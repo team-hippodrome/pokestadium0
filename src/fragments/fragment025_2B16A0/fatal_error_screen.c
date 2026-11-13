@@ -23,6 +23,8 @@ void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
  * Fills the 320x240 screen with the green Poke Ball wallpaper from transfer_pak_error_ui
  * (64x64 RGBA16 at segment offset 0x0), drawn in COPY mode as 64x16 strips.
  * The three arguments (0x55, 0x70, 0x88 from TransferPakError_DrawFrame) are unused.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment from Stadium 1.
  */
 void TransferPakError_DrawBackgroundPattern(s32 arg0, s32 arg1, s32 arg2) {
@@ -46,6 +48,7 @@ void TransferPakError_DrawBackgroundPattern(s32 arg0, s32 arg1, s32 arg2) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+/** Draws the icon of the fatal error screen. */
 void FatalError_DrawIcon(s32 arg0, s32 arg1) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetCycleType(gDisplayListHead++, G_CYC_COPY);
@@ -61,6 +64,7 @@ void FatalError_DrawIcon(s32 arg0, s32 arg1) {
 extern char** D_81100938;
 extern char* D_816008DC[];
 
+/** Draws the message panel of the fatal error screen. */
 void FatalError_DrawMessagePanel(s32 arg0) {
     Ui_DrawBorderedPanel(0x16, 0x10, 0x114, 0x76, 0x11C5);
     FatalError_DrawIcon(0x27, 0x22);
@@ -71,6 +75,7 @@ void FatalError_DrawMessagePanel(s32 arg0) {
     Font_EndTexturedTextRendering();
 }
 
+/** Draws the controller port diagram of the fatal error screen. */
 void FatalError_DrawPortDiagram(s32 arg0) {
     u16 sp80[] = {
         0x00BC,
@@ -112,6 +117,8 @@ void FatalError_DrawPortDiagram(s32 arg0) {
 
 /**
  * Per-frame draw callback: wallpaper, message window and port diagram for the stored error.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment from Stadium 1.
  */
 s32 TransferPakError_DrawFrame(u8 arg0) {
@@ -134,6 +141,8 @@ extern char** D_81100938;
  * Game Boy opcode or an emulator heap allocation failure.
  * Loads transfer_pak_error_ui and text file 0xD, then draws forever: the only exit is turning
  * the console off, as the message instructs.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void TransferPakError_Main(s32 arg0, s32 arg1) {

@@ -79,6 +79,8 @@ extern Entry8006A9DC D_8006A9DC[];
 /**
  * Declared s32 with no return statement: only then does IDO stop reading the
  * move id from v0 after the -2 check.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 s32 MonSummary_DrawMoveInfo(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
@@ -221,6 +223,8 @@ void MonSummary_DrawPage(s8 *arg0, s32 arg1)
 
 /**
  * Returns the page picked with the C buttons (up 0, right 1, down 2, left 3), or -1.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 MonSummary_GetCButtonPage(s8 *arg0) {
@@ -264,6 +268,7 @@ void PartyScreen_DrawBackground(void) {
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, M2C_FIELD(&D_8A203300, u8 *, 0), M2C_FIELD(&D_8A203300, u8 *, 1), (s32) M2C_FIELD(&D_8A203300, u8 *, 2));
 }
 
+/** Returns the experience points needed to reach a level. */
 s32 LabPC_ComputeExpForLevel(s32 arg0, s32 arg1) {
     s32 sp4;
 
@@ -308,6 +313,8 @@ void func_8A202390(s8 *arg0) {
 }
 
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void LabPC_WriteDeckBack(s32* arg0, s32 arg1) {
@@ -613,6 +620,8 @@ M2C_UNK PartyScreen_Update(M2C_UNK* ctx) {
 }
 
 /**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattlePrep_RenderFrame(void) {
@@ -684,6 +693,8 @@ void PartyScreen_RunFrame(s32 arg0) {
 
 /**
  * Entry point: pushes the 'VIEW' pool state, loads the font and archive, and creates the model preview and icon list.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 MonSummary_Init(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2) {

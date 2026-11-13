@@ -189,6 +189,7 @@ void func_89104FC0(s8* arg0, s32 arg1, s32 arg2, u8* arg3) {
 }
 
 extern s32 D_8910A920[5];
+/** Disables the move list entries that are restricted for the current cup. */
 void BattleMoveListWidget_DisableRestrictedMoves(unk_func_8830867C_04C_078* arg0) {
     s32 j;
     s32 i;
@@ -301,6 +302,7 @@ s32 func_891053B0(s8 *arg0) {
 void func_891053E0(void) {
 }
 
+/** Updates the flags of every entry in the info widget. */
 void BattleInfoWidget_UpdateEntryFlags(unk_func_8830867C_034* arg0) {
     s32 i;
     s8** sub = &M2C_FIELD(arg0, s8**, 0x20);
@@ -517,6 +519,7 @@ void func_891059FC(u8* widget) {
     }
 }
 
+/** Applies the selection state to an info widget entry. */
 void BattleInfoWidget_ApplyEntrySelection(unk_func_8830867C_034* arg0, s32 arg1) {
     s8* ptr = M2C_FIELD(M2C_FIELD(arg0, s8**, 0x70), s8**, 0) + arg1 * 0x24;
     s8* ptr2 = M2C_FIELD(ptr, s8**, 0x10);
@@ -1151,6 +1154,7 @@ void LabPCList_DrawTypeFilterRow(s32 arg0, s32 arg1, char **arg2, s32 arg3, s32 
     Font_EndTexturedTextRendering();
 }
 
+/** Converts a move table index to its display index by skipping unused slots. */
 s32 Move_NormalizeDisplayIndex(s32 a) {
     return a >= 20 ? a - 12 : (a >= 7 ? a - 1 : a);
 }
@@ -1667,6 +1671,8 @@ char* func_8001FDC8(u8, char*);
 s32 func_80031CC8(u8);
 /**
  * Draws an item row with パソコン (PC) / てもち (Party) and ×%02d.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void PcSort_DrawItemRow(s32 x, s32 y, u8** item, UNUSED s32 index, s32 flags) {
@@ -1793,6 +1799,8 @@ extern char D_8910E16C[];
 char* func_80031BC0(u8, char*);
 /**
  * Draws このどうぐをつかいますか？ (Use this item?), どの わざに つかいますか？ (On which move?) or どの わざを わすれさせたい？ (Which move should it forget?).
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void PcSort_DrawUseItemPrompt(s8* arg0) {
@@ -1861,6 +1869,8 @@ void func_89105144(s8 *);
 s32 func_80020974(s32);
 /**
  * Handles the item window. Returns 1 for a vitamin, 2 for PP Up, 3 for a TM or HM.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 LabPCList_UpdateItemWindow(s8 *arg0)

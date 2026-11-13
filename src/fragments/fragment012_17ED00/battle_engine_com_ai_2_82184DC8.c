@@ -389,7 +389,7 @@ s32 BattleAi_GetBestDamage(u8 *arg0, u8 *arg1, s32 arg2)
     goto slots;
   }
 
-  for (i = 0; i < 0x4E; i++)
+  for (i = 0; i < 78; i++)
   {
     move = D_82194578[i];
     if (((move != 0) && (((move != SELFDESTRUCT) && (move != EXPLOSION)) || (arg2 > 0))) && (BattleAi_MayKnowMove(arg0, move) != 0))
@@ -411,6 +411,7 @@ s32 BattleAi_GetBestDamage(u8 *arg0, u8 *arg1, s32 arg2)
  * Clears the switch-out volatile state of a battle Pokemon (arg0, BattleMonRuntime
  * layout), resets its in-battle stats to the party Pokemon's stats (arg1, BattleMon
  * layout) and resets all eight stat stages to 7 (neutral).
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 void BattleAi_ResetBattleStats(s8 *arg0, s8 *arg1)
@@ -479,6 +480,8 @@ extern u8 D_8438B0C4[];
 /**
  * Returns 1 if battler arg1 is held by a trapping state (byte 0x58 bit 0x40) and
  * arg0 moves first, so arg1 cannot act this turn.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_OpponentCannotAct(s8* arg0, s8* arg1) {
@@ -498,6 +501,8 @@ s32 func_82185494(void) {
  * Picks a move to use while the opponent cannot act: a stat boost
  * while that stat stage is below +2, Counter, Bide, Mirror Move or Splash, or
  * Substitute above half HP. Returns the move slot or -1.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_PickSetupMove(u8* arg0) {
@@ -550,6 +555,8 @@ extern s32 D_821CF288;
  * 0x7F (copied from the battle state each turn, possibly "slept from Rest") is
  * clear; when arg0 is the opponent's side, an asleep active opponent also blocks.
  * Returns 1 when another sleep move may be used.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_SleepClauseAllows(BattleSlotZ *arg0)
@@ -582,6 +589,7 @@ extern u8 D_82194840[];
  * Returns 1 if the battler can use Sing, Sleep Powder, Hypnosis, Lovely Kiss or
  * Spore, or (when its moves are unknown) its species is one that could learn a
  * sleep move (D_82194824, and D_82194840 from level 50).
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_MayHaveSleepMove(u8 *arg0) {
@@ -824,6 +832,8 @@ end:
  * Returns 0 if a move would do nothing now: no damage by type, a status the
  * target already has or is immune to, a stat stage already at its limit, Haze
  * with nothing to reset, and similar checks keyed on the move's effect id.
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_IsMoveUseful(s32 move) {
@@ -1184,6 +1194,8 @@ extern u8 D_821CF281;
  * Chansey and Jynx: returns 10000 in the first pick round (arg0 == 0), and in
  * later rounds 10000 only if none of the Pokemon picked so far (D_821CF280,
  * D_821CF281) is one of the three; 0 otherwise.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_NoVenusaurChanseyJynxPicked(s32 arg0) {
@@ -1287,8 +1299,8 @@ extern s8 *D_821CF2A0;
  * record arg0: HP, status, last move, volatile state and stat stages. Moves and PP
  * are copied in full only when the opponent's flag bit 3 (0x4E) is set; otherwise
  * only the move just used is recorded.
- * Seen in play (2026-11-12): after two turns, COM's record of 1P's Nidorino held HP 44 (the HUD
- * showed 44/ 69) and only the two moves Nidorino had used, Poison Sting and Tail Whip, out of its
+ * Seen in play (2026-11-12): after two turns, COM's record of 1P's Nidoqueen held HP 44 (the HUD
+ * showed 44/ 69) and only the two moves Nidoqueen had used, Poison Sting and Tail Whip, out of its
  * four.
  */
 void BattleAi_CopyVisibleBattleState(s8 *arg0, s8 *arg1)
@@ -1442,6 +1454,8 @@ extern u8 D_82194848[];
  * unfainted, not frozen, not recharging and not asleep, smaller ones for a healing
  * move, Ice or Poison type, higher speed, and the type-weighted accuracy of its
  * damaging moves.
+ * Seen in play (2026-11-13) (Free Battle, COM team selection after the order screen): called from
+ * BattleAi_PickNextPokemon once per opponent Pokémon for each COM candidate.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 void BattleAi_AddMatchupPickScore(u8 *arg0, u8 *arg1) {
@@ -1496,6 +1510,8 @@ void BattleAi_AddMatchupPickScore(u8 *arg0, u8 *arg1) {
 /**
  * Level rule for the team picks: the levels of the three Pokemon must add up to
  * 150..155 (Nintendo Cup '97 rules). arg0 is the pick round.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_LevelSumAllowed(s32 arg0, s32 arg1) {
@@ -1528,6 +1544,10 @@ s32 BattleAi_LevelSumAllowed(s32, s32);
 
 /**
  * Returns 1 if picking party slot arg2 in round arg1 keeps the team legal.
+ * Seen in play (2026-11-13) (Free Battle, COM team selection): called as IsPickAllowed(0, 0, slot)
+ * for slots 0, 1 and 2 and returned 1 each time; Free Battle has no level-sum rule, so
+ * BattleAi_LevelSumAllowed did not run. Round 2 of the tournament (vs かじばどろぼう) made the same
+ * three calls and returned 1, again without BattleAi_LevelSumAllowed (side byte +0x368 nonzero).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_IsPickAllowed(s32 arg0, s32 arg1, s32 arg2) {

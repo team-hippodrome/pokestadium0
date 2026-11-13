@@ -85,6 +85,7 @@ void PikachuReward_SetupScene(void);
 
 void PikachuReward_UpdateLeadPikachuAnimation(void);
 
+/** Positions the surfing Pikachu model during its animation phase. */
 s32 PikachuReward_PositionSurfingPikachuModel(s32 arg0, DisplayObject* arg1) {
     if (arg0 == 2) {
         arg1->rotation.z -= 0x80;
@@ -143,6 +144,7 @@ loop_1:
     return var_v1;
 }
 
+/** Starts and finishes a controller read. */
 void Controller_PollInputs(void) {
     Cont_StartReadInputs();
     Cont_ReadInputs();
@@ -150,6 +152,7 @@ void Controller_PollInputs(void) {
 }
 
 extern s32 D_81701B00;
+/** Updates the lead Pikachu's animation each frame. */
 void PikachuReward_UpdateLeadPikachuAnimation(void) {
     static s32 D_83202004 = 0;
 
@@ -171,6 +174,7 @@ void PikachuReward_UpdateLeadPikachuAnimation(void) {
     }
 }
 
+/** Shows or hides the follower models. */
 void PikachuReward_UpdateFollowerVisibility(void) {
     if (D_81701B04 == -1) {
         D_81702020[1].node.flags &= ~1;
@@ -210,6 +214,7 @@ void PikachuReward_UpdateFollowerVisibility(void) {
     }
 }
 
+/** Renders one frame of the Pikachu reward scene. */
 s32 PikachuReward_RenderFrame(u8 arg0) {
     GeoRender_AdvanceFrameCounter();
     PikachuReward_UpdateLeadPikachuAnimation();
@@ -220,6 +225,7 @@ s32 PikachuReward_RenderFrame(u8 arg0) {
     return 0;
 }
 
+/** Draws the blinking star icon. */
 void PikachuReward_DrawBlinkingStarIcon(s16 arg0, s16 arg1) {
     s32 var_a3;
 
@@ -242,13 +248,15 @@ void PikachuReward_DrawBlinkingStarIcon(s16 arg0, s16 arg1) {
     Font_DrawCharAt(arg0, arg1, 0x2177);
 }
 
+/** Draws the panel behind the text box. */
 void PikachuReward_DrawTextBoxPanel(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
-    Color_RGB8 sp24 = { 0x00, 0x00, 0x32 };
-    Color_RGB8 sp20 = { 0x00, 0x00, 0xC8 };
+    Color_RGB8 sp24 = { 0x00, 0x00, 0x32 }; // #000032
+    Color_RGB8 sp20 = { 0x00, 0x00, 0xC8 }; // #0000C8
 
     Ui_DrawGradientPanel(arg0, arg1, arg2, arg3, &sp24, &sp20);
 }
 
+/** Draws the selection cursor. */
 void PikachuReward_DrawSelectionCursor(s16 arg0, s16 arg1) {
     gSPDisplayList(gDisplayListHead++, D_80060290);
 
@@ -257,6 +265,7 @@ void PikachuReward_DrawSelectionCursor(s16 arg0, s16 arg1) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
+/** Shows a text message for a number of frames. */
 void PikachuReward_ShowTextForFrames(char* arg0, s32 arg1) {
     while (arg1-- > 0) {
         Controller_PollInputs();
@@ -275,6 +284,7 @@ void PikachuReward_ShowTextForFrames(char* arg0, s32 arg1) {
 
 M2C_UNK func_81700160();
 
+/** Shows a text message and waits for the A button. */
 void PikachuReward_ShowTextWaitForA(char* arg0, s32 arg1) {
     D_817025C0.unk_00 = 0x10;
 
@@ -297,6 +307,7 @@ void PikachuReward_ShowTextWaitForA(char* arg0, s32 arg1) {
     D_81701B08 = arg0;
 }
 
+/** Scrolls a text message into the text box. */
 void PikachuReward_ScrollTextIn(s8* arg0) {
     s32 i;
     s32 x1 = 0x1E;
@@ -326,6 +337,7 @@ void PikachuReward_ScrollTextIn(s8* arg0) {
 extern char** D_83202020;
 extern char D_81701EFC[];
 extern char D_81701F04[];
+/** Shows a text message with a yes/no choice and returns the choice. */
 s32 PikachuReward_ConfirmYesNoPrompt(char* arg0) {
     s32 temp_s3;
     s32 var_a2;
@@ -395,6 +407,7 @@ typedef struct MoveNameEntryZ {
 } MoveNameEntryZ; // size = 0xC
 extern MoveNameEntryZ D_8006A9D4[];
 
+/** Shows the move list and returns the move the player picks to forget. */
 s32 PikachuReward_SelectMoveToForget(char* arg0) {
     s32 var_a2;
     s32 var_s0;
@@ -527,6 +540,7 @@ void func_81700E04(void) {
     func_81700588(D_81701B48, 0x1E);
 }
 
+/** Plays the intro camera movement. */
 void PikachuReward_PlayIntroCamera(void) {
     s32 i;
     CameraNode* temp_s1 = D_81702010->children;
@@ -666,6 +680,7 @@ extern char D_81701F94[];
 extern char D_81701FA8[];
 extern char D_81701FC4[];
 extern char D_81701FE4[];
+/** Shows the save status screen. */
 void PikachuReward_ShowSaveStatusScreen(s32 arg0) {
     PikachuReward_RenderFrame(0);
     PikachuReward_DrawTextBoxPanel(0x1E, 0x20, 0x104, 0x30);
@@ -725,6 +740,10 @@ M2C_UNK func_817012C0(M2C_UNK);                     /* extern */
 extern s32 D_817025C4;
 extern Rec81700064 D_817025C8[];
 
+/**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ */
 void func_817014A4(s32 arg0) {
     M2C_UNK var_s0;
     s32 temp_v0;
@@ -807,6 +826,7 @@ void func_81701710(void) {
     func_800067BC(2);
 }
 
+/** Sets up a follower model with its position and animation. */
 void PikachuReward_SetupFollowerModel(DisplayObject* arg0, s16 arg1, s16 arg2, s16 arg3) {
     Model_InitDisplayObject(arg0, 0, 0, D_81702014);
     ModelAnim_BindTransformCurve(arg0, 0, D_8FC011C4, 0x10000);
@@ -817,6 +837,7 @@ void PikachuReward_SetupFollowerModel(DisplayObject* arg0, s16 arg1, s16 arg2, s
     arg0->rotation.z = arg3;
 }
 
+/** Sets up the models, cameras and state of the Pikachu reward scene. */
 void PikachuReward_SetupScene(void) {
     MemoryBlock* temp_v0;
     s32 i;
@@ -860,6 +881,7 @@ s32 Font_Init(s32 load_size, s32 side);
 
 void func_81701710(void);
 
+/** Runs the bonus Pikachu reward scene. */
 s32 Stadium_BonusPikachuReward(UNUSED s32 arg0, s32 arg1) {
     UNUSED s32 pad; // FAKE: stack padding
     StageContext* sp20;

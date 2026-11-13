@@ -17,6 +17,7 @@ s32 JpegUtils_ProcessHuffmanTable(u8* dht, JpegHuffmanTable* ht, u8* codesLength
 void JpegUtils_SetHuffmanTableOld(u8* data, JpegHuffmanTableOld* ht, u8* codesLengths, u16* codes, s16 count, u8 isAc);
 u32 JpegUtils_ProcessHuffmanTableImplOld(u8* dht, JpegHuffmanTableOld* ht, u8* codesLengths, u16* codes);
 
+/** Reads the quantization tables of a JPEG stream. */
 void JpegUtils_ProcessQuantizationTable(u8* dqt, JpegQuantizationTable* qt, u8 num_tables) {
     u8 i;
 
@@ -30,6 +31,7 @@ void JpegUtils_ProcessQuantizationTable(u8* dqt, JpegQuantizationTable* qt, u8 n
     }
 }
 
+/** Reads the code length counts of a Huffman table. */
 s32 JpegUtils_ParseHuffmanCodesLengths(u8* ptr, u8* codes_lengths) {
     u8 off = 1;
     s16 count = 0;
@@ -48,6 +50,7 @@ s32 JpegUtils_ParseHuffmanCodesLengths(u8* ptr, u8* codes_lengths) {
     return count;
 }
 
+/** Generates the Huffman codes from the code lengths. */
 s16 JpegUtils_GetHuffmanCodes(u8* codes_lengths, u16* codes) {
     s16 idx = 0;
     u16 code = 0;
@@ -76,6 +79,7 @@ s16 JpegUtils_GetHuffmanCodes(u8* codes_lengths, u16* codes) {
     return idx;
 }
 
+/** Fills a Huffman table from its codes. */
 u16 JpegUtils_SetHuffmanTable(u8* data, JpegHuffmanTable* ht, u16* codes) {
     u8 idx;
     u16 code_off = 0;
@@ -95,6 +99,7 @@ u16 JpegUtils_SetHuffmanTable(u8* data, JpegHuffmanTable* ht, u16* codes) {
     return code_off;
 }
 
+/** Reads one Huffman table from a JPEG stream. */
 u32 JpegUtils_ProcessHuffmanTableImpl(u8* data, JpegHuffmanTable* ht, u8* codes_lengths, u16* codes, u8 is_ac) {
     s16 ret;
     s32 count = JpegUtils_ParseHuffmanCodesLengths(data, codes_lengths);
@@ -114,6 +119,7 @@ u32 JpegUtils_ProcessHuffmanTableImpl(u8* data, JpegHuffmanTable* ht, u8* codes_
     return ret;
 }
 
+/** Reads the Huffman tables of a JPEG stream. */
 s32 JpegUtils_ProcessHuffmanTable(u8* dht, JpegHuffmanTable* ht, u8* codes_lengths, u16* codes, u8 count) {
     u8 idx;
     u32 code_count;
@@ -133,6 +139,7 @@ s32 JpegUtils_ProcessHuffmanTable(u8* dht, JpegHuffmanTable* ht, u8* codes_lengt
     return 0;
 }
 
+/** Fills a Huffman table in the older table layout. */
 void JpegUtils_SetHuffmanTableOld(u8* data, JpegHuffmanTableOld* ht, u8* codes_lengths, u16* codes, s16 count, u8 is_ac) {
     s16 idx;
     u8 a;
@@ -149,6 +156,7 @@ void JpegUtils_SetHuffmanTableOld(u8* data, JpegHuffmanTableOld* ht, u8* codes_l
     }
 }
 
+/** Reads one Huffman table in the older table layout. */
 u32 JpegUtils_ProcessHuffmanTableImplOld(u8* dht, JpegHuffmanTableOld* ht, u8* codes_lengths, u16* codes) {
      u8 is_ac = *dht++ >> 4;
     s16 count2;

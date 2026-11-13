@@ -97,9 +97,9 @@ void BattleAnim_EmitTriAttackUseRadial(void);
  * on).  During the first four frames (counter < 4) it starts one trail at the
  * secondary owner's bone position: the trail leaves in a direction in the
  * Y/Z plane given by an angle of (counter % 3) * pi / 3 + pi/6 (the sine and
- * cosine of that angle, normalised together with a 1.0 X component and
+ * cosine of that angle, normalized together with a 1.0 X component and
  * then scaled by 20), at X speed +-10 (negative when the start X is
- * negative), with colour 0xC0FFFF, alpha 0x80, a random +-0.3 drift and
+ * negative), with color 0xC0FFFF, alpha 0x80, a random +-0.3 drift and
  * fixed shape parameters 2.0, 13.0 and 0x28.  From frame 2 on it returns
  * whether the trail has completed (FourStreamTrail_IsComplete), else 0.
  *

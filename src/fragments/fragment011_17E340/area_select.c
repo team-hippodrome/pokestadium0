@@ -162,12 +162,14 @@ s32 func_81800020(s32 arg0, s8 *arg1) {
     return 0;
 }
 
+/** Starts and finishes a controller read for the area select screen. */
 void AreaSelect_PollInput(void) {
     Cont_StartReadInputs();
     Cont_ReadInputs();
     Input_ResetRepeatState();
 }
 
+/** Camera preset hook that does nothing. */
 void BattleScene_CameraPresetNop(UNUSED CameraNode* arg0) {
     if (arg0) {}  // karodo
 }
@@ -194,12 +196,12 @@ s32 func_81800074(s32 arg0) {
  *
  * Draws a rectangular vertical-gradient panel.  The four arguments are the
  * panel's x, y, width and height (as s16), passed straight on to
- * Ui_DrawGradientPanel.  The top colour is dark blue (R0 G0 B50) and the
- * bottom colour is a brighter blue (R0 G0 B200).
+ * Ui_DrawGradientPanel.  The top color is dark blue (R0 G0 B50) and the
+ * bottom color is a brighter blue (R0 G0 B200).
  */
 void func_818000D0(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
-    Color_RGB8 sp24 = { 0x00, 0x00, 0x32 }; /* top colour    */
-    Color_RGB8 sp20 = { 0x00, 0x00, 0xC8 }; /* bottom colour */
+    Color_RGB8 sp24 = { 0x00, 0x00, 0x32 }; /* top color    */ // #000032
+    Color_RGB8 sp20 = { 0x00, 0x00, 0xC8 }; /* bottom color */ // #0000C8
 
     Ui_DrawGradientPanel(arg0, arg1, arg2, arg3, &sp24, &sp20);
 }
@@ -220,6 +222,8 @@ extern char D_81800888[];
 
 /**
  * Draws the cup list (Poke Ball, Great Ball, Ultra Ball and Master Ball Cups, Tournament) with blinking クリアー！ (Cleared!) marks.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void AreaSelect_DrawCupClearList(s32 frames, s32 blink) {
@@ -279,7 +283,7 @@ M2C_UNK func_8180003C();
  * the three float fields are is not established from this function.
  *
  * Matching notes: the declaration order (var_s0, var_s2, target) and the
- * initialisation order (var_s0, target, var_s2) decide which saved registers
+ * initialization order (var_s0, target, var_s2) decide which saved registers
  * the three values get. The `(var_s0 ^ 0)` in the loop test is a
  * matching-only construct (found with decomp-permuter): it only swaps the
  * operand order of the final `bne` to the retail order; `(var_s0 | 0)` does
@@ -343,6 +347,8 @@ void func_81800320(void);
 
 /**
  * Plays the cup-cleared sequence: music cue, then the cup list with blinking クリアー！ marks.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void AreaSelect_PlayCupClearSequence(void) {
@@ -363,6 +369,7 @@ extern u32 D_81800760[];
 extern u32 D_8EA1B414[];
 extern ModelNodeView* D_818008A4;
 extern s16 D_818008D0;
+/** Sets up the scene for the Transfer Pak screen. */
 void TransferPak_InitScene(void) {
     UNUSED s32 pad; // FAKE: stack padding
     MemoryBlock* sp18;

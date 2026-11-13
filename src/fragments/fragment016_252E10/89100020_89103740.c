@@ -600,7 +600,7 @@ s32 LabPCList_UpdateList(s8* arg0) {
 }
 
 /**
- * Clears the first word of arg0 and initialises the sub-objects at offsets 4
+ * Clears the first word of arg0 and initializes the sub-objects at offsets 4
  * and 0xB7E4 with LabPCList_InitListWindow(arg0 + 4, 0x26, 0x48, arg0 + 0xB7E4). What the
  * object is is not established.
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): ran on entry, right before
@@ -801,7 +801,7 @@ M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void func_8002C8D8(Col891049E8*, Col891049E8, f32);
 /**
  * Steps the screen fade; returns once eight frames have passed.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran on the frames the いちらん (list) screen faded in from the main menu.
  */
 s32 LabPCList_UpdateFade(s32 arg0) {
     Col891049E8 sp2C;

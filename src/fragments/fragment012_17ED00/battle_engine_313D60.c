@@ -64,6 +64,10 @@ extern s32 D_8218C790;
 extern s32 D_8218C794;
 /**
  * Save the target's current HP and queue an HP-band message for the acting participant.
+ * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran when
+ * C-Left picked the Pokémon to switch in.
+ * Seen in play (2026-11-13) it also ran when COM sent out its next Pokémon (ゆけっ！ゲンのすけ) after its
+ * first one fainted.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void ShowDamageMessage(s32 attacker, s32 defender) {
@@ -124,7 +128,15 @@ extern s32 D_8218C79C;
 extern s32 D_8218C7A0;
 extern s32 D_8218C7A4;
 extern char D_8219544C[];
-void Battle_ResetEntityState(ActivePokemon* active_pokemon) {
+/**
+ * Formats the comment on the hit that just landed from the share of the target's max HP lost
+ * (unk_28, the HP before the hit, minus hp, as a percentage): message 0x25 for 0%, 0x26 under 30%,
+ * 0x27 under 70% and 0x28 for 70% or more. Adds message 0 when state.unk_2D is 0x10.
+ * Was misnamed Battle_ResetEntityState.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle.
+ * @unverified Named from the code; not checked in play.
+ */
+void Battle_FormatDamageComment(ActivePokemon* active_pokemon) {
     ActivePokemonState* sp1C = &sActivePokemon[0]->state;
     ActivePokemonState* sp18 = &sActivePokemon[1]->state;
     BattleMonRuntime* temp_a1 = &sActivePokemon[0]->state.runtime;
@@ -172,7 +184,7 @@ void Battle_RandomizeDamage(void) {
 
 /**
  * Return which participant acts first using Quick Attack, Counter, Speed and a random tie break.
- * Seen in play (2026-11-12): returned 1 (COM first) with Pinsir at Speed 50 against Nidorino, and
+ * Seen in play (2026-11-12): returned 1 (COM first) with Pinsir at Speed 50 against Nidoqueen, and
  * Pinsir moved first; with Pinsir's Speed set to 1 it returned 0 and 1P moved first.
  */
 u16 Battle_DetermineMoveOrder(ActivePokemon* pokemon, ActivePokemon* other_pokemon) {
@@ -230,6 +242,8 @@ void func_8210FA74(void) {
 
 /**
  * Select a move in the first scratch runtime using the current scratch move-slot index.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Battle_SetActiveMoveFromSlotIndex(void) {
@@ -252,6 +266,8 @@ s32 Battle_CheckMoveSuccess(void) {
 
 /**
  * Calculate the requested stored stat from the selected base-stat/experience entries and DVs.
+ * No caller in play (2026-11-13): it is only called from ComputeAllPokemonStats, which has no
+ * caller in the ROM itself.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ComputePokemonStat(s32 arg0, BattleMon* arg1) {

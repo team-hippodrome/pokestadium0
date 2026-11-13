@@ -247,11 +247,11 @@ extern Color_RGBA8 D_82009108;
  * Draws the object arg0 (layout not established; x at +0, y at +4, width at +8) while
  * func_8002AE6C() is zero. The sub-object at +0x2C is a list whose word at +8 is the
  * number of rows; the panel height is temp_s1 = rows * 32 + 8. Draws the frame via
- * Ui_DrawTexturedDivider, a filled bar (colour D_82009100, height temp_s1) via func_80029028, a
- * highlight band via Ui_FillRectPrimEnvColor (colours D_82009104 / D_82009108, height = word at
+ * Ui_DrawTexturedDivider, a filled bar (color D_82009100, height temp_s1) via func_80029028, a
+ * highlight band via Ui_FillRectPrimEnvColor (colors D_82009104 / D_82009108, height = word at
  * +0x80 * 0x1C), the list via Menu_DrawItems (flags arg1 | 0xFFED, width passed by
  * pointer in sp38), and the text pointer at index [+0x34] of the table in the word at
- * +0x7C, printed in the colour from D_800734A8 via func_8001A944.
+ * +0x7C, printed in the color from D_800734A8 via func_8001A944.
  * What the constants mean is not established. `pad` places sp38 at sp+0x38 as in the ROM.
  * Seen in play: draws the 「たいせんルールせんたく」 list window with its description box.
  */
@@ -539,8 +539,8 @@ extern char D_82009F84[];
 /**
  * Draws the object arg0 (layout not established; x at +0, y at +4, width at +8) while
  * func_8002AE6C() is zero: a frame via Ui_DrawTexturedDivider (at y + 0x92), a filled bar via
- * func_80029028 (colour D_82009100, height 0x70), the picture D_8200910C via Ui_DrawImageInStrips,
- * the text D_82009F84 in the colour from D_800734A8, the sub-object at +0x38 via
+ * func_80029028 (color D_82009100, height 0x70), the picture D_8200910C via Ui_DrawImageInStrips,
+ * the text D_82009F84 in the color from D_800734A8, the sub-object at +0x38 via
  * Menu_DrawItems, and finally FreeBattle_DrawControllerPanel with the words at +0x68 and +0x70, 1 and a
  * value chosen from the word at +0x40 (0 -> 2, 1 -> 4, 2 -> 8, otherwise 0).
  * What the constants mean is not established.
@@ -994,11 +994,11 @@ M2C_UNK GridMenu_DrawInlineItems(s8*, s32, s32, s32, s32);
 /**
  * Draws the object arg0 (layout not established; x at +0, y at +4, width at +8)
  * while func_8002AE6C() is zero: a box via Ui_DrawTexturedFrameDecal (D_800735C4), the frame via
- * Ui_DrawTexturedDivider, a filled bar via func_80029028 (colour D_82009100, height 0xDC), a second
- * panel via Ui_FillRectPrimEnvColor (colours D_820091BC / D_820091C0), the sub-object at +0x2C via
+ * Ui_DrawTexturedDivider, a filled bar via func_80029028 (color D_82009100, height 0xDC), a second
+ * panel via Ui_FillRectPrimEnvColor (colors D_820091BC / D_820091C0), the sub-object at +0x2C via
  * GridMenu_DrawInlineItems, and the text pointer stored at index [+0x34] of the table of 12-byte
  * records pointed to by the word at +0x68 (the pointer is the second word of a record),
- * printed in the colour from D_800734A8 via func_8001A944.
+ * printed in the color from D_800734A8 via func_8001A944.
  * What the constants mean is not established.
  * Matching note: Ui_DrawTexturedDivider must be declared void (see FreeBattle_DrawOpponentSelect).
  * Seen in play: draws the 「バトルモード」 window (フリーバトル / トーナメント pictures and the description below)
@@ -1069,7 +1069,8 @@ void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
  * Draws one row of 「カップせんたく」: highlight box when selected (flag 0x10), a cleared-cup icon at the
  * right when flag 0x100 is set, and the cup name dimmed when locked.
  * Seen in play: draws モンスターボールカップ (boxed) and the greyed スーパーボール, ハイパーボール and マスターボールカップ.
- * @unverified The cleared icon (flag 0x100) was not seen.
+ * Seen in play (2026-11-13) drew the rows of 「カップせんたく」 for the L1～30 tournament (モンスターボールカップ, then
+ * the greyed スーパー, ハイパー and マスターボール cups).
  */
 void FreeBattle_DrawCupRow(s32 arg0, s32 arg1, IconPanel* arg2, s32 arg3, s32 arg4) {
     UNUSED s32 pad[5]; // FAKE: stack padding
@@ -1194,7 +1195,7 @@ M2C_UNK func_80018234(s8*, s32, u8, u16);
  * second and third words (stride 0x50, width 0x50). Calls func_80018168(arg6), stores
  * arg6 at 0xDC and then, for each of the 0xD4 entries (stride 0x50 starting at the
  * pointer stored at 0xCC), calls func_80018234 with the entry's first byte and an
- * RGBA5551 value packed from the colour D_820091E4[i & 1] (the top five bits of red, green
+ * RGBA5551 value packed from the color D_820091E4[i & 1] (the top five bits of red, green
  * and blue go to bits 15-11, 10-6 and 5-1, and bit 0 is set).
  * What the object is and what the constants mean is not established.
  */
@@ -1249,7 +1250,7 @@ void func_82007D94(s8* arg0, s32 arg1) {
     s8* entry;
 
     if (func_8002AE6C() == 0) {
-        for (i = 0; i < 0x2A; i++) {
+        for (i = 0; i < 42; i++) {
             gSPDisplayList(gDisplayListHead++, D_80060270);
             func_80029028((i % 7) * 0x4F + x0, (i / 7) * 0x3C + y0, 0x4F, 0x3C, D_82009204[i & 1]);
         }
@@ -1306,6 +1307,8 @@ extern Str4_820080B8 D_82009210;
 extern u8 D_8200A0A0[];
 /**
  * Sets up the ちゅうい！！ (warning) window for duplicate species.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void FreeBattle_InitDuplicateWarning(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -1331,6 +1334,8 @@ extern char D_8200A0B0[];
 
 /**
  * Draws おなじポケモンが %dたいいます (there are %d of the same Pokemon).
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void FreeBattle_DrawDuplicateWarning(s8* arg0) {
@@ -1354,7 +1359,7 @@ extern char D_8200A11C[];
 /**
  * Initialises the object arg0 (size and layout not established); the same
  * setup as FreeBattle_InitLevelSumWarning with different strings (D_8200A104, D_8200A114 and
- * D_8200A11C) and colour (D_82009218), and one more argument. Calls
+ * D_8200A11C) and color (D_82009218), and one more argument. Calls
  * Window_SetRect(arg0, arg1, arg2, 0x134, 0x92), clears the words at 0x24 and
  * 0x28, sets the word at 0x14 to 0x2801 and the pointer at 0x20 to D_8200A104.
  * Calls Window_InitLabeled on the sub-objects at arg0 + 0x2C and arg0 + 0x68, sets
@@ -1362,7 +1367,8 @@ extern char D_8200A11C[];
  * D_800603C0 and then arg3 in the word at 0xA4 (calling func_8000B2F4 with
  * each), and finally stores arg3 at 0xB4 and arg4 at 0xB0.
  * What the object is and what the constants mean is not established.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-13) in the L1～30 tournament (モンスターボールカップ) entry, A on the GB party of three
+ * opened 「ちゅうい!! つかえるポケモンが 6たい たりません」 with はい/いいえ, and this ran once as it appeared.
  */
 void FreeBattle_InitShortageWarning(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Window_SetRect(arg0, arg1, arg2, 0x134, 0x92);
@@ -1390,13 +1396,14 @@ extern char D_8200A124[];
 
 /**
  * Draws the object arg0 (layout not established): the same drawing code as
- * FreeBattle_DrawLevelSumWarning with different colours (D_8200921C / D_82009220) and text
+ * FreeBattle_DrawLevelSumWarning with different colors (D_8200921C / D_82009220) and text
  * (D_8200A124), which is printed with the word at +0xB0 passed twice as extra
  * arguments to func_8001A944. See FreeBattle_DrawLevelSumWarning for the sequence of calls; the
  * selection index at +0xA8 again decides which of the two sub-objects (+0x2C,
  * +0x68) gets 2 from Window_DrawLabeled and which gets 0.
  * What the constants mean is not established.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-13) drew the 「ちゅうい!! つかえるポケモンが 6たい たりません」 warning on the tournament entry
+ * screen every frame while it was up.
  */
 void FreeBattle_DrawShortageWarning(s8* arg0) {
     if (func_8002AE6C() == 0) {
@@ -1421,7 +1428,8 @@ M2C_UNK func_8003F6AC(M2C_UNK);
 
 /**
  * Handles the too few usable Pokemon warning.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran every frame while the tournament entry screen's 「つかえるポケモンが 6たい
+ * たりません」 warning waited for はい/いいえ.
  */
 s32 FreeBattle_UpdateShortageWarning(s8* arg0) {
     s32 ret = 0;
@@ -1460,11 +1468,13 @@ void func_8000B2F4(s32);
  * 0x28, sets the word at 0x14 to 0x2801 and the pointer at 0x20 to
  * D_8200A178. Calls Window_InitLabeled twice, on the sub-objects at arg0 + 0x2C
  * (string D_8200A188) and arg0 + 0x68 (string D_8200A190), both with width
- * 0x48 and colour D_82009228 and positions derived from the words at 0 and 4.
+ * 0x48 and color D_82009228 and positions derived from the words at 0 and 4.
  * Then sets the words at 0x58, 0x60, 0xAC and 0xA8 to 0xA, 0xC, 2 and 0, and
  * stores D_800603C0 and then arg3 in the word at 0xA4, calling func_8000B2F4
  * with each value in turn. Finally stores arg3 at 0xB0.
  * What the object is and what the constants mean is not established.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void FreeBattle_InitLevelSumWarning(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -1492,15 +1502,17 @@ extern char D_8200A198[];
 
 /**
  * Draws the object arg0 (layout not established; the same kind of object that
- * FreeBattle_InitLevelSumWarning / FreeBattle_InitRentalConfirm initialise: x at +0, y at +4, width at +8, a
+ * FreeBattle_InitLevelSumWarning / FreeBattle_InitRentalConfirm initialize: x at +0, y at +4, width at +8, a
  * selection index at +0xA8 and two sub-objects at +0x2C and +0x68). Does nothing
  * while func_8002AE6C() is non-zero. Otherwise it draws the frame with
  * Ui_DrawTexturedDivider and Ui_FillRectPrimEnvColor, emits D_80060270 and fills a bar with
- * func_80029028 (colour D_82009100), then prints the string D_8200A198 with the
- * font colour from D_800734A8 via func_8001A944, and finally calls Window_DrawLabeled
+ * func_80029028 (color D_82009100), then prints the string D_8200A198 with the
+ * font color from D_800734A8 via func_8001A944, and finally calls Window_DrawLabeled
  * on the two sub-objects with 2 for the one whose index (0 for +0x2C, 1 for +0x68)
  * equals the selection at +0xA8 and 0 for the other.
  * What the constants mean is not established.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void FreeBattle_DrawLevelSumWarning(s8* arg0) {
@@ -1526,6 +1538,8 @@ M2C_UNK func_8003F6AC(M2C_UNK);
 
 /**
  * Handles the level sum warning.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 FreeBattle_UpdateLevelSumWarning(s8* arg0) {
@@ -1562,7 +1576,7 @@ extern char D_8200A1FC[];
  * FreeBattle_InitConfirmWindow. Calls Window_SetRect(arg0, arg1, arg2, 0x18C, 0x66), clears the words at
  * 0x20, 0x24 and 0x28 and sets the word at 0x14 to 0x1001. Calls Window_InitLabeled three times,
  * on the sub-objects at arg0 + 0x2C (string D_8200A1EC), + 0x68 (D_8200A1F4) and + 0xA4
- * (D_8200A1FC, width 0x5C; the other two use width 0x48), all with colour D_82009234 and
+ * (D_8200A1FC, width 0x5C; the other two use width 0x48), all with color D_82009234 and
  * positions derived from the words at 0 and 4; the words at 0x58 and 0x60 are set to 0xA
  * and 0xC between the first two calls. Then clears the word at 0xE4, stores arg3 at 0xEC
  * and 3 (arg3 != 0) or 2 (arg3 == 0) at 0xE8, and stores D_800603C0 and then arg4 in the
@@ -1600,7 +1614,7 @@ extern char D_8200A208[];
 
 /**
  * Draws the object arg0 (layout not established): a variant of FreeBattle_DrawLevelSumWarning /
- * FreeBattle_DrawShortageWarning with a shorter frame (height 0x30) and colours D_82009238 /
+ * FreeBattle_DrawShortageWarning with a shorter frame (height 0x30) and colors D_82009238 /
  * D_8200923C, text D_8200A208 in a larger font size (0x10), and a selection index
  * at +0xE4 (rather than +0xA8) that decides which of the sub-objects at +0x2C, +0x68
  * and, only when the word at +0xEC is non-zero, +0xA4 is passed 2 by Window_DrawLabeled

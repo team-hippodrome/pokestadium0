@@ -49,7 +49,7 @@ s32 Battle_CheckForDisobedience(void);
 s32 Battle_CheckFaintAfterMove(void);
 
 void Battle_CheckAllBroughtFainted_PoisonBurn(ActivePokemon* arg0);
-void Battle_CheckAllBroughtFainted_Status(ActivePokemon* arg0);
+void Battle_CheckAllBroughtFainted_LeechSeed(ActivePokemon* arg0);
 void Battle_CheckAllBroughtFainted_PendingHp(ActivePokemon* arg0);
 void Battle_CheckAllBroughtFainted_Hp(ActivePokemon* arg0);
 
@@ -89,6 +89,7 @@ s32 Battle_TryLoadFollowupMoveFromTarget(void) {
 /**
  * Self-Destruct and Explosion check of the target's Substitute and state; the body does nothing
  * in Zero. Runs after every move.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a Pound turn.
  * @unverified Name and comment from the code.
  */
 void Battle_CheckExplosionVsSubstitute(void)
@@ -167,6 +168,8 @@ void Battle_ApplyTypeEffectAndSTAB(void) {
 
 /**
  * Replace Counter damage with twice the eligible Normal/Fighting damage, or mark failure.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Battle_Effect_Counter(void) {
@@ -211,7 +214,7 @@ u8 Battle_Random(void);
  * Gen 1 critical-hit roll from the species' base speed (halved, or doubled
  * without Focus Energy, capped at 255). Name from Stadium 1.
  * Seen in play (2026-11-12): with Battle_Random forced to 2 for this call only it returned 1, and
- * the battle showed きゅうしょに あたった！ (A critical hit!) for Nidorino's Poison Sting.
+ * the battle showed きゅうしょに あたった！ (A critical hit!) for Nidoqueen's Poison Sting.
  */
 s32 Battle_CheckCriticalHit(void) {
     UNUSED s32 pad; // FAKE: stack padding
@@ -280,6 +283,8 @@ extern MoveName82111DCC D_8006A9CC[];
  * Before-move checks for the acting Pokemon: sleep countdown, freeze, and the
  * other conditions that stop it acting. Returns a code the turn loop switches on.
  * Name from Stadium 1.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
  * @unverified Name and comment guessed from the code.
  */
 s32 Battle_CheckMonCanAct(void) {
@@ -679,7 +684,7 @@ void Battle_CheckAllBroughtFainted_PoisonBurn(ActivePokemon* arg0) {
     }
 
     if (var_s2 == 0) {
-        Battle_ResetEntityState(arg0);
+        Battle_FormatDamageComment(arg0);
         ptr1->unk_2D = 0x12;
     } else {
         Battle_HandleFaint(arg0);
@@ -687,9 +692,16 @@ void Battle_CheckAllBroughtFainted_PoisonBurn(ActivePokemon* arg0) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Runs when a seeded Pokemon's Leech Seed drain this turn leaves it at 0 HP. Sums the side's
+ * remaining HP with that value for the active Pokemon: 0 ends the battle (state 0x12), otherwise
+ * the faint is handled.
+ * Seen in play (2026-11-13) (Free Battle, 1P Onix crafted with 2 HP and seeded, using Pound): ran
+ * from Battle_CheckFaintAfterMove after the Leech Seed drain took Onix to 0/ 49 HP; it then fainted
+ * and the switch prompt opened. Renamed from Battle_CheckAllBroughtFainted_Status: it sums the HP
+ * left after the Leech Seed drain (runtime +0x10), and runs only for a seeded Pokémon (volatile
+ * flag 0x80).
  */
-void Battle_CheckAllBroughtFainted_Status(ActivePokemon* arg0) {
+void Battle_CheckAllBroughtFainted_LeechSeed(ActivePokemon* arg0) {
     ActivePokemonState* ptr1 = &arg0->state;
     BattleMon* temp_v0;
     s32 i;
@@ -712,7 +724,7 @@ void Battle_CheckAllBroughtFainted_Status(ActivePokemon* arg0) {
     }
 
     if (var_s2 == 0) {
-        Battle_ResetEntityState(arg0);
+        Battle_FormatDamageComment(arg0);
         ptr1->unk_2D = 0x12;
     } else {
         Battle_HandleFaint(arg0);
@@ -723,6 +735,8 @@ void Battle_CheckAllBroughtFainted_Status(ActivePokemon* arg0) {
  * Like Battle_CheckAllBroughtFainted_Hp, but sums the active Pokemon's pendingHp (runtime
  * +0x12). Battle_CheckFaintAfterMove calls it when both HP values are nonzero but the
  * user's pendingHp is 0. Renamed from Battle_CheckAllBroughtFainted_PP: it reads HP, not PP.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Renamed from the code; never ran in play.
  */
 void Battle_CheckAllBroughtFainted_PendingHp(ActivePokemon* arg0) {
@@ -748,7 +762,7 @@ void Battle_CheckAllBroughtFainted_PendingHp(ActivePokemon* arg0) {
     }
 
     if (var_s2 == 0) {
-        Battle_ResetEntityState(arg0);
+        Battle_FormatDamageComment(arg0);
         ptr1->unk_2D = 0x12;
     } else {
         Battle_HandleFaint(arg0);
@@ -785,7 +799,7 @@ void Battle_CheckAllBroughtFainted_Hp(ActivePokemon* arg0) {
     }
 
     if (var_s2 == 0) {
-        Battle_ResetEntityState(arg0);
+        Battle_FormatDamageComment(arg0);
         ptr1->unk_2D = 0x12;
     } else {
         Battle_HandleFaint(arg0);
@@ -794,6 +808,8 @@ void Battle_CheckAllBroughtFainted_Hp(ActivePokemon* arg0) {
 
 /**
  * Test whether staged poison/burn damage leaves the side without a surviving roster member.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Battle_CheckSideDefeatAfterResidualStatus(ActivePokemon* arg0) {
@@ -852,7 +868,7 @@ s32 Battle_CheckFaintAfterMove(void) {
         return 0;
     } else if ((sBattleUser->hp != 0) && (sBattleTarget->hp != 0) && (sBattleUser->volatileStatusFlags & 0x80) &&
                (sBattleUser->unk_10 == 0)) {
-        Battle_CheckAllBroughtFainted_Status(sActivePokemon[sBattleScene.scene->actingSide]);
+        Battle_CheckAllBroughtFainted_LeechSeed(sActivePokemon[sBattleScene.scene->actingSide]);
         return 0;
     }
 }
@@ -888,15 +904,15 @@ void Battle_ResolveMonAction(void)
   sBattleTarget = sp18;
   if ((sBattleScene.scene->mode == 6) || (sBattleScene.scene->mode == 5))
   {
-    sBattleUser->hp = 0x384;
-    sBattleTarget->hp = 0x384;
+    sBattleUser->hp = 900;
+    sBattleTarget->hp = 900;
     func_8210F2F4(sActivePokemon[0]);
     func_8210F2F4(sActivePokemon[1]);
     ProcessBattleTurn();
-    sBattleUser->hp = 0x384;
-    sBattleTarget->hp = 0x384;
-    sBattleUser->hpAfterPoisonBurn = 0x384;
-    sBattleTarget->hpAfterPoisonBurn = 0x384;
+    sBattleUser->hp = 900;
+    sBattleTarget->hp = 900;
+    sBattleUser->hpAfterPoisonBurn = 900;
+    sBattleTarget->hpAfterPoisonBurn = 900;
     sBattleUser->unk_10 = 0x384;
     sBattleTarget->unk_10 = 0x384;
     func_8210F2F4(sActivePokemon[0]);
@@ -935,7 +951,7 @@ void Battle_ResolveMonAction(void)
 
 /**
  * Initialize an entering participant's runtime and clear its transient battle state.
- * Seen in play (2026-11-12): ran when 1P switched Nidorino (ニドニド) out for Onix (イワワ), which
+ * Seen in play (2026-11-12): ran when 1P switched Nidoqueen (ニドニド) out for Onix (イワワ), which
  * entered with full HP 49/ 49.
  */
 void BeginBattleForEntity(ActivePokemon* arg0) {
@@ -965,7 +981,7 @@ void BeginBattleForEntity(ActivePokemon* arg0) {
     sBattleUser = ptr1;
     sBattleTarget = ptr2;
 
-    Battle_ResetEntityState(arg0);
+    Battle_FormatDamageComment(arg0);
     Vec3f_SetComponentsDuplicate(&arg0->modelTransform.unk_00, 0.0f, 0.0f, 0.0f);
     Vec3f_SetComponentsDuplicate(&arg0->modelTransform.rotation, 0.0f, 0.0f, 0.0f);
     Battle_InitPokemonRuntimeState(arg0);

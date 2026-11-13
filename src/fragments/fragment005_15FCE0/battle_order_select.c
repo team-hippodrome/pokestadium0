@@ -162,6 +162,7 @@ extern u8* D_823028CC[];
 extern u8* D_823028D8[];
 extern u8* D_823028E0[];
 extern u8* D_823028E4[][3];
+/** Draws the lead Pokemon icon in the battle order sidebar. */
 void BattleMenu_DrawSidebarLeadIcon(s32 arg0, s32 arg1, unk_D_84803760* arg2) {
     u8* sp2C;
 
@@ -191,6 +192,7 @@ void BattleMenu_DrawSidebarLeadIcon(s32 arg0, s32 arg1, unk_D_84803760* arg2) {
 
 extern u8* D_823028E4[][3];
 
+/** Draws a row's type icon in the battle order sidebar. */
 s32 BattleMenu_DrawSidebarRowTypeIcon(s32 arg0, s32 arg1, s8 arg2, s8 arg3) {
     s32 sp34;
     s32 sp30;
@@ -327,7 +329,8 @@ void BattleMenu_ResetOrderSlotIcons(s32 arg0) {
 
 /**
  * Draws a panel using the border color assigned to its controller port.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-13) ran every frame on the Free Battle order screen, drawing the 1P panel
+ * in blue and the COM panel in green.
  */
 void BattleMenu_DrawPanelBorder(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
     Ui_DrawBorderedPanelStyleB(arg0, arg1, arg2, arg3, D_82302800[arg4]);
@@ -475,6 +478,8 @@ extern char D_82302ACC[];
 
 /**
  * Battle order select: レベルの ごうけいが 155を こえてしまいます (The level total goes over 155).
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void BattleMenu_DrawLevelSumOverNotice(s8* arg0) {
@@ -573,6 +578,7 @@ void BattleMenu_DrawOrderSelectPanel_Ready(unk_D_848037A0* arg0) {
     }
 }
 
+/** Draws the label of the confirm button. */
 void BattleMenu_DrawConfirmButtonLabel(unk_D_848037A0* arg0) {
     s16 sp26;
     s16 sp24;
@@ -598,7 +604,8 @@ void BattleMenu_DrawOrderSelectConfirmPrompt(s8*);
 void BattleMenu_DrawOrderSelectPanel_Ready(unk_D_848037A0*);
 /**
  * Draws the current panel mode when needed and updates its redraw countdown.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-13) ran every frame on the Free Battle order screen, which shows the 1P and
+ * COM panels with their six Pokémon each.
  */
 void BattleMenu_DrawOrderSelectPanel(unk_D_848037A0* arg0) {
     if ((D_82302B40 != 0) || (arg0->unk_0006 != 0)) {
@@ -707,7 +714,8 @@ s32 BattleMenu_IsSlotAlreadySelected(unk_D_848037A0* arg0, s8 arg1) {
  * side): two picks summing to 106 or more, or three summing to 156 or more. The caller then shows
  * the 155 level-total notice.
  * Seen in play: runs on every pick on the order screen (Free Battle, rule 0, so it never fires).
- * @unverified The over-limit case was not triggered.
+ * Seen in play (2026-11-13) on the Free Battle order screen it ran after each 1P pick (pick counts
+ * 0, 1, 2) and returned 0; Free Battle has no level-sum rule.
  */
 s32 BattleMenu_OrderExceedsLevelSumLimit(unk_D_848037A0* arg0) {
     s32 sum;
@@ -909,6 +917,8 @@ void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* arg0, unk_D_8480
 
 /**
  * Dismisses the level-limit warning and clears this panel's picks.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(Controller* arg0, unk_D_848037A0* arg1) {
@@ -972,8 +982,9 @@ extern s32 D_82302B44;
 void BattleMenu_DrawScrollingInstructionPanel(void);
 void func_8000A7FC(u16 color);
 /**
- * @src/stage_loader.c
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Runs the order select screen (both sides pick their three Pokemon) for one frame.
+ * Seen in play (2026-11-13) ran every frame on the Free Battle order screen (じゅんばんを きめてください, 1P and
+ * COM panels).
  */
 s32 BattleMenu_UpdateOrderSelect(s32 arg0) {
     UNUSED s32 pad; // FAKE: stack padding
@@ -1026,6 +1037,8 @@ s32 BattleMenu_UpdateOrderSelect(s32 arg0) {
 
 /**
  * Moves the trainer owning the first selection into the lead tag-team position.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment from Stadium 1.
  */
 void BattleMenu_SetLeadTagTeamMember(BattleSessionTeams* arg0, unk_D_84803760* arg1) {
@@ -1044,6 +1057,8 @@ void BattleMenu_SetLeadTagTeamMember(BattleSessionTeams* arg0, unk_D_84803760* a
 
 /**
  * Appends the unpicked roster slots in ascending order to fill six entries.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment from Stadium 1.
  */
 void BattleMenu_AppendUnpickedSlots(s8* arg0, s32 arg1) {
@@ -1115,6 +1130,8 @@ void BattleMenu_CommitOrderSelection(void) {
 
 /**
  * Initializes one trainer's panel and loads its roster icons.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleMenu_AddOrderSelectPanel(s16 arg0, s16 arg1, TeamRoster* arg2, s32 arg3, s32 arg4) {
@@ -1155,6 +1172,8 @@ extern s32 D_82302C00;
 extern Controller D_82302BD8;
 /**
  * Resets selection state and creates controller-ordered panels for both sides.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleMenu_InitOrderSelectPanels(SessionContext* arg0) {
@@ -1226,6 +1245,8 @@ s32 func_82301EF4();
 
 /**
  * Loads selection resources, runs the screen through its fades, and commits the orders.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 arg1) {

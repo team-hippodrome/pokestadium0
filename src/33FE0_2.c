@@ -57,6 +57,7 @@ s32 func_800332B0(s32 arg0) {
     return ((u8*)(s32)ptr + (arg0 * 0x10)) - ptr;
 }
 
+/** Returns the absolute value of a float. */
 f32 Math_FAbs(f32 value) {
     if (value < 0.0f) {
         value = -value;
@@ -64,6 +65,10 @@ f32 Math_FAbs(f32 value) {
     return value;
 }
 
+/**
+ * Stores the cross product of (ax, ay, az) and (bx, by, bz) in the output
+ * components.
+ */
 void Math_CrossProduct(f32 ax, f32 ay, f32 az, f32 bx, f32 by, f32 bz, f32* cx, f32* cy, f32* cz) {
     *cx = (ay * bz) - (az * by);
     *cy = (az * bx) - (ax * bz);
@@ -125,6 +130,7 @@ f32 func_80033408(
     return sqrtf(SQ(ex - px) + SQ(ey - py) + SQ(ez - pz));
 }
 
+/** Returns the vertex class of a vertex from a packed index table. */
 s16 Model_GetVertexClass(s16* table, s32 index) {
     s16 temp;
     s16 slot = table[index];
@@ -160,6 +166,7 @@ s16 Model_GetVertexClass(s16* table, s32 index) {
     return slot;
 }
 
+/** Returns the threshold value of a vertex from a packed index table. */
 s16 Model_GetVertexThreshold(s16* arg0, s32 arg1) {
     s16 temp_v0;
     s16 temp_v1;
@@ -174,6 +181,7 @@ s16 Model_GetVertexThreshold(s16* arg0, s32 arg1) {
     return 0;
 }
 
+/** Returns the joint of a vertex from a packed index table. */
 s16 Model_GetVertexJoint(s16* arg0, s32 arg1) {
     s16 temp_v1;
     s16 temp_a2;
@@ -182,6 +190,7 @@ s16 Model_GetVertexJoint(s16* arg0, s32 arg1) {
     return temp_a2;
 }
 
+/** Returns the merge class of a vertex from a packed index table. */
 s16 Model_GetVertexMergeClass(s16* arg0, s32 arg1) {
     s16 temp_v1;
     s16 temp_a2;
@@ -190,6 +199,7 @@ s16 Model_GetVertexMergeClass(s16* arg0, s32 arg1) {
     return temp_a2;
 }
 
+/** Returns the target class of a vertex from a packed index table. */
 s16 Model_GetVertexTargetClass(s16* arg0, s32 arg1) {
     s16 temp_v1;
     s16 temp_a2;
@@ -198,6 +208,7 @@ s16 Model_GetVertexTargetClass(s16* arg0, s32 arg1) {
     return temp_a2;
 }
 
+/** Returns the source class of a vertex from a packed index table. */
 s16 Model_GetVertexSourceClass(s16* arg0, s32 arg1) {
     s16 temp_v1;
     s16 temp_a2;
@@ -206,6 +217,7 @@ s16 Model_GetVertexSourceClass(s16* arg0, s32 arg1) {
     return temp_a2;
 }
 
+/** Returns the matrix class of a vertex from a packed index table. */
 s16 Model_GetVertexMatrixClass(s16* arg0, s32 arg1) {
     s16 temp_v1;
     s16 temp_a2;

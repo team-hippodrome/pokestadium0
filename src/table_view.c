@@ -22,6 +22,7 @@ void PointerList_Filter(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_0
 s32 Text_CompareU16Terminated(u16* a0, u16* a1);
 s32 Text_CompareGlyphCodes(u8* a0, u8* a1);
 
+/** Initializes a table view over a data table with the given dimensions. */
 void TableView_Initialize(unk_func_88201DA0_038* arg0, unk_func_88201DA0_034* arg1, s32 arg2, s32 arg3, s32 arg4) {
     arg0->unk_00 = arg1;
     arg0->unk_0C = arg2;
@@ -29,6 +30,7 @@ void TableView_Initialize(unk_func_88201DA0_038* arg0, unk_func_88201DA0_034* ar
     arg0->unk_08 = arg4;
 }
 
+/** Appends a row to a byte matrix. */
 s32 ByteMatrix_AppendRow(unk_func_8820BE14_06C* arg0, s8* a1) {
     s8* var_v0;
     s32 i;
@@ -49,6 +51,7 @@ s32 ByteMatrix_AppendRow(unk_func_8820BE14_06C* arg0, s8* a1) {
     return 0;
 }
 
+/** Inserts a row into a byte matrix at an index. */
 s32 ByteMatrix_InsertRow(unk_func_8820BE14_06C* arg0, s8* arg1, s32 arg2) {
     s32 var_t1;
     s8* var_t0;
@@ -80,6 +83,7 @@ s32 ByteMatrix_InsertRow(unk_func_8820BE14_06C* arg0, s8* arg1, s32 arg2) {
     return 0;
 }
 
+/** Removes a row from a byte matrix. */
 s32 ByteMatrix_RemoveRow(unk_func_8820BE14_06C* arg0, s32 arg1) {
     s32 var_t0;
     s8* var_a3;
@@ -104,6 +108,7 @@ s32 ByteMatrix_RemoveRow(unk_func_8820BE14_06C* arg0, s32 arg1) {
     return 0;
 }
 
+/** Copies a row into a byte matrix. */
 s32 ByteMatrix_CopyRow(unk_func_8820BE14_06C* arg0, s8* a1, s32 arg2) {
     s8* var_v0;
     s32 i;
@@ -123,6 +128,7 @@ s32 ByteMatrix_CopyRow(unk_func_8820BE14_06C* arg0, s8* a1, s32 arg2) {
     return 0;
 }
 
+/** Copies a row into a byte matrix at an index. */
 s32 ByteMatrix_CopyRowAt(unk_func_8820BE14_06C* arg0, s8* a1, s32 arg2) {
     s8* var_v0;
     s32 i;
@@ -142,6 +148,7 @@ s32 ByteMatrix_CopyRowAt(unk_func_8820BE14_06C* arg0, s8* a1, s32 arg2) {
     return 0;
 }
 
+/** Removes an entry from a list of 16-bit values. */
 s32 WordList_Remove(unk_func_8830867C_04C_030_02C_000_000_00C* arg0, s32 arg1) {
     s16* var_a2;
     s32 var_a3;
@@ -166,12 +173,14 @@ s32 WordList_Remove(unk_func_8830867C_04C_030_02C_000_000_00C* arg0, s32 arg1) {
     return 0;
 }
 
+/** Initializes a pointer list over a given array. */
 void PointerList_Initialize(unk_func_88205880_A030* arg0, void** arg1, s32 arg2, s32 arg3) {
     arg0->unk_00 = arg1;
     arg0->unk_04 = arg2;
     arg0->unk_08 = arg3;
 }
 
+/** Inserts a pointer into a pointer list at an index. */
 void PointerList_Insert(unk_func_88200FA0_030_038* arg0, char* arg1, s32 arg2) {
     s32 var_t1;
     unk_func_88205880_00D0** var_t0;
@@ -190,6 +199,7 @@ void PointerList_Insert(unk_func_88200FA0_030_038* arg0, char* arg1, s32 arg2) {
     arg0->unk_08++;
 }
 
+/** Removes a pointer from a pointer list. */
 void PointerList_Remove(unk_func_8830867C_02C_0CC* arg0, s32 arg1) {
     s32 var_a2;
     unk_func_8830867C_02C_0CC_000** var_v0;
@@ -208,6 +218,7 @@ void PointerList_Remove(unk_func_8830867C_02C_0CC* arg0, s32 arg1) {
     }
 }
 
+/** Swaps two ranges of pointers. */
 void PointerList_SwapRange(void** arg0, void** arg1, s32 arg2) {
     s32 i;
 
@@ -218,6 +229,7 @@ void PointerList_SwapRange(void** arg0, void** arg1, s32 arg2) {
     }
 }
 
+/** Returns the median of three pointers according to a comparison function. */
 s32* Sort_SelectMedianPointer(s32* arg0, s32* arg1, s32* arg2, s32 (*arg3)(s32, s32)) {
     return (arg3(*arg0, *arg1) < 0)   ? (arg3(*arg1, *arg2) < 0)   ? arg1
                                         : (arg3(*arg0, *arg2) < 0) ? arg2
@@ -227,6 +239,7 @@ s32* Sort_SelectMedianPointer(s32* arg0, s32* arg1, s32* arg2, s32 (*arg3)(s32, 
                                       : arg0;
 }
 
+/** Sorts an array of pointers with a quicksort using a comparison function. */
 void Sort_QuickSort(void** base, s32 n, s32 (*cmp)(s32, s32)) {
     void** sp8C;
     s32 temp_s2;
@@ -354,6 +367,7 @@ void Sort_QuickSort(void** base, s32 n, s32 (*cmp)(s32, s32)) {
     }
 }
 
+/** Sorts a pointer list with a comparison function. */
 void PointerList_Sort(unk_func_8830867C_02C_0CC* arg0, s32 (*arg1)(s32, s32)) {
     Sort_QuickSort(arg0->unk_00, arg0->unk_08, arg1);
 }
@@ -379,6 +393,7 @@ void PointerList_Filter(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_0
     arg1->unk_08 = ((s32)var_s1 - (s32)arg1->unk_00) >> 2;
 }
 
+/** Compares two zero-terminated 16-bit strings. */
 s32 Text_CompareU16Terminated(u16* a0, u16* a1) {
     u16* arg0 = a0;
     u16* arg1 = a1;
@@ -407,6 +422,7 @@ s32 Text_CompareU16Terminated(u16* a0, u16* a1) {
 // subtracts 0x100 from every code whose lead byte is 0xA5 (katakana row), which
 // maps it onto the matching 0xA4 hiragana code so both kana scripts sort
 // together; ties are then broken by an exact code comparison.
+/** Compares two strings of 16-bit glyph codes. */
 s32 Text_CompareGlyphCodes(u8* a0, u8* a1) {
     u16* arg0 = (u16*)a0;
     u16* arg1 = (u16*)a1;

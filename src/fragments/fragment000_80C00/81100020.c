@@ -163,7 +163,7 @@ void func_81100390(s32 arg0, s32 arg1, s32 arg2) {
     func_81103C40(fb + 0x138AE, &D_8111CDA8, 0, 0x10, 0xC);
     fb += 0xBB80;
     func_81103C40(fb, &D_8111C6A8, 0, 8, 8);
-    for (i = 0; i < 0x12; i++) {
+    for (i = 0; i < 18; i++) {
         r = fb; // FAKE
         if (i == 1) {
             i = 8;

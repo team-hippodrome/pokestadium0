@@ -205,6 +205,8 @@ void BattleScene_ReactionMultiHitEnd(CameraNode* arg0, void* arg1) {
 /**
  * Step 4 reaction when the hit also lowered a stat or confused the target (hitReactionKind 3, set
  * by Battle_Effect_LowerStat and Battle_Effect_ConfuseChance).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name from BattleScene_ActionStepReaction's dispatch.
  */
 void BattleScene_ReactionSideEffect(CameraNode* arg0, void* arg1) {
@@ -547,6 +549,8 @@ void func_8212C530(s32 arg0)
 
 /**
  * Plays BattleCamera_PlayShot variant 0-4 on the acting Pokemon.
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name from the code.
  */
 void BattleCamera_PlayUserShot(s32 arg0, s32 arg1) {
@@ -576,6 +580,7 @@ void BattleCamera_PlayUserShot(s32 arg0, s32 arg1) {
 /**
  * Plays one of four camera shots on the target (variant 0-3, from the move table or random).
  * Phase 8 uses it with a random variant for the dodge.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle.
  * @unverified Name from the code.
  */
 void BattleCamera_PlayTargetShot(ActivePokemon* arg0, CameraNode* arg1, s32 arg2) {
@@ -830,9 +835,9 @@ void BattleScene_PhaseMoveFailedMessage(CameraNode* arg0) {
 
 /**
  * Phase 21 (moveEffectKind 0x15, set by Battle_Effect_Heal): Recover, Soft-Boiled and Rest.
- * Not reached in the sweep: 1P's Nidorino was at full HP, so heal moves failed to phase 28
+ * Not reached in the sweep: 1P's Nidoqueen was at full HP, so heal moves failed to phase 28
  * instead.
- * Seen in play (2026-11-12): Recover with Nidorino at 20/69 HP ran this phase, and the HUD then
+ * Seen in play (2026-11-12): Recover with Nidoqueen at 20/69 HP ran this phase, and the HUD then
  * showed 54/69 (half its max HP restored).
  */
 void BattleScene_PhaseHeal(CameraNode* arg0) {
@@ -1590,7 +1595,7 @@ void BattleScene_PhaseEndTurn(s32 arg0) {
  * Phase 16 (moveEffectKind 0x10, set by Battle_PrintMoveFailureText): Jump Kick and Hi Jump Kick
  * missed and the user takes crash damage.
  * In play a forced Jump Kick miss went 2 -> 16, showed 「いきおい あまって ニドニドは じめんに ぶつかった！」 and took
- * Nidorino from 69 to 68 HP.
+ * Nidoqueen from 69 to 68 HP.
  */
 void BattleScene_PhaseCrashDamage(CameraNode* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
@@ -2068,7 +2073,7 @@ void BattleScene_Phase10(CameraNode* arg0) {
                 BattleMessage_ShowForSide(D_8219A520 + 0x2C8, !sBattleScene.scene->actingSide);
                 sBattleScene.scene->phaseStep += 1;
             }
-
+            /* fallthrough */
         case 2:
             if (BattleScene_AdvanceCameraFrameCounter(0x3C) != 0) {
                 func_8211EE8C();

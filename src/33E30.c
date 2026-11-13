@@ -15,6 +15,8 @@ extern char D_8007DBAC[];
 void func_8005666C();
 /**
  * Prints an Mtx as 8 rows of 2 hex words via rmonPrintf.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void Debug_PrintMtx(s32 *arg0) {
@@ -39,6 +41,8 @@ extern char D_8007DBC0[];
 
 /**
  * Prints an MtxF as 4x4 floats via rmonPrintf.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void Debug_PrintMtxF(f32* arg0) {
@@ -55,6 +59,10 @@ void Debug_PrintMtxF(f32* arg0) {
     rmonPrintf(D_8007DBC0);
 }
 
+/**
+ * Draws a triangle marker at a position with the given color and scale,
+ * returning the advanced display list pointer.
+ */
 Gfx* Gfx_DrawTriangleMarker(Gfx* arg0, Vec3f* arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, f32 arg6) {
     f32 sp144;
     f32 sp140;

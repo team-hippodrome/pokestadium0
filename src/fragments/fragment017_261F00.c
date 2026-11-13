@@ -9,6 +9,8 @@ extern s32 D_8A0005F0;
 
 /**
  * Draws a lab menu item, in yellow when it is selected.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void LabMenu_DrawItem(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -41,6 +43,8 @@ extern M2C_UNK D_8A000640;
 
 /**
  * Draws the lab menu: ポケモンずかん (Pokedex) title and the items ずかん, ポケモン, どうぐ, なまえ, せってい, とじる (Pokedex, Pokemon, Items, Name, Settings, Close).
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 LabMenu_Draw(s32 arg0) {
@@ -77,9 +81,11 @@ extern s32 D_8A0005F0;
  * func_8003F6AC(1) and decrements it, wrapping -1 to 5; any other value does
  * nothing.
  * Matching note: the empty `if (!D_8A0005F0) {}` before the first call has no
- * effect on behaviour. It was found with decomp-permuter and is the only form
+ * effect on behavior. It was found with decomp-permuter and is the only form
  * tried that gives the ROM's register for the address of D_8A0005F0 (v1
  * instead of v0). Same kind of workaround as in func_81200A20.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void LabMenu_UpdateCursor(void) {
@@ -116,6 +122,8 @@ extern s8 D_8A100000;
 extern s8 D_8A200000;
 /**
  * Loads the fragment for the selected lab menu item.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void LabMenu_LoadSelectedFragment(void) {
@@ -152,6 +160,8 @@ void func_8003F6AC(s32);
 void LabMenu_UpdateCursor(void);
 /**
  * One frame of the lab menu: A loads the selection, B closes.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 LabMenu_RunFrame(s32 arg0) {
@@ -200,6 +210,8 @@ s32 LabMenu_RunFrame(s32);
 
 /**
  * Entry point: pushes the 'BMNU' pool state, loads the font and segments, and starts the lab menu loop.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 LabMenu_Init(s32 arg0, M2C_UNK arg1) {

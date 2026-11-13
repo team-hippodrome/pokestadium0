@@ -190,6 +190,7 @@ typedef struct LabPCListBoxZero {
     /* 0x1C */ char unk1C[0x8];
 } LabPCListBoxZero; // size = 0x24
 
+/** Flattens the list's nested entries into one list. */
 void LabPCList_FlattenEntries(unk_func_88200FA0_030_038* arg0, unk_func_8830867C_02C_144* arg1) {
     s32 i;
     s32 j;
@@ -310,6 +311,7 @@ void func_89109E5C(unk_func_8830867C_02C_154* arg0, void* arg1, void* arg2, void
     }
 }
 
+/** Reads a deck category into the list. */
 void LabPCList_ReadDeckCategory(unk_func_8830867C_02C_154* arg0) {
     DeckHandle* sp24;
 
@@ -319,6 +321,7 @@ void LabPCList_ReadDeckCategory(unk_func_8830867C_02C_154* arg0) {
     arg0->unk_08 = 0;
 }
 
+/** Writes the list back to a deck category. */
 void LabPCList_WriteDeckCategory(unk_func_8830867C_02C_154* arg0) {
     DeckHandle* sp24 = Deck_Open(arg0->unk_00, arg0->unk_01, arg0->unk_02, 1);
 
@@ -327,6 +330,7 @@ void LabPCList_WriteDeckCategory(unk_func_8830867C_02C_154* arg0) {
     arg0->unk_08 = 0;
 }
 
+/** Returns whether an item ID is a TM; converts the ID to the TM index. */
 s32 LabPCList_IsTmItemId(s32* arg0) {
     if ((*arg0 >= 0xC9) && (*arg0 < 0xFB)) {
         *arg0 -= 0x65;
@@ -339,6 +343,7 @@ s32 LabPCList_IsTmItemId(s32* arg0) {
     return 0;
 }
 
+/** Returns whether an item ID is an HM. */
 s32 LabPCList_IsHmItemId(s32* arg0) {
     static u8 D_8831A250[] = { 0x23, 0x24, 0x25, 0x26, 0x27, 0x28 };
 
@@ -354,6 +359,7 @@ s32 LabPCList_IsHmItemId(s32* arg0) {
     return 0;
 }
 
+/** Returns whether an item ID is the special TM. */
 s32 LabPCList_IsSpecialTmItemId(s32* arg0) {
     static u8 D_8831A258[] = { 0x4F };
 
@@ -369,6 +375,7 @@ s32 LabPCList_IsSpecialTmItemId(s32* arg0) {
     return 0;
 }
 
+/** List comparison for TM and HM entries. */
 s32 LabPCList_CompareTmHmEntries(unk_func_88200FA0_030_038* arg0, unk_func_88200FA0_030_038* arg1) {
     return (arg0->unk_08 - arg1->unk_08 != 0) ? arg0->unk_08 - arg1->unk_08 : (s32)arg0[1].unk_00 - (s32)arg1[1].unk_00;
 }
@@ -438,6 +445,7 @@ void func_8910A21C(unk_func_88200FA0_030_038* arg0, TmEntry8910A21C* arg1, unk_f
     PointerList_Sort(arg0, LabPCList_CompareTmHmEntries);
 }
 
+/** Returns whether a species learns a move by level up. */
 s32 LabPCList_CanLearnMoveByLevelUp(s32 arg0, s32 arg1) {
     static SpeciesData D_8831757C[] = {
         { 0x06, 0x4E, 0x54, 0x4E, 0x64, 0x55, 0x14, 0x02, 0x2D, 0xD1, {0x0A, 0x2D, 0x34, 0x2B}, 0x03, {0xB5, 0x43, 0x4F, 0xCE, 0xE3, 0x08, 0x2E}, 0x00 },
@@ -550,6 +558,7 @@ void func_8910A4C8(s8* arg0, u8* arg1) {
     }
 }
 
+/** Consumes a TM item after use. */
 void LabPCList_ConsumeUsedTmItem(unk_func_8830867C_04C_030_02C_000* arg0) {
     if ((LabItem_IsQuantitylessItemForOperation(arg0->unk_00[0]->unk_00) != 0) || (arg0->unk_00[0]->unk_01 < 2)) {
         s32 tmp = arg0->unk_00[1]->unk_0C.unk_00;

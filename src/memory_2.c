@@ -11,6 +11,7 @@ void* MainPool_AllocAligned(struct MainPoolState* state, s32 arg1, s32 arg2);
 void MainPool_ResetStateToOffset(struct MainPoolState* state, s32 size);
 void MainPool_ResetState(struct MainPoolState* state);
 
+/** Allocates a main pool state from one side of the pool. */
 void* MainPool_AllocState(u32 size, s32 side) {
     MainPoolBlock* block;
     void* ptr = NULL;
@@ -24,6 +25,7 @@ void* MainPool_AllocState(u32 size, s32 side) {
     return ptr;
 }
 
+/** Finalizes a block allocation, aligning its size. */
 void MainPool_FinalizeAllocation(struct MemoryBlock* block) {
     s32 size = ALIGN16(block->size + 0x10);
 
@@ -31,6 +33,7 @@ void MainPool_FinalizeAllocation(struct MemoryBlock* block) {
     block->next = (void*)(size - 0x10);
 }
 
+/** Initializes a main pool state over a block of memory. */
 void* MainPool_InitState(struct MainPoolState* block, s32 size) {
     void* temp_v1 = (void*)((u8*)block + 0x10);
 
@@ -41,6 +44,7 @@ void* MainPool_InitState(struct MainPoolState* block, s32 size) {
     return block;
 }
 
+/** Allocates aligned memory from a pool state. */
 void* MainPool_AllocAligned(struct MainPoolState* state, s32 arg1, s32 arg2) {
     s32 temp_a2;
     s32 temp_a3;
@@ -64,6 +68,7 @@ void* MainPool_AllocAligned(struct MainPoolState* state, s32 arg1, s32 arg2) {
     return ret;
 }
 
+/** Resets a pool state, keeping the first part of its allocations. */
 void MainPool_ResetStateToOffset(struct MainPoolState* state, s32 size) {
     if ((s32)state->freeSpace >= size) {
         state->listHeadL = size;
@@ -71,6 +76,7 @@ void MainPool_ResetStateToOffset(struct MainPoolState* state, s32 size) {
     }
 }
 
+/** Frees every allocation of a pool state. */
 void MainPool_ResetState(struct MainPoolState* state) {
     void* mem = (u8*)((u32)state + sizeof(struct MainPoolState));
 

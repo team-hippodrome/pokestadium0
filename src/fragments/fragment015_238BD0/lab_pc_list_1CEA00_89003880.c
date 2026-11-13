@@ -222,7 +222,8 @@ typedef struct Ctx89003880 {
 } Ctx89003880;
 /**
  * Writes the changed item lists back to the save and flushes it.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran on レポートしてやめる (ないようが へんこうされています) after moving items in せいとん >
+ * どうぐをいどうする.
  */
 void LabItem_SaveChanges(s8* arg0) {
     s32 locked = 0;
@@ -269,7 +270,8 @@ void LabItem_SaveChanges(s8* arg0) {
 
 /**
  * Returns 1 when any of the three item lists changed.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once when B left the item sort screen after nothing had been moved;
+ * the screen closed without asking to save.
  */
 s32 LabItem_HasUnsavedChanges(s32* arg0) {
     s32 i;
@@ -559,6 +561,8 @@ M2C_UNK func_80027FF8(M2C_UNK *, s32);
  * &D_89019110 to func_80027FF8. Then calls LabTerminal_InitMainMenu(&D_89028950) and sets
  * D_890289D4 to 1. (The value is re-read from D_89019108 after the store, which is
  * what the retail register allocation needs.) What the value means is not established.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void LabTerminal_InitScreen(void) {

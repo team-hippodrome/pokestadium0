@@ -852,6 +852,9 @@ s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 s32 func_800383DC(s32, s32, s32, s32, s32, s32, s32);
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the main menu, the Pokédex,
+ * the party screen, the Lab list, Lab sort, registration, the Lab PC, Free Battle setup, the battle
+ * opening, a switch in battle, running from battle and a Pound turn.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Audio_UpdateBattleAudioFrame(void) {
@@ -908,6 +911,8 @@ s32 func_80037F68(u8*, u8*);
 void func_80037C04(s32, u32);
 
 /**
+ * Seen in play (2026-11-13) ran just after Start at the title screen (console reset, then N64 logo,
+ * opening, title and main menu).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 Audio_LoadWaveTablesAndMusic(u8* arg0) {
@@ -932,6 +937,7 @@ s32 Audio_LoadWaveTablesAndMusic(u8* arg0) {
     return D_800FD608;
 }
 
+/** Clears the flag that marks wave data as loaded. */
 void Audio_ClearWaveDataLoaded(void) {
     D_80075C30 &= ~0x80000000;
 }

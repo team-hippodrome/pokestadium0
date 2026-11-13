@@ -21,6 +21,7 @@ void Gfx_GetDisplayListRange(Gfx** arg0, Gfx** arg1);
 void* Gfx_AllocDisplayList(s32 size);
 s32 Gfx_GetDisplayListRemaining(void);
 
+/** Allocates the two display list buffers. */
 void Gfx_InitDisplayListBuffers(u32 buffer_size, s32 pool_side) {
     D_800AA158.unk10 = 0;
     D_800AA158.unkC = buffer_size;
@@ -29,11 +30,13 @@ void Gfx_InitDisplayListBuffers(u32 buffer_size, s32 pool_side) {
     Gfx_SwapDisplayListBuffer();
 }
 
+/** Frees the display list buffers. */
 void Gfx_FreeDisplayListBuffers(void) {
     main_pool_try_free(D_800AA158.unk4);
     main_pool_try_free(D_800AA158.unk0);
 }
 
+/** Switches to the other display list buffer. */
 void Gfx_SwapDisplayListBuffer(void) {
     s32* temp_v0 = (s32*)&D_800AA158;
 
@@ -44,12 +47,14 @@ void Gfx_SwapDisplayListBuffer(void) {
     gDisplayListHead = *temp_v0;
 }
 
+/** Returns the start and current end of the display list buffer. */
 void Gfx_GetDisplayListRange(Gfx** arg0, Gfx** arg1) {
     s32* ptr = (s32*)&D_800AA158;
     *arg1 = (Gfx*)((uintptr_t)gDisplayListHead - ptr[D_800AA158.unk10]);
     *arg0 = (Gfx*)(ptr[D_800AA158.unk10]);
 }
 
+/** Allocates space from the end of the display list buffer. */
 void* Gfx_AllocDisplayList(s32 size) {
     u32 temp_v0;
     u32 ret;
@@ -64,6 +69,7 @@ void* Gfx_AllocDisplayList(s32 size) {
     return ret;
 }
 
+/** Returns how many bytes of the display list buffer remain. */
 s32 Gfx_GetDisplayListRemaining(void) {
     return D_800AA158.unk8 - (uintptr_t)gDisplayListHead;
 }

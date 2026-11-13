@@ -261,8 +261,8 @@ extern u8 D_8F4B2EB0[];
  * Seen in play: draws 「オプション」 with サウンド/じっきょう/バックアップ/おわり; the cursor moves with D-Down.
  */
 void Options_DrawMenu(s32 arg0, u8 arg1) {
-    Color_RGB8 sp44 = {0x00, 0x00, 0x32};
-    Color_RGB8 sp40 = {0x00, 0x00, 0xC8};
+    Color_RGB8 sp44 = {0x00, 0x00, 0x32}; // #000032
+    Color_RGB8 sp40 = {0x00, 0x00, 0xC8}; // #0000C8
     static char *D_88402FA4[] = {D_88403234, D_88403240};
     static char *D_88402FAC[] = {D_8840324C, D_88403254};
     s32 row;
@@ -295,8 +295,8 @@ void Options_DrawMenu(s32 arg0, u8 arg1) {
  * Seen in play: draws 「64のセーブデータをクリアします よろしいですか？」 with はい / いいえ.
  */
 void Options_DrawClearSavePrompt(s32 arg0, s32 arg1) {
-    Color_RGB8 sp4C = { 0x00, 0x00, 0x32 };
-    Color_RGB8 sp48 = { 0x00, 0x00, 0xC8 };
+    Color_RGB8 sp4C = { 0x00, 0x00, 0x32 }; // #000032
+    Color_RGB8 sp48 = { 0x00, 0x00, 0xC8 }; // #0000C8
     UNUSED s32 pad; // FAKE: stack padding
     s16 pos[2];
     s32 temp;
@@ -382,6 +382,7 @@ s32 Options_RunClearSavePrompt(s32 arg0, s32 arg1, u8 arg2) {
     return loop;
 }
 
+/** Initializes save bank 3. */
 void Save_InitializeBank3(void) {
     s32 i;
 
@@ -631,6 +632,8 @@ void func_884022AC(void) {
 /**
  * Fragment006_Main entry when no Transfer Pak is detected (D_800AF986 == 0): sets up the screen
  * and runs TransferPak_RunCartridgeCheckScreen.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name from the code; this path ran in play (no paks), but the function was already
  * running when breakpoints went in.
  */
@@ -662,6 +665,8 @@ s32 TransferPak_EnterCheckScreenNoPaks(void) {
 /**
  * Fragment006_Main entry when a Transfer Pak is present: commits the detected cartridge
  * (func_80025BE4) and continues without the check loop.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name from the code.
  */
 s32 TransferPak_EnterWithPakSkippingCheck(void) {
@@ -684,6 +689,8 @@ s32 TransferPak_EnterWithPakSkippingCheck(void) {
 /**
  * Fragment006_Main entry when arg0 != 0 (coming back from the menus): rebuilds the scene and runs
  * the cartridge check loop again.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name from the code.
  */
 s32 TransferPak_EnterCheckScreenOnReturn(void) {
@@ -817,6 +824,8 @@ void func_884029FC(void) {
  * loops depending on arg0 and D_800AF986, and on success queues fragment014
  * (0x88000000) and returns 0x8040; otherwise returns 0x8010. Which game mode this is
  * has not been identified.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name says only which fragment this is.
  */
 s32 Fragment006_Main(s32 arg0, s32 arg1) {

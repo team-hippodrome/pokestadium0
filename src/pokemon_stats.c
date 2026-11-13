@@ -32,6 +32,7 @@ s32 Deck_GetCount(s32 arg0, s32 arg1, s32 arg2);
 s32 Deck_ReadEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, BattleMon* arg4);
 s32 Deck_WriteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, unk_func_88205880_00D0* arg4);
 
+/** Closes a deck handle, writing back changes. */
 s32 Deck_CloseAndFlush(DeckHandle* arg0) {
     s32 sp1C = 0;
 
@@ -51,6 +52,7 @@ void func_80020CC8(s32 *arg0, s32 arg1) {
     }
 }
 
+/** Reads the entries of a deck. */
 s32 Deck_ReadEntries(u8* arg0, s32 arg1, DeckHandle* arg2) {
     s32 var_s3;
     s32 var_s4;
@@ -94,6 +96,7 @@ s32 Deck_ReadEntries(u8* arg0, s32 arg1, DeckHandle* arg2) {
     return var_s4;
 }
 
+/** Writes the entries of a deck. */
 s32 Deck_WriteEntries(u8* arg0, s32 arg1, DeckHandle* arg2) {
     s32 var_s2;
     s32 var_s4;

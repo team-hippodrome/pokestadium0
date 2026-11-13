@@ -25,7 +25,9 @@ void func_82140B70(s8 *arg0, s32 arg1) {
 
 /**
  * Load the supplied texture using ParticleGfx_LoadTextureIa8.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pay Day, Ice Punch, Horn Attack, Pin Missile,
+ * Ice Beam and others): it emitted an IA texture load (FD700000) of the passed texture with the
+ * 32x32 tile (G_LOADBLOCK 071FF200).
  */
 void ParticleGfx_LoadTextureCallbackIa8_32x32(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureIa8(texture, 32, 32);
@@ -39,7 +41,8 @@ void func_82140BD0(s8 *arg0, s32 arg1) {
 
 /**
  * Load the supplied texture using ParticleGfx_LoadTextureI4Alias.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Solarbeam): it emitted an I texture load
+ * (FD900000) of the passed texture 0x8033CB00 with the 32x32 block (070FF400).
  */
 void ParticleGfx_LoadTextureCallbackI4_32x32(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureI4Alias(texture, 32, 32);
@@ -53,7 +56,9 @@ void func_82140C30(s8 *arg0, s32 arg1) {
 
 /**
  * Load a texture frame selected by the shared particle clock using ParticleGfx_LoadTextureI4Alias.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Mega Punch, Pin Missile, Water Gun, Thunderbolt
+ * and others): from base 0x8033DA50 it loaded 0x8033DE50, frame 2 of the 0x200-byte 32x32 I4
+ * frames, picked by gParticleFrameMod4.
  */
 void ParticleGfx_LoadTextureCallbackI4FrameMod4_32x32(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureI4Alias(&texture[gParticleFrameMod4 * (32 * 32 / 2)], 32, 32);
@@ -61,7 +66,9 @@ void ParticleGfx_LoadTextureCallbackI4FrameMod4_32x32(UNUSED Particle* arg0, u8*
 
 /**
  * Load a texture frame selected by the shared particle clock using ParticleGfx_LoadTextureI4Alias.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Water Gun, Hydro Pump, Surf, Waterfall): from
+ * base 0x8033F250 it loaded 0x8033F650, frame 2 of the 32x32 I4 frames, picked by
+ * gParticleFrameDiv2 & 3.
  */
 void ParticleGfx_LoadTextureCallbackI4FrameDiv2Mod4_32x32(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureI4Alias(&texture[(gParticleFrameDiv2 & 3) * (32 * 32 / 2)], 32, 32);
@@ -69,6 +76,10 @@ void ParticleGfx_LoadTextureCallbackI4FrameDiv2Mod4_32x32(UNUSED Particle* arg0,
 
 /**
  * Load a texture frame selected by the shared particle clock using ParticleGfx_LoadTextureI4Alias.
+ * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran
+ * while the new Pokémon was sent out.
+ * Seen in play (2026-11-13) it also ran when COM sent out its next Pokémon (ゆけっ！ゲンのすけ) after its
+ * first one fainted.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureCallbackI4FrameDiv4Mod4_32x32(UNUSED Particle* arg0, u8* texture) {
@@ -77,7 +88,9 @@ void ParticleGfx_LoadTextureCallbackI4FrameDiv4Mod4_32x32(UNUSED Particle* arg0,
 
 /**
  * Load a texture frame selected by the shared particle clock using ParticleGfx_LoadTextureI4Alias.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Hydro Pump, Ice Beam, Psybeam, Bubblebeam, Hyper
+ * Beam): from base 0x80342AE0 it loaded 0x80342CE0 and 0x803432E0 (frames 1 and 4 of 8), picked by
+ * gParticleFrameDiv2 & 7.
  */
 void ParticleGfx_LoadTextureCallbackI4FrameDiv2Mod8_32x32(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureI4Alias(&texture[(gParticleFrameDiv2 & 7) * (32 * 32 / 2)], 32, 32);

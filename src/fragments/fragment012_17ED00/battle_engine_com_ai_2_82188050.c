@@ -16,6 +16,8 @@ s32 BattleAi_EstimateDamage(s8 *, s8 *, u8);
  * If the chosen move is Hyper Beam but it would not knock the opponent out, looks
  * for another damaging move that would, trying stronger move groups only in later
  * rounds. Returns the move slot to use.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_ReplaceHyperBeam(s32 arg0) {
@@ -288,6 +290,8 @@ s32 BattleAi_ChooseMove(void)
 /**
  * If move slot arg0 has no PP left, returns another slot holding the same move
  * with PP; otherwise arg0.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_FindSlotWithPp(s32 arg0) {

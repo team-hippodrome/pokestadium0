@@ -43,6 +43,8 @@ extern u8 D_81184656[1];
 
 /**
  * Marks the fonts that are not permanently loaded (status 5) as unloaded. Zelda 64 audio driver (heap.c), same position and shape.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioHeap_ResetLoadStatus(void) {
@@ -92,6 +94,8 @@ extern s32 D_811858E8;
  * sequences and register numbering (a plain `&= 0xFF7F; |= 0x40` on a byte
  * was one temporary register off). Indexing the array with the loop counter,
  * instead of a separate byte offset, gives the retail loop setup order.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioHeap_DiscardFont(s32 arg0) {
@@ -118,6 +122,8 @@ extern s16 D_811858CC;
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Stops every sequence player that plays sequence `arg0`. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioHeap_DiscardSequence(s32 arg0)
@@ -146,6 +152,8 @@ void AudioHeap_DiscardSequence(s32 arg0)
 
 /**
  * Like alHeapDBAlloc: carves a 16-byte aligned block and zeroes it. Returns 0 when the arena is full.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 u32 GbApu_AllocZeroed(unk_func_81206FA0* arg0, s32 arg1) {
@@ -169,6 +177,8 @@ u32 GbApu_AllocZeroed(unk_func_81206FA0* arg0, s32 arg1) {
 
 /**
  * GbApu_AllocZeroed without the clear.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 GbApu_Alloc(unk_func_81206FA0* arg0, s32 arg1) {
@@ -188,6 +198,8 @@ s32 GbApu_Alloc(unk_func_81206FA0* arg0, s32 arg1) {
 
 /**
  * Like alHeapInit.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void GbApu_InitAllocator(unk_func_81206FA0* arg0, s32 arg1, s32 arg2) {
@@ -199,6 +211,8 @@ void GbApu_InitAllocator(unk_func_81206FA0* arg0, s32 arg1, s32 arg2) {
 
 /**
  * Empties a persistent cache and rewinds its pool. Zelda 64 audio driver.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioHeap_PersistentCacheClear(s8 *arg0) {
@@ -220,6 +234,8 @@ void AudioHeap_PersistentCacheClear(s8 *arg0) {
  * The sum is written with the fields in this order, and read from memory
  * rather than through a local, because IDO orders the two operands of the
  * addu differently otherwise.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioHeap_TemporaryCacheClear(s32* arg0) {
@@ -234,6 +250,8 @@ void AudioHeap_TemporaryCacheClear(s32* arg0) {
 
 /**
  * Rewinds an allocation pool to its start. Zelda 64 audio driver.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void AudioHeap_ResetPool(s8 *arg0) {
@@ -253,6 +271,8 @@ extern s32 D_811842A0;
  * length arg0, then on D_81184290 with the remainder of the buffer (starting
  * at arg0 and D_811526FC - arg0 long). Finally clears D_811842A0. What
  * func_811098C0 does with its arguments is not established.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioHeap_InitMainPools(s32 arg0) {
@@ -269,6 +289,8 @@ extern M2C_UNK D_811842F0;
 
 /**
  * Splits the session pool into the misc and cache pools. Zelda 64 audio driver.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioHeap_InitSessionPools(s8 *arg0) {
@@ -285,6 +307,8 @@ extern M2C_UNK D_81184310;
 
 /**
  * Splits the cache pool into the persistent and temporary pools. Zelda 64 audio driver.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioHeap_InitCachePools(s8 *arg0) {
@@ -305,6 +329,8 @@ extern M2C_UNK D_811843E4;
 
 /**
  * Splits the persistent pool between the sequence, font and sample caches. Zelda 64 audio driver.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioHeap_InitPersistentCache(s8 *arg0) {
@@ -329,6 +355,8 @@ extern M2C_UNK D_81184404;
 
 /**
  * Splits the temporary pool between the sequence, font and sample caches. Zelda 64 audio driver.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioHeap_InitTemporaryCache(s8 *arg0) {
@@ -368,6 +396,8 @@ void AudioLoad_SetFontLoadStatus(s32, s32);
 
 /**
  * Allocates `size` bytes for entry `id` of a table's persistent or temporary cache, evicting the older temporary entry when needed. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void* AudioHeap_AllocCached(s32 table_type, s32 size, s32 cache, s32 id) {
@@ -610,6 +640,8 @@ s32 AudioHeap_SearchPermanentCache(s32 arg0, s32 arg1);
 
 /**
  * Looks up entry `arg2` of table `arg0`, in the permanent cache first, then the regular caches. Zelda 64 audio driver.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioHeap_SearchCaches(s32 arg0, s32 arg1, s32 arg2) {
@@ -626,6 +658,8 @@ s32 AudioHeap_SearchCaches(s32 arg0, s32 arg1, s32 arg2) {
 
 /**
  * Looks up entry `arg2` of table `arg0` in its temporary or persistent cache. Zelda 64 audio driver.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioHeap_SearchRegularCaches(s32 arg0, s32 arg1, s32 arg2) {
@@ -672,6 +706,8 @@ s32 AudioHeap_SearchRegularCaches(s32 arg0, s32 arg1, s32 arg2) {
  * and q seeded with 262159.0f; as in the Ocarina of Time version
  * (func_800DDF80) the first loop writes to out instead of tmp, so the second
  * loop copies partly uninitialised values.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioHeap_ComputeFilterCoefficients(f32 p, f32 q, u16* out) {
@@ -698,6 +734,8 @@ void AudioHeap_ComputeFilterCoefficients(f32 p, f32 q, u16* out) {
  *
  * Sets the eight s16 values at arg0 to zero (the loop is unrolled by four in
  * the retail code).
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioHeap_ClearFilter(s16* arg0) {
@@ -716,6 +754,8 @@ extern s16 D_811371D8[];
  * Copies eight s16 values into arg0 from entry arg1 of the table at
  * D_811371D8 (entries are 8 s16 = 16 bytes long; the loop is unrolled by four
  * in the retail code).
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioHeap_LoadLowPassFilter(s16* arg0, s32 arg1) {
@@ -736,6 +776,8 @@ extern s16 D_811373C8[];
  * Copies eight s16 values into arg0 from the table at D_811373C8. The entry is
  * numbered from 1: entry arg1 starts at D_811373C8 + (arg1 - 1) * 16 bytes
  * (8 s16 per entry; the loop is unrolled by four in the retail code).
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioHeap_LoadHighPassFilter(s16* arg0, s32 arg1) {
@@ -750,6 +792,8 @@ void AudioHeap_LoadHighPassFilter(s16* arg0, s32 arg1) {
 
 /**
  * Loads a low-pass, high-pass or band-pass filter from the two cutoffs. Zelda 64 audio driver.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
 void AudioHeap_LoadFilter(s16* arg0, s32 arg1, s32 arg2) {
@@ -772,6 +816,8 @@ extern Voice8110AA50 D_81184110[];
 extern s8 D_8118427B;
 /**
  * Steps every reverb's settings once per audio frame. Zelda 64 audio driver.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 void AudioHeap_UpdateReverbs(void) {
@@ -795,6 +841,8 @@ extern s16 D_811858C2;
 
 /**
  * Clears the audio buffer that is being filled. Zelda 64 audio driver.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
 void AudioHeap_ClearCurrentAiBuffer(void) {
@@ -802,7 +850,7 @@ void AudioHeap_ClearCurrentAiBuffer(void) {
     s32 i;
 
     D_811859C4[idx] = D_811858C2;
-    for (i = 0; i < 0x7E0; i++) {
+    for (i = 0; i < 2016; i++) {
         D_811859B8[idx][i] = 0;
     }
 }
@@ -814,6 +862,8 @@ void AudioHeap_DiscardSampleCaches(void);
 
 /**
  * Runs one step of the audio reset: fade out, stop notes, clear buffers, reinitialize. Zelda 64 audio driver.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioHeap_ResetStep(void) {
@@ -875,7 +925,7 @@ s32 AudioHeap_ResetStep(void) {
             D_81184657 = 0;
             for (i = 0; i < 3; i++) {
                 D_811859C4[i] = D_811858B8.unk_08;
-                for (j = 0; j < 0x7E0; j++) {
+                for (j = 0; j < 2016; j++) {
                     D_811859B8[i][j] = 0;
                 }
             }
@@ -939,6 +989,8 @@ void func_81115480(void);
 
 /**
  * Lays out the audio heap and reverbs for the current audio spec. Zelda 64 audio driver.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name and comment guessed from the code.
  */
 void AudioHeap_Init(void) {

@@ -52,6 +52,7 @@ void PartyScreen_DrawHpLevel(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3) {
     Font_EndTexturedTextRendering();
 }
 
+/** Draws an RGBA16 texture at a position. */
 void UI_DrawTextureRgba16(s32 arg0, s32 arg1, s32 arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060290);
 
@@ -90,6 +91,8 @@ void PartyScreen_DrawListRow(s32 arg0, s32 arg1, BattleMon *arg2, s32 arg3, s32 
 
 /**
  * Sets up the Pokemon list window (545x360) and its menu of PartyScreen_DrawListRow rows.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void PartyScreen_InitList(s8 *arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -487,6 +490,8 @@ void func_8A2010C8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 
 /**
  * Draws the species name banner.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 void MonSummary_DrawSpeciesName(s32 arg0, s32 arg1, BattleMon* arg2) {

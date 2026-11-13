@@ -114,6 +114,8 @@ void BattleAnim_DrawFlameHit(Particle* arg0, CameraNode* arg1) {
 /**
  * Draw the flames when using Flamethrower, Dragon Rage, Fire Spin, Rage, Bide, Self-Destruct, Fire Blast, Sky Attack,
  * or Explosion
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_DrawFlameUse(Particle* arg0, CameraNode* arg1) {
@@ -122,7 +124,11 @@ void BattleAnim_DrawFlameUse(Particle* arg0, CameraNode* arg1) {
     BattleAnim_DrawAsset76Ia8FrameWithAsset77I4Overlay(arg0, arg1);
 }
 
-void BattleAnim_DrawAsset1FAnimatedI4WithAsset20DisplayList(Particle* arg0, CameraNode* arg1) {
+/**
+ * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
+ * only for Sing, Sleep Powder, Hypnosis, Lovely Kiss and Spore.
+ */
+void BattleAnim_DrawSleepMoveAnimatedI4(Particle* arg0, CameraNode* arg1) {
     ParticleGfx_PushBillboardMatrix(arg1, arg0->worldPosition, arg0->scale);
 
     gSPDisplayList(gDisplayListHead++, D_82190548);
@@ -433,7 +439,7 @@ void BattleAnim_DrawAssetA9I4XYScaledQuad(Particle* arg0, UNUSED CameraNode* arg
 
     ParticleGfx_LoadTextureI4Alias(sBattleAnimAssetPointers[0xA9], 0x20, 0x20);
     ParticleGfx_SetPrimEnvColorCombine(arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->env_r, arg0->env_g, arg0->env_b, arg0->prim_a);
-    ParticleGfx_DrawTransformedQuadXYScaled(arg0->worldPosition, arg0->rotation, arg0->scale, arg0->unk_20, gVtx_UI_RectVertical);
+    ParticleGfx_DrawTransformedQuadXYScaled(arg0->worldPosition, arg0->rotation, arg0->scale, arg0->scaleTarget, gVtx_UI_RectVertical);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }

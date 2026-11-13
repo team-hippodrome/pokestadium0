@@ -238,12 +238,12 @@ extern const f32 D_FLT_82196668;
 extern const f32 D_FLT_8219666C;
 extern Vec3f D_8218B630;
 void func_80041914(u8, u8);
-void func_82131880(CameraNode* arg0);
+void BattleScene_IntroStepInitOverheadCamera(CameraNode* arg0);
 
 s32 func_82101FD4(s32);                             /* extern */
 extern s32 D_82199DE0;
 
-void func_821319FC(s32 arg0);
+void BattleScene_IntroStepWaitForAssets(s32 arg0);
 
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);   /* extern */
 M2C_UNK ActivePokemon_SetModelTransform(s8 *, M2C_UNK, M2C_UNK);    /* extern */

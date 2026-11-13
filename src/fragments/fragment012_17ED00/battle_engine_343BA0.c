@@ -70,7 +70,7 @@ void func_82132AC4(s32 arg0) {
  *
  * Clears the byte at D_8219A4F1, calls func_821351F8(arg0, D_8219A580) and
  * func_82104C68(D_8219A580, 1), then adds 1 to the word at offset 0x20 of the
- * structure that D_8219A5A0 points to.  That word is advanced by neighbouring
+ * structure that D_8219A5A0 points to.  That word is advanced by neighboring
  * functions in this file in the same way (see func_82132AC4), so it looks
  * like a step counter, but this is not established from the code alone.
  */

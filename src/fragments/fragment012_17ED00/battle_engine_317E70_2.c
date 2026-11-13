@@ -80,7 +80,7 @@ void BattleAnim_SpawnBatchedParticles(s8* arg0);
 void BattleAnim_CleanupEffectsRetainingCategories47(void);
 void BattleAnim_CleanupEffectsRetainingCategory4(void);
 void BattleAnim_ClearEffectCallbacks(void);
-void BattleAnim_SetEffectStateFlag(s32 arg0);
+void BattleAnim_SetEffectState(s32 arg0);
 Particle* Particle_Alloc(void);
 s32 Particle_CountActive(void);
 s32 Particle_IsInactive(s8 *arg0);
@@ -96,6 +96,8 @@ extern s32 D_8219CA58;
 extern s32 D_8219CA5C;
 
 /**
+ * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
+ * menu.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_InitParticleSystem(void) {
@@ -149,7 +151,7 @@ Particle* Particle_Alloc(void) {
     s32 var_v0 = gParticlePoolIndex;
     Particle* var_a0 = &gParticlePool[var_v0];
 
-    for (i = 0; i < 0x12C; i++) {
+    for (i = 0; i < 300; i++) {
         if (var_a0->allocated == 0) {
             break;
         }
@@ -248,6 +250,8 @@ Particle* Particle_New(void) {
 
 /**
  * Allocate a linked chain, returning its first particle even if a later allocation fails.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 Particle* Particle_AllocChain(u8 arg0) {
@@ -360,7 +364,7 @@ Particle* BattleAnim_CreateProceduralParticle(s16 arg0, s16 arg1, s32 arg2, f32 
 }
 
 void func_80015908(ActivePokemon*, s32, Vec3f*);
-void Trade_UpdateBoxSlotBob(ActivePokemon* arg0, Vec3f* arg1);
+void BattleScene_GetParticipantModelSizeScaled(ActivePokemon* arg0, Vec3f* arg1);
 void BattleAnim_InitializeParticleAnchor(Particle* arg0) {
     Vec3f sp3C;
     Vec3f sp30;
@@ -392,7 +396,7 @@ void BattleAnim_InitializeParticleAnchor(Particle* arg0) {
         case 11:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);
             ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             break;
@@ -400,20 +404,20 @@ void BattleAnim_InitializeParticleAnchor(Particle* arg0) {
         case 12:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y + 0x8000);
             ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             break;
 
         case 13:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             arg0->origin.y += sp30.y * 25.0f;
             break;
 
         case 14:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             arg0->origin.y -= sp30.y * 25.0f;
             if (arg0->origin.y <= 0.0f) {
                 arg0->origin.y = 0.0f;
@@ -423,7 +427,7 @@ void BattleAnim_InitializeParticleAnchor(Particle* arg0) {
         case 15:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);
             ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             arg0->origin.y = 0.0f;
@@ -437,7 +441,7 @@ void BattleAnim_InitializeParticleAnchor(Particle* arg0) {
         case 19:
             func_80015908(arg0->pokemon, arg0->unk_CD, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);
             ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             break;
@@ -448,7 +452,7 @@ void BattleAnim_InitializeParticleAnchor(Particle* arg0) {
     }
 }
 
-void Trade_UpdateBoxSlotBob(ActivePokemon* arg0, Vec3f* arg1);
+void BattleScene_GetParticipantModelSizeScaled(ActivePokemon* arg0, Vec3f* arg1);
 void BattleAnim_UpdateParticleAnchor(Particle* arg0) {
     Vec3f sp3C;
     Vec3f sp30;
@@ -467,7 +471,7 @@ void BattleAnim_UpdateParticleAnchor(Particle* arg0) {
         case 4:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);
             ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             break;
@@ -475,20 +479,20 @@ void BattleAnim_UpdateParticleAnchor(Particle* arg0) {
         case 5:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y + 0x8000);
             ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             break;
 
         case 6:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             arg0->origin.y += sp30.y * 25.0f;
             break;
 
         case 7:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             arg0->origin.y -= sp30.y * 25.0f;
             if (arg0->origin.y <= 0.0f) {
                 arg0->origin.y = 0.0f;
@@ -498,7 +502,7 @@ void BattleAnim_UpdateParticleAnchor(Particle* arg0) {
         case 8:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
-            Trade_UpdateBoxSlotBob(arg0->pokemon, &sp30);
+            BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);
             ParticleMath_AddVec3f(&arg0->origin, &sp3C);
             arg0->origin.y = 0.0f;
@@ -648,7 +652,9 @@ void Particle_DispatchDraw(Particle* arg0, CameraNode* arg1) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pound and most hit moves): it filled each new
+ * particle from its effect slot: the update callback (e.g. 0x80168350), the descriptor pointer, the
+ * owner (1P 0x8028FB20 or COM 0x802905C0) and the origin position.
  */
 void BattleAnim_InitializeParticleFromEffect(Particle* arg0, ActivePokemon* arg1, BattleAnimEffectSlot* arg2, s16 arg3) {
     if ((u32)arg0 == -1) {
@@ -758,7 +764,7 @@ void BattleAnim_DispatchParticleEmission(BattleAnimEffectSlot* arg0) {
             break;
 
         case 23:
-            BattleAnim_SetEffectStateFlag(arg0->unk_19);
+            BattleAnim_SetEffectState(arg0->unk_19);
             break;
 
         case 25:
@@ -805,6 +811,8 @@ void BattleAnim_TickEffectSlots(void) {
 
 /**
  * Count allocated pool slots, regardless of their lifecycle or rendering flags.
+ * No caller in play (2026-11-13): it is only called from Particle_CountActiveAlias, which has no
+ * caller in the ROM itself.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Particle_CountActive(void) {
@@ -812,7 +820,7 @@ s32 Particle_CountActive(void) {
     s32 var_v1 = 0;
     Particle* ptr = gParticlePool;
 
-    for (i = 0; i < 0x12C; i++, ptr++) {
+    for (i = 0; i < 300; i++, ptr++) {
         if (ptr->allocated != 0) {
             var_v1++;
         }
@@ -823,6 +831,8 @@ s32 Particle_CountActive(void) {
 
 /**
  * Return the allocated-slot count through the shared counter.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Particle_CountActiveAlias(void) {
@@ -915,6 +925,8 @@ extern s32 D_8219A830;
 
 /**
  * Advance the particle clock and derive its remainder, quotient, and quotient-parity counters.
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void Particle_UpdateFrameCounters(void) {
@@ -927,6 +939,8 @@ void BattleAnim_EnableEffectSpawning(void) {
 
 /**
  * Advance the particle clock through the shared frame-counter updater.
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_UpdateFrameCountersAlias(void) {
@@ -1017,6 +1031,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnGlobalTintColorFadeDetach(s32 arg0, s16 ar
 }
 
 /**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnWhiteHueChange(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4) {
@@ -1104,6 +1120,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteCycleVariant(s32 arg0
 }
 
 /**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnDrainFlameHueChange(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
@@ -1123,6 +1141,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnRainbowHueChange(s32 arg0, s16 arg1, s16 a
 }
 
 /**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnInvisibility(s32 arg0, s16 arg1, s16 arg2, s16 arg3) {

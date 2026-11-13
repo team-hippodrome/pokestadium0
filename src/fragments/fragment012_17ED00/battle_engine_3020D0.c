@@ -337,6 +337,8 @@ void func_8211F274(s8 *arg0) {
 /**
  * Shows a caption for the Pokemon from its caption text table and formats the given string into
  * it. Ran in play for the Struggle prompt.
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
  * @unverified Name from the code.
  */
 void ActivePokemon_ShowCaption(ActivePokemon* arg0, s8* arg1, ...) {
@@ -351,6 +353,8 @@ extern ActivePokemon* sSide1ActivePokemon;
  * Same one-character-per-frame reveal as BattleMessage_TickTypewriter for the Pokemon's caption
  * (ActivePokemon_ShowCaption), drawn near that side's HUD. Called every frame from
  * Battle_RenderHud.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
  * @unverified Name from the code.
  */
 void ActivePokemon_TickCaptionTypewriter(ActivePokemon* arg0) {

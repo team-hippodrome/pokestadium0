@@ -81,7 +81,7 @@ battle with all PP at 0.
 | `BattleMenu_HandleMoveButtons` | C-Up used slot 0 (Poison Sting); the R list shows C-Up 0, C-Right 1, C-Down 2, C-Left 3 | verified |
 | `BattleMenu_CommitMoveSelection` | Called when both actions are in and 1P picked Fight | verified |
 | `func_8210D1B0` | Runs in the Pokémon menu after B | named `BattleMenu_UpdateSwitchMenu` |
-| `BattleMenu_MapButtonsToActionChoice` | In the Pokémon menu B sent out パルパル (Paras, party slot 2); the list maps C-Up 0, C-Left 1, B 2, C-Right 3, C-Down 4, A 5 | renamed `BattleMenu_HandleSwitchButtons` |
+| `BattleMenu_MapButtonsToActionChoice` | In the Pokémon menu B sent out パルパル (Cloyster, party slot 2); the list maps C-Up 0, C-Left 1, B 2, C-Right 3, C-Down 4, A 5 | renamed `BattleMenu_HandleSwitchButtons` |
 | `func_8210CD58` | Called at commit when 1P picked a switch; copies actionChosen into rosterIndex | named `BattleMenu_CommitSwitchSelection` |
 | `BattleScene_HandlePlayerForcedActionState` | Took over when 1P's Nidoqueen fainted: forced Pokémon menu without L | renamed `BattleScene_HandlePlayerFaintedSwitch` |
 | `BattleScene_WaitForCpuChoice` | When the COM's Pinsir fainted it called the AI at frame 60, which returned 9; Gengar (slot 5) came out | renamed `BattleScene_HandleCpuFaintedSwitch` |
@@ -220,14 +220,14 @@ Phase 34 (`func_82126E34`) runs the same steps 0–3 with its own step 4
 ## Move execution (`ProcessBattleTurn` callees, `battle_engine_317E70.c`, `battle_engine_359F90.c`)
 
 These were `func_` names. Breakpoints over a turn where COM's Pinsir used
-Double Team and then 1P's Nidorino used Thunderbolt (savestate at the command
+Double Team and then 1P's Nidoqueen used Thunderbolt (savestate at the command
 menu, 1P move slot 0 patched to Thunderbolt):
 
 | Function | What the game did |
 |---|---|
 | `Battle_CheckForDisobedience` (was `func_82111DC4`) | Called once per move, returned 1 every time. Zero has no disobedience. |
 | `BattleMessage_PrintUsedMove` (was `func_821102F0`) | Called once per move before damage; the box then read 「ニドニドの １０まんボルト！」. |
-| `ActivePokemon_GetMoveName` (was `func_82107F68`) | Returned 「かげぶんしん」 for Pinsir and 「１０まんボルト」 for Nidorino. |
+| `ActivePokemon_GetMoveName` (was `func_82107F68`) | Returned 「かげぶんしん」 for Pinsir and 「１０まんボルト」 for Nidoqueen. |
 | `Battle_RandomizeDamage` (was `func_8210F8E8`) | Damage 23 → 20 and 23 → 19 in two runs; 23 → 23 with Battle_Random forced to 255. |
 | `Battle_CalcHitChance` (was `func_82110890`) | Accuracy 255 → 168 against evasion stage 8 (+1 after Double Team), which is 255 × 66/100. |
 | `Battle_MoveHitTest` (was `HandleMoveEffectFlags`) | Calls the two above; with Battle_Random forced to 255 it called `Battle_MoveMissed`. |
@@ -289,7 +289,7 @@ patched, and Battle_Random patched just before the move was entered:
 |---|---|---|
 | Ember on Pinsir, `sBattleCritFlag` set to 1 when `Battle_PrintCriticalOHKOText` was entered | 「きゅうしょに あたった！」, then 「こうかは ばつぐんだ！」, Pinsir 75 → 54 | `Battle_PrintCriticalOHKOText`, `Battle_DisplayEffectiveness` |
 | Sonic Boom | Pinsir 75 → 55 | `Battle_ApplyAttackToTarget` (fixed 20 damage) |
-| Jump Kick with Battle_Random = 255 | 「しかし ニドニドの こうげきは はずれた！」「いきおい あまって ニドニドは じめんに ぶつかった！」, Nidorino 69 → 68, phases 2 → 16 → 3 | `Battle_PrintMoveFailureText`, `BattleScene_PhaseCrashDamage` |
+| Jump Kick with Battle_Random = 255 | 「しかし ニドニドの こうげきは はずれた！」「いきおい あまって ニドニドは じめんに ぶつかった！」, Nidoqueen 69 → 68, phases 2 → 16 → 3 | `Battle_PrintMoveFailureText`, `BattleScene_PhaseCrashDamage` |
 
 Battle_Random has to be patched before the move is entered: the turn's
 first action is resolved when both actions are committed (`Battle_StartTurn`),
@@ -329,7 +329,7 @@ Effect handlers ran for exactly their Gen 1 move sets (for example
 paralysis side effect; `Battle_Effect_Flinch`: Stomp, Rolling Kick, Headbutt,
 Bite, Low Kick, Bone Club, Hyper Fang), so their tags are gone.
 
-Phase 21 (`BattleScene_PhaseHeal`) wasn't seen in the sweep because Nidorino
+Phase 21 (`BattleScene_PhaseHeal`) wasn't seen in the sweep because Nidoqueen
 was at full HP. With its HP set to 30, Recover healed it (「ニドニドは
 たいりょくを かいふくした！」), but the phase watch missed the transition, so
 that name kept `@unverified`. A later run with a breakpoint on it caught
@@ -580,7 +580,7 @@ the fire-breath flames (Flamethrower, Dragon Rage, Fire Spin, Fire Blast).
 
 These scenarios start from a COM free battle (1P ガール team, COM むしとり team).
 
-* Switch: B, then C-Left, sent Onix (イワワ) in for Nidorino. This ran
+* Switch: B, then C-Left, sent Onix (イワワ) in for Nidoqueen. This ran
   `BeginBattleForEntity`, the runtime-state init and reset pair, and the roster
   selection helpers.
 * Surrender: Start opens 「こうさんしますか？ いいえ はい」. Choosing はい shows both
@@ -608,8 +608,8 @@ These scenarios start from a COM free battle (1P ガール team, COM むしと�
   `BattleAi_*` pick helpers once, before the first send-out. COM brought
   Pinsir, Gengar and Pikachu. The pick helpers' scoring is not shown on
   screen, so they keep their tags.
-* COM's view of 1P: after Nidorino had used Poison Sting and Tail Whip, the
-  AI record of Nidorino listed only those two moves and HP 44 (HUD 44/ 69),
+* COM's view of 1P: after Nidoqueen had used Poison Sting and Tail Whip, the
+  AI record of Nidoqueen listed only those two moves and HP 44 (HUD 44/ 69),
   which confirms `BattleAi_CopyVisibleBattleState`.
 
 ## Sweep cross-check against move lists in comments
@@ -644,7 +644,7 @@ on both sides of the call.
   and 0 once Pinsir's Speed was set to 1. The battle followed both results.
 * Critical hits: `Battle_CheckCriticalHit` returned 1 with the random roll
   forced to 2 for that call, and the game showed きゅうしょに あたった！
-* Damage: Nidorino's Poison Sting on Pinsir went through `Battle_CalcDamage`
+* Damage: Nidoqueen's Poison Sting on Pinsir went through `Battle_CalcDamage`
   (base 4, the Gen 1 formula), `Battle_ApplyTypeEffectAndSTAB` (6 for the
   same-type bonus, then 12 for Poison against Bug), the random roll (10), and
   `Battle_ApplyDamage` (75 to 65 HP). `Battle_LoadMoveCache` had loaded
@@ -653,10 +653,10 @@ on both sides of the call.
   and 「こうかは ばつぐんだ！」 with id 0x29.
 * Battle start: `BattleScene_SendOutSide0` ran as 1P's Poké Ball burst open,
   and `BattleScene_SendOutSide1` ran just after 1P's Onix was out.
-  `ActivePokemon_GetNickname` returned ニドニド for 1P's Nidorino.
+  `ActivePokemon_GetNickname` returned ニドニド for 1P's Nidoqueen.
 * COM AI helpers: `BattleAi_CanUseMove` returned each of Pinsir's four moves
   (all with PP left), and `BattleAi_FindUsableHealingMove` returned Recover
-  for Gengar once Recover was in its moves, and 0 for Nidorino.
+  for Gengar once Recover was in its moves, and 0 for Nidoqueen.
 
 ## Turn flow
 
@@ -760,7 +760,7 @@ selected, the panel showed HP: 19, こうげき 9, ぼうぎょ 9, すばやさ 
 ## GB Tower sound
 
 These were probed while Pocket Monsters Green's intro (Gengar against
-Nidorino) played in the GB Tower:
+Nidorino) played in the GB player (Zero has no GB Tower):
 
 * Green's NR50 write went through `GbApu_QueueRegisterWrite` (0xFF24, 0x77,
   timestamp). The next `GbApu_RenderBuffer` applied it through
@@ -928,6 +928,38 @@ Run again with longer windows or a matching setup:
 * Soft-Boiled at 20 HP ran start 0x42.
 * Dream Eater on a sleeping target ran end 0x3E.
 
-Guillotine and Horn Drill still miss Pinsir, which is level 25 against
-Nidorino's 20, so their hit inits keep their tags.
+Guillotine and Horn Drill missed Pinsir here. Later (2026-11-13), with their accuracy raised
+in gMoveData, both landed and their hit inits were verified.
 
+
+## Second player pass (2026-11-13): 165-move trace sweep
+
+Setup: free battle, 1P ガール team (Onix first) against COM むしとり (Pinsir first),
+from a command-phase savestate. For each move id 1-165 the state was reloaded, Onix's first
+move slot was overwritten with that move (20 PP), COM speed was set to 1 so Onix acted first,
+and the move was chosen with A, C-Up. Every named function in fragment012 (2,092) had an
+execution breakpoint. On each function's first three calls the tracer recorded a0-a3, f12,
+f14, the return value (v0, f0) and the 0xD0 bytes at a0 before and after the call (scripts not
+committed). A function's doc says "in the 165-move sweep" when its evidence comes from this run;
+the move named is the one being used when the call was seen.
+
+* Particle setters were judged by which bytes changed. Particle fields named after Stadium 1
+  offsets sit 4 bytes lower in Zero's struct (unk_AE is at 0xAA, unk_B0 at 0xAC, unk_A6 at 0xA2,
+  unk_A8 at 0xA4), and the sweep showed the writes there.
+* Renamed from code, confirmed by the sweep where they ran:
+  `Particle_AddVelocityXYFromRotationZViaImpulse` → `Particle_AddVelocityXZFromRotationYViaHelpers`
+  (it reads rotation.y and changed motionOffset.x and .z), its helper
+  `Particle_Field7C_SetXYFromField74AngleZ_0B23C` → `Particle_SetMotionStepXZFromRotationY`, and
+  twelve `Particle_FieldXX_..._0XXXX` placeholders (for example
+  `Particle_Field50_AddXZFromField7C_09C10` → `Particle_ApplyMotionStepXZ`,
+  `Particle_Field50_AddNegField74Y_CheckField2CYNonPositive_09F84` → `Particle_FallAtStepMagnitude`).
+* Setters only ever called with values the field already held (for example the zeroing calls in a
+  particle's first frame) keep their tags: nothing changed, so the sweep says nothing about them.
+* Scale fields: `Particle_SetScaleSpeed(0.1)` wrote 0.36 to 0x20 and `Particle_SetScaleTarget(0.03)`
+  wrote 0.108 to 0x24 (render scale 3.6); `Particle_Field1C_ApproachField24ByField20_0BA1C` then
+  moved scale from 0 to 0.108 toward 0.36. So 0x20 is the target and 0x24 the step. The fields are
+  now `scaleTarget` and `scaleStep`, the two setters swap names (`Particle_SetScaleTarget`,
+  `Particle_SetScaleStep`), and the five `Particle_Field1C_*` / `Particle_Field20_*` placeholders
+  became `Particle_SetScaleScaled`, `Particle_ApproachScale`, `Particle_ApproachScaleThenAdvance`,
+  `Particle_ApproachScaleTarget`, `Particle_ApproachScaleTargetThenAdvance` and
+  `Particle_StepScaleTarget` (found by the style pass; confirmed here).

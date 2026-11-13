@@ -285,6 +285,7 @@ char* func_8002E160_jp(s32 item_id, char* dest) {
     return dest;
 }
 
+/** Returns whether an item has no quantity. */
 s32 LabItem_IsQuantitylessItem(s32 arg0) {
     static u8 D_80075950[] = {
         5,    6,    8,    9,    0x1F, 0x29, 0x2A, 0x2B, 0x2D, 0x30, 0x3F, 0x40, 0x45,
@@ -302,6 +303,7 @@ s32 LabItem_IsQuantitylessItem(s32 arg0) {
     return 0;
 }
 
+/** Returns whether an item has no quantity for the requested operation. */
 s32 LabItem_IsQuantitylessItemForOperation(s32 arg0) {
     s32 sp1C = 0;
 

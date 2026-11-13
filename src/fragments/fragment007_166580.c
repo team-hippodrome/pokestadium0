@@ -16,6 +16,7 @@ void FreeBattle_SetScreenState(s32, s32, s32);
  * index arg1 (indices arg1 .. arg1 + arg2 - 1). Does nothing when
  * arg1 + arg2 <= arg1, i.e. when arg2 is not positive. The compare is signed.
  * What the -1 entries mean is not established from this function.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in Free Battle setup.
  * @unverified Name guessed from the code; comment kept.
  */
 void FreeBattle_ClearIndices(s32* arg0, s32 arg1, s32 arg2) {
@@ -39,7 +40,8 @@ extern u8 D_80065D00[];
 
 /**
  * Reads up to six Pokemon from deck (`arg0`, `arg1`, `arg2`) into `entry` and returns the count.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once as the entry screen opened, which then listed the GB party
+ * (フシ, ヒト, カメ at L10).
  */
 s32 FreeBattle_ReadTeam(s32 arg0, s32 arg1, s32 arg2, Entry82000058* entry) {
     s32 handle = func_80020AFC(arg0, arg1, arg2, 0);
@@ -76,6 +78,7 @@ typedef struct {
  * Sets the first word (flag) to 1 in each of the slots arg1 .. 5 of an array
  * of six 0x54-byte slots starting at arg0 (nothing happens when arg1 >= 6).
  * The retail code unrolls the loop by four.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in Free Battle setup.
  * @unverified Name guessed from the code; comment kept.
  */
 void FreeBattle_MarkEmptySlots(Slot54* arg0, s32 arg1) {
@@ -144,6 +147,8 @@ Slot54* FreeBattle_FindFlaggedSlot(Slot54* arg0, s32* arg1) {
 
 /**
  * Returns 1 when no three of the six Pokemon have levels summing to 155 or less (the さいていレベル warning). The running sum keeps the levels of earlier `j` iterations, so later trios are overestimated.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 FreeBattle_AllTriosOverLevelLimit(Mon82000258* mons) {
@@ -157,7 +162,7 @@ s32 FreeBattle_AllTriosOverLevelLimit(Mon82000258* mons) {
         for (j = i + 1; j < 5; j++) {
             sum += mons[j].level;
             for (k = j + 1; k < 6; k++) {
-                if (mons[k].level + sum < 0x9C) {
+                if (mons[k].level + sum < 156) {
                     return 0;
                 }
             }
@@ -244,7 +249,7 @@ void FreeBattle_LoadGbTeams(RecordList* arg0) {
 /**
  * FreeBattle_AddRentalEntry
  *
- * Appends an empty record to a list of 0x214-byte records: initialises the
+ * Appends an empty record to a list of 0x214-byte records: initializes the
  * header of the record at index `count` (type byte = 2, the next three bytes
  * = 0), then sets `count` to the index of the following record, computed as a
  * pointer difference from the start of the list.
@@ -320,6 +325,7 @@ void FreeBattle_AddPresetTeams(List82000594* arg0) {
  * known from the code alone.
  *
  * Registration_BuildTeamPointers is the same routine with a record size of 0x220.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in Free Battle setup.
  * @unverified Name guessed from the code; comment kept.
  */
 void FreeBattle_BuildTeamPointers(s32* arg0, s32* arg1) {
@@ -381,7 +387,7 @@ void func_8000B2F4(s32);
  * FreeBattle_InitLevelSumWarning. Calls Window_SetRect(arg0, arg1, arg2, 0x1AE, 0x124), clears the
  * words at 0x20, 0x24 and 0x28 and sets the word at 0x14 to 0x1001. Calls
  * Window_InitLabeled twice, on the sub-objects at arg0 + 0x2C (string D_82009B80)
- * and arg0 + 0x68 (string D_82009B88), both with width 0x48 and colour
+ * and arg0 + 0x68 (string D_82009B88), both with width 0x48 and color
  * D_8200902C and positions derived from the words at 0 and 4. Then sets the
  * words at 0x58, 0x60, 0xAC and 0xA8 to 0xA, 0xC, 2 and 0, stores D_800603C0
  * and then arg5 in the word at 0xA4 (calling func_8000B2F4 with each), stores
@@ -438,7 +444,7 @@ extern char D_82009B90[];
 u32 func_800566BC(const char*);
 
 /**
- * Draws a move name in its type's color (D_80066AD8 by D_8006A9D4[move].type), centred if asked;
+ * Draws a move name in its type's color (D_80066AD8 by D_8006A9D4[move].type), centered if asked;
  * move -2 draws the no-move string.
  * Seen in play: the rental status window lists the four moves on the C buttons in type colors
  * (メガドレイン and ソーラービーム green, どくどく purple, ねむりごな green).
@@ -773,11 +779,11 @@ void FreeBattle_MarkIneligibleMons(TeamList8200140C *arg0, s32 arg1) {
             if ((mon->species <= 0) || (mon->species >= 0x98)) {
                 mon->flags |= 0x20;
             } else if (arg1 == 1) {
-                if (!(D_80064C5C[mon->species - 1].flags & 1) || (mon->level < 0x32) || (mon->level >= 0x38)) {
+                if (!(D_80064C5C[mon->species - 1].flags & 1) || (mon->level < 50) || (mon->level >= 56)) {
                     mon->flags |= 2;
                 }
             } else if (arg1 == 2) {
-                if (!(D_80064C5C[mon->species - 1].flags & 2) || (mon->level <= 0) || (mon->level >= 0x1F)) {
+                if (!(D_80064C5C[mon->species - 1].flags & 2) || (mon->level <= 0) || (mon->level >= 31)) {
                     mon->flags |= 4;
                 }
             } else if (!(D_80064C5C[mon->species - 1].flags & 1)) {
@@ -795,6 +801,8 @@ typedef struct Slot82001558 {
 
 /**
  * Counts the picked Pokemon that share a species with another pick and stores the first index.
+ * Seen in play (2026-11-13) ran on the entry screen while rentals were picked (Free Battle, L1-30
+ * rules, six L30 rentals vs COM).
  * @unverified Name and comment guessed from the code.
  */
 s32 FreeBattle_CountDuplicateSpecies(void* arg0, s32* index) {
@@ -869,7 +877,7 @@ void func_8001A384(s32, s32);
 void Font_SetColorForFlags(s32);
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color82001CCC);
 void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
-void Trade_DrawDigitStrip(s32, s32, u8);
+void Ui_DrawNumberUnpadded(s32, s32, u8);
 void func_8001833C(s32, s32, s32*, u16);
 s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
@@ -898,7 +906,7 @@ void FreeBattle_DrawMonCell(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 
         gSPDisplayList(gDisplayListHead++, D_80073450);
         gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
         func_8001BCB4(x + 0x2C, y + 0x19, 8, 0xA, D_04011A60, 8, 0);
-        Trade_DrawDigitStrip(x + 0x38, y + 0x17, ((u8*)entry)[0x24]);
+        Ui_DrawNumberUnpadded(x + 0x38, y + 0x17, ((u8*)entry)[0x24]);
         key = cache->start + frame;
         idx = cache->base + key % cache->count;
         if (key != cache->slots[idx]) {
@@ -936,7 +944,7 @@ void FreeBattle_DrawSlotCell(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4, 
  * FreeBattle_FillTrainerPanel
  *
  * Emits the display list D_80060270, then fills a 0x88 by 0x64 rectangle at
- * (arg0, arg1) with the colour in arg2 using func_80029028
+ * (arg0, arg1) with the color in arg2 using func_80029028
  * (Trade_DrawSolidFillRect).
  * Seen in play: fills each team row's trainer panel (portrait, 「なまえ ガール」, IDNo/15235).
  */
@@ -949,9 +957,10 @@ void FreeBattle_FillTrainerPanel(s32 arg0, s32 arg1, Color82001CCC arg2) {
  * FreeBattle_FillTeamPanel
  *
  * Emits the display list D_80060270, then fills a 0x18C by 0x64 rectangle at
- * (arg0 + 0x88, arg1) with the colour in arg2 using func_80029028
+ * (arg0 + 0x88, arg1) with the color in arg2 using func_80029028
  * (Trade_DrawSolidFillRect).
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-13) ran while the tournament entry screen showed the GB party row (フシ, ヒト,
+ * カメ, L10).
  */
 void FreeBattle_FillTeamPanel(s32 arg0, s32 arg1, Color82001CCC arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -960,6 +969,7 @@ void FreeBattle_FillTeamPanel(s32 arg0, s32 arg1, Color82001CCC arg2) {
 
 /**
  * Draws the top and bottom border lines of a team row.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in Free Battle setup.
  * @unverified Name and comment guessed from the code.
  */
 void FreeBattle_DrawRowBorders(s32 arg0, s32 arg1, Color82001CCC arg2) {
@@ -977,9 +987,9 @@ void func_8001AC3C(void);
 /**
  * FreeBattle_DrawRentalPrompt
  *
- * Draws a filled rectangle with FreeBattle_FillTeamPanel using the colour D_82008F58,
+ * Draws a filled rectangle with FreeBattle_FillTeamPanel using the color D_82008F58,
  * then switches the font to translucent, two-cycle text rendering (white
- * environment colour, font set mask 0x20, Font_SetLineHeight(0x2A), prim colour
+ * environment color, font set mask 0x20, Font_SetLineHeight(0x2A), prim color
  * 255/100/255/255) and prints the string D_82009C08 at
  * (arg0 + 0xAE, arg1 + 0xE) before ending text rendering. arg2 is not used.
  * Seen in play: draws 「レンタルポケモンから 6たいえらぶ」 in the rental entry row.
@@ -1026,7 +1036,8 @@ void func_8002BC58(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
 /**
  * Draws the レンタルポケモン (Rental Pokemon) list with its なまえ (Name) header.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran while the entry screen showed the rental teams (ガール and むしとり rows
+ * with なまえ headers).
  */
 void FreeBattle_DrawRentalNameList(s32 arg0, s32 arg1, s32 arg2, Slot82001E20* arg3) {
     s32 pad[3]; // FAKE
@@ -1207,6 +1218,8 @@ void func_82002528(SlotFlags* arg0) {
  * For each of the six Slot54 entries reached through `*arg0->slots`, sets bit 0
  * of the matching u16 in `arg0->flags` when the entry's flag word does not have
  * bit 0x40 set. The meaning of the bits is not yet established.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void FreeBattle_DisableUnpickedRows(SlotFlags* arg0) {
@@ -1226,6 +1239,8 @@ void FreeBattle_DisableUnpickedRows(SlotFlags* arg0) {
  * through `*arg0->slots`, clears bit 0 of the matching u16 in `arg0->flags`
  * when the entry's flag word does not have bit 0x40 set.
  * The meaning of the bits is not yet established.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void FreeBattle_EnableUnpickedRows(SlotFlags* arg0) {

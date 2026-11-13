@@ -32,10 +32,12 @@ void Jpeg_ParseStreamMarkers(unk_func_80003680_sp300* arg0, u8* arg1);
 void Jpeg_InitializeDspTask(UnkStruct80001380* arg0, unk_func_80003680_sp90* arg1);
 void Jpeg_BuildDspOutput(unk_func_80003680_sp90* arg0, u8(arg1)[2][0x80], unk_func_80003680_sp300* arg2);
 
+/** Reads a big-endian 16-bit value from a JPEG stream. */
 s32 Jpeg_ReadBigEndianU16(u8* arg0) {
     return ((arg0[0] << 8) | arg0[1]) & 0xFFFF;
 }
 
+/** Parses the markers of a JPEG stream, collecting its tables and dimensions. */
 void Jpeg_ParseStreamMarkers(unk_func_80003680_sp300* arg0, u8* arg1) {
     s32 temp_v0_2;
     s32 var_s2;
@@ -106,6 +108,7 @@ void Jpeg_ParseStreamMarkers(unk_func_80003680_sp300* arg0, u8* arg1) {
     arg0->height = (arg0->start_of_frame[1] << 8) | arg0->start_of_frame[2];
 }
 
+/** Initializes the RSP task used for JPEG decoding. */
 void Jpeg_InitializeDspTask(UnkStruct80001380* arg0, unk_func_80003680_sp90* arg1) {
     arg0->task.t.type = 4;
     arg0->task.t.flags = 0;
@@ -127,6 +130,7 @@ void Jpeg_InitializeDspTask(UnkStruct80001380* arg0, unk_func_80003680_sp90* arg
     osCreateMesgQueue(&arg0->queue, &arg0->mesg, 1);
 }
 
+/** Builds the RSP input structure for JPEG decoding. */
 void Jpeg_BuildDspInput(s8 *arg0, s32 arg1, s8 *arg2)
 {
   *((s32 *) (((s8 *) arg0) + 0)) = (s32) (*((s32 *) (((s8 *) arg2) + 0x14))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
@@ -139,6 +143,7 @@ void Jpeg_BuildDspInput(s8 *arg0, s32 arg1, s8 *arg2)
   *((u8 *) (((s8 *) arg0) + 0x18)) = (u8) (*((u8 *) (((s8 *) arg2) + 1))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
+/** Builds the RSP output structure for JPEG decoding. */
 void Jpeg_BuildDspOutput(unk_func_80003680_sp90* arg0, u8(arg1)[2][0x80], unk_func_80003680_sp300* arg2) {
     arg0->unk_00 = 0;
     arg0->unk_08 = arg2->unk_00;
@@ -151,6 +156,8 @@ void Jpeg_BuildDspOutput(unk_func_80003680_sp90* arg0, u8(arg1)[2][0x80], unk_fu
 /**
  * Spins (with a capped counter) until func_80005014 returns 0 and at least one
  * controller is connected.
+ * Seen in play (2026-11-13) ran just after Start at the title screen (console reset, then N64 logo,
+ * opening, title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 void Jpeg_WaitForControllerReady(void) {
@@ -163,6 +170,7 @@ void Jpeg_WaitForControllerReady(void) {
     }
 }
 
+/** Decodes a JPEG image to the given address. */
 s32 Jpeg_DecodeImage(u32 addr, s32 arg1, u8* arg2) {
     UnkStruct80001380 sp318;
     unk_func_80003680_sp300 sp300;

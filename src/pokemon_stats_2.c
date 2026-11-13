@@ -97,6 +97,10 @@ s32 GbSave_GetPortAvailability(s32 arg0);
 
 GbSaveBoxEntry* GbSave_GetBoxEntry(s32 arg0, s32 arg1);
 
+/**
+ * Returns whether a player name buffer contains the 0x50 terminator within its
+ * 6 characters.
+ */
 s32 GbSave_HasPlayerNameMarker(u8* arg0) {
     s32 i;
 
@@ -109,6 +113,7 @@ s32 GbSave_HasPlayerNameMarker(u8* arg0) {
     return 0;
 }
 
+/** Verifies the checksum of a save range against its stored value. */
 s32 GbSave_VerifyChecksum(u8* arg0, u8* arg1) {
     s32 sp1C = 0;
     s32 sp18 = 0;
@@ -123,6 +128,7 @@ s32 GbSave_VerifyChecksum(u8* arg0, u8* arg1) {
     return sp1C;
 }
 
+/** Computes the checksum of a save data range. */
 void GbSave_ComputeChecksum(u8* arg0, u8* arg1) {
     s32 var_v0 = 0;
 
@@ -133,6 +139,7 @@ void GbSave_ComputeChecksum(u8* arg0, u8* arg1) {
     *arg1 = 0xFF - (var_v0 & 0xFF);
 }
 
+/** Checks that data written back to the cartridge matches the buffer. */
 s32 GbSave_VerifyWriteback(u8* arg0, s32 arg1) {
     u8* var_v0 = D_800AD338.unk_000;
 
@@ -145,6 +152,10 @@ s32 GbSave_VerifyWriteback(u8* arg0, s32 arg1) {
     return 1;
 }
 
+/**
+ * Reads the cartridge header and identifies which Game Boy Pokemon game is
+ * inserted.
+ */
 s8 GbCart_IdentifyGame(s32 arg0) {
     // Only part of the rom header,
     // osGbpakReadId reads from 0x100 but this reads from 0x120
@@ -187,6 +198,10 @@ s8 GbCart_IdentifyGame(s32 arg0) {
     return var_s0;
 }
 
+/**
+ * Returns whether the main save data on the cartridge still matches the loaded
+ * copy.
+ */
 s32 GbSave_CheckMainDataUnchanged(s32 arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 sp18 = 0;
@@ -198,6 +213,7 @@ s32 GbSave_CheckMainDataUnchanged(s32 arg0) {
     return sp18;
 }
 
+/** Reads the main save data from the cartridge in the given port. */
 s32 GbSave_ReadMainData(s32 arg0) {
     s32 i;
     s32 sp30;
@@ -283,6 +299,7 @@ s32 GbSave_WriteMainDataChecksum(s32 arg0) {
 }
 
 extern GbSavePort D_800AC910[4];
+/** Reads one Pokemon box bank from the cartridge. */
 s32 GbSave_ReadBoxBank(s32 arg0, s32 arg1) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     u8* sp1C = sGbSavePorts[arg0].unk_44 + arg1 * 0x15A0;
@@ -327,6 +344,7 @@ s32 GbSave_WriteBoxBank(s32 arg0, s32 arg1) {
 }
 
 extern s8 D_800AD210;
+/** Frees the save buffers held for a port. */
 void GbSave_ReleasePortBuffers(s32 arg0, u32 arg1) {
     s8 *temp_v0;
     s8 *temp_v0_2;
@@ -402,6 +420,7 @@ s32 GbSave_OpenMainData(s32 arg0) {
     return sp28;
 }
 
+/** Loads the main save data for a port if it is not loaded yet. */
 s32 GbSave_EnsureMainDataLoaded(s32 arg0) {
     s32 sp1C = 0;
 
@@ -467,6 +486,7 @@ s32 GbSave_OpenBoxData(s32 arg0) {
     return sp2C;
 }
 
+/** Loads the save data for the cartridge in the given port. */
 s32 GbSave_LoadPort(s32 arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     u8 sp2B;
@@ -500,7 +520,7 @@ extern GbSavePort D_800AC910[4];
  *   0  start the removal check (GbTower_IsPakInserted), fall into 1
  *   1  wait until the cartridge is off (GbPak_IsCartOff)
  *   2  wait until it is back on (GbPak_IsCartOn); returns 1 meanwhile
- *   3  re-initialise the pak (GbTower_ReinitPak); if that worked, return 3,
+ *   3  re-initialize the pak (GbTower_ReinitPak); if that worked, return 3,
  *      or 2 if the cartridge also identifies as the same game as before
  *      (GbCart_IdentifyGame == port byte 2) and
  *      GbTower_VerifyPakStillInserted accepts the port's data at offset
@@ -561,6 +581,8 @@ s32 GbSave_PollCartRemoval(s32 arg0) {
  */
 s32 GbSave_RefreshPlayerIdentity(s32 arg0);
 /**
+ * Seen in play (2026-11-13) ran when quitting the GB player (C-Up menu, Quit game, Yes) back to the
+ * main menu.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void GbSave_ForceReloadPort(s32 arg0) {
@@ -650,6 +672,7 @@ s32 func_80021E64(s32 arg0) {
     return ret;
 }
 
+/** Writes the box banks back to the cartridge. */
 s32 GbSave_WriteBoxBanks(s32 arg0) {
     u8 sp2F;
     s32 sp28 = 0;
@@ -669,6 +692,11 @@ s32 GbSave_WriteBoxBanks(s32 arg0) {
     return sp28;
 }
 
+/**
+ * Writes the main save data back to the cartridge.
+ * Seen in play (2026-11-13) ran when leaving せいとん with レポートしてやめる after moving フシギダネ and ヒトカゲ into
+ * GBのボックス1.
+ */
 s32 GbSave_CommitMainData(s32 arg0) {
     u8 sp2F;
     s32 sp28 = 0;
@@ -683,6 +711,7 @@ s32 GbSave_CommitMainData(s32 arg0) {
     return sp28;
 }
 
+/** Rebuilds derived save data and writes the whole save to the cartridge. */
 s32 GbSave_RebuildAndWriteSave(s32 arg0) {
     u8 sp2F;
     s32 sp28;
@@ -704,6 +733,7 @@ s32 GbSave_RebuildAndWriteSave(s32 arg0) {
     return sp28;
 }
 
+/** Probes the Transfer Pak before a save write. */
 void GbSave_ValidateBeforeWrite(s32 arg0) {
     u8 sp27;
 
@@ -716,12 +746,17 @@ void GbSave_ValidateBeforeWrite(s32 arg0) {
     }
 }
 
+/** Shuts down to a fragment when no Transfer Pak is inserted in the port. */
 void GbSave_RequirePakPresent(s32 arg0) {
     if (GbTower_IsPakInserted(arg0, 0) == 0) {
         Game_ShutdownAndLoadFragment(arg0, 2);
     }
 }
 
+/**
+ * Returns the entry for a box in a port's save data, or NULL when out of
+ * range.
+ */
 GbSaveBoxEntry* GbSave_GetBoxEntry(s32 arg0, s32 arg1) {
     GbSaveBoxEntry* sp1C = NULL;
     s32 temp_v0 = GbSave_GetBoxCount(arg0);
@@ -778,6 +813,8 @@ void GbSave_SaveMainPokemon(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2) {
 }
 
 /**
+ * Seen in play (2026-11-13) ran when leaving せいとん with レポートしてやめる after moving フシギダネ and ヒトカゲ into
+ * GBのボックス1.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void GbSave_LoadBoxPokemon(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -820,6 +857,7 @@ void GbSave_SaveBoxPokemon(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
 }
 
+/** Returns the number of Pokemon in a box. */
 s32 GbSave_GetBoxEntryCount(s32 arg0, s32 arg1) {
     s32 sp1C = 0;
     GbSaveBoxEntry* temp_v0 = GbSave_GetBoxEntry(arg0, arg1);
@@ -830,6 +868,7 @@ s32 GbSave_GetBoxEntryCount(s32 arg0, s32 arg1) {
     return sp1C;
 }
 
+/** Sets the number of Pokemon in a box. */
 void GbSave_SetBoxEntryCount(s32 arg0, s32 arg1, s32 arg2) {
     GbSaveBoxEntry* temp_v0 = GbSave_GetBoxEntry(arg0, arg1);
 
@@ -839,6 +878,7 @@ void GbSave_SetBoxEntryCount(s32 arg0, s32 arg1, s32 arg2) {
     }
 }
 
+/** Returns the maximum number of Pokemon a deck type holds. */
 s32 Deck_GetCapacity(s32 arg0) {
     s32 ret = 0;
 
@@ -863,6 +903,7 @@ s32 Deck_GetCapacity(s32 arg0) {
     return ret;
 }
 
+/** Returns the size in bytes of one entry of a deck type. */
 s32 Deck_GetEntrySize(s32 arg0) {
     s32 ret = 0;
 
@@ -883,6 +924,7 @@ s32 Deck_GetEntrySize(s32 arg0) {
     return ret;
 }
 
+/** Returns the number of Pokemon in a deck of a port's save data. */
 s32 Deck_GetCount(s32 arg0, s32 arg1, s32 arg2) {
     s32 var_v1 = 0;
     u8* ptr = sGbSavePorts[arg1].unk_40;
@@ -1090,15 +1132,18 @@ s32 Deck_WriteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, unk_func_88205880_00
     return sp2C;
 }
 
+/** Returns the bit mask of controller ports with a cartridge present. */
 s32 GbSave_GetPresentPortMask(void) {
     return D_800AD330;
 }
 
 extern s8 D_800AD213;
+/** Returns the save state of a port. */
 u8 GbSave_GetSaveState(s32 arg0) {
     return *(&D_800AD213 + (arg0 * 0x48));
 }
 
+/** Returns whether a port's cartridge is available. */
 s32 GbSave_GetPortAvailability(s32 arg0) {
     s32 temp_v0 = 1 << arg0;
 
@@ -1114,6 +1159,7 @@ s32 GbSave_GetPortAvailability(s32 arg0) {
 }
 
 extern s8 D_800AD212;
+/** Returns which game's save is loaded for a port. */
 u8 GbSave_GetPortGame(s32 arg0) {
     return *(&D_800AD212 + (arg0 * 0x48));
 }
@@ -1140,6 +1186,8 @@ u8 GbSave_GetPortGame(s32 arg0) {
 s32 func_8001FAB0(u8*);
 
 /**
+ * Seen in play (2026-11-13) ran during boot, before the opening (console reset, then N64 logo,
+ * opening, title and main menu).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 GbSave_RefreshPlayerIdentity(s32 arg0) {
@@ -1169,6 +1217,7 @@ void GbSave_CopyPlayerIdentity(s32 arg0, void* arg1) {
 }
 
 extern s8 D_800AD210;
+/** Returns the trainer ID stored in a port's save data. */
 s32 GbSave_GetTrainerId(s32 arg0) {
     s8 *temp_v0;
 
@@ -1179,12 +1228,14 @@ s32 GbSave_GetTrainerId(s32 arg0) {
     return func_8001FAB0((u8*)M2C_FIELD(temp_v0, s32 *, 0x40) + 0x7B);
 }
 
+/** Writes the trainer ID into a port's loaded save data. */
 void GbSave_SetTrainerId(s32 arg0, u16 arg1) {
     if (sGbSavePorts[arg0].unk_00 & 1) {
         GbData_WriteU16BE(sGbSavePorts[arg0].unk_40 + 0x7B, arg1);
     }
 }
 
+/** Returns the number of boxes in a port's save data. */
 s32 GbSave_GetBoxCount(s32 arg0) {
     s32 temp_a0;
     s32 phi_v1 = -1;
@@ -1304,6 +1355,7 @@ s32 func_80022F48(s32 arg0) {
     return var_v1;
 }
 
+/** Copies a snapshot of a port's save summary into the given structure. */
 s32 GbSave_CopyPortSnapshot(s32 arg0, GbSavePortSnapshot* arg1) {
     s32 temp_v1 = (sGbSavePorts[arg0].unk_00 & 1) != 0;
 
@@ -1340,6 +1392,7 @@ void GbSave_MarkSpeciesHeld(char* arg0, s32 arg1, u8* arg2) {
 /**
  * Rebuilds the held-species bits (unk_05) of port arg0 from the party, the current GB box and the
  * Stadium boxes.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex.
  * @unverified Renamed from GbSave_RebuildSeenBitfield after its callee was seen in play; the
  * Stadium box lists were empty in the test save.
  */
@@ -1364,6 +1417,7 @@ void GbSave_RebuildHeldSpecies(s32 arg0) {
     }
 }
 
+/** Returns a species' progress level from a port's save data. */
 s32 GbSave_GetSpeciesProgressLevel(s32 arg0, s32 arg1) {
     s32 temp_t1;
     s32 temp_t2;
@@ -1429,7 +1483,7 @@ s32 GbSave_CountSeenSpecies(s32 arg0) {
     s32 i;
     s32 temp_v1 = 0;
 
-    for (i = 0; i < 0x97; i++) {
+    for (i = 0; i < 151; i++) {
         temp_v1 += (sGbSavePorts[arg0].unk_40[0x31 + i / 8] >> (i % 8)) & 1;
     }
 
@@ -1447,7 +1501,7 @@ s32 GbSave_CountOwnedSpecies(s32 arg0) {
     s32 i;
     s32 temp_v1 = 0;
 
-    for (i = 0; i < 0x97; i++) {
+    for (i = 0; i < 151; i++) {
         temp_v1 += (sGbSavePorts[arg0].unk_40[0x1E + i / 8] >> (i % 8)) & 1;
     }
 
@@ -1465,7 +1519,7 @@ s32 GbSave_CountHeldSpecies(s32 arg0) {
     s32 i;
     s32 temp_v1 = 0;
 
-    for (i = 0; i < 0x97; i++) {
+    for (i = 0; i < 151; i++) {
         temp_v1 += (sGbSavePorts[arg0].unk_05[i / 8] >> (i % 8)) & 1;
     }
 

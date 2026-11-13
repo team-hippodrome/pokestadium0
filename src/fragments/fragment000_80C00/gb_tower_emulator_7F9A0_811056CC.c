@@ -596,7 +596,7 @@ void osViBlack(u8);
  * Per-frame tail of the GB Tower emulator: unless emulation is paused (D_81156546) or
  * the screen is being blanked (D_800AA148), runs the GB audio frame and mirrors the
  * emulated NR52 (0xFF26) register into GB memory; while D_800AA148 is set it blanks video.
- * @unverified Name guessed from the code.
+ * Seen in play (2026-11-13) ran every frame from the moment JP Green booted in the N64 GB player.
  */
 void GbEmu_UpdateAudioOrBlankVideo(UNUSED s32 arg0) {
     if ((*(u8*)&D_81156546 == 0) && (D_800AA148 == 0)) {
@@ -619,6 +619,8 @@ extern u16 D_81124C40[];
 /**
  * Draws a 46x46 framed panel (8x8 edge and corner tiles from sUiGraphics) with a
  * solid interior, used behind each party icon on the loading screen.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void GbEmu_DrawFramedPanel(u16* arg0) {
@@ -809,6 +811,8 @@ void func_81106CC8(u16* dst, u8 (*arg1)[0xC80], s32 arg2, s32 arg3) {
 
 /**
  * Adds a scrolling image layer to the destination with per-channel saturation.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void GbEmu_BlendScrollingLayer(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4) {

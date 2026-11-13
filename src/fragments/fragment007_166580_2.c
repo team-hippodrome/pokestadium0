@@ -68,7 +68,7 @@ void func_82008D54(s8 *arg0) {
  * Sets up four slot lists inside the session context (gSessionContext,
  * D_800AE8F0) and registers each list that is in use with one of two
  * groups.  Each of the four arguments is a count: a list is only set up when
- * its count is greater than 0, and is then initialised with
+ * its count is greater than 0, and is then initialized with
  * func_82008C40(list, extra, count - 1, count - 1).
  *
  *   arg0 -> list D_800AE8F4 (extra block D_800AF104), group A

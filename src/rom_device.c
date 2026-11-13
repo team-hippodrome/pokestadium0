@@ -9,6 +9,8 @@ void Rom_DmaRead(u32 dev_addr, u32 dram_addr, u32 size);
 
 extern OSMesg D_8010018C;
 /**
+ * Seen in play (2026-11-13) ran at boot (console reset, then N64 logo, opening, title and main
+ * menu).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Rom_InitDevice(s32 arg0) {
@@ -21,6 +23,7 @@ void Rom_InitDevice(s32 arg0) {
     osCreateMesgQueue(&D_80100170, &D_8010018C, 1);
 }
 
+/** Reads from a device address into memory with DMA and waits for completion. */
 void Rom_DmaRead(u32 dev_addr, u32 dram_addr, u32 size) {
     OSIoMesg msg;
     u32 dev = dev_addr;
@@ -52,6 +55,7 @@ void Rom_DmaRead(u32 dev_addr, u32 dram_addr, u32 size) {
 
 void func_800374E0(s32, s32);
 
+/** Sets the volume of an audio channel. */
 void Audio_SetChannelVolume(s32 arg0, u32 arg1) {
     s32 var_a1;
 

@@ -74,6 +74,8 @@ struct Entry8110EABC* func_8110E9A8(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
  * otherwise memory is allocated by the entry's cache policy and a chunked DMA
  * is started. The table's load status is updated either way. Same structure as
  * AudioLoad_AsyncLoadInner in the Ocarina of Time audio library.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name guessed from the code; comment kept.
  */
 s32 AudioLoad_AsyncLoadInner(s32 table_type, s32 id, s32 n_chunks, s32 ret_data, OSMesgQueue* ret_queue) {
@@ -164,6 +166,7 @@ s32 AudioLoad_AsyncLoadInner(s32 table_type, s32 id, s32 n_chunks, s32 ret_data,
     return ram_addr;
 }
 
+/** Ends a Pokemon's status animations and commits the result. */
 s32 BattleScene_EndStatusAnimationsAndCommit(ActivePokemon* arg0) {
     BattleAnim_ClearFreezeStatusAnimation(arg0);
     BattleAnim_EndSleepStatusAnimation(arg0);
@@ -234,6 +237,8 @@ void func_8110CB70(AudioTable8110DCC0*, u8*, s32);
  * and sample tables at their ROM copies and fills in each font's sample bank
  * ids and instrument and drum counts. Same structure as AudioLoad_Init in the
  * Ocarina of Time audio library.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioLoad_Init(void) {
@@ -282,7 +287,7 @@ void AudioLoad_Init(void) {
 
     for (i = 0; i < 3; i++) {
         buf = D_811859B8[i] = func_81109868(D_811842B0, 0xFC0);
-        for (j = 0; j < 0x7E0; j++) {
+        for (j = 0; j < 2016; j++) {
             *buf++ = 0;
         }
     }
@@ -463,6 +468,8 @@ void func_8110E994(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
  * Zero's version of OoT's AudioLoad_ProcessSlowLoads: steps the two slow sample
  * loads, copying at most 0x1000 bytes per call and finishing a load once nothing
  * is left.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioLoad_ProcessSlowLoads(s32 reset_status) {
@@ -588,6 +595,7 @@ Entry8110EABC* func_8110E9A8(s32 dev_addr, s32 ramAddr, u32 size, s32 medium, s3
 
 extern volatile s32 D_811859D4;
 void func_8110EB40(Entry8110EABC*, s32);
+/** Applies animation state effects for every Pokemon. */
 void Battle_ApplyAnimStateEffects(s32 arg0) {
     s32 i;
 
@@ -726,6 +734,8 @@ typedef struct Sample8110EE3C {
  * data address against the sample bank chosen by its medium. Samples flagged
  * for preloading that are not in RAM are added to D_81184978. Same structure as
  * AudioLoad_RelocateSample in the Ocarina of Time audio library.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioLoad_RelocateSample(Sample8110EE3C** sampleP, s32 font_data_addr, RelocInfo8110EF7C* reloc_info) {
@@ -1030,6 +1040,8 @@ void func_8110F64C(PackedWordRec **arg0) {
  * Zero's version of OoT's AudioLoad_PreloadSamplesForFont: gathers the samples
  * used by a font's instruments and drums, then copies them into the sample
  * cache (async == 0) or queues them on the preload stack (async == 1).
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
  * @unverified Name guessed from the code; comment kept.
  */
 void AudioLoad_PreloadSamplesForFont(s32 font_id, s32 async, RelocInfo8110EF7C* reloc_info) {

@@ -40,6 +40,7 @@ char* TextRenderer_FormatCopy(char* buffer, const char* data, size_t size);
 s32 HAL_Printf(s16 x, s16 y, const char* fmt, ...);
 s32 TextRenderer_QueuePersistentString(s16 x, s16 y, const char* fmt, ...);
 
+/** Sets the render state for drawing glyphs. */
 void TextRenderer_SetupGlyphState(void) {
     gDPPipeSync(D_800AA1D0++);
     gDPSetCycleType(D_800AA1D0++, G_CYC_1CYCLE);
@@ -52,6 +53,7 @@ void TextRenderer_SetupGlyphState(void) {
                            G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 7, 6, G_TX_NOLOD, G_TX_NOLOD);
 }
 
+/** Restores the render state after drawing glyphs. */
 void TextRenderer_RestoreState(void) {
     gDPPipeSync(D_800AA1D0++);
     gDPSetTexturePersp(D_800AA1D0++, G_TP_PERSP);
@@ -60,16 +62,19 @@ void TextRenderer_RestoreState(void) {
     gSPTexture(D_800AA1D0++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF);
 }
 
+/** Draws a small glyph at a position. */
 void TextRenderer_DrawGlyphSmall(s16 arg0, s16 arg1, s16 arg2) {
     gSPTextureRectangle(D_800AA1D0++, arg0 * 4, arg1 * 4, (arg0 + 6) << 2, (arg1 + 8) << 2, G_TX_RENDERTILE,
                         ((arg2 % 16) * 6) << 5, (u16)(arg2 / 16) << 8, 0x0400, 0x0400);
 }
 
+/** Draws a large glyph at a position. */
 void TextRenderer_DrawGlyphLarge(s16 arg0, s16 arg1, s16 arg2) {
     gSPTextureRectangle(D_800AA1D0++, arg0 * 8, arg1 * 8, (arg0 + 6) << 3, (arg1 + 8) << 3, G_TX_RENDERTILE,
                         ((arg2 % 16) * 6) << 5, (u16)(arg2 / 16) << 8, 0x0200, 0x0200);
 }
 
+/** Draws a string at a position. */
 void TextRenderer_DrawString(s16 arg0, s16 arg1, s8* arg2, s32 arg3) {
     s32 temp_s0;
 
@@ -88,6 +93,7 @@ void TextRenderer_DrawString(s16 arg0, s16 arg1, s8* arg2, s32 arg3) {
     }
 }
 
+/** Draws and clears the queued strings. */
 void TextRenderer_FlushQueuedStrings(Gfx** arg0, s32 arg1) {
     unk_D_80068CA0* var_s0 = D_8005F760;
     unk_D_80068CA0* var_s2 = D_8005F764;
@@ -125,6 +131,7 @@ void TextRenderer_FlushQueuedStrings(Gfx** arg0, s32 arg1) {
     }
 }
 
+/** Clears the queue of strings. */
 void TextRenderer_ClearQueuedStrings(void) {
     unk_D_80068CA0* var_s0 = D_8005F764;
 
@@ -138,10 +145,12 @@ void TextRenderer_ClearQueuedStrings(void) {
     D_8005F764 = NULL;
 }
 
+/** Copies formatted bytes into a buffer and returns the pointer past them. */
 char* TextRenderer_FormatCopy(char* buffer, const char* data, size_t size) {
     return (char*)memcpy(buffer, data, size) + size;
 }
 
+/** Formats text and draws it at a position. */
 s32 HAL_Printf(s16 x, s16 y, const char* fmt, ...) {
     s32 sp124;
     char sp20[0x104];
@@ -169,6 +178,7 @@ s32 HAL_Printf(s16 x, s16 y, const char* fmt, ...) {
     return sp124;
 }
 
+/** Formats text and queues it to be drawn each frame. */
 s32 TextRenderer_QueuePersistentString(s16 x, s16 y, const char* fmt, ...) {
     s32 sp124;
     char sp20[0x104];
