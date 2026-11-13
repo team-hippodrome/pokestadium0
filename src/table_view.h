@@ -1,9 +1,9 @@
-#ifndef _3D340_H_
-#define _3D340_H_
+/* Declarations for src/table_view.c. */
+#ifndef TABLE_VIEW_H
+#define TABLE_VIEW_H
 
 #include "global.h"
-#include "src/model_renderer.h"
-#include "src/poke_icon.h"
+#include "game_state.h"
 
 typedef struct unk_func_88205880_00D0 {
     /* 0x000 */ BattleMon unk_000[20];
@@ -131,21 +131,19 @@ typedef struct unk_func_8830867C_04C_030_02C_000_000_00C {
 } unk_func_8830867C_04C_030_02C_000_000_00C; // size >= 0xC
 
 typedef s32 (*func_func_8002D1AC)(unk_func_8830867C_02C_0CC_000*, s32*);
+
 typedef s32 (*unk_D_8831A1F8)(s32, s32);
 
+// table_view.c
 void TableView_Initialize(unk_func_88201DA0_038*, unk_func_88201DA0_034*, s32, s32, s32);
-void ByteMatrix_Allocate(unk_func_8820BE14_06C*, s32, s32, MemoryPool*);
 s32 ByteMatrix_InsertRow(unk_func_8820BE14_06C*, s8*, s32);
 s32 ByteMatrix_RemoveRow(unk_func_8820BE14_06C*, s32);
 s32 WordList_Remove(unk_func_8830867C_04C_030_02C_000_000_00C*, s32);
 void PointerList_Initialize(unk_func_88205880_A030*, void**, s32, s32);
-void PointerList_Allocate(unk_func_88200FA0_030_038*, s32, MemoryPool*);
 void PointerList_Insert(unk_func_88200FA0_030_038*, char*, s32);
 void PointerList_Remove(unk_func_8830867C_02C_0CC*, s32);
 void PointerList_Sort(unk_func_8830867C_02C_0CC*, unk_D_8831A1F8);
 void PointerList_Filter(unk_func_8830867C_02C_0CC*, unk_func_8830867C_02C_0CC*, func_func_8002D1AC, s32*);
 s32 Text_CompareGlyphCodes(u8*, u8*);
-void Vec2f_Normalize(f32*);
-Color_RGBA8 Color_ScaleRgb(Color_RGBA8, f32);
 
-#endif // _3D340_H_
+#endif // TABLE_VIEW_H

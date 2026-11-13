@@ -1,8 +1,14 @@
-#ifndef _11BA0_H_
-#define _11BA0_H_
+/* Declarations for src/geo_node.c. */
+#ifndef GEO_NODE_H
+#define GEO_NODE_H
 
 #include "global.h"
-#include "src/memory.h"
+#include "math.h"
+#include "moves.h"
+#include "pokemon.h"
+#include "status.h"
+#include "m2c_macros.h"
+#include "stdarg.h"
 
 typedef struct unk_func_80011B94 {
     /* 0x00 */ DisplayNodeHeader display_node_header;
@@ -20,6 +26,20 @@ typedef struct unk_D_8690A610 {
     /* 0x18 */ unk_D_8690A610_018 unk_18;
 } unk_D_8690A610; // size = 0x20
 
+/* Struct types that were defined identically in each of these files; this is
+ * now the one definition they all include:
+ * src/geo_node.c
+ * src/geo_render.c
+ */
+
+typedef struct unk_func_80016B30_arg0 {
+    /* 0x00 */ Vec3s vec;
+    /* 0x06 */ s16 unk_06;
+} unk_func_80016B30_arg0;
+
+#include "memory.h"
+
+// geo_node.c
 void GeoNode_Init(GraphNode* arg0, u8 arg1);
 void GeoNode_SetCallback(GraphNode* arg0, GraphNodeCallback arg1, void* arg2);
 GraphNode* GeoNode_CreateContainer(MainPoolState* arg0, GraphNode* arg1);
@@ -62,6 +82,20 @@ void GeoCamera_SetBackgroundTexture(CameraNode* arg0, s16 arg1, s16 arg2, s32 ar
 void GraphNode_AppendChild(GraphNode* parent, GraphNode* child);
 void GraphNode_RemoveChild(GraphNode* arg0, GraphNode* arg1);
 GraphNode* GraphNode_GetChildAtIndex(GraphNode* arg0, s32 arg1);
+s32 func_8001104C(s32);                             /* extern */
+s32 ModelAnim_IsAnimationDone(DisplayObject* display_object);
+void func_80010F8C(void*, s32);
+void func_80010F9C(void*, s32);
+M2C_UNK func_80010F14(M2C_UNK *, M2C_UNK, M2C_UNK *, M2C_UNK); /* extern */
+M2C_UNK func_8001107C(M2C_UNK *, M2C_UNK, M2C_UNK *); /* extern */
+void ModelAnim_ClearTransformChannel(DisplayObject* arg0);
+s32 ModelAnim_BindTransformCurve(DisplayObject* arg0, s16 arg1, void* arg2, s32 arg3);
+s32 ModelAnim_SetSpeed(DisplayObject* display_object, s32 speed);
+void ModelAnim_SetFrame(DisplayObject* display_object, s16 animation_timer);
+s32 ModelAnim_HasCrossedFrame(DisplayObject* arg0, s16 arg1);
+s32 ModelAnim_IsFinished(DisplayObject* arg0);
+void ModelAnim_ClearEventTrack(DisplayObject* arg0);
+s16 ModelAnim_BindEventTrack(DisplayObject* arg0, s16 arg1, s32 arg2);
+void ModelAnim_SetEventFrame(DisplayObject* display_object, s16 frame_number);
 
-
-#endif // _11BA0_H_
+#endif // GEO_NODE_H

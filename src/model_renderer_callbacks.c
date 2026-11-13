@@ -2,12 +2,13 @@
 /* C ported from the Stadium 1 decomp: src/model_renderer_callbacks.c. */
 
 #include "model_renderer_callbacks.h"
-#include "geo_render.h"
-#include "gallery.h"
 #include "battle_hud.h"
-#include "33FE0.h"
+#include "fragments/cartridge_check/cartridge_check.h"
+#include "geo_render.h"
 #include "gfx_buffer.h"
 #include "matrix.h"
+#include "model_vertex_draw.h"
+#include "vector_math.h"
 typedef struct StadiumModelSlot {
     /* 0x000 */ StadiumModel model;
     /* 0x204 */ char pad204[0x5CC];

@@ -2,6 +2,7 @@
 /* C ported from the Stadium 1 decomp: src/gb_mbc.c. */
 
 #include "global.h"
+#include "gb_mbc.h"
 #define MBC_RAM_ENABLE        0x0000
 #define MBC_ROM_BANK_ADDRESS  0x2000
 #define MBC_RAM_BANK_ADDRESS  0x4000

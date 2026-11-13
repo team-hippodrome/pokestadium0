@@ -177,7 +177,7 @@ text/data/rodata split, then disassemble with its own link-time namespace.
 Library-overlap comparisons, original compiler confirmation, recovered
 translation-unit boundaries and rebuilt-ROM byte identity remain unrun.
 
-The rejected linear split and its generated `src/1060.c` are kept only in
+The rejected linear split and its generated `src/main.c` are kept only in
 ignored `.analysis/broad-extraction/` scratch. They are not accepted source.
 This report was prepared before GitHub publication. See repository history for
 the publication commit, and [the refined flow report](../sections/refined/flow-and-gap-validation.md)

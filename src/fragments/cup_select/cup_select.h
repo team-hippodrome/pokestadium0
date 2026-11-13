@@ -1,19 +1,18 @@
-#ifndef _FRAGMENT60_H_
-#define _FRAGMENT60_H_
+/* Declarations for the cup_select fragment (src/fragments/cup_select/). */
+#ifndef FRAGMENT_CUP_SELECT_H
+#define FRAGMENT_CUP_SELECT_H
 
 #include "global.h"
-#include "src/geo_node.h"
 
-void CupSelect_PollController(void);
-void func_8216D9B8(void);
-void CupSelect_DrawSelectionCorners(s16 left, s16 bottom, s16 right, s16 top, u8 r, u8 g, u8 b, u8 alpha);
-s32 CupSelect_IconGeoPostCallback(s32 arg0, UNUSED unk_func_80011B94* arg1);
-s32 CupSelect_DividerGeoPostCallback(s32 arg0, UNUSED unk_func_80011B94* arg1);
-void CupSelect_RenderFrame(s32 mode, s32 counter);
-void CupSelect_BuildDivisionList(void);
-s32 CupSelect_HandleInput(void);
-s32 CupSelect_Loop(void);
-void CupSelect_InitGeoLayouts(void);
-s32 CupSelect_Main(UNUSED s32 arg0, UNUSED s32 arg1);
+// libultra/libc/xldtob.c
+void func_8005B388(void);
 
-#endif // _FRAGMENT60_H_
+// cup_select.c
+void AreaSelect_PollInput(void);
+void func_8180050C(void);
+void BattleScene_CameraPresetNop(UNUSED CameraNode* arg0);
+
+// functions defined in assembly
+s32 Stage_ShowIntro(void);
+
+#endif // FRAGMENT_CUP_SELECT_H

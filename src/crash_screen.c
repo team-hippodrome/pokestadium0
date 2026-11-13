@@ -6,8 +6,8 @@
 #include <PR/os_internal_thread.h>
 #include "stdarg.h"
 #include "crash_screen.h"
-#include "memmap.h"
 #include "controller.h"
+#include "memmap.h"
 #include "stdarg.h"
 extern CrashScreen gCrashScreen;
 extern u8 gCrashScreenCharToGlyph[128];

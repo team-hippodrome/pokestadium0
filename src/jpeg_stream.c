@@ -2,13 +2,10 @@
 /* C ported from the Stadium 1 decomp: src/jpeg_stream.c. */
 
 #include "jpeg_stream.h"
-#include "jpeg_stream.h"
-#include "flash.h"
-#include "dma.h"
 #include "dp_intro.h"
+#include "jpeg_decoder.h"
 #include "util.h"
 #include "lib/ultralib/include/PR/leo.h"
-#include "controller.h"
 s32 func_80005014(void);
 #include "m2c_macros.h"
 typedef enum {

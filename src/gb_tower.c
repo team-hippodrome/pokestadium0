@@ -2,10 +2,9 @@
 /* C ported from the Stadium 1 decomp: src/gb_tower.c. */
 
 #include "gb_tower.h"
-#include "hal_libc.h"
-#include "controller.h"
 #include "game_state.h"
 #include "gb_mbc.h"
+#include "hal_libc.h"
 extern OSPfs D_800AB050[4];
 extern u8 D_800AB1F0[4];
 extern u8 D_800AB1F4;

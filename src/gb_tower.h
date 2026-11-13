@@ -1,14 +1,15 @@
-#ifndef _SRC_GB_TOWER_H_
-#define _SRC_GB_TOWER_H_
+/* Declarations for src/gb_tower.c. */
+#ifndef GB_TOWER_H
+#define GB_TOWER_H
 
 #include "global.h"
 
+// gb_tower.c
 s32 GbPak_VerifyPattern(s32 arg0, void* arg1);
 s32 GbPak_DetectRam(s32 arg0, u8* arg1);
 s32 GbTower_ProbePak(s32 arg0, u8* arg1, u8* arg2);
 s32 GbTower_IsPakInserted(s32 arg0, u8 arg1);
 void GbTower_PowerOffAllPaks(void);
-s32 GbPak_IsPokemonCartridge(OSGbpakId* header);
 s32 GbTower_ScanPaks(void);
 s32 GbPak_IsCartOff(s32 arg0);
 s32 GbPak_IsCartOn(s32 arg0);
@@ -23,4 +24,4 @@ s32 GbPak_ReadRom(s32 arg0, u8* arg1, s32 arg2, s32 arg3);
 u8 GbTower_SetPollMask(u8 arg0);
 void GbTower_PollPakConnection(void);
 
-#endif /* _SRC_GB_TOWER_H_ */
+#endif // GB_TOWER_H

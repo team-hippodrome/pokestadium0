@@ -2,30 +2,11 @@
 /* C ported from the Stadium 1 decomp: src/DDC0.c, src/audio_sound_state.c, src/save_data.c. */
 
 #include "save_data.h"
-#include "save_data.h"
-#include "gb_data.h"
-#include "jpeg_stream.h"
-#include "memory.h"
 
-#include "audio_sound_state.h"
 #include "libnumus/player.h"
-#include "audio_stream.h"
-#include "3D140.h"
-#include "audio_commands.h"
 
 #include <PR/os_internal_reg.h>
 #include "global.h"
-#include "dp_intro.h"
-#include "profiler.h"
-#include "audio_loop_point.h"
-#include "scheduler.h"
-#include "gb_tower_audio.h"
-#include "audio_commands.h"
-#include "audio_category_fade.h"
-#include "audio_sound_state.h"
-#include "audio_channel.h"
-#include "audio_loop_point.h"
-#include "33FE0_types_2.h"
 extern s32 D_800AAE30;
 extern s32 D_800AAF3C;
 

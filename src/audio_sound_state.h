@@ -1,12 +1,13 @@
-#ifndef _490A0_H_
-#define _490A0_H_
+/* Declarations for src/audio_sound_state.c. */
+#ifndef AUDIO_SOUND_STATE_H
+#define AUDIO_SOUND_STATE_H
 
 #include "global.h"
 
-void Audio_IsSoundPlayingWrapper(s32 arg0);
-s32 Audio_CountCategorySounds(s32 arg0);
+// libnumus/player.c
 s32 Audio_GetActivityScore(void);
-s32 Audio_GetFreeVoiceCount(void);
+
+// audio_sound_state.c
 s32 Audio_GetActiveVoiceCount(void);
 
-#endif // _490A0_H_
+#endif // AUDIO_SOUND_STATE_H

@@ -2,11 +2,10 @@
 /* C ported from the Stadium 1 decomp: src/battle_hud.c. */
 
 #include "battle_hud.h"
-#include "model_renderer_callbacks.h"
 #include "geo_render.h"
-#include "util.h"
 #include "memmap.h"
-#include "fragments/particle_data_library/particle_data_library.h"
+#include "model_renderer_callbacks.h"
+#include "util.h"
 extern s32 D_800AFB20;
 extern s16 D_800AFB24;
 

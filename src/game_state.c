@@ -2,29 +2,22 @@
 /* C ported from the Stadium 1 decomp: src/dp_intro.c, src/game_state.c. */
 
 #include "game_state.h"
-#include "functions.h"
-#include "input.h"
-#include "save_data.h"
-#include "audio_commands.h"
-#include "gallery.h"
-#include "gb_data.h"
-#include "jpeg_stream.h"
-#include "gfx_buffer.h"
-#include "DDC0.h"
-#include "session.h"
-#include "save_data.h"
-#include "gb_save.h"
-#include "gb_tower_audio.h"
-#include "leo.h"
-#include "display_object_textures.h"
-#include "pokemon_stats.h"
-#include "controller.h"
-#include "dp_intro.h"
+#include "asset_archive.h"
+#include "audio_music.h"
+#include "font.h"
 #include "gb_tower.h"
-#include "memory.h"
-#include "rsp.h"
-#include "stage_loader.h"
+#include "gb_tower_launch.h"
+#include "gfx_buffer.h"
 #include "graphics_textures.h"
+#include "leo.h"
+#include "matrix.h"
+#include "memory_main.h"
+#include "menu.h"
+#include "pokemon_stats.h"
+#include "rsp.h"
+#include "save_data.h"
+#include "stage_loader.h"
+#include "functions.h"
 #include "lib/ultralib/include/PR/os_internal_reg.h"
 extern u16 D_8006BBB0[16][256];
 extern s32 pad_D_80075660;
@@ -53,12 +46,6 @@ SessionBlock D_800AE8F0;
 
 #include "global.h"
 #include <PR/os_internal_reg.h>
-#include "dp_intro.h"
-#include "scheduler.h"
-#include "gfx_rect.h"
-#include "crash_screen.h"
-#include "profiler.h"
-#include "memory.h"
 extern u64 F3DEX2_data_bin[];
 extern s32 D_800733F0;
 extern UnkStruct80083CA0_2 D_800870A0;

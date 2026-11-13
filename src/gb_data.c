@@ -2,13 +2,11 @@
 /* C ported from the Stadium 1 decomp: src/gb_data.c, src/pokemon_stats.c. */
 
 #include "gb_data.h"
-#include "string.h"
-#include "gb_data.h"
-#include "save_data.h"
-#include "text_system.h"
-#include "gb_tower.h"
 #include "hal_libc.h"
+#include "pokemon_stats.h"
+#include "save_data.h"
 #include "util.h"
+#include "string.h"
 extern const char sStatusNames[7][4];
 extern const char sTypeNames[17][4];
 extern const char sMoveNames[166][8];
@@ -19,13 +17,6 @@ extern unk_D_80072338 gMoveDisplayInfo[166];
 extern MoveData gMoveData[165];
 extern char* D_8006B570[84];
 
-#include "pokemon_stats.h"
-#include "gb_data.h"
-#include "save_data.h"
-#include "text_system.h"
-#include "gb_tower.h"
-#include "hal_libc.h"
-#include "util.h"
 extern u8 D_8006B8C4[0x420];
 typedef struct unk_func_800228F0_sp24 {
     /* 0x00 */ u8 unk_00;

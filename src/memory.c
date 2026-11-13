@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include "memory.h"
+#include "memory_main.h"
 
 MemoryPool* mem_pool_try_init(u32 size, s32 side);
 MainPool* mem_pool_init(MainPool* pool, s32 size);

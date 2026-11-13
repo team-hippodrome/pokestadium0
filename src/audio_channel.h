@@ -1,12 +1,15 @@
-#ifndef _4BA90_H_
-#define _4BA90_H_
+/* Declarations for src/audio_channel.c. */
+#ifndef AUDIO_CHANNEL_H
+#define AUDIO_CHANNEL_H
 
 #include "global.h"
 
-void Audio_SetChannelVolume(s32 arg0, u32 arg1);
-void Audio_SetMonoOutput(s32 arg0);
-void Audio_SetPauseMixMode(u32 arg0);
-void Audio_BeginVolumeTransition(u32 arg0);
-void Audio_ResetVolumeTransition(void);
+typedef struct unk_D_800FCF28 {
+    /* 0x000 */ s16 unk_000[0x8A0];
+} unk_D_800FCF28; // size = 0x1140
 
-#endif // _4BA90_H_
+// audio_channel.c
+void Audio_SetMonoOutput(s32 arg0);
+void Audio_IsSoundPlayingWrapper(s32 arg0);
+
+#endif // AUDIO_CHANNEL_H

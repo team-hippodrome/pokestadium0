@@ -2,8 +2,8 @@
 /* C ported from the Stadium 1 decomp: src/gb_audio_render.c. */
 
 #include "gb_audio_render.h"
-#include "rom_device.h"
 #include "audio_commands.h"
+#include "rom_device.h"
 typedef struct unk_D_800FD008 {
     /* 0x00 */ u16 unk_00[20];
     /* 0x28 */ u8 unk_28;

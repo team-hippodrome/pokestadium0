@@ -1,5 +1,6 @@
-#ifndef _18140_H_
-#define _18140_H_
+/* Declarations for src/model_animation_events.c. */
+#ifndef MODEL_ANIMATION_EVENTS_H
+#define MODEL_ANIMATION_EVENTS_H
 
 #include "global.h"
 
@@ -11,22 +12,9 @@ typedef struct unk_D_800ABD00 {
     /* 0x0C */ void* unk_0C;
 } unk_D_800ABD00; // size = 0x10
 
-typedef struct unk_func_80017540_arg1 {
-    /* 0x00 */ u16 unk_00;
-    /* 0x02 */ u16 unk_02;
-} unk_func_80017540_arg1; // size = 0x4
-
-s32 ModelAnim_ResolveEventIndex(s32 arg0, unk_func_80017540_arg1* arg1, s32 arg2);
-s16 ModelAnim_AdvanceEventFrame(EventTrackState* arg0);
-void ModelAnim_ResetEventContext(void);
-void ModelAnim_BeginEventContext(EventTrackState* arg0, u16 arg1, s32 arg2);
-void ModelAnim_EndEventContext(void);
-void ModelAnim_GetEventAtFrame(unk_D_86002F34_alt11_018** arg0, unk_D_86002F34_alt11_018* arg1, s32 arg2);
-void ModelAnim_ClearEventTrack(DisplayObject* arg0);
-s16 ModelAnim_BindEventTrack(DisplayObject* arg0, s16 arg1, s32 arg2);
-void ModelAnim_SetEventFrame(DisplayObject* display_object, s16 frame_number);
+// model_animation_events.c
 s32 ModelAnim_IsEventFrame(DisplayObject* display_object, s16 frame_number);
 s32 ModelAnim_IsEventTrackNearEnd(DisplayObject* display_object);
 s32 ModelAnim_IsEventTrackDone(DisplayObject* display_object);
 
-#endif // _18140_H_
+#endif // MODEL_ANIMATION_EVENTS_H

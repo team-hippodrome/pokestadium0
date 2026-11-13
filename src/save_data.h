@@ -1,9 +1,12 @@
-#ifndef _26820_H_
-#define _26820_H_
+/* Declarations for src/save_data.c. */
+#ifndef SAVE_DATA_H
+#define SAVE_DATA_H
 
 #include "global.h"
+#include "stdarg.h"
+#include "moves.h"
+#include "m2c_macros.h"
 #include "gb_data.h"
-#include "game_state.h"
 
 typedef struct GameOptions {
     /* 0x00 */ s16 gbTowerUnlockTier; // 0 = normal, 1 = Doduo, 2 = Dodrio.
@@ -39,6 +42,12 @@ typedef struct DeckRecordHeader {
     /* 0x0C */ u16 unk_0C;
     /* 0x0E */ s16 unk_0E;
 } DeckRecordHeader; // size >= 0x10
+
+typedef struct GbPokemonNamedRecord {
+    /* 0x00 */ GbPokemonRecord unk_00;
+    /* 0x21 */ u8 unk_21[11];
+    /* 0x2C */ u8 unk_2C[11];
+} GbPokemonNamedRecord; // size = 0x37
 
 typedef struct RegisteredTeamSlot {
     /* 0x000 */ DeckRecordHeader unk_000;
@@ -150,69 +159,29 @@ typedef struct SaveBank {
     /* 0x08 */ unk_D_800AE4E8_004 unk_08;
 } SaveBank; // size = 0xC
 
-void Save_ResetBank(UNUSED MainPoolBlock* arg0, u32 arg1);
+// save_data.c
 u16 Save_Checksum(u8* arg0, s32 arg1);
 s32 Save_RecordIsValid(u8* arg0, s32 arg1);
 void Save_WriteFooter(u8* arg0, s32 arg1, s32 arg2);
-void Save_WriteRecord(u8* arg0, u8* arg1, s32 arg2, s32 arg3);
-void Save_CommitRecord(u8* arg0, s32 arg1, s32 arg2);
-void Save_InvalidateRecord(u8* arg0, s32 arg1, s32 arg2);
-void Save_RestoreRecord(u8* arg0, s32 arg1, s32 arg2);
-void Save_ClearRecord(u8* arg0, s32 arg1, s32 arg2);
-void Save_LoadWithRepair(s32 arg0, s32 arg1);
-void GbSave_LoadBattleMonRecord(BattleMon* arg0, GbPokemonNamedRecord* arg1);
-void GbSave_SaveBattleMonRecord(BattleMon* arg0, GbPokemonNamedRecord* arg1);
 s32 Save_IsTypedRecordFlagSet(s32 arg0, s32 arg1, s16 arg2);
-void Save_MarkRecordDirty(s32 arg0, s32 arg1, s16 arg2);
-
 void Save_CommitTypedRecord(s32 arg0, s32 arg1);
 void Save_InvalidateTypedRecord(s32 arg0, s32 arg1);
-void Save_RestoreTypedRecord(s32 arg0, s32 arg1);
 void Save_ClearTypedRecord(s32 arg0, s32 arg1);
-void Save_CommitBankRecords(s16 arg0);
-void Save_CommitAllBankRecords(void);
 void Save_ResetAndCommitTypedRecord(s32 arg0, s32 arg1);
 s32 Deck_GetSaveRecordCapacity(s32 arg0);
 s32 Deck_GetSaveRecordSize(s32 arg0);
 s32 Deck_IsSaveEntryPresent(s32 arg0, s32 arg1);
 s32 Deck_GetSaveEntryTrainerId(s32 arg0, s32 arg1);
 s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2);
-void Deck_GetSaveEntryNameWrapper(s32 arg0, s32 arg1, char* arg2);
 void Deck_SetSaveEntryTrainerIdAndName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4);
-s16 Deck_GetSaveEntryCount(s32 arg0, s32 arg1);
 void Deck_SetSaveEntryCount(s32 arg0, s32 arg1, s32 arg2);
-void Deck_IncrementSaveEntryCount(s32 arg0, s32 arg1);
 s32 Deck_ReadSaveEntry(s32 arg0, s32 arg1, s32 arg2, u8* arg3);
 s32 Save_WriteTypedRecord(s32 arg0, s32 arg1, s32 arg2, u8* arg3);
-void Save_GetOptions(GameOptions* options);
-void Save_SetOptions(GameOptions* arg0);
-void Save_GetModeSettings(ModeSettings* settings, s16 round_index);
-void Save_SetModeSettings(ModeSettings* arg0, s16 arg1);
-void Save_GetOptionsField02(u16* arg0);
-void Save_SetOptionsField02(u16* arg0);
-s32 Save_GetOptionsField1E(void);
-void Save_SetOptionsField1E(u8 arg0);
-s32 Save_GetOptionsField1F(void);
-void Save_SetOptionsField1F(u8 arg0);
-s32 Save_GetSelectedPokemonId(void);
-void Save_SetSelectedPokemonId(u8 arg0, u8 arg1);
-void Session_SaveContinueRecord(SessionContinueData* arg0, BattleMon* arg1, s32 arg2);
-s32 Session_LoadContinueRecord(SessionContinueData* arg0, BattleMon* arg1);
-s32 Save_ContinueRecordExists(void);
-s32 Save_FlushBank(s16 arg0);
-s32 Save_FlushDirtyBanks(void);
-s32 Save_AllocateBank(s16 arg0, u32 arg1);
-void Save_InitializeBank0(void);
-void Save_InitializeBank1(void);
-void Save_InitializeBank2(void);
-void Save_InitializeBank3(void);
-s32 Save_EnsureBankLoaded(s16 arg0);
-void Save_EnsureAllBanksLoaded(void);
-void Save_EnsureBank3Loaded(void);
-s32 Save_SetActiveRecordBank(s16 arg0);
-s32 RegisteredTeam_ReadSlot(RegisteredTeamSlot* arg0, s32 arg1);
-s32 RegisteredTeam_WriteSlot(RegisteredTeamSlot* arg0, s32 arg1);
-s32 Deck_FindFirstFreeTeamSlot(void);
-void Deck_CompactRegisteredTeams(void);
+void func_80024044(void);
+s32 Audio_GetFreeVoiceCount(void);
+void func_800245E0(s32 arg0, s32 arg1);
 
-#endif // _26820_H_
+// functions defined in assembly
+s16 Deck_GetSaveEntryCount(s32 arg0, s32 arg1);
+
+#endif // SAVE_DATA_H
