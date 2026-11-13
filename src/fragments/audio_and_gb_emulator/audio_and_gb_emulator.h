@@ -79,26 +79,26 @@ typedef struct unk_D_81234650 {
 } unk_D_81234650;
 
 typedef struct Rec81109678Flags {
-    /* 0x0 */ u8 bit7 : 1;
-    /* 0x0 */ u8 bit6 : 1;
+    /* 0x0 */ u8 enabled : 1; // @unverified: same use as OoT's SequenceLayer.enabled (AudioHeap_DiscardFont)
+    /* 0x0 */ u8 finished : 1; // @unverified: same use as OoT's SequenceLayer.finished (AudioHeap_DiscardFont)
     /* 0x0 */ u8 rest : 6;
 } Rec81109678Flags;
 
 typedef struct Rec81109678 {
     /* 0x00 */ u8 pad00[0x30];
-    /* 0x30 */ u8 unk_30;
+    /* 0x30 */ u8 priority; // @unverified: same offset/use as OoT's Note.playbackState.priority (AudioHeap_DiscardFont)
     /* 0x31 */ u8 pad31[2];
-    /* 0x33 */ u8 unk_33;
+    /* 0x33 */ u8 fontId; // @unverified: same offset/use as OoT's Note.playbackState.fontId (compared with the font being discarded)
     /* 0x34 */ u8 unk_34;
     /* 0x35 */ u8 pad35[0x44 - 0x35];
-    /* 0x44 */ Rec81109678Flags* unk_44;
+    /* 0x44 */ Rec81109678Flags* parentLayer; // @unverified: same offset/use as OoT's Note.playbackState.parentLayer
     /* 0x48 */ u8 pad48[0x5C - 0x48];
-    /* 0x5C */ u8 unk_5C;
-    /* 0x5D */ u8 unk_5D;
+    /* 0x5C */ u8 adsrAction; // @unverified: same offset/use as OoT's Note.playbackState.adsr.action (0x10 = release)
+    /* 0x5D */ u8 adsrState; // @unverified: same offset/use as OoT's Note.playbackState.adsr.action.s.state
     /* 0x5E */ u8 pad5E[0x6C - 0x5E];
-    /* 0x6C */ f32 unk_6C;
+    /* 0x6C */ f32 adsrFadeOutVel; // @unverified: same offset/use as OoT's Note.playbackState.adsr.fadeOutVel
     /* 0x70 */ u8 pad70[0xB4 - 0x70];
-    /* 0xB4 */ u32 enabled : 1;
+    /* 0xB4 */ u32 enabled : 1; // @unverified: same offset/use as OoT's Note.sampleState.bitField0.enabled
     /* 0xB4 */ u32 restB4 : 31;
     /* 0xB8 */ u8 padB8[0xCC - 0xB8];
 } Rec81109678; // size = 0xCC
@@ -132,11 +132,11 @@ typedef struct ReverbSettingsAFF0 {
     /* 0x00 */ u8 downsampleRate;
     /* 0x01 */ u8 windowSize;
     /* 0x02 */ u16 decayRatio;
-    /* 0x04 */ u16 unk_4;
-    /* 0x06 */ u16 unk_6;
-    /* 0x08 */ u16 unk_8;
-    /* 0x0A */ s8 unk_A;
-    /* 0x0C */ u16 unk_C;
+    /* 0x04 */ u16 volume; // @unverified: copied to SynthesisReverb.volume (OoT's ReverbSettings.volume)
+    /* 0x06 */ u16 leakRtl; // @unverified: copied to SynthesisReverb.leakRtl (OoT's ReverbSettings.leakRtl)
+    /* 0x08 */ u16 leakLtr; // @unverified: copied to SynthesisReverb.leakLtr (OoT's ReverbSettings.leakLtr)
+    /* 0x0A */ s8 mixReverbIndex; // @unverified: copied to SynthesisReverb.mixReverbIndex (OoT's ReverbSettings.unk_10)
+    /* 0x0C */ u16 mixReverbStrength; // @unverified: copied to SynthesisReverb.mixReverbStrength (OoT's ReverbSettings.unk_12)
     /* 0x0E */ s16 lowPassFilterCutoffLeft;
     /* 0x10 */ s16 lowPassFilterCutoffRight;
 } ReverbSettingsAFF0; // size = 0x12
@@ -190,21 +190,21 @@ typedef struct SynthesisReverbAFF0 {
     /* 0x002 */ u8 framesToIgnore;
     /* 0x003 */ u8 curFrame;
     /* 0x004 */ u8 downsampleRate;
-    /* 0x005 */ s8 unk_05;
+    /* 0x005 */ s8 mixReverbIndex; // @unverified: from the code: index of another reverb mixed in when != -1 (OoT's SynthesisReverb.unk_05)
     /* 0x006 */ u16 windowSize;
-    /* 0x008 */ u16 unk_08;
-    /* 0x00A */ u16 unk_0A;
+    /* 0x008 */ u16 mixReverbStrength; // @unverified: from the code: aMix gain of that mixed-in reverb (OoT's SynthesisReverb.unk_08)
+    /* 0x00A */ u16 volume; // @unverified: same offset/use as OoT's SynthesisReverb.volume
     /* 0x00C */ u16 decayRatio;
-    /* 0x00E */ s16 unk_0E;
-    /* 0x010 */ u16 unk_10;
-    /* 0x012 */ u16 unk_12;
+    /* 0x00E */ s16 resampleRate; // @unverified: 0x8000 / downsampleRate, the aResample pitch (OoT's SynthesisReverb.unk_0E)
+    /* 0x010 */ u16 leakRtl; // @unverified: same offset/use as OoT's SynthesisReverb.leakRtl
+    /* 0x012 */ u16 leakLtr; // @unverified: same offset/use as OoT's SynthesisReverb.leakLtr
     /* 0x014 */ s32 nextRingBufPos;
     /* 0x018 */ s32 unk_18;
     /* 0x01C */ s32 bufSizePerChan;
     /* 0x020 */ s16* leftRingBuf;
     /* 0x024 */ s16* rightRingBuf;
-    /* 0x028 */ void* unk_28;
-    /* 0x02C */ void* unk_2C;
+    /* 0x028 */ void* resampleStateLeft; // @unverified: 0x20-byte aResample state, left (OoT's SynthesisReverb.unk_30)
+    /* 0x02C */ void* resampleStateRight; // @unverified: 0x20-byte aResample state, right (OoT's SynthesisReverb.unk_34)
     /* 0x030 */ void* unk_30;
     /* 0x034 */ void* unk_34;
     /* 0x038 */ ReverbItemAFF0 items[2][5];
@@ -355,22 +355,22 @@ typedef union GbApuMesg {
 } GbApuMesg;
 
 typedef struct unk_D_81234690 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ u16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
-    /* 0x10 */ s16 unk_10;
-    /* 0x12 */ s16 unk_12;
-    /* 0x14 */ s16 unk_14;
+    /* 0x00 */ s16 specUnk4; // @unverified: same offset/use as OoT's AudioBufferParameters.specUnk4 (set from AudioSpec.unk_04; 2 doubles the AI buffer bounds)
+    /* 0x02 */ u16 samplingFrequency; // @unverified: same offset/use as OoT's AudioBufferParameters.samplingFrequency
+    /* 0x04 */ s16 aiSamplingFrequency; // @unverified: same offset/use as OoT's AudioBufferParameters.aiSamplingFrequency (osAiSetFrequency result)
+    /* 0x06 */ s16 samplesPerFrameTarget; // @unverified: same offset/use as OoT's AudioBufferParameters.samplesPerFrameTarget
+    /* 0x08 */ s16 maxAiBufferLength; // @unverified: same offset/use as OoT's AudioBufferParameters.maxAiBufferLength
+    /* 0x0A */ s16 minAiBufferLength; // @unverified: same offset/use as OoT's AudioBufferParameters.minAiBufferLength
+    /* 0x0C */ s16 ticksPerUpdate; // @unverified: same offset/use as OoT's AudioBufferParameters.ticksPerUpdate
+    /* 0x0E */ s16 samplesPerTick; // @unverified: same offset/use as OoT's AudioBufferParameters.samplesPerTick
+    /* 0x10 */ s16 samplesPerTickMax; // @unverified: same offset/use as OoT's AudioBufferParameters.samplesPerTickMax
+    /* 0x12 */ s16 samplesPerTickMin; // @unverified: same offset/use as OoT's AudioBufferParameters.samplesPerTickMin
+    /* 0x14 */ s16 numSequencePlayers; // @unverified: same offset/use as OoT's AudioBufferParameters.numSequencePlayers
     /* 0x16 */ u8 pad16[0x18 - 0x16];
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ f32 unk_20;
-    /* 0x24 */ f32 unk_24;
+    /* 0x18 */ f32 resampleRate; // @unverified: same offset/use as OoT's AudioBufferParameters.resampleRate (32000 / samplingFrequency)
+    /* 0x1C */ f32 ticksPerUpdateInv; // @unverified: same offset/use as OoT's AudioBufferParameters.ticksPerUpdateInv
+    /* 0x20 */ f32 ticksPerUpdateInvScaled; // @unverified: same offset/use as OoT's AudioBufferParameters.ticksPerUpdateInvScaled
+    /* 0x24 */ f32 ticksPerUpdateScaled; // @unverified: same offset/use as OoT's AudioBufferParameters.ticksPerUpdateScaled
     /* 0x28 */ u8 pad28[0x38 - 0x28];
 } unk_D_81234690;
 

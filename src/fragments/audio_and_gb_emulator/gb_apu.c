@@ -990,12 +990,12 @@ s32 GbAudio_UpdateFrame(void) {
     buf_ptr = &D_811859B8[idx];
     len = &D_811859C4[idx];
     buf = *buf_ptr;
-    *len = ((D_811858B8.unk_06 - ai_len + 0x80) & 0xFFF0) + 0x10;
-    if (*len < D_811858B8.unk_0A) {
-        *len = D_811858B8.unk_0A;
+    *len = ((D_811858B8.samplesPerFrameTarget - ai_len + 0x80) & 0xFFF0) + 0x10;
+    if (*len < D_811858B8.minAiBufferLength) {
+        *len = D_811858B8.minAiBufferLength;
     }
-    if (D_811858B8.unk_08 < *len) {
-        *len = D_811858B8.unk_08;
+    if (D_811858B8.maxAiBufferLength < *len) {
+        *len = D_811858B8.maxAiBufferLength;
     }
     if (D_81138B80 == 0) {
         GbApu_RenderBuffer(*len, buf);

@@ -85,10 +85,10 @@ void AudioHeap_DiscardFont(s32 arg0) {
 
     for (i = 0; i < D_811858E8; i++) {
         p = &D_81184664[i];
-        if (arg0 == p->unk_33) {
-            if ((p->unk_34 == 0) && (p->unk_30 != 0)) {
-                p->unk_44->bit7 = 0;
-                p->unk_44->bit6 = 1;
+        if (arg0 == p->fontId) {
+            if ((p->unk_34 == 0) && (p->priority != 0)) {
+                p->parentLayer->enabled = 0;
+                p->parentLayer->finished = 1;
             }
             AudioPlayback_NoteDisable(p);
             AudioPlayback_AudioListRemove(p);
@@ -423,7 +423,7 @@ void* AudioHeap_AllocCached(s32 table_type, s32 size, s32 cache, s32 id) {
         if (table_type == 1) {
             if (load_status_entry0 == 4) {
                 for (i = 0; i < D_811858E8; i++) {
-                    if (D_81184664[i].unk_33 == t_cache->entries[0].id && D_81184664[i].enabled) {
+                    if (D_81184664[i].fontId == t_cache->entries[0].id && D_81184664[i].enabled) {
                         break;
                     }
                 }
@@ -436,7 +436,7 @@ void* AudioHeap_AllocCached(s32 table_type, s32 size, s32 cache, s32 id) {
 
             if (load_status_entry1 == 4) {
                 for (i = 0; i < D_811858E8; i++) {
-                    if (D_81184664[i].unk_33 == t_cache->entries[1].id && D_81184664[i].enabled) {
+                    if (D_81184664[i].fontId == t_cache->entries[1].id && D_81184664[i].enabled) {
                         break;
                     }
                 }
@@ -485,7 +485,7 @@ void* AudioHeap_AllocCached(s32 table_type, s32 size, s32 cache, s32 id) {
             } else if (table_type == 1) {
                 if (load_status_entry0 == 2) {
                     for (i = 0; i < D_811858E8; i++) {
-                        if (D_81184664[i].unk_33 == t_cache->entries[0].id && D_81184664[i].enabled) {
+                        if (D_81184664[i].fontId == t_cache->entries[0].id && D_81184664[i].enabled) {
                             break;
                         }
                     }
@@ -496,7 +496,7 @@ void* AudioHeap_AllocCached(s32 table_type, s32 size, s32 cache, s32 id) {
                 }
                 if (load_status_entry1 == 2) {
                     for (i = 0; i < D_811858E8; i++) {
-                        if (D_81184664[i].unk_33 == t_cache->entries[1].id && D_81184664[i].enabled) {
+                        if (D_81184664[i].fontId == t_cache->entries[1].id && D_81184664[i].enabled) {
                             break;
                         }
                     }
@@ -849,7 +849,7 @@ s32 AudioHeap_ResetStep(void) {
     s32 j;
     s32 sp24;
 
-    if (D_811858B8.unk_00 == 2) {
+    if (D_811858B8.specUnk4 == 2) {
         sp24 = 2;
     } else {
         sp24 = 1;
@@ -857,7 +857,7 @@ s32 AudioHeap_ResetStep(void) {
 
     switch (D_81184657) {
         case 5:
-            for (i = 0; i < D_811858B8.unk_14; i++) {
+            for (i = 0; i < D_811858B8.numSequencePlayers; i++) {
                 AudioSeq_SequencePlayerDisable(&D_81184668 + i * 0x15C);
             }
             D_8118465C = 4 / sp24;
@@ -869,9 +869,9 @@ s32 AudioHeap_ResetStep(void) {
                 AudioHeap_UpdateReverbs();
             } else {
                 for (i = 0; i < D_811858E8; i++) {
-                    if (D_81184664[i].enabled && D_81184664[i].unk_5D != 0) {
-                        D_81184664[i].unk_6C = D_811858B8.unk_1C;
-                        D_81184664[i].unk_5C |= 0x10;
+                    if (D_81184664[i].enabled && D_81184664[i].adsrState != 0) {
+                        D_81184664[i].adsrFadeOutVel = D_811858B8.ticksPerUpdateInv;
+                        D_81184664[i].adsrAction |= 0x10;
                     }
                 }
                 D_8118465C = 16 / sp24;
@@ -896,13 +896,13 @@ s32 AudioHeap_ResetStep(void) {
                 D_81184657--;
                 AudioHeap_DiscardSampleCaches();
             }
-            if (!D_811858B8.unk_00) {} // FAKE: empty test found by the permuter; keeps &D_811858B8 in a saved register
+            if (!D_811858B8.specUnk4) {} // FAKE: empty test found by the permuter; keeps &D_811858B8 in a saved register
             break;
         case 1:
             AudioHeap_Init();
             D_81184657 = 0;
             for (i = 0; i < 3; i++) {
-                D_811859C4[i] = D_811858B8.unk_08;
+                D_811859C4[i] = D_811858B8.maxAiBufferLength;
                 for (j = 0; j < 2016; j++) {
                     D_811859B8[i][j] = 0;
                 }
@@ -976,35 +976,35 @@ void AudioHeap_Init(void) {
     AudioSpecAFF0* spec = &D_811526C4[D_81184658];
 
     D_8118568C = 0;
-    D_811858B8.unk_02 = spec->frequency;
-    D_811858B8.unk_04 = func_80058100(D_811858B8.unk_02);
-    D_811858B8.unk_06 = ((D_811858B8.unk_02 / D_811859B4) + 0xF) & 0xFFF0;
-    D_811858B8.unk_0A = D_811858B8.unk_06 - 0x10;
-    D_811858B8.unk_08 = D_811858B8.unk_06 + 0x10;
-    D_811858B8.unk_0C = ((D_811858B8.unk_06 + 0x10) / 0xD0) + 1;
-    D_811858B8.unk_0E = (D_811858B8.unk_06 / D_811858B8.unk_0C) & ~7;
-    D_811858B8.unk_10 = D_811858B8.unk_0E + 8;
-    D_811858B8.unk_12 = D_811858B8.unk_0E - 8;
-    D_811858B8.unk_18 = 32000.0f / (s32)D_811858B8.unk_02;
-    D_811858B8.unk_20 = (1.0f / 256.0f) / D_811858B8.unk_0C;
-    D_811858B8.unk_24 = D_811858B8.unk_0C / 4.0f;
-    D_811858B8.unk_1C = 1.0f / D_811858B8.unk_0C;
+    D_811858B8.samplingFrequency = spec->frequency;
+    D_811858B8.aiSamplingFrequency = func_80058100(D_811858B8.samplingFrequency);
+    D_811858B8.samplesPerFrameTarget = ((D_811858B8.samplingFrequency / D_811859B4) + 0xF) & 0xFFF0;
+    D_811858B8.minAiBufferLength = D_811858B8.samplesPerFrameTarget - 0x10;
+    D_811858B8.maxAiBufferLength = D_811858B8.samplesPerFrameTarget + 0x10;
+    D_811858B8.ticksPerUpdate = ((D_811858B8.samplesPerFrameTarget + 0x10) / 0xD0) + 1;
+    D_811858B8.samplesPerTick = (D_811858B8.samplesPerFrameTarget / D_811858B8.ticksPerUpdate) & ~7;
+    D_811858B8.samplesPerTickMax = D_811858B8.samplesPerTick + 8;
+    D_811858B8.samplesPerTickMin = D_811858B8.samplesPerTick - 8;
+    D_811858B8.resampleRate = 32000.0f / (s32)D_811858B8.samplingFrequency;
+    D_811858B8.ticksPerUpdateInvScaled = (1.0f / 256.0f) / D_811858B8.ticksPerUpdate;
+    D_811858B8.ticksPerUpdateScaled = D_811858B8.ticksPerUpdate / 4.0f;
+    D_811858B8.ticksPerUpdateInv = 1.0f / D_811858B8.ticksPerUpdate;
     D_811858E8 = spec->numNotes;
-    D_811858B8.unk_14 = spec->numSequencePlayers;
-    if (D_811858B8.unk_14 >= 2) {
-        D_811858B8.unk_14 = 1;
+    D_811858B8.numSequencePlayers = spec->numSequencePlayers;
+    if (D_811858B8.numSequencePlayers >= 2) {
+        D_811858B8.numSequencePlayers = 1;
     }
     D_81184278 = spec->unk_0C;
-    D_811858EC = (u32)(D_811858B8.unk_0C * 2880000.0f / D_811526F8 / D_811859B0);
-    D_811858B8.unk_00 = spec->unk_04;
-    D_811858B8.unk_06 *= D_811858B8.unk_00;
-    D_811858B8.unk_08 *= D_811858B8.unk_00;
-    D_811858B8.unk_0A *= D_811858B8.unk_00;
-    D_811858B8.unk_0C *= D_811858B8.unk_00;
-    if (D_811858B8.unk_00 >= 2) {
-        D_811858B8.unk_08 -= 0x10;
+    D_811858EC = (u32)(D_811858B8.ticksPerUpdate * 2880000.0f / D_811526F8 / D_811859B0);
+    D_811858B8.specUnk4 = spec->unk_04;
+    D_811858B8.samplesPerFrameTarget *= D_811858B8.specUnk4;
+    D_811858B8.maxAiBufferLength *= D_811858B8.specUnk4;
+    D_811858B8.minAiBufferLength *= D_811858B8.specUnk4;
+    D_811858B8.ticksPerUpdate *= D_811858B8.specUnk4;
+    if (D_811858B8.specUnk4 >= 2) {
+        D_811858B8.maxAiBufferLength -= 0x10;
     }
-    D_811858E4 = D_811858E8 * 0x14 * D_811858B8.unk_0C + spec->numReverbs * 0x20 + 0x1E0;
+    D_811858E4 = D_811858E8 * 0x14 * D_811858B8.ticksPerUpdate + spec->numReverbs * 0x20 + 0x1E0;
     persistent_mem = spec->persistentSeqMem + spec->persistentFontMem + spec->persistentSampleMem + spec->persistentSampleCacheSize + 0x10;
     temporary_mem = spec->temporarySeqMem + spec->temporaryFontMem + spec->temporarySampleMem + spec->temporarySampleCacheSize + 0x10;
     total_mem = persistent_mem + temporary_mem;
@@ -1031,7 +1031,7 @@ void AudioHeap_Init(void) {
     D_81184664 = (Rec81109678*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, D_811858E8 * 0xCC);
     AudioPlayback_NoteInitAll();
     AudioPlayback_InitNoteFreeList();
-    D_81184288 = (void*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, D_811858B8.unk_0C * D_811858E8 * 0x18);
+    D_81184288 = (void*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, D_811858B8.ticksPerUpdate * D_811858E8 * 0x18);
     for (i = 0; i != 2; i++) {
         D_81185900[i] = (void*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, D_811858E4 * 8);
     }
@@ -1048,11 +1048,11 @@ void AudioHeap_Init(void) {
         reverb->windowSize = settings->windowSize * 64;
         reverb->windowSize /= reverb->downsampleRate;
         reverb->decayRatio = settings->decayRatio;
-        reverb->unk_0A = settings->unk_4;
-        reverb->unk_10 = settings->unk_6;
-        reverb->unk_12 = settings->unk_8;
-        reverb->unk_05 = settings->unk_A;
-        reverb->unk_08 = settings->unk_C;
+        reverb->volume = settings->volume;
+        reverb->leakRtl = settings->leakRtl;
+        reverb->leakLtr = settings->leakLtr;
+        reverb->mixReverbIndex = settings->mixReverbIndex;
+        reverb->mixReverbStrength = settings->mixReverbStrength;
         reverb->useReverb = 8;
         reverb->leftRingBuf = (s16*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, reverb->windowSize * 2);
         reverb->rightRingBuf = (s16*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, reverb->windowSize * 2);
@@ -1073,12 +1073,12 @@ void AudioHeap_Init(void) {
         reverb->loop.count = 1;
         reverb->loop.end = reverb->windowSize;
         if (reverb->downsampleRate != 1) {
-            reverb->unk_0E = 0x8000 / reverb->downsampleRate;
-            reverb->unk_28 = (void*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, 0x20);
-            reverb->unk_2C = (void*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, 0x20);
+            reverb->resampleRate = 0x8000 / reverb->downsampleRate;
+            reverb->resampleStateLeft = (void*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, 0x20);
+            reverb->resampleStateRight = (void*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, 0x20);
             reverb->unk_30 = (void*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, 0x20);
             reverb->unk_34 = (void*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, 0x20);
-            for (j = 0; j < D_811858B8.unk_0C; j++) {
+            for (j = 0; j < D_811858B8.ticksPerUpdate; j++) {
                 s16* mem = (s16*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, 0x340);
 
                 reverb->items[0][j].toDownsampleLeft = mem;
@@ -1104,7 +1104,7 @@ void AudioHeap_Init(void) {
         }
     }
     func_81115480();
-    for (j = 0; j < D_811858B8.unk_14; j++) {
+    for (j = 0; j < D_811858B8.numSequencePlayers; j++) {
         func_8111539C(j);
         func_811152A4(j);
     }

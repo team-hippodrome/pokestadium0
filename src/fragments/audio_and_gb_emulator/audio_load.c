@@ -693,8 +693,8 @@ void AudioLoad_InitSampleDmaBuffers(s32 num_notes) {
     s32 i;
 
     D_811858E0 = 0xA0;
-    D_81185688 = (Timer8110C1C0*)func_81109868(&D_811842C0, 4 * D_811858E8 * sizeof(Timer8110C1C0) * D_811858B8.unk_00);
-    for (i = 0; i < 3 * D_811858E8 * D_811858B8.unk_00; i++) {
+    D_81185688 = (Timer8110C1C0*)func_81109868(&D_811842C0, 4 * D_811858E8 * sizeof(Timer8110C1C0) * D_811858B8.specUnk4);
+    for (i = 0; i < 3 * D_811858E8 * D_811858B8.specUnk4; i++) {
         if ((D_81185688[D_8118568C].ramAddr = (u8*)func_81109868(&D_811842C0, D_811858E0)) == NULL) {
             if (D_811842A0 == 0) {
                 break;
