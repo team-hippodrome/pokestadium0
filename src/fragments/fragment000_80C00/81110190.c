@@ -1,4 +1,7 @@
 /* Stadium Zero fragment000_80C00. */
+/* Audio driver, matching OoT src/audio/internal/os.c in function order. The driver is Nintendo's
+ * "Nas" library (original names Nas_*); this revision sits between SM64 Shindou and OoT. See
+ * docs/annotation/audio-driver.md for the per-function mapping. */
 
 #include "global.h"
 
@@ -6,6 +9,8 @@
  * The fragment's private copy of libultra's osAiSetNextBuffer (same body, including the
  * hdwrBugFlag 8 KB-boundary workaround). GbAudio_UpdateFrame and GbAudio_RampToSilence use it
  * to hand the rendered GB audio buffers to the AI.
+ * Corresponds to OoT osAiSetNextBuffer. OoT's audio library carries its own copy too
+ * (osAiSetNextBuffer in src/audio/internal/os.c).
  * Seen in play (2026-11-12): GbAudio_UpdateFrame passed it the buffer GbApu_RenderBuffer filled
  * the frame before (0x801A64F0) with length 0xC40, that is 784 stereo 16-bit samples.
  */

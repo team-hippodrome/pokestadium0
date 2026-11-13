@@ -419,7 +419,7 @@ func_8111009C,0x8111009C,src/fragments/fragment000_80C00/battle_engine_2FA4D0.c,
 func_811100F8,0x811100F8,src/fragments/fragment000_80C00/battle_engine_2FA4D0.c,AudioThread_GetSeqPlayerIO,m2c,m2c,c
 func_81110128,0x81110128,src/fragments/fragment000_80C00/battle_engine_2FA4D0.c,AudioThread_InitExternalPool,m2c,m2c,c
 func_81110158,0x81110158,src/fragments/fragment000_80C00/battle_engine_2FA4D0.c,AudioThread_ResetExternalPool,s1,stadium1:src/fragments/battle_engine/battle_engine_317E70.c,c
-func_81110164,0x81110164,src/fragments/fragment000_80C00/battle_engine_2FA4D0.c,BattleAnim_EffectStartNop,s1,stadium1:src/fragments/battle_engine/battle_engine_317E70.c,c
+func_81110164,0x81110164,src/fragments/fragment000_80C00/battle_engine_2FA4D0.c,func_81110164,s1,stadium1:src/fragments/battle_engine/battle_engine_317E70.c,c
 func_8111016C,0x8111016C,src/fragments/fragment000_80C00/battle_engine_2FA4D0.c,AudioThread_InitMesgQueues,s1,stadium1:src/fragments/battle_engine/battle_engine_317E70.c,c
 func_8110DC90,0x8110DC90,src/fragments/fragment000_80C00/battle_engine_309ED0.c,func_8110DC90,s1,stadium1:src/fragments/battle_engine/battle_engine_309ED0.c,c
 func_8110DC98,0x8110DC98,src/fragments/fragment000_80C00/battle_engine_309ED0.c,func_8110DC98,s1,stadium1:src/fragments/battle_engine/battle_engine_309ED0.c,c
