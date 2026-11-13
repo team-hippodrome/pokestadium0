@@ -32,12 +32,10 @@ US_FONTS = 0x3BA190              # fonts_ROM_START in the Stadium 1 decompilatio
 US_ASCII_MAP = 0x8DE80           # 128-byte table whose A-Z and a-z entries increase
 MAP_BYTES = 0x80
 ADVANCES = 0x90
-ADV_ROM = 0x2C4000               # free ROM inside the stale part of the font archive span:
-                                 # six 0x90-byte advance tables, read through 0xB0000000
-ADV_VRAM = 0xB0000000 + ADV_ROM
 GLYPHS = 0x91
 # Which stages touch which part; the narrow ones exist to bisect a screen-level fault.
-ARCHIVE_STAGES = {'full', 'data', 'archive', 'data-keep', 'keep-map', 'keep-loader'}
+INPLACE_STAGES = {'full'}          # the real patch: English payloads in Zero's own slots
+ARCHIVE_STAGES = {'archive', 'data', 'data-keep', 'keep-map', 'keep-loader'}  # bisect: whole-archive swap
 MAP_TABLE_STAGES = {'full', 'data', 'map', 'data-keep', 'keep-map'}
 MAP_FUNC_STAGES = {'full', 'data', 'map', 'code', 'keep-map'}
 LOADER_STAGES = {'full', 'code', 'loader', 'loader0', 'keep-loader'}
@@ -143,27 +141,12 @@ def font_load_words(rom, shift=ADVANCES):
     return out + [NOP] * (len(r) - len(out))
 
 
-def advance_tables(us):
-    """The six per-set advance tables from Stadium 1's archive, one 0x90-byte table each."""
-    import crunch64                      # PERS-SZP payloads are Yay0; use the tested decoder
-
-    total, files = archive_files(us, US_FONTS)
-    tables = []
-    for off, size in files:
-        blob = us[US_FONTS + off:US_FONTS + off + size]
-        data = crunch64.yay0.decompress(blob[struct.unpack_from('>I', blob, 8)[0]:])
-        tables.append(data[:ADVANCES])
-    assert len(tables) == 6, len(tables)
-    assert tables[0][0] == 4 and tables[0][0x41] == 7, 'unexpected advance table: %r' % list(tables[0][:8])
-    return b''.join(tables)
-
-
 def font_map_words(rom, ctx=None):
     """func_80019F70: printable ASCII through the Latin map, and that glyph's advance into the set.
 
-    The advance comes from the copy of Stadium 1's tables at ADV_VRAM, not from set->tex: the font
-    context block is never cleared, so an entry slot that was not loaded holds pool garbage, and
-    dereferencing it faults where retail simply draws nothing.
+    The advance table sits 0x90 bytes before the glyph base, inside each English font file. The font
+    context block is never cleared, so a slot the screen did not load can hold stale data: the slot
+    is range-checked and a null glyph base is skipped before anything is dereferenced.
     """
     ctx = font_context_address(rom) if ctx is None else ctx
     ascii_block = [
@@ -184,15 +167,13 @@ def font_map_words(rom, ctx=None):
         NOP,
         sll(T6, T4, 3),
         addu(T6, T3, T6),                    # &entries[slot]
-        sll(T5, T4, 3),
-        addu(T5, T5, T4),                    # slot * 9
-        sll(T5, T5, 4),                      # slot * 0x90
-        addu(T5, T5, V0),                    # + glyph
-        lui(AT, hi(ADV_VRAM)),
-        addiu(AT, AT, lo(ADV_VRAM)),
-        addu(T5, T5, AT),
+        lw(T5, 0x4, T6),                     # entry->file is the glyph base
+        beq(T5, ZERO, 0),                    # set not loaded: nothing to read either
+        NOP,
+        addiu(T5, T5, -ADVANCES),            # its advance table sits 0x90 bytes before it
+        addu(T5, T5, V0),
         lbu(T5, 0, T5),
-        sb(T5, 0, T6),                       # set->advance = table[slot][glyph]
+        sb(T5, 0, T6),                       # entry->advance = table[glyph]
     ]
     tail = [jr(RA), NOP]
     head = [
@@ -210,6 +191,7 @@ def font_map_words(rom, ctx=None):
     head[6] = bne(AT, ZERO, base - 6 - 1)
     store[3] = beq(T3, ZERO, len(store) - 3 - 1)
     store[7] = beq(AT, ZERO, len(store) - 7 - 1)
+    store[13] = beq(T5, ZERO, len(store) - 13 - 1)
     words = head + ascii_block + store + tail
     retail = words_at(rom, MAP_FUNC, 0x120 // 4)
     assert len(words) <= len(retail), 'map function outgrew its retail span'
@@ -261,6 +243,7 @@ def font_map_words(rom, ctx=None):
     head[6] = bne(AT, ZERO, base - 6 - 1)
     store[3] = beq(T3, ZERO, len(store) - 3 - 1)
     store[7] = beq(AT, ZERO, len(store) - 7 - 1)
+    store[13] = beq(T5, ZERO, len(store) - 13 - 1)
     store[12] = beq(T5, ZERO, len(store) - 12 - 1)
     words = head + ascii_block + store + tail
     retail = words_at(rom, MAP_FUNC, 0x120 // 4)
@@ -338,7 +321,8 @@ def patch(rom, us, stage='full'):
     """Returns rom with Stadium 1's font archive and map, and both function patches."""
     total, _ = archive_files(us, US_FONTS)
     current, _ = archive_files(rom, ZERO_FONTS)
-    if current == total:
+    inplace = stage in INPLACE_STAGES
+    if current == total and not inplace:
         raise SystemExit("the font slot already holds Stadium 1's archive: already patched?")
     if current != ZERO_FONTS_END - ZERO_FONTS:
         raise SystemExit('font slot (%#x bytes) is not this build\'s archive' % current)
@@ -351,7 +335,17 @@ def patch(rom, us, stage='full'):
 
     seed = detect_seed(rom)
     out = bytearray(rom)
-    if stage in ARCHIVE_STAGES:
+    if stage in INPLACE_STAGES:
+        # Write Stadium 1's payloads into Zero's own slots: the archive header (and so every file
+        # offset, size and glyph count the UI code indexes) stays byte-identical to retail.
+        _, zfiles = archive_files(rom, ZERO_FONTS)
+        _, ufiles = archive_files(us, US_FONTS)
+        for (zoff, zsize), (uoff, usize) in zip(zfiles, ufiles):
+            blob = us[US_FONTS + uoff:US_FONTS + uoff + usize]
+            if len(blob) > zsize:
+                raise SystemExit('Stadium 1 file %d does not fit Zero slot %#x' % (len(blob), zsize))
+            out[ZERO_FONTS + zoff:ZERO_FONTS + zoff + zsize] = blob + bytes(zsize - len(blob))
+    elif stage in ARCHIVE_STAGES:
         out[ZERO_FONTS:ZERO_FONTS + total] = us[US_FONTS:US_FONTS + total]
     if stage in ('data', 'archive'):
         # Bisect-only: clearing Zero's stale glyph data is not required (the archive header
@@ -359,9 +353,6 @@ def patch(rom, us, stage='full'):
         out[ZERO_FONTS + total:ZERO_FONTS_END] = bytes(ZERO_FONTS_END - ZERO_FONTS - total)
     if stage in MAP_TABLE_STAGES:
         out[ZERO_ASCII_MAP:ZERO_ASCII_MAP + MAP_BYTES] = table
-    tables = advance_tables(us)
-    if stage in MAP_FUNC_STAGES:
-        out[ADV_ROM:ADV_ROM + len(tables)] = tables
     patches = []
     if stage in MAP_FUNC_STAGES:
         patches.append((MAP_FUNC, font_map_words(rom)))
@@ -387,7 +378,16 @@ def check(rom, us, retail, stage='full', seed=None):
     retail is the unpatched build, the source of the instruction words the patches reuse.
     """
     total, files = archive_files(rom, ZERO_FONTS)
-    if stage in ARCHIVE_STAGES:
+    if stage in INPLACE_STAGES:
+        zfiles = archive_files(retail, ZERO_FONTS)[1]
+        _, ufiles = archive_files(us, US_FONTS)
+        for (zoff, zsize), (uoff, usize) in zip(zfiles, ufiles):
+            blob = us[US_FONTS + uoff:US_FONTS + uoff + usize]
+            if rom[ZERO_FONTS + zoff:ZERO_FONTS + zoff + zsize] != blob + bytes(zsize - len(blob)):
+                raise SystemExit('font payload %#x is not Stadium 1\'s' % zoff)
+        if rom[ZERO_FONTS:ZERO_FONTS + 0x70] != retail[ZERO_FONTS:ZERO_FONTS + 0x70]:
+            raise SystemExit("the font archive header changed")
+    elif stage in ARCHIVE_STAGES:
         if rom[ZERO_FONTS:ZERO_FONTS + total] != us[US_FONTS:US_FONTS + total]:
             raise SystemExit("font archive differs from Stadium 1's")
     if stage in ('data', 'archive'):
@@ -396,9 +396,6 @@ def check(rom, us, retail, stage='full', seed=None):
     if stage in MAP_TABLE_STAGES:
         if rom[ZERO_ASCII_MAP:ZERO_ASCII_MAP + MAP_BYTES] != us[US_ASCII_MAP:US_ASCII_MAP + MAP_BYTES]:
             raise SystemExit("ASCII glyph map differs from Stadium 1's")
-    if stage in MAP_FUNC_STAGES:
-        if rom[ADV_ROM:ADV_ROM + 6 * ADVANCES] != advance_tables(us):
-            raise SystemExit("the advance tables are not in place")
     if stage == 'micro':
         rw = words_at(retail, LOAD_FUNC, 0x7C // 4)
         expected_loader = rw[:11] + [(rw[11] & ~((0x1F << 21) | (0x1F << 16))) | (3 << 21) | (15 << 16)] + rw[12:]
@@ -429,21 +426,28 @@ def _retail_stub(rom):
 
 
 # --- interpreter used by the self-test ---------------------------------------------------------
-def run_map_function(rom, code, ctx, set_base, tables, char, slot=0):
-    """Runs the emitted mapping function; returns (glyph, the advance it stored in entry[slot])."""
-    mem = {ctx: struct.pack('>I', set_base),               # font_context
-           set_base + 0x38: bytes([slot])}                 # unk_50 = the active slot
+def run_map_function(rom, code, ctx, set_base, tex, table, char, slot=0):
+    """Runs the emitted mapper; returns (glyph, the advance it wrote to entry[slot]).
+
+    table is the 0x90-byte advance table that sits 0x90 bytes before tex in every English font file.
+    """
+    mem = {ctx: struct.pack('>I', set_base),                # font_context
+           set_base + 0x38: bytes([slot])}                  # unk_50 = the active slot
+    if tex:
+        mem[set_base + slot * 8 + 4] = struct.pack('>I', tex)
+        for i, byte in enumerate(table):
+            mem[tex - ADVANCES + i] = bytes([byte])
     regs = [0] * 32
     regs[A0] = char
     pc, steps = 0, 0
 
     def read(addr, size):
-        if ADV_VRAM <= addr < ADV_VRAM + len(tables):
-            return tables[addr - ADV_VRAM:][:size]
         if addr in mem:
             return mem[addr]
         if ZERO_ASCII_MAP <= addr - ROM_BIAS < ZERO_ASCII_MAP + MAP_BYTES:
             return rom[addr - ROM_BIAS:][:size]
+        if set_base <= addr < set_base + 0x40:                # untouched entry slots read as zero
+            return bytes(size)
         raise AssertionError('read of unmapped %#x' % addr)
 
     while steps < 200:
@@ -544,17 +548,19 @@ def selftest():
     broken[0x50] = 0
     assert not map_is_latin(broken), 'a broken map was accepted'
 
-    tables = bytearray(6 * ADVANCES)
-    tables[0], tables[26], tables[69] = 4, 7, 5               # set 0: space, A, a
-    tables[5 * ADVANCES + 26] = 9                            # set 5 has its own advance for A
+    advance = bytearray(ADVANCES)
+    advance[0], advance[26], advance[77] = 4, 7, 3          # space, A, i
     rom = bytearray(ZERO_FONTS_END)
     rom[ZERO_ASCII_MAP:ZERO_ASCII_MAP + MAP_BYTES] = table
     words = font_map_words(rom, ctx=0x8006d200)
     code = struct.pack('>%dI' % len(words), *words)
-    for char, slot, expected in ((0x41, 0, (26, 7)), (0x61, 0, (69, 5)), (0x20, 0, (0, 4)),
-                                 (0x2421, 0, (0, 4)), (0x41, 5, (26, 9)), (0x41, 9, (26, 0))):
-        got = run_map_function(rom, code, 0x8006d200, 0x80100000, tables, char, slot)
-        assert got == expected, (hex(char), slot, got, expected)
+    cases = ((0x41, 0, 0x80200000, (26, 7)), (0x69, 0, 0x80200000, (77, 3)),
+             (0x20, 0, 0x80200000, (0, 4)), (0x2421, 0, 0x80200000, (0, 4)),
+             (0x41, 0, 0, (26, 0)),                          # set not loaded: no read, no write
+             (0x41, 9, 0x80200000, (26, 0)))                 # slot out of range: untouched
+    for char, slot, tex, expected in cases:
+        got = run_map_function(rom, code, 0x8006d200, 0x80100000, tex, advance, char, slot)
+        assert got == expected, (hex(char), slot, hex(tex), got, expected)
     # The loader patch, interpreted: set 2 gets file+0x90, its three size bytes, and slot 2.
     rom2 = bytearray(0x2E0000)
     code2 = struct.pack('>%dI' % 31, *font_load_words(_retail_stub(rom2)))
@@ -570,7 +576,7 @@ def main():
     ap.add_argument('--rom', default='build/pokestadium0-jp.z64')
     ap.add_argument('--us', help='Stadium 1 US baserom.z64, the source of the English font')
     ap.add_argument('--out')
-    ap.add_argument('--stage', choices=['full', 'data', 'data-keep', 'keep-map', 'keep-loader', 'code', 'map', 'archive', 'loader', 'loader0', 'micro'], default='full',
+    ap.add_argument('--stage', choices=['full', 'inplace', 'data', 'data-keep', 'keep-map', 'keep-loader', 'code', 'map', 'archive', 'loader', 'loader0', 'micro'], default='full',
                     help='full: archive + map + loader; data: archive + map; code: map + loader; '
                          'map/archive: one of them (bisecting a boot fault)')
     ap.add_argument('--base', default='build/pokestadium0-jp.z64',

@@ -195,25 +195,28 @@ for 24x20/24x24/32x32 starts at 0x2BE3D0), and clearing them broke any screen th
 those sets. The archive header defines every file's extent, so clearing the tail is not
 needed: `full` now leaves it alone and only the archive's own bytes change.
 
-## Per-glyph advances, and why the font context matters (2026-11-12)
+## Per-glyph advances, and why the archive header must not change (2026-11-12)
 
-Stadium 1 stores a 0x90-byte advance table at the start of every font file, so its 145 glyphs
-are proportional while Zero's 257 are monospace (one advance per set). Getting proportional Latin
-means the glyph mapper has to hand the drawer a per-glyph advance.
+Stadium 1 stores a 0x90-byte advance table at the start of every font file, so its 145 glyphs are
+proportional while Zero's 257 are monospace (one advance per set). `func_8001A118` is patched to
+register `file + 0x90` as the glyph base, and `func_80019F70` copies the glyph's advance out of that
+table into the set's first byte (`advance`), which `func_8001A3E4` already reads per character.
+Verified against the built ROM: `A` advances 7/7/10/12/14/18 in sets 0..5, space 4/4/6/7/8/10.
 
-The mapper must not read it through `set->tex`. `func_8001A194` (`Font_Init`) allocates the
-0x3C-byte font context from the main pool and never clears the six entry slots; it only fills the
-ones its `load_size` mask asks for. A screen that calls `Font_SetActive` with a mask it did not
-load therefore leaves `unk_50` pointing at pool garbage, and `lbu` through that garbage pointer is
-an address error - retail survives it because its mapper never dereferences `tex`. Screens that
-load a subset of the six sets (the ones after the main menu, e.g. `func_8001A25C(0x18)`) froze.
+The font context block is never cleared (`main_pool_alloc_with_func` does not zero), so a slot the
+screen did not load holds stale data. The mapper therefore range-checks the slot (`sltiu 6`), exits
+when `font_context` is null, and skips the read when a slot's glyph base is null.
 
-So the six tables are copied into free ROM at 0x2C4000 (inside the stale part of the font
-archive span, 0xB0000000 + 0x2C4000 in KSEG1) and the mapper reads
-`tables[slot * 0x90 + glyph]`: no pointer from the game, nothing that can be uninitialised.
-The slot is range-checked against 6 before the write, and the write only ever lands inside the
-font context block (slot * 8 <= 0x28).
+### The archive header stays retail
 
-Verified in the tool's interpreter against the built ROM: `A` -> glyph 26 advance 7 (16x10),
-`i` -> 77/3, space -> 0/4, `A` in the 24x24 set -> advance 14, in 32x32 -> 18, and an
-out-of-range slot writes nothing.
+Replacing Zero's whole archive with Stadium 1's (its own header, 145 glyphs per set, total
+0x10FA0) froze the screen behind the Battle menu: the panel never appeared, only the background and
+the `IDNo.` stamp. Zero's UI code indexes those sheets, so the archive is now patched *in place*:
+
+* Zero's header (file offsets, compressed sizes, total 0x2DF60) stays byte-identical to retail, and
+  every set keeps its 257 glyphs' worth of slot;
+* each slot receives Stadium 1's PERS-SZP payload (its own advance table + 145 glyphs), zero-padded
+  to the slot size, which is safe because the PERS header carries the real extents.
+
+Only bytes 0x2B2CFE..0x2E0BD3 -- the payloads -- differ, plus the map table, the two functions and
+the header CRC.
