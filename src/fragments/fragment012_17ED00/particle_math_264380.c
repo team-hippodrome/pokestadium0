@@ -150,7 +150,8 @@ s32 ParticleGfx_TextureSizeLog2(s32 size);
 
 /**
  * Append an RDP pipeline synchronization command.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pound and 134 other calls): each call emitted
+ * one G_RDPPIPESYNC (E7000000 00000000) at gDisplayListHead.
  */
 void ParticleGfx_PipeSync(void) {
     gDPPipeSync(gDisplayListHead++);
@@ -203,8 +204,9 @@ void func_82168FAC(u16* palette) {
 }
 
 /**
- * Synchronize the pipeline and write the supplied RGBA channels to the selected RDP color register.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Write the supplied RGBA channels to the primitive color register (no pipe sync).
+ * Seen in play (2026-11-13) in the 165-move sweep: with (FF, FF, FF, FF) it emitted G_SETPRIMCOLOR
+ * FA000000 FFFFFFFF.
  */
 void ParticleGfx_SetPrimColor(u8 r, u8 g, u8 b, u8 a) {
     gDPSetPrimColor(gDisplayListHead++, 0, 0, r, g, b, a);
@@ -212,7 +214,8 @@ void ParticleGfx_SetPrimColor(u8 r, u8 g, u8 b, u8 a) {
 
 /**
  * Synchronize the pipeline and write the supplied RGBA channels to the selected RDP color register.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: with (0, 0, 0, 0) it emitted G_RDPPIPESYNC then
+ * G_SETFOGCOLOR F8000000 00000000.
  */
 void ParticleGfx_SetFogColor(u8 r, u8 g, u8 b, u8 a) {
     gDPPipeSync(gDisplayListHead++);
@@ -221,7 +224,8 @@ void ParticleGfx_SetFogColor(u8 r, u8 g, u8 b, u8 a) {
 
 /**
  * Synchronize the pipeline and write the supplied RGBA channels to the selected RDP color register.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: with (0, 0, 0, 0) it emitted G_RDPPIPESYNC then
+ * G_SETBLENDCOLOR F9000000 00000000.
  */
 void ParticleGfx_SetBlendColor(u8 r, u8 g, u8 b, u8 a) {
     gDPPipeSync(gDisplayListHead++);
@@ -230,7 +234,8 @@ void ParticleGfx_SetBlendColor(u8 r, u8 g, u8 b, u8 a) {
 
 /**
  * Synchronize the pipeline and write the supplied RGBA channels to the selected RDP color register.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: with (FF, FF, 64, 00) it emitted G_RDPPIPESYNC
+ * then G_SETENVCOLOR FB000000 FFFF6400.
  */
 void ParticleGfx_SetEnvColor(u8 r, u8 g, u8 b, u8 a) {
     gDPPipeSync(gDisplayListHead++);
@@ -245,7 +250,9 @@ void func_82169200(u8 arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, u8 arg6
 
 /**
  * Synchronize the pipeline, write the supplied color parameters, and select this wrapper's explicit RDP combiner.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pound, Fire Punch and others): it emitted
+ * G_RDPPIPESYNC, G_SETPRIMCOLOR with the prim arguments (e.g. FFFF00FF), G_SETENVCOLOR with the env
+ * arguments (e.g. F0282800) and G_SETCOMBINE FC3097FF 5FFEFE38.
  */
 void ParticleGfx_SetPrimEnvColorCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8 env_r, u8 env_g, u8 env_b, u8 prim_a) {
     gDPPipeSync(gDisplayListHead++);
@@ -257,7 +264,9 @@ void ParticleGfx_SetPrimEnvColorCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8 env_
 
 /**
  * Synchronize the pipeline, write the supplied color parameters, and select this wrapper's explicit RDP combiner.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Sand Attack, Ember, Mist, powders, Smokescreen,
+ * Haze): it emitted G_RDPPIPESYNC, G_SETPRIMCOLOR (e.g. FFFF64B4), G_SETENVCOLOR with alpha FF
+ * (e.g. 969632FF) and G_SETCOMBINE FC767E60 F50FF37F.
  */
 void ParticleGfx_SetPrimEnvNoiseCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8 env_r, u8 env_g, u8 env_b, u8 prim_a) {
     gDPPipeSync(gDisplayListHead++);
@@ -269,7 +278,9 @@ void ParticleGfx_SetPrimEnvNoiseCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8 env_
 
 /**
  * Synchronize the pipeline, write the supplied color parameters, and select this wrapper's explicit RDP combiner.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Sing, Sleep Powder, Hypnosis): it emitted
+ * G_RDPPIPESYNC, G_SETPRIMCOLOR FFFFFFFF, G_SETENVCOLOR FFFFFFFF and G_SETCOMBINE FC309604
+ * 5F12FFFF.
  */
 void ParticleGfx_SetPrimEnvColorShadeCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g, u8 env_b, u8 env_a) {
     gDPPipeSync(gDisplayListHead++);
@@ -292,7 +303,9 @@ void ParticleGfx_SetPrimColorTextureCombine(u8 r, u8 g, u8 b, u8 a) {
 
 /**
  * Synchronize the pipeline, write the supplied color parameters, and select this wrapper's explicit RDP combiner.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Mist, powders, Smokescreen, Haze, Smog): with l
+ * = 0x80 it emitted G_SETPRIMCOLOR FA000080 (LOD fraction 0x80, e.g. 9600C800), G_SETENVCOLOR and
+ * G_SETCOMBINE FC272C60 150C937F.
  */
 void ParticleGfx_SetPrimEnvLodCombine(u8 l, u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g, u8 env_b) {
     gDPPipeSync(gDisplayListHead++);
@@ -304,7 +317,9 @@ void ParticleGfx_SetPrimEnvLodCombine(u8 l, u8 prim_r, u8 prim_g, u8 prim_b, u8 
 
 /**
  * Synchronize the pipeline, write the supplied color parameters, and select this wrapper's explicit RDP combiner.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Flamethrower, Dragon Rage, Fire Spin, Fire
+ * Blast): with l = 0x80 it emitted G_SETPRIMCOLOR FA000080, G_SETENVCOLOR and G_SETCOMBINE FC277E60
+ * 150CF37F.
  */
 void ParticleGfx_SetPrimEnvLodTextureCombine(u8 l, u8 prim_r, u8 prim_g, u8 prim_b, u8 prim_a, u8 env_r, u8 env_g, u8 env_b) {
     gDPPipeSync(gDisplayListHead++);
@@ -316,7 +331,8 @@ void ParticleGfx_SetPrimEnvLodTextureCombine(u8 l, u8 prim_r, u8 prim_g, u8 prim
 
 /**
  * Synchronize the pipeline, write the supplied color parameters, and select this wrapper's explicit RDP combiner.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Psybeam): with a = 0xC8 it emitted
+ * G_RDPPIPESYNC, G_SETPRIMCOLOR FFFFFFC8 and G_SETCOMBINE FC4097FF FFFFFE38.
  */
 void ParticleGfx_SetTextureAlphaCombine(u8 a) {
     gDPPipeSync(gDisplayListHead++);
@@ -327,7 +343,9 @@ void ParticleGfx_SetTextureAlphaCombine(u8 a) {
 
 /**
  * Write bounds for the render tile, scrolling S positively and T negatively with the particle clock.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Sing, Mist, powders, Haze): it emitted one
+ * G_SETTILESIZE (F2...) on the render tile whose bounds moved with the particle frame counter
+ * between frames (e.g. F26129EE 008C4834).
  */
 void ParticleGfx_SetAnimatedTileSize(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     gDPSetTileSize(gDisplayListHead++, G_TX_RENDERTILE, arg0 * gParticleFrameCounter, -arg1 * gParticleFrameCounter,
@@ -336,7 +354,9 @@ void ParticleGfx_SetAnimatedTileSize(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 
 /**
  * Write bounds for auxiliary tile 1, scrolling S positively and T negatively with the particle clock.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Flamethrower, Mist, powders, Fire Spin): it
+ * emitted one G_SETTILESIZE on tile 1 (second word 01xxxxxx, e.g. F2000220 010FC97C) that moved
+ * with the particle frame counter.
  */
 void ParticleGfx_SetAnimatedAuxTileSize(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     gDPSetTileSize(gDisplayListHead++, 1, arg0 * gParticleFrameCounter, -arg1 * gParticleFrameCounter,
@@ -345,7 +365,9 @@ void ParticleGfx_SetAnimatedAuxTileSize(s32 arg0, s32 arg1, s32 arg2, s32 arg3) 
 
 /**
  * Write bounds for the render tile, scrolling S positively and T negatively with the particle clock.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Mega Punch, Pay Day, Gust, Fly and others): it
+ * wrote a G_SETTILESIZE for the render tile into the passed list (e.g. F2098000 002DC07C) rather
+ * than at gDisplayListHead.
  */
 void ParticleGfx_SetAnimatedTileSizeOnList(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     gDPSetTileSize(gfx, G_TX_RENDERTILE, arg1 * gParticleFrameCounter, -arg2 * gParticleFrameCounter, (((arg1 * gParticleFrameCounter) + arg3) - 1) << 2,
@@ -354,7 +376,8 @@ void ParticleGfx_SetAnimatedTileSizeOnList(Gfx* gfx, s32 arg1, s32 arg2, s32 arg
 
 /**
  * Write bounds for auxiliary tile 1, scrolling S positively and T negatively with the particle clock.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Mega Punch, Pay Day, Gust, Fly and others): it
+ * wrote a G_SETTILESIZE for tile 1 into the passed list (e.g. F284C000 011AC07C).
  */
 void ParticleGfx_SetAnimatedAuxTileSizeOnList(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     gDPSetTileSize(gfx, 1, arg1 * gParticleFrameCounter, -arg2 * gParticleFrameCounter, (((arg1 * gParticleFrameCounter) + arg3) - 1) << 2,
@@ -363,7 +386,8 @@ void ParticleGfx_SetAnimatedAuxTileSizeOnList(Gfx* gfx, s32 arg1, s32 arg2, s32 
 
 /**
  * Write bounds for the render tile with fixed S and clock-scrolled negative T.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Waterfall): it wrote a G_SETTILESIZE for the
+ * render tile into the passed list (F2FF51C0 0005077C).
  */
 void ParticleGfx_SetPartiallyAnimatedTileSize(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     gDPSetTileSize(gfx, G_TX_RENDERTILE, arg1, -arg2 * gParticleFrameCounter, ((arg3 + arg1) - 1) << 2,
@@ -372,7 +396,8 @@ void ParticleGfx_SetPartiallyAnimatedTileSize(Gfx* gfx, s32 arg1, s32 arg2, s32 
 
 /**
  * Write bounds for auxiliary tile 1 with fixed S and clock-scrolled negative T.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Waterfall): it wrote a G_SETTILESIZE for tile 1
+ * into the passed list (F20358E0 011503FC).
  */
 void ParticleGfx_SetPartiallyAnimatedAuxTileSize(Gfx* gfx, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     gDPSetTileSize(gfx, 1, arg1, -arg2 * gParticleFrameCounter, ((arg3 + arg1) - 1) << 2,
@@ -381,7 +406,8 @@ void ParticleGfx_SetPartiallyAnimatedAuxTileSize(Gfx* gfx, s32 arg1, s32 arg2, s
 
 /**
  * Count successive halvings until size reaches one; callers must supply a size of at least two.
- * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Razor Wind, Whirlwind, Slam and others): it
+ * returned 6 for size 0x40.
  */
 s32 ParticleGfx_TextureSizeLog2(s32 arg0) {
     s32 temp_a1;
@@ -539,7 +565,9 @@ void ParticleGfx_LoadTextureTileRgba32(u8* texture, s32 width, s32 height) {
 
 /**
  * Append an RGBA16 texture block load with the specified addressing modes.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Wing Attack, Vine Whip, Petal Dance, String
+ * Shot, Dig): it emitted G_SETTIMG FD100000 (RGBA 16b) with the texture address, G_SETTILE,
+ * G_RDPLOADSYNC and G_LOADBLOCK for 32x32.
  */
 void ParticleGfx_LoadTextureRgba16(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureBlock16(texture, G_IM_FMT_RGBA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
@@ -632,7 +660,9 @@ void ParticleGfx_LoadTextureTileIa16(u8* texture, s32 width, s32 height) {
 
 /**
  * Append an IA8 texture block load with the specified addressing modes.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pound and most hit moves): it emitted G_SETTIMG
+ * FD700000 (IA, loaded as 16b) with the texture address, G_SETTILE F5700000 07080200, G_RDPLOADSYNC
+ * and G_LOADBLOCK.
  */
 void ParticleGfx_LoadTextureIa8(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureBlock8(texture, G_IM_FMT_IA, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
@@ -650,7 +680,8 @@ void ParticleGfx_LoadTextureTileIa8(u8* texture, s32 width, s32 height) {
 
 /**
  * Append an IA8 texture block load with the specified addressing modes.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Water Gun, Hydro Pump): it emitted an IA texture
+ * load (FD700000) whose G_SETTILE (07058160) sets mirror+wrap on S and T with mask 6 for 64x64.
  */
 void ParticleGfx_LoadTextureIa8WrapST(u8* texture, s32 width, s32 height) {
     s32 masks = ParticleGfx_TextureSizeLog2(width);
@@ -717,7 +748,8 @@ void ParticleGfx_LoadTextureTileIa4(u8* texture, s32 width, s32 height) {
 
 /**
  * Append an I4 texture tile load with the specified addressing modes.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Scratch, Cut, Vine Whip, Water Gun, Surf): it
+ * emitted G_SETTIMG FD88000B (I, 8b) and G_LOADTILE (F4...) for a 24x24 texture, not a block load.
  */
 void ParticleGfx_LoadTextureTileI4(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureTile4(texture, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
@@ -735,7 +767,8 @@ void ParticleGfx_LoadTextureIa4(u8* texture, s32 width, s32 height) {
 
 /**
  * Append an I4 texture block load with the specified addressing modes.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pound and most hit moves): it emitted G_SETTIMG
+ * FD900000 (I, loaded as 16b) with the texture address, G_SETTILE, G_RDPLOADSYNC and G_LOADBLOCK.
  */
 void ParticleGfx_LoadTextureI4(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureBlock4(texture, G_IM_FMT_I, width, height, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP,
@@ -744,7 +777,9 @@ void ParticleGfx_LoadTextureI4(u8* texture, s32 width, s32 height) {
 
 /**
  * Append an I4 texture block load with the specified addressing modes.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Razor Wind, Whirlwind, Slam and others): it
+ * emitted an I texture load (FD900000) whose G_SETTILE (07058160) sets mirror+wrap on S and T with
+ * mask 6 for 64x64.
  */
 void ParticleGfx_LoadTextureI4WrapST(u8* texture, s32 width, s32 height) {
     s32 masks = ParticleGfx_TextureSizeLog2(width);
@@ -756,7 +791,8 @@ void ParticleGfx_LoadTextureI4WrapST(u8* texture, s32 width, s32 height) {
 
 /**
  * Forward the texture and dimensions to the matching texture-load wrapper.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep: it forwarded to ParticleGfx_LoadTextureI4 with
+ * the same arguments and the same commands were emitted.
  */
 void ParticleGfx_LoadTextureI4Alias(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureI4(texture, width, height);
@@ -764,7 +800,8 @@ void ParticleGfx_LoadTextureI4Alias(u8* texture, s32 width, s32 height) {
 
 /**
  * Forward the texture and dimensions to the matching texture-load wrapper.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Scratch, Cut and others): it forwarded to
+ * ParticleGfx_LoadTextureTileI4 with the same arguments and the same commands were emitted.
  */
 void ParticleGfx_LoadTextureTileI4Alias(u8* texture, s32 width, s32 height) {
     ParticleGfx_LoadTextureTileI4(texture, width, height);
@@ -783,7 +820,9 @@ void ParticleGfx_LoadTextureI4WrapS(u8* texture, s32 width, s32 height) {
 
 /**
  * Append an I4 texture block load with the specified addressing modes.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Sing, powders, Hypnosis): it emitted an I
+ * texture load (FD900000) whose G_SETTILE (07018060) sets wrap without mirror on S and T with mask
+ * 6.
  */
 void ParticleGfx_LoadTextureI4WrapSTNoMirror(u8* texture, s32 width, s32 height) {
     s32 masks = ParticleGfx_TextureSizeLog2(width);
@@ -795,7 +834,8 @@ void ParticleGfx_LoadTextureI4WrapSTNoMirror(u8* texture, s32 width, s32 height)
 
 /**
  * Load textures into the explicitly selected TMEM regions/tiles for multi-texture rendering.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Poisonpowder, Stun Spore, Sleep Powder): it
+ * emitted an I texture load into TMEM 0x100 (G_SETTILE F5900100) with wrap, mask 6.
  */
 void ParticleGfx_LoadTextureI4MultiBlockWrapST(u8* texture, s32 width, s32 height) {
     s32 tmem = 0x100;
@@ -809,7 +849,9 @@ void ParticleGfx_LoadTextureI4MultiBlockWrapST(u8* texture, s32 width, s32 heigh
 
 /**
  * Load textures into the explicitly selected TMEM regions/tiles for multi-texture rendering.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Flamethrower, Dragon Rage, Fire Spin, Fire
+ * Blast): it emitted an I texture load into TMEM 0x100 (F5900100) whose tile word 07018462 carries
+ * the S shift of 2.
  */
 void ParticleGfx_LoadTextureI4MultiBlockWrapSTWithShift(u8* texture, s32 width, s32 height, s32 shifts, s32 shiftt) {
     s32 tmem = 0x100;
@@ -871,7 +913,8 @@ void ParticleGfx_LoadTextureDualRgba16I8(u8* texture1, u8* texture2, s32 width, 
 
 /**
  * Load four vertices and emit two triangles.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Mist, powders, Haze, Smog): it emitted G_VTX
+ * 01004008 (four vertices from the argument) and G_DL to D_82191910.
  */
 void ParticleGfx_DrawQuadVertices(Vtx* arg0) {
     gSPVertex(gDisplayListHead++, arg0, 4, 0);
@@ -887,7 +930,8 @@ void ParticleGfx_NoopStub4(void) {
 
 /**
  * Load the supplied position/rotation/scale transform, then draw the selected vertices.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Scratch, Cut, Slam and others): it emitted G_MTX
+ * DA380003, then G_VTX for four vertices and G_DL to D_82191910.
  */
 void ParticleGfx_DrawTransformedQuad(Vec3f arg0, Vec3s arg1, f32 arg2, Vtx* arg3) {
     ParticleGfx_PushTransformMatrix(arg0, arg1, arg2);
@@ -898,7 +942,9 @@ void ParticleGfx_DrawTransformedQuad(Vec3f arg0, Vec3s arg1, f32 arg2, Vtx* arg3
 
 /**
  * Load the supplied position/rotation/scale transform, then draw the selected vertices.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Thunderpunch, Hyper Beam, Thundershock,
+ * Thunderbolt, Thunder): it emitted G_MTX DA380003, then G_VTX for four vertices and G_DL to
+ * D_82191910.
  */
 void ParticleGfx_DrawTransformedQuadYScaled(Vec3f arg0, Vec3s arg1, f32 arg3, Vtx* arg4) {
     ParticleGfx_PushTransformMatrixYScaled(arg0, arg1, arg3);
@@ -931,7 +977,8 @@ void ParticleGfx_DrawTransformedTriangle(Vec3f arg0, Vec3s arg1, f32 arg2, Vtx* 
 
 /**
  * Load a camera-facing transform, then draw the selected quad or triangle vertices.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pound and most hit moves): called with the
+ * battle camera, it emitted G_MTX DA380003, then G_VTX for four vertices and G_DL to D_82191910.
  */
 void ParticleGfx_DrawModelQuad(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* arg3) {
     ParticleGfx_PushBillboardMatrix(arg0, arg1, arg2);
@@ -942,7 +989,9 @@ void ParticleGfx_DrawModelQuad(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* arg3
 
 /**
  * Load a camera-facing transform, then draw the selected quad or triangle vertices.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pay Day, Ice Punch, Ice Beam, Blizzard, Psybeam,
+ * Aurora Beam): called with the battle camera, it emitted G_MTX DA380003, G_VTX and G_DL to
+ * D_82191910.
  */
 void ParticleGfx_DrawModelQuadRotated(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* arg3, s16 arg4) {
     ParticleGfx_PushBillboardRotatedMatrix(arg0, arg1, arg2, arg4);
@@ -964,7 +1013,8 @@ void ParticleGfx_DrawModelQuadYScaled(CameraNode* arg0, Vec3f arg1, f32 arg2, Vt
 
 /**
  * Load a camera-facing transform, then draw the selected quad or triangle vertices.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Hyper Beam, Thundershock, Thunderbolt, Thunder):
+ * called with the battle camera, it emitted G_MTX DA380003, G_VTX and G_DL to D_82191910.
  */
 void ParticleGfx_DrawModelQuadRotatedYScaled(CameraNode* arg0, Vec3f arg1, f32 arg2, Vtx* arg3, s16 arg4) {
     ParticleGfx_PushBillboardRotatedMatrixYScaled(arg0, arg1, arg2, arg4);
@@ -1072,7 +1122,9 @@ void ParticleGfx_DrawIa8TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, 
 
 /**
  * Walk the texture atlas in fixed-size chunks, loading each chunk and drawing its four corresponding vertices.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Scratch, Cut, Vine Whip): for a 64x64 atlas it
+ * emitted an I texture load per chunk (FD900000 with 0x8033CA40, then 0x8033D240) each followed by
+ * its quad.
  */
 void ParticleGfx_DrawI4TextureAtlas(u8* texture, Vtx* vtx, s32 arg2, s32 arg3, s32 width, s32 height) {
     s32 i;
