@@ -89,6 +89,10 @@ void BattleAnim_InitializeAmnesiaUse(void) {
 s32 func_82107CF0(s32);
 void func_8213D720(s8*, f32);
 void func_8213D790(s8*, f32);
+/**
+ * Raises or lowers the particle by a per-species offset (species from the owner at +0x10):
+ * -10, 10 or 15 for the listed species, and also pushes it forward for species 0x3B.
+ */
 void func_82154704(s8* arg0) {
     f32 var_f20 = 0.0f;
 
@@ -375,6 +379,10 @@ void BattleAnim_AllocateEffect125DisplayList(s32 arg0, arg1_func_84344CE8* arg1)
     }
 }
 
+/**
+ * Queues two effect slots on the current owner: func_82154EA4 at once (lifetime 30) and
+ * func_82144750 after 20 frames (lifetime 80).
+ */
 void func_82155084(void) {
     func_8213B560(0, &func_82154EA4, &D_8218E580, 0x1E, 1, 7, 0, 0, 0);
     func_8213B560(0x14, &func_82144750, &D_8218E580, 0x50, 1, 0, 0, 0x33, 0);
@@ -627,6 +635,11 @@ void BattleAnim_InitEffect31Model(Particle* arg0) {
     }
 }
 
+/**
+ * Particle callback (lifecycle at 0xAE): starts after a random delay of up to 24 frames,
+ * then when the spawn step reports done spawns a func_821624FC hit effect, and finishes once
+ * the owner's model animation (+0x14) ends.
+ */
 void func_821558F4(s8 *arg0) {
     s16 temp_v0;
 
@@ -1686,6 +1699,10 @@ void BattleAnim_SetupStrongWinds(Particle* arg0) {
     }
 }
 
+/**
+ * Particle callback: init, fade alpha toward 155, then mark inactive. While running it
+ * keeps motionOffset (+0x4C) moving toward 200.
+ */
 void func_82157E28(s8 *arg0) {
     s16 temp_v0;
 
@@ -2001,6 +2018,11 @@ void Particle_CreateDisplayList_CustomColors(s32 arg0, arg1_func_84344CE8* arg1)
     }
 }
 
+/**
+ * Particle callback: init with scale 0.5, field B0 100, palette 0x17 and a 5-frame delay;
+ * then grows toward scale 7 by 0.25 with 5-frame delays between stages before it is marked
+ * inactive.
+ */
 void func_821588C0(s8 *arg0) {
     s16 temp_v1;
 
@@ -2304,6 +2326,9 @@ void BattleAnim_InitializeBoomHit(void) {
     BattleAnim_SpawnOwnerModelTintRampDetach(0x30, 0xE, 0xC8, 0xB4, 6);
 }
 
+/**
+ * Empty.
+ */
 void func_821597B8(UNUSED ActivePokemon* active_pokemon, UNUSED s32 unused) {
 }
 
@@ -2342,6 +2367,11 @@ void BattleAnim_SetupBitingEffect(Particle* arg0) {
     }
 }
 
+/**
+ * Particle callback: init, then a color stage that brightens prim green/blue, env green and
+ * alpha, then one that fades blue and green back out. While running it moves motionOffset
+ * toward 140.
+ */
 void func_82159898(s8 *arg0) {
     s16 sp26;
     s16 temp_v1;
@@ -3001,6 +3031,10 @@ void ParticleEffect_PaletteMultiBurst(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(7, 8, 5, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 9, 0, sp4A, 0);
 }
 
+/**
+ * Returns the particle scale for the owner's species: 0.3 for Onix, 0.25 for Gyarados, 0.4
+ * for Lapras, 0.5 for any other.
+ */
 f32 func_8215AEA4(Particle* arg0) {
     f32 sp1C = 0.5f;
 
@@ -3197,6 +3231,9 @@ void BattleAnim_InitializeSpeedLines(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 6, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 9, 0, 8, 0);
 }
 
+/**
+ * Sets the spawn timing (0, 32, 14) and starts the Quick Attack / Hi Jump Kick use effect.
+ */
 void func_8215B5B8(void) {
     func_8213B644(0, 0x20, 0xE);
     BattleAnim_InitializeQuickAttackHiJumpKickUse();
@@ -3222,6 +3259,11 @@ void BattleAnim_InitializeLickUse(void) {
     }
 }
 
+/**
+ * Adjusts the particle for large species and returns its scale: Onix is moved 15 to the
+ * side, Onix, Gyarados and Lapras are raised by 10, and the scale is 0.5 (Onix), 0.4
+ * (Gyarados, Lapras) or 1.
+ */
 f32 func_8215B6A4(Particle* arg0) {
     f32 a = 0.0f;
     f32 b = 1.0f;
@@ -3263,6 +3305,11 @@ void BattleAnim_InitializeLovelyKissHit(void) {
     func_8213B560(0, &func_82152F44, &D_8218E580, 0, 1, 9, 0, 0xC, 0);
 }
 
+/**
+ * Init step: creates a model object for the particle (+0x14) and picks model 0x8C, 0x8E or
+ * 0x8D from field CD (0-1, 2-3, other), with scale 1 and alpha 0. Detaches if no model
+ * could be created.
+ */
 void func_8215B83C(s8 *arg0) {
     s16 sp26;
     s32 temp_v0;
@@ -3672,6 +3719,10 @@ void BattleAnim_SetupConfuseRayUseSpotlight(Particle* arg0) {
     }
 }
 
+/**
+ * Particle callback: init, then fades in to full alpha while field AE moves toward 200.
+ * Always turns the particle to face away from the camera (camera yaw + 0x8000).
+ */
 void func_8215C984(s8 *arg0) {
     s16 temp_v0;
 
@@ -3770,6 +3821,9 @@ void ParticleEffect_WaterAnimBurst(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects21And93ModelAlphaAnchorFollow, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 0, 0);
 }
 
+/**
+ * Sets the spawn timing (16, 16, 8).
+ */
 void func_8215CCF0(void) {
     func_8213B644(0x10, 0x10, 8);
 }
@@ -3916,6 +3970,10 @@ void BattleAnim_SetupBarrageEffect(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback: init, then loops frames 0-7 while fading alpha toward 32, then detaches.
+ * Scale moves toward 0.5 by 0.1 every frame.
+ */
 void func_8215D76C(s8 *arg0) {
     s16 temp_v0;
 
@@ -4018,6 +4076,10 @@ void BattleAnim_SetupBarrageHitEffect(Particle* arg0) {
     BattleAnim_InitModel(arg0->displayObject, 0xA0);
 }
 
+/**
+ * Particle callback: init, then emits one func_8215D76C child per frame while spinning and
+ * counting down 7 frames, then detaches. Moves along its rotation while the countdown runs.
+ */
 void func_8215DAEC(s8 *arg0) {
     s16 temp_v0;
 
@@ -4562,6 +4624,10 @@ void BattleAnim_InitializeHornAttackUse(void) {
     func_8213B560(0, &func_8215EFF8, &D_8218E580, 0, 1, 0x11, 7, 0x20, 1);
 }
 
+/**
+ * Particle callback: starts a model animation (func_82152730 0), then fades alpha in and
+ * marks itself inactive once the model animation ends.
+ */
 void func_8215F1B0(s8 *arg0) {
     s16 temp_v0;
 
@@ -4637,6 +4703,10 @@ void BattleAnim_CallbackStartEffects127And128Descriptor39ScaleFade_InitParticle(
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback with several staged waits: init, wait for the spawn step, then a
+ * 10-frame delay, then the approach steps of func_821402B8 / func_82140548, then inactive.
+ */
 void func_8215F3EC(s8 *arg0) {
     s16 temp_v0;
 

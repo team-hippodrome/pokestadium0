@@ -320,6 +320,9 @@ s32 func_82101F94(s8 *arg0) {
     return M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x85C), u8 *, 0x1D) & 0xC0;
 }
 
+/**
+ * Returns the busy bits (0xD0) of the Pokemon's model state byte (the record at +0x85C).
+ */
 s32 func_82101FC4(s8 *arg0) {
     return *M2C_FIELD(arg0, u8 **, 0x85C) & 0xD0;
 }
@@ -373,6 +376,10 @@ void func_821020C8(s8 *arg0) {
     func_821368B0(M2C_FIELD(arg0, s32 *, 0x85C), func_82107BF4());
 }
 
+/**
+ * Sets the Pokemon's model state to 0x98 and marks it pending (bit 0x80): starts a model
+ * reload.
+ */
 void func_821020FC(s8 *arg0) {
     s8 *temp_v0;
 
@@ -381,6 +388,10 @@ void func_821020FC(s8 *arg0) {
     M2C_FIELD(temp_v0, u8 *, 0) = (u8) (M2C_FIELD(temp_v0, u8 *, 0) | 0x80);
 }
 
+/**
+ * Marks the Pokemon's model state pending (bit 0x80) and sets it to the Pokemon's current
+ * model id (+0x84C).
+ */
 void func_8210211C(s8 *arg0) {
     s8 *temp_v0;
 
@@ -1034,6 +1045,11 @@ void BattleScene_TickSendOutRowPlayCry(ActivePokemon* active_pokemon) {
     }
 }
 
+/**
+ * Animation row tick: once the Pokemon's asset tables are registered, records the displayed
+ * model and roster entry, resets the animation timer, queues the row's effect list, plays
+ * sound command 3 and ends the tick slot.
+ */
 void func_82103998(ActivePokemon* active_pokemon) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s32 row_index = active_pokemon->animationState;
@@ -1313,6 +1329,11 @@ extern f32 D_FLT_82189354[];
 extern s32 D_8219A74C;
 extern Cue8218A7D8 D_8218A7D8[];
 void func_82101B18(ActivePokemon*, s32);
+/**
+ * Animation row tick: ends at once for species with a hover height (except 0x16, 0x52 and
+ * 0x8E). Otherwise, when the timer reaches D_8219A74C and no asset load is pending, plays
+ * the row's sound and ends the tick slot.
+ */
 void func_82104120(ActivePokemon* active_pokemon) {
     if ((((f32(*)[4])D_FLT_82189354)[M2C_FIELD(active_pokemon, u16*, 0x1A)][0] != 0.0f) && (M2C_FIELD(active_pokemon, u16*, 0x1A) != 0x16) && (M2C_FIELD(active_pokemon, u16*, 0x1A) != 0x52) && (M2C_FIELD(active_pokemon, u16*, 0x1A) != 0x8E)) {
         sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
@@ -1523,6 +1544,10 @@ extern s16 D_8219A50C;
 void func_800199F8(ActivePokemon*, u8);
 void func_821054C4(ActivePokemon*, s32);
 
+/**
+ * Animation row tick: once the model is ready, resets the timer, sets the D_82199E14 entry,
+ * and starts the side's record animation for row D_82189190[D_8219A50C].
+ */
 void func_821049E8(ActivePokemon* arg0) {
     s32 pad; // FAKE: stack padding
     Record82104AFC* rec =
@@ -1538,6 +1563,10 @@ void func_821049E8(ActivePokemon* arg0) {
 
 extern u8 D_82189190[];
 extern s16 D_8219A4F0[];
+/**
+ * Sets the Pokemon's move id (+0x820) from D_82189190 and loads that move's data into the
+ * Pokemon's model record.
+ */
 void func_82104AB0(s8* arg0) {
     M2C_FIELD(arg0, u8*, 0x820) = D_82189190[D_8219A4F0[0xE]];
     func_821368B0(M2C_FIELD(arg0, s32*, 0x85C), D_82189190[D_8219A4F0[0xE]]);
@@ -1644,6 +1673,10 @@ void BattleScene_TickStateCallbacks(void) {
  */
 extern s32 D_8219A754;
 
+/**
+ * Animation row tick: when the timer (+0x620) reaches D_8219A754 and no asset load is
+ * pending, plays the landing sound by size and sets the D_82199E14 entry.
+ */
 void func_82104DB0(s8 *arg0) {
     if ((D_8219A754 == M2C_FIELD(arg0, s32 *, 0x620)) && (BattleAnim_IsAssetLoadBusy(arg0) == 0)) {
         ActivePokemon_PlayLandingSoundBySize(arg0);
@@ -1653,6 +1686,10 @@ void func_82104DB0(s8 *arg0) {
 
 extern s32 D_8219A750;
 
+/**
+ * Animation row tick: when the timer reaches D_8219A750 and no asset load is pending,
+ * queues effect list 6 entry 1 and ends the tick slot. Ends at once if D_8219A750 is 0.
+ */
 void func_82104E14(ActivePokemon* active_pokemon) {
     BattleScene_GetParticipantSideIndex(active_pokemon);
     if (D_8219A750 == 0) {
@@ -1667,6 +1704,11 @@ void func_82104E14(ActivePokemon* active_pokemon) {
 
 extern s16 D_8218920E[];
 extern s32 D_8219A75C;
+/**
+ * Animation row tick that starts the move's model animation once the model is ready: either
+ * the row cue (with its model transform) when D_8219A75C is 1, or the used move's own cue,
+ * and sets the matching model event track.
+ */
 void func_82104EAC(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime;
     s32 padA; // FAKE
@@ -1723,6 +1765,10 @@ void BattleScene_StartHitCueAnimation(ActivePokemon* active_pokemon) {
 }
 
 extern s32 D_8219A74C;
+/**
+ * Animation row tick: when the timer reaches D_8219A74C and no asset load is pending, plays
+ * the move's sound with flag 1 and ends the tick slot.
+ */
 void func_821050D0(ActivePokemon* active_pokemon) {
     if (D_8219A74C == active_pokemon->animationTimer) {
         if (BattleAnim_IsAssetLoadBusy((s8*)active_pokemon) == 0) {
@@ -1732,6 +1778,9 @@ void func_821050D0(ActivePokemon* active_pokemon) {
     }
 }
 
+/**
+ * Same as func_821050D0 but plays the move's sound with flag 0.
+ */
 void func_82105140(ActivePokemon* active_pokemon) {
     if (D_8219A74C == active_pokemon->animationTimer) {
         if (BattleAnim_IsAssetLoadBusy((s8*)active_pokemon) == 0) {
@@ -1742,6 +1791,10 @@ void func_82105140(ActivePokemon* active_pokemon) {
 }
 
 void func_82101C24(ActivePokemon*, s32);
+/**
+ * Animation row tick: when the timer reaches D_8219A74C and no asset load is pending, calls
+ * func_82101C24 for this Pokemon's side with its move id, then ends the tick slot.
+ */
 void func_821051B0(ActivePokemon* active_pokemon) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s32 side;
@@ -1763,6 +1816,11 @@ void func_82101BBC(ActivePokemon*, s32);
 void func_82101B54(ActivePokemon*, s32);
 extern s32 D_8219A75C;
 void ActivePokemon_SetModelTransform(ActivePokemon*, s32, s32);
+/**
+ * Animation row tick: when the timer reaches D_8219A74C and no asset load is pending, loads
+ * the used move's animation (row or move version by D_8219A75C), sets its event track and
+ * model transform, and ends the tick slot.
+ */
 void func_8210524C(ActivePokemon* active_pokemon) {
     UNUSED s32 pad; // FAKE: stack padding
     BattleMonRuntime* runtime;
@@ -1786,6 +1844,10 @@ void func_8210524C(ActivePokemon* active_pokemon) {
 }
 
 extern s32 D_8219A750;
+/**
+ * Animation row tick: when the timer reaches D_8219A750 and no asset load is pending, calls
+ * func_821365E8(1) for the Pokemon and ends the tick slot. Ends at once if D_8219A750 is 0.
+ */
 void func_82105344(ActivePokemon* active_pokemon) {
     // The do-while (0) wrapper is needed for the match.
     do {  // FAKE
@@ -1806,6 +1868,9 @@ void func_82105344(ActivePokemon* active_pokemon) {
 
 extern s32 D_8219A740;
 
+/**
+ * Sets the Pokemon's move id (+0x820) to D_8219A740.
+ */
 void func_821053E0(s8 *arg0) {
     M2C_FIELD(arg0, s8 *, 0x820) = (s8) D_8219A740;
 }
@@ -1855,8 +1920,11 @@ void func_82105484(ActivePokemon* arg0, s32 arg1) {
     BattleScene_EnterStateRow(arg0, 4);
 }
 
+/**
+ * Clears byte +0x1C of the Pokemon when its move id is 0x6A (Harden).
+ */
 void func_821054A8(s8 *arg0) {
-    if (M2C_FIELD(arg0, u8 *, 0x820) == 0x6A) {
+    if (M2C_FIELD(arg0, u8 *, 0x820) == HARDEN) {
         M2C_FIELD(arg0, s8 *, 0x1C) = 0;
     }
 }
@@ -1922,6 +1990,10 @@ s32 BattleAnim_TrySetModelEventTrackFromRow(ActivePokemon* active_pokemon, s32 c
     return 0;
 }
 
+/**
+ * Sets the model event track of move cue cue_index (when it has one and the model is not
+ * busy), restarts it at frame 0 and stores event_state in state.unk_36.
+ */
 void func_8210568C(ActivePokemon* active_pokemon, s32 cue_index, s32 event_state) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 event_track;
@@ -1938,6 +2010,11 @@ void func_8210568C(ActivePokemon* active_pokemon, s32 cue_index, s32 event_state
 
 s32 func_821217DC(s32);
 s32 func_8001101C(ActivePokemon*, s32);
+/**
+ * Returns whether the Pokemon's current model animation is done. While it is frozen,
+ * asleep, in the air or underground it instead waits arg1 frames (func_821217DC). No
+ * animation counts as done.
+ */
 s32 func_82105724(ActivePokemon* arg0, s32 arg1) {
     u8* p = (u8*)(*(s32*)((u8*)arg0 + 0x9D0) * 0x50 + *(s32*)((u8*)arg0 + 0x860)) + 0x1C;
 
@@ -1990,6 +2067,11 @@ s32 BattleScene_IsRowWaitCompleteWithEventCount(ActivePokemon* active_pokemon, s
     return 0;
 }
 
+/**
+ * Returns whether the Pokemon's move animation has finished. While frozen, asleep, in the
+ * air without an air action, or underground it waits frame_limit frames instead. A move cue
+ * that reuses the idle cue counts its own frame limit.
+ */
 s32 func_821058E8(ActivePokemon* active_pokemon, s32 frame_limit) {
     MovePresentationCue* idle_cue;
     BattleMon* party_pokemon;
@@ -2124,6 +2206,11 @@ s32 func_8210C020(s32, s8*);
 void func_821365B0(s32, s8*, s8*, s32, s32);
 extern s8* D_8219A5A0;
 
+/**
+ * Model event hook: when the Pokemon's model is idle, visible, flagged 0x20 and the scene
+ * mode is 1 or 5, and its animation and frame match the side's cue record, starts the cue's
+ * sound or effect (func_821365B0).
+ */
 void func_82105D3C(s8* arg0) {
     s16 id;
     u8* cue = D_82189180[func_82107A5C()] + 0x717;
@@ -2228,6 +2315,12 @@ void BattleScene_ResetBothParticipantsAnimationState(void) {
 
 }
 
+/**
+ * End-of-move cleanup between the two sides: clears the other side's Harden byte, stops this
+ * side's category-2 particles when its flag 0x80 is set and the other side is not
+ * immobilized (0x20), drops the other side's model back to height 200 when its flag 4 is
+ * set, and turns flag 0x200 into 0x400.
+ */
 void func_82105FCC(ActivePokemon* active_pokemon) {
     UNUSED s32 pad; // FAKE: stack padding
     ActivePokemonState* other_state;
@@ -2254,8 +2347,13 @@ void func_82105FCC(ActivePokemon* active_pokemon) {
     }
 }
 
+/**
+ * After Seismic Toss (move 0x45) resets the owner's facing and idle state. When the return
+ * reset flag is set, restores the model height from the species table and clears flags
+ * 0x608.
+ */
 void func_82106144(ActivePokemon* active_pokemon) {
-    if (M2C_FIELD(active_pokemon, u8*, 0x820) == 0x45) {
+    if (M2C_FIELD(active_pokemon, u8*, 0x820) == SEISMIC_TOSS) {
         BattleAnim_ResetOwnerFacingAndExitStatusIdle(active_pokemon);
     }
     if (M2C_FIELD(active_pokemon, u16*, 0x7C2) & ACTIVE_RETURN_RESET) {
@@ -2283,6 +2381,9 @@ void BattleScene_CleanupOpponentSpecialAnimFlag(ActivePokemon* active_pokemon) {
 }
 
 void BattleAnim_QueueEffectList(u8 arg0, s32 arg1);
+/**
+ * When state flag 0x40 is set, swaps it for 0x80 and queues effect list 2.
+ */
 void func_82106220(ActivePokemon* active_pokemon) {
     if (M2C_FIELD(active_pokemon, u16*, 0x7C2) & 0x40) {
         Battle_ClearRuntimeFlags((s8*)active_pokemon, 0x40);
@@ -2537,6 +2638,10 @@ void func_821065B4(ActivePokemon *arg0)
   }
 }
 
+/**
+ * When the Pokemon's roster status byte has bit 0x20, clears its model flag 0x20, queues
+ * effect list 1 and sets state flag 2.
+ */
 void func_82106AC0(ActivePokemon* arg0) {
     u8* p = (u8*)(*(s32*)((u8*)arg0 + 0x9D0) * 0x50 + *(s32*)((u8*)arg0 + 0x860)) + 0x1C;
 
@@ -2813,10 +2918,16 @@ void BattleThumbnail_TriggerOwnerModelAnimation(ActivePokemon* active_pokemon) {
     BattleThumbnail_SetFlagToUpdatePokemonThumbnail(active_pokemon->thumbnail.camera);
 }
 
+/**
+ * Clears the Pokemon's field +0x9D8.
+ */
 void func_821071AC(s8 *arg0) {
     M2C_FIELD(arg0, s32 *, 0x9D8) = 0;
 }
 
+/**
+ * Sets the Pokemon's field +0x9D8 to 1.
+ */
 void func_821071B4(s8 *arg0) {
     M2C_FIELD(arg0, s32 *, 0x9D8) = 1;
 }
