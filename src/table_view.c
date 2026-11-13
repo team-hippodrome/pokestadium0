@@ -372,6 +372,10 @@ void PointerList_Sort(unk_func_8830867C_02C_0CC* arg0, s32 (*arg1)(s32, s32)) {
     Sort_QuickSort(arg0->unk_00, arg0->unk_08, arg1);
 }
 
+/**
+ * Copies every entry of pointer list arg0 for which arg2(entry, arg3) returns nonzero into
+ * list arg1, and sets arg1's count.
+ */
 void PointerList_Filter(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_0CC* arg1,
                    s32 (*arg2)(unk_func_8830867C_02C_0CC_000*, s32*), s32* arg3) {
     s32 var_s2;

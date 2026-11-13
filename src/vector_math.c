@@ -148,6 +148,10 @@ void Mtx_BuildTranslatedDirectionRotation(Mtx* mtx, f32 arg1, f32 arg2, f32 arg3
     *mtx = spB8;
 }
 
+/**
+ * Projects point p onto the line through a and b and writes the closest point to out. If
+ * a and b coincide, writes a.
+ */
 void Math_ProjectPointOntoLine(
     f32 px, f32 py, f32 pz,
     f32 ax, f32 ay, f32 az,
