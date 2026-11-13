@@ -49,7 +49,7 @@ s32 Battle_CheckForDisobedience(void);
 s32 Battle_CheckFaintAfterMove(void);
 
 void Battle_CheckAllBroughtFainted_PoisonBurn(ActivePokemon* arg0);
-void Battle_CheckAllBroughtFainted_Status(ActivePokemon* arg0);
+void Battle_CheckAllBroughtFainted_LeechSeed(ActivePokemon* arg0);
 void Battle_CheckAllBroughtFainted_PendingHp(ActivePokemon* arg0);
 void Battle_CheckAllBroughtFainted_Hp(ActivePokemon* arg0);
 
@@ -687,11 +687,16 @@ void Battle_CheckAllBroughtFainted_PoisonBurn(ActivePokemon* arg0) {
 }
 
 /**
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Runs when a seeded Pokemon's Leech Seed drain this turn leaves it at 0 HP. Sums the side's
+ * remaining HP with that value for the active Pokemon: 0 ends the battle (state 0x12), otherwise
+ * the faint is handled.
+ * Seen in play (2026-11-13) (Free Battle, 1P Onix crafted with 2 HP and seeded, using Pound): ran
+ * from Battle_CheckFaintAfterMove after the Leech Seed drain took Onix to 0/ 49 HP; it then fainted
+ * and the switch prompt opened. Renamed from Battle_CheckAllBroughtFainted_Status: it sums the HP
+ * left after the Leech Seed drain (runtime +0x10), and runs only for a seeded Pokémon (volatile
+ * flag 0x80).
  */
-void Battle_CheckAllBroughtFainted_Status(ActivePokemon* arg0) {
+void Battle_CheckAllBroughtFainted_LeechSeed(ActivePokemon* arg0) {
     ActivePokemonState* ptr1 = &arg0->state;
     BattleMon* temp_v0;
     s32 i;
@@ -858,7 +863,7 @@ s32 Battle_CheckFaintAfterMove(void) {
         return 0;
     } else if ((sBattleUser->hp != 0) && (sBattleTarget->hp != 0) && (sBattleUser->volatileStatusFlags & 0x80) &&
                (sBattleUser->unk_10 == 0)) {
-        Battle_CheckAllBroughtFainted_Status(sActivePokemon[sBattleScene.scene->actingSide]);
+        Battle_CheckAllBroughtFainted_LeechSeed(sActivePokemon[sBattleScene.scene->actingSide]);
         return 0;
     }
 }

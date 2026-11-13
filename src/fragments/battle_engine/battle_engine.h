@@ -3034,7 +3034,7 @@ s32 Battle_CheckMonCanAct(void);
 void ProcessBattleTurn(void);
 void Battle_HandleFaint(ActivePokemon* active_pokemon);
 void Battle_CheckAllBroughtFainted_PoisonBurn(ActivePokemon* active_pokemon);
-void Battle_CheckAllBroughtFainted_Status(ActivePokemon* active_pokemon);
+void Battle_CheckAllBroughtFainted_LeechSeed(ActivePokemon* active_pokemon);
 void Battle_CheckAllBroughtFainted_PendingHp(ActivePokemon* active_pokemon);
 void Battle_CheckAllBroughtFainted_Hp(ActivePokemon* active_pokemon);
 s32 Battle_CheckSideDefeatAfterResidualStatus(ActivePokemon* active_pokemon);
