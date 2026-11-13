@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Fixed-layout C/assembly ROM build, with separately retained opaque assets.
+"""Relocatable C/assembly ROM build, with separately retained opaque assets.
 
 No original owner bytes survive in the extracted image assets. Every owner
 comes from a compiler or assembler object placed by the image linker script.
 """
 import argparse
+import bisect
 from collections import Counter
 import csv
 from concurrent.futures import ThreadPoolExecutor
@@ -26,6 +27,12 @@ BUILD = ROOT / 'build/production'
 SOURCE_REGISTRY = ROOT / 'config/jp/sources.json'
 # src/ file -> {section: link address} for object data placed at its ROM address.
 SECTION_REGISTRY = ROOT / 'config/jp/sections.json'
+# src/ file -> {section: retail size}; written by a matching build, read by the others.
+SIZE_REGISTRY = ROOT / 'config/jp/section_sizes.json'
+# The one fragment that other fragments reach through relocations (checked against retail).
+SHARED_SLOT = 0x82100000
+# Names that carry their own retail address.
+ADDRESS = re.compile(r'(?:func_|D_(?:(?:FLT|DBL|STR)_)?|jtbl_|T_|\.L)([0-9A-F]{8})(?:_\d+)?')
 SOURCE_FLAGS = ['-c', '-G', '0', '-non_shared', '-Xcpluscomm', '-nostdinc', '-Wab,-r4300_mul',
                 '-w', '-D_MIPS_SZLONG=32', '-DNDEBUG', '-D_FINALROM', '-DN_MICRO', '-DF3DEX_GBI_2',
                 '-DBUILD_VERSION=VERSION_I_P', '-DLANGUAGE_C', '-D_LANGUAGE_C', '-DVERSION_JP=1',
@@ -46,6 +53,10 @@ ULTRALIB_ASM_FLAGS = ['-c', '-Wab,-r4300_mul', '-G', '0', '-nostdinc',
                       '-Ilib/ultralib/include', '-Ilib/ultralib/include/PR']
 PRAGMA = re.compile(r'(#pragma\s+GLOBAL_ASM\(\s*")([^"]+)("\s*\))')
 LISTING = re.compile(r'/\*\s+[0-9A-F]+\s+([0-9A-F]+)\s+([0-9A-F]{8})\s*\*/\s*(.*)')
+# Address operands the generated listings left as numbers: "vram word" -> (operand, symbol).
+# The relocation check of a matching build fails for any that are missing here.
+LISTING_FIXES = {'8111C17C 3C088112': ('(0x81120000 >> 16)', '%hi(T_8111BC18)'),
+                 '8111C190 2508BC18': ('-0x43E8', '%lo(T_8111BC18)')}
 MACROS = '''.set noreorder
 .set noat
 .set gp=64
@@ -226,6 +237,9 @@ def canonical_assembly(text):
     for line in text.splitlines():
         match = LISTING.search(line)
         if match:
+            if match[1] + ' ' + match[2] in LISTING_FIXES:
+                line = line.replace(*LISTING_FIXES[match[1] + ' ' + match[2]])
+                match = LISTING.search(line)
             value = int(match[2], 16)
             mnemonic = match[3].split()[0]
             instruction = match[3].split('/*', 1)[0].strip()
@@ -289,7 +303,7 @@ def trim_text(obj, name, size):
     raise ValueError('no C text section')
 
 
-def trim_file_text(obj, size, after=b''):
+def trim_file_text(obj, size, after=b'', strict=True):
     """Trim IDO's trailing .text alignment of a source file to its owner span.
 
     The last owner of a file can carry more trailing padding than the object
@@ -302,13 +316,14 @@ def trim_file_text(obj, size, after=b''):
     bytes may be trimmed too when they equal the image bytes, which the gap
     after the span then supplies.
     """
-    return trim_section(obj, '.text', size, after)
+    return trim_section(obj, '.text', size, after, strict)
 
 
-def trim_section(obj, name, size, after=b''):
+def trim_section(obj, name, size, after=b'', strict=True):
     """Shorten a section to at most size bytes.
 
     Only zero bytes, or bytes equal to after (the image bytes past size), may be removed.
+    A section holding more than that is an error when strict, and is otherwise left whole.
     """
     data = bytearray(obj.read_bytes())
     header = struct.unpack_from('>16sHHIIIIIHHHHHH', data)
@@ -320,7 +335,9 @@ def trim_section(obj, name, size, after=b''):
         if strings[section[0]:].split(b'\0', 1)[0] == name.encode():
             extra = bytes(data[section[4] + size:section[4] + section[5]])
             if section[1] != 8 and any(extra) and extra != bytes(after[:len(extra)]):
-                raise ValueError(f'{obj.name}: {name} is 0x{section[5]:X} bytes, owners span 0x{size:X}')
+                if strict:
+                    raise ValueError(f'{obj.name}: {name} is 0x{section[5]:X} bytes, owners span 0x{size:X}')
+                return section[5]
             size = min(size, section[5])
             struct.pack_into('>I', data, position + 20, size)
             struct.pack_into('>I', data, position + 32, 4)
@@ -399,7 +416,7 @@ def compile_source_file(path, directory, compilers, prefix):
              *flags.get('extra', []), '-o', obj, unit])
         normalize_sdk_symbols(obj)
         return obj
-    canon = BUILD / 'canonical'
+    canon = BUILD / 'listings'
 
     def canonical(match):
         listing = canon / match[2]
@@ -466,165 +483,471 @@ def link_symbols(objects):
     return defined, referenced - defined
 
 
-def bss_output_section(output, address, obj, section, base, image_size):
-    """Bind runtime BSS without reserving its overlapping stored-image bytes.
+def read_elf(data):
+    """(section names, section headers, [(symbol, value, section name)]) of a big-endian ELF32."""
+    header = struct.unpack_from('>16sHHIIIIIHHHHHH', data)
+    raw = [struct.unpack_from('>10I', data, header[6] + i * header[11]) for i in range(header[12])]
 
-    Some fragments reuse their relocation storage as scratch after loading.
-    An INFO section keeps the BSS symbol addresses but emits no image bytes
-    or load segment; the stored bytes retain their independently checked owner.
+    def text(table, index):
+        start = raw[table][4] + index
+        return data[start:data.index(b'\0', start)].decode()
+    names = [text(header[13], section[0]) for section in raw]
+    symbols = []
+    for section in raw:
+        if section[1] == 2:  # SHT_SYMTAB
+            for position in range(section[4], section[4] + section[5], 16):
+                name, value, _, _, _, index = struct.unpack_from('>IIIBBH', data, position)
+                symbols.append((text(section[6], name), value,
+                                names[index] if 0 < index < len(raw) else None))
+    return names, raw, symbols
+
+
+def fix_checksum(rom):
+    """Restamp the header checksum (0x10) that the CIC 6103 boot code checks.
+
+    It covers the first megabyte after the boot code; a mismatch halts on a black screen.
+    Ported from Project64's CN64Rom::CalculateRomCrc.
     """
-    inside = base <= address < base + image_size
-    kind, segment = ('INFO', 'NONE') if inside else ('NOLOAD', 'body')
-    return f'{output} 0x{address:X} ({kind}) : SUBALIGN(4) {{ "{obj}"({section}) }} :{segment}'
+    a3 = t2 = t3 = s0 = a2 = t4 = 0xA3886759  # the 6103 seed
+    for v0 in struct.unpack_from('>262144I', rom, 0x1000):
+        v1 = (a3 + v0) & 0xFFFFFFFF
+        if v1 < a3:
+            t2 = (t2 + 1) & 0xFFFFFFFF
+        sa = v0 & 0x1F
+        a0 = ((v0 << sa) | (v0 >> ((0x20 - sa) & 0x1F))) & 0xFFFFFFFF
+        a3 = v1
+        t3 ^= v0
+        s0 = (s0 + a0) & 0xFFFFFFFF
+        a2 = (a3 ^ v0 ^ a2) & 0xFFFFFFFF if a2 < v0 else (a2 ^ a0)
+        t4 = ((v0 ^ s0) + t4) & 0xFFFFFFFF
+    struct.pack_into('>2I', rom, 0x10, ((a3 ^ t2) + t3) & 0xFFFFFFFF, ((s0 ^ a2) + t4) & 0xFFFFFFFF)
 
 
-def build_group(group, selected, cc, prefix, compare, files=None, compilers=None, symbols=None,
-                directory=None, placements=None):
-    name = group['name']
-    directory = directory or BUILD / name
-    directory.mkdir(parents=True, exist_ok=True)
-    assembly = [MACROS]
-    sections = []
-    c_objects = []
-    counts = Counter()
-    cursor = 0
-    current = None
-    files = files or {}
-    placements = placements or {}
+def in_fragment_space(address):
+    """Memmap_GetFragmentVaddr only translates this range."""
+    return 0x81000000 <= address < 0x90000000
 
-    def image_bytes(offset, count=64):
-        # Extracted image bytes from offset, for trim_file_text.
-        image = ROOT / 'assets/production' / (name + '.bin')
-        with open(image, 'rb') as h:
-            h.seek(offset)
-            return h.read(count)
-    objects_by_file = {}
-    occupied = []
-    nobits = []
-    for path in sorted({path for path, _ in files.values()} & {
-            files[row['name']][0] for row in group['owners'] if row['name'] in files}):
-        objects_by_file[path] = compile_source_file(path, directory, compilers, prefix)
-        found = object_sections(objects_by_file[path])
-        for section, place in placements.get(path, {}).items():
-            if section not in found:
-                raise ValueError(f'{path} has no {section} to place')
-            size, kind = found[section]
-            if isinstance(place, dict):
-                # IDO pads a section to 16 bytes; where the next object's data
-                # starts inside that padding, the registry gives the real size.
-                size = trim_section(objects_by_file[path], section, int(place['size'], 0))
-                place = place['address']
-            address = int(place, 0)
-            offset = address - group['base']
-            if kind == 8:  # SHT_NOBITS: addresses only, no image bytes
-                nobits.append((address, size, objects_by_file[path].name, section))
-            elif not 0 <= offset <= offset + size <= group['size']:
-                raise ValueError(f'{path} {section} lies outside {name}')
-            else:
-                occupied.append((offset, size, objects_by_file[path].name, section))
-    occupied.sort()
-    for (a, size_a, *_), (b, *_) in zip(occupied, occupied[1:]):
-        if a + size_a > b:
-            raise ValueError(f'placed data sections overlap in {name}')
 
-    def gap(begin, end):
-        # Placed object data takes precedence over the extracted asset bytes.
-        for offset, size, obj, section in occupied:
-            if begin < offset + size and offset < end:
-                if offset < begin or offset + size > end:
-                    raise ValueError(f'{obj} {section} straddles an owner in {name}')
-                gap(begin, offset)
-                sections.append((offset, size, obj, section))
-                begin = offset + size
-        if end > begin:
-            section = f'.gap_{begin:X}'
-            assembly.append(f'.section {section}, "a", @progbits\n.incbin "assets/production/{name}.bin", {begin}, {end - begin}\n')
-            sections.append((begin, end - begin, 'assembly.o', section))
-    spans = {}
-    for row in group['owners']:
-        if row['name'] in files:
-            path, _ = files[row['name']]
-            begin, end = spans.get(path, (int(row['start'], 0), int(row['end'], 0)))
-            spans[path] = (min(begin, int(row['start'], 0)), max(end, int(row['end'], 0)))
-    for row in sorted(group['owners'], key=lambda r: int(r['start'], 0)):
-        begin, end = int(row['start'], 0), int(row['end'], 0)
-        if begin < cursor:
-            if files.get(row['name'], (None,))[0] != current:
-                raise ValueError(f'{row["name"]} lies inside the span of {current}')
-            counts['c' if files[row['name']][1] else 'asm'] += 1
-            continue
-        gap(cursor, begin)
-        if row['name'] in files:
-            current = files[row['name']][0]
-            span_begin, span_end = spans[current]
-            obj = objects_by_file[current]
-            size = trim_file_text(obj, span_end - span_begin, image_bytes(span_end))
-            c_objects.append(obj)
-            sections.append((begin, size, obj.name, '.text'))
-            gap(begin + size, span_end)
-            counts['c' if files[row['name']][1] else 'asm'] += 1
-            cursor = span_end
-            continue
-        if row['name'] in selected:
-            candidate = ROOT / selected[row['name']]['candidate']
-            unit = directory / (row['name'] + '.c')
-            unit.write_bytes(TYPES.encode() + candidate.read_bytes())
-            obj = directory / (row['name'] + '.o')
-            run([cc, *FLAGS, '-I.', unit, '-o', obj])
-            trim_text(obj, row['name'], row['size'])
-            c_objects.append(obj)
-            sections.append((begin, end - begin, obj.name, '.text'))
-            counts['c'] += 1
+class Image:
+    """One independently linked image: the resident code or a fragment.
+
+    Nothing is pinned to its retail address. Each piece (an owner, a placed
+    object section or a run of asset bytes) follows the previous one, keeping
+    its retail alignment, so a piece that grows moves everything after it.
+    Every reference to a retail address is a symbol that the linker script
+    binds to the piece holding that address; pointers inside asset bytes are
+    emitted as such symbols too. A fragment's relocation table is rebuilt from
+    the relocations the linker applied.
+    """
+    # The resident entry sets up BSS, the stack and the first call with raw
+    # instructions that no owner covers; these are its address operands.
+    ENTRY = {0x1000: 'lui $t0, %hi(T_80080000)', 0x1008: 'addiu $t0, $t0, %lo(T_80080000)',
+             0x1024: 'lui $t2, %hi(T_80000550)', 0x1028: 'lui $sp, %hi(T_80080400)',
+             0x102C: 'addiu $t2, $t2, %lo(T_80000550)', 0x1034: 'addiu $sp, $sp, %lo(T_80080400)'}
+    RESIDENT_DATA = 0x60280  # ROM offset of the first resident data symbol, after the RSP microcode
+    RESIDENT_BSS = 0x85360   # cleared by the entry code; the size is an immediate there
+
+    def __init__(self, group, selected, cc, prefix, compare, files, compilers, symbols, placements,
+                 sizes, names, resident_addresses, shift=0, directory=None):
+        self.group, self.name, self.base = group, group['name'], group['base']
+        self.prefix, self.compare, self.symbols, self.shift = prefix, compare, symbols, shift
+        self.directory = directory or BUILD / self.name
+        self.directory.mkdir(parents=True, exist_ok=True)
+        self.asset = (ASSETS / (self.name + '.bin')).read_bytes()
+        self.fragment = group['image_index'] is not None
+        if self.fragment:
+            self.content, _, self.ram = struct.unpack_from('>3I', self.asset, 0x14)
+            count = struct.unpack_from('>I', self.asset, self.content)[0]
+            self.table = struct.unpack_from(f'>{count}I', self.asset, self.content + 4)
+            self.span = max(self.ram, group['size'])
         else:
-            section = '.text_' + row['name']
-            assembly.append(f'.section {section}, "ax", @progbits\n')
-            listing = ROOT / row['assembly']
-            assembly.append(canonical_assembly(listing.read_text()))
-            sections.append((begin, end - begin, 'assembly.o', section))
-            counts['asm'] += 1
-        cursor = end
-    gap(cursor, group['size'])
-    source = directory / 'assembly.s'
-    source.write_text('\n'.join(assembly))
-    assembly_obj = directory / 'assembly.o'
-    run([prefix + 'as', '-march=vr4300', '-32', '-G0', source, '-o', assembly_obj])
-    objects = [assembly_obj, *c_objects]
-    defined, undefined = link_symbols(objects)
-    linker = ['PHDRS { prefix PT_LOAD FLAGS(4); body PT_LOAD FLAGS(7); }', 'SECTIONS {']
-    for index, (begin, size, obj, section) in enumerate(sections):
-        output = f'.part_{index}'
-        segment = 'prefix' if index == 0 else 'body'
-        linker.append(f'{output} 0x{group["base"] + begin:X} : AT({begin}) SUBALIGN(4) {{ "{directory / obj}"({section}) }} :{segment}')
-        linker.append(f'ASSERT(SIZEOF({output}) == {size}, "size differs: {name} {section}")')
-    for index, (address, size, obj, section) in enumerate(nobits):
-        output = f'.nobits_{index}'
-        linker.append(bss_output_section(output, address, directory / obj, section,
-                                         group['base'], group['size']))
-        linker.append(f'ASSERT(SIZEOF({output}) == {size}, "size differs: {name} {obj} {section}")')
-    linker.append('/DISCARD/ : { *(*) }\n}')
-    for symbol in sorted(undefined):
-        if symbols and symbol in symbols:
-            linker.append(f'PROVIDE({symbol} = 0x{symbols[symbol]:08X});')
-            continue
-        match = re.fullmatch(r'(?:func_|D_(?:(?:FLT|DBL|STR)_)?|jtbl_|T_|\.L)([0-9A-F]{8})(?:_\d+)?', symbol)
-        if not match:
-            raise ValueError('unresolved symbol has no established address: ' + symbol)
-        linker.append(f'PROVIDE({symbol} = 0x{match[1]});')
-    script = directory / 'link.ld'
-    script.write_text('\n'.join(linker) + '\n')
-    elf = directory / (name + '.elf')
-    # ll.c and llcvt.c are -mips3 objects, as in ultralib.
-    run([prefix + 'ld', '--no-warn-mismatch', '-T', script, '-Map', directory / 'link.map', '-o', elf, *objects])
-    output = directory / (name + '.bin')
-    run([prefix + 'objcopy', '-O', 'binary', elf, output])
-    image = output.read_bytes()
-    if len(image) != group['size']:
-        raise ValueError('linked image size differs: ' + name)
-    if compare and sha(image) != group['expected_sha256']:
-        raise ValueError('linked image bytes differ: ' + name)
-    if group['storage'] != 'raw':
-        image = encode_image(image, (ASSETS / f'{name}.storage').read_bytes(), group['placeholders'])
-    return group, image, counts
+            self.content, self.table = group['size'], ()
+            self.span = self.content + self.RESIDENT_BSS
+        self.pointers = self.find_pointers(resident_addresses)
+        self.offsets = sorted(self.pointers)
+        self.used = set()
+        self.sizes = {}    # src file -> {section: size}, the retail sizes when this build matches
+        self.text = None   # the linker script of the last link
+        self.parts = None  # piece index -> linked address
+        self.prepare(selected, cc, files, compilers, placements, sizes, names)
+
+    def word(self, offset):
+        return struct.unpack_from('>I', self.asset, offset)[0]
+
+    def find_pointers(self, resident_addresses):
+        """Image offset -> assembly for each address held in the asset bytes."""
+        pointers = {}
+        if self.fragment:
+            # The retail relocation table says exactly which words are addresses.
+            for entry in self.table:
+                kind, offset = entry >> 24 & 0x7F, entry & 0xFFFFFF
+                word = self.word(offset)
+                if kind == 2:
+                    pointers[offset] = f'.4byte T_{word:08X}'
+                elif kind == 4 and word >> 26 in (2, 3):
+                    target = (word & 0x3FFFFFF) << 2 | 0x80000000
+                    pointers[offset] = f'{"j" if word >> 26 == 2 else "jal"} T_{target:08X}'
+            # The loader leaves resident addresses alone, so the table does not list them.
+            # Nor does it list geo layout set-callback commands (0x08000000, callback, argument)
+            # aiming at another fragment's slot: the geo code converts those when it runs.
+            for offset in range(0x20, self.content, 4):
+                word = self.word(offset)
+                if word in resident_addresses or (
+                        self.word(offset - 4) == 0x08000000 and in_fragment_space(word)
+                        and word & 0xFFF00000 != self.base):
+                    pointers.setdefault(offset, f'.4byte T_{word:08X}')
+            return pointers
+        pointers.update(self.ENTRY)
+        # The resident image has no relocation table, so any aligned data word that is a
+        # resident address counts as a pointer. Words in fragment slots are not taken: retail
+        # has none that point inside a fragment, only slot bases (which never move) and
+        # lookalikes such as 0x81000531, a slot id and a count.
+        low, high = self.base + 0x1000, self.base + self.span
+        for offset in range(self.RESIDENT_DATA, self.content, 4):
+            word = self.word(offset)
+            if low <= word <= high:
+                pointers[offset] = f'.4byte T_{word:08X}'
+        return pointers
+
+    def prepare(self, selected, cc, files, compilers, placements, sizes, names):
+        """Compile and assemble everything, and list the pieces in retail order."""
+        group, name, directory = self.group, self.name, self.directory
+        assembly = [MACROS]
+        pieces = []  # (retail image offset, retail size, object, section)
+        c_objects = []
+        self.counts = counts = Counter()
+        cursor = 0
+        current = None
+        objects_by_file = {}
+        occupied = []
+        self.nobits = []
+        for path in sorted({path for path, _ in files.values()} & {
+                files[row['name']][0] for row in group['owners'] if row['name'] in files}):
+            objects_by_file[path] = compile_source_file(path, directory, compilers, self.prefix)
+            found = object_sections(objects_by_file[path])
+            for section, place in placements.get(path, {}).items():
+                if section not in found:
+                    raise ValueError(f'{path} has no {section} to place')
+                size, kind = found[section]
+                if isinstance(place, dict):
+                    # IDO pads a section to 16 bytes; where the next object's data
+                    # starts inside that padding, the registry gives the real size.
+                    retail = int(place['size'], 0)
+                    retail = min(retail, trim_section(objects_by_file[path], section, retail,
+                                                      strict=self.compare))
+                    place = place['address']
+                else:
+                    retail = size if self.compare else sizes.get(path, {}).get(section, size)
+                self.sizes.setdefault(path, {})[section] = retail
+                address = int(place, 0)
+                offset = address - group['base']
+                if kind == 8:  # SHT_NOBITS: addresses only, no image bytes
+                    self.nobits.append((address, retail, objects_by_file[path].name, section))
+                elif not 0 <= offset <= offset + retail <= self.content:
+                    raise ValueError(f'{path} {section} lies outside {name}')
+                elif retail:
+                    occupied.append((offset, retail, objects_by_file[path].name, section))
+        occupied.sort()
+        for (a, size_a, *_), (b, *_) in zip(occupied, occupied[1:]):
+            if a + size_a > b:
+                raise ValueError(f'placed data sections overlap in {name}')
+
+        def gap(begin, end):
+            # Placed object data takes precedence over the extracted asset bytes.
+            for offset, size, obj, section in occupied:
+                if begin < offset + size and offset < end:
+                    if offset < begin or offset + size > end:
+                        raise ValueError(f'{obj} {section} straddles an owner in {name}')
+                    gap(begin, offset)
+                    pieces.append((offset, size, obj, section))
+                    begin = offset + size
+            if end > begin:
+                section = f'.gap_{begin:X}'
+                assembly.append(f'.section {section}, "a", @progbits')
+                position = begin
+                first = bisect.bisect_left(self.offsets, begin)
+                for offset in self.offsets[first:bisect.bisect_right(self.offsets, end - 4)]:
+                    if offset > position:
+                        assembly.append(f'.incbin "assets/production/{name}.bin", {position}, {offset - position}')
+                    assembly.append(self.pointers[offset])
+                    self.used.add(offset)
+                    position = offset + 4
+                if end > position:
+                    assembly.append(f'.incbin "assets/production/{name}.bin", {position}, {end - position}')
+                assembly.append('')
+                pieces.append((begin, end - begin, 'assembly.o', section))
+        spans = {}
+        for row in group['owners']:
+            if row['name'] in files:
+                path, _ = files[row['name']]
+                begin, end = spans.get(path, (int(row['start'], 0), int(row['end'], 0)))
+                spans[path] = (min(begin, int(row['start'], 0)), max(end, int(row['end'], 0)))
+        for row in sorted(group['owners'], key=lambda r: int(r['start'], 0)):
+            begin, end = int(row['start'], 0), int(row['end'], 0)
+            if begin < cursor:
+                if files.get(row['name'], (None,))[0] != current:
+                    raise ValueError(f'{row["name"]} lies inside the span of {current}')
+                counts['c' if files[row['name']][1] else 'asm'] += 1
+                continue
+            gap(cursor, begin)
+            if row['name'] in files:
+                current = files[row['name']][0]
+                span_begin, span_end = spans[current]
+                obj = objects_by_file[current]
+                size = min(trim_file_text(obj, span_end - span_begin, self.asset[span_end:span_end + 64],
+                                          strict=self.compare), span_end - span_begin)
+                c_objects.append(obj)
+                pieces.append((begin, size, obj.name, '.text'))
+                gap(begin + size, span_end)
+                counts['c' if files[row['name']][1] else 'asm'] += 1
+                cursor = span_end
+                continue
+            if row['name'] in selected:
+                candidate = ROOT / selected[row['name']]['candidate']
+                unit = directory / (row['name'] + '.c')
+                unit.write_bytes(TYPES.encode() + candidate.read_bytes())
+                obj = directory / (row['name'] + '.o')
+                run([cc, *FLAGS, '-I.', unit, '-o', obj])
+                trim_text(obj, row['name'], row['size'])
+                c_objects.append(obj)
+                pieces.append((begin, end - begin, obj.name, '.text'))
+                counts['c'] += 1
+            else:
+                section = '.text_' + row['name']
+                assembly.append(f'.section {section}, "ax", @progbits\n')
+                listing = ROOT / row['assembly']
+                assembly.append(canonical_assembly(listing.read_text()))
+                pieces.append((begin, end - begin, 'assembly.o', section))
+                counts['asm'] += 1
+            cursor = end
+        gap(cursor, self.content)
+        if not self.fragment and self.ENTRY.keys() - self.used:
+            raise ValueError('resident entry code is no longer asset bytes')
+        source = directory / 'assembly.s'
+        source.write_text('\n'.join(assembly))
+        assembly_obj = directory / 'assembly.o'
+        run([self.prefix + 'as', '-march=vr4300', '-32', '-G0', source, '-o', assembly_obj])
+        self.objects = [assembly_obj, *c_objects]
+        self.undefined = sorted(link_symbols(self.objects)[1])
+        self.pieces = pieces
+        self.begins = [piece[0] for piece in pieces]
+        # Per piece, (retail offset, object offset) of each symbol whose retail address is
+        # known, so an address inside an object that changed size can still be found.
+        self.anchors = []
+        defined = {}
+        for obj in c_objects:
+            _, _, symbols = read_elf(obj.read_bytes())
+            sections = object_sections(obj)
+            for symbol, value, section in symbols:
+                defined.setdefault((obj.name, section), []).append((symbol, value))
+            for section, (size, _) in sections.items():
+                defined[obj.name, section, 'size'] = size
+        for begin, size, obj, section in pieces:
+            anchors = {0: 0}
+            low = self.base + begin
+            for symbol, value in defined.get((obj, section), ()):
+                match = ADDRESS.fullmatch(symbol)
+                known = {int(match[1], 16)} if match else names.get(symbol, set())
+                known = [address for address in known if low <= address < low + size]
+                if len(known) == 1:
+                    anchors.setdefault(known[0] - low, value)
+            anchors = sorted(anchors.items()) + [(size, defined.get((obj, section, 'size'), size))]
+            if self.compare and any(old != new for old, new in anchors):
+                raise ValueError(f'{name}: {obj} {section} defines a symbol away from its retail address')
+            self.anchors.append(anchors)
+
+    def locate(self, address):
+        """(piece index, offset in the piece) of a retail address; index None is BSS."""
+        offset = address - self.base
+        if offset >= self.content:
+            return None, offset - self.content
+        index = bisect.bisect_right(self.begins, offset) - 1
+        offset -= self.begins[index]
+        anchors = self.anchors[index]
+        at = bisect.bisect_right(anchors, (offset, float('inf'))) - 1
+        (old, new), (next_old, next_new) = anchors[at], anchors[min(at + 1, len(anchors) - 1)]
+        if offset != old and next_old - old != next_new - new:
+            raise ValueError(f'{self.name}: 0x{address:08X} lies inside code or data of '
+                             f'{self.pieces[index][2]} that changed size; define a symbol there '
+                             'or place the referencing data in config/jp/sections.json')
+        return index, new + offset - old
+
+    def expression(self, address):
+        index, offset = self.locate(address)
+        return f'__bss + 0x{offset:X}' if index is None else f'ADDR(.part_{index}) + 0x{offset:X}'
+
+    def address(self, address):
+        """Where a retail address ended up in the last link; itself before any link."""
+        if self.parts is None:
+            return address
+        index, offset = self.locate(address)
+        return (self.bss if index is None else self.parts[index]) + offset
+
+    def script(self, resolve):
+        """Linker script text; resolve(image, retail address) gives a symbol's value."""
+        name, directory = self.name, self.directory
+        linker = ['PHDRS { prefix PT_LOAD FLAGS(4); body PT_LOAD FLAGS(7); }', 'SECTIONS {']
+        for index, (begin, size, obj, section) in enumerate(self.pieces):
+            output = f'.part_{index}'
+            # --shift pads some pieces, to prove that nothing depends on a retail address.
+            pad = self.shift if index % 64 == 1 else 0
+            where = f'ALIGN(. + {pad} - {begin % 16}, 16) + {begin % 16}' if index else f'0x{self.base:X}'
+            linker.append(f'{output} {where} : AT(ADDR({output}) - 0x{self.base:X}) SUBALIGN(4) '
+                          f'{{ "{directory / obj}"({section}) }} :{"body" if index else "prefix"}')
+            if self.compare:
+                linker.append(f'ASSERT(SIZEOF({output}) == {size}, "size differs: {name} {section}")')
+        linker.append('__bss = ALIGN(16);')
+        for index, (address, size, obj, section) in enumerate(self.nobits):
+            output = f'.nobits_{index}'
+            # Zeroed variables inside the stored bytes only name them: INFO emits nothing,
+            # and the bytes keep coming from the asset.
+            kind, segment = ('INFO', 'NONE') if address - self.base < self.content else ('NOLOAD', 'body')
+            linker.append(f'{output} {self.expression(address)} ({kind}) : SUBALIGN(4) '
+                          f'{{ "{directory / obj}"({section}) }} :{segment}')
+            linker.append(f'ASSERT(SIZEOF({output}) {"==" if self.compare else "<="} {size}, '
+                          f'"BSS size differs: {name} {obj} {section}")')
+        linker.append('/DISCARD/ : { *(*) }\n}')
+        for symbol in self.undefined:
+            if symbol in self.symbols:
+                address = self.symbols[symbol]
+            else:
+                match = ADDRESS.fullmatch(symbol)
+                if not match:
+                    raise ValueError('unresolved symbol has no established address: ' + symbol)
+                address = int(match[1], 16)
+            linker.append(f'PROVIDE({symbol} = {resolve(self, address)});')
+        return '\n'.join(linker) + '\n'
+
+    def link(self, text):
+        """Link with the given script; leaves the image bytes and their stored form."""
+        group, name, directory = self.group, self.name, self.directory
+        self.text = text
+        script = directory / 'link.ld'
+        script.write_text(text)
+        elf = directory / (name + '.elf')
+        # ll.c and llcvt.c are -mips3 objects, as in ultralib.
+        run([self.prefix + 'ld', '--no-warn-mismatch', '--emit-relocs', '-T', script,
+             '-Map', directory / 'link.map', '-o', elf, *self.objects])
+        output = directory / (name + '.bin')
+        run([self.prefix + 'objcopy', '-O', 'binary', elf, output])
+        data = elf.read_bytes()
+        names, raw, symbols = read_elf(data)
+        self.parts = {int(section[6:]): header[3] for section, header in zip(names, raw)
+                      if section.startswith('.part_')}
+        self.bss = next(value for symbol, value, _ in symbols if symbol == '__bss')
+        # (type, image offset, symbol value) of every relocation the linker applied, in the
+        # order the objects list them: a HI16 comes before the LO16s that complete it.
+        self.relocations = []
+        for header in raw:
+            if header[1] == 9 and names[header[7]].startswith('.part_'):  # SHT_REL
+                for position in range(header[4], header[4] + header[5], 8):
+                    offset, info = struct.unpack_from('>II', data, position)
+                    if info & 255 in (2, 4, 5, 6):
+                        self.relocations.append((info & 255, offset - self.base, symbols[info >> 8][1]))
+        image = bytearray(output.read_bytes())
+        image += bytes(-len(image) % 16)
+        if self.fragment:
+            image = self.add_relocations(image)
+        self.image = bytes(image)
+        if self.compare and len(image) != group['size']:
+            raise ValueError('linked image size differs: ' + name)
+        exact = sha(image) == group['expected_sha256']
+        if self.compare and not exact:
+            raise ValueError('linked image bytes differ: ' + name)
+        if group['storage'] == 'raw':
+            self.stored = self.image
+        elif exact:
+            self.stored = encode_image(image, (ASSETS / f'{name}.storage').read_bytes(), group['placeholders'])
+        else:
+            import crunch64
+            # No restoration patches: they only undo a quirk of the retail compressor.
+            self.stored = (b'PERS-SZP' + struct.pack('>4I', 0x18, len(image), max(len(image), self.ram_size), 0)
+                           + crunch64.yay0.compress(self.image))
+
+    def add_relocations(self, content):
+        """Append the relocation table to the linked bytes and complete the header."""
+        relocations = []  # what the loader must apply
+        for kind, offset, target in self.relocations:
+            foreign = (target & 0xFFF00000) != self.base
+            # Another fragment's address is a plain number that code hands to
+            # Memmap_GetFragmentVaddr itself (or masks for the slot number), except in
+            # SHARED_SLOT, whose image the retail tables do relocate references to.
+            if in_fragment_space(target) and (not foreign or target & 0xFFF00000 == SHARED_SLOT):
+                relocations.append(kind << 24 | foreign << 31 | offset)
+        self.ram_size = self.ram + len(content) - self.content
+
+        def finish(table):
+            image = content + table + bytes(-len(table) % 16)
+            struct.pack_into('>3I', image, 0x14, len(content), len(image), self.ram_size)
+            return image
+        if self.compare or self.shift:
+            # Every retail relocation that does anything must have been found again.
+            # Follows Memmap_RelocateFragment: a LO16 completes the last HI16 of its register.
+            expected, upper = set(), {}
+            for entry in self.table:
+                kind = entry >> 24 & 0x7F
+                offset = self.address(self.base + (entry & 0xFFFFFF)) - self.base
+                word = struct.unpack_from('>I', content, offset)[0]
+                if kind == 5:
+                    upper[word >> 16 & 31] = (offset, word)
+                elif kind == 6:
+                    high, value = upper[word >> 21 & 31]
+                    if in_fragment_space(((value << 16) + (word & 0xFFFF) - (word & 0x8000) * 2) & 0xFFFFFFFF):
+                        expected.update(((5, high), (6, offset)))
+                elif in_fragment_space(word if kind == 2 else (word & 0x3FFFFFF) << 2 | 0x80000000):
+                    expected.add((kind, offset))
+            found = {(entry >> 24 & 0x7F, entry & 0xFFFFFF) for entry in relocations}
+            if found != expected:
+                sample = sorted(found ^ expected)[:8]
+                raise ValueError(f'{self.name}: {len(found ^ expected)} relocations differ from retail: '
+                                 + ', '.join(f'{kind}@0x{offset:X}' for kind, offset in sample))
+        if len(content) == self.content:
+            # Unchanged images keep the retail table, whose order and flags are not derivable.
+            image = finish(bytearray(self.asset[self.content:]))
+            if sha(image) == self.group['expected_sha256']:
+                return image
+        return finish(bytearray(struct.pack(f'>{len(relocations) + 1}I', len(relocations), *relocations)))
+
+
+def check_shift(images, moved):
+    """--shift self-test: each image is the retail one with every address moved along.
+
+    Pieces only moved, so outside the relocated words the bytes must be the retail
+    bytes, and each relocated word must hold where its retail value went.
+    """
+    rom = (ROOT / 'baseroms/jp/baserom.z64').read_bytes()
+    mapping = json.loads((ROOT / 'docs/mappings/resident-fragments.json').read_text())
+    for image in images:
+        index = image.group['image_index']
+        old = bytearray(rom[:image.content] if index is None else load_image(rom, mapping['fragments'][index]))
+        new = bytearray(image.image)
+        starts = [image.parts[piece] - image.base for piece in range(len(image.pieces))]
+
+        def retail(offset):
+            piece = bisect.bisect_right(starts, offset) - 1
+            return image.begins[piece] + offset - starts[piece]
+        upper = {}  # register -> its last HI16, as the loader pairs them
+        for kind, offset, _ in image.relocations:
+            pair = [struct.unpack_from('>I', data, at)[0] for data, at in ((new, offset), (old, retail(offset)))]
+            if kind == 5:
+                upper[pair[0] >> 16 & 31] = pair
+                continue
+            if kind == 4:
+                pair = [(word & 0x3FFFFFF) << 2 | 0x80000000 for word in pair]
+            elif kind == 6:
+                pair = [((high << 16) + (low & 0xFFFF) - (low & 0x8000) * 2) & 0xFFFFFFFF
+                        for high, low in zip(upper[pair[0] >> 21 & 31], pair)]
+            if pair[0] != moved(image, pair[1]):
+                raise ValueError(f'{image.name}+0x{retail(offset):X}: 0x{pair[1]:08X} became 0x{pair[0]:08X}, '
+                                 f'not 0x{moved(image, pair[1]):08X}')
+        for kind, offset, _ in image.relocations:
+            new[offset:offset + 4] = old[retail(offset):retail(offset) + 4] = bytes(4)
+        for (begin, size, obj, section), start in zip(image.pieces, starts):
+            skip = 0x20 if image.fragment and not begin else 0  # the header holds the new sizes
+            if new[start + skip:start + size] != old[begin + skip:begin + size]:
+                raise ValueError(f'{image.name}: {obj} {section} changed besides its relocations')
+    print(f'shift check: {sum(len(image.relocations) for image in images)} addresses in '
+          f'{len(images)} images moved consistently', flush=True)
 
 
 def headers_digest():
@@ -653,7 +976,7 @@ def source_files(paths):
     return files
 
 
-def build(cc, prefix, compare, jobs, asm_only, compilers):
+def build(cc, prefix, compare, jobs, asm_only, compilers, shift=0):
     manifest = json.loads((ASSETS / 'manifest.json').read_text())
     BUILD.mkdir(parents=True, exist_ok=True)
     receipt_path = BUILD / 'receipt.json'
@@ -679,27 +1002,130 @@ def build(cc, prefix, compare, jobs, asm_only, compilers):
         match = re.match(r'\s*(\w+)\s*=\s*(0x[0-9A-Fa-f]+)\s*;', line)
         if match:
             symbols[match[1]] = int(match[2], 16)
-    output = bytearray(manifest['size'])
-    for gap in manifest['gaps']:
-        data = (ASSETS / gap['asset']).read_bytes()
-        if sha(data) != gap['sha256']:
-            raise ValueError('opaque asset changed: ' + gap['asset'])
-        output[gap['start']:gap['end']] = data
+    # Symbol name -> retail addresses, to find where an object defines a retail address.
+    names = {}
+    for name, address in symbols.items():
+        names.setdefault(name, set()).add(address)
+    with (ROOT / 'docs/function-matches.csv').open() as handle:
+        for row in csv.DictReader(handle):
+            for name in (row['owner'], row['c_name']):
+                names.setdefault(name, set()).add(int(row['vram'], 0))
+    sizes = json.loads(SIZE_REGISTRY.read_text()) if SIZE_REGISTRY.exists() else {}
+    resident_group = manifest['groups'][0]
+    # Addresses of resident things that fragment data may point at.
+    resident_addresses = {resident_group['base'] + int(row['start'], 0) for row in resident_group['owners']}
+    resident_addresses.update(address for address in symbols.values() if 0x80000400 <= address < 0x80105360)
+    for path in [*(ROOT / 'asm').rglob('*.s'), *(ROOT / 'src').rglob('*.[ch]')]:
+        resident_addresses.update(int(address, 16) for address in
+                                  re.findall(r'\bD_(80[01][0-9A-F]{5})\b', path.read_text(errors='replace')))
+    # Link slot -> image extent, for the slots that only one fragment uses.
+    slots = Counter(group['base'] for group in manifest['groups'])
+    unique = {}
+    for group in manifest['groups'][1:]:
+        if slots[group['base']] == 1:
+            with (ASSETS / (group['name'] + '.bin')).open('rb') as handle:
+                unique[group['base']] = max(group['size'], struct.unpack('>I', handle.read(0x20)[0x1C:])[0])
     counts = Counter()
-    def task(group):
-        return build_group(group, selected, cc, prefix, compare, files, compilers, symbols,
-                           placements=placements)
+    if not compare and not shift and '-DSHIFTABLE' not in SOURCE_FLAGS:
+        # Code that holds a ROM offset as a number takes it from a symbol instead. That costs
+        # instructions, so the --shift self-test, which keeps the retail code, leaves it out.
+        SOURCE_FLAGS.append('-DSHIFTABLE')
     with ThreadPoolExecutor(max_workers=jobs) as pool:
-        for index, (group, image, totals) in enumerate(pool.map(task, manifest['groups']), 1):
-            if len(image) != group['rom_end'] - group['rom_start']:
-                raise ValueError('stored image changed size')
-            output[group['rom_start']:group['rom_end']] = image
-            counts.update(totals)
-            if index % 25 == 0:
-                print(f'{index}/{len(manifest["groups"])} images linked', flush=True)
+        images = list(pool.map(lambda group: Image(
+            group, selected, cc, prefix, compare, files, compilers, symbols, placements, sizes, names,
+            resident_addresses, shift), manifest['groups']))
+        resident = images[0]
+        by_slot = {image.base: image for image in images[1:] if image.base in unique}
+        # ROM segments in order: (retail start, image or None, opaque bytes or None).
+        segments = [(image.group['rom_start'], image, None) for image in images]
+        for gap in manifest['gaps']:
+            data = (ASSETS / gap['asset']).read_bytes()
+            if sha(data) != gap['sha256']:
+                raise ValueError('opaque asset changed: ' + gap['asset'])
+            segments.append((gap['start'], None, data))
+        segments.sort(key=lambda segment: segment[0])
+        old_starts = [segment[0] for segment in segments]
+        new_starts = list(old_starts)
+
+        def rom(address):
+            """Where a retail ROM address is now; everything moves with its segment."""
+            index = bisect.bisect_right(old_starts, address) - 1
+            return new_starts[index] + address - old_starts[index]
+
+        def owner(image, address):
+            """The image that a retail address seen in the given image belongs to."""
+            if resident.base + 0x1000 <= address <= resident.base + resident.span:
+                return resident
+            if in_fragment_space(address):
+                target = image if address & 0xFFF00000 == image.base else by_slot.get(address & 0xFFF00000)
+                if target is not None and address - target.base <= target.span:
+                    return target
+
+        def moved(image, address):
+            """Where a retail RAM or ROM address seen in the given image is now."""
+            target = owner(image, address)
+            if target is not None:
+                return target.address(address)
+            return rom(address) if resident.content <= address < manifest['size'] else address
+
+        def resolve(image, address):
+            # The linker places an image's own addresses; the rest come from the last links.
+            if owner(image, address) is image:
+                return image.expression(address)
+            return f'0x{moved(image, address):08X}'
+
+        # An image's symbols depend on where the other images and the ROM contents ended
+        # up, which depends on every image's size: relink until nothing changes.
+        for _ in range(10):
+            scripts = [image.script(resolve) for image in images]
+            stale = [(image, text) for image, text in zip(images, scripts) if text != image.text]
+            if not stale:
+                break
+            for index, _ in enumerate(pool.map(lambda pair: pair[0].link(pair[1]), stale), 1):
+                if index % 25 == 0:
+                    print(f'{index}/{len(stale)} images linked', flush=True)
+            cursor = 0
+            for index, (start, image, data) in enumerate(segments):
+                # Stay at the retail offset while there is room; otherwise keep its alignment.
+                new_starts[index] = start if cursor <= start else cursor + (start - cursor) % 16
+                cursor = new_starts[index] + len(image.stored if image else data)
+        else:
+            raise ValueError('image addresses did not settle')
+    if shift:
+        check_shift(images, moved)
+    output = bytearray()
+    stored = {}
+    for start, (_, image, data) in zip(new_starts, segments):
+        output += bytes(start - len(output))
+        output += image.stored if image else data
+        if image:
+            counts.update(image.counts)
+            stored[image.group['rom_start']] = len(image.stored)
+    # Archive directories hold member offsets and sizes; fragments 43 and up live in the last two.
+    for archive in (0x2B2C80, 0x2F5940, 0x3FEBD0, 0x4A8000, 0x500000):
+        base = rom(archive)
+        total, count = struct.unpack_from('>2I', output, base + 8)
+        struct.pack_into('>I', output, base + 8, rom(archive + total) - base)
+        for entry in range(base + 16, base + 16 + 16 * count, 16):
+            offset, size = struct.unpack_from('>2I', output, entry)
+            member = archive + offset
+            if member in stored:
+                size = stored[member] + -stored[member] % 16
+            struct.pack_into('>2I', output, entry, rom(member) - base, size)
+    if len(output) > manifest['size'] and not output[manifest['size']:].strip(b'\xFF'):
+        del output[manifest['size']:]  # the retail ROM ends in 0xFF filler
+    output += b'\xFF' * (-len(output) % 0x100000)
     exact = sha(output) == EXPECTED_SHA256
     if compare and not exact:
         raise ValueError('full ROM differs')
+    if not exact:
+        fix_checksum(output)
+    if compare and not asm_only:
+        # Retail sizes of the placed sections, for builds whose objects no longer have them.
+        text = json.dumps({path: image.sizes[path] for image in images for path in sorted(image.sizes)},
+                          indent=2, sort_keys=True) + '\n'
+        if not SIZE_REGISTRY.exists() or SIZE_REGISTRY.read_text() != text:
+            SIZE_REGISTRY.write_text(text)
     target = ROOT / 'build/pokestadium0-jp.z64'
     target.write_bytes(output)
     overrides = json.loads((ROOT / 'tools/cflags_overrides.json').read_text())
@@ -754,12 +1180,15 @@ def main():
     parser.add_argument('--compare', type=int, choices=[0, 1], default=1)
     parser.add_argument('--jobs', type=int, default=4)
     parser.add_argument('--asm-only', action='store_true')
+    parser.add_argument('--shift', type=lambda value: int(value, 0), default=0,
+                        help='self-test: pad pieces of every image by this many bytes (a multiple of 16)')
     args = parser.parse_args()
     if args.command == 'extract':
         extract()
     else:
         compilers = {'5.3': str(Path(args.cc).resolve()), '7.1': str(Path(args.cc71).resolve())}
-        build(compilers['5.3'], args.prefix, bool(args.compare), args.jobs, args.asm_only, compilers)
+        build(compilers['5.3'], args.prefix, bool(args.compare) and not args.shift, args.jobs,
+              args.asm_only, compilers, args.shift)
 
 
 if __name__ == '__main__':
