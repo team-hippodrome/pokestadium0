@@ -401,16 +401,21 @@ block_7:
     return 0;
 }
 
+/**
+ * Steps the scene camera's rotationY by -arg1 toward arg2 without moving the eye. Snaps to
+ * arg2 and returns 1 once it gets there, otherwise returns 0.
+ * @unverified Name guessed from the code.
+ */
 s32 BattleScene_ApproachCameraRotationYNoEyeUpdate(UNUSED CameraNode* arg0, s16 arg1, s16 arg2) {
-    M2C_FIELD(sBattleScene.scene, s16*, 0x5A) -= arg1;
+    sBattleScene.scene->rotationY -= arg1;
 
     if (arg1 > 0) {
-        if ((arg2 >= M2C_FIELD(sBattleScene.scene, s16*, 0x5A)) && (M2C_FIELD(sBattleScene.scene, s16*, 0x5A) >= (arg2 - arg1))) {
-            M2C_FIELD(sBattleScene.scene, s16*, 0x5A) = arg2;
+        if ((arg2 >= sBattleScene.scene->rotationY) && (sBattleScene.scene->rotationY >= (arg2 - arg1))) {
+            sBattleScene.scene->rotationY = arg2;
             return 1;
         }
-    } else if ((M2C_FIELD(sBattleScene.scene, s16*, 0x5A) >= arg2) && ((arg2 - arg1) >= M2C_FIELD(sBattleScene.scene, s16*, 0x5A))) {
-        M2C_FIELD(sBattleScene.scene, s16*, 0x5A) = arg2;
+    } else if ((sBattleScene.scene->rotationY >= arg2) && ((arg2 - arg1) >= sBattleScene.scene->rotationY)) {
+        sBattleScene.scene->rotationY = arg2;
         return 1;
     }
     return 0;

@@ -46,6 +46,11 @@ s32 BattleScene_AreBothParticipantModelsCompact(void) {
     return 0;
 }
 
+/**
+ * Skips the current B-roll camera shot when the acting Pokemon can't be filmed (state unk_2D
+ * is 16 or flag 0x4000 is set): selects the next shot and returns 1. Otherwise returns 0.
+ * @unverified Name guessed from the code.
+ */
 s32 BattleScene_SkipUnavailableBRollShot(UNUSED ActivePokemon* arg0, CameraNode* arg1) {
     ActivePokemonState* ptr = &sActivePokemon[sBattleScene.scene->actingSide]->state;
 
@@ -58,6 +63,12 @@ s32 BattleScene_SkipUnavailableBRollShot(UNUSED ActivePokemon* arg0, CameraNode*
 
 extern Vec3f D_8218B630;
 extern Vec3f D_8218B63C;
+/**
+ * Sets up the arena-orbit B-roll shot: aims at the arena center (a closer point when both
+ * models are compact), eye 750 away at a low angle, squeezed in depth, then advances the
+ * phase step.
+ * @unverified Name guessed from the code.
+ */
 void BattleScene_BRollCameraSetupArenaOrbit(CameraNode* arg0) {
     BattleScene_SetCameraClipPlanes(arg0, 20.0f, 4000.0f);
     BattleScene_ResetCameraFrameCounter();
@@ -72,6 +83,11 @@ void BattleScene_BRollCameraSetupArenaOrbit(CameraNode* arg0) {
     sBattleScene.scene->phaseStep++;
 }
 
+/**
+ * Sets up the rotating arena-overview B-roll shot: aims at the arena center from 1000 away
+ * at a higher angle, then advances the phase step.
+ * @unverified Name guessed from the code.
+ */
 void BattleScene_BRollCameraSetupRotatingArenaOverview(CameraNode* arg0) {
     BattleScene_SetCameraClipPlanes(arg0, 20.0f, 4000.0f);
     BattleScene_ResetCameraFrameCounter();
@@ -415,6 +431,11 @@ void BattleScene_SelectNextBRollCameraShot(CameraNode* arg0) {
 }
 
 extern const f64 D_DBL_821960A0;
+/**
+ * Turns the arena-orbit shot by 0xB6 a frame until rotationY reaches 0x78DC, then selects
+ * the next B-roll shot. Keeps the eye squeezed in depth while turning.
+ * @unverified Name guessed from the code.
+ */
 void BattleScene_BRollCameraUpdateArenaOrbit(CameraNode* arg0) {
     if (BattleScene_ApproachCameraRotationY(arg0, 0xB6, 0x78DC) != 0) {
         BattleScene_SelectNextBRollCameraShot(arg0);

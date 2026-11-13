@@ -1114,14 +1114,14 @@ void func_82127724(CameraNode* arg0) {
                 for (;;) {
                     dist = func_82121750((ActivePokemon*)D_8219A544, 3.5f, 300.0f);
                     func_8210C1A8(&M2C_FIELD(sBattleScene.scene, f32*, 0x84), 8.0f, step);
-                    rate = (M2C_FIELD(sBattleScene.scene, s16*, 0x5A) - M2C_FIELD(D_8219A544, s32*, 0x60C) * 0x38E0) / (s16)M2C_FIELD(sBattleScene.scene, f32*, 0x84);
+                    rate = (sBattleScene.scene->rotationY - M2C_FIELD(D_8219A544, s32*, 0x60C) * 0x38E0) / (s16)M2C_FIELD(sBattleScene.scene, f32*, 0x84);
                     if (rate < 0) {
                         rate *= -1;
                     }
                     if (rate < 30) {
                         rate = 30;
                     }
-                    if (BattleAnim_StepToS16(&M2C_FIELD(sBattleScene.scene, s16*, 0x5A), M2C_FIELD(D_8219A544, s32*, 0x60C) * 0x38E0, rate) != 0) {
+                    if (BattleAnim_StepToS16(&sBattleScene.scene->rotationY, M2C_FIELD(D_8219A544, s32*, 0x60C) * 0x38E0, rate) != 0) {
                         func_8210C1A8(&M2C_FIELD(sBattleScene.scene, f32*, 0x8C), step, 0.02f);
                         func_8210C1A8(&sBattleScene.scene->unk_74, 0.0f, M2C_FIELD(sBattleScene.scene, f32*, 0x8C));
                     } else {
@@ -1129,7 +1129,7 @@ void func_82127724(CameraNode* arg0) {
                         func_8210C1A8(&sBattleScene.scene->distance, dist, M2C_FIELD(sBattleScene.scene, f32*, 0x88));
                     }
                     BattleScene_SetCameraAtFromAnchor((ActivePokemon*)D_8219A544, arg0, sBattleScene.scene->unk_D0, 0, M2C_FIELD(D_8219A544, s32*, 0x60C) << 0xE, sBattleScene.scene->unk_74, 0.0);
-                    BattleScene_SetCameraEyeFromAt(arg0, 0, M2C_FIELD(sBattleScene.scene, s16*, 0x5A), sBattleScene.scene->distance, 0.0f);
+                    BattleScene_SetCameraEyeFromAt(arg0, 0, sBattleScene.scene->rotationY, sBattleScene.scene->distance, 0.0f);
                     if (sBattleScene.scene->distance < dist + 5.0f) {
                         break;
                     }
@@ -1150,14 +1150,14 @@ void func_82127724(CameraNode* arg0) {
                 step = 0.3f;
                 dist = func_82121750((ActivePokemon*)D_8219A544, 3.5f, 300.0f);
                 func_8210C1A8(&M2C_FIELD(sBattleScene.scene, f32*, 0x84), 8.0f, step);
-                rate = (M2C_FIELD(sBattleScene.scene, s16*, 0x5A) - M2C_FIELD(D_8219A544, s32*, 0x60C) * 0x38E0) / (s16)M2C_FIELD(sBattleScene.scene, f32*, 0x84);
+                rate = (sBattleScene.scene->rotationY - M2C_FIELD(D_8219A544, s32*, 0x60C) * 0x38E0) / (s16)M2C_FIELD(sBattleScene.scene, f32*, 0x84);
                 if (rate < 0) {
                     rate *= -1;
                 }
                 if (rate < 30) {
                     rate = 30;
                 }
-                if (BattleAnim_StepToS16(&M2C_FIELD(sBattleScene.scene, s16*, 0x5A), M2C_FIELD(D_8219A544, s32*, 0x60C) * 0x38E0, rate) != 0) {
+                if (BattleAnim_StepToS16(&sBattleScene.scene->rotationY, M2C_FIELD(D_8219A544, s32*, 0x60C) * 0x38E0, rate) != 0) {
                     func_8210C1A8(&M2C_FIELD(sBattleScene.scene, f32*, 0x8C), step, 0.02f);
                     func_8210C1A8(&sBattleScene.scene->unk_74, 0.0f, M2C_FIELD(sBattleScene.scene, f32*, 0x8C));
                 } else {
@@ -1165,7 +1165,7 @@ void func_82127724(CameraNode* arg0) {
                     func_8210C1A8(&sBattleScene.scene->distance, dist, M2C_FIELD(sBattleScene.scene, f32*, 0x88));
                 }
                 BattleScene_SetCameraAtFromAnchor((ActivePokemon*)D_8219A544, arg0, sBattleScene.scene->unk_D0, 0, M2C_FIELD(D_8219A544, s32*, 0x60C) << 0xE, sBattleScene.scene->unk_74, 0.0);
-                BattleScene_SetCameraEyeFromAt(arg0, 0, M2C_FIELD(sBattleScene.scene, s16*, 0x5A), sBattleScene.scene->distance, 0.0f);
+                BattleScene_SetCameraEyeFromAt(arg0, 0, sBattleScene.scene->rotationY, sBattleScene.scene->distance, 0.0f);
                 if (sBattleScene.scene->distance < dist + 5.0f) {
                     BattleMessage_ShowForSide(D_8219A520 + 0x388, sBattleScene.scene->actingSide);
                     sBattleScene.scene->phaseStep++;

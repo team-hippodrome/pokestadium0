@@ -485,7 +485,7 @@ void BattleScene_UpdatePhase(CameraNode* arg0) {
 void BattleScene_IntroStepInitOverheadCamera(CameraNode* arg0) {
     BattleScene_ResetCameraFrameCounter();
     BattleScene_SetCameraAtFromPosition(arg0, D_8218B630, 0, 0, 0.0f, 0.0f);
-    BattleScene_SetCameraEyeAndStoreAngles(arg0, D_8218B630, 0x3C6E, M2C_FIELD(sBattleScene.scene, s16*, 0x5A) = 0, sBattleScene.scene->unk_74 = D_FLT_82196668, 0.0f);
+    BattleScene_SetCameraEyeAndStoreAngles(arg0, D_8218B630, 0x3C6E, sBattleScene.scene->rotationY = 0, sBattleScene.scene->unk_74 = D_FLT_82196668, 0.0f);
     sActivePokemon[0]->displayObject.node.flags &= ~1;
     sActivePokemon[1]->displayObject.node.flags &= ~1;
     M2C_FIELD(sBattleScene.scene, f32*, 0x64) = D_FLT_8219666C;
@@ -517,7 +517,7 @@ void BattleScene_IntroStepSpinOverheadCamera(CameraNode* arg0) {
     sActivePokemon[1]->displayObject.node.flags &= ~1;
     BattleAnim_ApproachF(&sBattleScene.scene->unk_74, 10000.0f, 0.025f);
     BattleScene_SetCameraAtFromPosition(arg0, D_8218B630, 0, 0, 0.0f, 0.0f);
-    BattleScene_SetCameraEyeAndStoreAngles(arg0, D_8218B630, 0x3C6E, M2C_FIELD(sBattleScene.scene, s16*, 0x5A) -= 0x16C, sBattleScene.scene->unk_74, 0.0f);
+    BattleScene_SetCameraEyeAndStoreAngles(arg0, D_8218B630, 0x3C6E, sBattleScene.scene->rotationY -= 0x16C, sBattleScene.scene->unk_74, 0.0f);
     BattleAnim_ApproachF(&M2C_FIELD(sBattleScene.scene, f32*, 0x64), 1.0f, 0.06f);
     Battle_SetStageScale(M2C_FIELD(sBattleScene.scene, f32*, 0x64));
     if (sBattleScene.scene->stepFrameTimer == 0x3C) {

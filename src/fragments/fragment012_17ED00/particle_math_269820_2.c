@@ -2388,6 +2388,11 @@ void Particle_SetMotionStepXZFromRotationY(Particle* arg0) {
     M2C_FIELD(arg0, f32*, 0x80) = COSS(M2C_FIELD(arg0, u16*, 0x92)) * arg0->stepMagnitude;
 }
 
+/**
+ * Sets motionStep to stepMagnitude along the direction given by rotation.x (pitch) and
+ * rotation.y (heading).
+ * @unverified Name guessed from the code.
+ */
 void Particle_SetMotionStepFromRotationXY(Particle* arg0) {
     arg0->motionStep.x = arg0->stepMagnitude * COSS(arg0->rotation.x) * SINS(arg0->rotation.y);
     arg0->motionStep.y = -arg0->stepMagnitude * SINS(arg0->rotation.x);
@@ -2406,6 +2411,11 @@ void Particle_MotionStep_SetVecFromField74AnglesXZ(Particle* arg0) {
     arg0->motionStep.z = arg0->stepMagnitude * COSS(arg0->rotation.x);
 }
 
+/**
+ * Sets motionStep from rotation.x and rotation.y with the other rotation order: x from
+ * rotation.y alone, y and z from both angles.
+ * @unverified Name guessed from the code.
+ */
 void Particle_SetMotionStepFromRotationXYAlt(Particle* arg0) {
     arg0->motionStep.x = arg0->stepMagnitude * SINS(arg0->rotation.y);
     arg0->motionStep.y = -arg0->stepMagnitude * SINS(arg0->rotation.x) * COSS(arg0->rotation.y);
@@ -2423,6 +2433,10 @@ void Particle_SetMotionStepFromRotationYZ(Particle* arg0) {
     arg0->motionStep.z = COSS(arg0->rotation.y);
 }
 
+/**
+ * Sets motionStep to stepMagnitude along the direction given by all three rotation angles.
+ * @unverified Name guessed from the code.
+ */
 void Particle_SetMotionStepFromRotationXYZ(Particle* arg0) {
     arg0->motionStep.x = arg0->stepMagnitude * (COSS(arg0->rotation.x) * SINS(arg0->rotation.y) * COSS(arg0->rotation.z) +
                                      SINS(arg0->rotation.x) * SINS(arg0->rotation.z));
@@ -2431,6 +2445,11 @@ void Particle_SetMotionStepFromRotationXYZ(Particle* arg0) {
     arg0->motionStep.z = arg0->stepMagnitude * (COSS(arg0->rotation.x) * COSS(arg0->rotation.y));
 }
 
+/**
+ * Sets motionStep to stepMagnitude along the direction given by all three rotation angles,
+ * with a different rotation order from Particle_SetMotionStepFromRotationXYZ.
+ * @unverified Name guessed from the code.
+ */
 void Particle_SetMotionStepFromRotationXYZAlt(Particle* arg0) {
     arg0->motionStep.x = arg0->stepMagnitude * (SINS(arg0->rotation.x) * COSS(arg0->rotation.y) * SINS(arg0->rotation.z) +
                                      COSS(arg0->rotation.x) * SINS(arg0->rotation.y));
@@ -2440,6 +2459,11 @@ void Particle_SetMotionStepFromRotationXYZAlt(Particle* arg0) {
                                      COSS(arg0->rotation.x) * COSS(arg0->rotation.y));
 }
 
+/**
+ * Sets motionStep to stepMagnitude along the direction given by all three rotation angles,
+ * with a third rotation order (see the XYZ and XYZAlt versions).
+ * @unverified Name guessed from the code.
+ */
 void Particle_SetMotionStepFromRotationYZAlt(Particle* arg0) {
     arg0->motionStep.x = arg0->stepMagnitude * SINS(arg0->rotation.y) * COSS(arg0->rotation.z);
     arg0->motionStep.y = arg0->stepMagnitude * (COSS(arg0->rotation.x) * SINS(arg0->rotation.y) * SINS(arg0->rotation.z) -

@@ -249,6 +249,10 @@ void BattleAnim_ClearEffectState(void) {
     D_8219A82C.unk_00 = 0;
 }
 
+/**
+ * Returns the battle animation effect state word D_8219A82C.
+ * @unverified Name guessed from the code.
+ */
 s32 BattleAnim_GetEffectState(void) {
     return (*(s32 *)&D_8219A82C);
 }
