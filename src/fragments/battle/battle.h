@@ -94,7 +94,7 @@ typedef struct unk_func_88316214 {
 } unk_func_88316214;
 
 typedef struct unk_func_88316304 {
-    /* 0x00 */ unk_func_8830867C_02C_0CC_000** unk_00;
+    /* 0x00 */ LabMonEntry** unk_00;
     /* 0x04 */ char unk04[0x4];
     /* 0x08 */ u8 unk_08;
     /* 0x09 */ char unk09[0x8];

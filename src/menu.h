@@ -219,7 +219,7 @@ typedef void (*unk_func_88200FA0_030_030_040)(s32, s32, char*, s32, s32, struct 
 
 typedef struct unk_func_88200FA0_030_030 {
     /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_8820BE14_06C* unk_2C;
+    /* 0x2C */ ByteMatrix* unk_2C;
     /* 0x30 */ s32 unk_30;
     /* 0x34 */ u16* unk_34;
     /* 0x38 */ s32 unk_38;
@@ -238,7 +238,7 @@ typedef struct unk_func_88200FA0_030_030 {
 // Copy of above with unk_2C changed just for fragment24_1CEA00
 typedef struct unk_func_88200FA0_030_030_1CEA00 {
     /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_8830867C_02C_0CC* unk_2C;
+    /* 0x2C */ LabMonEntryList* unk_2C;
     /* 0x30 */ s32 unk_30;
     /* 0x34 */ u16* unk_34;
     /* 0x38 */ s32 unk_38;
@@ -514,7 +514,7 @@ typedef struct unk_func_88201DA0 {
     /* 0x2C */ WidgetAnimatedPanel* unk_2C;
     /* 0x30 */ unk_func_88200FA0_030_030* unk_30;
     /* 0x34 */ unk_func_88201DA0_034* unk_34;
-    /* 0x38 */ unk_func_88201DA0_038 unk_38;
+    /* 0x38 */ ByteMatrix unk_38;
     /* 0x48 */ FragmentEntry unk_48;
     /* 0x4C */ unk_func_88205880_0098* unk_4C;
     /* 0x50 */ unk_func_8850878C* unk_50;
@@ -741,11 +741,11 @@ typedef void (*func88506238)(unk_func_88200FA0_030_030*, s32, MemoryPool*);
 
 typedef void (*func8850628C)(unk_func_88200FA0_030_030*);
 
-typedef void (*func8850633C)(unk_func_88200FA0_030_030_1CEA00*, unk_func_8830867C_02C_0CC*);
+typedef void (*func8850633C)(unk_func_88200FA0_030_030_1CEA00*, LabMonEntryList*);
 
 typedef void (*func88506384)(unk_func_88200FA0_030_030*, unk_func_88200FA0_030_038*, MemoryPool*);
 
-typedef void (*func885063B8)(unk_func_88200FA0_030_030*, unk_func_88201DA0_038*);
+typedef void (*func885063B8)(unk_func_88200FA0_030_030*, ByteMatrix*);
 
 typedef void (*func88506404)(unk_func_88200FA0_030_030*, u8*, MemoryPool*);
 

@@ -43,8 +43,8 @@ typedef struct unk_func_888044BC_038_02C_000 {
 
 typedef struct unk_func_888044BC_038_02C {
     /* 0x00 */ unk_func_888044BC_038_02C_000 unk_00;
-    /* 0x70 */ unk_func_88205880_A030 unk_70;
-    /* 0x7C */ unk_func_88205880_A030 unk_7C;
+    /* 0x70 */ PointerList unk_70;
+    /* 0x7C */ PointerList unk_7C;
     /* 0x88 */ s32 unk_88;
     /* 0x8C */ s32 unk_8C;
 } unk_func_888044BC_038_02C; // size = 0x90

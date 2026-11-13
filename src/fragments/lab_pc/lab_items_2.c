@@ -5,11 +5,11 @@ extern s32 pad_D_8831A4DC[8];
 #include "m2c_macros.h"
 void ScrollList_SetItems(s8*, s32, s8*);
 void func_8900020C(void);
-s32 LabItem_ComputeRemainingCapacity(s32 arg0, unk_func_8820BE14_06C* arg1);
-s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, unk_func_8820BE14_06C* arg1);
+s32 LabItem_ComputeRemainingCapacity(s32 arg0, ByteMatrix* arg1);
+s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, ByteMatrix* arg1);
 s32 LabItem_FindOrAllocateGamePakBoxSlot(unk_func_8821421C_07C* arg0, s32 arg1, char* arg2);
 void LabItem_LoadGamePakBoxSlots(unk_func_8821421C_07C* arg0);
-void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* arg3);
+void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, ByteMatrix* arg3);
 void func_800275E4(s32, s32);
 void ScrollList_SetCursorKeepOffset(s32*, s32);
 void func_800275E4(s32, s32);

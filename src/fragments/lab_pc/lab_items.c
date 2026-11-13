@@ -40,14 +40,14 @@ typedef struct unk_D_88218070 {
 void ScrollList_SetItems(s8*, s32, s8*);
 
 void func_8900020C(void);
-s32 LabItem_ComputeRemainingCapacity(s32 arg0, unk_func_8820BE14_06C* arg1);
-s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, unk_func_8820BE14_06C* arg1);
+s32 LabItem_ComputeRemainingCapacity(s32 arg0, ByteMatrix* arg1);
+s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, ByteMatrix* arg1);
 s32 LabItem_FindOrAllocateGamePakBoxSlot(unk_func_8821421C_07C* arg0, s32 arg1, char* arg2);
 void LabItem_LoadGamePakBoxSlots(unk_func_8821421C_07C* arg0);
-void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* arg3);
+void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, ByteMatrix* arg3);
 
-void func_89000020(unk_func_8830867C_02C_0CC* arg0, s32 (*arg1)(s32, s32)) {
-    func_800274E0(arg0->unk_00, arg1, arg0->unk_08);
+void func_89000020(LabMonEntryList* arg0, s32 (*arg1)(s32, s32)) {
+    func_800274E0(arg0->items, arg1, arg0->count);
 }
 
 typedef struct LabItemGrid {
@@ -169,12 +169,12 @@ void func_8900020C(void) {
 }
 
 /** Returns how many more items a box can hold. */
-s32 LabItem_ComputeRemainingCapacity(s32 arg0, unk_func_8820BE14_06C* arg1) {
+s32 LabItem_ComputeRemainingCapacity(s32 arg0, ByteMatrix* arg1) {
     s32 i;
     s32 var_v1 = 0;
-    u8* var_v0 = arg1->unk_00;
+    u8* var_v0 = arg1->rows;
 
-    for (i = 0; i < arg1->unk_08; i++, var_v0 += 2) {
+    for (i = 0; i < arg1->count; i++, var_v0 += 2) {
         if (arg0 == var_v0[0]) {
             var_v1 = (var_v1 - var_v0[1]) + 0x63;
         }
@@ -184,16 +184,16 @@ s32 LabItem_ComputeRemainingCapacity(s32 arg0, unk_func_8820BE14_06C* arg1) {
 }
 
 /** Returns the largest quantity of an item that can be transferred. */
-s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, unk_func_8820BE14_06C* arg1) {
+s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, ByteMatrix* arg1) {
     s32 var_v1;
 
     if (LabItem_IsQuantitylessItemForOperation(arg0) != 0) {
-        if (arg1->unk_08 < arg1->unk_04) {
+        if (arg1->count < arg1->capacity) {
             var_v1 = 1;
         } else {
             var_v1 = 0;
         }
-    } else if (arg1->unk_08 < arg1->unk_04) {
+    } else if (arg1->count < arg1->capacity) {
         var_v1 = 0x63;
     } else {
         var_v1 = LabItem_ComputeRemainingCapacity(arg0, arg1);
@@ -234,15 +234,15 @@ void LabItem_LoadGamePakBoxSlots(unk_func_8821421C_07C* arg0) {
 }
 
 /** Reads item entries from a deck. */
-void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* arg3) {
+void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, ByteMatrix* arg3) {
     DeckHandle* sp1C = Deck_Open(arg0, arg1, arg2, 0);
 
-    arg3->unk_08 = Deck_ReadEntries(arg3->unk_00, arg3->unk_04, sp1C);
+    arg3->count = Deck_ReadEntries(arg3->rows, arg3->capacity, sp1C);
     Deck_CloseAndFlush(sp1C);
 }
 
 /** Writes item entries back to a deck. */
-void LabItem_WriteDeckBack(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* arg3, s32 arg4, char* arg5, s32 arg6) {
+void LabItem_WriteDeckBack(s32 arg0, s32 arg1, s32 arg2, ByteMatrix* arg3, s32 arg4, char* arg5, s32 arg6) {
     DeckHandle* sp2C;
 
     if (arg6 != -1) {
@@ -252,7 +252,7 @@ void LabItem_WriteDeckBack(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* 
         sp2C = Deck_Open(arg0, arg1, arg2, 1);
     }
 
-    Deck_WriteEntries(arg3->unk_00, arg3->unk_08, sp2C);
+    Deck_WriteEntries(arg3->rows, arg3->count, sp2C);
 
     if ((arg0 == 0x10) || (arg0 == 0x11) || (arg0 == 0x12) || (arg0 == 0x13)) {
         Deck_CloseAndFlushBox(sp2C);
@@ -1058,7 +1058,7 @@ void func_890020C0(u8* arg0) {
     M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x1A4)] = 1;
     M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x140)] = M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x1A4)];
     if (LabItem_IsQuantitylessItemForOperation(item[0]) != 0) {
-        func_89000020((unk_func_8830867C_02C_0CC*)(arg0 + 0x2F8), (void*)(CURSOR(arg0)->grid->data + CURSOR(arg0)->grid->stride * CURSOR(arg0)->selected));
+        func_89000020((LabMonEntryList*)(arg0 + 0x2F8), (void*)(CURSOR(arg0)->grid->data + CURSOR(arg0)->grid->stride * CURSOR(arg0)->selected));
         LabList_RemoveSelectedEntry((LabItemCursor*)CURSOR(arg0));
     } else {
         func_890000A4((s32*)(arg0 + 0x2F8), item[0], M2C_FIELD(arg0, s32*, 0x444));

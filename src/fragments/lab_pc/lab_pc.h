@@ -53,7 +53,7 @@ typedef struct unk_func_8820BE14_030 {
 // Copy of above with unk_2C changed just for fragment23_1AE680
 typedef struct unk_func_88200FA0_030_030_1AE680 {
     /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_88205880_A030* unk_2C;
+    /* 0x2C */ PointerList* unk_2C;
     /* 0x30 */ s32 unk_30;
     /* 0x34 */ u16* unk_34;
     /* 0x38 */ s32 unk_38;
@@ -156,7 +156,7 @@ typedef struct unk_func_8820BE14_02C_078 {
     /* 0x2C */ WidgetAnimatedPanel* unk_2C;
     /* 0x30 */ unk_func_88200FA0_030_030* unk_30;
     /* 0x34 */ unk_func_8820BE14_02C_078_034* unk_34;
-    /* 0x38 */ unk_func_8820BE14_06C unk_38;
+    /* 0x38 */ ByteMatrix unk_38;
     /* 0x48 */ s32 unk_48;
     /* 0x4C */ s32 unk_4C;
     /* 0x50 */ s32 unk_50;
@@ -181,7 +181,7 @@ typedef struct unk_func_8820BE14_02C {
     /* 0x80 */ unk_func_88509F48* unk_80;
     /* 0x84 */ unk_func_889000C4* unk_84;
     /* 0x88 */ unk_func_8850878C* unk_88;
-    /* 0x8C */ unk_func_8820BE14_06C* unk_8C;
+    /* 0x8C */ ByteMatrix* unk_8C;
     /* 0x90 */ char unk90[0x10];
 } unk_func_8820BE14_02C; // size = 0xA0
 
@@ -303,7 +303,7 @@ typedef struct unk_func_8821421C_02C_070 {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ WidgetAnimatedPanel* unk_2C;
     /* 0x30 */ unk_func_88200FA0_030_030* unk_30;
-    /* 0x34 */ unk_func_88205880_A030 unk_34;
+    /* 0x34 */ PointerList unk_34;
     /* 0x40 */ s32 unk_40;
     /* 0x44 */ s32 unk_44;
     /* 0x48 */ s32 unk_48;
@@ -355,7 +355,7 @@ typedef struct unk_func_8821421C_038_04C {
 
 typedef struct unk_func_8821421C_03C {
     /* 0x00 */ s32 unk_00;
-    /* 0x04 */ unk_func_8820BE14_06C unk_04;
+    /* 0x04 */ ByteMatrix unk_04;
 } unk_func_8821421C_03C; // size = 0x14
 
 typedef struct unk_func_8821421C_07C {
@@ -379,7 +379,7 @@ typedef struct unk_func_8821421C_038 {
     /* 0x50 */ unk_func_8821421C_038_050* unk_50[1];
     /* 0x54 */ char unk54[0xC];
     /* 0x60 */ s32 unk_60;
-    /* 0x64 */ unk_func_8820BE14_06C unk_64;
+    /* 0x64 */ ByteMatrix unk_64;
     /* 0x74 */ char unk74[0x4];
 } unk_func_8821421C_038; // size = 0x78
 
@@ -423,12 +423,12 @@ typedef unk_D_88400138* (*func884000C4)(s32);
 struct unk_func_88203ED8_064;
 
 // lab_items.c
-void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* arg3);
-void LabItem_WriteDeckBack(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* arg3, s32 arg4, char* arg5, s32 arg6);
+void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, ByteMatrix* arg3);
+void LabItem_WriteDeckBack(s32 arg0, s32 arg1, s32 arg2, ByteMatrix* arg3, s32 arg4, char* arg5, s32 arg6);
 void LabItem_LoadGamePakBoxSlots(unk_func_8821421C_07C* arg0);
 s32 LabItem_FindOrAllocateGamePakBoxSlot(unk_func_8821421C_07C* arg0, s32 arg1, char* arg2);
-s32 LabItem_ComputeRemainingCapacity(s32 arg0, unk_func_8820BE14_06C* arg1);
-s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, unk_func_8820BE14_06C* arg1);
+s32 LabItem_ComputeRemainingCapacity(s32 arg0, ByteMatrix* arg1);
+s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, ByteMatrix* arg1);
 void func_8900020C(void);
 
 // pc_sort.c
