@@ -356,6 +356,8 @@ void ActivePokemon_SetController(ActivePokemon*, u8*);
 /**
  * Tag team: when either teammate's controller presses B, that teammate's
  * controller takes over this Pokemon's menu.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void BattleMenu_TakeControlOnBPress(ActivePokemon* arg0, u8* arg1, u8* arg2, s32 arg3) {
@@ -1064,6 +1066,8 @@ extern s32 D_82199F18[];
 /**
  * Feeds the scripted controller input for the current side (D_8218ABB8: frames,
  * pressed, held), as used by the demo battles.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void BattleDemo_PlayScriptedInput() {
@@ -1086,6 +1090,8 @@ void BattleDemo_PlayScriptedInput();
 /**
  * Runs the scripted input, then locks move selection when a volatile or trapping
  * state forces the move.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Battle_PrepareTurnInput(ActivePokemon* arg0, ActivePokemon* arg1) {
@@ -1178,6 +1184,8 @@ void func_8210E504(void) {
  * Calls Battle_InitPokemonRuntimeState(arg0).  The two extra arguments are
  * accepted but not used; the retail code stores them to the stack, which is
  * why the signature declares them.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name guessed from the code; comment kept.
  */
 void Battle_InitParticipantRuntime(ActivePokemon* arg0, s32 arg1, s32 arg2) {
@@ -1209,6 +1217,8 @@ void func_8210F688(s32 arg0, s32 arg1);
 
 /**
  * Initializes both participants and resets the demo input scripts and turn state.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Battle_InitBothParticipants(void) {

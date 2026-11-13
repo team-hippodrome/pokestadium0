@@ -64,6 +64,8 @@ extern s32 D_8218C790;
 extern s32 D_8218C794;
 /**
  * Save the target's current HP and queue an HP-band message for the acting participant.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void ShowDamageMessage(s32 attacker, s32 defender) {
@@ -237,6 +239,8 @@ void func_8210FA74(void) {
 
 /**
  * Select a move in the first scratch runtime using the current scratch move-slot index.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Battle_SetActiveMoveFromSlotIndex(void) {
@@ -259,6 +263,8 @@ s32 Battle_CheckMoveSuccess(void) {
 
 /**
  * Calculate the requested stored stat from the selected base-stat/experience entries and DVs.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ComputePokemonStat(s32 arg0, BattleMon* arg1) {

@@ -316,6 +316,8 @@ s32 BattleAi_GetHpPercent(s8 *arg0)
  * party, whose info byte at offset 2 is the number of Pokemon in play.
  * Matching note: the loop is a do/while over a byte pointer with the end address
  * `arg0 + n * 0x90` recomputed in its condition, as in the ROM.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CountUnfainted(u8 *arg0) {
@@ -357,6 +359,8 @@ void func_82183DC4(void) {
 
 /**
  * Adds a random 0..15 * 400 to a battler's team-pick score (word at offset 4).
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 void BattleAi_AddRandomPickScore(s8* arg0) {
@@ -373,6 +377,8 @@ extern BattleSlotZ* D_821CF298;
 /**
  * Returns 1 if an unfainted Pokemon of the given species is in the opponent's
  * team (D_821CF298), otherwise 0.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_OpponentHasSpecies(s32 arg0) {
@@ -388,6 +394,8 @@ s32 BattleAi_OpponentHasSpecies(s32 arg0) {
 
 /**
  * Counts opponent Pokemon that are Water or Flying type.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CountOpponentWaterOrFlying(void) {
@@ -405,6 +413,8 @@ s32 BattleAi_CountOpponentWaterOrFlying(void) {
 
 /**
  * Counts opponent Pokemon that are Ground type.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CountOpponentGround(void) {
@@ -422,6 +432,8 @@ s32 BattleAi_CountOpponentGround(void) {
 
 /**
  * Counts opponent Pokemon that are Fighting type.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CountOpponentFighting(void) {
@@ -439,6 +451,8 @@ s32 BattleAi_CountOpponentFighting(void) {
 
 /**
  * Returns 1 if the opponent brought a level 55 Tauros.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_OpponentHasLevel55Tauros(void) {
@@ -454,6 +468,8 @@ s32 BattleAi_OpponentHasLevel55Tauros(void) {
 
 /**
  * Counts opponent Pokemon that are Electric or Poison type.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CountOpponentElectricOrPoison(void) {
@@ -471,6 +487,8 @@ s32 BattleAi_CountOpponentElectricOrPoison(void) {
 
 /**
  * Counts opponent Pokemon that are Rock or Water type.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CountOpponentRockOrWater(void) {
@@ -488,6 +506,8 @@ s32 BattleAi_CountOpponentRockOrWater(void) {
 
 /**
  * Counts opponent Pokemon that are Electric type.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_CountOpponentElectric(void) {
@@ -512,6 +532,8 @@ s32 BattleAi_NoVenusaurChanseyJynxPicked(s32);
  * bonus when the opponent brought a species it counters (for example Gengar when
  * the opponent has Tauros). Every pick except Ditto also gets +50000 unless the
  * side's mode byte (0x368) is set. arg1 is the pick round (0 = lead).
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 void BattleAi_AddTrainerPickScore(u8* arg0, s32 arg1) {
@@ -759,6 +781,8 @@ extern u8 D_8218AC50[];
  * 150 for same-type attack bonus, then each matching type-chart row
  * (D_8218AC50: attacking type, defending type, multiplier * 10) is applied.
  * Status moves (power 0) return 100.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_GetTypeMultiplier(s8* arg0, s8* arg1, s32 move) {

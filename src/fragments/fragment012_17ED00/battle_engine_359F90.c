@@ -52,6 +52,8 @@ void Battle_RefundSelectedMovePp(void);
 
 /**
  * Invoke the stored-stat calculator for selectors 0 through 4, preserving its original range.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ComputeAllPokemonStats(BattleMon* arg0) {

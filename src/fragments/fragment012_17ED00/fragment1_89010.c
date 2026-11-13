@@ -97,6 +97,8 @@ void BattleScene_OpeningStepInitCamera(CameraNode* arg0) {
 /**
  * Battle opening, step 1: waits until the battle assets have loaded
  * (BattleAnim_PollAssetLoadBusyFlags).
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name from the code; not yet checked on screen.
  */
 void BattleScene_OpeningStepWaitForAssets(s32 arg0) {
@@ -109,6 +111,8 @@ s32 func_821217DC(s32);
 void func_8000EEBC(Vec3f*, Vec3f*, f32, s32, s32);
 /**
  * Battle opening, step 2: orbits the high camera around the field for 15 frames.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name from the code; not yet checked on screen.
  */
 void BattleScene_OpeningStepOrbitCamera(CameraNode* arg0) {

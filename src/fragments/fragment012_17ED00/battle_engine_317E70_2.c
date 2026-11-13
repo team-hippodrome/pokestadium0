@@ -96,6 +96,8 @@ extern s32 D_8219CA58;
 extern s32 D_8219CA5C;
 
 /**
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_InitParticleSystem(void) {
@@ -248,6 +250,8 @@ Particle* Particle_New(void) {
 
 /**
  * Allocate a linked chain, returning its first particle even if a later allocation fails.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 Particle* Particle_AllocChain(u8 arg0) {
@@ -807,6 +811,8 @@ void BattleAnim_TickEffectSlots(void) {
 
 /**
  * Count allocated pool slots, regardless of their lifecycle or rendering flags.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Particle_CountActive(void) {
@@ -825,6 +831,8 @@ s32 Particle_CountActive(void) {
 
 /**
  * Return the allocated-slot count through the shared counter.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Particle_CountActiveAlias(void) {

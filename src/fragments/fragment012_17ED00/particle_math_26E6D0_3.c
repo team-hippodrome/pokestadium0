@@ -108,6 +108,8 @@ void ParticleGfx_RecolorPrimEnvFromPalettePair(Particle* arg0, u16 arg1) {
 
 /**
  * Set the particle's primitive RGB channels from the selected palette-set index, leaving alpha unchanged.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_RecolorPrimFromPaletteSetA(Particle* arg0, s16 arg1) {
@@ -144,6 +146,8 @@ void ParticleGfx_RecolorEnvFromPaletteSetB(Particle* arg0, s16 arg1) {
 /**
  * Set the particle's primitive and environment RGB channels from the selected palette-set index, leaving alpha
  * unchanged.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_RecolorPrimEnvFromPaletteSetA(Particle* arg0, s16 arg1) {
@@ -156,6 +160,8 @@ void ParticleGfx_RecolorPrimEnvFromPaletteSetA(Particle* arg0, s16 arg1) {
 /**
  * Set the particle's primitive and environment RGB channels from the selected palette-set index, leaving alpha
  * unchanged.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_RecolorPrimEnvFromPaletteSetB(Particle* arg0, s16 arg1) {
@@ -167,6 +173,8 @@ void ParticleGfx_RecolorPrimEnvFromPaletteSetB(Particle* arg0, s16 arg1) {
 
 /**
  * Set the particle's primitive RGB channels from a randomly selected palette index, leaving alpha unchanged.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_RecolorPrimRandomPalette(Particle* arg0) {
@@ -210,6 +218,8 @@ s32 ParticleGfx_ApproachPrimPalette(Particle* arg0, u16 arg1, u8 arg2) {
 /**
  * Approach each selected RGB channel toward its palette value; return 1 only when all channel helpers report
  * completion.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleGfx_ApproachEnvPalette(Particle* arg0, u16 arg1, u8 arg2) {

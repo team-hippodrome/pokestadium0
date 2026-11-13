@@ -229,6 +229,8 @@ extern s32 D_8218C808;
 extern s32 D_8218C820;
 /**
  * Apply the Rage follow-up stat boost, using its separate message queue.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void BattleEffect_ApplyStatBoost(void) {

@@ -95,6 +95,8 @@ u8 ActivePokemon_GetBroughtCount(s8 *arg0) {
 /**
  * Returns the brought count of the other team member's roster in the session
  * (teamMember[teamMemberIndex == 0]).
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 u8 ActivePokemon_GetPartnerBroughtCount(s8 *arg0)
@@ -161,6 +163,8 @@ extern f32 D_FLT_82189350[][4];
 
 /**
  * Returns the model's first size entry from D_FLT_82189350, doubled and divided by 50.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 f32 ActivePokemon_GetSizeRatio(ActivePokemon* active_pokemon) {
@@ -339,6 +343,8 @@ s32 ActivePokemon_GetNickname(s8 *arg0)
 
 /**
  * Creates the participant's owner (trainer) model.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_InitializeParticipantOwnerModel(ActivePokemon* active_pokemon) {
@@ -367,6 +373,8 @@ void BattleScene_InitializeParticipantOwnerModel(ActivePokemon* active_pokemon) 
 /**
  * Creates the participant's two hidden secondary models.
  * ^?????? this annotation seems like a hallucination
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_InitializeParticipantSecondaryModels(ActivePokemon* pokemon, s32* secondary_models) {
@@ -405,6 +413,8 @@ void ActivePokemon_LoadSpeciesModelAssets(ActivePokemon*);
 /**
  * Creates and positions the participant's Pokemon model and loads its
  * presentation data.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void BattleScene_InitializeParticipantModel(ActivePokemon* active_pokemon) {
@@ -448,6 +458,8 @@ void BattleScene_InitializeParticipantModel(ActivePokemon* active_pokemon) {
 
 /**
  * Creates the participant's hidden auxiliary model (model 154).
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_InitializeParticipantAuxiliaryModel(ActivePokemon* active_pokemon) {
@@ -733,6 +745,8 @@ void ActivePokemon_SetTeamMemberIndex(void *arg0, s32 arg1) {
 
 /**
  * Sets state.controller, the controller that drives this Pokemon's menu.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void ActivePokemon_SetController(s8 *arg0, s32 arg1) {
@@ -741,6 +755,8 @@ void ActivePokemon_SetController(s8 *arg0, s32 arg1) {
 
 /**
  * Sets state.replacementState.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void ActivePokemon_SetReplacementState(void *arg0, s32 arg1) {

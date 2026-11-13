@@ -69,6 +69,8 @@ void func_8215FAA4(s8 *arg0) {
 }
 
 /**
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupRazorWindHitEffect(Particle* arg0) {
@@ -121,6 +123,8 @@ void BattleAnim_SetupRazorWindHitEffect(Particle* arg0) {
 }
 
 /**
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RunRazorWindHitEffect(Particle* arg0) {

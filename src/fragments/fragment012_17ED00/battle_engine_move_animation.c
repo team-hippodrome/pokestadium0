@@ -167,6 +167,8 @@ void BattleAnim_PlayMoveEffectEnd(ActivePokemon* user, s32 move_id) {
 
 /**
  * play on move end
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_TickClearAnimRecordIfLoaded(ActivePokemon* active_pokemon) {
@@ -230,6 +232,8 @@ void ActivePokemon_ResetCueTimer(s8 *arg0) {
 
 /**
  * trigger on up on the dialogue box disappearing after move use
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_ResetOpponentStateFrameCounter(ActivePokemon* active_pokemon) {
@@ -393,6 +397,8 @@ void ActivePokemon_LoadSpeciesModelAssets(ActivePokemon* arg0) {
 /**
  * State row 10 tick: requests a model reload at frame 20; once it completes,
  * loads the switch-in owner model, frames the camera and enters state row 18.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_TickRow10CleanupAndEnterState18(ActivePokemon* active_pokemon) {
@@ -988,6 +994,8 @@ void func_82103998(ActivePokemon* active_pokemon) {
 
 /**
  * State tick: on frame 1, queues the row's effect list 3 entry and sound 3.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_TickQueueRowEffectList3OnFirstFrame(ActivePokemon* active_pokemon) {
@@ -1004,6 +1012,8 @@ void BattleScene_TickQueueRowEffectList3OnFirstFrame(ActivePokemon* active_pokem
 /**
  * State row 20 tick: requests a model reload at frame 79; once it completes,
  * loads the switch-in owner model, frames the camera and enters state row 18.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_TickRow21CleanupAndEnterState18(ActivePokemon* active_pokemon) {
@@ -1160,6 +1170,8 @@ void BattleScene_EnterMissRowPlaySound(ActivePokemon* active_pokemon) {
 /**
  * State row 13: plays battle sounds 20 and/or 33 from runtime bits 0x08/0x10,
  * then retires the slot.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_Row13PlaySequences14And21(ActivePokemon* active_pokemon) {
@@ -1303,6 +1315,8 @@ void BattleScene_TickFaintRowQueueCollapseEffect(ActivePokemon* active_pokemon) 
 
 /**
  * Same as BattleScene_TickQueueList3Selector2OrC, using cue unk_B10.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_TickQueueList3Selector2OrCFromB10(ActivePokemon* active_pokemon) {
@@ -1630,6 +1644,8 @@ void func_821054C4(ActivePokemon*, s32);
 
 /**
  * Starts the hit cue animation and event track from frame 0.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_StartHitCueAnimation(ActivePokemon* active_pokemon) {
@@ -1820,6 +1836,8 @@ s32 func_82101FC4();
 /**
  * Binds cue `cue_index`'s event track at its end frame and records
  * `event_state`. Returns 1 when the cue has no track, otherwise 0.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 BattleAnim_TrySetModelEventTrackFromRow(ActivePokemon* active_pokemon, s32 cue_index, s32 event_state) {
@@ -1879,6 +1897,8 @@ s32 func_82105724(ActivePokemon* arg0, s32 arg1) {
 /**
  * Like BattleScene_IsRowWaitComplete, but waits the unkA60 cue's frame count
  * when it is at least 11.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 BattleScene_IsRowWaitCompleteWithEventCount(ActivePokemon* active_pokemon, s32 frame_limit) {
@@ -2481,6 +2501,8 @@ void func_82134EBC(ActivePokemon*, s32);
 /**
  * Starts the sleeping event track, particles and sound for an asleep
  * participant whose sleep animation is not running.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleAnim_TriggerStatusAfflictionCry(ActivePokemon* active_pokemon) {
@@ -2495,6 +2517,8 @@ void BattleAnim_TriggerStatusAfflictionCry(ActivePokemon* active_pokemon) {
 
 /**
  * Allocates and zeroes the ActivePokemon for `side_index`.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_AllocateParticipantRecord(BattleSessionTeams* session_teams, s32 side_index) {
@@ -2516,6 +2540,8 @@ void BattleScene_AllocateParticipantRecord(BattleSessionTeams* session_teams, s3
 M2C_UNK func_8211F3F4();                            /* extern */
 
 /**
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Battle_InitMessageQueues(void) {
@@ -2540,6 +2566,8 @@ void ActivePokemon_SetReplacementState(ActivePokemon*, s32);
 void ActivePokemon_SetController(ActivePokemon*, u8*);
 /**
  * Binds the first team member, side and controller to the participant.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void BattleScene_InitializeParticipantController(ActivePokemon* arg0) {
@@ -2573,6 +2601,8 @@ void func_8211F274(ActivePokemon*);
 /**
  * Initializes controllers, all participant models, the camera mode for the
  * session mode, message buffers and audio channel groups.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_InitializePresentation(UNUSED BattleSessionTeams* session_teams) {
@@ -2619,6 +2649,8 @@ void BattleScene_InitializePresentation(UNUSED BattleSessionTeams* session_teams
 
 /**
  * Zeroes the sway state and sets the facing direction (1 or -1).
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_ResetParticipantAuxTransform(UNUSED ActivePokemon* owner, ActivePokemon* active_pokemon, s32 facing_direction) {
@@ -2632,6 +2664,8 @@ void Battle_InitBothParticipants(void);
 /**
  * Loads battle string tables, clears tick slots and initializes facing,
  * presentation, runtime state and move illegality.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void BattleScene_InitializeRuntime(BattleSessionTeams* session_teams) {
@@ -2743,6 +2777,8 @@ void BattleThumbnail_SetFlagToUpdatePokemonThumbnail(CameraNode* camera) {
 
 /**
  * Loads the camera framing constants for the owner's thumbnail.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleThumbnail_LoadOwnerCameraFramingConstants(ActivePokemon* active_pokemon) {

@@ -26,6 +26,8 @@ void BattleScene_ResetParticipantModelFlags(ActivePokemon* active_pokemon) {
 
 /**
  * Places the Poke Ball above the field on this Pokemon's side and starts its sway.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void BattleAnim_PokeBallThrowStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon) {
@@ -43,6 +45,8 @@ void BattleAnim_PokeBallThrowStart(UNUSED ActivePokemon* owner, ActivePokemon* a
 
 /**
  * Spins the Poke Ball and lets it fall; hides it once it drops below the floor.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void BattleAnim_PokeBallThrowContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
@@ -65,6 +69,8 @@ void BattleAnim_PokeBallThrowContinue(ActivePokemon* owner, ActivePokemon* anima
 
 /**
  * Poke Ball throw model transform (case 1): start, then continue.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void BattleAnim_PokeBallThrow(s32 arg0, s8 *arg1) {
@@ -114,6 +120,8 @@ void BattleAnim_PokeBallLandContinue(ActivePokemon* owner, ActivePokemon* animat
  * Poke Ball landing model transform (case 2). In game it ran on the player's
  * side for 12 frames during a recall (「もういい！ もどれ！」), not when the
  * next Pokemon was sent out; what it shows there is not established.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void BattleAnim_PokeBallLand(s32 arg0, s8 *arg1) {

@@ -124,6 +124,8 @@ u32 ParticleMath_RandomRange(u32 arg0);
 
 /**
  * Set every bit selected by mask.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleMath_BitwiseOr(s32* arg0, s32 arg1) {
@@ -132,6 +134,8 @@ void ParticleMath_BitwiseOr(s32* arg0, s32 arg1) {
 
 /**
  * Clear every bit selected by mask.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleMath_BitwiseAndNot(s32* arg0, s32 arg1) {
@@ -140,6 +144,8 @@ void ParticleMath_BitwiseAndNot(s32* arg0, s32 arg1) {
 
 /**
  * Toggle every bit selected by mask.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleMath_BitwiseXor(s32* arg0, s32 arg1) {
@@ -148,6 +154,8 @@ void ParticleMath_BitwiseXor(s32* arg0, s32 arg1) {
 
 /**
  * Return whether any bit selected by mask is set.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleMath_HasBits(s32* arg0, s32 arg1) {
@@ -161,6 +169,8 @@ s32 ParticleMath_HasBits(s32* arg0, s32 arg1) {
 
 /**
  * Return whether all bits selected by mask are clear.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleMath_LacksBits(s32* arg0, s32 arg1) {
@@ -174,6 +184,8 @@ s32 ParticleMath_LacksBits(s32* arg0, s32 arg1) {
 
 /**
  * Increase value toward target by step; return 1 only when this call reaches or crosses the target.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleMath_ApproachFloatUp(f32* arg0, f32 arg1, f32 arg2) {
@@ -191,6 +203,8 @@ s32 ParticleMath_ApproachFloatUp(f32* arg0, f32 arg1, f32 arg2) {
 
 /**
  * Decrease value toward target by step; return 1 only when this call reaches or crosses the target.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleMath_ApproachFloatDown(f32* arg0, f32 arg1, f32 arg2) {
@@ -208,6 +222,8 @@ s32 ParticleMath_ApproachFloatDown(f32* arg0, f32 arg1, f32 arg2) {
 
 /**
  * Increase value toward target by step; return 1 only when this call reaches or crosses the target.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleMath_ApproachS32Up(s32* arg0, s32 arg1, s32 arg2) {
@@ -225,6 +241,8 @@ s32 ParticleMath_ApproachS32Up(s32* arg0, s32 arg1, s32 arg2) {
 
 /**
  * Decrease value toward target by step; return 1 only when this call reaches or crosses the target.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleMath_ApproachS32Down(s32* arg0, s32 arg1, s32 arg2) {
@@ -242,6 +260,8 @@ s32 ParticleMath_ApproachS32Down(s32* arg0, s32 arg1, s32 arg2) {
 
 /**
  * Increase value toward target by step; return 1 only when this call reaches or crosses the target.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleMath_ApproachS16Up(s16* arg0, s16 arg1, s16 arg2) {
@@ -259,6 +279,8 @@ s32 ParticleMath_ApproachS16Up(s16* arg0, s16 arg1, s16 arg2) {
 
 /**
  * Increase value toward target by step; return 1 only when this call reaches or crosses the target.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleMath_ApproachU16Up(u16* arg0, u16 arg1, u16 arg2) {
@@ -276,6 +298,8 @@ s32 ParticleMath_ApproachU16Up(u16* arg0, u16 arg1, u16 arg2) {
 
 /**
  * Decrease value toward target by step; return 1 only when this call reaches or crosses the target.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleMath_ApproachS16Down(s16* arg0, s16 arg1, s16 arg2) {
@@ -293,6 +317,8 @@ s32 ParticleMath_ApproachS16Down(s16* arg0, s16 arg1, s16 arg2) {
 
 /**
  * Decrease value toward target by step; return 1 only when this call reaches or crosses the target.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleMath_ApproachU16Down(u16* arg0, s32 arg1, s32 arg2) {
@@ -312,6 +338,8 @@ s32 ParticleMath_ApproachU16Down(u16* arg0, s32 arg1, s32 arg2) {
 
 /**
  * Increase value toward target by the pointed-to step; return 1 only when this call reaches or crosses the target.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleMath_ApproachFloatUpByPointer(f32* arg0, f32 arg1, f32* arg2) {
@@ -329,6 +357,8 @@ s32 ParticleMath_ApproachFloatUpByPointer(f32* arg0, f32 arg1, f32* arg2) {
 
 /**
  * Decrease value toward target by the pointed-to step; return 1 only when this call reaches or crosses the target.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleMath_ApproachFloatDownByPointer(f32* arg0, f32 arg1, f32* arg2) {
@@ -346,6 +376,8 @@ s32 ParticleMath_ApproachFloatDownByPointer(f32* arg0, f32 arg1, f32* arg2) {
 
 /**
  * Increase value toward target by the pointed-to step; return 1 only when this call reaches or crosses the target.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleMath_ApproachS32UpByPointer(s32* arg0, s32 arg1, s32* arg2) {
@@ -363,6 +395,8 @@ s32 ParticleMath_ApproachS32UpByPointer(s32* arg0, s32 arg1, s32* arg2) {
 
 /**
  * Decrease value toward target by the pointed-to step; return 1 only when this call reaches or crosses the target.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleMath_ApproachS32DownByPointer(s32* arg0, s32 arg1, s32* arg2) {
@@ -380,6 +414,8 @@ s32 ParticleMath_ApproachS32DownByPointer(s32* arg0, s32 arg1, s32* arg2) {
 
 /**
  * Increase value toward target by the pointed-to step; return 1 only when this call reaches or crosses the target.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleMath_ApproachS16UpByPointer(s16* arg0, s16 arg1, s16* arg2) {
@@ -397,6 +433,8 @@ s32 ParticleMath_ApproachS16UpByPointer(s16* arg0, s16 arg1, s16* arg2) {
 
 /**
  * Decrease value toward target by the pointed-to step; return 1 only when this call reaches or crosses the target.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleMath_ApproachS16DownByPointer(s16* arg0, s16 arg1, s16* arg2) {
@@ -556,6 +594,8 @@ s32 ParticleMath_ApproachAngle(s16* arg0, s16 arg1, s16 arg2) {
 
 /**
  * Move value toward target, clamp overshoot, and return 1 at the target.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleMath_ApproachS32(s32* arg0, s32 arg1, s32 arg2) {
@@ -630,6 +670,8 @@ s32 ParticleMath_ApproachFloat(f32* arg0, f32 arg1, f32 arg2) {
 
 /**
  * Advance by the signed step, clamp at the approached endpoint, and reverse the step there.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleMath_BounceFloat(f32* arg0, f32 arg1, f32 arg2, f32* arg3) {
@@ -648,6 +690,8 @@ void ParticleMath_BounceFloat(f32* arg0, f32 arg1, f32 arg2, f32* arg3) {
 
 /**
  * Advance by the signed step, clamp at the approached endpoint, and reverse the step there.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleMath_BounceS16(s16* arg0, s16 arg1, s16 arg2, s16* arg3) {
@@ -697,6 +741,8 @@ void ParticleMath_AddVec3f(Vec3f* arg0, Vec3f* arg1) {
 
 /**
  * Add all three source components to the destination in place.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleMath_AddVec3s(Vec3s* arg0, Vec3s* arg1) {
@@ -707,6 +753,8 @@ void ParticleMath_AddVec3s(Vec3s* arg0, Vec3s* arg1) {
 
 /**
  * Compare squared 2D distance with squared radius, including the boundary.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleMath_IsWithinRadius2D(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4) {
@@ -776,6 +824,8 @@ s32 ParticleMath_RandomSignedOffsetBySign(s32 arg0, s32 arg1) {
 
 /**
  * Empty callback retained at its original entry point.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleMath_NoopStub(UNUSED s32 arg0) {
@@ -783,6 +833,8 @@ void ParticleMath_NoopStub(UNUSED s32 arg0) {
 
 /**
  * Return MathUtil_Atan2s for the vector's Y and Z components, in that argument order.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s16 ParticleMath_Atan2YZ(Vec3f arg0) {
@@ -791,6 +843,8 @@ s16 ParticleMath_Atan2YZ(Vec3f arg0) {
 
 /**
  * Return MathUtil_Atan2s for the vector's Z and X components, in that argument order.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s16 ParticleMath_Atan2ZX(Vec3f arg0) {
@@ -799,6 +853,8 @@ s16 ParticleMath_Atan2ZX(Vec3f arg0) {
 
 /**
  * Return MathUtil_Atan2s for the vector's X and Y components, in that argument order.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s16 ParticleMath_Atan2XY(Vec3f arg0) {
@@ -807,6 +863,8 @@ s16 ParticleMath_Atan2XY(Vec3f arg0) {
 
 /**
  * Write the YZ, ZX, and XY atan2 results to the three destination components.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleMath_Vec3ToAngles(Vec3s* arg0, Vec3f arg1) {
@@ -817,6 +875,8 @@ void ParticleMath_Vec3ToAngles(Vec3s* arg0, Vec3f arg1) {
 
 /**
  * Return x*cos(angle) - y*sin(angle), the rotated 2D X component.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 f32 ParticleMath_Rotate2DX(f32 arg0, f32 arg1, s16 arg2) {
@@ -825,6 +885,8 @@ f32 ParticleMath_Rotate2DX(f32 arg0, f32 arg1, s16 arg2) {
 
 /**
  * Return x*sin(angle) + y*cos(angle), the rotated 2D Y component.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 f32 ParticleMath_Rotate2DY(f32 arg0, f32 arg1, s16 arg2) {
@@ -865,6 +927,8 @@ Vec3f* ParticleMath_MakeXZVectorFromAngle(Vec3f* arg0, f32 arg1, s16 arg2) {
 
 /**
  * Apply the explicit X/Y-angle transform to a copied vector and return the destination.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 Vec3f* ParticleMath_RotateVec3fXY(Vec3f* arg0, Vec3f arg1, Vec3s arg4) {
@@ -885,6 +949,8 @@ Vec3f* ParticleMath_RotateVec3fXY(Vec3f* arg0, Vec3f arg1, Vec3s arg4) {
 
 /**
  * Return the Euclidean distance between two 3D points.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 f32 ParticleMath_Distance3D(Vec3f arg0, Vec3f arg1) {
@@ -940,6 +1006,8 @@ void func_8213831C(Vec3f* out, f32 distance) {
 
 /**
  * Divide the 3D distance by the divisor and convert the result to s32.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleMath_DistanceScaled(Vec3f arg0, Vec3f arg1, f32 arg2) {
@@ -948,6 +1016,8 @@ s32 ParticleMath_DistanceScaled(Vec3f arg0, Vec3f arg1, f32 arg2) {
 
 /**
  * Scale end - start to length and return the original distance / length as s32; no zero guard.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 ParticleMath_ScaleDirectionToLength(Vec3f* arg0, Vec3f arg1, Vec3f arg2, f32 arg3) {
@@ -968,6 +1038,8 @@ s32 ParticleMath_ScaleDirectionToLength(Vec3f* arg0, Vec3f arg1, Vec3f arg2, f32
 
 /**
  * Rotate a +Z vector by independently sampled X/Y angles; this is not a uniform-sphere sampler.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 Vec3f* ParticleMath_RandomDirection(Vec3f* arg0, f32 arg1) {
@@ -987,6 +1059,8 @@ Vec3f* ParticleMath_RandomDirection(Vec3f* arg0, f32 arg1) {
 
 /**
  * Multiply all three components in place and return the vector.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 Vec3f* ParticleMath_ScaleVec3f(Vec3f* arg0, f32 arg1) {
@@ -1018,6 +1092,8 @@ void func_821385C0(void) {
 
 /**
  * Return the YZ-component atan2 of end - start in that argument order.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s16 ParticleMath_AngleXBetweenPoints(Vec3f arg0, Vec3f arg1) {
@@ -1034,6 +1110,8 @@ s16 ParticleMath_AngleYBetweenPoints(Vec3f arg0, Vec3f arg1) {
 
 /**
  * Return the XY-component atan2 of end - start in that argument order.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s16 ParticleMath_AngleZBetweenPoints(Vec3f arg0, Vec3f arg1) {
@@ -1042,6 +1120,8 @@ s16 ParticleMath_AngleZBetweenPoints(Vec3f arg0, Vec3f arg1) {
 
 /**
  * Select a fixed angular increment from the signed difference, or snap when the high bytes agree.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s16 ParticleMath_ApproachAngleCoarse(s16 arg0, s16 arg1) {
@@ -1074,6 +1154,8 @@ s16 ParticleMath_ApproachAngleCoarse(s16 arg0, s16 arg1) {
 
 /**
  * Empty callback retained at its original entry point.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_NoopStub1(void) {
@@ -1271,6 +1353,8 @@ void ParticleGfx_BuildTransformMatrixYScaled(MtxF* arg0, Vec3f arg1, Vec3s arg2,
 
 /**
  * Build a translated 3D rotation matrix and scale its X/Y bases separately.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_BuildTransformMatrixXYScaled(MtxF* arg0, Vec3f arg1, Vec3s arg2, f32 arg3, f32 arg4) {
@@ -1340,6 +1424,8 @@ void ParticleGfx_BuildBillboardMatrix(MtxF* arg0, MtxF* arg1, Vec3f arg2, f32 ar
 
 /**
  * Build a translated billboard matrix by transposing the supplied view basis and scaling only the second basis vector.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_BuildBillboardMatrixYScaled(MtxF* arg0, MtxF* arg1, Vec3f arg2, f32 arg3) {
@@ -1427,6 +1513,8 @@ void ParticleGfx_BuildBillboardRotatedMatrixYScaled(MtxF* arg0, MtxF* arg1, Vec3
 
 /**
  * Build a scaled basis from a normalized direction and cross products, with the supplied translation.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_BuildDirectionMatrix(MtxF* arg0, Vec3f arg1, Vec3f arg2, s16 arg3, f32 arg4) {
@@ -1488,6 +1576,8 @@ void ParticleGfx_PushTransformMatrixYScaled(Vec3f arg0, Vec3s arg1, f32 arg2) {
 
 /**
  * Build the corresponding transform and load it through the matrix pool.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_PushTransformMatrixXYScaled(Vec3f arg0, Vec3s arg1, f32 arg2, f32 arg3) {
@@ -1523,6 +1613,8 @@ void ParticleGfx_PushBillboardRotatedMatrix(CameraNode* arg0, Vec3f arg1, f32 ar
 
 /**
  * Build the corresponding transform and load it through the matrix pool.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_PushBillboardMatrixYScaled(CameraNode* arg0, Vec3f arg1, f32 arg4) {
@@ -1546,6 +1638,8 @@ void ParticleGfx_PushBillboardRotatedMatrixYScaled(CameraNode* arg0, Vec3f arg1,
 
 /**
  * Add half turns to rotation X/Y, build the transform, and load it through the matrix pool.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_PushTransformMatrixWithHalfTurnXY(Vec3f arg0, Vec3s arg3, f32 arg5) {
@@ -1562,6 +1656,8 @@ void ParticleGfx_PushTransformMatrixWithHalfTurnXY(Vec3f arg0, Vec3s arg3, f32 a
 
 /**
  * Build the corresponding transform and load it through the matrix pool.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_PushDirectionMatrix(Vec3f arg0, Vec3f arg3, f32 arg6) {

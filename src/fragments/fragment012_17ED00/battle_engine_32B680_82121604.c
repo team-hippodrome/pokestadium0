@@ -41,6 +41,8 @@ void func_82120A34(CameraNode*);
 void func_82120A90(CameraNode*);
 void func_82121434(CameraNode*);
 /**
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Rental_TeamSlotsUpdate(CameraNode* arg0) {

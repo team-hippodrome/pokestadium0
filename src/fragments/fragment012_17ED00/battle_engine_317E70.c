@@ -687,6 +687,8 @@ void Battle_CheckAllBroughtFainted_PoisonBurn(ActivePokemon* arg0) {
 }
 
 /**
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Battle_CheckAllBroughtFainted_Status(ActivePokemon* arg0) {
@@ -723,6 +725,8 @@ void Battle_CheckAllBroughtFainted_Status(ActivePokemon* arg0) {
  * Like Battle_CheckAllBroughtFainted_Hp, but sums the active Pokemon's pendingHp (runtime
  * +0x12). Battle_CheckFaintAfterMove calls it when both HP values are nonzero but the
  * user's pendingHp is 0. Renamed from Battle_CheckAllBroughtFainted_PP: it reads HP, not PP.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Renamed from the code; never ran in play.
  */
 void Battle_CheckAllBroughtFainted_PendingHp(ActivePokemon* arg0) {
@@ -794,6 +798,8 @@ void Battle_CheckAllBroughtFainted_Hp(ActivePokemon* arg0) {
 
 /**
  * Test whether staged poison/burn damage leaves the side without a surviving roster member.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Battle_CheckSideDefeatAfterResidualStatus(ActivePokemon* arg0) {

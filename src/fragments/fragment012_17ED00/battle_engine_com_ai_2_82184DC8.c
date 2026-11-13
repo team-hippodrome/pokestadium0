@@ -498,6 +498,8 @@ s32 func_82185494(void) {
  * Picks a move to use while the opponent cannot act: a stat boost
  * while that stat stage is below +2, Counter, Bide, Mirror Move or Splash, or
  * Substitute above half HP. Returns the move slot or -1.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_PickSetupMove(u8* arg0) {
@@ -824,6 +826,8 @@ end:
  * Returns 0 if a move would do nothing now: no damage by type, a status the
  * target already has or is immune to, a stat stage already at its limit, Haze
  * with nothing to reset, and similar checks keyed on the move's effect id.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_IsMoveUseful(s32 move) {
@@ -1184,6 +1188,8 @@ extern u8 D_821CF281;
  * Chansey and Jynx: returns 10000 in the first pick round (arg0 == 0), and in
  * later rounds 10000 only if none of the Pokemon picked so far (D_821CF280,
  * D_821CF281) is one of the three; 0 otherwise.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_NoVenusaurChanseyJynxPicked(s32 arg0) {
@@ -1442,6 +1448,8 @@ extern u8 D_82194848[];
  * unfainted, not frozen, not recharging and not asleep, smaller ones for a healing
  * move, Ice or Poison type, higher speed, and the type-weighted accuracy of its
  * damaging moves.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 void BattleAi_AddMatchupPickScore(u8 *arg0, u8 *arg1) {
@@ -1496,6 +1504,8 @@ void BattleAi_AddMatchupPickScore(u8 *arg0, u8 *arg1) {
 /**
  * Level rule for the team picks: the levels of the three Pokemon must add up to
  * 150..155 (Nintendo Cup '97 rules). arg0 is the pick round.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_LevelSumAllowed(s32 arg0, s32 arg1) {
@@ -1528,6 +1538,8 @@ s32 BattleAi_LevelSumAllowed(s32, s32);
 
 /**
  * Returns 1 if picking party slot arg2 in round arg1 keeps the team legal.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_IsPickAllowed(s32 arg0, s32 arg1, s32 arg2) {

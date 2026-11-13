@@ -132,6 +132,8 @@ void Particle_ClearFlags(Particle* arg0, s32 arg1) {
 
 /**
  * Toggle the selected particle flag bits.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_ToggleFlags(Particle* arg0, s32 arg1) {
@@ -196,6 +198,8 @@ s32 Particle_IsRenderingEnabled(Particle* arg0) {
 
 /**
  * Set flag 0x40; its effect-specific interpretation is unresolved.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_EnableFlag40(Particle* arg0) {
@@ -204,6 +208,8 @@ void Particle_EnableFlag40(Particle* arg0) {
 
 /**
  * Clear flag 0x40 without changing the other flags.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_DisableFlag40(Particle* arg0) {
@@ -212,6 +218,8 @@ void Particle_DisableFlag40(Particle* arg0) {
 
 /**
  * Evaluate flag 0x40 and discard the result; the original void interface returns no test value.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_HasFlag40(Particle* arg0) {
@@ -278,6 +286,8 @@ s32 Particle_AnimateFramesForwardLoopedThenAdvance(Particle* arg0, s16 arg1, s16
 
 /**
  * Like Particle_AnimateFramesForwardLooped, but steps textureFrame down from `arg1` to `arg2`.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 Particle_AnimateFramesReverseLooped(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
@@ -316,6 +326,8 @@ s32 Particle_AnimateFramesReverseLooped(Particle*, s16, s16, s16, s16, s16);
 
 /**
  * Particle_AnimateFramesReverseLooped, then clears flag 1 and advances the lifecycle when it finishes.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 Particle_AnimateFramesReverseLoopedThenAdvance(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
@@ -331,6 +343,8 @@ s32 Particle_AnimateFramesReverseLoopedThenAdvance(Particle* arg0, s16 arg1, s16
 
 /**
  * Run ping-pong texture-frame animation with a frame timer and loop counter; return 1 on completion.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Particle_AnimateFramesPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
@@ -379,6 +393,8 @@ s32 Particle_AnimateFramesPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3,
 
 /**
  * Run the corresponding frame animation and advance lifecycle when it reports completion.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Particle_AnimateFramesForwardAndAdvanceLifecycle(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
@@ -393,6 +409,8 @@ s32 Particle_AnimateFramesForwardAndAdvanceLifecycle(Particle* arg0, s16 arg1, s
 
 /**
  * Run reverse-first ping-pong texture-frame animation with a frame timer and loop counter; return 1 on completion.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Particle_AnimateFramesReverseFirstPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
@@ -437,6 +455,8 @@ s32 Particle_AnimateFramesReverseFirstPingPong(Particle* arg0, s16 arg1, s16 arg
 
 /**
  * Run the corresponding frame animation and advance lifecycle when it reports completion.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Particle_AnimateFramesReverseAndAdvanceLifecycle(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
@@ -544,6 +564,8 @@ void Particle_Field38_SetVecFromVec3fScaled_08C20(Particle* arg0, Vec3f arg1) {
 
 /**
  * Sets positionOffset (unscaled).
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetPositionOffset(s8 *arg0, f32 arg1, f32 arg2, f32 arg3) {
@@ -607,6 +629,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Adds arg1 times the particle scale D_FLT_8219A824 to the particle's positionOffset.x.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_AddPosOffsetXScaled(s8 *arg0, f32 arg1) {
@@ -628,6 +652,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Adds arg1 times the particle scale D_FLT_8219A824 to the particle's positionOffset.z.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_AddPosOffsetZScaled(s8 *arg0, f32 arg1) {
@@ -688,6 +714,8 @@ void Particle_SetPositionFromRotationTemplate1(Particle* arg0, f32 arg1) {
 
 /**
  * Set the base position offset using Particle_ComputeVectorFromRotationYZVariant and context scaling.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_SetPositionFromRotationTemplate2(Particle* arg0, f32 arg1) {
@@ -711,6 +739,8 @@ void Particle_AddPositionFromRotationTemplate1(Particle* arg0, f32 arg1) {
 
 /**
  * Add Particle_ComputeVectorFromRotationYZVariant's result to the base position offset with context scaling.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_AddPositionFromRotationTemplate2(Particle* arg0, f32 arg1) {
@@ -744,6 +774,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Sets the particle's positionOffset.y to a random value from func_82137DF4(arg1) times the particle scale D_FLT_8219A824.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetPosOffsetYRandomScaled(s8 *arg0, M2C_UNK arg1) {
@@ -767,6 +799,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Sets the particle's positionOffset.x to a random value from func_82137DF4(arg1) times the particle scale D_FLT_8219A824, plus arg2.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetPosOffsetXRandomScaledPlus(s8 *arg0, M2C_UNK arg1, s32 arg2) {
@@ -790,6 +824,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Sets the particle's positionOffset.z to a random value from func_82137DF4(arg1) times the particle scale D_FLT_8219A824, plus arg2.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetPosOffsetZRandomScaledPlus(s8 *arg0, M2C_UNK arg1, s32 arg2) {
@@ -820,6 +856,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Y version of Particle_SetRandomPositionOffsetXWithGap.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetRandomPositionOffsetYWithGap(s8 *arg0, M2C_UNK arg1, s32 arg2) {
@@ -866,6 +904,8 @@ void Particle_SetRandomVelocityXYZ(Particle* arg0, s32 arg1, s32 arg2, s32 arg3)
 
 /**
  * Sets positionOffset to random values in +-`arg1`/`arg2`/`arg3`, times the render scale.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetRandomPositionOffsetXYZ(Particle* arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -897,6 +937,8 @@ void Particle_SetRandomRotatedVelocityXY(Particle* arg0, s32 arg1, s32 arg2) {
 
 /**
  * Add independent signed random components to the base position offset with render-context scaling.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void Particle_AddRandomPositionOffsetXYZ(Particle* arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -935,6 +977,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Sets the particle's motionOffset.x to arg1 times the particle scale D_FLT_8219A824.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetMotionOffsetXScaled(s8 *arg0, f32 arg1) {
@@ -959,6 +1003,8 @@ void Particle_SetVelocityRandomDirection(Particle* arg0, f32 arg1) {
 
 /**
  * Adds the vector, times the render scale, to motionOffset.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_AddMotionOffsetScaled(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
@@ -971,6 +1017,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Adds arg1 times the particle scale D_FLT_8219A824 to the particle's motionOffset.x.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_AddMotionOffsetXScaled(s8 *arg0, f32 arg1) {
@@ -995,6 +1043,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Subtracts arg1 times the particle scale D_FLT_8219A824 from the particle's motionOffset.x.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SubMotionOffsetXScaled(s8 *arg0, f32 arg1) {
@@ -1011,6 +1061,8 @@ void Particle_SubMotionOffsetZScaled(Particle* arg0, f32 arg1) {
 
 /**
  * Moves motionOffset.x toward `arg1` (times the render scale) with ParticleMath_ApproachFloat.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 Particle_ApproachMotionOffsetX(Particle* arg0, f32 arg1) {
@@ -1031,6 +1083,8 @@ s32 Particle_ApproachMotionOffsetZ(Particle* arg0, f32 arg1) {
 
 /**
  * Sets motionOffset to motionStep.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_CopyMotionStepToOffset(s8 *arg0) {
@@ -1049,6 +1103,8 @@ void Particle_CopyMotionStepToOffsetXZ(s8 *arg0) {
 
 /**
  * Sets motionOffset.x and .y to motionStep.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_CopyMotionStepToOffsetXY(s8 *arg0) {
@@ -1078,6 +1134,8 @@ void Particle_ApplyMotionStepXZ(Particle* arg0) {
 
 /**
  * Adds motionStep.x and .y to motionOffset.x and .y.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Named from the code; not reached in the sweep.
  */
 void Particle_ApplyMotionStepXY(Particle* arg0) {
@@ -1292,6 +1350,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Sets the particle's motionTarget.z to arg1 times the particle scale D_FLT_8219A824.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetMotionTargetZScaled(s8 *arg0, f32 arg1) {
@@ -1304,6 +1364,8 @@ s32 Particle_Field5C_ApproachY_0A0C4(Particle* arg0, f32 arg1, f32 arg2) {
 
 /**
  * Return 40 percent of the supplied difference for proportional position approach.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 f32 ParticleMath_ScaleApproachStep(f32 arg0) {
@@ -1312,6 +1374,8 @@ f32 ParticleMath_ScaleApproachStep(f32 arg0) {
 
 /**
  * Approach each base position-offset component by 40 percent of its difference when outside a +/-0.01 tolerance.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_ApproachPosition(Particle* arg0, Vec3f arg1) {
@@ -1380,6 +1444,8 @@ void Particle_SetRotationZ(s8 *arg0, s16 arg1) {
 
 /**
  * Adds a half turn (0x8000) to each rotation axis.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_AddHalfTurnToRotation(s8 *arg0) {
@@ -1390,6 +1456,8 @@ void Particle_AddHalfTurnToRotation(s8 *arg0) {
 
 /**
  * Turns the particle's rotation.x by half a circle (+0x8000).
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_FlipRotationX(s8 *arg0) {
@@ -1398,6 +1466,8 @@ void Particle_FlipRotationX(s8 *arg0) {
 
 /**
  * Turns the particle's rotation.y by half a circle (+0x8000).
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_FlipRotationY(s8 *arg0) {
@@ -1425,6 +1495,8 @@ void Particle_SetRotationStep(s8 *arg0, s16 arg1, s16 arg2, s16 arg3) {
 
 /**
  * Sets rotationStep from a Vec3s passed by value.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetRotationStepVec(Particle* arg0, Vec3s arg1) {
@@ -1501,6 +1573,8 @@ void Particle_SetRotationTargetXY(Particle* arg0, s16 arg1, s16 arg2) {
 
 /**
  * Copies rotation into rotationTarget.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetRotationTargetToRotation(s8 *arg0) {
@@ -1511,6 +1585,8 @@ void Particle_SetRotationTargetToRotation(s8 *arg0) {
 
 /**
  * Adds rotationStep to rotation.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_ApplyRotationStep(Particle* arg0) {
@@ -1598,6 +1674,8 @@ void Particle_Field94_SubVecFromVec3s_0A600(Particle* arg0, Vec3s arg1) {
 
 /**
  * Subtracts arg1 from the particle's rotation.x.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SubRotationX(s8 *arg0, s16 arg1) {
@@ -1606,6 +1684,8 @@ void Particle_SubRotationX(s8 *arg0, s16 arg1) {
 
 /**
  * Subtracts arg1 from the particle's rotation.y.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SubRotationY(s8 *arg0, s16 arg1) {
@@ -1642,6 +1722,8 @@ M2C_UNK func_82137940(s8 *, s16, s16, s8 *);    /* extern */
 
 /**
  * Steps the particle's rotation.z toward a target (helper of the approach family).
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_ApproachRotationZ(s8 *arg0) {
@@ -1650,6 +1732,8 @@ void Particle_ApproachRotationZ(s8 *arg0) {
 
 /**
  * Approach the selected rotation components using the stored or supplied target and step.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_ApproachRotationTargetXY(Particle* arg0) {
@@ -1659,6 +1743,8 @@ void Particle_ApproachRotationTargetXY(Particle* arg0) {
 
 /**
  * Approach the selected rotation components using the stored or supplied target and step.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_ApproachRotationTargetXYZ(Particle* arg0) {
@@ -1678,6 +1764,8 @@ void Particle_ApproachRotationXTo(Particle* arg0, s16 arg1, s16 arg2) {
 
 /**
  * Moves rotation.y toward `arg1` by `arg2` with ParticleMath_ApproachAngle.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_ApproachRotationYAngle(Particle* arg0, s16 arg1, s16 arg2) {
@@ -1705,6 +1793,8 @@ s32 Particle_DecreaseRotationXTo(Particle* arg0, s32 arg1, s32 arg2) {
 
 /**
  * Lowers rotation.y by `arg2` toward `arg1`. Returns 1 when it reaches `arg1`.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 Particle_DecreaseRotationYTo(Particle* arg0, s32 arg1, s32 arg2) {
@@ -1741,6 +1831,8 @@ s32 Particle_Field94_DecrementXTo_0A7DC(Particle* arg0, s32 arg1, s32 arg2) {
 
 /**
  * Add the indicated random binary-angle offsets, including any fixed half/quarter turn.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_AddRotationRandomSignedXY(Particle* arg0, s32 arg1, s32 arg2) {
@@ -1750,6 +1842,8 @@ void Particle_AddRotationRandomSignedXY(Particle* arg0, s32 arg1, s32 arg2) {
 
 /**
  * Add the indicated random binary-angle offsets, including any fixed half/quarter turn.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_AddRotationRandomSignedXYWithXHalfTurn(Particle* arg0, s32 arg1, s32 arg2) {
@@ -1759,6 +1853,8 @@ void Particle_AddRotationRandomSignedXYWithXHalfTurn(Particle* arg0, s32 arg1, s
 
 /**
  * Add the indicated random binary-angle offsets, including any fixed half/quarter turn.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_AddRotationRandomSignedY(Particle* arg0, s32 arg1) {
@@ -1767,6 +1863,8 @@ void Particle_AddRotationRandomSignedY(Particle* arg0, s32 arg1) {
 
 /**
  * Add the indicated random binary-angle offsets, including any fixed half/quarter turn.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_AddRotationRandomSignedYWithHalfTurn(Particle* arg0, s32 arg1) {
@@ -1775,6 +1873,8 @@ void Particle_AddRotationRandomSignedYWithHalfTurn(Particle* arg0, s32 arg1) {
 
 /**
  * Add the indicated random binary-angle offsets, including any fixed half/quarter turn.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_AddRotationRandomSignedXWithFixedYQuarterTurn(Particle* arg0) {
@@ -1805,6 +1905,8 @@ void Particle_ComputeVectorFromRotationY(Particle* arg0, f32 arg1, Vec3f* arg2) 
 
 /**
  * Write a direction vector using the indicated rotation components and the supplied magnitude.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_ComputeVectorFromRotationXY(Particle* arg0, f32 arg1, Vec3f* arg2) {
@@ -1815,6 +1917,8 @@ void Particle_ComputeVectorFromRotationXY(Particle* arg0, f32 arg1, Vec3f* arg2)
 
 /**
  * Write a direction vector using the indicated rotation components and the supplied magnitude.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_ComputeVectorFromRotationXZ(Particle* arg0, f32 arg1, Vec3f* arg2) {
@@ -1837,6 +1941,8 @@ void Particle_ComputeVectorFromRotationXYZAlt(Particle* arg0, f32 arg1, Vec3f* a
 
 /**
  * Write a direction vector using the indicated rotation components and the supplied magnitude.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_ComputeVectorFromRotationYZVariant(Particle* arg0, f32 arg1, Vec3f* arg2) {
@@ -1892,6 +1998,8 @@ s32 Particle_Field74_Approach_0ADBC(Particle* arg0, f32 arg1, f32 arg2) {
 
 /**
  * Sets motionStep to the vector times the render scale.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetMotionStepScaled(Particle* arg0, Vec3f arg1) {
@@ -1914,6 +2022,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Sets the particle's motionStep.x to arg1 times the particle scale D_FLT_8219A824.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetMotionStepXScaled(s8 *arg0, f32 arg1) {
@@ -1935,6 +2045,8 @@ extern f32 D_FLT_8219A824;
 
 /**
  * Sets the particle's motionStep.z to arg1 times the particle scale D_FLT_8219A824.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetMotionStepZScaled(s8 *arg0, f32 arg1) {
@@ -1943,6 +2055,8 @@ void Particle_SetMotionStepZScaled(s8 *arg0, f32 arg1) {
 
 /**
  * Raises motionStep.x by `arg2` up to `arg1` (both times the render scale). Returns 1 at the cap.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 s32 Particle_IncreaseMotionStepXTo(Particle* arg0, f32 arg1, f32 arg2) {
@@ -1989,6 +2103,8 @@ s32 Particle_Field7C_IncrementYUntilAtLeast_0AFA8(Particle* arg0, f32 arg1, f32 
 
 /**
  * Decrease the selected field toward its threshold and return the completion result.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 s32 Particle_MotionStep_DecrementYUntilAtMost(Particle* arg0, f32 arg1, f32 arg2) {
@@ -2035,6 +2151,8 @@ s32 Particle_Field7C_DecrementYUntilAtMost_0B0A4(Particle* arg0, f32 arg1, f32 a
 
 /**
  * Multiplies motionStep by `arg1`.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void Particle_ScaleMotionStep(s8 *arg0, f32 arg1) {
@@ -2065,6 +2183,8 @@ void Particle_Field7C_SetYFromField74AngleX_0B1C4(Particle* arg0) {
 }
 
 /**
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Particle_SetMotionStepFromRotationXZ(Particle* arg0) {
@@ -2085,6 +2205,8 @@ void Particle_SetMotionStepFromRotationXY(Particle* arg0) {
 
 /**
  * Evaluate the explicit trigonometric component formula and store/add the resulting motion term.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void Particle_MotionStep_SetVecFromField74AnglesXZ(Particle* arg0) {
@@ -2137,6 +2259,8 @@ void Particle_SetMotionStepFromRotationYZAlt(Particle* arg0) {
 
 /**
  * Evaluate the explicit trigonometric component formula and store/add the resulting motion term.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_SetMotionStepFromRotationYZVariant(Particle* arg0) {
@@ -2269,6 +2393,8 @@ s32 Particle_ApproachScaleTargetThenAdvance(Particle* arg0) {
 /**
  * Steps scaleTarget itself toward arg1 by arg2 (both times the render-context scale); returns 1 on
  * arrival.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name from the code; not reached in the move sweep.
  */
 s32 Particle_StepScaleTarget(Particle* arg0, f32 arg1, f32 arg2) {
@@ -2447,6 +2573,8 @@ s32 func_821405A8(s8 *arg0, s16 arg1, s16 arg2) {
 
 /**
  * Decrease the selected field toward its threshold and return the completion result.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Particle_FieldA6_DecrementToZero_0BD08(Particle* arg0, s16 arg1) {
@@ -2455,6 +2583,8 @@ s32 Particle_FieldA6_DecrementToZero_0BD08(Particle* arg0, s16 arg1) {
 
 /**
  * Run the countdown helper and advance lifecycle when it reports completion.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Particle_FieldA6_DecrementToZeroAndStepState_0BD34(Particle* arg0, s16 arg1) {
@@ -2468,6 +2598,8 @@ s32 Particle_FieldA6_DecrementToZeroAndStepState_0BD34(Particle* arg0, s16 arg1)
 
 /**
  * Decrease the selected field toward its threshold and return the completion result.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Particle_FieldA6_DecrementToStep1_0BD80(Particle* arg0, s16 arg1) {
@@ -2529,6 +2661,8 @@ s32 Particle_DecrementUnkA8ToZero(Particle* arg0) {
 
 /**
  * Run the countdown helper and advance lifecycle when it reports completion.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Particle_FieldA8_DecrementToZeroStep1AndStepState_0BE8C(Particle* arg0) {

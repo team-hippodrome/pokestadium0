@@ -617,6 +617,8 @@ void func_82122A7C(CameraNode*, ActivePokemon*);
  * a0 untouched at the BattleScene_SelectNextBRollCameraShot call, so arg0 is passed there; at the
  * func_82122A7C call the Pokemon is the second argument (the form that
  * matches, with the Pokemon re-read exactly as func_82120D94 does).
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleScene_BRollCameraUpdatePresetHold(CameraNode* arg0) {

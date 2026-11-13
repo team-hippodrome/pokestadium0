@@ -420,6 +420,8 @@ void BattleMenu_DrawConfirmButton(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
 
 /**
  * Draws a string centered on x, assuming 10 pixels per two-byte character.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name from the code.
  */
 void BattleHud_DrawTextCentered(s32 arg0, s32 arg1, s32 arg2) {

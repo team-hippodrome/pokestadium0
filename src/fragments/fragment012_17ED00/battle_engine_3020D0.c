@@ -337,6 +337,8 @@ void func_8211F274(s8 *arg0) {
 /**
  * Shows a caption for the Pokemon from its caption text table and formats the given string into
  * it. Ran in play for the Struggle prompt.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name from the code.
  */
 void ActivePokemon_ShowCaption(ActivePokemon* arg0, s8* arg1, ...) {

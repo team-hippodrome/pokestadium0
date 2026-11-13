@@ -287,6 +287,8 @@ void Battle_FillActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer* t
 /**
  * Clear the faint-batch stamps for every picked Pokemon, including teammate rosters.
  * BattleMon.unk_25 is written by Battle_UpdateFaintBatches when its current HP reaches zero.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Battle_ResetFaintBatches(void) {

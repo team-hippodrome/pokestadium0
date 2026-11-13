@@ -22,6 +22,8 @@ void ParticleGfx_LoadTextureCallbackIa8WrapST_64x64(UNUSED Particle* arg0, u8* t
 
 /**
  * Load a texture frame selected by the shared particle clock using ParticleGfx_LoadTextureI4Alias.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureCallbackI4FrameDiv2Mod8_64x64(UNUSED Particle* arg0, u8* texture) {
@@ -57,6 +59,8 @@ extern Vtx D_82190E50[];
 
 /**
  * Draw the particle using its world position, scale, color/angle parameters, and the selected vertex template.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_DrawBillboardPrim(Particle* arg0, CameraNode* arg1) {
@@ -114,6 +118,8 @@ extern Vtx D_82190E90[];
 
 /**
  * Draw the particle using its world position, scale, color/angle parameters, and the selected vertex template.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void ParticleGfx_DrawBillboardDefaultQuad(Particle* arg0, CameraNode* arg1) {

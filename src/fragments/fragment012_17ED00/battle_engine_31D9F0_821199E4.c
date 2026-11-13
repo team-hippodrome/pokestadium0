@@ -277,6 +277,8 @@ extern char D_82195A58[];
 extern char D_82195A60[];
 /**
  * Draws こうさんしますか? (Surrender?) with いいえ (No) and はい (Yes), tinted for the trainer slot.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void BattleMenu_DrawSurrenderPrompt(s16 arg0, s16 arg1, s16 arg2, s32 arg3) {
@@ -668,6 +670,8 @@ void BattleMessage_DrawBox(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
 
 /**
  * Draws a side's caption box with the revealed part of the caption text.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name from its caller.
  */
 void BattleHud_DrawCaptionBox(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
@@ -1003,6 +1007,8 @@ extern char D_82195B64[];
 extern char D_82195B68[];
 /**
  * Debug overlay: camera distance, X/Y offset, X/Y angle and animation frame.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void BattleDebug_DrawCameraParams(s16 arg0, s16 arg1) {
@@ -1045,6 +1051,8 @@ s32 D_8218B15C[] = { (s32)D_82195B6C, (s32)D_82195B74, (s32)D_82195B80, (s32)D_8
 
 /**
  * Debug overlay: カメラ (Camera) label.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void BattleDebug_DrawCameraLabel(s16 arg0, s16 arg1) {
@@ -1090,6 +1098,8 @@ extern char D_82195CFC[], D_82195D04[], D_82195D0C[], D_82195D14[], D_82195D1C[]
 
 /**
  * Debug overlay: ステップ1 (Step 1) option lists, MODE, and しぬ/しなない (faint / don't faint).
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void BattleDebug_DrawStepMenu(s16 arg0, s16 arg1) {
@@ -1165,6 +1175,8 @@ extern s32 D_8219A75C;
 extern s32 D_8219A768;
 /**
  * Debug overlay for move effects: move name and number, turn, effect 1/2 start, end frame and current frame.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void BattleDebug_DrawMoveEffectViewer(s16 arg0, s16 arg1) {
@@ -1231,6 +1243,8 @@ extern char D_82195F68[];
 extern char D_82195F6C[];
 /**
  * Debug overlay for move effects with the camera: move name and number, effect 1/2 start, current frame, camera and frame.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void BattleDebug_DrawMoveCameraViewer(s16 arg0, s16 arg1) {
@@ -1281,6 +1295,8 @@ extern char D_82195FBC[];
 extern char D_82195FC0[];
 /**
  * Debug overlay: effect start, sound start, current frame and frame.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void BattleDebug_DrawEffectSoundTiming(s16 arg0, s16 arg1) {
@@ -1315,6 +1331,8 @@ extern char D_82195FF0[];
 extern s32 D_8219A760;
 /**
  * Debug overlay: Pokemon, Poke Ball, number and player.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void BattleDebug_DrawPokeBallViewer(s16 arg0, s16 arg1) {

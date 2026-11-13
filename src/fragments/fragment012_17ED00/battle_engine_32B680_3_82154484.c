@@ -200,6 +200,8 @@ void BattleAnim_AllocateReflectiveTextureDisplayList(s32 arg0, arg1_func_84344CE
 }
 
 /**
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_ApplyEffect125ModelScaleOffset(Particle* arg0) {
@@ -891,6 +893,8 @@ void BattleAnim_InitEffect49Model(Particle* arg0) {
 }
 
 /**
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_CallbackEndEffect49Model33Anim34WaitCleanup(Particle* arg0) {
@@ -2162,6 +2166,8 @@ void BattleAnim_InitializeBitingMoveHit(void) {
 
 /**
  * initializes being hit by guillotine
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void BattleAnim_InitializeGuillotineHit(void) {
@@ -4031,6 +4037,8 @@ void BattleAnim_InitializeHornDrillUse(void) {
 
 /**
  * initializes getting hit by horn drill
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void BattleAnim_InitializeHornDrillHit(void) {

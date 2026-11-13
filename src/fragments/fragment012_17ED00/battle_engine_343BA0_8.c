@@ -690,6 +690,8 @@ void BattleAnim_StartEffect77DoubleTextureTrail_Draw(void) {
 }
 
 /**
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SeedSolarBeamUseDoubleTextureTrail(void) {
@@ -713,6 +715,8 @@ void BattleAnim_SeedSolarBeamUseDoubleTextureTrail(void) {
 }
 
 /**
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupSolarBeamUseDoubleTextureTrail(void) {
@@ -722,6 +726,8 @@ void BattleAnim_SetupSolarBeamUseDoubleTextureTrail(void) {
 }
 
 /**
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name from Stadium 1.
  */
 s32 BattleAnim_RunSolarBeamUseDoubleTextureTrail(void) {
@@ -729,6 +735,8 @@ s32 BattleAnim_RunSolarBeamUseDoubleTextureTrail(void) {
 }
 
 /**
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_DrawSolarBeamUseDoubleTextureTrail(void) {

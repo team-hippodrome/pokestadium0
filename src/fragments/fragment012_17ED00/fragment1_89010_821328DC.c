@@ -3,6 +3,8 @@
 
 /**
  * Battle opening phase: steps through the intro camera shots and both send-outs.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name and comment guessed from the code.
  */
 void BattleScene_RunOpeningSendOut(CameraNode* arg0) {

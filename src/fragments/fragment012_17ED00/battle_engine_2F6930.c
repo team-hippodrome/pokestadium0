@@ -40,6 +40,8 @@ void BattleAnim_CalculateDistanceAngles(Vec3f* arg0, Vec3f* arg1, f32* arg2, s16
 
 /**
  * Sets all three components of `dest` to 0.0f and returns `dest`.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 Vec3f* BattleAnim_Vec3fSetZero(Vec3f* arg0) {
@@ -53,6 +55,8 @@ Vec3f* BattleAnim_Vec3fSetZero(Vec3f* arg0) {
  * Sets `dest` to `origin` displaced by `radius` in the XZ plane at angle
  * `theta` (s16 angle units, measured from +Z toward +X: x += sin, z += cos).
  * The Y component is copied unchanged. Returns `dest`.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 Vec3f* BattleAnim_Vec3fOffsetByPolarXZ(Vec3f* arg0, Vec3f* arg1, f32 arg2, s16 arg3) {
@@ -101,6 +105,8 @@ Vec3s* BattleAnim_Vec3sCopy(Vec3s* arg0, Vec3s* arg1) {
 
 /**
  * Multiplies `dest` in place by a separate factor per axis and returns `dest`.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 Vec3f* BattleAnim_Vec3fScaleComponents(Vec3f* arg0, f32 arg1, f32 arg2, f32 arg3) {
@@ -112,6 +118,8 @@ Vec3f* BattleAnim_Vec3fScaleComponents(Vec3f* arg0, f32 arg1, f32 arg2, f32 arg3
 
 /**
  * @src/math_util.c
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s16 BattleAnim_Atan2sFromPoints(f32 arg0, f32 arg1, f32 arg2, f32 arg3) {
@@ -218,6 +226,8 @@ void BattleAnim_ApproachF(f32* dest, f32 value, f32 speed) {
 /**
  * Integer variant of BattleAnim_ApproachF without the snap to zero. `speed` is
  * an s16 multiplier, so any value other than 0 or 1 overshoots `value`.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleAnim_ApproachS16(s16* dest, s16 value, s16 speed) {
@@ -226,6 +236,8 @@ void BattleAnim_ApproachS16(s16* dest, s16 value, s16 speed) {
 
 /**
  * u16 version of BattleAnim_ApproachS16; the same overshoot caveat applies.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleAnim_ApproachU16(u16* dest, u16 value, s16 speed) {

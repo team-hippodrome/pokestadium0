@@ -728,6 +728,8 @@ void func_82126A1C(UNUSED CameraNode* arg0) {
 }
 
 /**
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleScene_AdvanceSendOutFollowupCamera(CameraNode* arg0) {
