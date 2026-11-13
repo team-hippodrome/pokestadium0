@@ -267,6 +267,11 @@ void BattleAnim_RunRandomRotatingBoltOfLightning(Particle* arg0) {
     Particle_AddVelocityFromRotationTemplate1(arg0);
 }
 
+/**
+ * Lifecycle init: half scale, no speed, pointed up with a random spread about Z, palette
+ * color from the CF parameter.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupSharedDirectionalSprayFade(Particle* arg0) {
     Vec3s sp28;
 
@@ -414,6 +419,11 @@ void func_8214F06C(s8 *arg0) {
     func_8213E5C8(arg0);
 }
 
+/**
+ * Lifecycle init: tiny and growing, pointed straight along the stream direction, palette
+ * color from the CF parameter.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupUnregisteredStraightDirectionalStreamFade(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     Vec3s sp2C;
@@ -464,6 +474,11 @@ void func_8214F1E8(s8 *arg0) {
     func_8213E5C8(arg0);
 }
 
+/**
+ * Lifecycle init for end effect 28: tiny and growing, offset and pointed upward, palette
+ * color from the CF parameter.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupEndEffect28Descriptor10UpwardBurstFade(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     Vec3f sp30;
@@ -514,6 +529,11 @@ void func_8214F3D4(s8 *arg0) {
     func_8213E5C8(arg0);
 }
 
+/**
+ * Lifecycle init for end effect 28: tiny and growing, with a wide random spread, palette
+ * color from the CF parameter.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupEndEffect28Descriptor10WideScatterBurstFade(Particle* arg0) {
     UNUSED s32 pad[4]; // FAKE: stack padding
     Vec3s sp28;

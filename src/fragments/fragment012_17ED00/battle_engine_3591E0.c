@@ -45,6 +45,10 @@ void func_821832F4(void);
 void func_821832FC(void);
 s32 AuxEffect_GetId(s32 arg0);
 
+/**
+ * Marks both auxiliary effect pools free.
+ * @unverified Name from Stadium 1.
+ */
 void AuxiliaryEffect_Init(void) {
     s32 i;
 
@@ -53,6 +57,11 @@ void AuxiliaryEffect_Init(void) {
     }
 }
 
+/**
+ * Claims a free auxiliary effect pool (of 2), clears its 20 nodes and returns its index,
+ * or -1 if both are in use.
+ * @unverified Name from Stadium 1.
+ */
 s16 AuxiliaryEffect_Alloc(void) {
     AuxiliaryEffect* var_a0;
     AuxiliaryEffectNode* var_v1;
@@ -77,6 +86,11 @@ s16 AuxiliaryEffect_Alloc(void) {
     return -1;
 }
 
+/**
+ * Starts a node in auxiliary effect pool arg0 at (arg1, arg2, arg3) with parameters arg4
+ * and arg5, if the pool is active and a node is free.
+ * @unverified Name from Stadium 1.
+ */
 void AuxiliaryEffect_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, s16 arg4, f32 arg5) {
     s32 i;
     AuxiliaryEffect* temp_v0 = &D_821CEEA0[arg0];
@@ -99,6 +113,10 @@ void AuxiliaryEffect_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, s16 arg4, f32
     }
 }
 
+/**
+ * Advances every running node in auxiliary effect pool arg0.
+ * @unverified Name from Stadium 1.
+ */
 void AuxiliaryEffect_Update(s16 arg0) {
     AuxiliaryEffect* temp_v0 = &D_821CEEA0[arg0];
     AuxiliaryEffectNode* var_v1;
@@ -118,6 +136,11 @@ void AuxiliaryEffect_Update(s16 arg0) {
     }
 }
 
+/**
+ * Adds the display list for one auxiliary effect node, transformed by arg2, and returns
+ * the new end of the list.
+ * @unverified Name from Stadium 1.
+ */
 Gfx* AuxiliaryEffect_DrawOne(Gfx* arg0, AuxiliaryEffectNode* arg1, MtxF* arg2) {
     f32 spCC;
     f32 spC8;
@@ -147,6 +170,11 @@ Gfx* AuxiliaryEffect_DrawOne(Gfx* arg0, AuxiliaryEffectNode* arg1, MtxF* arg2) {
     return arg0;
 }
 
+/**
+ * Adds the display lists for every running node in auxiliary effect pool arg0 and returns
+ * the new end of the list.
+ * @unverified Name from Stadium 1.
+ */
 Gfx* AuxiliaryEffect_Draw(s16 arg0, Gfx* arg1) {
     UNUSED s32 pad; // FAKE: stack padding
     AuxiliaryEffect* temp_s3 = &D_821CEEA0[arg0];
@@ -178,6 +206,10 @@ void func_821832F4(void) {
 void func_821832FC(void) {
 }
 
+/**
+ * Returns its argument.
+ * @unverified Name from Stadium 1.
+ */
 s32 AuxEffect_GetId(s32 arg0) {
     return arg0;
 }

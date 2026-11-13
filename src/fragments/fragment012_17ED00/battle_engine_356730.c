@@ -24,6 +24,10 @@ Gfx* DoubleTextureTrail_DrawAll(Gfx* arg0);
 
 Gfx* WaterParticle_DrawPass(Gfx* arg0, DoubleTextureTrail* arg1, s16 arg2, s16 arg3);
 
+/**
+ * Clears the 4 double-texture trails and their segments.
+ * @unverified Name from Stadium 1.
+ */
 void DoubleTextureTrail_InitPool(void) {
     s32 i;
     s32 j;
@@ -51,6 +55,11 @@ void DoubleTextureTrail_InitPool(void) {
     }
 }
 
+/**
+ * Starts a free double-texture trail with the given positions, motion, segment counts,
+ * two scrolling textures and colors.
+ * @unverified Name from Stadium 1.
+ */
 void DoubleTextureTrail_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7, f32 arg8, f32 arg9,
                    f32 argA, s16 argB, s32 argC, s32 argD, s16 argE, s16 argF, s16 arg10, s16 arg11, s16 arg12,
                    s16 arg13, s16 arg14, s16 arg15, unk_D_843C2C00_024* arg16, unk_D_843C2C00_024* arg17, u8 arg18,
@@ -139,6 +148,10 @@ void DoubleTextureTrail_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, 
     }
 }
 
+/**
+ * Writes the point arg2 units along Z rotated by arg0 radians about X to arg1.
+ * @unverified Name from Stadium 1.
+ */
 void DoubleTextureTrail_RotateVertexOffset(f32 arg0, Vec3f* arg1, f32 arg2) {
     UNUSED MtxF sp70;
     MtxF sp30;
@@ -148,6 +161,10 @@ void DoubleTextureTrail_RotateVertexOffset(f32 arg0, Vec3f* arg1, f32 arg2) {
     guMtxXFMF(sp30.mf, 0.0f, 0.0f, arg2, &arg1->x, &arg1->y, &arg1->z);
 }
 
+/**
+ * Advances one trail: moves its head and updates each segment's position and fade.
+ * @unverified Name from Stadium 1.
+ */
 void DoubleTextureTrail_Update(DoubleTextureTrail* arg0) {
     unk_D_843C2C00_0B0* var_v0;
     UNUSED s32 pad; // FAKE: stack padding
@@ -215,6 +232,10 @@ void DoubleTextureTrail_Update(DoubleTextureTrail* arg0) {
     }
 }
 
+/**
+ * Advances every active trail and counts its frames. Returns 0.
+ * @unverified Name from Stadium 1.
+ */
 s32 DoubleTextureTrail_UpdateAll(void) {
     s32 i;
     DoubleTextureTrail* var_s0 = &D_821CD0E0[0];
@@ -283,6 +304,10 @@ Gfx* WaterParticle_DrawPass(Gfx* arg0, DoubleTextureTrail* arg1, s16 arg2, s16 a
     return arg0;
 }
 
+/**
+ * Adds the loads for a trail's two scrolling 32x32 I4 textures to the display list.
+ * @unverified Name from Stadium 1.
+ */
 Gfx* DoubleTextureTrail_LoadTextures(Gfx* arg0, DoubleTextureTrail* arg1) {
     unk_D_843C2C00_064* ptr;
 
@@ -299,6 +324,11 @@ Gfx* DoubleTextureTrail_LoadTextures(Gfx* arg0, DoubleTextureTrail* arg1) {
     return arg0;
 }
 
+/**
+ * Adds the display lists that draw every active trail as textured strips and returns the
+ * new end of the list.
+ * @unverified Name from Stadium 1.
+ */
 Gfx* DoubleTextureTrail_DrawAll(Gfx* arg0) {
     s32 i;
     s32 j;
