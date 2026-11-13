@@ -24,6 +24,8 @@ void ParticleGfx_LoadTextureCallbackIa8WrapST_64x64(UNUSED Particle* arg0, u8* t
  * Load a texture frame selected by the shared particle clock using ParticleGfx_LoadTextureI4Alias.
  * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran
  * while the new Pokémon was sent out.
+ * Seen in play (2026-11-13) it also ran when COM sent out its next Pokémon (ゆけっ！ゲンのすけ) after its
+ * first one fainted.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_LoadTextureCallbackI4FrameDiv2Mod8_64x64(UNUSED Particle* arg0, u8* texture) {

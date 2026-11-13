@@ -333,6 +333,8 @@ u8 Move_GetIdFromTableIndex(s32);
  * moves, level-up moves or TM/HM).
  * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran when
  * C-Left picked the Pokémon to switch in.
+ * Seen in play (2026-11-13) it also ran when COM sent out its next Pokémon (ゆけっ！ゲンのすけ) after its
+ * first one fainted.
  * @unverified Name and comment guessed from the code.
  */
 void Battle_MarkLegalMovesForSpecies(S0LearnMon* pokemon, u16 pokemon_id) {
@@ -400,6 +402,8 @@ extern u8 D_8218C930[][2];
  * its pre-evolutions (D_8218C930) can learn.
  * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran when
  * C-Left picked the Pokémon to switch in.
+ * Seen in play (2026-11-13) it also ran when COM sent out its next Pokémon (ゆけっ！ゲンのすけ) after its
+ * first one fainted.
  * @unverified Name and comment guessed from the code.
  */
 void Battle_CheckMovesetLegality(s8* arg0) {

@@ -122,6 +122,8 @@ void BattleAnim_PokeBallLandContinue(ActivePokemon* owner, ActivePokemon* animat
  * next Pokemon was sent out; what it shows there is not established.
  * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran when
  * A confirmed the switch, during the recall.
+ * Seen in play (2026-11-13) it also ran when COM sent out its next Pokémon (ゆけっ！ゲンのすけ) after its
+ * first one fainted.
  * @unverified Name and comment guessed from the code.
  */
 void BattleAnim_PokeBallLand(s32 arg0, s8 *arg1) {

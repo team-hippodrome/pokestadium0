@@ -1026,6 +1026,8 @@ void ParticleGfx_DrawTransformedQuadXYScaled(Vec3f arg0, Vec3s arg1, f32 arg2, f
  * Load the supplied position/rotation/scale transform, then draw the selected vertices.
  * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran
  * while the new Pokémon was sent out.
+ * Seen in play (2026-11-13) it also ran when COM sent out its next Pokémon (ゆけっ！ゲンのすけ) after its
+ * first one fainted.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void ParticleGfx_DrawTransformedTriangle(Vec3f arg0, Vec3s arg1, f32 arg2, Vtx* arg3) {

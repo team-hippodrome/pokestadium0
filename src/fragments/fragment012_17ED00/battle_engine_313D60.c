@@ -66,6 +66,8 @@ extern s32 D_8218C794;
  * Save the target's current HP and queue an HP-band message for the acting participant.
  * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran when
  * C-Left picked the Pokémon to switch in.
+ * Seen in play (2026-11-13) it also ran when COM sent out its next Pokémon (ゆけっ！ゲンのすけ) after its
+ * first one fainted.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void ShowDamageMessage(s32 attacker, s32 defender) {

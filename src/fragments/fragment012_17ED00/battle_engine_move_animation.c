@@ -1899,6 +1899,8 @@ s32 func_82105724(ActivePokemon* arg0, s32 arg1) {
  * when it is at least 11.
  * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran
  * while the new Pokémon was sent out.
+ * Seen in play (2026-11-13) it also ran when COM sent out its next Pokémon (ゆけっ！ゲンのすけ) after its
+ * first one fainted.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 BattleScene_IsRowWaitCompleteWithEventCount(ActivePokemon* active_pokemon, s32 frame_limit) {
