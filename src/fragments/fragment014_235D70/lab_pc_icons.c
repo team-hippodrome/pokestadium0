@@ -781,8 +781,8 @@ void MainMenu_LoadGbSaveSummary(void) {
 
 /**
  * Returns `arg0` with its RGB scaled by `arg1` (alpha kept).
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran as the main menu faded in (console reset, then N64 logo, opening,
+ * title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 Color_RGBA8 MainMenu_ScaleColor(Color_RGBA8 arg0, f32 arg1) {
@@ -799,8 +799,8 @@ M2C_UNK func_80005B98(M2C_UNK);
 extern s32 D_880022C4;
 /**
  * Draws the background, brightening it a little more each call.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran as the main menu faded in (console reset, then N64 logo, opening,
+ * title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 s32 MainMenu_DrawFadeInBackground(s32 arg0) {
@@ -824,8 +824,8 @@ extern M2C_UNK D_88002254;
 
 /**
  * Draws the tinted main menu background.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran as the main menu faded in (console reset, then N64 logo, opening,
+ * title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 s32 MainMenu_DrawBackground(s32 arg0) {
@@ -839,8 +839,8 @@ extern M2C_UNK D_88002A8C;
 
 /**
  * Draws the GB save summary bar sliding in from the top.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran as the main menu faded in (console reset, then N64 logo, opening,
+ * title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 s32 MainMenu_DrawSummaryBarSlideIn(UNUSED s32 arg0) {
@@ -868,8 +868,8 @@ extern M2C_UNK D_88002B08;
 
 /**
  * Draws the GB save summary bar.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran as the main menu faded in (console reset, then N64 logo, opening,
+ * title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 s32 MainMenu_DrawSummaryBar(s32 arg0) {

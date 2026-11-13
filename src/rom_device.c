@@ -9,8 +9,8 @@ void Rom_DmaRead(u32 dev_addr, u32 dram_addr, u32 size);
 
 extern OSMesg D_8010018C;
 /**
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran at boot (console reset, then N64 logo, opening, title and main
+ * menu).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Rom_InitDevice(s32 arg0) {

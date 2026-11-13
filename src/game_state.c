@@ -130,8 +130,8 @@ extern M2C_UNK D_8007B7B8;
 
 /**
  * Sets up trainer slot `arg1` as a human player on controller port `arg0` with roster info `arg2`.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran during boot, before the opening (console reset, then N64 logo,
+ * opening, title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 M2C_UNK Session_InitHumanTrainer(M2C_UNK arg0, M2C_UNK *arg1, M2C_UNK *arg2, s32 arg3) {
@@ -175,8 +175,8 @@ extern M2C_UNK D_800AF94C;
 
 /**
  * Sets the session mode to `arg0` and sets up both trainer slots and battle sides.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran during boot, before the opening (console reset, then N64 logo,
+ * opening, title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 M2C_UNK Session_InitTwoTrainers(M2C_UNK arg0, M2C_UNK arg1, M2C_UNK arg2) {
@@ -809,8 +809,8 @@ void func_800268A8(void);
 
 /**
  * Pushes the 'GAME' pool state and runs the top-level state machine (0x8001, 0x8010, 0x8040, 0x8050, 0x8060, 0x8080, 0xF000) forever.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran at boot (console reset, then N64 logo, opening, title and main
+ * menu).
  * @unverified Name and comment guessed from the code.
  */
 void Game_RunStateLoop(s32 arg0) {

@@ -1210,8 +1210,8 @@ void Geo_NodeType9Empty(UNUSED GraphNode* arg0) {
 
 /**
  * Geo node handler: enables fog with the node's fog range and color.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran while the opening and title scenes drew (console reset, then N64
+ * logo, opening, title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 void GeoRender_SetFog(GraphNode* arg0) {
@@ -1591,8 +1591,8 @@ M2C_UNK func_80011210(MtxF *);                      /* extern */
 
 /**
  * Pushes a scaled copy of the current matrix, then submits the node's display list. Stadium 1 name for the same handler.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran while the opening and title scenes drew (console reset, then N64
+ * logo, opening, title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 void Geo_NodeScale(s8 *arg0) {

@@ -79,8 +79,8 @@ extern u8 D_800AAFF8;
 /**
  * Initialize the gControllers structs. Clear each member, then set their cont
  * id and set the status and pads pointers.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran at boot (console reset, then N64 logo, opening, title and main
+ * menu).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Cont_InitControllers(void) {
@@ -121,8 +121,8 @@ s32 func_80053A90(OSMesgQueue*);
  * Mario 64 which also handled the controllers in the same file. Since
  * Nintendo EAD is also credited with co-developing Pokemon Stadium, this
  * organization may be a holdover from that era.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran at boot (console reset, then N64 logo, opening, title and main
+ * menu).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 u8 Cont_SetupControllers(u8 arg0) {

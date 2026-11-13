@@ -84,8 +84,8 @@ s32 GbPak_DetectRam(s32 arg0, u8* arg1) {
 /**
  * Prepares the pak on a port once (gGbPakPortReady): reads the ID, enables
  * cartridge RAM and runs GbPak_DetectRam. Shuts down with error 1 if the read fails.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran at boot (console reset, then N64 logo, opening, title and main
+ * menu).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 GbTower_ProbePak(s32 arg0, u8* arg1, u8* arg2) {

@@ -23,8 +23,8 @@ void N64Logo_ScanTransferPaks(void);
 /**
  * Draws the 128x112 RGBA16 "NINTENDO 64" logo (n64_logo_texture, loaded at segment 0x02)
  * centered at screen (96, 64)-(223, 175), as seven 128x16 strips in COPY mode.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran while the N64 logo was on screen (console reset, then N64 logo,
+ * opening, title and main menu).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void N64Logo_DrawLogoTexture(void) {
@@ -53,8 +53,8 @@ void N64Logo_DrawLogoTexture(void) {
 
 /**
  * Per-frame draw callback: clears the framebuffer to black (RGBA5551 0x0001) and draws the logo.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran while the N64 logo was on screen (console reset, then N64 logo,
+ * opening, title and main menu).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 N64Logo_DrawFrame(UNUSED u8 arg0) {
@@ -68,8 +68,8 @@ s32 N64Logo_DrawFrame(UNUSED u8 arg0) {
 /**
  * Busy-waits until 1,000,000 microseconds (1 second) have passed since start_time.
  * ticks * 64 / 3000 is the libultra OS_CYCLES_TO_USEC conversion for the 46.875 MHz counter.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran while the N64 logo was on screen (console reset, then N64 logo,
+ * opening, title and main menu).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void N64Logo_WaitForElapsed(u64 arg0) {

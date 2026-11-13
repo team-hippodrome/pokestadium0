@@ -986,8 +986,8 @@ typedef struct { u8 unk_00; u8 unk_01; u8 pad[0x4E]; } Mon50;
 
 /**
  * Reads the continue block at save offset 0x7A60 back; returns -1 when it is empty.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran on Start at the title screen and again at the main menu (console
+ * reset, then N64 logo, opening, title and main menu).
  * @unverified Name and comment guessed from the code.
  */
 s16 Save_ReadContinueData(Unk12Bytes* arg0, Unk162Bytes* arg1, Mon50* arg2) {
