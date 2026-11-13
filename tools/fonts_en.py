@@ -36,6 +36,11 @@ ADV_ROM = 0x2C4000               # free ROM inside the stale part of the font ar
                                  # six 0x90-byte advance tables, read through 0xB0000000
 ADV_VRAM = 0xB0000000 + ADV_ROM
 GLYPHS = 0x91
+# Which stages touch which part; the narrow ones exist to bisect a screen-level fault.
+ARCHIVE_STAGES = {'full', 'data', 'archive', 'data-keep', 'keep-map', 'keep-loader'}
+MAP_TABLE_STAGES = {'full', 'data', 'map', 'data-keep', 'keep-map'}
+MAP_FUNC_STAGES = {'full', 'data', 'map', 'code', 'keep-map'}
+LOADER_STAGES = {'full', 'code', 'loader', 'loader0', 'keep-loader'}
 CELLS = [(0x10, 0x0A), (0x10, 0x0C), (0x10, 0x10), (0x18, 0x14), (0x18, 0x18), (0x20, 0x20)]
 
 ROM_BIAS = 0x7FFFF400            # rom = vram - ROM_BIAS for the resident image
@@ -346,19 +351,19 @@ def patch(rom, us, stage='full'):
 
     seed = detect_seed(rom)
     out = bytearray(rom)
-    if stage in ('full', 'data', 'archive', 'data-keep'):
+    if stage in ARCHIVE_STAGES:
         out[ZERO_FONTS:ZERO_FONTS + total] = us[US_FONTS:US_FONTS + total]
     if stage in ('data', 'archive'):
         # Bisect-only: clearing Zero's stale glyph data is not required (the archive header
         # defines every file's extent) and it is 0x1CFC0 bytes of real ROM, so 'full' keeps it.
         out[ZERO_FONTS + total:ZERO_FONTS_END] = bytes(ZERO_FONTS_END - ZERO_FONTS - total)
-    if stage in ('full', 'data', 'map', 'data-keep'):
+    if stage in MAP_TABLE_STAGES:
         out[ZERO_ASCII_MAP:ZERO_ASCII_MAP + MAP_BYTES] = table
     tables = advance_tables(us)
-    if stage in ('full', 'data', 'map', 'code'):
+    if stage in MAP_FUNC_STAGES:
         out[ADV_ROM:ADV_ROM + len(tables)] = tables
     patches = []
-    if stage in ('full', 'data', 'map', 'code'):
+    if stage in MAP_FUNC_STAGES:
         patches.append((MAP_FUNC, font_map_words(rom)))
     if stage == 'micro':
         # One commutative operand swap inside the retail loader: proves a code patch lands where the
@@ -367,7 +372,7 @@ def patch(rom, us, stage='full'):
         assert (retail_words[11] & 0x3F) == 0x21, 'operand add expected'
         swap = (retail_words[11] & ~((0x1F << 21) | (0x1F << 16))) | (3 << 21) | (15 << 16)
         patches.append((LOAD_FUNC, retail_words[:11] + [swap] + retail_words[12:]))
-    if stage in ('full', 'code', 'loader', 'loader0'):
+    if stage in LOADER_STAGES:
         patches.insert(0, (LOAD_FUNC, font_load_words(rom, 0 if stage == 'loader0' else ADVANCES)))
     for vram, words in patches:
         struct.pack_into('>%dI' % len(words), out, vram - ROM_BIAS, *words)
@@ -382,16 +387,16 @@ def check(rom, us, retail, stage='full', seed=None):
     retail is the unpatched build, the source of the instruction words the patches reuse.
     """
     total, files = archive_files(rom, ZERO_FONTS)
-    if stage in ('full', 'data', 'archive', 'data-keep'):
+    if stage in ARCHIVE_STAGES:
         if rom[ZERO_FONTS:ZERO_FONTS + total] != us[US_FONTS:US_FONTS + total]:
             raise SystemExit("font archive differs from Stadium 1's")
     if stage in ('data', 'archive'):
         if rom[ZERO_FONTS + total:ZERO_FONTS_END].count(0) != ZERO_FONTS_END - ZERO_FONTS - total:
             raise SystemExit('font slot tail is not cleared')
-    if stage in ('full', 'data', 'map', 'data-keep'):
+    if stage in MAP_TABLE_STAGES:
         if rom[ZERO_ASCII_MAP:ZERO_ASCII_MAP + MAP_BYTES] != us[US_ASCII_MAP:US_ASCII_MAP + MAP_BYTES]:
             raise SystemExit("ASCII glyph map differs from Stadium 1's")
-    if stage in ('full', 'data', 'map', 'code'):
+    if stage in MAP_FUNC_STAGES:
         if rom[ADV_ROM:ADV_ROM + 6 * ADVANCES] != advance_tables(us):
             raise SystemExit("the advance tables are not in place")
     if stage == 'micro':
@@ -399,15 +404,15 @@ def check(rom, us, retail, stage='full', seed=None):
         expected_loader = rw[:11] + [(rw[11] & ~((0x1F << 21) | (0x1F << 16))) | (3 << 21) | (15 << 16)] + rw[12:]
     else:
         expected_loader = (font_load_words(retail, 0 if stage == 'loader0' else ADVANCES)
-                           if stage in ('full', 'code', 'loader', 'loader0')
+                           if stage in LOADER_STAGES
                            else words_at(retail, LOAD_FUNC, 0x7C // 4))
     if words_at(rom, LOAD_FUNC, 0x7C // 4) != expected_loader:
         raise SystemExit('the font loader patch is not in place')
     if rom_crc(rom, seed or detect_seed(retail)) != struct.unpack_from('>2I', rom, 0x10):
         raise SystemExit('header checksum does not match the patched ROM: IPL3 would hang')
     print('%s: font archive %#x bytes, glyph map %s, loader %s'
-          % (stage, total, 'patched' if stage in ('full', 'data', 'map', 'code') else 'retail',
-             'patched' if stage in ('full', 'code', 'loader', 'loader0') else 'retail'))
+          % (stage, total, 'patched' if stage in MAP_FUNC_STAGES else 'retail',
+             'patched' if stage in LOADER_STAGES else 'retail'))
 
 
 def _retail_stub(rom):
@@ -565,7 +570,7 @@ def main():
     ap.add_argument('--rom', default='build/pokestadium0-jp.z64')
     ap.add_argument('--us', help='Stadium 1 US baserom.z64, the source of the English font')
     ap.add_argument('--out')
-    ap.add_argument('--stage', choices=['full', 'data', 'data-keep', 'code', 'map', 'archive', 'loader', 'loader0', 'micro'], default='full',
+    ap.add_argument('--stage', choices=['full', 'data', 'data-keep', 'keep-map', 'keep-loader', 'code', 'map', 'archive', 'loader', 'loader0', 'micro'], default='full',
                     help='full: archive + map + loader; data: archive + map; code: map + loader; '
                          'map/archive: one of them (bisecting a boot fault)')
     ap.add_argument('--base', default='build/pokestadium0-jp.z64',
