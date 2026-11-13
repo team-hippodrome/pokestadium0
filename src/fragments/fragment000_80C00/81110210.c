@@ -364,6 +364,14 @@ void func_81112278(Note81110798*);
 f32 func_81112380(u8*);
 void func_8111220C(Note81110798*);
 
+//@unverified
+/**
+ * Per-update note processing for the GB tower audio driver: for each note with
+ * a parent layer, releases it when the layer no longer owns it or its channel
+ * has no sequence player, and otherwise updates its playback (envelope,
+ * frequency, velocity, pan and reverb). Follows Audio_ProcessNotes in the
+ * Zelda 64 audio decomps.
+ */
 void func_81110798(void)
 {
   Note81110798 *note;
@@ -377,7 +385,7 @@ void func_81110798(void)
   s32 i;
   for (i = 0; i < D_811858E8; i++)
   {
-    note = (Note81110798 *) (i * 0xCC + (u32) D_81184664); // FAKE: integer-cast address form
+    note = i + (Note81110798*)D_81184664; // FAKE: index first, for retail's addu operand order
     playbackState = &note->playbackState;
     if (playbackState->parentLayer != ((Layer81110798 *) (-1)))
     {
@@ -394,7 +402,7 @@ void func_81110798(void)
         goto d;
       }
       else
-        if (((!playbackState->parentLayer->enabled) && (playbackState->unk_04 == 0)) && ((playbackState->priority >= 1) ^ 0))
+        if (((!playbackState->parentLayer->enabled) && (playbackState->unk_04 == 0)) && (playbackState->priority >= 1))
       {
       }
       else
@@ -1115,39 +1123,46 @@ s32 func_81111734(s8 *arg0, s8 *arg1) {
     return ret;
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s8 *func_81111784(s8 *arg0, s8 *arg1)
-{
-  s8 *a;
-  s8 *b;
-  s32 prioA;
-  s32 prioB;
-  prioA = (prioB = 0x10);
-  a = func_811114E8(arg0 + 0x20, *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5)));
-  if (a != 0)
-  {
-    prioA = *((u8 *) (((s8 *) a) + 0x30));
-  }
-  b = func_811114E8(arg0 + 0x30, *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5)));
-  if (b != 0)
-  {
-    prioB = *((u8 *) (((s8 *) b) + 0x30));
-  }
-  if ((a == 0) && (b == 0))
-  {
-    return 0;
-  }
-  if (prioB < (prioA ^ 0))
-  {
-    func_811114BC(b);
-    func_81111688(b, (s32) arg1);
-    func_81112EAC(arg0 + 0x20, (Rec81111130 *) b);
-    *((u8 *) (((s8 *) b) + 0x30)) = *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5));
-    return b;
-  }
-  *((s8 **) (((s8 *) a) + 0x48)) = arg1;
-  *((u8 *) (((s8 *) a) + 0x30)) = *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5));
-  return a;
+//@unverified
+/**
+ * Picks a note for `layer` from the pool lists at +0x20 and +0x30. Each list
+ * is searched with func_811114E8 using the channel priority (layer +0x54, then
+ * +5); a found note's priority is its byte at +0x30, and a missing one counts
+ * as 0x10. Returns NULL if neither list gives a note. If the +0x30 note has
+ * the lower priority, it is unlinked, set up with func_81111688, appended to
+ * the +0x20 list and returned; otherwise the +0x20 note gets the layer at
+ * +0x48 and is returned. Either way the note's priority becomes the
+ * channel's. The shape matches Audio_AllocNoteFromActive in the Zelda 64
+ * audio decomps, so the names follow it.
+ */
+s8* func_81111784(s8* pool, s8* layer) {
+    s8* r_note;
+    s8* a_note;
+    s32 r_priority;
+    s32 a_priority;
+
+    r_priority = a_priority = 0x10;
+    r_note = func_811114E8(pool + 0x20, M2C_FIELD(M2C_FIELD(layer, u8**, 0x54), u8*, 5));
+    if (r_note != NULL) {
+        r_priority = M2C_FIELD(r_note, u8*, 0x30);
+    }
+    a_note = func_811114E8(pool + 0x30, M2C_FIELD(M2C_FIELD(layer, u8**, 0x54), u8*, 5));
+    if (a_note != NULL) {
+        a_priority = M2C_FIELD(a_note, u8*, 0x30);
+    }
+    if ((r_note == NULL) && (a_note == NULL)) {
+        return NULL;
+    }
+    if (a_priority < r_priority) {
+        func_811114BC(a_note);
+        func_81111688(a_note, (s32)layer);
+        func_81112EAC(pool + 0x20, (Rec81111130*)a_note);
+        M2C_FIELD(a_note, u8*, 0x30) = M2C_FIELD(M2C_FIELD(layer, u8**, 0x54), u8*, 5);
+        return a_note;
+    }
+    M2C_FIELD(r_note, s8**, 0x48) = layer;
+    M2C_FIELD(r_note, u8*, 0x30) = M2C_FIELD(M2C_FIELD(layer, u8**, 0x54), u8*, 5);
+    return r_note;
 }
 
 s8* func_8111187C(s8* arg0) {

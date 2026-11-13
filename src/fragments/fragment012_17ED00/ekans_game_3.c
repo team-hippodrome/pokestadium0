@@ -318,22 +318,31 @@ s32 func_82183CC0(s32 arg0, s32 arg1) {
     return func_82183BB0(arg0, 0xFFFF, arg1);
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s32 func_82183CE4(s8 *arg0)
-{
-  s32 var_v1;
-  u16 temp_v0;
-  temp_v0 = *((u16 *) (((s8 *) arg0) + 0x18));
-  if (!temp_v0)
-  {
-    return 0;
-  }
-  var_v1 = ((s32) (temp_v0 * 0x64)) / ((s32) (*((u16 *) (((s8 *) arg0) + 0x34))));
-  if (var_v1 == 0)
-  {
-    var_v1 = 1;
-  }
-  return var_v1;
+// The battle slot layout of Slot82186AF4 (ekans_game_3_82184DC8.c), as far as it is used here.
+typedef struct unk_func_82183CE4 {
+    /* 0x00 */ u8 unk00[0x18];
+    /* 0x18 */ u16 hp;
+    /* 0x1A */ u8 unk1A[0x1A];
+    /* 0x34 */ u16 maxHp;
+} unk_func_82183CE4;
+
+//@unverified
+/**
+ * Returns the slot's HP as a percentage of maxHp: 0 when hp is 0, otherwise
+ * at least 1.
+ */
+s32 func_82183CE4(unk_func_82183CE4* arg0) {
+    s32 percent;
+    u16 hp = arg0->hp;
+
+    if (!hp) {
+        return 0;
+    }
+    percent = (hp * 100) / arg0->maxHp;
+    if (percent == 0) {
+        percent = 1;
+    }
+    return percent;
 }
 
 /*

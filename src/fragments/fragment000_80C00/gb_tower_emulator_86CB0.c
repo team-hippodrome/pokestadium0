@@ -403,6 +403,13 @@ void func_81112E00(u8* arg0) {
     }
 }
 
+//@unverified
+/**
+ * Appends arg1 to the circular audio list arg0 if it is not already in a list
+ * (its prev link at +0 is NULL): links it before arg0, adds 1 to the count at +8
+ * and copies the pool pointer at +0xC. This is AudioSeq_AudioListPushBack in the
+ * Zelda 64 audio decomps.
+ */
 void func_81112EAC(s8 *arg0, s8 *arg1)
 {
   if ((*((s8 **) (((s8 *) arg1) + 0))) == 0)
@@ -411,7 +418,7 @@ void func_81112EAC(s8 *arg0, s8 *arg1)
     *((s8 **) (((s8 *) arg1) + 0)) = (s8 *) (*((s8 **) (((s8 *) arg0) + 0)));
     *((s8 **) (((s8 *) arg1) + 4)) = arg0;
     *((s8 **) (((s8 *) arg0) + 0)) = arg1;
-    *((s32 *) (((s8 *) arg0) + 8)) = ((s32) ((*((s32 *) (((s8 *) arg0) + 8))) + 1)) ^ 0;
+    *((s32 *) (((s8 *) arg0) + 8)) = ((s32) ((*((s32 *) (((s8 *) arg0) + 8))) + 1));
     *((s32 *) (((s8 *) arg1) + 0xC)) = (s32) (*((s32 *) (((s8 *) arg0) + 0xC)));
   }
 }

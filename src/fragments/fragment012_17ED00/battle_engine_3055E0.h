@@ -267,7 +267,7 @@ void func_82124664(s32 arg0, s32 arg1, s16 arg2);
 
 // Called with (CameraNode*, ActivePokemon*); the arguments pass through untouched.
 
-void func_82124830(s8 *arg0, ActivePokemon* arg1);
+void func_82124830(CameraNode* arg0, ActivePokemon* arg1);
 
 // Called with (CameraNode*, ActivePokemon*); the arguments pass through untouched.
 

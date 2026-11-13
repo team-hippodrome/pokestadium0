@@ -3,12 +3,15 @@
 #include "fragments/battle_engine/battle_engine.h"
 #include "m2c_macros.h"
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_821337A0(s8 *arg0)
-{
-  int new_var;
-  new_var = (*((s32 *) (((s8 *) arg0) + 0x860))) + 0x1C;
-  *((u16 *) (((s8 *) new_var) + 2)) = (u16) (*((u16 *) (((s8 *) arg0) + 0x7D2)));
+//@unverified
+/**
+ * Copies the battle runtime HP (state.runtime.unk_0C) to the first party
+ * Pokemon of arg0's roster.
+ */
+void func_821337A0(ActivePokemon* arg0) {
+    BattleMon* mon = arg0->teamRoster->pokemonPicked;
+
+    mon->hp = arg0->state.runtime.unk_0C;
 }
 
 /*

@@ -346,17 +346,16 @@ void func_820061F0(s8 *arg0, s32 arg1, s32 arg2, List820061F0 *arg3, s8 *arg4, C
 
 s32 func_8002AE6C();                                /* extern */
 void func_8002D9B8(s32, s32, s32, s32, s8 *);  /* extern */
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_82006348(s8 *arg0, s32 arg1)
-{
-  s8 *new_var;
-  if (func_8002AE6C() == 0)
-  {
-    if (arg0 && arg0)
-    {
+//@unverified
+/**
+ * If func_8002AE6C() is zero, calls func_8002D9B8 on the menu at +0x2C, at
+ * the panel's position (x + 6, y + 0xC) with flags arg1 | 0xFFED.
+ */
+void func_82006348(s8* arg0, s32 arg1) {
+    if (func_8002AE6C() == 0) {
+        if (arg0) {} // karodo
+        func_8002D9B8(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 12, arg1 | 0xFFED, arg0);
     }
-    func_8002D9B8(new_var = arg0 + 0x2C, (*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (((s8 *) arg0) + 4))) + 0xC, arg1 | 0xFFED, arg0);
-  }
 }
 
 s32 func_8002BC14(s32);

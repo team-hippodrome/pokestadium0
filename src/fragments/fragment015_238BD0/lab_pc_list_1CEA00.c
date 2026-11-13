@@ -318,19 +318,25 @@ extern Color_RGBA8 D_8900A5C4;
 extern Color_RGBA8 D_8900A5C8;
 extern Color_RGBA8 D_8900A5CC;
 
+//@unverified
+/**
+ * Draws the panel in arg0 when func_8002AE6C() is 0: the frames at its
+ * position, its text (+0x30) with func_8001A944, and the two items at +0x34 and
+ * +0x70 (func_8002AF04), passing 2 to the one selected by +0xB0.
+ */
 void func_89000694(s8* arg0) {
     if (func_8002AE6C() == 0) {
-        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x61, M2C_FIELD(arg0, s32*, 8), D_8007356C);
-        func_8002A550(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x5C, D_8900A5C4, D_8900A5C8);
+        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 97, M2C_FIELD(arg0, s32*, 8), D_8007356C);
+        func_8002A550(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 12, 92, D_8900A5C4, D_8900A5C8);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x68, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x24, D_8900A5CC);
+        func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 104, M2C_FIELD(arg0, s32*, 8) - 12, 36, D_8900A5CC);
         func_8001AB6C();
-        if (!arg0) { // FAKE: empty test only changes register allocation; needed to match
+        if (!arg0) { // karodo
         }
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
         func_8001A384(8, 0);
         func_8001AB2C(0x1C);
-        func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + 0xA, M2C_FIELD(arg0, s32*, 0x30));
+        func_8001A944(M2C_FIELD(arg0, s32*, 0) + 14, M2C_FIELD(arg0, s32*, 4) + 10, M2C_FIELD(arg0, s32*, 0x30));
         func_8001ABBC();
         func_8002AF04(arg0 + 0x34, (M2C_FIELD(arg0, s32*, 0xB0) == 0) ? 2 : 0);
         func_8002AF04(arg0 + 0x70, (M2C_FIELD(arg0, s32*, 0xB0) == 1) ? 2 : 0);
@@ -495,27 +501,19 @@ s32 func_89000BEC(s8 *arg0) {
     return sp2C;
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_89000CF0(s8 *arg0, s8 *arg1)
-{
-  s32 var_v0;
-  u16 *temp_a1;
-  s8 *var_v1;
-  s8 *new_var;
-  var_v0 = 0;
-  new_var = ((s8 *) arg0) + 0x30;
-  var_v1 = arg1;
-  do
-  {
-    if ((*((s32 *) (((s8 *) var_v1) + 8))) == 0)
-    {
-      temp_a1 = (*((s32 *) new_var)) + (var_v0 * 2);
-      *temp_a1 |= 0x100;
+//@unverified
+/**
+ * For each of the three 0x10-byte entries in arg1 whose word at +8 is zero,
+ * sets flag 0x100 in the matching u16 of the array pointed to by arg0 + 0x30.
+ */
+void func_89000CF0(s8* arg0, s8* arg1) {
+    s32 i;
+
+    for (i = 0; i < 3; i++) {
+        if (M2C_FIELD(arg1 + i * 0x10, s32*, 8) == 0) {
+            M2C_FIELD(arg0, u16**, 0x30)[i] |= 0x100;
+        }
     }
-    var_v0 += 1;
-    var_v1 += 0x10;
-  }
-  while (var_v0 != 3);
 }
 
 void func_89000D34(s8 *arg0, s32 arg1) {
@@ -1342,6 +1340,12 @@ void func_8002A8E0(void*);
 void func_8002DAD8(void*, s32, s32, s32, s32);
 extern u8 D_8007356C[];
 extern u8 D_89018688[];
+//@unverified
+/**
+ * Draws the panel in arg0 when func_8002AE6C() is 0: its frame, the window at
+ * +0x2C, the menu at +0x4C (func_8002DAD8, flags 0xFFEF) and the text
+ * D_89018688 in font 8.
+ */
 void func_89002D14(s8* arg0, s32 arg1) {
     if (func_8002AE6C() == 0) {
         func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 0x30) - 7, M2C_FIELD(arg0, s32*, 8), D_8007356C);
@@ -1349,7 +1353,7 @@ void func_89002D14(s8* arg0, s32 arg1) {
         func_8002DAD8(arg0 + 0x4C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, 0xFFEF, 0);
         func_8001AB6C();
         func_8001A384(8, 0);
-        if (!arg0) { // FAKE: empty test only changes register allocation; needed to match
+        if (!arg0) { // karodo
         }
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
         func_8001AB2C(0x1C);

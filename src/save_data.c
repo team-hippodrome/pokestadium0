@@ -271,42 +271,39 @@ s32 func_8000234C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *); /* extern */
 M2C_UNK func_80003774(s32, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 void func_80023A20(s32, s32);
 M2C_UNK func_8004FD20(s32, M2C_UNK);                /* extern */
+//@unverified
+/**
+ * Allocates the 0x8000-byte 'BU64' save buffer once (D_8006BBA0 marks it
+ * done), passes it to func_8004FD20 and func_80003774, and sets up its entries
+ * with func_80023A20. Returns D_8006BBA0.
+ */
 s32 func_80023C30(void)
 {
   s32 temp_v0;
-  int new_var;
-  s32 var_s0;
-  s32 var_s0_2;
-  if ((*((s32 *) (&D_8006BBA0))) == 0)
+  s32 i;
+  if (D_8006BBA0 == 0)
   {
- do { temp_v0 = func_8000234C(0x8000, 0, 0x42553634, &(*((s8 *) (&func_80023C08)))); *((s32 *) (&D_800AE8E0)) = temp_v0; } while (0);  // FAKE
+    temp_v0 = func_8000234C(0x8000, 0, 0x42553634, func_80023C08); D_800AE8E0 = temp_v0; // IDO: both statements must share one source line
     if (temp_v0 != 0)
     {
-      *((s32 *) (&D_8006BBA0)) = 1;
-      new_var = 0;
+      D_8006BBA0 = 1;
       func_8004FD20(temp_v0, 0x8000);
-      func_80003774(*((s32 *) (&D_800AE8E0)), 0, 0x8000, 0);
-      var_s0 = new_var;
-      do
+      func_80003774(D_800AE8E0, 0, 0x8000, 0);
+      for (i = 0; i < 16; i++)
       {
-        func_80023A20(0x10, var_s0);
-        var_s0 += 1;
+        func_80023A20(0x10, i);
       }
-      while (var_s0 < 0x10);
-      var_s0_2 = 0;
-      do
+      for (i = 0; i < 4; i++)
       {
-        func_80023A20(0x11, var_s0_2);
-        func_80023A20(0x12, var_s0_2);
-        var_s0_2 += 1;
+        func_80023A20(0x11, i);
+        func_80023A20(0x12, i);
       }
-      while (var_s0_2 != 4);
-      func_80023A20(0x13, new_var);
+      func_80023A20(0x13, 0);
       func_80023A20(0x14, 0);
-      func_80023A20(0x15, new_var);
+      func_80023A20(0x15, 0);
     }
   }
-  return *((s32 *) (&D_8006BBA0));
+  return D_8006BBA0;
 }
 
 s32 Audio_GetFreeVoiceCount(void) {
@@ -846,10 +843,13 @@ s32 func_80025168(s8 arg0) {
     return 1;
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s32 func_800251A8(void)
-{
-  return (((*((u8 *) (((s8 *) (*((s8 **) (&D_800AE8E0)))) + 0x7A48))) << 8) | (*((u8 *) (((s8 *) (*((s8 **) (&D_800AE8E0)))) + 0x7A49)))) & 0xFFFF;
+//@unverified
+/**
+ * Returns the big-endian 16-bit value at +0x7A48 of the save buffer (the
+ * value func_800251C8 stores).
+ */
+s32 func_800251A8(void) {
+    return ((M2C_FIELD(D_800AE8E0, u8*, 0x7A48) << 8) | M2C_FIELD(D_800AE8E0, u8*, 0x7A49)) & 0xFFFF;
 }
 
 void func_800251C8(u16 arg0) {

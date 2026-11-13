@@ -118,7 +118,8 @@ void func_8A201394();
 s32 func_8A2018E0(s32, s32, s32, s32);
 void func_8A201C08(s32, s32, s32);
 extern s8 D_8007356C;
-void func_8A201EAC(s8 *arg0, s32 arg1);
+struct unk_func_8A201EAC;
+void func_8A201EAC(struct unk_func_8A201EAC* arg0, s32 arg1);
 
 s32 func_80022B40();                                /* extern */
 s32 func_8002D454();                /* extern */

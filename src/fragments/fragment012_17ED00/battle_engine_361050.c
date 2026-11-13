@@ -400,16 +400,15 @@ void func_8210F24C(s8* arg0) {
     }
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_8210F2F4(s8 *arg0)
-{
-  int new_var2;
-  u16 *new_var;
-  ;
-  new_var = ((s8 *) arg0) + 0x7D2;
-  new_var2 = ((*((s32 *) (((s8 *) arg0) + 0x860))) + ((*((s32 *) (((s8 *) arg0) + 0x794))) * 0x50)) + ((0, 0x1C));  // FAKE
-  *((u16 *) (((s8 *) new_var2) + 2)) = (u16) (*((u16 *) new_var));
- if (1) { }  // karodo
+//@unverified
+/**
+ * Copies the battle runtime HP (state.runtime.unk_0C) back to arg0's party
+ * Pokemon.
+ */
+void func_8210F2F4(ActivePokemon* arg0) {
+    BattleMon* mon = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
+
+    mon->hp = arg0->state.runtime.unk_0C;
 }
 
 extern ActivePokemon* D_8219A540;
@@ -441,7 +440,12 @@ extern u8 D_82199F7C;
 extern f64 D_DBL_82195770;
 extern f64 D_DBL_82195778;
 u32 func_80053A80(void);
+//@unverified
+/**
+ * Battle random byte: adds a scaled value from func_80053A80 to D_82199F7C and
+ * returns the new value.
+ */
 u8 func_8210F3F0(void)
 {
-  return (D_82199F7C += (u8) ((u32) ((((f32) ((s32) ((u16) (func_80053A80() / 5577)))) / D_DBL_82195770) * D_DBL_82195778))) ^ 0;
+  return (D_82199F7C += (u8) ((u32) ((((f32) ((s32) ((u16) (func_80053A80() / 5577)))) / D_DBL_82195770) * D_DBL_82195778))) ^ 0; // FAKE: ^ 0 keeps the sum in v0
 }

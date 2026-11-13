@@ -1476,6 +1476,13 @@ void func_80046860(N_ALVoice* v, u8 fxmix); /* n_alSynSetFXMix */
 #define CH_FRAME(ch) M2C_FIELD(ch, u64*, 0x00)
 #define CH_VOICE(ch) M2C_FIELD(ch, PlayerChannelZero_1E**, 0x144)
 
+//@unverified
+/**
+ * Audio player handler (registered as D_800B3610.handler). For each channel
+ * with data it advances the frame counter, reads notes that are due
+ * (func_80039010) and runs the timed events, steps the envelope (func_800395D0),
+ * and updates the voice's pitch, volume, pan and FX mix.
+ */
 s32 func_800388BC(void* node) {
     u32 i;
     u32 j;
@@ -1613,7 +1620,6 @@ s32 func_800388BC(void* node) {
         }
     }
 
-    if (vol) {} // FAKE
     for (i = 0; i < 45; i++) {
         if (D_800B3670[i].unk_1E == 4) {
             if (M2C_FIELD(&D_800B3670[i], u32*, 0x20) < D_800B3CC4) {
@@ -1654,6 +1660,12 @@ extern command_func_t D_80075C38[];
 void Audio_UpdateVoicePlaybackEnd(channel_t* arg0);
 void func_80039A44(channel_t* cp);
 void func_800395D0(channel_t* cp);
+//@unverified
+/**
+ * Processes the channel's data stream at +0x30: runs command bytes (0x80 and
+ * up) through the handler table D_80075C38, then reads the next note and its
+ * parameters.
+ */
 void func_80039010(channel_t* arg0) {
 
     u8* var_s0;
@@ -1687,7 +1699,7 @@ void func_80039010(channel_t* arg0) {
                 M2C_FIELD(arg0, u8*, 0xC5) = 0;
                 temp_a0 = *M2C_FIELD(arg0, u8**, 0x30)++;
                 if (temp_a0 < 0x80) {
-                    M2C_FIELD(arg0, u16*, 0xA6) = temp_a0 ^ 0; // FAKE
+                    M2C_FIELD(arg0, u16*, 0xA6) = (s32)temp_a0; // FAKE: no-op cast; the plain assignment changes register allocation
                 } else {
                     M2C_FIELD(arg0, u16*, 0xA6) = *M2C_FIELD(arg0, u8**, 0x30)++ + ((temp_a0 & 0x7F) << 8);
                 }
@@ -1695,7 +1707,7 @@ void func_80039010(channel_t* arg0) {
         } else {
             temp_a0 = *M2C_FIELD(arg0, u8**, 0x30)++;
             if (temp_a0 < 0x80) {
-                M2C_FIELD(arg0, u16*, 0xA6) = temp_a0 ^ 0; // FAKE
+                M2C_FIELD(arg0, u16*, 0xA6) = temp_a0;
             } else {
                 M2C_FIELD(arg0, u16*, 0xA6) = *M2C_FIELD(arg0, u8**, 0x30)++ + ((temp_a0 & 0x7F) << 8);
             }
@@ -1823,10 +1835,17 @@ void Audio_UpdateVoicePlaybackEnd(channel_t* arg0) {
 }
 
 void func_8003A800(void*, s32);
+//@unverified
+/**
+ * Steps the envelope state (byte 0x1E) of the channel's voice at +0x144. When
+ * the note's end time is reached (and the state is below 4) or the channel has
+ * stopped, it moves to state 4, sets the release volume with n_alSynSetVol and
+ * detaches the voice. Otherwise it advances through the earlier states using
+ * the times at +0xD4 and +0xD5 and the volume byte at +0xD2.
+ */
 void func_800395D0(channel_t* arg0) {
     u32 temp_ft4;
     u32 temp_a0;
-    UNUSED s32 pad; // FAKE
 
     if (M2C_FIELD(arg0, u8**, 0x144) != NULL) {
         if (((M2C_FIELD(arg0, u64*, 0x0) >= M2C_FIELD(arg0, u64*, 0x28)) && (M2C_FIELD(arg0, u8**, 0x144)[0x1E] < 4)) ||
