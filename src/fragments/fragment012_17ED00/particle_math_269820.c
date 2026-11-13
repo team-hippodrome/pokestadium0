@@ -230,8 +230,8 @@ s16 Particle_GetUnkA8(s8 *arg0) {
 /**
  * Sets the battle animation effect state word D_8219A82C. BattleAnim_ClearEffectState and
  * BattleAnim_GetEffectState clear and read it.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) (title-screen demo battle, left idle after boot): ran once, with state
+ * 1, called from BattleAnim_DispatchParticleEmission.
  * @unverified Named from the code.
  */
 void BattleAnim_SetEffectState(s32 arg0) {

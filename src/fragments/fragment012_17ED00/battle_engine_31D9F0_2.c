@@ -605,9 +605,8 @@ void BattleAnim_CallbackUnusedGrowFadeVariant(Particle* arg0) {
 }
 
 /**
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-13) (Free Battle, 1P Metronome pinned to Rage): ran 32 times during Rage's
+ * use animation, the flames rising around Onix.
  */
 void BattleAnim_SetupOscillatingFlameUnderneathPokemon(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
