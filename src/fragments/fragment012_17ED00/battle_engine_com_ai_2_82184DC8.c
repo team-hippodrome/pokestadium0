@@ -1546,7 +1546,8 @@ s32 BattleAi_LevelSumAllowed(s32, s32);
  * Returns 1 if picking party slot arg2 in round arg1 keeps the team legal.
  * Seen in play (2026-11-13) (Free Battle, COM team selection): called as IsPickAllowed(0, 0, slot)
  * for slots 0, 1 and 2 and returned 1 each time; Free Battle has no level-sum rule, so
- * BattleAi_LevelSumAllowed did not run.
+ * BattleAi_LevelSumAllowed did not run. Round 2 of the tournament (vs かじばどろぼう) made the same
+ * three calls and returned 1, again without BattleAi_LevelSumAllowed (side byte +0x368 nonzero).
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_IsPickAllowed(s32 arg0, s32 arg1, s32 arg2) {
