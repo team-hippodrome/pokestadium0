@@ -32,7 +32,8 @@ US_FONTS = 0x3BA190              # fonts_ROM_START in the Stadium 1 decompilatio
 US_ASCII_MAP = 0x8DE80           # 128-byte table whose A-Z and a-z entries increase
 MAP_BYTES = 0x80
 ADVANCES = 0x90
-MAIN_POOL = 0x800A94A0          # struct MainPool: {start, end, ...}, the font sheets live inside it
+RDRAM_START = 0x80001000        # the font sheets are decompressed anywhere inside RDRAM
+RDRAM_END = 0x803F0000
 GLYPHS = 0x91
 # Which stages touch which part; the narrow ones exist to bisect a screen-level fault.
 INPLACE_STAGES = {'full'}          # the real patch: English payloads in Zero's own slots
@@ -203,16 +204,14 @@ def font_map_words(rom, ctx=None):
         sll(T6, T4, 3),
         addu(T6, T3, T6),                    # &entries[slot]
         lw(T5, 0x4, T6),                     # entry->file is the glyph base
-        lui(AT, hi(MAIN_POOL)),              # the glyph base must be inside the main pool
-        lw(T7, lo(MAIN_POOL), AT),           # pool start
-        addiu(T7, T7, 0x100),                # leave room for table[-0x90 .. +glyph]
-        sltu(AT, T5, T7),
-        bne(AT, ZERO, 0),                    # below the pool: the slot was never loaded
+        lui(AT, hi(RDRAM_START)),            # the glyph base must be inside RDRAM, or the read below
+        addiu(AT, AT, lo(RDRAM_START)),      # faults: unloaded slots hold values like 0x06003058
+        sltu(AT, T5, AT),
+        bne(AT, ZERO, 0),
         NOP,
-        lui(AT, hi(MAIN_POOL)),
-        lw(T7, lo(MAIN_POOL + 4), AT),       # pool end
-        sltu(AT, T5, T7),
-        beq(AT, ZERO, 0),                    # above the pool: same
+        lui(AT, hi(RDRAM_END)),
+        sltu(AT, T5, AT),
+        beq(AT, ZERO, 0),
         NOP,
         addiu(T5, T5, -ADVANCES),            # its advance table sits 0x90 bytes before it
         addu(T5, T5, V0),
@@ -234,10 +233,9 @@ def font_map_words(rom, ctx=None):
     head[3] = beq(AT, ZERO, base - 3 - 1)
     head[6] = bne(AT, ZERO, base - 6 - 1)
     tail_index = len(store)
-    store[3] = beq(T3, ZERO, tail_index - 4)      # no font context
-    store[7] = beq(AT, ZERO, tail_index - 8)      # slot out of range
-    store[16] = bne(AT, ZERO, tail_index - 17)    # glyph base below the pool
-    store[21] = beq(AT, ZERO, tail_index - 22)    # glyph base above the pool
+    for index in (3, 7, 15, 19):
+        assert (store[index] >> 26) in (0x04, 0x05), 'branch site %d moved' % index
+        store[index] = (store[index] & ~0xFFFF) | ((tail_index - index - 1) & 0xFFFF)
     words = head + ascii_block + store + tail
     retail = words_at(rom, MAP_FUNC, 0x120 // 4)
     assert len(words) <= len(retail), 'map function outgrew its retail span'
@@ -425,9 +423,7 @@ def run_map_function(rom, code, ctx, set_base, tex, table, char, slot=0):
     table is the 0x90-byte advance table that sits 0x90 bytes before tex in every English font file.
     """
     mem = {ctx: struct.pack('>I', set_base),                # font_context
-           set_base + 0x38: bytes([slot]),                  # unk_50 = the active slot
-           MAIN_POOL: struct.pack('>I', 0x80100000),        # pool start
-           MAIN_POOL + 4: struct.pack('>I', 0x80400000)}    # pool end
+           set_base + 0x38: bytes([slot])}                  # unk_50 = the active slot
     if tex:
         mem[set_base + slot * 8 + 4] = struct.pack('>I', tex)
         for i, byte in enumerate(table):
@@ -554,8 +550,8 @@ def selftest():
     cases = ((0x41, 0, 0x80200000, (26, 7)), (0x69, 0, 0x80200000, (77, 3)),
              (0x20, 0, 0x80200000, (0, 4)), (0x2421, 0, 0x80200000, (0, 4)),
              (0x41, 0, 0, (26, 0)),                          # set not loaded: no read, no write
-             (0x41, 0, 0x90, (26, 0)),                       # stale slot below the pool
-             (0x41, 0, 0x80500000, (26, 0)),                 # stale slot above the pool
+             (0x41, 0, 0x06003058, (26, 0)),                 # stale slot, the value the save state holds
+             (0x41, 0, 0x80500000, (26, 0)),                 # above RDRAM
              (0x41, 9, 0x80200000, (26, 0)))                 # slot out of range: untouched
     for char, slot, tex, expected in cases:
         got = run_map_function(rom, code, 0x8006d200, 0x80100000, tex, advance, char, slot)

@@ -237,3 +237,23 @@ Screens load subsets of the six sets: GB Tower uses mask 0x18, the ones behind ã
 reads nothing and survives that; the advance lookup dereferenced the stale glyph base and faulted.
 The mapper now requires the base to be inside `sMemPool` (0x800A94A0, start+0x100 <= base < end)
 before touching the advance table, so an unloaded slot can only cost a monospace character.
+
+### What the save state showed (2026-11-12)
+
+The frozen state (gopher64, RDRAM stored word- and byte-reversed at state offset 0x1E555) shows the
+font context the failing screens build with mask 0x3C:
+
+```
+entry0 adv= 5 h= 0 w=48 ptr=0x06003058   <- never loaded
+entry1 adv= 5 h= 0 w=48 ptr=0x060030a0   <- never loaded
+entry2 adv=16 h=16 w=16 ptr=0x801a13d0   <- set 2
+entry3 adv=20 h=20 w=24 ptr=0x801831e0   <- set 3
+entry4 adv=24 h=24 w=24 ptr=0x8015ef90   <- set 4
+entry5 adv= 5 h= 0 w=49 ptr=0x0600312c   <- never loaded
+```
+
+So the failing screens do call `Font_SetActive` with masks they never loaded, and those slots hold
+stale pool bytes. `text-0x90` on 0x06003058 is outside RDRAM: address error, picture stops, audio
+thread keeps playing. The mapper now refuses any glyph base outside 0x80001000..0x803F0000. Note the
+earlier attempt read `sMemPool.start` at offset 0; in this build the pool struct keeps its queue
+first and start/end sit at 0x20/0x24, so that check returned start=0 and accepted the bad pointer.
