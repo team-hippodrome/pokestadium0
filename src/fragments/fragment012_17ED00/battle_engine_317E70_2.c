@@ -314,6 +314,12 @@ void BattleAnim_InitializeParticleChain(Particle* arg0, Vec3f arg1, Vec3s arg2, 
     }
 }
 
+/**
+ * Initializes new particle arg0 as burst child arg4 of particle arg1: copies the owner,
+ * parameters, motion and transform state, and gives it update callback arg2 and
+ * descriptor arg3. A child of a list-4 particle goes to list 0.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CloneParticleState(Particle* arg0, Particle* arg1, ParticleUpdateCallback arg2, ParticleDescriptor* arg3,
                    s32 arg4) {
     arg0->updateCallback = arg2;
@@ -359,6 +365,11 @@ void BattleAnim_EmitParticleBurst(Particle* arg0, ParticleUpdateCallback arg1, P
     }
 }
 
+/**
+ * Like BattleAnim_EmitParticleBurst, but also sets each child's CF parameter to arg4 and
+ * CE parameter to arg5.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_EmitParticleBurstWithMetadata(Particle* arg0, ParticleUpdateCallback arg1, ParticleDescriptor* arg2, s16 arg3, s16 arg4,
                    s16 arg5) {
     s16 i;
@@ -1108,6 +1119,14 @@ void BattleAnim_ResetSpawnDelayAlias(void) {
     BattleAnim_ResetSpawnDelay();
 }
 
+/**
+ * Queues an effect slot: it runs after arg0 frames (plus the current spawn delay), repeats
+ * arg2 times every arg1 frames, and spawns particles with callback arg3 and descriptor arg4
+ * for owner arg5. arg8 is the emission kind and arg6, arg7, arg9 to argB its parameters.
+ * The slot remembers the current effect list and resource list. Returns -1 if no slot is
+ * free.
+ * @unverified Name from Stadium 1.
+ */
 BattleAnimEffectSlot* BattleAnim_CreateEffectSlot(s32 arg0, s32 arg1, s8 arg2, func_unk_D_8140E724 arg3, ParticleDescriptor* arg4,
                               ActivePokemon* arg5, s16 arg6, s16 arg7, u8 arg8, u8 arg9, u8 argA, u8 argB) {
     BattleAnimEffectSlot* sp1C = BattleAnim_AllocEffectSlot();
@@ -1131,11 +1150,20 @@ BattleAnimEffectSlot* BattleAnim_CreateEffectSlot(s32 arg0, s32 arg1, s8 arg2, f
     return sp1C;
 }
 
+/**
+ * BattleAnim_CreateEffectSlot for the current animation owner, run once.
+ * @unverified Name from Stadium 1.
+ */
 BattleAnimEffectSlot* BattleAnim_CreateEffectSlotForCurrentOwner(s32 arg0, func_unk_D_8140E724 arg1, ParticleDescriptor* arg2, s16 arg3, s16 arg4, u8 arg5,
                               u8 arg6, u8 arg7, u8 arg8) {
     return BattleAnim_CreateEffectSlot(arg0, 0, 1, arg1, arg2, gBattleAnimCurrentOwner, arg3, arg4, arg5, arg6, arg7, arg8);
 }
 
+/**
+ * BattleAnim_CreateEffectSlot for the current animation owner, with a repeat interval and
+ * count.
+ * @unverified Name from Stadium 1.
+ */
 BattleAnimEffectSlot* BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(s32 arg0, s32 arg1, s8 arg2, func_unk_D_8140E724 arg3, ParticleDescriptor* arg4, s16 arg5,
                               s16 arg6, u8 arg7, u8 arg8, u8 arg9, u8 argA) {
     return BattleAnim_CreateEffectSlot(arg0, arg1, arg2, arg3, arg4, gBattleAnimCurrentOwner, arg5, arg6, arg7, arg8, arg9, argA);
