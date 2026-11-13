@@ -2,7 +2,7 @@
 
 Zero saves to 32 KiB of battery SRAM (PI domain 2 at 0x08000000). Code:
 `src/save_data.c`, transfers in `Sram_TransferChunked`. Confirmed in
-pj64-pokestadium-debug on 2026-11-12 unless a row says "code".
+pj64-pokestadium-debug on 2026-11-12/13 unless a row says "code".
 
 ## Load and write
 
@@ -66,16 +66,17 @@ one shown.
 
 | Offset | Type | Field |
 |---|---|---|
-| 0x02 | u8 | GB Tower speed tier unlocked, 0–2; Z cycles speeds in the tower (code) |
+| 0x02 | u8 | GB Tower picture frames unlocked, 0–2 (1 Doduo, 2 Dodrio); Z cycles them in the tower. Seen: Master Ball Cup clear 0 → 1 |
 | 0x03 | u8 | bit 0 サウンド モノラル, bit 1 じっきょう なし |
 | 0x04 | s32 | GB Tower コンフィグ: bits 8–15 START button, bits 0–7 SELECT button − 1. Choices 0 START, 1 L, 2 R, 3 C-Left, 4 C-Down. Seen: START → R stored 0x0200 |
-| 0x08 | u8 | high byte of progress: bit 0 L50～55 tournament won, bit 1 マスターボールカップ won (code) |
-| 0x09 | u8 | L1～30 cups cleared, 0–4. Seen: 2 opens ハイパーボールカップ |
+| 0x08 | u8 | high byte of progress: bit 0 L50～55 tournament won (code), bit 1 マスターボールカップ won. Seen: bit 1 set by the final |
+| 0x09 | u8 | L1～30 cups cleared, 0–4. A win raises it only when the cup index ≥ the count. Seen: 2 opens ハイパーボールカップ; Master Ball Cup win 0 → 1 |
 
 ### Continue data (21)
 
 Written by ちゅうだんする at トーナメントをつづけますか？, read by
-トーナメントのつづきをする？ at the main menu.
+トーナメントのつづきをする？ at the main menu. Cleared (flags 0) when the
+tournament is won. Seen: after the Master Ball Cup final.
 
 | Offset | Type | Field |
 |---|---|---|

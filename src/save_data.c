@@ -932,7 +932,7 @@ s32 Save_WriteTypedRecord(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
 }
 
 /**
- * Reads the GB Tower settings from the options record: speed tier (+0x02, s8) and button config (+0x04, s32).
+ * Reads the GB Tower settings from the options record: picture frames unlocked (+0x02, s8) and button config (+0x04, s32).
  * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): the button config set in the GB Tower menu came back the next time the tower started.
  */
 s32 Save_GetGbTowerSettings(s8 *arg0, s32 *arg1) {
@@ -961,10 +961,12 @@ s32 Save_SetGbTowerButtonConfig(s32 arg0) {
 M2C_UNK Save_SetTypedRecordFlags(s32, s32, M2C_UNK);
 M2C_UNK Save_SetTypedRecordFlags(M2C_UNK, M2C_UNK, M2C_UNK);
 /**
- * Stores how many GB Tower fast-forward speeds are unlocked (+0x02 of the options record, 0 to 2). Z cycles through them in the tower.
- * @unverified Read from the code; no cup was cleared in play.
+ * Stores how many extra GB Tower picture frames are unlocked (+0x02 of the options record, 0 to 2). Z cycles the frame around the
+ * Game Boy screen in the tower: 1 adds the Doduo frame, 2 the Dodrio frame.
+ * Seen in play (2026-11-13, docs/annotation/n64-save-format.md): clearing マスターボールカップ raised it from 0 to 1; with 2 set, Z cycled
+ * green, Doduo and Dodrio frames.
  */
-s32 Save_SetGbTowerSpeedTier(s8 arg0) {
+s32 Save_SetGbTowerFrameTier(s8 arg0) {
     M2C_FIELD(gSaveBuffer, s8 *, 0x7A42) = arg0;
     Save_SetTypedRecordFlags(0x14, 0, 2);
     return 1;

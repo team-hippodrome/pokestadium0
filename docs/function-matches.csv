@@ -3479,7 +3479,7 @@ func_82200850,0x82200850,src/fragments/fragment013_232510/demo_scenes_161E60.c,f
 func_82200858,0x82200858,src/fragments/fragment013_232510/demo_scenes_161E60.c,VsScene_LoadTeamIcons,hand,,c
 func_8220091C,0x8220091C,src/fragments/fragment013_232510/demo_scenes_161E60.c,VsScene_PlayBattleTitle,hand,,c
 func_82200C04,0x82200C04,src/fragments/fragment013_232510/demo_scenes_161E60.c,VsScene_Play,hand,,c
-func_82200DA4,0x82200DA4,src/fragments/fragment013_232510/demo_scenes_161E60.c,Tournament_UnlockGbTowerSpeedTier,m2c,m2c,c
+func_82200DA4,0x82200DA4,src/fragments/fragment013_232510/demo_scenes_161E60.c,Tournament_UnlockGbTowerFrame,m2c,m2c,c
 func_82200E2C,0x82200E2C,src/fragments/fragment013_232510/demo_scenes_161E60.c,func_82200E2C,hand,,c
 func_82200F08,0x82200F08,src/fragments/fragment013_232510/demo_scenes_161E60.c,Tournament_RecordCupClear,hand,,c
 func_82201084,0x82201084,src/fragments/fragment013_232510/demo_scenes_161E60.c,func_82201084,hand,,c
@@ -5321,7 +5321,7 @@ func_80024D88,0x80024D88,src/save_data.c,Deck_ReadSaveEntry,hand,,c
 func_80024F14,0x80024F14,src/save_data.c,Save_WriteTypedRecord,hand,,c
 func_80025100,0x80025100,src/save_data.c,Save_GetGbTowerSettings,m2c,m2c,c
 func_80025130,0x80025130,src/save_data.c,Save_SetGbTowerButtonConfig,m2c,m2c,c
-func_80025168,0x80025168,src/save_data.c,Save_SetGbTowerSpeedTier,m2c,m2c+context,c
+func_80025168,0x80025168,src/save_data.c,Save_SetGbTowerFrameTier,m2c,m2c+context,c
 func_800251A8,0x800251A8,src/save_data.c,Save_GetProgressFlags,m2c,m2c+permuter,c
 func_800251C8,0x800251C8,src/save_data.c,Save_SetProgressFlags,hand,,c
 func_80025214,0x80025214,src/save_data.c,Save_GetOptionFlags,m2c,m2c,c

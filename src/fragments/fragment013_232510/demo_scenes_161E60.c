@@ -598,23 +598,23 @@ void VsScene_Play(void) {
 }
 
 M2C_UNK Save_GetGbTowerSettings(s8 *, M2C_UNK);               /* extern */
-M2C_UNK Save_SetGbTowerSpeedTier(s8);                          /* extern */
+M2C_UNK Save_SetGbTowerFrameTier(s8);                          /* extern */
 
 /**
- * Raises the GB Tower speed tier by one (up to 2) and flags the unlock message.
- * @unverified Read from the code; no cup was cleared in play.
+ * Unlocks the next GB Tower picture frame (options record +0x02, up to 2) and flags its unlock message.
+ * Seen in play (2026-11-13, docs/annotation/n64-save-format.md): clearing マスターボールカップ raised the frame count from 0 to 1.
  */
-void Tournament_UnlockGbTowerSpeedTier(void) {
+void Tournament_UnlockGbTowerFrame(void) {
     s8 sp1F;
 
     Save_GetGbTowerSettings(&sp1F, 0);
     switch (sp1F) {                                 /* irregular */
     case 0:
-        Save_SetGbTowerSpeedTier((s8) (sp1F + 1));
+        Save_SetGbTowerFrameTier((s8) (sp1F + 1));
         M2C_FIELD(D_822036A4, u16 *, 0x1096) = (u16) (M2C_FIELD(D_822036A4, u16 *, 0x1096) | 8);
         return;
     case 1:
-        Save_SetGbTowerSpeedTier((s8) (sp1F + 1));
+        Save_SetGbTowerFrameTier((s8) (sp1F + 1));
         M2C_FIELD(D_822036A4, u16 *, 0x1096) = (u16) (M2C_FIELD(D_822036A4, u16 *, 0x1096) | 0x10);
         return;
     }
@@ -662,8 +662,9 @@ void Save_SetProgressFlags(u16 arg0);
 
 /**
  * Updates the progress flags after a tournament win: mode 1 (L50～55) sets bit 0 of the high byte at the final; mode 2 (L1～30)
- * raises the cups-cleared count and sets bit 1 after マスターボールカップ. First clears unlock a GB Tower speed tier.
- * @unverified Read from the code; no cup was cleared in play.
+ * raises the cups-cleared count and sets bit 1 after マスターボールカップ. The first win of each unlocks a GB Tower picture frame.
+ * Seen in play (2026-11-13, docs/annotation/n64-save-format.md): winning the マスターボールカップ final set bit 1, raised the count from 0
+ * to 1 and unlocked a frame. The L50～55 branch (bit 0) is read from the code only.
  */
 void Tournament_RecordCupClear(void) {
     u16 lo = Save_GetProgressFlags() & 0xFF;
@@ -677,7 +678,7 @@ void Tournament_RecordCupClear(void) {
         if (!(hi & 1)) {
             hi |= 1;
             Save_SetProgressFlags((hi << 8) | lo);
-            Tournament_UnlockGbTowerSpeedTier();
+            Tournament_UnlockGbTowerFrame();
             Save_CommitTypedRecord(0x14, 0);
         }
     } else if (((DemoState*)D_822036A4)->unk_0000 == 2) {
@@ -692,7 +693,7 @@ void Tournament_RecordCupClear(void) {
             if (!(hi & 2)) {
                 hi |= 2;
                 Save_SetProgressFlags((hi << 8) | lo);
-                Tournament_UnlockGbTowerSpeedTier();
+                Tournament_UnlockGbTowerFrame();
                 Save_CommitTypedRecord(0x14, 0);
             }
         }
