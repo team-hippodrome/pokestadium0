@@ -662,8 +662,8 @@ void func_88101478(s32 x, s32 y, u8* entry, s32 frame, s32 color, s32* anim) {
 
 /**
  * Starts a timer at 0 that counts to `arg1` x 15.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran during the Ditto transform animation after registering the party
+ * (とうろく > ポケモンをとうろくする, はい), which ends with メタモンのへんしんがおわりました.
  * @unverified Name and comment guessed from the code.
  */
 void Registration_InitTimer(s8 *arg0, s32 arg1) {
@@ -687,8 +687,8 @@ void Registration_InitTimerFull(s8 *arg0, s32 arg1) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Returns whether the timer has reached its end.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran during the Ditto transform animation after registering the party
+ * (とうろく > ポケモンをとうろくする, はい), which ends with メタモンのへんしんがおわりました.
  * @unverified Name and comment guessed from the code.
  */
 s32 Registration_IsTimerDone(s8 *arg0)
@@ -709,8 +709,8 @@ s32 Registration_IsTimerAtStart(s32 *arg0) {
 
 /**
  * Advances the timer by one and returns whether it is done.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran during the Ditto transform animation after registering the party
+ * (とうろく > ポケモンをとうろくする, はい), which ends with メタモンのへんしんがおわりました.
  * @unverified Name and comment guessed from the code.
  */
 s32 Registration_StepTimer(s8* arg0) {
@@ -730,8 +730,8 @@ s32 Audio_QueueSoundAvoidingRecent(s32* arg0) {
 
 /**
  * Returns the timer's current value.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran during the Ditto transform animation after registering the party
+ * (とうろく > ポケモンをとうろくする, はい), which ends with メタモンのへんしんがおわりました.
  * @unverified Name and comment guessed from the code.
  */
 s32 Registration_GetTimer(s32 *arg0) {

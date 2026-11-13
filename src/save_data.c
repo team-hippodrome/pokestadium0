@@ -335,8 +335,8 @@ void func_80023D3C(s32 arg0, s32 arg1) {
 
 /**
  * Packs a BattleMon into a GB-format save record with its transcoded name and trainer data.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran when the party was registered into slot 01 and again into slot 02
+ * (とうろく > ポケモンをとうろくする, はい).
  * @unverified Name and comment guessed from the code.
  */
 void BattleMon_ToGbSaveRecord(s32 arg0, s32 arg1) {
@@ -623,8 +623,8 @@ s32 Deck_IsSaveEntryPresent(s32 arg0, s32 arg1) {
 
 s32 func_800246A8(s32, s32);
 /**
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran when slot 01 was picked in とうろく > とうろくしたポケモンをけす, before the
+ * このポケモンをけす？ prompt.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 Deck_GetSaveEntryTrainerId(s32 arg0, s32 arg1) {
@@ -766,8 +766,8 @@ M2C_UNK func_80023F38(s32, s32, M2C_UNK);           /* extern */
 s32 func_80024ADC();                                /* extern */
 
 /**
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-13) ran when the party was registered into slot 01 and again into slot 02
+ * (とうろく > ポケモンをとうろくする, はい).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Deck_SetSaveEntryCount(s32 arg0, s32 arg1, s32 arg2) {

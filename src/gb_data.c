@@ -136,7 +136,7 @@ char* Text_UntranscodeName(char* arg0, char* arg1) {
  * Converts an EUC-JP name back to Game Boy character codes by searching D_80076FD4_jp;
  * the full-width space 0xA1A1 becomes 0x7F.
  * Seen in play (2026-11-13) ran when leaving せいとん with レポートしてやめる after moving フシギダネ and ヒトカゲ into
- * GBのボックス1.
+ * GBのボックス1, and when the party was registered (とうろく > ポケモンをとうろくする).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 char* Text_TranscodeName(char* arg0, char* arg1) {
