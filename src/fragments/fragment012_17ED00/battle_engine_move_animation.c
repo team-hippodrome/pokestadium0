@@ -1170,8 +1170,9 @@ void BattleScene_EnterMissRowPlaySound(ActivePokemon* active_pokemon) {
 /**
  * State row 13: plays battle sounds 20 and/or 33 from runtime bits 0x08/0x10,
  * then retires the slot.
- * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
- * once, from the command menu to the end of its turn).
+ * Seen in play (2026-11-13) (Free Battle, crafted states): ran as the state-row-13 callback for
+ * 1P's Onix after its move in four battles, each time with the poison bit (0x08) set in its
+ * pendingStatusCondition.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_Row13PlaySequences14And21(ActivePokemon* active_pokemon) {
