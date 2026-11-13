@@ -32,6 +32,8 @@ US_FONTS = 0x3BA190              # fonts_ROM_START in the Stadium 1 decompilatio
 US_ASCII_MAP = 0x8DE80           # 128-byte table whose A-Z and a-z entries increase
 MAP_BYTES = 0x80
 ADVANCES = 0x90
+RETAIL_MAP_ROM = ZERO_FONTS_END - 0x200  # free tail of the archive: every payload ends well before it
+RETAIL_MAP_VRAM = 0xB0000000 + RETAIL_MAP_ROM
 RDRAM_START = 0x80001000        # the font sheets are decompressed anywhere inside RDRAM
 RDRAM_END = 0x803F0000
 GLYPHS = 0x91
@@ -147,13 +149,13 @@ def font_load_words(rom, shift=ADVANCES):
     return out + [NOP] * (len(r) - len(out))
 
 
-def english_payload(us, index, target_len):
-    """One English font file, sized to decompress to exactly Zero's own set (target_len bytes).
+def english_payload(us, index, zero_data):
+    """One English font file: Stadium 1's table and 145 glyphs, then Zero's own kana cells.
 
-    Zero's UI indexes glyphs up to 256, and its sets hold 257 cells; Stadium 1's hold 145. A set
-    that decompresses smaller than Zero's makes those reads land outside the pool block - an address
-    error mid-frame, which looks like a hang with the music still playing. So the English glyphs are
-    followed by blank cells (0xF0, the value of Zero's own empty glyph) up to Zero's count.
+    Zero's sets hold 257 cells and its UI indexes glyphs up to 256, so a shorter set sends those
+    reads outside the pool block - an address error mid-frame, which looks like a hang with the
+    music still playing. Keeping Zero's cells 145..256 in place means the Japanese text that is not
+    translated yet (species names, nicknames, Game Pak names) still draws instead of vanishing.
     """
     import crunch64
 
@@ -163,26 +165,26 @@ def english_payload(us, index, target_len):
     data = crunch64.yay0.decompress(blob[struct.unpack_from('>I', blob, 8)[0]:])
     width, height = CELLS[index]
     cells = (len(data) - ADVANCES) // (width * height)
-    out = data + b'\xF0' * (target_len - len(data))
-    if len(out) != target_len:
-        raise SystemExit('set %d is larger than Zero\'s (%#x > %#x)' % (index, len(data), target_len))
+    out = data + zero_data[cells * width * height:]      # English glyphs, then Zero's kana
     body = crunch64.yay0.compress(out)
     return b'PERS-SZP' + struct.pack('>4I', 0x18, len(out), len(out), 0) + body, cells
 
 
-def zero_set_len(rom, offset, size):
-    """Decompressed length of one of Zero's own font files."""
+def zero_set_data(rom, offset, size):
+    """One of Zero's own font files, decompressed: 257 glyph cells, no advance table."""
     import crunch64
     blob = rom[offset:offset + size]
-    return len(crunch64.yay0.decompress(blob[struct.unpack_from('>I', blob, 8)[0]:]))
+    return crunch64.yay0.decompress(blob[struct.unpack_from('>I', blob, 8)[0]:])
 
 
 def font_map_words(rom, ctx=None):
-    """func_80019F70: printable ASCII through the Latin map, and that glyph's advance into the set.
+    """func_80019F70: printable ASCII through the Latin map, everything else through retail's kana code.
 
-    The advance table sits 0x90 bytes before the glyph base, inside each English font file. The font
-    context block is never cleared, so a slot the screen did not load can hold stale data: the slot
-    is range-checked and a null glyph base is skipped before anything is dereferenced.
+    For printable ASCII this returns the glyph from D_8006081F, which now holds Stadium 1's
+    half-width glyphs, and copies that glyph's advance (the 0x90-byte table at the head of every
+    English font file) into the active set. Every other code - the text macros below 0x21 and the
+    EUC-JP kana above 0x7E - is handed to a copy of the retail mapper kept at RETAIL_MAP_VRAM, so
+    the untranslated Japanese names still draw with Zero's own kana cells.
     """
     ctx = font_context_address(rom) if ctx is None else ctx
     ascii_block = [
@@ -204,8 +206,8 @@ def font_map_words(rom, ctx=None):
         sll(T6, T4, 3),
         addu(T6, T3, T6),                    # &entries[slot]
         lw(T5, 0x4, T6),                     # entry->file is the glyph base
-        lui(AT, hi(RDRAM_START)),            # the glyph base must be inside RDRAM, or the read below
-        addiu(AT, AT, lo(RDRAM_START)),      # faults: unloaded slots hold values like 0x06003058
+        lui(AT, hi(RDRAM_START)),            # the base must be inside RDRAM, or the read below
+        addiu(AT, AT, lo(RDRAM_START)),      # faults: an unloaded slot holds stale pool bytes
         sltu(AT, T5, AT),
         bne(AT, ZERO, 0),
         NOP,
@@ -221,26 +223,32 @@ def font_map_words(rom, ctx=None):
     tail = [jr(RA), NOP]
     head = [
         andi(A0, A0, 0xFFFF),                # the caller's u16 character code
-        addu(V0, ZERO, ZERO),                # everything but printable ASCII is glyph 0
         sltiu(AT, A0, 0x7F),
-        beq(AT, ZERO, 0),                    # >= 0x7F: store
+        beq(AT, ZERO, 0),                    # >= 0x7F: retail (kana)
         NOP,
-        sltiu(AT, A0, 0x21),
-        bne(AT, ZERO, 0),                    # < 0x21: store
+        sltiu(AT, A0, 0x20),
+        bne(AT, ZERO, 0),                    # < 0x20: retail (text macros)
         NOP,
     ]
-    base = len(head) + len(ascii_block)
-    head[3] = beq(AT, ZERO, base - 3 - 1)
-    head[6] = bne(AT, ZERO, base - 6 - 1)
-    tail_index = len(store)
+    kana = [
+        lui(AT, hi(RETAIL_MAP_VRAM)),        # tail call: retail returns straight to our caller
+        addiu(AT, AT, lo(RETAIL_MAP_VRAM)),
+        jr(AT),
+        NOP,
+    ]
+    body = head + ascii_block + store + tail + kana
+    kana_at = len(head) + len(ascii_block) + len(store) + len(tail)
+    store_at = len(head) + len(ascii_block)
+    tail_at = store_at + len(store)
+    body[2] = beq(AT, ZERO, kana_at - 3)
+    body[5] = bne(AT, ZERO, kana_at - 6)
     for index in (3, 7, 15, 19):
-        assert (store[index] >> 26) in (0x04, 0x05), 'branch site %d moved' % index
-        store[index] = (store[index] & ~0xFFFF) | ((tail_index - index - 1) & 0xFFFF)
-    words = head + ascii_block + store + tail
+        assert (body[store_at + index] >> 26) in (0x04, 0x05), 'branch site %d moved' % index
+        body[store_at + index] = ((body[store_at + index] & ~0xFFFF)
+                                  | ((tail_at - store_at - index - 1) & 0xFFFF))
     retail = words_at(rom, MAP_FUNC, 0x120 // 4)
-    assert len(words) <= len(retail), 'map function outgrew its retail span'
-    return words + [NOP] * (len(retail) - len(words))
-
+    assert len(body) <= len(retail), 'map function outgrew its retail span'
+    return body + [NOP] * (len(retail) - len(body))
 
 
 # --- patch and check ---------------------------------------------------------------------------
@@ -338,7 +346,7 @@ def patch(rom, us, stage='full'):
         # offset, size and glyph count the UI code indexes) stays byte-identical to retail.
         _, zfiles = archive_files(rom, ZERO_FONTS)
         for index, (zoff, zsize) in enumerate(zfiles):
-            payload, _ = english_payload(us, index, zero_set_len(rom, ZERO_FONTS + zoff, zsize))
+            payload, _ = english_payload(us, index, zero_set_data(rom, ZERO_FONTS + zoff, zsize))
             if len(payload) > zsize:
                 raise SystemExit('English set %d does not fit Zero slot %#x (%#x)'
                                  % (index, zsize, len(payload)))
@@ -363,6 +371,13 @@ def patch(rom, us, stage='full'):
         patches.append((LOAD_FUNC, retail_words[:11] + [swap] + retail_words[12:]))
     if stage in LOADER_STAGES:
         patches.insert(0, (LOAD_FUNC, font_load_words(rom, 0 if stage == 'loader0' else ADVANCES)))
+    if stage in MAP_FUNC_STAGES:
+        _, zfiles = archive_files(rom, ZERO_FONTS)
+        last_end = ZERO_FONTS + zfiles[-1][0] + len(english_payload(
+            us, len(zfiles) - 1, zero_set_data(rom, ZERO_FONTS + zfiles[-1][0], zfiles[-1][1]))[0])
+        if last_end > RETAIL_MAP_ROM:
+            raise SystemExit('no room for the retail mapper copy: payloads end at %#x' % last_end)
+        out[RETAIL_MAP_ROM:RETAIL_MAP_ROM + 0x120] = rom[MAP_FUNC - ROM_BIAS:MAP_FUNC - ROM_BIAS + 0x120]
     for vram, words in patches:
         struct.pack_into('>%dI' % len(words), out, vram - ROM_BIAS, *words)
     fix_checksum(out, seed)
@@ -379,8 +394,10 @@ def check(rom, us, retail, stage='full', seed=None):
     if stage in INPLACE_STAGES:
         zfiles = archive_files(retail, ZERO_FONTS)[1]
         for index, (zoff, zsize) in enumerate(zfiles):
-            payload, _ = english_payload(us, index, zero_set_len(retail, ZERO_FONTS + zoff, zsize))
-            if rom[ZERO_FONTS + zoff:ZERO_FONTS + zoff + zsize] != payload + bytes(zsize - len(payload)):
+            payload, _ = english_payload(us, index, zero_set_data(retail, ZERO_FONTS + zoff, zsize))
+            # Only the PERS stream matters: the rest of the slot is free space (the retail mapper
+            # copy lives in slot 0's tail), and the archive never reads past the declared extents.
+            if rom[ZERO_FONTS + zoff:ZERO_FONTS + zoff + len(payload)] != payload:
                 raise SystemExit('font payload %#x is not the English set' % zoff)
         if rom[ZERO_FONTS:ZERO_FONTS + 0x70] != retail[ZERO_FONTS:ZERO_FONTS + 0x70]:
             raise SystemExit("the font archive header changed")
@@ -425,10 +442,11 @@ def _retail_stub(rom):
 
 
 # --- interpreter used by the self-test ---------------------------------------------------------
-def run_map_function(rom, code, ctx, set_base, tex, table, char, slot=0):
+def run_map_function(rom, code, ctx, set_base, tex, table, char, slot=0, code_vram=MAP_FUNC):
     """Runs the emitted mapper; returns (glyph, the advance it wrote to entry[slot]).
 
     table is the 0x90-byte advance table that sits 0x90 bytes before tex in every English font file.
+    Execution follows the tail call into the copy of the retail mapper at RETAIL_MAP_ROM.
     """
     mem = {ctx: struct.pack('>I', set_base),                # font_context
            set_base + 0x38: bytes([slot])}                  # unk_50 = the active slot
@@ -438,7 +456,14 @@ def run_map_function(rom, code, ctx, set_base, tex, table, char, slot=0):
             mem[tex - ADVANCES + i] = bytes([byte])
     regs = [0] * 32
     regs[A0] = char
-    pc, steps = 0, 0
+    pc, steps = code_vram, 0
+
+    def fetch(addr, size=4):
+        if code_vram <= addr < code_vram + len(code):
+            return code[addr - code_vram:][:size]
+        if 0xB0000000 <= addr < 0xB1000000:               # code kept in ROM
+            return rom[addr - 0xB0000000:][:size]
+        raise AssertionError('execute at %#x' % addr)
 
     def read(addr, size):
         if addr in mem:
@@ -451,7 +476,7 @@ def run_map_function(rom, code, ctx, set_base, tex, table, char, slot=0):
 
     while steps < 200:
         steps += 1
-        w = struct.unpack_from('>I', code, pc)[0]
+        w = struct.unpack('>I', fetch(pc))[0]
         op, rs, rt, rd = w >> 26, (w >> 21) & 0x1F, (w >> 16) & 0x1F, (w >> 11) & 0x1F
         imm = struct.unpack('>h', struct.pack('>H', w & 0xFFFF))[0]
         pc += 4
@@ -484,7 +509,9 @@ def run_map_function(rom, code, ctx, set_base, tex, table, char, slot=0):
             elif fn == 0x2B:
                 regs[rd] = 1 if regs[rs] < regs[rt] else 0
             elif fn == 0x08:
-                return regs[V0], mem.get(set_base + slot * 8, b'\x00')[0]
+                if rs == RA:
+                    return regs[V0], mem.get(set_base + slot * 8, b'\x00')[0]
+                pc = regs[rs]                              # tail call into the retail copy
             else:
                 raise AssertionError('unhandled funct %#x' % fn)
         else:
@@ -553,10 +580,15 @@ def selftest():
     advance[0], advance[26], advance[77] = 4, 7, 3          # space, A, i
     rom = bytearray(ZERO_FONTS_END)
     rom[ZERO_ASCII_MAP:ZERO_ASCII_MAP + MAP_BYTES] = table
+    # the copy of the retail mapper that the kana path tail-calls: return glyph 0x91
+    fake = [addiu(V0, ZERO, 0x91), jr(RA), NOP]
+    struct.pack_into('>3I', rom, RETAIL_MAP_ROM, *fake)
     words = font_map_words(rom, ctx=0x8006d200)
     code = struct.pack('>%dI' % len(words), *words)
     cases = ((0x41, 0, 0x80200000, (26, 7)), (0x69, 0, 0x80200000, (77, 3)),
-             (0x20, 0, 0x80200000, (0, 4)), (0x2421, 0, 0x80200000, (0, 4)),
+             (0x20, 0, 0x80200000, (0, 4)),
+             (0x2421, 0, 0x80200000, (0x91, 0)),      # kana: retail's mapper decides
+             (0x0A, 0, 0x80200000, (0x91, 0)),        # text macro: retail's mapper decides
              (0x41, 0, 0, (26, 0)),                          # set not loaded: no read, no write
              (0x41, 0, 0x06003058, (26, 0)),                 # stale slot, the value the save state holds
              (0x41, 0, 0x80500000, (26, 0)),                 # above RDRAM

@@ -257,3 +257,38 @@ stale pool bytes. `text-0x90` on 0x06003058 is outside RDRAM: address error, pic
 thread keeps playing. The mapper now refuses any glyph base outside 0x80001000..0x803F0000. Note the
 earlier attempt read `sMemPool.start` at offset 0; in this build the pool struct keeps its queue
 first and start/end sit at 0x20/0x24, so that check returned start=0 and accepted the bad pointer.
+
+## Strings: catalogue, dictionary, apply (2026-11-12)
+
+`tools/string_catalog.py dump` scans the ROM for NUL-terminated EUC-JP runs and keeps the ones that
+read as text (70% kana/digits/Japanese punctuation, at least three characters): 2722 strings today,
+1081 of them in the resident image. Each entry is keyed by ROM offset and carries `jp`, `en`,
+`room` (bytes the original occupied) and `region`. Re-running `dump` merges, so nothing typed into
+`en` is lost.
+
+`text/dictionary.json` holds jp->en pairs. It is seeded from Stadium 1's `species_names.json`
+(151 official names) plus menu, battle and trainer vocabulary. `string_catalog.py fill` copies any
+matching entry into `en` when the English fits in `room`; 581 strings are filled at the moment, the
+rest are Pokédex flavour text and names waiting for review.
+
+`tools/translate_strings.py apply` writes the translations into the built ROM in place (ASCII plus
+NUL padding inside `room`) and re-stamps the IPL3 checksum, since the resident image sits below the
+first megabyte. Only uncompressed, catalogued runs are ever written.
+
+Full English build:
+
+```
+.venv/bin/python tools/fonts_en.py patch --stage full --rom build/pokestadium0-jp.z64 \
+    --us ~/pokestadium-complete/baseroms/us/baserom.z64 --out build/pokestadium0-full.z64
+.venv/bin/python tools/string_catalog.py dump      # merge any new jp strings
+.venv/bin/python tools/string_catalog.py fill      # dictionary -> en, where it fits
+.venv/bin/python tools/translate_strings.py apply # -> build/pokestadium0-en.z64
+```
+
+## Kana stays visible (2026-11-12)
+
+Stadium 1's sets hold 145 glyphs, Zero's 257. The English payload keeps Stadium 1's 0x90-byte
+advance table and 145 glyphs, then carries **Zero's own cells 145..256**, so untranslated Japanese
+(species names, nicknames, Game Pak names) still draws. `func_80019F70` handles printable ASCII and
+tail-calls a copy of the retail mapper kept in the free tail of the font archive for everything
+else, so kana and the text macros keep retail behaviour exactly.

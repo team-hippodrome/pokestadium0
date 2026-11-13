@@ -1,148 +1,77 @@
 #!/usr/bin/env python3
-"""String inventory and English in-place translation for the resident image.
+"""Write English text from text/strings.json into a built ROM, in place.
 
-Strings are the `extern char D_800xxxxx[]` symbols the sources name, stored NUL-terminated in the
-resident image, which maps to ROM as rom = vram - 0x7FFFF400 (tools/map_rom.py). Text is EUC-JP, and
-the font loop (func_8001A944) draws single-byte ASCII directly, so a translation is plain ASCII
-padded with NULs inside the original string's extent.
+`text/strings.json` is produced by `tools/string_catalog.py dump` (jp text, room, region) and filled
+either by `string_catalog.py fill` (a jp->en dictionary) or by hand. Only string runs the scanner
+found are touched, so every write lands on an uncompressed, already-catalogued string; the English
+text is NUL-padded inside the bytes the Japanese text occupied, which the font loop reads as a
+terminator. Changes below 1 MB break the IPL3 header checksum, so it is re-stamped afterwards.
 
-usage: translate_strings.py dump  [--rom baseroms/jp/baserom.z64] [--out text/strings_ja.json]
-       translate_strings.py apply --translations text/strings_en.json
-                                   [--rom baseroms/jp/baserom.z64] [--out build/baserom_en.z64]
+usage: translate_strings.py apply --rom build/pokestadium0-full.z64 [--json text/strings.json]
+                                  [--out build/pokestadium0-en.z64]
        translate_strings.py selftest
 """
 
 import argparse
 import json
-import re
 import sys
 from pathlib import Path
 
-RESIDENT_VRAM_BIAS = 0x7FFFF400  # rom = vram - bias
-RESIDENT_VRAM_END = 0x80080000
-MAX_STRING = 0x100
-
-SYMBOL_RE = re.compile(r"extern\s+(?:char|u8|s8)\s+(D_8[0-9A-Fa-f]{7})\[\]")
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import fonts_en  # noqa: E402  (the IPL3 checksum port lives there)
 
 
-def scan_symbols(root: Path) -> dict:
-    """Every resident D_8xxxxxxx byte-array symbol the sources declare, as {name: vram}."""
-    found = {}
-    for path in sorted(root.glob("src/**/*.c")) + sorted(root.glob("src/**/*.h")) + sorted(root.glob("include/*.h")):
-        for name in SYMBOL_RE.findall(path.read_text(errors="ignore")):
-            vram = int(name[2:], 16)
-            if 0x80000000 <= vram < RESIDENT_VRAM_END:
-                found[name] = vram
-    return found
-
-
-def decode_string(data: bytes):
-    """The text at the start of data, or None when the bytes are not ASCII/EUC-JP text."""
-    end = data.find(b"\x00", 0, MAX_STRING)
-    if end <= 0:
-        return None
-    raw = data[:end]
-    if max(raw) >= 0x80:
-        try:
-            text = raw.decode("euc-jp")
-        except UnicodeDecodeError:
-            return None
-    else:
-        text = raw.decode("ascii")
-    if any(ord(c) < 0x20 and c != "\n" for c in text) or "\x7f" in text:
-        return None
-    return text
-
-
-def dump(rom: bytes, symbols: dict) -> dict:
-    strings = {}
-    for name, vram in sorted(symbols.items(), key=lambda kv: kv[1]):
-        off = vram - RESIDENT_VRAM_BIAS
-        if off < 0 or off >= len(rom):
+def apply(rom, strings):
+    """Patches every translated string in place; returns (written, overflow, skipped)."""
+    written = overflow = skipped = 0
+    for key, entry in strings.items():
+        text = entry.get("en")
+        if not text:
+            skipped += 1
             continue
-        text = decode_string(rom[off : off + MAX_STRING])
-        if text is not None:
-            strings[name] = {"vram": hex(vram), "text": text}
-    return strings
-
-
-def apply(rom: bytearray, strings: dict, translations: dict) -> list:
-    """Writes translations in place; returns the names that did not fit."""
-    overflow = []
-    for name, text in translations.items():
-        if name not in strings:
-            raise SystemExit("%s: not in the inventory" % name)
-        current = strings[name]
-        if text == current["text"]:
+        raw = text.encode("ascii", "replace")
+        if len(raw) + 1 > entry["room"]:
+            overflow += 1
             continue
-        try:
-            raw = text.encode("ascii")
-        except UnicodeEncodeError:
-            raise SystemExit("%s: %r is not ASCII (the glyph map covers 0x21-0x7E)" % (name, text))
-        off = int(current["vram"], 16) - RESIDENT_VRAM_BIAS
-        room = rom.find(b"\x00", off) - off
-        if len(raw) > room:
-            overflow.append((name, len(raw), room))
-            continue
-        rom[off : off + room] = raw + b"\x00" * (room - len(raw))
-    return overflow
+        offset = int(key, 16)
+        rom[offset:offset + entry["room"]] = raw + bytes(entry["room"] - len(raw))
+        written += 1
+    return written, overflow, skipped
 
 
 def selftest():
-    rom = bytearray(0x2000)
-    symbols = {"D_80000400": 0x80000400, "D_80000480": 0x80000480, "D_80000500": 0x80000500}
-    rom[0x1000:0x1000 + 6] = "テスト".encode("euc-jp")
-    rom[0x1080:0x1080 + 5] = b"ABCDE"
-    rom[0x1100:0x1100 + 5] = b"\xff\xfe\x00"
-    strings = dump(bytes(rom), symbols)
-    assert strings["D_80000400"]["text"] == "テスト", strings
-    assert strings["D_80000480"]["text"] == "ABCDE", strings
-    assert "D_80000500" not in strings, "binary data was taken for text"
-
-    overflow = apply(rom, strings, {"D_80000400": "TEST", "D_80000480": "AB"})
-    assert overflow == [], overflow
-    again = dump(bytes(rom), symbols)
-    assert again["D_80000400"]["text"] == "TEST", again
-    assert again["D_80000480"]["text"] == "AB", again
-    assert rom[0x1006] == 0, "the pad after a shorter translation is not NUL"
-
-    overflow = apply(rom, again, {"D_80000400": "TOO LONG FOR THE SLOT"})
-    assert overflow == [("D_80000400", 21, 4)], overflow  # the slot is now "TEST" + NUL pad
+    rom = bytearray(0x100)
+    rom[0x40:0x48] = "バトル".encode("euc_jp") + b"\x00\x00"      # 6 bytes of text, room 8
+    strings = {
+        "0x000040": {"jp": "バトル", "en": "Battle", "room": 8},
+        "0x000050": {"jp": "とてもながい", "en": "far too long to fit", "room": 6},
+        "0x000060": {"jp": "はい", "en": "", "room": 8},
+    }
+    written, overflow, skipped = apply(rom, strings)
+    assert (written, overflow, skipped) == (1, 1, 1), (written, overflow, skipped)
+    assert rom[0x40:0x48] == b"Battle\x00\x00", rom[0x40:0x48]
+    assert rom[0x50:0x58] == b"\x00" * 8, "an over-long string was written"
     print("selftest ok")
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("command", choices=["dump", "apply", "selftest"])
-    ap.add_argument("--rom", default="baseroms/jp/baserom.z64")
-    ap.add_argument("--out")
-    ap.add_argument("--translations")
+    ap.add_argument("command", choices=["apply", "selftest"])
+    ap.add_argument("--rom", default="build/pokestadium0-full.z64")
+    ap.add_argument("--json", default="text/strings.json")
+    ap.add_argument("--out", default="build/pokestadium0-en.z64")
     args = ap.parse_args()
-    root = Path(__file__).absolute().parent.parent
-
     if args.command == "selftest":
         selftest()
         return
-
-    rom = Path(args.rom).read_bytes()
-    strings = dump(rom, scan_symbols(root))
-    if args.command == "dump":
-        out = Path(args.out or root / "text/strings_ja.json")
-        out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(json.dumps(strings, ensure_ascii=False, indent=1, sort_keys=True) + "\n")
-        print("%d strings -> %s" % (len(strings), out))
-        return
-
-    translations = json.loads(Path(args.translations).read_text())
-    rom = bytearray(rom)
-    overflow = apply(rom, strings, translations)
-    for name, size, room in overflow:
-        print("%s: %d bytes in a %d-byte slot" % (name, size, room), file=sys.stderr)
-    out = Path(args.out or root / "build/baserom_en.z64")
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_bytes(rom)
-    print("%d translations applied, %d overflow -> %s" % (len(translations) - len(overflow), len(overflow), out))
-    sys.exit(1 if overflow else 0)
+    rom = bytearray(Path(args.rom).read_bytes())
+    strings = json.loads(Path(args.json).read_text(encoding="utf-8"))
+    seed = fonts_en.detect_seed(rom)
+    written, overflow, skipped = apply(rom, strings)
+    fonts_en.fix_checksum(rom, seed)
+    Path(args.out).write_bytes(rom)
+    print("%d strings translated, %d did not fit, %d untranslated -> %s"
+          % (written, overflow, skipped, args.out))
 
 
 if __name__ == "__main__":
