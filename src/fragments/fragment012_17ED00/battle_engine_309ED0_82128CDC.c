@@ -70,6 +70,11 @@ void BattleScene_ActionStepIntro(CameraNode* arg0, s32 arg1) {
     }
 }
 
+/**
+ * Hit-count step of a move: on substep 1, once the user's animation is done (or 20 frames
+ * in a frozen/asleep/airborne state), shows the move message and starts the user's model
+ * reaction 0x16 (when moveEffectKind is 0x14) or 3, then advances the phase step.
+ */
 void func_82128E34(s32 arg0) {
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
@@ -118,6 +123,11 @@ void BattleScene_ActionStepSetHitCount(CameraNode* arg0, s32 arg1) {
     }
 }
 
+/**
+ * Move-use camera shot 0: after 20 frames plays the user's camera shot 0 and captures its
+ * orbit, then follows the user until its move animation finishes (or 50 frames in a
+ * frozen/asleep state), clearing the message cursor along the way.
+ */
 void func_82128FBC(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
@@ -146,6 +156,9 @@ void func_82128FBC(CameraNode* arg0) {
     }
 }
 
+/**
+ * Move-use camera shot 1: same as func_82128FBC with camera shot 1.
+ */
 void func_821290CC(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
@@ -175,6 +188,9 @@ void func_821290CC(CameraNode* arg0) {
     }
 }
 
+/**
+ * Move-use camera shot 2: same as func_82128FBC with camera shot 2.
+ */
 void func_821291E4(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
@@ -204,6 +220,9 @@ void func_821291E4(CameraNode* arg0) {
     }
 }
 
+/**
+ * Move-use camera shot 3: same as func_82128FBC with camera shot 3.
+ */
 void func_821292FC(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
@@ -233,6 +252,10 @@ void func_821292FC(CameraNode* arg0) {
     }
 }
 
+/**
+ * Move-use camera shot 4: same pattern as func_82128FBC with camera shot 4, and eases the
+ * field of view to 60 while it plays.
+ */
 void func_82129414(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
@@ -264,6 +287,9 @@ void func_82129414(CameraNode* arg0) {
     }
 }
 
+/**
+ * Move-use camera variant 5: picks shot 0, 1 or 2 at random on substep 0 and runs it.
+ */
 void func_8212954C(CameraNode* arg0) {
     if (sBattleScene.scene->phaseSubstep == 0) {
         D_8219A568 = BattleAnim_RandomRange(3);
@@ -287,6 +313,9 @@ void func_8212954C(CameraNode* arg0) {
     }
 }
 
+/**
+ * Move-use camera variant 6: picks shot 0-3 at random on substep 0 and runs it.
+ */
 void func_8212960C(CameraNode* arg0) {
     if (sBattleScene.scene->phaseSubstep == 0) {
         D_8219A568 = BattleAnim_RandomRange(4);
@@ -313,6 +342,9 @@ void func_8212960C(CameraNode* arg0) {
     }
 }
 
+/**
+ * Move-use camera variant 7: picks shot 0, 1, 2 or 4 at random on substep 0 and runs it.
+ */
 void func_821296E4(CameraNode* arg0) {
     if (sBattleScene.scene->phaseSubstep == 0) {
         D_8219A568 = BattleAnim_RandomRange(4);
@@ -516,6 +548,11 @@ void BattleScene_ActionSetupAnimationVariantB(CameraNode* arg0) {
     }
 }
 
+/**
+ * Impact camera variant 1: clears old effects and offsets and aims at the target two
+ * heights above it; once the target's effect session is idle, tracks it until the camera
+ * settles, ends the user's effect mode and advances the phase step.
+ */
 void func_82129D10(CameraNode* arg0) {
     sBattleScene.scene->cameraPresetId = 2;
     switch (sBattleScene.scene->phaseSubstep) {
@@ -539,6 +576,10 @@ void func_82129D10(CameraNode* arg0) {
     }
 }
 
+/**
+ * Impact camera variant 2: like variant 1 but aimed below the target (by D_FLT_821963A0
+ * heights) with camera preset 2.
+ */
 void func_82129E30(s32 arg0) {
     s32 temp_v0;
 
@@ -563,6 +604,10 @@ void func_82129E30(s32 arg0) {
     }
 }
 
+/**
+ * Impact camera variant 3: orbits the target (func_82124544 with 8, 6, 2.5, 6 and angle 0)
+ * until the zoom is close to the stored distance, then advances the phase step.
+ */
 void func_82129F5C(CameraNode* arg0) {
     s32 temp_v0;
 
@@ -587,6 +632,10 @@ void func_82129F5C(CameraNode* arg0) {
     }
 }
 
+/**
+ * Impact camera variant 4: orbit like variant 3 with wider settings (10, 12, 3.5, 6) at
+ * angle 0x11C6.
+ */
 void func_8212A074(s32 arg0) {
     s32 temp_v0;
 
@@ -611,6 +660,9 @@ void func_8212A074(s32 arg0) {
     }
 }
 
+/**
+ * Impact camera variant 5: picks variant 0, 1 or 2 at random on substep 0 and runs it.
+ */
 void func_8212A190(CameraNode* arg0) {
     if (sBattleScene.scene->phaseSubstep == 0) {
         D_8219A568 = BattleAnim_RandomRange(3);
@@ -634,6 +686,9 @@ void func_8212A190(CameraNode* arg0) {
     }
 }
 
+/**
+ * Impact camera variant 7: picks variant 0-3 at random on substep 0 and runs it.
+ */
 void func_8212A250(CameraNode* arg0) {
     if (sBattleScene.scene->phaseSubstep == 0) {
         D_8219A568 = BattleAnim_RandomRange(4);
