@@ -1087,6 +1087,11 @@ void BattleAnim_RunPhysicalHitPurpleSmoke(Particle* arg0) {
     }
 }
 
+/**
+ * Init step for a Swift burst star: scale 0.1, random X/Y spin with a random Z spin speed,
+ * step magnitude 8, palette pair 0x17, no delay, hidden until it starts.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_SwiftBurstChild_InitParticle(Particle* arg0) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
     Vec3s sp28;
