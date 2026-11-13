@@ -679,12 +679,12 @@ void BattleAnim_CallbackSharedDescriptors3EAnd3FAnimatedRiseFade(Particle* arg0)
             Particle_ApproachStepMagnitude((s8*)arg0, 1.0, 1.0f);
             if (Particle_DecrementUnkA6ToZero(arg0) != 0) {
                 Particle_ApproachMotionStepY(arg0, 0.5f, 0.4f);
-                Particle_Field50_AddXFromField7C_09C58(arg0);
+                Particle_ApplyMotionStepY(arg0);
             }
             break;
 
         case 3:
-            Particle_Field50_AddXFromField7C_09C58(arg0);
+            Particle_ApplyMotionStepY(arg0);
             Particle_ApproachPrimAlphaThenAdvance(arg0, 0, 0x20);
             break;
 

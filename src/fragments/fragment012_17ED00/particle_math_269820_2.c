@@ -25,19 +25,19 @@ void Particle_SetPositionFromRotationTemplate1(Particle* arg0, f32 arg1);
 void Particle_SetPositionFromRotationTemplate2(Particle* arg0, f32 arg1);
 void Particle_AddPositionFromRotationTemplate1(Particle* arg0, f32 arg1);
 void Particle_AddPositionFromRotationTemplate2(Particle* arg0, f32 arg1);
-void Particle_Field50_SetXScaled_098E8(Particle* arg0, f32 arg1);
-void Particle_Field50_SetYScaled_09900(Particle* arg0, f32 arg1);
-void Particle_Field50_AddXScaled_099C0(Particle* arg0, f32 arg1);
-void Particle_Field50_AddYScaled_099E0(Particle* arg0, f32 arg1);
-void Particle_Field50_SubXScaled_09A78(Particle* arg0, f32 arg1);
-void Particle_Field50_SubYScaled_09A98(Particle* arg0, f32 arg1);
-s32 Particle_Field50_ApproachXToField5C_09AD8(Particle* arg0, f32 arg1);
-s32 Particle_Field50_ApproachYToField5C_09B18(Particle* arg0, f32 arg1);
-void Particle_Field50_AddXFromField7C_09C58(Particle* arg0);
-void Particle_Field50_AddYFromField7C_09C6C(Particle* arg0);
+void Particle_SetMotionOffsetYScaled(Particle* arg0, f32 arg1);
+void Particle_SetMotionOffsetZScaled(Particle* arg0, f32 arg1);
+void Particle_AddMotionOffsetYScaled(Particle* arg0, f32 arg1);
+void Particle_AddMotionOffsetZScaled(Particle* arg0, f32 arg1);
+void Particle_SubMotionOffsetYScaled(Particle* arg0, f32 arg1);
+void Particle_SubMotionOffsetZScaled(Particle* arg0, f32 arg1);
+s32 Particle_ApproachMotionOffsetY(Particle* arg0, f32 arg1);
+s32 Particle_ApproachMotionOffsetZ(Particle* arg0, f32 arg1);
+void Particle_ApplyMotionStepY(Particle* arg0);
+void Particle_ApplyMotionStepZ(Particle* arg0);
 void Particle_AddVelocityXZFromRotationYViaHelpers(Particle* arg0);
 void Particle_AddVelocityFromRotationTemplate2(Particle* arg0);
-void Particle_Field50_SetZScaled_09918(Particle* arg0, f32 arg1);
+void Particle_SetMotionTargetXScaled(Particle* arg0, f32 arg1);
 f32 ParticleMath_ScaleApproachStep(f32 arg0);
 void Particle_SetRotationTargetXY(Particle* arg0, s16 arg1, s16 arg2);
 void Particle_Field94_AddXFromField9A_0A4B4(Particle* arg0);
@@ -80,7 +80,7 @@ s32 Particle_AnimateFramesPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3,
 s32 Particle_AnimateFramesReverseFirstPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
 void Particle_Field38_SetVecFromVec3fScaled_08C20(Particle* arg0, Vec3f arg1);
 void Particle_Field38_AddVecScaledFromVec3f_08D78(Particle* arg0, Vec3f arg1);
-void Particle_Field50_AddVecFromField7C_09BDC(Particle* arg0);
+void Particle_ApplyMotionStepXY(Particle* arg0);
 void Particle_Field50_AddXYFromField7C_09C34(Particle* arg0);
 void Particle_FieldA0_SetX_0A400(Particle* arg0, s16 arg1);
 void Particle_FieldA0_SetY_0A414(Particle* arg0, s16 arg1);
@@ -938,11 +938,15 @@ void Particle_SetMotionOffsetXScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x4C) = (f32) (arg1 * D_FLT_8219A824);
 }
 
-void Particle_Field50_SetXScaled_098E8(Particle* arg0, f32 arg1) {
+/**
+ * Seen in play (2026-11-13) in the move sweep (Solar Beam): with arg1 = 76.0 it set motionOffset.y
+ * (0x50) to 273.6, arg1 times the 3.6 render scale; x and z were untouched.
+ */
+void Particle_SetMotionOffsetYScaled(Particle* arg0, f32 arg1) {
     arg0->motionOffset.y = arg1 * gParticleRenderContext.scale.y;
 }
 
-void Particle_Field50_SetYScaled_09900(Particle* arg0, f32 arg1) {
+void Particle_SetMotionOffsetZScaled(Particle* arg0, f32 arg1) {
     arg0->motionOffset.z = arg1 * gParticleRenderContext.scale.y;
 }
 
@@ -970,15 +974,15 @@ void Particle_AddMotionOffsetXScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x4C) = (f32) (M2C_FIELD(arg0, f32 *, 0x4C) + (arg1 * D_FLT_8219A824));
 }
 
-void Particle_Field50_AddXScaled_099C0(Particle* arg0, f32 arg1) {
+void Particle_AddMotionOffsetYScaled(Particle* arg0, f32 arg1) {
     arg0->motionOffset.y += arg1 * gParticleRenderContext.scale.y;
 }
 
-void Particle_Field50_AddYScaled_099E0(Particle* arg0, f32 arg1) {
+void Particle_AddMotionOffsetZScaled(Particle* arg0, f32 arg1) {
     arg0->motionOffset.z += arg1 * gParticleRenderContext.scale.y;
 }
 
-void Particle_Field50_SubVecScaled_09A20(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
+void Particle_SubMotionOffsetScaled(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
     arg0->motionOffset.x -= arg1 * gParticleRenderContext.scale.y;
     arg0->motionOffset.y -= arg2 * gParticleRenderContext.scale.y;
     arg0->motionOffset.z -= arg3 * gParticleRenderContext.scale.y;
@@ -994,11 +998,11 @@ void Particle_SubMotionOffsetXScaled(s8 *arg0, f32 arg1) {
     M2C_FIELD(arg0, f32 *, 0x4C) = (f32) (M2C_FIELD(arg0, f32 *, 0x4C) - (arg1 * D_FLT_8219A824));
 }
 
-void Particle_Field50_SubXScaled_09A78(Particle* arg0, f32 arg1) {
+void Particle_SubMotionOffsetYScaled(Particle* arg0, f32 arg1) {
     arg0->motionOffset.y -= arg1 * gParticleRenderContext.scale.y;
 }
 
-void Particle_Field50_SubYScaled_09A98(Particle* arg0, f32 arg1) {
+void Particle_SubMotionOffsetZScaled(Particle* arg0, f32 arg1) {
     arg0->motionOffset.z -= arg1 * gParticleRenderContext.scale.y;
 }
 
@@ -1010,11 +1014,15 @@ s32 Particle_ApproachMotionOffsetX(Particle* arg0, f32 arg1) {
     return ParticleMath_ApproachFloat(&arg0->motionOffset.x, arg1 * gParticleRenderContext.scale.y, arg0->motionTarget.x);
 }
 
-s32 Particle_Field50_ApproachXToField5C_09AD8(Particle* arg0, f32 arg1) {
+/**
+ * Seen in play (2026-11-13) in the move sweep (Solar Beam): with arg1 = 0 it moved motionOffset.y
+ * (0x50) from 273.6 to 266.4 and then 259.2, steps of motionTarget.y (7.2).
+ */
+s32 Particle_ApproachMotionOffsetY(Particle* arg0, f32 arg1) {
     return ParticleMath_ApproachFloat(&arg0->motionOffset.y, arg1 * gParticleRenderContext.scale.y, arg0->motionTarget.y);
 }
 
-s32 Particle_Field50_ApproachYToField5C_09B18(Particle* arg0, f32 arg1) {
+s32 Particle_ApproachMotionOffsetZ(Particle* arg0, f32 arg1) {
     return ParticleMath_ApproachFloat(&arg0->motionOffset.z, arg1 * gParticleRenderContext.scale.y, arg0->motionTarget.z);
 }
 
@@ -1066,9 +1074,10 @@ void Particle_ApplyMotionStepXZ(Particle* arg0) {
 }
 
 /**
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Adds motionStep.x and .y to motionOffset.x and .y.
+ * @unverified Named from the code; not reached in the sweep.
  */
-void Particle_Field50_AddVecFromField7C_09BDC(Particle* arg0) {
+void Particle_ApplyMotionStepXY(Particle* arg0) {
     arg0->motionOffset.x += arg0->motionStep.x;
     arg0->motionOffset.y += arg0->motionStep.y;
 }
@@ -1078,11 +1087,11 @@ void func_8213E474(s8 *arg0)
   *((f32 *) (((s8 *) arg0) + 0x4C)) = (f32) ((*((f32 *) (((s8 *) arg0) + 0x78))) + (*((f32 *) (((s8 *) arg0) + 0x4C)))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
-void Particle_Field50_AddXFromField7C_09C58(Particle* arg0) {
+void Particle_ApplyMotionStepY(Particle* arg0) {
     arg0->motionOffset.y += arg0->motionStep.y;
 }
 
-void Particle_Field50_AddYFromField7C_09C6C(Particle* arg0) {
+void Particle_ApplyMotionStepZ(Particle* arg0) {
     arg0->motionOffset.z += arg0->motionStep.z;
 }
 
@@ -1108,7 +1117,7 @@ void func_8213E4D8(s32 arg0) {
 
 void Particle_AddVelocityFromRotationTemplate2(Particle* arg0) {
     Particle_Field7C_SetVecFromField74AnglesXZ_0B330(arg0);
-    Particle_Field50_AddVecFromField7C_09BDC(arg0);
+    Particle_ApplyMotionStepXY(arg0);
 }
 
 M2C_UNK Particle_ApplyMotionStep(s32);                         /* extern */
@@ -1260,7 +1269,7 @@ void Particle_SetVelocityTarget(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
     arg0->motionTarget.z = arg3 * gParticleRenderContext.scale.y;
 }
 
-void Particle_Field50_SetZScaled_09918(Particle* arg0, f32 arg1) {
+void Particle_SetMotionTargetXScaled(Particle* arg0, f32 arg1) {
     arg0->motionTarget.x = arg1 * gParticleRenderContext.scale.y;
 }
 
