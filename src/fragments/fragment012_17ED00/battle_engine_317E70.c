@@ -214,7 +214,7 @@ u8 Battle_Random(void);
  * Gen 1 critical-hit roll from the species' base speed (halved, or doubled
  * without Focus Energy, capped at 255). Name from Stadium 1.
  * Seen in play (2026-11-12): with Battle_Random forced to 2 for this call only it returned 1, and
- * the battle showed きゅうしょに あたった！ (A critical hit!) for Nidorino's Poison Sting.
+ * the battle showed きゅうしょに あたった！ (A critical hit!) for Nidoqueen's Poison Sting.
  */
 s32 Battle_CheckCriticalHit(void) {
     UNUSED s32 pad; // FAKE: stack padding
@@ -951,7 +951,7 @@ void Battle_ResolveMonAction(void)
 
 /**
  * Initialize an entering participant's runtime and clear its transient battle state.
- * Seen in play (2026-11-12): ran when 1P switched Nidorino (ニドニド) out for Onix (イワワ), which
+ * Seen in play (2026-11-12): ran when 1P switched Nidoqueen (ニドニド) out for Onix (イワワ), which
  * entered with full HP 49/ 49.
  */
 void BeginBattleForEntity(ActivePokemon* arg0) {

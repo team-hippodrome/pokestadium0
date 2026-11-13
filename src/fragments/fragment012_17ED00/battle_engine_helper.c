@@ -345,7 +345,7 @@ s32 ActivePokemon_GetMoveName(u8* arg0) {
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Returns the nickname (+0x30 in BattleMon) of this Pokemon in the roster of the teammate named by state.replacementState.
- * Seen in play (2026-11-12): for 1P's Nidorino it returned the string ニドニド, the nickname shown on
+ * Seen in play (2026-11-12): for 1P's Nidoqueen it returned the string ニドニド, the nickname shown on
  * its HUD.
  */
 s32 ActivePokemon_GetNickname(s8 *arg0)

@@ -840,7 +840,7 @@ s32 BattleAi_CanUseMove(s8 *arg0, s32 arg1) {
 /**
  * Returns Recover, Softboiled or Rest if the battler can use one, otherwise 0.
  * Seen in play (2026-11-12): returned 0x69 (Recover) for COM's Gengar after Recover was put in
- * its move slot 3, and 0 for 1P's Nidorino, which has no healing move.
+ * its move slot 3, and 0 for 1P's Nidoqueen, which has no healing move.
  */
 u8 BattleAi_FindUsableHealingMove(u8 *arg0) {
     s32 i;

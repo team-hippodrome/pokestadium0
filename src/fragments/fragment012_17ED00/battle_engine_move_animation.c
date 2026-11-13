@@ -370,7 +370,7 @@ extern f32 D_82199DF0[][4];
 /**
  * Loads the species' model, animation and texture data for the Pokemon's side into its slots. Ran
  * in play when 1P switched and when 1P used Substitute (the doll model).
- * Seen in play (2026-11-12): ran when 1P switched Nidorino for Onix, and in the per-move sweep
+ * Seen in play (2026-11-12): ran when 1P switched Nidoqueen for Onix, and in the per-move sweep
  * only for Substitute (the doll model) and Transform (the target's model).
  */
 void ActivePokemon_LoadSpeciesModelAssets(ActivePokemon* arg0) {

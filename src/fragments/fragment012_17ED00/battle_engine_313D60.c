@@ -184,7 +184,7 @@ void Battle_RandomizeDamage(void) {
 
 /**
  * Return which participant acts first using Quick Attack, Counter, Speed and a random tie break.
- * Seen in play (2026-11-12): returned 1 (COM first) with Pinsir at Speed 50 against Nidorino, and
+ * Seen in play (2026-11-12): returned 1 (COM first) with Pinsir at Speed 50 against Nidoqueen, and
  * Pinsir moved first; with Pinsir's Speed set to 1 it returned 0 and 1P moved first.
  */
 u16 Battle_DetermineMoveOrder(ActivePokemon* pokemon, ActivePokemon* other_pokemon) {

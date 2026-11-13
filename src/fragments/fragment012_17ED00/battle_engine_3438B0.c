@@ -835,9 +835,9 @@ void BattleScene_PhaseMoveFailedMessage(CameraNode* arg0) {
 
 /**
  * Phase 21 (moveEffectKind 0x15, set by Battle_Effect_Heal): Recover, Soft-Boiled and Rest.
- * Not reached in the sweep: 1P's Nidorino was at full HP, so heal moves failed to phase 28
+ * Not reached in the sweep: 1P's Nidoqueen was at full HP, so heal moves failed to phase 28
  * instead.
- * Seen in play (2026-11-12): Recover with Nidorino at 20/69 HP ran this phase, and the HUD then
+ * Seen in play (2026-11-12): Recover with Nidoqueen at 20/69 HP ran this phase, and the HUD then
  * showed 54/69 (half its max HP restored).
  */
 void BattleScene_PhaseHeal(CameraNode* arg0) {
@@ -1595,7 +1595,7 @@ void BattleScene_PhaseEndTurn(s32 arg0) {
  * Phase 16 (moveEffectKind 0x10, set by Battle_PrintMoveFailureText): Jump Kick and Hi Jump Kick
  * missed and the user takes crash damage.
  * In play a forced Jump Kick miss went 2 -> 16, showed 「いきおい あまって ニドニドは じめんに ぶつかった！」 and took
- * Nidorino from 69 to 68 HP.
+ * Nidoqueen from 69 to 68 HP.
  */
 void BattleScene_PhaseCrashDamage(CameraNode* arg0) {
     UNUSED s32 pad; // FAKE: stack padding

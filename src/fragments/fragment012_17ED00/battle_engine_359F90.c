@@ -129,7 +129,7 @@ extern u16 D_82199F54;
 extern u16 D_82199F58;
 /**
  * Calculate base damage, halving defense for boom moves and delegating OHKO success.
- * Seen in play (2026-11-12): for Nidorino's Poison Sting (level 20, Attack 43, power 15) against
+ * Seen in play (2026-11-12): for Nidoqueen's Poison Sting (level 20, Attack 43, power 15) against
  * Pinsir (Defense 62) it set sBattleDamage to 4, which is the Gen 1 base damage
  * ((20*2/5+2)*15*43/62)/50+2.
  */
