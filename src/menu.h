@@ -95,7 +95,7 @@ typedef struct WidgetTextList {
     /* 0x34 */ u8 unk_34;
     /* 0x35 */ s8 unk_35;
     /* 0x36 */ u8 unk_36;
-    /* 0x38 */ Color_RGBA8 unk_38;
+    /* 0x37 */ Color_RGBA8 unk_37;
     /* 0x3C */ FontContext* unk_3C;
     /* 0x40 */ s32 unk_40;
 } WidgetTextList; // size = 0x44
@@ -121,7 +121,7 @@ typedef void (*WidgetGridMenuSetStateCallback)(struct WidgetGridMenu*, s32);
 
 typedef struct WidgetGridMenu {
     /* 0x00 */ char unk00[0xC];
-    /* 0x00 */ WidgetGridMenuItem* unk_0C;
+    /* 0x0C */ WidgetGridMenuItem* unk_0C;
     /* 0x10 */ WidgetGridMenuInputCallback unk_10;
     /* 0x14 */ WidgetGridMenuSetStateCallback unk_14;
     /* 0x18 */ WidgetNode** unk_18;
@@ -566,11 +566,11 @@ typedef struct unk_func_88203ED8_064 {
 typedef struct unk_func_88203ED8 {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ WidgetAnimatedPanel* unk_2C;
-    /* 0x2C */ unk_func_8820399C* unk_30;
-    /* 0x2C */ unk_func_8820399C* unk_34;
-    /* 0x2C */ unk_func_88200FA0_030_030* unk_38;
-    /* 0x2C */ unk_func_88200FA0_030_030* unk_3C;
-    /* 0x2C */ unk_func_88217740* unk_40;
+    /* 0x30 */ unk_func_8820399C* unk_30;
+    /* 0x34 */ unk_func_8820399C* unk_34;
+    /* 0x38 */ unk_func_88200FA0_030_030* unk_38;
+    /* 0x3C */ unk_func_88200FA0_030_030* unk_3C;
+    /* 0x40 */ unk_func_88217740* unk_40;
     /* 0x44 */ unk_func_882149A0* unk_44[5];
     /* 0x58 */ unk_func_88500994* unk_58;
     /* 0x5C */ unk_func_88201DA0* unk_5C;

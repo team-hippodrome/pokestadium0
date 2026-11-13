@@ -7,10 +7,10 @@
 
 typedef struct unk_func_88205880_00D0 {
     /* 0x000 */ BattleMon unk_000[20];
-    /* 0x690 */ s32 unk_690;
-    /* 0x694 */ s32 unk_694;
-    /* 0x698 */ s32 unk_698;
-    /* 0x69C */ u32 unk_69C;
+    /* 0x640 */ s32 unk_640;
+    /* 0x644 */ s32 unk_644;
+    /* 0x648 */ s32 unk_648;
+    /* 0x64C */ u32 unk_64C;
 } unk_func_88205880_00D0; // size = 0x6A0
 
 typedef struct unk_func_88200FA0_030_038 {

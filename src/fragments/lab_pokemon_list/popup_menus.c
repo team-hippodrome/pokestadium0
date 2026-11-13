@@ -1288,9 +1288,9 @@ void LabPCList_DrawTypeFilter(Ctx891074CC* arg0) {
 s32 ScrollList_UpdateCursor(s8*);
 
 typedef struct Slot89107614 {
-    s32 unk64;
-    s32 unk68;
-    char unk6C[0x38];
+    s32 unk_00;
+    s32 unk_04;
+    char unk08[0x38];
 } Slot89107614;
 
 typedef struct Lab89107614 {
@@ -1359,13 +1359,13 @@ s32 LabPCList_UpdateTypeFilter(Lab89107614* arg0) {
                         s32 prev;
 
                         func_8003F6AC(2);
-                        prev = arg0->slots[arg0->unk128].unk68;
+                        prev = arg0->slots[arg0->unk128].unk_04;
                         if (prev != -1) {
                             arg0->unk134[prev] &= ~8;
                         }
                         arg0->unk134[arg0->unk138] |= 8;
-                        arg0->slots[arg0->unk128].unk68 = arg0->unk138;
-                        arg0->slots[arg0->unk128].unk64 = *arg0->unk174[arg0->unk138];
+                        arg0->slots[arg0->unk128].unk_04 = arg0->unk138;
+                        arg0->slots[arg0->unk128].unk_00 = *arg0->unk174[arg0->unk138];
                         arg0->unk1DC = 0;
                         arg0->unk128++;
                     }
@@ -1612,13 +1612,13 @@ s32 LabPCList_UpdateMoveFilter(Lab89107EC4* arg0) {
                         s32 prev;
 
                         func_8003F6AC(2);
-                        prev = arg0->slots[arg0->cursor].unk68;
+                        prev = arg0->slots[arg0->cursor].unk_04;
                         if (prev != -1) {
                             arg0->flags[prev] &= ~8;
                         }
                         arg0->flags[arg0->sel] |= 8;
-                        arg0->slots[arg0->cursor].unk68 = arg0->sel;
-                        arg0->slots[arg0->cursor].unk64 = (s32)D_8006A9D4[D_8910A978[arg0->sel]].name;
+                        arg0->slots[arg0->cursor].unk_04 = arg0->sel;
+                        arg0->slots[arg0->cursor].unk_00 = (s32)D_8006A9D4[D_8910A978[arg0->sel]].name;
                         arg0->mode = 0;
                         arg0->cursor++;
                     }

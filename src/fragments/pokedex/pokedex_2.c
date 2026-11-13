@@ -45,7 +45,7 @@ typedef struct unk_D_88825ECC {
 } unk_D_88825ECC;
 typedef struct unk_D_88826444 {
     /* 0x00 */ s16 unk_00;
-    /* 0x00 */ s16 unk_02;
+    /* 0x02 */ s16 unk_02;
 } unk_D_88826444;
 extern unk_func_80011B94 D_8A130250;
 extern unk_func_80011B94 D_8A130270;

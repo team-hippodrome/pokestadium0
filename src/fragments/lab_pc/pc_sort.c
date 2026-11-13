@@ -107,7 +107,7 @@ void PcSort_DisableRow(s8 *arg0, s32 arg1) {
 }
 
 typedef struct Rgba89004908 {
-    /* 0x0 */ u8 r, g, b, a;
+    /* 0x00 */ u8 r, g, b, a;
 } Rgba89004908; // size = 0x4
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Rgba89004908);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);

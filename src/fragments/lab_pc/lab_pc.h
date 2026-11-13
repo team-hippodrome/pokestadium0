@@ -134,7 +134,7 @@ typedef struct unk_func_8820B12C_000 {
 typedef struct unk_func_8820B12C {
     /* 0x00 */ unk_func_8820B12C_000 unk_00;
     /* 0x28 */ WidgetGridMenu* unk_28;
-    /* 0x28 */ unk_func_8820B12C_02C* unk_2C;
+    /* 0x2C */ unk_func_8820B12C_02C* unk_2C;
 } unk_func_8820B12C; // size = 0x30
 
 typedef struct unk_func_8820BE14_02C_070 {
@@ -323,7 +323,7 @@ typedef struct unk_func_8821421C_02C {
     /* 0x6C */ unk_func_8821421C_02C_06C* unk_6C;
     /* 0x70 */ unk_func_8821421C_02C_070* unk_70[2];
     /* 0x78 */ struct unk_func_8821421C_03C* unk_78;
-    /* 0x78 */ struct unk_func_8821421C_03C* unk_7C;
+    /* 0x7C */ struct unk_func_8821421C_03C* unk_7C;
     /* 0x80 */ s32 unk_80;
     /* 0x84 */ struct unk_func_8821421C_038* unk_84;
     /* 0x88 */ struct unk_func_8821421C_034* unk_88;
@@ -391,7 +391,7 @@ typedef struct unk_func_8821421C_038 {
  */
 
 typedef struct Rgba89000D50 {
-    /* 0x0 */ u8 r, g, b, a;
+    /* 0x00 */ u8 r, g, b, a;
 } Rgba89000D50; // size = 0x4
 
 typedef struct ColorPair890017FC {
