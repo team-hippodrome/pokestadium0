@@ -229,3 +229,11 @@ error mid-frame: the picture freezes while the audio thread keeps playing. Each 
 therefore padded to Zero's exact decompressed length with blank cells (0xF0, the value of Zero's
 own empty glyph) and recompressed; the payload still fits its slot with room to spare (set 5:
 #67AD in a #F3F0 slot).
+
+### Stale set slots (2026-11-12)
+
+Screens load subsets of the six sets: GB Tower uses mask 0x18, the ones behind てもち/バトル use
+0x3C, so slots the screen did not load keep whatever the pool block held before. Retail's mapper
+reads nothing and survives that; the advance lookup dereferenced the stale glyph base and faulted.
+The mapper now requires the base to be inside `sMemPool` (0x800A94A0, start+0x100 <= base < end)
+before touching the advance table, so an unloaded slot can only cost a monospace character.

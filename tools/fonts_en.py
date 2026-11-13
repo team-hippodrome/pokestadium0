@@ -32,6 +32,7 @@ US_FONTS = 0x3BA190              # fonts_ROM_START in the Stadium 1 decompilatio
 US_ASCII_MAP = 0x8DE80           # 128-byte table whose A-Z and a-z entries increase
 MAP_BYTES = 0x80
 ADVANCES = 0x90
+MAIN_POOL = 0x800A94A0          # struct MainPool: {start, end, ...}, the font sheets live inside it
 GLYPHS = 0x91
 # Which stages touch which part; the narrow ones exist to bisect a screen-level fault.
 INPLACE_STAGES = {'full'}          # the real patch: English payloads in Zero's own slots
@@ -89,6 +90,10 @@ def sw(rt, off, rs):
 
 def sb(rt, off, rs):
     return 0xA0000000 | (rs << 21) | (rt << 16) | (off & 0xFFFF)
+
+
+def sltu(rd, rs, rt):
+    return (rs << 21) | (rt << 16) | (rd << 11) | 0x2B
 
 
 def beq(rs, rt, words):
@@ -198,7 +203,16 @@ def font_map_words(rom, ctx=None):
         sll(T6, T4, 3),
         addu(T6, T3, T6),                    # &entries[slot]
         lw(T5, 0x4, T6),                     # entry->file is the glyph base
-        beq(T5, ZERO, 0),                    # set not loaded: nothing to read either
+        lui(AT, hi(MAIN_POOL)),              # the glyph base must be inside the main pool
+        lw(T7, lo(MAIN_POOL), AT),           # pool start
+        addiu(T7, T7, 0x100),                # leave room for table[-0x90 .. +glyph]
+        sltu(AT, T5, T7),
+        bne(AT, ZERO, 0),                    # below the pool: the slot was never loaded
+        NOP,
+        lui(AT, hi(MAIN_POOL)),
+        lw(T7, lo(MAIN_POOL + 4), AT),       # pool end
+        sltu(AT, T5, T7),
+        beq(AT, ZERO, 0),                    # above the pool: same
         NOP,
         addiu(T5, T5, -ADVANCES),            # its advance table sits 0x90 bytes before it
         addu(T5, T5, V0),
@@ -219,66 +233,16 @@ def font_map_words(rom, ctx=None):
     base = len(head) + len(ascii_block)
     head[3] = beq(AT, ZERO, base - 3 - 1)
     head[6] = bne(AT, ZERO, base - 6 - 1)
-    store[3] = beq(T3, ZERO, len(store) - 3 - 1)
-    store[7] = beq(AT, ZERO, len(store) - 7 - 1)
-    store[13] = beq(T5, ZERO, len(store) - 13 - 1)
+    tail_index = len(store)
+    store[3] = beq(T3, ZERO, tail_index - 4)      # no font context
+    store[7] = beq(AT, ZERO, tail_index - 8)      # slot out of range
+    store[16] = bne(AT, ZERO, tail_index - 17)    # glyph base below the pool
+    store[21] = beq(AT, ZERO, tail_index - 22)    # glyph base above the pool
     words = head + ascii_block + store + tail
     retail = words_at(rom, MAP_FUNC, 0x120 // 4)
     assert len(words) <= len(retail), 'map function outgrew its retail span'
     return words + [NOP] * (len(retail) - len(words))
 
-
-
-    """func_80019F70: printable ASCII through the Latin map, and that glyph's advance into the set."""
-    ctx = font_context_address(rom) if ctx is None else ctx
-    ascii_block = [
-        lui(T2, hi(0x8006081F)),             # ret = map[c]
-        addiu(T2, T2, lo(0x8006081F)),
-        addu(T2, T2, A0),
-        lbu(V0, 0, T2),
-    ]
-    store = [
-        lui(T3, hi(ctx)),                    # font_context
-        addiu(T3, T3, lo(ctx)),
-        lw(T3, 0, T3),
-        beq(T3, ZERO, 0),                    # no font context yet: skip the advance update
-        NOP,
-        lbu(T4, 0x38, T3),                   # the active set slot
-        sltiu(AT, T4, 6),                    # outside the six registered sets: skip
-        beq(AT, ZERO, 0),
-        NOP,
-        sll(T4, T4, 3),
-        addu(T3, T3, T4),
-        lw(T5, 0x4, T3),                     # set->tex is the glyph base
-        beq(T5, ZERO, 0),                    # set not loaded: nothing to read either
-        NOP,
-        addiu(T5, T5, -ADVANCES),            # the advance table sits 0x90 bytes before it
-        addu(T5, T5, V0),
-        lbu(T5, 0, T5),
-        sb(T5, 0, T3),                       # set->advance = table[glyph]
-    ]
-    tail = [jr(RA), NOP]
-    head = [
-        andi(A0, A0, 0xFFFF),                # the caller's u16 character code
-        addu(V0, ZERO, ZERO),                # everything but printable ASCII is glyph 0
-        sltiu(AT, A0, 0x7F),
-        beq(AT, ZERO, 0),                    # >= 0x7F: store
-        NOP,
-        sltiu(AT, A0, 0x21),
-        bne(AT, ZERO, 0),                    # < 0x21: store
-        NOP,
-    ]
-    base = len(head) + len(ascii_block)
-    head[3] = beq(AT, ZERO, base - 3 - 1)
-    head[6] = bne(AT, ZERO, base - 6 - 1)
-    store[3] = beq(T3, ZERO, len(store) - 3 - 1)
-    store[7] = beq(AT, ZERO, len(store) - 7 - 1)
-    store[13] = beq(T5, ZERO, len(store) - 13 - 1)
-    store[12] = beq(T5, ZERO, len(store) - 12 - 1)
-    words = head + ascii_block + store + tail
-    retail = words_at(rom, MAP_FUNC, 0x120 // 4)
-    assert len(words) <= len(retail), 'map function outgrew its retail span'
-    return words + [NOP] * (len(retail) - len(words))
 
 
 # --- patch and check ---------------------------------------------------------------------------
@@ -461,7 +425,9 @@ def run_map_function(rom, code, ctx, set_base, tex, table, char, slot=0):
     table is the 0x90-byte advance table that sits 0x90 bytes before tex in every English font file.
     """
     mem = {ctx: struct.pack('>I', set_base),                # font_context
-           set_base + 0x38: bytes([slot])}                  # unk_50 = the active slot
+           set_base + 0x38: bytes([slot]),                  # unk_50 = the active slot
+           MAIN_POOL: struct.pack('>I', 0x80100000),        # pool start
+           MAIN_POOL + 4: struct.pack('>I', 0x80400000)}    # pool end
     if tex:
         mem[set_base + slot * 8 + 4] = struct.pack('>I', tex)
         for i, byte in enumerate(table):
@@ -511,6 +477,8 @@ def run_map_function(rom, code, ctx, set_base, tex, table, char, slot=0):
                 regs[rd] = (regs[rs] + regs[rt]) & 0xFFFFFFFF
             elif fn == 0x00:
                 regs[rd] = (regs[rt] << ((w >> 6) & 0x1F)) & 0xFFFFFFFF
+            elif fn == 0x2B:
+                regs[rd] = 1 if regs[rs] < regs[rt] else 0
             elif fn == 0x08:
                 return regs[V0], mem.get(set_base + slot * 8, b'\x00')[0]
             else:
@@ -586,6 +554,8 @@ def selftest():
     cases = ((0x41, 0, 0x80200000, (26, 7)), (0x69, 0, 0x80200000, (77, 3)),
              (0x20, 0, 0x80200000, (0, 4)), (0x2421, 0, 0x80200000, (0, 4)),
              (0x41, 0, 0, (26, 0)),                          # set not loaded: no read, no write
+             (0x41, 0, 0x90, (26, 0)),                       # stale slot below the pool
+             (0x41, 0, 0x80500000, (26, 0)),                 # stale slot above the pool
              (0x41, 9, 0x80200000, (26, 0)))                 # slot out of range: untouched
     for char, slot, tex, expected in cases:
         got = run_map_function(rom, code, 0x8006d200, 0x80100000, tex, advance, char, slot)
