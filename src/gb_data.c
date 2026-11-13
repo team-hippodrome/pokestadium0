@@ -109,7 +109,9 @@ extern u16 D_80076FD4_jp[0x100];
 /**
  * Converts a Game Boy name (terminated by 0x50) to EUC-JP; code 0x5D expands to the
  * 10-byte trainer name D_80076FD0_jp points at.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-13) with a JP Green cart, the party, registration, Pokédex, list and sort
+ * screens called it to build their names: the output buffers read サトシ (the trainer) and フシ (a
+ * nickname), as shown on screen.
  */
 char* Text_UntranscodeName(char* arg0, char* arg1) {
     char* sp34 = arg0;

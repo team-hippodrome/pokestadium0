@@ -156,7 +156,8 @@ u32 func_800566BC(s32);
 
 /**
  * Draws a save summary bar at `y`, colored by the summary's game, with `label`.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran on the Pokédex, party and list screens, which all show the 1P サトシ
+ * IDNo/12345 bar at the top.
  */
 void GbSave_DrawSummaryBar(s32 y, GbSaveSummary* summary, char* label, s32 arg3) {
     if (summary != NULL) {

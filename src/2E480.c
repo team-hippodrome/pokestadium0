@@ -224,7 +224,7 @@ s32 Menu_UpdateCursor(Menu8002E230* arg0) {
 
 /**
  * Moves the cursor up or down with wraparound, skipping disabled items (flag 1).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran while the cursor was in the せいとん (sort) screen's box list.
  */
 s32 Menu_UpdateCursorSkipDisabled(Menu8002E230* arg0) {
     s32 input;
@@ -398,7 +398,7 @@ void GridMenu_DrawInlineItems(Menu8002E230* menu, s32 x, s32 y, s32 mask, s32 ar
 
 /**
  * Moves the grid cursor with the D-Pad, wrapping around rows and columns.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran while the せいとん (sort) screen's Pokémon move grid had the cursor.
  */
 s32 GridMenu_UpdateCursor(Menu8002E230* arg0) {
     s32 input;
@@ -1156,7 +1156,8 @@ void ScrollList_SetCursor(s32* arg0, u32 arg1) {
 
 /**
  * Puts the cursor on row `arg1`, keeping its distance from the top of the visible area where possible.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once when C-Right switched the Pokédex list from number order to
+ * アイウエオ order; the list was re-sorted with the cursor kept on the top visible row.
  */
 void ScrollList_SetCursorKeepOffset(s32* arg0, s32 arg1) {
     s32 temp_a2;

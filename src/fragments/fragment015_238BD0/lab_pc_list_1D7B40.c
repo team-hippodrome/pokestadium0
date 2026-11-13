@@ -60,7 +60,8 @@ void func_89004710(void) {
 
 /**
  * Sets the 0x100 flag on each of the 13 box rows whose box is empty.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-13) ran once when the せいとん (sort) screen opened its list of 13 target boxes
+ * (てもち, GBのボックス1 to 12).
  */
 void PcSort_DisableEmptyBoxes(s8* arg0, s8* arg1) {
     s32 i;
