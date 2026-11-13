@@ -51,12 +51,10 @@ Each row is one function address that the source still reaches under more than o
 | `BattleAnim_CallbackStartEffects50And82CenterModelScalePaletteFade` | `func_821588C0` |
 | `BattleAnim_CallbackStartEffects71And74And111SpecialModelColorCycle` | `func_82159898` |
 | `BattleAnim_CallbackStartEffects95To97EndEffects62And63ModelFadeIn_InitParticle` | `func_8215B83C` |
-| `BattleAnim_ClearFreezeStatusAnimation` | `func_8110E784` |
 | `BattleAnim_DigEnd` | `func_8210A7D8` |
 | `BattleAnim_DispatchPresentation` | `func_821370DC` |
 | `BattleAnim_DrawAsset19I4AtlasYScaled` | `func_82132D3C` |
 | `BattleAnim_DrawI4AtlasYScaled` | `func_82135894` |
-| `BattleAnim_EndSleepStatusAnimation` | `func_8110F310` |
 | `BattleAnim_GetCameraContext` | `func_8213C80C` |
 | `BattleAnim_GetOwnerDefaultAnchorPosition` | `func_82107D24` |
 | `BattleAnim_GetOwnerSpeciesBaseScaleAlias` | `func_8213C75C` |
@@ -124,7 +122,6 @@ Each row is one function address that the source still reaches under more than o
 | `BattleScene_TryQueueIdleCueEffect` | `func_82105D3C` |
 | `BattleThumbnail_InitializeOwnerCameraFraming` | `func_82107428` |
 | `BattleThumbnail_TickOwnerSlideOut` | `func_821075B4` |
-| `Battle_ApplyAnimStateEffects` | `func_8110EABC` |
 | `Battle_ClearRuntimeFlags` | `func_82105E4C` |
 | `Battle_DrawSpectatorModeBackgroundPanel` | `func_8211CB0C` |
 | `Battle_GetDisplayModelId` | `func_82107F58` |

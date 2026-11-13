@@ -1,4 +1,7 @@
 /* Stadium Zero fragment000_80C00. */
+/* Audio driver, matching the rest of OoT load.c (src/audio/internal) in function order. The driver
+ * is Nintendo's "Nas" library (original names Nas_*); this revision sits between SM64 Shindou and
+ * OoT. See docs/annotation/audio-driver.md for the per-function mapping. */
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_309ED0.c. */
 
 #include "fragments/battle_engine/battle_engine.h"
@@ -18,18 +21,33 @@ extern s32 sMultihitCountdown;
 
 void func_8110DC90(void);
 void func_8110DC98(void);
-s32 BattleScene_EndStatusAnimationsAndCommit(ActivePokemon* arg0);
-void func_8110E714(void);
+void AudioLoad_ProcessLoads(s32 reset_status);
+void AudioLoad_Unused2(void);
 
+/**
+ * Empty.
+ * No OoT counterpart is certain. Zero has two empty stubs between AudioLoad_Dma and
+ * AudioLoad_SyncLoadSimple, as SM64 Shindou does (func_sh_802f3ec4, func_sh_802f3ed4); OoT keeps
+ * one there, AudioLoad_Unused1 (__OfsToLbaOfs).
+ */
 void func_8110DC90(void) {
 }
 
+/**
+ * Empty.
+ * See func_8110DC90.
+ */
 void func_8110DC98(void) {
 }
 
 void AudioLoad_SyncLoad(Particle* arg0, s32 arg1, s32* arg2);
 
-void func_8110DCA0(Particle* arg0, s32 arg1) {
+/**
+ * Loads entry `arg1` of table `arg0` synchronously and ignores the result.
+ * Corresponds to OoT AudioLoad_SyncLoadSimple (original name EmemLoad).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioLoad_SyncLoadSimple(Particle* arg0, s32 arg1) {
     s32 sp1C;
 
     AudioLoad_SyncLoad(arg0, arg1, &sp1C);
@@ -64,7 +82,7 @@ s32 func_8004CFB0(OSMesgQueue*, OSMesg, s32);
 void AudioLoad_SetFontLoadStatus(s32, s32);
 void AudioLoad_SetSeqLoadStatus(s32, s32);
 void AudioLoad_SetSampleLoadStatus(s32, s32);
-struct Entry8110EABC* func_8110E9A8(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
+struct Entry8110EABC* AudioLoad_StartAsyncLoad(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
 
 /**
  * Starts an asynchronous load of entry id of audio table tableType (0 sequences,
@@ -72,8 +90,9 @@ struct Entry8110EABC* func_8110E9A8(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
  * progress or no memory could be allocated. If the entry is already cached the
  * cached address is returned and retData is posted to retQueue at once;
  * otherwise memory is allocated by the entry's cache policy and a chunked DMA
- * is started. The table's load status is updated either way. Same structure as
- * AudioLoad_AsyncLoadInner in the Ocarina of Time audio library.
+ * is started. The table's load status is updated either way.
+ * Corresponds to OoT AudioLoad_AsyncLoadInner (original name __Load_Bank_BG). OoT also handles the
+ * unknown-medium queue.
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name guessed from the code; comment kept.
@@ -147,7 +166,7 @@ s32 AudioLoad_AsyncLoadInner(s32 table_type, s32 id, s32 n_chunks, s32 ret_data,
                 break;
         }
 
-        func_8110E9A8(dev_addr, ram_addr, size, medium, n_chunks, ret_queue, (ret_data << 0x18) | (table_type << 0x10) | (id << 8) | load_status);
+        AudioLoad_StartAsyncLoad(dev_addr, ram_addr, size, medium, n_chunks, ret_queue, (ret_data << 0x18) | (table_type << 0x10) | (id << 8) | load_status);
         load_status = 1;
     }
 
@@ -166,11 +185,20 @@ s32 AudioLoad_AsyncLoadInner(s32 table_type, s32 id, s32 n_chunks, s32 ret_data,
     return ram_addr;
 }
 
-/** Ends a Pokemon's status animations and commits the result. */
-s32 BattleScene_EndStatusAnimationsAndCommit(ActivePokemon* arg0) {
-    BattleAnim_ClearFreezeStatusAnimation(arg0);
-    BattleAnim_EndSleepStatusAnimation(arg0);
-    Battle_ApplyAnimStateEffects(arg0);
+void AudioLoad_ProcessSlowLoads(s32 reset_status);
+s32 AudioLoad_ProcessSamplePreloads(s32 reset_status);
+void AudioLoad_ProcessAsyncLoads(s32 reset_status);
+
+/**
+ * Runs the per-frame load work: slow sample loads, sample preloads, then async loads.
+ * Corresponds to OoT AudioLoad_ProcessLoads (original name Nas_BgDmaFrameWork): the same
+ * three calls in the same order.
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioLoad_ProcessLoads(s32 reset_status) {
+    AudioLoad_ProcessSlowLoads(reset_status);
+    AudioLoad_ProcessSamplePreloads(reset_status);
+    AudioLoad_ProcessAsyncLoads(reset_status);
 }
 
 typedef struct Entry811858B0 {
@@ -229,14 +257,15 @@ void AudioHeap_InitMainPools(s32);
 void* func_81109868(void*, s32);
 void func_811098C0(void*, void*, s32);
 s32 AudioHeap_ResetStep(void);
-void func_8110CB70(AudioTable8110DCC0*, u8*, s32);
+void AudioLoad_InitTable(AudioTable8110DCC0*, u8*, s32);
 
 /**
  * Initializes the audio system: clears the heap and the audio globals, sets up
  * the message queues and the three output buffers, points the sequence, font
  * and sample tables at their ROM copies and fills in each font's sample bank
- * ids and instrument and drum counts. Same structure as AudioLoad_Init in the
- * Ocarina of Time audio library.
+ * ids and instrument and drum counts.
+ * Corresponds to OoT AudioLoad_Init (original name Nas_InitAudio). OoT adds the DMA and unused
+ * handlers and moves the per-font loop into AudioLoad_InitSoundFont (__SetVlute).
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name guessed from the code; comment kept.
@@ -302,9 +331,9 @@ void AudioLoad_Init(void) {
     D_811858A8 = D_81152710;
     D_811858AC = D_8118589C->numEntries;
 
-    func_8110CB70(D_8118589C, D_0015AE60, 0);
-    func_8110CB70(D_811858A0, D_0015A9B0, 0);
-    func_8110CB70((AudioTable8110DCC0*)D_811858A4, D_0015AA60, 0);
+    AudioLoad_InitTable(D_8118589C, D_0015AE60, 0);
+    AudioLoad_InitTable(D_811858A0, D_0015A9B0, 0);
+    AudioLoad_InitTable((AudioTable8110DCC0*)D_811858A4, D_0015AA60, 0);
 
     num_fonts = D_811858A0->numEntries;
     D_811858B0 = func_81109868(D_811842B0, num_fonts * sizeof(Entry811858B0));
@@ -353,10 +382,16 @@ typedef struct SampleLoads8110E500 {
 
 extern SampleLoads8110E500 D_81180610;
 s32 AudioHeap_AllocTemporarySampleCache(s32, s32, s32, s8);
-s32 func_8110E6B0(s32 arg0, s32 arg1);
+s32 AudioLoad_GetFontSample(s32 arg0, s32 arg1);
 
-s32 func_8110E500(s32 arg0, u8 arg1, s8* status) {
-    SampleHeader8110E500* header = (SampleHeader8110E500*)func_8110E6B0(arg0, arg1);
+/**
+ * Queues a slow load of the sample for instrument or drum `arg1` (0x80 and up are drums) of font
+ * `arg0`; `status` reports progress.
+ * Corresponds to OoT AudioLoad_SlowLoadSample (original name VoiceLoad).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+s32 AudioLoad_SlowLoadSample(s32 arg0, u8 arg1, s8* status) {
+    SampleHeader8110E500* header = (SampleHeader8110E500*)AudioLoad_GetFontSample(arg0, arg1);
     SampleLoad8110E500* load;
 
     if (header == NULL) {
@@ -395,7 +430,14 @@ s32 func_8110E500(s32 arg0, u8 arg1, s8* status) {
 
 s32* AudioPlayback_GetInstrumentInner(s32, s32);
 s32* AudioPlayback_GetDrum(s32, s32);
-s32 func_8110E6B0(s32 arg0, s32 arg1) {
+/**
+ * Returns the sample of instrument `arg1` (below 0x80) or drum `arg1` - 0x80 of font `arg0`, or
+ * NULL.
+ * Corresponds to OoT AudioLoad_GetFontSample (original name __GetWaveTable). OoT also returns
+ * sound-effect samples for ids of 0x100 and up.
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+s32 AudioLoad_GetFontSample(s32 arg0, s32 arg1) {
     s32* p;
     s32 v;
 
@@ -415,7 +457,12 @@ s32 func_8110E6B0(s32 arg0, s32 arg1) {
     return v;
 }
 
-void func_8110E714(void) {
+/**
+ * Empty.
+ * Corresponds to OoT AudioLoad_Unused2.
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioLoad_Unused2(void) {
 }
 
 /** Four consecutive words, copied as a unit. */
@@ -423,7 +470,7 @@ typedef struct Words4_8110E71C {
     s32 w[4];
 } Words4_8110E71C;
 
-/** Entry returned by func_8110E6B0: four words, the first of which starts with a flag byte. */
+/** Entry returned by AudioLoad_GetFontSample: four words, the first of which starts with a flag byte. */
 typedef struct Entry8110E71C {
     /* 0x00 */ u8 flags;
     /* 0x01 */ u8 unk_01[3];
@@ -444,15 +491,16 @@ typedef struct Owner8110E71C {
 } Owner8110E71C;
 
 /**
- * Looks up the entry for (keyA, keyB) with func_8110E6B0. If one exists, its
+ * Looks up the entry for (keyA, keyB) with AudioLoad_GetFontSample. If one exists, its
  * 16 bytes are copied into arg0->copy, the entry's second word is
  * overwritten with arg0->unk_0C, and bits 2 and 3 of its first byte are
  * cleared.
+ * Corresponds to OoT AudioLoad_FinishSlowLoad (original name __SwapLoadLps).
  */
-void func_8110E71C(Owner8110E71C* arg0) {
+void AudioLoad_FinishSlowLoad(Owner8110E71C* arg0) {
     Entry8110E71C* entry;
 
-    entry = (Entry8110E71C*)func_8110E6B0(arg0->keyA, arg0->keyB);
+    entry = (Entry8110E71C*)AudioLoad_GetFontSample(arg0->keyA, arg0->keyB);
     if (entry != NULL) {
         arg0->copy = *(Words4_8110E71C*)entry;
         entry->unk_04 = arg0->unk_0C;
@@ -461,13 +509,14 @@ void func_8110E71C(Owner8110E71C* arg0) {
 }
 
 s32 func_8004D1C0(OSMesgQueue*, u32*, s32);
-void func_8110E910(s8* arg0, s32 arg1);
-void func_8110E994(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
+void AudioLoad_DmaSlowCopy(s8* arg0, s32 arg1);
+void AudioLoad_DmaSlowCopyUnkMedium(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
 
 /**
- * Zero's version of OoT's AudioLoad_ProcessSlowLoads: steps the two slow sample
+ * Steps the two slow sample
  * loads, copying at most 0x1000 bytes per call and finishing a load once nothing
  * is left.
+ * Corresponds to OoT AudioLoad_ProcessSlowLoads (original name LpsDma).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name guessed from the code; comment kept.
@@ -489,23 +538,23 @@ void AudioLoad_ProcessSlowLoads(s32 reset_status) {
             case 1:
                 load->state = 2;
                 if (load->size == 0) {
-                    func_8110E71C((Owner8110E71C*)load);
+                    AudioLoad_FinishSlowLoad((Owner8110E71C*)load);
                     load->state = 3;
                     *load->status = 1;
                 } else if (load->size < 0x1000) {
                     if (load->medium == 1) {
                         u32 size = load->size;
 
-                        func_8110E994(load->devAddr, load->ramAddr, size, *(s16*)(table + 2));
+                        AudioLoad_DmaSlowCopyUnkMedium(load->devAddr, load->ramAddr, size, *(s16*)(table + 2));
                     } else {
-                        func_8110E910((s8*)load, load->size);
+                        AudioLoad_DmaSlowCopy((s8*)load, load->size);
                     }
                     load->size = 0;
                 } else {
                     if (load->medium == 1) {
-                        func_8110E994(load->devAddr, load->ramAddr, 0x1000, *(s16*)(table + 2));
+                        AudioLoad_DmaSlowCopyUnkMedium(load->devAddr, load->ramAddr, 0x1000, *(s16*)(table + 2));
                     } else {
-                        func_8110E910((s8*)load, 0x1000);
+                        AudioLoad_DmaSlowCopy((s8*)load, 0x1000);
                     }
                     load->size -= 0x1000;
                     load->ramAddr += 0x1000;
@@ -519,13 +568,23 @@ void AudioLoad_ProcessSlowLoads(s32 reset_status) {
 extern u8 D_81137E3C[];
 void AudioLoad_Dma(s8*, s32, s32, s32, s32, s32, OSMesgQueue*, s32, u8*);
 
-void func_8110E910(s8* arg0, s32 arg1) {
+/**
+ * Starts the DMA for the next chunk of a slow load.
+ * Corresponds to OoT AudioLoad_DmaSlowCopy (original name __Nas_SlowCopy).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioLoad_DmaSlowCopy(s8* arg0, s32 arg1) {
     osInvalDCache((void*)M2C_FIELD(arg0, s32*, 8), arg1);
     osCreateMesgQueue((OSMesgQueue*)(arg0 + 0x2C), (OSMesg*)(arg0 + 0x44), 1);
     AudioLoad_Dma(arg0 + 0x48, 0, 0, M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), arg1, (OSMesgQueue*)(arg0 + 0x2C), *(u8*)arg0, D_81137E3C);
 }
 
-void func_8110E994(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
+/**
+ * Empty: slow loads from the unknown medium are not supported.
+ * Corresponds to OoT AudioLoad_DmaSlowCopyUnkMedium (original name __Nas_SlowDiskCopy).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioLoad_DmaSlowCopyUnkMedium(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
 
 }
 
@@ -546,7 +605,7 @@ typedef struct Entry8110EABC {
 } Entry8110EABC; // size = 0x54
 extern Entry8110EABC D_81185580[1];
 
-Entry8110EABC* func_8110E9A8(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
+Entry8110EABC* AudioLoad_StartAsyncLoad(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
 
 void func_800567E0(OSMesgQueue*, OSMesg*, s32);
 /**
@@ -554,8 +613,9 @@ void func_800567E0(OSMesgQueue*, OSMesg*, s32);
  * devAddr to ramAddr. nChunks == 0 means 0x1000-byte chunks; otherwise the size
  * is split into nChunks pieces rounded up to 0x100 (at least 0x100). retMsg is
  * sent to retQueue when the load finishes. Returns NULL when no slot is free.
+ * Corresponds to OoT AudioLoad_StartAsyncLoad (original name Nas_BgCopyReq).
  */
-Entry8110EABC* func_8110E9A8(s32 dev_addr, s32 ramAddr, u32 size, s32 medium, s32 n_chunks, OSMesgQueue* ret_queue, u32 ret_msg) {
+Entry8110EABC* AudioLoad_StartAsyncLoad(s32 dev_addr, s32 ramAddr, u32 size, s32 medium, s32 n_chunks, OSMesgQueue* ret_queue, u32 ret_msg) {
     Entry8110EABC* load;
     s32 i;
 
@@ -594,15 +654,19 @@ Entry8110EABC* func_8110E9A8(s32 dev_addr, s32 ramAddr, u32 size, s32 medium, s3
 }
 
 extern volatile s32 D_811859D4;
-void func_8110EB40(Entry8110EABC*, s32);
-/** Applies animation state effects for every Pokemon. */
-void Battle_ApplyAnimStateEffects(s32 arg0) {
+void AudioLoad_ProcessAsyncLoad(Entry8110EABC*, s32);
+/**
+ * Advances every active async load by one step.
+ * Corresponds to OoT AudioLoad_ProcessAsyncLoads (original name Nas_BgCopyMain). OoT adds the
+ * unknown-medium load queue. Stadium 1's name Battle_ApplyAnimStateEffects did not fit.
+ */
+void AudioLoad_ProcessAsyncLoads(s32 arg0) {
     s32 i;
 
     if (D_811859D4 != 1U) {
         for (i = 0; i < 1; i++) {
             if (D_81185580[i].active == 1) {
-                func_8110EB40(&D_81185580[i], arg0);
+                AudioLoad_ProcessAsyncLoad(&D_81185580[i], arg0);
             }
         }
     }
@@ -618,12 +682,19 @@ typedef struct RelocInfo8110EF7C {
 } RelocInfo8110EF7C;
 
 s32 func_8004D1C0(OSMesgQueue*, u32*, s32);
-s32 func_8110D408(s32, u32*);
-void func_8110ED98(s8* arg0, u32 arg1);
-void func_8110EE28(s32 arg0, M2C_UNK arg1, u32 arg2, M2C_UNK arg3);
-void func_8110EF7C(s32 size, s32 fontData, RelocInfo8110EF7C* relocInfo, s32 async);
+s32 AudioLoad_TrySyncLoadSampleBank(s32, u32*);
+void AudioLoad_AsyncDma(s8* arg0, u32 arg1);
+void AudioLoad_AsyncDmaUnkMedium(s32 arg0, M2C_UNK arg1, u32 arg2, M2C_UNK arg3);
+void AudioLoad_RelocateFontAndPreloadSamples(s32 size, s32 fontData, RelocInfo8110EF7C* relocInfo, s32 async);
 
-void func_8110EB40(Entry8110EABC* load, s32 reset_status) {
+/**
+ * Advances one async load by one chunk; when it is done, sets the load status, relocates a font and
+ * sends the done message.
+ * Corresponds to OoT AudioLoad_ProcessAsyncLoad (original name __BgCopySub). Zero has OoT's
+ * AudioLoad_FinishAsyncLoad (__BgCopyFinishProcess) inlined.
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioLoad_ProcessAsyncLoad(Entry8110EABC* load, s32 reset_status) {
     u8* table = D_811858A4;
     u32 info;
     s32 font_id;
@@ -661,9 +732,9 @@ void func_8110EB40(Entry8110EABC* load, s32 reset_status) {
                 sampleBankId2 = D_811858B0[font_id].unk_03;
                 reloc_info.sampleBankId1 = sampleBankId1;
                 reloc_info.sampleBankId2 = sampleBankId2;
-                reloc_info.baseAddr1 = (sampleBankId1 != 0xFF) ? func_8110D408(sampleBankId1, &reloc_info.medium1) : 0;
-                reloc_info.baseAddr2 = (sampleBankId2 != 0xFF) ? func_8110D408(sampleBankId2, &reloc_info.medium2) : 0;
-                func_8110EF7C(font_id, load->ramAddr, &reloc_info, 1);
+                reloc_info.baseAddr1 = (sampleBankId1 != 0xFF) ? AudioLoad_TrySyncLoadSampleBank(sampleBankId1, &reloc_info.medium1) : 0;
+                reloc_info.baseAddr2 = (sampleBankId2 != 0xFF) ? AudioLoad_TrySyncLoadSampleBank(sampleBankId2, &reloc_info.medium2) : 0;
+                AudioLoad_RelocateFontAndPreloadSamples(font_id, load->ramAddr, &reloc_info, 1);
                 break;
         }
         load->active = 0;
@@ -672,17 +743,17 @@ void func_8110EB40(Entry8110EABC* load, s32 reset_status) {
     }
     if (load->size < load->chunkSize) {
         if (load->medium == 1) {
-            func_8110EE28(load->romAddr, load->curAddr, load->size, *((s16*)(table + 2)));
+            AudioLoad_AsyncDmaUnkMedium(load->romAddr, load->curAddr, load->size, *((s16*)(table + 2)));
         } else {
-            func_8110ED98((s8*)load, load->size);
+            AudioLoad_AsyncDma((s8*)load, load->size);
         }
         load->size = 0;
         return;
     }
     if (load->medium == 1) {
-        func_8110EE28(load->romAddr, load->curAddr, load->chunkSize, *((s16*)(table + 2)));
+        AudioLoad_AsyncDmaUnkMedium(load->romAddr, load->curAddr, load->chunkSize, *((s16*)(table + 2)));
     } else {
-        func_8110ED98((s8*)load, load->chunkSize);
+        AudioLoad_AsyncDma((s8*)load, load->chunkSize);
     }
     load->size -= load->chunkSize;
     load->romAddr += load->chunkSize;
@@ -691,7 +762,12 @@ void func_8110EB40(Entry8110EABC* load, s32 reset_status) {
 
 extern u8 D_81137F04[];
 
-void func_8110ED98(s8* arg0, u32 arg1) {
+/**
+ * Starts the DMA for the next chunk of an async load.
+ * Corresponds to OoT AudioLoad_AsyncDma (original name __Nas_BgCopy).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioLoad_AsyncDma(s8* arg0, u32 arg1) {
     arg1 = (arg1 + 0xF) & ~0xF;
     osInvalDCache((void*)M2C_FIELD(arg0, s32*, 0xC), arg1);
     osCreateMesgQueue((OSMesgQueue*)(arg0 + 0x20), (OSMesg*)(arg0 + 0x38), 1);
@@ -699,7 +775,12 @@ void func_8110ED98(s8* arg0, u32 arg1) {
     if (arg1) {}  // karodo
 }
 
-void func_8110EE28(s32 arg0, M2C_UNK arg1, u32 arg2, M2C_UNK arg3) {
+/**
+ * Empty: async loads from the unknown medium are not supported.
+ * Corresponds to OoT AudioLoad_AsyncDmaUnkMedium (original name __Nas_BgDiskCopy).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioLoad_AsyncDmaUnkMedium(s32 arg0, M2C_UNK arg1, u32 arg2, M2C_UNK arg3) {
 
 }
 
@@ -732,8 +813,8 @@ typedef struct Sample8110EE3C {
  * Relocates a sound font sample: the sample pointer and its loop and book
  * pointers are made absolute against the font's RAM address, and the sample
  * data address against the sample bank chosen by its medium. Samples flagged
- * for preloading that are not in RAM are added to D_81184978. Same structure as
- * AudioLoad_RelocateSample in the Ocarina of Time audio library.
+ * for preloading that are not in RAM are added to D_81184978.
+ * Corresponds to OoT AudioLoad_RelocateSample (original name __WaveTouch).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name guessed from the code; comment kept.
@@ -800,13 +881,19 @@ extern s32 D_8118557C;
 extern OSMesgQueue D_811855F8;
 extern u8* D_811858A4;
 void AudioLoad_RelocateFont(s32, s32, RelocInfo8110EF7C*);
-void func_8110DB8C(s32, s32, u32, s16);
+void AudioLoad_SyncDmaUnkMedium(s32, s32, u32, s16);
 void AudioLoad_SyncDma(s32, s32, u32, s32);
 
 s32 AudioHeap_AllocPersistentSampleCache(s32, s32, s32, s8);
 
 
-void func_8110EF7C(s32 font_id, s32 font_data, RelocInfo8110EF7C* reloc_info, s32 async) {
+/**
+ * Relocates font `font_id` and loads the samples it marks for preloading, synchronously or (with
+ * `async`) through the preload queue.
+ * Corresponds to OoT AudioLoad_RelocateFontAndPreloadSamples (original name Nas_BankOfsToAddr).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioLoad_RelocateFontAndPreloadSamples(s32 font_id, s32 font_data, RelocInfo8110EF7C* reloc_info, s32 async) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s32 sample_ram_addr;
     Sample8110EF7C* sample;
@@ -862,7 +949,7 @@ void func_8110EF7C(s32 font_id, s32 font_data, RelocInfo8110EF7C* reloc_info, s3
         switch (async) {
             case 0:
                 if (sample->medium == 1) {
-                    func_8110DB8C(sample->sampleAddr, sample_ram_addr, sample->size, *(s16*)(D_811858A4 + 2));
+                    AudioLoad_SyncDmaUnkMedium(sample->sampleAddr, sample_ram_addr, sample->size, *(s16*)(D_811858A4 + 2));
                     sample->sampleAddr = sample_ram_addr;
                     sample->medium = 0;
                 } else {
@@ -887,7 +974,7 @@ void func_8110EF7C(s32 font_id, s32 font_data, RelocInfo8110EF7C* reloc_info, s3
     if ((D_8118557C != 0) && !preload_in_progress) {
         sample = D_81184B78[D_8118557C - 1].sample;
         n_chunks = (sample->size >> 12) + 1;
-        func_8110E9A8(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
+        AudioLoad_StartAsyncLoad(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
     }
 }
 
@@ -897,8 +984,10 @@ s32 func_8004D1C0(OSMesgQueue*, u32*, s32);
  * the sample is pointed at its RAM copy (if it still matches the request), and
  * the next pending request on the stack is started. Returns 0 while a DMA is
  * still in flight or on reset (arg0 != 0), otherwise 1.
+ * Corresponds to OoT AudioLoad_ProcessSamplePreloads (original name Nas_CheckBgWave). Stadium 1's
+ * name BattleAnim_EndSleepStatusAnimation did not fit.
  */
-s32 BattleAnim_EndSleepStatusAnimation(s32 arg0) {
+s32 AudioLoad_ProcessSamplePreloads(s32 arg0) {
     Sample8110EF7C* sample;
     u32 preload_index;
     u32 key;
@@ -942,7 +1031,7 @@ s32 BattleAnim_EndSleepStatusAnimation(s32 arg0) {
                 D_81184B78[D_8118557C - 1].isFree = 1;
                 D_8118557C--;
             } else {
-                func_8110E9A8(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
+                AudioLoad_StartAsyncLoad(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
                 break;
             }
         }
@@ -963,8 +1052,9 @@ typedef struct Item8110F4D0 {
  * @param count Number of entries currently in `list`.
  * @param list  Array of item pointers; must have room for `count + 1` entries.
  * @return The new entry count (count + 1 if added, otherwise unchanged).
+ * Corresponds to OoT AudioLoad_AddToSampleSet (original name __AddList).
  */
-s32 func_8110F4D0(Item8110F4D0* arg0, s32 count, Item8110F4D0** list) {
+s32 AudioLoad_AddToSampleSet(Item8110F4D0* arg0, s32 count, Item8110F4D0** list) {
     s32 i;
 
     for (i = 0; i < count; i++) {
@@ -980,7 +1070,13 @@ s32 func_8110F4D0(Item8110F4D0* arg0, s32 count, Item8110F4D0** list) {
 }
 
 
-s32 func_8110F518(s32 arg0, Item8110F4D0** arg1) {
+/**
+ * Collects the distinct samples of font `arg0`'s drums and instruments into `arg1` and returns how
+ * many there are.
+ * Corresponds to OoT AudioLoad_GetSamplesForFont (original name MakeWaveList).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+s32 AudioLoad_GetSamplesForFont(s32 arg0, Item8110F4D0** arg1) {
     s32 count = 0;
     s32 i;
     s32 n1 = D_811858B0[arg0].unk_00[1];
@@ -993,7 +1089,7 @@ s32 func_8110F518(s32 arg0, Item8110F4D0** arg1) {
         if (p != 0) {
             // FAKE: do-while(0) wrapper only changes register allocation; needed to match
             do {  // FAKE
-                count = func_8110F4D0((Item8110F4D0*)p[1], count, arg1);
+                count = AudioLoad_AddToSampleSet((Item8110F4D0*)p[1], count, arg1);
             } while (0);
         }
     }
@@ -1001,12 +1097,12 @@ s32 func_8110F518(s32 arg0, Item8110F4D0** arg1) {
         q = (u8*)AudioPlayback_GetInstrumentInner(arg0, i);
         if (q != 0) {
             if (q[1] != 0) {
-                count = func_8110F4D0(*(Item8110F4D0**)(q + 8), count, arg1);
+                count = AudioLoad_AddToSampleSet(*(Item8110F4D0**)(q + 8), count, arg1);
             }
             if (q[2] != 0x7F) {
-                count = func_8110F4D0(*(Item8110F4D0**)(q + 0x18), count, arg1);
+                count = AudioLoad_AddToSampleSet(*(Item8110F4D0**)(q + 0x18), count, arg1);
             }
-            count = func_8110F4D0(*(Item8110F4D0**)(q + 0x10), count, arg1);
+            count = AudioLoad_AddToSampleSet(*(Item8110F4D0**)(q + 0x10), count, arg1);
         }
     }
     return count;
@@ -1014,19 +1110,19 @@ s32 func_8110F518(s32 arg0, Item8110F4D0** arg1) {
 
 
 /*
- * func_8110F64C
+ * AudioLoad_AddUsedSample
  *
  * Takes a pointer to a pointer to a record whose first word is read as the
  * bit ranges above. When the low 24 bits, bit 25 and bits 27..26 are all
  * non-zero, the record pointer is appended to the pointer array D_81184978
  * and the count D_81185578 is incremented. There is no bounds check on the
- * count. This is Zero's version of OoT's AudioLoad_AddUsedSample: the caller
- * AudioLoad_PreloadSamplesForFont collects a font's used samples here and then preloads them.
+ * count. The caller AudioLoad_PreloadSamplesForFont collects a font's used samples here and then preloads them.
  * Matching note: the bit-field reads are what produce the ROM's shift
  * sequence; the equivalent masks and shifts on a plain word differ in
  * temporary register numbering.
+ * Corresponds to OoT AudioLoad_AddUsedSample (original name __Reload).
  */
-void func_8110F64C(PackedWordRec **arg0) {
+void AudioLoad_AddUsedSample(PackedWordRec **arg0) {
     PackedWordRec *rec;
 
     rec = *arg0;
@@ -1037,9 +1133,10 @@ void func_8110F64C(PackedWordRec **arg0) {
 }
 
 /**
- * Zero's version of OoT's AudioLoad_PreloadSamplesForFont: gathers the samples
+ * Gathers the samples
  * used by a font's instruments and drums, then copies them into the sample
  * cache (async == 0) or queues them on the preload stack (async == 1).
+ * Corresponds to OoT AudioLoad_PreloadSamplesForFont (original name WaveReload).
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name guessed from the code; comment kept.
@@ -1069,20 +1166,20 @@ void AudioLoad_PreloadSamplesForFont(s32 font_id, s32 async, RelocInfo8110EF7C* 
         instrument = (u8*)AudioPlayback_GetInstrumentInner(font_id, i);
         if (instrument != NULL) {
             if (instrument[1] != 0) {
-                func_8110F64C((PackedWordRec**)(instrument + 8));
+                AudioLoad_AddUsedSample((PackedWordRec**)(instrument + 8));
                 if (!reloc_info->medium2) {} // FAKE
             }
             if (instrument[2] != 0x7F) {
-                func_8110F64C((PackedWordRec**)(instrument + 0x18));
+                AudioLoad_AddUsedSample((PackedWordRec**)(instrument + 0x18));
             }
-            func_8110F64C((PackedWordRec**)(instrument + 0x10));
+            AudioLoad_AddUsedSample((PackedWordRec**)(instrument + 0x10));
         }
     }
 
     for (i = 0; i < num_drums; i++) {
         drum = (u8*)AudioPlayback_GetDrum(font_id, i);
         if (drum != NULL) {
-            func_8110F64C((PackedWordRec**)(drum + 4));
+            AudioLoad_AddUsedSample((PackedWordRec**)(drum + 4));
         }
     }
 
@@ -1127,7 +1224,7 @@ void AudioLoad_PreloadSamplesForFont(s32 font_id, s32 async, RelocInfo8110EF7C* 
         switch (async) {
             case 0:
                 if (sample->medium == 1) {
-                    func_8110DB8C(sample->sampleAddr, sample_ram_addr, sample->size, *(s16*)(D_811858A4 + 2));
+                    AudioLoad_SyncDmaUnkMedium(sample->sampleAddr, sample_ram_addr, sample->size, *(s16*)(D_811858A4 + 2));
                     sample->sampleAddr = sample_ram_addr;
                     sample->medium = 0;
                 } else {
@@ -1152,7 +1249,7 @@ void AudioLoad_PreloadSamplesForFont(s32 font_id, s32 async, RelocInfo8110EF7C* 
     if ((D_8118557C != 0) && !preload_in_progress) {
         sample = D_81184B78[D_8118557C - 1].sample;
         n_chunks = (sample->size >> 12) + 1;
-        func_8110E9A8(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
+        AudioLoad_StartAsyncLoad(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
     }
 }
 
@@ -1181,7 +1278,12 @@ typedef struct Table8110D840 {
 Table8110D840* AudioLoad_GetLoadTable(s32);
 s32 AudioLoad_GetRealTableIndex(s32, s32);
 void AudioLoad_PreloadSamplesForFont(s32, s32, RelocInfo8110EF7C*);
-void func_8110FAF4(void) {
+/**
+ * Preloads the samples of every permanently cached font.
+ * Corresponds to OoT AudioLoad_LoadPermanentSamples (original name EmemReload).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioLoad_LoadPermanentSamples(void) {
     Table8110D840* base = AudioLoad_GetLoadTable(2);
     s32 i;
     s32 idx;

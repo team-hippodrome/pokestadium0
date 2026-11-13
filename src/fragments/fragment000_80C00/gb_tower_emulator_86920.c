@@ -1,4 +1,7 @@
 /* Stadium Zero fragment000_80C00. */
+/* Audio driver, matching OoT src/audio/internal/heap.c in function order. The driver is Nintendo's
+ * "Nas" library (original names Nas_*); this revision sits between SM64 Shindou and OoT. See
+ * docs/annotation/audio-driver.md for the per-function mapping. */
 /* C ported from the Stadium 1 decomp: src/fragments/gb_tower_emulator/gb_tower_emulator_86920.c. */
 
 #include "global.h"
@@ -33,16 +36,17 @@ extern volatile s32 D_811859D4;
 
 #include "m2c_macros.h"
 
-u32 GbApu_AllocZeroed(unk_func_81206FA0* arg0, s32 arg1);
-s32 GbApu_Alloc(unk_func_81206FA0* arg0, s32 arg1);
-void GbApu_InitAllocator(unk_func_81206FA0* arg0, s32 arg1, s32 arg2);
+u32 AudioHeap_AllocZeroed(unk_func_81206FA0* arg0, s32 arg1);
+s32 AudioHeap_Alloc(unk_func_81206FA0* arg0, s32 arg1);
+void AudioHeap_InitPool(unk_func_81206FA0* arg0, s32 arg1, s32 arg2);
 
 extern u8 D_81184654[1];
 extern u8 D_81184655[1];
 extern u8 D_81184656[1];
 
 /**
- * Marks the fonts that are not permanently loaded (status 5) as unloaded. Zelda 64 audio driver (heap.c), same position and shape.
+ * Marks the fonts that are not permanently loaded (status 5) as unloaded.
+ * Corresponds to OoT AudioHeap_ResetLoadStatus (original name Nas_ResetIDtable).
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
@@ -89,6 +93,7 @@ extern s32 D_811858E8;
  * Records whose byte at 0x33 differs are skipped. What the record and the
  * flag bits mean is not established from this function.
  *
+ * Corresponds to OoT AudioHeap_DiscardFont (original name Nas_ForceStopChannel).
  * Matching notes: the two single-bit writes are declared as bit-fields; the
  * bit-field form gives the retail `andi 0xFF7F` / `ori 0x40` read-modify-write
  * sequences and register numbering (a plain `&= 0xFF7F; |= 0x40` on a byte
@@ -121,7 +126,8 @@ extern s8 D_81184668;
 extern s16 D_811858CC;
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
- * Stops every sequence player that plays sequence `arg0`. Zelda 64 audio driver.
+ * Stops every sequence player that plays sequence `arg0`.
+ * Corresponds to OoT AudioHeap_DiscardSequence (original name Nas_ForceStopSeq).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -152,11 +158,14 @@ void AudioHeap_DiscardSequence(s32 arg0)
 
 /**
  * Like alHeapDBAlloc: carves a 16-byte aligned block and zeroes it. Returns 0 when the arena is full.
+ * Corresponds to OoT AudioHeap_AllocZeroed (original name Nas_HeapAlloc_CL). Zero clears the block
+ * in its own loop; OoT calls AudioHeap_Alloc and then clears. Stadium 1's name GbApu_AllocZeroed
+ * did not fit.
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * @unverified Name follows the OoT counterpart; comment from Stadium 1.
  */
-u32 GbApu_AllocZeroed(unk_func_81206FA0* arg0, s32 arg1) {
+u32 AudioHeap_AllocZeroed(unk_func_81206FA0* arg0, s32 arg1) {
   s32 temp_v0;
   u32 temp_a2;
   u32 var_a1;
@@ -176,12 +185,14 @@ u32 GbApu_AllocZeroed(unk_func_81206FA0* arg0, s32 arg1) {
 }
 
 /**
- * GbApu_AllocZeroed without the clear.
+ * AudioHeap_AllocZeroed without the clear.
+ * Corresponds to OoT AudioHeap_Alloc (original name Nas_HeapAlloc). Same 16-byte alignment, bounds
+ * test and entry count. Stadium 1's name GbApu_Alloc did not fit.
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * @unverified Name follows the OoT counterpart; comment from Stadium 1.
  */
-s32 GbApu_Alloc(unk_func_81206FA0* arg0, s32 arg1) {
+s32 AudioHeap_Alloc(unk_func_81206FA0* arg0, s32 arg1) {
   s32 temp_a2;
   u32 temp_v0;
 
@@ -198,11 +209,13 @@ s32 GbApu_Alloc(unk_func_81206FA0* arg0, s32 arg1) {
 
 /**
  * Like alHeapInit.
+ * Corresponds to OoT AudioHeap_InitPool (original name Nas_HeapInit). Stadium 1's name
+ * GbApu_InitAllocator did not fit.
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * @unverified Name follows the OoT counterpart; comment from Stadium 1.
  */
-void GbApu_InitAllocator(unk_func_81206FA0* arg0, s32 arg1, s32 arg2) {
+void AudioHeap_InitPool(unk_func_81206FA0* arg0, s32 arg1, s32 arg2) {
   arg0->unk_00 = ALIGN16(arg1);
   arg0->unk_04 = ALIGN16(arg1);
   arg0->unk_08 = (s32) (arg2 - (arg1 & 0xF));
@@ -210,19 +223,21 @@ void GbApu_InitAllocator(unk_func_81206FA0* arg0, s32 arg1, s32 arg2) {
 }
 
 /**
- * Empties a persistent cache and rewinds its pool. Zelda 64 audio driver.
+ * Empties a persistent cache and rewinds its pool.
+ * Corresponds to OoT AudioHeap_InitPersistentCache (original name Nas_SzStayClear). This was
+ * AudioHeap_PersistentCacheClear; OoT and MM use AudioHeap_InitPersistentCache for this reset.
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
-void AudioHeap_PersistentCacheClear(s8 *arg0) {
+void AudioHeap_InitPersistentCache(s8 *arg0) {
     M2C_FIELD(arg0, s32 *, 0x10) = 0;
     M2C_FIELD(arg0, s32 *, 0) = 0;
     M2C_FIELD(arg0, s32 *, 8) = (s32) M2C_FIELD(arg0, s32 *, 4);
 }
 
 /**
- * AudioHeap_TemporaryCacheClear
+ * AudioHeap_InitTemporaryCache
  *
  * Resets a small record: the words at +0x00 and +0x10 are cleared, the words
  * at +0x08 and +0x14 are set to the value at +0x04, the word at +0x20 is set
@@ -234,11 +249,13 @@ void AudioHeap_PersistentCacheClear(s8 *arg0) {
  * The sum is written with the fields in this order, and read from memory
  * rather than through a local, because IDO orders the two operands of the
  * addu differently otherwise.
+ * Corresponds to OoT AudioHeap_InitTemporaryCache (original name Nas_SzAutoClear). This was
+ * AudioHeap_TemporaryCacheClear; OoT and MM use AudioHeap_InitTemporaryCache for this reset.
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name guessed from the code; comment kept.
  */
-void AudioHeap_TemporaryCacheClear(s32* arg0) {
+void AudioHeap_InitTemporaryCache(s32* arg0) {
     arg0[4] = 0;
     arg0[0] = 0;
     arg0[8] = arg0[3] + arg0[1];
@@ -249,7 +266,8 @@ void AudioHeap_TemporaryCacheClear(s32* arg0) {
 }
 
 /**
- * Rewinds an allocation pool to its start. Zelda 64 audio driver.
+ * Rewinds an allocation pool to its start.
+ * Corresponds to OoT AudioHeap_ResetPool (original name Nas_SzCustomClear).
  * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
@@ -271,6 +289,7 @@ extern s32 D_811842A0;
  * length arg0, then on D_81184290 with the remainder of the buffer (starting
  * at arg0 and D_811526FC - arg0 long). Finally clears D_811842A0. What
  * func_811098C0 does with its arguments is not established.
+ * Corresponds to OoT AudioHeap_InitMainPools (original name Nas_SzHeapReset).
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name guessed from the code; comment kept.
@@ -288,7 +307,8 @@ extern M2C_UNK D_811842C0;
 extern M2C_UNK D_811842F0;
 
 /**
- * Splits the session pool into the misc and cache pools. Zelda 64 audio driver.
+ * Splits the session pool into the misc and cache pools.
+ * Corresponds to OoT AudioHeap_InitSessionPools (original name Nas_SzHeapDivide).
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
@@ -306,7 +326,8 @@ extern M2C_UNK D_81184300;
 extern M2C_UNK D_81184310;
 
 /**
- * Splits the cache pool into the persistent and temporary pools. Zelda 64 audio driver.
+ * Splits the cache pool into the persistent and temporary pools.
+ * Corresponds to OoT AudioHeap_InitCachePools (original name Nas_SzDataDivide).
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
@@ -328,19 +349,21 @@ extern M2C_UNK D_811843E0;
 extern M2C_UNK D_811843E4;
 
 /**
- * Splits the persistent pool between the sequence, font and sample caches. Zelda 64 audio driver.
+ * Splits the persistent pool between the sequence, font and sample caches.
+ * Corresponds to OoT AudioHeap_InitPersistentPoolsAndCaches (original name Nas_SzStayDivide). This
+ * was AudioHeap_InitPersistentCache, which OoT uses for the reset above.
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
-void AudioHeap_InitPersistentCache(s8 *arg0) {
+void AudioHeap_InitPersistentPoolsAndCaches(s8 *arg0) {
     M2C_FIELD(&D_81184300, s32 *, 4) = (s32) M2C_FIELD(&D_81184300, s32 *, 0);
     func_811098C0(&D_81184324, func_81109868(&D_81184300, M2C_FIELD(arg0, s32 *, 0)), M2C_FIELD(arg0, s32 *, 0));
     func_811098C0(&D_81184384, func_81109868(&D_81184300, M2C_FIELD(arg0, s32 *, 4)), M2C_FIELD(arg0, s32 *, 4));
     func_811098C0(&D_811843E4, func_81109868(&D_81184300, M2C_FIELD(arg0, s32 *, 8)), M2C_FIELD(arg0, s32 *, 8));
-    AudioHeap_PersistentCacheClear(&D_81184320);
-    AudioHeap_PersistentCacheClear(&D_81184380);
-    AudioHeap_PersistentCacheClear(&D_811843E0);
+    AudioHeap_InitPersistentCache(&D_81184320);
+    AudioHeap_InitPersistentCache(&D_81184380);
+    AudioHeap_InitPersistentCache(&D_811843E0);
 }
 
 s32 func_81109868(M2C_UNK *, s32);                  /* extern */
@@ -354,19 +377,21 @@ extern M2C_UNK D_81184400;
 extern M2C_UNK D_81184404;
 
 /**
- * Splits the temporary pool between the sequence, font and sample caches. Zelda 64 audio driver.
+ * Splits the temporary pool between the sequence, font and sample caches.
+ * Corresponds to OoT AudioHeap_InitTemporaryPoolsAndCaches (original name Nas_SzAutoDivide). This
+ * was AudioHeap_InitTemporaryCache, which OoT uses for the reset above.
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
-void AudioHeap_InitTemporaryCache(s8 *arg0) {
+void AudioHeap_InitTemporaryPoolsAndCaches(s8 *arg0) {
     M2C_FIELD(&D_81184310, s32 *, 4) = (s32) M2C_FIELD(&D_81184310, s32 *, 0);
     func_811098C0(&D_81184344, func_81109868(&D_81184310, M2C_FIELD(arg0, s32 *, 0)), M2C_FIELD(arg0, s32 *, 0));
     func_811098C0(&D_811843A4, func_81109868(&D_81184310, M2C_FIELD(arg0, s32 *, 4)), M2C_FIELD(arg0, s32 *, 4));
     func_811098C0(&D_81184404, func_81109868(&D_81184310, M2C_FIELD(arg0, s32 *, 8)), M2C_FIELD(arg0, s32 *, 8));
-    AudioHeap_TemporaryCacheClear(&D_81184340);
-    AudioHeap_TemporaryCacheClear(&D_811843A0);
-    AudioHeap_TemporaryCacheClear(&D_81184400);
+    AudioHeap_InitTemporaryCache(&D_81184340);
+    AudioHeap_InitTemporaryCache(&D_811843A0);
+    AudioHeap_InitTemporaryCache(&D_81184400);
 }
 
 
@@ -395,7 +420,9 @@ extern u8 D_81184656[1];
 void AudioLoad_SetFontLoadStatus(s32, s32);
 
 /**
- * Allocates `size` bytes for entry `id` of a table's persistent or temporary cache, evicting the older temporary entry when needed. Zelda 64 audio driver.
+ * Allocates `size` bytes for entry `id` of a table's persistent or temporary cache, evicting the older temporary entry when needed.
+ * Corresponds to OoT AudioHeap_AllocCached (original name Nas_SzHeapAlloc). OoT also discards
+ * sample banks when it evicts (AudioHeap_DiscardSampleBank); Zero does not.
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -639,7 +666,8 @@ s32 AudioHeap_SearchRegularCaches(s32 arg0, s32 arg1, s32 arg2);
 s32 AudioHeap_SearchPermanentCache(s32 arg0, s32 arg1);
 
 /**
- * Looks up entry `arg2` of table `arg0`, in the permanent cache first, then the regular caches. Zelda 64 audio driver.
+ * Looks up entry `arg2` of table `arg0`, in the permanent cache first, then the regular caches.
+ * Corresponds to OoT AudioHeap_SearchCaches (original name Nas_SzCacheCheck).
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
@@ -657,7 +685,8 @@ s32 AudioHeap_SearchCaches(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 /**
- * Looks up entry `arg2` of table `arg0` in its temporary or persistent cache. Zelda 64 audio driver.
+ * Looks up entry `arg2` of table `arg0` in its temporary or persistent cache.
+ * Corresponds to OoT AudioHeap_SearchRegularCaches (original name __Nas_SzCacheCheck_Inner).
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
@@ -703,9 +732,10 @@ s32 AudioHeap_SearchRegularCaches(s32 arg0, s32 arg1, s32 arg2) {
 
 /**
  * Unused in the code seen so far. Fills out[0..15] from two recurrences in p
- * and q seeded with 262159.0f; as in the Ocarina of Time version
- * (func_800DDF80) the first loop writes to out instead of tmp, so the second
- * loop copies partly uninitialised values.
+ * and q seeded with 262159.0f. The first loop writes to out instead of tmp, so
+ * the second loop copies partly uninitialized values.
+ * Corresponds to OoT func_800DF1D8 (original name Nas_InitFilterCoef; MM func_8018C4E4): the same
+ * 262159.0f seeds, the same four initial terms and the same out/tmp bug.
  * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code; comment kept.
@@ -719,6 +749,7 @@ void AudioHeap_ComputeFilterCoefficients(f32 p, f32 q, u16* out) {
     tmp[1] = (f32)((q * p) * 262159.0f);
     tmp[9] = (f32)(((p * p) + q) * 262159.0f);
 
+    //!bug Writes out instead of tmp, so the copy below reads tmp[2..7] and tmp[10..15] uninitialized.
     for (i = 2; i < 8; i++) {
         out[i] = q * tmp[i - 2] + p * tmp[i - 1];
         out[8 + i] = q * tmp[6 + i] + p * tmp[7 + i];
@@ -734,6 +765,7 @@ void AudioHeap_ComputeFilterCoefficients(f32 p, f32 q, u16* out) {
  *
  * Sets the eight s16 values at arg0 to zero (the loop is unrolled by four in
  * the retail code).
+ * Corresponds to OoT AudioHeap_ClearFilter (original name Nas_ClearFilter).
  * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code; comment kept.
@@ -754,6 +786,7 @@ extern s16 D_811371D8[];
  * Copies eight s16 values into arg0 from entry arg1 of the table at
  * D_811371D8 (entries are 8 s16 = 16 bytes long; the loop is unrolled by four
  * in the retail code).
+ * Corresponds to OoT AudioHeap_LoadLowPassFilter (original name Nas_SetLPFilter).
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name guessed from the code; comment kept.
@@ -776,6 +809,7 @@ extern s16 D_811373C8[];
  * Copies eight s16 values into arg0 from the table at D_811373C8. The entry is
  * numbered from 1: entry arg1 starts at D_811373C8 + (arg1 - 1) * 16 bytes
  * (8 s16 per entry; the loop is unrolled by four in the retail code).
+ * Corresponds to OoT AudioHeap_LoadHighPassFilter (original name Nas_SetHPFilter).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name guessed from the code; comment kept.
@@ -791,7 +825,8 @@ void AudioHeap_LoadHighPassFilter(s16* arg0, s32 arg1) {
 }
 
 /**
- * Loads a low-pass, high-pass or band-pass filter from the two cutoffs. Zelda 64 audio driver.
+ * Loads a low-pass, high-pass or band-pass filter from the two cutoffs.
+ * Corresponds to OoT AudioHeap_LoadFilter (original name Nas_SetBPFilter).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -815,7 +850,9 @@ void AudioHeap_LoadFilter(s16* arg0, s32 arg1, s32 arg2) {
 extern Voice8110AA50 D_81184110[];
 extern s8 D_8118427B;
 /**
- * Steps every reverb's settings once per audio frame. Zelda 64 audio driver.
+ * Steps every reverb's settings once per audio frame.
+ * Corresponds to OoT AudioHeap_UpdateReverbs (original name __Nas_DelayDown). OoT moves the
+ * per-reverb body into AudioHeap_UpdateReverb.
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
@@ -840,7 +877,8 @@ void AudioHeap_UpdateReverbs(void) {
 extern s16 D_811858C2;
 
 /**
- * Clears the audio buffer that is being filled. Zelda 64 audio driver.
+ * Clears the audio buffer that is being filled.
+ * Corresponds to OoT AudioHeap_ClearCurrentAiBuffer (original name __Nas_DacClear).
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
@@ -861,7 +899,10 @@ void AudioHeap_Init(void);
 void AudioHeap_DiscardSampleCaches(void);
 
 /**
- * Runs one step of the audio reset: fade out, stop notes, clear buffers, reinitialize. Zelda 64 audio driver.
+ * Runs one step of the audio reset: fade out, stop notes, clear buffers, reinitialize.
+ * Corresponds to OoT AudioHeap_ResetStep (original name Nas_SpecChange). Zero calls
+ * AudioSeq_SequencePlayerDisable where OoT calls AudioSeq_SequencePlayerDisableAsFinished, and has
+ * no sample-bank discard.
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
@@ -974,21 +1015,23 @@ extern s32 D_8118557C;
 // matches that way.
 s32 AudioHeap_InitSampleCaches(s32, s32);
 void AudioLoad_InitSampleDmaBuffers(s32);
-void func_811152A4(s32);
+void AudioSeq_ResetSequencePlayer(s32);
 s32 func_80058100(s32);
 void func_8005C0A0(void);
-void func_8110FAF4(void);
+void AudioLoad_LoadPermanentSamples(void);
 void AudioPlayback_InitNoteFreeList(void);
 void AudioPlayback_NoteInitAll(void);
-void func_8111539C(s32);
-void func_81115480(void);
+void AudioSeq_InitSequencePlayerChannels(s32);
+void AudioSeq_InitSequencePlayers(void);
 
 
 #define EXTERNAL_POOL_AFF0 (*(PoolAFF0*)&D_811842A0)
 #define REVERBS_AFF0 ((SynthesisReverbAFF0*)D_81184110)
 
 /**
- * Lays out the audio heap and reverbs for the current audio spec. Zelda 64 audio driver.
+ * Lays out the audio heap and reverbs for the current audio spec.
+ * Corresponds to OoT AudioHeap_Init (original name __Nas_MemoryReconfig). OoT adds the external
+ * pool, ADSR decay table and the slow/async/script load initializers.
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
@@ -1048,22 +1091,22 @@ void AudioHeap_Init(void) {
     D_81184638.a = spec->persistentSeqMem;
     D_81184638.b = spec->persistentFontMem;
     D_81184638.c = spec->persistentSampleMem;
-    AudioHeap_InitPersistentCache((s8*)&D_81184638);
+    AudioHeap_InitPersistentPoolsAndCaches((s8*)&D_81184638);
     D_81184648.a = spec->temporarySeqMem;
     D_81184648.b = spec->temporaryFontMem;
     D_81184648.c = spec->temporarySampleMem;
-    AudioHeap_InitTemporaryCache((s8*)&D_81184648);
+    AudioHeap_InitTemporaryPoolsAndCaches((s8*)&D_81184648);
     AudioHeap_InitSampleCaches(spec->persistentSampleCacheSize, spec->temporarySampleCacheSize);
     if (EXTERNAL_POOL_AFF0.start != NULL) {
         EXTERNAL_POOL_AFF0.cur = EXTERNAL_POOL_AFF0.start;
     }
     AudioHeap_ResetLoadStatus();
-    D_81184664 = (Rec81109678*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, D_811858E8 * 0xCC);
+    D_81184664 = (Rec81109678*)AudioHeap_AllocZeroed((unk_func_81206FA0*)&D_811842C0, D_811858E8 * 0xCC);
     AudioPlayback_NoteInitAll();
     AudioPlayback_InitNoteFreeList();
-    D_81184288 = (void*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, D_811858B8.unk_0C * D_811858E8 * 0x18);
+    D_81184288 = (void*)AudioHeap_AllocZeroed((unk_func_81206FA0*)&D_811842C0, D_811858B8.unk_0C * D_811858E8 * 0x18);
     for (i = 0; i != 2; i++) {
-        D_81185900[i] = (void*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, D_811858E4 * 8);
+        D_81185900[i] = (void*)AudioHeap_AllocZeroed((unk_func_81206FA0*)&D_811842C0, D_811858E4 * 8);
     }
     for (i = 0; i < 1; i++) {
         reverb = &REVERBS_AFF0[i];
@@ -1084,8 +1127,8 @@ void AudioHeap_Init(void) {
         reverb->unk_05 = settings->unk_A;
         reverb->unk_08 = settings->unk_C;
         reverb->useReverb = 8;
-        reverb->leftRingBuf = (s16*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, reverb->windowSize * 2);
-        reverb->rightRingBuf = (s16*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, reverb->windowSize * 2);
+        reverb->leftRingBuf = (s16*)AudioHeap_AllocZeroed((unk_func_81206FA0*)&D_811842C0, reverb->windowSize * 2);
+        reverb->rightRingBuf = (s16*)AudioHeap_AllocZeroed((unk_func_81206FA0*)&D_811842C0, reverb->windowSize * 2);
         reverb->nextRingBufPos = 0;
         reverb->unk_18 = 0;
         reverb->curFrame = 0;
@@ -1104,43 +1147,43 @@ void AudioHeap_Init(void) {
         reverb->loop.end = reverb->windowSize;
         if (reverb->downsampleRate != 1) {
             reverb->unk_0E = 0x8000 / reverb->downsampleRate;
-            reverb->unk_28 = (void*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, 0x20);
-            reverb->unk_2C = (void*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, 0x20);
-            reverb->unk_30 = (void*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, 0x20);
-            reverb->unk_34 = (void*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, 0x20);
+            reverb->unk_28 = (void*)AudioHeap_AllocZeroed((unk_func_81206FA0*)&D_811842C0, 0x20);
+            reverb->unk_2C = (void*)AudioHeap_AllocZeroed((unk_func_81206FA0*)&D_811842C0, 0x20);
+            reverb->unk_30 = (void*)AudioHeap_AllocZeroed((unk_func_81206FA0*)&D_811842C0, 0x20);
+            reverb->unk_34 = (void*)AudioHeap_AllocZeroed((unk_func_81206FA0*)&D_811842C0, 0x20);
             for (j = 0; j < D_811858B8.unk_0C; j++) {
-                s16* mem = (s16*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, 0x340);
+                s16* mem = (s16*)AudioHeap_AllocZeroed((unk_func_81206FA0*)&D_811842C0, 0x340);
 
                 reverb->items[0][j].toDownsampleLeft = mem;
                 reverb->items[0][j].toDownsampleRight = mem + 0xD0;
-                mem = (s16*)GbApu_AllocZeroed((unk_func_81206FA0*)&D_811842C0, 0x340);
+                mem = (s16*)AudioHeap_AllocZeroed((unk_func_81206FA0*)&D_811842C0, 0x340);
                 reverb->items[1][j].toDownsampleLeft = mem;
                 reverb->items[1][j].toDownsampleRight = mem + 0xD0;
             }
         }
         if (settings->lowPassFilterCutoffLeft != 0) {
-            reverb->filterLeftState = (s16*)GbApu_Alloc((unk_func_81206FA0*)&D_811842C0, 0x20);
-            reverb->filterLeft = (s16*)GbApu_Alloc((unk_func_81206FA0*)&D_811842C0, 0x10);
+            reverb->filterLeftState = (s16*)AudioHeap_Alloc((unk_func_81206FA0*)&D_811842C0, 0x20);
+            reverb->filterLeft = (s16*)AudioHeap_Alloc((unk_func_81206FA0*)&D_811842C0, 0x10);
             AudioHeap_LoadLowPassFilter(reverb->filterLeft, settings->lowPassFilterCutoffLeft);
         } else {
             reverb->filterLeft = NULL;
         }
         if (settings->lowPassFilterCutoffRight != 0) {
-            reverb->filterRightState = (s16*)GbApu_Alloc((unk_func_81206FA0*)&D_811842C0, 0x20);
-            reverb->filterRight = (s16*)GbApu_Alloc((unk_func_81206FA0*)&D_811842C0, 0x10);
+            reverb->filterRightState = (s16*)AudioHeap_Alloc((unk_func_81206FA0*)&D_811842C0, 0x20);
+            reverb->filterRight = (s16*)AudioHeap_Alloc((unk_func_81206FA0*)&D_811842C0, 0x10);
             AudioHeap_LoadLowPassFilter(reverb->filterRight, settings->lowPassFilterCutoffRight);
         } else {
             reverb->filterRight = NULL;
         }
     }
-    func_81115480();
+    AudioSeq_InitSequencePlayers();
     for (j = 0; j < D_811858B8.unk_14; j++) {
-        func_8111539C(j);
-        func_811152A4(j);
+        AudioSeq_InitSequencePlayerChannels(j);
+        AudioSeq_ResetSequencePlayer(j);
     }
     AudioLoad_InitSampleDmaBuffers(D_811858E8);
     D_8118557C = 0;
     D_8118427C = 0x1000;
-    func_8110FAF4();
+    AudioLoad_LoadPermanentSamples();
     func_8005C0A0();
 }

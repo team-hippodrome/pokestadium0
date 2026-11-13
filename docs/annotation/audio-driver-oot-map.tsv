@@ -1,0 +1,205 @@
+vram	name	previous_name	oot_name	original_name	sm64_shindou_name	confidence	evidence
+0x81107390	AudioSynth_InitNextRingBuf		AudioSynth_InitNextRingBuf	Nas_CpuFX	prepare_reverb_ring_buffer	high	same position; calls only in Zero: none; calls only in OoT: Audio_InvalDCache. Same downsampling loops and ring-buffer wrap split. Difference: Zero downsamples only when downsampleRate >= 3 (`slti 3` in the ROM); OoT uses >= 2 and SM64 Shindou's prepare_reverb_ring_buffer uses != 1.
+0x81107634	AudioSynth_LoadRingBufferPart		AudioSynth_LoadRingBufferPart	__LoadAuxBuf	synthesis_load_reverb_ring_buffer	high	same position; leaf function (no driver calls on either side). Takes a reverb index, as SM64 Shindou's synthesis_load_reverb_ring_buffer does; OoT passes the reverb pointer.
+0x811076D0	AudioSynth_SaveRingBufferPart		AudioSynth_SaveRingBufferPart	__SaveAuxBuf	synthesis_save_reverb_ring_buffer	high	same position; leaf function (no driver calls on either side). Takes a reverb index, as SM64 Shindou's synthesis_save_reverb_ring_buffer does; OoT passes the reverb pointer.
+0x8110776C	AudioSynth_DisableSampleStates		func_800DB2C0	__Nas_WaveTerminateProcess	func_sh_802ed644	high	same position; leaf function (no driver calls on either side). OoT leaves it unnamed; the name is MM's.
+0x811077FC	AudioSynth_SyncSampleStates		func_800DB03C	__Nas_PushDrvReg	synthesis_load_note_subs_eu	high	same position; leaf function (no driver calls on either side). OoT leaves it unnamed; the name is MM's. Like OoT it also clears the harmonic index byte (unk06), which SM64 Shindou's synthesis_load_note_subs_eu does not.
+0x811078D8	AudioSynth_Update		AudioSynth_Update	Nas_smzAudioFrame	synthesis_execute	high	same position; calls the same driver functions. Same chunk split between samplesPerTickMax, samplesPerTickMin and samplesPerTick.
+0x81107AEC	AudioSynth_LoadReverbSamples		AudioSynth_LoadReverbSamples	Nas_LoadAuxBuffer	synthesis_resample_and_mix_reverb	high	same position; calls only in Zero: AudioSynth_LoadRingBufferPart; calls only in OoT: AudioSynth_LoadRingBuffer1 func_800DB4E4 func_800DB828. Zero does in one function what OoT splits into AudioSynth_LoadRingBuffer1 (Nas_LoadAuxBuffer1), func_800DB4E4 (Nas_LoadAuxBufferC, the resampling path) and AudioSynth_LeakReverb (Nas_CrossMix). SM64 Shindou has the single function too (synthesis_resample_and_mix_reverb). Difference from Shindou: the wet mix is two aMix commands (reverbGain, then wetGain + 0x8000) instead of aAddMixer plus one aMix.
+0x81107E70	AudioSynth_LoadRingBuffer1AtTemp	func_81107E70	AudioSynth_LoadRingBuffer1AtTemp	Nas_LoadAux2nd	synthesis_load_reverb_samples	high	same position; calls the same driver functions. SM64 Shindou: synthesis_load_reverb_samples.
+0x81107F40	AudioSynth_SaveReverbSamples	func_81107F40	AudioSynth_SaveReverbSamples	Nas_SaveAuxBuffer	synthesis_save_reverb_samples	high	same position; calls only in Zero: none; calls only in OoT: AudioSynth_SaveBuffer func_800DB680. SM64 Shindou: synthesis_save_reverb_samples. Zero has no comb-filter branch (OoT's unk_18 path through func_800DB680).
+0x8110807C	AudioSynth_SaveRingBuffer1AtTemp	func_8110807C	AudioSynth_SaveRingBuffer1AtTemp	Nas_SaveAux2nd	func_sh_802EDF24	high	same position; calls the same driver functions. SM64 Shindou: func_sh_802EDF24.
+0x8110814C	AudioSynth_DoOneAudioUpdate		AudioSynth_DoOneAudioUpdate	Nas_DriveRsp	synthesis_do_one_audio_update	high	same position; calls only in Zero: AudioSynth_LoadRingBuffer1AtTemp AudioSynth_SaveRingBuffer1AtTemp; calls only in OoT: AudioSynth_FilterReverb AudioSynth_LeakReverb AudioSynth_MaybeLoadRingBuffer2 AudioSynth_MaybeMixRingBuffer1 AudioSynth_SaveRingBuffer2. OoT adds the reverb filter, second ring buffer and leak calls; Zero's leak is inside AudioSynth_LoadReverbSamples.
+0x81108750	AudioSynth_ProcessSample		AudioSynth_ProcessNote	Nas_SynthMain	synthesis_process_note	high	same position; calls only in Zero: none; calls only in OoT: AudioSynth_ApplyHaasEffect AudioSynth_ClearBuffer AudioSynth_DMemMove AudioSynth_HiLoGain AudioSynth_InterL AudioSynth_LoadBuffer AudioSynth_LoadFilterBuffer AudioSynth_LoadFilterSize AudioSynth_LoadWaveSamples AudioSynth_Mix AudioSynth_S8Dec AudioSynth_SaveBuffer AudioSynth_SetBuffer AudioSynth_UnkCmd19 AudioSynth_UnkCmd3. The name is MM's. OoT adds the Haas effect and synthetic-wave paths.
+0x811092F4	AudioSynth_FinalResample		AudioSynth_FinalResample	Nas_Synth_Resample	final_resample	high	same position; calls only in Zero: none; calls only in OoT: AudioSynth_ClearBuffer
+0x8110938C	AudioSynth_ProcessEnvelope		AudioSynth_ProcessEnvelope	Nas_Synth_Envelope	process_envelope	high	same position; calls only in Zero: none; calls only in OoT: AudioSynth_ClearBuffer AudioSynth_EnvSetup1 AudioSynth_EnvSetup2
+0x811095E0	AudioHeap_ResetLoadStatus		AudioHeap_ResetLoadStatus	Nas_ResetIDtable		high	same position; leaf function (no driver calls on either side)
+0x81109678	AudioHeap_DiscardFont		AudioHeap_DiscardFont	Nas_ForceStopChannel		high	same position; calls the same driver functions
+0x81109764	AudioHeap_DiscardSequence		AudioHeap_DiscardSequence	Nas_ForceStopSeq		high	same position; calls the same driver functions
+0x811097E8	AudioHeap_AllocZeroed	GbApu_AllocZeroed	AudioHeap_AllocZeroed	Nas_HeapAlloc_CL		high	same position; calls only in Zero: none; calls only in OoT: AudioHeap_Alloc. Zero clears the block in its own loop; OoT calls AudioHeap_Alloc and then clears. Stadium 1's name GbApu_AllocZeroed did not fit.
+0x81109868	AudioHeap_Alloc	GbApu_Alloc	AudioHeap_Alloc	Nas_HeapAlloc		high	same position; leaf function (no driver calls on either side). Same 16-byte alignment, bounds test and entry count. Stadium 1's name GbApu_Alloc did not fit.
+0x811098C0	AudioHeap_InitPool	GbApu_InitAllocator	AudioHeap_InitPool	Nas_HeapInit		high	same position; leaf function (no driver calls on either side). Stadium 1's name GbApu_InitAllocator did not fit.
+0x811098E8	AudioHeap_InitPersistentCache	AudioHeap_PersistentCacheClear	AudioHeap_InitPersistentCache	Nas_SzStayClear		high	same position; leaf function (no driver calls on either side). This was AudioHeap_PersistentCacheClear; OoT and MM use AudioHeap_InitPersistentCache for this reset.
+0x811098FC	AudioHeap_InitTemporaryCache	AudioHeap_TemporaryCacheClear	AudioHeap_InitTemporaryCache	Nas_SzAutoClear		high	same position; leaf function (no driver calls on either side). This was AudioHeap_TemporaryCacheClear; OoT and MM use AudioHeap_InitTemporaryCache for this reset.
+0x8110992C	AudioHeap_ResetPool		AudioHeap_ResetPool	Nas_SzCustomClear		high	same position; leaf function (no driver calls on either side)
+0x8110993C	AudioHeap_InitMainPools		AudioHeap_InitMainPools	Nas_SzHeapReset		high	same position; calls the same driver functions
+0x8110999C	AudioHeap_InitSessionPools		AudioHeap_InitSessionPools	Nas_SzHeapDivide		high	same position; calls the same driver functions
+0x81109A18	AudioHeap_InitCachePools		AudioHeap_InitCachePools	Nas_SzDataDivide		high	same position; calls the same driver functions
+0x81109A94	AudioHeap_InitPersistentPoolsAndCaches	AudioHeap_InitPersistentCache	AudioHeap_InitPersistentPoolsAndCaches	Nas_SzStayDivide		high	same position; calls the same driver functions. This was AudioHeap_InitPersistentCache, which OoT uses for the reset above.
+0x81109B50	AudioHeap_InitTemporaryPoolsAndCaches	AudioHeap_InitTemporaryCache	AudioHeap_InitTemporaryPoolsAndCaches	Nas_SzAutoDivide		high	same position; calls the same driver functions. This was AudioHeap_InitTemporaryCache, which OoT uses for the reset above.
+0x81109C0C	AudioHeap_AllocCached		AudioHeap_AllocCached	Nas_SzHeapAlloc		high	same position; calls only in Zero: none; calls only in OoT: AudioHeap_DiscardSampleBank. OoT also discards sample banks when it evicts (AudioHeap_DiscardSampleBank); Zero does not.
+0x8110A310	AudioHeap_SearchCaches		AudioHeap_SearchCaches	Nas_SzCacheCheck		high	same position; calls the same driver functions
+0x8110A368	AudioHeap_SearchRegularCaches		AudioHeap_SearchRegularCaches	__Nas_SzCacheCheck_Inner		high	same position; calls the same driver functions
+0x8110A474	AudioHeap_ComputeFilterCoefficients		func_800DF1D8	Nas_InitFilterCoef		high	same position; leaf function (no driver calls on either side). OoT leaves it unnamed; MM calls it func_8018C4E4.
+0x8110A848	AudioHeap_ClearFilter		AudioHeap_ClearFilter	Nas_ClearFilter		high	same position; leaf function (no driver calls on either side)
+0x8110A878	AudioHeap_LoadLowPassFilter		AudioHeap_LoadLowPassFilter	Nas_SetLPFilter		high	same position; leaf function (no driver calls on either side)
+0x8110A8CC	AudioHeap_LoadHighPassFilter		AudioHeap_LoadHighPassFilter	Nas_SetHPFilter		high	same position; leaf function (no driver calls on either side)
+0x8110A924	AudioHeap_LoadFilter		AudioHeap_LoadFilter	Nas_SetBPFilter		high	same position; calls the same driver functions
+0x8110AA50	AudioHeap_UpdateReverbs		AudioHeap_UpdateReverbs	__Nas_DelayDown		high	same position; calls only in Zero: none; calls only in OoT: AudioHeap_UpdateReverb. OoT moves the per-reverb body into AudioHeap_UpdateReverb.
+0x8110AC14	AudioHeap_ClearCurrentAiBuffer		AudioHeap_ClearCurrentAiBuffer	__Nas_DacClear		high	same position; leaf function (no driver calls on either side)
+0x8110AC8C	AudioHeap_ResetStep		AudioHeap_ResetStep	Nas_SpecChange		high	same position; calls only in Zero: AudioSeq_SequencePlayerDisable; calls only in OoT: AudioHeap_DiscardSampleBanks AudioSeq_SequencePlayerDisableAsFinished. Zero calls AudioSeq_SequencePlayerDisable where OoT calls AudioSeq_SequencePlayerDisableAsFinished, and has no sample-bank discard.
+0x8110AFF0	AudioHeap_Init		AudioHeap_Init	__Nas_MemoryReconfig		high	same position; calls only in Zero: none; calls only in OoT: AudioHeap_AllocDmaMemory AudioHeap_AllocDmaMemoryZeroed AudioHeap_AllocZeroedAttemptExternal AudioHeap_InitAdsrDecayTable AudioLoad_InitAsyncLoads AudioLoad_InitScriptLoads AudioLoad_InitSlowLoads. OoT adds the external pool, ADSR decay table and the slow/async/script load initializers.
+0x8110B880	AudioHeap_SearchPermanentCache		AudioHeap_SearchPermanentCache	EmemOnCheck		high	same position; leaf function (no driver calls on either side)
+0x8110B8D8	AudioHeap_AllocPermanent		AudioHeap_AllocPermanent	EmemAlloc		high	same position; calls the same driver functions
+0x8110B958	AudioHeap_AllocTemporarySampleCache		AudioHeap_AllocSampleCache	Nas_Alloc_Single	func_sh_802f1d40	high	same position; calls only in Zero: none; calls only in OoT: AudioHeap_AllocPersistentSampleCacheEntry. OoT merges this and AudioHeap_AllocPersistentSampleCache into one AudioHeap_AllocSampleCache with a cache argument. SM64 Shindou keeps two functions, like Zero (func_sh_802f1d40, func_sh_802f1d90).
+0x8110B9A8	AudioHeap_AllocPersistentSampleCache		AudioHeap_AllocSampleCache	Nas_Alloc_Single	func_sh_802f1d90	high	same position; calls only in Zero: none; calls only in OoT: AudioHeap_AllocTemporarySampleCacheEntry. See AudioHeap_AllocTemporarySampleCache: OoT merges the two.
+0x8110B9F8	AudioHeap_InitSampleCaches		AudioHeap_InitSampleCaches	Nas_Init_Single		high	same position; calls only in Zero: AudioHeap_Alloc; calls only in OoT: AudioHeap_AllocAttemptExternal. Zero allocates with AudioHeap_Alloc; OoT tries the external pool first.
+0x8110BA8C	AudioHeap_AllocTemporarySampleCacheEntry		AudioHeap_AllocTemporarySampleCacheEntry	__Nas_Alloc_Single_Auto_Inner		high	same position; calls the same driver functions
+0x8110BD20	AudioHeap_DiscardSampleCacheEntry		AudioHeap_DiscardSampleCacheEntry	__KillSwMember		high	same position; calls only in Zero: AudioHeap_UnapplySampleCache Audio_GetDrum Audio_GetInstrumentInner; calls only in OoT: AudioHeap_UnapplySampleCacheForFont. OoT moves the per-font loop into AudioHeap_UnapplySampleCacheForFont (__SearchBank).
+0x8110BEE4	AudioHeap_UnapplySampleCache		AudioHeap_UnapplySampleCache	__RomAddrSet		high	same position; leaf function (no driver calls on either side)
+0x8110BF28	AudioHeap_AllocPersistentSampleCacheEntry		AudioHeap_AllocPersistentSampleCacheEntry	__Nas_Alloc_Single_Stay_Inner		high	same position; calls the same driver functions
+0x8110BFB0	AudioHeap_DiscardSampleCaches		AudioHeap_DiscardSampleCaches	Emem_KillSwMember		high	same position; calls only in Zero: AudioHeap_UnapplySampleCache Audio_GetDrum Audio_GetInstrumentInner; calls only in OoT: AudioHeap_DiscardSampleCacheForFont. OoT moves the per-font loop into AudioHeap_DiscardSampleCacheForFont.
+0x8110C1C0	AudioLoad_DecreaseSampleDmaTtls		AudioLoad_DecreaseSampleDmaTtls	Nas_WaveDmaFrameWork	decrease_sample_dma_ttls	high	same position; leaf function (no driver calls on either side)
+0x8110C2D8	AudioLoad_DmaSampleData		AudioLoad_DmaSampleData	Nas_WaveDmaCallBack	dma_sample_data	high	same position; calls the same driver functions
+0x8110C618	AudioLoad_InitSampleDmaBuffers		AudioLoad_InitSampleDmaBuffers	Nas_WaveDmaNew	init_sample_dma_buffers	medium	same position; calls only in Zero: none; calls only in OoT: AudioHeap_AllocAttemptExternal AudioHeap_WritebackDCache
+0x8110CA2C	AudioLoad_IsFontLoadComplete		AudioLoad_IsFontLoadComplete	Nas_CheckIDbank		high	same position; calls only in Zero: none; calls only in OoT: AudioLoad_GetRealTableIndex
+0x8110CA68	AudioLoad_IsSeqLoadComplete		AudioLoad_IsSeqLoadComplete	Nas_CheckIDseq		high	same position; calls only in Zero: none; calls only in OoT: AudioLoad_GetRealTableIndex
+0x8110CAA4	AudioLoad_IsSampleLoadComplete		AudioLoad_IsSampleLoadComplete	Nas_CheckIDwave		high	same position; calls only in Zero: none; calls only in OoT: AudioLoad_GetRealTableIndex
+0x8110CAE0	AudioLoad_SetFontLoadStatus		AudioLoad_SetFontLoadStatus	Nas_WriteIDbank		high	same position; leaf function (no driver calls on either side)
+0x8110CB10	AudioLoad_SetSeqLoadStatus		AudioLoad_SetSeqLoadStatus	Nas_WriteIDseq		high	same position; leaf function (no driver calls on either side)
+0x8110CB40	AudioLoad_SetSampleLoadStatus		AudioLoad_SetSampleFontLoadStatus	Nas_WriteIDwaveOnly		high	same position; leaf function (no driver calls on either side)
+0x8110CB70	AudioLoad_InitTable	func_8110CB70	AudioLoad_InitTable	Nas_BankHeaderInit		high	same position; leaf function (no driver calls on either side)
+0x8110CBD0	AudioLoad_SyncLoadSeqFonts	func_8110CBD0	AudioLoad_SyncLoadSeqFonts	Nas_PreLoadBank		high	same position; calls only in Zero: AudioLoad_GetRealTableIndex; calls only in OoT: none. Zero canonicalizes the sequence id with AudioLoad_GetRealTableIndex first; OoT does not.
+0x8110CC94	AudioLoad_SyncLoadSeqParts	func_8110CC94	AudioLoad_SyncLoadSeqParts	Nas_PreLoadSeq		high	same position; calls only in Zero: AudioLoad_GetRealTableIndex; calls only in OoT: none. Zero canonicalizes the sequence id first; OoT does not.
+0x8110CD0C	AudioLoad_SyncLoadSample	func_8110CD0C	AudioLoad_SyncLoadSample	__Nas_LoadVoice_Inner		high	same position; calls the same driver functions
+0x8110CDF0	AudioLoad_SyncLoadInstrument	func_8110CDF0	AudioLoad_SyncLoadInstrument	Nas_LoadVoice		high	same position; calls the same driver functions
+0x8110CEC0	AudioLoad_AsyncLoadSampleBank		AudioLoad_AsyncLoadSampleBank	Nas_PreLoadWave_BG	func_sh_802f30f4	high	same position; calls only in Zero: AudioLoad_AsyncLoadInner AudioLoad_GetRealTableIndex; calls only in OoT: AudioLoad_AsyncLoad. Zero calls AudioLoad_AsyncLoadInner directly; OoT goes through AudioLoad_AsyncLoad (Nas_PreLoad_BG). SM64 Shindou does the same as Zero (func_sh_802f30f4).
+0x8110CF24	AudioLoad_AsyncLoadSeqFonts	func_8110CF24			func_sh_802f3158	none	
+0x8110CFEC	AudioLoad_GetFontsForSequence	Audio_CountActiveSoundsByCategory	AudioLoad_GetFontsForSequence	Nas_SeqToBank	func_sh_802f3220	high	same position; calls only in Zero: AudioLoad_GetRealTableIndex; calls only in OoT: none. Stadium 1's name Audio_CountActiveSoundsByCategory did not fit.
+0x8110D054	AudioLoad_DiscardSeqFonts	func_8110D054	AudioLoad_DiscardSeqFonts	Nas_FlushBank	func_sh_802f3288	high	same position; calls the same driver functions
+0x8110D110	AudioLoad_DiscardFont	func_8110D110	AudioLoad_DiscardFont	__Kill_Bank	func_sh_802f3368	high	same position; calls the same driver functions
+0x8110D1B8	AudioLoad_SyncInitSeqPlayer		AudioLoad_SyncInitSeqPlayer	Nas_StartMySeq		high	same position; calls the same driver functions
+0x8110D214	AudioLoad_SyncInitSeqPlayerSkipTicks		AudioLoad_SyncInitSeqPlayerSkipTicks	Nas_StartSeq_Skip		high	same position; calls the same driver functions
+0x8110D278	AudioLoad_SyncInitSeqPlayerInternal		AudioLoad_SyncInitSeqPlayerInternal	__Nas_StartSeq		high	same position; calls the same driver functions
+0x8110D3D4	AudioLoad_SyncLoadSeq	func_8110D3D4	AudioLoad_SyncLoadSeq	__Load_Seq	func_sh_802f3564	high	same position; calls the same driver functions. OoT also refuses while a load of the sequence is in progress; Zero does not check.
+0x8110D408	AudioLoad_TrySyncLoadSampleBank	func_8110D408	AudioLoad_TrySyncLoadSampleBank	__Load_Wave	func_sh_802f3598	high	same position; calls the same driver functions. OoT adds a noLoad argument; Zero's two-argument form is SM64 Shindou's func_sh_802f3598.
+0x8110D4E0	AudioLoad_SyncLoadFont	func_8110D4E0	AudioLoad_SyncLoadFont	__Load_Ctrl	func_sh_802f3688	high	same position; calls the same driver functions. SM64 Shindou: func_sh_802f3688.
+0x8110D5BC	AudioLoad_SyncLoad		AudioLoad_SyncLoad	__Load_Bank		high	same position; calls only in Zero: AudioLoad_SetSampleFontLoadStatus; calls only in OoT: AudioLoad_GetRealTableIndex AudioLoad_SetSampleFontLoadStatusAndApplyCaches
+0x8110D7B0	AudioLoad_GetRealTableIndex		AudioLoad_GetRealTableIndex	__Link_BankNum	canonicalize_index	high	same position; calls the same driver functions
+0x8110D7EC	AudioLoad_SearchCaches		AudioLoad_SearchCaches	__Check_Cache		high	same position; calls the same driver functions
+0x8110D840	AudioLoad_GetLoadTable		AudioLoad_GetLoadTable		get_audio_file_header	high	same position; leaf function (no driver calls on either side)
+0x8110D884	AudioLoad_RelocateFont		AudioLoad_RelocateFont	Nas_BankOfsToAddr_Inner		high	same position; calls the same driver functions
+0x8110DA68	AudioLoad_SyncDma		AudioLoad_SyncDma	Nas_FastCopy		high	same position; calls only in Zero: none; calls only in OoT: Audio_InvalDCache
+0x8110DB8C	AudioLoad_SyncDmaUnkMedium	func_8110DB8C	AudioLoad_SyncDmaUnkMedium	Nas_FastDiskCopy		high	same position; leaf function (no driver calls on either side)
+0x8110DBA0	AudioLoad_Dma		AudioLoad_Dma	Nas_StartDma	func_sh_802f3dd0	high	same position; leaf function (no driver calls on either side)
+0x8110DC90	func_8110DC90				func_sh_802f3ec4	none	No OoT counterpart is certain. Zero has two empty stubs between AudioLoad_Dma and AudioLoad_SyncLoadSimple, as SM64 Shindou does (func_sh_802f3ec4, func_sh_802f3ed4); OoT keeps one there, AudioLoad_Unused1 (__OfsToLbaOfs).
+0x8110DC98	func_8110DC98				func_sh_802f3ed4	none	See func_8110DC90.
+0x8110DCA0	AudioLoad_SyncLoadSimple	func_8110DCA0	AudioLoad_SyncLoadSimple	EmemLoad	func_sh_802f3ee8	high	same position; calls the same driver functions
+0x8110DCC0	AudioLoad_AsyncLoadInner		AudioLoad_AsyncLoadInner	__Load_Bank_BG		high	same position; calls only in Zero: AudioLoad_SetSampleFontLoadStatus; calls only in OoT: AudioLoad_GetRealTableIndex AudioLoad_SetSampleFontLoadStatusAndApplyCaches AudioLoad_StartAsyncLoadUnkMedium. OoT also handles the unknown-medium queue.
+0x8110DF50	AudioLoad_ProcessLoads	BattleScene_EndStatusAnimationsAndCommit	AudioLoad_ProcessLoads	Nas_BgDmaFrameWork		high	same position; calls the same driver functions
+0x8110DF80	AudioLoad_Init		AudioLoad_Init	Nas_InitAudio	audio_init	high	same position; calls only in Zero: none; calls only in OoT: AudioHeap_AllocZeroed AudioLoad_InitSoundFont. OoT adds the DMA and unused handlers and moves the per-font loop into AudioLoad_InitSoundFont (__SetVlute).
+0x8110E500	AudioLoad_SlowLoadSample	func_8110E500	AudioLoad_SlowLoadSample	VoiceLoad		high	same position; calls the same driver functions
+0x8110E6B0	AudioLoad_GetFontSample	func_8110E6B0	AudioLoad_GetFontSample	__GetWaveTable		high	same position; calls only in Zero: none; calls only in OoT: Audio_GetSoundEffect. OoT also returns sound-effect samples for ids of 0x100 and up.
+0x8110E714	AudioLoad_Unused2	func_8110E714	AudioLoad_Unused2			high	same position; leaf function (no driver calls on either side)
+0x8110E71C	AudioLoad_FinishSlowLoad	func_8110E71C	AudioLoad_FinishSlowLoad	__SwapLoadLps		high	same position; calls the same driver functions
+0x8110E784	AudioLoad_ProcessSlowLoads		AudioLoad_ProcessSlowLoads	LpsDma		high	same position; calls the same driver functions
+0x8110E910	AudioLoad_DmaSlowCopy	func_8110E910	AudioLoad_DmaSlowCopy	__Nas_SlowCopy		high	same position; calls only in Zero: none; calls only in OoT: Audio_InvalDCache
+0x8110E994	AudioLoad_DmaSlowCopyUnkMedium	func_8110E994	AudioLoad_DmaSlowCopyUnkMedium	__Nas_SlowDiskCopy		high	same position; leaf function (no driver calls on either side)
+0x8110E9A8	AudioLoad_StartAsyncLoad	func_8110E9A8	AudioLoad_StartAsyncLoad	Nas_BgCopyReq		high	same position; leaf function (no driver calls on either side)
+0x8110EABC	AudioLoad_ProcessAsyncLoads	Battle_ApplyAnimStateEffects	AudioLoad_ProcessAsyncLoads	Nas_BgCopyMain		high	same position; calls only in Zero: none; calls only in OoT: AudioLoad_ProcessAsyncLoadUnkMedium. OoT adds the unknown-medium load queue. Stadium 1's name Battle_ApplyAnimStateEffects did not fit.
+0x8110EB40	AudioLoad_ProcessAsyncLoad	func_8110EB40	AudioLoad_ProcessAsyncLoad	__BgCopySub		high	same position; calls only in Zero: AudioLoad_RelocateFontAndPreloadSamples AudioLoad_SetFontLoadStatus AudioLoad_SetSampleFontLoadStatus AudioLoad_SetSeqLoadStatus AudioLoad_TrySyncLoadSampleBank; calls only in OoT: AudioLoad_FinishAsyncLoad. Zero has OoT's AudioLoad_FinishAsyncLoad (__BgCopyFinishProcess) inlined.
+0x8110ED98	AudioLoad_AsyncDma	func_8110ED98	AudioLoad_AsyncDma	__Nas_BgCopy		high	same position; calls only in Zero: none; calls only in OoT: Audio_InvalDCache
+0x8110EE28	AudioLoad_AsyncDmaUnkMedium	func_8110EE28	AudioLoad_AsyncDmaUnkMedium	__Nas_BgDiskCopy		high	same position; leaf function (no driver calls on either side)
+0x8110EE3C	AudioLoad_RelocateSample		AudioLoad_RelocateSample	__WaveTouch		high	same position; leaf function (no driver calls on either side)
+0x8110EF7C	AudioLoad_RelocateFontAndPreloadSamples	func_8110EF7C	AudioLoad_RelocateFontAndPreloadSamples	Nas_BankOfsToAddr		high	same position; calls the same driver functions
+0x8110F310	AudioLoad_ProcessSamplePreloads	BattleAnim_EndSleepStatusAnimation	AudioLoad_ProcessSamplePreloads	Nas_CheckBgWave		high	same position; calls the same driver functions. Stadium 1's name BattleAnim_EndSleepStatusAnimation did not fit.
+0x8110F4D0	AudioLoad_AddToSampleSet	func_8110F4D0	AudioLoad_AddToSampleSet	__AddList		high	same position; leaf function (no driver calls on either side)
+0x8110F518	AudioLoad_GetSamplesForFont	func_8110F518	AudioLoad_GetSamplesForFont	MakeWaveList		high	same position; calls the same driver functions
+0x8110F64C	AudioLoad_AddUsedSample	func_8110F64C	AudioLoad_AddUsedSample	__Reload		high	same position; leaf function (no driver calls on either side)
+0x8110F6A4	AudioLoad_PreloadSamplesForFont		AudioLoad_PreloadSamplesForFont	WaveReload		high	same position; calls only in Zero: none; calls only in OoT: Audio_GetSoundEffect
+0x8110FAF4	AudioLoad_LoadPermanentSamples	func_8110FAF4	AudioLoad_LoadPermanentSamples	EmemReload		high	same position; calls the same driver functions
+0x8110FC30	func_8110FC30					none	No OoT counterpart. Zero's audio thread file starts with three empty stubs; OoT's thread.c starts with AudioThread_Update.
+0x8110FC38	func_8110FC38					none	See func_8110FC30.
+0x8110FC40	func_8110FC40					none	See func_8110FC30.
+0x8110FC48	AudioThread_InitMesgQueuesImpl	BattleAnim_DisableEffectSpawning	AudioThread_InitMesgQueuesImpl	Nap_AudioPortInit		high	same position; leaf function (no driver calls on either side). Same three queues of 1, 4 and 1 messages. Stadium 1's name BattleAnim_DisableEffectSpawning did not fit.
+0x8110FCF0	AudioThread_QueueCmd	func_8110FCF0	AudioThread_QueueCmd	Nap_PortSet		high	same position; leaf function (no driver calls on either side)
+0x8110FD48	AudioThread_QueueCmdF32	func_8110FD48	AudioThread_QueueCmdF32	Nap_SetF32		high	same position; calls the same driver functions
+0x8110FD6C	AudioThread_QueueCmdS32	func_8110FD6C	AudioThread_QueueCmdS32	Nap_SetS32		high	same position; calls the same driver functions
+0x8110FD90	AudioThread_QueueCmdS8	func_8110FD90	AudioThread_QueueCmdS8	Nap_SetS8		high	same position; calls the same driver functions
+0x8110FDC0	AudioThread_QueueCmdU16	func_8110FDC0	AudioThread_QueueCmdU16	Nap_SetU16		high	same position; calls the same driver functions
+0x8110FDF0	AudioThread_ScheduleProcessCmds	func_8110FDF0	AudioThread_ScheduleProcessCmds	Nap_SendStart		high	same position; leaf function (no driver calls on either side)
+0x8110FE74	AudioThread_ResetCmdQueue	func_8110FE74	AudioThread_ResetCmdQueue	Nap_FlushPort		high	same position; leaf function (no driver calls on either side)
+0x8110FE90	func_8110FE90					none	No OoT counterpart. It sits where OoT has AudioThread_ProcessCmd (Nap_Process1Command) and AudioThread_ProcessCmds (Nap_AudioPortProcess).
+0x8110FE98	AudioThread_GetExternalLoadQueueMsg	func_8110FE98	func_800E5E20			high	same position; leaf function (no driver calls on either side). OoT leaves it unnamed; the name is MM's.
+0x8110FEFC	AudioThread_GetFontsForSequence	Audio_CountCategorySounds	AudioThread_GetFontsForSequence			high	same position; calls the same driver functions. Stadium 1's name Audio_CountCategorySounds did not fit.
+0x8110FF1C	AudioThread_CheckSpecChange	func_8110FF1C	func_800E5EDC	Nap_CheckSpecChange		high	same position; leaf function (no driver calls on either side). OoT leaves it unnamed; the name follows the original.
+0x8110FF74	AudioThread_ClearSpecChangeQueue	func_8110FF74	func_800E5F34	__ClearSpecChangeQ		high	same position; leaf function (no driver calls on either side). OoT leaves it unnamed; the name follows the original (MM: AudioThread_WaitForAudioResetQueueP).
+0x8110FFC8	AudioThread_ResetAudioHeap	func_8110FFC8	AudioThread_ResetAudioHeap	Nap_StartSpecChange		high	same position; calls only in Zero: AudioThread_QueueCmdS32; calls only in OoT: none
+0x81110060	AudioThread_PreNMIInternal	func_81110060	AudioThread_PreNMIInternal	Nap_StartReset		high	same position; calls the same driver functions
+0x8111009C	AudioThread_GetChannelIO	func_8111009C	AudioThread_GetChannelIO	Nap_ReadSubPort		high	same position; leaf function (no driver calls on either side)
+0x811100F8	AudioThread_GetSeqPlayerIO	func_811100F8	AudioThread_GetSeqPlayerIO	Nap_ReadGrpPort		high	same position; leaf function (no driver calls on either side)
+0x81110128	AudioThread_InitExternalPool	func_81110128	AudioThread_InitExternalPool			high	same position; calls the same driver functions
+0x81110158	AudioThread_ResetExternalPool	BattleAnim_ClearEffectStateFlag	AudioThread_ResetExternalPool			high	same position; leaf function (no driver calls on either side). Stadium 1's name BattleAnim_ClearEffectStateFlag did not fit.
+0x81110164	func_81110164	BattleAnim_EffectStartNop				none	No OoT counterpart; OoT's no-op command handlers are elsewhere in thread.c.
+0x8111016C	AudioThread_InitMesgQueues	BattleAnim_DisableEffectSpawningAlias	AudioThread_InitMesgQueues	Nas_InitGAudio		high	same position; calls the same driver functions. Stadium 1's name BattleAnim_DisableEffectSpawningAlias did not fit.
+0x81110190	osGbSetNextBuffer		osAiSetNextBuffer			high	same position; leaf function (no driver calls on either side). OoT's audio library carries its own copy too (osAiSetNextBuffer in src/audio/internal/os.c).
+0x81110210	AudioPlayback_InitSampleState		Audio_InitSampleState	Nas_smzSetParam		high	same position; calls the same driver functions
+0x811105DC	AudioPlayback_NoteSetResamplingRate		Audio_NoteSetResamplingRate	Nas_smzSetPitch		high	same position; leaf function (no driver calls on either side). Same 2.0f split, 1.99998f and 3.99996f clamps, halving and 32768.0f fixed-point scale.
+0x81110694	AudioPlayback_NoteInit		Audio_NoteInit	Nas_StartVoice		high	same position; calls the same driver functions
+0x8111073C	AudioPlayback_NoteDisable		Audio_NoteDisable	Nas_StopVoice		high	same position; leaf function (no driver calls on either side)
+0x81110798	AudioPlayback_ProcessNotes		Audio_ProcessNotes	Nas_UpdateChannel		medium	same position; calls only in Zero: none; calls only in OoT: Audio_NotePortamentoInit
+0x81110C6C	AudioPlayback_GetInstrumentTunedSample		Audio_GetInstrumentTunedSample	NoteToVoice		high	same position; leaf function (no driver calls on either side)
+0x81110CA8	AudioPlayback_GetInstrumentInner		Audio_GetInstrumentInner	ProgToVp		high	same position; calls the same driver functions
+0x81110D6C	AudioPlayback_GetDrum		Audio_GetDrum	PercToPp		high	same position; calls the same driver functions
+0x81110E3C	AudioPlayback_SeqLayerDecayRelease		Audio_SeqLayerDecayRelease	__Nas_Release_Channel_Main		high	same position; calls the same driver functions
+0x81111090	AudioPlayback_SeqLayerNoteDecay		Audio_SeqLayerNoteDecay	Nas_Release_Channel		high	same position; calls the same driver functions
+0x811110B0	AudioPlayback_SeqLayerNoteRelease		Audio_SeqLayerNoteRelease	Nas_Release_Channel_Force		high	same position; calls the same driver functions
+0x811110D0	AudioPlayback_InitNoteList		Audio_InitNoteList	__Nas_InitList		high	same position; leaf function (no driver calls on either side)
+0x811110E0	AudioPlayback_InitNoteLists		Audio_InitNoteLists	Nas_InitChNode		high	same position; calls the same driver functions
+0x81111130	AudioPlayback_InitNoteFreeList		Audio_InitNoteFreeList	Nas_InitChannelList		high	same position; calls the same driver functions
+0x811111E0	AudioPlayback_NotePoolClear		Audio_NotePoolClear	Nas_DeAllocAllVoices		high	same position; calls the same driver functions
+0x81111340	AudioPlayback_NotePoolFill		Audio_NotePoolFill	Nas_AllocVoices		high	same position; calls the same driver functions
+0x8111147C	AudioPlayback_AudioListPushFront		Audio_AudioListPushFront	Nas_AddListHead		high	same position; leaf function (no driver calls on either side)
+0x811114BC	AudioPlayback_AudioListRemove		Audio_AudioListRemove	Nas_CutList		high	same position; leaf function (no driver calls on either side)
+0x811114E8	AudioPlayback_FindNodeWithPrioLessThan		Audio_FindNodeWithPrioLessThan	__Nas_GetLowerPrio		high	same position; leaf function (no driver calls on either side)
+0x81111568	AudioPlayback_NoteInitForLayer		Audio_NoteInitForLayer	Nas_EntryTrack		high	same position; calls only in Zero: none; calls only in OoT: Audio_BuildSyntheticWave. OoT adds synthetic waves.
+0x81111688	AudioPlayback_NoteReleaseOwnerAndQueueLayer		func_800E82C0	__Nas_InterTrack		high	same position; calls the same driver functions. OoT leaves it unnamed (MM: func_801963E8).
+0x811116BC	AudioPlayback_NoteReleaseAndTakeOwnership		Audio_NoteReleaseAndTakeOwnership	__Nas_InterReleaseTrack		high	same position; leaf function (no driver calls on either side)
+0x811116E8	AudioPlayback_AllocNoteFromDisabled		Audio_AllocNoteFromDisabled			high	same position; calls the same driver functions
+0x81111734	AudioPlayback_AllocNoteFromDecaying		Audio_AllocNoteFromDecaying			high	same position; calls the same driver functions
+0x81111784	AudioPlayback_AllocNoteFromActive		Audio_AllocNoteFromActive	__Nas_ChLookRelWait		high	same position; calls the same driver functions
+0x8111187C	AudioPlayback_AllocNote		Audio_AllocNote	Nas_AllocationOnRequest		high	same position; calls the same driver functions
+0x81111AF4	AudioPlayback_NoteInitAll		Audio_NoteInitAll	Nas_ChannelInit		high	same position; calls only in Zero: AudioHeap_Alloc; calls only in OoT: AudioHeap_AllocDmaMemory. Zero allocates with AudioHeap_Alloc; OoT uses AudioHeap_AllocDmaMemory.
+0x81111C20	AudioEffects_SequenceChannelProcessSound	func_81111C20	Audio_SequenceChannelProcessSound	__Nas_CallWaveProcess_Sub		high	same position; leaf function (no driver calls on either side). MM: AudioScript_SequenceChannelProcessSound.
+0x81111DC8	AudioEffects_SequencePlayerProcessSound	func_81111DC8	Audio_SequencePlayerProcessSound	Nas_MainCtrl		high	same position; calls the same driver functions. MM: AudioScript_SequencePlayerProcessSound.
+0x81111F0C	AudioEffects_UpdatePortamento	func_81111F0C	Audio_GetPortamentoFreqScale	Nas_SweepCalculator		high	same position; leaf function (no driver calls on either side). OoT: Audio_GetPortamentoFreqScale. The name is MM's.
+0x81111FE0	AudioEffects_GetVibratoPitchChange	func_81111FE0	Audio_GetVibratoPitchChange	Nas_ModTableRead		high	same position; leaf function (no driver calls on either side). The name is MM's.
+0x81112024	AudioEffects_UpdateVibrato	func_81112024	Audio_GetVibratoFreqScale	Nas_Modulator		high	same position; calls the same driver functions. OoT: Audio_GetVibratoFreqScale. The name is MM's.
+0x8111220C	AudioEffects_UpdatePortamentoAndVibrato	func_8111220C	Audio_NoteVibratoUpdate	Nas_ChannelModulation		high	same position; calls the same driver functions. OoT: Audio_NoteVibratoUpdate. The name is MM's.
+0x81112278	AudioEffects_InitVibrato	func_81112278	Audio_NoteVibratoInit	Nas_ChannelModInit		high	same position; leaf function (no driver calls on either side). The name is MM's. Zero also copies the layer's portamento at the end, which OoT does in Audio_NotePortamentoInit (Nas_SweepInit).
+0x8111235C	AudioEffects_InitAdsr	func_8111235C	Audio_AdsrInit	Nas_EnvInit		high	same position; leaf function (no driver calls on either side). OoT: Audio_AdsrInit. The name is MM's.
+0x81112380	AudioEffects_UpdateAdsr		Audio_AdsrUpdate	Nas_EnvProcess		high	same position; leaf function (no driver calls on either side)
+0x81112650	AudioSeq_GetScriptControlFlowArgument		AudioSeq_GetScriptControlFlowArgument	Convert_Com		high	same position; calls the same driver functions
+0x811126B8	AudioSeq_HandleScriptFlowControl		AudioSeq_HandleScriptFlowControl	Common_Com		high	same position; calls the same driver functions
+0x81112894	AudioSeq_InitSequenceChannel		AudioSeq_InitSequenceChannel	Nas_InitSubTrack		high	same position; calls the same driver functions
+0x811129E0	AudioSeq_SeqChannelSetLayer		AudioSeq_SeqChannelSetLayer	Nas_EntryNoteTrack		high	same position; calls the same driver functions
+0x81112AF8	AudioSeq_SeqLayerDisable		AudioSeq_SeqLayerDisable	Nas_ReleaseNoteTrack		medium	same position; calls only in Zero: none; calls only in OoT: Audio_SeqLayerNoteRelease
+0x81112B34	AudioSeq_SeqLayerFree		AudioSeq_SeqLayerFree	Nas_CloseNoteTrack		high	same position; calls the same driver functions
+0x81112B84	AudioSeq_SequenceChannelDisable	Particle31_ResetAllSlots	AudioSeq_SequenceChannelDisable	Nas_ReleaseSubTrack		high	same position; calls the same driver functions. Stadium 1's name Particle31_ResetAllSlots did not fit.
+0x81112BF0	AudioSeq_SequencePlayerSetupChannels		AudioSeq_SequencePlayerSetupChannels	Nas_AllocSub		high	same position; leaf function (no driver calls on either side)
+0x81112CE8	AudioSeq_SequencePlayerDisableChannels		AudioSeq_SequencePlayerDisableChannels	Nas_DeAllocSub		high	same position; calls the same driver functions
+0x81112D68	AudioSeq_SequenceChannelEnable		AudioSeq_SequenceChannelEnable	Nas_OpenSub		high	same position; calls the same driver functions
+0x81112E00	AudioSeq_SequencePlayerDisable		AudioSeq_SequencePlayerDisable	Nas_ReleaseGroup		high	same position; calls only in Zero: none; calls only in OoT: AudioHeap_ReleaseNotesForFont. OoT also releases the notes of the player's fonts (AudioHeap_ReleaseNotesForFont).
+0x81112EAC	AudioSeq_AudioListPushBack		AudioSeq_AudioListPushBack	Nas_AddList		high	same position; leaf function (no driver calls on either side)
+0x81112EEC	AudioSeq_AudioListPopBack		AudioSeq_AudioListPopBack	Nas_GetList		high	same position; leaf function (no driver calls on either side)
+0x81112F2C	AudioSeq_InitLayerFreelist		AudioSeq_InitLayerFreelist	Nas_InitNoteList		high	same position; calls the same driver functions
+0x81112FB0	AudioSeq_ScriptReadU8		AudioSeq_ScriptReadU8	Nas_ReadByteData		high	same position; leaf function (no driver calls on either side)
+0x81112FC4	AudioSeq_ScriptReadS16		AudioSeq_ScriptReadS16	Nas_ReadWordData		high	same position; leaf function (no driver calls on either side)
+0x81112FFC	AudioSeq_ScriptReadCompressedU16		AudioSeq_ScriptReadCompressedU16	Nas_ReadLengthData		high	same position; leaf function (no driver calls on either side)
+0x8111303C	AudioSeq_SeqLayerProcessScript		AudioSeq_SeqLayerProcessScript	Nas_NoteSeq		high	same position; calls the same driver functions
+0x81113140	AudioSeq_SeqLayerProcessScriptStep1		AudioSeq_SeqLayerProcessScriptStep1	__Stop_Note		high	same position; calls the same driver functions
+0x811131CC	AudioSeq_SeqLayerProcessScriptStep5		AudioSeq_SeqLayerProcessScriptStep5	__SetChannel		medium	same position; calls only in Zero: none; calls only in OoT: Audio_InitSyntheticWave Audio_NotePortamentoInit
+0x811132E4	AudioSeq_SeqLayerProcessScriptStep2		AudioSeq_SeqLayerProcessScriptStep2	__Command_Seq		high	same position; calls the same driver functions
+0x81113650	AudioSeq_SeqLayerProcessScriptStep4		AudioSeq_SeqLayerProcessScriptStep4	__SetVoice		high	same position; calls only in Zero: none; calls only in OoT: Audio_GetSoundEffect
+0x81113A44	AudioSeq_SeqLayerProcessScriptStep3	func_81113A44	AudioSeq_SeqLayerProcessScriptStep3	__SetNote		high	same position; calls the same driver functions
+0x81113E54	AudioSeq_SetChannelPriorities	func_81113E54	AudioSeq_SetChannelPriorities	Nas_PriorityChanger		high	same position; leaf function (no driver calls on either side)
+0x81113E84	AudioSeq_GetInstrument	func_81113E84	AudioSeq_GetInstrument	Nas_ProgramChanger		high	same position; calls the same driver functions
+0x81113EF4	AudioSeq_SetInstrument	func_81113EF4	AudioSeq_SetInstrument	Nas_SubVoiceSet		high	same position; calls the same driver functions
+0x81113F84	AudioSeq_SequenceChannelSetVolume	func_81113F84	AudioSeq_SequenceChannelSetVolume	Nas_SubVolumeSet		high	same position; leaf function (no driver calls on either side)
+0x81113FA8	AudioSeq_SequenceChannelProcessScript	func_81113FA8	AudioSeq_SequenceChannelProcessScript	Nas_SubSeq		high	same position; calls only in Zero: none; calls only in OoT: AudioThread_NextRandom. OoT adds random numbers (AudioThread_NextRandom).
+0x81114B54	AudioSeq_SequencePlayerProcessSequence	func_81114B54	AudioSeq_SequencePlayerProcessSequence	Nas_GroupSeq		high	same position; calls only in Zero: none; calls only in OoT: AudioLoad_ScriptLoad AudioLoad_SlowLoadSeq AudioLoad_SyncInitSeqPlayer. OoT adds script loads and slow sequence loads.
+0x811151C8	AudioSeq_ProcessSequences	func_811151C8	AudioSeq_ProcessSequences	Nas_MySeqMain		high	same position; calls the same driver functions
+0x81115254	AudioSeq_SkipForwardSequence	func_81115254	AudioSeq_SkipForwardSequence	Nas_SeqSkip		high	same position; calls the same driver functions
+0x811152A4	AudioSeq_ResetSequencePlayer	func_811152A4	AudioSeq_ResetSequencePlayer	Nas_InitMySeq		high	same position; calls the same driver functions
+0x8111539C	AudioSeq_InitSequencePlayerChannels	func_8111539C	AudioSeq_InitSequencePlayerChannels	Nas_AssignSubTrack		medium	same position; calls only in Zero: none; calls only in OoT: AudioSeq_InitSequenceChannel
+0x81115480	AudioSeq_InitSequencePlayers	func_81115480	AudioSeq_InitSequencePlayers	Nas_InitPlayer		high	same position; calls only in Zero: AudioSeq_ResetSequencePlayer Audio_InitNoteLists; calls only in OoT: AudioSeq_InitSequencePlayer. Zero has OoT's AudioSeq_InitSequencePlayer (__InitGroup) inlined for its single player.

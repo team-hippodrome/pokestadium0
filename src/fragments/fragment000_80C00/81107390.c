@@ -1,4 +1,7 @@
 /* Stadium Zero fragment000_80C00. */
+/* Audio driver, matching OoT src/audio/internal/synthesis.c in function order. The driver is
+ * Nintendo's "Nas" library (original names Nas_*); this revision sits between SM64 Shindou and
+ * OoT. See docs/annotation/audio-driver.md for the per-function mapping. */
 
 #include "global.h"
 
@@ -72,7 +75,10 @@ typedef struct Reverb81107390 {
 void func_80056730(void*, s32);
 
 /**
- * Sets up the next reverb ring buffer item for update `update_index` of reverb `reverb_index`. Zelda 64 audio driver (synthesis.c), same position and shape.
+ * Sets up the next reverb ring buffer item for update `update_index` of reverb `reverb_index`.
+ * Corresponds to OoT AudioSynth_InitNextRingBuf (original name Nas_CpuFX). Same downsampling loops
+ * and ring-buffer wrap split. Difference: Zero downsamples only when downsampleRate >= 3 (`slti 3`
+ * in the ROM); OoT uses >= 2 and SM64 Shindou's prepare_reverb_ring_buffer uses != 1.
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -126,7 +132,9 @@ void AudioSynth_InitNextRingBuf(s32 chunkLen, s32 update_index, s32 reverb_index
     }
 
 /**
- * Loads part of a reverb ring buffer into DMEM (both channels). Zelda 64 audio driver.
+ * Loads part of a reverb ring buffer into DMEM (both channels).
+ * Corresponds to OoT AudioSynth_LoadRingBufferPart (original name __LoadAuxBuf). Takes a reverb
+ * index, as SM64 Shindou's synthesis_load_reverb_ring_buffer does; OoT passes the reverb pointer.
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -138,7 +146,9 @@ void* AudioSynth_LoadRingBufferPart(AudioCmd* cmd, u16 dmem, u16 offset, s32 cou
 }
 
 /**
- * Saves part of DMEM back into a reverb ring buffer (both channels). Zelda 64 audio driver.
+ * Saves part of DMEM back into a reverb ring buffer (both channels).
+ * Corresponds to OoT AudioSynth_SaveRingBufferPart (original name __SaveAuxBuf). Takes a reverb
+ * index, as SM64 Shindou's synthesis_save_reverb_ring_buffer does; OoT passes the reverb pointer.
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -160,7 +170,9 @@ extern AudioCfg811078D8 D_811858B8;
 extern s32 D_811858E8;
 
 /**
- * Marks voice `voice_index` as not dirty in the later updates of this frame. Zelda 64 audio driver.
+ * Marks voice `voice_index` as not dirty in the later updates of this frame.
+ * Corresponds to OoT func_800DB2C0 (original name __Nas_WaveTerminateProcess). OoT leaves it
+ * unnamed; the name is MM's.
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -184,7 +196,10 @@ typedef struct Rec811077FC {
 extern Rec811077FC* D_81184664;
 extern s32 D_811858E8;
 /**
- * Copies each note's sample state into the per-update state. Zelda 64 audio driver.
+ * Copies each note's sample state into the per-update state.
+ * Corresponds to OoT func_800DB03C (original name __Nas_PushDrvReg). OoT leaves it unnamed; the
+ * name is MM's. Like OoT it also clears the harmonic index byte (unk06), which SM64 Shindou's
+ * synthesis_load_note_subs_eu does not.
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -210,9 +225,11 @@ void AudioSynth_SyncSampleStates(u32 arg0) {
 extern s8 D_8118427B;
 void AudioSynth_InitNextRingBuf(s32, s32, s32);
 AudioCmd* AudioSynth_DoOneAudioUpdate(s32*, s32, AudioCmd*, s32);
-void func_811151C8(s32 arg0);
+void AudioSeq_ProcessSequences(s32 arg0);
 /**
- * Builds the audio command list for one frame of `arg3` samples. Zelda 64 audio driver.
+ * Builds the audio command list for one frame of `arg3` samples.
+ * Corresponds to OoT AudioSynth_Update (original name Nas_smzAudioFrame). Same chunk split between
+ * samplesPerTickMax, samplesPerTickMin and samplesPerTick.
  * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
@@ -226,7 +243,7 @@ AudioCmd* AudioSynth_Update(AudioCmd* arg0, s32* arg1, s32* arg2, s32 arg3) {
     s32* buf;
 
     for (i = D_811858B8.passes; i > 0; i--) {
-        func_811151C8(i - 1);
+        AudioSeq_ProcessSequences(i - 1);
         AudioSynth_SyncSampleStates(D_811858B8.passes - i);
     }
     buf = arg2;
@@ -288,7 +305,12 @@ typedef struct Reverb81107AEC {
         _a->w1 = (b);                       \
     }
 /**
- * Loads a reverb's ring buffer samples for this update. Zelda 64 audio driver.
+ * Loads a reverb's ring buffer samples for this update.
+ * Corresponds to OoT AudioSynth_LoadReverbSamples (original name Nas_LoadAuxBuffer). Zero does in
+ * one function what OoT splits into AudioSynth_LoadRingBuffer1 (Nas_LoadAuxBuffer1), func_800DB4E4
+ * (Nas_LoadAuxBufferC, the resampling path) and AudioSynth_LeakReverb (Nas_CrossMix). SM64 Shindou
+ * has the single function too (synthesis_resample_and_mix_reverb). Difference from Shindou: the wet
+ * mix is two aMix commands (reverbGain, then wetGain + 0x8000) instead of aAddMixer plus one aMix.
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -331,7 +353,13 @@ void* AudioSynth_LoadReverbSamples(AudioCmd* cmd, s32 bufLen, s16 reverbIndex, s
 void* AudioSynth_LoadRingBufferPart(AudioCmd* cmd, u16 dmem, u16 offset, s32 count, s32 channel);
 extern AudioChannel81107E70 D_81184110[];
 
-void* func_81107E70(void* cmd, s16 channel, s16 slot) {
+/**
+ * Loads this update's reverb ring buffer item (both parts when it wraps) into DMEM at 0x3E0.
+ * Corresponds to OoT AudioSynth_LoadRingBuffer1AtTemp (original name Nas_LoadAux2nd). SM64 Shindou:
+ * synthesis_load_reverb_samples.
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void* AudioSynth_LoadRingBuffer1AtTemp(void* cmd, s16 channel, s16 slot) {
     AudioVoice81107E70* voice = &D_81184110[channel].voices[D_81184110[channel].bank][slot];
 
     cmd = AudioSynth_LoadRingBufferPart(cmd, 0x3E0, voice->offset, voice->count, channel);
@@ -359,7 +387,15 @@ void* AudioSynth_SaveRingBufferPart(AudioCmd* cmd, u16 dmem, u16 offset, s32 cou
         }                                                                                             \
     } while (0)
 
-void* func_81107F40(AudioCmd* cmd, s16 channel, s16 slot) {
+/**
+ * Saves the wet channels back to the ring buffer, or to the downsample buffer when the reverb is
+ * downsampled, then clears the resample flags.
+ * Corresponds to OoT AudioSynth_SaveReverbSamples (original name Nas_SaveAuxBuffer). SM64 Shindou:
+ * synthesis_save_reverb_samples. Zero has no comb-filter branch (OoT's unk_18 path through
+ * func_800DB680).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void* AudioSynth_SaveReverbSamples(AudioCmd* cmd, s16 channel, s16 slot) {
     AudioVoice81107E70* voice = &D_81184110[channel].voices[D_81184110[channel].bank][slot];
     AudioCmd* c;
 
@@ -370,7 +406,13 @@ void* func_81107F40(AudioCmd* cmd, s16 channel, s16 slot) {
 
 void* AudioSynth_SaveRingBufferPart(AudioCmd* cmd, u16 dmem, u16 offset, s32 count, s32 channel);
 
-void* func_8110807C(void* cmd, s16 channel, s16 slot) {
+/**
+ * Saves DMEM at 0x3E0 back into this update's reverb ring buffer item (both parts when it wraps).
+ * Corresponds to OoT AudioSynth_SaveRingBuffer1AtTemp (original name Nas_SaveAux2nd). SM64 Shindou:
+ * func_sh_802EDF24.
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void* AudioSynth_SaveRingBuffer1AtTemp(void* cmd, s16 channel, s16 slot) {
     AudioVoice81107E70* voice = &D_81184110[channel].voices[D_81184110[channel].bank][slot];
 
     cmd = AudioSynth_SaveRingBufferPart(cmd, 0x3E0, voice->offset, voice->count, channel);
@@ -411,15 +453,17 @@ typedef struct Reverb8110814C {
 
 extern s8 D_8118427A;
 void* AudioSynth_LoadReverbSamples(AudioCmd* cmd, s32 bufLen, s16 reverbIndex, s16 updateIndex);
-void* func_81107E70(void* cmd, s16 channel, s16 slot);
-void* func_81107F40(AudioCmd* cmd, s16 channel, s16 slot);
-void* func_8110807C(void* cmd, s16 channel, s16 slot);
+void* AudioSynth_LoadRingBuffer1AtTemp(void* cmd, s16 channel, s16 slot);
+void* AudioSynth_SaveReverbSamples(AudioCmd* cmd, s16 channel, s16 slot);
+void* AudioSynth_SaveRingBuffer1AtTemp(void* cmd, s16 channel, s16 slot);
 struct ZNoteSubEu;
 struct ZNoteSynthesisState;
 AudioCmd* AudioSynth_ProcessSample(s32 noteIndex, struct ZNoteSubEu* noteSubEu, struct ZNoteSynthesisState* synthesisState, s16* aiBuf, s32 bufLen, AudioCmd* cmd, s32 updateIndex);
 
 /**
- * Builds the commands for one audio update: reverbs, every note, then the mix into the AI buffer. Zelda 64 audio driver.
+ * Builds the commands for one audio update: reverbs, every note, then the mix into the AI buffer.
+ * Corresponds to OoT AudioSynth_DoOneAudioUpdate (original name Nas_DriveRsp). OoT adds the reverb
+ * filter, second ring buffer and leak calls; Zero's leak is inside AudioSynth_LoadReverbSamples.
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -486,12 +530,12 @@ AudioCmd* AudioSynth_DoOneAudioUpdate(s32* ai_buf, s32 aiBufLen, AudioCmd* cmd, 
                 { AudioCmd* _a = cmd++; _a->w0 = ZSHIFTL_814C(0x1B, 24, 8) | ZSHIFTL_814C(2, 16, 8) | ZSHIFTL_814C(aiBufLen * 2, 0, 16); _a->w1 = (u32)((Reverb8110814C*)&D_81184110[reverbIndex])->filterRight; }
                 { AudioCmd* _a = cmd++; _a->w0 = ZSHIFTL_814C(0x1B, 24, 8) | ZSHIFTL_814C(((Reverb8110814C*)&D_81184110[reverbIndex])->resampleFlags, 16, 8) | ZSHIFTL_814C(0xE20, 0, 16); _a->w1 = (u32)((Reverb8110814C*)&D_81184110[reverbIndex])->filterRightState; }
             }
-            cmd = func_81107F40(cmd, reverbIndex, updateIndex);
+            cmd = AudioSynth_SaveReverbSamples(cmd, reverbIndex, updateIndex);
             if (((Reverb8110814C*)&D_81184110[reverbIndex])->unk_05 != -1) {
                 if (((Reverb81107390*)&D_81184110[((Reverb8110814C*)&D_81184110[reverbIndex])->unk_05])->downsampleRate == 1) {
-                    cmd = func_81107E70(cmd, ((Reverb8110814C*)&D_81184110[reverbIndex])->unk_05, updateIndex);
+                    cmd = AudioSynth_LoadRingBuffer1AtTemp(cmd, ((Reverb8110814C*)&D_81184110[reverbIndex])->unk_05, updateIndex);
                     cmd->w0 = ZSHIFTL_814C(0xC, 24, 8) | ZSHIFTL_814C(0x34, 16, 8) | ZSHIFTL_814C(((Reverb8110814C*)&D_81184110[reverbIndex])->unk_08, 0, 16); cmd->w1 = ZSHIFTL_814C(0xC80, 16, 16) | ZSHIFTL_814C(0x3E0, 0, 16); cmd++;
-                    cmd = func_8110807C(cmd, ((Reverb8110814C*)&D_81184110[reverbIndex])->unk_05, updateIndex);
+                    cmd = AudioSynth_SaveRingBuffer1AtTemp(cmd, ((Reverb8110814C*)&D_81184110[reverbIndex])->unk_05, updateIndex);
                 }
             }
         }
@@ -617,7 +661,9 @@ AudioCmd* AudioSynth_ProcessEnvelope(AudioCmd*, ZNoteSubEu*, ZNoteSynthesisState
 #define zFilter(pkt, f, countOrBuf, addr) ZCMD(pkt, ZSHIFTL(0x1B, 24, 8) | ZSHIFTL(f, 16, 8) | ZSHIFTL(countOrBuf, 0, 16), addr)
 
 /**
- * Builds the commands that decode, resample and mix one note's sample. Zelda 64 audio driver.
+ * Builds the commands that decode, resample and mix one note's sample.
+ * Corresponds to OoT AudioSynth_ProcessNote (original name Nas_SynthMain). The name is MM's. OoT
+ * adds the Haas effect and synthetic-wave paths.
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -952,7 +998,8 @@ AudioCmd* AudioSynth_ProcessSample(s32 note_index, ZNoteSubEu* noteSubEu, ZNoteS
         }                                                                                                \
     } while (0)
 /**
- * Adds the final resample command for a note. Zelda 64 audio driver.
+ * Adds the final resample command for a note.
+ * Corresponds to OoT AudioSynth_FinalResample (original name Nas_Synth_Resample).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
@@ -983,7 +1030,8 @@ typedef struct State8110938C {
 } State8110938C;
 
 /**
- * Adds the envelope (volume ramp, pan, reverb send) commands for a note. Zelda 64 audio driver.
+ * Adds the envelope (volume ramp, pan, reverb send) commands for a note.
+ * Corresponds to OoT AudioSynth_ProcessEnvelope (original name Nas_Synth_Envelope).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
