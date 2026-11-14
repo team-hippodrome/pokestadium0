@@ -200,18 +200,10 @@ void Session_LoadPortSnapshot(s32 arg0) {
     D_800AF9A8.gameType = 0;
 }
 
-typedef struct ContinueDataZ {
-    /* 0x00 */ u8 mode;
-    /* 0x01 */ u8 modeSelection;
-    /* 0x02 */ u8 round;
-    /* 0x03 */ u8 pad03;
-    /* 0x04 */ u8 opponentHistory[8];
-} ContinueDataZ; // size = 0xC
 extern M2C_UNK D_800AF974;
-void Save_WriteContinueData(ContinueDataZ* arg0, void* arg1, BattleMon* arg2, s32 arg3);
 
 void func_80025830(void) {
-    ContinueDataZ sp1C;
+    SaveContinueSession sp1C;
     ExtendedRosterInfo* info = (*(TeamRoster**)((u8*)&gSessionContext + 0x103C))->rosterInfo;
 
     sp1C.mode = gSessionContext.mode;

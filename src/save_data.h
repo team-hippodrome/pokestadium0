@@ -7,6 +7,7 @@
 #include "moves.h"
 #include "m2c_macros.h"
 #include "gb_data.h"
+#include "pokemon_stats.h"
 
 typedef struct GameOptions {
     /* 0x00 */ s16 gbTowerUnlockTier; // 0 = normal, 1 = Doduo, 2 = Dodrio.
@@ -23,141 +24,112 @@ typedef struct ModeSettings {
     /* 0x07 */ u8 mewtwoUnlocked; // Set when clearedModes reaches 0xF8.
 } ModeSettings; // size = 0x8
 
-typedef struct SessionContinueData {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05[2][4];
-    /* 0x0D */ u8 unk_0D;
-    /* 0x0E */ u16 unk_0E;
-    /* 0x10 */ char unk_10[16];
-} SessionContinueData; // size = 0x20
+// Zero's 32 KiB cartridge SRAM, loaded whole into the buffer at D_800AE8E0
+// (docs/n64-save-format.md). Every record is stored twice, primary then backup,
+// and each copy ends with a SaveFooter. Fields without a tag were seen in play
+// (pj64, 2026-11-12/13, see the doc).
 
-typedef struct DeckRecordHeader {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ char unk02[0xA];
-    /* 0x0C */ u16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
-} DeckRecordHeader; // size >= 0x10
+// "POKE" and a u16 sum of every byte of the copy before it; "XXXX" and sum ^ 0xFF
+// when invalidated. Written by Save_WriteFooter, checked by Save_RecordIsValid.
+typedef struct SaveFooter {
+    /* 0x0 */ u8 magic[4];
+    /* 0x4 */ u16 checksum;
+} SaveFooter; // size = 0x6
 
-typedef struct GbPokemonNamedRecord {
-    /* 0x00 */ GbPokemonRecord unk_00;
-    /* 0x21 */ u8 unk_21[11];
-    /* 0x2C */ u8 unk_2C[11];
-} GbPokemonNamedRecord; // size = 0x37
+// A Pokemon as kept in Zero's save: the Gen 1 box struct plus its names in the GB charset.
+// Read by func_80023D3C and written by BattleMon_ToGbSaveRecord.
+typedef struct SaveMonRecord {
+    /* 0x00 */ GbPokemonRecord mon;
+    /* 0x21 */ u8 nickname[6];
+    /* 0x27 */ u8 otName[6];
+} SaveMonRecord; // size = 0x2D
 
-typedef struct RegisteredTeamSlot {
-    /* 0x000 */ DeckRecordHeader unk_000;
-    /* 0x010 */ GbPokemonNamedRecord unk_010[1];
-    /* 0x047 */ char unk047[0x119];
-} RegisteredTeamSlot; // size = 0x160
+// Flags bit 0: present (teams set it when registered), bit 1: dirty.
+typedef struct SaveTeamRecord {
+    /* 0x000 */ s16 flags;
+    /* 0x002 */ u8 trainerName[6]; // GB charset, 0x50-terminated.
+    /* 0x008 */ u16 trainerId;
+    /* 0x00A */ u8 secondName[8]; // @unverified: written by Deck_SetSaveEntryTrainerIdAndName, empty in every record seen
+    /* 0x012 */ s16 count;
+    /* 0x014 */ SaveMonRecord mons[6];
+    /* 0x122 */ SaveFooter footer;
+} SaveTeamRecord; // size = 0x128
 
-typedef struct RegisteredTeamBank {
-    /* 0x0000 */ RegisteredTeamSlot unk_0000[4][10];
-} RegisteredTeamBank; // size = 0x3700
+typedef struct SaveBoxRecord {
+    /* 0x000 */ s16 flags;
+    /* 0x002 */ u8 trainerName[6]; // Empty in boxes.
+    /* 0x008 */ u16 trainerId;
+    /* 0x00A */ u8 secondName[8]; // @unverified: written by Deck_SetSaveEntryTrainerIdAndName, empty in every record seen
+    /* 0x012 */ s16 count;
+    /* 0x014 */ SaveMonRecord mons[30];
+    /* 0x55A */ SaveFooter footer;
+} SaveBoxRecord; // size = 0x560
+
+typedef struct SaveItemSlot {
+    /* 0x0 */ u8 id;
+    /* 0x1 */ u8 quantity;
+} SaveItemSlot; // size = 0x2
+
+// One per trainer; the record whose name and ID match the cartridge is shown.
+typedef struct SaveItemRecord {
+    /* 0x00 */ s16 flags;
+    /* 0x02 */ u8 trainerName[6];
+    /* 0x08 */ u16 trainerId;
+    /* 0x0A */ s16 count;
+    /* 0x0C */ SaveItemSlot items[100];
+    /* 0xD4 */ char unk_D4[0x6];
+    /* 0xDA */ SaveFooter footer;
+} SaveItemRecord; // size = 0xE0
+
+// No screen using it was found; never written in play.
+typedef struct SaveListRecord {
+    /* 0x0000 */ s16 flags; // @unverified: bit 0 set on reset (Save_ClearTypedRecord)
+    /* 0x0002 */ s16 count; // @unverified: Deck_SetSaveEntryCount
+    /* 0x0004 */ SaveMonRecord mons[100]; // @unverified: Deck_ReadSaveEntry, Save_WriteTypedRecord
+    /* 0x1198 */ char unk_1198[0x2];
+    /* 0x119A */ SaveFooter footer;
+} SaveListRecord; // size = 0x11A0
 
 typedef struct SaveOptionsRecord {
-    /* 0x00 */ u8 unk_00;
-    /* 0x02 */ u16 unk_02;
-    /* 0x04 */ GameOptions unk_04;
-    /* 0x0C */ ModeSettings unk_0C[1];
-    /* 0x14 */ char unk14[0x8];
-    /* 0x1C */ u16 unk_1C;
-    /* 0x1E */ u8 unk_1E;
-    /* 0x1F */ u8 unk_1F;
-    /* 0x20 */ char unk20[0x8];
-} SaveOptionsRecord; // size = 0x28
+    /* 0x0 */ s16 flags;
+    /* 0x2 */ s8 towerFrames; // GB Tower picture frames unlocked: 0-2 (1 Doduo, 2 Dodrio).
+    /* 0x3 */ u8 soundFlags; // Bit 0 mono sound, bit 1 commentary off.
+    /* 0x4 */ s32 towerButtons; // GB Tower config: bits 8-15 START button, bits 0-7 SELECT button - 1.
+    /* 0x8 */ u8 progress[2]; // Big-endian u16 (Save_GetProgressFlags): high byte bit 0 L50-55 won (code), bit 1 Master Ball Cup won; low byte L1-30 cups cleared.
+    /* 0xA */ SaveFooter footer;
+} SaveOptionsRecord; // size = 0x10
 
-typedef struct unk_D_800AE4E8_004_2_0DC0_002 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u16 unk_02;
-    /* 0x04 */ char unk_04[11];
-    /* 0x0F */ char unk_0F[11];
-} unk_D_800AE4E8_004_2_0DC0_002; // size = 0x1A
+// Where a paused tournament stands; built by func_80025830 from gSessionContext.
+typedef struct SaveContinueSession {
+    /* 0x0 */ u8 mode; // 1 L50-55, 2 L1-30 cups.
+    /* 0x1 */ u8 modeSelection; // Cup (0 Monster Ball Cup).
+    /* 0x2 */ u8 round; // Next round: 3 after two wins.
+    /* 0x3 */ u8 pad03; // Stack garbage.
+    /* 0x4 */ u8 opponentHistory[8]; // Opponents faced so far.
+} SaveContinueSession; // size = 0xC
 
-typedef struct unk_D_800AE4E8_004_2_0DC0 {
-    /* 0x000 */ u8 unk_000;
-    /* 0x001 */ char unk001[0x1];
-    /* 0x002 */ unk_D_800AE4E8_004_2_0DC0_002 unk_002[1];
-    /* 0x01C */ char unk01C[0xF44];
-} unk_D_800AE4E8_004_2_0DC0; // size = 0xF60
+// Tournament continue data, written at the continue-tournament prompt and read at the
+// main menu. Cleared (flags 0) when the tournament is won.
+typedef struct SaveContinueRecord {
+    /* 0x000 */ s16 flags;
+    /* 0x002 */ SaveContinueSession session;
+    /* 0x00E */ s16 count;
+    /* 0x010 */ SaveMonRecord team[6];
+    /* 0x11E */ GbSavePortSnapshot gbSnapshot; // All zero for rentals; a GB team resumes only if the cartridge still matches.
+    /* 0x280 */ u8 speciesFlagMask; // @unverified: bit n set when team[n]'s BattleMon.species.unk_01 == 1 (Save_WriteContinueData)
+    /* 0x281 */ char unk_281[0x1];
+    /* 0x282 */ SaveFooter footer;
+} SaveContinueRecord; // size = 0x288
 
-typedef struct ContinueRecordBlock {
-    /* 0x000 */ u8 unk_000;
-    /* 0x002 */ SessionContinueData unk_002;
-    /* 0x022 */ s16 unk_022;
-    /* 0x024 */ GbPokemonNamedRecord unk_024[6];
-    /* 0x16E */ u8 unk_16E[6];
-    /* 0x174 */ u8 unk_174[6];
-    /* 0x17A */ char unk17A[0x6];
-} ContinueRecordBlock; // size = 0x180
-
-typedef struct unk_D_800AE4E8_004_2_1EC8_0002 {
-    /* 0x00 */ char unk00[0x8C];
-} unk_D_800AE4E8_004_2_1EC8_0002; // size = 0x8C
-
-typedef struct unk_D_800AE4E8_004_2_1EC8 {
-    /* 0x0000 */ u8 unk_0000;
-    /* 0x0001 */ char unk0001[0x1];
-    /* 0x0002 */ unk_D_800AE4E8_004_2_1EC8_0002 unk_0002[1];
-    /* 0x008E */ char unk008E[0x132A];
-} unk_D_800AE4E8_004_2_1EC8; // size = 0x13B8
-
-typedef struct unk_D_800AE4E8_004_2_3280 {
-    /* 0x0000 */ u8 unk_0000;
-    /* 0x0001 */ char unk0001[0x1];
-    /* 0x0002 */ unk_D_800AE4E8_004_2_1EC8_0002 unk_0002[1];
-    /* 0x008E */ char unk008E[0xAF6];
-} unk_D_800AE4E8_004_2_3280; // size = 0xB84
-
-typedef struct unk_D_800AE4E8_004_2 {
-    /* 0x0000 */ char unk0000[0xDC0];
-    /* 0x0DC0 */ unk_D_800AE4E8_004_2_0DC0 unk_0DC0;
-    /* 0x1D20 */ ContinueRecordBlock unk_1D20;
-    /* 0x1EA0 */ SaveOptionsRecord unk_1EA0;
-    /* 0x1EC8 */ unk_D_800AE4E8_004_2_1EC8 unk_1EC8;
-    /* 0x3280 */ unk_D_800AE4E8_004_2_3280 unk_3280;
-    /* 0x3E04 */ char unk3E04[0x17C];
-} unk_D_800AE4E8_004_2; // size = 0x3F80
-
-typedef struct unk_D_800AE4E8_004_3_0000 {
-    /* 0x0000 */ DeckRecordHeader unk_000;
-    /* 0x0010 */ GbPokemonNamedRecord unk_010[1];
-    /* 0x0047 */ char unk010[0x421];
-} unk_D_800AE4E8_004_3_0000; // size = 0x468
-
-typedef struct unk_D_800AE4E8_004_3_34E0_010 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-} unk_D_800AE4E8_004_3_34E0_010; // size = 0x2
-
-typedef struct unk_D_800AE4E8_004_3_34E0 {
-    /* 0x0000 */ DeckRecordHeader unk_00;
-    /* 0x0000 */ unk_D_800AE4E8_004_3_34E0_010 unk_10[1];
-    /* 0x0012 */ char unk12[0xCE];
-} unk_D_800AE4E8_004_3_34E0; // size = 0xE0
-
-typedef struct unk_D_800AE4E8_004_3 {
-    /* 0x0000 */ unk_D_800AE4E8_004_3_0000 unk_0000[12];
-    /* 0x34E0 */ unk_D_800AE4E8_004_3_34E0 unk_34E0[4];
-    /* 0x3860 */ char unk_3860[0x20];
-} unk_D_800AE4E8_004_3; // size = 0x3880
-
-typedef union unk_D_800AE4E8_004 {
-    RegisteredTeamBank* unk1;
-    unk_D_800AE4E8_004_2* unk2;
-    unk_D_800AE4E8_004_3* unk3;
-} unk_D_800AE4E8_004;
-
-typedef struct SaveBank {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ unk_D_800AE4E8_004 unk_04;
-    /* 0x08 */ unk_D_800AE4E8_004 unk_08;
-} SaveBank; // size = 0xC
+typedef struct SaveSram {
+    /* 0x0000 */ SaveTeamRecord teams[16][2]; // Kind 16.
+    /* 0x2500 */ SaveBoxRecord boxes[4][2]; // Kind 17.
+    /* 0x5000 */ SaveItemRecord items[4][2]; // Kind 18.
+    /* 0x5700 */ SaveListRecord list[2]; // Kind 19.
+    /* 0x7A40 */ SaveOptionsRecord options[2]; // Kind 20.
+    /* 0x7A60 */ SaveContinueRecord continueData[2]; // Kind 21.
+    /* 0x7F70 */ char unk_7F70[0x90];
+} SaveSram; // size = 0x8000
 
 // save_data.c
 u16 Save_Checksum(u8* arg0, s32 arg1);
@@ -177,6 +149,7 @@ void Deck_SetSaveEntryTrainerIdAndName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u
 void Deck_SetSaveEntryCount(s32 arg0, s32 arg1, s32 arg2);
 s32 Deck_ReadSaveEntry(s32 arg0, s32 arg1, s32 arg2, u8* arg3);
 s32 Save_WriteTypedRecord(s32 arg0, s32 arg1, s32 arg2, u8* arg3);
+void Save_WriteContinueData(SaveContinueSession* arg0, GbSavePortSnapshot* arg1, BattleMon* arg2, s32 arg3);
 void func_80024044(void);
 s32 Audio_GetFreeVoiceCount(void);
 void func_800245E0(s32 arg0, s32 arg1);
