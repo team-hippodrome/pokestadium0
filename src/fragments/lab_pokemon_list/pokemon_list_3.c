@@ -11,7 +11,7 @@ M2C_UNK LabPCList_InitDeckCategories(s32, s32, s32, s32);
 
 extern s32 D_8910A7F8[3];
 void func_80027410(void*, void*, s32, s32, s32);
-void func_89109990(void*, void*, void*, s32);
+void LabPCList_InitSourceBoxes(void*, void*, void*, s32);
 
 extern s32 D_800603C0;
 void func_8000B2F4(s32);
@@ -29,8 +29,8 @@ extern u8 D_8910A848[];
 extern u8 D_8910A804[];
 extern u8 D_8910A84C[];
 
-void func_891000BC(s32 arg0);
-void func_89100294(LabPCListScreen* arg0);
+void LabPCList_SaveDirtyItemDecks(s32 arg0);
+void LabPCList_ResetHeaderCursor(LabPCListScreen* arg0);
 s32 LabPCList_GetColumnCursorX(LabPCListScreen* arg0);
 extern u8 D_800734A8[];
 
@@ -140,7 +140,7 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
         case 8:
 
         case 9:
-          func_89100FC4(cx + 1, y + 2, (s32) (&entry->species), col - 6);
+          LabPCList_DrawMoveName(cx + 1, y + 2, (s32) (&entry->species), col - 6);
           break;
 
         case 10:

@@ -11,7 +11,7 @@ M2C_UNK LabPCList_InitDeckCategories(s32, s32, s32, s32);
 
 extern s32 D_8910A7F8[3];
 void func_80027410(void*, void*, s32, s32, s32);
-void func_89109990(void*, void*, void*, s32);
+void LabPCList_InitSourceBoxes(void*, void*, void*, s32);
 
 extern s32 D_800603C0;
 void func_8000B2F4(s32);
@@ -29,8 +29,8 @@ extern u8 D_8910A848[];
 extern u8 D_8910A804[];
 extern u8 D_8910A84C[];
 
-void func_891000BC(s32 arg0);
-void func_89100294(LabPCListScreen* arg0);
+void LabPCList_SaveDirtyItemDecks(s32 arg0);
+void LabPCList_ResetHeaderCursor(LabPCListScreen* arg0);
 s32 LabPCList_GetColumnCursorX(LabPCListScreen* arg0);
 extern M2C_UNK D_800734A8;
 
@@ -67,7 +67,7 @@ extern Gfx D_80060270[];
 extern Color_RGBA8 D_8910A88C;
 void LabPCList_DrawRowCursor(s8*, s32, s32);
 void LabPCList_DrawPageHint(LabPCListScreen*);
-void func_89100688(s8*);
+void LabPCList_DrawColumnCursor(s8*);
 void LabPCList_DrawHeaderCursor(LabPCListScreen*);
 /**
  * Draws the lab PC list screen: page hint, column headers and rows.
@@ -105,7 +105,7 @@ void LabPCList_DrawListScreen(LabPCListScreen* arg0) {
                 LabPCList_DrawRowCursor((s8*)&arg0->list, arg0->listFrame.x, y);
                 break;
             case 1:
-                func_89100688(arg0);
+                LabPCList_DrawColumnCursor(arg0);
                 break;
             case 2:
                 LabPCList_DrawHeaderCursor(arg0);
@@ -116,7 +116,7 @@ void LabPCList_DrawListScreen(LabPCListScreen* arg0) {
         case 0:
             break;
         case 1:
-            func_89105E70(&arg0->sourceSelectWindow, 2);
+            LabSourceSelect_Draw(&arg0->sourceSelectWindow, 2);
             break;
         case 2:
         case 3:
@@ -215,7 +215,7 @@ s32 LabPCList_FilterByAnyType();
 s32 LabPCList_FilterByAnyMove();
 s32 LabPCList_FilterBySpeciesId();
 s32 LabPCList_FilterByExactTypePair();
-s32 func_89109960();
+s32 LabPCList_FilterByBattleEligible();
 /**
  * Rebuilds the visible list from the source boxes using the active filter flags.
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): ran when OK was pressed on
@@ -245,7 +245,7 @@ M2C_UNK LabPCList_ApplyFiltersAndSort(LabPCListScreen* arg0) {
             ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
         if (arg0->activeFilters & 0x20) {
-            func_80027D94(arg0->list.items, &arg0->filteredRows, func_89109960, NULL);
+            func_80027D94(arg0->list.items, &arg0->filteredRows, LabPCList_FilterByBattleEligible, NULL);
             ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
     }
@@ -257,7 +257,11 @@ extern Pair8910D910 D_8910D910[];
 void LabPCList_InitPopupMenu(LabPopupMenu*, void*, s8*, s32, s32);
 void LabPCList_PlacePopup(LabPopupMenu*);
 
-void func_89101F90(LabPCListScreen* arg0) {
+/**
+ * Opens what A does on the selected column header: a sort popup for the text and stat columns, the type filter for タイプ1/タイプ2, the move filter for わざ1-4.
+ * Seen in play (2026-11-14) in いちらん: A on ニックネーム opened アイウエオじゅんにならべる, on タイプ1 タイプであつめる, on わざ わざであつめる, on レベル たかいじゅん/ひくいじゅん/レベルをきめてあつめる.
+ */
+void LabPCList_OpenColumnMenu(LabPCListScreen* arg0) {
     s32 sel;
 
     sel = arg0->pageColumnStart[arg0->page] + arg0->headerCursor.cursor - 2;
@@ -433,7 +437,7 @@ s32 LabPCList_UpdateHeaderCursor(LabPCListScreen* arg0) {
             arg0->state = 2;
         } else {
             func_8003F6AC(2);
-            func_89101F90((LabPCListScreen*)arg0);
+            LabPCList_OpenColumnMenu((LabPCListScreen*)arg0);
             ret = 1;
         }
     }
@@ -472,14 +476,14 @@ s32 LabPCList_UpdateBrowse(LabPCListScreen* arg0) {
                 arg0->page += 3;
             }
             arg0->page--;
-            func_89100294(arg0);
+            LabPCList_ResetHeaderCursor(arg0);
         } else if (buttons & 1) {
             func_8003F6AC(2);
             if (arg0->page >= 2) {
                 arg0->page -= 3;
             }
             arg0->page++;
-            func_89100294(arg0);
+            LabPCList_ResetHeaderCursor(arg0);
         } else if (buttons & 0x20) {
             if (arg0->focus != 0) {
                 func_8003F6AC(2);
@@ -505,7 +509,7 @@ s32 LabPCList_UpdateSourceSelect(LabPCListScreen* arg0)
   s8 *new_var2; // FAKE: permuter temp
   s32 temp_v0;
   s8 *new_var; // FAKE: permuter temp
-  temp_v0 = func_89106254(&arg0->sourceSelectWindow);
+  temp_v0 = LabSourceSelect_Update(&arg0->sourceSelectWindow);
   new_var2 = (s8*)&arg0->rows;
   if (temp_v0 == (-1))
   {
@@ -526,7 +530,11 @@ s32 LabPCList_UpdateSourceSelect(LabPCListScreen* arg0)
 
 typedef struct Sub89102930 { char unk00[0x10]; s32 unk10; char unk14[0xC]; } Sub89102930; // 0x20
 typedef struct Item89102930 { char unk00[4]; s32 unk04; char unk08[8]; Sub89102930* subs; char unk14[4]; s32 subCount; char unk1C[8]; } Item89102930; // 0x24
-s32 func_89102930(arg0) s8* arg0; {
+/**
+ * Returns which saves need writing: 1 a Game Boy box or the party changed, 2 a Game Boy item deck, 0x10 a 64 cartridge box, 0x20 the 64 item deck.
+ * Seen in play (2026-11-14) in いちらん: ran on レポートしてやめる after a TM and a move; the Game Boy save was written.
+ */
+s32 LabPCList_GetChangedSaveFlags(arg0) s8* arg0; {
     s32 flags = 0;
     s32 i;
     s32 j;
@@ -563,7 +571,7 @@ M2C_UNK func_800230C4(s32);                         /* extern */
 M2C_UNK func_800243B8();                            /* extern */
 M2C_UNK func_8002D7D4(s32);                         /* extern */
 void LabPCList_DrawListScreen(LabPCListScreen*);
-s32 func_89102930();                                /* extern */
+s32 LabPCList_GetChangedSaveFlags();                                /* extern */
 M2C_UNK LabPCList_SaveDirtyBoxes(s32);                         /* extern */
 extern s32 D_8910E37C;
 
@@ -576,13 +584,13 @@ void LabPCList_SaveChanges(s32 arg0) {
     s32 sp1C;
     s32 temp_v0;
 
-    temp_v0 = func_89102930();
+    temp_v0 = LabPCList_GetChangedSaveFlags();
     sp1C = temp_v0;
     if (temp_v0 & 3) {
         func_80022118(D_8910E37C);
     }
     LabPCList_SaveDirtyBoxes(arg0 + 0x420);
-    func_891000BC(arg0);
+    LabPCList_SaveDirtyItemDecks(arg0);
     if (sp1C & 3) {
         if (sp1C & 1) {
             func_800230C4(D_8910E37C);

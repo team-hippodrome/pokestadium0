@@ -21,7 +21,7 @@ s32 LabPCList_CompareBySpecialAsc(LabMonEntry* arg0, LabMonEntry* arg1);
 s32 LabPCList_CompareBySpecialDesc(LabMonEntry* arg0, LabMonEntry* arg1);
 s32 LabPCList_CompareById(LabMonEntry* arg0, LabMonEntry* arg1);
 s32 LabPCList_CompareByNickname(LabMonEntry* arg0, LabMonEntry* arg1);
-s32 LabPCList_CompareBySpeciesRawId(LabMonEntry* arg0, LabMonEntry* arg1);
+s32 LabPCList_CompareBySpeciesNumber(LabMonEntry* arg0, LabMonEntry* arg1);
 int LabPCList_FilterByLevelRange(LabMonEntry* a0, u8* arg1);
 s32 LabPCList_FilterByAnyType(LabMonEntry* arg0, unk_func_8830867C_02C_C54_01C* a1);
 s32 LabPCList_FilterByAnyMove(LabMonEntry* a0, unk_func_8830867C_02C_C54_024* a1);
@@ -30,6 +30,10 @@ s32 LabPCList_FilterByExactTypePair(LabMonEntry* arg0, unk_func_8830867C_02C_C54
 
 s32 LabPCList_CompareByPointer(LabMonEntry* arg0, LabMonEntry* arg1);
 
+/**
+ * Tie-break comparison: by entry address, which is the order the sources were loaded in.
+ * Seen in play (2026-11-14) in いちらん: ran under every sort.
+ */
 s32 LabPCList_CompareByPointer(LabMonEntry* arg0, LabMonEntry* arg1) {
     s32 var_v1 = arg0->unk_00->unk_00->unk_0C - arg1->unk_00->unk_00->unk_0C;
 
@@ -211,7 +215,11 @@ s32 LabPCList_CompareById(LabMonEntry* arg0, LabMonEntry* arg1) {
     return ret;
 }
 
-s32 func_89109580(LabMonEntry* arg0, LabMonEntry* arg1) {
+/**
+ * List comparison: by location (party, then GB boxes, then 64 boxes, in load order). Also the default order.
+ * Seen in play (2026-11-14) in いちらん: ばしょでならべる ordered the list てもち, GB 1, GB 2.
+ */
+s32 LabPCList_CompareByLocation(LabMonEntry* arg0, LabMonEntry* arg1) {
     return LabPCList_CompareByPointer(arg0, arg1);
 }
 
@@ -254,7 +262,11 @@ typedef struct LabNameEntryZ {
 extern LabNameEntryZ D_80064C5C[];
 s32 Text_CompareGlyphCodes(u8*, u8*);
 
-s32 func_89109638(u8* arg0, u8* arg1) {
+/**
+ * List comparison: by species name in kana order.
+ * Seen in play (2026-11-14) in いちらん: アイウエオじゅんにならべる ordered イシツブテ, カビゴン, コイキング, ...
+ */
+s32 LabPCList_CompareBySpeciesName(u8* arg0, u8* arg1) {
     s32 ret;
     s32 var_v1;
 
@@ -267,8 +279,11 @@ s32 func_89109638(u8* arg0, u8* arg1) {
     return var_v1;
 }
 
-/** List comparison: by raw species ID. */
-s32 LabPCList_CompareBySpeciesRawId(LabMonEntry* arg0, LabMonEntry* arg1) {
+/**
+ * List comparison: by Pokédex number.
+ * Seen in play (2026-11-14) in いちらん: ポケモンばんごうでならべる ordered フシギダネ, ヒトカゲ, ゼニガメ, ポッポ, コラッタ, ピカチュウ, プリン, ...
+ */
+s32 LabPCList_CompareBySpeciesNumber(LabMonEntry* arg0, LabMonEntry* arg1) {
     s32 var_v0 = arg0->mon.species.id - arg1->mon.species.id;
     s32 ret;
 
@@ -386,18 +401,14 @@ s32 LabPCList_FilterByExactTypePair(LabMonEntry* arg0, unk_func_8830867C_02C_C54
     return 1;
 }
 
-/*
- * func_89109960
- *
- * Returns 1 if bit 0 of the first byte of the entry at index `i` of the
- * 0x1C-byte-stride table at D_80064C4C is set, otherwise 0, where `i` is the
- * byte at offset 8 of arg0. arg1 is not used.
- *
- * What the table and the record arg0 are is not established. Matching note:
- * the table is indexed through a byte pointer; the untyped word extern would
- * scale the 0x1C stride by 4 and read a word.
- */
 extern M2C_UNK D_80064C4C;
-s32 func_89109960(void *arg0, M2C_UNK arg1) {
+/**
+ * List filter: keeps the species that Free Battle accepts (bit 0 of the species table's flags at +0xC).
+ * Seen in play (2026-11-14) in いちらん: バトルようのポケモンをあつめる left only ピカチュウ and カビゴン of twelve.
+ * D_80064C4C + species * 0x1C is the flags byte of the Free Battle species table D_80064C5C.
+ * Matching note: the table is indexed through a byte pointer; the untyped word extern would scale
+ * the 0x1C stride by 4 and read a word.
+ */
+s32 LabPCList_FilterByBattleEligible(void *arg0, M2C_UNK arg1) {
     return (*((u8 *)&D_80064C4C + (M2C_FIELD(arg0, u8 *, 8) * 0x1C)) & 1) != 0;
 }

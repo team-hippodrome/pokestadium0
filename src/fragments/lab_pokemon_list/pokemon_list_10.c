@@ -7,7 +7,7 @@
 #include "save_data.h"
 
 // Declared here instead of in a header: the callers of these disagree on their types.
-void LabPCList_ConsumeUsedTmItem(unk_func_8830867C_04C_030_02C_000*);
+void LabPCList_ConsumeUsedItem(unk_func_8830867C_04C_030_02C_000*);
 extern Gfx D_8910D028[];
 
 #include "m2c_macros.h"
@@ -27,12 +27,12 @@ typedef struct unk_func_88313894 {
 
 void LabPCList_ReadDeckCategory(unk_func_8830867C_02C_154* arg0);
 void LabPCList_WriteDeckCategory(unk_func_8830867C_02C_154* arg0);
-s32 LabPCList_IsTmItemId(s32* arg0);
-s32 LabPCList_IsHmItemId(s32* arg0);
-s32 LabPCList_IsSpecialTmItemId(s32* arg0);
-s32 LabPCList_CompareTmHmEntries(PointerList* arg0, PointerList* arg1);
+s32 LabPCList_IsTmHmItemId(s32* arg0);
+s32 LabPCList_IsVitaminItemId(s32* arg0);
+s32 LabPCList_IsPpUpItemId(s32* arg0);
+s32 LabPCList_CompareUsableItems(PointerList* arg0, PointerList* arg1);
 s32 LabPCList_CanLearnMoveByLevelUp(s32 arg0, s32 arg1);
-void LabPCList_ConsumeUsedTmItem(unk_func_8830867C_04C_030_02C_000* arg0);
+void LabPCList_ConsumeUsedItem(unk_func_8830867C_04C_030_02C_000* arg0);
 
 typedef struct unk_func_89109990_010 {
     /* 0x00 */ void* unk_00;
@@ -53,7 +53,11 @@ typedef struct unk_func_89109990 {
 } unk_func_89109990;
 
 void func_80027804(void*, u8**, s32, s32);
-void func_89109990(unk_func_89109990* arg0, u8** arg1, u8* arg2, s32 arg3) {
+/**
+ * Sets up the box slots of one source and points each slot at its 0x58-byte entries.
+ * Seen in play (2026-11-14) in いちらん: ran three times on entry, for てもち, the GB boxes and the 64 boxes.
+ */
+void LabPCList_InitSourceBoxes(unk_func_89109990* arg0, u8** arg1, u8* arg2, s32 arg3) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     unk_func_89109990_010* var_s1 = arg0->unk_10;
     s32 var_t0 = 0;
@@ -302,8 +306,11 @@ void LabPCList_WriteDeckCategory(unk_func_8830867C_02C_154* arg0) {
     arg0->unk_08 = 0;
 }
 
-/** Returns whether an item ID is a TM; converts the ID to the TM index. */
-s32 LabPCList_IsTmItemId(s32* arg0) {
+/**
+ * Returns whether an item id is a TM or HM and turns it into its usable-item code: TMs (0xC9-0xFA) 100-149, HMs (0xC4-0xC8) 200-204.
+ * Seen in play (2026-11-14) in いちらん: わざマシン06 was listed among the usable items.
+ */
+s32 LabPCList_IsTmHmItemId(s32* arg0) {
     if ((*arg0 >= 0xC9) && (*arg0 < 0xFB)) {
         *arg0 -= 0x65;
         return 1;
@@ -315,8 +322,11 @@ s32 LabPCList_IsTmItemId(s32* arg0) {
     return 0;
 }
 
-/** Returns whether an item ID is an HM. */
-s32 LabPCList_IsHmItemId(s32* arg0) {
+/**
+ * Returns whether an item id is HP Up, Protein, Iron, Carbos, Calcium or Rare Candy (0x23-0x28) and turns it into 0-5.
+ * Seen in play (2026-11-14) in いちらん: マックスアップ, タウリン, ブロムヘキシン, インドメタシン, リゾチウム and ふしぎなアメ were listed.
+ */
+s32 LabPCList_IsVitaminItemId(s32* arg0) {
     static u8 D_8831A250[] = { 0x23, 0x24, 0x25, 0x26, 0x27, 0x28 };
 
     s32 i;
@@ -331,8 +341,11 @@ s32 LabPCList_IsHmItemId(s32* arg0) {
     return 0;
 }
 
-/** Returns whether an item ID is the special TM. */
-s32 LabPCList_IsSpecialTmItemId(s32* arg0) {
+/**
+ * Returns whether an item id is PP Up (0x4F) and turns it into the usable-item code 50.
+ * Seen in play (2026-11-14) in いちらん: ポイントアップ was listed.
+ */
+s32 LabPCList_IsPpUpItemId(s32* arg0) {
     static u8 D_8831A258[] = { 0x4F };
 
     s32 i;
@@ -347,8 +360,11 @@ s32 LabPCList_IsSpecialTmItemId(s32* arg0) {
     return 0;
 }
 
-/** List comparison for TM and HM entries. */
-s32 LabPCList_CompareTmHmEntries(PointerList* arg0, PointerList* arg1) {
+/**
+ * Usable-item list comparison: by usable-item code, then by bag position.
+ * Seen in play (2026-11-14) in いちらん: the list came out vitamins, ふしぎなアメ, ポイントアップ, わざマシン06.
+ */
+s32 LabPCList_CompareUsableItems(PointerList* arg0, PointerList* arg1) {
     return (arg0->count - arg1->count != 0) ? arg0->count - arg1->count : (s32)arg0[1].items - (s32)arg1[1].items;
 }
 
@@ -359,6 +375,10 @@ typedef struct TmEntry8910A21C {
     /* 0x0C */ s32 unk_0C;
     /* 0x10 */ s32 unk_10;
 } TmEntry8910A21C; // size = 0x14
+/**
+ * Collects the usable items (vitamins, PP Up, TMs, HMs) of every item deck into one sorted list.
+ * Seen in play (2026-11-14) in いちらん: built the list of 「フシギダネがつかえるどうぐ」.
+ */
 void LabPCList_BuildUsableItemList(PointerList* arg0, TmEntry8910A21C* arg1, unk_func_8830867C_02C_154* arg2, s32 arg3) {
     void** var_s6;
     unk_func_8830867C_02C_154* var_s4;
@@ -381,11 +401,11 @@ void LabPCList_BuildUsableItemList(PointerList* arg0, TmEntry8910A21C* arg1, unk
             for (j = 0; j < var_s4->unk_14; j++, var_s2 += 2) {
                 var_s0 = 0;
                 sp50 = *var_s2;
-                if (LabPCList_IsTmItemId(&sp50) != 0) {
+                if (LabPCList_IsTmHmItemId(&sp50) != 0) {
                     var_s0 = 1;
-                } else if (LabPCList_IsHmItemId(&sp50) != 0) {
+                } else if (LabPCList_IsVitaminItemId(&sp50) != 0) {
                     var_s0 = 1;
-                } else if (LabPCList_IsSpecialTmItemId(&sp50) != 0) {
+                } else if (LabPCList_IsPpUpItemId(&sp50) != 0) {
                     var_s0 = 1;
                 }
 
@@ -414,7 +434,7 @@ void LabPCList_BuildUsableItemList(PointerList* arg0, TmEntry8910A21C* arg1, unk
     }
 
     arg0->count = var_s1 - arg1;
-    PointerList_Sort(arg0, LabPCList_CompareTmHmEntries);
+    PointerList_Sort(arg0, LabPCList_CompareUsableItems);
 }
 
 /** Returns whether a species learns a move by level up. */
@@ -450,7 +470,11 @@ s32 func_80020974(s32);
 s32 BattleMon_CountMoves(u8* arg0);
 s32 BattleMon_GetMoveIndex(s32, s32);
 
-void func_8910A4C8(s8* arg0, u8* arg1) {
+/**
+ * Sets each usable item's flags for a Pokémon: 1 vitamin stat exp at the cap, 2 already level 100, 4 no move can take a PP Up, 8 already knows the TM/HM move, 0x10 can't learn it.
+ * Seen in play (2026-11-14) in いちらん: ran when どうぐをつかう opened; わざマシン06 was usable on フシギダネ and ゼニガメ.
+ */
+void LabPCList_UpdateItemUsability(s8* arg0, u8* arg1) {
     s32 i;
     s32 j;
     s32 n;
@@ -530,8 +554,11 @@ void func_8910A4C8(s8* arg0, u8* arg1) {
     }
 }
 
-/** Consumes a TM item after use. */
-void LabPCList_ConsumeUsedTmItem(unk_func_8830867C_04C_030_02C_000* arg0) {
+/**
+ * Takes one of the used item out of its deck (removing the entry at quantity 1) and marks the deck changed.
+ * Seen in play (2026-11-14) in いちらん: ran after マックスアップ, ポイントアップ and わざマシン06; the TM06 count went from 1 to none.
+ */
+void LabPCList_ConsumeUsedItem(unk_func_8830867C_04C_030_02C_000* arg0) {
     if ((LabItem_IsQuantitylessItemForOperation(arg0->unk_00[0]->unk_00) != 0) || (arg0->unk_00[0]->unk_01 < 2)) {
         s32 tmp = arg0->unk_00[1]->unk_0C.items;
 

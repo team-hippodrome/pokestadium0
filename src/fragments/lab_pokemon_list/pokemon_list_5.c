@@ -19,7 +19,7 @@ extern u8 D_80073520[];
 M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 extern s32 D_8910A7F8[3];
 void func_80027410(void*, void*, s32, s32, s32);
-void func_89109990(void*, void*, void*, s32);
+void LabPCList_InitSourceBoxes(void*, void*, void*, s32);
 extern s32 D_800603C0;
 void func_8000B2F4(s32);
 void Window_SetRect(s8 *, s32, s32, s32, s32);
@@ -69,7 +69,7 @@ s32 LabPCList_FilterByAnyType();
 s32 LabPCList_FilterByAnyMove();
 s32 LabPCList_FilterBySpeciesId();
 s32 LabPCList_FilterByExactTypePair();
-s32 func_89109960();
+s32 LabPCList_FilterByBattleEligible();
 void func_8000A460(s8*, s8*);
 u32 func_800566BC(s8*);
 void LabPCList_InitPopupMenu(LabPopupMenu*, void*, s8*, s32, s32);
@@ -146,7 +146,7 @@ s32 LabPCList_UpdateSortMenu(LabPCListScreen* arg0) {
                     break;
                 case 4:
                     arg0->state = 1;
-                    func_89105C54(&arg0->sourceSelectWindow, 0x78, 0x67, (s8*)&arg0->sourceMatrix, D_8910A7F4);
+                    LabSourceSelect_Init(&arg0->sourceSelectWindow, 0x78, 0x67, (s8*)&arg0->sourceMatrix, D_8910A7F4);
                     return 0;
             }
         } else {

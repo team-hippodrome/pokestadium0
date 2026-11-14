@@ -20,7 +20,7 @@ extern u8 D_80073520[];
 M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 extern s32 D_8910A7F8[3];
 void func_80027410(void*, void*, s32, s32, s32);
-void func_89109990(void*, void*, void*, s32);
+void LabPCList_InitSourceBoxes(void*, void*, void*, s32);
 extern s32 D_800603C0;
 void func_8000B2F4(s32);
 void Window_SetRect(s8 *, s32, s32, s32, s32);
@@ -70,7 +70,7 @@ s32 LabPCList_FilterByAnyType();
 s32 LabPCList_FilterByAnyMove();
 s32 LabPCList_FilterBySpeciesId();
 s32 LabPCList_FilterByExactTypePair();
-s32 func_89109960();
+s32 LabPCList_FilterByBattleEligible();
 void func_8000A460(s8*, s8*);
 u32 func_800566BC(s8*);
 void LabPCList_InitPopupMenu(LabPopupMenu*, void*, s8*, s32, s32);
@@ -107,7 +107,11 @@ extern s32 D_8910D9D4;
 void LabPCList_InitLevelInputWindow(LabLevelInputWindow*, s32, s32, Color_RGBA8, s32, s32, s32);
 s32 LabPCList_HasFilterFlag(LabPCListScreen*, s32);
 
-s32 func_89102C40(LabPCListScreen* arg0) {
+/**
+ * Handles the column sort popup: the first row sorts high to low (or by text), the second low to high, the third opens the level range input.
+ * Seen in play (2026-11-14) in いちらん: sorted every stat column both ways and opened レベルのにゅうりょく.
+ */
+s32 LabPCList_UpdateColumnMenu(LabPCListScreen* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     u32 sel;
     s32 a;
@@ -325,11 +329,10 @@ typedef struct Flags89103144 {
 } Flags89103144;
 
 /**
- * For every item of arg2 whose unk_08 is zero, whose unk_1C is at
- * least arg2->limit, or that is the item *arg1, sets bit 0 of the matching
- * entry in arg0->flags.
+ * Greys out the boxes of a source that are not listed, full, or the Pokémon's own box.
+ * Seen in play (2026-11-14) in いちらん: ran when いどうする > ゲームボーイのボックス / 64カセットのボックス opened the box list.
  */
-void func_89103144(Flags89103144* arg0, Item89103144** arg1, List89103144* arg2) {
+void LabPCList_DisableUnavailableBoxes(Flags89103144* arg0, Item89103144** arg1, List89103144* arg2) {
     s32 i;
     Item89103144* item;
 
@@ -346,7 +349,11 @@ void func_89103144(Flags89103144* arg0, Item89103144** arg1, List89103144* arg2)
     }
 }
 
-void func_891031B8(s8* arg0, s8** arg1, s8* arg2) {
+/**
+ * Greys out each destination source with no box that could take the Pokémon.
+ * Seen in play (2026-11-14) in いちらん: ran when いどうする opened 「どこへ？」.
+ */
+void LabPCList_DisableUnavailableSources(s8* arg0, s8** arg1, s8* arg2) {
     s32 i;
     s32 j;
     s8* box;
@@ -367,7 +374,11 @@ void func_891031B8(s8* arg0, s8** arg1, s8* arg2) {
 
 extern u8 D_8910A8DC[];
 extern s32 D_8910DD34[];
-void func_89103274(LabPCListScreen* arg0, s8** arg1) {
+/**
+ * Opens the 「どこへ？」 (where to?) menu: てもちのポケモン, ゲームボーイのボックス, 64カセットのボックス.
+ * Seen in play (2026-11-14) in いちらん: いどうする on フシギダネ opened it.
+ */
+void LabPCList_OpenDestinationMenu(LabPCListScreen* arg0, s8** arg1) {
     LabPCList_InitPopupMenu(&arg0->subPopup, D_8910A8DC, (s8*)&arg0->popupItemFlags[1], 3, (s32)D_8910DD34);
     Window_SetRect((s8*)&arg0->subPopup.anchorX, arg0->popup.window.frame.x + 0xE, arg0->popup.window.frame.y + 0x38, 0x6C, 0x1C);
     arg0->subPopup.window.frame.style |= 0x1000000;
@@ -375,10 +386,14 @@ void func_89103274(LabPCListScreen* arg0, s8** arg1) {
     arg0->subPopup.limitY = arg0->listFrame.y + arg0->listFrame.height;
     LabPCList_PlacePopup(&arg0->subPopup);
     arg0->subPopup.window.frame.color = D_8910A7F4;
-    func_891031B8((s8*)&arg0->subPopup.menu, arg1, (s8*)&arg0->sourceMatrix);
+    LabPCList_DisableUnavailableSources((s8*)&arg0->subPopup.menu, arg1, (s8*)&arg0->sourceMatrix);
 }
 
-s32 func_89103370(s8 **arg0) {
+/**
+ * Returns whether the Pokémon is the only one left in the party, which cannot be moved.
+ * Seen in play (2026-11-14) in いちらん: with the party count poked to 1 at this check, いどうする showed 「さいごのポケモンです」.
+ */
+s32 LabPCList_IsLastPartyMon(s8 **arg0) {
     s32 var_v1;
     s8 *temp_v0;
 
@@ -436,13 +451,13 @@ s32 LabPCList_UpdateMonMenu(LabPCListScreen* arg0) {
                 arg0->state = 0;
                 break;
             case 2:
-                if (func_89103370((s8**)entry) != 0) {
+                if (LabPCList_IsLastPartyMon((s8**)entry) != 0) {
                     func_8003F6AC(8);
                     TextBox_Init((s8*)arg0->textBox, (s32)D_8910DD40, 0, 1, 0);
                     arg0->state = 0xB;
                 } else {
                     func_8003F6AC(2);
-                    func_89103274(arg0, (s8**)entry);
+                    LabPCList_OpenDestinationMenu(arg0, (s8**)entry);
                     arg0->state = 8;
                 }
                 break;

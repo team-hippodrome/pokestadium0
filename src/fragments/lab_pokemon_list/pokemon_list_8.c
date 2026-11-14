@@ -22,7 +22,7 @@ extern u8 D_80073520[];
 M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 extern s32 D_8910A7F8[3];
 void func_80027410(void*, void*, s32, s32, s32);
-void func_89109990(void*, void*, void*, s32);
+void LabPCList_InitSourceBoxes(void*, void*, void*, s32);
 extern s32 D_800603C0;
 void func_8000B2F4(s32);
 void Window_SetRect(s8 *, s32, s32, s32, s32);
@@ -72,7 +72,7 @@ s32 LabPCList_FilterByAnyType();
 s32 LabPCList_FilterByAnyMove();
 s32 LabPCList_FilterBySpeciesId();
 s32 LabPCList_FilterByExactTypePair();
-s32 func_89109960();
+s32 LabPCList_FilterByBattleEligible();
 void func_8000A460(s8*, s8*);
 u32 func_800566BC(s8*);
 void LabPCList_InitPopupMenu(LabPopupMenu*, void*, s8*, s32, s32);
@@ -157,7 +157,7 @@ void func_800307D4(List89103C54**, s32, s32);
 
 
 extern u8 D_8910A8E8[];
-void func_89103144(s8*, Ref89103740*, s32);
+void LabPCList_DisableUnavailableBoxes(s8*, Ref89103740*, s32);
 /**
  * Handles the どこへ？ (where to?) menu: party, GB box, Stadium box, or a box list.
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): いどうする opened 「どこへ？」 with
@@ -206,7 +206,7 @@ s32 LabPCList_UpdateDestinationMenu(LabPCListScreen* arg0) {
                     arg0->subPopup2.limitY = arg0->listFrame.y + arg0->listFrame.height;
                     LabPCList_PlacePopup(&arg0->subPopup2);
                     arg0->subPopup2.window.frame.color = D_8910A7F4;
-                    func_89103144((s8*)&arg0->subPopup2.menu, ((List89103C54*)arg0->list.items)->items[arg0->list.cursor], arg0->sourceMatrix.rows + 0x24);
+                    LabPCList_DisableUnavailableBoxes((s8*)&arg0->subPopup2.menu, ((List89103C54*)arg0->list.items)->items[arg0->list.cursor], arg0->sourceMatrix.rows + 0x24);
                     arg0->state = 9;
                     break;
                 case 2:
@@ -218,7 +218,7 @@ s32 LabPCList_UpdateDestinationMenu(LabPCListScreen* arg0) {
                     arg0->subPopup2.limitY = arg0->listFrame.y + arg0->listFrame.height;
                     LabPCList_PlacePopup(&arg0->subPopup2);
                     arg0->subPopup2.window.frame.color = D_8910A7F4;
-                    func_89103144((s8*)&arg0->subPopup2.menu, ((List89103C54*)arg0->list.items)->items[arg0->list.cursor], arg0->sourceMatrix.rows + 0x48);
+                    LabPCList_DisableUnavailableBoxes((s8*)&arg0->subPopup2.menu, ((List89103C54*)arg0->list.items)->items[arg0->list.cursor], arg0->sourceMatrix.rows + 0x48);
                     arg0->state = 0xA;
                     break;
             }
@@ -309,7 +309,7 @@ extern char D_8910DE34[];
 u16 func_80020234(s32, u8, s32, u8, s32);
 s32 func_8002057C(u8, u16);
 void func_800203FC(BattleMon*);
-void LabPCList_ConsumeUsedTmItem();
+void LabPCList_ConsumeUsedItem();
 /**
  * Uses a vitamin (HP Up, Protein, Iron, Carbos, Calcium; 0x23-0x27) or a Rare Candy (0x28) on the
  * Pokemon and fills in the old and new values for the result message.
@@ -384,7 +384,7 @@ void LabPCList_ApplyVitaminItem(u8** arg0, u8** arg1, Msg89103F04* arg2) {
             arg2->newValue = mon->level;
             break;
     }
-    LabPCList_ConsumeUsedTmItem(arg1);
+    LabPCList_ConsumeUsedItem(arg1);
     *(s32*)(arg0[0] + 0x10) = 1;
 }
 
@@ -430,7 +430,7 @@ void LabPCList_ApplyPpUpItem(u8** arg0, s32 arg1, s32 arg2, Msg891041D8* arg3) {
     arg3->oldPp = (ptr[0x20] >> 6) * step + base_pp;
     arg3->newPp = arg3->oldPp + step;
     ptr[0x20] += step + 0x40;
-    LabPCList_ConsumeUsedTmItem(arg1, ptr, base_pp, arg3);
+    LabPCList_ConsumeUsedItem(arg1, ptr, base_pp, arg3);
     *(s32*)(arg0[0] + 0x10) = 1;
 }
 
@@ -456,14 +456,14 @@ void LabPCList_TeachTmHmMove(u8** arg0, u8** arg1, s32 arg2) {
     ptr[0x20] = gMoveData[ptr[9] - 1].pp;
 
     if (*arg1[0] >= 0xC9) {
-        LabPCList_ConsumeUsedTmItem(arg1);
+        LabPCList_ConsumeUsedItem(arg1);
     }
     *(s32*)(arg0[0] + 0x10) = 1;
 }
 
 s32 LabPCList_UpdateBrowse();
 s32 LabPCList_UpdateSortMenu(LabPCListScreen*);
-s32 func_89102C40(LabPCListScreen*);
+s32 LabPCList_UpdateColumnMenu(LabPCListScreen*);
 s32 LabPCList_RunLevelFilter(s8*);
 s32 LabPCList_UpdateMonMenu(LabPCListScreen*);
 s32 LabPCList_UpdateGbBoxMenu();
@@ -490,7 +490,7 @@ s32 LabPCList_UpdateList(LabPCListScreen* arg0) {
             ret = LabPCList_UpdateSortMenu(arg0);
             break;
         case 3:
-            ret = func_89102C40(arg0);
+            ret = LabPCList_UpdateColumnMenu(arg0);
             break;
         case 4:
             ret = LabPCList_RunLevelFilter(arg0);
@@ -541,7 +541,7 @@ void LabPCList_InitItemWindow(LabItemWindow*, s32, s32, s8*, s8*, s32);
 s32 LabPCList_UpdateItemWindow(LabItemWindow*);
 void LabPCList_InitMessageWindow(LabMessageWindow*, s32, s32, LabItemResult*);
 s32 LabPCList_UpdateMessageWindow(LabMessageWindow*);
-void func_8910A4C8(s8*, s32);
+void LabPCList_UpdateItemUsability(s8*, s32);
 /**
  * Per-frame update of the いちらん screen: runs the list, the save prompt, the item window or the
  * message window by state. Returns 1 when the caller should leave this screen.
@@ -564,7 +564,7 @@ s32 LabPCList_UpdateScreen(LabPCList* arg0) {
                     ret = 1;
                 }
             } else if (r == 2) {
-                func_8910A4C8((s8*)&arg0->listScreen + 0xAFFC, ((s32*)arg0->listScreen.list.items->rows)[arg0->listScreen.list.cursor] + 8);
+                LabPCList_UpdateItemUsability((s8*)&arg0->listScreen + 0xAFFC, ((s32*)arg0->listScreen.list.items->rows)[arg0->listScreen.list.cursor] + 8);
                 LabPCList_InitItemWindow(&arg0->itemWindow, ((LabPCListScreen*)sub)->window.frame.x + 0xAB, ((LabPCListScreen*)sub)->window.frame.y + 0xD, sub + 0xAFFC,
                               sub + 0xB008, ((s32**)((LabPCListScreen*)sub)->list.items->rows)[((LabPCListScreen*)sub)->list.cursor]);
                 arg0->state = 2;
@@ -646,7 +646,7 @@ void LabPCList_DrawBackground(void) {
 void BgStage_DrawFrame(void);
 s32 Window_UpdateAnimation(Window* arg0);
 void SavePrompt_Draw(SavePrompt*);
-void PcSort_DrawUseItemPrompt(LabItemWindow*);
+void LabPCList_DrawItemWindow(LabItemWindow*);
 void LabPCList_DrawMessageWindow(LabMessageWindow*);
 
 /**
@@ -676,7 +676,7 @@ M2C_UNK LabPCList_DrawScreen(LabPCList* arg0) {
             if (Window_UpdateAnimation(&arg0->itemWindow) != 0) {
                 LabPCList_DrawListScreen(&arg0->listScreen);
             }
-            PcSort_DrawUseItemPrompt(&arg0->itemWindow);
+            LabPCList_DrawItemWindow(&arg0->itemWindow);
             break;
         case 3:
             if (Window_UpdateAnimation(&arg0->listScreen) != 0) {

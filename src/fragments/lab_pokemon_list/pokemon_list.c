@@ -9,7 +9,11 @@ M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 
 M2C_UNK LabPCList_InitDeckCategories(s32, s32, s32, s32);          /* extern */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_89100020(s32 arg0)
+/**
+ * Sets up the three item decks (Game Boy bag, Game Boy PC, 64 cartridge) and reads each one that exists.
+ * Seen in play (2026-11-14) in いちらん: ran on entry; the どうぐをつかう window later listed the bag's items (マックスアップ ×5 ...).
+ */
+void LabPCList_LoadItemDecks(s32 arg0)
 {
   s32 var_s0;
   s32 var_s1;
@@ -20,7 +24,11 @@ void func_89100020(s32 arg0)
 }
 
 
-void func_891000BC(s32 arg0) {
+/**
+ * Writes back every item deck that exists and was changed.
+ * Seen in play (2026-11-14) in いちらん: ran from LabPCList_SaveChanges on レポートしてやめる after a TM was used.
+ */
+void LabPCList_SaveDirtyItemDecks(s32 arg0) {
     s32 var_s1;
     s32 var_s2;
     s8 *var_s0;
@@ -40,9 +48,13 @@ void func_891000BC(s32 arg0) {
 
 extern s32 D_8910A7F8[3];
 void func_80027410(void*, void*, s32, s32, s32);
-void func_89109990(void*, void*, void*, s32);
+void LabPCList_InitSourceBoxes(void*, void*, void*, s32);
 
-void func_89100140(LabPCListScreen* arg0) {
+/**
+ * Sets up the three sources of the list: てもち (6 slots), the 8 Game Boy boxes and the 4 64 cartridge boxes (30 slots each).
+ * Seen in play (2026-11-14) in いちらん: ran on entry; 「どこのポケモンを いちらん するか」 then offered てもち, ゲームボーイのボックス (ボックス1-8) and 64カセットのボックス (ボックス1-4).
+ */
+void LabPCList_InitSources(LabPCListScreen* arg0) {
     s32 i;
 
     arg0->sources[0].unk_04 = 0x20;
@@ -50,19 +62,19 @@ void func_89100140(LabPCListScreen* arg0) {
     arg0->sources[0].unk_0C = 0;
     arg0->sources[0].unk_20 = 6;
     func_80027410(&arg0->sources[0].boxes, (s8*)arg0 + 0x90, 0x20, 1, 0);
-    func_89109990(&arg0->sources[0], (s8*)arg0 + 0x8200, (s8*)arg0 + 0x430, 6);
+    LabPCList_InitSourceBoxes(&arg0->sources[0], (s8*)arg0 + 0x8200, (s8*)arg0 + 0x430, 6);
     arg0->sources[1].unk_04 = 0x21;
     arg0->sources[1].unk_08 = arg0->sources[0].unk_08;
     arg0->sources[1].unk_0C = 1;
     arg0->sources[1].unk_20 = 0x1E;
     func_80027410(&arg0->sources[1].boxes, (s8*)arg0 + 0xB0, 0x20, 8, 0);
-    func_89109990(&arg0->sources[1], (s8*)arg0 + 0x8218, (s8*)arg0 + 0x640, 0x1E);
+    LabPCList_InitSourceBoxes(&arg0->sources[1], (s8*)arg0 + 0x8218, (s8*)arg0 + 0x640, 0x1E);
     arg0->sources[2].unk_04 = 0x11;
     arg0->sources[2].unk_08 = 0;
     arg0->sources[2].unk_0C = 2;
     arg0->sources[2].unk_20 = 0x1E;
     func_80027410(&arg0->sources[2].boxes, (s8*)arg0 + 0x1B0, 0x20, 4, 0);
-    func_89109990(&arg0->sources[2], (s8*)arg0 + 0x85D8, (s8*)arg0 + 0x58C0, 0x1E);
+    LabPCList_InitSourceBoxes(&arg0->sources[2], (s8*)arg0 + 0x85D8, (s8*)arg0 + 0x58C0, 0x1E);
     for (i = 0; i < 3; i++) {
         arg0->sources[i].unk_00 = D_8910A7F8[i];
     }
@@ -71,7 +83,11 @@ void func_89100140(LabPCListScreen* arg0) {
 
 extern s32 D_800603C0;
 void func_8000B2F4(s32);
-void func_89100294(LabPCListScreen* arg0) {
+/**
+ * Sets the header cursor's range for the current detail page (1/3: six columns, 2/3: the move block, 3/3: six stat columns).
+ * Seen in play (2026-11-14) in いちらん: ran on entry and on every C-Left/C-Right page turn (ページおくり1/3 -> 2/3 -> 3/3).
+ */
+void LabPCList_ResetHeaderCursor(LabPCListScreen* arg0) {
     s32 count;
 
     switch (arg0->page) {
@@ -129,7 +145,7 @@ extern u8 D_8910A84C[];
 void LabPCList_InitListWindow(LabPCListScreen* arg0, s32 arg1, s32 arg2, s32 arg3) {
     UNUSED s32 pad[1]; // FAKE: stack padding
 
-    func_89100140(arg0);
+    LabPCList_InitSources(arg0);
     Window_SetRect(arg0, arg1, arg2, 0x234, 0x17E);
     arg0->window.animTimer = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
@@ -150,25 +166,23 @@ void LabPCList_InitListWindow(LabPCListScreen* arg0, s32 arg1, s32 arg2, s32 arg
     arg0->sortKey = 0;
     func_80027D68((s32)((s8*)&arg0->rows), D_8910D990[0]);
     arg0->focus = 0;
-    func_89100020((s32)arg0);
+    LabPCList_LoadItemDecks((s32)arg0);
     arg0->unk_0080 = 0;
     arg0->page = 0;
     ScrollList_Init((s8*)&arg0->list, (s8*)&arg0->rows, (s8*)arg0->rowFlags, 0xE, LabPCList_DrawMonRow, 0x228, 0x14);
     arg0->list.options &= ~0x100000;
     arg0->pageColumnStart = D_8910A84C;
-    func_89100294(arg0);
+    LabPCList_ResetHeaderCursor(arg0);
     arg0->hasChanges = 0;
     arg0->msg = arg3;
     LabPCList_ResetFilterState(arg0);
     arg0->state = 1;
-    func_89105C54(&arg0->sourceSelectWindow, 0x78, 0x67, (s8*)&arg0->sourceMatrix, D_8910A7F4);
+    LabSourceSelect_Init(&arg0->sourceSelectWindow, 0x78, 0x67, (s8*)&arg0->sourceMatrix, D_8910A7F4);
 }
 
 /**
  * Returns the x position of the header cursor for the current detail page.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14) in いちらん: placed the header frame and the column popups under ニックネーム, ID, おや, ばしょ and the stat columns.
  */
 s32 LabPCList_GetColumnCursorX(LabPCListScreen* arg0) {
     s32 i;
@@ -181,7 +195,11 @@ s32 LabPCList_GetColumnCursorX(LabPCListScreen* arg0) {
     return arg0->listFrame.x + x + 0x78;
 }
 
-void func_89100688(LabPCListScreen* arg0) {
+/**
+ * Draws the yellow frame around the selected column header; on page 1 the two type columns share one frame.
+ * Seen in play (2026-11-14) in いちらん: framed ニックネーム, ID, おや, ばしょ and タイプ1/タイプ2 while R and D-Right moved the header cursor.
+ */
+void LabPCList_DrawColumnCursor(LabPCListScreen* arg0) {
     s32 end;
     s32* r;
     s32 i;
@@ -220,9 +238,7 @@ void func_89100688(LabPCListScreen* arg0) {
  * arg0 + 0xB550 selects the shape: 0 draws a 0x26 x 0x14 rectangle at the origin, 1 a
  * 0x50 x 0x14 rectangle offset 0x26 to the right; other values draw nothing. The color is
  * read from D_80073520. (Compare LabPCList_DrawRowCursor.)
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-14) in いちらん: D-Up from the first row framed the ポケモン header (cursor 1), whose A opens the sort menu.
  */
 void LabPCList_DrawHeaderCursor(LabPCListScreen* arg0) {
     switch (arg0->headerCursor.cursor) {

@@ -24,14 +24,19 @@ void func_8001A384(s32, s32);
 void func_8001A944(s32 x, s32 y, const char* fmt, ...);
 void func_8001AB6C(void);
 void func_8001ABBC(void);
-void func_891053E0(void);
-void func_89108F0C(void);
+void LabPCList_UnusedStub1(void);
+void LabPCList_UnusedStub2(void);
 
 extern Color_RGBA8 D_8910A910;
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void Font_SetColorForFlags(s32);
 
-void func_89104C70(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5) {
+/**
+ * Draws one text row of a plain popup menu.
+ * No callers: no jal, j, address word or lui/addiu pair in any built fragment or the resident code reaches it (2026-11-14 scan), so it never runs.
+ * @unverified Name guessed from the code.
+ */
+void LabTextMenu_DrawRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5) {
     s32 temp_v0 = *arg5;
 
     if (arg4 & 8) {
@@ -50,8 +55,13 @@ void func_80027804(s8 *, s32 *, s32, s32);
 void Window_SetRect(s8 *, s32, s32, s32, s32);
 void Menu_Init(s8 *, s8 *, s32, void *, s32, s32);
 u32 func_800566BC(s32);
-void func_89104C70();
-void func_89104D14(s8 *arg0, s32 arg1, s32 arg2, s32 *arg3, s32 arg4, s32 arg5) {
+void LabTextMenu_DrawRow();
+/**
+ * Sets up a plain popup menu of text rows sized to its longest row.
+ * No callers: no jal, j, address word or lui/addiu pair in any built fragment or the resident code reaches it (2026-11-14 scan), so it never runs.
+ * @unverified Name guessed from the code.
+ */
+void LabTextMenu_Init(s8 *arg0, s32 arg1, s32 arg2, s32 *arg3, s32 arg4, s32 arg5) {
     s32 i;
     s32 w;
     s32 max = 0;
@@ -65,7 +75,7 @@ void func_89104D14(s8 *arg0, s32 arg1, s32 arg2, s32 *arg3, s32 arg4, s32 arg5) 
     }
     func_80027804(arg0 + 0x50, arg3, arg5, arg5);
     h = max * 0x14 + 0x10;
-    Menu_Init(arg0 + 0x2C, arg0 + 0x50, arg4, func_89104C70, h, 0x1C);
+    Menu_Init(arg0 + 0x2C, arg0 + 0x50, arg4, LabTextMenu_DrawRow, h, 0x1C);
     M2C_FIELD(arg0, s32 *, 0x4C) |= 0x10000;
     Window_SetRect(arg0, arg1, arg2, h + 0xC, 0x84);
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
@@ -86,7 +96,12 @@ typedef struct Box89104E38 {
     s8 label[1];
 } Box89104E38;
 
-void func_89104E38(Box89104E38* arg0) {
+/**
+ * Draws a plain popup menu.
+ * No callers: no jal, j, address word or lui/addiu pair in any built fragment or the resident code reaches it (2026-11-14 scan), so it never runs.
+ * @unverified Name guessed from the code.
+ */
+void LabTextMenu_Draw(Box89104E38* arg0) {
     s32 label;
 
     if (func_8002AE6C() == 0) {
@@ -103,7 +118,12 @@ void func_89104E38(Box89104E38* arg0) {
 
 M2C_UNK Menu_UpdateCursor(s32);                         /* extern */
 
-void func_89104E94(s32 arg0) {
+/**
+ * Moves the cursor of a plain popup menu.
+ * No callers: no jal, j, address word or lui/addiu pair in any built fragment or the resident code reaches it (2026-11-14 scan), so it never runs.
+ * @unverified Name guessed from the code.
+ */
+void LabTextMenu_Update(s32 arg0) {
     Menu_UpdateCursor(arg0 + 0x2C);
 }
 
@@ -118,7 +138,11 @@ extern Color_RGBA8 D_800734A8[];
 extern char D_8910E000[];
 extern char D_8910E010[];
 
-void func_89104EB4(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4, s32* arg5) {
+/**
+ * Draws one move of the move list; the forgotten move fades out and the new one fades in during the learn animation.
+ * Seen in play (2026-11-14) in いちらん: drew たいあたり, なきごえ and the dashes for empty slots in the PP Up and TM move lists.
+ */
+void LabMoveSelect_DrawMoveRow(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4, s32* arg5) {
     UNUSED s32 padA[4]; // FAKE: stack padding
     const char* name;
     s32 temp;
@@ -155,9 +179,13 @@ extern Str89104FC0 D_8910A91C;
 s32 BattleMon_CountMoves(u8* arg0);
 s32 BattleMon_GetMoveIndex(s32, s32);
 void func_80027410(void*, void*, s32, s32, s32);
-void func_89104EB4();
+void LabMoveSelect_DrawMoveRow();
 
-void func_89104FC0(LabMoveSelectWindow* arg0, s32 arg1, s32 arg2, u8* arg3) {
+/**
+ * Sets up the 168x132 move list of a Pokémon (four slots, -1 when empty).
+ * Seen in play (2026-11-14) in いちらん: opened for ポイントアップ (「どの わざに つかいますか？」) and わざマシン06 on ゼニガメ (「どの わざを わすれさせたい？」).
+ */
+void LabMoveSelect_Init(LabMoveSelectWindow* arg0, s32 arg1, s32 arg2, u8* arg3) {
     s32 n = BattleMon_CountMoves(arg3);
     s32 i;
 
@@ -168,7 +196,7 @@ void func_89104FC0(LabMoveSelectWindow* arg0, s32 arg1, s32 arg2, u8* arg3) {
         arg0->moves[i] = -1;
     }
     func_80027410(&arg0->moveMatrix, arg0->moves, 4, 4, 4);
-    Menu_Init(&arg0->menu, &arg0->moveMatrix, (s32)arg0->itemFlags, func_89104EB4, 0x9C, 0x1C);
+    Menu_Init(&arg0->menu, &arg0->moveMatrix, (s32)arg0->itemFlags, LabMoveSelect_DrawMoveRow, 0x9C, 0x1C);
     arg0->menu.options |= 0x10000;
     Window_SetRect(&arg0->window, arg1, arg2, 0xA8, 0x84);
     arg0->window.animTimer = 0;
@@ -196,7 +224,11 @@ void LabMoveSelect_DisableHmMoves(LabMoveSelectWindow* arg0) {
 
 M2C_UNK Menu_DrawInlineItems(s8*, s32, s32, s32, s8*);
 
-void func_891051A4(LabMoveSelectWindow* arg0) {
+/**
+ * Draws the move list.
+ * Seen in play (2026-11-14) in いちらん: drew the move lists of ポイントアップ and わざマシン06.
+ */
+void LabMoveSelect_Draw(LabMoveSelectWindow* arg0) {
     Menu* label;
 
     if (func_8002AE6C() == 0) {
@@ -213,9 +245,13 @@ void func_891051A4(LabMoveSelectWindow* arg0) {
 
 M2C_UNK func_8003F6AC(M2C_UNK);
 
-s32 func_89105200(LabMoveSelectWindow* arg0) {
+/**
+ * Runs the 60-frame learn animation: the old move fades out, then at frame 29 the new move replaces it and fades in. Returns 1 when done.
+ * Seen in play (2026-11-14) in いちらん: たいあたり faded into どくどく when ゼニガメ learned TM06.
+ */
+s32 LabMoveSelect_DrawLearnAnimation(LabMoveSelectWindow* arg0) {
     s32 color;
-    s32 params[4]; // only params[0] (alpha) is set here, as in func_891051A4
+    s32 params[4]; // only params[0] (alpha) is set here, as in LabMoveSelect_Draw
 
     if (func_8002AE6C() != 0) {
         return 0;
@@ -239,7 +275,11 @@ s32 func_89105200(LabMoveSelectWindow* arg0) {
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_89105340(s8 *arg0, s32 arg1, s32 arg2)
+/**
+ * Starts the learn animation of move `move` into slot `slot`.
+ * Seen in play (2026-11-14) in いちらん: ran for ゼニガメ slot 0 (たいあたり -> どくどく) and フシギダネ slot 2.
+ */
+void LabMoveSelect_StartLearnAnimation(s8 *arg0, s32 arg1, s32 arg2)
 {
   u16 *temp_v0;
   int new_var; // FAKE: permuter temp
@@ -260,11 +300,19 @@ void func_89105340(s8 *arg0, s32 arg1, s32 arg2)
 
 M2C_UNK Menu_UpdateCursor(s32);                         /* extern */
 
-s32 func_89105390(s32 arg0) {
+/**
+ * Moves the cursor of the move list.
+ * Seen in play (2026-11-14) in いちらん: ran while picking the move for ポイントアップ.
+ */
+s32 LabMoveSelect_Update(s32 arg0) {
     return Menu_UpdateCursor(arg0 + 0x2C);
 }
 
-s32 func_891053B0(s8 *arg0) {
+/**
+ * Returns a box row's menu flags: 8 when it is checked, 0x100 (disabled) when it holds no Pokémon.
+ * Seen in play (2026-11-14) in いちらん: ボックス1 and 2 (with Pokémon) were selectable and ボックス3-8 were drawn green (empty).
+ */
+s32 LabBoxList_GetBoxFlags(s8 *arg0) {
     s32 var_v1;
 
     var_v1 = 0x100;
@@ -277,7 +325,12 @@ s32 func_891053B0(s8 *arg0) {
     return var_v1;
 }
 
-void func_891053E0(void) {
+/**
+ * Does nothing.
+ * No callers: no jal, j, address word or lui/addiu pair in any built fragment or the resident code reaches it (2026-11-14 scan), so it never runs.
+ * @unverified Name guessed from the code.
+ */
+void LabPCList_UnusedStub1(void) {
 }
 
 /** Updates the flags of every entry in the info widget. */
@@ -288,12 +341,15 @@ void LabBoxList_UpdateItemFlags(LabBoxListWindow* arg0) {
 
     for (i = 0; i < (*sub)->count; i++, var_s2 += 0x20) {
         arg0->menu.itemFlags[i] = 0;
-        arg0->menu.itemFlags[i] |= func_891053B0(var_s2);
+        arg0->menu.itemFlags[i] |= LabBoxList_GetBoxFlags(var_s2);
     }
 }
 
-/* Set or clear bit 3 in every laboratory list entry flag. */
-void func_8910548C(u8* widget, s32 enabled) {
+/**
+ * Checks or unchecks every box of a box list.
+ * Seen in play (2026-11-14) in いちらん: A on ゲームボーイのボックス turned all eight box balls red or grey at once.
+ */
+void LabBoxList_SetAllChecked(u8* widget, s32 enabled) {
     s32 value = enabled ? 8 : 0;
     s32 offset;
     s32 index;
@@ -315,7 +371,11 @@ void func_8910548C(u8* widget, s32 enabled) {
     }
 }
 
-void func_89105504(LabBoxListWindow* arg0) {
+/**
+ * Copies each box row's check into the box, so only checked boxes are listed.
+ * Seen in play (2026-11-14) in いちらん: ran on OK; the list then held the Pokémon of GB 1 and GB 2.
+ */
+void LabBoxList_ApplyChecks(LabBoxListWindow* arg0) {
     s32 i;
     s32* entry = (s32*)arg0->menu.items->rows;
 
@@ -341,7 +401,7 @@ extern char D_8910E018[];
  * Draws ボックス%d (Box %d).
  * Seen in play (2026-11-12): ボックス1 ... ボックス4 in the 64カセットのボックス submenu.
  */
-void PcSort_DrawBoxName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+void LabBoxList_DrawBoxName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Color_RGBA8 color;
     s32 pad[6]; // FAKE: stack padding
     s32 sel;
@@ -371,13 +431,17 @@ void PcSort_DrawBoxName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
 }
 
 
-void PcSort_DrawBoxName();
+void LabBoxList_DrawBoxName();
 
-void func_8910576C(LabBoxListWindow* arg0, s32 arg1, s32 arg2, ByteMatrix* arg3, s32 arg4, Color_RGBA8 arg5) {
+/**
+ * Sets up a box list window (156 wide, 28 per row) beside the source window.
+ * Seen in play (2026-11-14) in いちらん: set up ボックス1-8 and ボックス1-4.
+ */
+void LabBoxList_Init(LabBoxListWindow* arg0, s32 arg1, s32 arg2, ByteMatrix* arg3, s32 arg4, Color_RGBA8 arg5) {
     Window_SetRect(&arg0->frame, arg1, arg2, 0x9C, arg3->count * 0x1C + 8);
     arg0->frame.style = 0;
     arg0->frame.color = arg5;
-    Menu_Init(&arg0->menu, arg3, arg4, PcSort_DrawBoxName, 0x9C, 0x1C);
+    Menu_Init(&arg0->menu, arg3, arg4, LabBoxList_DrawBoxName, 0x9C, 0x1C);
     LabBoxList_UpdateItemFlags(arg0);
 }
 
@@ -386,7 +450,11 @@ M2C_UNK Window_DrawFrame(s8 *);                      /* extern */
 M2C_UNK Menu_DrawInlineItems(s8 *, s32, s32, s32, s8 *); /* extern */
 extern M2C_UNK D_80073554;
 
-void func_891057FC(LabBoxListWindow* arg0, s32 arg1) {
+/**
+ * Draws a box list window.
+ * Seen in play (2026-11-14) in いちらん: drew ボックス1-8 next to ゲームボーイのボックス.
+ */
+void LabBoxList_Draw(LabBoxListWindow* arg0, s32 arg1) {
     Ui_DrawTexturedFrameDecal(arg0->frame.x - 6, arg0->frame.y - 6, arg0->frame.width + 0xC, arg0->frame.height + 0xC, &D_80073554);
     Window_DrawFrame(&arg0->frame);
     Menu_DrawInlineItems(&arg0->menu, arg0->frame.x, arg0->frame.y + 4, arg1 | 0xFFED, arg0);
@@ -396,15 +464,10 @@ M2C_UNK func_8003F6AC(M2C_UNK);
 extern s32 D_800603C0;
 
 /**
- * List-menu input handler (same family as PartyScreen_UpdateActionMenu). arg0 is the menu object (passed as
- * an integer address here, as elsewhere in this file). Calls Menu_UpdateCursor(arg0 + 0x20) and
- * acts on its result: 0x200 plays sound func_8003F6AC(1) and returns 2. 0 reads the button
- * halfword at D_800603C0 + 8: if bit 0x8000 is set it plays sound 2, toggles bit 3 of the
- * halfword table entry arg0->0x24[arg0->0x28] and returns 1; otherwise if bit 0x4000 is set it
- * plays sound 3 and returns -1. Any other case returns 0. (The button-bit names are not
- * established, so they are left as raw masks.)
+ * Handles a box list: A toggles the box (returns 1), B returns -1, D-Left goes back to the sources (returns 2).
+ * Seen in play (2026-11-14) in いちらん: D-Right then A toggled ボックス2 off.
  */
-s32 func_8910587C(LabBoxListWindow* arg0) {
+s32 LabBoxList_Update(LabBoxListWindow* arg0) {
     s32 ret = 0;
     s32 res;
     s32 buttons;
@@ -430,7 +493,11 @@ s32 func_8910587C(LabBoxListWindow* arg0) {
 
 typedef struct Entry89105924 { char unk00[0xC]; s32 unk0C; char unk10[0xC]; s32 unk1C; } Entry89105924;
 typedef struct List89105924 { char unk00[0x10]; Entry89105924* entries; char unk14[4]; s32 count; } List89105924;
-s32 func_89105924(List89105924* arg0) {
+/**
+ * Returns a source row's menu flags: 8 when any box is checked, 0x100 when no box holds a Pokémon.
+ * Seen in play (2026-11-14) in いちらん: 64カセットのボックス (all four boxes empty) was drawn green.
+ */
+s32 LabSourceSelect_GetSourceFlags(List89105924* arg0) {
     Entry89105924* entries = arg0->entries;
     s32 flags = 0x100;
     s32 i;
@@ -445,7 +512,11 @@ s32 func_89105924(List89105924* arg0) {
     return flags;
 }
 
-void func_8910597C(LabSourceSelectWindow* arg0, LabBoxListWindow* arg1) {
+/**
+ * Checks a source when any of its boxes is checked, and unchecks it otherwise.
+ * Seen in play (2026-11-14) in いちらん: ran after toggling ボックス2.
+ */
+void LabSourceSelect_SyncSourceCheck(LabSourceSelectWindow* arg0, LabBoxListWindow* arg1) {
     s32 flag = 0;
     s32 i = 0;
     s32 count = arg1->menu.items->count;
@@ -483,7 +554,7 @@ void LabSourceSelect_UpdateItemFlags(u8* widget) {
     if (list[2] > 0) {
         do {
             *(u16*)(*(u8**)(widget + 0x74) + offset) = 0;
-            flags = func_89105924((List89105924*)entry);
+            flags = LabSourceSelect_GetSourceFlags((List89105924*)entry);
             index++;
             entry += 0x24;
             destination = (u16*)(*(u8**)(widget + 0x74) + offset);
@@ -508,7 +579,11 @@ extern u8 D_80073624[];
 extern Color_RGBA8 D_80073520;
 extern Color_RGBA8 D_8910A934[];
 extern Color_RGBA8 D_800734A8[];
-void func_89105AD4(s32 arg0, s32 arg1, char** arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws one source row with its Poké Ball check mark.
+ * Seen in play (2026-11-14) in いちらん: drew てもち, ゲームボーイのボックス and 64カセットのボックス.
+ */
+void LabSourceSelect_DrawRow(s32 arg0, s32 arg1, char** arg2, s32 arg3, s32 arg4) {
     Color_RGBA8 color;
     s32 pad[5]; // FAKE: stack padding
     s32 sel;
@@ -535,14 +610,18 @@ void func_89105AD4(s32 arg0, s32 arg1, char** arg2, s32 arg3, s32 arg4) {
 }
 
 void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5);
-void func_89105AD4(s32 arg0, s32 arg1, char** arg2, s32 arg3, s32 arg4);
+void LabSourceSelect_DrawRow(s32 arg0, s32 arg1, char** arg2, s32 arg3, s32 arg4);
 void LabSourceSelect_UpdateItemFlags(u8* widget);
 void func_8000B2F4(s32);
 extern s32 D_800603C0;
 extern Color_RGBA8 D_8910A93C;
 extern Color_RGBA8 D_8910A940;
 extern char D_8910E024[];
-void func_89105C54(LabSourceSelectWindow* arg0, s32 arg1, s32 arg2, s8* arg3, Color_RGBA8 arg4) {
+/**
+ * Sets up the 308x206 「どこのポケモンを いちらん するか えらんでください。」 window, its box lists and the ＯＫ button.
+ * Seen in play (2026-11-14) in いちらん: opened on entry with the cursor on ＯＫ.
+ */
+void LabSourceSelect_Init(LabSourceSelectWindow* arg0, s32 arg1, s32 arg2, s8* arg3, Color_RGBA8 arg4) {
     s32 pad[5]; // FAKE: stack padding
     s32 list;
 
@@ -563,9 +642,9 @@ void func_89105C54(LabSourceSelectWindow* arg0, s32 arg1, s32 arg2, s8* arg3, Co
     arg0->okButton.labelX = 0xA;
     arg0->okButton.unk_34 = 0xC;
     list = *(s32*)arg3;
-    func_8910576C(&arg0->gbBoxes, arg0->window.frame.x + arg0->window.frame.width, arg0->listFrame.y + 0x1C, (ByteMatrix*)(list + 0x34), (s32)(&arg0->gbBoxFlags), arg4);
-    func_8910576C(&arg0->cartBoxes, arg0->window.frame.x + arg0->window.frame.width, arg0->listFrame.y + 0x38, (ByteMatrix*)(list + 0x58), (s32)(&arg0->cartBoxFlags), arg4);
-    Menu_Init(&arg0->menu, arg3, (s32)(&arg0->itemFlags), func_89105AD4, 0x128, 0x1C);
+    LabBoxList_Init(&arg0->gbBoxes, arg0->window.frame.x + arg0->window.frame.width, arg0->listFrame.y + 0x1C, (ByteMatrix*)(list + 0x34), (s32)(&arg0->gbBoxFlags), arg4);
+    LabBoxList_Init(&arg0->cartBoxes, arg0->window.frame.x + arg0->window.frame.width, arg0->listFrame.y + 0x38, (ByteMatrix*)(list + 0x58), (s32)(&arg0->cartBoxFlags), arg4);
+    Menu_Init(&arg0->menu, arg3, (s32)(&arg0->itemFlags), LabSourceSelect_DrawRow, 0x128, 0x1C);
     LabSourceSelect_UpdateItemFlags((u8*)arg0);
     arg0->cursor.count = 4;
     arg0->cursor.cursor = 0;
@@ -584,7 +663,11 @@ extern char D_8910E02C[];
 extern Gfx D_80060290[];
 extern Gfx D_80060398[];
 extern u8 D_8910D138[];
-void func_89105E70(LabSourceSelectWindow* arg0, s32 arg1) {
+/**
+ * Draws the source window, the arrow of the source under the cursor and its box list.
+ * Seen in play (2026-11-14) in いちらん: drew the window and the open box lists.
+ */
+void LabSourceSelect_Draw(LabSourceSelectWindow* arg0, s32 arg1) {
     UNUSED s32 pad[3]; // FAKE: stack padding
     s32 sp38 = 0xFFED;
     s32 sp34 = 0;
@@ -614,16 +697,20 @@ void func_89105E70(LabSourceSelectWindow* arg0, s32 arg1) {
         Menu_DrawInlineItems(&arg0->menu, arg0->listFrame.x, arg0->listFrame.y + 4, sp38, arg0);
         Window_DrawLabeled(&arg0->okButton, sp34);
         if (arg0->cursor.cursor == 1) {
-            func_891057FC(&arg0->gbBoxes, (arg0->openBoxList == 1) ? 2 : 0);
+            LabBoxList_Draw(&arg0->gbBoxes, (arg0->openBoxList == 1) ? 2 : 0);
         } else if (arg0->cursor.cursor == 2) {
-            func_891057FC(&arg0->cartBoxes, (arg0->openBoxList == 2) ? 2 : 0);
+            LabBoxList_Draw(&arg0->cartBoxes, (arg0->openBoxList == 2) ? 2 : 0);
         }
     }
 }
 
 s32 func_8002B2B0(s8*);
 
-s32 func_891060BC(LabSourceSelectWindow* arg0) {
+/**
+ * Handles the source rows and ＯＫ: A toggles a source with all its boxes, D-Right opens its box list, A on ＯＫ applies the checks (returns 1), B returns -1.
+ * Seen in play (2026-11-14) in いちらん: each of those inputs did that.
+ */
+s32 LabSourceSelect_UpdateSources(LabSourceSelectWindow* arg0) {
     s32 ret = 0;
     s32 res;
     s32 buttons;
@@ -643,16 +730,16 @@ s32 func_891060BC(LabSourceSelectWindow* arg0) {
             if (arg0->cursor.cursor == 3) {
                 func_8003F6AC(2);
                 LabSourceSelect_ApplyCheck(arg0, 0);
-                func_89105504(&arg0->gbBoxes);
-                func_89105504(&arg0->cartBoxes);
+                LabBoxList_ApplyChecks(&arg0->gbBoxes);
+                LabBoxList_ApplyChecks(&arg0->cartBoxes);
                 ret = 1;
             } else {
                 func_8003F6AC(2);
                 arg0->menu.itemFlags[arg0->menu.cursor] ^= 8;
                 if (arg0->cursor.cursor == 1) {
-                    func_8910548C((u8*)(&arg0->gbBoxes), arg0->menu.itemFlags[arg0->menu.cursor] & 8);
+                    LabBoxList_SetAllChecked((u8*)(&arg0->gbBoxes), arg0->menu.itemFlags[arg0->menu.cursor] & 8);
                 } else if (arg0->cursor.cursor == 2) {
-                    func_8910548C((u8*)(&arg0->cartBoxes), arg0->menu.itemFlags[arg0->menu.cursor] & 8);
+                    LabBoxList_SetAllChecked((u8*)(&arg0->cartBoxes), arg0->menu.itemFlags[arg0->menu.cursor] & 8);
                 }
             }
         } else if (buttons & 0x4000) {
@@ -666,7 +753,11 @@ s32 func_891060BC(LabSourceSelectWindow* arg0) {
     return ret;
 }
 
-s32 func_89106254(LabSourceSelectWindow* arg0) {
+/**
+ * Runs the source window, passing input to the open box list if there is one.
+ * Seen in play (2026-11-14) in いちらん: ran the whole time the window was open.
+ */
+s32 LabSourceSelect_Update(LabSourceSelectWindow* arg0) {
     s32 ret = 0;
     s32 r;
 
@@ -675,24 +766,24 @@ s32 func_89106254(LabSourceSelectWindow* arg0) {
     }
     switch (arg0->openBoxList) {
         case 0:
-            ret = func_891060BC(arg0);
+            ret = LabSourceSelect_UpdateSources(arg0);
             break;
         case 1:
-            r = func_8910587C(&arg0->gbBoxes);
+            r = LabBoxList_Update(&arg0->gbBoxes);
             if (r == -1) {
                 ret = -1;
             } else if (r == 1) {
-                func_8910597C(arg0, &arg0->gbBoxes);
+                LabSourceSelect_SyncSourceCheck(arg0, &arg0->gbBoxes);
             } else if (r == 2) {
                 arg0->openBoxList = 0;
             }
             break;
         case 2:
-            r = func_8910587C(&arg0->cartBoxes);
+            r = LabBoxList_Update(&arg0->cartBoxes);
             if (r == -1) {
                 ret = -1;
             } else if (r == 1) {
-                func_8910597C(arg0, &arg0->cartBoxes);
+                LabSourceSelect_SyncSourceCheck(arg0, &arg0->cartBoxes);
             } else if (r == 2) {
                 arg0->openBoxList = 0;
             }
@@ -1015,13 +1106,12 @@ s32 LabPCList_UpdateLevelInput(LabLevelInputWindow* arg0) {
     return sp1C;
 }
 
-/*
- * func_89106E34
- *
- * Calls Window_SetRect(arg0, arg1, arg2, arg3, 0), which fills the first five
- * words of the object (arg1, arg2, arg3, 0, 0), then stores arg4 at +0x14.
+/**
+ * Sets up a two-state image toggle.
+ * No callers: no jal, j, address word or lui/addiu pair in any built fragment or the resident code reaches it (2026-11-14 scan), so it never runs.
+ * @unverified Name guessed from the code.
  */
-void func_89106E34(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+void LabToggle_Init(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Window_SetRect(arg0, arg1, arg2, arg3, 0);
     M2C_FIELD(arg0, s32 *, 0x14) = arg4;
 }
@@ -1045,7 +1135,12 @@ typedef struct Win89106E64 {
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
-void func_89106E64(Win89106E64* arg0) {
+/**
+ * Draws a two-state image toggle, each end lit by flag 8.
+ * No callers: no jal, j, address word or lui/addiu pair in any built fragment or the resident code reaches it (2026-11-14 scan), so it never runs.
+ * @unverified Name guessed from the code.
+ */
+void LabToggle_Draw(Win89106E64* arg0) {
     gSPDisplayList(gDisplayListHead++, D_80073408);
     func_8001B884(arg0->x, arg0->y, arg0->tex->width, arg0->tex->height,
                   (arg0->flags & 8) ? arg0->tex->img08 : arg0->tex->img0C, arg0->tex->width, 0x200000);
@@ -1055,7 +1150,12 @@ void func_89106E64(Win89106E64* arg0) {
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s32 func_89106F74(s8 *arg0)
+/**
+ * D-Left sets a toggle's flag 8 and D-Right clears it.
+ * No callers: no jal, j, address word or lui/addiu pair in any built fragment or the resident code reaches it (2026-11-14 scan), so it never runs.
+ * @unverified Name guessed from the code.
+ */
+s32 LabToggle_Update(s8 *arg0)
 {
   s32 temp_v0;
   s32 var_v1;
@@ -1107,12 +1207,19 @@ void LabPCList_DrawTypeFilterRow(s32 arg0, s32 arg1, char **arg2, s32 arg3, s32 
     Font_EndTexturedTextRendering();
 }
 
-/** Converts a move table index to its display index by skipping unused slots. */
-s32 Move_NormalizeDisplayIndex(s32 a) {
+/**
+ * Converts a type id to its row in the type list, skipping the unused ids 6 and 9-19.
+ * Seen in play (2026-11-14) in いちらん: reopening タイプであつめる showed ひこう in row 3.
+ */
+s32 LabPCList_TypeIdToListIndex(s32 a) {
     return a >= 20 ? a - 12 : (a >= 7 ? a - 1 : a);
 }
 
-s32 func_89107170(s32 a) {
+/**
+ * Converts a row of the type list to a type id, skipping the unused ids 6 and 9-19.
+ * Seen in play (2026-11-14) in いちらん: row 3 of タイプであつめる became ひこう (2), and あつめる left only ポッポ.
+ */
+s32 LabPCList_ListIndexToTypeId(s32 a) {
     return a >= 8 ? a + 12 : (a >= 6 ? a + 1 : a);
 }
 
@@ -1154,7 +1261,7 @@ void LabPCList_InitTypeFilter(LabTypeFilterWindow* arg0, s32 x, s32 y, s32* arg3
     ScrollList_Init(&arg0->list, (s32)&arg0->typeList, (s32)arg0->typeFlags, 8, LabPCList_DrawTypeFilterRow, 0xAE, 0x1C);
     arg0->list.options |= 0x10000;
     for (i = 0; i < *arg3; i++) {
-        arg0->slots[i].index = Move_NormalizeDisplayIndex(((u8*)arg3)[4 + i]);
+        arg0->slots[i].index = LabPCList_TypeIdToListIndex(((u8*)arg3)[4 + i]);
     }
     for (; i < 2; i++) {
         arg0->slots[i].index = -1;
@@ -1292,7 +1399,7 @@ void LabPCList_CommitTypeFilter(LabTypeFilterWindow* arg0, s32* arg1) {
 
     for (i = 0; i < 2; i++) {
         if (arg0->slots[i].index != -1) {
-            M2C_FIELD((s8*)arg1 + count, s8*, 4) = func_89107170(arg0->slots[i].index);
+            M2C_FIELD((s8*)arg1 + count, s8*, 4) = LabPCList_ListIndexToTypeId(arg0->slots[i].index);
             count++;
         }
     }
@@ -1514,11 +1621,9 @@ char* func_8001FDC8(u8, char*);
 s32 func_80031CC8(u8);
 /**
  * Draws an item row with パソコン (PC) / てもち (Party) and ×%02d.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14) in いちらん: drew マックスアップ ×05 てもち ... わざマシン06 ×01 てもち in 「フシギダネがつかえるどうぐ」.
  */
-void PcSort_DrawItemRow(s32 x, s32 y, u8** item, UNUSED s32 index, s32 flags) {
+void LabPCList_DrawItemRow(s32 x, s32 y, u8** item, UNUSED s32 index, s32 flags) {
     char buf[0x38];
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -1573,19 +1678,13 @@ typedef struct {
     u16* flags;              /* 0x50 */
 } FlagScanOwner;
 
-/*
- * func_89108450
- *
- * Walks the pointer array arg0->table->entries (arg0->table->count items).
- * For every entry whose word at offset 0x10 has any of its low five bits
- * (mask 0x1F) set, bit 0 is set in the matching halfword of the array at
- * arg0->flags (same index). What the entries and the flags are is not
- * established here. The loop bound re-reads arg0->table->count each pass.
- * Matching note: the entries pointer is held in a local and indexed;
- * advancing a pointer through arg0->table->entries directly gives a
- * different register assignment.
+/**
+ * Greys out the items whose usability flags (LabPCList_UpdateItemUsability) say they can't be used on the Pokémon.
+ * Seen in play (2026-11-14) in いちらん: ran when どうぐをつかう opened 「フシギダネがつかえるどうぐ」.
+ * Matching note: the entries pointer is held in a local and indexed; advancing a pointer through
+ * arg0->table->entries directly gives a different register assignment.
  */
-void func_89108450(FlagScanOwner* arg0) {
+void LabPCList_DisableUnusableItems(FlagScanOwner* arg0) {
     s32 i;
     FlagScanEntry** entries;
 
@@ -1609,7 +1708,7 @@ extern u8 D_8910AAE0[];
 extern u8 D_8910AAE4[];
 void func_8000A460(s8*, s8*);
 void ScrollList_Init(s8*, s32, s32, s32, void*, s32, s32);
-void PcSort_DrawItemRow();
+void LabPCList_DrawItemRow();
 /**
  * Sets up the window that uses an item on the selected Pokemon.
  * Seen in play (2026-11-12) in いちらん: どうぐをつかう on フシギダネ opened 「フシギダネがつかえるどうぐ」, listing the bag
@@ -1628,9 +1727,9 @@ void LabPCList_InitItemWindow(LabItemWindow* arg0, s32 arg1, s32 arg2, s32 arg3,
     arg0->textFrame.style = 6;
     *(Rgba891084B4*)&arg0->textFrame.color = *(Rgba891084B4*)D_8910AAE0;
     *(Rgba891084B4*)&arg0->textFrame.color2 = *(Rgba891084B4*)D_8910AAE4;
-    ScrollList_Init(&arg0->list, arg3, arg4, 8, PcSort_DrawItemRow, 0x178, 0x1C);
+    ScrollList_Init(&arg0->list, arg3, arg4, 8, LabPCList_DrawItemRow, 0x178, 0x1C);
     arg0->list.options |= 0x10000;
-    func_89108450((FlagScanOwner*)arg0);
+    LabPCList_DisableUnusableItems((FlagScanOwner*)arg0);
     arg0->mon = arg5;
     arg0->mode = 0;
 }
@@ -1642,11 +1741,9 @@ extern char D_8910E16C[];
 char* func_80031BC0(u8, char*);
 /**
  * Draws このどうぐをつかいますか？ (Use this item?), どの わざに つかいますか？ (On which move?) or どの わざを わすれさせたい？ (Which move should it forget?).
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14) in いちらん: drew the item list with このどうぐをつかいますか？, どの わざに つかいますか？ and どの わざを わすれさせたい？, and the move list and learn animation under them.
  */
-void PcSort_DrawUseItemPrompt(LabItemWindow* arg0) {
+void LabPCList_DrawItemWindow(LabItemWindow* arg0) {
     s32 flags;
     s32 x;
     s32 y;
@@ -1695,10 +1792,10 @@ void PcSort_DrawUseItemPrompt(LabItemWindow* arg0) {
                     break;
                 case 2:
                 case 3:
-                    func_891051A4(&arg0->moveSelect);
+                    LabMoveSelect_Draw(&arg0->moveSelect);
                     break;
                 case 4:
-                    func_89105200(&arg0->moveSelect);
+                    LabMoveSelect_DrawLearnAnimation(&arg0->moveSelect);
                     break;
             }
         }
@@ -1711,9 +1808,7 @@ s32 ScrollList_UpdateCursor(s8 *);
 s32 func_80020974(s32);
 /**
  * Handles the item window. Returns 1 for a vitamin, 2 for PP Up, 3 for a TM or HM.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14) in いちらん: ran マックスアップ (HP 21 -> 21), ポイントアップ (たいあたりのPP 35 -> 42) and わざマシン06 on フシギダネ (learned in slot 3) and on ゼニガメ (たいあたり forgotten).
  */
 s32 LabPCList_UpdateItemWindow(s8 *arg0)
 {
@@ -1784,13 +1879,13 @@ s32 LabPCList_UpdateItemWindow(s8 *arg0)
               {
                 species = (*entry[0]) - 146;
               }
-              func_89104FC0(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+              LabMoveSelect_Init(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8); // FAKE: decomp slop, raw pointer casts stand in for struct fields
               *((s32 *) (((s8 *) self) + 0x144)) = n;
-              func_89105340(self + 0x110, *((s32 *) (((s8 *) self) + 0x144)), func_80020974(species));
+              LabMoveSelect_StartLearnAnimation(self + 0x110, *((s32 *) (((s8 *) self) + 0x144)), func_80020974(species));
             }
             else
             {
-              func_89104FC0(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+              LabMoveSelect_Init(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8); // FAKE: decomp slop, raw pointer casts stand in for struct fields
               LabMoveSelect_DisableHmMoves((LabMoveSelectWindow*)(self + 0x110));
               *((u32 *) (((s8 *) self) + 0x1B0)) = 3;
             }
@@ -1799,7 +1894,7 @@ s32 LabPCList_UpdateItemWindow(s8 *arg0)
             if ((*((s32 *) (((s8 *) entry) + 8))) >= 50)
           {
             func_8003F6AC(2);
-            func_89104FC0(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+            LabMoveSelect_Init(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8); // FAKE: decomp slop, raw pointer casts stand in for struct fields
             for (i = 0; i < 4; i++)
             {
               if ((((*((s32 *) (((s8 *) self) + (0x170 + (i * 4))))) == (-1)) || ((*((s32 *) (((s8 *) self) + (0x170 + (i * 4))))) == (-2))) || ((*((u8 **) (((s8 *) self) + 0x1AC)))[0x28 + i] >= 0xC0)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
@@ -1827,7 +1922,7 @@ s32 LabPCList_UpdateItemWindow(s8 *arg0)
       break;
 
     case 2:
-      if (func_89105390((s32) (self + 0x110)) == 0)
+      if (LabMoveSelect_Update((s32) (self + 0x110)) == 0)
     {
       if (((u16 *) D_800603C0)[4] & 0x4000)
       {
@@ -1852,7 +1947,7 @@ s32 LabPCList_UpdateItemWindow(s8 *arg0)
       break;
 
     case 3:
-      if (func_89105390((s32) (self + 0x110)) == 0)
+      if (LabMoveSelect_Update((s32) (self + 0x110)) == 0)
     {
       if (((u16 *) D_800603C0)[4] & 0x4000)
       {
@@ -1876,7 +1971,7 @@ s32 LabPCList_UpdateItemWindow(s8 *arg0)
             sp38 = (*entry2[0]) - 146;
           }
           func_8003F6AC(2);
-          func_89105340(self + 0x110, *((s32 *) (((s8 *) self) + 0x144)), func_80020974(sp38));
+          LabMoveSelect_StartLearnAnimation(self + 0x110, *((s32 *) (((s8 *) self) + 0x144)), func_80020974(sp38));
           *((u32 *) (((s8 *) self) + 0x1B0)) = 4;
         }
         else
@@ -1901,7 +1996,12 @@ s32 LabPCList_UpdateItemWindow(s8 *arg0)
   return ret;
 }
 
-void func_89108F0C(void) {
+/**
+ * Does nothing.
+ * No callers: no jal, j, address word or lui/addiu pair in any built fragment or the resident code reaches it (2026-11-14 scan), so it never runs.
+ * @unverified Name guessed from the code.
+ */
+void LabPCList_UnusedStub2(void) {
 }
 
 typedef struct Rgba89108F14 {

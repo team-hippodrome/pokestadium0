@@ -184,7 +184,11 @@ extern Entry89100FC4 D_8006A9D4[];
 extern u8 D_800734A8[];
 extern char D_8910DBAC[];
 s32 BattleMon_GetMoveIndexChecked(s32, s32);
-void func_89100FC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * Draws move slot `slot` of a Pokémon in its type's color, or the empty-slot dash; nothing for a missing slot.
+ * Seen in play (2026-11-14) in いちらん: drew the わざ1-4 columns of page 2/3.
+ */
+void LabPCList_DrawMoveName(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     const char* str;
     Color82000BC4 color;
     s32 idx;
