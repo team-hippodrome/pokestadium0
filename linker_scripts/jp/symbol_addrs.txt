@@ -5905,3 +5905,4 @@ Ui_DrawFramedYuvImage = 0x8001E24C; // type:func
 Ui_DrawSegment1Banner = 0x8001E9A0; // type:func
 Display_AcceptFrameRequest = 0x800012AC; // type:func
 Display_ClearForReset = 0x80001558; // type:func
+UnusedRelay022_QueueMainMenuLauncher = 0x8E200020; // type:func
