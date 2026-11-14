@@ -707,6 +707,34 @@ typedef struct LabMoveSelectWindow {
     /* 0x80 */ s32 learnMove; // @unverified: written to moves[learnSlot] (func_89105200)
 } LabMoveSelectWindow; // size = 0x84
 
+/* The どうぐをつかう (use an item) window of the いちらん screen: 「<name>がつかえるどうぐ」 (Items <name>
+ * can use) over the Game Boy bag items (LabPCList_InitItemWindow). */
+typedef struct LabItemWindow {
+    /* 0x000 */ Window window; // @unverified: 388x366; title = D_89119BD0, the Pokémon's name and がつかえるどうぐ
+    /* 0x02C */ WindowFrame textFrame; // @unverified: frame of the prompt text at the bottom (PcSort_DrawUseItemPrompt)
+    /* 0x04C */ ScrollList list; // @unverified: the bag items, 8 rows; itemFlags bit 0 = cannot be used (func_89108450)
+    /* 0x090 */ u16 confirmItemFlags[2]; // @unverified: confirmPopup.menu.itemFlags
+    /* 0x094 */ LabPopupMenu confirmPopup; // @unverified: このどうぐをつかいますか？ (Use this item?) choice (mode 1)
+    /* 0x110 */ LabMoveSelectWindow moveSelect; // @unverified: the move list of modes 2 to 4
+    /* 0x194 */ char unk_194[0x1AC - 0x194];
+    /* 0x1AC */ u8* mon; // @unverified: the Pokémon the item is used on; its species names the window (LabPCList_InitItemWindow)
+    /* 0x1B0 */ s32 mode; // @unverified: 0 = pick an item, 1 = confirm, 2 = PP Up move, 3 = move to forget, 4 = learning (PcSort_DrawUseItemPrompt)
+} LabItemWindow; // size = 0x1B4
+
+/* What a used item did, shown by the message window: a title and a value change (LabPCList_DrawMessageWindow). */
+typedef struct LabItemResult {
+    /* 0x00 */ char* title; // @unverified: printed at the top of the message window
+    /* 0x04 */ s32 kind; // @unverified: 0 = left and right are numbers (%4d, %d), 1 = they are strings
+    /* 0x08 */ char* left; // @unverified: the value before
+    /* 0x0C */ char* right; // @unverified: the value after, drawn right of an arrow (D_8910D2F0)
+} LabItemResult; // size = 0x10
+
+/* The window that shows a LabItemResult until A or B is pressed (LabPCList_InitMessageWindow). */
+typedef struct LabMessageWindow {
+    /* 0x00 */ Window window; // @unverified: 276x96 at (182, 234)
+    /* 0x2C */ LabItemResult* message; // @unverified: LabPCList_InitMessageWindow arg3
+} LabMessageWindow; // size = 0x30
+
 #define LAB_PC_LIST_MAX_ROWS 466
 
 /* The いちらん (Pokémon list) screen of the Lab PC (LabPCList_InitListWindow). Its functions used to
@@ -762,6 +790,16 @@ typedef struct LabPCListScreen {
     /* 0xB55C */ char textBox[0xB594 - 0xB55C]; // @unverified: TextBox_Init, TextBox_Draw
     /* 0xB594 */ void* msg; // @unverified: message box given to LabPCList_MoveMonTo; last argument of LabPCList_InitListWindow
 } LabPCListScreen; // size = 0xB598
+
+/* The いちらん screen with the windows over it (LabPCList_UpdateScreen, LabPCList_DrawScreen). */
+typedef struct LabPCList {
+    /* 0x0000 */ s32 state; // @unverified: 0 = the list, 1 = savePrompt, 2 = itemWindow, 3 = messageWindow (LabPCList_UpdateScreen)
+    /* 0x0004 */ LabPCListScreen listScreen;
+    /* 0xB59C */ SavePrompt savePrompt; // @unverified: asks to save on exit when listScreen.hasChanges
+    /* 0xB600 */ LabItemWindow itemWindow; // @unverified: opened by どうぐをつかう
+    /* 0xB7B4 */ LabMessageWindow messageWindow; // @unverified: shows message after an item is used
+    /* 0xB7E4 */ LabItemResult message; // @unverified: filled by LabPCList_ApplyVitaminItem and LabPCList_ApplyPpUpItem
+} LabPCList; // size = 0xB7F4
 
 #include "gfx_rect.h"
 #include "poke_icon.h"

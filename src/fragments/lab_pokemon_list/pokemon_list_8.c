@@ -531,69 +531,65 @@ s32 LabPCList_UpdateList(LabPCListScreen* arg0) {
 }
 
 /**
- * Clears the first word of arg0 and initializes the sub-objects at offsets 4
- * and 0xB7E4 with LabPCList_InitListWindow(arg0 + 4, 0x26, 0x48, arg0 + 0xB7E4). What the
- * object is is not established.
+ * Sets the state to the list and sets up the list screen, which gets the item result message.
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): ran on entry, right before
  * LabPCList_InitListWindow.
  */
-void LabPCList_InitScreen(void* arg0) {
-    M2C_FIELD(arg0, s32*, 0) = 0;
-    LabPCList_InitListWindow((s8*)arg0 + 4, 0x26, 0x48, (s8*)arg0 + 0xB7E4);
+void LabPCList_InitScreen(LabPCList* arg0) {
+    arg0->state = 0;
+    LabPCList_InitListWindow(&arg0->listScreen, 0x26, 0x48, (s32)&arg0->message);
 }
 
-void SavePrompt_Init(s8*, s32, s32);
-void Save_DrawReportingWindow(s8*);
-s32 SavePrompt_Update(s8*);
-void LabPCList_SaveChanges(s8*);
-void LabPCList_InitItemWindow(s8*, s32, s32, s8*, s8*, s32);
-s32 LabPCList_UpdateItemWindow(s8*);
-void LabPCList_InitMessageWindow(s8*, s32, s32, s8*);
-s32 LabPCList_UpdateMessageWindow(s8*);
+void SavePrompt_Init(SavePrompt*, s32, s32);
+void Save_DrawReportingWindow(SavePrompt*);
+s32 SavePrompt_Update(SavePrompt*);
+void LabPCList_SaveChanges(LabPCListScreen*);
+void LabPCList_InitItemWindow(LabItemWindow*, s32, s32, s8*, s8*, s32);
+s32 LabPCList_UpdateItemWindow(LabItemWindow*);
+void LabPCList_InitMessageWindow(LabMessageWindow*, s32, s32, LabItemResult*);
+s32 LabPCList_UpdateMessageWindow(LabMessageWindow*);
 void func_8910A4C8(s8*, s32);
 /**
- * Per-frame update for a four-state object at arg0 (state word at offset 0).
- * Returns 1 when the caller should leave this screen. The sub-objects at
- * 4, 0xB59C, 0xB600 and 0xB7B4 are driven by the LabPCList_UpdateList,
- * SavePrompt_Update, LabPCList_UpdateItemWindow and LabPCList_UpdateMessageWindow updates.
+ * Per-frame update of the いちらん screen: runs the list, the save prompt, the item window or the
+ * message window by state. Returns 1 when the caller should leave this screen.
  * Seen in play (2026-11-12): ran the いちらん screen.
  */
-s32 LabPCList_UpdateScreen(s8* arg0) {
+s32 LabPCList_UpdateScreen(LabPCList* arg0) {
     s32 ret = 0;
     s32 r;
     s8* sub;
 
-    switch (M2C_FIELD(arg0, s32*, 0)) {
+    switch (arg0->state) {
         case 0:
-            sub = arg0 + 4;
+            sub = (s8*)&arg0->listScreen;
             r = LabPCList_UpdateList(sub);
             if (r == 1) {
-                if (M2C_FIELD(arg0, s32*, 0xB55C) != 0) {
-                    SavePrompt_Init(arg0 + 0xB59C, 0xCA, 0xAD);
-                    M2C_FIELD(arg0, s32*, 0) = 1;
+                if (arg0->listScreen.hasChanges != 0) {
+                    SavePrompt_Init(&arg0->savePrompt, 0xCA, 0xAD);
+                    arg0->state = 1;
                 } else {
                     ret = 1;
                 }
             } else if (r == 2) {
-                func_8910A4C8(arg0 + 0xB000, (*M2C_FIELD(arg0, s32***, 0xB164))[M2C_FIELD(arg0, s32*, 0xB16C)] + 8);
-                LabPCList_InitItemWindow(arg0 + 0xB600, M2C_FIELD(sub, s32*, 0) + 0xAB, M2C_FIELD(sub, s32*, 4) + 0xD, sub + 0xAFFC,
-                              sub + 0xB008, (*M2C_FIELD(sub, s32***, 0xB160))[M2C_FIELD(sub, s32*, 0xB168)]);
-                M2C_FIELD(arg0, s32*, 0) = 2;
+                func_8910A4C8((s8*)&arg0->listScreen + 0xAFFC, ((s32*)arg0->listScreen.list.items->rows)[arg0->listScreen.list.cursor] + 8);
+                LabPCList_InitItemWindow(&arg0->itemWindow, ((LabPCListScreen*)sub)->window.frame.x + 0xAB, ((LabPCListScreen*)sub)->window.frame.y + 0xD, sub + 0xAFFC,
+                              sub + 0xB008, ((s32**)((LabPCListScreen*)sub)->list.items->rows)[((LabPCListScreen*)sub)->list.cursor]);
+                arg0->state = 2;
             } else if (r == 3) {
-                LabPCList_InitMessageWindow(arg0 + 0xB7B4, 0xB6, 0xEA, arg0 + 0xB7E4);
-                M2C_FIELD(arg0, s32*, 0) = 3;
+                LabPCList_InitMessageWindow(&arg0->messageWindow, 0xB6, 0xEA, &arg0->message);
+                arg0->state = 3;
             }
             break;
         case 1:
-            sub = arg0 + 0xB59C;
-            r = SavePrompt_Update(sub);
+            sub = (s8*)&arg0->savePrompt;
+            r = SavePrompt_Update((SavePrompt*)sub);
             if (r == -1) {
-                M2C_FIELD(arg0, s32*, 0) = 0;
+                arg0->state = 0;
             } else if (r > 0) {
                 switch (r) {
                     case 1:
-                        Save_DrawReportingWindow(sub);
-                        LabPCList_SaveChanges(arg0 + 4);
+                        Save_DrawReportingWindow((SavePrompt*)sub);
+                        LabPCList_SaveChanges(&arg0->listScreen);
                         ret = 1;
                         break;
                     case 2:
@@ -603,40 +599,40 @@ s32 LabPCList_UpdateScreen(s8* arg0) {
             }
             break;
         case 2:
-            r = LabPCList_UpdateItemWindow(arg0 + 0xB600);
+            r = LabPCList_UpdateItemWindow(&arg0->itemWindow);
             if (r == -1) {
-                M2C_FIELD(arg0, s32*, 0) = 0;
+                arg0->state = 0;
             } else {
                 s32 off = 0xB55C; // FAKE: stops IDO reusing arg0 + 0x8000 for the store below.
 
                 if (r > 0) {
-                    s32 a1 = (*M2C_FIELD(arg0, s32***, 0xB64C))[M2C_FIELD(arg0, s32*, 0xB654)];
-                    s32 a0 = (*M2C_FIELD(arg0, s32***, 0xB164))[M2C_FIELD(arg0, s32*, 0xB16C)];
+                    s32 a1 = ((s32*)arg0->itemWindow.list.items->rows)[arg0->itemWindow.list.cursor];
+                    s32 a0 = ((s32*)arg0->listScreen.list.items->rows)[arg0->listScreen.list.cursor];
 
                     switch (r) {
                         case 1:
-                            LabPCList_ApplyVitaminItem((u8**)a0, (u8**)a1, (Msg89103F04*)(arg0 + 0xB7E4));
+                            LabPCList_ApplyVitaminItem((u8**)a0, (u8**)a1, (Msg89103F04*)&arg0->message);
                             break;
                         case 2:
-                            LabPCList_ApplyPpUpItem((u8**)a0, a1, M2C_FIELD(arg0, s32*, 0xB744), (Msg891041D8*)(arg0 + 0xB7E4));
+                            LabPCList_ApplyPpUpItem((u8**)a0, a1, arg0->itemWindow.moveSelect.menu.cursor, (Msg891041D8*)&arg0->message);
                             break;
                         case 3:
-                            LabPCList_TeachTmHmMove((u8**)a0, (u8**)a1, M2C_FIELD(arg0, s32*, 0xB744));
+                            LabPCList_TeachTmHmMove((u8**)a0, (u8**)a1, arg0->itemWindow.moveSelect.menu.cursor);
                             break;
                     }
-                    M2C_FIELD(arg0, s32*, off) = 1;
+                    *(s32*)((s8*)arg0 + off) = 1;
                     if (r == 3) {
-                        M2C_FIELD(arg0, s32*, 0) = 0;
+                        arg0->state = 0;
                     } else {
-                        LabPCList_InitMessageWindow(arg0 + 0xB7B4, 0xB6, 0xEA, arg0 + 0xB7E4);
-                        M2C_FIELD(arg0, s32*, 0) = 3;
+                        LabPCList_InitMessageWindow(&arg0->messageWindow, 0xB6, 0xEA, &arg0->message);
+                        arg0->state = 3;
                     }
                 }
             }
             break;
         case 3:
-            if (LabPCList_UpdateMessageWindow(arg0 + 0xB7B4) == 1) {
-                M2C_FIELD(arg0, s32*, 0) = 0;
+            if (LabPCList_UpdateMessageWindow(&arg0->messageWindow) == 1) {
+                arg0->state = 0;
             }
             break;
     }
@@ -656,53 +652,52 @@ void LabPCList_DrawBackground(void) {
 
 void BgStage_DrawFrame(void);
 s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0);
-void SavePrompt_Draw(void*);
-void PcSort_DrawUseItemPrompt(void*);
-void LabPCList_DrawMessageWindow(void*);
+void SavePrompt_Draw(SavePrompt*);
+void PcSort_DrawUseItemPrompt(LabItemWindow*);
+void LabPCList_DrawMessageWindow(LabMessageWindow*);
 
 /**
  * Draws the lab PC list for its current state.
  * Seen in play (2026-11-12): drew the いちらん screen.
  */
-M2C_UNK LabPCList_DrawScreen(M2C_UNK* arg0) {
+M2C_UNK LabPCList_DrawScreen(LabPCList* arg0) {
     BgStage_DrawFrame();
-    switch (*arg0) {
+    switch (arg0->state) {
         case 0:
-            if (Particle_Field7C_SetXZFromField74AngleY_0B278(arg0 + 1) != 0) {
+            if (Particle_Field7C_SetXZFromField74AngleY_0B278(&arg0->listScreen) != 0) {
                 LabPCList_DrawBackground();
             }
-            LabPCList_DrawListScreen(arg0 + 1);
+            LabPCList_DrawListScreen(&arg0->listScreen);
             break;
         case 1:
-            if (Particle_Field7C_SetXZFromField74AngleY_0B278(arg0 + 1) != 0) {
+            if (Particle_Field7C_SetXZFromField74AngleY_0B278(&arg0->listScreen) != 0) {
                 LabPCList_DrawBackground();
             }
-            LabPCList_DrawListScreen(arg0 + 1);
-            SavePrompt_Draw((s8*)arg0 + 0xB59C);
+            LabPCList_DrawListScreen(&arg0->listScreen);
+            SavePrompt_Draw(&arg0->savePrompt);
             break;
         case 2:
-            if (Particle_Field7C_SetXZFromField74AngleY_0B278(arg0 + 1) != 0) {
+            if (Particle_Field7C_SetXZFromField74AngleY_0B278(&arg0->listScreen) != 0) {
                 LabPCList_DrawBackground();
             }
-            if (Particle_Field7C_SetXZFromField74AngleY_0B278((s8*)arg0 + 0xB600) != 0) {
-                LabPCList_DrawListScreen(arg0 + 1);
+            if (Particle_Field7C_SetXZFromField74AngleY_0B278(&arg0->itemWindow) != 0) {
+                LabPCList_DrawListScreen(&arg0->listScreen);
             }
-            PcSort_DrawUseItemPrompt((s8*)arg0 + 0xB600);
+            PcSort_DrawUseItemPrompt(&arg0->itemWindow);
             break;
         case 3:
-            if (Particle_Field7C_SetXZFromField74AngleY_0B278(arg0 + 1) != 0) {
+            if (Particle_Field7C_SetXZFromField74AngleY_0B278(&arg0->listScreen) != 0) {
                 LabPCList_DrawBackground();
             }
-            LabPCList_DrawListScreen(arg0 + 1);
-            LabPCList_DrawMessageWindow((s8*)arg0 + 0xB7B4);
+            LabPCList_DrawListScreen(&arg0->listScreen);
+            LabPCList_DrawMessageWindow(&arg0->messageWindow);
             break;
     }
 }
 
 void func_80027FF8(void*, s32);
-void LabPCList_InitScreen(void*);
 extern M2C_UNK D_8910E380;
-extern M2C_UNK D_8910E3D0;
+extern LabPCList D_8910E3D0;
 
 /**
  * Seen in play (2026-11-12): runs once when いちらん opens; it reads the active controller port and
@@ -767,9 +762,7 @@ s32 LabPCList_UpdateFade(s32 arg0) {
 
 void Cont_StartReadInputs(void);                            /* extern */
 void Cont_ReadInputs(void);                            /* extern */
-s32 LabPCList_UpdateScreen(s8*);
-M2C_UNK LabPCList_DrawScreen(M2C_UNK *);                   /* extern */
-extern M2C_UNK D_8910E3D0;
+extern LabPCList D_8910E3D0;
 
 /**
  * One frame of the Pokemon list screen.

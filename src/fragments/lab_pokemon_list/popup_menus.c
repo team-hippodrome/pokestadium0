@@ -1725,24 +1725,24 @@ void PcSort_DrawItemRow();
  * Seen in play (2026-11-12) in いちらん: どうぐをつかう on フシギダネ opened 「フシギダネがつかえるどうぐ」, listing the bag
  * items from the Game Boy save (マックスアップ ×5, タウリン ×5, ふしぎなアメ ×5, ポイントアップ ×3, わざマシン06, ひでんマシン01).
  */
-void LabPCList_InitItemWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8* arg5) {
-    Window_SetRect(arg0, arg1, arg2, 0x184, 0x16E);
-    M2C_FIELD(arg0, s32*, 0x24) = 0;
-    M2C_FIELD(arg0, s32*, 0x20) = 0;
-    M2C_FIELD(arg0, s32*, 0x28) = 0;
-    M2C_FIELD(arg0, s32*, 0x14) = 0x801;
+void LabPCList_InitItemWindow(LabItemWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8* arg5) {
+    Window_SetRect(&arg0->window, arg1, arg2, 0x184, 0x16E);
+    arg0->window.animTimer = 0;
+    arg0->window.title = 0;
+    arg0->window.state = 0;
+    arg0->window.frame.style = 0x801;
     func_8000A460(D_89119BD0, *(s8**)D_80064C44[arg5[8]]);
     *(Str891084B4*)(func_800566BC((s32)D_89119BD0) + D_89119BD0) = *(Str891084B4*)D_8910E120;
-    M2C_FIELD(arg0, s8**, 0x20) = D_89119BD0;
-    Window_SetRect(arg0 + 0x2C, arg1 + 6, arg2 + 0x10C, 0x178, 0x5C);
-    M2C_FIELD(arg0, s32*, 0x40) = 6;
-    M2C_FIELD(arg0, Rgba891084B4*, 0x44) = *(Rgba891084B4*)D_8910AAE0;
-    M2C_FIELD(arg0, Rgba891084B4*, 0x48) = *(Rgba891084B4*)D_8910AAE4;
-    ScrollList_Init(arg0 + 0x4C, arg3, arg4, 8, PcSort_DrawItemRow, 0x178, 0x1C);
-    M2C_FIELD(arg0, s32*, 0x6C) |= 0x10000;
+    arg0->window.title = (char*)D_89119BD0;
+    Window_SetRect(&arg0->textFrame, arg1 + 6, arg2 + 0x10C, 0x178, 0x5C);
+    arg0->textFrame.style = 6;
+    *(Rgba891084B4*)&arg0->textFrame.color = *(Rgba891084B4*)D_8910AAE0;
+    *(Rgba891084B4*)&arg0->textFrame.color2 = *(Rgba891084B4*)D_8910AAE4;
+    ScrollList_Init(&arg0->list, arg3, arg4, 8, PcSort_DrawItemRow, 0x178, 0x1C);
+    arg0->list.options |= 0x10000;
     func_89108450((FlagScanOwner*)arg0);
-    M2C_FIELD(arg0, u8**, 0x1AC) = arg5;
-    M2C_FIELD(arg0, s32*, 0x1B0) = 0;
+    arg0->mon = arg5;
+    arg0->mode = 0;
 }
 
 extern Color_RGBA8 D_800734B8[];
@@ -1756,59 +1756,59 @@ char* func_80031BC0(u8, char*);
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-void PcSort_DrawUseItemPrompt(s8* arg0) {
+void PcSort_DrawUseItemPrompt(LabItemWindow* arg0) {
     s32 flags;
     s32 x;
     s32 y;
     char buf[0x70];
 
     if (Particle_Field50_SetXZFromField7C_09BB4() == 0) {
-        Window_DrawFrame(arg0 + 0x2C);
-        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 0x30) - 7, M2C_FIELD(arg0, s32*, 8), D_8007356C);
+        Window_DrawFrame(&arg0->textFrame);
+        Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->textFrame.y - 7, arg0->window.frame.width, D_8007356C);
         flags = 0xFFED;
-        flags |= (M2C_FIELD(arg0, s32*, 0x1B0) == 0) ? 2 : 0x10;
-        ScrollList_DrawItems(arg0 + 0x4C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x16, flags, 0);
-        if (M2C_FIELD(M2C_FIELD(arg0, s8**, 0x4C), s32*, 8) > 0) {
+        flags |= (arg0->mode == 0) ? 2 : 0x10;
+        ScrollList_DrawItems(&arg0->list, arg0->window.frame.x + 6, arg0->window.frame.y + 0x16, flags, 0);
+        if (arg0->list.items->count > 0) {
             Font_BeginTranslucentTextRendering();
             Font_SetActive(8, 0);
             Font_SetLineHeight(0x1C);
-            x = M2C_FIELD(arg0, s32*, 0x2C) + 8;
-            y = M2C_FIELD(arg0, s32*, 0x30) + 8;
-            switch (M2C_FIELD(arg0, s32*, 0x1B0)) {
+            x = arg0->textFrame.x + 8;
+            y = arg0->textFrame.y + 8;
+            switch (arg0->mode) {
                 case 0:
                     Gfx_SetEnvColor(D_800734A8[0].r, D_800734A8[0].g, D_800734A8[0].b, D_800734A8[0].a);
-                    Font_Printf(x, y + 0x1C, func_80031BC0(**M2C_FIELD(M2C_FIELD(arg0, s8**, 0x4C), u8****, 0)[M2C_FIELD(arg0, s32*, 0x54)], buf));
+                    Font_Printf(x, y + 0x1C, func_80031BC0(**((u8***)arg0->list.items->rows)[arg0->list.cursor], buf));
                     break;
                 case 1:
                     Gfx_SetEnvColor(D_800734B8[0].r, D_800734B8[0].g, D_800734B8[0].b, D_800734B8[0].a);
                     Font_Printf(x, y, D_8910E134);
                     Gfx_SetEnvColor(D_800734A8[0].r, D_800734A8[0].g, D_800734A8[0].b, D_800734A8[0].a);
-                    Font_Printf(x, y + 0x1C, func_80031BC0(**M2C_FIELD(M2C_FIELD(arg0, s8**, 0x4C), u8****, 0)[M2C_FIELD(arg0, s32*, 0x54)], buf));
+                    Font_Printf(x, y + 0x1C, func_80031BC0(**((u8***)arg0->list.items->rows)[arg0->list.cursor], buf));
                     break;
                 case 2:
                     Gfx_SetEnvColor(D_800734B8[0].r, D_800734B8[0].g, D_800734B8[0].b, D_800734B8[0].a);
                     Font_Printf(x, y, D_8910E150);
                     Gfx_SetEnvColor(D_800734A8[0].r, D_800734A8[0].g, D_800734A8[0].b, D_800734A8[0].a);
-                    Font_Printf(x, y + 0x1C, func_80031BC0(**M2C_FIELD(M2C_FIELD(arg0, s8**, 0x4C), u8****, 0)[M2C_FIELD(arg0, s32*, 0x54)], buf));
+                    Font_Printf(x, y + 0x1C, func_80031BC0(**((u8***)arg0->list.items->rows)[arg0->list.cursor], buf));
                     break;
                 case 3:
                     Gfx_SetEnvColor(D_800734B8[0].r, D_800734B8[0].g, D_800734B8[0].b, D_800734B8[0].a);
                     Font_Printf(x, y, D_8910E16C);
                     Gfx_SetEnvColor(D_800734A8[0].r, D_800734A8[0].g, D_800734A8[0].b, D_800734A8[0].a);
-                    Font_Printf(x, y + 0x1C, func_80031BC0(**M2C_FIELD(M2C_FIELD(arg0, s8**, 0x4C), u8****, 0)[M2C_FIELD(arg0, s32*, 0x54)], buf));
+                    Font_Printf(x, y + 0x1C, func_80031BC0(**((u8***)arg0->list.items->rows)[arg0->list.cursor], buf));
                     break;
             }
             Font_EndTexturedTextRendering();
-            switch (M2C_FIELD(arg0, s32*, 0x1B0)) {
+            switch (arg0->mode) {
                 case 1:
-                    LabPCList_DrawPopupMenu((LabPopupMenu *) (arg0 + 0x94), 2);
+                    LabPCList_DrawPopupMenu(&arg0->confirmPopup, 2);
                     break;
                 case 2:
                 case 3:
-                    func_891051A4((LabMoveSelectWindow*)(arg0 + 0x110));
+                    func_891051A4(&arg0->moveSelect);
                     break;
                 case 4:
-                    func_89105200((LabMoveSelectWindow*)(arg0 + 0x110));
+                    func_89105200(&arg0->moveSelect);
                     break;
             }
         }
@@ -2027,23 +2027,16 @@ extern u8 D_8910AAF8[];
  * Seen in play (2026-11-12) in いちらん: opened the result window after an item was used (「HP 19 ->
  * 20」).
  */
-void LabPCList_InitMessageWindow(void* arg0, s32 arg1, s32 arg2, s32 arg3) {
-    Window_SetRect((s8*)arg0, arg1, arg2, 0x114, 0x60);
-    M2C_FIELD(arg0, s32*, 0x24) = 0;
-    M2C_FIELD(arg0, s32*, 0x20) = 0;
-    M2C_FIELD(arg0, s32*, 0x28) = 0;
-    M2C_FIELD(arg0, s32*, 0x14) = 6;
-    M2C_FIELD(arg0, Rgba89108F14*, 0x18) = *(Rgba89108F14*)D_8910AAF4;
-    M2C_FIELD(arg0, Rgba89108F14*, 0x1C) = *(Rgba89108F14*)D_8910AAF8;
-    M2C_FIELD(arg0, s32*, 0x2C) = arg3;
+void LabPCList_InitMessageWindow(LabMessageWindow* arg0, s32 arg1, s32 arg2, LabItemResult* arg3) {
+    Window_SetRect(&arg0->window, arg1, arg2, 0x114, 0x60);
+    arg0->window.animTimer = 0;
+    arg0->window.title = 0;
+    arg0->window.state = 0;
+    arg0->window.frame.style = 6;
+    *(Rgba89108F14*)&arg0->window.frame.color = *(Rgba89108F14*)D_8910AAF4;
+    *(Rgba89108F14*)&arg0->window.frame.color2 = *(Rgba89108F14*)D_8910AAF8;
+    arg0->message = arg3;
 }
-
-typedef struct Entry89108F94 {
-    /* 0x00 */ char* title;
-    /* 0x04 */ s32 kind;
-    /* 0x08 */ char* left;
-    /* 0x0C */ char* right;
-} Entry89108F94;
 
 extern u8 D_8910D2F0[];
 extern char D_8910E1AC[];
@@ -2053,8 +2046,8 @@ extern char D_8910E1B0[];
  * Draws the result message window.
  * Seen in play (2026-11-12) in いちらん: drew the item result window every frame while it was open.
  */
-void LabPCList_DrawMessageWindow(s8* arg0) {
-    Entry89108F94* entry;
+void LabPCList_DrawMessageWindow(LabMessageWindow* arg0) {
+    LabItemResult* entry;
 
     if (func_8002AE6C() == 0) {
         Font_BeginTranslucentTextRendering();
@@ -2062,20 +2055,20 @@ void LabPCList_DrawMessageWindow(s8* arg0) {
         Font_SetActive(0x10, 0);
         Font_EnableTwoCycleTexturing();
         Gfx_SetPrimColor(0xFF, 0xAC, 0xAC, 0xFF);
-        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0x12, M2C_FIELD(arg0, s32*, 4) + 0x12, M2C_FIELD(arg0, Entry89108F94**, 0x2C)->title);
+        Font_Printf(arg0->window.frame.x + 0x12, arg0->window.frame.y + 0x12, arg0->message->title);
         Font_DisableTwoCycleTexturing();
         Gfx_SetEnvColor(D_800734A8[0].r, D_800734A8[0].g, D_800734A8[0].b, D_800734A8[0].a);
-        entry = M2C_FIELD(arg0, Entry89108F94**, 0x2C);
+        entry = arg0->message;
         if (entry->kind == 0) {
-            Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0x12, M2C_FIELD(arg0, s32*, 4) + 0x36, D_8910E1AC, entry->left);
-            Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xA2, M2C_FIELD(arg0, s32*, 4) + 0x36, D_8910E1B0, M2C_FIELD(arg0, Entry89108F94**, 0x2C)->right);
+            Font_Printf(arg0->window.frame.x + 0x12, arg0->window.frame.y + 0x36, D_8910E1AC, entry->left);
+            Font_Printf(arg0->window.frame.x + 0xA2, arg0->window.frame.y + 0x36, D_8910E1B0, arg0->message->right);
         } else if (entry->kind == 1) {
-            Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0x12, M2C_FIELD(arg0, s32*, 4) + 0x36, entry->left);
-            Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xA2, M2C_FIELD(arg0, s32*, 4) + 0x36, M2C_FIELD(arg0, Entry89108F94**, 0x2C)->right);
+            Font_Printf(arg0->window.frame.x + 0x12, arg0->window.frame.y + 0x36, entry->left);
+            Font_Printf(arg0->window.frame.x + 0xA2, arg0->window.frame.y + 0x36, arg0->message->right);
         }
         Font_EndTexturedTextRendering();
         gSPDisplayList(gDisplayListHead++, D_80073408);
-        func_8001B884(M2C_FIELD(arg0, s32*, 0) + 0x7A, M2C_FIELD(arg0, s32*, 4) + 0x36, 0x20, 0x18, D_8910D2F0, 0x20, 0x200000);
+        func_8001B884(arg0->window.frame.x + 0x7A, arg0->window.frame.y + 0x36, 0x20, 0x18, D_8910D2F0, 0x20, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);
     }
 }
@@ -2087,7 +2080,7 @@ M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
  * Seen in play (2026-11-12) in いちらん: returned 0 while the item result window was up and 1 after
  * A.
  */
-s32 LabPCList_UpdateMessageWindow(s32 arg0) {
+s32 LabPCList_UpdateMessageWindow(LabMessageWindow* arg0) {
     s32 var_v1;
 
     var_v1 = 0;
