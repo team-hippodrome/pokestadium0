@@ -9,6 +9,61 @@
 #include "poke_icon.h"
 #include "table_view.h"
 
+/* The resident menu library (src/menu.c). A menu draws the items of an item table through a
+ * callback and moves a cursor over them. Menu is a one-column list, GridMenu lays the items out
+ * in columns, and ScrollMenu (ScrollList_*, ScrollGrid_*) shows a window of visibleRows rows that
+ * scrolls smoothly. The three share the first 0x24 bytes. */
+typedef void (*MenuDrawItemFunc)(s32 x, s32 y, u8* item, s32 index, s32 flags, s32 arg);
+
+typedef struct Menu {
+    /* 0x00 */ ByteMatrix* items; // item table: a PointerList of items, or rows drawn in place (*_DrawInlineItems)
+    /* 0x04 */ u16* itemFlags; // one per item slot; bit 0 = disabled (Menu_UpdateCursorSkipDisabled skips it)
+    /* 0x08 */ s32 cursor; // index of the selected item
+    /* 0x0C */ s32 cellWidth;
+    /* 0x10 */ s32 cellHeight;
+    /* 0x14 */ MenuDrawItemFunc drawItem; // called once per item with 0x12 added to the flags of the cursor item
+    /* 0x18 */ Controller* controller; // the Init functions store D_800603C0
+    /* 0x1C */ s32 unk_1C; // set to 0xC00 by the Init functions
+    /* 0x20 */ s32 options; // 0x10000 = draw the cursor frame, 0x100000 = draw the scroll arrows
+} Menu; // size = 0x24
+
+typedef struct GridMenu {
+    /* 0x00 */ ByteMatrix* items;
+    /* 0x04 */ u16* itemFlags;
+    /* 0x08 */ s32 cursor;
+    /* 0x0C */ s32 cellWidth;
+    /* 0x10 */ s32 cellHeight;
+    /* 0x14 */ MenuDrawItemFunc drawItem;
+    /* 0x18 */ Controller* controller;
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ s32 options;
+    /* 0x24 */ s32 columns;
+} GridMenu; // size = 0x28
+
+typedef struct ScrollMenu {
+    /* 0x00 */ ByteMatrix* items;
+    /* 0x04 */ u16* itemFlags;
+    /* 0x08 */ s32 cursor;
+    /* 0x0C */ s32 cellWidth;
+    /* 0x10 */ s32 cellHeight;
+    /* 0x14 */ MenuDrawItemFunc drawItem;
+    /* 0x18 */ Controller* controller;
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ s32 options;
+    /* 0x24 */ s32 visibleRows;
+    /* 0x28 */ u16 inputDirection; // the direction button (0x800 up, 0x400 down, 0x200 left/page up, 0x100 right/page down) acted on this frame
+    /* 0x2A */ u16 scrollFlags; // the same direction bits while the cursor or the page is still moving
+    /* 0x2C */ s32 scrollY; // pixel offset of the first visible row
+    /* 0x30 */ s32 pageTargetY; // scrollY a page scroll is moving to
+    /* 0x34 */ s32 cursorY; // cursor's pixel position, moved toward cursor * cellHeight
+    /* 0x38 */ s32 cursorStep; // pixels the cursor moves per frame: cellHeight * 4 / 10
+    /* 0x3C */ s32 pageStep; // pixels a page scroll moves per frame: visibleRows * cellHeight * 2 / 10
+    /* 0x40 */ s32 repeatTimer; // frames before a held direction repeats: 8 after a press
+    /* 0x44 */ s32 cursorX; // ScrollGrid: cursor's pixel position across the row
+    /* 0x48 */ s32 columns; // ScrollGrid only
+    /* 0x4C */ s32 cursorStepX; // ScrollGrid: cellWidth * 4 / 10
+} ScrollMenu; // size = 0x50
+
 typedef struct unk_D_88400138 {
     /* 0x00 */ s32 unk_00;
     /* 0x04 */ Color_RGBA8 unk_04;
@@ -832,7 +887,7 @@ typedef void (*func8850CD44)(unk_func_8850CD44*, s32, MemoryPool*);
 typedef void (*func8850CF00)(unk_func_8850CD44*, Controller*);
 
 // menu.c
-void WidgetTree_SetPagedGridSelectionWithOffset(s8*, s32, s32);
+void WidgetTree_SetPagedGridSelectionWithOffset(ScrollMenu*, s32, s32);
 
 // functions defined in assembly
 void WidgetTree_ClearEntryFlags(unk_func_88200FA0_030_030*);
