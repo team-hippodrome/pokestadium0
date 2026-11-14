@@ -288,7 +288,7 @@ void BattleAi_AddRandomPickScore(s8* arg0) {
 void func_82183E1C(void) {
 }
 
-extern BattleSlotZ* D_821CF298;
+extern ComSide* D_821CF298;
 
 /**
  * Returns 1 if an unfainted Pokemon of the given species is in the opponent's
@@ -301,7 +301,7 @@ s32 BattleAi_OpponentHasSpecies(s32 arg0) {
     s32 i;
 
     for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
-        if ((D_821CF298[i].hp != 0) && (arg0 == D_821CF298[i].species)) {
+        if ((D_821CF298->battlers[i].mon.hp != 0) && (arg0 == D_821CF298->battlers[i].mon.species)) {
             return 1;
         }
     }
@@ -320,7 +320,7 @@ s32 BattleAi_CountOpponentWaterOrFlying(void) {
 
     count = 0;
     for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
-        if ((D_821CF298[i].type1 == TYPE_WATER) || (D_821CF298[i].type2 == TYPE_WATER) || (D_821CF298[i].type1 == TYPE_FLYING) || (D_821CF298[i].type2 == TYPE_FLYING)) {
+        if ((D_821CF298->battlers[i].mon.type1 == TYPE_WATER) || (D_821CF298->battlers[i].mon.type2 == TYPE_WATER) || (D_821CF298->battlers[i].mon.type1 == TYPE_FLYING) || (D_821CF298->battlers[i].mon.type2 == TYPE_FLYING)) {
             count++;
         }
     }
@@ -339,7 +339,7 @@ s32 BattleAi_CountOpponentGround(void) {
 
     count = 0;
     for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
-        if ((D_821CF298[i].type1 == TYPE_GROUND) || (D_821CF298[i].type2 == TYPE_GROUND)) {
+        if ((D_821CF298->battlers[i].mon.type1 == TYPE_GROUND) || (D_821CF298->battlers[i].mon.type2 == TYPE_GROUND)) {
             count++;
         }
     }
@@ -358,7 +358,7 @@ s32 BattleAi_CountOpponentFighting(void) {
 
     count = 0;
     for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
-        if ((D_821CF298[i].type1 == TYPE_FIGHTING) || (D_821CF298[i].type2 == TYPE_FIGHTING)) {
+        if ((D_821CF298->battlers[i].mon.type1 == TYPE_FIGHTING) || (D_821CF298->battlers[i].mon.type2 == TYPE_FIGHTING)) {
             count++;
         }
     }
@@ -375,7 +375,7 @@ s32 BattleAi_OpponentHasLevel55Tauros(void) {
     s32 i;
 
     for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
-        if ((D_821CF298[i].species == TAUROS) && (D_821CF298[i].level == 55)) {
+        if ((D_821CF298->battlers[i].mon.species == TAUROS) && (D_821CF298->battlers[i].mon.level == 55)) {
             return 1;
         }
     }
@@ -394,7 +394,7 @@ s32 BattleAi_CountOpponentElectricOrPoison(void) {
 
     count = 0;
     for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
-        if ((D_821CF298[i].type1 == TYPE_ELECTRIC) || (D_821CF298[i].type2 == TYPE_ELECTRIC) || (D_821CF298[i].type1 == TYPE_POISON) || (D_821CF298[i].type2 == TYPE_POISON)) {
+        if ((D_821CF298->battlers[i].mon.type1 == TYPE_ELECTRIC) || (D_821CF298->battlers[i].mon.type2 == TYPE_ELECTRIC) || (D_821CF298->battlers[i].mon.type1 == TYPE_POISON) || (D_821CF298->battlers[i].mon.type2 == TYPE_POISON)) {
             count++;
         }
     }
@@ -413,7 +413,7 @@ s32 BattleAi_CountOpponentRockOrWater(void) {
 
     count = 0;
     for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
-        if ((D_821CF298[i].type1 == TYPE_ROCK) || (D_821CF298[i].type2 == TYPE_ROCK) || (D_821CF298[i].type1 == TYPE_WATER) || (D_821CF298[i].type2 == TYPE_WATER)) {
+        if ((D_821CF298->battlers[i].mon.type1 == TYPE_ROCK) || (D_821CF298->battlers[i].mon.type2 == TYPE_ROCK) || (D_821CF298->battlers[i].mon.type1 == TYPE_WATER) || (D_821CF298->battlers[i].mon.type2 == TYPE_WATER)) {
             count++;
         }
     }
@@ -432,14 +432,14 @@ s32 BattleAi_CountOpponentElectric(void) {
 
     count = 0;
     for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
-        if ((D_821CF298[i].type1 == TYPE_ELECTRIC) || (D_821CF298[i].type2 == TYPE_ELECTRIC)) {
+        if ((D_821CF298->battlers[i].mon.type1 == TYPE_ELECTRIC) || (D_821CF298->battlers[i].mon.type2 == TYPE_ELECTRIC)) {
             count++;
         }
     }
     return count;
 }
 
-extern BattleSlotZ* D_821CF294;
+extern ComSide* D_821CF294;
 s32 BattleAi_NoVenusaurChanseyJynxPicked(s32);
 
 /**
@@ -484,7 +484,7 @@ void BattleAi_AddTrainerPickScore(u8* arg0, s32 arg1) {
             }
             break;
         case DITTO:
-            if (((u8*)D_821CF294)[0x368] != 0) {
+            if (D_821CF294->mode != 0) {
                 score = 1000;
             }
             break;
@@ -599,7 +599,7 @@ void BattleAi_AddTrainerPickScore(u8* arg0, s32 arg1) {
             }
             break;
         case EXEGGUTOR:
-            if (((u8*)D_821CF294)[0x368] != 0) {
+            if (D_821CF294->mode != 0) {
                 score = 1000;
                 break;
             }
@@ -662,12 +662,12 @@ void BattleAi_AddTrainerPickScore(u8* arg0, s32 arg1) {
             }
             break;
         case PINSIR:
-            if (((u8*)D_821CF294)[0x368] != 0) {
+            if (D_821CF294->mode != 0) {
                 score = 1000;
             }
             break;
     }
-    if ((((u8*)D_821CF294)[0x368] == 0) && (arg0[0x17] != DITTO)) {
+    if ((D_821CF294->mode == 0) && (arg0[0x17] != DITTO)) {
         score += 50000;
     }
     M2C_FIELD(arg0, s32*, 4) += score;

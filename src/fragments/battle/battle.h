@@ -124,6 +124,41 @@ typedef struct unk_D_86B10BE0 {
  * src/fragments/fragment012_17ED00/battle_engine_361050_2.c
  */
 
+struct ComSide;
+
+// One Pokémon in the COM AI's own model of a side (ComSide.battlers); see docs/annotation/com-ai.md.
+typedef struct ComBattler {
+    /* 0x00 */ struct ComSide* side; // set by BattleAi_InitSide
+    /* 0x04 */ s32 pickScore; // @unverified: summed by the BattleAi_Add*PickScore helpers in team selection
+    /* 0x08 */ f32 matchupRatio; // @unverified: best damage it deals / best damage it takes against the active opponent (BattleAi_ChooseSwitch)
+    /* 0x0C */ BattleMonRuntime mon; // copied from the battle each turn (BattleAi_ChooseTurnAction), or built from party or base stats
+    /* 0x70 */ u16 prevHp; // @unverified: mon.hp at the previous turn (BattleAi_ChooseTurnAction)
+    /* 0x72 */ s16 damageTaken; // @unverified: prevHp - mon.hp, halved when the hit was a critical (BattleAi_ChooseTurnAction)
+    /* 0x74 */ u8 species; // @unverified: party species, copied by BattleAi_InitSide
+    /* 0x75 */ u8 partyBit; // @unverified: 1 << party slot (BattleAi_InitSide)
+    /* 0x76 */ u8 outspedMask;
+    /* 0x77 */ u8 leechSeededMask;
+    /* 0x78 */ u8 moveCount; // @unverified: moves before an empty slot or Mimic (BattleAi_InitSide)
+    /* 0x79 */ u8 unk_79;
+    /* 0x7A */ u8 rechargeTurns;
+    /* 0x7B */ u8 unk_7B;
+    /* 0x7C */ u8 lastMoves[3];
+    /* 0x7F */ char unk7F[0x11];
+} ComBattler; // size = 0x90
+
+// The COM AI's model of one side (D_821CF618 for the COM, D_821CF998 for its opponent).
+typedef struct ComSide {
+    /* 0x000 */ TeamRoster* roster;
+    /* 0x004 */ ComBattler battlers[6];
+    /* 0x364 */ f32 switchThreshold;
+    /* 0x368 */ u8 mode;
+    /* 0x369 */ u8 lastOpponentSlot;
+    /* 0x36A */ u8 opponentTurnsIn;
+    /* 0x36B */ u8 unk_36B;
+    /* 0x36C */ u8 usableMask;
+    /* 0x36D */ char unk36D[0x13];
+} ComSide; // size = 0x380
+
 /*
  * BattleSlotZ is a 0x90-byte view of the AI's side model (D_821CF618 /
  * D_821CF998) shifted by four bytes: each side is a party pointer followed by
