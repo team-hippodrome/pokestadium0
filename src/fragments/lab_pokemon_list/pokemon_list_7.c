@@ -85,7 +85,7 @@ extern s8 D_8910E312[];
 s32 func_8003F6AC();
 s32 ScrollList_UpdateCursor(void*);
 void ScrollList_SetCursor(void*, s32);
-void LabPCList_FormatGatherPrompt(s8*);
+void LabPCList_FormatGatherPrompt(LabPCListScreen*);
 void func_8000A460(s8 *, s8 *);
 u32 func_800566BC(s8*);
 void LabPCList_InitPopupMenu(s8 *, void *, s8 *, s32, s32);

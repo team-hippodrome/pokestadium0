@@ -87,7 +87,7 @@ extern s8 D_8910E312[];
 s32 func_8003F6AC();
 s32 ScrollList_UpdateCursor(void*);
 void ScrollList_SetCursor(void*, s32);
-void LabPCList_FormatGatherPrompt(s8*);
+void LabPCList_FormatGatherPrompt(LabPCListScreen*);
 void func_8000A460(s8 *, s8 *);
 u32 func_800566BC(s8*);
 void LabPCList_InitPopupMenu(s8 *, void *, s8 *, s32, s32);
@@ -471,10 +471,10 @@ void LabPCList_TeachTmHmMove(u8** arg0, u8** arg1, s32 arg2) {
 }
 
 s32 LabPCList_UpdateBrowse();
-s32 LabPCList_UpdateSortMenu(s8*);
-s32 func_89102C40(s8*);
+s32 LabPCList_UpdateSortMenu(LabPCListScreen*);
+s32 func_89102C40(LabPCListScreen*);
 s32 LabPCList_RunLevelFilter(s8*);
-s32 LabPCList_UpdateMonMenu(s8*);
+s32 LabPCList_UpdateMonMenu(LabPCListScreen*);
 s32 LabPCList_UpdateGbBoxMenu();
 s32 LabPCList_UpdateStadiumBoxMenu();
 s32 Ui_CheckConfirmPressed(void*);
@@ -482,13 +482,13 @@ s32 Ui_CheckConfirmPressed(void*);
  * Runs the list window's state machine (browse, sort menu, filters, moves).
  * Seen in play (2026-11-12): ran the list window.
  */
-s32 LabPCList_UpdateList(s8* arg0) {
+s32 LabPCList_UpdateList(LabPCListScreen* arg0) {
     s32 ret = 0;
 
-    if (M2C_FIELD(arg0, s32*, 0x28) == 0) {
+    if (arg0->window.state == 0) {
         return 0;
     }
-    switch (M2C_FIELD(arg0, u32*, 0x88)) {
+    switch (arg0->state) {
         case 0:
             ret = LabPCList_UpdateBrowse(arg0);
             break;
@@ -514,7 +514,7 @@ s32 LabPCList_UpdateList(s8* arg0) {
             ret = LabPCList_UpdateMonMenu(arg0);
             break;
         case 8:
-            ret = LabPCList_UpdateDestinationMenu((LabPCListScreen*)arg0);
+            ret = LabPCList_UpdateDestinationMenu(arg0);
             break;
         case 9:
             ret = LabPCList_UpdateGbBoxMenu(arg0);
@@ -524,8 +524,8 @@ s32 LabPCList_UpdateList(s8* arg0) {
             break;
         case 11:
         case 12:
-            if (Ui_CheckConfirmPressed(arg0 + 0xB55C) == 1) {
-                M2C_FIELD(arg0, u32*, 0x88) = 0;
+            if (Ui_CheckConfirmPressed((s8*)arg0->textBox) == 1) {
+                arg0->state = 0;
             }
             break;
     }

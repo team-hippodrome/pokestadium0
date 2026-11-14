@@ -225,19 +225,19 @@ void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
  * Draws タテ／ヨコきりかえ (switch vertical/horizontal) and ページおくり%d/3 (page %d/3).
  * Seen in play (2026-11-12): Lタテ／ヨコきりかえR and ページおくり1／3.
  */
-void LabPCList_DrawPageHint(s8* arg0) {
+void LabPCList_DrawPageHint(LabPCListScreen* arg0) {
     func_8001AB6C();
     func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
     func_8001A384(8, 0);
-    func_8001A944(M2C_FIELD(arg0, s32*, 0x4C) + 0x22, M2C_FIELD(arg0, s32*, 0x50) + 5, (M2C_UNK*)D_8910DBF0);
-    func_8001A944(M2C_FIELD(arg0, s32*, 0x4C) + 0x152, M2C_FIELD(arg0, s32*, 0x50) + 5, (M2C_UNK*)D_8910DC04,
-                  M2C_FIELD(arg0, s32*, 0xB15C) + 1);
+    func_8001A944(arg0->headerFrame.x + 0x22, arg0->headerFrame.y + 5, (M2C_UNK*)D_8910DBF0);
+    func_8001A944(arg0->headerFrame.x + 0x152, arg0->headerFrame.y + 5, (M2C_UNK*)D_8910DC04,
+                  arg0->page + 1);
     func_8001ABBC();
     gSPDisplayList(gDisplayListHead++, D_80060290);
-    Gfx_DrawTextureRgba16(M2C_FIELD(arg0, s32*, 0x4C) + 4, M2C_FIELD(arg0, s32*, 0x50) + 3, 0x1A, 0x18, D_8910C370, 0x20, 0x200000);
-    Gfx_DrawTextureRgba16(M2C_FIELD(arg0, s32*, 0x4C) + 0xDA, M2C_FIELD(arg0, s32*, 0x50) + 3, 0x1A, 0x18, D_8910C978, 0x20, 0x200000);
-    Gfx_DrawTextureRgba16(M2C_FIELD(arg0, s32*, 0x4C) + 0x134, M2C_FIELD(arg0, s32*, 0x50) + 2, 0x1A, 0x1A, D_04006170, 0x1C, 0x200000);
-    Gfx_DrawTextureRgba16(M2C_FIELD(arg0, s32*, 0x4C) + 0x20A, M2C_FIELD(arg0, s32*, 0x50) + 2, 0x1A, 0x1A, D_04006CE0, 0x1C, 0x200000);
+    Gfx_DrawTextureRgba16(arg0->headerFrame.x + 4, arg0->headerFrame.y + 3, 0x1A, 0x18, D_8910C370, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(arg0->headerFrame.x + 0xDA, arg0->headerFrame.y + 3, 0x1A, 0x18, D_8910C978, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(arg0->headerFrame.x + 0x134, arg0->headerFrame.y + 2, 0x1A, 0x1A, D_04006170, 0x1C, 0x200000);
+    Gfx_DrawTextureRgba16(arg0->headerFrame.x + 0x20A, arg0->headerFrame.y + 2, 0x1A, 0x1A, D_04006CE0, 0x1C, 0x200000);
     gSPDisplayList(gDisplayListHead++, D_80060398);
 }
 
