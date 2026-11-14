@@ -11,7 +11,7 @@ extern ComBattler* D_821CF2A0;
 s32 BattleAi_GetBestDamage(ComBattler* arg0, ComBattler* arg1, s32 arg2);
 s32 BattleAi_MovesFirst(ComBattler* arg0, ComBattler* arg1);
 s32 BattleAi_CanUseMove(ComBattler* arg0, s32 arg1);
-s32 BattleAi_EstimateDamage(s8 *, s8 *, u8);
+s32 BattleAi_EstimateDamage(BattleMonRuntime*, BattleMonRuntime*, u8);
 
 /**
  * If the chosen move is Hyper Beam but it would not knock the opponent out, looks
@@ -332,7 +332,7 @@ extern ComSide* D_821CF298;
 extern s32 D_821CF288;
 void func_80058410(u8 *, u8 *, s32);
 void BattleAi_CopyVisibleBattleState(s8 *, u8 *);
-void BattleAi_ResetBattleStats(u8 *, u8 *);
+void BattleAi_ResetBattleStats(BattleMonRuntime*, u8 *);
 s32 BattleAi_ChooseSwitch(void);
 s32 BattleAi_ChooseRandomMove(void);
 /**

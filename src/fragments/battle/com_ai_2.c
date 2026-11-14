@@ -63,7 +63,7 @@ u16 BattleCalc_EstimateDamage(s8*, s8*, u8);
  * or Dig, uses half the target's HP for Super Fang, and zeroes Fissure against
  * Flying and the OHKO moves against Ghost.
  */
-s32 BattleAi_EstimateDamage(s8* arg0, s8* arg1, u8 move) {
+s32 BattleAi_EstimateDamage(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u8 move) {
     s32 score;
     s32 power;
 
@@ -71,7 +71,7 @@ s32 BattleAi_EstimateDamage(s8* arg0, s8* arg1, u8 move) {
     score = power;
     switch (move) {
         case DREAM_EATER:
-            if (M2C_FIELD(arg1, u8*, 0x15) & 7) {
+            if (arg1->pendingStatusCondition & 7) {
                 break;
             }
         case LEECH_SEED:
@@ -91,8 +91,8 @@ s32 BattleAi_EstimateDamage(s8* arg0, s8* arg1, u8 move) {
         case REST:
             return 0;
     }
-    if ((power >= 6) && (M2C_FIELD(arg1, u8*, 0x61) >= 8)) {
-        if (BattleAi_RandomPercent() >= (-M2C_FIELD(arg1, u8*, 0x61) * 10) + 0x8C) {
+    if ((power >= 6) && (arg1->statStages[5] >= 8)) {
+        if (BattleAi_RandomPercent() >= (-arg1->statStages[5] * 10) + 0x8C) {
             return 1;
         }
     }
@@ -123,23 +123,23 @@ s32 BattleAi_EstimateDamage(s8* arg0, s8* arg1, u8 move) {
         case SOLARBEAM:
         case SKULL_BASH:
         case SKY_ATTACK:
-            if ((M2C_FIELD(arg0, u16*, 0x2E) < M2C_FIELD(arg1, u16*, 0x2E)) ||
+            if ((arg0->speed < arg1->speed) ||
                 (BattleAi_FindByte((u8*)arg1 + 0x1F, 1, 4, FLY) != 0) ||
                 (BattleAi_FindByte((u8*)arg1 + 0x1F, 1, 4, DIG) != 0)) {
                 score = 10;
             }
             break;
         case SUPER_FANG:
-            score = M2C_FIELD(arg1, u16*, 0xC) / 2;
+            score = arg1->hp / 2;
             break;
         case FISSURE:
-            if ((M2C_FIELD(arg1, u8*, 0x1C) == TYPE_FLYING) || (M2C_FIELD(arg1, u8*, 0x1D) == TYPE_FLYING)) {
+            if ((arg1->type1 == TYPE_FLYING) || (arg1->type2 == TYPE_FLYING)) {
                 score = 0;
             }
             break;
         case GUILLOTINE:
         case HORN_DRILL:
-            if ((M2C_FIELD(arg1, u8*, 0x1C) == TYPE_GHOST) || (M2C_FIELD(arg1, u8*, 0x1D) == TYPE_GHOST)) {
+            if ((arg1->type1 == TYPE_GHOST) || (arg1->type2 == TYPE_GHOST)) {
                 score = 0;
             }
             break;
@@ -239,7 +239,7 @@ s32 BattleAi_MayKnowMove(ComBattler* arg0, s32 arg1) {
 }
 
 s32 BattleAi_MayKnowMove(ComBattler* arg0, s32 arg1);
-s32 BattleAi_EstimateDamage(s8 *, s8 *, u8);
+s32 BattleAi_EstimateDamage(BattleMonRuntime*, BattleMonRuntime*, u8);
 extern u8 D_82194578[];
 /**
  * Highest BattleAi_EstimateDamage that attacker arg0 can do to arg1. Uses the
@@ -307,25 +307,25 @@ s32 BattleAi_GetBestDamage(ComBattler* arg0, ComBattler* arg1, s32 arg2)
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-void BattleAi_ResetBattleStats(s8 *arg0, s8 *arg1)
+void BattleAi_ResetBattleStats(BattleMonRuntime* arg0, s8 *arg1)
 {
   s32 var_v0;
   s8 *var_v1;
-  *((s8 *) (((s8 *) arg0) + 0x4A)) = 0;
-  *((s8 *) (((s8 *) arg0) + 0x4B)) = 0;
-  *((s8 *) (((s8 *) arg0) + 0x4C)) = 0;
-  *((s8 *) (((s8 *) arg0) + 0x4D)) = 0;
-  *((s8 *) (((s8 *) arg0) + 0x4E)) = 0;
-  *((s8 *) (((s8 *) arg0) + 0x52)) = 0;
-  *((s8 *) (((s8 *) arg0) + 0x57)) = 0;
-  *((s8 *) (((s8 *) arg0) + 0x56)) = 0;
+  arg0->unk_4A = 0;
+  arg0->unk_4B = 0;
+  arg0->immobilizedReason = 0;
+  arg0->volatileStatusFlags = 0;
+  arg0->uniqueStatusFlags = 0;
+  arg0->disabledMoveState = 0;
+  arg0->disabledMove = 0;
+  arg0->scaleResize = 0;
   var_v1 = arg0;
   var_v0 = 0;
-  *((u16 *) (((s8 *) arg0) + 0x2A)) = (u16) (*((u16 *) (((s8 *) arg1) + 0x28))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  *((u16 *) (((s8 *) arg0) + 0x2C)) = (u16) (*((u16 *) (((s8 *) arg1) + 0x2A))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  *((u16 *) (((s8 *) arg0) + 0x2E)) = (u16) (*((u16 *) (((s8 *) arg1) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  arg0->modifiedAttack = (u16) (*((u16 *) (((s8 *) arg1) + 0x28))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  arg0->modifiedDefense = (u16) (*((u16 *) (((s8 *) arg1) + 0x2A))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  arg0->speed = (u16) (*((u16 *) (((s8 *) arg1) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   var_v1 = (s8 *) var_v1;
-  *((u16 *) (((s8 *) arg0) + 0x30)) = (u16) (*((u16 *) (((s8 *) arg1) + 0x2E))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  arg0->modifiedSpecial = (u16) (*((u16 *) (((s8 *) arg1) + 0x2E))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   do
   {
     var_v0 += 4;
