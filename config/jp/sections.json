@@ -162,7 +162,7 @@
       "size": "0xC"
     }
   },
-  "src/fragments/cup_select/cup_select.c": {
+  "src/fragments/cup_clear/cup_clear.c": {
     ".data": "0x818007CC",
     ".rodata": {
       "address": "0x8180088C",

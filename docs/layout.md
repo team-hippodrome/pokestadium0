@@ -25,7 +25,7 @@ Where the code lives, after the reorganization. File names are broadly correct g
 | 008 | `src/fragments/registration/` | 1 | 51 | team registration |
 | 009 | `src/fragments/nintendo_cup_teams/` | 1 | 8 | Nintendo Cup '97 finalist teams |
 | 010 | `src/fragments/pikachu_reward/` | 1 | 27 | Pikachu reward |
-| 011 | `src/fragments/cup_select/` | 1 | 12 | cup selection |
+| 011 | `src/fragments/cup_clear/` | 1 | 12 | cup-cleared trophy scene after a tournament win |
 | 012 | `src/fragments/battle/` | 98 | 2527 | battle engine, move animations, particles and COM AI |
 | 013 | `src/fragments/vs_scene/` | 1 | 33 | VS screen before a battle |
 | 014 | `src/fragments/main_menu/` | 2 | 33 | main menu |
