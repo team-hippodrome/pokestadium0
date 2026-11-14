@@ -1116,34 +1116,6 @@ s32 func_89107170(s32 a) {
     return a >= 8 ? a + 12 : (a >= 6 ? a + 1 : a);
 }
 
-typedef struct Lab891071A4 {
-    /* 0x000 */ s32 x;
-    /* 0x004 */ s32 y;
-    /* 0x008 */ char unk008[0xC];
-    /* 0x014 */ s32 unk14;
-    /* 0x018 */ Color_RGBA8 color;
-    /* 0x01C */ char unk01C[4];
-    /* 0x020 */ char* unk20;
-    /* 0x024 */ s32 unk24;
-    /* 0x028 */ s32 unk28;
-    /* 0x02C */ s8 buttons[2][0x40];
-    /* 0x0AC */ s8 unkAC[0x10];
-    /* 0x0BC */ s32 unkBC;
-    /* 0x0C0 */ char unkC0[0x28];
-    /* 0x0E8 */ s8 unkE8[0x3C];
-    /* 0x124 */ s32 unk124;
-    /* 0x128 */ s32 cursor;
-    /* 0x12C */ s32 unk12C;
-    /* 0x130 */ s8 list[4];
-    /* 0x134 */ u16* flags;
-    /* 0x138 */ char unk138[0x18];
-    /* 0x150 */ s32 unk150;
-    /* 0x154 */ char unk154[0x20];
-    /* 0x174 */ s8* names[15];
-    /* 0x1B0 */ s8 unk1B0[0x20];
-    /* 0x1D0 */ s8 unk1D0[0xC];
-    /* 0x1DC */ s32 mode;
-} Lab891071A4;
 typedef struct Entry891071A4 {
     const char* str;
     u8 color[4];
@@ -1165,60 +1137,48 @@ extern char D_8910E0C4[];
  * window, with two empty type slots, the numbered type list (1 ノーマル, 2 かくとう, ... 8 ゴースト) and あつめる
  * / かいじょ buttons.
  */
-void LabPCList_InitTypeFilter(Lab891071A4* arg0, s32 x, s32 y, s32* arg3) {
+void LabPCList_InitTypeFilter(LabTypeFilterWindow* arg0, s32 x, s32 y, s32* arg3) {
     s32 i;
 
     Window_SetRect((s8*)arg0, x, y, 0x156, 0x120);
-    arg0->unk24 = 0;
-    arg0->unk20 = NULL;
-    arg0->unk28 = 0;
-    arg0->unk14 = 0x800;
-    arg0->color = D_8910A974;
-    arg0->unk20 = D_8910E09C;
-    func_80027804(arg0->unk1D0, (s32*)arg0->names, 0xF, 0xF);
+    arg0->window.animTimer = 0;
+    arg0->window.title = NULL;
+    arg0->window.state = 0;
+    arg0->window.frame.style = 0x800;
+    arg0->window.frame.color = D_8910A974;
+    arg0->window.title = D_8910E09C;
+    func_80027804(&arg0->typeList, (s32*)arg0->names, 0xF, 0xF);
     for (i = 0; i < 0xF; i++) {
         arg0->names[i] = (s8*)&D_80066AD8[i + ((i < 6) ? 0 : 1)];
     }
-    ScrollList_Init(arg0->list, (s32)arg0->unk1D0, (s32)arg0->unk1B0, 8, LabPCList_DrawTypeFilterRow, 0xAE, 0x1C);
-    arg0->unk150 |= 0x10000;
+    ScrollList_Init(&arg0->list, (s32)&arg0->typeList, (s32)arg0->typeFlags, 8, LabPCList_DrawTypeFilterRow, 0xAE, 0x1C);
+    arg0->list.options |= 0x10000;
     for (i = 0; i < *arg3; i++) {
-        M2C_FIELD(arg0, s32*, 0x68 + i * 0x40) = Move_NormalizeDisplayIndex(((u8*)arg3)[4 + i]);
+        arg0->slots[i].index = Move_NormalizeDisplayIndex(((u8*)arg3)[4 + i]);
     }
     for (; i < 2; i++) {
-        M2C_FIELD(arg0, s32*, 0x68 + i * 0x40) = -1;
+        arg0->slots[i].index = -1;
     }
     for (i = 0; i < 2; i++) {
-        if (M2C_FIELD(arg0, s32*, 0x68 + i * 0x40) == -1) {
-            Window_InitLabeled(arg0->buttons[i], arg0->x + 0x20, arg0->y + i * 0x1C + 0x22, 0x5C, D_8910A974, D_8910E0B0);
+        if (arg0->slots[i].index == -1) {
+            Window_InitLabeled(&arg0->slots[i].button, arg0->window.frame.x + 0x20, arg0->window.frame.y + i * 0x1C + 0x22, 0x5C, D_8910A974, D_8910E0B0);
         } else {
-            Window_InitLabeled(arg0->buttons[i], arg0->x + 0x20, arg0->y + i * 0x1C + 0x22, 0x5C, D_8910A974, *(char**)arg0->names[M2C_FIELD(arg0, s32*, 0x68 + i * 0x40)]);
-            arg0->flags[M2C_FIELD(arg0, s32*, 0x68 + i * 0x40)] |= 8;
+            Window_InitLabeled(&arg0->slots[i].button, arg0->window.frame.x + 0x20, arg0->window.frame.y + i * 0x1C + 0x22, 0x5C, D_8910A974, *(char**)arg0->names[arg0->slots[i].index]);
+            arg0->list.itemFlags[arg0->slots[i].index] |= 8;
         }
     }
-    Window_InitLabeled(arg0->unkE8, arg0->x + 0x20, arg0->y + 0xCA, 0x5C, D_8910A974, D_8910E0B8);
-    Window_InitLabeled(arg0->unkAC, arg0->x + 0x20, arg0->y + 0xE6, 0x5C, D_8910A974, D_8910E0C4);
+    Window_InitLabeled(&arg0->gatherButton, arg0->window.frame.x + 0x20, arg0->window.frame.y + 0xCA, 0x5C, D_8910A974, D_8910E0B8);
+    Window_InitLabeled(&arg0->clearButton, arg0->window.frame.x + 0x20, arg0->window.frame.y + 0xE6, 0x5C, D_8910A974, D_8910E0C4);
     if (*arg3 == 0) {
-        arg0->unkBC |= 1;
+        arg0->clearButton.flags |= 1;
     }
-    arg0->cursor = 0;
-    arg0->unk12C = 4;
-    arg0->unk124 = D_800603C0;
+    arg0->cursor.cursor = 0;
+    arg0->cursor.count = 4;
+    arg0->cursor.controller = D_800603C0;
     func_8000B2F4(D_800603C0);
     arg0->mode = 0;
 }
 
-typedef struct Ctx891074CC {
-    /* 0x000 */ s32 x;
-    /* 0x004 */ s32 y;
-    /* 0x008 */ char unk008[0x24];
-    /* 0x02C */ s8 buttons[2][0x40];
-    /* 0x0AC */ s8 unk0AC[0x3C];
-    /* 0x0E8 */ s8 unk0E8[0x40];
-    /* 0x128 */ s32 cursor;
-    /* 0x12C */ char unk12C[4];
-    /* 0x130 */ s8 text[0xAC];
-    /* 0x1DC */ s32 mode;
-} Ctx891074CC;
 extern u8 D_800735C4[];
 void ScrollList_DrawItems(s8*, s32, s32, s32, s32);
 
@@ -1226,7 +1186,7 @@ void ScrollList_DrawItems(s8*, s32, s32, s32, s32);
  * Draws the type filter window.
  * Seen in play (2026-11-12) in いちらん: drew the タイプであつめる window.
  */
-void LabPCList_DrawTypeFilter(Ctx891074CC* arg0) {
+void LabPCList_DrawTypeFilter(LabTypeFilterWindow* arg0) {
     s32 i;
     s32 hl;
     s32 mask;
@@ -1234,71 +1194,53 @@ void LabPCList_DrawTypeFilter(Ctx891074CC* arg0) {
     if (func_8002AE6C() == 0) {
         hl = (arg0->mode == 0) ? 2 : 0x10;
         for (i = 0; i < 2; i++) {
-            Window_DrawLabeled(arg0->buttons[i], (i == arg0->cursor) ? hl : 0);
+            Window_DrawLabeled(&arg0->slots[i].button, (i == arg0->cursor.cursor) ? hl : 0);
         }
         hl = (arg0->mode == 0) ? 2 : 0;
-        Window_DrawLabeled(arg0->unk0E8, (arg0->cursor == 2) ? hl : 0);
-        Window_DrawLabeled(arg0->unk0AC, (arg0->cursor == 3) ? hl : 0);
-        Ui_DrawTexturedFrameDecal(arg0->x + 0x96, arg0->y + 0xE, 0xB2, 0x104, D_800735C4);
+        Window_DrawLabeled(&arg0->gatherButton, (arg0->cursor.cursor == 2) ? hl : 0);
+        Window_DrawLabeled(&arg0->clearButton, (arg0->cursor.cursor == 3) ? hl : 0);
+        Ui_DrawTexturedFrameDecal(arg0->window.frame.x + 0x96, arg0->window.frame.y + 0xE, 0xB2, 0x104, D_800735C4);
         mask = 0xFFED;
         if (arg0->mode == 1) {
             mask = 0xFFEF;
         }
-        ScrollList_DrawItems(arg0->text, arg0->x + 0x98, arg0->y + 0x20, mask, 0);
+        ScrollList_DrawItems(&arg0->list, arg0->window.frame.x + 0x98, arg0->window.frame.y + 0x20, mask, 0);
     }
 }
 
 s32 ScrollList_UpdateCursor(s8*);
 
-typedef struct Slot89107614 {
-    s32 unk_00;
-    s32 unk_04;
-    char unk08[0x38];
-} Slot89107614;
 
-typedef struct Lab89107614 {
-    char unk000[0x64];
-    Slot89107614 slots[3];
-    s8 unk124[4];
-    s32 unk128;
-    char unk12C[4];
-    s8 unk130[4];
-    u16* unk134;
-    s32 unk138;
-    char unk13C[0x38];
-    s32* unk174[26];
-    s32 unk1DC;
-} Lab89107614;
 
 /**
  * Handles the type filter window. Returns -1 on cancel, 1 on confirm, 2 on clear.
  * Seen in play (2026-11-12) in いちらん: handled the タイプであつめる window; A moved the cursor into the
  * type list (1 ノーマル).
  */
-s32 LabPCList_UpdateTypeFilter(Lab89107614* arg0) {
+s32 LabPCList_UpdateTypeFilter(LabTypeFilterWindow* arg0) {
     s32 ret = 0;
     u16 buttons;
 
-    switch (arg0->unk1DC) {
+    switch (arg0->mode) {
         case 0:
-            if (func_8002B2B0(arg0->unk124) == 0) {
+            if (func_8002B2B0(&arg0->cursor) == 0) {
                 buttons = ((u16*)D_800603C0)[4];
                 if (buttons & 0x4000) {
                     func_8003F6AC(3);
                     ret = -1;
                 } else if (buttons & 0x8000) {
-                    switch (arg0->unk128) {
+                    switch (arg0->cursor.cursor) {
                         case 0:
                         case 1:
                             func_8003F6AC(2);
-                            arg0->unk1DC = 1;
+                            arg0->mode = 1;
                             break;
                         case 2:
                             func_8003F6AC(2);
                             ret = 1;
                             break;
                         case 3:
-                            if (M2C_FIELD(arg0, s32*, 0xBC) & 1) {
+                            if (arg0->clearButton.flags & 1) {
                                 func_8003F6AC(8);
                             } else {
                                 func_8003F6AC(2);
@@ -1310,27 +1252,27 @@ s32 LabPCList_UpdateTypeFilter(Lab89107614* arg0) {
             }
             break;
         case 1:
-            if (ScrollList_UpdateCursor(arg0->unk130) == 0) {
+            if (ScrollList_UpdateCursor(&arg0->list) == 0) {
                 buttons = ((u16*)D_800603C0)[4];
                 if (buttons & 0x4000) {
                     func_8003F6AC(3);
-                    arg0->unk1DC = 0;
+                    arg0->mode = 0;
                 } else if (buttons & 0x8000) {
-                    if (arg0->unk134[arg0->unk138] & 8) {
+                    if (arg0->list.itemFlags[arg0->list.cursor] & 8) {
                         func_8003F6AC(8);
                     } else {
                         s32 prev;
 
                         func_8003F6AC(2);
-                        prev = arg0->slots[arg0->unk128].unk_04;
+                        prev = arg0->slots[arg0->cursor.cursor].index;
                         if (prev != -1) {
-                            arg0->unk134[prev] &= ~8;
+                            arg0->list.itemFlags[prev] &= ~8;
                         }
-                        arg0->unk134[arg0->unk138] |= 8;
-                        arg0->slots[arg0->unk128].unk_04 = arg0->unk138;
-                        arg0->slots[arg0->unk128].unk_00 = *arg0->unk174[arg0->unk138];
-                        arg0->unk1DC = 0;
-                        arg0->unk128++;
+                        arg0->list.itemFlags[arg0->list.cursor] |= 8;
+                        arg0->slots[arg0->cursor.cursor].index = arg0->list.cursor;
+                        arg0->slots[arg0->cursor.cursor].button.label = *(char**)arg0->names[arg0->list.cursor];
+                        arg0->mode = 0;
+                        arg0->cursor.cursor++;
                     }
                 }
             }
@@ -1344,13 +1286,13 @@ s32 LabPCList_UpdateTypeFilter(Lab89107614* arg0) {
  * Seen in play (2026-11-12) in いちらん: after choosing どく and pressing あつめる, it wrote count 1 and
  * type byte 0x03 (Poison) into the filter state at +0x9918.
  */
-void LabPCList_CommitTypeFilter(s8* arg0, s32* arg1) {
+void LabPCList_CommitTypeFilter(LabTypeFilterWindow* arg0, s32* arg1) {
     s32 count = 0;
     s32 i;
 
     for (i = 0; i < 2; i++) {
-        if (M2C_FIELD(arg0 + i * 0x40, s32*, 0x68) != -1) {
-            M2C_FIELD((s8*)arg1 + count, s8*, 4) = func_89107170(M2C_FIELD(arg0 + i * 0x40, s32*, 0x68));
+        if (arg0->slots[i].index != -1) {
+            M2C_FIELD((s8*)arg1 + count, s8*, 4) = func_89107170(arg0->slots[i].index);
             count++;
         }
     }
@@ -1383,33 +1325,6 @@ void LabPCList_DrawMoveFilterRow(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg
     Font_EndTexturedTextRendering();
 }
 
-typedef struct Lab89107A60 {
-    /* 0x000 */ s32 x;
-    /* 0x004 */ s32 y;
-    /* 0x008 */ char unk008[0xC];
-    /* 0x014 */ s32 unk14;
-    /* 0x018 */ Color_RGBA8 color;
-    /* 0x01C */ char unk01C[4];
-    /* 0x020 */ char* unk20;
-    /* 0x024 */ s32 unk24;
-    /* 0x028 */ s32 unk28;
-    /* 0x02C */ s8 buttons[4][0x40];
-    /* 0x12C */ s8 unk12C[0x10];
-    /* 0x13C */ s32 unk13C;
-    /* 0x140 */ char unk140[0x28];
-    /* 0x168 */ s8 unk168[0x3C];
-    /* 0x1A4 */ s32 unk1A4;
-    /* 0x1A8 */ s32 cursor;
-    /* 0x1AC */ s32 unk1AC;
-    /* 0x1B0 */ s8 list[4];
-    /* 0x1B4 */ u16* flags;
-    /* 0x1B8 */ char unk1B8[0x18];
-    /* 0x1D0 */ s32 unk1D0;
-    /* 0x1D4 */ char unk1D4[0x20];
-    /* 0x1F4 */ s8 unk1F4[0x148];
-    /* 0x33C */ s8 unk33C[0x10];
-    /* 0x34C */ s32 mode;
-} Lab89107A60;
 
 void ScrollList_Init(s8*, s32, s32, s32, void*, s32, s32);
 void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5);
@@ -1427,64 +1342,52 @@ extern char D_8910E0F4[];
  * Seen in play (2026-11-12) in いちらん: A on the わざ header (detail page 2/3) ran this once and
  * opened わざであつめる, with four empty slots and the move list starting at 1 10まんボルト.
  */
-void LabPCList_InitMoveFilter(Lab89107A60* arg0, s32 x, s32 y, u8* arg3) {
+void LabPCList_InitMoveFilter(LabMoveFilterWindow* arg0, s32 x, s32 y, u8* arg3) {
     s32 i;
 
     Window_SetRect((s8*)arg0, x, y, 0x194, 0x120);
-    arg0->unk24 = 0;
-    arg0->unk20 = NULL;
-    arg0->unk28 = 0;
-    arg0->unk14 = 0x800;
-    arg0->color = D_8910AACC;
-    arg0->unk20 = D_8910E0D0;
-    func_80027410(arg0->unk33C, D_8910A978, 1, 0xA4, 0xA4);
-    ScrollList_Init(arg0->list, (s32)arg0->unk33C, (s32)arg0->unk1F4, 8, LabPCList_DrawMoveFilterRow, 0xD4, 0x1C);
-    arg0->unk1D0 |= 0x10000;
+    arg0->window.animTimer = 0;
+    arg0->window.title = NULL;
+    arg0->window.state = 0;
+    arg0->window.frame.style = 0x800;
+    arg0->window.frame.color = D_8910AACC;
+    arg0->window.title = D_8910E0D0;
+    func_80027410(&arg0->moveMatrix, D_8910A978, 1, 0xA4, 0xA4);
+    ScrollList_Init(&arg0->list, (s32)&arg0->moveMatrix, (s32)arg0->moveFlags, 8, LabPCList_DrawMoveFilterRow, 0xD4, 0x1C);
+    arg0->list.options |= 0x10000;
     for (i = 0; i < M2C_FIELD(arg3, s32*, 4); i++) {
-        M2C_FIELD(arg0, s32*, 0x68 + i * 0x40) = D_8910AA1C[arg3[i] - 1];
+        arg0->slots[i].index = D_8910AA1C[arg3[i] - 1];
     }
     for (; i < 4; i++) {
-        M2C_FIELD(arg0, s32*, 0x68 + i * 0x40) = -1;
+        arg0->slots[i].index = -1;
     }
     for (i = 0; i < 4; i++) {
-        if (M2C_FIELD(arg0, s32*, 0x68 + i * 0x40) == -1) {
-            Window_InitLabeled(arg0->buttons[i], arg0->x + 0xE, arg0->y + i * 0x1C + 0x22, 0x98, D_8910AACC, D_8910E0E0);
+        if (arg0->slots[i].index == -1) {
+            Window_InitLabeled(&arg0->slots[i].button, arg0->window.frame.x + 0xE, arg0->window.frame.y + i * 0x1C + 0x22, 0x98, D_8910AACC, D_8910E0E0);
         } else {
-            Window_InitLabeled(arg0->buttons[i], arg0->x + 0xE, arg0->y + i * 0x1C + 0x22, 0x98, D_8910AACC, (char*)D_8006A9D4[D_8910A978[M2C_FIELD(arg0, s32*, 0x68 + i * 0x40)]].name);
-            arg0->flags[M2C_FIELD(arg0, s32*, 0x68 + i * 0x40)] |= 8;
+            Window_InitLabeled(&arg0->slots[i].button, arg0->window.frame.x + 0xE, arg0->window.frame.y + i * 0x1C + 0x22, 0x98, D_8910AACC, (char*)D_8006A9D4[D_8910A978[arg0->slots[i].index]].name);
+            arg0->list.itemFlags[arg0->slots[i].index] |= 8;
         }
     }
-    Window_InitLabeled(arg0->unk168, arg0->x + 0x4A, arg0->y + 0xCA, 0x5C, D_8910AACC, D_8910E0E8);
-    Window_InitLabeled(arg0->unk12C, arg0->x + 0x4A, arg0->y + 0xE6, 0x5C, D_8910AACC, D_8910E0F4);
+    Window_InitLabeled(&arg0->gatherButton, arg0->window.frame.x + 0x4A, arg0->window.frame.y + 0xCA, 0x5C, D_8910AACC, D_8910E0E8);
+    Window_InitLabeled(&arg0->clearButton, arg0->window.frame.x + 0x4A, arg0->window.frame.y + 0xE6, 0x5C, D_8910AACC, D_8910E0F4);
     if (M2C_FIELD(arg3, s32*, 4) == 0) {
-        arg0->unk13C |= 1;
+        arg0->clearButton.flags |= 1;
     }
-    arg0->cursor = 0;
-    arg0->unk1AC = 6;
-    arg0->unk1A4 = D_800603C0;
+    arg0->cursor.cursor = 0;
+    arg0->cursor.count = 6;
+    arg0->cursor.controller = D_800603C0;
     func_8000B2F4(D_800603C0);
     arg0->mode = 0;
 }
 
-typedef struct Ctx89107D7C {
-    /* 0x000 */ s32 x;
-    /* 0x004 */ s32 y;
-    /* 0x008 */ char unk008[0x24];
-    /* 0x02C */ s8 buttons[4][0x40];
-    /* 0x12C */ s8 unk12C[0x3C];
-    /* 0x168 */ s8 unk168[0x40];
-    /* 0x1A8 */ s32 cursor;
-    /* 0x1AC */ char unk1AC[4];
-    /* 0x1B0 */ s8 text[0x19C];
-    /* 0x34C */ s32 mode;
-} Ctx89107D7C;
 void ScrollList_DrawInlineItems(s8*, s32, s32, s32, s32);
 
 /**
  * Draws the move filter window.
  * Seen in play (2026-11-12) in いちらん: ran every frame while わざであつめる was open.
  */
-void LabPCList_DrawMoveFilter(Ctx89107D7C* arg0) {
+void LabPCList_DrawMoveFilter(LabMoveFilterWindow* arg0) {
     s32 i;
     s32 hl;
     s32 mask;
@@ -1492,53 +1395,40 @@ void LabPCList_DrawMoveFilter(Ctx89107D7C* arg0) {
     if (func_8002AE6C() == 0) {
         hl = (arg0->mode == 0) ? 2 : 0x10;
         for (i = 0; i < 4; i++) {
-            Window_DrawLabeled(arg0->buttons[i], (i == arg0->cursor) ? hl : 0);
+            Window_DrawLabeled(&arg0->slots[i].button, (i == arg0->cursor.cursor) ? hl : 0);
         }
         hl = (arg0->mode == 0) ? 2 : 0;
-        Window_DrawLabeled(arg0->unk168, (arg0->cursor == 4) ? hl : 0);
-        Window_DrawLabeled(arg0->unk12C, (arg0->cursor == 5) ? hl : 0);
-        Ui_DrawTexturedFrameDecal(arg0->x + 0xAE, arg0->y + 0xE, 0xD8, 0x104, D_800735C4);
+        Window_DrawLabeled(&arg0->gatherButton, (arg0->cursor.cursor == 4) ? hl : 0);
+        Window_DrawLabeled(&arg0->clearButton, (arg0->cursor.cursor == 5) ? hl : 0);
+        Ui_DrawTexturedFrameDecal(arg0->window.frame.x + 0xAE, arg0->window.frame.y + 0xE, 0xD8, 0x104, D_800735C4);
         mask = 0xFFED;
         if (arg0->mode == 1) {
             mask = 0xFFEF;
         }
-        ScrollList_DrawInlineItems(arg0->text, arg0->x + 0xB0, arg0->y + 0x20, mask, 0);
+        ScrollList_DrawInlineItems(&arg0->list, arg0->window.frame.x + 0xB0, arg0->window.frame.y + 0x20, mask, 0);
     }
 }
 
 extern u8 D_8910A978[];
-typedef struct Lab89107EC4 {
-    /* 0x000 */ char unk000[0x64];
-    /* 0x064 */ Slot89107614 slots[4];
-    /* 0x164 */ char unk164[0x40];
-    /* 0x1A4 */ s8 unk1A4[4];
-    /* 0x1A8 */ u32 cursor;
-    /* 0x1AC */ char unk1AC[4];
-    /* 0x1B0 */ s8 unk1B0[4];
-    /* 0x1B4 */ u16* flags;
-    /* 0x1B8 */ s32 sel;
-    /* 0x1BC */ char unk1BC[0x190];
-    /* 0x34C */ s32 mode;
-} Lab89107EC4;
 
 /**
  * Handles the move filter window. Returns -1 on cancel, 1 on confirm, 2 on clear.
  * Seen in play (2026-11-12) in いちらん: handled わざであつめる. あつめる led to the commit path (1) and かいじょ to
  * the clear path (2).
  */
-s32 LabPCList_UpdateMoveFilter(Lab89107EC4* arg0) {
+s32 LabPCList_UpdateMoveFilter(LabMoveFilterWindow* arg0) {
     s32 ret = 0;
     u16 buttons;
 
     switch (arg0->mode) {
         case 0:
-            if (func_8002B2B0(arg0->unk1A4) == 0) {
+            if (func_8002B2B0(&arg0->cursor) == 0) {
                 buttons = ((u16*)D_800603C0)[4];
                 if (buttons & 0x4000) {
                     func_8003F6AC(3);
                     ret = -1;
                 } else if (buttons & 0x8000) {
-                    switch (arg0->cursor) {
+                    switch (arg0->cursor.cursor) {
                         case 0:
                         case 1:
                         case 2:
@@ -1551,7 +1441,7 @@ s32 LabPCList_UpdateMoveFilter(Lab89107EC4* arg0) {
                             ret = 1;
                             break;
                         case 5:
-                            if (M2C_FIELD(arg0, s32*, 0x13C) & 1) {
+                            if (arg0->clearButton.flags & 1) {
                                 func_8003F6AC(8);
                             } else {
                                 func_8003F6AC(2);
@@ -1563,27 +1453,27 @@ s32 LabPCList_UpdateMoveFilter(Lab89107EC4* arg0) {
             }
             break;
         case 1:
-            if (ScrollList_UpdateCursor(arg0->unk1B0) == 0) {
+            if (ScrollList_UpdateCursor(&arg0->list) == 0) {
                 buttons = ((u16*)D_800603C0)[4];
                 if (buttons & 0x4000) {
                     func_8003F6AC(3);
                     arg0->mode = 0;
                 } else if (buttons & 0x8000) {
-                    if (arg0->flags[arg0->sel] & 8) {
+                    if (arg0->list.itemFlags[arg0->list.cursor] & 8) {
                         func_8003F6AC(8);
                     } else {
                         s32 prev;
 
                         func_8003F6AC(2);
-                        prev = arg0->slots[arg0->cursor].unk_04;
+                        prev = arg0->slots[arg0->cursor.cursor].index;
                         if (prev != -1) {
-                            arg0->flags[prev] &= ~8;
+                            arg0->list.itemFlags[prev] &= ~8;
                         }
-                        arg0->flags[arg0->sel] |= 8;
-                        arg0->slots[arg0->cursor].unk_04 = arg0->sel;
-                        arg0->slots[arg0->cursor].unk_00 = (s32)D_8006A9D4[D_8910A978[arg0->sel]].name;
+                        arg0->list.itemFlags[arg0->list.cursor] |= 8;
+                        arg0->slots[arg0->cursor.cursor].index = arg0->list.cursor;
+                        arg0->slots[arg0->cursor.cursor].button.label = (s32)D_8006A9D4[D_8910A978[arg0->list.cursor]].name;
                         arg0->mode = 0;
-                        arg0->cursor++;
+                        arg0->cursor.cursor++;
                     }
                 }
             }
@@ -1599,13 +1489,13 @@ extern u8 D_8910A978[];
  * Seen in play (2026-11-12) in いちらん: after choosing ひっさつまえば and pressing あつめる, it wrote move 0x9E
  * (Hyper Fang) and count 1 into the filter state at +0x9B00.
  */
-void LabPCList_CommitMoveFilter(s8* arg0, s8* arg1) {
+void LabPCList_CommitMoveFilter(LabMoveFilterWindow* arg0, u8* arg1) {
     s32 count = 0;
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        if (M2C_FIELD(arg0 + i * 0x40, s32*, 0x68) != -1) {
-            arg1[count++] = D_8910A978[M2C_FIELD(arg0 + i * 0x40, s32*, 0x68)] + 1;
+        if (arg0->slots[i].index != -1) {
+            arg1[count++] = D_8910A978[arg0->slots[i].index] + 1;
         }
     }
     M2C_FIELD(arg1, s32*, 4) = count;

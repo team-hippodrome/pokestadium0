@@ -106,8 +106,8 @@ void LabPCList_ResetFilterState(LabPCListScreen* state) {
     /* IDO schedules these byte stores together when they share a source line. */
     state->levelFilterMin = 1; state->levelFilterMax = 100;
     state->unk_982C = 0;
-    state->unk_9918 = 0;
-    state->unk_9B04 = 0;
+    state->typeFilterCount = 0;
+    state->moveFilterCount = 0;
 }
 
 void Window_SetRect(s8 *, s32, s32, s32, s32);

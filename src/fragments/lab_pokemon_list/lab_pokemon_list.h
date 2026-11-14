@@ -735,6 +735,39 @@ typedef struct LabMessageWindow {
     /* 0x2C */ LabItemResult* message; // @unverified: LabPCList_InitMessageWindow arg3
 } LabMessageWindow; // size = 0x30
 
+/* One slot of a filter window: a button that shows the chosen type or move, ---- when empty. */
+typedef struct LabFilterSlot {
+    /* 0x00 */ LabeledButton button; // @unverified: label = the name of the choice (LabPCList_UpdateTypeFilter)
+    /* 0x3C */ s32 index; // @unverified: row of the choice in the window's list, -1 when empty
+} LabFilterSlot; // size = 0x40
+
+/* The タイプであつめる (gather by type) window of the いちらん screen (LabPCList_InitTypeFilter). */
+typedef struct LabTypeFilterWindow {
+    /* 0x000 */ Window window; // @unverified: 342x288
+    /* 0x02C */ LabFilterSlot slots[2]; // two empty type slots were seen in play
+    /* 0x0AC */ LabeledButton clearButton; // かいじょ; flags bit 0 when no type filter is set
+    /* 0x0E8 */ LabeledButton gatherButton; // あつめる
+    /* 0x124 */ ChoiceCursor cursor; // @unverified: count 4: slots 0 and 1, gatherButton, clearButton (LabPCList_UpdateTypeFilter)
+    /* 0x130 */ ScrollList list; // the numbered type list (1 ノーマル, 2 かくとう, ... 8 ゴースト); itemFlags bit 3 = in a slot
+    /* 0x174 */ s8* names[15]; // @unverified: entries of D_80066AD8 (a name pointer first), skipping entry 6
+    /* 0x1B0 */ u16 typeFlags[16]; // @unverified: list.itemFlags
+    /* 0x1D0 */ PointerList typeList; // @unverified: over names, the items of list
+    /* 0x1DC */ s32 mode; // @unverified: 0 = the buttons, 1 = the list (LabPCList_UpdateTypeFilter)
+} LabTypeFilterWindow; // size = 0x1E0
+
+/* The わざであつめる (gather by move) window of the いちらん screen (LabPCList_InitMoveFilter). */
+typedef struct LabMoveFilterWindow {
+    /* 0x000 */ Window window; // @unverified: typed from the function it is passed to
+    /* 0x02C */ LabFilterSlot slots[4]; // @unverified: like LabTypeFilterWindow.slots
+    /* 0x12C */ LabeledButton clearButton; // @unverified: かいじょ; flags bit 0 when no move filter is set
+    /* 0x168 */ LabeledButton gatherButton; // @unverified: あつめる
+    /* 0x1A4 */ ChoiceCursor cursor; // @unverified: count 6: the four slots, gatherButton, clearButton
+    /* 0x1B0 */ ScrollList list; // the numbered move list (1 10まんボルト, 2 あくまのキッス, ...)
+    /* 0x1F4 */ u16 moveFlags[164]; // @unverified: list.itemFlags
+    /* 0x33C */ ByteMatrix moveMatrix; // @unverified: 164 one-byte rows over D_8910A978, the items of list
+    /* 0x34C */ s32 mode; // @unverified: 0 = the buttons, 1 = the list
+} LabMoveFilterWindow; // size = 0x350
+
 #define LAB_PC_LIST_MAX_ROWS 466
 
 /* The いちらん (Pokémon list) screen of the Lab PC (LabPCList_InitListWindow). Its functions used to
@@ -767,12 +800,12 @@ typedef struct LabPCListScreen {
     /* 0x982A */ char pad982A[2];
     /* 0x982C */ s32 unk_982C;
     /* 0x9830 */ LabLevelInputWindow levelInputWindow;
-    /* 0x9918 */ s32 unk_9918; // @unverified: LabPCList_CommitTypeFilter writes here; 0 turns the type filter off
-    /* 0x991C */ s32 unk_991C;
-    /* 0x9920 */ char typeFilterWindow[0x9B00 - 0x9920]; // @unverified: LabPCList_DrawTypeFilter
-    /* 0x9B00 */ s32 unk_9B00; // @unverified: LabPCList_CommitMoveFilter writes here
-    /* 0x9B04 */ s32 unk_9B04;
-    /* 0x9B08 */ char moveFilterWindow[0x9E58 - 0x9B08]; // @unverified: LabPCList_DrawMoveFilter
+    /* 0x9918 */ s32 typeFilterCount; // @unverified: number of types in typeFilterTypes (LabPCList_CommitTypeFilter); 0 turns the type filter off
+    /* 0x991C */ u8 typeFilterTypes[4]; // @unverified: the types to gather (LabPCList_CommitTypeFilter, func_89109720)
+    /* 0x9920 */ LabTypeFilterWindow typeFilterWindow; // @unverified: LabPCList_DrawTypeFilter
+    /* 0x9B00 */ u8 moveFilterMoves[4]; // @unverified: the moves to gather (LabPCList_CommitMoveFilter, func_891097E4)
+    /* 0x9B04 */ s32 moveFilterCount; // @unverified: number of moves in moveFilterMoves; 0 turns the move filter off
+    /* 0x9B08 */ LabMoveFilterWindow moveFilterWindow; // @unverified: LabPCList_DrawMoveFilter
     /* 0x9E58 */ s32 unk_9E58;
     /* 0x9E5C */ s32 unk_9E5C; // @unverified: number of types in unk_9E60/unk_9E61 for the おなじタイプをあつめる filter (LabPCList_UpdateMonMenu)
     /* 0x9E60 */ u8 unk_9E60;
@@ -820,6 +853,14 @@ void func_89105C54(LabSourceSelectWindow* arg0, s32 arg1, s32 arg2, s8* arg3, Co
 void func_89105E70(LabSourceSelectWindow* arg0, s32 arg1);
 s32 func_891060BC(LabSourceSelectWindow* arg0);
 s32 func_89106254(LabSourceSelectWindow* arg0);
+void LabPCList_InitTypeFilter(LabTypeFilterWindow* arg0, s32 x, s32 y, s32* arg3);
+void LabPCList_DrawTypeFilter(LabTypeFilterWindow* arg0);
+s32 LabPCList_UpdateTypeFilter(LabTypeFilterWindow* arg0);
+void LabPCList_CommitTypeFilter(LabTypeFilterWindow* arg0, s32* arg1);
+void LabPCList_InitMoveFilter(LabMoveFilterWindow* arg0, s32 x, s32 y, u8* arg3);
+void LabPCList_DrawMoveFilter(LabMoveFilterWindow* arg0);
+s32 LabPCList_UpdateMoveFilter(LabMoveFilterWindow* arg0);
+void LabPCList_CommitMoveFilter(LabMoveFilterWindow* arg0, u8* arg1);
 void func_891053E0(void);
 void func_89108F0C(void);
 s32 Move_NormalizeDisplayIndex(s32 arg0);

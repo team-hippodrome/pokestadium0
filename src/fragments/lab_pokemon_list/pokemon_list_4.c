@@ -64,8 +64,6 @@ void ScrollList_DrawItems(s8*, s32, s32, s32, s8*);
 void LabPCList_DrawDetailColumns(s8*, s32, s32, s32);
 void LabPCList_DrawPopupMenu(LabPopupMenu*, s32);
 void LabPCList_DrawLevelInputWindow(LabLevelInputWindow*);
-void LabPCList_DrawTypeFilter(s8*);
-void LabPCList_DrawMoveFilter(s8*);
 void TextBox_Draw(s8*);
 extern u8 D_8007356C[];
 extern Gfx D_80060270[];
@@ -131,10 +129,10 @@ void LabPCList_DrawListScreen(LabPCListScreen* arg0) {
             LabPCList_DrawLevelInputWindow(&arg0->levelInputWindow);
             break;
         case 5:
-            LabPCList_DrawTypeFilter((s8*)arg0->typeFilterWindow);
+            LabPCList_DrawTypeFilter(&arg0->typeFilterWindow);
             break;
         case 6:
-            LabPCList_DrawMoveFilter((s8*)arg0->moveFilterWindow);
+            LabPCList_DrawMoveFilter(&arg0->moveFilterWindow);
             break;
         case 7:
             LabPCList_DrawPopupMenu(&arg0->popup, 2);
@@ -234,11 +232,11 @@ M2C_UNK LabPCList_ApplyFiltersAndSort(LabPCListScreen* arg0) {
             ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
         if (arg0->activeFilters & 2) {
-            func_80027D94(arg0->list.items, &arg0->filteredRows, func_89109720, &arg0->unk_9918);
+            func_80027D94(arg0->list.items, &arg0->filteredRows, func_89109720, &arg0->typeFilterCount);
             ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
         if (arg0->activeFilters & 4) {
-            func_80027D94(arg0->list.items, &arg0->filteredRows, func_891097E4, &arg0->unk_9B00);
+            func_80027D94(arg0->list.items, &arg0->filteredRows, func_891097E4, &arg0->moveFilterMoves);
             ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
         if (arg0->activeFilters & 8) {
@@ -261,8 +259,6 @@ typedef struct Pair8910D910 { void* a; s32 b; } Pair8910D910;
 extern Pair8910D910 D_8910D910[];
 void LabPCList_InitPopupMenu(LabPopupMenu*, void*, s8*, s32, s32);
 void LabPCList_PlacePopup(LabPopupMenu*);
-void LabPCList_InitTypeFilter(s8*, s32, s32, s8*);
-void LabPCList_InitMoveFilter(s8*, s32, s32, s8*);
 
 void func_89101F90(LabPCListScreen* arg0) {
     s32 sel;
@@ -289,14 +285,14 @@ void func_89101F90(LabPCListScreen* arg0) {
             break;
         case 4:
         case 5:
-            LabPCList_InitTypeFilter(arg0->typeFilterWindow, 0x81, 0x94, (s8*)&arg0->unk_9918);
+            LabPCList_InitTypeFilter(&arg0->typeFilterWindow, 0x81, 0x94, &arg0->typeFilterCount);
             arg0->state = 5;
             break;
         case 6:
         case 7:
         case 8:
         case 9:
-            LabPCList_InitMoveFilter(arg0->moveFilterWindow, 0x81, 0x94, (s8*)&arg0->unk_9B00);
+            LabPCList_InitMoveFilter(&arg0->moveFilterWindow, 0x81, 0x94, arg0->moveFilterMoves);
             arg0->state = 6;
             break;
     }
