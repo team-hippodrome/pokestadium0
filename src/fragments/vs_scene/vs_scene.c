@@ -98,71 +98,8 @@ extern s32 D_822036A8;
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
 s32 Completion_LightAngleCallbackA(s32, GraphNode*);
 s32 Completion_LightAngleCallbackB(s32, GraphNode*);
-typedef struct unk_D_86B0DBCC {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-} unk_D_86B0DBCC;
-typedef struct unk_D_86B0DB98 {
-    /* 0x00 */ u8* unk_00;
-    /* 0x04 */ s16 unk_04;
-} unk_D_86B0DB98;
-typedef struct unk_D_86B0EBD8 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ char unk10[0x8];
-    /* 0x18 */ s32 unk_18;
-    /* 0x30 */ unk_D_86B0DAE0 unk_1C;
-} unk_D_86B0EBD8;
-typedef struct unk_D_86B0EBDC {
-    /* 0x000 */ unk_D_86002F30* unk_000;
-    /* 0x004 */ unk_D_86002F30* unk_004;
-    /* 0x008 */ DisplayObject unk_008;
-    /* 0x170 */ DisplayObject unk_170;
-    /* 0x2D8 */ s32 unk_2D8;
-    /* 0x2DC */ s32 unk_2DC;
-    /* 0x2E0 */ char unk2E0[0x4];
-    /* 0x2E4 */ s32 unk_2E4;
-    /* 0x2E8 */ s32 unk_2E8;
-    /* 0x2EC */ s32 unk_2EC;
-    /* 0x2F0 */ s32 unk_2F0;
-    /* 0x2F4 */ f32 unk_2F4;
-    /* 0x2F8 */ char unk2F8[0x4];
-    /* 0x2FC */ f32 unk_2FC;
-    /* 0x300 */ f32 unk_300;
-    /* 0x304 */ s32 unk_304;
-    /* 0x308 */ s32 unk_308;
-} unk_D_86B0EBDC;
-typedef struct unk_D_86B0EBE0 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s16 unk_14;
-    /* 0x16 */ s16 unk_16;
-    /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A;
-    /* 0x1C */ s16 unk_1C;
-} unk_D_86B0EBE0;
-extern s32 pad_D_86B0C4BC[3];
 
 #include "math.h"
-typedef struct unk_D_86301730 {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ DisplayObject unk_004;
-    /* 0x16C */ Vec3f unk_16C;
-    /* 0x178 */ s8 unk_178;
-    /* 0x179 */ s8 unk_179;
-    /* 0x17A */ s8 unk_17A;
-    /* 0x17B */ s8 unk_17B;
-    /* 0x17C */ u16 unk_17C;
-    /* 0x17E */ char pad17E[6];
-} unk_D_86301730;
 
 
 s32 Completion_LightAngleCallbackA(s32 arg0, GraphNode* arg1);
