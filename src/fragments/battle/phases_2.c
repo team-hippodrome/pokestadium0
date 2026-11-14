@@ -569,8 +569,8 @@ void BattleScene_IntroStepSpinOverheadCamera(CameraNode* arg0) {
         func_821365B0(8, (s8*)sActivePokemon[0], (s8*)sActivePokemon[0], 0xFF, 0xFF);
         Battle_SetStageScale(1.0f);
         sBattleScene.scene->phaseStep += 1;
-        sBattleScene.scene->verticalFieldOfView = M2C_FIELD(arg0, f32*, 0x2C);
-        M2C_FIELD(arg0, f32*, 0x2C) = 40.0f;
+        sBattleScene.scene->verticalFieldOfView = arg0->perspective.verticalFieldOfView;
+        arg0->perspective.verticalFieldOfView = 40.0f;
     }
 }
 

@@ -309,7 +309,7 @@ void func_82129414(CameraNode* arg0) {
                 sBattleScene.scene->cameraPresetId = 0;
                 sBattleScene.scene->phaseStep++;
             }
-            func_8210C1A8(&M2C_FIELD(arg0, f32*, 0x2C), 60.0f, 0.03f);
+            func_8210C1A8(&arg0->perspective.verticalFieldOfView, 60.0f, 0.03f);
             break;
     }
 }
