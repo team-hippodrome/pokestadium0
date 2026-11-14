@@ -1143,16 +1143,11 @@ s32 FreeBattle_UpdateCupSelect(FreeBattleCupWindow* arg0) {
     return result;
 }
 
-typedef struct Cfg82007C30 {
-    /* 0x0 */ s32 unk0;
-    /* 0x4 */ s32 unk4;
-    /* 0x8 */ s32 unk8;
-} Cfg82007C30; // size = 0xC
 extern Color_RGBA8 D_820091E4[2];
-extern Cfg82007C30 D_820091EC[2];
+extern FreeBattleMonGridConfig D_820091EC[2];
 
 /**
- * Initializes the object arg0 (size and layout not established) and fills in a
+ * Initializes the FreeBattleMonGridWindow arg0 and fills in a
  * per-entry table. Stores arg4 and arg5 in the second word of the two entries of
  * the 12-byte table D_820091EC, selects entry 1 when arg3 == 2 (otherwise entry 0),
  * calls Window_SetRect(arg0, arg1, arg2, 0x235, 0x174), clears the words at 0x20, 0x24
@@ -1165,8 +1160,8 @@ extern Cfg82007C30 D_820091EC[2];
  * and blue go to bits 15-11, 10-6 and 5-1, and bit 0 is set).
  * What the object is and what the constants mean is not established.
  */
-void func_82007C30(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s8* arg6) {
-    Cfg82007C30* cfg;
+void func_82007C30(FreeBattleMonGridWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s8* arg6) {
+    FreeBattleMonGridConfig* cfg;
     u8* entry;
     s32 sel;
     s32 i;
@@ -1178,23 +1173,23 @@ void func_82007C30(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s
     } else {
         sel = 0;
     }
-    D_820091EC[0].unk4 = arg4;
-    D_820091EC[1].unk4 = arg5;
+    D_820091EC[0].mons = arg4;
+    D_820091EC[1].mons = arg5;
     Window_SetRect(arg0, arg1, arg2, 0x235, 0x174);
-    M2C_FIELD(arg0, s32*, 0x24) = 0;
-    M2C_FIELD(arg0, s32*, 0x20) = 0;
-    M2C_FIELD(arg0, s32*, 0x28) = 0;
-    M2C_FIELD(arg0, s32*, 0x14) = 0x801;
+    arg0->window.animTimer = 0;
+    arg0->window.title = 0;
+    arg0->window.state = 0;
+    arg0->window.frame.style = 0x801;
     cfg = &D_820091EC[sel];
-    M2C_FIELD(arg0, s32*, 0x20) = cfg->unk0;
-    size = cfg->unk8;
-    func_80027410(arg0 + 0xCC, cfg->unk4, 0x50, size, size);
+    arg0->window.title = cfg->title;
+    size = cfg->count;
+    func_80027410(&arg0->mons, cfg->mons, sizeof(BattleMon), size, size);
     func_80018168(arg6);
-    entry = M2C_FIELD(arg0, u8**, 0xCC);
-    M2C_FIELD(arg0, s8**, 0xDC) = arg6;
-    for (i = 0; i < M2C_FIELD(arg0, s32*, 0xD4); i++) {
+    entry = arg0->mons.rows;
+    arg0->icons = arg6;
+    for (i = 0; i < arg0->mons.count; i++) {
         color = D_820091E4[i & 1];
-        func_80018234(M2C_FIELD(arg0, unk_func_8001A024**, 0xDC), i, *entry,
+        func_80018234(arg0->icons, i, *entry,
                       ((color.r << 8) & 0xF800) | ((color.g * 8) & 0x7C0) | ((color.b >> 2) & 0x3E) | 1);
         entry += 0x50;
     }
@@ -1207,12 +1202,12 @@ void func_800189C0(s32, s32);
 void BgStage_DrawFrame(void);
 s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
 
-void func_82007D94(s8* arg0, s32 arg1) {
+void func_82007D94(FreeBattleMonGridWindow* arg0, s32 arg1) {
     s32 i;
     s32 x;
     s32 y;
-    s32 x0 = M2C_FIELD(arg0, s32*, 0) + 6;
-    s32 y0 = M2C_FIELD(arg0, s32*, 4) + 6;
+    s32 x0 = arg0->window.frame.x + 6;
+    s32 y0 = arg0->window.frame.y + 6;
     s8* entry;
 
     if (func_8002AE6C() == 0) {
@@ -1220,10 +1215,10 @@ void func_82007D94(s8* arg0, s32 arg1) {
             gSPDisplayList(gDisplayListHead++, D_80060270);
             func_80029028((i % 7) * 0x4F + x0, (i / 7) * 0x3C + y0, 0x4F, 0x3C, D_82009204[i & 1]);
         }
-        func_800189C0(M2C_FIELD(arg0, s32*, 0xDC), 0);
+        func_800189C0(arg0->icons, 0);
         BgStage_DrawFrame();
-        entry = M2C_FIELD(arg0, s8**, 0xCC);
-        for (i = 0; i < M2C_FIELD(arg0, s32*, 0xD4); i++) {
+        entry = arg0->mons.rows;
+        for (i = 0; i < arg0->mons.count; i++) {
             func_8001AB6C();
             func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
             func_8001A384(4, -1);
@@ -1232,7 +1227,7 @@ void func_82007D94(s8* arg0, s32 arg1) {
             func_8001A944(x + 2, y + 0x2A, entry + 0x30);
             func_8001ABBC();
             gSPDisplayList(gDisplayListHead++, D_80073408);
-            func_8001B884(x + 0x26, y + 2, 0x28, 0x28, PokeIcon_GetImage(M2C_FIELD(arg0, s32*, 0xDC), i), 0x28, 0x200000);
+            func_8001B884(x + 0x26, y + 2, 0x28, 0x28, PokeIcon_GetImage(arg0->icons, i), 0x28, 0x200000);
             gSPDisplayList(gDisplayListHead++, D_80073438);
             entry += 0x50;
         }
@@ -1248,11 +1243,11 @@ extern s32 D_800603C0;
  * reads func_8002BC14(D_800603C0): -1 or 1 calls func_8003F6AC(3) and returns
  * -1; any other value returns 0.
  */
-s32 func_82008044(void* arg0) {
+s32 func_82008044(FreeBattleMonGridWindow* arg0) {
     s32 result = 0;
     s32 tmp;
 
-    tmp = M2C_FIELD(arg0, s32*, 0x28);
+    tmp = arg0->window.state;
     if ((tmp != 1) && (tmp != 2)) {
         return 0;
     }

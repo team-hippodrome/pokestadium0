@@ -98,6 +98,21 @@ typedef struct FreeBattleTeamOpponentWindow {
     /* 0xC4 */ s32 unk_C4; // passed to FreeBattle_DrawControllerPanel as `active`
 } FreeBattleTeamOpponentWindow; // size = 0xC8
 
+/* One of the two configurations of the Pokémon grid window (D_820091EC). */
+typedef struct FreeBattleMonGridConfig {
+    /* 0x0 */ char* title; // @unverified: copied to window.title
+    /* 0x4 */ BattleMon* mons; // @unverified: row buffer for FreeBattleMonGridWindow.mons; arg4/arg5 of func_82007C30
+    /* 0x8 */ s32 count; // @unverified: rows in mons
+} FreeBattleMonGridConfig; // size = 0xC
+
+/* A 7x6 grid of Pokémon with their names and icons (func_82007C30, func_82007D94). */
+typedef struct FreeBattleMonGridWindow {
+    /* 0x00 */ Window window;
+    /* 0x2C */ char unk2C[0xA0];
+    /* 0xCC */ ByteMatrix mons; // rows of BattleMon; the cell shows nickname and icon
+    /* 0xDC */ unk_func_8001A024* icons; // @unverified: icon set built by func_80018168/func_80018234, drawn with PokeIcon_GetImage
+} FreeBattleMonGridWindow; // size >= 0xE0, the screen's layout after it is not established
+
 /* Struct types that were defined identically in each of these files; this is
  * now the one definition they all include:
  * src/fragments/fragment007_166580.c
