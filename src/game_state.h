@@ -75,8 +75,7 @@ typedef struct TeamRoster {
     /* 0x001 */ u8 controllerPort;
     /* 0x002 */ u8 numberOfPokemonBrought;
     /* 0x004 */ Controller* controller;
-    /* 0x008 */ char trainerName[4];
-    /* 0x00C */ char unk00C[0xC];
+    /* 0x008 */ char trainerName[0x10]; // NUL-terminated; "1P" (Session_InitHumanTrainer copies 5 bytes) and full-width ＣＯ... for the COM side (EUC-JP A3 C3 A3 CF, FreeBattle_CopyTeamToRoster copies 7 bytes) seen in battle
     /* 0x018 */ s32 unk_018;
     /* 0x01C */ BattleMon pokemonPicked[6];
     /* 0x1FC */ ExtendedRosterInfo* rosterInfo;
