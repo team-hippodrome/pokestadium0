@@ -8,25 +8,6 @@
 #include "battle.h"
 #include "asset_archive.h"
 
-typedef struct unk_D_84002D18 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-} unk_D_84002D18;
-typedef struct unk_D_84002D28 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-} unk_D_84002D28;
-typedef struct unk_D_84002BE8 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ u8* unk_08;
-    /* 0x0C */ u8* unk_0C;
-} unk_D_84002BE8;
 extern s32 pad_D_84002D10;
 extern s32 pad_D_84002D1C;
 
@@ -40,14 +21,6 @@ extern u8 D_50011D0[];
 extern u8 D_5001680[];
 extern u8 D_50017E8[];
 
-typedef struct unk_D_839006B0 {
-    /* 0x00 */ BattleMon unk_00;
-    /* 0x54 */ char unk54[0x38];
-} unk_D_839006B0;
-typedef struct unk_D_83902700 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ char unk04[0x70];
-} unk_D_83902700;
 
 
 extern char** sUiText;
@@ -69,18 +42,6 @@ extern s16 sRoomDescriptionHeight;
 extern s16 sEliteFourTransition;
 
 #include "math.h"
-typedef struct unk_D_86301730 {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ DisplayObject unk_004;
-    /* 0x16C */ Vec3f unk_16C;
-    /* 0x178 */ s8 unk_178;
-    /* 0x179 */ s8 unk_179;
-    /* 0x17A */ s8 unk_17A;
-    /* 0x17B */ s8 unk_17B;
-    /* 0x17C */ u16 unk_17C;
-    /* 0x17E */ char pad17E[6];
-} unk_D_86301730;
 
 #include "m2c_macros.h"
 

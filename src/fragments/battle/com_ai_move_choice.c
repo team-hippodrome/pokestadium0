@@ -29,7 +29,7 @@ s32 BattleAi_ReplaceHyperBeam(s32 arg0) {
     s32 v;
     u8 move;
 
-    if (arg0 >= 0 && arg0 < 4 && BattleAi_GetBestDamage((u8*)D_821CF2A0, D_821CF29C, 0) < D_821CF29C->mon.hp && D_821CF29C->mon.moves[arg0] == HYPER_BEAM) {
+    if (arg0 >= 0 && arg0 < 4 && BattleAi_GetBestDamage(D_821CF2A0, D_821CF29C, 0) < D_821CF29C->mon.hp && D_821CF29C->mon.moves[arg0] == HYPER_BEAM) {
         threshold = D_821CF2A0->mon.hp - BattleAi_EstimateDamage((s8*)&D_821CF29C->mon, (s8*)&D_821CF2A0->mon, 0x3F) * 9 / 10;
         best = -1;
         if (threshold > 0) {
@@ -38,7 +38,7 @@ s32 BattleAi_ReplaceHyperBeam(s32 arg0) {
                     if (D_821CF29C->mon.moves[i] == 0) {
                         break;
                     }
-                    if (BattleAi_MovesFirst((s8*)D_821CF29C, D_821CF2A0) != 0 || D_821CF29C->mon.moves[i] == QUICK_ATTACK) {
+                    if (BattleAi_MovesFirst(D_821CF29C, D_821CF2A0) != 0 || D_821CF29C->mon.moves[i] == QUICK_ATTACK) {
                         move = D_821CF29C->mon.moves[i];
                         switch (move) {
                             case BIND:
@@ -167,7 +167,7 @@ s32 BattleAi_PickStrongestMove(s32 arg0) {
         if (D_821CF29C->mon.moves[i] == 0) {
             break;
         }
-        if (BattleAi_CanUseMove((s8*)D_821CF29C, D_821CF29C->mon.moves[i]) != 0) {
+        if (BattleAi_CanUseMove(D_821CF29C, D_821CF29C->mon.moves[i]) != 0) {
             v = BattleAi_EstimateDamage((s8*)&D_821CF29C->mon, (s8*)&D_821CF2A0->mon, D_821CF29C->mon.moves[i]);
             if (best < v) {
                 best = v;
@@ -213,48 +213,48 @@ s32 BattleAi_ChooseMove(void)
   s32 i;
   s32 j;
 
-  BattleAi_MovesFirst((s8 *) D_821CF29C, D_821CF2A0);
+  BattleAi_MovesFirst(D_821CF29C, D_821CF2A0);
   r = -1;
-  if ((BattleAi_MovesFirst((s8 *) D_821CF29C, D_821CF2A0) != 0) && (BattleAi_OpponentCannotAct((s8 *) D_821CF29C, D_821CF2A0) == 0) && (!(D_821CF2A0->mon.pendingStatusCondition & 0x27)) && (BattleAi_PickStrongestMove(BattleAi_GetHpPercent(D_821CF2A0)) != 0))
+  if ((BattleAi_MovesFirst(D_821CF29C, D_821CF2A0) != 0) && (BattleAi_OpponentCannotAct(D_821CF29C, D_821CF2A0) == 0) && (!(D_821CF2A0->mon.pendingStatusCondition & 0x27)) && (BattleAi_PickStrongestMove(BattleAi_GetHpPercent(D_821CF2A0)) != 0))
   {
-    r = BattleAi_PickHealingMove((s8 *) D_821CF29C);
+    r = BattleAi_PickHealingMove(D_821CF29C);
   }
   if (r < 0)
   {
-    if (BattleAi_OpponentCannotAct((s8 *) D_821CF29C, D_821CF2A0) != 0)
+    if (BattleAi_OpponentCannotAct(D_821CF29C, D_821CF2A0) != 0)
     {
-      r = BattleAi_PickSetupMove((s8 *) D_821CF29C);
+      r = BattleAi_PickSetupMove(D_821CF29C);
     }
     else
     {
-      r = BattleAi_PickToxicOrLeechSeed((s8 *) D_821CF29C);
+      r = BattleAi_PickToxicOrLeechSeed(D_821CF29C);
       if (r < 0)
       {
-        r = BattleAi_PickParalysisMove((s8 *) D_821CF29C, D_821CF2A0);
+        r = BattleAi_PickParalysisMove(D_821CF29C, D_821CF2A0);
       }
       if (r < 0)
       {
-        r = BattleAi_PickSleepMove((s8 *) D_821CF29C, D_821CF2A0);
+        r = BattleAi_PickSleepMove(D_821CF29C, D_821CF2A0);
       }
       if ((r < 0) && ((BattleAi_FindUsableHealingMove(D_821CF2A0) != 0) || (BattleAi_GetHpPercent(D_821CF2A0) >= 21)))
       {
-        r = BattleAi_PickStatLowerMove((s8 *) D_821CF29C, D_821CF2A0);
+        r = BattleAi_PickStatLowerMove(D_821CF29C, D_821CF2A0);
       }
     }
   }
   if (r < 0)
   {
     r = BattleAi_PickStrongestMove(50);
-    if ((r < 0) && ((BattleAi_PickStrongestMove(30) != 0) || (BattleAi_FindUsableHealingMove(D_821CF2A0) != 0)) && ((BattleAi_GetHpPercent(D_821CF2A0) >= 51) || (BattleAi_GetHpPercent((s8 *) D_821CF29C) >= 0x51)))
+    if ((r < 0) && ((BattleAi_PickStrongestMove(30) != 0) || (BattleAi_FindUsableHealingMove(D_821CF2A0) != 0)) && ((BattleAi_GetHpPercent(D_821CF2A0) >= 51) || (BattleAi_GetHpPercent(D_821CF29C) >= 0x51)))
     {
-      r = BattleAi_PickStatBoostMove((s8 *) D_821CF29C);
+      r = BattleAi_PickStatBoostMove(D_821CF29C);
     }
   }
   if (r < 0)
   {
-    if ((((BattleAi_MovesFirst((s8 *) D_821CF29C, D_821CF2A0) != 0) && (BattleAi_GetHpPercent((s8 *) D_821CF29C) < 0x14)) || ((BattleAi_MovesFirst((s8 *) D_821CF29C, D_821CF2A0) == 0) && ((D_821CF29C->mon.hp / 2) < ((BattleAi_GetBestDamage((u8 *) D_821CF2A0, D_821CF29C, 0) * 0x5A) / 100))) || ((BattleAi_FindUsableHealingMove((s8 *) D_821CF29C) == 0) && (BattleAi_GetHpPercent((s8 *) D_821CF29C) < 0x28))) && (BattleAi_CountUnfainted(D_821CF294) >= 2))
+    if ((((BattleAi_MovesFirst(D_821CF29C, D_821CF2A0) != 0) && (BattleAi_GetHpPercent(D_821CF29C) < 0x14)) || ((BattleAi_MovesFirst(D_821CF29C, D_821CF2A0) == 0) && ((D_821CF29C->mon.hp / 2) < ((BattleAi_GetBestDamage(D_821CF2A0, D_821CF29C, 0) * 0x5A) / 100))) || ((BattleAi_FindUsableHealingMove(D_821CF29C) == 0) && (BattleAi_GetHpPercent(D_821CF29C) < 0x28))) && (BattleAi_CountUnfainted(D_821CF294) >= 2))
     {
-      r = BattleAi_PickBoomMove((s8 *) D_821CF29C, D_821CF2A0);
+      r = BattleAi_PickBoomMove(D_821CF29C, D_821CF2A0);
     }
     if (r < 0)
     {
@@ -272,7 +272,7 @@ s32 BattleAi_ChooseMove(void)
         {
           break;
         }
-        if ((BattleAi_CanUseMove((s8 *) D_821CF29C, D_821CF29C->mon.moves[i]) != 0) && ((j != 0) || (BattleAi_IsMoveUseful(D_821CF29C->mon.moves[i]) != 0)))
+        if ((BattleAi_CanUseMove(D_821CF29C, D_821CF29C->mon.moves[i]) != 0) && ((j != 0) || (BattleAi_IsMoveUseful(D_821CF29C->mon.moves[i]) != 0)))
         {
           r = i;
           break;
@@ -302,7 +302,7 @@ s32 BattleAi_FindSlotWithPp(s32 arg0) {
     u8* me;
     u8 v;
 
-    base = (u8*)D_821CF29C;
+    base = D_821CF29C;
     me = base + arg0;
     i = 0;
     if (!(me[0x3E] & 0x3F)) {
@@ -387,9 +387,9 @@ s32 BattleAi_ChooseTurnAction(BattleMonRuntime* arg0, BattleMonRuntime* arg1, s3
     move = BattleAi_ChooseSwitch();
     if ((move >= 0) && (D_821CF29C->partyBit != ((one = 1) << move))) { // FAKE: one
         r = -1;
-        if ((D_821CF29C->mon.hp != 0) && (BattleAi_GetHpPercent((s8*)D_821CF29C) < 0x23) &&
-            (BattleAi_CountUnfainted(D_821CF294) >= 2) && (BattleAi_PickBoomMove((s8*)D_821CF29C, D_821CF2A0) >= 0)) {
-            r = BattleAi_PickBoomMove((s8*)D_821CF29C, D_821CF2A0);
+        if ((D_821CF29C->mon.hp != 0) && (BattleAi_GetHpPercent(D_821CF29C) < 0x23) &&
+            (BattleAi_CountUnfainted(D_821CF294) >= 2) && (BattleAi_PickBoomMove(D_821CF29C, D_821CF2A0) >= 0)) {
+            r = BattleAi_PickBoomMove(D_821CF29C, D_821CF2A0);
         }
         if (r < 0) {
             BattleAi_ResetBattleStats(&D_821CF29C->mon, &D_821CF294->roster->pokemonPicked[move]);

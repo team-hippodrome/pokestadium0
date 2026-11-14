@@ -51,7 +51,7 @@ s32 BattleAi_ChooseRandomMove(void) {
             switch (slots[i]) {
                 case SELFDESTRUCT:
                 case EXPLOSION:
-                    if ((cnt < 10) && (BattleAi_GetHpPercent((s8 *) D_821CF29C) >= 0x33)) {
+                    if ((cnt < 10) && (BattleAi_GetHpPercent(D_821CF29C) >= 0x33)) {
                         break;
                     }
                     if ((cnt < 50) && (BattleAi_RandomPercent() < 95)) {
@@ -73,7 +73,7 @@ s32 BattleAi_ChooseRandomMove(void) {
                 case RECOVER:
                 case SOFTBOILED:
                 case REST:
-                    if ((cnt < 50) && (BattleAi_GetHpPercent((s8 *) D_821CF29C) >= 0x5B)) {
+                    if ((cnt < 50) && (BattleAi_GetHpPercent(D_821CF29C) >= 0x5B)) {
                         break;
                     }
                     return i;
