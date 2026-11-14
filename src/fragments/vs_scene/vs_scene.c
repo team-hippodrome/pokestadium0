@@ -75,8 +75,8 @@ extern u8 D_82202F5C[];
 extern u8 D_8220301C[];
 extern unk_D_82203170 D_82203170[2];
 extern DisplayObject* D_82203200;
-extern DepthBuffer* D_82203208;
-extern DepthBuffer* D_82203210[12];
+extern GfxImage* D_82203208;
+extern GfxImage* D_82203210[12];
 extern GraphNode* D_82203240;
 extern GraphNode* D_82203244;
 extern GraphNode* D_82203248;
@@ -729,7 +729,7 @@ void func_82201084(s32 arg0) {
 extern u8 D_8F625700[];
 void func_8001C058(s32, s32, s32, s32, u8*, s32, s32);
 
-void func_82201348(DepthBuffer* arg0) {
+void func_82201348(GfxImage* arg0) {
     u8* sp34 = (u8*)Util_ConvertAddrToVirtAddr((uintptr_t)D_8F625700);
 
     GfxImage_SetRenderTarget(&gDisplayListHead, arg0);
@@ -792,7 +792,7 @@ void func_82201600(s32 arg0) {
                 for (k = 0; k < team->numberOfPokemonBrought; k++) {
                     if (arg0 == team->pokemonPicked[k].faintBatch) {
                         idx = i * 6 + j * 3 + k;
-                        func_82201348(*(DepthBuffer**)(M2C_FIELD(D_82203264, s8**, 8) + idx * 0x14 + 0xC));
+                        func_82201348(*(GfxImage**)(M2C_FIELD(D_82203264, s8**, 8) + idx * 0x14 + 0xC));
                         Audio_PlayCommand(0x3D, 2, idx + 1);
                     }
                 }
@@ -802,7 +802,7 @@ void func_82201600(s32 arg0) {
             for (k = 0; k < team->numberOfPokemonBrought; k++) {
                 if (arg0 == (team->pokemonPicked + k)->faintBatch) {
                     idx = i * 6 + k;
-                    func_82201348(*(DepthBuffer**)(M2C_FIELD(D_82203264, s8**, 8) + idx * 0x14 + 0xC));
+                    func_82201348(*(GfxImage**)(M2C_FIELD(D_82203264, s8**, 8) + idx * 0x14 + 0xC));
                     Audio_PlayCommand(0x3D, 2, idx + 1);
                 }
             }

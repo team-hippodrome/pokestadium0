@@ -172,7 +172,7 @@ void Ui_FillInsetRectangleB(s32 x1, s32 y1, s32 width, s32 height, u16 color) {
 /** Draws a rectangle shaded from one color to another. */
 void BattleHud_DrawGradientRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8* arg4, Color_RGB8* arg5) {
     Vtx* temp_s2;
-    DepthBuffer* temp_s1;
+    GfxImage* temp_s1;
     Mtx* sp7C;
     Vp* sp78;
 

@@ -50,7 +50,7 @@ void StageLoader_RunFrames(s32 timer);
 s32 BgStage_RunUntilCondition(u32 timer, s32 (*f)(u8));
 s32 BgStage_WaitForCondition(s32 (*arg0)(u8), s32 arg1, s32 arg2);
 void StageContext_SetClearColor(u16 color);
-DepthBuffer* StageContext_GetCurrentImage(void);
+GfxImage* StageContext_GetCurrentImage(void);
 s32 StageContext_IsHighResolution(void);
 
 s32 StageFade_Start(s32 arg0);
@@ -476,8 +476,8 @@ void BgStage_DrawFrame(void) {
  * Returns the current stage's depth buffer image, or NULL when there is no
  * stage.
  */
-DepthBuffer* StageContext_GetCurrentImage(void) {
-    DepthBuffer* ret = NULL;
+GfxImage* StageContext_GetCurrentImage(void) {
+    GfxImage* ret = NULL;
 
     if (stage != NULL) {
         ret = stage->renderTargets[stage->renderTargetIndex];

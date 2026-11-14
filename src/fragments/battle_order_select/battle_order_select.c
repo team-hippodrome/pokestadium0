@@ -77,7 +77,7 @@ void BattleMenu_DrawScrollingInstructionPanel(void) {
     s32 var_s2;
     s32 var_s4;
     s32 idx;
-    DepthBuffer* sp4C;
+    GfxImage* sp4C;
     Color_RGB8 sp48;
     Color_RGB8 sp44;
 

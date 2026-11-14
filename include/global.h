@@ -21,9 +21,9 @@ struct ModelAssetNode;
 
 typedef union arg1_func_80010CA8 {
     struct {
-        /* 0x00 */ s16 unk_00;
-        /* 0x02 */ s8 unk_02;
-        /* 0x03 */ s8 unk_03;
+        /* 0x00 */ s16 hueShift;        // @unverified: added to the HSV hue as 1/64 steps in Color_AdjustRGB5551
+        /* 0x02 */ s8 saturationShift;  // @unverified: moves HSV saturation by 1/8 steps toward 1 or 0 in Color_AdjustRGB5551
+        /* 0x03 */ s8 valueShift;       // @unverified: picks the D_8006BBB0 brightness curve in Color_AdjustRGB5551
     };
     u32 raw;
 } arg1_func_80010CA8; // size = 0x4

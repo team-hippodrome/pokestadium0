@@ -182,7 +182,7 @@ typedef struct UnkStruct80083CA0_2 {
     /* 0x1D8 */ s32 unk_1D8;
     /* 0x1DC */ s32 unk_1DC;
     /* 0x1E0 */ u8 unk1E0[0x800];
-    /* 0x9E0 */ struct unk_D_80068BB0* unk_9E0;
+    /* 0x9E0 */ struct GfxImage* unk_9E0;
     /* 0x9E4 */ OSMesg unk_9E4;
     /* 0x9E8 */ OSMesg unk_9E8;
     /* 0x9EC */ OSMesgQueue unk_9EC;

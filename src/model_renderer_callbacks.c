@@ -13,11 +13,6 @@ typedef struct StadiumModelSlot {
     /* 0x000 */ StadiumModel model;
     /* 0x204 */ char pad204[0x5CC];
 } StadiumModelSlot;
-typedef struct unk_func_80032F94_a0 {
-    /* 0x00 */ u8 pad00[0x18];
-    /* 0x18 */ s32 unk_18;
-    /* 0x1C */ s32 unk_1C;
-} unk_func_80032F94_a0;
 typedef struct unk_D_800B2EA8 {
     u8 unk_00[0xA8];
 } unk_D_800B2EA8;
@@ -105,7 +100,7 @@ void ModelRenderer_ClearSlotModels(s32 arg0) {
     StadiumModelSlot* slot = &D_800B0338[arg0];
 
     for (i = 0; i < 3; i++) {
-        slot[i].model.unk_00 = 0;
+        slot[i].model.isActive = 0;
     }
 }
 
@@ -194,7 +189,7 @@ Gfx* func_80032D90(Gfx* gfx) {
             Gfx_AllocDisplayList(0xA0);
             gfx = func_80032C74(gfx);
             {
-                ModelSegment* segment = (ModelSegment*)(&D_800B0338[mode][D_800AFB28].model.unkSegment);
+                ModelSegment* segment = &D_800B0338[mode][D_800AFB28].model.segment;
                 {    Gfx *_gfx = (Gfx *)(gfx++);    _gfx->words.w0 = 0xDB060038;    _gfx->words.w1 = (s32) segment->vertexSegment;    }
                 {    Gfx *_gfx = (Gfx *)(gfx++);    _gfx->words.w0 = 0xDE000000;    _gfx->words.w1 = (s32) segment->displayList;    }
                 {    Gfx *_gfx = (Gfx *)(gfx++);    _gfx->words.w0 = 0xDE000000;    _gfx->words.w1 = (s32) D_800744C0;    }

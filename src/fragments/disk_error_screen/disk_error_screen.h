@@ -38,8 +38,8 @@ typedef struct unk_func_80031270 {
     /* 0x02 */ s16 unk_02;
     /* 0x04 */ s16 unk_04;
     /* 0x06 */ s16 unk_06;
-    /* 0x08 */ DepthBuffer* unk_08;
-    /* 0x0C */ DepthBuffer* unk_0C;
+    /* 0x08 */ GfxImage* unk_08;
+    /* 0x0C */ GfxImage* unk_0C;
     /* 0x10 */ ModelLoadContext* unk_10;
     /* 0x14 */ BinArchive* unk_14;
     /* 0x18 */ unk_D_83403C60* unk_18;

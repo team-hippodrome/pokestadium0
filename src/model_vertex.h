@@ -4,20 +4,6 @@
 
 #include "global.h"
 
-/* Struct types that were defined identically in each of these files; this is
- * now the one definition they all include:
- * src/33FE0.c
- * src/DDC0.c
- * src/DDC0_2.c
- * src/DDC0_3.c
- * src/save_data.c
- */
-
-typedef struct unk_D_800A8480 {
-  /* 0x0000 */ OSThread thread;
-  /* 0x01B0 */ char unk01B0[0x2030];
-} unk_D_800A8480;
-
 #include "model_vertex_draw.h"
 
 // model_vertex_2.c

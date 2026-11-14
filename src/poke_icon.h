@@ -20,8 +20,8 @@ typedef struct PokeModelPreview {
     /* 0x1C */ ModelLoadContext* loadContext; // @unverified: model loader
     /* 0x20 */ GraphNode* rootNode; // @unverified: preview geo root
     /* 0x24 */ DisplayObject* displayObject; // @unverified: preview model
-    /* 0x28 */ DepthBuffer* colorImage; // @unverified: color image the preview renders into
-    /* 0x2C */ DepthBuffer* depthImage; // @unverified: depth image of colorImage
+    /* 0x28 */ GfxImage* colorImage; // @unverified: color image the preview renders into
+    /* 0x2C */ GfxImage* depthImage; // @unverified: depth image of colorImage
 } PokeModelPreview; // size = 0x30
 
 typedef union PokeIconSource {
@@ -38,7 +38,7 @@ typedef struct PokeIconSlot {
     /* 0x02 */ u16 fillColor; // @unverified: background fill (GfxImage_FillCurrent)
     /* 0x04 */ PokeIconSource source; // @unverified: species id or BattleMon*
     /* 0x08 */ f32 scale; // @unverified: species scale / 100
-    /* 0x0C */ DepthBuffer* image; // @unverified: rendered icon image
+    /* 0x0C */ GfxImage* image; // @unverified: rendered icon image
     /* 0x10 */ arg1_func_80010CA8 colorVariant; // @unverified: nickname color variant for the model colors
 } PokeIconSlot; // size = 0x14
 
@@ -51,7 +51,7 @@ typedef struct PokeIconRenderer {
     /* 0x08 */ PokeIconSlot* slots; // @unverified: slotCount icon slots
     /* 0x0C */ GraphNode* rootNode; // @unverified: geo root drawn into each slot image
     /* 0x10 */ DisplayObject* displayObject; // @unverified: model drawn for the icon
-    /* 0x14 */ DepthBuffer* depthImage; // @unverified: depth image shared by every slot
+    /* 0x14 */ GfxImage* depthImage; // @unverified: depth image shared by every slot
     /* 0x18 */ unk_D_8006FF00* unk_18;
 } PokeIconRenderer; // size = 0x1C
 

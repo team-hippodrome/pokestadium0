@@ -12,10 +12,10 @@ typedef struct unk_func_8001C248 {
     /* 0x018 */ s16 unk_018;
     /* 0x01A */ s16 unk_01A;
     /* 0x01C */ u8 unk_01C;
-    /* 0x01D */ u8 unk_01D;
+    /* 0x01D */ u8 backgroundLoadFlags; // @unverified: 0x80 requested, 0x40 loading, 0x20 wait, 0x10 done (PokeIcon_RequestBackgroundForObject)
     /* 0x01E */ char unk01E[0x2];
-    /* 0x020 */ s32 unk_020;
-    /* 0x024 */ s32* unk_024;
+    /* 0x020 */ s32 backgroundFileList; // @unverified: passed as the file list to PokeIcon_RequestBackgroundLoad
+    /* 0x024 */ s32* loadedBackground; // @unverified: gets ModelLoadContext.loadedBackground when the load finishes
 } unk_func_8001C248; // size >= 0x28
 
 #include "game_state.h"

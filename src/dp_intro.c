@@ -142,17 +142,17 @@ void DisplayWorker_ProcessFrame(void) {
         func_8000494C(&DW(u8, 0x9EC));
     }
 
-    if (DW(struct unk_D_80068BB0*, 0xAA0) != NULL) {
-        osViSwapBuffer(DW(struct unk_D_80068BB0*, 0xAA0)->img_p);
+    if (DW(struct GfxImage*, 0xAA0) != NULL) {
+        osViSwapBuffer(DW(struct GfxImage*, 0xAA0)->img_p);
         osViRepeatLine(0);
         if ((DW(u8, 0xAA5) != DW(u8, 0xA95)) || (DW(u8, 0xAA6) != DW(u8, 0xA96))) {
             DpIntro_SetViMode((s8)DW(u8, 0xA95), (s8)DW(u8, 0xA96));
         }
         osViBlack(0U);
-        crash_screen_set_draw_info((u16*)DW(struct unk_D_80068BB0*, 0xAA0)->img_p, DW(struct unk_D_80068BB0*, 0xAA0)->width, 0x10);
+        crash_screen_set_draw_info((u16*)DW(struct GfxImage*, 0xAA0)->img_p, DW(struct GfxImage*, 0xAA0)->width, 0x10);
     } else {
         osViRepeatLine(1);
-        osViSwapBuffer(DW(struct unk_D_80068BB0*, 0x9B0)->img_p);
+        osViSwapBuffer(DW(struct GfxImage*, 0x9B0)->img_p);
         if ((DW(u8, 0xAA5) != DW(u8, 0xA95)) || (DW(u8, 0xAA6) != DW(u8, 0xA96))) {
             DpIntro_SetViMode((s8)DW(u8, 0xA95), (s8)DW(u8, 0xA96));
         }
@@ -182,8 +182,8 @@ void func_80001558(void) {
         } else {
             width = 320;
         }
-        if (M2C_FIELD(&D_800870D0, struct unk_D_80068BB0**, 0xAB0) != NULL) {
-            p = (u64*)M2C_FIELD(&D_800870D0, struct unk_D_80068BB0**, 0xAB0)->img_p;
+        if (M2C_FIELD(&D_800870D0, struct GfxImage**, 0xAB0) != NULL) {
+            p = (u64*)M2C_FIELD(&D_800870D0, struct GfxImage**, 0xAB0)->img_p;
             p += width * M2C_FIELD(&D_800870D0, s16*, 0xA80);
             // clang-format off
             for (i = 0; i < 16; i++) { for (j = 0; j < width; j++) { *(p++) = 0; } p += width * 14; }
@@ -317,7 +317,7 @@ void Display_SetBufferConfig(struct UnkArray4* arg0, u8 arg1, u8 arg2, u8 arg3, 
     arg0->unk_03 = arg4;
     arg0->unk_04 = arg5;
     arg0->unk_08 = arg6;
-    arg0->unk_0C = (struct unk_D_80068BB0*)(uintptr_t)arg7;
+    arg0->unk_0C = (struct GfxImage*)(uintptr_t)arg7;
 }
 
 /** Returns the state of the special audio sequence. */

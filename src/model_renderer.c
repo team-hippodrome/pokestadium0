@@ -189,7 +189,7 @@ arg1_func_80010CA8* Model_ComputeNicknameColorVariant(arg1_func_80010CA8* arg0, 
             var_a0 += 0;
         }
 
-        sp34.unk_00 = ((((sp30->unk_12 - sp30->unk_10) << 6) * var_a0) / 255) + (sp30->unk_10 << 6);
+        sp34.hueShift = ((((sp30->unk_12 - sp30->unk_10) << 6) * var_a0) / 255) + (sp30->unk_10 << 6);
     }
 
     *arg0 = sp34;
@@ -255,14 +255,14 @@ void PokeIcon_WaitFrameLoadForObject(unk_func_8001C248* arg0) {
 
 /** Requests a background load for a display object. */
 void PokeIcon_RequestBackgroundForObject(unk_func_8001C248* arg0) {
-    if (!(arg0->unk_01D & 0x40) && (arg0->unk_01D & 0x80)) {
-        PokeIcon_RequestBackgroundLoad(arg0->node.callback, arg0->unk_020, arg0->unk_024);
-        arg0->unk_01D |= 0x40;
-        arg0->unk_01D &= ~0x10;
-        if (arg0->unk_01D & 0x20) {
+    if (!(arg0->backgroundLoadFlags & 0x40) && (arg0->backgroundLoadFlags & 0x80)) {
+        PokeIcon_RequestBackgroundLoad(arg0->node.callback, arg0->backgroundFileList, arg0->loadedBackground);
+        arg0->backgroundLoadFlags |= 0x40;
+        arg0->backgroundLoadFlags &= ~0x10;
+        if (arg0->backgroundLoadFlags & 0x20) {
             PokeIcon_WaitBackgroundLoad(arg0->node.callback);
-            arg0->unk_024 = arg0->node.callback->loadedBackground;
-            arg0->unk_01D &= ~0xE0;
+            arg0->loadedBackground = arg0->node.callback->loadedBackground;
+            arg0->backgroundLoadFlags &= ~0xE0;
         }
     }
 }
@@ -270,9 +270,9 @@ void PokeIcon_RequestBackgroundForObject(unk_func_8001C248* arg0) {
 /** Polls the icon loader for a display object's background load. */
 void PokeIcon_PollBackgroundForObject(unk_func_8001C248* arg0) {
     if (PokeIcon_PollBackgroundLoad(arg0->node.callback) != 0) {
-        arg0->unk_024 = arg0->node.callback->loadedBackground;
-        arg0->unk_01D &= ~0xE0;
-        arg0->unk_01D |= 0x10;
+        arg0->loadedBackground = arg0->node.callback->loadedBackground;
+        arg0->backgroundLoadFlags &= ~0xE0;
+        arg0->backgroundLoadFlags |= 0x10;
     }
 }
 

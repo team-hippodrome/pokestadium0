@@ -12,7 +12,7 @@ extern Vec3f D_80060464;
 #define GET_LOW_S16_OF_32(var) (((s16*)&(var))[1])
 
 #include "global.h"
-extern DepthBuffer* D_8005F670;
+extern GfxImage* D_8005F670;
 
 #include "global.h"
 // gSineTable, gCosineTable and gArctanTable (include/trig_tables.inc.c) match the
@@ -1121,24 +1121,24 @@ u16 Color_AdjustRGB5551(u16 arg0, arg1_func_80010CA8 arg1) {
     if (arg0 & 1) {
         Color_RGB5551ToHSV(arg0, &sp24);
 
-        if (arg1.unk_00 != 0) {
-            sp24.x += (arg1.unk_00 * 0.015625f);
+        if (arg1.hueShift != 0) {
+            sp24.x += (arg1.hueShift * 0.015625f);
         }
 
-        if (arg1.unk_02 != 0) {
-            if (arg1.unk_02 > 0) {
-                sp24.y += ((1.0f - sp24.y) * arg1.unk_02 * 0.125f);
+        if (arg1.saturationShift != 0) {
+            if (arg1.saturationShift > 0) {
+                sp24.y += ((1.0f - sp24.y) * arg1.saturationShift * 0.125f);
             } else {
-                sp24.y += (sp24.y * arg1.unk_02 * 0.125f);
+                sp24.y += (sp24.y * arg1.saturationShift * 0.125f);
             }
         }
 
-        if (arg1.unk_03 != 0) {
+        if (arg1.valueShift != 0) {
             a = (((sp24.z + 1.0f) * 0.5f * 255.0f));
-            if (arg1.unk_03 > 0) {
-                b = arg1.unk_03 + 7;
+            if (arg1.valueShift > 0) {
+                b = arg1.valueShift + 7;
             } else {
-                b = arg1.unk_03 + 8;
+                b = arg1.valueShift + 8;
             }
 
             sp24.z = (2.0f * (D_8006BBB0[b][a] / 65535.0f)) - 1.0f;
@@ -1161,25 +1161,25 @@ u32 Color_AdjustRGBA8(u32 arg0, arg1_func_80010CA8 arg1) {
     if (arg.a > 0) {
         Color_RGBA8ToHSV(arg, &sp2C);
 
-        if (arg1.unk_00 != 0) {
-            sp2C.x += (arg1.unk_00 * 0.015625f);
+        if (arg1.hueShift != 0) {
+            sp2C.x += (arg1.hueShift * 0.015625f);
         }
 
-        if (arg1.unk_02 != 0) {
-            if (arg1.unk_02 > 0) {
-                sp2C.y += ((1.0f - sp2C.y) * arg1.unk_02 * 0.125f);
+        if (arg1.saturationShift != 0) {
+            if (arg1.saturationShift > 0) {
+                sp2C.y += ((1.0f - sp2C.y) * arg1.saturationShift * 0.125f);
             } else {
-                sp2C.y += (sp2C.y * arg1.unk_02 * 0.125f);
+                sp2C.y += (sp2C.y * arg1.saturationShift * 0.125f);
             }
         }
 
-        if (arg1.unk_03 != 0) {
+        if (arg1.valueShift != 0) {
             a = (((sp2C.z + 1.0f) * 0.5f * 255.0f));
 
-            if (arg1.unk_03 > 0) {
-                b = arg1.unk_03 + 7;
+            if (arg1.valueShift > 0) {
+                b = arg1.valueShift + 7;
             } else {
-                b = arg1.unk_03 + 8;
+                b = arg1.valueShift + 8;
             }
 
             sp2C.z = (2.0f * (D_8006BBB0[b][a] / 65535.0f)) - 1.0f;

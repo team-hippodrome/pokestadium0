@@ -32,8 +32,8 @@ extern void* sStageBackdrop;
 extern GraphNode* sStageRoot;
 extern GraphNode* sSide1ThumbnailRoot;
 extern GraphNode* sSide2ThumbnailRoot;
-extern DepthBuffer* sSide1PokemonThumbnail;
-extern DepthBuffer* sSide2PokemonThumbnail;
+extern GfxImage* sSide1PokemonThumbnail;
+extern GfxImage* sSide2PokemonThumbnail;
 extern BattleSessionTeams* sBattleSides;
 extern s32 sIsPaused;
 extern s32 sNextFaintBatch;
@@ -53,9 +53,9 @@ s32 Battle_StageGeoDispatchCallback(s32 event, GraphNode* node);
 s32 Battle_StageLightAngleCallbackA(s32 event, GeoLightNode* light);
 s32 Battle_StageMaterialTintCallback(s32 event, DisplayObject* object);
 void Battle_SetStageScale(f32 scale);
-void Battle_RenderActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer* thumbnail);
+void Battle_RenderActivePokemonThumbnail(GraphNode* thumbnail_root, GfxImage* thumbnail);
 void Battle_DrawTexturedRectSegment(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width);
-void Battle_FillActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer* thumbnail);
+void Battle_FillActivePokemonThumbnail(GraphNode* thumbnail_root, GfxImage* thumbnail);
 void func_82100CB8(void);
 void func_82100CC0(void);
 s32 BattleScene_UpdateFrame(s32 fade_mode);
@@ -216,7 +216,7 @@ void Battle_DrawStageBackdrop(void) {
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
-void Battle_RenderActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer* thumbnail) {
+void Battle_RenderActivePokemonThumbnail(GraphNode* thumbnail_root, GfxImage* thumbnail) {
     CameraNode* camera_node = thumbnail_root->children;
     CameraViewport viewport;
 
@@ -283,7 +283,7 @@ void Battle_DrawTexturedRectSegment(s32 x1, s32 y1, s32 draw_width, s32 height, 
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
-void Battle_FillActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer* thumbnail) {
+void Battle_FillActivePokemonThumbnail(GraphNode* thumbnail_root, GfxImage* thumbnail) {
     s32 x;
     s32 y;
     CameraNode* camera_node = thumbnail_root->children;
@@ -664,9 +664,9 @@ extern Unit82101324* D_82198D14;
 extern s32 D_82198D1C;
 extern s32 D_82198D20;
 extern s32 D_82198D18;
-extern DepthBuffer* D_82198CFC;
-extern DepthBuffer* D_82198D00;
-extern DepthBuffer* D_82198D04;
+extern GfxImage* D_82198CFC;
+extern GfxImage* D_82198D00;
+extern GfxImage* D_82198D04;
 extern u8* D_82198D08;
 extern u8* D_82198D0C;
 extern GraphNode* D_82198CF0;

@@ -47,7 +47,7 @@ void func_80017F54(s8 *arg0, s16 arg1, s16 arg2) {
 /** Creates the render list for a Pokemon icon. */
 PokeIconRenderer* PokeIcon_CreateRenderList(ModelLoadContext* arg0, s16 arg1, s16 arg2, s16 arg3) {
     s32 var_s0;
-    DepthBuffer* temp_a1;
+    GfxImage* temp_a1;
     s32 i;
     PokeIconRenderer* temp_v0 = main_pool_alloc(0x18, 0);
 
@@ -83,7 +83,7 @@ void func_80018168(PokeIconRenderer* arg0) {
     u16 temp_a2;
     u16 temp_a3;
     PokeIconSlot* temp_v0;
-    DepthBuffer* temp_v1;
+    GfxImage* temp_v1;
 
     if (arg0->flags & 1) {
         func_80017D00((s32)arg0->loadContext);
@@ -110,7 +110,7 @@ void func_80018168(PokeIconRenderer* arg0) {
 }
 
 void func_80018234(PokeIconRenderer* arg0, s32 arg1, s32 arg2, u16 arg3) {
-    DepthBuffer* buf;
+    GfxImage* buf;
     UNUSED s32 pad; // FAKE: stack padding
 
     if (arg1 < arg0->slotCount) {
@@ -129,7 +129,7 @@ void func_80018234(PokeIconRenderer* arg0, s32 arg1, s32 arg2, u16 arg3) {
 
 void Model_ComputeNicknameColorVariant(arg1_func_80010CA8*);
 void func_8001833C(PokeIconRenderer* arg0, s32 arg1, BattleMon* arg2, u16 arg3) {
-    DepthBuffer* buf;
+    GfxImage* buf;
     UNUSED s32 pad; // FAKE: stack padding
 
     if (arg1 < arg0->slotCount) {

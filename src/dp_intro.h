@@ -4,7 +4,7 @@
 
 #include "global.h"
 
-struct unk_D_80068BB0;
+struct GfxImage;
 
 typedef struct UnkArray4 {
     /* 0x00 */ u8 unk_00;
@@ -13,7 +13,7 @@ typedef struct UnkArray4 {
     /* 0x03 */ u8 unk_03;
     /* 0x04 */ u32 unk_04;
     /* 0x08 */ u32 unk_08;
-    /* 0x0C */ struct unk_D_80068BB0* unk_0C;
+    /* 0x0C */ struct GfxImage* unk_0C;
 } UnkArray4; // size = 0x10
 
 #include "scheduler.h"
