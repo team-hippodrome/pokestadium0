@@ -24,17 +24,17 @@ extern M2C_UNK D_00162BE0;
 extern M2C_UNK D_00175570;
 
 /**
- * Loads the fragment for main menu choice `arg0`.
+ * Loads the fragment for main menu choice `item` (the grid cursor, 0-8).
  * Seen in play (2026-11-12) by choosing each main menu item and answering はい: 0 せいとん
  * (0x89000000), 2 いちらん (0x89100000), 3 ずかん (0x8A100000), 4 バトル (0x82000000), 5 てもち (0x8A200000),
  * 6 GB (returns 0x8060 and loads nothing), 7 OFF (0x88400000), 8 とうろく (0x88100000).
  */
-s32 MainMenu_LoadSelectedFragment(u32 arg0) {
+s32 MainMenu_LoadSelectedFragment(u32 item) {
     s32 ret;
 
     // FAKE: each "ret = ...; func_80025BA0(...);" pair has to share one line (as a macro
     // expansion would) for IDO to schedule it like the retail code.
-    switch (arg0) {
+    switch (item) {
         case 0:
             ret = 0x8040; func_80025BA0(((u32)((s32)&D_89000000 & 0x0FF00000) >> 0x14) - 0x10, &D_00238BD0, &D_00252E10, 0, 0);
             break;

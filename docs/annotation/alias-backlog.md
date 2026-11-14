@@ -95,8 +95,6 @@ Each row is one function address that the source still reaches under more than o
 | `BattleAnim_UpdateSecondaryOwnerParticleBlueGrow` | `func_82140AB4` |
 | `BattleHud_DrawSpeciesNameLabel` | `func_82116FF4` |
 | `BattleHud_DrawSpeciesNameLabelBlink` | `func_821170D0` |
-| `BattleMenu_InitTeamOrderState` | `func_823003B8` |
-| `BattleMenu_SelectSlotOrShowSummary` | `BattleMenu_SelectOrderSlot` |
 | `BattleMon_CountMoves` | `func_8002D3D0` |
 | `BattleScene_ApplyForcedActionDelay` | `func_8210C708` |
 | `BattleScene_ApproachCameraRoll` | `func_821221C0` |
@@ -135,7 +133,6 @@ Each row is one function address that the source still reaches under more than o
 | `Deck_GetSaveEntryName` | `func_8002479C` |
 | `Deck_ReadSaveEntry` | `func_80024D88` |
 | `Deck_SetSaveEntryTrainerIdAndName` | `func_80024954` |
-| `DisplayList_BuildRotationMatrixSegment` | `func_8F2003EC` |
 | `Font_DrawCharAt` | `func_8001AA60` |
 | `Font_Init` | `func_8001A194` |
 | `Font_Printf` | `func_8001A944` |

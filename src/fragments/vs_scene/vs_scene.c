@@ -1,4 +1,24 @@
 /* Stadium Zero fragment013_232510. */
+/*
+ * The VS scene: the stadium's big screen before and after every Free Battle and tournament battle.
+ * Entry point VsScene_Run(kind, session); see VsSceneKind in vs_scene.h. Seen in play (2026-11-14):
+ *
+ * Before a battle (VsScene_Play): the camera flies from the field into the big screen's flames
+ * (VsScene_ZoomIntoScreen), then VsScene_PlayTitleAndRevealTeams plays, in tournaments only, the
+ * flaming round title (バトル-2 etc.) and then the two trainer panels: they slide in, the VS letters
+ * fly in, and the panels flip over to show each side's Pokémon. That flip is a model animation curve
+ * (D_8F5054AC), not code; the panel's contents come from the geo callbacks in
+ * src/fragments/vs_trainer_panel (fragment 032: VsPanel_PortraitCallback, VsPanel_TitleTextCallback,
+ * VsPanel_NameTextCallback, VsPanel_IconCallback, VsPanel_NicknameCallback).
+ * VsScene_ZoomOutOfScreen then pulls back to the field.
+ *
+ * After a battle: VsScene_PlayFreeBattleResults or VsScene_PlayTournamentResults show the results
+ * board (icons of the Pokémon brought, HP bars draining to what is left, a red cross on each fainted
+ * one, VsScene_PlayResultsBoard), then かち/まけ (VsScene_PlayWinLose). After a tournament win,
+ * Tournament_PlayBadgeAward puts the round's badge on the trainer cap, asks
+ * Tournament_RunContinuePrompt, and Tournament_PlayNextRoundTitle plays the next round's title and
+ * panels in the same scene.
+ */
 /* C ported from the Stadium 1 decomp: src/fragments/demo_scenes/demo_scenes_161E60.c, src/fragments/jigglypuff_doodle/jigglypuff_doodle.c. */
 
 #include "vs_scene.h"
@@ -64,36 +84,40 @@ extern Color_RGBA8 D_822036A0;
 extern SessionContext* D_822036A4; // the session (gSessionContext) passed to VsScene_Run
 extern s32 D_822036A8;
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
-s32 Completion_LightAngleCallbackA(s32, GraphNode*);
+s32 VsScene_LightFollowCameraCallback(s32, GraphNode*);
 s32 Completion_LightAngleCallbackB(s32, GraphNode*);
 
 #include "math.h"
 
 
-s32 Completion_LightAngleCallbackA(s32 arg0, GraphNode* arg1);
-void func_82200848(void);
-void func_82200850(void);
+s32 VsScene_LightFollowCameraCallback(s32 phase, GraphNode* node);
+void VsScene_UnusedStubA(void);
+void VsScene_UnusedStubB(void);
 
 /**
  * Camera node callback: sets the perspective (fov 39, near 50, far 6400) and eye position on the first call.
  * Seen in play (2026-11-13) ran as the VS screen started; the scene then showed the stadium's big
  * screen head-on.
  */
-void VsScene_SetupCamera(s32 arg0, CameraNode* arg1) {
-    if (arg0 == 0) {
-        GeoCamera_SetPerspective(arg1, 39.0f, 50.0f, 6400.0f);
-        GeoCamera_SetEyeAtUp(arg1, 0.0f, 0.0f, 1507.0f, 0.0f, 0.0f, -165.0f, 0);
+void VsScene_SetupCamera(s32 phase, CameraNode* camera) {
+    if (phase == 0) {
+        GeoCamera_SetPerspective(camera, 39.0f, 50.0f, 6400.0f);
+        GeoCamera_SetEyeAtUp(camera, 0.0f, 0.0f, 1507.0f, 0.0f, 0.0f, -165.0f, 0);
     }
 }
 
-/** Callback that sets the light angle of a node. */
-s32 Completion_LightAngleCallbackA(s32 arg0, GraphNode* arg1) {
-    GeoLightNode* ptr = (GeoLightNode*)arg1;
+/**
+ * Geo light callback: each draw (phase 2) points the light along the current camera's view,
+ * pitch + 0x2000 and yaw - 0x2000. Stadium 1 calls its version Completion_LightAngleCallbackA.
+ * Seen in play (2026-11-14) ran with phase 2 every frame of the tournament VS scene.
+ */
+s32 VsScene_LightFollowCameraCallback(s32 phase, GraphNode* node) {
+    GeoLightNode* ptr = (GeoLightNode*)node;
     f32 sp28;
     s16 sp26;
     s16 sp24;
 
-    if (arg0 == 2) {
+    if (phase == 2) {
         Vec3f_CalculateDistanceAngles(&D_80060488->view.targetPosition, &D_80060488->view.eyePosition, &sp28, &sp26, &sp24);
         ptr->pitch = sp26 + 0x2000;
         ptr->yaw = sp24 - 0x2000;
@@ -101,13 +125,19 @@ s32 Completion_LightAngleCallbackA(s32 arg0, GraphNode* arg1) {
     return 0;
 }
 
-void func_822000F0(s32 arg0, s8 *arg1)
+/**
+ * Geo callback: at layout build (phase 0) stores the node itself in the variable its callbackArg
+ * (offset 0x14) points to. The three tournament stadium layouts (D_82202DDC, D_82202E9C, D_82202F5C)
+ * pass &D_82203200, which VsScene_LoadGeoLayout then animates with D_8F20A788.
+ * Seen in play (2026-11-14) ran in the tournament VS scene.
+ */
+void VsScene_StoreNodeCallback(s32 phase, s8 *node)
 {
   s8 **new_var; // FAKE: permuter temp
-  if (arg0 == 0)
+  if (phase == 0)
   {
-    new_var = *((s8 ***) (((s8 *) arg1) + 0x14));
-    *new_var = arg1;
+    new_var = *((s8 ***) (((s8 *) node) + 0x14));
+    *new_var = node;
   }
 }
 
@@ -209,7 +239,7 @@ void VsScene_DrawBackground(void);
  * Draws one frame of the scene into the offscreen image.
  * Seen in play (2026-11-13) ran every frame of the VS screen.
  */
-s32 VsScene_DrawFrameToImage(s32 arg0) {
+s32 VsScene_DrawFrameToImage(s32 unused) {
     s32 sp24 = VsScene_BeginFrame();
 
     GeoRender_AdvanceFrameCounter();
@@ -227,7 +257,7 @@ s32 VsScene_DrawFrameToImage(s32 arg0) {
  * Draws one frame of the scene over the background stage.
  * Seen in play: draws the VS scene's frames while the 「バトル」 title and VS panels play.
  */
-s32 VsScene_DrawFrame(s32 arg0) {
+s32 VsScene_DrawFrame(s32 unused) {
     s32 sp24 = VsScene_BeginFrame();
 
     GeoRender_AdvanceFrameCounter();
@@ -252,7 +282,7 @@ s32 func_80027214(s8 *, s32);                       /* extern */
  * func_80027214(buf2, rec + 0xB4), then VsScene_DrawFrameToImage(0) and
  * func_80006780(), and stops as soon as VsScene_DrawFrameToImage returns non-zero.
  *
- * Same buffer pair and loop as func_88401E24. What the buffers, the record
+ * Same buffer pair and loop as CartridgeCheck_PlayExitToTitle. What the buffers, the record
  * and the helpers are is not established.
  *
  * Matching notes: `sp3C` is a stack local (as m2c reported it), the
@@ -299,7 +329,15 @@ extern s8 D_82202D08;
 extern s8 D_82202D24;
 M2C_UNK func_80005B98(M2C_UNK);
 M2C_UNK func_8000A7FC(M2C_UNK);
-void func_82200714(void) {
+/**
+ * The reverse of VsScene_ZoomIntoScreen: moves the camera along the path from the big screen back
+ * out to the stadium (D_82202D08/D_82202D24 in Free Battle, D_82202C98/D_82202CB4 in tournaments),
+ * one frame per step. On step 20 it calls func_80005B98(0x20) and func_8000A7FC(0x3C) (@unverified:
+ * the screen fades to white as the step runs).
+ * Seen in play (2026-11-14) at the end of the pre-battle panels, the results board and the
+ * next-round panels: the camera pulls back out of the screen to the field, then the screen fades.
+ */
+void VsScene_ZoomOutOfScreen(void) {
     s8 sp8C[0x3C];
     s8 sp50[0x3C];
     s32 i = 0;
@@ -330,27 +368,37 @@ void func_82200714(void) {
     }
 }
 
-void func_82200848(void) {
+/**
+ * Empty. Nothing in the ROM calls it or holds its address (jal, j and pointer scan of every built
+ * fragment, 2026-11-14).
+ * @unverified Unreachable, so never seen in play.
+ */
+void VsScene_UnusedStubA(void) {
 }
 
-void func_82200850(void) {
+/**
+ * Empty. Nothing in the ROM calls it or holds its address (same scan as VsScene_UnusedStubA).
+ * @unverified Unreachable, so never seen in play.
+ */
+void VsScene_UnusedStubB(void) {
 }
 
 
 /**
- * Requests the icon of each Pokemon a side can pick and stores the images.
- * Seen in play: runs as the VS scene opens; the trainer portraits (1P's cap, the むしとり しょうねん)
- * appear in its panels.
+ * Requests the icon of each Pokémon on a side's team (all it could pick, up to six) into icon slots
+ * sideIndex * 6 onward and stores the images for the trainer panel's back.
+ * Seen in play (2026-11-14): these are the six icons the panels show after they flip over
+ * (イワイワ, パルパル, ... for the girl's Free Battle team).
  */
-void VsScene_LoadTeamIcons(VsSceneSide* arg0, s32 arg1) {
+void VsScene_LoadTeamIcons(VsSceneSide* side, s32 sideIndex) {
     s32 i;
-    s32 slot = arg1 * 6;
+    s32 slot = sideIndex * 6;
 
     for (i = 0; i < 6; i++) {
-        if (i < arg0->rosterInfo[0]->numberOfPokemonCanBePicked) {
-            func_8001833C((PokeIconRenderer*)D_82203264, slot, &arg0->rosterInfo[0]->battleMon[i], 1);
+        if (i < side->rosterInfo[0]->numberOfPokemonCanBePicked) {
+            func_8001833C((PokeIconRenderer*)D_82203264, slot, &side->rosterInfo[0]->battleMon[i], 1);
         }
-        arg0->iconImages[i] = PokeIcon_GetImage((PokeIconRenderer*)D_82203264, slot++);
+        side->iconImages[i] = PokeIcon_GetImage((PokeIconRenderer*)D_82203264, slot++);
     }
 }
 
@@ -360,13 +408,28 @@ extern u8 D_8EE0FDE0[];
 extern u8 D_8F5054AC[];
 extern u8 D_8F5054C8[];
 /**
- * Plays the title over the flames: an audio cue chosen by mode and round (command 0x3C), then the
- * title model's animation (special curves for models 7 and 8), then the closing animation, 100 or
- * 160 frames.
- * Seen in play: the flaming 「バトル」 title letters appear one by one, then 「VS」 with both trainers.
- * Seen in play (2026-11-13) ran once during the VS screen, over the flames on the stadium screen.
+ * The pre-battle reveal: plays the round title, then the two trainer panels, which flip over to
+ * reveal each side's Pokémon. Formerly VsScene_PlayBattleTitle.
+ *
+ * 1. Audio command 0x3C with a track by rule category (Free Battle 6, L1-30 1, L50-55 by cup 2-5)
+ *    and, in tournaments, the round.
+ * 2. Tournaments only (mode != 0): the round title model (model roundOrDemoId on D_82203248, the
+ *    geo layout VsScene_LoadGeoLayout picked by round) runs one curve and is cleared:
+ *    D_8EC145CC for rounds 1-6 (100 frames), D_8ED0FACC for round 7 and D_8EE0FDE0 for round 8
+ *    (110 frames each). Seen: バトル-2 flies in letter by letter over the flames and shrinks away.
+ * 3. The trainer panels (model on D_8220324C, geo layout D_8F504830 in vs_trainer_panel; its
+ *    VsPanel_* callbacks fill in portrait, トレーナー, name, the six icons from VsScene_LoadTeamIcons
+ *    and nicknames).
+ *    Curve D_8F5054AC (160 frames) when neither side is a two-trainer team: the 1P panel slides in
+ *    from the top right and the other side's from the bottom, the V and S letters fly in, then both
+ *    panels rotate about their horizontal axis so their backs, with the team's Pokémon, face the
+ *    camera. Curve D_8F5054C8 (100 frames) is used when either side has teamLayout 2
+ *    (@unverified: no two-trainer battle was played).
+ * The panel model is left on screen for VsScene_ZoomOutOfScreen.
+ * Seen in play (2026-11-14) before a Free Battle (1P vs COM: panels and flip only) and from
+ * Tournament_PlayNextRoundTitle before Monster Ball Cup round 2 (バトル-2, then 1P vs かじばどろぼう).
  */
-void VsScene_PlayBattleTitle(void) {
+void VsScene_PlayTitleAndRevealTeams(void) {
     s32 track;
     s32 pad; // FAKE
     DisplayObject* obj = (DisplayObject*)((GraphNode*)D_82203244->children)->children;
@@ -436,15 +499,17 @@ extern u8 D_82400000[];
 extern u8 D_00175570[];
 extern u8 D_0017BE70[];
 void VsScene_ZoomIntoScreen(void);
-void VsScene_PlayBattleTitle(void);
-void func_82200714(void);
+void VsScene_PlayTitleAndRevealTeams(void);
+void VsScene_ZoomOutOfScreen(void);
 
 /**
- * Runs the VS scene before a tournament battle: loads both teams and their icons, places the
- * camera (two layouts by mode), fades in with the scene music (0x12 or 6), zooms into the stadium
- * screen, plays the flaming battle title and then the trainer panels.
+ * VS_SCENE_PRE_BATTLE: runs the VS scene before a battle: loads the session's trainer data
+ * (fragment 009), both teams and their icons, places the camera (Free Battle or tournament
+ * stadium), fades in with the scene music (0x12 Free Battle, 6 tournament), zooms into the big
+ * screen, plays the round title and the trainer panel reveal, and zooms back out.
  * Seen in play: before the first モンスターボールカップ round, the stadium, the flaming 「バトル」 title on its
- * big screen, and 「トレーナー 1P VS トレーナー むしとり しょうねん」.
+ * big screen, and 「トレーナー 1P VS トレーナー むしとり しょうねん」; before a Free Battle (2026-11-14)
+ * the same without a title.
  */
 void VsScene_Play(void) {
     CameraNode* camera = D_82203240->children;
@@ -470,8 +535,8 @@ void VsScene_Play(void) {
     }
     BgStage_RunUntilCondition(0x40, VsScene_DrawFrameToImage);
     VsScene_ZoomIntoScreen();
-    VsScene_PlayBattleTitle();
-    func_82200714();
+    VsScene_PlayTitleAndRevealTeams();
+    VsScene_ZoomOutOfScreen();
     ModelRenderer_ClearDisplayObject(&D_82203268);
     if (D_822036A4->sessionFlags & 2) {
         Save_ResetAndCommitTypedRecord(0x15, 0);
@@ -482,7 +547,13 @@ void VsScene_Play(void) {
 M2C_UNK func_80025100(s8 *, M2C_UNK);               /* extern */
 M2C_UNK func_80025168(s8);                          /* extern */
 
-void func_82200DA4(void) {
+/**
+ * Unlocks the next GB Tower frame (reads the count with func_80025100, stores it + 1 with
+ * func_80025168) and sets transitionFlags 0x8 for the first unlock, 0x10 for the second.
+ * Named by the save-format thread from play (docs/annotation/n64-save-format.md on its branch);
+ * not played again here.
+ */
+void Tournament_UnlockGbTowerFrame(void) {
     s8 sp1F;
 
     func_80025100(&sp1F, 0);
@@ -499,7 +570,13 @@ void func_82200DA4(void) {
 }
 
 
-void func_82200E2C(void) {
+/**
+ * Sets transitionFlags 0x20 when the player's team came from a GB cartridge (port teamGbPort 0-3,
+ * no rental on the team) and it brought a non-rental Pikachu (species 0x19) that does not know Surf
+ * (move 0x39), presumably to start the Surfing Pikachu reward (fragment 010).
+ * @unverified Not reached in play: needs a cup won with a GB Pikachu.
+ */
+void Tournament_CheckSurfPikachuReward(void) {
     SessionContext* state = D_822036A4;
     s32 player = state->teamGbPort;
     TeamRoster* roster;
@@ -538,7 +615,15 @@ void func_82200E2C(void) {
 s32 Save_GetProgressFlags(void);
 void Save_SetProgressFlags(u16 arg0);
 
-void func_82200F08(void) {
+/**
+ * The cup champion handler, called by Tournament_PlayBadgeAward after round 8: sets transitionFlags
+ * 0x2 (and 0x4 for an L1-30 or Master Ball cup clear), records the cleared cup in the progress
+ * flags and saves record 0x14; the first clear also unlocks a GB Tower frame and checks the Surfing
+ * Pikachu reward. The game then loads fragment 011, the cup-cleared trophy scene.
+ * Named by the save-format thread from play (docs/annotation/n64-save-format.md on its branch);
+ * not played again here.
+ */
+void Tournament_RecordCupClear(void) {
     u16 lo = Save_GetProgressFlags() & 0xFF;
     u16 hi = (Save_GetProgressFlags() >> 8) & 0xFF;
 
@@ -546,11 +631,11 @@ void func_82200F08(void) {
 
     if (D_822036A4->mode == 1) {
         D_822036A4->transitionFlags |= 4;
-        func_82200E2C();
+        Tournament_CheckSurfPikachuReward();
         if (!(hi & 1)) {
             hi |= 1;
             Save_SetProgressFlags((hi << 8) | lo);
-            func_82200DA4();
+            Tournament_UnlockGbTowerFrame();
             Save_CommitTypedRecord(0x14, 0);
         }
     } else if (D_822036A4->mode == 2) {
@@ -561,11 +646,11 @@ void func_82200F08(void) {
         }
         if (D_822036A4->modeSelection == 3) {
             D_822036A4->transitionFlags |= 4;
-            func_82200E2C();
+            Tournament_CheckSurfPikachuReward();
             if (!(hi & 2)) {
                 hi |= 2;
                 Save_SetProgressFlags((hi << 8) | lo);
-                func_82200DA4();
+                Tournament_UnlockGbTowerFrame();
                 Save_CommitTypedRecord(0x14, 0);
             }
         }
@@ -578,22 +663,21 @@ void func_82200F08(void) {
 void BattleHud_DrawHpBarTexture(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4); //@src/ui_graphics.c
 
 /**
- * Draws the HP bar of every Pokemon both teams brought, each into its own slot
+ * Draws the HP bar of every Pokémon both teams brought, each into its own slot
  * image in D_82203210 (team i owns slots i * 6 to i * 6 + 5).
  *
- * The bar shows max(hp, unk_26 * arg0 / 100) out of unk_26. unk_26 is passed
- * as the bar's maximum, so it is probably the maximum HP (func_822017F0 also
- * checks hp < unk_26). func_822018EC calls this with arg0 counting from 100
- * down to 0 in steps of 4, so each bar starts full and drains to the Pokemon's
- * current HP.
+ * The bar shows max(hp, maxHp * percent / 100) out of maxHp. VsScene_PlayResultsBoard calls this
+ * with percent counting from 100 down to 0 in steps of 4, so each bar starts full and drains to
+ * the Pokémon's current HP.
+ * Seen in play (2026-11-14): on the tournament results board the bars drained to the HP left.
  *
- * A team with unk_00 == 2 has two rosters (unk_38[0] and unk_38[1]) that use
- * three slots each; any other team has one roster that uses all six slots.
+ * A side with teamLayout 2 has two trainers (teamMember[0] and teamMember[1]) that use
+ * three slots each; any other side has one trainer that uses all six slots.
  *
  * Each branch declares its own mon/hp/scaled. With one shared set, the loop
  * constant 2 is kept in a2 instead of retail's a0.
  */
-void func_82201084(s32 arg0) {
+void VsScene_DrawHpBars(s32 percent) {
     s32 i;
     s32 j;
     s32 k;
@@ -609,7 +693,7 @@ void func_82201084(s32 arg0) {
             for (j = 0; j < 2; j++) {
                 mon = p->teamMember[j]->pokemonPicked;
                 for (k = 0; k < p->teamMember[j]->numberOfPokemonBrought; k++, mon++) {
-                    scaled = (mon->maxHp * arg0) / 100;
+                    scaled = (mon->maxHp * percent) / 100;
                     hp = (mon->hp >= scaled) ? mon->hp : scaled;
                     GfxImage_SetRenderTarget(&gDisplayListHead, D_82203210[i * 6 + j * 3 + k]);
                     BattleHud_DrawHpBarTexture(0, 0, 104, hp, mon->maxHp);
@@ -622,7 +706,7 @@ void func_82201084(s32 arg0) {
 
             mon = p->teamMember[0]->pokemonPicked;
             for (k = 0; k < p->teamMember[0]->numberOfPokemonBrought; k++, mon++) {
-                scaled = (mon->maxHp * arg0) / 100;
+                scaled = (mon->maxHp * percent) / 100;
                 hp = (mon->hp >= scaled) ? mon->hp : scaled;
                 GfxImage_SetRenderTarget(&gDisplayListHead, D_82203210[i * 6 + k]);
                 BattleHud_DrawHpBarTexture(0, 0, 104, hp, mon->maxHp);
@@ -634,10 +718,15 @@ void func_82201084(s32 arg0) {
 extern u8 D_8F625700[];
 void func_8001C058(s32, s32, s32, s32, u8*, s32, s32);
 
-void func_82201348(GfxImage* arg0) {
+/**
+ * Draws the red cross (64x64 texture D_8F625700 tinted #FF3214) over a Pokémon's icon image on the
+ * results board.
+ * Seen in play (2026-11-14): crosses appeared on the three fainted COM Pokémon after a tournament win.
+ */
+void VsScene_DrawFaintCross(GfxImage* iconImage) {
     u8* sp34 = (u8*)Util_ConvertAddrToVirtAddr((uintptr_t)D_8F625700);
 
-    GfxImage_SetRenderTarget(&gDisplayListHead, arg0);
+    GfxImage_SetRenderTarget(&gDisplayListHead, iconImage);
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     gDPSetEnvColor(gDisplayListHead++, 255, 50, 20, 255); // #FF3214FF
     func_8001C058(0, 0, 0x40, 0x20, sp34, 0x40, 0);
@@ -646,40 +735,48 @@ void func_82201348(GfxImage* arg0) {
 }
 
 /**
- * Requests the icons of both members of a two-trainer side, three Pokemon each.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * For the results board: requests the icons of the Pokémon a side brought into battle (three per
+ * trainer for a two-trainer side, else up to six) into icon slots sideIndex * 6 onward, and stores
+ * each icon image and its HP bar image (D_82203210[slot]). Formerly VsScene_LoadTagTeamIcons.
+ * Seen in play (2026-11-14) at the start of the Free Battle and tournament results boards (the
+ * three brought Pokémon per side in a tournament, six in Free Battle).
  */
-void VsScene_LoadTagTeamIcons(VsSceneSide* arg0, s32 arg1) {
-    s32 slot = arg1 * 6;
+void VsScene_LoadBroughtIcons(VsSceneSide* side, s32 sideIndex) {
+    s32 slot = sideIndex * 6;
     s32 i;
     s32 j;
 
-    if (arg0->teamLayout == 2) {
+    if (side->teamLayout == 2) {
         for (i = 0; i < 2; i++) {
             for (j = 0; j < 3; j++) {
-                if (j < arg0->teamMember[i]->numberOfPokemonBrought) {
-                    func_8001833C((PokeIconRenderer*)D_82203264, slot, &arg0->teamMember[i]->pokemonPicked[j], 1);
+                if (j < side->teamMember[i]->numberOfPokemonBrought) {
+                    func_8001833C((PokeIconRenderer*)D_82203264, slot, &side->teamMember[i]->pokemonPicked[j], 1);
                 }
-                arg0->iconImages[i * 3 + j] = PokeIcon_GetImage((PokeIconRenderer*)D_82203264, slot);
-                arg0->hpBarImages[i * 3 + j] = D_82203210[slot]->img_p;
+                side->iconImages[i * 3 + j] = PokeIcon_GetImage((PokeIconRenderer*)D_82203264, slot);
+                side->hpBarImages[i * 3 + j] = D_82203210[slot]->img_p;
                 slot++;
             }
         }
     } else {
         for (j = 0; j < 6; j++) {
-            if (j < arg0->teamMember[0]->numberOfPokemonBrought) {
-                func_8001833C((PokeIconRenderer*)D_82203264, slot, &arg0->teamMember[0]->pokemonPicked[j], 1);
+            if (j < side->teamMember[0]->numberOfPokemonBrought) {
+                func_8001833C((PokeIconRenderer*)D_82203264, slot, &side->teamMember[0]->pokemonPicked[j], 1);
             }
-            arg0->iconImages[j] = PokeIcon_GetImage((PokeIconRenderer*)D_82203264, slot);
-            arg0->hpBarImages[j] = D_82203210[slot]->img_p;
+            side->iconImages[j] = PokeIcon_GetImage((PokeIconRenderer*)D_82203264, slot);
+            side->hpBarImages[j] = D_82203210[slot]->img_p;
             slot++;
         }
     }
 }
 
-void func_82201600(s32 arg0) {
+/**
+ * Draws the fainted cross (VsScene_DrawFaintCross) and plays audio command 0x3D/2 for every brought
+ * Pokémon whose faintBatch equals batch. VsScene_PlayResultsBoard calls it for batch 1 to 12 in a
+ * Free Battle, 1 to 6 otherwise.
+ * Seen in play (2026-11-14): all three COM Pokémon fainted in the same turn, got batch 1 and were
+ * crossed out together.
+ */
+void VsScene_MarkFaintedBatch(s32 batch) {
     s32 idx;
     UNUSED s32 pad[2]; // FAKE: stack padding
     TeamRoster* team;
@@ -695,9 +792,9 @@ void func_82201600(s32 arg0) {
                 if (team == NULL && team == NULL && team == NULL) {  // FAKE
                 }
                 for (k = 0; k < team->numberOfPokemonBrought; k++) {
-                    if (arg0 == team->pokemonPicked[k].faintBatch) {
+                    if (batch == team->pokemonPicked[k].faintBatch) {
                         idx = i * 6 + j * 3 + k;
-                        func_82201348(((PokeIconRenderer*)D_82203264)->slots[idx].image);
+                        VsScene_DrawFaintCross(((PokeIconRenderer*)D_82203264)->slots[idx].image);
                         Audio_PlayCommand(0x3D, 2, idx + 1);
                     }
                 }
@@ -705,9 +802,9 @@ void func_82201600(s32 arg0) {
         } else {
             team = D_822036A4->battleSides[i].teamMember[0];
             for (k = 0; k < team->numberOfPokemonBrought; k++) {
-                if (arg0 == (team->pokemonPicked + k)->faintBatch) {
+                if (batch == (team->pokemonPicked + k)->faintBatch) {
                     idx = i * 6 + k;
-                    func_82201348(((PokeIconRenderer*)D_82203264)->slots[idx].image);
+                    VsScene_DrawFaintCross(((PokeIconRenderer*)D_82203264)->slots[idx].image);
                     Audio_PlayCommand(0x3D, 2, idx + 1);
                 }
             }
@@ -715,7 +812,12 @@ void func_82201600(s32 arg0) {
     }
 }
 
-s32 func_822017F0(void) {
+/**
+ * Returns 1 when any Pokémon either side brought has hp below maxHp, else 0. Decides whether the
+ * results board plays the HP-drain sound (audio command 0x3D/1).
+ * Seen in play (2026-11-14) ran on the results board.
+ */
+s32 VsScene_AnyMonDamaged(void) {
     VsSceneSide* p;
     BattleMon* mon;
     s32 i;
@@ -750,23 +852,30 @@ M2C_UNK func_80006828(M2C_UNK, M2C_UNK (*)(M2C_UNK)); /* extern */
 s32 func_80018E24(s32);                             /* extern */
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);   /* extern */
 M2C_UNK VsScene_DrawFrame(M2C_UNK);                     /* extern */
-void func_82201084(s32);
-void func_82201600(s32);
-s32 func_822017F0();                                /* extern */
+void VsScene_DrawHpBars(s32);
+void VsScene_MarkFaintedBatch(s32);
+s32 VsScene_AnyMonDamaged();                                /* extern */
 
-void func_822018EC(void) {
+/**
+ * The results board: drains the HP bars from full to the HP left over 26 steps (with the drain
+ * sound when VsScene_AnyMonDamaged), waits until every icon is rendered, then crosses out the
+ * fainted Pokémon batch by batch (VsScene_MarkFaintedBatch, 6 or 8 frames apart) and waits 30
+ * frames.
+ * Seen in play (2026-11-14) after a Free Battle surrender and after a tournament round win.
+ */
+void VsScene_PlayResultsBoard(void) {
     s32 var_s0;
     s32 var_s0_2;
     s32 var_s0_3;
 
     Audio_PlayCommand(0x3D, 0, 0);
     func_80006828(5, VsScene_DrawFrame);
-    if (func_822017F0() != 0) {
+    if (VsScene_AnyMonDamaged() != 0) {
         Audio_PlayCommand(0x3D, 1, 0);
     }
     var_s0 = 0x64;
     do {
-        func_82201084(var_s0);
+        VsScene_DrawHpBars(var_s0);
         VsScene_DrawFrame(0);
         func_80006780();
         var_s0 -= 4;
@@ -781,13 +890,13 @@ void func_822018EC(void) {
     if ((D_822036A4->mode == 0) && (D_822036A4->ruleCategory == 0)) {
         var_s0_3 = 1;
         do {
-            func_82201600(var_s0_3);
+            VsScene_MarkFaintedBatch(var_s0_3);
             func_80006828(6, VsScene_DrawFrame);
             var_s0_3 += 1;
         } while (var_s0_3 != 0xD);
     } else {
         do {
-            func_82201600(var_s0_2);
+            VsScene_MarkFaintedBatch(var_s0_2);
             func_80006828(8, VsScene_DrawFrame);
             var_s0_2 += 1;
         } while (var_s0_2 != 7);
@@ -799,7 +908,14 @@ M2C_UNK func_8001107C(M2C_UNK *, M2C_UNK, M2C_UNK *); /* extern */
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);   /* extern */
 extern M2C_UNK D_8F6256E0;
 
-void func_82201A3C(void) {
+/**
+ * Shows the outcome: audio command 0x3D/3 when side 0 won (battleSides[0].unk_1C == 1), 0x3D/4
+ * otherwise, then runs curve D_8F6256E0 on the board model for 150 frames: the board flips back to
+ * the trainer panels, かち (win) and まけ (lose) fly onto them, and the loser's panel shatters.
+ * Seen in play (2026-11-14): after a Free Battle surrender 1P got まけ and its panel broke; after a
+ * tournament win 1P got かち.
+ */
+void VsScene_PlayWinLose(void) {
     if (D_822036A4->battleSides[0].unk_1C == 1) {
         Audio_PlayCommand(0x3D, 3, 0);
     } else {
@@ -880,10 +996,19 @@ s32 Tournament_RunContinuePrompt(void) {
     return sel;
 }
 
-void func_82200F08(void);
+void Tournament_RecordCupClear(void);
 s32 Tournament_RunContinuePrompt(void);
 
-s32 func_82201DF8(void) {
+/**
+ * After a tournament round, if side 0 won (battleSides[0].unk_1C == 1): the trainer cap
+ * (D_822033D0, geo D_8EB300B0) and its sparkles (D_82203538, geo D_8EB37440) run the round's curves
+ * from D_82202C1C and D_82202C3C, and the round's badge lands on the cap (audio 0x50, 0x51, and
+ * 0x52 for the final). After round 8 it calls Tournament_RecordCupClear; otherwise it asks
+ * Tournament_RunContinuePrompt and returns its answer (1 = quit). Returns 0 when side 0 lost.
+ * Seen in play (2026-11-14) after winning Monster Ball Cup round 1: the cap with the badge, then
+ * トーナメントをつづけますか？. The fragment 034 thread saw the badge and sparkles too.
+ */
+s32 Tournament_PlayBadgeAward(void) {
     s32 sp24 = 0;
 
     if (D_822036A4->battleSides[0].unk_1C == 1) {
@@ -899,7 +1024,7 @@ s32 func_82201DF8(void) {
             BgStage_RunUntilCondition(0x19, VsScene_DrawFrame);
             Audio_PlayCommand(0x52, 0, 0);
             BgStage_RunUntilCondition(0x37, VsScene_DrawFrame);
-            func_82200F08();
+            Tournament_RecordCupClear();
         } else {
             BgStage_RunUntilCondition(0x55, VsScene_DrawFrame);
             Audio_PlayCommand(0x51, 0, 0);
@@ -912,17 +1037,23 @@ s32 func_82201DF8(void) {
 
 extern u8 D_8F625614[];
 extern u8 D_8F61F87C[];
-void VsScene_LoadTagTeamIcons(VsSceneSide* arg0, s32 arg1);
-void func_82201084(s32);
-void func_82200714(void);
+void VsScene_LoadBroughtIcons(VsSceneSide* side, s32 sideIndex);
+void VsScene_DrawHpBars(s32);
+void VsScene_ZoomOutOfScreen(void);
 void func_80041374(s32 arg0, s32 arg1);
 
-void func_82201F90(void) {
+/**
+ * VS_SCENE_FREE_BATTLE_RESULTS: the scene after a Free Battle. Loads the brought Pokémon's icons,
+ * puts the camera on the stadium, zooms into the big screen, plays the results board and
+ * かち/まけ, and zooms back out (music 0xD).
+ * Seen in play (2026-11-14) after surrendering a Free Battle against COM.
+ */
+void VsScene_PlayFreeBattleResults(void) {
     CameraNode* camera = D_82203240->children;
 
     VsScene_PrepareTeams();
-    VsScene_LoadTagTeamIcons(&D_82203170[0], 0);
-    VsScene_LoadTagTeamIcons(&D_82203170[1], 1);
+    VsScene_LoadBroughtIcons(&D_82203170[0], 0);
+    VsScene_LoadBroughtIcons(&D_82203170[1], 1);
     Vec3f_SetComponentsDuplicate(&camera->view.targetPosition, -1200.0f, 300.0f, 0.0f);
     Vec3f_SetComponentsDuplicate(&camera->view.eyePosition, 200.0f, 50.0f, 0.0f);
     StageLoader_RunFrames(2);
@@ -935,12 +1066,12 @@ void func_82201F90(void) {
     D_82203268.node.renderFlags &= ~0x20;
     StageFade_Start(0x20);
     Audio_PlayMusicIfChanged(0xD);
-    func_82201084(0x64);
+    VsScene_DrawHpBars(0x64);
     VsScene_ZoomIntoScreen();
-    func_822018EC();
-    func_82201A3C();
+    VsScene_PlayResultsBoard();
+    VsScene_PlayWinLose();
     func_80041374(0x3D, 0);
-    func_82200714();
+    VsScene_ZoomOutOfScreen();
     ModelRenderer_ClearDisplayObject(&D_82203268);
     D_822036A4->transitionFlags |= 1;
 }
@@ -949,9 +1080,17 @@ extern u8 D_82400000[];
 extern u8 D_00175570[];
 extern u8 D_0017BE70[];
 void VsScene_PrepareTeams(void);
-void VsScene_PlayBattleTitle(void);
+void VsScene_PlayTitleAndRevealTeams(void);
 
-void func_822020FC(void) {
+/**
+ * After the badge award: if side 0 won and the round is below 8, advances roundOrDemoId, reloads the
+ * trainer data (fragment 009), the next opponent's team and icons, and plays the next round's title
+ * and panel reveal (VsScene_PlayTitleAndRevealTeams) in the same scene with music 0xF. After round
+ * 8 it waits 32 frames. Either way it sets transitionFlags 0x1.
+ * Seen in play (2026-11-14): choosing つづける after round 1 played バトル-2 and the panels of 1P vs
+ * かじばどろぼう (breakpoint: called from VsScene_PlayTournamentResults).
+ */
+void Tournament_PlayNextRoundTitle(void) {
     SessionContext* state = D_822036A4;
 
     if (state->battleSides[0].unk_1C == 1) {
@@ -967,7 +1106,7 @@ void func_822020FC(void) {
             D_822033E8 = D_822036A4->roundOrDemoId;
             D_82203550 = D_822036A4->roundOrDemoId;
             Audio_PlayMusicIfChanged(0xF);
-            VsScene_PlayBattleTitle();
+            VsScene_PlayTitleAndRevealTeams();
         } else {
             BgStage_RunUntilCondition(0x20, VsScene_DrawFrame);
             D_822036A4->transitionFlags |= 1;
@@ -977,12 +1116,18 @@ void func_822020FC(void) {
     }
 }
 
-void func_82202228(void) {
+/**
+ * VS_SCENE_TOURNAMENT_RESULTS: the scene after a tournament battle. Results board and かち/まけ as
+ * in Free Battle (music 0xD, 0x10 for the final), then the badge award; quitting at the continue
+ * prompt sets transitionFlags 0x41, continuing plays the next round's title and panels.
+ * Seen in play (2026-11-14) after winning Monster Ball Cup round 1.
+ */
+void VsScene_PlayTournamentResults(void) {
     CameraNode* camera = D_82203240->children;
 
     VsScene_PrepareTeams();
-    VsScene_LoadTagTeamIcons(&D_82203170[0], 0);
-    VsScene_LoadTagTeamIcons(&D_82203170[1], 1);
+    VsScene_LoadBroughtIcons(&D_82203170[0], 0);
+    VsScene_LoadBroughtIcons(&D_82203170[1], 1);
     Vec3f_SetComponentsDuplicate(&camera->view.targetPosition, -1200.0f, 300.0f, 0.0f);
     Vec3f_SetComponentsDuplicate(&camera->view.eyePosition, 200.0f, 50.0f, 0.0f);
     StageLoader_RunFrames(2);
@@ -999,17 +1144,17 @@ void func_82202228(void) {
     } else {
         Audio_PlayMusicIfChanged(0x10);
     }
-    func_82201084(0x64);
+    VsScene_DrawHpBars(0x64);
     VsScene_ZoomIntoScreen();
-    func_822018EC();
-    func_82201A3C();
-    if (func_82201DF8() != 0) {
+    VsScene_PlayResultsBoard();
+    VsScene_PlayWinLose();
+    if (Tournament_PlayBadgeAward() != 0) {
         D_822036A4->transitionFlags |= 0x41;
     } else {
-        func_822020FC();
+        Tournament_PlayNextRoundTitle();
     }
     func_80041374(0x3D, 0);
-    func_82200714();
+    VsScene_ZoomOutOfScreen();
     ModelRenderer_ClearDisplayObject(&D_82203268);
 }
 
@@ -1042,10 +1187,13 @@ extern u8 D_8F20A788[];
 void func_800270B4(s32 arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5);
 
 /**
- * Builds the scene's geo layout for the current stage kind.
- * Seen in play (2026-11-13) ran once as the VS screen started.
+ * Builds the scene's geo layouts: the stadium for the current stage kind (D_822036A8: Free Battle,
+ * or tournament rounds 1-6, 7, 8), the scene root, the round title for `round`, the trainer panels
+ * (vs_trainer_panel), the results board (geo_model_033), the badge cap and its sparkles
+ * (tournament_badge_cap).
+ * Seen in play (2026-11-13) ran once as the VS screen started; 2026-11-14 called from VsScene_Run.
  */
-void VsScene_LoadGeoLayout(s32 arg0) {
+void VsScene_LoadGeoLayout(s32 round) {
     MemoryBlock* block = MainPool_AllocState(main_pool_get_available(), 0);
 
     switch (D_822036A8) {
@@ -1067,11 +1215,11 @@ void VsScene_LoadGeoLayout(s32 arg0) {
     }
 
     D_82203244 = process_geo_layout(block, D_82202D40);
-    if ((arg0 > 0) && (arg0 < 7)) {
+    if ((round > 0) && (round < 7)) {
         D_82203248 = process_geo_layout(block, D_8EC13F98);
-    } else if (arg0 == 7) {
+    } else if (round == 7) {
         D_82203248 = process_geo_layout(block, D_8ED0E1A0);
-    } else if (arg0 == 8) {
+    } else if (round == 8) {
         D_82203248 = process_geo_layout(block, D_8EE0F378);
     }
     D_8220324C = process_geo_layout(block, D_8F504830);
@@ -1133,22 +1281,25 @@ s32 Font_Init(s32 load_size, s32 side);
 #define DEMO_FRAGMENT_ID(vram) ((((u32)(vram) & 0x0FF00000) >> 0x14) - 0x10)
 
 /**
- * Entry point: pushes the 'BTLS' pool state, loads the round's stage and fragments, and runs the pre-battle scene for mode `arg0`.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Entry point of the VS scene: pushes the 'BTLS' pool state, loads the stage and model fragments
+ * for the round, and runs the scene of the given kind (VsSceneKind): VsScene_Play before a battle,
+ * VsScene_PlayFreeBattleResults or VsScene_PlayTournamentResults after one. For the tournament
+ * results the stage is the next round's (round + 1, at most 8).
+ * Seen in play (2026-11-14): its calls to VsScene_LoadGeoLayout (VsScene_Run+0x464) and
+ * VsScene_PlayFreeBattleResults (VsScene_Run+0x4B0) were caught by breakpoints, before a Free Battle,
+ * after one and after a tournament round.
  */
-s32 VsScene_Run(s32 arg0, SessionContext* arg1) {
+s32 VsScene_Run(s32 kind, SessionContext* session) {
     s32 round;
     s32 sp24;
 
-    D_822036A4 = arg1;
+    D_822036A4 = session;
     round = 0;
     D_822036A4->transitionFlags = 0;
 
-    if (arg0 == 0) {
+    if (kind == VS_SCENE_PRE_BATTLE) {
         round = D_822036A4->roundOrDemoId;
-    } else if (arg0 == 2) {
+    } else if (kind == VS_SCENE_TOURNAMENT_RESULTS) {
         round = D_822036A4->roundOrDemoId + 1;
         if (round >= 9) {
             round = 8;
@@ -1213,17 +1364,17 @@ s32 VsScene_Run(s32 arg0, SessionContext* arg1) {
     VsScene_LoadGeoLayout(sp24);
     StageContext_Activate(D_82203204);
 
-    switch (arg0) {
-        case 0:
+    switch (kind) {
+        case VS_SCENE_PRE_BATTLE:
             VsScene_Play();
             break;
 
-        case 1:
-            func_82201F90();
+        case VS_SCENE_FREE_BATTLE_RESULTS:
+            VsScene_PlayFreeBattleResults();
             break;
 
-        case 2:
-            func_82202228();
+        case VS_SCENE_TOURNAMENT_RESULTS:
+            VsScene_PlayTournamentResults();
             break;
     }
 
