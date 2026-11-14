@@ -487,7 +487,7 @@ extern Gfx D_80073450[];
 extern u8 D_04010918[];
 void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
 u8 GbSave_GetPortGame(s32 arg0);
-void func_8002BC58(s32, s32, u8, s32);
+void GbSave_DrawCartridgeIcon(s32, s32, u8, s32);
 void Ui_DrawImageInStrips(u8*, s32, s32);
 void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
 /**
@@ -501,7 +501,7 @@ void Registration_DrawTrainerPanel(s32 x, s32 y, s32 textFlags, RegisteredTeam* 
     func_80029028(x, y, 0x88, 0x64, D_88102D7C);
     if (team->unk_00 == 0) {
         if (team->source == 0x20) {
-            func_8002BC58(x + 5, y + 4, team->pak, GbSave_GetPortGame(team->pak));
+            GbSave_DrawCartridgeIcon(x + 5, y + 4, team->pak, GbSave_GetPortGame(team->pak));
         } else if (team->source == 0x10) {
             Ui_DrawImageInStrips(D_88102DB8, x + 4, y + 4);
             Font_BeginTranslucentTextRendering();

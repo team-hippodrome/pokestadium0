@@ -18,7 +18,7 @@ M2C_UNK Ui_DrawTexturedDivider(s32, s32, s32, M2C_UNK *);
 M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32);
 M2C_UNK func_80019008(s32, s32, M2C_UNK);
 M2C_UNK func_8001B5F0();
-M2C_UNK func_80029864(s32, s32, s32, M2C_UNK *);
+M2C_UNK Ui_DrawFrameLeftCorners(s32, s32, s32, M2C_UNK *);
 extern M2C_UNK D_800734A8;
 extern s8 *D_800603C0;
 extern s8 D_8007356C;
@@ -33,7 +33,7 @@ void func_8001ABBC(void);
 void func_80022118(s32);
 void func_80022188(s32);
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
-void func_8002D7D4(s32);
+void GbSave_RunReportErrorLoop(s32);
 
 extern s32 D_8A21DE08;
 extern M2C_UNK D_8A21DE10;
@@ -228,7 +228,7 @@ void MonSummary_DrawPage(MonSummaryWindow* window, s32 page)
   {
     if (page == 0)
     {
-      func_80029864((window->window.frame.x) + 0xF9, window->window.frame.y, window->window.frame.height, &D_8007356C);
+      Ui_DrawFrameLeftCorners((window->window.frame.x) + 0xF9, window->window.frame.y, window->window.frame.height, &D_8007356C);
       Ui_DrawTexturedDivider(window->window.frame.x, (window->window.frame.y) + 0xD7, 0x100, &D_8007356C);
       Ui_DrawTexturedDivider((window->window.frame.x) + 0xFA, (window->window.frame.y) + 0x95, 0x12E, &D_8007356C);
       MonSummary_DrawStats((window->window.frame.x) + 6, (window->window.frame.y) + 0xDE, window->mon);
@@ -238,7 +238,7 @@ void MonSummary_DrawPage(MonSummaryWindow* window, s32 page)
     else
     {
       Ui_DrawTexturedDivider(window->window.frame.x, (window->window.frame.y) + 0xD7, window->window.frame.width, &D_8007356C);
-      func_80029864((window->window.frame.x) + 0xF9, window->window.frame.y, 0xDE, &D_8007356C);
+      Ui_DrawFrameLeftCorners((window->window.frame.x) + 0xF9, window->window.frame.y, 0xDE, &D_8007356C);
       MonSummary_DrawMovesHeader((window->window.frame.x) + 0x100, (window->window.frame.y) + 6, window->mon);
       MonSummary_DrawMoveList((window->window.frame.x) + 6, (window->window.frame.y) + 0xDE, window->mon, window->moveSlot);
       MonSummary_DrawMoveInfo((window->window.frame.x) + 0x100, (window->window.frame.y) + 0x54, window->mon, window->moveSlot);
@@ -373,7 +373,7 @@ void PartyScreen_WriteParty(s32* monList, s32 screen) {
 
     func_80020C60(temp_s3);
     if (func_8002207C(sPartyGbPort) == 0) {
-        func_8002D7D4(sPartyGbPort);
+        GbSave_RunReportErrorLoop(sPartyGbPort);
         PartyScreen_Draw((M2C_UNK*)screen);
     }
     func_80022188(sPartyGbPort);

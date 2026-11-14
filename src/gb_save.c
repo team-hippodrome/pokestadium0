@@ -79,7 +79,7 @@ void Font_SetColorForFlags(s32 arg0)
 }
 
 /*
- * func_80027F8C
+ * Ui_SetTextColorForFlags
  *
  * Picks one 4-byte entry and passes its four bytes to func_8001AA9C as four
  * byte-sized arguments.  The entry comes from one of three tables chosen by
@@ -95,17 +95,22 @@ void Font_SetColorForFlags(s32 arg0)
  * mean is not established from the code (they look like color components).
  */
 extern s8 D_800734C0;
-void func_80027F8C(s32 arg0) {
+/**
+ * Sets the text (environment) color for a menu item from its `flags`: disabled (0x18), highlighted
+ * (1) or normal, each in a bright and a dim variant (bit 1).
+ * @unverified Name read from the code; Free Battle setup uses it for its cup rows.
+ */
+void Ui_SetTextColorForFlags(s32 flags) {
     u8* entry;
 
-    if (arg0 & 0x18) {
+    if (flags & 0x18) {
         entry = (u8*)&D_800734B8;
-    } else if (arg0 & 1) {
+    } else if (flags & 1) {
         entry = (u8*)&D_800734C0;
     } else {
         entry = (u8*)&D_800734A8;
     }
-    if (!(arg0 & 2)) {
+    if (!(flags & 2)) {
         entry += 4;
     }
     func_8001AA9C(entry[0], entry[1], entry[2], entry[3]);
@@ -370,11 +375,11 @@ void Ui_DrawTexturedDivider(s32 x, s32 y, s32 w, FrameTextures* arg3) {
 extern GbTexLoadFunc D_80073510[];
 
 /**
- * Vertical counterpart of Ui_DrawTexturedDivider: draws a frame edge of height h (at least 16)
- * at (x, y) from the textures at arg3 + 8 and arg3 + 0xC, loaded through
- * D_80073510[arg3 + 4].
+ * Draws the 8x8 top-left and bottom-left corner tiles of a frame at (x, y) with height `h`
+ * (at least 16), using the loader that matches the frame textures' format.
+ * @unverified Name read from the code.
  */
-void func_80029864(s32 x, s32 y, s32 h, FrameTextures* arg3) {
+void Ui_DrawFrameLeftCorners(s32 x, s32 y, s32 h, FrameTextures* frame) {
     GbTexLoadFunc load;
     s32 pad[2]; // FAKE
     s32 y2;
@@ -385,12 +390,12 @@ void func_80029864(s32 x, s32 y, s32 h, FrameTextures* arg3) {
     }
     y2 = y + h;
     x8 = (x + 8) << 2;
-    load = D_80073510[arg3->format];
+    load = D_80073510[frame->format];
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-    load(8, 8, arg3->top, arg3->loadArg);
+    load(8, 8, frame->top, frame->loadArg);
     gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, x8, (y2 - 8) << 2, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
-    load(8, 8, arg3->left, arg3->loadArg);
+    load(8, 8, frame->left, frame->loadArg);
     gSPTextureRectangle(gDisplayListHead++, x << 2, (y2 - 8) << 2, x8, y2 << 2, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
 }
 
@@ -459,26 +464,34 @@ void Ui_FillRectHighlighted(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 
 }
 
 /*
- * func_8002A32C
+ * Ui_DrawLabelFrame
  *
  * Forwards its four arguments unchanged to Ui_DrawTexturedFrameDecal and adds a fifth
  * argument: the address of the data at D_80073524 (typed as a byte array).
- * func_8002A354 calls Ui_DrawTexturedFrameDecal the same way with D_8007353C as the
+ * Ui_DrawFilledFrame calls Ui_DrawTexturedFrameDecal the same way with D_8007353C as the
  * fifth argument.  What this data is, and what Ui_DrawTexturedFrameDecal does with it,
  * has not been determined, so the names are left as addresses.
  */
 extern u8 D_80073524[];
 void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
-void func_8002A32C(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
-    Ui_DrawTexturedFrameDecal(arg0, arg1, arg2, arg3, D_80073524);
+/**
+ * Draws the textured border of a label box at (x, y), size (w, h).
+ * Seen in play (2026-11-14): Window_DrawLabeled draws the main menu's small label boxes with it.
+ */
+void Ui_DrawLabelFrame(s32 x, s32 y, s32 w, s32 h) {
+    Ui_DrawTexturedFrameDecal(x, y, w, h, D_80073524);
 }
 
 extern u8 D_8007353C[];
 void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
-void func_8002A354(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color8002A354 arg4) {
+/**
+ * Fills a box at (x, y), size (w, h) with `color` and draws its textured border.
+ * @unverified Name read from the code; the Lab PC terminal uses it.
+ */
+void Ui_DrawFilledFrame(s32 x, s32 y, s32 w, s32 h, Color8002A354 color) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(arg0 + 1, arg1 + 1, arg2 - 2, arg3 - 2, arg4);
-    Ui_DrawTexturedFrameDecal(arg0, arg1, arg2, arg3, D_8007353C);
+    func_80029028(x + 1, y + 1, w - 2, h - 2, color);
+    Ui_DrawTexturedFrameDecal(x, y, w, h, D_8007353C);
 }
 
 typedef struct Img8002A3F8 {
@@ -672,8 +685,8 @@ s32 Window_UpdateAnimation(Window* arg0) {
 }
 
 extern u8 D_80073554[];
-void func_8002C1B4(s32, s32, s32, s32);
-void func_8002C5A4(); // no prototype: callers pass a fourth argument the definition ignores
+void Window_DrawTitleTab(s32, s32, s32, s32);
+void Window_DrawHeaderStripe(); // no prototype: callers pass a fourth argument the definition ignores
 
 /**
  * Draws a window's frame, scaled from 16x16 up to its size while it opens (state 0) and back down
@@ -739,10 +752,10 @@ s32 Window_DrawAnimatedFrame(Window* arg0) {
     }
     Ui_DrawTexturedFrameDecal(x, y, w, h, D_80073554);
     if (arg0->frame.style & 0x800) {
-        func_8002C1B4(x, y - 0x16, (s32)arg0->title, arg0->frame.style);
+        Window_DrawTitleTab(x, y - 0x16, (s32)arg0->title, arg0->frame.style);
     }
     if (arg0->frame.style & 0x1000) {
-        func_8002C5A4(x, y - 0xA, 0x50, arg0->frame.style);
+        Window_DrawHeaderStripe(x, y - 0xA, 0x50, arg0->frame.style);
     }
     return ret;
 }
@@ -790,7 +803,7 @@ void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
  * @unverified Name and comment guessed from the code.
  */
 void Window_DrawLabeled(LabeledButton* arg0, s32 arg1) {
-    func_8002A32C(arg0->x, arg0->y, arg0->width, arg0->height);
+    Ui_DrawLabelFrame(arg0->x, arg0->y, arg0->width, arg0->height);
     if ((arg0->flags & 8) || (arg1 & 0x10)) {
         Ui_FillRectHighlighted(arg0->x + 1, arg0->y + 1, arg0->width - 2, arg0->height - 2, arg0->color);
     } else if (arg1 & 2) {
@@ -804,38 +817,40 @@ void Window_DrawLabeled(LabeledButton* arg0, s32 arg1) {
 }
 
 /**
- * Sets up an image button: its rect (Window_SetRect, which also clears flags), the image and its width.
+ * Sets an image button's rectangle and its IA16 image and image width.
+ * Seen in play (2026-11-14): せいとん's organize window sets up its two image buttons with it.
  */
-void func_8002B018(ImageButton* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
-    Window_SetRect((s8*)arg0, arg1, arg2, arg3, arg4);
-    arg0->image = (u8*)arg6;
-    arg0->imageWidth = arg5;
+void ImageButton_Init(ImageButton* button, s32 x, s32 y, s32 w, s32 h, s32 imageWidth, s32 image) {
+    Window_SetRect((s8*)button, x, y, w, h);
+    button->image = (u8*)image;
+    button->imageWidth = imageWidth;
 }
 
 /**
- * Draws an image button. `arg1` bit 0x10 (or flags bit 3) fills it with highlightColor, else bit 2 draws a
- * rounded frame; bits 0x12 tint the image with selectedColor instead of color.
+ * Draws an image button: border, a highlighted fill when it is pressed (flag 8 or `flags` 0x10) or a
+ * rounded frame when selected (`flags` 2), then its image tinted with the selected or normal color.
+ * Seen in play (2026-11-14): draws the せいとん organize window's buttons.
  */
-void func_8002B054(ImageButton* arg0, s32 arg1) {
+void ImageButton_Draw(ImageButton* button, s32 flags) {
     Color_RGBA8 color;
     Color_RGBA8* src;
 
-    func_8002A32C(arg0->x, arg0->y, arg0->width, arg0->height);
-    if ((arg0->flags & 8) || (arg1 & 0x10)) {
-        Ui_FillRectHighlighted(arg0->x + 1, arg0->y + 1, arg0->width - 2, arg0->height - 2, arg0->highlightColor);
-    } else if (arg1 & 2) {
-        Ui_DrawRoundedFrame(arg0->x, arg0->y, arg0->width, arg0->height, D_80073520);
+    Ui_DrawLabelFrame(button->x, button->y, button->width, button->height);
+    if ((button->flags & 8) || (flags & 0x10)) {
+        Ui_FillRectHighlighted(button->x + 1, button->y + 1, button->width - 2, button->height - 2, button->highlightColor);
+    } else if (flags & 2) {
+        Ui_DrawRoundedFrame(button->x, button->y, button->width, button->height, D_80073520);
     }
-    if (arg1 & 0x12) {
-        src = &arg0->selectedColor;
+    if (flags & 0x12) {
+        src = &button->selectedColor;
     } else {
-        src = &arg0->color;
+        src = &button->color;
     }
     color = *src;
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
     gDPSetPrimColor(gDisplayListHead++, 0, 0, color.r, color.g, color.b, color.a);
-    Gfx_DrawTextureIa16(arg0->x + 3, arg0->y + 3, arg0->width - 6, arg0->height - 6, arg0->image, arg0->imageWidth, 0);
+    Gfx_DrawTextureIa16(button->x + 3, button->y + 3, button->width - 6, button->height - 6, button->image, button->imageWidth, 0);
 }
 
 /** Moves a vertical menu selection according to a d-pad direction. */
@@ -1161,7 +1176,12 @@ extern u8* D_80073694[];
 extern u8 D_04008F20[];
 void Gfx_DrawTextureIa8(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 texture_spread_x_mode);
 
-void func_8002BC58(s32 x, s32 y, s32 arg2, s32 game) {
+/**
+ * Draws a Game Boy cartridge icon at (x, y), tinted with the color of the cartridge's `game`
+ * (GbSave_GameToCategoryIndex), with label image `label` on it.
+ * Seen in play (2026-11-14): the registration screen's trainer panel draws the Green cartridge with it.
+ */
+void GbSave_DrawCartridgeIcon(s32 x, s32 y, s32 label, s32 game) {
     Img8002A3F8 img = D_80073674;
     Color_RGBA8* color = &D_80073684[GbSave_GameToCategoryIndex(game)];
 
@@ -1171,7 +1191,7 @@ void func_8002BC58(s32 x, s32 y, s32 arg2, s32 game) {
     gDPSetPrimColor(gDisplayListHead++, 0, 0, color->r, color->g, color->b, color->a);
     Gfx_DrawTextureIa8(x + 6, y + 0x10, 0x28, 0x22, D_04008F20, 0x28, 0);
     gDPSetPrimColor(gDisplayListHead++, 0, 0, ((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
-    Gfx_DrawTextureIa8(x + 9, y + 0x17, 0x20, 0x14, D_80073694[arg2], 0x20, 0);
+    Gfx_DrawTextureIa8(x + 9, y + 0x17, 0x20, 0x14, D_80073694[label], 0x20, 0);
 }
 
 extern u8 D_04009FB0[];
@@ -1221,7 +1241,13 @@ extern u8 D_04010FD8[];
 extern Img8002A3F8 D_800735F4;
 u32 func_800566BC(s32);
 
-void func_8002C1B4(s32 x, s32 y, s32 str, s32 flags) {
+/**
+ * Draws a window's title tab above it at (x, y): a stretched tab sized to the title `str`, its end
+ * cap, an optional icon (style 0x2000) and the title text.
+ * Verified in play (2026-11-14): stubbed at the main menu's バトル prompt, the バトル tab above the
+ * prompt vanished.
+ */
+void Window_DrawTitleTab(s32 x, s32 y, s32 str, s32 flags) {
     s32 width;
     s32 textX;
 
@@ -1250,7 +1276,12 @@ void func_8002C1B4(s32 x, s32 y, s32 str, s32 flags) {
 extern u8 D_0400E680[];
 extern u8 D_0400E788[];
 
-void func_8002C5A4(s32 x, s32 y, s32 w) {
+/**
+ * Draws the decorative stripe (style 0x1000) above a window: a `w`-wide bar and a 32-pixel end cap at
+ * (x, y). Callers pass the window style as a fourth argument it ignores.
+ * Seen in play (2026-11-14): runs for the Pokédex, party, registration and list windows (style 0x1000).
+ */
+void Window_DrawHeaderStripe(s32 x, s32 y, s32 w) {
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
     gDPLoadTextureBlock(gDisplayListHead++, D_0400E680, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 16, 0, G_TX_CLAMP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -1724,7 +1755,7 @@ void Save_DrawReportResultWindow(s32 arg0) {
 }
 
 /*
- * func_8002D7D4
+ * GbSave_RunReportErrorLoop
  *
  * Polling loop on arg0.  First func_80006780 (BgStage_AdvanceFrame, per
  * symbol_addrs.txt) is called once.  Then, repeatedly:
@@ -1754,7 +1785,12 @@ s32 GbSave_PollCartRemoval(s32);                             /* extern */
 s32 func_8002207C(s32);                             /* extern */
 void Save_DrawReportResultWindow(s32);
 
-void func_8002D7D4(s32 arg0) {
+/**
+ * Shows the report (save) error window until the cartridge has been taken out and put back, and
+ * repeats until the save to port `port` succeeds.
+ * @unverified Name read from the code; the Lab PC calls it when writing to the GB cartridge fails.
+ */
+void GbSave_RunReportErrorLoop(s32 port) {
     s32 state;
     s32 result;
 
@@ -1763,7 +1799,7 @@ void func_8002D7D4(s32 arg0) {
         state = 2;
         do {
             Save_DrawReportResultWindow(state);
-            result = GbSave_PollCartRemoval(arg0);
+            result = GbSave_PollCartRemoval(port);
             if (result == 1) {
                 state = 1;
             } else if (result == 3) {
@@ -1772,5 +1808,5 @@ void func_8002D7D4(s32 arg0) {
         } while (result != 2);
         Save_DrawReportResultWindow(0);
         Save_DrawReportResultWindow(0);
-    } while (func_8002207C(arg0) == 0);
+    } while (func_8002207C(port) == 0);
 }
