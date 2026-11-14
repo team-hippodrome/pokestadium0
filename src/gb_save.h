@@ -84,6 +84,15 @@ typedef struct ImageButton {
     /* 0x28 */ u8* image; // @unverified: texture passed to Gfx_DrawTextureIa16 (func_8002B018 arg6)
 } ImageButton; // size = 0x2C
 
+/* A message window sized to its text (TextBox_Init, TextBox_Draw), e.g. the error messages of the Lab PC
+ * screens. */
+typedef struct TextBox {
+    /* 0x00 */ Window window; // @unverified: typed from the function it is passed to
+    /* 0x2C */ char* text; // @unverified: TextBox_Init arg1; printed by TextBox_Draw
+    /* 0x30 */ s32 fontStyle; // @unverified: index into D_800736D0 (character width and height, font)
+    /* 0x34 */ s32 lineCount; // @unverified: TextBox_Init arg3; sets the window height
+} TextBox; // size = 0x38
+
 void func_8002B018(ImageButton* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
 void func_8002B054(ImageButton* arg0, s32 arg1);
 

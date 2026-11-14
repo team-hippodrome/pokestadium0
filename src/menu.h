@@ -64,6 +64,16 @@ typedef struct ScrollList {
     /* 0x40 */ s32 repeatTimer; // frames before a held direction repeats: 8 after a press, counts down
 } ScrollList; // size = 0x44
 
+/* The ないようが へんこうされています (the contents were changed) prompt: レポートしてやめる (save and quit),
+ * レポートしないでやめる (quit without saving), キャンセル (SavePrompt_Init, SavePrompt_Update, SavePrompt_Draw). */
+typedef struct SavePrompt {
+    /* 0x00 */ Window window; // @unverified: typed from the function it is passed to
+    /* 0x2C */ Menu menu; // @unverified: cursor 0 = save (Update returns 1), 1 = quit (2), 2 = cancel (-1)
+    /* 0x50 */ PointerList items; // @unverified: the 3 option strings D_800736AC
+    /* 0x5C */ u16 itemFlags[3]; // @unverified: itemFlags of menu
+    /* 0x62 */ char pad62[0x2];
+} SavePrompt; // size = 0x64
+
 /* A scrolling grid (ScrollGrid_*): the ScrollList fields, then the column fields. */
 typedef struct ScrollGrid {
     /* 0x00 */ ByteMatrix* items;
