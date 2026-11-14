@@ -92,7 +92,7 @@ typedef struct MonSummaryWindow {
     /* 0x00 */ Window window; // @unverified: typed from the function it is passed to
     /* 0x2C */ s32 mon; // @unverified: the BattleMon shown (MonSummary_InitPageWindow arg3, MonSummary_DrawModelPreview)
     /* 0x30 */ s32 moveSlot; // @unverified: the move picked with the C buttons (MonSummary_GetCButtonPage)
-    /* 0x34 */ s32 unk_34;
+    /* 0x34 */ s32 modelLoaded; // @unverified: set once func_80019008 loaded the Pokémon's model (MonSummary_DrawPage)
 } MonSummaryWindow; // size = 0x38
 
 /* The てもち (party) screen (func_8A2024D0, PartyScreen_Update, PartyScreen_Draw). */
@@ -131,7 +131,7 @@ extern Gfx D_80060270[];
 
 extern s32 D_8A21DA4C;
 
-extern M2C_UNK D_8A203300;
+extern Color_RGBA8 D_8A203300;
 
 extern s32 D_8A21DA40;
 
@@ -176,10 +176,10 @@ void BattlePrep_RenderFrame(void);
 s32 LabPC_ComputeExpForLevel(s32 arg0, s32 arg1);
 void MonSummary_DrawModelPreview(s32 arg0, s32 arg1, s32 arg2);
 s32 MonSummary_DrawMoveInfo(s32, s32, s32, s32);
-void MonSummary_DrawPage(s8 *arg0, s32 arg1);
-s32 MonSummary_GetCButtonPage(s8 *arg0);
+void MonSummary_DrawPage(MonSummaryWindow* arg0, s32 arg1);
+s32 MonSummary_GetCButtonPage(MonSummaryWindow* arg0);
 void PartyScreen_DrawBackground(void);
-void func_8A202390(s8 *arg0);
+void func_8A202390(ByteMatrix* arg0);
 void PartyScreen_Draw(void*);
 void LabPC_WriteDeckBack(s32* arg0, s32 arg1);
 void func_8A202904(PartyScreen* arg0, s32 arg1, s32 arg2);
