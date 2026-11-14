@@ -655,6 +655,21 @@ typedef struct Slot89102930 {
     /* 0x08 */ char unk08[0x14];
 } Slot89102930; // @unverified: size = 0x1C
 
+/* The レベルのにゅうりょく (level input) window of the いちらん screen: 「001 から 100」
+ * (LabPCList_InitLevelInputWindow). */
+typedef struct LabLevelInputWindow {
+    /* 0x00 */ Window window;
+    /* 0x2C */ LabeledButton clearButton; // かいじょ; flags bit 0 (greyed out) when no level filter is active
+    /* 0x68 */ LabeledButton gatherButton; // あつめる
+    /* 0xA4 */ DigitSelector minLevel; // @unverified: 3 digits, 1 to 100 (LabPCList_InitLevelInputWindow)
+    /* 0xB8 */ DigitSelector maxLevel; // @unverified: 3 digits, 1 to 100
+    /* 0xCC */ ChoiceCursor cursor; // @unverified: count 2
+    /* 0xD8 */ s32 unk_D8;
+    /* 0xDC */ s32 column; // @unverified: L/R position: 0-2 the digits of minLevel, 3-5 of maxLevel, 6 the buttons (LabPCList_UpdateLevelInput)
+    /* 0xE0 */ s32 unk_E0;
+    /* 0xE4 */ s32 focus; // @unverified: 0 = minLevel, 1 = maxLevel, 2 = the buttons
+} LabLevelInputWindow; // size = 0xE8
+
 #define LAB_PC_LIST_MAX_ROWS 466
 
 /* The いちらん (Pokémon list) screen of the Lab PC (LabPCList_InitListWindow). Its functions used to
@@ -682,11 +697,11 @@ typedef struct LabPCListScreen {
     /* 0x96D0 */ LabPopupMenu subPopup; // @unverified: drawn over popup (LabPCList_DrawWindows)
     /* 0x974C */ LabPopupMenu subPopup2; // @unverified: drawn over subPopup
     /* 0x97C8 */ u16 popupItemFlags[3][16]; // @unverified: Menu.itemFlags of popups
-    /* 0x9828 */ u8 unk_9828;
-    /* 0x9829 */ u8 unk_9829;
+    /* 0x9828 */ u8 levelFilterMin; // @unverified: play note on LabPCList_RunLevelFilter: あつめる with 006から100 stored 6 here
+    /* 0x9829 */ u8 levelFilterMax; // @unverified: and 100 here; LabPCList_ResetFilterState sets 1 and 100
     /* 0x982A */ char pad982A[2];
     /* 0x982C */ s32 unk_982C;
-    /* 0x9830 */ char levelInputWindow[0x9918 - 0x9830]; // @unverified: レベルのにゅうりょく (LabPCList_InitLevelInputWindow)
+    /* 0x9830 */ LabLevelInputWindow levelInputWindow;
     /* 0x9918 */ s32 unk_9918; // @unverified: LabPCList_CommitTypeFilter writes here; 0 turns the type filter off
     /* 0x991C */ s32 unk_991C;
     /* 0x9920 */ char typeFilterWindow[0x9B00 - 0x9920]; // @unverified: LabPCList_DrawTypeFilter

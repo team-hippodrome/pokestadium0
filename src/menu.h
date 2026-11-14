@@ -89,6 +89,15 @@ typedef struct ScrollGrid {
     /* 0x4C */ s32 cursorStepX; // @unverified: ScrollGrid: cellWidth * 4 / 10 (ScrollGrid_Init)
 } ScrollGrid; // size = 0x50
 
+/* A number picker of digitCount digits (func_8002B638): two in the Lab item count, three in the level input. */
+typedef struct DigitSelector {
+    /* 0x00 */ s32 value; // @unverified: the ×count LabItem_DrawCountSelector prints (seen drawn as ×01 ... ×05 for ほのおのいし, fire stone)
+    /* 0x04 */ s32 min; // @unverified: 1 in LabItem_InitCountSelector
+    /* 0x08 */ s32 max; // @unverified: arg3 of LabItem_InitCountSelector
+    /* 0x0C */ s32 digitCount; // @unverified: 2
+    /* 0x10 */ s32 digit; // @unverified: the digit the cursor is on, 0 = ones, 1 = tens (the frame moves left by 0x16 per digit)
+} DigitSelector; // size = 0x14
+
 /* A window with a one-column menu and a description of the cursor item under it
  * (FreeBattle_InitMenuWindow, FreeBattle_InitPopupMenu, Registration_InitMainMenu). */
 typedef struct MenuWindow {

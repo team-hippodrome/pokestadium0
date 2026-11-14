@@ -104,7 +104,7 @@ void func_89100294(LabPCListScreen* arg0) {
  */
 void LabPCList_ResetFilterState(LabPCListScreen* state) {
     /* IDO schedules these byte stores together when they share a source line. */
-    state->unk_9828 = 1; state->unk_9829 = 100;
+    state->levelFilterMin = 1; state->levelFilterMax = 100;
     state->unk_982C = 0;
     state->unk_9918 = 0;
     state->unk_9B04 = 0;

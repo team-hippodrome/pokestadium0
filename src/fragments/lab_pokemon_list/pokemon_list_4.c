@@ -65,7 +65,7 @@ void ScrollList_DrawItems(s8*, s32, s32, s32, s8*);
 void LabPCList_DrawDetailColumns(s8*, s32, s32, s32);
 void func_89105E70(s8*, s32);
 void LabPCList_DrawPopupMenu(LabPopupMenu*, s32);
-void LabPCList_DrawLevelInputWindow(s8*);
+void LabPCList_DrawLevelInputWindow(LabLevelInputWindow*);
 void LabPCList_DrawTypeFilter(s8*);
 void LabPCList_DrawMoveFilter(s8*);
 void TextBox_Draw(s8*);
@@ -130,7 +130,7 @@ void LabPCList_DrawListScreen(LabPCListScreen* arg0) {
             LabPCList_DrawPopupMenu(&arg0->popup, 2);
             break;
         case 4:
-            LabPCList_DrawLevelInputWindow((s8*)arg0->levelInputWindow);
+            LabPCList_DrawLevelInputWindow(&arg0->levelInputWindow);
             break;
         case 5:
             LabPCList_DrawTypeFilter((s8*)arg0->typeFilterWindow);
@@ -232,7 +232,7 @@ M2C_UNK LabPCList_ApplyFiltersAndSort(LabPCListScreen* arg0) {
     ScrollList_SetItems(&arg0->list, &arg0->rows, arg0->rowFlags);
     if (arg0->activeFilters != 0) {
         if (arg0->activeFilters & 1) {
-            func_80027D94(arg0->list.items, &arg0->filteredRows, func_891096F4, &arg0->unk_9828);
+            func_80027D94(arg0->list.items, &arg0->filteredRows, func_891096F4, &arg0->levelFilterMin);
             ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
         if (arg0->activeFilters & 2) {

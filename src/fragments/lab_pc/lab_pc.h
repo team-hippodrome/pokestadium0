@@ -26,14 +26,6 @@ struct unk_func_8820E99C;
 
 struct unk_func_8821421C_02C;
 
-/* A two-digit number picker (func_8002B638). */
-typedef struct DigitSelector {
-    /* 0x00 */ s32 value; // @unverified: the ×count LabItem_DrawCountSelector prints (seen drawn as ×01 ... ×05 for ほのおのいし, fire stone)
-    /* 0x04 */ s32 min; // @unverified: 1 in LabItem_InitCountSelector
-    /* 0x08 */ s32 max; // @unverified: arg3 of LabItem_InitCountSelector
-    /* 0x0C */ s32 digitCount; // @unverified: 2
-    /* 0x10 */ s32 digit; // @unverified: the digit the cursor is on, 0 = ones, 1 = tens (the frame moves left by 0x16 per digit)
-} DigitSelector; // size = 0x14
 
 /* The ×count selector of the Lab item screens (LabItem_InitCountSelector), with a text box for a count
  * over the limit. */

@@ -106,7 +106,7 @@ M2C_UNK LabPCList_ApplyFiltersAndSort();
 extern s32 D_8910D9D0;
 extern s32 D_8910D9D4;
 
-void LabPCList_InitLevelInputWindow(s8*, s32, s32, Color_RGBA8, s32, s32, s32);
+void LabPCList_InitLevelInputWindow(LabLevelInputWindow*, s32, s32, Color_RGBA8, s32, s32, s32);
 s32 LabPCList_HasFilterFlag(LabPCListScreen*, s32);
 
 s32 func_89102C40(LabPCListScreen* arg0) {
@@ -185,35 +185,20 @@ s32 func_89102C40(LabPCListScreen* arg0) {
                 break;
             case 2:
                 if (arg0->unk_982C != 0) {
-                    a = arg0->unk_9829;
-                    b = arg0->unk_9828;
+                    a = arg0->levelFilterMax;
+                    b = arg0->levelFilterMin;
                 } else {
-                    a = arg0->unk_9828;
-                    b = arg0->unk_9829;
+                    a = arg0->levelFilterMin;
+                    b = arg0->levelFilterMax;
                 }
                 arg0->state = 4;
-                LabPCList_InitLevelInputWindow((s8*)arg0->levelInputWindow, 0x110, 0xF5, D_8910A7F4, a, b, LabPCList_HasFilterFlag(arg0, 1));
+                LabPCList_InitLevelInputWindow(&arg0->levelInputWindow, 0x110, 0xF5, D_8910A7F4, a, b, LabPCList_HasFilterFlag(arg0, 1));
                 break;
         }
     }
     return 0;
 }
 
-typedef struct Ctx89102EC8 {
-    /* 0x0000 */ char unk0000[0x78];
-    /* 0x0078 */ s32 unk78;
-    /* 0x007C */ char unk007C[0xC];
-    /* 0x0088 */ s32 unk88;
-    /* 0x008C */ char unk008C[0x9828 - 0x8C];
-    /* 0x9828 */ u8 unk9828;
-    /* 0x9829 */ u8 unk9829;
-    /* 0x982A */ char unk982A[2];
-    /* 0x982C */ s32 unk982C;
-    /* 0x9830 */ char unk9830[0x98D4 - 0x9830];
-    /* 0x98D4 */ s32 unk98D4;
-    /* 0x98D8 */ char unk98D8[0x10];
-    /* 0x98E8 */ s32 unk98E8;
-} Ctx89102EC8;
 s32 LabPCList_UpdateLevelInput(void*);
 M2C_UNK LabPCList_ApplyFiltersAndSort();
 /**
@@ -223,39 +208,39 @@ M2C_UNK LabPCList_ApplyFiltersAndSort();
  */
 s32 LabPCList_RunLevelFilter(s8 *arg)
 {
-  Ctx89102EC8 *arg0 = (Ctx89102EC8 *) arg;
+  LabPCListScreen *arg0 = (LabPCListScreen *) arg;
   s32 ret;
-  Ctx89102EC8 *new_var; // FAKE: permuter temp
-  ret = LabPCList_UpdateLevelInput(arg0->unk9830);
+  LabPCListScreen *new_var; // FAKE: permuter temp
+  ret = LabPCList_UpdateLevelInput(&arg0->levelInputWindow);
   if (ret == (-1))
   {
     new_var = arg0;
-    new_var->unk88 = 0;
+    new_var->state = 0;
   }
   else
     if (ret == 1)
   {
-    if (arg0->unk98E8 >= arg0->unk98D4)
+    if (arg0->levelInputWindow.maxLevel.value >= arg0->levelInputWindow.minLevel.value)
     {
-      arg0->unk982C = 0;
-      arg0->unk9828 = arg0->unk98D4;
-      arg0->unk9829 = arg0->unk98E8;
-      arg0->unk78 = 1;
+      arg0->unk_982C = 0;
+      arg0->levelFilterMin = arg0->levelInputWindow.minLevel.value;
+      arg0->levelFilterMax = arg0->levelInputWindow.maxLevel.value;
+      arg0->sortKey = 1;
     }
     else
     {
-      arg0->unk982C = 1;
-      arg0->unk9829 = arg0->unk98D4;
-      arg0->unk9828 = arg0->unk98E8;
-      arg0->unk78 = 2;
+      arg0->unk_982C = 1;
+      arg0->levelFilterMax = arg0->levelInputWindow.minLevel.value;
+      arg0->levelFilterMin = arg0->levelInputWindow.maxLevel.value;
+      arg0->sortKey = 2;
     }
     LabPCList_SetFilterFlag((s8 *) arg0, 1);
     LabPCList_ApplyFiltersAndSort((s8 *) arg0);
-    arg0->unk88 = 0;
+    arg0->state = 0;
   }
   else
   {
- do { if (ret == 2) { arg0->unk9828 = 1; arg0->unk9829 = 100; arg0->unk982C = 0; LabPCList_ClearFilterFlag((s8 *) arg0, 1); LabPCList_ApplyFiltersAndSort((s8 *) arg0); arg0->unk88 = 0; } } while (0);  // FAKE
+ do { if (ret == 2) { arg0->levelFilterMin = 1; arg0->levelFilterMax = 100; arg0->unk_982C = 0; LabPCList_ClearFilterFlag((s8 *) arg0, 1); LabPCList_ApplyFiltersAndSort((s8 *) arg0); arg0->state = 0; } } while (0);  // FAKE
   }
   return 0;
 }
