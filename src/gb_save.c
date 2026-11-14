@@ -35,7 +35,7 @@ s32 Window_UpdateAnimation(Window* arg0);
 void func_8001AA9C(u8, u8, u8, u8);
 void func_8001AB6C(void);
 void func_8001A384(s32, s32);
-void func_8001A944(s32, s32, s32);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 void func_8001ABBC(void);
 void Font_SetLineHeight(s32 arg0);
 void func_8001ABE8(void);
@@ -148,7 +148,7 @@ extern u8 D_0400FB80[];
 extern u8 D_04010918[];
 void Ui_FillRectRgba5551(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4);
 s32 GbSave_GameToCategoryIndex(s32 arg0);
-void func_8001AA60(s32, s32, s32);
+void Font_DrawCharAt(s32 x, s32 y, s32 chr);
 void Ui_DrawNumberZeroPadded(s32 x, s32 y, s32 value, s32 digits);
 u32 func_800566BC(s32);
 
@@ -194,9 +194,9 @@ void GbSave_DrawSummaryBar(s32 y, GbSaveSummary* summary, char* label, s32 arg3)
         func_8001AB6C();
         func_8001A384(8, 0);
         func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
-        func_8001AA60(0x4A, (y + 32), arg3 + 0x31);
-        func_8001AA60(0x5E, (y + 32), 0x50);
-        func_8001A944(0x86, (y + 32), (s32)((summary->state == 0) ? summary->name : D_8007B8E0));
+        Font_DrawCharAt(0x4A, (y + 32), arg3 + 0x31);
+        Font_DrawCharAt(0x5E, (y + 32), 0x50);
+        Font_Printf(0x86, (y + 32), (s32)((summary->state == 0) ? summary->name : D_8007B8E0));
         func_8001ABBC();
 
         gSPDisplayList(gDisplayListHead++, D_80073450);
@@ -219,7 +219,7 @@ void GbSave_DrawSummaryBar(s32 y, GbSaveSummary* summary, char* label, s32 arg3)
     func_8001AB6C();
     func_8001A384(8, 0);
     func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
-    func_8001A944(0x254 - ((func_800566BC((s32)label) * 20) >> 1), (y + 32), (s32)label);
+    Font_Printf(0x254 - ((func_800566BC((s32)label) * 20) >> 1), (y + 32), (s32)label);
     func_8001ABBC();
 }
 
@@ -799,7 +799,7 @@ void Window_DrawLabeled(LabeledButton* arg0, s32 arg1) {
     func_8001AB6C();
     func_8001A384(arg0->fontSize, arg0->unk_34);
     Font_SetColorForFlags(arg0->flags | arg1);
-    func_8001A944(arg0->x + arg0->labelX, arg0->y + arg0->labelY, arg0->label);
+    Font_Printf(arg0->x + arg0->labelX, arg0->y + arg0->labelY, arg0->label);
     func_8001ABBC();
 }
 
@@ -1243,7 +1243,7 @@ void func_8002C1B4(s32 x, s32 y, s32 str, s32 flags) {
     func_8001AB6C();
     func_8001A384(8, 0);
     func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
-    func_8001A944(textX, y + 4, str);
+    Font_Printf(textX, y + 4, str);
     func_8001ABBC();
 }
 
@@ -1354,7 +1354,7 @@ void SavePrompt_Draw(SavePrompt* arg0) {
     func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
     func_8001A384(8, 0);
     Font_SetLineHeight(0x1C);
-    func_8001A944(arg0->window.frame.x + 0xE, arg0->window.frame.y + 0xA, (s32)D_8007B920);
+    Font_Printf(arg0->window.frame.x + 0xE, arg0->window.frame.y + 0xA, (s32)D_8007B920);
     func_8001ABBC();
 }
 
@@ -1378,7 +1378,7 @@ void Save_DrawReportingWindow(SavePrompt* arg0) {
         func_8001A384(0x10, 0);
         func_8001ABE8();
         func_8001AAE4(0xFF, 0xB2, 0xB2, 0xFF);
-        func_8001A944(arg0->window.frame.x + 0x20, arg0->window.frame.y + 0x16, (s32)str);
+        Font_Printf(arg0->window.frame.x + 0x20, arg0->window.frame.y + 0x16, (s32)str);
         func_8001AC3C();
         func_8001ABBC();
         BgStage_AdvanceFrame();
@@ -1506,7 +1506,7 @@ void TextBox_Draw(TextBox* arg0) {
     Font_SetLineHeight(D_800736D0[arg0->fontStyle].w + D_800736D0[arg0->fontStyle].h);
     func_8001ABE8();
     func_8001AAE4(D_800736F0[1].r, D_800736F0[1].g, D_800736F0[1].b, D_800736F0[1].a);
-    func_8001A944(arg0->window.frame.x + D_800736D0[arg0->fontStyle].h + 6, arg0->window.frame.y + D_800736D0[arg0->fontStyle].h + 6, (s32)arg0->text);
+    Font_Printf(arg0->window.frame.x + D_800736D0[arg0->fontStyle].h + 6, arg0->window.frame.y + D_800736D0[arg0->fontStyle].h + 6, (s32)arg0->text);
     func_8001AC3C();
     func_8001ABBC();
 }
@@ -1582,7 +1582,7 @@ void BlinkingTextBox_Draw(BlinkingTextBox* arg0) {
     Font_SetLineHeight(D_800736D0[arg0->fontStyle].w + D_800736D0[arg0->fontStyle].h);
     func_8001ABE8();
     func_8001AAE4(D_80073700[1].r, D_80073700[1].g, D_80073700[1].b, D_80073700[1].a);
-    func_8001A944(arg0->frame.x + D_800736D0[arg0->fontStyle].h + 6, arg0->frame.y + D_800736D0[arg0->fontStyle].h + 6, arg0->text);
+    Font_Printf(arg0->frame.x + D_800736D0[arg0->fontStyle].h + 6, arg0->frame.y + D_800736D0[arg0->fontStyle].h + 6, arg0->text);
     func_8001AC3C();
     func_8001ABBC();
 }
@@ -1685,7 +1685,7 @@ void Save_DrawReportResultWindow(s32 arg0) {
         func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
         func_8001ABE8();
         func_8001AAE4(0xFF, 0xF1, 0x78, 0xFF);
-        func_8001A944(0xEC, 0xA8, (s32)D_8007B950);
+        Font_Printf(0xEC, 0xA8, (s32)D_8007B950);
         func_8001AC3C();
         func_8001ABBC();
     } else if (arg0 == 2) {
@@ -1694,7 +1694,7 @@ void Save_DrawReportResultWindow(s32 arg0) {
         func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
         func_8001ABE8();
         func_8001AAE4(0xFF, 0xF1, 0x78, 0xFF);
-        func_8001A944(0xB0, 0xA8, (s32)D_8007B960);
+        Font_Printf(0xB0, 0xA8, (s32)D_8007B960);
         func_8001AC3C();
         func_8001ABBC();
     } else if (arg0 == 3) {
@@ -1703,7 +1703,7 @@ void Save_DrawReportResultWindow(s32 arg0) {
         func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
         func_8001ABE8();
         func_8001AAE4(0xFF, 0xF1, 0x78, 0xFF);
-        func_8001A944(0x80, 0x84, (s32)D_8007B97C);
+        Font_Printf(0x80, 0x84, (s32)D_8007B97C);
         func_8001AC3C();
         func_8001ABBC();
     }
@@ -1713,11 +1713,11 @@ void Save_DrawReportResultWindow(s32 arg0) {
         func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
         func_8001ABE8();
         func_8001AAE4(0xFF, 0xF1, 0x78, 0xFF);
-        func_8001A944(0x128, 0xF0, (s32)D_8007B9BC);
+        Font_Printf(0x128, 0xF0, (s32)D_8007B9BC);
         func_8001AC3C();
         func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
         Font_SetLineHeight(0x24);
-        func_8001A944(0x80, 0xF0, (s32)D_8007B9D0);
+        Font_Printf(0x80, 0xF0, (s32)D_8007B9D0);
         func_8001ABBC();
     }
     func_80006780();

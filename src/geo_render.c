@@ -1667,7 +1667,7 @@ typedef struct GeoTextNode {
     /* 0x24 */ const char* text;
     /* 0x28 */ Color_RGBA8_u32 arg;
 } GeoTextNode;
-Gfx* func_8001B3AC(s16 x, s16 y, s16 arg2, s16 arg3, Color_RGBA8_u32 color, const char* fmt, ...);
+Gfx* Font_PrintfToDisplayList(s16 x, s16 y, s16 arg2, s16 arg3, Color_RGBA8_u32 color, const char* fmt, ...);
 /**
  * Geo callback for a text node: prints the node's formatted string with its
  * font and color and queues the resulting display list on the node's layer.
@@ -1681,7 +1681,7 @@ void Geo_NodeText(GraphNode* arg0) {
 
     if (arg->text != NULL) {
         Font_SetActive(arg->font, arg->fontArg);
-        dl = func_8001B3AC(arg->x, arg->y, arg->w, arg->h, arg->arg, arg->text);
+        dl = Font_PrintfToDisplayList(arg->x, arg->y, arg->w, arg->h, arg->arg, arg->text);
         if (dl != NULL) {
             GeoRender_SubmitLayerDisplayList(arg->node.renderLayer, (s32)dl, 0, arg->node.renderFlags & 4);
         }

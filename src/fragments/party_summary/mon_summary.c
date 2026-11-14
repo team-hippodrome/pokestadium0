@@ -26,7 +26,7 @@ s32 Window_DrawAnimatedFrame();
 s32 func_80020CE4(s32, s32, s32);
 u8* func_800196F8(s32);
 void func_8001A384(s32, s32);
-void func_8001A944(s32, s32, const char*, ...);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 void func_8001AA9C(u8, u8, u8, u8);
 void func_8001AB6C(void);
 void func_8001ABBC(void);
@@ -139,25 +139,25 @@ s32 MonSummary_DrawMoveInfo(s32 x, s32 y, s32 mon, s32 slot)
         func_8001AB6C();
         func_8001A384(4, 0);
         func_8001AA9C(0xFF, 0xC8, 0xC8, 0xFF);
-        func_8001A944(x + 9, y + 4, D_8A21D9B4);
-        func_8001A944(x + 0x99, y + 4, D_8A21D9BC);
-        func_8001A944(x + 9, y + 0x17, D_8A21D9C8);
+        Font_Printf(x + 9, y + 4, D_8A21D9B4);
+        Font_Printf(x + 0x99, y + 4, D_8A21D9BC);
+        Font_Printf(x + 9, y + 0x17, D_8A21D9C8);
         func_8001AA9C(type->color.r, type->color.g, type->color.b, type->color.a);
-        func_8001A944(x + 0x49, y + 4, type->str);
+        Font_Printf(x + 0x49, y + 4, type->str);
         func_8001AA9C(*((u8 *) (((s8 *) (&D_800734A8)) + 0)), *((u8 *) (((s8 *) (&D_800734A8)) + 1)), *((u8 *) (((s8 *) (&D_800734A8)) + 2)), *((u8 *) (((s8 *) (&D_800734A8)) + 3)));
         Font_SetLineHeight(0x14);
         if (D_8006B190[move].power >= 2)
         {
-            func_8001A944(x + 0xE9, y + 4, D_8A21D9D4, D_8006B190[move].power);
+            Font_Printf(x + 0xE9, y + 4, D_8A21D9D4, D_8006B190[move].power);
         }
         else
         {
-            func_8001A944(x + 0xE9, y + 4, D_8A21D9D8, D_8006B190[move].power);
+            Font_Printf(x + 0xE9, y + 4, D_8A21D9D8, D_8006B190[move].power);
         }
-        func_8001A944(x + 0x69, y + 0x17, D_8A21D9DC, pp);
+        Font_Printf(x + 0x69, y + 0x17, D_8A21D9DC, pp);
         func_8001A384(4, -1);
         Font_SetLineHeight(0x18);
-        func_8001A944(x + 9, y + 0x3A, D_8006A9DC[move].str);
+        Font_Printf(x + 9, y + 0x3A, D_8006A9DC[move].str);
         func_8001ABBC();
     }
 }

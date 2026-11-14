@@ -267,7 +267,7 @@ extern u8 D_8006081F[];
 extern u8 D_8005E7D2[];
 extern u8 D_8005E47F[];
 extern u8 D_8005E37F[];
-s32 func_80019F70(u16 arg0) {
+s32 Font_GetGlyphIndex(u16 arg0) {
     s32 c = arg0;
     s32 ret = 0;
 

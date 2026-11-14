@@ -26,7 +26,7 @@ M2C_UNK func_80006828(M2C_UNK, M2C_UNK *);
 M2C_UNK func_80006998(M2C_UNK);
 M2C_UNK func_800199E4(M2C_UNK *);
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);
-M2C_UNK func_8001A944(M2C_UNK, M2C_UNK, s32);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 M2C_UNK func_8001AB6C();
 M2C_UNK func_8001ABBC();
 M2C_UNK Save_GetGbTowerSettings(s8 *, M2C_UNK);
@@ -127,7 +127,7 @@ void CartridgeCheck_ShowMessageUntilA(s32 text) {
         func_8001AB6C();
         func_8001A384(4, -1);
         Font_SetLineHeight(0x14);
-        func_8001A944(0x2E, 0x28, text);
+        Font_Printf(0x2E, 0x28, text);
         CartridgeCheck_DrawNextArrow(0x104, 0x3C);
         func_8001ABBC();
         func_80006780();

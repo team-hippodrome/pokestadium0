@@ -41,7 +41,7 @@ s32 LabPCList_GetColumnCursorX();
 extern Entry80066AD8 D_80066AD8[];
 s32 Pokemon_GetTypeIndex(u8*, s32);
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);
-M2C_UNK func_8001A944(s32, s32, M2C_UNK *, ...);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);
 M2C_UNK func_8001AB6C();
 M2C_UNK func_8001ABBC();

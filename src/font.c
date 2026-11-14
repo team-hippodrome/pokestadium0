@@ -51,19 +51,6 @@ s32 Font_GetSetIndexFromMask(s32 mask) {
     return index;
 }
 
-/*
- * func_8001A118: registers one font set in the font context.
- *
- * Takes the next free slot index from func_8001A0A4 and fills the 8-byte
- * entry at that index in the table at the start of *font_context: three
- * size bytes (arg1, arg2, arg3 -- their meaning is not established; Font_Init
- * passes e.g. 0x20/0x20/0x20 for mask 0x20 and 0xA/0xA/0x10 for mask 0x1) and
- * the pointer to the font file.  The slot index is then stored at
- * font_context + 0x38 (FontContext::unk_50, cleared by Font_Init).
- *
- * `mask` is not used by the retail code; the empty `if (mask) {}` is only there
- * so IDO does not spill the unused argument register.
- */
 typedef struct FontEntry8001A118 {
     /* 0x0 */ s8 size_a;
     /* 0x1 */ s8 size_b;
@@ -71,17 +58,24 @@ typedef struct FontEntry8001A118 {
     /* 0x4 */ void* file;
 } FontEntry8001A118; // size = 0x8
 s32 func_8001A0A4(void);
-void func_8001A118(s32 mask, s32 arg1, s32 arg2, s32 arg3, void* file);
-void func_8001A118(s32 mask, s32 arg1, s32 arg2, s32 arg3, void* file) {
+void Font_RegisterSet(s32 mask, s32 arg1, s32 arg2, s32 arg3, void* file);
+/**
+ * Registers one font set in the next free slot of the font context: glyph advance, height and width,
+ * and the font file. The slot becomes the active set. `mask` is unused; the empty if only keeps IDO from
+ * spilling it.
+ * Seen in play (2026-11-14): Font_Init calls it on every screen that loads fonts, e.g. mask 2 with
+ * 12x12 glyphs and mask 1 with 10x10.
+ */
+void Font_RegisterSet(s32 mask, s32 advance, s32 height, s32 width, void* file) {
     s32 index;
 
     if (mask) {}  // karodo
     index = func_8001A0A4();
 
     ((FontEntry8001A118*)font_context)[index].file = file;
-    ((FontEntry8001A118*)font_context)[index].size_a = arg1;
-    ((FontEntry8001A118*)font_context)[index].size_b = arg2;
-    ((FontEntry8001A118*)font_context)[index].size_c = arg3;
+    ((FontEntry8001A118*)font_context)[index].size_a = advance;
+    ((FontEntry8001A118*)font_context)[index].size_b = height;
+    ((FontEntry8001A118*)font_context)[index].size_c = width;
     font_context->unk_50 = index;
 }
 
@@ -94,7 +88,7 @@ void func_8001A118(s32 mask, s32 arg1, s32 arg2, s32 arg3, void* file) {
  * free callback; opens the font archive (ROM range D_002B2C80..D_002E0BE0)
  * into font_context->unk_48 and clears the two bytes at +0x38 / +0x39.
  * Then, for every bit set in `load_size`, loads one font set with
- * func_8001A118 (mask, three size values, file number in the archive):
+ * Font_RegisterSet (mask, three size values, file number in the archive):
  *
  *   bit 0x20: file 5   bit 0x10: file 4   bit 0x08: file 3
  *   bit 0x04: file 2   bit 0x02: file 1   bit 0x01: file 0
@@ -104,13 +98,13 @@ void func_8001A118(s32 mask, s32 arg1, s32 arg2, s32 arg3, void* file) {
  * The Stadium 1 version (Font_Init + Font_LoadSizes) is structured the same
  * way but zeroes the block with bzero, returns the context and calls a
  * three-argument Font_LoadSet; this Zero version is the older shape.  The
- * meaning of the three size values passed to func_8001A118 is not
- * established here (func_8001A118 is still assembly); the values are copied
+ * meaning of the three size values passed to Font_RegisterSet is not
+ * established here (Font_RegisterSet is still assembly); the values are copied
  * from the retail code.
  */
 extern u8 D_002B2C80[];
 extern u8 D_002E0BE0[];
-void func_8001A118(s32 mask, s32 arg1, s32 arg2, s32 arg3, void* file);
+void Font_RegisterSet(s32 mask, s32 arg1, s32 arg2, s32 arg3, void* file);
 
 /** Allocates the font context. */
 s32 Font_Init(s32 load_size, s32 side) {
@@ -120,22 +114,22 @@ s32 Font_Init(s32 load_size, s32 side) {
     font_context->unk_51 = 0;
 
     if (load_size & 0x20) {
-        func_8001A118(0x20, 0x20, 0x20, 0x20, BinArchive_GetFile(font_context->unk_48, 5));
+        Font_RegisterSet(0x20, 0x20, 0x20, 0x20, BinArchive_GetFile(font_context->unk_48, 5));
     }
     if (load_size & 0x10) {
-        func_8001A118(0x10, 0x18, 0x18, 0x18, BinArchive_GetFile(font_context->unk_48, 4));
+        Font_RegisterSet(0x10, 0x18, 0x18, 0x18, BinArchive_GetFile(font_context->unk_48, 4));
     }
     if (load_size & 0x8) {
-        func_8001A118(0x8, 0x14, 0x14, 0x18, BinArchive_GetFile(font_context->unk_48, 3));
+        Font_RegisterSet(0x8, 0x14, 0x14, 0x18, BinArchive_GetFile(font_context->unk_48, 3));
     }
     if (load_size & 0x4) {
-        func_8001A118(0x4, 0x10, 0x10, 0x10, BinArchive_GetFile(font_context->unk_48, 2));
+        Font_RegisterSet(0x4, 0x10, 0x10, 0x10, BinArchive_GetFile(font_context->unk_48, 2));
     }
     if (load_size & 0x2) {
-        func_8001A118(0x2, 0xC, 0xC, 0x10, BinArchive_GetFile(font_context->unk_48, 1));
+        Font_RegisterSet(0x2, 0xC, 0xC, 0x10, BinArchive_GetFile(font_context->unk_48, 1));
     }
     if (load_size & 0x1) {
-        func_8001A118(0x1, 0xA, 0xA, 0x10, BinArchive_GetFile(font_context->unk_48, 0));
+        Font_RegisterSet(0x1, 0xA, 0xA, 0x10, BinArchive_GetFile(font_context->unk_48, 0));
     }
     return 1;
 }
@@ -160,13 +154,17 @@ typedef struct FontGlyphSet8001A3E4 {
     /* 0x2 */ u8 width;
     /* 0x4 */ u8* tex;
 } FontGlyphSet8001A3E4; // size = 0x8
-s32 func_80019F70(u16);
+s32 Font_GetGlyphIndex(u16);
 
-// FAKE: gDP* macros are expanded by hand and several are joined on one line; IDO schedules by source line and only this layout matches
-s32 func_8001A3E4(s16 x, s16 y, s16 chr)
+/**
+ * Draws character `chr` of the active font set at (x, y) as a texture rectangle, loading the glyph
+ * into TMEM first when it changed. Returns the x position of the next character.
+ * Verified in play (2026-11-14): stubbed on the main menu, every item label (せいとん, バトル, ...) vanished.
+ */
+s32 Font_DrawChar(s16 x, s16 y, s16 chr)
 {
   FontGlyphSet8001A3E4 *set = &((FontGlyphSet8001A3E4 *) font_context)[font_context->unk_50];
-  s32 offset = (func_80019F70(chr) * set->width) * set->height;
+  s32 offset = (Font_GetGlyphIndex(chr) * set->width) * set->height;
   UNUSED s32 pad; // FAKE
   s16 lrx = (x + set->advance) * 4;
   s16 lry = (y + set->height) * 4;
@@ -220,8 +218,14 @@ char* String_CopyBytesAndAdvance(char* buffer, const char* data, u32 size) {
     return (char*)memcpy(buffer, data, size) + size;
 }
 
-s32 func_8001A3E4(s16, s16, s16);
-void func_8001A944(s32 x, s32 y, const char* fmt, ...) {
+s32 Font_DrawChar(s16, s16, s16);
+/**
+ * Formats `fmt` and draws it at (x, y) with the active font set. '\n' starts a new line unless
+ * Font_DisableNewlines was called; bytes >= 0x80 start a two-byte (JIS) character.
+ * Seen in play (2026-11-14): draws the main menu item labels and the battle message box (through
+ * Font_DrawChar, whose stub test removed them).
+ */
+void Font_Printf(s32 x, s32 y, const char* fmt, ...) {
     u8 buf[0x100];
     UNUSED s32 pad; // FAKE: stack padding
     s32 startX;
@@ -252,7 +256,7 @@ void func_8001A944(s32 x, s32 y, const char* fmt, ...) {
                         p++;
                     }
                 }
-                x = func_8001A3E4(x, y, chr & 0x7F7F);
+                x = Font_DrawChar(x, y, chr & 0x7F7F);
             }
             chr = *p;
             p++;
@@ -261,9 +265,14 @@ void func_8001A944(s32 x, s32 y, const char* fmt, ...) {
     va_end(args);
 }
 
-s32 func_8001A3E4(s16, s16, s16);
-void func_8001AA60(s32 arg0, s32 arg1, s32 arg2) {
-    func_8001A3E4(arg0, arg1, (s16) (arg2 & 0x7F7F));
+s32 Font_DrawChar(s16, s16, s16);
+/**
+ * Draws the single character `chr` at (x, y).
+ * Seen in play (2026-11-14): GbSave_DrawSummaryBar draws the '1' and 'P' of the 1P label in the top bar
+ * with it.
+ */
+void Font_DrawCharAt(s32 x, s32 y, s32 chr) {
+    Font_DrawChar(x, y, (s16) (chr & 0x7F7F));
 }
 
 /** Emits a command that sets the RDP environment color. */
@@ -284,13 +293,21 @@ void Font_SetLineHeight(s32 arg0) {
 
 extern s8 *D_800AD200;
 
-void func_8001AB3C(void) {
+/**
+ * Makes Font_Printf draw '\n' as a character instead of breaking the line.
+ * @unverified Name read from the code.
+ */
+void Font_DisableNewlines(void) {
     M2C_FIELD(D_800AD200, u8 *, 0x3B) = (u8) (M2C_FIELD(D_800AD200, u8 *, 0x3B) | 4);
 }
 
 extern s8 *D_800AD200;
 
-void func_8001AB54(void) {
+/**
+ * Undoes Font_DisableNewlines.
+ * @unverified Name read from the code.
+ */
+void Font_EnableNewlines(void) {
     M2C_FIELD(D_800AD200, u8 *, 0x3B) = (u8) (M2C_FIELD(D_800AD200, u8 *, 0x3B) & 0xFFFB);
 }
 
@@ -339,15 +356,20 @@ void Ui_DrawPrimColorRect(s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b, s32 a
     gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);
 }
 
-Vtx* func_8001ADA0(s16 x, s16 y, s16 width, s16 height, u8* tex) {
-    s16 w = (tex[0] * width) / 100;
-    s16 h = (tex[1] * height) / 100;
+/**
+ * Allocates the four vertices of a glyph quad at (x, y), scaled by `scaleX` / `scaleY` percent from
+ * the glyph size at `glyphSet` (width byte, height byte).
+ * @unverified Name read from the code.
+ */
+Vtx* Font_AllocGlyphQuad(s16 x, s16 y, s16 scaleX, s16 scaleY, u8* glyphSet) {
+    s16 w = (glyphSet[0] * scaleX) / 100;
+    s16 h = (glyphSet[1] * scaleY) / 100;
     Vtx* vtx = Gfx_AllocDisplayList(sizeof(Vtx) * 4);
 
     Gfx_SetVertexAttributes(&vtx[0], x, y, 0, 0, 0, 0, 0, 0x7F, 0xFF);
-    Gfx_SetVertexAttributes(&vtx[1], x, y - h, 0, 0, (tex[1] << 5) - 1, 0, 0, 0x7F, 0xFF);
-    Gfx_SetVertexAttributes(&vtx[2], x + w, y - h, 0, (tex[0] << 5) - 1, (tex[1] << 5) - 1, 0, 0, 0x7F, 0xFF);
-    Gfx_SetVertexAttributes(&vtx[3], x + w, y, 0, (tex[0] << 5) - 1, 0, 0, 0, 0x7F, 0xFF);
+    Gfx_SetVertexAttributes(&vtx[1], x, y - h, 0, 0, (glyphSet[1] << 5) - 1, 0, 0, 0x7F, 0xFF);
+    Gfx_SetVertexAttributes(&vtx[2], x + w, y - h, 0, (glyphSet[0] << 5) - 1, (glyphSet[1] << 5) - 1, 0, 0, 0x7F, 0xFF);
+    Gfx_SetVertexAttributes(&vtx[3], x + w, y, 0, (glyphSet[0] << 5) - 1, 0, 0, 0, 0x7F, 0xFF);
     return vtx;
 }
 
@@ -357,11 +379,16 @@ typedef struct Glyph8001AFB0 {
     /* 0x2 */ u8 width;
     /* 0x4 */ u8* file;
 } Glyph8001AFB0;
-s32 func_80019F70(u16);
-s32 func_8001AFB0(Gfx** arg0, s16 x, s16 y, s16 arg3, s16 arg4, u16 chr) {
+s32 Font_GetGlyphIndex(u16);
+/**
+ * Builds a display list that draws character `chr` as a textured 3D quad and chains it in front of
+ * *`list`. Returns the scaled advance.
+ * @unverified Name read from the code.
+ */
+s32 Font_AddGlyphDisplayList(Gfx** list, s16 x, s16 y, s16 scaleX, s16 scaleY, u16 chr) {
     Glyph8001AFB0* font = &((Glyph8001AFB0*)font_context)[font_context->unk_50];
-    s32 offset = func_80019F70(chr) * font->width * font->height;
-    Vtx* vtx = func_8001ADA0(x, y, arg3, arg4, (u8*)font);
+    s32 offset = Font_GetGlyphIndex(chr) * font->width * font->height;
+    Vtx* vtx = Font_AllocGlyphQuad(x, y, scaleX, scaleY, (u8*)font);
     Gfx* dl = Gfx_AllocDisplayList(0xA0);
     Gfx* gfx = dl;
 
@@ -369,26 +396,21 @@ s32 func_8001AFB0(Gfx** arg0, s16 x, s16 y, s16 arg3, s16 arg4, u16 chr) {
                         G_TX_CLAMP, G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     gSPVertex(gfx++, vtx, 4, 0);
     gSP2Triangles(gfx++, 0, 1, 2, 0, 0, 2, 3, 0);
-    if (*arg0 == NULL) {
+    if (*list == NULL) {
         gSPEndDisplayList(gfx++);
     } else {
-        gSPBranchList(gfx++, *arg0);
+        gSPBranchList(gfx++, *list);
     }
-    *arg0 = dl;
-    return ((font->advance + font_context->unk_51) * arg3) / 100;
+    *list = dl;
+    return ((font->advance + font_context->unk_51) * scaleX) / 100;
 }
 
 /**
- * Builds a small display list in freshly allocated display-list memory:
- * lighting is switched off, textures are enabled with full scale, a two-cycle
- * combiner (TEXEL0 * ENVIRONMENT) is selected, the environment color is set
- * to arg1, the caller's display list
- * arg0 is called, and lighting is switched back on.
- *
- * Note: 0x80 bytes are allocated but only the first 0x40 (eight commands)
- * are written.
+ * Builds a display list that calls `inner` with lighting off and its texels tinted by the environment
+ * color `color`.
+ * @unverified Name read from the code.
  */
-Gfx* func_8001B25C(Gfx* arg0, Color_RGBA8_u32 arg1) {
+Gfx* Gfx_WrapWithEnvColor(Gfx* inner, Color_RGBA8_u32 color) {
     Gfx* dl = Gfx_AllocDisplayList(0x80);
     Gfx* gfx = dl;
 
@@ -397,8 +419,8 @@ Gfx* func_8001B25C(Gfx* arg0, Color_RGBA8_u32 arg1) {
     gSPTexture(gfx++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
     gDPSetCombineLERP(gfx++, TEXEL0, 0, ENVIRONMENT, 0, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, COMBINED, 0, 0, 0,
                       COMBINED);
-    gDPSetEnvColor(gfx++, arg1.r, arg1.g, arg1.b, arg1.a);
-    gSPDisplayList(gfx++, arg0);
+    gDPSetEnvColor(gfx++, color.r, color.g, color.b, color.a);
+    gSPDisplayList(gfx++, inner);
     gSPSetGeometryMode(gfx++, G_LIGHTING);
     gSPEndDisplayList(gfx++);
     return dl;
@@ -432,7 +454,13 @@ s32 Font_GetCenteredStartX(s32 x, s32 scale, const char* str) {
     return x - (((strlen(str) >> 1) * width) >> 1);
 }
 
-Gfx* func_8001B3AC(s16 x, s16 y, s16 arg2, s16 arg3, Color_RGBA8_u32 color, const char* fmt, ...) {
+/**
+ * Formats `fmt` into a chain of textured glyph quads (Font_AddGlyphDisplayList) scaled by
+ * `scaleX` / `scaleY` percent and tinted with `color`, for drawing as part of a model. '\t' centers the
+ * rest of the line on x.
+ * @unverified Name read from the code; called by the geo text nodes.
+ */
+Gfx* Font_PrintfToDisplayList(s16 x, s16 y, s16 scaleX, s16 scaleY, Color_RGBA8_u32 color, const char* fmt, ...) {
     u8 buf[0x100];
     UNUSED s32 pad[2]; // FAKE: stack padding
     s32 startX;
@@ -453,9 +481,9 @@ Gfx* func_8001B3AC(s16 x, s16 y, s16 arg2, s16 arg3, Color_RGBA8_u32 color, cons
         while (chr != 0) {
             if (chr == 0xA) {
                 x = startX;
-                y -= ((u8)((FontEntry8001A118*)D_800AD200)[M2C_FIELD(D_800AD200, u8*, 0x38)].size_b * ((arg3 * 0xB) / 10)) / 100;
+                y -= ((u8)((FontEntry8001A118*)D_800AD200)[M2C_FIELD(D_800AD200, u8*, 0x38)].size_b * ((scaleY * 0xB) / 10)) / 100;
             } else if (chr == 9) {
-                x = Font_GetCenteredStartX(x, arg2, (const char*)p);
+                x = Font_GetCenteredStartX(x, scaleX, (const char*)p);
             } else {
                 if (chr >= 0x80) {
                     if (*p != 0) {
@@ -463,14 +491,14 @@ Gfx* func_8001B3AC(s16 x, s16 y, s16 arg2, s16 arg3, Color_RGBA8_u32 color, cons
                         p++;
                     }
                 }
-                x += func_8001AFB0(&dl, x, y, arg2, arg3, chr & 0x7F7F);
+                x += Font_AddGlyphDisplayList(&dl, x, y, scaleX, scaleY, chr & 0x7F7F);
             }
             chr = *p;
             p++;
         }
     }
     if (dl != NULL) {
-        dl = func_8001B25C(dl, color);
+        dl = Gfx_WrapWithEnvColor(dl, color);
     }
     va_end(args);
     return dl;

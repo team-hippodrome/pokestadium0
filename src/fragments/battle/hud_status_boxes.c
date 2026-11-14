@@ -6,7 +6,7 @@
 #include "ui_graphics.h"
 
 // Declared here instead of in a header: the callers of these disagree on their types.
-M2C_UNK func_8001A944(s32, s32, s8*);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 M2C_UNK func_8001AB6C();
 extern StatusLabel D_80066AA0[];
 u32 func_8001FA30(s32);
@@ -375,9 +375,9 @@ void BattleMenu_DrawCommandMenu(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
     func_8001AB6C();
     func_8001A384(1, 0);
-    func_8001A944(arg1 + 0x16, arg2 + 4, D_821959C4);
-    func_8001A944(arg1 + 0x56, arg2 + 4, D_821959D0);
-    func_8001A944(arg1 + 0x96, arg2 + 4, D_821959DC);
+    Font_Printf(arg1 + 0x16, arg2 + 4, D_821959C4);
+    Font_Printf(arg1 + 0x56, arg2 + 4, D_821959D0);
+    Font_Printf(arg1 + 0x96, arg2 + 4, D_821959DC);
     func_8001ABBC();
     BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 0xCC, 0x16, 0);
 }
@@ -414,8 +414,8 @@ void BattleMenu_DrawBackConfirmBar(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
     func_8001AB6C();
     func_8001A384(1, 0);
-    func_8001A944(arg1 + 0x18, arg2 + 4, D_821959E4);
-    func_8001A944(arg1 + 0x51, arg2 + 4, D_821959EC);
+    Font_Printf(arg1 + 0x18, arg2 + 4, D_821959E4);
+    Font_Printf(arg1 + 0x51, arg2 + 4, D_821959EC);
     func_8001ABBC();
     BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 0x83, 0x16, 0);
 }
@@ -450,7 +450,7 @@ void BattleMenu_DrawConfirmButton(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
     func_8001AB6C();
     func_8001A384(1, 0);
-    func_8001A944(arg1 + 0x18, arg2 + 4, D_821959F8);
+    Font_Printf(arg1 + 0x18, arg2 + 4, D_821959F8);
     func_8001ABBC();
     BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 0x4A, 0x16, 0);
 }
@@ -462,5 +462,5 @@ void BattleMenu_DrawConfirmButton(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
  * @unverified Name from the code.
  */
 void BattleHud_DrawTextCentered(s32 arg0, s32 arg1, s32 arg2) {
-    func_8001A944(arg0 - ((func_800566BC(arg2) >> 1) * 0xA), arg1, arg2);
+    Font_Printf(arg0 - ((func_800566BC(arg2) >> 1) * 0xA), arg1, arg2);
 }

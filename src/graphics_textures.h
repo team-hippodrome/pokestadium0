@@ -13,6 +13,6 @@ void Gfx_SetViewportDimensions(Vp* viewport, s16 width, s16 height);
 
 // functions defined in assembly
 void Font_Printf(s32 x, s32 y, const char* fmt, ...);
-void Font_DrawCharAt(s32 arg0, s32 arg1, s32 arg2);
+void Font_DrawCharAt(s32 x, s32 y, s32 chr);
 
 #endif // GRAPHICS_TEXTURES_H

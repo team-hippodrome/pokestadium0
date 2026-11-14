@@ -215,7 +215,7 @@ void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 void func_8001AB6C(void);
 void func_8001AA9C(u8, u8, u8, u8);
 void func_8001A384(s32, s32);
-void func_8001A944(s32, s32, s32);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 void func_8001ABBC(void);
 
 // D_88002034 is declared as raw bytes in this file; each 0x18 byte row is one MainMenuImage.
@@ -269,7 +269,7 @@ void MainMenu_DrawItem(s32 x, s32 y, s32 item, s32 index, s32 flags, f32* opacit
         func_8001AB6C();
         func_8001AA9C(text_color.r, text_color.g, text_color.b, text_color.a);
         func_8001A384(0x10, D_8800219C[index].unk_08);
-        func_8001A944(D_8800210C[index].x + D_8800219C[index].x, D_8800210C[index].y + D_8800219C[index].y, D_8800219C[index].text);
+        Font_Printf(D_8800210C[index].x + D_8800219C[index].x, D_8800210C[index].y + D_8800219C[index].y, D_8800219C[index].text);
         func_8001ABBC();
     }
     if (flags & 2) {
