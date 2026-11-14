@@ -44,7 +44,7 @@ Where the code lives, after the reorganization. File names are broadly correct g
 | 031 | `src/fragments/particle_data/` | 2 | 8 | particle data |
 | 032 | `src/fragments/geo_model_032/` | 1 | 9 | geo layout callbacks for models |
 | 033 | `src/fragments/geo_model_033/` | 1 | 13 | geo layout callbacks for models |
-| 034 | `src/fragments/geo_model_034/` | 1 | 8 | geo layout callbacks for models |
+| 034 | `src/fragments/tournament_badge_cap/` | 1 | 8 | trainer cap with the eight tournament badges, shown after a tournament win |
 | 038 | `src/fragments/geo_model_038/` | 1 | 2 | geo layout callbacks for models |
 | 039 | `src/fragments/geo_model_039/` | 1 | 1 | geo layout callbacks for models |
 | 040 | `src/fragments/geo_model_040/` | 1 | 1 | geo layout callbacks for models |
