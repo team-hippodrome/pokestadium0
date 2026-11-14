@@ -481,10 +481,10 @@ void BattleAnim_DrawTriAttackUseRadial(void) {
  * for Aurora Beam.
  */
 void BattleAnim_SeedAuroraBeamUseDoubleTextureTrail(void) {
-    static unk_D_843C2C00_024 D_84387FC0 = { 2, 1, 0xE, 1, 2, 2, 3, 1 };
-    static unk_D_843C2C00_024 D_84387FE0 = { 3, 5, 0, 5, 3, 7, 0, 5 };
-    static unk_D_843C2C00_024 D_84388000 = { 2, 1, 0xE, 1, 2, 1, 3, 1 };
-    static unk_D_843C2C00_024 D_84388020 = { 3, 5, 0, 5, 0, 7, 5, 7 };
+    static CombinerCycleArgs D_84387FC0 = { 2, 1, 0xE, 1, 2, 2, 3, 1 };
+    static CombinerCycleArgs D_84387FE0 = { 3, 5, 0, 5, 3, 7, 0, 5 };
+    static CombinerCycleArgs D_84388000 = { 2, 1, 0xE, 1, 2, 1, 3, 1 };
+    static CombinerCycleArgs D_84388020 = { 3, 5, 0, 5, 0, 7, 5, 7 };
 
     f32 spB4;
     f32 spB0;
@@ -537,8 +537,8 @@ void BattleAnim_DrawAuroraBeamUseDoubleTextureTrail(void) {
  * for Ice Beam.
  */
 void BattleAnim_SeedIceBeamUseSixSlotTrail(void) {
-    static unk_D_843C2C00_024 D_84388040 = { 3, 5, 1, 5, 1, 7, 3, 7 };
-    static unk_D_843C2C00_024 D_84388060 = { 0x1F, 0x1F, 0x1F, 0, 7, 7, 7, 0 };
+    static CombinerCycleArgs D_84388040 = { 3, 5, 1, 5, 1, 7, 3, 7 };
+    static CombinerCycleArgs D_84388060 = { 0x1F, 0x1F, 0x1F, 0, 7, 7, 7, 0 };
 
     f32 spA4;
     f32 spA0;
@@ -597,10 +597,10 @@ void BattleAnim_DrawIceBeamUseSixSlotTrail(void) {
  * for Psybeam.
  */
 void BattleAnim_SeedPsybeamUseDoubleTextureTrail(void) {
-    static unk_D_843C2C00_024 D_84388080 = { 3, 5, 1, 5, 6, 7, 2, 3 };
-    static unk_D_843C2C00_024 D_843880A0 = { 0x1F, 0x1F, 0x1F, 0, 0, 7, 5, 7 };
-    static unk_D_843C2C00_024 D_843880C0 = { 3, 5, 2, 5, 1, 7, 3, 7 };
-    static unk_D_843C2C00_024 D_843880E0 = { 0x1F, 0x1F, 0x1F, 0, 0, 7, 5, 7 };
+    static CombinerCycleArgs D_84388080 = { 3, 5, 1, 5, 6, 7, 2, 3 };
+    static CombinerCycleArgs D_843880A0 = { 0x1F, 0x1F, 0x1F, 0, 0, 7, 5, 7 };
+    static CombinerCycleArgs D_843880C0 = { 3, 5, 2, 5, 1, 7, 3, 7 };
+    static CombinerCycleArgs D_843880E0 = { 0x1F, 0x1F, 0x1F, 0, 0, 7, 5, 7 };
 
     f32 spB4;
     f32 spB0;
@@ -657,10 +657,10 @@ void BattleAnim_DrawPsybeamUseDoubleTextureTrail(void) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_StartEffect77DoubleTextureTrail_Seed(void) {
-    static unk_D_843C2C00_024 D_84388100 = { 2, 1, 0xE, 1, 2, 7, 1, 3 };
-    static unk_D_843C2C00_024 D_84388120 = { 3, 5, 0, 5, 0, 7, 5, 7 };
-    static unk_D_843C2C00_024 D_84388140 = { 2, 1, 0xE, 1, 2, 7, 1, 3 };
-    static unk_D_843C2C00_024 D_84388160 = { 3, 5, 0, 5, 0, 7, 5, 7 };
+    static CombinerCycleArgs D_84388100 = { 2, 1, 0xE, 1, 2, 7, 1, 3 };
+    static CombinerCycleArgs D_84388120 = { 3, 5, 0, 5, 0, 7, 5, 7 };
+    static CombinerCycleArgs D_84388140 = { 2, 1, 0xE, 1, 2, 7, 1, 3 };
+    static CombinerCycleArgs D_84388160 = { 3, 5, 0, 5, 0, 7, 5, 7 };
 
     f32 spB4;
     f32 spB0;
@@ -722,8 +722,8 @@ void BattleAnim_StartEffect77DoubleTextureTrail_Draw(void) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SeedSolarBeamUseDoubleTextureTrail(void) {
-    static unk_D_843C2C00_024 D_84388180 = { 2, 1, 0xE, 1, 2, 1, 3, 1 };
-    static unk_D_843C2C00_024 D_843881A0 = { 3, 5, 0, 5, 0, 7, 5, 7 };
+    static CombinerCycleArgs D_84388180 = { 2, 1, 0xE, 1, 2, 1, 3, 1 };
+    static CombinerCycleArgs D_843881A0 = { 3, 5, 0, 5, 0, 7, 5, 7 };
 
     f32 spB4;
     f32 spB0;
@@ -774,16 +774,16 @@ void BattleAnim_DrawSolarBeamUseDoubleTextureTrail(void) {
  * for Hyper Beam.
  */
 void BattleAnim_SeedHyperBeamUseDoubleTextureTrail(void) {
-    static unk_D_843C2C00_024 D_843881C0 = {
+    static CombinerCycleArgs D_843881C0 = {
         0x00000002, 0x00000001, 0x0000000E, 0x00000001, 0x00000007, 0x00000007, 0x00000007, 0x00000003,
     };
-    static unk_D_843C2C00_024 D_843881E0 = {
+    static CombinerCycleArgs D_843881E0 = {
         0x00000003, 0x00000005, 0x00000000, 0x00000005, 0x00000007, 0x00000007, 0x00000007, 0x00000000,
     };
-    static unk_D_843C2C00_024 D_84388200 = {
+    static CombinerCycleArgs D_84388200 = {
         0x00000002, 0x00000001, 0x0000000E, 0x00000001, 0x00000002, 0x00000001, 0x00000003, 0x00000001,
     };
-    static unk_D_843C2C00_024 D_84388220 = {
+    static CombinerCycleArgs D_84388220 = {
         0x00000003, 0x00000005, 0x00000000, 0x00000005, 0x00000000, 0x00000007, 0x00000005, 0x00000007,
     };
 

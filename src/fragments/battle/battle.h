@@ -186,23 +186,21 @@ typedef struct Cue8212B270 {
     /* 0x0A */ u8 unk_0A;
 } Cue8212B270; // size = 0xB
 
-typedef struct unk_D_843951D0_1010 {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ s16 unk_10;
-} unk_D_843951D0_1010;
+typedef struct SurfWaterGridPoint {
+    /* 0x00 */ Vec3f position; // @unverified: grid point; y is the water height
+    /* 0x0C */ f32 nextHeight; // @unverified: next frame's height from the neighbour diffusion
+    /* 0x10 */ s16 alpha; // @unverified: vertex alpha, 0xFF in the middle and 0 on the edge rows
+} SurfWaterGridPoint;
 
-typedef struct unk_D_843951D0 {
-    /* 0x0000 */ s16 unk_0000;
-    /* 0x0004 */ f32 unk_0004;
+typedef struct SurfWaterGrid {
+    /* 0x0000 */ s16 frame; // @unverified: counts up each frame until duration
+    /* 0x0004 */ f32 waveSpread; // @unverified: neighbour-height diffusion factor
     /* 0x0008 */ s16 unk_0008;
-    /* 0x000A */ s16 unk_000A;
-    /* 0x000C */ Vtx* unk_000C;
+    /* 0x000A */ s16 duration; // @unverified: frames the surface runs
+    /* 0x000C */ Vtx* vtx; // @unverified: 16x16 vertices allocated each frame
     /* 0x0010 */ char unk0010[0x1000];
-    /* 0x1010 */ unk_D_843951D0_1010 grid[16][16];
-} unk_D_843951D0;
+    /* 0x1010 */ SurfWaterGridPoint grid[16][16];
+} SurfWaterGrid;
 
 /* Struct types that were defined identically in each of these files; this is
  * now the one definition they all include:
@@ -657,54 +655,44 @@ typedef struct arg1_func_8434E21C {
 } arg1_func_8434E21C; // size >= 0xC
 
 typedef struct RibbonMeshVertexState {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
-    /* 0x10 */ Color_RGBA8 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
+    /* 0x00 */ Vec3f position; // @unverified: ribbon point
+    /* 0x0C */ s16 texS; // @unverified: texture S coordinate
+    /* 0x0E */ s16 texT; // @unverified: texture T coordinate
+    /* 0x10 */ Color_RGBA8 color; // @unverified: vertex color
+    /* 0x14 */ f32 angle; // @unverified: angle around the owner in radians
+    /* 0x18 */ f32 wavePhase; // @unverified: wave phase, advanced each frame
 } RibbonMeshVertexState; // size = 0x1C
 
 typedef struct RibbonMesh {
-    /* 0x000 */ s32 unk_000;
-    /* 0x004 */ f32 unk_004;
-    /* 0x008 */ f32 unk_008;
-    /* 0x00C */ f32 unk_00C;
-    /* 0x010 */ f32 unk_010;
-    /* 0x014 */ f32 unk_014;
-    /* 0x018 */ s16 unk_018;
-    /* 0x01A */ s16 unk_01A;
-    /* 0x01C */ s16 unk_01C;
-    /* 0x01E */ s16 unk_01E;
-    /* 0x020 */ f32 unk_020;
-    /* 0x024 */ s32 unk_024;
-    /* 0x028 */ s32 unk_028;
-    /* 0x02C */ s32 unk_02C;
-    /* 0x030 */ s32 unk_030;
-    /* 0x034 */ s32 unk_034;
-    /* 0x038 */ s32 unk_038;
-    /* 0x03C */ s32 unk_03C;
-    /* 0x040 */ s32 unk_040;
-    /* 0x044 */ s32 unk_044;
+    /* 0x000 */ s32 active; // @unverified: 1 while running
+    /* 0x004 */ Vec3f origin; // @unverified: ring center
+    /* 0x010 */ f32 radius; // @unverified: ring radius (size x scale)
+    /* 0x014 */ f32 scale; // @unverified: owner scale
+    /* 0x018 */ s16 frame; // @unverified: counts up each frame
+    /* 0x01A */ s16 duration; // @unverified: 0x3C, 0x78 or 0x1E frames by kind
+    /* 0x01C */ s16 direction; // @unverified: 1 rises (kinds 0, 2), -1 falls (kind 1)
+    /* 0x01E */ s16 auxEffectId; // @unverified: AuxiliaryEffect_Alloc() id for kind 0, else -1
+    /* 0x020 */ f32 riseSpeed; // @unverified: 1.5, height added per frame
+    /* 0x024 */ s32 primLodFrac; // @unverified: gDPSetPrimColor lod fraction
+    /* 0x028 */ s32 primR; // @unverified: gDPSetPrimColor red
+    /* 0x02C */ s32 primG; // @unverified: gDPSetPrimColor green
+    /* 0x030 */ s32 primB; // @unverified: gDPSetPrimColor blue
+    /* 0x034 */ s32 primA; // @unverified: gDPSetPrimColor alpha
+    /* 0x038 */ s32 envR; // @unverified: gDPSetEnvColor red
+    /* 0x03C */ s32 envG; // @unverified: gDPSetEnvColor green
+    /* 0x040 */ s32 envB; // @unverified: gDPSetEnvColor blue
+    /* 0x044 */ s32 envA; // @unverified: gDPSetEnvColor alpha, faded in or out by StatRibbon_UpdateEnvAlpha
     /* 0x048 */ char unk048[0x8];
-    /* 0x050 */ Vtx unk_050[31 * 2];
-    /* 0x430 */ RibbonMeshVertexState unk_430[31 * 2];
+    /* 0x050 */ Vtx vertices[31 * 2]; // @unverified: 31 vertex pairs
+    /* 0x430 */ RibbonMeshVertexState points[31 * 2]; // @unverified: 31 point pairs (lower, upper)
 } RibbonMesh; // size = 0xAF8
 
-typedef struct unk_D_843975E8 {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ f32 unk_20;
+typedef struct CameraFacingQuad {
+    /* 0x00 */ Vec3f center; // @unverified: point straight ahead of the camera eye
+    /* 0x0C */ Vec3f halfRight; // @unverified: half-width vector along the camera's right
+    /* 0x18 */ Vec3f halfUp; // @unverified: half-height vector along the camera's up
     /* 0x24 */ char unk24[0x4];
-} unk_D_843975E8; // size = 0x28
+} CameraFacingQuad; // size = 0x28
 
 typedef struct Radial20Node {
     /* 0x00 */ f32 startDelay; // @unverified: frames before the node starts moving (Radial20_UpdateNode)
@@ -975,112 +963,110 @@ typedef struct Trail50Effect {
     /* 0x040 */ Trail50EffectNode nodes[10]; // @unverified: trail nodes, head first
 } Trail50Effect; // size = 0x360
 
-typedef struct unk_D_843C2C00_0B0 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ u8 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ Vec3f unk_10;
-    /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ f32 unk_20;
-    /* 0x24 */ f32 unk_24;
-} unk_D_843C2C00_0B0; // size = 0x28
+typedef struct DoubleTextureTrailSegment {
+    /* 0x00 */ s32 index; // @unverified: segment index, only written
+    /* 0x04 */ u8 alpha; // @unverified: 0xFF at spawn, only written
+    /* 0x08 */ f32 radius; // @unverified: tube radius; head stays 1.0, the rest grow by radiusStep to a share of maxRadius
+    /* 0x0C */ f32 angle; // @unverified: roll angle in radians, advanced by angleStep
+    /* 0x10 */ Vec3f position; // @unverified: lerped between the owner anchor and the target's bone 9
+    /* 0x1C */ Vec3f velocity; // @unverified: start direction x speed, only written
+} DoubleTextureTrailSegment; // size = 0x28
 
-typedef struct unk_D_843C2C00_064 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-} unk_D_843C2C00_064; // size = 0xC
+typedef struct TextureScroll {
+    /* 0x00 */ s16 s; // @unverified: texture S offset, scrolled by sStep each frame
+    /* 0x02 */ s16 t; // @unverified: texture T offset, scrolled by tStep each frame
+    /* 0x04 */ s16 sStep; // @unverified: S scroll per frame
+    /* 0x06 */ s16 tStep; // @unverified: T scroll per frame
+    /* 0x08 */ s16 shiftS; // @unverified: gDPLoadTextureTile shifts
+    /* 0x0A */ s16 shiftT; // @unverified: gDPLoadTextureTile shifts
+} TextureScroll; // size = 0xC
 
-typedef struct unk_D_843C2C00_024 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ s32 unk_18;
-    /* 0x1C */ s32 unk_1C;
-} unk_D_843C2C00_024; // size = 0x20
+typedef struct CombinerCycleArgs {
+    /* 0x00 */ s32 colorA; // @unverified: Gfx_SetCombineMode argument, cycle color a
+    /* 0x04 */ s32 colorB; // @unverified: cycle color b
+    /* 0x08 */ s32 colorC; // @unverified: cycle color c
+    /* 0x0C */ s32 colorD; // @unverified: cycle color d
+    /* 0x10 */ s32 alphaA; // @unverified: cycle alpha a
+    /* 0x14 */ s32 alphaB; // @unverified: cycle alpha b
+    /* 0x18 */ s32 alphaC; // @unverified: cycle alpha c
+    /* 0x1C */ s32 alphaD; // @unverified: cycle alpha d
+} CombinerCycleArgs; // size = 0x20
 
-typedef struct unk_D_84389CE0 {
-    /* 0x00 */ Color_RGBA8 unk_00;
-    /* 0x04 */ u8 unk_04;
-} unk_D_84389CE0; // size = 0x8
+typedef struct PrimLodColor {
+    /* 0x00 */ Color_RGBA8 color; // @unverified: gDPSetPrimColor/gDPSetEnvColor color
+    /* 0x04 */ u8 lodFrac; // @unverified: gDPSetPrimColor lod fraction (prim only)
+} PrimLodColor; // size = 0x8
 
 typedef struct DoubleTextureTrail {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ s16 unk_004;
-    /* 0x008 */ f32 unk_008;
-    /* 0x00C */ f32 unk_00C;
-    /* 0x010 */ f32 unk_010;
-    /* 0x014 */ f32 unk_014;
-    /* 0x018 */ Vtx* unk_018;
-    /* 0x01C */ s32 unk_01C;
-    /* 0x020 */ s32 unk_020;
-    /* 0x024 */ unk_D_843C2C00_024 unk_024;
-    /* 0x044 */ unk_D_843C2C00_024 unk_044;
-    /* 0x064 */ unk_D_843C2C00_064 unk_064;
-    /* 0x070 */ unk_D_843C2C00_064 unk_070;
-    /* 0x07C */ unk_D_84389CE0 unk_07C;
-    /* 0x081 */ unk_D_84389CE0 unk_081;
-    /* 0x086 */ Color_RGBA8 unk_086;
-    /* 0x08C */ f32 unk_08C;
-    /* 0x090 */ f32 unk_090;
-    /* 0x094 */ s16 unk_094;
+    /* 0x000 */ s16 active; // @unverified: 1 while running
+    /* 0x002 */ s16 frame; // @unverified: counts up each frame
+    /* 0x004 */ s16 growFrames; // @unverified: frames over which the tube extends to full length
+    /* 0x008 */ f32 maxRadius; // @unverified: tube radius cap
+    /* 0x00C */ f32 angleStep; // @unverified: added to every segment's angle per frame
+    /* 0x010 */ f32 radiusStep; // @unverified: radius growth per frame
+    /* 0x014 */ f32 speed; // @unverified: scales the start velocity, only written
+    /* 0x018 */ Vtx* vtx; // @unverified: 90 vertices allocated each frame
+    /* 0x01C */ s32 textureA; // @unverified: sBattleAnimAssetPointers index of tile 0
+    /* 0x020 */ s32 textureB; // @unverified: sBattleAnimAssetPointers index of tile 1
+    /* 0x024 */ CombinerCycleArgs combineCycle0; // @unverified: color combiner cycle 1
+    /* 0x044 */ CombinerCycleArgs combineCycle1; // @unverified: color combiner cycle 2
+    /* 0x064 */ TextureScroll scrollA; // @unverified: tile 0 scroll
+    /* 0x070 */ TextureScroll scrollB; // @unverified: tile 1 scroll
+    /* 0x07C */ PrimLodColor primColor; // @unverified: primitive color
+    /* 0x081 */ PrimLodColor envColor; // @unverified: environment color
+    /* 0x086 */ Color_RGBA8 lineColor; // @unverified: color of the thick line drawn along the tube, 0 for none
+    /* 0x08C */ f32 primAlphaScale; // @unverified: 1.0, fades by 0.1 a frame after fadeStartFrame
+    /* 0x090 */ f32 envAlphaScale; // @unverified: 1.0, fades by 0.1 a frame after fadeStartFrame
+    /* 0x094 */ s16 fadeStartFrame; // @unverified: 0x46
     /* 0x096 */ char unk096[0x1A];
-    /* 0x0B0 */ unk_D_843C2C00_0B0 unk_0B0[10];
+    /* 0x0B0 */ DoubleTextureTrailSegment segments[10]; // @unverified: tube rings, owner first
 } DoubleTextureTrail; // size = 0x240
 
 typedef struct AuxiliaryEffectNode {
-    /* 0x00 */ s16 unk_00;
+    /* 0x00 */ s16 active; // @unverified: 1 while running
     /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ Vec3f unk_0C;
+    /* 0x04 */ s16 frame; // @unverified: counts up each frame until duration
+    /* 0x06 */ s16 duration; // @unverified: frames the node lives
+    /* 0x08 */ f32 scale; // @unverified: draw scale, pulsed by sin(frame)
+    /* 0x0C */ Vec3f position; // @unverified: node position, falls 0.75 a frame
 } AuxiliaryEffectNode; // size = 0x18
 
 typedef struct AuxiliaryEffect {
-    /* 0x000 */ s16 unk_000;
+    /* 0x000 */ s16 inUse; // @unverified: 1 while claimed by AuxiliaryEffect_Alloc
     /* 0x002 */ char pad002[2];
-    /* 0x004 */ AuxiliaryEffectNode unk_004[20];
+    /* 0x004 */ AuxiliaryEffectNode nodes[20]; // @unverified: sparkle nodes
 } AuxiliaryEffect; // size = 0x1E4
 
-typedef struct unk_D_843C3508_0A4 {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ Vec3f unk_18;
-} unk_D_843C3508_0A4; // size = 0x24
+typedef struct BeamTrailSegment {
+    /* 0x00 */ f32 startDelay; // @unverified: frames the segment waits at the owner (2 x index)
+    /* 0x04 */ f32 halfWidth; // @unverified: grows by 3 a frame up to maxHalfWidth
+    /* 0x08 */ f32 angle; // @unverified: roll angle in radians, advanced by angleStep
+    /* 0x0C */ Vec3f position; // @unverified: segment center
+    /* 0x18 */ Vec3f velocity; // @unverified: added to position once moving; also the beam direction
+} BeamTrailSegment; // size = 0x24
 
-typedef struct unk_D_843C3508 {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ s16 unk_004;
-    /* 0x006 */ s16 unk_006;
-    /* 0x008 */ unk_D_84389CE0 unk_008;
-    /* 0x00D */ unk_D_84389CE0 unk_00D;
-    /* 0x014 */ f32 unk_014;
-    /* 0x018 */ f32 unk_018;
-    /* 0x01C */ s16 unk_01C;
-    /* 0x020 */ s32 unk_020;
-    /* 0x024 */ s32 unk_024;
-    /* 0x028 */ unk_D_843C2C00_024 unk_028;
-    /* 0x048 */ unk_D_843C2C00_024 unk_048;
-    /* 0x068 */ unk_D_843C2C00_064 unk_068;
-    /* 0x074 */ unk_D_843C2C00_064 unk_074;
-    /* 0x080 */ f32 unk_080;
-    /* 0x084 */ f32 unk_084;
-    /* 0x088 */ Vtx* unk_088;
+typedef struct BeamTrail {
+    /* 0x000 */ s16 active; // @unverified: 1 while running
+    /* 0x002 */ s16 widthMode; // @unverified: 0 rotates the width about the beam, 1 faces it to the camera
+    /* 0x004 */ s16 frame; // @unverified: counts up each frame until duration
+    /* 0x006 */ s16 duration; // @unverified: frames the beam runs
+    /* 0x008 */ PrimLodColor primColor; // @unverified: primitive color
+    /* 0x00D */ PrimLodColor envColor; // @unverified: environment color
+    /* 0x014 */ f32 primAlphaScale; // @unverified: fades by 0.1 a frame after fadeStartFrame
+    /* 0x018 */ f32 envAlphaScale; // @unverified: fades by 0.1 a frame after fadeStartFrame
+    /* 0x01C */ s16 fadeStartFrame; // @unverified: 0x46, compared with the shared frame counter D_821CD9E0
+    /* 0x020 */ s32 textureA; // @unverified: sBattleAnimAssetPointers index of tile 0
+    /* 0x024 */ s32 textureB; // @unverified: sBattleAnimAssetPointers index of tile 1
+    /* 0x028 */ CombinerCycleArgs combineCycle0; // @unverified: color combiner cycle 1
+    /* 0x048 */ CombinerCycleArgs combineCycle1; // @unverified: color combiner cycle 2
+    /* 0x068 */ TextureScroll scrollA; // @unverified: tile 0 scroll
+    /* 0x074 */ TextureScroll scrollB; // @unverified: tile 1 scroll
+    /* 0x080 */ f32 maxHalfWidth; // @unverified: cap for the segments' halfWidth
+    /* 0x084 */ f32 angleStep; // @unverified: added to the moving segments' angle per frame
+    /* 0x088 */ Vtx* vtx; // @unverified: 40 vertices allocated each frame
     /* 0x08C */ char unk08C[0x18];
-    /* 0x0A4 */ unk_D_843C3508_0A4 unk_0A4[20];
-} unk_D_843C3508; // size = 0x374
+    /* 0x0A4 */ BeamTrailSegment segments[20]; // @unverified: beam segments
+} BeamTrail; // size = 0x374
 
 typedef struct StatStageMultiplier {
     /* 0x00 */ u8 multiplier;
@@ -2130,7 +2116,7 @@ extern s16 D_8219F700;
 
 extern s16 D_8219F702;
 
-extern unk_D_843951D0 sWaterHeightMap;
+extern SurfWaterGrid sWaterHeightMap;
 
 extern s16 D_821A1B20;
 
@@ -2138,7 +2124,7 @@ extern s16 D_821A1B22;
 
 extern s16 D_821A1B24;
 
-extern unk_D_843975E8 D_821A1B28;
+extern CameraFacingQuad D_821A1B28;
 
 extern Gfx D_82192890[];
 
@@ -4520,7 +4506,7 @@ s32 StatRibbon_Update(RibbonMesh* arg0);
 s32 StatRibbon_UpdatePool(void);
 Gfx* StatRibbon_Draw(Gfx* arg0, RibbonMesh* arg1);
 Gfx* StatRibbon_DrawPool(Gfx* arg0);
-void SurfTerrainGrid_BuildCameraBounds(unk_D_843975E8* arg0, f32 arg1);
+void SurfTerrainGrid_BuildCameraBounds(CameraFacingQuad* arg0, f32 arg1);
 f32 SurfTerrainGrid_SampleHeightAndSlope(f32 x, f32 z, f32* rotation_x);
 s32 SurfTerrainGrid_UpdateWaves(void);
 void SurfTerrainGrid_Init(s32 arg0, s16 arg1, s16 arg2);
@@ -4622,7 +4608,7 @@ Gfx* RazorLeafTrail_Draw(Gfx* arg0);
 
 // double_texture_trail.c
 void DoubleTextureTrail_InitPool(void);
-void DoubleTextureTrail_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7, f32 arg8, f32 arg9, f32 argA, s16 argB, s32 argC, s32 argD, s16 argE, s16 argF, s16 arg10, s16 arg11, s16 arg12, s16 arg13, s16 arg14, s16 arg15, unk_D_843C2C00_024* arg16, unk_D_843C2C00_024* arg17, u8 arg18, u8 arg19, u8 arg1A, u8 arg1B, u8 arg1C, u8 arg1D, u8 arg1E, u8 arg1F, u8 arg20, u8 arg21, u8 arg22, u8 arg23, u8 arg24);
+void DoubleTextureTrail_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7, f32 arg8, f32 arg9, f32 argA, s16 argB, s32 argC, s32 argD, s16 argE, s16 argF, s16 arg10, s16 arg11, s16 arg12, s16 arg13, s16 arg14, s16 arg15, CombinerCycleArgs* arg16, CombinerCycleArgs* arg17, u8 arg18, u8 arg19, u8 arg1A, u8 arg1B, u8 arg1C, u8 arg1D, u8 arg1E, u8 arg1F, u8 arg20, u8 arg21, u8 arg22, u8 arg23, u8 arg24);
 void DoubleTextureTrail_RotateVertexOffset(f32 arg0, Vec3f* arg1, f32 arg2);
 void DoubleTextureTrail_Update(DoubleTextureTrail* arg0);
 s32 DoubleTextureTrail_UpdateAll(void);
@@ -4632,13 +4618,13 @@ Gfx* DoubleTextureTrail_DrawAll(Gfx* arg0);
 
 // hyper_beam_ice_beam_trail.c
 void HyperBeamIceBeamTrail_ResetPool(void);
-void HyperBeamIceBeamTrail_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, u8 arg7, u8 arg8, u8 arg9, u8 argA, u8 argB, u8 argC, u8 argD, u8 argE, u8 argF, f32 arg10, f32 arg11, f32 arg12, s16 arg13, s32 arg14, s32 arg15, s16 arg16, s16 arg17, s16 arg18, s16 arg19, s16 arg1A, s16 arg1B, s16 arg1C, s16 arg1D, unk_D_843C2C00_024* arg1E, unk_D_843C2C00_024* arg1F);
+void HyperBeamIceBeamTrail_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, u8 arg7, u8 arg8, u8 arg9, u8 argA, u8 argB, u8 argC, u8 argD, u8 argE, u8 argF, f32 arg10, f32 arg11, f32 arg12, s16 arg13, s32 arg14, s32 arg15, s16 arg16, s16 arg17, s16 arg18, s16 arg19, s16 arg1A, s16 arg1B, s16 arg1C, s16 arg1D, CombinerCycleArgs* arg1E, CombinerCycleArgs* arg1F);
 void HyperBeamIceBeamTrail_ComputeCameraRelativeOffset(s32 arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7);
 void HyperBeamIceBeamTrail_ComputeRotatedOffset(f32 arg0, Vec3f* arg1, Vec3f* arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6);
-void HyperBeamIceBeamTrail_UpdateSlot(unk_D_843C3508* arg0);
+void HyperBeamIceBeamTrail_UpdateSlot(BeamTrail* arg0);
 s32 HyperBeamIceBeamTrail_UpdateAll(void);
-Gfx* HyperBeamIceBeamTrail_DrawSegments(Gfx* arg0, unk_D_843C3508* arg1);
-Gfx* HyperBeamIceBeamTrail_LoadTextures(Gfx* arg0, unk_D_843C3508* arg1);
+Gfx* HyperBeamIceBeamTrail_DrawSegments(Gfx* arg0, BeamTrail* arg1);
+Gfx* HyperBeamIceBeamTrail_LoadTextures(Gfx* arg0, BeamTrail* arg1);
 Gfx* HyperBeamIceBeamTrail_DrawAll(Gfx* arg0);
 
 // auxiliary_effect.c
