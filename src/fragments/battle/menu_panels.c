@@ -149,7 +149,7 @@ void BattleMenu_DrawMovePanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3)
     BattleMon* party;
     BattleMonRuntime* runtime;
 
-    party = &arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)]->pokemonPicked[M2C_FIELD(arg0, s32*, 0x9D0)];
+    party = &arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)]->pokemonPicked[arg0->thumbnail.tagTeam];
     runtime = &arg0->state.runtime;
 
     func_82116CF4(arg1 + 1, arg2 + 1, 0xC7, 0x38, &D_8218B008 + arg3 * 3, &D_8218B014 + arg3 * 3);
@@ -646,7 +646,7 @@ void BattleHud_DrawCompactMonStatusBox(ActivePokemon* arg0, s16 arg1, s16 arg2, 
     u16 val;
 
     state = &arg0->state;
-    mon = &arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)]->pokemonPicked[M2C_FIELD(arg0, s32*, 0x9D0)];
+    mon = &arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)]->pokemonPicked[arg0->thumbnail.tagTeam];
     if (mon->hp == 0) {
         status = 1;
     } else {

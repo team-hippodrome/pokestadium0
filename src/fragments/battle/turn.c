@@ -705,7 +705,7 @@ void Battle_CheckAllBroughtFainted_LeechSeed(ActivePokemon* arg0) {
 
     for (i = 0; i < BattleScene_GetTeamMemberTeamSize(arg0); i++) {
         if (i == ptr1->rosterIndex) {
-            var_s2 += M2C_FIELD(arg0, u16*, 0x7D6);
+            var_s2 += arg0->state.runtime.hpAfterLeechSeed;
         } else {
             temp_v0 = &arg0->teamRoster->pokemonPicked[i];
             var_s2 += temp_v0->hp;
@@ -744,7 +744,7 @@ void Battle_CheckAllBroughtFainted_PendingHp(ActivePokemon* arg0) {
 
     for (i = 0; i < BattleScene_GetTeamMemberTeamSize(arg0); i++) {
         if (i == ptr1->rosterIndex) {
-            var_s2 += M2C_FIELD(arg0, u16*, 0x7D8);
+            var_s2 += arg0->state.runtime.pendingHp;
         } else {
             temp_v0 = &arg0->teamRoster->pokemonPicked[i];
             var_s2 += temp_v0->hp;
@@ -781,7 +781,7 @@ void Battle_CheckAllBroughtFainted_Hp(ActivePokemon* arg0) {
 
     for (i = 0; i < BattleScene_GetTeamMemberTeamSize(arg0); i++) {
         if (i == ptr1->rosterIndex) {
-            var_s2 += M2C_FIELD(arg0, u16*, 0x7D2);
+            var_s2 += arg0->state.runtime.hp;
         } else {
             temp_v0 = &arg0->teamRoster->pokemonPicked[i];
             var_s2 += temp_v0->hp;

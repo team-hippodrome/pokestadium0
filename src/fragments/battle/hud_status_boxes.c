@@ -170,7 +170,7 @@ void BattleHud_DrawMonStatusBoxPlayer(ActivePokemon* arg0, s16 arg1, s16 arg2, u
     u32 var_v1;
 
     sp80 = arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)];
-    sp7C = &arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)]->pokemonPicked[M2C_FIELD(arg0, s32*, 0x9D0)];
+    sp7C = &arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)]->pokemonPicked[arg0->thumbnail.tagTeam];
 
     if (sp7C->hp == 0) {
         var_v1 = 1;
@@ -264,7 +264,7 @@ void BattleHud_DrawMonStatusBoxOpponent(ActivePokemon* arg0, s16 arg1, s16 arg2,
     u32 var_v1;
 
     sp80 = arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)];
-    sp7C = &arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)]->pokemonPicked[M2C_FIELD(arg0, s32*, 0x9D0)];
+    sp7C = &arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)]->pokemonPicked[arg0->thumbnail.tagTeam];
 
     if (sp7C->hp == 0) {
         var_v1 = 1;

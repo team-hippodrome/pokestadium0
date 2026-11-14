@@ -58,8 +58,8 @@ s32 func_8210C708(s8 *arg0) {
 void BattleScene_SelectActiveController(ActivePokemon* arg0) {
     ActivePokemonState* ptr = &arg0->state;
 
-    M2C_FIELD(arg0, u8*, 0x7B9) = M2C_FIELD(arg0, u8*, 0x7B8);
-    ptr->controller = &gControllers[arg0->sessionTeams->teamMember[M2C_FIELD(arg0, u8*, 0x7B9)]->controllerPort];
+    arg0->state.replacementState = arg0->state.ownerTeamMemberIndex;
+    ptr->controller = &gControllers[arg0->sessionTeams->teamMember[arg0->state.replacementState]->controllerPort];
 }
 
 s32 func_82107A5C(void);
@@ -372,7 +372,7 @@ extern s32 D_8218C6FC;
  * @unverified Name from Stadium 1.
  */
 s32 BattleScene_ValidateSelectedPartyMember(ActivePokemon* arg0) {
-    if (arg0->sessionTeams->teamMember[M2C_FIELD(arg0, u8*, 0x7B9)]->pokemonPicked[arg0->state.actionChosen].hp != 0) {
+    if (arg0->sessionTeams->teamMember[arg0->state.replacementState]->pokemonPicked[arg0->state.actionChosen].hp != 0) {
         return 1;
     }
 
@@ -486,7 +486,7 @@ void func_82134D60(void);
  * Pokemon's own button shows a message instead.
  */
 void BattleMenu_HandleSwitchButtons(ActivePokemon* arg0, s8* arg1) {
-    u8* team = *(u8**)(M2C_FIELD(arg0, u8*, 0x7B9) * 4 + M2C_FIELD(arg0, s8**, 0x85C) + 8);
+    u8* team = *(u8**)(arg0->state.replacementState * 4 + M2C_FIELD(arg0, s8**, 0x85C) + 8);
     ActivePokemonState* state = &arg0->state;
 
     if (team[2] == 3) {
@@ -557,7 +557,7 @@ void BattleMenu_UpdateSwitchMenu(ActivePokemon* arg0) {
         c2 = &gControllers[arg0->sessionTeams->teamMember[idx]->controllerPort];
     }
 
-    if (M2C_FIELD(arg0, s32*, 0xA04) != 0) {
+    if (arg0->captionState.active != 0) {
         if (sp18->controller->buttonPressed & 0xE03F) {
             func_8211F274(arg0);
         }
@@ -595,8 +595,8 @@ s32 BattleScene_HandlePlayerFaintedSwitch(ActivePokemon* arg0, ActivePokemon* ar
     ActivePokemonState* state = &arg0->state;
     ActivePokemonState* other = &arg1->state;
 
-    if (M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), u8*, 1) == 1) {
-        c1 = c2 = &D_800AAF50[M2C_FIELD(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), s8**, 8), u8*, 1) * 0x24];
+    if (M2C_FIELD(arg0->sessionTeams, u8*, 1) == 1) {
+        c1 = c2 = &D_800AAF50[M2C_FIELD(M2C_FIELD(arg0->sessionTeams, s8**, 8), u8*, 1) * 0x24];
     } else {
         team = M2C_FIELD(arg0, s8**, 0x85C);
         c1 = &D_800AAF50[M2C_FIELD(M2C_FIELD(team, s8**, 8), u8*, 1) * 0x24];
@@ -617,7 +617,7 @@ s32 BattleScene_HandlePlayerFaintedSwitch(ActivePokemon* arg0, ActivePokemon* ar
         state->selectedCommandOption = 2;
         other->selectedCommandOption = 3;
         other->selectedCommand = 1;
-        BattleMenu_TakeControlOnCButtonPress(arg0, c1, c2, M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), u8*, 1));
+        BattleMenu_TakeControlOnCButtonPress(arg0, c1, c2, M2C_FIELD(arg0->sessionTeams, u8*, 1));
         BattleMenu_UpdateSwitchMenu(arg0);
         return 1;
     }
@@ -699,8 +699,8 @@ void func_8210D6BC(ActivePokemon* arg0) {
     if (M2C_FIELD(state, s32*, 0x10) != 0) {
         return;
     }
-    if (M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), u8*, 1) == 1U) {
-        c1 = c2 = &D_800AAF50[M2C_FIELD(M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), s8**, 8), u8*, 1) * 0x24];
+    if (M2C_FIELD(arg0->sessionTeams, u8*, 1) == 1U) {
+        c1 = c2 = &D_800AAF50[M2C_FIELD(M2C_FIELD(arg0->sessionTeams, s8**, 8), u8*, 1) * 0x24];
     } else {
         team = M2C_FIELD(arg0, s8**, 0x85C);
         c1 = &D_800AAF50[M2C_FIELD(M2C_FIELD(team, s8**, 8), u8*, 1) * 0x24];
@@ -712,7 +712,7 @@ void func_8210D6BC(ActivePokemon* arg0) {
         buttons = M2C_FIELD(c2, u16*, 8) | M2C_FIELD(c1, u16*, 8);
         if (buttons & 0x4000) {
             M2C_FIELD(state, s32*, 4) = 2;
-            BattleMenu_TakeControlOnBPress(arg0, c1, c2, M2C_FIELD(M2C_FIELD(arg0, s8**, 0x85C), u8*, 1));
+            BattleMenu_TakeControlOnBPress(arg0, c1, c2, M2C_FIELD(arg0->sessionTeams, u8*, 1));
         } else if (buttons & 0x1000) {
             M2C_FIELD(state, s32*, 4) = 3;
         } else {
@@ -813,7 +813,7 @@ s32 BattleMenu_MustStruggle(ActivePokemon* arg0) {
     s32 pp = 0;
     s32 disabled;
 
-    if (M2C_FIELD(arg0, u8*, 0x818) != 0) {
+    if (arg0->state.runtime.disabledMoveState != 0) {
         disabled = mon[0x52] >> 4;
         if (disabled != 0) {
             pp = mon[0x32] & 0x3F;
