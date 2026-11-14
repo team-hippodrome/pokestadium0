@@ -198,7 +198,6 @@ arg1_func_80010CA8* Model_ComputeNicknameColorVariant(arg1_func_80010CA8* arg0, 
 
 s32 Sched_IsGfxTaskPending(void);
 void func_8001799C(ModelLoadContext*, u16, arg1_func_80010CA8);
-void func_80017D00(ModelLoadContext*);
 
 /**
  * When a side's model is flagged for reloading (0x80) and not yet requested, starts loading its
@@ -221,7 +220,7 @@ void BattleSide_RequestModelLoad(BattleSide* side) {
         side->modelFlags |= 0x40;
         side->modelFlags &= ~0x10;
         if (side->modelFlags & 0x20) {
-            func_80017D00(side->modelLoadContext);
+            PokeIcon_WaitFrameLoad(side->modelLoadContext);
             side->loadedModel = (ModelNodeView*)side->modelLoadContext->loadedModel;
             side->modelFlags &= ~0xE0;
         }

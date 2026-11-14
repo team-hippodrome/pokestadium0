@@ -244,7 +244,6 @@ Each row is one function address that the source still reaches under more than o
 | `PokeIcon_AllocFramebuffers` | `func_80017860` |
 | `PokeIcon_GetImage` | `func_80018DEC` |
 | `PokeIcon_WaitBackgroundLoad` | `func_80017D38` |
-| `PokeIcon_WaitFrameLoad` | `func_80017D00` |
 | `Pokedex_DrawAreaMapFrame` | `func_8A104B00` |
 | `Pokedex_RedrawAreaMapTransition` | `func_8A1011A4` |
 | `Pokemon_CreateDefault` | `func_80025540` |

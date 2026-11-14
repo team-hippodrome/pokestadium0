@@ -88,8 +88,12 @@ M2C_UNK DpIntro_SetViMode(s8 arg0, s8 arg1) {
     osViSetSpecialFeatures(OS_VI_DIVOT_ON);
 }
 
-void func_800012AC(DisplayFrame* arg0) {
-    if (arg0 == NULL) {
+/**
+ * Copies a frame request (display list, framebuffer, resolution, anti-alias, retraces per frame) into
+ * the display thread's pending frame; NULL clears the request and keeps the current video settings.
+ */
+void Display_AcceptFrameRequest(DisplayFrame* frame) {
+    if (frame == NULL) {
         D_800870D0.requestFrame.dlist = 0;
         D_800870D0.requestFrame.dlistSize = 0;
         D_800870D0.requestFrame.framebuffer = 0;
@@ -98,13 +102,13 @@ void func_800012AC(DisplayFrame* arg0) {
         D_800870D0.requestFrame.retracesPerFrame = D_800870D0.renderFrame.retracesPerFrame;
         return;
     }
-    D_800870D0.requestFrame.hiRes = arg0->hiRes;
-    D_800870D0.requestFrame.antiAlias = arg0->antiAlias;
-    D_800870D0.requestFrame.retracesPerFrame = arg0->retracesPerFrame;
-    D_800870D0.requestFrame.dlist = arg0->dlist;
-    D_800870D0.requestFrame.dlistSize = arg0->dlistSize;
-    D_800870D0.requestFrame.framebuffer = arg0->framebuffer;
-    D_800870D0.requestFrame.renderTargetIndex = arg0->renderTargetIndex;
+    D_800870D0.requestFrame.hiRes = frame->hiRes;
+    D_800870D0.requestFrame.antiAlias = frame->antiAlias;
+    D_800870D0.requestFrame.retracesPerFrame = frame->retracesPerFrame;
+    D_800870D0.requestFrame.dlist = frame->dlist;
+    D_800870D0.requestFrame.dlistSize = frame->dlistSize;
+    D_800870D0.requestFrame.framebuffer = frame->framebuffer;
+    D_800870D0.requestFrame.renderTargetIndex = frame->renderTargetIndex;
 }
 
 void func_8000460C(void*);
@@ -163,7 +167,11 @@ void DisplayWorker_ProcessFrame(void) {
     SchedClient_WaitMessage(&D_800870D0.client);
 }
 
-void func_80001558(void) {
+/**
+ * Run by the display thread once the reset button is pressed: clears 16 more lines of the shown framebuffer
+ * each call (15 steps), then drains and waits for retraces, so the screen goes black before the reset.
+ */
+void Display_ClearForReset(void) {
     s32 width;
     s32 i;
     s32 j;
@@ -201,9 +209,9 @@ void func_80001140(void*);
 void func_800081E0(s32);
 s32 func_8004D1C0(OSMesgQueue*, OSMesg*, s32);
 s32 func_8004CFB0(OSMesgQueue*, OSMesg, s32);
-void func_800012AC(DisplayFrame* arg0);
+void Display_AcceptFrameRequest(DisplayFrame* arg0);
 void func_80001328(void);
-void func_80001558(void);
+void Display_ClearForReset(void);
 
 /**
  * Seen in play (2026-11-13) ran at boot (console reset, then N64 logo, opening, title and main
@@ -221,7 +229,7 @@ void DisplayWorker_ThreadMain(UNUSED void* arg0) {
     func_80001140(&D_800870D0.task);
     while (1) {
         if (D_800A9710.preNmiFrames > 0) {
-            func_80001558();
+            Display_ClearForReset();
             continue;
         }
         func_800081E0(0);
@@ -230,7 +238,7 @@ void DisplayWorker_ThreadMain(UNUSED void* arg0) {
         D_800870D0.isWaitingForRequest = 0;
         func_800081E0(1);
         func_800081E0(2);
-        func_800012AC(msg);
+        Display_AcceptFrameRequest(msg);
         func_80001328();
         func_8004CFB0(&D_800870D0.doneQueue, (OSMesg)0x444F4E45, 0);
     }

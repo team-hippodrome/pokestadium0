@@ -802,7 +802,12 @@ void ScrollList_DrawInlineItems(ScrollList* menu, s32 x, s32 y, s32 mask, s32 ar
     }
 }
 
-void func_8002F9D8(ScrollList* menu, s32 x, s32 y, s32 mask, s32 arg4) {
+/**
+ * Draws a scroll list whose rows scroll by pixels (scrollY): clips to the visible rows, draws the cursor row
+ * first, then each visible item with its flags (cursor row gets 0x12) masked by `mask`, then the scroll
+ * arrows and cursor when enabled. Used by the Lab item and PC sort lists.
+ */
+void ScrollList_DrawSmoothScroll(ScrollList* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     ByteMatrix* def = menu->items;
     u8* items = def->rows;
     s32 pad[2]; // FAKE: stack padding
@@ -947,7 +952,11 @@ u16 ScrollList_UpdateCursor(ScrollList* menu) {
     return menu->scrollFlags;
 }
 
-u16 func_80030230(ScrollList* menu) {
+/**
+ * Input step for a pixel-scrolling list: D-pad up/down move the cursor by cursorStep pixels with key repeat
+ * (8 frames), left/right page, and the cursor sound plays when the row changes. Returns the buttons acted on.
+ */
+u16 ScrollList_UpdateSmoothScroll(ScrollList* menu) {
     s32 prev_top;
     s32 prev;
     s32 room;

@@ -507,14 +507,15 @@ s32 PokeIcon_PollBackgroundLoad(ModelLoadContext* arg0) {
     return sp18;
 }
 
-M2C_UNK func_80017BA0(s32, s32);                    /* extern */
-M2C_UNK func_8004D1C0(s32, s32 *, M2C_UNK);         /* extern */
+/**
+ * Blocks until the next model load request of `ctx` completes (queue at +0x24) and applies it.
+ * Returns PokeIcon_ApplyLoadResult's result. Callers wait on it before reusing a slot.
+ */
+s32 PokeIcon_WaitFrameLoad(ModelLoadContext* ctx) {
+    ModelLoadRequest* req;
 
-void func_80017D00(s32 arg0) {
-    s32 sp1C;
-
-    func_8004D1C0(arg0 + 0x24, &sp1C, 1);
-    func_80017BA0(arg0, sp1C);
+    osRecvMesg((OSMesgQueue*)((u8*)ctx + 0x24), (OSMesg*)&req, OS_MESG_BLOCK);
+    return PokeIcon_ApplyLoadResult(ctx, req);
 }
 
 M2C_UNK func_80017BA0(s32, s32);                    /* extern */

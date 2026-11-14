@@ -698,7 +698,7 @@ void func_8000A838(s32);
 void func_8000A8DC(void);
 void func_8000A904(void);
 void GbTower_Start(GbTowerLaunchParams*);
-s32 func_8000ADE8(void);
+s32 GbPlayer_WaitForExit(void);
 void func_8000AE1C(GbTowerLaunchParams*);
 void func_800268E4(s32, s32);
 void GbSave_ForceReloadPort(s32);
@@ -721,7 +721,7 @@ void State_GbTower(void) {
     func_80025B60(((u32) ((s32) &D_81300000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015F8F0, &D_0015FCE0, gActiveGbPort, (s32) &sp24);
     GbTower_Start(&sp24);
 
-    sp2C = func_8000ADE8();
+    sp2C = GbPlayer_WaitForExit();
 
     func_8000AE1C(&sp24);
     Display_WaitForFrames(2);

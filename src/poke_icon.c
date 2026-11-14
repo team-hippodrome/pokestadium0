@@ -76,7 +76,6 @@ PokeIconRenderer* PokeIcon_CreateRenderList(ModelLoadContext* arg0, s16 arg1, s1
     return temp_v0;
 }
 
-M2C_UNK func_80017D00(s32);                         /* extern */
 M2C_UNK func_800199E4(s32);                         /* extern */
 M2C_UNK func_8004FD20(s32, s32, u16, u16);          /**
  * Waits for any pending model load, then clears every slot's image and marks the slots empty. Free Battle
@@ -91,7 +90,7 @@ void PokeIcon_ResetSlots(PokeIconRenderer* arg0) {
     GfxImage* temp_v1;
 
     if (arg0->flags & 1) {
-        func_80017D00((s32)arg0->loadContext);
+        PokeIcon_WaitFrameLoad(arg0->loadContext);
         func_800199E4((s32)arg0->displayObject);
     }
     arg0->flags = 0U;
