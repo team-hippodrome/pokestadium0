@@ -707,135 +707,116 @@ typedef struct unk_D_843975E8 {
 } unk_D_843975E8; // size = 0x28
 
 typedef struct Radial20Node {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ u8 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ Vec3f unk_10;
-    /* 0x1C */ Vec3f unk_1C;
+    /* 0x00 */ f32 startDelay; // @unverified: frames before the node starts moving (Radial20_UpdateNode)
+    /* 0x04 */ u8 alpha; // @unverified: vertex alpha in Radial20_Draw
+    /* 0x08 */ f32 halfWidth; // @unverified: grows by 1 a frame up to Radial20.maxHalfWidth; vertex offset length
+    /* 0x0C */ f32 angle; // @unverified: roll angle in radians, advanced by angleStep
+    /* 0x10 */ Vec3f position; // @unverified: node center, moves by velocity
+    /* 0x1C */ Vec3f velocity; // @unverified: added to position every frame
     /* 0x28 */ char unk28[0x20];
 } Radial20Node; // size = 0x48
 
 typedef struct Radial20 {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ s16 unk_004;
-    /* 0x006 */ s16 unk_006;
-    /* 0x008 */ s16 unk_008;
-    /* 0x00A */ Color_RGBA8 unk_00A; // Stadium 1 follows this with a Color_RGB8
-    /* 0x010 */ f32 unk_014;
-    /* 0x014 */ f32 unk_018;
-    /* 0x018 */ Vtx* unk_01C;
-    /* 0x01C */ char unk020[0x18];
-    /* 0x034 */ s32 unk_038[3];
-    /* 0x040 */ Radial20Node unk_048[20];
+    /* 0x000 */ s16 active; // @unverified: 1 while running (Radial20_IsComplete)
+    /* 0x002 */ s16 auxEffectId; // @unverified: AuxiliaryEffect_Alloc() id, passed to AuxiliaryEffect_Update/Spawn/Draw
+    /* 0x004 */ s16 frame; // @unverified: counts up each frame until duration
+    /* 0x006 */ s16 duration; // @unverified: frames the effect runs
+    /* 0x008 */ s16 variant; // @unverified: motion and draw mode switch (0-9) in Radial20_UpdateNode/Draw
+    /* 0x00A */ Color_RGBA8 color; // Stadium 1 follows this with a Color_RGB8
+    /* 0x010 */ f32 maxHalfWidth; // @unverified: cap for each node's halfWidth
+    /* 0x014 */ f32 angleStep; // @unverified: added to each node's angle per frame
+    /* 0x018 */ Vtx* vtx; // @unverified: vertices allocated each frame in Radial20_Draw
+    /* 0x01C */ char unk01C[0x18];
+    /* 0x034 */ s32 unk_034[3]; // @unverified: only cleared at start
+    /* 0x040 */ Radial20Node nodes[20];
 } Radial20; // size = 0x5E0 (Stadium 1: 0x5E8)
 
 typedef struct Trail40Node {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A;
+    /* 0x00 */ Vec3f position; // @unverified: grid point; y is the wave height
+    /* 0x0C */ Vec3f normal; // @unverified: averaged face normal, drawn as the vertex color
+    /* 0x18 */ s16 texS; // @unverified: texture S coordinate
+    /* 0x1A */ s16 texT; // @unverified: texture T coordinate
 } Trail40Node; // size = 0x1C
 
 typedef struct Trail40 {
-    /* 0x0000 */ s16 unk_0000;
-    /* 0x0002 */ s16 unk_0002;
-    /* 0x0004 */ s16 unk_0004;
-    /* 0x0008 */ f32 unk_0008;
-    /* 0x000C */ Vtx* unk_000C;
-    /* 0x0010 */ Mtx* unk_0010;
-    /* 0x0014 */ Trail40Node unk_0014[16][16];
+    /* 0x0000 */ s16 frame; // @unverified: counts up each frame until duration
+    /* 0x0002 */ s16 duration; // @unverified: frames the effect runs
+    /* 0x0004 */ s16 alpha; // @unverified: fades in by 10 to 0x80, out by 10 at the end
+    /* 0x0008 */ f32 waveAmplitude; // @unverified: ramps up by 0.05 a frame, scales the wave height
+    /* 0x000C */ Vtx* vtx; // @unverified: grid vertices allocated each frame
+    /* 0x0010 */ Mtx* mtx; // @unverified: model matrix loaded before the grid
+    /* 0x0014 */ Trail40Node grid[16][16]; // @unverified: 16x16 surface grid
 } Trail40; // size >= 0x1C14
 
 typedef struct Trail40VariantNode {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A;
-    /* 0x1C */ f32 unk_1C;
+    /* 0x00 */ Vec3f position; // @unverified: grid point; y is the wave height
+    /* 0x0C */ Vec3f normal; // @unverified: averaged face normal, drawn as the vertex color
+    /* 0x18 */ s16 texS; // @unverified: texture S coordinate
+    /* 0x1A */ s16 texT; // @unverified: texture T coordinate
+    /* 0x1C */ f32 wavePhase; // @unverified: per-point sine phase, advanced by 0.1 a frame
 } Trail40VariantNode; // size = 0x20
 
 typedef struct Trail40Variant {
-    /* 0x0000 */ s16 unk_0000;
-    /* 0x0002 */ s16 unk_0002;
-    /* 0x0004 */ s16 unk_0004;
-    /* 0x0008 */ f32 unk_0008;
-    /* 0x000C */ Vtx* unk_000C;
-    /* 0x0010 */ Mtx* unk_0010;
-    /* 0x0014 */ Trail40VariantNode unk_0014[16][16];
+    /* 0x0000 */ s16 frame; // @unverified: counts up each frame until duration
+    /* 0x0002 */ s16 duration; // @unverified: frames the effect runs
+    /* 0x0004 */ s16 alpha; // @unverified: fades in by 10 to 0x80, out by 10 at the end
+    /* 0x0008 */ f32 waveAmplitude; // @unverified: ramps up by 0.05 a frame to 0.5, not read back
+    /* 0x000C */ Vtx* vtx; // @unverified: grid vertices allocated each frame
+    /* 0x0010 */ Mtx* mtx; // @unverified: model matrix loaded before the grid
+    /* 0x0014 */ Trail40VariantNode grid[16][16]; // @unverified: 16x16 surface grid
 } Trail40Variant; // size >= 0x2014
 
 typedef struct TexturedRibbonSheetNode {
-    /* 0x00 */ f32 unk_00;
-    /* 0x08 */ u8 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ Vec3f unk_18;
-    /* 0x24 */ Vec3f unk_24;
-    /* 0x30 */ Vtx unk_30[2];
+    /* 0x00 */ f32 startDelay; // @unverified: node index at start; vertices are only recomputed once it is <= 0
+    /* 0x08 */ u8 alpha; // @unverified: vertex alpha, fades along the ribbon
+    /* 0x08 */ f32 angle; // @unverified: roll angle in radians
+    /* 0x0C */ Vec3f position; // @unverified: node center
+    /* 0x18 */ Vec3f velocity; // @unverified: phase 1 motion
+    /* 0x24 */ Vec3f riseVelocity; // @unverified: phase 0 motion (only y is used)
+    /* 0x30 */ Vtx vertices[2]; // @unverified: the node's two edge vertices, shifted down the ribbon each frame
 } TexturedRibbonSheetNode; // size = 0x50
 
 typedef struct TexturedRibbonSheet {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ s16 unk_004;
-    /* 0x006 */ s16 unk_006;
-    /* 0x008 */ s16 unk_008;
-    /* 0x00A */ Color_RGB8 unk_00A;
-    /* 0x010 */ f32 unk_010;
-    /* 0x014 */ f32 unk_014;
-    /* 0x018 */ Vtx* unk_018;
+    /* 0x000 */ s16 active; // @unverified: 1 while running
+    /* 0x002 */ s16 phase; // @unverified: 0 rise, 1 fly toward the target after frame 11
+    /* 0x004 */ s16 frame; // @unverified: counts up each frame until duration + 10
+    /* 0x006 */ s16 duration; // @unverified: frames the effect runs
+    /* 0x008 */ s16 direction; // @unverified: -1 or 1 from the sign of the start x
+    /* 0x00A */ Color_RGB8 color; // @unverified: vertex color
+    /* 0x010 */ f32 scale; // @unverified: half the secondary owner's model scale
+    /* 0x014 */ f32 angleStep; // @unverified: added to the head node's angle per frame
+    /* 0x018 */ Vtx* vtx; // @unverified: vertices allocated each frame
     /* 0x01C */ char unk01C[0x1C];
-    /* 0x038 */ TexturedRibbonSheetNode unk_038[10];
+    /* 0x038 */ TexturedRibbonSheetNode nodes[10]; // @unverified: ribbon nodes, head first
 } TexturedRibbonSheet; // size = 0x358
 
 typedef struct FourStreamTrailNode {
-    /* 0x00 */ u8 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ Vec3f unk_18;
-    /* 0x24 */ f32 unk_24;
-    /* 0x28 */ f32 unk_28;
-    /* 0x2C */ Vec3f unk_2C;
-    /* 0x38 */ Vec3f unk_38;
+    /* 0x00 */ u8 alpha; // @unverified: vertex alpha, fades along the stream
+    /* 0x04 */ f32 halfWidth; // @unverified: grows by 2 a frame up to maxHalfWidth
+    /* 0x08 */ f32 angle; // @unverified: roll angle in radians
+    /* 0x0C */ Vec3f position; // @unverified: node center
+    /* 0x18 */ Vec3f velocity; // @unverified: added to position each frame (head node)
+    /* 0x24 */ f32 prevHalfWidth; // @unverified: halfWidth before this frame, copied to the next node
+    /* 0x28 */ f32 prevAngle; // @unverified: angle before this frame, copied to the next node
+    /* 0x2C */ Vec3f prevPosition; // @unverified: position before this frame, copied to the next node
+    /* 0x38 */ Vec3f prevVelocity; // @unverified: velocity before this frame, copied to the next node
 } FourStreamTrailNode; // size = 0x44
 
 typedef struct FourStreamTrail {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ s16 unk_004;
-    /* 0x006 */ s16 unk_006;
-    /* 0x008 */ Color_RGB8 unk_008;
-    /* 0x00C */ f32 unk_00C;
-    /* 0x010 */ f32 unk_010;
-    /* 0x014 */ f32 unk_014;
-    /* 0x018 */ Vtx* unk_018;
-    /* 0x01C */ Vec3f unk_01C;
+    /* 0x000 */ s16 active; // @unverified: 1 while running
+    /* 0x002 */ s16 frame; // @unverified: counts up each frame until duration
+    /* 0x004 */ s16 duration; // @unverified: frames the effect runs
+    /* 0x006 */ s16 direction; // @unverified: -1 or 1 from the sign of the start x
+    /* 0x008 */ Color_RGB8 color; // @unverified: vertex color
+    /* 0x00C */ f32 scale; // @unverified: 0.75 x the secondary owner's model scale
+    /* 0x010 */ f32 maxHalfWidth; // @unverified: cap for the nodes' halfWidth
+    /* 0x014 */ f32 angleStep; // @unverified: added to the head node's angle per frame
+    /* 0x018 */ Vtx* vtx; // @unverified: vertices allocated each frame
+    /* 0x01C */ Vec3f targetPos; // @unverified: the head node is pulled toward its y and z
     /* 0x028 */ char unk028[0xC];
-    /* 0x034 */ FourStreamTrailNode unk_034[15];
+    /* 0x034 */ FourStreamTrailNode nodes[15]; // @unverified: stream nodes, head first
 } FourStreamTrail; // size = 0x430
 
-typedef struct OwnerLinkedFourStreamNode {
-    /* 0x00 */ u8 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ Vec3f unk_18;
-    /* 0x24 */ f32 unk_24;
-    /* 0x28 */ f32 unk_28;
-    /* 0x2C */ Vec3f unk_2C;
-    /* 0x38 */ Vec3f unk_38;
-} OwnerLinkedFourStreamNode; // size = 0x44
 
 typedef void (*unk_D_8140E728_01C_004_1_04)(struct Particle*, s32);
 
@@ -935,75 +916,63 @@ typedef struct Particle {
 } Particle; // size = 0xD0
 
 typedef struct OwnerLinkedFourStream {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ s16 unk_004;
-    /* 0x006 */ s16 unk_006;
-    /* 0x008 */ Color_RGB8 unk_008;
-    /* 0x00C */ f32 unk_00C;
-    /* 0x010 */ f32 unk_010;
-    /* 0x014 */ f32 unk_014;
-    /* 0x018 */ Vtx* unk_018;
-    /* 0x01C */ Vec3f unk_01C;
+    /* 0x000 */ s16 active; // @unverified: 1 while running
+    /* 0x002 */ s16 frame; // @unverified: counts up each frame until duration
+    /* 0x004 */ s16 duration; // @unverified: frames the effect runs
+    /* 0x006 */ s16 direction; // @unverified: -1 or 1 from the sign of the start x
+    /* 0x008 */ Color_RGB8 color; // @unverified: vertex color
+    /* 0x00C */ f32 maxHalfWidth; // @unverified: cap for the nodes' halfWidth
+    /* 0x010 */ f32 angleStep; // @unverified: added to the head node's angle per frame
+    /* 0x014 */ f32 heading; // @unverified: atan2 of the head velocity in degrees, used as the head model's roll
+    /* 0x018 */ Vtx* vtx; // @unverified: vertices allocated each frame
+    /* 0x01C */ Vec3f targetPos; // @unverified: the head node is pulled toward its y
     /* 0x028 */ char unk028[0xC];
-    /* 0x034 */ Particle* unk_034;
-    /* 0x038 */ OwnerLinkedFourStreamNode unk_038[15];
+    /* 0x034 */ Particle* particle; // @unverified: particle that follows the head node (BattleAnim_SpawnSecondaryOwnerParticle)
+    /* 0x038 */ FourStreamTrailNode nodes[15]; // @unverified: stream nodes, head first
 } OwnerLinkedFourStream; // size = 0x434
 
-typedef struct OwnerAnchoredFourStreamNode {
-    /* 0x00 */ u8 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ Vec3f unk_18;
-    /* 0x24 */ f32 unk_24;
-    /* 0x28 */ f32 unk_28;
-    /* 0x2C */ Vec3f unk_2C;
-    /* 0x38 */ Vec3f unk_38;
-} OwnerAnchoredFourStreamNode; // size = 0x44
 
 typedef struct OwnerAnchoredFourStream {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ s16 unk_004;
-    /* 0x006 */ s16 unk_006;
-    /* 0x008 */ Color_RGB8 unk_008;
-    /* 0x010 */ f32 unk_00C;
-    /* 0x010 */ f32 unk_010;
-    /* 0x014 */ Vtx* unk_014;
-    /* 0x018 */ Particle* unk_018;
-    /* 0x01C */ OwnerAnchoredFourStreamNode unk_01C[15];
-    /* 0x418 */ f32 unk_418;
-} OwnerAnchoredFourStream; // size = 0x41C
+    /* 0x000 */ s16 active; // @unverified: 1 while running
+    /* 0x002 */ s16 frame; // @unverified: counts up each frame until duration
+    /* 0x004 */ s16 duration; // @unverified: frames the effect runs
+    /* 0x006 */ s16 direction; // @unverified: -1 or 1 from the sign of the start x
+    /* 0x008 */ Color_RGB8 color; // @unverified: vertex color
+    /* 0x00C */ f32 maxHalfWidth; // @unverified: cap for the nodes' halfWidth
+    /* 0x010 */ f32 angleStep; // @unverified: added to the head node's angle per frame
+    /* 0x014 */ Vtx* vtx; // @unverified: vertices allocated each frame
+    /* 0x018 */ Particle* particle; // @unverified: particle that follows the head node
+    /* 0x01C */ FourStreamTrailNode nodes[15]; // @unverified: stream nodes, head first
+} OwnerAnchoredFourStream; // size = 0x418
 
 typedef struct Trail50EffectNode {
-    /* 0x00 */ u8 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ Vec3f unk_18;
-    /* 0x24 */ Vec3f unk_24;
-    /* 0x30 */ f32 unk_30;
-    /* 0x34 */ f32 unk_34;
-    /* 0x38 */ Vec3f unk_38;
-    /* 0x44 */ Vec3f unk_44;
+    /* 0x00 */ u8 alpha; // @unverified: vertex alpha, fades along the trail
+    /* 0x04 */ f32 halfWidth; // @unverified: grows by 2 a frame up to maxHalfWidth
+    /* 0x08 */ f32 angle; // @unverified: roll angle in radians
+    /* 0x0C */ Vec3f position; // @unverified: node center
+    /* 0x18 */ Vec3f velocity; // @unverified: phase 1 motion
+    /* 0x24 */ Vec3f swirlVelocity; // @unverified: phase 0 motion, swirls by sin/cos(angle) x scale
+    /* 0x30 */ f32 prevHalfWidth; // @unverified: halfWidth before this frame, copied to the next node
+    /* 0x34 */ f32 prevAngle; // @unverified: angle before this frame, copied to the next node
+    /* 0x38 */ Vec3f prevPosition; // @unverified: position before this frame, copied to the next node
+    /* 0x44 */ Vec3f prevVelocity; // @unverified: velocity before this frame, copied to the next node
 } Trail50EffectNode; // size = 0x50
 
 typedef struct Trail50Effect {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ s16 unk_004;
-    /* 0x006 */ s16 unk_006;
-    /* 0x008 */ s16 unk_008;
-    /* 0x00A */ Color_RGB8 unk_00A;
-    /* 0x010 */ f32 unk_010;
-    /* 0x014 */ f32 unk_014;
-    /* 0x018 */ f32 unk_018;
+    /* 0x000 */ s16 active; // @unverified: 1 while running
+    /* 0x002 */ s16 phase; // @unverified: 0 swirl, 1 fly (after frame 21, frame restarts)
+    /* 0x004 */ s16 frame; // @unverified: counts up each frame
+    /* 0x006 */ s16 duration; // @unverified: frames of phase 1
+    /* 0x008 */ s16 direction; // @unverified: -1 or 1 from the sign of the start x
+    /* 0x00A */ Color_RGB8 color; // @unverified: vertex color
+    /* 0x010 */ f32 scale; // @unverified: model scale; swirl strength and draw scale
+    /* 0x014 */ f32 maxHalfWidth; // @unverified: cap for the nodes' halfWidth
+    /* 0x018 */ f32 angleStep; // @unverified: added to the head node's angle per frame
     /* 0x01C */ char unk01C[0x4];
-    /* 0x020 */ Vtx* unk_020;
-    /* 0x024 */ Vec3f unk_024;
+    /* 0x020 */ Vtx* vtx; // @unverified: vertices allocated each frame
+    /* 0x024 */ Vec3f startPos; // @unverified: start position, only written
     /* 0x030 */ char unk030[0x10];
-    /* 0x040 */ Trail50EffectNode unk_040[10];
+    /* 0x040 */ Trail50EffectNode nodes[10]; // @unverified: trail nodes, head first
 } Trail50Effect; // size = 0x360
 
 typedef struct unk_D_843C2C00_0B0 {

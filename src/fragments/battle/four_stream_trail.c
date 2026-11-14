@@ -31,18 +31,18 @@ void FourStreamTrail_Init(void) {
     var_a2 = &D_821B4D70[0];
 
     for (i = 0; i < 4; i++, var_a2++) {
-        var_a2->unk_000 = 0;
-        var_a2->unk_002 = 0;
-        var_a2->unk_004 = 0;
-        var_a2->unk_00C = temp_fa0;
+        var_a2->active = 0;
+        var_a2->frame = 0;
+        var_a2->duration = 0;
+        var_a2->scale = temp_fa0;
 
-        var_v0 = &var_a2->unk_034[0];
+        var_v0 = &var_a2->nodes[0];
         for (j = 0; j < 15; j++, var_v0++) {
-            var_v0->unk_00 = 0;
-            var_v0->unk_04 = 1.0f;
-            var_v0->unk_08 = 0.0f;
-            var_v0->unk_0C.z = var_v0->unk_0C.y = var_v0->unk_0C.x = 0.0f;
-            var_v0->unk_18.z = var_v0->unk_18.y = var_v0->unk_18.x = 0.0f;
+            var_v0->alpha = 0;
+            var_v0->halfWidth = 1.0f;
+            var_v0->angle = 0.0f;
+            var_v0->position.z = var_v0->position.y = var_v0->position.x = 0.0f;
+            var_v0->velocity.z = var_v0->velocity.y = var_v0->velocity.x = 0.0f;
         }
     }
 }
@@ -68,37 +68,37 @@ void FourStreamTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32
     var_v1 = &D_821B4D70[0];
 
     for (i = 0; i < 4; i++, var_v1++) {
-        if (var_v1->unk_000 == 0) {
-            f32 tmp = var_v1->unk_00C;
+        if (var_v1->active == 0) {
+            f32 tmp = var_v1->scale;
 
-            var_v1->unk_000 = 1;
-            var_v1->unk_002 = 0;
+            var_v1->active = 1;
+            var_v1->frame = 0;
 
-            var_v1->unk_004 = argD;
-            var_v1->unk_008.r = arg6;
-            var_v1->unk_008.g = arg7;
-            var_v1->unk_008.b = arg8;
-            var_v1->unk_01C = sp64;
-            var_v1->unk_010 = argC;
-            var_v1->unk_014 = argA;
+            var_v1->duration = argD;
+            var_v1->color.r = arg6;
+            var_v1->color.g = arg7;
+            var_v1->color.b = arg8;
+            var_v1->targetPos = sp64;
+            var_v1->maxHalfWidth = argC;
+            var_v1->angleStep = argA;
 
             sp58.x = arg3;
             sp58.y = arg4 * tmp;
             sp58.z = arg5 * tmp;
 
             if (arg3 < 0.0) {
-                var_v1->unk_006 = -1;
+                var_v1->direction = -1;
             } else {
-                var_v1->unk_006 = 1;
+                var_v1->direction = 1;
             }
 
-            var_s0 = &var_v1->unk_034[0];
+            var_s0 = &var_v1->nodes[0];
             for (j = 0; j < 15; j++, var_s0++) {
-                var_s0->unk_00 = (arg9 * (0xE - j)) / 15;
-                var_s0->unk_04 = argB;
-                var_s0->unk_08 = (RAND(120) * 6.2831855f) / 120.0;
-                var_s0->unk_0C = sp64;
-                var_s0->unk_18 = sp58;
+                var_s0->alpha = (arg9 * (0xE - j)) / 15;
+                var_s0->halfWidth = argB;
+                var_s0->angle = (RAND(120) * 6.2831855f) / 120.0;
+                var_s0->position = sp64;
+                var_s0->velocity = sp58;
             }
             break;
         }
@@ -129,64 +129,64 @@ void FourStreamTrail_Update(f32 arg0, Vec3f* arg1, f32 arg2, f32 arg3) {
  * @unverified Name from Stadium 1.
  */
 void FourStreamTrail_UpdateNodeChain(FourStreamTrail* arg0) {
-    FourStreamTrailNode* var_v0 = &arg0->unk_034[0];
+    FourStreamTrailNode* var_v0 = &arg0->nodes[0];
     s32 i;
     f32 temp_fa0;
     f32 temp_fa1;
 
     for (i = 0; i < 15; i++, var_v0++) {
         if (i == 0) {
-            var_v0->unk_24 = var_v0->unk_04;
-            var_v0->unk_28 = var_v0->unk_08;
-            var_v0->unk_2C = var_v0->unk_0C;
-            var_v0->unk_38 = var_v0->unk_18;
+            var_v0->prevHalfWidth = var_v0->halfWidth;
+            var_v0->prevAngle = var_v0->angle;
+            var_v0->prevPosition = var_v0->position;
+            var_v0->prevVelocity = var_v0->velocity;
 
-            var_v0->unk_0C.x += var_v0->unk_18.x;
-            var_v0->unk_0C.y += var_v0->unk_18.y;
-            var_v0->unk_0C.z += var_v0->unk_18.z;
+            var_v0->position.x += var_v0->velocity.x;
+            var_v0->position.y += var_v0->velocity.y;
+            var_v0->position.z += var_v0->velocity.z;
 
-            var_v0->unk_08 += arg0->unk_014;
-            if (arg0->unk_006 < 0) {
-                var_v0->unk_18.x += 1.5;
-                if (var_v0->unk_18.x > 20.0) {
-                    var_v0->unk_18.x = 20.0f;
+            var_v0->angle += arg0->angleStep;
+            if (arg0->direction < 0) {
+                var_v0->velocity.x += 1.5;
+                if (var_v0->velocity.x > 20.0) {
+                    var_v0->velocity.x = 20.0f;
                 }
             } else {
-                var_v0->unk_18.x -= 1.5;
-                if (var_v0->unk_18.x < -20.0) {
-                    var_v0->unk_18.x = -20.0f;
+                var_v0->velocity.x -= 1.5;
+                if (var_v0->velocity.x < -20.0) {
+                    var_v0->velocity.x = -20.0f;
                 }
             }
 
-            if (arg0->unk_002 < 0xF) {
-                temp_fa0 = ((0xF - arg0->unk_002) * 0.03) / 15.0;
-                temp_fa1 = (arg0->unk_002 * 0.15) / 15.0;
-                var_v0->unk_18.y += (arg0->unk_01C.y - var_v0->unk_0C.y) * temp_fa0;
-                var_v0->unk_18.z += (arg0->unk_01C.z - var_v0->unk_0C.z) * temp_fa0;
-                var_v0->unk_0C.y += (arg0->unk_01C.y - var_v0->unk_0C.y) * temp_fa1;
-                var_v0->unk_0C.z += (arg0->unk_01C.z - var_v0->unk_0C.z) * temp_fa1;
+            if (arg0->frame < 0xF) {
+                temp_fa0 = ((0xF - arg0->frame) * 0.03) / 15.0;
+                temp_fa1 = (arg0->frame * 0.15) / 15.0;
+                var_v0->velocity.y += (arg0->targetPos.y - var_v0->position.y) * temp_fa0;
+                var_v0->velocity.z += (arg0->targetPos.z - var_v0->position.z) * temp_fa0;
+                var_v0->position.y += (arg0->targetPos.y - var_v0->position.y) * temp_fa1;
+                var_v0->position.z += (arg0->targetPos.z - var_v0->position.z) * temp_fa1;
             } else {
-                var_v0->unk_18.y += (arg0->unk_01C.y - var_v0->unk_0C.y) * 0.03;
-                var_v0->unk_18.z += (arg0->unk_01C.z - var_v0->unk_0C.z) * 0.03;
-                var_v0->unk_0C.y += (arg0->unk_01C.y - var_v0->unk_0C.y) * 0.15;
-                var_v0->unk_0C.z += (arg0->unk_01C.z - var_v0->unk_0C.z) * 0.15;
+                var_v0->velocity.y += (arg0->targetPos.y - var_v0->position.y) * 0.03;
+                var_v0->velocity.z += (arg0->targetPos.z - var_v0->position.z) * 0.03;
+                var_v0->position.y += (arg0->targetPos.y - var_v0->position.y) * 0.15;
+                var_v0->position.z += (arg0->targetPos.z - var_v0->position.z) * 0.15;
             }
 
-            var_v0->unk_04 += 2.0;
-            if (arg0->unk_010 < var_v0->unk_04) {
-                var_v0->unk_04 = arg0->unk_010;
+            var_v0->halfWidth += 2.0;
+            if (arg0->maxHalfWidth < var_v0->halfWidth) {
+                var_v0->halfWidth = arg0->maxHalfWidth;
             }
         } else {
-            var_v0->unk_24 = var_v0->unk_04;
-            var_v0->unk_28 = var_v0->unk_08;
+            var_v0->prevHalfWidth = var_v0->halfWidth;
+            var_v0->prevAngle = var_v0->angle;
 
-            var_v0->unk_2C = var_v0->unk_0C;
-            var_v0->unk_38 = var_v0->unk_18;
+            var_v0->prevPosition = var_v0->position;
+            var_v0->prevVelocity = var_v0->velocity;
 
-            var_v0->unk_0C = var_v0[-1].unk_2C;
-            var_v0->unk_08 = var_v0[-1].unk_28;
-            var_v0->unk_18 = var_v0[-1].unk_38;
-            var_v0->unk_04 = var_v0[-1].unk_24;
+            var_v0->position = var_v0[-1].prevPosition;
+            var_v0->angle = var_v0[-1].prevAngle;
+            var_v0->velocity = var_v0[-1].prevVelocity;
+            var_v0->halfWidth = var_v0[-1].prevHalfWidth;
         }
     }
 }
@@ -201,10 +201,10 @@ s32 FourStreamTrail_IsComplete(void) {
     FourStreamTrail* var_s0 = &D_821B4D70[0];
 
     for (i = 0; i < 4; i++, var_s0++) {
-        if (var_s0->unk_000 == 1) {
-            var_s0->unk_002 += 1;
-            if (var_s0->unk_004 < var_s0->unk_002) {
-                var_s0->unk_000 = 0;
+        if (var_s0->active == 1) {
+            var_s0->frame += 1;
+            if (var_s0->duration < var_s0->frame) {
+                var_s0->active = 0;
             } else {
                 FourStreamTrail_UpdateNodeChain(var_s0);
             }
@@ -240,15 +240,15 @@ Gfx* FourStreamTrail_Draw(Gfx* arg0) {
 
     var_s4 = &D_821B4D70[0];
     for (i = 0; i < 4; i++, var_s4++) {
-        if (var_s4->unk_000 == 1) {
-            guScale(&spB0, var_s4->unk_00C, var_s4->unk_00C, var_s4->unk_00C);
-            temp_s0 = &var_s4->unk_034[0];
+        if (var_s4->active == 1) {
+            guScale(&spB0, var_s4->scale, var_s4->scale, var_s4->scale);
+            temp_s0 = &var_s4->nodes[0];
 
-            if (temp_s0->unk_0C.y > 0.0f) {
+            if (temp_s0->position.y > 0.0f) {
                 temp_v0 = Gfx_AllocDisplayList(sizeof(Mtx) * 1);
-                guTranslate(temp_v0, temp_s0->unk_0C.x, temp_s0->unk_0C.y, temp_s0->unk_0C.z);
-                guRotateRPY(&spF0, (temp_s0->unk_08 * -360.0f * var_s4->unk_006) / 6.2831854820251465,
-                            (var_s4->unk_006 * 0x5A) + 0x5A, 0.0f);
+                guTranslate(temp_v0, temp_s0->position.x, temp_s0->position.y, temp_s0->position.z);
+                guRotateRPY(&spF0, (temp_s0->angle * -360.0f * var_s4->direction) / 6.2831854820251465,
+                            (var_s4->direction * 0x5A) + 0x5A, 0.0f);
                 guMtxCatL(&spF0, temp_v0, temp_v0);
                 guMtxCatL(&spB0, temp_v0, temp_v0);
 
@@ -257,44 +257,44 @@ Gfx* FourStreamTrail_Draw(Gfx* arg0) {
                 gSPPopMatrix(arg0++, G_MTX_MODELVIEW);
             }
 
-            var_s4->unk_018 = Gfx_AllocDisplayList(sizeof(Vtx) * 30);
-            var_s0 = var_s4->unk_018;
+            var_s4->vtx = Gfx_AllocDisplayList(sizeof(Vtx) * 30);
+            var_s0 = var_s4->vtx;
 
             for (j = 0; j < 15; j++) {
-                FourStreamTrail_Update(temp_s0->unk_08, &sp134, temp_s0->unk_04, var_s4->unk_00C);
-                var_s3 = temp_s0->unk_0C.y + sp134.y;
+                FourStreamTrail_Update(temp_s0->angle, &sp134, temp_s0->halfWidth, var_s4->scale);
+                var_s3 = temp_s0->position.y + sp134.y;
                 if (var_s3 < 0) {
                     var_s3 = 0;
                 }
 
-                var_s0->v.ob[0] = temp_s0->unk_0C.x + sp134.x;
+                var_s0->v.ob[0] = temp_s0->position.x + sp134.x;
                 var_s0->v.ob[1] = var_s3;
-                var_s0->v.ob[2] = temp_s0->unk_0C.z + sp134.z;
-                var_s0->v.cn[0] = var_s4->unk_008.r;
-                var_s0->v.cn[1] = var_s4->unk_008.g;
-                var_s0->v.cn[2] = var_s4->unk_008.b;
-                var_s0->v.cn[3] = temp_s0->unk_00;
+                var_s0->v.ob[2] = temp_s0->position.z + sp134.z;
+                var_s0->v.cn[0] = var_s4->color.r;
+                var_s0->v.cn[1] = var_s4->color.g;
+                var_s0->v.cn[2] = var_s4->color.b;
+                var_s0->v.cn[3] = temp_s0->alpha;
                 var_s0++;
 
-                FourStreamTrail_Update(temp_s0->unk_08 + M_PI_F, &sp134, temp_s0->unk_04, var_s4->unk_00C);
+                FourStreamTrail_Update(temp_s0->angle + M_PI_F, &sp134, temp_s0->halfWidth, var_s4->scale);
 
-                var_s3 = temp_s0->unk_0C.y + sp134.y;
+                var_s3 = temp_s0->position.y + sp134.y;
                 if (var_s3 < 0) {
                     var_s3 = 0;
                 }
-                var_s0->v.ob[0] = temp_s0->unk_0C.x + sp134.x;
+                var_s0->v.ob[0] = temp_s0->position.x + sp134.x;
                 var_s0->v.ob[1] = var_s3;
-                var_s0->v.ob[2] = temp_s0->unk_0C.z + sp134.z;
-                var_s0->v.cn[0] = var_s4->unk_008.r;
-                var_s0->v.cn[1] = var_s4->unk_008.g;
-                var_s0->v.cn[2] = var_s4->unk_008.b;
-                var_s0->v.cn[3] = temp_s0->unk_00;
+                var_s0->v.ob[2] = temp_s0->position.z + sp134.z;
+                var_s0->v.cn[0] = var_s4->color.r;
+                var_s0->v.cn[1] = var_s4->color.g;
+                var_s0->v.cn[2] = var_s4->color.b;
+                var_s0->v.cn[3] = temp_s0->alpha;
                 var_s0++;
 
                 temp_s0++;
             }
 
-            var_s0 = var_s4->unk_018;
+            var_s0 = var_s4->vtx;
 
             gSPDisplayList(arg0++, D_821931C8);
 
