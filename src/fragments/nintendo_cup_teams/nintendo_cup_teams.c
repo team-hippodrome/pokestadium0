@@ -18,7 +18,7 @@ void func_82400020(TeamRoster* roster, ExtendedRosterInfo* info, DemoTeamTemplat
     roster->isHuman = 3;
     roster->controllerPort = 1;
     roster->controller = D_800603C4;
-    roster->unk_018 = template->unk_02;
+    roster->trainerId = template->unk_02;
     roster->numberOfPokemonBrought = 6;
     roster->rosterInfo = info;
     HAL_Strcpy(roster->trainerName, template->unk_0C);

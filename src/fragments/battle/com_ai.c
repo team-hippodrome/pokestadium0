@@ -455,7 +455,7 @@ s32 BattleAi_NoVenusaurChanseyJynxPicked(s32);
  */
 void BattleAi_AddTrainerPickScore(u8* arg0, s32 arg1) {
     s32 score = 0;
-    s32 id = D_821CF294->roster->unk_018;
+    s32 id = D_821CF294->roster->trainerId;
 
     switch (arg0[0x17]) {
         case GENGAR:
