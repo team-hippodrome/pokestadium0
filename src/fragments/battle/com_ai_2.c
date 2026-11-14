@@ -223,7 +223,7 @@ s32 BattleAi_SpeciesCanLearnMove(u8*, s32);
  * Returns the move if the battler is known to have it with PP left, or if its
  * species could learn it.
  */
-s32 BattleAi_MayKnowMove(u8* arg0, s32 arg1) {
+s32 BattleAi_MayKnowMove(ComBattler* arg0, s32 arg1) {
     s32 i;
     u8* slot;
 
@@ -238,7 +238,7 @@ s32 BattleAi_MayKnowMove(u8* arg0, s32 arg1) {
     return BattleAi_SpeciesCanLearnMove(arg0, arg1);
 }
 
-s32 BattleAi_MayKnowMove(u8 *arg0, s32 arg1);
+s32 BattleAi_MayKnowMove(ComBattler* arg0, s32 arg1);
 s32 BattleAi_EstimateDamage(s8 *, s8 *, u8);
 extern u8 D_82194578[];
 /**
@@ -247,7 +247,7 @@ extern u8 D_82194578[];
  * list); otherwise it considers every move in the D_82194578 list the species
  * could learn, with Self-Destruct and Explosion only when arg2 > 0.
  */
-s32 BattleAi_GetBestDamage(u8 *arg0, u8 *arg1, s32 arg2)
+s32 BattleAi_GetBestDamage(ComBattler* arg0, ComBattler* arg1, s32 arg2)
 {
   s32 best = 0;
   s32 i;
@@ -260,13 +260,13 @@ s32 BattleAi_GetBestDamage(u8 *arg0, u8 *arg1, s32 arg2)
   slots:
   for (i = 0; i < 4; i++)
   {
-    if (arg0[0x2B + i] == 0)
+    if (arg0->mon.moves[i] == 0)
     {
       break;
     }
-    if (BattleAi_CanUseMove((s8 *) arg0, arg0[0x2B + i]) != 0)
+    if (BattleAi_CanUseMove((s8 *) arg0, arg0->mon.moves[i]) != 0)
     {
-      d = BattleAi_EstimateDamage(((s8 *) arg0) + 0xC, ((s8 *) arg1) + 0xC, arg0[0x2B + i]);
+      d = BattleAi_EstimateDamage(((s8 *) arg0) + 0xC, ((s8 *) arg1) + 0xC, arg0->mon.moves[i]);
       if (best < d)
       {
         best = d;
@@ -277,7 +277,7 @@ s32 BattleAi_GetBestDamage(u8 *arg0, u8 *arg1, s32 arg2)
 
   goto end;
   check:
-  if (arg0[0x2E] != 0)
+  if (arg0->mon.moves[3] != 0)
   {
     goto slots;
   }
@@ -368,13 +368,13 @@ void func_82185404(void) {
  * already been seen to move first against it (mask bytes 0x75/0x76) or its
  * speed is higher.
  */
-s32 BattleAi_MovesFirst(s8 *arg0, s8 *arg1)
+s32 BattleAi_MovesFirst(ComBattler* arg0, ComBattler* arg1)
 {
-  if ((*((u8 *) (((s8 *) arg1) + 0x75))) & (*((u8 *) (((s8 *) arg0) + 0x76)))) // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  if (arg0->outspedMask & arg1->partyBit)
   {
     return 1;
   }
-  if (((s32) (*((u16 *) (((s8 *) arg1) + 0x3A)))) < ((s32) (*((u16 *) (((s8 *) arg0) + 0x3A))))) // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  if (((s32) (arg1->mon.speed)) < ((s32) (arg0->mon.speed)))
   {
     return 1;
   }
@@ -389,8 +389,8 @@ extern u8 D_8438B0C4[];
  * switch in battle.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAi_OpponentCannotAct(s8* arg0, s8* arg1) {
-    if ((M2C_FIELD(arg1, u8*, 0x58) & 0x40) && (BattleAi_MovesFirst(arg0, arg1) != 0)) {
+s32 BattleAi_OpponentCannotAct(ComBattler* arg0, ComBattler* arg1) {
+    if ((arg1->mon.immobilizedReason & 0x40) && (BattleAi_MovesFirst(arg0, arg1) != 0)) {
         return 1;
     }
     return 0;
@@ -414,16 +414,16 @@ s32 func_82185494(void) {
  * turn 25): ran once on the COM side. Which condition led to it was not logged.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAi_PickSetupMove(u8* arg0) {
+s32 BattleAi_PickSetupMove(ComBattler* arg0) {
     s32 i;
     s32 t;
 
     for (i = 0; i < 4; i++) {
-        if (arg0[0x2B + i] == 0) {
+        if (arg0->mon.moves[i] == 0) {
             return -1;
         }
-        if (BattleAi_CanUseMove((s8*)arg0, arg0[0x2B + i]) != 0) {
-            switch (arg0[0x2B + i]) {
+        if (BattleAi_CanUseMove((s8*)arg0, arg0->mon.moves[i]) != 0) {
+            switch (arg0->mon.moves[i]) {
                 case SWORDS_DANCE:
                 case GROWTH:
                 case MEDITATE:
@@ -437,8 +437,8 @@ s32 BattleAi_PickSetupMove(u8* arg0) {
                 case AMNESIA:
                 case ACID_ARMOR:
                 case SHARPEN:
-                    t = (D_8006B190[arg0[0x2B + i] - 1].unk01 - 10) & 7;
-                    if ((arg0 + 0x68)[t] < 9) {
+                    t = (D_8006B190[arg0->mon.moves[i] - 1].unk01 - 10) & 7;
+                    if (arg0->mon.statStages[t] < 9) {
                         return i;
                     }
                     break;
@@ -500,15 +500,15 @@ extern u8 D_82194840[];
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAi_MayHaveSleepMove(u8 *arg0) {
+s32 BattleAi_MayHaveSleepMove(ComBattler* arg0) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        if (arg0[0x2B + i] == 0) {
+        if (arg0->mon.moves[i] == 0) {
             goto check;
         }
-        if (BattleAi_CanUseMove((s8*)arg0, arg0[0x2B + i]) != 0) {
-            switch (arg0[0x2B + i]) {
+        if (BattleAi_CanUseMove((s8*)arg0, arg0->mon.moves[i]) != 0) {
+            switch (arg0->mon.moves[i]) {
                 case 0:
                     goto check;
                 case SING:
@@ -522,10 +522,10 @@ s32 BattleAi_MayHaveSleepMove(u8 *arg0) {
     }
     return 0;
 check:
-    if (BattleAi_FindByte(D_82194824, 1, 0x19, arg0[0x74]) != 0) {
+    if (BattleAi_FindByte(D_82194824, 1, 0x19, arg0->species) != 0) {
         return 1;
     }
-    if ((arg0[0x32] >= 50) && (BattleAi_FindByte(D_82194840, 1, 8, arg0[0x74]) != 0)) {
+    if ((arg0->mon.level >= 50) && (BattleAi_FindByte(D_82194840, 1, 8, arg0->species) != 0)) {
         return 1;
     }
     return 0;
@@ -535,16 +535,16 @@ check:
  * Picks a stat-boosting move while that stat stage is below +6. Returns the move
  * slot or -1.
  */
-s32 BattleAi_PickStatBoostMove(u8* arg0) {
+s32 BattleAi_PickStatBoostMove(ComBattler* arg0) {
     s32 i;
     s32 t;
 
     for (i = 0; i < 4; i++) {
-        if (arg0[0x2B + i] == 0) {
+        if (arg0->mon.moves[i] == 0) {
             return -1;
         }
-        if (BattleAi_CanUseMove((s8*)arg0, arg0[0x2B + i]) != 0) {
-            switch (arg0[0x2B + i]) {
+        if (BattleAi_CanUseMove((s8*)arg0, arg0->mon.moves[i]) != 0) {
+            switch (arg0->mon.moves[i]) {
                 case SWORDS_DANCE:
                 case GROWTH:
                 case MEDITATE:
@@ -558,8 +558,8 @@ s32 BattleAi_PickStatBoostMove(u8* arg0) {
                 case AMNESIA:
                 case ACID_ARMOR:
                 case SHARPEN:
-                    t = (D_8006B190[arg0[0x2B + i] - 1].unk01 - 10) & 7;
-                    if ((arg0 + 0x68)[t] < 13) {
+                    t = (D_8006B190[arg0->mon.moves[i] - 1].unk01 - 10) & 7;
+                    if (arg0->mon.statStages[t] < 13) {
                         return i;
                     }
                     break;
@@ -582,14 +582,14 @@ extern ComBattler* D_821CF29C;
  * 0x72 held 52 (left over after a super-effective Poison Sting knocked out the
  * Pinsir before it) and blocked the heal until it was cleared.
  */
-s32 BattleAi_PickHealingMove(u8 *arg0)
+s32 BattleAi_PickHealingMove(ComBattler* arg0)
 {
   s32 i;
-  if ((arg0[0x5A] & 1) || (((*((u16 *) (((s8 *) arg0) + 0x34))) / 2) < (*((u16 *) (((s8 *) arg0) + 0x72))))) // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  if ((arg0->mon.uniqueStatusFlags & 1) || (((arg0->mon.maxHp) / 2) < (arg0->damageTaken)))
   {
     return -1;
   }
-  switch (arg0[0x7C])
+  switch (arg0->lastMoves[0])
   {
     case RECOVER:
 
@@ -604,13 +604,13 @@ s32 BattleAi_PickHealingMove(u8 *arg0)
   {
     for (i = 0; i < 4; i++)
     {
-      if (arg0[0x2B + i] == 0)
+      if (arg0->mon.moves[i] == 0)
       {
         return -1;
       }
-      if (BattleAi_CanUseMove((s8 *) arg0, arg0[0x2B + i]) != 0)
+      if (BattleAi_CanUseMove((s8 *) arg0, arg0->mon.moves[i]) != 0)
       {
-        switch (arg0[0x2B + i])
+        switch (arg0->mon.moves[i])
         {
           case RECOVER:
 
@@ -618,7 +618,7 @@ s32 BattleAi_PickHealingMove(u8 *arg0)
             return i;
 
           case REST:
-            if ((arg0[0x7E] != REST) && (arg0[0x7D] != REST))
+            if ((arg0->lastMoves[2] != REST) && (arg0->lastMoves[1] != REST))
           {
             return i;
             break;
@@ -639,7 +639,7 @@ s32 BattleAi_PickStrongestMove(s32);
  * Picks Toxic against a healthy non-Poison opponent, or Leech Seed against a
  * poisoned non-Grass opponent that is not seeded yet. Returns the move slot or -1.
  */
-s32 BattleAi_PickToxicOrLeechSeed(u8 *arg0) {
+s32 BattleAi_PickToxicOrLeechSeed(ComBattler* arg0) {
     s32 i;
     s32 r;
 
@@ -655,10 +655,10 @@ s32 BattleAi_PickToxicOrLeechSeed(u8 *arg0) {
     }
     if ((D_821CF2A0->mon.pendingStatusCondition == 0) && (BattleAi_HasType(D_821CF2A0, TYPE_POISON) == 0)) {
         for (i = 0; i < 4; i++) {
-            if (arg0[0x2B + i] == 0) {
+            if (arg0->mon.moves[i] == 0) {
                 break;
             }
-            if ((BattleAi_CanUseMove((s8 *)arg0, arg0[0x2B + i]) != 0) && (arg0[0x2B + i] == TOXIC)) {
+            if ((BattleAi_CanUseMove((s8 *)arg0, arg0->mon.moves[i]) != 0) && (arg0->mon.moves[i] == TOXIC)) {
                 return i;
             }
         }
@@ -671,10 +671,10 @@ s32 BattleAi_PickToxicOrLeechSeed(u8 *arg0) {
     }
     {
         for (i = 0; i < 4; i++) {
-            if (arg0[0x2B + i] == 0) {
+            if (arg0->mon.moves[i] == 0) {
                 break;
             }
-            if ((BattleAi_CanUseMove((s8 *)arg0, arg0[0x2B + i]) != 0) && (arg0[0x2B + i] == LEECH_SEED)) {
+            if ((BattleAi_CanUseMove((s8 *)arg0, arg0->mon.moves[i]) != 0) && (arg0->mon.moves[i] == LEECH_SEED)) {
                 return i;
             }
         }

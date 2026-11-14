@@ -133,7 +133,7 @@ typedef struct ComBattler {
     /* 0x08 */ f32 matchupRatio; // @unverified: best damage it deals / best damage it takes against the active opponent (BattleAi_ChooseSwitch)
     /* 0x0C */ BattleMonRuntime mon; // copied from the battle each turn (BattleAi_ChooseTurnAction), or built from party or base stats
     /* 0x70 */ u16 prevHp; // @unverified: mon.hp at the previous turn (BattleAi_ChooseTurnAction)
-    /* 0x72 */ s16 damageTaken; // @unverified: prevHp - mon.hp, halved when the hit was a critical (BattleAi_ChooseTurnAction)
+    /* 0x72 */ u16 damageTaken; // @unverified: prevHp - mon.hp, halved when the hit was a critical (BattleAi_ChooseTurnAction)
     /* 0x74 */ u8 species; // @unverified: party species, copied by BattleAi_InitSide
     /* 0x75 */ u8 partyBit; // @unverified: 1 << party slot (BattleAi_InitSide)
     /* 0x76 */ u8 outspedMask;
@@ -4196,7 +4196,7 @@ void func_82183DC4(void);
 void func_82183E1C(void);
 
 // com_ai_2.c
-s32 BattleAi_OpponentCannotAct(s8* arg0, s8* arg1);
+s32 BattleAi_OpponentCannotAct(ComBattler* arg0, ComBattler* arg1);
 void func_821853EC(void);
 void func_821853F4(void);
 void func_821853FC(void);

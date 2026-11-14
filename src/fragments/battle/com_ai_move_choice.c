@@ -8,8 +8,8 @@
 
 extern ComBattler* D_821CF29C;
 extern ComBattler* D_821CF2A0;
-s32 BattleAi_GetBestDamage(u8 *arg0, u8 *arg1, s32 arg2);
-s32 BattleAi_MovesFirst(s8 *arg0, s8 *arg1);
+s32 BattleAi_GetBestDamage(ComBattler* arg0, ComBattler* arg1, s32 arg2);
+s32 BattleAi_MovesFirst(ComBattler* arg0, ComBattler* arg1);
 s32 BattleAi_CanUseMove(ComBattler* arg0, s32 arg1);
 s32 BattleAi_EstimateDamage(s8 *, s8 *, u8);
 
@@ -186,11 +186,11 @@ extern ComSide* D_821CF294;
 s32 BattleAi_GetHpPercent(ComBattler*);
 s32 BattleAi_CountUnfainted(ComSide*);
 s32 BattleAi_FindUsableHealingMove(ComBattler*);
-s32 BattleAi_OpponentCannotAct(s8 *, s8 *);
-s32 BattleAi_PickSetupMove(s8 *);
-s32 BattleAi_PickStatBoostMove(s8 *);
-s32 BattleAi_PickHealingMove(s8 *);
-s32 BattleAi_PickToxicOrLeechSeed(s8 *);
+s32 BattleAi_OpponentCannotAct(ComBattler*, ComBattler*);
+s32 BattleAi_PickSetupMove(ComBattler*);
+s32 BattleAi_PickStatBoostMove(ComBattler*);
+s32 BattleAi_PickHealingMove(ComBattler*);
+s32 BattleAi_PickToxicOrLeechSeed(ComBattler*);
 s32 BattleAi_PickStatLowerMove(s8 *, s8 *);
 s32 BattleAi_IsMoveUseful(u8);
 s32 BattleAi_PickParalysisMove(s8 *, s8 *);
