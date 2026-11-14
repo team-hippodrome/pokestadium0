@@ -16,6 +16,19 @@ typedef struct FreeBattleMenuWindow {
     /* 0x80 */ s32 descriptionLines; // 3 in the rule window; the description box is 0x1C pixels per line
 } FreeBattleMenuWindow; // size = 0x84
 
+/* The opponent select window (FreeBattle_InitOpponentSelect): a menu of four opponents next to
+ * the controller panel. */
+typedef struct FreeBattleOpponentWindow {
+    /* 0x00 */ Window window;
+    /* 0x2C */ PointerList itemList;
+    /* 0x38 */ Menu menu;
+    /* 0x5C */ u16 itemFlags[4]; // 2P, 3P, 4P, COM; 1 1 1 0 (2P-4P greyed out) with one controller
+    /* 0x64 */ s32 choice; // 2 + the row picked with A: 5 for COM
+    /* 0x68 */ s32 controllerMask; // controllers plugged in, bit 1 << n for controller n + 1: 1 with only controller 1
+    /* 0x6C */ char unk6C[0x4];
+    /* 0x70 */ s32 unk_70; // passed to FreeBattle_DrawControllerPanel as `active`
+} FreeBattleOpponentWindow; // size = 0x74
+
 /* Struct types that were defined identically in each of these files; this is
  * now the one definition they all include:
  * src/fragments/fragment007_166580.c

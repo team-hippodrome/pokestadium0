@@ -469,17 +469,11 @@ extern M2C_UNK D_82009F70;
  * FreeBattle_InitOpponentSelect
  *
  * Initializes the object arg0 (layout not established): calls
- * Window_SetRect(arg0, arg1, arg2, 0x192, 0x10F), clears the words at 0x24 and
- * 0x28, sets the word at 0x14 to 0x801 and the pointer at 0x20 to
- * &D_82009F70. Calls func_80027804 on the sub-object at arg0 + 0x2C with
- * (&D_8200917C, 4, 4), then Menu_Init on the sub-objects at 0x38, 0x2C
- * and 0x5C with the callback FreeBattle_DrawOpponentOption, 0x4C and 0x1C. Sets bit 0x10000
- * in the word at 0x58 and stores arg3 at 0x68.
- *
- * Then, with mask = ~arg3 (OR 0xE when arg4 == 1): for each of the bits 2, 4
- * and 8 that is set in mask, sets bit 0 of the halfword at offset 0, 2 or 4
- * of the record pointed to by the word at arg0 + 0x3C. Stores arg5 at 0x70
- * and calls Menu_SkipDisabledForward(arg0 + 0x38, arg3).
+ * Window_SetRect(&arg0->window, arg1, arg2, 0x192, 0x10F), style 0x801, title D_82009F70; the
+ * four options D_8200917C go into itemList and the menu (FreeBattle_DrawOpponentOption rows).
+ * controllerMask = arg3. With mask = ~arg3 (OR 0xE when arg4 == 1), each of the bits 2, 4 and 8
+ * set in mask disables option 0, 1 or 2. Stores arg5 at unk_70 and moves the cursor to an
+ * enabled option (Menu_SkipDisabledForward).
  *
  * Same family as FreeBattle_InitBattleModeWindow and FreeBattle_InitMenuWindow. What the object, the bits
  * and the values mean is not established. Matching notes: the sub-object
@@ -488,37 +482,37 @@ extern M2C_UNK D_82009F70;
  * sp+0x28.
  * Seen in play: たいせんする opens 「あいてをせんたく」 (1P VS, 2P 3P 4P COM) and runs this.
  */
-void FreeBattle_InitOpponentSelect(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+void FreeBattle_InitOpponentSelect(FreeBattleOpponentWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s32 pad; // FAKE: stack padding
     s8 *sp2C;
     s8 *sp28;
     s32 var_v1;
 
-    Window_SetRect(arg0, arg1, arg2, 0x192, 0x10F);
-    M2C_FIELD(arg0, s32 *, 0x24) = 0;
-    M2C_FIELD(arg0, s32 *, 0x28) = 0;
-    M2C_FIELD(arg0, s32 *, 0x14) = 0x801;
-    M2C_FIELD(arg0, M2C_UNK **, 0x20) = &D_82009F70;
-    sp2C = arg0 + 0x2C;
+    Window_SetRect(&arg0->window, arg1, arg2, 0x192, 0x10F);
+    arg0->window.animTimer = 0;
+    arg0->window.state = 0;
+    arg0->window.style = 0x801;
+    arg0->window.title = (char*)&D_82009F70;
+    sp2C = (s8*)&arg0->itemList;
     func_80027804(sp2C, (s32)&D_8200917C, 4, 4);
-    sp28 = arg0 + 0x38;
-    Menu_Init(sp28, sp2C, arg0 + 0x5C, (void (*)(s32, s32, char *, s32, s32, s32 *))FreeBattle_DrawOpponentOption, 0x4C, 0x1C);
-    M2C_FIELD(arg0, s32 *, 0x58) = (s32) (M2C_FIELD(arg0, s32 *, 0x58) | 0x10000);
-    M2C_FIELD(arg0, s32 *, 0x68) = arg3;
+    sp28 = (s8*)&arg0->menu;
+    Menu_Init(sp28, sp2C, arg0->itemFlags, (void (*)(s32, s32, char *, s32, s32, s32 *))FreeBattle_DrawOpponentOption, 0x4C, 0x1C);
+    arg0->menu.options = (s32) (arg0->menu.options | 0x10000);
+    arg0->controllerMask = arg3;
     var_v1 = ~arg3;
     if (arg4 == 1) {
         var_v1 |= 0xE;
     }
     if (var_v1 & 2) {
-        M2C_FIELD(M2C_FIELD(arg0, void **, 0x3C), u16 *, 0) |= 1;
+        arg0->menu.itemFlags[0] |= 1;
     }
     if (var_v1 & 4) {
-        M2C_FIELD(M2C_FIELD(arg0, void **, 0x3C), u16 *, 2) |= 1;
+        arg0->menu.itemFlags[1] |= 1;
     }
     if (var_v1 & 8) {
-        M2C_FIELD(M2C_FIELD(arg0, void **, 0x3C), u16 *, 4) |= 1;
+        arg0->menu.itemFlags[2] |= 1;
     }
-    M2C_FIELD(arg0, s32 *, 0x70) = arg5;
+    arg0->unk_70 = arg5;
     Menu_SkipDisabledForward(sp28, arg3);
 }
 
@@ -528,33 +522,32 @@ extern u8 D_8200910C[];
 extern char D_82009F84[];
 
 /**
- * Draws the object arg0 (layout not established; x at +0, y at +4, width at +8) while
- * func_8002AE6C() is zero: a frame via Ui_DrawTexturedDivider (at y + 0x92), a filled bar via
- * func_80029028 (color D_82009100, height 0x70), the picture D_8200910C via Ui_DrawImageInStrips,
- * the text D_82009F84 in the color from D_800734A8, the sub-object at +0x38 via
- * Menu_DrawItems, and finally FreeBattle_DrawControllerPanel with the words at +0x68 and +0x70, 1 and a
- * value chosen from the word at +0x40 (0 -> 2, 1 -> 4, 2 -> 8, otherwise 0).
+ * Draws the window while func_8002AE6C() is zero: a frame via Ui_DrawTexturedDivider (at y + 0x92),
+ * a filled bar via func_80029028 (color D_82009100, height 0x70), the picture D_8200910C via
+ * Ui_DrawImageInStrips, the text D_82009F84 in the color from D_800734A8, the menu via
+ * Menu_DrawItems, and finally FreeBattle_DrawControllerPanel with controllerMask, unk_70, 1 and a
+ * value chosen from menu.cursor (0 -> 2, 1 -> 4, 2 -> 8, otherwise 0).
  * What the constants mean is not established.
  * Matching note: Ui_DrawTexturedDivider and Menu_DrawItems must be declared void; their
  * (unused) return value would otherwise shift the compiler's register choices.
  * Seen in play: draws 「あいてをせんたく」 with the N64 and controller pictures and 1P VS COM.
  */
-void FreeBattle_DrawOpponentSelect(s8* arg0) {
+void FreeBattle_DrawOpponentSelect(FreeBattleOpponentWindow* arg0) {
     s32 sp2C;
 
     sp2C = 0;
     if (func_8002AE6C() == 0) {
-        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x92, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
+        Ui_DrawTexturedDivider(arg0->window.x, arg0->window.y + 0x92, arg0->window.width, &D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x99, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x70, *(Color82001CCC*)&D_82009100);
-        Ui_DrawImageInStrips(D_8200910C, M2C_FIELD(arg0, s32*, 0) + 0xA9, M2C_FIELD(arg0, s32*, 4) + 0xC1);
+        func_80029028(arg0->window.x + 6, arg0->window.y + 0x99, arg0->window.width - 0xC, 0x70, *(Color82001CCC*)&D_82009100);
+        Ui_DrawImageInStrips(D_8200910C, arg0->window.x + 0xA9, arg0->window.y + 0xC1);
         func_8001AB6C();
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
         func_8001A384(8, 0);
-        func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0x36, M2C_FIELD(arg0, s32*, 4) + 0xC3, D_82009F84);
+        func_8001A944(arg0->window.x + 0x36, arg0->window.y + 0xC3, D_82009F84);
         func_8001ABBC();
-        Menu_DrawItems(arg0 + 0x38, M2C_FIELD(arg0, s32*, 0) + 0x110, M2C_FIELD(arg0, s32*, 4) + 0x99, 0xFEF, 0);
-        switch (M2C_FIELD(arg0, s32*, 0x40)) {
+        Menu_DrawItems(&arg0->menu, arg0->window.x + 0x110, arg0->window.y + 0x99, 0xFEF, 0);
+        switch (arg0->menu.cursor) {
             case 0:
                 sp2C = 2;
                 break;
@@ -565,7 +558,7 @@ void FreeBattle_DrawOpponentSelect(s8* arg0) {
                 sp2C = 8;
                 break;
         }
-        FreeBattle_DrawControllerPanel(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 0x68), M2C_FIELD(arg0, s32*, 0x70), 1, sp2C);
+        FreeBattle_DrawControllerPanel(arg0->window.x + 6, arg0->window.y + 6, arg0->controllerMask, arg0->unk_70, 1, sp2C);
     }
 }
 
@@ -578,15 +571,15 @@ void FreeBattle_DrawOpponentSelect(s8* arg0) {
  * value 2..5 stored in the word at arg0 + 0x64. Any other value returns 0.
  * Seen in play: runs while 「あいてをせんたく」 is open.
  */
-s32 FreeBattle_UpdateOpponentSelect(void* arg0) {
+s32 FreeBattle_UpdateOpponentSelect(FreeBattleOpponentWindow* arg0) {
     s32 result = 0;
     s32 tmp;
 
-    tmp = M2C_FIELD(arg0, s32*, 0x28);
+    tmp = arg0->window.state;
     if ((tmp != 1) && (tmp != 2)) {
         return 0;
     }
-    if (Menu_UpdateCursorSkipDisabled((u8*)arg0 + 0x38, arg0) == 0) {
+    if (Menu_UpdateCursorSkipDisabled(&arg0->menu, arg0) == 0) {
         tmp = func_8002BC14(D_800603C0);
         if (tmp == -1) {
             func_8003F6AC(3);
@@ -594,18 +587,18 @@ s32 FreeBattle_UpdateOpponentSelect(void* arg0) {
         } else if (tmp == 1) {
             func_8003F6AC(2);
             result = 1;
-            switch (M2C_FIELD(arg0, s32*, 0x40)) {
+            switch (arg0->menu.cursor) {
                 case 0:
-                    M2C_FIELD(arg0, s32*, 0x64) = 2;
+                    arg0->choice = 2;
                     break;
                 case 1:
-                    M2C_FIELD(arg0, s32*, 0x64) = 3;
+                    arg0->choice = 3;
                     break;
                 case 2:
-                    M2C_FIELD(arg0, s32*, 0x64) = 4;
+                    arg0->choice = 4;
                     break;
                 case 3:
-                    M2C_FIELD(arg0, s32*, 0x64) = 5;
+                    arg0->choice = 5;
                     break;
             }
         }
