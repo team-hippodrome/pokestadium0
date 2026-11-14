@@ -27,7 +27,7 @@ typedef struct {
 } SlotFlags;
 
 M2C_UNK GridMenu_UpdateCursor();
-void FreeBattle_SetScreenState(s8*, s32, s32);
+void FreeBattle_SetScreenState(FreeBattleScreen*, s32, s32);
 extern s32 D_8200AC58[];
 void func_8001AB6C(void);
 void func_8001A384(s32, s32);

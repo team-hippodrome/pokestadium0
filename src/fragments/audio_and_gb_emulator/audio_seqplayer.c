@@ -770,13 +770,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep2(SequenceLayer* layer) {
 
 extern f32 D_81136778[];
 extern s16 D_811858EC;
-typedef struct Reverb81113650 {
-    /* 0x000 */ u8 unk000[0x110];
-    /* 0x110 */ SoundFontSound sound;
-    /* 0x118 */ u8 unk118[0x158 - 0x118];
-} Reverb81113650; // size = 0x158
-
-extern Reverb81113650 D_81184110[];
+extern SynthesisReverb D_81184110[];
 u8* AudioPlayback_GetInstrumentTunedSample(u8* arg0, s32 arg1);
 u8* AudioPlayback_GetDrum(s32 arg0, s32 arg1);
 

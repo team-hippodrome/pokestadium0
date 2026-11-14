@@ -35,34 +35,6 @@ typedef struct AudioCmd {
 
 extern NoteSampleState* D_81184288;
 
-/* Reverb ring-buffer view of an Reverb81107E70 entry (same 0x158-byte layout). */
-typedef struct ReverbItem81107390 {
-    /* 0x00 */ s16 numSamplesAfterDownsampling;
-    /* 0x02 */ s16 chunkLen;
-    /* 0x04 */ s16* toDownsampleLeft;
-    /* 0x08 */ s16* toDownsampleRight;
-    /* 0x0C */ s32 startPos;
-    /* 0x10 */ s16 lengthA;
-    /* 0x12 */ s16 lengthB;
-} ReverbItem81107390; // size = 0x14
-
-typedef struct Reverb81107390 {
-    /* 0x000 */ u8 unk00;
-    /* 0x001 */ u8 unk01;
-    /* 0x002 */ u8 framesToIgnore; // @unverified: same offset/use as OoT's SynthesisReverb.framesToIgnore
-    /* 0x003 */ u8 curFrame;
-    /* 0x004 */ u8 downsampleRate;
-    /* 0x005 */ char unk05[0xF];
-    /* 0x014 */ s32 nextRingBufPos; // @unverified: same offset/use as OoT's SynthesisReverb.nextRingBufPos
-    /* 0x018 */ char unk18[0x4];
-    /* 0x01C */ s32 bufSizePerChan; // @unverified: same offset/use as OoT's SynthesisReverb.bufSizePerChan
-    /* 0x020 */ s16* leftRingBuf; // @unverified: same offset/use as OoT's SynthesisReverb.leftRingBuf
-    /* 0x024 */ s16* rightRingBuf; // @unverified: same offset/use as OoT's SynthesisReverb.rightRingBuf
-    /* 0x028 */ char unk28[0x10];
-    /* 0x038 */ ReverbItem81107390 items[2][5];
-    /* 0x100 */ char unk100[0x58];
-} Reverb81107390; // size = 0x158
-
 void func_80056730(void*, s32);
 
 /**
@@ -72,15 +44,15 @@ void func_80056730(void*, s32);
  * @unverified Name and comment guessed from the code.
  */
 void AudioSynth_InitNextRingBuf(s32 chunkLen, s32 update_index, s32 reverb_index) {
-    ReverbItem81107390* item;
+    ReverbRingBufferItem* item;
     s32 src_pos;
     s32 dst_pos;
     s32 n_samples;
     s32 excessive_samples;
     s32 pad[3]; // FAKE
-    Reverb81107390* reverb;
+    SynthesisReverb* reverb;
 
-    reverb = (Reverb81107390*)&D_81184110[reverb_index];
+    reverb = (SynthesisReverb*)&D_81184110[reverb_index];
     if (reverb->downsampleRate >= 3 && reverb->framesToIgnore == 0) {
         item = &reverb->items[reverb->curFrame][update_index];
         func_80056730(item->toDownsampleLeft, 0x340);
@@ -261,7 +233,7 @@ typedef struct Reverb81107AEC {
     /* 0x028 */ s32 resampleStateLeft; // @unverified: aResample state of the left channel (OoT's SynthesisReverb.unk_30)
     /* 0x02C */ s32 resampleStateRight; // @unverified: aResample state of the right channel (OoT's SynthesisReverb.unk_34)
     /* 0x030 */ char unk30[0x8];
-    /* 0x038 */ ReverbItem81107390 items[2][5];
+    /* 0x038 */ ReverbRingBufferItem items[2][5];
     /* 0x100 */ char unk100[0x58];
 } Reverb81107AEC; // size = 0x158
 #define ACMD_81107AEC(pkt, a, b)            \
@@ -277,7 +249,7 @@ typedef struct Reverb81107AEC {
  * @unverified Name and comment guessed from the code.
  */
 void* AudioSynth_LoadReverbSamples(AudioCmd* cmd, s32 bufLen, s16 reverbIndex, s16 update_index) {
-    ReverbItem81107390* item;
+    ReverbRingBufferItem* item;
     s16 startPad;
     s16 padded_length_a;
 
@@ -457,7 +429,7 @@ AudioCmd* AudioSynth_DoOneAudioUpdate(s32* ai_buf, s32 aiBufLen, AudioCmd* cmd, 
             }
             cmd = func_81107F40(cmd, reverbIndex, updateIndex);
             if (((Reverb8110814C*)&D_81184110[reverbIndex])->mixReverbIndex != -1) {
-                if (((Reverb81107390*)&D_81184110[((Reverb8110814C*)&D_81184110[reverbIndex])->mixReverbIndex])->downsampleRate == 1) {
+                if (((SynthesisReverb*)&D_81184110[((Reverb8110814C*)&D_81184110[reverbIndex])->mixReverbIndex])->downsampleRate == 1) {
                     cmd = func_81107E70(cmd, ((Reverb8110814C*)&D_81184110[reverbIndex])->mixReverbIndex, updateIndex);
                     cmd->w0 = ZSHIFTL_814C(0xC, 24, 8) | ZSHIFTL_814C(0x34, 16, 8) | ZSHIFTL_814C(((Reverb8110814C*)&D_81184110[reverbIndex])->mixReverbStrength, 0, 16); cmd->w1 = ZSHIFTL_814C(0xC80, 16, 16) | ZSHIFTL_814C(0x3E0, 0, 16); cmd++;
                     cmd = func_8110807C(cmd, ((Reverb8110814C*)&D_81184110[reverbIndex])->mixReverbIndex, updateIndex);

@@ -33,9 +33,9 @@ typedef struct { f32 v; f32 pad[3]; } CameraTargetOffsetRow;
 
 typedef struct MoveAnimInfoZ {
     /* 0x00 */ u8 pad00[2];
-    /* 0x02 */ u16 unk_02;
-    /* 0x04 */ u16 unk_04;
-    /* 0x06 */ u16 unk_06;
+    /* 0x02 */ u16 userCameraShot; // @unverified: func_8212C78C plays it with BattleCamera_PlayUserShot
+    /* 0x04 */ u16 travelCameraShot; // @unverified: checked for 6 in BattleScene_ActionStepTravel
+    /* 0x06 */ u16 targetCameraShot; // @unverified: func_8212F044 plays it with BattleCamera_PlayTargetShot
     /* 0x08 */ u8 pad08[2];
 } MoveAnimInfoZ; // size = 0xA
 
@@ -79,12 +79,6 @@ typedef struct unk_D_84392040 {
 
 #define NINETY_DEGREES 0x4000
 
-typedef struct Cue8212B270 {
-    /* 0x00 */ u8 unk_00[6];
-    /* 0x06 */ u8 unk_06;
-    /* 0x07 */ u8 unk_07[3];
-    /* 0x0A */ u8 unk_0A;
-} Cue8212B270; // size = 0xB
 
 typedef struct SurfWaterGridPoint {
     /* 0x00 */ Vec3f position; // @unverified: grid point; y is the water height
@@ -164,7 +158,6 @@ typedef struct ComSide {
  * src/fragments/fragment012_17ED00/battle_engine_com_ai_2_82184DC8.c
  */
 
-typedef struct Move82184ADC { u8 unk00; u8 unk01; u8 power; u8 type; u8 unk04; u8 unk05; } Move82184ADC;
 
 typedef s32 (*func_D_84390300)(void);
 
@@ -253,10 +246,14 @@ typedef struct SpeciesLearnsetBuffer {
 } SpeciesLearnsetBuffer; // size = 0x20
 
 typedef struct SwayState {
-    /* 0x00 */ Vec3f unk_00;
+    /* 0x00 */ Vec3f translation; // @unverified: zeroed together with rotation when a Pokémon is reset (turn.c)
     /* 0x0C */ Vec3f rotation;
     /* 0x18 */ Vec3f orbitCenter; // @unverified: model point the camera orbit is measured from (BattleCamera_CaptureModelOrbit)
-    /* 0x24 */ char unk24[0x18];
+    /* 0x24 */ Vec3f focusOffset; // @unverified: per-side point from D_82199DF0 (x scaled by facingDirection); orbitCenter is built from it
+    /* 0x30 */ s16 orbitRotationX; // @unverified: angles/distance from orbitCenter to the camera target, saved by BattleCamera_CaptureModelOrbit
+    /* 0x32 */ s16 orbitRotationY; // @unverified: see orbitRotationX
+    /* 0x34 */ char unk34[0x4];
+    /* 0x38 */ f32 orbitDistance; // @unverified: see orbitRotationX
 } SwayState; // size = 0x3C
 
 typedef struct ActivePokemon {
@@ -350,7 +347,7 @@ typedef struct BattleScene {
     /* 0x14 */ s32 stepFrameTimer;
     /* 0x18 */ u16 transitionStage;
     /* 0x1A */ u8 hitReactionKind;
-    /* 0x1B */ u8 unk_1B;
+    /* 0x1B */ u8 hitCountWaitFrames; // @unverified: BattleScene_ActionStepSetHitCount counts it to 10 while message buffer 12 is non-empty
     /* 0x1C */ s32 mode; // BattleScene_Update mode: 1 at the command menu, 2 while a turn plays out
     /* 0x20 */ s32 phaseStep;
     /* 0x24 */ s32 modelReloadStep;
@@ -363,7 +360,7 @@ typedef struct BattleScene {
     /* 0x38 */ s32 phase; // BattleScene_UpdatePhase case: 1 command, 2 first action, 3 second action, 15 Transform, ...
     /* 0x3C */ s32 phaseSubstep;
     /* 0x40 */ s32 winner; // 0 while the battle runs, otherwise the winning side + 1 (1 when 1P knocked out COM's last Pokémon)
-    /* 0x44 */ s32 unk_44;
+    /* 0x44 */ s32 modeAfterTransition; // @unverified: func_82121DAC passes it to func_82121D5C, which stores it in mode
     /* 0x48 */ s32 moveEffectKind;
     /* 0x4C */ s32 rageFollowupPhase;
     /* 0x50 */ s32 cameraPresetId;
@@ -375,12 +372,12 @@ typedef struct BattleScene {
     /* 0x64 */ f32 stageScale; // @unverified: eased toward 1.0 and passed to Battle_SetStageScale in phases_2.c
     /* 0x68 */ f32 shakeAmplitude;
     /* 0x6C */ s16 shakeAngle; // camera shake phase: BattleScene_ApplyCameraShake adds 0x4000 a frame; with shakeAmplitude poked to 40 the look-at bobbed with its cosine
-    /* 0x6E */ s16 unk_6E;
+    /* 0x6E */ s16 orbitPitch; // @unverified: pitch passed to BattleScene_SetCameraEyeFromPosition, eased to 0x149E
     /* 0x70 */ char unk70[0x4];
     /* 0x74 */ f32 orbitDistance; // @unverified: eye-to-look-at distance that func_8210BCF0 measures next to rotationX/rotationY
     /* 0x78 */ char unk78[0xC];
-    /* 0x84 */ Vec3f unk_84;
-    /* 0x90 */ Vec3f unk_90;
+    /* 0x84 */ Vec3f easeRates; // @unverified: .y/.z used as per-frame step sizes for camera easing (scene_camera_2.c, phases.c)
+    /* 0x90 */ Vec3f easeRampRates; // @unverified: .z ramps up and feeds easeRates.z or camera steps (opening.c, turn_actions.c)
     /* 0x9C */ char unk9C[0xC];
     /* 0xA8 */ Vec3f savedCameraAt; // camera look-at saved around a shot; each write in play equaled the live camera's targetPosition
     /* 0xB4 */ Vec3f savedCameraEye; // camera eye saved with savedCameraAt; each write in play equaled the live eyePosition
@@ -413,7 +410,7 @@ typedef struct SpeciesModelTransform {
     /* 0x00 */ Vec3f coordinates;
     /* 0x0C */ s16 rotationX;
     /* 0x0E */ s16 rotationY;
-    /* 0x10 */ s16 unk_10;
+    /* 0x10 */ s16 mirrorBySide; // @unverified: 0xFF makes BattleThumbnail_* scale rotationY and z by the thumbnail side
     /* 0x12 */ u16 idleTimer;
     /* 0x14 */ char unk14[0xC];
 } SpeciesModelTransform; // size = 0x20
@@ -440,48 +437,18 @@ typedef struct unk_D_843847BC {
     /* 0x14 */ s16 side;
 } ThumbnailSettings; // size = 0x18
 
-typedef struct unk_D_843901A0_4C8 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ Vec3f unk_14;
-    /* 0x20 */ f32 unk_20;
-    /* 0x24 */ f32 unk_24;
-    /* 0x28 */ s16 unk_28;
-    /* 0x2A */ s16 unk_2A;
-} unk_D_843901A0_4C8; // size = 0x2C
+typedef struct BattleMessageQueues {
+    /* 0x000 */ u8 controllerPort; // @unverified: BattleMessage_ShowForSide stores the speaking trainer's port; picks the box color in BattleMessage_TickTypewriter
+    /* 0x004 */ s32 cursor; // @unverified: typewriter position in fullText, reset by BattleScene_ResetMessageQueue
+    /* 0x008 */ s8 shownText[64]; // @unverified: the part of fullText revealed so far (BattleMessage_TickTypewriter)
+    /* 0x048 */ s8 fullText[64]; // @unverified: message being revealed, copied in by BattleMessage_ShowForSide
+    /* 0x088 */ s8 messageBuffers[17][64]; // @unverified: 64-byte strings cleared by Battle_ClearAllMessageQueues; +0xC8/+0x148 go to BattleMessage_ShowForSide
+} BattleMessageQueues; // size = 0x4C8 (func_8211F3F4 allocates 0x4C8; Stadium 1's 0x2C-byte tail is gone)
 
-typedef struct unk_D_843901A0 {
-    /* 0x000 */ u8 unk_000;
-    /* 0x004 */ s32 unk_004;
-    /* 0x008 */ u8 unk_008[4];
-    /* 0x00C */ char unk00C[0x3C];
-    /* 0x048 */ u8 unk_048[64];
-    /* 0x088 */ s8 unk_088[64];
-    /* 0x0C8 */ s8 unk_0C8[64];
-    /* 0x148 */ s8 unk_108[64];
-    /* 0x148 */ s8 unk_148[64];
-    /* 0x188 */ s8 unk_188[64];
-    /* 0x1C8 */ s8 unk_1C8[64];
-    /* 0x208 */ s8 unk_208[64];
-    /* 0x248 */ s8 unk_248[64];
-    /* 0x288 */ s8 unk_288[64];
-    /* 0x2C8 */ s8 unk_2C8[64];
-    /* 0x2C8 */ s8 unk_308[64];
-    /* 0x348 */ s8 unk_348[64];
-    /* 0x388 */ s8 unk_388[64];
-    /* 0x3C8 */ s8 unk_3C8[64];
-    /* 0x408 */ s8 unk_408[64];
-    /* 0x448 */ s8 unk_448[2][64];
-    /* 0x4C8 */ unk_D_843901A0_4C8 unk_4C8;
-} unk_D_843901A0; // size = 0x4F4
-
-typedef struct unk_D_84385790 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ Color_RGBA8 unk_04;
-} unk_D_84385790; // size = 0x8
+typedef struct StatusLabel {
+    /* 0x00 */ s32 text; // @unverified: status label string drawn by BattleHud_DrawMonInfoBox (table D_80066AA0 indexed by status)
+    /* 0x04 */ Color_RGBA8 color; // @unverified: color the label is drawn in
+} StatusLabel; // size = 0x8
 
 typedef struct arg1_func_84344CE8 {
     /* 0x00 */ char unk00[0x14];
@@ -916,21 +883,18 @@ typedef struct StatStageMultiplier {
     /* 0x01 */ u8 divisor;
 } StatStageMultiplier; // size = 0x2
 
-typedef struct TypeEffectivenessEntry {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-} TypeEffectivenessEntry; // size = 0x3
+/* The move name table at 0x8006A9C8 (12-byte entries indexed by move id) seen from +4
+   (D_8006A9CC), so that .name lines up with entry 0 */
+typedef struct MoveNameView {
+    /* 0x0 */ char* name;
+    /* 0x4 */ char unk4[0x8];
+} MoveNameView; // size = 0xC
 
-typedef struct unk_D_843C6148 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
-    /* 0x06 */ char unk06[0x2];
-} unk_D_843C6148; // size <= 0x8
+typedef struct TypeEffectivenessEntry {
+    /* 0x00 */ u8 attackType; // @unverified: compared with the move type in Battle_ApplyTypeEffectAndSTAB; 0xFF ends the table
+    /* 0x01 */ u8 defenderType; // @unverified: compared with the target types
+    /* 0x02 */ u8 multiplier; // @unverified: damage = damage * multiplier / 10
+} TypeEffectivenessEntry; // size = 0x3
 
 struct Particle;
 
@@ -1089,7 +1053,7 @@ extern f32 D_FLT_82199EB4;
 
 extern Color_RGB8 D_84385860[];
 
-extern unk_D_84385790 D_84385790[];
+extern StatusLabel D_84385790[];
 
 extern u8 D_030096C0[];
 
@@ -1582,7 +1546,7 @@ extern BattleMonRuntime* sBattleTarget;
 extern ActivePokemon* sOtherPokemon; // @unverified: the one not acting
 extern ActivePokemon* sActingPokemon; // @unverified: the one whose action is running
 
-extern unk_D_843901A0* gBattleMessageQueues;
+extern BattleMessageQueues* gBattleMessageQueues;
 
 extern unk_D_84390240 sBattleScene;
 
@@ -2162,7 +2126,7 @@ void BattleHud_DrawHpFractionText(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void BattleHud_DrawTrainerNameLabel(s16 arg0, s16 arg1, s32 arg2, s32 arg3, s32 arg4);
 void BattleHud_DrawTrainerNameLabelBlink(s16 arg0, s16 arg1, s32 arg2, s32 arg3, u16 arg4, s32 arg5);
 void BattleHud_DrawTrainerNameLabelAuto(ActivePokemon* arg0, TeamRoster* arg1, s16 arg2, s16 arg3, s32 arg4, u16 arg5, s32 arg6);
-void BattleHud_DrawMonInfoBox(ActivePokemon* arg0, BattleMon* arg1, unk_D_84385790* arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 argA);
+void BattleHud_DrawMonInfoBox(ActivePokemon* arg0, BattleMon* arg1, StatusLabel* arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 argA);
 
 // hud_status_boxes.c
 void func_82117610(s16 x, s16 y);

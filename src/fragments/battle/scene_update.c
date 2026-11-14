@@ -67,7 +67,7 @@ void BattleScene_TickCameraSubstateDefault(CameraNode* arg0) {
             break;
 
         case 1:
-            if (sBattleScene.scene->unk_44 == 2) {
+            if (sBattleScene.scene->modeAfterTransition == 2) {
                 BattleThumbnail_ClearBothOwnerIdleFlags();
             }
             sBattleScene.scene->transitionStep++;
@@ -97,7 +97,7 @@ void BattleScene_TickCameraSubstateDefault(CameraNode* arg0) {
 
         case 5:
             if (BattleScene_AdvanceBothOwnerAnimations() == 0) {
-                if ((sBattleScene.scene->unk_44 == 1) || (sBattleScene.scene->unk_44 == 5) || (sBattleScene.scene->unk_44 == 9)) {
+                if ((sBattleScene.scene->modeAfterTransition == 1) || (sBattleScene.scene->modeAfterTransition == 5) || (sBattleScene.scene->modeAfterTransition == 9)) {
                     BattleAnim_CleanupEffects(2);
                 }
                 func_821054A8(sActivePokemon[0]);
@@ -118,7 +118,7 @@ void BattleScene_TickCameraSubstateDefault(CameraNode* arg0) {
             sBattleScene.scene->transitionStage = 0;
             if (arg0->overlay.stepIndex == 0xA) {
                 sBattleScene.scene->transitionStep = 0;
-                if (sBattleScene.scene->unk_44 == 1) {
+                if (sBattleScene.scene->modeAfterTransition == 1) {
                     BattleThumbnail_SetBothOwnerIdleFlags();
                 }
             }
@@ -138,7 +138,7 @@ void BattleScene_TickCameraSubstateStripWipe(CameraNode* arg0) {
             break;
 
         case 1:
-            if (sBattleScene.scene->unk_44 == 2) {
+            if (sBattleScene.scene->modeAfterTransition == 2) {
                 BattleThumbnail_ClearBothOwnerIdleFlags();
             }
             sBattleScene.scene->transitionStep++;
@@ -184,7 +184,7 @@ void BattleScene_TickCameraSubstateStripWipe(CameraNode* arg0) {
 
         case 8:
             if (BattleScene_AdvanceBothOwnerAnimations() == 0) {
-                if ((sBattleScene.scene->unk_44 == 1) || (sBattleScene.scene->unk_44 == 5) || (sBattleScene.scene->unk_44 == 9)) {
+                if ((sBattleScene.scene->modeAfterTransition == 1) || (sBattleScene.scene->modeAfterTransition == 5) || (sBattleScene.scene->modeAfterTransition == 9)) {
                     BattleAnim_CleanupEffects(2);
                 }
                 func_821054A8(sActivePokemon[0]);
@@ -206,7 +206,7 @@ void BattleScene_TickCameraSubstateStripWipe(CameraNode* arg0) {
             BattleScene_UpdateStripWipe();
             if (BattleScene_GetStripWipeState() == 0) {
                 sBattleScene.scene->transitionStep = 0;
-                if (sBattleScene.scene->unk_44 == 1) {
+                if (sBattleScene.scene->modeAfterTransition == 1) {
                     BattleThumbnail_SetBothOwnerIdleFlags();
                 }
             }

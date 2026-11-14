@@ -12,7 +12,7 @@ M2C_UNK Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
 M2C_UNK func_8001A944(s32, s32, s8*);
 M2C_UNK func_8001AA9C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK);
 M2C_UNK func_8001AB6C();
-extern unk_D_84385790 D_80066AA0[];
+extern StatusLabel D_80066AA0[];
 u32 func_8001FA30(s32);
 u32 func_800566BC(s8*);
 void func_8001A384(M2C_UNK, M2C_UNK);

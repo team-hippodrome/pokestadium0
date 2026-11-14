@@ -15,7 +15,6 @@ M2C_UNK func_82124544(s32, s32, f32, f32, f32, f32, s32);
 M2C_UNK func_82124664(s32, s32, M2C_UNK);
 M2C_UNK func_82124A40();
 extern s32 D_82199DE0;
-extern s32 D_8219A520;
 extern u8 D_82199F31;
 f32 BattleScene_GetParticipantHeight(s32);
 void BattleCamera_PlayShot(ActivePokemon* arg0, CameraNode* arg1, s32 arg2);
@@ -106,7 +105,7 @@ void func_82128E34(s32 arg0) {
             break;
         case 1:
             if (func_82105724(sActingPokemon, 0x14) != 0) {
-                BattleMessage_ShowForSide(D_8219A520 + 0xC8, sBattleScene.scene->actingSide);
+                BattleMessage_ShowForSide((s32)gBattleMessageQueues->messageBuffers[1], sBattleScene.scene->actingSide);
                 func_8212188C();
                 if (sBattleScene.scene->moveEffectKind == 0x14) {
                     func_82104C68(sActivePokemon[sBattleScene.scene->actingSide], 0x16);
@@ -129,13 +128,11 @@ void func_82128E34(s32 arg0) {
 void BattleScene_ActionStepSetHitCount(CameraNode* arg0, s32 arg1) {
     BattleScene* scene;
     u8 temp_v1;
-    int off;
 
     scene = sBattleScene.scene;
-    temp_v1 = sBattleScene.scene->unk_1B;
-    off = 0x389;
-    if ((temp_v1 != 0xA) && (M2C_FIELD(D_8219A520, s8*, off) != 0)) {
-        scene->unk_1B = temp_v1 + 1;
+    temp_v1 = sBattleScene.scene->hitCountWaitFrames;
+    if ((temp_v1 != 0xA) && (gBattleMessageQueues->messageBuffers[12][1] != 0)) {
+        scene->hitCountWaitFrames = temp_v1 + 1;
         return;
     }
     func_82124A40();
@@ -464,7 +461,7 @@ void BattleScene_UseMoveStepConfusionSelfHit(CameraNode* arg0) {
                 sBattleScene.scene->cameraPresetId = 4;
                 BattleScene_SetPhaseFlag();
                 Battle_ClearMessageCursor();
-                BattleMessage_ShowForSide(D_8219A520 + 0x148, sBattleScene.scene->actingSide);
+                BattleMessage_ShowForSide((s32)gBattleMessageQueues->messageBuffers[3], sBattleScene.scene->actingSide);
                 BattleCamera_PlayShot(sActingPokemon, arg0, 3);
                 BattleCamera_CaptureModelOrbit(sActingPokemon, arg0);
                 BattleScene_ResetCameraSubstepCounter();

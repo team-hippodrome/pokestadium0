@@ -76,7 +76,7 @@ s32 AudioHeap_SearchRegularCaches(s32 arg0, s32 arg1, s32 arg2);
 s32 AudioHeap_SearchPermanentCache(s32 arg0, s32 arg1);
 extern s16 D_811371D8[];
 extern s16 D_811373C8[];
-extern Reverb8110AA50 D_81184110[];
+extern SynthesisReverb D_81184110[];
 extern s8 D_8118427B;
 extern s16 D_811858C2;
 extern AudioSpec D_811526C4[];
@@ -107,7 +107,6 @@ void AudioPlayback_NoteInitAll(void);
 void func_8111539C(s32);
 void func_81115480(void);
 #define EXTERNAL_POOL_AFF0 (*(AudioAllocPool*)&D_811842A0)
-#define REVERBS_AFF0 ((SynthesisReverb*)D_81184110)
 
 
 
@@ -214,19 +213,6 @@ typedef struct SampleCache8110BA8C {
     /* 0x24 */ s32 numEntries;
 } SampleCache8110BA8C;
 
-typedef struct PreloadSample8110BA8C {
-    /* 0x00 */ u32 unk_bits : 8;
-    /* 0x00 */ u32 size : 24;
-} PreloadSample8110BA8C;
-
-typedef struct Preload8110BA8C {
-    /* 0x00 */ u32 endAndMediumKey;
-    /* 0x04 */ PreloadSample8110BA8C* sample;
-    /* 0x08 */ u8* ramAddr;
-    /* 0x0C */ u32 encodedInfo;
-    /* 0x10 */ s32 isFree;
-} Preload8110BA8C; // size = 0x14
-
 extern SampleCache8110BA8C D_811845F8;
 extern s32 D_81184600;
 extern s32 D_8118461C;
@@ -257,7 +243,7 @@ void AudioHeap_InitSampleCaches(s32 arg0, s32 arg1) {
     D_8118461C = 0;
 }
 
-extern Preload8110BA8C D_81184B78[];
+extern AudioPreloadReq D_81184B78[];
 extern s32 D_8118557C;
 void AudioHeap_DiscardSampleCacheEntry(SampleCacheEntry8110BA8C*);
 
@@ -274,7 +260,7 @@ SampleCacheEntry8110BA8C* AudioHeap_AllocTemporarySampleCacheEntry(u32 size) {
     s32 index;
     s32 i;
     SampleCacheEntry8110BA8C* entry;
-    Preload8110BA8C* preload;
+    AudioPreloadReq* preload;
     SampleCache8110BA8C* cache;
     u8* startRamAddr;
     u8* end_ram_addr;
@@ -1019,24 +1005,22 @@ void func_8110D054(s32 arg0) {
     }
 }
 
-extern s16 D_811843BE;
-extern s16 D_811843CA;
 void func_8110D110(s32 arg0) {
-    Cache8110A368* tbl2;
+    AudioPersistentCache* persistent;
     s32 none;
-    Cache8110A368* tbl = (Cache8110A368*)&D_81184380;
+    AudioCache* tbl = (AudioCache*)&D_81184380;
     u32 i;
 
     none = -1;
-    if (arg0 == ((Cache8110A368*)((u8*)tbl + 0x20))->entries[0].id) {
-        D_811843BE = none;
-    } else if (arg0 == D_811843CA) {
-        D_811843CA = none;
+    if (arg0 == tbl->temporary.entries[0].id) {
+        tbl->temporary.entries[0].id = none;
+    } else if (arg0 == tbl->temporary.entries[1].id) {
+        tbl->temporary.entries[1].id = none;
     }
-    tbl2 = tbl;
-    for (i = 0; i < tbl2->numEntries; i++) {
-        if (arg0 == tbl2->entries[i].id) {
-            tbl2->entries[i].id = none;
+    persistent = &tbl->persistent;
+    for (i = 0; i < persistent->numEntries; i++) {
+        if (arg0 == persistent->entries[i].id) {
+            persistent->entries[i].id = none;
         }
     }
     AudioHeap_DiscardFont(arg0);
@@ -1206,24 +1190,6 @@ s32 func_8110D4E0(s32 arg0) {
     return ret;
 }
 
-typedef struct AudioTableEntry8110D5BC {
-    /* 0x00 */ u32 romAddr;
-    /* 0x04 */ u32 size;
-    /* 0x08 */ s8 medium;
-    /* 0x09 */ s8 cachePolicy;
-    /* 0x0A */ s16 shortData1;
-    /* 0x0C */ s16 shortData2;
-    /* 0x0E */ s16 shortData3;
-} AudioTableEntry8110D5BC; // size = 0x10
-
-typedef struct AudioTable8110D5BC {
-    /* 0x00 */ s16 numEntries;
-    /* 0x02 */ s16 unkMediumParam;
-    /* 0x04 */ u32 romAddr;
-    /* 0x08 */ char pad[0x8];
-    /* 0x10 */ AudioTableEntry8110D5BC entries[1];
-} AudioTable8110D5BC;
-
 s32 AudioHeap_AllocCached(s32, s32, s32, s32);
 
 /**
@@ -1238,7 +1204,7 @@ s32 AudioHeap_AllocCached(s32, s32, s32, s32);
  */
 s32 AudioLoad_SyncLoad(s32 table_type, s32 id, s32* did_allocate) {
     u32 size;
-    AudioTable8110D5BC* table;
+    AudioTable* table;
     s32 ram_addr;
     u32 medium;
     s32 status;
@@ -1251,7 +1217,7 @@ s32 AudioLoad_SyncLoad(s32 table_type, s32 id, s32* did_allocate) {
         *did_allocate = 0;
         status = 2;
     } else {
-        table = (AudioTable8110D5BC*)AudioLoad_GetLoadTable(table_type);
+        table = (AudioTable*)AudioLoad_GetLoadTable(table_type);
         size = table->entries[id].size;
         size = ALIGN16(size);
         medium = table->entries[id].medium;

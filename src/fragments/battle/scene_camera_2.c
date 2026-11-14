@@ -14,8 +14,8 @@ void func_82123D4C(CameraNode* arg0, ActivePokemon* arg1);
  */
 void func_821243DC(CameraNode* arg0, ActivePokemon* arg1, f32 arg2) {
     BattleAnim_GetOwnerDefaultAnchorPosition(arg1, &sBattleScene.scene->anchorPosition);
-    sBattleScene.scene->unk_84.z = Math_StepToF(sBattleScene.scene->unk_90.z, 2.8f, 0.45f, 0.45f);
-    BattleAnim_ApproachF(&sBattleScene.scene->orbitDistance, 0.0f, sBattleScene.scene->unk_84.z);
+    sBattleScene.scene->easeRates.z = Math_StepToF(sBattleScene.scene->easeRampRates.z, 2.8f, 0.45f, 0.45f);
+    BattleAnim_ApproachF(&sBattleScene.scene->orbitDistance, 0.0f, sBattleScene.scene->easeRates.z);
     D_8219A530 = BattleScene_ScaleCameraDistance(arg1, 5.0f, 400.0f);
     BattleScene_SetCameraAtFromAnchor(arg1, arg0, sBattleScene.scene->anchorPosition, 0, arg1->facingDirection << 14, sBattleScene.scene->orbitDistance, 0.0f);
     BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->anchorPosition, 0, arg1->facingDirection * 0x1555, D_8219A530, arg2);
@@ -45,8 +45,8 @@ void func_82124544(CameraNode* arg0, ActivePokemon* arg1, f32 arg2, f32 arg3, f3
 void func_82124664(s32 arg0, s32 arg1, s16 arg2) {
     f32 temp = 0.35f;
 
-    sBattleScene.scene->unk_84.z = func_8000F23C(sBattleScene.scene->unk_90.z, 2.5f, temp, temp);
-    func_8210C1A8(&sBattleScene.scene->orbitDistance, sBattleScene.scene->distance, sBattleScene.scene->unk_84.z);
+    sBattleScene.scene->easeRates.z = func_8000F23C(sBattleScene.scene->easeRampRates.z, 2.5f, temp, temp);
+    func_8210C1A8(&sBattleScene.scene->orbitDistance, sBattleScene.scene->distance, sBattleScene.scene->easeRates.z);
     func_8212254C(arg1, arg0, sBattleScene.scene->anchorPosition, 0, BattleScene_GetParticipantFacingAngle(arg1), 0.0f, 0.0f);
     func_82122684(arg0, arg2, BattleScene_GetParticipantFacingAngle(arg1), sBattleScene.scene->orbitDistance, 0.0f);
 }

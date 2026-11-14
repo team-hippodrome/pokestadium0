@@ -54,7 +54,7 @@ void func_821329F8(s32 arg0) {
     D_8219A580 = (&D_82199DE0)[sBattleScene.scene->actingSide];
     M2C_FIELD(sp1C, s32 *, 8) = 0;
     BattleCamera_PlayShot(D_8219A580, arg0, 3);
-    func_82136918(M2C_FIELD(D_8219A580, s32 *, 0x85C), 9);
+    func_82136918((s32)((ActivePokemon*)D_8219A580)->side, 9);
     func_80006998(0);
     sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
 }
@@ -185,7 +185,7 @@ void func_82132C14(UNUSED CameraNode* arg0) {
 void func_82132CDC(CameraNode* arg0) {
     u8* flags;
 
-    flags = M2C_FIELD(D_8219A580, u8**, 0x85C);
+    flags = &((ActivePokemon*)D_8219A580)->side->modelFlags;
     if (*flags & 0x10) {
         *flags &= 0xFF6F;
         Battle_LoadOwnerModelForSwitchIn(D_8219A580);

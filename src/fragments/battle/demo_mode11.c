@@ -254,7 +254,6 @@ void func_8213346C(CameraNode* arg0) {
 }
 
 typedef struct Arr82133534 { u8 b[7]; } Arr82133534;
-typedef struct Mon82133534 { u8 flags; u8 pad1; s16 move; } Mon82133534;
 extern Arr82133534 D_8218B350;
 s16 func_8000F1FC(s16, M2C_UNK, M2C_UNK, M2C_UNK);
 M2C_UNK func_80019B28(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32);
@@ -277,8 +276,8 @@ void func_82133534(CameraNode *arg0)
     }
     else
     {
-      (*((Mon82133534 **) (((s8 *) D_8219A590) + 0x85C)))->move = v;
-      (*((Mon82133534 **) (((s8 *) D_8219A590) + 0x85C)))->flags |= 0x80;
+      ((ActivePokemon*)D_8219A590)->side->displayModel = v;
+      ((ActivePokemon*)D_8219A590)->side->modelFlags |= 0x80;
       sBattleScene.scene->phaseStep++;
     }
   }
@@ -297,9 +296,9 @@ extern u8 D_8219A594;
 void func_82133640(s32 arg0) {
     u8 *temp_v0;
 
-    if (*M2C_FIELD(D_8219A590, u8 **, 0x85C) & 0x10) {
+    if (((ActivePokemon*)D_8219A590)->side->modelFlags & 0x10) {
         func_8213B31C(2);
-        temp_v0 = M2C_FIELD(D_8219A590, u8 **, 0x85C);
+        temp_v0 = &((ActivePokemon*)D_8219A590)->side->modelFlags;
         *temp_v0 &= 0xFF6F;
         Battle_LoadOwnerModelForSwitchIn(D_8219A590);
         func_82133028(arg0);

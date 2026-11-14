@@ -627,36 +627,37 @@ s32 AudioHeap_SearchCaches(s32 arg0, s32 arg1, s32 arg2) {
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioHeap_SearchRegularCaches(s32 arg0, s32 arg1, s32 arg2) {
-    Cache8110A368* sub;
-    Cache8110A368* tbl;
+    AudioTemporaryCache* temporary;
+    AudioCache* tbl;
+    AudioPersistentCache* persistent;
     u32 i;
     switch (arg0) {
     case 0:
-        tbl = (Cache8110A368*)&D_81184320;
+        tbl = (AudioCache*)&D_81184320;
         break;
     case 1:
-        tbl = (Cache8110A368*)&D_81184380;
+        tbl = (AudioCache*)&D_81184380;
         break;
     case 2:
-        tbl = (Cache8110A368*)&D_811843E0;
+        tbl = (AudioCache*)&D_811843E0;
         break;
     }
-    sub = (Cache8110A368*)((u8*)tbl + 0x20);
+    temporary = &tbl->temporary;
     if (arg1 == 0) {
-        if (arg2 == sub->entries[0].id) {
-            sub->numEntries = 1;
-            return sub->entries[0].ramAddr;
+        if (arg2 == temporary->entries[0].id) {
+            temporary->nextSide = 1;
+            return (s32)temporary->entries[0].ramAddr;
         }
-        if (arg2 == sub->entries[1].id) {
-            sub->numEntries = 0;
-            return sub->entries[1].ramAddr;
+        if (arg2 == temporary->entries[1].id) {
+            temporary->nextSide = 0;
+            return (s32)temporary->entries[1].ramAddr;
         }
         return 0;
     }
-    sub = tbl;
-    for (i = 0; i < sub->numEntries; i++) {
-        if (arg2 == tbl->entries[i].id) {
-            return tbl->entries[i].ramAddr;
+    persistent = &tbl->persistent;
+    for (i = 0; i < persistent->numEntries; i++) {
+        if (arg2 == tbl->persistent.entries[i].id) {
+            return (s32)tbl->persistent.entries[i].ramAddr;
         }
     }
     if (arg1 == 2) {
@@ -776,7 +777,7 @@ void AudioHeap_LoadFilter(s16* arg0, s32 arg1, s32 arg2) {
     }
 }
 
-extern Reverb8110AA50 D_81184110[];
+extern SynthesisReverb D_81184110[];
 extern s8 D_8118427B;
 /**
  * Steps every reverb's settings once per audio frame. Zelda 64 audio driver.
@@ -936,7 +937,6 @@ void func_8111539C(s32);
 void func_81115480(void);
 
 #define EXTERNAL_POOL_AFF0 (*(AudioAllocPool*)&D_811842A0)
-#define REVERBS_AFF0 ((SynthesisReverb*)D_81184110)
 
 /**
  * Lays out the audio heap and reverbs for the current audio spec. Zelda 64 audio driver.
@@ -1017,12 +1017,12 @@ void AudioHeap_Init(void) {
         D_81185900[i] = (void*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, D_811858E4 * 8);
     }
     for (i = 0; i < 1; i++) {
-        reverb = &REVERBS_AFF0[i];
+        reverb = &D_81184110[i];
         reverb->useReverb = 0;
     }
     D_8118427B = spec->numReverbs;
     for (i = 0; i < D_8118427B; i++) {
-        reverb = &REVERBS_AFF0[i];
+        reverb = &D_81184110[i];
         settings = &spec->reverbSettings[i];
 
         reverb->downsampleRate = settings->downsampleRate;
@@ -1043,13 +1043,13 @@ void AudioHeap_Init(void) {
         reverb->bufSizePerChan = reverb->windowSize;
         reverb->framesToIgnore = 2;
         reverb->resampleFlags = 1;
-        reverb->soundSample = &reverb->sample;
+        reverb->sound.sample = &reverb->sample;
         reverb->sample.loop = &reverb->loop;
-        reverb->soundTuning = 1.0f;
+        reverb->sound.tuning = 1.0f;
         reverb->sample.codec = 3;
         reverb->sample.medium = 0;
         reverb->sample.size = reverb->windowSize * 2;
-        reverb->sample.sampleAddr = reverb->leftRingBuf;
+        reverb->sample.sampleAddr = (u8*)reverb->leftRingBuf;
         reverb->loop.start = 0;
         reverb->loop.count = 1;
         reverb->loop.end = reverb->windowSize;

@@ -111,6 +111,47 @@ typedef struct FreeBattleMonGridWindow {
     /* 0x2C */ char unk2C[0xA0];
     /* 0xCC */ ByteMatrix mons; // rows of BattleMon; the cell shows nickname and icon
     /* 0xDC */ PokeIconRenderer* icons; // @unverified: icon set built by func_80018168/func_80018234, drawn with PokeIcon_GetImage
-} FreeBattleMonGridWindow; // size >= 0xE0, the screen's layout after it is not established
+} FreeBattleMonGridWindow; // size = 0xE0 (FreeBattleScreen.monGridWindow is followed by connectedControllerMask)
+
+/* The Free Battle setup screen: its state machine and every window it switches between
+   (FreeBattle_SetScreenState). Only the part after 0x4318 is laid out here; the entry screen
+   code in free_battle_setup_4.c still reaches 0x10-0x4318 through raw offsets. */
+typedef struct FreeBattleScreen {
+    /* 0x0000 */ s32 state; // @unverified: FreeBattle_SetScreenState's arg1 when it opens a window
+    /* 0x0004 */ s32 pendingState; // @unverified: arg1 when the window is opened on top (arg2 & 1), else 0
+    /* 0x0008 */ s8* view; // @unverified: window that is shown; set to state 7 (+0x24) when another opens on top
+    /* 0x000C */ s8* nextView; // @unverified: window opened on top of view (arg2 & 1)
+    /* 0x0010 */ char unk0010[0x431C];
+    /* 0x432C */ s32 unk_432C;
+    /* 0x4330 */ s32 unk_4330;
+    /* 0x4334 */ s32 unk_4334;
+    /* 0x4338 */ s32 unk_4338;
+    /* 0x433C */ s32 unk_433C;
+    /* 0x4340 */ char unk4340[0x18];
+    /* 0x4358 */ s32 unk_4358;
+    /* 0x435C */ s32 unk_435C;
+    /* 0x4360 */ s32 unk_4360;
+    /* 0x4364 */ s32 unk_4364;
+    /* 0x4368 */ char unk4368[0x8];
+    /* 0x4370 */ s32 unk_4370;
+    /* 0x4374 */ s32 unk_4374;
+    /* 0x4378 */ FreeBattleModeWindow modeWindow; // @unverified: state 1, FreeBattle_InitBattleModeWindow
+    /* 0x43E4 */ MenuWindow menuWindow; // @unverified: states 2 and 3, FreeBattle_InitMenuWindow
+    /* 0x4468 */ MenuWindow ruleMenuWindow; // @unverified: states 4, 7 and 8, FreeBattle_InitMenuWindow
+    /* 0x44EC */ FreeBattleCupWindow cupWindow; // @unverified: state 9, FreeBattle_InitCupSelect
+    /* 0x4554 */ FreeBattleOpponentWindow opponentWindow; // @unverified: state 5, FreeBattle_InitOpponentSelect
+    /* 0x45C8 */ char unk45C8[0xDC];
+    /* 0x46A4 */ char entryScreen[0x778]; // @unverified: state 10's view, set up by FreeBattle_InitEntryScreen
+    /* 0x4E1C */ char textBox[0x34]; // @unverified: state 11, BlinkingTextBox_Init
+    /* 0x4E50 */ char popupMenu[0x5C]; // @unverified: state 12, FreeBattle_InitPopupMenu
+    /* 0x4EAC */ char popupMenu2[0x5C]; // @unverified: state 13, FreeBattle_InitPopupMenu
+    /* 0x4F08 */ char popupMenuText[0x14]; // @unverified: text buffer passed with popupMenu
+    /* 0x4F1C */ char popupMenu2Text[0x14]; // @unverified: text buffer passed with popupMenu2
+    /* 0x4F30 */ FreeBattleMonGridWindow monGridWindow; // @unverified: state 14, func_82007C30
+    /* 0x5010 */ s32 connectedControllerMask; // @unverified: func_8000B2E8 (the controller-present mask controller.c builds gControllers from)
+    /* 0x5014 */ s32 connectedControllerCount; // @unverified: bits set in connectedControllerMask
+    /* 0x5018 */ s32 gbSaveReadyMask; // @unverified: bit i set when GbSave_GetSaveState(i) is 0
+    /* 0x501C */ s32 unk_501C;
+} FreeBattleScreen; // size = 0x5020
 
 #endif // FRAGMENT_FREE_BATTLE_SETUP_H

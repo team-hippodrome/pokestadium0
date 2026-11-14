@@ -48,7 +48,7 @@ void func_82185404(void);
 extern s32 D_821CF2B0;
 extern u32 D_821CF2B4;
 extern ComSide* D_821CF298;
-extern Move82184ADC D_8006B190[];
+
 extern u8 D_8218AC50[];
 
 /* The definition has no return statement, so the value left in v0 by its last
@@ -436,7 +436,7 @@ s32 BattleAi_PickSetupMove(ComBattler* arg0) {
                 case AMNESIA:
                 case ACID_ARMOR:
                 case SHARPEN:
-                    t = (D_8006B190[arg0->mon.moves[i] - 1].unk01 - 10) & 7;
+                    t = (gMoveData[arg0->mon.moves[i] - 1].effect - 10) & 7;
                     if (arg0->mon.statStages[t] < 9) {
                         return i;
                     }
@@ -557,7 +557,7 @@ s32 BattleAi_PickStatBoostMove(ComBattler* arg0) {
                 case AMNESIA:
                 case ACID_ARMOR:
                 case SHARPEN:
-                    t = (D_8006B190[arg0->mon.moves[i] - 1].unk01 - 10) & 7;
+                    t = (gMoveData[arg0->mon.moves[i] - 1].effect - 10) & 7;
                     if (arg0->mon.statStages[t] < 13) {
                         return i;
                     }
@@ -746,13 +746,13 @@ s32 BattleAi_IsMoveUseful(s32 move) {
     s32 v1;
     s32 i;
 
-    if (D_8006B190[move - 1].power != 0) {
+    if (gMoveData[move - 1].power != 0) {
         if (BattleAi_GetTypeMultiplier(D_821CF29C, D_821CF2A0, move) == 0) {
             fail:
             return 0;
         }
     }
-    switch (D_8006B190[move - 1].unk01) {
+    switch (gMoveData[move - 1].effect) {
         case 28:
             goto fail;
         case 66:
@@ -796,7 +796,7 @@ s32 BattleAi_IsMoveUseful(s32 move) {
             if (D_821CF2A0->mon.statusCondition != 0) {
                 goto fail;
             }
-            if (BattleAi_HasType(D_821CF2A0, D_8006B190[move - 1].type) == 0) {
+            if (BattleAi_HasType(D_821CF2A0, gMoveData[move - 1].type) == 0) {
                 break;
             }
             return 0;
@@ -813,7 +813,7 @@ s32 BattleAi_IsMoveUseful(s32 move) {
             return 0;
         case 10: case 11: case 12: case 13: case 14: case 15:
         case 50: case 51: case 52: case 53: case 54: case 55:
-            v1 = D_8006B190[move - 1].unk01 - 10;
+            v1 = gMoveData[move - 1].effect - 10;
             v1 &= 7;
             if (D_821CF2A0->mon.statStages[v1] != 13) {
                 break;
@@ -827,7 +827,7 @@ s32 BattleAi_IsMoveUseful(s32 move) {
             if (D_821CF2A0->mon.volatileStatusFlags & 2) {
                 goto fail;
             }
-            v1 = D_8006B190[move - 1].unk01;
+            v1 = gMoveData[move - 1].effect;
             if (v1 >= 0x44) {
                 v1 -= 0x44;
             } else {
@@ -945,7 +945,7 @@ s32 BattleAi_IsMoveUseful(s32 move) {
             if (D_821CF2A0->mon.statusCondition != 0) {
                 goto fail;
             }
-            if (D_8006B190[move - 1].type == 0x17) {
+            if (gMoveData[move - 1].type == 0x17) {
                 if (BattleAi_HasType(D_821CF2A0, TYPE_GROUND) != 0) {
                     goto fail;
                 }
@@ -1361,7 +1361,7 @@ void BattleAi_AddMatchupPickScore(ComBattler* arg0, ComBattler* arg1) {
             break;
         }
         if ((BattleAi_CanUseMove((s8 *)arg0, arg0->mon.moves[i]) != 0) && (BattleAi_FindByte(D_82194848, 1, 0x2B, arg0->mon.moves[i]) != 0)) {
-            acc = (D_8006B190[arg0->mon.moves[i]].unk04 * D_8006B190[arg0->mon.moves[i]].unk04) / 650;
+            acc = (gMoveData[arg0->mon.moves[i]].accuracy * gMoveData[arg0->mon.moves[i]].accuracy) / 650;
             score += (((BattleAi_GetTypeMultiplier((s8 *)arg0, (s8 *)arg1, arg0->mon.moves[i]) * 8) / 100) * acc) / 100;
         }
     }
