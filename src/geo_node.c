@@ -56,7 +56,7 @@ GeoDisplayListMatrixNode* GeoNode_CreateDisplayListMatrixFromTransform(MainPoolS
                                    Vec3s* arg5);
 GeoBillboardNode* GeoNode_CreateBillboard(MainPoolState* arg0, GeoBillboardNode* arg1, s32 arg2, Gfx* arg3, Vec3f* arg4,
                                    f32 arg5);
-unk_func_80011B94* GeoNode_CreateDisplayList(MainPoolState* arg0, unk_func_80011B94* arg1, s32 arg2, Gfx* arg3);
+GeoDisplayListNode* GeoNode_CreateDisplayList(MainPoolState* arg0, GeoDisplayListNode* arg1, s32 arg2, Gfx* arg3);
 GeoMaterialNode* GeoNode_CreateMaterial(MainPoolState* arg0, GeoMaterialNode* arg1, s16 arg2, s16 arg3, Gfx* arg4,
                                     s16 arg5, s16 arg6, u8 r, u8 g, u8 b, u8 a);
 GeoAnchorNode* GeoNode_CreateAnchor(MainPoolState* arg0, GeoAnchorNode* arg1, s16 arg2);
@@ -536,15 +536,15 @@ GeoBillboardNode* GeoNode_CreateBillboard(MainPoolState* arg0, GeoBillboardNode*
 }
 
 /** Allocates a graph node that draws a display list. */
-unk_func_80011B94* GeoNode_CreateDisplayList(MainPoolState* arg0, unk_func_80011B94* arg1, s32 arg2, Gfx* arg3) {
+GeoDisplayListNode* GeoNode_CreateDisplayList(MainPoolState* arg0, GeoDisplayListNode* arg1, s32 arg2, Gfx* arg3) {
     if (arg0 != NULL) {
-        arg1 = MainPool_AllocAligned(arg0, sizeof(unk_func_80011B94), 4);
+        arg1 = MainPool_AllocAligned(arg0, sizeof(GeoDisplayListNode), 4);
     }
 
     if (arg1 != NULL) {
-        arg1->gfx = arg3;
+        arg1->displayList = arg3;
         GeoNode_Init(arg1, 0x19);
-        arg1->display_node_header.renderLayer = arg2;
+        arg1->node.renderLayer = arg2;
     }
 
     return arg1;

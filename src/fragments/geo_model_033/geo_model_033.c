@@ -36,9 +36,9 @@ void func_8F6000E8(s32 arg0, DemoGeoNode* arg1) {
 
     if (arg0 == 2) {
         teams = D_80060490->node.callbackArg;
-        arg1->unk_18 = Gfx_AllocDisplayList(0x10);
-        func_8F600088(arg1->unk_18, teams[(s32)arg1->node.callbackArg].unk_04);
-        arg1->unk_18 = (Gfx*)func_8F600020((s32)arg1->unk_18);
+        arg1->displayList = Gfx_AllocDisplayList(0x10);
+        func_8F600088(arg1->displayList, teams[(s32)arg1->node.callbackArg].unk_04);
+        arg1->displayList = (Gfx*)func_8F600020((s32)arg1->displayList);
     }
 }
 
@@ -114,12 +114,12 @@ void func_8F600360(s32 arg0, DemoGeoNode *arg1)
     slot = ((u32) arg1->node.callbackArg) & 0xFFFF;
     if (slot < teams[team].unk_38[0][2])
     {
-      arg1->unk_18 = Gfx_AllocDisplayList(0x10);
-      func_8F600300(arg1->unk_18, teams[team].unk_08[slot]);
+      arg1->displayList = Gfx_AllocDisplayList(0x10);
+      func_8F600300(arg1->displayList, teams[team].unk_08[slot]);
     }
     else
     {
-      arg1->unk_18 = 0;
+      arg1->displayList = 0;
       if (arg1)
       {
       }
@@ -146,16 +146,16 @@ void func_8F600480(s32 arg0, DemoGeoNode* arg1) {
         slot = (u32)arg1->node.callbackArg & 0xFFFF;
         if (teams[team].unk_00 == 2) {
             if (slot % 3 < teams[team].unk_38[slot / 3][2]) {
-                arg1->unk_18 = Gfx_AllocDisplayList(0x10);
-                func_8F600420(arg1->unk_18, teams[team].unk_08[slot]);
+                arg1->displayList = Gfx_AllocDisplayList(0x10);
+                func_8F600420(arg1->displayList, teams[team].unk_08[slot]);
             } else {
-                arg1->unk_18 = NULL;
+                arg1->displayList = NULL;
             }
         } else if (slot < teams[team].unk_38[0][2]) {
-            arg1->unk_18 = Gfx_AllocDisplayList(0x10);
-            func_8F600420(arg1->unk_18, teams[team].unk_08[slot]);
+            arg1->displayList = Gfx_AllocDisplayList(0x10);
+            func_8F600420(arg1->displayList, teams[team].unk_08[slot]);
         } else {
-            arg1->unk_18 = NULL;
+            arg1->displayList = NULL;
         }
     }
 }
@@ -179,16 +179,16 @@ void func_8F600648(s32 arg0, DemoGeoNode* arg1) {
         slot = (u32)arg1->node.callbackArg & 0xFFFF;
         if (teams[team].unk_00 == 2) {
             if (slot % 3 < teams[team].unk_38[slot / 3][2]) {
-                arg1->unk_18 = Gfx_AllocDisplayList(0x10);
-                func_8F6005E8(arg1->unk_18, teams[team].unk_20[slot]);
+                arg1->displayList = Gfx_AllocDisplayList(0x10);
+                func_8F6005E8(arg1->displayList, teams[team].unk_20[slot]);
             } else {
-                arg1->unk_18 = NULL;
+                arg1->displayList = NULL;
             }
         } else if (slot < teams[team].unk_38[0][2]) {
-            arg1->unk_18 = Gfx_AllocDisplayList(0x10);
-            func_8F6005E8(arg1->unk_18, teams[team].unk_20[slot]);
+            arg1->displayList = Gfx_AllocDisplayList(0x10);
+            func_8F6005E8(arg1->displayList, teams[team].unk_20[slot]);
         } else {
-            arg1->unk_18 = NULL;
+            arg1->displayList = NULL;
         }
     }
 }

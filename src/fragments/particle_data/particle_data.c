@@ -21,9 +21,9 @@ Gfx* func_8F200020(Gfx* gfx, s32 frame) {
     return gfx;
 }
 
-void func_8F20010C(s32 arg0, s8* arg1) {
+void func_8F20010C(s32 arg0, GeoDisplayListNode* arg1) {
     if (arg0 == 2) {
-        M2C_FIELD(arg1, Gfx**, 0x18) = Gfx_AllocDisplayList(0x50);
-        func_8F200020(M2C_FIELD(arg1, Gfx**, 0x18), D_80060484 & 7);
+        arg1->displayList = Gfx_AllocDisplayList(0x50);
+        func_8F200020(arg1->displayList, D_80060484 & 7);
     }
 }

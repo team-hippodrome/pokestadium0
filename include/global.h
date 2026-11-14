@@ -308,6 +308,13 @@ typedef struct GeoDisplayListMatrixNode {
     /* 0x1C */ MtxF matrix; // @unverified: pushed before the display list
 } GeoDisplayListMatrixNode; // size = 0x5C
 
+// Graph node type 0x19 (GeoNode_CreateDisplayList). The geo callbacks in the geo_model fragments
+// also use this view for the display list they build at 0x18.
+typedef struct GeoDisplayListNode {
+    /* 0x00 */ DisplayNodeHeader node;
+    /* 0x18 */ Gfx* displayList; // @unverified: set by GeoNode_CreateDisplayList, rebuilt by geo callbacks
+} GeoDisplayListNode; // size = 0x1C
+
 // Graph node type 0x18: Geo_NodeBillboard draws it with a camera-facing matrix (MtxF_SetBillboard).
 typedef struct GeoBillboardNode {
     /* 0x00 */ GraphNode node;

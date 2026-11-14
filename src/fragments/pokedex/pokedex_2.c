@@ -47,9 +47,9 @@ typedef struct unk_D_88826444 {
     /* 0x00 */ s16 unk_00;
     /* 0x00 */ s16 unk_02;
 } unk_D_88826444;
-extern unk_func_80011B94 D_8A130250;
-extern unk_func_80011B94 D_8A130270;
-extern unk_func_80011B94 D_8A1302B0;
+extern GeoDisplayListNode D_8A130250;
+extern GeoDisplayListNode D_8A130270;
+extern GeoDisplayListNode D_8A1302B0;
 extern s32 pad_D_88826A40;
 extern GraphNode* D_8A1302CC;
 extern s16 D_8A1302D4;
@@ -150,7 +150,7 @@ s32 Pokedex_FindPrevMapArea(s32 arg0) {
 void Pokedex_BuildMapMarkerDisplayList(void) {
     Gfx* temp_v0 = Gfx_AllocDisplayList(sizeof(Gfx) * 5);
 
-    D_8A130250.gfx = temp_v0;
+    D_8A130250.displayList = temp_v0;
 
     if (D_8A1302D4 == 1) {
         gSPDisplayList(temp_v0++, D_8A12ECF0);
@@ -177,7 +177,7 @@ void Pokedex_BuildMapMarkersDisplayList(void) {
     ptr = &temp_s2->view;
 
     temp_v0 = Gfx_AllocDisplayList(sizeof(Gfx) * 36 * 25);
-    D_8A130270.gfx = temp_v0;
+    D_8A130270.displayList = temp_v0;
     D_8A130454 = Gfx_AllocDisplayList(sizeof(Mtx) * 36);
     var_s1 = D_8A130454;
 
@@ -257,7 +257,7 @@ void Pokedex_BuildOverviewMarkersDisplayList(void) {
     Gfx* temp_v0;
 
     temp_v0 = Gfx_AllocDisplayList(sizeof(Gfx) * 170);
-    D_8A1302B0.gfx = temp_v0;
+    D_8A1302B0.displayList = temp_v0;
 
     if (D_8A1302D4 == 1) {
         gSPDisplayList(temp_v0++, D_8A12EC60);
@@ -452,7 +452,7 @@ Gfx* func_8A1033CC(Gfx* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, 
     return arg0;
 }
 
-extern unk_func_80011B94 D_8A130290;
+extern GeoDisplayListNode D_8A130290;
 extern s16 D_8A130430;
 extern Gfx D_8A12EBB8[];
 extern Gfx D_8A12EBF0[];
@@ -476,7 +476,7 @@ void Pokedex_BuildMapLabelsDisplayList(void) {
     s32 sp2C;
 
     temp_v0 = Gfx_AllocDisplayList(sizeof(Gfx) * 450);
-    D_8A130290.gfx = temp_v0;
+    D_8A130290.displayList = temp_v0;
 
     gSPDisplayList(temp_v0++, D_8A12EBB8);
 

@@ -196,40 +196,35 @@ arg1_func_80010CA8* Model_ComputeNicknameColorVariant(arg1_func_80010CA8* arg0, 
     return arg0;
 }
 
-typedef struct IconLoader19D08 {
-    u8 flags;
-    char pad01[0x17];
-    s32 loadedModel;
-} IconLoader19D08;
 typedef struct Obj80019D08 {
-    u8 flags;
-    u16 unk_02;
-    BattleMon* unk_04;
-    char pad08[8];
-    IconLoader19D08* unk_10;
-    s32 unk_14;
-} Obj80019D08;
+    /* 0x00 */ u8 flags;                     // @unverified: 0x80 requested, 0x40 loading, 0x20 wait, 0x10 done, as in PokeIcon_RequestBackgroundForObject
+    /* 0x02 */ u16 modelId;                  // @unverified: passed to func_8001799C with the color variant
+    /* 0x04 */ BattleMon* pokemon;           // @unverified: source of the color variant (Model_ComputeSizeVariant)
+    /* 0x08 */ char pad08[8];
+    /* 0x10 */ ModelLoadContext* loadContext;
+    /* 0x14 */ s32 loadedModel;              // @unverified: gets loadContext->loadedModel after the load
+} Obj80019D08; // size = 0x18; same layout as BattleSessionTeams
 s32 func_80005014(void);
-void func_8001799C(IconLoader19D08*, u16, arg1_func_80010CA8);
-void func_80017D00(IconLoader19D08*);
+void func_8001799C(ModelLoadContext*, u16, arg1_func_80010CA8);
+void func_80017D00(ModelLoadContext*);
 
 void func_80019D08(Obj80019D08* arg0) {
     arg1_func_80010CA8 sp24;
 
     sp24.raw = 0;
     if (!(arg0->flags & 0x40) && (arg0->flags & 0x80)) {
-        if (arg0->unk_04 != NULL) {
-            Model_ComputeSizeVariant(&sp24, arg0->unk_04);
+        if (arg0->pokemon != NULL) {
+            Model_ComputeSizeVariant(&sp24, arg0->pokemon);
         }
-        if (!(arg0->unk_10->flags & 4)) {
+        if (!(arg0->loadContext->flags & 4)) {
             while (func_80005014() != 0) {}
         }
-        func_8001799C(arg0->unk_10, arg0->unk_02, sp24);
+        func_8001799C(arg0->loadContext, arg0->modelId, sp24);
         arg0->flags |= 0x40;
         arg0->flags &= ~0x10;
         if (arg0->flags & 0x20) {
-            func_80017D00(arg0->unk_10);
-            arg0->unk_14 = arg0->unk_10->loadedModel;
+            func_80017D00(arg0->loadContext);
+            arg0->loadedModel = arg0->loadContext->loadedModel;
             arg0->flags &= ~0xE0;
         }
     }
