@@ -133,7 +133,6 @@ Each row is one function address that the source still reaches under more than o
 | `Deck_GetSaveEntryName` | `func_8002479C` |
 | `Deck_ReadSaveEntry` | `func_80024D88` |
 | `Deck_SetSaveEntryTrainerIdAndName` | `func_80024954` |
-| `DisplayList_BuildRotationMatrixSegment` | `func_8F2003EC` |
 | `Font_DrawCharAt` | `func_8001AA60` |
 | `Font_Init` | `func_8001A194` |
 | `Font_Printf` | `func_8001A944` |
