@@ -17,15 +17,15 @@
 #include "ui_graphics.h"
 #include "m2c_macros.h"
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
-extern unk_D_84803760 D_82302B20[2];
+extern OrderSidebarIcons D_82302B20[2];
 extern u16 D_82302800[];
 
 void BattleMenu_AppendOrderSlotIcon(s32 arg0, s32 arg1);
 void BattleMenu_ResetOrderSlotIcons(s32 arg0);
 void BattleMenu_DrawPanelBorder(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
-s32 BattleMenu_IsSlotAlreadySelected(unk_D_848037A0* arg0, s8 arg1);
-void BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(Controller* arg0, unk_D_848037A0* arg1);
-void BattleMenu_SetLeadTagTeamMember(BattleSessionTeams* arg0, unk_D_84803760* arg1);
+s32 BattleMenu_IsSlotAlreadySelected(OrderSelectPanel* arg0, s8 arg1);
+void BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(Controller* arg0, OrderSelectPanel* arg1);
+void BattleMenu_SetLeadTagTeamMember(BattleSessionTeams* arg0, OrderSidebarIcons* arg1);
 void BattleMenu_AppendUnpickedSlots(s8* arg0, s32 arg1);
 
 extern void* D_84803784;
@@ -113,16 +113,7 @@ void BattleMenu_DrawScrollingInstructionPanel(void) {
     }
 }
 
-typedef struct OrderSel823003B8 {
-    /* 0x00 */ s8 unk_00;
-    /* 0x01 */ s8 unk_01;
-    /* 0x02 */ s8 unk_02[6];
-    /* 0x08 */ s8 unk_08[6];
-    /* 0x0E */ u8 unk_0E;
-    /* 0x0F */ s8 unk_0F;
-} OrderSel823003B8; // size = 0x10
-
-void func_823003B8(OrderSel823003B8* arg0, u8* arg1, s32 arg2) {
+void func_823003B8(OrderSidebarIcons* arg0, u8* arg1, s32 arg2) {
     s32 i;
 
     arg0->unk_00 = 0;
@@ -161,7 +152,7 @@ extern u8* D_823028D8[];
 extern u8* D_823028E0[];
 extern u8* D_823028E4[][3];
 /** Draws the lead Pokemon icon in the battle order sidebar. */
-void BattleMenu_DrawSidebarLeadIcon(s32 arg0, s32 arg1, unk_D_84803760* arg2) {
+void BattleMenu_DrawSidebarLeadIcon(s32 arg0, s32 arg1, OrderSidebarIcons* arg2) {
     u8* sp2C;
 
     if (arg2->unk_0F == -1) {
@@ -226,7 +217,7 @@ s32 BattleMenu_DrawSidebarRowTypeIcon(s32 arg0, s32 arg1, s8 arg2, s8 arg3) {
  * Seen in play: runs every frame on the order screen (the 1P column of ball icons on the left).
  */
 void BattleMenu_DrawTeamOrderSidebarTeam0(void) {
-    unk_D_84803760* temp_v0 = &D_82302B20[0];
+    OrderSidebarIcons* temp_v0 = &D_82302B20[0];
     s32 i;
     s16 var_s2;
     s32 var_s1;
@@ -265,7 +256,7 @@ void BattleMenu_DrawTeamOrderSidebarTeam0(void) {
  * Seen in play: runs every frame on the order screen (the COM column of ball icons on the left).
  */
 void BattleMenu_DrawTeamOrderSidebarTeam1(void) {
-    unk_D_84803760* temp_v0 = &D_82302B20[1];
+    OrderSidebarIcons* temp_v0 = &D_82302B20[1];
     s32 i;
     s16 var_s2;
     s32 var_s1;
@@ -304,7 +295,7 @@ void BattleMenu_DrawTeamOrderSidebarTeam1(void) {
  * Seen in play: runs on each pick (B, C buttons, A) on the order screen.
  */
 void BattleMenu_AppendOrderSlotIcon(s32 arg0, s32 arg1) {
-    unk_D_84803760* temp_v0 = &D_82302B20[arg0];
+    OrderSidebarIcons* temp_v0 = &D_82302B20[arg0];
 
     temp_v0->unk_02[temp_v0->unk_00] = ((arg1 + 1) << 4) | (temp_v0->unk_02[temp_v0->unk_00] & 0xF);
     temp_v0->unk_08[temp_v0->unk_00] = 1;
@@ -316,7 +307,7 @@ void BattleMenu_AppendOrderSlotIcon(s32 arg0, s32 arg1) {
  * Seen in play: runs when L cancels the picks on the order screen.
  */
 void BattleMenu_ResetOrderSlotIcons(s32 arg0) {
-    unk_D_84803760* ptr = &D_82302B20[arg0];
+    OrderSidebarIcons* ptr = &D_82302B20[arg0];
     s32 i;
 
     for (i = 0; i < 6; i++) {
@@ -385,7 +376,7 @@ void BattleMenu_DrawOrderSelectPartyGrid(s8* arg0) {
     Font_SetActive(4, 0);
 
     for (i = 0; i < arg0[0x16]; i++) {
-        sel = BattleMenu_IsSlotAlreadySelected((unk_D_848037A0*)arg0, i);
+        sel = BattleMenu_IsSlotAlreadySelected((OrderSelectPanel*)arg0, i);
         if ((arg0[9] != 0) && (sel != 0)) {
             Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF);
         }
@@ -521,22 +512,22 @@ extern char D_82302AFC[];
  * Draws the ready message, pulsing its text alpha for tag-team panels.
  * Seen in play: runs every frame while the COM panel shows 「じゅんび かんりょう！」.
  */
-void BattleMenu_DrawOrderSelectPanel_Ready(unk_D_848037A0* arg0) {
+void BattleMenu_DrawOrderSelectPanel_Ready(OrderSelectPanel* arg0) {
     s32 sp3C;
     s32 sp38;
     s32 sp34;
 
-    if (arg0->unk_0002 == -1) {
+    if (arg0->partnerPanelIndex == -1) {
         // clang-format off
-        if (arg0->unk_0003 == 0) {
+        if (arg0->sidebarTeam == 0) {
             sp3C = 0xC8; sp38 = 0x81;
         } else {
             sp3C = 0x50; sp38 = 0xF0;
         }
         // clang-format on
-        arg0->unk_0007 = 0;
+        arg0->unk_07 = 0;
         BattleMenu_DrawOrderSelectPartyGrid((s8*)arg0);
-        BattleMenu_DrawPanelBorder(sp3C, sp38, 0x15F, 0x53, arg0->unk_0001);
+        BattleMenu_DrawPanelBorder(sp3C, sp38, 0x15F, 0x53, arg0->controllerPort);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x20, -4);
         Font_EnableTwoCycleTexturing();
@@ -545,22 +536,22 @@ void BattleMenu_DrawOrderSelectPanel_Ready(unk_D_848037A0* arg0) {
         Font_DisableTwoCycleTexturing();
         Font_EndTexturedTextRendering();
     } else {
-        sp3C = arg0->unk_0012;
-        sp38 = arg0->unk_0014;
+        sp3C = arg0->x;
+        sp38 = arg0->y;
 
-        if (arg0->unk_0008 < 0x10) {
-            sp34 = arg0->unk_0008 * 0x10;
-        } else if (arg0->unk_0008 < 0x23) {
+        if (arg0->readyBlinkTimer < 0x10) {
+            sp34 = arg0->readyBlinkTimer * 0x10;
+        } else if (arg0->readyBlinkTimer < 0x23) {
             sp34 = 0xFF;
-        } else if (arg0->unk_0008 < 0x32) {
-            sp34 = (-arg0->unk_0008 * 0x10) + 0x320;
+        } else if (arg0->readyBlinkTimer < 0x32) {
+            sp34 = (-arg0->readyBlinkTimer * 0x10) + 0x320;
         } else {
             sp34 = 0;
         }
 
-        arg0->unk_0008++;
-        if (arg0->unk_0008 >= 0x3D) {
-            arg0->unk_0008 = 0;
+        arg0->readyBlinkTimer++;
+        if (arg0->readyBlinkTimer >= 0x3D) {
+            arg0->readyBlinkTimer = 0;
         }
 
         BattleMenu_DrawOrderSelectPartyGrid((s8*)arg0);
@@ -577,11 +568,11 @@ void BattleMenu_DrawOrderSelectPanel_Ready(unk_D_848037A0* arg0) {
 }
 
 /** Draws the label of the confirm button. */
-void BattleMenu_DrawConfirmButtonLabel(unk_D_848037A0* arg0) {
+void BattleMenu_DrawConfirmButtonLabel(OrderSelectPanel* arg0) {
     s16 sp26;
     s16 sp24;
 
-    if (arg0->unk_0003 == 0) {
+    if (arg0->sidebarTeam == 0) {
         // clang-format off
         sp26 = 0x50; sp24 = 0x81;
         // clang-format on
@@ -590,28 +581,28 @@ void BattleMenu_DrawConfirmButtonLabel(unk_D_848037A0* arg0) {
         sp24 = 0x123;
     }
 
-    BattleMenu_DrawPanelBorder(sp26, sp24, 0x76, 0x20, arg0->unk_0001);
+    BattleMenu_DrawPanelBorder(sp26, sp24, 0x76, 0x20, arg0->controllerPort);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, 0);
-    Font_Printf(sp26 + 9, sp24 + 5, arg0->unk_001C->trainerName);
+    Font_Printf(sp26 + 9, sp24 + 5, arg0->roster->trainerName);
     Font_EndTexturedTextRendering();
 }
 
 extern s16 D_82302B40;
 void BattleMenu_DrawOrderSelectConfirmPrompt(s8*);
-void BattleMenu_DrawOrderSelectPanel_Ready(unk_D_848037A0*);
+void BattleMenu_DrawOrderSelectPanel_Ready(OrderSelectPanel*);
 /**
  * Draws the current panel mode when needed and updates its redraw countdown.
  * Seen in play (2026-11-13) ran every frame on the Free Battle order screen, which shows the 1P and
  * COM panels with their six Pokémon each.
  */
-void BattleMenu_DrawOrderSelectPanel(unk_D_848037A0* arg0) {
-    if ((D_82302B40 != 0) || (arg0->unk_0006 != 0)) {
-        if ((D_82302B40 != 0) && (arg0->unk_0002 == -1)) {
+void BattleMenu_DrawOrderSelectPanel(OrderSelectPanel* arg0) {
+    if ((D_82302B40 != 0) || (arg0->redrawFrames != 0)) {
+        if ((D_82302B40 != 0) && (arg0->partnerPanelIndex == -1)) {
             BattleMenu_DrawConfirmButtonLabel(arg0);
         }
 
-        switch (arg0->unk_0005) {
+        switch (arg0->state) {
             case 0:
                 BattleMenu_DrawOrderSelectPartyGrid((s8*)arg0);
                 break;
@@ -629,10 +620,10 @@ void BattleMenu_DrawOrderSelectPanel(unk_D_848037A0* arg0) {
                 break;
         }
 
-        if (arg0->unk_0006 != 0) {
-            arg0->unk_0006--;
+        if (arg0->redrawFrames != 0) {
+            arg0->redrawFrames--;
         }
-    } else if (arg0->unk_0005 == 3) {
+    } else if (arg0->state == 3) {
         BattleMenu_DrawOrderSelectPanel_Ready(arg0);
     }
 }
@@ -640,10 +631,10 @@ void BattleMenu_DrawOrderSelectPanel(unk_D_848037A0* arg0) {
 extern s32 D_84816450;
 extern Controller D_84816428;
 extern unk_D_84803548* D_848035E0[];
-extern unk_D_848037A0 D_848037A0[4];
+extern OrderSelectPanel D_848037A0[4];
 extern SessionContext* D_84816420;
 extern s32 D_8481644C;
-extern unk_D_848037A0 D_82302B48[];
+extern OrderSelectPanel D_82302B48[];
 extern SessionContext* D_82302BD0;
 extern Controller D_82302BD8;
 extern s32 D_82302BFC;
@@ -662,13 +653,13 @@ void BattleMenu_FeedScriptedComOrderInput(void) {
     s32 var_v0;
     unk_D_84803548* ptr;
 
-    if (D_82302B48[1].unk_001C->isHuman & 2) {
+    if (D_82302B48[1].roster->isHuman & 2) {
         if (D_82302BD0->ruleCategory != 0) {
             var_v0 = 3;
         } else {
-            var_v0 = D_82302B48[1].unk_0016;
-            if (D_82302B48[0].unk_0016 < var_v0) {
-                var_v0 = D_82302B48[0].unk_0016;
+            var_v0 = D_82302B48[1].candidateCount;
+            if (D_82302B48[0].candidateCount < var_v0) {
+                var_v0 = D_82302B48[0].candidateCount;
             }
         }
         D_82302BD8.buttonPressed = 0;
@@ -693,13 +684,13 @@ void BattleMenu_FeedScriptedComOrderInput(void) {
  * Seen in play (2026-11-12) on the order screen of a COM free battle: returned 1 for slots 0 and
  * 1 of COM's finished order.
  */
-s32 BattleMenu_IsSlotAlreadySelected(unk_D_848037A0* arg0, s8 arg1) {
+s32 BattleMenu_IsSlotAlreadySelected(OrderSelectPanel* arg0, s8 arg1) {
     s32 i;
     s8 temp_v1;
-    unk_D_848037A0* var_a2;
+    OrderSelectPanel* var_a2;
 
-    for (i = 0; i < arg0->unk_000B; i++) {
-        if (arg1 == arg0->unk_000C[i]) {
+    for (i = 0; i < arg0->pickCount; i++) {
+        if (arg1 == arg0->pickedSlots[i]) {
             return 1;
         }
     }
@@ -715,20 +706,20 @@ s32 BattleMenu_IsSlotAlreadySelected(unk_D_848037A0* arg0, s8 arg1) {
  * Seen in play (2026-11-13) on the Free Battle order screen it ran after each 1P pick (pick counts
  * 0, 1, 2) and returned 0; Free Battle has no level-sum rule.
  */
-s32 BattleMenu_OrderExceedsLevelSumLimit(unk_D_848037A0* arg0) {
+s32 BattleMenu_OrderExceedsLevelSumLimit(OrderSelectPanel* arg0) {
     s32 sum;
     s32 i;
-    s32 locked = (arg0->unk_001C->isHuman & 2) != 0;
+    s32 locked = (arg0->roster->isHuman & 2) != 0;
 
     if ((D_82302BD0->ruleCategory == 1) && !locked) {
         sum = 0;
-        for (i = 0; i < arg0->unk_000B; i++) {
-            sum += arg0->unk_0018[arg0->unk_000C[i]].level;
+        for (i = 0; i < arg0->pickCount; i++) {
+            sum += arg0->candidates[arg0->pickedSlots[i]].level;
         }
-        if ((arg0->unk_000B == 2) && (sum >= 0x6A)) {
+        if ((arg0->pickCount == 2) && (sum >= 0x6A)) {
             return 1;
         }
-        if ((arg0->unk_000B == 3) && (sum >= 0x9C)) {
+        if ((arg0->pickCount == 3) && (sum >= 0x9C)) {
             return 1;
         }
     }
@@ -741,36 +732,36 @@ s32 BattleMenu_OrderExceedsLevelSumLimit(unk_D_848037A0* arg0) {
  * the panel switches to the confirm prompt.
  * Seen in play: runs on every pick; the sixth Free Battle pick opened 「これで いいですか？」.
  */
-s32 BattleMenu_IsOrderComplete(unk_D_848037A0* arg0) {
+s32 BattleMenu_IsOrderComplete(OrderSelectPanel* arg0) {
     s32 var_v1;
 
     if (D_82302BD0->ruleCategory != 0) {
         var_v1 = 3;
-    } else if (arg0->unk_001C->isHuman & 2) {
-        var_v1 = arg0->unk_0016;
-        if (D_82302B48[0].unk_0016 < var_v1) {
-            var_v1 = D_82302B48[0].unk_0016;
+    } else if (arg0->roster->isHuman & 2) {
+        var_v1 = arg0->candidateCount;
+        if (D_82302B48[0].candidateCount < var_v1) {
+            var_v1 = D_82302B48[0].candidateCount;
         }
     } else {
-        var_v1 = arg0->unk_0016;
-        if ((arg0->unk_0002 != -1) && (var_v1 >= 4)) {
+        var_v1 = arg0->candidateCount;
+        if ((arg0->partnerPanelIndex != -1) && (var_v1 >= 4)) {
             var_v1 = 3;
         }
     }
 
-    return arg0->unk_000B >= var_v1;
+    return arg0->pickCount >= var_v1;
 }
 
-s32 BattleMenu_OrderExceedsLevelSumLimit(unk_D_848037A0* arg0);
-s32 BattleMenu_IsOrderComplete(unk_D_848037A0* arg0);
+s32 BattleMenu_OrderExceedsLevelSumLimit(OrderSelectPanel* arg0);
+s32 BattleMenu_IsOrderComplete(OrderSelectPanel* arg0);
 /**
  * Opens a slot's details or adds it to the picked order and checks the result.
  * Seen in play (2026-11-12) on the order screen of a COM free battle: B added slot 0 (イワワ) to
  * 1P's order and C-Left added slot 1 (パルパル); each call checked
  * BattleMenu_OrderExceedsLevelSumLimit, which returned 0.
  */
-void BattleMenu_SelectSlotOrShowSummary(unk_D_848037A0* arg0, s8 arg1) {
-    if (arg1 >= arg0->unk_0016) {
+void BattleMenu_SelectSlotOrShowSummary(OrderSelectPanel* arg0, s8 arg1) {
+    if (arg1 >= arg0->candidateCount) {
         Audio_PlaySoundEffectById(SFX_MENU_ERROR);
         return;
     }
@@ -780,75 +771,75 @@ void BattleMenu_SelectSlotOrShowSummary(unk_D_848037A0* arg0, s8 arg1) {
         return;
     }
 
-    arg0->unk_000C[arg0->unk_000B] = arg1;
-    arg0->unk_000B++;
-    BattleMenu_AppendOrderSlotIcon(arg0->unk_0003, arg0->unk_0001);
+    arg0->pickedSlots[arg0->pickCount] = arg1;
+    arg0->pickCount++;
+    BattleMenu_AppendOrderSlotIcon(arg0->sidebarTeam, arg0->controllerPort);
 
-    if (arg0->unk_0009 != 0) {
-        arg0->unk_0006 = 2;
+    if (arg0->showingSummary != 0) {
+        arg0->redrawFrames = 2;
     }
 
     if (BattleMenu_OrderExceedsLevelSumLimit(arg0) != 0) {
         Audio_PlaySoundEffectById(SFX_MENU_ERROR);
-        arg0->unk_0005 = 2;
-        arg0->unk_0006 = 2;
+        arg0->state = 2;
+        arg0->redrawFrames = 2;
         return;
     }
 
     Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
     if (BattleMenu_IsOrderComplete(arg0) != 0) {
-        arg0->unk_0005 = 1;
-        arg0->unk_000A = 0;
-        arg0->unk_0006 = 2;
+        arg0->state = 1;
+        arg0->confirmCursor = 0;
+        arg0->redrawFrames = 2;
     }
 }
 
-M2C_UNK func_8003F6AC(M2C_UNK, s8 *);             /* extern */
-M2C_UNK func_82300B30(s8, s8 *);                  /* extern */
-extern unk_D_848037A0 D_82302B48[];
+M2C_UNK func_8003F6AC(M2C_UNK, OrderSelectPanel*);             /* extern */
+M2C_UNK func_82300B30(s8, OrderSelectPanel*);                  /* extern */
+extern OrderSelectPanel D_82302B48[];
 /**
  * Clears a nonempty panel's picks, resetting the partner panel when present.
  * Seen in play (2026-11-12) on the order screen of a COM free battle: L cleared 1P's picks after
  * two had been made; the pick markers emptied.
  */
-void BattleMenu_UndoSelections(s8 *arg0) {
+void BattleMenu_UndoSelections(OrderSelectPanel* arg0) {
     s8 temp_v1;
-    s8 *temp_v0;
+    OrderSelectPanel* temp_v0;
 
-    if (M2C_FIELD(arg0, s8 *, 0xB) > 0) {
-        M2C_FIELD(arg0, s8 *, 0xB) = 0;
-        func_82300B30(M2C_FIELD(arg0, s8 *, 3), arg0);
-        if (M2C_FIELD(arg0, s8 *, 9) != 0) {
-            M2C_FIELD(arg0, s8 *, 6) = 2;
+    if (arg0->pickCount > 0) {
+        arg0->pickCount = 0;
+        func_82300B30(arg0->sidebarTeam, arg0);
+        if (arg0->showingSummary != 0) {
+            arg0->redrawFrames = 2;
         }
         func_8003F6AC(3, arg0);
-        temp_v1 = M2C_FIELD(arg0, s8 *, 2);
+        temp_v1 = arg0->partnerPanelIndex;
         if (temp_v1 != -1) {
-            temp_v0 = (temp_v1 << 5) + (s8*)D_82302B48;
-            M2C_FIELD(temp_v0, s8 *, 5) = 0;
-            M2C_FIELD(temp_v0, s8 *, 0xB) = 0;
-            M2C_FIELD(temp_v0, s8 *, 9) = 0;
-            M2C_FIELD(temp_v0, s8 *, 6) = 2;
+            temp_v0 = (OrderSelectPanel*)((temp_v1 << 5) + (s8*)D_82302B48);
+            temp_v0->state = 0;
+            temp_v0->pickCount = 0;
+            temp_v0->showingSummary = 0;
+            temp_v0->redrawFrames = 2;
         }
     }
 }
 
-void BattleMenu_SelectSlotOrShowSummary(unk_D_848037A0*, s8);
+void BattleMenu_SelectSlotOrShowSummary(OrderSelectPanel*, s8);
 
 /**
  * Maps slot buttons to picking or checking Pokemon and handles L-cancel.
  * Seen in play: runs every frame while 1P is still picking.
  */
-void BattleMenu_HandleOrderSelectPanel_PartyInput(Controller* arg0, unk_D_848037A0* arg1) {
+void BattleMenu_HandleOrderSelectPanel_PartyInput(Controller* arg0, OrderSelectPanel* arg1) {
     if (BTN_IS_PRESSED(arg0, BTN_R)) {
         // clang-format off
-        arg1->unk_0009 = 1; arg1->unk_0006 = 2;
+        arg1->showingSummary = 1; arg1->redrawFrames = 2;
         // clang-format on
     }
 
     if (arg0->buttonReleased & 0x10) {
-        arg1->unk_0009 = 0;
-        arg1->unk_0006 = 2;
+        arg1->showingSummary = 0;
+        arg1->redrawFrames = 2;
     }
 
     if (BTN_IS_PRESSED(arg0, BTN_L)) {
@@ -868,46 +859,46 @@ void BattleMenu_HandleOrderSelectPanel_PartyInput(Controller* arg0, unk_D_848037
     }
 }
 
-extern unk_D_848037A0 D_848037A0[4];
+extern OrderSelectPanel D_848037A0[4];
 /**
  * Handles confirmation choices, accepting the order or restarting selection.
  * Seen in play: starts running when the sixth pick opens the confirm prompt.
  */
-void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* arg0, unk_D_848037A0* arg1) {
-    unk_D_848037A0* temp_v0_2;
+void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* arg0, OrderSelectPanel* arg1) {
+    OrderSelectPanel* temp_v0_2;
 
     if (BTN_IS_PRESSED(arg0, BTN_R)) {
-        arg1->unk_0009 = 1;
-        arg1->unk_0006 = 2;
+        arg1->showingSummary = 1;
+        arg1->redrawFrames = 2;
     }
     if (arg0->buttonReleased & 0x10) {
-        arg1->unk_0009 = 0;
-        arg1->unk_0006 = 2;
+        arg1->showingSummary = 0;
+        arg1->redrawFrames = 2;
     }
 
     if (BTN_IS_PRESSED(arg0, BTN_DLEFT | BTN_DRIGHT)) {
-        arg1->unk_0006 = 2;
-        arg1->unk_000A ^= 1;
+        arg1->redrawFrames = 2;
+        arg1->confirmCursor ^= 1;
         Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
     } else if (BTN_IS_PRESSED(arg0, BTN_A)) {
-        if (arg1->unk_000A == 0) {
-            arg1->unk_0006 = 2;
-            arg1->unk_0005 = 3;
-            arg1->unk_0008 = 0;
+        if (arg1->confirmCursor == 0) {
+            arg1->redrawFrames = 2;
+            arg1->state = 3;
+            arg1->readyBlinkTimer = 0;
             Audio_PlaySoundEffectById(9);
         } else {
-            arg1->unk_0006 = 2;
-            arg1->unk_0005 = 0;
-            arg1->unk_000B = 0;
-            arg1->unk_0009 = 0;
-            BattleMenu_ResetOrderSlotIcons(arg1->unk_0003);
+            arg1->redrawFrames = 2;
+            arg1->state = 0;
+            arg1->pickCount = 0;
+            arg1->showingSummary = 0;
+            BattleMenu_ResetOrderSlotIcons(arg1->sidebarTeam);
             Audio_PlaySoundEffectById(SFX_MENU_BACK);
-            if (arg1->unk_0002 != -1) {
-                temp_v0_2 = &D_82302B48[arg1->unk_0002];
-                temp_v0_2->unk_0005 = 0;
-                temp_v0_2->unk_000B = 0;
-                temp_v0_2->unk_0009 = 0;
-                temp_v0_2->unk_0006 = 2;
+            if (arg1->partnerPanelIndex != -1) {
+                temp_v0_2 = &D_82302B48[arg1->partnerPanelIndex];
+                temp_v0_2->state = 0;
+                temp_v0_2->pickCount = 0;
+                temp_v0_2->showingSummary = 0;
+                temp_v0_2->redrawFrames = 2;
             }
         }
     }
@@ -919,13 +910,13 @@ void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* arg0, unk_D_8480
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-void BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(Controller* arg0, unk_D_848037A0* arg1) {
+void BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(Controller* arg0, OrderSelectPanel* arg1) {
     if (BTN_IS_PRESSED(arg0, BTN_A | BTN_B)) {
-        arg1->unk_0005 = 0;
-        arg1->unk_000B = 0;
-        arg1->unk_0009 = 0;
-        arg1->unk_0006 = 2;
-        BattleMenu_ResetOrderSlotIcons(arg1->unk_0003);
+        arg1->state = 0;
+        arg1->pickCount = 0;
+        arg1->showingSummary = 0;
+        arg1->redrawFrames = 2;
+        BattleMenu_ResetOrderSlotIcons(arg1->sidebarTeam);
         Audio_PlaySoundEffectById(SFX_MENU_BACK);
     }
 }
@@ -937,18 +928,18 @@ extern Controller D_82302BD8;
  * Seen in play (2026-11-12) on the order screen of a COM free battle: returned 0 for 1P's panel
  * before any pick and 1 for COM's panel, which was already ready.
  */
-s32 BattleMenu_UpdateOrderSelectPanel(s32 arg0, unk_D_848037A0* arg1) {
+s32 BattleMenu_UpdateOrderSelectPanel(s32 arg0, OrderSelectPanel* arg1) {
     Controller* var_a0;
     s32 sp18 = 0;
 
-    if (arg1->unk_001C->isHuman & 2) {
+    if (arg1->roster->isHuman & 2) {
         var_a0 = &D_82302BD8;
     } else {
-        var_a0 = &gControllers[arg1->unk_0001];
+        var_a0 = &gControllers[arg1->controllerPort];
     }
 
     if (arg0 == 0) {
-        switch (arg1->unk_0005) {
+        switch (arg1->state) {
             case 0:
                 BattleMenu_HandleOrderSelectPanel_PartyInput(var_a0, arg1);
                 break;
@@ -971,7 +962,7 @@ s32 BattleMenu_UpdateOrderSelectPanel(s32 arg0, unk_D_848037A0* arg1) {
 
 extern s32 D_8480379C;
 extern s16 D_84803798;
-extern unk_D_848037A0 D_848037A0[4];
+extern OrderSelectPanel D_848037A0[4];
 extern s32 D_82302BCC;
 void BattleMenu_FeedScriptedComOrderInput(void);
 extern s16 D_82302B40;
@@ -1000,7 +991,7 @@ s32 BattleMenu_UpdateOrderSelect(s32 arg0) {
     GeoRender_AdvanceFrameCounter();
     i = PokeIcon_ProcessAllSlots((unk_func_8001A024*)D_82302BCC, 0);
     if (i != -1) {
-        (D_82302B48)[i % 4].unk_0006 = 3;
+        (D_82302B48)[i % 4].redrawFrames = 3;
     }
     BgStage_DrawFrame();
 
@@ -1039,7 +1030,7 @@ s32 BattleMenu_UpdateOrderSelect(s32 arg0) {
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment from Stadium 1.
  */
-void BattleMenu_SetLeadTagTeamMember(BattleSessionTeams* arg0, unk_D_84803760* arg1) {
+void BattleMenu_SetLeadTagTeamMember(BattleSessionTeams* arg0, OrderSidebarIcons* arg1) {
     TeamRoster* temp_v0;
     s32 tmp;
 
@@ -1080,16 +1071,7 @@ void BattleMenu_AppendUnpickedSlots(s8* arg0, s32 arg1) {
 extern s32 D_82302B44;
 extern SessionContext* D_82302BD0;
 
-// Zero's order-select slot keeps only the first 0x20 bytes of Stadium 1's unk_D_848037A0.
-typedef struct OrderSelectSlot {
-    /* 0x00 */ char unk00[0xB];
-    /* 0x0B */ s8 unk_000B;
-    /* 0x0C */ s8 unk_000C[6];
-    /* 0x12 */ char unk12[0x6];
-    /* 0x18 */ BattleMon* unk_0018;
-    /* 0x1C */ TeamRoster* unk_001C;
-} OrderSelectSlot; // size = 0x20
-
+// Zero's order-select slot keeps only the first 0x20 bytes of Stadium 1's OrderSelectPanel.
 /**
  * Copies final orders into battle rosters and sets each tag team's lead trainer.
  * COM rosters keep their original order rather than using the scripted panel picks.
@@ -1100,22 +1082,22 @@ void BattleMenu_CommitOrderSelection(void) {
     s32 i;
     s32 var_s4;
     TeamRoster* temp_s1;
-    OrderSelectSlot* var_s2;
+    OrderSelectPanel* var_s2;
 
-    var_s2 = (OrderSelectSlot*)D_82302B48;
+    var_s2 = (OrderSelectPanel*)D_82302B48;
     var_s4 = D_82302B44;
 
     while (var_s4-- > 0) {
-        temp_s1 = var_s2->unk_001C;
+        temp_s1 = var_s2->roster;
         if (temp_s1->isHuman & 2) {
             temp_s1->numberOfPokemonBrought = temp_s1->rosterInfo->numberOfPokemonCanBePicked;
             _bcopy(temp_s1->rosterInfo->battleMon, temp_s1->pokemonPicked, sizeof(temp_s1->pokemonPicked));
         } else {
-            BattleMenu_AppendUnpickedSlots(var_s2->unk_000C, var_s2->unk_000B);
-            temp_s1->numberOfPokemonBrought = var_s2->unk_000B;
+            BattleMenu_AppendUnpickedSlots(var_s2->pickedSlots, var_s2->pickCount);
+            temp_s1->numberOfPokemonBrought = var_s2->pickCount;
 
             for (i = 0; i < temp_s1->rosterInfo->numberOfPokemonCanBePicked; i++) {
-                temp_s1->pokemonPicked[i] = var_s2->unk_0018[var_s2->unk_000C[i]];
+                temp_s1->pokemonPicked[i] = var_s2->candidates[var_s2->pickedSlots[i]];
             }
         }
         var_s2++;
@@ -1134,26 +1116,26 @@ void BattleMenu_CommitOrderSelection(void) {
  */
 void BattleMenu_AddOrderSelectPanel(s16 arg0, s16 arg1, TeamRoster* arg2, s32 arg3, s32 arg4) {
     s32 i;
-    unk_D_848037A0* temp_v1;
+    OrderSelectPanel* temp_v1;
     s32 j;
 
     j = D_82302B44;
     temp_v1 = &(D_82302B48)[D_82302B44];
-    temp_v1->unk_0000 = D_82302B44;
-    temp_v1->unk_0001 = arg2->controllerPort;
-    temp_v1->unk_0002 = arg4;
-    temp_v1->unk_0003 = arg3;
-    temp_v1->unk_0005 = 0;
-    temp_v1->unk_000B = 0;
-    temp_v1->unk_0006 = 2;
-    temp_v1->unk_0007 = 0;
-    temp_v1->unk_0009 = 0;
-    temp_v1->unk_000A = 0;
-    temp_v1->unk_0012 = arg0;
-    temp_v1->unk_0014 = arg1;
-    temp_v1->unk_0016 = arg2->rosterInfo->numberOfPokemonCanBePicked;
-    temp_v1->unk_0018 = arg2->rosterInfo->battleMon;
-    temp_v1->unk_001C = arg2;
+    temp_v1->panelIndex = D_82302B44;
+    temp_v1->controllerPort = arg2->controllerPort;
+    temp_v1->partnerPanelIndex = arg4;
+    temp_v1->sidebarTeam = arg3;
+    temp_v1->state = 0;
+    temp_v1->pickCount = 0;
+    temp_v1->redrawFrames = 2;
+    temp_v1->unk_07 = 0;
+    temp_v1->showingSummary = 0;
+    temp_v1->confirmCursor = 0;
+    temp_v1->x = arg0;
+    temp_v1->y = arg1;
+    temp_v1->candidateCount = arg2->rosterInfo->numberOfPokemonCanBePicked;
+    temp_v1->candidates = arg2->rosterInfo->battleMon;
+    temp_v1->roster = arg2;
 
     for (i = 0; i < arg2->rosterInfo->numberOfPokemonCanBePicked; i++, j += 4) {
         Pokemon_PrepareBattleMon(&arg2->rosterInfo->battleMon[i]);
