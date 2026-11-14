@@ -22,7 +22,6 @@ void Particle_SetPrimAlpha(s8 *arg0, char arg1);
 void Particle_Param0_SetS16_0BCA8(Particle* arg0, s16 arg1);
 void Particle_Countdown_SetS16_0BE14(Particle* arg0, s16 arg1);
 void Particle_SpawnIndex_SetS16_0BED8(Particle* arg0, s16 arg1);
-void Particle_ByteParam1_SetU8_0BEEC(Particle* arg0, u8 arg1);
 
 /**
  * Store the parameter only when it differs from the field-specific sentinel.
@@ -44,7 +43,7 @@ void Particle_SetFieldOffsetACIfNotSentinel(Particle* arg0, s16 arg1) {
  */
 void Particle_SetFieldOffsetCFIfNotSentinel(Particle* arg0, u8 arg1) {
     if ((u32)arg0 != -1) {
-        Particle_ByteParam1_SetU8_0BEEC(arg0, arg1);
+        Particle_SetByteParam1(arg0, arg1);
     }
 }
 

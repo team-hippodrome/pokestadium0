@@ -109,7 +109,7 @@ void BattleScene_OpeningStepInitCamera(CameraNode* arg0) {
 
 /**
  * Battle opening, step 1: waits until the battle assets have loaded
- * (BattleAnim_PollAssetLoadBusyFlags).
+ * (BattleAnim_PollAssetLoadBusy).
  * Seen in play (2026-11-13) in a COM Free Battle opening it ran on the two frames after
  * BattleScene_OpeningStepInitCamera, then the step moved to 2.
  */

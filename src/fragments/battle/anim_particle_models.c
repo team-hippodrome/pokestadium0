@@ -7,7 +7,6 @@
 
 // Declared here instead of in a header: the callers of these disagree on their types.
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32);
-M2C_UNK func_8213E4D8(s8 *);
 
 /**
  * Builds a reflection look-at matrix from the battle camera for environment-mapped
@@ -675,7 +674,7 @@ void BattleAnim_RunThunderWaveHitEffect(Particle* arg0) {
     }
 
     Particle_ApproachScale(arg0, 0.0f, 0.1f);
-    Particle_AddVelocityXZFromRotationYViaImpulse(arg0);
+    Particle_MoveXZAlongRotationY(arg0);
 }
 
 /**
@@ -742,7 +741,7 @@ void func_82153E28(Particle* arg0) {
         break;
     }
     func_82140228(arg0, 0x41200000, 0x3D4CCCCD);
-    func_8213E4D8(arg0);
+    Particle_MoveXZAlongRotationY(arg0);
 }
 
 /**

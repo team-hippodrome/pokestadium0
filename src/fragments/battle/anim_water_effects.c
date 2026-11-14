@@ -119,7 +119,7 @@ void BattleAnim_RunSurfHitSpark(Particle* arg0) {
 void BattleAnim_SetupBubbleBubbles(Particle* arg0, s16 arg1) {
     s16 sp2E = Particle_SpawnIndex_GetS16_0C038(arg0);
 
-    Particle_EffectList_SetU8_0BECC(arg0, 7);
+    Particle_SetEffectList(arg0, 7);
     Particle_SetScaleScaled(arg0, 0.1f);
     Particle_Rotation_AddVec_0A52C(arg0, ParticleMath_RandomSigned(0xC00), ParticleMath_RandomSigned(0x1000), 0);
     ParticleGfx_RecolorEnvRandomPalette(arg0);
@@ -256,7 +256,7 @@ void BattleAnim_SetupBubbleBeamBubblesFast(Particle* arg0) {
     Vec3f sp30;
     s16 sp2E;
 
-    Particle_EffectList_SetU8_0BECC(arg0, 7);
+    Particle_SetEffectList(arg0, 7);
     Particle_SetScaleScaled(arg0, 0.1f);
     Particle_SetScaleTarget(arg0, 0.2f);
     Particle_SetScaleStep(arg0, 0.02f);
@@ -336,7 +336,7 @@ void BattleAnim_SetupUnusedRotatingSparkVariant(Particle* arg0) {
     s16 sp30 = Particle_SpawnIndex_GetS16_0C038(arg0);
     s16 sp2E = Particle_FieldCE_GetS32_0C040(arg0);
 
-    Particle_EffectList_SetU8_0BECC(arg0, 7);
+    Particle_SetEffectList(arg0, 7);
     Particle_SetScaleScaled(arg0, 0.1f);
     BattleAnim_GetSecondaryOwnerAnchorPosition(&sp40);
     BattleAnim_GetTertiaryOwnerBone9Position(&sp34);
@@ -400,7 +400,7 @@ void BattleAnim_MotionUnusedRotatingSparkVariant(Particle* arg0) {
     }
 
     if (arg0->phase > 0) {
-        Particle_AddVelocityFromRotationTemplate5(arg0);
+        Particle_MoveAlongRotationXYZAlt(arg0);
     }
 }
 
@@ -453,7 +453,7 @@ void BattleAnim_SetupUnusedAimedSparkVariant(Particle* arg0) {
     Vec3f sp34;
     s16 temp_v1;
 
-    Particle_EffectList_SetU8_0BECC(arg0, 7);
+    Particle_SetEffectList(arg0, 7);
     Particle_SetScaleScaled(arg0, 0.1f);
     Particle_SetScaleTarget(arg0, 0.1f);
     BattleAnim_GetSecondaryOwnerAnchorPosition(&sp40);
@@ -1736,7 +1736,7 @@ void BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade(Particle
     }
 
     if (Particle_IsRunning(arg0) != 0) {
-        Particle_AddVelocityFromRotationTemplate3(arg0);
+        Particle_MoveAlongRotationXYAlt(arg0);
     }
 }
 

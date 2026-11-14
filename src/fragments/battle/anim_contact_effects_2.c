@@ -10,7 +10,6 @@ M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);
 M2C_UNK Particle_IncrementPhase(s8 *);
 M2C_UNK Particle_SetMagnitudeStepScaled(s8 *, M2C_UNK);
 M2C_UNK Particle_SetParam0(s8 *, M2C_UNK);
-M2C_UNK func_8213E77C(s8 *);
 s32 func_82140690(s8 *);
 void BattleAnim_RunDigHitDust(Particle* arg0);
 void BattleAnim_RunDigHitRocks(Particle* arg0);
@@ -35,13 +34,13 @@ void BattleAnim_RunAcidArmorUseEffect2(Particle* arg0) {
 
         case 3:
             Particle_DecrementParam0ToZeroThenAdvance(arg0);
-            Particle_AddVelocityYFromFieldOffset74(arg0);
+            Particle_RiseByStepMagnitude(arg0);
             break;
 
         case 4:
             Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
             Particle_PrimAlpha_Approach_0BC2C(arg0, 0x40, 4);
-            Particle_AddVelocityYFromFieldOffset74(arg0);
+            Particle_RiseByStepMagnitude(arg0);
             break;
 
         case 5:
@@ -235,7 +234,7 @@ void func_82164AD0(Particle* arg0) {
     case 3:
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, (s32) arg0->scratchB, 0);
         Particle_ApproachPrimAlpha(arg0, 0x40, M2C_FIELD(arg0, u8 *, 0xAB));
-        func_8213E77C(arg0);
+        Particle_RiseByStepMagnitude(arg0);
         return;
     case 4:
         Particle_MarkInactive(arg0);

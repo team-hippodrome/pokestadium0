@@ -76,7 +76,7 @@ s32 BattleScene_DispatchLifecycle(s32 lifecycle_stage, BattleSide* session_teams
 void BattleThumbnail_SetFlagToUpdatePokemonThumbnail(CameraNode* camera);
 
 void BattleAnim_SetModelEventTrackFromRow(ActivePokemon* pokemon, s32 cue_index);
-void BattleScene_TryQueueIdleCueEffect(ActivePokemon* active_pokemon);
+void BattleScene_TryQueueIdleCueEffect(s8* active_pokemon);
 void BattleScene_AllocateParticipantRecord(BattleSide* session_teams, s32 side_index);
 void BattleScene_InitializeRuntime(BattleSide* session_teams);
 
@@ -325,7 +325,7 @@ s32 BattleAnim_IsModelBusy(ActivePokemon* active_pokemon) {
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 BattleAnim_TryRegisterAssetTables(ActivePokemon* active_pokemon) {
-    if (BattleAnim_PollAssetLoadBusyFlags(active_pokemon) == 0) {
+    if (BattleAnim_PollAssetLoadBusy(active_pokemon) == 0) {
         BattleAnim_RegisterAssetTablesForSession(active_pokemon->side);
         return 1;
     }
@@ -2219,7 +2219,7 @@ void func_821365B0(s32, s8*, s8*, s32, s32);
  * sound or effect (func_821365B0).
  * @unverified Name guessed from the code.
  */
-void BattleAnim_TickCueModelEvent(s8* active_pokemon) {
+void BattleScene_TryQueueIdleCueEffect(s8* active_pokemon) {
     s16 id;
     u8* cue = D_82189180[func_82107A5C()] + 0x717;
 

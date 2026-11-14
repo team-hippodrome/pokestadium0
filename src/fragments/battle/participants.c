@@ -837,7 +837,7 @@ void Battle_ReturnToIdleAnimIfFinished(ActivePokemon* active_pokemon, ActivePoke
     idx = BattleScene_GetParticipantSideIndex(active_pokemon);
     sleep_idle_cue = (MovePresentationCue*)((u8*)sSideBattleCues[idx] + 0x785);
     if (!(pokemon_state->flags & (ACTIVE_UNDERGROUND | ACTIVE_FREEZE))) {
-        if ((BattleAnim_IsSessionBusy(active_pokemon) == 0) && (animated_pokemon->displayObject.transformAnim.animationId != -1) &&
+        if ((BattleAnim_IsModelBusy(active_pokemon) == 0) && (animated_pokemon->displayObject.transformAnim.animationId != -1) &&
             (ModelAnim_IsFinished(&animated_pokemon->displayObject) == 1)) {
             if (pokemon_state->flags & ACTIVE_AIRBORNE) {
                 ModelAnim_SetAnimation(&animated_pokemon->displayObject, flying_cue->id);
@@ -877,7 +877,7 @@ void Battle_ResetModelToIdleAnim(ActivePokemon* active_pokemon) {
     idx = BattleScene_GetParticipantSideIndex(active_pokemon);
     sleep_idle_cue = (u8*)sSideBattleCues[idx] + 0x785;
 
-    if (!(state->flags & (ACTIVE_UNDERGROUND | ACTIVE_FREEZE)) && (BattleAnim_IsSessionBusy(active_pokemon) == 0) && (active_pokemon->displayObject.transformAnim.animationId != -1)) {
+    if (!(state->flags & (ACTIVE_UNDERGROUND | ACTIVE_FREEZE)) && (BattleAnim_IsModelBusy(active_pokemon) == 0) && (active_pokemon->displayObject.transformAnim.animationId != -1)) {
         if (state->flags & ACTIVE_AIRBORNE) {
             ModelAnim_SetAnimation(&active_pokemon->displayObject, *flying_idle_cue);
         } else if ((state->flags & ACTIVE_SLEEP) && ((active_pokemon->displayObject.objectType == PRIMEAPE) || (active_pokemon->displayObject.objectType == EXEGGUTOR))) {

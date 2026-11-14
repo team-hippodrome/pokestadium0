@@ -126,10 +126,10 @@ void func_82124830(s8 *arg0, ActivePokemon* arg1)
 }
 
 /**
- * Updates the mini effect particles.
+ * Frames the Pokemon from the front (BattleScene_FrameParticipantFrontAlt).
  */
-void func_82124874(void) {
-    MiniFx_UpdateParticles();
+void func_82124874(CameraNode* camera, ActivePokemon* active_pokemon) {
+    BattleScene_FrameParticipantFrontAlt(camera, active_pokemon);
 }
 
 /**

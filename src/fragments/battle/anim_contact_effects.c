@@ -19,7 +19,6 @@ M2C_UNK Particle_ApproachStepMagnitude(s8 *, f32, f32);
 M2C_UNK Particle_SetStepMagnitudeScaled(s8 *, f32);
 M2C_UNK func_8213C9D0(s8 *);
 M2C_UNK func_8213E1FC(s8 *, s32);
-M2C_UNK func_8213E4D8(s8 *);
 M2C_UNK func_821401D4(s8 *, M2C_UNK);
 M2C_UNK func_82143478(s8 *, u16);
 s16 Particle_GetUnkCE();
@@ -505,7 +504,7 @@ void BattleAnim_RunSmallSand(Particle* arg0) {
         func_82140228(arg0, 0x3F400000, 0x3CCCCCCD);
         Particle_ApproachStepMagnitude(arg0, 0.5f, 0.25f);
         func_8213E1FC(arg0, M2C_FIELD(arg0, s32 *, 0x5C));
-        func_8213E4D8(arg0);
+        Particle_MoveXZAlongRotationY(arg0);
         return;
     case 3:
         func_82140548(arg0, 0, 0x20);
@@ -565,7 +564,7 @@ void BattleAnim_RunLargeSand(Particle* arg0) {
         Particle_MarkInactive(arg0);
         break;
     }
-    func_8213E4D8(arg0);
+    Particle_MoveXZAlongRotationY(arg0);
 }
 
 /**
@@ -602,7 +601,7 @@ void BattleAnim_SandAttackParticleUpdate(Particle* arg0) {
         Particle_ApproachPrimAlpha(arg0, 0x64, 9);
         func_82140228(arg0, 0x3ECCCCCD, 0x3CCCCCCD);
         func_8213E1FC(arg0, M2C_FIELD(arg0, s32 *, 0x5C));
-        func_8213E4D8(arg0);
+        Particle_MoveXZAlongRotationY(arg0);
         return;
     case 3:
         Particle_MarkInactive(arg0);
@@ -645,7 +644,7 @@ void func_82160CCC(Particle* arg0) {
         func_82140228(arg0, 0x3F400000, 0x3CCCCCCD);
         Particle_ApproachStepMagnitude(arg0, 0.5f, 0.2f);
         func_8213E1FC(arg0, M2C_FIELD(arg0, s32 *, 0x5C));
-        func_8213E4D8(arg0);
+        Particle_MoveXZAlongRotationY(arg0);
         return;
     case 3:
         if (Particle_ApproachPrimAlpha(arg0, 0, 0x20) != 0) {
@@ -763,7 +762,7 @@ void BattleAnim_HeavyHitAnimatedRiseFade(Particle* arg0) {
     }
 
     if (Particle_IsRunning(arg0) != 0) {
-        Particle_AddVelocityXZFromRotationYViaImpulse(arg0);
+        Particle_MoveXZAlongRotationY(arg0);
     }
 }
 
@@ -1782,7 +1781,7 @@ void BattleAnim_SetupPointyMoveHitSpark(Particle* arg0) {
             Particle_SetScaleScaled(arg0, 1.5f);
             Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.4f);
             Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
-            Particle_ByteParam1_SetU8_0BEEC(arg0, 0);
+            Particle_SetByteParam1(arg0, 0);
             break;
 
         case 4:
@@ -1790,7 +1789,7 @@ void BattleAnim_SetupPointyMoveHitSpark(Particle* arg0) {
             Particle_SetScaleScaled(arg0, 1.5f);
             Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.4f);
             Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
-            Particle_ByteParam1_SetU8_0BEEC(arg0, 1);
+            Particle_SetByteParam1(arg0, 1);
             break;
     }
 
@@ -1956,7 +1955,7 @@ void BattleAnim_FirePunchParticleUpdate(Particle* arg0) {
             Particle_ApproachPrimGreen(arg0, 0, 0x20);
             Particle_ApproachPrimAlpha(arg0, 0x64, 0x4E);
         }
-        func_8213E4D8(arg0);
+        Particle_MoveXZAlongRotationY(arg0);
         return;
     case 4:
         Particle_MarkInactive(arg0);
@@ -2029,7 +2028,7 @@ void func_821639EC(Particle* arg0) {
             Particle_ApproachPrimGreen(arg0, 0, 0x20);
             Particle_ApproachPrimAlpha(arg0, 0x64, 0x4E);
         }
-        func_8213E4D8(arg0);
+        Particle_MoveXZAlongRotationY(arg0);
         return;
     case 4:
         Particle_MarkInactive(arg0);

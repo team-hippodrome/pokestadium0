@@ -122,7 +122,7 @@ void Particle_ResetDefaults(Particle* arg0) {
     Particle_ByteParam2_SetS16_0BF24(arg0, 0);
     Particle_Param1_SetS16_0BF10(arg0, 0);
     Particle_SpawnIndex_SetS16_0BED8(arg0, 0);
-    Particle_ByteParam1_SetU8_0BEEC(arg0, 0);
+    Particle_SetByteParam1(arg0, 0);
     Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
     Particle_SetEnvColor(arg0, 0xFF, 0xFF, 0xFF);
     Particle_SetPrimAlpha(arg0, 0xFF);

@@ -71,7 +71,7 @@ void BattleAnim_CallbackOwnerModelTintPaletteFade(Particle* arg0) {
  */
 void BattleAnim_SetupOwnerModelTintRandomPaletteCycle(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, gParticlePaletteSetA[ParticleMath_RandomRange(6)]);
-    Particle_ByteParam1_SetU8_0BEEC(arg0, gParticlePaletteSetA[ParticleMath_RandomRange(6)]);
+    Particle_SetByteParam1(arg0, gParticlePaletteSetA[ParticleMath_RandomRange(6)]);
     Particle_SetPrimAlpha(arg0, arg0->byteParam0);
 
     if (arg0->param1 == 0) {
@@ -99,7 +99,7 @@ void BattleAnim_CallbackOwnerModelTintRandomPaletteCycle(Particle* arg0) {
             ParticleGfx_ApproachPrimPalette(arg0, arg0->byteParam1, arg0->param1);
             if (Particle_DecrementParam0ToZero(arg0) != 0) {
                 Particle_Param0_SetS16_0BCA8(arg0, 0xFF / arg0->param1);
-                Particle_ByteParam1_SetU8_0BEEC(arg0, gParticlePaletteSetA[ParticleMath_RandomRange(6)]);
+                Particle_SetByteParam1(arg0, gParticlePaletteSetA[ParticleMath_RandomRange(6)]);
             }
             Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->prim_a);
             break;
@@ -114,7 +114,7 @@ void BattleAnim_CallbackOwnerModelTintRandomPaletteCycle(Particle* arg0) {
 void BattleAnim_SetupRainbowHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, gParticlePaletteSetA[0]);
     Particle_ScratchA_SetS16_0BF4C(arg0, 1);
-    Particle_ByteParam1_SetU8_0BEEC(arg0, gParticlePaletteSetA[1]);
+    Particle_SetByteParam1(arg0, gParticlePaletteSetA[1]);
     Particle_SetPrimAlpha(arg0, arg0->byteParam0);
 
     if (arg0->param1 == 0) {
@@ -141,7 +141,7 @@ void BattleAnim_RunRainbowHueChange(Particle* arg0) {
             if (Particle_DecrementCountdownToZero(arg0) != 0) {
                 Particle_Countdown_SetS16_0BE14(arg0, 0xFF / arg0->param1);
                 arg0->scratchA = (arg0->scratchA + 1) % 6;
-                Particle_ByteParam1_SetU8_0BEEC(arg0, gParticlePaletteSetA[arg0->scratchA]);
+                Particle_SetByteParam1(arg0, gParticlePaletteSetA[arg0->scratchA]);
             }
             ParticleGfx_ApproachPrimPalette(arg0, arg0->byteParam1, arg0->param1);
             Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->prim_a);

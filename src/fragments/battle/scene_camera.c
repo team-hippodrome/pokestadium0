@@ -1147,7 +1147,7 @@ void BattleScene_FrameParticipantFromBelow(CameraNode* camera, ActivePokemon* ac
  * Same framing as BattleScene_FrameParticipantFront.
  * @unverified Name guessed from the code.
  */
-void BattleScene_FrameParticipantFrontUnused(CameraNode* camera, ActivePokemon* active_pokemon) {
+void BattleScene_FrameParticipantFrontAlt(CameraNode* camera, ActivePokemon* active_pokemon) {
     BattleAnim_GetOwnerDefaultAnchorPosition(active_pokemon, &sBattleScene.scene->anchorPosition);
     gCameraDistTarget = BattleScene_ScaleCameraDistance(active_pokemon, 3.5f, 300.0f);
     BattleScene_SetCameraAtFromAnchor(active_pokemon, camera, sBattleScene.scene->anchorPosition, 0, BattleScene_GetParticipantFacingAngle(active_pokemon), 0.0f, 0.0f);

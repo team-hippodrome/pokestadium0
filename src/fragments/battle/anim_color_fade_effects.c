@@ -230,7 +230,7 @@ void BattleAnim_MotionUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg
     }
 
     if (arg0->phase > 0) {
-        Particle_AddVelocityFromRotationTemplate7B(arg0);
+        Particle_MoveAlongRotationYZAltCopy(arg0);
     }
 }
 
@@ -1010,7 +1010,7 @@ void BattleAnim_RunEmberUseEffect(Particle* arg0) {
 void BattleAnim_GetExplosionParticleColor(Particle* arg0, u8 arg1) {
     u16 sp1E;
 
-    Particle_ByteParam1_SetU8Alt_0BEF8(arg0, arg1);
+    Particle_SetByteParam1Copy(arg0, arg1);
 
     switch (arg1) {
         case 0:
@@ -1995,7 +1995,7 @@ void BattleAnim_ContinueDaimonji(Particle* arg0) {
     }
 
     if (arg0->phase > 0) {
-        Particle_AddVelocityFromRotationTemplate5(arg0);
+        Particle_MoveAlongRotationXYZAlt(arg0);
     }
 }
 

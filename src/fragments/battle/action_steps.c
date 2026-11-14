@@ -584,7 +584,7 @@ void func_82129D10(CameraNode* arg0) {
             BattleScene_FrameParticipantImpact((s32)arg0, sOtherPokemon, BattleScene_GetParticipantHeight(sOtherPokemon) * 2.0f);
             break;
         case 1:
-            if (BattleAnim_IsSessionBusy(sOtherPokemon) == 0) {
+            if (BattleAnim_IsModelBusy(sOtherPokemon) == 0) {
                 func_821243DC((s32)arg0, sOtherPokemon, BattleScene_GetParticipantHeight(sOtherPokemon) * 2.0f);
                 if (sBattleScene.scene->orbitDistance <= 1.0f) {
                     BattleScene_CleanupParticipantEffectMode(sActingPokemon);

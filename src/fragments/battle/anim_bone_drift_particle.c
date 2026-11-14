@@ -60,7 +60,7 @@ void func_82168CC4(Particle* arg0) {
     }
 
     if (arg0->lifecycle > 0) {
-        Particle_AddVelocityXZFromRotationYViaImpulse(arg0);
+        Particle_MoveXZAlongRotationY(arg0);
         Particle_ApplyMotionStepY(arg0);
     }
 

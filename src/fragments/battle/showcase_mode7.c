@@ -102,7 +102,7 @@ void func_82132B04(CameraNode* arg0) {
  * single argument.  What the counter at +0x20 counts is not established
  * from the code alone.
  */
-s32 BattleCamera_StepPathLateEase(CameraNode* arg0, s8* arg1);
+s32 BattleCamera_StepPathLateEase(CameraNode* camera, ActivePokemon* active_pokemon);
 
 /**
  * Advances the phase step once the camera path on the featured Pokemon finishes.
@@ -199,7 +199,7 @@ void func_82132CDC(CameraNode* arg0) {
  * Draws the featured Pokemon's I4 atlas, scaled in Y.
  */
 void func_82132D3C(Particle* arg0) {
-    BattleAnim_DrawI4AtlasYScaled(arg0, D_8219A580);
+    BattleCamera_StepPathLateEase(arg0, D_8219A580);
 }
 
 void func_82132B04(CameraNode* arg0);

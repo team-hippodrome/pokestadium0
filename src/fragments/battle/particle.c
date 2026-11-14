@@ -93,8 +93,8 @@ void Particle_ComputeVectorFromRotationYZVariant(Particle* arg0, f32 arg1, Vec3f
 void Particle_SetMotionStepXZFromRotationY(Particle* arg0);
 void Particle_SetMotionStepFromRotationXZ(Particle* arg0);
 s32 Particle_PrimAlpha_Approach_0BC2C(Particle* arg0, u8 arg1, u8 arg2);
-s32 Particle_Param0_DecrementTo_0BCC4(Particle* arg0, s16 arg1, s16 arg2);
-s32 Particle_Countdown_DecrementTo_0BE30(Particle* arg0, s16 arg1);
+s32 Particle_StepParam0DownTo(Particle* arg0, s16 arg1, s16 arg2);
+s32 Particle_TickCountdownTo(Particle* arg0, s16 arg1);
 s32 Particle_ScratchA_Approach_0BF60(Particle* arg0, s16 arg1, s16 arg2);
 
 /**
@@ -1254,9 +1254,13 @@ void Particle_ApplyMotionStepXY(Particle* arg0) {
     arg0->motionOffset.y += arg0->motionStep.y;
 }
 
-void func_8213E474(s8 *arg0)
+/**
+ * Adds motionStep.x to motionOffset.x.
+ * @unverified Name guessed from the code.
+ */
+void Particle_ApplyMotionStepX(s8 *particle)
 {
-  *((f32 *) (((s8 *) arg0) + 0x4C)) = (f32) ((*((f32 *) (((s8 *) arg0) + 0x78))) + (*((f32 *) (((s8 *) arg0) + 0x4C)))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *((f32 *) (((s8 *) particle) + 0x4C)) = (f32) ((*((f32 *) (((s8 *) particle) + 0x78))) + (*((f32 *) (((s8 *) particle) + 0x4C)))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
 /**
@@ -1293,9 +1297,13 @@ void Particle_AddVelocityXZFromRotationYViaHelpers(Particle* arg0) {
 
 M2C_UNK func_8213FB14();                            /* extern */
 
-void func_8213E4D8(s32 arg0) {
+/**
+ * Sets the XZ motion step from rotation.y and adds it to the motion offset.
+ * @unverified Name guessed from the code.
+ */
+void Particle_MoveXZAlongRotationY(Particle* particle) {
     func_8213FB14();
-    Particle_ApplyMotionStepXZ(arg0);
+    Particle_ApplyMotionStepXZ(particle);
 }
 
 /**
@@ -1324,58 +1332,86 @@ void Particle_MotionStep_SetVecFromStepMagnitudeAnglesXZ(Particle* arg0);
 
 /**
  * Sets motionStep from rotation.x and rotation.z and adds it to motionOffset.
+ * @unverified Name guessed from the code.
  */
-void func_8213E550(s32 arg0) {
-    Particle_MotionStep_SetVecFromStepMagnitudeAnglesXZ((Particle*)arg0);
-    Particle_ApplyMotionStep(arg0);
+void Particle_MoveAlongRotationXZ(s32 particle) {
+    Particle_MotionStep_SetVecFromStepMagnitudeAnglesXZ((Particle*)particle);
+    Particle_ApplyMotionStep(particle);
 }
 
 M2C_UNK Particle_ApplyMotionStep(s32);                         /* extern */
 M2C_UNK func_8213FC48();                            /* extern */
 
-void func_8213E578(s32 arg0) {
+/**
+ * Sets the motion step from rotation.x and rotation.y (alternate form) and adds it to the motion
+ * offset.
+ * @unverified Name guessed from the code.
+ */
+void Particle_MoveAlongRotationXYAlt(Particle* particle) {
     func_8213FC48();
-    Particle_ApplyMotionStep(arg0);
+    Particle_ApplyMotionStep(particle);
 }
 
 M2C_UNK Particle_ApplyMotionStep(s32);                         /* extern */
 M2C_UNK func_8213FCC8();                            /* extern */
 
-void func_8213E5A0(s32 arg0) {
+/**
+ * Sets the motion step from rotation.y and rotation.z and adds it to the motion offset.
+ * @unverified Name guessed from the code.
+ */
+void Particle_MoveAlongRotationYZ(s32 particle) {
     func_8213FCC8();
-    Particle_ApplyMotionStep(arg0);
+    Particle_ApplyMotionStep(particle);
 }
 
 M2C_UNK Particle_ApplyMotionStep(s32);                         /* extern */
 M2C_UNK func_8213FE04();                            /* extern */
 
-void func_8213E5C8(s32 arg0) {
+/**
+ * Sets the motion step from all three rotation angles (alternate form) and adds it to the motion
+ * offset.
+ * @unverified Name guessed from the code.
+ */
+void Particle_MoveAlongRotationXYZAlt(Particle* particle) {
     func_8213FE04();
-    Particle_ApplyMotionStep(arg0);
+    Particle_ApplyMotionStep(particle);
 }
 
 M2C_UNK Particle_ApplyMotionStep(s32);                         /* extern */
 M2C_UNK func_8213FD3C();                            /* extern */
 
-void func_8213E5F0(s32 arg0) {
+/**
+ * Sets the motion step from all three rotation angles and adds it to the motion offset.
+ * @unverified Name guessed from the code.
+ */
+void Particle_MoveAlongRotationXYZ(s32 particle) {
     func_8213FD3C();
-    Particle_ApplyMotionStep(arg0);
+    Particle_ApplyMotionStep(particle);
 }
 
 M2C_UNK Particle_ApplyMotionStep(s32);                         /* extern */
 M2C_UNK func_8213FED4();                            /* extern */
 
-void func_8213E618(s32 arg0) {
+/**
+ * Sets the motion step from rotation.y and rotation.z (alternate form) and adds it to the motion
+ * offset.
+ * @unverified Name guessed from the code.
+ */
+void Particle_MoveAlongRotationYZAlt(s32 particle) {
     func_8213FED4();
-    Particle_ApplyMotionStep(arg0);
+    Particle_ApplyMotionStep(particle);
 }
 
 M2C_UNK Particle_ApplyMotionStep(s32);                         /* extern */
 M2C_UNK func_8213FED4();                            /* extern */
 
-void func_8213E640(s32 arg0) {
+/**
+ * Same code as Particle_MoveAlongRotationYZAlt.
+ * @unverified Name guessed from the code.
+ */
+void Particle_MoveAlongRotationYZAltCopy(Particle* particle) {
     func_8213FED4();
-    Particle_ApplyMotionStep(arg0);
+    Particle_ApplyMotionStep(particle);
 }
 
 /**
@@ -1418,8 +1454,12 @@ void Particle_StepBackwardAlongRotationY(Particle* arg0, f32 arg1) {
 
 M2C_UNK func_8213E488();                            /* extern */
 
-void func_8213E77C(Particle* arg0) {
-    arg0->motionStep.y = (f32) arg0->stepMagnitude;
+/**
+ * Sets motionStep.y to stepMagnitude and adds it to the motion offset.
+ * @unverified Name guessed from the code.
+ */
+void Particle_RiseByStepMagnitude(Particle* particle) {
+    particle->motionStep.y = (f32) particle->stepMagnitude;
     func_8213E488();
 }
 
@@ -1836,10 +1876,11 @@ void Particle_AddRotationZ(Particle* arg0, s16 arg1) {
 
 /**
  * Adds arg1 and arg2 to the particle's rotation speeds at 0x9C and 0x9E.
+ * @unverified Name guessed from the code.
  */
-void func_8213EDE8(Particle* arg0, s16 arg1, s16 arg2) {
-    arg0->rotationTarget.x = (s16) (arg0->rotationTarget.x + arg1);
-    arg0->rotationTarget.y = (s16) (arg0->rotationTarget.y + arg2);
+void Particle_AddRotationTargetXY(Particle* particle, s16 delta_x, s16 delta_y) {
+    particle->rotationTarget.x = (s16) (particle->rotationTarget.x + delta_x);
+    particle->rotationTarget.y = (s16) (particle->rotationTarget.y + delta_y);
 }
 
 /**
@@ -2421,9 +2462,10 @@ void Particle_MotionStep_SetXFromStepMagnitudeAngleY_0B1EC(Particle* arg0) {
 
 /**
  * Sets motionStep.y (0x78) to stepMagnitude times the sine of the angle at 0x92.
+ * @unverified Name guessed from the code.
  */
-void func_8213FA88(Particle* arg0) {
-    arg0->motionStep.x = arg0->stepMagnitude * SINS((u16)arg0->rotation.y);
+void Particle_SetMotionStepXFromRotationY(Particle* particle) {
+    particle->motionStep.x = particle->stepMagnitude * SINS((u16)particle->rotation.y);
 }
 
 /**
@@ -2874,14 +2916,15 @@ void Particle_SetParam0(Particle* arg0, s16 arg1) {
 
 /**
  * Counts field A2 down by arg2 to at least arg1; returns 1 once it reaches arg1.
+ * @unverified Name guessed from the code.
  */
-s32 func_821405A8(Particle* arg0, s16 arg1, s16 arg2) {
+s32 Particle_StepParam0DownTo(Particle* particle, s16 floor, s16 step) {
     s32 var_v1;
 
-    arg0->param0 = (s16) (arg0->param0 - arg2);
+    particle->param0 = (s16) (particle->param0 - step);
     var_v1 = 0;
-    if (arg1 >= arg0->param0) {
-        arg0->param0 = arg1;
+    if (floor >= particle->param0) {
+        particle->param0 = floor;
         var_v1 = 1;
     }
     return var_v1;
@@ -2894,7 +2937,7 @@ s32 func_821405A8(Particle* arg0, s16 arg1, s16 arg2) {
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Particle_Param0_DecrementToZero_0BD08(Particle* arg0, s16 arg1) {
-    return Particle_Param0_DecrementTo_0BCC4(arg0, 0, arg1);
+    return Particle_StepParam0DownTo(arg0, 0, arg1);
 }
 
 /**
@@ -2904,7 +2947,7 @@ s32 Particle_Param0_DecrementToZero_0BD08(Particle* arg0, s16 arg1) {
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Particle_Param0_DecrementToZeroAndStepState_0BD34(Particle* arg0, s16 arg1) {
-    s32 sp1C = Particle_Param0_DecrementTo_0BCC4(arg0, 0, arg1);
+    s32 sp1C = Particle_StepParam0DownTo(arg0, 0, arg1);
 
     if (sp1C != 0) {
         Particle_AdvanceLifecycle(arg0);
@@ -2919,7 +2962,7 @@ s32 Particle_Param0_DecrementToZeroAndStepState_0BD34(Particle* arg0, s16 arg1) 
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Particle_Param0_DecrementToStep1_0BD80(Particle* arg0, s16 arg1) {
-    return Particle_Param0_DecrementTo_0BCC4(arg0, arg1, 1);
+    return Particle_StepParam0DownTo(arg0, arg1, 1);
 }
 
 /**
@@ -2928,7 +2971,7 @@ s32 Particle_Param0_DecrementToStep1_0BD80(Particle* arg0, s16 arg1) {
  * Seen in play (2026-11-13) in the 165-move sweep (Cut): unk_A6 at 0xA2 went from 7 to 6.
  */
 s32 Particle_DecrementParam0ToZero(Particle* arg0) {
-    return Particle_Param0_DecrementTo_0BCC4(arg0, 0, 1);
+    return Particle_StepParam0DownTo(arg0, 0, 1);
 }
 
 /**
@@ -2938,7 +2981,7 @@ s32 Particle_DecrementParam0ToZero(Particle* arg0) {
  * 0x32 to 0x31.
  */
 s32 Particle_DecrementParam0ToZeroThenAdvance(Particle* arg0) {
-    s32 sp1C = Particle_Param0_DecrementTo_0BCC4(arg0, 0, 1);
+    s32 sp1C = Particle_StepParam0DownTo(arg0, 0, 1);
 
     if (sp1C != 0) {
         Particle_AdvanceLifecycle(arg0);
@@ -2958,14 +3001,15 @@ void Particle_SetCountdown(Particle* arg0, s16 arg1) {
 
 /**
  * Counts field A4 down by 1 to at least arg1; returns 1 once it reaches arg1.
+ * @unverified Name guessed from the code.
  */
-s32 func_8214070C(Particle* arg0, s16 arg1) {
+s32 Particle_TickCountdownTo(Particle* particle, s16 floor) {
     s32 var_v1;
 
-    arg0->countdown = (s16) (arg0->countdown - 1);
+    particle->countdown = (s16) (particle->countdown - 1);
     var_v1 = 0;
-    if (arg1 >= arg0->countdown) {
-        arg0->countdown = arg1;
+    if (floor >= particle->countdown) {
+        particle->countdown = floor;
         var_v1 = 1;
     }
     return var_v1;
@@ -2977,7 +3021,7 @@ s32 func_8214070C(Particle* arg0, s16 arg1) {
  * Seen in play (2026-11-13) in the 165-move sweep (Ember): unk_A8 at 0xA4 went from 7 to 6.
  */
 s32 Particle_DecrementCountdownToZero(Particle* arg0) {
-    return Particle_Countdown_DecrementTo_0BE30(arg0, 0);
+    return Particle_TickCountdownTo(arg0, 0);
 }
 
 /**
@@ -2987,7 +3031,7 @@ s32 Particle_DecrementCountdownToZero(Particle* arg0) {
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Particle_Countdown_DecrementToZeroStep1AndStepState_0BE8C(Particle* arg0) {
-    s32 sp1C = Particle_Countdown_DecrementTo_0BE30(arg0, 0);
+    s32 sp1C = Particle_TickCountdownTo(arg0, 0);
 
     if (sp1C != 0) {
         Particle_AdvanceLifecycle(arg0);
@@ -2995,11 +3039,15 @@ s32 Particle_Countdown_DecrementToZeroStep1AndStepState_0BE8C(Particle* arg0) {
     return sp1C;
 }
 
-void func_821407A8(s8 *arg0, int arg1)
+/**
+ * Sets the effect list the particle belongs to (+0xC6).
+ * @unverified Name guessed from the code.
+ */
+void Particle_SetEffectList(s8 *particle, int effect_list)
 {
   int *new_var; // FAKE: permuter temp
-  new_var = &arg1;
-  *((s8 *) (((s8 *) arg0) + 0xC6)) = *new_var;
+  new_var = &effect_list;
+  *((s8 *) (((s8 *) particle) + 0xC6)) = *new_var;
 }
 
 /**
@@ -3010,18 +3058,26 @@ void Particle_SetSpawnIndex(Particle* arg0, s16 arg1) {
     arg0->spawnIndex = arg1;
 }
 
-void func_821407C8(s8 *arg0, unsigned char arg1)
+/**
+ * Sets byteParam1 (+0xCB).
+ * @unverified Name guessed from the code.
+ */
+void Particle_SetByteParam1(s8 *particle, unsigned char value)
 {
   s8 *new_var; // FAKE: permuter temp
-  new_var = (s8 *) (((s8 *) arg0) + 0xCB);
-  *new_var = arg1;
+  new_var = (s8 *) (((s8 *) particle) + 0xCB);
+  *new_var = value;
 }
 
-void func_821407D4(s8 *arg0, unsigned char arg1)
+/**
+ * Same as Particle_SetByteParam1.
+ * @unverified Name guessed from the code.
+ */
+void Particle_SetByteParam1Copy(s8 *particle, unsigned char value)
 {
   s8 *new_var; // FAKE: permuter temp
-  new_var = ((s8 *) arg0) + 0xCB;
-  *((s8 *) new_var) = arg1;
+  new_var = ((s8 *) particle) + 0xCB;
+  *((s8 *) new_var) = value;
 }
 
 /**

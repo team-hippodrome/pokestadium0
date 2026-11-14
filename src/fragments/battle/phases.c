@@ -1071,7 +1071,7 @@ void BattleScene_PhaseSubstitute(CameraNode* arg0) {
             if (sp18->flags & 0x800) {
                 BattleScene_ResetOwnerModelIfLoaded(sActingPokemon);
             }
-            if (BattleAnim_IsSessionBusy(sActingPokemon) == 0) {
+            if (BattleAnim_IsModelBusy(sActingPokemon) == 0) {
                 Battle_ClearRuntimeFlags(sActingPokemon, 0x800);
                 BattleScene_ResetCameraFrameCounter();
                 BattleMessage_ShowForSide((s32)gBattleMessageQueues->messageBuffers[0], sBattleScene.scene->actingSide);

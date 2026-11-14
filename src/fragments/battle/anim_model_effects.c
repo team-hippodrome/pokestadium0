@@ -28,7 +28,6 @@ M2C_UNK Particle_SetScratchB(s8 *, M2C_UNK);
 M2C_UNK func_8213831C(s8 *, M2C_UNK);
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32);
 M2C_UNK func_8213C9D0(s8 *);
-M2C_UNK func_8213E77C(s8 *);
 M2C_UNK func_821401D4(s8 *, M2C_UNK);
 M2C_UNK func_82143478(s8 *, M2C_UNK);
 extern M2C_UNK BattleAnim_RunBlizzardHitUpwardColdAir;
@@ -446,7 +445,7 @@ void BattleAnim_InitEffect65Overlay(Particle* arg0) {
     sp26 = BattleAnim_GetQueuedMoveId();
     sp24 = 0x17;
     sp22 = 0x8;
-    Particle_EffectList_SetU8_0BECC(arg0, 7);
+    Particle_SetEffectList(arg0, 7);
     Particle_SetScaleScaled(arg0, 1.0f);
     Particle_SetPosition(arg0, 160.0f, 120.0f, 0.0f);
 
@@ -508,7 +507,7 @@ void ParticleEffect_RegisterParticleNodes(void) {
 void BattleAnim_InitEffect28Overlay(Particle* arg0) {
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
 
-    Particle_EffectList_SetU8_0BECC(arg0, 7);
+    Particle_SetEffectList(arg0, 7);
     Particle_SetScaleScaled(arg0, 1.0f);
     Particle_SetPosition(arg0, 160.0f, 120.0f, 0.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp26);
@@ -1732,7 +1731,7 @@ void BattleAnim_SetupStrongWinds(Particle* arg0) {
     arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
     if (arg0->displayObject != NULL) {
         BattleAnim_InitModel(arg0->displayObject, 0x60);
-        Particle_EffectList_SetU8_0BECC(arg0, 7);
+        Particle_SetEffectList(arg0, 7);
         Particle_SetFlags(arg0, 0x200);
         Particle_SetScale(arg0, 3.3f);
         Particle_SetPrimAlpha(arg0, 0);
@@ -2013,7 +2012,7 @@ void BattleAnim_RunBoomUseEffect4(Particle* arg0) {
         return;
     case 3:
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
-        func_8213E77C(arg0);
+        Particle_RiseByStepMagnitude(arg0);
         if (func_82140690(arg0) != 0) {
             Particle_ApproachPrimGreen(arg0, 0, 0x14);
             Particle_ApproachEnvRed(arg0, 0, 0x14);
@@ -2400,7 +2399,7 @@ void BattleAnim_SetupBitingEffect(Particle* arg0) {
         }
         BattleAnim_BindModelAnim(arg0->displayObject, 0x56);
         Particle_SetFlags(arg0, 0x200);
-        Particle_EffectList_SetU8_0BECC(arg0, 7);
+        Particle_SetEffectList(arg0, 7);
         Particle_SetScale(arg0, 1.0f);
         ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x24);
         Particle_SetPrimAlpha(arg0, 0);
