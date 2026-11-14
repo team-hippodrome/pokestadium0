@@ -11,7 +11,7 @@ s32 ByteMatrix_CopyRow(ByteMatrix* arg0, s8* a1, s32 arg2);
 s32 ByteMatrix_CopyRowAt(ByteMatrix* arg0, s8* a1, s32 arg2);
 s32 WordList_Remove(unk_func_8830867C_04C_030_02C_000_000_00C* arg0, s32 arg1);
 void PointerList_Initialize(PointerList* arg0, void** arg1, s32 arg2, s32 arg3);
-void PointerList_Insert(unk_func_88200FA0_030_038* arg0, char* arg1, s32 arg2);
+void PointerList_Insert(PointerList* arg0, char* arg1, s32 arg2);
 void PointerList_Remove(LabMonEntryList* arg0, s32 arg1);
 void PointerList_SwapRange(void** arg0, void** arg1, s32 arg2);
 s32* Sort_SelectMedianPointer(s32* arg0, s32* arg1, s32* arg2, s32 (*arg3)(s32, s32));
@@ -181,10 +181,10 @@ void PointerList_Initialize(PointerList* arg0, void** arg1, s32 arg2, s32 arg3) 
 }
 
 /** Inserts a pointer into a pointer list at an index. */
-void PointerList_Insert(unk_func_88200FA0_030_038* arg0, char* arg1, s32 arg2) {
+void PointerList_Insert(PointerList* arg0, char* arg1, s32 arg2) {
     s32 var_t1;
-    unk_func_88205880_00D0** var_t0;
-    unk_func_88205880_00D0** var_v0;
+    void** var_t0;
+    void** var_v0;
 
     var_v0 = &arg0->items[arg0->count];
     var_t0 = var_v0 + 1;

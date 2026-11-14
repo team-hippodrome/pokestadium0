@@ -380,7 +380,7 @@ typedef struct unk_func_889000C4 {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ unk_func_889000C4_02C* unk_2C;
     /* 0x30 */ unk_func_88200FA0_030_030* unk_30;
-    /* 0x34 */ unk_func_88200FA0_030_038 unk_34;
+    /* 0x34 */ PointerList unk_34;
     /* 0x40 */ unk_func_88500994* unk_40;
     /* 0x44 */ unk_func_889000C4_044* unk_44;
 } unk_func_889000C4; // size = 0x48
@@ -834,7 +834,7 @@ typedef void (*func8850628C)(unk_func_88200FA0_030_030*);
 
 typedef void (*func8850633C)(unk_func_88200FA0_030_030_1CEA00*, LabMonEntryList*);
 
-typedef void (*func88506384)(unk_func_88200FA0_030_030*, unk_func_88200FA0_030_038*, MemoryPool*);
+typedef void (*func88506384)(unk_func_88200FA0_030_030*, PointerList*, MemoryPool*);
 
 typedef void (*func885063B8)(unk_func_88200FA0_030_030*, ByteMatrix*);
 
@@ -846,9 +846,9 @@ typedef void (*func88506CE4)(unk_func_88200FA0_030_030*);
 
 typedef void (*func88506DCC)(unk_func_8821421C_038_034*, s32, s32, void (*)(), s32, s32, s32, MemoryPool*);
 
-typedef void (*func88506EE4)(unk_func_8820BE14_02C_038*, unk_func_88200FA0_030_038*);
+typedef void (*func88506EE4)(unk_func_8820BE14_02C_038*, PointerList*);
 
-typedef void (*func88506F1C)(unk_func_8830867C_02C_034*, unk_func_88200FA0_030_038*, MemoryPool*);
+typedef void (*func88506F1C)(unk_func_8830867C_02C_034*, PointerList*, MemoryPool*);
 
 typedef void (*func88506F50)(unk_func_8821421C_038_034*, unk_func_8821421C_038_050**);
 

@@ -56,7 +56,7 @@ typedef struct unk_func_8830867C_02C_0B4 {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ WidgetAnimatedPanel* unk_2C;
     /* 0x30 */ unk_func_8830867C_02C_0B4_030* unk_30;
-    /* 0x34 */ unk_func_88200FA0_030_038 unk_34;
+    /* 0x34 */ PointerList unk_34;
 } unk_func_8830867C_02C_0B4; // size = 0x40
 
 typedef struct unk_func_8830867C_02C_0C0 {
@@ -445,7 +445,7 @@ typedef struct unk_func_8830867C_02C {
     /* 0x030 */ unk_func_8850B254* unk_030;
     /* 0x034 */ unk_func_8830867C_02C_034* unk_034;
     /* 0x038 */ unk_func_88500994* unk_038;
-    /* 0x03C */ unk_func_88200FA0_030_038 unk_03C;
+    /* 0x03C */ PointerList unk_03C;
     /* 0x048 */ unk_func_8830867C_02C_048* unk_048;
     /* 0x04C */ unk_func_8830867C_02C_04C* unk_04C;
     /* 0x050 */ unk_func_8830867C_02C_050* unk_050;
@@ -479,7 +479,7 @@ typedef struct unk_func_8830867C_02C {
     /* 0x0C0 */ unk_func_8830867C_02C_0C0* unk_0C0;
     /* 0x0C4 */ unk_func_882173EC* unk_0C4;
     /* 0x0C8 */ unk_func_882173EC* unk_0C8;
-    /* 0x0CC */ unk_func_88200FA0_030_038 unk_0CC;
+    /* 0x0CC */ PointerList unk_0CC;
     /* 0x0D8 */ s32 unk_0D8;
     /* 0x0DC */ unk_func_8830867C_02C_0DC* unk_0DC;
     /* 0x0E0 */ s32 unk_0E0;
@@ -489,7 +489,7 @@ typedef struct unk_func_8830867C_02C {
     /* 0x154 */ unk_func_8830867C_02C_154 unk_154[3];
     /* 0x1A8 */ unk_func_8830867C_02C_1A8 unk_1A8[3];
     /* 0x1D8 */ char unk1D8[0xA70];
-    /* 0xC48 */ unk_func_88200FA0_030_038 unk_C48;
+    /* 0xC48 */ PointerList unk_C48;
     /* 0xC54 */ unk_func_8830867C_02C_C54 unk_C54;
     /* 0xC84 */ unk_func_8830867C_02C_C54 unk_C84;
     /* 0xCB4 */ s32 unk_CB4;
@@ -739,7 +739,7 @@ s32 LabPCList_FilterByExactTypePair(LabMonEntry* arg0, unk_func_8830867C_02C_C54
 
 // pokemon_list_10.c
 s32 LabPCList_CanLearnMoveByLevelUp(s32 arg0, s32 arg1);
-void LabPCList_FlattenEntries(unk_func_88200FA0_030_038*, unk_func_8830867C_02C_144*);
+void LabPCList_FlattenEntries(PointerList*, unk_func_8830867C_02C_144*);
 void LabPCList_ReadDeckCategory(unk_func_8830867C_02C_154*);
 void LabPCList_WriteDeckCategory(unk_func_8830867C_02C_154*);
 
@@ -748,7 +748,7 @@ s32 LabPCList_CompareByPointer(LabMonEntry*, LabMonEntry*);
 void LabPCList_LoadAllBoxes(unk_func_8830867C_02C_144*);
 void LabPCList_SaveDirtyBoxes(unk_func_8830867C_02C_144*, s32);
 void LabPCList_InitDeckCategories(unk_func_8830867C_02C_154*, MemoryPool* arg1);
-void LabPCList_BuildTmHmList(unk_func_88200FA0_030_038*, unk_func_8830867C_02C_1A8*, unk_func_8830867C_02C_154*, s32, s32);
+void LabPCList_BuildTmHmList(PointerList*, unk_func_8830867C_02C_1A8*, unk_func_8830867C_02C_154*, s32, s32);
 void PokeIcon_AttachDepthBuffer(unk_func_8001A024*, ModelLoadContext*, DepthBuffer*);
 
 #endif // FRAGMENT_LAB_POKEMON_LIST_H

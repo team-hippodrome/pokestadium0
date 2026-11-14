@@ -5,19 +5,16 @@
 #include "global.h"
 #include "game_state.h"
 
+/* Every user (Pokemon_ToGbRecordExt, GbSave_SaveMainPokemon, Deck_WriteEntry) only reads unk_000[0], and
+ * the lab structs only hold pointers to it, so this looks like a pointer to one BattleMon; nothing
+ * sizes or indexes the rest. @unverified */
 typedef struct unk_func_88205880_00D0 {
     /* 0x000 */ BattleMon unk_000[20];
     /* 0x640 */ s32 unk_640;
     /* 0x644 */ s32 unk_644;
     /* 0x648 */ s32 unk_648;
     /* 0x64C */ u32 unk_64C;
-} unk_func_88205880_00D0; // size = 0x6A0
-
-typedef struct unk_func_88200FA0_030_038 {
-    /* 0x00 */ unk_func_88205880_00D0** items;
-    /* 0x04 */ s32 capacity;
-    /* 0x08 */ s32 count;
-} unk_func_88200FA0_030_038; // size = 0xC
+} unk_func_88205880_00D0; // size = 0x650
 
 typedef struct unk_func_88201DA0_034 {
     /* 0x0000 */ s32 unk_000;
@@ -105,7 +102,7 @@ s32 ByteMatrix_InsertRow(ByteMatrix*, s8*, s32);
 s32 ByteMatrix_RemoveRow(ByteMatrix*, s32);
 s32 WordList_Remove(unk_func_8830867C_04C_030_02C_000_000_00C*, s32);
 void PointerList_Initialize(PointerList*, void**, s32, s32);
-void PointerList_Insert(unk_func_88200FA0_030_038*, char*, s32);
+void PointerList_Insert(PointerList*, char*, s32);
 void PointerList_Remove(LabMonEntryList*, s32);
 void PointerList_Sort(LabMonEntryList*, unk_D_8831A1F8);
 void PointerList_Filter(LabMonEntryList*, LabMonEntryList*, func_func_8002D1AC, s32*);
