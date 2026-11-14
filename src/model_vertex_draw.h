@@ -98,8 +98,8 @@ typedef struct StadiumModel {
 } StadiumModel; // size = 0x204
 
 // model_vertex_draw.c
-void func_80035694(StadiumModel* model);
+void Model_BuildVertexLinks(StadiumModel* model);
 void Model_ApplyTransformCommands(ModelSegment*, ModelVertex*, StadiumModel*, f32);
-void func_80035E48(ModelSegment*, ModelVertex*);
+void Model_ApplyVertexOffsets(ModelSegment*, ModelVertex*);
 
 #endif // MODEL_VERTEX_DRAW_H

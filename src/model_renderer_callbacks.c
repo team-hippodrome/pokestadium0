@@ -27,14 +27,17 @@ void ModelRenderer_ApplySlotScale(u8 index);
 void ModelRenderer_RebuildSlotMatrix(u8 index);
 void ModelRenderer_ClearSlotModels(s32 arg0);
 
-void func_80032840(u32 arg0) {
+/**
+ * Loops over the three model slots of side `side` & 1 without doing anything (retail leftover).
+ */
+void ModelRenderer_UnusedSlotLoop(u32 side) {
     s32 i;
     StadiumModelSlot* slot;
 
-    if (arg0 < 4) {
-        arg0 &= 1;
+    if (side < 4) {
+        side &= 1;
         for (i = 0; i < 3; i++) {
-            slot = &D_800B0338[arg0][i];
+            slot = &D_800B0338[side][i];
             if (slot) {  // karodo
             }
         }
@@ -45,12 +48,16 @@ void func_80032840(u32 arg0) {
 
 extern s16 D_800AFB30[];
 
-s32 func_80032890(u32 arg0) {
-    if (arg0 >= 4) {
+/**
+ * Returns 1 when side `side`'s slot model has finished loading (state 3), or for an invalid side.
+ * @unverified Name read from the code; the battle thumbnail slide-in waits on it.
+ */
+s32 ModelRenderer_IsSlotModelReady(u32 side) {
+    if (side >= 4) {
         return 1;
     }
-    arg0 &= 1;
-    if (D_800AFB30[arg0] == 3) {
+    side &= 1;
+    if (D_800AFB30[side] == 3) {
         return 1;
     }
     return 0;
@@ -145,14 +152,19 @@ void ModelRenderer_UpdateSlotVertices(void) {
         ModelRenderer_RebuildSlotMatrix(index);
         ModelRenderer_ApplySlotScale(index);
         // Zero model slots are 0x7D0 bytes.
-        func_80036064((void*)((u8 (*)[3][0x7D0])D_800B0338)[index][D_800AFB28], &D_800AFB38[index].mtx);
+        Model_UpdateVertexPositions((void*)((u8 (*)[3][0x7D0])D_800B0338)[index][D_800AFB28], &D_800AFB38[index].mtx);
     }
 }
 
 extern Gfx D_800744D8[];
 extern Gfx D_80074540[];
 extern u16 D_80060484;
-Gfx* func_80032C74(Gfx* gfx) {
+/**
+ * Sets the combiner and colors for a slot model by the drawn object's type: a flickering red-orange
+ * by default, fixed orange for 0x92 and orange plus yellow primitive color for 0x7E.
+ * @unverified Name read from the code.
+ */
+Gfx* ModelRenderer_SetSlotModelColor(Gfx* gfx) {
     switch (D_8006049C->objectType) {
         default:
             gSPDisplayList(gfx++, D_800744D8);
@@ -171,11 +183,17 @@ Gfx* func_80032C74(Gfx* gfx) {
     return gfx;
 }
 
-Gfx* func_80032C74(Gfx*);
+Gfx* ModelRenderer_SetSlotModelColor(Gfx*);
 void func_80032A6C(void);
 extern Gfx D_80074410[];
 extern Gfx D_800744C0[];
-Gfx* func_80032D90(Gfx* gfx) {
+/**
+ * Geo callback that draws the current slot model of the active side: its deformable model in modes
+ * 0-1, or its segment's display list in modes 2-3, then advances to the next slot.
+ * Seen in play (2026-11-14): called during the opening battle.
+ * @unverified Name read from the code.
+ */
+Gfx* ModelRenderer_DrawSlotModel(Gfx* gfx) {
     u8 mode;
     void* vtx;
 
@@ -187,7 +205,7 @@ Gfx* func_80032D90(Gfx* gfx) {
         mode &= 1;
         if (D_800AFB30[mode] >= 2) {
             Gfx_AllocDisplayList(0xA0);
-            gfx = func_80032C74(gfx);
+            gfx = ModelRenderer_SetSlotModelColor(gfx);
             {
                 ModelSegment* segment = &D_800B0338[mode][D_800AFB28].model.segment;
                 {    Gfx *_gfx = (Gfx *)(gfx++);    _gfx->words.w0 = 0xDB060038;    _gfx->words.w1 = (s32) segment->vertexSegment;    }
@@ -206,7 +224,7 @@ Gfx* func_80032D90(Gfx* gfx) {
         case 3:
             vtx = Gfx_AllocDisplayList(0xA0);
             {    Gfx *_gfx = (Gfx *)(gfx++);    _gfx->words.w0 = 0xDA380002;    _gfx->words.w1 = (s32) D_80074410;    }
-            gfx = func_80032C74(gfx);
+            gfx = ModelRenderer_SetSlotModelColor(gfx);
             gfx = Model_Draw(gfx, &D_800B0338[mode][D_800AFB28].model, vtx);
             {    Gfx *_gfx = (Gfx *)(gfx++);    _gfx->words.w0 = 0xD8380002;    _gfx->words.w1 = 0x40;    }
             {    Gfx *_gfx = (Gfx *)(gfx++);    _gfx->words.w0 = 0xDE000000;    _gfx->words.w1 = (s32) D_800744C0;    }

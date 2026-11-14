@@ -51,9 +51,9 @@ f32 Math_DistancePointToSegment(
 s16 Model_GetVertexClass(s16* table, s32 index);
 s16 Model_GetVertexJoint(s16* arg0, s32 arg1);
 void Model_InitializeVertexPositions(ModelSegment* segment, MtxF* mtx, ModelVertex* mvtx);
-void func_80035694(StadiumModel* model);
+void Model_BuildVertexLinks(StadiumModel* model);
 void Model_ApplyTransformCommands(ModelSegment* segment, ModelVertex* vertices, StadiumModel* model, f32 deltaTime);
-void func_80035E48(ModelSegment* segment, ModelVertex* vertices);
+void Model_ApplyVertexOffsets(ModelSegment* segment, ModelVertex* vertices);
 
 /**
  * Empty function with no callers.
@@ -208,7 +208,7 @@ void Model_InitSkinned(StadiumModel* model, void* normalBuf,  void* mtxSeg, void
     model->scale.z = sp44;
     guScale(&D_800B35C8, 0.1f, 0.1f, 0.1f);
     Model_BuildVertexRuntimeData(model, temp_s0);
-    func_80035694(model);
+    Model_BuildVertexLinks(model);
 }
 
 /**
@@ -217,7 +217,7 @@ void Model_InitSkinned(StadiumModel* model, void* normalBuf,  void* mtxSeg, void
  */
 void Model_RebuildVertexData(StadiumModel* model, MtxF* mtx) {
     Model_BuildVertexRuntimeData(model, mtx);
-    func_80035694(model);
+    Model_BuildVertexLinks(model);
 }
 
 /**
@@ -559,7 +559,7 @@ void Model_ApplyVertexTransforms(StadiumModel* model) {
         Model_ApplySkinBone(segment, &model->transforms[i], i, mvtx);
     }
 
-    func_80035E48(segment, mvtx);
+    Model_ApplyVertexOffsets(segment, mvtx);
     Model_ApplyTransformCommands(segment, mvtx, model, 1.0f);
 }
 
