@@ -113,10 +113,10 @@ typedef struct GbSaveParty {
 // GbSave_GetBoxEntry: the current box in GbSaveMainData, or one of the four boxes of a box bank.
 typedef struct GbSaveBox {
     /* 0x000 */ u8 count; // Pokemon in the box; せいとん shows it as 00/30
-    /* 0x001 */ u8 species[31]; // @unverified: internal species indices ended by 0xFF (GbSave_SetBoxEntryCount); pokered wBoxSpecies
-    /* 0x020 */ GbPokemonRecord mons[30]; // @unverified: GbSave_SaveBoxPokemon; pokered wBoxMons
-    /* 0x3FE */ char otNames[30][6]; // @unverified: GbSave_SaveBoxPokemon; pokered wBoxMonOT
-    /* 0x4B2 */ char nicknames[30][6]; // @unverified: GbSave_SaveBoxPokemon; pokered wBoxMonNicks
+    /* 0x001 */ u8 species[31]; // internal species indices ended by 0xFF: 54 FF after いちらん moved ピカチュウ (0x54) into GB box 1
+    /* 0x020 */ GbPokemonRecord mons[30]; // the box Pokémon: mons[0] species 0x54, Lv25, HP 60, types 0x17 after the move to GB box 1, and the same bytes at cart SRAM 0x302D + 0x20
+    /* 0x3FE */ char otNames[30][6]; // original trainer names, GB charset, 0x50-terminated: otNames[0] = 8A 93 8B 50 (サトシ), also in cart SRAM
+    /* 0x4B2 */ char nicknames[30][6]; // nicknames, GB charset, 0x50-terminated: nicknames[0] = 99 94 50 (ハナ), also in cart SRAM
 } GbSaveBox; // size = 0x566
 
 // The main data of a Japanese Gen 1 save: the 0x1020 bytes read from SRAM 0x2580 (GbSave_ReadMainData)
@@ -142,14 +142,14 @@ typedef struct GbSaveMainData {
     /* 0x25C */ u8 numBoxItems; // PC item count; せいとん shows it as 001/050
     /* 0x25D */ BattleMonSpecies boxItems[50]; // {item ID, quantity} pairs ended by an ID of 0xFF
     /* 0x2C1 */ u8 unk_2C1; // Untouched; pokered puts the PC item list 0xFF terminator here.
-    /* 0x2C2 */ u8 currentBox[2]; // @unverified: read as a big-endian u16 >> 8: bit 0x80 boxes in use, low bits the box (GbSave_GetBoxCount); pokered wCurrentBoxNum
+    /* 0x2C2 */ u8 currentBox[2]; // read as a big-endian u16 >> 8: bit 0x80 boxes in use, low bits the box (GbSave_GetBoxCount); 80 00 with box 1 current
     /* 0x2C4 */ char unk2C4[0x1A9];
     /* 0x46D */ s8 pokedexEventFlags; // Event flag byte at SRAM 0x29ED: bit 0x20 got the Pokedex (GbSave_HasPokedex); set, ずかん (Pokedex) is enabled on the main menu
     /* 0x46E */ char unk46E[0xA5];
     /* 0x513 */ s8 unk_513; // bit 0 read by func_80022F48
     /* 0x514 */ char unk514[0x441];
     /* 0x955 */ GbSaveParty party;
-    /* 0xAAD */ GbSaveBox currentBoxData; // @unverified: GbSave_GetBoxEntry for the current box; pokered wBoxDataStart
+    /* 0xAAD */ GbSaveBox currentBoxData; // the current box (GbSave_GetBoxEntry): box 1 when currentBox was 0x80; saving wrote it to cart SRAM 0x302D
     /* 0x1013 */ char unk1013[0x1];
     /* 0x1014 */ u8 checksum; // (sum of 0x18..0x1013 & 0xFF) ^ 0xFF; SRAM 0x3594 (GbSave_ComputeChecksum)
     /* 0x1015 */ char unk1015[0xB];

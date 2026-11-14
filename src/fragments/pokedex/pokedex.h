@@ -107,29 +107,29 @@ typedef struct unk_D_80064C60 {
 /* The ずかんもくじ (index) list window: 151 rows of number, name and caught icon, and the アイウエオじゅん /
  * ばんごうじゅん (kana / number order) bar (Pokedex_InitListWindow, Pokedex_DrawSortOrderMenu). */
 typedef struct PokedexListWindow {
-    /* 0x000 */ Window window; // @unverified: typed from the function it is passed to
-    /* 0x02C */ ScrollList list; // @unverified: rows drawn by Pokedex_DrawListRow
-    /* 0x070 */ ByteMatrix entries; // @unverified: rows = the 0x1C-byte entries of D_80064C5C, 0x97 of them
+    /* 0x000 */ Window window; // the ずかんもくじ window, 272x366 at (54, 85)
+    /* 0x02C */ ScrollList list; // rows drawn by Pokedex_DrawListRow; D-Down moved list.cursor 0 -> 1, D-Right paged it to 9
+    /* 0x070 */ ByteMatrix entries; // rows = the 0x1C-byte entries of D_80064C5C: capacity and count 151, rowSize 28
     /* 0x080 */ u16 itemFlags[0x97]; // @unverified: itemFlags of list
     /* 0x1AE */ char pad1AE[0x2];
-    /* 0x1B0 */ s32 sortByKana; // @unverified: A toggles it (Pokedex_UpdateListCursor); picks the bar text and the row order
+    /* 0x1B0 */ s32 sortByKana; // C-Right (button bit 1, not A) toggles it (Pokedex_UpdateListCursor): 1 showed アイウエオじゅん with 023, 024, 119, 133 first; 0 ばんごうじゅん
 } PokedexListWindow; // size = 0x1B4
 
 /* The データをみる / なきごえ / ぶんぷをみる / やめる (data, cry, area, quit) menu window (Pokedex_InitSortMenuWindow). */
 typedef struct PokedexMenuWindow {
-    /* 0x00 */ Window window; // @unverified: typed from the function it is passed to
-    /* 0x2C */ Menu menu; // @unverified: rows drawn by Pokedex_DrawMenuRow
+    /* 0x00 */ Window window; // 180x168 at (390, 262)
+    /* 0x2C */ Menu menu; // rows drawn by Pokedex_DrawMenuRow: データをみる, なきごえ, ぶんぷをみる, やめる; D-Down moved menu.cursor to 1
     /* 0x50 */ u16 itemFlags[4]; // @unverified: itemFlags of menu; bit 0 = disabled (func_8A1013C0)
-    /* 0x58 */ PointerList items; // @unverified: func_80027804 over the 4 strings D_8A1057E8
+    /* 0x58 */ PointerList items; // func_80027804 over the 4 strings D_8A1057E8 (count 4)
 } PokedexMenuWindow; // size = 0x64
 
 /* The ずかんもくじ screen, D_8A12FFC0 (Pokedex_InitIndexWindows). The code also reaches the windows through
  * their own symbols D_8A130174, D_8A1301A0 and D_8A130204. */
 typedef struct PokedexIndexScreen {
-    /* 0x000 */ PokedexListWindow listWindow; // @unverified: typed from the function it is passed to
-    /* 0x1B4 */ Window countsWindow; // @unverified: みつけたかず / つかまえたかず / もっているかず (Pokedex_DrawCounts)
-    /* 0x1E0 */ PokedexMenuWindow menuWindow; // @unverified: typed from the function it is passed to
-    /* 0x244 */ Window entryWindow; // @unverified: the データをみる page (Pokedex_InitEntryWindow), also reached as D_8A130204
+    /* 0x000 */ PokedexListWindow listWindow; // the ずかんもくじ list
+    /* 0x1B4 */ Window countsWindow; // みつけたかず / つかまえたかず / もっているかず (Pokedex_DrawCounts), 248x104 at (342, 114)
+    /* 0x1E0 */ PokedexMenuWindow menuWindow; // the データをみる / なきごえ / ぶんぷをみる / やめる menu
+    /* 0x244 */ Window entryWindow; // the データをみる page (Pokedex_InitEntryWindow), also reached as D_8A130204: 552x348 at (44, 84) with ヒトカゲ's entry
 } PokedexIndexScreen; // size = 0x270
 
 #include "controller.h"

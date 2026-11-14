@@ -38,7 +38,7 @@ typedef struct GridMenu {
     /* 0x18 */ Controller* controller;
     /* 0x1C */ s32 unk_1C;
     /* 0x20 */ s32 options;
-    /* 0x24 */ s32 columns; // @unverified: GridMenu_UpdateCursor and GridMenu_DrawItems lay the items out in this many columns
+    /* 0x24 */ s32 columns; // items per row: 2 for the six ポケモンのせいり buttons, where D-Down moved the cursor by 2
 } GridMenu; // size = 0x28
 
 /* A scrolling one-column list (ScrollList_*). Some screens put other fields right after its 0x44
