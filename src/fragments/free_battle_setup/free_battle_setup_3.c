@@ -70,7 +70,7 @@ void FreeBattle_DrawRentalTeamPanels(s8* arg0);
 M2C_UNK GridMenu_UpdateCursor();                            /* extern */
 extern char D_800735C4[];
 
-void func_82003688(s32 arg0);
+void FreeBattle_UpdateTeamSlotCursor(s32 arg0);
 
 
 M2C_UNK FreeBattle_BuildBattleRosters(s8 *, s8 *, s8 *, s32, s32, s32); /* extern */
@@ -84,7 +84,7 @@ s32 func_80025BD8(void);
 void func_80027FF8(void*, s32);
 s32 func_80002D98(s32);
 void FreeBattle_InitBattleModeScreen(s32);
-void func_8200573C(void);
+void FreeBattle_CreateScreen(void);
 
 void Cont_StartReadInputs(void);                            /* extern */
 void Cont_ReadInputs(void);                            /* extern */
@@ -106,14 +106,14 @@ s32 FreeBattle_DrawScreenWithSummary(s32 arg0);
 M2C_UNK func_80002DC0(s32);                         /* extern */
 extern s32 D_8200AD28;
 
-void func_82005958(void);
+void FreeBattle_FreeScreen(void);
 
 extern s32 D_8200AD08[8];
 extern s32 D_8200AC40;
 extern s32 D_820090DC[8];
 s32 func_800044AC(s32, s32);
 
-void func_8200597C(void);
+void FreeBattle_LoadArchiveFiles(void);
 
 s32 Font_Init(s32 load_size, s32 side);
 s8 *PokeIcon_AllocFramebuffers(s32 arg0);
@@ -132,7 +132,7 @@ void func_80006998(s32);
 void func_8000A7FC(s32);
 void func_80006724(void);
 void func_8000675C(void);
-s32 func_8200579C(s32);
+s32 FreeBattle_UpdateFade(s32);
 extern u8 D_81000000[];
 extern u8 D_0015B1A0[];
 extern u8 D_0015E220[];
@@ -160,18 +160,27 @@ extern s32 D_8200AD00;
 extern s32 D_8200AD04;
 extern s32 D_8200AD28;
 extern s32 D_82008F84;
-M2C_UNK func_820059EC(void);
+M2C_UNK FreeBattle_RunSetupScreen(void);
 
 M2C_UNK func_8000256C(M2C_UNK);                     /* extern */
 M2C_UNK func_80002620(M2C_UNK);                     /* extern */
 M2C_UNK func_80025BA0(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, s32); /* extern */
-M2C_UNK func_820059EC();                            /* extern */
-M2C_UNK func_82008F14();                            /* extern */
+M2C_UNK FreeBattle_RunSetupScreen();                            /* extern */
+M2C_UNK FreeBattle_SetupGbCartVersus();                            /* extern */
 extern s8 D_00235D70;
 extern s8 D_00238BD0;
 extern s32 D_82008F84;
 extern s8 D_88000000;
-s32 func_82005CCC(s32 arg0, M2C_UNK arg1);
+/**
+ * Entry point of the battle setup fragment: pushes the 'MENT' pool state, runs the setup screen
+ * (or, when `mode` is 1, FreeBattle_SetupGbCartVersus), pops the state and, when the screen was
+ * left with B (0x8040), queues the main menu. Returns 0x8040 (back to the main menu) or 0x8050
+ * (start the battle).
+ * Seen in play (2026-11-14): ran with `mode` 0 when はい was picked on the main menu's バトル
+ * prompt. Both callers (main_menu.c, main_menu_entry.c) pass 0, so the `mode` 1 branch is not
+ * reachable in retail.
+ */
+s32 FreeBattle_Main(s32 arg0, M2C_UNK arg1);
 
 extern Color_RGBA8 D_82009100;
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
@@ -602,7 +611,14 @@ s32 FreeBattle_UpdateOpponentSelect(FreeBattleOpponentWindow* arg0) {
     return result;
 }
 
-void func_82006AC0(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
+/**
+ * Menu row callback of the tag opponent window: prints one option, highlighted when `flags`
+ * has 0x10 and translucent when it has 1 (disabled).
+ * Not reached in play: the tag opponent window is never opened (see
+ * FreeBattle_InitTagOpponentSelect).
+ * @unverified Name from the code.
+ */
+void FreeBattle_DrawTagOpponentOption(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
     UNUSED s32 pad[4]; // FAKE: stack padding
     Color_RGBA8 c;
 
@@ -621,20 +637,17 @@ void func_82006AC0(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
 }
 
 
-/*
- * func_82006BB8
- *
- * Reads the word at arg0 + 0xBC, inverts it, and for each of bits 1, 2 and 3
- * of the inverted value (masks 2, 4 and 8) sets bit 0 in three of the six
- * halfwords of the array that arg0 + 0x70 points to:
- *   bit 1 -> halfwords 0, 3, 4
- *   bit 2 -> halfwords 1, 3, 5
- *   bit 3 -> halfwords 2, 4, 5
- * What the flags word and the halfwords mean is not established here; the
- * bank pointer is re-read from arg0 for every update because the compiler is
- * not told the stores cannot change it.
+/**
+ * Disables (bit 0) the opponent options of the tag opponent window that need a controller that is
+ * not plugged in: no 2P disables 2P, 2P&3P and 2P&4P; no 3P disables 3P, 2P&3P and 3P&4P; no 4P
+ * disables 4P, 2P&4P and 3P&4P.
+ * The bank pointer is re-read from `window` for every update because the compiler is not told the
+ * stores cannot change it.
+ * Not reached in play: the tag opponent window is never opened (see
+ * FreeBattle_InitTagOpponentSelect).
+ * @unverified Name from the code.
  */
-void func_82006BB8(FreeBattleTeamOpponentWindow* arg0) {
+void FreeBattle_DisableAbsentTagOpponents(FreeBattleTeamOpponentWindow* arg0) {
     s32 inv;
 
     inv = ~arg0->controllerMask;
@@ -659,29 +672,21 @@ extern M2C_UNK D_82009190;
 extern M2C_UNK D_820091A0;
 extern M2C_UNK D_82009FCC;
 
-/*
- * func_82006C74
- *
- * Initializes the object arg0 (layout not established): the same shape as
- * FreeBattle_InitOpponentSelect, but the embedded window starts at arg0 + 4 (Window_SetRect with
- * 0x192 x 0x163), the words at 0x28 and 0x2C are cleared, the word at 0x18 is set to
- * 0x801 and the pointer at 0x24 to &D_82009FCC. Calls func_80027804 on the
- * sub-objects at arg0 + 0x30 (&D_82009190, 4, 4) and arg0 + 0x3C (&D_820091A0, 7, 7),
- * and Menu_Init on (0x48, 0x30, 0x90) and (0x6C, 0x3C, 0x98), both with the
- * callback func_82006AC0, 0x74 and 0x1C; sets bit 0x10000 in the words at 0x68 and
- * 0x8C and stores arg3 at 0xBC.
- *
- * Then, with mask = ~arg3 (OR 0xE when arg4 == 2): for each of the bits 2, 4 and 8 that
- * is set in mask, sets bit 0 of the halfword at offset 2, 4 or 6 of the record
- * pointed to by the word at arg0 + 0x4C. Finally calls func_82006BB8(arg0), stores
- * 1 at offset 0 and arg5 at 0xC4.
- *
- * What the object, the bits and the values mean is not established. Matching
- * notes: the sub-object addresses are held in the locals sp2C and sp28 (the ROM
- * spills them), the unused leading `pad` places the spill slots, and arg5 is stored
- * before the constant 1 so that its load comes first.
+/**
+ * Sets up the tag opponent window, a version of 「あいてをせんたく」 for two-player teams: a side
+ * menu (1P, 1P&2P, 1P&3P, 1P&4P; D_82009190) and an opponent menu (2P, 3P, 4P, 2P&3P, 2P&4P,
+ * 3P&4P, COM; D_820091A0), both drawn by FreeBattle_DrawTagOpponentOption. Options that need an
+ * absent controller (`controllerMask`) are disabled, all partner options when `controllerCount`
+ * is 2.
+ * Matching notes: the sub-object addresses are held in the locals sp2C and sp28 (the ROM spills
+ * them), the unused leading `pad` places the spill slots, and arg5 is stored before the constant 1
+ * so that its load comes first.
+ * Not reached in play: nothing calls it. FreeBattleScreen keeps room for the window at 0x45C8 and
+ * FreeBattle_DrawScreen draws it in state 6, but FreeBattle_SetScreenState never opens state 6;
+ * Free Battle only offers 1P against one opponent.
+ * @unverified Name from the code.
  */
-void func_82006C74(FreeBattleTeamOpponentWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+void FreeBattle_InitTagOpponentSelect(FreeBattleTeamOpponentWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s32 pad; // FAKE: stack padding
     void *sp2C;
     void *sp28;
@@ -695,11 +700,11 @@ void func_82006C74(FreeBattleTeamOpponentWindow* arg0, s32 arg1, s32 arg2, s32 a
     sp2C = &arg0->sideItemList;
     func_80027804(sp2C, (s32)&D_82009190, 4, 4);
     sp28 = &arg0->sideMenu;
-    Menu_Init(sp28, sp2C, &arg0->sideItemFlags, (void (*)(s32, s32, char *, s32, s32, s32 *))func_82006AC0, 0x74, 0x1C);
+    Menu_Init(sp28, sp2C, &arg0->sideItemFlags, (void (*)(s32, s32, char *, s32, s32, s32 *))FreeBattle_DrawTagOpponentOption, 0x74, 0x1C);
     sp2C = &arg0->opponentItemList;
     arg0->sideMenu.options = (s32) (arg0->sideMenu.options | 0x10000);
     func_80027804(sp2C, (s32)&D_820091A0, 7, 7);
-    Menu_Init(&arg0->opponentMenu, sp2C, &arg0->opponentItemFlags, (void (*)(s32, s32, char *, s32, s32, s32 *))func_82006AC0, 0x74, 0x1C);
+    Menu_Init(&arg0->opponentMenu, sp2C, &arg0->opponentItemFlags, (void (*)(s32, s32, char *, s32, s32, s32 *))FreeBattle_DrawTagOpponentOption, 0x74, 0x1C);
     arg0->opponentMenu.options = (s32) (arg0->opponentMenu.options | 0x10000);
     arg0->controllerMask = arg3;
     var_v1 = ~arg3;
@@ -715,13 +720,20 @@ void func_82006C74(FreeBattleTeamOpponentWindow* arg0, s32 arg1, s32 arg2, s32 a
     if (var_v1 & 8) {
         arg0->sideMenu.itemFlags[3] |= 1;
     }
-    func_82006BB8(arg0);
+    FreeBattle_DisableAbsentTagOpponents(arg0);
     arg0->unk_C4 = arg5;
     arg0->focus = 1;
 }
 
 
-void func_82006DF8(FreeBattleTeamOpponentWindow* arg0) {
+/**
+ * Draws the tag opponent window: the side menu, the opponent menu and the controller panel with
+ * the picked players marked.
+ * Not reached in play: FreeBattle_DrawScreen draws it for screen state 6, which
+ * FreeBattle_SetScreenState never sets.
+ * @unverified Name from the code.
+ */
+void FreeBattle_DrawTagOpponentSelect(FreeBattleTeamOpponentWindow* arg0) {
     s32 maskB = 0xFED, maskA = 0xFED;
     s32 pad[1]; // FAKE: stack padding
     s32 markA = 0;
@@ -788,7 +800,13 @@ void Menu_ClearItemFlags(u8*, void*);
 #define SET_PAIR_82007030(owner, first, second, count) \
     (owner)->players[2] = (first); (owner)->players[3] = (second); (owner)->playerCount += (count)
 
-s32 func_82007030(FreeBattleTeamOpponentWindow* arg0) {
+/**
+ * Input of the tag opponent window: A on the side menu fills players[0..1] and moves to the
+ * opponent menu, A there fills players[2..3]; returns 1 when both sides are picked, -1 on B.
+ * Not reached in play: nothing calls it (no screen state updates the tag opponent window).
+ * @unverified Name from the code.
+ */
+s32 FreeBattle_UpdateTagOpponentSelect(FreeBattleTeamOpponentWindow* arg0) {
     s32 result = 0;
     u32 res;
 
@@ -851,7 +869,7 @@ s32 func_82007030(FreeBattleTeamOpponentWindow* arg0) {
                 func_8003F6AC(3);
                 arg0->focus = 1;
                 Menu_ClearItemFlags((u8*)&arg0->opponentMenu, arg0);
-                func_82006BB8(arg0);
+                FreeBattle_DisableAbsentTagOpponents(arg0);
             } else if (res == 1) {
                 func_8003F6AC(2);
                 switch ((u32)arg0->opponentMenu.cursor) {
@@ -1143,20 +1161,14 @@ extern Color_RGBA8 D_820091E4[2];
 extern FreeBattleMonGridConfig D_820091EC[2];
 
 /**
- * Initializes the FreeBattleMonGridWindow arg0 and fills in a
- * per-entry table. Stores arg4 and arg5 in the second word of the two entries of
- * the 12-byte table D_820091EC, selects entry 1 when arg3 == 2 (otherwise entry 0),
- * calls Window_SetRect(arg0, arg1, arg2, 0x235, 0x174), clears the words at 0x20, 0x24
- * and 0x28 and sets the word at 0x14 to 0x801. Copies the selected entry's first word to
- * 0x20 and builds the sub-object at arg0 + 0xCC with func_80027410 from the entry's
- * second and third words (stride 0x50, width 0x50). Calls func_80018168(arg6), stores
- * arg6 at 0xDC and then, for each of the 0xD4 entries (stride 0x50 starting at the
- * pointer stored at 0xCC), calls func_80018234 with the entry's first byte and an
- * RGBA5551 value packed from the color D_820091E4[i & 1] (the top five bits of red, green
- * and blue go to bits 15-11, 10-6 and 5-1, and bit 0 is set).
- * What the object is and what the constants mean is not established.
+ * Sets up the 7x6 grid of the Pokémon a rule allows, 「たいせんでつかえるポケモンは４０ぴき」 (40 Pokémon
+ * can battle) or 「…３３びき」 for L1-30: picks config 1 (`ruleCategory` 2, L1-30, list `l130Mons`)
+ * or config 0 (`allMons`), sets the window's title and rows, and registers each Pokémon's icon in
+ * `icons` with a checkered cell color from D_820091E4.
+ * Seen in play (2026-11-14): ran with ruleCategory 0 when 4) エントリーできるポケモン ４０しゅるい was
+ * picked on the フリーバトル rules (40 Pokémon shown) and with 2 on the L1-30 rules (33 shown).
  */
-void func_82007C30(FreeBattleMonGridWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s8* arg6) {
+void FreeBattle_InitUsableMonGrid(FreeBattleMonGridWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s8* arg6) {
     FreeBattleMonGridConfig* cfg;
     u8* entry;
     s32 sel;
@@ -1198,7 +1210,11 @@ void func_800189C0(s32, s32);
 void BgStage_DrawFrame(void);
 s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
 
-void func_82007D94(FreeBattleMonGridWindow* arg0, s32 arg1) {
+/**
+ * Draws the usable Pokémon grid: 42 checkered cells, then each Pokémon's name and icon.
+ * Seen in play (2026-11-14): drew the 40 (Free Battle) and 33 (L1-30) Pokémon grids.
+ */
+void FreeBattle_DrawUsableMonGrid(FreeBattleMonGridWindow* arg0, s32 arg1) {
     s32 i;
     s32 x;
     s32 y;
@@ -1232,14 +1248,11 @@ void func_82007D94(FreeBattleMonGridWindow* arg0, s32 arg1) {
 
 extern s32 D_800603C0;
 
-/*
- * func_82008044
- *
- * Returns 0 immediately unless the word at arg0 + 0x28 is 1 or 2. Otherwise
- * reads func_8002BC14(D_800603C0): -1 or 1 calls func_8003F6AC(3) and returns
- * -1; any other value returns 0.
+/**
+ * Input of the usable Pokémon grid: A or B closes it (returns -1); otherwise 0.
+ * Seen in play (2026-11-14): ran while the grid was shown; B went back to the rules list.
  */
-s32 func_82008044(FreeBattleMonGridWindow* arg0) {
+s32 FreeBattle_UpdateUsableMonGrid(FreeBattleMonGridWindow* arg0) {
     s32 result = 0;
     s32 tmp;
 
@@ -1261,9 +1274,8 @@ extern Color_RGBA8 D_82009210;
 extern u8 D_8200A0A0[];
 /**
  * Sets up the ちゅうい！！ (warning) window for duplicate species.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14): opened 「ちゅうい！！ おなじポケモンが ２たいいます」 when a rental team in
+ * L1～30 Battle held two スピアー (one poked in RAM).
  */
 void FreeBattle_InitDuplicateWarning(FreeBattleDuplicateWarning* arg0, s32 arg1, s32 arg2, s32 arg3) {
     Window_SetRect(arg0, arg1, arg2, 0x148, 0x68);
@@ -1288,9 +1300,8 @@ extern char D_8200A0B0[];
 
 /**
  * Draws おなじポケモンが %dたいいます (there are %d of the same Pokemon).
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14): drew 「おなじポケモンが ２たいいます しゅつじょうするポケモンを １たい
+ * えらんでください」 (two of the same Pokémon; pick one to send out).
  */
 void FreeBattle_DrawDuplicateWarning(FreeBattleDuplicateWarning* arg0) {
     if (func_8002AE6C() == 0) {
@@ -1427,9 +1438,8 @@ void func_8000B2F4(s32);
  * stores D_800603C0 and then arg3 in the word at 0xA4, calling func_8000B2F4
  * with each value in turn. Finally stores arg3 at 0xB0.
  * What the object is and what the constants mean is not established.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-14): opened the 155 level-sum warning in L50～55 Battle (はい / いいえ under
+ * 「レンタルポケモンからえらぶ？」).
  */
 void FreeBattle_InitLevelSumWarning(FreeBattleLevelSumWarning* arg0, s32 arg1, s32 arg2, s32 arg3) {
     Window_SetRect(arg0, arg1, arg2, 0x134, 0x92);
@@ -1465,9 +1475,7 @@ extern char D_8200A198[];
  * on the two sub-objects with 2 for the one whose index (0 for +0x2C, 1 for +0x68)
  * equals the selection at +0xA8 and 0 for the other.
  * What the constants mean is not established.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-14): drew the 155 level-sum warning with its はい / いいえ buttons.
  */
 void FreeBattle_DrawLevelSumWarning(FreeBattleLevelSumWarning* arg0) {
     if (func_8002AE6C() == 0) {
@@ -1492,9 +1500,7 @@ M2C_UNK func_8003F6AC(M2C_UNK);
 
 /**
  * Handles the level sum warning.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14): ran while the 155 level-sum warning was open.
  */
 s32 FreeBattle_UpdateLevelSumWarning(FreeBattleLevelSumWarning* arg0) {
     s32 ret = 0;

@@ -22,7 +22,7 @@ void FreeBattle_InitCupSelect(s8* arg0, s32 arg1, s32 arg2, s32 arg3);
 void FreeBattle_InitOpponentSelect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5);
 void FreeBattle_InitEntryScreen(FreeBattleScreen* arg0);
 void FreeBattle_InitPopupMenu(s8* arg0, s32 arg1, s32 arg2, List82004518* arg3, s8* arg4, Color_RGBA8 arg5);
-void func_82007C30(FreeBattleMonGridWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s8* arg6);
+void FreeBattle_InitUsableMonGrid(FreeBattleMonGridWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s8* arg6);
 void BlinkingTextBox_Init(s8* arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4);
 s32 Save_GetProgressFlags(void);
 extern u8 D_82009014[];
@@ -161,7 +161,7 @@ void FreeBattle_SetScreenState(FreeBattleScreen* arg0, s32 arg1, s32 arg2) {
             break;
         case 14:
             if (!(arg2 & 2)) {
-                func_82007C30(&arg0->monGridWindow, 0x25, 0x50, arg0->unk_4374, D_8200ACFC, D_8200AD00, (s8*)D_8200AC50);
+                FreeBattle_InitUsableMonGrid(&arg0->monGridWindow, 0x25, 0x50, arg0->unk_4374, D_8200ACFC, D_8200AD00, (s8*)D_8200AC50);
             }
             view = &arg0->monGridWindow;
             break;
@@ -253,9 +253,9 @@ extern u8 D_82008F50[];
 void FreeBattle_DrawBattleModeWindow(s8*);
 void FreeBattle_DrawMenuWindow(s8*, s32);
 void FreeBattle_DrawPopupMenu(s8*, s32);
-void func_82007D94(FreeBattleMonGridWindow*, s32);
+void FreeBattle_DrawUsableMonGrid(FreeBattleMonGridWindow*, s32);
 void FreeBattle_DrawOpponentSelect(s8*);
-void func_82006DF8(FreeBattleTeamOpponentWindow*);
+void FreeBattle_DrawTagOpponentSelect(FreeBattleTeamOpponentWindow*);
 void FreeBattle_DrawCupSelect(s8*, s32);
 void FreeBattle_DrawRentalScreen(s8*);
 void BlinkingTextBox_Draw(s8*);
@@ -288,7 +288,7 @@ M2C_UNK FreeBattle_DrawScreen(FreeBattleScreen* arg0) {
             FreeBattle_DrawPopupMenu(base + 0x4EAC, 0);
             break;
         case 14:
-            func_82007D94(base + 0x4F30, 0);
+            FreeBattle_DrawUsableMonGrid(base + 0x4F30, 0);
             break;
         case 5:
             FreeBattle_DrawMenuWindow(base + 0x43E4, 0x10);
@@ -298,7 +298,7 @@ M2C_UNK FreeBattle_DrawScreen(FreeBattleScreen* arg0) {
         case 6:
             FreeBattle_DrawMenuWindow(base + 0x43E4, 0x10);
             FreeBattle_DrawMenuWindow(base + 0x4468, 0x10);
-            func_82006DF8(base + 0x45C8);
+            FreeBattle_DrawTagOpponentSelect(base + 0x45C8);
             break;
         case 7:
         case 8:
@@ -341,7 +341,7 @@ s32 FreeBattle_UpdatePopupMenu(s8*);
 s32 FreeBattle_UpdateOpponentSelect(s8*);
 s32 FreeBattle_UpdateBattleModeWindow(s8*);
 s32 FreeBattle_UpdateCupSelect(s8*);
-s32 func_82008044(FreeBattleMonGridWindow*);
+s32 FreeBattle_UpdateUsableMonGrid(FreeBattleMonGridWindow*);
 extern s32 D_800603C0;
 extern s32 D_82008F84;
 extern u8 D_8200AC58[];
@@ -444,7 +444,7 @@ s32 FreeBattle_UpdateScreen(FreeBattleScreen* arg0) {
             }
             break;
         case 14:
-            if (func_82008044(&arg0->monGridWindow) == -1) {
+            if (FreeBattle_UpdateUsableMonGrid(&arg0->monGridWindow) == -1) {
                 FreeBattle_SetScreenState(arg0, 0xC, 1);
             }
             break;
@@ -580,9 +580,9 @@ s32 FreeBattle_UpdateScreen(FreeBattleScreen* arg0) {
 
 /**
  * Reopens the rule menu with the choice saved from the previous visit.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14): a write watchpoint on +0x4418 stopped in it when a surrendered COM
+ * Free Battle returned to the battle setup screen, which reopened on 「たいせんルールせんたく」 (state 2)
+ * instead of the バトルモード window.
  */
 void FreeBattle_RestoreMenuState(FreeBattleScreen* arg0) {
     s32 var_v0;
@@ -617,7 +617,13 @@ extern M2C_UNK D_8200AD30;
 s32 func_80025BD8(void);
 void func_80027FF8(void*, s32);
 s32 func_80002D98(s32);
-void func_8200573C(void) {
+/**
+ * Reads the GB save summary of the active port (if any), allocates the 0x5020-byte
+ * FreeBattleScreen (D_8200AD28) and opens it on the battle mode window.
+ * Seen in play (2026-11-14): ran once when バトル was entered from the main menu, before the
+ * バトルモード window appeared.
+ */
+void FreeBattle_CreateScreen(void) {
     D_8200AD2C = func_80025BD8();
     if (D_8200AD2C != -1) {
         func_80027FF8(&D_8200AD30, D_8200AD2C);
@@ -631,7 +637,7 @@ extern s32 D_820090D4;
 extern s32 D_820090D8;
 /*
  * Second name for D_820090D4. The fade-out store in this function family
- * (also func_8200579C, func_8900429C, LabPCList_UpdateFade, func_8A101B30) does not
+ * (also FreeBattle_UpdateFade, func_8900429C, LabPCList_UpdateFade, func_8A101B30) does not
  * share the counter's address with the load before it, which only happens
  * when the two accesses name different symbols.
  */
@@ -641,7 +647,13 @@ M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void BgStage_DrawFrame(void);
 M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32);
 void func_8002C8D8(Col8200579C*, Col8200579C, f32);
-s32 func_8200579C(FreeBattleScreen* arg0) {
+/**
+ * Fade callback: draws the stage, the GB summary bar and the screen background tinted by an
+ * 8-step counter that counts up to 8 and then back down.
+ * Seen in play (2026-11-14): ran as the battle setup screen faded in from the main menu, and
+ * again as it faded out when B left the バトルモード window.
+ */
+s32 FreeBattle_UpdateFade(FreeBattleScreen* arg0) {
     Col8200579C sp2C;
     M2C_UNK *var_a1;
     s32 n;
@@ -716,7 +728,11 @@ s32 FreeBattle_DrawScreenWithSummary(FreeBattleScreen* arg0) {
 M2C_UNK func_80002DC0(s32);                         /* extern */
 extern s32 D_8200AD28;
 
-void func_82005958(void) {
+/**
+ * Frees the FreeBattleScreen allocated by FreeBattle_CreateScreen.
+ * Seen in play (2026-11-14): ran after B on the バトルモード window, as the screen closed.
+ */
+void FreeBattle_FreeScreen(void) {
     func_80002DC0(D_8200AD28);
 }
 
@@ -725,7 +741,12 @@ extern s32 D_8200AC40;
 extern s32 D_820090DC[8];
 s32 func_800044AC(s32, s32);
 
-void func_8200597C(void) {
+/**
+ * Loads the eight files listed in D_820090DC from the archive D_8200AC40 into D_8200AD08.
+ * Seen in play (2026-11-14): ran once while the battle setup screen was set up; what the eight
+ * files hold was not checked.
+ */
+void FreeBattle_LoadArchiveFiles(void) {
     s32 i;
 
     for (i = 0; i < 8; i++) {
@@ -750,7 +771,7 @@ void func_80006998(s32);
 void func_8000A7FC(s32);
 void func_80006724(void);
 void func_8000675C(void);
-s32 func_8200579C(FreeBattleScreen*);
+s32 FreeBattle_UpdateFade(FreeBattleScreen*);
 extern u8 D_81000000[];
 extern u8 D_0015B1A0[];
 extern u8 D_0015E220[];
@@ -778,7 +799,15 @@ extern s32 D_8200AD00;
 extern s32 D_8200AD04;
 extern s32 D_8200AD28;
 extern s32 D_82008F84;
-M2C_UNK func_820059EC(void) {
+/**
+ * Sets up the battle setup screen (font, Pokémon icons, model archives, segments), opens it and
+ * runs it until it closes: a fade in, FreeBattle_RunFrame every frame, then a fade out, and frees
+ * the screen. After a battle (transitionFlags & 0x100) it reopens the menu the player came from
+ * (FreeBattle_RestoreMenuState) instead of the battle mode window.
+ * Seen in play (2026-11-14): ran each time バトル was entered from the main menu, and when a
+ * surrendered COM battle returned to 「たいせんルールせんたく」.
+ */
+M2C_UNK FreeBattle_RunSetupScreen(void) {
     Font_Init(0x3C, 0);
     D_8200AC44 = PokeIcon_AllocFramebuffers(1);
     D_8200AC48 = func_80018F2C(D_8200AC44, 0x80, 0x78, 0, 0, 0x78, 0x78, 0);
@@ -798,8 +827,8 @@ M2C_UNK func_820059EC(void) {
     D_8200ACFC = func_80001B10(D_0A000000);
     D_8200AD00 = func_80001B10(D_0A000C80);
     D_8200AD04 = func_80001B10(D_0A0016D0);
-    func_8200597C();
-    func_8200573C();
+    FreeBattle_LoadArchiveFiles();
+    FreeBattle_CreateScreen();
     func_8000675C();
 
     if (gSessionContext.transitionFlags & 0x100) {
@@ -809,7 +838,7 @@ M2C_UNK func_820059EC(void) {
         func_80006828(0x11, FreeBattle_DrawScreenWithSummary);
         func_8000A7B0(9);
     } else {
-        func_80006828(8, func_8200579C);
+        func_80006828(8, FreeBattle_UpdateFade);
     }
     func_80006828(0, FreeBattle_RunFrame);
 
@@ -819,34 +848,43 @@ M2C_UNK func_820059EC(void) {
         func_80006828(0x11, FreeBattle_DrawScreenWithSummary);
         func_8000A7FC(0xF);
     } else {
-        func_80006828(8, func_8200579C);
+        func_80006828(8, FreeBattle_UpdateFade);
     }
     func_80006724();
-    func_82005958();
+    FreeBattle_FreeScreen();
 }
 
 M2C_UNK func_8000256C(M2C_UNK);                     /* extern */
 M2C_UNK func_80002620(M2C_UNK);                     /* extern */
 M2C_UNK func_80025BA0(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, s32); /* extern */
-M2C_UNK func_820059EC();                            /* extern */
-M2C_UNK func_82008F14();                            /* extern */
+M2C_UNK FreeBattle_RunSetupScreen();                            /* extern */
+M2C_UNK FreeBattle_SetupGbCartVersus();                            /* extern */
 extern s8 D_00235D70;
 extern s8 D_00238BD0;
 extern s32 D_82008F84;
 extern SessionContext* D_8200ACF8;
 extern s8 D_88000000;
-s32 func_82005CCC(s32 arg0, M2C_UNK arg1)
+/**
+ * Entry point of the battle setup fragment: pushes the 'MENT' pool state, runs the setup screen
+ * (or, when `mode` is 1, FreeBattle_SetupGbCartVersus), pops the state and, when the screen was
+ * left with B (0x8040), queues the main menu. Returns 0x8040 (back to the main menu) or 0x8050
+ * (start the battle).
+ * Seen in play (2026-11-14): ran with `mode` 0 when はい was picked on the main menu's バトル
+ * prompt. Both callers (main_menu.c, main_menu_entry.c) pass 0, so the `mode` 1 branch is not
+ * reachable in retail.
+ */
+s32 FreeBattle_Main(s32 arg0, M2C_UNK arg1)
 {
   s32 temp_v1;
   func_8000256C(0x4D454E54);
   D_8200ACF8 = &gSessionContext;
   if (arg0 == 1)
   {
-    func_82008F14();
+    FreeBattle_SetupGbCartVersus();
   }
   else
   {
-    func_820059EC();
+    FreeBattle_RunSetupScreen();
   }
   func_80002620(0x4D454E54);
   temp_v1 = D_82008F84;

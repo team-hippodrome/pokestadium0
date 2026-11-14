@@ -71,7 +71,7 @@ s32 FreeBattle_ReadTeam(s32 arg0, s32 arg1, s32 arg2, TeamMonSlot* entry) {
  * of six 0x54-byte slots starting at arg0 (nothing happens when arg1 >= 6).
  * The retail code unrolls the loop by four.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in Free Battle setup.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-14): the empty slots of a rental team being built read flags 1 in RAM.
  */
 void FreeBattle_MarkEmptySlots(TeamMonSlot* arg0, s32 arg1) {
     s32 i;
@@ -137,9 +137,9 @@ TeamMonSlot* FreeBattle_FindFlaggedSlot(TeamMonSlot* arg0, s32* arg1) {
 
 /**
  * Returns 1 when no three of the six Pokemon have levels summing to 155 or less (the さいていレベル warning). The running sum keeps the levels of earlier `j` iterations, so later trios are overestimated.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14): with five rentals poked to L55 and a sixth at L50 in L50～55 Battle,
+ * 「さいていレベル ３びきの ごうけいが１５５をこえます。」 (the lowest three levels add up to more
+ * than 155) appeared.
  */
 s32 FreeBattle_AllTriosOverLevelLimit(TeamMonSlot* mons) {
     s32 i;
@@ -691,7 +691,8 @@ void Menu_ClearItemFlags(FlagOwner*);
  * Clears the rental grid's item flags, then flags (0x101) every rental Pokemon already in the
  * team being built, except the one in slot arg2.
  * Seen in play: runs when the L50～55 rental grid 「レンタルポケモン」 opens.
- * @unverified The flagged look was not checked on screen.
+ * Seen in play (2026-11-14): rentals already in the team are drawn with blue names in the
+ * 「レンタルポケモン」 grid (スピアー after it was rented).
  */
 void FreeBattle_MarkPickedRentals(FlagOwner* arg0, TeamMonSlot* arg1, s32 arg2) {
     Record50* records;
@@ -792,7 +793,7 @@ typedef struct Slot82001558 {
  * Counts the picked Pokemon that share a species with another pick and stores the first index.
  * Seen in play (2026-11-13) ran on the entry screen while rentals were picked (Free Battle, L1-30
  * rules, six L30 rentals vs COM).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14): two スピアー in a rental team gave 「おなじポケモンが ２たいいます」.
  */
 s32 FreeBattle_CountDuplicateSpecies(void* arg0, s32* index) {
     Slot82001558* slots = arg0;
@@ -823,12 +824,12 @@ s32 FreeBattle_CountDuplicateSpecies(void* arg0, s32* index) {
 }
 
 /**
- * Walks the six TeamMonSlot entries at arg0. For each entry whose flag word has
- * bit 0x40 set, clears that bit, and then sets bit 0x10 unless the entry's
- * index equals arg1 (so only the entry arg1 is left without 0x10).
- * The meaning of the flag bits is not yet established.
+ * After 「このポケモンにしますか？」 → はい on a duplicate: clears the duplicate mark (0x40) of every slot
+ * and marks the duplicates other than `keep` with 0x10 (to be replaced from the rentals).
+ * Seen in play (2026-11-14): with a poked second スピアー, keeping the first left the second slot's
+ * flags 0x10.
  */
-void func_82001708(TeamMonSlot* arg0, s32 arg1) {
+void FreeBattle_KeepChosenDuplicate(TeamMonSlot* arg0, s32 arg1) {
     s32 i;
 
     for (i = 0; i < 6; i++) {
@@ -1184,12 +1185,12 @@ void FreeBattle_MarkIneligibleSlots(SlotFlags* arg0) {
 }
 
 /**
- * For each of the six TeamMonSlot entries reached through `*arg0->slots`, sets bit
- * 0x800 in the matching u16 of `arg0->flags` when the entry's flag word has bit 0
- * clear and at least one of the bits 0x10 set.
- * The meaning of the bits is not yet established.
+ * Sets row flag 0x800 on each filled slot marked 0x10 (a duplicate to replace), which draws the
+ * replace marker on its cell.
+ * Seen in play (2026-11-14): after keeping one of two スピアー, the other row got 0x800 and a
+ * yellow marker, and the rental list opened to replace it.
  */
-void func_82002528(SlotFlags* arg0) {
+void FreeBattle_MarkSlotsToReplace(SlotFlags* arg0) {
     TeamMonSlot* slots;
     s32 i;
 
@@ -1202,14 +1203,13 @@ void func_82002528(SlotFlags* arg0) {
 }
 
 /**
- * For each of the six TeamMonSlot entries reached through `*arg0->slots`, sets bit 0
- * of the matching u16 in `arg0->flags` when the entry's flag word does not have
- * bit 0x40 set. The meaning of the bits is not yet established.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name guessed from the code; comment kept.
+ * Sets row flag 1 (drawn dimmed) on each slot that is not a duplicate (no 0x40), so the
+ * duplicates stand out while the player picks one to keep. The cursor can still land on the dimmed
+ * rows; A there only buzzes (FreeBattle_UpdateEntrySelect checks 0x40).
+ * Seen in play (2026-11-14): on 「おなじポケモンが ２たいいます」 rows 2-5 had flag 1 and blue names,
+ * the two duplicates white.
  */
-void FreeBattle_DisableUnpickedRows(SlotFlags* arg0) {
+void FreeBattle_DisableNonDuplicateRows(SlotFlags* arg0) {
     TeamMonSlot* slots;
     s32 i;
 
@@ -1222,15 +1222,11 @@ void FreeBattle_DisableUnpickedRows(SlotFlags* arg0) {
 }
 
 /**
- * Counterpart of FreeBattle_DisableUnpickedRows: for each of the six TeamMonSlot entries reached
- * through `*arg0->slots`, clears bit 0 of the matching u16 in `arg0->flags`
- * when the entry's flag word does not have bit 0x40 set.
- * The meaning of the bits is not yet established.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name guessed from the code; comment kept.
+ * Counterpart of FreeBattle_DisableNonDuplicateRows: clears row flag 1 on each slot that is not a
+ * duplicate (no 0x40).
+ * Seen in play (2026-11-14): ran after はい on 「このポケモンにしますか？」 in the duplicate flow.
  */
-void FreeBattle_EnableUnpickedRows(SlotFlags* arg0) {
+void FreeBattle_EnableNonDuplicateRows(SlotFlags* arg0) {
     TeamMonSlot* slots;
     s32 i;
 

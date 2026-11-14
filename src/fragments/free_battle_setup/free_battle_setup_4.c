@@ -49,10 +49,13 @@ void FreeBattle_InitRentalConfirm(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 ar
 void ScrollGrid_SyncCursor(FlagOwner*);
 
 /**
- * Enters an entry screen state and picks its panel: 1 the team list, 2, 4, 5 the level-sum
- * warning, 8 a team's Pokemon grid.
+ * Enters an entry screen state and picks its panel: 1 the team list, 2 the duplicate warning,
+ * 3/7/9 a Pokémon's confirm window, 4 the shortage warning, 5 the level-sum warning, 6 and 8 the
+ * rental grid, 10 the entry confirm, 12 the text box.
  * Seen in play: runs when 「エントリーポケモンのせんたく」 opens in state 1 (the team list).
- * @unverified States other than 1 not seen.
+ * Seen in play (2026-11-14): state 2 with 「おなじポケモンが ２たいいます」, 3 with 「このポケモンにしますか？」,
+ * 5 with the 155 level-sum warning and 8 with the rental grid (state read at +4 in RAM), and 10
+ * with 「このデータでエントリーします。」 (FreeBattle_InitRentalConfirm hit). Not seen: 4, 6, 7, 9, 12.
  */
 void FreeBattle_EnterEntryScreenState(arg0)
     s8* arg0;
@@ -459,7 +462,12 @@ void FreeBattle_DrawRentalScreen(s8* arg0) {
     }
 }
 
-s32 func_82003688(s32 arg0) {
+/**
+ * Moves the cursor over the picked team's six slots (GridMenu_UpdateCursor on the slot grid).
+ * Seen in play (2026-11-14): ran while 「おなじポケモンが ２たいいます」 asked for the duplicate to
+ * keep; D-pad moved the slot index at +0x300 (1, 2, 5, 3).
+ */
+s32 FreeBattle_UpdateTeamSlotCursor(s32 arg0) {
     return GridMenu_UpdateCursor(arg0 + 0x2F8);
 }
 
@@ -497,7 +505,7 @@ s32 FreeBattle_AllTriosOverLevelLimit(TeamMonSlot*);
  * is non-zero, inspects the slots in this order and returns the first result
  * that applies:
  *   1. FreeBattle_CountDuplicateSpecies reports a positive count: call FreeBattle_InitDuplicateWarning on the struct at +0x320,
- *      store the reported slot index in `cur`, call FreeBattle_DisableUnpickedRows on +0x2F8,
+ *      store the reported slot index in `cur`, call FreeBattle_DisableNonDuplicateRows on +0x2F8,
  *      return 2.
  *   2. FreeBattle_FindFlaggedSlot finds a flagged slot: set `picked`, store its index in
  *      `cur`, then return 8 if bit 0 of unk_784 is set, otherwise call
@@ -523,7 +531,7 @@ s32 FreeBattle_CheckEntryRules(SlotMenu* arg0) {
         if (sp38 > 0) {
             FreeBattle_InitDuplicateWarning((s8*)arg0 + 0x320, 0x9C, 0x105, sp38);
             arg0->cur = sp34;
-            FreeBattle_DisableUnpickedRows((SlotFlags*)((s8*)arg0 + 0x2F8));
+            FreeBattle_DisableNonDuplicateRows((SlotFlags*)((s8*)arg0 + 0x2F8));
             ret = 2;
         } else {
             found = FreeBattle_FindFlaggedSlot(arg0->slots, &sp38);
@@ -656,7 +664,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       break;
 
     case 2:
-      if (func_82003688(arg0) == 0)
+      if (FreeBattle_UpdateTeamSlotCursor(arg0) == 0)
     {
       next = func_8002BC14(*((s32 *) (((s8 *) arg0) + 0x744)));
       if (next == (-1))
@@ -690,9 +698,9 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       if (next == 1)
     {
       func_8003F6AC(2);
-      FreeBattle_EnableUnpickedRows(arg0 + 0x2F8);
-      func_82001708(arg0 + 0xE4, *((s32 *) (((s8 *) arg0) + 0x300)));
-      func_82002528(arg0 + 0x2F8);
+      FreeBattle_EnableNonDuplicateRows(arg0 + 0x2F8);
+      FreeBattle_KeepChosenDuplicate(arg0 + 0xE4, *((s32 *) (((s8 *) arg0) + 0x300)));
+      FreeBattle_MarkSlotsToReplace(arg0 + 0x2F8);
       FreeBattle_SetEntryScreenState(arg0, FreeBattle_CheckEntryRules(arg0), 1);
     }
       break;
@@ -729,7 +737,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       break;
 
     case 6:
-      if (func_82003688(arg0) == 0)
+      if (FreeBattle_UpdateTeamSlotCursor(arg0) == 0)
     {
       next = func_8002BC14(*((s32 *) (((s8 *) arg0) + 0x744)));
       if (next == (-1))
