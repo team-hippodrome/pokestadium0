@@ -307,7 +307,7 @@ s32 BattleAi_GetBestDamage(ComBattler* arg0, ComBattler* arg1, s32 arg2)
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-void BattleAi_ResetBattleStats(BattleMonRuntime* arg0, s8 *arg1)
+void BattleAi_ResetBattleStats(BattleMonRuntime* arg0, BattleMon *arg1)
 {
   s32 var_v0;
   s8 *var_v1;
@@ -319,13 +319,13 @@ void BattleAi_ResetBattleStats(BattleMonRuntime* arg0, s8 *arg1)
   arg0->disabledMoveState = 0;
   arg0->disabledMove = 0;
   arg0->scaleResize = 0;
-  var_v1 = arg0;
+  var_v1 = (s8 *) arg0;
   var_v0 = 0;
-  arg0->modifiedAttack = (u16) (*((u16 *) (((s8 *) arg1) + 0x28))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  arg0->modifiedDefense = (u16) (*((u16 *) (((s8 *) arg1) + 0x2A))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  arg0->speed = (u16) (*((u16 *) (((s8 *) arg1) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  arg0->modifiedAttack = (u16) arg1->attack;
+  arg0->modifiedDefense = (u16) arg1->defense;
+  arg0->speed = (u16) arg1->speed;
   var_v1 = (s8 *) var_v1;
-  arg0->modifiedSpecial = (u16) (*((u16 *) (((s8 *) arg1) + 0x2E))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  arg0->modifiedSpecial = (u16) arg1->special;
   do
   {
     var_v0 += 4;

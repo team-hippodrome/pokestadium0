@@ -332,7 +332,7 @@ extern ComSide* D_821CF298;
 extern s32 D_821CF288;
 void func_80058410(u8 *, u8 *, s32);
 void BattleAi_CopyVisibleBattleState(s8 *, u8 *);
-void BattleAi_ResetBattleStats(BattleMonRuntime*, u8 *);
+void BattleAi_ResetBattleStats(BattleMonRuntime*, BattleMon *);
 s32 BattleAi_ChooseSwitch(void);
 s32 BattleAi_ChooseRandomMove(void);
 /**
@@ -372,7 +372,7 @@ s32 BattleAi_ChooseTurnAction(u8* arg0, u8* arg1, s32 arg2, s32 arg3) {
     if (arg3 != D_821CF294->lastOpponentSlot) {
         move = D_821CF294->lastOpponentSlot;
         if (move < D_821CF288) {
-            BattleAi_ResetBattleStats((u8*)&D_821CF298->battlers[D_821CF294->lastOpponentSlot].mon, (u8*)&D_821CF298->roster->pokemonPicked[move]);
+            BattleAi_ResetBattleStats(&D_821CF298->battlers[D_821CF294->lastOpponentSlot].mon, &D_821CF298->roster->pokemonPicked[move]);
         }
         D_821CF294->lastOpponentSlot = arg3;
         D_821CF294->opponentTurnsIn = 0;
@@ -392,7 +392,7 @@ s32 BattleAi_ChooseTurnAction(u8* arg0, u8* arg1, s32 arg2, s32 arg3) {
             r = BattleAi_PickBoomMove((s8*)D_821CF29C, D_821CF2A0);
         }
         if (r < 0) {
-            BattleAi_ResetBattleStats((u8*)&D_821CF29C->mon, (u8*)&D_821CF294->roster->pokemonPicked[move]);
+            BattleAi_ResetBattleStats(&D_821CF29C->mon, &D_821CF294->roster->pokemonPicked[move]);
             r = move + 4;
         }
     } else if ((D_821CF294->mode == 3) && (BattleAi_GetHpPercent(D_821CF2A0) >= 31)) {
