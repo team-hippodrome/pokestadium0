@@ -563,29 +563,30 @@ void BattleAnim_EndEffect16_NoOpInit(void) {
 
 /**
  * Like BattleAnim_CallbackDescriptor50BurstChild with the shared vertical-fade init and a fall step of 0.2.
+ * @unverified Name guessed from the code.
  */
-void func_8216547C(Particle* arg0) {
+void BattleAnim_CallbackVerticalFadeBurstChild(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        BattleAnim_InitSharedVerticalFadeParticle(arg0);
+        BattleAnim_InitSharedVerticalFadeParticle(particle);
         break;
     case 2:
-        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 1, 7, 1, 2, 0);
-        if (func_82140690(arg0) != 0) {
-            Particle_ApproachPrimAlpha(arg0, 0x64, 0x10);
+        Particle_AnimateFramesForwardLoopedThenAdvance(particle, 1, 7, 1, 2, 0);
+        if (func_82140690(particle) != 0) {
+            Particle_ApproachPrimAlpha(particle, 0x64, 0x10);
         }
         break;
     case 3:
-        Particle_MarkInactive(arg0);
+        Particle_MarkInactive(particle);
         break;
     }
-    if (Particle_IsRunning(arg0) != 0) {
-        func_821402B8(arg0);
-        func_8213F940(arg0, 0xBFC00000, 0x3E4CCCCD);
-        Particle_ApplyMotionStep(arg0);
+    if (Particle_IsRunning(particle) != 0) {
+        func_821402B8(particle);
+        func_8213F940(particle, 0xBFC00000, 0x3E4CCCCD);
+        Particle_ApplyMotionStep(particle);
     }
 }
 

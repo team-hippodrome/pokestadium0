@@ -946,7 +946,7 @@ void BattleScene_EnterIdleRow(ActivePokemon* active_pokemon) {
     }
 }
 
-void func_82134DEC(s16);
+void BattleSound_PlayCry(s16);
 
 /**
  * State row 1 tick: on frame 1 plays the cry (the real species while behind
@@ -965,9 +965,9 @@ void BattleScene_TickRow1PlayOwnerCry(ActivePokemon* active_pokemon) {
     } else if (active_pokemon->animationTimer == 1) {
         if (BattleAnim_IsAssetLoadBusy(active_pokemon) == 0) {
             if (active_pokemon->displayObject.objectType >= SUBSTITUTE_DOLL) {
-                func_82134DEC(state->model);
+                BattleSound_PlayCry(state->model);
             } else {
-                func_82134DEC(active_pokemon->displayObject.objectType);
+                BattleSound_PlayCry(active_pokemon->displayObject.objectType);
             }
             sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
         }
@@ -2739,7 +2739,7 @@ void BattleScene_AllocateParticipantRecord(BattleSide* session_teams, s32 side_i
     sActivePokemon[side_index]->side = session_teams;
 }
 
-M2C_UNK func_8211F3F4();                            /* extern */
+M2C_UNK Battle_AllocMessageQueues();                            /* extern */
 
 /**
  * Seen in play (2026-11-13) (Free Battle, as the battle scene starts): called once from
@@ -2747,7 +2747,7 @@ M2C_UNK func_8211F3F4();                            /* extern */
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Battle_InitMessageQueues(void) {
-    func_8211F3F4();
+    Battle_AllocMessageQueues();
 }
 
 /**
@@ -2787,7 +2787,7 @@ void BattleScene_InitializeParticipantController(ActivePokemon* arg0) {
 }
 
 extern s32 D_84390174;
-void func_821079E8(s32);
+void BattleScene_SetCameraClipMaskBothSides(s32);
 
 void BattleScene_InitializeParticipantModel(ActivePokemon*);
 
@@ -2797,7 +2797,7 @@ void func_82108340(ActivePokemon*);
 void func_82121D5C(s32, s32);
 void ActivePokemon_SetModelTransform(ActivePokemon*, s32, s32);
 void func_8211F430(void);
-void func_8211F274(ActivePokemon*);
+void ActivePokemon_ClearCaption(ActivePokemon*);
 
 /**
  * Initializes controllers, all participant models, the camera mode for the
@@ -2842,10 +2842,10 @@ void BattleScene_InitializePresentation(UNUSED BattleSide* session_teams) {
 
     ActivePokemon_SetModelTransform(sActivePokemon[0], 0, 0);
     ActivePokemon_SetModelTransform(sActivePokemon[1], 0, 0);
-    func_821079E8(0x1FFE);
+    BattleScene_SetCameraClipMaskBothSides(0x1FFE);
     func_8211F430();
-    func_8211F274(sActivePokemon[0]);
-    func_8211F274(sActivePokemon[1]);
+    ActivePokemon_ClearCaption(sActivePokemon[0]);
+    ActivePokemon_ClearCaption(sActivePokemon[1]);
 }
 
 /**

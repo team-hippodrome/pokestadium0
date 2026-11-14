@@ -83,22 +83,27 @@ void Particle_SetFieldOffsetCEIfNotSentinel(Particle* arg0, u8 arg1) {
     }
 }
 
-void func_8213C3B8(s8 *arg0, unsigned char arg1)
+/**
+ * Sets byteParam0 (0xC9) to arg1, unless the particle pointer is -1.
+ * @unverified Name guessed from the code.
+ */
+void Particle_SetByteParam0Checked(s8 *particle, unsigned char value)
 {
   int new_var; // FAKE: permuter temp
-  new_var = arg0 != ((s8 *) (-1));
+  new_var = particle != ((s8 *) (-1));
   if (new_var)
   {
-    *((s8 *) (((s8 *) arg0) + 0xC9)) = (s8) (arg1 & 0xFF);
+    *((s8 *) (((s8 *) particle) + 0xC9)) = (s8) (value & 0xFF);
   }
 }
 
 /**
  * Sets field A6 of the particle to arg1, unless the particle pointer is -1.
+ * @unverified Name guessed from the code.
  */
-void func_8213C3D4(s8 *arg0, s16 arg1) {
-    if (arg0 != (s8 *)-1) {
-        M2C_FIELD(arg0, s16 *, 0xA6) = arg1;
+void Particle_SetParam1Checked(s8 *particle, s16 value) {
+    if (particle != (s8 *)-1) {
+        M2C_FIELD(particle, s16 *, 0xA6) = value;
     }
 }
 
@@ -128,10 +133,11 @@ void Particle_SetFieldOffsetAAIfNotSentinel(Particle* arg0, s16 arg1) {
 
 /**
  * Sets field AC of the particle to arg1, unless the particle pointer is -1.
+ * @unverified Name guessed from the code.
  */
-void func_8213C444(s8 *arg0, s16 arg1) {
-    if (arg0 != (s8 *)-1) {
-        M2C_FIELD(arg0, s16 *, 0xAC) = arg1;
+void Particle_SetScratchBChecked(s8 *particle, s16 value) {
+    if (particle != (s8 *)-1) {
+        M2C_FIELD(particle, s16 *, 0xAC) = value;
     }
 }
 

@@ -411,8 +411,12 @@ void Battle_CheckMovesetLegality(ActivePokemon* arg0) {
     }
 }
 
+/**
+ * Copies the Pokemon's battle HP (0x7D2) into its team roster entry (state.rosterIndex).
+ * @unverified Name guessed from the code.
+ */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_8210F2F4(s8 *arg0)
+void Battle_SyncHpToRoster(s8 *arg0)
 {
   int new_var2; // FAKE: permuter temp
   u16 *new_var; // FAKE: permuter temp

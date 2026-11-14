@@ -29,21 +29,26 @@ extern u8 gParticlePalettePairs[][2];
 
 #include "m2c_macros.h"
 
-void func_82140D50(void);
+void ParticleGfx_TextureCallbackNop(void);
 void ParticleGfx_LoadTextureCallbackI4FrameMod10_32x64(UNUSED Particle* arg0, u8* texture);
 void ParticleGfx_LoadTextureCallbackI4_64x64(UNUSED Particle* arg0, u8* texture);
 void ParticleGfx_LoadTextureCallbackI4FrameMod8_64x64(UNUSED Particle* arg0, u8* texture);
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82140D50(void) {
+void ParticleGfx_TextureCallbackNop(void) {
 }
 
 M2C_UNK func_8216C008(s32, M2C_UNK, M2C_UNK);       /* extern */
 
-void func_82140D58(s8 *arg0, s32 arg1) {
-    func_8216C008((M2C_FIELD(arg0, s8 *, 0xC3) * 0x120) + arg1, 0x18, 0x18);
+/**
+ * Texture callback: loads 24x24 I4 frame (byte 0xC3) of the texture at arg1 as a tile.
+ * @unverified Name guessed from the code.
+ */
+void ParticleGfx_LoadTextureCallbackTileI4FrameC3_24x24(s8 *particle, s32 texture) {
+    func_8216C008((M2C_FIELD(particle, s8 *, 0xC3) * 0x120) + texture, 0x18, 0x18);
 }
 
 /**
@@ -57,8 +62,12 @@ void ParticleGfx_LoadTextureCallbackI4FrameMod10_32x64(UNUSED Particle* arg0, u8
 
 M2C_UNK func_8216BFE8(s32, M2C_UNK, M2C_UNK);       /* extern */
 
-void func_82140DD8(s8 *arg0, s32 arg1) {
-    func_8216BFE8((M2C_FIELD(arg0, s8 *, 0xC3) << 0xA) + arg1, 0x20, 0x40);
+/**
+ * Texture callback: loads 32x64 I4 frame (byte 0xC3) of the texture at arg1.
+ * @unverified Name guessed from the code.
+ */
+void ParticleGfx_LoadTextureCallbackI4FrameC3_32x64(s8 *particle, s32 texture) {
+    func_8216BFE8((M2C_FIELD(particle, s8 *, 0xC3) << 0xA) + texture, 0x20, 0x40);
 }
 
 /**

@@ -40,7 +40,7 @@ void BattleAnim_SetupEmberProjectile(Particle* arg0);
 void BattleAnim_SetupEmberBurstEmitter(Particle* arg0);
 void BattleAnim_SetupEmberUseEffect(Particle* arg0);
 void BattleAnim_GetExplosionParticleColor(Particle* arg0, u8 arg1);
-void func_82146674(void);
+void BattleAnim_ColorFadeUnusedNop(void);
 void BattleAnim_FirePunchEmberEggBombColorChange(Particle* arg0);
 void BattleAnim_SetupBackgroundBombExplosion(Particle* arg0);
 void BattleAnim_SetupBoomSmallExplosion(Particle* arg0);
@@ -57,7 +57,7 @@ void BattleAnim_RunFlamethrowerHitRotationStrong(Particle* arg0);
 void BattleAnim_SetupFireBlastHitFrontFlames(Particle* arg0);
 void BattleAnim_SetupDaimonji(Particle* arg0);
 void BattleAnim_SetupDaimonjiColoration(Particle* arg0);
-void func_821491CC(void);
+void BattleAnim_StartEffect124Nop(void);
 void BattleAnim_DefaultStartEffect_Init(void);
 void BattleAnim_DefaultEndEffect_Init(void);
 
@@ -351,31 +351,36 @@ s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_821452FC(s8 *);                      /* extern */
 M2C_UNK func_821453F4(s8 *);                      /* extern */
 
-void func_82145498(Particle* arg0) {
+/**
+ * Particle callback for the Fire Blast/Flamethrower smoke, Dragon Rage and Fire Spin particles:
+ * init, step until the spawn step is done, then fade.
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackFireSmokeParticle(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_821452FC(arg0);
+        func_821452FC(particle);
         break;
     case 2:
-        if (func_821406B4(arg0) != 0) {
-            func_8213D238(arg0);
-            func_8213CB3C(arg0);
+        if (func_821406B4(particle) != 0) {
+            func_8213D238(particle);
+            func_8213CB3C(particle);
         }
         break;
     case 3:
-        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
-        Particle_ApproachPrimAlpha(arg0, 0x20, 4);
-        func_82140228(arg0, 0x3F400000, 0x3D4CCCCD);
+        Particle_AnimateFramesForwardLoopedThenAdvance(particle, 0, 7, 1, 2, 0);
+        Particle_ApproachPrimAlpha(particle, 0x20, 4);
+        func_82140228(particle, 0x3F400000, 0x3D4CCCCD);
         break;
     case 4:
-        Particle_MarkInactive(arg0);
+        Particle_MarkInactive(particle);
         break;
     }
-    if (func_8213CB7C(arg0) != 0) {
-        func_821453F4(arg0);
+    if (func_8213CB7C(particle) != 0) {
+        func_821453F4(particle);
     }
 }
 
@@ -1035,8 +1040,9 @@ void BattleAnim_GetExplosionParticleColor(Particle* arg0, u8 arg1) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82146674(void) {
+void BattleAnim_ColorFadeUnusedNop(void) {
 }
 
 /**
@@ -2197,7 +2203,7 @@ void BattleAnim_InitializeFireBlastFlamethrowerUseSmoke(void) {
     func_8213C220(0x64, 1);
     func_8213B644(0, 8, 6);
     func_8213B5D8(0, 2, 0x3C, &func_82144E24, &D_8218E7F8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
-    func_8213B5D8(0, 4, 0x1E, &func_82145498, &D_8218E770, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
+    func_8213B5D8(0, 4, 0x1E, &BattleAnim_CallbackFireSmokeParticle, &D_8218E770, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
     func_8213B5D8(0, 4, 0x1E, &func_82145718, &D_8218E7F8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
 }
 
@@ -2235,7 +2241,7 @@ extern M2C_UNK func_82145718;
 void BattleAnim_InitializeDragonRageUse(void) {
     func_8213B644(0, 8, 6);
     func_8213B5D8(0, 2, 0x3C, &func_82144E24, &D_8218E7F8, 0, 1, 0x11, (s32) D_8219A80A, 1, 0);
-    func_8213B5D8(0, 4, 0x1E, &func_82145498, &D_8218E770, 0, 1, 0x11, (s32) D_8219A80A, 1, 0);
+    func_8213B5D8(0, 4, 0x1E, &BattleAnim_CallbackFireSmokeParticle, &D_8218E770, 0, 1, 0x11, (s32) D_8219A80A, 1, 0);
     func_8213B5D8(0, 4, 0x1E, &func_82145718, &D_8218E7F8, 0, 1, 0x11, (s32) D_8219A80A, 1, 0);
 }
 
@@ -2272,7 +2278,7 @@ extern M2C_UNK func_82145718;
 void BattleAnim_InitializeFireSpinUse(void) {
     func_8213B644(0, 8, 6);
     func_8213B5D8(0, 2, 0x50, &func_82144E24, &D_8218E7F8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
-    func_8213B5D8(0, 4, 0x28, &func_82145498, &D_8218E770, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
+    func_8213B5D8(0, 4, 0x28, &BattleAnim_CallbackFireSmokeParticle, &D_8218E770, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
     func_8213B5D8(0, 4, 0x28, &func_82145718, &D_8218E7F8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
 }
 
@@ -2294,8 +2300,9 @@ void BattleAnim_InitializeFireSpinHitFlames(void) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_821491CC(void) {
+void BattleAnim_StartEffect124Nop(void) {
 }
 
 /**

@@ -21,8 +21,9 @@ extern u8 D_03006D00[];
 
 /**
  * Draws the "TIME" label and the battle time (minutes, seconds, hundredths) at (x, y).
+ * @unverified Name guessed from the code.
  */
-void func_82117610(s16 x, s16 y) {
+void BattleHud_DrawBattleTime(s16 x, s16 y) {
     UNUSED s32 pad; // FAKE: stack padding
     s8 buf[12];
     f32 time = D_FLT_82199EB0 / 30.0f;
@@ -33,18 +34,19 @@ void func_82117610(s16 x, s16 y) {
     Font_Printf(x + 3, y + 3, "TIME");
     Font_EndTexturedTextRendering();
     sprintf(buf, "%02d", (s32)(time / 60.0f));
-    func_82116480(buf, x + 0x32, y + 5);
+    BattleHud_DrawSmallDigits(buf, x + 0x32, y + 5);
     sprintf(buf, "%02d", (s32)time % 60);
-    func_82116480(buf, x + 0x46, y + 5);
+    BattleHud_DrawSmallDigits(buf, x + 0x46, y + 5);
     sprintf(buf, "%02d", (s32)(time * 100.0) % 100);
-    func_82116480(buf, x + 0x5A, y + 5);
+    BattleHud_DrawSmallDigits(buf, x + 0x5A, y + 5);
 }
 
 
 /**
  * Draws the "TOTAL TIME" label and the total time (minutes, seconds, hundredths) at (x, y).
+ * @unverified Name guessed from the code.
  */
-void func_8211778C(s16 x, s16 y) {
+void BattleHud_DrawTotalTime(s16 x, s16 y) {
     UNUSED s32 pad; // FAKE: stack padding
     s8 buf[12];
     f32 time = D_FLT_82199EB4 / 30.0f;
@@ -55,11 +57,11 @@ void func_8211778C(s16 x, s16 y) {
     Font_Printf(x + 3, y + 3, "TOTAL TIME");
     Font_EndTexturedTextRendering();
     sprintf(buf, "%02d", (s32)(time / 60.0f));
-    func_82116480(buf, x + 0x6E, y + 5);
+    BattleHud_DrawSmallDigits(buf, x + 0x6E, y + 5);
     sprintf(buf, "%02d", (s32)time % 60);
-    func_82116480(buf, x + 0x82, y + 5);
+    BattleHud_DrawSmallDigits(buf, x + 0x82, y + 5);
     sprintf(buf, "%02d", (s32)(time * 100.0) % 100);
-    func_82116480(buf, x + 0x96, y + 5);
+    BattleHud_DrawSmallDigits(buf, x + 0x96, y + 5);
 }
 
 

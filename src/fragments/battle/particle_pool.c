@@ -588,8 +588,9 @@ void BattleAnim_UpdateOrDestroyParticle(Particle* arg0) {
  * Updates every allocated particle in the 300-entry pool: refreshes its anchor, sets the
  * render scale (1 when it has no owner or flags 0x108, else the owner's species base scale
  * unless flag 0x800 is set) and runs or destroys it.
+ * @unverified Name guessed from the code.
  */
-void func_8213A68C(void) {
+void BattleAnim_UpdateParticlePool(void) {
     s32 i;
     Particle* var_s0 = gParticlePool;
 
@@ -611,12 +612,17 @@ void func_8213A68C(void) {
     }
 }
 
-void func_8213A904(Particle*);
+void BattleAnim_SetupParticleDraw(Particle*);
 M2C_UNK func_8213A9C4(s8 *, s32);                 /* extern */
 s32 func_8213CAFC(s8 *, M2C_UNK);                 /* extern */
 s32 func_8213CB1C(s8 *, M2C_UNK);                 /* extern */
 
-void func_8213A784(s32 arg0) {
+/**
+ * Draws every particle chain whose head lacks flag 8 (world-space particles): each chain member
+ * with flag 4 and lifecycle 2 or more is drawn.
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_DrawWorldParticleChains(s32 camera) {
     s32 var_s3;
     Particle* var_s0;
     Particle* var_s2;
@@ -625,12 +631,12 @@ void func_8213A784(s32 arg0) {
     var_s3 = 0;
     do {
         if ((var_s2->allocated != 0) && (var_s2->prev == NULL) && (func_8213CB1C((s8*)var_s2, 8) != 0)) {
-            func_8213A904(var_s2);
+            BattleAnim_SetupParticleDraw(var_s2);
             var_s0 = var_s2;
             if (var_s2 != NULL) {
                 do {
                     if ((func_8213CAFC((s8*)var_s0, 4) != 0) && (var_s0->lifecycle >= 2)) {
-                        func_8213A9C4((s8*)var_s0, arg0);
+                        func_8213A9C4((s8*)var_s0, camera);
                     }
                     var_s0 = var_s0->next;
                 } while (var_s0 != NULL);
@@ -641,11 +647,16 @@ void func_8213A784(s32 arg0) {
     } while (var_s3 != 0x12C);
 }
 
-void func_8213A904(Particle*);
+void BattleAnim_SetupParticleDraw(Particle*);
 M2C_UNK func_8213A9C4(s8 *, s32);                 /* extern */
 s32 func_8213CAFC(s8 *, M2C_UNK);                 /* extern */
 
-void func_8213A858(s32 arg0) {
+/**
+ * Draws every particle with flag 8 (screen-space particles) that has flag 4 and lifecycle 2 or
+ * more.
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_DrawScreenParticles(s32 camera) {
     s32 var_s1;
     Particle* var_s0;
 
@@ -653,9 +664,9 @@ void func_8213A858(s32 arg0) {
     var_s1 = 0;
     do {
         if ((var_s0->allocated != 0) && (func_8213CAFC((s8*)var_s0, 8) != 0)) {
-            func_8213A904(var_s0);
+            BattleAnim_SetupParticleDraw(var_s0);
             if ((func_8213CAFC((s8*)var_s0, 4) != 0) && (var_s0->lifecycle >= 2)) {
-                func_8213A9C4((s8*)var_s0, arg0);
+                func_8213A9C4((s8*)var_s0, camera);
             }
         }
         var_s1 += 1;
@@ -667,9 +678,10 @@ typedef void (*Fn8213A904)(Particle*, s32);
 /**
  * Draws a particle through its descriptor: picks the render setup display list from the
  * descriptor's mode, then calls the descriptor's draw callback.
+ * @unverified Name guessed from the code.
  */
-void func_8213A904(Particle* arg0) {
-    ParticleDescriptor* desc = arg0->descriptor;
+void BattleAnim_SetupParticleDraw(Particle* particle) {
+    ParticleDescriptor* desc = particle->descriptor;
     ParticleDescriptorChild* sp = desc->payload.a;
 
     if (desc->kind == 1) {
@@ -682,7 +694,7 @@ void func_8213A904(Particle* arg0) {
                 break;
         }
         if (sp->drawMode != 2) {
-            ((Fn8213A904)sp->setupCallback)(arg0, sp->setupArg.s->arg);
+            ((Fn8213A904)sp->setupCallback)(particle, sp->setupArg.s->arg);
         }
     }
 }

@@ -377,7 +377,7 @@ typedef struct BRollShotSequence {
 } BRollShotSequence;
 extern BRollShotSequence D_8218B240;
 extern f32 D_FLT_82189350[][4];
-void func_82121434(CameraNode*);
+void BattleCamera_StartNextBRollShot(CameraNode*);
 void func_8212188C(void);
 void BattleScene_UpdateParticipantsInView(CameraNode*);
 void func_82108C0C(ActivePokemon*);
@@ -404,7 +404,7 @@ void BattleScene_SelectNextBRollCameraShot(CameraNode* arg0) {
     BRollShotSequence seq = D_8218B240;
 
     if (sBattleScene.scene->mode == 9) {
-        func_82121434(arg0);
+        BattleCamera_StartNextBRollShot(arg0);
         return;
     }
     if (seq.shots[sBattleScene.scene->bRollShotIndex] == 0xFF) {

@@ -16,14 +16,16 @@ void func_8001ABBC(void);
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82116D20(void) {
+void BattleHud_UnusedNopA(void) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82116D28(void) {
+void BattleHud_UnusedNopB(void) {
 }
 
 /**

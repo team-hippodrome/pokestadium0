@@ -466,26 +466,31 @@ M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214F110(s8 *);                      /* extern */
 
-void func_8214F1E8(Particle* arg0) {
+/**
+ * Particle callback (no reference found) for
+ * BattleAnim_SetupUnregisteredStraightDirectionalStreamFade: steps, fades out by 16, then detaches.
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackUnregisteredStraightStreamFade(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_8214F110(arg0);
+        func_8214F110(particle);
         break;
     case 2:
-        func_821406B4(arg0);
+        func_821406B4(particle);
         break;
     case 3:
-        func_82140548(arg0, 0, 0x10);
+        func_82140548(particle, 0, 0x10);
         break;
     case 4:
-        Particle_DisableAndDetach(arg0);
+        Particle_DisableAndDetach(particle);
         break;
     }
-    func_821402B8(arg0);
-    Particle_MoveAlongRotationXYZAlt(arg0);
+    func_821402B8(particle);
+    Particle_MoveAlongRotationXYZAlt(particle);
 }
 
 /**
@@ -522,26 +527,30 @@ M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214F28C(s8 *);                      /* extern */
 
-void func_8214F3D4(Particle* arg0) {
+/**
+ * Particle callback for end effect 28: init, step, fade out by 64, detach.
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackEndEffect28StreamA(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_8214F28C(arg0);
+        func_8214F28C(particle);
         break;
     case 2:
-        func_821406B4(arg0);
+        func_821406B4(particle);
         break;
     case 3:
-        func_82140548(arg0, 0, 0x40);
+        func_82140548(particle, 0, 0x40);
         break;
     case 4:
-        Particle_DisableAndDetach(arg0);
+        Particle_DisableAndDetach(particle);
         break;
     }
-    func_821402B8(arg0);
-    Particle_MoveAlongRotationXYZAlt(arg0);
+    func_821402B8(particle);
+    Particle_MoveAlongRotationXYZAlt(particle);
 }
 
 /**
@@ -575,26 +584,30 @@ M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214F478(s8 *);                      /* extern */
 
-void func_8214F55C(Particle* arg0) {
+/**
+ * Second particle callback for end effect 28: init, step, fade out by 64, detach.
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackEndEffect28StreamB(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_8214F478(arg0);
+        func_8214F478(particle);
         break;
     case 2:
-        func_821406B4(arg0);
+        func_821406B4(particle);
         break;
     case 3:
-        func_82140548(arg0, 0, 0x40);
+        func_82140548(particle, 0, 0x40);
         break;
     case 4:
-        Particle_DisableAndDetach(arg0);
+        Particle_DisableAndDetach(particle);
         break;
     }
-    func_821402B8(arg0);
-    Particle_MoveAlongRotationXYZAlt(arg0);
+    func_821402B8(particle);
+    Particle_MoveAlongRotationXYZAlt(particle);
 }
 
 /**
@@ -685,15 +698,16 @@ extern M2C_UNK D_8218E608;
 extern M2C_UNK D_8218E620;
 
 /**
- * Starts a three-part effect: sets the tint and spawn timing, then queues func_8214F3D4,
- * func_8214F55C and BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade on the current owner.
+ * Starts a three-part effect: sets the tint and spawn timing, then queues BattleAnim_CallbackEndEffect28StreamA,
+ * BattleAnim_CallbackEndEffect28StreamB and BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade on the current owner.
+ * @unverified Name guessed from the code.
  */
-void func_8214FCBC(void) {
+void BattleAnim_EndEffect28ThreePartStream(void) {
     func_8213B720(0x22, 4, 0x10, 8);
     func_8213B644(0, 0x20, 3);
     func_8213B644(0x30, 0x20, 8);
-    func_8213B5D8(0, 0xA, 2, &func_8214F3D4, &D_8218E608, 0xC, 1, 3, 0, 0x25, 0);
-    func_8213B5D8(0, 5, 3, &func_8214F55C, &D_8218E608, 0xC, 2, 3, 0, 0x25, 0);
+    func_8213B5D8(0, 0xA, 2, &BattleAnim_CallbackEndEffect28StreamA, &D_8218E608, 0xC, 1, 3, 0, 0x25, 0);
+    func_8213B5D8(0, 5, 3, &BattleAnim_CallbackEndEffect28StreamB, &D_8218E608, 0xC, 2, 3, 0, 0x25, 0);
     func_8213B5D8(0, 8, 2, &BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade, &D_8218E620, 0xC, 3, 3, 0, 0x25, 0);
 }
 

@@ -17,17 +17,18 @@ void func_8213C9D0(Particle*);
 /**
  * Init step for a small particle that drifts to a bone: scale 0.16, a random Y spin, slow
  * step and rise speeds, palette 0x1A, full alpha and a 2-frame delay.
+ * @unverified Name guessed from the code.
  */
-void func_82168C20(Particle* arg0) {
-    func_821401D4(arg0, 0.16f);
-    func_8213E11C(arg0, -3.2f);
-    Particle_SetRotationStepY(arg0, ParticleMath_RandomRange(0x10000));
-    Particle_SetStepMagnitudeScaled(arg0, 0.085f);
-    Particle_SetMotionStepYScaled(arg0, 0.44f);
-    func_82143478(arg0, 0x1A);
-    Particle_SetPrimAlpha(arg0, 0xFF);
-    Particle_SetParam0(arg0, 2);
-    func_8213C9D0(arg0);
+void BattleAnim_InitBoneDriftEmber(Particle* particle) {
+    func_821401D4(particle, 0.16f);
+    func_8213E11C(particle, -3.2f);
+    Particle_SetRotationStepY(particle, ParticleMath_RandomRange(0x10000));
+    Particle_SetStepMagnitudeScaled(particle, 0.085f);
+    Particle_SetMotionStepYScaled(particle, 0.44f);
+    func_82143478(particle, 0x1A);
+    Particle_SetPrimAlpha(particle, 0xFF);
+    Particle_SetParam0(particle, 2);
+    func_8213C9D0(particle);
 }
 
 extern Vec3f D_8219A898;
@@ -35,39 +36,40 @@ extern Vec3f D_8219A898;
 /**
  * Particle callback: init, then follows the owner's bone CD while shrinking and fading,
  * then detaches. Hidden while not running.
+ * @unverified Name guessed from the code.
  */
-void func_82168CC4(Particle* arg0) {
-    switch (arg0->lifecycle) {
+void BattleAnim_CallbackBoneDriftEmber(Particle* particle) {
+    switch (particle->lifecycle) {
         case 1:
-            func_82168C20(arg0);
+            BattleAnim_InitBoneDriftEmber(particle);
             break;
 
         case 2:
-            BattleAnim_GetOwnerBonePosition(arg0->pokemon, arg0->byteParam0, &D_8219A898);
-            Particle_ApproachPosition(arg0, D_8219A898);
-            Particle_ApproachScale(arg0, 0.2f, 0.053f);
-            Particle_ApproachPrimAlphaThenAdvance(arg0, 0x10, 0x1A);
-            Particle_PrimG_Approach_0BB14(arg0, 0, 0x40);
-            if (Particle_DecrementParam0ToZero(arg0) != 0) {
-                Particle_PrimR_Approach_0BAE4(arg0, 0, 8);
-                Particle_EnvR_Approach_0BB90(arg0, 0, 0xE);
+            BattleAnim_GetOwnerBonePosition(particle->pokemon, particle->byteParam0, &D_8219A898);
+            Particle_ApproachPosition(particle, D_8219A898);
+            Particle_ApproachScale(particle, 0.2f, 0.053f);
+            Particle_ApproachPrimAlphaThenAdvance(particle, 0x10, 0x1A);
+            Particle_PrimG_Approach_0BB14(particle, 0, 0x40);
+            if (Particle_DecrementParam0ToZero(particle) != 0) {
+                Particle_PrimR_Approach_0BAE4(particle, 0, 8);
+                Particle_EnvR_Approach_0BB90(particle, 0, 0xE);
             }
             break;
 
         case 3:
-            Particle_DisableAndDetach(arg0);
+            Particle_DisableAndDetach(particle);
             break;
     }
 
-    if (arg0->lifecycle > 0) {
-        Particle_MoveXZAlongRotationY(arg0);
-        Particle_ApplyMotionStepY(arg0);
+    if (particle->lifecycle > 0) {
+        Particle_MoveXZAlongRotationY(particle);
+        Particle_ApplyMotionStepY(particle);
     }
 
-    if (BattleScene_IsParticipantModelVisible(arg0->pokemon)) {
-        Particle_EnableRendering(arg0);
+    if (BattleScene_IsParticipantModelVisible(particle->pokemon)) {
+        Particle_EnableRendering(particle);
     } else {
-        Particle_DisableRendering(arg0);
+        Particle_DisableRendering(particle);
     }
 }
 
@@ -79,14 +81,15 @@ s32 func_82107CF0(void*);
 void func_8213B5D8(s32, s32, s32, void (*)(Particle*), u8*, s32, s32, s32, s32, s32, s32);
 
 /**
- * Spawns the func_82168CC4 effect for side arg0 when D_800733C8 is 0x8080 and that
+ * Spawns the BattleAnim_CallbackBoneDriftEmber effect for side arg0 when D_800733C8 is 0x8080 and that
  * Pokemon's species is 6 (Charizard).
+ * @unverified Name guessed from the code.
  */
-void func_82168E18(s32 arg0) {
-    D_8219A810 = D_82199DE0[arg0];
+void BattleAnim_SpawnCharizardBoneDriftEmbers(s32 side) {
+    D_8219A810 = D_82199DE0[side];
     if (D_800733C8 == 0x8080) {
         if (func_82107CF0(D_8219A810) == 6) {
-            func_8213B5D8(0, 0, -1, func_82168CC4, D_8218E5A0, 0, 1, 0x11, 0xA, 0, 0);
+            func_8213B5D8(0, 0, -1, BattleAnim_CallbackBoneDriftEmber, D_8218E5A0, 0, 1, 0x11, 0xA, 0, 0);
         }
     }
 }

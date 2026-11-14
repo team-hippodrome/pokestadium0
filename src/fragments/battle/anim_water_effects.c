@@ -413,30 +413,35 @@ s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82149FD8(s8 *);                      /* extern */
 M2C_UNK func_8214A190(s8 *);                      /* extern */
 
-void func_8214A220(Particle* arg0) {
+/**
+ * Particle callback (no reference found): runs BattleAnim_SetupUnusedRotatingSparkVariant on
+ * lifecycle 1, then steps it until its spawn step is done.
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackUnusedRotatingSpark(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82149FD8(arg0);
+        func_82149FD8(particle);
         break;
     case 2:
-        if (func_821406B4(arg0) != 0) {
-            func_8213D238(arg0);
-            func_8213CB3C(arg0);
-            Particle_SetParam0(arg0, 0x1E);
+        if (func_821406B4(particle) != 0) {
+            func_8213D238(particle);
+            func_8213CB3C(particle);
+            Particle_SetParam0(particle, 0x1E);
         }
         break;
     case 3:
-        func_821406B4(arg0);
+        func_821406B4(particle);
         break;
     case 4:
-        Particle_MarkInactive(arg0);
+        Particle_MarkInactive(particle);
         break;
     }
-    if (func_8213CB7C(arg0) != 0) {
-        func_8214A190(arg0);
+    if (func_8213CB7C(particle) != 0) {
+        func_8214A190(particle);
     }
 }
 
@@ -1604,32 +1609,37 @@ M2C_UNK Particle_SetParam0(s8 *, M2C_UNK);             /* extern */
 s32 func_82140690(s8 *);                          /* extern */
 M2C_UNK func_8214C300(s8 *);                      /* extern */
 
-void func_8214C3C8(Particle* arg0) {
+/**
+ * Particle callback (no reference found) for BattleAnim_SetupUnusedIndexedFadeVariantA: waits
+ * param0 frames, then fades.
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackUnusedIndexedFadeA(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_8214C300(arg0);
+        func_8214C300(particle);
         return;
     case 2:
-        if (func_8213CA80(arg0, arg0->param0) != 0) {
-            Particle_SetParam0(arg0, 2);
-            func_8213CB3C(arg0);
+        if (func_8213CA80(particle, particle->param0) != 0) {
+            Particle_SetParam0(particle, 2);
+            func_8213CB3C(particle);
             return;
         }
         return;
     case 3:
-        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 1, 0);
-        func_82140228(arg0, 0x3ECCCCCD, 0x3DCCCCCD);
-        Particle_AddVelocityFromRotationTemplate1(arg0);
-        if (func_82140690(arg0) != 0) {
-            Particle_ApproachPrimAlpha(arg0, 0, 0x20);
+        Particle_AnimateFramesForwardLoopedThenAdvance(particle, 0, 7, 1, 1, 0);
+        func_82140228(particle, 0x3ECCCCCD, 0x3DCCCCCD);
+        Particle_AddVelocityFromRotationTemplate1(particle);
+        if (func_82140690(particle) != 0) {
+            Particle_ApproachPrimAlpha(particle, 0, 0x20);
             return;
         }
         break;
     case 4:
-        Particle_MarkInactive(arg0);
+        Particle_MarkInactive(particle);
         break;
     }
 }
@@ -1663,28 +1673,33 @@ void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214C4C4(s8 *);                      /* extern */
 
-void func_8214C598(Particle* arg0) {
+/**
+ * Particle callback (no reference found) for BattleAnim_SetupUnusedIndexedFadeVariantB: waits
+ * param0 frames, switches to texture frame 1, then fades.
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackUnusedIndexedFadeB(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_8214C4C4(arg0);
+        func_8214C4C4(particle);
         return;
     case 2:
-        if (func_8213CA80(arg0, arg0->param0) != 0) {
-            func_8213CB3C(arg0);
-            Particle_SetTextureFrame(arg0, 1);
+        if (func_8213CA80(particle, particle->param0) != 0) {
+            func_8213CB3C(particle);
+            Particle_SetTextureFrame(particle, 1);
             return;
         }
         return;
     case 3:
-        func_82140228(arg0, 0x3F000000, 0x3CCCCCCD);
-        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 2, 7, 1, 1, 0);
-        Particle_AddVelocityFromRotationTemplate1(arg0);
+        func_82140228(particle, 0x3F000000, 0x3CCCCCCD);
+        Particle_AnimateFramesForwardLoopedThenAdvance(particle, 2, 7, 1, 1, 0);
+        Particle_AddVelocityFromRotationTemplate1(particle);
         return;
     case 4:
-        Particle_MarkInactive(arg0);
+        Particle_MarkInactive(particle);
         break;
     }
 }
@@ -2181,8 +2196,9 @@ extern M2C_UNK func_8214B1F8;
 /**
  * Starts a beam effect: sets the spawn and tint timing, then queues func_8214B1F8 at once and
  * the pulsing beam emanator after 6 frames (lifetime 70).
+ * @unverified Name guessed from the code.
  */
-void func_8214D938(void) {
+void BattleAnim_StartEffect70PulsingBeam(void) {
     func_8213B6AC(0, 0, 0x20, 8, 0xA0);
     func_8213B644(0, 8, 0x20);
     func_8213B560(0, &func_8214B1F8, &D_8218E818, 0, 1, 0x10, (s32) D_8219A80A, 0x17, 0);

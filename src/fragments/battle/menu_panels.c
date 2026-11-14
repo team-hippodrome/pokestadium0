@@ -1110,17 +1110,17 @@ void BattleDebug_DrawCameraParams(s16 arg0, s16 arg1) {
     func_8001A944(arg0 + 3, arg1 + 0x40, (s32)D_82195B3C);
     func_8001ABBC();
     func_800564D4(buf, D_82195B4C, M2C_FIELD(D_82199DE0, f32*, 0x9F0));
-    func_82116480(buf, arg0 + 0x46, arg1 + 6);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x46, arg1 + 6);
     func_800564D4(buf, D_82195B50, M2C_FIELD(D_82199DE0, f32*, 0x9FC));
-    func_82116480(buf, arg0 + 0x46, arg1 + 0x12);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x46, arg1 + 0x12);
     func_800564D4(buf, D_82195B58, M2C_FIELD(D_82199DE0, f32*, 0x9F8));
-    func_82116480(buf, arg0 + 0x46, arg1 + 0x1E);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x46, arg1 + 0x1E);
     func_800564D4(buf, D_82195B60, M2C_FIELD(D_82199DE0, s16*, 0x9EC));
-    func_82116480(buf, arg0 + 0x46, arg1 + 0x2A);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x46, arg1 + 0x2A);
     func_800564D4(buf, D_82195B64, M2C_FIELD(D_82199DE0, s16*, 0x9EE));
-    func_82116480(buf, arg0 + 0x46, arg1 + 0x36);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x46, arg1 + 0x36);
     func_800564D4(buf, D_82195B68, M2C_FIELD(D_82199DE0, s32*, 0x9E8));
-    func_82116480(buf, arg0 + 0x4B, arg1 + 0x42);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x4B, arg1 + 0x42);
 }
 
 extern char D_82195B6C[];
@@ -1230,9 +1230,9 @@ void BattleDebug_DrawStepMenu(s16 arg0, s16 arg1) {
     func_8001A944(arg0 + 0x3C, arg1 + 0x70, (s32)names3[D_8219A74B]);
     func_8001ABBC();
     func_800564D4(buf, D_82195DA8, D_8219A740);
-    func_82116480(buf, arg0 + 0x3C, arg1 + 0x28);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x3C, arg1 + 0x28);
     func_800564D4(buf, D_82195DAC, D_8219A744);
-    func_82116480(buf, arg0 + 0x3C, arg1 + 0x40);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x3C, arg1 + 0x40);
 }
 
 extern s32 D_8219A740;
@@ -1297,19 +1297,19 @@ void BattleDebug_DrawMoveEffectViewer(s16 arg0, s16 arg1) {
     func_8001A944(arg0 + 3, arg1 + 0x64, (s32)D_82195E84);
     func_8001ABBC();
     func_800564D4(buf, D_82195E90, D_8219A740);
-    func_82116480(buf, arg0 + 0x64, arg1 + 0x12);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x64, arg1 + 0x12);
     func_800564D4(buf, D_82195E94, val);
-    func_82116480(buf, arg0 + 0x64, arg1 + 0x4E);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x64, arg1 + 0x4E);
     func_800564D4(buf, D_82195E98, D_8219A74C);
-    func_82116480(buf, arg0 + 0x6E, arg1 + 0x2A);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x6E, arg1 + 0x2A);
     if (D_8219A750 != 0) {
         func_800564D4(buf, D_82195E9C, D_8219A750);
-        func_82116480(buf, arg0 + 0x6E, arg1 + 0x36);
+        BattleHud_DrawSmallDigits(buf, arg0 + 0x6E, arg1 + 0x36);
     }
     func_800564D4(buf, D_82195EA0, D_8219A768);
-    func_82116480(buf, arg0 + 0x6E, arg1 + 0x42);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x6E, arg1 + 0x42);
     func_800564D4(buf, D_82195EA4, M2C_FIELD(M2C_FIELD(D_82199DE0, void**, 0x44), u16*, 0xA));
-    func_82116480(buf, arg0 + 0x64, arg1 + 0x66);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x64, arg1 + 0x66);
 }
 
 extern s32 D_8218B228[];
@@ -1355,17 +1355,17 @@ void BattleDebug_DrawMoveCameraViewer(s16 arg0, s16 arg1) {
     func_8001A944(arg0 + 3, arg1 + 0x4C, (s32)D_82195F50);
     func_8001ABBC();
     func_800564D4(buf, D_82195F5C, D_8219A740);
-    func_82116480(buf, arg0 + 0x69, arg1 + 0x12);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x69, arg1 + 0x12);
     func_800564D4(buf, D_82195F60, val);
-    func_82116480(buf, arg0 + 0x69, arg1 + 0x36);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x69, arg1 + 0x36);
     if (D_8219A750 != 0) {
         func_800564D4(buf, D_82195F64, D_8219A750);
-        func_82116480(buf, arg0 + 0x69, arg1 + 0x2A);
+        BattleHud_DrawSmallDigits(buf, arg0 + 0x69, arg1 + 0x2A);
     }
     func_800564D4(buf, D_82195F68, D_8219A74C);
-    func_82116480(buf, arg0 + 0x69, arg1 + 0x1E);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x69, arg1 + 0x1E);
     func_800564D4(buf, D_82195F6C, M2C_FIELD(M2C_FIELD(D_82199DE0, void**, 0x44), u16*, 0xA));
-    func_82116480(buf, arg0 + 0x64, arg1 + 0x4E);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x64, arg1 + 0x4E);
 }
 
 extern s32 D_8219A74C;
@@ -1399,13 +1399,13 @@ void BattleDebug_DrawEffectSoundTiming(s16 arg0, s16 arg1) {
     func_8001A944(arg0 + 3, arg1 + 0x28, (s32)D_82195FA8);
     func_8001ABBC();
     func_800564D4(buf, D_82195FB4, val);
-    func_82116480(buf, arg0 + 0x64, arg1 + 0x1E);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x64, arg1 + 0x1E);
     func_800564D4(buf, D_82195FB8, D_8219A74C);
-    func_82116480(buf, arg0 + 0x64, arg1 + 6);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x64, arg1 + 6);
     func_800564D4(buf, D_82195FBC, D_8219A754);
-    func_82116480(buf, arg0 + 0x64, arg1 + 0x12);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x64, arg1 + 0x12);
     func_800564D4(buf, D_82195FC0, M2C_FIELD(M2C_FIELD(D_82199DE0, void**, 0x44), u16*, 0xA));
-    func_82116480(buf, arg0 + 0x64, arg1 + 0x2A);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x64, arg1 + 0x2A);
 }
 
 extern char D_82195FC4[];
@@ -1438,7 +1438,7 @@ void BattleDebug_DrawPokeBallViewer(s16 arg0, s16 arg1) {
     func_8001A944(arg0 + 0x3C, arg1 + 0x1C, M2C_FIELD(((s32*)&D_82199DE0)[D_8219A760], s32*, 0x860) + 8);
     func_8001ABBC();
     func_800564D4(buf, D_82195FF0, mon[0xB]);
-    func_82116480(buf, arg0 + 0x3C, arg1 + 0x12);
+    BattleHud_DrawSmallDigits(buf, arg0 + 0x3C, arg1 + 0x12);
 }
 
 extern char D_82195FF4[];
@@ -1453,7 +1453,7 @@ void BattleDebug_DrawCameraClipPlanes(s16 x, s16 y) {
 
     Ui_DrawPrimColorRect(x, y, 0x50, 0x1E, 0, 0, 0, 0x3C);
     func_800564D4(buf, D_82195FF4, sBattleScene.scene->camera->perspective.nearPlane);
-    func_82116480(buf, x + 3, y + 2);
+    BattleHud_DrawSmallDigits(buf, x + 3, y + 2);
     func_800564D4(buf, D_82195FF8, sBattleScene.scene->camera->perspective.farPlane);
-    func_82116480(buf, x + 3, y + 0x10);
+    BattleHud_DrawSmallDigits(buf, x + 3, y + 0x10);
 }

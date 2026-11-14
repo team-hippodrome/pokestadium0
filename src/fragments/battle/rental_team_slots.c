@@ -30,7 +30,7 @@ extern u8* D_800603C0;
 
 void func_82120A34(CameraNode*);
 void func_82120A90(CameraNode*);
-void func_82121434(CameraNode*);
+void BattleCamera_StartNextBRollShot(CameraNode*);
 /**
  * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
  * once, from the command menu to the end of its turn).
@@ -84,7 +84,7 @@ void Rental_TeamSlotsUpdate(CameraNode* arg0) {
             BattleScene_BRollWaitForButtonToExit(arg0);
             break;
         case 50:
-            func_82121434(arg0);
+            BattleCamera_StartNextBRollShot(arg0);
             break;
     }
 }

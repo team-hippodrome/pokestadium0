@@ -4,10 +4,11 @@
 #include "global.h"
 #include "battle.h"
 
-void func_82183AE0(void);
+void ComAi_StubNop(void);
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82183AE0(void) {
+void ComAi_StubNop(void) {
 }

@@ -14,8 +14,8 @@ extern BattleMessageQueues* gBattleMessageQueues;
 void Battle_ClearAllMessageQueues(void);
 void Battle_ClearMessageCursor(void);
 void Battle_SimpleStringFormat(s8* arg0, s8* arg1, ...);
-void func_8211F3E4(void);
-void func_8211F3EC(void);
+void BattleMessage_UnusedNopA(void);
+void BattleMessage_UnusedNopB(void);
 void BattleScene_ResetMessageQueue(void);
 
 void BattleMenu_DrawRosterPanel(TeamRoster*, s32, s32, s32);
@@ -322,12 +322,13 @@ void Battle_DrawCompactStatusBoxesIfVisible(void) {
 
 /**
  * Clears the Pokemon's caption state fields (0xA04, 0xA08, 0xA0C, 0xA4C).
+ * @unverified Name guessed from the code.
  */
-void func_8211F274(ActivePokemon* arg0) {
-    arg0->captionState.active = 0;
-    arg0->captionState.revealIndex = 0;
-    arg0->captionState.fullText[0] = 0;
-    arg0->captionState.shownText[0] = 0;
+void ActivePokemon_ClearCaption(ActivePokemon* active_pokemon) {
+    active_pokemon->captionState.active = 0;
+    active_pokemon->captionState.revealIndex = 0;
+    active_pokemon->captionState.fullText[0] = 0;
+    active_pokemon->captionState.shownText[0] = 0;
 }
 
 /*
@@ -395,20 +396,23 @@ void ActivePokemon_TickCaptionTypewriter(ActivePokemon* arg0) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8211F3E4(void) {
+void BattleMessage_UnusedNopA(void) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8211F3EC(void) {
+void BattleMessage_UnusedNopB(void) {
 }
 
 /**
  * Allocates and zeroes the battle message buffers (gBattleMessageQueues).
+ * @unverified Name guessed from the code.
  */
-void func_8211F3F4(void) {
+void Battle_AllocMessageQueues(void) {
     gBattleMessageQueues = main_pool_alloc(sizeof(BattleMessageQueues), 0);
     bzero(gBattleMessageQueues, sizeof(BattleMessageQueues));
 }

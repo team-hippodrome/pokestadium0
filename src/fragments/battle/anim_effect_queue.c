@@ -602,14 +602,23 @@ void BattleAnim_StopOwnerCategoryParticles(u8 category, ActivePokemon* owner) {
 M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 M2C_UNK func_8213C220(M2C_UNK, M2C_UNK);            /* extern */
 
-void func_8213672C(void) {
+/**
+ * Shared start-effect init (effects 0, 5, 9 and 19): spawns a category 17 marker slot (0x80, 1) and
+ * a global tint fade (0, 32, 8).
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_StartEffectDefaultTint(void) {
     func_8213C220(0x80, 1);
     func_8213B644(0, 0x20, 8);
 }
 
 M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 
-void func_82136760(void) {
+/**
+ * Shared end-effect init (effects 0, 1, 9 and 11): spawns a global tint fade (0, 32, 8).
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_EndEffectDefaultTint(void) {
     func_8213B644(0, 0x20, 8);
 }
 
@@ -951,8 +960,9 @@ extern s32 D_8219A7C8;
  * Advances the battle animation frame counter and its derived timers: the counter masked to
  * 64, 32, 16, 8, 4 and 2 frames, and for each period a wrap counter and a toggle. Counts the
  * countdown D_8219A77C down to 0.
+ * @unverified Name guessed from the code.
  */
-void func_82136E48(void) {
+void BattleAnim_AdvanceFrameCounters(void) {
     D_8219A780++;
     D_8219A77C--;
     if (D_8219A77C <= 0) {

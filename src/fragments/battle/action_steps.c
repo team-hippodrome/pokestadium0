@@ -6,7 +6,7 @@
 // Declared here instead of in a header: the callers of these disagree on their types.
 M2C_UNK func_800419F8();
 M2C_UNK func_82106374(s32);
-M2C_UNK func_821079E8(M2C_UNK);
+M2C_UNK BattleScene_SetCameraClipMaskBothSides(M2C_UNK);
 M2C_UNK func_8212189C();
 M2C_UNK func_821224F4();
 M2C_UNK BattleScene_FrameParticipantImpact(s32, s32, f32);
@@ -36,7 +36,7 @@ void func_8210C104(s16*, s16, s16);
 void ModelAnim_SetFrame(DisplayObject* display_object, s16 animation_timer);
 f32 func_82121750(ActivePokemon*, f32, f32);
 s16 BattleScene_GetParticipantFacingAngle(ActivePokemon* arg0);
-void func_82134FD0(ActivePokemon*);
+void BattleSound_UpdateSideHpAndStatus(ActivePokemon*);
 void func_82102010(ActivePokemon*);
 s32 func_82101FD4(ActivePokemon*);
 
@@ -53,7 +53,7 @@ void BattleScene_ResetSideFlagsAtActionStart(s32);
 void BattleScene_ActionStepIntro(CameraNode* arg0, s32 arg1) {
     s8* sp1C = (s8*)sActingPokemon + 0x78C;
 
-    func_821079E8(0x1FFE);
+    BattleScene_SetCameraClipMaskBothSides(0x1FFE);
     func_82106374((s32)sActivePokemon[0]);
     func_82106374((s32)sActivePokemon[1]);
     if ((BattleScene_TryStartSwitchAction() == 0) && (func_82125F54() == 0)) {

@@ -15,7 +15,7 @@ void func_8211EE8C(void);
 void func_8212188C(void);
 void BattleScene_FrameParticipantFromBelowClamped(void*, void*);
 void BattleScene_FrameParticipantFrontAltThunk(void*, void*);
-void func_82135098(ActivePokemon*);
+void BattleSound_UpdateSideHp(ActivePokemon*);
 
 /**
  * Step 3 of an action phase: waits for the user's animation, enters the miss or status phase when
@@ -234,7 +234,7 @@ void BattleScene_ReactionNormal(CameraNode* arg0, s32 arg1) {
             BattleCamera_PlayReactionFraming(sOtherPokemon, arg0, arg1);
             BattleCamera_CaptureModelOrbit(sOtherPokemon, arg0);
             ActivePokemon_CommitPendingStatus(sOtherPokemon);
-            func_82135098(sOtherPokemon);
+            BattleSound_UpdateSideHp(sOtherPokemon);
             func_821061A8(sOtherPokemon);
             break;
 
@@ -314,7 +314,7 @@ void BattleScene_ReactionNormal(CameraNode* arg0, s32 arg1) {
             break;
 
         case 7:
-            if (func_82124BF8(sOtherPokemon) == 0) {
+            if (BattleScene_ReloadModelForFlag1000(sOtherPokemon) == 0) {
                 D_8219A560 = Battle_StepPartyHpToDisplay((s32)sOtherPokemon);
                 D_8219A564 = Battle_StepPartyHpToDisplay(sActingPokemon);
                 BattleScene_FrameReactingParticipant(arg0, sOtherPokemon);
@@ -347,7 +347,7 @@ void BattleScene_ReactionCritical(CameraNode* arg0, s32 arg1) {
             BattleCamera_CaptureModelOrbit(sOtherPokemon, arg0);
             ActivePokemon_CommitPendingStatus(sOtherPokemon);
             func_821061A8(sOtherPokemon);
-            func_82135098(sOtherPokemon);
+            BattleSound_UpdateSideHp(sOtherPokemon);
             break;
 
         case 1:
@@ -438,7 +438,7 @@ void BattleScene_ReactionCritical(CameraNode* arg0, s32 arg1) {
             break;
 
         case 8:
-            if (func_82124BF8(sOtherPokemon) == 0) {
+            if (BattleScene_ReloadModelForFlag1000(sOtherPokemon) == 0) {
                 D_8219A560 = Battle_StepPartyHpToDisplay((s32)sOtherPokemon);
                 D_8219A564 = Battle_StepPartyHpToDisplay(sActingPokemon);
                 BattleScene_FrameReactingParticipant(arg0, sOtherPokemon);

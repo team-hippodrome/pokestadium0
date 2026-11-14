@@ -876,7 +876,8 @@ void BattleAnim_SleepMovePhaseFadeOut(Particle* arg0) {
 /**
  * Effect start init 1 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Hypnosis, Lovely Kiss, Sing, Sleep Powder, Spore.
+ * @unverified Name guessed from the code.
  */
-void func_821542BC(void) {
+void BattleAnim_StartEffect1Sleep(void) {
     func_8213B560(0, &func_82154248, &D_8218E700, 0, 1, 0x10, 7, 0, 0);
 }

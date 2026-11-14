@@ -614,8 +614,9 @@ void BattleAnim_SandAttackParticleUpdate(Particle* arg0) {
 /**
  * Init step for a spreading particle: scale 0.4, a random rise speed (0.25-0.75), a heading
  * fanned out by spawn index, a random step magnitude (1-2), palette 10 and alpha 100.
+ * @unverified Name guessed from the code.
  */
-void func_82160BB8(s8 *arg0) {
+void BattleAnim_InitSpreadingParticle(s8 *arg0) {
     s16 sp26;
 
     sp26 = Particle_GetSpawnIndex();
@@ -630,32 +631,33 @@ void func_82160BB8(s8 *arg0) {
 }
 
 /**
- * Particle callback for the spreading particle of func_82160BB8: loops frames 0-7 while it
+ * Particle callback for the spreading particle of BattleAnim_InitSpreadingParticle: loops frames 0-7 while it
  * shrinks toward 0.75, slows its step to 0.5 and rises, then fades and is marked inactive.
+ * @unverified Name guessed from the code.
  */
-void func_82160CCC(Particle* arg0) {
+void BattleAnim_CallbackSpreadingParticle(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82160BB8(arg0);
+        BattleAnim_InitSpreadingParticle(particle);
         return;
     case 2:
-        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
-        func_82140228(arg0, 0x3F400000, 0x3CCCCCCD);
-        Particle_ApproachStepMagnitude(arg0, 0.5f, 0.2f);
-        func_8213E1FC(arg0, M2C_FIELD(arg0, s32 *, 0x5C));
-        Particle_MoveXZAlongRotationY(arg0);
+        Particle_AnimateFramesForwardLoopedThenAdvance(particle, 0, 7, 1, 2, 0);
+        func_82140228(particle, 0x3F400000, 0x3CCCCCCD);
+        Particle_ApproachStepMagnitude(particle, 0.5f, 0.2f);
+        func_8213E1FC(particle, M2C_FIELD(particle, s32 *, 0x5C));
+        Particle_MoveXZAlongRotationY(particle);
         return;
     case 3:
-        if (Particle_ApproachPrimAlpha(arg0, 0, 0x20) != 0) {
-            func_8213C9D0(arg0);
+        if (Particle_ApproachPrimAlpha(particle, 0, 0x20) != 0) {
+            func_8213C9D0(particle);
             return;
         }
         return;
     case 4:
-        Particle_MarkInactive(arg0);
+        Particle_MarkInactive(particle);
         break;
     }
 }
@@ -944,27 +946,28 @@ void BattleAnim_SetupUnusedGlitterVariant(Particle* arg0) {
 /**
  * Particle callback: init, then speeds up toward step magnitude 2 and fades out once the
  * spawn step reports done. Moves along its rotation while running.
+ * @unverified Name guessed from the code.
  */
-void func_821616BC(Particle* arg0) {
+void BattleAnim_CallbackAccelerateFadeParticle(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_821615F8(arg0);
+        func_821615F8(particle);
         break;
     case 2:
-        Particle_ApproachStepMagnitude(arg0, 2.0f, 0.5f);
-        if ((func_82140690(arg0) != 0) && (Particle_ApproachPrimAlpha(arg0, 0, 0x40) != 0)) {
-            func_8213C9D0(arg0);
+        Particle_ApproachStepMagnitude(particle, 2.0f, 0.5f);
+        if ((func_82140690(particle) != 0) && (Particle_ApproachPrimAlpha(particle, 0, 0x40) != 0)) {
+            func_8213C9D0(particle);
         }
         break;
     case 3:
-        Particle_MarkInactive(arg0);
+        Particle_MarkInactive(particle);
         break;
     }
-    if (Particle_IsRunning(arg0) != 0) {
-        Particle_AddVelocityFromRotationTemplate1(arg0);
+    if (Particle_IsRunning(particle) != 0) {
+        Particle_AddVelocityFromRotationTemplate1(particle);
     }
 }
 

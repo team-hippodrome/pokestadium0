@@ -219,24 +219,29 @@ M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
 void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_82144710(s8 *);                      /* extern */
 
-void func_82144750(Particle* arg0) {
+/**
+ * Particle callback queued by start effect 123: init, fade in toward alpha 128, then fade out by 8
+ * and detach.
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackModelBurstAlphaFade(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82144710(arg0);
+        func_82144710(particle);
         break;
     case 2:
-        Particle_ApproachPrimAlpha(arg0, 0x80, 4);
+        Particle_ApproachPrimAlpha(particle, 0x80, 4);
         break;
     case 3:
-        if (Particle_ApproachPrimAlpha(arg0, 0, 8) != 0) {
-            Particle_DisableAndDetach(arg0);
+        if (Particle_ApproachPrimAlpha(particle, 0, 8) != 0) {
+            Particle_DisableAndDetach(particle);
         }
         break;
     }
-    func_80019B28(M2C_FIELD(arg0, s32 *, 0x10), arg0->prim_r, arg0->prim_g, arg0->prim_b, (s32) arg0->prim_a);
+    func_80019B28(M2C_FIELD(particle, s32 *, 0x10), particle->prim_r, particle->prim_g, particle->prim_b, (s32) particle->prim_a);
 }
 
 /**
@@ -366,11 +371,12 @@ void BattleAnim_RunPokemonAndFullScreenHueChange(Particle* arg0) {
 
 /**
  * Init step: recolors the prim color from palette CF, sets alpha from field CD and advances.
+ * @unverified Name guessed from the code.
  */
-void func_82144A54(Particle* arg0) {
-    ParticleGfx_RecolorPrim(arg0, Particle_GetByteParam1(arg0));
-    Particle_SetPrimAlpha(arg0, arg0->byteParam0);
-    Particle_AdvanceLifecycle(arg0);
+void BattleAnim_SetupDescriptor25AlphaHold(Particle* particle) {
+    ParticleGfx_RecolorPrim(particle, Particle_GetByteParam1(particle));
+    Particle_SetPrimAlpha(particle, particle->byteParam0);
+    Particle_AdvanceLifecycle(particle);
 }
 
 void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
@@ -382,7 +388,7 @@ void BattleAnim_CallbackDescriptor25AlphaHoldDetach(Particle* arg0) {
     temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82144A54((Particle*)arg0);
+        BattleAnim_SetupDescriptor25AlphaHold((Particle*)arg0);
         return;
     case 2:
         if (func_82140690() != 0) {

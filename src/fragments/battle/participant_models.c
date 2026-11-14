@@ -847,8 +847,8 @@ s32 BattleCamera_StepDemoPath(CameraNode* camera, ActivePokemon* active_pokemon)
 }
 
 M2C_UNK func_82136338();                            /* extern */
-M2C_UNK func_82136E48();                            /* extern */
-M2C_UNK func_8213A68C();                            /* extern */
+M2C_UNK BattleAnim_AdvanceFrameCounters();                            /* extern */
+M2C_UNK BattleAnim_UpdateParticlePool();                            /* extern */
 M2C_UNK func_8213AE68();                            /* extern */
 M2C_UNK func_8216D970();                            /* extern */
 
@@ -858,10 +858,10 @@ M2C_UNK func_8216D970();                            /* extern */
  * @unverified Name guessed from the code.
  */
 void BattleAnim_UpdateEffectSystems(s32 unused) {
-    func_82136E48();
+    BattleAnim_AdvanceFrameCounters();
     func_82136338();
     func_8213AE68();
-    func_8213A68C();
+    BattleAnim_UpdateParticlePool();
     func_8216D970();
 }
 

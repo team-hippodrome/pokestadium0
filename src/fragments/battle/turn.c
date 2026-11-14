@@ -865,7 +865,7 @@ s32 Battle_CheckFaintAfterMove(void) {
 }
 
 void ActivePokemon_CommitPendingStatus(ActivePokemon*);
-void func_8210F2F4(ActivePokemon*);
+void Battle_SyncHpToRoster(ActivePokemon*);
 void ProcessBattleTurn(void);
 /**
  * Initialize one action's shared state, resolve its turn and residuals, then check defeat.
@@ -897,8 +897,8 @@ void Battle_ResolveMonAction(void)
   {
     sBattleUser->hp = 900;
     sBattleTarget->hp = 900;
-    func_8210F2F4(sActivePokemon[0]);
-    func_8210F2F4(sActivePokemon[1]);
+    Battle_SyncHpToRoster(sActivePokemon[0]);
+    Battle_SyncHpToRoster(sActivePokemon[1]);
     ProcessBattleTurn();
     sBattleUser->hp = 900;
     sBattleTarget->hp = 900;
@@ -906,8 +906,8 @@ void Battle_ResolveMonAction(void)
     sBattleTarget->hpAfterPoisonBurn = 900;
     sBattleUser->hpAfterLeechSeed = 0x384;
     sBattleTarget->hpAfterLeechSeed = 0x384;
-    func_8210F2F4(sActivePokemon[0]);
-    func_8210F2F4(sActivePokemon[1]);
+    Battle_SyncHpToRoster(sActivePokemon[0]);
+    Battle_SyncHpToRoster(sActivePokemon[1]);
     Battle_ApplyResidualEffects();
     if (sp1C->effectTurnsLeft == 0)
     {
@@ -923,8 +923,8 @@ void Battle_ResolveMonAction(void)
     ((BattleMonRuntime *) D_8219A3C4)->hpAfterPoisonBurn = 0x384; // FAKE
     ((BattleMonRuntime *) D_8219A3C0)->hpAfterLeechSeed = 0x384; // FAKE
     ((BattleMonRuntime *) D_8219A3C4)->hpAfterLeechSeed = 0x384; // FAKE
-    func_8210F2F4(sActivePokemon[0]);
-    func_8210F2F4(sActivePokemon[1]);
+    Battle_SyncHpToRoster(sActivePokemon[0]);
+    Battle_SyncHpToRoster(sActivePokemon[1]);
     return;
   }
   ProcessBattleTurn();

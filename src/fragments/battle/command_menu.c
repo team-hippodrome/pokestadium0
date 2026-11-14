@@ -119,7 +119,7 @@ void BattleMenu_CommitMoveSelection(ActivePokemon* arg0) {
     }
 }
 
-void func_8211F274();
+void ActivePokemon_ClearCaption();
 s32 ActivePokemon_GetNickname(s32);
 M2C_UNK ActivePokemon_ShowCaption();
 extern s32 D_8218C6F0;
@@ -164,20 +164,20 @@ s32 BattleMenu_HandleNoUsableMoves(arg0) ActivePokemon *arg0;
       {
         temp_v0->selectedCommandOption = 1;
       }
-      func_8211F274(arg0);
+      ActivePokemon_ClearCaption(arg0);
       ActivePokemon_ShowCaption(arg0, D_8218C6F0, ActivePokemon_GetNickname((s32) arg0));
     }
     else
       if (cont->buttonPressed & 0x20)
     {
-      func_8211F274(arg0);
+      ActivePokemon_ClearCaption(arg0);
       arg0->state.selectedCommandOption = 0;
       BattleAnim_PlaySoundEffect3();
     }
     else
       if (cont->buttonPressed & 0x8000)
     {
-      func_8211F274(arg0);
+      ActivePokemon_ClearCaption(arg0);
       temp_v0->actionDelayTimer = 0;
       temp_v0->selectedCommandOption = 3;
       temp_v0->moveIndex = 4;
@@ -187,7 +187,7 @@ s32 BattleMenu_HandleNoUsableMoves(arg0) ActivePokemon *arg0;
   return 0;
 }
 
-void func_8211F274();
+void ActivePokemon_ClearCaption();
 M2C_UNK ActivePokemon_ShowCaption();
 extern s32 D_8218C6F4;
 extern s32 D_8218C6F8;
@@ -211,14 +211,14 @@ s32 BattleMenu_TryConfirmMove(ActivePokemon* arg0) {
     s8* state;
 
     if (!(((BattleMoveCheck8210CA24*)arg0)->moveFlags[((BattleMoveCheck8210CA24*)arg0)->slot] & 0x3F)) {
-        func_8211F274(arg0);
+        ActivePokemon_ClearCaption(arg0);
         ActivePokemon_ShowCaption(arg0, D_8218C6F4);
         return 1;
     }
     flags = arg0->state.runtime.disabledMoveState;
     state = (s8*)arg0 + 0x78C;
     if ((flags & 0xF) && ((flags >> 4) == M2C_FIELD(state, s32*, 0x14))) {
-        func_8211F274(arg0);
+        ActivePokemon_ClearCaption(arg0);
         ActivePokemon_ShowCaption(arg0, D_8218C6F8);
         return 1;
     }
@@ -262,7 +262,7 @@ void BattleMenu_HandleMoveButtons(ActivePokemon* arg0) {
 s32 BattleMenu_HandleNoUsableMoves();                                /* extern */
 void func_82134D40(s8 *);
 M2C_UNK func_82134D80(s8 *);                        /* extern */
-void func_8211F274();
+void ActivePokemon_ClearCaption();
 
 /**
  * Fight menu, every frame: L goes back to the command menu, holding R shows the
@@ -274,7 +274,7 @@ void func_8211F274();
  * Does nothing unless the word at arg0 + 0x790 is 1 and BattleMenu_HandleNoUsableMoves()
  * returns 0. Then, with `rec` = the pointer at arg0 + 0x858 and `sub` =
  * &arg0->state:
- *  - if the word at arg0 + 0xA04 is non-zero: calls func_8211F274(arg0) when
+ *  - if the word at arg0 + 0xA04 is non-zero: calls ActivePokemon_ClearCaption(arg0) when
  *    any of the bits 0xE03F is set in the halfword at rec + 8;
  *  - otherwise clears sub[0x20]; if sub[0x10] is 0 it sets it to 1 and
  *    returns; else if bit 0x20 of rec + 8 is set and bit 0x10 of the halfword
@@ -299,7 +299,7 @@ void BattleMenu_UpdateMoveMenu(ActivePokemon* arg0) {
         temp_v0 = &arg0->state;
         if (arg0->captionState.active != 0) {
             if (M2C_FIELD(temp_v1, u16 *, 8) & 0xE03F) {
-                func_8211F274(arg0);
+                ActivePokemon_ClearCaption(arg0);
             }
         } else {
             M2C_FIELD(temp_v0, s32 *, 0x20) = 0;
@@ -366,7 +366,7 @@ void BattleMenu_CommitSwitchSelection(ActivePokemon* arg0) {
     }
 }
 
-void func_8211F274();
+void ActivePokemon_ClearCaption();
 M2C_UNK ActivePokemon_ShowCaption();
 extern s32 D_8218C6FC;
 
@@ -382,7 +382,7 @@ s32 BattleScene_ValidateSelectedPartyMember(ActivePokemon* arg0) {
         return 1;
     }
 
-    func_8211F274(arg0);
+    ActivePokemon_ClearCaption(arg0);
     ActivePokemon_ShowCaption(arg0, D_8218C6FC);
     return 0;
 }
@@ -470,7 +470,7 @@ void BattleMenu_TakeControlOnCButtonPress(ActivePokemon* arg0, u8* arg1, u8* arg
 }
 
 s32 ActivePokemon_GetNickname(s32);                             /* extern */
-void func_8211F274();                            /* extern */
+void ActivePokemon_ClearCaption();                            /* extern */
 M2C_UNK ActivePokemon_ShowCaption(s32, s32, s32);               /* extern */
 extern s32 D_8218C700;
 
@@ -479,7 +479,7 @@ extern s32 D_8218C700;
  * @unverified Name guessed from the code.
  */
 void BattleMenu_ShowNicknameCaption(s32 active_pokemon) {
-    func_8211F274();
+    ActivePokemon_ClearCaption();
     ActivePokemon_ShowCaption(active_pokemon, D_8218C700, ActivePokemon_GetNickname(active_pokemon));
 }
 
@@ -566,7 +566,7 @@ void BattleMenu_UpdateSwitchMenu(ActivePokemon* arg0) {
 
     if (arg0->captionState.active != 0) {
         if (sp18->controller->buttonPressed & 0xE03F) {
-            func_8211F274(arg0);
+            ActivePokemon_ClearCaption(arg0);
         }
     } else if (sp18->selectedCommandOption == 0) {
         sp18->selectedCommandOption = 2;

@@ -19,8 +19,12 @@ void ParticleGfx_LoadTextureCallbackI4FrameDiv2Mod8_32x32(UNUSED Particle* arg0,
 
 M2C_UNK func_8216BBF8(s32, M2C_UNK, M2C_UNK);       /* extern */
 
-void func_82140B70(s8 *arg0, s32 arg1) {
-    func_8216BBF8((M2C_FIELD(arg0, s8 *, 0xC3) << 0xA) + arg1, 0x20, 0x20);
+/**
+ * Texture callback: loads 32x32 IA8 frame (byte 0xC3) of the texture at arg1.
+ * @unverified Name guessed from the code.
+ */
+void ParticleGfx_LoadTextureCallbackIa8FrameC3_32x32(s8 *particle, s32 texture) {
+    func_8216BBF8((M2C_FIELD(particle, s8 *, 0xC3) << 0xA) + texture, 0x20, 0x20);
 }
 
 /**
@@ -35,8 +39,12 @@ void ParticleGfx_LoadTextureCallbackIa8_32x32(UNUSED Particle* arg0, u8* texture
 
 M2C_UNK func_8216BBF8(s32, M2C_UNK, M2C_UNK);       /* extern */
 
-void func_82140BD0(s8 *arg0, s32 arg1) {
-    func_8216BBF8((M2C_FIELD(arg0, s8 *, 0xC3) << 0xB) + arg1, 0x20, 0x40);
+/**
+ * Texture callback: loads 32x64 IA8 frame (byte 0xC3) of the texture at arg1.
+ * @unverified Name guessed from the code.
+ */
+void ParticleGfx_LoadTextureCallbackIa8FrameC3_32x64(s8 *particle, s32 texture) {
+    func_8216BBF8((M2C_FIELD(particle, s8 *, 0xC3) << 0xB) + texture, 0x20, 0x40);
 }
 
 /**
@@ -50,8 +58,12 @@ void ParticleGfx_LoadTextureCallbackI4_32x32(UNUSED Particle* arg0, u8* texture)
 
 M2C_UNK func_8216BFE8(s32, M2C_UNK, M2C_UNK);       /* extern */
 
-void func_82140C30(s8 *arg0, s32 arg1) {
-    func_8216BFE8((M2C_FIELD(arg0, s8 *, 0xC3) << 9) + arg1, 0x20, 0x20);
+/**
+ * Texture callback: loads 32x32 I4 frame (byte 0xC3) of the texture at arg1.
+ * @unverified Name guessed from the code.
+ */
+void ParticleGfx_LoadTextureCallbackI4FrameC3_32x32(s8 *particle, s32 texture) {
+    func_8216BFE8((M2C_FIELD(particle, s8 *, 0xC3) << 9) + texture, 0x20, 0x20);
 }
 
 /**

@@ -25,7 +25,7 @@ extern const char D_821978C8[];
 
 void BattleAnim_InitializeSurfUse(void);
 s32 BattleAnim_SurfCompleteImmediately(void);
-void func_8216E0C0(void);
+void Radial_UnusedNop(void);
 void BattleAnim_StartTrappingLassoMove_Init(void);
 s32 BattleAnim_StartTrappingLassoMove_Update(void);
 void BattleAnim_StartTrappingLassoMove_Draw(void);
@@ -66,8 +66,9 @@ s32 BattleAnim_SurfCompleteImmediately(void) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8216E0C0(void) {
+void Radial_UnusedNop(void) {
 }
 
 void BattleAnim_CalcVectorAtToDm(f32* arg0, f32* arg1, f32* arg2, f32* arg3, f32* arg4, f32* arg5);

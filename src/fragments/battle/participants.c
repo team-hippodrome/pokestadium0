@@ -82,8 +82,9 @@ f32 BattleScene_GetParticipantModelXOffset(ActivePokemon* active_pokemon) {
 
 /**
  * Sets field 0x34 of both Pokemon's state (the camera clip mask) to value.
+ * @unverified Name guessed from the code.
  */
-void func_821079E8(s16 value) {
+void BattleScene_SetCameraClipMaskBothSides(s16 value) {
     ActivePokemonState* side1 = &sActivePokemon[0]->state;
     ActivePokemonState* side2 = &sActivePokemon[1]->state;
     M2C_FIELD(side1, s16*, 0x34) = value;

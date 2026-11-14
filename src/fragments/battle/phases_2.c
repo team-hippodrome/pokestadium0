@@ -28,7 +28,7 @@ void func_82107408(ActivePokemon*);
 void func_82108C0C(ActivePokemon*);
 void BattleScene_FrameParticipantFrontAltThunk(void*, void*);
 void func_82124A40(void);
-void func_82135098(ActivePokemon*);
+void BattleSound_UpdateSideHp(ActivePokemon*);
 
 /**
  * Phase 35. Same residual damage presentation as BattleScene_PhaseResidualDamageAfterMove for a Pokemon that
@@ -45,7 +45,7 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
 
     switch (sBattleScene.scene->phaseStep) {
         case 0:
-            func_82135098(sActingPokemon);
+            BattleSound_UpdateSideHp(sActingPokemon);
             func_82106374(sActingPokemon);
             BattleAnim_CleanupEffects(2);
             sBattleScene.scene->phaseStep++;
@@ -53,7 +53,7 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
 
         case 1:
             BattleScene_ResidualPhaseNop(cur);
-            if (func_82124A50(sActivePokemon[sBattleScene.scene->actingSide]) == 0) {
+            if (BattleScene_ReloadModelForFlag2000(sActivePokemon[sBattleScene.scene->actingSide]) == 0) {
                 func_82108C0C(sActingPokemon);
                 Audio_FadeAndClearStoredSounds();
                 BattleAnim_CleanupEffects(1);
@@ -115,7 +115,7 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
             break;
 
         case 4:
-            if (func_82124BF8(sOtherPokemon) == 0) {
+            if (BattleScene_ReloadModelForFlag1000(sOtherPokemon) == 0) {
                 sBattleScene.scene->phaseStep++;
             }
             break;
@@ -145,7 +145,7 @@ void BattleScene_PhaseResidualDamageFaintCheck(CameraNode* arg0) {
 
     switch (sBattleScene.scene->phaseStep) {
         case 0:
-            func_82135098(sActingPokemon);
+            BattleSound_UpdateSideHp(sActingPokemon);
             func_82106374(sActingPokemon);
             BattleAnim_CleanupEffects(2);
             sBattleScene.scene->phaseStep += 1;
@@ -186,8 +186,9 @@ void BattleScene_PhaseResidualDamageFaintCheck(CameraNode* arg0) {
 /**
  * When the Pokemon is frozen (status 0x20), stops its category-1 particles and sets render
  * flag 0x20.
+ * @unverified Name guessed from the code.
  */
-void func_82130D48(ActivePokemon* active_pokemon) {
+void BattleScene_FreezeWithdrawnPokemon(ActivePokemon* active_pokemon) {
     BattleMon* party_pokemon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->thumbnail.shownRosterIndex];
 
     if (party_pokemon->statusCondition & 0x20) {
@@ -220,7 +221,7 @@ void BattleScene_PhaseWithdraw(CameraNode* arg0) {
         case 1:
             BattleScene_ApproachCameraZoom(arg0, temp_s0);
             func_82104C68(temp_s0, 2);
-            func_82130D48(temp_s0);
+            BattleScene_FreezeWithdrawnPokemon(temp_s0);
             sBattleScene.scene->phaseStep++;
             break;
 

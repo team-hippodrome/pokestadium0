@@ -56,13 +56,13 @@ void Battle_SetStageScale(f32 scale);
 void Battle_RenderActivePokemonThumbnail(GraphNode* thumbnail_root, GfxImage* thumbnail);
 void Battle_DrawTexturedRectSegment(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width);
 void Battle_FillActivePokemonThumbnail(GraphNode* thumbnail_root, GfxImage* thumbnail);
-void func_82100CB8(void);
-void func_82100CC0(void);
+void BattleStage_UnusedNopA(void);
+void BattleStage_UnusedNopB(void);
 s32 BattleScene_UpdateFrame(s32 fade_mode);
 s32 BattleScene_UpdatePausedFrame(s32 fade_mode);
 void Battle_CompleteRosterOrder(u8* roster_order, s32 number_of_pokemon_picked);
 void BattleScene_InitializeParticipantPresentation(BattleSide* side, unk_D_86002F30* model);
-void func_8210186C(void);
+void BattleStage_UnusedNopC(void);
 
 void Battle_DrawStageBackdrop(void);
 void Battle_DrawClippedTextureRect(s32 x1, s32 y1, s32 x2, s32 y2);
@@ -379,15 +379,17 @@ void Battle_UpdateFaintBatches(void) {
 // Empty retail hook; its intended purpose is not established.
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82100CB8(void) {
+void BattleStage_UnusedNopA(void) {
 }
 
 // Empty retail hook; no purpose is established by callers in this fragment.
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82100CC0(void) {
+void BattleStage_UnusedNopB(void) {
 }
 
 // called every frame: bug boy in GLC
@@ -797,8 +799,9 @@ s32 BattleScene_Init(s32* arg0) { // FAKE: s32 return (value unused) fixes calle
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8210186C(void) {
+void BattleStage_UnusedNopC(void) {
 }
 
 extern s32 D_82198D1C;
@@ -808,14 +811,20 @@ s32 Storage_GetDiskStatus(void);
 void Audio_SetDiskReadyPolling(s32);
 void Audio_WaitForIdle(s32);
 s32 BattleScene_Init(s32* arg0); // FAKE: see definition
-s32 func_82101874(s32 arg0, SessionContext *arg1)
+/**
+ * Stage entry: stores the session context, picks the battle kind (D_82198D1C) from the mode and
+ * round, allocates the stage context, sets up the battle scene, starts the mode's music and runs
+ * the stage loop.
+ * @unverified Name guessed from the code.
+ */
+s32 BattleStage_Init(s32 unused, SessionContext *session)
 {
   StageContext *stage_context;
   SessionContext *new_var2; // FAKE
   SessionContext *ctx;
   int new_var; // FAKE
-  ctx = (D_82198D10 = arg1);
-  sBattleSides = (BattleSide *) (((u8 *) arg1) + 0x1034);
+  ctx = (D_82198D10 = session);
+  sBattleSides = (BattleSide *) (((u8 *) session) + 0x1034);
   sCompletionGate = -2;
   new_var2 = ctx; // FAKE
   if (ctx->mode == 0)

@@ -25,7 +25,7 @@ M2C_UNK Particle_GetUnkCE();
 M2C_UNK Particle_SetRotationY(s8 *, s16);
 M2C_UNK Particle_SetParam0(s8 *, s16);
 M2C_UNK Particle_SetScratchB(s8 *, M2C_UNK);
-M2C_UNK func_8213831C(s8 *, M2C_UNK);
+M2C_UNK ParticleMath_GetPointAlongView(s8 *, M2C_UNK);
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32);
 M2C_UNK func_8213C9D0(s8 *);
 M2C_UNK func_821401D4(s8 *, M2C_UNK);
@@ -35,10 +35,10 @@ extern M2C_UNK BattleAnim_RunDigHitDust;
 extern M2C_UNK BattleAnim_RunDigHitRocks;
 extern M2C_UNK BattleAnim_RunOscillatingFlameUnderneathPokemon;
 extern M2C_UNK D_8218E7B8;
-extern M2C_UNK func_82144750;
+extern M2C_UNK BattleAnim_CallbackModelBurstAlphaFade;
 s16 Particle_GetUnkCD();
 s16 Particle_GetByteParam1();
-s32 func_821385C0();
+s32 ParticleMath_ComputeViewYawUnused();
 s32 func_82140690(s8 *);
 void Particle_AddPosOffsetYScaled(s8*, f32);
 void func_8213E1FC(Particle* arg0, f32 arg1);
@@ -422,12 +422,12 @@ void BattleAnim_AllocateEffect125DisplayList(s32 arg0, arg1_func_84344CE8* arg1)
 
 /**
  * Queues two effect slots on the current owner: func_82154EA4 at once (lifetime 30) and
- * func_82144750 after 20 frames (lifetime 80).
+ * BattleAnim_CallbackModelBurstAlphaFade after 20 frames (lifetime 80).
  * @unverified Name guessed from the code.
  */
 void BattleAnim_StartEffect123ModelBurst(void) {
     func_8213B560(0, &func_82154EA4, &D_8218E580, 0x1E, 1, 7, 0, 0, 0);
-    func_8213B560(0x14, &func_82144750, &D_8218E580, 0x50, 1, 0, 0, 0x33, 0);
+    func_8213B560(0x14, &BattleAnim_CallbackModelBurstAlphaFade, &D_8218E580, 0x50, 1, 0, 0, 0x33, 0);
 }
 
 /**
@@ -807,7 +807,7 @@ void BattleAnim_BlizzardParticleUpdate(s8 *arg0) {
         break;
     }
     if (Particle_IsRunning(arg0) != 0) {
-        func_8213831C(arg0 + 0x4C, 0x45674000);
+        ParticleMath_GetPointAlongView(arg0 + 0x4C, 0x45674000);
     }
 }
 
@@ -1763,7 +1763,7 @@ void BattleAnim_CallbackStartEffect10Model60AlphaFadeIn(s8 *arg0) {
         break;
     }
     if (Particle_IsRunning(arg0) != 0) {
-        func_8213831C(arg0 + 0x4C, 0x43480000);
+        ParticleMath_GetPointAlongView(arg0 + 0x4C, 0x43480000);
     }
 }
 
@@ -2450,10 +2450,10 @@ void BattleAnim_CallbackStartEffects71And74And111SpecialModelColorCycle(s8 *arg0
     }
     if (Particle_IsRunning(arg0) != 0) {
         if (sp26 == 0) {
-            func_8213831C(arg0 + 0x4C, 0x432A0000);
+            ParticleMath_GetPointAlongView(arg0 + 0x4C, 0x432A0000);
             return;
         }
-        func_8213831C(arg0 + 0x4C, 0x430C0000);
+        ParticleMath_GetPointAlongView(arg0 + 0x4C, 0x430C0000);
     }
 }
 
@@ -3788,7 +3788,7 @@ void BattleAnim_CallbackStartEffects21And93ModelAlphaAnchorFollow(Particle* part
         Particle_ApproachScratchA(particle, 0xC8, 6);
         break;
     }
-    Particle_SetRotationY(particle, (s16) (func_821385C0() + 0x8000));
+    Particle_SetRotationY(particle, (s16) (ParticleMath_ComputeViewYawUnused() + 0x8000));
 }
 
 /**
@@ -3817,7 +3817,7 @@ void BattleAnim_ConfuseRayParticleUpdate(Particle* arg0) {
     if (arg0->lifecycle == 1) {
         func_8215CA14();
     }
-    Particle_SetRotationY(arg0, (s16) (func_821385C0() + 0x8000));
+    Particle_SetRotationY(arg0, (s16) (ParticleMath_ComputeViewYawUnused() + 0x8000));
 }
 
 /**

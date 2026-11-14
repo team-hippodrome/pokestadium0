@@ -47,11 +47,12 @@ void func_82108C0C(ActivePokemon*);
 /**
  * Selects the next B-roll camera shot from the shot list for D_8219A4F4 (wrapping at 0xFF)
  * and starts it; list 5 jumps straight to phase step 24.
+ * @unverified Name guessed from the code.
  */
-void func_82121434(CameraNode* arg0) {
+void BattleCamera_StartNextBRollShot(CameraNode* camera) {
     if (D_8219A4F4 == 5) {
         sBattleScene.scene->phaseStep = 0x18;
-        func_8211F9C4(arg0);
+        func_8211F9C4(camera);
         return;
     }
     if (D_8218B2B8[D_8219A4F4][sBattleScene.scene->bRollShotIndex] == 0xFF) {
@@ -64,41 +65,41 @@ void func_82121434(CameraNode* arg0) {
     func_8212188C();
     switch (sBattleScene.scene->phaseStep) {
         case 0:
-            func_8211F6B8(arg0);
+            func_8211F6B8(camera);
             break;
         case 2:
-            func_8211F84C(arg0);
+            func_8211F84C(camera);
             break;
         case 4:
-            BattleScene_BRollShotFrontHigh(arg0);
+            BattleScene_BRollShotFrontHigh(camera);
             break;
         case 6:
-            BattleScene_BRollShotRandomPokemon0(arg0);
+            BattleScene_BRollShotRandomPokemon0(camera);
             break;
         case 8:
-            BattleScene_BRollShotRandomPokemon1(arg0);
+            BattleScene_BRollShotRandomPokemon1(camera);
             break;
         case 10:
-            BattleScene_BRollShotFrontLow(arg0);
+            BattleScene_BRollShotFrontLow(camera);
             break;
         case 12:
-            BattleScene_BRollShotAimPokemon0(arg0);
+            BattleScene_BRollShotAimPokemon0(camera);
             break;
         case 14:
-            BattleScene_BRollShotAimPokemon1(arg0);
+            BattleScene_BRollShotAimPokemon1(camera);
             break;
         case 16:
-            BattleScene_BRollShotWideFovPitched(arg0);
+            BattleScene_BRollShotWideFovPitched(camera);
             break;
         case 18:
-            BattleScene_BRollShotWideFovPitched(arg0);
+            BattleScene_BRollShotWideFovPitched(camera);
             break;
         case 20:
-            BattleScene_BRollShotFrontWide(arg0);
+            BattleScene_BRollShotFrontWide(camera);
             break;
         case 22:
-            BattleScene_BRollShotFrontClose(arg0);
+            BattleScene_BRollShotFrontClose(camera);
             break;
     }
-    BattleScene_UpdateParticipantsInView(arg0);
+    BattleScene_UpdateParticipantsInView(camera);
 }

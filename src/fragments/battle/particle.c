@@ -3128,7 +3128,7 @@ void Particle_SetScratchA(Particle* arg0, s16 arg1) {
     arg0->scratchA = arg1;
 }
 
-M2C_UNK func_82137898(s32, s16, s16);               /* extern */
+M2C_UNK ParticleMath_StepS16Toward(s32, s16, s16);               /* extern */
 
 /**
  * Steps the particle's unk_AE toward a target (helper of the approach family).
@@ -3136,7 +3136,7 @@ M2C_UNK func_82137898(s32, s16, s16);               /* extern */
  * (offset 0xAA) went from 0xE1 to 0xA1.
  */
 void Particle_ApproachScratchA(Particle* arg0, s16 arg1, s16 arg2) {
-    func_82137898((s32)&arg0->scratchA, arg1, arg2);
+    ParticleMath_StepS16Toward((s32)&arg0->scratchA, arg1, arg2);
 }
 
 /**
@@ -3163,7 +3163,7 @@ void Particle_SetScratchB(Particle* arg0, s16 arg1) {
     arg0->scratchB = arg1;
 }
 
-M2C_UNK func_82137898(s32, s16, s16);               /* extern */
+M2C_UNK ParticleMath_StepS16Toward(s32, s16, s16);               /* extern */
 
 /**
  * Steps the particle's unk_B0 toward a target (helper of the approach family).
@@ -3171,5 +3171,5 @@ M2C_UNK func_82137898(s32, s16, s16);               /* extern */
  * (offset 0xAC) went from 0x64 to 0x5C.
  */
 void Particle_ApproachScratchB(Particle* arg0, s16 arg1, s16 arg2) {
-    func_82137898((s32)&arg0->scratchB, arg1, arg2);
+    ParticleMath_StepS16Toward((s32)&arg0->scratchB, arg1, arg2);
 }
