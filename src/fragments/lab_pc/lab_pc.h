@@ -96,8 +96,8 @@ typedef struct PcBoxOperationWindow {
     /* 0x12C */ ImageButton viewButton; // operation 4 「ボックスのなかをみる」 (look inside a box), the bottom button
     /* 0x158 */ ChoiceCursor operationCursor; // cursor = the operation 0-5 (titles D_8900A924), count = 6; D-Up from 0 went to 5, D-Down from 5 to 0 .. 4
     /* 0x164 */ ChoiceCursor boxCursor; // operation 4: count 12, 0-7 = the GB boxes, 8-11 the 64 boxes; 0 opened ＧＢのボックス１
-    /* 0x170 */ Menu gbBoxMenu; // the GB box list (PcBox_DrawBoxName); items = gbBoxTable, D-Down moved its cursor to 1 while reordering
-    /* 0x194 */ Menu stadiumBoxMenu; // the 64 box list (PcBox_DrawBoxCount); items = stadiumBoxTable
+    /* 0x170 */ Menu gbBoxMenu; // the GB box list (PcBox_DrawGbBoxRow); items = gbBoxTable, D-Down moved its cursor to 1 while reordering
+    /* 0x194 */ Menu stadiumBoxMenu; // the 64 box list (PcBox_DrawStadiumBoxRow); items = stadiumBoxTable
     /* 0x1B8 */ u16 gbBoxFlags[8]; // @unverified: itemFlags of gbBoxMenu
     /* 0x1C8 */ u16 stadiumBoxFlags[8]; // @unverified: itemFlags of stadiumBoxMenu
     /* 0x1D8 */ Menu* sourceMenu; // the box list picked first (PcBox_SetActiveLists): gbBoxMenu for ボックスをならべかえる

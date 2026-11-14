@@ -171,32 +171,32 @@ void LabItem_DrawSaveDataWindow(LabItemSaveDataWindow*);
  * Draws the item organizer for its current state.
  * Seen in play (2026-11-12): drew the どうぐのせいり screen.
  */
-void LabItem_DrawScreen(LabItemScreen* arg0) {
+void LabItem_DrawScreen(LabItemScreen* screen) {
     BgStage_DrawFrame();
     LabItem_DrawBackground();
-    switch (arg0->state) {
+    switch (screen->state) {
         case 1:
-            LabItem_DrawOrganizeWindow(&arg0->organizeWindow);
+            LabItem_DrawOrganizeWindow(&screen->organizeWindow);
             break;
         case 2:
-            LabItem_DrawOrganizeWindow(&arg0->organizeWindow);
-            SavePrompt_Draw(&arg0->savePrompt);
+            LabItem_DrawOrganizeWindow(&screen->organizeWindow);
+            SavePrompt_Draw(&screen->savePrompt);
             break;
         case 3:
-            LabItem_DrawOrganizeWindow(&arg0->organizeWindow);
-            LabItem_DrawConfirmWindow(&arg0->confirmWindow);
+            LabItem_DrawOrganizeWindow(&screen->organizeWindow);
+            LabItem_DrawConfirmWindow(&screen->confirmWindow);
             break;
         case 4:
-            LabItem_DrawDeleteDataWindow(&arg0->deleteDataWindow, 2);
+            LabItem_DrawDeleteDataWindow(&screen->deleteDataWindow, 2);
             break;
         case 5:
-            LabItem_DrawDeleteDataWindow(&arg0->deleteDataWindow, 0x10);
-            LabItem_DrawSaveDataWindow(&arg0->saveDataWindow);
+            LabItem_DrawDeleteDataWindow(&screen->deleteDataWindow, 0x10);
+            LabItem_DrawSaveDataWindow(&screen->saveDataWindow);
             break;
         case 6:
-            LabItem_DrawDeleteDataWindow(&arg0->deleteDataWindow, 0x10);
-            LabItem_DrawSaveDataWindow(&arg0->saveDataWindow);
-            LabItem_DrawConfirmWindow(&arg0->confirmWindow);
+            LabItem_DrawDeleteDataWindow(&screen->deleteDataWindow, 0x10);
+            LabItem_DrawSaveDataWindow(&screen->saveDataWindow);
+            LabItem_DrawConfirmWindow(&screen->confirmWindow);
             break;
     }
 }
