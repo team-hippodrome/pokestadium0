@@ -10,7 +10,7 @@ extern ComBattler* D_821CF29C;
 extern ComBattler* D_821CF2A0;
 s32 BattleAi_GetBestDamage(u8 *arg0, u8 *arg1, s32 arg2);
 s32 BattleAi_MovesFirst(s8 *arg0, s8 *arg1);
-s32 BattleAi_CanUseMove(s8 *arg0, s32 arg1);
+s32 BattleAi_CanUseMove(ComBattler* arg0, s32 arg1);
 s32 BattleAi_EstimateDamage(s8 *, s8 *, u8);
 
 /**
@@ -183,9 +183,9 @@ s32 BattleAi_PickStrongestMove(s32 arg0) {
 }
 
 extern ComSide* D_821CF294;
-s32 BattleAi_GetHpPercent(s8 *);
+s32 BattleAi_GetHpPercent(ComBattler*);
 s32 BattleAi_CountUnfainted(void *);
-s32 BattleAi_FindUsableHealingMove(s8 *);
+s32 BattleAi_FindUsableHealingMove(ComBattler*);
 s32 BattleAi_OpponentCannotAct(s8 *, s8 *);
 s32 BattleAi_PickSetupMove(s8 *);
 s32 BattleAi_PickStatBoostMove(s8 *);

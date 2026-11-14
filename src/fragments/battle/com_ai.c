@@ -190,16 +190,16 @@ s32 BattleAi_CalcSpecial(s32 arg0, s32 arg1) {
  * Current HP as a percentage of max HP (battler bytes 0x18 / 0x34), at least 1
  * while the Pokemon has any HP left, 0 when fainted.
  */
-s32 BattleAi_GetHpPercent(s8 *arg0)
+s32 BattleAi_GetHpPercent(ComBattler* arg0)
 {
   s32 var_v1;
   u16 temp_v0;
-  temp_v0 = *((u16 *) (((s8 *) arg0) + 0x18));
+  temp_v0 = arg0->mon.hp;
   if (!temp_v0)
   {
     return 0;
   }
-  var_v1 = ((s32) (temp_v0 * 0x64)) / ((s32) (*((u16 *) (((s8 *) arg0) + 0x34))));
+  var_v1 = ((s32) (temp_v0 * 0x64)) / ((s32) (arg0->mon.maxHp));
   if (var_v1 == 0)
   {
     var_v1 = 1;
@@ -277,9 +277,9 @@ void func_82183DC4(void) {
  * for some candidates (the 40% roll), with the candidate battler as the argument.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-void BattleAi_AddRandomPickScore(s8* arg0) {
+void BattleAi_AddRandomPickScore(ComBattler* arg0) {
     BattleAi_StirRandom();
-    M2C_FIELD(arg0, s32*, 4) += (BattleAi_RandomPercent() & 0xF) * 400;
+    arg0->pickScore += (BattleAi_RandomPercent() & 0xF) * 400;
 }
 
 /**
@@ -453,11 +453,11 @@ s32 BattleAi_NoVenusaurChanseyJynxPicked(s32);
  * of the hand-written cases, so none of the opponent checks it calls ran.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-void BattleAi_AddTrainerPickScore(u8* arg0, s32 arg1) {
+void BattleAi_AddTrainerPickScore(ComBattler* arg0, s32 arg1) {
     s32 score = 0;
     s32 id = D_821CF294->roster->trainerId;
 
-    switch (arg0[0x17]) {
+    switch (arg0->mon.species) {
         case GENGAR:
             if ((id == 0x6974) && BattleAi_OpponentHasSpecies(TAUROS)) {
                 score = 30000;
@@ -667,10 +667,10 @@ void BattleAi_AddTrainerPickScore(u8* arg0, s32 arg1) {
             }
             break;
     }
-    if ((D_821CF294->mode == 0) && (arg0[0x17] != DITTO)) {
+    if ((D_821CF294->mode == 0) && (arg0->mon.species != DITTO)) {
         score += 50000;
     }
-    M2C_FIELD(arg0, s32*, 4) += score;
+    arg0->pickScore += score;
 }
 
 /**
@@ -703,7 +703,7 @@ extern u8 D_8218AC50[];
  * BattleAi_AddMatchupPickScore and returned 100 for neutral matchups.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAi_GetTypeMultiplier(s8* arg0, s8* arg1, s32 move) {
+s32 BattleAi_GetTypeMultiplier(ComBattler* arg0, ComBattler* arg1, s32 move) {
     s32 mult = 100;
     u8 def_type1;
     u8 def_type2;
@@ -711,11 +711,11 @@ s32 BattleAi_GetTypeMultiplier(s8* arg0, s8* arg1, s32 move) {
     u8* chart;
 
     if (move != 0) {
-        def_type1 = M2C_FIELD(arg1, u8*, 0x28);
-        def_type2 = M2C_FIELD(arg1, u8*, 0x29);
+        def_type1 = arg1->mon.type1;
+        def_type2 = arg1->mon.type2;
         if (D_8006B190[move - 1].power != 0) {
             type = D_8006B190[move - 1].type;
-            if (type == M2C_FIELD(arg0, u8*, 0x28) || type == M2C_FIELD(arg0, u8*, 0x29)) {
+            if (type == arg0->mon.type1 || type == arg0->mon.type2) {
                 mult = 150;
             }
             for (chart = D_8218AC50; chart[0] != 0xFF; chart += 3) {
@@ -735,7 +735,7 @@ s32 BattleAi_GetTypeMultiplier(s8* arg0, s8* arg1, s32 move) {
  * (0x0B, 0x42, 0x68, 0x75) for COM's Pinsir, whose AI record holds exactly those four moves
  * with 30, 25, 15 and 10 PP.
  */
-s32 BattleAi_CanUseMove(s8 *arg0, s32 arg1) {
+s32 BattleAi_CanUseMove(ComBattler* arg0, s32 arg1) {
     s32 i;
     u8 *p = (u8 *)arg0;
 
@@ -757,19 +757,19 @@ s32 BattleAi_CanUseMove(s8 *arg0, s32 arg1) {
  * Seen in play (2026-11-12): returned 0x69 (Recover) for COM's Gengar after Recover was put in
  * its move slot 3, and 0 for 1P's Nidoqueen, which has no healing move.
  */
-u8 BattleAi_FindUsableHealingMove(u8 *arg0) {
+u8 BattleAi_FindUsableHealingMove(ComBattler* arg0) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        if (arg0[0x2B + i] == 0) {
+        if (arg0->mon.moves[i] == 0) {
             return 0;
         }
-        switch (arg0[0x2B + i]) {
+        switch (arg0->mon.moves[i]) {
             case RECOVER:
             case SOFTBOILED:
             case REST:
-                if (BattleAi_CanUseMove((s8*)arg0, arg0[0x2B + i]) != 0) {
-                    return arg0[0x2B + i];
+                if (BattleAi_CanUseMove((s8*)arg0, arg0->mon.moves[i]) != 0) {
+                    return arg0->mon.moves[i];
                 }
                 break;
         }
@@ -780,8 +780,8 @@ u8 BattleAi_FindUsableHealingMove(u8 *arg0) {
 /**
  * Returns 1 if either of the battler's types is arg1.
  */
-s32 BattleAi_HasType(s8 *arg0, s32 arg1) {
-    if ((arg1 == M2C_FIELD(arg0, u8 *, 0x28)) || (arg1 == M2C_FIELD(arg0, u8 *, 0x29))) {
+s32 BattleAi_HasType(ComBattler* arg0, s32 arg1) {
+    if ((arg1 == arg0->mon.type1) || (arg1 == arg0->mon.type2)) {
         return 1;
     }
     return 0;

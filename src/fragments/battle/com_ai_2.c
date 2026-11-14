@@ -1470,7 +1470,7 @@ s32 BattleAi_IsPickAllowed(s32 arg0, s32 arg1, s32 arg2) {
     return 1;
 }
 
-void BattleAi_AddTrainerPickScore(u8 *, s32);
+void BattleAi_AddTrainerPickScore(ComBattler*, s32);
 /**
  * Scores every unfainted, unpicked (arg1 == 0) or picked (arg1 != 0) Pokemon of
  * the COM side and returns the best legal one, marking it as picked. arg0 is the
