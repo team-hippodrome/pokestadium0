@@ -249,28 +249,28 @@ typedef struct LabItemScreen {
 /* The window of the ポケモンを いどうする screen: six operation buttons, two box pickers and two
  * Pokémon lists side by side (PcSort_InitOrganizeWindow, PcSort_UpdateOrganizeWindow). */
 typedef struct PcSortOrganizeWindow {
-    /* 0x000 */ s32 state; // @unverified: 1 = picking an operation, 2/3 = box pickers, 4-7 = Pokémon lists, 0xA-0xD = text box up
-    /* 0x004 */ Window window; // @unverified: typed from the function it is passed to
-    /* 0x030 */ WindowFrame footerFrame; // @unverified: frame of the bottom strip
-    /* 0x050 */ ImageButton moveButton; // @unverified: operation 0 (いどうする, move); same image as PcBoxOperationWindow.moveTo64Button
-    /* 0x07C */ ImageButton backButton; // @unverified: operation 1; same image as PcBoxOperationWindow.backButton
-    /* 0x0A8 */ ImageButton exchangeButton; // @unverified: operation 2 (いれかえる, exchange)
-    /* 0x0D4 */ ImageButton reorderButton; // @unverified: operation 3 (ならべかえる, reorder)
-    /* 0x100 */ ImageButton viewButton; // @unverified: operation 4 (みる, look)
-    /* 0x12C */ ImageButton releaseButton; // @unverified: operation 5 (にがす, release)
+    /* 0x000 */ s32 state; // 1 = picking an operation, 2/3 = box pickers, 4-7 = Pokémon lists, 0xA-0xD = text box up; seen 1, 2, 3, 4, 5 and 0xA (さいごのポケモンです) in play
+    /* 0x004 */ Window window; // the ポケモンのせいり window, 564x370 at (38, 83)
+    /* 0x030 */ WindowFrame footerFrame; // the bottom strip, 552x108 at (44, 339): the operation name, or the Pokémon's stats and moves for みる
+    /* 0x050 */ ImageButton moveButton; // operation 0 「ポケモンをいどうする」 (move), top left
+    /* 0x07C */ ImageButton backButton; // operation 1 (back to the menu, house icon), top right
+    /* 0x0A8 */ ImageButton exchangeButton; // operation 2 (いれかえる, exchange), middle left
+    /* 0x0D4 */ ImageButton reorderButton; // operation 3 (ならべかえる, reorder), middle right
+    /* 0x100 */ ImageButton viewButton; // operation 4 「ポケモンをみる」 (look), bottom left
+    /* 0x12C */ ImageButton releaseButton; // operation 5 (にがす, release; the hand), bottom right
     /* 0x158 */ ByteMatrix buttonTable; // @unverified: rows = the six buttons, items of operationMenu
-    /* 0x168 */ GridMenu operationMenu; // @unverified: cursor = the operation; error texts D_8900A84C
+    /* 0x168 */ GridMenu operationMenu; // cursor = the operation, 2 columns: D-Right 0 -> 1, D-Down 1 -> 3, D-Left 3 -> 2, D-Down 2 -> 4
     /* 0x190 */ u16 operationFlags[6]; // @unverified: typed from the function it is passed to
-    /* 0x19C */ PcSortMenuWindow sourceBoxWindow; // @unverified: picks the box of leftList (state 2)
-    /* 0x214 */ PcSortMenuWindow targetBoxWindow; // @unverified: picks the box of rightList (state 3)
-    /* 0x28C */ s32 leftBox; // @unverified: index into boxTables of leftList
-    /* 0x290 */ s32 rightBox; // @unverified: index into boxTables of rightList; -1 while it shows partyTable
-    /* 0x294 */ PcSortMonList leftList; // @unverified: typed from the function it is passed to
-    /* 0x31C */ PcSortMonList rightList; // @unverified: typed from the function it is passed to
+    /* 0x19C */ PcSortMenuWindow sourceBoxWindow; // picks the box of leftList (state 2): てもち, GBのボックス1-8, 64のボックス1-4; てもち with one Pokémon gave さいごのポケモンです
+    /* 0x214 */ PcSortMenuWindow targetBoxWindow; // picks the box of rightList (state 3)
+    /* 0x28C */ s32 leftBox; // index into boxTables of leftList: 0 てもち, 1 GBのボックス1
+    /* 0x290 */ s32 rightBox; // index into boxTables of rightList: 1 GBのボックス1, 12 64のボックス4; -1 while it shows partyView (みる)
+    /* 0x294 */ PcSortMonList leftList; // the left Pokémon list at (52, 127)
+    /* 0x31C */ PcSortMonList rightList; // the right Pokémon list at (384, 127)
     /* 0x3A4 */ s32 swapIndex; // @unverified: reorder: the first Pokémon picked in leftList
-    /* 0x3A8 */ ByteMatrix* boxTables; // @unverified: PcSortScreen.partyTable and the 12 box tables after it
-    /* 0x3AC */ s32* dirty; // @unverified: PcSortScreen.dirty, one per box table
-    /* 0x3B0 */ ByteMatrix partyView; // @unverified: a copy of boxTables[0] shown in rightList for some operations
+    /* 0x3A8 */ ByteMatrix* boxTables; // PcSortScreen.partyTable and the 12 box tables after it: index 1 = GB box 1, 12 = 64 box 4
+    /* 0x3AC */ s32* dirty; // PcSortScreen.dirty, one per box table
+    /* 0x3B0 */ ByteMatrix partyView; // a copy of boxTables[0] (rows = partyMons, capacity 6) with no rows in use, shown as 00/06 in rightList for みる
     /* 0x3C0 */ TextBox textBox; // @unverified: typed from the function it is passed to
 } PcSortOrganizeWindow; // size = 0x3F8
 
@@ -280,16 +280,16 @@ typedef struct PcSortScreen {
     /* 0x0004 */ s8* iconFramebuffers; // @unverified: PokeIcon_AllocFramebuffers
     /* 0x0008 */ u16* monRenderer; // @unverified: func_80018F2C; the anim of statusWindow
     /* 0x000C */ s32 mode; // @unverified: PcSort_Init's arg1
-    /* 0x0010 */ PcSortOrganizeWindow organizeWindow; // @unverified: typed from the function it is passed to
+    /* 0x0010 */ PcSortOrganizeWindow organizeWindow; // the ポケモンのせいり window
     /* 0x0408 */ SavePrompt savePrompt; // @unverified: typed from the function it is passed to
     /* 0x046C */ PcBoxConfirmWindow statusWindow; // @unverified: typed from the function it is passed to
-    /* 0x052C */ BattleMon partyMons[6]; // @unverified: read from deck 0x20 of the GB cart
-    /* 0x070C */ BattleMon gbBoxMons[8][30]; // @unverified: read from deck 0x21 of the GB cart
+    /* 0x052C */ BattleMon partyMons[6]; // read from deck 0x20 of the GB cart: partyMons[0] ヒトカゲ (4) Lv10, the only party Pokémon
+    /* 0x070C */ BattleMon gbBoxMons[8][30]; // read from deck 0x21 of the GB cart: gbBoxMons[0][0] ピカチュウ (25) Lv25, the one moved there in いちらん
     /* 0x520C */ BattleMon stadiumBoxMons[4][30]; // @unverified: read from deck 0x11, the 64 boxes
-    /* 0x778C */ ByteMatrix partyTable; // @unverified: rows = partyMons; boxTables[0] of organizeWindow
-    /* 0x779C */ ByteMatrix gbBoxTables[8]; // @unverified: rows = gbBoxMons
-    /* 0x781C */ ByteMatrix stadiumBoxTables[4]; // @unverified: rows = stadiumBoxMons
-    /* 0x785C */ s32 dirty[13]; // @unverified: set when a table changed; PcSort_SaveChanges writes those back
+    /* 0x778C */ ByteMatrix partyTable; // rows = partyMons, capacity 6, count 1 (shown 01/06); boxTables[0] of organizeWindow
+    /* 0x779C */ ByteMatrix gbBoxTables[8]; // rows = gbBoxMons, capacity 30: box 1 count 1 (01/30), 0 after moving ハナ out
+    /* 0x781C */ ByteMatrix stadiumBoxTables[4]; // rows = stadiumBoxMons: box 4 count 1 after moving ハナ there
+    /* 0x785C */ s32 dirty[13]; // set when a table changed: [1] (GB box 1) and [12] (64 box 4) after moving ハナ; PcSort_SaveChanges writes those back
 } PcSortScreen; // size = 0x7890
 
 void PcBox_InitConfirmWindow(PcBoxConfirmWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16* arg6);

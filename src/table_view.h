@@ -27,7 +27,7 @@ typedef struct ByteMatrix {
     /* 0x00 */ u8* rows;
     /* 0x04 */ s32 capacity; // number of rows the buffer holds
     /* 0x08 */ s32 count; // number of rows in use: 3 for the Free Battle rule window's items
-    /* 0x0C */ s32 rowSize; // @unverified: bytes per row (ByteMatrix_AppendRow, Menu_DrawInlineItems)
+    /* 0x0C */ s32 rowSize; // bytes per row: 80 (sizeof BattleMon) for the せいとん box tables, 2 for the item tables
 } ByteMatrix; // size = 0x10
 
 typedef struct unk_func_8830867C_02C_0CC_000_000_000 {
