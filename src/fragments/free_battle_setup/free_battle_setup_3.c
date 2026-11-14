@@ -11,7 +11,7 @@ void func_80020C60(s32);
 void func_800207F8(u8*);
 extern u8 D_80065D00[];
 
-s32 FreeBattle_ReadTeam(s32 arg0, s32 arg1, s32 arg2, Entry82000058* entry);
+s32 FreeBattle_ReadTeam(s32 arg0, s32 arg1, s32 arg2, TeamMonSlot* entry);
 
 typedef struct Color82000BC4 {
     u8 r, g, b, a;
