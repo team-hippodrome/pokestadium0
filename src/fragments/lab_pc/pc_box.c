@@ -784,7 +784,7 @@ void Window_DrawFrame(void*);
 void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
 void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
 void Menu_DrawInlineItems(void*, s32, s32, s32, s32);
-void TextBox_Draw(void*);
+void TextBox_Draw(TextBox*);
 extern u8 D_8007356C[];
 extern u8 D_800735C4[];
 /**
@@ -850,7 +850,7 @@ void PcBox_DrawOperationWindow(PcBoxOperationWindow* arg0) {
     Menu_DrawInlineItems(&arg0->stadiumBoxMenu, arg0->window.frame.x + 0x120, arg0->window.frame.y + 0x3C, flags[1], 0);
     func_89008EF0(arg0);
     if (arg0->state == 7) {
-        TextBox_Draw(arg0->textBox);
+        TextBox_Draw(&arg0->textBox);
     }
 }
 
@@ -1006,8 +1006,8 @@ s32 func_89009738(PcBoxOperationWindow* arg0, s32 arg1) {
 
 s32 func_8000B30C(void);
 s32 func_8002B2B0(void*);
-void TextBox_Init(void*, void*, s32, s32, s32);
-s32 Ui_CheckConfirmPressed(void*);
+void TextBox_Init(TextBox*, char*, s32, s32, s32);
+s32 Ui_CheckConfirmPressed(TextBox*);
 void Menu_ClearItemFlags(void*);
 extern void* D_8900A954[];
 extern u8 D_8900A96C[];
@@ -1043,11 +1043,11 @@ s32 PcBox_UpdateOperationWindow(PcBoxOperationWindow* arg0) {
                             if (LabPC_AllBoxesEmpty(arg0->gbBoxMenu.items) != 0) {
                                 func_8003F6AC(8);
                                 arg0->state = 7;
-                                TextBox_Init(arg0->textBox, D_8900A954[arg0->operationCursor.cursor], 0, 1, 0);
+                                TextBox_Init(&arg0->textBox, D_8900A954[arg0->operationCursor.cursor], 0, 1, 0);
                             } else if (LabPC_NoEmptyBoxAvailable(arg0->stadiumBoxMenu.items) != 0) {
                                 func_8003F6AC(8);
                                 arg0->state = 7;
-                                TextBox_Init(arg0->textBox, D_8900A96C, 0, 1, 0);
+                                TextBox_Init(&arg0->textBox, D_8900A96C, 0, 1, 0);
                             } else {
                                 func_8003F6AC(2);
                                 next = 2;
@@ -1058,11 +1058,11 @@ s32 PcBox_UpdateOperationWindow(PcBoxOperationWindow* arg0) {
                             if (LabPC_AllBoxesEmpty(arg0->stadiumBoxMenu.items) != 0) {
                                 func_8003F6AC(8);
                                 arg0->state = 7;
-                                TextBox_Init(arg0->textBox, D_8900A954[arg0->operationCursor.cursor], 0, 1, 0);
+                                TextBox_Init(&arg0->textBox, D_8900A954[arg0->operationCursor.cursor], 0, 1, 0);
                             } else if (LabPC_NoEmptyBoxAvailable(arg0->gbBoxMenu.items) != 0) {
                                 func_8003F6AC(8);
                                 arg0->state = 7;
-                                TextBox_Init(arg0->textBox, D_8900A96C, 0, 1, 0);
+                                TextBox_Init(&arg0->textBox, D_8900A96C, 0, 1, 0);
                             } else {
                                 func_8003F6AC(2);
                                 next = 2;
@@ -1073,7 +1073,7 @@ s32 PcBox_UpdateOperationWindow(PcBoxOperationWindow* arg0) {
                             if (LabPC_AllBoxesEmpty(arg0->gbBoxMenu.items) != 0) {
                                 func_8003F6AC(8);
                                 arg0->state = 7;
-                                TextBox_Init(arg0->textBox, D_8900A954[arg0->operationCursor.cursor], 0, 1, 0);
+                                TextBox_Init(&arg0->textBox, D_8900A954[arg0->operationCursor.cursor], 0, 1, 0);
                             } else {
                                 func_8003F6AC(2);
                                 arg0->state = 2;
@@ -1085,7 +1085,7 @@ s32 PcBox_UpdateOperationWindow(PcBoxOperationWindow* arg0) {
                                 (LabPC_AllBoxesEmpty(arg0->stadiumBoxMenu.items) != 0)) {
                                 func_8003F6AC(8);
                                 arg0->state = 7;
-                                TextBox_Init(arg0->textBox, D_8900A954[arg0->operationCursor.cursor], 0, 1, 0);
+                                TextBox_Init(&arg0->textBox, D_8900A954[arg0->operationCursor.cursor], 0, 1, 0);
                             } else {
                                 func_8003F6AC(2);
                                 next = 2;
@@ -1097,7 +1097,7 @@ s32 PcBox_UpdateOperationWindow(PcBoxOperationWindow* arg0) {
                                 (LabPC_AllBoxesEmpty(arg0->stadiumBoxMenu.items) != 0)) {
                                 func_8003F6AC(8);
                                 arg0->state = 7;
-                                TextBox_Init(arg0->textBox, D_8900A954[arg0->operationCursor.cursor], 0, 1, 0);
+                                TextBox_Init(&arg0->textBox, D_8900A954[arg0->operationCursor.cursor], 0, 1, 0);
                             } else {
                                 func_8003F6AC(2);
                                 next = 6;
@@ -1202,7 +1202,7 @@ s32 PcBox_UpdateOperationWindow(PcBoxOperationWindow* arg0) {
             break;
 
         case 7:
-            if (Ui_CheckConfirmPressed(arg0->textBox) == 1) {
+            if (Ui_CheckConfirmPressed(&arg0->textBox) == 1) {
                 arg0->state = 1;
             }
             break;
@@ -1310,7 +1310,7 @@ void PcBox_Free(s32 arg0) {
 void Ui_DrawTintedScreenBackground(s32, s32, s32, s32, s32);
 extern u8 D_8900A5B8[];
 void PcBox_DrawOperationWindow(PcBoxOperationWindow*);
-void SavePrompt_Draw(void*);
+void SavePrompt_Draw(SavePrompt*);
 void PcBox_DrawMonStatusWindow(PcBoxConfirmWindow*);
 /**
  * Draws the PC box screen for its current state, including the storage label and status window.
@@ -1325,7 +1325,7 @@ void PcBox_DrawScreen(PcBoxScreen* arg0) {
             break;
         case 4:
             PcBox_DrawOperationWindow(&arg0->operationWindow);
-            SavePrompt_Draw(arg0->savePrompt);
+            SavePrompt_Draw(&arg0->savePrompt);
             break;
         case 2:
             PcBox_DrawList(&arg0->listWindow, 2);
@@ -1360,9 +1360,9 @@ s32 PcBox_HasUnsavedChanges(PcBoxScreen* arg0) {
 }
 
 s32 PcBox_UpdateOperationWindow(PcBoxOperationWindow*);
-void SavePrompt_Init(void*, s32, s32);
-void Save_DrawReportingWindow(void*);
-s32 SavePrompt_Update(void*);
+void SavePrompt_Init(SavePrompt*, s32, s32);
+void Save_DrawReportingWindow(SavePrompt*);
+s32 SavePrompt_Update(SavePrompt*);
 s32 PcBox_HasUnsavedChanges(PcBoxScreen* arg0);
 void func_890070BC(PcBoxScreen* arg0);
 void func_8900806C(PcBoxListWindow* arg0, s32 arg1, s32 arg2, PcBoxStorage* arg3, s32 arg4, s32 arg5, s32 arg6);
@@ -1384,7 +1384,7 @@ s32 PcBox_UpdateScreen(PcBoxScreen* arg0) {
             if (r == -1) {
                 if (PcBox_HasUnsavedChanges(arg0) != 0) {
                     arg0->state = 4;
-                    SavePrompt_Init(arg0->savePrompt, 0xCA, 0xAD);
+                    SavePrompt_Init(&arg0->savePrompt, 0xCA, 0xAD);
                 } else {
                     ret = 1;
                 }
@@ -1396,14 +1396,14 @@ s32 PcBox_UpdateScreen(PcBoxScreen* arg0) {
             }
             break;
         case 4:
-            r = SavePrompt_Update(arg0->savePrompt);
+            r = SavePrompt_Update(&arg0->savePrompt);
             if (r == -1) {
                 arg0->state = 1;
             } else if (r > 0) {
                 ret = 1;
                 switch (r) {
                     case 1:
-                        Save_DrawReportingWindow(arg0->savePrompt);
+                        Save_DrawReportingWindow(&arg0->savePrompt);
                         func_890070BC(arg0);
                         break;
                     case 2:

@@ -34,7 +34,7 @@ typedef struct LabItemCountSelector {
     /* 0x04 */ Window window;
     /* 0x30 */ s32 limit; // @unverified: arg4; a value above it opens the text box, then is set back to it
     /* 0x34 */ DigitSelector count;
-    /* 0x48 */ s8 textBox[0x38]; // @unverified: TextBox_Init, TextBox_Draw; LabItemOrganizeWindow.tables follows at +0x80
+    /* 0x48 */ TextBox textBox; // @unverified: typed from the function it is passed to
 } LabItemCountSelector; // size = 0x80
 
 /* A yes/no question in the Lab item screens (LabItem_InitConfirmWindow). */
@@ -102,7 +102,7 @@ typedef struct PcBoxOperationWindow {
     /* 0x1C8 */ u16 stadiumBoxFlags[8]; // @unverified: itemFlags of stadiumBoxMenu
     /* 0x1D8 */ Menu* sourceMenu; // @unverified: the box list picked first (PcBox_SetActiveLists)
     /* 0x1DC */ Menu* targetMenu; // @unverified: the box list picked second (PcBox_SetActiveLists)
-    /* 0x1E0 */ s8 textBox[0x38]; // @unverified: TextBox_Init, TextBox_Draw; its size is not established
+    /* 0x1E0 */ TextBox textBox; // @unverified: typed from the function it is passed to
     /* 0x218 */ s32 swapIndex; // @unverified: operation 2: the first box picked, swapped with the second
 } PcBoxOperationWindow; // size = 0x21C
 
@@ -110,7 +110,7 @@ typedef struct PcBoxOperationWindow {
 typedef struct PcBoxScreen {
     /* 0x0000 */ s32 state; // @unverified: 1 = operation window, 2 = box list, 3 = mon status, 4 = save prompt (PcBox_UpdateScreen)
     /* 0x0004 */ PcBoxOperationWindow operationWindow; // @unverified: typed from the function it is passed to
-    /* 0x0220 */ s8 savePrompt[0x64]; // @unverified: SavePrompt_Init, SavePrompt_Update, SavePrompt_Draw
+    /* 0x0220 */ SavePrompt savePrompt; // @unverified: typed from the function it is passed to
     /* 0x0284 */ PcBoxListWindow listWindow; // @unverified: typed from the function it is passed to
     /* 0x0328 */ PcBoxConfirmWindow statusWindow; // @unverified: typed from the function it is passed to
     /* 0x03E8 */ PcBoxStorage gbBoxes[8]; // @unverified: read from deck 0x21 of the GB cart (D_89019108)
@@ -215,7 +215,7 @@ typedef struct LabItemOrganizeWindow {
     /* 0x494 */ s32* dirty; // @unverified: one per table, set when it changed
     /* 0x498 */ s32* gamePakSlot; // @unverified: picking box 2 as target with -1 here ends the window with 1
     /* 0x49C */ ByteMatrix reorderView; // @unverified: func_80027410 over the rows of tables[0] with no rows in use; rightList shows it while reordering
-    /* 0x4AC */ s8 textBox[0x38]; // @unverified: TextBox_Init, TextBox_Draw; LabItemScreen.savePrompt follows
+    /* 0x4AC */ TextBox textBox; // @unverified: typed from the function it is passed to
 } LabItemOrganizeWindow; // size = 0x4E4
 
 /* The せいとん (organize) menu window of the Lab terminal, D_89028950: ポケモンを いどうする / どうぐを
@@ -233,7 +233,7 @@ typedef struct LabTerminalMenuWindow {
 typedef struct LabItemScreen {
     /* 0x000 */ s32 state; // @unverified: 1 = organizeWindow, 2 = save prompt, 3-6 = deleting a ６４の カセット save (LabItem_UpdateScreen)
     /* 0x004 */ LabItemOrganizeWindow organizeWindow; // @unverified: typed from the function it is passed to
-    /* 0x4E8 */ s8 savePrompt[0x64]; // @unverified: SavePrompt_Init, SavePrompt_Update, SavePrompt_Draw
+    /* 0x4E8 */ SavePrompt savePrompt; // @unverified: typed from the function it is passed to
     /* 0x54C */ LabItemConfirmWindow confirmWindow; // @unverified: typed from the function it is passed to
     /* 0x604 */ LabItemDeleteDataWindow deleteDataWindow; // @unverified: typed from the function it is passed to
     /* 0x68C */ LabItemSaveDataWindow saveDataWindow; // @unverified: typed from the function it is passed to
@@ -271,7 +271,7 @@ typedef struct PcSortOrganizeWindow {
     /* 0x3A8 */ ByteMatrix* boxTables; // @unverified: PcSortScreen.partyTable and the 12 box tables after it
     /* 0x3AC */ s32* dirty; // @unverified: PcSortScreen.dirty, one per box table
     /* 0x3B0 */ ByteMatrix partyView; // @unverified: a copy of boxTables[0] shown in rightList for some operations
-    /* 0x3C0 */ s8 textBox[0x38]; // @unverified: TextBox_Init, TextBox_Draw; its size is not established
+    /* 0x3C0 */ TextBox textBox; // @unverified: typed from the function it is passed to
 } PcSortOrganizeWindow; // size = 0x3F8
 
 /* The ポケモンを いどうする screen (PcSort_Init, PcSort_UpdateScreen, PcSort_DrawScreen). */
@@ -281,7 +281,7 @@ typedef struct PcSortScreen {
     /* 0x0008 */ u16* monRenderer; // @unverified: func_80018F2C; the anim of statusWindow
     /* 0x000C */ s32 mode; // @unverified: PcSort_Init's arg1
     /* 0x0010 */ PcSortOrganizeWindow organizeWindow; // @unverified: typed from the function it is passed to
-    /* 0x0408 */ s8 savePrompt[0x64]; // @unverified: SavePrompt_Init, SavePrompt_Update, SavePrompt_Draw
+    /* 0x0408 */ SavePrompt savePrompt; // @unverified: typed from the function it is passed to
     /* 0x046C */ PcBoxConfirmWindow statusWindow; // @unverified: typed from the function it is passed to
     /* 0x052C */ BattleMon partyMons[6]; // @unverified: read from deck 0x20 of the GB cart
     /* 0x070C */ BattleMon gbBoxMons[8][30]; // @unverified: read from deck 0x21 of the GB cart

@@ -397,7 +397,7 @@ void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void func_8001AA60(s32, s32, s32);
 void Font_SetColorForFlags(s32);
 void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
-void TextBox_Draw(s8*);
+void TextBox_Draw(TextBox*);
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
 extern Color_RGBA8 D_80073520;
@@ -455,15 +455,15 @@ void LabItem_DrawCountSelector(LabItemCountSelector* arg0) {
         func_8001AA60(arg0->window.frame.x + 0x36, arg0->window.frame.y + 0x10, arg0->count.value % 10 + '0');
         Font_EndTexturedTextRendering();
         if (arg0->state == 1) {
-            TextBox_Draw(arg0->textBox);
+            TextBox_Draw(&arg0->textBox);
         }
     }
 }
 
 s32 func_8002B638(s8 *);                          /* extern */
 s32 func_8002BC14(s32);                             /* extern */
-M2C_UNK TextBox_Init(s8 *, M2C_UNK *, M2C_UNK, M2C_UNK, s32); /* extern */
-s32 Ui_CheckConfirmPressed(s8 *);                          /* extern */
+void TextBox_Init(TextBox*, char*, s32, s32, s32);
+s32 Ui_CheckConfirmPressed(TextBox*);
 M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
 extern s32 D_800603C0;
 extern M2C_UNK D_89018474;
@@ -490,7 +490,7 @@ s32 LabItem_UpdateCountSelector(LabItemCountSelector* arg0) {
             } else if (temp_v0_2 == 1) {
                 if (arg0->limit < arg0->count.value) {
                     func_8003F6AC(8);
-                    TextBox_Init(arg0->textBox, &D_89018474, 0, 1, 0);
+                    TextBox_Init(&arg0->textBox, &D_89018474, 0, 1, 0);
                     arg0->state = 1;
                 } else {
                     func_8003F6AC(2);
@@ -500,7 +500,7 @@ s32 LabItem_UpdateCountSelector(LabItemCountSelector* arg0) {
         }
         break;
     case 1:
-        if (Ui_CheckConfirmPressed(arg0->textBox) == 1) {
+        if (Ui_CheckConfirmPressed(&arg0->textBox) == 1) {
             arg0->state = 0;
             arg0->count.value = (s32) arg0->limit;
         }
@@ -1005,7 +1005,7 @@ void LabItem_DrawOrganizeWindow(LabItemOrganizeWindow* arg0) {
         }
         LabItem_DrawHelpText(arg0);
         if ((arg0->state == 9) || (arg0->state == 0xA) || (arg0->state == 0xB) || (arg0->state == 0xC)) {
-            TextBox_Draw(arg0->textBox);
+            TextBox_Draw(&arg0->textBox);
         }
         if (arg0->state == 8) {
             LabItem_DrawCountSelector(&arg0->countSelector);
@@ -1129,7 +1129,7 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* arg0) {
             }
             if (arg0->sourceBoxWindow.menu.itemFlags[arg0->sourceBoxWindow.menu.cursor] & 0x100) {
                 arg0->state = 9;
-                TextBox_Init(arg0->textBox, (void*)D_8900A688[arg0->operationCursor.cursor], 0, 1, 0);
+                TextBox_Init(&arg0->textBox, (void*)D_8900A688[arg0->operationCursor.cursor], 0, 1, 0);
                 func_8003F6AC(8);
                 break;
             }
@@ -1156,7 +1156,7 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* arg0) {
             if (arg0->targetBoxWindow.menu.itemFlags[arg0->targetBoxWindow.menu.cursor] & 0x100) {
                 func_8003F6AC(8);
                 arg0->state = 10;
-                TextBox_Init(arg0->textBox, (void*)D_8900A688[arg0->operationCursor.cursor], 0, 1, 0);
+                TextBox_Init(&arg0->textBox, (void*)D_8900A688[arg0->operationCursor.cursor], 0, 1, 0);
                 break;
             }
             func_8003F6AC(2);
@@ -1182,7 +1182,7 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* arg0) {
             if (arg0->operationCursor.cursor == 0) {
                 if (func_80031C24(*ptr) != 0 && arg0->rightBox == 2) {
                     func_8003F6AC(8);
-                    TextBox_Init(arg0->textBox, (void*)D_8900A694, 1, 2, 0xC);
+                    TextBox_Init(&arg0->textBox, (void*)D_8900A694, 1, 2, 0xC);
                     arg0->state = 11;
                     break;
                 }
@@ -1190,7 +1190,7 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* arg0) {
                 if (v == 0) {
                     func_8003F6AC(8);
                     arg0->state = 11;
-                    TextBox_Init(arg0->textBox, D_89018648, 0, 1, 0);
+                    TextBox_Init(&arg0->textBox, D_89018648, 0, 1, 0);
                     break;
                 }
                 func_8003F6AC(2);
@@ -1207,7 +1207,7 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* arg0) {
             if (arg0->operationCursor.cursor == 2) {
                 if (func_80031C24(*ptr) != 0 && arg0->rightBox == 2) {
                     func_8003F6AC(8);
-                    TextBox_Init(arg0->textBox, (void*)D_8900A694, 1, 2, 0xC);
+                    TextBox_Init(&arg0->textBox, (void*)D_8900A694, 1, 2, 0xC);
                     arg0->state = 11;
                     break;
                 }
@@ -1279,7 +1279,7 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* arg0) {
             if (func_80031C24(*ptr2) != 0 &&
                 arg0->leftBox == 2) {
                 func_8003F6AC(8);
-                TextBox_Init(arg0->textBox, (void*)D_8900A694, 1, 2, 0xC);
+                TextBox_Init(&arg0->textBox, (void*)D_8900A694, 1, 2, 0xC);
                 arg0->state = 12;
                 break;
             }
@@ -1289,22 +1289,22 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* arg0) {
             break;
 
         case 9:
-            if (Ui_CheckConfirmPressed(arg0->textBox) == 1) {
+            if (Ui_CheckConfirmPressed(&arg0->textBox) == 1) {
                 arg0->state = 2;
             }
             break;
         case 10:
-            if (Ui_CheckConfirmPressed(arg0->textBox) == 1) {
+            if (Ui_CheckConfirmPressed(&arg0->textBox) == 1) {
                 arg0->state = 3;
             }
             break;
         case 11:
-            if (Ui_CheckConfirmPressed(arg0->textBox) == 1) {
+            if (Ui_CheckConfirmPressed(&arg0->textBox) == 1) {
                 arg0->state = 4;
             }
             break;
         case 12:
-            if (Ui_CheckConfirmPressed(arg0->textBox) == 1) {
+            if (Ui_CheckConfirmPressed(&arg0->textBox) == 1) {
                 arg0->state = 6;
             }
             break;

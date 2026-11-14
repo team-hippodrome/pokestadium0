@@ -46,7 +46,7 @@ void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void func_8001AA60(s32, s32, s32);
 void Font_SetColorForFlags(s32);
 void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
-void TextBox_Draw(s8*);
+void TextBox_Draw(TextBox*);
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
 extern Color_RGBA8 D_80073520;
@@ -242,10 +242,10 @@ s32 LabItem_HasUnsavedChanges(LabItemScreen* arg0) {
     return 0;
 }
 
-void SavePrompt_Init(s8*, s32, s32);
+void SavePrompt_Init(SavePrompt*, s32, s32);
 void LabItem_InitConfirmWindow(LabItemConfirmWindow*, s32, s32, s8*, s8*);
-s32 SavePrompt_Update(s8*);
-void Save_DrawReportingWindow(s8*);
+s32 SavePrompt_Update(SavePrompt*);
+void Save_DrawReportingWindow(SavePrompt*);
 s32 LabItem_UpdateConfirmWindow(LabItemConfirmWindow*);
 void LabItem_InitDeleteDataWindow(LabItemDeleteDataWindow*, s32, s32, LabItemSaveSlot*);
 s32 LabItem_UpdateDeleteDataCursor(LabItemDeleteDataWindow*);
@@ -272,7 +272,7 @@ s32 LabItem_UpdateScreen(LabItemScreen* arg0) {
             if (res == -1) {
                 if (LabItem_HasUnsavedChanges(arg0) != 0) {
                     arg0->state = 2;
-                    SavePrompt_Init(arg0->savePrompt, 0xCA, 0xAD);
+                    SavePrompt_Init(&arg0->savePrompt, 0xCA, 0xAD);
                 } else {
                     ret = 1;
                 }
@@ -287,7 +287,7 @@ s32 LabItem_UpdateScreen(LabItemScreen* arg0) {
             }
             break;
         case 2:
-            res = SavePrompt_Update(arg0->savePrompt);
+            res = SavePrompt_Update(&arg0->savePrompt);
             if (res == -1) {
                 arg0->state = 1;
             } else if (res > 0) {
@@ -296,7 +296,7 @@ s32 LabItem_UpdateScreen(LabItemScreen* arg0) {
                     case 2:
                         break;
                     case 1:
-                        Save_DrawReportingWindow(arg0->savePrompt);
+                        Save_DrawReportingWindow(&arg0->savePrompt);
                         LabItem_SaveChanges(arg0);
                         break;
                 }

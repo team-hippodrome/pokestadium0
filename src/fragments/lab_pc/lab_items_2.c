@@ -42,7 +42,7 @@ void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void func_8001AA60(s32, s32, s32);
 void Font_SetColorForFlags(s32);
 void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
-void TextBox_Draw(s8*);
+void TextBox_Draw(TextBox*);
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
 extern Color_RGBA8 D_80073520;
@@ -163,7 +163,7 @@ s32 LabItem_UpdateItemList(void *, u32);
 
 void BgStage_DrawFrame(void);
 void LabItem_DrawOrganizeWindow(LabItemOrganizeWindow*);
-void SavePrompt_Draw(s8*);
+void SavePrompt_Draw(SavePrompt*);
 void LabItem_DrawConfirmWindow(LabItemConfirmWindow*);
 void LabItem_DrawDeleteDataWindow(LabItemDeleteDataWindow*, s32);
 void func_890032E4(LabItemSaveDataWindow*);
@@ -180,7 +180,7 @@ void LabItem_DrawScreen(LabItemScreen* arg0) {
             break;
         case 2:
             LabItem_DrawOrganizeWindow(&arg0->organizeWindow);
-            SavePrompt_Draw(arg0->savePrompt);
+            SavePrompt_Draw(&arg0->savePrompt);
             break;
         case 3:
             LabItem_DrawOrganizeWindow(&arg0->organizeWindow);
