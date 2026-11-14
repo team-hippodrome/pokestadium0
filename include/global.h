@@ -327,20 +327,20 @@ typedef struct GeoBillboardNode {
 typedef struct GeoMaterialNode {
     /* 0x00 */ GraphNode node;
     /* 0x18 */ Gfx* displayList; // @unverified: stored in D_800AB45C for the layer entries
-    /* 0x1C */ s16 textureIndex; // @unverified: index into the texture bank textures, -1 for none
+    /* 0x1C */ s16 textureIndex; // index into the texture bank textures, -1 for none; adding 1 swapped Onix's rock texture for its eye texture in play
     /* 0x1E */ s16 paletteIndex; // @unverified: index into the texture bank palettes, -1 for none
     /* 0x20 */ s16 eventIndex; // @unverified: event track that overrides textureIndex
-    /* 0x22 */ u8 mode; // @unverified: 1 forces a white tint; stored in D_800AB448
-    /* 0x24 */ Color_RGBA8_u32 color; // @unverified: material tint, multiplied by DisplayObject.textureTint
+    /* 0x22 */ u8 mode; // combine mode index into D_80060534 (via D_800AB448); 1 also forces a white tint. Poking 0 drew Onix flat white in play
+    /* 0x24 */ Color_RGBA8_u32 color; // material tint, multiplied by DisplayObject.textureTint; with mode 0, poking FF0000 turned Onix red in play (mode 1 ignores it)
 } GeoMaterialNode; // size >= 0x28
 
 // Graph node type 0xF.
 typedef struct GeoShadowNode {
     /* 0x00 */ GraphNode node;
-    /* 0x18 */ s16 shape; // @unverified: 0 draws D_01002480, otherwise D_01002500
-    /* 0x1A */ s16 scaleXPercent; // @unverified: shadow width in percent of the model scale
+    /* 0x18 */ s16 shape; // 0 draws D_01002480, otherwise D_01002500; poking 1 gave Onix's segment shadows a hard-edged shape in play
+    /* 0x1A */ s16 scaleXPercent; // shadow width in percent of the model scale; 600 on Onix's segments; poking 1500 widened the shadows in play
     /* 0x1C */ s16 scaleZPercent; // @unverified: shadow depth in percent of the model scale
-    /* 0x1E */ s16 heightOffset; // @unverified: added to the model height before projecting the shadow
+    /* 0x1E */ s16 heightOffset; // added to the model height before projecting the shadow; poking 200 moved Onix's shadows off the floor in play
 } GeoShadowNode; // size = 0x20
 
 // Graph node type 0x3 (GeoNode_CreateType3).
@@ -385,15 +385,15 @@ typedef struct GeoFogNode {
 // Graph node type 0xB.
 typedef struct GeoLightNode {
     /* 0x00 */ GraphNode node;
-    /* 0x18 */ Color_RGBA8_u32 color; // @unverified: light color; alpha is the percent added to the ambient color
-    /* 0x1C */ s16 pitch; // @unverified: binary angle: dir.y = 120*sin(pitch)
+    /* 0x18 */ Color_RGBA8_u32 color; // light color; alpha is the percent added to the ambient color; poking FF0000 turned both battle models red, alpha 100 washed them out and 0 darkened them in play
+    /* 0x1C */ s16 pitch; // binary angle: dir.y = 120*sin(pitch); with the node callback cleared, poking -0x4000 lit Onix from below (dark) in play; Battle_StageLightAngleCallbackA rewrites it every frame
     /* 0x1E */ s16 yaw; // @unverified: binary angle around the vertical axis
 } GeoLightNode; // size = 0x20
 
 // Graph node type 0xD.
 typedef struct GeoAmbientLightNode {
     /* 0x00 */ GraphNode node;
-    /* 0x18 */ u8 r;
+    /* 0x18 */ u8 r; // ambient color; poking 0000FF into r/g/b turned both battle models blue in play
     /* 0x19 */ u8 g;
     /* 0x1A */ u8 b;
 } GeoAmbientLightNode; // size = 0x1C
