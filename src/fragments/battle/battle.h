@@ -433,26 +433,13 @@ typedef struct unk_D_843847BC {
     /* 0x14 */ s16 side;
 } ThumbnailSettings; // size = 0x18
 
-typedef struct unk_D_843901A0_4C8 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ Vec3f unk_14;
-    /* 0x20 */ f32 unk_20;
-    /* 0x24 */ f32 unk_24;
-    /* 0x28 */ s16 unk_28;
-    /* 0x2A */ s16 unk_2A;
-} unk_D_843901A0_4C8; // size = 0x2C
-
 typedef struct BattleMessageQueues {
-    /* 0x000 */ u8 unk_000;
-    /* 0x004 */ s32 cursor; // @unverified: write index into lines[0], reset by BattleScene_ResetMessageQueue
-    /* 0x008 */ u8 lines[2][64]; // @unverified: both cleared by Battle_ClearMessageCursor ("both line buffers")
+    /* 0x000 */ u8 controllerPort; // @unverified: BattleMessage_ShowForSide stores the speaking trainer's port; picks the box color in BattleMessage_TickTypewriter
+    /* 0x004 */ s32 cursor; // @unverified: typewriter position in fullText, reset by BattleScene_ResetMessageQueue
+    /* 0x008 */ s8 shownText[64]; // @unverified: the part of fullText revealed so far (BattleMessage_TickTypewriter)
+    /* 0x048 */ s8 fullText[64]; // @unverified: message being revealed, copied in by BattleMessage_ShowForSide
     /* 0x088 */ s8 messageBuffers[17][64]; // @unverified: 64-byte strings cleared by Battle_ClearAllMessageQueues; +0xC8/+0x148 go to BattleMessage_ShowForSide
-    /* 0x4C8 */ unk_D_843901A0_4C8 unk_4C8;
-} BattleMessageQueues; // size = 0x4F4
+} BattleMessageQueues; // size = 0x4C8 (func_8211F3F4 allocates 0x4C8; Stadium 1's 0x2C-byte tail is gone)
 
 typedef struct unk_D_84385790 {
     /* 0x00 */ s32 unk_00;

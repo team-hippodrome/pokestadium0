@@ -1289,7 +1289,7 @@ void BattleScene_TickFaintRowPlayLandingSound(ActivePokemon* active_pokemon) {
 }
 
 typedef struct Cue8218A7D8 {
-    s32 unk_00;
+    /* 0x00 */ s32 sound; // @unverified: func_82104120 passes it to func_82101B18 as the row's sound
     char pad04[0x28];
 } Cue8218A7D8;
 extern f32 D_FLT_82189354[];
@@ -1310,7 +1310,7 @@ void func_82104120(ActivePokemon* active_pokemon) {
         if (BattleAnim_IsAssetLoadBusy((s8*)active_pokemon) == 0) {
             s32 idx = active_pokemon->animationState;
 
-            func_82101B18(active_pokemon, D_8218A7D8[idx].unk_00);
+            func_82101B18(active_pokemon, D_8218A7D8[idx].sound);
             sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
         }
     }

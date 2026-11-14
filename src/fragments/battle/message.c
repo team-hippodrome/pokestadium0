@@ -165,10 +165,10 @@ void Battle_ClearAllMessageQueues(void) {
  */
 void Battle_ClearMessageCursor(void) {
     gBattleMessageQueues->cursor = 0;
-    gBattleMessageQueues->lines[1][0] = 0;
-    gBattleMessageQueues->lines[1][1] = 0;
-    gBattleMessageQueues->lines[0][0] = 0;
-    gBattleMessageQueues->lines[0][1] = 0;
+    gBattleMessageQueues->fullText[0] = 0;
+    gBattleMessageQueues->fullText[1] = 0;
+    gBattleMessageQueues->shownText[0] = 0;
+    gBattleMessageQueues->shownText[1] = 0;
 }
 
 /**
@@ -245,7 +245,6 @@ void func_8211EE8C(void);
 void func_8211EEC0(void*, s8*);
 void func_80042A6C(s32);
 void func_80042FF8(s32);
-extern void* D_8219A520;
 
 /**
  * Shows a message built by BattleMessage_Format in `side`'s trainer color and plays its announcer clip (bit 7 picks the second clip bank), then clears the id.
@@ -257,8 +256,8 @@ void BattleMessage_ShowForSide(s8* arg0, s32 side) {
 
     func_8211EE8C();
     ap = sActivePokemon[side];
-    *(u8*)D_8219A520 = ap->side->teamMember[ap->thumbnail.shownTeamMemberIndex]->controllerPort;
-    func_8211EEC0((u8*)D_8219A520 + 0x48, arg0 + 1);
+    gBattleMessageQueues->controllerPort = ap->side->teamMember[ap->thumbnail.shownTeamMemberIndex]->controllerPort;
+    func_8211EEC0(gBattleMessageQueues->fullText, arg0 + 1);
     if (!(arg0[0] & 0x80)) {
         func_80042A6C(arg0[0] & 0x7F);
     } else {
@@ -267,8 +266,6 @@ void BattleMessage_ShowForSide(s8* arg0, s32 side) {
     arg0[0] = 0;
 }
 
-typedef struct Msg8211F0DC { u8 id; s32 pos; s8 out[0x40]; s8 in[0x40]; } Msg8211F0DC;
-#define MSG ((Msg8211F0DC*)D_8219A520)
 void BattleMessage_DrawBox();
 /**
  * Reveals the battle message one character per frame (one byte for ASCII and spaces, two for EUC-
@@ -277,34 +274,33 @@ void BattleMessage_DrawBox();
  */
 void BattleMessage_TickTypewriter(void)
 {
-  s8 c = MSG->in[MSG->pos];
+  s8 c = gBattleMessageQueues->fullText[gBattleMessageQueues->cursor];
   if (c != 0)
   {
     if ((c == 0xA) || (c == 0x20))
     {
-      MSG->out[MSG->pos] = c;
-      MSG->pos++;
+      gBattleMessageQueues->shownText[gBattleMessageQueues->cursor] = c;
+      gBattleMessageQueues->cursor++;
     }
-    c = MSG->in[MSG->pos];
+    c = gBattleMessageQueues->fullText[gBattleMessageQueues->cursor];
     if ((c >= 0x21) && (c < 0x40))
     {
-      MSG->out[MSG->pos] = c;
-      MSG->pos++;
+      gBattleMessageQueues->shownText[gBattleMessageQueues->cursor] = c;
+      gBattleMessageQueues->cursor++;
     }
     else
     {
-      MSG->out[MSG->pos] = c;
-      MSG->out[MSG->pos + 1] = MSG->in[MSG->pos + 1];
-      MSG->pos += 2;
+      gBattleMessageQueues->shownText[gBattleMessageQueues->cursor] = c;
+      gBattleMessageQueues->shownText[gBattleMessageQueues->cursor + 1] = gBattleMessageQueues->fullText[gBattleMessageQueues->cursor + 1];
+      gBattleMessageQueues->cursor += 2;
     }
   }
-  MSG->out[MSG->pos] = 0;
-  if (MSG->in[0] != 0)
+  gBattleMessageQueues->shownText[gBattleMessageQueues->cursor] = 0;
+  if (gBattleMessageQueues->fullText[0] != 0)
   {
-    BattleMessage_DrawBox(MSG->id, 0x29, 0xBB, MSG->out);
+    BattleMessage_DrawBox(gBattleMessageQueues->controllerPort, 0x29, 0xBB, gBattleMessageQueues->shownText);
   }
 }
-#undef MSG
 
 void BattleMessage_TickTypewriter(void);
 /**
@@ -339,7 +335,7 @@ void func_8211F274(ActivePokemon* arg0) {
  *
  * Starts a caption for the participant: stores the byte at index 1 of the
  * session entry selected by state.unk_2D_zero (+0x7B9) + 2 (from the table at
- * ActivePokemon +0x85C) into the byte D_8219A520 points to, sets
+ * ActivePokemon +0x85C) into gBattleMessageQueues->controllerPort, sets
  * captionState.unk_00 to 1, and formats the string arg1 into
  * captionState.unk_48 with func_8211EEC0 (Battle_SimpleStringFormat). The
  * function is variadic: the extra arguments are the format's values, which is
@@ -353,7 +349,7 @@ void func_8211F274(ActivePokemon* arg0) {
  * @unverified Name from the code.
  */
 void ActivePokemon_ShowCaption(ActivePokemon* arg0, s8* arg1, ...) {
-    *(u8*)D_8219A520 = (*(u8***)((u8*)arg0 + 0x85C))[arg0->state.menuTeamMemberIndex + 2][1];
+    gBattleMessageQueues->controllerPort = arg0->side->teamMember[arg0->state.menuTeamMemberIndex]->controllerPort;
     arg0->captionState.active = 1;
     func_8211EEC0(&arg0->captionState.fullText, arg1);
 }
@@ -409,14 +405,12 @@ void func_8211F3E4(void) {
 void func_8211F3EC(void) {
 }
 
-extern void* D_8219A520;
-
 /**
- * Allocates and zeroes the 0x4C8-byte battle message buffer D_8219A520.
+ * Allocates and zeroes the battle message buffers (gBattleMessageQueues).
  */
 void func_8211F3F4(void) {
-    D_8219A520 = main_pool_alloc(0x4C8, 0);
-    bzero(D_8219A520, 0x4C8);
+    gBattleMessageQueues = main_pool_alloc(sizeof(BattleMessageQueues), 0);
+    bzero(gBattleMessageQueues, sizeof(BattleMessageQueues));
 }
 
 /**
@@ -427,7 +421,7 @@ void func_8211F3F4(void) {
  */
 void BattleScene_ResetMessageQueue(void) {
     gBattleMessageQueues->cursor = 0;
-    gBattleMessageQueues->lines[0][gBattleMessageQueues->cursor] = 0;
+    gBattleMessageQueues->shownText[gBattleMessageQueues->cursor] = 0;
     Battle_ClearMessageCursor();
 }
 
