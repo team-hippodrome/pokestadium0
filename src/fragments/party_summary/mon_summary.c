@@ -374,23 +374,23 @@ void LabPC_WriteDeckBack(s32* arg0, s32 arg1) {
 
 void func_80027410(s8 *, s8 *, s32, s32, s32);
 void func_80027804(s8 *, s8 *, s32, s32);
-void func_8A2024D0(s8 *arg0) {
+void func_8A2024D0(PartyScreen* arg0) {
     s32 i;
 
-    M2C_FIELD(arg0, s32 *, 0) = 1;
-    M2C_FIELD(arg0, s8 **, 8) = arg0 + 0x10;
-    M2C_FIELD(arg0, s32 *, 0x384) = 0;
+    arg0->state = 1;
+    arg0->activeWindow = &arg0->listWindow.window;
+    arg0->dirty = 0;
     for (i = 0; i < 6; i++) {
-        M2C_FIELD(arg0, s8 **, 0x18C + i * 4) = arg0 + 0x1A4 + i * 0x50;
+        arg0->monPointers[i] = &arg0->mons[i];
     }
-    func_80027410(arg0 + 0x170, arg0 + 0x1A4, 0x50, 6, 0);
-    func_8A202390(arg0 + 0x170);
-    func_80027804(arg0 + 0x180, arg0 + 0x18C, 6, M2C_FIELD(arg0, s32 *, 0x178));
-    for (i = 0; i < M2C_FIELD(arg0, s32 *, 0x178); i++) {
-        func_8001833C((PokeIconRenderer*)D_8A21DA50, i, (BattleMon*)(M2C_FIELD(arg0, s32 *, 0x170) + i * 0x50),
+    func_80027410((s8*)&arg0->monTable, (s8*)arg0->mons, 0x50, 6, 0);
+    func_8A202390((s8*)&arg0->monTable);
+    func_80027804((s8*)&arg0->monList, (s8*)arg0->monPointers, 6, arg0->monTable.count);
+    for (i = 0; i < arg0->monTable.count; i++) {
+        func_8001833C((PokeIconRenderer*)D_8A21DA50, i, (BattleMon*)(arg0->monTable.rows + i * 0x50),
                       GPACK_RGBA5551(D_8A203304.r, D_8A203304.g, D_8A203304.b, 1));
     }
-    PartyScreen_InitList(arg0 + 0x10, 0x2F, 0x4D, (s32)(arg0 + 0x180));
+    PartyScreen_InitList(&arg0->listWindow, 0x2F, 0x4D, (s32)&arg0->monList);
 }
 
 typedef struct Ctx8A20261C {
@@ -478,10 +478,10 @@ void PartyScreen_Draw(void* arg0) {
 }
 #undef CTX
 
-void func_8A202904(s8 *arg0, s32 arg1, s32 arg2) {
-    M2C_FIELD(M2C_FIELD(arg0, s8 **, 8), s32 *, 0x24) = 7;
-    M2C_FIELD(arg0, s32 *, 4) = arg1;
-    M2C_FIELD(arg0, s32 *, 0xC) = arg2;
+void func_8A202904(PartyScreen* arg0, s32 arg1, s32 arg2) {
+    arg0->activeWindow->animTimer = 7;
+    arg0->nextState = arg1;
+    arg0->nextWindow = (Window*)arg2;
 }
 
 typedef struct Ctx8A20291C { char pad[0x18C]; s32 ptrs[6]; } Ctx8A20291C;
@@ -500,104 +500,104 @@ void LabPC_WriteDeckBack(s32* arg0, s32 arg1);
  * Seen in play (2026-11-12): runs the てもち screen: list, action menu, summary page and the ならびかえ
  * (reorder) prompt 「どこに いどうしますか？」.
  */
-M2C_UNK PartyScreen_Update(M2C_UNK* ctx) {
+M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
     s32 ret = 0;
-    s8* arg0 = (s8*)ctx;
+    PartyScreen* arg0 = ctx; // FAKE: the copy takes a stack slot; needed to match
     s32 res;
 
-    if (M2C_FIELD(M2C_FIELD(arg0, s8**, 8), s32*, 0x28) == 4) {
-        M2C_FIELD(arg0, s32*, 0) = M2C_FIELD(arg0, s32*, 4);
-        if (M2C_FIELD(arg0, s32*, 0) == 7) {
+    if (arg0->activeWindow->state == 4) {
+        arg0->state = arg0->nextState;
+        if (arg0->state == 7) {
             ret = 1;
         } else {
-            M2C_FIELD(arg0, s32*, 4) = 0;
-            M2C_FIELD(arg0, s8**, 8) = M2C_FIELD(arg0, s8**, 0xC);
+            arg0->nextState = 0;
+            arg0->activeWindow = arg0->nextWindow;
         }
         return ret;
     }
-    if ((M2C_FIELD(M2C_FIELD(arg0, s8**, 8), s32*, 0x28) != 1) && (M2C_FIELD(M2C_FIELD(arg0, s8**, 8), s32*, 0x28) != 2)) {
+    if ((arg0->activeWindow->state != 1) && (arg0->activeWindow->state != 2)) {
         return 0;
     }
 
-    switch (M2C_FIELD(arg0, s32*, 0)) {
+    switch (arg0->state) {
         case 1:
-            if (Menu_UpdateCursor(arg0 + 0x3C) != 0) {
-                M2C_FIELD(arg0, s32*, 0x34) = (M2C_FIELD(arg0, s32*, 0x38) <= 0) ? M2C_FIELD(arg0, s32*, 0x34) : 4;
+            if (Menu_UpdateCursor(&arg0->listWindow.menu) != 0) {
+                arg0->listWindow.window.animTimer = (arg0->listWindow.window.state <= 0) ? arg0->listWindow.window.animTimer : 4;
             } else {
                 res = func_8002BC14((s32)D_800603C0);
                 if (res == -1) {
                     func_8003F6AC(3);
-                    if (M2C_FIELD(arg0, s32*, 0x384) != 0) {
-                        SavePrompt_Init(arg0 + 0x10C, 0xCA, 0xAD);
-                        M2C_FIELD(arg0, s32*, 0) = 6;
-                        M2C_FIELD(arg0, s8**, 8) = arg0 + 0x10C;
+                    if (arg0->dirty != 0) {
+                        SavePrompt_Init(&arg0->savePrompt, 0xCA, 0xAD);
+                        arg0->state = 6;
+                        arg0->activeWindow = &arg0->savePrompt;
                     } else {
                         func_8A202904(arg0, 7, 0);
                     }
                 } else if (res == 1) {
                     func_8003F6AC(2);
-                    PartyScreen_InitActionMenu(arg0 + 0x70, 0x194, 0x123, (u8*)((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)]);
-                    M2C_FIELD(arg0, s32*, 0) = 2;
-                    M2C_FIELD(arg0, s8**, 8) = arg0 + 0x70;
+                    PartyScreen_InitActionMenu(&arg0->actionMenu, 0x194, 0x123, (u8*)arg0->monPointers[arg0->listWindow.menu.cursor]);
+                    arg0->state = 2;
+                    arg0->activeWindow = &arg0->actionMenu;
                 }
             }
             break;
         case 2:
-            res = PartyScreen_UpdateActionMenu(arg0 + 0x70);
+            res = PartyScreen_UpdateActionMenu(&arg0->actionMenu);
             if (res == -1) {
                 func_8003F6AC(3);
-                func_8A202904(arg0, 1, (s32)(arg0 + 0x10));
+                func_8A202904(arg0, 1, (s32)&arg0->listWindow);
             } else if (res > 0) {
                 switch (res) {
                     case 1:
                         func_8003F6AC(2);
-                        func_8A202904(arg0, 4, (s32)(arg0 + 0xD4));
-                        M2C_FIELD(arg0, s32*, 0x104) = 0;
-                        M2C_FIELD(arg0, s32*, 0x34) = 7;
-                        MonSummary_InitPageWindow(arg0 + 0xD4, 0x2C, 0x54, ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)]);
+                        func_8A202904(arg0, 4, (s32)&arg0->summaryWindow);
+                        arg0->summaryWindow.moveSlot = 0;
+                        arg0->listWindow.window.animTimer = 7;
+                        MonSummary_InitPageWindow(&arg0->summaryWindow, 0x2C, 0x54, arg0->monPointers[arg0->listWindow.menu.cursor]);
                         break;
                     case 2:
                         func_8003F6AC(2);
-                        func_8A202904(arg0, 3, (s32)(arg0 + 0x10));
-                        M2C_FIELD(arg0, u16**, 0x40)[M2C_FIELD(arg0, s32*, 0x44)] |= 8;
-                        M2C_FIELD(arg0, s32*, 0x6C) = M2C_FIELD(arg0, s32*, 0x44);
+                        func_8A202904(arg0, 3, (s32)&arg0->listWindow);
+                        arg0->listWindow.menu.itemFlags[arg0->listWindow.menu.cursor] |= 8;
+                        arg0->swapIndex = arg0->listWindow.menu.cursor;
                         break;
                     case 3:
                         func_8003F6AC(3);
-                        if (M2C_FIELD(arg0, s32*, 0x384) != 0) {
-                            SavePrompt_Init(arg0 + 0x10C, 0xD4, 0xAD);
-                            func_8A202904(arg0, 6, (s32)(arg0 + 0x10C));
+                        if (arg0->dirty != 0) {
+                            SavePrompt_Init(&arg0->savePrompt, 0xD4, 0xAD);
+                            func_8A202904(arg0, 6, (s32)&arg0->savePrompt);
                         } else {
                             func_8A202904(arg0, 7, 0);
-                            M2C_FIELD(arg0, s32*, 0x34) = 7;
+                            arg0->listWindow.window.animTimer = 7;
                         }
                         break;
                 }
             }
             break;
         case 3:
-            if (Menu_UpdateCursor(arg0 + 0x3C) != 0) {
-                M2C_FIELD(arg0, s32*, 0x34) = (M2C_FIELD(arg0, s32*, 0x38) <= 0) ? M2C_FIELD(arg0, s32*, 0x34) : 4;
+            if (Menu_UpdateCursor(&arg0->listWindow.menu) != 0) {
+                arg0->listWindow.window.animTimer = (arg0->listWindow.window.state <= 0) ? arg0->listWindow.window.animTimer : 4;
             } else {
                 res = func_8002BC14((s32)D_800603C0);
                 if (res == -1) {
                     func_8003F6AC(3);
-                    M2C_FIELD(arg0, s32*, 0) = 1;
-                    M2C_FIELD(arg0, s8**, 8) = arg0 + 0x10;
-                    M2C_FIELD(arg0, s32*, 0x34) = (M2C_FIELD(arg0, s32*, 0x38) <= 0) ? M2C_FIELD(arg0, s32*, 0x34) : 4;
-                    Menu_ClearItemFlags(arg0 + 0x3C);
+                    arg0->state = 1;
+                    arg0->activeWindow = &arg0->listWindow;
+                    arg0->listWindow.window.animTimer = (arg0->listWindow.window.state <= 0) ? arg0->listWindow.window.animTimer : 4;
+                    Menu_ClearItemFlags(&arg0->listWindow.menu);
                 } else if (res == 1) {
                     func_8003F6AC(0x18);
-                    res = ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x6C)];
-                    ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x6C)] = ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)];
-                    ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)] = res;
-                    func_8001833C((PokeIconRenderer*)D_8A21DA50, M2C_FIELD(arg0, s32*, 0x6C), (BattleMon*)((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x6C)], 0);
-                    func_8001833C((PokeIconRenderer*)D_8A21DA50, M2C_FIELD(arg0, s32*, 0x44), (BattleMon*)((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)], 0);
-                    M2C_FIELD(arg0, s32*, 0x384) = 1;
-                    M2C_FIELD(arg0, s32*, 0) = 1;
-                    M2C_FIELD(arg0, s8**, 8) = arg0 + 0x10;
-                    M2C_FIELD(arg0, s32*, 0x34) = (M2C_FIELD(arg0, s32*, 0x38) <= 0) ? M2C_FIELD(arg0, s32*, 0x34) : 4;
-                    Menu_ClearItemFlags(arg0 + 0x3C);
+                    res = arg0->monPointers[arg0->swapIndex];
+                    arg0->monPointers[arg0->swapIndex] = arg0->monPointers[arg0->listWindow.menu.cursor];
+                    arg0->monPointers[arg0->listWindow.menu.cursor] = res;
+                    func_8001833C((PokeIconRenderer*)D_8A21DA50, arg0->swapIndex, (BattleMon*)arg0->monPointers[arg0->swapIndex], 0);
+                    func_8001833C((PokeIconRenderer*)D_8A21DA50, arg0->listWindow.menu.cursor, (BattleMon*)arg0->monPointers[arg0->listWindow.menu.cursor], 0);
+                    arg0->dirty = 1;
+                    arg0->state = 1;
+                    arg0->activeWindow = &arg0->listWindow;
+                    arg0->listWindow.window.animTimer = (arg0->listWindow.window.state <= 0) ? arg0->listWindow.window.animTimer : 4;
+                    Menu_ClearItemFlags(&arg0->listWindow.menu);
                 }
             }
             break;
@@ -605,43 +605,43 @@ M2C_UNK PartyScreen_Update(M2C_UNK* ctx) {
             res = func_8002BC14((s32)D_800603C0);
             if (res == -1) {
                 func_8003F6AC(3);
-                func_8A202904(arg0, 1, (s32)(arg0 + 0x10));
-                M2C_FIELD(arg0, s32*, 0x34) = 0;
+                func_8A202904(arg0, 1, (s32)&arg0->listWindow);
+                arg0->listWindow.window.animTimer = 0;
             } else if (res == 1) {
                 func_8003F6AC(2);
-                M2C_FIELD(arg0, s32*, 0) = 5;
-                M2C_FIELD(arg0, s32*, 0xF8) = (M2C_FIELD(arg0, s32*, 0xFC) <= 0) ? M2C_FIELD(arg0, s32*, 0xF8) : 4;
+                arg0->state = 5;
+                arg0->summaryWindow.window.animTimer = (arg0->summaryWindow.window.state <= 0) ? arg0->summaryWindow.window.animTimer : 4;
             }
             break;
         case 5:
-            if (MonSummary_GetCButtonPage(arg0 + 0xD4) == 0) {
+            if (MonSummary_GetCButtonPage(&arg0->summaryWindow) == 0) {
                 res = func_8002BC14((s32)D_800603C0);
                 if (res == -1) {
                     func_8003F6AC(3);
-                    M2C_FIELD(arg0, s32*, 0) = 4;
-                    M2C_FIELD(arg0, s32*, 0xF8) = (M2C_FIELD(arg0, s32*, 0xFC) <= 0) ? M2C_FIELD(arg0, s32*, 0xF8) : 4;
+                    arg0->state = 4;
+                    arg0->summaryWindow.window.animTimer = (arg0->summaryWindow.window.state <= 0) ? arg0->summaryWindow.window.animTimer : 4;
                 } else if (res == 1) {
                     func_8003F6AC(2);
-                    func_8A202904(arg0, 1, (s32)(arg0 + 0x10));
-                    M2C_FIELD(arg0, s32*, 0x34) = 0;
+                    func_8A202904(arg0, 1, (s32)&arg0->listWindow);
+                    arg0->listWindow.window.animTimer = 0;
                 }
             }
             break;
         case 6:
-            res = SavePrompt_Update(arg0 + 0x10C);
+            res = SavePrompt_Update(&arg0->savePrompt);
             if (res == -1) {
-                func_8A202904(arg0, 1, (s32)(arg0 + 0x10));
+                func_8A202904(arg0, 1, (s32)&arg0->listWindow);
             } else if (res > 0) {
                 switch (res) {
                     case 1:
-                        Save_DrawReportingWindow(arg0 + 0x10C);
-                        LabPC_WriteDeckBack((s32*)(arg0 + 0x180), (s32)arg0);
+                        Save_DrawReportingWindow(&arg0->savePrompt);
+                        LabPC_WriteDeckBack((s32*)(&arg0->monList), (s32)arg0);
                         func_8A202904(arg0, 7, 0);
-                        M2C_FIELD(arg0, s32*, 0x34) = 7;
+                        arg0->listWindow.window.animTimer = 7;
                         break;
                     case 2:
                         func_8A202904(arg0, 7, 0);
-                        M2C_FIELD(arg0, s32*, 0x34) = 7;
+                        arg0->listWindow.window.animTimer = 7;
                         break;
                 }
             }

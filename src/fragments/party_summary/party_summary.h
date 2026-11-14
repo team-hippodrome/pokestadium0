@@ -5,6 +5,7 @@
 #include "global.h"
 #include "m2c_macros.h"
 #include "asset_archive.h"
+#include "menu.h"
 
 typedef struct unk_D_84B1A598 {
     /* 0x0000 */ char unk0000[0x1];
@@ -69,6 +70,48 @@ typedef struct Entry80066AD8 {
 } Entry80066AD8;
 
 #include "game_state.h"
+
+/* The てもち (party) list window: one row per party Pokémon (PartyScreen_InitList, PartyScreen_DrawList). */
+typedef struct PartyListWindow {
+    /* 0x00 */ Window window; // @unverified: typed from the function it is passed to
+    /* 0x2C */ Menu menu; // @unverified: rows drawn by PartyScreen_DrawListRow; items = PartyScreen.monList
+    /* 0x50 */ u16 itemFlags[6]; // @unverified: bit 3 = the Pokémon picked first when reordering (PartyScreen_DrawList)
+} PartyListWindow; // size = 0x5C
+
+/* The menu that opens on a party Pokémon (PartyScreen_InitActionMenu): 3 rows. */
+typedef struct PartyActionMenuWindow {
+    /* 0x00 */ Window window; // @unverified: typed from the function it is passed to
+    /* 0x2C */ Menu menu; // @unverified: rows drawn by PartyScreen_DrawActionMenuRow
+    /* 0x50 */ PointerList items; // @unverified: func_80027804 over the 3 strings D_8A203364
+    /* 0x5C */ u16 itemFlags[3]; // @unverified: bit 0 = disabled (PartyScreen_UpdateActionMenu)
+    /* 0x62 */ char pad62[0x2];
+} PartyActionMenuWindow; // size = 0x64
+
+/* The summary page of one party Pokémon (MonSummary_InitPageWindow, MonSummary_DrawPage). */
+typedef struct MonSummaryWindow {
+    /* 0x00 */ Window window; // @unverified: typed from the function it is passed to
+    /* 0x2C */ s32 mon; // @unverified: the BattleMon shown (MonSummary_InitPageWindow arg3, MonSummary_DrawModelPreview)
+    /* 0x30 */ s32 moveSlot; // @unverified: the move picked with the C buttons (MonSummary_GetCButtonPage)
+    /* 0x34 */ s32 unk_34;
+} MonSummaryWindow; // size = 0x38
+
+/* The てもち (party) screen (func_8A2024D0, PartyScreen_Update, PartyScreen_Draw). */
+typedef struct PartyScreen {
+    /* 0x000 */ s32 state; // @unverified: PartyScreen_Update
+    /* 0x004 */ s32 nextState; // @unverified: becomes state once activeWindow has closed (func_8A202904)
+    /* 0x008 */ Window* activeWindow; // @unverified: the window taking input; func_8A202904 closes it
+    /* 0x00C */ Window* nextWindow; // @unverified: becomes activeWindow once it has closed (func_8A202904)
+    /* 0x010 */ PartyListWindow listWindow; // @unverified: typed from the function it is passed to
+    /* 0x06C */ s32 swapIndex; // @unverified: reorder: the Pokémon picked first (listWindow.menu.cursor)
+    /* 0x070 */ PartyActionMenuWindow actionMenu; // @unverified: typed from the function it is passed to
+    /* 0x0D4 */ MonSummaryWindow summaryWindow; // @unverified: typed from the function it is passed to
+    /* 0x10C */ SavePrompt savePrompt; // @unverified: typed from the function it is passed to
+    /* 0x170 */ ByteMatrix monTable; // @unverified: rows = mons, 0x50 bytes each
+    /* 0x180 */ PointerList monList; // @unverified: over monPointers; items of listWindow.menu
+    /* 0x18C */ BattleMon* monPointers[6]; // @unverified: swapped when reordering
+    /* 0x1A4 */ BattleMon mons[6]; // @unverified: rows of monTable
+    /* 0x384 */ s32 dirty; // @unverified: set by a reorder; asks to save (state 6)
+} PartyScreen; // size >= 0x388
 
 extern Entry80066AA0 D_80066AA8;
 
@@ -139,8 +182,8 @@ void PartyScreen_DrawBackground(void);
 void func_8A202390(s8 *arg0);
 void PartyScreen_Draw(void*);
 void LabPC_WriteDeckBack(s32* arg0, s32 arg1);
-void func_8A202904(s8 *arg0, s32 arg1, s32 arg2);
-M2C_UNK PartyScreen_Update(M2C_UNK *);                   /* extern */
+void func_8A202904(PartyScreen* arg0, s32 arg1, s32 arg2);
+M2C_UNK PartyScreen_Update(PartyScreen*);
 void PartyScreen_RunFrame(s32 arg0);
 s32 func_8A202F50(u8);
 s32 MonSummary_Init(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2);
