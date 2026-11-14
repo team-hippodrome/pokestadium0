@@ -1744,6 +1744,8 @@ extern s32 gMiniFxEmitterIndex;
 // libnumus/player.c
 void Audio_FadeCategoriesAndStreams(s32);
 s32 Team_IsOpponentIndexUsed(s32 arg0);
+// The callers pass the COM's teamRoster as a fifth argument that the function never reads.
+s32 BattleAi_ChooseTurnAction(BattleMonRuntime* arg0, BattleMonRuntime* arg1, s32 arg2, s32 arg3, TeamRoster* arg4);
 
 // stage.c
 s32 Battle_StageGeoDispatchCallback(s32 event, GraphNode* node);

@@ -340,7 +340,7 @@ s32 BattleAi_ChooseRandomMove(void);
  * visible state) into the AI's model, updates its turn bookkeeping, then returns
  * a move slot (0..3) or 4 + a party slot to switch, also stored in D_821CF2A4.
  */
-s32 BattleAi_ChooseTurnAction(BattleMonRuntime* arg0, BattleMonRuntime* arg1, s32 arg2, s32 arg3) {
+s32 BattleAi_ChooseTurnAction(BattleMonRuntime* arg0, BattleMonRuntime* arg1, s32 arg2, s32 arg3, UNUSED TeamRoster* arg4) {
     s32 move;
     s32 r;
     s32 one; // FAKE

@@ -839,7 +839,6 @@ s32 BattleMenu_MustStruggle(ActivePokemon* arg0) {
     return 0;
 }
 
-s32 BattleAi_ChooseTurnAction(s32, s32, s32, s32, s8*);
 /**
  * When the COM's Pokemon has fainted, asks the AI for a replacement at frame 60
  * of the command timer (BattleAi_ChooseTurnAction returns 4 + party slot) and
@@ -860,7 +859,7 @@ s32 BattleScene_HandleCpuFaintedSwitch(ActivePokemon* arg0, ActivePokemon* arg1)
         state->selectedCommandOption = 2;
         if (D_FLT_82199EB0 == 60.0f) {
             func_82134D60();
-            D_82199EB8 = BattleAi_ChooseTurnAction((s32)&arg0->state.runtime, (s32)&arg1->state.runtime, state->rosterIndex, other->rosterIndex, M2C_FIELD(arg1, s8**, 0x860));
+            D_82199EB8 = BattleAi_ChooseTurnAction(&arg0->state.runtime, &arg1->state.runtime, state->rosterIndex, other->rosterIndex, arg1->teamRoster);
             state->showingCommandOptions = 0;
             state->actionChosen = D_82199EB8 - 4;
             state->actionDelayTimer = 0;
@@ -876,7 +875,7 @@ s32 BattleScene_HandleCpuFaintedSwitch(ActivePokemon* arg0, ActivePokemon* arg1)
         other->selectedCommand = 1;
         if (D_FLT_82199EB0 == 60.0f) {
             func_82134D60();
-            D_82199EB8 = BattleAi_ChooseTurnAction((s32)&arg0->state.runtime, (s32)&arg1->state.runtime, state->rosterIndex, other->rosterIndex, M2C_FIELD(arg1, s8**, 0x860));
+            D_82199EB8 = BattleAi_ChooseTurnAction(&arg0->state.runtime, &arg1->state.runtime, state->rosterIndex, other->rosterIndex, arg1->teamRoster);
             state->showingCommandOptions = 0;
             state->actionChosen = D_82199EB8 - 4;
             state->actionDelayTimer = 0;
@@ -1020,7 +1019,6 @@ extern f32 D_84390120;
 extern s32 D_8439013C;
 extern s32 D_84390138;
 extern s32 D_82199EBC;
-s32 BattleAi_ChooseTurnAction(s32, s32, s32, s32, s8*);
 /**
  * On the first frame of the COM's thinking delay, runs the COM AI once to pick its turn
  * action.
@@ -1031,7 +1029,7 @@ void BattleScene_TriggerCpuChoice(s32 arg0, s32 arg1, s8* arg2, s8* arg3, Active
     if (D_FLT_82199EB0 == 1.0f) {
         if (D_82199EBC == 0) {
             D_82199EBC = 1;
-            D_82199EB8 = BattleAi_ChooseTurnAction(arg0, arg1, M2C_FIELD(arg2, s32*, 8), M2C_FIELD(arg3, s32*, 8), M2C_FIELD(arg4, s8**, 0x860));
+            D_82199EB8 = BattleAi_ChooseTurnAction((BattleMonRuntime*)arg0, (BattleMonRuntime*)arg1, M2C_FIELD(arg2, s32*, 8), M2C_FIELD(arg3, s32*, 8), arg4->teamRoster);
         }
     }
 }
