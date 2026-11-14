@@ -603,7 +603,7 @@ typedef struct Entry89100140 {
     /* 0x04 */ s32 unk_04;
     /* 0x08 */ s32 unk_08;
     /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ char unk_10[0x10];
+    /* 0x10 */ ByteMatrix boxes; // @unverified: 0x20-byte rows: 1 for てもち, 8 for the GB boxes, 4 for the cartridge boxes (func_89100140); row +0xC = checked, +0x1C = Pokémon count (func_891053B0)
     /* 0x20 */ s32 unk_20;
 } Entry89100140; // size = 0x24
 
@@ -670,6 +670,30 @@ typedef struct LabLevelInputWindow {
     /* 0xE4 */ s32 focus; // @unverified: 0 = minLevel, 1 = maxLevel, 2 = the buttons
 } LabLevelInputWindow; // size = 0xE8
 
+/* A list of boxes that opens next to the source-select window when a box source is checked
+ * (func_8910576C): one row per box, ボックス%d (Box %d), each with a check mark. */
+typedef struct LabBoxListWindow {
+    /* 0x00 */ WindowFrame frame; // @unverified: 156 wide, 28 per row (func_8910576C)
+    /* 0x20 */ Menu menu; // @unverified: items are the boxes of one source; itemFlags bit 3 = checked (func_8910587C)
+} LabBoxListWindow; // size = 0x44
+
+/* The source-select window of the いちらん screen: 「どこのポケモンを いちらん するか えらんでください。」
+ * (Which Pokémon do you want to list? Choose.), a checkbox row per source and an ＯＫ button (func_89105C54). */
+typedef struct LabSourceSelectWindow {
+    /* 0x000 */ s32 openBoxList; // @unverified: 0 = none, 1 = gbBoxes, 2 = cartBoxes takes the input (func_89106254)
+    /* 0x004 */ Window window; // @unverified: 308x206 (func_89105C54)
+    /* 0x030 */ WindowFrame textFrame; // @unverified: frame of the prompt text (func_89105E70)
+    /* 0x050 */ WindowFrame listFrame; // @unverified: frame of the source rows
+    /* 0x070 */ Menu menu; // @unverified: the sources: てもち, ゲームボーイのボックス, 64カセットのボックス; itemFlags bit 3 = checked
+    /* 0x094 */ LabeledButton okButton; // @unverified: ＯＫ (D_8910E024)
+    /* 0x0D0 */ ChoiceCursor cursor; // @unverified: count 4: the three sources, then okButton (func_891060BC)
+    /* 0x0DC */ LabBoxListWindow gbBoxes; // @unverified: boxes of row 1 (func_89105C54)
+    /* 0x120 */ LabBoxListWindow cartBoxes; // @unverified: boxes of row 2
+    /* 0x164 */ u16 itemFlags[4]; // @unverified: menu.itemFlags
+    /* 0x16C */ u16 gbBoxFlags[8]; // @unverified: gbBoxes.menu.itemFlags
+    /* 0x17C */ u16 cartBoxFlags[4]; // @unverified: cartBoxes.menu.itemFlags
+} LabSourceSelectWindow; // size = 0x184
+
 #define LAB_PC_LIST_MAX_ROWS 466
 
 /* The いちらん (Pokémon list) screen of the Lab PC (LabPCList_InitListWindow). Its functions used to
@@ -686,7 +710,7 @@ typedef struct LabPCListScreen {
     /* 0x0088 */ s32 state; // @unverified: LabPCList_UpdateHeaderCursor sets 2 when it opens the sort menu
     /* 0x008C */ s32 focus; // @unverified: 0 = the rows, 1 = the header buttons, 2 = the column headers (R moved the focus to ニックネーム, ID, おや, ばしょ)
     /* 0x0090 */ char unk_0090[0x230 - 0x90];
-    /* 0x0230 */ char sourceSelectWindow[0x3B4 - 0x230]; // @unverified: 「どこのポケモンを いちらん するか えらんでください。」 (LabPCList_UpdateSourceSelect)
+    /* 0x0230 */ LabSourceSelectWindow sourceSelectWindow; // @unverified: 「どこのポケモンを いちらん するか えらんでください。」 (LabPCList_UpdateSourceSelect)
     /* 0x03B4 */ Entry89100140 sources[3]; // @unverified: rows of sourceMatrix: てもち, ゲームボーイのボックス, 64カセットのボックス
     /* 0x0420 */ ByteMatrix sourceMatrix; // @unverified: over sources (func_89100140)
     /* 0x0430 */ char unk_0430[0x87B8 - 0x430];
@@ -739,8 +763,12 @@ void LabPCList_Setup(void);
 
 // popup_menus.c
 void BattleMoveListWidget_DisableRestrictedMoves(unk_func_8830867C_04C_078* arg0);
-void BattleInfoWidget_UpdateEntryFlags(unk_func_8830867C_034* arg0);
-void BattleInfoWidget_ApplyEntrySelection(unk_func_8830867C_034* arg0, s32 arg1);
+void BattleInfoWidget_UpdateEntryFlags(LabBoxListWindow* arg0);
+void BattleInfoWidget_ApplyEntrySelection(LabSourceSelectWindow* arg0, s32 arg1);
+void func_89105C54(LabSourceSelectWindow* arg0, s32 arg1, s32 arg2, s8* arg3, Color_RGBA8 arg4);
+void func_89105E70(LabSourceSelectWindow* arg0, s32 arg1);
+s32 func_891060BC(LabSourceSelectWindow* arg0);
+s32 func_89106254(LabSourceSelectWindow* arg0);
 void func_891053E0(void);
 void func_89108F0C(void);
 s32 Move_NormalizeDisplayIndex(s32 arg0);

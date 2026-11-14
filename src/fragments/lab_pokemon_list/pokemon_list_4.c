@@ -25,7 +25,6 @@ M2C_UNK func_89109C6C(s32, s32);                    /* extern */
 void func_80027D68(void*, s32);
 void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
 void LabPCList_DrawMonRow();
-void func_89105C54(s8*, s32, s32, s8*, Color_RGBA8);
 extern s32 D_8910D990[];
 extern Color_RGBA8 D_8910A7F4;
 extern u8 D_8910A844[];
@@ -63,7 +62,6 @@ void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
 void ScrollList_DrawScrollArrows(s8*, s32, s32, s32, s32);
 void ScrollList_DrawItems(s8*, s32, s32, s32, s8*);
 void LabPCList_DrawDetailColumns(s8*, s32, s32, s32);
-void func_89105E70(s8*, s32);
 void LabPCList_DrawPopupMenu(LabPopupMenu*, s32);
 void LabPCList_DrawLevelInputWindow(LabLevelInputWindow*);
 void LabPCList_DrawTypeFilter(s8*);
@@ -123,7 +121,7 @@ void LabPCList_DrawListScreen(LabPCListScreen* arg0) {
         case 0:
             break;
         case 1:
-            func_89105E70((s8*)arg0->sourceSelectWindow, 2);
+            func_89105E70(&arg0->sourceSelectWindow, 2);
             break;
         case 2:
         case 3:
@@ -504,7 +502,6 @@ s32 LabPCList_UpdateBrowse(LabPCListScreen* arg0) {
 }
 
 M2C_UNK LabPCList_ApplyFiltersAndSort();
-s32 func_89106254(s32);                             /* extern */
 M2C_UNK func_89109C6C(s32, s32);                    /* extern */
 /**
  * Handles the window that chooses which boxes to list.
@@ -516,7 +513,7 @@ s32 LabPCList_UpdateSourceSelect(LabPCListScreen* arg0)
   s8 *new_var2; // FAKE: permuter temp
   s32 temp_v0;
   s8 *new_var; // FAKE: permuter temp
-  temp_v0 = func_89106254((s8*)arg0->sourceSelectWindow);
+  temp_v0 = func_89106254(&arg0->sourceSelectWindow);
   new_var2 = (s8*)&arg0->rows;
   if (temp_v0 == (-1))
   {

@@ -293,14 +293,14 @@ void func_891053E0(void) {
 }
 
 /** Updates the flags of every entry in the info widget. */
-void BattleInfoWidget_UpdateEntryFlags(unk_func_8830867C_034* arg0) {
+void BattleInfoWidget_UpdateEntryFlags(LabBoxListWindow* arg0) {
     s32 i;
-    s8** sub = &M2C_FIELD(arg0, s8**, 0x20);
-    s8* var_s2 = M2C_FIELD(*sub, s8**, 0);
+    ByteMatrix** sub = &arg0->menu.items;
+    s8* var_s2 = (*sub)->rows;
 
-    for (i = 0; i < M2C_FIELD(*sub, s32*, 8); i++, var_s2 += 0x20) {
-        M2C_FIELD(arg0, u16**, 0x24)[i] = 0;
-        M2C_FIELD(arg0, u16**, 0x24)[i] |= func_891053B0(var_s2);
+    for (i = 0; i < (*sub)->count; i++, var_s2 += 0x20) {
+        arg0->menu.itemFlags[i] = 0;
+        arg0->menu.itemFlags[i] |= func_891053B0(var_s2);
     }
 }
 
@@ -327,12 +327,12 @@ void func_8910548C(u8* widget, s32 enabled) {
     }
 }
 
-void func_89105504(s32 arg0) {
+void func_89105504(LabBoxListWindow* arg0) {
     s32 i;
-    s32* entry = *M2C_FIELD(arg0, s32**, 0x20);
+    s32* entry = (s32*)arg0->menu.items->rows;
 
-    for (i = 0; i < M2C_FIELD(arg0, s32**, 0x20)[2]; i++) {
-        entry[3] = (M2C_FIELD(arg0, u16**, 0x24)[i] & 8) != 0;
+    for (i = 0; i < arg0->menu.items->count; i++) {
+        entry[3] = (arg0->menu.itemFlags[i] & 8) != 0;
         entry += 8;
     }
 }
@@ -384,14 +384,13 @@ void PcSort_DrawBoxName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
 
 
 void PcSort_DrawBoxName();
-void func_891053E8(void* arg0);
 
-void func_8910576C(void* arg0, s32 arg1, s32 arg2, void* arg3, s32 arg4, Color_RGBA8 arg5) {
-    Window_SetRect((s8*)arg0, arg1, arg2, 0x9C, M2C_FIELD(arg3, s32*, 8) * 0x1C + 8);
-    M2C_FIELD(arg0, s32*, 0x14) = 0;
-    M2C_FIELD(arg0, Color_RGBA8*, 0x18) = arg5;
-    Menu_Init((s8*)arg0 + 0x20, arg3, arg4, PcSort_DrawBoxName, 0x9C, 0x1C);
-    func_891053E8(arg0);
+void func_8910576C(LabBoxListWindow* arg0, s32 arg1, s32 arg2, ByteMatrix* arg3, s32 arg4, Color_RGBA8 arg5) {
+    Window_SetRect(&arg0->frame, arg1, arg2, 0x9C, arg3->count * 0x1C + 8);
+    arg0->frame.style = 0;
+    arg0->frame.color = arg5;
+    Menu_Init(&arg0->menu, arg3, arg4, PcSort_DrawBoxName, 0x9C, 0x1C);
+    BattleInfoWidget_UpdateEntryFlags(arg0);
 }
 
 M2C_UNK Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, M2C_UNK *); /* extern */
@@ -399,10 +398,10 @@ M2C_UNK Window_DrawFrame(s8 *);                      /* extern */
 M2C_UNK Menu_DrawInlineItems(s8 *, s32, s32, s32, s8 *); /* extern */
 extern M2C_UNK D_80073554;
 
-void func_891057FC(s8 *arg0, s32 arg1) {
-    Ui_DrawTexturedFrameDecal(M2C_FIELD(arg0, s32 *, 0) - 6, M2C_FIELD(arg0, s32 *, 4) - 6, M2C_FIELD(arg0, s32 *, 8) + 0xC, M2C_FIELD(arg0, s32 *, 0xC) + 0xC, &D_80073554);
-    Window_DrawFrame(arg0);
-    Menu_DrawInlineItems(arg0 + 0x20, M2C_FIELD(arg0, s32 *, 0), M2C_FIELD(arg0, s32 *, 4) + 4, arg1 | 0xFFED, arg0);
+void func_891057FC(LabBoxListWindow* arg0, s32 arg1) {
+    Ui_DrawTexturedFrameDecal(arg0->frame.x - 6, arg0->frame.y - 6, arg0->frame.width + 0xC, arg0->frame.height + 0xC, &D_80073554);
+    Window_DrawFrame(&arg0->frame);
+    Menu_DrawInlineItems(&arg0->menu, arg0->frame.x, arg0->frame.y + 4, arg1 | 0xFFED, arg0);
 }
 
 M2C_UNK func_8003F6AC(M2C_UNK);
@@ -417,13 +416,13 @@ extern s32 D_800603C0;
  * plays sound 3 and returns -1. Any other case returns 0. (The button-bit names are not
  * established, so they are left as raw masks.)
  */
-s32 func_8910587C(s32 arg0) {
+s32 func_8910587C(LabBoxListWindow* arg0) {
     s32 ret = 0;
     s32 res;
     s32 buttons;
     u16* entry;
 
-    res = Menu_UpdateCursor(arg0 + 0x20);
+    res = Menu_UpdateCursor(&arg0->menu);
     if (res == 0x200) {
         func_8003F6AC(1);
         ret = 2;
@@ -432,7 +431,7 @@ s32 func_8910587C(s32 arg0) {
         if (buttons & 0x8000) {
             func_8003F6AC(2);
             ret = 1;
-            M2C_FIELD(arg0, u16**, 0x24)[M2C_FIELD(arg0, s32*, 0x28)] ^= 8;
+            arg0->menu.itemFlags[arg0->menu.cursor] ^= 8;
         } else if (buttons & 0x4000) {
             func_8003F6AC(3);
             ret = -1;
@@ -458,15 +457,15 @@ s32 func_89105924(List89105924* arg0) {
     return flags;
 }
 
-void func_8910597C(s8* arg0, s8* arg1) {
+void func_8910597C(LabSourceSelectWindow* arg0, LabBoxListWindow* arg1) {
     s32 flag = 0;
     s32 i = 0;
-    s32 count = M2C_FIELD(M2C_FIELD(arg1, s8**, 0x20), s32*, 8);
+    s32 count = arg1->menu.items->count;
     u16* items;
 
     if (count > 0) {
         if (!arg0) {} // fake, keeps arg0 live in a saved register
-        items = M2C_FIELD(arg1, u16**, 0x24);
+        items = arg1->menu.itemFlags;
         do {
             i++;
             if (*items & 8) {
@@ -476,8 +475,8 @@ void func_8910597C(s8* arg0, s8* arg1) {
             items++;
         } while (i < count);
     }
-    M2C_FIELD(arg0, u16**, 0x74)[M2C_FIELD(arg0, s32*, 0x78)] &= ~8;
-    M2C_FIELD(arg0, u16**, 0x74)[M2C_FIELD(arg0, s32*, 0x78)] |= flag;
+    arg0->menu.itemFlags[arg0->menu.cursor] &= ~8;
+    arg0->menu.itemFlags[arg0->menu.cursor] |= flag;
 }
 
 /* Rebuild entry flags from the current laboratory records. */
@@ -507,11 +506,11 @@ void func_891059FC(u8* widget) {
 }
 
 /** Applies the selection state to an info widget entry. */
-void BattleInfoWidget_ApplyEntrySelection(unk_func_8830867C_034* arg0, s32 arg1) {
-    s8* ptr = M2C_FIELD(M2C_FIELD(arg0, s8**, 0x70), s8**, 0) + arg1 * 0x24;
+void BattleInfoWidget_ApplyEntrySelection(LabSourceSelectWindow* arg0, s32 arg1) {
+    s8* ptr = (s8*)arg0->menu.items->rows + arg1 * 0x24;
     s8* ptr2 = M2C_FIELD(ptr, s8**, 0x10);
 
-    M2C_FIELD(ptr2, s32*, 0xC) = (M2C_FIELD(arg0, u16**, 0x74)[arg1] & 8) != 0;
+    M2C_FIELD(ptr2, s32*, 0xC) = (arg0->menu.itemFlags[arg1] & 8) != 0;
 }
 
 void Ui_DrawImageInStrips(void*, s32, s32);
@@ -548,7 +547,6 @@ void func_89105AD4(s32 arg0, s32 arg1, char** arg2, s32 arg3, s32 arg4) {
 }
 
 void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5);
-void func_8910576C(void* arg0, s32 arg1, s32 arg2, void* arg3, s32 arg4, Color_RGBA8 arg5);
 void func_89105AD4(s32 arg0, s32 arg1, char** arg2, s32 arg3, s32 arg4);
 void func_891059FC(u8* widget);
 void func_8000B2F4(s32);
@@ -556,37 +554,37 @@ extern s32 D_800603C0;
 extern Color_RGBA8 D_8910A93C;
 extern Color_RGBA8 D_8910A940;
 extern char D_8910E024[];
-void func_89105C54(s8* arg0, s32 arg1, s32 arg2, s8* arg3, Color_RGBA8 arg4) {
+void func_89105C54(LabSourceSelectWindow* arg0, s32 arg1, s32 arg2, s8* arg3, Color_RGBA8 arg4) {
     s32 pad[5]; // FAKE: stack padding
     s32 list;
 
-    Window_SetRect(arg0 + 4, arg1, arg2, 0x134, 0xCE);
-    M2C_FIELD(arg0, s32*, 0x28) = 0;
-    M2C_FIELD(arg0, s32*, 0x24) = 0;
-    M2C_FIELD(arg0, s32*, 0x2C) = 0;
-    M2C_FIELD(arg0, s32*, 0x18) = 1;
-    M2C_FIELD(arg0, Color_RGBA8*, 0x1C) = arg4;
-    Window_SetRect(arg0 + 0x30, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0x40);
-    M2C_FIELD(arg0, s32*, 0x44) = 6;
-    M2C_FIELD(arg0, Color_RGBA8*, 0x48) = D_8910A93C;
-    M2C_FIELD(arg0, Color_RGBA8*, 0x4C) = D_8910A940;
-    Window_SetRect(arg0 + 0x50, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x4C, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0x7C);
-    M2C_FIELD(arg0, s32*, 0x64) = 0;
-    M2C_FIELD(arg0, Color_RGBA8*, 0x68) = arg4;
-    Window_InitLabeled(arg0 + 0x94, M2C_FIELD(arg0, s32*, 0x50) + 0x70, M2C_FIELD(arg0, s32*, 0x54) + 0x5C, 0x48, arg4, D_8910E024);
-    M2C_FIELD(arg0, s32*, 0xC0) = 0xA;
-    M2C_FIELD(arg0, s32*, 0xC8) = 0xC;
+    Window_SetRect(&arg0->window, arg1, arg2, 0x134, 0xCE);
+    arg0->window.animTimer = 0;
+    arg0->window.title = 0;
+    arg0->window.state = 0;
+    arg0->window.frame.style = 1;
+    arg0->window.frame.color = arg4;
+    Window_SetRect(&arg0->textFrame, arg0->window.frame.x + 6, arg0->window.frame.y + 6, arg0->window.frame.width - 0xC, 0x40);
+    arg0->textFrame.style = 6;
+    arg0->textFrame.color = D_8910A93C;
+    arg0->textFrame.color2 = D_8910A940;
+    Window_SetRect(&arg0->listFrame, arg0->window.frame.x + 6, arg0->window.frame.y + 0x4C, arg0->window.frame.width - 0xC, 0x7C);
+    arg0->listFrame.style = 0;
+    arg0->listFrame.color = arg4;
+    Window_InitLabeled(&arg0->okButton, arg0->listFrame.x + 0x70, arg0->listFrame.y + 0x5C, 0x48, arg4, D_8910E024);
+    arg0->okButton.labelX = 0xA;
+    arg0->okButton.unk_34 = 0xC;
     list = *(s32*)arg3;
-    func_8910576C(arg0 + 0xDC, M2C_FIELD(arg0, s32*, 0xC) + M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 0x54) + 0x1C, (void*)(list + 0x34), (s32)(arg0 + 0x16C), arg4);
-    func_8910576C(arg0 + 0x120, M2C_FIELD(arg0, s32*, 0xC) + M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 0x54) + 0x38, (void*)(list + 0x58), (s32)(arg0 + 0x17C), arg4);
-    Menu_Init(arg0 + 0x70, arg3, (s32)(arg0 + 0x164), func_89105AD4, 0x128, 0x1C);
+    func_8910576C(&arg0->gbBoxes, arg0->window.frame.x + arg0->window.frame.width, arg0->listFrame.y + 0x1C, (ByteMatrix*)(list + 0x34), (s32)(&arg0->gbBoxFlags), arg4);
+    func_8910576C(&arg0->cartBoxes, arg0->window.frame.x + arg0->window.frame.width, arg0->listFrame.y + 0x38, (ByteMatrix*)(list + 0x58), (s32)(&arg0->cartBoxFlags), arg4);
+    Menu_Init(&arg0->menu, arg3, (s32)(&arg0->itemFlags), func_89105AD4, 0x128, 0x1C);
     func_891059FC((u8*)arg0);
-    M2C_FIELD(arg0, s32*, 0xD8) = 4;
-    M2C_FIELD(arg0, s32*, 0xD4) = 0;
-    M2C_FIELD(arg0, s32*, 0xD0) = D_800603C0;
+    arg0->cursor.count = 4;
+    arg0->cursor.cursor = 0;
+    arg0->cursor.controller = (Controller*)D_800603C0;
     func_8000B2F4(D_800603C0);
-    M2C_FIELD(arg0, s32*, 0xD4) = 3;
-    M2C_FIELD(arg0, s32*, 0) = 0;
+    arg0->cursor.cursor = 3;
+    arg0->openBoxList = 0;
 }
 
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
@@ -598,76 +596,75 @@ extern char D_8910E02C[];
 extern Gfx D_80060290[];
 extern Gfx D_80060398[];
 extern u8 D_8910D138[];
-void func_89105E70(s8* arg0, s32 arg1) {
+void func_89105E70(LabSourceSelectWindow* arg0, s32 arg1) {
     UNUSED s32 pad[3]; // FAKE: stack padding
     s32 sp38 = 0xFFED;
     s32 sp34 = 0;
 
-    if (func_8002AE6C(arg0 + 4) == 0) {
-        Window_DrawFrame(arg0 + 0x30);
-        Window_DrawFrame(arg0 + 0x50);
-        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8) + 0x45, M2C_FIELD(arg0, s32*, 0xC), D_8007356C);
+    if (func_8002AE6C(&arg0->window) == 0) {
+        Window_DrawFrame(&arg0->textFrame);
+        Window_DrawFrame(&arg0->listFrame);
+        Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->window.frame.y + 0x45, arg0->window.frame.width, D_8007356C);
         Font_BeginTranslucentTextRendering();
         Gfx_SetEnvColor(D_800734A8[0].r, D_800734A8[0].g, D_800734A8[0].b, D_800734A8[0].a);
         Font_SetActive(8, 0);
         Font_SetLineHeight(0x1C);
-        Font_Printf(M2C_FIELD(arg0, s32*, 0x30) + 8, M2C_FIELD(arg0, s32*, 0x34) + 8, D_8910E02C);
+        Font_Printf(arg0->textFrame.x + 8, arg0->textFrame.y + 8, D_8910E02C);
         Font_EndTexturedTextRendering();
-        if ((arg1 & 2) && (M2C_FIELD(arg0, s32*, 0) == 0)) {
-            if (M2C_FIELD(arg0, s32*, 0xD4) == 3) {
+        if ((arg1 & 2) && (arg0->openBoxList == 0)) {
+            if (arg0->cursor.cursor == 3) {
                 sp34 = 2;
             } else {
                 sp38 = 0xFFEF;
-                if ((M2C_FIELD(arg0, s32*, 0xD4) == 1) || (M2C_FIELD(arg0, s32*, 0xD4) == 2)) {
+                if ((arg0->cursor.cursor == 1) || (arg0->cursor.cursor == 2)) {
                     gSPDisplayList(gDisplayListHead++, D_80060290);
-                    func_8001B884((M2C_FIELD(arg0, s32*, 0x58) + M2C_FIELD(arg0, s32*, 0x50)) - 0x11, (M2C_FIELD(arg0, s32*, 0xD4) * 0x1C) + M2C_FIELD(arg0, s32*, 0x54) + 9, 0xB, 0x12, D_8910D138, 0xC, 0x200000);
+                    func_8001B884((arg0->listFrame.x + arg0->listFrame.width) - 0x11, arg0->listFrame.y + (arg0->cursor.cursor * 0x1C) + 9, 0xB, 0x12, D_8910D138, 0xC, 0x200000);
                     gSPDisplayList(gDisplayListHead++, D_80060398);
                 }
             }
         }
-        Menu_DrawInlineItems(arg0 + 0x70, M2C_FIELD(arg0, s32*, 0x50), M2C_FIELD(arg0, s32*, 0x54) + 4, sp38, arg0);
-        Window_DrawLabeled(arg0 + 0x94, sp34);
-        if (M2C_FIELD(arg0, s32*, 0xD4) == 1) {
-            func_891057FC(arg0 + 0xDC, (M2C_FIELD(arg0, s32*, 0) == 1) ? 2 : 0);
-        } else if (M2C_FIELD(arg0, s32*, 0xD4) == 2) {
-            func_891057FC(arg0 + 0x120, (M2C_FIELD(arg0, s32*, 0) == 2) ? 2 : 0);
+        Menu_DrawInlineItems(&arg0->menu, arg0->listFrame.x, arg0->listFrame.y + 4, sp38, arg0);
+        Window_DrawLabeled(&arg0->okButton, sp34);
+        if (arg0->cursor.cursor == 1) {
+            func_891057FC(&arg0->gbBoxes, (arg0->openBoxList == 1) ? 2 : 0);
+        } else if (arg0->cursor.cursor == 2) {
+            func_891057FC(&arg0->cartBoxes, (arg0->openBoxList == 2) ? 2 : 0);
         }
     }
 }
 
 s32 func_8002B2B0(s8*);
-void func_89105A98(s8*, s32);
 
-s32 func_891060BC(s8* arg0) {
+s32 func_891060BC(LabSourceSelectWindow* arg0) {
     s32 ret = 0;
     s32 res;
     s32 buttons;
 
-    res = func_8002B2B0(arg0 + 0xD0);
+    res = func_8002B2B0(&arg0->cursor);
     if (res == 0x100) {
-        if (M2C_FIELD(arg0, s32*, 0xD4) == 1) {
+        if (arg0->cursor.cursor == 1) {
             func_8003F6AC(1);
-            M2C_FIELD(arg0, s32*, 0) = 1;
-        } else if (M2C_FIELD(arg0, s32*, 0xD4) == 2) {
+            arg0->openBoxList = 1;
+        } else if (arg0->cursor.cursor == 2) {
             func_8003F6AC(1);
-            M2C_FIELD(arg0, s32*, 0) = 2;
+            arg0->openBoxList = 2;
         }
     } else if (res == 0) {
         buttons = ((u16*)D_800603C0)[4];
         if (buttons & 0x8000) {
-            if (M2C_FIELD(arg0, s32*, 0xD4) == 3) {
+            if (arg0->cursor.cursor == 3) {
                 func_8003F6AC(2);
-                func_89105A98(arg0, 0);
-                func_89105504((s32)(arg0 + 0xDC));
-                func_89105504((s32)(arg0 + 0x120));
+                BattleInfoWidget_ApplyEntrySelection(arg0, 0);
+                func_89105504(&arg0->gbBoxes);
+                func_89105504(&arg0->cartBoxes);
                 ret = 1;
             } else {
                 func_8003F6AC(2);
-                M2C_FIELD(arg0, u16**, 0x74)[M2C_FIELD(arg0, s32*, 0x78)] ^= 8;
-                if (M2C_FIELD(arg0, s32*, 0xD4) == 1) {
-                    func_8910548C((u8*)(arg0 + 0xDC), M2C_FIELD(arg0, u16**, 0x74)[M2C_FIELD(arg0, s32*, 0x78)] & 8);
-                } else if (M2C_FIELD(arg0, s32*, 0xD4) == 2) {
-                    func_8910548C((u8*)(arg0 + 0x120), M2C_FIELD(arg0, u16**, 0x74)[M2C_FIELD(arg0, s32*, 0x78)] & 8);
+                arg0->menu.itemFlags[arg0->menu.cursor] ^= 8;
+                if (arg0->cursor.cursor == 1) {
+                    func_8910548C((u8*)(&arg0->gbBoxes), arg0->menu.itemFlags[arg0->menu.cursor] & 8);
+                } else if (arg0->cursor.cursor == 2) {
+                    func_8910548C((u8*)(&arg0->cartBoxes), arg0->menu.itemFlags[arg0->menu.cursor] & 8);
                 }
             }
         } else if (buttons & 0x4000) {
@@ -675,42 +672,41 @@ s32 func_891060BC(s8* arg0) {
             ret = -1;
         }
     }
-    if (M2C_FIELD(arg0, s32*, 0xD4) < 4) {
-        M2C_FIELD(arg0, s32*, 0x78) = M2C_FIELD(arg0, s32*, 0xD4);
+    if (arg0->cursor.cursor < 4) {
+        arg0->menu.cursor = arg0->cursor.cursor;
     }
     return ret;
 }
 
-s32 func_891060BC(s8 *);
-s32 func_89106254(s8 *arg0) {
+s32 func_89106254(LabSourceSelectWindow* arg0) {
     s32 ret = 0;
     s32 r;
 
-    if (M2C_FIELD(arg0, s32 *, 0x2C) == 0) {
+    if (arg0->window.state == 0) {
         return 0;
     }
-    switch (M2C_FIELD(arg0, s32 *, 0)) {
+    switch (arg0->openBoxList) {
         case 0:
             ret = func_891060BC(arg0);
             break;
         case 1:
-            r = func_8910587C((s32)(arg0 + 0xDC));
+            r = func_8910587C(&arg0->gbBoxes);
             if (r == -1) {
                 ret = -1;
             } else if (r == 1) {
-                func_8910597C(arg0, arg0 + 0xDC);
+                func_8910597C(arg0, &arg0->gbBoxes);
             } else if (r == 2) {
-                M2C_FIELD(arg0, s32 *, 0) = 0;
+                arg0->openBoxList = 0;
             }
             break;
         case 2:
-            r = func_8910587C((s32)(arg0 + 0x120));
+            r = func_8910587C(&arg0->cartBoxes);
             if (r == -1) {
                 ret = -1;
             } else if (r == 1) {
-                func_8910597C(arg0, arg0 + 0x120);
+                func_8910597C(arg0, &arg0->cartBoxes);
             } else if (r == 2) {
-                M2C_FIELD(arg0, s32 *, 0) = 0;
+                arg0->openBoxList = 0;
             }
             break;
     }

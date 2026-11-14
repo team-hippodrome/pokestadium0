@@ -51,19 +51,19 @@ void func_89100140(LabPCListScreen* arg0) {
     arg0->sources[0].unk_08 = func_80025BD8();
     arg0->sources[0].unk_0C = 0;
     arg0->sources[0].unk_20 = 6;
-    func_80027410(arg0->sources[0].unk_10, (s8*)arg0 + 0x90, 0x20, 1, 0);
+    func_80027410(&arg0->sources[0].boxes, (s8*)arg0 + 0x90, 0x20, 1, 0);
     func_89109990(&arg0->sources[0], (s8*)arg0 + 0x8200, (s8*)arg0 + 0x430, 6);
     arg0->sources[1].unk_04 = 0x21;
     arg0->sources[1].unk_08 = arg0->sources[0].unk_08;
     arg0->sources[1].unk_0C = 1;
     arg0->sources[1].unk_20 = 0x1E;
-    func_80027410(arg0->sources[1].unk_10, (s8*)arg0 + 0xB0, 0x20, 8, 0);
+    func_80027410(&arg0->sources[1].boxes, (s8*)arg0 + 0xB0, 0x20, 8, 0);
     func_89109990(&arg0->sources[1], (s8*)arg0 + 0x8218, (s8*)arg0 + 0x640, 0x1E);
     arg0->sources[2].unk_04 = 0x11;
     arg0->sources[2].unk_08 = 0;
     arg0->sources[2].unk_0C = 2;
     arg0->sources[2].unk_20 = 0x1E;
-    func_80027410(arg0->sources[2].unk_10, (s8*)arg0 + 0x1B0, 0x20, 4, 0);
+    func_80027410(&arg0->sources[2].boxes, (s8*)arg0 + 0x1B0, 0x20, 4, 0);
     func_89109990(&arg0->sources[2], (s8*)arg0 + 0x85D8, (s8*)arg0 + 0x58C0, 0x1E);
     for (i = 0; i < 3; i++) {
         arg0->sources[i].unk_00 = D_8910A7F8[i];
@@ -117,7 +117,6 @@ M2C_UNK func_89109C6C(s32, s32);                    /* extern */
 void func_80027D68(s32, s32);
 void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
 void LabPCList_DrawMonRow();
-void func_89105C54(s8*, s32, s32, s8*, Color_RGBA8);
 extern s32 D_8910D990[];
 extern Color_RGBA8 D_8910A7F4;
 extern u8 D_8910A844[];
@@ -165,7 +164,7 @@ void LabPCList_InitListWindow(LabPCListScreen* arg0, s32 arg1, s32 arg2, s32 arg
     arg0->msg = arg3;
     LabPCList_ResetFilterState(arg0);
     arg0->state = 1;
-    func_89105C54((s8*)arg0->sourceSelectWindow, 0x78, 0x67, (s8*)&arg0->sourceMatrix, D_8910A7F4);
+    func_89105C54(&arg0->sourceSelectWindow, 0x78, 0x67, (s8*)&arg0->sourceMatrix, D_8910A7F4);
 }
 
 /**

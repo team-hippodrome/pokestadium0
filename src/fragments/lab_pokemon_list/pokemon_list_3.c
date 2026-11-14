@@ -25,7 +25,6 @@ M2C_UNK func_89109C6C(s32, s32);                    /* extern */
 void func_80027D68(s32, s32);
 void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
 void LabPCList_DrawMonRow();
-void func_89105C54(s8*, s32, s32, s8*, Color_RGBA8);
 extern s32 D_8910D990[];
 extern Color_RGBA8 D_8910A7F4;
 extern u8 D_8910A844[];
