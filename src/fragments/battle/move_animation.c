@@ -1379,7 +1379,7 @@ void BattleScene_TickFaintRowQueueCollapseEffect(ActivePokemon* active_pokemon) 
 }
 
 /**
- * Same as BattleScene_TickQueueList3Selector2OrC, using cue unk_B10.
+ * Same as BattleScene_TickQueueList3Selector2OrC, using cue unk_79B.
  * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
  * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
@@ -1606,7 +1606,7 @@ void BattleScene_RegisterStateTickCallback(ActivePokemon* active_pokemon, Battle
 }
 
 /**
- * Sets the cue 166 (unkA60) event track on the participant at this side index.
+ * Sets the cue 166 (unk_722) event track on the participant at this side index.
  */
 void BattleScene_SetOpponentEventTrackA6(ActivePokemon* active_pokemon) {
     BattleAnim_SetModelEventTrackFromRow(sActivePokemon[BattleScene_GetParticipantSideIndex(active_pokemon)], BATTLE_CUE_A60);
@@ -2018,7 +2018,7 @@ s32 func_82105724(ActivePokemon* arg0, s32 arg1) {
 }
 
 /**
- * Like BattleScene_IsRowWaitComplete, but waits the unkA60 cue's frame count
+ * Like BattleScene_IsRowWaitComplete, but waits the unk_722 cue's frame count
  * when it is at least 11.
  * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran
  * while the new Pokémon was sent out.
@@ -2697,8 +2697,8 @@ void BattleScene_AllocateParticipantRecord(BattleSessionTeams* session_teams, s3
     bzero(&sActivePokemon[side_index]->state.runtime, sizeof(BattleMonRuntime));
     bzero(&sActivePokemon[side_index]->thumbnail, sizeof(ThumbnailState));
     bzero(&sActivePokemon[side_index]->state.runtime.moveCache, sizeof(CachedMoveData));
-    bzero(&sActivePokemon[side_index]->state.unk_9C, sizeof(unk_D_84390010_654_09C));
-    bzero(&sActivePokemon[side_index]->state.unk_AC, sizeof(unk_D_84390010_654_0AC));
+    bzero(&sActivePokemon[side_index]->state.unk_A0, sizeof(unk_D_84390010_654_09C));
+    bzero(&sActivePokemon[side_index]->state.unk_B0, sizeof(unk_D_84390010_654_0AC));
     bzero(&sActivePokemon[side_index]->captionState, sizeof(MonCaptionState));
     sActivePokemon[side_index]->sessionTeams = session_teams;
 }

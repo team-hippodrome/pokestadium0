@@ -1495,17 +1495,17 @@ s32 BattleAi_PickNextPokemon(u8 *arg0, s32 arg1, s32 arg2, s32 arg3)
         {
           if ((D_821CF298[j].hp != 0) && (D_821CF298[j].species != 0) && (D_821CF298[j].level != 0))
           {
-            BattleAi_AddMatchupPickScore(D_821CF294[i].pad04, D_821CF298[j].pad04);
+            BattleAi_AddMatchupPickScore(D_821CF294[i].record, D_821CF298[j].record);
           }
         }
       }
       else
       {
-        BattleAi_AddMatchupPickScore(D_821CF294[i].pad04, arg0);
+        BattleAi_AddMatchupPickScore(D_821CF294[i].record, arg0);
       }
       if ((arg2 != 0) && (BattleAi_RandomPercent() < 40))
       {
-        BattleAi_AddRandomPickScore((s8 *) D_821CF294[i].pad04);
+        BattleAi_AddRandomPickScore((s8 *) D_821CF294[i].record);
       }
       if (((u8 *) D_821CF294)[0x368] >= 2)
       {
@@ -1513,9 +1513,9 @@ s32 BattleAi_PickNextPokemon(u8 *arg0, s32 arg1, s32 arg2, s32 arg3)
       }
       else if (((u8 *) D_821CF294)[0x368] == 1)
       {
-        BattleAi_AddRandomPickScore((s8 *) D_821CF294[i].pad04);
+        BattleAi_AddRandomPickScore((s8 *) D_821CF294[i].record);
       }
-      BattleAi_AddTrainerPickScore(D_821CF294[i].pad04, arg3);
+      BattleAi_AddTrainerPickScore(D_821CF294[i].record, arg3);
     }
   }
 
@@ -1574,14 +1574,14 @@ s32 BattleAi_PickTeam(s32 arg0)
     {
       if (D_821CF298[j].hp != 0)
       {
-        r = BattleAi_GetBestDamage(D_821CF298[j].pad04, D_821CF294[D_821CF280[i]].pad04, 0);
+        r = BattleAi_GetBestDamage(D_821CF298[j].record, D_821CF294[D_821CF280[i]].record, 0);
         if (r == 0)
         {
           scores[i] += 2.0f;
         }
         else
         {
-          scores[i] += ((f32) BattleAi_GetBestDamage(D_821CF294[D_821CF280[i]].pad04, D_821CF298[j].pad04, 0)) / ((f32) r);
+          scores[i] += ((f32) BattleAi_GetBestDamage(D_821CF294[D_821CF280[i]].record, D_821CF298[j].record, 0)) / ((f32) r);
         }
       }
     }
@@ -1607,12 +1607,12 @@ s32 BattleAi_PickTeam(s32 arg0)
 
   for (i = 0; i < D_821CF288; i++)
   {
-    func_80058410((s8 *) D_821CF294[D_821CF280[i]].pad04, (s8 *) &D_821CF2B8[i * 0x90], 0x90);
+    func_80058410((s8 *) D_821CF294[D_821CF280[i]].record, (s8 *) &D_821CF2B8[i * 0x90], 0x90);
   }
 
   for (i = 0; i < D_821CF288; i++)
   {
-    func_80058410((s8 *) &D_821CF2B8[i * 0x90], (s8 *) D_821CF294[i].pad04, 0x90);
+    func_80058410((s8 *) &D_821CF2B8[i * 0x90], (s8 *) D_821CF294[i].record, 0x90);
     ((u8 *) &D_821CF294[i])[0x79] = 1 << i;
   }
 
@@ -1700,10 +1700,10 @@ s32 BattleAi_ChooseSwitch(void) {
         ((u8*)D_821CF294)[0x36C] &= ~D_821CF29C[0x75];
     }
     for (i = 0; i < D_821CF288; i++) {
-        if ((r = BattleAi_GetBestDamage((u8*)D_821CF2A0, D_821CF294[i].pad04, 0)) == 0) {
+        if ((r = BattleAi_GetBestDamage((u8*)D_821CF2A0, D_821CF294[i].record, 0)) == 0) {
             fa[i] = 255.0f;
         } else {
-            fa[i] = (f32)BattleAi_GetBestDamage(D_821CF294[i].pad04, (u8*)D_821CF2A0, 0) / (f32)r;
+            fa[i] = (f32)BattleAi_GetBestDamage(D_821CF294[i].record, (u8*)D_821CF2A0, 0) / (f32)r;
         }
         // FAKE: the dead store to r is needed for the operand order
         if (D_821CF29C[0x75] == (r = 1 << i)) {
@@ -1719,7 +1719,7 @@ s32 BattleAi_ChooseSwitch(void) {
             switch (k) {
             case 0:
                 if (fa[i] - f20 < *(f32*)((u8*)D_821CF294 + 0x364)) break;
-                if (BattleAi_GetHpPercent((s8*)D_821CF294[i].pad04) < 0x28) break;
+                if (BattleAi_GetHpPercent((s8*)D_821CF294[i].record) < 0x28) break;
             case 1:
             case 2:
                 if (fa[i] < f20) break;
@@ -1728,11 +1728,11 @@ s32 BattleAi_ChooseSwitch(void) {
             case 4:
                 if (D_821CF294[i].unk_5E & 1) break;
             case 5:
-                if (flag && BattleAi_PickBoomMove(D_821CF294[i].pad04, (u8*)D_821CF2A0) < 0) break;
+                if (flag && BattleAi_PickBoomMove(D_821CF294[i].record, (u8*)D_821CF2A0) < 0) break;
             case 6:
-                if (flag && BattleAi_MovesFirst((s8*)D_821CF294[i].pad04, D_821CF2A0) == 0) break;
+                if (flag && BattleAi_MovesFirst((s8*)D_821CF294[i].record, D_821CF2A0) == 0) break;
             case 7:
-                if (BattleAi_GetHpPercent((s8*)D_821CF294[i].pad04) < 0x37) break;
+                if (BattleAi_GetHpPercent((s8*)D_821CF294[i].record) < 0x37) break;
             case 8:
                 if (D_821CF294[i].status & 0x20) break;
             default:

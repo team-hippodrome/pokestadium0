@@ -133,7 +133,7 @@ typedef struct unk_D_86B10BE0 {
  */
 typedef struct BattleSlotZ {
     /* 0x00 */ TeamRoster* roster;
-    /* 0x04 */ u8 pad04[4];
+    /* 0x04 */ u8 record[4]; // @unverified: first bytes of the 0x90-byte battler record (slot + 4); code passes its address to the BattleAi_* helpers
     /* 0x08 */ s32 pickScore;
     /* 0x0C */ f32 matchupRatio;
     /* 0x10 */ u8 pad10[0xB];
@@ -173,7 +173,7 @@ typedef struct unk_D_84390010_654_0AC {
     /* 0x00 */ char unk00[0x10];
 } unk_D_84390010_654_0AC; // size = 0x10
 
-typedef struct unk_D_84390010_168 {
+typedef struct PokemonAfterimage {
     /* 0x000 */ DisplayObject displayObject;
     /* 0x168 */ char unk168[0x1];
     /* 0x169 */ u8 minimized;
@@ -202,15 +202,15 @@ typedef struct ActivePokemonState {
     /* 0x2F */ u8 alpha;
     /* 0x30 */ u8 surrenderCursor; // こうさんしますか？ (Surrender?) prompt: 0 いいえ (No), 1 はい (Yes)
     /* 0x32 */ u16 infoBoxBlinkTimer; // counts down by 0x30 a frame; bit 8 picks the info box color
-    /* 0x34 */ char unk32[0x2];
+    /* 0x34 */ char unk34[0x2];
     /* 0x36 */ u16 flags;
     /* 0x38 */ u16 modelEventTrackState; // event_state of BattleAnim_TrySetModelEventTrackFromRow; 2 blocks a new track
     /* 0x3A */ BattleMonRuntime runtime;
-    /* 0xA0 */ unk_D_84390010_654_09C unk_9C;
-    /* 0xB0 */ unk_D_84390010_654_0AC unk_AC;
+    /* 0xA0 */ unk_D_84390010_654_09C unk_A0;
+    /* 0xB0 */ unk_D_84390010_654_0AC unk_B0;
     /* 0xC0 */ s16 model;
     /* 0xC2 */ s16 transformSpecies; // species Transform copied (the target's own transformSpecies if it is transformed too)
-    /* 0xC4 */ char unkC0[1];
+    /* 0xC4 */ char unkC4[1];
     /* 0xC5 */ u8 moveSlotIllegality[4];
     /* 0xCC */ Controller* controller;
 } ActivePokemonState; // size = 0xD0
@@ -221,7 +221,7 @@ typedef struct ThumbnailState {
     /* 0x16C */ s32 shownRosterIndex; // @unverified: roster slot (pokemonPicked index) of the Pokémon the thumbnail and HUD boxes show; set from state.rosterIndex in participants.c
     /* 0x170 */ s32 shownTeamMemberIndex; // @unverified: tag-team member (sessionTeams->teamMember index) owning that Pokémon; set from state.teamMemberIndex
     /* 0x174 */ s32 showing;
-    /* 0x178 */ char unk174[0x4];
+    /* 0x178 */ char unk178[0x4];
     /* 0x17C */ s32 side;
     /* 0x180 */ s32 idleAnimation;
     /* 0x184 */ s32 idleTimer;
@@ -231,7 +231,7 @@ typedef struct ThumbnailState {
     /* 0x190 */ s32 status;
     /* 0x194 */ f32 z;
     /* 0x198 */ f32 y;
-    /* 0x19C */ char unk198[0x4];
+    /* 0x19C */ char unk19C[0x4];
 } ThumbnailState; // size = 0x1A0
 
 typedef struct MonCaptionState {
@@ -278,7 +278,7 @@ typedef struct ActivePokemon {
     /* 0x60C */ s32 facingDirection;
     /* 0x610 */ s32 modelTransformId;
     /* 0x614 */ s32 modelTransformTimer;
-    /* 0x618 */ char unk4BC[0x4];
+    /* 0x618 */ char unk618[0x4];
     /* 0x61C */ s32 animationState;
     /* 0x620 */ s32 animationTimer;
     /* 0x624 */ DisplayObject pokeBall;
@@ -305,19 +305,19 @@ typedef struct MovePresentationCue {
     /* 0x0A */ u8 frameCounter;
 } MovePresentationCue; // size = 0xB (Stadium 1: 0x10)
 
-typedef struct unk_D_8438E7B0 {
+typedef struct PokemonBattleCues {
     /* 0x000 */ MovePresentationCue moveCues[165];
     /* 0x717 */ MovePresentationCue idleCues;
-    /* 0x722 */ MovePresentationCue unkA60;
+    /* 0x722 */ MovePresentationCue unk_722;
     /* 0x72D */ MovePresentationCue faintCue;
     /* 0x738 */ MovePresentationCue hitCue;
     /* 0x743 */ MovePresentationCue chargeCues[6];
     /* 0x785 */ MovePresentationCue sleepIdleCue;
     /* 0x790 */ MovePresentationCue flyingIdleCue;
-    /* 0x79B */ MovePresentationCue unk_B10;
+    /* 0x79B */ MovePresentationCue unk_79B;
     /* 0x7A6 */ MovePresentationCue hitReactionOverride;
-    /* 0x7B1 */ MovePresentationCue unkB30[5];
-    /* 0x7E8 */ u8 unkB30_tail;
+    /* 0x7B1 */ MovePresentationCue unk_7B1[5];
+    /* 0x7E8 */ u8 unk_7E8;
     /* 0x7E9 */ u8 wakeUpEventTrack;
 } PokemonBattleCues; // size >= 0x7EA
 
@@ -325,7 +325,7 @@ typedef struct unk_D_8438E7B0 {
 // named cues that follow it (each MovePresentationCue is 0xB bytes in Zero).
 #define BATTLE_CUE_IDLE 165       // idleCues (0x717)
 
-#define BATTLE_CUE_A60 166        // unkA60 (0x722)
+#define BATTLE_CUE_A60 166        // unk_722 (0x722)
 
 #define BATTLE_CUE_FAINT 167      // faintCue (0x72D)
 
