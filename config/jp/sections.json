@@ -602,7 +602,7 @@
       "size": "0x18"
     }
   },
-  "src/fragments/lab_menu/lab_menu.c": {
+  "src/fragments/pokedex_menu/pokedex_menu.c": {
     ".rodata": {
       "address": "0x8A000648",
       "size": "0x18"

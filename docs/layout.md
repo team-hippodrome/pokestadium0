@@ -31,7 +31,7 @@ Where the code lives, after the reorganization. File names are broadly correct g
 | 014 | `src/fragments/main_menu/` | 2 | 33 | main menu |
 | 015 | `src/fragments/lab_pc/` | 5 | 137 | Lab PC |
 | 016 | `src/fragments/lab_pokemon_list/` | 11 | 163 | Lab Pokémon list |
-| 017 | `src/fragments/lab_menu/` | 1 | 6 | Lab menu |
+| 017 | `src/fragments/pokedex_menu/` | 1 | 6 | unused ポケモンずかん menu (nothing in the retail ROM loads it) |
 | 018 | `src/fragments/pokedex/` | 2 | 56 | Pokédex |
 | 019 | `src/fragments/party_summary/` | 2 | 34 | party summary |
 | 020 | `src/fragments/main_menu_launcher/` | 1 | 1 | queues the main menu; only loaded by 021–024, which nothing loads |
