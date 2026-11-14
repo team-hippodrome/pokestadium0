@@ -4924,3 +4924,4 @@ AudioSeq_InitSequencePlayerChannels = 0x8111539C; // type:func
 AudioSeq_InitSequencePlayers = 0x81115480; // type:func
 MainMenuLauncher_QueueMainMenu = 0x8E000020; // type:func
 UnusedRelay021_QueueMainMenuLauncher = 0x8E100020; // type:func
+UnusedRelay023_QueueMainMenuLauncher = 0x8E300020; // type:func
