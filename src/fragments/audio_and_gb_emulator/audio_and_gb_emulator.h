@@ -531,6 +531,15 @@ typedef struct Sample {
     /* 0xC */ void* book; // @unverified: same offset/use as OoT's Sample.book
 } Sample; // size = 0x10
 
+/* A queued sample preload (OoT's AudioPreloadReq), D_81184B78 */
+typedef struct AudioPreloadReq {
+    /* 0x00 */ u32 endAndMediumKey; // @unverified: same offset/use as OoT's AudioPreloadReq.endAndMediumKey (sampleAddr + size + medium)
+    /* 0x04 */ Sample* sample; // @unverified: same offset/use as OoT's AudioPreloadReq.sample
+    /* 0x08 */ u8* ramAddr; // @unverified: same offset/use as OoT's AudioPreloadReq.ramAddr
+    /* 0x0C */ u32 encodedInfo; // @unverified: same offset/use as OoT's AudioPreloadReq.encodedInfo
+    /* 0x10 */ s32 isFree; // @unverified: same offset/use as OoT's AudioPreloadReq.isFree
+} AudioPreloadReq; // size = 0x14
+
 /* One entry of an audio table (OoT's AudioTableEntry): sequences, sound fonts or sample banks */
 typedef struct AudioTableEntry {
     /* 0x00 */ u32 romAddr; // @unverified: same offset/use as OoT's AudioTableEntry.romAddr

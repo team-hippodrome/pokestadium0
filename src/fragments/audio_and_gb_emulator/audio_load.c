@@ -214,19 +214,6 @@ typedef struct SampleCache8110BA8C {
     /* 0x24 */ s32 numEntries;
 } SampleCache8110BA8C;
 
-typedef struct PreloadSample8110BA8C {
-    /* 0x00 */ u32 unk_bits : 8;
-    /* 0x00 */ u32 size : 24;
-} PreloadSample8110BA8C;
-
-typedef struct Preload8110BA8C {
-    /* 0x00 */ u32 endAndMediumKey;
-    /* 0x04 */ PreloadSample8110BA8C* sample;
-    /* 0x08 */ u8* ramAddr;
-    /* 0x0C */ u32 encodedInfo;
-    /* 0x10 */ s32 isFree;
-} Preload8110BA8C; // size = 0x14
-
 extern SampleCache8110BA8C D_811845F8;
 extern s32 D_81184600;
 extern s32 D_8118461C;
@@ -257,7 +244,7 @@ void AudioHeap_InitSampleCaches(s32 arg0, s32 arg1) {
     D_8118461C = 0;
 }
 
-extern Preload8110BA8C D_81184B78[];
+extern AudioPreloadReq D_81184B78[];
 extern s32 D_8118557C;
 void AudioHeap_DiscardSampleCacheEntry(SampleCacheEntry8110BA8C*);
 
@@ -274,7 +261,7 @@ SampleCacheEntry8110BA8C* AudioHeap_AllocTemporarySampleCacheEntry(u32 size) {
     s32 index;
     s32 i;
     SampleCacheEntry8110BA8C* entry;
-    Preload8110BA8C* preload;
+    AudioPreloadReq* preload;
     SampleCache8110BA8C* cache;
     u8* startRamAddr;
     u8* end_ram_addr;

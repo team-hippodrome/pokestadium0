@@ -713,16 +713,8 @@ typedef struct Sample8110EF7C {
     /* 0x04 */ s32 sampleAddr;
 } Sample8110EF7C;
 
-typedef struct Preload8110EF7C {
-    /* 0x00 */ u32 endAndMediumKey;
-    /* 0x04 */ Sample8110EF7C* sample;
-    /* 0x08 */ s32 ramAddr;
-    /* 0x0C */ u32 encodedInfo;
-    /* 0x10 */ s32 isFree;
-} Preload8110EF7C; // size = 0x14
-
 extern s32 D_811806D8;
-extern Preload8110EF7C D_81184B78[];
+extern AudioPreloadReq D_81184B78[];
 extern s32 D_8118557C;
 extern OSMesgQueue D_811855F8;
 extern u8* D_811858A4;
@@ -800,8 +792,8 @@ void func_8110EF7C(s32 font_id, s32 font_data, RelocInfo8110EF7C* reloc_info, s3
                 break;
 
             case 1:
-                D_81184B78[D_8118557C].sample = sample;
-                D_81184B78[D_8118557C].ramAddr = sample_ram_addr;
+                D_81184B78[D_8118557C].sample = (Sample*)sample;
+                D_81184B78[D_8118557C].ramAddr = (u8*)sample_ram_addr;
                 D_81184B78[D_8118557C].encodedInfo = (D_8118557C << 24) | 0xFFFFFF;
                 D_81184B78[D_8118557C].isFree = 0;
                 D_81184B78[D_8118557C].endAndMediumKey = sample->sampleAddr + sample->size + sample->medium;
@@ -812,9 +804,9 @@ void func_8110EF7C(s32 font_id, s32 font_data, RelocInfo8110EF7C* reloc_info, s3
     D_81185578 = 0;
 
     if ((D_8118557C != 0) && !preload_in_progress) {
-        sample = D_81184B78[D_8118557C - 1].sample;
+        sample = (Sample8110EF7C*)D_81184B78[D_8118557C - 1].sample;
         n_chunks = (sample->size >> 12) + 1;
-        func_8110E9A8(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
+        func_8110E9A8(sample->sampleAddr, (s32)D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
     }
 }
 
@@ -844,10 +836,10 @@ s32 BattleAnim_EndSleepStatusAnimation(s32 arg0) {
 
         preload_index >>= 24;
         if (D_81184B78[preload_index].isFree == 0) {
-            sample = D_81184B78[preload_index].sample;
+            sample = (Sample8110EF7C*)D_81184B78[preload_index].sample;
             key = sample->sampleAddr + sample->size + sample->medium;
             if (key == D_81184B78[preload_index].endAndMediumKey) {
-                sample->sampleAddr = D_81184B78[preload_index].ramAddr;
+                sample->sampleAddr = (s32)D_81184B78[preload_index].ramAddr;
                 sample->medium = 0;
             }
             D_81184B78[preload_index].isFree = 1;
@@ -862,14 +854,14 @@ s32 BattleAnim_EndSleepStatusAnimation(s32 arg0) {
                 continue;
             }
 
-            sample = D_81184B78[D_8118557C - 1].sample;
+            sample = (Sample8110EF7C*)D_81184B78[D_8118557C - 1].sample;
             n_chunks = (sample->size >> 12) + 1;
             key = sample->sampleAddr + sample->size + sample->medium;
             if (key != D_81184B78[D_8118557C - 1].endAndMediumKey) {
                 D_81184B78[D_8118557C - 1].isFree = 1;
                 D_8118557C--;
             } else {
-                func_8110E9A8(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
+                func_8110E9A8(sample->sampleAddr, (s32)D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
                 break;
             }
         }
@@ -1065,8 +1057,8 @@ void AudioLoad_PreloadSamplesForFont(s32 font_id, s32 async, RelocInfo8110EF7C* 
                 break;
 
             case 1:
-                D_81184B78[D_8118557C].sample = sample;
-                D_81184B78[D_8118557C].ramAddr = sample_ram_addr;
+                D_81184B78[D_8118557C].sample = (Sample*)sample;
+                D_81184B78[D_8118557C].ramAddr = (u8*)sample_ram_addr;
                 D_81184B78[D_8118557C].encodedInfo = (D_8118557C << 24) | 0xFFFFFF;
                 D_81184B78[D_8118557C].isFree = 0;
                 D_81184B78[D_8118557C].endAndMediumKey = sample->sampleAddr + sample->size + sample->medium;
@@ -1077,9 +1069,9 @@ void AudioLoad_PreloadSamplesForFont(s32 font_id, s32 async, RelocInfo8110EF7C* 
     D_81185578 = 0;
 
     if ((D_8118557C != 0) && !preload_in_progress) {
-        sample = D_81184B78[D_8118557C - 1].sample;
+        sample = (Sample8110EF7C*)D_81184B78[D_8118557C - 1].sample;
         n_chunks = (sample->size >> 12) + 1;
-        func_8110E9A8(sample->sampleAddr, D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
+        func_8110E9A8(sample->sampleAddr, (s32)D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
     }
 }
 
