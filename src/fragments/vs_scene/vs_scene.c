@@ -34,7 +34,7 @@ extern u8 D_300C2D0[];
 typedef struct VsSceneSide {
     /* 0x00 */ u8 teamLayout; // @unverified: VsScene_PrepareTeams sets 0 when ruleCategory != 0, 2 for a two-trainer side, else 1
     /* 0x01 */ char unk01[0x3];
-    /* 0x04 */ void* trainerFile; // @unverified: BinArchive file picked by rosterInfo[0]->unk_003 in VsScene_PrepareTeams
+    /* 0x04 */ void* trainerFile; // @unverified: BinArchive file picked by rosterInfo[0]->trainerIndex in VsScene_PrepareTeams
     /* 0x08 */ u8* iconImages[6]; // @unverified: PokeIcon_GetImage results for the side's Pokémon (VsScene_LoadTeamIcons)
     /* 0x20 */ u8* hpBarImages[6]; // @unverified: images of the D_82203210 render targets func_82201084 draws HP bars into
     /* 0x38 */ TeamRoster* teamMember[2];
@@ -159,7 +159,7 @@ void VsScene_PrepareTeams(void) {
 
         team->teamMember[0] = D_822036A4->battleSides[i].teamMember[0];
         team->rosterInfo[0] = D_822036A4->battleSides[i].teamMember[0]->rosterInfo;
-        team->trainerFile = BinArchive_GetFile(D_8220325C, team->rosterInfo[0]->unk_003);
+        team->trainerFile = BinArchive_GetFile(D_8220325C, team->rosterInfo[0]->trainerIndex);
 
         if (D_822036A4->battleSides[i].tagTeamSize == 2) {
             team->teamMember[1] = D_822036A4->battleSides[i].teamMember[1];

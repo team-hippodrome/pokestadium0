@@ -125,13 +125,11 @@ typedef struct BattleMonRuntime {
 
 typedef struct ExtendedRosterInfo {
     /* 0x000 */ u16 unk_000;
-    /* 0x002 */ u8 numberOfPokemonCanBePicked; // Only changes for Free Battle and VS Mewtwo, see @src/fragments/battle_engine/battle_engine_main.c
-    /* 0x003 */ u8 unk_003;
-    /* 0x004 */ char unk004[0x10];
-    /* 0x014 */ char unk_014[4];
-    /* 0x018 */ char unk018[0x10];
-    /* 0x028 */ BattleMon battleMon[1];
-    /* 0x078 */ char unk078[0x190];
+    /* 0x002 */ u8 numberOfPokemonCanBePicked; // size of the team the order screen picks from (battleMon[0..n-1]); 6 for a tournament template team
+    /* 0x003 */ u8 trainerIndex; // @unverified: index of the trainer's BinArchive file the VS screen loads (vs_scene); nintendo_cup_teams sets the template index or round + 0x16
+    /* 0x004 */ char title[0x10]; // @unverified: copied from the trainer template's title, e.g. 「ほっかいどう」 (Hokkaido) or 「トレーナー」 (Trainer)
+    /* 0x014 */ char fullName[0x14]; // @unverified: copied from the template's two-line name, e.g. 「むしとり\nしょうねん」 (Bug Catcher)
+    /* 0x028 */ BattleMon battleMon[6];
 } ExtendedRosterInfo; // size = 0x208 (Stadium 1: 0x248)
 
 typedef struct TeamRoster {
@@ -139,8 +137,7 @@ typedef struct TeamRoster {
     /* 0x001 */ u8 controllerPort;
     /* 0x002 */ u8 numberOfPokemonBrought;
     /* 0x004 */ Controller* controller;
-    /* 0x008 */ char trainerName[4];
-    /* 0x00C */ char unk00C[0xC];
+    /* 0x008 */ char trainerName[0x10];
     /* 0x018 */ s32 trainerId; // @unverified: id word BattleAi_AddTrainerPickScore switches the COM picks on (0x6974, 0x95EC, ...)
     /* 0x01C */ BattleMon pokemonPicked[6];
     /* 0x1FC */ ExtendedRosterInfo* rosterInfo;
