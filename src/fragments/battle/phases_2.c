@@ -43,8 +43,8 @@ void func_82135098(ActivePokemon*);
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
-    u8* sp2C = (u8*)sActivePokemon[sBattleScene.scene->actingSide] + 0x7C6;
-    u8* sp28 = (u8*)sActivePokemon[!sBattleScene.scene->actingSide] + 0x7C6;
+    BattleMonRuntime* sp2C = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
+    BattleMonRuntime* sp28 = &sActivePokemon[!sBattleScene.scene->actingSide]->state.runtime;
     ActivePokemon* cur = sActivePokemon[sBattleScene.scene->actingSide];
 
     switch (sBattleScene.scene->phaseStep) {
@@ -63,11 +63,11 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
                 BattleAnim_CleanupEffects(1);
                 func_82124894(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
                 func_82104C68(sActivePokemon[sBattleScene.scene->actingSide], 0xD);
-                if (sp2C[0x15] & 0x18) {
+                if (sp2C->pendingStatusCondition & 0x18) {
                     BattleMessage_ShowForSide(D_8219A520 + 0x248, sBattleScene.scene->actingSide);
-                    M2C_FIELD(sp2C, u16*, 0xC) = M2C_FIELD(sp2C, u16*, 0xE);
-                    M2C_FIELD(sp28, u16*, 0xC) = M2C_FIELD(sp28, u16*, 0xE);
-                    if (sp2C[0x15] & 0x10) {
+                    sp2C->hp = sp2C->hpAfterPoisonBurn;
+                    sp28->hp = sp28->hpAfterPoisonBurn;
+                    if (sp2C->pendingStatusCondition & 0x10) {
                         BattleAnim_QueueEffectList(6, (ActivePokemon*)D_8219A544);
                     } else {
                         BattleAnim_QueueEffectList(5, (ActivePokemon*)D_8219A544);
@@ -75,8 +75,8 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
                     sBattleScene.scene->phaseStep++;
                 } else {
                     BattleMessage_ShowForSide(D_8219A520 + 0x288, sBattleScene.scene->actingSide);
-                    M2C_FIELD(sp2C, u16*, 0xC) = M2C_FIELD(sp2C, u16*, 0x10);
-                    M2C_FIELD(sp28, u16*, 0xC) = M2C_FIELD(sp28, u16*, 0x10);
+                    sp2C->hp = sp2C->hpAfterLeechSeed;
+                    sp28->hp = sp28->hpAfterLeechSeed;
                     BattleAnim_QueueEffectList(0xA, (ActivePokemon*)D_8219A544);
                     sBattleScene.scene->phaseStep = 3;
                 }
@@ -94,11 +94,11 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
                     func_82125570();
                     BattleScene_SetPhase(arg0, 5);
                     sBattleScene.scene->actingSide = !sBattleScene.scene->actingSide;
-                } else if (sp2C[0x4D] & 0x80) {
+                } else if (sp2C->volatileStatusFlags & 0x80) {
                     Audio_PlayCommand(0x22, 0, 0);
                     BattleMessage_ShowForSide(D_8219A520 + 0x288, sBattleScene.scene->actingSide);
-                    M2C_FIELD(sp2C, u16*, 0xC) = M2C_FIELD(sp2C, u16*, 0x10);
-                    M2C_FIELD(sp28, u16*, 0xC) = M2C_FIELD(sp28, u16*, 0x10);
+                    sp2C->hp = sp2C->hpAfterLeechSeed;
+                    sp28->hp = sp28->hpAfterLeechSeed;
                     BattleAnim_QueueEffectList(0xA, (ActivePokemon*)D_8219A544);
                     sBattleScene.scene->phaseStep++;
                 } else {
@@ -144,8 +144,8 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
 void BattleScene_PhaseResidualDamageFaintCheck(CameraNode* arg0) {
-    u8* sp1C = (u8*)sActivePokemon[sBattleScene.scene->actingSide] + 0x7C6;
-    u8* sp18 = (u8*)sActivePokemon[!sBattleScene.scene->actingSide] + 0x7C6;
+    BattleMonRuntime* sp1C = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
+    BattleMonRuntime* sp18 = &sActivePokemon[!sBattleScene.scene->actingSide]->state.runtime;
 
     switch (sBattleScene.scene->phaseStep) {
         case 0:
@@ -162,8 +162,8 @@ void BattleScene_PhaseResidualDamageFaintCheck(CameraNode* arg0) {
             func_82124874(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
             func_82104C68(sActivePokemon[sBattleScene.scene->actingSide], 0xD);
             BattleMessage_ShowForSide(D_8219A520 + 0x248, sBattleScene.scene->actingSide);
-            M2C_FIELD(sp1C, u16*, 0xC) = M2C_FIELD(sp1C, u16*, 0xE);
-            M2C_FIELD(sp18, u16*, 0xC) = M2C_FIELD(sp18, u16*, 0xE);
+            sp1C->hp = sp1C->hpAfterPoisonBurn;
+            sp18->hp = sp18->hpAfterPoisonBurn;
             sBattleScene.scene->phaseStep += 1;
             break;
 
@@ -206,7 +206,7 @@ void func_82130D48(ActivePokemon* active_pokemon) {
  * BattleScene_TryStartSwitchAction). Ran in play when 1P switched from the Pokemon menu.
  */
 void BattleScene_PhaseWithdraw(CameraNode* arg0) {
-    u8* sp2C = (u8*)sActivePokemon[sBattleScene.scene->actingSide] + 0x78C;
+    ActivePokemonState* sp2C = &sActivePokemon[sBattleScene.scene->actingSide]->state;
     ActivePokemon* temp_s0 = sActivePokemon[sBattleScene.scene->actingSide];
 
     if (sBattleScene.scene->actingSide) {}  // karodo
@@ -265,7 +265,7 @@ void BattleScene_PhaseWithdraw(CameraNode* arg0) {
                 func_82107408(temp_s0);
                 BattleAnim_QueueEffectList3(3, temp_s0, temp_s0, 0xFF, 0xFF);
                 Audio_PlayCommand(2, 0, 0);
-                BattleScene_RebindParticipantTeamMember(temp_s0, sp2C[0x2D]);
+                BattleScene_RebindParticipantTeamMember(temp_s0, sp2C->menuTeamMemberIndex);
                 sBattleScene.scene->phaseStep++;
             }
             break;
@@ -291,7 +291,7 @@ void BattleScene_PhaseWithdraw(CameraNode* arg0) {
                 BattleScene_ResetCameraFrameCounter();
                 Vec3f_SetComponentsDuplicate((Vec3f*)((u8*)temp_s0 + 0x30), 1.0f, 1.0f, 1.0f);
                 func_8212562C();
-                M2C_FIELD(sp2C, u16*, 0x36) &= ~0x3800;
+                sp2C->flags &= ~0x3800;
             }
             break;
     }

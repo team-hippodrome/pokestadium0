@@ -124,22 +124,22 @@ void BattleAi_RecordUsedMove(s32, s32, s32);
  * @unverified Name and comment from the code.
  */
 s32 BattleScene_TryStartSwitchAction(void) {
-    s8* sp24;
-    s8* sp20;
-    s8* sp1C;
+    ActivePokemonState* sp24;
+    ActivePokemonState* sp20;
+    ActivePokemonState* sp1C;
 
     sp24 = &sActivePokemon[sBattleScene.scene->actingSide]->state;
     sp20 = &sActivePokemon[sBattleScene.scene->actingSide]->state;
     sp1C = &sActivePokemon[!sBattleScene.scene->actingSide]->state;
     func_821079E8(0x1FFE);
-    if ((M2C_FIELD(sp24, u8*, 0x2E) == 0xF) || (M2C_FIELD(sp24, u8*, 0x2E) == 0x10)) {
+    if ((sp24->faintState == 0xF) || (sp24->faintState == 0x10)) {
         if (*M2C_FIELD(sActivePokemon[sBattleScene.scene->actingSide], u8**, 0x860) & 2) {
-            BattleAi_RecordUsedMove(M2C_FIELD(sp20, s32*, 8), M2C_FIELD(sp1C, s32*, 8), 2);
+            BattleAi_RecordUsedMove(sp20->rosterIndex, sp1C->rosterIndex, 2);
         }
         Battle_ClearRuntimeFlags(sActivePokemon[sBattleScene.scene->actingSide], 0x3800);
         sBattleScene.scene->phaseStep = 0;
         sBattleScene.scene->stepFrameTimer = 0;
-        if (M2C_FIELD(sp24, u8*, 0x2E) == 0x10) {
+        if (sp24->faintState == 0x10) {
             sBattleScene.scene->phase = 0x12;
         } else {
             sBattleScene.scene->phase = 0xB;
@@ -455,7 +455,7 @@ void BattleScene_ResolveDisplayedHpCompletion(CameraNode* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleScene_UpdateDisplayedHpAndTransition(CameraNode* arg0) {
-    u8* sp1C = (u8*)sActivePokemon[sBattleScene.scene->actingSide] + 0x7C6;
+    BattleMonRuntime* sp1C = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
 
     func_82125570();
     func_8212188C();
@@ -471,7 +471,7 @@ void BattleScene_UpdateDisplayedHpAndTransition(CameraNode* arg0) {
         func_82125990(0xA);
     } else if (sBattleScene.scene->moveEffectKind == 9) {
         func_82125930(9);
-    } else if ((sp1C[0x15] & 0x18) || (sp1C[0x4D] & 0x80)) {
+    } else if ((sp1C->pendingStatusCondition & 0x18) || (sp1C->volatileStatusFlags & 0x80)) {
         func_82125930(6);
     } else {
         func_821259E8(arg0);
