@@ -2739,8 +2739,7 @@ Pokedex_DrawAreaMapFrame = 0x8A104B00; // type:func
 Pokedex_CheckAreaMapExit = 0x8A1051A4; // type:func
 Pokedex_ExitAreaMapPool = 0x8A1057AC; // type:func
 LabPC_ComputeExpForLevel = 0x8A20219C; // type:func
-DisplayList_BuildRotationMatrixSegment = 0x8F2003EC; // type:func
-DisplayList_InitRotationMatrixSegment = 0x8F200504; // type:func
+FireFx_ScrollMaterialGeoCallback = 0x8F200504; // type:func
 
 // ultralib 2.0I_P names of functions and data built from lib/ultralib
 _init_lpfilter = 0x8004E990; // type:func libultra
@@ -4922,3 +4921,15 @@ AudioSeq_SkipForwardSequence = 0x81115254; // type:func
 AudioSeq_ResetSequencePlayer = 0x811152A4; // type:func
 AudioSeq_InitSequencePlayerChannels = 0x8111539C; // type:func
 AudioSeq_InitSequencePlayers = 0x81115480; // type:func
+FireFx_BuildFlameBackdropDisplayList = 0x8F200020; // type:func
+FireFx_FlameBackdropGeoCallback = 0x8F20010C; // type:func
+FireFx_BuildFlickerOverlayDisplayList = 0x8F200160; // type:func
+FireFx_FlickerOverlayGeoCallback = 0x8F200244; // type:func
+FireFx_BuildScrollOverlayDisplayList = 0x8F200290; // type:func
+FireFx_ScrollOverlayGeoCallback = 0x8F2003AC; // type:func
+FireFx_BuildScrollMaterialDisplayList = 0x8F2003EC; // type:func
+sFlameBackdropPreTextureDL = 0x8F20E830; // type:data
+sFlameBackdropPostTextureDL = 0x8F20E880; // type:data
+sFlameBackdropTextures = 0x8F20E8A8; // type:data
+sFireOverlaySetupDL = 0x8F2128D0; // type:data
+sFireOverlayTextures = 0x8F212910; // type:data

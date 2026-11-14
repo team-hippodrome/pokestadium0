@@ -41,7 +41,7 @@ Where the code lives, after the reorganization. File names are broadly correct g
 | 024 | `src/fragments/launcher_relay_024/` | 1 | 1 | launcher relay |
 | 025 | `src/fragments/fatal_error_screen/` | 1 | 6 | fatal error screen |
 | 030 | `src/fragments/geo_model_030/` | 1 | 4 | geo layout callbacks for models |
-| 031 | `src/fragments/particle_data/` | 2 | 8 | particle data |
+| 031 | `src/fragments/particle_data/` | 2 | 8 | fire effects for the VS scene (backdrop, panel and title overlays) |
 | 032 | `src/fragments/geo_model_032/` | 1 | 9 | geo layout callbacks for models |
 | 033 | `src/fragments/geo_model_033/` | 1 | 13 | geo layout callbacks for models |
 | 034 | `src/fragments/geo_model_034/` | 1 | 8 | geo layout callbacks for models |
