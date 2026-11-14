@@ -18,7 +18,7 @@ Where the code lives, after the reorganization. File names are broadly correct g
 | 001 | `src/fragments/unidentified_001/` | 1 | 1 | not identified yet |
 | 002 | `src/fragments/disk_error_screen/` | 1 | 9 | 64DD / disk error screen |
 | 003 | `src/fragments/n64_logo/` | 1 | 5 | N64 logo intro |
-| 004 | `src/fragments/gb_tower_team_prep/` | 1 | 4 | GB Tower team preparation |
+| 004 | `src/fragments/gb_tower_team_prep/` | 1 | 4 | GB mode party icon render (before the GB emulator) |
 | 005 | `src/fragments/battle_order_select/` | 1 | 33 | battle order selection |
 | 006 | `src/fragments/cartridge_check/` | 2 | 40 | Game Boy cartridge check |
 | 007 | `src/fragments/free_battle_setup/` | 5 | 108 | Free Battle setup and rental teams |
