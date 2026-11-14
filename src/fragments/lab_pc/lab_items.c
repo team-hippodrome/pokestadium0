@@ -376,21 +376,21 @@ extern Rgba89000D50 D_8900A5BC;
  * Seen in play (2026-11-13) in せいとん > どうぐをいどうする, the ×count selector opened when ほのおのいし ×05 was
  * picked to move from てもちのどうぐ to サトシのパソコン.
  */
-void LabItem_InitCountSelector(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
-    Window_SetRect(arg0 + 4, arg1, arg2, 0x54, 0x34);
-    M2C_FIELD(arg0, s32*, 0x28) = 0;
-    M2C_FIELD(arg0, s32*, 0x24) = 0;
-    M2C_FIELD(arg0, s32*, 0x2C) = 0;
-    M2C_FIELD(arg0, s32*, 0x18) = 0;
-    M2C_FIELD(arg0, Rgba89000D50*, 0x1C) = D_8900A5BC;
-    M2C_FIELD(arg0, s32*, 0x40) = 2;
-    M2C_FIELD(arg0, s32*, 0x34) = 1;
-    M2C_FIELD(arg0, s32*, 0x38) = 1;
-    M2C_FIELD(arg0, s32*, 0x3C) = arg3;
-    M2C_FIELD(arg0, s32*, 0x44) = 0;
+void LabItem_InitCountSelector(LabItemCountSelector* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    Window_SetRect(&arg0->window, arg1, arg2, 0x54, 0x34);
+    arg0->window.animTimer = 0;
+    arg0->window.title = 0;
+    arg0->window.state = 0;
+    arg0->window.frame.style = 0;
+    *(Rgba89000D50*)&arg0->window.frame.color = D_8900A5BC; // copied as an aligned word
+    arg0->count.digitCount = 2;
+    arg0->count.value = 1;
+    arg0->count.min = 1;
+    arg0->count.max = arg3;
+    arg0->count.digit = 0;
     func_8000B2F4(D_800603C0);
-    M2C_FIELD(arg0, s32*, 0x30) = arg4;
-    M2C_FIELD(arg0, s32*, 0) = 0;
+    arg0->limit = arg4;
+    arg0->state = 0;
 }
 
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
@@ -412,50 +412,50 @@ extern char D_89018470[];
  * Seen in play (2026-11-13) in せいとん > どうぐをいどうする, drew the ×count selector (×01, ×02 ... ×05) for
  * ほのおのいし.
  */
-void LabItem_DrawCountSelector(s8* arg0) {
+void LabItem_DrawCountSelector(LabItemCountSelector* arg0) {
     UNUSED s32 pad[1]; // FAKE: stack padding
     s32 x;
     s32 v;
 
-    if (func_8002AE6C(arg0 + 4) == 0) {
-        x = M2C_FIELD(arg0, s32*, 4) - M2C_FIELD(arg0, s32*, 0x44) * 0x16 + 0x36;
+    if (func_8002AE6C(&arg0->window) == 0) {
+        x = arg0->window.frame.x - arg0->count.digit * 0x16 + 0x36;
         gSPDisplayList(gDisplayListHead++, D_80073408);
         if (((u16*)D_800603C0)[3] & 0x800) {
             v = (s32)D_04002340;
         } else {
             v = (s32)D_04002130;
         }
-        func_8001B884(x + 3, M2C_FIELD(arg0, s32*, 8) + 6, 0xE, 8, (u8*)v, 0x10, 0x200000);
+        func_8001B884(x + 3, arg0->window.frame.y + 6, 0xE, 8, (u8*)v, 0x10, 0x200000);
         if (((u16*)D_800603C0)[3] & 0x400) {
             v = (s32)D_04002448;
         } else {
             v = (s32)D_04002238;
         }
-        func_8001B884(x + 3, M2C_FIELD(arg0, s32*, 8) + 0x26, 0xE, 8, (u8*)v, 0x10, 0x200000);
+        func_8001B884(x + 3, arg0->window.frame.y + 0x26, 0xE, 8, (u8*)v, 0x10, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);
-        Ui_DrawRoundedFrame(x - 3, M2C_FIELD(arg0, s32*, 8) + 0xD, 0x1A, 0x1A, D_80073520);
+        Ui_DrawRoundedFrame(x - 3, arg0->window.frame.y + 0xD, 0x1A, 0x1A, D_80073520);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(8, 0);
         Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2],
                       D_800734A8[3]);
-        func_8001A944(M2C_FIELD(arg0, s32*, 4) + 0xA, M2C_FIELD(arg0, s32*, 8) + 0x10, D_89018470);
-        if (M2C_FIELD(arg0, s32*, 0x44) == 1) {
+        func_8001A944(arg0->window.frame.x + 0xA, arg0->window.frame.y + 0x10, D_89018470);
+        if (arg0->count.digit == 1) {
             v = 2;
         } else {
             v = 0;
         }
         Font_SetColorForFlags(v);
-        func_8001AA60(M2C_FIELD(arg0, s32*, 4) + 0x20, M2C_FIELD(arg0, s32*, 8) + 0x10, M2C_FIELD(arg0, s32*, 0x34) / 10 + '0');
-        if (M2C_FIELD(arg0, s32*, 0x44) == 0) {
+        func_8001AA60(arg0->window.frame.x + 0x20, arg0->window.frame.y + 0x10, arg0->count.value / 10 + '0');
+        if (arg0->count.digit == 0) {
             v = 2;
         } else {
             v = 0;
         }
         Font_SetColorForFlags(v);
-        func_8001AA60(M2C_FIELD(arg0, s32*, 4) + 0x36, M2C_FIELD(arg0, s32*, 8) + 0x10, M2C_FIELD(arg0, s32*, 0x34) % 10 + '0');
+        func_8001AA60(arg0->window.frame.x + 0x36, arg0->window.frame.y + 0x10, arg0->count.value % 10 + '0');
         Font_EndTexturedTextRendering();
-        if (M2C_FIELD(arg0, s32*, 0) == 1) {
-            TextBox_Draw(arg0 + 0x48);
+        if (arg0->state == 1) {
+            TextBox_Draw(&arg0->textBox);
         }
     }
 }
@@ -473,25 +473,25 @@ extern M2C_UNK D_89018474;
  * Seen in play (2026-11-13) in せいとん > どうぐをいどうする, the D-pad changed the ほのおのいし count and A moved
  * that many to サトシのパソコン.
  */
-s32 LabItem_UpdateCountSelector(s8 *arg0) {
+s32 LabItem_UpdateCountSelector(LabItemCountSelector* arg0) {
     s32 sp2C;
     s32 temp_v0;
     s32 temp_v0_2;
 
     sp2C = 0;
-    temp_v0 = M2C_FIELD(arg0, s32 *, 0);
+    temp_v0 = arg0->state;
     switch (temp_v0) {                              /* irregular */
     case 0:
-        if (func_8002B638(arg0 + 0x34) == 0) {
+        if (func_8002B638(&arg0->count) == 0) {
             temp_v0_2 = func_8002BC14(D_800603C0);
             if (temp_v0_2 == -1) {
                 func_8003F6AC(3);
                 sp2C = -1;
             } else if (temp_v0_2 == 1) {
-                if (M2C_FIELD(arg0, s32 *, 0x30) < M2C_FIELD(arg0, s32 *, 0x34)) {
+                if (arg0->limit < arg0->count.value) {
                     func_8003F6AC(8);
-                    TextBox_Init(arg0 + 0x48, &D_89018474, 0, 1, 0);
-                    M2C_FIELD(arg0, s32 *, 0) = 1;
+                    TextBox_Init(&arg0->textBox, &D_89018474, 0, 1, 0);
+                    arg0->state = 1;
                 } else {
                     func_8003F6AC(2);
                     sp2C = 1;
@@ -500,9 +500,9 @@ s32 LabItem_UpdateCountSelector(s8 *arg0) {
         }
         break;
     case 1:
-        if (Ui_CheckConfirmPressed(arg0 + 0x48) == 1) {
-            M2C_FIELD(arg0, s32 *, 0) = 0;
-            M2C_FIELD(arg0, s32 *, 0x34) = (s32) M2C_FIELD(arg0, s32 *, 0x30);
+        if (Ui_CheckConfirmPressed(&arg0->textBox) == 1) {
+            arg0->state = 0;
+            arg0->count.value = (s32) arg0->limit;
         }
         break;
     }

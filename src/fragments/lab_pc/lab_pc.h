@@ -26,6 +26,25 @@ struct unk_func_8820E99C;
 
 struct unk_func_8821421C_02C;
 
+/* A two-digit number picker (func_8002B638). */
+typedef struct DigitSelector {
+    /* 0x00 */ s32 value; // the ×count shown: ×01, ×02 ... ×05 for ほのおのいし (fire stone)
+    /* 0x04 */ s32 min; // @unverified: 1 in LabItem_InitCountSelector
+    /* 0x08 */ s32 max; // @unverified: arg3 of LabItem_InitCountSelector
+    /* 0x0C */ s32 digitCount; // @unverified: 2
+    /* 0x10 */ s32 digit; // @unverified: the digit the cursor is on, 0 = ones, 1 = tens (the frame moves left by 0x16 per digit)
+} DigitSelector; // size = 0x14
+
+/* The ×count selector of the Lab item screens (LabItem_InitCountSelector), with a text box for a count
+ * over the limit. */
+typedef struct LabItemCountSelector {
+    /* 0x00 */ s32 state; // @unverified: 1 while the text box D_89018474 is up
+    /* 0x04 */ Window window;
+    /* 0x30 */ s32 limit; // @unverified: arg4; a value above it opens the text box, then is set back to it
+    /* 0x34 */ DigitSelector count;
+    /* 0x48 */ s32 textBox; // first word of a TextBox (TextBox_Init, TextBox_Draw); its size is not established
+} LabItemCountSelector;
+
 /* A yes/no question in the Lab item screens (LabItem_InitConfirmWindow). */
 typedef struct LabItemConfirmWindow {
     /* 0x00 */ Window window;
