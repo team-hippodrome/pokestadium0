@@ -15,8 +15,8 @@ void func_821337A0(s8 *arg0)
 /*
  * func_821337B4
  *
- * Resets some fields of the battle scene object (D_8219A5A0, named
- * sBattleScene in symbol_addrs.txt; D_82199DE0 is sActivePokemon, an array
+ * Resets some fields of the battle scene object (sBattleScene.scene;
+ * D_82199DE0 is sActivePokemon, an array
  * of two pointers):
  *
  *   - BattleScene_SetCameraSubstate(1, 0) is called.
@@ -36,7 +36,6 @@ void func_821337A0(s8 *arg0)
 M2C_UNK func_82121D8C(M2C_UNK, M2C_UNK);            /* extern */
 void func_82133868();
 extern M2C_UNK D_82199DE0;
-extern void *D_8219A5A0;
 
 /**
  * Sets up the scene mode 11 demo battle: switches the camera to mode 0 for both sides, runs

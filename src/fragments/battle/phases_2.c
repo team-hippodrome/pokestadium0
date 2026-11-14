@@ -12,7 +12,6 @@ M2C_UNK func_821365B0(M2C_UNK, s8 *, s8 *, M2C_UNK, s32);
 extern M2C_UNK D_82199DE0;
 extern Vec3f D_8218B630;
 extern s32 D_8219A520;
-extern s8 *D_8219A5A0;
 s32 ActivePokemon_GetNickname(ActivePokemon*);
 s32 BattleMessage_Format(s32, s32, s32, ...);
 s32 Battle_StepPartyHpToDisplay(ActivePokemon*);

@@ -6,6 +6,8 @@
 #include "math.h"
 /* Spline camera path state (scene spline block pointer, keyframe buffer) and helper shared by the func_82135xxx camera path functions. */
 extern s8 D_FLT_8219A5B0;
+// FAKE: sBattleScene.scene under a second symbol at the same address, so IDO does not
+// treat its loads and stores as aliasing sBattleScene; needed to match these functions.
 extern BattleScene* D_8219A5A0;
 void Battle_ComputeSplineWeightsVariantC(f32* arg0, f32 arg1);
 extern u8* sBattleAnimAssetPointers[256];

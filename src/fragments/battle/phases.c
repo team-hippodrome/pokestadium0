@@ -7,7 +7,6 @@ M2C_UNK func_8211EE8C();
 M2C_UNK func_82125384();
 extern f32 D_FLT_82189354[][4];
 extern s32 D_8219A520;
-extern s8 *D_8219A5A0;
 extern u8* D_82189180[];
 s32 Battle_StepPartyHpToDisplay(ActivePokemon*);
 s32 func_82107A5C(ActivePokemon*);
@@ -54,7 +53,6 @@ extern u8* D_8218B320[];
 extern s32 D_8219A568;
 extern MoveAnimInfoZ D_80073D90[];
 extern f32 D_FLT_82189354[][4];
-extern s8 *D_8219A5A0;
 
 /**
  * Empty render hook.

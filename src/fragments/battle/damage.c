@@ -336,7 +336,6 @@ extern s8 D_82199F31;
 extern s16 D_82199F50;
 extern s8 *D_8219A3C0;
 extern s8 *D_8219A3C4;
-extern s8 *D_8219A5A0;
 
 /**
  * Marks the move as missed: clears the damage, sets the missed flag and clears the user's

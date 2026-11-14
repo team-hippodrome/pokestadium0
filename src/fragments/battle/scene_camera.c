@@ -6,7 +6,6 @@
 // Declared here instead of in a header: the callers of these disagree on their types.
 M2C_UNK func_8000EEBC(s32, s32, f32, s16, s32);
 extern f32 D_FLT_82189358[];
-extern s8 *D_8219A5A0;
 f32 BattleScene_GetParticipantHeight();
 void func_82124874();
 
@@ -146,7 +145,6 @@ void BattleScene_GetParticipantCameraAnchor(ActivePokemon* arg0, Vec3f* arg1) {
 void func_8210BCF0(Vec3f*, Vec3f*, f32*, s16*, s16*);
 f32 BattleAnim_Vec3fDistance(Vec3f a, Vec3f b);
 f32 BattleScene_GetParticipantModelRadiusScaled(ActivePokemon* active_pokemon);
-extern s8* D_8219A5A0;
 /*
  * Stadium 0 counterpart of Stadium 1's BattleScene_IsOwnerInViewWedgeAlt.
  * Returns 1 when a2 lies inside the wedge in front of the camera eye
@@ -362,8 +360,8 @@ void BattleScene_ApplyCameraShake(CameraNode* arg0) {
  * Resets scene+0x68 to 30 and scene+0x6C to 0.
  */
 void func_82122104(s32 arg0) {
-    M2C_FIELD(D_8219A5A0, f32 *, 0x68) = 30.0f;
-    M2C_FIELD(D_8219A5A0, s16 *, 0x6C) = 0;
+    sBattleScene.scene->shakeAmplitude = 30.0f;
+    sBattleScene.scene->shakeAngle = 0;
 }
 
 /**
@@ -400,7 +398,6 @@ s32 BattleScene_IsCameraAngleSettled(s16 arg0, s16 arg1) {
     return 0;
 }
 
-extern s8 *D_8219A5A0;
 
 /**
  * Seen in play (2026-11-13) called by the B-roll overview shot with (0xB6, 0x78DC): it stepped
@@ -487,8 +484,8 @@ void BattleCamera_CaptureModelOrbit(ActivePokemon* pokemon, CameraNode* camera) 
     UNUSED s32 pad[3]; // FAKE: stack padding
     Vec3f_SetComponentsDuplicate(&pokemon->modelTransform.orbitCenter, M2C_FIELD(pokemon, f32*, 0x5DC), M2C_FIELD(pokemon, f32*, 0x5E0), M2C_FIELD(pokemon, f32*, 0x5E4));
     pokemon->modelTransform.orbitCenter.y = M2C_FIELD(pokemon, f32*, 0x5E0) + (pokemon->displayObject.position.y - D_FLT_82189354[pokemon->displayObject.objectType][0]);
-    BattleAnim_Vec3fCopy((Vec3f*)(D_8219A5A0 + 0xA8), &camera->view.targetPosition);
-    BattleAnim_Vec3fCopy((Vec3f*)(D_8219A5A0 + 0xB4), &camera->view.eyePosition);
+    BattleAnim_Vec3fCopy(&sBattleScene.scene->savedCameraAt, &camera->view.targetPosition);
+    BattleAnim_Vec3fCopy(&sBattleScene.scene->savedCameraEye, &camera->view.eyePosition);
     BattleAnim_CalculateDistanceAngles(&pokemon->modelTransform.orbitCenter, &camera->view.targetPosition, &model->distance, &model->rotationX, &model->rotationY);
 }
 

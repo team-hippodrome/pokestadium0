@@ -1433,7 +1433,6 @@ void BattleDebug_DrawPokeBallViewer(s16 arg0, s16 arg1) {
     func_82116480(buf, arg0 + 0x3C, arg1 + 0x12);
 }
 
-extern s8* D_8219A5A0;
 extern char D_82195FF4[];
 extern char D_82195FF8[];
 /**

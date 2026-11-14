@@ -3,7 +3,6 @@
 
 // Declared here instead of in a header: the callers of these disagree on their types.
 extern s32 D_82199DE0;
-extern s8 *D_8219A5A0;
 s32 func_82101FD4(s32);
 void BattleScene_IntroStepWaitForAssets(CameraNode* arg0);
 void BattleScene_OpeningStepLandSide0Ball(CameraNode* arg0);
@@ -84,7 +83,6 @@ void BattleScene_UpdateIntroSequence(CameraNode* arg0) {
 }
 
 extern s32 D_82199DE0;
-extern s8 *D_8219A5A0;
 void func_8212188C(void);
 void func_8000D41C(Vec3f*, f32, f32, f32);
 void func_8210BCF0(Vec3f*, Vec3f*, s8*, s8*, s8*);
@@ -100,7 +98,7 @@ void BattleScene_OpeningStepInitCamera(CameraNode* arg0) {
     func_8212188C();
     func_8000D41C(&arg0->view.targetPosition, 0.0f, 425.0f, 0.0f);
     func_8000D41C(&arg0->view.eyePosition, -0.15f, 15.0f, 64.8f);
-    func_8210BCF0(&arg0->view.targetPosition, &arg0->view.eyePosition, D_8219A5A0 + 0x74, D_8219A5A0 + 0x58, D_8219A5A0 + 0x5A);
+    func_8210BCF0(&arg0->view.targetPosition, &arg0->view.eyePosition, &sBattleScene.scene->orbitDistance, &sBattleScene.scene->rotationX, &sBattleScene.scene->rotationY);
     (*(u8**)&D_82199DE0)[1] &= ~1;
     ((u8**)&D_82199DE0)[1][1] &= ~1;
     Audio_PlayCommand(4, 0, 0);
@@ -135,7 +133,7 @@ void BattleScene_OpeningStepOrbitCamera(CameraNode* arg0) {
     }
     sBattleScene.scene->rotationY += 0x2D8;
     func_8000EEBC(&arg0->view.targetPosition, &arg0->view.eyePosition, sBattleScene.scene->orbitDistance, sBattleScene.scene->rotationX, sBattleScene.scene->rotationY);
-    func_8210BCF0(&arg0->view.targetPosition, &arg0->view.eyePosition, D_8219A5A0 + 0x74, D_8219A5A0 + 0x58, D_8219A5A0 + 0x5A);
+    func_8210BCF0(&arg0->view.targetPosition, &arg0->view.eyePosition, &sBattleScene.scene->orbitDistance, &sBattleScene.scene->rotationX, &sBattleScene.scene->rotationY);
     sBattleScene.scene->unk_90.z = 0.0f;
 }
 

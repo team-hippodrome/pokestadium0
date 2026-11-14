@@ -58,7 +58,6 @@ extern s32 D_8218C784;
 extern s8 *D_8219A3C0;
 extern s8 *D_8219A3C4;
 extern s32 D_8219A520;
-extern s8 *D_8219A5A0;
 
 /**
  * Mirror Move: copies the target's last move into the user (fails when it is

@@ -7,7 +7,6 @@ M2C_UNK func_8212189C();
 M2C_UNK func_82124A40();
 M2C_UNK func_82125AC8(s32);
 extern s32 D_8219A520;
-extern s8 *D_8219A5A0;
 s32 Battle_StepPartyHpToDisplay(s32);
 s32 func_82124810(void*, void*);
 void BattleMessage_ShowForSide(s32, s32);

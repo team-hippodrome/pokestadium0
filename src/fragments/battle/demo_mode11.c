@@ -154,7 +154,6 @@ void func_82133028(CameraNode* arg0) {
     D_8219A594 = 0;
 }
 
-extern s8 *D_8219A5A0;
 
 /**
  * Starts the current demo cut and advances the phase step.
@@ -192,7 +191,7 @@ void func_8213334C(CameraNode* arg0) {
             break;
         case 5:
             func_82135E80(arg0, D_8219A590);
-            if (D_8219A5A0[1] == 4) {
+            if (sBattleScene.scene->splineSegment == 4) {
                 func_800414B0(0, 0x38, 9, 0);
                 D_8219A4F4 = 1;
                 func_82104C68(D_8219A590, 0x14);
@@ -211,11 +210,11 @@ void func_8213334C(CameraNode* arg0) {
  *   - if D_8219A50C == 5: calls func_82135E80(arg0, D_8219A590); if the
  *     upper halfword of the word at offset 0x48 of the object
  *     D_8219A590 points to is 0x26, calls Audio_PlayMoveSound(0x38, 9, 0); and if
- *     func_821217DC(0x37) returns non-zero, sets the word at offset 0x40
- *     of the object D_8219A5A0 points to to 3, calls func_80006998(0xFFFF),
- *     func_80005C4C(4) and Audio_FadeAndClearStoredSounds(), and sets the word at offset
- *     0x20 of that object to 6;
- *   - otherwise adds 1 to that word at offset 0x20.
+ *     func_821217DC(0x37) returns non-zero, sets sBattleScene.scene->winner
+ *     to 3, calls func_80006998(0xFFFF),
+ *     func_80005C4C(4) and Audio_FadeAndClearStoredSounds(), and sets
+ *     sBattleScene.scene->phaseStep to 6;
+ *   - otherwise adds 1 to sBattleScene.scene->phaseStep.
  *
  * The second argument of func_82135E80 is D_8219A590; the first is
  * `arg0` passed straight through (the retail code loads it into $a1 and
@@ -273,14 +272,14 @@ void func_82133534(CameraNode *arg0)
     v = sp28.b[D_8219A4F0[0xE]];
     if (v == 0xFF)
     {
-      *((s32 *) (((s8 *) D_8219A5A0) + 0x20)) = 6;
+      sBattleScene.scene->phaseStep = 6;
  if (1) { }  // karodo
     }
     else
     {
       (*((Mon82133534 **) (((s8 *) D_8219A590) + 0x85C)))->move = v;
       (*((Mon82133534 **) (((s8 *) D_8219A590) + 0x85C)))->flags |= 0x80;
-      (*((s32 *) (((s8 *) D_8219A5A0) + 0x20)))++;
+      sBattleScene.scene->phaseStep++;
     }
   }
 }
@@ -290,7 +289,6 @@ void Battle_LoadOwnerModelForSwitchIn(ActivePokemon* active_pokemon);           
 M2C_UNK func_8213B31C(M2C_UNK);                     /* extern */
 extern s8 *D_8219A590;
 extern u8 D_8219A594;
-extern s8 *D_8219A5A0;
 
 /**
  * Once the demo Pokemon's model reload is done (bit 0x10), reloads its switch-in model,

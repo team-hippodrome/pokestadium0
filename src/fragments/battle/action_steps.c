@@ -16,7 +16,6 @@ M2C_UNK func_82124664(s32, s32, M2C_UNK);
 M2C_UNK func_82124A40();
 extern s32 D_82199DE0;
 extern s32 D_8219A520;
-extern s8 *D_8219A5A0;
 extern u8 D_82199F31;
 f32 BattleScene_GetParticipantHeight(s32);
 void BattleCamera_PlayShot(ActivePokemon* arg0, CameraNode* arg1, s32 arg2);

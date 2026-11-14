@@ -2188,7 +2188,6 @@ s32 BattleScene_IsRowAnimWaitComplete(ActivePokemon* active_pokemon, s32 frame_l
 
 s32 func_8210C020(s32, s8*);
 void func_821365B0(s32, s8*, s8*, s32, s32);
-extern s8* D_8219A5A0;
 
 /**
  * Model event hook: when the Pokemon's model is idle, visible, flagged 0x20 and the scene
@@ -2212,7 +2211,7 @@ void func_82105D3C(s8* arg0) {
     if (!(*(u8*)(arg0 + 2) & 0x20)) {
         return;
     }
-    if ((*(s32*)(D_8219A5A0 + 0x1C) != 1) && (*(s32*)(D_8219A5A0 + 0x1C) != 5)) {
+    if ((sBattleScene.scene->mode != 1) && (sBattleScene.scene->mode != 5)) {
         return;
     }
     if (id != cue[0]) {

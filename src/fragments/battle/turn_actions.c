@@ -17,7 +17,9 @@ extern f32 D_FLT_82189354[][4];
 extern s32 D_82199DE0;
 extern s32 D_82199DE4;
 extern s32 D_8219A520;
-extern s8 *D_8219A5A0;
+// FAKE: sBattleScene.scene under a second symbol at the same address; func_82128510
+// mixes it with sBattleScene, which is needed to match (IDO does not see the two alias).
+extern BattleScene* D_8219A5A0;
 extern u8 D_82199F31;
 f32 BattleScene_GetParticipantHeight(s32);
 s32 Battle_StepPartyHpToDisplay(s32);
@@ -1445,7 +1447,7 @@ void func_82128510(CameraNode* arg0) {
     f32 sp44;
     UNUSED s32 pad[2]; // FAKE: stack padding
     s16 sp3A;
-    BattleScene* scene = (BattleScene*)D_8219A5A0;
+    BattleScene* scene = D_8219A5A0;
 
     switch (scene->phaseSubstep) {
         case 0:
@@ -1454,7 +1456,7 @@ void func_82128510(CameraNode* arg0) {
                 func_82108C0C(sActingPokemon);
                 func_82108C0C(sOtherPokemon);
                 func_8213B31C(2);
-                ((BattleScene*)D_8219A5A0)->unk_1B = 0;
+                D_8219A5A0->unk_1B = 0;
                 func_821272C0((s8*)sActingPokemon);
                 func_821255EC((s8*)arg0);
                 BattleAnim_GetOwnerDefaultAnchorPosition(sActingPokemon, &sBattleScene.scene->anchorPosition);
@@ -1472,11 +1474,11 @@ void func_82128510(CameraNode* arg0) {
         case 1:
             scene->cameraPresetId = 4;
             if (func_82101FD4(sActingPokemon) != 0) {
-                func_8210C1A8(&((BattleScene*)D_8219A5A0)->unk_84.z, 0.4f, 0.01f);
-                func_8210C1A8(&arg0->view.targetPosition.y, ((BattleScene*)D_8219A5A0)->anchorPosition.y, ((BattleScene*)D_8219A5A0)->unk_84.z);
-                if ((((BattleScene*)D_8219A5A0)->anchorPosition.y - 1.0f) <= arg0->view.targetPosition.y) {
-                    BattleMessage_ShowForSide(D_8219A520 + 0x388, ((BattleScene*)D_8219A5A0)->actingSide);
-                    ((BattleScene*)D_8219A5A0)->phaseStep++;
+                func_8210C1A8(&D_8219A5A0->unk_84.z, 0.4f, 0.01f);
+                func_8210C1A8(&arg0->view.targetPosition.y, D_8219A5A0->anchorPosition.y, D_8219A5A0->unk_84.z);
+                if ((D_8219A5A0->anchorPosition.y - 1.0f) <= arg0->view.targetPosition.y) {
+                    BattleMessage_ShowForSide(D_8219A520 + 0x388, D_8219A5A0->actingSide);
+                    D_8219A5A0->phaseStep++;
                     func_82125570();
                 }
             }
