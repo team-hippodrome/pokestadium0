@@ -421,13 +421,13 @@ typedef struct AudioBufferParameters {
 
 typedef struct unk_D_81287B08_jp {
     /* 0x000 */ u8 unk_000;
-    /* 0x001 */ u8 unk_001;
+    /* 0x001 */ u8 state; // @unverified: same offset/use as OoT's SequencePlayer.state (reset to 0 when a fade starts)
     /* 0x002 */ char unk002[0x10];
-    /* 0x012 */ s16 unk_012;
+    /* 0x012 */ s16 fadeTimer; // @unverified: same offset/use as OoT's SequencePlayer.fadeTimer (fade length in updates)
     /* 0x014 */ char unk014[0x8];
-    /* 0x01C */ f32 unk_01C;
-    /* 0x020 */ f32 unk_020;
-    /* 0x024 */ f32 unk_024;
+    /* 0x01C */ f32 fadeVolume; // @unverified: same offset/use as OoT's SequencePlayer.fadeVolume
+    /* 0x020 */ f32 fadeVelocity; // @unverified: same offset/use as OoT's SequencePlayer.fadeVelocity ((target - fadeVolume) / time)
+    /* 0x024 */ f32 volume; // @unverified: same offset/use as OoT's SequencePlayer.volume (saved before a fade, restored after)
     /* 0x028 */ char unk028[0x134];
 } unk_D_81287B08_jp;
 

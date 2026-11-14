@@ -492,29 +492,29 @@ void func_81215C14_jp(s32 arg0, s32 arg1, u8 arg2) {
     unk_D_81287B08_jp* ch = &D_81287B08_jp[arg0];
     f32 target;
 
-    ch->unk_012 = 0;
-    target = ((s32)arg2 / 100.0f) * ch->unk_01C;
-    ch->unk_024 = ch->unk_01C;
+    ch->fadeTimer = 0;
+    target = ((s32)arg2 / 100.0f) * ch->fadeVolume;
+    ch->volume = ch->fadeVolume;
     if (arg1 == 0) {
-        ch->unk_01C = target;
+        ch->fadeVolume = target;
         return;
     }
-    ch->unk_001 = 0;
-    ch->unk_012 = arg1;
-    ch->unk_020 = (target - ch->unk_01C) / arg1;
+    ch->state = 0;
+    ch->fadeTimer = arg1;
+    ch->fadeVelocity = (target - ch->fadeVolume) / arg1;
 }
 
 void func_81215C9C_jp(s32 arg0, s32 arg1) {
     unk_D_81287B08_jp* ch = &D_81287B08_jp[arg0];
 
-    ch->unk_012 = 0;
+    ch->fadeTimer = 0;
     if (arg1 == 0) {
-        ch->unk_01C = ch->unk_024;
+        ch->fadeVolume = ch->volume;
         return;
     }
-    ch->unk_001 = 0;
-    ch->unk_012 = arg1;
-    ch->unk_020 = (ch->unk_024 - ch->unk_01C) / arg1;
+    ch->state = 0;
+    ch->fadeTimer = arg1;
+    ch->fadeVelocity = (ch->volume - ch->fadeVolume) / arg1;
 }
 
 void func_81115704(void) {
