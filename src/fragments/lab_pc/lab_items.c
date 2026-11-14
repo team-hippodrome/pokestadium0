@@ -50,18 +50,6 @@ void func_89000020(LabMonEntryList* arg0, s32 (*arg1)(s32, s32)) {
     func_800274E0(arg0->items, arg1, arg0->count);
 }
 
-typedef struct LabItemGrid {
-    /* 0x00 */ u8* unk_00;
-    /* 0x04 */ char unk04[0x8];
-    /* 0x0C */ s32 unk_0C;
-} LabItemGrid;
-
-typedef struct LabItemCursor {
-    /* 0x00 */ LabItemGrid* unk_00;
-    /* 0x04 */ char unk04[0x4];
-    /* 0x08 */ s32 unk_08;
-} LabItemCursor;
-
 void func_800275E4(s32, s32);
 void ScrollList_SetCursorKeepOffset(s32*, s32);
 
@@ -69,7 +57,7 @@ void ScrollList_SetCursorKeepOffset(s32*, s32);
  * LabList_RemoveSelectedEntry
  *
  * Removes one row from the grid referenced by the cursor arg0 and fixes up
- * the cursor.  arg0->unk_00 is the grid and arg0->unk_08 the current index.
+ * the cursor.  arg0->items is the table and arg0->cursor the current index.
  *
  *   1. func_800275E4(grid, index) is called.  This is ByteMatrix_RemoveRow
  *      (name from symbol_addrs.txt; its code was read and agrees): it
@@ -92,12 +80,12 @@ void ScrollList_SetCursorKeepOffset(s32*, s32);
  * a Pokémon moved out of てもち into GBのボックス1, so it serves the Pokémon lists as well as the item
  * list.
  */
-void LabList_RemoveSelectedEntry(LabItemCursor* arg0) {
-    func_800275E4((s32)arg0->unk_00, arg0->unk_08);
-    if (arg0->unk_08 >= M2C_FIELD(arg0->unk_00, s32*, 8)) {
-        arg0->unk_08 -= 1;
+void LabList_RemoveSelectedEntry(ScrollList* arg0) {
+    func_800275E4((s32)arg0->items, arg0->cursor);
+    if (arg0->cursor >= arg0->items->count) {
+        arg0->cursor -= 1;
     }
-    ScrollList_SetCursorKeepOffset((s32*)arg0, arg0->unk_08);
+    ScrollList_SetCursorKeepOffset((s32*)arg0, arg0->cursor);
 }
 
 void func_800275E4(s32, s32);
@@ -155,8 +143,8 @@ void func_890000A4(s32* arg0, s32 arg1, s32 arg2) {
  * Seen in play (2026-11-13) in せいとん > どうぐをいどうする, moving all five ほのおのいし to サトシのパソコン removed the bag
  * row (006/020 to 005/020, PC 000/050 to 001/050).
  */
-void LabItem_DecreaseSelectedCount(LabItemCursor* arg0, s32 arg1) {
-    u8* temp_v1 = &arg0->unk_00->unk_00[arg0->unk_00->unk_0C * arg0->unk_08];
+void LabItem_DecreaseSelectedCount(ScrollList* arg0, s32 arg1) {
+    u8* temp_v1 = &arg0->items->rows[arg0->items->rowSize * arg0->cursor];
 
     if (arg1 >= temp_v1[1]) {
         LabList_RemoveSelectedEntry(arg0);
@@ -1038,28 +1026,17 @@ void LabItem_DrawOrganizeWindow(s8 *arg0)
   }
 }
 
-typedef struct LabItemGridZ {
-    /* 0x00 */ u8* data;
-    /* 0x04 */ s32 pad04[2];
-    /* 0x0C */ s32 stride;
-} LabItemGridZ;
-typedef struct LabItemCursorZ {
-    /* 0x00 */ LabItemGridZ* grid;
-    /* 0x04 */ s32 pad04;
-    /* 0x08 */ s32 selected;
-} LabItemCursorZ;
-
-#define CURSOR(p) ((LabItemCursorZ*)((p) + 0x1E4))
+#define CURSOR(p) ((ScrollList*)((p) + 0x1E4))
 
 void func_890020C0(u8* arg0) {
     u8* item;
 
-    item = CURSOR(arg0)->grid->data + CURSOR(arg0)->selected * 2;
+    item = CURSOR(arg0)->items->rows + CURSOR(arg0)->cursor * 2;
     M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x1A4)] = 1;
     M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x140)] = M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x1A4)];
     if (LabItem_IsQuantitylessItemForOperation(item[0]) != 0) {
-        func_89000020((LabMonEntryList*)(arg0 + 0x2F8), (void*)(CURSOR(arg0)->grid->data + CURSOR(arg0)->grid->stride * CURSOR(arg0)->selected));
-        LabList_RemoveSelectedEntry((LabItemCursor*)CURSOR(arg0));
+        func_89000020((LabMonEntryList*)(arg0 + 0x2F8), (void*)(CURSOR(arg0)->items->rows + CURSOR(arg0)->items->rowSize * CURSOR(arg0)->cursor));
+        LabList_RemoveSelectedEntry((ScrollList*)CURSOR(arg0));
     } else {
         func_890000A4((s32*)(arg0 + 0x2F8), item[0], M2C_FIELD(arg0, s32*, 0x444));
         LabItem_SubtractSelectedItemQuantity((unk_func_8820BE14_02C_038*)CURSOR(arg0), M2C_FIELD(arg0, s32*, 0x444));
@@ -1217,7 +1194,7 @@ s32 LabItem_UpdateOrganizeWindow(s8* arg0) {
             if (v != 1) {
                 break;
             }
-            ptr = ((LabItemCursorZ*)(arg0 + 0x1E4))->grid->data + ((LabItemCursorZ*)(arg0 + 0x1E4))->selected * 2;
+            ptr = ((ScrollList*)(arg0 + 0x1E4))->items->rows + ((ScrollList*)(arg0 + 0x1E4))->cursor * 2;
             if (*(s32*)(arg0 + 0x104) == 0) {
                 if (func_80031C24(*ptr) != 0 && *(s32*)(arg0 + 0x1D8) == 2) {
                     func_8003F6AC(8);
@@ -1314,7 +1291,7 @@ s32 LabItem_UpdateOrganizeWindow(s8* arg0) {
             if (v != 1) {
                 break;
             }
-            ptr2 = ((LabItemCursorZ*)(arg0 + 0x2F8))->grid->data + ((LabItemCursorZ*)(arg0 + 0x2F8))->selected * 2;
+            ptr2 = ((ScrollList*)(arg0 + 0x2F8))->items->rows + ((ScrollList*)(arg0 + 0x2F8))->cursor * 2;
             if (func_80031C24(*ptr2) != 0 &&
                 *(s32*)(arg0 + 0x1D4) == 2) {
                 func_8003F6AC(8);
