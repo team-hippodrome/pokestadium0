@@ -340,8 +340,11 @@ typedef struct PokemonBattleCues {
 #define TYPE_EFFECTIVENESS_SUPER 20
 
 typedef struct BattleScene {
-    /* 0x00 */ char unk00[0x8];
-    /* 0x08 */ s8 visibilityPolicy;
+    /* 0x00 */ s8 splineSegmentFrames; // @unverified: frames per camera spline segment; splineT advances by 1/this a frame (participant_models.c)
+    /* 0x01 */ s8 splineSegment; // @unverified: current camera spline segment, from 1; demo_mode11 waits for it to reach 4
+    /* 0x02 */ char unk02[0x2];
+    /* 0x04 */ f32 splineT; // @unverified: 0..1 parameter within splineSegment, reset when it reaches 1
+    /* 0x08 */ s8 splineKeyframeCount; // @unverified: keyframes in D_FLT_8219A5B0, counted by func_821351F8
     /* 0x0C */ s32 bRollShotIndex;
     /* 0x10 */ s32 substepFrameCounter;
     /* 0x14 */ s32 stepFrameTimer;

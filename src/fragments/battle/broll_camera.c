@@ -707,7 +707,7 @@ void func_8212188C(void);
  */
 void func_8212116C(CameraNode* arg0) {
     func_82135734(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
-    if (M2C_FIELD(sBattleScene.scene, s8*, 1) == 0x10) {
+    if (sBattleScene.scene->splineSegment == 0x10) {
         func_8212188C();
         sBattleScene.scene->phaseStep = 0x1B;
     }
