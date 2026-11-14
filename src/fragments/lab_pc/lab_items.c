@@ -273,21 +273,21 @@ extern s32 D_800603C0;
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-void LabItem_InitConfirmWindow(s8* arg0, s32 arg1, s32 arg2, char *arg3, s32 arg4) {
+void LabItem_InitConfirmWindow(LabItemConfirmWindow* arg0, s32 arg1, s32 arg2, char *arg3, s32 arg4) {
     Window_SetRect(arg0, arg1, arg2, 0x10C, 0x92);
-    M2C_FIELD(arg0, s32*, 0x24) = 0;
-    M2C_FIELD(arg0, s32*, 0x28) = 0;
-    M2C_FIELD(arg0, s32*, 0x14) = 0x2801;
-    M2C_FIELD(arg0, char**, 0x20) = arg3;
-    Window_InitLabeled(arg0 + 0x34, M2C_FIELD(arg0, s32*, 0) + 0x2E, M2C_FIELD(arg0, s32*, 4) + 0x6E, 0x48, D_8900A5C0, D_89018460);
-    M2C_FIELD(arg0, s32*, 0x60) = 0xA;
-    M2C_FIELD(arg0, s32*, 0x68) = 0xC;
-    Window_InitLabeled(arg0 + 0x70, M2C_FIELD(arg0, s32*, 0) + 0x96, M2C_FIELD(arg0, s32*, 4) + 0x6E, 0x48, D_8900A5C0, D_89018468);
-    M2C_FIELD(arg0, s32*, 0xB4) = 2;
-    M2C_FIELD(arg0, s32*, 0xB0) = 0;
-    M2C_FIELD(arg0, s32*, 0xAC) = D_800603C0;
+    arg0->window.animTimer = 0;
+    arg0->window.state = 0;
+    arg0->window.frame.style = 0x2801;
+    arg0->window.title = arg3;
+    Window_InitLabeled(&arg0->yesButton, arg0->window.frame.x + 0x2E, arg0->window.frame.y + 0x6E, 0x48, D_8900A5C0, D_89018460);
+    arg0->yesButton.labelX = 0xA;
+    arg0->yesButton.unk_34 = 0xC;
+    Window_InitLabeled(&arg0->noButton, arg0->window.frame.x + 0x96, arg0->window.frame.y + 0x6E, 0x48, D_8900A5C0, D_89018468);
+    arg0->choice.count = 2;
+    arg0->choice.cursor = 0;
+    arg0->choice.controller = (Controller*)D_800603C0;
     func_8000B2F4(D_800603C0);
-    M2C_FIELD(arg0, s32*, 0x30) = arg4;
+    arg0->text = arg4;
 }
 
 s32 func_8002AE6C();                                /* extern */
@@ -314,22 +314,22 @@ extern Color_RGBA8 D_8900A5CC;
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-void LabItem_DrawConfirmWindow(s8* arg0) {
+void LabItem_DrawConfirmWindow(LabItemConfirmWindow* arg0) {
     if (func_8002AE6C() == 0) {
-        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x61, M2C_FIELD(arg0, s32*, 8), D_8007356C);
-        Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x5C, D_8900A5C4, D_8900A5C8);
+        Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->window.frame.y + 0x61, arg0->window.frame.width, D_8007356C);
+        Ui_FillRectPrimEnvColor(arg0->window.frame.x + 6, arg0->window.frame.y + 6, arg0->window.frame.width - 0xC, 0x5C, D_8900A5C4, D_8900A5C8);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x68, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x24, D_8900A5CC);
+        func_80029028(arg0->window.frame.x + 6, arg0->window.frame.y + 0x68, arg0->window.frame.width - 0xC, 0x24, D_8900A5CC);
         func_8001AB6C();
         if (!arg0) { // FAKE: empty test only changes register allocation; needed to match
         }
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
         Font_SetLineHeight(0x1C);
-        func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + 0xA, M2C_FIELD(arg0, s32*, 0x30));
+        func_8001A944(arg0->window.frame.x + 0xE, arg0->window.frame.y + 0xA, arg0->text);
         func_8001ABBC();
-        Window_DrawLabeled(arg0 + 0x34, (M2C_FIELD(arg0, s32*, 0xB0) == 0) ? 2 : 0);
-        Window_DrawLabeled(arg0 + 0x70, (M2C_FIELD(arg0, s32*, 0xB0) == 1) ? 2 : 0);
+        Window_DrawLabeled(&arg0->yesButton, (arg0->choice.cursor == 0) ? 2 : 0);
+        Window_DrawLabeled(&arg0->noButton, (arg0->choice.cursor == 1) ? 2 : 0);
     }
 }
 
@@ -343,20 +343,20 @@ extern s32 D_800603C0;
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-s32 LabItem_UpdateConfirmWindow(s8* arg0) {
+s32 LabItem_UpdateConfirmWindow(LabItemConfirmWindow* arg0) {
     s32 ret = 0;
 
-    switch (M2C_FIELD(arg0, s32*, 0x28)) {
+    switch (arg0->window.state) {
         case 1:
         case 2:
             break;
         default:
             return 0;
     }
-    if (func_8002B390(arg0 + 0xAC) == 0) {
+    if (func_8002B390(&arg0->choice) == 0) {
         ret = func_8002BC14(D_800603C0);
         if (ret == 1) {
-            switch (M2C_FIELD(arg0, s32*, 0xB0)) {
+            switch (arg0->choice.cursor) {
                 case 0:
                     ret = 1;
                     break;

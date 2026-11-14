@@ -26,6 +26,16 @@ struct unk_func_8820E99C;
 
 struct unk_func_8821421C_02C;
 
+/* A yes/no question in the Lab item screens (LabItem_InitConfirmWindow). */
+typedef struct LabItemConfirmWindow {
+    /* 0x00 */ Window window;
+    /* 0x2C */ char unk2C[0x4];
+    /* 0x30 */ char* text; // @unverified: printed at the top left (arg4)
+    /* 0x34 */ LabeledButton yesButton; // @unverified: label D_89018460
+    /* 0x70 */ LabeledButton noButton; // @unverified: label D_89018468
+    /* 0xAC */ ChoiceCursor choice;
+} LabItemConfirmWindow; // size = 0xB8
+
 typedef struct unk_func_88208C5C {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ unk_func_8850143C* unk_2C;
