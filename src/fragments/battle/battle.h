@@ -410,7 +410,7 @@ typedef struct SpeciesModelTransform {
     /* 0x00 */ Vec3f coordinates;
     /* 0x0C */ s16 rotationX;
     /* 0x0E */ s16 rotationY;
-    /* 0x10 */ s16 unk_10;
+    /* 0x10 */ s16 mirrorBySide; // @unverified: 0xFF makes BattleThumbnail_* scale rotationY and z by the thumbnail side
     /* 0x12 */ u16 idleTimer;
     /* 0x14 */ char unk14[0xC];
 } SpeciesModelTransform; // size = 0x20
@@ -445,10 +445,10 @@ typedef struct BattleMessageQueues {
     /* 0x088 */ s8 messageBuffers[17][64]; // @unverified: 64-byte strings cleared by Battle_ClearAllMessageQueues; +0xC8/+0x148 go to BattleMessage_ShowForSide
 } BattleMessageQueues; // size = 0x4C8 (func_8211F3F4 allocates 0x4C8; Stadium 1's 0x2C-byte tail is gone)
 
-typedef struct unk_D_84385790 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ Color_RGBA8 unk_04;
-} unk_D_84385790; // size = 0x8
+typedef struct StatusLabel {
+    /* 0x00 */ s32 text; // @unverified: status label string drawn by BattleHud_DrawMonInfoBox (table D_80066AA0 indexed by status)
+    /* 0x04 */ Color_RGBA8 color; // @unverified: color the label is drawn in
+} StatusLabel; // size = 0x8
 
 typedef struct arg1_func_84344CE8 {
     /* 0x00 */ char unk00[0x14];
@@ -1052,7 +1052,7 @@ extern f32 D_FLT_82199EB4;
 
 extern Color_RGB8 D_84385860[];
 
-extern unk_D_84385790 D_84385790[];
+extern StatusLabel D_84385790[];
 
 extern u8 D_030096C0[];
 
@@ -2125,7 +2125,7 @@ void BattleHud_DrawHpFractionText(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void BattleHud_DrawTrainerNameLabel(s16 arg0, s16 arg1, s32 arg2, s32 arg3, s32 arg4);
 void BattleHud_DrawTrainerNameLabelBlink(s16 arg0, s16 arg1, s32 arg2, s32 arg3, u16 arg4, s32 arg5);
 void BattleHud_DrawTrainerNameLabelAuto(ActivePokemon* arg0, TeamRoster* arg1, s16 arg2, s16 arg3, s32 arg4, u16 arg5, s32 arg6);
-void BattleHud_DrawMonInfoBox(ActivePokemon* arg0, BattleMon* arg1, unk_D_84385790* arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 argA);
+void BattleHud_DrawMonInfoBox(ActivePokemon* arg0, BattleMon* arg1, StatusLabel* arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 argA);
 
 // hud_status_boxes.c
 void func_82117610(s16 x, s16 y);
