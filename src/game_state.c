@@ -725,7 +725,7 @@ void State_GbTower(void) {
     Display_WaitForFrames(2);
     func_8000A8DC();
 
-    sp24.unk_04 = main_pool_alloc(sizeof(*sp24.unk_04), 0);
+    sp24.partyIcons = main_pool_alloc(sizeof(*sp24.partyIcons), 0);
 
     func_80025B60(((u32) ((s32) &D_81300000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015F8F0, &D_0015FCE0, D_800733D4, (s32) &sp24);
     GbTower_Start(&sp24);
