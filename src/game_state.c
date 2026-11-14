@@ -211,7 +211,6 @@ typedef struct { u8 b[11]; } Unk11Bytes;
 M2C_UNK func_8000A460(M2C_UNK *, M2C_UNK *);
 s32 GbSave_GetTrainerId(s32 arg0);
 M2C_UNK func_80022D84(s16, M2C_UNK *);
-extern s32 D_800603C0;
 extern s16 D_800733D4;
 extern M2C_UNK D_8007B7C0;
 extern M2C_UNK D_8007B7C4;
@@ -222,7 +221,7 @@ void func_80025910(s32 arg0)
   SessionContext *st = &gSessionContext;
   st->trainerSlots[0].isHuman = 1;
   st->trainerSlots[0].controllerPort = 0;
-  st->trainerSlots[0].controller = (Controller *) D_800603C0;
+  st->trainerSlots[0].controller = gPlayer1Controller;
   st->trainerSlots[0].rosterInfo = &st->rosterInfo[0];
   if ((arg0 != 0) && (D_800733D4 == 0))
   {

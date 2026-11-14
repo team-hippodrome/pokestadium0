@@ -49,7 +49,6 @@ extern s32 D_88403364;
 
 extern s32 D_88402D70;
 
-extern u16 D_800AF986;
 
 extern s32 D_88402D88;
 
