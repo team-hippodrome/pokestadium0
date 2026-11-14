@@ -5,11 +5,10 @@
 #include "pokemon_types.h"
 #include "battle.h"
 
-struct BattleSlotZ;
-extern struct BattleSlotZ* D_821CF294;
-extern struct BattleSlotZ* D_821CF298;
-extern u8* D_821CF29C;
-extern s8* D_821CF2A0;
+extern ComSide* D_821CF294;
+extern ComSide* D_821CF298;
+extern ComBattler* D_821CF29C;
+extern ComBattler* D_821CF2A0;
 
 /**
  * Random move choice used in AI mode 3: picks a random usable move, with soft
@@ -31,11 +30,11 @@ s32 BattleAi_ChooseRandomMove(void) {
     }
     acc = 0;
     for (i = 0; i < 4; i++) {
-        byte = D_821CF29C[i + 0x2B];
+        byte = D_821CF29C->mon.moves[i];
         if (byte == 0) {
             break;
         }
-        if ((D_821CF29C[i + 0x2B] != 0) && ((D_821CF29C[i + 0x3E] & 0x3F) != 0) && (D_821CF29C[0x63] != D_821CF29C[i + 0x2B])) {
+        if ((D_821CF29C->mon.moves[i] != 0) && ((D_821CF29C->mon.pp[i] & 0x3F) != 0) && (D_821CF29C->mon.disabledMove != D_821CF29C->mon.moves[i])) {
             slots[i] = byte;
         } else {
             slots[i] = 0;
@@ -79,10 +78,10 @@ s32 BattleAi_ChooseRandomMove(void) {
                     }
                     return i;
                 case DREAM_EATER:
-                    if ((cnt < 50) && ((((u8 *) D_821CF2A0)[0x21] & 7) == 0)) {
+                    if ((cnt < 50) && ((D_821CF2A0->mon.pendingStatusCondition & 7) == 0)) {
                         break;
                     }
-                    if ((cnt < 50) && ((((u8 *) D_821CF2A0)[0x21] & 7) != 0) && (BattleAi_RandomPercent() < 80) && (BattleAi_CountUnfainted((u8 *) D_821CF298) != 1)) {
+                    if ((cnt < 50) && ((D_821CF2A0->mon.pendingStatusCondition & 7) != 0) && (BattleAi_RandomPercent() < 80) && (BattleAi_CountUnfainted((u8 *) D_821CF298) != 1)) {
                         break;
                     }
                     return i;
