@@ -43,8 +43,8 @@ typedef struct unk_func_888044BC_038_02C_000 {
 
 typedef struct unk_func_888044BC_038_02C {
     /* 0x00 */ unk_func_888044BC_038_02C_000 unk_00;
-    /* 0x70 */ unk_func_88205880_A030 unk_70;
-    /* 0x7C */ unk_func_88205880_A030 unk_7C;
+    /* 0x70 */ PointerList unk_70;
+    /* 0x7C */ PointerList unk_7C;
     /* 0x88 */ s32 unk_88;
     /* 0x8C */ s32 unk_8C;
 } unk_func_888044BC_038_02C; // size = 0x90
@@ -58,7 +58,7 @@ typedef struct unk_func_888044BC_03C_02C {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ s32 unk_2C;
     /* 0x30 */ char unk_30[8];
-    /* 0x38 */ unk_func_88200FA0_030_038* unk_38;
+    /* 0x38 */ PointerList* unk_38;
     /* 0x3C */ s32 unk_3C;
     /* 0x40 */ s32 unk_40;
     /* 0x44 */ s32 unk_44;
@@ -74,7 +74,7 @@ typedef struct unk_func_888044BC_040 {
     /* 0x2C */ char unk2C[0x4];
     /* 0x30 */ unk_func_888044BC_040_030* unk_30;
     /* 0x34 */ unk_func_88200FA0_030_030* unk_34;
-    /* 0x38 */ unk_func_88200FA0_030_038 unk_38;
+    /* 0x38 */ PointerList unk_38;
 } unk_func_888044BC_040; // size = 0x44
 
 typedef struct unk_func_888044BC_044_02C {

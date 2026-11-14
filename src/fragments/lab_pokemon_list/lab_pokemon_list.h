@@ -24,7 +24,7 @@ typedef struct unk_func_8830867C_02C_04C_018 {
 
 typedef struct unk_func_8830867C_02C_04C {
     /* 0x00 */ char unk00[0xC];
-    /* 0x00 */ WidgetGridMenuItem* unk_0C;
+    /* 0x0C */ WidgetGridMenuItem* unk_0C;
     /* 0x10 */ WidgetGridMenuInputCallback unk_10;
     /* 0x14 */ WidgetGridMenuSetStateCallback unk_14;
     /* 0x18 */ unk_func_8830867C_02C_04C_018* unk_18;
@@ -56,7 +56,7 @@ typedef struct unk_func_8830867C_02C_0B4 {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ WidgetAnimatedPanel* unk_2C;
     /* 0x30 */ unk_func_8830867C_02C_0B4_030* unk_30;
-    /* 0x34 */ unk_func_88200FA0_030_038 unk_34;
+    /* 0x34 */ PointerList unk_34;
 } unk_func_8830867C_02C_0B4; // size = 0x40
 
 typedef struct unk_func_8830867C_02C_0C0 {
@@ -135,7 +135,7 @@ typedef struct unk_func_8830867C_030 {
     /* 0x34 */ WidgetPoint unk_34;
     /* 0x38 */ unk_func_885012A4* unk_38;
     /* 0x3C */ unk_func_88200FA0_030_030_1CEA00* unk_3C;
-    /* 0x40 */ unk_func_8830867C_02C_0CC unk_40;
+    /* 0x40 */ LabMonEntryList unk_40;
     /* 0x4C */ s32 unk_4C;
     /* 0x50 */ s32 unk_50;
 } unk_func_8830867C_030; // size = 0x54
@@ -197,7 +197,7 @@ typedef struct unk_func_8830867C_038 {
 
 typedef struct unk_func_8830867C_03C_030 {
     /* 0x00 */ unk_func_8850878C* unk_00;
-    /* 0x00 */ s32 unk_04;
+    /* 0x04 */ s32 unk_04;
 } unk_func_8830867C_03C_030; // size = 0x8
 
 typedef struct unk_func_8830867C_03C_04C {
@@ -240,7 +240,7 @@ typedef struct unk_func_8830867C_040 {
     /* 0x5C */ unk_func_8830867C_040_05C* unk_5C;
     /* 0x60 */ WidgetGridMenu* unk_60;
     /* 0x64 */ unk_func_8821421C_038_034* unk_64;
-    /* 0x68 */ unk_func_88205880_A030 unk_68;
+    /* 0x68 */ PointerList unk_68;
     /* 0x74 */ u16 unk_74;
 } unk_func_8830867C_040; // size = 0x78
 
@@ -351,7 +351,7 @@ typedef struct unk_func_8830867C_04C_078 {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ WidgetAnimatedPanel* unk_2C;
     /* 0x30 */ unk_func_8830867C_04C_078_030* unk_30;
-    /* 0x34 */ unk_func_88201DA0_038 unk_34;
+    /* 0x34 */ ByteMatrix unk_34;
     /* 0x44 */ unk_func_8830867C_04C_078_044 unk_44[1];
     /* 0x4C */ char unk4C[0x18];
 } unk_func_8830867C_04C_078; // size = 0x64
@@ -425,7 +425,7 @@ typedef struct unk_func_8830867C_02C_0E4 {
     /* 0x00 */ s32 unk_00;
     /* 0x04 */ s32 unk_04;
     /* 0x08 */ s32 unk_08;
-    /* 0x0C */ unk_func_8820BE14_06C unk_0C;
+    /* 0x0C */ ByteMatrix unk_0C;
     /* 0x1C */ s32 unk_1C;
 } unk_func_8830867C_02C_0E4; // size = 0x20
 
@@ -445,7 +445,7 @@ typedef struct unk_func_8830867C_02C {
     /* 0x030 */ unk_func_8850B254* unk_030;
     /* 0x034 */ unk_func_8830867C_02C_034* unk_034;
     /* 0x038 */ unk_func_88500994* unk_038;
-    /* 0x03C */ unk_func_88200FA0_030_038 unk_03C;
+    /* 0x03C */ PointerList unk_03C;
     /* 0x048 */ unk_func_8830867C_02C_048* unk_048;
     /* 0x04C */ unk_func_8830867C_02C_04C* unk_04C;
     /* 0x050 */ unk_func_8830867C_02C_050* unk_050;
@@ -479,7 +479,7 @@ typedef struct unk_func_8830867C_02C {
     /* 0x0C0 */ unk_func_8830867C_02C_0C0* unk_0C0;
     /* 0x0C4 */ unk_func_882173EC* unk_0C4;
     /* 0x0C8 */ unk_func_882173EC* unk_0C8;
-    /* 0x0CC */ unk_func_88200FA0_030_038 unk_0CC;
+    /* 0x0CC */ PointerList unk_0CC;
     /* 0x0D8 */ s32 unk_0D8;
     /* 0x0DC */ unk_func_8830867C_02C_0DC* unk_0DC;
     /* 0x0E0 */ s32 unk_0E0;
@@ -489,7 +489,7 @@ typedef struct unk_func_8830867C_02C {
     /* 0x154 */ unk_func_8830867C_02C_154 unk_154[3];
     /* 0x1A8 */ unk_func_8830867C_02C_1A8 unk_1A8[3];
     /* 0x1D8 */ char unk1D8[0xA70];
-    /* 0xC48 */ unk_func_88200FA0_030_038 unk_C48;
+    /* 0xC48 */ PointerList unk_C48;
     /* 0xC54 */ unk_func_8830867C_02C_C54 unk_C54;
     /* 0xC84 */ unk_func_8830867C_02C_C54 unk_C84;
     /* 0xCB4 */ s32 unk_CB4;
@@ -545,23 +545,6 @@ typedef struct unk_func_88313894_020 {
     /* 0x18 */ char unk18[0x4];
     /* 0x1C */ s32 unk_1C;
 } unk_func_88313894_020; // size = 0x20
-
-typedef struct unk_func_88316128 {
-    /* 0x00 */ char unk00[0x8];
-    /* 0x08 */ u8 unk_08;
-    /* 0x09 */ char unk09[0xD];
-    /* 0x16 */ u16 unk_16;
-    /* 0x18 */ char unk18[0x14];
-    /* 0x2C */ u8 unk_2C;
-    /* 0x2E */ u16 unk_2E;
-    /* 0x30 */ u16 unk_30;
-    /* 0x32 */ u16 unk_32;
-    /* 0x34 */ u16 unk_34;
-    /* 0x36 */ u16 unk_36;
-    /* 0x38 */ u8 unk_38;
-    /* 0x39 */ char unk39[0xA];
-    /* 0x43 */ u8 unk_43;
-} unk_func_88316128; // size >= 0x44
 
 /* Struct types that were defined identically in each of these files; this is
  * now the one definition they all include:
@@ -732,40 +715,40 @@ void func_89108F0C(void);
 s32 Move_NormalizeDisplayIndex(s32 arg0);
 
 // pokemon_list_9.c
-s32 LabPCList_CompareByLevelAsc(unk_func_88316128*, unk_func_88316128*);
-s32 LabPCList_CompareByLevelDesc(unk_func_88316128*, unk_func_88316128*);
-s32 LabPCList_CompareByHpAsc(unk_func_88316128*, unk_func_88316128*);
-s32 LabPCList_CompareByHpDesc(unk_func_88316128*, unk_func_88316128*);
-s32 LabPCList_CompareByAttackAsc(unk_func_88316128*, unk_func_88316128*);
-s32 LabPCList_CompareByAttackDesc(unk_func_88316128*, unk_func_88316128*);
-s32 LabPCList_CompareByDefenseAsc(unk_func_88316128*, unk_func_88316128*);
-s32 LabPCList_CompareByDefenseDesc(unk_func_88316128*, unk_func_88316128*);
-s32 LabPCList_CompareBySpeedAsc(unk_func_88316128*, unk_func_88316128*);
-s32 LabPCList_CompareBySpeedDesc(unk_func_88316128*, unk_func_88316128*);
-s32 LabPCList_CompareBySpecialAsc(unk_func_88316128*, unk_func_88316128*);
-s32 LabPCList_CompareBySpecialDesc(unk_func_88316128*, unk_func_88316128*);
-s32 LabPCList_CompareById(unk_func_88316128*, unk_func_88316128*);
-s32 LabPCList_CompareByOtName(unk_func_88316128* arg0, unk_func_88316128* arg1);
-s32 LabPCList_CompareByNickname(unk_func_88316128*, unk_func_88316128*);
-s32 LabPCList_CompareBySpeciesRawId(unk_func_8830867C_02C_0CC*, unk_func_8830867C_02C_0CC*);
-int LabPCList_FilterByLevelRange(unk_func_8830867C_02C_0CC* arg0, u8* arg1);
-s32 LabPCList_FilterByAnyType(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_C54_01C* arg1);
-s32 LabPCList_FilterByAnyMove(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_C54_024* arg1);
-s32 LabPCList_FilterBySpeciesId(unk_func_8830867C_02C_0CC* arg0, s32* arg1);
-s32 LabPCList_FilterByExactTypePair(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_C54_014* arg1);
+s32 LabPCList_CompareByLevelAsc(LabMonEntry*, LabMonEntry*);
+s32 LabPCList_CompareByLevelDesc(LabMonEntry*, LabMonEntry*);
+s32 LabPCList_CompareByHpAsc(LabMonEntry*, LabMonEntry*);
+s32 LabPCList_CompareByHpDesc(LabMonEntry*, LabMonEntry*);
+s32 LabPCList_CompareByAttackAsc(LabMonEntry*, LabMonEntry*);
+s32 LabPCList_CompareByAttackDesc(LabMonEntry*, LabMonEntry*);
+s32 LabPCList_CompareByDefenseAsc(LabMonEntry*, LabMonEntry*);
+s32 LabPCList_CompareByDefenseDesc(LabMonEntry*, LabMonEntry*);
+s32 LabPCList_CompareBySpeedAsc(LabMonEntry*, LabMonEntry*);
+s32 LabPCList_CompareBySpeedDesc(LabMonEntry*, LabMonEntry*);
+s32 LabPCList_CompareBySpecialAsc(LabMonEntry*, LabMonEntry*);
+s32 LabPCList_CompareBySpecialDesc(LabMonEntry*, LabMonEntry*);
+s32 LabPCList_CompareById(LabMonEntry*, LabMonEntry*);
+s32 LabPCList_CompareByOtName(LabMonEntry* arg0, LabMonEntry* arg1);
+s32 LabPCList_CompareByNickname(LabMonEntry*, LabMonEntry*);
+s32 LabPCList_CompareBySpeciesRawId(LabMonEntry*, LabMonEntry*);
+int LabPCList_FilterByLevelRange(LabMonEntry* arg0, u8* arg1);
+s32 LabPCList_FilterByAnyType(LabMonEntry* arg0, unk_func_8830867C_02C_C54_01C* arg1);
+s32 LabPCList_FilterByAnyMove(LabMonEntry* arg0, unk_func_8830867C_02C_C54_024* arg1);
+s32 LabPCList_FilterBySpeciesId(LabMonEntry* arg0, s32* arg1);
+s32 LabPCList_FilterByExactTypePair(LabMonEntry* arg0, unk_func_8830867C_02C_C54_014* arg1);
 
 // pokemon_list_10.c
 s32 LabPCList_CanLearnMoveByLevelUp(s32 arg0, s32 arg1);
-void LabPCList_FlattenEntries(unk_func_88200FA0_030_038*, unk_func_8830867C_02C_144*);
+void LabPCList_FlattenEntries(PointerList*, unk_func_8830867C_02C_144*);
 void LabPCList_ReadDeckCategory(unk_func_8830867C_02C_154*);
 void LabPCList_WriteDeckCategory(unk_func_8830867C_02C_154*);
 
 // functions defined in assembly
-s32 LabPCList_CompareByPointer(unk_func_88316128*, unk_func_88316128*);
+s32 LabPCList_CompareByPointer(LabMonEntry*, LabMonEntry*);
 void LabPCList_LoadAllBoxes(unk_func_8830867C_02C_144*);
 void LabPCList_SaveDirtyBoxes(unk_func_8830867C_02C_144*, s32);
 void LabPCList_InitDeckCategories(unk_func_8830867C_02C_154*, MemoryPool* arg1);
-void LabPCList_BuildTmHmList(unk_func_88200FA0_030_038*, unk_func_8830867C_02C_1A8*, unk_func_8830867C_02C_154*, s32, s32);
+void LabPCList_BuildTmHmList(PointerList*, unk_func_8830867C_02C_1A8*, unk_func_8830867C_02C_154*, s32, s32);
 void PokeIcon_AttachDepthBuffer(unk_func_8001A024*, ModelLoadContext*, DepthBuffer*);
 
 #endif // FRAGMENT_LAB_POKEMON_LIST_H

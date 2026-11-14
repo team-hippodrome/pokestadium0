@@ -40,34 +40,29 @@ extern u8 D_80065D00[];
  * Seen in play (2026-11-13) ran once as the entry screen opened, which then listed the GB party
  * (フシ, ヒト, カメ at L10).
  */
-s32 FreeBattle_ReadTeam(s32 arg0, s32 arg1, s32 arg2, Entry82000058* entry) {
+s32 FreeBattle_ReadTeam(s32 arg0, s32 arg1, s32 arg2, TeamMonSlot* entry) {
     s32 handle = func_80020AFC(arg0, arg1, arg2, 0);
     s32 i;
     u8* row;
     s32 idx;
 
     for (i = 0; i < 6; i++, entry++) {
-        if (func_80020CE4(entry->unk_04, 1, handle) == 0) {
+        if (func_80020CE4(&entry->mon, 1, handle) == 0) {
             break;
         }
-        if ((entry->unk_04[0] > 0) && (entry->unk_04[0] < 0x98)) {
-            func_800207F8(entry->unk_04);
-            idx = entry->unk_04[0] - 1;
+        if ((entry->mon.species.id > 0) && (entry->mon.species.id < 0x98)) {
+            func_800207F8(&entry->mon);
+            idx = entry->mon.species.id - 1;
             row = &D_80065D00[idx * 0x17];
-            entry->unk_04[6] = row[6];
-            entry->unk_04[7] = row[7];
-            entry->unk_00 = 0;
+            entry->mon.type1 = row[6];
+            entry->mon.type2 = row[7];
+            entry->flags = 0;
         }
     }
     func_80020C60(handle);
     return i;
 }
 
-/* One of six 0x54-byte slots; only the leading in-use flag word is known. */
-typedef struct {
-    /* 0x00 */ s32 flag;
-    /* 0x04 */ char unk04[0x50];
-} Slot54;
 
 /**
  * FreeBattle_MarkEmptySlots
@@ -78,12 +73,12 @@ typedef struct {
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in Free Battle setup.
  * @unverified Name guessed from the code; comment kept.
  */
-void FreeBattle_MarkEmptySlots(Slot54* arg0, s32 arg1) {
+void FreeBattle_MarkEmptySlots(TeamMonSlot* arg0, s32 arg1) {
     s32 i;
 
     arg0 += arg1;
     for (i = arg1; i < 6; i++) {
-        arg0->flag = 1;
+        arg0->flags = 1;
         arg0++;
     }
 }
@@ -101,38 +96,38 @@ void FreeBattle_MarkEmptySlots(Slot54* arg0, s32 arg1) {
  * Seen in play: runs when A picks a team on 「エントリーポケモンのせんたく」.
  * @unverified Name from the code.
  */
-Slot54* FreeBattle_FindFlaggedSlot(Slot54* arg0, s32* arg1) {
-    Slot54* found = NULL;
+TeamMonSlot* FreeBattle_FindFlaggedSlot(TeamMonSlot* arg0, s32* arg1) {
+    TeamMonSlot* found = NULL;
     s32 count = 0;
 
     arg0 += 5;
 
-    if (arg0->flag != 0) {
+    if (arg0->flags != 0) {
         found = arg0;
         count++;
     }
     arg0--;
-    if (arg0->flag != 0) {
+    if (arg0->flags != 0) {
         found = arg0;
         count++;
     }
     arg0--;
-    if (arg0->flag != 0) {
+    if (arg0->flags != 0) {
         found = arg0;
         count++;
     }
     arg0--;
-    if (arg0->flag != 0) {
+    if (arg0->flags != 0) {
         found = arg0;
         count++;
     }
     arg0--;
-    if (arg0->flag != 0) {
+    if (arg0->flags != 0) {
         found = arg0;
         count++;
     }
     arg0--;
-    if (arg0->flag != 0) {
+    if (arg0->flags != 0) {
         found = arg0;
         count++;
     }
@@ -146,18 +141,18 @@ Slot54* FreeBattle_FindFlaggedSlot(Slot54* arg0, s32* arg1) {
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-s32 FreeBattle_AllTriosOverLevelLimit(Mon82000258* mons) {
+s32 FreeBattle_AllTriosOverLevelLimit(TeamMonSlot* mons) {
     s32 i;
     s32 j;
     s32 k;
     s32 sum;
 
     for (i = 0; i < 4; i++) {
-        sum = mons[i].level;
+        sum = mons[i].mon.level;
         for (j = i + 1; j < 5; j++) {
-            sum += mons[j].level;
+            sum += mons[j].mon.level;
             for (k = j + 1; k < 6; k++) {
-                if (mons[k].level + sum < 156) {
+                if (mons[k].mon.level + sum < 156) {
                     return 0;
                 }
             }
@@ -180,7 +175,7 @@ typedef struct {
     /* 0x08 */ s32 count;
 } RecordList;
 
-/* Header (0x1C bytes) followed by six 0x54-byte slots (see Slot54). */
+/* Header (0x1C bytes) followed by six 0x54-byte slots (see TeamMonSlot). */
 typedef struct {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 unk_01;
@@ -189,7 +184,7 @@ typedef struct {
     /* 0x04 */ s32 unk_04;
     /* 0x08 */ char unk08[0x10];
     /* 0x18 */ s32 slotCount;
-    /* 0x1C */ Slot54 slots[6];
+    /* 0x1C */ TeamMonSlot slots[6];
 } SlotList;
 
 s32 func_80021894(s32);
@@ -216,7 +211,7 @@ void FreeBattle_LoadGbTeams(RecordList* arg0) {
         rec->unk_01 = 0x20;
         rec->unk_02 = i;
         rec->unk_03 = 0;
-        FreeBattle_MarkEmptySlots(rec->slots, FreeBattle_ReadTeam(rec->unk_01, rec->unk_02, rec->unk_03, (Entry82000058*)rec->slots));
+        FreeBattle_MarkEmptySlots(rec->slots, FreeBattle_ReadTeam(rec->unk_01, rec->unk_02, rec->unk_03, (TeamMonSlot*)rec->slots));
         rec->slotCount = 6;
         rec->unk_04 = GbSave_GetTrainerId(rec->unk_02);
         func_80022D84(rec->unk_02, rec->unk08);
@@ -231,7 +226,7 @@ void FreeBattle_LoadGbTeams(RecordList* arg0) {
         rec->unk_01 = 0x10;
         rec->unk_02 = 0;
         rec->unk_03 = i;
-        FreeBattle_MarkEmptySlots(rec->slots, FreeBattle_ReadTeam(rec->unk_01, rec->unk_02, rec->unk_03, (Entry82000058*)rec->slots));
+        FreeBattle_MarkEmptySlots(rec->slots, FreeBattle_ReadTeam(rec->unk_01, rec->unk_02, rec->unk_03, (TeamMonSlot*)rec->slots));
         rec->slotCount = 6;
         rec->unk_04 = Deck_GetSaveEntryTrainerId(rec->unk_01, rec->unk_03);
         Deck_GetSaveEntryName(rec->unk_01, rec->unk_03, rec->unk08);
@@ -270,7 +265,7 @@ typedef struct Src82000594 {
     /* 0x0C */ s32 name;
     /* 0x10 */ Src82000594Entry entries[6];
 } Src82000594; // size = 0x1F0
-typedef struct Slot82000594 { s32 flag; Src82000594Entry data; } Slot82000594;
+typedef struct Slot82000594 { s32 flags; Src82000594Entry data; } Slot82000594;
 typedef struct Rec82000594 {
     u8 type; u8 unk_01; u8 unk_02; s8 index; s32 unk_04; char name[0x10]; s32 slotCount;
     Slot82000594 slots[6];
@@ -301,7 +296,7 @@ void FreeBattle_AddPresetTeams(List82000594* arg0) {
         func_8000A460(rec->name, func_80001B10(D_8200AD04[i].name));
         rec->slotCount = 6;
         for (j = 0; j < 6; j++) {
-            rec->slots[j].flag = 0;
+            rec->slots[j].flags = 0;
             rec->slots[j].data = D_8200AD04[i].entries[j];
         }
         rec++;
@@ -362,7 +357,7 @@ void FreeBattle_InitNamedTeam(SlotList* arg0, s32 arg1) {
     arg0->unk_04 = 0;
     HAL_Strcpy(arg0->unk08, ((char**)&D_82008F84)[arg1]);
     for (i = 0; i < 6; i++) {
-        arg0->slots[i].flag = 0;
+        arg0->slots[i].flags = 0;
     }
     FreeBattle_MarkEmptySlots(arg0->slots, 0);
     arg0->slotCount = 6;
@@ -698,20 +693,20 @@ void Menu_ClearItemFlags(FlagOwner*);
  * Seen in play: runs when the L50～55 rental grid 「レンタルポケモン」 opens.
  * @unverified The flagged look was not checked on screen.
  */
-void FreeBattle_MarkPickedRentals(FlagOwner* arg0, Slot54* arg1, s32 arg2) {
+void FreeBattle_MarkPickedRentals(FlagOwner* arg0, TeamMonSlot* arg1, s32 arg2) {
     Record50* records;
     Record50* rec;
     s32 i;
     s32 count;
     s32 slot;
-    Slot54* p;
+    TeamMonSlot* p;
 
     records = arg0->table->records;
     Menu_ClearItemFlags(arg0);
     slot = 0;
     p = arg1;
     for (; slot != 0x1F8; slot += 0x54, p++) {
-        if ((p->flag == 0) && (arg2 != M2C_FIELD(p, u8*, 4))) {
+        if ((p->flags == 0) && (arg2 != M2C_FIELD(p, u8*, 4))) {
             i = 0;
             rec = records;
             count = arg0->table->count;
@@ -828,20 +823,20 @@ s32 FreeBattle_CountDuplicateSpecies(void* arg0, s32* index) {
 }
 
 /**
- * Walks the six Slot54 entries at arg0. For each entry whose flag word has
+ * Walks the six TeamMonSlot entries at arg0. For each entry whose flag word has
  * bit 0x40 set, clears that bit, and then sets bit 0x10 unless the entry's
  * index equals arg1 (so only the entry arg1 is left without 0x10).
  * The meaning of the flag bits is not yet established.
  */
-void func_82001708(Slot54* arg0, s32 arg1) {
+void func_82001708(TeamMonSlot* arg0, s32 arg1) {
     s32 i;
 
     for (i = 0; i < 6; i++) {
-        if (!(arg0[i].flag & 0x40)) {
+        if (!(arg0[i].flags & 0x40)) {
         } else {
-            arg0[i].flag &= ~0x40;
+            arg0[i].flags &= ~0x40;
             if (i != arg1) {
-                arg0[i].flag |= 0x10;
+                arg0[i].flags |= 0x10;
             }
         }
     }
@@ -872,7 +867,6 @@ void Font_SetColorForFlags(s32);
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color82001CCC);
 void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
 void Ui_DrawNumberUnpadded(s32, s32, u8);
-void func_8001833C(s32, s32, s32*, u16);
 s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 /**
@@ -905,7 +899,7 @@ void FreeBattle_DrawMonCell(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 
         idx = cache->base + key % cache->count;
         if (key != cache->slots[idx]) {
             cache->slots[idx] = key;
-            func_8001833C(D_8200AC50, idx, entry, ((D_82008F58.c[1] << 3) & 0x7C0) | ((D_82008F58.c[2] >> 2) & 0x3E) | ((D_82008F58.c[0] << 8) & 0xF800) | 1);
+            func_8001833C((unk_func_8001A024*)D_8200AC50, idx, (BattleMon*)entry, ((D_82008F58.c[1] << 3) & 0x7C0) | ((D_82008F58.c[2] >> 2) & 0x3E) | ((D_82008F58.c[0] << 8) & 0xF800) | 1);
         }
         gSPDisplayList(gDisplayListHead++, D_80073408);
         func_8001B884(x + 0x56, y + 6, 0x28, 0x28, PokeIcon_GetImage(D_8200AC50, idx), 0x28, 0x200000);
@@ -1123,10 +1117,10 @@ void FreeBattle_DrawTeamRow(s32 arg0, s32 arg1, SlotList *arg2, s32 arg3, s32 ar
         {
           hl = 0;
           name = 0;
-          if (!(list->slots[i].flag & 1))
+          if (!(list->slots[i].flags & 1))
           {
             name = ((s32 *) (&arg2->slots[i])) + 1;
-            if (list->slots[i].flag & 0x26)
+            if (list->slots[i].flags & 0x26)
             {
               hl = 0x200;
             }
@@ -1167,7 +1161,7 @@ void FreeBattle_DrawTeamRow(s32 arg0, s32 arg1, SlotList *arg2, s32 arg3, s32 ar
 }
 
 typedef struct {
-    /* 0x00 */ Slot54** slots;
+    /* 0x00 */ TeamMonSlot** slots;
     /* 0x04 */ u16* flags;
 } SlotFlags;
 
@@ -1178,37 +1172,37 @@ typedef struct {
  * @unverified Name from the code.
  */
 void FreeBattle_MarkIneligibleSlots(SlotFlags* arg0) {
-    Slot54* slots;
+    TeamMonSlot* slots;
     s32 i;
 
     slots = *arg0->slots;
     for (i = 0; i < 6; i++) {
-        if (!(slots[i].flag & 1) && (slots[i].flag & 0x26)) {
+        if (!(slots[i].flags & 1) && (slots[i].flags & 0x26)) {
             arg0->flags[i] |= 0x200;
         }
     }
 }
 
 /**
- * For each of the six Slot54 entries reached through `*arg0->slots`, sets bit
+ * For each of the six TeamMonSlot entries reached through `*arg0->slots`, sets bit
  * 0x800 in the matching u16 of `arg0->flags` when the entry's flag word has bit 0
  * clear and at least one of the bits 0x10 set.
  * The meaning of the bits is not yet established.
  */
 void func_82002528(SlotFlags* arg0) {
-    Slot54* slots;
+    TeamMonSlot* slots;
     s32 i;
 
     slots = *arg0->slots;
     for (i = 0; i < 6; i++) {
-        if (!(slots[i].flag & 1) && (slots[i].flag & 0x10)) {
+        if (!(slots[i].flags & 1) && (slots[i].flags & 0x10)) {
             arg0->flags[i] |= 0x800;
         }
     }
 }
 
 /**
- * For each of the six Slot54 entries reached through `*arg0->slots`, sets bit 0
+ * For each of the six TeamMonSlot entries reached through `*arg0->slots`, sets bit 0
  * of the matching u16 in `arg0->flags` when the entry's flag word does not have
  * bit 0x40 set. The meaning of the bits is not yet established.
  * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
@@ -1216,19 +1210,19 @@ void func_82002528(SlotFlags* arg0) {
  * @unverified Name guessed from the code; comment kept.
  */
 void FreeBattle_DisableUnpickedRows(SlotFlags* arg0) {
-    Slot54* slots;
+    TeamMonSlot* slots;
     s32 i;
 
     slots = *arg0->slots;
     for (i = 0; i < 6; i++) {
-        if (!(slots[i].flag & 0x40)) {
+        if (!(slots[i].flags & 0x40)) {
             arg0->flags[i] |= 1;
         }
     }
 }
 
 /**
- * Counterpart of FreeBattle_DisableUnpickedRows: for each of the six Slot54 entries reached
+ * Counterpart of FreeBattle_DisableUnpickedRows: for each of the six TeamMonSlot entries reached
  * through `*arg0->slots`, clears bit 0 of the matching u16 in `arg0->flags`
  * when the entry's flag word does not have bit 0x40 set.
  * The meaning of the bits is not yet established.
@@ -1237,12 +1231,12 @@ void FreeBattle_DisableUnpickedRows(SlotFlags* arg0) {
  * @unverified Name guessed from the code; comment kept.
  */
 void FreeBattle_EnableUnpickedRows(SlotFlags* arg0) {
-    Slot54* slots;
+    TeamMonSlot* slots;
     s32 i;
 
     slots = *arg0->slots;
     for (i = 0; i < 6; i++) {
-        if (!(slots[i].flag & 0x40)) {
+        if (!(slots[i].flags & 0x40)) {
             arg0->flags[i] &= ~1;
         }
     }

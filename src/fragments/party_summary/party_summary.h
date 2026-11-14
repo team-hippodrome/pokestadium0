@@ -35,10 +35,10 @@ typedef struct unk_D_84B26640_010_010 {
 
 typedef struct unk_D_84B26640 {
     /* 0x00 */ unk_D_84B26640_010 unk_00;
-    /* 0x00 */ char unk0C[0x4];
-    /* 0x00 */ unk_D_84B26640_010 unk_10;
-    /* 0x00 */ BattlePrepRuleWindow unk_1C;
-    /* 0x00 */ BattlePrepRuleWindow unk_28;
+    /* 0x0C */ char unk0C[0x4];
+    /* 0x10 */ unk_D_84B26640_010 unk_10;
+    /* 0x1C */ BattlePrepRuleWindow unk_1C;
+    /* 0x24 */ BattlePrepRuleWindow unk_24;
 } unk_D_84B26640; // size = 0x30
 
 typedef struct unk_func_84B067B4 {

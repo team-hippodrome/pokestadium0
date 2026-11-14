@@ -30,7 +30,7 @@ void LabPCList_WriteDeckCategory(unk_func_8830867C_02C_154* arg0);
 s32 LabPCList_IsTmItemId(s32* arg0);
 s32 LabPCList_IsHmItemId(s32* arg0);
 s32 LabPCList_IsSpecialTmItemId(s32* arg0);
-s32 LabPCList_CompareTmHmEntries(unk_func_88200FA0_030_038* arg0, unk_func_88200FA0_030_038* arg1);
+s32 LabPCList_CompareTmHmEntries(PointerList* arg0, PointerList* arg1);
 s32 LabPCList_CanLearnMoveByLevelUp(s32 arg0, s32 arg1);
 void LabPCList_ConsumeUsedTmItem(unk_func_8830867C_04C_030_02C_000* arg0);
 
@@ -163,7 +163,7 @@ typedef struct LabPCListBoxZero {
 } LabPCListBoxZero; // size = 0x24
 
 /** Flattens the list's nested entries into one list. */
-void LabPCList_FlattenEntries(unk_func_88200FA0_030_038* arg0, unk_func_8830867C_02C_144* arg1) {
+void LabPCList_FlattenEntries(PointerList* arg0, unk_func_8830867C_02C_144* arg1) {
     s32 i;
     s32 j;
     s32 x;
@@ -172,7 +172,7 @@ void LabPCList_FlattenEntries(unk_func_88200FA0_030_038* arg0, unk_func_8830867C
     s32* var_t0;
     LabPCListBoxZero* var_a2;
 
-    var_v0 = (s32*)arg0->unk_00;
+    var_v0 = (s32*)arg0->items;
     var_a2 = (LabPCListBoxZero*)arg1->unk_00;
 
     for (i = 0; i < arg1->unk_08; i++, var_a2++) {
@@ -189,7 +189,7 @@ void LabPCList_FlattenEntries(unk_func_88200FA0_030_038* arg0, unk_func_8830867C
         }
     }
 
-    arg0->unk_08 = var_v0 - (s32*)arg0->unk_00;
+    arg0->count = var_v0 - (s32*)arg0->items;
 }
 
 typedef struct LabPCDeck89109D14 {
@@ -348,8 +348,8 @@ s32 LabPCList_IsSpecialTmItemId(s32* arg0) {
 }
 
 /** List comparison for TM and HM entries. */
-s32 LabPCList_CompareTmHmEntries(unk_func_88200FA0_030_038* arg0, unk_func_88200FA0_030_038* arg1) {
-    return (arg0->unk_08 - arg1->unk_08 != 0) ? arg0->unk_08 - arg1->unk_08 : (s32)arg0[1].unk_00 - (s32)arg1[1].unk_00;
+s32 LabPCList_CompareTmHmEntries(PointerList* arg0, PointerList* arg1) {
+    return (arg0->count - arg1->count != 0) ? arg0->count - arg1->count : (s32)arg0[1].items - (s32)arg1[1].items;
 }
 
 typedef struct TmEntry8910A21C {
@@ -359,8 +359,8 @@ typedef struct TmEntry8910A21C {
     /* 0x0C */ s32 unk_0C;
     /* 0x10 */ s32 unk_10;
 } TmEntry8910A21C; // size = 0x14
-void func_8910A21C(unk_func_88200FA0_030_038* arg0, TmEntry8910A21C* arg1, unk_func_8830867C_02C_154* arg2, s32 arg3) {
-    unk_func_88205880_00D0** var_s6;
+void func_8910A21C(PointerList* arg0, TmEntry8910A21C* arg1, unk_func_8830867C_02C_154* arg2, s32 arg3) {
+    void** var_s6;
     unk_func_8830867C_02C_154* var_s4;
     s32 i;
     TmEntry8910A21C* var_s1;
@@ -370,7 +370,7 @@ void func_8910A21C(unk_func_88200FA0_030_038* arg0, TmEntry8910A21C* arg1, unk_f
     s32 var_v0;
     u8* var_s2;
 
-    var_s6 = arg0->unk_00;
+    var_s6 = arg0->items;
     var_s4 = arg2;
     var_s1 = arg1;
 
@@ -404,7 +404,7 @@ void func_8910A21C(unk_func_88200FA0_030_038* arg0, TmEntry8910A21C* arg1, unk_f
                         }
                         var_s1->unk_0C = var_v0;
                     }
-                    *var_s6 = (unk_func_88205880_00D0*)var_s1;
+                    *var_s6 = var_s1;
 
                     var_s1++;
                     var_s6++;
@@ -413,7 +413,7 @@ void func_8910A21C(unk_func_88200FA0_030_038* arg0, TmEntry8910A21C* arg1, unk_f
         }
     }
 
-    arg0->unk_08 = var_s1 - arg1;
+    arg0->count = var_s1 - arg1;
     PointerList_Sort(arg0, LabPCList_CompareTmHmEntries);
 }
 
@@ -533,7 +533,7 @@ void func_8910A4C8(s8* arg0, u8* arg1) {
 /** Consumes a TM item after use. */
 void LabPCList_ConsumeUsedTmItem(unk_func_8830867C_04C_030_02C_000* arg0) {
     if ((LabItem_IsQuantitylessItemForOperation(arg0->unk_00[0]->unk_00) != 0) || (arg0->unk_00[0]->unk_01 < 2)) {
-        s32 tmp = arg0->unk_00[1]->unk_0C.unk_00;
+        s32 tmp = arg0->unk_00[1]->unk_0C.items;
 
         WordList_Remove(&arg0->unk_00[1]->unk_0C, ((s32)arg0->unk_00[0] - tmp) >> 1);
     } else {

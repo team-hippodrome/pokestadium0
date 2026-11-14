@@ -26,6 +26,35 @@ struct unk_func_8820E99C;
 
 struct unk_func_8821421C_02C;
 
+/* A two-digit number picker (func_8002B638). */
+typedef struct DigitSelector {
+    /* 0x00 */ s32 value; // @unverified: the ×count LabItem_DrawCountSelector prints (seen drawn as ×01 ... ×05 for ほのおのいし, fire stone)
+    /* 0x04 */ s32 min; // @unverified: 1 in LabItem_InitCountSelector
+    /* 0x08 */ s32 max; // @unverified: arg3 of LabItem_InitCountSelector
+    /* 0x0C */ s32 digitCount; // @unverified: 2
+    /* 0x10 */ s32 digit; // @unverified: the digit the cursor is on, 0 = ones, 1 = tens (the frame moves left by 0x16 per digit)
+} DigitSelector; // size = 0x14
+
+/* The ×count selector of the Lab item screens (LabItem_InitCountSelector), with a text box for a count
+ * over the limit. */
+typedef struct LabItemCountSelector {
+    /* 0x00 */ s32 state; // @unverified: 1 while the text box D_89018474 is up
+    /* 0x04 */ Window window;
+    /* 0x30 */ s32 limit; // @unverified: arg4; a value above it opens the text box, then is set back to it
+    /* 0x34 */ DigitSelector count;
+    /* 0x48 */ s32 textBox; // first word of a TextBox (TextBox_Init, TextBox_Draw); its size is not established
+} LabItemCountSelector;
+
+/* A yes/no question in the Lab item screens (LabItem_InitConfirmWindow). */
+typedef struct LabItemConfirmWindow {
+    /* 0x00 */ Window window;
+    /* 0x2C */ char unk2C[0x4];
+    /* 0x30 */ char* text; // @unverified: printed at the top left (arg4)
+    /* 0x34 */ LabeledButton yesButton; // @unverified: label D_89018460
+    /* 0x70 */ LabeledButton noButton; // @unverified: label D_89018468
+    /* 0xAC */ ChoiceCursor choice;
+} LabItemConfirmWindow; // size = 0xB8
+
 typedef struct unk_func_88208C5C {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ unk_func_8850143C* unk_2C;
@@ -53,7 +82,7 @@ typedef struct unk_func_8820BE14_030 {
 // Copy of above with unk_2C changed just for fragment23_1AE680
 typedef struct unk_func_88200FA0_030_030_1AE680 {
     /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_88205880_A030* unk_2C;
+    /* 0x2C */ PointerList* unk_2C;
     /* 0x30 */ s32 unk_30;
     /* 0x34 */ u16* unk_34;
     /* 0x38 */ s32 unk_38;
@@ -134,7 +163,7 @@ typedef struct unk_func_8820B12C_000 {
 typedef struct unk_func_8820B12C {
     /* 0x00 */ unk_func_8820B12C_000 unk_00;
     /* 0x28 */ WidgetGridMenu* unk_28;
-    /* 0x28 */ unk_func_8820B12C_02C* unk_2C;
+    /* 0x2C */ unk_func_8820B12C_02C* unk_2C;
 } unk_func_8820B12C; // size = 0x30
 
 typedef struct unk_func_8820BE14_02C_070 {
@@ -156,7 +185,7 @@ typedef struct unk_func_8820BE14_02C_078 {
     /* 0x2C */ WidgetAnimatedPanel* unk_2C;
     /* 0x30 */ unk_func_88200FA0_030_030* unk_30;
     /* 0x34 */ unk_func_8820BE14_02C_078_034* unk_34;
-    /* 0x38 */ unk_func_8820BE14_06C unk_38;
+    /* 0x38 */ ByteMatrix unk_38;
     /* 0x48 */ s32 unk_48;
     /* 0x4C */ s32 unk_4C;
     /* 0x50 */ s32 unk_50;
@@ -181,7 +210,7 @@ typedef struct unk_func_8820BE14_02C {
     /* 0x80 */ unk_func_88509F48* unk_80;
     /* 0x84 */ unk_func_889000C4* unk_84;
     /* 0x88 */ unk_func_8850878C* unk_88;
-    /* 0x8C */ unk_func_8820BE14_06C* unk_8C;
+    /* 0x8C */ ByteMatrix* unk_8C;
     /* 0x90 */ char unk90[0x10];
 } unk_func_8820BE14_02C; // size = 0xA0
 
@@ -303,7 +332,7 @@ typedef struct unk_func_8821421C_02C_070 {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ WidgetAnimatedPanel* unk_2C;
     /* 0x30 */ unk_func_88200FA0_030_030* unk_30;
-    /* 0x34 */ unk_func_88205880_A030 unk_34;
+    /* 0x34 */ PointerList unk_34;
     /* 0x40 */ s32 unk_40;
     /* 0x44 */ s32 unk_44;
     /* 0x48 */ s32 unk_48;
@@ -323,7 +352,7 @@ typedef struct unk_func_8821421C_02C {
     /* 0x6C */ unk_func_8821421C_02C_06C* unk_6C;
     /* 0x70 */ unk_func_8821421C_02C_070* unk_70[2];
     /* 0x78 */ struct unk_func_8821421C_03C* unk_78;
-    /* 0x78 */ struct unk_func_8821421C_03C* unk_7C;
+    /* 0x7C */ struct unk_func_8821421C_03C* unk_7C;
     /* 0x80 */ s32 unk_80;
     /* 0x84 */ struct unk_func_8821421C_038* unk_84;
     /* 0x88 */ struct unk_func_8821421C_034* unk_88;
@@ -355,7 +384,7 @@ typedef struct unk_func_8821421C_038_04C {
 
 typedef struct unk_func_8821421C_03C {
     /* 0x00 */ s32 unk_00;
-    /* 0x04 */ unk_func_8820BE14_06C unk_04;
+    /* 0x04 */ ByteMatrix unk_04;
 } unk_func_8821421C_03C; // size = 0x14
 
 typedef struct unk_func_8821421C_07C {
@@ -379,7 +408,7 @@ typedef struct unk_func_8821421C_038 {
     /* 0x50 */ unk_func_8821421C_038_050* unk_50[1];
     /* 0x54 */ char unk54[0xC];
     /* 0x60 */ s32 unk_60;
-    /* 0x64 */ unk_func_8820BE14_06C unk_64;
+    /* 0x64 */ ByteMatrix unk_64;
     /* 0x74 */ char unk74[0x4];
 } unk_func_8821421C_038; // size = 0x78
 
@@ -391,7 +420,7 @@ typedef struct unk_func_8821421C_038 {
  */
 
 typedef struct Rgba89000D50 {
-    /* 0x0 */ u8 r, g, b, a;
+    /* 0x00 */ u8 r, g, b, a;
 } Rgba89000D50; // size = 0x4
 
 typedef struct ColorPair890017FC {
@@ -423,12 +452,12 @@ typedef unk_D_88400138* (*func884000C4)(s32);
 struct unk_func_88203ED8_064;
 
 // lab_items.c
-void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* arg3);
-void LabItem_WriteDeckBack(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* arg3, s32 arg4, char* arg5, s32 arg6);
+void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, ByteMatrix* arg3);
+void LabItem_WriteDeckBack(s32 arg0, s32 arg1, s32 arg2, ByteMatrix* arg3, s32 arg4, char* arg5, s32 arg6);
 void LabItem_LoadGamePakBoxSlots(unk_func_8821421C_07C* arg0);
 s32 LabItem_FindOrAllocateGamePakBoxSlot(unk_func_8821421C_07C* arg0, s32 arg1, char* arg2);
-s32 LabItem_ComputeRemainingCapacity(s32 arg0, unk_func_8820BE14_06C* arg1);
-s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, unk_func_8820BE14_06C* arg1);
+s32 LabItem_ComputeRemainingCapacity(s32 arg0, ByteMatrix* arg1);
+s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, ByteMatrix* arg1);
 void func_8900020C(void);
 
 // pc_sort.c

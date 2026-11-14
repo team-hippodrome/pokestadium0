@@ -107,14 +107,14 @@ void PcSort_DisableRow(s8 *arg0, s32 arg1) {
 }
 
 typedef struct Rgba89004908 {
-    /* 0x0 */ u8 r, g, b, a;
+    /* 0x00 */ u8 r, g, b, a;
 } Rgba89004908; // size = 0x4
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Rgba89004908);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);
 extern Rgba89004908 D_8900A5BC;
 extern Rgba89004908 D_8900A730[];
 extern Rgba89004908 D_800734B0[];
-extern M2C_UNK D_800734A8;
+extern u8 D_800734A8[];
 /**
  * Draws one menu row label with the selection highlight (dimmed when disabled).
  * Seen in play (2026-11-12): rows てもち, GBのボックス1-8, 64のボックス1-4 (dimmed when disabled).
@@ -486,7 +486,7 @@ void PcSort_DrawMonStats(s32 x, s32 y, u8* mon) {
     Font_Printf(x + 0x91, y + 0x56, D_89018AD0);
     Font_Printf(x + 0x11C, y + 0x56, D_89018ADC);
     Font_Printf(x + 0x1A7, y + 0x56, D_89018AE8);
-    func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
+    func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
     Font_SetActive(8, 0);
     if ((mon[0] <= 0) || (mon[0] >= 0x98)) {
         name = D_89018AF4;
@@ -516,7 +516,7 @@ M2C_UNK func_8001AA9C(u8, u8, u8, u8);              /* extern */
 void Font_SetLineHeight(s32 arg0);                     /* extern */
 M2C_UNK func_8001AB6C();                            /* extern */
 M2C_UNK func_8001ABBC();                            /* extern */
-extern M2C_UNK D_800734A8;
+extern u8 D_800734A8[];
 
 /**
  * Draws `arg2` in the small font.
@@ -525,7 +525,7 @@ extern M2C_UNK D_800734A8;
 void PcSort_DrawSmallText(s32 arg0, s32 arg1, s32 arg2) {
     func_8001AB6C();
     func_8001A384(0x10, 0);
-    func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
+    func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
     Font_SetLineHeight(0x2C);
     func_8001A944(arg0 + 0xC, arg1 + 0x14, arg2);
     func_8001ABBC();

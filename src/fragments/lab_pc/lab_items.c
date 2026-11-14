@@ -40,27 +40,15 @@ typedef struct unk_D_88218070 {
 void ScrollList_SetItems(s8*, s32, s8*);
 
 void func_8900020C(void);
-s32 LabItem_ComputeRemainingCapacity(s32 arg0, unk_func_8820BE14_06C* arg1);
-s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, unk_func_8820BE14_06C* arg1);
+s32 LabItem_ComputeRemainingCapacity(s32 arg0, ByteMatrix* arg1);
+s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, ByteMatrix* arg1);
 s32 LabItem_FindOrAllocateGamePakBoxSlot(unk_func_8821421C_07C* arg0, s32 arg1, char* arg2);
 void LabItem_LoadGamePakBoxSlots(unk_func_8821421C_07C* arg0);
-void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* arg3);
+void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, ByteMatrix* arg3);
 
-void func_89000020(unk_func_8830867C_02C_0CC* arg0, s32 (*arg1)(s32, s32)) {
-    func_800274E0(arg0->unk_00, arg1, arg0->unk_08);
+void func_89000020(LabMonEntryList* arg0, s32 (*arg1)(s32, s32)) {
+    func_800274E0(arg0->items, arg1, arg0->count);
 }
-
-typedef struct LabItemGrid {
-    /* 0x00 */ u8* unk_00;
-    /* 0x04 */ char unk04[0x8];
-    /* 0x0C */ s32 unk_0C;
-} LabItemGrid;
-
-typedef struct LabItemCursor {
-    /* 0x00 */ LabItemGrid* unk_00;
-    /* 0x04 */ char unk04[0x4];
-    /* 0x08 */ s32 unk_08;
-} LabItemCursor;
 
 void func_800275E4(s32, s32);
 void ScrollList_SetCursorKeepOffset(s32*, s32);
@@ -69,7 +57,7 @@ void ScrollList_SetCursorKeepOffset(s32*, s32);
  * LabList_RemoveSelectedEntry
  *
  * Removes one row from the grid referenced by the cursor arg0 and fixes up
- * the cursor.  arg0->unk_00 is the grid and arg0->unk_08 the current index.
+ * the cursor.  arg0->items is the table and arg0->cursor the current index.
  *
  *   1. func_800275E4(grid, index) is called.  This is ByteMatrix_RemoveRow
  *      (name from symbol_addrs.txt; its code was read and agrees): it
@@ -92,12 +80,12 @@ void ScrollList_SetCursorKeepOffset(s32*, s32);
  * a Pokémon moved out of てもち into GBのボックス1, so it serves the Pokémon lists as well as the item
  * list.
  */
-void LabList_RemoveSelectedEntry(LabItemCursor* arg0) {
-    func_800275E4((s32)arg0->unk_00, arg0->unk_08);
-    if (arg0->unk_08 >= M2C_FIELD(arg0->unk_00, s32*, 8)) {
-        arg0->unk_08 -= 1;
+void LabList_RemoveSelectedEntry(ScrollList* arg0) {
+    func_800275E4((s32)arg0->items, arg0->cursor);
+    if (arg0->cursor >= arg0->items->count) {
+        arg0->cursor -= 1;
     }
-    ScrollList_SetCursorKeepOffset((s32*)arg0, arg0->unk_08);
+    ScrollList_SetCursorKeepOffset((s32*)arg0, arg0->cursor);
 }
 
 void func_800275E4(s32, s32);
@@ -155,8 +143,8 @@ void func_890000A4(s32* arg0, s32 arg1, s32 arg2) {
  * Seen in play (2026-11-13) in せいとん > どうぐをいどうする, moving all five ほのおのいし to サトシのパソコン removed the bag
  * row (006/020 to 005/020, PC 000/050 to 001/050).
  */
-void LabItem_DecreaseSelectedCount(LabItemCursor* arg0, s32 arg1) {
-    u8* temp_v1 = &arg0->unk_00->unk_00[arg0->unk_00->unk_0C * arg0->unk_08];
+void LabItem_DecreaseSelectedCount(ScrollList* arg0, s32 arg1) {
+    u8* temp_v1 = &arg0->items->rows[arg0->items->rowSize * arg0->cursor];
 
     if (arg1 >= temp_v1[1]) {
         LabList_RemoveSelectedEntry(arg0);
@@ -169,12 +157,12 @@ void func_8900020C(void) {
 }
 
 /** Returns how many more items a box can hold. */
-s32 LabItem_ComputeRemainingCapacity(s32 arg0, unk_func_8820BE14_06C* arg1) {
+s32 LabItem_ComputeRemainingCapacity(s32 arg0, ByteMatrix* arg1) {
     s32 i;
     s32 var_v1 = 0;
-    u8* var_v0 = arg1->unk_00;
+    u8* var_v0 = arg1->rows;
 
-    for (i = 0; i < arg1->unk_08; i++, var_v0 += 2) {
+    for (i = 0; i < arg1->count; i++, var_v0 += 2) {
         if (arg0 == var_v0[0]) {
             var_v1 = (var_v1 - var_v0[1]) + 0x63;
         }
@@ -184,16 +172,16 @@ s32 LabItem_ComputeRemainingCapacity(s32 arg0, unk_func_8820BE14_06C* arg1) {
 }
 
 /** Returns the largest quantity of an item that can be transferred. */
-s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, unk_func_8820BE14_06C* arg1) {
+s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, ByteMatrix* arg1) {
     s32 var_v1;
 
     if (LabItem_IsQuantitylessItemForOperation(arg0) != 0) {
-        if (arg1->unk_08 < arg1->unk_04) {
+        if (arg1->count < arg1->capacity) {
             var_v1 = 1;
         } else {
             var_v1 = 0;
         }
-    } else if (arg1->unk_08 < arg1->unk_04) {
+    } else if (arg1->count < arg1->capacity) {
         var_v1 = 0x63;
     } else {
         var_v1 = LabItem_ComputeRemainingCapacity(arg0, arg1);
@@ -234,15 +222,15 @@ void LabItem_LoadGamePakBoxSlots(unk_func_8821421C_07C* arg0) {
 }
 
 /** Reads item entries from a deck. */
-void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* arg3) {
+void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, ByteMatrix* arg3) {
     DeckHandle* sp1C = Deck_Open(arg0, arg1, arg2, 0);
 
-    arg3->unk_08 = Deck_ReadEntries(arg3->unk_00, arg3->unk_04, sp1C);
+    arg3->count = Deck_ReadEntries(arg3->rows, arg3->capacity, sp1C);
     Deck_CloseAndFlush(sp1C);
 }
 
 /** Writes item entries back to a deck. */
-void LabItem_WriteDeckBack(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* arg3, s32 arg4, char* arg5, s32 arg6) {
+void LabItem_WriteDeckBack(s32 arg0, s32 arg1, s32 arg2, ByteMatrix* arg3, s32 arg4, char* arg5, s32 arg6) {
     DeckHandle* sp2C;
 
     if (arg6 != -1) {
@@ -252,7 +240,7 @@ void LabItem_WriteDeckBack(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* 
         sp2C = Deck_Open(arg0, arg1, arg2, 1);
     }
 
-    Deck_WriteEntries(arg3->unk_00, arg3->unk_08, sp2C);
+    Deck_WriteEntries(arg3->rows, arg3->count, sp2C);
 
     if ((arg0 == 0x10) || (arg0 == 0x11) || (arg0 == 0x12) || (arg0 == 0x13)) {
         Deck_CloseAndFlushBox(sp2C);
@@ -285,21 +273,21 @@ extern s32 D_800603C0;
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-void LabItem_InitConfirmWindow(s8* arg0, s32 arg1, s32 arg2, char *arg3, s32 arg4) {
+void LabItem_InitConfirmWindow(LabItemConfirmWindow* arg0, s32 arg1, s32 arg2, char *arg3, s32 arg4) {
     Window_SetRect(arg0, arg1, arg2, 0x10C, 0x92);
-    M2C_FIELD(arg0, s32*, 0x24) = 0;
-    M2C_FIELD(arg0, s32*, 0x28) = 0;
-    M2C_FIELD(arg0, s32*, 0x14) = 0x2801;
-    M2C_FIELD(arg0, char**, 0x20) = arg3;
-    Window_InitLabeled(arg0 + 0x34, M2C_FIELD(arg0, s32*, 0) + 0x2E, M2C_FIELD(arg0, s32*, 4) + 0x6E, 0x48, D_8900A5C0, D_89018460);
-    M2C_FIELD(arg0, s32*, 0x60) = 0xA;
-    M2C_FIELD(arg0, s32*, 0x68) = 0xC;
-    Window_InitLabeled(arg0 + 0x70, M2C_FIELD(arg0, s32*, 0) + 0x96, M2C_FIELD(arg0, s32*, 4) + 0x6E, 0x48, D_8900A5C0, D_89018468);
-    M2C_FIELD(arg0, s32*, 0xB4) = 2;
-    M2C_FIELD(arg0, s32*, 0xB0) = 0;
-    M2C_FIELD(arg0, s32*, 0xAC) = D_800603C0;
+    arg0->window.animTimer = 0;
+    arg0->window.state = 0;
+    arg0->window.frame.style = 0x2801;
+    arg0->window.title = arg3;
+    Window_InitLabeled(&arg0->yesButton, arg0->window.frame.x + 0x2E, arg0->window.frame.y + 0x6E, 0x48, D_8900A5C0, D_89018460);
+    arg0->yesButton.labelX = 0xA;
+    arg0->yesButton.unk_34 = 0xC;
+    Window_InitLabeled(&arg0->noButton, arg0->window.frame.x + 0x96, arg0->window.frame.y + 0x6E, 0x48, D_8900A5C0, D_89018468);
+    arg0->choice.count = 2;
+    arg0->choice.cursor = 0;
+    arg0->choice.controller = (Controller*)D_800603C0;
     func_8000B2F4(D_800603C0);
-    M2C_FIELD(arg0, s32*, 0x30) = arg4;
+    arg0->text = arg4;
 }
 
 s32 func_8002AE6C();                                /* extern */
@@ -314,7 +302,7 @@ void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void Window_DrawLabeled(s8*, s32);
 extern u8 D_8007356C[];
-extern M2C_UNK D_800734A8;
+extern u8 D_800734A8[];
 extern Gfx D_80060270[];
 extern Color_RGBA8 D_8900A5C4;
 extern Color_RGBA8 D_8900A5C8;
@@ -326,22 +314,22 @@ extern Color_RGBA8 D_8900A5CC;
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-void LabItem_DrawConfirmWindow(s8* arg0) {
+void LabItem_DrawConfirmWindow(LabItemConfirmWindow* arg0) {
     if (func_8002AE6C() == 0) {
-        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x61, M2C_FIELD(arg0, s32*, 8), D_8007356C);
-        Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x5C, D_8900A5C4, D_8900A5C8);
+        Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->window.frame.y + 0x61, arg0->window.frame.width, D_8007356C);
+        Ui_FillRectPrimEnvColor(arg0->window.frame.x + 6, arg0->window.frame.y + 6, arg0->window.frame.width - 0xC, 0x5C, D_8900A5C4, D_8900A5C8);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x68, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x24, D_8900A5CC);
+        func_80029028(arg0->window.frame.x + 6, arg0->window.frame.y + 0x68, arg0->window.frame.width - 0xC, 0x24, D_8900A5CC);
         func_8001AB6C();
         if (!arg0) { // FAKE: empty test only changes register allocation; needed to match
         }
-        func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
+        func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
         Font_SetLineHeight(0x1C);
-        func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + 0xA, M2C_FIELD(arg0, s32*, 0x30));
+        func_8001A944(arg0->window.frame.x + 0xE, arg0->window.frame.y + 0xA, arg0->text);
         func_8001ABBC();
-        Window_DrawLabeled(arg0 + 0x34, (M2C_FIELD(arg0, s32*, 0xB0) == 0) ? 2 : 0);
-        Window_DrawLabeled(arg0 + 0x70, (M2C_FIELD(arg0, s32*, 0xB0) == 1) ? 2 : 0);
+        Window_DrawLabeled(&arg0->yesButton, (arg0->choice.cursor == 0) ? 2 : 0);
+        Window_DrawLabeled(&arg0->noButton, (arg0->choice.cursor == 1) ? 2 : 0);
     }
 }
 
@@ -355,20 +343,20 @@ extern s32 D_800603C0;
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-s32 LabItem_UpdateConfirmWindow(s8* arg0) {
+s32 LabItem_UpdateConfirmWindow(LabItemConfirmWindow* arg0) {
     s32 ret = 0;
 
-    switch (M2C_FIELD(arg0, s32*, 0x28)) {
+    switch (arg0->window.state) {
         case 1:
         case 2:
             break;
         default:
             return 0;
     }
-    if (func_8002B390(arg0 + 0xAC) == 0) {
+    if (func_8002B390(&arg0->choice) == 0) {
         ret = func_8002BC14(D_800603C0);
         if (ret == 1) {
-            switch (M2C_FIELD(arg0, s32*, 0xB0)) {
+            switch (arg0->choice.cursor) {
                 case 0:
                     ret = 1;
                     break;
@@ -388,21 +376,21 @@ extern Rgba89000D50 D_8900A5BC;
  * Seen in play (2026-11-13) in せいとん > どうぐをいどうする, the ×count selector opened when ほのおのいし ×05 was
  * picked to move from てもちのどうぐ to サトシのパソコン.
  */
-void LabItem_InitCountSelector(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
-    Window_SetRect(arg0 + 4, arg1, arg2, 0x54, 0x34);
-    M2C_FIELD(arg0, s32*, 0x28) = 0;
-    M2C_FIELD(arg0, s32*, 0x24) = 0;
-    M2C_FIELD(arg0, s32*, 0x2C) = 0;
-    M2C_FIELD(arg0, s32*, 0x18) = 0;
-    M2C_FIELD(arg0, Rgba89000D50*, 0x1C) = D_8900A5BC;
-    M2C_FIELD(arg0, s32*, 0x40) = 2;
-    M2C_FIELD(arg0, s32*, 0x34) = 1;
-    M2C_FIELD(arg0, s32*, 0x38) = 1;
-    M2C_FIELD(arg0, s32*, 0x3C) = arg3;
-    M2C_FIELD(arg0, s32*, 0x44) = 0;
+void LabItem_InitCountSelector(LabItemCountSelector* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+    Window_SetRect(&arg0->window, arg1, arg2, 0x54, 0x34);
+    arg0->window.animTimer = 0;
+    arg0->window.title = 0;
+    arg0->window.state = 0;
+    arg0->window.frame.style = 0;
+    *(Rgba89000D50*)&arg0->window.frame.color = D_8900A5BC; // copied as an aligned word
+    arg0->count.digitCount = 2;
+    arg0->count.value = 1;
+    arg0->count.min = 1;
+    arg0->count.max = arg3;
+    arg0->count.digit = 0;
     func_8000B2F4(D_800603C0);
-    M2C_FIELD(arg0, s32*, 0x30) = arg4;
-    M2C_FIELD(arg0, s32*, 0) = 0;
+    arg0->limit = arg4;
+    arg0->state = 0;
 }
 
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
@@ -424,50 +412,50 @@ extern char D_89018470[];
  * Seen in play (2026-11-13) in せいとん > どうぐをいどうする, drew the ×count selector (×01, ×02 ... ×05) for
  * ほのおのいし.
  */
-void LabItem_DrawCountSelector(s8* arg0) {
+void LabItem_DrawCountSelector(LabItemCountSelector* arg0) {
     UNUSED s32 pad[1]; // FAKE: stack padding
     s32 x;
     s32 v;
 
-    if (func_8002AE6C(arg0 + 4) == 0) {
-        x = M2C_FIELD(arg0, s32*, 4) - M2C_FIELD(arg0, s32*, 0x44) * 0x16 + 0x36;
+    if (func_8002AE6C(&arg0->window) == 0) {
+        x = arg0->window.frame.x - arg0->count.digit * 0x16 + 0x36;
         gSPDisplayList(gDisplayListHead++, D_80073408);
         if (((u16*)D_800603C0)[3] & 0x800) {
             v = (s32)D_04002340;
         } else {
             v = (s32)D_04002130;
         }
-        func_8001B884(x + 3, M2C_FIELD(arg0, s32*, 8) + 6, 0xE, 8, (u8*)v, 0x10, 0x200000);
+        func_8001B884(x + 3, arg0->window.frame.y + 6, 0xE, 8, (u8*)v, 0x10, 0x200000);
         if (((u16*)D_800603C0)[3] & 0x400) {
             v = (s32)D_04002448;
         } else {
             v = (s32)D_04002238;
         }
-        func_8001B884(x + 3, M2C_FIELD(arg0, s32*, 8) + 0x26, 0xE, 8, (u8*)v, 0x10, 0x200000);
+        func_8001B884(x + 3, arg0->window.frame.y + 0x26, 0xE, 8, (u8*)v, 0x10, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);
-        Ui_DrawRoundedFrame(x - 3, M2C_FIELD(arg0, s32*, 8) + 0xD, 0x1A, 0x1A, D_80073520);
+        Ui_DrawRoundedFrame(x - 3, arg0->window.frame.y + 0xD, 0x1A, 0x1A, D_80073520);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(8, 0);
-        Gfx_SetEnvColor(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2),
-                      M2C_FIELD(&D_800734A8, u8*, 3));
-        func_8001A944(M2C_FIELD(arg0, s32*, 4) + 0xA, M2C_FIELD(arg0, s32*, 8) + 0x10, D_89018470);
-        if (M2C_FIELD(arg0, s32*, 0x44) == 1) {
+        Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2],
+                      D_800734A8[3]);
+        func_8001A944(arg0->window.frame.x + 0xA, arg0->window.frame.y + 0x10, D_89018470);
+        if (arg0->count.digit == 1) {
             v = 2;
         } else {
             v = 0;
         }
         Font_SetColorForFlags(v);
-        func_8001AA60(M2C_FIELD(arg0, s32*, 4) + 0x20, M2C_FIELD(arg0, s32*, 8) + 0x10, M2C_FIELD(arg0, s32*, 0x34) / 10 + '0');
-        if (M2C_FIELD(arg0, s32*, 0x44) == 0) {
+        func_8001AA60(arg0->window.frame.x + 0x20, arg0->window.frame.y + 0x10, arg0->count.value / 10 + '0');
+        if (arg0->count.digit == 0) {
             v = 2;
         } else {
             v = 0;
         }
         Font_SetColorForFlags(v);
-        func_8001AA60(M2C_FIELD(arg0, s32*, 4) + 0x36, M2C_FIELD(arg0, s32*, 8) + 0x10, M2C_FIELD(arg0, s32*, 0x34) % 10 + '0');
+        func_8001AA60(arg0->window.frame.x + 0x36, arg0->window.frame.y + 0x10, arg0->count.value % 10 + '0');
         Font_EndTexturedTextRendering();
-        if (M2C_FIELD(arg0, s32*, 0) == 1) {
-            TextBox_Draw(arg0 + 0x48);
+        if (arg0->state == 1) {
+            TextBox_Draw(&arg0->textBox);
         }
     }
 }
@@ -485,25 +473,25 @@ extern M2C_UNK D_89018474;
  * Seen in play (2026-11-13) in せいとん > どうぐをいどうする, the D-pad changed the ほのおのいし count and A moved
  * that many to サトシのパソコン.
  */
-s32 LabItem_UpdateCountSelector(s8 *arg0) {
+s32 LabItem_UpdateCountSelector(LabItemCountSelector* arg0) {
     s32 sp2C;
     s32 temp_v0;
     s32 temp_v0_2;
 
     sp2C = 0;
-    temp_v0 = M2C_FIELD(arg0, s32 *, 0);
+    temp_v0 = arg0->state;
     switch (temp_v0) {                              /* irregular */
     case 0:
-        if (func_8002B638(arg0 + 0x34) == 0) {
+        if (func_8002B638(&arg0->count) == 0) {
             temp_v0_2 = func_8002BC14(D_800603C0);
             if (temp_v0_2 == -1) {
                 func_8003F6AC(3);
                 sp2C = -1;
             } else if (temp_v0_2 == 1) {
-                if (M2C_FIELD(arg0, s32 *, 0x30) < M2C_FIELD(arg0, s32 *, 0x34)) {
+                if (arg0->limit < arg0->count.value) {
                     func_8003F6AC(8);
-                    TextBox_Init(arg0 + 0x48, &D_89018474, 0, 1, 0);
-                    M2C_FIELD(arg0, s32 *, 0) = 1;
+                    TextBox_Init(&arg0->textBox, &D_89018474, 0, 1, 0);
+                    arg0->state = 1;
                 } else {
                     func_8003F6AC(2);
                     sp2C = 1;
@@ -512,9 +500,9 @@ s32 LabItem_UpdateCountSelector(s8 *arg0) {
         }
         break;
     case 1:
-        if (Ui_CheckConfirmPressed(arg0 + 0x48) == 1) {
-            M2C_FIELD(arg0, s32 *, 0) = 0;
-            M2C_FIELD(arg0, s32 *, 0x34) = (s32) M2C_FIELD(arg0, s32 *, 0x30);
+        if (Ui_CheckConfirmPressed(&arg0->textBox) == 1) {
+            arg0->state = 0;
+            arg0->count.value = (s32) arg0->limit;
         }
         break;
     }
@@ -571,7 +559,7 @@ void LabItem_DisableRow(s8 *arg0, s32 arg1) {
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Rgba89000D50);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);
 extern Rgba89000D50 D_8900A5D4[];
-extern M2C_UNK D_800734A8;
+extern u8 D_800734A8[];
 /**
  * Draws one menu row label with the selection highlight (dimmed when disabled).
  * Seen in play (2026-11-13) drew the rows of the item sort screen's source window (てもちの どうぐ, サトシの
@@ -903,7 +891,7 @@ void LabItem_DrawTitleText(s32 arg0, s32 arg1, s32 arg2, s8 *arg3) {
     func_8001ABBC();
 }
 
-extern M2C_UNK D_800734A8;
+extern u8 D_800734A8[];
 
 /**
  * Draws `arg2` centered in the 376-pixel help area.
@@ -913,7 +901,7 @@ extern M2C_UNK D_800734A8;
 void LabItem_DrawCenteredText(s32 arg0, s32 arg1, char* arg2) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(0x10, 0);
-    Gfx_SetEnvColor(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
+    Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
     Font_Printf(((0x178 - (strlen(arg2) / 2) * 0x18) / 2) + arg0, arg1 + 0x10, arg2);
     Font_EndTexturedTextRendering();
 }
@@ -924,7 +912,7 @@ M2C_UNK func_8001AA9C(u8, u8, u8, u8);              /* extern */
 void Font_SetLineHeight(s32 arg0);                     /* extern */
 M2C_UNK func_8001AB6C();                            /* extern */
 M2C_UNK func_8001ABBC();                            /* extern */
-extern M2C_UNK D_800734A8;
+extern u8 D_800734A8[];
 
 /**
  * Draws `arg2` in the small font.
@@ -935,7 +923,7 @@ extern M2C_UNK D_800734A8;
 void LabItem_DrawSmallText(s32 arg0, s32 arg1, s32 arg2) {
     func_8001AB6C();
     func_8001A384(8, 0);
-    func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
+    func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
     Font_SetLineHeight(0x1C);
     func_8001A944(arg0 + 8, arg1 + 4, arg2);
     func_8001ABBC();
@@ -1038,28 +1026,17 @@ void LabItem_DrawOrganizeWindow(s8 *arg0)
   }
 }
 
-typedef struct LabItemGridZ {
-    /* 0x00 */ u8* data;
-    /* 0x04 */ s32 pad04[2];
-    /* 0x0C */ s32 stride;
-} LabItemGridZ;
-typedef struct LabItemCursorZ {
-    /* 0x00 */ LabItemGridZ* grid;
-    /* 0x04 */ s32 pad04;
-    /* 0x08 */ s32 selected;
-} LabItemCursorZ;
-
-#define CURSOR(p) ((LabItemCursorZ*)((p) + 0x1E4))
+#define CURSOR(p) ((ScrollList*)((p) + 0x1E4))
 
 void func_890020C0(u8* arg0) {
     u8* item;
 
-    item = CURSOR(arg0)->grid->data + CURSOR(arg0)->selected * 2;
+    item = CURSOR(arg0)->items->rows + CURSOR(arg0)->cursor * 2;
     M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x1A4)] = 1;
     M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x140)] = M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x1A4)];
     if (LabItem_IsQuantitylessItemForOperation(item[0]) != 0) {
-        func_89000020((unk_func_8830867C_02C_0CC*)(arg0 + 0x2F8), (void*)(CURSOR(arg0)->grid->data + CURSOR(arg0)->grid->stride * CURSOR(arg0)->selected));
-        LabList_RemoveSelectedEntry((LabItemCursor*)CURSOR(arg0));
+        func_89000020((LabMonEntryList*)(arg0 + 0x2F8), (void*)(CURSOR(arg0)->items->rows + CURSOR(arg0)->items->rowSize * CURSOR(arg0)->cursor));
+        LabList_RemoveSelectedEntry((ScrollList*)CURSOR(arg0));
     } else {
         func_890000A4((s32*)(arg0 + 0x2F8), item[0], M2C_FIELD(arg0, s32*, 0x444));
         LabItem_SubtractSelectedItemQuantity((unk_func_8820BE14_02C_038*)CURSOR(arg0), M2C_FIELD(arg0, s32*, 0x444));
@@ -1217,7 +1194,7 @@ s32 LabItem_UpdateOrganizeWindow(s8* arg0) {
             if (v != 1) {
                 break;
             }
-            ptr = ((LabItemCursorZ*)(arg0 + 0x1E4))->grid->data + ((LabItemCursorZ*)(arg0 + 0x1E4))->selected * 2;
+            ptr = ((ScrollList*)(arg0 + 0x1E4))->items->rows + ((ScrollList*)(arg0 + 0x1E4))->cursor * 2;
             if (*(s32*)(arg0 + 0x104) == 0) {
                 if (func_80031C24(*ptr) != 0 && *(s32*)(arg0 + 0x1D8) == 2) {
                     func_8003F6AC(8);
@@ -1314,7 +1291,7 @@ s32 LabItem_UpdateOrganizeWindow(s8* arg0) {
             if (v != 1) {
                 break;
             }
-            ptr2 = ((LabItemCursorZ*)(arg0 + 0x2F8))->grid->data + ((LabItemCursorZ*)(arg0 + 0x2F8))->selected * 2;
+            ptr2 = ((ScrollList*)(arg0 + 0x2F8))->items->rows + ((ScrollList*)(arg0 + 0x2F8))->cursor * 2;
             if (func_80031C24(*ptr2) != 0 &&
                 *(s32*)(arg0 + 0x1D4) == 2) {
                 func_8003F6AC(8);
@@ -1464,7 +1441,7 @@ void LabItem_DrawDeleteDataWindow(s8* arg0, s32 arg1) {
         func_8001A384(8, 0);
         if (!arg0) { // FAKE: empty test only changes register allocation; needed to match
         }
-        func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
+        func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         Font_SetLineHeight(0x1C);
         func_8001A944(M2C_FIELD(arg0, s32*, 0x2C) + 8, M2C_FIELD(arg0, s32*, 0x30) + 8, D_89018688);
         func_8001ABBC();

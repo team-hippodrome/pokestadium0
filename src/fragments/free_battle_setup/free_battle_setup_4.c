@@ -5,10 +5,6 @@
 #include "free_battle_setup.h"
 
 typedef struct {
-    /* 0x00 */ s32 flag;
-    /* 0x04 */ char unk04[0x50];
-} Slot54;
-typedef struct {
     /* 0x00 */ u8 id;
     /* 0x01 */ char unk01[0x4F];
 } Record50;
@@ -25,7 +21,7 @@ typedef struct Color82001CCC {
     u8 c[4];
 } Color82001CCC;
 typedef struct {
-    /* 0x00 */ Slot54** slots;
+    /* 0x00 */ TeamMonSlot** slots;
     /* 0x04 */ u16* flags;
 } SlotFlags;
 
@@ -85,12 +81,12 @@ void FreeBattle_EnterEntryScreenState(arg0)
             break;
         case 8:
             if (!(M2C_FIELD(arg0, s32*, 0x788) & 2)) {
-                if (((Slot54*)(arg0 + 0xE4))[M2C_FIELD(arg0, s32*, 0x300)].flag != 0) {
+                if (((TeamMonSlot*)(arg0 + 0xE4))[M2C_FIELD(arg0, s32*, 0x300)].flags != 0) {
                     color = -1;
                 } else {
-                    color = ((Slot54*)(arg0 + 0xE4))[M2C_FIELD(arg0, s32*, 0x300)].unk04[0];
+                    color = ((TeamMonSlot*)(arg0 + 0xE4))[M2C_FIELD(arg0, s32*, 0x300)].mon.species.id;
                 }
-                FreeBattle_MarkPickedRentals((FlagOwner*)(arg0 + 0x6E4), (Slot54*)(arg0 + 0xE4), color);
+                FreeBattle_MarkPickedRentals((FlagOwner*)(arg0 + 0x6E4), (TeamMonSlot*)(arg0 + 0xE4), color);
                 ScrollGrid_SyncCursor((FlagOwner*)(arg0 + 0x6E4));
             }
             panel = arg0 + 0x14;
@@ -100,11 +96,11 @@ void FreeBattle_EnterEntryScreenState(arg0)
             panel = arg0 + 0x14;
             break;
         case 3:
-            FreeBattle_InitConfirmWindow(arg0 + 0x5CC, 0x69, 0x7D, (s32)((Slot54*)(arg0 + 0xE4))[M2C_FIELD(arg0, s32*, 0x300)].unk04, (s32)&D_82009C50, M2C_FIELD(arg0, s32*, 0x744));
+            FreeBattle_InitConfirmWindow(arg0 + 0x5CC, 0x69, 0x7D, (s32)((TeamMonSlot*)(arg0 + 0xE4))[M2C_FIELD(arg0, s32*, 0x300)].mon.nickname - 0x30, (s32)&D_82009C50, M2C_FIELD(arg0, s32*, 0x744)); // FAKE: the ROM adds the base last, as for an array member; &slot.mon does not match
             panel = arg0 + 0x5CC;
             break;
         case 7:
-            FreeBattle_InitConfirmWindow(arg0 + 0x5CC, 0x69, 0x7D, (s32)((Slot54*)(arg0 + 0xE4))[M2C_FIELD(arg0, s32*, 0x300)].unk04, (s32)&D_82009C6C, M2C_FIELD(arg0, s32*, 0x744));
+            FreeBattle_InitConfirmWindow(arg0 + 0x5CC, 0x69, 0x7D, (s32)((TeamMonSlot*)(arg0 + 0xE4))[M2C_FIELD(arg0, s32*, 0x300)].mon.nickname - 0x30, (s32)&D_82009C6C, M2C_FIELD(arg0, s32*, 0x744)); // FAKE: the ROM adds the base last, as for an array member; &slot.mon does not match
             panel = arg0 + 0x5CC;
             break;
         case 9:
@@ -472,7 +468,7 @@ typedef struct {
     /* 0x000 */ char unk000[0x48];
     /* 0x048 */ s32 unk_48;
     /* 0x04C */ char unk04C[0x98];
-    /* 0x0E4 */ Slot54 slots[6];
+    /* 0x0E4 */ TeamMonSlot slots[6];
     /* 0x2DC */ char unk2DC[0x20];
     /* 0x2FC */ s16* unk_2FC;
     /* 0x300 */ s32 cur;
@@ -493,7 +489,7 @@ typedef struct {
 void FreeBattle_InitDuplicateWarning(s8*, s32, s32, s32);
 void FreeBattle_InitShortageWarning(s8*, s32, s32, s32, s32);
 s32 FreeBattle_CountDuplicateSpecies(void*, s32*);
-s32 FreeBattle_AllTriosOverLevelLimit(Mon82000258*);
+s32 FreeBattle_AllTriosOverLevelLimit(TeamMonSlot*);
 
 /**
  * Decides the next state of the six-slot menu. Clears `picked`, then, if `mode`
@@ -512,7 +508,7 @@ s32 FreeBattle_AllTriosOverLevelLimit(Mon82000258*);
  * Seen in play: runs when A picks a team on the entry screen.
  */
 s32 FreeBattle_CheckEntryRules(SlotMenu* arg0) {
-    Slot54* found;
+    TeamMonSlot* found;
     s32 sp38;
     s32 sp34;
     s32 ret;
@@ -564,8 +560,8 @@ extern s32 D_8200AC58[];
 void FreeBattle_RentSelectedMon(SlotMenu* arg0) {
     arg0->unk_734 = 1;
     arg0->unk_784 |= 1;
-    *(Words80*)arg0->slots[arg0->cur].unk04 = (*arg0->records)[arg0->recordIndex];
-    arg0->slots[arg0->cur].flag = 0;
+    *(Words80*)&arg0->slots[arg0->cur].mon = (*arg0->records)[arg0->recordIndex];
+    arg0->slots[arg0->cur].flags = 0;
     arg0->unk_2FC[arg0->cur] = 0;
     D_8200AC58[(arg0->unk_48 * 6 + arg0->cur) % 24] = -1;
 }
@@ -670,7 +666,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
       else
         if (next == 1)
       {
-        if (((Slot54 *) (arg0 + 0xE4))[*((s32 *) (((s8 *) arg0) + 0x300))].flag & 0x40) // FAKE: decomp slop, raw pointer casts stand in for struct fields
+        if (((TeamMonSlot *) (arg0 + 0xE4))[*((s32 *) (((s8 *) arg0) + 0x300))].flags & 0x40) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
           func_8003F6AC(2);
           FreeBattle_SetEntryScreenState(arg0, 3, 0);
@@ -751,7 +747,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *arg0)
         if (next == 1)
       {
         func_8003F6AC(2);
-        if (((Slot54 *) (arg0 + 0xE4))[*((s32 *) (((s8 *) arg0) + 0x300))].flag & 1) // FAKE: decomp slop, raw pointer casts stand in for struct fields
+        if (((TeamMonSlot *) (arg0 + 0xE4))[*((s32 *) (((s8 *) arg0) + 0x300))].flags & 1) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
           FreeBattle_SetEntryScreenState(arg0, 8, 0);
         }

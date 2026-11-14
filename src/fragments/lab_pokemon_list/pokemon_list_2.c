@@ -25,7 +25,7 @@ extern u8 D_8910A860[];
 extern Gfx D_80060270[];
 extern Gfx D_80073450[];
 extern u8 D_8910AB08[];
-extern M2C_UNK D_800734A8;
+extern u8 D_800734A8[];
 extern char D_8910DAF8[];
 extern char D_8910DB04[];
 extern char D_8910DB14[];
@@ -194,7 +194,7 @@ typedef struct Label89100FC4 {
     const char* str;
 } Label89100FC4;
 extern Entry89100FC4 D_8006A9D4[];
-extern M2C_UNK D_800734A8;
+extern u8 D_800734A8[];
 extern char D_8910DBAC[];
 s32 BattleMon_GetMoveIndexChecked(s32, s32);
 void func_89100FC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -225,7 +225,7 @@ M2C_UNK func_8001AA60(s32, s32, s32);               /* extern */
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);              /* extern */
 M2C_UNK func_8001AB6C();                            /* extern */
 M2C_UNK func_8001ABBC();                            /* extern */
-extern M2C_UNK D_800734A8;
+extern u8 D_800734A8[];
 extern M2C_UNK D_8910DBB4;
 extern M2C_UNK D_8910DBBC;
 extern M2C_UNK D_8910DBC0;
@@ -240,7 +240,7 @@ void LabPCList_DrawLocation(s32 arg0, s32 arg1, s8 ***arg2) {
     s32 temp_v0;
 
     func_8001AB6C();
-    func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
+    func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
     temp_v0 = M2C_FIELD(**arg2, s32 *, 4);
     switch (temp_v0) {                              /* irregular */
     case 32:
