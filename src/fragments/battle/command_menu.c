@@ -595,8 +595,8 @@ s32 BattleScene_HandlePlayerFaintedSwitch(ActivePokemon* arg0, ActivePokemon* ar
     ActivePokemonState* state = &arg0->state;
     ActivePokemonState* other = &arg1->state;
 
-    if (M2C_FIELD(arg0->sessionTeams, u8*, 1) == 1) {
-        c1 = c2 = &D_800AAF50[M2C_FIELD(M2C_FIELD(arg0->sessionTeams, s8**, 8), u8*, 1) * 0x24];
+    if (arg0->sessionTeams->tagTeamSize == 1) {
+        c1 = c2 = &D_800AAF50[M2C_FIELD(arg0->sessionTeams->teamMember[0], u8*, 1) * 0x24];
     } else {
         team = M2C_FIELD(arg0, s8**, 0x85C);
         c1 = &D_800AAF50[M2C_FIELD(M2C_FIELD(team, s8**, 8), u8*, 1) * 0x24];
@@ -617,7 +617,7 @@ s32 BattleScene_HandlePlayerFaintedSwitch(ActivePokemon* arg0, ActivePokemon* ar
         state->selectedCommandOption = 2;
         other->selectedCommandOption = 3;
         other->selectedCommand = 1;
-        BattleMenu_TakeControlOnCButtonPress(arg0, c1, c2, M2C_FIELD(arg0->sessionTeams, u8*, 1));
+        BattleMenu_TakeControlOnCButtonPress(arg0, c1, c2, arg0->sessionTeams->tagTeamSize);
         BattleMenu_UpdateSwitchMenu(arg0);
         return 1;
     }
@@ -699,8 +699,8 @@ void func_8210D6BC(ActivePokemon* arg0) {
     if (M2C_FIELD(state, s32*, 0x10) != 0) {
         return;
     }
-    if (M2C_FIELD(arg0->sessionTeams, u8*, 1) == 1U) {
-        c1 = c2 = &D_800AAF50[M2C_FIELD(M2C_FIELD(arg0->sessionTeams, s8**, 8), u8*, 1) * 0x24];
+    if (arg0->sessionTeams->tagTeamSize == 1U) {
+        c1 = c2 = &D_800AAF50[M2C_FIELD(arg0->sessionTeams->teamMember[0], u8*, 1) * 0x24];
     } else {
         team = M2C_FIELD(arg0, s8**, 0x85C);
         c1 = &D_800AAF50[M2C_FIELD(M2C_FIELD(team, s8**, 8), u8*, 1) * 0x24];
@@ -712,7 +712,7 @@ void func_8210D6BC(ActivePokemon* arg0) {
         buttons = M2C_FIELD(c2, u16*, 8) | M2C_FIELD(c1, u16*, 8);
         if (buttons & 0x4000) {
             M2C_FIELD(state, s32*, 4) = 2;
-            BattleMenu_TakeControlOnBPress(arg0, c1, c2, M2C_FIELD(arg0->sessionTeams, u8*, 1));
+            BattleMenu_TakeControlOnBPress(arg0, c1, c2, arg0->sessionTeams->tagTeamSize);
         } else if (buttons & 0x1000) {
             M2C_FIELD(state, s32*, 4) = 3;
         } else {

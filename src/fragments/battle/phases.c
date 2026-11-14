@@ -92,7 +92,7 @@ void BattleScene_ReactionMultiHitEnd(CameraNode* arg0, void* arg1) {
     if (D_8219A540->displayObject.objectType == 0x98) {
         sp1C = 0xF;
     } else if (temp_v1->unk_0A == 0xFF) {
-        sp1C = M2C_FIELD((((ActivePokemon*)D_8219A544))->displayObject.transformAnim.data, u16*, 0xA) - temp_v1->unk_06;
+        sp1C = M2C_FIELD(((ActivePokemon*)D_8219A544)->displayObject.transformAnim.data, u16*, 0xA) - temp_v1->unk_06;
     } else {
         sp1C = temp_v1->unk_0A - temp_v1->unk_06;
     }
@@ -1001,18 +1001,18 @@ void BattleScene_PhaseTransform(CameraNode* arg0) {
                 func_821233EC(arg0, (ActivePokemon*)D_8219A544);
                 if (sp30[0x4D] & 0x10) {
                     if (sp2C[0x4E] & 8) {
-                        M2C_FIELD(sp28, s16*, 0xC0) = M2C_FIELD((((ActivePokemon*)D_8219A544))->sessionTeams, s16*, 2) = M2C_FIELD(sp24, s16*, 0xC2);
-                    } else if (M2C_FIELD(D_8219A540->sessionTeams, s16*, 2) == 0x98) {
-                        M2C_FIELD(sp28, s16*, 0xC0) = M2C_FIELD((((ActivePokemon*)D_8219A544))->sessionTeams, s16*, 2) = sp2C[0xB];
+                        M2C_FIELD(sp28, s16*, 0xC0) = ((ActivePokemon*)D_8219A544)->sessionTeams->displayModel = M2C_FIELD(sp24, s16*, 0xC2);
+                    } else if (D_8219A540->sessionTeams->displayModel == 0x98) {
+                        M2C_FIELD(sp28, s16*, 0xC0) = ((ActivePokemon*)D_8219A544)->sessionTeams->displayModel = sp2C[0xB];
                     } else {
-                        M2C_FIELD(sp28, s16*, 0xC0) = M2C_FIELD((((ActivePokemon*)D_8219A544))->sessionTeams, s16*, 2) = M2C_FIELD(D_8219A540->sessionTeams, s16*, 2);
+                        M2C_FIELD(sp28, s16*, 0xC0) = ((ActivePokemon*)D_8219A544)->sessionTeams->displayModel = D_8219A540->sessionTeams->displayModel;
                     }
                 } else if (sp2C[0x4E] & 8) {
-                    M2C_FIELD((((ActivePokemon*)D_8219A544))->sessionTeams, s16*, 2) = M2C_FIELD(sp24, s16*, 0xC2);
-                } else if (M2C_FIELD(D_8219A540->sessionTeams, s16*, 2) == 0x98) {
-                    M2C_FIELD((((ActivePokemon*)D_8219A544))->sessionTeams, s16*, 2) = sp2C[0xB];
+                    ((ActivePokemon*)D_8219A544)->sessionTeams->displayModel = M2C_FIELD(sp24, s16*, 0xC2);
+                } else if (D_8219A540->sessionTeams->displayModel == 0x98) {
+                    ((ActivePokemon*)D_8219A544)->sessionTeams->displayModel = sp2C[0xB];
                 } else {
-                    M2C_FIELD((((ActivePokemon*)D_8219A544))->sessionTeams, s16*, 2) = M2C_FIELD(D_8219A540->sessionTeams, s16*, 2);
+                    ((ActivePokemon*)D_8219A544)->sessionTeams->displayModel = D_8219A540->sessionTeams->displayModel;
                 }
                 *M2C_FIELD(D_8219A544, u8**, 0x85C) |= 0x80;
                 sBattleScene.scene->phaseStep++;
@@ -1030,7 +1030,7 @@ void BattleScene_PhaseTransform(CameraNode* arg0) {
             break;
 
         case 3:
-            Audio_PlayMoveSound(sp30[0x5A], (((ActivePokemon*)D_8219A544))->displayObject.objectType, 0);
+            Audio_PlayMoveSound(sp30[0x5A], ((ActivePokemon*)D_8219A544)->displayObject.objectType, 0);
             func_82104C68((ActivePokemon*)D_8219A544, 0x12);
             func_821233EC(arg0, (ActivePokemon*)D_8219A544);
             sBattleScene.scene->phaseStep++;
@@ -1038,7 +1038,7 @@ void BattleScene_PhaseTransform(CameraNode* arg0) {
 
         case 4:
             M2C_FIELD(D_8219A544, u8**, 0x9CC)[1] |= 1;
-            (((ActivePokemon*)D_8219A544))->thumbnail.displayObject.node.flags |= 1;
+            ((ActivePokemon*)D_8219A544)->thumbnail.displayObject.node.flags |= 1;
             func_82107160((ActivePokemon*)D_8219A544);
             func_821233EC(arg0, (ActivePokemon*)D_8219A544);
             if (func_82105724((ActivePokemon*)D_8219A544, 0x32) != 0) {
@@ -1281,7 +1281,7 @@ void BattleScene_PhaseFlyUp(CameraNode* arg0) {
         case 1:
             BattleAnim_ApproachF(&sBattleScene.scene->unk_84.y, 0.0f, 0.06f);
             func_8212311C(arg0, (ActivePokemon*)D_8219A544, sBattleScene.scene->unk_84.y);
-            if (((ActivePokemon*)D_8219A544)->displayObject.position.y - D_FLT_82189354[(((ActivePokemon*)D_8219A544))->displayObject.objectType][0] >= 800.0f) {
+            if (((ActivePokemon*)D_8219A544)->displayObject.position.y - D_FLT_82189354[((ActivePokemon*)D_8219A544)->displayObject.objectType][0] >= 800.0f) {
                 BattleMessage_ShowForSide(D_8219A520 + 0x148, sBattleScene.scene->actingSide);
                 sBattleScene.scene->phaseStep++;
             }
