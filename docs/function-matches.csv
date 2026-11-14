@@ -640,6 +640,28 @@ func_811177E8,0x811177E8,src/fragments/audio_and_gb_emulator/gb_apu_2.c,func_811
 func_81117AFC,0x81117AFC,src/fragments/audio_and_gb_emulator/gb_apu_2.c,func_81117AFC,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
 func_81117B04,0x81117B04,src/fragments/audio_and_gb_emulator/gb_apu_2.c,func_81218104_jp,s1,stadium1:src/fragments/gb_tower_emulator/gb_tower_emulator_86CB0.c (VERSION_JP),c
 func_81000020,0x81000020,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_81000170,0x81000170,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_8100024C,0x8100024c,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_810002A0,0x810002a0,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_8100037C,0x8100037c,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_81000400,0x81000400,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_81000438,0x81000438,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_81000480,0x81000480,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_810004BC,0x810004bc,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_81000510,0x81000510,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_81000670,0x81000670,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_81000CC8,0x81000cc8,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_81000F18,0x81000f18,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_81001A64,0x81001a64,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_81001B24,0x81001b24,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_81001C40,0x81001c40,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_81001C94,0x81001c94,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_81001CE0,0x81001ce0,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_81001F7C,0x81001f7c,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_81001FD0,0x81001fd0,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_81002108,0x81002108,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_81002150,0x81002150,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
+func_81002208,0x81002208,src/fragments/unidentified_001/unidentified_001.c,,asm,,asm
 func_81200020,0x81200020,src/fragments/disk_error_screen/disk_error_screen.c,func_81200020,hand,,c
 func_81200190,0x81200190,src/fragments/disk_error_screen/disk_error_screen.c,func_81200190,hand,,c
 func_8120023C,0x8120023C,src/fragments/disk_error_screen/disk_error_screen.c,Leo_DrawErrorScreen,hand,,c

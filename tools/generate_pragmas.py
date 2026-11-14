@@ -29,24 +29,49 @@ def digest(data):
     return hashlib.sha256(data).hexdigest()
 
 
-def make_section(data, start, end, base, name, ram_end=None, entries=()):
+def make_section(data, start, end, base, name, ram_end=None, entries=(), stub_entries=()):
     context = spimdisasm.common.Context()
     context.changeGlobalSegmentRanges(0, len(data), base,
                                       ram_end or base + len(data))
     for entry in sorted(set(entries)):
         if start <= entry < end:
             context.globalSegment.addFunction(base + entry, vromAddress=entry)
+    # Entry stub table targets are exported entry points: let them end the
+    # function before them.
+    for entry in sorted(set(stub_entries)):
+        if start <= entry < end:
+            symbol = context.globalSegment.addFunction(base + entry, vromAddress=entry)
+            symbol.isUserDeclared = True
     section = spimdisasm.mips.sections.SectionText(
         context, start, end, base + start, name, data, 0, None)
     section.analyze()
     return section
 
 
-def merge_owners(section, data, base, transfers):
+def entry_stub_table(data, entry):
+    """Return the end offset and targets of a `j target; nop` table at the entry.
+
+    Fragment 001 (the model callback library) starts with such a table: model data
+    calls its callbacks through fixed table slots. The slots are exported entry
+    points, so their local targets are function starts, not branch continuations.
+    A table needs at least two slots.
+    """
+    position, targets = entry, []
+    while position + 8 <= len(data):
+        word, delay = struct.unpack_from(">II", data, position)
+        if word >> 26 != 2 or delay != 0:
+            break
+        targets.append((word & 0x3FFFFFF) << 2)
+        position += 8
+    return (position, targets) if len(targets) > 1 else (entry, [])
+
+
+def merge_owners(section, data, base, transfers, stub_end=None):
     """Do not split ordinary branch destinations or switch cases into functions.
 
     Call targets remain separate. Tail jumps to known local call targets also
     remain separate; other non-call edges conservatively share one asm owner.
+    Slots of an entry stub table (see entry_stub_table) never merge owners.
     """
     functions = section.symbolList
     starts = [function.vromStart for function in functions]
@@ -62,6 +87,8 @@ def merge_owners(section, data, base, transfers):
             edges.append((position, instruction.getBranchVramGeneric() - base,
                           instruction.isUnconditionalBranch()))
         elif instruction.isJumpWithAddress() and not instruction.doesLink():
+            if stub_end is not None and position < stub_end:
+                continue
             edges.append((position, instruction.getInstrIndexAsVram() - base, True))
     for transfer in transfers:
         if transfer["transfer"] == "jump" and transfer["status"].startswith("resolved_"):
@@ -86,6 +113,10 @@ def merge_owners(section, data, base, transfers):
             continue
         for index in range(left, right):
             links[find(index + 1)] = find(index)
+    if stub_end is not None:
+        # The stub table itself stays one owner.
+        for index in range(1, bisect_right(starts, stub_end - 4)):
+            links[find(index)] = find(0)
     grouped = []
     for index, function in enumerate(functions):
         root = find(index)
@@ -146,6 +177,9 @@ def generate(rom, mapping, sections, flow):
         base = int(metadata["link_base"], 0)
         owner = f"fragments/fragment{index:03d}_{int(metadata['rom_start'], 0):X}"
         entries = [int(metadata["entry_offset"], 0)]
+        stub_end, stub_targets = entry_stub_table(data, entries[0])
+        stub_entries = [target - (base & 0x0FFFFFFF) for target in stub_targets
+                        if 0 <= target - (base & 0x0FFFFFFF) < stop]
         for transfer in detail["transfers"]:
             if transfer["status"] == "known_initializer_candidates_runtime_unresolved":
                 entries.extend(int(target, 0) for target in transfer.get("targets", []))
@@ -156,19 +190,23 @@ def generate(rom, mapping, sections, flow):
                       "data": data, "start": start, "end": stop, "base": base,
                       "ram_end": base + max(len(data), int(metadata["ram_size"], 0)),
                       "image_index": index, "entries": entries,
+                      "stub_end": stub_end if stub_targets else None,
+                      "stub_entries": stub_entries,
                       "transfers": detail["transfers"], "metadata": metadata,
                       "reused_slot": slot_counts[metadata["link_base"]] > 1})
     source_blocks = {}
     owners = []
     for spec in specs:
         section = make_section(spec["data"], spec["start"], spec["end"], spec["base"],
-                               spec["owner"], spec["ram_end"], spec["entries"])
+                               spec["owner"], spec["ram_end"], spec["entries"],
+                               spec.get("stub_entries", ()))
         for function in section.symbolList:
             name = f"func_{function.vram:08X}"
             if spec.get("reused_slot"):
                 name += f"_{spec['image_index']:03d}"
             function.contextSym.name = name
-        for members in merge_owners(section, spec["data"], spec["base"], spec["transfers"]):
+        for members in merge_owners(section, spec["data"], spec["base"], spec["transfers"],
+                                    spec.get("stub_end")):
             start, stop = members[0].vromStart, members[-1].vromEnd
             symbol = members[0].getName()
             if any(function.hasUnimplementedIntrs for function in members):
