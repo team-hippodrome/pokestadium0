@@ -897,7 +897,7 @@ extern s32 sFadeTimer;
 extern s32 sFadingOut;
 /*
  * Second name for sFadeTimer. The fade-out store in this function family
- * (also FreeBattle_UpdateFade, func_8900429C, LabPCList_UpdateFade, Pokedex_DrawFadeFrame) does not
+ * (also FreeBattle_UpdateFade, LabTerminal_UpdateFade, LabPCList_UpdateFade, Pokedex_DrawFadeFrame) does not
  * share the counter's address with the load before it, which only happens
  * when the two accesses name different symbols.
  */

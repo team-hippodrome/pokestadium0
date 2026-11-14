@@ -8,7 +8,7 @@
 extern s32 pad_D_8831A4DC[8];
 #include "m2c_macros.h"
 void ScrollList_SetItems(s8*, s32, s8*);
-void func_8900020C(void);
+void LabItem_Unused(void);
 s32 LabItem_ComputeRemainingCapacity(s32 arg0, ByteMatrix* arg1);
 s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, ByteMatrix* arg1);
 s32 LabItem_FindOrAllocateGamePakBoxSlot(LabItemSaveSlot* arg0, s32 arg1, char* arg2);
@@ -182,41 +182,41 @@ void LabItem_DrawScreen(LabItemScreen*);
  * Seen in play (2026-11-13) ran on レポートしてやめる (ないようが へんこうされています) after moving items in せいとん >
  * どうぐをいどうする.
  */
-void LabItem_SaveChanges(LabItemScreen* arg0) {
+void LabItem_SaveChanges(LabItemScreen* screen) {
     s32 locked = 0;
     s32 flush = 0;
 
-    if ((arg0->dirty[0] != 0) || (arg0->dirty[1] != 0)) {
+    if ((screen->dirty[0] != 0) || (screen->dirty[1] != 0)) {
         locked = 1;
     }
     if (locked) {
         func_80022118(D_89019108);
     }
-    if (arg0->dirty[0] != 0) {
-        LabItem_WriteDeckBack(0x23, D_89019108, 0, &arg0->itemTables[0], 0, NULL, -1);
+    if (screen->dirty[0] != 0) {
+        LabItem_WriteDeckBack(0x23, D_89019108, 0, &screen->itemTables[0], 0, NULL, -1);
     }
-    if (arg0->dirty[1] != 0) {
-        LabItem_WriteDeckBack(0x22, D_89019108, 0, &arg0->itemTables[1], 0, NULL, -1);
+    if (screen->dirty[1] != 0) {
+        LabItem_WriteDeckBack(0x22, D_89019108, 0, &screen->itemTables[1], 0, NULL, -1);
     }
-    if (arg0->gamePakSlot != -1) {
-        if (arg0->saveSlots[arg0->gamePakSlot].present != 0) {
-            if (arg0->dirty[2] != 0) {
+    if (screen->gamePakSlot != -1) {
+        if (screen->saveSlots[screen->gamePakSlot].present != 0) {
+            if (screen->dirty[2] != 0) {
                 flush = 1;
-                if (arg0->itemTables[2].count == 0) {
-                    func_800245E0(0x12, arg0->gamePakSlot);
+                if (screen->itemTables[2].count == 0) {
+                    func_800245E0(0x12, screen->gamePakSlot);
                 } else {
-                    LabItem_WriteDeckBack(0x12, 0, arg0->gamePakSlot, &arg0->itemTables[2], 0, NULL, -1);
+                    LabItem_WriteDeckBack(0x12, 0, screen->gamePakSlot, &screen->itemTables[2], 0, NULL, -1);
                 }
             }
-        } else if (arg0->itemTables[2].count > 0) {
+        } else if (screen->itemTables[2].count > 0) {
             flush = 1;
-            LabItem_WriteDeckBack(0x12, 0, arg0->gamePakSlot, &arg0->itemTables[2], 0, (char*)D_8901911C, D_89019118);
+            LabItem_WriteDeckBack(0x12, 0, screen->gamePakSlot, &screen->itemTables[2], 0, (char*)D_8901911C, D_89019118);
         }
     }
     if (locked) {
         if (func_8002207C(D_89019108) == 0) {
             func_8002D7D4(D_89019108);
-            LabItem_DrawScreen(arg0);
+            LabItem_DrawScreen(screen);
         }
         func_80022188(D_89019108);
     }
@@ -230,11 +230,11 @@ void LabItem_SaveChanges(LabItemScreen* arg0) {
  * Seen in play (2026-11-13) ran once when B left the item sort screen after nothing had been moved;
  * the screen closed without asking to save.
  */
-s32 LabItem_HasUnsavedChanges(LabItemScreen* arg0) {
+s32 LabItem_HasUnsavedChanges(LabItemScreen* screen) {
     s32 i;
 
     for (i = 0; i < 3; i++) {
-        if (arg0->dirty[i] != 0) {
+        if (screen->dirty[i] != 0) {
             return 1;
         }
     }
@@ -249,9 +249,9 @@ void Save_DrawReportingWindow(SavePrompt*);
 s32 LabItem_UpdateConfirmWindow(LabItemConfirmWindow*);
 void LabItem_InitDeleteDataWindow(LabItemDeleteDataWindow*, s32, s32, LabItemSaveSlot*);
 s32 LabItem_UpdateDeleteDataCursor(LabItemDeleteDataWindow*);
-void func_89002E58(LabItemSaveDataWindow*, s32, s32, LabItemSaveSlot*, ByteMatrix*);
-s32 func_8900352C(LabItemSaveDataWindow*);
-void func_890022D0(LabItemOrganizeWindow*);
+void LabItem_InitSaveDataWindow(LabItemSaveDataWindow*, s32, s32, LabItemSaveSlot*, ByteMatrix*);
+s32 LabItem_UpdateSaveDataWindow(LabItemSaveDataWindow*);
+void LabItem_OpenTargetList(LabItemOrganizeWindow*);
 s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow*);
 extern s8 D_8901871C[];
 extern s8 D_89018728[];
@@ -262,86 +262,86 @@ extern s8 D_8901876C[];
  * Runs the item organizer's state machine for one frame.
  * Seen in play (2026-11-12): ran どうぐのせいり.
  */
-s32 LabItem_UpdateScreen(LabItemScreen* arg0) {
+s32 LabItem_UpdateScreen(LabItemScreen* screen) {
     s32 ret = 0;
     s32 res;
 
-    switch (arg0->state) {
+    switch (screen->state) {
         case 1:
-            res = LabItem_UpdateOrganizeWindow(&arg0->organizeWindow);
+            res = LabItem_UpdateOrganizeWindow(&screen->organizeWindow);
             if (res == -1) {
-                if (LabItem_HasUnsavedChanges(arg0) != 0) {
-                    arg0->state = 2;
-                    SavePrompt_Init(&arg0->savePrompt, 0xCA, 0xAD);
+                if (LabItem_HasUnsavedChanges(screen) != 0) {
+                    screen->state = 2;
+                    SavePrompt_Init(&screen->savePrompt, 0xCA, 0xAD);
                 } else {
                     ret = 1;
                 }
             } else if (res > 0) {
                 switch (res) {
                     case 1:
-                        arg0->state = 3;
-                        LabItem_InitConfirmWindow(&arg0->confirmWindow, 0xBA, 0xAE, D_8901871C, D_89018728);
-                        arg0->confirmWindow.choice.cursor = 1;
+                        screen->state = 3;
+                        LabItem_InitConfirmWindow(&screen->confirmWindow, 0xBA, 0xAE, D_8901871C, D_89018728);
+                        screen->confirmWindow.choice.cursor = 1;
                         break;
                 }
             }
             break;
         case 2:
-            res = SavePrompt_Update(&arg0->savePrompt);
+            res = SavePrompt_Update(&screen->savePrompt);
             if (res == -1) {
-                arg0->state = 1;
+                screen->state = 1;
             } else if (res > 0) {
                 ret = 1;
                 switch (res) {
                     case 2:
                         break;
                     case 1:
-                        Save_DrawReportingWindow(&arg0->savePrompt);
-                        LabItem_SaveChanges(arg0);
+                        Save_DrawReportingWindow(&screen->savePrompt);
+                        LabItem_SaveChanges(screen);
                         break;
                 }
             }
             break;
         case 3:
-            res = LabItem_UpdateConfirmWindow(&arg0->confirmWindow);
+            res = LabItem_UpdateConfirmWindow(&screen->confirmWindow);
             if (res == -1) {
-                arg0->state = 1;
+                screen->state = 1;
             } else if (res == 1) {
-                LabItem_InitDeleteDataWindow(&arg0->deleteDataWindow, 0x2B, 0x5C, arg0->saveSlots);
-                arg0->state = 4;
+                LabItem_InitDeleteDataWindow(&screen->deleteDataWindow, 0x2B, 0x5C, screen->saveSlots);
+                screen->state = 4;
             }
             break;
         case 4:
-            res = LabItem_UpdateDeleteDataCursor(&arg0->deleteDataWindow);
+            res = LabItem_UpdateDeleteDataCursor(&screen->deleteDataWindow);
             if (res == -1) {
-                arg0->state = 1;
-                arg0->itemTables[2].count = 0;
+                screen->state = 1;
+                screen->itemTables[2].count = 0;
             } else if (res == 1) {
-                LabItem_ReadDeckEntries(0x12, 0, arg0->deleteDataWindow.menu.cursor, &arg0->itemTables[2]);
-                func_89002E58(&arg0->saveDataWindow, 0xD6, 0x45, &arg0->saveSlots[arg0->deleteDataWindow.menu.cursor], &arg0->itemTables[2]);
-                arg0->state = 5;
+                LabItem_ReadDeckEntries(0x12, 0, screen->deleteDataWindow.menu.cursor, &screen->itemTables[2]);
+                LabItem_InitSaveDataWindow(&screen->saveDataWindow, 0xD6, 0x45, &screen->saveSlots[screen->deleteDataWindow.menu.cursor], &screen->itemTables[2]);
+                screen->state = 5;
             }
             break;
         case 5:
-            res = func_8900352C(&arg0->saveDataWindow);
+            res = LabItem_UpdateSaveDataWindow(&screen->saveDataWindow);
             if (res == -1) {
-                arg0->state = 4;
+                screen->state = 4;
             } else if (res == 1) {
-                arg0->state = 6;
-                LabItem_InitConfirmWindow(&arg0->confirmWindow, 0xBA, 0xAE, D_89018760, D_8901876C);
-                arg0->confirmWindow.choice.cursor = 1;
+                screen->state = 6;
+                LabItem_InitConfirmWindow(&screen->confirmWindow, 0xBA, 0xAE, D_89018760, D_8901876C);
+                screen->confirmWindow.choice.cursor = 1;
             }
             break;
         case 6:
-            res = LabItem_UpdateConfirmWindow(&arg0->confirmWindow);
+            res = LabItem_UpdateConfirmWindow(&screen->confirmWindow);
             if (res == -1) {
-                arg0->state = 5;
+                screen->state = 5;
             } else if (res == 1) {
-                arg0->gamePakSlot = arg0->deleteDataWindow.menu.cursor;
-                arg0->saveSlots[arg0->gamePakSlot].present = 0;
-                arg0->itemTables[2].count = 0;
-                func_890022D0(&arg0->organizeWindow);
-                arg0->state = 1;
+                screen->gamePakSlot = screen->deleteDataWindow.menu.cursor;
+                screen->saveSlots[screen->gamePakSlot].present = 0;
+                screen->itemTables[2].count = 0;
+                LabItem_OpenTargetList(&screen->organizeWindow);
+                screen->state = 1;
             }
             break;
     }
@@ -357,18 +357,18 @@ void Font_SetColorForFlags(s32);
  * Draws one terminal menu row with its highlight or frame.
  * Seen in play (2026-11-12): rows ポケモンを いどうする / どうぐを いどうする / ボックスを いどうする.
  */
-void LabTerminal_DrawMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5) {
-    s32 temp_v0 = *arg5;
+void LabTerminal_DrawMenuRow(s32 x, s32 y, char* text, s32 index, s32 flags, s32* width) {
+    s32 temp_v0 = *width;
 
-    if (arg4 & 8) {
-        func_8002A354(arg0 + 3, arg1 + 3, temp_v0 - 6, 0x1A, D_8900A6E8);
-    } else if (arg4 & 2) {
-        Ui_DrawRoundedFrame(arg0 + 2, arg1 + 2, temp_v0 - 4, 0x1C, D_80073520);
+    if (flags & 8) {
+        func_8002A354(x + 3, y + 3, temp_v0 - 6, 0x1A, D_8900A6E8);
+    } else if (flags & 2) {
+        Ui_DrawRoundedFrame(x + 2, y + 2, temp_v0 - 4, 0x1C, D_80073520);
     }
     Font_BeginTranslucentTextRendering();
-    Font_SetColorForFlags(arg4);
+    Font_SetColorForFlags(flags);
     Font_SetActive(0x10, 0);
-    Font_Printf(arg0 + 8, arg1 + 4, arg2);
+    Font_Printf(x + 8, y + 4, text);
     Font_EndTexturedTextRendering();
 }
 
@@ -377,17 +377,17 @@ M2C_UNK func_80027804();
  * Sets up a terminal menu window with its rows and title.
  * Seen in play (2026-11-12) in せいとん: ran on entry as the せいとん menu window appeared.
  */
-void LabTerminal_InitMenuWindow(LabTerminalMenuWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, char* arg5, s32 arg6, char* arg7, s32 arg8, char* arg9) {
+void LabTerminal_InitMenuWindow(LabTerminalMenuWindow* win, s32 x, s32 y, s32 width, s32 height, char* names, s32 count, char* descriptions, s32 descriptionLines, char* title) {
 
-    Window_SetRect((s8*)&arg0->window, arg1, arg2, arg3, arg4);
-    arg0->window.state = 0;
-    arg0->window.animTimer = 0;
-    arg0->window.frame.style = 0x801;
-    arg0->window.title = arg9;
-    func_80027804(&arg0->items, arg5, arg6, arg6);
-    Menu_Init((s8*)&arg0->menu, (s32)&arg0->items, (s32)arg0->itemFlags, (s32)LabTerminal_DrawMenuRow, arg3 - 0xC, 0x20);
-    arg0->descriptions = (char**)arg7;
-    arg0->descriptionLines = arg8;
+    Window_SetRect((s8*)&win->window, x, y, width, height);
+    win->window.state = 0;
+    win->window.animTimer = 0;
+    win->window.frame.style = 0x801;
+    win->window.title = title;
+    func_80027804(&win->items, names, count, count);
+    Menu_Init((s8*)&win->menu, (s32)&win->items, (s32)win->itemFlags, (s32)LabTerminal_DrawMenuRow, width - 0xC, 0x20);
+    win->descriptions = (char**)descriptions;
+    win->descriptionLines = descriptionLines;
 }
 
 extern Color_RGBA8 D_8900A6FC;
@@ -396,24 +396,24 @@ extern Color_RGBA8 D_8900A700;
  * Draws a terminal menu window.
  * Seen in play (2026-11-12): the せいとん menu with its description.
  */
-void LabTerminal_DrawMenuWindow(LabTerminalMenuWindow* arg0) {
+void LabTerminal_DrawMenuWindow(LabTerminalMenuWindow* win) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 sp38;
     s32 h;
 
     if (func_8002AE6C() == 0) {
-        h = (arg0->menu.items->count << 5) + 8;
-        Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->window.frame.y + h + 5, arg0->window.frame.width, D_8007356C);
+        h = (win->menu.items->count << 5) + 8;
+        Ui_DrawTexturedDivider(win->window.frame.x, win->window.frame.y + h + 5, win->window.frame.width, D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(arg0->window.frame.x + 6, arg0->window.frame.y + 6, arg0->window.frame.width - 0xC, h, *(Color_RGBA8*)&D_8900A5BC);
-        Ui_FillRectPrimEnvColor(arg0->window.frame.x + 6, arg0->window.frame.y + h + 0xC, arg0->window.frame.width - 0xC, arg0->descriptionLines * 0x1C, D_8900A6FC, D_8900A700);
-        sp38 = arg0->window.frame.width - 0xC;
-        Menu_DrawItems(&arg0->menu, arg0->window.frame.x + 6, arg0->window.frame.y + 0xA, 0xFFEF, (s32)&sp38);
+        func_80029028(win->window.frame.x + 6, win->window.frame.y + 6, win->window.frame.width - 0xC, h, *(Color_RGBA8*)&D_8900A5BC);
+        Ui_FillRectPrimEnvColor(win->window.frame.x + 6, win->window.frame.y + h + 0xC, win->window.frame.width - 0xC, win->descriptionLines * 0x1C, D_8900A6FC, D_8900A700);
+        sp38 = win->window.frame.width - 0xC;
+        Menu_DrawItems(&win->menu, win->window.frame.x + 6, win->window.frame.y + 0xA, 0xFFEF, (s32)&sp38);
         Font_BeginTranslucentTextRendering();
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         Font_SetActive(8, 0);
         Font_SetLineHeight(0x1C);
-        Font_Printf(arg0->window.frame.x + 0xE, arg0->window.frame.y + h + 0x10, arg0->descriptions[arg0->menu.cursor]);
+        Font_Printf(win->window.frame.x + 0xE, win->window.frame.y + h + 0x10, win->descriptions[win->menu.cursor]);
         Font_EndTexturedTextRendering();
     }
 }
@@ -422,23 +422,23 @@ void LabTerminal_DrawMenuWindow(LabTerminalMenuWindow* arg0) {
  * Handles input on a terminal menu window while it is open.
  * Seen in play (2026-11-12): moved over the せいとん menu.
  */
-s32 LabTerminal_UpdateMenuWindow(LabTerminalMenuWindow* arg0) {
+s32 LabTerminal_UpdateMenuWindow(LabTerminalMenuWindow* win) {
     s32 ret = 0;
     s32 temp_v0;
 
-    switch (arg0->window.state) {
+    switch (win->window.state) {
         case 1:
         case 2:
             break;
         default:
             return 0;
     }
-    if (Menu_UpdateCursor(&arg0->menu) == 0) {
+    if (Menu_UpdateCursor(&win->menu) == 0) {
         temp_v0 = func_8002BC14(D_800603C0);
         if (temp_v0 == -1) {
             ret = -1;
         } else if (temp_v0 == 1) {
-            ret = arg0->menu.cursor + 1;
+            ret = win->menu.cursor + 1;
         }
     }
     return ret;
@@ -450,14 +450,12 @@ extern char D_890188F4[];
 void LabTerminal_InitMenuWindow(LabTerminalMenuWindow*, s32, s32, s32, s32, char*, s32, char*, s32, char*);
 
 /**
- * Calls LabTerminal_InitMenuWindow with its own first argument passed straight through
- * followed by 0x30, 0x5C, 0x170, 0xCE, D_8900A704, 3, D_8900A710, 3 and
- * D_890188F4. What LabTerminal_InitMenuWindow does (it is still assembly) and what the
- * arguments mean are not established.
- * Seen in play (2026-11-12) in せいとん: set up the first menu: ポケモンを いどうする, どうぐを いどうする, ボックスを いどうする.
+ * Sets up the せいとん menu window at (0x30, 0x5C), 0x170 x 0xCE: ポケモンを いどうする,
+ * どうぐを いどうする and ボックスを いどうする, each with a three-line description.
+ * Seen in play (2026-11-14) in せいとん.
  */
-void LabTerminal_InitMainMenu(LabTerminalMenuWindow* arg0) {
-    LabTerminal_InitMenuWindow(arg0, 0x30, 0x5C, 0x170, 0xCE, D_8900A704, 3, D_8900A710, 3, D_890188F4);
+void LabTerminal_InitMainMenu(LabTerminalMenuWindow* win) {
+    LabTerminal_InitMenuWindow(win, 0x30, 0x5C, 0x170, 0xCE, D_8900A704, 3, D_8900A710, 3, D_890188F4);
 }
 
 void BgStage_DrawFrame(void);                            /* extern */
@@ -471,7 +469,7 @@ extern M2C_UNK D_89019110;
  * Draws the GB save summary bar and the background.
  * Seen in play (2026-11-12): the せいとん screen with the 1P サトシ IDNo/12345 bar.
  */
-void LabTerminal_DrawMainScreen(LabTerminalMenuWindow* arg0) {
+void LabTerminal_DrawMainScreen(LabTerminalMenuWindow* win) {
     M2C_UNK *var_a1;
 
     BgStage_DrawFrame();
@@ -482,7 +480,7 @@ void LabTerminal_DrawMainScreen(LabTerminalMenuWindow* arg0) {
     }
     GbSave_DrawSummaryBar(0, var_a1, &D_89018900, D_89019108);
     LabItem_DrawBackground();
-    LabTerminal_DrawMenuWindow(arg0);
+    LabTerminal_DrawMenuWindow(win);
 }
 
 /**
@@ -491,17 +489,17 @@ void LabTerminal_DrawMainScreen(LabTerminalMenuWindow* arg0) {
  * plus 1; any other result returns 0. (Same pattern as FreeBattle_UpdateBattleModeWindow.)
  * Seen in play (2026-11-12): returned the せいとん menu pick.
  */
-s32 LabTerminal_UpdateMainMenu(LabTerminalMenuWindow* arg0) {
+s32 LabTerminal_UpdateMainMenu(LabTerminalMenuWindow* win) {
     s32 result = 0;
     s32 tmp;
 
-    tmp = LabTerminal_UpdateMenuWindow(arg0);
+    tmp = LabTerminal_UpdateMenuWindow(win);
     if (tmp == -1) {
         func_8003F6AC(3);
         result = -1;
     } else if (tmp > 0) {
         func_8003F6AC(2);
-        result = arg0->menu.cursor + 1;
+        result = win->menu.cursor + 1;
     }
     return result;
 }
@@ -513,13 +511,9 @@ s32 func_80025BD8();
 M2C_UNK func_80027FF8(M2C_UNK *, s32);
 
 /**
- * Stores the result of func_80025BD8() in D_89019108. If it is not -1, passes it with
- * &D_89019110 to func_80027FF8. Then calls LabTerminal_InitMainMenu(&D_89028950) and sets
- * D_890289D4 to 1. (The value is re-read from D_89019108 after the store, which is
- * what the retail register allocation needs.) What the value means is not established.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name guessed from the code; comment kept.
+ * Picks the Game Boy cartridge (func_80025BD8) into D_89019108, loads its summary bar
+ * data when there is one, and sets up the せいとん menu.
+ * Seen in play (2026-11-14): ran as せいとん opened.
  */
 void LabTerminal_InitScreen(void) {
     D_89019108 = func_80025BD8();
@@ -535,7 +529,7 @@ extern s32 D_8900A71C;
 extern s32 D_8900A720;
 /*
  * Second name for D_8900A71C. The fade-out store in this function family
- * (also FreeBattle_UpdateFade, func_8900429C, LabPCList_UpdateFade, Pokedex_DrawFadeFrame) does not
+ * (also FreeBattle_UpdateFade, LabTerminal_UpdateFade, LabPCList_UpdateFade, Pokedex_DrawFadeFrame) does not
  * share the counter's address with the load before it, which only happens
  * when the two accesses name different symbols.
  */
@@ -543,7 +537,12 @@ extern s32 D_8900A71C_2;
 extern M2C_UNK D_8901890C;
 M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void func_8002C8D8(Col8900429C*, Col8900429C, f32);
-s32 func_8900429C(s32 arg0) {
+/**
+ * BgStage callback for the fade into and out of せいとん: draws the background and summary
+ * bar and steps the tint over 8 frames.
+ * Seen in play (2026-11-14): ran for the frames before the せいとん menu appeared.
+ */
+s32 LabTerminal_UpdateFade(s32 unused) {
     Col8900429C sp2C;
     M2C_UNK *var_a1;
     s32 n;
@@ -576,7 +575,7 @@ s32 func_8900429C(s32 arg0) {
 
 void Cont_StartReadInputs(void);                            /* extern */
 void Cont_ReadInputs(void);                            /* extern */
-void func_89003650(LabItemScreen*);
+void LabItem_Init(LabItemScreen*);
 void LabItem_DrawScreen(LabItemScreen*);
 M2C_UNK PcSort_Init(M2C_UNK *, M2C_UNK *);        /* extern */
 M2C_UNK PcSort_Free(M2C_UNK *);                   /* extern */
@@ -597,7 +596,7 @@ extern s32 D_890289D4;
  * One frame of the lab terminal.
  * Seen in play (2026-11-12): ran every frame of せいとん.
  */
-s32 LabTerminal_RunFrame(s32 arg0) {
+s32 LabTerminal_RunFrame(s32 unused) {
     s32 sp1C;
     s32 temp_v0;
 
@@ -617,7 +616,7 @@ s32 LabTerminal_RunFrame(s32 arg0) {
                 PcSort_Init(&D_89019B98, &D_89018918);
                 break;
             case 3:                                 /* switch 2 */
-                func_89003650(&D_89019128);
+                LabItem_Init(&D_89019128);
                 break;
             case 4:                                 /* switch 2 */
                 PcBox_Init(&D_89021428);
@@ -660,7 +659,7 @@ extern u8 D_88000000[];
 extern u8 D_00235D70[];
 extern u8 D_00238BD0[];
 void LabTerminal_InitScreen(void);
-s32 func_8900429C(s32);
+s32 LabTerminal_UpdateFade(s32);
 
 /**
  * LabTerminal_Init
@@ -677,9 +676,8 @@ s32 func_8900429C(s32);
  *      D_01000000 / D_04000000.
  *   4. LabTerminal_InitScreen() and StageLoader_UpdateSegments() are called.
  *   5. BgStage_RunUntilCondition is run three times, with timer values 8, 0
- *      and 8: the first and third with callback func_8900429C, the second
- *      with LabTerminal_RunFrame.  What those callbacks do is not established
- *      (func_8900429C is still assembly).
+ *      and 8: the fade in and out (LabTerminal_UpdateFade) around the menu loop
+ *      (LabTerminal_RunFrame), which runs until B leaves the せいとん menu.
  *   6. StageLoader_WaitForRetrace() and main_pool_pop_state('TERM').
  *   7. Fragment_QueueCall queues a call to the fragment whose id comes from
  *      the address D_88000000 (bits 20-27, minus 0x10), with the ROM range
@@ -688,16 +686,16 @@ s32 func_8900429C(s32);
  * Returns 0x8040.
  * Seen in play (2026-11-12) in せいとん: ran when せいとん was entered from the main menu.
  */
-s32 LabTerminal_Init(s32 arg0, s32 arg1) {
+s32 LabTerminal_Init(s32 unused0, s32 unused1) {
     main_pool_push_state('TERM');
     Font_Init(0x3C, 0);
     Asset_LoadToSegment(((u32)D_01000000 & 0x0F000000) >> 0x18, D_002E0BE0, D_002E2B90, 0);
     Asset_LoadToSegment(((u32)D_04000000 & 0x0F000000) >> 0x18, D_00400F70, D_004076E0, 0);
     LabTerminal_InitScreen();
     StageLoader_UpdateSegments();
-    BgStage_RunUntilCondition(8, func_8900429C);
+    BgStage_RunUntilCondition(8, LabTerminal_UpdateFade);
     BgStage_RunUntilCondition(0, LabTerminal_RunFrame);
-    BgStage_RunUntilCondition(8, func_8900429C);
+    BgStage_RunUntilCondition(8, LabTerminal_UpdateFade);
     StageLoader_WaitForRetrace();
     main_pool_pop_state('TERM');
     Fragment_QueueCall(((((u32)D_88000000) & 0x0FF00000) >> 0x14) - 0x10, D_00235D70, D_00238BD0, 0, 0);
