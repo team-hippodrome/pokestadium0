@@ -191,11 +191,11 @@ s32 BattleAi_PickSetupMove(ComBattler*);
 s32 BattleAi_PickStatBoostMove(ComBattler*);
 s32 BattleAi_PickHealingMove(ComBattler*);
 s32 BattleAi_PickToxicOrLeechSeed(ComBattler*);
-s32 BattleAi_PickStatLowerMove(s8 *, s8 *);
+s32 BattleAi_PickStatLowerMove(ComBattler*, s8 *);
 s32 BattleAi_IsMoveUseful(u8);
-s32 BattleAi_PickParalysisMove(s8 *, s8 *);
-s32 BattleAi_PickSleepMove(s8 *, s8 *);
-s32 BattleAi_PickBoomMove(s8 *, s8 *);
+s32 BattleAi_PickParalysisMove(ComBattler*, ComBattler*);
+s32 BattleAi_PickSleepMove(ComBattler*, ComBattler*);
+s32 BattleAi_PickBoomMove(ComBattler*, ComBattler*);
 /**
  * Normal move choice. In order:
  * - heal, but only when the COM moves first and slot 0 is not a move that knocks the opponent out
