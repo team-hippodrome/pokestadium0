@@ -48,12 +48,12 @@ void GbTower_BuildPartyResult(UnkInputStruct8000D738* arg0) {
     s32 i;
     s8 tier;
     s32 field;
-    u16(*var_s1)[0x640] = arg0->unk_04[0];
+    u16(*var_s1)[0x640] = arg0->partyIcons[0];
 
     func_80025100(&tier, &field);
     arg0->unk_02 = tier;
     arg0->unk_00 = field;
-    arg0->unk_03 = D_81300370;
+    arg0->partyCount = D_81300370;
 
     for (i = 0; i < D_81300370; i++, var_s1++) {
         _bcopy(PokeIcon_GetImage(D_81300384, i), var_s1, sizeof(var_s1[0]));

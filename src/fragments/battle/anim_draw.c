@@ -20,7 +20,6 @@ extern BattleSceneStateTickSlot sBattleSceneStateTickSlots[7];
 extern s32 sBattleSceneStateTickSlotIndex;
 extern PokemonBattleCues* sSideBattleCues[];
 extern SpeciesModelTransform* sSidePresentationTransform[];
-extern TagTeamPartners* sPlayerTagTeam[];
 extern u8 sPokemonWithAlternateSleepIdle[];
 extern u8 sPokemonWithAlternateSleepHitReactions[];
 extern u8 sPokemonWithNewHmInYellow[];

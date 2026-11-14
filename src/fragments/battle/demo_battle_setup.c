@@ -50,17 +50,17 @@ void func_821337B4(void) {
     sp20 = M2C_FIELD(&D_82199DE0, s32 *, 0) + 0x78C;
     sp1C = M2C_FIELD(&D_82199DE0, s32 *, 4) + 0x78C;
     func_82121D8C(1, 0);
-    saved = M2C_FIELD(D_8219A5A0, u16 *, 0x2C);
-    M2C_FIELD(D_8219A5A0, u16 *, 0x2C) = 0U;
-    M2C_FIELD(D_8219A5A0, u16 *, 0x2A) = (u16) M2C_FIELD(D_8219A5A0, u16 *, 0x2C);
-    M2C_FIELD(D_8219A5A0, s32 *, 0x38) = 0;
+    saved = sBattleScene.scene->actingSide;
+    sBattleScene.scene->actingSide = 0U;
+    sBattleScene.scene->sideCurrentlySwitching = (u16) sBattleScene.scene->actingSide;
+    sBattleScene.scene->phase = 0;
     M2C_FIELD(sp20, s16 *, 0x32) = 0;
     M2C_FIELD(sp1C, s16 *, 0x32) = 0;
-    if (M2C_FIELD(D_8219A5A0, s32 *, 0x1C) == 9) {
-        M2C_FIELD(D_8219A5A0, s32 *, 0x44) = 0xA;
+    if (sBattleScene.scene->mode == 9) {
+        sBattleScene.scene->unk_44 = 0xA;
     }
     func_82133868(saved);
-    M2C_FIELD(D_8219A5A0, u16 *, 0x2C) = saved;
+    sBattleScene.scene->actingSide = saved;
 }
 
 void func_8211ED90(void);
@@ -79,7 +79,7 @@ void func_82133868(void) {
     u16 idx;
     u8 move;
 
-    idx = M2C_FIELD(D_8219A5A0, u16*, 0x2C);
+    idx = sBattleScene.scene->actingSide;
     self = ((s8**)&D_82199DE0)[idx];
     other = ((s8**)&D_82199DE0)[idx == 0] + 0x7C6;
     D_82199F31 = 0;
@@ -91,27 +91,27 @@ void func_82133868(void) {
     func_821337A0(((s8**)&D_82199DE0)[1]);
     D_82199FCC = 1;
     D_82199FCD = 1;
-    M2C_FIELD(D_8219A5A0, s8*, 0x1A) = 0;
-    M2C_FIELD(D_8219A5A0, s32*, 0x48) = 0;
+    sBattleScene.scene->hitReactionKind = 0;
+    sBattleScene.scene->moveEffectKind = 0;
     M2C_FIELD(self, u16*, 0x12) = 0xFFFF;
     M2C_FIELD(other, u16*, 0x12) = 0xFFFF;
     func_8211ED90();
     move = M2C_FIELD(self, u8*, 0x5A);
     switch (move) {
         case STRING_SHOT:
-            M2C_FIELD(D_8219A5A0, s8*, 0x1A) = 3;
+            sBattleScene.scene->hitReactionKind = 3;
             break;
         case HARDEN:
         case MINIMIZE:
         case SPLASH:
-            M2C_FIELD(D_8219A5A0, s32*, 0x48) = 7;
+            sBattleScene.scene->moveEffectKind = 7;
             break;
         case SING:
-            M2C_FIELD(D_8219A5A0, s32*, 0x48) = 0x16;
+            sBattleScene.scene->moveEffectKind = 0x16;
             M2C_FIELD(other, s8*, 0x15) = 3;
             break;
         case REST:
-            M2C_FIELD(D_8219A5A0, s32*, 0x48) = 0x15;
+            sBattleScene.scene->moveEffectKind = 0x15;
             M2C_FIELD(self, s8*, 0x15) = 3;
             break;
     }
@@ -250,9 +250,9 @@ void func_82133B6C(void) {
     s32 side = 1; // FAKE: constant side index kept in a variable
     f32 vec[3];
 
-    M2C_FIELD(D_8219A5A0, s32*, 0x50) = 0;
+    sBattleScene.scene->cameraPresetId = 0;
     mons = (s8**)&D_82199DE0;
-    if (M2C_FIELD(D_8219A5A0, s32*, 0x20) != 0x1D) {
+    if (sBattleScene.scene->phaseStep != 0x1D) {
         D_8219A4F0.unk_1E++;
         D_8219A4F0.unk_20++;
         D_8219A4F0.timer++;
@@ -270,7 +270,7 @@ void func_82133B6C(void) {
         if (D_8219A4F0.index == 5) {
             D_8219A4F0.unk16 = D_8218B5D0[D_8219A4F0.index].unk04;
             D_8219A4F0.unk18 = D_8218B5D0[D_8219A4F0.index].unk06;
-            M2C_FIELD(((s8**)&D_82199DE0)[0], u8*, 1) |= 1;
+            ((ActivePokemon*)((s8**)&D_82199DE0)[0])->displayObject.node.flags |= 1;
             if (D_82199ED0[0][0] & 0x8000) {
                 D_8219A4F0.unk01 = 0;
                 D_8219A4F0.flags |= 0xA0;
@@ -307,23 +307,23 @@ void func_82133B6C(void) {
             }
             if ((D_8219A4F0.timer == 25) && (D_8219A4F0.flags & 0x10)) {
                 if (D_8219A4F0.index == 4) {
-                    M2C_FIELD(M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C), s16*, 2) = 0x96;
+                    ((ActivePokemon*)((s8**)&D_82199DE0)[0])->sessionTeams->displayModel = 0x96;
                 } else {
                     M2C_FIELD(M2C_FIELD(mons[0], u8**, 0x85C), s16*, 2) = D_8218B5D0[D_8219A4F0.index + 1].unk0A;
                 }
                 *M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C) |= 0x80;
                 D_8219A4F0.flags |= 2;
                 D_8219A4F0.flags &= ~0x10;
-                M2C_FIELD(M2C_FIELD(D_8219A5A0, void**, 0xCC), f32*, 0x2C) = 30.0f;
+                sBattleScene.scene->camera->perspective.verticalFieldOfView = 30.0f;
             }
             if (D_8219A4F0.flags & 2) {
                 if (*M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C) & 0x10) {
                     *M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C) &= ~0x90;
                     Battle_LoadOwnerModelForSwitchIn(((s8**)&D_82199DE0)[0]);
                     if (D_8219A4F0.index == 4) {
-                        M2C_FIELD(M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C), s16*, 2) = 0x96;
+                        ((ActivePokemon*)((s8**)&D_82199DE0)[0])->sessionTeams->displayModel = 0x96;
                     }
-                    M2C_FIELD(M2C_FIELD(((s8**)&D_82199DE0)[1], u8**, 0x85C), s16*, 2) = D_8218B5D0[D_8219A4F0.index + 1].unk0B;
+                    ((ActivePokemon*)((s8**)&D_82199DE0)[1])->sessionTeams->displayModel = D_8218B5D0[D_8219A4F0.index + 1].unk0B;
                     *M2C_FIELD(((s8**)&D_82199DE0)[1], u8**, 0x85C) |= 0x80;
                     D_8219A4F0.flags |= 4;
                     D_8219A4F0.flags &= ~2;
@@ -340,10 +340,10 @@ void func_82133B6C(void) {
                     D_8219A4F0.flags = D_82199F18[1] = D_82199F10[1] = 0;
                     D_8219A4F0.index++;
                     D_8219A4F0.timer = 0;
-                    func_80010B3C(M2C_FIELD(D_8219A5A0, void**, 0xCC), 0, 0, 0x140, 0xF0);
-                    M2C_FIELD(D_8219A5A0, s32*, 0xC) = 0;
+                    func_80010B3C(sBattleScene.scene->camera, 0, 0, 0x140, 0xF0);
+                    sBattleScene.scene->bRollShotIndex = 0;
                     func_82121D5C(9, 0x32);
-                    M2C_FIELD(D_8219A5A0, s32*, 0xC) = 0;
+                    sBattleScene.scene->bRollShotIndex = 0;
                     func_821339CC(((ActivePokemon**)&D_82199DE0)[0]);
                     func_821339CC((ActivePokemon*)D_82199DE4);
                 }
@@ -363,7 +363,7 @@ void func_82133B6C(void) {
                 D_8219A4F0.height = func_8000F23C(D_8219A4F0.height, 120.0f, 6.0f, 6.0f);
                 D_8219A4F0.curDist = func_8000F23C(D_8219A4F0.curDist, D_8219A4F0.dist, D_8219A4F0.dist / 20.0f, D_8219A4F0.dist / 20.0f);
                 func_8210BE1C(vec, D_8219A4F0.curDist, D_8219A4F0.angle);
-                func_80010B3C(M2C_FIELD(D_8219A5A0, void**, 0xCC), vec[0], vec[2], D_8219A4F0.width, D_8219A4F0.height);
+                func_80010B3C(sBattleScene.scene->camera, vec[0], vec[2], D_8219A4F0.width, D_8219A4F0.height);
                 if (D_8219A4F0.width == 0xA0) {
                     D_8219A4F0.flags &= ~1;
                 }

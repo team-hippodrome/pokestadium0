@@ -114,24 +114,24 @@ M2C_UNK Session_InitHumanTrainer(M2C_UNK arg0, TeamRoster *arg1, ExtendedRosterI
     arg1->isHuman = 1;
     arg1->controllerPort = arg0;
     arg1->controller = (Controller *)(D_800AAF50 + arg0 * 0x24);
-    arg1->unk_018 = 0;
+    arg1->trainerId = 0;
     arg1->rosterInfo = arg2;
     arg1->numberOfPokemonBrought = 1;
     *(Unk5Bytes *)arg1->trainerName = *(Unk5Bytes *)&D_8007B7B8;
     func_80025540(&arg1->pokemonPicked[0], arg3);
     arg2->unk_000 = 0;
     arg2->numberOfPokemonCanBePicked = 1;
-    arg2->unk_003 = 0;
-    arg2->unk004[0] = 0;
-    arg2->unk_014[0] = 0;
+    arg2->trainerIndex = 0;
+    arg2->title[0] = 0;
+    arg2->fullName[0] = 0;
     arg2->battleMon[0] = arg1->pokemonPicked[0];
 }
 
-void func_8002572C(BattleSessionTeams *arg0, TeamRoster *arg1) {
-    arg0->uniqueStatusFlags = 0;
+void func_8002572C(BattleSide *arg0, TeamRoster *arg1) {
+    arg0->modelFlags = 0;
     arg0->tagTeamSize = 1;
     arg0->displayModel = 0;
-    arg0->unk_04 = NULL;
+    arg0->displayMon = NULL;
     arg0->loadedModel = NULL;
     arg0->teamMember[0] = arg1;
     arg0->teamMember[1] = NULL;
@@ -225,20 +225,20 @@ void func_80025910(s32 arg0)
   st->trainerSlots[0].rosterInfo = &st->rosterInfo[0];
   if ((arg0 != 0) && (D_800733D4 == 0))
   {
-    st->trainerSlots[0].unk_018 = GbSave_GetTrainerId(D_800733D4);
+    st->trainerSlots[0].trainerId = GbSave_GetTrainerId(D_800733D4);
     func_80022D84(D_800733D4, (M2C_UNK *) st->trainerSlots[0].trainerName);
   }
   else
   {
-    st->trainerSlots[0].unk_018 = 0;
+    st->trainerSlots[0].trainerId = 0;
     *((Unk3Bytes *) st->trainerSlots[0].trainerName) = *((Unk3Bytes *) (&D_8007B7C0));
   }
   st->rosterInfo[0].unk_000 = 0;
   st->rosterInfo[0].numberOfPokemonCanBePicked = st->trainerSlots[0].numberOfPokemonBrought;
-  st->rosterInfo[0].unk_003 = 0;
+  st->rosterInfo[0].trainerIndex = 0;
   func_80058410(st->trainerSlots[0].pokemonPicked, st->rosterInfo[0].battleMon, 0x1E0);
-  *((Unk11Bytes *) st->rosterInfo[0].unk004) = *((Unk11Bytes *) (&D_8007B7C4));
-  func_8000A460(st->rosterInfo[0].unk_014, st->trainerSlots[0].trainerName);
+  *((Unk11Bytes *) st->rosterInfo[0].title) = *((Unk11Bytes *) (&D_8007B7C4));
+  func_8000A460(st->rosterInfo[0].fullName, st->trainerSlots[0].trainerName);
   func_8002572C(&st->battleSides[0], &st->trainerSlots[0]);
 }
 
@@ -685,7 +685,7 @@ void State_GbTower(void) {
     Display_WaitForFrames(2);
     func_8000A8DC();
 
-    sp24.unk_04 = main_pool_alloc(sizeof(*sp24.unk_04), 0);
+    sp24.partyIcons = main_pool_alloc(sizeof(*sp24.partyIcons), 0);
 
     func_80025B60(((u32) ((s32) &D_81300000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015F8F0, &D_0015FCE0, D_800733D4, (s32) &sp24);
     GbTower_Start(&sp24);

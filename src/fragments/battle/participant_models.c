@@ -542,7 +542,7 @@ void func_82135458(ActivePokemon* arg0, CameraNode* arg1) {
     s16 sp2E;
     s16 sp2C;
 
-    BattleAnim_Vec3fCopy(&arg1->view.eyePosition, &sBattleScene.scene->unk_C4);
+    BattleAnim_Vec3fCopy(&arg1->view.eyePosition, &sBattleScene.scene->savedCameraEye);
     BattleScene_GetParticipantCameraAnchor(arg0, &sp58);
     BattleAnim_CalculateDistanceAngles(&sp58, &M2C_FIELD(arg0, Vec3f*, 0x5D0), &sp30, &sp2E, &sp2C);
     BattleAnim_Vec3fCopy(&sp34, &arg1->view.targetPosition);
@@ -550,7 +550,7 @@ void func_82135458(ActivePokemon* arg0, CameraNode* arg1) {
         Camera_ComputeEyeFromAngles(&sp58, &sp4C, M2C_FIELD(ptr, f32*, 0x38), M2C_FIELD(ptr, s16*, 0x30), M2C_FIELD(ptr, s16*, 0x32));
         BattleAnim_CalculateDistanceAngles(&sp34, &sp4C, &sp30, &sp2E, &sp2C);
     } else {
-        BattleAnim_CalculateDistanceAngles(&sp34, &sBattleScene.scene->unk_B8, &sp30, &sp2E, &sp2C);
+        BattleAnim_CalculateDistanceAngles(&sp34, &sBattleScene.scene->savedCameraAt, &sp30, &sp2E, &sp2C);
     }
     Camera_ComputeEyeFromAngles(&sp34, &arg1->view.targetPosition, sp30 * D_FLT_82196810, sp2E, sp2C);
 }

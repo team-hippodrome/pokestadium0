@@ -39,6 +39,6 @@ void Model_InitDisplayObject(DisplayObject* display_object, s16 root_id, s16 obj
 
 // functions defined in assembly
 arg1_func_80010CA8* Model_ComputeSizeVariant(arg1_func_80010CA8* arg0, BattleMon* arg1);
-void Trainer_RequestPokeIcon(BattleSessionTeams* arg0);
+void Trainer_RequestPokeIcon(BattleSide* arg0);
 
 #endif // MODEL_RENDERER_H

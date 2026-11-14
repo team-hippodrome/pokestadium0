@@ -151,7 +151,7 @@ void Battle_FormatDamageComment(ActivePokemon* active_pokemon) {
         BattleMessage_Format(D_8219A520 + 0x1C8, 0x28, D_8218C7A4);
     }
 
-    if (active_pokemon->state.unk_2E == 0x10) {
+    if (active_pokemon->state.faintState == 0x10) {
         BattleMessage_Format(D_8219A520 + 0x1C8, 0, (s32)D_8219544C);
     }
 }

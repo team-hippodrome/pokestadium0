@@ -5,7 +5,6 @@
 #include "gb_data.h"
 #include "matrix.h"
 #include "math.h"
-extern unk_D_843C5568 gBattleAI_ActivePokemon[2];
 extern s32 pad_D_843C60A0;
 extern u16 D_82199F50;
 extern u16 D_82199F52;
@@ -32,7 +31,6 @@ extern BattleSceneStateTickSlot sBattleSceneStateTickSlots[7];
 extern s32 sBattleSceneStateTickSlotIndex;
 extern PokemonBattleCues* sSideBattleCues[];
 extern SpeciesModelTransform* sSidePresentationTransform[];
-extern TagTeamPartners* sPlayerTagTeam[];
 extern u8 sPokemonWithAlternateSleepIdle[];
 extern u8 sPokemonWithAlternateSleepHitReactions[];
 extern u8 sPokemonWithNewHmInYellow[];
@@ -408,9 +406,9 @@ extern u8 D_8218C930[][2];
  * first one fainted.
  * @unverified Name and comment guessed from the code.
  */
-void Battle_CheckMovesetLegality(s8* arg0) {
+void Battle_CheckMovesetLegality(ActivePokemon* arg0) {
     s32 pad; // FAKE: stack padding
-    s8* state = arg0 + 0x7C6;
+    s8* state = (s8*)arg0 + 0x7C6;
 
     M2C_FIELD(arg0, s8*, 0x851) = 1;
     M2C_FIELD(arg0, s8*, 0x852) = 1;
@@ -437,7 +435,6 @@ void func_8210F2F4(s8 *arg0)
  if (1) { }  // karodo
 }
 
-extern ActivePokemon* D_8219A540;
 void func_80043860(s32);
 
 /**

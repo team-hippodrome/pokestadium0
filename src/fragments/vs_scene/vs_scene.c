@@ -29,38 +29,17 @@ extern u8 D_300B980[];
 extern u8 D_300BAD0[];
 extern u8 D_300BED0[];
 extern u8 D_300C2D0[];
-// Scene state passed in by the caller of this fragment; D_822036A4 points at it.
-typedef struct DemoPlayer {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ char unk01[0xC];
-    /* 0x0D */ u8 unk_0D;
-    /* 0x0E */ char unk0E[0x6];
-    /* 0x14 */ TeamRoster* unk_14[2];
-    /* 0x1C */ char unk1C[0xC];
-} DemoPlayer; // size = 0x28
 
-typedef struct DemoState {
-    /* 0x0000 */ s8 unk_0000;
-    /* 0x0001 */ s8 unk_0001;
-    /* 0x0002 */ s8 unk_0002;
-    /* 0x0003 */ s8 unk_0003;
-    /* 0x0004 */ char unk0004[0x1024];
-    /* 0x1028 */ DemoPlayer players[2];
-    /* 0x1078 */ char unk1078[0x1C];
-    /* 0x1094 */ u8 unk_1094;
-    /* 0x1095 */ u8 unk_1095;
-    /* 0x1096 */ u16 unk_1096;
-} DemoState;
-
-typedef struct unk_D_82203170 {
-    /* 0x00 */ u8 unk_00;
+// One side's trainer panel on the VS screen (D_82203170[2]).
+typedef struct VsSceneSide {
+    /* 0x00 */ u8 teamLayout; // @unverified: VsScene_PrepareTeams sets 0 when ruleCategory != 0, 2 for a two-trainer side, else 1
     /* 0x01 */ char unk01[0x3];
-    /* 0x04 */ void* unk_04;
-    /* 0x08 */ u8* unk_08[6];
-    /* 0x20 */ u8* unk_20[6];
-    /* 0x38 */ TeamRoster* unk_38[2];
-    /* 0x40 */ ExtendedRosterInfo* unk_40[2];
-} unk_D_82203170; // size = 0x48
+    /* 0x04 */ void* trainerFile; // @unverified: BinArchive file picked by rosterInfo[0]->trainerIndex in VsScene_PrepareTeams
+    /* 0x08 */ u8* iconImages[6]; // @unverified: PokeIcon_GetImage results for the side's Pokémon (VsScene_LoadTeamIcons)
+    /* 0x20 */ u8* hpBarImages[6]; // @unverified: images of the D_82203210 render targets func_82201084 draws HP bars into
+    /* 0x38 */ TeamRoster* teamMember[2];
+    /* 0x40 */ ExtendedRosterInfo* rosterInfo[2];
+} VsSceneSide; // size = 0x48
 
 extern u8* D_82202C1C[];
 extern u8* D_82202C3C[];
@@ -73,7 +52,7 @@ extern u8 D_82202DDC[];
 extern u8 D_82202E9C[];
 extern u8 D_82202F5C[];
 extern u8 D_8220301C[];
-extern unk_D_82203170 D_82203170[2];
+extern VsSceneSide D_82203170[2];
 extern DisplayObject* D_82203200;
 extern GfxImage* D_82203208;
 extern GfxImage* D_82203210[12];
@@ -93,76 +72,13 @@ extern DisplayObject D_82203538;
 extern s32 D_8220354C;
 extern s16 D_82203550;
 extern Color_RGBA8 D_822036A0;
-extern s8* D_822036A4;
+extern SessionContext* D_822036A4; // the session (gSessionContext) passed to VsScene_Run
 extern s32 D_822036A8;
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
 s32 Completion_LightAngleCallbackA(s32, GraphNode*);
 s32 Completion_LightAngleCallbackB(s32, GraphNode*);
-typedef struct unk_D_86B0DBCC {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-} unk_D_86B0DBCC;
-typedef struct unk_D_86B0DB98 {
-    /* 0x00 */ u8* unk_00;
-    /* 0x04 */ s16 unk_04;
-} unk_D_86B0DB98;
-typedef struct unk_D_86B0EBD8 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ char unk10[0x8];
-    /* 0x18 */ s32 unk_18;
-    /* 0x30 */ unk_D_86B0DAE0 unk_1C;
-} unk_D_86B0EBD8;
-typedef struct unk_D_86B0EBDC {
-    /* 0x000 */ unk_D_86002F30* unk_000;
-    /* 0x004 */ unk_D_86002F30* unk_004;
-    /* 0x008 */ DisplayObject unk_008;
-    /* 0x170 */ DisplayObject unk_170;
-    /* 0x2D8 */ s32 unk_2D8;
-    /* 0x2DC */ s32 unk_2DC;
-    /* 0x2E0 */ char unk2E0[0x4];
-    /* 0x2E4 */ s32 unk_2E4;
-    /* 0x2E8 */ s32 unk_2E8;
-    /* 0x2EC */ s32 unk_2EC;
-    /* 0x2F0 */ s32 unk_2F0;
-    /* 0x2F4 */ f32 unk_2F4;
-    /* 0x2F8 */ char unk2F8[0x4];
-    /* 0x2FC */ f32 unk_2FC;
-    /* 0x300 */ f32 unk_300;
-    /* 0x304 */ s32 unk_304;
-    /* 0x308 */ s32 unk_308;
-} unk_D_86B0EBDC;
-typedef struct unk_D_86B0EBE0 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s16 unk_14;
-    /* 0x16 */ s16 unk_16;
-    /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A;
-    /* 0x1C */ s16 unk_1C;
-} unk_D_86B0EBE0;
-extern s32 pad_D_86B0C4BC[3];
 
 #include "math.h"
-typedef struct unk_D_86301730 {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ DisplayObject unk_004;
-    /* 0x16C */ Vec3f unk_16C;
-    /* 0x178 */ s8 unk_178;
-    /* 0x179 */ s8 unk_179;
-    /* 0x17A */ s8 unk_17A;
-    /* 0x17B */ s8 unk_17B;
-    /* 0x17C */ u16 unk_17C;
-    /* 0x17E */ char pad17E[6];
-} unk_D_86301730;
 
 
 s32 Completion_LightAngleCallbackA(s32 arg0, GraphNode* arg1);
@@ -227,30 +143,30 @@ s32 VsScene_BeginFrame(void) {
  * Seen in play: runs as the VS scene opens before a tournament battle.
  */
 void VsScene_PrepareTeams(void) {
-    unk_D_82203170* team;
+    VsSceneSide* team;
     s32 i;
 
     main_pool_push_state('ICON');
 
     for (i = 0, team = D_82203170; i < 2; i++, team++) {
-        if (((DemoState*)D_822036A4)->unk_0001 != 0) {
-            team->unk_00 = 0;
-        } else if (((DemoState*)D_822036A4)->players[i].unk_0D == 2) {
-            team->unk_00 = 2;
+        if (D_822036A4->ruleCategory != 0) {
+            team->teamLayout = 0;
+        } else if (D_822036A4->battleSides[i].tagTeamSize == 2) {
+            team->teamLayout = 2;
         } else {
-            team->unk_00 = 1;
+            team->teamLayout = 1;
         }
 
-        team->unk_38[0] = ((DemoState*)D_822036A4)->players[i].unk_14[0];
-        team->unk_40[0] = ((DemoState*)D_822036A4)->players[i].unk_14[0]->rosterInfo;
-        team->unk_04 = BinArchive_GetFile(D_8220325C, team->unk_40[0]->unk_003);
+        team->teamMember[0] = D_822036A4->battleSides[i].teamMember[0];
+        team->rosterInfo[0] = D_822036A4->battleSides[i].teamMember[0]->rosterInfo;
+        team->trainerFile = BinArchive_GetFile(D_8220325C, team->rosterInfo[0]->trainerIndex);
 
-        if (((DemoState*)D_822036A4)->players[i].unk_0D == 2) {
-            team->unk_38[1] = ((DemoState*)D_822036A4)->players[i].unk_14[1];
-            team->unk_40[1] = ((DemoState*)D_822036A4)->players[i].unk_14[1]->rosterInfo;
+        if (D_822036A4->battleSides[i].tagTeamSize == 2) {
+            team->teamMember[1] = D_822036A4->battleSides[i].teamMember[1];
+            team->rosterInfo[1] = D_822036A4->battleSides[i].teamMember[1]->rosterInfo;
         } else {
-            team->unk_38[1] = NULL;
-            team->unk_40[1] = NULL;
+            team->teamMember[1] = NULL;
+            team->rosterInfo[1] = NULL;
         }
     }
 }
@@ -342,7 +258,7 @@ s32 func_80027214(s8 *, s32);                       /* extern */
  * Reads the word at offset 0xC of D_82203240 (the `children` pointer of
  * that GraphNode; call it `rec`), fills two
  * 0x3C-byte local buffers with func_800273E8: from D_82202CD0 and D_82202CEC
- * when the byte *D_822036A4 is 0, from D_82202C60 and D_82202C7C otherwise.
+ * when D_822036A4->mode is 0, from D_82202C60 and D_82202C7C otherwise.
  * Then, while func_80027214(buf1, rec + 0xA8) returns non-zero, it calls
  * func_80027214(buf2, rec + 0xB4), then VsScene_DrawFrameToImage(0) and
  * func_80006780(), and stops as soon as VsScene_DrawFrameToImage returns non-zero.
@@ -368,8 +284,8 @@ void VsScene_ZoomIntoScreen(void) {
     s32 sp3C;
     s32 temp_s0_2;
 
-    sp3C = M2C_FIELD(D_82203240, s32 *, 0xC);
-    if (*D_822036A4 == 0) {
+    sp3C = (s32)D_82203240->children;
+    if (D_822036A4->mode == 0) {
         func_800273E8(sp7C, (s32) &D_82202CD0);
         func_800273E8(sp40, (s32) &D_82202CEC);
     } else {
@@ -401,8 +317,8 @@ void func_82200714(void) {
     s32 rec;
     s32 done;
 
-    rec = M2C_FIELD(D_82203240, s32 *, 0xC);
-    if (*D_822036A4 == 0) {
+    rec = (s32)D_82203240->children;
+    if (D_822036A4->mode == 0) {
         func_800273E8(sp8C, (s32) &D_82202D08);
         func_800273E8(sp50, (s32) &D_82202D24);
     } else {
@@ -437,15 +353,15 @@ void func_82200850(void) {
  * Seen in play: runs as the VS scene opens; the trainer portraits (1P's cap, the むしとり しょうねん)
  * appear in its panels.
  */
-void VsScene_LoadTeamIcons(unk_D_82203170* arg0, s32 arg1) {
+void VsScene_LoadTeamIcons(VsSceneSide* arg0, s32 arg1) {
     s32 i;
     s32 slot = arg1 * 6;
 
     for (i = 0; i < 6; i++) {
-        if (i < arg0->unk_40[0]->numberOfPokemonCanBePicked) {
-            func_8001833C((PokeIconRenderer*)D_82203264, slot, &arg0->unk_40[0]->battleMon[i], 1);
+        if (i < arg0->rosterInfo[0]->numberOfPokemonCanBePicked) {
+            func_8001833C((PokeIconRenderer*)D_82203264, slot, &arg0->rosterInfo[0]->battleMon[i], 1);
         }
-        arg0->unk_08[i] = PokeIcon_GetImage((PokeIconRenderer*)D_82203264, slot++);
+        arg0->iconImages[i] = PokeIcon_GetImage((PokeIconRenderer*)D_82203264, slot++);
     }
 }
 
@@ -467,7 +383,7 @@ void VsScene_PlayBattleTitle(void) {
     DisplayObject* obj = (DisplayObject*)((GraphNode*)D_82203244->children)->children;
     s32 pad2; // FAKE
 
-    switch (((DemoState*)D_822036A4)->unk_0001) {
+    switch (D_822036A4->ruleCategory) {
         case 0:
             if (!D_82203244->children) { // FAKE: karodo, empty if needed for regalloc
             }
@@ -477,7 +393,7 @@ void VsScene_PlayBattleTitle(void) {
             track = 1;
             break;
         case 2:
-            switch (((DemoState*)D_822036A4)->unk_0002) {
+            switch (D_822036A4->modeSelection) {
                 case 0:
                     track = 2;
                     break;
@@ -493,32 +409,32 @@ void VsScene_PlayBattleTitle(void) {
             }
             break;
     }
-    if (((DemoState*)D_822036A4)->unk_0000 == 0) {
+    if (D_822036A4->mode == 0) {
         Audio_PlayCommand(0x3C, 0, track);
     } else {
-        Audio_PlayCommand(0x3C, ((DemoState*)D_822036A4)->unk_0003, track);
+        Audio_PlayCommand(0x3C, D_822036A4->roundOrDemoId, track);
     }
-    obj->rootId = ((DemoState*)D_822036A4)->unk_0003;
-    if (((DemoState*)D_822036A4)->unk_0000 != 0) {
-        if (((DemoState*)D_822036A4)->unk_0003 == 7) {
-            Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_82203248);
+    obj->rootId = D_822036A4->roundOrDemoId;
+    if (D_822036A4->mode != 0) {
+        if (D_822036A4->roundOrDemoId == 7) {
+            Model_InitDisplayObject(&D_82203268, D_822036A4->roundOrDemoId, 0, (ModelNodeView*)D_82203248);
             ModelAnim_BindTransformCurve(&D_82203268, 1, D_8ED0FACC, 0x10000);
             BgStage_RunUntilCondition(0x6E, (s32(*)(u8))VsScene_DrawFrame);
             ModelRenderer_ClearDisplayObject(&D_82203268);
-        } else if (((DemoState*)D_822036A4)->unk_0003 == 8) {
-            Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_82203248);
+        } else if (D_822036A4->roundOrDemoId == 8) {
+            Model_InitDisplayObject(&D_82203268, D_822036A4->roundOrDemoId, 0, (ModelNodeView*)D_82203248);
             ModelAnim_BindTransformCurve(&D_82203268, 1, D_8EE0FDE0, 0x10000);
             BgStage_RunUntilCondition(0x6E, (s32(*)(u8))VsScene_DrawFrame);
             ModelRenderer_ClearDisplayObject(&D_82203268);
         } else {
-            Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_82203248);
+            Model_InitDisplayObject(&D_82203268, D_822036A4->roundOrDemoId, 0, (ModelNodeView*)D_82203248);
             ModelAnim_BindTransformCurve(&D_82203268, 1, D_8EC145CC, 0x10000);
             BgStage_RunUntilCondition(0x64, (s32(*)(u8))VsScene_DrawFrame);
             ModelRenderer_ClearDisplayObject(&D_82203268);
         }
     }
-    Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_8220324C);
-    if ((D_82203170[0].unk_00 == 2) || (D_82203170[1].unk_00 == 2)) {
+    Model_InitDisplayObject(&D_82203268, D_822036A4->roundOrDemoId, 0, (ModelNodeView*)D_8220324C);
+    if ((D_82203170[0].teamLayout == 2) || (D_82203170[1].teamLayout == 2)) {
         ModelAnim_BindTransformCurve(&D_82203268, 1, D_8F5054C8, 0x10000);
         BgStage_RunUntilCondition(0x64, (s32(*)(u8))VsScene_DrawFrame);
     } else {
@@ -549,7 +465,7 @@ void VsScene_Play(void) {
     VsScene_PrepareTeams();
     VsScene_LoadTeamIcons(&D_82203170[0], 0);
     VsScene_LoadTeamIcons(&D_82203170[1], 1);
-    if (((DemoState*)D_822036A4)->unk_0000 == 0) {
+    if (D_822036A4->mode == 0) {
         Vec3f_FromVec3s(&camera->view.targetPosition, (Vec3s*)(D_82202CEC + 2));
         Vec3f_FromVec3s(&camera->view.eyePosition, (Vec3s*)(D_82202CD0 + 2));
     } else {
@@ -558,7 +474,7 @@ void VsScene_Play(void) {
     }
     StageLoader_RunFrames(2);
     StageFade_Start(0x80);
-    if (((DemoState*)D_822036A4)->unk_0000 == 0) {
+    if (D_822036A4->mode == 0) {
         Audio_PlayMusicIfChanged(0x12);
     } else {
         Audio_PlayMusicIfChanged(6);
@@ -568,9 +484,9 @@ void VsScene_Play(void) {
     VsScene_PlayBattleTitle();
     func_82200714();
     ModelRenderer_ClearDisplayObject(&D_82203268);
-    if (((DemoState*)D_822036A4)->unk_1095 & 2) {
+    if (D_822036A4->sessionFlags & 2) {
         Save_ResetAndCommitTypedRecord(0x15, 0);
-        ((DemoState*)D_822036A4)->unk_1095 &= ~3;
+        D_822036A4->sessionFlags &= ~3;
     }
 }
 
@@ -584,18 +500,18 @@ void func_82200DA4(void) {
     switch (sp1F) {                                 /* irregular */
     case 0:
         func_80025168((s8) (sp1F + 1));
-        M2C_FIELD(D_822036A4, u16 *, 0x1096) = (u16) (M2C_FIELD(D_822036A4, u16 *, 0x1096) | 8);
+        D_822036A4->transitionFlags |= 8;
         return;
     case 1:
         func_80025168((s8) (sp1F + 1));
-        M2C_FIELD(D_822036A4, u16 *, 0x1096) = (u16) (M2C_FIELD(D_822036A4, u16 *, 0x1096) | 0x10);
+        D_822036A4->transitionFlags |= 0x10;
         return;
     }
 }
 
 
 void func_82200E2C(void) {
-    DemoState* state = (DemoState*)D_822036A4;
+    SessionContext* state = D_822036A4;
     s32 player = state->unk_1094;
     TeamRoster* roster;
     ExtendedRosterInfo* info;
@@ -604,7 +520,7 @@ void func_82200E2C(void) {
     s32 j;
 
     if ((player >= 0) && (player < 4)) {
-        roster = state->players[0].unk_14[0];
+        roster = state->battleSides[0].teamMember[0];
         info = roster->rosterInfo;
         for (i = 0; i < info->numberOfPokemonCanBePicked; i++) {
             if (info->battleMon[i].species.isRental != 0) {
@@ -623,7 +539,7 @@ void func_82200E2C(void) {
                         return;
                     }
                 }
-                state->unk_1096 |= 0x20;
+                state->transitionFlags |= 0x20;
                 return;
             }
         }
@@ -637,10 +553,10 @@ void func_82200F08(void) {
     u16 lo = Save_GetProgressFlags() & 0xFF;
     u16 hi = (Save_GetProgressFlags() >> 8) & 0xFF;
 
-    ((DemoState*)D_822036A4)->unk_1096 |= 2;
+    D_822036A4->transitionFlags |= 2;
 
-    if (((DemoState*)D_822036A4)->unk_0000 == 1) {
-        ((DemoState*)D_822036A4)->unk_1096 |= 4;
+    if (D_822036A4->mode == 1) {
+        D_822036A4->transitionFlags |= 4;
         func_82200E2C();
         if (!(hi & 1)) {
             hi |= 1;
@@ -648,14 +564,14 @@ void func_82200F08(void) {
             func_82200DA4();
             Save_CommitTypedRecord(0x14, 0);
         }
-    } else if (((DemoState*)D_822036A4)->unk_0000 == 2) {
-        if (((DemoState*)D_822036A4)->unk_0002 >= lo) {
+    } else if (D_822036A4->mode == 2) {
+        if (D_822036A4->modeSelection >= lo) {
             lo++;
             Save_SetProgressFlags((hi << 8) | lo);
             Save_CommitTypedRecord(0x14, 0);
         }
-        if (((DemoState*)D_822036A4)->unk_0002 == 3) {
-            ((DemoState*)D_822036A4)->unk_1096 |= 4;
+        if (D_822036A4->modeSelection == 3) {
+            D_822036A4->transitionFlags |= 4;
             func_82200E2C();
             if (!(hi & 2)) {
                 hi |= 2;
@@ -692,18 +608,18 @@ void func_82201084(s32 arg0) {
     s32 i;
     s32 j;
     s32 k;
-    unk_D_82203170* p;
+    VsSceneSide* p;
 
     for (i = 0; i < 2; i++) {
         p = &D_82203170[i];
-        if (p->unk_00 == 2) {
+        if (p->teamLayout == 2) {
             BattleMon* mon;
             s32 hp;
             s32 scaled;
 
             for (j = 0; j < 2; j++) {
-                mon = p->unk_38[j]->pokemonPicked;
-                for (k = 0; k < p->unk_38[j]->numberOfPokemonBrought; k++, mon++) {
+                mon = p->teamMember[j]->pokemonPicked;
+                for (k = 0; k < p->teamMember[j]->numberOfPokemonBrought; k++, mon++) {
                     scaled = (mon->maxHp * arg0) / 100;
                     hp = (mon->hp >= scaled) ? mon->hp : scaled;
                     GfxImage_SetRenderTarget(&gDisplayListHead, D_82203210[i * 6 + j * 3 + k]);
@@ -715,8 +631,8 @@ void func_82201084(s32 arg0) {
             s32 hp;
             s32 scaled;
 
-            mon = p->unk_38[0]->pokemonPicked;
-            for (k = 0; k < p->unk_38[0]->numberOfPokemonBrought; k++, mon++) {
+            mon = p->teamMember[0]->pokemonPicked;
+            for (k = 0; k < p->teamMember[0]->numberOfPokemonBrought; k++, mon++) {
                 scaled = (mon->maxHp * arg0) / 100;
                 hp = (mon->hp >= scaled) ? mon->hp : scaled;
                 GfxImage_SetRenderTarget(&gDisplayListHead, D_82203210[i * 6 + k]);
@@ -746,29 +662,29 @@ void func_82201348(GfxImage* arg0) {
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-void VsScene_LoadTagTeamIcons(unk_D_82203170* arg0, s32 arg1) {
+void VsScene_LoadTagTeamIcons(VsSceneSide* arg0, s32 arg1) {
     s32 slot = arg1 * 6;
     s32 i;
     s32 j;
 
-    if (arg0->unk_00 == 2) {
+    if (arg0->teamLayout == 2) {
         for (i = 0; i < 2; i++) {
             for (j = 0; j < 3; j++) {
-                if (j < arg0->unk_38[i]->numberOfPokemonBrought) {
-                    func_8001833C((PokeIconRenderer*)D_82203264, slot, &arg0->unk_38[i]->pokemonPicked[j], 1);
+                if (j < arg0->teamMember[i]->numberOfPokemonBrought) {
+                    func_8001833C((PokeIconRenderer*)D_82203264, slot, &arg0->teamMember[i]->pokemonPicked[j], 1);
                 }
-                arg0->unk_08[i * 3 + j] = PokeIcon_GetImage((PokeIconRenderer*)D_82203264, slot);
-                arg0->unk_20[i * 3 + j] = D_82203210[slot]->img_p;
+                arg0->iconImages[i * 3 + j] = PokeIcon_GetImage((PokeIconRenderer*)D_82203264, slot);
+                arg0->hpBarImages[i * 3 + j] = D_82203210[slot]->img_p;
                 slot++;
             }
         }
     } else {
         for (j = 0; j < 6; j++) {
-            if (j < arg0->unk_38[0]->numberOfPokemonBrought) {
-                func_8001833C((PokeIconRenderer*)D_82203264, slot, &arg0->unk_38[0]->pokemonPicked[j], 1);
+            if (j < arg0->teamMember[0]->numberOfPokemonBrought) {
+                func_8001833C((PokeIconRenderer*)D_82203264, slot, &arg0->teamMember[0]->pokemonPicked[j], 1);
             }
-            arg0->unk_08[j] = PokeIcon_GetImage((PokeIconRenderer*)D_82203264, slot);
-            arg0->unk_20[j] = D_82203210[slot]->img_p;
+            arg0->iconImages[j] = PokeIcon_GetImage((PokeIconRenderer*)D_82203264, slot);
+            arg0->hpBarImages[j] = D_82203210[slot]->img_p;
             slot++;
         }
     }
@@ -783,26 +699,26 @@ void func_82201600(s32 arg0) {
     s32 i;
 
     for (i = 0; i != 2; i++) {
-        if (((DemoState*)D_822036A4)->players[i].unk_0D == 2) {
+        if (D_822036A4->battleSides[i].tagTeamSize == 2) {
             for (j = 0; j != 2; j++) {
-                team = ((DemoState*)D_822036A4)->players[i].unk_14[j];
+                team = D_822036A4->battleSides[i].teamMember[j];
                 // Fake match: an empty check found by the permuter fixes register allocation.
                 if (team == NULL && team == NULL && team == NULL) {  // FAKE
                 }
                 for (k = 0; k < team->numberOfPokemonBrought; k++) {
                     if (arg0 == team->pokemonPicked[k].faintBatch) {
                         idx = i * 6 + j * 3 + k;
-                        func_82201348(*(GfxImage**)(M2C_FIELD(D_82203264, s8**, 8) + idx * 0x14 + 0xC));
+                        func_82201348(((PokeIconRenderer*)D_82203264)->slots[idx].image);
                         Audio_PlayCommand(0x3D, 2, idx + 1);
                     }
                 }
             }
         } else {
-            team = ((DemoState*)D_822036A4)->players[i].unk_14[0];
+            team = D_822036A4->battleSides[i].teamMember[0];
             for (k = 0; k < team->numberOfPokemonBrought; k++) {
                 if (arg0 == (team->pokemonPicked + k)->faintBatch) {
                     idx = i * 6 + k;
-                    func_82201348(*(GfxImage**)(M2C_FIELD(D_82203264, s8**, 8) + idx * 0x14 + 0xC));
+                    func_82201348(((PokeIconRenderer*)D_82203264)->slots[idx].image);
                     Audio_PlayCommand(0x3D, 2, idx + 1);
                 }
             }
@@ -811,7 +727,7 @@ void func_82201600(s32 arg0) {
 }
 
 s32 func_822017F0(void) {
-    unk_D_82203170* p;
+    VsSceneSide* p;
     BattleMon* mon;
     s32 i;
     s32 j;
@@ -819,18 +735,18 @@ s32 func_822017F0(void) {
 
     for (i = 0; i < 2; i++) {
         p = &D_82203170[i];
-        if (p->unk_00 == 2) {
+        if (p->teamLayout == 2) {
             for (j = 0; j < 2; j++) {
-                mon = p->unk_38[j]->pokemonPicked;
-                for (k = 0; k < p->unk_38[j]->numberOfPokemonBrought; k++, mon++) {
+                mon = p->teamMember[j]->pokemonPicked;
+                for (k = 0; k < p->teamMember[j]->numberOfPokemonBrought; k++, mon++) {
                     if (mon->hp < mon->maxHp) {
                         return 1;
                     }
                 }
             }
         } else {
-            mon = p->unk_38[0]->pokemonPicked;
-            for (k = 0; k < p->unk_38[0]->numberOfPokemonBrought; k++, mon++) {
+            mon = p->teamMember[0]->pokemonPicked;
+            for (k = 0; k < p->teamMember[0]->numberOfPokemonBrought; k++, mon++) {
                 if (mon->hp < mon->maxHp) {
                     return 1;
                 }
@@ -873,7 +789,7 @@ void func_822018EC(void) {
         } while (func_80018E24(D_82203264) == 0);
     }
     var_s0_2 = 1;
-    if ((M2C_FIELD(D_822036A4, s8 *, 0) == 0) && (M2C_FIELD(D_822036A4, s8 *, 1) == 0)) {
+    if ((D_822036A4->mode == 0) && (D_822036A4->ruleCategory == 0)) {
         var_s0_3 = 1;
         do {
             func_82201600(var_s0_3);
@@ -895,12 +811,12 @@ s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);   /* extern */
 extern M2C_UNK D_8F6256E0;
 
 void func_82201A3C(void) {
-    if (M2C_FIELD(D_822036A4, u8 *, 0x1050) == 1) {
+    if (D_822036A4->battleSides[0].unk_1C == 1) {
         Audio_PlayCommand(0x3D, 3, 0);
     } else {
         Audio_PlayCommand(0x3D, 4, 0);
     }
-    M2C_FIELD(&D_82203268, u8 *, 2) = (u8) (M2C_FIELD(&D_82203268, u8 *, 2) | 0x20);
+    D_82203268.node.renderFlags |= 0x20;
     func_8001107C(&D_82203268, 0, &D_8F6256E0);
     func_80006828(0x96, &VsScene_DrawFrame);
 }
@@ -981,14 +897,14 @@ s32 Tournament_RunContinuePrompt(void);
 s32 func_82201DF8(void) {
     s32 sp24 = 0;
 
-    if (((DemoState*)D_822036A4)->players[1].unk_00 == 1) {
+    if (D_822036A4->battleSides[0].unk_1C == 1) {
         Model_InitDisplayObject(&D_822033D0, 1, 0, D_82203254);
         Model_InitDisplayObject(&D_82203538, 1, 0, D_82203258);
-        ModelAnim_BindTransformCurve(&D_822033D0, 1, D_82202C1C[((DemoState*)D_822036A4)->unk_0003], 0x10000);
-        ModelAnim_BindTransformCurve(&D_82203538, 1, D_82202C3C[((DemoState*)D_822036A4)->unk_0003], 0x10000);
+        ModelAnim_BindTransformCurve(&D_822033D0, 1, D_82202C1C[D_822036A4->roundOrDemoId], 0x10000);
+        ModelAnim_BindTransformCurve(&D_82203538, 1, D_82202C3C[D_822036A4->roundOrDemoId], 0x10000);
         Audio_PlayCommand(0x50, 0, 0);
-        D_8220354C = ((DemoState*)D_822036A4)->unk_0003 - 1;
-        if (((DemoState*)D_822036A4)->unk_0003 == 8) {
+        D_8220354C = D_822036A4->roundOrDemoId - 1;
+        if (D_822036A4->roundOrDemoId == 8) {
             BgStage_RunUntilCondition(0x5A, VsScene_DrawFrame);
             Audio_PlayCommand(0x51, 0, 0);
             BgStage_RunUntilCondition(0x19, VsScene_DrawFrame);
@@ -1007,7 +923,7 @@ s32 func_82201DF8(void) {
 
 extern u8 D_8F625614[];
 extern u8 D_8F61F87C[];
-void VsScene_LoadTagTeamIcons(unk_D_82203170* arg0, s32 arg1);
+void VsScene_LoadTagTeamIcons(VsSceneSide* arg0, s32 arg1);
 void func_82201084(s32);
 void func_82200714(void);
 void func_80041374(s32 arg0, s32 arg1);
@@ -1022,7 +938,7 @@ void func_82201F90(void) {
     Vec3f_SetComponentsDuplicate(&camera->view.eyePosition, 200.0f, 50.0f, 0.0f);
     StageLoader_RunFrames(2);
     Model_InitDisplayObject(&D_82203268, 1, 0, D_82203250);
-    if (((DemoState*)D_822036A4)->players[1].unk_00 == 1) {
+    if (D_822036A4->battleSides[0].unk_1C == 1) {
         ModelAnim_BindTransformCurve(&D_82203268, 1, D_8F625614, 0x10000);
     } else {
         ModelAnim_BindTransformCurve(&D_82203268, 1, D_8F61F87C, 0x10000);
@@ -1037,7 +953,7 @@ void func_82201F90(void) {
     func_80041374(0x3D, 0);
     func_82200714();
     ModelRenderer_ClearDisplayObject(&D_82203268);
-    ((DemoState*)D_822036A4)->unk_1096 |= 1;
+    D_822036A4->transitionFlags |= 1;
 }
 
 extern u8 D_82400000[];
@@ -1047,11 +963,11 @@ void VsScene_PrepareTeams(void);
 void VsScene_PlayBattleTitle(void);
 
 void func_822020FC(void) {
-    DemoState* state = (DemoState*)D_822036A4;
+    SessionContext* state = D_822036A4;
 
-    if (state->players[1].unk_00 == 1) {
-        if (state->unk_0003 < 8) {
-            state->unk_0003++;
+    if (state->battleSides[0].unk_1C == 1) {
+        if (state->roundOrDemoId < 8) {
+            state->roundOrDemoId++;
             ModelRenderer_ClearDisplayObject(&D_82203268);
             main_pool_pop_state('ICON');
             Fragment_LoadAndCall((((u32)D_82400000 & 0x0FF00000) >> 0x14) - 0x10, D_00175570, D_0017BE70, 0,
@@ -1059,16 +975,16 @@ void func_822020FC(void) {
             VsScene_PrepareTeams();
             VsScene_LoadTeamIcons(&D_82203170[0], 0);
             VsScene_LoadTeamIcons(&D_82203170[1], 1);
-            D_822033E8 = ((DemoState*)D_822036A4)->unk_0003;
-            D_82203550 = ((DemoState*)D_822036A4)->unk_0003;
+            D_822033E8 = D_822036A4->roundOrDemoId;
+            D_82203550 = D_822036A4->roundOrDemoId;
             Audio_PlayMusicIfChanged(0xF);
             VsScene_PlayBattleTitle();
         } else {
             BgStage_RunUntilCondition(0x20, VsScene_DrawFrame);
-            ((DemoState*)D_822036A4)->unk_1096 |= 1;
+            D_822036A4->transitionFlags |= 1;
         }
     } else {
-        state->unk_1096 |= 1;
+        state->transitionFlags |= 1;
     }
 }
 
@@ -1082,14 +998,14 @@ void func_82202228(void) {
     Vec3f_SetComponentsDuplicate(&camera->view.eyePosition, 200.0f, 50.0f, 0.0f);
     StageLoader_RunFrames(2);
     Model_InitDisplayObject(&D_82203268, 1, 0, D_82203250);
-    if (((DemoState*)D_822036A4)->players[1].unk_00 == 1) {
+    if (D_822036A4->battleSides[0].unk_1C == 1) {
         ModelAnim_BindTransformCurve(&D_82203268, 1, D_8F625614, 0x10000);
     } else {
         ModelAnim_BindTransformCurve(&D_82203268, 1, D_8F61F87C, 0x10000);
     }
     D_82203268.node.renderFlags &= ~0x20;
     StageFade_Start(0x20);
-    if (((DemoState*)D_822036A4)->unk_0003 < 8) {
+    if (D_822036A4->roundOrDemoId < 8) {
         Audio_PlayMusicIfChanged(0xD);
     } else {
         Audio_PlayMusicIfChanged(0x10);
@@ -1099,7 +1015,7 @@ void func_82202228(void) {
     func_822018EC();
     func_82201A3C();
     if (func_82201DF8() != 0) {
-        ((DemoState*)D_822036A4)->unk_1096 |= 0x41;
+        D_822036A4->transitionFlags |= 0x41;
     } else {
         func_822020FC();
     }
@@ -1233,24 +1149,24 @@ s32 Font_Init(s32 load_size, s32 side);
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-s32 VsScene_Run(s32 arg0, s8* arg1) {
+s32 VsScene_Run(s32 arg0, SessionContext* arg1) {
     s32 round;
     s32 sp24;
 
     D_822036A4 = arg1;
     round = 0;
-    ((DemoState*)D_822036A4)->unk_1096 = 0;
+    D_822036A4->transitionFlags = 0;
 
     if (arg0 == 0) {
-        round = ((DemoState*)D_822036A4)->unk_0003;
+        round = D_822036A4->roundOrDemoId;
     } else if (arg0 == 2) {
-        round = ((DemoState*)D_822036A4)->unk_0003 + 1;
+        round = D_822036A4->roundOrDemoId + 1;
         if (round >= 9) {
             round = 8;
         }
     }
 
-    if (((DemoState*)D_822036A4)->unk_0000 == 0) {
+    if (D_822036A4->mode == 0) {
         D_822036A8 = 0;
     } else if (round < 7) {
         D_822036A8 = 1;

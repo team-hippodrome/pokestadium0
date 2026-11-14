@@ -203,7 +203,7 @@ typedef struct Obj80019D08 {
     /* 0x08 */ char pad08[8];
     /* 0x10 */ ModelLoadContext* loadContext;
     /* 0x14 */ s32 loadedModel;              // @unverified: gets loadContext->loadedModel after the load
-} Obj80019D08; // size = 0x18; same layout as BattleSessionTeams
+} Obj80019D08; // size = 0x18; same layout as BattleSide
 s32 func_80005014(void);
 void func_8001799C(ModelLoadContext*, u16, arg1_func_80010CA8);
 void func_80017D00(ModelLoadContext*);

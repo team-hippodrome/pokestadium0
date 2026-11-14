@@ -508,7 +508,7 @@ extern s8 *D_8219A5A0;
  * In the per-move sweep only Splash ran it.
  */
 void Battle_Effect_Splash(void) {
-    M2C_FIELD(D_8219A5A0, s32 *, 0x48) = 7;
+    sBattleScene.scene->moveEffectKind = 7;
     BattleMessage_Format(D_8219A520 + 0x88, -0x3C, D_8218C8CC);
 }
 

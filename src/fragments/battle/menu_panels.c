@@ -149,7 +149,7 @@ void BattleMenu_DrawMovePanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3)
     BattleMon* party;
     BattleMonRuntime* runtime;
 
-    party = &arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)]->pokemonPicked[M2C_FIELD(arg0, s32*, 0x9D0)];
+    party = &arg0->sessionTeams->teamMember[arg0->thumbnail.shownTeamMemberIndex]->pokemonPicked[arg0->thumbnail.shownRosterIndex];
     runtime = &arg0->state.runtime;
 
     func_82116CF4(arg1 + 1, arg2 + 1, 0xC7, 0x38, &D_8218B008 + arg3 * 3, &D_8218B014 + arg3 * 3);
@@ -547,7 +547,7 @@ void BattleMenu_DrawSwitchPanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg
     UNUSED s32 pad[3]; // FAKE
     Colors8211B900 a = D_8218B104;
     Colors8211B900 b = D_8218B114;
-    TeamRoster* roster = arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)];
+    TeamRoster* roster = arg0->sessionTeams->teamMember[arg0->thumbnail.shownTeamMemberIndex];
     BattleMon* m0 = &arg0->teamRoster->pokemonPicked[0];
     BattleMon* m1 = &arg0->teamRoster->pokemonPicked[1];
     BattleMon* m2 = &arg0->teamRoster->pokemonPicked[2];
@@ -646,7 +646,7 @@ void BattleHud_DrawCompactMonStatusBox(ActivePokemon* arg0, s16 arg1, s16 arg2, 
     u16 val;
 
     state = &arg0->state;
-    mon = &arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)]->pokemonPicked[M2C_FIELD(arg0, s32*, 0x9D0)];
+    mon = &arg0->sessionTeams->teamMember[arg0->thumbnail.shownTeamMemberIndex]->pokemonPicked[arg0->thumbnail.shownRosterIndex];
     if (mon->hp == 0) {
         status = 1;
     } else {
@@ -1444,8 +1444,8 @@ void func_8211E794(s16 arg0, s16 arg1) {
     char buf[16];
 
     Ui_DrawPrimColorRect(arg0, arg1, 0x50, 0x1E, 0, 0, 0, 0x3C);
-    func_800564D4(buf, D_82195FF4, M2C_FIELD(M2C_FIELD(D_8219A5A0, s8**, 0xCC), f32*, 0x34));
+    func_800564D4(buf, D_82195FF4, sBattleScene.scene->camera->perspective.nearPlane);
     func_82116480(buf, arg0 + 3, arg1 + 2);
-    func_800564D4(buf, D_82195FF8, M2C_FIELD(M2C_FIELD(D_8219A5A0, s8**, 0xCC), f32*, 0x38));
+    func_800564D4(buf, D_82195FF8, sBattleScene.scene->camera->perspective.farPlane);
     func_82116480(buf, arg0 + 3, arg1 + 0x10);
 }
