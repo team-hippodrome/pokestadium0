@@ -7,9 +7,7 @@
 extern u8 D_80073520[];
 M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 
-M2C_UNK func_89109E5C(s32, s32, s32, s32);
-M2C_UNK func_89109FE0(s32);
-M2C_UNK func_8910A03C(s32);
+M2C_UNK LabPCList_InitDeckCategories(s32, s32, s32, s32);
 
 extern s32 D_8910A7F8[3];
 void func_80027410(void*, void*, s32, s32, s32);
@@ -20,8 +18,7 @@ void func_8000B2F4(s32);
 
 void Window_SetRect(s8 *, s32, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
-void func_89109B60(s8*);
-M2C_UNK func_89109C6C(s32, s32);                    /* extern */
+void LabPCList_LoadAllBoxes(s8*);
 void func_80027D68(void*, s32);
 void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
 void LabPCList_DrawMonRow();
@@ -53,7 +50,7 @@ void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
 void Font_SetColorForFlags(s32);
-void func_89101238(s32, s32, s8*, s32, s32);
+void LabPCList_DrawPlainText(s32, s32, s8*, s32, s32);
 
 s32 Window_DrawAnimatedFrame(void);
 void func_8002C5A4(s32, s32, s32);
@@ -213,11 +210,11 @@ extern s32 D_8910D990[];
 void ScrollList_SetItems(ScrollList*, PointerList*, u16*);
 void func_80027D94(void*, PointerList*, void*, void*);
 void func_80027D68(void*, s32);
-s32 func_891096F4();
-s32 func_89109720();
-s32 func_891097E4();
-s32 func_89109884();
-s32 func_89109898();
+int LabPCList_FilterByLevelRange();
+s32 LabPCList_FilterByAnyType();
+s32 LabPCList_FilterByAnyMove();
+s32 LabPCList_FilterBySpeciesId();
+s32 LabPCList_FilterByExactTypePair();
 s32 func_89109960();
 /**
  * Rebuilds the visible list from the source boxes using the active filter flags.
@@ -228,23 +225,23 @@ M2C_UNK LabPCList_ApplyFiltersAndSort(LabPCListScreen* arg0) {
     ScrollList_SetItems(&arg0->list, &arg0->rows, arg0->rowFlags);
     if (arg0->activeFilters != 0) {
         if (arg0->activeFilters & 1) {
-            func_80027D94(arg0->list.items, &arg0->filteredRows, func_891096F4, &arg0->levelFilterMin);
+            func_80027D94(arg0->list.items, &arg0->filteredRows, LabPCList_FilterByLevelRange, &arg0->levelFilterMin);
             ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
         if (arg0->activeFilters & 2) {
-            func_80027D94(arg0->list.items, &arg0->filteredRows, func_89109720, &arg0->typeFilterCount);
+            func_80027D94(arg0->list.items, &arg0->filteredRows, LabPCList_FilterByAnyType, &arg0->typeFilterCount);
             ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
         if (arg0->activeFilters & 4) {
-            func_80027D94(arg0->list.items, &arg0->filteredRows, func_891097E4, &arg0->moveFilterMoves);
+            func_80027D94(arg0->list.items, &arg0->filteredRows, LabPCList_FilterByAnyMove, &arg0->moveFilterMoves);
             ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
         if (arg0->activeFilters & 8) {
-            func_80027D94(arg0->list.items, &arg0->filteredRows, func_89109884, &arg0->unk_9E58);
+            func_80027D94(arg0->list.items, &arg0->filteredRows, LabPCList_FilterBySpeciesId, &arg0->unk_9E58);
             ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
         if (arg0->activeFilters & 0x10) {
-            func_80027D94(arg0->list.items, &arg0->filteredRows, func_89109898, &arg0->sameTypeFilterCount);
+            func_80027D94(arg0->list.items, &arg0->filteredRows, LabPCList_FilterByExactTypePair, &arg0->sameTypeFilterCount);
             ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
         if (arg0->activeFilters & 0x20) {
@@ -303,7 +300,7 @@ void func_8000A460(s8*, s8*);
 u32 func_800566BC(s8*);
 void LabPCList_InitPopupMenu(LabPopupMenu*, void*, s8*, s32, s32);
 void LabPCList_PlacePopup(LabPopupMenu*);
-void func_8910A21C(s8*, s8*, s8*, s32);
+void LabPCList_BuildUsableItemList(s8*, s8*, s8*, s32);
 extern s8* D_8910A890[];
 extern u8 D_8910A898[];
 extern u8 D_8910DC50[];
@@ -329,7 +326,7 @@ void LabPCList_FormatGatherPrompt(LabPCListScreen* arg0) {
     arg0->popup.window.frame.color = D_8910A7F4;
     arg0->state = 7;
     func_80027804((s8*)arg0 + 0xAFFC, (s8*)arg0 + 0xAD54, 0xAA, 0);
-    func_8910A21C((s8*)arg0 + 0xAFFC, (s8*)arg0 + 0xA00C, (s8*)arg0->unk_9E64, 3);
+    LabPCList_BuildUsableItemList((s8*)arg0 + 0xAFFC, (s8*)arg0 + 0xA00C, (s8*)arg0->unk_9E64, 3);
     if (M2C_FIELD(arg0, s32*, 0xB004) == 0) {
         M2C_FIELD(arg0->popup.menu.itemFlags, u16*, 6) |= 1;
     }
@@ -498,7 +495,6 @@ s32 LabPCList_UpdateBrowse(LabPCListScreen* arg0) {
 }
 
 M2C_UNK LabPCList_ApplyFiltersAndSort();
-M2C_UNK func_89109C6C(s32, s32);                    /* extern */
 /**
  * Handles the window that chooses which boxes to list.
  * Seen in play (2026-11-12): ran the 「どこのポケモンを いちらん するか えらんでください。」 window (てもち / ゲームボーイのボックス /
@@ -518,7 +514,7 @@ s32 LabPCList_UpdateSourceSelect(LabPCListScreen* arg0)
   if (temp_v0 == 1)
   {
     new_var = (s8*)&arg0->sourceMatrix;
-    func_89109C6C(new_var2, new_var);
+    LabPCList_FlattenEntries((PointerList*)new_var2, (unk_func_8830867C_02C_144*)new_var);
     LabPCList_ApplyFiltersAndSort(arg0);
     *((s32 *) (((s8 *) arg0) + 0x88)) = 0;
     block_4:
@@ -568,7 +564,7 @@ M2C_UNK func_800243B8();                            /* extern */
 M2C_UNK func_8002D7D4(s32);                         /* extern */
 void LabPCList_DrawListScreen(LabPCListScreen*);
 s32 func_89102930();                                /* extern */
-M2C_UNK func_89109D14(s32);                         /* extern */
+M2C_UNK LabPCList_SaveDirtyBoxes(s32);                         /* extern */
 extern s32 D_8910E37C;
 
 /**
@@ -585,7 +581,7 @@ void LabPCList_SaveChanges(s32 arg0) {
     if (temp_v0 & 3) {
         func_80022118(D_8910E37C);
     }
-    func_89109D14(arg0 + 0x420);
+    LabPCList_SaveDirtyBoxes(arg0 + 0x420);
     func_891000BC(arg0);
     if (sp1C & 3) {
         if (sp1C & 1) {

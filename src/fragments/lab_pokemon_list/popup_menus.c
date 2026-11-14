@@ -468,7 +468,7 @@ void func_8910597C(LabSourceSelectWindow* arg0, LabBoxListWindow* arg1) {
 }
 
 /* Rebuild entry flags from the current laboratory records. */
-void func_891059FC(u8* widget) {
+void LabSourceSelect_UpdateItemFlags(u8* widget) {
     s32 offset;
     s32 entry = (*(s32**)(widget + 0x70))[0];
     s32 index;
@@ -536,7 +536,7 @@ void func_89105AD4(s32 arg0, s32 arg1, char** arg2, s32 arg3, s32 arg4) {
 
 void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5);
 void func_89105AD4(s32 arg0, s32 arg1, char** arg2, s32 arg3, s32 arg4);
-void func_891059FC(u8* widget);
+void LabSourceSelect_UpdateItemFlags(u8* widget);
 void func_8000B2F4(s32);
 extern s32 D_800603C0;
 extern Color_RGBA8 D_8910A93C;
@@ -566,7 +566,7 @@ void func_89105C54(LabSourceSelectWindow* arg0, s32 arg1, s32 arg2, s8* arg3, Co
     func_8910576C(&arg0->gbBoxes, arg0->window.frame.x + arg0->window.frame.width, arg0->listFrame.y + 0x1C, (ByteMatrix*)(list + 0x34), (s32)(&arg0->gbBoxFlags), arg4);
     func_8910576C(&arg0->cartBoxes, arg0->window.frame.x + arg0->window.frame.width, arg0->listFrame.y + 0x38, (ByteMatrix*)(list + 0x58), (s32)(&arg0->cartBoxFlags), arg4);
     Menu_Init(&arg0->menu, arg3, (s32)(&arg0->itemFlags), func_89105AD4, 0x128, 0x1C);
-    func_891059FC((u8*)arg0);
+    LabSourceSelect_UpdateItemFlags((u8*)arg0);
     arg0->cursor.count = 4;
     arg0->cursor.cursor = 0;
     arg0->cursor.controller = (Controller*)D_800603C0;
@@ -1708,7 +1708,6 @@ void PcSort_DrawUseItemPrompt(LabItemWindow* arg0) {
 extern u8 D_8910AAE8[];
 extern Rgba891084B4 D_8910AAEC;
 s32 ScrollList_UpdateCursor(s8 *);
-void func_89105144(s8 *);
 s32 func_80020974(s32);
 /**
  * Handles the item window. Returns 1 for a vitamin, 2 for PP Up, 3 for a TM or HM.
@@ -1792,7 +1791,7 @@ s32 LabPCList_UpdateItemWindow(s8 *arg0)
             else
             {
               func_89104FC0(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-              func_89105144(self + 0x110);
+              LabMoveSelect_DisableHmMoves((LabMoveSelectWindow*)(self + 0x110));
               *((u32 *) (((s8 *) self) + 0x1B0)) = 3;
             }
           }

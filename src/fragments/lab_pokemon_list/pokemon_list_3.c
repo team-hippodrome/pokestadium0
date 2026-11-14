@@ -7,9 +7,7 @@
 extern u8 D_80073520[];
 M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 
-M2C_UNK func_89109E5C(s32, s32, s32, s32);
-M2C_UNK func_89109FE0(s32);
-M2C_UNK func_8910A03C(s32);
+M2C_UNK LabPCList_InitDeckCategories(s32, s32, s32, s32);
 
 extern s32 D_8910A7F8[3];
 void func_80027410(void*, void*, s32, s32, s32);
@@ -20,8 +18,7 @@ void func_8000B2F4(s32);
 
 void Window_SetRect(s8 *, s32, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
-void func_89109B60(s8*);
-M2C_UNK func_89109C6C(s32, s32);                    /* extern */
+void LabPCList_LoadAllBoxes(s8*);
 void func_80027D68(s32, s32);
 void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
 void LabPCList_DrawMonRow();
@@ -53,7 +50,7 @@ void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
 void Font_SetColorForFlags(s32);
-void func_89101238(s32, s32, s8*, s32, s32);
+void LabPCList_DrawPlainText(s32, s32, s8*, s32, s32);
 
 /**
  * Draws one Pokemon row of the list with the columns of the current detail page.
@@ -115,7 +112,7 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
       switch (col)
       {
         case 0:
-          func_89101238(cx + 6, y + 2, entry->nickname, 0, 0);
+          LabPCList_DrawPlainText(cx + 6, y + 2, entry->nickname, 0, 0);
           break;
 
         case 1:
@@ -123,7 +120,7 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
           break;
 
         case 2:
-          func_89101238(cx + 4, y + 2, entry->trainer, 0, 0);
+          LabPCList_DrawPlainText(cx + 4, y + 2, entry->trainer, 0, 0);
           break;
 
         case 3:
@@ -147,27 +144,27 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
           break;
 
         case 10:
-          func_89101238(cx + 0xC, y + 2, D_8910DBD8, entry->unk2C, 0);
+          LabPCList_DrawPlainText(cx + 0xC, y + 2, D_8910DBD8, entry->unk2C, 0);
           break;
 
         case 11:
-          func_89101238(cx + 0xC, y + 2, D_8910DBDC, entry->stats[0], 0);
+          LabPCList_DrawPlainText(cx + 0xC, y + 2, D_8910DBDC, entry->stats[0], 0);
           break;
 
         case 12:
-          func_89101238(cx + 0xC, y + 2, D_8910DBE0, entry->stats[1], 0);
+          LabPCList_DrawPlainText(cx + 0xC, y + 2, D_8910DBE0, entry->stats[1], 0);
           break;
 
         case 13:
-          func_89101238(cx + 0xC, y + 2, D_8910DBE4, entry->stats[2], 0);
+          LabPCList_DrawPlainText(cx + 0xC, y + 2, D_8910DBE4, entry->stats[2], 0);
           break;
 
         case 14:
-          func_89101238(cx + 0xC, y + 2, D_8910DBE8, entry->stats[3], 0);
+          LabPCList_DrawPlainText(cx + 0xC, y + 2, D_8910DBE8, entry->stats[3], 0);
           break;
 
         case 15:
-          func_89101238(cx + 0xC, y + 2, D_8910DBEC, entry->stats[4], 0);
+          LabPCList_DrawPlainText(cx + 0xC, y + 2, D_8910DBEC, entry->stats[4], 0);
           break;
 
       }

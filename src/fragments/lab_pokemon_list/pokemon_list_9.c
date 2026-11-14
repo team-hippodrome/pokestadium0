@@ -30,7 +30,7 @@ s32 LabPCList_FilterByExactTypePair(LabMonEntry* arg0, unk_func_8830867C_02C_C54
 
 s32 LabPCList_CompareByPointer(LabMonEntry* arg0, LabMonEntry* arg1);
 
-s32 func_891091C0(LabMonEntry* arg0, LabMonEntry* arg1) {
+s32 LabPCList_CompareByPointer(LabMonEntry* arg0, LabMonEntry* arg1) {
     s32 var_v1 = arg0->unk_00->unk_00->unk_0C - arg1->unk_00->unk_00->unk_0C;
 
     if (var_v1 == 0) {
@@ -212,7 +212,7 @@ s32 LabPCList_CompareById(LabMonEntry* arg0, LabMonEntry* arg1) {
 }
 
 s32 func_89109580(LabMonEntry* arg0, LabMonEntry* arg1) {
-    return func_891091C0(arg0, arg1);
+    return LabPCList_CompareByPointer(arg0, arg1);
 }
 
 /**

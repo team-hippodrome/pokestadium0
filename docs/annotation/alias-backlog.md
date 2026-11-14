@@ -154,12 +154,7 @@ Each row is one function address that the source still reaches under more than o
 | `Geo_NodeModelPartRoot` | `func_80013DC8` |
 | `Jpeg_BuildDspInput` | `func_800033B8` |
 | `LabItem_SubtractSelectedItemQuantity` | `func_890001B4` |
-| `LabPCList_BuildTmHmList` | `func_8910A21C` |
-| `LabPCList_CompareByPointer` | `func_891091C0` |
 | `LabPCList_CompareBySpeciesGroup` | `func_82123F44` |
-| `LabPCList_InitDeckCategories` | `func_89109E5C` |
-| `LabPCList_LoadAllBoxes` | `func_89109B60` |
-| `LabPCList_SaveDirtyBoxes` | `func_89109D14` |
 | `MewtwoIntro_RenderFrame` | `func_82200510` |
 | `MiniFx_UpdateParticles` | `func_82124194` |
 | `ModelAnim_BeginCurveContext` | `func_8001148C` |
@@ -250,7 +245,6 @@ Each row is one function address that the source still reaches under more than o
 | `Particle_SetRotationSpeed` | `func_8213EB64` |
 | `Particle_SetTextureFrame` | `func_8213CBFC` |
 | `PokeIcon_AllocFramebuffers` | `func_80017860` |
-| `PokeIcon_AttachDepthBuffer` | `func_891059FC` |
 | `PokeIcon_GetImage` | `func_80018DEC` |
 | `PokeIcon_WaitBackgroundLoad` | `func_80017D38` |
 | `PokeIcon_WaitFrameLoad` | `func_80017D00` |

@@ -375,7 +375,7 @@ typedef struct LabPCListScreen {
     /* 0x9918 */ s32 typeFilterCount; // number of types in typeFilterTypes: 1 after あつめる (gather) with でんき (Electric); 0 turns the type filter off
     /* 0x991C */ u8 typeFilterTypes[4]; // the types to gather: 0x17 (Electric) seen in play
     /* 0x9920 */ LabTypeFilterWindow typeFilterWindow; // @unverified: LabPCList_DrawTypeFilter
-    /* 0x9B00 */ u8 moveFilterMoves[4]; // @unverified: the moves to gather (LabPCList_CommitMoveFilter, func_891097E4)
+    /* 0x9B00 */ u8 moveFilterMoves[4]; // @unverified: the moves to gather (LabPCList_CommitMoveFilter, LabPCList_FilterByAnyMove)
     /* 0x9B04 */ s32 moveFilterCount; // @unverified: number of moves in moveFilterMoves; 0 turns the move filter off
     /* 0x9B08 */ LabMoveFilterWindow moveFilterWindow; // @unverified: LabPCList_DrawMoveFilter
     /* 0x9E58 */ s32 unk_9E58;
@@ -465,12 +465,5 @@ void LabPCList_FlattenEntries(PointerList*, unk_func_8830867C_02C_144*);
 void LabPCList_ReadDeckCategory(unk_func_8830867C_02C_154*);
 void LabPCList_WriteDeckCategory(unk_func_8830867C_02C_154*);
 
-// functions defined in assembly
-s32 LabPCList_CompareByPointer(LabMonEntry*, LabMonEntry*);
-void LabPCList_LoadAllBoxes(unk_func_8830867C_02C_144*);
-void LabPCList_SaveDirtyBoxes(unk_func_8830867C_02C_144*, s32);
-void LabPCList_InitDeckCategories(unk_func_8830867C_02C_154*, MemoryPool* arg1);
-void LabPCList_BuildTmHmList(PointerList*, unk_func_8830867C_02C_1A8*, unk_func_8830867C_02C_154*, s32, s32);
-void PokeIcon_AttachDepthBuffer(PokeIconRenderer*, ModelLoadContext*, GfxImage*);
 
 #endif // FRAGMENT_LAB_POKEMON_LIST_H

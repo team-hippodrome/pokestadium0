@@ -7,20 +7,18 @@
 extern u8 D_80073520[];
 M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 
-M2C_UNK func_89109E5C(s32, s32, s32, s32);          /* extern */
-M2C_UNK func_89109FE0(s32);                         /* extern */
+M2C_UNK LabPCList_InitDeckCategories(s32, s32, s32, s32);          /* extern */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void func_89100020(s32 arg0)
 {
   s32 var_s0;
   s32 var_s1;
   s8 *var_s2;
-  func_89109E5C(arg0 + 0x9E64, arg0 + 0x9EB8, arg0 + 0x9EE0, arg0 + 0x9F44);
+  LabPCList_InitDeckCategories(arg0 + 0x9E64, arg0 + 0x9EB8, arg0 + 0x9EE0, arg0 + 0x9F44);
   var_s2 = arg0 + 0x8000;
- do { var_s0 = arg0; var_s1 = 0; do { if ((*((s32 *) (((s8 *) var_s2) + 0x1E68))) != 0) { func_89109FE0(var_s0 + 0x9E64); } var_s1 += 0x1C; var_s0 += 0x1C; var_s2 += 0x1C; } while (var_s1 != 0x54); } while (0);  // FAKE
+ do { var_s0 = arg0; var_s1 = 0; do { if ((*((s32 *) (((s8 *) var_s2) + 0x1E68))) != 0) { LabPCList_ReadDeckCategory((unk_func_8830867C_02C_154*)(var_s0 + 0x9E64)); } var_s1 += 0x1C; var_s0 += 0x1C; var_s2 += 0x1C; } while (var_s1 != 0x54); } while (0);  // FAKE
 }
 
-M2C_UNK func_8910A03C(s32);                         /* extern */
 
 void func_891000BC(s32 arg0) {
     s32 var_s1;
@@ -32,7 +30,7 @@ void func_891000BC(s32 arg0) {
     var_s2 = 0;
     do {
         if ((M2C_FIELD(var_s0, s32 *, 0x1E68) != 0) && (M2C_FIELD(var_s0, s32 *, 0x1E6C) != 0)) {
-            func_8910A03C(var_s1 + 0x9E64);
+            LabPCList_WriteDeckCategory((unk_func_8830867C_02C_154*)(var_s1 + 0x9E64));
         }
         var_s2 += 0x1C;
         var_s1 += 0x1C;
@@ -112,8 +110,7 @@ void LabPCList_ResetFilterState(LabPCListScreen* state) {
 
 void Window_SetRect(s8 *, s32, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
-void func_89109B60(s8*);
-M2C_UNK func_89109C6C(s32, s32);                    /* extern */
+void LabPCList_LoadAllBoxes(s8*);
 void func_80027D68(s32, s32);
 void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
 void LabPCList_DrawMonRow();
@@ -146,10 +143,10 @@ void LabPCList_InitListWindow(LabPCListScreen* arg0, s32 arg1, s32 arg2, s32 arg
     arg0->listFrame.style = 1;
     func_80027804((s8*)&arg0->rows, (s8*)arg0->rowBuffer, 0x1D2, 0);
     func_80027804((s8*)&arg0->filteredRows, (s8*)arg0->filteredRowBuffer, 0x1D2, 0);
-    func_89109B60((s8*)&arg0->sourceMatrix);
+    LabPCList_LoadAllBoxes((s8*)&arg0->sourceMatrix);
     arg0->activeFilters = 0;
     arg0->columnWidths = D_8910A804;
-    func_89109C6C((s32)((s8*)&arg0->rows), (s32)((s8*)&arg0->sourceMatrix));
+    LabPCList_FlattenEntries(&arg0->rows, (unk_func_8830867C_02C_144*)&arg0->sourceMatrix);
     arg0->sortKey = 0;
     func_80027D68((s32)((s8*)&arg0->rows), D_8910D990[0]);
     arg0->focus = 0;

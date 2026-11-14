@@ -114,7 +114,7 @@ typedef struct LabPCBoxList89109B60 {
 } LabPCBoxList89109B60;
 
 /* Stadium 1's LabPCList_LoadAllBoxes, without its box-count check and NULL deck check. */
-void func_89109B60(LabPCBoxList89109B60* arg0) {
+void LabPCList_LoadAllBoxes(LabPCBoxList89109B60* arg0) {
     s32 i;
     s32 j;
     s32 n;
@@ -202,7 +202,7 @@ typedef struct LabPCDeck89109D14 {
 void func_80023268(s32 arg0, s32 arg1, s32 arg2);
 
 /* Stadium 1's LabPCList_SaveAllBoxes, with every deck flushed the same way. */
-void func_89109D14(LabPCBoxList89109B60* arg0) {
+void LabPCList_SaveDirtyBoxes(LabPCBoxList89109B60* arg0) {
     s32 i;
     s32 j;
     s32 x;
@@ -239,7 +239,7 @@ s32 Deck_GetSaveEntryTrainerId(s32, s32);
 s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2);
 s32 func_80024ADC(s32, s32);
 s32 func_8000A4E8(char*, char*);
-void func_89109E5C(unk_func_8830867C_02C_154* arg0, void* arg1, void* arg2, void* arg3) {
+void LabPCList_InitDeckCategories(unk_func_8830867C_02C_154* arg0, void* arg1, void* arg2, void* arg3) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 temp_s1;
     char sp54[4];
@@ -359,7 +359,7 @@ typedef struct TmEntry8910A21C {
     /* 0x0C */ s32 unk_0C;
     /* 0x10 */ s32 unk_10;
 } TmEntry8910A21C; // size = 0x14
-void func_8910A21C(PointerList* arg0, TmEntry8910A21C* arg1, unk_func_8830867C_02C_154* arg2, s32 arg3) {
+void LabPCList_BuildUsableItemList(PointerList* arg0, TmEntry8910A21C* arg1, unk_func_8830867C_02C_154* arg2, s32 arg3) {
     void** var_s6;
     unk_func_8830867C_02C_154* var_s4;
     s32 i;

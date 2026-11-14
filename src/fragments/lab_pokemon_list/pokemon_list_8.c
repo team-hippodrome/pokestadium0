@@ -27,7 +27,7 @@ extern s32 D_800603C0;
 void func_8000B2F4(s32);
 void Window_SetRect(s8 *, s32, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
-void func_89109B60(s8*);
+void LabPCList_LoadAllBoxes(s8*);
 void func_80027D68(s32, s32);
 void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
 void LabPCList_DrawMonRow();
@@ -67,17 +67,17 @@ extern s32 D_8910D990[];
 void ScrollList_SetItems(s32*, void*, void*);
 void func_80027D94(s32, void*, void*, void*);
 void func_80027D68(s32, s32);
-s32 func_891096F4();
-s32 func_89109720();
-s32 func_891097E4();
-s32 func_89109884();
-s32 func_89109898();
+int LabPCList_FilterByLevelRange();
+s32 LabPCList_FilterByAnyType();
+s32 LabPCList_FilterByAnyMove();
+s32 LabPCList_FilterBySpeciesId();
+s32 LabPCList_FilterByExactTypePair();
 s32 func_89109960();
 void func_8000A460(s8*, s8*);
 u32 func_800566BC(s8*);
 void LabPCList_InitPopupMenu(LabPopupMenu*, void*, s8*, s32, s32);
 void LabPCList_PlacePopup(LabPopupMenu*);
-void func_8910A21C(s8*, s8*, s8*, s32);
+void LabPCList_BuildUsableItemList(s8*, s8*, s8*, s32);
 extern s8* D_8910A890[];
 extern u8 D_8910A898[];
 extern u8 D_8910DC50[];
@@ -154,7 +154,6 @@ typedef struct List89103C54 {
     /* 0x00 */ Ref89103740** items;
 } List89103C54;
 void func_800307D4(List89103C54**, s32, s32);
-void func_89109C6C(s8*, s8*);
 
 
 extern u8 D_8910A8E8[];
@@ -181,7 +180,7 @@ s32 LabPCList_UpdateDestinationMenu(LabPCListScreen* arg0) {
                     cursor = arg0->list.cursor;
                     top = arg0->list.cursor - arg0->list.scrollY / arg0->list.cellHeight;
                     LabPCList_MoveMonTo((LabPCListScreen*)arg0, ((List89103C54*)arg0->list.items)->items[arg0->list.cursor], 0, 0, arg0->msg);
-                    func_89109C6C((s8*)&arg0->rows, (s8*)&arg0->sourceMatrix.rows);
+                    LabPCList_FlattenEntries(&arg0->rows, (unk_func_8830867C_02C_144*)&arg0->sourceMatrix.rows);
                     LabPCList_ApplyFiltersAndSort(arg0);
                     func_800307D4(&arg0->list.items, cursor, top);
                     arg0->state = 0;
@@ -192,7 +191,7 @@ s32 LabPCList_UpdateDestinationMenu(LabPCListScreen* arg0) {
                     cursor = arg0->list.cursor;
                     top = arg0->list.cursor - arg0->list.scrollY / arg0->list.cellHeight;
                     LabPCList_MoveMonTo((LabPCListScreen*)arg0, ((List89103C54*)arg0->list.items)->items[arg0->list.cursor], 3, 0, arg0->msg);
-                    func_89109C6C((s8*)&arg0->rows, (s8*)&arg0->sourceMatrix.rows);
+                    LabPCList_FlattenEntries(&arg0->rows, (unk_func_8830867C_02C_144*)&arg0->sourceMatrix.rows);
                     LabPCList_ApplyFiltersAndSort(arg0);
                     func_800307D4(&arg0->list.items, cursor, top);
                     arg0->state = 0;
@@ -251,7 +250,7 @@ s32 LabPCList_UpdateGbBoxMenu(LabPCListScreen* arg0) {
             top = arg0->list.cursor - arg0->list.scrollY / arg0->list.cellHeight;
             func_8003F6AC(0x18);
             LabPCList_MoveMonTo((LabPCListScreen*)arg0, ((List89103C54*)arg0->list.items)->items[arg0->list.cursor], 1, arg0->subPopup2.menu.cursor, arg0->msg);
-            func_89109C6C((s8*)&arg0->rows, (s8*)&arg0->sourceMatrix);
+            LabPCList_FlattenEntries(&arg0->rows, (unk_func_8830867C_02C_144*)&arg0->sourceMatrix);
             LabPCList_ApplyFiltersAndSort(arg0);
             func_800307D4(&arg0->list.items, cursor, top);
             arg0->state = 0;
@@ -283,7 +282,7 @@ s32 LabPCList_UpdateStadiumBoxMenu(LabPCListScreen* arg0) {
             top = arg0->list.cursor - arg0->list.scrollY / arg0->list.cellHeight;
             func_8003F6AC(0x18);
             LabPCList_MoveMonTo((LabPCListScreen*)arg0, ((List89103C54*)arg0->list.items)->items[arg0->list.cursor], 2, arg0->subPopup2.menu.cursor, arg0->msg);
-            func_89109C6C((s8*)&arg0->rows, (s8*)&arg0->sourceMatrix);
+            LabPCList_FlattenEntries(&arg0->rows, (unk_func_8830867C_02C_144*)&arg0->sourceMatrix);
             LabPCList_ApplyFiltersAndSort(arg0);
             func_800307D4(&arg0->list.items, cursor, top);
             arg0->state = 0;
@@ -310,7 +309,7 @@ extern char D_8910DE34[];
 u16 func_80020234(s32, u8, s32, u8, s32);
 s32 func_8002057C(u8, u16);
 void func_800203FC(BattleMon*);
-void func_8910A764();
+void LabPCList_ConsumeUsedTmItem();
 /**
  * Uses a vitamin (HP Up, Protein, Iron, Carbos, Calcium; 0x23-0x27) or a Rare Candy (0x28) on the
  * Pokemon and fills in the old and new values for the result message.
@@ -385,7 +384,7 @@ void LabPCList_ApplyVitaminItem(u8** arg0, u8** arg1, Msg89103F04* arg2) {
             arg2->newValue = mon->level;
             break;
     }
-    func_8910A764(arg1);
+    LabPCList_ConsumeUsedTmItem(arg1);
     *(s32*)(arg0[0] + 0x10) = 1;
 }
 
@@ -405,7 +404,6 @@ typedef struct Str891041D8 {
 } Str891041D8;
 extern char D_8910DE3C[];
 extern s8 D_8910E3B8[];
-void func_8910A764(s32, u8*, s32, Msg891041D8*);
 
 /**
  * Uses a PP Up on move `arg2` of the Pokemon and writes the result message.
@@ -432,12 +430,11 @@ void LabPCList_ApplyPpUpItem(u8** arg0, s32 arg1, s32 arg2, Msg891041D8* arg3) {
     arg3->oldPp = (ptr[0x20] >> 6) * step + base_pp;
     arg3->newPp = arg3->oldPp + step;
     ptr[0x20] += step + 0x40;
-    func_8910A764(arg1, ptr, base_pp, arg3);
+    LabPCList_ConsumeUsedTmItem(arg1, ptr, base_pp, arg3);
     *(s32*)(arg0[0] + 0x10) = 1;
 }
 
 u8 Move_GetIdFromTableIndex(s32 arg0);
-void LabPCList_ConsumeUsedTmItem(u8** arg0);
 
 /**
  * Teaches the TM or HM move `arg1` in move slot `arg2` (item ids from 0xC9 are TMs, below are HMs).
