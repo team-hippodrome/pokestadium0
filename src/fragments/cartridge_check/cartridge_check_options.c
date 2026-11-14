@@ -5,7 +5,7 @@
 #include "audio_music.h"
 #include "font.h"
 #include "fragments/geo_model_038/geo_model_038.h"
-#include "fragments/geo_model_039/geo_model_039.h"
+#include "fragments/doduo_game_boy_model/doduo_game_boy_model.h"
 #include "fragments/geo_model_040/geo_model_040.h"
 #include "fragments/main_menu/main_menu.h"
 #include "geo_node.h"
@@ -810,6 +810,7 @@ void func_884026A4(s32 arg0) {
     D_884037B8 = (s32)process_geo_layout(sp20, D_8F4959C8);
     Model_InitDisplayObject(&D_88403648, 0, 0, (s32)process_geo_layout(sp20, D_8F4886F8));
     if (gSessionContext.transitionFlags & 8) {
+        // Doduo Game Boy prize model (fragment039, seen in play 2026-11-14).
         Model_InitDisplayObject(&D_884034E0, 1, 0, (s32)process_geo_layout(sp20, D_8E825FE8));
         func_80010F14(&D_884034E0, 1, &D_8E802B64, 0x10000);
         M2C_FIELD(&D_884034E0, u8 *, 1) &= ~1;

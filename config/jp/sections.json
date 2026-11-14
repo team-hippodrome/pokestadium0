@@ -635,7 +635,7 @@
   "src/fragments/particle_data/particle_data_2.c": {
     ".bss": "0x8F212930"
   },
-  "src/fragments/geo_model_039/geo_model_039.c": {
+  "src/fragments/doduo_game_boy_model/doduo_game_boy_model.c": {
     ".bss": "0x8E825728"
   },
   "src/fragments/geo_model_040/geo_model_040.c": {

@@ -46,7 +46,7 @@ Where the code lives, after the reorganization. File names are broadly correct g
 | 033 | `src/fragments/geo_model_033/` | 1 | 13 | geo layout callbacks for models |
 | 034 | `src/fragments/geo_model_034/` | 1 | 8 | geo layout callbacks for models |
 | 038 | `src/fragments/geo_model_038/` | 1 | 2 | geo layout callbacks for models |
-| 039 | `src/fragments/geo_model_039/` | 1 | 1 | geo layout callbacks for models |
+| 039 | `src/fragments/doduo_game_boy_model/` | 1 | 1 | Doduo Game Boy (Pocket) prize model and its screen glare callback |
 | 040 | `src/fragments/geo_model_040/` | 1 | 1 | geo layout callbacks for models |
 | 106–258 | `src/fragments/model_data/` | 153 | 153 | model data, one file per fragment |
 
