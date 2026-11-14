@@ -694,6 +694,19 @@ typedef struct LabSourceSelectWindow {
     /* 0x17C */ u16 cartBoxFlags[4]; // @unverified: cartBoxes.menu.itemFlags
 } LabSourceSelectWindow; // size = 0x184
 
+/* The move list of the item window: どの わざに つかいますか？ (On which move?) for a PP Up, どの わざを
+ * わすれさせたい？ (Which move should it forget?) for a TM or HM (func_89104FC0). */
+typedef struct LabMoveSelectWindow {
+    /* 0x00 */ Window window; // @unverified: 168x132 (func_89104FC0)
+    /* 0x2C */ Menu menu; // @unverified: rows drawn by func_89104EB4
+    /* 0x50 */ ByteMatrix moveMatrix; // @unverified: over moves (func_89104FC0)
+    /* 0x60 */ s32 moves[4]; // @unverified: move index - 1 of each slot, -1 when empty (func_89104FC0)
+    /* 0x70 */ u16 itemFlags[4]; // @unverified: menu.itemFlags; bit 0 = an HM move, which cannot be forgotten (LabMoveSelect_DisableHmMoves)
+    /* 0x78 */ s32 learnTimer; // @unverified: 60 frames: the old move fades out, at 29 it becomes learnMove (func_89105200)
+    /* 0x7C */ s32 learnSlot; // @unverified: slot that learnMove replaces (func_89105340)
+    /* 0x80 */ s32 learnMove; // @unverified: written to moves[learnSlot] (func_89105200)
+} LabMoveSelectWindow; // size = 0x84
+
 #define LAB_PC_LIST_MAX_ROWS 466
 
 /* The いちらん (Pokémon list) screen of the Lab PC (LabPCList_InitListWindow). Its functions used to
@@ -762,7 +775,7 @@ void LabPCList_DrawPlainText(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4);
 void LabPCList_Setup(void);
 
 // popup_menus.c
-void BattleMoveListWidget_DisableRestrictedMoves(unk_func_8830867C_04C_078* arg0);
+void BattleMoveListWidget_DisableRestrictedMoves(LabMoveSelectWindow* arg0);
 void BattleInfoWidget_UpdateEntryFlags(LabBoxListWindow* arg0);
 void BattleInfoWidget_ApplyEntrySelection(LabSourceSelectWindow* arg0, s32 arg1);
 void func_89105C54(LabSourceSelectWindow* arg0, s32 arg1, s32 arg2, s8* arg3, Color_RGBA8 arg4);

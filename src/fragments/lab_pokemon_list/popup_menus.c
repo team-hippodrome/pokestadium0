@@ -157,37 +157,37 @@ s32 BattleMon_GetMoveIndex(s32, s32);
 void func_80027410(void*, void*, s32, s32, s32);
 void func_89104EB4();
 
-void func_89104FC0(s8* arg0, s32 arg1, s32 arg2, u8* arg3) {
+void func_89104FC0(LabMoveSelectWindow* arg0, s32 arg1, s32 arg2, u8* arg3) {
     s32 n = BattleMon_CountMoves(arg3);
     s32 i;
 
     for (i = 0; i < n; i++) {
-        M2C_FIELD(arg0, s32*, 0x60 + i * 4) = BattleMon_GetMoveIndex((s32)arg3, i);
+        arg0->moves[i] = BattleMon_GetMoveIndex((s32)arg3, i);
     }
     for (i = n; i < 4; i++) {
-        M2C_FIELD(arg0, s32*, 0x60 + i * 4) = -1;
+        arg0->moves[i] = -1;
     }
-    func_80027410(arg0 + 0x50, arg0 + 0x60, 4, 4, 4);
-    Menu_Init(arg0 + 0x2C, arg0 + 0x50, (s32)(arg0 + 0x70), func_89104EB4, 0x9C, 0x1C);
-    M2C_FIELD(arg0, s32*, 0x4C) |= 0x10000;
-    Window_SetRect(arg0, arg1, arg2, 0xA8, 0x84);
-    M2C_FIELD(arg0, s32*, 0x24) = 0;
-    M2C_FIELD(arg0, s32*, 0x20) = 0;
-    M2C_FIELD(arg0, s32*, 0x28) = 0;
-    M2C_FIELD(arg0, s32*, 0x14) = 0;
-    M2C_FIELD(arg0, Str89104FC0*, 0x18) = D_8910A91C;
+    func_80027410(&arg0->moveMatrix, arg0->moves, 4, 4, 4);
+    Menu_Init(&arg0->menu, &arg0->moveMatrix, (s32)arg0->itemFlags, func_89104EB4, 0x9C, 0x1C);
+    arg0->menu.options |= 0x10000;
+    Window_SetRect(&arg0->window, arg1, arg2, 0xA8, 0x84);
+    arg0->window.animTimer = 0;
+    arg0->window.title = 0;
+    arg0->window.state = 0;
+    arg0->window.frame.style = 0;
+    *(Str89104FC0*)&arg0->window.frame.color = D_8910A91C;
 }
 
 extern s32 D_8910A920[5];
 /** Disables the move list entries that are restricted for the current cup. */
-void BattleMoveListWidget_DisableRestrictedMoves(unk_func_8830867C_04C_078* arg0) {
+void BattleMoveListWidget_DisableRestrictedMoves(LabMoveSelectWindow* arg0) {
     s32 j;
     s32 i;
 
     for (i = 0; i < 4; i++) {
         for (j = 0; j < 5; j++) {
-            if (M2C_FIELD(arg0, s32*, 0x60 + i * 4) == D_8910A920[j]) {
-                M2C_FIELD(arg0, u16*, 0x70 + i * 2) |= 1;
+            if (arg0->moves[i] == D_8910A920[j]) {
+                arg0->itemFlags[i] |= 1;
                 break;
             }
         }
@@ -196,58 +196,46 @@ void BattleMoveListWidget_DisableRestrictedMoves(unk_func_8830867C_04C_078* arg0
 
 M2C_UNK Menu_DrawInlineItems(s8*, s32, s32, s32, s8*);
 
-void func_891051A4(Box89104E38* arg0) {
-    s8* label;
+void func_891051A4(LabMoveSelectWindow* arg0) {
+    Menu* label;
 
     if (func_8002AE6C() == 0) {
         s32 sp2C[4];
 
-        sp2C[0] = arg0->w - 0xC;
-        label = arg0->label;
-        Menu_DrawInlineItems(label, arg0->x + 6, arg0->y + 0xA, 0xFFEF, (s8*)sp2C);
+        sp2C[0] = arg0->window.frame.width - 0xC;
+        label = &arg0->menu;
+        Menu_DrawInlineItems(label, arg0->window.frame.x + 6, arg0->window.frame.y + 0xA, 0xFFEF, (s8*)sp2C);
     }
     /* Empty test kept from the permuter: it keeps arg0 in $s0 as in the ROM. */
     if (arg0) {  // karodo
     }
 }
 
-typedef struct Box89105200 {
-    /* 0x00 */ s32 x;
-    /* 0x04 */ s32 y;
-    /* 0x08 */ s32 w;
-    /* 0x0C */ char padC[0x20];
-    /* 0x2C */ s8 label[0x34];
-    /* 0x60 */ s32 unk60[6];
-    /* 0x78 */ s32 timer;
-    /* 0x7C */ s32 unk7C;
-    /* 0x80 */ s32 unk80;
-} Box89105200;
-
 M2C_UNK func_8003F6AC(M2C_UNK);
 
-s32 func_89105200(Box89105200* arg0) {
+s32 func_89105200(LabMoveSelectWindow* arg0) {
     s32 color;
     s32 params[4]; // only params[0] (alpha) is set here, as in func_891051A4
 
     if (func_8002AE6C() != 0) {
         return 0;
     }
-    if (arg0->timer > 0) {
-        arg0->timer--;
+    if (arg0->learnTimer > 0) {
+        arg0->learnTimer--;
     }
-    if (arg0->timer >= 30) {
+    if (arg0->learnTimer >= 30) {
         color = 0xFDED;
-        params[0] = (arg0->timer * 0xFF - 30 * 0xFF) / 30;
+        params[0] = (arg0->learnTimer * 0xFF - 30 * 0xFF) / 30;
     } else {
-        if (arg0->timer == 29) {
-            arg0->unk60[arg0->unk7C] = arg0->unk80;
+        if (arg0->learnTimer == 29) {
+            arg0->moves[arg0->learnSlot] = arg0->learnMove;
             func_8003F6AC(0x22);
         }
         color = 0xFEED;
-        params[0] = ((30 - arg0->timer) * 0xFF) / 30;
+        params[0] = ((30 - arg0->learnTimer) * 0xFF) / 30;
     }
-    Menu_DrawInlineItems(arg0->label, arg0->x + 6, arg0->y + 0xA, color, (s8*)params);
-    return arg0->timer == 0;
+    Menu_DrawInlineItems(&arg0->menu, arg0->window.frame.x + 6, arg0->window.frame.y + 0xA, color, (s8*)params);
+    return arg0->learnTimer == 0;
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
@@ -1817,10 +1805,10 @@ void PcSort_DrawUseItemPrompt(s8* arg0) {
                     break;
                 case 2:
                 case 3:
-                    func_891051A4((Box89104E38*)(arg0 + 0x110));
+                    func_891051A4((LabMoveSelectWindow*)(arg0 + 0x110));
                     break;
                 case 4:
-                    func_89105200((Box89105200*)(arg0 + 0x110));
+                    func_89105200((LabMoveSelectWindow*)(arg0 + 0x110));
                     break;
             }
         }
