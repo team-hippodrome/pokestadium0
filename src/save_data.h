@@ -50,7 +50,7 @@ typedef struct SaveTeamRecord {
     /* 0x000 */ s16 flags;
     /* 0x002 */ u8 trainerName[6]; // GB charset, 0x50-terminated.
     /* 0x008 */ u16 trainerId;
-    /* 0x00A */ u8 secondName[8]; // @unverified: written by Deck_SetSaveEntryTrainerIdAndName, empty in every record seen
+    /* 0x00A */ u8 secondName[8]; // @unverified: written by Deck_SetSaveEntryTrainerIdAndName, empty in every record seen; ポケモンを とうろくする passed NULL for it (only the trainer name サトシ)
     /* 0x012 */ s16 count;
     /* 0x014 */ SaveMonRecord mons[6];
     /* 0x122 */ SaveFooter footer;
