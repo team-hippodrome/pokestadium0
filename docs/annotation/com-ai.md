@@ -73,7 +73,7 @@ battle Pokémon is `ComBattler.mon`, a `BattleMonRuntime`, so record offset 0x18
 - **Per-trainer picks** (`BattleAi_AddTrainerPickScore`):
   - Hand-written preferences keyed by the COM trainer's id word (0x6974, 0x95EC, 0x6299, 0xC0FC, 0x3C5E, 0x813A, 0x77CB, 0xBBBD, 0x940F, 0xD870, 0xCD7E, 0x4FC7).
   - The ids are the `trainerId` words of the tournament trainer templates in nintendo_cup_teams
-    (`D_82400400`, read from the fragment's data): 0x755B ほっかいどう (Hokkaido), 0x6974 とうほくＡ, 0xCD7E とうほくＢ,
+    (`sTournamentOpponents`, 0x82400400, read from the fragment's data): 0x755B ほっかいどう (Hokkaido), 0x6974 とうほくＡ, 0xCD7E とうほくＢ,
     0x4FC7 ほくりく, 0xC0FC かんとうＡ１, 0xC3E5 かんとうＡ２, 0x95EC かんとうＢ, 0x6299 ちゅうぶＡ, 0x3C5E ちゅうぶＢ,
     0x813A かんさい, 0x77CB ちゅうごくＡ, 0xBBBD ちゅうごくＢ, 0xD870 しこく, 0x940F きゅうしゅうＡ, 0x14FC きゅうしゅうＢ
     (regional players), and 0x473B むしとりしょうねん (Bug Catcher), 0x4353 かじばどろぼう, 0x3F6B とりつかい (Bird Keeper).
