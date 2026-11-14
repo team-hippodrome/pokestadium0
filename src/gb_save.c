@@ -643,7 +643,7 @@ void Window_DrawFrame(s32* arg0) {
     }
 }
 
-M2C_UNK func_8003F6AC();
+M2C_UNK Audio_PlaySystemSound();
 
 /**
  * Steps the open/close animation of a window: animTimer 0-3 opening (state 0, plays sound 4 at 0), 4-5 state 1,
@@ -666,7 +666,7 @@ s32 Window_UpdateAnimation(Window* arg0) {
         arg0->animTimer = (s32) (var_v0 + 1);
     } else if (var_v0 < 4) {
         if (var_v0 == 0) {
-            func_8003F6AC(4, arg0);
+            Audio_PlaySystemSound(4, arg0);
             var_v1 = 1;
             var_v0 = arg0->animTimer;
         }
@@ -1436,21 +1436,21 @@ s32 SavePrompt_Update(SavePrompt* arg0) {
         s32 res = func_8002BC14(D_800603C0);
 
         if (res == -1) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             ret = -1;
         } else if (res == 1) {
             switch (arg0->menu.cursor) {
                 case 0:
                     ret = 1;
-                    func_8003F6AC(0x1D);
+                    Audio_PlaySystemSound(0x1D);
                     break;
                 case 1:
                     ret = 2;
-                    func_8003F6AC(0x21);
+                    Audio_PlaySystemSound(0x21);
                     break;
                 case 2:
                     ret = -1;
-                    func_8003F6AC(3);
+                    Audio_PlaySystemSound(3);
                     break;
             }
             if (arg0) { // FAKE: no-op test; changes register allocation to match

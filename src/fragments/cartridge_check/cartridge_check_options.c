@@ -35,7 +35,7 @@ s32 func_800051F0(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32);
 s32 BezierPath_Step(s8*, s32);
 void MainPool_FinalizeAllocation(struct MemoryBlock* block);
 void func_8000A7FC(s32);
-void func_80041374(s32, s32);
+void Audio_StopSoundByCategory(s32, s32);
 
 extern M2C_UNK D_88402E40;
 extern M2C_UNK D_88402E5C;
@@ -132,7 +132,7 @@ void CartridgeCheck_ShowMessageUntilA(s32 text) {
         func_8001ABBC();
         func_80006780();
     } while (!(gPlayer1Controller->buttonPressed & 0x8000));
-    func_8003F6AC(1);
+    Audio_PlaySystemSound(1);
     D_88402D70 = text;
 }
 
@@ -203,7 +203,7 @@ s32 BezierPath_Step(s8*, s32);
 extern M2C_UNK D_88403648;
 extern s8 D_88402D98;
 extern s8 D_88402DB4;
-M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 /**
  * Camera move that opens the scene after the title screen: follows the eye/target paths
  * D_88402DB4/D_88402D98 until they end, and on frame 42 shows the console model and plays sound 0x10.
@@ -223,7 +223,7 @@ void CartridgeCheck_PlayBootIntro(void) {
         do {
             if (i++ == 0x2A) {
                 M2C_FIELD(&D_88403648, s32 *, 0x14) = 1;
-                func_8003F6AC(0x10);
+                Audio_PlaySystemSound(0x10);
                 M2C_FIELD(&D_88403648, u8 *, 2) |= 0x20;
             }
             BezierPath_Step(sp50, rec + 0xB4);
@@ -240,7 +240,7 @@ extern M2C_UNK D_88403648;
 extern s8 D_88402DD0;
 extern s8 D_88402DEC;
 
-M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 /**
  * Opening of the scene on the CartridgeCheck_EnterAfterCupWin path: runs the Game Boy present
  * event when transitionFlags has 8 or 0x10, then the camera move along D_88402DEC/D_88402DD0
@@ -268,7 +268,7 @@ void CartridgeCheck_PlayCupWinIntro(void) {
             if (i++ == 0xA) {
                 M2C_FIELD(&D_88403648, s32 *, 0x14) = 1;
                 M2C_FIELD(&D_88403648, u8 *, 2) |= 0x20;
-                func_8003F6AC(0x10);
+                Audio_PlaySystemSound(0x10);
             }
             BezierPath_Step(sp50, rec + 0xB4);
             CartridgeCheck_DrawFrame(0);
@@ -443,7 +443,7 @@ s32 Options_RunClearSavePrompt(s32 secondAsk, s32 row, u8 flags) {
         Options_DrawMenu(row, flags);
         buttons = gPlayer1Controller->buttonPressed;
         if (buttons & 0x300) {
-            func_8003F6AC(1);
+            Audio_PlaySystemSound(1);
             sel ^= 1;
         } else if (buttons & 0x8000) {
             loop = 0;
@@ -458,12 +458,12 @@ s32 Options_RunClearSavePrompt(s32 secondAsk, s32 row, u8 flags) {
     loop = sel == 0;
     if (loop) {
         if (secondAsk == 0) {
-            func_8003F6AC(2);
+            Audio_PlaySystemSound(2);
         } else {
-            func_8003F6AC(0x1F);
+            Audio_PlaySystemSound(0x1F);
         }
     } else {
-        func_8003F6AC(3);
+        Audio_PlaySystemSound(3);
     }
     return loop;
 }
@@ -491,8 +491,8 @@ void Save_ResetAll(void) {
     func_800245E0(19, 0);
     func_800245E0(20, 0);
     func_800245E0(21, 0);
-    func_8003BC9C(1);
-    func_800418F0(1);
+    Audio_SetOutputMode(1);
+    Announcer_SetEnabled(1);
 }
 
 s32 Save_GetOptionFlags(void);
@@ -515,25 +515,25 @@ void Options_RunMenu(void) {
             if (sel < 0) {
                 sel = 3;
             }
-            func_8003F6AC(1);
+            Audio_PlaySystemSound(1);
         } else if (gPlayer1Controller->buttonPressed & 0x400) {
             sel++;
             if (sel >= 4) {
                 sel = 0;
             }
-            func_8003F6AC(1);
+            Audio_PlaySystemSound(1);
         } else if (gPlayer1Controller->buttonPressed & 0x8000) {
             switch (sel) {
                 case 0:
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     flags ^= 1;
                     break;
                 case 1:
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     flags ^= 2;
                     break;
                 case 2:
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     if (Options_RunClearSavePrompt(0, sel, flags) != 0 && Options_RunClearSavePrompt(1, sel, flags) != 0) {
                         flags = 0;
                         Save_ResetAll();
@@ -541,12 +541,12 @@ void Options_RunMenu(void) {
                     break;
                 case 3:
                     done = 1;
-                    func_8003F6AC(0x1D);
+                    Audio_PlaySystemSound(0x1D);
                     break;
             }
         } else if (gPlayer1Controller->buttonPressed & 0x4000) {
             done = 2;
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
         }
         CartridgeCheck_DrawFrame(0);
         Options_DrawMenu(sel, flags);
@@ -557,16 +557,16 @@ void Options_RunMenu(void) {
         if (diff != 0) {
             if (diff & 1) {
                 if (flags & 1) {
-                    func_8003BC9C(0);
+                    Audio_SetOutputMode(0);
                 } else {
-                    func_8003BC9C(1);
+                    Audio_SetOutputMode(1);
                 }
             }
             if (diff & 2) {
                 if (flags & 2) {
-                    func_800418F0(0);
+                    Announcer_SetEnabled(0);
                 } else {
-                    func_800418F0(1);
+                    Announcer_SetEnabled(1);
                 }
             }
             Save_SetOptionFlags(flags);
@@ -593,12 +593,12 @@ s32 CartridgeCheck_RunScreen(void) {
         func_80006780();
         if (gPlayer1Controller->buttonPressed & 0x8000) {
             var_s0 = 1;
-            func_8003F6AC(0x1B);
+            Audio_PlaySystemSound(0x1B);
         } else if (gPlayer1Controller->buttonPressed & 0x4000) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             var_s0 = 2;
         } else if (gPlayer1Controller->buttonPressed & 1) {
-            func_8003F6AC(2);
+            Audio_PlaySystemSound(2);
             Options_RunMenu();
         }
     } while (var_s0 == 0);
@@ -627,8 +627,8 @@ void CartridgeCheck_PlayExitToTitle(void) {
     func_80006998(0xFFFF);
     StageFade_Start(0x1E);
     func_8000A7FC(0x3C);
-    func_80041374(0x46, 0x3C);
-    func_8003F6AC(0x23);
+    Audio_StopSoundByCategory(0x46, 0x3C);
+    Audio_PlaySystemSound(0x23);
     while (BezierPath_Step(sp74, sp34 + 0xA8)) {
         BezierPath_Step(sp38, sp34 + 0xB4);
         CartridgeCheck_DrawFrame(0);
@@ -656,7 +656,7 @@ void CartridgeCheck_PlaySetCartridgeAnimation(void) {
         func_80010F14(&D_88403378, 1, *((M2C_UNK*)((u8*)&D_88402D74 + (sp1F * 4))), 0x10000);
         func_80010F9C(&D_88403378, 0x2E);
     }
-    func_8003F6AC(0xB);
+    Audio_PlaySystemSound(0xB);
     func_80006828(0x14, (s32 *) CartridgeCheck_DrawFrame);
 }
 
@@ -705,7 +705,7 @@ extern M2C_UNK D_88403378;
 extern M2C_UNK D_88403648;
 extern s8 D_88402E78;
 extern s8 D_88402E94;
-M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 /**
  * First part of coming back from the main menu: the camera moves along D_88402E94/D_88402E78
  * out of the monitor; on frame 15 it starts the console (and Game Boy) animation and plays sound 0x11.
@@ -728,7 +728,7 @@ void CartridgeCheck_PlayZoomOutOfMonitor(void) {
                 if (D_88403358 >= 0) {
                     M2C_FIELD(&D_88403378, u8 *, 2) |= 0x20;
                 }
-                func_8003F6AC(0x11);
+                Audio_PlaySystemSound(0x11);
             }
             BezierPath_Step(sp58, temp_s1 + 0xB4);
             CartridgeCheck_DrawFrame(0);
@@ -751,7 +751,7 @@ void CartridgeCheck_TransitionToMainMenu(void) {
     CartridgeCheck_PlayZoomIntoMonitor();
     func_80006998(1);
     func_80006828(2, &CartridgeCheck_DrawFrame);
-    func_80041374(0x46, 0x1E);
+    Audio_StopSoundByCategory(0x46, 0x1E);
     if (D_88403358 < 0 || D_88403310[D_88403358].saveState != 0) {
         func_80006828(0x14, &CartridgeCheck_DrawFrame);
     }

@@ -629,7 +629,7 @@ s32 MainMenu_UpdateScreen(MainMenuScreen* screen) {
             } else {
                 switch (MainMenu_UpdatePromptCursor(&screen->promptWindow)) {
                     case 1:
-                        func_8003F6AC(0x1E);
+                        Audio_PlaySystemSound(0x1E);
                         gSessionContext.sessionFlags |= 2;
                         screen->result = 0x8050;
                         screen->promptWindow.window.animTimer = 7;
@@ -637,13 +637,13 @@ s32 MainMenu_UpdateScreen(MainMenuScreen* screen) {
                         screen->itemList.fadeTimer = 0xD;
                         break;
                     case 2:
-                        func_8003F6AC(3);
+                        Audio_PlaySystemSound(3);
                         gSessionContext.sessionFlags &= ~1;
                         screen->promptWindow.window.animTimer = 7;
                         screen->nextState = 2;
                         break;
                     case 3:
-                        func_8003F6AC(0x1F);
+                        Audio_PlaySystemSound(0x1F);
                         func_800245E0(0x15, 0);
                         gSessionContext.sessionFlags &= ~1;
                         screen->promptWindow.window.animTimer = 7;
@@ -656,9 +656,9 @@ s32 MainMenu_UpdateScreen(MainMenuScreen* screen) {
             if (GridMenu_UpdateCursorSkipDisabled(&screen->itemList.menu) == 0) {
                 dir = func_8002BC14(D_800603C0);
                 if (dir == -1) {
-                    func_8003F6AC(8);
+                    Audio_PlaySystemSound(8);
                 } else if (dir == 1) {
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     screen->state = 3;
                     idx = screen->itemList.menu.cursor;
                     MainMenu_InitMessageWindow(&screen->messageWindow, 0x36, 0x57, D_88002258[idx], D_8800227C[idx], D_880022A0[idx], D_88001FEC[idx], (s32)D_88002034[idx]);
@@ -674,14 +674,14 @@ s32 MainMenu_UpdateScreen(MainMenuScreen* screen) {
             } else {
                 dir = MainMenu_UpdateMessageWindow(&screen->messageWindow);
                 if (dir == -1) {
-                    func_8003F6AC(3);
+                    Audio_PlaySystemSound(3);
                     screen->messageWindow.window.animTimer = 7;
                     screen->nextState = 2;
                 } else if (dir == 1) {
                     if (screen->itemList.menu.cursor == 7) {
-                        func_8003F6AC(2);
+                        Audio_PlaySystemSound(2);
                     } else {
-                        func_8003F6AC(0x1C);
+                        Audio_PlaySystemSound(0x1C);
                     }
                     screen->result = MainMenu_LoadSelectedFragment(screen->itemList.menu.cursor);
                     screen->messageWindow.window.animTimer = 7;

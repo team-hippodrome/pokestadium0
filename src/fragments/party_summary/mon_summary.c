@@ -279,9 +279,9 @@ s32 MonSummary_UpdateMoveCursor(MonSummaryWindow* window) {
         }
         if (var_s0 >= 0) {
             if (BattleMon_GetMoveIndexChecked(window->mon, var_s0, window) == -1) {
-                func_8003F6AC(8);
+                Audio_PlaySystemSound(8);
             } else {
-                func_8003F6AC(2);
+                Audio_PlaySystemSound(2);
                 window->moveSlot = var_s0;
                 if (window->window.state <= 0) {
                     window->window.animTimer = (s32) window->window.animTimer;
@@ -527,7 +527,7 @@ M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
             } else {
                 res = func_8002BC14((s32)D_800603C0);
                 if (res == -1) {
-                    func_8003F6AC(3);
+                    Audio_PlaySystemSound(3);
                     if (arg0->dirty != 0) {
                         SavePrompt_Init(&arg0->savePrompt, 0xCA, 0xAD);
                         arg0->state = 6;
@@ -536,7 +536,7 @@ M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
                         PartyScreen_CloseWindow(arg0, 7, 0);
                     }
                 } else if (res == 1) {
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     PartyScreen_InitActionMenu(&arg0->actionMenu, 0x194, 0x123, (u8*)arg0->monPointers[arg0->listWindow.menu.cursor]);
                     arg0->state = 2;
                     arg0->activeWindow = &arg0->actionMenu;
@@ -546,25 +546,25 @@ M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
         case 2:
             res = PartyScreen_UpdateActionMenu(&arg0->actionMenu);
             if (res == -1) {
-                func_8003F6AC(3);
+                Audio_PlaySystemSound(3);
                 PartyScreen_CloseWindow(arg0, 1, (s32)&arg0->listWindow);
             } else if (res > 0) {
                 switch (res) {
                     case 1:
-                        func_8003F6AC(2);
+                        Audio_PlaySystemSound(2);
                         PartyScreen_CloseWindow(arg0, 4, (s32)&arg0->summaryWindow);
                         arg0->summaryWindow.moveSlot = 0;
                         arg0->listWindow.window.animTimer = 7;
                         MonSummary_InitPageWindow(&arg0->summaryWindow, 0x2C, 0x54, arg0->monPointers[arg0->listWindow.menu.cursor]);
                         break;
                     case 2:
-                        func_8003F6AC(2);
+                        Audio_PlaySystemSound(2);
                         PartyScreen_CloseWindow(arg0, 3, (s32)&arg0->listWindow);
                         arg0->listWindow.menu.itemFlags[arg0->listWindow.menu.cursor] |= 8;
                         arg0->swapIndex = arg0->listWindow.menu.cursor;
                         break;
                     case 3:
-                        func_8003F6AC(3);
+                        Audio_PlaySystemSound(3);
                         if (arg0->dirty != 0) {
                             SavePrompt_Init(&arg0->savePrompt, 0xD4, 0xAD);
                             PartyScreen_CloseWindow(arg0, 6, (s32)&arg0->savePrompt);
@@ -582,13 +582,13 @@ M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
             } else {
                 res = func_8002BC14((s32)D_800603C0);
                 if (res == -1) {
-                    func_8003F6AC(3);
+                    Audio_PlaySystemSound(3);
                     arg0->state = 1;
                     arg0->activeWindow = &arg0->listWindow;
                     arg0->listWindow.window.animTimer = (arg0->listWindow.window.state <= 0) ? arg0->listWindow.window.animTimer : 4;
                     Menu_ClearItemFlags(&arg0->listWindow.menu);
                 } else if (res == 1) {
-                    func_8003F6AC(0x18);
+                    Audio_PlaySystemSound(0x18);
                     res = arg0->monPointers[arg0->swapIndex];
                     arg0->monPointers[arg0->swapIndex] = arg0->monPointers[arg0->listWindow.menu.cursor];
                     arg0->monPointers[arg0->listWindow.menu.cursor] = res;
@@ -605,11 +605,11 @@ M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
         case 4:
             res = func_8002BC14((s32)D_800603C0);
             if (res == -1) {
-                func_8003F6AC(3);
+                Audio_PlaySystemSound(3);
                 PartyScreen_CloseWindow(arg0, 1, (s32)&arg0->listWindow);
                 arg0->listWindow.window.animTimer = 0;
             } else if (res == 1) {
-                func_8003F6AC(2);
+                Audio_PlaySystemSound(2);
                 arg0->state = 5;
                 arg0->summaryWindow.window.animTimer = (arg0->summaryWindow.window.state <= 0) ? arg0->summaryWindow.window.animTimer : 4;
             }
@@ -618,11 +618,11 @@ M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
             if (MonSummary_UpdateMoveCursor(&arg0->summaryWindow) == 0) {
                 res = func_8002BC14((s32)D_800603C0);
                 if (res == -1) {
-                    func_8003F6AC(3);
+                    Audio_PlaySystemSound(3);
                     arg0->state = 4;
                     arg0->summaryWindow.window.animTimer = (arg0->summaryWindow.window.state <= 0) ? arg0->summaryWindow.window.animTimer : 4;
                 } else if (res == 1) {
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     PartyScreen_CloseWindow(arg0, 1, (s32)&arg0->listWindow);
                     arg0->listWindow.window.animTimer = 0;
                 }

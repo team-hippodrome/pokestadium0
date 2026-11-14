@@ -122,7 +122,7 @@ void Menu_DrawInlineItems(Menu* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
 }
 
 s32 func_8000B30C();
-s32 func_8003F6AC();
+s32 Audio_PlaySystemSound();
 /**
  * Moves a menu's cursor from controller input. Returns 0 when the menu has no items.
  * Seen in play (2026-11-12) in いちらん: D-Down moved the sort menu cursor one row per press. It also
@@ -153,7 +153,7 @@ s32 Menu_UpdateCursor(Menu* arg0) {
             break;
     }
     if (old != arg0->cursor) {
-        func_8003F6AC(1);
+        Audio_PlaySystemSound(1);
     }
     return input;
 }
@@ -190,7 +190,7 @@ s32 Menu_UpdateCursorSkipDisabled(Menu* arg0) {
             break;
     }
     if (old != arg0->cursor) {
-        func_8003F6AC(1);
+        Audio_PlaySystemSound(1);
     }
     return input;
 }
@@ -386,7 +386,7 @@ s32 GridMenu_UpdateCursor(GridMenu* arg0) {
             break;
     }
     if (old != arg0->cursor) {
-        func_8003F6AC(1);
+        Audio_PlaySystemSound(1);
     }
     return input;
 }
@@ -486,7 +486,7 @@ s32 GridMenu_UpdateCursorSkipDisabled(GridMenu* menu) {
             break;
     }
     if (prev != menu->cursor) {
-        func_8003F6AC(1);
+        Audio_PlaySystemSound(1);
         if (button) {} // karodo
     }
     return button;
@@ -887,7 +887,7 @@ u16 ScrollList_UpdateCursor(ScrollList* menu) {
         ScrollList_ScrollUpToCursor(menu);
         menu->cursor = menu->cursorY / menu->cellHeight;
         if (prev != menu->cursor) {
-            func_8003F6AC(1);
+            Audio_PlaySystemSound(1);
         }
     } else if ((menu->inputDirection & 0x400) && !(menu->scrollFlags & ~0x400)) {
         if (menu->scrollFlags == 0) {
@@ -899,7 +899,7 @@ u16 ScrollList_UpdateCursor(ScrollList* menu) {
         ScrollList_ScrollDownToCursor(menu);
         menu->cursor = menu->cursorY / menu->cellHeight;
         if (prev != menu->cursor) {
-            func_8003F6AC(1);
+            Audio_PlaySystemSound(1);
         }
     } else if ((menu->inputDirection & 0x200) && !(menu->scrollFlags & ~0x200)) {
         page = menu->cellHeight * menu->visibleRows;
@@ -919,7 +919,7 @@ u16 ScrollList_UpdateCursor(ScrollList* menu) {
             menu->pageTargetY -= (page < menu->pageTargetY) ? page : menu->pageTargetY;
         }
         if (prev_top != menu->pageTargetY) {
-            func_8003F6AC(1);
+            Audio_PlaySystemSound(1);
         }
     } else if ((menu->inputDirection & 0x100) && !(menu->scrollFlags & ~0x100)) {
         total = menu->cellHeight * menu->items->count;
@@ -941,7 +941,7 @@ u16 ScrollList_UpdateCursor(ScrollList* menu) {
             menu->pageTargetY += (page < room) ? page : room;
         }
         if (prev_top != menu->pageTargetY) {
-            func_8003F6AC(1);
+            Audio_PlaySystemSound(1);
         }
     }
     return menu->scrollFlags;
@@ -983,7 +983,7 @@ u16 func_80030230(ScrollList* menu) {
         ScrollList_ScrollUpToCursor(menu);
         menu->cursor = menu->cursorY / menu->cellHeight;
         if (prev != menu->cursor) {
-            func_8003F6AC(1);
+            Audio_PlaySystemSound(1);
         }
     } else if ((menu->inputDirection & 0x400) && !(menu->scrollFlags & ~0x400)) {
         if (menu->scrollFlags == 0) {
@@ -995,7 +995,7 @@ u16 func_80030230(ScrollList* menu) {
         ScrollList_ScrollDownToCursor(menu);
         menu->cursor = menu->cursorY / menu->cellHeight;
         if (prev != menu->cursor) {
-            func_8003F6AC(1);
+            Audio_PlaySystemSound(1);
         }
     } else if ((menu->inputDirection & 0x200) && !(menu->scrollFlags & ~0x200)) {
         page = menu->cellHeight * menu->visibleRows;
@@ -1015,7 +1015,7 @@ u16 func_80030230(ScrollList* menu) {
             menu->pageTargetY -= (page < menu->pageTargetY) ? page : menu->pageTargetY;
         }
         if (prev_top != menu->pageTargetY) {
-            func_8003F6AC(1);
+            Audio_PlaySystemSound(1);
         }
     } else if ((menu->inputDirection & 0x100) && !(menu->scrollFlags & ~0x100)) {
         total = menu->cellHeight * menu->items->count;
@@ -1037,7 +1037,7 @@ u16 func_80030230(ScrollList* menu) {
             menu->pageTargetY += (page < room) ? page : room;
         }
         if (prev_top != menu->pageTargetY) {
-            func_8003F6AC(1);
+            Audio_PlaySystemSound(1);
         }
     }
     return menu->scrollFlags;
@@ -1463,7 +1463,7 @@ u16 ScrollGrid_UpdateCursor(ScrollGrid *menu)
   }
   if (prev != menu->cursor)
   {
-    func_8003F6AC(1);
+    Audio_PlaySystemSound(1);
   }
   return menu->scrollFlags;
 }

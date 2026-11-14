@@ -133,7 +133,11 @@ void Block_RelocateSelf(u8*);
 s32 func_800371A4(s8*);
 void Audio_SetChannelVolume(s32 arg0, u32 arg1);
 
-s32 func_8003E1F8(void) {
+/**
+ * Loads and relocates the sound banks, sequences and GB music tables from ROM (0xB98000) at audio thread
+ * start, then creates the synthesizer.
+ */
+s32 Audio_LoadSoundData(void) {
     u32 i;
     u32* hdr;
     s32 num;
@@ -313,7 +317,7 @@ s32 func_8003E1F8(void) {
 
 void Audio_StopAllSoundEffects(void);
 s32 func_80037F68(s32, s32);
-void func_80043CE8(s32, f32, s32);
+void Announcer_QueueLine(s32, f32, s32);
 void func_8004609C(u32, u8*, s32);
 void func_80047FB0(u8*, s32, s32);
 extern u8 D_80077524;
@@ -335,7 +339,7 @@ extern s32 D_800FD608;
 extern u32 D_800FD684;
 s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 void func_80037C04(s32, u32);
-void func_800419F8(u32);
+void Announcer_CommentOnTurnStart(u32);
 
 /**
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening.
@@ -356,7 +360,7 @@ s32 Audio_StartMusicTrack(u32 track_id) {
         D_800FD608 = 0;
     }
     if (D_8007754C != 0) {
-        func_800419F8(0);
+        Announcer_CommentOnTurnStart(0);
     }
     file_index[0] = track_id;
     switch (track_id) {
@@ -373,7 +377,7 @@ s32 Audio_StartMusicTrack(u32 track_id) {
             D_80077528 = 0;
             volume_scale[0] = 0x68;
             D_8007752C = 0;
-            func_800419F8(1);
+            Announcer_CommentOnTurnStart(1);
             break;
         case 0x29:
             D_80077524 = 0;
@@ -459,7 +463,7 @@ s32 Audio_StartMusicTrack(u32 track_id) {
             D_8007753C = 1;
             volume_scale[0] = 0xA0;
             D_8007752C = 1;
-            func_800419F8(1);
+            Announcer_CommentOnTurnStart(1);
             break;
         case 0xA:
             D_80077528 = 0;
@@ -502,70 +506,70 @@ s32 Audio_StartMusicTrack(u32 track_id) {
                     switch (D_80077544) {
                         case 6:
                             file_index[0] = 3;
-                            func_80043CE8(0x11, 0.0f, 0x80);
+                            Announcer_QueueLine(0x11, 0.0f, 0x80);
                             break;
                         case 1:
                             file_index[0] = 2;
-                            func_80043CE8(0x11, 0.0f, 0x80);
-                            func_80043CE8(0x12, 0.0f, 0x80);
+                            Announcer_QueueLine(0x11, 0.0f, 0x80);
+                            Announcer_QueueLine(0x12, 0.0f, 0x80);
                             break;
                         case 2:
                         case 3:
                         case 4:
                         case 5:
                             file_index[0] = 2;
-                            func_80043CE8(0x11, 0.0f, 0x80);
-                            func_80043CE8(0x13, 0.0f, 0x80);
+                            Announcer_QueueLine(0x11, 0.0f, 0x80);
+                            Announcer_QueueLine(0x13, 0.0f, 0x80);
                             break;
                         default:
                             file_index[0] = 3;
-                            func_80043CE8(0x11, 0.0f, 0x80);
+                            Announcer_QueueLine(0x11, 0.0f, 0x80);
                             break;
                     }
                     break;
                 case 1:
                     switch (D_80077544) {
                         case 1:
-                            func_80043CE8(9, 0.0f, 0x80);
+                            Announcer_QueueLine(9, 0.0f, 0x80);
                             file_index[0] = 2;
                             break;
                         case 2:
-                            func_80043CE8(0x14, 0.0f, 0x80);
+                            Announcer_QueueLine(0x14, 0.0f, 0x80);
                             file_index[0] = 2;
                             break;
                         case 3:
-                            func_80043CE8(0x15, 0.0f, 0x80);
+                            Announcer_QueueLine(0x15, 0.0f, 0x80);
                             file_index[0] = 2;
                             break;
                         case 4:
-                            func_80043CE8(0x16, 0.0f, 0x80);
+                            Announcer_QueueLine(0x16, 0.0f, 0x80);
                             file_index[0] = 2;
                             break;
                         case 5:
-                            func_80043CE8(0x17, 0.0f, 0x80);
+                            Announcer_QueueLine(0x17, 0.0f, 0x80);
                             file_index[0] = 2;
                             break;
                     }
                     break;
                 case 2:
                     file_index[0] = 2;
-                    func_80043CE8(0xB, 0.0f, 0x80);
+                    Announcer_QueueLine(0xB, 0.0f, 0x80);
                     break;
                 case 3:
                     file_index[0] = 2;
-                    func_80043CE8(0xA, 0.0f, 0x80);
+                    Announcer_QueueLine(0xA, 0.0f, 0x80);
                     break;
                 case 4:
                     file_index[0] = 3;
-                    func_80043CE8(0xF, 0.0f, 0x80);
+                    Announcer_QueueLine(0xF, 0.0f, 0x80);
                     break;
                 case 5:
                     file_index[0] = 3;
-                    func_80043CE8(0xE, 0.0f, 0x80);
+                    Announcer_QueueLine(0xE, 0.0f, 0x80);
                     break;
                 case 6:
                     file_index[0] = 3;
-                    func_80043CE8(0xC, 0.0f, 0x80);
+                    Announcer_QueueLine(0xC, 0.0f, 0x80);
                     break;
                 case 7:
                     if (D_80077544 == 1) {
@@ -573,7 +577,7 @@ s32 Audio_StartMusicTrack(u32 track_id) {
                     } else {
                         file_index[0] = 3;
                     }
-                    func_80043CE8(0x10, 0.0f, 0x80);
+                    Announcer_QueueLine(0x10, 0.0f, 0x80);
                     break;
                 case 8:
                     if (D_80077544 == 1) {
@@ -581,10 +585,10 @@ s32 Audio_StartMusicTrack(u32 track_id) {
                     } else {
                         file_index[0] = 4;
                     }
-                    func_80043CE8(0xD, 0.0f, 0x80);
+                    Announcer_QueueLine(0xD, 0.0f, 0x80);
                     break;
             }
-            func_800419F8(1);
+            Announcer_CommentOnTurnStart(1);
             break;
         case 0x3:
         case 0x4:
@@ -612,7 +616,7 @@ s32 Audio_StartMusicTrack(u32 track_id) {
 extern s32 D_800FD608;
 extern u8 D_8007752C;
 s32 func_80037AC4(s32, s32);
-void func_800419F8(u32);
+void Announcer_CommentOnTurnStart(u32);
 
 /**
  * Seen in play (2026-11-13) ran when Start was pressed at the title screen (console reset, then N64
@@ -628,7 +632,7 @@ s32 Audio_FadeOutAll(s32 arg0) {
     ret = func_80037AC4(D_800FD608, arg0);
 
     if (D_8007752C == 0) {
-        func_800419F8(0);
+        Announcer_CommentOnTurnStart(0);
     }
     return ret;
 }
@@ -646,14 +650,18 @@ extern u8 D_800FD620;
 extern s32 D_800FD628[];
 extern u8 D_800FD68C;
 
-s32 func_8003F6AC(s32 arg0) {
+/**
+ * Plays system sound `soundId` (menus pass 1 for the cursor), once per id until the list is cleared; ids 0xF
+ * and 0x17 bypass the list. @unverified: sound not heard in the headless emulator.
+ */
+s32 Audio_PlaySystemSound(s32 soundId) {
     s32 ret;
     s32 pad[2]; // FAKE
     u32 i;
     volatile s32 id; // FAKE: keeps the copy in its stack slot
     s32* p;
 
-    if (arg0 == 0xF) {
+    if (soundId == 0xF) {
         if (!(D_80075C30 & 0x80000000)) {
             return 0;
         }
@@ -661,7 +669,7 @@ s32 func_8003F6AC(s32 arg0) {
         func_80037AC4(D_800FD608, 0x28);
         return ret;
     }
-    if (arg0 == 0x17) {
+    if (soundId == 0x17) {
         return func_8003834C(D_800B4188, D_800B41A0, 0x17, 0x80, 0x80, 0, -1);
     }
     i = 0;
@@ -669,7 +677,7 @@ s32 func_8003F6AC(s32 arg0) {
         p = D_800FD628;
     loop:
         i++;
-        if (arg0 == *p) {
+        if (soundId == *p) {
             return 0;
         }
         p++;
@@ -677,10 +685,10 @@ s32 func_8003F6AC(s32 arg0) {
             goto loop;
         }
     }
-    D_800FD628[D_800FD68C] = arg0;
+    D_800FD628[D_800FD68C] = soundId;
     D_800FD68C++;
-    id = arg0;
-    switch (arg0) {
+    id = soundId;
+    switch (soundId) {
         case 36:
             func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
             break;
@@ -700,7 +708,7 @@ s32 func_8003F6AC(s32 arg0) {
         default:
             return 0;
     }
-    if (arg0 == 0xA) {
+    if (soundId == 0xA) {
         D_80077524 = 1;
     }
     switch (id) {
@@ -713,12 +721,12 @@ s32 func_8003F6AC(s32 arg0) {
             if (D_800FD610[D_800FD620] != 0) {
                 func_80037AC4(D_800FD610[D_800FD620], 1);
             }
-            ret = func_800376E8(arg0);
+            ret = func_800376E8(soundId);
             D_800FD610[D_800FD620++] = ret;
             D_800FD620 %= 4;
             break;
         default:
-            ret = func_800376E8(arg0);
+            ret = func_800376E8(soundId);
             break;
     }
     if (id == 0xA) {
@@ -823,8 +831,11 @@ s32 Audio_PlayCry(u32 arg0, u32 arg1) {
 
 s32 Audio_PlayMoveSound(u32, u32, u32);
 
-void func_8003FE34(s32 arg0, s32 arg1) {
-    Audio_PlayMoveSound(arg0, 1, arg1);
+/**
+ * Audio_PlayMoveSound(move, 1, kind). @unverified: no callers found.
+ */
+void Audio_PlayMoveSoundKind1(s32 move, s32 kind) {
+    Audio_PlayMoveSound(move, 1, kind);
 }
 
 extern u8 D_80077062[];
@@ -931,12 +942,12 @@ skip:
             }
             switch (move_id) {
                 case DIG:
-                    func_80043CE8(0x4B, 0.0f, 0x80);
+                    Announcer_QueueLine(0x4B, 0.0f, 0x80);
                     var = 4;
                     break;
 
                 case FLY:
-                    func_80043CE8(0x4A, 0.0f, 0x80);
+                    Announcer_QueueLine(0x4A, 0.0f, 0x80);
                     var = 4;
                     break;
 
@@ -944,7 +955,7 @@ skip:
                 case SOLARBEAM:
                 case SKULL_BASH:
                 case SKY_ATTACK:
-                    func_80043CE8(0x52, 0.0f, 0x80);
+                    Announcer_QueueLine(0x52, 0.0f, 0x80);
                     var = 4;
                     break;
 
@@ -974,7 +985,7 @@ skip:
 
                 case SELFDESTRUCT:
                 case EXPLOSION:
-                    func_80043CE8(0x23, 0.0f, 0x80);
+                    Announcer_QueueLine(0x23, 0.0f, 0x80);
                     var = 0;
                     D_8007757C = 1;
                     break;
@@ -986,7 +997,7 @@ skip:
 
         case 1:
             if ((move_id == 6) && (D_8007755C == 0)) {
-                func_80043CE8(0x53, 0.0f, 0x80);
+                Announcer_QueueLine(0x53, 0.0f, 0x80);
             }
             switch (move_id) {
                 case LEER: case SUPERSONIC: case BLIZZARD: case BUBBLEBEAM: case AURORA_BEAM: case HYPER_BEAM: case CONFUSE_RAY: case KINESIS:

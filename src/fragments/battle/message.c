@@ -243,8 +243,8 @@ void BattleMessage_Format(s8* arg0, s8 id, s8* arg1, ...) {
 
 void func_8211EE8C(void);
 void func_8211EEC0(void*, s8*);
-void func_80042A6C(s32);
-void func_80042FF8(s32);
+void Announcer_CommentOnSideMessage(s32);
+void Announcer_CommentOnMessage(s32);
 
 /**
  * Shows a message built by BattleMessage_Format in `side`'s trainer color and plays its announcer clip (bit 7 picks the second clip bank), then clears the id.
@@ -259,9 +259,9 @@ void BattleMessage_ShowForSide(s8* arg0, s32 side) {
     gBattleMessageQueues->controllerPort = ap->side->teamMember[ap->thumbnail.shownTeamMemberIndex]->controllerPort;
     func_8211EEC0(gBattleMessageQueues->fullText, arg0 + 1);
     if (!(arg0[0] & 0x80)) {
-        func_80042A6C(arg0[0] & 0x7F);
+        Announcer_CommentOnSideMessage(arg0[0] & 0x7F);
     } else {
-        func_80042FF8(arg0[0] & 0x7F);
+        Announcer_CommentOnMessage(arg0[0] & 0x7F);
     }
     arg0[0] = 0;
 }

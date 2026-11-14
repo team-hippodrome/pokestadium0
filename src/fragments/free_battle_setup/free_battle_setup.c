@@ -638,7 +638,7 @@ void FreeBattle_DrawMonStatusWindow(Screen82000C5C* window) {
 
 s32 func_8002B390(s32);
 s32 func_8002BC14(s32);
-M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 
 /**
  * Runs the はい/いいえ choice of 「レンタルしますか？」: returns 1 for はい, -1 for いいえ or B (with the cancel
@@ -652,12 +652,12 @@ s32 FreeBattle_UpdateRentalConfirmChoice(s8* window) {
     if (func_8002B390(window + 0xA4) == 0) {
         temp_v0 = func_8002BC14(M2C_FIELD(window, s32*, 0xA4));
         if (temp_v0 == -1) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             ret = -1;
         } else if (temp_v0 == 1) {
             switch (M2C_FIELD(window, s32*, 0xA8)) {
                 case 1:
-                    func_8003F6AC(3);
+                    Audio_PlaySystemSound(3);
                     ret = -1;
                     break;
                 default:

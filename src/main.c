@@ -14,7 +14,7 @@ M2C_UNK func_80052DC0(M2C_UNK);                     /* extern */
 M2C_UNK func_80057370(M2C_UNK, M2C_UNK);            /* extern */
 M2C_UNK func_8005BD80(M2C_UNK);                     /* extern */
 M2C_UNK func_8005C130(M2C_UNK *);                   /* extern */
-extern M2C_UNK D_8000A92C;
+void Audio_ThreadEntry(s32 arg0);
 extern M2C_UNK D_800269A0;
 extern M2C_UNK D_800809B0;
 extern M2C_UNK D_80082B60;
@@ -33,7 +33,7 @@ void Idle_ThreadEntry(s32 arg0) {
     func_8000803C();
     Storage_StartThread();
     func_80004E34();
-    func_80051B20(&D_80082B60, 4, &D_8000A92C, 0, &D_80084D10, 0x50);
+    func_80051B20(&D_80082B60, 4, &Audio_ThreadEntry, 0, &D_80084D10, 0x50);
     func_8005C130(&D_80082B60);
     func_80001868();
     func_80051B20(&D_800809B0, 6, &D_800269A0, 0, &D_80082B60, 0x14);

@@ -265,7 +265,7 @@ void PartyScreen_DrawActionMenu(PartyActionMenuWindow* window) {
 }
 
 extern s8 *D_800603C0;
-M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 s32 Menu_UpdateCursor(s8*);
 s32 func_8002BC14(s32);
 /**
@@ -287,7 +287,7 @@ s32 PartyScreen_UpdateActionMenu(PartyActionMenuWindow* window) {
             if (!(window->menu.itemFlags[idx] & 1)) {
                 sp1C = idx + 1;
             } else {
-                func_8003F6AC(8);
+                Audio_PlaySystemSound(8);
             }
         }
     }

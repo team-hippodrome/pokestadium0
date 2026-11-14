@@ -100,8 +100,8 @@ void N64Logo_ScanTransferPaks(void) {
 
 void Save_LoadSram(void);
 u8 Save_GetOptionFlags(void);
-void func_8003BC9C(s32);
-void func_800418F0(s32);
+void Audio_SetOutputMode(s32);
+void Announcer_SetEnabled(s32);
 
 /**
  * Boot logo sequence: the fragment's entry point. Its only loader is State_Boot, the boot
@@ -134,15 +134,15 @@ s32 N64Logo_Main(UNUSED s32 loaderArg0, UNUSED s32 loaderArg1) {
     soundOptions = Save_GetOptionFlags();
 
     if (soundOptions & 1) {
-        func_8003BC9C(0);
+        Audio_SetOutputMode(0);
     } else {
-        func_8003BC9C(1);
+        Audio_SetOutputMode(1);
     }
 
     if (soundOptions & 2) {
-        func_800418F0(0);
+        Announcer_SetEnabled(0);
     } else {
-        func_800418F0(1);
+        Announcer_SetEnabled(1);
     }
 
     Audio_PlaySoundEffectById(SFX_N64_LOGO);

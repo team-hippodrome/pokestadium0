@@ -299,7 +299,7 @@ void Cont_ReadInputs(void);
 void BgStage_DrawFrame(void);
 void StageContext_SetClearColor(u16 color);
 M2C_UNK Audio_FadeCategoriesAndStreams(M2C_UNK);
-M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 extern void *D_800603C0;
 extern LeoBootDescriptor* sDiskBootBlock;
 
@@ -341,7 +341,7 @@ s32 TitleScreen_Update(s32 fadeMode) {
             result = TITLE_EXIT_DISK_BOOT;
         } else if (M2C_FIELD(D_800603C0, u16 *, 8) & 0x9000) {
             if (TitleScreen_CanAcceptInput((bootStatus >> 0x10) & 0xFFFF) != 0) {
-                func_8003F6AC(0xF);
+                Audio_PlaySystemSound(0xF);
                 result = TITLE_EXIT_MAIN_MENU;
             }
         } else if (TitleScreen_ShouldStartDemo((bootStatus >> 0x10) & 0xFFFF) != 0) {

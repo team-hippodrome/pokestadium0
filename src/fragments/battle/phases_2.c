@@ -20,7 +20,7 @@ s32 func_82107CA0(ActivePokemon*);
 void BattleCamera_PlayShot(s32, s32, s32);
 void BattleMessage_ShowForSide(s32, s32);
 void BattleScene_InitTurnPresentation(CameraNode* arg0);
-void func_80041914(u8, u8);
+void Announcer_SetTeamSizes(u8, u8);
 void func_82104C68(ActivePokemon*, s32);
 void func_82106354(ActivePokemon*);
 void func_82106374(ActivePokemon*);
@@ -525,7 +525,7 @@ void BattleScene_IntroStepInitOverheadCamera(CameraNode* arg0) {
     sBattleScene.scene->stageScale = D_FLT_8219666C;
     Battle_SetStageScale(sBattleScene.scene->stageScale);
     Audio_PlayCommand(4, 0, 0);
-    func_80041914(sActivePokemon[0]->teamRoster->numberOfPokemonBrought, sActivePokemon[1]->teamRoster->numberOfPokemonBrought);
+    Announcer_SetTeamSizes(sActivePokemon[0]->teamRoster->numberOfPokemonBrought, sActivePokemon[1]->teamRoster->numberOfPokemonBrought);
     BattleAnim_LoadModeResourceList(sActivePokemon[0]->side, 3);
     sBattleScene.scene->phaseStep += 1;
 }
@@ -540,7 +540,7 @@ void BattleScene_IntroStepWaitForAssets(s32 arg0) {
     }
 }
 
-s32 func_80041374(s32, u32);
+s32 Audio_StopSoundByCategory(s32, u32);
 /**
  * Seen in play (2026-11-13) with scene mode forced to 4 the screen showed the arena from directly
  * above, small and rotating; rotationY fell by 0x16C per call (0 to -21476 over about 60 calls)
@@ -555,7 +555,7 @@ void BattleScene_IntroStepSpinOverheadCamera(CameraNode* arg0) {
     BattleAnim_ApproachF(&sBattleScene.scene->stageScale, 1.0f, 0.06f);
     Battle_SetStageScale(sBattleScene.scene->stageScale);
     if (sBattleScene.scene->stepFrameTimer == 0x3C) {
-        func_80041374(4, 0x3C);
+        Audio_StopSoundByCategory(4, 0x3C);
     }
     if (func_821217DC(0x50) != 0) {
         Audio_PlayCommand(1, 0xFE, 0);

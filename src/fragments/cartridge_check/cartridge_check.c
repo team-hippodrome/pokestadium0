@@ -231,37 +231,37 @@ void CartridgeCheck_DrawPortPanel(s32 port, s32 x, s32 y) {
 s32 CartridgeCheck_MoveCursor(s32 cursor) {
     if ((M2C_FIELD(D_800603C0, u16*, 8) & 0x800) && (cursor >= 2)) {
         if (D_88403310[cursor ^ 2].game != 0) {
-            func_8003F6AC(0x25);
+            Audio_PlaySystemSound(0x25);
             cursor ^= 2;
         } else if (D_88403310[cursor ^ 3].game != 0) {
-            func_8003F6AC(0x25);
+            Audio_PlaySystemSound(0x25);
             cursor ^= 3;
         }
     }
     if ((M2C_FIELD(D_800603C0, u16*, 8) & 0x400) && (cursor < 2)) {
         if (D_88403310[cursor ^ 2].game != 0) {
-            func_8003F6AC(0x25);
+            Audio_PlaySystemSound(0x25);
             cursor ^= 2;
         } else if (D_88403310[cursor ^ 3].game != 0) {
-            func_8003F6AC(0x25);
+            Audio_PlaySystemSound(0x25);
             cursor ^= 3;
         }
     }
     if ((M2C_FIELD(D_800603C0, u16*, 8) & 0x200) && ((cursor % 2) == 1)) {
         if (D_88403310[cursor ^ 1].game != 0) {
-            func_8003F6AC(0x25);
+            Audio_PlaySystemSound(0x25);
             cursor ^= 1;
         } else if (D_88403310[cursor ^ 3].game != 0) {
-            func_8003F6AC(0x25);
+            Audio_PlaySystemSound(0x25);
             cursor ^= 3;
         }
     }
     if ((M2C_FIELD(D_800603C0, u16*, 8) & 0x100) && ((cursor % 2) == 0)) {
         if (D_88403310[cursor ^ 1].game != 0) {
-            func_8003F6AC(0x25);
+            Audio_PlaySystemSound(0x25);
             cursor ^= 1;
         } else if (D_88403310[cursor ^ 3].game != 0) {
-            func_8003F6AC(0x25);
+            Audio_PlaySystemSound(0x25);
             cursor ^= 3;
         }
     }
