@@ -726,7 +726,7 @@ void BattleAnim_SetupMove86StartDescriptor24(Particle* arg0) {
 void func_82153E28(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82153D00(arg0);

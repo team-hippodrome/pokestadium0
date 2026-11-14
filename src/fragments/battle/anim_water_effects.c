@@ -85,7 +85,7 @@ M2C_UNK func_82149660(s8 *);                      /* extern */
 void BattleAnim_RunSurfHitSpark(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82149660(arg0);
@@ -107,8 +107,8 @@ void BattleAnim_RunSurfHitSpark(Particle* arg0) {
     }
     if (func_8213CB7C(arg0) != 0) {
         func_8213E488(arg0);
-        Particle_ApproachStepMagnitude(arg0, M2C_FIELD(arg0, f32 *, 0x74), 0.5f);
-        func_82140064(arg0, M2C_FIELD(arg0, s32 *, 0x70), M2C_FIELD(arg0, s16 *, 0xAA));
+        Particle_ApproachStepMagnitude(arg0, arg0->magnitudeStep, 0.5f);
+        func_82140064(arg0, M2C_FIELD(arg0, s32 *, 0x70), arg0->scratchA);
     }
 }
 
@@ -217,7 +217,7 @@ M2C_UNK func_82149C20(s8 *);                      /* extern */
 void BattleAnim_RunBubbleBeamBubblesSlow(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82149ADC(arg0);
@@ -294,7 +294,7 @@ M2C_UNK func_82149D74(s8 *);                      /* extern */
 void BattleAnim_RunBubbleBeamBubblesFast(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82149D74(arg0);
@@ -416,7 +416,7 @@ M2C_UNK func_8214A190(s8 *);                      /* extern */
 void func_8214A220(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82149FD8(arg0);
@@ -584,7 +584,7 @@ M2C_UNK func_8214A634(s8 *);                      /* extern */
 void func_8214A6B4(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214A634(arg0);
@@ -630,7 +630,7 @@ M2C_UNK func_8214A77C(s8 *);                      /* extern */
 void func_8214A7F4(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214A77C(arg0);
@@ -711,7 +711,7 @@ M2C_UNK func_8214A9DC(s8 *);                      /* extern */
 void func_8214AA60(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214A9DC(arg0);
@@ -762,7 +762,7 @@ M2C_UNK func_8214AB14(s8 *);                      /* extern */
 void func_8214ABAC(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214AB14(arg0);
@@ -869,7 +869,7 @@ M2C_UNK func_8214AF08(s8 *);                      /* extern */
 void BattleAnim_IceBeamParticleUpdateA(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214ADB8(arg0);
@@ -1001,7 +1001,7 @@ M2C_UNK func_8214B280(s8 *);                      /* extern */
 void BattleAnim_RunPulsingBeamEmanator(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214B280(arg0);
@@ -1017,7 +1017,7 @@ void BattleAnim_RunPulsingBeamEmanator(Particle* arg0) {
     case 4:
         func_821401F8(arg0, 0x3F333333);
         func_82140210(arg0, 0x3DCCCCCD);
-        M2C_FIELD(arg0, s16 *, 0xAE) = 2;
+        arg0->lifecycle = 2;
         break;
     }
     if (func_82140690(arg0) != 0) {
@@ -1203,7 +1203,7 @@ M2C_UNK func_8214B84C(s8 *);                      /* extern */
 void BattleAnim_RunStrongOutwardMovingLargeHitSpark(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214B84C(arg0);
@@ -1252,7 +1252,7 @@ M2C_UNK func_8214B9A8(s8 *);                      /* extern */
 void BattleAnim_RunBlizzardHitUpwardColdAir(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214B9A8(arg0);
@@ -1300,7 +1300,7 @@ M2C_UNK func_8214BAFC(s8 *);                      /* extern */
 void BattleAnim_RunWaterGunHitEffect(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214BAFC(arg0);
@@ -1373,7 +1373,7 @@ void BattleAnim_RunWeakBeamHitEffect(Particle* arg0) {
     s16 temp_v1;
 
     sp2E = func_8213C484();
-    temp_v1 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v1 = arg0->lifecycle;
     switch (temp_v1) {                              /* switch 1; irregular */
     case 1:                                         /* switch 1 */
         func_8214BC58(arg0);
@@ -1467,7 +1467,7 @@ void BattleAnim_RunTriAttackHitSpark(Particle* arg0) {
     s16 temp_v1;
 
     Particle_GetUnkCE();
-    temp_v1 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v1 = arg0->lifecycle;
     switch (temp_v1) {                              /* irregular */
     case 1:
         func_8214BEE8(arg0);
@@ -1525,13 +1525,13 @@ M2C_UNK func_8214C134(s8 *);                      /* extern */
 void func_8214C208(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214C134(arg0);
         return;
     case 2:
-        if (func_8213CA80(arg0, M2C_FIELD(arg0, s16 *, 0xA2)) != 0) {
+        if (func_8213CA80(arg0, arg0->param0) != 0) {
             Particle_SetParam0(arg0, 2);
             func_8213CB3C(arg0);
             return;
@@ -1587,13 +1587,13 @@ M2C_UNK func_8214C300(s8 *);                      /* extern */
 void func_8214C3C8(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214C300(arg0);
         return;
     case 2:
-        if (func_8213CA80(arg0, M2C_FIELD(arg0, s16 *, 0xA2)) != 0) {
+        if (func_8213CA80(arg0, arg0->param0) != 0) {
             Particle_SetParam0(arg0, 2);
             func_8213CB3C(arg0);
             return;
@@ -1646,13 +1646,13 @@ M2C_UNK func_8214C4C4(s8 *);                      /* extern */
 void func_8214C598(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214C4C4(arg0);
         return;
     case 2:
-        if (func_8213CA80(arg0, M2C_FIELD(arg0, s16 *, 0xA2)) != 0) {
+        if (func_8213CA80(arg0, arg0->param0) != 0) {
             func_8213CB3C(arg0);
             Particle_SetTextureFrame(arg0, 1);
             return;
@@ -1853,7 +1853,7 @@ M2C_UNK func_8214CA90(s8 *);                      /* extern */
 void BattleAnim_RunWaterGunEmitterColoration(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214CA90(arg0);
@@ -1912,7 +1912,7 @@ M2C_UNK func_8214CC90(s8 *);                      /* extern */
 void BattleAnim_RunHydroPumpWaterGunProjectileHit(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214CC90(arg0);
@@ -1928,7 +1928,7 @@ void BattleAnim_RunHydroPumpWaterGunProjectileHit(Particle* arg0) {
         Particle_MarkInactive(arg0);
         break;
     }
-    if (M2C_FIELD(arg0, f32 *, 0x2C) < 0.0f) {
+    if (arg0->worldPosition.y < 0.0f) {
         Particle_MarkInactive(arg0);
     }
 }

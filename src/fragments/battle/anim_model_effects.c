@@ -584,7 +584,7 @@ void BattleAnim_SetupLeechSeedUseEffect1(Particle* arg0) {
 void BattleAnim_LeechSeedParticleUpdate(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8215558C(arg0);
@@ -686,7 +686,7 @@ void BattleAnim_InitEffect31Model(Particle* arg0) {
 void func_821558F4(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         Particle_SetParam0(arg0, ParticleMath_RandomRange(0x18));
@@ -695,7 +695,7 @@ void func_821558F4(Particle* arg0) {
     case 2:
         if (func_82140690(arg0) != 0) {
             func_82155878(arg0);
-            func_8213B560(0, &func_821624FC, &D_8218E798, 0, 1, 0x10, (s32) M2C_FIELD(arg0, u8 *, 0xC9), 0x17, 4);
+            func_8213B560(0, &func_821624FC, &D_8218E798, 0, 1, 0x10, (s32) arg0->byteParam0, 0x17, 4);
             return;
         }
         return;
@@ -845,7 +845,7 @@ void BattleAnim_SetupBlizzard(Particle* arg0) {
 void BattleAnim_RunBlizzard(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82155DB8(arg0);
@@ -1439,7 +1439,7 @@ void BattleAnim_InitEffects10And50Model(Particle* arg0) {
 void BattleAnim_RunFallingRock(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82156F70(arg0);
@@ -1941,7 +1941,7 @@ void BattleAnim_SetupBoomUseEffect3(Particle* arg0) {
 void BattleAnim_RunBoomUseEffect3(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82158344(arg0);
@@ -1999,7 +1999,7 @@ void BattleAnim_SetupBoomUseEffect4(Particle* arg0) {
 void BattleAnim_RunBoomUseEffect4(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8215856C(arg0);
@@ -2070,7 +2070,7 @@ void func_821588C0(Particle* arg0) {
     s16 temp_v1;
 
     Particle_GetUnkCE();
-    temp_v1 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v1 = arg0->lifecycle;
     switch (temp_v1) {                              /* irregular */
     case 1:
         func_82152730(arg0, 2);
@@ -2165,7 +2165,7 @@ void BattleAnim_RunBoomHitEffect1(Particle* arg0) {
     s16 temp_v1;
 
     Particle_GetUnkCE();
-    temp_v1 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v1 = arg0->lifecycle;
     switch (temp_v1) {                              /* irregular */
     case 1:
         func_82152730(arg0, 2);
@@ -2230,7 +2230,7 @@ void BattleAnim_SetupBoomHitEffect2(Particle* arg0) {
 void BattleAnim_RunBoomHitEffect2(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82158CE0(arg0);
@@ -2293,7 +2293,7 @@ void BattleAnim_SetupBoomHitEffect3(Particle* arg0) {
 void BattleAnim_RunBoomHitEffect3(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82158F20(arg0);
@@ -3769,7 +3769,7 @@ void BattleAnim_SetupConfuseRayUseSpotlight(Particle* arg0) {
 void func_8215C984(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8215C8FC(arg0);
@@ -3805,7 +3805,7 @@ void BattleAnim_SetupConfuseRayHitSpotlight(Particle* arg0) {
  * only Confuse Ray reached this function.
  */
 void BattleAnim_ConfuseRayParticleUpdate(Particle* arg0) {
-    if (M2C_FIELD(arg0, s16 *, 0xAE) == 1) {
+    if (arg0->lifecycle == 1) {
         func_8215CA14();
     }
     Particle_SetRotationY(arg0, (s16) (func_821385C0() + 0x8000));
@@ -4020,7 +4020,7 @@ void BattleAnim_SetupBarrageEffect(Particle* arg0) {
 void func_8215D76C(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8215D724(arg0);
@@ -4126,7 +4126,7 @@ void BattleAnim_SetupBarrageHitEffect(Particle* arg0) {
 void func_8215DAEC(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8215DA5C(arg0);
@@ -4674,7 +4674,7 @@ void BattleAnim_InitializeHornAttackUse(void) {
 void func_8215F1B0(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82152730(arg0, 0);
@@ -4753,7 +4753,7 @@ void BattleAnim_CallbackStartEffects127And128Descriptor39ScaleFade_InitParticle(
 void func_8215F3EC(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8215F2B8(arg0);

@@ -265,13 +265,13 @@ void Particle_InitLifecycle(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void Particle_MarkInactive(Particle* arg0) {
-    M2C_FIELD(arg0, s16 *, 0xAE) = 0;
+    arg0->lifecycle = 0;
 }
 
 M2C_UNK func_8213D260();                            /* extern */
 
 void Particle_DisableAndDetach(Particle* arg0) {
-    M2C_FIELD(arg0, s16 *, 0xAE) = 0;
+    arg0->lifecycle = 0;
     M2C_FIELD(arg0, s32 *, 8) = 0;
     M2C_FIELD(arg0, s32 *, 0xC) = 0;
     func_8213D260();
@@ -298,7 +298,7 @@ s32 Particle_IsInactive(Particle* arg0) {
     s32 var_v1;
 
     var_v1 = 0;
-    if (M2C_FIELD(arg0, s16 *, 0xAE) == 0) {
+    if (arg0->lifecycle == 0) {
         var_v1 = 1;
     }
     return var_v1;
@@ -313,7 +313,7 @@ s32 Particle_IsRunning(Particle* arg0) {
     s32 var_v1;
 
     var_v1 = 0;
-    if (M2C_FIELD(arg0, s16 *, 0xAE) >= 2) {
+    if (arg0->lifecycle >= 2) {
         var_v1 = 1;
     }
     return var_v1;

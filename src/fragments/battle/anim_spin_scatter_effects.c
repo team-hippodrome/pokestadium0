@@ -193,7 +193,7 @@ M2C_UNK func_821519AC(s8 *);                      /* extern */
 void func_82151A5C(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_821519AC(arg0);

@@ -38,18 +38,18 @@ M2C_UNK func_82144130(s8 *);                      /* extern */
 void BattleAnim_CallbackOwnerModelTintPaletteFade(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82144130(arg0);
         break;
     case 2:
-        if (Particle_ApproachScratchA(arg0, M2C_FIELD(arg0, s16 *, 0xA2), M2C_FIELD(arg0, u8 *, 0xCA)) != 0) {
+        if (Particle_ApproachScratchA(arg0, arg0->param0, arg0->byteParam2) != 0) {
             func_8213C9D0(arg0);
         }
         break;
     case 3:
-        if (func_821436A0(arg0, M2C_FIELD(arg0, u8 *, 0xC9), M2C_FIELD(arg0, u8 *, 0xA7)) != 0) {
+        if (func_821436A0(arg0, arg0->byteParam0, M2C_FIELD(arg0, u8 *, 0xA7)) != 0) {
             func_8213C9D0(arg0);
         }
         break;
@@ -58,7 +58,7 @@ void BattleAnim_CallbackOwnerModelTintPaletteFade(Particle* arg0) {
         break;
     }
     if (Particle_IsRunning(arg0) != 0) {
-        func_80019B28(M2C_FIELD(arg0, s32 *, 0x10), M2C_FIELD(arg0, u8 *, 0xBA), M2C_FIELD(arg0, u8 *, 0xBB), M2C_FIELD(arg0, u8 *, 0xBC), (s32) M2C_FIELD(arg0, s16 *, 0xAA));
+        func_80019B28(M2C_FIELD(arg0, s32 *, 0x10), arg0->prim_r, arg0->prim_g, arg0->prim_b, (s32) arg0->scratchA);
     }
 }
 
@@ -183,13 +183,13 @@ M2C_UNK func_82144644(s8 *);                      /* extern */
 void BattleAnim_CallbackOwnerModelAlphaFade(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82144644(arg0);
         break;
     case 2:
-        if (Particle_ApproachPrimAlpha(arg0, M2C_FIELD(arg0, u8 *, 0xC9), M2C_FIELD(arg0, u8 *, 0xA7)) != 0) {
+        if (Particle_ApproachPrimAlpha(arg0, arg0->byteParam0, M2C_FIELD(arg0, u8 *, 0xA7)) != 0) {
             func_8213C9D0(arg0);
         }
         break;
@@ -198,7 +198,7 @@ void BattleAnim_CallbackOwnerModelAlphaFade(Particle* arg0) {
         break;
     }
     if (Particle_IsRunning(arg0) != 0) {
-        func_80019B6C(M2C_FIELD(arg0, s32 *, 0x10), M2C_FIELD(arg0, u8 *, 0xC0));
+        func_80019B6C(M2C_FIELD(arg0, s32 *, 0x10), arg0->prim_a);
     }
 }
 
@@ -221,7 +221,7 @@ M2C_UNK func_82144710(s8 *);                      /* extern */
 void func_82144750(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82144710(arg0);
@@ -235,7 +235,7 @@ void func_82144750(Particle* arg0) {
         }
         break;
     }
-    func_80019B28(M2C_FIELD(arg0, s32 *, 0x10), M2C_FIELD(arg0, u8 *, 0xBA), M2C_FIELD(arg0, u8 *, 0xBB), M2C_FIELD(arg0, u8 *, 0xBC), (s32) M2C_FIELD(arg0, u8 *, 0xC0));
+    func_80019B28(M2C_FIELD(arg0, s32 *, 0x10), arg0->prim_r, arg0->prim_g, arg0->prim_b, (s32) arg0->prim_a);
 }
 
 /**
@@ -379,7 +379,7 @@ s32 func_82140690();                                /* extern */
 void BattleAnim_CallbackDescriptor25AlphaHoldDetach(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82144A54((Particle*)arg0);

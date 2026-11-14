@@ -354,7 +354,7 @@ M2C_UNK func_821453F4(s8 *);                      /* extern */
 void func_82145498(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_821452FC(arg0);
@@ -671,7 +671,7 @@ M2C_UNK func_82145C28(s8 *);                      /* extern */
 void BattleAnim_RunOscillatingFlameUnderneathPokemon(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82145C28(arg0);
@@ -733,7 +733,7 @@ M2C_UNK func_82145E04(s8 *);                      /* extern */
 void BattleAnim_FireSpinParticleUpdate(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82145E04(arg0);
@@ -833,7 +833,7 @@ M2C_UNK func_821460C8(s8 *);                      /* extern */
 void BattleAnim_EmberParticleUpdateB(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_821460C8(arg0);
@@ -880,7 +880,7 @@ extern M2C_UNK D_8218E7D0;
 void BattleAnim_RunEmberProjectile(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_821461C4(arg0);
@@ -931,7 +931,7 @@ M2C_UNK func_82146314(s8 *);                      /* extern */
 void BattleAnim_EmberParticleUpdateA(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82146314(arg0);
@@ -1200,7 +1200,7 @@ void BattleAnim_RunBoomSmallExplosion(Particle* arg0) {
     s16 temp_v1;
 
     Particle_GetUnkCE();
-    temp_v1 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v1 = arg0->lifecycle;
     switch (temp_v1) {                              /* irregular */
     case 1:
         func_821469BC(arg0);
@@ -1215,10 +1215,10 @@ void BattleAnim_RunBoomSmallExplosion(Particle* arg0) {
         func_8213E6BC(arg0);
         func_821402B8(arg0);
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 1, 7, 1, 1, 0);
-        if (M2C_FIELD(arg0, s8 *, 0xC3) >= 6) {
+        if (arg0->textureFrame >= 6) {
             Particle_ApproachPrimAlpha(arg0, 0x64, 0x4E);
         }
-        if (M2C_FIELD(arg0, s8 *, 0xC3) >= 4) {
+        if (arg0->textureFrame >= 4) {
             return;
         }
         break;
@@ -1270,7 +1270,7 @@ M2C_UNK func_82146BEC(s8 *);                      /* extern */
 void BattleAnim_CallbackEndEffect40Descriptor48SpreadScaleAlphaFade(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82146BEC(arg0);
@@ -1341,7 +1341,7 @@ M2C_UNK func_82146E1C(s8 *);                      /* extern */
 void BattleAnim_RunSecondaryBombExplosion(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82146E1C(arg0);
@@ -1412,7 +1412,7 @@ M2C_UNK func_82147050(s8 *);                      /* extern */
 void BattleAnim_CallbackEndEffect56Descriptor46RisingScaleAlphaFade(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82147050(arg0);
@@ -1542,7 +1542,7 @@ M2C_UNK func_821474CC(s8 *);                      /* extern */
 void BattleAnim_RunFirePunchLingeringHitSpark(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_821474CC(arg0);
@@ -1617,7 +1617,7 @@ M2C_UNK func_82147710(s8 *);                      /* extern */
 void BattleAnim_RunAfterImpactSmoke(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82147710(arg0);
@@ -1688,13 +1688,13 @@ M2C_UNK func_8214795C(s8 *);                      /* extern */
 void BattleAnim_RunFirePunchHitEffect(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214795C(arg0);
         return;
     case 2:
-        if (func_8213CA80(arg0, M2C_FIELD(arg0, s16 *, 0xA2)) != 0) {
+        if (func_8213CA80(arg0, arg0->param0) != 0) {
             func_8213CB3C(arg0);
             return;
         }
@@ -1704,7 +1704,7 @@ void BattleAnim_RunFirePunchHitEffect(Particle* arg0) {
         func_82140228(arg0, 0x3F800000, 0x3CA3D70A);
         Particle_ApproachPrimBlue(arg0, 0, 0x20);
         Particle_ApproachEnvGreen(arg0, 0, 0x20);
-        if (M2C_FIELD(arg0, s8 *, 0xC3) >= 6) {
+        if (arg0->textureFrame >= 6) {
             Particle_ApproachPrimGreen(arg0, 0, 0x20);
             Particle_ApproachPrimAlpha(arg0, 0x64, 0x4E);
             return;
@@ -1900,7 +1900,7 @@ M2C_UNK func_82147FF0(s8 *);                      /* extern */
 void func_82148090(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82147ED0(arg0);
@@ -2089,7 +2089,7 @@ M2C_UNK func_8214851C(s8 *);                      /* extern */
 void BattleAnim_RunDaimonjiColoration(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214851C(arg0);

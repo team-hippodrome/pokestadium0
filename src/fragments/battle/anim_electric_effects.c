@@ -57,7 +57,7 @@ M2C_UNK func_8214E590(s8 *);                      /* extern */
 void func_8214E67C(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214E590(arg0);
@@ -297,7 +297,7 @@ M2C_UNK func_8214EC88(s8 *);                      /* extern */
 void func_8214ED30(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214EC88(arg0);
@@ -347,7 +347,7 @@ M2C_UNK func_8214EDE0(s8 *);                      /* extern */
 void func_8214EEE0(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214EDE0(arg0);
@@ -401,7 +401,7 @@ M2C_UNK func_8214EF84(s8 *);                      /* extern */
 void func_8214F06C(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214EF84(arg0);
@@ -458,7 +458,7 @@ M2C_UNK func_8214F110(s8 *);                      /* extern */
 void func_8214F1E8(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214F110(arg0);
@@ -515,7 +515,7 @@ M2C_UNK func_8214F28C(s8 *);                      /* extern */
 void func_8214F3D4(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214F28C(arg0);
@@ -569,7 +569,7 @@ M2C_UNK func_8214F478(s8 *);                      /* extern */
 void func_8214F55C(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8214F478(arg0);

@@ -38,7 +38,7 @@ M2C_UNK func_82140920(s8 *);                      /* extern */
 void BattleAnim_UpdateNeedleBlueFadeGrow(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82140920(arg0);
@@ -73,7 +73,7 @@ M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82140A48();                            /* extern */
 
 void BattleAnim_UpdateSecondaryOwnerParticleBlueGrow(Particle* arg0) {
-    if (M2C_FIELD(arg0, s16 *, 0xAE) == 1) {
+    if (arg0->lifecycle == 1) {
         func_82140A48();
     }
     if (Particle_IsRunning(arg0) != 0) {

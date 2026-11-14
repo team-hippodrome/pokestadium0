@@ -221,7 +221,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
 void func_82164AD0(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         BattleAnim_InitSharedVerticalFadeParticle(arg0);
@@ -233,7 +233,7 @@ void func_82164AD0(Particle* arg0) {
         }
         return;
     case 3:
-        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, (s32) M2C_FIELD(arg0, s16 *, 0xAC), 0);
+        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, (s32) arg0->scratchB, 0);
         Particle_ApproachPrimAlpha(arg0, 0x40, M2C_FIELD(arg0, u8 *, 0xAB));
         func_8213E77C(arg0);
         return;
@@ -300,7 +300,7 @@ void BattleAnim_RunSplashOfWater(Particle* arg0) {
     s16 temp_v0;
     s16 temp_v0_2;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* switch 1; irregular */
     case 1:                                         /* switch 1 */
         BattleAnim_InitSharedVerticalFadeParticle(arg0);
@@ -324,7 +324,7 @@ void BattleAnim_RunSplashOfWater(Particle* arg0) {
         Particle_MarkInactive(arg0);
         break;
     }
-    temp_v0_2 = M2C_FIELD(arg0, s16 *, 0xB4);
+    temp_v0_2 = arg0->phase;
     switch (temp_v0_2) {                            /* switch 2; irregular */
     case 1:                                         /* switch 2 */
         func_8213F6DC(arg0, 0x3F800000, 0x3DCCCCCD);
@@ -349,7 +349,7 @@ void BattleAnim_RunSplashOfWater(Particle* arg0) {
 void BattleAnim_RunDigHitDust(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         BattleAnim_InitSharedVerticalFadeParticle(arg0);
@@ -360,7 +360,7 @@ void BattleAnim_RunDigHitDust(Particle* arg0) {
         }
         break;
     case 3:
-        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, (s32) M2C_FIELD(arg0, s16 *, 0xAC), 0);
+        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, (s32) arg0->scratchB, 0);
         Particle_ApproachPrimAlpha(arg0, 0x40, M2C_FIELD(arg0, u8 *, 0xAB));
         break;
     case 4:
@@ -382,7 +382,7 @@ void BattleAnim_RunDigHitDust(Particle* arg0) {
 void BattleAnim_RunDigHitRocks(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         BattleAnim_InitSharedVerticalFadeParticle(arg0);
@@ -393,7 +393,7 @@ void BattleAnim_RunDigHitRocks(Particle* arg0) {
         }
         break;
     case 3:
-        if (M2C_FIELD(arg0, f32 *, 0x2C) < 0.0f) {
+        if (arg0->worldPosition.y < 0.0f) {
             Particle_MarkInactive(arg0);
         }
         break;
@@ -476,7 +476,7 @@ void BattleAnim_CallbackDescriptor50BurstChild_InitParticle(Particle* arg0) {
 void func_82165224(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82165100(arg0);
@@ -566,7 +566,7 @@ void BattleAnim_EndEffect16_NoOpInit(void) {
 void func_8216547C(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         BattleAnim_InitSharedVerticalFadeParticle(arg0);
