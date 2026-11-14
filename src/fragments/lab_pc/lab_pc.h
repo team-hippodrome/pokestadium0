@@ -65,7 +65,7 @@ typedef struct unk_func_88208C5C {
 
 typedef struct unk_func_882079D8 {
     /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_88205880_00D0* unk_2C;
+    /* 0x2C */ BattleMon* unk_2C;
 } unk_func_882079D8; // size = 0x30
 
 typedef struct unk_func_8820BE14_030 {
@@ -73,7 +73,7 @@ typedef struct unk_func_8820BE14_030 {
     /* 0x02 */ s16 unk_02;
     /* 0x04 */ MemoryPool* unk_04;
     /* 0x08 */ WidgetLinkHeader* unk_08;
-    /* 0x0C */ unk_func_88205880_00D0* unk_0C;
+    /* 0x0C */ BattleMon* unk_0C;
     /* 0x10 */ s32 unk_10;
     /* 0x14 */ WidgetNode* unk_14;
     /* 0x18 */ s32 unk_18;
@@ -168,7 +168,7 @@ typedef struct unk_func_8820B12C {
 
 typedef struct unk_func_8820BE14_02C_070 {
     /* 0x0000 */ WidgetNode unk_0000;
-    /* 0x002C */ unk_func_88205880_00D0* unk_002C;
+    /* 0x002C */ BattleMon* unk_002C;
     /* 0x0030 */ s16 unk_0030;
     /* 0x0032 */ char unk0032[0x7];
     /* 0x0039 */ u8 unk_0039[2][0xC80];

@@ -436,7 +436,7 @@ typedef s32 (*unk_func_882025E0_010)(struct unk_func_882025E0* arg0, Controller*
 typedef void (*unk_func_882025E0_014)(struct unk_func_882025E0* arg0, s32 arg1);
 
 typedef struct unk_func_882025E0_024_02C {
-    /* 0x00 */ unk_func_88205880_00D0* unk_00[2];
+    /* 0x00 */ BattleMon* unk_00[2];
     /* 0x08 */ s32 unk_08;
 } unk_func_882025E0_024_02C; // size >= 0xC
 
@@ -611,13 +611,13 @@ typedef struct unk_func_88201DA0 {
     /* 0x50 */ unk_func_8850878C* unk_50;
     /* 0x54 */ char* unk_54;
     /* 0x58 */ unk_func_8850182C* unk_58;
-    /* 0x5C */ unk_func_88205880_00D0* unk_5C;
+    /* 0x5C */ BattleMon* unk_5C;
     /* 0x60 */ u32 unk_60;
 } unk_func_88201DA0; // size = 0x64
 
 typedef struct unk_func_8820253C {
     /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_88205880_00D0* unk_2C;
+    /* 0x2C */ BattleMon* unk_2C;
 } unk_func_8820253C; // size = 0x30
 
 typedef struct unk_func_88217740 {
@@ -864,7 +864,7 @@ typedef void (*func88507B80)(unk_func_8820BE14_02C_038*, s32);
 
 typedef void (*func88507C0C)(unk_func_8830867C_02C_034*, s32, s32);
 
-typedef void (*func88507CC4)(unk_func_8820BE14_02C_038*, unk_func_88205880_00D0*);
+typedef void (*func88507CC4)(unk_func_8820BE14_02C_038*, BattleMon*);
 
 typedef void (*func88507CEC)(unk_func_8820BE14_02C_038*);
 

@@ -5,17 +5,6 @@
 #include "global.h"
 #include "game_state.h"
 
-/* Every user (Pokemon_ToGbRecordExt, GbSave_SaveMainPokemon, Deck_WriteEntry) only reads unk_000[0], and
- * the lab structs only hold pointers to it, so this looks like a pointer to one BattleMon; nothing
- * sizes or indexes the rest. @unverified */
-typedef struct unk_func_88205880_00D0 {
-    /* 0x000 */ BattleMon unk_000[20];
-    /* 0x640 */ s32 unk_640;
-    /* 0x644 */ s32 unk_644;
-    /* 0x648 */ s32 unk_648;
-    /* 0x64C */ u32 unk_64C;
-} unk_func_88205880_00D0; // size = 0x650
-
 typedef struct unk_func_88201DA0_034 {
     /* 0x0000 */ s32 unk_000;
     /* 0x0004 */ char unk004[0x4];
