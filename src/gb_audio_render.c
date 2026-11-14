@@ -4,81 +4,87 @@
 #include "gb_audio_render.h"
 #include "audio_commands.h"
 #include "rom_device.h"
-typedef struct unk_D_800FD008 {
-    /* 0x00 */ u16 unk_00[20];
-    /* 0x28 */ u8 unk_28;
-    /* 0x29 */ u8 unk_29;
-    /* 0x2A */ u8 unk_2A;
+/* Emulated Game Boy sound registers. Each register is a value byte followed by a dirty byte. */
+typedef struct GbSoundRegisters {
+    /* 0x00 */ u16 regs[20]; /* NR10-NR44 (0xFF10-0xFF23): value byte, dirty byte */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x28 */ u8 nr50; /* master volume */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x29 */ u8 nr50Dirty; /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x2A */ u8 nr51; /* panning */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
     /* 0x2B */ char unk2B[1];
-    /* 0x2C */ u8 unk_2C;
+    /* 0x2C */ u8 nr52; /* sound on/off; bits 0-3 are the channel-on flags */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
     /* 0x2D */ char unk2D[0x13];
-} unk_D_800FD008;
-#define GB_REG(n) (((u8*)&D_800FD7E8.unk_00[n])[0])
-#define GB_REG_DIRTY(n) (((u8*)&D_800FD7E8.unk_00[n])[1])
-typedef struct unk_D_800FD068 {
-    /* 0x00 */ u8* unk_00;
-    /* 0x04 */ u8 unk_04;
-    /* 0x06 */ u16 unk_06;
-} unk_D_800FD068;
-typedef struct unk_D_800FCFD8 {
-    /* 0x00 */ u32 unk_00;
-    /* 0x04 */ u8 unk_04;
+} GbSoundRegisters; // size = 0x40
+#define GB_REG(n) (((u8*)&D_800FD7E8.regs[n])[0])
+#define GB_REG_DIRTY(n) (((u8*)&D_800FD7E8.regs[n])[1])
+/* A queued register write, applied when the renderer reaches its sample time. */
+typedef struct GbSoundRegWrite {
+    /* 0x00 */ u8* reg; /* value byte in D_800FD7E8.regs */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x04 */ u8 value; /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x06 */ u16 time; /* sample time + 1; 0 ends the queue */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+} GbSoundRegWrite; // size = 0x08
+/* Noise (channel 4) renderer state: plays a sampled noise clip. */
+typedef struct GbSynthNoise {
+    /* 0x00 */ u32 time; /* sample clock, +0x100 per sample */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x04 */ u8 sampleId; /* GbNoiseSampleEntry index, 0xFF = none */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
     /* 0x05 */ u8 pad05[0x3];
-    /* 0x04 */ u32 unk_08;
-    /* 0x04 */ f32 unk_0C;
-    /* 0x04 */ f32 unk_10;
-    /* 0x04 */ f32 unk_14;
-    /* 0x04 */ f32 unk_18;
-    /* 0x04 */ u32 unk_1C;
-    /* 0x04 */ u32 unk_20;
-    /* 0x04 */ u32 unk_24;
-    /* 0x04 */ u8 unk_28;
-} unk_D_800FCFD8;
-typedef struct unk_D_800FCF90 {
-    /* 0x00 */ u32 unk_00;
-    /* 0x00 */ s16 unk_04;
-    /* 0x00 */ s16 unk_06;
-    /* 0x00 */ u32 unk_08;
-    /* 0x00 */ u32 unk_0C;
-    /* 0x10 */ u16 unk_10[2];
+    /* 0x08 */ u32 sampleIndex; /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x0C */ f32 pitchStep; /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x10 */ f32 pitchAccum; /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x14 */ f32 volume; /* capped at 0.75 */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x18 */ f32 envelopeStep; /* +-0.05 per envelope period (NR42) */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x1C */ u32 envelopePeriod; /* -1 = off */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x20 */ u32 nextEnvelopeTime; /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x24 */ u32 lengthEnd; /* -1 = no length limit (NR41/NR44) */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x28 */ u8 enabled; /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+} GbSynthNoise; // size = 0x2C
+/* Square 2 (channel 2) renderer state: square 1 without the sweep. */
+typedef struct GbSynthSquare2 {
+    /* 0x00 */ u32 time; /* sample clock */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x04 */ s16 volume; /* envelope level, capped at 0x7800 */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x06 */ s16 envelopeStep; /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x08 */ u32 envelopePeriod; /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x0C */ u32 nextEnvelopeTime; /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x10 */ u16 halfPeriods[2]; /* high and low lengths from the NR21 duty */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
     /* 0x14 */ s16 unk_14;
-    /* 0x16 */ u8 unk_16;
-    /* 0x00 */ u32 unk_18;
-    /* 0x00 */ u32 unk_1C;
-    /* 0x00 */ u32 unk_20;
-    /* 0x24 */ u8 unk_24;
-} unk_D_800FCF90;
-typedef struct unk_D_800FCFB8 {
-    /* 0x00 */ u32 unk_00;
+    /* 0x16 */ u8 phase; /* index into halfPeriods */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x18 */ u32 nextPhaseTime; /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x1C */ u32 period; /* from the NR23/NR24 frequency */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x20 */ u32 lengthEnd; /* -1 = no length limit */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x24 */ u8 enabled; /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+} GbSynthSquare2; // size = 0x28
+/* Wave (channel 3) renderer state. Only reset here. */
+typedef struct GbSynthWave {
+    /* 0x00 */ u32 time; /* @unverified: reset with enabled, like the other channels' clocks */
     /* 0x04 */ u8 unk04[0x18];
-    /* 0x1C */ u8 unk_1C;
-} unk_D_800FCFB8;
-typedef struct unk_D_800FCF60 {
-    /* 0x00 */ u32 unk_00;
-    /* 0x04 */ u16 unk_04;
+    /* 0x1C */ u8 enabled; /* @unverified: reset with time, like the other channels' flags */
+} GbSynthWave; // size = 0x20
+/* Square 1 (channel 1) renderer state, with the NR10 frequency sweep. */
+typedef struct GbSynthSquare1 {
+    /* 0x00 */ u32 time; /* sample clock, +0x40 per sample */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x04 */ u16 frequency; /* 11-bit NR13/NR14 value, swept */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
     /* 0x06 */ char pad06[0x2];
-    /* 0x08 */ u32 unk_08;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
-    /* 0x10 */ u32 unk_10;
-    /* 0x14 */ u32 unk_14;
-    /* 0x18 */ u16 unk_18[2];
+    /* 0x08 */ u32 sweepPeriod; /* from NR10 bits 4-6, -1 = off */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x0C */ s16 volume; /* envelope level, capped at 0x7800 */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x0E */ s16 envelopeStep; /* +-0x800 (NR12 direction) */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x10 */ u32 envelopePeriod; /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x14 */ u32 nextEnvelopeTime; /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x18 */ u16 halfPeriods[2]; /* high and low lengths from the NR11 duty */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
     /* 0x1C */ s16 unk_1C;
-    /* 0x1E */ u8 unk_1E;
+    /* 0x1E */ u8 phase; /* index into halfPeriods */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
     /* 0x1F */ char pad1F[0x1];
-    /* 0x20 */ u32 unk_20;
-    /* 0x24 */ u32 unk_24;
-    /* 0x28 */ u32 unk_28;
-    /* 0x2C */ u8 unk_2C;
-} unk_D_800FCF60;
-extern unk_D_800FCF60 D_800FD740;
-extern unk_D_800FCF90 D_800FD770;
-extern unk_D_800FCFB8 D_800FD798;
-extern unk_D_800FCFD8 D_800FD7B8;
+    /* 0x20 */ u32 nextPhaseTime; /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x24 */ u32 period; /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x28 */ u32 lengthEnd; /* -1 = no length limit */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+    /* 0x2C */ u8 enabled; /* @unverified: from the code (Game Boy APU, NR10-NR52) */
+} GbSynthSquare1; // size = 0x30
+extern GbSynthSquare1 D_800FD740;
+extern GbSynthSquare2 D_800FD770;
+extern GbSynthWave D_800FD798;
+extern GbSynthNoise D_800FD7B8;
 extern u32 D_800FD7E4;
-extern unk_D_800FD008 D_800FD7E8;
+extern GbSoundRegisters D_800FD7E8;
 extern u8 D_800FD828[32];
-extern unk_D_800FD068 D_800FD848[199];
+extern GbSoundRegWrite D_800FD848[199];
 extern u8 D_800FDE80[8];
 extern u32 D_800FDE88;
 extern u32 D_800FDE8C;
@@ -128,13 +134,13 @@ void GbAudio_GenerateSamples(s16* arg0, s32 arg1, u32 arg2, f32 arg3) {
 
 /** Queues a write to an emulated Game Boy sound register. */
 void GbAudio_QueueRegisterWrite(u16 arg0, u8 arg1, u16 arg2) {
-    D_800FD848[D_800FDE8C].unk_00 = (u8*)&D_800FD7E8.unk_00[(arg0 & 0xFF) - 0x10];
-    D_800FD848[D_800FDE8C].unk_04 = arg1;
-    D_800FD848[D_800FDE8C].unk_06 = arg2 + 1;
+    D_800FD848[D_800FDE8C].reg = (u8*)&D_800FD7E8.regs[(arg0 & 0xFF) - 0x10];
+    D_800FD848[D_800FDE8C].value = arg1;
+    D_800FD848[D_800FDE8C].time = arg2 + 1;
     D_800FDE80[arg0 & 0xFF] = arg1;
     D_800FDE8C++;
     D_800FDE8C %= 200;
-    D_800FD848[D_800FDE8C].unk_06 = 0;
+    D_800FD848[D_800FDE8C].time = 0;
 }
 
 /** Returns the last value written to an emulated Game Boy sound register. */
@@ -181,20 +187,20 @@ void func_80044BA8(u32 arg0, u8 arg1, u32 arg2) {
         p[i * 2] = 0;
     }
     D_800FDE8C = 0;
-    D_800FD848[0].unk_06 = 0;
+    D_800FD848[0].time = 0;
     D_800FDE88 = 0;
-    D_800FD740.unk_00 = 0;
-    D_800FD740.unk_2C = 0;
+    D_800FD740.time = 0;
+    D_800FD740.enabled = 0;
 
-    D_800FD770.unk_00 = 0;
-    D_800FD770.unk_24 = 0;
+    D_800FD770.time = 0;
+    D_800FD770.enabled = 0;
 
-    D_800FD798.unk_00 = 0;
-    D_800FD798.unk_1C = 0;
+    D_800FD798.time = 0;
+    D_800FD798.enabled = 0;
 
-    D_800FD7B8.unk_00 = 0;
-    D_800FD7B8.unk_28 = 0;
-    D_800FD7B8.unk_04 = 0xFF;
+    D_800FD7B8.time = 0;
+    D_800FD7B8.enabled = 0;
+    D_800FD7B8.sampleId = 0xFF;
 
     GbAudio_ClearOutputBuffer();
     GbAudio_ClearInterpolationHistory();
@@ -238,18 +244,18 @@ void func_80044D60(u32 arg0) {
             GbAudio_ApplyQueuedWrites(var_s4);
         }
 
-        if (D_800FD7E8.unk_2C & 0x80) {
-            if (D_800FD7E8.unk_29 != 0) {
-                D_800FDEC0 = D_800FD7E8.unk_28 & 7;
-                D_800FDEC1 = (D_800FD7E8.unk_28 & 0x70) >> 4;
-                D_800FD7E8.unk_29 = 0;
+        if (D_800FD7E8.nr52 & 0x80) {
+            if (D_800FD7E8.nr50Dirty != 0) {
+                D_800FDEC0 = D_800FD7E8.nr50 & 7;
+                D_800FDEC1 = (D_800FD7E8.nr50 & 0x70) >> 4;
+                D_800FD7E8.nr50Dirty = 0;
             }
 
             sp4C[0] = func_800450F0();
             sp4C[1] = func_80045774();
             sp4C[3] = func_80045B9C();
 
-            var_t = D_800FD7E8.unk_2A;
+            var_t = D_800FD7E8.nr51;
             var_a0 =
                 ((u32)((sp4C[0] & ((var_t & 1) ? -1 : 0)) + (sp4C[1] & ((var_t & 2) ? -1 : 0)) +
                        (sp4C[3] & ((var_t & 8) ? -1 : 0))) >>
@@ -288,9 +294,9 @@ void func_80044D60(u32 arg0) {
 
 /** Applies the queued register writes that are due. */
 void GbAudio_ApplyQueuedWrites(u16 arg0) {
-    while (D_800FD848[D_800FDE88].unk_06 >= arg0) {
-        D_800FD848[D_800FDE88].unk_00[0] = D_800FD848[D_800FDE88].unk_04;
-        D_800FD848[D_800FDE88].unk_00[1] = 1;
+    while (D_800FD848[D_800FDE88].time >= arg0) {
+        D_800FD848[D_800FDE88].reg[0] = D_800FD848[D_800FDE88].value;
+        D_800FD848[D_800FDE88].reg[1] = 1;
         D_800FDE88++;
         if (D_800FDE88 >= 0xC8) {
             D_800FDE88 -= 0xC8;
@@ -316,177 +322,177 @@ s16 func_800450F0(void) {
 
     if (changed) {
         nr14 = GB_REG(4);
-        D_800FD740.unk_04 = GB_REG(3) | (((u8)nr14 & 7) << 8);
-        D_800FD740.unk_24 = ((0x800 - D_800FD740.unk_04) * D_800FD7E4) >> 11;
+        D_800FD740.frequency = GB_REG(3) | (((u8)nr14 & 7) << 8);
+        D_800FD740.period = ((0x800 - D_800FD740.frequency) * D_800FD7E4) >> 11;
         switch ((GB_REG(1) & 0xC0) >> 6) {
             case 0:
-                D_800FD740.unk_18[1] = D_800FD740.unk_24 >> 3;
-                if (D_800FD740.unk_18[1] < 0x40) {
-                    D_800FD740.unk_18[1] = 0x40;
+                D_800FD740.halfPeriods[1] = D_800FD740.period >> 3;
+                if (D_800FD740.halfPeriods[1] < 0x40) {
+                    D_800FD740.halfPeriods[1] = 0x40;
                 }
                 phase = 1;
-                D_800FD740.unk_18[0] = D_800FD740.unk_24 - D_800FD740.unk_18[1];
+                D_800FD740.halfPeriods[0] = D_800FD740.period - D_800FD740.halfPeriods[1];
                 goto duty_done;
             case 1:
-                D_800FD740.unk_18[1] = D_800FD740.unk_24 >> 2;
-                if (D_800FD740.unk_18[1] < 0x40) {
-                    D_800FD740.unk_18[1] = 0x40;
+                D_800FD740.halfPeriods[1] = D_800FD740.period >> 2;
+                if (D_800FD740.halfPeriods[1] < 0x40) {
+                    D_800FD740.halfPeriods[1] = 0x40;
                 }
                 phase = 0;
-                D_800FD740.unk_18[0] = D_800FD740.unk_24 - D_800FD740.unk_18[1];
+                D_800FD740.halfPeriods[0] = D_800FD740.period - D_800FD740.halfPeriods[1];
                 goto duty_done;
             case 2:
-                D_800FD740.unk_18[1] = D_800FD740.unk_24 >> 1;
-                if (D_800FD740.unk_18[1] < 0x40) {
-                    D_800FD740.unk_18[1] = 0x40;
+                D_800FD740.halfPeriods[1] = D_800FD740.period >> 1;
+                if (D_800FD740.halfPeriods[1] < 0x40) {
+                    D_800FD740.halfPeriods[1] = 0x40;
                 }
                 phase = 0;
-                D_800FD740.unk_18[0] = D_800FD740.unk_24 - D_800FD740.unk_18[1];
+                D_800FD740.halfPeriods[0] = D_800FD740.period - D_800FD740.halfPeriods[1];
                 goto duty_done;
             case 3:
-                D_800FD740.unk_18[0] = D_800FD740.unk_24 >> 2;
-                if (D_800FD740.unk_18[0] < 0x40) {
-                    D_800FD740.unk_18[0] = 0x40;
+                D_800FD740.halfPeriods[0] = D_800FD740.period >> 2;
+                if (D_800FD740.halfPeriods[0] < 0x40) {
+                    D_800FD740.halfPeriods[0] = 0x40;
                 }
                 phase = 1;
-                D_800FD740.unk_18[1] = D_800FD740.unk_24 - D_800FD740.unk_18[0];
+                D_800FD740.halfPeriods[1] = D_800FD740.period - D_800FD740.halfPeriods[0];
                 goto duty_done;
         }
-        D_800FD740.unk_18[1] = 0;
+        D_800FD740.halfPeriods[1] = 0;
         phase = 1;
-        D_800FD740.unk_18[0] = D_800FD740.unk_24;
+        D_800FD740.halfPeriods[0] = D_800FD740.period;
     duty_done:
 
         if (!(GB_REG(2) & 8) && !(GB_REG(2) & 0xF0)) {
-            D_800FD740.unk_2C = 0;
-            D_800FD7E8.unk_2C &= 0xFFFE;
+            D_800FD740.enabled = 0;
+            D_800FD7E8.nr52 &= 0xFFFE;
             return 0;
         }
         if ((GB_REG(2) & 8) && !(GB_REG(2) & 0xF0) && !(GB_REG(2) & 7)) {
-            D_800FD740.unk_2C = 0;
-            D_800FD7E8.unk_2C &= 0xFFFE;
+            D_800FD740.enabled = 0;
+            D_800FD7E8.nr52 &= 0xFFFE;
             return 0;
         }
 
         if (nr14 & 0x80) {
-            D_800FD740.unk_00 = 0;
-            D_800FD740.unk_2C = 1;
-            D_800FD740.unk_1E = phase;
+            D_800FD740.time = 0;
+            D_800FD740.enabled = 1;
+            D_800FD740.phase = phase;
             D_800FD740.unk_1C = 0;
-            D_800FD740.unk_20 = 0;
-            D_800FD740.unk_0C = (u8)(GB_REG(2) & 0xF0) << 7;
+            D_800FD740.nextPhaseTime = 0;
+            D_800FD740.volume = (u8)(GB_REG(2) & 0xF0) << 7;
             if (GB_REG(2) & 7) {
                 if (GB_REG(2) & 8) {
-                    D_800FD740.unk_0E = 0x800;
+                    D_800FD740.envelopeStep = 0x800;
                 } else {
-                    D_800FD740.unk_0E = -0x800;
+                    D_800FD740.envelopeStep = -0x800;
                 }
-                D_800FD740.unk_14 = D_800FD740.unk_10 = (GB_REG(2) & 7) * D_800FD7E4;
+                D_800FD740.nextEnvelopeTime = D_800FD740.envelopePeriod = (GB_REG(2) & 7) * D_800FD7E4;
             } else {
-                D_800FD740.unk_0E = 0;
-                D_800FD740.unk_10 = -1;
-                D_800FD740.unk_14 = -1;
+                D_800FD740.envelopeStep = 0;
+                D_800FD740.envelopePeriod = -1;
+                D_800FD740.nextEnvelopeTime = -1;
             }
-            D_800FD740.unk_08 = (((GB_REG(0) & 0x70) >> 4) * D_800FD7E4) >> 1;
-            if (D_800FD740.unk_08 == 0) {
-                D_800FD740.unk_08 = -1;
+            D_800FD740.sweepPeriod = (((GB_REG(0) & 0x70) >> 4) * D_800FD7E4) >> 1;
+            if (D_800FD740.sweepPeriod == 0) {
+                D_800FD740.sweepPeriod = -1;
             }
             if (nr14 & 0x40) {
-                D_800FD740.unk_28 = ((0x40 - (GB_REG(1) & 0x3F)) * D_800FD7E4) >> 2;
+                D_800FD740.lengthEnd = ((0x40 - (GB_REG(1) & 0x3F)) * D_800FD7E4) >> 2;
             } else {
-                D_800FD740.unk_28 = -1;
+                D_800FD740.lengthEnd = -1;
             }
             GB_REG(4) = nr14 & ~0x80;
         }
-        if (D_800FD740.unk_2C == 0) {
+        if (D_800FD740.enabled == 0) {
             return 0;
         }
-    } else if (D_800FD740.unk_2C == 0) {
+    } else if (D_800FD740.enabled == 0) {
         return 0;
     }
 
-    if (D_800FD740.unk_28 < D_800FD740.unk_00) {
-        D_800FD740.unk_2C = 0;
-        D_800FD7E8.unk_2C &= 0xFFFE;
+    if (D_800FD740.lengthEnd < D_800FD740.time) {
+        D_800FD740.enabled = 0;
+        D_800FD7E8.nr52 &= 0xFFFE;
         return 0;
     }
 
-    if ((D_800FD740.unk_08 - (D_800FD740.unk_00 % D_800FD740.unk_08)) <= 0x40) {
+    if ((D_800FD740.sweepPeriod - (D_800FD740.time % D_800FD740.sweepPeriod)) <= 0x40) {
         if (!(GB_REG(0) & 8)) {
-            freq = (D_800FD740.unk_04 + (D_800FD740.unk_04 >> (GB_REG(0) & 7)));
+            freq = (D_800FD740.frequency + (D_800FD740.frequency >> (GB_REG(0) & 7)));
             if (freq >= 0x800) {
-                D_800FD740.unk_2C = 0;
-                D_800FD7E8.unk_2C &= 0xFFFE;
+                D_800FD740.enabled = 0;
+                D_800FD7E8.nr52 &= 0xFFFE;
                 return 0;
             }
-            D_800FD740.unk_04 = freq;
+            D_800FD740.frequency = freq;
         } else {
-            freq = (D_800FD740.unk_04 - (D_800FD740.unk_04 >> (GB_REG(0) & 7)));
+            freq = (D_800FD740.frequency - (D_800FD740.frequency >> (GB_REG(0) & 7)));
             if ((freq >= 0x800) || (freq < 0)) {
                 goto skip;
             }
-            D_800FD740.unk_04 = freq;
+            D_800FD740.frequency = freq;
         }
-        D_800FD740.unk_24 = ((0x800 - D_800FD740.unk_04) * D_800FD7E4) >> 11;
+        D_800FD740.period = ((0x800 - D_800FD740.frequency) * D_800FD7E4) >> 11;
         switch ((GB_REG(1) & 0xC0) >> 6) {
             case 0:
-                D_800FD740.unk_18[1] = D_800FD740.unk_24 >> 3;
-                if (D_800FD740.unk_18[1] < 0x40) {
-                    D_800FD740.unk_18[1] = 0x40;
+                D_800FD740.halfPeriods[1] = D_800FD740.period >> 3;
+                if (D_800FD740.halfPeriods[1] < 0x40) {
+                    D_800FD740.halfPeriods[1] = 0x40;
                 }
-                D_800FD740.unk_18[0] = D_800FD740.unk_24 - D_800FD740.unk_18[1];
+                D_800FD740.halfPeriods[0] = D_800FD740.period - D_800FD740.halfPeriods[1];
                 break;
             case 1:
-                D_800FD740.unk_18[1] = D_800FD740.unk_24 >> 2;
-                if (D_800FD740.unk_18[1] < 0x40) {
-                    D_800FD740.unk_18[1] = 0x40;
+                D_800FD740.halfPeriods[1] = D_800FD740.period >> 2;
+                if (D_800FD740.halfPeriods[1] < 0x40) {
+                    D_800FD740.halfPeriods[1] = 0x40;
                 }
-                D_800FD740.unk_18[0] = D_800FD740.unk_24 - D_800FD740.unk_18[1];
+                D_800FD740.halfPeriods[0] = D_800FD740.period - D_800FD740.halfPeriods[1];
                 break;
             case 2:
-                D_800FD740.unk_18[1] = D_800FD740.unk_24 >> 1;
-                if (D_800FD740.unk_18[1] < 0x40) {
-                    D_800FD740.unk_18[1] = 0x40;
+                D_800FD740.halfPeriods[1] = D_800FD740.period >> 1;
+                if (D_800FD740.halfPeriods[1] < 0x40) {
+                    D_800FD740.halfPeriods[1] = 0x40;
                 }
-                D_800FD740.unk_18[0] = D_800FD740.unk_24 - D_800FD740.unk_18[1];
+                D_800FD740.halfPeriods[0] = D_800FD740.period - D_800FD740.halfPeriods[1];
                 break;
             case 3:
-                D_800FD740.unk_18[0] = D_800FD740.unk_24 >> 2;
-                if (D_800FD740.unk_18[0] < 0x40) {
-                    D_800FD740.unk_18[0] = 0x40;
+                D_800FD740.halfPeriods[0] = D_800FD740.period >> 2;
+                if (D_800FD740.halfPeriods[0] < 0x40) {
+                    D_800FD740.halfPeriods[0] = 0x40;
                 }
-                D_800FD740.unk_18[1] = D_800FD740.unk_24 - D_800FD740.unk_18[0];
+                D_800FD740.halfPeriods[1] = D_800FD740.period - D_800FD740.halfPeriods[0];
                 break;
             default:
-                D_800FD740.unk_18[1] = 0;
-                D_800FD740.unk_18[0] = D_800FD740.unk_24;
+                D_800FD740.halfPeriods[1] = 0;
+                D_800FD740.halfPeriods[0] = D_800FD740.period;
         }
     }
 skip:
 
-    if (D_800FD740.unk_14 < D_800FD740.unk_00) {
-        D_800FD740.unk_0C += D_800FD740.unk_0E;
-        D_800FD740.unk_14 += D_800FD740.unk_10;
+    if (D_800FD740.nextEnvelopeTime < D_800FD740.time) {
+        D_800FD740.volume += D_800FD740.envelopeStep;
+        D_800FD740.nextEnvelopeTime += D_800FD740.envelopePeriod;
     }
-    while (D_800FD740.unk_20 < D_800FD740.unk_00) {
-        D_800FD740.unk_1E ^= 1;
-        D_800FD740.unk_20 += D_800FD740.unk_18[D_800FD740.unk_1E];
+    while (D_800FD740.nextPhaseTime < D_800FD740.time) {
+        D_800FD740.phase ^= 1;
+        D_800FD740.nextPhaseTime += D_800FD740.halfPeriods[D_800FD740.phase];
     }
 
-    if (!(GB_REG(2) & 8) && (D_800FD740.unk_0C < 0)) {
-        D_800FD740.unk_2C = 0;
+    if (!(GB_REG(2) & 8) && (D_800FD740.volume < 0)) {
+        D_800FD740.enabled = 0;
         return 0;
     }
-    if ((u16)D_800FD740.unk_0C > 0x7800) {
-        D_800FD740.unk_0C = 0x7800;
-        D_800FD740.unk_0E = 0;
-        D_800FD740.unk_14 = -1;
+    if ((u16)D_800FD740.volume > 0x7800) {
+        D_800FD740.volume = 0x7800;
+        D_800FD740.envelopeStep = 0;
+        D_800FD740.nextEnvelopeTime = -1;
     }
-    out = D_800FD740.unk_0C;
-    if (D_800FD740.unk_1E == 0) {
+    out = D_800FD740.volume;
+    if (D_800FD740.phase == 0) {
         out = -out;
     }
-    D_800FD740.unk_00 += 0x40;
+    D_800FD740.time += 0x40;
     return out;
 }
 
@@ -507,119 +513,119 @@ s16 func_80045774(void) {
 
     if (changed) {
         nr24 = GB_REG(9);
-        D_800FD770.unk_1C = ((0x800 - (GB_REG(8) | (((u8)nr24 & 7) << 8))) * D_800FD7E4) >> 11;
+        D_800FD770.period = ((0x800 - (GB_REG(8) | (((u8)nr24 & 7) << 8))) * D_800FD7E4) >> 11;
         switch ((GB_REG(6) & 0xC0) >> 6) {
             case 0:
-                D_800FD770.unk_10[1] = D_800FD770.unk_1C >> 3;
-                if (D_800FD770.unk_10[1] < 0x40) {
-                    D_800FD770.unk_10[1] = 0x40;
+                D_800FD770.halfPeriods[1] = D_800FD770.period >> 3;
+                if (D_800FD770.halfPeriods[1] < 0x40) {
+                    D_800FD770.halfPeriods[1] = 0x40;
                 }
                 phase = 1;
-                D_800FD770.unk_10[0] = D_800FD770.unk_1C - D_800FD770.unk_10[1];
+                D_800FD770.halfPeriods[0] = D_800FD770.period - D_800FD770.halfPeriods[1];
                 goto duty_done;
             case 1:
-                D_800FD770.unk_10[1] = D_800FD770.unk_1C >> 2;
-                if (D_800FD770.unk_10[1] < 0x40) {
-                    D_800FD770.unk_10[1] = 0x40;
+                D_800FD770.halfPeriods[1] = D_800FD770.period >> 2;
+                if (D_800FD770.halfPeriods[1] < 0x40) {
+                    D_800FD770.halfPeriods[1] = 0x40;
                 }
                 phase = 0;
-                D_800FD770.unk_10[0] = D_800FD770.unk_1C - D_800FD770.unk_10[1];
+                D_800FD770.halfPeriods[0] = D_800FD770.period - D_800FD770.halfPeriods[1];
                 goto duty_done;
             case 2:
-                D_800FD770.unk_10[1] = D_800FD770.unk_1C >> 1;
-                if (D_800FD770.unk_10[1] < 0x40) {
-                    D_800FD770.unk_10[1] = 0x40;
+                D_800FD770.halfPeriods[1] = D_800FD770.period >> 1;
+                if (D_800FD770.halfPeriods[1] < 0x40) {
+                    D_800FD770.halfPeriods[1] = 0x40;
                 }
                 phase = 0;
-                D_800FD770.unk_10[0] = D_800FD770.unk_1C - D_800FD770.unk_10[1];
+                D_800FD770.halfPeriods[0] = D_800FD770.period - D_800FD770.halfPeriods[1];
                 goto duty_done;
             case 3:
-                D_800FD770.unk_10[0] = D_800FD770.unk_1C >> 2;
-                if (D_800FD770.unk_10[0] < 0x40) {
-                    D_800FD770.unk_10[0] = 0x40;
+                D_800FD770.halfPeriods[0] = D_800FD770.period >> 2;
+                if (D_800FD770.halfPeriods[0] < 0x40) {
+                    D_800FD770.halfPeriods[0] = 0x40;
                 }
                 phase = 1;
-                D_800FD770.unk_10[1] = D_800FD770.unk_1C - D_800FD770.unk_10[0];
+                D_800FD770.halfPeriods[1] = D_800FD770.period - D_800FD770.halfPeriods[0];
                 goto duty_done;
         }
-        D_800FD770.unk_10[1] = 0;
+        D_800FD770.halfPeriods[1] = 0;
         phase = 1;
-        D_800FD770.unk_10[0] = D_800FD770.unk_1C;
+        D_800FD770.halfPeriods[0] = D_800FD770.period;
     duty_done:
 
         if (!(GB_REG(7) & 8) && !(GB_REG(7) & 0xF0)) {
-            D_800FD770.unk_24 = 0;
-            D_800FD7E8.unk_2C &= 0xFFFD;
+            D_800FD770.enabled = 0;
+            D_800FD7E8.nr52 &= 0xFFFD;
             return 0;
         }
         if ((GB_REG(7) & 8) && !(GB_REG(7) & 0xF0) && !(GB_REG(7) & 7)) {
-            D_800FD770.unk_24 = 0;
-            D_800FD7E8.unk_2C &= 0xFFFD;
+            D_800FD770.enabled = 0;
+            D_800FD7E8.nr52 &= 0xFFFD;
             return 0;
         }
 
         if (nr24 & 0x80) {
-            D_800FD770.unk_00 = 0;
-            D_800FD770.unk_24 = 1;
-            D_800FD770.unk_16 = phase;
+            D_800FD770.time = 0;
+            D_800FD770.enabled = 1;
+            D_800FD770.phase = phase;
             D_800FD770.unk_14 = 0;
-            D_800FD770.unk_18 = 0;
-            D_800FD770.unk_04 = ((GB_REG(7) & 0xF0) << 3) << 4;
+            D_800FD770.nextPhaseTime = 0;
+            D_800FD770.volume = ((GB_REG(7) & 0xF0) << 3) << 4;
             if (GB_REG(7) & 7) {
                 if (GB_REG(7) & 8) {
-                    D_800FD770.unk_06 = 0x800;
+                    D_800FD770.envelopeStep = 0x800;
                 } else {
-                    D_800FD770.unk_06 = -0x800;
+                    D_800FD770.envelopeStep = -0x800;
                 }
-                D_800FD770.unk_0C = D_800FD770.unk_08 = (GB_REG(7) & 7) * D_800FD7E4;
+                D_800FD770.nextEnvelopeTime = D_800FD770.envelopePeriod = (GB_REG(7) & 7) * D_800FD7E4;
             } else {
-                D_800FD770.unk_06 = 0;
-                D_800FD770.unk_08 = -1;
-                D_800FD770.unk_0C = -1;
+                D_800FD770.envelopeStep = 0;
+                D_800FD770.envelopePeriod = -1;
+                D_800FD770.nextEnvelopeTime = -1;
             }
             if (nr24 & 0x40) {
-                D_800FD770.unk_20 = ((0x40 - (GB_REG(6) & 0x3F)) * D_800FD7E4) >> 2;
+                D_800FD770.lengthEnd = ((0x40 - (GB_REG(6) & 0x3F)) * D_800FD7E4) >> 2;
             } else {
-                D_800FD770.unk_20 = -1;
+                D_800FD770.lengthEnd = -1;
             }
             GB_REG(9) = nr24 & ~0x80;
         }
-        if (D_800FD770.unk_24 == 0) {
+        if (D_800FD770.enabled == 0) {
             return 0;
         }
-    } else if (D_800FD770.unk_24 == 0) {
+    } else if (D_800FD770.enabled == 0) {
         return 0;
     }
 
-    if (D_800FD770.unk_20 < D_800FD770.unk_00) {
-        D_800FD770.unk_24 = 0;
-        D_800FD7E8.unk_2C &= 0xFFFD;
+    if (D_800FD770.lengthEnd < D_800FD770.time) {
+        D_800FD770.enabled = 0;
+        D_800FD7E8.nr52 &= 0xFFFD;
         return 0;
     }
 
-    if (D_800FD770.unk_0C < D_800FD770.unk_00) {
-        D_800FD770.unk_04 += D_800FD770.unk_06;
-        D_800FD770.unk_0C += D_800FD770.unk_08;
+    if (D_800FD770.nextEnvelopeTime < D_800FD770.time) {
+        D_800FD770.volume += D_800FD770.envelopeStep;
+        D_800FD770.nextEnvelopeTime += D_800FD770.envelopePeriod;
     }
-    while (D_800FD770.unk_18 <= D_800FD770.unk_00) {
-        D_800FD770.unk_16 ^= 1;
-        D_800FD770.unk_18 += D_800FD770.unk_10[D_800FD770.unk_16];
+    while (D_800FD770.nextPhaseTime <= D_800FD770.time) {
+        D_800FD770.phase ^= 1;
+        D_800FD770.nextPhaseTime += D_800FD770.halfPeriods[D_800FD770.phase];
     }
 
-    if (!(GB_REG(7) & 8) && (D_800FD770.unk_04 < 0)) {
-        D_800FD770.unk_24 = 0;
+    if (!(GB_REG(7) & 8) && (D_800FD770.volume < 0)) {
+        D_800FD770.enabled = 0;
         return 0;
     }
-    if ((u16)D_800FD770.unk_04 > 0x7800) {
-        D_800FD770.unk_04 = 0x7800;
-        D_800FD770.unk_06 = 0;
-        D_800FD770.unk_0C = -1;
+    if ((u16)D_800FD770.volume > 0x7800) {
+        D_800FD770.volume = 0x7800;
+        D_800FD770.envelopeStep = 0;
+        D_800FD770.nextEnvelopeTime = -1;
     }
-    out = D_800FD770.unk_04;
-    if (D_800FD770.unk_16 == 0) {
+    out = D_800FD770.volume;
+    if (D_800FD770.phase == 0) {
         out = -out;
     }
-    D_800FD770.unk_00 += 0x40;
+    D_800FD770.time += 0x40;
     return out;
 }
 
@@ -650,97 +656,97 @@ s16 func_80045B9C(void) {
         entry = &GB_NOISE_TABLE[row][col];
         sampleId = entry->sampleId;
         if (sampleId == 0xFF) {
-            D_800FD7B8.unk_28 = 0;
+            D_800FD7B8.enabled = 0;
             return 0;
         }
         if (GB_REG(0x12) & 8) {
             sampleId += 0x10;
         }
-        D_800FD7B8.unk_0C = GB_NOISE_TABLE[nr43 & 7][col].pitchStep;
-        if (sampleId != D_800FD7B8.unk_04) {
-            D_800FD7B8.unk_04 = sampleId;
-            ent = (GbNoiseSampleEntry*)((u32*)D_800B41E4 + (D_800FD7B8.unk_04 << 1));
+        D_800FD7B8.pitchStep = GB_NOISE_TABLE[nr43 & 7][col].pitchStep;
+        if (sampleId != D_800FD7B8.sampleId) {
+            D_800FD7B8.sampleId = sampleId;
+            ent = (GbNoiseSampleEntry*)((u32*)D_800B41E4 + (D_800FD7B8.sampleId << 1));
             Rom_DmaRead(ent->romAddr, (u32)D_800B41E8, ent->size);
         }
 
-        D_800FD7B8.unk_08 = 0;
-        D_800FD7B8.unk_10 = 0;
+        D_800FD7B8.sampleIndex = 0;
+        D_800FD7B8.pitchAccum = 0;
         if (!(GB_REG(0x11) & 8) && !(GB_REG(0x11) & 0xF0)) {
-            D_800FD7B8.unk_28 = 0;
-            D_800FD7E8.unk_2C &= 0xFFF7;
+            D_800FD7B8.enabled = 0;
+            D_800FD7E8.nr52 &= 0xFFF7;
             return 0;
         }
         if ((GB_REG(0x11) & 8) && !(GB_REG(0x11) & 0xF0) && !(GB_REG(0x11) & 7)) {
-            D_800FD7B8.unk_28 = 0;
-            D_800FD7E8.unk_2C &= 0xFFF7;
+            D_800FD7B8.enabled = 0;
+            D_800FD7E8.nr52 &= 0xFFF7;
             return 0;
         }
 
         nr44 = GB_REG(0x13);
         if (nr44 & 0x80) {
-            D_800FD7B8.unk_00 = 0;
-            D_800FD7B8.unk_28 = 1;
-            D_800FD7B8.unk_14 = (u8)(GB_REG(0x11) & 0xF0) * 0.05f;
+            D_800FD7B8.time = 0;
+            D_800FD7B8.enabled = 1;
+            D_800FD7B8.volume = (u8)(GB_REG(0x11) & 0xF0) * 0.05f;
             if (GB_REG(0x11) & 7) {
                 if (GB_REG(0x11) & 8) {
-                    D_800FD7B8.unk_18 = 0.05f;
+                    D_800FD7B8.envelopeStep = 0.05f;
                 } else {
-                    D_800FD7B8.unk_18 = -0.05f;
+                    D_800FD7B8.envelopeStep = -0.05f;
                 }
-                D_800FD7B8.unk_20 = D_800FD7B8.unk_1C = (GB_REG(0x11) & 7) * D_800FD7E4 * 4;
+                D_800FD7B8.nextEnvelopeTime = D_800FD7B8.envelopePeriod = (GB_REG(0x11) & 7) * D_800FD7E4 * 4;
             } else {
-                D_800FD7B8.unk_1C = -1;
-                D_800FD7B8.unk_20 = -1;
-                D_800FD7B8.unk_18 = 0.0f;
+                D_800FD7B8.envelopePeriod = -1;
+                D_800FD7B8.nextEnvelopeTime = -1;
+                D_800FD7B8.envelopeStep = 0.0f;
             }
             if (nr44 & 0x40) {
-                D_800FD7B8.unk_24 = (0x40 - (GB_REG(0x10) & 0x3F)) * D_800FD7E4;
+                D_800FD7B8.lengthEnd = (0x40 - (GB_REG(0x10) & 0x3F)) * D_800FD7E4;
             } else {
-                D_800FD7B8.unk_24 = -1;
+                D_800FD7B8.lengthEnd = -1;
             }
             GB_REG(0x13) = nr44 & 0xFF7F;
         }
-        if (D_800FD7B8.unk_28 == 0) {
+        if (D_800FD7B8.enabled == 0) {
             return 0;
         }
-    } else if (D_800FD7B8.unk_28 == 0) {
+    } else if (D_800FD7B8.enabled == 0) {
         return 0;
     }
 
-    if (D_800FD7B8.unk_24 < D_800FD7B8.unk_00) {
-        D_800FD7B8.unk_28 = 0;
-        D_800FD7E8.unk_2C &= 0xFFF7;
+    if (D_800FD7B8.lengthEnd < D_800FD7B8.time) {
+        D_800FD7B8.enabled = 0;
+        D_800FD7E8.nr52 &= 0xFFF7;
         return 0;
     }
 
-    if (D_800FD7B8.unk_20 < D_800FD7B8.unk_00) {
-        D_800FD7B8.unk_20 += D_800FD7B8.unk_1C;
-        D_800FD7B8.unk_14 += D_800FD7B8.unk_18;
+    if (D_800FD7B8.nextEnvelopeTime < D_800FD7B8.time) {
+        D_800FD7B8.nextEnvelopeTime += D_800FD7B8.envelopePeriod;
+        D_800FD7B8.volume += D_800FD7B8.envelopeStep;
     }
 
-    ent = (GbNoiseSampleEntry*)((u32*)D_800B41E4 + (D_800FD7B8.unk_04 << 1));
+    ent = (GbNoiseSampleEntry*)((u32*)D_800B41E4 + (D_800FD7B8.sampleId << 1));
     if (1) {}  // karodo
-    sample = ((s16*)D_800B41E8)[D_800FD7B8.unk_08];
-    D_800FD7B8.unk_10 += 1.0f;
-    if (D_800FD7B8.unk_0C <= D_800FD7B8.unk_10) {
-        D_800FD7B8.unk_08++;
-        D_800FD7B8.unk_10 -= D_800FD7B8.unk_0C;
-        if (D_800FD7B8.unk_08 >= (ent->size >> 1)) {
-            D_800FD7B8.unk_08 = 0;
+    sample = ((s16*)D_800B41E8)[D_800FD7B8.sampleIndex];
+    D_800FD7B8.pitchAccum += 1.0f;
+    if (D_800FD7B8.pitchStep <= D_800FD7B8.pitchAccum) {
+        D_800FD7B8.sampleIndex++;
+        D_800FD7B8.pitchAccum -= D_800FD7B8.pitchStep;
+        if (D_800FD7B8.sampleIndex >= (ent->size >> 1)) {
+            D_800FD7B8.sampleIndex = 0;
         }
     }
 
-    if (!(GB_REG(0x11) & 8) && (D_800FD7B8.unk_14 < 0.0f)) {
-        D_800FD7B8.unk_28 = 0;
+    if (!(GB_REG(0x11) & 8) && (D_800FD7B8.volume < 0.0f)) {
+        D_800FD7B8.enabled = 0;
         return 0;
     }
-    if (D_800FD7B8.unk_14 > 0.75f) {
-        D_800FD7B8.unk_14 = 0.75f;
-        D_800FD7B8.unk_18 = 0.0f;
-        D_800FD7B8.unk_20 = -1;
+    if (D_800FD7B8.volume > 0.75f) {
+        D_800FD7B8.volume = 0.75f;
+        D_800FD7B8.envelopeStep = 0.0f;
+        D_800FD7B8.nextEnvelopeTime = -1;
     }
-    sample = sample * D_800FD7B8.unk_14;
-    D_800FD7B8.unk_00 += 0x100;
+    sample = sample * D_800FD7B8.volume;
+    D_800FD7B8.time += 0x100;
     return sample;
 }
 
