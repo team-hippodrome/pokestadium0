@@ -6,7 +6,6 @@ M2C_UNK func_82108C0C(s32);
 M2C_UNK func_8212189C();
 M2C_UNK func_82124A40();
 M2C_UNK func_82125AC8(s32);
-extern s32 D_8219A520;
 s32 Battle_StepPartyHpToDisplay(s32);
 s32 func_82124810(void*, void*);
 void BattleMessage_ShowForSide(s32, s32);
@@ -223,8 +222,8 @@ void BattleScene_ReactionNormal(CameraNode* arg0, s32 arg1) {
             BattleScene_ResetCameraFrameCounter();
             func_82125580();
             BattleScene_SetDamageShakeAmplitude(sOtherPokemon);
-            func_8212A4A4((s8*)(D_8219A520 + 0x208));
-            BattleMessage_ShowForSide(D_8219A520 + 0x88, sBattleScene.scene->actingSide);
+            func_8212A4A4((s8*)((s32)gBattleMessageQueues->messageBuffers[6]));
+            BattleMessage_ShowForSide((s32)gBattleMessageQueues->messageBuffers[0], sBattleScene.scene->actingSide);
             BattleScene_EnterStateRow(sActingPokemon, 4);
             func_8212A768(sOtherPokemon, arg0, arg1);
             BattleCamera_CaptureModelOrbit(sOtherPokemon, arg0);
@@ -243,7 +242,7 @@ void BattleScene_ReactionNormal(CameraNode* arg0, s32 arg1) {
                 sBattleScene.scene->phaseSubstep++;
             } else if (BattleScene_AdvanceCameraFrameCounter(0x1E) != 0) {
                 BattleScene_ResetCameraSubstepCounter();
-                BattleMessage_ShowForSide(D_8219A520 + 0x208, sBattleScene.scene->actingSide);
+                BattleMessage_ShowForSide((s32)gBattleMessageQueues->messageBuffers[6], sBattleScene.scene->actingSide);
                 sBattleScene.scene->phaseSubstep++;
             }
             break;
@@ -290,11 +289,11 @@ void BattleScene_ReactionNormal(CameraNode* arg0, s32 arg1) {
         case 5:
             D_8219A560 = Battle_StepPartyHpToDisplay((s32)sOtherPokemon);
             D_8219A564 = Battle_StepPartyHpToDisplay(sActingPokemon);
-            if (*(s8*)(D_8219A520 + 0x3C9) == 0) {
+            if (*(s8*)((s32)&gBattleMessageQueues->messageBuffers[13][1]) == 0) {
                 sBattleScene.scene->phaseSubstep = 7;
             } else if (BattleScene_AdvanceCameraFrameCounter(0x1E) != 0) {
                 BattleScene_ResetCameraFrameCounter();
-                BattleMessage_ShowForSide(D_8219A520 + 0x3C8, sBattleScene.scene->actingSide);
+                BattleMessage_ShowForSide((s32)gBattleMessageQueues->messageBuffers[13], sBattleScene.scene->actingSide);
                 sBattleScene.scene->phaseSubstep++;
             }
             break;
@@ -336,7 +335,7 @@ void BattleScene_ReactionCritical(CameraNode* arg0, s32 arg1) {
             BattleScene_ResetCameraFrameCounter();
             func_82125580();
             BattleScene_SetDamageShakeAmplitude(sOtherPokemon);
-            BattleMessage_ShowForSide(D_8219A520 + 0x148, sBattleScene.scene->actingSide);
+            BattleMessage_ShowForSide((s32)gBattleMessageQueues->messageBuffers[3], sBattleScene.scene->actingSide);
             BattleScene_EnterStateRow(sActingPokemon, 4);
             func_8212A768(sOtherPokemon, arg0, arg1);
             BattleCamera_CaptureModelOrbit(sOtherPokemon, arg0);
@@ -351,8 +350,8 @@ void BattleScene_ReactionCritical(CameraNode* arg0, s32 arg1) {
             func_82122DFC(arg0, sOtherPokemon);
             if (BattleScene_AdvanceCameraFrameCounter(0x1E) != 0) {
                 func_82124E80();
-                func_8212A4A4((s8*)(D_8219A520 + 0x88));
-                BattleMessage_ShowForSide(D_8219A520 + 0x88, sBattleScene.scene->actingSide);
+                func_8212A4A4((s8*)((s32)gBattleMessageQueues->messageBuffers[0]));
+                BattleMessage_ShowForSide((s32)gBattleMessageQueues->messageBuffers[0], sBattleScene.scene->actingSide);
                 sBattleScene.scene->phaseSubstep++;
             }
             break;
@@ -363,11 +362,11 @@ void BattleScene_ReactionCritical(CameraNode* arg0, s32 arg1) {
             func_82122DFC(arg0, sOtherPokemon);
             if (D_8219A578 == 0) {
                 BattleScene_ResetCameraSubstepCounter();
-                BattleMessage_ShowForSide(D_8219A520 + 0x208, sBattleScene.scene->actingSide);
+                BattleMessage_ShowForSide((s32)gBattleMessageQueues->messageBuffers[6], sBattleScene.scene->actingSide);
                 sBattleScene.scene->phaseSubstep++;
             } else if (BattleScene_AdvanceCameraFrameCounter(0x14) != 0) {
                 BattleScene_ResetCameraSubstepCounter();
-                BattleMessage_ShowForSide(D_8219A520 + 0x208, sBattleScene.scene->actingSide);
+                BattleMessage_ShowForSide((s32)gBattleMessageQueues->messageBuffers[6], sBattleScene.scene->actingSide);
                 sBattleScene.scene->phaseSubstep++;
             }
             break;
@@ -414,11 +413,11 @@ void BattleScene_ReactionCritical(CameraNode* arg0, s32 arg1) {
         case 6:
             D_8219A560 = Battle_StepPartyHpToDisplay((s32)sOtherPokemon);
             D_8219A564 = Battle_StepPartyHpToDisplay(sActingPokemon);
-            if (*(s8*)(D_8219A520 + 0x3C9) == 0) {
+            if (*(s8*)((s32)&gBattleMessageQueues->messageBuffers[13][1]) == 0) {
                 sBattleScene.scene->phaseSubstep = 8;
             } else if (BattleScene_AdvanceCameraFrameCounter(0x1E) != 0) {
                 BattleScene_ResetCameraFrameCounter();
-                BattleMessage_ShowForSide(D_8219A520 + 0x3C8, sBattleScene.scene->actingSide);
+                BattleMessage_ShowForSide((s32)gBattleMessageQueues->messageBuffers[13], sBattleScene.scene->actingSide);
                 sBattleScene.scene->phaseSubstep++;
             }
             break;
