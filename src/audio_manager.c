@@ -69,7 +69,7 @@ extern OSMesg* audDMAMessageBuf;
 extern u32 dmaBufferLen;
 extern OSPiHandle* D_800B3FC0[4];
 void Audio_QueueSoundWithFallbackList(u16, u16*, u8*);
-u32 Battle_EstimateMoveDamage(u32, BattleMonRuntime*, BattleMonRuntime*);
+u32 Battle_EstimateMoveDamage(u32, struct BattleMonRuntime*, struct BattleMonRuntime*);
 s32 Battle_MapCategoryIdToCompactIndex(u8);
 ALDMAproc __amDmaNew(AMDMAState** state);
 extern u8 D_80075E04[4];
