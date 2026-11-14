@@ -117,9 +117,9 @@ M2C_UNK func_89109C6C(s32, s32);                    /* extern */
 void func_80027D68(s32, s32);
 void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
 void LabPCList_DrawMonRow();
-void func_89105C54(s8*, s32, s32, s8*, Rgba891024A4);
+void func_89105C54(s8*, s32, s32, s8*, Color_RGBA8);
 extern s32 D_8910D990[];
-extern Rgba891024A4 D_8910A7F4;
+extern Color_RGBA8 D_8910A7F4;
 extern u8 D_8910A844[];
 extern u8 D_8910A848[];
 extern u8 D_8910A804[];
@@ -141,8 +141,8 @@ void LabPCList_InitListWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     M2C_FIELD(arg0, s32*, 0x14) = 1;
     Window_SetRect(arg0 + 0x4C, arg1 + 6, arg2 + 6, 0x228, 0x1E);
     M2C_FIELD(arg0, s32*, 0x60) = 6;
-    M2C_FIELD(arg0, Rgba891024A4*, 0x64) = *(Rgba891024A4*)D_8910A844;
-    M2C_FIELD(arg0, Rgba891024A4*, 0x68) = *(Rgba891024A4*)D_8910A848;
+    M2C_FIELD(arg0, Color_RGBA8*, 0x64) = *(Color_RGBA8*)D_8910A844;
+    M2C_FIELD(arg0, Color_RGBA8*, 0x68) = *(Color_RGBA8*)D_8910A848;
     Window_SetRect(arg0 + 0x2C, arg1 + 6, arg2 + 0x3A, 0x228, 0x12E);
     M2C_FIELD(arg0, s32*, 0x40) = 1;
     func_80027804(arg0 + 0x9648, arg0 + 0x87B8, 0x1D2, 0);
@@ -162,7 +162,7 @@ void LabPCList_InitListWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     ((LabPCListScreen*)arg0)->pageColumnStart = D_8910A84C;
     func_89100294((LabPCListScreen*)arg0);
     ((LabPCListScreen*)arg0)->unk_B558 = 0;
-    ((LabPCListScreen*)arg0)->unk_B594 = arg3;
+    ((LabPCListScreen*)arg0)->msg = arg3;
     LabPCList_ResetFilterState((LabPCListScreen*)arg0);
     M2C_FIELD(arg0, s32*, 0x88) = 1;
     func_89105C54(arg0 + 0x230, 0x78, 0x67, arg0 + 0x420, D_8910A7F4);

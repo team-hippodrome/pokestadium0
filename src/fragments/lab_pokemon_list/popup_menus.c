@@ -774,24 +774,6 @@ void LabPCList_InitPopupMenu(s8 *arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4) 
     }
 }
 
-typedef struct Popup89106570 {
-    /* 0x00 */ s32 x;
-    /* 0x04 */ s32 y;
-    /* 0x08 */ s32 width;
-    /* 0x0C */ s32 height;
-    /* 0x10 */ char unk10[0x4];
-    /* 0x14 */ s32 flags;
-    /* 0x18 */ char unk18[0xC];
-    /* 0x24 */ s32 unk24;
-    /* 0x28 */ char unk28[0x4];
-    /* 0x2C */ s32 anchorX;
-    /* 0x30 */ s32 anchorY;
-    /* 0x34 */ s32 anchorW;
-    /* 0x38 */ s32 anchorH;
-    /* 0x3C */ char unk3C[0x38];
-    /* 0x74 */ s32 limitX;
-    /* 0x78 */ s32 limitY;
-} Popup89106570;
 
 /**
  * LabPCList_PlacePopup
@@ -804,35 +786,35 @@ typedef struct Popup89106570 {
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): placed that popup over the
  * list next to the selected row.
  */
-void LabPCList_PlacePopup(Popup89106570* arg0) {
+void LabPCList_PlacePopup(LabPopupMenu* arg0) {
     s32 over;
 
-    if (arg0->flags & 0x01000000) {
-        if (arg0->limitY >= arg0->anchorY + arg0->height) {
-            arg0->y = arg0->anchorY;
+    if (arg0->window.frame.style & 0x01000000) {
+        if (arg0->limitY >= arg0->anchorY + arg0->window.frame.height) {
+            arg0->window.frame.y = arg0->anchorY;
         } else {
-            over = (arg0->anchorY + arg0->height) - arg0->limitY;
-            arg0->y = arg0->anchorY - ((over > 8) ? over : 8);
+            over = (arg0->anchorY + arg0->window.frame.height) - arg0->limitY;
+            arg0->window.frame.y = arg0->anchorY - ((over > 8) ? over : 8);
         }
-        if (arg0->limitX >= arg0->anchorX + arg0->anchorW + arg0->width) {
-            arg0->x = arg0->anchorX + arg0->anchorW;
+        if (arg0->limitX >= arg0->anchorX + arg0->anchorW + arg0->window.frame.width) {
+            arg0->window.frame.x = arg0->anchorX + arg0->anchorW;
         } else {
-            arg0->x = arg0->anchorX - arg0->width;
+            arg0->window.frame.x = arg0->anchorX - arg0->window.frame.width;
         }
     } else {
-        if (arg0->limitX >= arg0->anchorX + arg0->width) {
-            arg0->x = arg0->anchorX;
+        if (arg0->limitX >= arg0->anchorX + arg0->window.frame.width) {
+            arg0->window.frame.x = arg0->anchorX;
         } else {
-            over = (arg0->anchorX + arg0->width) - arg0->limitX;
-            arg0->x = arg0->anchorX - ((over > 8) ? over : 8);
+            over = (arg0->anchorX + arg0->window.frame.width) - arg0->limitX;
+            arg0->window.frame.x = arg0->anchorX - ((over > 8) ? over : 8);
         }
-        if (arg0->limitY >= arg0->anchorY + arg0->anchorH + arg0->height) {
-            arg0->y = arg0->anchorY + arg0->anchorH;
+        if (arg0->limitY >= arg0->anchorY + arg0->anchorH + arg0->window.frame.height) {
+            arg0->window.frame.y = arg0->anchorY + arg0->anchorH;
         } else {
-            arg0->y = arg0->anchorY - arg0->height;
+            arg0->window.frame.y = arg0->anchorY - arg0->window.frame.height;
         }
     }
-    arg0->unk24 = 0;
+    arg0->window.animTimer = 0;
 }
 
 s32 func_8002AE6C();                                /* extern */
@@ -1891,7 +1873,7 @@ s32 LabPCList_UpdateItemWindow(s8 *arg0)
           Window_SetRect(self + 0xC0, (*((s32 *) (((s8 *) self) + 0))) + 6, (((*((s32 *) (((s8 *) self) + 4))) + (*((s32 *) (((s8 *) self) + 0x80)))) - (*((s32 *) (((s8 *) self) + 0x78)))) + 0x16, (*((s32 *) (((s8 *) self) + 8))) - 0xC, 0x1C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
           *((s32 *) (((s8 *) self) + 0x108)) = ((*((s32 *) (((s8 *) self) + 8))) + (*((s32 *) (((s8 *) self) + 0)))) - 6; // FAKE: decomp slop, raw pointer casts stand in for struct fields
           *((s32 *) (((s8 *) self) + 0x10C)) = (*((s32 *) (((s8 *) self) + 4))) + 0xF6; // FAKE: decomp slop, raw pointer casts stand in for struct fields
-          LabPCList_PlacePopup((Popup89106570 *) (self + 0x94));
+          LabPCList_PlacePopup((LabPopupMenu *) (self + 0x94));
           *((Rgba891084B4 *) (((s8 *) self) + 0xAC)) = D_8910AAEC;
           *((u32 *) (((s8 *) self) + 0x1B0)) = 1;
         }

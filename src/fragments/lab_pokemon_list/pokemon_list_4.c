@@ -25,9 +25,9 @@ M2C_UNK func_89109C6C(s32, s32);                    /* extern */
 void func_80027D68(void*, s32);
 void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
 void LabPCList_DrawMonRow();
-void func_89105C54(s8*, s32, s32, s8*, Rgba891024A4);
+void func_89105C54(s8*, s32, s32, s8*, Color_RGBA8);
 extern s32 D_8910D990[];
-extern Rgba891024A4 D_8910A7F4;
+extern Color_RGBA8 D_8910A7F4;
 extern u8 D_8910A844[];
 extern u8 D_8910A848[];
 extern u8 D_8910A804[];
@@ -265,38 +265,11 @@ void LabPCList_InitPopupMenu(s8*, void*, s8*, s32, s32);
 void LabPCList_PlacePopup(s8*);
 void LabPCList_InitTypeFilter(s8*, s32, s32, s8*);
 void LabPCList_InitMoveFilter(s8*, s32, s32, s8*);
-typedef struct Ctx89101F90 {
-    /* 0x0000 */ char unk0000[0x2C];
-    /* 0x002C */ s32 x;
-    /* 0x0030 */ s32 y;
-    /* 0x0034 */ s32 dx;
-    /* 0x0038 */ s32 dy;
-    /* 0x003C */ char unk003C[0x88 - 0x3C];
-    /* 0x0088 */ s32 state;
-    /* 0x008C */ char unk008C[0x9654 - 0x8C];
-    /* 0x9654 */ s8 unk9654[0x966C - 0x9654];
-    /* 0x966C */ Rgba891024A4 color;
-    /* 0x9670 */ char unk9670[0x9680 - 0x9670];
-    /* 0x9680 */ s8 unk9680[0x96C8 - 0x9680];
-    /* 0x96C8 */ s32 posX;
-    /* 0x96CC */ s32 posY;
-    /* 0x96D0 */ char unk96D0[0x97C8 - 0x96D0];
-    /* 0x97C8 */ s8 unk97C8[0x9918 - 0x97C8];
-    /* 0x9918 */ s8 unk9918[0x9920 - 0x9918];
-    /* 0x9920 */ s8 unk9920[0x9B00 - 0x9920];
-    /* 0x9B00 */ s8 unk9B00[0x9B08 - 0x9B00];
-    /* 0x9B08 */ s8 unk9B08[0xB15C - 0x9B08];
-    /* 0xB15C */ s32 mode;
-    /* 0xB160 */ char unkB160[0xB548 - 0xB160];
-    /* 0xB548 */ s32* ranges;
-    /* 0xB54C */ char unkB54C[4];
-    /* 0xB550 */ s32 base;
-} Ctx89101F90;
 
-void func_89101F90(Ctx89101F90* arg0) {
+void func_89101F90(LabPCListScreen* arg0) {
     s32 sel;
 
-    sel = arg0->ranges[arg0->mode] + arg0->base - 2;
+    sel = arg0->pageColumnStart[arg0->page] + arg0->headerCursor.cursor - 2;
     switch (sel) {
         case 0:
         case 1:
@@ -309,23 +282,23 @@ void func_89101F90(Ctx89101F90* arg0) {
         case 14:
         case 15:
             arg0->state = 3;
-            LabPCList_InitPopupMenu(arg0->unk9654, D_8910D910[sel].a, arg0->unk97C8, D_8910D910[sel].b, 0);
-            Window_SetRect(arg0->unk9680, LabPCList_GetColumnCursorX(arg0), arg0->y, 0, 0x16);
-            arg0->posX = arg0->x + arg0->dx;
-            arg0->posY = arg0->y + arg0->dy;
-            LabPCList_PlacePopup(arg0->unk9654);
-            arg0->color = D_8910A7F4;
+            LabPCList_InitPopupMenu((s8*)&arg0->popup, D_8910D910[sel].a, (s8*)&arg0->popupItemFlags, D_8910D910[sel].b, 0);
+            Window_SetRect((s8*)&arg0->popup.anchorX, LabPCList_GetColumnCursorX(arg0), arg0->listFrame.y, 0, 0x16);
+            arg0->popup.limitX = arg0->listFrame.x + arg0->listFrame.width;
+            arg0->popup.limitY = arg0->listFrame.y + arg0->listFrame.height;
+            LabPCList_PlacePopup((s8*)&arg0->popup);
+            arg0->popup.window.frame.color = D_8910A7F4;
             break;
         case 4:
         case 5:
-            LabPCList_InitTypeFilter(arg0->unk9920, 0x81, 0x94, arg0->unk9918);
+            LabPCList_InitTypeFilter(arg0->typeFilterWindow, 0x81, 0x94, (s8*)&arg0->unk_9918);
             arg0->state = 5;
             break;
         case 6:
         case 7:
         case 8:
         case 9:
-            LabPCList_InitMoveFilter(arg0->unk9B08, 0x81, 0x94, arg0->unk9B00);
+            LabPCList_InitMoveFilter(arg0->moveFilterWindow, 0x81, 0x94, (s8*)&arg0->unk_9B00);
             arg0->state = 6;
             break;
     }
@@ -359,7 +332,7 @@ void LabPCList_FormatGatherPrompt(s8* arg0) {
     ((LabPCListScreen*)arg0)->popup.limitX = M2C_FIELD(arg0, s32*, 0x34) + M2C_FIELD(arg0, s32*, 0x2C);
     ((LabPCListScreen*)arg0)->popup.limitY = M2C_FIELD(arg0, s32*, 0x38) + M2C_FIELD(arg0, s32*, 0x30);
     LabPCList_PlacePopup(arg0 + 0x9654);
-    M2C_FIELD(arg0, Rgba891024A4*, 0x966C) = D_8910A7F4;
+    M2C_FIELD(arg0, Color_RGBA8*, 0x966C) = D_8910A7F4;
     M2C_FIELD(arg0, s32*, 0x88) = 7;
     func_80027804(arg0 + 0xAFFC, arg0 + 0xAD54, 0xAA, 0);
     func_8910A21C(arg0 + 0xAFFC, arg0 + 0xA00C, arg0 + 0x9E64, 3);
@@ -407,32 +380,12 @@ s32 LabPCList_UpdateListCursor(LabPCListScreen* arg0) {
     return ret;
 }
 
-typedef struct Screen891024A4 {
-    /* 0x0000 */ char unk0[0x2C];
-    /* 0x002C */ s32 x;
-    /* 0x0030 */ s32 y;
-    /* 0x0034 */ s32 w;
-    /* 0x0038 */ s32 h;
-    /* 0x003C */ char unk3C[0x40];
-    /* 0x007C */ s32 mode;
-    /* 0x0080 */ char unk80[0x9654 - 0x80];
-    /* 0x9654 */ s8 menu[0x18];
-    /* 0x966C */ Rgba891024A4 color;
-    /* 0x9670 */ char unk9670[0x10];
-    /* 0x9680 */ s8 box[0x18];
-    /* 0x9698 */ s8 *boxItems;
-    /* 0x969C */ char unk969C[0x2C];
-    /* 0x96C8 */ s32 right;
-    /* 0x96CC */ s32 bottom;
-    /* 0x96D0 */ char unk96D0[0xF8];
-    /* 0x97C8 */ s8 items[1];
-} Screen891024A4;
 void func_8000A460(s8 *, s8 *);
 u32 func_800566BC(s8*);
 void LabPCList_InitPopupMenu(s8 *, void *, s8 *, s32, s32);
 void LabPCList_PlacePopup(s8 *);
 void Window_SetRect(s8 *, s32, s32, s32, s32);
-extern Rgba891024A4 D_8910A7F4;
+extern Color_RGBA8 D_8910A7F4;
 extern s8 *D_8910A8A8[];
 extern s8 D_8910A8B0[];
 extern u8 D_8910A8C8[];
@@ -442,17 +395,17 @@ extern s8 D_8910E358[];
  * Seen in play (2026-11-12) in いちらん: A on the ポケモン header opened the menu アイウエオじゅんにならべる,
  * ポケモンばんごうでならべる, バトルようのポケモンをあつめる, すべてのせんたくをやめる, いちらんするポケモンをえらぶ.
  */
-void LabPCList_InitSortMenu(Screen891024A4 *arg0) {
+void LabPCList_InitSortMenu(LabPCListScreen *arg0) {
     func_8000A460(D_8910E358, D_8910A8B0);
-    func_8000A460(D_8910E358 + func_800566BC(D_8910E358), D_8910A8A8[(arg0->mode & 0x20) ? 1 : 0]);
-    LabPCList_InitPopupMenu(arg0->menu, D_8910A8C8, arg0->items, 5, 0);
-    Window_SetRect(arg0->box, arg0->x + 0x26, arg0->y, 0, 0x16);
-    arg0->right = arg0->x + arg0->w;
-    arg0->bottom = arg0->y + arg0->h;
-    LabPCList_PlacePopup(arg0->menu);
-    arg0->color = D_8910A7F4;
-    if (arg0->mode == 0) {
-        M2C_FIELD(arg0->boxItems, u16 *, 6) |= 1;
+    func_8000A460(D_8910E358 + func_800566BC(D_8910E358), D_8910A8A8[(arg0->activeFilters & 0x20) ? 1 : 0]);
+    LabPCList_InitPopupMenu((s8*)&arg0->popup, D_8910A8C8, (s8*)&arg0->popupItemFlags, 5, 0);
+    Window_SetRect((s8*)&arg0->popup.anchorX, arg0->listFrame.x + 0x26, arg0->listFrame.y, 0, 0x16);
+    arg0->popup.limitX = arg0->listFrame.x + arg0->listFrame.width;
+    arg0->popup.limitY = arg0->listFrame.y + arg0->listFrame.height;
+    LabPCList_PlacePopup((s8*)&arg0->popup);
+    arg0->popup.window.frame.color = D_8910A7F4;
+    if (arg0->activeFilters == 0) {
+        M2C_FIELD(arg0->popup.menu.itemFlags, u16 *, 6) |= 1;
     }
 }
 
@@ -484,12 +437,12 @@ s32 LabPCList_UpdateHeaderCursor(LabPCListScreen* arg0) {
             ret = -1;
         } else if (arg0->headerCursor.cursor == 1) {
             func_8003F6AC(2);
-            LabPCList_InitSortMenu((Screen891024A4*)arg0);
+            LabPCList_InitSortMenu((LabPCListScreen*)arg0);
             ret = 1;
             arg0->state = 2;
         } else {
             func_8003F6AC(2);
-            func_89101F90((Ctx89101F90*)arg0);
+            func_89101F90((LabPCListScreen*)arg0);
             ret = 1;
         }
     }
