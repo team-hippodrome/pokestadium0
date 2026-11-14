@@ -157,10 +157,10 @@ M2C_UNK func_8001560C(s32);                         /* extern */
 M2C_UNK func_800158C0();                            /* extern */
 extern M2C_UNK D_800AA150;
 extern s32 D_818008A0;
-extern M2C_UNK D_818008B0;
+extern DisplayObject D_818008B0;
 
 s32 func_81800074(s32 arg0) {
-    M2C_FIELD(&D_818008B0, s16 *, 0x20) = (s16) (M2C_FIELD(&D_818008B0, s16 *, 0x20) - 0xC0);
+    D_818008B0.rotation.y -= 0xC0;
     func_800158C0();
     BgStage_DrawFrame();
     func_80005928(&D_800AA150, 1);
@@ -357,8 +357,8 @@ void TransferPak_InitScene(void) {
     D_818008A4 = (ModelNodeView*)process_geo_layout(sp18, D_8EA1B414);
     MainPool_FinalizeAllocation(sp18);
     ModelRenderer_InitDisplayRoots();
-    ModelRenderer_AttachDisplayObject((DisplayObject*)&D_818008B0);
-    Model_InitDisplayObject((DisplayObject*)&D_818008B0, 0, 0, D_818008A4);
+    ModelRenderer_AttachDisplayObject(&D_818008B0);
+    Model_InitDisplayObject(&D_818008B0, 0, 0, D_818008A4);
     D_818008D0 = 0x4000;
 }
 
