@@ -292,7 +292,7 @@ void AudioSeq_InitSequenceChannel(void*);
 /**
  * Stops sequence player `arg0` and restores its tempo, volumes and channels to their defaults.
  * Corresponds to OoT AudioSeq_ResetSequencePlayer (original name Nas_InitMySeq).
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from AudioSeq_InitSequencePlayers.
  */
 void AudioSeq_ResetSequencePlayer(s32 arg0) {
@@ -329,7 +329,7 @@ void* func_811097E8(void*, s32);
 /**
  * Allocates sequence player `arg0`'s 16 channels, falling back to the shared dummy channel.
  * Corresponds to OoT AudioSeq_InitSequencePlayerChannels (original name Nas_AssignSubTrack).
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioSeq_InitSequencePlayerChannels(s32 arg0) {
@@ -358,7 +358,7 @@ void AudioPlayback_InitNoteLists(void*);
  * Sets up the layer free list, the sequence layers and the one sequence player.
  * Corresponds to OoT AudioSeq_InitSequencePlayers (original name Nas_InitPlayer). Zero has OoT's
  * AudioSeq_InitSequencePlayer (__InitGroup) inlined for its single player.
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioSeq_InitSequencePlayers(void) {

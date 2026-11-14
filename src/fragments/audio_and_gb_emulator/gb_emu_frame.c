@@ -101,7 +101,7 @@ void func_80056730(void*, s32, void*);
 void func_811177D0(s32);
 
 /**
- * Runs one frame of the GB Tower emulator (Stadium 1's GbEmu_UpdateFrame).
+ * Runs one frame of the GB Player emulator (Stadium 1's GbEmu_UpdateFrame).
  * Services the Transfer Pak, builds the emulated joypad from the controller,
  * lets C-Right cycle the emulation speed, steps the CPU core that many times
  * and queues the RSP task that draws the Game Boy screen. When enabled, Z
@@ -110,7 +110,7 @@ void func_811177D0(s32);
  * stopped, otherwise 0.
  * Seen in play (2026-11-12): runs Green frame by frame and, while banks load, restores the header
  * bytes once the GB PC (gbPc) reaches 0x100.
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from GbEmu_RunFrame.
  */
 s32 GbEmu_UpdateFrame(void) {
@@ -428,7 +428,7 @@ extern u8 D_811565A0;
 /**
  * Asks the I/O thread for a connector check (request 8) and spins until it is done. Returns -1
  * when the channel reports an error.
- * Seen in play (2026-11-14) ran when C-Up opened the GB Tower menu; called from GbEmu_RunFrame.
+ * Seen in play (2026-11-14) ran when C-Up opened the GB Player menu; called from GbEmu_RunFrame.
  */
 s32 GbPak_CheckConnectionBlocking(void) {
     volatile u8* chan = (volatile u8*)&D_811561C8[D_811565A0];
@@ -555,7 +555,7 @@ extern s8 D_81156546;
 
 /**
  * Sets D_81156546, which stops the per-frame GB audio update.
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from GbEmu_PauseAndBlankScreen.
  */
 void GbEmu_PauseEmulation(void) {
@@ -571,11 +571,11 @@ extern s32 D_81156550;
 void GbAudio_UpdateFrame(void);
 void osViBlack(u8);
 /**
- * Per-frame tail of the GB Tower emulator: unless emulation is paused (D_81156546) or
+ * Per-frame tail of the GB Player emulator: unless emulation is paused (D_81156546) or
  * the screen is being blanked (D_800AA148), runs the GB audio frame and mirrors the
  * emulated NR52 (0xFF26) register into GB memory; while D_800AA148 is set it blanks video.
  * Seen in play (2026-11-13) ran every frame from the moment JP Green booted in the N64 GB player.
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from func_8000AAE0.
  */
 void GbEmu_UpdateAudioOrBlankVideo(UNUSED s32 arg0) {
@@ -636,7 +636,7 @@ extern u8 D_811565E1;
 
 /**
  * Draws frame `frame` of the cable animation between the party panels on the loading screen.
- * Not reached in play (2026-11-14): it did not run in the GB Tower with JP Green (boot, intro,
+ * Not reached in play (2026-11-14): it did not run in the GB Player with JP Green (boot, intro,
  * menu, button config, speed-up, recovery, quit).
  * @unverified Name from the code and Stadium 1.
  */
@@ -708,7 +708,7 @@ M2C_UNK func_8005C0A0();
 /**
  * Draws the cartridge loading screen: the background, the six party icons in framed panels, the
  * Game Boy for `port` and the cartridge picture for `version`, then starts the cable animation.
- * Not reached in play (2026-11-14): it did not run in the GB Tower with JP Green (boot, intro,
+ * Not reached in play (2026-11-14): it did not run in the GB Player with JP Green (boot, intro,
  * menu, button config, speed-up, recovery, quit).
  * @unverified Name from the code and Stadium 1.
  */
@@ -847,7 +847,7 @@ extern u16* D_811565D0;
 void GbEmu_DrawTransferAnimation(s32, s32);
 /**
  * Advances the loading-screen cable animation one step when its timer runs out.
- * Not reached in play (2026-11-14): it did not run in the GB Tower with JP Green (boot, intro,
+ * Not reached in play (2026-11-14): it did not run in the GB Player with JP Green (boot, intro,
  * menu, button config, speed-up, recovery, quit).
  * @unverified Name from the code and Stadium 1.
  */

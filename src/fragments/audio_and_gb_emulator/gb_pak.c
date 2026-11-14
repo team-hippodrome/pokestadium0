@@ -51,7 +51,7 @@ extern M2C_UNK D_81156480;
  * Writes `value` to cartridge address `address` (an MBC1 register) through the Transfer Pak: puts
  * the value in the last byte of the 0x20-byte block D_81156480 and writes the block with
  * osGbpakReadWrite. Returns the osGbpakReadWrite result.
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from GbPak_InitializeCartridgeMapper, whose MBC1 writes the 2026-11-12
  * Transfer Pak trace showed.
  */
@@ -65,7 +65,7 @@ s32 GbPak_WriteMapperRegister(void *arg0, s32 address, s32 value) {
  * bank 0, ROM banking mode, ROM bank 1. Caches pakRomBank/pakRamBank/pakMbcMode.
  * Seen in play (2026-11-12): the Transfer Pak trace shows the MBC1 writes 0x0000=0x0A, 0x6000=1,
  * 0x4000=0, 0x6000=0, 0x4000=0 and 0x2100=1 in that order.
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from GbPak_IoThreadMain.
  */
 s32 GbPak_InitializeCartridgeMapper(unk_D_8122B2C0* arg0) {
@@ -146,7 +146,7 @@ s32 func_80051110(s32, s8 *, s8 *);             /* extern */
  * Reads the Transfer Pak status into status (0x9B) and fails with 0x63 unless bits 0 and 3 are
  * both set, i.e. the pak is powered and a cartridge is inserted. Seen in play (2026-11-12): runs
  * before every transfer while Pocket Monsters Green loads.
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from GbPak_IoThreadMain.
  */
 s32 GbPak_CheckCartInserted(s8 *arg0) {
@@ -174,7 +174,7 @@ s32 GbPak_WriteVerifiedSramBlock(s32, s32, s32);                     /* extern *
  * cartridge header ID and compares it with cartridgeId (detects a swapped cartridge),
  * then re-verifies the RAM probe block if one was written.
  * Seen in play (2026-11-12): runs before each ROM read while Green streams in.
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from GbPak_ReadRomSummed.
  */
 s32 GbPak_ProbeCartridge(u8 *arg0) {
@@ -206,7 +206,7 @@ s32 GbPak_ProbeCartridge(u8 *arg0) {
  * switching to ROM banking mode and writing the upper bank bits when needed.
  * Seen in play (2026-11-12): its writes reached the emulated MBC1 as 0x6000=0, 0x4000=bank/32 and
  * 0x2100=bank (Transfer Pak trace).
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from GbPak_ReadRomSummed.
  */
 s32 GbPak_SelectRomAddress(unk_D_8122B2C0* arg0, s32 arg1) {
@@ -243,7 +243,7 @@ s32 GbPak_SelectRomAddress(unk_D_8122B2C0* arg0, s32 arg1) {
  * Selects an 8 KB cartridge RAM bank (MBC1 RAM banking mode).
  * Seen in play (2026-11-12): wrote 0x6000=1 and 0x4000=bank on the emulated MBC1 before the SRAM
  * probe.
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from GbPak_WriteVerifiedSramBlock.
  */
 s32 GbPak_SelectRamBank(unk_D_8122B2C0* arg0, s32 arg1) {
@@ -272,7 +272,7 @@ extern GbPakChannel D_811561C8[4];
  * Reads the Transfer Pak status; returns 0 only when bit 7 is set and bit 6 is clear.
  * Seen in play (2026-11-12): polled every fourth frame (request 8) while Green runs; the emulated
  * status 0x89 passes.
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from GbPak_IoThreadMain.
  */
 s32 GbPak_CheckTransferStatus(OSPfs* arg0) {
@@ -292,7 +292,7 @@ s32 GbPak_CheckTransferStatus(OSPfs*);
  * bank for the 0x4000-0x7FFF window, and adds every byte read to sum. The bank checksum check in
  * GbPak_IoThreadMain (request 6) compares these sums with the known-cartridge tables. Seen in
  * play: two 0x2000-byte reads per bank while Green loads.
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from GbPak_IoThreadMain.
  */
 s32 GbPak_ReadRomSummed(u8* arg0) {
@@ -361,7 +361,7 @@ s32 GbPak_CheckTransferStatus(OSPfs*);
  * RAM at gbAddress, selecting each 8 KB bank as it goes.
  * Seen in play (2026-11-12): starting GB from the main menu ran this as a read (is_write 0) of
  * cartridge RAM, just before GbPak_CheckGen1SaveChecksum checked the save; returned 0.
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from GbPak_IoThreadMain.
  */
 s32 GbPak_TransferBankedRam(u8* arg0, s32 arg1) {
@@ -415,7 +415,7 @@ s32 func_8004CFB0(OSMesgQueue*, s32, s32);
  * it checks the running byte sum against the header's global checksum (error 2 on mismatch),
  * powers the pak off (request 4) and sets D_81156476 to 2. Seen in play: streamed all 32 banks of
  * Green, after which bankState was all zero.
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from GbEmu_UpdateFrame.
  */
 void GbPak_QueueNextBankLoad(GbPakChannel* ch) {
@@ -480,7 +480,7 @@ s32 func_8004CFB0(OSMesgQueue*, s32, s32);
  * waits for the I/O thread. Returns -2 when no load is running or the channel is busy, and -1
  * when the bank is not in the list or the transfer failed. Seen in play: GbEmu_LoadCartridge
  * requests bank 0 first.
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from GbEmu_LoadCartridge.
  */
 s32 GbPak_RequestBankLoad(s32 chan, s32 bank) {
@@ -531,7 +531,7 @@ s32 func_8004CFB0(OSMesgQueue*, s32, s32);
  * the I/O thread is busy, 2 when a write was queued, 3 when it must wait, 4 on a pak error and 0
  * when nothing is dirty. Seen in play: runs every frame of GbEmu_UpdateFrame once Green is
  * running.
- * Seen in play (2026-11-14) ran while Green's intro played in the GB Tower; called from
+ * Seen in play (2026-11-14) ran while Green's intro played in the GB Player; called from
  * GbEmu_UpdateFrame.
  */
 s32 GbPak_WriteBackDirtySramBlock(s32 arg0) {

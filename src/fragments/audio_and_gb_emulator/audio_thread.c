@@ -72,7 +72,7 @@ extern M2C_UNK *D_81186250;
  * queues of 1, 4 and 1 messages. Stadium 1's name BattleAnim_DisableEffectSpawning did not fit.
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from AudioThread_InitMesgQueues.
  */
 void AudioThread_InitMesgQueuesImpl(void) {
@@ -415,7 +415,7 @@ void AudioThread_Unused5(void) {
  * Sets up the audio thread message queues.
  * Corresponds to OoT AudioThread_InitMesgQueues (original name Nas_InitGAudio). Stadium 1's name
  * BattleAnim_DisableEffectSpawningAlias did not fit.
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from AudioLoad_Init.
  */
 void AudioThread_InitMesgQueues(void) {
