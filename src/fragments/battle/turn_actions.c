@@ -1104,10 +1104,10 @@ void BattleScene_PhaseCommand(CameraNode* arg0) {
 }
 
 /**
- * Sets the Pokemon's field +0x7BE to 0x800.
+ * Starts the Pokémon's info box blinking (infoBoxBlinkTimer = 0x800).
  */
 void func_821272C0(ActivePokemon* arg0) {
-    M2C_FIELD(arg0, s16 *, 0x7BE) = 0x800;
+    arg0->state.infoBoxBlinkTimer = 0x800;
 }
 
 void ModelAnim_SetFrame(DisplayObject* display_object, s16 animation_timer);

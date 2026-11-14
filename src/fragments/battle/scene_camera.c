@@ -328,7 +328,7 @@ void BattleScene_SetDamageShakeAmplitude(ActivePokemon* arg0) {
         sBattleScene.scene->shakeAmplitude = 40.0f;
     }
 
-    M2C_FIELD(sBattleScene.scene, s16*, 0x6C) = 0;
+    sBattleScene.scene->shakeAngle = 0;
 }
 
 /**
@@ -345,10 +345,10 @@ void BattleScene_ApplyCameraShake(CameraNode* arg0) {
     s16 sp28;
 
     BattleAnim_CalculateDistanceAngles(&arg0->view.eyePosition, &arg0->view.targetPosition, &sp30, &sp28, &sp2A);
-    M2C_FIELD(sBattleScene.scene, s16*, 0x6C) += 0x4000;
+    sBattleScene.scene->shakeAngle += 0x4000;
     BattleAnim_ApproachF(&sBattleScene.scene->shakeAmplitude, 0.0f, 0.15f);
 
-    temp_fv0 = sBattleScene.scene->shakeAmplitude * COSS(M2C_FIELD(sBattleScene.scene, s16*, 0x6C));
+    temp_fv0 = sBattleScene.scene->shakeAmplitude * COSS(sBattleScene.scene->shakeAngle);
 
     arg0->view.eyePosition.y += temp_fv0 / 3.0f;
     arg0->view.targetPosition.y += temp_fv0 / 3.0f;

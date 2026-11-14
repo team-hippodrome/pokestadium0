@@ -223,7 +223,7 @@ typedef struct ActivePokemonState {
 typedef struct ThumbnailState {
     /* 0x000 */ DisplayObject displayObject;
     /* 0x168 */ CameraNode* camera;
-    /* 0x16C */ s32 shownRosterIndex; // @unverified: roster slot (pokemonPicked index) of the Pokémon the thumbnail and HUD boxes show; set from state.rosterIndex in participants.c
+    /* 0x16C */ s32 shownRosterIndex; // roster slot (pokemonPicked index) of the Pokémon the HUD boxes show; poking 1 put the bench Pokémon's name, level and HP in 1P's box
     /* 0x170 */ s32 shownTeamMemberIndex; // @unverified: tag-team member (sessionTeams->teamMember index) owning that Pokémon; set from state.teamMemberIndex
     /* 0x174 */ s32 showing;
     /* 0x178 */ char unk178[0x4];
@@ -371,7 +371,7 @@ typedef struct BattleScene {
     /* 0x60 */ f32 verticalFieldOfView;
     /* 0x64 */ f32 stageScale; // @unverified: eased toward 1.0 and passed to Battle_SetStageScale in phases_2.c
     /* 0x68 */ f32 shakeAmplitude;
-    /* 0x6C */ s16 shakeAngle; // @unverified: BattleScene_ApplyCameraShake adds 0x4000 a frame and scales shakeAmplitude by its cosine
+    /* 0x6C */ s16 shakeAngle; // camera shake phase: BattleScene_ApplyCameraShake adds 0x4000 a frame; with shakeAmplitude poked to 40 the look-at bobbed with its cosine
     /* 0x6E */ s16 unk_6E;
     /* 0x70 */ char unk70[0x4];
     /* 0x74 */ f32 orbitDistance; // @unverified: eye-to-look-at distance that func_8210BCF0 measures next to rotationX/rotationY
@@ -379,9 +379,9 @@ typedef struct BattleScene {
     /* 0x84 */ Vec3f unk_84;
     /* 0x90 */ Vec3f unk_90;
     /* 0x9C */ char unk9C[0xC];
-    /* 0xA8 */ Vec3f savedCameraAt; // @unverified: camera look-at saved and restored around a shot (phases.c, scene_camera.c)
-    /* 0xB4 */ Vec3f savedCameraEye; // @unverified: camera eye saved and restored with savedCameraAt
-    /* 0xC0 */ Vec3f anchorPosition; // @unverified: an owner's default anchor (BattleAnim_GetOwnerDefaultAnchorPosition) that camera shots orbit
+    /* 0xA8 */ Vec3f savedCameraAt; // camera look-at saved around a shot; each write in play equaled the live camera's targetPosition
+    /* 0xB4 */ Vec3f savedCameraEye; // camera eye saved with savedCameraAt; each write in play equaled the live eyePosition
+    /* 0xC0 */ Vec3f anchorPosition; // a Pokémon's default anchor point (BattleAnim_GetOwnerDefaultAnchorPosition) that camera shots aim at; (150, 25, 0) for COM, and poking x to 60 pulled the look-at toward it
     /* 0xCC */ CameraNode* camera;
 } BattleScene; // size = 0xD0 (Stadium 1: 0xE0)
 
