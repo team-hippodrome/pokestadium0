@@ -16,38 +16,7 @@ void GbEmu_BlendScrollingLayer(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 ar
 
 s32 func_811020A8(void *arg0);
 
-typedef struct GbpakChannel811023DC {
-    /* 0x00 */ char unk00[0x4E];
-    /* 0x4E */ u8 checksum[2];
-    /* 0x50 */ OSPfs* pfs;
-    /* 0x54 */ u8* buf;
-    /* 0x58 */ u8* romBuf;
-    /* 0x5C */ u8* sramBuf;
-    /* 0x60 */ u8* bankState;
-    /* 0x64 */ u8* sramState;
-    /* 0x68 */ u8* bankList;
-    /* 0x6C */ u8* bankEntry;
-    /* 0x70 */ u8* ramBuf;
-    /* 0x74 */ u8* blockState;
-    /* 0x78 */ u8* verifyBuf;
-    /* 0x7C */ u8* blockDirty;
-    /* 0x80 */ s32 size;
-    /* 0x84 */ s32 sum;
-    /* 0x88 */ char unk88[0x4];
-    /* 0x8C */ s32 addr;
-    /* 0x90 */ u32 ramSize;
-    /* 0x94 */ s32 sramAddr;
-    /* 0x98 */ u8 unk98;
-    /* 0x99 */ volatile u8 request;
-    /* 0x9A */ volatile u8 error;
-    /* 0x9B */ u8 status;
-    /* 0x9C */ u8 channel;
-    /* 0x9D */ char unk9D[0x4];
-    /* 0xA1 */ u8 unkA1;
-    /* 0xA2 */ u8 unkA2;
-    /* 0xA3 */ char unkA3[0x1];
-} GbpakChannel811023DC; // size = 0xA4
-extern GbpakChannel811023DC D_811561C8[4];
+extern GbPakChannel D_811561C8[4];
 extern volatile u8 D_81156475;
 extern volatile u8 D_81156476;
 extern OSMesgQueue D_81156458;
@@ -148,7 +117,7 @@ extern u8 D_8113556C[];
 extern u8 D_8111F470[];
 extern u8 D_8111E678[];
 void func_800093E0(void*, void*);
-void GbPak_QueueNextBankLoad(GbpakChannel811023DC*);
+void GbPak_QueueNextBankLoad(GbPakChannel*);
 void Cont_StartReadInputs(void);
 void Cont_ReadInputs(void);
 u8 func_81118018(void*, s32);
@@ -500,7 +469,7 @@ extern u8 D_811565A0;
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s32 func_8110659C(void)
 {
-  GbpakChannel811023DC *ch = &D_811561C8[D_811565A0];
+  GbPakChannel *ch = &D_811561C8[D_811565A0];
   ch->unk00[0x99] = 0x80;
   ch->unk00[0x9A] = 0;
   func_8004CFB0(&D_81156458, D_811565A0, 1);
@@ -521,7 +490,7 @@ s32 func_8110659C(void)
 
 s32 func_8110665C(void) {
     u8 idx = D_811565A0;
-    volatile GbpakChannel811023DC* ch = &D_811561C8[idx];
+    volatile GbPakChannel* ch = &D_811561C8[idx];
 
     ch->status = 0;
     ch->request = 8;

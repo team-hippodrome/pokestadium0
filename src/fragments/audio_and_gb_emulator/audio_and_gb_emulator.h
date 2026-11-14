@@ -365,6 +365,45 @@ typedef union GbApuMesg {
     GbApuWrite write;
 } GbApuMesg;
 
+// One Transfer Pak channel of the Game Boy emulator (D_811561C8[4]). Merges the three identical
+// copies that gb_emu_draw.c, gb_emu_frame.c and gb_pak.c had.
+typedef struct GbPakChannel {
+    /* 0x00 */ char unk00[0x48]; // the start of an OSGbpakId (osGbpakReadId in gb_emu_draw.c)
+    /* 0x48 */ u8 romSize; // @unverified: OSGbpakId.rom_size; 4 selects a 512 KiB ROM, else 1 MiB (gb_emu_draw.c)
+    /* 0x49 */ char unk49[0x3];
+    /* 0x4C */ u8 maskRomVersion; // @unverified: OSGbpakId.version; picks the bank list of a game revision (gb_emu_draw.c)
+    /* 0x4D */ char unk4D[0x1];
+    /* 0x4E */ u8 checksum[2];
+    /* 0x50 */ OSPfs* pfs;
+    /* 0x54 */ u8* buf;
+    /* 0x58 */ u8* romBuf;
+    /* 0x5C */ u8* sramBuf;
+    /* 0x60 */ volatile u8* bankState;
+    /* 0x64 */ volatile u8* sramState;
+    /* 0x68 */ u8* bankList;
+    /* 0x6C */ u8* bankEntry;
+    /* 0x70 */ u8* ramBuf;
+    /* 0x74 */ u8* blockState;
+    /* 0x78 */ u8* verifyBuf;
+    /* 0x7C */ u8* blockDirty;
+    /* 0x80 */ s32 size;
+    /* 0x84 */ s32 sum;
+    /* 0x88 */ char unk88[0x4];
+    /* 0x8C */ s32 addr;
+    /* 0x90 */ u32 ramSize;
+    /* 0x94 */ s32 sramAddr;
+    /* 0x98 */ u8 unk98;
+    /* 0x99 */ volatile u8 request;
+    /* 0x9A */ volatile u8 error;
+    /* 0x9B */ u8 status;
+    /* 0x9C */ u8 channel;
+    /* 0x9D */ char unk9D[0x3];
+    /* 0xA0 */ u8 gameIndex; // @unverified: GbPak_IdentifyCartridge, 0 not a supported game; colorIndex is gameIndex - 1
+    /* 0xA1 */ u8 unkA1;
+    /* 0xA2 */ u8 unkA2;
+    /* 0xA3 */ char unkA3[0x1];
+} GbPakChannel; // size = 0xA4
+
 typedef struct unk_D_81234690 {
     /* 0x00 */ s16 unk_00;
     /* 0x02 */ u16 unk_02;
