@@ -5,7 +5,7 @@
 #include "title_screen.h"
 #include "leo.h"
 
-s32 func_8000B2E8(void);
+s32 Cont_GetConnectedMask(void);
 void Font_BeginTranslucentTextRendering(void);
 void Font_SetActive(s32 mask, s32 arg1);
 void Font_DrawCharAt(s32 x, s32 y, s32 chr);
@@ -17,8 +17,8 @@ extern s32 sNoControllerScroll;
  * Scrolls コントローラ１がせつぞくされていません。でんげんをきって、コントローラを
  * コントローラコネクタ１にさしこんでください。 ("Controller 1 is not connected. Turn the
  * power off and plug a controller into controller connector 1.") right to left along the
- * PUSH START line, one pixel per frame, while bit 0 of func_8000B2E8() is clear.
- * Seen in play (2026-11-14): with func_8000B2E8 patched to return 0 on the title screen, PUSH START
+ * PUSH START line, one pixel per frame, while bit 0 of Cont_GetConnectedMask() is clear.
+ * Seen in play (2026-11-14): with Cont_GetConnectedMask patched to return 0 on the title screen, PUSH START
  * gave way to this message (scrolling).
  */
 void TitleScreen_DrawNoControllerTicker(void) {
@@ -28,7 +28,7 @@ void TitleScreen_DrawNoControllerTicker(void) {
     s32 idx;
     s32 i;
 
-    if (!(func_8000B2E8() & 1)) {
+    if (!(Cont_GetConnectedMask() & 1)) {
         len = strlen((const char*)sNoControllerMessage) >> 1;
         x = 16 - (sNoControllerScroll % 16);
         idx = sNoControllerScroll / 16;
@@ -351,7 +351,7 @@ s32 TitleScreen_Update(s32 fadeMode) {
     }
     BgStage_DrawFrame();
     TitleScreen_DrawBackground();
-    if (func_8000B2E8() & 1) {
+    if (Cont_GetConnectedMask() & 1) {
         TitleScreen_DrawPushStart(0x74, 0xC0);
     }
     TitleScreen_DrawNoControllerTicker();

@@ -5,7 +5,7 @@
 #include "global.h"
 #include "PR/leo.h"
 
-// A request for the storage thread (thread20_rsp), allocated by the Storage_Queue* functions in dma.c.
+// A request for the storage thread (Storage_ThreadEntry), allocated by the Storage_Queue* functions in dma.c.
 // It starts with the space of a LEOCmd, which the 64DD requests use (see StorageLeoRequest).
 typedef struct StorageRequest {
     /* 0x00 */ u8 command; // @unverified: 0xF0/0xF1 ROM read, 0xF2/0xF3 SRAM read/write, else a LEO command (5 read, 6 write, 7 seek, ...)
@@ -29,11 +29,11 @@ typedef struct StorageLeoRequest {
     void *addr;
 } StorageLeoRequest;
 
-// The storage thread's queues (D_80087000), created in func_80000C14.
+// The storage thread's queues (D_80087000), created in Storage_StartThread.
 typedef struct StorageQueues {
     /* 0x00 */ OSMesg ioMesg; // @unverified: receives the PI DMA completion in Storage_ReadSram/Storage_ReadRom
-    /* 0x04 */ OSMesgQueue piCmdQueue; // @unverified: the PI manager's command queue (osCreatePiManager in func_80000C14)
-    /* 0x1C */ OSMesgQueue requestQueue; // @unverified: StorageRequest pointers for thread20_rsp (Storage_QueueRequest)
+    /* 0x04 */ OSMesgQueue piCmdQueue; // @unverified: the PI manager's command queue (osCreatePiManager in Storage_StartThread)
+    /* 0x1C */ OSMesgQueue requestQueue; // @unverified: StorageRequest pointers for Storage_ThreadEntry (Storage_QueueRequest)
     /* 0x34 */ OSMesgQueue ioDoneQueue; // @unverified: PI and LEO completion messages
 } StorageQueues; // size = 0x4C
 
@@ -51,7 +51,7 @@ void *Storage_SeekDisk(StorageLeoRequest* arg0);
 void *Storage_SetDiskMotor(StorageLeoRequest* arg0);
 void *Storage_ReadRtc(StorageLeoRequest* arg0);
 void *Storage_WriteRtc(StorageLeoRequest* arg0);
-void thread20_rsp(void *arg);
+void Storage_ThreadEntry(void *arg);
 void Storage_ResetDisk(void);
 void Storage_QueueRequest(void* arg0, s32 arg1);
 

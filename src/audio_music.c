@@ -82,8 +82,8 @@ void Audio_Enable(void) {
     D_800AAE30 = 1;
 }
 
-M2C_UNK func_80004920(M2C_UNK *);                   /* extern */
-M2C_UNK func_80004EA8(M2C_UNK *);                   /* extern */
+M2C_UNK SchedClient_WaitMessage(M2C_UNK *);                   /* extern */
+M2C_UNK Sched_AddClient(M2C_UNK *);                   /* extern */
 M2C_UNK func_80004F34(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_800082D0();                            /* extern */
 M2C_UNK func_8003B868(s8 *);                      /* extern */
@@ -103,7 +103,7 @@ extern s32 D_800AAF38;
 extern s32 D_800AAF3C;
 void func_8000A92C(s32 arg0) {
     func_800567E0(&D_800AAE48, &D_800AAE38, 1);
-    func_80004EA8(&D_800AAE38);
+    Sched_AddClient(&D_800AAE38);
     D_800AAE30 = 1;
     D_800AAF3C = -1;
     D_800AAF38 = 0;
@@ -115,7 +115,7 @@ void func_8000A92C(s32 arg0) {
     func_8003BC9C(1);
     Audio_SetChannelVolume(3, 4);
 loop_1:
-    func_80004920(&D_800AAE38);
+    SchedClient_WaitMessage(&D_800AAE38);
     func_800082D0();
     if ((D_800AAE30 != 0) && (D_800A9710.preNmiFrames < 0x15)) {
         func_8003B868(&D_800AAE68 + (D_800AAF38 * 0x68) + 0x20);

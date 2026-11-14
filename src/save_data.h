@@ -151,7 +151,7 @@ void Deck_SetSaveEntryCount(s32 arg0, s32 arg1, s32 arg2);
 s32 Deck_ReadSaveEntry(s32 arg0, s32 arg1, s32 arg2, u8* arg3);
 s32 Save_WriteTypedRecord(s32 arg0, s32 arg1, s32 arg2, u8* arg3);
 void Save_WriteContinueData(SaveContinueSession* arg0, GbSavePortSnapshot* arg1, BattleMon* arg2, s32 arg3);
-void func_80024044(void);
+void Save_UnusedStub(void);
 s32 Save_GetBuffer(void);
 void func_800245E0(s32 arg0, s32 arg1);
 

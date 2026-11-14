@@ -196,7 +196,7 @@ arg1_func_80010CA8* Model_ComputeNicknameColorVariant(arg1_func_80010CA8* arg0, 
     return arg0;
 }
 
-s32 func_80005014(void);
+s32 Sched_IsGfxTaskPending(void);
 void func_8001799C(ModelLoadContext*, u16, arg1_func_80010CA8);
 void func_80017D00(ModelLoadContext*);
 
@@ -215,7 +215,7 @@ void BattleSide_RequestModelLoad(BattleSide* side) {
             Model_ComputeSizeVariant(&sp24, side->displayMon);
         }
         if (!(side->modelLoadContext->flags & 4)) {
-            while (func_80005014() != 0) {}
+            while (Sched_IsGfxTaskPending() != 0) {}
         }
         func_8001799C(side->modelLoadContext, side->displayModel, sp24);
         side->modelFlags |= 0x40;

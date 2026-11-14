@@ -1381,7 +1381,7 @@ void Geo_NodeTranslate(GraphNode* arg0) {
 }
 
 extern s32 D_800AB248[];
-void func_8000ED9C(MtxF* dest, Vec3f* local_position, Vec3s* rotate, Vec3f* scale, MtxF* basis, MtxF* transform);
+void MtxF_ComposeBillboardTransform(MtxF* dest, Vec3f* local_position, Vec3s* rotate, Vec3f* scale, MtxF* basis, MtxF* transform);
 /**
  * Geo_NodeAnimatedPart from Stadium 1, with the joint evaluation inlined. D_800AC690 is declared as u8 in this file, so it is cast to the anim record type.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
@@ -1420,7 +1420,7 @@ void Geo_NodeAnimatedPart(GraphNode* arg0) {
     }
 
     if (arg->transformMode & 2) {
-        func_8000ED9C(&sp40, &sp8C, &sp98, &sp80, &D_80060488->view.floatMatrix,
+        MtxF_ComposeBillboardTransform(&sp40, &sp8C, &sp98, &sp80, &D_80060488->view.floatMatrix,
                       &D_800AB460.unk_0000[D_800AB460.unk_10A0]);
         D_800AB460.unk_10A0++;
         GeoRender_SetMatrix(&sp40);

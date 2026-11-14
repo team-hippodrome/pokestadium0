@@ -4,7 +4,7 @@
 #include "m2c_macros.h"
 #include "main.h"
 
-M2C_UNK func_80000C14();                            /* extern */
+M2C_UNK Storage_StartThread();                            /* extern */
 M2C_UNK DpIntro_SetViMode(M2C_UNK, M2C_UNK);            /* extern */
 M2C_UNK func_80001868();                            /* extern */
 M2C_UNK func_80004E34();                            /* extern */
@@ -31,7 +31,7 @@ void Idle_ThreadEntry(s32 arg0) {
     DpIntro_SetViMode(0, 1);
     func_80052DC0(1);
     func_8000803C();
-    func_80000C14();
+    Storage_StartThread();
     func_80004E34();
     func_80051B20(&D_80082B60, 4, &D_8000A92C, 0, &D_80084D10, 0x50);
     func_8005C130(&D_80082B60);
@@ -43,7 +43,7 @@ loop_1:
     goto loop_1;
 }
 
-M2C_UNK func_80002D58();                            /* extern */
+M2C_UNK Memory_InitPools();                            /* extern */
 M2C_UNK func_800093C0(M2C_UNK);                     /* extern */
 M2C_UNK func_80051B20(M2C_UNK *, M2C_UNK, M2C_UNK *, M2C_UNK, M2C_UNK *, s32); /* extern */
 M2C_UNK func_80052180();                            /* extern */
@@ -61,7 +61,7 @@ extern M2C_UNK D_800809B0;
 void Main(void) {
     func_80052180();
     func_800093C0(0);
-    func_80002D58();
+    Memory_InitPools();
     func_80051B20(&D_80080400, 1, &Idle_ThreadEntry, 0, &D_800809B0, 0x64);
     func_8005C130(&D_80080400);
 }

@@ -108,8 +108,8 @@ void func_800012AC(DisplayFrame* arg0) {
 }
 
 void func_8000460C(void*);
-void func_80004920(void*);
-void func_8000494C(void*);
+void SchedClient_WaitMessage(void*);
+void SchedClient_PollMessage(void*);
 M2C_UNK DpIntro_SetViMode(s8, s8);
 
 /**
@@ -130,11 +130,11 @@ void DisplayWorker_ProcessFrame(void) {
     }
 
     for (i = 1; i < D_800870D0.shownFrame.retracesPerFrame; i++) {
-        func_80004920(&D_800870D0.client);
+        SchedClient_WaitMessage(&D_800870D0.client);
     }
 
     while (D_800870D0.client.queue.validCount > 0) {
-        func_8000494C(&D_800870D0.client);
+        SchedClient_PollMessage(&D_800870D0.client);
     }
 
     if (D_800870D0.renderFrame.framebuffer != NULL) {
@@ -160,7 +160,7 @@ void DisplayWorker_ProcessFrame(void) {
     D_800870D0.shownFrame = D_800870D0.renderFrame;
     D_800870D0.renderFrame = D_800870D0.requestFrame;
     profiler_log_thread5_time(THREAD5_END);
-    func_80004920(&D_800870D0.client);
+    SchedClient_WaitMessage(&D_800870D0.client);
 }
 
 void func_80001558(void) {
@@ -187,16 +187,16 @@ void func_80001558(void) {
         D_800870D0.nmiClearStep++;
         func_8005C0A0();
     }
-    func_80004920(&D_800870D0.client);
+    SchedClient_WaitMessage(&D_800870D0.client);
     while (D_800870D0.client.queue.validCount > 0) {
-        func_8000494C(&D_800870D0.client);
+        SchedClient_PollMessage(&D_800870D0.client);
     }
-    func_80004920(&D_800870D0.client);
+    SchedClient_WaitMessage(&D_800870D0.client);
 }
 
 void func_800594D0(u32);
 void func_80001A30(void*, u8, u8, u8, u8, s32, s32, s32);
-void func_80004EA8(SchedClient*);
+void Sched_AddClient(SchedClient*);
 void func_80001140(void*);
 void func_800081E0(s32);
 s32 func_8004D1C0(OSMesgQueue*, OSMesg*, s32);
@@ -217,7 +217,7 @@ void DisplayWorker_ThreadMain(UNUSED void* arg0) {
     func_80001A30(&D_800870D0.shownFrame, 0, 1, 2, 0xFF, 0, 0, 0);
     func_80001A30(&D_800870D0.renderFrame, 0, 1, 2, 0xFF, 0, 0, 0);
     func_800567E0(&D_800870D0.client.queue, D_800870D0.client.mesgBuf, 4);
-    func_80004EA8(&D_800870D0.client);
+    Sched_AddClient(&D_800870D0.client);
     func_80001140(&D_800870D0.task);
     while (1) {
         if (D_800A9710.preNmiFrames > 0) {

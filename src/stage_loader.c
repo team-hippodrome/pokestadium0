@@ -200,7 +200,7 @@ extern Mtx D_8005F688;
 extern Vp D_8005F6C8;
 extern Vp D_8005F6D8;
 void func_80005980(void);
-void func_80002EC8(Gfx**);
+void Util_DrawMemoryProfiler(Gfx**);
 
 /** Sets the render target and viewport for the frame. */
 void StageLoader_SetupFrame(void) {
@@ -234,7 +234,7 @@ void StageLoader_SetupFrame(void) {
     }
 
     if ((gShowCPUProfiler != 0) && (gShowMEMProfiler != 0)) {
-        func_80002EC8(&gDisplayListHead);
+        Util_DrawMemoryProfiler(&gDisplayListHead);
     }
 
     gDPFullSync(gDisplayListHead++);

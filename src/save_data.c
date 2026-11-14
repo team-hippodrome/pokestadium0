@@ -16,7 +16,7 @@ u16 Save_Checksum(u8* arg0, s32 arg1);
 s32 Save_RecordIsValid(u8* arg0, s32 arg1);
 void Save_WriteFooter(u8* arg0, s32 arg1, s32 arg2);
 s32 Save_GetBuffer(void);
-void func_80024044(void);
+void Save_UnusedStub(void);
 void Save_ResetAndCommitTypedRecord(s32 arg0, s32 arg1);
 s32 Deck_IsSaveEntryPresent(s32 arg0, s32 arg1);
 
@@ -397,7 +397,10 @@ M2C_UNK Save_SetTypedRecordFlags(arg0, arg1, arg2)
     }
 }
 
-void func_80024044(void) {
+/**
+ * Empty; no callers.
+ */
+void Save_UnusedStub(void) {
 }
 
 void Save_CommitRecord(); // Called with two or three arguments.
