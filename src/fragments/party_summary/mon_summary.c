@@ -41,7 +41,7 @@ extern M2C_UNK D_8A21DE10;
 s32 Display_IsFrameReady(void);
 s32 func_80002BA4(void*, s32);
 s32 func_80017304(s32, BinArchive*, s32, void*, s32);
-s32 func_8001FA8C(s32);
+s32 Type_ToTableIndex(s32);
 s32 BattleMon_CountMoves(u8* arg0);
 s32 BattleMon_GetMoveIndexChecked();
 typedef struct Move8A201D3C { u8 unk00; u8 unk01; u8 power; u8 type; u8 unk04; u8 unk05; } Move8A201D3C;
@@ -102,7 +102,7 @@ void MonSummary_DrawMoveBackdrop(s32 x, s32 y, u8* image) {
 }
 
 void MonSummary_DrawMoveBackdrop(s32, s32, u8*);
-s32 func_8001FA8C(s32);
+s32 Type_ToTableIndex(s32);
 extern Color_RGBA8 D_8A203424;
 extern char D_8A21D9B4[];
 extern char D_8A21D9BC[];
@@ -133,7 +133,7 @@ s32 MonSummary_DrawMoveInfo(s32 x, s32 y, s32 mon, s32 slot)
         s32 type_id;
         Entry80066AD8 *type;
         s32 pp;
-        type_id = func_8001FA8C(D_8006B190[move].type);
+        type_id = Type_ToTableIndex(D_8006B190[move].type);
         type = &D_80066AD8[type_id];
         pp = ((((D_8006B190[move].unk04 * 100) / 255) + 2) / 5) * 5;
         func_8001AB6C();
@@ -212,7 +212,7 @@ void MonSummary_InitPageWindow(MonSummaryWindow* window, s32 x, s32 y, s32 mon) 
     for (i = 0; i < count; i++) {
         handle = func_80002BA4(sMoveBackdropPools[i], 0x14800);
         move = BattleMon_GetMoveIndexChecked(mon, i);
-        sMoveBackdrops[i] = func_80017304(handle, sMoveBackdropArchive, func_8001FA8C((move == -2) ? 0 : D_8006B190[move].type), D_8A21DA58, 0x3000);
+        sMoveBackdrops[i] = func_80017304(handle, sMoveBackdropArchive, Type_ToTableIndex((move == -2) ? 0 : D_8006B190[move].type), D_8A21DA58, 0x3000);
     }
 }
 

@@ -152,7 +152,7 @@ void Registration_LoadRegisteredTeams(ByteMatrix* table) {
 
 s32 func_80021894(s32);
 s32 GbSave_GetTrainerId(s32 arg0);
-void func_80022D84(s32, u8*);
+void GbSave_GetPlayerName(s32, u8*);
 /**
  * Reads the party of each Game Boy cartridge in the four Transfer Paks (deck 0x20).
  * Seen in play (2026-11-12): ポケモンを とうろくする listed the 1P cartridge's party.
@@ -172,7 +172,7 @@ void Registration_LoadGbTeams(ByteMatrix* table) {
         func_80027410(&p->mons, p->monBuffer, sizeof(TeamMonSlot), 6, 0);
         Registration_ReadTeam(p->source, p->pak, p->slot, &p->mons);
         p->trainerId = GbSave_GetTrainerId(p->pak);
-        func_80022D84(p->pak, p->name);
+        GbSave_GetPlayerName(p->pak, p->name);
         p++;
     }
     table->count = p - (RegisteredTeam*)table->rows;

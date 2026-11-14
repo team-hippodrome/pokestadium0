@@ -4238,12 +4238,12 @@ func_8001FCC0,0x8001FCC0,src/gb_data.c,Text_UntranscodeFixedName,s1,stadium1:src
 func_8001FD00,0x8001FD00,src/gb_data.c,Text_CopyString,s1,,c
 func_8001FD8C,0x8001FD8C,src/gb_data.c,Text_CopySpeciesName,s1,stadium1:src/gb_data.c (VERSION_JP),c
 func_8001FDC8,0x8001FDC8,src/gb_data.c,Text_GetTmHmName,s1,stadium1:src/gb_data.c (VERSION_JP),c
-func_8001FE84,0x8001FE84,src/gb_data.c,func_8001FE84,m2c,m2c,c
+func_8001FE84,0x8001FE84,src/gb_data.c,Pokemon_FromGbRecord,m2c,m2c,c
 func_8001FF74,0x8001FF74,src/gb_data.c,Pokemon_FromGbRecordExt,s1,stadium1:src/gb_data.c (VERSION_JP),c
 func_8001FFE8,0x8001FFE8,src/gb_data.c,Pokemon_ToGbRecord,m2c,m2c,c
 func_800200D4,0x800200D4,src/gb_data.c,Pokemon_ToGbRecordExt,s1,stadium1:src/gb_data.c (VERSION_JP),c
 func_80020148,0x80020148,src/gb_data.c,StatExpSqrt,s1,stadium1:src/gb_data.c (VERSION_JP),c
-func_80020188,0x80020188,src/gb_data.c,func_80020188,s1,stadium1:src/gb_data.c (VERSION_JP),c
+func_80020188,0x80020188,src/gb_data.c,GbData_UnusedStub,s1,stadium1:src/gb_data.c (VERSION_JP),c
 func_80020190,0x80020190,src/gb_data.c,GetPokemonDV,s1,stadium1:src/gb_data.c,c
 func_80020234,0x80020234,src/gb_data.c,CalculateStatValue,s1,stadium1:src/gb_data.c,c
 func_800203FC,0x800203FC,src/gb_data.c,Pokemon_RecalcStats,s1,stadium1:src/gb_data.c,c
@@ -4252,10 +4252,10 @@ func_8002057C,0x8002057C,src/gb_data.c,Pokemon_ExpForLevel,s1,stadium1:src/gb_da
 func_80020784,0x80020784,src/gb_data.c,Pokemon_LevelFromExp,s1,stadium1:src/pokemon_stats.c,c
 func_800207F8,0x800207F8,src/gb_data.c,Pokemon_PrepareBattleMon,s1,stadium1:src/pokemon_stats.c,c
 func_80020974,0x80020974,src/gb_data.c,Move_GetIdFromTableIndex,s1,stadium1:src/pokemon_stats.c,c
-func_80020984,0x80020984,src/gb_data.c,func_80020984,s1,stadium1:src/pokemon_stats.c,c
+func_80020984,0x80020984,src/gb_data.c,Species_ToInternalIndex,s1,stadium1:src/pokemon_stats.c,c
 func_80020994,0x80020994,src/gb_data.c,Species_FromInternalIndex,s1,stadium1:src/pokemon_stats.c,c
-func_800209A4,0x800209A4,src/gb_data.c,func_800209A4,m2c,m2c,c
-func_800209B4,0x800209B4,src/gb_data.c,func_800209B4,m2c,m2c,c
+func_800209A4,0x800209A4,src/gb_data.c,Species_GetKanaOrderEntry,m2c,m2c,c
+func_800209B4,0x800209B4,src/gb_data.c,Species_GetAltOrderEntry,m2c,m2c,c
 func_800209C4,0x800209C4,src/gb_data.c,Deck_InitializeSaveBackend,s1,stadium1:src/pokemon_stats.c,c
 func_80020A5C,0x80020A5C,src/gb_data.c,Deck_InitializeBoxBackend,s1,stadium1:src/pokemon_stats.c,c
 func_80020AFC,0x80020AFC,src/gb_data.c,Deck_Open,s1,stadium1:src/pokemon_stats.c,c
@@ -5181,9 +5181,9 @@ func_800194A8,0x800194A8,src/poke_icon_2.c,PokeIcon_UpdatePreview,s1,stadium1:sr
 func_80019564,0x80019564,src/poke_icon_2.c,PokeIcon_DrawPreview,s1,stadium1:src/poke_icon.c,c
 func_800196F8,0x800196F8,src/poke_icon_2.c,PokeIcon_RenderPreview,hand,,c
 func_8001FA30,0x8001FA30,src/pokemon_lab_support.c,LabPC_StatusToIconIndex,s1,stadium1:src/fragments/pokemon_lab_support/pokemon_lab_support.c,c
-func_8001FA8C,0x8001FA8C,src/pokemon_lab_support.c,func_8001FA8C,m2c,m2c+permuter,c
+func_8001FA8C,0x8001FA8C,src/pokemon_lab_support.c,Type_ToTableIndex,m2c,m2c+permuter,c
 func_80020C60,0x80020C60,src/pokemon_stats.c,Deck_CloseAndFlush,s1,stadium1:src/pokemon_stats.c,c
-func_80020CC8,0x80020CC8,src/pokemon_stats.c,func_80020CC8,m2c,m2c,c
+func_80020CC8,0x80020CC8,src/pokemon_stats.c,Counter_SetIfAtMostMax,m2c,m2c,c
 func_80020CE4,0x80020CE4,src/pokemon_stats.c,Deck_ReadEntries,s1,stadium1:src/pokemon_stats.c,c
 func_80020DF0,0x80020DF0,src/pokemon_stats.c,Deck_WriteEntries,s1,stadium1:src/pokemon_stats.c,c
 func_80020F40,0x80020F40,src/pokemon_stats_2.c,GbSave_HasPlayerNameMarker,s1,stadium1:src/pokemon_stats.c (VERSION_JP),c
@@ -5193,7 +5193,7 @@ func_800210AC,0x800210AC,src/pokemon_stats_2.c,GbSave_VerifyWriteback,s1,stadium
 func_80021100,0x80021100,src/pokemon_stats_2.c,GbCart_IdentifyGame,hand,,c
 func_800211C4,0x800211C4,src/pokemon_stats_2.c,GbSave_CheckMainDataUnchanged,hand,,c
 func_80021248,0x80021248,src/pokemon_stats_2.c,GbSave_ReadMainData,hand,,c
-func_80021334,0x80021334,src/pokemon_stats_2.c,func_80021334,m2c,m2c,c
+func_80021334,0x80021334,src/pokemon_stats_2.c,GbSave_WriteMainDataWithRetry,m2c,m2c,c
 func_80021410,0x80021410,src/pokemon_stats_2.c,GbSave_WriteMainDataChecksum,hand,,c
 func_800214F0,0x800214F0,src/pokemon_stats_2.c,GbSave_ReadBoxBank,hand,,c
 func_80021570,0x80021570,src/pokemon_stats_2.c,GbSave_WriteBoxBank,hand,,c
@@ -5206,7 +5206,7 @@ func_80021A8C,0x80021A8C,src/pokemon_stats_2.c,GbSave_LoadPort,hand,,c
 func_80021B30,0x80021B30,src/pokemon_stats_2.c,GbSave_PollCartRemoval,hand,,c
 func_80021C6C,0x80021C6C,src/pokemon_stats_2.c,GbSave_ForceReloadPort,hand,,c
 func_80021CF4,0x80021CF4,src/pokemon_stats_2.c,GbSave_ScanAllPorts,hand,,c
-func_80021E64,0x80021E64,src/pokemon_stats_2.c,func_80021E64,hand,,c
+func_80021E64,0x80021E64,src/pokemon_stats_2.c,GbSave_InitializeBoxesAndWrite,hand,,c
 func_80021F50,0x80021F50,src/pokemon_stats_2.c,GbSave_WriteBoxBanks,hand,,c
 func_80021FF4,0x80021FF4,src/pokemon_stats_2.c,GbSave_CommitMainData,hand,,c
 func_8002207C,0x8002207C,src/pokemon_stats_2.c,GbSave_RebuildAndWriteSave,hand,,c
@@ -5235,18 +5235,18 @@ func_80022C40,0x80022C40,src/pokemon_stats_2.c,GbSave_CopyPlayerIdentity,hand,,c
 func_80022C70,0x80022C70,src/pokemon_stats_2.c,GbSave_GetTrainerId,m2c,m2c,c
 func_80022CC4,0x80022CC4,src/pokemon_stats_2.c,GbSave_SetTrainerId,hand,,c
 func_80022D18,0x80022D18,src/pokemon_stats_2.c,GbSave_GetBoxCount,hand,,c
-func_80022D84,0x80022D84,src/pokemon_stats_2.c,func_80022D84,m2c,m2c+permuter,c
-func_80022DDC,0x80022DDC,src/pokemon_stats_2.c,func_80022DDC,m2c,m2c,c
-func_80022E30,0x80022E30,src/pokemon_stats_2.c,func_80022E30,m2c,m2c+permuter,c
-func_80022E88,0x80022E88,src/pokemon_stats_2.c,func_80022E88,m2c,m2c,c
+func_80022D84,0x80022D84,src/pokemon_stats_2.c,GbSave_GetPlayerName,m2c,m2c+permuter,c
+func_80022DDC,0x80022DDC,src/pokemon_stats_2.c,GbSave_SetPlayerName,m2c,m2c,c
+func_80022E30,0x80022E30,src/pokemon_stats_2.c,GbSave_GetRivalName,m2c,m2c+permuter,c
+func_80022E88,0x80022E88,src/pokemon_stats_2.c,GbSave_SetRivalName,m2c,m2c,c
 func_80022EDC,0x80022EDC,src/pokemon_stats_2.c,GbSave_SavedAtPokemonCenter,s1,stadium1:src/pokemon_stats.c,c
 func_80022F00,0x80022F00,src/pokemon_stats_2.c,GbSave_HasPokedex,m2c,m2c,c
-func_80022F48,0x80022F48,src/pokemon_stats_2.c,func_80022F48,m2c,m2c,c
+func_80022F48,0x80022F48,src/pokemon_stats_2.c,GbSave_UnusedTestFlag513,m2c,m2c,c
 func_80022F90,0x80022F90,src/pokemon_stats_2.c,GbSave_CopyPortSnapshot,hand,,c
 func_8002302C,0x8002302C,src/pokemon_stats_2.c,GbSave_MarkSpeciesHeld,hand,,c
 func_800230C4,0x800230C4,src/pokemon_stats_2.c,GbSave_RebuildHeldSpecies,hand,,c
 func_800231C8,0x800231C8,src/pokemon_stats_2.c,GbSave_GetSpeciesProgressLevel,hand,,c
-func_80023268,0x80023268,src/pokemon_stats_2.c,func_80023268,hand,,c
+func_80023268,0x80023268,src/pokemon_stats_2.c,GbSave_SetSeenOwnedBits,hand,,c
 func_800233AC,0x800233AC,src/pokemon_stats_2.c,GbSave_CountSeenSpecies,hand,,c
 func_800234EC,0x800234EC,src/pokemon_stats_2.c,GbSave_CountOwnedSpecies,hand,,c
 func_8002362C,0x8002362C,src/pokemon_stats_2.c,GbSave_CountHeldSpecies,hand,,c

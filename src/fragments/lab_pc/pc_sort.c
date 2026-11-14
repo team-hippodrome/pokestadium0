@@ -1004,7 +1004,6 @@ void PcSort_DrawScreen(PcSortScreen* screen) {
     }
 }
 
-M2C_UNK func_80023268(s32, u8, M2C_UNK);            /* extern */
 extern s32 D_89019108;
 
 /**
@@ -1021,7 +1020,7 @@ void PcSort_MarkListInPokedex(ByteMatrix* table) {
     var_s1 = 0;
     if (table->count > 0) {
         do {
-            func_80023268(D_89019108, *var_s0, 3);
+            GbSave_SetSeenOwnedBits(D_89019108, *var_s0, 3);
             var_s1 += 1;
             var_s0 += 0x50;
         } while (var_s1 < table->count);

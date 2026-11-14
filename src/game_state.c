@@ -229,7 +229,6 @@ typedef struct { u8 b[3]; } Unk3Bytes;
 typedef struct { u8 b[11]; } Unk11Bytes;
 M2C_UNK func_8000A460(M2C_UNK *, M2C_UNK *);
 s32 GbSave_GetTrainerId(s32 arg0);
-M2C_UNK func_80022D84(s16, M2C_UNK *);
 extern s16 gActiveGbPort;
 extern M2C_UNK D_8007B7C0;
 extern M2C_UNK D_8007B7C4;
@@ -251,7 +250,7 @@ void Session_InitContinueTrainer(s32 isGbTeam)
   if ((isGbTeam != 0) && (gActiveGbPort == 0))
   {
     st->trainerSlots[0].trainerId = GbSave_GetTrainerId(gActiveGbPort);
-    func_80022D84(gActiveGbPort, (M2C_UNK *) st->trainerSlots[0].trainerName);
+    GbSave_GetPlayerName(gActiveGbPort, (M2C_UNK *) st->trainerSlots[0].trainerName);
   }
   else
   {
@@ -526,7 +525,7 @@ extern u8 D_00235D70[];
 extern u8 D_00238BD0[];
 extern StageContext *D_800AF9A4;
 s32 GbSave_LoadPort(s32 arg0);
-s32 func_80021E64(s32);
+s32 GbSave_InitializeBoxesAndWrite(s32);
 void GbSave_ValidateBeforeWrite(s32);
 void GbSave_RequirePakPresent(s32);
 u8 GbSave_GetSaveState(s32 arg0);
@@ -581,7 +580,7 @@ void State_MainMenu(void)
         if (GbSave_GetBoxCount(gActiveGbPort) == 0)
         {
           GbSave_ValidateBeforeWrite(gActiveGbPort);
-          while (func_80021E64(gActiveGbPort) == 0)
+          while (GbSave_InitializeBoxesAndWrite(gActiveGbPort) == 0)
           {
             Save_RunGbReportErrorScreen(gActiveGbPort);
           }

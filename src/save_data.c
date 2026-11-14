@@ -300,7 +300,6 @@ s32 Save_GetBuffer(void) {
 }
 
 M2C_UNK func_8001FB10(s32, s32);                    /* extern */
-M2C_UNK func_8001FE84();                            /* extern */
 M2C_UNK func_800203FC(s32);                         /* extern */
 M2C_UNK func_80058410(s32, s32, M2C_UNK);           /* extern */
 
@@ -312,7 +311,7 @@ void BattleMon_FromGbSaveRecord(s32 arg0, s32 arg1) {
     s32 sp24;
     s32 temp_a0;
 
-    func_8001FE84();
+    Pokemon_FromGbRecord((BattleMon*)arg0, (GbPokemonRecord*)arg1);
     func_800203FC(arg0);
     temp_a0 = (s32)((SaveMonRecord*)arg1)->otName;
     sp24 = temp_a0;
@@ -715,10 +714,10 @@ void Deck_SetSaveEntryTrainerIdAndName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u
                 rec->trainerId = arg4;
             }
             if (arg3 != 0) {
-                func_8001FBE4(rec->trainerName, arg3);
+                Text_TranscodeName((char*)rec->trainerName, (char*)arg3);
             }
             if (arg2 != 0) {
-                func_8001FBE4(rec->secondName, arg2);
+                Text_TranscodeName((char*)rec->secondName, (char*)arg2);
             }
             Save_SetTypedRecordFlags(arg0, arg1, 3);
             break;
@@ -729,10 +728,10 @@ void Deck_SetSaveEntryTrainerIdAndName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u
                 rec->trainerId = arg4;
             }
             if (arg3 != 0) {
-                func_8001FBE4(rec->trainerName, arg3);
+                Text_TranscodeName((char*)rec->trainerName, (char*)arg3);
             }
             if (arg2 != 0) {
-                func_8001FBE4(rec->secondName, arg2);
+                Text_TranscodeName((char*)rec->secondName, (char*)arg2);
             }
             Save_SetTypedRecordFlags(arg0, arg1, 3);
             break;
@@ -743,7 +742,7 @@ void Deck_SetSaveEntryTrainerIdAndName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u
                 rec->trainerId = arg4;
             }
             if (arg3 != 0) {
-                func_8001FBE4(rec->trainerName, arg3);
+                Text_TranscodeName((char*)rec->trainerName, (char*)arg3);
             }
             Save_SetTypedRecordFlags(arg0, arg1, 3);
             break;

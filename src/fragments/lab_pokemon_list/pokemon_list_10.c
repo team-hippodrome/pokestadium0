@@ -203,7 +203,7 @@ typedef struct LabPCDeck89109D14 {
     /* 0x18 */ char unk18[0x4];
     /* 0x1C */ s32 count;
 } LabPCDeck89109D14; // size = 0x20
-void func_80023268(s32 arg0, s32 arg1, s32 arg2);
+void GbSave_SetSeenOwnedBits(s32 arg0, s32 arg1, s32 arg2);
 
 /* Stadium 1's LabPCList_SaveAllBoxes, with every deck flushed the same way. */
 void LabPCList_SaveDirtyBoxes(LabPCBoxList89109B60* sources) {
@@ -225,7 +225,7 @@ void LabPCList_SaveDirtyBoxes(LabPCBoxList89109B60* sources) {
                 for (x = 0; x < deck->count; x++, node++) {
                     Deck_WriteEntries((*node)->entry, 1, handle);
                     if ((box->unk_04 == 0x20) || (box->unk_04 == 0x21)) {
-                        func_80023268(box->unk_08, (*node)->entry[0], 3);
+                        GbSave_SetSeenOwnedBits(box->unk_08, (*node)->entry[0], 3);
                     }
                 }
                 Deck_CloseAndFlush(handle);

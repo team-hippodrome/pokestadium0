@@ -112,8 +112,8 @@ s32 GbSave_CountHeldSpecies(s32 arg0);
 s32 func_80022B40();                                /* extern */
 s32 func_8002207C(s32);
 
-// functions defined in assembly
-char* GbSave_GetPlayerName(s32 arg0, char* arg1);
+
+s32 GbSave_GetPlayerName(s32 arg0, M2C_UNK arg1); // arg1 is the destination buffer, typed as an integer for the FAKE mask in the definition
 void GbSave_SetSeenOwnedBits(s32 arg0, s32 arg1, s32 arg2);
 
 #endif // POKEMON_STATS_H

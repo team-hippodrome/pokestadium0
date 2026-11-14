@@ -189,7 +189,7 @@ typedef struct {
 
 s32 func_80021894(s32);
 s32 GbSave_GetTrainerId(s32 arg0);
-s32 func_80022D84(s32, void*);
+s32 GbSave_GetPlayerName(s32, void*);
 s32 func_800246A8(s32, s32);
 s32 Deck_GetSaveEntryTrainerId(s32, s32);
 s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2);
@@ -214,7 +214,7 @@ void FreeBattle_LoadGbTeams(RecordList* list) {
         FreeBattle_MarkEmptySlots(rec->slots, FreeBattle_ReadTeam(rec->unk_01, rec->unk_02, rec->unk_03, (TeamMonSlot*)rec->slots));
         rec->slotCount = 6;
         rec->unk_04 = GbSave_GetTrainerId(rec->unk_02);
-        func_80022D84(rec->unk_02, rec->unk08);
+        GbSave_GetPlayerName(rec->unk_02, rec->unk08);
         rec++;
     }
 

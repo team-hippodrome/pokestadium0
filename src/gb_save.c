@@ -1667,7 +1667,7 @@ s32 BattleMon_GetMoveIndexChecked(s32 arg0, s32 arg1) {
     return BattleMon_GetMoveIndex(arg0, arg1);
 }
 
-s32 func_8001FA8C(s32);
+s32 Type_ToTableIndex(s32);
 
 /**
  * Returns the display index of the species' type 1 (`arg1` 0) or type 2 (`arg1` 1); -1 for type 2 of a single-type species.
@@ -1686,7 +1686,7 @@ s32 Pokemon_GetTypeIndex(BattleMon* arg0, s32 arg1) {
     } else {
         type = gSpeciesData[idx].type1;
     }
-    return func_8001FA8C(type);
+    return Type_ToTableIndex(type);
 }
 
 s32 func_80006780();
