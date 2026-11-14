@@ -18,7 +18,7 @@ Where the code lives, after the reorganization. File names are broadly correct g
 | 001 | `src/fragments/unidentified_001/` | 1 | 1 | not identified yet |
 | 002 | `src/fragments/disk_error_screen/` | 1 | 9 | 64DD / disk error screen |
 | 003 | `src/fragments/n64_logo/` | 1 | 5 | N64 logo intro |
-| 004 | `src/fragments/gb_tower_team_prep/` | 1 | 4 | GB Tower team preparation |
+| 004 | `src/fragments/gb_tower_team_prep/` | 1 | 4 | GB mode party icon render (before the GB emulator) |
 | 005 | `src/fragments/battle_order_select/` | 1 | 33 | battle order selection |
 | 006 | `src/fragments/cartridge_check/` | 2 | 40 | Game Boy cartridge check |
 | 007 | `src/fragments/free_battle_setup/` | 5 | 108 | Free Battle setup and rental teams |
@@ -34,13 +34,13 @@ Where the code lives, after the reorganization. File names are broadly correct g
 | 017 | `src/fragments/lab_menu/` | 1 | 6 | Lab menu |
 | 018 | `src/fragments/pokedex/` | 2 | 56 | Pokédex |
 | 019 | `src/fragments/party_summary/` | 2 | 34 | party summary |
-| 020 | `src/fragments/main_menu_launcher/` | 1 | 1 | launches the main menu |
-| 021 | `src/fragments/launcher_relay_021/` | 1 | 1 | launcher relay |
+| 020 | `src/fragments/main_menu_launcher/` | 1 | 1 | queues the main menu; only loaded by 021–024, which nothing loads |
+| 021 | `src/fragments/unused_relay_021/` | 1 | 1 | unused relay that queues the main menu launcher (020); never loaded |
 | 022 | `src/fragments/launcher_relay_022/` | 1 | 1 | launcher relay |
-| 023 | `src/fragments/launcher_relay_023/` | 1 | 1 | launcher relay |
+| 023 | `src/fragments/unused_relay_023/` | 1 | 1 | unused relay that queues the main menu launcher (020); never loaded |
 | 024 | `src/fragments/launcher_relay_024/` | 1 | 1 | launcher relay |
 | 025 | `src/fragments/fatal_error_screen/` | 1 | 6 | fatal error screen |
-| 030 | `src/fragments/geo_model_030/` | 1 | 4 | geo layout callbacks for models |
+| 030 | `src/fragments/pokedex_kanto_map/` | 1 | 4 | 3D Kanto map model for the Pokédex habitat screen |
 | 031 | `src/fragments/particle_data/` | 2 | 8 | particle data |
 | 032 | `src/fragments/geo_model_032/` | 1 | 9 | geo layout callbacks for models |
 | 033 | `src/fragments/geo_model_033/` | 1 | 13 | geo layout callbacks for models |
