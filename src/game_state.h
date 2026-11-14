@@ -127,8 +127,8 @@ typedef struct ExtendedRosterInfo {
     /* 0x000 */ u16 unk_000;
     /* 0x002 */ u8 numberOfPokemonCanBePicked; // size of the team the order screen picks from (battleMon[0..n-1]); 6 for a tournament template team
     /* 0x003 */ u8 trainerIndex; // @unverified: index of the trainer's BinArchive file the VS screen loads (vs_scene); nintendo_cup_teams sets the template index or round + 0x16
-    /* 0x004 */ char title[0x10]; // @unverified: copied from the trainer template's title, e.g. 「ほっかいどう」 (Hokkaido) or 「トレーナー」 (Trainer)
-    /* 0x014 */ char fullName[0x14]; // @unverified: copied from the template's two-line name, e.g. 「むしとり\nしょうねん」 (Bug Catcher)
+    /* 0x004 */ char title[0x10]; // in Free Battle both sides held 「トレーナー」 (Trainer) in play; copied from the trainer template's title, e.g. 「ほっかいどう」 (Hokkaido) or 「トレーナー」 (Trainer)
+    /* 0x014 */ char fullName[0x14]; // in Free Battle it held the trainerName (1P, ＣＯＭ) in play; copied from the template's two-line name, e.g. 「むしとり\nしょうねん」 (Bug Catcher)
     /* 0x028 */ BattleMon battleMon[6];
 } ExtendedRosterInfo; // size = 0x208 (Stadium 1: 0x248)
 
@@ -146,10 +146,10 @@ typedef struct TeamRoster {
 
 // One side of a battle: its trainer(s) (two in a tag battle), the Pokémon model it shows and model load state.
 typedef struct BattleSide {
-    /* 0x00 */ u8 modelFlags; // @unverified: bit 0x80 asks for the side's model to be reloaded, 0x10 is set once it is loaded (owner_animation.c, phases_2.c)
+    /* 0x00 */ u8 modelFlags; // 0x80 asks for the side's model to be reloaded, 0x40 while it is requested, 0x10 once loaded; a switch in play wrote 0x80 (BattleScene_PhaseWithdraw), 0xC0 (Trainer_RequestPokeIcon), 0x10 (PokeIcon_WaitFrameLoadForObject), then 0
     /* 0x01 */ u8 tagTeamSize;
     /* 0x02 */ s16 displayModel;
-    /* 0x04 */ BattleMon* displayMon; // @unverified: party BattleMon whose model the side shows (set with displayModel)
+    /* 0x04 */ BattleMon* displayMon; // party BattleMon whose model the side shows; moved from pokemonPicked[0] to [3] with displayModel 95 to 31 when 1P switched Onix for Nidoqueen
     /* 0x08 */ TeamRoster* teamMember[2];
     /* 0x10 */ ModelLoadContext* unk_10;
     /* 0x14 */ ModelNodeView* loadedModel;
