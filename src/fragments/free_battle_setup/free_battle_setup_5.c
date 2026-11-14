@@ -254,7 +254,7 @@ void FreeBattle_DrawMenuWindow(s8*, s32);
 void FreeBattle_DrawPopupMenu(s8*, s32);
 void func_82007D94(s8*, s32);
 void FreeBattle_DrawOpponentSelect(s8*);
-void func_82006DF8(s8*);
+void func_82006DF8(FreeBattleTeamOpponentWindow*);
 void FreeBattle_DrawCupSelect(s8*, s32);
 void FreeBattle_DrawRentalScreen(s8*);
 void BlinkingTextBox_Draw(s8*);

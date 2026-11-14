@@ -624,18 +624,6 @@ void func_82006AC0(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
     Font_EndTexturedTextRendering();
 }
 
-/* Partial layouts local to this function: only the fields it touches are
- * named, and the names say where they are, not what they mean. */
-typedef struct {
-    u16 h[6];
-} HalfBank6;
-
-typedef struct {
-    u8 pad0[0x70];
-    HalfBank6* bank; /* 0x70 */
-    u8 pad74[0x48];
-    s32 flags;       /* 0xBC */
-} HalfBankOwner;
 
 /*
  * func_82006BB8
@@ -650,24 +638,24 @@ typedef struct {
  * bank pointer is re-read from arg0 for every update because the compiler is
  * not told the stores cannot change it.
  */
-void func_82006BB8(HalfBankOwner* arg0) {
+void func_82006BB8(FreeBattleTeamOpponentWindow* arg0) {
     s32 inv;
 
-    inv = ~arg0->flags;
+    inv = ~arg0->controllerMask;
     if (inv & 2) {
-        arg0->bank->h[0] |= 1;
-        arg0->bank->h[3] |= 1;
-        arg0->bank->h[4] |= 1;
+        arg0->opponentMenu.itemFlags[0] |= 1;
+        arg0->opponentMenu.itemFlags[3] |= 1;
+        arg0->opponentMenu.itemFlags[4] |= 1;
     }
     if (inv & 4) {
-        arg0->bank->h[1] |= 1;
-        arg0->bank->h[3] |= 1;
-        arg0->bank->h[5] |= 1;
+        arg0->opponentMenu.itemFlags[1] |= 1;
+        arg0->opponentMenu.itemFlags[3] |= 1;
+        arg0->opponentMenu.itemFlags[5] |= 1;
     }
     if (inv & 8) {
-        arg0->bank->h[2] |= 1;
-        arg0->bank->h[4] |= 1;
-        arg0->bank->h[5] |= 1;
+        arg0->opponentMenu.itemFlags[2] |= 1;
+        arg0->opponentMenu.itemFlags[4] |= 1;
+        arg0->opponentMenu.itemFlags[5] |= 1;
     }
 }
 
@@ -697,68 +685,68 @@ extern M2C_UNK D_82009FCC;
  * spills them), the unused leading `pad` places the spill slots, and arg5 is stored
  * before the constant 1 so that its load comes first.
  */
-void func_82006C74(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+void func_82006C74(FreeBattleTeamOpponentWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s32 pad; // FAKE: stack padding
-    s8 *sp2C;
-    s8 *sp28;
+    void *sp2C;
+    void *sp28;
     s32 var_v1;
 
-    Window_SetRect(arg0 + 4, arg1, arg2, 0x192, 0x163);
-    M2C_FIELD(arg0, s32 *, 0x28) = 0;
-    M2C_FIELD(arg0, s32 *, 0x2C) = 0;
-    M2C_FIELD(arg0, s32 *, 0x18) = 0x801;
-    M2C_FIELD(arg0, M2C_UNK **, 0x24) = &D_82009FCC;
-    sp2C = arg0 + 0x30;
+    Window_SetRect(&arg0->window, arg1, arg2, 0x192, 0x163);
+    arg0->window.animTimer = 0;
+    arg0->window.state = 0;
+    arg0->window.frame.style = 0x801;
+    arg0->window.title = &D_82009FCC;
+    sp2C = &arg0->sideItemList;
     func_80027804(sp2C, (s32)&D_82009190, 4, 4);
-    sp28 = arg0 + 0x48;
-    Menu_Init(sp28, sp2C, arg0 + 0x90, (void (*)(s32, s32, char *, s32, s32, s32 *))func_82006AC0, 0x74, 0x1C);
-    sp2C = arg0 + 0x3C;
-    M2C_FIELD(arg0, s32 *, 0x68) = (s32) (M2C_FIELD(arg0, s32 *, 0x68) | 0x10000);
+    sp28 = &arg0->sideMenu;
+    Menu_Init(sp28, sp2C, &arg0->sideItemFlags, (void (*)(s32, s32, char *, s32, s32, s32 *))func_82006AC0, 0x74, 0x1C);
+    sp2C = &arg0->opponentItemList;
+    arg0->sideMenu.options = (s32) (arg0->sideMenu.options | 0x10000);
     func_80027804(sp2C, (s32)&D_820091A0, 7, 7);
-    Menu_Init(arg0 + 0x6C, sp2C, arg0 + 0x98, (void (*)(s32, s32, char *, s32, s32, s32 *))func_82006AC0, 0x74, 0x1C);
-    M2C_FIELD(arg0, s32 *, 0x8C) = (s32) (M2C_FIELD(arg0, s32 *, 0x8C) | 0x10000);
-    M2C_FIELD(arg0, s32 *, 0xBC) = arg3;
+    Menu_Init(&arg0->opponentMenu, sp2C, &arg0->opponentItemFlags, (void (*)(s32, s32, char *, s32, s32, s32 *))func_82006AC0, 0x74, 0x1C);
+    arg0->opponentMenu.options = (s32) (arg0->opponentMenu.options | 0x10000);
+    arg0->controllerMask = arg3;
     var_v1 = ~arg3;
     if (arg4 == 2) {
         var_v1 |= 0xE;
     }
     if (var_v1 & 2) {
-        M2C_FIELD(M2C_FIELD(arg0, void **, 0x4C), u16 *, 2) |= 1;
+        arg0->sideMenu.itemFlags[1] |= 1;
     }
     if (var_v1 & 4) {
-        M2C_FIELD(M2C_FIELD(arg0, void **, 0x4C), u16 *, 4) |= 1;
+        arg0->sideMenu.itemFlags[2] |= 1;
     }
     if (var_v1 & 8) {
-        M2C_FIELD(M2C_FIELD(arg0, void **, 0x4C), u16 *, 6) |= 1;
+        arg0->sideMenu.itemFlags[3] |= 1;
     }
-    func_82006BB8((HalfBankOwner*)arg0);
-    M2C_FIELD(arg0, s32 *, 0xC4) = arg5;
-    M2C_FIELD(arg0, s32 *, 0) = 1;
+    func_82006BB8(arg0);
+    arg0->unk_C4 = arg5;
+    arg0->focus = 1;
 }
 
 
-void func_82006DF8(s8* arg0) {
+void func_82006DF8(FreeBattleTeamOpponentWindow* arg0) {
     s32 maskB = 0xFED, maskA = 0xFED;
     s32 pad[1]; // FAKE: stack padding
     s32 markA = 0;
     s32 markB = 0;
 
-    if (func_8002AE6C(arg0 + 4) == 0) {
-        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8) + 0x92, M2C_FIELD(arg0, s32*, 0xC), &D_8007356C);
+    if (func_8002AE6C(&arg0->window) == 0) {
+        Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->window.frame.y + 0x92, arg0->window.frame.width, &D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x99, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0xC4, *(Color82001CCC*)&D_82009100);
-        Ui_DrawImageInStrips(D_8200910C, M2C_FIELD(arg0, s32*, 4) + 0xA9, M2C_FIELD(arg0, s32*, 8) + 0xF9);
-        if (M2C_FIELD(arg0, s32*, 0) != 0) {
-            if (M2C_FIELD(arg0, s32*, 0) == 1) {
+        func_80029028(arg0->window.frame.x + 6, arg0->window.frame.y + 0x99, arg0->window.frame.width - 0xC, 0xC4, *(Color82001CCC*)&D_82009100);
+        Ui_DrawImageInStrips(D_8200910C, arg0->window.frame.x + 0xA9, arg0->window.frame.y + 0xF9);
+        if (arg0->focus != 0) {
+            if (arg0->focus == 1) {
                 maskB = 0xFEF;
             }
         } else {
             maskB = 0xFFD;
             maskA = 0xFEF;
         }
-        Menu_DrawItems(arg0 + 0x48, M2C_FIELD(arg0, s32*, 4) + 0x22, M2C_FIELD(arg0, s32*, 8) + 0xD1, maskB, NULL);
-        Menu_DrawItems(arg0 + 0x6C, M2C_FIELD(arg0, s32*, 4) + 0xFC, M2C_FIELD(arg0, s32*, 8) + 0x99, maskA, NULL);
-        switch (M2C_FIELD(arg0, s32*, 0x50)) {
+        Menu_DrawItems(&arg0->sideMenu, arg0->window.frame.x + 0x22, arg0->window.frame.y + 0xD1, maskB, NULL);
+        Menu_DrawItems(&arg0->opponentMenu, arg0->window.frame.x + 0xFC, arg0->window.frame.y + 0x99, maskA, NULL);
+        switch ((u32)arg0->sideMenu.cursor) {
             case 0:
                 markA = 1;
                 break;
@@ -772,8 +760,8 @@ void func_82006DF8(s8* arg0) {
                 markA = 9;
                 break;
         }
-        if (M2C_FIELD(arg0, s32*, 0) == 0) {
-            switch (M2C_FIELD(arg0, u32*, 0x74)) {
+        if (arg0->focus == 0) {
+            switch ((u32)arg0->opponentMenu.cursor) {
                 case 0:
                     markB = 2;
                     break;
@@ -794,7 +782,7 @@ void func_82006DF8(s8* arg0) {
                     break;
             }
         }
-        FreeBattle_DrawControllerPanel(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xBC), M2C_FIELD(arg0, s32*, 0xC4), markA, markB);
+        FreeBattle_DrawControllerPanel(arg0->window.frame.x + 6, arg0->window.frame.y + 6, arg0->controllerMask, arg0->unk_C4, markA, markB);
     }
 }
 
@@ -802,75 +790,75 @@ void Menu_ClearItemFlags(u8*, void*);
 // The seven result cases were one macro in the original: IDO only schedules
 // these three stores the way the ROM does when they share a source line.
 #define SET_PAIR_82007030(owner, first, second, count) \
-    M2C_FIELD(owner, u32*, 0xB0) = (first); M2C_FIELD(owner, u32*, 0xB4) = (second); M2C_FIELD(owner, u32*, 0xB8) += (count)
+    (owner)->players[2] = (first); (owner)->players[3] = (second); (owner)->playerCount += (count)
 
-s32 func_82007030(void* arg0) {
+s32 func_82007030(FreeBattleTeamOpponentWindow* arg0) {
     s32 result = 0;
     u32 res;
 
-    if ((M2C_FIELD(arg0, u32*, 0x2C) != 1) && (M2C_FIELD(arg0, u32*, 0x2C) != 2)) {
+    if (((u32)arg0->window.state != 1) && ((u32)arg0->window.state != 2)) { // the ROM compares these unsigned
         return 0;
     }
-    switch (M2C_FIELD(arg0, u32*, 0)) {
+    switch (arg0->focus) {
         case 1:
-            if (Menu_UpdateCursorSkipDisabled((u8*)arg0 + 0x48, arg0) == 0) {
+            if (Menu_UpdateCursorSkipDisabled((u8*)&arg0->sideMenu, arg0) == 0) {
                 res = func_8002BC14(D_800603C0);
                 if (res == -1) {
                     func_8003F6AC(3);
                     result = -1;
                 } else if (res == 1) {
                     func_8003F6AC(2);
-                    M2C_FIELD(arg0, u32*, 0) = 0;
-                    switch (M2C_FIELD(arg0, u32*, 0x50)) {
+                    arg0->focus = 0;
+                    switch ((u32)arg0->sideMenu.cursor) {
                         case 0:
-                            M2C_FIELD(arg0, u32*, 0xA8) = 1;
-                            M2C_FIELD(arg0, u32*, 0xAC) = 0;
-                            M2C_FIELD(arg0, u32*, 0xB8) = 1;
+                            arg0->players[0] = 1;
+                            arg0->players[1] = 0;
+                            arg0->playerCount = 1;
                             break;
                         case 1:
-                            M2C_FIELD(arg0, u32*, 0xA8) = 1;
-                            M2C_FIELD(arg0, u32*, 0xAC) = 2;
-                            M2C_FIELD(arg0, u32*, 0xB8) = 2;
-                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 0) |= 1;
-                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 6) |= 1;
-                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 8) |= 1;
-                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 0xC) |= 1;
+                            arg0->players[0] = 1;
+                            arg0->players[1] = 2;
+                            arg0->playerCount = 2;
+                            arg0->opponentMenu.itemFlags[0] |= 1;
+                            arg0->opponentMenu.itemFlags[3] |= 1;
+                            arg0->opponentMenu.itemFlags[4] |= 1;
+                            arg0->opponentMenu.itemFlags[6] |= 1;
                             break;
                         case 2:
-                            M2C_FIELD(arg0, u32*, 0xA8) = 1;
-                            M2C_FIELD(arg0, u32*, 0xAC) = 3;
-                            M2C_FIELD(arg0, u32*, 0xB8) = 2;
-                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 2) |= 1;
-                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 6) |= 1;
-                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 0xA) |= 1;
-                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 0xC) |= 1;
+                            arg0->players[0] = 1;
+                            arg0->players[1] = 3;
+                            arg0->playerCount = 2;
+                            arg0->opponentMenu.itemFlags[1] |= 1;
+                            arg0->opponentMenu.itemFlags[3] |= 1;
+                            arg0->opponentMenu.itemFlags[5] |= 1;
+                            arg0->opponentMenu.itemFlags[6] |= 1;
                             break;
                         case 3:
-                            M2C_FIELD(arg0, u32*, 0xA8) = 1;
-                            M2C_FIELD(arg0, u32*, 0xAC) = 4;
-                            M2C_FIELD(arg0, u32*, 0xB8) = 2;
-                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 4) |= 1;
-                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 8) |= 1;
-                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 0xA) |= 1;
-                            M2C_FIELD(M2C_FIELD(arg0, void**, 0x70), u16*, 0xC) |= 1;
+                            arg0->players[0] = 1;
+                            arg0->players[1] = 4;
+                            arg0->playerCount = 2;
+                            arg0->opponentMenu.itemFlags[2] |= 1;
+                            arg0->opponentMenu.itemFlags[4] |= 1;
+                            arg0->opponentMenu.itemFlags[5] |= 1;
+                            arg0->opponentMenu.itemFlags[6] |= 1;
                             break;
                     }
-                    M2C_FIELD(arg0, u32*, 0x74) = 0;
-                    Menu_SkipDisabledForward((s8*)arg0 + 0x6C, (s32)arg0);
+                    arg0->opponentMenu.cursor = 0;
+                    Menu_SkipDisabledForward((s8*)&arg0->opponentMenu, (s32)arg0);
                 }
             }
             break;
         case 0:
-        if (Menu_UpdateCursorSkipDisabled((u8*)arg0 + 0x6C, arg0) == 0) {
+        if (Menu_UpdateCursorSkipDisabled((u8*)&arg0->opponentMenu, arg0) == 0) {
             res = func_8002BC14(D_800603C0);
             if (res == -1) {
                 func_8003F6AC(3);
-                M2C_FIELD(arg0, u32*, 0) = 1;
-                Menu_ClearItemFlags((u8*)arg0 + 0x6C, arg0);
-                func_82006BB8((HalfBankOwner*)arg0);
+                arg0->focus = 1;
+                Menu_ClearItemFlags((u8*)&arg0->opponentMenu, arg0);
+                func_82006BB8(arg0);
             } else if (res == 1) {
                 func_8003F6AC(2);
-                switch (M2C_FIELD(arg0, u32*, 0x74)) {
+                switch ((u32)arg0->opponentMenu.cursor) {
                     case 0:
                         SET_PAIR_82007030(arg0, 2, 0, 1);
                         break;

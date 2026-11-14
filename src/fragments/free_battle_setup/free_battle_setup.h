@@ -78,6 +78,26 @@ typedef struct FreeBattleOpponentWindow {
     /* 0x70 */ s32 unk_70; // passed to FreeBattle_DrawControllerPanel as `active`
 } FreeBattleOpponentWindow; // size = 0x74
 
+/* The opponent select window with partners, 「あいてをせんたく」 (Choose your opponent) with two
+ * menus (func_82006C74): your side (1P, 1P&2P, 1P&3P, 1P&4P), then the other side (2P, 3P, 4P,
+ * 2P&3P, 2P&4P, 3P&4P, COM). */
+typedef struct FreeBattleTeamOpponentWindow {
+    /* 0x00 */ u32 focus; // @unverified: 1 while the side menu has the cursor, 0 for the opponent menu (func_82007030)
+    /* 0x04 */ Window window;
+    /* 0x30 */ PointerList sideItemList; // D_82009190
+    /* 0x3C */ PointerList opponentItemList; // D_820091A0
+    /* 0x48 */ Menu sideMenu;
+    /* 0x6C */ Menu opponentMenu;
+    /* 0x90 */ u16 sideItemFlags[4];
+    /* 0x98 */ u16 opponentItemFlags[7];
+    /* 0xA6 */ char padA6[0x2];
+    /* 0xA8 */ u32 players[4]; // @unverified: [0] [1] your side, [2] [3] the other side: 1-4 = 1P-4P, 5 = COM, 0 = nobody
+    /* 0xB8 */ u32 playerCount; // @unverified: players in use, 2 to 4
+    /* 0xBC */ s32 controllerMask; // @unverified: as FreeBattleOpponentWindow.controllerMask; clear bits disable the matching options
+    /* 0xC0 */ char unkC0[0x4];
+    /* 0xC4 */ s32 unk_C4; // passed to FreeBattle_DrawControllerPanel as `active`
+} FreeBattleTeamOpponentWindow; // size = 0xC8
+
 /* Struct types that were defined identically in each of these files; this is
  * now the one definition they all include:
  * src/fragments/fragment007_166580.c
