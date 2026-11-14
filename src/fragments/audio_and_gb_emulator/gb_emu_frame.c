@@ -28,13 +28,7 @@ extern s32 D_81156550;
 extern u8 D_8111E308;
 void func_81103C40(s32, u8*, s32, s32, s32);
 extern s8 D_811565A2;
-typedef struct Screen81104930 {
-    /* 0x00 */ u8 unk_00[0x4C];
-    /* 0x4C */ s32 framebuffer;
-    /* 0x50 */ u8 unk_50[4];
-    /* 0x54 */ s32 colorIndex;
-} Screen81104930;
-extern Screen81104930 D_81156540;
+extern GbEmuState D_81156540;
 extern u8 D_811565A0;
 void func_80058410(void*, void*, s32);
 extern s32 D_81154C48;
@@ -45,24 +39,6 @@ void func_81104618(s32 arg0);
 void func_811047A0(s32 arg0);
 void func_81104930(void);
 
-typedef struct GbEmuRunState {
-    /* 0x00 */ u8 unk_00[6];
-    /* 0x06 */ u8 unk_06;
-    /* 0x07 */ u8 unk_07[5];
-    /* 0x0C */ u16 gbPc; // GB program counter saved when the core stops (seen in play)
-    /* 0x0E */ u8 unk_0E[2];
-    /* 0x10 */ u8* mem;
-    /* 0x14 */ u8 unk_14[8];
-    /* 0x1C */ u8* rom; // cartridge ROM buffer (seen in play)
-    /* 0x20 */ u8 unk_20[4];
-    /* 0x24 */ u32 buttons;
-    /* 0x28 */ u8 unk_28[0x1C];
-    /* 0x44 */ s32 unk_44;
-    /* 0x48 */ u8* unk_48;
-    /* 0x4C */ s32 unk_4C;
-    /* 0x50 */ s32 unk_50;
-    /* 0x54 */ s32 unk_54;
-} GbEmuRunState;
 
 typedef struct GbEmuTask {
     /* 0x00 */ u32 type;
@@ -82,7 +58,7 @@ typedef struct GbEmuTask {
     /* 0x38 */ s32 unk_38;
 } GbEmuTask;
 
-#define GB_RUN ((GbEmuRunState*)&D_81156540)
+#define GB_RUN (&D_81156540)
 #define GB_MEM (GB_RUN->mem)
 
 extern volatile u8 D_81156475;
@@ -219,7 +195,7 @@ s32 GbEmu_UpdateFrame(void) {
                             break;
                     }
                     GB_MEM[0x101B9] = btn;
-                    func_81104618(GB_RUN->unk_4C);
+                    func_81104618(GB_RUN->framebuffer);
                 }
             }
         } else if (D_811561C8[D_811565A0].error != 0) {
@@ -258,7 +234,7 @@ s32 GbEmu_UpdateFrame(void) {
     if (status == 0) {
         count = GB_MEM[0x101B9];
         if ((GB_MEM[0x1017D] == 0) && (GB_MEM[0x10181] == 0) && (GB_MEM[0xFF40] & 0x80) &&
-            ((count != 1) || (GB_RUN->unk_54 != 3))) {
+            ((count != 1) || (GB_RUN->colorIndex != 3))) {
             i = GB_MEM[0x101D1];
             if (i == 0) {
                 if (GB_MEM[0x101CD] != 0) {

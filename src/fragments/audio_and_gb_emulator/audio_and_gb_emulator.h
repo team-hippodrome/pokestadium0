@@ -365,6 +365,31 @@ typedef union GbApuMesg {
     GbApuWrite write;
 } GbApuMesg;
 
+// The Game Boy emulator core's state (D_81156540). Merges Screen81104930 (gb_emu_draw.c and
+// gb_emu_frame.c) and GbEmuRunState (gb_emu_frame.c), three views of the same variable.
+typedef struct GbEmuState {
+    /* 0x00 */ u8 unk_00[6];
+    /* 0x06 */ u8 unk_06; // set to 1 around the core start in GbEmu_LoadCartridge, cleared in GbEmu_UpdateFrame
+    /* 0x07 */ u8 unk_07;
+    /* 0x08 */ u8 unk_08[4];
+    /* 0x0C */ u16 gbPc; // GB program counter saved when the core stops (seen in play); 0 after the boot ROM is patched in
+    /* 0x0E */ u8 unk_0E[2];
+    /* 0x10 */ u8* mem; // @unverified: 0x27F80-byte GB address space and emulator tables (GbEmu_LoadCartridge); 0xFF42 is SCY
+    /* 0x14 */ u8 unk_14[8];
+    /* 0x1C */ u8* rom; // cartridge ROM buffer (seen in play)
+    /* 0x20 */ u8* sram; // @unverified: cartridge RAM buffer, sramSize bytes (GbEmu_LoadCartridge)
+    /* 0x24 */ u32 buttons;
+    /* 0x28 */ u8 unk_28[0x10];
+    /* 0x38 */ s32 unk_38;
+    /* 0x3C */ u32 romSize; // @unverified: 0x80000 or 0x100000 from GbPakChannel.romSize (GbEmu_LoadCartridge)
+    /* 0x40 */ u32 sramSize; // @unverified: 0x8000 (GbEmu_LoadCartridge)
+    /* 0x44 */ u8* unk_44;
+    /* 0x48 */ u8* unk_48;
+    /* 0x4C */ s32 framebuffer;
+    /* 0x50 */ u8* unk_50;
+    /* 0x54 */ s32 colorIndex;
+} GbEmuState; // size = 0x58
+
 // One Transfer Pak channel of the Game Boy emulator (D_811561C8[4]). Merges the three identical
 // copies that gb_emu_draw.c, gb_emu_frame.c and gb_pak.c had.
 typedef struct GbPakChannel {
