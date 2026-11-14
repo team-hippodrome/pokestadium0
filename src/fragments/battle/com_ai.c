@@ -216,21 +216,21 @@ s32 BattleAi_GetHpPercent(ComBattler* arg0)
  * turns): ran.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAi_CountUnfainted(u8 *arg0) {
+s32 BattleAi_CountUnfainted(ComSide* arg0) {
     s32 count;
     u8 *p;
     s32 n;
 
     count = 0;
-    p = arg0;
-    n = M2C_FIELD(*(void **)arg0, u8 *, 2);
+    p = (u8*)arg0;
+    n = arg0->roster->numberOfPokemonBrought;
     if (n > 0) {
         do {
             if (M2C_FIELD(p, u16 *, 0x1C) != 0) {
                 count++;
             }
             p += 0x90;
-        } while (p < arg0 + n * 0x90);
+        } while (p < n * 0x90 + (u8*)arg0);
     }
     return count;
 }

@@ -57,7 +57,7 @@ s32 BattleAi_ChooseRandomMove(void) {
                     if ((cnt < 50) && (BattleAi_RandomPercent() < 95)) {
                         break;
                     }
-                    if ((cnt < 80) && (BattleAi_CountUnfainted((u8 *) D_821CF294) == 1)) {
+                    if ((cnt < 80) && (BattleAi_CountUnfainted(D_821CF294) == 1)) {
                         break;
                     }
                     return i;
@@ -81,7 +81,7 @@ s32 BattleAi_ChooseRandomMove(void) {
                     if ((cnt < 50) && ((D_821CF2A0->mon.pendingStatusCondition & 7) == 0)) {
                         break;
                     }
-                    if ((cnt < 50) && ((D_821CF2A0->mon.pendingStatusCondition & 7) != 0) && (BattleAi_RandomPercent() < 80) && (BattleAi_CountUnfainted((u8 *) D_821CF298) != 1)) {
+                    if ((cnt < 50) && ((D_821CF2A0->mon.pendingStatusCondition & 7) != 0) && (BattleAi_RandomPercent() < 80) && (BattleAi_CountUnfainted(D_821CF298) != 1)) {
                         break;
                     }
                     return i;

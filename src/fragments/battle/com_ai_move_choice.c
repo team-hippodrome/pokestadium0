@@ -184,7 +184,7 @@ s32 BattleAi_PickStrongestMove(s32 arg0) {
 
 extern ComSide* D_821CF294;
 s32 BattleAi_GetHpPercent(ComBattler*);
-s32 BattleAi_CountUnfainted(void *);
+s32 BattleAi_CountUnfainted(ComSide*);
 s32 BattleAi_FindUsableHealingMove(ComBattler*);
 s32 BattleAi_OpponentCannotAct(s8 *, s8 *);
 s32 BattleAi_PickSetupMove(s8 *);
