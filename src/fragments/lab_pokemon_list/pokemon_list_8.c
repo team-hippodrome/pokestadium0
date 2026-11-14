@@ -76,8 +76,8 @@ s32 func_89109898();
 s32 func_89109960();
 void func_8000A460(s8*, s8*);
 u32 func_800566BC(s8*);
-void LabPCList_InitPopupMenu(s8*, void*, s8*, s32, s32);
-void LabPCList_PlacePopup(s8*);
+void LabPCList_InitPopupMenu(LabPopupMenu*, void*, s8*, s32, s32);
+void LabPCList_PlacePopup(LabPopupMenu*);
 void func_8910A21C(s8*, s8*, s8*, s32);
 extern s8* D_8910A890[];
 extern u8 D_8910A898[];
@@ -90,8 +90,8 @@ void ScrollList_SetCursor(void*, s32);
 void LabPCList_FormatGatherPrompt(LabPCListScreen*);
 void func_8000A460(s8 *, s8 *);
 u32 func_800566BC(s8*);
-void LabPCList_InitPopupMenu(s8 *, void *, s8 *, s32, s32);
-void LabPCList_PlacePopup(s8 *);
+void LabPCList_InitPopupMenu(LabPopupMenu*, void *, s8 *, s32, s32);
+void LabPCList_PlacePopup(LabPopupMenu*);
 void Window_SetRect(s8 *, s32, s32, s32, s32);
 extern Color_RGBA8 D_8910A7F4;
 extern s8 *D_8910A8A8[];
@@ -101,7 +101,7 @@ extern s8 D_8910E358[];
 s32 LabPCList_UpdateHeaderCursor(void*);
 M2C_UNK LabPCList_ApplyFiltersAndSort();
 extern s32 D_8910E37C;
-s32 LabPCList_UpdatePopupMenu(s8*);
+s32 LabPCList_UpdatePopupMenu(LabPopupMenu*);
 void func_80027D68(s32, s32);
 void func_89105C54(s8*, s32, s32, s8*, Color_RGBA8);
 M2C_UNK LabPCList_ApplyFiltersAndSort();
@@ -175,7 +175,7 @@ s32 LabPCList_UpdateDestinationMenu(LabPCListScreen* arg0) {
     s32 cursor;
     s32 top;
 
-    LabPCList_UpdatePopupMenu((s8*)&arg0->subPopup.window.frame.x);
+    LabPCList_UpdatePopupMenu(&arg0->subPopup.window.frame.x);
     if (*(u16*)(D_800603C0 + 8) & 0x4000) {
         func_8003F6AC(3);
         arg0->state = 7;
@@ -206,24 +206,24 @@ s32 LabPCList_UpdateDestinationMenu(LabPCListScreen* arg0) {
                     break;
                 case 1:
                     func_8003F6AC(2);
-                    LabPCList_InitPopupMenu((s8*)&arg0->subPopup2, D_8910A8E8, (s8*)&arg0->popupItemFlags[2], 8, 0);
+                    LabPCList_InitPopupMenu(&arg0->subPopup2, D_8910A8E8, (s8*)&arg0->popupItemFlags[2], 8, 0);
                     Window_SetRect((s8*)&arg0->subPopup2.anchorX, arg0->subPopup.window.frame.x + 0xE, arg0->subPopup.window.frame.y + 0x1C, 0xE4, 0x1C);
                     arg0->subPopup2.window.frame.style |= 0x01000000;
                     arg0->subPopup2.limitX = arg0->listFrame.x + arg0->listFrame.width;
                     arg0->subPopup2.limitY = arg0->listFrame.y + arg0->listFrame.height;
-                    LabPCList_PlacePopup((s8*)&arg0->subPopup2);
+                    LabPCList_PlacePopup(&arg0->subPopup2);
                     arg0->subPopup2.window.frame.color = D_8910A7F4;
                     func_89103144((s8*)&arg0->subPopup2.menu, ((List89103C54*)arg0->list.items)->items[arg0->list.cursor], arg0->sourceMatrix.rows + 0x24);
                     arg0->state = 9;
                     break;
                 case 2:
                     func_8003F6AC(2);
-                    LabPCList_InitPopupMenu((s8*)&arg0->subPopup2, D_8910A8E8, (s8*)&arg0->popupItemFlags[2], 4, 0);
+                    LabPCList_InitPopupMenu(&arg0->subPopup2, D_8910A8E8, (s8*)&arg0->popupItemFlags[2], 4, 0);
                     Window_SetRect((s8*)&arg0->subPopup2.anchorX, arg0->subPopup.window.frame.x + 0xE, arg0->subPopup.window.frame.y + 0x38, 0xE4, 0x1C);
                     arg0->subPopup2.window.frame.style |= 0x01000000;
                     arg0->subPopup2.limitX = arg0->listFrame.x + arg0->listFrame.width;
                     arg0->subPopup2.limitY = arg0->listFrame.y + arg0->listFrame.height;
-                    LabPCList_PlacePopup((s8*)&arg0->subPopup2);
+                    LabPCList_PlacePopup(&arg0->subPopup2);
                     arg0->subPopup2.window.frame.color = D_8910A7F4;
                     func_89103144((s8*)&arg0->subPopup2.menu, ((List89103C54*)arg0->list.items)->items[arg0->list.cursor], arg0->sourceMatrix.rows + 0x48);
                     arg0->state = 0xA;
@@ -247,7 +247,7 @@ s32 LabPCList_UpdateGbBoxMenu(LabPCListScreen* arg0) {
     s32 cursor;
     s32 top;
 
-    LabPCList_UpdatePopupMenu((s8*)&arg0->subPopup2);
+    LabPCList_UpdatePopupMenu(&arg0->subPopup2);
     if (*(u16*)(D_800603C0 + 8) & 0x4000) {
         func_8003F6AC(3);
         arg0->state = 8;
@@ -279,7 +279,7 @@ s32 LabPCList_UpdateStadiumBoxMenu(LabPCListScreen* arg0) {
     s32 cursor;
     s32 top;
 
-    LabPCList_UpdatePopupMenu((s8*)&arg0->subPopup2);
+    LabPCList_UpdatePopupMenu(&arg0->subPopup2);
     if (*(u16*)(D_800603C0 + 8) & 0x4000) {
         func_8003F6AC(3);
         arg0->state = 8;

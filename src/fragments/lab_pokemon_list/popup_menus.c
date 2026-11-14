@@ -743,31 +743,31 @@ void LabPCList_DrawPopupRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, 
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): A on フシギダネ set up the popup
  * (フシギダネをあつめる, おなじタイプをあつめる, いどうする, どうぐをつかう).
  */
-void LabPCList_InitPopupMenu(s8 *arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4) {
+void LabPCList_InitPopupMenu(LabPopupMenu* arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 i;
     s32 w;
     s32 max = 0;
     s32 h;
 
-    M2C_FIELD(arg0, s32 *, 0x70) = arg4;
+    arg0->title = arg4;
     for (i = 0; i < arg3; i++) {
         w = func_800566BC(arg1[i]) >> 1;
         if (max < w) {
             max = w;
         }
     }
-    func_80027804(arg0 + 0x64, arg1, arg3, arg3);
+    func_80027804((s8*)&arg0->itemList, arg1, arg3, arg3);
     h = max * 0x14 + 0x10;
-    Menu_Init(arg0 + 0x40, arg0 + 0x64, arg2, LabPCList_DrawPopupRow, h, 0x1C);
-    M2C_FIELD(arg0, s32 *, 0x60) |= 0x10000;
-    Window_SetRect(arg0, 0, 0, h + 0xC, M2C_FIELD(arg0, s32 *, 0x6C) * 0x1C + 0x14);
-    M2C_FIELD(arg0, s32 *, 0x24) = 0;
+    Menu_Init((s8*)&arg0->menu, (s8*)&arg0->itemList, arg2, LabPCList_DrawPopupRow, h, 0x1C);
+    arg0->menu.options |= 0x10000;
+    Window_SetRect(arg0, 0, 0, h + 0xC, arg0->itemList.count * 0x1C + 0x14);
+    arg0->window.animTimer = 0;
     M2C_FIELD(arg0, s32 *, 0x20) = 0;
-    M2C_FIELD(arg0, s32 *, 0x28) = 0;
+    arg0->window.state = 0;
     if (arg4 != 0) {
-        M2C_FIELD(arg0, s32 *, 0x14) = 0x800;
+        arg0->window.frame.style = 0x800;
     } else {
-        M2C_FIELD(arg0, s32 *, 0x14) = 0;
+        arg0->window.frame.style = 0;
     }
     if (arg4 != 0) {
         M2C_FIELD(arg0, s32 *, 0x20) = arg4;
@@ -824,7 +824,7 @@ M2C_UNK Menu_DrawItems(s32, s32, s32, s32, s8 *);  /* extern */
  * Draws a popup menu's items.
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): drew that popup's four rows.
  */
-void LabPCList_DrawPopupMenu(s8 *arg0, s32 arg1)
+void LabPCList_DrawPopupMenu(LabPopupMenu* arg0, s32 arg1)
 {
   s8 *new_var; // FAKE: permuter temp
   if (func_8002AE6C() == 0)
@@ -833,7 +833,7 @@ void LabPCList_DrawPopupMenu(s8 *arg0, s32 arg1)
     if ((arg0 && arg0) && arg0)
     {
     }
-    Menu_DrawItems(arg0 + 0x40, (*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (new_var + 4))) + 0xA, arg1 | 0xFFED, arg0); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+    Menu_DrawItems((s8*)&arg0->menu, (*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (new_var + 4))) + 0xA, arg1 | 0xFFED, arg0); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     if (arg1)
     {
     }
@@ -847,8 +847,8 @@ M2C_UNK Menu_UpdateCursor(s32);                         /* extern */
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): D-Down twice moved the popup
  * cursor from フシギダネをあつめる to いどうする.
  */
-s32 LabPCList_UpdatePopupMenu(s32 arg0) {
-    return Menu_UpdateCursor(arg0 + 0x40);
+s32 LabPCList_UpdatePopupMenu(LabPopupMenu* arg0) {
+    return Menu_UpdateCursor((s32)&arg0->menu);
 }
 
 extern char D_8910E064[];
@@ -1820,7 +1820,7 @@ void PcSort_DrawUseItemPrompt(s8* arg0) {
             Font_EndTexturedTextRendering();
             switch (M2C_FIELD(arg0, s32*, 0x1B0)) {
                 case 1:
-                    LabPCList_DrawPopupMenu(arg0 + 0x94, 2);
+                    LabPCList_DrawPopupMenu((LabPopupMenu *) (arg0 + 0x94), 2);
                     break;
                 case 2:
                 case 3:
@@ -1869,7 +1869,7 @@ s32 LabPCList_UpdateItemWindow(s8 *arg0)
         if (!((*((u16 **) (((s8 *) self) + 0x50)))[*((s32 *) (((s8 *) self) + 0x54))] & 1)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
           func_8003F6AC(2);
-          LabPCList_InitPopupMenu(self + 0x94, (s32 *) D_8910AAE8, (s32) (self + 0x90), 1, 0);
+          LabPCList_InitPopupMenu((LabPopupMenu *) (self + 0x94), (s32 *) D_8910AAE8, (s32) (self + 0x90), 1, 0);
           Window_SetRect(self + 0xC0, (*((s32 *) (((s8 *) self) + 0))) + 6, (((*((s32 *) (((s8 *) self) + 4))) + (*((s32 *) (((s8 *) self) + 0x80)))) - (*((s32 *) (((s8 *) self) + 0x78)))) + 0x16, (*((s32 *) (((s8 *) self) + 8))) - 0xC, 0x1C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
           *((s32 *) (((s8 *) self) + 0x108)) = ((*((s32 *) (((s8 *) self) + 8))) + (*((s32 *) (((s8 *) self) + 0)))) - 6; // FAKE: decomp slop, raw pointer casts stand in for struct fields
           *((s32 *) (((s8 *) self) + 0x10C)) = (*((s32 *) (((s8 *) self) + 4))) + 0xF6; // FAKE: decomp slop, raw pointer casts stand in for struct fields
@@ -1886,7 +1886,7 @@ s32 LabPCList_UpdateItemWindow(s8 *arg0)
       break;
 
     case 1:
-      if (LabPCList_UpdatePopupMenu((s32) (self + 0x94)) == 0)
+      if (LabPCList_UpdatePopupMenu((LabPopupMenu *) (self + 0x94)) == 0)
     {
       if (((u16 *) D_800603C0)[4] & 0x4000)
       {

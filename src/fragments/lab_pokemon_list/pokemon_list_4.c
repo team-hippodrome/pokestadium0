@@ -64,7 +64,7 @@ void ScrollList_DrawScrollArrows(s8*, s32, s32, s32, s32);
 void ScrollList_DrawItems(s8*, s32, s32, s32, s8*);
 void LabPCList_DrawDetailColumns(s8*, s32, s32, s32);
 void func_89105E70(s8*, s32);
-void LabPCList_DrawPopupMenu(s8*, s32);
+void LabPCList_DrawPopupMenu(LabPopupMenu*, s32);
 void LabPCList_DrawLevelInputWindow(s8*);
 void LabPCList_DrawTypeFilter(s8*);
 void LabPCList_DrawMoveFilter(s8*);
@@ -127,7 +127,7 @@ void LabPCList_DrawListScreen(LabPCListScreen* arg0) {
             break;
         case 2:
         case 3:
-            LabPCList_DrawPopupMenu((s8*)&arg0->popup, 2);
+            LabPCList_DrawPopupMenu(&arg0->popup, 2);
             break;
         case 4:
             LabPCList_DrawLevelInputWindow((s8*)arg0->levelInputWindow);
@@ -139,21 +139,21 @@ void LabPCList_DrawListScreen(LabPCListScreen* arg0) {
             LabPCList_DrawMoveFilter((s8*)arg0->moveFilterWindow);
             break;
         case 7:
-            LabPCList_DrawPopupMenu((s8*)&arg0->popup, 2);
+            LabPCList_DrawPopupMenu(&arg0->popup, 2);
             break;
         case 8:
-            LabPCList_DrawPopupMenu((s8*)&arg0->popup, 0x10);
-            LabPCList_DrawPopupMenu((s8*)&arg0->subPopup, 2);
+            LabPCList_DrawPopupMenu(&arg0->popup, 0x10);
+            LabPCList_DrawPopupMenu(&arg0->subPopup, 2);
             break;
         case 9:
-            LabPCList_DrawPopupMenu((s8*)&arg0->popup, 0x10);
-            LabPCList_DrawPopupMenu((s8*)&arg0->subPopup, 0x10);
-            LabPCList_DrawPopupMenu((s8*)&arg0->subPopup2, 2);
+            LabPCList_DrawPopupMenu(&arg0->popup, 0x10);
+            LabPCList_DrawPopupMenu(&arg0->subPopup, 0x10);
+            LabPCList_DrawPopupMenu(&arg0->subPopup2, 2);
             break;
         case 10:
-            LabPCList_DrawPopupMenu((s8*)&arg0->popup, 0x10);
-            LabPCList_DrawPopupMenu((s8*)&arg0->subPopup, 0x10);
-            LabPCList_DrawPopupMenu((s8*)&arg0->subPopup2, 2);
+            LabPCList_DrawPopupMenu(&arg0->popup, 0x10);
+            LabPCList_DrawPopupMenu(&arg0->subPopup, 0x10);
+            LabPCList_DrawPopupMenu(&arg0->subPopup2, 2);
             break;
         case 11:
         case 12:
@@ -261,8 +261,8 @@ M2C_UNK LabPCList_ApplyFiltersAndSort(LabPCListScreen* arg0) {
 
 typedef struct Pair8910D910 { void* a; s32 b; } Pair8910D910;
 extern Pair8910D910 D_8910D910[];
-void LabPCList_InitPopupMenu(s8*, void*, s8*, s32, s32);
-void LabPCList_PlacePopup(s8*);
+void LabPCList_InitPopupMenu(LabPopupMenu*, void*, s8*, s32, s32);
+void LabPCList_PlacePopup(LabPopupMenu*);
 void LabPCList_InitTypeFilter(s8*, s32, s32, s8*);
 void LabPCList_InitMoveFilter(s8*, s32, s32, s8*);
 
@@ -282,11 +282,11 @@ void func_89101F90(LabPCListScreen* arg0) {
         case 14:
         case 15:
             arg0->state = 3;
-            LabPCList_InitPopupMenu((s8*)&arg0->popup, D_8910D910[sel].a, (s8*)&arg0->popupItemFlags, D_8910D910[sel].b, 0);
+            LabPCList_InitPopupMenu(&arg0->popup, D_8910D910[sel].a, (s8*)&arg0->popupItemFlags, D_8910D910[sel].b, 0);
             Window_SetRect((s8*)&arg0->popup.anchorX, LabPCList_GetColumnCursorX(arg0), arg0->listFrame.y, 0, 0x16);
             arg0->popup.limitX = arg0->listFrame.x + arg0->listFrame.width;
             arg0->popup.limitY = arg0->listFrame.y + arg0->listFrame.height;
-            LabPCList_PlacePopup((s8*)&arg0->popup);
+            LabPCList_PlacePopup(&arg0->popup);
             arg0->popup.window.frame.color = D_8910A7F4;
             break;
         case 4:
@@ -307,8 +307,8 @@ void func_89101F90(LabPCListScreen* arg0) {
 typedef struct Str891020F8 { char s[13]; } Str891020F8;
 void func_8000A460(s8*, s8*);
 u32 func_800566BC(s8*);
-void LabPCList_InitPopupMenu(s8*, void*, s8*, s32, s32);
-void LabPCList_PlacePopup(s8*);
+void LabPCList_InitPopupMenu(LabPopupMenu*, void*, s8*, s32, s32);
+void LabPCList_PlacePopup(LabPopupMenu*);
 void func_8910A21C(s8*, s8*, s8*, s32);
 extern s8* D_8910A890[];
 extern u8 D_8910A898[];
@@ -326,12 +326,12 @@ void LabPCList_FormatGatherPrompt(LabPCListScreen* arg0) {
     func_8000A460(D_8910E2D0 + func_800566BC(D_8910E2D0), D_8910A890[(arg0->activeFilters & 8) ? 1 : 0]);
     *(Str891020F8*)D_8910E312 = *(Str891020F8*)D_8910DC50;
     func_8000A460(D_8910E2D0 + (func_800566BC(D_8910E312) + 0x42), D_8910A890[(arg0->activeFilters & 0x10) ? 1 : 0]);
-    LabPCList_InitPopupMenu((s8*)&arg0->popup, D_8910A898, (s8*)arg0->popupItemFlags, 4, 0);
+    LabPCList_InitPopupMenu(&arg0->popup, D_8910A898, (s8*)arg0->popupItemFlags, 4, 0);
     Window_SetRect((s8*)&arg0->popup.anchorX, arg0->listFrame.x + 0x26,
                   arg0->listFrame.y + arg0->list.cursorY - arg0->list.scrollY + 0x16, 0, 0x14);
     arg0->popup.limitX = arg0->listFrame.x + arg0->listFrame.width;
     arg0->popup.limitY = arg0->listFrame.y + arg0->listFrame.height;
-    LabPCList_PlacePopup((s8*)&arg0->popup);
+    LabPCList_PlacePopup(&arg0->popup);
     arg0->popup.window.frame.color = D_8910A7F4;
     arg0->state = 7;
     func_80027804((s8*)arg0 + 0xAFFC, (s8*)arg0 + 0xAD54, 0xAA, 0);
@@ -382,8 +382,8 @@ s32 LabPCList_UpdateListCursor(LabPCListScreen* arg0) {
 
 void func_8000A460(s8 *, s8 *);
 u32 func_800566BC(s8*);
-void LabPCList_InitPopupMenu(s8 *, void *, s8 *, s32, s32);
-void LabPCList_PlacePopup(s8 *);
+void LabPCList_InitPopupMenu(LabPopupMenu*, void *, s8 *, s32, s32);
+void LabPCList_PlacePopup(LabPopupMenu*);
 void Window_SetRect(s8 *, s32, s32, s32, s32);
 extern Color_RGBA8 D_8910A7F4;
 extern s8 *D_8910A8A8[];
@@ -398,11 +398,11 @@ extern s8 D_8910E358[];
 void LabPCList_InitSortMenu(LabPCListScreen *arg0) {
     func_8000A460(D_8910E358, D_8910A8B0);
     func_8000A460(D_8910E358 + func_800566BC(D_8910E358), D_8910A8A8[(arg0->activeFilters & 0x20) ? 1 : 0]);
-    LabPCList_InitPopupMenu((s8*)&arg0->popup, D_8910A8C8, (s8*)&arg0->popupItemFlags, 5, 0);
+    LabPCList_InitPopupMenu(&arg0->popup, D_8910A8C8, (s8*)&arg0->popupItemFlags, 5, 0);
     Window_SetRect((s8*)&arg0->popup.anchorX, arg0->listFrame.x + 0x26, arg0->listFrame.y, 0, 0x16);
     arg0->popup.limitX = arg0->listFrame.x + arg0->listFrame.width;
     arg0->popup.limitY = arg0->listFrame.y + arg0->listFrame.height;
-    LabPCList_PlacePopup((s8*)&arg0->popup);
+    LabPCList_PlacePopup(&arg0->popup);
     arg0->popup.window.frame.color = D_8910A7F4;
     if (arg0->activeFilters == 0) {
         M2C_FIELD(arg0->popup.menu.itemFlags, u16 *, 6) |= 1;
