@@ -4,7 +4,7 @@
 #include "audio_commands.h"
 #include "audio_music.h"
 #include "font.h"
-#include "fragments/geo_model_038/geo_model_038.h"
+#include "fragments/cartridge_check_models/cartridge_check_models.h"
 #include "fragments/geo_model_039/geo_model_039.h"
 #include "fragments/geo_model_040/geo_model_040.h"
 #include "fragments/main_menu/main_menu.h"

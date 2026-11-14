@@ -3979,8 +3979,8 @@ func_8EB00254,0x8EB00254,src/fragments/geo_model_034/geo_model_034.c,func_8EB002
 func_8EB002B8,0x8EB002B8,src/fragments/geo_model_034/geo_model_034.c,func_8EB002B8,m2c,m2c,c
 func_8EB0031C,0x8EB0031C,src/fragments/geo_model_034/geo_model_034.c,func_8EB0031C,m2c,m2c,c
 func_8EB00380,0x8EB00380,src/fragments/geo_model_034/geo_model_034.c,func_8EB00380,hand,,c
-func_8F400020,0x8F400020,src/fragments/geo_model_038/geo_model_038.c,func_8F400020,m2c,m2c,c
-func_8F400088,0x8F400088,src/fragments/geo_model_038/geo_model_038.c,func_8F400088,m2c,m2c,c
+func_8F400020,0x8F400020,src/fragments/cartridge_check_models/cartridge_check_models.c,CartridgeCheckModels_CheckBootCode,m2c,m2c,c
+func_8F400088,0x8F400088,src/fragments/cartridge_check_models/cartridge_check_models.c,CartridgeCheckModels_GeoSwitchTerminal,m2c,m2c,c
 func_8E800020,0x8E800020,src/fragments/geo_model_039/geo_model_039.c,func_8E800020,hand,,c
 func_8E900020,0x8E900020,src/fragments/geo_model_040/geo_model_040.c,func_8E900020,hand,,c
 func_8FF00020_106,0x8FF00020,src/fragments/model_data/model_data_106.c,func_8FF00020_106,m2c,m2c,c

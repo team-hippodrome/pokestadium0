@@ -45,7 +45,7 @@ Where the code lives, after the reorganization. File names are broadly correct g
 | 032 | `src/fragments/geo_model_032/` | 1 | 9 | geo layout callbacks for models |
 | 033 | `src/fragments/geo_model_033/` | 1 | 13 | geo layout callbacks for models |
 | 034 | `src/fragments/geo_model_034/` | 1 | 8 | geo layout callbacks for models |
-| 038 | `src/fragments/geo_model_038/` | 1 | 2 | geo layout callbacks for models |
+| 038 | `src/fragments/cartridge_check_models/` | 1 | 2 | models of the Game Boy cartridge check (P-OS terminal) and its anti-piracy check |
 | 039 | `src/fragments/geo_model_039/` | 1 | 1 | geo layout callbacks for models |
 | 040 | `src/fragments/geo_model_040/` | 1 | 1 | geo layout callbacks for models |
 | 106–258 | `src/fragments/model_data/` | 153 | 153 | model data, one file per fragment |
