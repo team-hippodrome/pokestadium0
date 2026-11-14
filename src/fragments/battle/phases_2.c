@@ -5,7 +5,7 @@
 #include "matrix.h"
 
 // Declared here instead of in a header: the callers of these disagree on their types.
-M2C_UNK ActivePokemon_SetModelTransform(s8 *, M2C_UNK, M2C_UNK);
+M2C_UNK ActivePokemon_SetModelTransform(ActivePokemon*, M2C_UNK, M2C_UNK);
 M2C_UNK func_8211EE8C();
 M2C_UNK func_82125384();
 M2C_UNK func_821365B0(M2C_UNK, s8 *, s8 *, M2C_UNK, s32);

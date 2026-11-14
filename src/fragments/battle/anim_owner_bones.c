@@ -29,7 +29,7 @@ void BattleAnim_ReleaseParticleModel(Particle* arg0);
 void BattleAnim_GetOwnerBonePosition(ActivePokemon* arg0, s16 arg1, Vec3f* arg2);
 f32 BattleAnim_GetSpeciesBaseScale(ActivePokemon* arg0);
 void BattleAnim_GetOwnerSpeciesBaseScaleAlias(ActivePokemon* arg0);
-void BattleScene_GetParticipantModelSizeScaled(unk_D_82F20A88* arg0);
+void BattleScene_GetParticipantModelSizeScaled(ActivePokemon* arg0);
 
 /**
  * Returns 1 if the current animation owner's model shows species arg0.

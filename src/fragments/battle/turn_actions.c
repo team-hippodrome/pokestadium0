@@ -128,9 +128,9 @@ s32 BattleScene_TryStartSwitchAction(void) {
     s8* sp20;
     s8* sp1C;
 
-    sp24 = (s8*)sActivePokemon[sBattleScene.scene->actingSide] + 0x78C;
-    sp20 = (s8*)sActivePokemon[sBattleScene.scene->actingSide] + 0x78C;
-    sp1C = (s8*)sActivePokemon[!sBattleScene.scene->actingSide] + 0x78C;
+    sp24 = &sActivePokemon[sBattleScene.scene->actingSide]->state;
+    sp20 = &sActivePokemon[sBattleScene.scene->actingSide]->state;
+    sp1C = &sActivePokemon[!sBattleScene.scene->actingSide]->state;
     func_821079E8(0x1FFE);
     if ((M2C_FIELD(sp24, u8*, 0x2E) == 0xF) || (M2C_FIELD(sp24, u8*, 0x2E) == 0x10)) {
         if (*M2C_FIELD(sActivePokemon[sBattleScene.scene->actingSide], u8**, 0x860) & 2) {
@@ -1108,7 +1108,7 @@ void BattleScene_PhaseCommand(CameraNode* arg0) {
 /**
  * Sets the Pokemon's field +0x7BE to 0x800.
  */
-void func_821272C0(s8 *arg0) {
+void func_821272C0(ActivePokemon* arg0) {
     M2C_FIELD(arg0, s16 *, 0x7BE) = 0x800;
 }
 
@@ -1131,7 +1131,7 @@ void func_821272CC(DisplayObject* arg0, s32 arg1) {
 }
 
 f32 func_82121750(ActivePokemon*, f32, f32);
-s16 BattleScene_GetParticipantFacingAngle(s8 *arg0);
+s16 BattleScene_GetParticipantFacingAngle(ActivePokemon* arg0);
 void func_82134FD0(ActivePokemon*);
 void func_82102010(ActivePokemon*);
 s32 func_82101FD4(ActivePokemon*);
@@ -1306,7 +1306,7 @@ void func_82127724(CameraNode* arg0) {
 
 extern f32 D_FLT_8218935C[][4];
 f32 func_82121750(ActivePokemon*, f32, f32);
-s16 BattleScene_GetParticipantFacingAngle(s8 *arg0);
+s16 BattleScene_GetParticipantFacingAngle(ActivePokemon* arg0);
 void func_82134FD0(ActivePokemon*);
 void func_82102010(ActivePokemon*);
 s32 func_82101FD4(ActivePokemon*);
@@ -1371,7 +1371,7 @@ void func_82127DFC(CameraNode* arg0) {
 
 extern f32 D_FLT_8218935C[][4];
 f32 func_82121750(ActivePokemon*, f32, f32);
-s16 BattleScene_GetParticipantFacingAngle(s8 *arg0);
+s16 BattleScene_GetParticipantFacingAngle(ActivePokemon* arg0);
 void func_82134FD0(ActivePokemon*);
 void func_82102010(ActivePokemon*);
 s32 func_82101FD4(ActivePokemon*);
@@ -1435,7 +1435,7 @@ void func_8212817C(CameraNode* arg0) {
 }
 
 f32 func_82121750(ActivePokemon*, f32, f32);
-s16 BattleScene_GetParticipantFacingAngle(s8 *arg0);
+s16 BattleScene_GetParticipantFacingAngle(ActivePokemon* arg0);
 void func_82134FD0(ActivePokemon*);
 void func_82102010(ActivePokemon*);
 s32 func_82101FD4(ActivePokemon*);

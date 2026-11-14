@@ -1444,8 +1444,8 @@ void func_8211E794(s16 arg0, s16 arg1) {
     char buf[16];
 
     Ui_DrawPrimColorRect(arg0, arg1, 0x50, 0x1E, 0, 0, 0, 0x3C);
-    func_800564D4(buf, D_82195FF4, M2C_FIELD(sBattleScene.scene->camera, f32*, 0x34));
+    func_800564D4(buf, D_82195FF4, sBattleScene.scene->camera->perspective.nearPlane);
     func_82116480(buf, arg0 + 3, arg1 + 2);
-    func_800564D4(buf, D_82195FF8, M2C_FIELD(sBattleScene.scene->camera, f32*, 0x38));
+    func_800564D4(buf, D_82195FF8, sBattleScene.scene->camera->perspective.farPlane);
     func_82116480(buf, arg0 + 3, arg1 + 0x10);
 }

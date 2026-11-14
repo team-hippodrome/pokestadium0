@@ -407,9 +407,9 @@ extern u8 D_8218C930[][2];
  * first one fainted.
  * @unverified Name and comment guessed from the code.
  */
-void Battle_CheckMovesetLegality(s8* arg0) {
+void Battle_CheckMovesetLegality(ActivePokemon* arg0) {
     s32 pad; // FAKE: stack padding
-    s8* state = arg0 + 0x7C6;
+    s8* state = (s8*)arg0 + 0x7C6;
 
     M2C_FIELD(arg0, s8*, 0x851) = 1;
     M2C_FIELD(arg0, s8*, 0x852) = 1;

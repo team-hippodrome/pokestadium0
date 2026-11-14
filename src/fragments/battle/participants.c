@@ -107,8 +107,8 @@ void BattleScene_SetParticipantModelScale(ActivePokemon* active_pokemon, f32 sca
  * Seen in play (2026-11-13) in the 165-move sweep (Jump Kick, Sing, Hypnosis, Selfdestruct): it
  * returned 6 for both the 1P and the COM side in a six-on-six free battle.
  */
-u8 ActivePokemon_GetBroughtCount(s8 *arg0) {
-    return M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x860), u8 *, 2);
+u8 ActivePokemon_GetBroughtCount(ActivePokemon* arg0) {
+    return arg0->teamRoster->numberOfPokemonBrought;
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
@@ -221,8 +221,8 @@ f32 ActivePokemon_GetSizeRatio(ActivePokemon* active_pokemon) {
 /**
  * Returns the Pokemon's move id (+0x820).
  */
-u8 func_82107BF4(s8 *arg0) {
-    return M2C_FIELD(arg0, u8 *, 0x820);
+u8 func_82107BF4(ActivePokemon* arg0) {
+    return arg0->state.runtime.usedMove;
 }
 
 extern f32 D_FLT_8218935C[][4];
@@ -235,10 +235,10 @@ extern f32 D_FLT_8218935C[][4];
  * switch in battle.
  * @unverified Named from the code; the sweep hit it but did not check the values.
  */
-void BattleScene_GetParticipantModelSizeScaled(s8* arg0, Vec3f* out) {
-    out->x = M2C_FIELD(arg0, f32*, 0x30) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][0] * 2 / 50.0f);
-    out->y = M2C_FIELD(arg0, f32*, 0x34) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][1] * 2 / 50.0f);
-    out->z = M2C_FIELD(arg0, f32*, 0x30) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][0] * 2 / 50.0f);
+void BattleScene_GetParticipantModelSizeScaled(ActivePokemon* arg0, Vec3f* out) {
+    out->x = arg0->displayObject.scale.x * (D_FLT_8218935C[arg0->displayObject.objectType - 1][0] * 2 / 50.0f);
+    out->y = arg0->displayObject.scale.y * (D_FLT_8218935C[arg0->displayObject.objectType - 1][1] * 2 / 50.0f);
+    out->z = arg0->displayObject.scale.x * (D_FLT_8218935C[arg0->displayObject.objectType - 1][0] * 2 / 50.0f);
 }
 
 /**
@@ -269,8 +269,8 @@ u16 Battle_GetActiveMonHp(ActivePokemon* active_pokemon) {
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
-s16 BattleScene_GetParticipantFacingAngle(s8 *arg0) {
-    return (s16) (M2C_FIELD(arg0, s32 *, 0x60C) << 0xE);
+s16 BattleScene_GetParticipantFacingAngle(ActivePokemon* arg0) {
+    return (s16) (arg0->facingDirection << 0xE);
 }
 
 /**
@@ -366,10 +366,10 @@ void BattleScene_GetParticipantScreenAimPoint(ActivePokemon* active_pokemon, Vec
  * Seen in play (2026-11-12): ran during ゆけっ！ゲンのすけ, while the Poké Ball for COM's replacement
  * Gengar was in the air (its shadow on the floor), and not before.
  */
-void ActivePokemon_GetPokeBallAimPoint(s8 *arg0, s8 *arg1) {
-    M2C_FIELD(arg1, f32 *, 0) = (f32) M2C_FIELD(arg0, f32 *, 0x648);
-    M2C_FIELD(arg1, f32 *, 4) = (f32) (M2C_FIELD(arg0, f32 *, 0x64C) + 2.5f);
-    M2C_FIELD(arg1, f32 *, 8) = (f32) M2C_FIELD(arg0, f32 *, 0x650);
+void ActivePokemon_GetPokeBallAimPoint(ActivePokemon* arg0, s8 *arg1) {
+    M2C_FIELD(arg1, f32 *, 0) = (f32) arg0->pokeBall.position.x;
+    M2C_FIELD(arg1, f32 *, 4) = (f32) (arg0->pokeBall.position.y + 2.5f);
+    M2C_FIELD(arg1, f32 *, 8) = (f32) arg0->pokeBall.position.z;
 }
 
 extern f32 D_FLT_82189350[][4];
@@ -417,8 +417,8 @@ ModelNodeView* Battle_GetLoadedModelNode(ActivePokemon* active_pokemon, s32 node
  * switch in battle.
  * @unverified Name and comment guessed from the code.
  */
-s16 ActivePokemon_GetDisplayModel(s8 *arg0, M2C_UNK arg1) {
-    return M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x85C), s16 *, 2);
+s16 ActivePokemon_GetDisplayModel(ActivePokemon* arg0, M2C_UNK arg1) {
+    return arg0->sessionTeams->displayModel;
 }
 
 typedef struct {
@@ -815,9 +815,9 @@ void Battle_ReloadDisplayModel(ActivePokemon* active_pokemon) {
  * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
-void ActivePokemon_SetModelTransform(s8 *arg0, s32 arg1, s32 arg2) {
-    M2C_FIELD(arg0, s32 *, 0x610) = arg1;
-    M2C_FIELD(arg0, s32 *, 0x614) = arg2;
+void ActivePokemon_SetModelTransform(ActivePokemon* arg0, s32 arg1, s32 arg2) {
+    arg0->modelTransformId = arg1;
+    arg0->modelTransformTimer = arg2;
 }
 
 /**
@@ -916,7 +916,7 @@ void Battle_SetModelToHitAnim(ActivePokemon* active_pokemon) {
  * Points teamRoster at sessionTeams->teamMember[index].
  * Seen in play (2026-11-12): picked Onix's roster entry when it was switched in.
  */
-void ActivePokemon_SelectTeamRoster(s8 *arg0, s32 arg1) {
+void ActivePokemon_SelectTeamRoster(ActivePokemon* arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0x860) = (s32) M2C_FIELD((M2C_FIELD(arg0, s32 *, 0x85C) + (arg1 * 4)), s32 *, 8);
 }
 
@@ -924,7 +924,7 @@ void ActivePokemon_SelectTeamRoster(s8 *arg0, s32 arg1) {
  * Sets state.teamMemberIndex.
  * Seen in play (2026-11-12): set the switched-in team member (Onix).
  */
-void ActivePokemon_SetTeamMemberIndex(void *arg0, s32 arg1) {
+void ActivePokemon_SetTeamMemberIndex(ActivePokemon* arg0, s32 arg1) {
     M2C_FIELD(arg0, s8 *, 0x7B7) = arg1;
 }
 
@@ -934,7 +934,7 @@ void ActivePokemon_SetTeamMemberIndex(void *arg0, s32 arg1) {
  * B opened the Pokémon menu.
  * @unverified Name and comment guessed from the code.
  */
-void ActivePokemon_SetController(s8 *arg0, s32 arg1) {
+void ActivePokemon_SetController(ActivePokemon* arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0x858) = arg1;
 }
 
@@ -944,7 +944,7 @@ void ActivePokemon_SetController(s8 *arg0, s32 arg1) {
  * menu.
  * @unverified Name and comment guessed from the code.
  */
-void ActivePokemon_SetReplacementState(void *arg0, s32 arg1) {
+void ActivePokemon_SetReplacementState(ActivePokemon* arg0, s32 arg1) {
     M2C_FIELD(arg0, s8 *, 0x7B9) = arg1;
 }
 

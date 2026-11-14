@@ -37,10 +37,10 @@ void BattleMenu_ResetCommandTimer(void) {
  * While the Pokemon's command state (+0x79C) is 3, adds 0x38E to its action timer and
  * returns 1; otherwise returns 0.
  */
-s32 func_8210C708(s8 *arg0) {
+s32 func_8210C708(ActivePokemon* arg0) {
     s8 *temp_v1;
 
-    temp_v1 = arg0 + 0x78C;
+    temp_v1 = &arg0->state;
     if (M2C_FIELD(arg0, s32 *, 0x79C) == 3) {
         M2C_FIELD(temp_v1, u16 *, 0x1E) = (u16) (M2C_FIELD(temp_v1, u16 *, 0x1E) + 0x38E);
         return 1;
@@ -204,7 +204,7 @@ typedef struct BattleMoveCheck8210CA24 {
  * 1 and the game showed わざの のこりポイントが ない！ (No PP left for this move!) instead of starting the
  * turn.
  */
-s32 BattleMenu_TryConfirmMove(s8* arg0) {
+s32 BattleMenu_TryConfirmMove(ActivePokemon* arg0) {
     u8 flags;
     s8* state;
 
@@ -213,8 +213,8 @@ s32 BattleMenu_TryConfirmMove(s8* arg0) {
         ActivePokemon_ShowCaption(arg0, D_8218C6F4);
         return 1;
     }
-    flags = M2C_FIELD(arg0, u8*, 0x818);
-    state = arg0 + 0x78C;
+    flags = arg0->state.runtime.disabledMoveState;
+    state = (s8*)arg0 + 0x78C;
     if ((flags & 0xF) && ((flags >> 4) == M2C_FIELD(state, s32*, 0x14))) {
         func_8211F274(arg0);
         ActivePokemon_ShowCaption(arg0, D_8218C6F8);
@@ -227,32 +227,32 @@ s32 BattleMenu_TryConfirmMove(s8* arg0) {
 }
 
 void func_82134D60(void);
-s32 BattleMenu_TryConfirmMove(s8*);
+s32 BattleMenu_TryConfirmMove(ActivePokemon*);
 /**
  * Maps the C buttons to the four move slots and tries to confirm the pressed one.
  */
-void BattleMenu_HandleMoveButtons(s8* arg0) {
+void BattleMenu_HandleMoveButtons(ActivePokemon* arg0) {
     s32 buttons;
     s8* ctrl;
 
     ctrl = M2C_FIELD(arg0, s8**, 0x858);
     buttons = M2C_FIELD(ctrl, u16*, 8);
 
-    if ((buttons & 8) && (M2C_FIELD(arg0, u8*, 0x7E5) != 0) && (M2C_FIELD(arg0, u8*, 0x7E5) < 0xA6)) {
+    if ((buttons & 8) && (arg0->state.runtime.moves[0] != 0) && (arg0->state.runtime.moves[0] < 0xA6)) {
         func_82134D60();
-        M2C_FIELD(arg0, s32*, 0x7A0) = 0;
+        arg0->state.moveIndex = 0;
         BattleMenu_TryConfirmMove(arg0);
-    } else if ((buttons & 1) && (M2C_FIELD(arg0, u8*, 0x7E6) != 0) && (M2C_FIELD(arg0, u8*, 0x7E6) < 0xA6)) {
+    } else if ((buttons & 1) && (arg0->state.runtime.moves[1] != 0) && (arg0->state.runtime.moves[1] < 0xA6)) {
         func_82134D60();
-        M2C_FIELD(arg0, s32*, 0x7A0) = 1;
+        arg0->state.moveIndex = 1;
         BattleMenu_TryConfirmMove(arg0);
-    } else if ((buttons & 4) && (M2C_FIELD(arg0, u8*, 0x7E7) != 0) && (M2C_FIELD(arg0, u8*, 0x7E7) < 0xA6)) {
+    } else if ((buttons & 4) && (arg0->state.runtime.moves[2] != 0) && (arg0->state.runtime.moves[2] < 0xA6)) {
         func_82134D60();
-        M2C_FIELD(arg0, s32*, 0x7A0) = 2;
+        arg0->state.moveIndex = 2;
         BattleMenu_TryConfirmMove(arg0);
-    } else if ((buttons & 2) && (M2C_FIELD(arg0, u8*, 0x7E8) != 0) && (M2C_FIELD(arg0, u8*, 0x7E8) < 0xA6)) {
+    } else if ((buttons & 2) && (arg0->state.runtime.moves[3] != 0) && (arg0->state.runtime.moves[3] < 0xA6)) {
         func_82134D60();
-        M2C_FIELD(arg0, s32*, 0x7A0) = 3;
+        arg0->state.moveIndex = 3;
         BattleMenu_TryConfirmMove(arg0);
     }
 }
@@ -271,7 +271,7 @@ void func_8211F274();
  *
  * Does nothing unless the word at arg0 + 0x790 is 1 and BattleMenu_HandleNoUsableMoves()
  * returns 0. Then, with `rec` = the pointer at arg0 + 0x858 and `sub` =
- * arg0 + 0x78C:
+ * &arg0->state:
  *  - if the word at arg0 + 0xA04 is non-zero: calls func_8211F274(arg0) when
  *    any of the bits 0xE03F is set in the halfword at rec + 8;
  *  - otherwise clears sub[0x20]; if sub[0x10] is 0 it sets it to 1 and
@@ -287,15 +287,15 @@ void func_8211F274();
  * an `M2C_UNK` return changes register allocation), and the unused `pad` local,
  * declared after `temp_v1`, moves the spill slot of `temp_v0` to sp+0x18.
  */
-void BattleMenu_UpdateMoveMenu(s8 *arg0) {
-    void *temp_v0;
+void BattleMenu_UpdateMoveMenu(ActivePokemon* arg0) {
+    ActivePokemonState* temp_v0;
     void *temp_v1;
     UNUSED s32 pad; // FAKE: stack padding
 
     temp_v1 = M2C_FIELD(arg0, void **, 0x858);
     if ((M2C_FIELD(arg0, s32 *, 0x790) == 1) && (BattleMenu_HandleNoUsableMoves() == 0)) {
-        temp_v0 = arg0 + 0x78C;
-        if (M2C_FIELD(arg0, s32 *, 0xA04) != 0) {
+        temp_v0 = &arg0->state;
+        if (arg0->captionState.active != 0) {
             if (M2C_FIELD(temp_v1, u16 *, 8) & 0xE03F) {
                 func_8211F274(arg0);
             }
@@ -353,10 +353,10 @@ void BattleScene_ConfirmForcedMoveRepeat(ActivePokemon* arg0) {
  * Commits a chosen switch: the picked party slot (state.actionChosen) becomes
  * state.rosterIndex. The switch counterpart of BattleMenu_CommitMoveSelection.
  */
-void BattleMenu_CommitSwitchSelection(s8 *arg0) {
-    M2C_FIELD(arg0, s32 *, 0x794) = (s32) M2C_FIELD(arg0, s32 *, 0x7A4);
-    if (M2C_FIELD(arg0, u8 *, 0x7BA) != 0x10) {
-        M2C_FIELD(arg0, u8 *, 0x7BA) = 0xFU;
+void BattleMenu_CommitSwitchSelection(ActivePokemon* arg0) {
+    arg0->state.rosterIndex = (s32) M2C_FIELD(arg0, s32 *, 0x7A4);
+    if (arg0->state.faintState != 0x10) {
+        arg0->state.faintState = 0xFU;
     }
 }
 
@@ -689,8 +689,8 @@ void func_82134D60(void);
  * or Start (when the other side isn't in state 4) also calls func_82134D60.
  */
 void func_8210D6BC(ActivePokemon* arg0) {
-    s8* state = (s8*)arg0 + 0x78C;
-    s8* other = (s8*)sActivePokemon[BattleScene_GetParticipantSideIndex(arg0) == 0] + 0x78C;
+    ActivePokemonState* state = &arg0->state;
+    ActivePokemonState* other = &sActivePokemon[BattleScene_GetParticipantSideIndex(arg0) == 0]->state;
     u8* c1;
     u8* c2;
     s8* team;
@@ -706,7 +706,7 @@ void func_8210D6BC(ActivePokemon* arg0) {
         c1 = &D_800AAF50[M2C_FIELD(M2C_FIELD(team, s8**, 8), u8*, 1) * 0x24];
         c2 = &D_800AAF50[M2C_FIELD(M2C_FIELD(team, s8**, 0xC), u8*, 1) * 0x24];
     }
-    if (M2C_FIELD(M2C_FIELD(state, s8**, 0xCC), u16*, 8) & 0x8000) {
+    if (M2C_FIELD(state->controller, u16*, 8) & 0x8000) {
         M2C_FIELD(state, s32*, 4) = 1;
     } else {
         buttons = M2C_FIELD(c2, u16*, 8) | M2C_FIELD(c1, u16*, 8);

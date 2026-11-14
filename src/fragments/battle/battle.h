@@ -1997,7 +1997,7 @@ void BattleThumbnail_TickBothOwnerSlideAnimations(ActivePokemon* side1_pokemon, 
 s32 BattleThumbnail_DispatchOwnerCameraLifecycle(s32 state, CameraNode* side1_camera_node, CameraNode* side2_camera_node);
 
 // participants.c
-s16 BattleScene_GetParticipantFacingAngle(s8 *arg0);
+s16 BattleScene_GetParticipantFacingAngle(ActivePokemon* arg0);
 void func_82108A0C(ActivePokemon* active_pokemon);
 void func_821089D0(ActivePokemon*);
 void func_8210881C(ActivePokemon*);
@@ -2467,7 +2467,7 @@ void func_82126E34(CameraNode* arg0);
 void func_82126EE0(CameraNode* arg0);
 void func_82126F70(CameraNode* arg0);
 void BattleScene_PhaseCommand(CameraNode* arg0);
-void func_821272C0(s8 *arg0);
+void func_821272C0(ActivePokemon* arg0);
 M2C_UNK func_82125580();
 void func_82125FD0(void);
 

@@ -142,7 +142,7 @@ void BattleScene_OpeningStepOrbitCamera(CameraNode* arg0) {
 f32 func_8000F23C(f32, f32, f32, f32);
 void func_8210C1A8(f32*, f32, f32);
 void func_80041374(s32, s32);
-M2C_UNK ActivePokemon_SetModelTransform(s8*, M2C_UNK, M2C_UNK);
+M2C_UNK ActivePokemon_SetModelTransform(ActivePokemon*, M2C_UNK, M2C_UNK);
 M2C_UNK func_821365B0(M2C_UNK, s8*, s8*, M2C_UNK, s32);
 /**
  * Battle opening, step 3: eases the camera down to field level over 110 frames, then starts side

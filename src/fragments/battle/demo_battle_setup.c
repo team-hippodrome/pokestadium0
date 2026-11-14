@@ -314,7 +314,7 @@ void func_82133B6C(void) {
                 *M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C) |= 0x80;
                 D_8219A4F0.flags |= 2;
                 D_8219A4F0.flags &= ~0x10;
-                M2C_FIELD(sBattleScene.scene->camera, f32*, 0x2C) = 30.0f;
+                sBattleScene.scene->camera->perspective.verticalFieldOfView = 30.0f;
             }
             if (D_8219A4F0.flags & 2) {
                 if (*M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C) & 0x10) {

@@ -39,7 +39,7 @@ f32 func_8000F23C(f32, f32, f32, f32);
 void func_8210C104(s16*, s16, s16);
 void ModelAnim_SetFrame(DisplayObject* display_object, s16 animation_timer);
 f32 func_82121750(ActivePokemon*, f32, f32);
-s16 BattleScene_GetParticipantFacingAngle(s8 *arg0);
+s16 BattleScene_GetParticipantFacingAngle(ActivePokemon* arg0);
 void func_82134FD0(ActivePokemon*);
 void func_82102010(ActivePokemon*);
 s32 func_82101FD4(ActivePokemon*);
