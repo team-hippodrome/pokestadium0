@@ -4,56 +4,10 @@
 #include "m2c_macros.h"
 #include "audio_and_gb_emulator.h"
 
-typedef struct SeqPlayer81111C20 {
-    /* 0x00 */ u32 unk00_31 : 2;
-    /* 0x00 */ u32 muted : 1; // @unverified: bit 2 of the player flags, OoT's SequencePlayer.muted (softens the channel volume)
-    /* 0x00 */ u32 unk00_28 : 29;
-    /* 0x04 */ char unk04[0x28 - 0x4];
-    /* 0x28 */ f32 muteVolumeScale; // @unverified: same offset/use as OoT's SequencePlayer.muteVolumeScale
-    /* 0x2C */ char unk2C[0x30 - 0x2C];
-    /* 0x30 */ f32 appliedFadeVolume; // @unverified: same offset/use as OoT's SequencePlayer.appliedFadeVolume
-} SeqPlayer81111C20;
-typedef struct Layer81111C20 {
-    /* 0x00 */ u32 enabled : 1; // @unverified: same bit/use as OoT's SequenceLayer.enabled
-    /* 0x00 */ u32 unk00_30 : 4;
-    /* 0x00 */ u32 notePropertiesNeedInit : 1; // @unverified: same use as OoT's SequenceLayer.notePropertiesNeedInit (cleared once the note properties are set)
-    /* 0x00 */ u32 unk00_25 : 26;
-    /* 0x04 */ u8 unk04[2];
-    /* 0x06 */ u8 pan; // @unverified: same offset/use as OoT's SequenceLayer.pan
-    /* 0x07 */ s8 notePan; // @unverified: same offset/use as OoT's SequenceLayer.notePan
-    /* 0x08 */ char unk08[0x24 - 0x8];
-    /* 0x24 */ f32 freqScale; // @unverified: same offset/use as OoT's SequenceLayer.freqScale
-    /* 0x28 */ char unk28[0x2C - 0x28];
-    /* 0x2C */ f32 velocitySquare2; // @unverified: same offset as Layer81113A44.velocitySquare2, the randomized velocity
-    /* 0x30 */ char unk30[0x34 - 0x30];
-    /* 0x34 */ f32 noteVelocity; // @unverified: same offset/use as OoT's SequenceLayer.noteVelocity
-    /* 0x38 */ f32 noteFreqScale; // @unverified: same offset/use as OoT's SequenceLayer.noteFreqScale
-    /* 0x3C */ char unk3C[0x48 - 0x3C];
-    /* 0x48 */ s32 note; // @unverified: same offset/use as OoT's SequenceLayer.note (only layers with a note are updated)
-} Layer81111C20;
-typedef struct Channel81111C20 {
-    /* 0x00 */ u32 unk00_31 : 8;
-    /* 0x00 */ u32 changeFreqScale : 1; // @unverified: same bit/use as OoT's SequenceChannel.changes.s.freqScale
-    /* 0x00 */ u32 changeVolume : 1; // @unverified: same bit/use as OoT's SequenceChannel.changes.s.volume
-    /* 0x00 */ u32 changePan : 1; // @unverified: same bit/use as OoT's SequenceChannel.changes.s.pan
-    /* 0x00 */ u32 unk00_20 : 21;
-    /* 0x04 */ char unk04[0xA - 0x4];
-    /* 0x0A */ u8 newPan; // @unverified: same offset/use as OoT's SequenceChannel.newPan
-    /* 0x0B */ u8 panChannelWeight; // @unverified: same offset/use as OoT's SequenceChannel.panChannelWeight
-    /* 0x0C */ char unk0C[0x28 - 0xC];
-    /* 0x28 */ f32 volumeScale; // @unverified: same offset/use as OoT's SequenceChannel.volumeScale
-    /* 0x2C */ f32 volume; // @unverified: same offset/use as OoT's SequenceChannel.volume
-    /* 0x30 */ s32 pan; // @unverified: same offset/use as OoT's SequenceChannel.pan (newPan * panChannelWeight)
-    /* 0x34 */ f32 appliedVolume; // @unverified: same offset/use as OoT's SequenceChannel.appliedVolume
-    /* 0x38 */ f32 freqScale; // @unverified: same offset/use as OoT's SequenceChannel.freqScale
-    /* 0x3C */ char unk3C[0x4C - 0x3C];
-    /* 0x4C */ SeqPlayer81111C20* seqPlayer; // @unverified: same offset/use as OoT's SequenceChannel.seqPlayer
-    /* 0x50 */ Layer81111C20* layers[4]; // @unverified: same offset/use as OoT's SequenceChannel.layers
-} Channel81111C20;
-void func_81111C20(Channel81111C20* arg0, u32 force) {
+void func_81111C20(SequenceChannel* arg0, u32 force) {
     f32 vol;
     s32 i;
-    Layer81111C20* v;
+    SequenceLayer* v;
 
     if (arg0->changeVolume || force) {
         vol = arg0->volume * arg0->volumeScale * arg0->seqPlayer->appliedFadeVolume;
@@ -89,27 +43,9 @@ void func_81111C20(Channel81111C20* arg0, u32 force) {
     M2C_FIELD(arg0, u8*, 1) = 0;
 }
 
-typedef struct Channel81111DC8 {
-    /* 0x00 */ u32 enabled : 1; // @unverified: same bit/use as OoT's SequenceChannel.enabled
-} Channel81111DC8;
-typedef struct SeqPlayer81111DC8 {
-    /* 0x00 */ u32 unk00_0 : 5;
-    /* 0x00 */ u32 recalculateVolume : 1; // @unverified: same bit/use as OoT's SequencePlayer.recalculateVolume
-    /* 0x00 */ u32 unk00_6 : 2;
-    /* 0x01 */ u32 state : 8; // @unverified: same offset/use as OoT's SequencePlayer.state (2 = fade out, then disable)
-    /* 0x02 */ char unk02[0x12 - 0x2];
-    /* 0x12 */ u16 fadeTimer; // @unverified: same offset/use as OoT's SequencePlayer.fadeTimer
-    /* 0x14 */ char unk14[0x1C - 0x14];
-    /* 0x1C */ f32 fadeVolume; // @unverified: same offset/use as OoT's SequencePlayer.fadeVolume
-    /* 0x20 */ f32 fadeVelocity; // @unverified: same offset/use as OoT's SequencePlayer.fadeVelocity
-    /* 0x24 */ char unk24[0x2C - 0x24];
-    /* 0x2C */ f32 fadeVolumeScale; // @unverified: same offset/use as OoT's SequencePlayer.fadeVolumeScale
-    /* 0x30 */ f32 appliedFadeVolume; // @unverified: same offset/use as OoT's SequencePlayer.appliedFadeVolume
-    /* 0x34 */ Channel81111DC8* channels[16]; // @unverified: same offset/use as OoT's SequencePlayer.channels
-} SeqPlayer81111DC8;
 void func_81111C20();
-void AudioSeq_SequencePlayerDisable(SeqPlayer81111DC8 *);
-void func_81111DC8(SeqPlayer81111DC8 *arg0) {
+void AudioSeq_SequencePlayerDisable(SequencePlayer *);
+void func_81111DC8(SequencePlayer *arg0) {
     s32 i;
 
     if (arg0->fadeTimer != 0) {
@@ -154,13 +90,6 @@ f32 func_81111F0C(arg0)
     return ret;
 }
 
-typedef struct {
-    /* 0x00 */ char unk00[0x4];
-    /* 0x04 */ u32 time; // @unverified: same offset/use as OoT's VibratoState.time
-    /* 0x08 */ s16* curve; // @unverified: same offset/use as OoT's VibratoState.curve
-    /* 0x0C */ char unk0C[0x4];
-    /* 0x10 */ f32 rate; // @unverified: same offset/use as OoT's VibratoState.rate
-} VibratoState81111FE0;
 
 /*
  * func_81111FE0
@@ -170,66 +99,13 @@ typedef struct {
  * s16), shifted right by 8 (sign-extended). Same as OoT's
  * AudioEffects_GetVibratoPitchChange.
  */
-s16 func_81111FE0(VibratoState81111FE0* arg0) {
+s16 func_81111FE0(VibratoState* arg0) {
     s32 index;
 
     arg0->time += (s32)arg0->rate;
     index = (arg0->time >> 10) & 0x3F;
     return (s16)(arg0->curve[index] >> 8);
 }
-
-typedef struct Channel81112278 {
-    /* 0x00 */ char pad00[0x10];
-    /* 0x10 */ u16 vibratoRateStart;
-    /* 0x12 */ u16 vibratoExtentStart;
-    /* 0x14 */ u16 vibratoRateTarget;
-    /* 0x16 */ u16 vibratoExtentTarget;
-    /* 0x18 */ u16 vibratoRateChangeDelay;
-    /* 0x1A */ u16 vibratoExtentChangeDelay;
-    /* 0x1C */ u16 vibratoDelay;
-} Channel81112278;
-
-typedef struct Portamento81112278 {
-    /* 0x00 */ s32 words[4];
-} Portamento81112278; // size = 0x10
-
-typedef struct Layer81112278 {
-    /* 0x00 */ char pad00[0x8];
-    /* 0x08 */ Portamento81112278 portamento;
-    /* 0x18 */ char pad18[0x54 - 0x18];
-    /* 0x54 */ Channel81112278* seqChannel;
-} Layer81112278;
-
-typedef struct PlaybackState81112278 {
-    /* 0x00 */ char pad00[0x14];
-    /* 0x14 */ Layer81112278* parentLayer;
-    /* 0x18 */ char pad18[0x50 - 0x18];
-    /* 0x50 */ Portamento81112278 portamento;
-} PlaybackState81112278;
-
-typedef struct Vibrato81112278 {
-    /* 0x00 */ Channel81112278* seqChannel;
-    /* 0x04 */ u32 time;
-    /* 0x08 */ s16* curve;
-    /* 0x0C */ f32 extent;
-    /* 0x10 */ f32 rate;
-    /* 0x14 */ u8 active;
-    /* 0x16 */ u16 rateChangeTimer;
-    /* 0x18 */ u16 extentChangeTimer;
-    /* 0x1A */ u16 delay;
-} Vibrato81112278;
-
-typedef struct Note81112278 {
-    /* 0x00 */ char pad00[0x30];
-    /* 0x30 */ u8 priority;
-    /* 0x31 */ char pad31[0x38 - 0x31];
-    /* 0x38 */ f32 portamentoFreqScale;
-    /* 0x3C */ f32 vibratoFreqScale;
-    /* 0x40 */ char pad40[0x4];
-    /* 0x44 */ Layer81112278* parentLayer;
-    /* 0x48 */ char pad48[0x90 - 0x48];
-    /* 0x90 */ Vibrato81112278 vibratoState;
-} Note81112278;
 
 /**
  * Returns the frequency scale for a note's vibrato and steps it: counts down
@@ -239,12 +115,12 @@ typedef struct Note81112278 {
  * library.
  */
 f32 func_81112024(vib)
-    Vibrato81112278* vib;
+    VibratoState* vib;
 {
     s32 pitch_change;
     f32 extent;
     f32 result;
-    Channel81112278* seqChannel = vib->seqChannel;
+    SequenceChannel* seqChannel = vib->channel;
 
     if (vib->delay != 0) {
         vib->delay--;
@@ -283,7 +159,7 @@ f32 func_81112024(vib)
         return 1.0f;
     }
 
-    pitch_change = func_81111FE0((VibratoState81111FE0*)vib);
+    pitch_change = func_81111FE0(vib);
     extent = (f32)vib->extent / 4096.0f;
 
     result = 1.0f + extent * (D_FLT_81136178[pitch_change] - 1.0f);
@@ -310,21 +186,21 @@ extern s16* D_81135F68;
  * their targets) and copies the layer's portamento into the note. Same
  * structure as note_vibrato_init in the Super Mario 64 audio library.
  */
-void func_81112278(Note81112278* note) {
-    Vibrato81112278* vib;
-    Channel81112278* seqChannel;
-    PlaybackState81112278* seq_player_state = (PlaybackState81112278*)&note->priority;
+void func_81112278(Note* note) {
+    VibratoState* vib;
+    SequenceChannel* seqChannel;
+    NotePlaybackState* seq_player_state = &note->playbackState;
 
-    note->vibratoFreqScale = 1.0f;
-    note->portamentoFreqScale = 1.0f;
-    vib = &note->vibratoState;
+    note->playbackState.vibratoFreqScale = 1.0f;
+    note->playbackState.portamentoFreqScale = 1.0f;
+    vib = &note->playbackState.vibratoState;
 
     vib->active = 1;
     vib->time = 0;
 
     vib->curve = D_81135F68;
-    vib->seqChannel = note->parentLayer->seqChannel;
-    seqChannel = vib->seqChannel;
+    vib->channel = note->playbackState.parentLayer->channel;
+    seqChannel = vib->channel;
 
     if ((vib->extentChangeTimer = seqChannel->vibratoExtentChangeDelay) == 0) {
         vib->extent = (s32)seqChannel->vibratoExtentTarget;
@@ -351,25 +227,6 @@ void func_8111235C(s8 *arg0, s32 arg1, M2C_UNK arg2) {
     M2C_FIELD(arg0, f32 *, 0x14) = 0.0f;
 }
 
-typedef struct EnvelopePoint81112380 {
-    /* 0x0 */ s16 delay;
-    /* 0x2 */ s16 arg;
-} EnvelopePoint81112380;
-
-typedef struct Adsr81112380 {
-    /* 0x00 */ u8 action;
-    /* 0x01 */ u8 state;
-    /* 0x02 */ s16 envIndex;
-    /* 0x04 */ s16 delay;
-    /* 0x08 */ f32 sustain;
-    /* 0x0C */ f32 velocity;
-    /* 0x10 */ f32 fadeOutVel;
-    /* 0x14 */ f32 current;
-    /* 0x18 */ f32 target;
-    /* 0x1C */ char pad1C[4];
-    /* 0x20 */ EnvelopePoint81112380* envelope;
-} Adsr81112380;
-
 extern f32 D_811858DC;
 
 /**
@@ -382,7 +239,7 @@ extern f32 D_811858DC;
  * tables or fragment headers.
  * @unverified Name guessed from the code; comment kept.
  */
-f32 AudioEffects_UpdateAdsr(Adsr81112380* adsr) {
+f32 AudioEffects_UpdateAdsr(AdsrState* adsr) {
     u8 action = adsr->action;
     u8 state = adsr->state;
 
