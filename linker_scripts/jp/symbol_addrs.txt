@@ -4922,3 +4922,4 @@ AudioSeq_SkipForwardSequence = 0x81115254; // type:func
 AudioSeq_ResetSequencePlayer = 0x811152A4; // type:func
 AudioSeq_InitSequencePlayerChannels = 0x8111539C; // type:func
 AudioSeq_InitSequencePlayers = 0x81115480; // type:func
+MainMenuLauncher_QueueMainMenu = 0x8E000020; // type:func

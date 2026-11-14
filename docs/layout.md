@@ -34,7 +34,7 @@ Where the code lives, after the reorganization. File names are broadly correct g
 | 017 | `src/fragments/lab_menu/` | 1 | 6 | Lab menu |
 | 018 | `src/fragments/pokedex/` | 2 | 56 | Pokédex |
 | 019 | `src/fragments/party_summary/` | 2 | 34 | party summary |
-| 020 | `src/fragments/main_menu_launcher/` | 1 | 1 | launches the main menu |
+| 020 | `src/fragments/main_menu_launcher/` | 1 | 1 | queues the main menu; only loaded by 021–024, which nothing loads |
 | 021 | `src/fragments/launcher_relay_021/` | 1 | 1 | launcher relay |
 | 022 | `src/fragments/launcher_relay_022/` | 1 | 1 | launcher relay |
 | 023 | `src/fragments/launcher_relay_023/` | 1 | 1 | launcher relay |
