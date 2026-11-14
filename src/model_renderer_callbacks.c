@@ -122,10 +122,10 @@ void ModelRenderer_UpdateSlotModel(void) {
         ModelRenderer_ApplySlotScale(index);
 
         if (D_8006049C->objectType == 0x92) {
-            func_800339CC(&D_800B0338[index][D_800AFB28].model, D_800B3218, D_800AFB38[index].mtx, D_80075C10);
+            Model_InitSkinned(&D_800B0338[index][D_800AFB28].model, D_800B3218, D_800AFB38[index].mtx, D_80075C10);
             return;
         }
-        func_800339CC(&D_800B0338[index][D_800AFB28].model, D_800B3218, D_800AFB38[index].mtx, D_80075A68);
+        Model_InitSkinned(&D_800B0338[index][D_800AFB28].model, D_800B3218, D_800AFB38[index].mtx, D_80075A68);
     }
 }
 

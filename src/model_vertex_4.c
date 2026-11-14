@@ -23,8 +23,8 @@ extern Vec3fCounter* D_800B32C0;
 extern PosBlend D_800B32C8[0x10];
 extern Mtx D_800B35C8;
 
-void func_800350E0(void);
-void func_800350E8(ModelSegment* segment, MtxF* mtx, ModelVertex* mvtx);
+void Model_UnusedStub2(void);
+void Model_InitializeVertexPositionsAlt(ModelSegment* segment, MtxF* mtx, ModelVertex* mvtx);
 f32 Model_ComputeScaledDistance(Vec3f* a, Vec3f* b, Vec3f* scale);
 f32 Model_ComputeDistance(s16 (*a)[3], s16 (*b)[3]);
 void Model_ExtrapolateVertexPosition(Vec3f* from, Vec3f* to, f32 currentTime, f32 deltaTime, f32 scale);
@@ -39,10 +39,18 @@ void Model_TransformPoint(MtxF* mtx, Vec3f* out, s16 (*in)[3]);
 void Model_AccumulateVertexOffset(MtxF* mtx, PosBlend* position, s16 (*target)[3], f32 alpha);
 void Model_CopyPositionBuffer(PosBlend* src, PosBlend* dst);
 
-void func_800350E0(void) {
+/**
+ * Empty function with no callers.
+ */
+void Model_UnusedStub2(void) {
 }
 
-void func_800350E8(ModelSegment* segment, MtxF* mtx, ModelVertex* mvtx) {
+/**
+ * Transforms each primary vertex to its starting position by its class (plain, merged, blend source or
+ * target, per-matrix), like Model_InitializeVertexPositions.
+ * @unverified Name read from the code.
+ */
+void Model_InitializeVertexPositionsAlt(ModelSegment* segment, MtxF* mtx, ModelVertex* mvtx) {
     ModelVertex* tmp;
     Vtx* vtx;
     PosBlend* position;

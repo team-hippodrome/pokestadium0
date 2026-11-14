@@ -520,9 +520,9 @@ s32 Battle_FrameCallback(s32 fade_mode) {
     s32 battle_result = 0;
 
     Cont_StartReadInputs();
-    Trainer_RequestPokeIcon(&sBattleSides[0]);
+    BattleSide_RequestModelLoad(&sBattleSides[0]);
     PokeIcon_WaitFrameLoadForObject(&sBattleSides[0]);
-    Trainer_RequestPokeIcon(&sBattleSides[1]);
+    BattleSide_RequestModelLoad(&sBattleSides[1]);
     PokeIcon_WaitFrameLoadForObject(&sBattleSides[1]);
     Cont_ReadInputs();
     Input_ResetRepeatState();
@@ -651,7 +651,7 @@ void BattleScene_InitializeParticipantPresentation(BattleSide* side, unk_D_86002
     side->unk_1C = 0;
     side->displayModel = first_trainer->pokemonPicked[0].species.id;
     side->displayMon = first_trainer->pokemonPicked;
-    Trainer_RequestPokeIcon(side);
+    BattleSide_RequestModelLoad(side);
 }
 
 typedef struct Unit82101324 {

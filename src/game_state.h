@@ -146,12 +146,12 @@ typedef struct TeamRoster {
 
 // One side of a battle: its trainer(s) (two in a tag battle), the Pokémon model it shows and model load state.
 typedef struct BattleSide {
-    /* 0x00 */ u8 modelFlags; // 0x80 asks for the side's model to be reloaded, 0x40 while it is requested, 0x10 once loaded; a switch in play wrote 0x80 (BattleScene_PhaseWithdraw), 0xC0 (Trainer_RequestPokeIcon), 0x10 (PokeIcon_WaitFrameLoadForObject), then 0
+    /* 0x00 */ u8 modelFlags; // 0x80 asks for the side's model to be reloaded, 0x40 while it is requested, 0x10 once loaded; a switch in play wrote 0x80 (BattleScene_PhaseWithdraw), 0xC0 (BattleSide_RequestModelLoad), 0x10 (PokeIcon_WaitFrameLoadForObject), then 0
     /* 0x01 */ u8 tagTeamSize;
     /* 0x02 */ s16 displayModel;
     /* 0x04 */ BattleMon* displayMon; // party BattleMon whose model the side shows; moved from pokemonPicked[0] to [3] with displayModel 95 to 31 when 1P switched Onix for Nidoqueen
     /* 0x08 */ TeamRoster* teamMember[2];
-    /* 0x10 */ ModelLoadContext* modelLoadContext; // @unverified: loader Trainer_RequestPokeIcon and the PokeIcon_*ForObject functions use
+    /* 0x10 */ ModelLoadContext* modelLoadContext; // @unverified: loader BattleSide_RequestModelLoad and the PokeIcon_*ForObject functions use
     /* 0x14 */ ModelNodeView* loadedModel; // @unverified: modelLoadContext->loadedModel once the model load finishes
     /* 0x18 */ ModelNodeView* unk_18;
     /* 0x1C */ u8 unk_1C;

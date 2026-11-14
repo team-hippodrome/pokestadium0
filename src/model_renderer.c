@@ -200,24 +200,30 @@ s32 func_80005014(void);
 void func_8001799C(ModelLoadContext*, u16, arg1_func_80010CA8);
 void func_80017D00(ModelLoadContext*);
 
-void func_80019D08(BattleSide* arg0) {
+/**
+ * When a side's model is flagged for reloading (0x80) and not yet requested, starts loading its
+ * display model (sized for the displayed Pokémon) and marks it requested (0x40); if 0x20 is set it
+ * also waits for the load and takes the loaded model.
+ * @unverified Name read from the code; the battle stage calls it for both sides.
+ */
+void BattleSide_RequestModelLoad(BattleSide* side) {
     arg1_func_80010CA8 sp24;
 
     sp24.raw = 0;
-    if (!(arg0->modelFlags & 0x40) && (arg0->modelFlags & 0x80)) {
-        if (arg0->displayMon != NULL) {
-            Model_ComputeSizeVariant(&sp24, arg0->displayMon);
+    if (!(side->modelFlags & 0x40) && (side->modelFlags & 0x80)) {
+        if (side->displayMon != NULL) {
+            Model_ComputeSizeVariant(&sp24, side->displayMon);
         }
-        if (!(arg0->modelLoadContext->flags & 4)) {
+        if (!(side->modelLoadContext->flags & 4)) {
             while (func_80005014() != 0) {}
         }
-        func_8001799C(arg0->modelLoadContext, arg0->displayModel, sp24);
-        arg0->modelFlags |= 0x40;
-        arg0->modelFlags &= ~0x10;
-        if (arg0->modelFlags & 0x20) {
-            func_80017D00(arg0->modelLoadContext);
-            arg0->loadedModel = (ModelNodeView*)arg0->modelLoadContext->loadedModel;
-            arg0->modelFlags &= ~0xE0;
+        func_8001799C(side->modelLoadContext, side->displayModel, sp24);
+        side->modelFlags |= 0x40;
+        side->modelFlags &= ~0x10;
+        if (side->modelFlags & 0x20) {
+            func_80017D00(side->modelLoadContext);
+            side->loadedModel = (ModelNodeView*)side->modelLoadContext->loadedModel;
+            side->modelFlags &= ~0xE0;
         }
     }
 }

@@ -7,13 +7,13 @@
 #include "model_vertex_draw.h"
 
 // model_vertex_2.c
-void func_80033BBC(StadiumModel* model, MtxF* mtx);
-void func_80033750(void);
+void Model_RebuildVertexData(StadiumModel* model, MtxF* mtx);
+void Model_UnusedStub(void);
 
 // model_vertex_3.c
 void Model_InitializeVertexPositions(ModelSegment*, MtxF*, ModelVertex*);
 
 // model_vertex_4.c
-void func_800350E0(void);
+void Model_UnusedStub2(void);
 
 #endif // MODEL_VERTEX_H

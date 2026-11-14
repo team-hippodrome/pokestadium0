@@ -35,10 +35,10 @@ s16 Model_GetVertexClass(s16* table, s32 index);
 s16 Model_GetVertexThreshold(s16* arg0, s32 arg1);
 s16 Model_GetVertexJoint(s16* arg0, s32 arg1);
 s16 Model_GetVertexHeightClass(s16* arg0, s32 arg1);
-void func_800341E8(ModelSegment* segment, ModelVertex* vertices);
+void Model_ComputeVertexNormals(ModelSegment* segment, ModelVertex* vertices);
 void Model_ApplyVertexTransforms(StadiumModel* model);
-void func_80034A74(u32 modelSegment, StadiumTransform* xf, s32 index, ModelVertex* vertices);
-void func_800350E8(ModelSegment* segment, MtxF* mtx, ModelVertex* mvtx);
+void Model_ApplySkinBoneInRange(u32 modelSegment, StadiumTransform* xf, s32 index, ModelVertex* vertices);
+void Model_InitializeVertexPositionsAlt(ModelSegment* segment, MtxF* mtx, ModelVertex* mvtx);
 f32 Model_ComputeScaledDistance(Vec3f* a, Vec3f* b, Vec3f* scale);
 f32 Model_ComputeDistance(s16 (*a)[3], s16 (*b)[3]);
 void Model_ExtrapolateVertexPosition(Vec3f* from, Vec3f* to, f32 currentTime, f32 deltaTime, f32 scale);
@@ -378,58 +378,58 @@ void func_80036064(StadiumModel* model, MtxF* mtx) {
     ModelSegment* segment = Memmap_GetSegmentVaddr(model->modelSegment);
     switch (segment->type) {
     case 3:
-        func_800350E8(segment, mtx, mvtx);
+        Model_InitializeVertexPositionsAlt(segment, mtx, mvtx);
         Model_OffsetVertexHeights(segment, mvtx, model->scale.y * -10.0f);
-        func_800341E8(segment, mvtx);
+        Model_ComputeVertexNormals(segment, mvtx);
         for(var_s0 = 0; var_s0 < model->transformCount; var_s0++) {
-            func_80034A74(segment, &model->transforms[var_s0], var_s0, mvtx);
+            Model_ApplySkinBoneInRange(segment, &model->transforms[var_s0], var_s0, mvtx);
         }
         func_80035E48(segment, mvtx);
         Model_ApplyTransformCommands(segment, mvtx, model, 0.7f);        
         break;
     case 4:
-        func_800350E8(segment, mtx, mvtx);
+        Model_InitializeVertexPositionsAlt(segment, mtx, mvtx);
         Model_OffsetVertexHeights(segment, mvtx, model->scale.y * -10.0f);
-        func_800341E8(segment, mvtx);
+        Model_ComputeVertexNormals(segment, mvtx);
         func_80035E48(segment, mvtx);
         break;
     case 10:
-        func_800350E8(segment, mtx, mvtx);
+        Model_InitializeVertexPositionsAlt(segment, mtx, mvtx);
         func_80035BA8(segment, mvtx, model->scale.y * 160.0f);
         func_80035E48(segment, mvtx);
         func_800359C0(segment, mvtx, model, 1.0f);
         break;
     case 11:
-        func_800350E8(segment, mtx, mvtx);
+        Model_InitializeVertexPositionsAlt(segment, mtx, mvtx);
         func_80035CCC(segment, mvtx, 160.0f, model);
         func_80035E48(segment, mvtx);
         func_800359C0(segment, mvtx, model, 1.0f);
         break;
     case 1:
-        func_800350E8(segment, mtx, mvtx);
-        func_800341E8(segment, mvtx);
+        Model_InitializeVertexPositionsAlt(segment, mtx, mvtx);
+        Model_ComputeVertexNormals(segment, mvtx);
         func_80035E48(segment, mvtx);
         break;
     case 2:
-        func_800350E8(segment, mtx, mvtx);
+        Model_InitializeVertexPositionsAlt(segment, mtx, mvtx);
         Model_OffsetVertexHeights(segment, mvtx, model->scale.y * -10.0f);
-        func_800341E8(segment, mvtx);
+        Model_ComputeVertexNormals(segment, mvtx);
         func_80035E48(segment, mvtx);
         break;
     case 5:
-        func_800350E8(segment, mtx, mvtx);
-        func_800341E8(segment, mvtx);
+        Model_InitializeVertexPositionsAlt(segment, mtx, mvtx);
+        Model_ComputeVertexNormals(segment, mvtx);
         func_80035E48(segment, mvtx);
         break;
     case 6:
-        func_800350E8(segment, mtx, mvtx);
-        func_800341E8(segment, mvtx);
+        Model_InitializeVertexPositionsAlt(segment, mtx, mvtx);
+        Model_ComputeVertexNormals(segment, mvtx);
         func_80035E48(segment, mvtx);
         break;
     case 9:
-        func_800350E8(segment, mtx, mvtx);
+        Model_InitializeVertexPositionsAlt(segment, mtx, mvtx);
         Model_ApplyVertexTransforms(model);
-        func_800341E8(segment, mvtx);
+        Model_ComputeVertexNormals(segment, mvtx);
         break;
     default:
         return;
