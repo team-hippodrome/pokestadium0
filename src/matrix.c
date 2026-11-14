@@ -564,7 +564,7 @@ void MtxF_SetRotationAndScaledTranslation(MtxF* dest, Vec3f* translate, Vec3s* r
     dest->mf[3][3] = 1.0f;
 }
 
-void func_8000E41C(MtxF* dest, MtxF* basis, MtxF* transform, Vec3f* local_position) {
+void MtxF_SetBillboard(MtxF* dest, MtxF* basis, MtxF* transform, Vec3f* local_position) {
     f32 x_norm;
     f32 y_norm;
     f32 z_norm;
@@ -726,12 +726,12 @@ void MtxF_ToFixed(MtxF* dest, MtxF* src) {
     }
 }
 
-void func_8000E41C(MtxF* dest, MtxF* basis, MtxF* transform, Vec3f* local_position);
+void MtxF_SetBillboard(MtxF* dest, MtxF* basis, MtxF* transform, Vec3f* local_position);
 void func_8000ED9C(MtxF* dest, Vec3f* local_position, Vec3s* rotate, Vec3f* scale, MtxF* basis, MtxF* transform) {
     MtxF sp58;
     MtxF sp18;
 
-    func_8000E41C(&sp58, basis, transform, local_position);
+    MtxF_SetBillboard(&sp58, basis, transform, local_position);
     MtxF_SetRotationTranslationF(&sp18, &D_80060450, rotate);
     MtxF_Multiply(&sp18, &sp18, &sp58);
     MtxF_ScaleRows(dest, &sp18, scale);

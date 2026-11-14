@@ -2384,7 +2384,7 @@ s32 Team_IsOpponentIndexUsed(s32 arg0);
 
 // stage.c
 s32 Battle_StageGeoDispatchCallback(s32 event, GraphNode* node);
-s32 Battle_StageLightAngleCallbackA(s32 event, unk_D_86002F34_alt18* light);
+s32 Battle_StageLightAngleCallbackA(s32 event, GeoLightNode* light);
 s32 Battle_StageMaterialTintCallback(s32 event, DisplayObject* object);
 void Battle_SetStageTintColor(u8 r, u8 g, u8 b);
 void Battle_SetStageScale(f32 scale);

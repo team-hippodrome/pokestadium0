@@ -183,15 +183,15 @@ void VsScene_SetupCamera(s32 arg0, CameraNode* arg1) {
 
 /** Callback that sets the light angle of a node. */
 s32 Completion_LightAngleCallbackA(s32 arg0, GraphNode* arg1) {
-    unk_D_86002F34_alt18* ptr = (unk_D_86002F34_alt18*)arg1;
+    GeoLightNode* ptr = (GeoLightNode*)arg1;
     f32 sp28;
     s16 sp26;
     s16 sp24;
 
     if (arg0 == 2) {
         Vec3f_CalculateDistanceAngles(&D_80060488->view.targetPosition, &D_80060488->view.eyePosition, &sp28, &sp26, &sp24);
-        ptr->unk_1C = sp26 + 0x2000;
-        ptr->unk_1E = sp24 - 0x2000;
+        ptr->pitch = sp26 + 0x2000;
+        ptr->yaw = sp24 - 0x2000;
     }
     return 0;
 }

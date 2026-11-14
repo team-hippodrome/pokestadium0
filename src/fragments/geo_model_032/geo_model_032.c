@@ -23,9 +23,9 @@ s32 func_8F500020(s32 arg0) {
     return arg0;
 }
 
-void func_8F500088(s32 arg0, unk_D_86002F34_alt1* arg1) {
+void func_8F500088(s32 arg0, GeoModelRootNode* arg1) {
     if (arg0 == 2) {
-        arg1->unk_1A = D_80060490->unk_18 - 1;
+        arg1->unk_1A = D_80060490->rootId - 1;
     }
 }
 

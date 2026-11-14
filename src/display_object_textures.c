@@ -22,7 +22,7 @@ typedef struct ret_func_unk_D_800ABE10 {
     /* 0x00 */ char unk00[0x3];
     /* 0x03 */ u8 unk_03;
     /* 0x04 */ char unk04[0x4];
-    /* 0x08 */ unk_D_86002F34** unk_08;
+    /* 0x08 */ GeoTextureBankNode** unk_08;
     /* 0x0C */ char unk0C[0x8];
     /* 0x14 */ func_unk_D_800ABE10 unk_14;
 } ret_func_unk_D_800ABE10;
@@ -30,7 +30,7 @@ extern ModelLoaderThread D_800AC7A0;
 
 #include "m2c_macros.h"
 
-void func_80016D40(unk_D_86002F34* arg0, arg1_func_80010CA8 arg1);
+void func_80016D40(GeoTextureBankNode* arg0, arg1_func_80010CA8 arg1);
 Fragment* Jpeg_AllocAndDecodeFragment(MemoryBlock* arg0, PRESJPEG* arg1, PRESJPEG* arg2);
 Fragment* Yay0_AllocAndDecompressFragment(MainPoolState* arg0, PERSSZP* arg1, PERSSZP* arg2);
 Fragment* Asset_AllocAndCopyFragment(MainPoolState* arg0, PERSSZP* arg1, s32 arg2, u32 arg3);
@@ -52,13 +52,13 @@ Fragment* Fragment_LoadAndRelocateFromRomRange(MainPoolState* arg0, u32 arg1, s3
 
 void PokeIcon_ThreadMain(UNUSED void* arg0);
 
-void func_80016D40(unk_D_86002F34* arg0, arg1_func_80010CA8 arg1) {
+void func_80016D40(GeoTextureBankNode* arg0, arg1_func_80010CA8 arg1) {
     s32 i;
     s32 j;
-    unk_D_86002F34_018* var_s2 = arg0->unk_18;
-    unk_D_86002F34_01C* var_s4 = arg0->unk_1C;
+    unk_D_86002F34_018* var_s2 = arg0->textures;
+    unk_D_86002F34_01C* var_s4 = arg0->palettes;
 
-    for (i = 0; i < arg0->unk_24; i++, var_s2++) {
+    for (i = 0; i < arg0->textureCount; i++, var_s2++) {
         if (var_s2->unk_00 == 0) {
             if (var_s2->type == unk_D_86002F34_018_GFX_TYPE_2) {
                 u16* var_s1 = (u16*)var_s2->texture;
@@ -70,7 +70,7 @@ void func_80016D40(unk_D_86002F34* arg0, arg1_func_80010CA8 arg1) {
             }
         }
     }
-    for (i = 0; i < arg0->unk_25; i++, var_s4++) {
+    for (i = 0; i < arg0->paletteCount; i++, var_s4++) {
         u16* var_s1 = var_s4->unk_04;
         for (j = 0; j < var_s4->unk_00; j++, var_s1++) *var_s1 = Color_AdjustRGB5551(*var_s1, arg1);
     }
@@ -223,7 +223,7 @@ Fragment* BinArchive_LoadFileToPool(MainPoolState* arg0, BinArchive* arg1, s32 a
 /** Builds the graph node tree for a fragment's geo layout. */
 s32 Fragment_ProcessGeoLayout(MemoryBlock* arg0, Fragment* arg1, arg1_func_80010CA8 arg2) {
     s32 i;
-    unk_D_86002F34* temp_v0_2;
+    GeoTextureBankNode* temp_v0_2;
     ret_func_unk_D_800ABE10* temp_v0;
     ret_func_unk_D_800ABE10* (*func)(s32, s32) = arg1;
 

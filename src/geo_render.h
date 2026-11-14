@@ -80,13 +80,13 @@ extern s32 D_80060480;
 
 extern u16 D_80060484;
 
-extern unk_D_86002F34_alt1* D_8006048C;
+extern GeoType3Node* D_8006048C;
 
-extern unk_D_86002F34_alt1* D_80060490;
+extern GeoModelRootNode* D_80060490;
 
 extern CameraNode* D_80060494;
 
-extern unk_D_86002F34_alt1* D_80060498;
+extern GeoModelRootNode* D_80060498;
 
 extern DisplayObject* D_8006049C;
 
@@ -118,7 +118,7 @@ void Geo_NodeClearDepth(UNUSED GraphNode* arg0);
 void Geo_NodeType9Empty(UNUSED GraphNode* arg0);
 void Geo_NodeType12Empty(UNUSED GraphNode* arg0);
 void Geo_NodeAmbientLight(GraphNode* arg0);
-void Geo_NodeShadowContext(GraphNode* arg0);
+void Geo_NodeTextureBank(GraphNode* arg0);
 void Geo_NodeSwitchCase(GraphNode* arg0);
 void Geo_NodeTranslateRotate(GraphNode* arg0);
 void Geo_NodeTranslate(GraphNode* arg0);
@@ -126,7 +126,7 @@ void Geo_NodeAnimatedPart(GraphNode* arg0);
 void Geo_NodeDisplayListPart(void *arg0);
 void Geo_NodeModelPart(GraphNode* arg0);
 void Geo_NodeDisplayListMatrix(s8 *arg0);
-void Geo_NodeScale(s8 *arg0);
+void Geo_NodeBillboard(s8 *arg0);
 void Geo_NodeDisplayList(s8 *arg0);
 void GeoRender_RecordAnchorPosition(s32 arg0);
 void Geo_NodeAnchor(GraphNode* arg0);

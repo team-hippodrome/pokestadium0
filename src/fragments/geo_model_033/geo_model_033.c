@@ -86,12 +86,12 @@ void func_8F600214(s32 arg0, DemoGeoNode* arg1) {
     }
 }
 
-void func_8F6002C4(s32 arg0, unk_D_86002F34_alt1* arg1) {
+void func_8F6002C4(s32 arg0, GeoModelRootNode* arg1) {
     DemoGeoTeam* teams;
 
     if (arg0 == 2) {
         teams = D_80060490->node.callbackArg;
-        arg1->unk_1A = teams[arg1->unk_18].unk_00 != 0;
+        arg1->unk_1A = teams[arg1->rootId].unk_00 != 0;
     }
 }
 

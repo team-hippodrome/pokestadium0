@@ -22,10 +22,10 @@ typedef struct unk_D_800AA8C8 {
 extern s32 D_80060480;
 extern u16 D_80060484;
 extern CameraNode* D_80060488;
-extern unk_D_86002F34_alt1* D_8006048C;
-extern unk_D_86002F34_alt1* D_80060490;
+extern GeoType3Node* D_8006048C;
+extern GeoModelRootNode* D_80060490;
 extern CameraNode* D_80060494;
-extern unk_D_86002F34_alt1* D_80060498;
+extern GeoModelRootNode* D_80060498;
 extern DisplayObject* D_8006049C;
 extern func_D_8006F0A4 D_8006062C[];
 extern s32 D_800AB244;
@@ -600,7 +600,7 @@ s32 func_8001298C(arg0) s8* arg0; {
     if ((D_80060480 & 1) && (M2C_FIELD(arg0, u8*, 0x1D) == 1) && (M2C_FIELD(arg0, u8*, 0x1C) == 5)) {
         mode = 0x107A58;
     }
-    if (D_80060490->unk_1D != 0) {
+    if (D_80060490->fogEnabled != 0) {
         gSPSetOtherMode(gDisplayListHead++, G_SETOTHERMODE_L, G_MDSFT_RENDERMODE, 29, mode | 0xC8000000);
     } else {
         gSPSetOtherMode(gDisplayListHead++, G_SETOTHERMODE_L, G_MDSFT_RENDERMODE, 29, mode | 0x0C080000);
@@ -978,7 +978,7 @@ void Geo_ProcessNodeChildren(GraphNode* arg0) {
 /** Geo node handler: processes the node it references. */
 void Geo_NodeReference(GraphNode* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
-    GraphNode* temp_a1 = ((unk_D_86002F34*)arg0)->unk_18;
+    GraphNode* temp_a1 = ((GeoReferenceNode*)arg0)->target;
 
     if ((temp_a1 != NULL) && (temp_a1->flags & 1)) {
         D_800AB244 = 0;
@@ -1051,12 +1051,12 @@ extern EventTrackRender D_800AC6A8;
 
 /** Geo node handler: root of a model; processes its children. */
 void Geo_NodeModelRoot(GraphNode* arg0) {
-    unk_D_86002F34_alt1* arg = (unk_D_86002F34_alt1*)arg0;
+    GeoModelRootNode* arg = (GeoModelRootNode*)arg0;
 
     if (arg->node.children != NULL) {
-        arg->unk_1D = 0;
+        arg->fogEnabled = 0;
         arg->lights = Gfx_AllocDisplayList(sizeof(Lights7));
-        arg->unk_1C = 0;
+        arg->lightCount = 0;
         arg->lights->a.l.col[0] = 0;
         arg->lights->a.l.col[1] = 0;
         arg->lights->a.l.col[2] = 0;
@@ -1165,10 +1165,10 @@ void Geo_NodePerspective(GraphNode* arg0) {
 
 /** Geo node handler: fills the viewport with the background. */
 void Geo_NodeBackground(GraphNode* arg0) {
-    unk_D_86002F34_alt2* arg = (unk_D_86002F34_alt2*)arg0;
+    GeoBackgroundNode* arg = (GeoBackgroundNode*)arg0;
     CameraViewport* ptr = &D_80060488->viewport;
 
-    GfxImage_FillRectangle(&gDisplayListHead, ptr->x, ptr->y, ptr->width, ptr->height, arg->unk_18);
+    GfxImage_FillRectangle(&gDisplayListHead, ptr->x, ptr->y, ptr->width, ptr->height, arg->fillColor);
 
     gDPPipeSync(gDisplayListHead++);
     gDPSetCycleType(gDisplayListHead++, G_CYC_2CYCLE);
@@ -1195,13 +1195,13 @@ void Geo_NodeType9Empty(UNUSED GraphNode* arg0) {
  * @unverified Name and comment guessed from the code.
  */
 void GeoRender_SetFog(GraphNode* arg0) {
-    unk_D_86002F34_alt3* arg = (unk_D_86002F34_alt3*)arg0;
+    GeoFogNode* arg = (GeoFogNode*)arg0;
 
-    D_80060490->unk_1D = 1;
+    D_80060490->fogEnabled = 1;
 
-    gSPFogPosition(gDisplayListHead++, arg->unk_18, arg->unk_1A);
+    gSPFogPosition(gDisplayListHead++, arg->fog.near, arg->fog.far);
     gSPSetGeometryMode(gDisplayListHead++, G_FOG);
-    gDPSetColor(gDisplayListHead++, G_SETFOGCOLOR, arg->unk_1C);
+    gDPSetColor(gDisplayListHead++, G_SETFOGCOLOR, arg->fog.color.rgba);
 }
 
 /**
@@ -1212,40 +1212,40 @@ void GeoRender_SetFog(GraphNode* arg0) {
  * @unverified Name and comment guessed from the code.
  */
 void Geo_NodeLight(GraphNode* arg0) {
-    unk_D_86002F34_alt4* arg = (unk_D_86002F34_alt4*)arg0;
+    GeoLightNode* arg = (GeoLightNode*)arg0;
     Light* light;
     Ambient* ambient;
 
-    if (D_80060490->unk_1C >= 7) {
+    if (D_80060490->lightCount >= 7) {
         return;
     }
 
-    light = &D_80060490->lights->l[D_80060490->unk_1C];
+    light = &D_80060490->lights->l[D_80060490->lightCount];
     ambient = &D_80060490->lights->a;
 
-    *(u32*)light->l.col = arg->unk_18.rgba;
-    *(u32*)light->l.colc = arg->unk_18.rgba;
+    *(u32*)light->l.col = arg->color.rgba;
+    *(u32*)light->l.colc = arg->color.rgba;
 
-    light->l.dir[0] = (120.0f * COSS(arg->unk_1C)) * SINS(arg->unk_1E);
-    light->l.dir[1] = (120.0f) * SINS(arg->unk_1C);
-    light->l.dir[2] = (120.0f * COSS(arg->unk_1C)) * COSS(arg->unk_1E);
+    light->l.dir[0] = (120.0f * COSS(arg->pitch)) * SINS(arg->yaw);
+    light->l.dir[1] = (120.0f) * SINS(arg->pitch);
+    light->l.dir[2] = (120.0f * COSS(arg->pitch)) * COSS(arg->yaw);
 
-    ambient->l.col[0] += ((arg->unk_18.r * arg->unk_18.a) / 100);
+    ambient->l.col[0] += ((arg->color.r * arg->color.a) / 100);
     if (ambient->l.col[0] > 0xFF) {
         ambient->l.col[0] = 0xFF;
     }
 
-    ambient->l.col[1] += ((arg->unk_18.g * arg->unk_18.a) / 100);
+    ambient->l.col[1] += ((arg->color.g * arg->color.a) / 100);
     if (ambient->l.col[1] > 0xFF) {
         ambient->l.col[1] = 0xFF;
     }
 
-    ambient->l.col[2] += ((arg->unk_18.b * arg->unk_18.a) / 100);
+    ambient->l.col[2] += ((arg->color.b * arg->color.a) / 100);
     if (ambient->l.col[2] > 0xFF) {
         ambient->l.col[2] = 0xFF;
     }
 
-    D_80060490->unk_1C++;
+    D_80060490->lightCount++;
 }
 
 /** Geo node handler for type 12; does nothing. */
@@ -1257,25 +1257,25 @@ void Geo_NodeType12Empty(UNUSED GraphNode* arg0) {
  * children.
  */
 void Geo_NodeAmbientLight(GraphNode* arg0) {
-    unk_D_86002F34_alt4* arg = (unk_D_86002F34_alt4*)arg0;
+    GeoAmbientLightNode* arg = (GeoAmbientLightNode*)arg0;
     s32 i;
     Lights7* lights;
 
     lights = D_80060490->lights;
-    if ((arg->unk_18.r == 0xFF) && (arg->unk_18.g == 0xFF) && (arg->unk_18.b == 0xFF)) {
+    if ((arg->r == 0xFF) && (arg->g == 0xFF) && (arg->b == 0xFF)) {
         lights->a.l.colc[0] = lights->a.l.col[0];
         lights->a.l.colc[1] = lights->a.l.col[1];
         lights->a.l.colc[2] = lights->a.l.col[2];
     } else {
-        lights->a.l.colc[0] = lights->a.l.col[0] = arg->unk_18.r;
-        lights->a.l.colc[1] = lights->a.l.col[1] = arg->unk_18.g;
-        lights->a.l.colc[2] = lights->a.l.col[2] = arg->unk_18.b;
+        lights->a.l.colc[0] = lights->a.l.col[0] = arg->r;
+        lights->a.l.colc[1] = lights->a.l.col[1] = arg->g;
+        lights->a.l.colc[2] = lights->a.l.col[2] = arg->b;
     }
 
     gSPSetGeometryMode(gDisplayListHead++, G_LIGHTING);
-    gMoveWd(gDisplayListHead++, 2, 0, D_80060490->unk_1C * 0x18);
+    gMoveWd(gDisplayListHead++, 2, 0, D_80060490->lightCount * 0x18);
 
-    for (i = 0; i < D_80060490->unk_1C; i++) {
+    for (i = 0; i < D_80060490->lightCount; i++) {
         gSPLight(gDisplayListHead++, &D_80060490->lights->l[i], i + 1);
     }
 
@@ -1285,10 +1285,10 @@ void Geo_NodeAmbientLight(GraphNode* arg0) {
 extern unk_D_86002F34_alt11* D_800604A0;
 extern Gfx D_01002580[];
 /**
- * Geo node handler: records the shadow context from the current matrix, then
+ * Geo node handler: makes this texture bank current (D_800604A0), then
  * processes children.
  */
-void Geo_NodeShadowContext(GraphNode* arg0) {
+void Geo_NodeTextureBank(GraphNode* arg0) {
     unk_D_86002F34_alt11* arg = (unk_D_86002F34_alt11*)arg0;
     MtxF* temp_v0 = &D_800AB460.unk_0000[D_800AB460.unk_10A0];
     Vec3f sp2C;
@@ -1328,12 +1328,12 @@ void func_8001473C(s8 *arg0)
 
 /** Geo node handler: processes only the child selected by the node's index. */
 void Geo_NodeSwitchCase(GraphNode* arg0) {
-    unk_D_86002F34_alt3* arg = (unk_D_86002F34_alt3*)arg0;
+    GeoSwitchCaseNode* arg = (GeoSwitchCaseNode*)arg0;
     s32 i;
     GraphNode* var_a1 = arg->node.children;
 
     if (var_a1 != NULL) {
-        for (i = 0; i < arg->unk_1A; i++) {
+        for (i = 0; i < arg->selectedChild; i++) {
             var_a1 = var_a1->nextSibling;
         }
     }
@@ -1349,9 +1349,9 @@ void Geo_NodeSwitchCase(GraphNode* arg0) {
  */
 void Geo_NodeTranslateRotate(GraphNode* arg0) {
     MtxF sp20;
-    unk_D_86002F34_alt5* arg = (unk_D_86002F34_alt5*)arg0;
+    GeoTranslateRotateNode* arg = (GeoTranslateRotateNode*)arg0;
 
-    MtxF_SetRotationTranslationF(&sp20, &arg->unk_18, &arg->unk_24);
+    MtxF_SetRotationTranslationF(&sp20, &arg->translation, &arg->rotation);
     GeoRender_PushMultipliedMatrix(&sp20);
     Geo_ProcessNodeChildren(arg0);
 
@@ -1360,9 +1360,9 @@ void Geo_NodeTranslateRotate(GraphNode* arg0) {
 
 /** Geo node handler: pushes a translation matrix, then processes children. */
 void Geo_NodeTranslate(GraphNode* arg0) {
-    unk_D_86002F34_alt5* arg = (unk_D_86002F34_alt5*)arg0;
+    GeoTranslateNode* arg = (GeoTranslateNode*)arg0;
 
-    GeoRender_PushScaledMatrix(&arg->unk_18);
+    GeoRender_PushScaledMatrix(&arg->translation);
     Geo_ProcessNodeChildren(arg0);
 
     D_800AB460.unk_10A0--;
@@ -1382,16 +1382,16 @@ void Geo_NodeAnimatedPart(GraphNode* arg0) {
     Vec3f sp8C;
     Vec3f sp80;
     MtxF sp40;
-    unk_D_86002F34_alt6* arg = (unk_D_86002F34_alt6*)arg0;
+    GeoAnimatedPartNode* arg = (GeoAnimatedPartNode*)arg0;
     s32 idx;
     s32 sp34;
 
-    idx = arg->unk_32 * 3;
+    idx = arg->channelGroup * 3;
     sp34 = 0;
-    sp98 = arg->unk_1E;
-    sp80 = arg->unk_24;
+    sp98 = arg->rotation;
+    sp80 = arg->scale;
 
-    Vec3f_FromVec3s(&sp8C, &arg->unk_18);
+    Vec3f_FromVec3s(&sp8C, &arg->translation);
     if (((&D_800AC690)->active == 1) && (idx >= 0) &&
         (idx + 2 < (&D_800AC690)->data->channelCount)) {
         sp8C.x = ModelAnim_EvaluateTranslationChannel(&D_800AC690, idx + 0);
@@ -1407,12 +1407,12 @@ void Geo_NodeAnimatedPart(GraphNode* arg0) {
         sp80.z = ModelAnim_EvaluateScaleChannel(&D_800AC690, idx + 2);
     }
 
-    if (arg->unk_31 & 2) {
+    if (arg->transformMode & 2) {
         func_8000ED9C(&sp40, &sp8C, &sp98, &sp80, &D_80060488->view.floatMatrix,
                       &D_800AB460.unk_0000[D_800AB460.unk_10A0]);
         D_800AB460.unk_10A0++;
         GeoRender_SetMatrix(&sp40);
-    } else if (arg->unk_31 & 1) {
+    } else if (arg->transformMode & 1) {
         MtxF_SetRotationScaleTranslation(&sp40, &sp8C, &sp98, &sp80);
         GeoRender_PushMultipliedMatrix(&sp40);
     } else {
@@ -1435,9 +1435,9 @@ void Geo_NodeAnimatedPart(GraphNode* arg0) {
         sp34 = 1;
     }
 
-    D_800AB248[arg->unk_30] = (s32)D_800AB460.unk_1000[D_800AB460.unk_10A0];
+    D_800AB248[arg->matrixSlot] = (s32)D_800AB460.unk_1000[D_800AB460.unk_10A0];
     Geo_ProcessNodeChildren(arg0);
-    D_800AB248[arg->unk_30] = 0;
+    D_800AB248[arg->matrixSlot] = 0;
     D_800AB460.unk_10A0--;
 
     if (sp34 != 0) {
@@ -1474,15 +1474,15 @@ extern s32 D_800AB248[];
 void Geo_NodeDisplayListPart(void *arg0) {
     s32 temp_a1;
 
-    temp_a1 = M2C_FIELD(arg0, s32 *, 0x18);
+    temp_a1 = (s32)((GeoDisplayListPartNode*)arg0)->displayList;
     if (temp_a1 != 0) {
-        GeoRender_SubmitLayerDisplayList(M2C_FIELD(arg0, u8 *, 3), temp_a1, D_800AB248[M2C_FIELD(arg0, s16 *, 0x1C)], M2C_FIELD(arg0, u8 *, 2) & 4);
+        GeoRender_SubmitLayerDisplayList(((GeoDisplayListPartNode*)arg0)->node.renderLayer, temp_a1, D_800AB248[((GeoDisplayListPartNode*)arg0)->matrixSlot], ((GeoDisplayListPartNode*)arg0)->node.renderFlags & 4);
     }
     func_8001380C(arg0);
 }
 
 void func_80011838(EventTrackState*, s32);
-void func_8000E41C(MtxF*, MtxF*, MtxF*, Vec3f*);
+void MtxF_SetBillboard(MtxF*, MtxF*, MtxF*, Vec3f*);
 extern s32 D_800AB44C;
 /**
  * Renders a display object: evaluates its animation curves and pushes its transform. Stadium 1 name for the same handler.
@@ -1495,7 +1495,7 @@ void Geo_NodeModelPart(GraphNode* arg0) {
     MtxF sp28;
     DisplayObject* arg = (DisplayObject*)arg0;
 
-    if (D_80060490->unk_18 == arg->rootId) {
+    if (D_80060490->rootId == arg->rootId) {
         arg->anchorCount = 0;
         if (arg->transformAnim.data != NULL) {
             ModelAnim_BeginCurveContext(&arg->transformAnim, arg->node.renderFlags & 0x20);
@@ -1507,7 +1507,7 @@ void Geo_NodeModelPart(GraphNode* arg0) {
         if (arg->node.renderFlags & 0x10) {
             MtxF_Multiply(&sp28, &arg->matrix, &D_800AB460.unk_0000[D_800AB460.unk_10A0]);
         } else if (arg->node.renderFlags & 8) {
-            func_8000E41C(&sp28, &D_80060488->view.floatMatrix, &D_800AB460.unk_0000[D_800AB460.unk_10A0], &arg->position);
+            MtxF_SetBillboard(&sp28, &D_80060488->view.floatMatrix, &D_800AB460.unk_0000[D_800AB460.unk_10A0], &arg->position);
         } else if (arg->node.renderFlags & 0x80) {
             MtxF_SetRotationAndTransformTranslation(&sp28, &arg->position, &arg->rotation);
             MtxF_Multiply(&sp28, &sp28, &D_800AB460.unk_0000[D_800AB460.unk_10A0]);
@@ -1556,16 +1556,16 @@ void Geo_NodeDisplayListMatrix(s8 *arg0) {
     s32 temp_a1;
 
     func_80011294(arg0 + 0x1C);
-    temp_a1 = M2C_FIELD(arg0, s32 *, 0x18);
+    temp_a1 = (s32)((GeoDisplayListMatrixNode*)arg0)->displayList;
     if (temp_a1 != 0) {
-        GeoRender_SubmitLayerDisplayList(M2C_FIELD(arg0, u8 *, 3), temp_a1, 0, M2C_FIELD(arg0, u8 *, 2) & 4);
+        GeoRender_SubmitLayerDisplayList(((GeoDisplayListMatrixNode*)arg0)->node.renderLayer, temp_a1, 0, ((GeoDisplayListMatrixNode*)arg0)->node.renderFlags & 4);
     }
     func_8001380C(arg0);
     D_800AB460.unk_10A0 = (s32) (D_800AB460.unk_10A0 - 1);
 }
 
 M2C_UNK func_8001380C();
-void func_8000E41C(MtxF*, MtxF*, MtxF*, Vec3f*);
+void MtxF_SetBillboard(MtxF*, MtxF*, MtxF*, Vec3f*);
 M2C_UNK func_8001380C(s8 *);
 M2C_UNK func_80011210(MtxF *);                      /* extern */
 
@@ -1575,16 +1575,16 @@ M2C_UNK func_80011210(MtxF *);                      /* extern */
  * logo, opening, title and main menu).
  * @unverified Name and comment guessed from the code.
  */
-void Geo_NodeScale(s8 *arg0) {
+void Geo_NodeBillboard(s8 *arg0) {
     MtxF sp28;
     s32 temp_a1;
 
-    func_8000E41C(&sp28, &D_80060488->view.floatMatrix, &D_800AB460.unk_0000[D_800AB460.unk_10A0], arg0 + 0x1C);
+    MtxF_SetBillboard(&sp28, &D_80060488->view.floatMatrix, &D_800AB460.unk_0000[D_800AB460.unk_10A0], arg0 + 0x1C);
     D_800AB460.unk_10A0 += 1;
     func_80011210(&sp28);
-    temp_a1 = M2C_FIELD(arg0, s32 *, 0x18);
+    temp_a1 = (s32)((GeoBillboardNode*)arg0)->displayList;
     if (temp_a1 != 0) {
-        GeoRender_SubmitLayerDisplayList(M2C_FIELD(arg0, u8 *, 3), temp_a1, 0, M2C_FIELD(arg0, u8 *, 2) & 4);
+        GeoRender_SubmitLayerDisplayList(((GeoBillboardNode*)arg0)->node.renderLayer, temp_a1, 0, ((GeoBillboardNode*)arg0)->node.renderFlags & 4);
     }
     func_8001380C(arg0);
     D_800AB460.unk_10A0 -= 1;
@@ -1615,41 +1615,32 @@ void Geo_NodeDisplayList(s8 *arg0)
   func_8001380C((0, arg0));  // FAKE
 }
 
-typedef struct GeoMaterialNode {
-    /* 0x00 */ GraphNode node;
-    /* 0x18 */ s32 unk_18;
-    /* 0x1C */ s16 unk_1C;
-    /* 0x1E */ s16 unk_1E;
-    /* 0x20 */ s16 eventIndex;
-    /* 0x22 */ u8 unk_22;
-    /* 0x24 */ u32 color;
-} GeoMaterialNode;
 #define GEO_TINT (*(Color_RGBA8_u32*)&D_800AB450)
-void func_80014FC4(GeoMaterialNode *arg0)
+void Geo_NodeMaterial(GeoMaterialNode *arg0)
 {
   u8 tex_index;
 
-  D_800AB448 = arg0->unk_22;
-  if (arg0->unk_22 == 1)
+  D_800AB448 = arg0->mode;
+  if (arg0->mode == 1)
   {
     (*((Color_RGBA8_u32 *) (&D_800AB450))).rgba = -1;
   }
   else
   {
-    (*((Color_RGBA8_u32 *) (&D_800AB450))).rgba = arg0->color;
+    (*((Color_RGBA8_u32 *) (&D_800AB450))).rgba = arg0->color.rgba;
   }
-  D_800AB45C = arg0->unk_18;
-  if (arg0->unk_1C >= 0)
+  D_800AB45C = (s32)arg0->displayList;
+  if (arg0->textureIndex >= 0)
   {
-    D_800AB454 = (s32) (&D_800604A0->unk_18[arg0->unk_1C]);
+    D_800AB454 = (s32) (&D_800604A0->unk_18[arg0->textureIndex]);
   }
   else
   {
     D_800AB454 = 0;
   }
-  if (arg0->unk_1E >= 0)
+  if (arg0->paletteIndex >= 0)
   {
-    D_800AB458 = (s32) (&D_800604A0->unk_1C[arg0->unk_1E]);
+    D_800AB458 = (s32) (&D_800604A0->unk_1C[arg0->paletteIndex]);
   }
   else
   {
@@ -1694,9 +1685,9 @@ void GeoRender_RecordAnchorPosition(s32 arg0) {
 
 /** Geo node handler: records an anchor position, then processes children. */
 void Geo_NodeAnchor(GraphNode* arg0) {
-    unk_D_86002F34_alt3* arg = (unk_D_86002F34_alt3*)arg0;
+    GeoAnchorNode* arg = (GeoAnchorNode*)arg0;
 
-    GeoRender_RecordAnchorPosition(arg->unk_18);
+    GeoRender_RecordAnchorPosition(arg->anchorId);
     Geo_ProcessNodeChildren(arg0);
 }
 
@@ -1748,7 +1739,7 @@ void Geo_NodeShadow(GraphNode* arg0) {
     f32 sp80;
     MtxF sp40;
     MtxF* sp3C;
-    unk_D_86002F34_alt12* arg = (unk_D_86002F34_alt12*)arg0;
+    GeoShadowNode* arg = (GeoShadowNode*)arg0;
     Gfx* temp_s1;
 
     sp3C = &D_800AB460.unk_0000[D_800AB460.unk_10A0];
@@ -1758,7 +1749,7 @@ void Geo_NodeShadow(GraphNode* arg0) {
         GeoRender_RecordAnchorPosition(0x64);
     }
 
-    Vec3f_SetComponentsDuplicate(&sp9C, sp3C->mf[3][0], sp3C->mf[3][1] + arg->unk_1E, sp3C->mf[3][2]);
+    Vec3f_SetComponentsDuplicate(&sp9C, sp3C->mf[3][0], sp3C->mf[3][1] + arg->heightOffset, sp3C->mf[3][2]);
     sp9C.y = 0.0f;
 
     if (D_8006049C->node.renderFlags & 0x40) {
@@ -1774,15 +1765,15 @@ void Geo_NodeShadow(GraphNode* arg0) {
             sp80 = 1.0f;
         }
 
-        sp84.x *= (arg->unk_1A / 100.0f) * sp80;
-        sp84.z *= (arg->unk_1C / 100.0f) * sp80;
+        sp84.x *= (arg->scaleXPercent / 100.0f) * sp80;
+        sp84.z *= (arg->scaleZPercent / 100.0f) * sp80;
         MtxF_SetOrthonormalBasis(&sp40, &sp90, &sp9C, D_8006049C->rotation.y);
         MtxF_ScaleRows(&D_800AB460.unk_0000[D_800AB460.unk_10A0 + 1], &sp40, &sp84);
 
         D_800AB460.unk_10A0++;
         GeoRender_CommitMatrix();
 
-        if (arg->unk_18 == 0) {
+        if (arg->shape == 0) {
             gSPBranchList(&temp_s1[1], Util_ConvertAddrToVirtAddr(D_01002480));
         } else {
             gSPBranchList(&temp_s1[1], Util_ConvertAddrToVirtAddr(D_01002500));
@@ -1803,7 +1794,7 @@ void Geo_NodeShadow(GraphNode* arg0) {
 
 /** Renders a root graph node and its children. */
 void Geo_RenderRootNode(GraphNode* node) {
-    unk_D_86002F34_alt1* arg = (unk_D_86002F34_alt1*)node;
+    GeoModelRootNode* arg = (GeoModelRootNode*)node;
 
     if (node->flags & 1) {
         gDPPipeSync(gDisplayListHead++);

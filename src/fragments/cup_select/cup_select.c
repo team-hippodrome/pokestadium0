@@ -99,7 +99,7 @@ extern f32 gCameraDistTarget;
 extern f32 D_8219A534;
 
 extern CameraNode sStageCamera;
-extern unk_D_8690A610 sStageFog;
+extern GeoFogNode sStageFog;
 extern GraphNode sStageLayout0;
 extern GraphNode sStageLayout1;
 extern GraphNode sStageLayout3;

@@ -28,7 +28,7 @@ void func_88400020(s32 arg0, s8 *arg1) {
 void BattleHud_Noop(void) {
 }
 
-s32 func_88400064(s32 arg0, unk_D_86002F34_alt18* arg1) {
+s32 func_88400064(s32 arg0, GeoLightNode* arg1) {
     UNUSED s32 pad; // keeps the retail stack layout: the three locals below sit 4 bytes lower
     f32 sp28;
     s16 sp26;
@@ -36,8 +36,8 @@ s32 func_88400064(s32 arg0, unk_D_86002F34_alt18* arg1) {
 
     if (arg0 == 2) {
         Vec3f_CalculateDistanceAngles(&D_80060488->view.targetPosition, &D_80060488->view.eyePosition, &sp28, &sp26, &sp24);
-        arg1->unk_1C = sp26 + 0x2000;
-        arg1->unk_1E = sp24 + 0x2000;
+        arg1->pitch = sp26 + 0x2000;
+        arg1->yaw = sp24 + 0x2000;
     }
     return 0;
 }

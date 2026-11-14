@@ -4371,7 +4371,7 @@ func_80016064,0x80016064,src/geo_layout.c,geo_layout_cmd_create_fog,s1,stadium1:
 func_800160D4,0x800160D4,src/geo_layout.c,geo_layout_cmd_create_light,s1,stadium1:src/geo_layout.c,c
 func_800161BC,0x800161BC,src/geo_layout.c,geo_layout_cmd_skip,s1,stadium1:src/geo_layout.c,c
 func_800161D4,0x800161D4,src/geo_layout.c,geo_layout_cmd_create_ambient_light,s1,stadium1:src/geo_layout.c,c
-func_8001622C,0x8001622C,src/geo_layout.c,geo_layout_cmd_create_shadow_context,s1,stadium1:src/geo_layout.c,c
+func_8001622C,0x8001622C,src/geo_layout.c,geo_layout_cmd_create_texture_bank,s1,stadium1:src/geo_layout.c,c
 func_8001629C,0x8001629C,src/geo_layout.c,geo_layout_cmd_create_shadow,s1,stadium1:src/geo_layout.c,c
 func_800162FC,0x800162FC,src/geo_layout.c,geo_layout_cmd_create_cull_distance,s1,stadium1:src/geo_layout.c,c
 func_8001634C,0x8001634C,src/geo_layout.c,geo_layout_cmd_create_switch_case,s1,stadium1:src/geo_layout.c,c
@@ -4381,9 +4381,9 @@ func_80016590,0x80016590,src/geo_layout.c,geo_layout_cmd_create_animated_part,s1
 func_800166A8,0x800166A8,src/geo_layout.c,geo_layout_cmd_create_display_list_part,s1,stadium1:src/geo_layout.c,c
 func_80016700,0x80016700,src/geo_layout.c,geo_layout_cmd_create_model_part,s1,stadium1:src/geo_layout.c,c
 func_8001688C,0x8001688C,src/geo_layout.c,geo_layout_cmd_create_display_list_matrix,s1,stadium1:src/geo_layout.c,c
-func_800169C8,0x800169C8,src/geo_layout.c,geo_layout_cmd_create_scale,s1,stadium1:src/geo_layout.c,c
+func_800169C8,0x800169C8,src/geo_layout.c,geo_layout_cmd_create_billboard,s1,stadium1:src/geo_layout.c,c
 func_80016A68,0x80016A68,src/geo_layout.c,geo_layout_cmd_create_display_list,s1,stadium1:src/geo_layout.c,c
-func_80016AB8,0x80016AB8,src/geo_layout.c,geo_layout_cmd_create_shadow_texture,s1,stadium1:src/geo_layout.c,c
+func_80016AB8,0x80016AB8,src/geo_layout.c,geo_layout_cmd_create_material,s1,stadium1:src/geo_layout.c,c
 func_80016B40,0x80016B40,src/geo_layout.c,geo_layout_cmd_create_anchor,s1,stadium1:src/geo_layout.c,c
 func_80016B8C,0x80016B8C,src/geo_layout.c,geo_layout_cmd_set_node_flag4,s1,stadium1:src/geo_layout.c,c
 func_80016BD0,0x80016BD0,src/geo_layout.c,geo_layout_cmd_create_group,s1,stadium1:src/geo_layout.c,c
@@ -4402,7 +4402,7 @@ func_8001013C,0x8001013C,src/geo_node.c,GeoNode_CreateClearDepth,s1,stadium1:src
 func_80010188,0x80010188,src/geo_node.c,GeoNode_CreateFog,s1,stadium1:src/geo_node.c,c
 func_80010214,0x80010214,src/geo_node.c,GeoNode_CreateLight,s1,stadium1:src/geo_node.c,c
 func_80010294,0x80010294,src/geo_node.c,GeoNode_CreateAmbientLight,s1,stadium1:src/geo_node.c,c
-func_800102FC,0x800102FC,src/geo_node.c,GeoNode_CreateShadowContext,s1,stadium1:src/geo_node.c,c
+func_800102FC,0x800102FC,src/geo_node.c,GeoNode_CreateTextureBank,s1,stadium1:src/geo_node.c,c
 func_80010380,0x80010380,src/geo_node.c,GeoNode_CreateShadow,s1,stadium1:src/geo_node.c,c
 func_800103F0,0x800103F0,src/geo_node.c,GeoNode_CreateCullDistance,s1,stadium1:src/geo_node.c,c
 func_80010450,0x80010450,src/geo_node.c,GeoNode_CreateSwitchCase,s1,stadium1:src/geo_node.c,c
@@ -4413,9 +4413,9 @@ func_80010660,0x80010660,src/geo_node.c,GeoNode_CreateDisplayListPart,s1,stadium
 func_800106C8,0x800106C8,src/geo_node.c,GeoNode_CreateModelPart,s1,stadium1:src/geo_node.c,c
 func_800107CC,0x800107CC,src/geo_node.c,GeoNode_CreateDisplayListMatrix,s1,stadium1:src/geo_node.c,c
 func_8001084C,0x8001084C,src/geo_node.c,GeoNode_CreateDisplayListMatrixFromTransform,s1,stadium1:src/geo_node.c,c
-func_800108A0,0x800108A0,src/geo_node.c,GeoNode_CreateScale,s1,stadium1:src/geo_node.c,c
+func_800108A0,0x800108A0,src/geo_node.c,GeoNode_CreateBillboard,s1,stadium1:src/geo_node.c,c
 func_80010924,0x80010924,src/geo_node.c,GeoNode_CreateDisplayList,s1,stadium1:src/geo_node.c,c
-func_80010984,0x80010984,src/geo_node.c,GeoNode_CreateShadowTexture,s1,stadium1:src/geo_node.c,c
+func_80010984,0x80010984,src/geo_node.c,GeoNode_CreateMaterial,s1,stadium1:src/geo_node.c,c
 func_80010A28,0x80010A28,src/geo_node.c,GeoNode_CreateAnchor,s1,stadium1:src/geo_node.c,c
 func_80010A80,0x80010A80,src/geo_node.c,GeoNode_CreateGroup,s1,stadium1:src/geo_node.c,c
 func_80010B3C,0x80010B3C,src/geo_node.c,GeoCamera_SetViewport,s1,stadium1:src/geo_node.c,c
@@ -4487,7 +4487,7 @@ func_80014164,0x80014164,src/geo_render.c,GeoRender_SetFog,hand,,c
 func_8001426C,0x8001426C,src/geo_render.c,Geo_NodeLight,s1,stadium1:src/geo_render.c,c
 func_800144B4,0x800144B4,src/geo_render.c,Geo_NodeType12Empty,s1,stadium1:src/geo_render.c,c
 func_800144BC,0x800144BC,src/geo_render.c,Geo_NodeAmbientLight,hand,,c
-func_8001465C,0x8001465C,src/geo_render.c,Geo_NodeShadowContext,hand,,c
+func_8001465C,0x8001465C,src/geo_render.c,Geo_NodeTextureBank,hand,,c
 func_8001473C,0x8001473C,src/geo_render.c,func_8001473C,m2c,m2c+permuter,c
 func_800147A8,0x800147A8,src/geo_render.c,Geo_NodeSwitchCase,s1,stadium1:src/geo_render.c,c
 func_80014820,0x80014820,src/geo_render.c,Geo_NodeTranslateRotate,s1,stadium1:src/geo_render.c,c
@@ -4496,9 +4496,9 @@ func_800148AC,0x800148AC,src/geo_render.c,Geo_NodeAnimatedPart,hand,,c
 func_80014BF0,0x80014BF0,src/geo_render.c,Geo_NodeDisplayListPart,hand,,c
 func_80014C4C,0x80014C4C,src/geo_render.c,Geo_NodeModelPart,hand,,c
 func_80014E78,0x80014E78,src/geo_render.c,Geo_NodeDisplayListMatrix,m2c,m2c,c
-func_80014EDC,0x80014EDC,src/geo_render.c,Geo_NodeScale,m2c,m2c+context,c
+func_80014EDC,0x80014EDC,src/geo_render.c,Geo_NodeBillboard,m2c,m2c+context,c
 func_80014F78,0x80014F78,src/geo_render.c,Geo_NodeDisplayList,m2c,m2c+permuter,c
-func_80014FC4,0x80014FC4,src/geo_render.c,func_80014FC4,hand,,c
+func_80014FC4,0x80014FC4,src/geo_render.c,Geo_NodeMaterial,hand,,c
 func_80015214,0x80015214,src/geo_render.c,GeoRender_RecordAnchorPosition,s1,stadium1:src/geo_render.c,c
 func_80015280,0x80015280,src/geo_render.c,Geo_NodeAnchor,s1,stadium1:src/geo_render.c,c
 func_800152AC,0x800152AC,src/geo_render.c,Geo_NodeText,hand,,c
@@ -5060,7 +5060,7 @@ func_8000DE54,0x8000DE54,src/matrix.c,MtxF_SetRotationTranslationF,s1,stadium1:s
 func_8000DF8C,0x8000DF8C,src/matrix.c,MtxF_SetRotationAndTransformTranslation,s1,stadium1:src/matrix.c,c
 func_8000E138,0x8000E138,src/matrix.c,MtxF_SetRotationScaleTranslation,s1,stadium1:src/matrix.c,c
 func_8000E2C0,0x8000E2C0,src/matrix.c,MtxF_SetRotationAndScaledTranslation,s1,stadium1:src/matrix.c,c
-func_8000E41C,0x8000E41C,src/matrix.c,func_8000E41C,hand,,c
+func_8000E41C,0x8000E41C,src/matrix.c,MtxF_SetBillboard,hand,,c
 func_8000E608,0x8000E608,src/matrix.c,MtxF_SetOrthonormalBasis,s1,stadium1:src/matrix.c,c
 func_8000E724,0x8000E724,src/matrix.c,MtxF_Multiply,s1,stadium1:src/matrix.c,c
 func_8000E958,0x8000E958,src/matrix.c,MtxF_ScaleRows,s1,stadium1:src/matrix.c,c

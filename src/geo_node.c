@@ -29,38 +29,38 @@ typedef struct TransformAnimRaw {
 void GeoNode_Init(GraphNode* arg0, u8 arg1);
 void GeoNode_SetCallback(GraphNode* arg0, GraphNodeCallback arg1, void* arg2);
 GraphNode* GeoNode_CreateContainer(MainPoolState* arg0, GraphNode* arg1);
-unk_D_86002F34_alt2* GeoNode_CreateWithReference(MainPoolState* arg0, unk_D_86002F34_alt2* arg1, GraphNode* arg2);
+GeoReferenceNode* GeoNode_CreateWithReference(MainPoolState* arg0, GeoReferenceNode* arg1, GraphNode* arg2);
 CameraNode* GeoNode_CreateCamera(MemoryBlock* arg0, CameraNode* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
-unk_D_86002F34_alt13* GeoNode_CreateType3(MemoryBlock* arg0, unk_D_86002F34_alt13* arg1, s16 arg2);
-unk_D_86002F34_alt16* GeoNode_CreateBackground(MainPoolState* arg0, unk_D_86002F34_alt16* arg1, u8 arg2, u8 arg3, u8 arg4);
-unk_D_86002F34_alt17* GeoNode_CreateClearDepth(MainPoolState* arg0, unk_D_86002F34_alt17* arg1);
-unk_D_8690A610* GeoNode_CreateFog(s32 arg0, unk_D_8690A610* arg1, s16 arg2, s16 arg3, u8 r, u8 g, u8 b, u8 a);
-unk_D_86002F34_alt18* GeoNode_CreateLight(MainPoolState* arg0, unk_D_86002F34_alt18* arg1, s16 arg2, s16 arg3, u8 r, u8 g,
+GeoType3Node* GeoNode_CreateType3(MemoryBlock* arg0, GeoType3Node* arg1, s16 arg2);
+GeoBackgroundNode* GeoNode_CreateBackground(MainPoolState* arg0, GeoBackgroundNode* arg1, u8 arg2, u8 arg3, u8 arg4);
+GeoClearDepthNode* GeoNode_CreateClearDepth(MainPoolState* arg0, GeoClearDepthNode* arg1);
+GeoFogNode* GeoNode_CreateFog(s32 arg0, GeoFogNode* arg1, s16 arg2, s16 arg3, u8 r, u8 g, u8 b, u8 a);
+GeoLightNode* GeoNode_CreateLight(MainPoolState* arg0, GeoLightNode* arg1, s16 arg2, s16 arg3, u8 r, u8 g,
                                     u8 b, u8 a);
-unk_D_86002F34_alt19* GeoNode_CreateAmbientLight(MainPoolState* arg0, unk_D_86002F34_alt19* arg1, u8 r, u8 g, u8 b);
-unk_D_86002F34* GeoNode_CreateShadowContext(MainPoolState* arg0, unk_D_86002F34* arg1, s32 arg2, unk_D_86002F34_018* arg3, s32 arg4,
+GeoAmbientLightNode* GeoNode_CreateAmbientLight(MainPoolState* arg0, GeoAmbientLightNode* arg1, u8 r, u8 g, u8 b);
+GeoTextureBankNode* GeoNode_CreateTextureBank(MainPoolState* arg0, GeoTextureBankNode* arg1, s32 arg2, unk_D_86002F34_018* arg3, s32 arg4,
                               unk_D_86002F34_01C* arg5, s32 arg6, Vtx* arg7);
-unk_D_86002F34_alt12* GeoNode_CreateShadow(MainPoolState* arg0, unk_D_86002F34_alt12* arg1, s16 arg2, s16 arg3, s16 arg4,
+GeoShadowNode* GeoNode_CreateShadow(MainPoolState* arg0, GeoShadowNode* arg1, s16 arg2, s16 arg3, s16 arg4,
                                     s16 arg5);
-unk_D_86002F34_alt20* GeoNode_CreateCullDistance(MainPoolState* arg0, unk_D_86002F34_alt20* arg1, s16 arg2, s16 arg3);
-unk_D_86002F34_alt21* GeoNode_CreateSwitchCase(MainPoolState* arg0, unk_D_86002F34_alt21* arg1, s16 arg2, s16 arg3);
-unk_D_86002F34_alt5* GeoNode_CreateTranslateRotate(MainPoolState* arg0, unk_D_86002F34_alt5* arg1, Vec3f* arg2, Vec3s* arg3);
-unk_D_86002F34_alt22* GeoNode_CreateTranslate(MainPoolState* arg0, unk_D_86002F34_alt22* arg1, Vec3f* arg2);
-unk_D_86002F34_alt6* GeoNode_CreateAnimatedPart(MainPoolState* arg0, unk_D_86002F34_alt6* arg1, s16 arg2, s16 arg3, s16 arg4,
+GeoCullDistanceNode* GeoNode_CreateCullDistance(MainPoolState* arg0, GeoCullDistanceNode* arg1, s16 arg2, s16 arg3);
+GeoSwitchCaseNode* GeoNode_CreateSwitchCase(MainPoolState* arg0, GeoSwitchCaseNode* arg1, s16 arg2, s16 arg3);
+GeoTranslateRotateNode* GeoNode_CreateTranslateRotate(MainPoolState* arg0, GeoTranslateRotateNode* arg1, Vec3f* arg2, Vec3s* arg3);
+GeoTranslateNode* GeoNode_CreateTranslate(MainPoolState* arg0, GeoTranslateNode* arg1, Vec3f* arg2);
+GeoAnimatedPartNode* GeoNode_CreateAnimatedPart(MainPoolState* arg0, GeoAnimatedPartNode* arg1, s16 arg2, s16 arg3, s16 arg4,
                                    Vec3s* arg5, Vec3s* arg6, Vec3f* arg7);
-unk_D_86002F34_alt7* GeoNode_CreateDisplayListPart(MainPoolState* arg0, unk_D_86002F34_alt7* arg1, s32 arg2, Gfx* arg3, s16 arg4);
+GeoDisplayListPartNode* GeoNode_CreateDisplayListPart(MainPoolState* arg0, GeoDisplayListPartNode* arg1, s32 arg2, Gfx* arg3, s16 arg4);
 DisplayObject* GeoNode_CreateModelPart(MainPoolState* arg0, DisplayObject* arg1, s16 arg2, Vec3f* arg3,
                                       Vec3s* arg4, Vec3f* arg5);
-unk_D_86002F34_alt8* GeoNode_CreateDisplayListMatrix(MainPoolState* arg0, unk_D_86002F34_alt8* arg1, s32 arg2, Gfx* arg3, MtxF* arg4);
-unk_D_86002F34_alt8* GeoNode_CreateDisplayListMatrixFromTransform(MainPoolState* arg0, unk_D_86002F34_alt8* arg1, s32 arg2, Gfx* arg3, Vec3f* arg4,
+GeoDisplayListMatrixNode* GeoNode_CreateDisplayListMatrix(MainPoolState* arg0, GeoDisplayListMatrixNode* arg1, s32 arg2, Gfx* arg3, MtxF* arg4);
+GeoDisplayListMatrixNode* GeoNode_CreateDisplayListMatrixFromTransform(MainPoolState* arg0, GeoDisplayListMatrixNode* arg1, s32 arg2, Gfx* arg3, Vec3f* arg4,
                                    Vec3s* arg5);
-unk_D_86002F34_alt9* GeoNode_CreateScale(MainPoolState* arg0, unk_D_86002F34_alt9* arg1, s32 arg2, Gfx* arg3, Vec3f* arg4,
+GeoBillboardNode* GeoNode_CreateBillboard(MainPoolState* arg0, GeoBillboardNode* arg1, s32 arg2, Gfx* arg3, Vec3f* arg4,
                                    f32 arg5);
 unk_func_80011B94* GeoNode_CreateDisplayList(MainPoolState* arg0, unk_func_80011B94* arg1, s32 arg2, Gfx* arg3);
-unk_D_86002F34_alt10* GeoNode_CreateShadowTexture(MainPoolState* arg0, unk_D_86002F34_alt10* arg1, s16 arg2, s16 arg3, Gfx* arg4,
+GeoMaterialNode* GeoNode_CreateMaterial(MainPoolState* arg0, GeoMaterialNode* arg1, s16 arg2, s16 arg3, Gfx* arg4,
                                     s16 arg5, s16 arg6, u8 r, u8 g, u8 b, u8 a);
-unk_D_86002F34_alt23* GeoNode_CreateAnchor(MainPoolState* arg0, unk_D_86002F34_alt23* arg1, s16 arg2);
-unk_D_86002F34_alt24* GeoNode_CreateGroup(MainPoolState* arg0, unk_D_86002F34_alt24* arg1, s32 arg2, s16 arg3, s16 arg4,
+GeoAnchorNode* GeoNode_CreateAnchor(MainPoolState* arg0, GeoAnchorNode* arg1, s16 arg2);
+GeoGroupNode* GeoNode_CreateGroup(MainPoolState* arg0, GeoGroupNode* arg1, s32 arg2, s16 arg3, s16 arg4,
                                     s16 arg5, s16 arg6, s16 arg7, s16 arg8, s32 arg9, u8 r, u8 g, u8 b, u8 a);
 void GeoCamera_SetViewport(CameraNode* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
 void GeoCamera_SetPerspective(CameraNode* arg0, f32 arg1, f32 arg2, f32 arg3);
@@ -131,13 +131,13 @@ GraphNode* GeoNode_CreateContainer(MainPoolState* arg0, GraphNode* arg1) {
 }
 
 /** Allocates a graph node that references another graph node. */
-unk_D_86002F34_alt2* GeoNode_CreateWithReference(MainPoolState* arg0, unk_D_86002F34_alt2* arg1, GraphNode* arg2) {
+GeoReferenceNode* GeoNode_CreateWithReference(MainPoolState* arg0, GeoReferenceNode* arg1, GraphNode* arg2) {
     if (arg0 != NULL) {
-        arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt2), 4);
+        arg1 = MainPool_AllocAligned(arg0, sizeof(GeoReferenceNode), 4);
     }
 
     if (arg1 != NULL) {
-        arg1->unk_18 = arg2;
+        arg1->target = arg2;
         GeoNode_Init(arg1, 1);
     }
 
@@ -161,9 +161,9 @@ CameraNode* GeoNode_CreateCamera(MemoryBlock* arg0, CameraNode* arg1, s16 arg2, 
 }
 
 /** Allocates a type 3 graph node. */
-unk_D_86002F34_alt13* GeoNode_CreateType3(MemoryBlock* arg0, unk_D_86002F34_alt13* arg1, s16 arg2) {
+GeoType3Node* GeoNode_CreateType3(MemoryBlock* arg0, GeoType3Node* arg1, s16 arg2) {
     if (arg0 != NULL) {
-        arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt13), 4);
+        arg1 = MainPool_AllocAligned(arg0, sizeof(GeoType3Node), 4);
     }
 
     if (arg1 != NULL) {
@@ -175,13 +175,13 @@ unk_D_86002F34_alt13* GeoNode_CreateType3(MemoryBlock* arg0, unk_D_86002F34_alt1
 }
 
 /** Allocates a type 4 (model root) graph node. */
-unk_D_86002F34_alt1* GeoNode_CreateType4(MemoryBlock* arg0, unk_D_86002F34_alt1* arg1, s16 arg2) {
+GeoModelRootNode* GeoNode_CreateType4(MemoryBlock* arg0, GeoModelRootNode* arg1, s16 arg2) {
     if (arg0 != NULL) {
         arg1 = MainPool_AllocAligned(arg0, 0x24, 4);
     }
 
     if (arg1 != NULL) {
-        arg1->unk_18 = arg2;
+        arg1->rootId = arg2;
         arg1->unk_1A = 0;
         GeoNode_Init(arg1, 4);
     }
@@ -190,7 +190,7 @@ unk_D_86002F34_alt1* GeoNode_CreateType4(MemoryBlock* arg0, unk_D_86002F34_alt1*
 }
 
 /** Allocates an orthographic projection graph node. */
-unk_D_86002F34_alt14* GeoNode_CreateOrtho(MainPoolState* arg0, unk_D_86002F34_alt14* arg1, s16 arg2) {
+GeoOrthoNode* GeoNode_CreateOrtho(MainPoolState* arg0, GeoOrthoNode* arg1, s16 arg2) {
     if (arg0 != NULL) {
         arg1 = MainPool_AllocAligned(arg0, 0x60, 4);
     }
@@ -204,9 +204,9 @@ unk_D_86002F34_alt14* GeoNode_CreateOrtho(MainPoolState* arg0, unk_D_86002F34_al
 }
 
 /** Allocates a perspective projection graph node. */
-unk_D_86002F34_alt15* GeoNode_CreatePerspective(MainPoolState* arg0, unk_D_86002F34_alt15* arg1, s16 arg2) {
+GeoPerspectiveNode* GeoNode_CreatePerspective(MainPoolState* arg0, GeoPerspectiveNode* arg1, s16 arg2) {
     if (arg0 != NULL) {
-        arg1 = MainPool_AllocAligned(arg0, 0x60 /* sizeof(unk_D_86002F34_alt15) */, 4);
+        arg1 = MainPool_AllocAligned(arg0, 0x60 /* sizeof(GeoPerspectiveNode) */, 4);
     }
 
     if (arg1 != NULL) {
@@ -218,25 +218,25 @@ unk_D_86002F34_alt15* GeoNode_CreatePerspective(MainPoolState* arg0, unk_D_86002
 }
 
 /** Allocates a background graph node with the given fill color. */
-unk_D_86002F34_alt16* GeoNode_CreateBackground(MainPoolState* arg0, unk_D_86002F34_alt16* arg1, u8 arg2, u8 arg3, u8 arg4) {
+GeoBackgroundNode* GeoNode_CreateBackground(MainPoolState* arg0, GeoBackgroundNode* arg1, u8 arg2, u8 arg3, u8 arg4) {
     u32 temp_v0;
 
     if (arg0 != NULL) {
-        arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt16), 4);
+        arg1 = MainPool_AllocAligned(arg0, sizeof(GeoBackgroundNode), 4);
     }
 
     if (arg1 != NULL) {
         temp_v0 = ((arg2 >> 3) << 0xB) | ((arg3 >> 3) << 6) | ((arg4 >> 3) << 1) | 1;
-        arg1->unk_18 = (temp_v0 << 0x10) | temp_v0;
+        arg1->fillColor = (temp_v0 << 0x10) | temp_v0;
         GeoNode_Init(arg1, 7);
     }
     return arg1;
 }
 
 /** Allocates a graph node that clears the depth buffer. */
-unk_D_86002F34_alt17* GeoNode_CreateClearDepth(MainPoolState* arg0, unk_D_86002F34_alt17* arg1) {
+GeoClearDepthNode* GeoNode_CreateClearDepth(MainPoolState* arg0, GeoClearDepthNode* arg1) {
     if (arg0 != NULL) {
-        arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt17), 4);
+        arg1 = MainPool_AllocAligned(arg0, sizeof(GeoClearDepthNode), 4);
     }
 
     if (arg1 != NULL) {
@@ -247,15 +247,15 @@ unk_D_86002F34_alt17* GeoNode_CreateClearDepth(MainPoolState* arg0, unk_D_86002F
 }
 
 /** Allocates a fog graph node with a fog range and color. */
-unk_D_8690A610* GeoNode_CreateFog(s32 arg0, unk_D_8690A610* arg1, s16 arg2, s16 arg3, u8 r, u8 g, u8 b, u8 a) {
+GeoFogNode* GeoNode_CreateFog(s32 arg0, GeoFogNode* arg1, s16 arg2, s16 arg3, u8 r, u8 g, u8 b, u8 a) {
     if (arg0 != 0) {
-        arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_8690A610), 4);
+        arg1 = MainPool_AllocAligned(arg0, sizeof(GeoFogNode), 4);
     }
 
     if (arg1 != NULL) {
-        arg1->unk_18.unk_00 = arg2;
-        arg1->unk_18.unk_02 = arg3;
-        arg1->unk_18.unk_04.rgba = (r << 0x18) | (g << 0x10) | (b << 8) | a;
+        arg1->fog.near = arg2;
+        arg1->fog.far = arg3;
+        arg1->fog.color.rgba = (r << 0x18) | (g << 0x10) | (b << 8) | a;
         GeoNode_Init(arg1, 0xA);
     }
 
@@ -266,19 +266,19 @@ unk_D_8690A610* GeoNode_CreateFog(s32 arg0, unk_D_8690A610* arg1, s16 arg2, s16 
  * Allocates a directional light graph node (type 0xB) with a color and two s16 light
  * parameters (stored at 0x1C and 0x1E). Allocates from arg0 if given, else uses arg1.
  */
-unk_D_86002F34_alt18* GeoNode_CreateLight(MainPoolState* arg0, unk_D_86002F34_alt18* arg1, s16 arg2, s16 arg3, u8 r, u8 g,
+GeoLightNode* GeoNode_CreateLight(MainPoolState* arg0, GeoLightNode* arg1, s16 arg2, s16 arg3, u8 r, u8 g,
                                     u8 b, u8 a) {
     if (arg0 != NULL) {
-        arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt18), 4);
+        arg1 = MainPool_AllocAligned(arg0, sizeof(GeoLightNode), 4);
     }
 
     if (arg1 != NULL) {
-        arg1->r = r;
-        arg1->g = g;
-        arg1->b = b;
-        arg1->a = a;
-        arg1->unk_1C = arg2;
-        arg1->unk_1E = arg3;
+        arg1->color.r = r;
+        arg1->color.g = g;
+        arg1->color.b = b;
+        arg1->color.a = a;
+        arg1->pitch = arg2;
+        arg1->yaw = arg3;
         GeoNode_Init(arg1, 0xB);
     }
 
@@ -286,9 +286,9 @@ unk_D_86002F34_alt18* GeoNode_CreateLight(MainPoolState* arg0, unk_D_86002F34_al
 }
 
 /** Allocates an ambient light graph node with the given color. */
-unk_D_86002F34_alt19* GeoNode_CreateAmbientLight(MainPoolState* arg0, unk_D_86002F34_alt19* arg1, u8 r, u8 g, u8 b) {
+GeoAmbientLightNode* GeoNode_CreateAmbientLight(MainPoolState* arg0, GeoAmbientLightNode* arg1, u8 r, u8 g, u8 b) {
     if (arg0 != NULL) {
-        arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt19), 4);
+        arg1 = MainPool_AllocAligned(arg0, sizeof(GeoAmbientLightNode), 4);
     }
 
     if (arg1 != NULL) {
@@ -303,21 +303,21 @@ unk_D_86002F34_alt19* GeoNode_CreateAmbientLight(MainPoolState* arg0, unk_D_8600
 
 /**
  * Allocates a graph node of type 0xE that holds three tables with their counts (arg3/arg2,
- * arg5/arg4, arg7/arg6), used as the shadow context.
+ * arg5/arg4, arg7/arg6): a texture bank (textures, palettes, vertices) for the material nodes below it.
  */
-unk_D_86002F34* GeoNode_CreateShadowContext(MainPoolState* arg0, unk_D_86002F34* arg1, s32 arg2, unk_D_86002F34_018* arg3, s32 arg4,
+GeoTextureBankNode* GeoNode_CreateTextureBank(MainPoolState* arg0, GeoTextureBankNode* arg1, s32 arg2, unk_D_86002F34_018* arg3, s32 arg4,
                               unk_D_86002F34_01C* arg5, s32 arg6, Vtx* arg7) {
     if (arg0 != NULL) {
-        arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34), 4);
+        arg1 = MainPool_AllocAligned(arg0, sizeof(GeoTextureBankNode), 4);
     }
 
     if (arg1 != NULL) {
-        arg1->unk_18 = arg3;
-        arg1->unk_1C = arg5;
-        arg1->unk_20 = arg7;
-        arg1->unk_24 = arg2;
-        arg1->unk_25 = arg4;
-        arg1->unk_26 = arg6;
+        arg1->textures = arg3;
+        arg1->palettes = arg5;
+        arg1->vertices = arg7;
+        arg1->textureCount = arg2;
+        arg1->paletteCount = arg4;
+        arg1->vertexCount = arg6;
         arg1->unk_28 = NULL;
         GeoNode_Init(arg1, 0xE);
     }
@@ -328,17 +328,17 @@ unk_D_86002F34* GeoNode_CreateShadowContext(MainPoolState* arg0, unk_D_86002F34*
 /**
  * Allocates a shadow graph node (type 0xF) with four s16 parameters.
  */
-unk_D_86002F34_alt12* GeoNode_CreateShadow(MainPoolState* arg0, unk_D_86002F34_alt12* arg1, s16 arg2, s16 arg3, s16 arg4,
+GeoShadowNode* GeoNode_CreateShadow(MainPoolState* arg0, GeoShadowNode* arg1, s16 arg2, s16 arg3, s16 arg4,
                                     s16 arg5) {
     if (arg0 != NULL) {
-        arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt12), 4);
+        arg1 = MainPool_AllocAligned(arg0, sizeof(GeoShadowNode), 4);
     }
 
     if (arg1 != NULL) {
-        arg1->unk_18 = arg2;
-        arg1->unk_1A = arg3;
-        arg1->unk_1C = arg4;
-        arg1->unk_1E = arg5;
+        arg1->shape = arg2;
+        arg1->scaleXPercent = arg3;
+        arg1->scaleZPercent = arg4;
+        arg1->heightOffset = arg5;
         GeoNode_Init(arg1, 0xF);
     }
 
@@ -346,9 +346,9 @@ unk_D_86002F34_alt12* GeoNode_CreateShadow(MainPoolState* arg0, unk_D_86002F34_a
 }
 
 /** Allocates a graph node that culls its children beyond a distance range. */
-unk_D_86002F34_alt20* GeoNode_CreateCullDistance(MainPoolState* arg0, unk_D_86002F34_alt20* arg1, s16 arg2, s16 arg3) {
+GeoCullDistanceNode* GeoNode_CreateCullDistance(MainPoolState* arg0, GeoCullDistanceNode* arg1, s16 arg2, s16 arg3) {
     if (arg0 != NULL) {
-        arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt20), 4);
+        arg1 = MainPool_AllocAligned(arg0, sizeof(GeoCullDistanceNode), 4);
     }
 
     if (arg1 != NULL) {
@@ -363,14 +363,14 @@ unk_D_86002F34_alt20* GeoNode_CreateCullDistance(MainPoolState* arg0, unk_D_8600
 /**
  * Allocates a switch-case graph node that processes one child chosen by index.
  */
-unk_D_86002F34_alt21* GeoNode_CreateSwitchCase(MainPoolState* arg0, unk_D_86002F34_alt21* arg1, s16 arg2, s16 arg3) {
+GeoSwitchCaseNode* GeoNode_CreateSwitchCase(MainPoolState* arg0, GeoSwitchCaseNode* arg1, s16 arg2, s16 arg3) {
     if (arg0 != NULL) {
-        arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt21), 4);
+        arg1 = MainPool_AllocAligned(arg0, sizeof(GeoSwitchCaseNode), 4);
     }
 
     if (arg1 != NULL) {
         arg1->unk_18 = arg2;
-        arg1->unk_1A = arg3;
+        arg1->selectedChild = arg3;
         GeoNode_Init(arg1, 0x11);
     }
 
@@ -378,14 +378,14 @@ unk_D_86002F34_alt21* GeoNode_CreateSwitchCase(MainPoolState* arg0, unk_D_86002F
 }
 
 /** Allocates a graph node with a translation and a rotation. */
-unk_D_86002F34_alt5* GeoNode_CreateTranslateRotate(MainPoolState* arg0, unk_D_86002F34_alt5* arg1, Vec3f* arg2, Vec3s* arg3) {
+GeoTranslateRotateNode* GeoNode_CreateTranslateRotate(MainPoolState* arg0, GeoTranslateRotateNode* arg1, Vec3f* arg2, Vec3s* arg3) {
     if (arg0 != NULL) {
-        arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt5), 4);
+        arg1 = MainPool_AllocAligned(arg0, sizeof(GeoTranslateRotateNode), 4);
     }
 
     if (arg1 != NULL) {
-        arg1->unk_18 = *arg2;
-        arg1->unk_24 = *arg3;
+        arg1->translation = *arg2;
+        arg1->rotation = *arg3;
         GeoNode_Init(arg1, 0x12);
     }
 
@@ -393,13 +393,13 @@ unk_D_86002F34_alt5* GeoNode_CreateTranslateRotate(MainPoolState* arg0, unk_D_86
 }
 
 /** Allocates a graph node with a translation. */
-unk_D_86002F34_alt22* GeoNode_CreateTranslate(MainPoolState* arg0, unk_D_86002F34_alt22* arg1, Vec3f* arg2) {
+GeoTranslateNode* GeoNode_CreateTranslate(MainPoolState* arg0, GeoTranslateNode* arg1, Vec3f* arg2) {
     if (arg0 != NULL) {
-        arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt22), 4);
+        arg1 = MainPool_AllocAligned(arg0, sizeof(GeoTranslateNode), 4);
     }
 
     if (arg1 != NULL) {
-        arg1->unk_18 = *arg2;
+        arg1->translation = *arg2;
         GeoNode_Init(arg1, 0x13);
     }
 
@@ -410,19 +410,19 @@ unk_D_86002F34_alt22* GeoNode_CreateTranslate(MainPoolState* arg0, unk_D_86002F3
  * Allocates an animated part graph node (type 0x14) with a translation, rotation and
  * scale and three s16 part parameters.
  */
-unk_D_86002F34_alt6* GeoNode_CreateAnimatedPart(MainPoolState* arg0, unk_D_86002F34_alt6* arg1, s16 arg2, s16 arg3, s16 arg4,
+GeoAnimatedPartNode* GeoNode_CreateAnimatedPart(MainPoolState* arg0, GeoAnimatedPartNode* arg1, s16 arg2, s16 arg3, s16 arg4,
                                    Vec3s* arg5, Vec3s* arg6, Vec3f* arg7) {
     if (arg0 != NULL) {
-        arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt6), 4);
+        arg1 = MainPool_AllocAligned(arg0, sizeof(GeoAnimatedPartNode), 4);
     }
 
     if (arg1 != NULL) {
-        arg1->unk_18 = *arg5;
-        arg1->unk_1E = *arg6;
-        arg1->unk_24 = *arg7;
-        arg1->unk_30 = arg2;
-        arg1->unk_31 = arg3;
-        arg1->unk_32 = arg4;
+        arg1->translation = *arg5;
+        arg1->rotation = *arg6;
+        arg1->scale = *arg7;
+        arg1->matrixSlot = arg2;
+        arg1->transformMode = arg3;
+        arg1->channelGroup = arg4;
         GeoNode_Init(arg1, 0x14);
     }
 
@@ -430,14 +430,14 @@ unk_D_86002F34_alt6* GeoNode_CreateAnimatedPart(MainPoolState* arg0, unk_D_86002
 }
 
 /** Allocates a graph node that draws a display list as a model part. */
-unk_D_86002F34_alt7* GeoNode_CreateDisplayListPart(MainPoolState* arg0, unk_D_86002F34_alt7* arg1, s32 arg2, Gfx* arg3, s16 arg4) {
+GeoDisplayListPartNode* GeoNode_CreateDisplayListPart(MainPoolState* arg0, GeoDisplayListPartNode* arg1, s32 arg2, Gfx* arg3, s16 arg4) {
     if (arg0 != NULL) {
-        arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt7), 4);
+        arg1 = MainPool_AllocAligned(arg0, sizeof(GeoDisplayListPartNode), 4);
     }
 
     if (arg1 != NULL) {
-        arg1->unk_18 = arg3;
-        arg1->unk_1C = arg4;
+        arg1->displayList = arg3;
+        arg1->matrixSlot = arg4;
         GeoNode_Init(arg1, 0x15);
         arg1->node.renderLayer = arg2;
     }
@@ -483,17 +483,17 @@ DisplayObject* GeoNode_CreateModelPart(MainPoolState* arg0, DisplayObject* arg1,
 }
 
 /** Allocates a graph node that draws a display list with its own matrix. */
-unk_D_86002F34_alt8* GeoNode_CreateDisplayListMatrix(MainPoolState* arg0, unk_D_86002F34_alt8* arg1, s32 arg2, Gfx* arg3, MtxF* arg4) {
+GeoDisplayListMatrixNode* GeoNode_CreateDisplayListMatrix(MainPoolState* arg0, GeoDisplayListMatrixNode* arg1, s32 arg2, Gfx* arg3, MtxF* arg4) {
     if (arg0 != NULL) {
-        arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt8), 4);
+        arg1 = MainPool_AllocAligned(arg0, sizeof(GeoDisplayListMatrixNode), 4);
     }
 
     if (arg1 != NULL) {
-        arg1->unk_18 = arg3;
+        arg1->displayList = arg3;
         if (arg4 == NULL) {
-            MtxF_Identity(&arg1->unk_1C);
+            MtxF_Identity(&arg1->matrix);
         } else {
-            MtxF_Copy(&arg1->unk_1C, arg4);
+            MtxF_Copy(&arg1->matrix, arg4);
         }
         GeoNode_Init(arg1, 0x17);
         arg1->node.renderLayer = arg2;
@@ -506,7 +506,7 @@ unk_D_86002F34_alt8* GeoNode_CreateDisplayListMatrix(MainPoolState* arg0, unk_D_
  * Builds a matrix from a translation and rotation, then allocates a display list matrix
  * node with it.
  */
-unk_D_86002F34_alt8* GeoNode_CreateDisplayListMatrixFromTransform(MainPoolState* arg0, unk_D_86002F34_alt8* arg1, s32 arg2, Gfx* arg3, Vec3f* arg4,
+GeoDisplayListMatrixNode* GeoNode_CreateDisplayListMatrixFromTransform(MainPoolState* arg0, GeoDisplayListMatrixNode* arg1, s32 arg2, Gfx* arg3, Vec3f* arg4,
                                    Vec3s* arg5) {
     MtxF sp20;
 
@@ -518,16 +518,16 @@ unk_D_86002F34_alt8* GeoNode_CreateDisplayListMatrixFromTransform(MainPoolState*
  * Allocates a scale graph node (type 0x18) on render layer arg2 that draws display list
  * arg3 at offset arg4 scaled by arg5.
  */
-unk_D_86002F34_alt9* GeoNode_CreateScale(MainPoolState* arg0, unk_D_86002F34_alt9* arg1, s32 arg2, Gfx* arg3, Vec3f* arg4,
+GeoBillboardNode* GeoNode_CreateBillboard(MainPoolState* arg0, GeoBillboardNode* arg1, s32 arg2, Gfx* arg3, Vec3f* arg4,
                                    f32 arg5) {
     if (arg0 != NULL) {
-        arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt9), 4);
+        arg1 = MainPool_AllocAligned(arg0, sizeof(GeoBillboardNode), 4);
     }
 
     if (arg1 != NULL) {
-        arg1->unk_1C = *arg4;
+        arg1->position = *arg4;
         arg1->unk_28 = arg5;
-        arg1->unk_18 = arg3;
+        arg1->displayList = arg3;
         GeoNode_Init(arg1, 0x18);
         arg1->node.renderLayer = arg2;
     }
@@ -551,22 +551,22 @@ unk_func_80011B94* GeoNode_CreateDisplayList(MainPoolState* arg0, unk_func_80011
 }
 
 /**
- * Allocates a shadow texture graph node (type 0x1A) with a display list, size parameters
+ * Allocates a material graph node (type 0x1A) with a display list, size parameters
  * and an RGBA color.
  */
-unk_D_86002F34_alt10* GeoNode_CreateShadowTexture(MainPoolState* arg0, unk_D_86002F34_alt10* arg1, s16 arg2, s16 arg3, Gfx* arg4,
+GeoMaterialNode* GeoNode_CreateMaterial(MainPoolState* arg0, GeoMaterialNode* arg1, s16 arg2, s16 arg3, Gfx* arg4,
                                     s16 arg5, s16 arg6, u8 r, u8 g, u8 b, u8 a) {
     if (arg0 != NULL) {
-        arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt10), 4);
+        arg1 = MainPool_AllocAligned(arg0, sizeof(GeoMaterialNode), 4);
     }
 
     if (arg1 != NULL) {
-        arg1->unk_22 = arg2;
-        arg1->unk_20 = arg3;
-        arg1->unk_18 = arg4;
-        arg1->unk_1C = arg5;
-        arg1->unk_1E = arg6;
-        arg1->unk_24.rgba = (r << 0x18) | (g << 0x10) | (b << 8) | a;
+        arg1->mode = arg2;
+        arg1->eventIndex = arg3;
+        arg1->displayList = arg4;
+        arg1->textureIndex = arg5;
+        arg1->paletteIndex = arg6;
+        arg1->color.rgba = (r << 0x18) | (g << 0x10) | (b << 8) | a;
         GeoNode_Init(arg1, 0x1A);
     }
 
@@ -577,13 +577,13 @@ unk_D_86002F34_alt10* GeoNode_CreateShadowTexture(MainPoolState* arg0, unk_D_860
  * Allocates an anchor graph node that records a position for attaching other
  * objects.
  */
-unk_D_86002F34_alt23* GeoNode_CreateAnchor(MainPoolState* arg0, unk_D_86002F34_alt23* arg1, s16 arg2) {
+GeoAnchorNode* GeoNode_CreateAnchor(MainPoolState* arg0, GeoAnchorNode* arg1, s16 arg2) {
     if (arg0 != NULL) {
-        arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt23), 4);
+        arg1 = MainPool_AllocAligned(arg0, sizeof(GeoAnchorNode), 4);
     }
 
     if (arg1 != NULL) {
-        arg1->unk_18 = arg2;
+        arg1->anchorId = arg2;
         GeoNode_Init(arg1, 0x1B);
     }
 
@@ -594,10 +594,10 @@ unk_D_86002F34_alt23* GeoNode_CreateAnchor(MainPoolState* arg0, unk_D_86002F34_a
  * Allocates a group graph node (type 0x1C) on render layer arg2 with six s16 parameters, a
  * word parameter and an RGBA color.
  */
-unk_D_86002F34_alt24* GeoNode_CreateGroup(MainPoolState* arg0, unk_D_86002F34_alt24* arg1, s32 arg2, s16 arg3, s16 arg4,
+GeoGroupNode* GeoNode_CreateGroup(MainPoolState* arg0, GeoGroupNode* arg1, s32 arg2, s16 arg3, s16 arg4,
                                     s16 arg5, s16 arg6, s16 arg7, s16 arg8, s32 arg9, u8 r, u8 g, u8 b, u8 a) {
     if (arg0 != NULL) {
-        arg1 = MainPool_AllocAligned(arg0, sizeof(unk_D_86002F34_alt24), 4);
+        arg1 = MainPool_AllocAligned(arg0, sizeof(GeoGroupNode), 4);
     }
 
     if (arg1 != NULL) {

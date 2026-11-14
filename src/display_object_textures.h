@@ -41,7 +41,7 @@ typedef struct ModelLoaderThread {
 extern ModelLoaderThread D_800AC7A0;
 
 // display_object_textures.c
-void func_80016D40(unk_D_86002F34* arg0, arg1_func_80010CA8 arg1);
+void func_80016D40(GeoTextureBankNode* arg0, arg1_func_80010CA8 arg1);
 Fragment* Jpeg_AllocAndDecodeFragment(MemoryBlock* arg0, PRESJPEG* arg1, PRESJPEG* arg2);
 Fragment* Yay0_AllocAndDecompressFragment(MainPoolState* arg0, PERSSZP* arg1, PERSSZP* arg2);
 Fragment* Asset_AllocAndCopyFragment(MainPoolState* arg0, PERSSZP* arg1, s32 arg2, u32 arg3);
