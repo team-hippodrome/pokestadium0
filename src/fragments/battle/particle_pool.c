@@ -84,10 +84,6 @@ void Particle_UpdateFrameCounters(void);
 
 s32 func_800023C4(M2C_UNK, M2C_UNK);                /* extern */
 M2C_UNK func_8004FD20(s32, M2C_UNK);                /* extern */
-extern s32 D_8219CA50;
-extern s32 D_8219CA54;
-extern s32 D_8219CA58;
-extern s32 D_8219CA5C;
 
 /**
  * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
@@ -95,12 +91,12 @@ extern s32 D_8219CA5C;
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_InitParticleSystem(void) {
-    D_8219CA54 = func_800023C4(0x20D0, 0);
-    D_8219CA50 = func_800023C4(0xF3C0, 0);
-    func_8004FD20(D_8219CA54, 0x20D0);
-    func_8004FD20(D_8219CA50, 0xF3C0);
-    D_8219CA5C = 0;
-    D_8219CA58 = 0;
+    gBattleAnimEffectSlots = (void*)func_800023C4(0x20D0, 0);
+    gParticlePool = (Particle*)func_800023C4(sizeof(Particle) * 300, 0);
+    func_8004FD20((s32)gBattleAnimEffectSlots, 0x20D0);
+    func_8004FD20((s32)gParticlePool, sizeof(Particle) * 300);
+    gBattleAnimEffectSlotIndex = 0;
+    gParticlePoolIndex = 0;
 }
 
 /**
@@ -625,7 +621,7 @@ void func_8213A784(s32 arg0) {
     Particle* var_s0;
     Particle* var_s2;
 
-    var_s2 = D_8219CA50;
+    var_s2 = gParticlePool;
     var_s3 = 0;
     do {
         if ((var_s2->allocated != 0) && (var_s2->prev == NULL) && (func_8213CB1C((s8*)var_s2, 8) != 0)) {
@@ -653,7 +649,7 @@ void func_8213A858(s32 arg0) {
     s32 var_s1;
     Particle* var_s0;
 
-    var_s0 = D_8219CA50;
+    var_s0 = gParticlePool;
     var_s1 = 0;
     do {
         if ((var_s0->allocated != 0) && (func_8213CAFC((s8*)var_s0, 8) != 0)) {
