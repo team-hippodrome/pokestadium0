@@ -120,7 +120,7 @@
       "size": "0xC"
     }
   },
-  "src/fragments/disk_error_screen/disk_error_screen.c": {
+  "src/fragments/title_screen/title_screen.c": {
     ".rodata": {
       "address": "0x81200FF4",
       "size": "0x14"
@@ -602,7 +602,7 @@
       "size": "0x18"
     }
   },
-  "src/fragments/lab_menu/lab_menu.c": {
+  "src/fragments/pokedex_menu/pokedex_menu.c": {
     ".rodata": {
       "address": "0x8A000648",
       "size": "0x18"
@@ -635,7 +635,7 @@
   "src/fragments/particle_data/particle_data_2.c": {
     ".bss": "0x8F212930"
   },
-  "src/fragments/geo_model_039/geo_model_039.c": {
+  "src/fragments/doduo_game_boy_model/doduo_game_boy_model.c": {
     ".bss": "0x8E825728"
   },
   "src/fragments/geo_model_040/geo_model_040.c": {

@@ -407,9 +407,9 @@ the orbit, which a still frame can't tell apart.
 On the order select screen (`battle_order_select.c`, Free Battle against the
 COM), presses were matched to the functions they reached:
 
-* Each pick reaches `BattleMenu_AppendOrderSlotIcon`, the level-sum check and
+* Each pick reaches `BattleMenu_AddSidebarPickBall`, the level-sum check and
   the completeness check.
-* L reaches `BattleMenu_ResetOrderSlotIcons`.
+* L reaches `BattleMenu_ShrinkSidebarPickBalls`.
 * The sixth pick opens 「これで いいですか？ はい えらびなおす」
   (`BattleMenu_DrawOrderSelectConfirmPrompt`, `..._ConfirmInput`).
 
@@ -813,7 +813,7 @@ On the order screen of a COM free battle:
 
 * COM's panel is ready at once (じゅんび かんりょう！) from scripted input
   (`BattleMenu_FeedScriptedComOrderInput`).
-* Each C/A/B button adds a slot (`BattleMenu_SelectSlotOrShowSummary`), and L
+* Each C/A/B button adds a slot (`BattleMenu_PickOrderSlot`), and L
   clears the picks (`BattleMenu_UndoSelections`).
 * After six picks, 「これで いいですか？ はい / えらびなおす」 appears, and はい
   commits the order (`BattleMenu_CommitOrderSelection`).
