@@ -13,7 +13,8 @@ typedef struct GbSoundRegisters {
     /* 0x2B */ char unk2B[1];
     /* 0x2C */ u8 nr52; /* sound on/off; bits 0-3 are the channel-on flags */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
     /* 0x2D */ char unk2D[0x13];
-} GbSoundRegisters; // size = 0x40
+    /* 0x40 */ u16 waveRam[16]; /* wave pattern RAM (0xFF30-0xFF3F): value byte, dirty byte */ /* @unverified: register 0x20 on in the 48-register reset loop of func_80044BA8 */
+} GbSoundRegisters; // size = 0x60
 #define GB_REG(n) (((u8*)&D_800FD7E8.regs[n])[0])
 #define GB_REG_DIRTY(n) (((u8*)&D_800FD7E8.regs[n])[1])
 /* A queued register write, applied when the renderer reaches its sample time. */
@@ -83,7 +84,6 @@ extern GbSynthWave D_800FD798;
 extern GbSynthNoise D_800FD7B8;
 extern u32 D_800FD7E4;
 extern GbSoundRegisters D_800FD7E8;
-extern u8 D_800FD828[32];
 extern GbSoundRegWrite D_800FD848[199];
 extern u8 D_800FDE80[8];
 extern u32 D_800FDE88;
@@ -182,7 +182,7 @@ void func_80044BA8(u32 arg0, u8 arg1, u32 arg2) {
     p[0x2A] = 0;
     p[0x2C] = 0;
 
-    p = D_800FD828;
+    p = (u8*) D_800FD7E8.waveRam;
     for (i = 0; i < 16; i++) {
         p[i * 2] = 0;
     }
