@@ -11,8 +11,8 @@ void ScrollList_SetItems(s8*, s32, s8*);
 void func_8900020C(void);
 s32 LabItem_ComputeRemainingCapacity(s32 arg0, ByteMatrix* arg1);
 s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, ByteMatrix* arg1);
-s32 LabItem_FindOrAllocateGamePakBoxSlot(unk_func_8821421C_07C* arg0, s32 arg1, char* arg2);
-void LabItem_LoadGamePakBoxSlots(unk_func_8821421C_07C* arg0);
+s32 LabItem_FindOrAllocateGamePakBoxSlot(LabItemSaveSlot* arg0, s32 arg1, char* arg2);
+void LabItem_LoadGamePakBoxSlots(LabItemSaveSlot* arg0);
 void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, ByteMatrix* arg3);
 void func_800275E4(s32, s32);
 void ScrollList_SetCursorKeepOffset(s32*, s32);
@@ -41,12 +41,12 @@ extern Color_RGBA8 D_8900A5CC;
 s32 func_8002B390(s8*);
 s32 func_8002BC14(s32);
 extern s32 D_800603C0;
-extern Rgba89000D50 D_8900A5BC;
+extern Color_RGBA8 D_8900A5BC;
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void func_8001AA60(s32, s32, s32);
 void Font_SetColorForFlags(s32);
 void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
-void TextBox_Draw(s8*);
+void TextBox_Draw(TextBox*);
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
 extern Color_RGBA8 D_80073520;
@@ -57,18 +57,18 @@ extern u8 D_04002448[];
 extern char D_89018470[];
 extern s32 D_800603C0;
 extern M2C_UNK D_89018474;
-void Ui_FillRectHighlighted(s32, s32, s32, s32, Rgba89000D50);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);
-extern Rgba89000D50 D_8900A5D4[];
+extern Color_RGBA8 D_8900A5D4[];
 extern u8 D_800734A8[];
 void Window_SetRect(s8*, s32, s32, s32, s32);
 void Menu_Init(s8*, s32, s32, s32, s32, s32);
 M2C_UNK func_80027804();
 s32 Menu_UpdateCursorSkipDisabled(void*);
 extern Gfx D_80060270[];
-extern Rgba89000D50 D_8900A5E0;
-extern Rgba89000D50 D_8900A5E8;
-extern Rgba89000D50 D_8900A5EC[];
+extern Color_RGBA8 D_8900A5E0;
+extern Color_RGBA8 D_8900A5E8;
+extern Color_RGBA8 D_8900A5EC[];
 extern char D_8901848C[];
 char* func_8001FDC8(u8, char*);
 s32 func_80031C24(u8);
@@ -84,8 +84,8 @@ extern Gfx D_80073450[];
 extern u8 D_04011AB8[];
 s32 ScrollList_UpdateCursor(void*);
 s32 func_80030230(void*);
-extern ColorPair890017FC D_8900A608;
-extern ColorPair890017FC D_8900A610;
+extern PrimEnvColor D_8900A608;
+extern PrimEnvColor D_8900A610;
 extern u8* D_89017A80[];
 extern u8 D_89017A98[];
 extern s32 D_89019114;
@@ -124,8 +124,8 @@ extern char D_89018660[];
 extern char D_8901866C[];
 void Ui_DrawImageInStrips(void*, s32, s32);
 void Font_SetColorForFlags(s32);
-extern Col89002C10 D_8900A6AC;
-extern Col89002C10 D_8900A6B0;
+extern Color_RGBA8 D_8900A6AC;
+extern Color_RGBA8 D_8900A6B0;
 extern char D_89018678[];
 void LabItem_DrawTrainerInfo();
 void Window_SetRect(s8*, s32, s32, s32, s32);
@@ -137,36 +137,30 @@ void Menu_DrawInlineItems(void*, s32, s32, s32, s32);
 extern u8 D_8007356C[];
 extern u8 D_89018688[];
 s32 Menu_UpdateCursor(void*);
-void func_8002B018(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
 extern u8 D_8900A580[];
 extern u8 D_8900A584[];
 extern u8 D_8900A5A0[];
 extern u8 D_8900A5A4[];
 extern u8 D_8900A5A8[];
 extern u8 D_8900A5AC[];
-extern Rgba89000D50 D_8900A6B4;
-extern Rgba89000D50 D_8900A6B8;
+extern Color_RGBA8 D_8900A6B4;
+extern Color_RGBA8 D_8900A6B8;
 extern u8 D_8900BFC0[];
 extern u8 D_89010368[];
 extern u8 D_890110F0[];
-typedef Color_RGBA8 Rgba8900A6BC; // size = 0x4
-typedef struct Color8900A6BC {
-    /* 0x0 */ Rgba8900A6BC c[2];
-} Color8900A6BC; // size = 0x8
-extern Color8900A6BC D_8900A6BC;
-extern Color8900A6BC D_8900A6C4;
+extern PrimEnvColor D_8900A6BC;
+extern PrimEnvColor D_8900A6C4;
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
 extern u8 D_89017A98[];
 extern char D_890186C0[];
 extern char D_890186CC[];
-void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Rgba8900A6BC, Rgba8900A6BC);
+void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 void Font_SetColorForFlags(s32);
 extern s32 D_8900A6CC[];
 extern s8 *D_8900A6D8[];
 void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
 extern u8 D_800735C4[];
-void func_8002B054(s8*, s32);
 void Window_DrawFrame(void*);
 s32 func_8002B2B0(void *);
 s32 LabItem_UpdateItemList(void *, u32);
@@ -182,56 +176,47 @@ s32 func_8002207C(s32);
 void func_8002D7D4(s32);
 void func_800243B8(void);
 void func_800245E0(s32, s32);
-void func_89000494(s32, s32, s32, s8*, s32, void*, s32);
-void LabItem_DrawScreen(void*);
-typedef struct Slot89003880 {
-    /* 0x00 */ s32 active;
-    /* 0x04 */ char unk04[0x10];
-} Slot89003880; // size = 0x14
-typedef struct Ctx89003880 {
-    /* 0x000 */ char unk000[0xA20];
-    /* 0xA20 */ Slot89003880 slots[1];
-} Ctx89003880;
+void LabItem_DrawScreen(LabItemScreen*);
 /**
  * Writes the changed item lists back to the save and flushes it.
  * Seen in play (2026-11-13) ran on レポートしてやめる (ないようが へんこうされています) after moving items in せいとん >
  * どうぐをいどうする.
  */
-void LabItem_SaveChanges(s8* arg0) {
+void LabItem_SaveChanges(LabItemScreen* arg0) {
     s32 locked = 0;
     s32 flush = 0;
 
-    if ((M2C_FIELD(arg0, s32*, 0xA10) != 0) || (M2C_FIELD(arg0, s32*, 0xA14) != 0)) {
+    if ((arg0->dirty[0] != 0) || (arg0->dirty[1] != 0)) {
         locked = 1;
     }
     if (locked) {
         func_80022118(D_89019108);
     }
-    if (M2C_FIELD(arg0, s32*, 0xA10) != 0) {
-        func_89000494(0x23, D_89019108, 0, arg0 + 0x9E0, 0, NULL, -1);
+    if (arg0->dirty[0] != 0) {
+        LabItem_WriteDeckBack(0x23, D_89019108, 0, &arg0->itemTables[0], 0, NULL, -1);
     }
-    if (M2C_FIELD(arg0, s32*, 0xA14) != 0) {
-        func_89000494(0x22, D_89019108, 0, arg0 + 0x9F0, 0, NULL, -1);
+    if (arg0->dirty[1] != 0) {
+        LabItem_WriteDeckBack(0x22, D_89019108, 0, &arg0->itemTables[1], 0, NULL, -1);
     }
-    if (M2C_FIELD(arg0, s32*, 0xA1C) != -1) {
-        if (((Ctx89003880*)arg0)->slots[M2C_FIELD(arg0, s32*, 0xA1C)].active != 0) {
-            if (M2C_FIELD(arg0, s32*, 0xA18) != 0) {
+    if (arg0->gamePakSlot != -1) {
+        if (arg0->saveSlots[arg0->gamePakSlot].present != 0) {
+            if (arg0->dirty[2] != 0) {
                 flush = 1;
-                if (M2C_FIELD(arg0, s32*, 0xA08) == 0) {
-                    func_800245E0(0x12, M2C_FIELD(arg0, s32*, 0xA1C));
+                if (arg0->itemTables[2].count == 0) {
+                    func_800245E0(0x12, arg0->gamePakSlot);
                 } else {
-                    func_89000494(0x12, 0, M2C_FIELD(arg0, s32*, 0xA1C), arg0 + 0xA00, 0, NULL, -1);
+                    LabItem_WriteDeckBack(0x12, 0, arg0->gamePakSlot, &arg0->itemTables[2], 0, NULL, -1);
                 }
             }
-        } else if (M2C_FIELD(arg0, s32*, 0xA08) > 0) {
+        } else if (arg0->itemTables[2].count > 0) {
             flush = 1;
-            func_89000494(0x12, 0, M2C_FIELD(arg0, s32*, 0xA1C), arg0 + 0xA00, 0, D_8901911C, D_89019118);
+            LabItem_WriteDeckBack(0x12, 0, arg0->gamePakSlot, &arg0->itemTables[2], 0, (char*)D_8901911C, D_89019118);
         }
     }
     if (locked) {
         if (func_8002207C(D_89019108) == 0) {
             func_8002D7D4(D_89019108);
-            LabItem_DrawScreen((M2C_UNK*)arg0);
+            LabItem_DrawScreen(arg0);
         }
         func_80022188(D_89019108);
     }
@@ -245,11 +230,11 @@ void LabItem_SaveChanges(s8* arg0) {
  * Seen in play (2026-11-13) ran once when B left the item sort screen after nothing had been moved;
  * the screen closed without asking to save.
  */
-s32 LabItem_HasUnsavedChanges(s32* arg0) {
+s32 LabItem_HasUnsavedChanges(LabItemScreen* arg0) {
     s32 i;
 
     for (i = 0; i < 3; i++) {
-        if (arg0[0x284 + i] != 0) {
+        if (arg0->dirty[i] != 0) {
             return 1;
         }
     }
@@ -257,18 +242,17 @@ s32 LabItem_HasUnsavedChanges(s32* arg0) {
     return 0;
 }
 
-void SavePrompt_Init(s8*, s32, s32);
-void LabItem_InitConfirmWindow(s8*, s32, s32, s8*, s8*);
-s32 SavePrompt_Update(s8*);
-void Save_DrawReportingWindow(s8*);
-s32 LabItem_UpdateConfirmWindow(s8*);
-void LabItem_InitDeleteDataWindow(s8*, s32, s32, s8*);
-s32 LabItem_UpdateDeleteDataCursor(s8*);
-void func_89000448(s32, s32, s32, s8*);
-void func_89002E58(s8*, s32, s32, s8*, s8*);
-s32 func_8900352C(s8*);
-void func_890022D0(s8*);
-s32 LabItem_UpdateOrganizeWindow(s8*);
+void SavePrompt_Init(SavePrompt*, s32, s32);
+void LabItem_InitConfirmWindow(LabItemConfirmWindow*, s32, s32, s8*, s8*);
+s32 SavePrompt_Update(SavePrompt*);
+void Save_DrawReportingWindow(SavePrompt*);
+s32 LabItem_UpdateConfirmWindow(LabItemConfirmWindow*);
+void LabItem_InitDeleteDataWindow(LabItemDeleteDataWindow*, s32, s32, LabItemSaveSlot*);
+s32 LabItem_UpdateDeleteDataCursor(LabItemDeleteDataWindow*);
+void func_89002E58(LabItemSaveDataWindow*, s32, s32, LabItemSaveSlot*, ByteMatrix*);
+s32 func_8900352C(LabItemSaveDataWindow*);
+void func_890022D0(LabItemOrganizeWindow*);
+s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow*);
 extern s8 D_8901871C[];
 extern s8 D_89018728[];
 extern s8 D_89018760[];
@@ -278,86 +262,86 @@ extern s8 D_8901876C[];
  * Runs the item organizer's state machine for one frame.
  * Seen in play (2026-11-12): ran どうぐのせいり.
  */
-s32 LabItem_UpdateScreen(s8* arg0) {
+s32 LabItem_UpdateScreen(LabItemScreen* arg0) {
     s32 ret = 0;
     s32 res;
 
-    switch (M2C_FIELD(arg0, s32*, 0)) {
+    switch (arg0->state) {
         case 1:
-            res = LabItem_UpdateOrganizeWindow(arg0 + 4);
+            res = LabItem_UpdateOrganizeWindow(&arg0->organizeWindow);
             if (res == -1) {
-                if (LabItem_HasUnsavedChanges((s32*)arg0) != 0) {
-                    M2C_FIELD(arg0, s32*, 0) = 2;
-                    SavePrompt_Init(arg0 + 0x4E8, 0xCA, 0xAD);
+                if (LabItem_HasUnsavedChanges(arg0) != 0) {
+                    arg0->state = 2;
+                    SavePrompt_Init(&arg0->savePrompt, 0xCA, 0xAD);
                 } else {
                     ret = 1;
                 }
             } else if (res > 0) {
                 switch (res) {
                     case 1:
-                        M2C_FIELD(arg0, s32*, 0) = 3;
-                        LabItem_InitConfirmWindow(arg0 + 0x54C, 0xBA, 0xAE, D_8901871C, D_89018728);
-                        M2C_FIELD(arg0, s32*, 0x5FC) = 1;
+                        arg0->state = 3;
+                        LabItem_InitConfirmWindow(&arg0->confirmWindow, 0xBA, 0xAE, D_8901871C, D_89018728);
+                        arg0->confirmWindow.choice.cursor = 1;
                         break;
                 }
             }
             break;
         case 2:
-            res = SavePrompt_Update(arg0 + 0x4E8);
+            res = SavePrompt_Update(&arg0->savePrompt);
             if (res == -1) {
-                M2C_FIELD(arg0, s32*, 0) = 1;
+                arg0->state = 1;
             } else if (res > 0) {
                 ret = 1;
                 switch (res) {
                     case 2:
                         break;
                     case 1:
-                        Save_DrawReportingWindow(arg0 + 0x4E8);
+                        Save_DrawReportingWindow(&arg0->savePrompt);
                         LabItem_SaveChanges(arg0);
                         break;
                 }
             }
             break;
         case 3:
-            res = LabItem_UpdateConfirmWindow(arg0 + 0x54C);
+            res = LabItem_UpdateConfirmWindow(&arg0->confirmWindow);
             if (res == -1) {
-                M2C_FIELD(arg0, s32*, 0) = 1;
+                arg0->state = 1;
             } else if (res == 1) {
-                LabItem_InitDeleteDataWindow(arg0 + 0x604, 0x2B, 0x5C, arg0 + 0xA20);
-                M2C_FIELD(arg0, s32*, 0) = 4;
+                LabItem_InitDeleteDataWindow(&arg0->deleteDataWindow, 0x2B, 0x5C, arg0->saveSlots);
+                arg0->state = 4;
             }
             break;
         case 4:
-            res = LabItem_UpdateDeleteDataCursor(arg0 + 0x604);
+            res = LabItem_UpdateDeleteDataCursor(&arg0->deleteDataWindow);
             if (res == -1) {
-                M2C_FIELD(arg0, s32*, 0) = 1;
-                M2C_FIELD(arg0, s32*, 0xA08) = 0;
+                arg0->state = 1;
+                arg0->itemTables[2].count = 0;
             } else if (res == 1) {
-                func_89000448(0x12, 0, M2C_FIELD(arg0, s32*, 0x658), arg0 + 0xA00);
-                func_89002E58(arg0 + 0x68C, 0xD6, 0x45, (s8*)&((Ctx89003880*)arg0)->slots[M2C_FIELD(arg0, s32*, 0x658)], arg0 + 0xA00);
-                M2C_FIELD(arg0, s32*, 0) = 5;
+                LabItem_ReadDeckEntries(0x12, 0, arg0->deleteDataWindow.menu.cursor, &arg0->itemTables[2]);
+                func_89002E58(&arg0->saveDataWindow, 0xD6, 0x45, &arg0->saveSlots[arg0->deleteDataWindow.menu.cursor], &arg0->itemTables[2]);
+                arg0->state = 5;
             }
             break;
         case 5:
-            res = func_8900352C(arg0 + 0x68C);
+            res = func_8900352C(&arg0->saveDataWindow);
             if (res == -1) {
-                M2C_FIELD(arg0, s32*, 0) = 4;
+                arg0->state = 4;
             } else if (res == 1) {
-                M2C_FIELD(arg0, s32*, 0) = 6;
-                LabItem_InitConfirmWindow(arg0 + 0x54C, 0xBA, 0xAE, D_89018760, D_8901876C);
-                M2C_FIELD(arg0, s32*, 0x5FC) = 1;
+                arg0->state = 6;
+                LabItem_InitConfirmWindow(&arg0->confirmWindow, 0xBA, 0xAE, D_89018760, D_8901876C);
+                arg0->confirmWindow.choice.cursor = 1;
             }
             break;
         case 6:
-            res = LabItem_UpdateConfirmWindow(arg0 + 0x54C);
+            res = LabItem_UpdateConfirmWindow(&arg0->confirmWindow);
             if (res == -1) {
-                M2C_FIELD(arg0, s32*, 0) = 5;
+                arg0->state = 5;
             } else if (res == 1) {
-                M2C_FIELD(arg0, s32*, 0xA1C) = M2C_FIELD(arg0, s32*, 0x658);
-                M2C_FIELD(arg0 + M2C_FIELD(arg0, s32*, 0xA1C) * 0x14, s32*, 0xA20) = 0;
-                M2C_FIELD(arg0, s32*, 0xA08) = 0;
-                func_890022D0(arg0 + 4);
-                M2C_FIELD(arg0, s32*, 0) = 1;
+                arg0->gamePakSlot = arg0->deleteDataWindow.menu.cursor;
+                arg0->saveSlots[arg0->gamePakSlot].present = 0;
+                arg0->itemTables[2].count = 0;
+                func_890022D0(&arg0->organizeWindow);
+                arg0->state = 1;
             }
             break;
     }
@@ -393,17 +377,17 @@ M2C_UNK func_80027804();
  * Sets up a terminal menu window with its rows and title.
  * Seen in play (2026-11-12) in せいとん: ran on entry as the せいとん menu window appeared.
  */
-void LabTerminal_InitMenuWindow(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, char *arg5, s32 arg6, char *arg7, s32 arg8, char *arg9) {
+void LabTerminal_InitMenuWindow(LabTerminalMenuWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, char* arg5, s32 arg6, char* arg7, s32 arg8, char* arg9) {
 
-    Window_SetRect(((s8 *)arg0), arg1, arg2, arg3, arg4);
-    M2C_FIELD(((s8 *)arg0), s32 *, 0x28) = 0;
-    M2C_FIELD(((s8 *)arg0), s32 *, 0x24) = 0;
-    M2C_FIELD(((s8 *)arg0), s32 *, 0x14) = 0x801;
-    M2C_FIELD(((s8 *)arg0), char **, 0x20) = arg9;
-    func_80027804(((s8 *)arg0) + 0x50, arg5, arg6, arg6);
-    Menu_Init(((s8 *)arg0) + 0x2C, (s32)(((s8 *)arg0) + 0x50), (s32)(((s8 *)arg0) + 0x5C), (s32)LabTerminal_DrawMenuRow, arg3 - 0xC, 0x20);
-    M2C_FIELD(((s8 *)arg0), char **, 0x7C) = arg7;
-    M2C_FIELD(((s8 *)arg0), s32 *, 0x80) = arg8;
+    Window_SetRect((s8*)&arg0->window, arg1, arg2, arg3, arg4);
+    arg0->window.state = 0;
+    arg0->window.animTimer = 0;
+    arg0->window.frame.style = 0x801;
+    arg0->window.title = arg9;
+    func_80027804(&arg0->items, arg5, arg6, arg6);
+    Menu_Init((s8*)&arg0->menu, (s32)&arg0->items, (s32)arg0->itemFlags, (s32)LabTerminal_DrawMenuRow, arg3 - 0xC, 0x20);
+    arg0->descriptions = (char**)arg7;
+    arg0->descriptionLines = arg8;
 }
 
 extern Color_RGBA8 D_8900A6FC;
@@ -412,24 +396,24 @@ extern Color_RGBA8 D_8900A700;
  * Draws a terminal menu window.
  * Seen in play (2026-11-12): the せいとん menu with its description.
  */
-void LabTerminal_DrawMenuWindow(s8* arg0) {
+void LabTerminal_DrawMenuWindow(LabTerminalMenuWindow* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 sp38;
     s32 h;
 
     if (func_8002AE6C() == 0) {
-        h = (M2C_FIELD(M2C_FIELD(arg0, s8**, 0x2C), s32*, 8) << 5) + 8;
-        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + h + 5, M2C_FIELD(arg0, s32*, 8), D_8007356C);
+        h = (arg0->menu.items->count << 5) + 8;
+        Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->window.frame.y + h + 5, arg0->window.frame.width, D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, h, *(Color_RGBA8*)&D_8900A5BC);
-        Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + h + 0xC, M2C_FIELD(arg0, s32*, 8) - 0xC, M2C_FIELD(arg0, s32*, 0x80) * 0x1C, D_8900A6FC, D_8900A700);
-        sp38 = M2C_FIELD(arg0, s32*, 8) - 0xC;
-        Menu_DrawItems(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0xA, 0xFFEF, (s32)&sp38);
+        func_80029028(arg0->window.frame.x + 6, arg0->window.frame.y + 6, arg0->window.frame.width - 0xC, h, *(Color_RGBA8*)&D_8900A5BC);
+        Ui_FillRectPrimEnvColor(arg0->window.frame.x + 6, arg0->window.frame.y + h + 0xC, arg0->window.frame.width - 0xC, arg0->descriptionLines * 0x1C, D_8900A6FC, D_8900A700);
+        sp38 = arg0->window.frame.width - 0xC;
+        Menu_DrawItems(&arg0->menu, arg0->window.frame.x + 6, arg0->window.frame.y + 0xA, 0xFFEF, (s32)&sp38);
         Font_BeginTranslucentTextRendering();
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         Font_SetActive(8, 0);
         Font_SetLineHeight(0x1C);
-        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + h + 0x10, (*(char***)(arg0 + 0x7C))[M2C_FIELD(arg0, s32*, 0x34)]);
+        Font_Printf(arg0->window.frame.x + 0xE, arg0->window.frame.y + h + 0x10, arg0->descriptions[arg0->menu.cursor]);
         Font_EndTexturedTextRendering();
     }
 }
@@ -438,23 +422,23 @@ void LabTerminal_DrawMenuWindow(s8* arg0) {
  * Handles input on a terminal menu window while it is open.
  * Seen in play (2026-11-12): moved over the せいとん menu.
  */
-s32 LabTerminal_UpdateMenuWindow(s8* arg0) {
+s32 LabTerminal_UpdateMenuWindow(LabTerminalMenuWindow* arg0) {
     s32 ret = 0;
     s32 temp_v0;
 
-    switch (M2C_FIELD(arg0, s32*, 0x28)) {
+    switch (arg0->window.state) {
         case 1:
         case 2:
             break;
         default:
             return 0;
     }
-    if (Menu_UpdateCursor(arg0 + 0x2C) == 0) {
+    if (Menu_UpdateCursor(&arg0->menu) == 0) {
         temp_v0 = func_8002BC14(D_800603C0);
         if (temp_v0 == -1) {
             ret = -1;
         } else if (temp_v0 == 1) {
-            ret = M2C_FIELD(arg0, s32*, 0x34) + 1;
+            ret = arg0->menu.cursor + 1;
         }
     }
     return ret;
@@ -463,7 +447,7 @@ s32 LabTerminal_UpdateMenuWindow(s8* arg0) {
 extern char D_8900A704[];
 extern char D_8900A710[];
 extern char D_890188F4[];
-void LabTerminal_InitMenuWindow(s32, s32, s32, s32, s32, char*, s32, char*, s32, char*);
+void LabTerminal_InitMenuWindow(LabTerminalMenuWindow*, s32, s32, s32, s32, char*, s32, char*, s32, char*);
 
 /**
  * Calls LabTerminal_InitMenuWindow with its own first argument passed straight through
@@ -472,13 +456,13 @@ void LabTerminal_InitMenuWindow(s32, s32, s32, s32, s32, char*, s32, char*, s32,
  * arguments mean are not established.
  * Seen in play (2026-11-12) in せいとん: set up the first menu: ポケモンを いどうする, どうぐを いどうする, ボックスを いどうする.
  */
-void LabTerminal_InitMainMenu(s32 arg0) {
+void LabTerminal_InitMainMenu(LabTerminalMenuWindow* arg0) {
     LabTerminal_InitMenuWindow(arg0, 0x30, 0x5C, 0x170, 0xCE, D_8900A704, 3, D_8900A710, 3, D_890188F4);
 }
 
 void BgStage_DrawFrame(void);                            /* extern */
 M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
-void LabTerminal_DrawMenuWindow(s8*);
+void LabTerminal_DrawMenuWindow(LabTerminalMenuWindow*);
 extern M2C_UNK D_89018900;
 extern s32 D_89019108;
 extern M2C_UNK D_89019110;
@@ -487,7 +471,7 @@ extern M2C_UNK D_89019110;
  * Draws the GB save summary bar and the background.
  * Seen in play (2026-11-12): the せいとん screen with the 1P サトシ IDNo/12345 bar.
  */
-void LabTerminal_DrawMainScreen(s32 arg0) {
+void LabTerminal_DrawMainScreen(LabTerminalMenuWindow* arg0) {
     M2C_UNK *var_a1;
 
     BgStage_DrawFrame();
@@ -503,11 +487,11 @@ void LabTerminal_DrawMainScreen(s32 arg0) {
 
 /**
  * Wrapper around LabTerminal_UpdateMenuWindow(arg0): -1 calls func_8003F6AC(3) and returns -1;
- * a positive result calls func_8003F6AC(2) and returns the word at arg0 + 0x34
+ * a positive result calls func_8003F6AC(2) and returns menu.cursor
  * plus 1; any other result returns 0. (Same pattern as FreeBattle_UpdateBattleModeWindow.)
  * Seen in play (2026-11-12): returned the せいとん menu pick.
  */
-s32 LabTerminal_UpdateMainMenu(s8* arg0) {
+s32 LabTerminal_UpdateMainMenu(LabTerminalMenuWindow* arg0) {
     s32 result = 0;
     s32 tmp;
 
@@ -517,13 +501,13 @@ s32 LabTerminal_UpdateMainMenu(s8* arg0) {
         result = -1;
     } else if (tmp > 0) {
         func_8003F6AC(2);
-        result = M2C_FIELD(arg0, s32*, 0x34) + 1;
+        result = arg0->menu.cursor + 1;
     }
     return result;
 }
 
 extern M2C_UNK D_89019110;
-extern M2C_UNK D_89028950;
+extern LabTerminalMenuWindow D_89028950;
 extern s32 D_890289D4;
 s32 func_80025BD8();
 M2C_UNK func_80027FF8(M2C_UNK *, s32);
@@ -592,8 +576,8 @@ s32 func_8900429C(s32 arg0) {
 
 void Cont_StartReadInputs(void);                            /* extern */
 void Cont_ReadInputs(void);                            /* extern */
-void func_89003650(s8*);
-void LabItem_DrawScreen(void*);
+void func_89003650(LabItemScreen*);
+void LabItem_DrawScreen(LabItemScreen*);
 M2C_UNK PcSort_Init(M2C_UNK *, M2C_UNK *);        /* extern */
 M2C_UNK PcSort_Free(M2C_UNK *);                   /* extern */
 M2C_UNK PcSort_DrawScreen(M2C_UNK *);                   /* extern */
@@ -603,10 +587,10 @@ M2C_UNK PcBox_Free(M2C_UNK *);                   /* extern */
 M2C_UNK PcBox_DrawScreen(M2C_UNK *);                   /* extern */
 s32 PcBox_UpdateScreen(M2C_UNK *);                       /* extern */
 extern M2C_UNK D_89018918;
-extern M2C_UNK D_89019128;
+extern LabItemScreen D_89019128;
 extern M2C_UNK D_89019B98;
 extern M2C_UNK D_89021428;
-extern M2C_UNK D_89028950;
+extern LabTerminalMenuWindow D_89028950;
 extern s32 D_890289D4;
 
 /**
@@ -633,7 +617,7 @@ s32 LabTerminal_RunFrame(s32 arg0) {
                 PcSort_Init(&D_89019B98, &D_89018918);
                 break;
             case 3:                                 /* switch 2 */
-                func_89003650((s8*)&D_89019128);
+                func_89003650(&D_89019128);
                 break;
             case 4:                                 /* switch 2 */
                 PcBox_Init(&D_89021428);

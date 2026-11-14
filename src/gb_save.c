@@ -2,6 +2,7 @@
 /* C ported from the Stadium 1 decomp: src/fragments/particle_math/particle_math_269820.c, src/gb_save.c. */
 
 #include "gb_save.h"
+#include "menu.h"
 #include "pokemon_stats.h"
 
 // Declared here instead of in a header: the callers of these disagree on their types.
@@ -804,39 +805,39 @@ void Window_DrawLabeled(s8* arg0, s32 arg1) {
     func_8001ABBC();
 }
 
-/*
- * func_8002B018
- *
- * Calls Window_SetRect(arg0, arg1, arg2, arg3, arg4), which fills the first
- * five words of the object (arg1, arg2, arg3, arg4, 0), then stores arg5 at
- * +0x24 and arg6 at +0x28.
+/**
+ * Sets up an image button: its rect (Window_SetRect, which also clears flags), the image and its width.
  */
-void func_8002B018(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
-    Window_SetRect(arg0, arg1, arg2, arg3, arg4);
-    M2C_FIELD(arg0, s32 *, 0x28) = arg6;
-    M2C_FIELD(arg0, s32 *, 0x24) = arg5;
+void func_8002B018(ImageButton* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
+    Window_SetRect((s8*)arg0, arg1, arg2, arg3, arg4);
+    arg0->image = (u8*)arg6;
+    arg0->imageWidth = arg5;
 }
 
-void func_8002B054(s8* arg0, s32 arg1) {
+/**
+ * Draws an image button. `arg1` bit 0x10 (or flags bit 3) fills it with highlightColor, else bit 2 draws a
+ * rounded frame; bits 0x12 tint the image with selectedColor instead of color.
+ */
+void func_8002B054(ImageButton* arg0, s32 arg1) {
     Color_RGBA8 color;
     Color_RGBA8* src;
 
-    func_8002A32C(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC));
-    if ((M2C_FIELD(arg0, s32*, 0x10) & 8) || (arg1 & 0x10)) {
-        Ui_FillRectHighlighted(M2C_FIELD(arg0, s32*, 0) + 1, M2C_FIELD(arg0, s32*, 4) + 1, M2C_FIELD(arg0, s32*, 8) - 2, M2C_FIELD(arg0, s32*, 0xC) - 2, M2C_FIELD(arg0, Color_RGBA8*, 0x20));
+    func_8002A32C(arg0->x, arg0->y, arg0->width, arg0->height);
+    if ((arg0->flags & 8) || (arg1 & 0x10)) {
+        Ui_FillRectHighlighted(arg0->x + 1, arg0->y + 1, arg0->width - 2, arg0->height - 2, arg0->highlightColor);
     } else if (arg1 & 2) {
-        Ui_DrawRoundedFrame(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC), D_80073520);
+        Ui_DrawRoundedFrame(arg0->x, arg0->y, arg0->width, arg0->height, D_80073520);
     }
     if (arg1 & 0x12) {
-        src = (Color_RGBA8*)(arg0 + 0x18);
+        src = &arg0->selectedColor;
     } else {
-        src = (Color_RGBA8*)(arg0 + 0x1C);
+        src = &arg0->color;
     }
     color = *src;
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
     gDPSetPrimColor(gDisplayListHead++, 0, 0, color.r, color.g, color.b, color.a);
-    Gfx_DrawTextureIa16(M2C_FIELD(arg0, s32*, 0) + 3, M2C_FIELD(arg0, s32*, 4) + 3, M2C_FIELD(arg0, s32*, 8) - 6, M2C_FIELD(arg0, s32*, 0xC) - 6, M2C_FIELD(arg0, u8**, 0x28), M2C_FIELD(arg0, s32*, 0x24), 0);
+    Gfx_DrawTextureIa16(arg0->x + 3, arg0->y + 3, arg0->width - 6, arg0->height - 6, arg0->image, arg0->imageWidth, 0);
 }
 
 /** Moves a vertical menu selection according to a d-pad direction. */
@@ -1313,20 +1314,20 @@ extern M2C_UNK func_8002C998;
  * Seen in play (2026-11-12) in いちらん: B after using an item opened 「ないようが へんこうされています」 with
  * レポートしてやめる, レポートしないでやめる and キャンセル.
  */
-void SavePrompt_Init(s8 *arg0, s32 arg1, s32 arg2) {
+void SavePrompt_Init(SavePrompt* arg0, s32 arg1, s32 arg2) {
     s8 *sp2C;
     s8 *temp_a0;
 
-    Window_SetRect(arg0, arg1, arg2, 0xF8, 0xAE);
-    M2C_FIELD(arg0, s32 *, 0x24) = 0;
-    M2C_FIELD(arg0, s32 *, 0x20) = 0;
-    M2C_FIELD(arg0, s32 *, 0x28) = 0;
-    M2C_FIELD(arg0, s32 *, 0x14) = 0x1001;
-    temp_a0 = arg0 + 0x50;
+    Window_SetRect((s8*)arg0, arg1, arg2, 0xF8, 0xAE);
+    arg0->window.animTimer = 0;
+    arg0->window.title = NULL;
+    arg0->window.state = 0;
+    arg0->window.frame.style = 0x1001;
+    temp_a0 = (s8*)&arg0->items;
     sp2C = temp_a0;
     func_80027804(temp_a0, &D_800736AC, 3, 3);
-    Menu_Init(arg0 + 0x2C, sp2C, arg0 + 0x5C, &func_8002C998, 0xEC, 0x1C);
-    M2C_FIELD(arg0, s32 *, 0x4C) = (s32) (M2C_FIELD(arg0, s32 *, 0x4C) | 0x10000);
+    Menu_Init((s8*)&arg0->menu, sp2C, (s8*)arg0->itemFlags, &func_8002C998, 0xEC, 0x1C);
+    arg0->menu.options |= 0x10000;
 }
 
 s32 func_8002AE6C();
@@ -1342,20 +1343,20 @@ extern u8 D_8007B920[];
  * Draws the save-before-leaving window.
  * Seen in play (2026-11-12) in いちらん: drew that window every frame while it was open.
  */
-void SavePrompt_Draw(s32* arg0) {
+void SavePrompt_Draw(SavePrompt* arg0) {
     if (func_8002AE6C() != 0) {
         return;
     }
-    Ui_DrawTexturedDivider(arg0[0], arg0[1] + 0x45, arg0[2], D_8007356C);
-    Ui_FillRectPrimEnvColor(arg0[0] + 6, arg0[1] + 6, arg0[2] - 0xC, 0x40, D_800736B8, D_800736BC);
+    Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->window.frame.y + 0x45, arg0->window.frame.width, D_8007356C);
+    Ui_FillRectPrimEnvColor(arg0->window.frame.x + 6, arg0->window.frame.y + 6, arg0->window.frame.width - 0xC, 0x40, D_800736B8, D_800736BC);
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(arg0[0] + 6, arg0[1] + 0x4C, arg0[2] - 0xC, 0x5C, D_800736C0);
-    Menu_DrawItems((s8*)arg0 + 0x2C, arg0[0] + 6, arg0[1] + 0x50, 0xFFEF, 0);
+    func_80029028(arg0->window.frame.x + 6, arg0->window.frame.y + 0x4C, arg0->window.frame.width - 0xC, 0x5C, D_800736C0);
+    Menu_DrawItems((s8*)&arg0->menu, arg0->window.frame.x + 6, arg0->window.frame.y + 0x50, 0xFFEF, 0);
     func_8001AB6C();
     func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
     func_8001A384(8, 0);
     Font_SetLineHeight(0x1C);
-    func_8001A944(arg0[0] + 0xE, arg0[1] + 0xA, (s32)D_8007B920);
+    func_8001A944(arg0->window.frame.x + 0xE, arg0->window.frame.y + 0xA, (s32)D_8007B920);
     func_8001ABBC();
 }
 
@@ -1367,19 +1368,19 @@ extern u8 D_8007B940[];
  * Seen in play (2026-11-12) in いちらん: after レポートしてやめる it drew 「レポートちゅう」 over the prompt, just
  * before LabPCList_SaveChanges ran.
  */
-void Save_DrawReportingWindow(s32* arg0) {
+void Save_DrawReportingWindow(SavePrompt* arg0) {
     s32 i = 2;
     u8* str = D_8007B940;
     BgStage_AdvanceFrame();
     while (i-- > 0) {
         BgStage_DrawFrame();
-        Ui_FillRectPrimEnvColor(arg0[0] + 6, arg0[1] + 6, arg0[2] - 0xC, 0x40, D_800736C4, D_800736C8);
+        Ui_FillRectPrimEnvColor(arg0->window.frame.x + 6, arg0->window.frame.y + 6, arg0->window.frame.width - 0xC, 0x40, D_800736C4, D_800736C8);
         func_8001AB6C();
         func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
         func_8001A384(0x10, 0);
         func_8001ABE8();
         func_8001AAE4(0xFF, 0xB2, 0xB2, 0xFF);
-        func_8001A944(arg0[0] + 0x20, arg0[1] + 0x16, (s32)str);
+        func_8001A944(arg0->window.frame.x + 0x20, arg0->window.frame.y + 0x16, (s32)str);
         func_8001AC3C();
         func_8001ABBC();
         BgStage_AdvanceFrame();
@@ -1396,20 +1397,20 @@ extern s32 D_800603C0;
  * Seen in play (2026-11-12) in いちらん: returned 1 for レポートしてやめる, 2 for レポートしないでやめる, and -1 for
  * キャンセル or B.
  */
-s32 SavePrompt_Update(s8 *arg0) {
+s32 SavePrompt_Update(SavePrompt* arg0) {
     s32 ret = 0;
 
-    if ((M2C_FIELD(arg0, s32 *, 0x28) != 1) && (M2C_FIELD(arg0, s32 *, 0x28) != 2)) {
+    if ((arg0->window.state != 1) && (arg0->window.state != 2)) {
         return 0;
     }
-    if (Menu_UpdateCursor(arg0 + 0x2C, arg0) == 0) {
+    if (Menu_UpdateCursor(&arg0->menu, arg0) == 0) {
         s32 res = func_8002BC14(D_800603C0);
 
         if (res == -1) {
             func_8003F6AC(3);
             ret = -1;
         } else if (res == 1) {
-            switch (M2C_FIELD(arg0, s32 *, 0x34)) {
+            switch (arg0->menu.cursor) {
                 case 0:
                     ret = 1;
                     func_8003F6AC(0x1D);
@@ -1463,7 +1464,7 @@ extern u8 D_800736EC[];
  * Seen in play (2026-11-13) ran once when A was pressed on a Free Battle entry row whose Pokémon
  * were all ineligible; a text box sized to 「エントリーできる ポケモンが いません」 then appeared.
  */
-void TextBox_Init(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
+void TextBox_Init(TextBox* arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
     u32 len;
     s32 w;
     s32 h;
@@ -1475,20 +1476,20 @@ void TextBox_Init(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
     } else {
         len = arg4;
     }
-    M2C_FIELD(arg0, s32 *, 0x30) = arg2;
-    M2C_FIELD(arg0, s32 *, 0x34) = arg3;
+    arg0->fontStyle = arg2;
+    arg0->lineCount = arg3;
     cw = D_800736D0[arg2].w;
     ch = D_800736D0[arg2].h;
     w = ch * 2 + len * cw;
     h = ch + (u32)(cw + ch) * arg3;
-    Window_SetRect(arg0, (0x274 - w) / 2, (0x19C - h) / 2 + 0x38, w + 0xC, h + 0xC);
-    M2C_FIELD(arg0, s32 *, 0x24) = 0;
-    M2C_FIELD(arg0, s32 *, 0x20) = 0;
-    M2C_FIELD(arg0, s32 *, 0x28) = 0;
-    M2C_FIELD(arg0, s32 *, 0x14) = 6;
-    M2C_FIELD(arg0, Rgba8002D188 *, 0x18) = *(Rgba8002D188 *)D_800736E8;
-    M2C_FIELD(arg0, Rgba8002D188 *, 0x1C) = *(Rgba8002D188 *)D_800736EC;
-    M2C_FIELD(arg0, s32 *, 0x2C) = arg1;
+    Window_SetRect((s8*)arg0, (0x274 - w) / 2, (0x19C - h) / 2 + 0x38, w + 0xC, h + 0xC);
+    arg0->window.animTimer = 0;
+    arg0->window.title = NULL;
+    arg0->window.state = 0;
+    arg0->window.frame.style = 6;
+    arg0->window.frame.color = *(Color_RGBA8*)D_800736E8;
+    arg0->window.frame.color2 = *(Color_RGBA8*)D_800736EC;
+    arg0->text = (char*)arg1;
 }
 
 extern Rgba8002D188 D_800736F0[];
@@ -1497,17 +1498,17 @@ extern Rgba8002D188 D_800736F0[];
  * Seen in play (2026-11-13) drew the 「エントリーできる ポケモンが いません」 box on the Free Battle entry screen,
  * every frame while it was up.
  */
-void TextBox_Draw(s32* arg0) {
+void TextBox_Draw(TextBox* arg0) {
     if (func_8002AE6C(arg0) != 0) {
         return;
     }
     func_8001AB6C();
-    func_8001A384(D_800736D0[arg0[12]].unk8, 0);
+    func_8001A384(D_800736D0[arg0->fontStyle].unk8, 0);
     func_8001AA9C(D_800736F0[0].r, D_800736F0[0].g, D_800736F0[0].b, D_800736F0[0].a);
-    Font_SetLineHeight(D_800736D0[arg0[12]].w + D_800736D0[arg0[12]].h);
+    Font_SetLineHeight(D_800736D0[arg0->fontStyle].w + D_800736D0[arg0->fontStyle].h);
     func_8001ABE8();
     func_8001AAE4(D_800736F0[1].r, D_800736F0[1].g, D_800736F0[1].b, D_800736F0[1].a);
-    func_8001A944(arg0[0] + D_800736D0[arg0[12]].h + 6, arg0[1] + D_800736D0[arg0[12]].h + 6, arg0[11]);
+    func_8001A944(arg0->window.frame.x + D_800736D0[arg0->fontStyle].h + 6, arg0->window.frame.y + D_800736D0[arg0->fontStyle].h + 6, (s32)arg0->text);
     func_8001AC3C();
     func_8001ABBC();
 }

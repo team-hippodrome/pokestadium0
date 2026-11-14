@@ -298,13 +298,11 @@ s32 PcSort_UpdateMonList(PcSortMonList* menu, u32 flags) {
     return result;
 }
 
-M2C_UNK func_8002B054(M2C_UNK, s32);                /* extern */
 
 void func_89005068(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3, s32 arg4) {
     func_8002B054(arg2, arg4);
 }
 
-void func_8002B018(s8*, s32, s32, s32, s32, s32, void*);
 void GridMenu_Init(s8*, s8*, s8*, void*, s32, s32, s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
 extern Color_RGBA8 D_8900A580[];
@@ -558,7 +556,7 @@ void Window_DrawFrame(s8*);
 void Ui_DrawTexturedDivider(s32, s32, s32, void*);
 void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, void*);
 void GridMenu_DrawInlineItems(s8*, s32, s32, s32, s32);
-void TextBox_Draw(s8*);
+void TextBox_Draw(TextBox*);
 extern u8 D_8007356C[];
 extern u8 D_800735C4[];
 
@@ -698,8 +696,8 @@ void PcSort_OpenBox(PcSortOrganizeWindow* arg0) {
     arg0->state = 4;
 }
 
-void TextBox_Init(s8*, s8*, s32, s32, s32);
-s32 Ui_CheckConfirmPressed(s8*);
+void TextBox_Init(TextBox*, char*, s32, s32, s32);
+s32 Ui_CheckConfirmPressed(TextBox*);
 void Menu_ClearItemFlags(s8*);
 void Menu_SkipDisabledForward(s8*);
 s32 GridMenu_UpdateCursor(s8*);
@@ -971,7 +969,7 @@ void PcSort_Free(s32 arg0) {
 
 void Ui_DrawTintedScreenBackground(s32, s32, s32, s32, s32);
 void PcSort_DrawOrganizeWindow();
-void SavePrompt_Draw(void*);
+void SavePrompt_Draw(SavePrompt*);
 extern Color_RGB8 D_8900A5B8;
 
 /**
@@ -987,7 +985,7 @@ void PcSort_DrawScreen(PcSortScreen* arg0) {
             break;
         case 2:
             PcSort_DrawOrganizeWindow(&arg0->organizeWindow);
-            SavePrompt_Draw(arg0->savePrompt);
+            SavePrompt_Draw(&arg0->savePrompt);
             break;
         case 3:
             PcSort_DrawOrganizeWindow(&arg0->organizeWindow);
@@ -1097,9 +1095,9 @@ s32 PcSort_HasUnsavedChanges(PcSortScreen* arg0) {
     return 0;
 }
 
-void SavePrompt_Init(s8* arg0, s32 arg1, s32 arg2);
-void Save_DrawReportingWindow(s8* arg0);
-s32 SavePrompt_Update(s8* arg0);
+void SavePrompt_Init(SavePrompt*, s32, s32);
+void Save_DrawReportingWindow(SavePrompt*);
+s32 SavePrompt_Update(SavePrompt*);
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
 s32 PcSort_UpdateOrganizeWindow(PcSortOrganizeWindow* arg0);
 extern u8 D_89018DBC[];
@@ -1110,7 +1108,7 @@ extern u8 D_89018DBC[];
  */
 s32 PcSort_UpdateScreen(PcSortScreen* arg0) {
     s32 ret = 0;
-    s8* sub;
+    SavePrompt* sub;
     u8* mon;
     s32 res;
 
@@ -1120,7 +1118,7 @@ s32 PcSort_UpdateScreen(PcSortScreen* arg0) {
             if (res == -1) {
                 if (PcSort_HasUnsavedChanges(arg0) != 0) {
                     arg0->state = 2;
-                    SavePrompt_Init(arg0->savePrompt, 0xCA, 0xAD);
+                    SavePrompt_Init(&arg0->savePrompt, 0xCA, 0xAD);
                 } else {
                     ret = 1;
                 }
@@ -1138,7 +1136,7 @@ s32 PcSort_UpdateScreen(PcSortScreen* arg0) {
             }
             break;
         case 2:
-            sub = arg0->savePrompt;
+            sub = &arg0->savePrompt;
             res = SavePrompt_Update(sub);
             if (res == -1) {
                 arg0->state = 1;
