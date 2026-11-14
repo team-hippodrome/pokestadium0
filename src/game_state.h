@@ -99,29 +99,29 @@ typedef struct BattleSessionTeams {
     /* 0x24 */ arg1_func_80019420* unk_24;
 } BattleSessionTeams; // size = 0x28
 
-// Offsets are for US 1.0. In VERSION_JP, TeamRoster and ExtendedRosterInfo are 0x18 bytes shorter,
-// so rosterInfo starts at 0x0814, battleSides at 0x10D4, and the struct is 0x1138 bytes.
+// Zero's layout (offsets checked against func_80025910, func_8002572C and func_80025830, which
+// reach these fields by raw offset). gSessionContext at 0x800AE8F0 is defined in game_state.c.
 typedef struct SessionContext {
     /* 0x0000 */ s8 mode;
     /* 0x0001 */ s8 ruleCategory;
     /* 0x0002 */ s8 modeSelection; // Cup division or castle location, depending on mode.
     /* 0x0003 */ s8 roundOrDemoId; // One-based battle round; scene ID in non-battle attract demos.
     /* 0x0004 */ TeamRoster trainerSlots[4];
-    /* 0x0874 */ ExtendedRosterInfo rosterInfo[4];
-    /* 0x1194 */ BattleSessionTeams battleSides[2];
-    /* 0x11E4 */ u8 opponentHistory[2][4]; // Eight contiguous entries; the first subscript is not a battle side.
-    /* 0x11EC */ u8 aiDifficulty; // Free Battle: 0 = Hard, 1 = Normal, 2 = Easy.
-    /* 0x11ED */ u8 timeLimitsEnabled;
-    /* 0x11EE */ u8 battleLimitMinutes;
-    /* 0x11EF */ u8 moveLimitSeconds;
-    /* 0x11F0 */ u8 gbStarterChoice;
-    /* 0x11F1 */ char unk11F1[0x1];
-    /* 0x11F2 */ u8 inRound2;
-    /* 0x11F3 */ u8 continueCount;
-    /* 0x11F4 */ u8 unk_11F4;
-    /* 0x11F5 */ u8 sessionFlags;
-    /* 0x11F6 */ u16 transitionFlags;
-} SessionContext; // size = 0x11F8 (JP: 0x1138)
+    /* 0x0814 */ ExtendedRosterInfo rosterInfo[4];
+    /* 0x1034 */ BattleSessionTeams battleSides[2];
+    /* 0x1084 */ u8 opponentHistory[2][4]; // Eight contiguous entries; the first subscript is not a battle side.
+    /* 0x108C */ u8 aiDifficulty; // Free Battle: 0 = Hard, 1 = Normal, 2 = Easy.
+    /* 0x108D */ u8 timeLimitsEnabled;
+    /* 0x108E */ u8 battleLimitMinutes;
+    /* 0x108F */ u8 moveLimitSeconds;
+    /* 0x1090 */ u8 gbStarterChoice;
+    /* 0x1091 */ char unk1091[0x1];
+    /* 0x1092 */ u8 inRound2;
+    /* 0x1093 */ u8 continueCount;
+    /* 0x1094 */ u8 unk_1094; // @unverified: GB port of the continued team, 0xFF for rentals (func_80025A64)
+    /* 0x1095 */ u8 sessionFlags;
+    /* 0x1096 */ u16 transitionFlags;
+} SessionContext; // size = 0x1098
 
 #define RULE_CATEGORY_ANYTHING_GOES 0
 

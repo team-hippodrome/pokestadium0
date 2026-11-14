@@ -29,20 +29,7 @@ extern s16 D_800733D4;
 extern s16 D_800733D8;
 extern unk_D_800AE520 D_800AF990;
 extern s32 pad_D_800AE534[2];
-extern SessionContext gSessionContext;
-typedef struct SessionBlock {
-    /* 0x0000 */ s8 unk_0000;
-    /* 0x0001 */ s8 unk_0001;
-    /* 0x0002 */ s8 unk_0002;
-    /* 0x0003 */ s8 unk_0003;
-    /* 0x0004 */ u8 unk_0004[0x1038];
-    /* 0x103C */ TeamRoster* unk_103C;
-    /* 0x1040 */ u8 unk_1040[0x54];
-    /* 0x1094 */ u8 unk_1094;
-    /* 0x1095 */ u8 unk_1095;
-    /* 0x1096 */ u16 unk_1096;
-} SessionBlock; // size = 0x1098
-SessionBlock D_800AE8F0;
+SessionContext gSessionContext;
 
 #include "global.h"
 #include <PR/os_internal_reg.h>
@@ -79,35 +66,37 @@ s32 func_8002057C(s32, s32, s32);                 /* extern */
 extern M2C_UNK D_80065D00;
 extern M2C_UNK D_8007B7B0;
 
-void func_80025540(s8 *arg0, s32 arg1) {
+// Fills a BattleMon with a default level 50 Pokemon of species arg1: Pound only, vitamin-cap stat
+// experience and DVs, its species name and the default OT name.
+void func_80025540(BattleMon *arg0, s32 arg1) {
     u8 *temp_v1;
 
-    M2C_FIELD(arg0, s8 *, 0) = arg1;
-    M2C_FIELD(arg0, s8 *, 4) = 0;
-    M2C_FIELD(arg0, s8 *, 5) = 0;
-    M2C_FIELD(arg0, u8 *, 6) = ((u8 *)&D_80065D00)[arg1 * 0x17 - 0x11];
-    M2C_FIELD(arg0, u8 *, 7) = ((u8 *)&D_80065D00)[arg1 * 0x17 - 0x10];
-    M2C_FIELD(arg0, s8 *, 8) = 0;
-    M2C_FIELD(arg0, s8 *, 9) = 1;
-    M2C_FIELD(arg0, s8 *, 0xA) = 0;
-    M2C_FIELD(arg0, s8 *, 0xB) = 0;
-    M2C_FIELD(arg0, s8 *, 0xC) = 0;
-    M2C_FIELD(arg0, s16 *, 0xE) = 0;
-    M2C_FIELD(arg0, s16 *, 0x14) = 0x6400;
-    M2C_FIELD(arg0, s16 *, 0x16) = 0x6400;
-    M2C_FIELD(arg0, s16 *, 0x18) = 0x6400;
-    M2C_FIELD(arg0, s16 *, 0x1A) = 0x6400;
-    M2C_FIELD(arg0, s16 *, 0x1C) = 0x6400;
-    M2C_FIELD(arg0, u16 *, 0x1E) = 0xFFFF;
-    M2C_FIELD(arg0, s8 *, 0x20) = 0x23;
-    M2C_FIELD(arg0, s8 *, 0x21) = 0;
-    M2C_FIELD(arg0, s8 *, 0x22) = 0;
-    M2C_FIELD(arg0, s8 *, 0x23) = 0;
-    M2C_FIELD(arg0, s32 *, 0x10) = func_8002057C(arg1, 0x32, arg1);
+    arg0->species.id = arg1;
+    arg0->boxLevel = 0;
+    arg0->statusCondition = 0;
+    arg0->type1 = ((u8 *)&D_80065D00)[arg1 * 0x17 - 0x11];
+    arg0->type2 = ((u8 *)&D_80065D00)[arg1 * 0x17 - 0x10];
+    arg0->catchRate = 0;
+    arg0->moves[0] = 1;
+    arg0->moves[1] = 0;
+    arg0->moves[2] = 0;
+    arg0->moves[3] = 0;
+    arg0->otId = 0;
+    arg0->statExp[0] = 25600;
+    arg0->statExp[1] = 25600;
+    arg0->statExp[2] = 25600;
+    arg0->statExp[3] = 25600;
+    arg0->statExp[4] = 25600;
+    arg0->dvs = 0xFFFF;
+    arg0->pp[0] = 35;
+    arg0->pp[1] = 0;
+    arg0->pp[2] = 0;
+    arg0->pp[3] = 0;
+    arg0->exp = func_8002057C(arg1, 50, arg1);
     func_800203FC(arg0);
-    M2C_FIELD(arg0, u16 *, 2) = M2C_FIELD(arg0, u16 *, 0x26);
-    func_8001FD8C(arg0 + 0x30, arg1);
-    *(Unk5Bytes *)(arg0 + 0x40) = *(Unk5Bytes *)&D_8007B7B0;
+    arg0->hp = arg0->maxHp;
+    func_8001FD8C(arg0->nickname, arg1);
+    *(Unk5Bytes *)arg0->otName = *(Unk5Bytes *)&D_8007B7B0;
 }
 
 typedef struct { s32 w[0x14]; } Unk50Bytes;
@@ -120,37 +109,37 @@ extern M2C_UNK D_8007B7B8;
  * opening, title and main menu).
  * @unverified Name and comment guessed from the code.
  */
-M2C_UNK Session_InitHumanTrainer(M2C_UNK arg0, M2C_UNK *arg1, M2C_UNK *arg2, s32 arg3) {
+M2C_UNK Session_InitHumanTrainer(M2C_UNK arg0, TeamRoster *arg1, ExtendedRosterInfo *arg2, s32 arg3) {
 
-    M2C_FIELD(arg1, s8 *, 0) = 1;
-    M2C_FIELD(arg1, s8 *, 1) = arg0;
-    M2C_FIELD(arg1, u8 **, 4) = D_800AAF50 + arg0 * 0x24;
-    M2C_FIELD(arg1, s32 *, 0x18) = 0;
-    M2C_FIELD(arg1, s8 **, 0x1FC) = (s8 *)arg2;
-    M2C_FIELD(arg1, s8 *, 2) = 1;
-    *(Unk5Bytes *)((s8 *)arg1 + 8) = *(Unk5Bytes *)&D_8007B7B8;
-    func_80025540((s8 *)arg1 + 0x1C, arg3);
-    M2C_FIELD(arg2, s16 *, 0) = 0;
-    M2C_FIELD(arg2, s8 *, 2) = 1;
-    M2C_FIELD(arg2, s8 *, 3) = 0;
-    M2C_FIELD(arg2, s8 *, 4) = 0;
-    M2C_FIELD(arg2, s8 *, 0x14) = 0;
-    *(Unk50Bytes *)((s8 *)arg2 + 0x28) = *(Unk50Bytes *)((s8 *)arg1 + 0x1C);
+    arg1->isHuman = 1;
+    arg1->controllerPort = arg0;
+    arg1->controller = (Controller *)(D_800AAF50 + arg0 * 0x24);
+    arg1->unk_018 = 0;
+    arg1->rosterInfo = arg2;
+    arg1->numberOfPokemonBrought = 1;
+    *(Unk5Bytes *)arg1->trainerName = *(Unk5Bytes *)&D_8007B7B8;
+    func_80025540(&arg1->pokemonPicked[0], arg3);
+    arg2->unk_000 = 0;
+    arg2->numberOfPokemonCanBePicked = 1;
+    arg2->unk_003 = 0;
+    arg2->unk004[0] = 0;
+    arg2->unk_014[0] = 0;
+    arg2->battleMon[0] = arg1->pokemonPicked[0];
 }
 
-void func_8002572C(s8 *arg0, s32 arg1) {
-    M2C_FIELD(arg0, s8 *, 0) = 0;
-    M2C_FIELD(arg0, s8 *, 1) = 1;
-    M2C_FIELD(arg0, s16 *, 2) = 0;
-    M2C_FIELD(arg0, s32 *, 4) = 0;
-    M2C_FIELD(arg0, s32 *, 0x14) = 0;
-    M2C_FIELD(arg0, s32 *, 8) = arg1;
-    M2C_FIELD(arg0, s32 *, 0xC) = 0;
-    M2C_FIELD(arg0, s8 *, 0x1D) = 0;
-    M2C_FIELD(arg0, s32 *, 0x20) = 0;
+void func_8002572C(BattleSessionTeams *arg0, TeamRoster *arg1) {
+    arg0->uniqueStatusFlags = 0;
+    arg0->tagTeamSize = 1;
+    arg0->displayModel = 0;
+    arg0->unk_04 = NULL;
+    arg0->loadedModel = NULL;
+    arg0->teamMember[0] = arg1;
+    arg0->teamMember[1] = NULL;
+    arg0->assetIsBusy = 0;
+    arg0->unk_20 = 0;
 }
 
-M2C_UNK Session_InitHumanTrainer(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
+M2C_UNK Session_InitHumanTrainer(M2C_UNK, TeamRoster *, ExtendedRosterInfo *, s32);
 extern M2C_UNK D_800AE8F4;
 extern M2C_UNK D_800AEAF8;
 typedef struct { s16 unk_00; u8 unk_02; u8 unk_03; } Unk800AF104;
@@ -166,13 +155,13 @@ extern M2C_UNK D_800AF94C;
  * @unverified Name and comment guessed from the code.
  */
 M2C_UNK Session_InitTwoTrainers(M2C_UNK arg0, M2C_UNK arg1, M2C_UNK arg2) {
-    D_800AE8F0.unk_0000 = arg0;
-    D_800AE8F0.unk_0001 = 1;
-    D_800AE8F0.unk_0003 = 1;
-    Session_InitHumanTrainer(0, &D_800AE8F4, (M2C_UNK *)&D_800AF104, arg1);
-    Session_InitHumanTrainer(1, &D_800AEAF8, &D_800AF30C, arg2);
-    func_8002572C((s8 *)&D_800AF924, (s32)&D_800AE8F4);
-    func_8002572C((s8 *)&D_800AF94C, (s32)&D_800AEAF8);
+    gSessionContext.mode = arg0;
+    gSessionContext.ruleCategory = 1;
+    gSessionContext.roundOrDemoId = 1;
+    Session_InitHumanTrainer(0, (TeamRoster *)&D_800AE8F4, (ExtendedRosterInfo *)&D_800AF104, arg1);
+    Session_InitHumanTrainer(1, (TeamRoster *)&D_800AEAF8, (ExtendedRosterInfo *)&D_800AF30C, arg2);
+    func_8002572C((BattleSessionTeams *)&D_800AF924, (TeamRoster *)&D_800AE8F4);
+    func_8002572C((BattleSessionTeams *)&D_800AF94C, (TeamRoster *)&D_800AEAF8);
 }
 
 /*
@@ -204,7 +193,7 @@ extern M2C_UNK D_800AF974;
 
 void func_80025830(void) {
     SaveContinueSession sp1C;
-    ExtendedRosterInfo* info = (*(TeamRoster**)((u8*)&gSessionContext + 0x103C))->rosterInfo;
+    ExtendedRosterInfo* info = gSessionContext.battleSides[0].teamMember[0]->rosterInfo;
 
     sp1C.mode = gSessionContext.mode;
     sp1C.modeSelection = gSessionContext.modeSelection;
@@ -220,10 +209,10 @@ extern M2C_UNK D_800AFB10;
 extern M2C_UNK D_800AFB14;
 
 void func_800258B4(void) {
-    M2C_FIELD(&D_800AE8F0, u8 *, 0) = (u8) M2C_FIELD(&D_800AFB10, u8 *, 0);
-    M2C_FIELD(&D_800AE8F0, u8 *, 1) = (u8) M2C_FIELD(&D_800AFB10, u8 *, 0);
-    M2C_FIELD(&D_800AE8F0, u8 *, 2) = (u8) M2C_FIELD(&D_800AFB10, u8 *, 1);
-    M2C_FIELD(&D_800AE8F0, u8 *, 3) = (u8) M2C_FIELD(&D_800AFB10, u8 *, 2);
+    gSessionContext.mode = (u8) M2C_FIELD(&D_800AFB10, u8 *, 0);
+    gSessionContext.ruleCategory = (u8) M2C_FIELD(&D_800AFB10, u8 *, 0);
+    gSessionContext.modeSelection = (u8) M2C_FIELD(&D_800AFB10, u8 *, 1);
+    gSessionContext.roundOrDemoId = (u8) M2C_FIELD(&D_800AFB10, u8 *, 2);
     func_80058410(&D_800AFB14, &D_800AF974, 8, &D_800AFB10);
 }
 
@@ -246,28 +235,28 @@ extern s8 D_800AE8F6;
 
 void func_80025910(s32 arg0)
 {
-  s8 *st = (s8 *) (&D_800AE8F0);
-  *((s8 *) (st + 4)) = 1;
-  *((s8 *) (st + 5)) = 0;
-  *((s32 *) (st + 8)) = D_800603C0;
-  *((s8 **) (st + 0x200)) = st + 0x814;
+  SessionContext *st = &gSessionContext;
+  st->trainerSlots[0].isHuman = 1;
+  st->trainerSlots[0].controllerPort = 0;
+  st->trainerSlots[0].controller = (Controller *) D_800603C0;
+  st->trainerSlots[0].rosterInfo = &st->rosterInfo[0];
   if ((arg0 != 0) && (D_800733D4 == 0))
   {
-    (*((s32 *) (st + 0x1C))) = GbSave_GetTrainerId(D_800733D4);
-    func_80022D84(D_800733D4, (st + 0xC));
+    st->trainerSlots[0].unk_018 = GbSave_GetTrainerId(D_800733D4);
+    func_80022D84(D_800733D4, (M2C_UNK *) st->trainerSlots[0].trainerName);
   }
   else
   {
-    (*((s32 *) (st + 0x1C))) = 0;
-    *((Unk3Bytes *) ((st + 0xC))) = *((Unk3Bytes *) (&D_8007B7C0));
+    st->trainerSlots[0].unk_018 = 0;
+    *((Unk3Bytes *) st->trainerSlots[0].trainerName) = *((Unk3Bytes *) (&D_8007B7C0));
   }
-  *((s16 *) (st + 0x814)) = 0;
-  *((u8 *) (st + 0x816)) = *((u8 *) ((st + 6)));
-  *((u8 *) (st + 0x817)) = 0;
-  func_80058410((st + 0x20), (st + 0x83C), 0x1E0);
-  *((Unk11Bytes *) ((st + 0x818))) = *((Unk11Bytes *) (&D_8007B7C4));
-  func_8000A460((st + 0x828), (st + 0xC));
-  func_8002572C((s8 *) ((st + 0x1034)), (s32) ((st + 4)));
+  st->rosterInfo[0].unk_000 = 0;
+  st->rosterInfo[0].numberOfPokemonCanBePicked = st->trainerSlots[0].numberOfPokemonBrought;
+  st->rosterInfo[0].unk_003 = 0;
+  func_80058410(st->trainerSlots[0].pokemonPicked, st->rosterInfo[0].battleMon, 0x1E0);
+  *((Unk11Bytes *) st->rosterInfo[0].unk004) = *((Unk11Bytes *) (&D_8007B7C4));
+  func_8000A460(st->rosterInfo[0].unk_014, st->trainerSlots[0].trainerName);
+  func_8002572C(&st->battleSides[0], &st->trainerSlots[0]);
 }
 
 s8 Save_ReadContinueData(M2C_UNK *, s8 *, M2C_UNK *);       /* extern */
@@ -279,22 +268,22 @@ extern M2C_UNK D_800AE910;
 /*
  * func_80025A64
  *
- * Clears the byte at D_800AE8F0 + 0x1095, then calls
+ * Clears the byte at gSessionContext.sessionFlags, then calls
  * Save_ReadContinueData(&D_800AFB10, buf, &D_800AE910) with a 0x162-byte local
  * buffer. If it returns -1 the function returns 0. Otherwise the result is
  * stored to the byte D_800AE8F6 and:
  *  - if buf[0] == 0: calls func_80025910(buf[0]), sets bit 0 of the byte at
- *    D_800AE8F0 + 0x1095, sets the byte at + 0x1094 to 0xFF, calls
+ *    gSessionContext.sessionFlags, sets unk_1094 to 0xFF, calls
  *    Session_LoadPortSnapshot(-1) and returns 1;
  *  - otherwise, if D_800733D4 is in 0..3, GbSave_CopyPortSnapshot(D_800733D4,
  *    &D_800AF9A8) is non-zero and func_80057910(buf, &D_800AF9A8, 0x162)
  *    returns 0 (func_80057910 is libultra bcmp, so: the 0x162 bytes of buf
  *    equal the snapshot just copied): calls func_80025910(buf[0]), sets
- *    bit 0 of + 0x1095, stores D_800733D4 at + 0x1094, calls
+ *    bit 0 of sessionFlags, stores D_800733D4 in unk_1094, calls
  *    Session_LoadPortSnapshot(D_800733D4) and returns 1;
  *  - in every other case returns 0.
  *
- * What the buffer, D_800AE8F0's fields and the two helpers do is not
+ * What the buffer, gSessionContext.sessionFlags and unk_1094 and the two helpers do is not
  * established. Matching notes: the unused `pad` local sits between the
  * buffer and `ret` as in the ROM's frame (buffer at sp+0x34, ret at sp+0x2C),
  * and the bit-0 update is written before the store of 0xFF to match the
@@ -307,20 +296,20 @@ s32 func_80025A64(void) {
     s8 temp_v0;
 
     ret = 0;
-    D_800AE8F0.unk_1095 = 0U;
+    gSessionContext.sessionFlags = 0U;
     temp_v0 = Save_ReadContinueData(&D_800AFB10, buf, &D_800AE910);
     if (temp_v0 != -1) {
         D_800AE8F6 = temp_v0;
         if (buf[0] == 0) {
             func_80025910(buf[0]);
-            D_800AE8F0.unk_1095 = (u8) (D_800AE8F0.unk_1095 | 1);
-            D_800AE8F0.unk_1094 = 0xFF;
+            gSessionContext.sessionFlags = (u8) (gSessionContext.sessionFlags | 1);
+            gSessionContext.unk_1094 = 0xFF;
             Session_LoadPortSnapshot(-1);
             ret = 1;
         } else if ((D_800733D4 >= 0) && (D_800733D4 < 4) && (GbSave_CopyPortSnapshot(D_800733D4, &D_800AF9A8) != 0) && (func_80057910(buf, &D_800AF9A8, 0x162) == 0)) {
             func_80025910(buf[0]);
-            D_800AE8F0.unk_1095 = (u8) (D_800AE8F0.unk_1095 | 1);
-            M2C_FIELD(&D_800AE8F0, s8 *, 0x1094) = (s8) D_800733D4;
+            gSessionContext.sessionFlags = (u8) (gSessionContext.sessionFlags | 1);
+            gSessionContext.unk_1094 = (s8) D_800733D4;
             Session_LoadPortSnapshot((s32) D_800733D4);
             ret = 1;
         }
@@ -500,7 +489,7 @@ extern M2C_UNK D_82100000;
 void func_80025F3C(void) {
     func_80025B60(((u32) ((s32) &D_81500000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015F390, &D_0015F8F0, 0, 0);
     Session_InitTwoTrainers(5, 3, 3);
-    func_80025B60(((u32) ((s32) &D_82100000 & 0x0FF00000) >> 0x14) - 0x10, &D_0017ED00, &D_00232510, 0, (s32) &D_800AE8F0);
+    func_80025B60(((u32) ((s32) &D_82100000 & 0x0FF00000) >> 0x14) - 0x10, &D_0017ED00, &D_00232510, 0, (s32) &gSessionContext);
     D_800733C8 = 0x8010;
 }
 
@@ -511,11 +500,11 @@ extern s32 D_800AF988;
 /** Game state: shows the N64 logo quickly. */
 void State_FastN64Logo(void) {
     D_800733C8 = func_80025B60(((u32) ((s32) &D_81200000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015E220, &D_0015F390, 0, 0);
-    M2C_FIELD(&D_800AE8F0, u8*, 2) = 0;
-    M2C_FIELD(&D_800AE8F0, s16*, 0x1096) = 0;
+    gSessionContext.modeSelection = 0;
+    gSessionContext.transitionFlags = 0;
     switch (D_800733C8) {
         case 0x8010:
-            func_80025B60(((u32) ((s32) &D_82100000 & 0x0FF00000) >> 0x14) - 0x10, &D_0017ED00, &D_00232510, 0, (s32) &D_800AE8F0);
+            func_80025B60(((u32) ((s32) &D_82100000 & 0x0FF00000) >> 0x14) - 0x10, &D_0017ED00, &D_00232510, 0, (s32) &gSessionContext);
             break;
         case 0x8020:
             D_800733D4 = -1;
@@ -545,7 +534,7 @@ u8 GbSave_GetSaveState(s32 arg0);
 s32 GbSave_GetBoxCount(s32);
 void func_80023C30(void);
 void Save_RunGbReportErrorScreen(s32);
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
+// FAKE: the `* 0` in the D_800AF986 store at the end is decomp slop.
 void func_800260C4(void)
 {
   s32 pushed = 0;
@@ -554,20 +543,20 @@ void func_800260C4(void)
   Gfx_InitDisplayListBuffers(0x10000, 0);
   D_800AF9A4 = StageContext_Allocate(1, 1, 2, 0, 2, 1);
   StageContext_Activate(D_800AF9A4);
-  if (((*((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096))) & 1) && (!((*((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096))) & 2))) // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  if ((gSessionContext.transitionFlags & 1) && (!(gSessionContext.transitionFlags & 2)))
   {
-    *((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096)) |= 0x100;
+    gSessionContext.transitionFlags |= 0x100;
   }
   D_800733D8 = 0;
-  if ((D_800AF988 != 0) || ((*((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096))) & 0x100))
+  if ((D_800AF988 != 0) || (gSessionContext.transitionFlags & 0x100))
   {
     D_800AF988 = 0;
     GbSave_SetActivePort(D_800733D4);
-    Fragment_QueueCall((((u32) (((s32) (&D_88000000)) & 0x0FF00000)) >> 0x14) - 0x10, D_00235D70, D_00238BD0, 0, (s32) (&D_800AE8F0));
+    Fragment_QueueCall((((u32) (((s32) (&D_88000000)) & 0x0FF00000)) >> 0x14) - 0x10, D_00235D70, D_00238BD0, 0, (s32) (&gSessionContext));
   }
   else
   {
-    Fragment_QueueCall((((u32) (((s32) (&D_88400000)) & 0x0FF00000)) >> 0x14) - 0x10, D_00162BE0, D_00166580, 0, (s32) (&D_800AE8F0));
+    Fragment_QueueCall((((u32) (((s32) (&D_88400000)) & 0x0FF00000)) >> 0x14) - 0x10, D_00162BE0, D_00166580, 0, (s32) (&gSessionContext));
   }
   func_80025A64();
   while ((D_800733C8 == 0x8040) && (D_800AF990.unk_00 != 0))
@@ -601,7 +590,7 @@ void func_800260C4(void)
     D_800733C8 = Fragment_LoadAndCall(D_800AF990.fragment_id, D_800AF990.rom_start, D_800AF990.rom_end, D_800AF990.arg0, D_800AF990.arg1);
   }
 
-  D_800AF986 = (!((*((u16 *) (((s8 *) (&D_800AE8F0)) + 0x1096))) & 2)) * 0;
+  D_800AF986 = (!(gSessionContext.transitionFlags & 2)) * 0;
   StageContext_Deactivate();
   Gfx_FreeDisplayListBuffers();
   main_pool_pop_state('OVLY');
@@ -625,66 +614,66 @@ void func_80026368(void)
   TeamRoster *roster;
   ExtendedRosterInfo *info;
   func_80001948(0xFFFF);
-  if (D_800AE8F0.unk_1095 & 2)
+  if (gSessionContext.sessionFlags & 2)
   {
     func_800258B4();
   }
   else
   {
-    D_800AE8F0.unk_0003 = 1;
+    gSessionContext.roundOrDemoId = 1;
   }
-  if (D_800AE8F0.unk_0000 == 0)
+  if (gSessionContext.mode == 0)
   {
-    D_800AE8F0.unk_0003 = 1;
-    func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 0, (s32) &D_800AE8F0);
-    func_80025B60((((u32) (((s32) (&D_82300000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0015FCE0, &D_00162BE0, 0, (s32) &D_800AE8F0);
-    func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &D_800AE8F0);
-    func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 1, (s32) &D_800AE8F0);
+    gSessionContext.roundOrDemoId = 1;
+    func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 0, (s32) &gSessionContext);
+    func_80025B60((((u32) (((s32) (&D_82300000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0015FCE0, &D_00162BE0, 0, (s32) &gSessionContext);
+    func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &gSessionContext);
+    func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 1, (s32) &gSessionContext);
   }
   else
   {
-    prev = D_800AE8F0.unk_0000;
-    func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 0, (s32) &D_800AE8F0);
-    while (!(D_800AE8F0.unk_1096 & 1))
+    prev = gSessionContext.mode;
+    func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 0, (s32) &gSessionContext);
+    while (!(gSessionContext.transitionFlags & 1))
     {
-      func_80025B60((((u32) (((s32) (&D_82300000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0015FCE0, &D_00162BE0, 0, (s32) &D_800AE8F0);
-      func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &D_800AE8F0);
-      func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 2, (s32) &D_800AE8F0);
+      func_80025B60((((u32) (((s32) (&D_82300000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0015FCE0, &D_00162BE0, 0, (s32) &gSessionContext);
+      func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &gSessionContext);
+      func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 2, (s32) &gSessionContext);
     }
 
-    if (D_800AE8F0.unk_1096 & 0x40)
+    if (gSessionContext.transitionFlags & 0x40)
     {
       D_800733C8 = 0x8010;
       return;
     }
     else
     {
-      if (D_800AE8F0.unk_1096 & 2)
+      if (gSessionContext.transitionFlags & 2)
       {
-        roster = D_800AE8F0.unk_103C;
-        D_800AE8F0.unk_0000 = 4;
+        roster = gSessionContext.battleSides[0].teamMember[0];
+        gSessionContext.mode = 4;
         info = roster->rosterInfo;
         roster->numberOfPokemonBrought = info->numberOfPokemonCanBePicked;
         _bcopy(info->battleMon, roster->pokemonPicked, 0x1E0);
-        func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &D_800AE8F0);
+        func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &gSessionContext);
         if (prev == 1)
         {
           func_80025B60((((u32) (((s32) (&D_81800000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017E340, &D_0017ED00_2, 0, 4);
         }
         else
         {
-          func_80025B60((((u32) (((s32) (&D_81800000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017E340, &D_0017ED00_2, 0, (s32) D_800AE8F0.unk_0002);
+          func_80025B60((((u32) (((s32) (&D_81800000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017E340, &D_0017ED00_2, 0, (s32) gSessionContext.modeSelection);
         }
       }
-      if (D_800AE8F0.unk_1096 & 4)
+      if (gSessionContext.transitionFlags & 4)
       {
         Session_InitTwoTrainers(6, 0xA, 0xD);
-        D_800AE8F0.unk_0003 = 8;
-        func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &D_800AE8F0);
+        gSessionContext.roundOrDemoId = 8;
+        func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &gSessionContext);
       }
-      if (D_800AE8F0.unk_1096 & 0x20)
+      if (gSessionContext.transitionFlags & 0x20)
       {
-        func_80025B60((((u32) (((s32) (&D_81700000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017BE70, &D_0017E340, 0, (s32) &D_800AE8F0);
+        func_80025B60((((u32) (((s32) (&D_81700000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017BE70, &D_0017E340, 0, (s32) &gSessionContext);
       }
       }
   }
@@ -799,7 +788,7 @@ void Game_RunStateLoop(s32 arg0) {
     func_8000D20C();
     func_800177DC();
     func_8000256C(0x47414D45);
-    D_800AE8F0.unk_0000 = 1;
+    gSessionContext.mode = 1;
     while (1) {
         state = D_800733C8;
         switch (state) {
