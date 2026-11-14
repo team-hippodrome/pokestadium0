@@ -436,7 +436,6 @@ void func_8210F2F4(s8 *arg0)
  if (1) { }  // karodo
 }
 
-extern ActivePokemon* D_8219A540;
 void func_80043860(s32);
 
 /**

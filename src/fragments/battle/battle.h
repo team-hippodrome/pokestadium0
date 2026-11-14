@@ -1731,6 +1731,9 @@ extern u16 sBattleDamage;
 extern BattleMonRuntime* sBattleUser;
 
 extern BattleMonRuntime* sBattleTarget;
+// The other Pokémon and the acting one in the battle scene; BattleScene_UpdateActiveOwnerPointers sets both from scene->actingSide.
+extern ActivePokemon* D_8219A540;
+extern ActivePokemon* D_8219A544;
 
 extern unk_D_843901A0* gBattleMessageQueues;
 
