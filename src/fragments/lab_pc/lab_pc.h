@@ -50,23 +50,23 @@ typedef struct LabItemConfirmWindow {
 /* One box of the Lab PC box screens (せいとん): its Pokémon and how many are stored. PcBox_ReadDeck fills
  * it from a deck, LabPC_WriteBoxEntries writes it back. */
 typedef struct PcBoxStorage {
-    /* 0x000 */ BattleMon mons[30];
+    /* 0x000 */ BattleMon mons[30]; // @unverified: typed from the function it is passed to
     /* 0x960 */ s32 count; // @unverified: shown as N/30 beside the box name (PcBox_DrawBoxName, PcBox_DrawBoxCount)
 } PcBoxStorage; // size = 0x964
 
 /* A row of the box tables of the box screens: a box and whether it was changed. */
 typedef struct LabPCBoxEntry {
-    /* 0x0 */ PcBoxStorage* box;
+    /* 0x0 */ PcBoxStorage* box; // @unverified: typed from the function it is passed to
     /* 0x4 */ s32 dirty; // @unverified: set by the swaps; func_890070BC writes back the boxes that have it, PcBox_HasUnsavedChanges asks to save
 } LabPCBoxEntry; // size = 0x8
 
 /* A button that shows an image (func_8002B018, func_8002B054 in gb_save.c), e.g. the operation buttons of
  * ボックスのそうさ. */
 typedef struct PcBoxImageButton {
-    /* 0x00 */ s32 x;
-    /* 0x04 */ s32 y;
-    /* 0x08 */ s32 width;
-    /* 0x0C */ s32 height;
+    /* 0x00 */ s32 x; // @unverified: typed from the function it is passed to
+    /* 0x04 */ s32 y; // @unverified: typed from the function it is passed to
+    /* 0x08 */ s32 width; // @unverified: typed from the function it is passed to
+    /* 0x0C */ s32 height; // @unverified: typed from the function it is passed to
     /* 0x10 */ s32 flags; // @unverified: bit 3 = highlighted (func_8002B054)
     /* 0x14 */ char unk14[0x4];
     /* 0x18 */ Color_RGBA8 selectedColor; // @unverified: image tint when the draw flags have 0x12 (func_8002B054)
@@ -79,11 +79,11 @@ typedef struct PcBoxImageButton {
 /* The ほんとうにいいの？ はい/いいえ window of the box screens with the Pokémon's stats and moves
  * (PcBox_InitConfirmWindow, PcBox_DrawMonStatusWindow). Without a title it only shows the stats. */
 typedef struct PcBoxConfirmWindow {
-    /* 0x00 */ Window window;
+    /* 0x00 */ Window window; // @unverified: typed from the function it is passed to
     /* 0x2C */ LabeledButton yesButton; // @unverified: label D_89018E60
     /* 0x68 */ LabeledButton noButton; // @unverified: label D_89018E68
-    /* 0xA4 */ ChoiceCursor choice;
-    /* 0xB0 */ BattleMon* mon;
+    /* 0xA4 */ ChoiceCursor choice; // @unverified: typed from the function it is passed to
+    /* 0xB0 */ BattleMon* mon; // @unverified: typed from the function it is passed to
     /* 0xB4 */ char* title; // @unverified: question printed above the buttons; NULL hides the buttons
     /* 0xB8 */ s32 animLoaded; // @unverified: set once func_80019008 loaded the Pokémon's image into anim
     /* 0xBC */ u16* anim; // @unverified: renderer from func_80018F2C; bits 1 and 2 of its flags cleared while a question is up
@@ -91,8 +91,8 @@ typedef struct PcBoxConfirmWindow {
 
 /* The window of one box's Pokémon in the box screens (func_8900806C, PcBox_DrawList). */
 typedef struct PcBoxListWindow {
-    /* 0x00 */ Window window;
-    /* 0x2C */ GridMenu menu;
+    /* 0x00 */ Window window; // @unverified: typed from the function it is passed to
+    /* 0x2C */ GridMenu menu; // @unverified: typed from the function it is passed to
     /* 0x54 */ u16 itemFlags[30]; // @unverified: itemFlags of menu
     /* 0x90 */ s32 iconRenderer; // @unverified: PokeIconRenderer for the icons (func_8001833C, func_800189C0)
     /* 0x94 */ ByteMatrix mons; // @unverified: rows over the box's mons, 0x50 bytes each
@@ -102,7 +102,7 @@ typedef struct PcBoxListWindow {
  * (PcBox_InitOperationWindow, PcBox_UpdateOperationWindow). */
 typedef struct PcBoxOperationWindow {
     /* 0x000 */ s32 state; // @unverified: 1 = picking an operation, 2-6 = picking boxes, 7 = text box up (PcBox_UpdateOperationWindow)
-    /* 0x004 */ Window window;
+    /* 0x004 */ Window window; // @unverified: typed from the function it is passed to
     /* 0x030 */ WindowFrame footerFrame; // @unverified: frame of the bottom strip (Window_DrawFrame)
     /* 0x050 */ PcBoxImageButton backButton; // @unverified: operation 5 「メニューへもどる」 (back to the menu)
     /* 0x07C */ PcBoxImageButton moveToGbButton; // @unverified: operation 1 「ＧＢへボックスをいどうする」 (move a box to the GB)
@@ -118,24 +118,24 @@ typedef struct PcBoxOperationWindow {
     /* 0x1C8 */ u16 stadiumBoxFlags[8]; // @unverified: itemFlags of stadiumBoxMenu
     /* 0x1D8 */ Menu* sourceMenu; // @unverified: the box list picked first (PcBox_SetActiveLists)
     /* 0x1DC */ Menu* targetMenu; // @unverified: the box list picked second (PcBox_SetActiveLists)
-    /* 0x1E0 */ s8 textBox[0x38]; // TextBox_Init, TextBox_Draw; its size is not established
+    /* 0x1E0 */ s8 textBox[0x38]; // @unverified: TextBox_Init, TextBox_Draw; its size is not established
     /* 0x218 */ s32 swapIndex; // @unverified: operation 2: the first box picked, swapped with the second
 } PcBoxOperationWindow; // size = 0x21C
 
 /* The ボックスのそうさ screen (PcBox_Init, PcBox_UpdateScreen, PcBox_DrawScreen). */
 typedef struct PcBoxScreen {
     /* 0x0000 */ s32 state; // @unverified: 1 = operation window, 2 = box list, 3 = mon status, 4 = save prompt (PcBox_UpdateScreen)
-    /* 0x0004 */ PcBoxOperationWindow operationWindow;
-    /* 0x0220 */ s8 savePrompt[0x64]; // SavePrompt_Init, SavePrompt_Update, SavePrompt_Draw
-    /* 0x0284 */ PcBoxListWindow listWindow;
-    /* 0x0328 */ PcBoxConfirmWindow statusWindow;
+    /* 0x0004 */ PcBoxOperationWindow operationWindow; // @unverified: typed from the function it is passed to
+    /* 0x0220 */ s8 savePrompt[0x64]; // @unverified: SavePrompt_Init, SavePrompt_Update, SavePrompt_Draw
+    /* 0x0284 */ PcBoxListWindow listWindow; // @unverified: typed from the function it is passed to
+    /* 0x0328 */ PcBoxConfirmWindow statusWindow; // @unverified: typed from the function it is passed to
     /* 0x03E8 */ PcBoxStorage gbBoxes[8]; // @unverified: read from deck 0x21 of the GB cart (D_89019108)
     /* 0x4F08 */ PcBoxStorage stadiumBoxes[4]; // @unverified: read from deck 0x11, the 64 boxes
-    /* 0x7498 */ LabPCBoxEntry gbBoxEntries[8];
-    /* 0x74D8 */ LabPCBoxEntry stadiumBoxEntries[4];
+    /* 0x7498 */ LabPCBoxEntry gbBoxEntries[8]; // @unverified: typed from the function it is passed to
+    /* 0x74D8 */ LabPCBoxEntry stadiumBoxEntries[4]; // @unverified: typed from the function it is passed to
     /* 0x74F8 */ ByteMatrix gbBoxTable; // @unverified: rows = gbBoxEntries; items of operationWindow.gbBoxMenu
     /* 0x7508 */ ByteMatrix stadiumBoxTable; // @unverified: rows = stadiumBoxEntries; items of operationWindow.stadiumBoxMenu
-    /* 0x7518 */ s8* iconFramebuffers; // PokeIcon_AllocFramebuffers
+    /* 0x7518 */ s8* iconFramebuffers; // @unverified: PokeIcon_AllocFramebuffers
     /* 0x751C */ u16* monRenderer; // @unverified: func_80018F2C; the anim of statusWindow
     /* 0x7520 */ s32 iconRenderer; // @unverified: func_80017FDC; the icons of listWindow
 } PcBoxScreen; // size = 0x7524
@@ -143,8 +143,8 @@ typedef struct PcBoxScreen {
 /* A box picker of the ポケモンを いどうする screen (PcSort_InitMenuWindow) over the box names D_8900A758.
  * LabItemMenuWindow is the same with room for 4 rows. */
 typedef struct PcSortMenuWindow {
-    /* 0x00 */ Window window;
-    /* 0x2C */ Menu menu;
+    /* 0x00 */ Window window; // @unverified: typed from the function it is passed to
+    /* 0x2C */ Menu menu; // @unverified: typed from the function it is passed to
     /* 0x50 */ PointerList items; // @unverified: func_80027804 over the 13 names of D_8900A758
     /* 0x5C */ u16 itemFlags[13]; // @unverified: 0x100 = empty box, 0x200 = party of one, 0x400 = full box (PcSort_Disable*)
     /* 0x76 */ char pad76[0x2];
@@ -152,33 +152,33 @@ typedef struct PcSortMenuWindow {
 
 /* A pop-up list of the Lab item screens (LabItem_InitMenuWindow); PcSortMenuWindow with 4 rows. */
 typedef struct LabItemMenuWindow {
-    /* 0x00 */ Window window;
-    /* 0x2C */ Menu menu;
+    /* 0x00 */ Window window; // @unverified: typed from the function it is passed to
+    /* 0x2C */ Menu menu; // @unverified: typed from the function it is passed to
     /* 0x50 */ PointerList items; // @unverified: func_80027804 over the names (LabItem_InitMenuWindow arg3)
-    /* 0x5C */ u16 itemFlags[4];
+    /* 0x5C */ u16 itemFlags[4]; // @unverified: typed from the function it is passed to
 } LabItemMenuWindow; // size = 0x64
 
 /* A Pokémon list of the ポケモンを いどうする screen (PcSort_InitMonList, PcSort_DrawMonList). */
 typedef struct PcSortMonList {
     /* 0x00 */ ScrollList list; // @unverified: items = the box's ByteMatrix of BattleMon rows
-    /* 0x44 */ u16 itemFlags[30];
-    /* 0x80 */ s32 x;
-    /* 0x84 */ s32 y;
+    /* 0x44 */ u16 itemFlags[30]; // @unverified: typed from the function it is passed to
+    /* 0x80 */ s32 x; // @unverified: typed from the function it is passed to
+    /* 0x84 */ s32 y; // @unverified: typed from the function it is passed to
 } PcSortMonList; // size = 0x88
 
 /* An item list of the Lab item screens (LabItem_InitItemList, LabItem_DrawItemList). */
 typedef struct LabItemList {
     /* 0x000 */ ScrollList list; // @unverified: items = an item table with 2-byte rows (LabItem_DrawItemCountRow)
-    /* 0x044 */ u16 itemFlags[100];
-    /* 0x10C */ s32 x;
-    /* 0x110 */ s32 y;
+    /* 0x044 */ u16 itemFlags[100]; // @unverified: typed from the function it is passed to
+    /* 0x10C */ s32 x; // @unverified: typed from the function it is passed to
+    /* 0x110 */ s32 y; // @unverified: typed from the function it is passed to
 } LabItemList; // size = 0x114
 
 /* The window of the ポケモンを いどうする screen: six operation buttons, two box pickers and two
  * Pokémon lists side by side (PcSort_InitOrganizeWindow, PcSort_UpdateOrganizeWindow). */
 typedef struct PcSortOrganizeWindow {
     /* 0x000 */ s32 state; // @unverified: 1 = picking an operation, 2/3 = box pickers, 4-7 = Pokémon lists, 0xA-0xD = text box up
-    /* 0x004 */ Window window;
+    /* 0x004 */ Window window; // @unverified: typed from the function it is passed to
     /* 0x030 */ WindowFrame footerFrame; // @unverified: frame of the bottom strip
     /* 0x050 */ PcBoxImageButton moveButton; // @unverified: operation 0 (いどうする, move); same image as PcBoxOperationWindow.moveTo64Button
     /* 0x07C */ PcBoxImageButton backButton; // @unverified: operation 1; same image as PcBoxOperationWindow.backButton
@@ -188,35 +188,35 @@ typedef struct PcSortOrganizeWindow {
     /* 0x12C */ PcBoxImageButton releaseButton; // @unverified: operation 5 (にがす, release)
     /* 0x158 */ ByteMatrix buttonTable; // @unverified: rows = the six buttons, items of operationMenu
     /* 0x168 */ GridMenu operationMenu; // @unverified: cursor = the operation; error texts D_8900A84C
-    /* 0x190 */ u16 operationFlags[6];
+    /* 0x190 */ u16 operationFlags[6]; // @unverified: typed from the function it is passed to
     /* 0x19C */ PcSortMenuWindow sourceBoxWindow; // @unverified: picks the box of leftList (state 2)
     /* 0x214 */ PcSortMenuWindow targetBoxWindow; // @unverified: picks the box of rightList (state 3)
     /* 0x28C */ s32 leftBox; // @unverified: index into boxTables of leftList
     /* 0x290 */ s32 rightBox; // @unverified: index into boxTables of rightList; -1 while it shows partyTable
-    /* 0x294 */ PcSortMonList leftList;
-    /* 0x31C */ PcSortMonList rightList;
+    /* 0x294 */ PcSortMonList leftList; // @unverified: typed from the function it is passed to
+    /* 0x31C */ PcSortMonList rightList; // @unverified: typed from the function it is passed to
     /* 0x3A4 */ s32 swapIndex; // @unverified: reorder: the first Pokémon picked in leftList
     /* 0x3A8 */ ByteMatrix* boxTables; // @unverified: PcSortScreen.partyTable and the 12 box tables after it
     /* 0x3AC */ s32* dirty; // @unverified: PcSortScreen.dirty, one per box table
     /* 0x3B0 */ ByteMatrix partyView; // @unverified: a copy of boxTables[0] shown in rightList for some operations
-    /* 0x3C0 */ s8 textBox[0x38]; // TextBox_Init, TextBox_Draw; its size is not established
+    /* 0x3C0 */ s8 textBox[0x38]; // @unverified: TextBox_Init, TextBox_Draw; its size is not established
 } PcSortOrganizeWindow; // size = 0x3F8
 
 /* The ポケモンを いどうする screen (PcSort_Init, PcSort_UpdateScreen, PcSort_DrawScreen). */
 typedef struct PcSortScreen {
     /* 0x0000 */ s32 state; // @unverified: PcSort_UpdateScreen
-    /* 0x0004 */ s8* iconFramebuffers; // PokeIcon_AllocFramebuffers
+    /* 0x0004 */ s8* iconFramebuffers; // @unverified: PokeIcon_AllocFramebuffers
     /* 0x0008 */ u16* monRenderer; // @unverified: func_80018F2C; the anim of statusWindow
     /* 0x000C */ s32 mode; // @unverified: PcSort_Init's arg1
-    /* 0x0010 */ PcSortOrganizeWindow organizeWindow;
-    /* 0x0408 */ s8 savePrompt[0x64]; // SavePrompt_Init, SavePrompt_Update, SavePrompt_Draw
-    /* 0x046C */ PcBoxConfirmWindow statusWindow;
+    /* 0x0010 */ PcSortOrganizeWindow organizeWindow; // @unverified: typed from the function it is passed to
+    /* 0x0408 */ s8 savePrompt[0x64]; // @unverified: SavePrompt_Init, SavePrompt_Update, SavePrompt_Draw
+    /* 0x046C */ PcBoxConfirmWindow statusWindow; // @unverified: typed from the function it is passed to
     /* 0x052C */ BattleMon partyMons[6]; // @unverified: read from deck 0x20 of the GB cart
     /* 0x070C */ BattleMon gbBoxMons[8][30]; // @unverified: read from deck 0x21 of the GB cart
     /* 0x520C */ BattleMon stadiumBoxMons[4][30]; // @unverified: read from deck 0x11, the 64 boxes
     /* 0x778C */ ByteMatrix partyTable; // @unverified: rows = partyMons; boxTables[0] of organizeWindow
-    /* 0x779C */ ByteMatrix gbBoxTables[8]; // rows = gbBoxMons
-    /* 0x781C */ ByteMatrix stadiumBoxTables[4]; // rows = stadiumBoxMons
+    /* 0x779C */ ByteMatrix gbBoxTables[8]; // @unverified: rows = gbBoxMons
+    /* 0x781C */ ByteMatrix stadiumBoxTables[4]; // @unverified: rows = stadiumBoxMons
     /* 0x785C */ s32 dirty[13]; // @unverified: set when a table changed; PcSort_SaveChanges writes those back
 } PcSortScreen; // size = 0x7890
 
