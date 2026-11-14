@@ -226,7 +226,9 @@ typedef struct ReverbRingBufferItem {
     /* 0x02 */ s16 chunkLen;
     /* 0x04 */ s16* toDownsampleLeft;
     /* 0x08 */ s16* toDownsampleRight;
-    /* 0x0C */ u8 unk0C[8];
+    /* 0x0C */ s32 startPos; // @unverified: same offset/use as OoT's ReverbRingBufferItem.startPos
+    /* 0x10 */ s16 lengthA; // @unverified: same offset/use as OoT's ReverbRingBufferItem.lengthA
+    /* 0x12 */ s16 lengthB; // @unverified: same offset/use as OoT's ReverbRingBufferItem.lengthB (part after the ring buffer wraps)
 } ReverbRingBufferItem; // size = 0x14
 
 typedef struct SynthesisReverb {
