@@ -8,7 +8,7 @@
 extern s32 pad_D_8831A4DC[8];
 #include "m2c_macros.h"
 void ScrollList_SetItems(s8*, s32, s8*);
-void func_8900020C(void);
+void LabItem_Unused(void);
 s32 LabItem_ComputeRemainingCapacity(s32 arg0, ByteMatrix* arg1);
 s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, ByteMatrix* arg1);
 s32 LabItem_FindOrAllocateGamePakBoxSlot(LabItemSaveSlot* arg0, s32 arg1, char* arg2);
@@ -249,9 +249,9 @@ void Save_DrawReportingWindow(SavePrompt*);
 s32 LabItem_UpdateConfirmWindow(LabItemConfirmWindow*);
 void LabItem_InitDeleteDataWindow(LabItemDeleteDataWindow*, s32, s32, LabItemSaveSlot*);
 s32 LabItem_UpdateDeleteDataCursor(LabItemDeleteDataWindow*);
-void func_89002E58(LabItemSaveDataWindow*, s32, s32, LabItemSaveSlot*, ByteMatrix*);
-s32 func_8900352C(LabItemSaveDataWindow*);
-void func_890022D0(LabItemOrganizeWindow*);
+void LabItem_InitSaveDataWindow(LabItemSaveDataWindow*, s32, s32, LabItemSaveSlot*, ByteMatrix*);
+s32 LabItem_UpdateSaveDataWindow(LabItemSaveDataWindow*);
+void LabItem_OpenTargetList(LabItemOrganizeWindow*);
 s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow*);
 extern s8 D_8901871C[];
 extern s8 D_89018728[];
@@ -318,12 +318,12 @@ s32 LabItem_UpdateScreen(LabItemScreen* arg0) {
                 arg0->itemTables[2].count = 0;
             } else if (res == 1) {
                 LabItem_ReadDeckEntries(0x12, 0, arg0->deleteDataWindow.menu.cursor, &arg0->itemTables[2]);
-                func_89002E58(&arg0->saveDataWindow, 0xD6, 0x45, &arg0->saveSlots[arg0->deleteDataWindow.menu.cursor], &arg0->itemTables[2]);
+                LabItem_InitSaveDataWindow(&arg0->saveDataWindow, 0xD6, 0x45, &arg0->saveSlots[arg0->deleteDataWindow.menu.cursor], &arg0->itemTables[2]);
                 arg0->state = 5;
             }
             break;
         case 5:
-            res = func_8900352C(&arg0->saveDataWindow);
+            res = LabItem_UpdateSaveDataWindow(&arg0->saveDataWindow);
             if (res == -1) {
                 arg0->state = 4;
             } else if (res == 1) {
@@ -340,7 +340,7 @@ s32 LabItem_UpdateScreen(LabItemScreen* arg0) {
                 arg0->gamePakSlot = arg0->deleteDataWindow.menu.cursor;
                 arg0->saveSlots[arg0->gamePakSlot].present = 0;
                 arg0->itemTables[2].count = 0;
-                func_890022D0(&arg0->organizeWindow);
+                LabItem_OpenTargetList(&arg0->organizeWindow);
                 arg0->state = 1;
             }
             break;
@@ -535,7 +535,7 @@ extern s32 D_8900A71C;
 extern s32 D_8900A720;
 /*
  * Second name for D_8900A71C. The fade-out store in this function family
- * (also func_8200579C, func_8900429C, LabPCList_UpdateFade, func_8A101B30) does not
+ * (also func_8200579C, LabTerminal_UpdateFade, LabPCList_UpdateFade, func_8A101B30) does not
  * share the counter's address with the load before it, which only happens
  * when the two accesses name different symbols.
  */
@@ -543,7 +543,7 @@ extern s32 D_8900A71C_2;
 extern M2C_UNK D_8901890C;
 M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void func_8002C8D8(Col8900429C*, Col8900429C, f32);
-s32 func_8900429C(s32 arg0) {
+s32 LabTerminal_UpdateFade(s32 arg0) {
     Col8900429C sp2C;
     M2C_UNK *var_a1;
     s32 n;
@@ -576,7 +576,7 @@ s32 func_8900429C(s32 arg0) {
 
 void Cont_StartReadInputs(void);                            /* extern */
 void Cont_ReadInputs(void);                            /* extern */
-void func_89003650(LabItemScreen*);
+void LabItem_Init(LabItemScreen*);
 void LabItem_DrawScreen(LabItemScreen*);
 M2C_UNK PcSort_Init(M2C_UNK *, M2C_UNK *);        /* extern */
 M2C_UNK PcSort_Free(M2C_UNK *);                   /* extern */
@@ -617,7 +617,7 @@ s32 LabTerminal_RunFrame(s32 arg0) {
                 PcSort_Init(&D_89019B98, &D_89018918);
                 break;
             case 3:                                 /* switch 2 */
-                func_89003650(&D_89019128);
+                LabItem_Init(&D_89019128);
                 break;
             case 4:                                 /* switch 2 */
                 PcBox_Init(&D_89021428);
@@ -660,7 +660,7 @@ extern u8 D_88000000[];
 extern u8 D_00235D70[];
 extern u8 D_00238BD0[];
 void LabTerminal_InitScreen(void);
-s32 func_8900429C(s32);
+s32 LabTerminal_UpdateFade(s32);
 
 /**
  * LabTerminal_Init
@@ -677,9 +677,9 @@ s32 func_8900429C(s32);
  *      D_01000000 / D_04000000.
  *   4. LabTerminal_InitScreen() and StageLoader_UpdateSegments() are called.
  *   5. BgStage_RunUntilCondition is run three times, with timer values 8, 0
- *      and 8: the first and third with callback func_8900429C, the second
+ *      and 8: the first and third with callback LabTerminal_UpdateFade, the second
  *      with LabTerminal_RunFrame.  What those callbacks do is not established
- *      (func_8900429C is still assembly).
+ *      (LabTerminal_UpdateFade is still assembly).
  *   6. StageLoader_WaitForRetrace() and main_pool_pop_state('TERM').
  *   7. Fragment_QueueCall queues a call to the fragment whose id comes from
  *      the address D_88000000 (bits 20-27, minus 0x10), with the ROM range
@@ -695,9 +695,9 @@ s32 LabTerminal_Init(s32 arg0, s32 arg1) {
     Asset_LoadToSegment(((u32)D_04000000 & 0x0F000000) >> 0x18, D_00400F70, D_004076E0, 0);
     LabTerminal_InitScreen();
     StageLoader_UpdateSegments();
-    BgStage_RunUntilCondition(8, func_8900429C);
+    BgStage_RunUntilCondition(8, LabTerminal_UpdateFade);
     BgStage_RunUntilCondition(0, LabTerminal_RunFrame);
-    BgStage_RunUntilCondition(8, func_8900429C);
+    BgStage_RunUntilCondition(8, LabTerminal_UpdateFade);
     StageLoader_WaitForRetrace();
     main_pool_pop_state('TERM');
     Fragment_QueueCall(((((u32)D_88000000) & 0x0FF00000) >> 0x14) - 0x10, D_00235D70, D_00238BD0, 0, 0);

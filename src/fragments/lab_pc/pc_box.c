@@ -10,7 +10,7 @@
 M2C_UNK func_80023268(s32, u8, M2C_UNK);            /* extern */
 extern s32 D_89019108;
 
-void func_89006FC0(PcBoxStorage* arg0) {
+void PcBox_MarkBoxInPokedex(PcBoxStorage* arg0) {
     s32 var_s1;
     u8 *var_s0;
 
@@ -46,7 +46,7 @@ void func_800243B8(void);
 void func_8002D7D4(s32);
 void PcBox_DrawScreen(PcBoxScreen* arg0);
 
-void func_890070BC(PcBoxScreen* arg0) {
+void PcBox_SaveChanges(PcBoxScreen* arg0) {
     s32 any;
     s32 i;
     s32 any2;
@@ -66,7 +66,7 @@ void func_890070BC(PcBoxScreen* arg0) {
     for (i = 0; i < 8; i++) {
         if (arg0->gbBoxEntries[i].dirty != 0) {
             LabPC_WriteBoxEntries(0x21, D_89019108, i, arg0->gbBoxEntries[i].box);
-            func_89006FC0(arg0->gbBoxEntries[i].box);
+            PcBox_MarkBoxInPokedex(arg0->gbBoxEntries[i].box);
         }
     }
     for (i = 0; i < 4; i++) {
@@ -103,7 +103,7 @@ s32 PcBox_ReadDeck(s32 arg0, s32 arg1, s32 arg2, s8* arg3, s32 arg4) {
 }
 
 s32 PcBox_ReadDeck(M2C_UNK, M2C_UNK, s32, s8 *, s32); /* extern */
-void func_89007264(s8 *arg0, M2C_UNK arg1, M2C_UNK arg2, s32 arg3)
+void PcBox_ReadBoxes(s8 *arg0, M2C_UNK arg1, M2C_UNK arg2, s32 arg3)
 {
   s32 temp_v0;
   s32 *new_var2; // FAKE: permuter temp
@@ -174,7 +174,7 @@ extern char D_89018E68[];
  * Sets up the confirm window (430x292) with its labeled Yes/No buttons.
  * Seen in play (2026-11-13) set up the ほんとうにいいの？ はい/いいえ window in せいとん > ポケモンをにがす.
  */
-void PcBox_InitConfirmWindow(PcBoxConfirmWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16* arg6) {
+void PcBox_InitMonStatusWindow(PcBoxConfirmWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16* arg6) {
     Window_SetRect((s8*)&arg0->window, arg1, arg2, 0x1AE, 0x124);
     arg0->window.animTimer = 0;
     arg0->window.title = NULL;
@@ -449,7 +449,7 @@ void Ui_DrawNumberUnpadded(s32, s32, u8);
 void Font_SetColorForFlags(s32);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
-void func_89007D54(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3, s32 arg4, s32 arg5) {
+void PcBox_DrawListCell(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3, s32 arg4, s32 arg5) {
     s32 pad[4]; // FAKE
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -488,8 +488,8 @@ extern char D_89018EE8[];
 extern char D_89018EF0[];
 extern char D_89018EF8[];
 extern s8 D_890289E0[];
-void func_89007D54();
-void func_8900806C(PcBoxListWindow* arg0, s32 arg1, s32 arg2, PcBoxStorage* arg3, s32 arg4, s32 arg5, s32 arg6) {
+void PcBox_DrawListCell();
+void PcBox_InitListWindow(PcBoxListWindow* arg0, s32 arg1, s32 arg2, PcBoxStorage* arg3, s32 arg4, s32 arg5, s32 arg6) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s32 i;
     u8* p;
@@ -503,7 +503,7 @@ void func_8900806C(PcBoxListWindow* arg0, s32 arg1, s32 arg2, PcBoxStorage* arg3
     arg0->window.frame.style = 0x801;
     arg0->window.title = (char*)D_890289E0;
     func_80027410((s8*)&arg0->mons, (s8*)arg3, 0x50, 0x1E, arg3->count);
-    GridMenu_Init((s8*)&arg0->menu, (s8*)&arg0->mons, (s8*)arg0->itemFlags, func_89007D54, 6, 0x5A, 0x42);
+    GridMenu_Init((s8*)&arg0->menu, (s8*)&arg0->mons, (s8*)arg0->itemFlags, PcBox_DrawListCell, 6, 0x5A, 0x42);
     arg0->menu.options |= 0x10000;
     func_80018168(arg4);
     for (p = (u8*)arg3, i = 0; i < arg3->count; i++, p += 0x50) {
@@ -773,7 +773,7 @@ void PcBox_InitOperationWindow(PcBoxOperationWindow* arg0, s32 x, s32 y, ByteMat
 extern s32 D_8900A924[];
 extern s32 D_8900A93C[];
 void LabItem_DrawTitleText(s32, s32, s32, s32);
-void func_89008EF0(PcBoxOperationWindow* arg0) {
+void PcBox_DrawHelpText(PcBoxOperationWindow* arg0) {
     if (arg0->state == 1) {
         if (0) {}  // karodo
         LabItem_DrawTitleText(arg0->footerFrame.x + 0x58, arg0->footerFrame.y, D_8900A924[(0, arg0)->operationCursor.cursor], D_8900A93C[arg0->operationCursor.cursor]); // FAKE: comma expression
@@ -848,7 +848,7 @@ void PcBox_DrawOperationWindow(PcBoxOperationWindow* arg0) {
     PcBox_DrawStorageLabel(arg0->window.frame.x + 0x120, arg0->window.frame.y + 0x10, 2, 1);
     Menu_DrawInlineItems(&arg0->gbBoxMenu, arg0->window.frame.x + 0x10, arg0->window.frame.y + 0x3C, flags[0], 0);
     Menu_DrawInlineItems(&arg0->stadiumBoxMenu, arg0->window.frame.x + 0x120, arg0->window.frame.y + 0x3C, flags[1], 0);
-    func_89008EF0(arg0);
+    PcBox_DrawHelpText(arg0);
     if (arg0->state == 7) {
         TextBox_Draw(&arg0->textBox);
     }
@@ -983,7 +983,7 @@ void PcBox_SetActiveLists(PcBoxOperationWindow* arg0, Menu* arg1, Menu* arg2) {
 }
 
 s32 func_8002B204();
-s32 func_89009738(PcBoxOperationWindow* arg0, s32 arg1) {
+s32 PcBox_StepViewCursorSkipEmpty(PcBoxOperationWindow* arg0, s32 arg1) {
     s32 r;
     s32 idx;
     s32 pos;
@@ -1180,7 +1180,7 @@ s32 PcBox_UpdateOperationWindow(PcBoxOperationWindow* arg0) {
             break;
 
         case 6:
-            if (func_89009738(arg0, func_8000B30C() & 0xFFFF) != 0) {
+            if (PcBox_StepViewCursorSkipEmpty(arg0, func_8000B30C() & 0xFFFF) != 0) {
                 r = arg0->boxCursor.cursor;
                 if (r < 8) {
                     arg0->sourceMenu = &arg0->gbBoxMenu;
@@ -1281,8 +1281,8 @@ void PcBox_Init(PcBoxScreen* arg0) {
     arg0->iconRenderer = func_80017FDC(arg0->iconFramebuffers, 0x1E, 0x28, 0x28);
     PokeIcon_OpenModelArchives();
     Fragment_Load(((((u32)D_81000000) & 0x0FF00000) >> 0x14) - 0x10, D_0015B1A0, D_0015E220);
-    func_89007264((s8*)arg0->gbBoxes, 0x21, D_89019108, 8);
-    func_89007264((s8*)arg0->stadiumBoxes, 0x11, 0, 4);
+    PcBox_ReadBoxes((s8*)arg0->gbBoxes, 0x21, D_89019108, 8);
+    PcBox_ReadBoxes((s8*)arg0->stadiumBoxes, 0x11, 0, 4);
     for (i = 0; i < 8; i++) {
         arg0->gbBoxEntries[i].box = &arg0->gbBoxes[i];
         arg0->gbBoxEntries[i].dirty = 0;
@@ -1364,9 +1364,9 @@ void SavePrompt_Init(SavePrompt*, s32, s32);
 void Save_DrawReportingWindow(SavePrompt*);
 s32 SavePrompt_Update(SavePrompt*);
 s32 PcBox_HasUnsavedChanges(PcBoxScreen* arg0);
-void func_890070BC(PcBoxScreen* arg0);
-void func_8900806C(PcBoxListWindow* arg0, s32 arg1, s32 arg2, PcBoxStorage* arg3, s32 arg4, s32 arg5, s32 arg6);
-void PcBox_InitConfirmWindow(PcBoxConfirmWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16* arg6);
+void PcBox_SaveChanges(PcBoxScreen* arg0);
+void PcBox_InitListWindow(PcBoxListWindow* arg0, s32 arg1, s32 arg2, PcBoxStorage* arg3, s32 arg4, s32 arg5, s32 arg6);
+void PcBox_InitMonStatusWindow(PcBoxConfirmWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16* arg6);
 /**
  * Runs the PC box screen's state machine for one frame.
  * Seen in play (2026-11-12): ran ボックスのそうさ.
@@ -1391,7 +1391,7 @@ s32 PcBox_UpdateScreen(PcBoxScreen* arg0) {
             } else if (r == 2) {
                 ent = arg0->operationWindow.sourceMenu->cursor + *(LabPCBoxEntry**)arg0->operationWindow.sourceMenu->items;
                 arg0->state = 2;
-                func_8900806C(&arg0->listWindow, 0x2C, 0x5F, ent->box, arg0->iconRenderer,
+                PcBox_InitListWindow(&arg0->listWindow, 0x2C, 0x5F, ent->box, arg0->iconRenderer,
                               (arg0->operationWindow.boxCursor.cursor < 8) ? 0 : 1, arg0->operationWindow.sourceMenu->cursor);
             }
             break;
@@ -1404,7 +1404,7 @@ s32 PcBox_UpdateScreen(PcBoxScreen* arg0) {
                 switch (r) {
                     case 1:
                         Save_DrawReportingWindow(&arg0->savePrompt);
-                        func_890070BC(arg0);
+                        PcBox_SaveChanges(arg0);
                         break;
                     case 2:
                         break;
@@ -1423,7 +1423,7 @@ s32 PcBox_UpdateScreen(PcBoxScreen* arg0) {
                 } else {
                     func_8003F6AC(2);
                     arg0->state = 3;
-                    PcBox_InitConfirmWindow(&arg0->statusWindow, 0x69, 0x7D, (s32)entry, 0, D_800603C0, arg0->monRenderer);
+                    PcBox_InitMonStatusWindow(&arg0->statusWindow, 0x69, 0x7D, (s32)entry, 0, D_800603C0, arg0->monRenderer);
                 }
             }
             break;

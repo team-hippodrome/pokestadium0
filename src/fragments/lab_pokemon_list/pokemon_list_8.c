@@ -713,7 +713,7 @@ extern s32 D_8910A908;
 extern s32 D_8910A90C;
 /*
  * Second name for D_8910A908. The fade-out store in this function family
- * (also func_8200579C, func_8900429C, LabPCList_UpdateFade, func_8A101B30) does not
+ * (also func_8200579C, LabTerminal_UpdateFade, LabPCList_UpdateFade, func_8A101B30) does not
  * share the counter's address with the load before it, which only happens
  * when the two accesses name different symbols.
  */

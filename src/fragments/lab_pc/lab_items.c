@@ -39,14 +39,14 @@ typedef struct unk_D_88218070 {
 #include "m2c_macros.h"
 void ScrollList_SetItems(s8*, s32, s8*);
 
-void func_8900020C(void);
+void LabItem_Unused(void);
 s32 LabItem_ComputeRemainingCapacity(s32 arg0, ByteMatrix* arg1);
 s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, ByteMatrix* arg1);
 s32 LabItem_FindOrAllocateGamePakBoxSlot(LabItemSaveSlot* arg0, s32 arg1, char* arg2);
 void LabItem_LoadGamePakBoxSlots(LabItemSaveSlot* arg0);
 void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, ByteMatrix* arg3);
 
-void func_89000020(LabMonEntryList* arg0, s32 (*arg1)(s32, s32)) {
+void LabList_InsertRowAtCursor(LabMonEntryList* arg0, s32 (*arg1)(s32, s32)) {
     func_800274E0(arg0->items, arg1, arg0->count);
 }
 
@@ -70,7 +70,7 @@ void ScrollList_SetCursorKeepOffset(s32*, s32);
  *   3. ScrollList_SetCursorKeepOffset(arg0, index) is called
  *      (WidgetTree_SetScrollableGridIndexPreserveScroll in symbol_addrs.txt).
  *
- * symbol_addrs.txt names this function WidgetTree_RemoveScrollableGridEntry,
+ * symbol_addrs.txt names this function LabList_RemoveSelectedEntry,
  * a Stadium 1 name.  The Stadium 1 function of that name is NOT the same
  * code: it removes from a pointer list and, when the index is past the end
  * and positive, sets the index to count - 1.  Zero's version operates on a
@@ -92,7 +92,7 @@ void func_800275E4(s32, s32);
 int func_800274E0();
 void ScrollList_SetCursorKeepOffset(s32*, s32);
 
-void func_890000A4(s32* arg0, s32 arg1, s32 arg2) {
+void LabItem_InsertItemStacks(s32* arg0, s32 arg1, s32 arg2) {
     s32 i;
     s32 var_s3;
     s32 var_v0;
@@ -153,7 +153,7 @@ void LabItem_DecreaseSelectedCount(ScrollList* arg0, s32 arg1) {
     temp_v1[1] -= arg1;
 }
 
-void func_8900020C(void) {
+void LabItem_Unused(void) {
 }
 
 /** Returns how many more items a box can hold. */
@@ -512,7 +512,7 @@ s32 LabItem_UpdateCountSelector(LabItemCountSelector* arg0) {
 /**
  * Sets flag 0x100 (empty) on the rows of the box picker whose item table has no rows.
  */
-void func_89000CF0(LabItemMenuWindow* arg0, ByteMatrix* arg1) {
+void LabItem_DisableEmptyLists(LabItemMenuWindow* arg0, ByteMatrix* arg1) {
     s32 var_v0;
     u16* temp_a1;
     ByteMatrix* var_v1;
@@ -689,7 +689,7 @@ void LabItem_DrawItemCountRow(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) 
     }
 }
 
-void func_89001230(LabItemList* arg0, s32 arg1) {
+void LabItem_SetItemList(LabItemList* arg0, s32 arg1) {
     ScrollList_SetItems((s8*)&arg0->list, arg1, (s8*)arg0->itemFlags);
 }
 
@@ -835,7 +835,7 @@ void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
 void Font_SetColorForFlags(s32);
 s32 func_8002BC44(s32);
 
-void func_890017FC(LabItemOrganizeWindow* arg0, s32 x, s32 y, s32 flags, s32 icon) {
+void LabItem_DrawListTab(LabItemOrganizeWindow* arg0, s32 x, s32 y, s32 flags, s32 icon) {
     PrimEnvColor* colors;
 
     if (flags & 2) {
@@ -991,8 +991,8 @@ void LabItem_DrawOrganizeWindow(LabItemOrganizeWindow* arg0) {
         func_8002B054(&arg0->moveButton, (arg0->operationCursor.cursor == 0) ? v : 0);
         func_8002B054(&arg0->reorderButton, (arg0->operationCursor.cursor == 1) ? v : 0);
         func_8002B054(&arg0->exchangeButton, (arg0->operationCursor.cursor == 2) ? v : 0);
-        func_890017FC(arg0, arg0->window.frame.x + 0xC, arg0->window.frame.y + 0xC, 0, arg0->leftBox);
-        func_890017FC(arg0, arg0->window.frame.x + 0x13C, arg0->window.frame.y + 0xC, 0, arg0->rightBox);
+        LabItem_DrawListTab(arg0, arg0->window.frame.x + 0xC, arg0->window.frame.y + 0xC, 0, arg0->leftBox);
+        LabItem_DrawListTab(arg0, arg0->window.frame.x + 0x13C, arg0->window.frame.y + 0xC, 0, arg0->rightBox);
         LabItem_DrawItemList(&arg0->leftList, ((arg0->state == 4) || (arg0->state == 7)) ? 2 : ((arg0->state == 5) || (arg0->state == 6)) ? 0x10 : 0);
         flags = ((arg0->state == 5) || (arg0->state == 6)) ? 2 : 0;
         flags |= (arg0->state == 5) ? 0x200 : 0;
@@ -1013,25 +1013,25 @@ void LabItem_DrawOrganizeWindow(LabItemOrganizeWindow* arg0) {
     }
 }
 
-void func_890020C0(LabItemOrganizeWindow* arg0) {
+void LabItem_MoveSelectedItem(LabItemOrganizeWindow* arg0) {
     u8* item;
 
     item = arg0->leftList.list.items->rows + arg0->leftList.list.cursor * 2;
     arg0->dirty[arg0->targetBoxWindow.menu.cursor] = 1;
     arg0->dirty[arg0->sourceBoxWindow.menu.cursor] = arg0->dirty[arg0->targetBoxWindow.menu.cursor];
     if (LabItem_IsQuantitylessItemForOperation(item[0]) != 0) {
-        func_89000020((LabMonEntryList*)&arg0->rightList, (void*)(arg0->leftList.list.items->rows + arg0->leftList.list.items->rowSize * arg0->leftList.list.cursor));
+        LabList_InsertRowAtCursor((LabMonEntryList*)&arg0->rightList, (void*)(arg0->leftList.list.items->rows + arg0->leftList.list.items->rowSize * arg0->leftList.list.cursor));
         LabList_RemoveSelectedEntry(&arg0->leftList.list);
     } else {
-        func_890000A4((s32*)&arg0->rightList, item[0], arg0->countSelector.count.value);
-        LabItem_SubtractSelectedItemQuantity((unk_func_8820BE14_02C_038*)&arg0->leftList, arg0->countSelector.count.value);
+        LabItem_InsertItemStacks((s32*)&arg0->rightList, item[0], arg0->countSelector.count.value);
+        LabItem_DecreaseSelectedCount((ScrollList*)&arg0->leftList, arg0->countSelector.count.value);
     }
 }
 
 void func_80027654(ByteMatrix* matrix, u8* out, s32 row);
 void func_80027700(ByteMatrix* matrix, u8* in, s32 row);
 
-void func_8900219C(LabItemOrganizeWindow* arg0) {
+void LabItem_SwapBetweenLists(LabItemOrganizeWindow* arg0) {
     u8 row[4];
     ByteMatrix* matrix;
 
@@ -1046,7 +1046,7 @@ void func_8900219C(LabItemOrganizeWindow* arg0) {
 void func_80027654(ByteMatrix* matrix, u8* out, s32 row);
 void func_80027700(ByteMatrix* matrix, u8* in, s32 row);
 
-void func_89002248(LabItemOrganizeWindow* arg0) {
+void LabItem_SwapWithinList(LabItemOrganizeWindow* arg0) {
     u8 row[4];
     ByteMatrix* matrix = arg0->leftList.list.items;
 
@@ -1057,14 +1057,14 @@ void func_89002248(LabItemOrganizeWindow* arg0) {
 }
 
 
-void func_890022D0(LabItemOrganizeWindow* arg0) {
+void LabItem_OpenTargetList(LabItemOrganizeWindow* arg0) {
     s32 temp_v0;
     LabItemList* temp_a0;
 
     temp_v0 = arg0->targetBoxWindow.menu.cursor;
     temp_a0 = &arg0->rightList;
     arg0->rightBox = temp_v0;
-    func_89001230(temp_a0, (s32)&arg0->tables[temp_v0]);
+    LabItem_SetItemList(temp_a0, (s32)&arg0->tables[temp_v0]);
     arg0->state = 4;
 }
 
@@ -1114,7 +1114,7 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* arg0) {
             if (arg0->operationCursor.cursor != 1) {
                 break;
             }
-            func_89001230(&arg0->rightList, &arg0->reorderView);
+            LabItem_SetItemList(&arg0->rightList, &arg0->reorderView);
             arg0->rightBox = -1;
             break;
 
@@ -1136,7 +1136,7 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* arg0) {
             func_8003F6AC(2);
             idx = arg0->sourceBoxWindow.menu.cursor;
             arg0->leftBox = idx;
-            func_89001230(&arg0->leftList, (s32)&arg0->tables[idx]);
+            LabItem_SetItemList(&arg0->leftList, (s32)&arg0->tables[idx]);
             if (arg0->operationCursor.cursor == 1) {
                 arg0->state = 4;
                 break;
@@ -1166,7 +1166,7 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* arg0) {
                     break;
                 }
             }
-            func_890022D0(arg0);
+            LabItem_OpenTargetList(arg0);
             break;
 
         case 4:
@@ -1242,7 +1242,7 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* arg0) {
                 break;
             }
             func_8003F6AC(0x18);
-            func_890020C0(arg0);
+            LabItem_MoveSelectedItem(arg0);
             if (arg0->leftList.list.items->count == 0) {
                 arg0->state = 1;
                 break;
@@ -1261,7 +1261,7 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* arg0) {
                 break;
             }
             func_8003F6AC(0x18);
-            func_89002248(arg0);
+            LabItem_SwapWithinList(arg0);
             Menu_ClearItemFlags((Menu*)&arg0->leftList.list);
             arg0->state = 4;
             break;
@@ -1284,7 +1284,7 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* arg0) {
                 break;
             }
             func_8003F6AC(0x18);
-            func_8900219C(arg0);
+            LabItem_SwapBetweenLists(arg0);
             arg0->state = 4;
             break;
 
@@ -1315,13 +1315,13 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* arg0) {
             case 2:
                 LabItem_InitMenuWindow(&arg0->sourceBoxWindow, arg0->window.frame.x + 0x1F, arg0->window.frame.y + 0x29, (s32)arg0->boxNames,
                               arg0->boxCount, arg0->leftBox);
-                func_89000CF0(&arg0->sourceBoxWindow, arg0->tables);
+                LabItem_DisableEmptyLists(&arg0->sourceBoxWindow, arg0->tables);
                 break;
             case 3:
                 LabItem_InitMenuWindow(&arg0->targetBoxWindow, arg0->window.frame.x + 0x14F, arg0->window.frame.y + 0x29, (s32)arg0->boxNames,
                               arg0->boxCount, arg0->rightBox);
                 if (arg0->operationCursor.cursor == 2) {
-                    func_89000CF0(&arg0->targetBoxWindow, arg0->tables);
+                    LabItem_DisableEmptyLists(&arg0->targetBoxWindow, arg0->tables);
                 }
                 LabItem_DisableRow(&arg0->targetBoxWindow, arg0->leftBox);
                 arg0->targetBoxWindow.menu.cursor = 0;
@@ -1456,7 +1456,7 @@ extern u8 D_8900BFC0[];
 extern u8 D_89010368[];
 extern u8 D_890110F0[];
 
-void func_89002E58(LabItemSaveDataWindow* arg0, s32 arg1, s32 arg2, LabItemSaveSlot* arg3, ByteMatrix* arg4) {
+void LabItem_InitSaveDataWindow(LabItemSaveDataWindow* arg0, s32 arg1, s32 arg2, LabItemSaveSlot* arg3, ByteMatrix* arg4) {
     Window_SetRect(&arg0->window, arg1, arg2, 0x184, 0x180);
     arg0->window.animTimer = 0;
     arg0->window.title = NULL;
@@ -1497,7 +1497,7 @@ extern char D_890186C0[];
 extern char D_890186CC[];
 void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 void Font_SetColorForFlags(s32);
-void func_890030C8(s32 arg0, s32 arg1, LabItemSaveSlot* arg2, s32 arg3) {
+void LabItem_DrawSaveDataOwner(s32 arg0, s32 arg1, LabItemSaveSlot* arg2, s32 arg3) {
     PrimEnvColor* color;
 
     if (arg3 & 2) {
@@ -1520,7 +1520,7 @@ void func_890030C8(s32 arg0, s32 arg1, LabItemSaveSlot* arg2, s32 arg3) {
 
 extern s32 D_8900A6CC[];
 extern PrimEnvColor* D_8900A6D8[];
-void func_8900323C(LabItemSaveDataWindow* arg0) {
+void LabItem_DrawSaveDataHelpText(LabItemSaveDataWindow* arg0) {
     char sp2C[0x54];
     ScrollList* list;
 
@@ -1538,7 +1538,7 @@ void func_8900323C(LabItemSaveDataWindow* arg0) {
 void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
 extern u8 D_800735C4[];
 void Window_DrawFrame(void*);
-void func_890032E4(LabItemSaveDataWindow* arg0) {
+void LabItem_DrawSaveDataWindow(LabItemSaveDataWindow* arg0) {
     s32 v;
 
     if (func_8002AE6C(&arg0->window) == 0) {
@@ -1554,15 +1554,15 @@ void func_890032E4(LabItemSaveDataWindow* arg0) {
         func_8002B054(&arg0->backButton, (arg0->operationCursor.cursor == 2) ? v : 0);
         func_8002B054(&arg0->discardButton, (arg0->operationCursor.cursor == 0) ? v : 0);
         func_8002B054(&arg0->viewItemsButton, (arg0->operationCursor.cursor == 1) ? v : 0);
-        func_890030C8(arg0->window.frame.x + 0x88, arg0->window.frame.y + 0xC, arg0->slot, 0);
+        LabItem_DrawSaveDataOwner(arg0->window.frame.x + 0x88, arg0->window.frame.y + 0xC, arg0->slot, 0);
         LabItem_DrawItemList(&arg0->itemList, (arg0->state == 2) ? 2 : 0);
-        func_8900323C(arg0);
+        LabItem_DrawSaveDataHelpText(arg0);
     }
 }
 
 s32 func_8002B2B0(void *);
 s32 LabItem_UpdateItemList(void *, u32);
-s32 func_8900352C(LabItemSaveDataWindow* arg0) {
+s32 LabItem_UpdateSaveDataWindow(LabItemSaveDataWindow* arg0) {
     s32 ret = 0;
 
     switch (arg0->state) {
@@ -1603,7 +1603,7 @@ extern s32 D_89019108;
 extern s32 D_89019118;
 extern s32 D_8901911C;
 
-void func_89003650(LabItemScreen* arg0) {
+void LabItem_Init(LabItemScreen* arg0) {
     s32 i;
 
     func_80027410((s8*)&arg0->itemTables[0], (s8*)arg0->bagItemRows, 2, 0x14, 0);

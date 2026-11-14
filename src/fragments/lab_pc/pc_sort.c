@@ -13,8 +13,8 @@ extern u8 D_8910D7D0[];
 #include "m2c_macros.h"
 void ScrollList_SetItems(void*, s32, void*);
 
-void func_89004708(void);
-void func_89004710(void);
+void PcSort_Unused1(void);
+void PcSort_Unused2(void);
 
 /**
  * Writes the list `arg3` to deck (`arg0`, `arg1`, `arg2`) and closes it, flushing box decks 0x10..0x13.
@@ -33,10 +33,10 @@ void PcSort_WriteDeck(s32 arg0, s32 arg1, s32 arg2, ByteMatrix* arg3) {
     }
 }
 
-void func_89004708(void) {
+void PcSort_Unused1(void) {
 }
 
-void func_89004710(void) {
+void PcSort_Unused2(void) {
 }
 
 /**
@@ -299,7 +299,7 @@ s32 PcSort_UpdateMonList(PcSortMonList* menu, u32 flags) {
 }
 
 
-void func_89005068(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3, s32 arg4) {
+void PcSort_DrawOperationButton(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3, s32 arg4) {
     func_8002B054(arg2, arg4);
 }
 
@@ -356,7 +356,7 @@ void PcSort_InitOrganizeWindow(PcSortOrganizeWindow* arg0, s32 x, s32 y, ByteMat
     arg0->releaseButton.color = D_8900A580[13];
     arg0->releaseButton.highlightColor = D_8900A5BC;
     func_80027410(&arg0->buttonTable, &arg0->moveButton, 0x2C, 6, 6);
-    GridMenu_Init(&arg0->operationMenu, &arg0->buttonTable, &arg0->operationFlags, func_89005068, 2, 0, 0);
+    GridMenu_Init(&arg0->operationMenu, &arg0->buttonTable, &arg0->operationFlags, PcSort_DrawOperationButton, 2, 0, 0);
     arg0->rightBox = 1;
     arg0->leftBox = 0;
     PcSort_InitMonList(&arg0->leftList, arg0->window.frame.x + 0xE, arg0->window.frame.y + 0x2C, (s32)arg3);
@@ -614,8 +614,7 @@ void PcSort_DrawOrganizeWindow(PcSortOrganizeWindow* arg0) {
     }
 }
 
-void func_89000020(void* arg0, void* arg1);
-void LabList_RemoveSelectedEntry(void*);
+void LabList_InsertRowAtCursor(void* arg0, void* arg1);
 
 /**
  * Moves the selected Pokemon into the destination box and marks both boxes changed.
@@ -625,8 +624,8 @@ void LabList_RemoveSelectedEntry(void*);
 void PcSort_MoveSelectedMon(PcSortOrganizeWindow* arg0) {
     arg0->dirty[arg0->targetBoxWindow.menu.cursor] = 1;
     arg0->dirty[arg0->sourceBoxWindow.menu.cursor] = arg0->dirty[arg0->targetBoxWindow.menu.cursor];
-    func_89000020(&arg0->rightList, (void*)(arg0->leftList.list.items->rows + arg0->leftList.list.items->rowSize * arg0->leftList.list.cursor));
-    LabList_RemoveSelectedEntry(&arg0->leftList);
+    LabList_InsertRowAtCursor(&arg0->rightList, (void*)(arg0->leftList.list.items->rows + arg0->leftList.list.items->rowSize * arg0->leftList.list.cursor));
+    LabList_RemoveSelectedEntry(&arg0->leftList.list);
 }
 
 void func_80027654(ByteMatrix* matrix, u8* out, s32 row);
@@ -667,14 +666,13 @@ void PcSort_SwapBetweenLists(PcSortOrganizeWindow* arg0) {
     arg0->dirty[arg0->leftBox] = arg0->dirty[arg0->rightBox];
 }
 
-void LabList_RemoveSelectedEntry(void*);
 
 /**
  * Removes the selected Pokemon from its box and marks the box changed.
  * Seen in play (2026-11-13) released フシギダネ in せいとん > ポケモンをにがす: てもち went from 03/06 to 02/06.
  */
 void PcSort_ReleaseSelectedMon(PcSortOrganizeWindow* arg0) {
-    LabList_RemoveSelectedEntry(&arg0->leftList);
+    LabList_RemoveSelectedEntry(&arg0->leftList.list);
     arg0->dirty[arg0->leftBox] = 1;
     arg0->state = (((arg0->leftBox == 0) ? 1 : 0) == arg0->leftList.list.items->count) ? 1 : 4;
 }
@@ -1007,7 +1005,7 @@ extern s32 D_89019108;
  * GBのボックス1.
  * @unverified Name and comment guessed from the code.
  */
-void PcSort_LoadMonIcons(ByteMatrix* arg0) {
+void PcSort_MarkListInPokedex(ByteMatrix* arg0) {
     s32 var_s1;
     u8 *var_s0;
 
@@ -1052,12 +1050,12 @@ void PcSort_SaveChanges(PcSortScreen* arg0) {
     }
     if (arg0->dirty[0] != 0) {
         PcSort_WriteDeck(0x20, D_89019108, 0, &arg0->partyTable);
-        PcSort_LoadMonIcons(&arg0->partyTable);
+        PcSort_MarkListInPokedex(&arg0->partyTable);
     }
     for (i = 0; i < 8; i++) {
         if (arg0->dirty[1 + i] != 0) {
             PcSort_WriteDeck(0x21, D_89019108, i, &arg0->gbBoxTables[i]);
-            PcSort_LoadMonIcons(&arg0->gbBoxTables[i]);
+            PcSort_MarkListInPokedex(&arg0->gbBoxTables[i]);
         }
     }
     for (i = 0; i < 4; i++) {
@@ -1125,12 +1123,12 @@ s32 PcSort_UpdateScreen(PcSortScreen* arg0) {
             } else if (res == 2) {
                 mon = arg0->organizeWindow.leftList.list.cursor * 0x50 + *(u8**)arg0->organizeWindow.leftList.list.items;
                 arg0->state = 3;
-                PcBox_InitConfirmWindow(&arg0->statusWindow, 0x69, 0x7D, (s32)mon, 0,
+                PcBox_InitMonStatusWindow(&arg0->statusWindow, 0x69, 0x7D, (s32)mon, 0,
                               D_800603C0, arg0->monRenderer);
             } else if (res == 3) {
                 mon = arg0->organizeWindow.leftList.list.cursor * 0x50 + *(u8**)arg0->organizeWindow.leftList.list.items;
                 arg0->state = 4;
-                PcBox_InitConfirmWindow(&arg0->statusWindow, 0x69, 0x7D, (s32)mon,
+                PcBox_InitMonStatusWindow(&arg0->statusWindow, 0x69, 0x7D, (s32)mon,
                               (s32)D_89018DBC, D_800603C0, arg0->monRenderer);
                 arg0->statusWindow.choice.cursor = 1;
             }
