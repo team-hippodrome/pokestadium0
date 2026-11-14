@@ -577,6 +577,39 @@ void GeoRender_SetCombineMode(Gfx* arg0, arg1_func_81407874_014_000_010* arg1) {
                       GCCc1w1(arg1->unk_09, arg1->unk_0C, arg1->unk_0E, arg1->unk_0B, arg1->unk_0D, arg1->unk_0F));
 }
 
+// Render state cache used while func_80013398 draws the layer lists.
+typedef struct GeoRenderCtx80013398 {
+    /* 0x00 */ s32 unk_00;
+    /* 0x04 */ s32 primColor; // @unverified: last gDPSetPrimColor color (func_80012A80)
+    /* 0x08 */ s32 fogColor; // @unverified: last G_SETFOGCOLOR word, compared with the layer entry (func_80012C00)
+    /* 0x0C */ s32 texture; // @unverified: bound texture; 0 means none (GeoRender_DisableTexture/BindTexture)
+    /* 0x10 */ s32 palette; // @unverified: cleared with texture in func_80012A80
+    /* 0x14 */ s32 displayList; // @unverified: last material display list (GeoRender_BindTexture)
+    /* 0x18 */ u8 combineMode; // @unverified: index into D_80060534 combine modes
+    /* 0x19 */ u8 primLodFraction; // @unverified: last gDPSetPrimColor LOD fraction
+    /* 0x1A */ u8 unk_1A;
+    /* 0x1B */ u8 unk_1B;
+    /* 0x1C */ u8 layer;
+    /* 0x1D */ u8 flags;
+    /* 0x1E */ u8 syncPending; // @unverified: set once a gDPPipeSync has been emitted for the entry
+    /* 0x1F */ u8 unk_1F;
+} GeoRenderCtx80013398; // size = 0x20
+
+typedef struct GeoLayerEntry {
+    /* 0x00 */ struct GeoLayerEntry* next;
+    /* 0x04 */ u8 unk_04;
+    /* 0x05 */ u8 textureMode;
+    /* 0x06 */ u8 unk_06;
+    /* 0x07 */ u8 lodFraction;
+    /* 0x08 */ s32 dl;
+    /* 0x0C */ s32 mtx;
+    /* 0x10 */ s32 unk_10;
+    /* 0x14 */ s32 unk_14;
+    /* 0x18 */ s32 unk_18;
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ s32 unk_20;
+} GeoLayerEntry; // size = 0x24
+
 extern arg1_func_81407874_014_000_010 D_80060534[];
 void func_800128E0(s8 *arg0) {
     bzero(arg0, 0x20);
@@ -614,19 +647,19 @@ typedef union Rgba80012D04 {
     } c;
 } Rgba80012D04;
 
-void func_80012A80(s8* arg0) {
+void func_80012A80(GeoRenderCtx80013398* arg0) {
     Rgba80012D04 color;
 
-    color.word = M2C_FIELD(arg0, s32*, 4);
-    M2C_FIELD(arg0, s32*, 0xC) = 0;
-    M2C_FIELD(arg0, s32*, 0x10) = 0;
-    M2C_FIELD(arg0, s32*, 0) = 0;
-    M2C_FIELD(arg0, u8*, 0x1A) = 0;
+    color.word = arg0->primColor;
+    arg0->texture = 0;
+    arg0->palette = 0;
+    arg0->unk_00 = 0;
+    arg0->unk_1A = 0;
     gDPPipeSync(gDisplayListHead++);
-    gDPSetPrimColor(gDisplayListHead++, 0, M2C_FIELD(arg0, u8*, 0x19), color.c.r, color.c.g, color.c.b, color.c.a);
+    gDPSetPrimColor(gDisplayListHead++, 0, arg0->primLodFraction, color.c.r, color.c.g, color.c.b, color.c.a);
     gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
     gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF);
-    GeoRender_SetCombineMode(gDisplayListHead++, &D_80060534[M2C_FIELD(arg0, u8*, 0x18)]);
+    GeoRender_SetCombineMode(gDisplayListHead++, &D_80060534[arg0->combineMode]);
     gSPClearGeometryMode(gDisplayListHead++, G_TEXTURE_GEN);
     gSPLookAt(gDisplayListHead++, M2C_FIELD(D_80060488, u32*, 0xA4) & 0x1FFFFFFF);
 }
@@ -649,11 +682,11 @@ void func_80012C00(s8 *arg0, s8 *arg1) {
 
 M2C_UNK func_8001298C();                            /* extern */
 
-void func_80012CC0(s8 *arg0, s8 *arg1) {
-    if (M2C_FIELD(arg0, s32 *, 8) & 0xFF) {
+void func_80012CC0(GeoRenderCtx80013398* arg0, GeoLayerEntry* arg1) {
+    if (arg0->fogColor & 0xFF) {
         func_8001298C();
     }
-    M2C_FIELD(arg0, s32 *, 8) = (s32) M2C_FIELD(arg1, s32 *, 0x14);
+    arg0->fogColor = (s32) arg1->unk_14;
 }
 
 void func_80012D04(s8* arg0, s8* arg1) {
@@ -796,17 +829,6 @@ void func_800132C8(s32* arg0, void* arg1) {
     }
 }
 
-typedef struct GeoRenderCtx80013398 {
-    /* 0x00 */ s32 unk_00[6];
-    /* 0x18 */ u8 unk_18;
-    /* 0x19 */ u8 unk_19;
-    /* 0x1A */ u8 unk_1A;
-    /* 0x1B */ u8 unk_1B;
-    /* 0x1C */ u8 layer;
-    /* 0x1D */ u8 flags;
-    /* 0x1E */ u8 unk_1E;
-    /* 0x1F */ u8 unk_1F;
-} GeoRenderCtx80013398; // size = 0x20
 
 void func_80013398(struct Root80013DC8 *arg0)
 {
@@ -837,7 +859,7 @@ void func_80013398(struct Root80013DC8 *arg0)
         }
         else
         {
-          func_80012CC0((s8 *) (&ctx), entry);
+          func_80012CC0(&ctx, (GeoLayerEntry*) entry);
         }
         if ((*((u8 *) (((s8 *) entry) + 5))) != 0)
         {
@@ -847,7 +869,7 @@ void func_80013398(struct Root80013DC8 *arg0)
         {
           if (ctx.unk_1A == 1)
           {
-            func_80012A80((s8 *) (&ctx));
+            func_80012A80(&ctx);
           }
           if ((*((s32 *) (((s8 *) entry) + 0x18))) != 0)
           {
@@ -863,7 +885,7 @@ void func_80013398(struct Root80013DC8 *arg0)
         func_800132C8((s32 *) (&ctx), entry);
         if ((*((u8 *) (((s8 *) entry) + 4))) != 0)
         {
-          func_80012A80((s8 *) (&ctx));
+          func_80012A80(&ctx);
         }
       }
 
@@ -879,20 +901,6 @@ void func_80013398(struct Root80013DC8 *arg0)
   gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF);
 }
 
-typedef struct GeoLayerEntry {
-    /* 0x00 */ struct GeoLayerEntry* next;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 textureMode;
-    /* 0x06 */ u8 unk_06;
-    /* 0x07 */ u8 lodFraction;
-    /* 0x08 */ s32 dl;
-    /* 0x0C */ s32 mtx;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ s32 unk_18;
-    /* 0x1C */ s32 unk_1C;
-    /* 0x20 */ s32 unk_20;
-} GeoLayerEntry; // size = 0x24
 extern s32 D_800AB240;
 extern s32 D_800AB448;
 extern s32 D_800AB44C;
