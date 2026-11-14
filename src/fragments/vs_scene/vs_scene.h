@@ -6,7 +6,7 @@
 #include "game_state.h"
 
 // One side's trainer panel on the VS screen (D_82203170[2]). The demo stadium geo fragments
-// (geo_model_032/033) read the same array through D_80060490's callbackArg.
+// (vs_trainer_panel, geo_model_033) read the same array through D_80060490's callbackArg.
 typedef struct VsSceneSide {
     /* 0x00 */ u8 teamLayout; // @unverified: VsScene_PrepareTeams sets 0 when ruleCategory != 0, 2 for a two-trainer side, else 1
     /* 0x01 */ char unk01[0x3];

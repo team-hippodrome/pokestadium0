@@ -42,7 +42,7 @@ Where the code lives, after the reorganization. File names are broadly correct g
 | 025 | `src/fragments/fatal_error_screen/` | 1 | 6 | fatal error screen |
 | 030 | `src/fragments/geo_model_030/` | 1 | 4 | geo layout callbacks for models |
 | 031 | `src/fragments/particle_data/` | 2 | 8 | particle data |
-| 032 | `src/fragments/geo_model_032/` | 1 | 9 | geo layout callbacks for models |
+| 032 | `src/fragments/vs_trainer_panel/` | 1 | 9 | VS screen trainer panels (portrait, title, name, team icons, nicknames) and the battle-title round switch |
 | 033 | `src/fragments/geo_model_033/` | 1 | 13 | geo layout callbacks for models |
 | 034 | `src/fragments/geo_model_034/` | 1 | 8 | geo layout callbacks for models |
 | 038 | `src/fragments/geo_model_038/` | 1 | 2 | geo layout callbacks for models |

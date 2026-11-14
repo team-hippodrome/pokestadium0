@@ -226,7 +226,7 @@
   "src/fragments/geo_model_030/geo_model_030.c",
   "src/fragments/particle_data/particle_data.c",
   "src/fragments/particle_data/particle_data_2.c",
-  "src/fragments/geo_model_032/geo_model_032.c",
+  "src/fragments/vs_trainer_panel/vs_trainer_panel.c",
   "src/fragments/geo_model_033/geo_model_033.c",
   "src/fragments/geo_model_034/geo_model_034.c",
   "src/fragments/geo_model_038/geo_model_038.c",
