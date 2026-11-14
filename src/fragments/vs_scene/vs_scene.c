@@ -252,7 +252,7 @@ s32 func_80027214(s8 *, s32);                       /* extern */
  * func_80027214(buf2, rec + 0xB4), then VsScene_DrawFrameToImage(0) and
  * func_80006780(), and stops as soon as VsScene_DrawFrameToImage returns non-zero.
  *
- * Same buffer pair and loop as func_88401E24. What the buffers, the record
+ * Same buffer pair and loop as CartridgeCheck_PlayExitToTitle. What the buffers, the record
  * and the helpers are is not established.
  *
  * Matching notes: `sp3C` is a stack local (as m2c reported it), the

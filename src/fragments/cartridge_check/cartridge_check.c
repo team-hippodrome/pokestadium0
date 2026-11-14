@@ -14,46 +14,77 @@
 M2C_UNK func_8001B5F0();
 extern s8 *D_800603C0;
 
-void func_88400020(s32 arg0, s8 *arg1) {
-    if (arg0 == 2) {
+/**
+ * Geo callback (referenced from the console model in fragment038, the 0x8F400000 model
+ * fragment this fragment loads). On event 2 it shows the node (flag bit 0 at +1) while a
+ * cartridge port is selected (D_88403358 >= 0) and hides it otherwise.
+ * Seen in play (2026-11-14): with four Transfer Paks, pressing A drops a Poké Ball and the
+ * Game Boy onto the console; with D_88403358 poked to -1 (or no pak) no Poké Ball appears. The
+ * Game Boy is a separate model (D_88403378) that the code only creates for a selected port,
+ * so the node this callback toggles is the Poké Ball.
+ */
+void CartridgeCheck_PokeBallVisibilityCallback(s32 event, s8 *node) {
+    if (event == 2) {
         if (D_88403358 >= 0) {
-            M2C_FIELD(arg1, u8 *, 1) = (u8) (M2C_FIELD(arg1, u8 *, 1) | 1);
+            M2C_FIELD(node, u8 *, 1) = (u8) (M2C_FIELD(node, u8 *, 1) | 1);
             return;
         }
-        M2C_FIELD(arg1, u8 *, 1) = (u8) (M2C_FIELD(arg1, u8 *, 1) & 0xFFFE);
+        M2C_FIELD(node, u8 *, 1) = (u8) (M2C_FIELD(node, u8 *, 1) & 0xFFFE);
     }
 }
 
-/** Battle HUD hook that does nothing. */
-void BattleHud_Noop(void) {
+/**
+ * Empty function. Nothing in the ROM calls it or holds its address (scan of every built
+ * image for a jal to it or its address as a word, 2026-11-14).
+ */
+void CartridgeCheck_UnusedNoop1(void) {
 }
 
-s32 func_88400064(s32 arg0, GeoLightNode* arg1) {
+/**
+ * Geo light callback of this fragment's scene layout (D_88402EB0 holds its address twice).
+ * On event 2 it points the light along the camera's eye-to-target direction
+ * (Vec3f_CalculateDistanceAngles) and stores both angles plus 0x2000 in the light's pitch
+ * and yaw. Always returns 0.
+ * Seen in play (2026-11-14): called with event 2 every frame of the cartridge check scene.
+ * Same shape as Intro_LightAngleCallbackA in the Stadium 1 decomp, which subtracts 0x2000
+ * from the second angle where Zero adds it.
+ */
+s32 CartridgeCheck_LightAngleCallback(s32 event, GeoLightNode* light) {
     UNUSED s32 pad; // keeps the retail stack layout: the three locals below sit 4 bytes lower
     f32 sp28;
     s16 sp26;
     s16 sp24;
 
-    if (arg0 == 2) {
+    if (event == 2) {
         Vec3f_CalculateDistanceAngles(&D_80060488->view.targetPosition, &D_80060488->view.eyePosition, &sp28, &sp26, &sp24);
-        arg1->pitch = sp26 + 0x2000;
-        arg1->yaw = sp24 + 0x2000;
+        light->pitch = sp26 + 0x2000;
+        light->yaw = sp24 + 0x2000;
     }
     return 0;
 }
 
-s32 func_884000CC(void) {
+/**
+ * Reads the controllers for this frame (Cont_StartReadInputs, Cont_ReadInputs,
+ * Input_ResetRepeatState). Seen in play: runs every frame of the scene, from CartridgeCheck_DrawFrame.
+ */
+s32 CartridgeCheck_ReadInputs(void) {
     Cont_StartReadInputs();
     Cont_ReadInputs();
     func_8001B5F0();
     return 0;
 }
 
-void func_88400100(void) {
+/** Empty function; nothing in the ROM calls it or holds its address (same scan as CartridgeCheck_UnusedNoop1). */
+void CartridgeCheck_UnusedNoop2(void) {
 }
 
-s32 func_88400108(s32 arg0) {
-    func_884000CC();
+/**
+ * Per-frame callback of the scene: reads input, draws the 3D stage and the frame. Every loop in
+ * this fragment calls it once per frame, and it is the callback passed to BgStage_RunUntilCondition.
+ * Seen in play (2026-11-14): runs every frame on every screen of the fragment.
+ */
+s32 CartridgeCheck_DrawFrame(s32 arg0) {
+    CartridgeCheck_ReadInputs();
     func_800158C0();
     BgStage_DrawFrame();
     func_80005770(&D_800AA150, 0, 0, 0x140, 0xF0);
@@ -69,7 +100,13 @@ extern Gfx gUiEnvTintTextureDL[];
 extern Gfx gUiRestoreTextureDL[];
 void Gfx_DrawTextureIa8(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 texture_spread_x_mode);
 
-void func_88400168(s32 x, s32 y, s32 port, s32 game) {
+/**
+ * Draws the Game Boy cartridge icon of a port panel, tinted by `game` (1 Red, 2 Green,
+ * 3 Blue, 7 Pikachu/Yellow; 0 = no Pokémon cartridge, drawn faded), with the 1P-4P label of `port`.
+ * Seen in play (2026-11-14): with Green, Red, Blue and Pikachu in ports 1-4 the icons were
+ * green 1P, red 2P, blue 3P and yellow 4P.
+ */
+void CartridgeCheck_DrawGameBoyIcon(s32 x, s32 y, s32 port, s32 game) {
     u8* icons[4] = D_88402F6C;
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
@@ -120,15 +157,18 @@ extern char D_884031D0[];
 extern char D_884031E0[];
 extern char D_884031F4[];
 extern char D_88403210[];
-void func_88400168(s32, s32, s32, s32);
+void CartridgeCheck_DrawGameBoyIcon(s32, s32, s32, s32);
 
 /**
- * Shows the Transfer Pak cartridge details (ID, No., trainer) for `port`, or an error: not a Pokemon cartridge, or no 64GB Pak inserted.
- * Seen in play (2026-11-13) ran on the "choose a Game Boy cartridge" screen after the title
- * (console reset, then N64 logo, opening, title and main menu), drawing port 1 (ID 12345, trainer
- * サトシ) and "64GB Pak not inserted" for ports 2-4.
+ * Draws one port's panel on the 「ゲームボーイのカートリッジをえらんでください。」 screen: the cartridge
+ * icon, then ID No. and トレーナー (trainer name) from the save, ＊＊＊＊＊ / ？？？？？ when the
+ * cartridge has no valid save, or an error: 「ポケモンのカートリッジではありません。」 (not a Pokémon
+ * cartridge), 「64GBパックがささっていません。」 (no Transfer Pak) or 「ゲームボーイのカートリッジが
+ * ささっていません。」 (no Game Boy cartridge). The selected port gets the brighter panel.
+ * Seen in play (2026-11-13, 2026-11-14): port 1 showed ID 12345 and サトシ from a crafted Green
+ * save, ports 2-4 (blank saves) showed ＊＊＊＊＊ and ？？？？？, and "64GB Pak not inserted" for empty ports.
  */
-void TransferPak_DrawStatusScreen(s32 port, s32 x, s32 y) {
+void CartridgeCheck_DrawPortPanel(s32 port, s32 x, s32 y) {
     Color_RGB8 top = D_88402F7C;
     Color_RGB8 bottom = D_88402F80;
     Color_RGB8 sel_top = D_88402F84;
@@ -139,7 +179,7 @@ void TransferPak_DrawStatusScreen(s32 port, s32 x, s32 y) {
     } else {
         Ui_DrawGradientPanel(x, y, 0x80, 0x46, &top, &bottom);
     }
-    func_88400168(x + 6, y + 6, port, D_88403310[port].game);
+    CartridgeCheck_DrawGameBoyIcon(x + 6, y + 6, port, D_88403310[port].game);
     Font_BeginTranslucentTextRendering();
     if (D_88403310[port].game != 0) {
         Font_SetActive(1, -2);
@@ -181,17 +221,14 @@ void TransferPak_DrawStatusScreen(s32 port, s32 x, s32 y) {
     Font_EndTexturedTextRendering();
 }
 
-// Moves the cursor around a 2x2 grid of slots on D-pad presses, skipping
-// to the diagonal slot when the adjacent one is empty.
 /**
- * Moves the cartridge cursor between the four controller ports on D-pad up/down/left/right,
- * skipping ports without a Game Boy cartridge (D_88403310[port].game).
- * Seen in play (2026-11-13) ran on the "choose a Game Boy cartridge" screen after the title
- * (console reset, then N64 logo, opening, title and main menu), drawing port 1 (ID 12345, trainer
- * サトシ) and "64GB Pak not inserted" for ports 2-4.
- * @unverified Needs a Transfer Pak to see; name from the code.
+ * Moves the cartridge cursor around the 2x2 grid of controller ports on D-pad presses. A port
+ * without a Pokémon cartridge (D_88403310[port].game == 0) is skipped for the diagonal one.
+ * Returns the new port.
+ * Seen in play (2026-11-14): with paks in all four ports, D-Right, D-Down, D-Left and D-Up moved
+ * the highlight 1P → 2P → 4P → 3P → 1P.
  */
-s32 TransferPak_MoveCartridgeCursor(s32 cursor) {
+s32 CartridgeCheck_MoveCursor(s32 cursor) {
     if ((M2C_FIELD(D_800603C0, u16*, 8) & 0x800) && (cursor >= 2)) {
         if (D_88403310[cursor ^ 2].game != 0) {
             func_8003F6AC(0x25);
@@ -232,10 +269,14 @@ s32 TransferPak_MoveCartridgeCursor(s32 cursor) {
 }
 
 
-/** Draws the backdrop of the save sequence message box. */
-void Trade_DrawSaveSeqMessageBackdrop(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
+/**
+ * Draws the blue gradient message window at (x, y), width x height.
+ * Seen in play (2026-11-14): the window of the Game Boy gift messages, called with growing and
+ * shrinking sizes while it opens and closes.
+ */
+void CartridgeCheck_DrawMessageWindow(s16 x, s16 y, s16 width, s16 height) {
     Color_RGB8 sp24 = { 0x00, 0x00, 0x32 }; // #000032
     Color_RGB8 sp20 = { 0x00, 0x00, 0xC8 }; // #0000C8
 
-    Ui_DrawGradientPanel(arg0, arg1, arg2, arg3, &sp24, &sp20);
+    Ui_DrawGradientPanel(x, y, width, height, &sp24, &sp20);
 }

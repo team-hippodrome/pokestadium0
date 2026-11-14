@@ -162,7 +162,7 @@
       "size": "0xC"
     }
   },
-  "src/fragments/cup_select/cup_select.c": {
+  "src/fragments/cup_clear/cup_clear.c": {
     ".data": "0x818007CC",
     ".rodata": {
       "address": "0x8180088C",
@@ -638,7 +638,7 @@
   "src/fragments/doduo_game_boy_model/doduo_game_boy_model.c": {
     ".bss": "0x8E825728"
   },
-  "src/fragments/geo_model_040/geo_model_040.c": {
+  "src/fragments/dodrio_game_boy_model/dodrio_game_boy_model.c": {
     ".bss": "0x8E923EB0"
   },
   "src/game_state.c": {
