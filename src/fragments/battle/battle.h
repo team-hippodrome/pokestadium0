@@ -16,78 +16,6 @@
 
 #define BTN_START       0x1000
 
-typedef struct unk_D_861054C0 {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ char pad4[4];
-    /* 0x008 */ DisplayObject unk_008;
-    /* 0x170 */ s16 unk_170;
-    /* 0x172 */ u16 unk_172;
-    /* 0x174 */ s16 unk_174[0xC];
-    /* 0x18C */ s16 unk_18C;
-    /* 0x18E */ s16 unk_18E[0xC];
-    /* 0x1A6 */ s16 unk_1A6;
-    /* 0x1A8 */ s16 unk_1A8;
-    /* 0x1AA */ s16 unk_1AA;
-    /* 0x1AC */ s16 unk_1AC;
-    /* 0x1AE */ s16 unk_1AE;
-    /* 0x1B0 */ s16 unk_1B0;
-    /* 0x1B2 */ s16 unk_1B2;
-    /* 0x1B4 */ s16 unk_1B4;
-    /* 0x1B6 */ char pad1B6[2];
-    /* 0x1B8 */ f32 unk_1B8;
-    /* 0x1BC */ f32 unk_1BC;
-} unk_D_861054C0;
-
-typedef struct unk_D_86105EA0 {
-    /* 0x000 */ char unk000[0x4];
-    /* 0x004 */ DisplayObject unk_004;
-} unk_D_86105EA0;
-
-typedef struct unk_D_86106450 {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ DisplayObject unk_004;
-    /* 0x16C */ ModelNodeView* unk_16C;
-} unk_D_86106450;
-
-typedef struct unk_D_861047B8 {
-    /* 0x00 */ u8 unk_00[6];
-    /* 0x06 */ u8 unk_06[4];
-} unk_D_861047B8;
-
-typedef struct unk_D_86104984 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-} unk_D_86104984;
-
-typedef struct unk_D_861049B4 {
-    /* 0x00 */ u32* unk_00;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-} unk_D_861049B4;
-
-typedef struct unk_D_86104B5C {
-    /* 0x00 */ u8 unk_00[3];
-} unk_D_86104B5C;
-
-typedef struct unk_D_86B0E5D8 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
-    /* 0x06 */ u8 unk_06;
-    /* 0x07 */ u8 unk_07;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-} unk_D_86B0E5D8;
-
 typedef struct unk_func_88316214 {
     /* 0x00 */ char unk00[0x2C];
     /* 0x2C */ u8 unk_2C;
@@ -100,10 +28,6 @@ typedef struct unk_func_88316304 {
     /* 0x09 */ char unk09[0x8];
     /* 0x11 */ u8 unk_11[1];
 } unk_func_88316304;
-
-typedef struct unk_func_883164C0 {
-    /* 0x00 */ char unk00[0x5C];
-} unk_func_883164C0;
 
 typedef struct { f32 v; f32 pad[3]; } CameraTargetOffsetRow;
 
@@ -121,30 +45,6 @@ typedef struct MoveAnimInfoZ {
  * src/fragments/fragment012_17ED00/battle_engine_317E70.c
  * src/fragments/fragment012_17ED00/battle_engine_359F90.c
  */
-
-typedef struct unk_D_843C4DA0 {
-    /* 0x00 */ u16 unk_00;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
-    /* 0x06 */ char unk06[0x3];
-    /* 0x09 */ u8 unk_09;
-    /* 0x0A */ char unk0A[0xA];
-    /* 0x13 */ u8 unk_13;
-    /* 0x14 */ char unk14[0x1];
-    /* 0x15 */ u8 unk_15;
-    /* 0x16 */ char unk16[0x1];
-    /* 0x17 */ u8 unk_17;
-    /* 0x18 */ char unk18[0xB];
-    /* 0x22 */ u8 unk_22;
-    /* 0x24 */ u16 unk_24;
-    /* 0x26 */ u16 unk_26;
-    /* 0x28 */ u16 unk_28;
-    /* 0x2A */ u16 unk_2A;
-    /* 0x2C */ u16 unk_2C;
-    /* 0x2E */ char unk2E[0x1E];
-} unk_D_843C4DA0;
 
 /* Struct types that were defined identically in each of these files; this is
  * now the one definition they all include:
@@ -210,12 +110,6 @@ typedef struct unk_D_843951D0 {
  * src/fragments/fragment012_17ED00/particle_math_269820.c
  */
 
-typedef struct unk_D_86B10BD0 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-} unk_D_86B10BD0;
-
 typedef struct unk_D_86B10BE0 {
     /* 0x00 */ s32 unk_00;
     /* 0x04 */ s32 unk_04;
@@ -229,15 +123,6 @@ typedef struct unk_D_86B10BE0 {
  * src/fragments/fragment012_17ED00/battle_engine_361050.c
  * src/fragments/fragment012_17ED00/battle_engine_361050_2.c
  */
-
-typedef struct unk_func_8437F068_sp28 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-} unk_func_8437F068_sp28;
-
-typedef struct unk_func_8437F85C_sp74 {
-    /* 0x00 */ s32 unk_00[6];
-} unk_func_8437F85C_sp74;
 
 /*
  * BattleSlotZ is a 0x90-byte view of the AI's side model (D_821CF618 /
@@ -520,27 +405,10 @@ typedef struct BattleSceneStateRow {
     /* 0x28 */ s32 unk_28;
 } BattleSceneStateRow; // size = 0x2C
 
-typedef struct unk_D_843C4E44 {
-    /* 0x000 */ u8 unk_000;
-    /* 0x001 */ u8 unk_001;
-    /* 0x3F2 */ char unk02[0x3F2];
-} unk_D_843C4E44; // size >= 0x3F4
-
-typedef struct unk_D_843C4DEC {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ char unk04[0x54];
-} unk_D_843C4DEC; // size = 0x58
-
 typedef struct BattleSceneStateTickSlot {
     /* 0x00 */ s32 unk_00;
     /* 0x04 */ BattleSceneStateCallback callback;
 } BattleSceneStateTickSlot; // size = 0x8
-
-typedef struct TagTeamPartners {
-    /* 0x00 */ u8 firstPartner;
-    /* 0x01 */ u8 secondPartner;
-    /* 0x02 */ char names[14];
-} TagTeamPartners; // size = 0x10
 
 typedef struct unk_D_84390178 {
     /* 0x00 */ s32 timeLeft;
@@ -1123,77 +991,6 @@ typedef struct TypeEffectivenessEntry {
     /* 0x02 */ u8 unk_02;
 } TypeEffectivenessEntry; // size = 0x3
 
-typedef struct BattleAiMonState {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05[1];
-    /* 0x0C */ char unk06[0xC];
-    /* 0x12 */ BattleMonRuntime unk_12;
-} BattleAiMonState; // size = 0x76
-
-typedef struct unk_D_843C5568 {
-    /* 0x000 */ u8 unk_000;
-    /* 0x001 */ u8 unk_001;
-    /* 0x002 */ u8 unk_002;
-    /* 0x003 */ u8 unk_003;
-    /* 0x004 */ u8 unk_004;
-    /* 0x005 */ u8 unk_005;
-    /* 0x006 */ u8 unk_006;
-    /* 0x007 */ u8 unk_007;
-    /* 0x008 */ u8 unk_008;
-    /* 0x009 */ char unk009[0x3];
-    /* 0x00C */ u8 unk_00C[1];
-    /* 0x00D */ char unk00D[0x5];
-    /* 0x012 */ u8 unk_012;
-    /* 0x013 */ char unk013[0x3];
-    /* 0x016 */ BattleAiMonState unk_016[1];
-    /* 0x08C */ char unk08C[0x510];
-} unk_D_843C5568; // size = 0x59C
-
-typedef struct SpeciesLevelUpLearnset {
-    /* 0x00 */ u8 unk_00[1];
-    /* 0x01 */ char unk01[9];
-    /* 0x0A */ u8 unk_0A[1];
-    /* 0x0B */ char unk0B[0x15];
-} SpeciesLevelUpLearnset; // size = 0x20
-
-typedef struct AIDecisionScratch {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x04 */ s32 unk_04[1];
-    /* 0x08 */ char unk08[0xC];
-} AIDecisionScratch; // size = 0x14
-
-typedef struct AIDifficultyConfig {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
-    /* 0x06 */ u8 unk_06;
-    /* 0x07 */ u8 unk_07;
-    /* 0x08 */ u8 unk_08;
-    /* 0x09 */ u8 unk_09;
-    /* 0x0A */ u8 unk_0A;
-    /* 0x0B */ u8 unk_0B;
-    /* 0x0C */ u8 unk_0C;
-    /* 0x0D */ u8 unk_0D;
-    /* 0x0E */ u8 unk_0E;
-    /* 0x0F */ u8 unk_0F;
-    /* 0x10 */ u8 unk_10;
-    /* 0x11 */ char unk11[0x3];
-} AIDifficultyConfig; // size = 0x14
-
-typedef struct unk_D_843C60F0 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ char unk03[0x9];
-    /* 0x0C */ AIDecisionScratch unk_0C[3];
-} unk_D_843C60F0; // size >= 0x48
-
 typedef struct unk_D_843C6148 {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 unk_01;
@@ -1203,205 +1000,6 @@ typedef struct unk_D_843C6148 {
     /* 0x05 */ u8 unk_05;
     /* 0x06 */ char unk06[0x2];
 } unk_D_843C6148; // size <= 0x8
-
-typedef struct unk_D_86B0FA7C {
-    /* 0x00 */ CameraNode* unk_00;
-    /* 0x04 */ Vec3f unk_04;
-    /* 0x10 */ s16 unk_10;
-    /* 0x12 */ s16 unk_12;
-    /* 0x14 */ char unk14[0x2];
-    /* 0x16 */ s16 unk_16;
-    /* 0x18 */ s16 unk_18;
-    /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ f32 unk_20;
-    /* 0x24 */ s16 unk_24;
-    /* 0x26 */ s16 unk_26;
-    /* 0x28 */ char unk28[0x2];
-    /* 0x2A */ s16 unk_2A;
-    /* 0x2C */ s16 unk_2C;
-    /* 0x30 */ f32 unk_30;
-    /* 0x34 */ f32 unk_34;
-    /* 0x38 */ f32 unk_38;
-    /* 0x3C */ f32 unk_3C;
-    /* 0x40 */ f32 unk_40;
-    /* 0x44 */ f32 unk_44;
-    /* 0x48 */ char unk48[0x34];
-} unk_D_86B0FA7C; // size = 0x7C
-
-typedef struct unk_D_86B0C264 {
-    /* 0x00 */ Vec3f unk_00;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
-    /* 0x10 */ u16 unk_10;
-    /* 0x10 */ u16 unk_12;
-    /* 0x14 */ u16 unk_14;
-    /* 0x14 */ u16 unk_16;
-    /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A;
-} unk_D_86B0C264; // size = 0x1C
-
-typedef struct unk_D_83407B18_008 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ char unk_0A[0x2];
-} unk_D_83407B18_008; // size >= 0xC
-
-typedef struct unk_D_83407B00 {
-    /* 0x00 */ union {
-                    struct {
-                        s16 unk_00s;
-                        s16 unk_02s;
-                    };
-                    s32 unk_00;
-                };
-    /* 0x04 */ union {
-                    struct {
-                        s16 unk_04s;
-                        s16 unk_06s;
-                    };
-                    s32 unk_04;
-                };
-} unk_D_83407B00; // size = 0x8
-
-typedef struct unk_D_83407B18 {
-    /* 0x00 */ unk_D_83407B00 unk_00;
-    /* 0x08 */ unk_D_83407B18_008 unk_08;
-    /* 0x14 */ char unk14[0x4];
-} unk_D_83407B18; // size = 0x18
-
-typedef struct unk_D_8690B2F8 {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-} unk_D_8690B2F8; // size >= 0x10
-
-typedef struct unk_D_8690A710 {
-    /* 0x000 */ char unk000[0x4];
-    /* 0x004 */ f32 unk_004;
-    /* 0x008 */ f32 unk_008;
-    /* 0x00C */ s32 unk_00C;
-    /* 0x010 */ char unk010[0x4];
-    /* 0x014 */ u8 unk_014;
-    /* 0x015 */ char unk015[0x16F];
-} unk_D_8690A710; // size = 0x184
-
-typedef struct unk_D_8690B350 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
-} unk_D_8690B350; // size = 0x10
-
-typedef struct unk_D_8690B360 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-} unk_D_8690B360; // size = 0x18
-
-typedef struct unk_D_8690B308 {
-    /* 0x00 */ s16 unk_00[8];
-    /* 0x18 */ f32 unk_10;
-    /* 0x1C */ f32 unk_14;
-    /* 0x20 */ f32 unk_18;
-    /* 0x24 */ f32 unk_1C;
-    /* 0x28 */ f32 unk_20;
-    /* 0x2C */ f32 unk_24;
-    /* 0x30 */ f32 unk_28;
-    /* 0x34 */ f32 unk_2C;
-    /* 0x38 */ s16 unk_30;
-    /* 0x3A */ s16 unk_32;
-    /* 0x3C */ s16 unk_34;
-    /* 0x3E */ s16 unk_36;
-} unk_D_8690B308; // size >= 0x38
-
-typedef struct unk_D_8690B3C0 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-} unk_D_8690B3C0; // size >= 0x10
-
-typedef struct unk_D_838067F0_0168_0000 {
-    union {
-        struct {
-            /* 0x000 */ u8 unk_000;
-            /* 0x001 */ u8 unk_001;
-            /* 0x002 */ u8 unk_002;
-            /* 0x003 */ u8 unk_003;
-        };
-        s32 raw;
-    };
-    /* 0x004 */ BattleMon unk_004;
-    /* 0x058 */ u16 unk_058[0x640];
-} unk_D_838067F0_0168_0000; // size = 0xCD8
-
-typedef struct unk_D_838067F0_0168 {
-    /* 0x0000 */ unk_D_838067F0_0168_0000 unk_0000[3];
-    /* 0x2688 */ struct unk_D_838067F0_0168* unk_2688;
-    /* 0x268C */ struct unk_D_838067F0_0168* unk_268C;
-    /* 0x2690 */ s16 unk_2690;
-    /* 0x2692 */ s16 unk_2692;
-    /* 0x2694 */ char unk2694[0x4];
-} unk_D_838067F0_0168; // size = 0x2698
-
-typedef struct unk_D_838067F0_003C {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ u8 unk_02[1];
-    /* 0x03 */ char unk03[0x13];
-} unk_D_838067F0_003C; // size = 0x16
-
-typedef struct unk_D_8380548C {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ s16 unk_0C;
-} unk_D_8380548C; // size = 0xE
-
-typedef struct GymLeaderCastleTrainer {
-    /* 0x00 */ u8 loaded;
-    /* 0x02 */ s16 portraitX;
-    /* 0x04 */ s32 portrait;
-    /* 0x08 */ char* name;
-} GymLeaderCastleTrainer; // size = 0xC
-
-typedef struct CastleMapNode {
-    /* 0x00 */ u8 index;
-    /* 0x01 */ u8 nodeState;
-    /* 0x02 */ s16 labelX;
-    /* 0x04 */ s16 labelY;
-    /* 0x06 */ s16 cursorX;
-    /* 0x08 */ s16 cursorY;
-    /* 0x0A */ s16 markerX;
-    /* 0x0C */ s16 markerY;
-    /* 0x0E */ s16 markerWidth;
-    /* 0x10 */ s16 markerHeight;
-    /* 0x12 */ s16 pulsing;
-    /* 0x14 */ s8 upNeighbor;
-    /* 0x15 */ s8 downNeighbor;
-    /* 0x16 */ s8 leftNeighbor;
-    /* 0x17 */ s8 rightNeighbor;
-    /* 0x18 */ Color_RGBA8 color;
-    /* 0x1C */ u8* texture;
-    /* 0x20 */ s16 bossTitle;
-    /* 0x22 */ s16 fileNumber;
-    /* 0x24 */ u8* infoPanelTexture;
-} CastleMapNode; // size = 0x28
 
 struct Particle;
 
@@ -1550,136 +1148,7 @@ typedef struct ParticleMatrixPool {
     /* 0x5BC0 */ char unk5BC0[0x20];
 } ParticleMatrixPool; // size = 0x5BE0
 
-struct RentalCarouselState;
 
-struct unk_D_84229EB0;
-
-typedef struct unk_D_8423D3A8 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ unk_D_800A7440 unk_0E;
-    /* 0x16 */ unk_D_800A7440 unk_16;
-    /* 0x20 */ s32 unk_20;
-    /* 0x24 */ ModelLoadContext* unk_24;
-    /* 0x28 */ unk_func_8001B1FC* unk_28;
-    /* 0x2C */ unk_D_838067F0_0168_0000* unk_2C;
-} unk_D_8423D3A8; // size >= 0x30
-
-typedef struct unk_D_842168A0_13608 {
-    /* 0x00 */ char unk04[0x4];
-} unk_D_842168A0_13608; // size >= 0x4
-
-typedef struct unk_D_84229EB0_00024 {
-    /* 0x0000 */ unk_D_838067F0_0168_0000 unk_0000[6];
-    /* 0x4D10 */ u16 unk_4D10;
-    /* 0x4D12 */ char unk_4D12[2];
-    /* 0x4D14 */ char unk4D14[0xA];
-    /* 0x4D1E */ s16 unk_4D1E;
-    /* 0x4D20 */ s16 unk_4D20;
-    /* 0x4D24 */ struct unk_D_84229EB0_00024* unk_4D24;
-    /* 0x4D28 */ struct unk_D_84229EB0_00024* unk_4D28;
-    /* 0x4D2C */ char unk4D2C[0x4];
-} unk_D_84229EB0_00024; // size = 0x4D30
-
-typedef struct RentalTeamTray {
-    /* 0x0000 */ u8 unk_0000;
-    /* 0x0001 */ u8 unk_0001;
-    /* 0x0002 */ u8 unk_0002;
-    /* 0x0003 */ u8 unk_0003;
-    /* 0x0004 */ u8 unk_0004;
-    /* 0x0006 */ s16 unk_0006;
-    /* 0x0008 */ s16 unk_0008;
-    /* 0x000A */ s16 unk_000A;
-    /* 0x000C */ s16 unk_000C;
-    /* 0x000E */ s16 unk_000E;
-    /* 0x0010 */ s16 unk_0010;
-    /* 0x0012 */ s16 unk_0012;
-    /* 0x0014 */ s16 unk_0014;
-    /* 0x0016 */ s16 unk_0016;
-    /* 0x0018 */ s16 unk_0018;
-    /* 0x001A */ s16 unk_001A;
-    /* 0x001C */ u16 unk_001C;
-    /* 0x001E */ char unk_001E[2];
-    /* 0x0020 */ char unk0020[0x10];
-    /* 0x0030 */ unk_D_838067F0_0168_0000 unk_0030[6];
-    /* 0x4D40 */ struct RentalCarouselState* unk_4D40;
-    /* 0x4D44 */ unk_D_8423D3A8* unk_4D44;
-    /* 0x4D48 */ struct unk_D_84229EB0* unk_4D48;
-} RentalTeamTray; // size = 0x4D4C
-
-typedef struct RentalRoster {
-    /* 0x00 */ u32 unk_00;
-    /* 0x04 */ BattleMon unk_04[1];
-} RentalRoster; // size >= 0x58
-
-typedef struct RentalCarouselState {
-    /* 0x00000 */ u8 unk_00000;
-    /* 0x00001 */ u8 unk_00001;
-    /* 0x00002 */ u8 unk_00002;
-    /* 0x00003 */ u8 unk_00003;
-    /* 0x00004 */ u8 unk_00004;
-    /* 0x00005 */ u8 unk_00005;
-    /* 0x00006 */ u8 unk_00006;
-    /* 0x00007 */ u8 unk_00007;
-    /* 0x00008 */ u8 unk_00008;
-    /* 0x00009 */ u8 unk_00009;
-    /* 0x0000A */ s16 unk_0000A;
-    /* 0x0000C */ s16 unk_0000C;
-    /* 0x0000E */ s16 unk_0000E;
-    /* 0x00010 */ s16 unk_00010;
-    /* 0x00012 */ s16 unk_00012;
-    /* 0x00014 */ s16 unk_00014;
-    /* 0x00016 */ s16 unk_00016;
-    /* 0x00018 */ s16 unk_00018;
-    /* 0x0001A */ s16 unk_0001A;
-    /* 0x0001C */ unk_D_838067F0_003C unk_0001C[13];
-    /* 0x0013A */ char unk0013A[0x2];
-    /* 0x0013C */ RentalRoster* unk_0013C;
-    /* 0x00140 */ unk_D_838067F0_0168* unk_00140;
-    /* 0x00144 */ char unk00144[0x4];
-    /* 0x00148 */ unk_D_838067F0_0168 unk_00148[8];
-    /* 0x13608 */ RentalTeamTray* unk_13608;
-    /* 0x1360C */ unk_D_8423D3A8* unk_1360C;
-} RentalCarouselState; // size = 0x13610
-
-typedef struct unk_D_84229EB0 {
-    /* 0x00000 */ u8 unk_00000;
-    /* 0x00001 */ u8 unk_00001;
-    /* 0x00002 */ u8 unk_00002;
-    /* 0x00003 */ u8 unk_00003;
-    /* 0x00004 */ u8 unk_00004;
-    /* 0x00005 */ s8 unk_00005;
-    /* 0x00006 */ s16 unk_00006;
-    /* 0x00008 */ s16 unk_00008;
-    /* 0x0000A */ s16 unk_0000A;
-    /* 0x0000C */ u8 unk_0000C;
-    /* 0x0000D */ u8 unk_0000D;
-    /* 0x0000E */ s16 unk_0000E;
-    /* 0x00010 */ s16 unk_00010;
-    /* 0x00012 */ s16 unk_00012;
-    /* 0x00014 */ s16 unk_00014;
-    /* 0x00016 */ s16 unk_00016;
-    /* 0x00018 */ s16 unk_00018;
-    /* 0x0001A */ s16 unk_0001A;
-    /* 0x0001C */ s16 unk_0001C;
-    /* 0x0001E */ u8 unk_0001E;
-    /* 0x0001F */ u8 unk_0001F;
-    /* 0x00020 */ u8 unk_00020;
-    /* 0x00024 */ unk_D_84229EB0_00024* unk_00024;
-    /* 0x00028 */ unk_D_84229EB0_00024 unk_00028[3];
-    /* 0x0E7B8 */ char unk0E7B8[0x4D30];
-    /* 0x134E8 */ RentalTeamTray* unk_134E8;
-    /* 0x134EC */ RentalCarouselState* unk_134EC;
-    /* 0x134F0 */ unk_D_8423D3A8* unk_134F0;
-    /* 0x134F4 */ char unk134F4[0x4];
-} unk_D_84229EB0; // size = 0x134F8
 
 typedef struct unk_D_82F20A88 {
     /* 0x000 */ s16 unk_000;
@@ -1880,8 +1349,6 @@ extern s32 sBattleSceneStateTickSlotIndex;
 extern PokemonBattleCues* sSideBattleCues[];
 
 extern SpeciesModelTransform* sSidePresentationTransform[];
-
-extern TagTeamPartners* sPlayerTagTeam[];
 
 extern u8 sPokemonWithAlternateSleepIdle[];
 
@@ -2248,8 +1715,6 @@ extern u8 sBattleMoveFailed;
 extern u8 sBattleCritFlag;
 
 extern s32 sTypeEffectiveness;
-
-//extern unk_D_843C4E44 D_843C4E44;
 extern u8 sConfused;
 
 extern u8 sStatCanBeChangedFurther;

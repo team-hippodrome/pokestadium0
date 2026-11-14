@@ -4,7 +4,6 @@
 #include "battle.h"
 #include "asset_archive.h"
 #include "math.h"
-extern unk_D_843C5568 gBattleAI_ActivePokemon[2];
 extern s32 pad_D_843C60A0;
 extern u16 D_82199F50;
 extern u16 D_82199F52;

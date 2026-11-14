@@ -52,7 +52,6 @@ typedef struct unk_D_83902700 {
 
 extern char** sUiText;
 extern char** sTrainerNameText;
-extern GymLeaderCastleTrainer sCurrentNodeTrainers[4];
 extern BinArchive* sTrainerDataArchive;
 extern BinArchive* sPortraitArchive;
 extern BinArchive* sBackgroundArchive;
@@ -64,7 +63,6 @@ extern s16 sCurrentHoverNodeIndex;
 #define ELITE_4_TO_GLC 9
 #define GLC_TO_ELITE_4 8
 #define GIOVANNI 7
-extern CastleMapNode sCastleMapNodes[];
 extern s16 sSelectedMapNode;
 extern s16 sCursorMoveTimer;
 extern s16 sRoomDescriptionHeight;
