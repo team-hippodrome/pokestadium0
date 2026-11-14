@@ -32,34 +32,34 @@ Gfx* func_8F600088(Gfx* gfx, void* segment) {
 
 void func_8F6000E8(s32 arg0, DemoGeoNode* arg1) {
     s32 pad; // FAKE: stack padding
-    DemoGeoTeam* teams;
+    VsSceneSide* teams;
 
     if (arg0 == 2) {
         teams = D_80060490->node.callbackArg;
         arg1->displayList = Gfx_AllocDisplayList(0x10);
-        func_8F600088(arg1->displayList, teams[(s32)arg1->node.callbackArg].unk_04);
+        func_8F600088(arg1->displayList, teams[(s32)arg1->node.callbackArg].trainerFile);
         arg1->displayList = (Gfx*)func_8F600020((s32)arg1->displayList);
     }
 }
 
 void func_8F600164(s32 arg0, DemoGeoNode* arg1) {
-    DemoGeoTeam* teams;
+    VsSceneSide* teams;
 
     if (arg0 == 2) {
         teams = D_80060490->node.callbackArg;
-        arg1->unk_24 = teams[(s32)arg1->node.callbackArg].unk_40[0] + 4;
+        arg1->unk_24 = (u8*)teams[(s32)arg1->node.callbackArg].rosterInfo[0]->title;
     }
 }
 
 void func_8F6001A0(s32 arg0, DemoGeoNode* arg1) {
-    DemoGeoTeam* teams;
+    VsSceneSide* teams;
 
     if (arg0 == 2) {
         teams = D_80060490->node.callbackArg;
-        arg1->unk_24 = teams[(s32)arg1->node.callbackArg].unk_40[0] + 0x14;
-        if (*(s16*)teams[(s32)arg1->node.callbackArg].unk_40[0] & 1) {
+        arg1->unk_24 = (u8*)teams[(s32)arg1->node.callbackArg].rosterInfo[0]->fullName;
+        if (*(s16*)&teams[(s32)arg1->node.callbackArg].rosterInfo[0]->unk_000 & 1) {
             arg1->unk_20 = 0xD2;
-        } else if (*(s16*)teams[(s32)arg1->node.callbackArg].unk_40[0] & 2) {
+        } else if (*(s16*)&teams[(s32)arg1->node.callbackArg].rosterInfo[0]->unk_000 & 2) {
             arg1->unk_22 = -0xF0;
         } else {
             arg1->unk_22 = -0x12C;
@@ -68,7 +68,7 @@ void func_8F6001A0(s32 arg0, DemoGeoNode* arg1) {
 }
 
 void func_8F600214(s32 arg0, DemoGeoNode* arg1) {
-    DemoGeoTeam* teams;
+    VsSceneSide* teams;
     s32 team;
     s32 slot;
 
@@ -76,9 +76,9 @@ void func_8F600214(s32 arg0, DemoGeoNode* arg1) {
         teams = D_80060490->node.callbackArg;
         team = ((u32)arg1->node.callbackArg >> 16) & 0xFFFF;
         slot = (u32)arg1->node.callbackArg & 0xFFFF;
-        if (slot < teams[team].trainers[0]->numberOfPokemonBrought) {
+        if (slot < teams[team].teamMember[0]->numberOfPokemonBrought) {
             D_8F626620[0] = 9;
-            _bcopy(teams[team].trainers[0]->pokemonPicked[slot].nickname, &D_8F626620[1], 0xC);
+            _bcopy(teams[team].teamMember[0]->pokemonPicked[slot].nickname, &D_8F626620[1], 0xC);
             arg1->unk_24 = D_8F626620;
         } else {
             arg1->unk_24 = NULL;
@@ -87,11 +87,11 @@ void func_8F600214(s32 arg0, DemoGeoNode* arg1) {
 }
 
 void func_8F6002C4(s32 arg0, GeoModelRootNode* arg1) {
-    DemoGeoTeam* teams;
+    VsSceneSide* teams;
 
     if (arg0 == 2) {
         teams = D_80060490->node.callbackArg;
-        arg1->unk_1A = teams[arg1->rootId].trainerCount != 0;
+        arg1->unk_1A = teams[arg1->rootId].teamLayout != 0;
     }
 }
 
@@ -104,7 +104,7 @@ Gfx* func_8F600300(Gfx* gfx, void* segment) {
 void func_8F600360(s32 arg0, DemoGeoNode *arg1)
 {
   s32 pad; // FAKE: stack padding
-  DemoGeoTeam *teams;
+  VsSceneSide *teams;
   s32 team;
   s32 slot;
   if (arg0 == 2)
@@ -112,10 +112,10 @@ void func_8F600360(s32 arg0, DemoGeoNode *arg1)
     teams = D_80060490->node.callbackArg;
     team = (((u32) arg1->node.callbackArg) >> 16) & 0xFFFF;
     slot = ((u32) arg1->node.callbackArg) & 0xFFFF;
-    if (slot < teams[team].trainers[0]->numberOfPokemonBrought)
+    if (slot < teams[team].teamMember[0]->numberOfPokemonBrought)
     {
       arg1->displayList = Gfx_AllocDisplayList(0x10);
-      func_8F600300(arg1->displayList, teams[team].unk_08[slot]);
+      func_8F600300(arg1->displayList, teams[team].iconImages[slot]);
     }
     else
     {
@@ -135,7 +135,7 @@ Gfx* func_8F600420(Gfx* gfx, void* segment) {
 
 void func_8F600480(s32 arg0, DemoGeoNode* arg1) {
     s32 pad0; // FAKE: stack padding
-    DemoGeoTeam* teams;
+    VsSceneSide* teams;
     s32 team;
     s32 slot;
     s32 pad1[2]; // FAKE: stack padding
@@ -144,16 +144,16 @@ void func_8F600480(s32 arg0, DemoGeoNode* arg1) {
         teams = D_80060490->node.callbackArg;
         team = ((u32)arg1->node.callbackArg >> 16) & 0xFFFF;
         slot = (u32)arg1->node.callbackArg & 0xFFFF;
-        if (teams[team].trainerCount == 2) {
-            if (slot % 3 < teams[team].trainers[slot / 3]->numberOfPokemonBrought) {
+        if (teams[team].teamLayout == 2) {
+            if (slot % 3 < teams[team].teamMember[slot / 3]->numberOfPokemonBrought) {
                 arg1->displayList = Gfx_AllocDisplayList(0x10);
-                func_8F600420(arg1->displayList, teams[team].unk_08[slot]);
+                func_8F600420(arg1->displayList, teams[team].iconImages[slot]);
             } else {
                 arg1->displayList = NULL;
             }
-        } else if (slot < teams[team].trainers[0]->numberOfPokemonBrought) {
+        } else if (slot < teams[team].teamMember[0]->numberOfPokemonBrought) {
             arg1->displayList = Gfx_AllocDisplayList(0x10);
-            func_8F600420(arg1->displayList, teams[team].unk_08[slot]);
+            func_8F600420(arg1->displayList, teams[team].iconImages[slot]);
         } else {
             arg1->displayList = NULL;
         }
@@ -168,7 +168,7 @@ Gfx* func_8F6005E8(Gfx* gfx, void* segment) {
 
 void func_8F600648(s32 arg0, DemoGeoNode* arg1) {
     s32 pad0; // FAKE: stack padding
-    DemoGeoTeam* teams;
+    VsSceneSide* teams;
     s32 team;
     s32 slot;
     s32 pad1[2]; // FAKE: stack padding
@@ -177,16 +177,16 @@ void func_8F600648(s32 arg0, DemoGeoNode* arg1) {
         teams = D_80060490->node.callbackArg;
         team = ((u32)arg1->node.callbackArg >> 16) & 0xFFFF;
         slot = (u32)arg1->node.callbackArg & 0xFFFF;
-        if (teams[team].trainerCount == 2) {
-            if (slot % 3 < teams[team].trainers[slot / 3]->numberOfPokemonBrought) {
+        if (teams[team].teamLayout == 2) {
+            if (slot % 3 < teams[team].teamMember[slot / 3]->numberOfPokemonBrought) {
                 arg1->displayList = Gfx_AllocDisplayList(0x10);
-                func_8F6005E8(arg1->displayList, teams[team].unk_20[slot]);
+                func_8F6005E8(arg1->displayList, teams[team].hpBarImages[slot]);
             } else {
                 arg1->displayList = NULL;
             }
-        } else if (slot < teams[team].trainers[0]->numberOfPokemonBrought) {
+        } else if (slot < teams[team].teamMember[0]->numberOfPokemonBrought) {
             arg1->displayList = Gfx_AllocDisplayList(0x10);
-            func_8F6005E8(arg1->displayList, teams[team].unk_20[slot]);
+            func_8F6005E8(arg1->displayList, teams[team].hpBarImages[slot]);
         } else {
             arg1->displayList = NULL;
         }

@@ -30,17 +30,6 @@ extern u8 D_300BAD0[];
 extern u8 D_300BED0[];
 extern u8 D_300C2D0[];
 
-// One side's trainer panel on the VS screen (D_82203170[2]).
-typedef struct VsSceneSide {
-    /* 0x00 */ u8 teamLayout; // @unverified: VsScene_PrepareTeams sets 0 when ruleCategory != 0, 2 for a two-trainer side, else 1
-    /* 0x01 */ char unk01[0x3];
-    /* 0x04 */ void* trainerFile; // BinArchive file picked by rosterInfo[0]->trainerIndex in VsScene_PrepareTeams: the trainer portrait; swapping the two sides' pointers swapped the portraits in play
-    /* 0x08 */ u8* iconImages[6]; // @unverified: PokeIcon_GetImage results for the side's Pokémon (VsScene_LoadTeamIcons)
-    /* 0x20 */ u8* hpBarImages[6]; // @unverified: images of the D_82203210 render targets func_82201084 draws HP bars into
-    /* 0x38 */ TeamRoster* teamMember[2];
-    /* 0x40 */ ExtendedRosterInfo* rosterInfo[2];
-} VsSceneSide; // size = 0x48
-
 extern u8* D_82202C1C[];
 extern u8* D_82202C3C[];
 extern u8 D_82202C60[];
