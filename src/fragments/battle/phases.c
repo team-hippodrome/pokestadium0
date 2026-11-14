@@ -23,7 +23,7 @@ void BattleMessage_ShowForSide(s32, s32);
 void BattleScene_CameraShotTargetHighThunk(void*, void*);
 void BattleScene_ReactionCritical(CameraNode*, void*);
 void BattleScene_ReactionNormal(CameraNode*, void*);
-void func_821020FC(s8*);
+void func_821020FC(ActivePokemon*);
 void func_82104C68(ActivePokemon*, s32);
 void func_82106354(ActivePokemon*);
 void func_82106374(ActivePokemon*);

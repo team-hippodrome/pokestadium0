@@ -2296,7 +2296,7 @@ void BattleScene_TickQueueRowEffectList3AtAnimEnd(ActivePokemon* active_pokemon)
 void BattleScene_ResetOpponentStateFrameCounter(ActivePokemon* active_pokemon);
 void BattleAnim_SetFlagForRockThrowingMoves(ActivePokemon* active_pokemon);
 void BattleAnim_ClearRockThrowingMoveFlag(ActivePokemon* active_pokemon);
-s32 BattleAnim_IsAssetLoadBusy(s8 *arg0);
+s32 BattleAnim_IsAssetLoadBusy(ActivePokemon* arg0);
 s32 BattleAnim_TryRegisterAssetTables(ActivePokemon* active_pokemon);
 void BattleScene_LoadMoveResourceList(ActivePokemon* active_pokemon);
 void BattleScene_LoadRowResourceList(ActivePokemon* active_pokemon);
