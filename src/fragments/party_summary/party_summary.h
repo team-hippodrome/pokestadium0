@@ -30,7 +30,7 @@ typedef struct unk_D_84B26640_010_010 {
     /* 0x01 */ s8 unk_01;
     /* 0x02 */ s8 unk_02;
     /* 0x04 */ DisplayObject* unk_04;
-    /* 0x08 */ unk_D_86002F34* unk_08;
+    /* 0x08 */ GeoTextureBankNode* unk_08;
 } unk_D_84B26640_010; // size = 0xC
 
 typedef struct unk_D_84B26640 {

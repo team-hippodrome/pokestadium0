@@ -6,7 +6,7 @@
 #include "gfx_buffer.h"
 #include "vector_math.h"
 extern s16 D_821CD9E0;
-extern unk_D_843C3508 D_821CD9E8[6];
+extern BeamTrail D_821CD9E8[6];
 
 void HyperBeamIceBeamTrail_ResetPool(void);
 /**
@@ -16,7 +16,7 @@ void HyperBeamIceBeamTrail_ResetPool(void);
 void HyperBeamIceBeamTrail_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, u8 arg7, u8 arg8, u8 arg9,
                    u8 argA, u8 argB, u8 argC, u8 argD, u8 argE, u8 argF, f32 arg10, f32 arg11, f32 arg12, s16 arg13,
                    s32 arg14, s32 arg15, s16 arg16, s16 arg17, s16 arg18, s16 arg19, s16 arg1A, s16 arg1B, s16 arg1C,
-                   s16 arg1D, unk_D_843C2C00_024* arg1E, unk_D_843C2C00_024* arg1F);
+                   s16 arg1D, CombinerCycleArgs* arg1E, CombinerCycleArgs* arg1F);
 /**
  * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
@@ -25,10 +25,10 @@ void HyperBeamIceBeamTrail_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg
 void HyperBeamIceBeamTrail_ComputeCameraRelativeOffset(s32 arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, UNUSED f32 arg5, UNUSED f32 arg6,
                    UNUSED f32 arg7);
 void HyperBeamIceBeamTrail_ComputeRotatedOffset(f32 arg0, Vec3f* arg1, Vec3f* arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6);
-void HyperBeamIceBeamTrail_UpdateSlot(unk_D_843C3508* arg0);
+void HyperBeamIceBeamTrail_UpdateSlot(BeamTrail* arg0);
 s32 HyperBeamIceBeamTrail_UpdateAll(void);
-Gfx* HyperBeamIceBeamTrail_DrawSegments(Gfx* arg0, unk_D_843C3508* arg1);
-Gfx* HyperBeamIceBeamTrail_LoadTextures(Gfx* arg0, unk_D_843C3508* arg1);
+Gfx* HyperBeamIceBeamTrail_DrawSegments(Gfx* arg0, BeamTrail* arg1);
+Gfx* HyperBeamIceBeamTrail_LoadTextures(Gfx* arg0, BeamTrail* arg1);
 Gfx* HyperBeamIceBeamTrail_DrawAll(Gfx* arg0);
 
 /**
@@ -38,9 +38,9 @@ Gfx* HyperBeamIceBeamTrail_DrawAll(Gfx* arg0);
 void HyperBeamIceBeamTrail_ResetPool(void) {
     s32 i;
     s32 j;
-    unk_D_843C3508* var_v0;
-    unk_D_843C3508_0A4* var_a0;
-    unk_D_84389CE0 sp0 = {
+    BeamTrail* var_v0;
+    BeamTrailSegment* var_a0;
+    PrimLodColor sp0 = {
         { 0, 0, 0, 0 },
         0,
     };
@@ -49,23 +49,23 @@ void HyperBeamIceBeamTrail_ResetPool(void) {
 
     var_v0 = &D_821CD9E8[0];
     for (i = 0; i < 6; i++, var_v0++) {
-        var_v0->unk_000 = 0;
-        var_v0->unk_004 = 0;
-        var_v0->unk_006 = 0;
-        var_v0->unk_008 = sp0;
-        var_v0->unk_00D = sp0;
+        var_v0->active = 0;
+        var_v0->frame = 0;
+        var_v0->duration = 0;
+        var_v0->primColor = sp0;
+        var_v0->envColor = sp0;
 
-        var_a0 = &var_v0->unk_0A4[0];
+        var_a0 = &var_v0->segments[0];
         for (j = 0; j < 20; j++, var_a0++) {
-            var_a0->unk_00 = 0.0f;
-            var_a0->unk_04 = 1.0f;
-            var_a0->unk_08 = 0.0f;
-            var_a0->unk_0C.x = 0.0f;
-            var_a0->unk_0C.y = 0.0f;
-            var_a0->unk_0C.z = 0.0f;
-            var_a0->unk_18.x = 0.0f;
-            var_a0->unk_18.y = 0.0f;
-            var_a0->unk_18.z = 0.0f;
+            var_a0->startDelay = 0.0f;
+            var_a0->halfWidth = 1.0f;
+            var_a0->angle = 0.0f;
+            var_a0->position.x = 0.0f;
+            var_a0->position.y = 0.0f;
+            var_a0->position.z = 0.0f;
+            var_a0->velocity.x = 0.0f;
+            var_a0->velocity.y = 0.0f;
+            var_a0->velocity.z = 0.0f;
         }
     }
 }
@@ -78,9 +78,9 @@ void HyperBeamIceBeamTrail_ResetPool(void) {
 void HyperBeamIceBeamTrail_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, u8 arg7, u8 arg8, u8 arg9,
                    u8 argA, u8 argB, u8 argC, u8 argD, u8 argE, u8 argF, f32 arg10, f32 arg11, f32 arg12, s16 arg13,
                    s32 arg14, s32 arg15, s16 arg16, s16 arg17, s16 arg18, s16 arg19, s16 arg1A, s16 arg1B, s16 arg1C,
-                   s16 arg1D, unk_D_843C2C00_024* arg1E, unk_D_843C2C00_024* arg1F) {
-    unk_D_843C3508* var_v0;
-    unk_D_843C3508_0A4* var_v1_2;
+                   s16 arg1D, CombinerCycleArgs* arg1E, CombinerCycleArgs* arg1F) {
+    BeamTrail* var_v0;
+    BeamTrailSegment* var_v1_2;
     s32 i;
     s32 j;
     Vec3f spC;
@@ -95,49 +95,49 @@ void HyperBeamIceBeamTrail_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg
     sp0.z = arg6;
 
     for (i = 0; i < 6; i++, var_v0++) {
-        if (var_v0->unk_000 == 0) {
-            var_v0->unk_000 = 1;
-            var_v0->unk_002 = arg0;
-            var_v0->unk_004 = 0;
-            var_v0->unk_006 = arg13;
-            var_v0->unk_080 = arg12;
-            var_v0->unk_084 = arg10;
-            var_v0->unk_020 = arg14;
-            var_v0->unk_024 = arg15;
-            var_v0->unk_068.unk_00 = 0;
-            var_v0->unk_068.unk_02 = 0;
-            var_v0->unk_074.unk_00 = 0;
-            var_v0->unk_074.unk_02 = 0;
-            var_v0->unk_068.unk_04 = arg16;
-            var_v0->unk_068.unk_06 = arg17;
-            var_v0->unk_074.unk_04 = arg1A;
-            var_v0->unk_074.unk_06 = arg1B;
-            var_v0->unk_068.unk_08 = arg18;
-            var_v0->unk_068.unk_0A = arg19;
-            var_v0->unk_074.unk_08 = arg1C;
-            var_v0->unk_074.unk_0A = arg1D;
-            var_v0->unk_028 = *arg1E;
-            var_v0->unk_048 = *arg1F;
-            var_v0->unk_01C = 0x46;
-            var_v0->unk_014 = 1.0f;
-            var_v0->unk_018 = 1.0f;
-            var_v0->unk_008.unk_00.r = arg7;
-            var_v0->unk_008.unk_00.g = arg8;
-            var_v0->unk_008.unk_00.b = arg9;
-            var_v0->unk_008.unk_00.a = argA;
-            var_v0->unk_008.unk_04 = argB;
-            var_v0->unk_00D.unk_00.r = argC;
-            var_v0->unk_00D.unk_00.g = argD;
-            var_v0->unk_00D.unk_00.b = argE;
-            var_v0->unk_00D.unk_00.a = argF;
+        if (var_v0->active == 0) {
+            var_v0->active = 1;
+            var_v0->widthMode = arg0;
+            var_v0->frame = 0;
+            var_v0->duration = arg13;
+            var_v0->maxHalfWidth = arg12;
+            var_v0->angleStep = arg10;
+            var_v0->textureA = arg14;
+            var_v0->textureB = arg15;
+            var_v0->scrollA.s = 0;
+            var_v0->scrollA.t = 0;
+            var_v0->scrollB.s = 0;
+            var_v0->scrollB.t = 0;
+            var_v0->scrollA.sStep = arg16;
+            var_v0->scrollA.tStep = arg17;
+            var_v0->scrollB.sStep = arg1A;
+            var_v0->scrollB.tStep = arg1B;
+            var_v0->scrollA.shiftS = arg18;
+            var_v0->scrollA.shiftT = arg19;
+            var_v0->scrollB.shiftS = arg1C;
+            var_v0->scrollB.shiftT = arg1D;
+            var_v0->combineCycle0 = *arg1E;
+            var_v0->combineCycle1 = *arg1F;
+            var_v0->fadeStartFrame = 0x46;
+            var_v0->primAlphaScale = 1.0f;
+            var_v0->envAlphaScale = 1.0f;
+            var_v0->primColor.color.r = arg7;
+            var_v0->primColor.color.g = arg8;
+            var_v0->primColor.color.b = arg9;
+            var_v0->primColor.color.a = argA;
+            var_v0->primColor.lodFrac = argB;
+            var_v0->envColor.color.r = argC;
+            var_v0->envColor.color.g = argD;
+            var_v0->envColor.color.b = argE;
+            var_v0->envColor.color.a = argF;
 
-            var_v1_2 = &var_v0->unk_0A4[0];
+            var_v1_2 = &var_v0->segments[0];
             for (j = 0; j < 20; j++, var_v1_2++) {
-                var_v1_2->unk_00 = 2.0f * j;
-                var_v1_2->unk_04 = arg11;
-                var_v1_2->unk_08 = 0.0f;
-                var_v1_2->unk_0C = spC;
-                var_v1_2->unk_18 = sp0;
+                var_v1_2->startDelay = 2.0f * j;
+                var_v1_2->halfWidth = arg11;
+                var_v1_2->angle = 0.0f;
+                var_v1_2->position = spC;
+                var_v1_2->velocity = sp0;
             }
             break;
         }
@@ -207,8 +207,8 @@ void HyperBeamIceBeamTrail_ComputeRotatedOffset(f32 arg0, Vec3f* arg1, Vec3f* ar
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam, Hyper Beam.
  */
-void HyperBeamIceBeamTrail_UpdateSlot(unk_D_843C3508* arg0) {
-    unk_D_843C3508_0A4* var_s0;
+void HyperBeamIceBeamTrail_UpdateSlot(BeamTrail* arg0) {
+    BeamTrailSegment* var_s0;
     s32 spA8;
     s32 i;
     Vec3f sp98;
@@ -221,9 +221,9 @@ void HyperBeamIceBeamTrail_UpdateSlot(unk_D_843C3508* arg0) {
     s32 temp_s3;
     s32 temp_s4;
 
-    var_s0 = &arg0->unk_0A4[0];
+    var_s0 = &arg0->segments[0];
     for (i = 0; i < 20; i++, var_s0++) {
-        if (var_s0->unk_00 > 0.0) {
+        if (var_s0->startDelay > 0.0) {
             temp_s3 = RAND(20) + 2;
             temp_s2 = RAND(10) + 4;
             temp_s4 = RAND(20) + 2;
@@ -234,18 +234,18 @@ void HyperBeamIceBeamTrail_UpdateSlot(unk_D_843C3508* arg0) {
                 __sinf((((spA8 + temp_s4) % (temp_s1 + 20)) * 6.2831854820251465) / (temp_s1 + 20)) * (10.0 * temp_fs1);
             temp_fs1_2 = __sinf((((spA8 + temp_s4) % temp_s1) * 6.2831854820251465) / temp_s1) * 10.0;
             BattleAnim_GetSecondaryOwnerAnchorPosition(&sp98);
-            var_s0->unk_0C.x = sp98.x;
-            var_s0->unk_0C.y = sp98.y + temp_fs2;
-            var_s0->unk_0C.z = sp98.z + temp_fs1_2;
-            var_s0->unk_00 -= 1.0;
+            var_s0->position.x = sp98.x;
+            var_s0->position.y = sp98.y + temp_fs2;
+            var_s0->position.z = sp98.z + temp_fs1_2;
+            var_s0->startDelay -= 1.0;
         } else {
-            var_s0->unk_0C.x += var_s0->unk_18.x;
-            var_s0->unk_0C.y += var_s0->unk_18.y;
-            var_s0->unk_0C.z += var_s0->unk_18.z;
-            var_s0->unk_08 += arg0->unk_084;
-            var_s0->unk_04 += 3.0f;
-            if (arg0->unk_080 < var_s0->unk_04) {
-                var_s0->unk_04 = arg0->unk_080;
+            var_s0->position.x += var_s0->velocity.x;
+            var_s0->position.y += var_s0->velocity.y;
+            var_s0->position.z += var_s0->velocity.z;
+            var_s0->angle += arg0->angleStep;
+            var_s0->halfWidth += 3.0f;
+            if (arg0->maxHalfWidth < var_s0->halfWidth) {
+                var_s0->halfWidth = arg0->maxHalfWidth;
             }
         }
     }
@@ -259,35 +259,35 @@ s32 HyperBeamIceBeamTrail_UpdateAll(void) {
     f32 temp_fv0;
     s32 i;
     s32 var_s2;
-    unk_D_843C3508* var_s0;
+    BeamTrail* var_s0;
 
     D_821CD9E0++;
     var_s2 = 0;
     var_s0 = &D_821CD9E8[0];
 
     for (i = 0; i < 6; i++, var_s0++) {
-        if (var_s0->unk_000 == 1) {
-            var_s0->unk_004++;
-            if (var_s0->unk_006 < var_s0->unk_004) {
-                var_s0->unk_000 = 0;
+        if (var_s0->active == 1) {
+            var_s0->frame++;
+            if (var_s0->duration < var_s0->frame) {
+                var_s0->active = 0;
             } else {
                 HyperBeamIceBeamTrail_UpdateSlot(var_s0);
                 var_s2++;
             }
 
-            if (var_s0->unk_01C < D_821CD9E0) {
-                s16 tmp = D_821CD9E0 - var_s0->unk_01C;
+            if (var_s0->fadeStartFrame < D_821CD9E0) {
+                s16 tmp = D_821CD9E0 - var_s0->fadeStartFrame;
 
                 temp_fv0 = tmp * 0.02f;
-                var_s0->unk_014 = 1.0f - temp_fv0;
-                var_s0->unk_018 = 1.0f - temp_fv0;
+                var_s0->primAlphaScale = 1.0f - temp_fv0;
+                var_s0->envAlphaScale = 1.0f - temp_fv0;
 
                 if (temp_fv0 > 1.0f) {
-                    var_s0->unk_014 = 0.0f;
+                    var_s0->primAlphaScale = 0.0f;
                 }
 
-                if (var_s0->unk_018 < 0.0f) {
-                    var_s0->unk_018 = 0.0f;
+                if (var_s0->envAlphaScale < 0.0f) {
+                    var_s0->envAlphaScale = 0.0f;
                 }
             }
         }
@@ -303,9 +303,9 @@ s32 HyperBeamIceBeamTrail_UpdateAll(void) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam, Hyper Beam.
  */
-Gfx* HyperBeamIceBeamTrail_DrawSegments(Gfx* arg0, unk_D_843C3508* arg1) {
+Gfx* HyperBeamIceBeamTrail_DrawSegments(Gfx* arg0, BeamTrail* arg1) {
     s32 i;
-    Vtx* temp_v0 = arg1->unk_088;
+    Vtx* temp_v0 = arg1->vtx;
 
     for (i = 0; i < 19; i++) {
         gSPVertex(arg0++, temp_v0, 4, 0);
@@ -320,19 +320,19 @@ Gfx* HyperBeamIceBeamTrail_DrawSegments(Gfx* arg0, unk_D_843C3508* arg1) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam, Hyper Beam.
  */
-Gfx* HyperBeamIceBeamTrail_LoadTextures(Gfx* arg0, unk_D_843C3508* arg1) {
-    unk_D_843C2C00_064* ptr;
+Gfx* HyperBeamIceBeamTrail_LoadTextures(Gfx* arg0, BeamTrail* arg1) {
+    TextureScroll* ptr;
     UNUSED s32 pad[2]; // FAKE: stack padding
 
-    ptr = &arg1->unk_068;
-    gDPLoadTextureTile_4b(arg0++, sBattleAnimAssetPointers[arg1->unk_020], G_IM_FMT_I, 32, 0, 0, 0, 31, 31, 0,
-                          G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, ptr->unk_08, ptr->unk_0A);
-    gDPSetTileSize(arg0++, G_TX_RENDERTILE, ptr->unk_00, ptr->unk_02, (ptr->unk_00 + 31) << 2, (ptr->unk_02 + 31) << 2);
+    ptr = &arg1->scrollA;
+    gDPLoadTextureTile_4b(arg0++, sBattleAnimAssetPointers[arg1->textureA], G_IM_FMT_I, 32, 0, 0, 0, 31, 31, 0,
+                          G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, ptr->shiftS, ptr->shiftT);
+    gDPSetTileSize(arg0++, G_TX_RENDERTILE, ptr->s, ptr->t, (ptr->s + 31) << 2, (ptr->t + 31) << 2);
 
-    ptr = &arg1->unk_074;
-    gDPLoadMultiTile_4b(arg0++, sBattleAnimAssetPointers[arg1->unk_024], 0x0100, 1, G_IM_FMT_I, 32, 0, 0, 0, 31, 31, 0,
-                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, ptr->unk_08, ptr->unk_0A);
-    gDPSetTileSize(arg0++, 1, ptr->unk_00, ptr->unk_02, (ptr->unk_00 + 31) << 2, (ptr->unk_02 + 31) << 2);
+    ptr = &arg1->scrollB;
+    gDPLoadMultiTile_4b(arg0++, sBattleAnimAssetPointers[arg1->textureB], 0x0100, 1, G_IM_FMT_I, 32, 0, 0, 0, 31, 31, 0,
+                        G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, ptr->shiftS, ptr->shiftT);
+    gDPSetTileSize(arg0++, 1, ptr->s, ptr->t, (ptr->s + 31) << 2, (ptr->t + 31) << 2);
 
     return arg0;
 }
@@ -361,8 +361,8 @@ Gfx* HyperBeamIceBeamTrail_DrawAll(Gfx* arg0) {
     };
 
     s32 i;
-    unk_D_843C3508* var_s6;
-    unk_D_843C3508_0A4* var_s0;
+    BeamTrail* var_s6;
+    BeamTrailSegment* var_s0;
     s32 j;
     s32 k;
     Vec3f spF0;
@@ -373,33 +373,33 @@ Gfx* HyperBeamIceBeamTrail_DrawAll(Gfx* arg0) {
 
     var_s6 = &D_821CD9E8[0];
     for (i = 0; i < 6; i++, var_s6++) {
-        if (var_s6->unk_000 == 1) {
-            var_s0 = &var_s6->unk_0A4[0];
+        if (var_s6->active == 1) {
+            var_s0 = &var_s6->segments[0];
 
-            var_s6->unk_088 = Gfx_AllocDisplayList(sizeof(Vtx) * 40);
-            var_s1 = var_s6->unk_088;
+            var_s6->vtx = Gfx_AllocDisplayList(sizeof(Vtx) * 40);
+            var_s1 = var_s6->vtx;
 
             for (j = 0; j < 20; j++, var_s0++) {
                 for (k = 0; k < 2; k++) {
-                    switch (var_s6->unk_002) {
+                    switch (var_s6->widthMode) {
                         case 0:
-                            if (var_s0->unk_00 <= 0.0) {
-                                HyperBeamIceBeamTrail_ComputeRotatedOffset(var_s0->unk_08 + ((k % 2) * 3.1415927f), &var_s0->unk_18, &spF0,
-                                              var_s0->unk_04, 1.0f, 0.0f, 0.0f);
+                            if (var_s0->startDelay <= 0.0) {
+                                HyperBeamIceBeamTrail_ComputeRotatedOffset(var_s0->angle + ((k % 2) * 3.1415927f), &var_s0->velocity, &spF0,
+                                              var_s0->halfWidth, 1.0f, 0.0f, 0.0f);
                             }
                             break;
 
                         case 1:
-                            if (var_s0->unk_00 <= 0.0) {
-                                HyperBeamIceBeamTrail_ComputeCameraRelativeOffset(k % 2, &var_s0->unk_18, &var_s0->unk_0C, &spF0, var_s0->unk_04, 1.0f,
+                            if (var_s0->startDelay <= 0.0) {
+                                HyperBeamIceBeamTrail_ComputeCameraRelativeOffset(k % 2, &var_s0->velocity, &var_s0->position, &spF0, var_s0->halfWidth, 1.0f,
                                               0.0f, 0.0f);
                             }
                             break;
                     }
 
-                    var_s1->v.ob[0] = var_s0->unk_0C.x + spF0.x;
-                    var_s1->v.ob[1] = var_s0->unk_0C.y + spF0.y;
-                    var_s1->v.ob[2] = var_s0->unk_0C.z + spF0.z;
+                    var_s1->v.ob[0] = var_s0->position.x + spF0.x;
+                    var_s1->v.ob[1] = var_s0->position.y + spF0.y;
+                    var_s1->v.ob[2] = var_s0->position.z + spF0.z;
 
                     var_s1->v.tc[0] = (k % 2) << 0xA;
                     var_s1->v.tc[1] = (j * 0x400) / 20;
@@ -415,15 +415,15 @@ Gfx* HyperBeamIceBeamTrail_DrawAll(Gfx* arg0) {
             gSPDisplayList(arg0++, D_84389CE8);
 
             Gfx_SetCombineMode(
-                arg0++, var_s6->unk_028.unk_00, var_s6->unk_028.unk_04, var_s6->unk_028.unk_08, var_s6->unk_028.unk_0C,
-                var_s6->unk_028.unk_10, var_s6->unk_028.unk_14, var_s6->unk_028.unk_18, var_s6->unk_028.unk_1C,
-                var_s6->unk_048.unk_00, var_s6->unk_048.unk_04, var_s6->unk_048.unk_08, var_s6->unk_048.unk_0C,
-                var_s6->unk_048.unk_10, var_s6->unk_048.unk_14, var_s6->unk_048.unk_18, var_s6->unk_048.unk_1C);
+                arg0++, var_s6->combineCycle0.colorA, var_s6->combineCycle0.colorB, var_s6->combineCycle0.colorC, var_s6->combineCycle0.colorD,
+                var_s6->combineCycle0.alphaA, var_s6->combineCycle0.alphaB, var_s6->combineCycle0.alphaC, var_s6->combineCycle0.alphaD,
+                var_s6->combineCycle1.colorA, var_s6->combineCycle1.colorB, var_s6->combineCycle1.colorC, var_s6->combineCycle1.colorD,
+                var_s6->combineCycle1.alphaA, var_s6->combineCycle1.alphaB, var_s6->combineCycle1.alphaC, var_s6->combineCycle1.alphaD);
 
-            gDPSetPrimColor(arg0++, 0, var_s6->unk_008.unk_04, var_s6->unk_008.unk_00.r, var_s6->unk_008.unk_00.g,
-                            var_s6->unk_008.unk_00.b, (u8)(var_s6->unk_008.unk_00.a * var_s6->unk_014));
-            gDPSetEnvColor(arg0++, var_s6->unk_00D.unk_00.r, var_s6->unk_00D.unk_00.g, var_s6->unk_00D.unk_00.b,
-                           (u8)(var_s6->unk_00D.unk_00.a * var_s6->unk_018));
+            gDPSetPrimColor(arg0++, 0, var_s6->primColor.lodFrac, var_s6->primColor.color.r, var_s6->primColor.color.g,
+                            var_s6->primColor.color.b, (u8)(var_s6->primColor.color.a * var_s6->primAlphaScale));
+            gDPSetEnvColor(arg0++, var_s6->envColor.color.r, var_s6->envColor.color.g, var_s6->envColor.color.b,
+                           (u8)(var_s6->envColor.color.a * var_s6->envAlphaScale));
 
             arg0 = HyperBeamIceBeamTrail_LoadTextures(arg0, var_s6);
 

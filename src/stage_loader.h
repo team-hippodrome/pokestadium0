@@ -31,8 +31,8 @@ typedef struct StageContext {
     // Color-buffer descriptors with optional depth buffers. StageLoader_SetupFrame
     // selects their img_p as the RDP color destination through gDPSetColorImage.
     union {
-        /* 0x18 */ DepthBuffer* renderTargets[3];
-        /* 0x18 */ DepthBuffer* unk_18[3];
+        /* 0x18 */ GfxImage* renderTargets[3];
+        /* 0x18 */ GfxImage* unk_18[3];
     };
 } StageContext; // size = 0x24
 
@@ -79,7 +79,7 @@ void StageLoader_RunFrames(s32 timer);
 s32 BgStage_RunUntilCondition(u32 timer, s32 (*f)(u8));
 s32 BgStage_WaitForCondition(s32 (*arg0)(u8), s32 arg1, s32 arg2);
 void StageContext_SetClearColor(u16 color);
-DepthBuffer* StageContext_GetCurrentImage(void);
+GfxImage* StageContext_GetCurrentImage(void);
 s32 StageContext_IsHighResolution(void);
 void BgStage_DrawFrame(void);                            /* extern */
 M2C_UNK func_80006780();                            /* extern */

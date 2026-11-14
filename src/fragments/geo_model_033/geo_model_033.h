@@ -19,7 +19,7 @@ typedef struct DemoGeoTeam {
 // Geo callback node; callbackArg holds a team index, or (team << 16) | slot.
 typedef struct DemoGeoNode {
     /* 0x00 */ GraphNode node;
-    /* 0x18 */ Gfx* unk_18;
+    /* 0x18 */ Gfx* displayList; // @unverified: built by the geo callbacks as in GeoDisplayListNode
     /* 0x1C */ char unk1C[0x4];
     /* 0x20 */ s16 unk_20;
     /* 0x22 */ s16 unk_22;

@@ -94,12 +94,11 @@ extern GameOptions sAreaSelectGameOptions;
 
 #include "moves.h"
 #include "pokemon.h"
-extern unk_D_843901B0 gCameraPreset;
 extern f32 gCameraDistTarget;
 extern f32 D_8219A534;
 
 extern CameraNode sStageCamera;
-extern unk_D_8690A610 sStageFog;
+extern GeoFogNode sStageFog;
 extern GraphNode sStageLayout0;
 extern GraphNode sStageLayout1;
 extern GraphNode sStageLayout3;
@@ -111,8 +110,8 @@ extern void* sStageBackdrop;
 extern GraphNode* sStageRoot;
 extern GraphNode* sSide1ThumbnailRoot;
 extern GraphNode* sSide2ThumbnailRoot;
-extern DepthBuffer* sSide1PokemonThumbnail;
-extern DepthBuffer* sSide2PokemonThumbnail;
+extern GfxImage* sSide1PokemonThumbnail;
+extern GfxImage* sSide2PokemonThumbnail;
 extern BattleSessionTeams* sBattleSides;
 extern s32 sIsPaused;
 extern s32 sNextFaintBatch;

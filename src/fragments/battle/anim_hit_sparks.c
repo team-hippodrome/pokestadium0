@@ -7,8 +7,8 @@ extern M2C_UNK BattleAnim_RunOscillatingFlameUnderneathPokemon;
 extern M2C_UNK D_8218E7B8;
 extern M2C_UNK func_8214E67C;
 s32 func_82107CF0(s32);
-void func_82163D7C(s8 *arg0);
-void func_82164AD0(s8 *arg0);
+void func_82163D7C(Particle* arg0);
+void func_82164AD0(Particle* arg0);
 
 /**
  * Particle callback for the growing spark: waits its delay, shows for 12 frames, fades out
@@ -24,7 +24,7 @@ void BattleAnim_CallbackUnusedGrowingSparkVariant(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
+            if (Particle_DecrementParam0ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;

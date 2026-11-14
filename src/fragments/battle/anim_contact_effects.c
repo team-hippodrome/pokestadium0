@@ -25,47 +25,47 @@ M2C_UNK func_82143478(s8 *, u16);
 s16 Particle_GetUnkCE();
 s32 func_82140690(s8 *);
 u16 func_8213C484(s8 *);
-void func_82163D7C(s8 *arg0);
+void func_82163D7C(Particle* arg0);
 
 /**
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Scratch, Cut, Vine Whip, Fury Swipes, Slash.
  */
 void BattleAnim_SetupSlashingMoveUse(Particle* arg0) {
-    s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
 
     switch (Particle_FieldCE_GetS32_0C040(arg0)) {
         case 0:
-            Particle_Field94_AddX_0A578(arg0, 0x4000);
+            Particle_Rotation_AddX_0A578(arg0, 0x4000);
             break;
 
         case 1:
-            Particle_Field94_AddX_0A578(arg0, -0x3000);
-            Particle_Field94_AddY_0A594(arg0, 0x4000);
-            Particle_Field94_AddZ_0A5B0(arg0, 0x2000);
+            Particle_Rotation_AddX_0A578(arg0, -0x3000);
+            Particle_Rotation_AddY_0A594(arg0, 0x4000);
+            Particle_Rotation_AddZ_0A5B0(arg0, 0x2000);
             break;
 
         case 2:
-            Particle_Field94_AddX_0A578(arg0, 0x2000);
-            Particle_Field94_AddY_0A594(arg0, 0x2000);
-            Particle_Field94_AddZ_0A5B0(arg0, 0x2000);
+            Particle_Rotation_AddX_0A578(arg0, 0x2000);
+            Particle_Rotation_AddY_0A594(arg0, 0x2000);
+            Particle_Rotation_AddZ_0A5B0(arg0, 0x2000);
             break;
 
         case 3:
-            Particle_Field94_AddX_0A578(arg0, -0x8000);
-            Particle_Field94_AddY_0A594(arg0, 0x2000);
-            Particle_Field94_AddZ_0A5B0(arg0, 0x6000);
+            Particle_Rotation_AddX_0A578(arg0, -0x8000);
+            Particle_Rotation_AddY_0A594(arg0, 0x2000);
+            Particle_Rotation_AddZ_0A5B0(arg0, 0x6000);
             break;
 
         case 4:
-            Particle_Field94_AddX_0A578(arg0, -0x4000);
-            Particle_Field94_AddY_0A594(arg0, 0x4000);
-            Particle_Field94_AddZ_0A5B0(arg0, 0x4000);
+            Particle_Rotation_AddX_0A578(arg0, -0x4000);
+            Particle_Rotation_AddY_0A594(arg0, 0x4000);
+            Particle_Rotation_AddZ_0A5B0(arg0, 0x4000);
             break;
     }
 
-    Particle_Field38_AddYScaled_08E90(arg0, 10.0f);
+    Particle_PositionOffset_AddYScaled_08E90(arg0, 10.0f);
     Particle_AddPositionFromRotationTemplate1(arg0, (sp26 - 1) * 10.0f);
     Particle_SetScaleScaled(arg0, 1.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp24);
@@ -76,10 +76,10 @@ void BattleAnim_SetupSlashingMoveUse(Particle* arg0) {
  * Particle callback (lifecycle at 0xAE): init, loop frames 0-7 once, fade alpha out by 64,
  * then mark inactive. Scale moves toward 3.5 by 0.25 every frame.
  */
-void func_8215FAA4(s8 *arg0) {
+void func_8215FAA4(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8215F930(arg0);
@@ -103,50 +103,50 @@ void func_8215FAA4(s8 *arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupRazorWindHitEffect(Particle* arg0) {
-    s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
 
     Particle_FieldCF_GetS16_0C058(arg0);
 
     switch (sp26) {
         case 0:
-            Particle_Field94_AddX_0A578(arg0, 0x5800);
-            Particle_Field94_AddY_0A594(arg0, 0x5800);
-            Particle_Field94_AddZ_0A5B0(arg0, -0x6000);
+            Particle_Rotation_AddX_0A578(arg0, 0x5800);
+            Particle_Rotation_AddY_0A594(arg0, 0x5800);
+            Particle_Rotation_AddZ_0A5B0(arg0, -0x6000);
             break;
 
         case 1:
-            Particle_Field94_AddX_0A578(arg0, 0x6000);
-            Particle_Field94_AddY_0A594(arg0, 0);
-            Particle_Field94_AddZ_0A5B0(arg0, 0x5800);
+            Particle_Rotation_AddX_0A578(arg0, 0x6000);
+            Particle_Rotation_AddY_0A594(arg0, 0);
+            Particle_Rotation_AddZ_0A5B0(arg0, 0x5800);
             break;
 
         case 2:
-            Particle_Field94_AddX_0A578(arg0, 0x2000);
-            Particle_Field94_AddY_0A594(arg0, 0x2000);
-            Particle_Field94_AddZ_0A5B0(arg0, 0x2000);
+            Particle_Rotation_AddX_0A578(arg0, 0x2000);
+            Particle_Rotation_AddY_0A594(arg0, 0x2000);
+            Particle_Rotation_AddZ_0A5B0(arg0, 0x2000);
             break;
 
         case 3:
-            Particle_Field94_AddX_0A578(arg0, 0x6000);
+            Particle_Rotation_AddX_0A578(arg0, 0x6000);
             break;
 
         case 4:
-            Particle_Field94_AddX_0A578(arg0, 0);
-            Particle_Field94_AddY_0A594(arg0, 0);
-            Particle_Field94_AddZ_0A5B0(arg0, 0);
+            Particle_Rotation_AddX_0A578(arg0, 0);
+            Particle_Rotation_AddY_0A594(arg0, 0);
+            Particle_Rotation_AddZ_0A5B0(arg0, 0);
             break;
 
         case 5:
-            Particle_Field94_AddX_0A578(arg0, 0x6000);
-            Particle_Field94_AddY_0A594(arg0, 0x2800);
-            Particle_Field94_AddZ_0A5B0(arg0, 0x5800);
+            Particle_Rotation_AddX_0A578(arg0, 0x6000);
+            Particle_Rotation_AddY_0A594(arg0, 0x2800);
+            Particle_Rotation_AddZ_0A5B0(arg0, 0x5800);
             break;
     }
 
-    Particle_Field38_AddYScaled_08E90(arg0, 10.0f);
+    Particle_PositionOffset_AddYScaled_08E90(arg0, 10.0f);
     Particle_SetScaleScaled(arg0, 1.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0xC);
-    Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 3);
+    Particle_Param0_SetS16_0BCA8(arg0, sp26 * 3);
     Particle_DisableRendering(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -163,7 +163,7 @@ void BattleAnim_RunRazorWindHitEffect(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
+            if (Particle_DecrementParam0ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
@@ -189,42 +189,42 @@ void BattleAnim_RunRazorWindHitEffect(Particle* arg0) {
  * for Razor Leaf, Petal Dance.
  */
 void BattleAnim_SetupPetalDanceRazorLeafHitEffect(Particle* arg0) {
-    s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
 
     switch (sp26) {
         case 0:
-            Particle_Field94_AddX_0A578(arg0, 0x5800);
-            Particle_Field94_AddY_0A594(arg0, 0x5800);
-            Particle_Field94_AddZ_0A5B0(arg0, -0x6000);
+            Particle_Rotation_AddX_0A578(arg0, 0x5800);
+            Particle_Rotation_AddY_0A594(arg0, 0x5800);
+            Particle_Rotation_AddZ_0A5B0(arg0, -0x6000);
             break;
 
         case 1:
-            Particle_Field94_AddX_0A578(arg0, 0x6000);
-            Particle_Field94_AddY_0A594(arg0, 0);
-            Particle_Field94_AddZ_0A5B0(arg0, 0x5800);
+            Particle_Rotation_AddX_0A578(arg0, 0x6000);
+            Particle_Rotation_AddY_0A594(arg0, 0);
+            Particle_Rotation_AddZ_0A5B0(arg0, 0x5800);
             break;
 
         case 2:
-            Particle_Field94_AddX_0A578(arg0, 0x2000);
-            Particle_Field94_AddY_0A594(arg0, 0x2000);
-            Particle_Field94_AddZ_0A5B0(arg0, 0x2000);
+            Particle_Rotation_AddX_0A578(arg0, 0x2000);
+            Particle_Rotation_AddY_0A594(arg0, 0x2000);
+            Particle_Rotation_AddZ_0A5B0(arg0, 0x2000);
             break;
 
         case 3:
-            Particle_Field94_AddX_0A578(arg0, 0x6000);
+            Particle_Rotation_AddX_0A578(arg0, 0x6000);
             break;
 
         case 4:
-            Particle_Field94_AddX_0A578(arg0, 0);
-            Particle_Field94_AddY_0A594(arg0, 0);
-            Particle_Field94_AddZ_0A5B0(arg0, 0);
+            Particle_Rotation_AddX_0A578(arg0, 0);
+            Particle_Rotation_AddY_0A594(arg0, 0);
+            Particle_Rotation_AddZ_0A5B0(arg0, 0);
             break;
 
         case 5:
-            Particle_Field94_AddX_0A578(arg0, 0x6000);
-            Particle_Field94_AddY_0A594(arg0, 0x2800);
-            Particle_Field94_AddZ_0A5B0(arg0, 0x5800);
+            Particle_Rotation_AddX_0A578(arg0, 0x6000);
+            Particle_Rotation_AddY_0A594(arg0, 0x2800);
+            Particle_Rotation_AddZ_0A5B0(arg0, 0x5800);
             break;
     }
 
@@ -245,7 +245,7 @@ void BattleAnim_SetupPetalDanceRazorLeafHitEffect(Particle* arg0) {
     }
 
     Particle_SetScaleScaled(arg0, 1.0f);
-    Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 2);
+    Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
     Particle_DisableRendering(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -261,7 +261,7 @@ void BattleAnim_RunPetalDanceRazorLeafHitEffect(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
+            if (Particle_DecrementParam0ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
@@ -284,7 +284,7 @@ void BattleAnim_RunPetalDanceRazorLeafHitEffect(Particle* arg0) {
 void BattleAnim_SetupSlashingMoveFullScreenFlash(Particle* arg0) {
     Particle_SetScaleScaled(arg0, 1.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_Field94_AddZ_0A5B0(arg0, 0x2500);
+    Particle_Rotation_AddZ_0A5B0(arg0, 0x2500);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -294,12 +294,12 @@ void BattleAnim_SetupSlashingMoveFullScreenFlash(Particle* arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Scratch, Cut, Vine Whip, Fury Swipes, Slash.
  */
-void BattleAnim_RunSlashingMoveFullScreenFlash(s8 *arg0) {
+void BattleAnim_RunSlashingMoveFullScreenFlash(Particle* arg0) {
     s16 sp26;
     s16 temp_v1;
 
     sp26 = Particle_GetUnkCE();
-    temp_v1 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v1 = arg0->lifecycle;
     switch (temp_v1) {                              /* irregular */
     case 1:
         BattleAnim_SetupSlashingMoveFullScreenFlash(arg0);
@@ -329,7 +329,7 @@ void BattleAnim_SetupSlashMoveWhiteFlashOverlay(Particle* arg0) {
     Particle_SetScaleScaled(arg0, 1.0f);
     Particle_SetPosition(arg0, 320.0f, 0.0f, 0.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_Field94_AddZ_0A5B0(arg0, -0x2800);
+    Particle_Rotation_AddZ_0A5B0(arg0, -0x2800);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -339,12 +339,12 @@ void BattleAnim_SetupSlashMoveWhiteFlashOverlay(Particle* arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Scratch, Cut, Vine Whip, Crabhammer, Fury Swipes, Slash.
  */
-void BattleAnim_RunSlashMoveWhiteFlashOverlay(s8 *arg0) {
+void BattleAnim_RunSlashMoveWhiteFlashOverlay(Particle* arg0) {
     s16 sp26;
     s16 temp_v1;
 
     sp26 = Particle_GetUnkCE();
-    temp_v1 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v1 = arg0->lifecycle;
     switch (temp_v1) {                              /* irregular */
     case 1:
         BattleAnim_SetupSlashMoveWhiteFlashOverlay(arg0);
@@ -375,16 +375,16 @@ void BattleAnim_SlashGrowFade_InitParticle(Particle* arg0) {
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
 
     Particle_SetScaleScaled(arg0, 1.0f);
-    Particle_Field94_AddX_0A578(arg0, 0x2000);
-    Particle_Field94_AddY_0A594(arg0, 0x4000);
+    Particle_Rotation_AddX_0A578(arg0, 0x2000);
+    Particle_Rotation_AddY_0A594(arg0, 0x4000);
 
     switch (sp26) {
         case 0:
-            Particle_Field38_AddYScaled_08E90(arg0, -10.0f);
+            Particle_PositionOffset_AddYScaled_08E90(arg0, -10.0f);
             break;
 
         case 2:
-            Particle_Field38_AddYScaled_08E90(arg0, 10.0f);
+            Particle_PositionOffset_AddYScaled_08E90(arg0, 10.0f);
             break;
     }
 
@@ -396,10 +396,10 @@ void BattleAnim_SlashGrowFade_InitParticle(Particle* arg0) {
  * Particle callback: init, an 8-frame countdown, a fade-out by 32, then inactive. Loops
  * frames 0-7 and moves scale toward 5 by 0.4 every frame.
  */
-void func_821603C8(s8 *arg0) {
+void func_821603C8(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8216031C(arg0);
@@ -425,14 +425,14 @@ void func_821603C8(s8 *arg0) {
  * Fang.
  */
 void BattleAnim_HeavyHitBurstChild_InitParticle(Particle* arg0) {
-    s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
 
     Particle_SetScaleScaled(arg0, 1.0f);
-    Particle_Field74_SetScaled_0AD8C(arg0, 0.4f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.4f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp24);
     Particle_SetPrimAlpha(arg0, 0x64);
-    Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 4);
+    Particle_Param0_SetS16_0BCA8(arg0, sp26 * 4);
     Particle_DisableRendering(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -441,16 +441,16 @@ void BattleAnim_HeavyHitBurstChild_InitParticle(Particle* arg0) {
  * Particle callback: init, wait the delay in field A2, then the later stages of
  * func_82160494's effect before it is marked inactive.
  */
-void func_82160528(s8 *arg0) {
+void func_82160528(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82160494(arg0);
         return;
     case 2:
-        if (func_8213CA80(arg0, M2C_FIELD(arg0, s16 *, 0xA2)) != 0) {
+        if (func_8213CA80(arg0, arg0->param0) != 0) {
             func_8213CB3C(arg0);
             return;
         }
@@ -475,7 +475,7 @@ void BattleAnim_SetupSmallSand(s8 *arg0) {
     s16 sp26;
     u16 sp24;
 
-    sp26 = Particle_GetUnkAC();
+    sp26 = Particle_GetSpawnIndex();
     sp24 = func_8213C484(arg0);
     func_821401D4(arg0, 0x3E800000);
     M2C_FIELD(arg0, f32 *, 0x5C) = (f32) ((func_8000F150() * 0.5f) + 0.25f);
@@ -492,10 +492,10 @@ void BattleAnim_SetupSmallSand(s8 *arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Sand Attack.
  */
-void BattleAnim_RunSmallSand(s8 *arg0) {
+void BattleAnim_RunSmallSand(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         BattleAnim_SetupSmallSand(arg0);
@@ -525,7 +525,7 @@ void BattleAnim_SetupLargeSand(s8 *arg0) {
     s16 sp26;
     u16 sp24;
 
-    sp26 = Particle_GetUnkAC();
+    sp26 = Particle_GetSpawnIndex();
     sp24 = func_8213C484(arg0);
     func_821401D4(arg0, 0x3F000000);
     M2C_FIELD(arg0, f32 *, 0x5C) = (f32) ((func_8000F150() * 0.5f) + 0.25f);
@@ -542,10 +542,10 @@ void BattleAnim_SetupLargeSand(s8 *arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Sand Attack.
  */
-void BattleAnim_RunLargeSand(s8 *arg0) {
+void BattleAnim_RunLargeSand(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         BattleAnim_SetupLargeSand(arg0);
@@ -574,12 +574,12 @@ void BattleAnim_RunLargeSand(s8 *arg0) {
  */
 void BattleAnim_SetupSandAttackUseEffect(Particle* arg0) {
     UNUSED s16 pad; // FAKE: stack padding
-    s16 sp24 = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp24 = Particle_SpawnIndex_GetS16_0C038(arg0);
 
     Particle_SetScaleScaled(arg0, 0.25f);
     arg0->motionTarget.y = (MathUtil_Random_ZeroOne() * 0.5f) + 0.4f;
-    Particle_Field94_AddY_0A594(arg0, 0x800 - ((0x1000 / func_8213C494(arg0)) * sp24));
-    Particle_Field74_SetScaled_0AD8C(arg0, (2.0f * MathUtil_Random_ZeroOne()) + 5.0f);
+    Particle_Rotation_AddY_0A594(arg0, 0x800 - ((0x1000 / func_8213C494(arg0)) * sp24));
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, (2.0f * MathUtil_Random_ZeroOne()) + 5.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x32);
     Particle_SetPrimAlpha(arg0, 0xFF);
     Particle_AdvanceLifecycle(arg0);
@@ -589,10 +589,10 @@ void BattleAnim_SetupSandAttackUseEffect(Particle* arg0) {
  * Particle callback of the Sand Attack animation. Player sweep (all 165 moves used in battle):
  * only Sand Attack reached this function.
  */
-void BattleAnim_SandAttackParticleUpdate(s8 *arg0) {
+void BattleAnim_SandAttackParticleUpdate(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_821609F0(arg0);
@@ -617,7 +617,7 @@ void BattleAnim_SandAttackParticleUpdate(s8 *arg0) {
 void func_82160BB8(s8 *arg0) {
     s16 sp26;
 
-    sp26 = Particle_GetUnkAC();
+    sp26 = Particle_GetSpawnIndex();
     func_821401D4(arg0, 0x3ECCCCCD);
     func_8213DDB8(arg0, 0, 0, 0xA);
     M2C_FIELD(arg0, f32 *, 0x5C) = (f32) ((func_8000F150() * 0.5f) + 0.25f);
@@ -632,10 +632,10 @@ void func_82160BB8(s8 *arg0) {
  * Particle callback for the spreading particle of func_82160BB8: loops frames 0-7 while it
  * shrinks toward 0.75, slows its step to 0.5 and rises, then fades and is marked inactive.
  */
-void func_82160CCC(s8 *arg0) {
+void func_82160CCC(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82160BB8(arg0);
@@ -664,13 +664,13 @@ void func_82160CCC(s8 *arg0) {
  * for Sand Attack.
  */
 void BattleAnim_SetupSandAttackHitEffect(Particle* arg0) {
-    s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
 
     Particle_SetScaleScaled(arg0, 0.3f);
     Particle_SetRandomVelocityXYZ(arg0, 0xA, 5, 0xA);
-    Particle_Field38_AddYScaled_08E90(arg0, 15.0f);
-    Particle_Field74_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0xA) * 0.1f) + 1.5f);
-    Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 2);
+    Particle_PositionOffset_AddYScaled_08E90(arg0, 15.0f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0xA) * 0.1f) + 1.5f);
+    Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x32);
     Particle_SetPrimAlpha(arg0, 0xFF);
     Particle_DisableRendering(arg0);
@@ -681,16 +681,16 @@ void BattleAnim_SetupSandAttackHitEffect(Particle* arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Sand Attack.
  */
-void BattleAnim_RunSandAttackHitEffect(s8 *arg0) {
+void BattleAnim_RunSandAttackHitEffect(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82160DC4(arg0);
         return;
     case 2:
-        if (func_8213CA80(arg0, M2C_FIELD(arg0, s16 *, 0xA2)) != 0) {
+        if (func_8213CA80(arg0, arg0->param0) != 0) {
             func_8213CB3C(arg0);
             return;
         }
@@ -717,15 +717,15 @@ void BattleAnim_RunSandAttackHitEffect(s8 *arg0) {
  * Bash, Sky Attack, Crabhammer, Explosion, Rock Slide and Struggle.
  */
 void BattleAnim_HeavyHitAnimatedRiseFade_InitParticle(Particle* arg0) {
-    s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
 
     Particle_SetScaleScaled(arg0, 0.25f);
-    Particle_Field94_AddY_0A594(arg0, sp26 << 0xC);
-    Particle_Field74_SetScaled_0AD8C(arg0, (2.0f * MathUtil_Random_ZeroOne()) + 6.0f);
-    Particle_Field7C_SetYScaled_0AF24(arg0, (MathUtil_Random_ZeroOne() * 3.0f) + 1.0f);
+    Particle_Rotation_AddY_0A594(arg0, sp26 << 0xC);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, (2.0f * MathUtil_Random_ZeroOne()) + 6.0f);
+    Particle_MotionStep_SetYScaled_0AF24(arg0, (MathUtil_Random_ZeroOne() * 3.0f) + 1.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0xA);
     Particle_SetPrimAlpha(arg0, 0x64);
-    Particle_FieldA6_SetS16_0BCA8(arg0, 7);
+    Particle_Param0_SetS16_0BCA8(arg0, 7);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -746,7 +746,7 @@ void BattleAnim_HeavyHitAnimatedRiseFade(Particle* arg0) {
             Particle_AnimateFramesForwardLoopedThenAdvance((s8*)arg0, 0, 7, 1, 2, 0);
             Particle_ApproachScale(arg0, 0.8f, 0.1f);
             Particle_ApproachStepMagnitude((s8*)arg0, 1.0, 1.0f);
-            if (Particle_DecrementUnkA6ToZero(arg0) != 0) {
+            if (Particle_DecrementParam0ToZero(arg0) != 0) {
                 Particle_ApproachMotionStepY(arg0, 0.5f, 0.4f);
                 Particle_ApplyMotionStepY(arg0);
             }
@@ -772,24 +772,24 @@ void BattleAnim_HeavyHitAnimatedRiseFade(Particle* arg0) {
  * for Ice Punch, Ice Beam.
  */
 void BattleAnim_SetupIceBeamIcePunchEffect(Particle* arg0) {
-    s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
 
     switch (Particle_FieldCF_GetS16_0C058(arg0)) {
         case 0:
             Particle_SetScaleScaled(arg0, 0.75f);
             Particle_SetRandomVelocityXYZ(arg0, 0xF, 0xF, 0xF);
-            Particle_Field38_AddYScaled_08E90(arg0, 15.0f);
-            Particle_Field74_SetScaled_0AD8C(arg0, 1.0f);
+            Particle_PositionOffset_AddYScaled_08E90(arg0, 15.0f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 1.0f);
             break;
 
         case 1:
             Particle_SetScaleScaled(arg0, 0.5f);
             Particle_SetRandomVelocityXYZ(arg0, 3, 3, 3);
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.4f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.4f);
             break;
     }
 
-    Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 4);
+    Particle_Param0_SetS16_0BCA8(arg0, sp26 * 4);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x13);
     Particle_SetPrimAlpha(arg0, 0xC8);
     Particle_DisableRendering(arg0);
@@ -800,16 +800,16 @@ void BattleAnim_SetupIceBeamIcePunchEffect(Particle* arg0) {
  * Particle callback: init, wait the delay in field A2, run the effect stages, then mark
  * inactive.
  */
-void func_82161288(s8 *arg0) {
+void func_82161288(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82161190(arg0);
         return;
     case 2:
-        if (func_8213CA80(arg0, M2C_FIELD(arg0, s16 *, 0xA2)) != 0) {
+        if (func_8213CA80(arg0, arg0->param0) != 0) {
             func_8213CB3C(arg0);
             return;
         }
@@ -833,15 +833,15 @@ void func_82161288(s8 *arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_CallbackOrphanDescriptor34ColorFadeDetach_InitParticle(Particle* arg0) {
-    s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
 
     Particle_SetRandomRotatedVelocityXY(arg0, 0xF, 0xF);
     Particle_SetScaleScaled(arg0, 1.0f);
-    Particle_Field74_SetScaled_0AD8C(arg0, 0.2f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.2f);
     Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
     Particle_SetEnvColor(arg0, 0xFF, 0x64, 0);
     Particle_SetPrimAlpha(arg0, 0xFF);
-    Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 4);
+    Particle_Param0_SetS16_0BCA8(arg0, sp26 * 4);
     Particle_DisableRendering(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -849,16 +849,16 @@ void BattleAnim_CallbackOrphanDescriptor34ColorFadeDetach_InitParticle(Particle*
 /**
  * Particle callback: init, wait the delay in field A2, run the effect stages, then detach.
  */
-void func_8216140C(s8 *arg0) {
+void func_8216140C(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82161358(arg0);
         return;
     case 2:
-        if (func_8213CA80(arg0, M2C_FIELD(arg0, s16 *, 0xA2)) != 0) {
+        if (func_8213CA80(arg0, arg0->param0) != 0) {
             func_8213CB3C(arg0);
             return;
         }
@@ -925,16 +925,16 @@ void BattleAnim_RunGroundedCircularHitSpark(Particle* arg0) {
 void BattleAnim_SetupUnusedGlitterVariant(Particle* arg0) {
     Vec3s sp28;
 
-    Particle_FieldAC_GetS16_0C038(arg0);
+    Particle_SpawnIndex_GetS16_0C038(arg0);
     Particle_SetScaleScaled(arg0, 0.1f);
     sp28.x = MathUtil_Random16();
     sp28.y = MathUtil_Random16();
     sp28.z = 0;
-    Particle_Field9A_SetVecFromVec3s_0A37C(arg0, sp28);
+    Particle_Rotation_SetVecFromVec3s_0A37C(arg0, sp28);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x15);
     Particle_SetPrimAlpha(arg0, 0xFF);
-    Particle_FieldA6_SetS16_0BCA8(arg0, ParticleMath_RandomRange(5) + 8);
-    Particle_Field74_SetScaled_0AD8C(arg0, 5.0f);
+    Particle_Param0_SetS16_0BCA8(arg0, ParticleMath_RandomRange(5) + 8);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, 5.0f);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -942,10 +942,10 @@ void BattleAnim_SetupUnusedGlitterVariant(Particle* arg0) {
  * Particle callback: init, then speeds up toward step magnitude 2 and fades out once the
  * spawn step reports done. Moves along its rotation while running.
  */
-void func_821616BC(s8 *arg0) {
+void func_821616BC(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_821615F8(arg0);
@@ -973,12 +973,12 @@ void BattleAnim_SetupPointyMoveHitSparkChild(Particle* arg0) {
     Vec3s sp28;
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
 
-    Particle_FieldAC_GetS16_0C038(arg0);
+    Particle_SpawnIndex_GetS16_0C038(arg0);
 
     sp28.x = ParticleMath_RandomSigned(0x2000);
     sp28.y = ParticleMath_RandomSignedOffset(0x2000, 0x8000);
     sp28.z = 0;
-    Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp28);
+    Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp28);
 
     switch (sp26) {
         case 0:
@@ -993,8 +993,8 @@ void BattleAnim_SetupPointyMoveHitSparkChild(Particle* arg0) {
     }
 
     Particle_SetPrimAlpha(arg0, 0xFF);
-    Particle_FieldA6_SetS16_0BCA8(arg0, ParticleMath_RandomRange(5) + 8);
-    Particle_Field74_SetScaled_0AD8C(arg0, 6.0f);
+    Particle_Param0_SetS16_0BCA8(arg0, ParticleMath_RandomRange(5) + 8);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, 6.0f);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -1005,10 +1005,10 @@ void BattleAnim_SetupPointyMoveHitSparkChild(Particle* arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Horn Attack, Poison Sting, Twineedle, Pin Missile, Peck, Spike Cannon.
  */
-void BattleAnim_RunPointyMoveHitSparkChild(s8 *arg0) {
+void BattleAnim_RunPointyMoveHitSparkChild(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_8216177C(arg0);
@@ -1038,63 +1038,63 @@ void BattleAnim_SetupPhysicalHitPurpleSmoke(Particle* arg0) {
     Vec3s sp28;
     s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
 
-    Particle_FieldAC_GetS16_0C038(arg0);
+    Particle_SpawnIndex_GetS16_0C038(arg0);
     Particle_SetScaleScaled(arg0, 1.0f);
 
     switch (sp26) {
         case 0:
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 8);
             Particle_SetPrimAlpha(arg0, 0x64);
-            Particle_Field74_SetScaled_0AD8C(arg0, 5.0f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 5.0f);
             sp28.x = ParticleMath_RandomSigned(0x2000);
             sp28.y = ParticleMath_RandomSignedOffset(0x2000, 0x8000);
             sp28.z = 0;
-            Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp28);
+            Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp28);
             break;
 
         case 1:
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 8);
             Particle_SetPrimAlpha(arg0, 0x64);
-            Particle_Field74_SetScaled_0AD8C(arg0, 5.0f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 5.0f);
             sp28.x = ParticleMath_RandomSigned(0x2000);
             sp28.y = ParticleMath_RandomSignedOffset(0x2000, 0x8000);
             sp28.z = 0;
-            Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp28);
+            Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp28);
             break;
 
         case 2:
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 8);
             Particle_SetPrimAlpha(arg0, 0x64);
-            Particle_Field38_SetYScaled_08CA0(arg0, -10.0f);
-            Particle_Field74_SetScaled_0AD8C(arg0, 5.0f);
+            Particle_PositionOffset_SetYScaled_08CA0(arg0, -10.0f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 5.0f);
             sp28.x = ParticleMath_RandomSigned(0x2000);
             sp28.y = ParticleMath_RandomSignedOffset(0x2000, 0x8000);
             sp28.z = 0;
-            Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp28);
+            Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp28);
             break;
 
         case 3:
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 9);
             Particle_SetPrimAlpha(arg0, 0x96);
-            Particle_Field74_SetScaled_0AD8C(arg0, 3.0f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 3.0f);
             sp28.x = ParticleMath_RandomSigned(0x2000);
             sp28.y = ParticleMath_RandomSignedOffset(0x2000, 0x8000);
             sp28.z = 0;
-            Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp28);
+            Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp28);
             break;
 
         case 4:
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 5);
             Particle_SetPrimAlpha(arg0, 0x96);
-            Particle_Field74_SetScaled_0AD8C(arg0, 4.0f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 4.0f);
             sp28.x = ParticleMath_RandomSigned(0x3000);
             sp28.y = ParticleMath_RandomSignedOffset(0x3000, 0x8000);
             sp28.z = 0;
-            Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp28);
+            Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp28);
             break;
     }
 
-    Particle_FieldA6_SetS16_0BCA8(arg0, ParticleMath_RandomRange(5) + 8);
+    Particle_Param0_SetS16_0BCA8(arg0, ParticleMath_RandomRange(5) + 8);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -1126,7 +1126,7 @@ void BattleAnim_RunPhysicalHitPurpleSmoke(Particle* arg0) {
 
                 case 4:
                     Particle_ApproachStepMagnitude(arg0, 1.0f, 0.75f);
-                    Particle_Field38_AddYScaled_08E90(arg0, 0.5f);
+                    Particle_PositionOffset_AddYScaled_08E90(arg0, 0.5f);
                     Particle_PrimAlpha_Approach_0BC2C(arg0, 0x32, 6);
                     break;
 
@@ -1154,18 +1154,18 @@ void BattleAnim_RunPhysicalHitPurpleSmoke(Particle* arg0) {
  * @unverified Name guessed from the code.
  */
 void BattleAnim_SwiftBurstChild_InitParticle(Particle* arg0) {
-    s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp2E = Particle_SpawnIndex_GetS16_0C038(arg0);
     Vec3s sp28;
 
     Particle_SetScaleScaled(arg0, 0.1f);
     sp28.x = ParticleMath_RandomRange(0x10000);
     sp28.y = ParticleMath_RandomRange(0x10000);
     sp28.z = 0;
-    Particle_Field9A_SetVecFromVec3s_0A37C(arg0, sp28);
-    Particle_Field9A_SetZ_0A3EC(arg0, ParticleMath_RandomSignedOffsetBySign(0x400, 0x400));
-    Particle_Field74_SetScaled_0AD8C(arg0, 8.0f);
+    Particle_Rotation_SetVecFromVec3s_0A37C(arg0, sp28);
+    Particle_RotationStep_SetZ_0A3EC(arg0, ParticleMath_RandomSignedOffsetBySign(0x400, 0x400));
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, 8.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x17);
-    Particle_FieldA6_SetS16_0BCA8(arg0, sp2E * 0);
+    Particle_Param0_SetS16_0BCA8(arg0, sp2E * 0);
     Particle_DisableRendering(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -1181,7 +1181,7 @@ void BattleAnim_SwiftBurstChild(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
+            if (Particle_DecrementParam0ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
@@ -1205,7 +1205,7 @@ void BattleAnim_SwiftBurstChild(Particle* arg0) {
     }
 
     if (Particle_IsRenderingEnabled(arg0) != 0) {
-        Particle_Field94_AddXFromField9A_0A4B4(arg0);
+        Particle_Rotation_AddXFromRotationStep_0A4B4(arg0);
         Particle_SetMotionStepFromRotationXY(arg0);
         Particle_ApplyMotionStep(arg0);
     }
@@ -1243,7 +1243,7 @@ void BattleAnim_RunSwiftHitEffect2(Particle* arg0) {
  * @unverified Name guessed from the code.
  */
 void BattleAnim_SetupSharedScalePulseFallSetup(Particle* arg0) {
-    s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp2E = Particle_SpawnIndex_GetS16_0C038(arg0);
     s16 sp2C = Particle_FieldCE_GetS32_0C040(arg0);
     s16 sp2A = Particle_FieldCF_GetS16_0C058(arg0);
     Vec3s sp24;
@@ -1252,14 +1252,14 @@ void BattleAnim_SetupSharedScalePulseFallSetup(Particle* arg0) {
     sp24.y = ParticleMath_RandomRange(0x10000);
     sp24.z = 0;
 
-    Particle_Field9A_SetVecFromVec3s_0A37C(arg0, sp24);
-    Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
-    Particle_Field78_SetScaled_0ADA4(arg0, 0.0f);
+    Particle_Rotation_SetVecFromVec3s_0A37C(arg0, sp24);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.0f);
+    Particle_MagnitudeStep_SetScaled_0ADA4(arg0, 0.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp2A);
     Particle_SetScaleScaled(arg0, 0.0f);
     Particle_SetScaleTarget(arg0, 0.3f);
     Particle_SetScaleStep(arg0, 0.05f);
-    Particle_FieldA6_SetS16_0BCA8(arg0, sp2E * 2);
+    Particle_Param0_SetS16_0BCA8(arg0, sp2E * 2);
 
     switch (sp2C) {
         case 0:
@@ -1277,61 +1277,61 @@ void BattleAnim_SetupSharedScalePulseFallSetup(Particle* arg0) {
             Particle_SetScaleTarget(arg0, 0.1f);
             Particle_SetScaleStep(arg0, 0.03f);
             Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(0xC, 5));
-            Particle_FieldA6_SetS16_0BCA8(arg0, sp2E * 1);  // FAKE
+            Particle_Param0_SetS16_0BCA8(arg0, sp2E * 1);  // FAKE
             break;
 
         case 3:
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.2f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.2f);
             Particle_SetScaleScaled(arg0, 0.1f);
             Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(0x14, 0x1E));
-            Particle_FieldA6_SetS16_0BCA8(arg0, sp2E * 4);
+            Particle_Param0_SetS16_0BCA8(arg0, sp2E * 4);
             break;
 
         case 5:
             Particle_SetRandomVelocityXYZ(arg0, 0, 0xF, 0x19);
-            Particle_Field38_AddYScaled_08E90(arg0, 15.0f);
+            Particle_PositionOffset_AddYScaled_08E90(arg0, 15.0f);
             Particle_SetScaleTarget(arg0, 0.15f);
             Particle_SetScaleStep(arg0, 0.02f);
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.1f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.1f);
             break;
 
         case 6:
             Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(0x1E, 0x14));
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.3f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.3f);
             break;
 
         case 8:
             Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(8, 2));
             Particle_SetScaleTarget(arg0, 0.1f);
             Particle_SetScaleStep(arg0, 0.04f);
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.4f);
-            Particle_FieldA6_SetS16_0BCA8(arg0, 0);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.4f);
+            Particle_Param0_SetS16_0BCA8(arg0, 0);
             break;
 
         case 7:
             Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(0xA, 2));
             Particle_SetScaleTarget(arg0, 0.2f);
             Particle_SetScaleStep(arg0, 0.025f);
-            Particle_Field74_SetScaled_0AD8C(arg0, 1.0f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 1.0f);
             break;
 
         case 9:
             Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(0x1E, 0x14));
             Particle_SetScaleTarget(arg0, 0.3f);
             Particle_SetScaleStep(arg0, 0.025f);
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
-            Particle_Field78_SetScaled_0ADA4(arg0, 0.02f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.0f);
+            Particle_MagnitudeStep_SetScaled_0ADA4(arg0, 0.02f);
             break;
 
         case 10:
             Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(0x19, 5));
-            Particle_Field38_AddYScaled_08E90(arg0, 10.0f);
+            Particle_PositionOffset_AddYScaled_08E90(arg0, 10.0f);
             Particle_SetScaleTarget(arg0, 0.2f);
             break;
 
         case 11:
             Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(5, 5));
-            Particle_Field74_SetScaled_0AD8C(arg0, ParticleMath_RandomRange(5) + 5.0f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, ParticleMath_RandomRange(5) + 5.0f);
             break;
     }
     Particle_DisableRendering(arg0);
@@ -1353,7 +1353,7 @@ void BattleAnim_RunSparkleHit(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
+            if (Particle_DecrementParam0ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
@@ -1386,7 +1386,7 @@ void BattleAnim_RunSparkleHit(Particle* arg0) {
  * for Blizzard.
  */
 void BattleAnim_SetupBlizzardHitEffect(Particle* arg0) {
-    s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
 
     Particle_SetScaleScaled(arg0, 0.0f);
@@ -1394,9 +1394,9 @@ void BattleAnim_SetupBlizzardHitEffect(Particle* arg0) {
     Particle_SetScaleStep(arg0, 0.05f);
     Particle_SetRandomVelocityXYZ(arg0, 0xA, 0x14, 0x14);
     Particle_AddPositionOffsetAlongRotationY(arg0, 15.0f);
-    Particle_Field38_AddYScaled_08E90(arg0, 7.0f);
-    Particle_Field74_SetScaled_0AD8C(arg0, ParticleMath_RandomRange(5) + 8.0f);
-    Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 2);
+    Particle_PositionOffset_AddYScaled_08E90(arg0, 7.0f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, ParticleMath_RandomRange(5) + 8.0f);
+    Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp24);
     Particle_DisableRendering(arg0);
     Particle_AdvanceLifecycle(arg0);
@@ -1413,7 +1413,7 @@ void BattleAnim_RunBlizzardHitEffect(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
+            if (Particle_DecrementParam0ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
@@ -1449,7 +1449,7 @@ void BattleAnim_IceBeamParticleUpdateB(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
+            if (Particle_DecrementParam0ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
@@ -1482,13 +1482,13 @@ void BattleAnim_IceBeamParticleUpdateB(Particle* arg0) {
  * for Thunder Punch.
  */
 void BattleAnim_SetupThunderPunchHitEffect(Particle* arg0) {
-    s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
 
     Particle_SetScaleScaled(arg0, 0.7f);
-    Particle_Field38_SetYScaled_08CA0(arg0, 10.0f);
+    Particle_PositionOffset_SetYScaled_08CA0(arg0, 10.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x19);
     Particle_SetPrimAlpha(arg0, 0xFF);
-    Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 4);
+    Particle_Param0_SetS16_0BCA8(arg0, sp26 * 4);
     Particle_DisableRendering(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -1504,7 +1504,7 @@ void BattleAnim_RunThunderPunchHitEffect(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_TickDelayAndAdvanceLifecycle(arg0, arg0->unk_A6) != 0) {
+            if (Particle_TickDelayAndAdvanceLifecycle(arg0, arg0->param0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
@@ -1525,52 +1525,52 @@ void BattleAnim_RunThunderPunchHitEffect(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupDefaultHitSpark(Particle* arg0) {
-    s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCE_GetS32_0C040(arg0);
 
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
 
     switch (sp24) {
         case 1:
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.2f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.2f);
             Particle_SetScaleScaled(arg0, 1.0f);
             break;
 
         case 5:
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.2f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.2f);
             Particle_SetScaleScaled(arg0, 1.0f);
             break;
 
         case 6:
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.4f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.4f);
             Particle_SetScaleScaled(arg0, 1.5f);
             break;
 
         case 16:
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.4f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.4f);
             Particle_SetScaleScaled(arg0, 2.0f);
             break;
 
         case 7:
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.4f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.4f);
             Particle_SetScaleScaled(arg0, 1.5f);
             break;
 
         case 8:
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.4f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.4f);
             Particle_SetScaleScaled(arg0, 1.5f);
-            Particle_Field38_AddYScaled_08E90(arg0, -10.0f);
+            Particle_PositionOffset_AddYScaled_08E90(arg0, -10.0f);
             break;
 
         case 12:
             Particle_SetScaleScaled(arg0, 0.75f);
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.4f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.4f);
             Particle_SetRandomVelocityXYZ(arg0, 8, 0xA, 8);
             break;
 
         case 13:
             Particle_SetScaleScaled(arg0, 1.0f);
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.0f);
             Particle_SetRandomVelocityX(arg0, 0x1E);
             Particle_SetRandomVelocityYOffset(arg0, 0x14, 0xA);
             Particle_SetRandomVelocityZ(arg0, 0x1E);
@@ -1578,7 +1578,7 @@ void BattleAnim_SetupDefaultHitSpark(Particle* arg0) {
 
         case 14:
             Particle_SetScaleScaled(arg0, 1.0f);
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.0f);
             Particle_SetRandomVelocityX(arg0, 0x14);
             Particle_SetRandomVelocityYOffset(arg0, 0x14, 0xA);
             Particle_SetRandomVelocityZ(arg0, 0xF);
@@ -1586,13 +1586,13 @@ void BattleAnim_SetupDefaultHitSpark(Particle* arg0) {
 
         case 15:
             Particle_SetScaleScaled(arg0, 1.5f);
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.3f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.3f);
             Particle_SetRandomVelocityXYZ(arg0, 0xA, 0xA, 0xA);
             break;
     }
 
     Particle_SetPrimAlpha(arg0, 0xFF);
-    Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 4);
+    Particle_Param0_SetS16_0BCA8(arg0, sp26 * 4);
     Particle_DisableRendering(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -1617,7 +1617,7 @@ void BattleAnim_RunDefaultHitSpark(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_TickDelayAndAdvanceLifecycle(arg0, arg0->unk_A6) != 0) {
+            if (Particle_TickDelayAndAdvanceLifecycle(arg0, arg0->param0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
@@ -1642,85 +1642,85 @@ void BattleAnim_RunDefaultHitSpark(Particle* arg0) {
  * SolarBeam, Clamp, Skull Bash, Sky Attack, Crabhammer, Hyper Fang, Super Fang).
  */
 void BattleAnim_SetupHeavyHitSparksAndSmoke(Particle* arg0) {
-    s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
 
     switch (Particle_FieldCF_GetS16_0C058(arg0)) {
         case 0:
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0);
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.2f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.2f);
             Particle_SetScaleScaled(arg0, 1.0f);
-            Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 2);
-            Particle_Field38_AddYScaled_08E90(arg0, 15.0f);
+            Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
+            Particle_PositionOffset_AddYScaled_08E90(arg0, 15.0f);
             break;
 
         case 1:
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0);
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.2f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.2f);
             Particle_SetScaleScaled(arg0, 1.0f);
-            Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 2);
+            Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
             break;
 
         case 2:
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0);
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.2f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.2f);
             Particle_SetScaleScaled(arg0, 1.0f);
-            Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 2);
-            Particle_Field38_AddYScaled_08E90(arg0, -10.0f);
+            Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
+            Particle_PositionOffset_AddYScaled_08E90(arg0, -10.0f);
             break;
 
         case 3:
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 1);
             Particle_SetScaleScaled(arg0, 0.5f);
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.4f);
-            Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 2);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.4f);
+            Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
             break;
 
         case 4:
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 2);
             Particle_SetScaleScaled(arg0, 0.5f);
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.4f);
-            Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 2);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.4f);
+            Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
             break;
 
         case 5:
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 3);
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.2f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.2f);
             Particle_SetScaleScaled(arg0, 1.0f);
-            Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 2);
+            Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
             break;
 
         case 6:
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0);
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.4f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.4f);
             Particle_SetScaleScaled(arg0, 1.5f);
-            Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 2);
+            Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
             break;
 
         case 9:
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0);
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.2f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.2f);
             Particle_SetScaleScaled(arg0, 1.0f);
             Particle_SetRandomVelocityXYZ(arg0, 0xF, 0xF, 0xF);
-            Particle_Field38_AddYScaled_08E90(arg0, 10.0f);
-            Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 2);
+            Particle_PositionOffset_AddYScaled_08E90(arg0, 10.0f);
+            Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
             break;
 
         case 10:
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0);
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.2f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.2f);
             Particle_SetScaleScaled(arg0, 1.0f);
             Particle_SetRandomVelocityXYZ(arg0, 0x14, 0, 0x14);
-            Particle_Field38_SetYScaled_08CA0(arg0, 0.0f);
-            Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 2);
+            Particle_PositionOffset_SetYScaled_08CA0(arg0, 0.0f);
+            Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
             break;
 
         case 11:
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0);
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.2f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.2f);
             Particle_SetScaleScaled(arg0, 1.0f);
             Particle_SetRandomVelocityXYZ(arg0, 0xA, 0, 0xA);
-            Particle_Field38_SetYScaled_08CA0(arg0, 30.0f - (sp26 * 5.0f));
-            Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 2);
+            Particle_PositionOffset_SetYScaled_08CA0(arg0, 30.0f - (sp26 * 5.0f));
+            Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
             break;
     }
 
@@ -1744,16 +1744,16 @@ void BattleAnim_RunHeavyHitSparksAndSmoke(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_TickDelayAndAdvanceLifecycle(arg0, arg0->unk_A6) != 0) {
+            if (Particle_TickDelayAndAdvanceLifecycle(arg0, arg0->param0) != 0) {
                 Particle_EnableRendering(arg0);
-                Particle_FieldA6_SetS16_0BCA8(arg0, 2);
+                Particle_Param0_SetS16_0BCA8(arg0, 2);
             }
             break;
 
         case 3:
             Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 3, 1, 1, 0);
             Particle_AddVelocityXZFromRotationYPlusHalfTurn(arg0);
-            if ((Particle_DecrementUnkA6ToZero != 0) && (arg0->phase == 0)) {
+            if ((Particle_DecrementParam0ToZero != 0) && (arg0->phase == 0)) {
                 Particle_AdvancePhase(arg0);
             }
             break;
@@ -1774,23 +1774,23 @@ void BattleAnim_RunHeavyHitSparksAndSmoke(Particle* arg0) {
  * for Horn Attack, Poison Sting, Twineedle, Pin Missile, Peck, Spike Cannon.
  */
 void BattleAnim_SetupPointyMoveHitSpark(Particle* arg0) {
-    s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
 
     switch (Particle_FieldCF_GetS16_0C058(arg0)) {
         case 3:
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 1);
             Particle_SetScaleScaled(arg0, 1.5f);
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.4f);
-            Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 2);
-            Particle_FieldCF_SetU8_0BEEC(arg0, 0);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.4f);
+            Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
+            Particle_ByteParam1_SetU8_0BEEC(arg0, 0);
             break;
 
         case 4:
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 2);
             Particle_SetScaleScaled(arg0, 1.5f);
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.4f);
-            Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 2);
-            Particle_FieldCF_SetU8_0BEEC(arg0, 1);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.4f);
+            Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
+            Particle_ByteParam1_SetU8_0BEEC(arg0, 1);
             break;
     }
 
@@ -1813,16 +1813,16 @@ s32 BattleAnim_RunPointyMoveHitSpark(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_TickDelayAndAdvanceLifecycle(arg0, arg0->unk_A6) != 0) {
+            if (Particle_TickDelayAndAdvanceLifecycle(arg0, arg0->param0) != 0) {
                 Particle_EnableRendering(arg0);
-                Particle_FieldA6_SetS16_0BCA8(arg0, 2);
+                Particle_Param0_SetS16_0BCA8(arg0, 2);
             }
             break;
 
         case 3:
             Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 3, 1, 1, 0);
             Particle_AddVelocityXZFromRotationYPlusHalfTurn(arg0);
-            if ((Particle_DecrementUnkA6ToZero != NULL) && (arg0->phase == 0)) { //!bug: compares the function pointer instead of calling it
+            if ((Particle_DecrementParam0ToZero != NULL) && (arg0->phase == 0)) { //!bug: compares the function pointer instead of calling it
                 Particle_AdvancePhase(arg0);
             }
             break;
@@ -1859,11 +1859,11 @@ s32 BattleAnim_RunPointyMoveHitSpark(Particle* arg0) {
  * for Fire Punch.
  */
 void BattleAnim_SetupFirePunchUseEffect1(Particle* arg0) {
-    Particle_FieldAC_GetS16_0C038(arg0);
+    Particle_SpawnIndex_GetS16_0C038(arg0);
     Particle_SetScaleScaled(arg0, 0.05f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 7);
     Particle_SetPrimAlpha(arg0, 0xFF);
-    Particle_FieldA6_SetS16_0BCA8(arg0, 50);
+    Particle_Param0_SetS16_0BCA8(arg0, 50);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -1880,7 +1880,7 @@ void BattleAnim_RunFirePunchUseEffect1(Particle* arg0) {
         case 2:
             Particle_AnimateFramesForwardLooped(arg0, 0, 5, 1, 1, -1);
             Particle_ApproachScale(arg0, 0.3f, 0.01f);
-            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
+            Particle_DecrementParam0ToZeroThenAdvance(arg0);
             break;
 
         case 3:
@@ -1898,15 +1898,15 @@ void BattleAnim_SetupFirePunchUseEffect2(Particle* arg0) {
     s16 sp2C;
     Vec3s sp24;
 
-    sp2E = Particle_FieldAC_GetS16_0C038(arg0);
+    sp2E = Particle_SpawnIndex_GetS16_0C038(arg0);
     sp2C = sp2E % 3;
     Particle_SetScaleScaled(arg0, 0.4f);
-    Particle_Field74_SetScaled_0AD8C(arg0, 1.0f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, 1.0f);
 
     sp24.x = MathUtil_Random16();
     sp24.y = MathUtil_Random16();
     sp24.z = 0;
-    Particle_Field9A_SetVecFromVec3s_0A37C(arg0, sp24);
+    Particle_Rotation_SetVecFromVec3s_0A37C(arg0, sp24);
 
     switch (sp2C) {
         case 0:
@@ -1923,7 +1923,7 @@ void BattleAnim_SetupFirePunchUseEffect2(Particle* arg0) {
     }
 
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x17);
-    Particle_FieldA6_SetS16_0BCA8(arg0, sp2E * 4);
+    Particle_Param0_SetS16_0BCA8(arg0, sp2E * 4);
     Particle_DisableRendering(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -1932,16 +1932,16 @@ void BattleAnim_SetupFirePunchUseEffect2(Particle* arg0) {
  * Particle callback of the Fire Punch animation. Player sweep (all 165 moves used in battle):
  * only Fire Punch reached this function.
  */
-void BattleAnim_FirePunchParticleUpdate(s8 *arg0) {
+void BattleAnim_FirePunchParticleUpdate(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_821635E4(arg0);
         return;
     case 2:
-        if (func_8213CA80(arg0, M2C_FIELD(arg0, s16 *, 0xA2)) != 0) {
+        if (func_8213CA80(arg0, arg0->param0) != 0) {
             func_8213CB3C(arg0);
             return;
         }
@@ -1952,7 +1952,7 @@ void BattleAnim_FirePunchParticleUpdate(s8 *arg0) {
         func_82140228(arg0, 0x3F000000, 0x3CA3D70A);
         Particle_ApproachPrimBlue(arg0, 0, 0x20);
         Particle_ApproachEnvGreen(arg0, 0, 0x20);
-        if (M2C_FIELD(arg0, s8 *, 0xC3) >= 6) {
+        if (arg0->textureFrame >= 6) {
             Particle_ApproachPrimGreen(arg0, 0, 0x20);
             Particle_ApproachPrimAlpha(arg0, 0x64, 0x4E);
         }
@@ -1969,17 +1969,17 @@ void BattleAnim_FirePunchParticleUpdate(s8 *arg0) {
  * for Thunder Punch.
  */
 void BattleAnim_SetupThunderPunchUseEffect(Particle* arg0) {
-    s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp2E = Particle_SpawnIndex_GetS16_0C038(arg0);
     s16 sp2C = sp2E % 3;
     Vec3s sp24;
 
     Particle_SetScaleScaled(arg0, 0.4f);
-    Particle_Field74_SetScaled_0AD8C(arg0, 1.0f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, 1.0f);
 
     sp24.x = MathUtil_Random16();
     sp24.y = MathUtil_Random16();
     sp24.z = 0;
-    Particle_Field9A_SetVecFromVec3s_0A37C(arg0, sp24);
+    Particle_Rotation_SetVecFromVec3s_0A37C(arg0, sp24);
 
     switch (sp2C) {
         case 0:
@@ -1996,7 +1996,7 @@ void BattleAnim_SetupThunderPunchUseEffect(Particle* arg0) {
     }
 
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x17);
-    Particle_FieldA6_SetS16_0BCA8(arg0, sp2E * 4);
+    Particle_Param0_SetS16_0BCA8(arg0, sp2E * 4);
     Particle_DisableRendering(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -2005,16 +2005,16 @@ void BattleAnim_SetupThunderPunchUseEffect(Particle* arg0) {
  * Particle callback: init, wait the delay in field A2, run the effect stages, then mark
  * inactive.
  */
-void func_821639EC(s8 *arg0) {
+void func_821639EC(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82163884(arg0);
         return;
     case 2:
-        if (func_8213CA80(arg0, M2C_FIELD(arg0, s16 *, 0xA2)) != 0) {
+        if (func_8213CA80(arg0, arg0->param0) != 0) {
             func_8213CB3C(arg0);
             return;
         }
@@ -2025,7 +2025,7 @@ void func_821639EC(s8 *arg0) {
         func_82140228(arg0, 0x3F000000, 0x3CA3D70A);
         Particle_ApproachPrimBlue(arg0, 0, 0x20);
         Particle_ApproachEnvGreen(arg0, 0, 0x20);
-        if (M2C_FIELD(arg0, s8 *, 0xC3) >= 6) {
+        if (arg0->textureFrame >= 6) {
             Particle_ApproachPrimGreen(arg0, 0, 0x20);
             Particle_ApproachPrimAlpha(arg0, 0x64, 0x4E);
         }
@@ -2087,28 +2087,28 @@ void BattleAnim_RecolorParticleByQueuedMoveId(Particle* arg0) {
  */
 void BattleAnim_PowderCloudScaleMotion_InitParticle(Particle* arg0) {
     Vec3s sp28;
-    s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
 
     Particle_SetScaleScaled(arg0, 1.0f);
     sp28.x = MathUtil_Random16();
     sp28.y = MathUtil_Random16();
     sp28.z = 0;
-    Particle_Field9A_SetVecFromVec3s_0A37C(arg0, sp28);
+    Particle_Rotation_SetVecFromVec3s_0A37C(arg0, sp28);
 
     switch (sp24) {
         case 0:
             Particle_SetRandomVelocityXYZ(arg0, 0xF, 0xF, 0xF);
-            Particle_Field38_AddYScaled_08E90(arg0, 10.0f);
-            Particle_Field74_SetScaled_0AD8C(arg0, 1.0f);
-            Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 2);
+            Particle_PositionOffset_AddYScaled_08E90(arg0, 10.0f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 1.0f);
+            Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
             break;
 
         case 1:
             Particle_SetRandomVelocityXYZ(arg0, 0xA, 0xA, 0xA);
-            Particle_Field38_AddYScaled_08E90(arg0, 10.0f);
-            Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
-            Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 2);
+            Particle_PositionOffset_AddYScaled_08E90(arg0, 10.0f);
+            Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.0f);
+            Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
             break;
     }
 
@@ -2122,16 +2122,16 @@ void BattleAnim_PowderCloudScaleMotion_InitParticle(Particle* arg0) {
  * Particle callback: init, wait the delay in field A2, run the effect stages, then mark
  * inactive.
  */
-void func_82163D7C(s8 *arg0) {
+void func_82163D7C(Particle* arg0) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = arg0->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
         func_82163C28(arg0);
         return;
     case 2:
-        if (func_8213CA80(arg0, M2C_FIELD(arg0, s16 *, 0xA2)) != 0) {
+        if (func_8213CA80(arg0, arg0->param0) != 0) {
             func_8213CB3C(arg0);
             return;
         }
@@ -2156,7 +2156,7 @@ void BattleAnim_AcidArmorParticleUpdateB(Particle* arg0) {
     Particle_SetScaleScaled(arg0, 0.2f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_SetPrimAlpha(arg0, 0xC8);
-    Particle_FieldA6_SetS16_0BCA8(arg0, 24);
+    Particle_Param0_SetS16_0BCA8(arg0, 24);
     arg0->stepMagnitude = D_FLT_82197730;
     Particle_AdvanceLifecycle(arg0);
 }
@@ -2195,14 +2195,14 @@ void BattleAnim_AcidArmorParticleUpdateA(s8 *arg0) {
  * for Acid Armor.
  */
 void BattleAnim_SetupAcidArmorUseEffect2(Particle* arg0) {
-    s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
 
     Particle_SetScaleScaled(arg0, 1.0f);
     Particle_SetRandomVelocityXYZ(arg0, 0xF, 0xF, 0xF);
-    Particle_Field74_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0x32) * D_FLT_82197734) + 0.5f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0x32) * D_FLT_82197734) + 0.5f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_SetPrimAlpha(arg0, 0x64);
-    Particle_FieldA6_SetS16_0BCA8(arg0, sp26 * 4);
+    Particle_Param0_SetS16_0BCA8(arg0, sp26 * 4);
     Particle_DisableRendering(arg0);
     Particle_AdvanceLifecycle(arg0);
 }

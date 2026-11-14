@@ -8,7 +8,7 @@
 #include "poke_icon.h"
 #include "pokemon_stats.h"
 #include "stage_loader.h"
-extern unk_func_8001A024* D_81300384;
+extern PokeIconRenderer* D_81300384;
 extern BattleMon D_81300388[6];
 extern s32 D_81300370;
 

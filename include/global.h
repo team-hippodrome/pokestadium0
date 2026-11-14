@@ -21,9 +21,9 @@ struct ModelAssetNode;
 
 typedef union arg1_func_80010CA8 {
     struct {
-        /* 0x00 */ s16 unk_00;
-        /* 0x02 */ s8 unk_02;
-        /* 0x03 */ s8 unk_03;
+        /* 0x00 */ s16 hueShift;        // @unverified: added to the HSV hue as 1/64 steps in Color_AdjustRGB5551
+        /* 0x02 */ s8 saturationShift;  // @unverified: moves HSV saturation by 1/8 steps toward 1 or 0 in Color_AdjustRGB5551
+        /* 0x03 */ s8 valueShift;       // @unverified: picks the D_8006BBB0 brightness curve in Color_AdjustRGB5551
     };
     u32 raw;
 } arg1_func_80010CA8; // size = 0x4
@@ -99,9 +99,9 @@ typedef struct TransformAnimData {
     /* 0x08 */ u16 channelCount;
     /* 0x0A */ u16 endFrame;
     /* 0x0C */ u32 channelTable;
-    /* 0x10 */ u32 translationData;
+    /* 0x10 */ u32 scaleData; // @unverified: read as thousandths by ModelAnim_EvaluateScaleChannel; was named translationData
     /* 0x14 */ u32 rotationData;
-    /* 0x18 */ u32 scaleData;
+    /* 0x18 */ u32 translationData; // @unverified: whole-unit keys for ModelAnim_EvaluateTranslationChannel; was named scaleData
 } TransformAnimData; // size >= 0x1C
 
 typedef struct TransformAnimState {
@@ -141,17 +141,17 @@ typedef struct ModelAnchor {
 typedef struct DisplayObject {
     /* 0x000 */ DisplayNodeHeader node;
     /* 0x018 */ s16 rootId;
-    /* 0x01A */ s16 objectType;
+    /* 0x01A */ s16 objectType; // species id for battle models (play: 95 for Onix)
     /* 0x01C */ u8 textureMode;
-    /* 0x01D */ u8 lodFraction; // gDPSetPrimColor's primitive LOD-fraction argument
-    /* 0x01E */ Vec3s rotation;
-    /* 0x024 */ Vec3f position;
-    /* 0x030 */ Vec3f scale;
-    /* 0x03C */ Color_RGBA8_u32 textureTint;
+    /* 0x01D */ u8 alpha; // model opacity, passed as gDPSetPrimColor's LOD fraction (play: 0x40 made Onix translucent)
+    /* 0x01E */ Vec3s rotation; // binary angles (play: rotation.y 0x4000 -> 0 turned Onix)
+    /* 0x024 */ Vec3f position; // world position (play: y = 150 lifted Onix)
+    /* 0x030 */ Vec3f scale; // (play: 2.0 doubled Onix)
+    /* 0x03C */ Color_RGBA8_u32 textureTint; // multiplies material colors (play: ff000000 turned Onix red)
     /* 0x040 */ TransformAnimState transformAnim;
     /* 0x054 */ EventTrackState eventTrack;
     /* 0x060 */ MtxF matrix;
-    /* 0x0A0 */ Color_RGBA8_u32 fogColor; // submitted through GeoRender_SetFogColor
+    /* 0x0A0 */ Color_RGBA8_u32 fogColor; // submitted through GeoRender_SetFogColor (play: ff0000ff turned Onix solid red)
     /* 0x0A4 */ char unk0A4[2];
     /* 0x0A6 */ u8 effectSlot; // 0/1 select effect state; 0xFF disables slot-specific work
     /* 0x0A7 */ u8 anchorCount;
@@ -260,163 +260,172 @@ typedef struct CameraNode {
     /* 0xEC */ char unk_EC[0x4];
 } CameraNode; // size = 0xF0
 
-typedef struct unk_D_86002F34_alt1 {
+// Graph node type 0x4, rendered by Geo_NodeModelRoot.
+typedef struct GeoModelRootNode {
     /* 0x00 */ GraphNode node;
-    /* 0x18 */ s16 unk_18;
+    /* 0x18 */ s16 rootId; // @unverified: compared with DisplayObject.rootId in Geo_NodeModelPart
     /* 0x1A */ u16 unk_1A;
-    /* 0x1C */ s8 unk_1C;
-    /* 0x1D */ s8 unk_1D;
+    /* 0x1C */ s8 lightCount; // @unverified: Geo_NodeLight fills lights->l[lightCount] and stops at 7
+    /* 0x1D */ s8 fogEnabled; // @unverified: cleared by Geo_NodeModelRoot, set by GeoRender_SetFog
     /* 0x20 */ Lights7* lights; // Stadium 1 has an s32 before this, at 0x20
-} unk_D_86002F34_alt1; // size >= 0x24
+} GeoModelRootNode; // size >= 0x24
 
-typedef struct unk_D_86002F34_alt2 {
+// Graph node type 0x1, rendered by Geo_NodeReference.
+typedef struct GeoReferenceNode {
     /* 0x00 */ GraphNode node;
-    /* 0x18 */ GraphNode* unk_18;
-} unk_D_86002F34_alt2; // size >= 0x1C
+    /* 0x18 */ GraphNode* target; // @unverified: node rendered by Geo_NodeReference
+} GeoReferenceNode; // size >= 0x1C
 
-typedef struct unk_D_86002F34_alt3 {
+// Graph node type 0x12.
+typedef struct GeoTranslateRotateNode {
     /* 0x00 */ GraphNode node;
-    /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A;
-    /* 0x1C */ s32 unk_1C;
-} unk_D_86002F34_alt3; // size >= 0x20
+    /* 0x18 */ Vec3f translation; // @unverified: MtxF_SetRotationTranslationF in Geo_NodeTranslateRotate
+    /* 0x24 */ Vec3s rotation; // @unverified: MtxF_SetRotationTranslationF in Geo_NodeTranslateRotate
+} GeoTranslateRotateNode; // size = 0x2C
 
-typedef struct unk_D_86002F34_alt4 {
+// Graph node type 0x14.
+typedef struct GeoAnimatedPartNode {
     /* 0x00 */ GraphNode node;
-    /* 0x18 */ Color_RGBA8_u32 unk_18;
-    /* 0x1C */ u16 unk_1C;
-    /* 0x1E */ u16 unk_1E;
-} unk_D_86002F34_alt4; // size >= 0x20
+    /* 0x18 */ Vec3s translation; // @unverified: default translation, overridden by the curve context
+    /* 0x1E */ Vec3s rotation; // @unverified: default rotation, overridden by the curve context
+    /* 0x24 */ Vec3f scale; // @unverified: default scale, overridden by the curve context
+    /* 0x30 */ u8 matrixSlot; // @unverified: D_800AB248 slot that receives the part matrix
+    /* 0x31 */ u8 transformMode; // @unverified: bit 1 billboard, bit 0 plain matrix, else scaled hierarchy
+    /* 0x32 */ s16 channelGroup; // @unverified: curve channels channelGroup*3 .. +2
+} GeoAnimatedPartNode; // size = 0x34
 
-typedef struct unk_D_86002F34_alt5 {
+// Graph node type 0x15.
+typedef struct GeoDisplayListPartNode {
     /* 0x00 */ GraphNode node;
-    /* 0x18 */ Vec3f unk_18;
-    /* 0x24 */ Vec3s unk_24;
-} unk_D_86002F34_alt5; // size = 0x2C
+    /* 0x18 */ Gfx* displayList; // @unverified: submitted by Geo_NodeDisplayListPart
+    /* 0x1C */ s16 matrixSlot; // @unverified: D_800AB248 slot of the animated part whose matrix it uses
+} GeoDisplayListPartNode; // size = 0x20
 
-typedef struct unk_D_86002F34_alt6 {
+// Graph node type 0x17.
+typedef struct GeoDisplayListMatrixNode {
     /* 0x00 */ GraphNode node;
-    /* 0x18 */ Vec3s unk_18;
-    /* 0x1E */ Vec3s unk_1E;
-    /* 0x24 */ Vec3f unk_24;
-    /* 0x30 */ u8 unk_30;
-    /* 0x31 */ u8 unk_31;
-    /* 0x32 */ s16 unk_32;
-} unk_D_86002F34_alt6; // size = 0x34
+    /* 0x18 */ Gfx* displayList; // @unverified: submitted by Geo_NodeDisplayListMatrix
+    /* 0x1C */ MtxF matrix; // @unverified: pushed before the display list
+} GeoDisplayListMatrixNode; // size = 0x5C
 
-typedef struct unk_D_86002F34_alt7 {
-    /* 0x00 */ GraphNode node;
-    /* 0x18 */ Gfx* unk_18;
-    /* 0x1C */ s16 unk_1C;
-} unk_D_86002F34_alt7; // size = 0x20
+// Graph node type 0x19 (GeoNode_CreateDisplayList). The geo callbacks in the geo_model fragments
+// also use this view for the display list they build at 0x18.
+typedef struct GeoDisplayListNode {
+    /* 0x00 */ DisplayNodeHeader node;
+    /* 0x18 */ Gfx* displayList; // @unverified: set by GeoNode_CreateDisplayList, rebuilt by geo callbacks
+} GeoDisplayListNode; // size = 0x1C
 
-typedef struct unk_D_86002F34_alt8 {
+// Graph node type 0x18: Geo_NodeBillboard draws it with a camera-facing matrix (MtxF_SetBillboard).
+typedef struct GeoBillboardNode {
     /* 0x00 */ GraphNode node;
-    /* 0x18 */ Gfx* unk_18;
-    /* 0x1C */ MtxF unk_1C;
-} unk_D_86002F34_alt8; // size = 0x5C
-
-typedef struct unk_D_86002F34_alt9 {
-    /* 0x00 */ GraphNode node;
-    /* 0x18 */ Gfx* unk_18;
-    /* 0x1C */ Vec3f unk_1C;
+    /* 0x18 */ Gfx* displayList; // @unverified: submitted by Geo_NodeBillboard
+    /* 0x1C */ Vec3f position; // @unverified: local position passed to MtxF_SetBillboard (camera-facing matrix)
     /* 0x28 */ f32 unk_28;
-} unk_D_86002F34_alt9; // size = 0x2C
+} GeoBillboardNode; // size = 0x2C
 
-typedef struct unk_D_86002F34_alt10 {
+// Graph node type 0x1A (was called a shadow texture).
+typedef struct GeoMaterialNode {
     /* 0x00 */ GraphNode node;
-    /* 0x18 */ Gfx* unk_18;
-    /* 0x1C */ s16 unk_1C;
-    /* 0x1E */ s16 unk_1E;
-    /* 0x20 */ s16 unk_20;
-    /* 0x22 */ u8 unk_22;
-    /* 0x24 */ Color_RGBA8_u32 unk_24;
-} unk_D_86002F34_alt10; // size >= 0x28
+    /* 0x18 */ Gfx* displayList; // @unverified: stored in D_800AB45C for the layer entries
+    /* 0x1C */ s16 textureIndex; // @unverified: index into the texture bank textures, -1 for none
+    /* 0x1E */ s16 paletteIndex; // @unverified: index into the texture bank palettes, -1 for none
+    /* 0x20 */ s16 eventIndex; // @unverified: event track that overrides textureIndex
+    /* 0x22 */ u8 mode; // @unverified: 1 forces a white tint; stored in D_800AB448
+    /* 0x24 */ Color_RGBA8_u32 color; // @unverified: material tint, multiplied by DisplayObject.textureTint
+} GeoMaterialNode; // size >= 0x28
 
-typedef struct unk_D_86002F34_alt11_018 {
-    /* 0x00 */ u8 fmt;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ char unk04[0x4];
-    /* 0x08 */ u8* texture;
-} unk_D_86002F34_alt11_018; // size >= 0xC
-
-typedef struct unk_D_86002F34_alt11 {
+// Graph node type 0xF.
+typedef struct GeoShadowNode {
     /* 0x00 */ GraphNode node;
-    /* 0x18 */ unk_D_86002F34_alt11_018* unk_18;
-    /* 0x1C */ unk_D_86002F34_alt11_018* unk_1C;
-} unk_D_86002F34_alt11; // size >= 0x20
+    /* 0x18 */ s16 shape; // @unverified: 0 draws D_01002480, otherwise D_01002500
+    /* 0x1A */ s16 scaleXPercent; // @unverified: shadow width in percent of the model scale
+    /* 0x1C */ s16 scaleZPercent; // @unverified: shadow depth in percent of the model scale
+    /* 0x1E */ s16 heightOffset; // @unverified: added to the model height before projecting the shadow
+} GeoShadowNode; // size = 0x20
 
-typedef struct unk_D_86002F34_alt12 {
+// Graph node type 0x3 (GeoNode_CreateType3).
+typedef struct GeoType3Node {
     /* 0x00 */ GraphNode node;
     /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A;
-    /* 0x1C */ s16 unk_1C;
-    /* 0x1E */ s16 unk_1E;
-} unk_D_86002F34_alt12; // size = 0x20
+} GeoType3Node; // size = 0x1C
 
-typedef struct unk_D_86002F34_alt13 {
+// Graph node type 0x5.
+typedef struct GeoOrthoNode {
     /* 0x00 */ GraphNode node;
-    /* 0x18 */ s16 unk_18;
-} unk_D_86002F34_alt13; // size = 0x1C
+} GeoOrthoNode; // size = 0x18
 
-typedef struct unk_D_86002F34_alt14 {
+// Graph node type 0x6.
+typedef struct GeoPerspectiveNode {
     /* 0x00 */ GraphNode node;
-} unk_D_86002F34_alt14; // size = 0x18
+} GeoPerspectiveNode; // size = 0x18
 
-typedef struct unk_D_86002F34_alt15 {
+// Graph node type 0x7.
+typedef struct GeoBackgroundNode {
     /* 0x00 */ GraphNode node;
-} unk_D_86002F34_alt15; // size = 0x18
+    /* 0x18 */ u32 fillColor; // @unverified: RGBA5551 fill built by GeoNode_CreateBackground, drawn over the viewport
+} GeoBackgroundNode; // size = 0x1C
 
-typedef struct unk_D_86002F34_alt16 {
+// Graph node type 0x8.
+typedef struct GeoClearDepthNode {
     /* 0x00 */ GraphNode node;
-    /* 0x18 */ u32 unk_18;
-} unk_D_86002F34_alt16; // size = 0x1C
+} GeoClearDepthNode; // size = 0x18
 
-typedef struct unk_D_86002F34_alt17 {
+typedef struct GeoFogParams {
+    /* 0x00 */ s16 near; // @unverified: first gSPFogPosition argument
+    /* 0x02 */ s16 far; // @unverified: second gSPFogPosition argument
+    /* 0x04 */ Color_RGBA8_u32 color; // @unverified: G_SETFOGCOLOR
+} GeoFogParams; // size = 0x8
+
+// Graph node type 0xA.
+typedef struct GeoFogNode {
     /* 0x00 */ GraphNode node;
-} unk_D_86002F34_alt17; // size = 0x18
+    /* 0x18 */ GeoFogParams fog; // @unverified: GeoRender_SetFog
+} GeoFogNode; // size = 0x20
 
-typedef struct unk_D_86002F34_alt18 {
+// Graph node type 0xB.
+typedef struct GeoLightNode {
+    /* 0x00 */ GraphNode node;
+    /* 0x18 */ Color_RGBA8_u32 color; // @unverified: light color; alpha is the percent added to the ambient color
+    /* 0x1C */ s16 pitch; // @unverified: binary angle: dir.y = 120*sin(pitch)
+    /* 0x1E */ s16 yaw; // @unverified: binary angle around the vertical axis
+} GeoLightNode; // size = 0x20
+
+// Graph node type 0xD.
+typedef struct GeoAmbientLightNode {
     /* 0x00 */ GraphNode node;
     /* 0x18 */ u8 r;
     /* 0x19 */ u8 g;
     /* 0x1A */ u8 b;
-    /* 0x1B */ u8 a;
-    /* 0x1C */ s16 unk_1C;
-    /* 0x1E */ s16 unk_1E;
-} unk_D_86002F34_alt18; // size = 0x20
+} GeoAmbientLightNode; // size = 0x1C
 
-typedef struct unk_D_86002F34_alt19 {
-    /* 0x00 */ GraphNode node;
-    /* 0x18 */ u8 r;
-    /* 0x19 */ u8 g;
-    /* 0x1A */ u8 b;
-} unk_D_86002F34_alt19; // size = 0x1C
-
-typedef struct unk_D_86002F34_alt20 {
+// Graph node type 0x10.
+typedef struct GeoCullDistanceNode {
     /* 0x00 */ GraphNode node;
     /* 0x18 */ s16 unk_18;
     /* 0x1A */ s16 unk_1A;
-} unk_D_86002F34_alt20; // size = 0x1C
+} GeoCullDistanceNode; // size = 0x1C
 
-typedef struct unk_D_86002F34_alt21 {
+// Graph node type 0x11.
+typedef struct GeoSwitchCaseNode {
     /* 0x00 */ GraphNode node;
     /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A;
-} unk_D_86002F34_alt21; // size = 0x1C
+    /* 0x1A */ s16 selectedChild; // @unverified: index of the only child Geo_NodeSwitchCase renders
+} GeoSwitchCaseNode; // size = 0x1C
 
-typedef struct unk_D_86002F34_alt22 {
+// Graph node type 0x13.
+typedef struct GeoTranslateNode {
     /* 0x00 */ GraphNode node;
-    /* 0x18 */ Vec3f unk_18;
-} unk_D_86002F34_alt22; // size = 0x24
+    /* 0x18 */ Vec3f translation; // @unverified: pushed by Geo_NodeTranslate
+} GeoTranslateNode; // size = 0x24
 
-typedef struct unk_D_86002F34_alt23 {
+// Graph node type 0x1B.
+typedef struct GeoAnchorNode {
     /* 0x00 */ GraphNode node;
-    /* 0x18 */ s16 unk_18;
-} unk_D_86002F34_alt23; // size = 0x1C
+    /* 0x18 */ s16 anchorId; // @unverified: id recorded in DisplayObject.anchors by GeoRender_RecordAnchorPosition
+} GeoAnchorNode; // size = 0x1C
 
-typedef struct unk_D_86002F34_alt24 {
+// Graph node type 0x1C.
+typedef struct GeoGroupNode {
     /* 0x00 */ GraphNode node;
     /* 0x18 */ s16 unk_18;
     /* 0x1A */ s16 unk_1A;
@@ -426,39 +435,40 @@ typedef struct unk_D_86002F34_alt24 {
     /* 0x22 */ s16 unk_22;
     /* 0x24 */ s32 unk_24;
     /* 0x28 */ Color_RGBA8_u32 unk_28;
-} unk_D_86002F34_alt24; // size = 0x2C
+} GeoGroupNode; // size = 0x2C
 
 typedef void* (*func_unk_D_800ABE10)(s32, s32);
 
-#define unk_D_86002F34_018_GFX_TYPE_1 1 // 8-bit per texel
-#define unk_D_86002F34_018_GFX_TYPE_2 2 // 16-bit per texel
-#define unk_D_86002F34_018_GFX_TYPE_3 3 // 32-bit per texel
+#define GEO_TEXTURE_SIZ_1 1 // 8-bit per texel
+#define GEO_TEXTURE_SIZ_2 2 // 16-bit per texel
+#define GEO_TEXTURE_SIZ_3 3 // 32-bit per texel
 
-typedef struct unk_D_86002F34_018 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 type;
+typedef struct GeoTexture {
+    /* 0x00 */ u8 fmt; // @unverified: G_IM_FMT_* passed to gDPSetTextureImage (GeoRender_BindTexture); 0 (RGBA) gets color variants
+    /* 0x01 */ u8 siz; // @unverified: G_IM_SIZ_* passed to gDPSetTextureImage; 2 = 16-bit, 3 = 32-bit texels
     /* 0x02 */ s16 width;
     /* 0x04 */ s16 height;
     /* 0x06 */ s16 num_texels;
     /* 0x08 */ u32* texture;
-} unk_D_86002F34_018; // size = 0xC
+} GeoTexture; // size = 0xC
 
-typedef struct unk_D_86002F34_01C {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s16* unk_04;
-    /* 0x08 */ char unk08[0x4];
-} unk_D_86002F34_01C; // size = 0xC
+typedef struct GeoPalette {
+    /* 0x00 */ s32 count; // @unverified: number of 16-bit colors recolored in func_80016D40
+    /* 0x04 */ s16* data; // @unverified: RGBA5551 colors recolored in func_80016D40
+    /* 0x08 */ Gfx* loadDisplayList; // @unverified: called by GeoRender_BindTexture before the texture image (TLUT load)
+} GeoPalette; // size = 0xC
 
-typedef struct unk_D_86002F34 {
+// Graph node type 0xE: textures and palettes for the GeoMaterialNodes below it (was called a shadow context).
+typedef struct GeoTextureBankNode {
     /* 0x00 */ GraphNode node;
-    /* 0x18 */ unk_D_86002F34_018* unk_18;
-    /* 0x1C */ unk_D_86002F34_01C* unk_1C;
-    /* 0x20 */ Vtx* unk_20;
-    /* 0x24 */ u8 unk_24;
-    /* 0x25 */ u8 unk_25;
-    /* 0x26 */ s16 unk_26;
+    /* 0x18 */ GeoTexture* textures; // @unverified: indexed by GeoMaterialNode.textureIndex
+    /* 0x1C */ GeoPalette* palettes; // @unverified: indexed by GeoMaterialNode.paletteIndex; 16-bit data, maybe TLUTs
+    /* 0x20 */ Vtx* vertices; // @unverified: GeoNode_CreateTextureBank arg7
+    /* 0x24 */ u8 textureCount; // @unverified: count stored with textures
+    /* 0x25 */ u8 paletteCount; // @unverified: count stored with palettes
+    /* 0x26 */ s16 vertexCount; // @unverified: count stored with vertices
     /* 0x28 */ func_unk_D_800ABE10 unk_28;
-} unk_D_86002F34; // size = 0x2C
+} GeoTextureBankNode; // size = 0x2C
 
 // Are unk_D_86002F30 and unk_D_800AC840 the same?
 typedef struct unk_D_86002F30 {

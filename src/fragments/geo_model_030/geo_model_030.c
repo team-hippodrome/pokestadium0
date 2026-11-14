@@ -31,10 +31,10 @@ Gfx* func_8F100020(Gfx* gfx) {
     return gfx;
 }
 
-void func_8F100118(s32 arg0, s8* arg1) {
+void func_8F100118(s32 arg0, GeoDisplayListNode* arg1) {
     if (arg0 == 2) {
-        M2C_FIELD(arg1, Gfx**, 0x18) = Gfx_AllocDisplayList(0x20);
-        func_8F100020(M2C_FIELD(arg1, Gfx**, 0x18));
+        arg1->displayList = Gfx_AllocDisplayList(0x20);
+        func_8F100020(arg1->displayList);
     }
 }
 
@@ -52,9 +52,9 @@ Gfx* func_8F100154(Gfx* gfx) {
     return gfx;
 }
 
-void func_8F100214(s32 arg0, s8* arg1) {
+void func_8F100214(s32 arg0, GeoDisplayListNode* arg1) {
     if (arg0 == 2) {
-        M2C_FIELD(arg1, Gfx**, 0x18) = Gfx_AllocDisplayList(0x18);
-        func_8F100154(M2C_FIELD(arg1, Gfx**, 0x18));
+        arg1->displayList = Gfx_AllocDisplayList(0x18);
+        func_8F100154(arg1->displayList);
     }
 }

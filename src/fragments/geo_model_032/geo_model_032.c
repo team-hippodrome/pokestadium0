@@ -23,9 +23,9 @@ s32 func_8F500020(s32 arg0) {
     return arg0;
 }
 
-void func_8F500088(s32 arg0, unk_D_86002F34_alt1* arg1) {
+void func_8F500088(s32 arg0, GeoModelRootNode* arg1) {
     if (arg0 == 2) {
-        arg1->unk_1A = D_80060490->unk_18 - 1;
+        arg1->unk_1A = D_80060490->rootId - 1;
     }
 }
 
@@ -41,9 +41,9 @@ void func_8F50010C(s32 arg0, DemoGeoNode* arg1) {
 
     if (arg0 == 2) {
         teams = D_80060490->node.callbackArg;
-        arg1->unk_18 = Gfx_AllocDisplayList(0x10);
-        func_8F5000AC(arg1->unk_18, teams[(s32)arg1->node.callbackArg].unk_04);
-        arg1->unk_18 = (Gfx*)func_8F500020((s32)arg1->unk_18);
+        arg1->displayList = Gfx_AllocDisplayList(0x10);
+        func_8F5000AC(arg1->displayList, teams[(s32)arg1->node.callbackArg].unk_04);
+        arg1->displayList = (Gfx*)func_8F500020((s32)arg1->displayList);
     }
 }
 
@@ -91,12 +91,12 @@ void func_8F500298(s32 arg0, DemoGeoNode *arg1)
     slot = ((u32) arg1->node.callbackArg) & 0xFFFF;
     if (slot < teams[team].unk_40[0][2])
     {
-      arg1->unk_18 = Gfx_AllocDisplayList(0x10);
-      func_8F500238(arg1->unk_18, teams[team].unk_08[slot]);
+      arg1->displayList = Gfx_AllocDisplayList(0x10);
+      func_8F500238(arg1->displayList, teams[team].unk_08[slot]);
     }
     else
     {
-      arg1->unk_18 = 0;
+      arg1->displayList = 0;
       if (arg1)
       {
       }

@@ -749,6 +749,6 @@ void LabPCList_LoadAllBoxes(unk_func_8830867C_02C_144*);
 void LabPCList_SaveDirtyBoxes(unk_func_8830867C_02C_144*, s32);
 void LabPCList_InitDeckCategories(unk_func_8830867C_02C_154*, MemoryPool* arg1);
 void LabPCList_BuildTmHmList(PointerList*, unk_func_8830867C_02C_1A8*, unk_func_8830867C_02C_154*, s32, s32);
-void PokeIcon_AttachDepthBuffer(unk_func_8001A024*, ModelLoadContext*, DepthBuffer*);
+void PokeIcon_AttachDepthBuffer(PokeIconRenderer*, ModelLoadContext*, GfxImage*);
 
 #endif // FRAGMENT_LAB_POKEMON_LIST_H

@@ -246,7 +246,7 @@ void DisplayWorker_Initialize(void) {
     osCreateMesgQueue(&D_800870D0.doneQueue, &D_800870D0.doneMesgBuf, 1);
     D_800870D0.nmiClearStep = 0;
     D_800870D0.isWaitingForRequest = 0;
-    D_800870D0.lineImage = (struct unk_D_80068BB0*)GfxImage_Allocate(0, IMAGE_SIZE_BITS_16b, 0x280, 1, MEMORY_POOL_RIGHT);
+    D_800870D0.lineImage = (struct GfxImage*)GfxImage_Allocate(0, IMAGE_SIZE_BITS_16b, 0x280, 1, MEMORY_POOL_RIGHT);
     Display_ClearFramebufferLine(1);
     Dma_WriteChunks(&D_80087B88, 0xB0000B70, 0xB0000C70, 0);
 }
@@ -303,7 +303,7 @@ void Display_SetBufferConfig(DisplayFrame* arg0, u8 arg1, u8 arg2, u8 arg3, u8 a
     arg0->renderTargetIndex = arg4;
     arg0->dlist = (Gfx*)arg5;
     arg0->dlistSize = (Gfx*)arg6;
-    arg0->framebuffer = (struct unk_D_80068BB0*)(uintptr_t)arg7;
+    arg0->framebuffer = (struct GfxImage*)(uintptr_t)arg7;
 }
 
 /** Returns the state of the special audio sequence. */

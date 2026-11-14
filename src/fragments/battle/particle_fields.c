@@ -14,15 +14,15 @@ void Particle_SetFieldOffsetA6IfNotSentinel(Particle* arg0, s16 arg1);
 void Particle_SetFieldOffsetA8IfNotSentinel(Particle* arg0, s16 arg1);
 void Particle_SetPrimAlphaIfNotSentinel(Particle* arg0, u8 arg1);
 void Particle_SetFieldOffsetAAIfNotSentinel(Particle* arg0, s16 arg1);
-s16 Particle_FieldAA_GetS16_0C068(Particle* arg0);
-s16 Particle_GetUnkAA(Particle* arg0);
+s16 Particle_ScratchA_GetS16_0C068(Particle* arg0);
+s16 Particle_GetParam1(Particle* arg0);
 void BattleAnim_ClearEffectState(void);
 
 void Particle_SetPrimAlpha(s8 *arg0, char arg1);
-void Particle_FieldA6_SetS16_0BCA8(Particle* arg0, s16 arg1);
-void Particle_FieldA8_SetS16_0BE14(Particle* arg0, s16 arg1);
-void Particle_FieldAC_SetS16_0BED8(Particle* arg0, s16 arg1);
-void Particle_FieldCF_SetU8_0BEEC(Particle* arg0, u8 arg1);
+void Particle_Param0_SetS16_0BCA8(Particle* arg0, s16 arg1);
+void Particle_Countdown_SetS16_0BE14(Particle* arg0, s16 arg1);
+void Particle_SpawnIndex_SetS16_0BED8(Particle* arg0, s16 arg1);
+void Particle_ByteParam1_SetU8_0BEEC(Particle* arg0, u8 arg1);
 
 /**
  * Store the parameter only when it differs from the field-specific sentinel.
@@ -32,7 +32,7 @@ void Particle_FieldCF_SetU8_0BEEC(Particle* arg0, u8 arg1);
  */
 void Particle_SetFieldOffsetACIfNotSentinel(Particle* arg0, s16 arg1) {
     if ((u32)arg0 != -1) {
-        Particle_FieldAC_SetS16_0BED8(arg0, arg1);
+        Particle_SpawnIndex_SetS16_0BED8(arg0, arg1);
     }
 }
 
@@ -44,7 +44,7 @@ void Particle_SetFieldOffsetACIfNotSentinel(Particle* arg0, s16 arg1) {
  */
 void Particle_SetFieldOffsetCFIfNotSentinel(Particle* arg0, u8 arg1) {
     if ((u32)arg0 != -1) {
-        Particle_FieldCF_SetU8_0BEEC(arg0, arg1);
+        Particle_ByteParam1_SetU8_0BEEC(arg0, arg1);
     }
 }
 
@@ -56,7 +56,7 @@ void Particle_SetFieldOffsetCFIfNotSentinel(Particle* arg0, u8 arg1) {
  */
 void Particle_SetFieldOffsetA6IfNotSentinel(Particle* arg0, s16 arg1) {
     if ((u32)arg0 != -1) {
-        Particle_FieldA6_SetS16_0BCA8(arg0, arg1);
+        Particle_Param0_SetS16_0BCA8(arg0, arg1);
     }
 }
 
@@ -68,7 +68,7 @@ void Particle_SetFieldOffsetA6IfNotSentinel(Particle* arg0, s16 arg1) {
  */
 void Particle_SetFieldOffsetA8IfNotSentinel(Particle* arg0, s16 arg1) {
     if ((u32)arg0 != -1) {
-        Particle_FieldA8_SetS16_0BE14(arg0, arg1);
+        Particle_Countdown_SetS16_0BE14(arg0, arg1);
     }
 }
 
@@ -80,7 +80,7 @@ void Particle_SetFieldOffsetA8IfNotSentinel(Particle* arg0, s16 arg1) {
  */
 void Particle_SetFieldOffsetCEIfNotSentinel(Particle* arg0, u8 arg1) {
     if ((u32)arg0 != -1) {
-        arg0->unk_CE = arg1;
+        arg0->byteParam2 = arg1;
     }
 }
 
@@ -123,7 +123,7 @@ void Particle_SetPrimAlphaIfNotSentinel(Particle* arg0, u8 arg1) {
  */
 void Particle_SetFieldOffsetAAIfNotSentinel(Particle* arg0, s16 arg1) {
     if ((u32)arg0 != -1) {
-        arg0->unk_AE = arg1;
+        arg0->scratchA = arg1;
     }
 }
 
@@ -161,8 +161,8 @@ u8 Particle_GetUnkCD(s8 *arg0) {
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-s16 Particle_FieldAA_GetS16_0C068(Particle* arg0) {
-    return arg0->unk_AE;
+s16 Particle_ScratchA_GetS16_0C068(Particle* arg0) {
+    return arg0->scratchA;
 }
 
 /**
@@ -171,7 +171,7 @@ s16 Particle_FieldAA_GetS16_0C068(Particle* arg0) {
  * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
-s16 Particle_GetUnkAC(s8 *arg0) {
+s16 Particle_GetSpawnIndex(s8 *arg0) {
     return M2C_FIELD(arg0, s16 *, 0xA8);
 }
 
@@ -190,8 +190,8 @@ s16 func_8213C484(s8 *arg0)
  * Seen in play (2026-11-13) in the 165-move sweep (Guillotine): it returned 32, the halfword at
  * 0xA6.
  */
-s16 Particle_GetUnkAA(Particle* arg0) {
-    return arg0->unk_AA;
+s16 Particle_GetParam1(Particle* arg0) {
+    return arg0->param1;
 }
 
 /**
@@ -200,7 +200,7 @@ s16 Particle_GetUnkAA(Particle* arg0) {
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-s16 Particle_GetUnkA6(s8 *arg0) {
+s16 Particle_GetParam0(s8 *arg0) {
     return M2C_FIELD(arg0, s16 *, 0xA2);
 }
 
@@ -210,7 +210,7 @@ s16 Particle_GetUnkA6(s8 *arg0) {
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-s16 Particle_GetUnkA8(s8 *arg0) {
+s16 Particle_GetCountdown(s8 *arg0) {
     return M2C_FIELD(arg0, s16 *, 0xA4);
 }
 

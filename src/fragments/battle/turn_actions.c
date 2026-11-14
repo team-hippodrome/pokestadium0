@@ -695,7 +695,7 @@ s32 BattleScene_ResetFaintingMonState(ActivePokemon* active_pokemon) {
         Battle_ClearRuntimeFlags(active_pokemon, 0x80);
     }
     if (state->flags & 0x4008) {
-        active_pokemon->displayObject.lodFraction = 0xFF;
+        active_pokemon->displayObject.alpha = 0xFF;
         func_82136708(4, active_pokemon);
         active_pokemon->displayObject.position.y = D_FLT_82189354[active_pokemon->displayObject.objectType][0];
         active_pokemon->displayObject.node.renderFlags &= ~2;
@@ -738,7 +738,7 @@ void BattleScene_FaintStepStart(CameraNode* arg0) {
 }
 
 extern u8* D_82189180[];
-s32 BattleAnim_IsAssetLoadBusy(s8 *arg0);
+s32 BattleAnim_IsAssetLoadBusy(ActivePokemon* arg0);
 void func_821235E0(CameraNode*, ActivePokemon*);
 void func_8211EE8C(void);
 void ActivePokemon_SetStateFlags(ActivePokemon*, s32);

@@ -7,7 +7,7 @@
 
 // geo_model_032.c
 s32 func_8F500020(s32 arg0);
-void func_8F500088(s32 arg0, unk_D_86002F34_alt1* arg1);
+void func_8F500088(s32 arg0, GeoModelRootNode* arg1);
 Gfx* func_8F5000AC(Gfx* gfx, void* segment);
 void func_8F50010C(s32 arg0, DemoGeoNode* arg1);
 void func_8F500188(s32 arg0, DemoGeoNode* arg1);

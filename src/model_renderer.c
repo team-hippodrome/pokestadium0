@@ -56,7 +56,7 @@ void Model_InitDisplayObject(DisplayObject* display_object, s16 root_id, s16 obj
     MtxF_Identity(&display_object->matrix);
     display_object->rootId = root_id;
     display_object->objectType = object_type;
-    display_object->lodFraction = 0xFF;
+    display_object->alpha = 0xFF;
     display_object->textureMode = 0;
     display_object->node.flags |= 0x1;
     display_object->node.renderFlags &= ~0x4;
@@ -119,7 +119,7 @@ void Model_SetMaterialColor(DisplayObject* display_object, u8 r, u8 g, u8 b, u8 
 
 /** Sets the material alpha (LOD fraction) of a display object. */
 void Model_SetMaterialAlpha(DisplayObject* arg0, u8 arg1) {
-    arg0->lodFraction = arg1;
+    arg0->alpha = arg1;
 }
 
 /*
@@ -189,47 +189,42 @@ arg1_func_80010CA8* Model_ComputeNicknameColorVariant(arg1_func_80010CA8* arg0, 
             var_a0 += 0;
         }
 
-        sp34.unk_00 = ((((sp30->unk_12 - sp30->unk_10) << 6) * var_a0) / 255) + (sp30->unk_10 << 6);
+        sp34.hueShift = ((((sp30->unk_12 - sp30->unk_10) << 6) * var_a0) / 255) + (sp30->unk_10 << 6);
     }
 
     *arg0 = sp34;
     return arg0;
 }
 
-typedef struct IconLoader19D08 {
-    u8 flags;
-    char pad01[0x17];
-    s32 loadedModel;
-} IconLoader19D08;
 typedef struct Obj80019D08 {
-    u8 flags;
-    u16 unk_02;
-    BattleMon* unk_04;
-    char pad08[8];
-    IconLoader19D08* unk_10;
-    s32 unk_14;
-} Obj80019D08;
+    /* 0x00 */ u8 flags;                     // @unverified: 0x80 requested, 0x40 loading, 0x20 wait, 0x10 done, as in PokeIcon_RequestBackgroundForObject
+    /* 0x02 */ u16 modelId;                  // @unverified: passed to func_8001799C with the color variant
+    /* 0x04 */ BattleMon* pokemon;           // @unverified: source of the color variant (Model_ComputeSizeVariant)
+    /* 0x08 */ char pad08[8];
+    /* 0x10 */ ModelLoadContext* loadContext;
+    /* 0x14 */ s32 loadedModel;              // @unverified: gets loadContext->loadedModel after the load
+} Obj80019D08; // size = 0x18; same layout as BattleSessionTeams
 s32 func_80005014(void);
-void func_8001799C(IconLoader19D08*, u16, arg1_func_80010CA8);
-void func_80017D00(IconLoader19D08*);
+void func_8001799C(ModelLoadContext*, u16, arg1_func_80010CA8);
+void func_80017D00(ModelLoadContext*);
 
 void func_80019D08(Obj80019D08* arg0) {
     arg1_func_80010CA8 sp24;
 
     sp24.raw = 0;
     if (!(arg0->flags & 0x40) && (arg0->flags & 0x80)) {
-        if (arg0->unk_04 != NULL) {
-            Model_ComputeSizeVariant(&sp24, arg0->unk_04);
+        if (arg0->pokemon != NULL) {
+            Model_ComputeSizeVariant(&sp24, arg0->pokemon);
         }
-        if (!(arg0->unk_10->flags & 4)) {
+        if (!(arg0->loadContext->flags & 4)) {
             while (func_80005014() != 0) {}
         }
-        func_8001799C(arg0->unk_10, arg0->unk_02, sp24);
+        func_8001799C(arg0->loadContext, arg0->modelId, sp24);
         arg0->flags |= 0x40;
         arg0->flags &= ~0x10;
         if (arg0->flags & 0x20) {
-            func_80017D00(arg0->unk_10);
-            arg0->unk_14 = arg0->unk_10->loadedModel;
+            func_80017D00(arg0->loadContext);
+            arg0->loadedModel = arg0->loadContext->loadedModel;
             arg0->flags &= ~0xE0;
         }
     }
@@ -255,14 +250,14 @@ void PokeIcon_WaitFrameLoadForObject(unk_func_8001C248* arg0) {
 
 /** Requests a background load for a display object. */
 void PokeIcon_RequestBackgroundForObject(unk_func_8001C248* arg0) {
-    if (!(arg0->unk_01D & 0x40) && (arg0->unk_01D & 0x80)) {
-        PokeIcon_RequestBackgroundLoad(arg0->node.callback, arg0->unk_020, arg0->unk_024);
-        arg0->unk_01D |= 0x40;
-        arg0->unk_01D &= ~0x10;
-        if (arg0->unk_01D & 0x20) {
+    if (!(arg0->backgroundLoadFlags & 0x40) && (arg0->backgroundLoadFlags & 0x80)) {
+        PokeIcon_RequestBackgroundLoad(arg0->node.callback, arg0->backgroundFileList, arg0->loadedBackground);
+        arg0->backgroundLoadFlags |= 0x40;
+        arg0->backgroundLoadFlags &= ~0x10;
+        if (arg0->backgroundLoadFlags & 0x20) {
             PokeIcon_WaitBackgroundLoad(arg0->node.callback);
-            arg0->unk_024 = arg0->node.callback->loadedBackground;
-            arg0->unk_01D &= ~0xE0;
+            arg0->loadedBackground = arg0->node.callback->loadedBackground;
+            arg0->backgroundLoadFlags &= ~0xE0;
         }
     }
 }
@@ -270,9 +265,9 @@ void PokeIcon_RequestBackgroundForObject(unk_func_8001C248* arg0) {
 /** Polls the icon loader for a display object's background load. */
 void PokeIcon_PollBackgroundForObject(unk_func_8001C248* arg0) {
     if (PokeIcon_PollBackgroundLoad(arg0->node.callback) != 0) {
-        arg0->unk_024 = arg0->node.callback->loadedBackground;
-        arg0->unk_01D &= ~0xE0;
-        arg0->unk_01D |= 0x10;
+        arg0->loadedBackground = arg0->node.callback->loadedBackground;
+        arg0->backgroundLoadFlags &= ~0xE0;
+        arg0->backgroundLoadFlags |= 0x10;
     }
 }
 

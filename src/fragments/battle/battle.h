@@ -186,23 +186,21 @@ typedef struct Cue8212B270 {
     /* 0x0A */ u8 unk_0A;
 } Cue8212B270; // size = 0xB
 
-typedef struct unk_D_843951D0_1010 {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ s16 unk_10;
-} unk_D_843951D0_1010;
+typedef struct SurfWaterGridPoint {
+    /* 0x00 */ Vec3f position; // @unverified: grid point; y is the water height
+    /* 0x0C */ f32 nextHeight; // @unverified: next frame's height from the neighbour diffusion
+    /* 0x10 */ s16 alpha; // @unverified: vertex alpha, 0xFF in the middle and 0 on the edge rows
+} SurfWaterGridPoint;
 
-typedef struct unk_D_843951D0 {
-    /* 0x0000 */ s16 unk_0000;
-    /* 0x0004 */ f32 unk_0004;
+typedef struct SurfWaterGrid {
+    /* 0x0000 */ s16 frame; // @unverified: counts up each frame until duration
+    /* 0x0004 */ f32 waveSpread; // @unverified: neighbour-height diffusion factor
     /* 0x0008 */ s16 unk_0008;
-    /* 0x000A */ s16 unk_000A;
-    /* 0x000C */ Vtx* unk_000C;
+    /* 0x000A */ s16 duration; // @unverified: frames the surface runs
+    /* 0x000C */ Vtx* vtx; // @unverified: 16x16 vertices allocated each frame
     /* 0x0010 */ char unk0010[0x1000];
-    /* 0x1010 */ unk_D_843951D0_1010 grid[16][16];
-} unk_D_843951D0;
+    /* 0x1010 */ SurfWaterGridPoint grid[16][16];
+} SurfWaterGrid;
 
 /* Struct types that were defined identically in each of these files; this is
  * now the one definition they all include:
@@ -292,8 +290,8 @@ typedef struct unk_D_84390010_168 {
     /* 0x000 */ DisplayObject displayObject;
     /* 0x168 */ char unk168[0x1];
     /* 0x169 */ u8 minimized;
-    /* 0x16A */ s16 unk_16A;
-    /* 0x16C */ s16 unk_16C;
+    /* 0x16A */ s16 orbitAngle;
+    /* 0x16C */ s16 orbitSpeed;
     /* 0x16E */ char unk16E[0x2];
 } PokemonAfterimage; // size = 0x170
 
@@ -362,20 +360,10 @@ typedef struct SpeciesLearnsetBuffer {
     /* 0x0E */ char unk0E[0x12];
 } SpeciesLearnsetBuffer; // size = 0x20
 
-typedef struct SwayLayoutConfig {
-    /* 0x00 */ Vec3f frontCameraShotOffset;
-    /* 0x0C */ Vec3f backCameraShotOffset;
-    /* 0x18 */ u8 unk_18;
-    /* 0x19 */ u8 unk_19;
-    /* 0x1A */ u8 unk_1A;
-    /* 0x1B */ u8 unk_1B;
-    /* 0x1C */ char unk1C[4];
-} SwayLayoutConfig; // size = 0x20
-
 typedef struct SwayState {
     /* 0x00 */ Vec3f unk_00;
     /* 0x0C */ Vec3f rotation;
-    /* 0x18 */ Vec3f unk_18;
+    /* 0x18 */ Vec3f orbitCenter; // @unverified: model point the camera orbit is measured from (BattleCamera_CaptureModelOrbit)
     /* 0x24 */ char unk24[0x18];
 } SwayState; // size = 0x3C
 
@@ -408,31 +396,31 @@ typedef struct ActivePokemon {
 
 typedef struct MovePresentationCue {
     /* 0x00 */ u8 id;
-    /* 0x01 */ u8 unk_01;
+    /* 0x01 */ u8 eventTrack; // @unverified: model event track set for the cue, 0xFF for none
     /* 0x02 */ u8 defaultAnchor;
     /* 0x03 */ u8 alternateAnchor;
     /* 0x04 */ u8 animationDuration;
     /* 0x05 */ u8 flags1;
     /* 0x06 */ u8 currentFrame;
     /* 0x07 */ u8 endFrame;
-    /* 0x08 */ u8 unk_08;
-    /* 0x09 */ u8 unk_09;
+    /* 0x08 */ u8 statDownEffectFrame; // @unverified: target's animationTimer frame (minus 1) that queues the stat-down effect
+    /* 0x09 */ u8 statUpEffectFrame; // @unverified: animationTimer frame (minus 1) that queues the stat-up effect
     /* 0x0A */ u8 frameCounter;
 } MovePresentationCue; // size = 0xB (Stadium 1: 0x10)
 
 typedef struct unk_D_8438E7B0 {
     /* 0x000 */ MovePresentationCue moveCues[165];
     /* 0x717 */ MovePresentationCue idleCues;
-    /* 0x722 */ MovePresentationCue unkA60;
+    /* 0x722 */ MovePresentationCue unk722;
     /* 0x72D */ MovePresentationCue faintCue;
     /* 0x738 */ MovePresentationCue hitCue;
     /* 0x743 */ MovePresentationCue chargeCues[6];
     /* 0x785 */ MovePresentationCue sleepIdleCue;
     /* 0x790 */ MovePresentationCue flyingIdleCue;
-    /* 0x79B */ MovePresentationCue unk_B10;
+    /* 0x79B */ MovePresentationCue unk79B;
     /* 0x7A6 */ MovePresentationCue hitReactionOverride;
-    /* 0x7B1 */ MovePresentationCue unkB30[5];
-    /* 0x7E8 */ u8 unkB30_tail;
+    /* 0x7B1 */ MovePresentationCue unk7B1[5];
+    /* 0x7E8 */ u8 unk7E8;
     /* 0x7E9 */ u8 wakeUpEventTrack;
 } PokemonBattleCues; // size >= 0x7EA
 
@@ -440,7 +428,7 @@ typedef struct unk_D_8438E7B0 {
 // named cues that follow it (each MovePresentationCue is 0xB bytes in Zero).
 #define BATTLE_CUE_IDLE 165       // idleCues (0x717)
 
-#define BATTLE_CUE_A60 166        // unkA60 (0x722)
+#define BATTLE_CUE_A60 166        // unk722
 
 #define BATTLE_CUE_FAINT 167      // faintCue (0x72D)
 
@@ -515,8 +503,8 @@ typedef void (*BattleSceneStateCallback)(ActivePokemon*);
 
 typedef struct BattleSceneStateRow {
     /* 0x00 */ s16 unk_00;
-    /* 0x04 */ BattleSceneStateCallback unk_04[7];
-    /* 0x20 */ s32 unk_20;
+    /* 0x04 */ BattleSceneStateCallback callbacks[7]; // @unverified: 0-2 called on entry, 3 registered as the row's tick callback (BattleScene_EnterStateRow)
+    /* 0x20 */ s32 cueIndex; // @unverified: index into PokemonBattleCues.moveCues
     /* 0x24 */ s32 mode;
     /* 0x28 */ s32 unk_28;
 } BattleSceneStateRow; // size = 0x2C
@@ -533,7 +521,7 @@ typedef struct unk_D_843C4DEC {
 } unk_D_843C4DEC; // size = 0x58
 
 typedef struct BattleSceneStateTickSlot {
-    /* 0x00 */ s32 unk_00;
+    /* 0x00 */ s32 pokemon; // @unverified: ActivePokemon passed to callback
     /* 0x04 */ BattleSceneStateCallback callback;
 } BattleSceneStateTickSlot; // size = 0x8
 
@@ -542,11 +530,6 @@ typedef struct TagTeamPartners {
     /* 0x01 */ u8 secondPartner;
     /* 0x02 */ char names[14];
 } TagTeamPartners; // size = 0x10
-
-typedef struct unk_D_84390178 {
-    /* 0x00 */ s32 timeLeft;
-    /* 0x04 */ char unk04[0x14];
-} unk_D_84390178; // size >= 0x18
 
 typedef struct SpeciesModelTransform {
     /* 0x00 */ Vec3f coordinates;
@@ -576,29 +559,8 @@ typedef struct unk_D_843847BC {
     /* 0x08 */ f32 verticalFieldOfView;
     /* 0x0C */ f32 nearPlane;
     /* 0x10 */ f32 farPlane;
-    /* 0x14 */ s16 unk_14;
+    /* 0x14 */ s16 side;
 } ThumbnailSettings; // size = 0x18
-
-typedef struct unk_D_843901B0 {
-    /* 0x00 */Vec3f unk_00;
-    /* 0x0C */s16 unk_0C;
-    /* 0x0E */s16 unk_0E;
-    /* 0x10 */char unk10[0x2];
-    /* 0x12 */s16 unk_12;
-    /* 0x14 */s16 unk_14;
-    /* 0x18 */f32 unk_18;
-    /* 0x1C */f32 unk_1C;
-    /* 0x20 */s16 unk_20;
-    /* 0x22 */s16 unk_22;
-    /* 0x24 */char unk24[0x2];
-    /* 0x26 */s16 unk_26;
-    /* 0x28 */s16 unk_28;
-    /* 0x2C */f32 unk_2C;
-    /* 0x30 */f32 unk_30;
-    /* 0x34 */f32 unk_34;
-    /* 0x38 */f32 unk_38;
-    /* 0x3C */f32 unk_3C;
-} unk_D_843901B0; // size >= 0x40
 
 typedef struct unk_D_843901A0_4C8 {
     /* 0x00 */ s32 unk_00;
@@ -645,201 +607,172 @@ typedef struct unk_D_84385790 {
 
 typedef struct arg1_func_84344CE8 {
     /* 0x00 */ char unk00[0x14];
-    /* 0x14 */ u8* unk_14;
-    /* 0x18 */ Gfx* unk_18;
+    /* 0x14 */ u8* texture; // @unverified: texture passed to the effect display list builders
+    /* 0x18 */ Gfx* displayList; // @unverified: display list allocated per frame by the effect
 } arg1_func_84344CE8; // size >= 0x1C
 
 typedef struct arg1_func_8434E21C {
-    /* 0x00 */ u8* unk_00;
-    /* 0x04 */ u8* unk_04;
+    /* 0x00 */ u8* textureA; // @unverified: I4 tile 0 (gDPLoadTextureTile_4b)
+    /* 0x04 */ u8* textureB; // @unverified: I4 tile 1 (gDPLoadMultiTile_4b)
     /* 0x08 */ char unk08[0x2];
-    /* 0x0A */ s16 unk_0A;
+    /* 0x0A */ s16 variant; // @unverified: switch value in anim_model_effects.c
 } arg1_func_8434E21C; // size >= 0xC
 
 typedef struct RibbonMeshVertexState {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
-    /* 0x10 */ Color_RGBA8 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
+    /* 0x00 */ Vec3f position; // @unverified: ribbon point
+    /* 0x0C */ s16 texS; // @unverified: texture S coordinate
+    /* 0x0E */ s16 texT; // @unverified: texture T coordinate
+    /* 0x10 */ Color_RGBA8 color; // @unverified: vertex color
+    /* 0x14 */ f32 angle; // @unverified: angle around the owner in radians
+    /* 0x18 */ f32 wavePhase; // @unverified: wave phase, advanced each frame
 } RibbonMeshVertexState; // size = 0x1C
 
 typedef struct RibbonMesh {
-    /* 0x000 */ s32 unk_000;
-    /* 0x004 */ f32 unk_004;
-    /* 0x008 */ f32 unk_008;
-    /* 0x00C */ f32 unk_00C;
-    /* 0x010 */ f32 unk_010;
-    /* 0x014 */ f32 unk_014;
-    /* 0x018 */ s16 unk_018;
-    /* 0x01A */ s16 unk_01A;
-    /* 0x01C */ s16 unk_01C;
-    /* 0x01E */ s16 unk_01E;
-    /* 0x020 */ f32 unk_020;
-    /* 0x024 */ s32 unk_024;
-    /* 0x028 */ s32 unk_028;
-    /* 0x02C */ s32 unk_02C;
-    /* 0x030 */ s32 unk_030;
-    /* 0x034 */ s32 unk_034;
-    /* 0x038 */ s32 unk_038;
-    /* 0x03C */ s32 unk_03C;
-    /* 0x040 */ s32 unk_040;
-    /* 0x044 */ s32 unk_044;
+    /* 0x000 */ s32 active; // @unverified: 1 while running
+    /* 0x004 */ Vec3f origin; // @unverified: ring center
+    /* 0x010 */ f32 radius; // @unverified: ring radius (size x scale)
+    /* 0x014 */ f32 scale; // @unverified: owner scale
+    /* 0x018 */ s16 frame; // @unverified: counts up each frame
+    /* 0x01A */ s16 duration; // @unverified: 0x3C, 0x78 or 0x1E frames by kind
+    /* 0x01C */ s16 direction; // @unverified: 1 rises (kinds 0, 2), -1 falls (kind 1)
+    /* 0x01E */ s16 auxEffectId; // @unverified: AuxiliaryEffect_Alloc() id for kind 0, else -1
+    /* 0x020 */ f32 riseSpeed; // @unverified: 1.5, height added per frame
+    /* 0x024 */ s32 primLodFrac; // @unverified: gDPSetPrimColor lod fraction
+    /* 0x028 */ s32 primR; // @unverified: gDPSetPrimColor red
+    /* 0x02C */ s32 primG; // @unverified: gDPSetPrimColor green
+    /* 0x030 */ s32 primB; // @unverified: gDPSetPrimColor blue
+    /* 0x034 */ s32 primA; // @unverified: gDPSetPrimColor alpha
+    /* 0x038 */ s32 envR; // @unverified: gDPSetEnvColor red
+    /* 0x03C */ s32 envG; // @unverified: gDPSetEnvColor green
+    /* 0x040 */ s32 envB; // @unverified: gDPSetEnvColor blue
+    /* 0x044 */ s32 envA; // @unverified: gDPSetEnvColor alpha, faded in or out by StatRibbon_UpdateEnvAlpha
     /* 0x048 */ char unk048[0x8];
-    /* 0x050 */ Vtx unk_050[31 * 2];
-    /* 0x430 */ RibbonMeshVertexState unk_430[31 * 2];
+    /* 0x050 */ Vtx vertices[31 * 2]; // @unverified: 31 vertex pairs
+    /* 0x430 */ RibbonMeshVertexState points[31 * 2]; // @unverified: 31 point pairs (lower, upper)
 } RibbonMesh; // size = 0xAF8
 
-typedef struct unk_D_843975E8 {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ f32 unk_18;
-    /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ f32 unk_20;
+typedef struct CameraFacingQuad {
+    /* 0x00 */ Vec3f center; // @unverified: point straight ahead of the camera eye
+    /* 0x0C */ Vec3f halfRight; // @unverified: half-width vector along the camera's right
+    /* 0x18 */ Vec3f halfUp; // @unverified: half-height vector along the camera's up
     /* 0x24 */ char unk24[0x4];
-} unk_D_843975E8; // size = 0x28
+} CameraFacingQuad; // size = 0x28
 
 typedef struct Radial20Node {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ u8 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ Vec3f unk_10;
-    /* 0x1C */ Vec3f unk_1C;
+    /* 0x00 */ f32 startDelay; // @unverified: frames before the node starts moving (Radial20_UpdateNode)
+    /* 0x04 */ u8 alpha; // @unverified: vertex alpha in Radial20_Draw
+    /* 0x08 */ f32 halfWidth; // @unverified: grows by 1 a frame up to Radial20.maxHalfWidth; vertex offset length
+    /* 0x0C */ f32 angle; // @unverified: roll angle in radians, advanced by angleStep
+    /* 0x10 */ Vec3f position; // @unverified: node center, moves by velocity
+    /* 0x1C */ Vec3f velocity; // @unverified: added to position every frame
     /* 0x28 */ char unk28[0x20];
 } Radial20Node; // size = 0x48
 
 typedef struct Radial20 {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ s16 unk_004;
-    /* 0x006 */ s16 unk_006;
-    /* 0x008 */ s16 unk_008;
-    /* 0x00A */ Color_RGBA8 unk_00A; // Stadium 1 follows this with a Color_RGB8
-    /* 0x010 */ f32 unk_014;
-    /* 0x014 */ f32 unk_018;
-    /* 0x018 */ Vtx* unk_01C;
-    /* 0x01C */ char unk020[0x18];
-    /* 0x034 */ s32 unk_038[3];
-    /* 0x040 */ Radial20Node unk_048[20];
+    /* 0x000 */ s16 active; // @unverified: 1 while running (Radial20_IsComplete)
+    /* 0x002 */ s16 auxEffectId; // @unverified: AuxiliaryEffect_Alloc() id, passed to AuxiliaryEffect_Update/Spawn/Draw
+    /* 0x004 */ s16 frame; // @unverified: counts up each frame until duration
+    /* 0x006 */ s16 duration; // @unverified: frames the effect runs
+    /* 0x008 */ s16 variant; // @unverified: motion and draw mode switch (0-9) in Radial20_UpdateNode/Draw
+    /* 0x00A */ Color_RGBA8 color; // vertex color (rgb); poking FF0000 turned Onix's light-blue move streak red in play. Stadium 1 follows this with a Color_RGB8
+    /* 0x010 */ f32 maxHalfWidth; // @unverified: cap for each node's halfWidth
+    /* 0x014 */ f32 angleStep; // @unverified: added to each node's angle per frame
+    /* 0x018 */ Vtx* vtx; // @unverified: vertices allocated each frame in Radial20_Draw
+    /* 0x01C */ char unk01C[0x18];
+    /* 0x034 */ s32 unk_034[3]; // @unverified: only cleared at start
+    /* 0x040 */ Radial20Node nodes[20];
 } Radial20; // size = 0x5E0 (Stadium 1: 0x5E8)
 
 typedef struct Trail40Node {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A;
+    /* 0x00 */ Vec3f position; // @unverified: grid point; y is the wave height
+    /* 0x0C */ Vec3f normal; // @unverified: averaged face normal, drawn as the vertex color
+    /* 0x18 */ s16 texS; // @unverified: texture S coordinate
+    /* 0x1A */ s16 texT; // @unverified: texture T coordinate
 } Trail40Node; // size = 0x1C
 
 typedef struct Trail40 {
-    /* 0x0000 */ s16 unk_0000;
-    /* 0x0002 */ s16 unk_0002;
-    /* 0x0004 */ s16 unk_0004;
-    /* 0x0008 */ f32 unk_0008;
-    /* 0x000C */ Vtx* unk_000C;
-    /* 0x0010 */ Mtx* unk_0010;
-    /* 0x0014 */ Trail40Node unk_0014[16][16];
+    /* 0x0000 */ s16 frame; // @unverified: counts up each frame until duration
+    /* 0x0002 */ s16 duration; // @unverified: frames the effect runs
+    /* 0x0004 */ s16 alpha; // @unverified: fades in by 10 to 0x80, out by 10 at the end
+    /* 0x0008 */ f32 waveAmplitude; // @unverified: ramps up by 0.05 a frame, scales the wave height
+    /* 0x000C */ Vtx* vtx; // @unverified: grid vertices allocated each frame
+    /* 0x0010 */ Mtx* mtx; // @unverified: model matrix loaded before the grid
+    /* 0x0014 */ Trail40Node grid[16][16]; // @unverified: 16x16 surface grid
 } Trail40; // size >= 0x1C14
 
 typedef struct Trail40VariantNode {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ f32 unk_14;
-    /* 0x18 */ s16 unk_18;
-    /* 0x1A */ s16 unk_1A;
-    /* 0x1C */ f32 unk_1C;
+    /* 0x00 */ Vec3f position; // @unverified: grid point; y is the wave height
+    /* 0x0C */ Vec3f normal; // @unverified: averaged face normal, drawn as the vertex color
+    /* 0x18 */ s16 texS; // @unverified: texture S coordinate
+    /* 0x1A */ s16 texT; // @unverified: texture T coordinate
+    /* 0x1C */ f32 wavePhase; // @unverified: per-point sine phase, advanced by 0.1 a frame
 } Trail40VariantNode; // size = 0x20
 
 typedef struct Trail40Variant {
-    /* 0x0000 */ s16 unk_0000;
-    /* 0x0002 */ s16 unk_0002;
-    /* 0x0004 */ s16 unk_0004;
-    /* 0x0008 */ f32 unk_0008;
-    /* 0x000C */ Vtx* unk_000C;
-    /* 0x0010 */ Mtx* unk_0010;
-    /* 0x0014 */ Trail40VariantNode unk_0014[16][16];
+    /* 0x0000 */ s16 frame; // @unverified: counts up each frame until duration
+    /* 0x0002 */ s16 duration; // @unverified: frames the effect runs
+    /* 0x0004 */ s16 alpha; // @unverified: fades in by 10 to 0x80, out by 10 at the end
+    /* 0x0008 */ f32 waveAmplitude; // @unverified: ramps up by 0.05 a frame to 0.5, not read back
+    /* 0x000C */ Vtx* vtx; // @unverified: grid vertices allocated each frame
+    /* 0x0010 */ Mtx* mtx; // @unverified: model matrix loaded before the grid
+    /* 0x0014 */ Trail40VariantNode grid[16][16]; // @unverified: 16x16 surface grid
 } Trail40Variant; // size >= 0x2014
 
 typedef struct TexturedRibbonSheetNode {
-    /* 0x00 */ f32 unk_00;
-    /* 0x08 */ u8 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ Vec3f unk_18;
-    /* 0x24 */ Vec3f unk_24;
-    /* 0x30 */ Vtx unk_30[2];
+    /* 0x00 */ f32 startDelay; // @unverified: node index at start; vertices are only recomputed once it is <= 0
+    /* 0x08 */ u8 alpha; // @unverified: vertex alpha, fades along the ribbon
+    /* 0x08 */ f32 angle; // @unverified: roll angle in radians
+    /* 0x0C */ Vec3f position; // @unverified: node center
+    /* 0x18 */ Vec3f velocity; // @unverified: phase 1 motion
+    /* 0x24 */ Vec3f riseVelocity; // @unverified: phase 0 motion (only y is used)
+    /* 0x30 */ Vtx vertices[2]; // @unverified: the node's two edge vertices, shifted down the ribbon each frame
 } TexturedRibbonSheetNode; // size = 0x50
 
 typedef struct TexturedRibbonSheet {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ s16 unk_004;
-    /* 0x006 */ s16 unk_006;
-    /* 0x008 */ s16 unk_008;
-    /* 0x00A */ Color_RGB8 unk_00A;
-    /* 0x010 */ f32 unk_010;
-    /* 0x014 */ f32 unk_014;
-    /* 0x018 */ Vtx* unk_018;
+    /* 0x000 */ s16 active; // @unverified: 1 while running
+    /* 0x002 */ s16 phase; // @unverified: 0 rise, 1 fly toward the target after frame 11
+    /* 0x004 */ s16 frame; // @unverified: counts up each frame until duration + 10
+    /* 0x006 */ s16 duration; // @unverified: frames the effect runs
+    /* 0x008 */ s16 direction; // @unverified: -1 or 1 from the sign of the start x
+    /* 0x00A */ Color_RGB8 color; // @unverified: vertex color
+    /* 0x010 */ f32 scale; // @unverified: half the secondary owner's model scale
+    /* 0x014 */ f32 angleStep; // @unverified: added to the head node's angle per frame
+    /* 0x018 */ Vtx* vtx; // @unverified: vertices allocated each frame
     /* 0x01C */ char unk01C[0x1C];
-    /* 0x038 */ TexturedRibbonSheetNode unk_038[10];
+    /* 0x038 */ TexturedRibbonSheetNode nodes[10]; // @unverified: ribbon nodes, head first
 } TexturedRibbonSheet; // size = 0x358
 
 typedef struct FourStreamTrailNode {
-    /* 0x00 */ u8 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ Vec3f unk_18;
-    /* 0x24 */ f32 unk_24;
-    /* 0x28 */ f32 unk_28;
-    /* 0x2C */ Vec3f unk_2C;
-    /* 0x38 */ Vec3f unk_38;
+    /* 0x00 */ u8 alpha; // @unverified: vertex alpha, fades along the stream
+    /* 0x04 */ f32 halfWidth; // @unverified: grows by 2 a frame up to maxHalfWidth
+    /* 0x08 */ f32 angle; // @unverified: roll angle in radians
+    /* 0x0C */ Vec3f position; // @unverified: node center
+    /* 0x18 */ Vec3f velocity; // @unverified: added to position each frame (head node)
+    /* 0x24 */ f32 prevHalfWidth; // @unverified: halfWidth before this frame, copied to the next node
+    /* 0x28 */ f32 prevAngle; // @unverified: angle before this frame, copied to the next node
+    /* 0x2C */ Vec3f prevPosition; // @unverified: position before this frame, copied to the next node
+    /* 0x38 */ Vec3f prevVelocity; // @unverified: velocity before this frame, copied to the next node
 } FourStreamTrailNode; // size = 0x44
 
 typedef struct FourStreamTrail {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ s16 unk_004;
-    /* 0x006 */ s16 unk_006;
-    /* 0x008 */ Color_RGB8 unk_008;
-    /* 0x00C */ f32 unk_00C;
-    /* 0x010 */ f32 unk_010;
-    /* 0x014 */ f32 unk_014;
-    /* 0x018 */ Vtx* unk_018;
-    /* 0x01C */ Vec3f unk_01C;
+    /* 0x000 */ s16 active; // @unverified: 1 while running
+    /* 0x002 */ s16 frame; // @unverified: counts up each frame until duration
+    /* 0x004 */ s16 duration; // @unverified: frames the effect runs
+    /* 0x006 */ s16 direction; // @unverified: -1 or 1 from the sign of the start x
+    /* 0x008 */ Color_RGB8 color; // @unverified: vertex color
+    /* 0x00C */ f32 scale; // @unverified: 0.75 x the secondary owner's model scale
+    /* 0x010 */ f32 maxHalfWidth; // @unverified: cap for the nodes' halfWidth
+    /* 0x014 */ f32 angleStep; // @unverified: added to the head node's angle per frame
+    /* 0x018 */ Vtx* vtx; // @unverified: vertices allocated each frame
+    /* 0x01C */ Vec3f targetPos; // @unverified: the head node is pulled toward its y and z
     /* 0x028 */ char unk028[0xC];
-    /* 0x034 */ FourStreamTrailNode unk_034[15];
+    /* 0x034 */ FourStreamTrailNode nodes[15]; // @unverified: stream nodes, head first
 } FourStreamTrail; // size = 0x430
 
-typedef struct OwnerLinkedFourStreamNode {
-    /* 0x00 */ u8 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ Vec3f unk_18;
-    /* 0x24 */ f32 unk_24;
-    /* 0x28 */ f32 unk_28;
-    /* 0x2C */ Vec3f unk_2C;
-    /* 0x38 */ Vec3f unk_38;
-} OwnerLinkedFourStreamNode; // size = 0x44
 
-typedef void (*unk_D_8140E728_01C_004_1_04)(struct Particle*, s32, struct ParticleDescriptorChild*);
+typedef void (*unk_D_8140E728_01C_004_1_04)(struct Particle*, s32);
 
-typedef void (*unk_D_8140E728_01C_004_1_08)(struct Particle*, s32, struct ParticleDescriptorChild*);
+typedef void (*unk_D_8140E728_01C_004_1_08)(struct Particle*, CameraNode*);
 
 typedef struct unk_D_8140E728_01C_00C_1 {
     /* 0x00 */ s32 arg;
@@ -851,12 +784,11 @@ typedef union unk_D_8140E728_01C_00C {
 } unk_D_8140E728_01C_00C;
 
 typedef struct ParticleDescriptorChild {
-    /* 0x00 */ u8 unk_00;
-    /* 0x00 */ u8 unk_01;
-    /* 0x00 */ s16 unk_02;
-    /* 0x04 */ unk_D_8140E728_01C_004_1_04 unk_04;
-    /* 0x08 */ unk_D_8140E728_01C_004_1_08 unk_08;
-    /* 0x0C */ unk_D_8140E728_01C_00C unk_0C;
+    /* 0x00 */ s16 drawMode; // @unverified: 2 = call setupCallback(setupArg->arg) before drawCallback (Particle_DispatchDraw)
+    /* 0x02 */ s16 renderSetup; // @unverified: 0/1 picks the setup display list in func_8213A904
+    /* 0x04 */ unk_D_8140E728_01C_004_1_04 setupCallback; // @unverified: called with *setupArg when drawMode is 2
+    /* 0x08 */ unk_D_8140E728_01C_004_1_08 drawCallback; // @unverified: per-particle draw call in Particle_DispatchDraw
+    /* 0x0C */ unk_D_8140E728_01C_00C setupArg; // @unverified: argument read for setupCallback
 } ParticleDescriptorChild; // size = 0x10
 
 typedef void (*ParticleRenderCallback)(struct Particle*, CameraNode*);
@@ -867,7 +799,8 @@ typedef union ParticleDescriptorPayload {
 } ParticleDescriptorPayload;
 
 typedef struct ParticleDescriptor {
-    /* 0x00 */ s32 kind; /* unk_04: 1 = a, 3 = func */
+    /* 0x00 */ s16 kind; // @unverified: 1 = payload.a (child table), 3 = payload.func (Particle_DispatchDraw)
+    /* 0x02 */ s16 chained; // @unverified: nonzero spawns the whole count from the chained pool (BattleAnim_SpawnStandardParticles)
     /* 0x04 */ ParticleDescriptorPayload payload;
 } ParticleDescriptor; // size = 0x08
 
@@ -875,8 +808,8 @@ typedef void (*ParticleUpdateCallback)(struct Particle*);
 
 /*
  * Same record as Stadium 1's Particle, but 4 bytes shorter: from 0x28 on, every
- * field sits 4 bytes lower than in Stadium 1 (unk_XX names keep the Stadium 1
- * offset). Field names follow Stadium 1. @unverified
+ * field sits 4 bytes lower than in Stadium 1. Field names without a trailing comment
+ * follow Stadium 1 and are @unverified; the commented ones say where they came from.
  */
 typedef struct Particle {
     /* 0x00 */ struct Particle* next;
@@ -886,232 +819,218 @@ typedef struct Particle {
     /* 0x10 */ struct ActivePokemon* pokemon;
     /* 0x14 */ DisplayObject* displayObject;
     /* 0x18 */ u32 flags;
-    /* 0x1C */ f32 scale;
+    /* 0x1C */ f32 scale; // draw scale; poking 1.0 over 5.4 shrank Transform's smoke puffs in play
     /* 0x20 */ f32 scaleTarget;
     /* 0x24 */ f32 scaleStep;
     /* 0x28 */ Vec3f worldPosition;
     /* 0x34 */ Vec3f positionOffset;
-    /* 0x40 */ char unk44[0xC];
+    /* 0x40 */ char unk40[0xC];
     /* 0x4C */ Vec3f motionOffset;
     /* 0x58 */ Vec3f motionTarget;
-    /* 0x64 */ Vec3f origin;
+    /* 0x64 */ Vec3f origin; // anchor position; poking x = -200 moved Transform's smoke off screen in play
     /* 0x70 */ f32 stepMagnitude;
     /* 0x74 */ f32 magnitudeStep;
     /* 0x78 */ Vec3f motionStep;
-    /* 0x84 */ char unk88[0xC];
+    /* 0x84 */ char unk84[0xC];
     /* 0x90 */ Vec3s rotation;
     /* 0x96 */ Vec3s rotationStep;
     /* 0x9C */ Vec3s rotationTarget;
-    /* 0xA2 */ s16 unk_A6;
-    /* 0xA4 */ s16 unk_A8;
-    /* 0xA6 */ s16 unk_AA;
-    /* 0xA8 */ s16 unk_AC;
-    /* 0xAA */ s16 unk_AE;
-    /* 0xAC */ s16 unk_B0;
+    /* 0xA2 */ s16 param0; // @unverified: from BattleAnimEffectSlot.param0 at spawn (times spawnIndex for kind 18); per-effect countdown or alpha target
+    /* 0xA4 */ s16 countdown; // @unverified: per-effect countdown, only set and counted down by the particle.c helpers
+    /* 0xA6 */ s16 param1; // @unverified: from BattleAnimEffectSlot.param1 at spawn; per-effect step (palette/alpha approach speed)
+    /* 0xA8 */ s16 spawnIndex; // @unverified: index of the particle within its spawn batch/burst (BattleAnim_InitializeParticleFromEffect, CloneParticleState)
+    /* 0xAA */ s16 scratchA; // @unverified: per-effect scratch value (alpha, angle step, palette index), meaning set by each callback
+    /* 0xAC */ s16 scratchB; // @unverified: per-effect scratch value (env alpha, angle target), meaning set by each callback
     /* 0xAE */ s16 lifecycle;
-    /* 0xB0 */ char unkB4[0x2];
+    /* 0xB0 */ char unkB0[0x2];
     /* 0xB2 */ s16 frameTimer;
     /* 0xB4 */ s16 phase;
     /* 0xB6 */ s16 phaseTimer;
     /* 0xB8 */ s16 delayTimer;
-    /* 0xBA */ u8 prim_r;
+    /* 0xBA */ u8 prim_r; // primitive color; poking FF0000 into prim_r/g/b turned Transform's smoke red in play
     /* 0xBB */ u8 prim_g;
     /* 0xBC */ u8 prim_b;
-    /* 0xBD */ u8 env_r;
+    /* 0xBD */ u8 env_r; // environment color; poking 0000FF into env_r/g/b tinted Transform's smoke blue in play
     /* 0xBE */ u8 env_g;
     /* 0xBF */ u8 env_b;
-    /* 0xC0 */ u8 prim_a;
-    /* 0xC1 */ char unkC5[0x1];
+    /* 0xC0 */ u8 prim_a; // primitive alpha; poking 0 hid Transform's smoke in play, it fades 0x78 -> 0x40 on its own
+    /* 0xC1 */ char unkC1[0x1];
     /* 0xC2 */ s8 loopsRemaining;
     /* 0xC3 */ s8 textureFrame;
-    /* 0xC4 */ char unkC8[0x2];
-    /* 0xC6 */ u8 unk_CA;
-    /* 0xC7 */ u8 unk_CB;
-    /* 0xC8 */ u8 unk_CC;
-    /* 0xC9 */ u8 unk_CD;
-    /* 0xCA */ u8 unk_CE;
-    /* 0xCB */ u8 unk_CF;
+    /* 0xC4 */ char unkC4[0x2];
+    /* 0xC6 */ u8 effectList; // @unverified: effect list the particle belongs to; lists 4 and 7 survive BattleAnim_CleanupEffects*
+    /* 0xC7 */ u8 resourceListId; // @unverified: queued resource list id; BattleAnim_StopParticlesForOwnerCategory matches it
+    /* 0xC8 */ u8 anchorMode; // @unverified: selects the origin in BattleAnim_InitializeParticleAnchor/UpdateParticleAnchor
+    /* 0xC9 */ u8 byteParam0; // @unverified: from BattleAnimEffectSlot.byteParam0; 0xFF by default; bone id or alpha target per effect
+    /* 0xCA */ u8 byteParam2; // @unverified: from BattleAnimEffectSlot.byteParam2; per-effect step value
+    /* 0xCB */ u8 byteParam1; // @unverified: from BattleAnimEffectSlot.byteParam1; per-effect palette/color target
     /* 0xCC */ s8 allocated;
 } Particle; // size = 0xD0
 
 typedef struct OwnerLinkedFourStream {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ s16 unk_004;
-    /* 0x006 */ s16 unk_006;
-    /* 0x008 */ Color_RGB8 unk_008;
-    /* 0x00C */ f32 unk_00C;
-    /* 0x010 */ f32 unk_010;
-    /* 0x014 */ f32 unk_014;
-    /* 0x018 */ Vtx* unk_018;
-    /* 0x01C */ Vec3f unk_01C;
+    /* 0x000 */ s16 active; // @unverified: 1 while running
+    /* 0x002 */ s16 frame; // @unverified: counts up each frame until duration
+    /* 0x004 */ s16 duration; // @unverified: frames the effect runs
+    /* 0x006 */ s16 direction; // @unverified: -1 or 1 from the sign of the start x
+    /* 0x008 */ Color_RGB8 color; // @unverified: vertex color
+    /* 0x00C */ f32 maxHalfWidth; // @unverified: cap for the nodes' halfWidth
+    /* 0x010 */ f32 angleStep; // @unverified: added to the head node's angle per frame
+    /* 0x014 */ f32 heading; // @unverified: atan2 of the head velocity in degrees, used as the head model's roll
+    /* 0x018 */ Vtx* vtx; // @unverified: vertices allocated each frame
+    /* 0x01C */ Vec3f targetPos; // @unverified: the head node is pulled toward its y
     /* 0x028 */ char unk028[0xC];
-    /* 0x034 */ Particle* unk_034;
-    /* 0x038 */ OwnerLinkedFourStreamNode unk_038[15];
+    /* 0x034 */ Particle* particle; // @unverified: particle that follows the head node (BattleAnim_SpawnSecondaryOwnerParticle)
+    /* 0x038 */ FourStreamTrailNode nodes[15]; // @unverified: stream nodes, head first
 } OwnerLinkedFourStream; // size = 0x434
 
-typedef struct OwnerAnchoredFourStreamNode {
-    /* 0x00 */ u8 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ Vec3f unk_18;
-    /* 0x24 */ f32 unk_24;
-    /* 0x28 */ f32 unk_28;
-    /* 0x2C */ Vec3f unk_2C;
-    /* 0x38 */ Vec3f unk_38;
-} OwnerAnchoredFourStreamNode; // size = 0x44
 
 typedef struct OwnerAnchoredFourStream {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ s16 unk_004;
-    /* 0x006 */ s16 unk_006;
-    /* 0x008 */ Color_RGB8 unk_008;
-    /* 0x010 */ f32 unk_00C;
-    /* 0x010 */ f32 unk_010;
-    /* 0x014 */ Vtx* unk_014;
-    /* 0x018 */ Particle* unk_018;
-    /* 0x01C */ OwnerAnchoredFourStreamNode unk_01C[15];
-    /* 0x418 */ f32 unk_418;
-} OwnerAnchoredFourStream; // size = 0x41C
+    /* 0x000 */ s16 active; // @unverified: 1 while running
+    /* 0x002 */ s16 frame; // @unverified: counts up each frame until duration
+    /* 0x004 */ s16 duration; // @unverified: frames the effect runs
+    /* 0x006 */ s16 direction; // @unverified: -1 or 1 from the sign of the start x
+    /* 0x008 */ Color_RGB8 color; // @unverified: vertex color
+    /* 0x00C */ f32 maxHalfWidth; // @unverified: cap for the nodes' halfWidth
+    /* 0x010 */ f32 angleStep; // @unverified: added to the head node's angle per frame
+    /* 0x014 */ Vtx* vtx; // @unverified: vertices allocated each frame
+    /* 0x018 */ Particle* particle; // @unverified: particle that follows the head node
+    /* 0x01C */ FourStreamTrailNode nodes[15]; // @unverified: stream nodes, head first
+} OwnerAnchoredFourStream; // size = 0x418
 
 typedef struct Trail50EffectNode {
-    /* 0x00 */ u8 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ Vec3f unk_18;
-    /* 0x24 */ Vec3f unk_24;
-    /* 0x30 */ f32 unk_30;
-    /* 0x34 */ f32 unk_34;
-    /* 0x38 */ Vec3f unk_38;
-    /* 0x44 */ Vec3f unk_44;
+    /* 0x00 */ u8 alpha; // @unverified: vertex alpha, fades along the trail
+    /* 0x04 */ f32 halfWidth; // @unverified: grows by 2 a frame up to maxHalfWidth
+    /* 0x08 */ f32 angle; // @unverified: roll angle in radians
+    /* 0x0C */ Vec3f position; // @unverified: node center
+    /* 0x18 */ Vec3f velocity; // @unverified: phase 1 motion
+    /* 0x24 */ Vec3f swirlVelocity; // @unverified: phase 0 motion, swirls by sin/cos(angle) x scale
+    /* 0x30 */ f32 prevHalfWidth; // @unverified: halfWidth before this frame, copied to the next node
+    /* 0x34 */ f32 prevAngle; // @unverified: angle before this frame, copied to the next node
+    /* 0x38 */ Vec3f prevPosition; // @unverified: position before this frame, copied to the next node
+    /* 0x44 */ Vec3f prevVelocity; // @unverified: velocity before this frame, copied to the next node
 } Trail50EffectNode; // size = 0x50
 
 typedef struct Trail50Effect {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ s16 unk_004;
-    /* 0x006 */ s16 unk_006;
-    /* 0x008 */ s16 unk_008;
-    /* 0x00A */ Color_RGB8 unk_00A;
-    /* 0x010 */ f32 unk_010;
-    /* 0x014 */ f32 unk_014;
-    /* 0x018 */ f32 unk_018;
+    /* 0x000 */ s16 active; // @unverified: 1 while running
+    /* 0x002 */ s16 phase; // @unverified: 0 swirl, 1 fly (after frame 21, frame restarts)
+    /* 0x004 */ s16 frame; // @unverified: counts up each frame
+    /* 0x006 */ s16 duration; // @unverified: frames of phase 1
+    /* 0x008 */ s16 direction; // @unverified: -1 or 1 from the sign of the start x
+    /* 0x00A */ Color_RGB8 color; // @unverified: vertex color
+    /* 0x010 */ f32 scale; // @unverified: model scale; swirl strength and draw scale
+    /* 0x014 */ f32 maxHalfWidth; // @unverified: cap for the nodes' halfWidth
+    /* 0x018 */ f32 angleStep; // @unverified: added to the head node's angle per frame
     /* 0x01C */ char unk01C[0x4];
-    /* 0x020 */ Vtx* unk_020;
-    /* 0x024 */ Vec3f unk_024;
+    /* 0x020 */ Vtx* vtx; // @unverified: vertices allocated each frame
+    /* 0x024 */ Vec3f startPos; // @unverified: start position, only written
     /* 0x030 */ char unk030[0x10];
-    /* 0x040 */ Trail50EffectNode unk_040[10];
+    /* 0x040 */ Trail50EffectNode nodes[10]; // @unverified: trail nodes, head first
 } Trail50Effect; // size = 0x360
 
-typedef struct unk_D_843C2C00_0B0 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ u8 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ Vec3f unk_10;
-    /* 0x1C */ f32 unk_1C;
-    /* 0x20 */ f32 unk_20;
-    /* 0x24 */ f32 unk_24;
-} unk_D_843C2C00_0B0; // size = 0x28
+typedef struct DoubleTextureTrailSegment {
+    /* 0x00 */ s32 index; // @unverified: segment index, only written
+    /* 0x04 */ u8 alpha; // @unverified: 0xFF at spawn, only written
+    /* 0x08 */ f32 radius; // @unverified: tube radius; head stays 1.0, the rest grow by radiusStep to a share of maxRadius
+    /* 0x0C */ f32 angle; // @unverified: roll angle in radians, advanced by angleStep
+    /* 0x10 */ Vec3f position; // @unverified: lerped between the owner anchor and the target's bone 9
+    /* 0x1C */ Vec3f velocity; // @unverified: start direction x speed, only written
+} DoubleTextureTrailSegment; // size = 0x28
 
-typedef struct unk_D_843C2C00_064 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-} unk_D_843C2C00_064; // size = 0xC
+typedef struct TextureScroll {
+    /* 0x00 */ s16 s; // @unverified: texture S offset, scrolled by sStep each frame
+    /* 0x02 */ s16 t; // @unverified: texture T offset, scrolled by tStep each frame
+    /* 0x04 */ s16 sStep; // @unverified: S scroll per frame
+    /* 0x06 */ s16 tStep; // @unverified: T scroll per frame
+    /* 0x08 */ s16 shiftS; // @unverified: gDPLoadTextureTile shifts
+    /* 0x0A */ s16 shiftT; // @unverified: gDPLoadTextureTile shifts
+} TextureScroll; // size = 0xC
 
-typedef struct unk_D_843C2C00_024 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ s32 unk_18;
-    /* 0x1C */ s32 unk_1C;
-} unk_D_843C2C00_024; // size = 0x20
+typedef struct CombinerCycleArgs {
+    /* 0x00 */ s32 colorA; // @unverified: Gfx_SetCombineMode argument, cycle color a
+    /* 0x04 */ s32 colorB; // @unverified: cycle color b
+    /* 0x08 */ s32 colorC; // @unverified: cycle color c
+    /* 0x0C */ s32 colorD; // @unverified: cycle color d
+    /* 0x10 */ s32 alphaA; // @unverified: cycle alpha a
+    /* 0x14 */ s32 alphaB; // @unverified: cycle alpha b
+    /* 0x18 */ s32 alphaC; // @unverified: cycle alpha c
+    /* 0x1C */ s32 alphaD; // @unverified: cycle alpha d
+} CombinerCycleArgs; // size = 0x20
 
-typedef struct unk_D_84389CE0 {
-    /* 0x00 */ Color_RGBA8 unk_00;
-    /* 0x04 */ u8 unk_04;
-} unk_D_84389CE0; // size = 0x8
+typedef struct PrimLodColor {
+    /* 0x00 */ Color_RGBA8 color; // @unverified: gDPSetPrimColor/gDPSetEnvColor color
+    /* 0x04 */ u8 lodFrac; // @unverified: gDPSetPrimColor lod fraction (prim only)
+} PrimLodColor; // size = 0x8
 
 typedef struct DoubleTextureTrail {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ s16 unk_004;
-    /* 0x008 */ f32 unk_008;
-    /* 0x00C */ f32 unk_00C;
-    /* 0x010 */ f32 unk_010;
-    /* 0x014 */ f32 unk_014;
-    /* 0x018 */ Vtx* unk_018;
-    /* 0x01C */ s32 unk_01C;
-    /* 0x020 */ s32 unk_020;
-    /* 0x024 */ unk_D_843C2C00_024 unk_024;
-    /* 0x044 */ unk_D_843C2C00_024 unk_044;
-    /* 0x064 */ unk_D_843C2C00_064 unk_064;
-    /* 0x070 */ unk_D_843C2C00_064 unk_070;
-    /* 0x07C */ unk_D_84389CE0 unk_07C;
-    /* 0x081 */ unk_D_84389CE0 unk_081;
-    /* 0x086 */ Color_RGBA8 unk_086;
-    /* 0x08C */ f32 unk_08C;
-    /* 0x090 */ f32 unk_090;
-    /* 0x094 */ s16 unk_094;
+    /* 0x000 */ s16 active; // @unverified: 1 while running
+    /* 0x002 */ s16 frame; // @unverified: counts up each frame
+    /* 0x004 */ s16 growFrames; // @unverified: frames over which the tube extends to full length
+    /* 0x008 */ f32 maxRadius; // @unverified: tube radius cap
+    /* 0x00C */ f32 angleStep; // @unverified: added to every segment's angle per frame
+    /* 0x010 */ f32 radiusStep; // @unverified: radius growth per frame
+    /* 0x014 */ f32 speed; // @unverified: scales the start velocity, only written
+    /* 0x018 */ Vtx* vtx; // @unverified: 90 vertices allocated each frame
+    /* 0x01C */ s32 textureA; // @unverified: sBattleAnimAssetPointers index of tile 0
+    /* 0x020 */ s32 textureB; // @unverified: sBattleAnimAssetPointers index of tile 1
+    /* 0x024 */ CombinerCycleArgs combineCycle0; // @unverified: color combiner cycle 1
+    /* 0x044 */ CombinerCycleArgs combineCycle1; // @unverified: color combiner cycle 2
+    /* 0x064 */ TextureScroll scrollA; // @unverified: tile 0 scroll
+    /* 0x070 */ TextureScroll scrollB; // @unverified: tile 1 scroll
+    /* 0x07C */ PrimLodColor primColor; // @unverified: primitive color
+    /* 0x081 */ PrimLodColor envColor; // @unverified: environment color
+    /* 0x086 */ Color_RGBA8 lineColor; // @unverified: color of the thick line drawn along the tube, 0 for none
+    /* 0x08C */ f32 primAlphaScale; // @unverified: 1.0, fades by 0.1 a frame after fadeStartFrame
+    /* 0x090 */ f32 envAlphaScale; // @unverified: 1.0, fades by 0.1 a frame after fadeStartFrame
+    /* 0x094 */ s16 fadeStartFrame; // @unverified: 0x46
     /* 0x096 */ char unk096[0x1A];
-    /* 0x0B0 */ unk_D_843C2C00_0B0 unk_0B0[10];
+    /* 0x0B0 */ DoubleTextureTrailSegment segments[10]; // @unverified: tube rings, owner first
 } DoubleTextureTrail; // size = 0x240
 
 typedef struct AuxiliaryEffectNode {
-    /* 0x00 */ s16 unk_00;
+    /* 0x00 */ s16 active; // @unverified: 1 while running
     /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ Vec3f unk_0C;
+    /* 0x04 */ s16 frame; // @unverified: counts up each frame until duration
+    /* 0x06 */ s16 duration; // @unverified: frames the node lives
+    /* 0x08 */ f32 scale; // @unverified: draw scale, pulsed by sin(frame)
+    /* 0x0C */ Vec3f position; // @unverified: node position, falls 0.75 a frame
 } AuxiliaryEffectNode; // size = 0x18
 
 typedef struct AuxiliaryEffect {
-    /* 0x000 */ s16 unk_000;
+    /* 0x000 */ s16 inUse; // @unverified: 1 while claimed by AuxiliaryEffect_Alloc
     /* 0x002 */ char pad002[2];
-    /* 0x004 */ AuxiliaryEffectNode unk_004[20];
+    /* 0x004 */ AuxiliaryEffectNode nodes[20]; // @unverified: sparkle nodes
 } AuxiliaryEffect; // size = 0x1E4
 
-typedef struct unk_D_843C3508_0A4 {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ Vec3f unk_0C;
-    /* 0x18 */ Vec3f unk_18;
-} unk_D_843C3508_0A4; // size = 0x24
+typedef struct BeamTrailSegment {
+    /* 0x00 */ f32 startDelay; // @unverified: frames the segment waits at the owner (2 x index)
+    /* 0x04 */ f32 halfWidth; // @unverified: grows by 3 a frame up to maxHalfWidth
+    /* 0x08 */ f32 angle; // @unverified: roll angle in radians, advanced by angleStep
+    /* 0x0C */ Vec3f position; // @unverified: segment center
+    /* 0x18 */ Vec3f velocity; // @unverified: added to position once moving; also the beam direction
+} BeamTrailSegment; // size = 0x24
 
-typedef struct unk_D_843C3508 {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ s16 unk_004;
-    /* 0x006 */ s16 unk_006;
-    /* 0x008 */ unk_D_84389CE0 unk_008;
-    /* 0x00D */ unk_D_84389CE0 unk_00D;
-    /* 0x014 */ f32 unk_014;
-    /* 0x018 */ f32 unk_018;
-    /* 0x01C */ s16 unk_01C;
-    /* 0x020 */ s32 unk_020;
-    /* 0x024 */ s32 unk_024;
-    /* 0x028 */ unk_D_843C2C00_024 unk_028;
-    /* 0x048 */ unk_D_843C2C00_024 unk_048;
-    /* 0x068 */ unk_D_843C2C00_064 unk_068;
-    /* 0x074 */ unk_D_843C2C00_064 unk_074;
-    /* 0x080 */ f32 unk_080;
-    /* 0x084 */ f32 unk_084;
-    /* 0x088 */ Vtx* unk_088;
+typedef struct BeamTrail {
+    /* 0x000 */ s16 active; // @unverified: 1 while running
+    /* 0x002 */ s16 widthMode; // @unverified: 0 rotates the width about the beam, 1 faces it to the camera
+    /* 0x004 */ s16 frame; // @unverified: counts up each frame until duration
+    /* 0x006 */ s16 duration; // @unverified: frames the beam runs
+    /* 0x008 */ PrimLodColor primColor; // @unverified: primitive color
+    /* 0x00D */ PrimLodColor envColor; // @unverified: environment color
+    /* 0x014 */ f32 primAlphaScale; // @unverified: fades by 0.1 a frame after fadeStartFrame
+    /* 0x018 */ f32 envAlphaScale; // @unverified: fades by 0.1 a frame after fadeStartFrame
+    /* 0x01C */ s16 fadeStartFrame; // @unverified: 0x46, compared with the shared frame counter D_821CD9E0
+    /* 0x020 */ s32 textureA; // @unverified: sBattleAnimAssetPointers index of tile 0
+    /* 0x024 */ s32 textureB; // @unverified: sBattleAnimAssetPointers index of tile 1
+    /* 0x028 */ CombinerCycleArgs combineCycle0; // @unverified: color combiner cycle 1
+    /* 0x048 */ CombinerCycleArgs combineCycle1; // @unverified: color combiner cycle 2
+    /* 0x068 */ TextureScroll scrollA; // @unverified: tile 0 scroll
+    /* 0x074 */ TextureScroll scrollB; // @unverified: tile 1 scroll
+    /* 0x080 */ f32 maxHalfWidth; // @unverified: cap for the segments' halfWidth
+    /* 0x084 */ f32 angleStep; // @unverified: added to the moving segments' angle per frame
+    /* 0x088 */ Vtx* vtx; // @unverified: 40 vertices allocated each frame
     /* 0x08C */ char unk08C[0x18];
-    /* 0x0A4 */ unk_D_843C3508_0A4 unk_0A4[20];
-} unk_D_843C3508; // size = 0x374
+    /* 0x0A4 */ BeamTrailSegment segments[20]; // @unverified: beam segments
+} BeamTrail; // size = 0x374
 
 typedef struct StatStageMultiplier {
     /* 0x00 */ u8 multiplier;
@@ -1412,118 +1331,25 @@ struct ActivePokemon;
 
 struct BattleAnimEffectSlot;
 
-typedef struct ParticleEmitter {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ Vec3f origin;
-    /* 0x10 */ Vec3s rotation;
-    /* 0x18 */ ParticleUpdateCallback updateCallback;
-    /* 0x1C */ ParticleDescriptor* descriptor;
-    /* 0x20 */ s32 unk_20;
-    /* 0x24 */ u16 unk_24;
-    /* 0x26 */ s16 unk_26;
-    /* 0x28 */ s16 unk_28;
-    /* 0x2A */ s8 unk_2A;
-    /* 0x2B */ s8 unk_2B;
-    /* 0x2C */ u8 unk_2C;
-    /* 0x2D */ u8 unk_2D;
-    /* 0x2E */ u8 unk_2E;
-    /* 0x2F */ u8 unk_2F;
-} ParticleEmitter; // size = 0x30
-
 typedef void (*func_unk_D_8140E724)(struct Particle*);
 
 typedef struct BattleAnimEffectSlot {
-    /* 0x00 */ func_unk_D_8140E724 unk_00;
-    /* 0x04 */ ParticleDescriptor* unk_04;
-    /* 0x08 */ struct ActivePokemon* unk_08;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
-    /* 0x10 */ s16 unk_10;
-    /* 0x12 */ s16 unk_12;
-    /* 0x14 */ s8 unk_14;
-    /* 0x15 */ s8 unk_15;
-    /* 0x16 */ u8 unk_16;
-    /* 0x17 */ u8 unk_17;
-    /* 0x18 */ u8 unk_18;
-    /* 0x19 */ u8 unk_19;
-    /* 0x1A */ u8 unk_1A;
-    /* 0x1B */ u8 unk_1B;
+    /* 0x00 */ func_unk_D_8140E724 updateCallback; // @unverified: copied to Particle.updateCallback at spawn
+    /* 0x04 */ ParticleDescriptor* descriptor; // @unverified: copied to Particle.descriptor at spawn
+    /* 0x08 */ struct ActivePokemon* pokemon; // @unverified: owner, passed to BattleAnim_InitializeParticleFromEffect
+    /* 0x0C */ s16 repeatInterval; // @unverified: reloads delayTimer after each emission (BattleAnim_TickEffectSlots)
+    /* 0x0E */ s16 delayTimer; // @unverified: frames until the next emission, counts down in BattleAnim_TickEffectSlots
+    /* 0x10 */ s16 param0; // @unverified: copied to Particle.param0
+    /* 0x12 */ s16 param1; // @unverified: copied to Particle.param1
+    /* 0x14 */ s8 repeatCount; // @unverified: emissions left; 0x7F repeats forever, -1 emits every interval
+    /* 0x15 */ s8 inUse; // @unverified: nonzero while allocated (BattleAnim_AllocEffectSlot sets -1)
+    /* 0x16 */ u8 anchorMode; // @unverified: emission kind (18, 22-26 are special in BattleAnim_DispatchParticleEmission), else copied to Particle.anchorMode
+    /* 0x17 */ u8 effectList; // @unverified: BattleAnim_GetCurrentEffectList() at creation
+    /* 0x18 */ u8 resourceListId; // @unverified: BattleAnim_GetQueuedResourceListId() at creation
+    /* 0x19 */ u8 byteParam0; // @unverified: copied to Particle.byteParam0; effect state id for kinds 23/25
+    /* 0x1A */ u8 byteParam2; // @unverified: copied to Particle.byteParam2
+    /* 0x1B */ u8 byteParam1; // @unverified: copied to Particle.byteParam1
 } BattleAnimEffectSlot; // size = 0x1C
-
-typedef struct arg1_func_81407874_014_000_014_000_000 {
-    /* 0x00 */ Color_RGBA8 color;
-    /* 0x04 */ u8 l;
-} arg1_func_81407874_014_000_014_000_000; // size = 0x5
-
-typedef struct arg1_func_81407874_014_000_018_000_000 {
-    /* 0x00 */ Color_RGBA8 color;
-} arg1_func_81407874_014_000_018_000_000; // size = 0x4
-
-typedef union arg1_func_81407874_014_000_014_000 {
-    arg1_func_81407874_014_000_014_000_000* ptr5;
-    arg1_func_81407874_014_000_018_000_000* ptr4;
-    Color_RGBA8_u32 color;
-    u8** texture;
-} arg1_func_81407874_014_000_014_000; // size = 0x4
-
-typedef struct arg1_func_81407874_014_000_014 {
-    /* 0x00 */ arg1_func_81407874_014_000_014_000 unk_00;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-} arg1_func_81407874_014_000_014; // size >= 0x08
-
-typedef struct arg1_func_81407874_014_000_01C {
-    /* 0x00 */ u16 unk_00;
-    /* 0x02 */ u16 unk_02;
-} arg1_func_81407874_014_000_01C; // size >= 0x04
-
-typedef struct arg1_func_81407874_014_000 {
-    /* 0x00 */ struct arg1_func_81407874_014_000* unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ char unk08[0x8];
-    /* 0x10 */ arg1_func_81407874_014_000_010* unk_10;
-    /* 0x14 */ arg1_func_81407874_014_000_014* unk_14;
-    /* 0x18 */ arg1_func_81407874_014_000_014* unk_18;
-    /* 0x1C */ arg1_func_81407874_014_000_01C* unk_1C;
-} arg1_func_81407874_014_000; // size >= 0x20
-
-typedef struct arg1_func_81407874_014_004_008 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-} arg1_func_81407874_014_004_008; // size >= 0xA
-
-typedef struct arg1_func_81407874_014_004_004 {
-    /* 0x00 */ s16 fmt;
-    /* 0x02 */ s16 size;
-    /* 0x04 */ s16 width;
-    /* 0x06 */ s16 height;
-    /* 0x08 */ s16 cms;
-    /* 0x0A */ s16 cmt;
-    /* 0x0C */ s16 masks;
-    /* 0x0E */ s16 maskt;
-    /* 0x10 */ s16 shfits;
-    /* 0x12 */ s16 shiftt;
-} arg1_func_81407874_014_004_004; // size >= 0x14
-
-typedef struct arg1_func_81407874_014_004 {
-    /* 0x00 */ arg1_func_81407874_014_000* unk_00;
-    /* 0x04 */ arg1_func_81407874_014_004_004* unk_04;
-    /* 0x08 */ arg1_func_81407874_014_004_008* unk_08;
-    /* 0x0C */ arg1_func_81407874_014_000_014* unk_0C;
-} arg1_func_81407874_014_004; // size >= 0x4
-
-typedef struct arg1_func_81407874_014 {
-    /* 0x00 */ arg1_func_81407874_014_000* unk_00;
-    /* 0x04 */ arg1_func_81407874_014_004* unk_04;
-} arg1_func_81407874_014; // size >= 0x8
-
-typedef struct arg1_func_81407874 {
-    /* 0x00 */ char unk00[0x14];
-    /* 0x00 */ arg1_func_81407874_014* unk_14;
-} arg1_func_81407874; // size >= 0x18
 
 typedef struct ParticleCameraState {
     /* 0x00 */ MtxF viewMatrix;
@@ -1545,9 +1371,9 @@ typedef struct ParticleRenderContext {
 } ParticleRenderContext; // size = 0x8C
 
 typedef struct ParticleMatrixPool {
-    /* 0x0000 */ MtxF unk_0000[364];
+    /* 0x0000 */ MtxF matrices[364]; // @unverified: per-frame model matrices, indexed by gParticleMatrixPoolIndex
     /* 0x5B00 */ char unk5B00[0x80];
-    /* 0x5B80 */ Mtx unk_5B80;
+    /* 0x5B80 */ Mtx orthoMatrix; // @unverified: 320x240 guOrtho for screen-space particles
     /* 0x5BC0 */ char unk5BC0[0x20];
 } ParticleMatrixPool; // size = 0x5BE0
 
@@ -1569,7 +1395,7 @@ typedef struct unk_D_8423D3A8 {
     /* 0x16 */ unk_D_800A7440 unk_16;
     /* 0x20 */ s32 unk_20;
     /* 0x24 */ ModelLoadContext* unk_24;
-    /* 0x28 */ unk_func_8001B1FC* unk_28;
+    /* 0x28 */ PokeModelPreview* unk_28;
     /* 0x2C */ unk_D_838067F0_0168_0000* unk_2C;
 } unk_D_8423D3A8; // size >= 0x30
 
@@ -1704,7 +1530,6 @@ typedef struct unk_D_82F20A88 {
 #include "gfx_rect.h"
 #include "stage_loader.h"
 
-extern unk_D_843901B0 gCameraPreset;
 
 extern f32 gCameraDistTarget;
 
@@ -1872,7 +1697,6 @@ extern MovePresentationCue* sCurrentAnimation;
 
 extern ModelDimensions sPokemonModelDimensions[2];
 
-extern SwayLayoutConfig sDefaultSwayLayout;
 
 extern BattleSceneStateTickSlot sBattleSceneStateTickSlots[7];
 
@@ -2019,7 +1843,7 @@ extern M2C_UNK func_8215EFF8;
  *
  * Particle initializer: sets the particle's scale to 0.2, recolours its
  * primitive/environment colors from its descriptor's palette pair, sets
- * the primitive alpha to 0xC8, stores 0x18 with Particle_FieldA6_SetS16_0BCA8,
+ * the primitive alpha to 0xC8, stores 0x18 with Particle_Param0_SetS16_0BCA8,
  * sets the float at offset 0x70 (the donor calls it stepMagnitude; the
  * value, 0.02 in the donor, is the rodata float D_FLT_82197730 here) and
  * advances the particle's lifecycle.
@@ -2161,7 +1985,7 @@ extern s16 D_8219F700;
 
 extern s16 D_8219F702;
 
-extern unk_D_843951D0 sWaterHeightMap;
+extern SurfWaterGrid sWaterHeightMap;
 
 extern s16 D_821A1B20;
 
@@ -2169,7 +1993,7 @@ extern s16 D_821A1B22;
 
 extern s16 D_821A1B24;
 
-extern unk_D_843975E8 D_821A1B28;
+extern CameraFacingQuad D_821A1B28;
 
 extern Gfx D_82192890[];
 
@@ -2363,7 +2187,6 @@ extern s32 gParticleMatrixPoolIndex;
 
 extern ParticleRenderContext gParticleRenderContext;
 
-extern ParticleCameraState* gParticleCameraState;
 
 extern u32 gParticleFrameCounter;
 
@@ -2415,7 +2238,6 @@ extern Particle* gParticlePool;
 
 extern BattleAnimEffectSlot* gBattleAnimEffectSlots;
 
-extern ParticleEmitter* gMiniFxEmitters;
 
 extern s32 gParticlePoolIndex;
 
@@ -2429,15 +2251,15 @@ s32 Team_IsOpponentIndexUsed(s32 arg0);
 
 // stage.c
 s32 Battle_StageGeoDispatchCallback(s32 event, GraphNode* node);
-s32 Battle_StageLightAngleCallbackA(s32 event, unk_D_86002F34_alt18* light);
+s32 Battle_StageLightAngleCallbackA(s32 event, GeoLightNode* light);
 s32 Battle_StageMaterialTintCallback(s32 event, DisplayObject* object);
 void Battle_SetStageTintColor(u8 r, u8 g, u8 b);
 void Battle_SetStageScale(f32 scale);
 void Battle_DrawStageBackdrop(void);
-void Battle_RenderActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer* thumbnail);
+void Battle_RenderActivePokemonThumbnail(GraphNode* thumbnail_root, GfxImage* thumbnail);
 void Battle_DrawClippedTextureRect(s32 x1, s32 y1, s32 x2, s32 y2);
 void Battle_DrawTexturedRectSegment(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width);
-void Battle_FillActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer* thumbnail);
+void Battle_FillActivePokemonThumbnail(GraphNode* thumbnail_root, GfxImage* thumbnail);
 void Battle_ResetFaintBatches(void);
 void Battle_UpdateFaintBatches(void);
 void func_82100CB8(void);
@@ -2474,7 +2296,7 @@ void BattleScene_TickQueueRowEffectList3AtAnimEnd(ActivePokemon* active_pokemon)
 void BattleScene_ResetOpponentStateFrameCounter(ActivePokemon* active_pokemon);
 void BattleAnim_SetFlagForRockThrowingMoves(ActivePokemon* active_pokemon);
 void BattleAnim_ClearRockThrowingMoveFlag(ActivePokemon* active_pokemon);
-s32 BattleAnim_IsAssetLoadBusy(s8 *arg0);
+s32 BattleAnim_IsAssetLoadBusy(ActivePokemon* arg0);
 s32 BattleAnim_TryRegisterAssetTables(ActivePokemon* active_pokemon);
 void BattleScene_LoadMoveResourceList(ActivePokemon* active_pokemon);
 void BattleScene_LoadRowResourceList(ActivePokemon* active_pokemon);
@@ -2615,53 +2437,53 @@ void BattleAnim_WithdrawContinue(ActivePokemon* owner, UNUSED ActivePokemon* ani
 void BattleAnim_DrawParticleNoop(UNUSED Particle* arg0, UNUSED CameraNode* arg1);
 void BattleAnim_PokeBallThrowStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void BattleAnim_PokeBallThrowContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon);
-void BattleAnim_PokeBallThrow(s32 arg0, s8 *arg1);
+void BattleAnim_PokeBallThrow(s32 arg0, ActivePokemon* arg1);
 void BattleAnim_PokeBallLandStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void BattleAnim_PokeBallLandContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 M2C_UNK func_82109E60();                         /* extern */
 M2C_UNK func_82109EF8(s32, s8 *);                 /* extern */
-void BattleAnim_PokeBallLand(s32 arg0, s8 *arg1);
+void BattleAnim_PokeBallLand(s32 arg0, ActivePokemon* arg1);
 void BattleAnim_FlyStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void BattleAnim_FlyContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 M2C_UNK func_82109FFC(s32);                         /* extern */
 M2C_UNK func_8210A084(s32, s8 *);                 /* extern */
-void BattleAnim_Fly(s32 arg0, s8 *arg1);
+void BattleAnim_Fly(s32 arg0, ActivePokemon* arg1);
 void BattleAnim_WaterfallStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void BattleAnim_WaterfallContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void BattleAnim_Waterfall(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void func_8210A2F4(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void func_8210A374(ActivePokemon* owner, ActivePokemon* animated_pokemon);
-void func_8210A3DC(s32 arg0, s8 *arg1);
-void BattleAnim_SubmissionStart(s32 arg0, s8 *arg1);
+void func_8210A3DC(s32 arg0, ActivePokemon* arg1);
+void BattleAnim_SubmissionStart(s32 arg0, ActivePokemon* arg1);
 M2C_UNK func_82109AF4(s8 *, s16);                 /* extern */
 s32 func_8210A430(s32, s16, s16);                   /* extern */
-void BattleAnim_SubmissionContinue(s32 arg0, s8 *arg1);
+void BattleAnim_SubmissionContinue(s32 arg0, ActivePokemon* arg1);
 void BattleAnim_SubmissionEnd(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void func_8210A584(UNUSED ActivePokemon* owner, UNUSED ActivePokemon* animated_pokemon);
 void BattleAnim_Submission(ActivePokemon* owner, ActivePokemon* animated_pokemon);
-void BattleAnim_DigStart(s32 arg0, s8 *arg1);
-void BattleAnim_DigContinue(s32 arg0, s8 *arg1);
-void func_8210A7D8(s32 arg0, s8* arg1);
+void BattleAnim_DigStart(s32 arg0, ActivePokemon* arg1);
+void BattleAnim_DigContinue(s32 arg0, ActivePokemon* arg1);
+void func_8210A7D8(s32 arg0, ActivePokemon* arg1);
 void BattleAnim_Dig(ActivePokemon* owner, ActivePokemon* animated_pokemon);
-void BattleAnim_AgilityStart(s32 arg0, s8 *arg1);
+void BattleAnim_AgilityStart(s32 arg0, ActivePokemon* arg1);
 void BattleAnim_AgilityContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void BattleAnim_AgilityEnd(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void func_8210A9B4(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void func_8210AAA4(UNUSED ActivePokemon* owner, UNUSED ActivePokemon* animated_pokemon);
 void BattleAnim_Agility(ActivePokemon* owner, ActivePokemon* animated_pokemon);
-void BattleAnim_DoubleTeamStart(s32 arg0, s8 *arg1);
+void BattleAnim_DoubleTeamStart(s32 arg0, ActivePokemon* arg1);
 void BattleAnim_DoubleTeamContinue(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void BattleAnim_DoubleTeam(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void BattleAnim_ResetOwnerFacingAndExitStatusIdle(ActivePokemon* arg0);
-void BattleAnim_SeismicTossStart(s32 arg0, s8 *arg1);
+void BattleAnim_SeismicTossStart(s32 arg0, ActivePokemon* arg1);
 void BattleAnim_SeismicTossContinue(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void func_8210AE34(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void BattleAnim_SeismicToss(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 M2C_UNK func_82109C88(s8 *);                      /* extern */
-void BattleAnim_MinimizeStart(s8 *arg0, s8 *arg1);
+void BattleAnim_MinimizeStart(DisplayObject* arg0, ActivePokemon* arg1);
 void BattleAnim_MinimizeContinue(s32 arg0, s32 arg1);
 void BattleAnim_Minimize(ActivePokemon* owner, ActivePokemon* animated_pokemon);
-void BattleAnim_WithdrawStart(s32 arg0, s8 *arg1);
+void BattleAnim_WithdrawStart(s32 arg0, ActivePokemon* arg1);
 void func_8210B164(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void BattleAnim_Withdraw(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void BattleAnim_MeditateStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon);
@@ -2675,12 +2497,12 @@ void BattleAnim_SquishHitReactionStart(ActivePokemon* owner, ActivePokemon* anim
 void BattleAnim_SquishHitReactionContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 M2C_UNK func_8210B58C(s32);                         /* extern */
 M2C_UNK func_8210B5C8(s32, s8 *);                 /* extern */
-void BattleAnim_SquishHitReaction(s32 arg0, s8 *arg1);
+void BattleAnim_SquishHitReaction(s32 arg0, ActivePokemon* arg1);
 void BattleAnim_BindHitReactionStart(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void BattleAnim_BindHitReactionContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 M2C_UNK func_8210B824(s32, s8 *);                 /* extern */
-void BattleAnim_BindHitReaction(s32 arg0, s8 *arg1);
-void BattleAnim_SurfStart(s32 arg0, s8 *arg1);
+void BattleAnim_BindHitReaction(s32 arg0, ActivePokemon* arg1);
+void BattleAnim_SurfStart(s32 arg0, ActivePokemon* arg1);
 void BattleAnim_SurfContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void BattleAnim_Surf(ActivePokemon* owner, ActivePokemon* animated_pokemon);
 void BattleAnim_PlayTransformInducingAnimation(s32 side_index);
@@ -3308,8 +3130,8 @@ void BattleAnim_InitializeParticleAnchor(Particle* arg0);
 void BattleAnim_UpdateParticleAnchor(Particle* arg0);
 void BattleAnim_UpdateOrDestroyParticle(Particle* arg0);
 void BattleAnim_InitializeParticleFromEffect(Particle* arg0, ActivePokemon* arg1, BattleAnimEffectSlot* arg2, s16 arg3);
-void BattleAnim_SpawnStandardParticles(s8 *arg0);
-void BattleAnim_SpawnBatchedParticles(s8* arg0);
+void BattleAnim_SpawnStandardParticles(BattleAnimEffectSlot* arg0);
+void BattleAnim_SpawnBatchedParticles(BattleAnimEffectSlot* arg0);
 void BattleAnim_SpawnSingleParticle(BattleAnimEffectSlot* arg0);
 void BattleAnim_DispatchParticleEmission(BattleAnimEffectSlot* arg0);
 void BattleAnim_TickEffectSlots(void);
@@ -3357,7 +3179,7 @@ BattleAnimEffectSlot* BattleAnim_SpawnCategory17MarkerSlot(s32 arg0, u8 arg1);
 BattleAnimEffectSlot* BattleAnim_SpawnCategory19MarkerSlot(s32 arg0, u8 arg1);
 void Particle_ResetDefaults(Particle* arg0);
 Particle* Particle_Alloc(void);
-void Particle_Free(s8 *arg0);
+void Particle_Free(Particle* arg0);
 Particle* Particle_New(void);
 Particle* Particle_AllocChain(u8 arg0);
 s32 Particle_CountActive(void);
@@ -3367,13 +3189,13 @@ void Particle_UpdateFrameCounters(void);
 void Particle_UpdateFrameCountersAlias(void);
 
 // particle_fields.c
-s16 Particle_GetUnkAC();                                /* extern */
+s16 Particle_GetSpawnIndex();                                /* extern */
 s32 func_8213C494(s8 *);                          /* extern */
 void func_8213C4B8(void);
 void BattleAnim_SetEffectState(s32 arg0);
 void BattleAnim_ClearEffectState(void);
-s16 Particle_GetUnkAA(Particle* arg0);
-s16 Particle_FieldAA_GetS16_0C068(Particle* arg0);
+s16 Particle_GetParam1(Particle* arg0);
+s16 Particle_ScratchA_GetS16_0C068(Particle* arg0);
 void Particle_SetFieldOffsetACIfNotSentinel(Particle* arg0, s16 arg1);
 void Particle_SetFieldOffsetCFIfNotSentinel(Particle* arg0, u8 arg1);
 void Particle_SetFieldOffsetA6IfNotSentinel(Particle* arg0, s16 arg1);
@@ -3383,9 +3205,9 @@ void Particle_SetFieldOffsetAAIfNotSentinel(Particle* arg0, s16 arg1);
 void Particle_SetPrimAlphaIfNotSentinel(Particle* arg0, u8 arg1);
 
 // anim_owner_bones.c
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
-s32 Particle_IsRunning(s8 *arg0);                          /* extern */
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
+s32 Particle_IsRunning(Particle* arg0);                          /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
 s32 func_8213C4D0(M2C_UNK);                         /* extern */
 s32 func_8213CA04(s8 *, M2C_UNK);                 /* extern */
 void BattleAnim_DestroyParticle(Particle* arg0);
@@ -3406,7 +3228,7 @@ Particle* BattleAnim_SpawnSecondaryOwnerParticle(Vec3f arg0, u8 arg1);
 void BattleAnim_SetParticlePosition(Particle* arg0, Vec3f arg1);
 void BattleAnim_MarkParticleInactive(Particle* arg0);
 void Particle_InitLifecycle(Particle* arg0);
-s32 Particle_IsInactive(s8 *arg0);
+s32 Particle_IsInactive(Particle* arg0);
 void Particle_AdvanceLifecycle(Particle* arg0);
 s32 Particle_TickDelayTimer(Particle* arg0, s16 arg1);
 
@@ -3458,12 +3280,12 @@ void Particle_BeginPhase(Particle* arg0);
 void Particle_ResetPhase(Particle* arg0);
 s32 Particle_TickPhaseTimer(Particle* arg0, s16 arg1);
 void Particle_UpdateWorldTransform(Particle* arg0);
-void Particle_Field38_SetVecFromVec3fScaled_08C20(Particle* arg0, Vec3f arg1);
+void Particle_PositionOffset_SetVecFromVec3fScaled_08C20(Particle* arg0, Vec3f arg1);
 void Particle_SetPositionFromRotationTemplate1(Particle* arg0, f32 arg1);
 void Particle_SetPositionFromRotationTemplate2(Particle* arg0, f32 arg1);
-void Particle_Field38_AddVecScaledFromVec3f_08D78(Particle* arg0, Vec3f arg1);
-void Particle_Field38_AddVecFromVec3f_08DD8(Particle* arg0, Vec3f arg1);
-void Particle_Field38_AddVecScaled_08E18(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
+void Particle_PositionOffset_AddVecScaledFromVec3f_08D78(Particle* arg0, Vec3f arg1);
+void Particle_PositionOffset_AddVecFromVec3f_08DD8(Particle* arg0, Vec3f arg1);
+void Particle_PositionOffset_AddVecScaled_08E18(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
 void Particle_AddPositionOffsetAlongRotationY(Particle* arg0, f32 arg1);
 void Particle_AddPositionOffsetAlongRotationYPlus180(Particle* arg0, f32 arg1);
 void Particle_AddPositionOffsetAlongRotationYPlus90(Particle* arg0, f32 arg1);
@@ -3499,20 +3321,20 @@ void Particle_StepBackwardAlongRotationY(Particle* arg0, f32 arg1);
 s32 Particle_FallAtStepMagnitude(Particle* arg0);
 s32 Particle_AccelerateFall(Particle* arg0);
 void Particle_SetVelocityTarget(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
-s32 Particle_Field5C_ApproachY_0A0C4(Particle* arg0, f32 arg1, f32 arg2);
+s32 Particle_MotionTarget_ApproachY_0A0C4(Particle* arg0, f32 arg1, f32 arg2);
 f32 ParticleMath_ScaleApproachStep(f32 arg0);
 void Particle_ApproachPosition(Particle* arg0, Vec3f arg1);
-void Particle_Field9A_SetVecFromVec3s_0A37C(Particle* arg0, Vec3s arg1);
+void Particle_Rotation_SetVecFromVec3s_0A37C(Particle* arg0, Vec3s arg1);
 void Particle_SetRotation(Particle* arg0, s16 arg1, s16 arg2, s16 arg3);
 void Particle_SetRotationTargetXY(Particle* arg0, s16 arg1, s16 arg2);
-void Particle_Field94_AddXFromField9A_0A4B4(Particle* arg0);
-void Particle_Field94_AddVecFromVec3s_0A4F0(Particle* arg0, Vec3s arg1);
-void Particle_Field94_SubVecFromVec3s_0A600(Particle* arg0, Vec3s arg1);
-void Particle_Field94_SubX_0A63C(Particle* arg0, s16 arg1);
+void Particle_Rotation_AddXFromRotationStep_0A4B4(Particle* arg0);
+void Particle_Rotation_AddVecFromVec3s_0A4F0(Particle* arg0, Vec3s arg1);
+void Particle_Rotation_SubVecFromVec3s_0A600(Particle* arg0, Vec3s arg1);
+void Particle_Rotation_SubX_0A63C(Particle* arg0, s16 arg1);
 void Particle_ApproachRotationTargetXY(Particle* arg0);
 void Particle_ApproachRotationTargetXYZ(Particle* arg0);
 void Particle_ApproachRotationXTo(Particle* arg0, s16 arg1, s16 arg2);
-s32 Particle_Field94_DecrementXTo_0A7DC(Particle* arg0, s32 arg1, s32 arg2);
+s32 Particle_Rotation_DecrementXTo_0A7DC(Particle* arg0, s32 arg1, s32 arg2);
 void Particle_AddRotationRandomSignedXY(Particle* arg0, s32 arg1, s32 arg2);
 void Particle_AddRotationRandomSignedXYWithXHalfTurn(Particle* arg0, s32 arg1, s32 arg2);
 void Particle_AddRotationRandomSignedY(Particle* arg0, s32 arg1);
@@ -3523,16 +3345,16 @@ void Particle_ComputeVectorFromRotationXY(Particle* arg0, f32 arg1, Vec3f* arg2)
 void Particle_ComputeVectorFromRotationXZ(Particle* arg0, f32 arg1, Vec3f* arg2);
 void Particle_ComputeVectorFromRotationXYZAlt(Particle* arg0, f32 arg1, Vec3f* arg2);
 void Particle_ComputeVectorFromRotationYZVariant(Particle* arg0, f32 arg1, Vec3f* arg2);
-s32 Particle_Field74_Approach_0ADBC(Particle* arg0, f32 arg1, f32 arg2);
+s32 Particle_MagnitudeStep_Approach_0ADBC(Particle* arg0, f32 arg1, f32 arg2);
 s32 Particle_StepMagnitude_ApproachUsingMagnitudeStep(Particle* arg0, f32 arg1);
 void Particle_SetMotionStep(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);
-s32 Particle_Field7C_IncrementXUntilAtLeast_0AF54(Particle* arg0, f32 arg1, f32 arg2);
-s32 Particle_Field7C_IncrementYUntilAtLeast_0AFA8(Particle* arg0, f32 arg1, f32 arg2);
-s32 Particle_Field7C_DecrementXUntilAtMost_0B050(Particle* arg0, f32 arg1, f32 arg2);
-s32 Particle_Field7C_DecrementYUntilAtMost_0B0A4(Particle* arg0, f32 arg1, f32 arg2);
+s32 Particle_MotionStep_IncrementXUntilAtLeast_0AF54(Particle* arg0, f32 arg1, f32 arg2);
+s32 Particle_MotionStep_IncrementYUntilAtLeast_0AFA8(Particle* arg0, f32 arg1, f32 arg2);
+s32 Particle_MotionStep_DecrementXUntilAtMost_0B050(Particle* arg0, f32 arg1, f32 arg2);
+s32 Particle_MotionStep_DecrementYUntilAtMost_0B0A4(Particle* arg0, f32 arg1, f32 arg2);
 s32 Particle_ApproachMotionStepY(Particle* arg0, f32 arg1, f32 arg2);
-void Particle_Field7C_SetYFromField74AngleX_0B1C4(Particle* arg0);
-void Particle_Field7C_SetXFromField74AngleY_0B1EC(Particle* arg0);
+void Particle_MotionStep_SetYFromStepMagnitudeAngleX_0B1C4(Particle* arg0);
+void Particle_MotionStep_SetXFromStepMagnitudeAngleY_0B1EC(Particle* arg0);
 void Particle_SetMotionStepXZFromRotationY(Particle* arg0);
 void Particle_SetMotionStepFromRotationXY(Particle* arg0);
 void Particle_SetMotionStepFromRotationXZ(Particle* arg0);
@@ -3543,7 +3365,7 @@ void Particle_SetMotionStepFromRotationXYZAlt(Particle* arg0);
 void Particle_SetMotionStepFromRotationYZAlt(Particle* arg0);
 void Particle_SetMotionStepFromRotationYZVariant(Particle* arg0);
 void Particle_UpdateRotatingVelocityXZ(Particle* arg0, f32 arg1, s16 arg2);
-s32 Particle_Field50_AdvanceField7CWithTimer_0B854(Particle* arg0, f32 arg1, f32 arg2, f32 arg3, s16 arg4, s16 arg5);
+s32 Particle_MotionOffset_AdvanceMotionStepWithTimer_0B854(Particle* arg0, f32 arg1, f32 arg2, f32 arg3, s16 arg4, s16 arg5);
 void Particle_SetScaleScaled(Particle* arg0, f32 arg1);
 void Particle_SetScale(Particle* arg0, f32 arg1);
 void Particle_SetScaleTarget(Particle* arg0, f32 arg1);
@@ -3556,20 +3378,20 @@ s32 Particle_StepScaleTarget(Particle* arg0, f32 arg1, f32 arg2);
 void Particle_SetPrimColor(Particle* arg0, u8 arg1, u8 arg2, u8 arg3);
 void Particle_SetEnvColor(Particle* arg0, u8 arg1, u8 arg2, u8 arg3);
 s32 Particle_ApproachPrimAlphaThenAdvance(Particle* arg0, u8 arg1, u8 arg2);
-s32 Particle_FieldA6_DecrementToZero_0BD08(Particle* arg0, s16 arg1);
-s32 Particle_FieldA6_DecrementToZeroAndStepState_0BD34(Particle* arg0, s16 arg1);
-s32 Particle_FieldA6_DecrementToStep1_0BD80(Particle* arg0, s16 arg1);
-s32 Particle_DecrementUnkA6ToZero(Particle* arg0);
-s32 Particle_DecrementUnkA6ToZeroThenAdvance(Particle* arg0);
-s32 Particle_DecrementUnkA8ToZero(Particle* arg0);
-s32 Particle_FieldA8_DecrementToZeroStep1AndStepState_0BE8C(Particle* arg0);
-s32 Particle_ApproachUnkAEThenAdvance(Particle* arg0, s16 arg1, s16 arg2);
+s32 Particle_Param0_DecrementToZero_0BD08(Particle* arg0, s16 arg1);
+s32 Particle_Param0_DecrementToZeroAndStepState_0BD34(Particle* arg0, s16 arg1);
+s32 Particle_Param0_DecrementToStep1_0BD80(Particle* arg0, s16 arg1);
+s32 Particle_DecrementParam0ToZero(Particle* arg0);
+s32 Particle_DecrementParam0ToZeroThenAdvance(Particle* arg0);
+s32 Particle_DecrementCountdownToZero(Particle* arg0);
+s32 Particle_Countdown_DecrementToZeroStep1AndStepState_0BE8C(Particle* arg0);
+s32 Particle_ApproachScratchAThenAdvance(Particle* arg0, s16 arg1, s16 arg2);
 
 // anim_stinger.c
 void BattleAnim_InitStingerTrailColor(Particle* arg0);
-void BattleAnim_UpdateNeedleBlueFadeGrow(s8 *arg0);
+void BattleAnim_UpdateNeedleBlueFadeGrow(Particle* arg0);
 void BattleAnim_InitStingerTrailColorDuplicate(Particle* arg0);
-void BattleAnim_UpdateSecondaryOwnerParticleBlueGrow(s8 *arg0);
+void BattleAnim_UpdateSecondaryOwnerParticleBlueGrow(Particle* arg0);
 void BattleAnim_InitStingerMoveParticle(Particle* arg0, u8 arg1);
 
 // particle_textures.c
@@ -3647,13 +3469,13 @@ s32 ParticleGfx_ApproachPrimEnvPalettePair(Particle* arg0, u16 arg1, u8 arg2);
 
 // anim_model_tint.c
 void BattleAnim_SetupDrainFlameHueChange(Particle* arg0);
-void BattleAnim_CallbackOwnerModelTintPaletteFade(s8 *arg0);
+void BattleAnim_CallbackOwnerModelTintPaletteFade(Particle* arg0);
 void BattleAnim_SetupOwnerModelTintRandomPaletteCycle(Particle* arg0);
 void BattleAnim_CallbackOwnerModelTintRandomPaletteCycle(Particle* arg0);
 void BattleAnim_SetupRainbowHueChange(Particle* arg0);
 void BattleAnim_RunRainbowHueChange(Particle* arg0);
 void BattleAnim_SetupInvisibility(Particle* arg0);
-void BattleAnim_CallbackOwnerModelAlphaFade(s8 *arg0);
+void BattleAnim_CallbackOwnerModelAlphaFade(Particle* arg0);
 void BattleAnim_SetupParticleRecolorTransparent(Particle* arg0);
 void BattleAnim_SetupWhiteHueChange(Particle* arg0);
 void BattleAnim_RunWhiteHueChange(Particle* arg0);
@@ -3661,7 +3483,7 @@ void BattleAnim_SetupDescriptor25AlphaHoldFadeOut(s8 *arg0);
 void BattleAnim_RunFullScreenHueChange(Particle* arg0);
 void BattleAnim_SetupDescriptor25AlphaFadeInHold(Particle* arg0);
 void BattleAnim_RunPokemonAndFullScreenHueChange(Particle* arg0);
-void BattleAnim_CallbackDescriptor25AlphaHoldDetach(s8 *arg0);
+void BattleAnim_CallbackDescriptor25AlphaHoldDetach(Particle* arg0);
 void BattleAnim_SetupDescriptor25PaletteFadeOut(Particle* arg0);
 void BattleAnim_CallbackDescriptor25PaletteFadeOut(Particle* arg0);
 void BattleAnim_SetupDescriptor25PaletteFadeIn(Particle* arg0);
@@ -3698,10 +3520,10 @@ void BattleAnim_SetupBackgroundBombExplosion(Particle* arg0);
 void BattleAnim_RunBackgroundBombExplosion(Particle* arg0);
 void BattleAnim_SetupBoomSmallExplosion(Particle* arg0);
 void BattleAnim_SetupEggBombHitEffect(Particle* arg0);
-void BattleAnim_CallbackEndEffect40Descriptor48SpreadScaleAlphaFade(s8 *arg0);
+void BattleAnim_CallbackEndEffect40Descriptor48SpreadScaleAlphaFade(Particle* arg0);
 void BattleAnim_SetupSecondaryBombExplosion(Particle* arg0);
 void BattleAnim_SetupEmberHitFireball(Particle* arg0);
-void BattleAnim_CallbackEndEffect56Descriptor46RisingScaleAlphaFade(s8 *arg0);
+void BattleAnim_CallbackEndEffect56Descriptor46RisingScaleAlphaFade(Particle* arg0);
 void BattleAnim_SetupEmberHitSmoke(Particle* arg0);
 void BattleAnim_EmberSpreadScaleAlphaRise(Particle* arg0);
 void BattleAnim_SetupFirePunchLingeringHitSpark(Particle* arg0);
@@ -3864,7 +3686,7 @@ void BattleAnim_SetupMove86EndDescriptor24(Particle* arg0);
 void BattleAnim_RunThunderWaveHitEffect(Particle* arg0);
 void BattleAnim_SetupMove86StartDescriptor24(Particle* arg0);
 M2C_UNK func_82153D00(s8 *);                      /* extern */
-void func_82153E28(s8 *arg0);
+void func_82153E28(Particle* arg0);
 void BattleAnim_InitializeThunderWaveHit(void);
 void BattleAnim_SleepMovePhaseFadeOut(Particle* arg0);
 void func_821542BC(void);
@@ -4051,16 +3873,16 @@ void BattleAnim_InitializeHazePoisonGasSmokescreenUse(void);
 void BattleAnim_InitializeSmogUse(void);
 void BattleAnim_InitializeMistUse(void);
 M2C_UNK func_8215558C(s8 *);                      /* extern */
-void BattleAnim_LeechSeedParticleUpdate(s8 *arg0);
+void BattleAnim_LeechSeedParticleUpdate(Particle* arg0);
 void BattleAnim_CallbackStartEffect8ModelBurstEmitter(Particle* arg0);
 void BattleAnim_InitEffect31Model(Particle* arg0);
 M2C_UNK func_82155878(s8 *);                      /* extern */
-void func_821558F4(s8 *arg0);
+void func_821558F4(Particle* arg0);
 void BattleAnim_InitializeLeechSeedUse(void);
 M2C_UNK func_82155CC0(s8 *);                      /* extern */
 void BattleAnim_BlizzardParticleUpdate(s8 *arg0);
 M2C_UNK func_82155DB8(s8 *);                      /* extern */
-void BattleAnim_RunBlizzard(s8 *arg0);
+void BattleAnim_RunBlizzard(Particle* arg0);
 void BattleAnim_InitializeBlizzardUse(void);
 void BattleAnim_InitializeBlizzardHit(void);
 void BattleAnim_InitMove146Model(Particle* arg0);
@@ -4070,7 +3892,7 @@ void BattleAnim_InitializeDrainingMoveHit(void);
 void BattleAnim_InitializeFlyUse(void);
 void func_82156E54(Particle* arg0);
 M2C_UNK func_82156F70(s8 *);                      /* extern */
-void BattleAnim_RunFallingRock(s8 *arg0);
+void BattleAnim_RunFallingRock(Particle* arg0);
 void func_82157354(Particle* arg0);
 void BattleAnim_InitializeSoftBoiledUse(void);
 M2C_UNK func_82157DA0(s8 *);                      /* extern */
@@ -4080,17 +3902,17 @@ void BattleAnim_CallbackStartEffects50And82ScalePulse_InitParticle(Particle* arg
 void BattleAnim_RunBoomUseEffect2(Particle* arg0);
 void BattleAnim_SetupBoomUseEffect3(Particle* arg0);
 M2C_UNK func_82158344(s8 *);                      /* extern */
-void BattleAnim_RunBoomUseEffect3(s8 *arg0);
+void BattleAnim_RunBoomUseEffect3(Particle* arg0);
 M2C_UNK func_8215856C(s8 *);                      /* extern */
-void BattleAnim_RunBoomUseEffect4(s8 *arg0);
-void func_821588C0(s8 *arg0);
+void BattleAnim_RunBoomUseEffect4(Particle* arg0);
+void func_821588C0(Particle* arg0);
 void BattleAnim_RunBoomUseEffect6(Particle* arg0);
-void BattleAnim_RunBoomHitEffect1(s8 *arg0);
+void BattleAnim_RunBoomHitEffect1(Particle* arg0);
 void BattleAnim_SetupBoomHitEffect2(Particle* arg0);
 M2C_UNK func_82158CE0(s8 *);                      /* extern */
-void BattleAnim_RunBoomHitEffect2(s8 *arg0);
+void BattleAnim_RunBoomHitEffect2(Particle* arg0);
 M2C_UNK func_82158F20(s8 *);                      /* extern */
-void BattleAnim_RunBoomHitEffect3(s8 *arg0);
+void BattleAnim_RunBoomHitEffect3(Particle* arg0);
 void BattleAnim_InitializeBoomUse(void);
 void BattleAnim_InitializeBoomHit(void);
 M2C_UNK func_821597D0(s8 *);                      /* extern */
@@ -4115,9 +3937,9 @@ void BattleAnim_CreateDrainingMoveOverlay(void);
 void BattleAnim_InitializeNightShadeUse(void);
 void BattleAnim_InitializeNightShadeHit(void);
 M2C_UNK func_8215C8FC(s8 *);                      /* extern */
-void func_8215C984(s8 *arg0);
+void func_8215C984(Particle* arg0);
 M2C_UNK func_8215CA14();                            /* extern */
-void BattleAnim_ConfuseRayParticleUpdate(s8 *arg0);
+void BattleAnim_ConfuseRayParticleUpdate(Particle* arg0);
 void func_8215CCF0(void);
 void BattleAnim_InitializeConfuseRayUse(void);
 void BattleAnim_InitializeConfuseRayHit(void);
@@ -4127,9 +3949,9 @@ void BattleAnim_InitializeSurfUseSpray(void);
 void BattleAnim_InitializeSurfHit(void);
 void BattleAnim_InitializeCrabhammerUse(void);
 M2C_UNK func_8215D724(s8 *);                      /* extern */
-void func_8215D76C(s8 *arg0);
+void func_8215D76C(Particle* arg0);
 M2C_UNK func_8215DA5C(s8 *);                      /* extern */
-void func_8215DAEC(s8 *arg0);
+void func_8215DAEC(Particle* arg0);
 void BattleAnim_InitializePsywaveHit(void);
 void BattleAnim_RunConfusionPsychicHitEffect(Particle* arg0);
 void BattleAnim_InitializePsychicUse(void);
@@ -4146,10 +3968,10 @@ void BattleAnim_InitializeHornDrillHit(void);
 void BattleAnim_RunWeakSpear(Particle* arg0);
 void BattleAnim_InitializeFuryAttackPeckUse(void);
 void BattleAnim_InitializeHornAttackUse(void);
-void func_8215F1B0(s8 *arg0);
+void func_8215F1B0(Particle* arg0);
 void BattleAnim_InitializeSonicBoomUse(void);
 M2C_UNK func_8215F2B8(s8 *);                      /* extern */
-void func_8215F3EC(s8 *arg0);
+void func_8215F3EC(Particle* arg0);
 M2C_UNK func_8215E510();                            /* extern */
 
 // anim_contact_effects.c
@@ -4189,43 +4011,43 @@ void BattleAnim_RunDefaultHitSpark(Particle* arg0);
 void BattleAnim_RunHeavyHitSparksAndSmoke(Particle* arg0);
 s32 BattleAnim_RunPointyMoveHitSpark(Particle* arg0);
 M2C_UNK func_8215F930(s8 *);                      /* extern */
-void func_8215FAA4(s8 *arg0);
+void func_8215FAA4(Particle* arg0);
 void BattleAnim_SetupSlashingMoveFullScreenFlash(Particle* arg0);
-void BattleAnim_RunSlashingMoveFullScreenFlash(s8 *arg0);
+void BattleAnim_RunSlashingMoveFullScreenFlash(Particle* arg0);
 void BattleAnim_SetupSlashMoveWhiteFlashOverlay(Particle* arg0);
-void BattleAnim_RunSlashMoveWhiteFlashOverlay(s8 *arg0);
+void BattleAnim_RunSlashMoveWhiteFlashOverlay(Particle* arg0);
 void BattleAnim_SlashGrowFade_InitParticle(Particle* arg0);
 M2C_UNK func_8216031C(s8 *);                      /* extern */
-void func_821603C8(s8 *arg0);
+void func_821603C8(Particle* arg0);
 M2C_UNK func_82160494(s8 *);                      /* extern */
-void func_82160528(s8 *arg0);
+void func_82160528(Particle* arg0);
 void BattleAnim_SetupSmallSand(s8 *arg0);
-void BattleAnim_RunSmallSand(s8 *arg0);
+void BattleAnim_RunSmallSand(Particle* arg0);
 void BattleAnim_SetupLargeSand(s8 *arg0);
-void BattleAnim_RunLargeSand(s8 *arg0);
+void BattleAnim_RunLargeSand(Particle* arg0);
 void BattleAnim_SetupSandAttackUseEffect(Particle* arg0);
 M2C_UNK func_821609F0(s8 *);                      /* extern */
-void BattleAnim_SandAttackParticleUpdate(s8 *arg0);
+void BattleAnim_SandAttackParticleUpdate(Particle* arg0);
 void func_82160BB8(s8 *arg0);
-void func_82160CCC(s8 *arg0);
+void func_82160CCC(Particle* arg0);
 M2C_UNK func_82160DC4(s8 *);                      /* extern */
-void BattleAnim_RunSandAttackHitEffect(s8 *arg0);
+void BattleAnim_RunSandAttackHitEffect(Particle* arg0);
 M2C_UNK func_82161190(s8 *);                      /* extern */
 M2C_UNK func_82161358(s8 *);                      /* extern */
-void func_8216140C(s8 *arg0);
+void func_8216140C(Particle* arg0);
 M2C_UNK func_821615F8(s8 *);                      /* extern */
-void func_821616BC(s8 *arg0);
+void func_821616BC(Particle* arg0);
 M2C_UNK func_8216177C(s8 *);                      /* extern */
-void BattleAnim_RunPointyMoveHitSparkChild(s8 *arg0);
+void BattleAnim_RunPointyMoveHitSparkChild(Particle* arg0);
 void BattleAnim_SwiftBurstChild_InitParticle(Particle* arg0);
 void BattleAnim_SetupSharedScalePulseFallSetup(Particle* arg0);
 void BattleAnim_RunBlizzardHitEffect(Particle* arg0);
 void BattleAnim_RunThunderPunchHitEffect(Particle* arg0);
 void BattleAnim_RunFirePunchUseEffect1(Particle* arg0);
 M2C_UNK func_821635E4(s8 *);                      /* extern */
-void BattleAnim_FirePunchParticleUpdate(s8 *arg0);
+void BattleAnim_FirePunchParticleUpdate(Particle* arg0);
 M2C_UNK func_82163884(s8 *);                      /* extern */
-void func_821639EC(s8 *arg0);
+void func_821639EC(Particle* arg0);
 M2C_UNK func_82163C28(s8 *);                      /* extern */
 void BattleAnim_AcidArmorParticleUpdateB(Particle* arg0);
 void BattleAnim_AcidArmorParticleUpdateA(s8 *arg0);
@@ -4241,13 +4063,13 @@ void BattleAnim_SolarbeamMimicBurstEmitter(Particle* arg0);
 void BattleAnim_RunAcidArmorUseEffect2(Particle* arg0);
 void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0);
 M2C_UNK func_82164B9C(s8 *);                      /* extern */
-void BattleAnim_RunSplashOfWater(s8 *arg0);
+void BattleAnim_RunSplashOfWater(Particle* arg0);
 void BattleAnim_RunBarrageUseEffect2(Particle* arg0);
 M2C_UNK func_82165100(s8 *);                      /* extern */
-void func_82165224(s8 *arg0);
+void func_82165224(Particle* arg0);
 void BattleAnim_CallbackDescriptor50BurstEmitter_InitParticle(Particle* arg0);
 void BattleAnim_CallbackDescriptor50BurstEmitter(Particle* arg0);
-void func_8216547C(s8 *arg0);
+void func_8216547C(Particle* arg0);
 void BattleAnim_RunSolarBeamUseEffect(Particle* arg0);
 void BattleAnim_RunQiChargeChild(Particle* arg0);
 void BattleAnim_SetupQiCharge(Particle* arg0);
@@ -4551,7 +4373,7 @@ s32 StatRibbon_Update(RibbonMesh* arg0);
 s32 StatRibbon_UpdatePool(void);
 Gfx* StatRibbon_Draw(Gfx* arg0, RibbonMesh* arg1);
 Gfx* StatRibbon_DrawPool(Gfx* arg0);
-void SurfTerrainGrid_BuildCameraBounds(unk_D_843975E8* arg0, f32 arg1);
+void SurfTerrainGrid_BuildCameraBounds(CameraFacingQuad* arg0, f32 arg1);
 f32 SurfTerrainGrid_SampleHeightAndSlope(f32 x, f32 z, f32* rotation_x);
 s32 SurfTerrainGrid_UpdateWaves(void);
 void SurfTerrainGrid_Init(s32 arg0, s16 arg1, s16 arg2);
@@ -4653,7 +4475,7 @@ Gfx* RazorLeafTrail_Draw(Gfx* arg0);
 
 // double_texture_trail.c
 void DoubleTextureTrail_InitPool(void);
-void DoubleTextureTrail_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7, f32 arg8, f32 arg9, f32 argA, s16 argB, s32 argC, s32 argD, s16 argE, s16 argF, s16 arg10, s16 arg11, s16 arg12, s16 arg13, s16 arg14, s16 arg15, unk_D_843C2C00_024* arg16, unk_D_843C2C00_024* arg17, u8 arg18, u8 arg19, u8 arg1A, u8 arg1B, u8 arg1C, u8 arg1D, u8 arg1E, u8 arg1F, u8 arg20, u8 arg21, u8 arg22, u8 arg23, u8 arg24);
+void DoubleTextureTrail_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7, f32 arg8, f32 arg9, f32 argA, s16 argB, s32 argC, s32 argD, s16 argE, s16 argF, s16 arg10, s16 arg11, s16 arg12, s16 arg13, s16 arg14, s16 arg15, CombinerCycleArgs* arg16, CombinerCycleArgs* arg17, u8 arg18, u8 arg19, u8 arg1A, u8 arg1B, u8 arg1C, u8 arg1D, u8 arg1E, u8 arg1F, u8 arg20, u8 arg21, u8 arg22, u8 arg23, u8 arg24);
 void DoubleTextureTrail_RotateVertexOffset(f32 arg0, Vec3f* arg1, f32 arg2);
 void DoubleTextureTrail_Update(DoubleTextureTrail* arg0);
 s32 DoubleTextureTrail_UpdateAll(void);
@@ -4663,13 +4485,13 @@ Gfx* DoubleTextureTrail_DrawAll(Gfx* arg0);
 
 // hyper_beam_ice_beam_trail.c
 void HyperBeamIceBeamTrail_ResetPool(void);
-void HyperBeamIceBeamTrail_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, u8 arg7, u8 arg8, u8 arg9, u8 argA, u8 argB, u8 argC, u8 argD, u8 argE, u8 argF, f32 arg10, f32 arg11, f32 arg12, s16 arg13, s32 arg14, s32 arg15, s16 arg16, s16 arg17, s16 arg18, s16 arg19, s16 arg1A, s16 arg1B, s16 arg1C, s16 arg1D, unk_D_843C2C00_024* arg1E, unk_D_843C2C00_024* arg1F);
+void HyperBeamIceBeamTrail_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6, u8 arg7, u8 arg8, u8 arg9, u8 argA, u8 argB, u8 argC, u8 argD, u8 argE, u8 argF, f32 arg10, f32 arg11, f32 arg12, s16 arg13, s32 arg14, s32 arg15, s16 arg16, s16 arg17, s16 arg18, s16 arg19, s16 arg1A, s16 arg1B, s16 arg1C, s16 arg1D, CombinerCycleArgs* arg1E, CombinerCycleArgs* arg1F);
 void HyperBeamIceBeamTrail_ComputeCameraRelativeOffset(s32 arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, f32 arg5, f32 arg6, f32 arg7);
 void HyperBeamIceBeamTrail_ComputeRotatedOffset(f32 arg0, Vec3f* arg1, Vec3f* arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6);
-void HyperBeamIceBeamTrail_UpdateSlot(unk_D_843C3508* arg0);
+void HyperBeamIceBeamTrail_UpdateSlot(BeamTrail* arg0);
 s32 HyperBeamIceBeamTrail_UpdateAll(void);
-Gfx* HyperBeamIceBeamTrail_DrawSegments(Gfx* arg0, unk_D_843C3508* arg1);
-Gfx* HyperBeamIceBeamTrail_LoadTextures(Gfx* arg0, unk_D_843C3508* arg1);
+Gfx* HyperBeamIceBeamTrail_DrawSegments(Gfx* arg0, BeamTrail* arg1);
+Gfx* HyperBeamIceBeamTrail_LoadTextures(Gfx* arg0, BeamTrail* arg1);
 Gfx* HyperBeamIceBeamTrail_DrawAll(Gfx* arg0);
 
 // auxiliary_effect.c
@@ -4807,46 +4629,46 @@ void Radial20_VariantD(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg
 void BattleAi_CalcDamage(BattleMonRuntime* arg0, BattleMonRuntime* arg1);
 s32 Completion_LightAngleCallbackB(s32 arg0, GraphNode* arg1);
 void Particle_AdvancePhase(Particle* arg0);
-void Particle_Field38_SetXScaled_08C88(Particle* arg0, f32 arg1);
-void Particle_Field38_SetYScaled_08CA0(Particle* arg0, f32 arg1);
-void Particle_Field38_SetZScaled_08CB8(Particle* arg0, f32 arg1);
-void Particle_Field38_AddYScaled_08E90(Particle* arg0, f32 arg1);
+void Particle_PositionOffset_SetXScaled_08C88(Particle* arg0, f32 arg1);
+void Particle_PositionOffset_SetYScaled_08CA0(Particle* arg0, f32 arg1);
+void Particle_PositionOffset_SetZScaled_08CB8(Particle* arg0, f32 arg1);
+void Particle_PositionOffset_AddYScaled_08E90(Particle* arg0, f32 arg1);
 void Particle_SetRandomVelocityX(Particle* arg0, s32 arg1);
 void Particle_SetRandomVelocityZ(Particle* arg0, s32 arg1);
 void Particle_SetRandomVelocityYOffset(Particle* arg0, s32 arg1, s32 arg2);
 void Particle_SetRandomVelocityXSymmetric(Particle* arg0, s32 arg1, s32 arg2);
 void Particle_SetRandomVelocityZSymmetric(Particle* arg0, s32 arg1, s32 arg2);
-void Particle_Field50_AddXYFromField7C_09C34(Particle* arg0);
+void Particle_MotionOffset_AddXYFromMotionStep_09C34(Particle* arg0);
 void Particle_AddVelocityXZFromRotationYViaImpulse(Particle* arg0);
 void Particle_AddVelocityFromRotationTemplate3(Particle* arg0);
 void Particle_AddVelocityFromRotationTemplate5(Particle* arg0);
 void Particle_AddVelocityFromRotationTemplate7B(Particle* arg0);
 void Particle_AddVelocityYFromFieldOffset74(Particle* arg0);
-void Particle_Field5C_SetYScaled_0A094(Particle* arg0, f32 arg1);
-void Particle_Field94_SetX_0A2A4(Particle* arg0, s16 arg1);
-void Particle_Field94_SetY_0A2B8(Particle* arg0, s16 arg1);
-void Particle_Field94_SetZ_0A2CC(Particle* arg0, s16 arg1);
-void Particle_Field94_AddZConstant_0A334(Particle* arg0);
+void Particle_MotionTarget_SetYScaled_0A094(Particle* arg0, f32 arg1);
+void Particle_Rotation_SetX_0A2A4(Particle* arg0, s16 arg1);
+void Particle_Rotation_SetY_0A2B8(Particle* arg0, s16 arg1);
+void Particle_Rotation_SetZ_0A2CC(Particle* arg0, s16 arg1);
+void Particle_Rotation_AddZConstant_0A334(Particle* arg0);
 void Particle_SetRotationSpeed(Particle* arg0, s16 arg1, s16 arg2, s16 arg3);
-void Particle_Field9A_SetXY_0A3A0(Particle* arg0, s16 arg1, s16 arg2);
-void Particle_Field9A_SetX_0A3C4(Particle* arg0, s16 arg1);
-void Particle_Field9A_SetY_0A3D8(Particle* arg0, s16 arg1);
-void Particle_Field9A_SetZ_0A3EC(Particle* arg0, s16 arg1);
-void Particle_FieldA0_SetX_0A400(Particle* arg0, s16 arg1);
-void Particle_FieldA0_SetY_0A414(Particle* arg0, s16 arg1);
-void Particle_Field94_AddYFromField9A_0A4C8(Particle* arg0);
-void Particle_Field94_AddVec_0A52C(Particle* arg0, s16 arg1, s16 arg2, s16 arg3);
-void Particle_Field94_AddX_0A578(Particle* arg0, s16 arg1);
-void Particle_Field94_AddY_0A594(Particle* arg0, s16 arg1);
-void Particle_Field94_AddZ_0A5B0(Particle* arg0, s16 arg1);
+void Particle_RotationStep_SetXY_0A3A0(Particle* arg0, s16 arg1, s16 arg2);
+void Particle_RotationStep_SetX_0A3C4(Particle* arg0, s16 arg1);
+void Particle_RotationStep_SetY_0A3D8(Particle* arg0, s16 arg1);
+void Particle_RotationStep_SetZ_0A3EC(Particle* arg0, s16 arg1);
+void Particle_RotationTarget_SetX_0A400(Particle* arg0, s16 arg1);
+void Particle_RotationTarget_SetY_0A414(Particle* arg0, s16 arg1);
+void Particle_Rotation_AddYFromRotationStep_0A4C8(Particle* arg0);
+void Particle_Rotation_AddVec_0A52C(Particle* arg0, s16 arg1, s16 arg2, s16 arg3);
+void Particle_Rotation_AddX_0A578(Particle* arg0, s16 arg1);
+void Particle_Rotation_AddY_0A594(Particle* arg0, s16 arg1);
+void Particle_Rotation_AddZ_0A5B0(Particle* arg0, s16 arg1);
 void Particle_AddRotationTargetXY(Particle* arg0, s16 arg1, s16 arg2);
 void Particle_ApproachRotationTargetX(Particle* arg0);
 void Particle_ApproachRotationTargetY(Particle* arg0);
 void Particle_ApproachRotationTargetZ(Particle* arg0);
-void Particle_Field74_SetScaled_0AD8C(Particle* arg0, f32 arg1);
-void Particle_Field78_SetScaled_0ADA4(Particle* arg0, f32 arg1);
-void Particle_Field7C_SetYScaled_0AF24(Particle* arg0, f32 arg1);
-void Particle_Field7C_ScaleVec_0B14C(Particle* arg0, f32 arg1);
+void Particle_StepMagnitude_SetScaled_0AD8C(Particle* arg0, f32 arg1);
+void Particle_MagnitudeStep_SetScaled_0ADA4(Particle* arg0, f32 arg1);
+void Particle_MotionStep_SetYScaled_0AF24(Particle* arg0, f32 arg1);
+void Particle_MotionStep_ScaleVec_0B14C(Particle* arg0, f32 arg1);
 s32 Particle_PrimR_Approach_0BAE4(Particle* arg0, u8 arg1, u8 arg2);
 s32 Particle_PrimG_Approach_0BB14(Particle* arg0, u8 arg1, u8 arg2);
 s32 Particle_PrimB_Approach_0BB44(Particle* arg0, u8 arg1, u8 arg2);
@@ -4854,23 +4676,23 @@ s32 Particle_EnvR_Approach_0BB90(Particle* arg0, u8 arg1, u8 arg2);
 s32 Particle_EnvB_Approach_0BBC0(Particle* arg0, u8 arg1, u8 arg2);
 s32 Particle_EnvG_Approach_0BBF0(Particle* arg0, u8 arg1, u8 arg2);
 s32 Particle_PrimAlpha_Approach_0BC2C(Particle* arg0, u8 arg1, u8 arg2);
-void Particle_FieldA6_SetS16_0BCA8(Particle* arg0, s16 arg1);
-s32 Particle_FieldA6_DecrementTo_0BCC4(Particle* arg0, s16 arg1, s16 arg2);
-void Particle_FieldA8_SetS16_0BE14(Particle* arg0, s16 arg1);
-s32 Particle_FieldA8_DecrementTo_0BE30(Particle* arg0, s16 arg1);
-void Particle_FieldCA_SetU8_0BECC(Particle* arg0, u8 arg1);
-void Particle_FieldAC_SetS16_0BED8(Particle* arg0, s16 arg1);
-void Particle_FieldCF_SetU8_0BEEC(Particle* arg0, u8 arg1);
-void Particle_FieldCF_SetU8Alt_0BEF8(Particle* arg0, u8 arg1);
-void Particle_FieldCC_SetU8_0BF04(Particle* arg0, u8 arg1);
-void Particle_FieldAA_SetS16_0BF10(Particle* arg0, s16 arg1);
-void Particle_FieldCE_SetS16_0BF24(Particle* arg0, s16 arg1);
-void Particle_FieldCD_SetS16_0BF38(Particle* arg0, s16 arg1);
-void Particle_FieldAE_SetS16_0BF4C(Particle* arg0, s16 arg1);
-s32 Particle_FieldAE_Approach_0BF60(Particle* arg0, s16 arg1, s16 arg2);
-void Particle_FieldB0_SetS16_0BFEC(Particle* arg0, s16 arg1);
-s32 Particle_FieldB0_Approach_0C000(Particle* arg0, s16 arg1, s16 arg2);
-s16 Particle_FieldAC_GetS16_0C038(Particle* arg0);
+void Particle_Param0_SetS16_0BCA8(Particle* arg0, s16 arg1);
+s32 Particle_Param0_DecrementTo_0BCC4(Particle* arg0, s16 arg1, s16 arg2);
+void Particle_Countdown_SetS16_0BE14(Particle* arg0, s16 arg1);
+s32 Particle_Countdown_DecrementTo_0BE30(Particle* arg0, s16 arg1);
+void Particle_EffectList_SetU8_0BECC(Particle* arg0, u8 arg1);
+void Particle_SpawnIndex_SetS16_0BED8(Particle* arg0, s16 arg1);
+void Particle_ByteParam1_SetU8_0BEEC(Particle* arg0, u8 arg1);
+void Particle_ByteParam1_SetU8Alt_0BEF8(Particle* arg0, u8 arg1);
+void Particle_AnchorMode_SetU8_0BF04(Particle* arg0, u8 arg1);
+void Particle_Param1_SetS16_0BF10(Particle* arg0, s16 arg1);
+void Particle_ByteParam2_SetS16_0BF24(Particle* arg0, s16 arg1);
+void Particle_ByteParam0_SetS16_0BF38(Particle* arg0, s16 arg1);
+void Particle_ScratchA_SetS16_0BF4C(Particle* arg0, s16 arg1);
+s32 Particle_ScratchA_Approach_0BF60(Particle* arg0, s16 arg1, s16 arg2);
+void Particle_ScratchB_SetS16_0BFEC(Particle* arg0, s16 arg1);
+s32 Particle_ScratchB_Approach_0C000(Particle* arg0, s16 arg1, s16 arg2);
+s16 Particle_SpawnIndex_GetS16_0C038(Particle* arg0);
 s32 Particle_FieldCE_GetS32_0C040(Particle* arg0);
 u8 Particle_FieldCD_GetU8_0C048(Particle* arg0);
 s16 Particle_FieldCF_GetS16_0C058(Particle* arg0);

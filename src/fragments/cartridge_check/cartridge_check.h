@@ -123,7 +123,7 @@ void BattleHud_Noop(void);
 void func_88400100(void);
 void Trade_DrawSaveSeqMessageBackdrop(s16 arg0, s16 arg1, s16 arg2, s16 arg3);
 void func_88400020(s32 arg0, s8 *arg1);
-s32 func_88400064(s32 arg0, unk_D_86002F34_alt18* arg1);
+s32 func_88400064(s32 arg0, GeoLightNode* arg1);
 s32 func_884000CC(void);
 s32 func_88400108(s32 arg0);
 M2C_UNK func_88400A1C(s16, s16, s16, s16);          /* extern */

@@ -23,7 +23,7 @@ void BattleMessage_ShowForSide(s32, s32);
 void BattleScene_CameraShotTargetHighThunk(void*, void*);
 void BattleScene_ReactionCritical(CameraNode*, void*);
 void BattleScene_ReactionNormal(CameraNode*, void*);
-void func_821020FC(s8*);
+void func_821020FC(ActivePokemon*);
 void func_82104C68(ActivePokemon*, s32);
 void func_82106354(ActivePokemon*);
 void func_82106374(ActivePokemon*);
@@ -1467,7 +1467,7 @@ void func_8212E9C8(ActivePokemon* arg0) {
         arg0->displayObject.position.y = D_FLT_82189354[M2C_FIELD(arg0, s16*, 0x1A)][0];
         Battle_ClearRuntimeFlags(arg0, 0x608);
     } else if (M2C_FIELD(ptr, u16*, 0x36) & 0x4008) {
-        arg0->displayObject.lodFraction = 0xFF;
+        arg0->displayObject.alpha = 0xFF;
         func_82136708(4, arg0);
         arg0->displayObject.position.y = D_FLT_82189354[M2C_FIELD(arg0, s16*, 0x1A)][0];
         arg0->displayObject.node.renderFlags &= ~0x2;
