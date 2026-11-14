@@ -428,15 +428,16 @@ f32 BattleScene_GetParticipantHeight(s8*);
 /**
  * Model transform step that sinks the Pokemon below the ground: turns it toward its side,
  * lowers it toward -2.6 heights and ends the transform once it is 2.5 heights down.
+ * @unverified Name guessed from the code.
  */
-void func_8210A7D8(s32 arg0, ActivePokemon* arg1) {
-    func_8210A430(arg0, arg1->oscillationPhase, (s16)(arg1->facingDirection << 0xE));
-    func_82109AF4(arg1, arg1->oscillationPhase);
-    BattleAnim_ApproachF((f32*)(arg0 + 0x28), -(BattleScene_GetParticipantHeight(arg1) * 2.6), 0.04f);
-    if (*(f32*)(arg0 + 0x28) <= -(BattleScene_GetParticipantHeight(arg1) * 2.5)) {
-        func_8000D700(arg0 + 0x1E, 0, (s16)(arg1->facingDirection << 0xE), 0);
-        func_82109C88(arg1);
-        func_8210942C((s32)arg1);
+void BattleAnim_DigSinkUnderground(s32 transform, ActivePokemon* active_pokemon) {
+    func_8210A430(transform, active_pokemon->oscillationPhase, (s16)(active_pokemon->facingDirection << 0xE));
+    func_82109AF4(active_pokemon, active_pokemon->oscillationPhase);
+    BattleAnim_ApproachF((f32*)(transform + 0x28), -(BattleScene_GetParticipantHeight(active_pokemon) * 2.6), 0.04f);
+    if (*(f32*)(transform + 0x28) <= -(BattleScene_GetParticipantHeight(active_pokemon) * 2.5)) {
+        func_8000D700(transform + 0x1E, 0, (s16)(active_pokemon->facingDirection << 0xE), 0);
+        func_82109C88(active_pokemon);
+        func_8210942C((s32)active_pokemon);
     }
 }
 
@@ -453,7 +454,7 @@ void BattleAnim_Dig(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
             break;
 
         case 2:
-            func_8210A7D8(owner, animated_pokemon);
+            BattleAnim_DigSinkUnderground(owner, animated_pokemon);
             break;
     }
 }

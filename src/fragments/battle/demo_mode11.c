@@ -23,13 +23,14 @@ extern const char D_821978C8[];
 
 #include "m2c_macros.h"
 
-void func_82132E20(void);
-void func_821336E4(UNUSED s32 arg0);
+void SceneMode11_UnusedNop(void);
+void SceneMode11_StepEnd(UNUSED s32 arg0);
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82132E20(void) {
+void SceneMode11_UnusedNop(void) {
 }
 
 void BattleScene_CameraShotTargetHighThunk(s32, s32);
@@ -40,20 +41,21 @@ void func_82124874(s32, s32);
 /**
  * Runs one of four camera framings on Pokemon arg0 with camera arg1, chosen by arg2 (0 the
  * high target shot, 1-3 func_82124810/830/874).
+ * @unverified Name guessed from the code.
  */
-void func_82132E28(s32 arg0, s32 arg1, s32 arg2) {
-    switch (arg2) {
+void SceneMode11_FrameDemoPokemon(s32 active_pokemon, s32 camera, s32 framing) {
+    switch (framing) {
         case 0:
-            BattleScene_CameraShotTargetHighThunk(arg1, arg0);
+            BattleScene_CameraShotTargetHighThunk(camera, active_pokemon);
             break;
         case 1:
-            func_82124810(arg1, arg0);
+            func_82124810(camera, active_pokemon);
             break;
         case 2:
-            func_82124830(arg1, arg0);
+            func_82124830(camera, active_pokemon);
             break;
         case 3:
-            func_82124874(arg1, arg0);
+            func_82124874(camera, active_pokemon);
             break;
     }
 }
@@ -64,11 +66,12 @@ void func_82122628(s32, Vec3f, s32, s32, f32, f32);
 /**
  * Frames Pokemon arg1 from its aim point: target from angle 0x4000 at zoom arg3, eye at the
  * angles (arg4, arg5) and distance arg2.
+ * @unverified Name guessed from the code.
  */
-void func_82132EB4(s32 arg0, s32 arg1, f32 arg2, f32 arg3, s16 arg4, s16 arg5) {
-    BattleScene_GetParticipantAimPoint(arg1, &sBattleScene.scene->anchorPosition);
-    func_8212254C(arg1, arg0, sBattleScene.scene->anchorPosition, 0, 0x4000, arg3, 0.0f);
-    func_82122628(arg0, sBattleScene.scene->anchorPosition, arg4, arg5, arg2, 0.0f);
+void SceneMode11_FrameFromAimPoint(s32 camera, s32 active_pokemon, f32 distance, f32 zoom, s16 pitch, s16 yaw) {
+    BattleScene_GetParticipantAimPoint(active_pokemon, &sBattleScene.scene->anchorPosition);
+    func_8212254C(active_pokemon, camera, sBattleScene.scene->anchorPosition, 0, 0x4000, zoom, 0.0f);
+    func_82122628(camera, sBattleScene.scene->anchorPosition, pitch, yaw, distance, 0.0f);
 }
 
 extern s16 D_8219A4F0[];
@@ -78,15 +81,16 @@ void BattleCamera_PlayShot(s8* arg0, CameraNode* arg1, s32 arg2);
 /**
  * Scene mode 11 step 0: clears the demo indices, sets clip planes 20-4000, picks side 0 as
  * the demo Pokemon, plays its camera shot 3, shrinks the stage to scale 0 and advances.
+ * @unverified Name guessed from the code.
  */
-void func_82132F88(CameraNode* arg0) {
+void SceneMode11_StepInit(CameraNode* camera) {
     D_8219A4F0[0xE] = 0;
     D_8219A4F0[0xD] = 0;
-    BattleScene_SetCameraClipPlanes(arg0, 20.0f, 4000.0f);
+    BattleScene_SetCameraClipPlanes(camera, 20.0f, 4000.0f);
     BattleScene_ResetCameraFrameCounter();
     sBattleScene.scene->actingSide = 0;
     D_8219A590 = (s8*)sActivePokemon[sBattleScene.scene->actingSide];
-    BattleCamera_PlayShot(D_8219A590, arg0, 3);
+    BattleCamera_PlayShot(D_8219A590, camera, 3);
     Battle_SetStageScale(0.0f);
     sBattleScene.scene->phaseStep++;
 }
@@ -104,8 +108,9 @@ extern u8 D_8219A594;
  * Starts demo cut D_8219A50C (0-5) of scene mode 11: plays a sound, frames the demo
  * Pokemon (raising it by 500 in cut 1), and starts its move-cue animation and model
  * reaction from the cut tables.
+ * @unverified Name guessed from the code.
  */
-void func_82133028(CameraNode* arg0) {
+void SceneMode11_StartCut(CameraNode* camera) {
     u8 sp40[6] = { 0x01, 0x13, 0x1B, 0x17, 0x24, 0x38 };
     u8 sp38[6] = { 0x00, 0x0C, 0x0E, 0x0F, 0x46, 0x1B };
     MovePresentationCue* cue = D_82189180[func_82107A5C(D_8219A590)]->moveCues + sp40[D_8219A50C] - 1;
@@ -113,34 +118,34 @@ void func_82133028(CameraNode* arg0) {
     switch (D_8219A50C) {
         case 0:
             func_8003F6AC(0x12);
-            func_82132E28((s32)D_8219A590, (s32)arg0, 3);
+            SceneMode11_FrameDemoPokemon((s32)D_8219A590, (s32)camera, 3);
             func_800199F8(D_8219A590, cue->id);
             func_80010F9C(D_8219A590, sp38[D_8219A50C]);
             break;
         case 1:
             func_8003F6AC(0x13);
             ((ActivePokemon*)D_8219A590)->displayObject.position.y += 500.0;
-            func_82132EB4((s32)arg0, (s32)D_8219A590, 350.0f, 0.0f, -0x1C71, 0x38E3);
+            SceneMode11_FrameFromAimPoint((s32)camera, (s32)D_8219A590, 350.0f, 0.0f, -0x1C71, 0x38E3);
             func_800199F8(D_8219A590, cue->id);
             func_80010F9C(D_8219A590, sp38[D_8219A50C]);
             break;
         case 2:
             func_8003F6AC(0x14);
             ((ActivePokemon*)D_8219A590)->displayObject.rotation.y = -0x4000;
-            func_82132EB4((s32)arg0, (s32)D_8219A590, 300.0f, -75.0f, 0x71C, -0x2AAA);
+            SceneMode11_FrameFromAimPoint((s32)camera, (s32)D_8219A590, 300.0f, -75.0f, 0x71C, -0x2AAA);
             func_800199F8(D_8219A590, cue->id);
             func_80010F9C(D_8219A590, sp38[D_8219A50C]);
             break;
         case 3:
             func_8003F6AC(0x15);
-            func_82132EB4((s32)arg0, (s32)D_8219A590, 200.0f, 0.0f, 0x71C, 0x2AAA);
+            SceneMode11_FrameFromAimPoint((s32)camera, (s32)D_8219A590, 200.0f, 0.0f, 0x71C, 0x2AAA);
             func_800199F8(D_8219A590, cue->id);
             func_80010F9C(D_8219A590, sp38[D_8219A50C]);
             break;
         case 4:
             func_8003F6AC(0x16);
             ((ActivePokemon*)D_8219A590)->displayObject.rotation.y = -0x4000;
-            func_82132EB4((s32)arg0, (s32)D_8219A590, 600.0f, -200.0f, 0, -0x238E);
+            SceneMode11_FrameFromAimPoint((s32)camera, (s32)D_8219A590, 600.0f, -200.0f, 0, -0x238E);
             func_800199F8(D_8219A590, cue->id);
             func_80010F9C(D_8219A590, sp38[D_8219A50C]);
             break;
@@ -148,7 +153,7 @@ void func_82133028(CameraNode* arg0) {
             func_8003F6AC(0x17);
             func_80010F9C(D_8219A590, sp38[D_8219A50C]);
             D_8219A4F4 = 0xA;
-            BattleCamera_StartDemoPath(arg0, D_8219A590);
+            BattleCamera_StartDemoPath(camera, D_8219A590);
             break;
     }
     D_8219A594 = 0;
@@ -157,9 +162,10 @@ void func_82133028(CameraNode* arg0) {
 
 /**
  * Starts the current demo cut and advances the phase step.
+ * @unverified Name guessed from the code.
  */
-void func_82133318(CameraNode* arg0) {
-    func_82133028(arg0);
+void SceneMode11_StepStartCut(CameraNode* camera) {
+    SceneMode11_StartCut(camera);
     sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
 }
 
@@ -175,8 +181,9 @@ void func_82104C68(s8*, s32);
 /**
  * Fades the demo Pokemon in over 30 frames. Cuts 0-4 advance after 40 frames; cut 5 follows
  * the Pokemon with the camera and plays its sound when the scene state is 4.
+ * @unverified Name guessed from the code.
  */
-void func_8213334C(CameraNode* arg0) {
+void SceneMode11_StepFadeInCut(CameraNode* camera) {
     D_8219A594 = func_8000F1FC(D_8219A594, 0xFF, 0x1E, 0x1E);
     func_80019B28(D_8219A590, 0, 0, 0, 0xFF - D_8219A594);
     switch (*(u16*)&D_8219A50C) {
@@ -190,7 +197,7 @@ void func_8213334C(CameraNode* arg0) {
             }
             break;
         case 5:
-            BattleCamera_StepDemoPath(arg0, D_8219A590);
+            BattleCamera_StepDemoPath(camera, D_8219A590);
             if (sBattleScene.scene->splineSegment == 4) {
                 func_800414B0(0, 0x38, 9, 0);
                 D_8219A4F4 = 1;
@@ -202,9 +209,9 @@ void func_8213334C(CameraNode* arg0) {
 }
 
 /*
- * func_8213346C
+ * SceneMode11_StepHoldCut
  *
- * Entry 3 of the 7-way dispatch in func_821336EC (see its comment).  Its
+ * Entry 3 of the 7-way dispatch in SceneMode11_Update (see its comment).  Its
  * argument is typed CameraNode* in this file.  Sets D_8219A594 (a byte) to
  * 0xFF, then:
  *   - if D_8219A50C == 5: calls BattleCamera_StepDemoPath(arg0, D_8219A590); if the
@@ -233,11 +240,12 @@ extern u8 D_8219A594;
  * Holds the demo cut at full alpha. Cut 5 follows the Pokemon, plays move sound 0x38 on
  * frame 0x26 of its animation, and after 55 frames stops the audio and sets phase step 6;
  * other cuts advance at once.
+ * @unverified Name guessed from the code.
  */
-void func_8213346C(CameraNode* arg0) {
+void SceneMode11_StepHoldCut(CameraNode* camera) {
     D_8219A594 = 0xFF;
     if (D_8219A50C == 5) {
-        BattleCamera_StepDemoPath(arg0, D_8219A590);
+        BattleCamera_StepDemoPath(camera, D_8219A590);
         if (((s32) M2C_FIELD(D_8219A590, s32 *, 0x48) >> 0x10) == 0x26) {
             Audio_PlayMoveSound(0x38, 9, 0);
         }
@@ -257,8 +265,13 @@ typedef struct Arr82133534 { u8 b[7]; } Arr82133534;
 extern Arr82133534 D_8218B350;
 s16 func_8000F1FC(s16, M2C_UNK, M2C_UNK, M2C_UNK);
 M2C_UNK func_80019B28(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32);
+/**
+ * Scene mode 11 step 4: fades the demo Pokémon out and, after 8 frames, loads the next species from
+ * the cut model list (D_8218B350) or ends the sequence at 0xFF.
+ * @unverified Name guessed from the code.
+ */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_82133534(CameraNode *arg0)
+void SceneMode11_StepFadeOutAndSwapModel(CameraNode *camera)
 {
   s32 pad[2]; // FAKE: stack padding
   Arr82133534 sp28 = D_8218B350;
@@ -292,8 +305,9 @@ extern u8 D_8219A594;
 /**
  * Once the demo Pokemon's model reload is done (bit 0x10), reloads its switch-in model,
  * restarts the demo cut at full alpha and sets phase step 2.
+ * @unverified Name guessed from the code.
  */
-void func_82133640(s32 arg0) {
+void SceneMode11_StepWaitModelReload(s32 camera) {
     u8 *temp_v0;
 
     if (((ActivePokemon*)D_8219A590)->side->modelFlags & 0x10) {
@@ -301,7 +315,7 @@ void func_82133640(s32 arg0) {
         temp_v0 = &((ActivePokemon*)D_8219A590)->side->modelFlags;
         *temp_v0 &= 0xFF6F;
         Battle_LoadOwnerModelForSwitchIn(D_8219A590);
-        func_82133028(arg0);
+        SceneMode11_StartCut(camera);
         func_80019B28(D_8219A590, 0, 0, 0, 0xFF);
         D_8219A594 = 0;
         sBattleScene.scene->phaseStep = 2;
@@ -310,17 +324,18 @@ void func_82133640(s32 arg0) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_821336E4(UNUSED s32 arg0) {
+void SceneMode11_StepEnd(UNUSED s32 unused) {
 }
 
 /*
- * func_821336EC
+ * SceneMode11_Update
  *
  * Dispatches one tick of the "faint after residual damage" phase of a
  * battle scene by the scene's step counter (sBattleScene.scene->unk_20, 0..6):
- *   0 func_82132F88   1 func_82133318   2 func_8213334C   3 func_8213346C
- *   4 func_82133534   5 func_82133640   6 func_821336E4
+ *   0 SceneMode11_StepInit   1 SceneMode11_StepStartCut   2 SceneMode11_StepFadeInCut   3 SceneMode11_StepHoldCut
+ *   4 SceneMode11_StepFadeOutAndSwapModel   5 SceneMode11_StepWaitModelReload   6 SceneMode11_StepEnd
  * Any other step does nothing.  The camera node arg0 is passed through to
  * the step functions in the register a0 untouched.
  *
@@ -328,41 +343,42 @@ void func_821336E4(UNUSED s32 arg0) {
  * decomp (steps begin, animate, advance/finish camera close, complete,
  * no-op, alternate animation).
  */
-void func_8213334C(CameraNode* arg0);
-void func_8213346C(CameraNode* arg0);
-void func_82133534(CameraNode* arg0);
+void SceneMode11_StepFadeInCut(CameraNode* arg0);
+void SceneMode11_StepHoldCut(CameraNode* arg0);
+void SceneMode11_StepFadeOutAndSwapModel(CameraNode* arg0);
 
 /**
  * Scene mode 11 (a demo sequence of move cuts): runs the step for the current phase step.
+ * @unverified Name guessed from the code.
  */
-void func_821336EC(CameraNode* arg0) {
+void SceneMode11_Update(CameraNode* camera) {
     switch (sBattleScene.scene->phaseStep) {
         case 0:
-            func_82132F88(arg0);
+            SceneMode11_StepInit(camera);
             break;
 
         case 1:
-            func_82133318(arg0);
+            SceneMode11_StepStartCut(camera);
             break;
 
         case 2:
-            func_8213334C(arg0);
+            SceneMode11_StepFadeInCut(camera);
             break;
 
         case 3:
-            func_8213346C(arg0);
+            SceneMode11_StepHoldCut(camera);
             break;
 
         case 4:
-            func_82133534(arg0);
+            SceneMode11_StepFadeOutAndSwapModel(camera);
             break;
 
         case 5:
-            func_82133640((s32)arg0);
+            SceneMode11_StepWaitModelReload((s32)camera);
             break;
 
         case 6:
-            func_821336E4((s32)arg0);
+            SceneMode11_StepEnd((s32)camera);
             break;
     }
 }

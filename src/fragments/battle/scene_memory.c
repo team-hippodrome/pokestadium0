@@ -63,13 +63,14 @@ void BattleScene_SetPhase(CameraNode* arg0, s32 arg1);
 void BattleScene_OpeningStepInitCamera(CameraNode* arg0);
 void BattleScene_IntroStepInitOverheadCamera(CameraNode* arg0);
 void func_821329F8(s32 arg0);
-void func_82132F88(CameraNode* arg0);
+void SceneMode11_StepInit(CameraNode* arg0);
 /**
  * Starts the battle scene: clears the winner, sets the field of view to 30 and runs the
  * opening step for the scene mode (mode 0 frames the active Pokemon, modes 1 and 5 start
  * the B-roll), then stores the camera.
+ * @unverified Name guessed from the code.
  */
-void func_82134374(CameraNode* arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
+void BattleScene_StartPresentationForMode(CameraNode* arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
     sBattleScene.scene->winner = 0;
     sBattleScene.scene->verticalFieldOfView = 30.0f;
     switch (sBattleScene.scene->mode) {
@@ -103,7 +104,7 @@ void func_82134374(CameraNode* arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
             func_821329F8((s32)arg0);
             break;
         case 11:
-            func_82132F88(arg0);
+            SceneMode11_StepInit(arg0);
             break;
     }
     sBattleScene.scene->camera = arg0;

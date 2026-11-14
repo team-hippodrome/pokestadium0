@@ -39,7 +39,7 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
     s16 sp26;
     s16 sp24 = Particle_FieldCD_GetU8_0C048(arg0);
 
-    switch (Particle_FieldCF_GetS16_0C058(arg0)) {
+    switch (Particle_GetByteParam1(arg0)) {
         case 30:
             sp2A = 0x23;
             sp28 = 0x24;
@@ -721,27 +721,28 @@ void BattleAnim_SetupMove86StartDescriptor24(Particle* arg0) {
 /**
  * Particle callback: init, wait for the spawn step, then the later stages; scale moves
  * toward 10 by 0.05 and the particle rises every frame.
+ * @unverified Name guessed from the code.
  */
-void func_82153E28(Particle* arg0) {
+void BattleAnim_CallbackMove86StartDescriptor24(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82153D00(arg0);
+        func_82153D00(particle);
         break;
     case 2:
-        func_821406B4(arg0);
+        func_821406B4(particle);
         break;
     case 3:
-        func_82140548(arg0, 0, 0x20);
+        func_82140548(particle, 0, 0x20);
         break;
     case 4:
-        Particle_DisableAndDetach(arg0);
+        Particle_DisableAndDetach(particle);
         break;
     }
-    func_82140228(arg0, 0x41200000, 0x3D4CCCCD);
-    Particle_MoveXZAlongRotationY(arg0);
+    func_82140228(particle, 0x41200000, 0x3D4CCCCD);
+    Particle_MoveXZAlongRotationY(particle);
 }
 
 /**

@@ -181,8 +181,9 @@ s16 BattleScene_GetHitCueDefaultAnchor(ActivePokemon* active_pokemon) {
 
 /**
  * Returns the alternate anchor of the Pokemon's side hit cue.
+ * @unverified Name guessed from the code.
  */
-s16 func_82107B54(ActivePokemon* active_pokemon) {
+s16 BattleScene_GetHitCueAlternateAnchor(ActivePokemon* active_pokemon) {
     MovePresentationCue* hit_cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->hitCue;
 
     return hit_cue->alternateAnchor;
@@ -220,9 +221,10 @@ f32 ActivePokemon_GetSizeRatio(ActivePokemon* active_pokemon) {
 
 /**
  * Returns the Pokemon's move id (+0x820).
+ * @unverified Name guessed from the code.
  */
-u8 func_82107BF4(ActivePokemon* arg0) {
-    return arg0->state.runtime.usedMove;
+u8 BattleScene_GetParticipantUsedMove(ActivePokemon* active_pokemon) {
+    return active_pokemon->state.runtime.usedMove;
 }
 
 extern f32 D_FLT_8218935C[][4];

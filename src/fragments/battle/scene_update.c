@@ -14,7 +14,6 @@ void BattleScene_AvoidDegenerateCameraLookAt(CameraNode* arg0);
 void BattleScene_TickCameraSubstate(CameraNode* arg0);
 s32 BattleScene_Dispatch(s32 arg0, CameraNode* arg1);
 
-void BattleScene_RunFinalPresentation(CameraNode* arg0, UNUSED ActivePokemon* arg1, UNUSED ActivePokemon* arg2);
 void BattleScene_AllocateMemory(void);
 void BattleScene_TickCameraSubstateDefault(CameraNode* arg0);
 void BattleScene_TickCameraSubstateStripWipe(CameraNode* arg0);
@@ -231,7 +230,7 @@ void BattleScene_ApplyModeAfterTransition(void);
 void BattleScene_RunOpeningSendOut(CameraNode*);
 void Rental_TeamSlotsUpdate(CameraNode*);
 void func_82132D60(CameraNode*);
-void func_821336EC(CameraNode*);
+void SceneMode11_Update(CameraNode*);
 void BattleScene_UpdateParticipantsInView(CameraNode*);
 void func_82133B6C(void);
 void BattleScene_UpdateParticipantVisuals(ActivePokemon*);
@@ -284,7 +283,7 @@ void BattleScene_Update(CameraNode* arg0) {
             func_82132D60(arg0);
             break;
         case 11:
-            func_821336EC(arg0);
+            SceneMode11_Update(arg0);
             break;
     }
 
@@ -322,7 +321,7 @@ s32 BattleScene_Dispatch(s32 arg0, CameraNode* arg1) {
             break;
 
         case 3:
-            BattleScene_RunFinalPresentation(arg1, sActivePokemon[0], sActivePokemon[1]);
+            BattleScene_StartPresentationForMode(arg1, sActivePokemon[0], sActivePokemon[1]);
             break;
     }
     return sBattleScene.scene->winner;

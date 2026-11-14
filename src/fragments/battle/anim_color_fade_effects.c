@@ -123,7 +123,7 @@ void BattleAnim_ContinueFireBreathFlameFading(Particle* arg0) {
  * for Flamethrower, Dragon Rage, Fire Spin, Fire Blast.
  */
 void BattleAnim_RunFireBreathFlameFading(Particle* arg0) {
-    s16 sp2E = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp2E = Particle_GetByteParam1(arg0);
 
     switch (arg0->lifecycle) {
         case 1:
@@ -291,7 +291,7 @@ void BattleAnim_CallbackUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* a
 void BattleAnim_SetupFireBreathFlameGeometry(Particle* arg0) {
     UNUSED s32 pad[3]; // FAKE: stack padding
     s16 sp22 = Particle_SpawnIndex_GetS16_0C038(arg0);
-    s16 sp20 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp20 = Particle_GetByteParam1(arg0);
 
     Particle_SetScaleScaled(arg0, 0.4f);
     Particle_Rotation_AddX_0A578(arg0, ParticleMath_RandomSignedOffset(0x200, 0xE00));
@@ -437,7 +437,7 @@ void BattleAnim_ContinueFireBreathFlameColoration(Particle* arg0) {
  * only for Flamethrower, Dragon Rage, Fire Spin and Fire Blast.
  */
 void BattleAnim_FlameRotatingFallColorCycle(Particle* arg0) {
-    s16 temp_v0 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 temp_v0 = Particle_GetByteParam1(arg0);
 
     switch (arg0->lifecycle) {
         case 1:
@@ -511,7 +511,7 @@ void BattleAnim_FlameRotatingFallColorCycle(Particle* arg0) {
 void BattleAnim_SetupExpandingHitSpark(Particle* arg0) {
     Particle_AddPositionOffsetAlongRotationYPlus180(arg0, 33.0f);
     Particle_SetScaleScaled(arg0, 0.67f);
-    ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrim(arg0, Particle_GetByteParam1(arg0));
     Particle_SetPrimAlpha(arg0, 0xC8);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -959,7 +959,7 @@ void BattleAnim_SetupEmberUseEffect(Particle* arg0) {
     Vec3s sp28;
     UNUSED s32 pad[1]; // FAKE: stack padding
 
-    Particle_FieldCF_GetS16_0C058(arg0);
+    Particle_GetByteParam1(arg0);
     Particle_SpawnIndex_GetS16_0C038(arg0);
     Particle_SetScaleScaled(arg0, 0.45f);
     sp28.x = ParticleMath_RandomSigned(0x2000);
@@ -1050,7 +1050,7 @@ void BattleAnim_FirePunchEmberEggBombColorChange(Particle* arg0) {
     u16 sp1C;
     u16 sp1A;
 
-    switch (Particle_FieldCF_GetS16_0C058(arg0)) {
+    switch (Particle_GetByteParam1(arg0)) {
         case 0:
             sp1C = 0x2E;
             sp1A = 0x10;
@@ -1081,7 +1081,7 @@ void BattleAnim_FirePunchEmberEggBombColorChange(Particle* arg0) {
  */
 void BattleAnim_SetupBackgroundBombExplosion(Particle* arg0) {
     s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
-    s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp24 = Particle_GetByteParam1(arg0);
     s16 sp22 = Particle_FieldCE_GetS32_0C040(arg0);
 
     switch (sp26) {
@@ -1167,7 +1167,7 @@ void BattleAnim_SetupBoomSmallExplosion(Particle* arg0) {
     s16 sp28;
 
     sp2A = Particle_SpawnIndex_GetS16_0C038(arg0);
-    sp28 = Particle_FieldCF_GetS16_0C058(arg0);
+    sp28 = Particle_GetByteParam1(arg0);
     sp2C.x = ParticleMath_RandomSigned(0xA);
     sp2C.y = ParticleMath_RandomSignedOffset(0xF, 0xA);
     sp2C.z = ParticleMath_RandomSigned(0xF);
@@ -1239,7 +1239,7 @@ void BattleAnim_SetupEggBombHitEffect(Particle* arg0) {
     s16 sp20;
 
     sp22 = Particle_SpawnIndex_GetS16_0C038(arg0);
-    sp20 = Particle_FieldCF_GetS16_0C058(arg0);
+    sp20 = Particle_GetByteParam1(arg0);
     sp24.x = ParticleMath_RandomSigned(0xA);
     sp24.y = ParticleMath_RandomSignedOffset(0xA, 5);
     sp24.z = ParticleMath_RandomSigned(0xA);
@@ -1763,7 +1763,7 @@ void BattleAnim_SetupFlamethrowerHitRotation(Particle* arg0, s16 arg1, s16 arg2)
  * for Flamethrower, Dragon Rage.
  */
 void BattleAnim_RunFlamethrowerHitRotation(Particle* arg0, s32 arg1) {
-    s16 temp_v0 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 temp_v0 = Particle_GetByteParam1(arg0);
 
     switch (arg0->lifecycle) {
         case 1:
@@ -1833,7 +1833,7 @@ void BattleAnim_RunFlamethrowerHitRotationStrong(Particle* arg0) {
  * for Flamethrower, Dragon Rage, Fire Blast.
  */
 void BattleAnim_SetupFireBlastHitFrontFlames(Particle* arg0) {
-    s16 sp36 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp36 = Particle_GetByteParam1(arg0);
     UNUSED s32 pad[3]; // FAKE: stack padding
     s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
 
@@ -1897,31 +1897,35 @@ s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82147ED0(s8 *);                      /* extern */
 M2C_UNK func_82147FF0(s8 *);                      /* extern */
 
-void func_82148090(Particle* arg0) {
+/**
+ *
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82147ED0(arg0);
+        func_82147ED0(particle);
         break;
     case 2:
-        if (func_821406B4(arg0) != 0) {
-            func_8213D238(arg0);
-            func_8213CB3C(arg0);
+        if (func_821406B4(particle) != 0) {
+            func_8213D238(particle);
+            func_8213CB3C(particle);
         }
         break;
     case 3:
-        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
-        Particle_ApproachPrimAlpha(arg0, 0x20, 4);
-        func_82140228(arg0, 0x3F99999A, 0x3DCCCCCD);
+        Particle_AnimateFramesForwardLoopedThenAdvance(particle, 0, 7, 1, 2, 0);
+        Particle_ApproachPrimAlpha(particle, 0x20, 4);
+        func_82140228(particle, 0x3F99999A, 0x3DCCCCCD);
         break;
     case 4:
-        Particle_MarkInactive(arg0);
+        Particle_MarkInactive(particle);
         break;
     }
-    if (func_8213CB7C(arg0) != 0) {
-        func_82147FF0(arg0);
+    if (func_8213CB7C(particle) != 0) {
+        func_82147FF0(particle);
     }
 }
 
@@ -1932,7 +1936,7 @@ void func_82148090(Particle* arg0) {
 void BattleAnim_SetupDaimonji(Particle* arg0) {
     UNUSED s32 pad[3]; // FAKE: stack padding
     s16 sp22 = Particle_SpawnIndex_GetS16_0C038(arg0);
-    s16 sp20 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp20 = Particle_GetByteParam1(arg0);
 
     Particle_SetScaleScaled(arg0, 0.6f);
     Particle_PositionOffset_AddYScaled_08E90(arg0, 15.0f);
@@ -2055,7 +2059,7 @@ void BattleAnim_SetupDaimonjiColoration(Particle* arg0) {
     UNUSED s32 pad[3]; // FAKE: stack padding
     s16 sp22 = Particle_SpawnIndex_GetS16_0C038(arg0);
 
-    Particle_FieldCF_GetS16_0C058(arg0);
+    Particle_GetByteParam1(arg0);
     Particle_SetScaleScaled(arg0, 0.7f);
     Particle_SetRandomVelocityX(arg0, 0xF);
     Particle_SetRandomVelocityYOffset(arg0, 0xF, 0xA);

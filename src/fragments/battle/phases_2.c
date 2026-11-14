@@ -512,7 +512,7 @@ void BattleScene_UpdatePhase(CameraNode* arg0) {
 }
 
 /**
- * Seen in play (2026-11-13) with scene mode forced to 4 at scene start, func_82134374 called this
+ * Seen in play (2026-11-13) with scene mode forced to 4 at scene start, BattleScene_StartPresentationForMode called this
  * directly (not through BattleScene_UpdateIntroSequence's case 0): it set rotationX to 0x3C6E and
  * rotationY to 0, and the next frame's update was already at step 1.
  */

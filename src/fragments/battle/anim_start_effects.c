@@ -104,7 +104,7 @@ void func_82150D1C(void);
  */
 void BattleAnim_InitStartEffect135Descriptor1CRisingScale(Particle* arg0) {
     Vec3s sp28;
-    s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp26 = Particle_GetByteParam1(arg0);
     s16 sp24 = Particle_SpawnIndex_GetS16_0C038(arg0);
 
     Particle_PositionOffset_SetYScaled_08CA0(arg0, 2.5f);
@@ -156,11 +156,11 @@ void BattleAnim_CallbackStartEffect135Descriptor1CRisingScaleFade(Particle* arg0
     Particle_AddVelocityFromRotationTemplate1(arg0);
 }
 
-u16 func_8213C484();                                /* extern */
+u16 func_8213C484(); // Particle_GetByteParam1 with the u16 return this call needs
 M2C_UNK func_8213C9D0(s32);                         /* extern */
 M2C_UNK func_821401D4(s32, M2C_UNK);                /* extern */
 M2C_UNK func_82143478(s32, u16);                    /* extern */
-void func_821501B4(s32 arg0)
+void BattleAnim_InitStartEffect135ExpandingFlash(s32 arg0)
 {
   u16 sp26;
   sp26 = func_8213C484();
@@ -213,7 +213,7 @@ void BattleAnim_CallbackStartEffect135ExpandingFlashFade(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_InitStartEffect139Descriptor42FallingScale(Particle* arg0) {
-    s16 sp2E = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp2E = Particle_GetByteParam1(arg0);
     s16 sp2C = Particle_SpawnIndex_GetS16_0C038(arg0);
 
     Particle_SetScaleScaled(arg0, 0.05f);
@@ -279,7 +279,7 @@ void BattleAnim_InitStartEffect139Descriptor22SpinFade(Particle* arg0) {
     s16 sp2C;
 
     Particle_SpawnIndex_GetS16_0C038(arg0);
-    sp2C = Particle_FieldCF_GetS16_0C058(arg0);
+    sp2C = Particle_GetByteParam1(arg0);
     Particle_SetScaleScaled(arg0, 0.175f);
     Particle_SetRotation(arg0, ParticleMath_RandomRange(0x10000), ParticleMath_RandomRange(0x10000), 0);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp2C);
@@ -390,7 +390,7 @@ void BattleAnim_InitExplosionOrbit(Particle* arg0) {
     s16 sp36;
     s16 sp34;
     s16 sp32 = Particle_SpawnIndex_GetS16_0C038(arg0);
-    s16 sp30 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp30 = Particle_GetByteParam1(arg0);
     s16 sp2E = Particle_FieldCE_GetS32_0C040(arg0);
 
     Particle_SetRotation(arg0, ParticleMath_RandomRange(0x10000), ParticleMath_RandomRange(0x10000), 0);
@@ -504,7 +504,7 @@ void BattleAnim_ExplosionOrbitSwirl(Particle* arg0) {
  * @unverified Name guessed from the code.
  */
 void BattleAnim_InitExplosionBurst(Particle* arg0) {
-    s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp26 = Particle_GetByteParam1(arg0);
 
     Particle_SetScaleScaled(arg0, 0.2f);
     Particle_PositionOffset_AddYScaled_08E90(arg0, 5.0f);

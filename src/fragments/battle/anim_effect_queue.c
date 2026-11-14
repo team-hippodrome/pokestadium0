@@ -1030,8 +1030,9 @@ extern s32 D_8219A878;
 /**
  * Effect list command handler: 0 resets (func_82137160), 2 selects list arg1, 5 calls
  * func_8216D720(arg1); 1, 3 and 4 do nothing. Returns 0.
+ * @unverified Name guessed from the code.
  */
-s32 func_821370DC(u32 arg0, s32 arg1) {
+s32 BattleAnim_DispatchPresentation(u32 arg0, s32 arg1) {
     switch (arg0) {
     case 1:
     case 3:

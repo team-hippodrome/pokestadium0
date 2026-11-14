@@ -43,7 +43,7 @@ void BattleAnim_SetupStrongElectricSpark(Particle* arg0) {
     Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp2C);
     Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRange(0xA));
     Particle_Rotation_AddX_0A578(arg0, 0x4000);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -53,26 +53,30 @@ M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214E590(s8 *);                      /* extern */
 
-void func_8214E67C(Particle* arg0) {
+/**
+ *
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_8214E590(arg0);
+        func_8214E590(particle);
         break;
     case 2:
-        func_821406B4(arg0);
+        func_821406B4(particle);
         break;
     case 3:
-        func_82140548(arg0, 0, 0x40);
+        func_82140548(particle, 0, 0x40);
         break;
     case 4:
-        Particle_DisableAndDetach(arg0);
+        Particle_DisableAndDetach(particle);
         break;
     }
-    func_82140228(arg0, 0x3F800000, 0x3D4CCCCD);
-    Particle_MoveAlongRotationXYZAlt(arg0);
+    func_82140228(particle, 0x3F800000, 0x3D4CCCCD);
+    Particle_MoveAlongRotationXYZAlt(particle);
 }
 
 /**
@@ -169,7 +173,7 @@ void BattleAnim_SetupDelayedRisingColumnFade(Particle* arg0) {
     sp28.y = sp2E << 0xD;
     sp28.z = 0;
     Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp28);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_DisableRendering(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -225,7 +229,7 @@ void BattleAnim_SetupDelayedRisingColumnRandomScale(Particle* arg0) {
     sp28.y = sp2E << 0xD;
     sp28.z = 0;
     Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp28);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_DisableRendering(arg0);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -282,7 +286,7 @@ void BattleAnim_SetupSharedDirectionalSprayFade(Particle* arg0) {
     sp28.y = 0;
     sp28.z = (ParticleMath_RandomRange(0x10) << 0xB) - 0x4000;
     Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp28);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -292,26 +296,30 @@ M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214EC88(s8 *);                      /* extern */
 
-void func_8214ED30(Particle* arg0) {
+/**
+ *
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackSharedDirectionalSprayFade(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_8214EC88(arg0);
+        func_8214EC88(particle);
         break;
     case 2:
-        func_82140228(arg0, 0x40000000, 0x3E4CCCCD);
-        func_821406B4(arg0);
+        func_82140228(particle, 0x40000000, 0x3E4CCCCD);
+        func_821406B4(particle);
         break;
     case 3:
-        func_82140548(arg0, 0, 0x40);
+        func_82140548(particle, 0, 0x40);
         break;
     case 4:
-        Particle_DisableAndDetach(arg0);
+        Particle_DisableAndDetach(particle);
         break;
     }
-    Particle_MoveAlongRotationXYZAlt(arg0);
+    Particle_MoveAlongRotationXYZAlt(particle);
 }
 
 /**
@@ -331,7 +339,7 @@ void BattleAnim_SetupDirectionalSprayScaledFade(Particle* arg0) {
     sp2C.y = 0;
     sp2C.z = (ParticleMath_RandomRange(0x10) << 0xB) - 0x4000;
     Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp2C);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -341,26 +349,30 @@ M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214EDE0(s8 *);                      /* extern */
 
-void func_8214EEE0(Particle* arg0) {
+/**
+ *
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_8214EDE0(arg0);
+        func_8214EDE0(particle);
         break;
     case 2:
-        func_821402B8(arg0);
-        func_821406B4(arg0);
+        func_821402B8(particle);
+        func_821406B4(particle);
         break;
     case 3:
-        func_82140548(arg0, 0, 0x40);
+        func_82140548(particle, 0, 0x40);
         break;
     case 4:
-        Particle_DisableAndDetach(arg0);
+        Particle_DisableAndDetach(particle);
         break;
     }
-    Particle_MoveAlongRotationXYZAlt(arg0);
+    Particle_MoveAlongRotationXYZAlt(particle);
 }
 
 /**
@@ -384,7 +396,7 @@ void BattleAnim_SetupThunderShockOuterJolts(Particle* arg0) {
     Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp2C);
     Particle_AddPositionFromRotationTemplate1(arg0, 150.0f);
     Particle_Rotation_AddZConstant_0A334(arg0);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -394,26 +406,30 @@ M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214EF84(s8 *);                      /* extern */
 
-void func_8214F06C(Particle* arg0) {
+/**
+ *
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_8214EF84(arg0);
+        func_8214EF84(particle);
         break;
     case 2:
-        func_821406B4(arg0);
+        func_821406B4(particle);
         break;
     case 3:
-        func_82140548(arg0, 0, 0x10);
+        func_82140548(particle, 0, 0x10);
         break;
     case 4:
-        Particle_DisableAndDetach(arg0);
+        Particle_DisableAndDetach(particle);
         break;
     }
-    func_821402B8(arg0);
-    Particle_MoveAlongRotationXYZAlt(arg0);
+    func_821402B8(particle);
+    Particle_MoveAlongRotationXYZAlt(particle);
 }
 
 /**
@@ -440,7 +456,7 @@ void BattleAnim_SetupUnregisteredStraightDirectionalStreamFade(Particle* arg0) {
     Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp2C);
     Particle_AddPositionFromRotationTemplate1(arg0, 150.0f);
     Particle_Rotation_AddZConstant_0A334(arg0);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -496,7 +512,7 @@ void BattleAnim_SetupEndEffect28Descriptor10UpwardBurstFade(Particle* arg0) {
     sp30.y = 200.0f;
     sp30.z = ParticleMath_RandomRange(0x64) + -50.0f;
     Particle_PositionOffset_AddVecScaledFromVec3f_08D78(arg0, sp30);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -549,7 +565,7 @@ void BattleAnim_SetupEndEffect28Descriptor10WideScatterBurstFade(Particle* arg0)
     Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp28);
     Particle_AddPositionFromRotationTemplate1(arg0, 200.0f);
     Particle_Rotation_AddX_0A578(arg0, -0x4000);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -616,7 +632,7 @@ extern M2C_UNK func_8214EBA4;
 void BattleAnim_InitializeThunderShockThunderboltHit(void) {
     func_8213B794(0x2C, 4, 0x10, 8, 0xFF);
     func_8213B644(0x30, 0x20, 8);
-    func_8213B5D8(0, 8, 5, &func_8214ED30, &D_8218E618, 8, 3, 3, 0, 0x25, 0);
+    func_8213B5D8(0, 8, 5, &BattleAnim_CallbackSharedDirectionalSprayFade, &D_8218E618, 8, 3, 3, 0, 0x25, 0);
     func_8213B5D8(0, 4, 2, &func_8214E9F0, &D_8218E600, 0x14, 4, 3, 0, 0x25, 0);
     func_8213B5D8(0, 4, 2, &func_8214EBA4, &D_8218E600, 0x14, 4, 3, 0, 0x25, 0);
 }
@@ -638,7 +654,7 @@ extern M2C_UNK func_8214EBA4;
 void BattleAnim_InitializeThunderHit(void) {
     func_8213B794(0, 4, 8, 8, 0xC8);
     func_8213B644(0x30, 0x20, 8);
-    func_8213B5D8(0, 8, 5, &func_8214ED30, &D_8218E618, 8, 3, 3, 0, 0x25, 0);
+    func_8213B5D8(0, 8, 5, &BattleAnim_CallbackSharedDirectionalSprayFade, &D_8218E618, 8, 3, 3, 0, 0x25, 0);
     func_8213B5D8(0, 4, 2, &func_8214E9F0, &D_8218E600, 0x14, 4, 3, 0, 0x25, 0);
     func_8213B5D8(0, 4, 2, &func_8214EBA4, &D_8218E600, 0x14, 4, 3, 0, 0x25, 0);
     func_8215EC44();
@@ -670,7 +686,7 @@ extern M2C_UNK D_8218E620;
 
 /**
  * Starts a three-part effect: sets the tint and spawn timing, then queues func_8214F3D4,
- * func_8214F55C and func_8214F06C on the current owner.
+ * func_8214F55C and BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade on the current owner.
  */
 void func_8214FCBC(void) {
     func_8213B720(0x22, 4, 0x10, 8);
@@ -678,7 +694,7 @@ void func_8214FCBC(void) {
     func_8213B644(0x30, 0x20, 8);
     func_8213B5D8(0, 0xA, 2, &func_8214F3D4, &D_8218E608, 0xC, 1, 3, 0, 0x25, 0);
     func_8213B5D8(0, 5, 3, &func_8214F55C, &D_8218E608, 0xC, 2, 3, 0, 0x25, 0);
-    func_8213B5D8(0, 8, 2, &func_8214F06C, &D_8218E620, 0xC, 3, 3, 0, 0x25, 0);
+    func_8213B5D8(0, 8, 2, &BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade, &D_8218E620, 0xC, 3, 3, 0, 0x25, 0);
 }
 
 /**

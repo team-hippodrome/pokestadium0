@@ -25,7 +25,7 @@ void BattleAnim_NoopUpdateHook(void) {
 }
 
 /**
- * Seen in play (2026-11-13) (scene mode forced to 4): step 0 was run by func_82134374 at scene
+ * Seen in play (2026-11-13) (scene mode forced to 4): step 0 was run by BattleScene_StartPresentationForMode at scene
  * start, so the first update already saw step 1; the case 0 fall-through into case 1 was not
  * reached. Steps 1 to 3 ran in order (wait for assets, spinning overhead shot, then the side 1
  * throw). A COM Free Battle uses mode 8 (BattleScene_OpeningStepInitCamera and the other

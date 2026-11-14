@@ -196,10 +196,11 @@ void func_82132CDC(CameraNode* arg0) {
 
 // Zero's version takes only the particle; the header keeps Stadium 1's callback signature.
 /**
- * Draws the featured Pokemon's I4 atlas, scaled in Y.
+ * Steps the camera along the featured Pokémon's path in D_8219A580 with a late ease.
+ * @unverified Name guessed from the code.
  */
-void func_82132D3C(Particle* arg0) {
-    BattleCamera_StepPathLateEase(arg0, D_8219A580);
+void BattleCamera_StepFeaturedPokemonPath(Particle* camera) {
+    BattleCamera_StepPathLateEase(camera, D_8219A580);
 }
 
 void func_82132B04(CameraNode* arg0);
@@ -235,7 +236,7 @@ void func_82132D60(CameraNode* arg0) {
             func_82132CDC(arg0);
             break;
         case 7:
-            func_82132D3C((Particle*)arg0);
+            BattleCamera_StepFeaturedPokemonPath((Particle*)arg0);
             break;
     }
 }

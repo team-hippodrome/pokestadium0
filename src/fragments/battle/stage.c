@@ -707,9 +707,15 @@ void func_82100B84(void);
 void func_821070E0(s32, Unit82101324*);
 void func_821076FC(s32, CameraNode*, CameraNode*);
 void func_82134CC0(s32, CameraNode*);
-void func_821370DC(s32, CameraNode*);
+void func_821370DC(s32, CameraNode*); // BattleAnim_DispatchPresentation, declared here with the argument types this file's calls need
 
-s32 func_82101324(s32* arg0) { // FAKE: s32 return (value unused) fixes caller regalloc
+/**
+ * Sets up the battle stage: fonts, icon framebuffers, the thumbnail images, the stage assets
+ * and models, and runs the presentation, camera and participant setup for lifecycle stages 0
+ * and 3.
+ * @unverified Name from Stadium 1.
+ */
+s32 BattleScene_Init(s32* arg0) { // FAKE: s32 return (value unused) fixes caller regalloc
     UNUSED s32 pad; // FAKE
     MemoryBlock* block;
     unk_D_86002F30* model;
@@ -801,7 +807,7 @@ void Audio_PlayMusicIfChanged(s32);
 s32 Storage_GetDiskStatus(void);
 void Audio_SetDiskReadyPolling(s32);
 void Audio_WaitForIdle(s32);
-s32 func_82101324(s32* arg0); // FAKE: see definition
+s32 BattleScene_Init(s32* arg0); // FAKE: see definition
 s32 func_82101874(s32 arg0, SessionContext *arg1)
 {
   StageContext *stage_context;
@@ -834,7 +840,7 @@ s32 func_82101874(s32 arg0, SessionContext *arg1)
   main_pool_push_state('BATL');
   Gfx_InitDisplayListBuffers(0x20000, 0);
   stage_context = StageContext_Allocate(0, 1, 3, 1, 2, 1);
-  func_82101324((s32*)stage_context);
+  BattleScene_Init((s32*)stage_context);
   switch (D_82198D10->mode)
   {
     case 3:

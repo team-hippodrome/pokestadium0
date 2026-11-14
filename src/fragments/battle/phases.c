@@ -1874,7 +1874,7 @@ void BattleScene_PhaseDisable(CameraNode* arg0) {
             BattleCamera_PlayTargetShot(sOtherPokemon, arg0, D_8219A568 = BattleAnim_RandomRange(4));
             BattleMessage_ShowForSide((s32)gBattleMessageQueues->messageBuffers[0], sBattleScene.scene->actingSide);
             BattleScene_ResetCameraFrameCounter();
-            BattleAnim_QueueMoveEffectEnd(runtime->usedMove, sActingPokemon, sOtherPokemon, BattleScene_GetHitCueDefaultAnchor(sOtherPokemon), func_82107B54(sOtherPokemon));
+            BattleAnim_QueueMoveEffectEnd(runtime->usedMove, sActingPokemon, sOtherPokemon, BattleScene_GetHitCueDefaultAnchor(sOtherPokemon), BattleScene_GetHitCueAlternateAnchor(sOtherPokemon));
             BattleScene_SetParticipantModelTransform(sOtherPokemon, 0x10, 0);
             sBattleScene.scene->phaseStep += 1;
             break;

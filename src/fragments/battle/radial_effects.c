@@ -71,7 +71,6 @@ void func_8216E0C0(void) {
 }
 
 void BattleAnim_CalcVectorAtToDm(f32* arg0, f32* arg1, f32* arg2, f32* arg3, f32* arg4, f32* arg5);
-void func_82175440(f32, f32, f32, f32, f32, f32, s16, u8, u8, u8, u8, f32, f32, f32, s16);
 /**
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
@@ -94,7 +93,7 @@ void BattleAnim_StartEffect19Radial20_EmitVariantD(void) {
     sp54 += 6.0f;
     r1 = guRandom();
     r2 = guRandom();
-    func_82175440(sp64, sp60, sp5C, sp58, ((r1 % 4) * 0.01) + sp54 - 0.02, sp50 - ((r2 % 5) * 0.3) + 0.6, 3, 0x80, 0xC0, 0xFF, 0xC8, 0.1f, 2.0f, 5.0f, 0x3C);
+    Radial20_VariantD(sp64, sp60, sp5C, sp58, ((r1 % 4) * 0.01) + sp54 - 0.02, sp50 - ((r2 % 5) * 0.3) + 0.6, 3, 0x80, 0xC0, 0xFF, 0xC8, 0.1f, 2.0f, 5.0f, 0x3C);
 }
 
 /**
@@ -397,5 +396,5 @@ void BattleAnim_StartEffect98Radial20_EmitVariantD(void) {
     sp54 += 6.0f;
     r1 = guRandom();
     r2 = guRandom();
-    func_82175440(sp64, sp60, sp5C, sp58, ((r1 % 4) * 0.01) + sp54 - 0.02, sp50 - ((r2 % 5) * 0.3) + 0.6, 3, 0xFF, 0xFF, 0x40, 0xC8, 0.1f, 2.0f, 5.0f, 0x3C);
+    Radial20_VariantD(sp64, sp60, sp5C, sp58, ((r1 % 4) * 0.01) + sp54 - 0.02, sp50 - ((r2 % 5) * 0.3) + 0.6, 3, 0xFF, 0xFF, 0x40, 0xC8, 0.1f, 2.0f, 5.0f, 0x3C);
 }

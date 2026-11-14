@@ -429,7 +429,6 @@ void func_8211F1E0(ActivePokemon*, ActivePokemonState*, ActivePokemonState*);
 void func_8211CC8C(ActivePokemon*, ActivePokemonState*, ActivePokemonState*);
 void func_8211D3A8(void);
 void func_8211D06C(void);
-void func_8211CB0C(ActivePokemon*, ActivePokemonState*, ActivePokemonState*);
 void func_8211C9FC(ActivePokemon*, ActivePokemonState*, ActivePokemonState*);
 
 /**
@@ -462,7 +461,7 @@ void Battle_RenderHud(void) {
             break;
         case 5:
         case 6:
-            func_8211CB0C(sActivePokemon[0], s0, s1);
+            Battle_DrawSpectatorModeBackgroundPanel(sActivePokemon[0], s0, s1);
             func_8211D3A8();
             break;
         case 9:

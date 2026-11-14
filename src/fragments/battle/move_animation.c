@@ -359,7 +359,7 @@ void BattleScene_LoadRowResourceList(ActivePokemon* active_pokemon) {
     BattleAnim_LoadModeResourceList(active_pokemon->side, sBattleSceneStateRowTable[row_index].mode);
 }
 
-s16 func_82107BF4();                                /* extern */
+s16 func_82107BF4(); // BattleScene_GetParticipantUsedMove with the s16 return this call needs
 M2C_UNK func_821368B0(s32, s16);                    /* extern */
 
 /**

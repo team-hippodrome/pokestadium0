@@ -47,22 +47,22 @@ void BattleScene_ActionStepTravel(CameraNode* arg0, s32 arg1) {
             BattleScene_ActionSetupAnimationVariantB(arg0);
             break;
         case 1:
-            func_82129D10(arg0);
+            BattleScene_ImpactCameraAbove(arg0);
             break;
         case 2:
-            func_82129E30((s32)arg0);
+            BattleScene_ImpactCameraBelow((s32)arg0);
             break;
         case 3:
-            func_82129F5C(arg0);
+            BattleScene_ImpactCameraOrbit(arg0);
             break;
         case 4:
-            func_8212A074((s32)arg0);
+            BattleScene_ImpactCameraWideOrbit((s32)arg0);
             break;
         case 5:
-            func_8212A190(arg0);
+            BattleScene_ImpactCameraRandom3(arg0);
             break;
         case 7:
-            func_8212A250(arg0);
+            BattleScene_ImpactCameraRandom4(arg0);
             break;
         default:
             BattleScene_ActionSetupAnimationVariantB(arg0);

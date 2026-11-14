@@ -36,12 +36,13 @@ void BattleMenu_ResetCommandTimer(void) {
 /**
  * While the Pokemon's command state (+0x79C) is 3, adds 0x38E to its action timer and
  * returns 1; otherwise returns 0.
+ * @unverified Name guessed from the code.
  */
-s32 func_8210C708(ActivePokemon* arg0) {
+s32 BattleScene_ApplyForcedActionDelay(ActivePokemon* active_pokemon) {
     s8 *temp_v1;
 
-    temp_v1 = &arg0->state;
-    if (M2C_FIELD(arg0, s32 *, 0x79C) == 3) {
+    temp_v1 = &active_pokemon->state;
+    if (M2C_FIELD(active_pokemon, s32 *, 0x79C) == 3) {
         M2C_FIELD(temp_v1, u16 *, 0x1E) = (u16) (M2C_FIELD(temp_v1, u16 *, 0x1E) + 0x38E);
         return 1;
     }
@@ -322,14 +323,18 @@ void BattleMenu_UpdateMoveMenu(ActivePokemon* arg0) {
     }
 }
 
-s32 func_8210CCDC(s8 *arg0, M2C_UNK arg1)
+/**
+ * Marks the move menu as locked (+0x7B6) and updates it; returns 0.
+ * @unverified Name guessed from the code.
+ */
+s32 BattleScene_HandlePlayerMoveSelectionLocked(s8 *active_pokemon, M2C_UNK unused)
 {
-  *((s8 *) (((s8 *) arg0) + 0x7B6)) = 1;
+  *((s8 *) (((s8 *) active_pokemon) + 0x7B6)) = 1;
   if (1)
   {
-    *((s8 *) (((s8 *) arg0) + 0x7B6)) = 1;
-    BattleMenu_UpdateMoveMenu(arg0);
-    *((s8 *) (((s8 *) arg0) + 0x7B6)) = 1;
+    *((s8 *) (((s8 *) active_pokemon) + 0x7B6)) = 1;
+    BattleMenu_UpdateMoveMenu(active_pokemon);
+    *((s8 *) (((s8 *) active_pokemon) + 0x7B6)) = 1;
   }
   return 0;
 }
@@ -604,7 +609,7 @@ s32 BattleScene_HandlePlayerFaintedSwitch(ActivePokemon* arg0, ActivePokemon* ar
     }
     if ((state->faintState == 0x10) && (other->faintState == 0x10)) {
         if (state->selectedCommandOption == 3) {
-            func_8210C708((s8*)arg0);
+            BattleScene_ApplyForcedActionDelay((s8*)arg0);
             return 1;
         }
         state->selectedCommand = 2;
@@ -740,7 +745,7 @@ s32 BattleScene_HandlePlayerActionInput(ActivePokemon* arg0) {
     ActivePokemonState* opponent_state = &sActivePokemon[BattleScene_GetParticipantSideIndex(arg0) == 0]->state;
 
     if (opponent_state->faintState == 0x10) {
-        if (func_8210C708(arg0) != 0) {
+        if (BattleScene_ApplyForcedActionDelay(arg0) != 0) {
             return 1;
         }
     } else if (func_8210C778(arg0) != 0) {
@@ -852,7 +857,7 @@ s32 BattleScene_HandleCpuFaintedSwitch(ActivePokemon* arg0, ActivePokemon* arg1)
 
     if ((state->faintState == 0x10) && (other->faintState == 0x10)) {
         if (state->selectedCommandOption == 3) {
-            func_8210C708((s8*)arg0);
+            BattleScene_ApplyForcedActionDelay((s8*)arg0);
             return 1;
         }
         state->selectedCommand = 2;

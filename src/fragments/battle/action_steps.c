@@ -97,8 +97,9 @@ void BattleScene_ActionStepIntro(CameraNode* arg0, s32 arg1) {
  * Hit-count step of a move: on substep 1, once the user's animation is done (or 20 frames
  * in a frozen/asleep/airborne state), shows the move message and starts the user's model
  * reaction 0x16 (when moveEffectKind is 0x14) or 3, then advances the phase step.
+ * @unverified Name guessed from the code.
  */
-void func_82128E34(s32 arg0) {
+void BattleScene_HitCountStepShowMessage(s32 camera) {
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
             func_82125580();
@@ -140,7 +141,7 @@ void BattleScene_ActionStepSetHitCount(CameraNode* arg0, s32 arg1) {
     }
     D_8219A574 = D_8219A570 = sMultihitCount;
     if (BattleScene_TryEnterEffectPhaseBeforeLaunch() == 0) {
-        func_82128E34((s32)arg0);
+        BattleScene_HitCountStepShowMessage((s32)arg0);
     }
 }
 
@@ -148,21 +149,22 @@ void BattleScene_ActionStepSetHitCount(CameraNode* arg0, s32 arg1) {
  * Move-use camera shot 0: after 20 frames plays the user's camera shot 0 and captures its
  * orbit, then follows the user until its move animation finishes (or 50 frames in a
  * frozen/asleep state), clearing the message cursor along the way.
+ * @unverified Name guessed from the code.
  */
-void func_82128FBC(CameraNode* arg0) {
+void BattleScene_UseMoveCameraShot0(CameraNode* camera) {
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
             sBattleScene.scene->cameraPresetId = 4;
             if (BattleScene_AdvanceCameraFrameCounter(0x14) != 0) {
                 BattleScene_SetPhaseFlag();
-                BattleCamera_PlayShot(sActingPokemon, arg0, 0);
-                BattleCamera_CaptureModelOrbit(sActingPokemon, arg0);
+                BattleCamera_PlayShot(sActingPokemon, camera, 0);
+                BattleCamera_CaptureModelOrbit(sActingPokemon, camera);
                 BattleScene_ResetCameraSubstepCounter();
             }
             break;
         case 1:
             sBattleScene.scene->cameraPresetId = 4;
-            BattleScene_FollowParticipantOrbit(arg0, sActingPokemon);
+            BattleScene_FollowParticipantOrbit(camera, sActingPokemon);
             if (BattleScene_AdvanceCameraSubstepCounter(0xF) != 0) {
                 Battle_ClearMessageCursor();
             }
@@ -178,23 +180,24 @@ void func_82128FBC(CameraNode* arg0) {
 }
 
 /**
- * Move-use camera shot 1: same as func_82128FBC with camera shot 1.
+ * Move-use camera shot 1: same as BattleScene_UseMoveCameraShot0 with camera shot 1.
+ * @unverified Name guessed from the code.
  */
-void func_821290CC(CameraNode* arg0) {
+void BattleScene_UseMoveCameraShot1(CameraNode* camera) {
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
             sBattleScene.scene->cameraPresetId = 4;
             if (BattleScene_AdvanceCameraFrameCounter(0x14) != 0) {
                 BattleScene_SetPhaseFlag();
-                BattleCamera_PlayShot(sActingPokemon, arg0, 1);
-                BattleCamera_CaptureModelOrbit(sActingPokemon, arg0);
+                BattleCamera_PlayShot(sActingPokemon, camera, 1);
+                BattleCamera_CaptureModelOrbit(sActingPokemon, camera);
                 Battle_ClearMessageCursor();
                 BattleScene_ResetCameraSubstepCounter();
             }
             break;
         case 1:
             sBattleScene.scene->cameraPresetId = 4;
-            BattleScene_FollowParticipantOrbit(arg0, sActingPokemon);
+            BattleScene_FollowParticipantOrbit(camera, sActingPokemon);
             if (BattleScene_AdvanceCameraSubstepCounter(0xF) != 0) {
                 Battle_ClearMessageCursor();
             }
@@ -210,23 +213,24 @@ void func_821290CC(CameraNode* arg0) {
 }
 
 /**
- * Move-use camera shot 2: same as func_82128FBC with camera shot 2.
+ * Move-use camera shot 2: same as BattleScene_UseMoveCameraShot0 with camera shot 2.
+ * @unverified Name guessed from the code.
  */
-void func_821291E4(CameraNode* arg0) {
+void BattleScene_UseMoveCameraShot2(CameraNode* camera) {
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
             sBattleScene.scene->cameraPresetId = 4;
             if (BattleScene_AdvanceCameraFrameCounter(0x14) != 0) {
                 BattleScene_SetPhaseFlag();
-                BattleCamera_PlayShot(sActingPokemon, arg0, 2);
-                BattleCamera_CaptureModelOrbit(sActingPokemon, arg0);
+                BattleCamera_PlayShot(sActingPokemon, camera, 2);
+                BattleCamera_CaptureModelOrbit(sActingPokemon, camera);
                 Battle_ClearMessageCursor();
                 BattleScene_ResetCameraSubstepCounter();
             }
             break;
         case 1:
             sBattleScene.scene->cameraPresetId = 4;
-            BattleScene_FollowParticipantOrbit(arg0, sActingPokemon);
+            BattleScene_FollowParticipantOrbit(camera, sActingPokemon);
             if (BattleScene_AdvanceCameraSubstepCounter(0xF) != 0) {
                 Battle_ClearMessageCursor();
             }
@@ -242,23 +246,24 @@ void func_821291E4(CameraNode* arg0) {
 }
 
 /**
- * Move-use camera shot 3: same as func_82128FBC with camera shot 3.
+ * Move-use camera shot 3: same as BattleScene_UseMoveCameraShot0 with camera shot 3.
+ * @unverified Name guessed from the code.
  */
-void func_821292FC(CameraNode* arg0) {
+void BattleScene_UseMoveCameraShot3(CameraNode* camera) {
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
             sBattleScene.scene->cameraPresetId = 4;
             if (BattleScene_AdvanceCameraFrameCounter(0x14) != 0) {
                 BattleScene_SetPhaseFlag();
-                BattleCamera_PlayShot(sActingPokemon, arg0, 3);
-                BattleCamera_CaptureModelOrbit(sActingPokemon, arg0);
+                BattleCamera_PlayShot(sActingPokemon, camera, 3);
+                BattleCamera_CaptureModelOrbit(sActingPokemon, camera);
                 Battle_ClearMessageCursor();
                 BattleScene_ResetCameraSubstepCounter();
             }
             break;
         case 1:
             sBattleScene.scene->cameraPresetId = 4;
-            BattleScene_FollowParticipantOrbit(arg0, sActingPokemon);
+            BattleScene_FollowParticipantOrbit(camera, sActingPokemon);
             if (BattleScene_AdvanceCameraSubstepCounter(0xF) != 0) {
                 Battle_ClearMessageCursor();
             }
@@ -274,25 +279,26 @@ void func_821292FC(CameraNode* arg0) {
 }
 
 /**
- * Move-use camera shot 4: same pattern as func_82128FBC with camera shot 4, and eases the
+ * Move-use camera shot 4: same pattern as BattleScene_UseMoveCameraShot0 with camera shot 4, and eases the
  * field of view to 60 while it plays.
+ * @unverified Name guessed from the code.
  */
-void func_82129414(CameraNode* arg0) {
+void BattleScene_UseMoveCameraShot4(CameraNode* camera) {
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
             sBattleScene.scene->cameraPresetId = 4;
             if (func_821217DC(0x14) != 0) {
-                BattleScene_SaveCameraFovAndClipMask((s8*)arg0);
+                BattleScene_SaveCameraFovAndClipMask((s8*)camera);
                 func_82125580();
-                BattleCamera_PlayShot(sActingPokemon, arg0, 4);
-                BattleCamera_CaptureModelOrbit(sActingPokemon, arg0);
+                BattleCamera_PlayShot(sActingPokemon, camera, 4);
+                BattleCamera_CaptureModelOrbit(sActingPokemon, camera);
                 func_8211EE8C();
                 func_8212189C();
             }
             break;
         case 1:
             sBattleScene.scene->cameraPresetId = 4;
-            BattleScene_FollowParticipantOrbit(arg0, sActingPokemon);
+            BattleScene_FollowParticipantOrbit(camera, sActingPokemon);
             if (func_82121798(0xF) != 0) {
                 func_8211EE8C();
             }
@@ -303,15 +309,16 @@ void func_82129414(CameraNode* arg0) {
                 sBattleScene.scene->cameraPresetId = 0;
                 sBattleScene.scene->phaseStep++;
             }
-            func_8210C1A8(&arg0->perspective.verticalFieldOfView, 60.0f, 0.03f);
+            func_8210C1A8(&camera->perspective.verticalFieldOfView, 60.0f, 0.03f);
             break;
     }
 }
 
 /**
  * Move-use camera variant 5: picks shot 0, 1 or 2 at random on substep 0 and runs it.
+ * @unverified Name guessed from the code.
  */
-void func_8212954C(CameraNode* arg0) {
+void BattleScene_UseMoveCameraRandom3(CameraNode* camera) {
     if (sBattleScene.scene->phaseSubstep == 0) {
         D_8219A568 = BattleAnim_RandomRange(3);
         if (D_8219A568 >= 4) {
@@ -320,24 +327,25 @@ void func_8212954C(CameraNode* arg0) {
     }
     switch (D_8219A568) {
         case 0:
-            func_82128FBC(arg0);
+            BattleScene_UseMoveCameraShot0(camera);
             break;
         case 1:
-            func_821290CC(arg0);
+            BattleScene_UseMoveCameraShot1(camera);
             break;
         case 2:
-            func_821291E4(arg0);
+            BattleScene_UseMoveCameraShot2(camera);
             break;
         default:
-            func_82128FBC(arg0);
+            BattleScene_UseMoveCameraShot0(camera);
             break;
     }
 }
 
 /**
  * Move-use camera variant 6: picks shot 0-3 at random on substep 0 and runs it.
+ * @unverified Name guessed from the code.
  */
-void func_8212960C(CameraNode* arg0) {
+void BattleScene_UseMoveCameraRandom4(CameraNode* camera) {
     if (sBattleScene.scene->phaseSubstep == 0) {
         D_8219A568 = BattleAnim_RandomRange(4);
         if (D_8219A568 >= 5) {
@@ -346,27 +354,28 @@ void func_8212960C(CameraNode* arg0) {
     }
     switch (D_8219A568) {
         case 0:
-            func_82128FBC(arg0);
+            BattleScene_UseMoveCameraShot0(camera);
             break;
         case 1:
-            func_821290CC(arg0);
+            BattleScene_UseMoveCameraShot1(camera);
             break;
         case 2:
-            func_821291E4(arg0);
+            BattleScene_UseMoveCameraShot2(camera);
             break;
         case 3:
-            func_821292FC(arg0);
+            BattleScene_UseMoveCameraShot3(camera);
             break;
         default:
-            func_82128FBC(arg0);
+            BattleScene_UseMoveCameraShot0(camera);
             break;
     }
 }
 
 /**
  * Move-use camera variant 7: picks shot 0, 1, 2 or 4 at random on substep 0 and runs it.
+ * @unverified Name guessed from the code.
  */
-void func_821296E4(CameraNode* arg0) {
+void BattleScene_UseMoveCameraRandomWithShot4(CameraNode* camera) {
     if (sBattleScene.scene->phaseSubstep == 0) {
         D_8219A568 = BattleAnim_RandomRange(4);
         if (D_8219A568 >= 5) {
@@ -375,19 +384,19 @@ void func_821296E4(CameraNode* arg0) {
     }
     switch (D_8219A568) {
         case 0:
-            func_82128FBC(arg0);
+            BattleScene_UseMoveCameraShot0(camera);
             break;
         case 1:
-            func_821290CC(arg0);
+            BattleScene_UseMoveCameraShot1(camera);
             break;
         case 2:
-            func_821291E4(arg0);
+            BattleScene_UseMoveCameraShot2(camera);
             break;
         case 3:
-            func_82129414(arg0);
+            BattleScene_UseMoveCameraShot4(camera);
             break;
         default:
-            func_82128FBC(arg0);
+            BattleScene_UseMoveCameraShot0(camera);
             break;
     }
 }
@@ -504,28 +513,28 @@ void BattleScene_ActionStepUseMove(CameraNode* arg0, s32 arg1) {
     }
     switch (arg1) {
         case 0:
-            func_82128FBC(arg0);
+            BattleScene_UseMoveCameraShot0(arg0);
             break;
         case 1:
-            func_821290CC(arg0);
+            BattleScene_UseMoveCameraShot1(arg0);
             break;
         case 2:
-            func_821291E4(arg0);
+            BattleScene_UseMoveCameraShot2(arg0);
             break;
         case 3:
-            func_821292FC(arg0);
+            BattleScene_UseMoveCameraShot3(arg0);
             break;
         case 4:
-            func_82129414(arg0);
+            BattleScene_UseMoveCameraShot4(arg0);
             break;
         case 5:
-            func_8212954C(arg0);
+            BattleScene_UseMoveCameraRandom3(arg0);
             break;
         case 6:
-            func_8212960C(arg0);
+            BattleScene_UseMoveCameraRandom4(arg0);
             break;
         case 7:
-            func_821296E4(arg0);
+            BattleScene_UseMoveCameraRandomWithShot4(arg0);
             break;
         case 10:
             BattleScene_UseMoveStepMultiHit(arg0);
@@ -534,7 +543,7 @@ void BattleScene_ActionStepUseMove(CameraNode* arg0, s32 arg1) {
             BattleScene_UseMoveStepConfusionSelfHit(arg0);
             break;
         default:
-            func_82128FBC(arg0);
+            BattleScene_UseMoveCameraShot0(arg0);
             break;
     }
 }
@@ -573,19 +582,20 @@ void BattleScene_ActionSetupAnimationVariantB(CameraNode* arg0) {
  * Impact camera variant 1: clears old effects and offsets and aims at the target two
  * heights above it; once the target's effect session is idle, tracks it until the camera
  * settles, ends the user's effect mode and advances the phase step.
+ * @unverified Name guessed from the code.
  */
-void func_82129D10(CameraNode* arg0) {
+void BattleScene_ImpactCameraAbove(CameraNode* camera) {
     sBattleScene.scene->cameraPresetId = 2;
     switch (sBattleScene.scene->phaseSubstep) {
         case 0:
             BattleAnim_CleanupEffects(1);
             BattleScene_ClearCameraOffsetVectors();
             BattleScene_SetPhaseFlag();
-            BattleScene_FrameParticipantImpact((s32)arg0, sOtherPokemon, BattleScene_GetParticipantHeight(sOtherPokemon) * 2.0f);
+            BattleScene_FrameParticipantImpact((s32)camera, sOtherPokemon, BattleScene_GetParticipantHeight(sOtherPokemon) * 2.0f);
             break;
         case 1:
             if (BattleAnim_IsModelBusy(sOtherPokemon) == 0) {
-                func_821243DC((s32)arg0, sOtherPokemon, BattleScene_GetParticipantHeight(sOtherPokemon) * 2.0f);
+                func_821243DC((s32)camera, sOtherPokemon, BattleScene_GetParticipantHeight(sOtherPokemon) * 2.0f);
                 if (sBattleScene.scene->orbitDistance <= 1.0f) {
                     BattleScene_CleanupParticipantEffectMode(sActingPokemon);
                     sBattleScene.scene->phaseStep++;
@@ -600,8 +610,9 @@ void func_82129D10(CameraNode* arg0) {
 /**
  * Impact camera variant 2: like variant 1 but aimed below the target (by D_FLT_821963A0
  * heights) with camera preset 2.
+ * @unverified Name guessed from the code.
  */
-void func_82129E30(s32 arg0) {
+void BattleScene_ImpactCameraBelow(s32 camera) {
     s32 temp_v0;
 
     sBattleScene.scene->cameraPresetId = 2;
@@ -611,10 +622,10 @@ void func_82129E30(s32 arg0) {
         func_8213B31C(1);
         func_821224F4();
         func_82125580();
-        BattleScene_FrameParticipantImpact(arg0, sOtherPokemon, -BattleScene_GetParticipantHeight(sOtherPokemon) * D_FLT_821963A0);
+        BattleScene_FrameParticipantImpact(camera, sOtherPokemon, -BattleScene_GetParticipantHeight(sOtherPokemon) * D_FLT_821963A0);
         return;
     case 1:
-        func_821243DC(arg0, sOtherPokemon, -BattleScene_GetParticipantHeight(sOtherPokemon) * D_FLT_821963A4);
+        func_821243DC(camera, sOtherPokemon, -BattleScene_GetParticipantHeight(sOtherPokemon) * D_FLT_821963A4);
         if (sBattleScene.scene->orbitDistance <= 1.0f) {
             func_82106374(sActingPokemon);
             func_82125570();
@@ -628,8 +639,9 @@ void func_82129E30(s32 arg0) {
 /**
  * Impact camera variant 3: orbits the target (func_82124544 with 8, 6, 2.5, 6 and angle 0)
  * until the zoom is close to the stored distance, then advances the phase step.
+ * @unverified Name guessed from the code.
  */
-void func_82129F5C(CameraNode* arg0) {
+void BattleScene_ImpactCameraOrbit(CameraNode* camera) {
     s32 temp_v0;
 
     sBattleScene.scene->cameraPresetId = 2;
@@ -639,10 +651,10 @@ void func_82129F5C(CameraNode* arg0) {
         func_8213B31C(1);
         func_821224F4();
         func_82125580();
-        func_82124544((s32)arg0, sOtherPokemon, 8.0f, 6.0f, 2.5f, 6.0f, 0);
+        func_82124544((s32)camera, sOtherPokemon, 8.0f, 6.0f, 2.5f, 6.0f, 0);
         return;
     case 1:
-        func_82124664((s32)arg0, sOtherPokemon, 0);
+        func_82124664((s32)camera, sOtherPokemon, 0);
         if (sBattleScene.scene->orbitDistance < (sBattleScene.scene->distance + D_FLT_821963A8)) {
             func_82106374(sActingPokemon);
             sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
@@ -656,8 +668,9 @@ void func_82129F5C(CameraNode* arg0) {
 /**
  * Impact camera variant 4: orbit like variant 3 with wider settings (10, 12, 3.5, 6) at
  * angle 0x11C6.
+ * @unverified Name guessed from the code.
  */
-void func_8212A074(s32 arg0) {
+void BattleScene_ImpactCameraWideOrbit(s32 camera) {
     s32 temp_v0;
 
     sBattleScene.scene->cameraPresetId = 2;
@@ -667,10 +680,10 @@ void func_8212A074(s32 arg0) {
         func_8213B31C(1);
         func_821224F4();
         func_82125580();
-        func_82124544(arg0, sOtherPokemon, 10.0f, 12.0f, 3.5f, 6.0f, 0x11C6);
+        func_82124544(camera, sOtherPokemon, 10.0f, 12.0f, 3.5f, 6.0f, 0x11C6);
         return;
     case 1:
-        func_82124664(arg0, sOtherPokemon, 0x11C6);
+        func_82124664(camera, sOtherPokemon, 0x11C6);
         if (sBattleScene.scene->orbitDistance <= (sBattleScene.scene->distance + 1.0f)) {
             func_82106374(sActingPokemon);
             sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
@@ -683,8 +696,9 @@ void func_8212A074(s32 arg0) {
 
 /**
  * Impact camera variant 5: picks variant 0, 1 or 2 at random on substep 0 and runs it.
+ * @unverified Name guessed from the code.
  */
-void func_8212A190(CameraNode* arg0) {
+void BattleScene_ImpactCameraRandom3(CameraNode* camera) {
     if (sBattleScene.scene->phaseSubstep == 0) {
         D_8219A568 = BattleAnim_RandomRange(3);
         if (D_8219A568 >= 4) {
@@ -693,24 +707,25 @@ void func_8212A190(CameraNode* arg0) {
     }
     switch (D_8219A568) {
         case 0:
-            func_82129C1C(arg0);
+            func_82129C1C(camera);
             break;
         case 1:
-            func_82129D10(arg0);
+            BattleScene_ImpactCameraAbove(camera);
             break;
         case 2:
-            func_82129E30((s32)arg0);
+            BattleScene_ImpactCameraBelow((s32)camera);
             break;
         default:
-            func_82129C1C(arg0);
+            func_82129C1C(camera);
             break;
     }
 }
 
 /**
  * Impact camera variant 7: picks variant 0-3 at random on substep 0 and runs it.
+ * @unverified Name guessed from the code.
  */
-void func_8212A250(CameraNode* arg0) {
+void BattleScene_ImpactCameraRandom4(CameraNode* camera) {
     if (sBattleScene.scene->phaseSubstep == 0) {
         D_8219A568 = BattleAnim_RandomRange(4);
         if (D_8219A568 >= 5) {
@@ -719,19 +734,19 @@ void func_8212A250(CameraNode* arg0) {
     }
     switch (D_8219A568) {
         case 0:
-            func_82129C1C(arg0);
+            func_82129C1C(camera);
             break;
         case 1:
-            func_82129D10(arg0);
+            BattleScene_ImpactCameraAbove(camera);
             break;
         case 2:
-            func_82129E30((s32)arg0);
+            BattleScene_ImpactCameraBelow((s32)camera);
             break;
         case 3:
-            func_82129F5C(arg0);
+            BattleScene_ImpactCameraOrbit(camera);
             break;
         default:
-            func_82129C1C(arg0);
+            func_82129C1C(camera);
             break;
     }
 }

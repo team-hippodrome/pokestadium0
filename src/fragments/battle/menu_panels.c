@@ -820,8 +820,9 @@ extern u8 D_03006C40[];
 
 /**
  * Draws a 104-pixel wide RGBA32 image line by line from y = 23, starting at D_03003EC0.
+ * @unverified Name guessed from the code.
  */
-void func_8211CB0C(void) {
+void Battle_DrawSpectatorModeBackgroundPanel(void) {
     s32 i;
     u8* tex;
 

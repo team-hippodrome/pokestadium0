@@ -174,8 +174,12 @@ s16 Particle_GetSpawnIndex(s8 *arg0) {
     return M2C_FIELD(arg0, s16 *, 0xA8);
 }
 
+/**
+ * Returns the particle's byteParam1 (+0xCB) as an s16. Most callers pass the particle through a0.
+ * @unverified Name guessed from the code.
+ */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s16 func_8213C484(s8 *arg0)
+s16 Particle_GetByteParam1(s8 *arg0)
 {
   u8 new_var; // FAKE: permuter temp
   new_var = *((u8 *) (((s8 *) arg0) + 0xCB));

@@ -22,7 +22,7 @@ void BattleAnim_SetupDescriptor25PaletteFadeIn(Particle* arg0);
  * prim FF0000) and advanced the lifecycle.
  */
 void BattleAnim_SetupDrainFlameHueChange(Particle* arg0) {
-    ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrim(arg0, Particle_GetByteParam1(arg0));
     Particle_ScratchA_SetS16_0BF4C(arg0, 0);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -30,6 +30,7 @@ void BattleAnim_SetupDrainFlameHueChange(Particle* arg0) {
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
 void Particle_MarkInactive(Particle* arg0);                      /* extern */
 s32 Particle_IsRunning(Particle* arg0);                          /* extern */
+s32 func_8213C484(); // Particle_GetByteParam1 with the s32 return this call needs
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 s32 Particle_ApproachScratchA(s8 *, s16, u8);                 /* extern */
 s32 func_821436A0(s8 *, u8, u8);                  /* extern */
@@ -209,7 +210,7 @@ void BattleAnim_CallbackOwnerModelAlphaFade(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupParticleRecolorTransparent(Particle* arg0) {
-    ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrim(arg0, Particle_GetByteParam1(arg0));
     Particle_SetPrimAlpha(arg0, 0);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -248,7 +249,7 @@ void func_82144750(Particle* arg0) {
  * advanced the lifecycle.
  */
 void BattleAnim_SetupWhiteHueChange(Particle* arg0) {
-    ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrim(arg0, Particle_GetByteParam1(arg0));
     Particle_SetPrimAlpha(arg0, 0);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -284,10 +285,9 @@ void BattleAnim_RunWhiteHueChange(Particle* arg0) {
     }
 }
 
-s32 func_8213C484();                                /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 void Particle_SetPrimAlpha(s8 *arg0, char arg1);                  /* extern */
-M2C_UNK func_82143408(s8 *, s32);                 /* extern */
+M2C_UNK func_82143408(s8 *, s32); // ParticleGfx_RecolorPrim with the s32 argument this call needs
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void BattleAnim_SetupDescriptor25AlphaHoldFadeOut(s8 *arg0)
 {
@@ -336,7 +336,7 @@ void BattleAnim_RunFullScreenHueChange(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupDescriptor25AlphaFadeInHold(Particle* arg0) {
-    ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrim(arg0, Particle_GetByteParam1(arg0));
     Particle_SetPrimAlpha(arg0, 0);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -368,7 +368,7 @@ void BattleAnim_RunPokemonAndFullScreenHueChange(Particle* arg0) {
  * Init step: recolors the prim color from palette CF, sets alpha from field CD and advances.
  */
 void func_82144A54(Particle* arg0) {
-    ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrim(arg0, Particle_GetByteParam1(arg0));
     Particle_SetPrimAlpha(arg0, arg0->byteParam0);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -400,7 +400,7 @@ void BattleAnim_CallbackDescriptor25AlphaHoldDetach(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupDescriptor25PaletteFadeOut(Particle* arg0) {
-    ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrim(arg0, Particle_GetByteParam1(arg0));
     Particle_SetPrimAlpha(arg0, 0xFF);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -439,7 +439,7 @@ void BattleAnim_CallbackDescriptor25PaletteFadeOut(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupDescriptor25PaletteFadeIn(Particle* arg0) {
-    ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrim(arg0, Particle_GetByteParam1(arg0));
     Particle_SetPrimAlpha(arg0, 0);
     Particle_AdvanceLifecycle(arg0);
 }
