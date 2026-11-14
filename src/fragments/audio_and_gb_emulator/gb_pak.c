@@ -29,7 +29,7 @@ void GbApu_SelectRegionClock(s32);
 void GbApu_QueueRegisterWrite(u16, u8, u16);
 void GbApu_ResetChannels(void);
 void GbApu_Reset(unk_D_8122B2F8*);
-void func_811173F4(void);
+void GbAudio_FrameStub(void);
 void GbAudio_SetMenuSoundMode(s32);
 #define GB_EMU_PAL_Y_SCALE 0.833f
 
@@ -47,9 +47,17 @@ void GbEmu_BlendScrollingLayer(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 ar
 
 M2C_UNK func_8005C670(s32, M2C_UNK, u16, M2C_UNK *, s32); /* extern */
 extern M2C_UNK D_81156480;
-void func_81101FA0(void *arg0, s32 arg1, s32 arg2) {
-    M2C_FIELD(&D_81156480, s8 *, 0x1F) = arg2;
-    func_8005C670(M2C_FIELD(arg0, s32 *, 0x50), 1, arg1, &D_81156480, 0x20);
+/**
+ * Writes `value` to cartridge address `address` (an MBC1 register) through the Transfer Pak: puts
+ * the value in the last byte of the 0x20-byte block D_81156480 and writes the block with
+ * osGbpakReadWrite. Returns the osGbpakReadWrite result.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbPak_InitializeCartridgeMapper, whose MBC1 writes the 2026-11-12
+ * Transfer Pak trace showed.
+ */
+s32 GbPak_WriteMapperRegister(void *arg0, s32 address, s32 value) {
+    M2C_FIELD(&D_81156480, s8 *, 0x1F) = value;
+    return func_8005C670(M2C_FIELD(arg0, s32 *, 0x50), 1, address, &D_81156480, 0x20);
 }
 
 /**
@@ -57,6 +65,8 @@ void func_81101FA0(void *arg0, s32 arg1, s32 arg2) {
  * bank 0, ROM banking mode, ROM bank 1. Caches pakRomBank/pakRamBank/pakMbcMode.
  * Seen in play (2026-11-12): the Transfer Pak trace shows the MBC1 writes 0x0000=0x0A, 0x6000=1,
  * 0x4000=0, 0x6000=0, 0x4000=0 and 0x2100=1 in that order.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbPak_IoThreadMain.
  */
 s32 GbPak_InitializeCartridgeMapper(unk_D_8122B2C0* arg0) {
   s32 ret;
@@ -73,7 +83,7 @@ s32 GbPak_InitializeCartridgeMapper(unk_D_8122B2C0* arg0) {
 }
 
 /*
- * func_811020A8
+ * GbPak_VerifyProbeBlock
  *
  * Operates on a record arg0 that looks like the one GbPak_TransferBankedRam
  * takes (it holds a handle at 0x50 and is passed to func_81102344 in both),
@@ -81,7 +91,7 @@ s32 GbPak_InitializeCartridgeMapper(unk_D_8122B2C0* arg0) {
  * saves then clears the byte at 0x98. Calls func_81102344(arg0, word94 >> 13) (the same
  * bank-select helper GbPak_TransferBankedRam uses with address / 0x2000);
  * if that returns 0, calls func_8005C670 with the handle at 0x50, the
- * mode 0 (func_81101FA0 passes 1 here), the address (word94 & 0x1FFF) | 0xA000,
+ * mode 0 (GbPak_WriteMapperRegister passes 1 here), the address (word94 & 0x1FFF) | 0xA000,
  * the buffer D_811564A0 and a length of 0x20; if that also returns 0, calls
  * func_80057910(D_811564A0, entry, 0x20) where entry is the 0x20-byte record
  * number byte9C of the table at D_811564C0. If the last result is 0 the byte
@@ -98,29 +108,35 @@ s32 func_81102344(u8*, s32);
 s32 func_80057910(M2C_UNK *, void *, u32); /* extern */
 extern M2C_UNK D_811564A0;
 extern M2C_UNK D_811564C0;
-s32 func_811020A8(void *arg0) {
+/**
+ * Reads the 0x20-byte cartridge RAM probe block back at sramAddr and compares it with the copy for
+ * this channel in D_811564C0. Returns 0 when it matches.
+ * Seen in play (2026-11-14) ran in the 「レポートできませんでした」 recovery flow (state forced to 20, cartridge
+ * removal faked by stubbing GbPak_IsCartridgeInserted); called from GbPak_IoThreadMain.
+ */
+s32 GbPak_VerifyProbeBlock(void *ch) {
     s32 pad; // FAKE: stack padding
     s32 sp28;
     s32 var_v0;
     s32 var_v1;
 
-    M2C_FIELD(arg0, s8 *, 0xA2) = 2;
-    sp28 = (s32) M2C_FIELD(arg0, u8 *, 0x98);
-    M2C_FIELD(arg0, u8 *, 0x98) = 0U;
-    var_v0 = func_81102344(arg0, (u32) M2C_FIELD(arg0, u32 *, 0x94) >> 0xD);
+    M2C_FIELD(ch, s8 *, 0xA2) = 2;
+    sp28 = (s32) M2C_FIELD(ch, u8 *, 0x98);
+    M2C_FIELD(ch, u8 *, 0x98) = 0U;
+    var_v0 = func_81102344(ch, (u32) M2C_FIELD(ch, u32 *, 0x94) >> 0xD);
     var_v1 = var_v0;
     if (var_v0 == 0) {
-        var_v0 = func_8005C670(M2C_FIELD(arg0, s32 *, 0x50), 0, ((M2C_FIELD(arg0, u32 *, 0x94) & 0x1FFF) | 0xA000) & 0xFFFF, &D_811564A0, 0x20);
+        var_v0 = func_8005C670(M2C_FIELD(ch, s32 *, 0x50), 0, ((M2C_FIELD(ch, u32 *, 0x94) & 0x1FFF) | 0xA000) & 0xFFFF, &D_811564A0, 0x20);
         var_v1 = var_v0;
         if (var_v0 == 0) {
-            var_v0 = func_80057910(&D_811564A0, (u8 *)&D_811564C0 + ((M2C_FIELD(arg0, u8 *, 0x9C) << 1) << 4), 0x20);
+            var_v0 = func_80057910(&D_811564A0, (u8 *)&D_811564C0 + ((M2C_FIELD(ch, u8 *, 0x9C) << 1) << 4), 0x20);
             var_v1 = var_v0;
         }
     }
     if (var_v0 == 0) {
-        M2C_FIELD(arg0, s8 *, 0xA2) = 0;
+        M2C_FIELD(ch, s8 *, 0xA2) = 0;
     }
-    M2C_FIELD(arg0, u8 *, 0x98) = (u8) sp28;
+    M2C_FIELD(ch, u8 *, 0x98) = (u8) sp28;
     return var_v1;
 }
 
@@ -130,6 +146,8 @@ s32 func_80051110(s32, s8 *, s8 *);             /* extern */
  * Reads the Transfer Pak status into status (0x9B) and fails with 0x63 unless bits 0 and 3 are
  * both set, i.e. the pak is powered and a cartridge is inserted. Seen in play (2026-11-12): runs
  * before every transfer while Pocket Monsters Green loads.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbPak_IoThreadMain.
  */
 s32 GbPak_CheckCartInserted(s8 *arg0) {
     s32 temp_v0;
@@ -156,6 +174,8 @@ s32 GbPak_WriteVerifiedSramBlock(s32, s32, s32);                     /* extern *
  * cartridge header ID and compares it with cartridgeId (detects a swapped cartridge),
  * then re-verifies the RAM probe block if one was written.
  * Seen in play (2026-11-12): runs before each ROM read while Green streams in.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbPak_ReadRomSummed.
  */
 s32 GbPak_ProbeCartridge(u8 *arg0) {
     s32 ret;
@@ -168,7 +188,7 @@ s32 GbPak_ProbeCartridge(u8 *arg0) {
         if (ret == 0) {
             ret = func_81101FE8(arg0);
             if ((ret == 0) && (M2C_FIELD(arg0, u8 *, 0x9B) & 1) && (M2C_FIELD(arg0, u8 *, 0x98) != 0)) {
-                ret = func_811020A8(arg0);
+                ret = GbPak_VerifyProbeBlock(arg0);
                 if (ret == 0) {
                     ret = GbPak_WriteVerifiedSramBlock(M2C_FIELD(arg0, u8 *, 0x9C), M2C_FIELD(arg0, s32 *, 0x94), M2C_FIELD(arg0, u8 *, 0x98));
                 }
@@ -186,6 +206,8 @@ s32 GbPak_ProbeCartridge(u8 *arg0) {
  * switching to ROM banking mode and writing the upper bank bits when needed.
  * Seen in play (2026-11-12): its writes reached the emulated MBC1 as 0x6000=0, 0x4000=bank/32 and
  * 0x2100=bank (Transfer Pak trace).
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbPak_ReadRomSummed.
  */
 s32 GbPak_SelectRomAddress(unk_D_8122B2C0* arg0, s32 arg1) {
     s32 temp_a2;
@@ -221,6 +243,8 @@ s32 GbPak_SelectRomAddress(unk_D_8122B2C0* arg0, s32 arg1) {
  * Selects an 8 KB cartridge RAM bank (MBC1 RAM banking mode).
  * Seen in play (2026-11-12): wrote 0x6000=1 and 0x4000=bank on the emulated MBC1 before the SRAM
  * probe.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbPak_WriteVerifiedSramBlock.
  */
 s32 GbPak_SelectRamBank(unk_D_8122B2C0* arg0, s32 arg1) {
     s32 var_v1;
@@ -248,6 +272,8 @@ extern GbPakChannel D_811561C8[4];
  * Reads the Transfer Pak status; returns 0 only when bit 7 is set and bit 6 is clear.
  * Seen in play (2026-11-12): polled every fourth frame (request 8) while Green runs; the emulated
  * status 0x89 passes.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbPak_IoThreadMain.
  */
 s32 GbPak_CheckTransferStatus(OSPfs* arg0) {
     s32 ret = osGbpakGetStatus(arg0, &D_811561C8[arg0->channel].status);
@@ -266,6 +292,8 @@ s32 GbPak_CheckTransferStatus(OSPfs*);
  * bank for the 0x4000-0x7FFF window, and adds every byte read to sum. The bank checksum check in
  * GbPak_IoThreadMain (request 6) compares these sums with the known-cartridge tables. Seen in
  * play: two 0x2000-byte reads per bank while Green loads.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbPak_IoThreadMain.
  */
 s32 GbPak_ReadRomSummed(u8* arg0) {
     s32 ret;
@@ -333,6 +361,8 @@ s32 GbPak_CheckTransferStatus(OSPfs*);
  * RAM at gbAddress, selecting each 8 KB bank as it goes.
  * Seen in play (2026-11-12): starting GB from the main menu ran this as a read (is_write 0) of
  * cartridge RAM, just before GbPak_CheckGen1SaveChecksum checked the save; returned 0.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbPak_IoThreadMain.
  */
 s32 GbPak_TransferBankedRam(u8* arg0, s32 arg1) {
     s32 temp_v0;
@@ -385,6 +415,8 @@ s32 func_8004CFB0(OSMesgQueue*, s32, s32);
  * it checks the running byte sum against the header's global checksum (error 2 on mismatch),
  * powers the pak off (request 4) and sets D_81156476 to 2. Seen in play: streamed all 32 banks of
  * Green, after which bankState was all zero.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbEmu_UpdateFrame.
  */
 void GbPak_QueueNextBankLoad(GbPakChannel* ch) {
     GbpakBankEntry* entry;
@@ -448,6 +480,8 @@ s32 func_8004CFB0(OSMesgQueue*, s32, s32);
  * waits for the I/O thread. Returns -2 when no load is running or the channel is busy, and -1
  * when the bank is not in the list or the transfer failed. Seen in play: GbEmu_LoadCartridge
  * requests bank 0 first.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbEmu_LoadCartridge.
  */
 s32 GbPak_RequestBankLoad(s32 chan, s32 bank) {
     u8* entry;
@@ -497,6 +531,8 @@ s32 func_8004CFB0(OSMesgQueue*, s32, s32);
  * the I/O thread is busy, 2 when a write was queued, 3 when it must wait, 4 on a pak error and 0
  * when nothing is dirty. Seen in play: runs every frame of GbEmu_UpdateFrame once Green is
  * running.
+ * Seen in play (2026-11-14) ran while Green's intro played in the GB Tower; called from
+ * GbEmu_UpdateFrame.
  */
 s32 GbPak_WriteBackDirtySramBlock(s32 arg0) {
     s32 chan = arg0;
