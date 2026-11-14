@@ -544,7 +544,7 @@ void Particle_UpdateWorldTransform(Particle* arg0) {
             arg0->displayObject->rotation.y = arg0->rotation.y;
             arg0->displayObject->rotation.z = arg0->rotation.z;
         }
-        arg0->displayObject->lodFraction = arg0->prim_a;
+        arg0->displayObject->alpha = arg0->prim_a;
     }
 }
 

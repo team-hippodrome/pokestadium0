@@ -461,7 +461,7 @@ DisplayObject* GeoNode_CreateModelPart(MainPoolState* arg0, DisplayObject* arg1,
         arg1->position = *arg3;
         arg1->scale = *arg5;
         arg1->rotation = *arg4;
-        arg1->lodFraction = 0xFF;
+        arg1->alpha = 0xFF;
         arg1->textureMode = 0;
         arg1->effectSlot = 0;
         arg1->fogColor.rgba = 0xFFFFFF00;

@@ -401,7 +401,7 @@ void BattleAnim_BuildEffect125DisplayList(Gfx* arg0, u16 arg1) {
 
     gDPPipeSync(arg0++);
 
-    gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, tmp->lodFraction);
+    gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, tmp->alpha);
 
     ParticleGfx_SetAnimatedTileSizeOnList(arg0++, 1, 1, 0x20, 0x20);
     ParticleGfx_SetAnimatedAuxTileSizeOnList(arg0++, 2, 2, 0x20, 0x20);
@@ -2933,7 +2933,7 @@ void Gfx_ParticlePaletteDL(Gfx* arg0, UNUSED arg1_func_8434E21C* arg1, UNUSED u1
 
     gDPSetCombineLERP(arg0++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED,
                       0, 0, 0, COMBINED);
-    gDPSetPrimColor(arg0++, 0, 0xFF, sp1D, sp1C, sp1B, sp24->lodFraction);
+    gDPSetPrimColor(arg0++, 0, 0xFF, sp1D, sp1C, sp1B, sp24->alpha);
     gDPSetEnvColor(arg0++, sp1A, sp19, sp18, 255);
 
     gSPEndDisplayList(arg0++);

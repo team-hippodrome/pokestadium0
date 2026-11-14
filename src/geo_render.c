@@ -914,7 +914,7 @@ void GeoRender_SubmitLayerDisplayList(s16 layer, s32 arg1, s32 arg2, s32 arg3) {
     flag = layer & 0x80;
     layer &= 0xF;
 
-    if (!(D_80060480 & 2) && (D_80060494 != NULL) && ((D_8006049C == NULL) || (D_8006049C->lodFraction != 0))) {
+    if (!(D_80060480 & 2) && (D_80060494 != NULL) && ((D_8006049C == NULL) || (D_8006049C->alpha != 0))) {
         entry = MainPool_AllocAligned((struct MainPoolState*)D_800AB240, sizeof(GeoLayerEntry), 4);
         entry->unk_04 = (arg3 != 0);
         if (arg2 != 0) {
@@ -933,8 +933,8 @@ void GeoRender_SubmitLayerDisplayList(s16 layer, s32 arg1, s32 arg2, s32 arg3) {
         entry->textureMode = 0;
         entry->next = NULL;
         if (D_8006049C != NULL) {
-            if (D_8006049C->lodFraction < 0xFF) {
-                entry->lodFraction = D_8006049C->lodFraction;
+            if (D_8006049C->alpha < 0xFF) {
+                entry->lodFraction = D_8006049C->alpha;
                 if (layer == 1) {
                     layer = 8;
                 } else if (layer == 4) {

@@ -2607,7 +2607,7 @@ void func_821065B4(ActivePokemon *arg0)
   {
     if ((arg0->displayObject.objectType != 0x32) && (arg0->displayObject.objectType != 0x33))
     {
-      arg0->displayObject.lodFraction = 0;
+      arg0->displayObject.alpha = 0;
     }
   }
   if ((arg0 == sSide2ActivePokemon) && (sBattleScene.scene->mode == 7))

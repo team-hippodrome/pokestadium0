@@ -56,7 +56,7 @@ void Model_InitDisplayObject(DisplayObject* display_object, s16 root_id, s16 obj
     MtxF_Identity(&display_object->matrix);
     display_object->rootId = root_id;
     display_object->objectType = object_type;
-    display_object->lodFraction = 0xFF;
+    display_object->alpha = 0xFF;
     display_object->textureMode = 0;
     display_object->node.flags |= 0x1;
     display_object->node.renderFlags &= ~0x4;
@@ -119,7 +119,7 @@ void Model_SetMaterialColor(DisplayObject* display_object, u8 r, u8 g, u8 b, u8 
 
 /** Sets the material alpha (LOD fraction) of a display object. */
 void Model_SetMaterialAlpha(DisplayObject* arg0, u8 arg1) {
-    arg0->lodFraction = arg1;
+    arg0->alpha = arg1;
 }
 
 /*

@@ -141,17 +141,17 @@ typedef struct ModelAnchor {
 typedef struct DisplayObject {
     /* 0x000 */ DisplayNodeHeader node;
     /* 0x018 */ s16 rootId;
-    /* 0x01A */ s16 objectType;
+    /* 0x01A */ s16 objectType; // species id for battle models (play: 95 for Onix)
     /* 0x01C */ u8 textureMode;
-    /* 0x01D */ u8 lodFraction; // gDPSetPrimColor's primitive LOD-fraction argument
-    /* 0x01E */ Vec3s rotation;
-    /* 0x024 */ Vec3f position;
-    /* 0x030 */ Vec3f scale;
-    /* 0x03C */ Color_RGBA8_u32 textureTint;
+    /* 0x01D */ u8 alpha; // model opacity, passed as gDPSetPrimColor's LOD fraction (play: 0x40 made Onix translucent)
+    /* 0x01E */ Vec3s rotation; // binary angles (play: rotation.y 0x4000 -> 0 turned Onix)
+    /* 0x024 */ Vec3f position; // world position (play: y = 150 lifted Onix)
+    /* 0x030 */ Vec3f scale; // (play: 2.0 doubled Onix)
+    /* 0x03C */ Color_RGBA8_u32 textureTint; // multiplies material colors (play: ff000000 turned Onix red)
     /* 0x040 */ TransformAnimState transformAnim;
     /* 0x054 */ EventTrackState eventTrack;
     /* 0x060 */ MtxF matrix;
-    /* 0x0A0 */ Color_RGBA8_u32 fogColor; // submitted through GeoRender_SetFogColor
+    /* 0x0A0 */ Color_RGBA8_u32 fogColor; // submitted through GeoRender_SetFogColor (play: ff0000ff turned Onix solid red)
     /* 0x0A4 */ char unk0A4[2];
     /* 0x0A6 */ u8 effectSlot; // 0/1 select effect state; 0xFF disables slot-specific work
     /* 0x0A7 */ u8 anchorCount;
