@@ -16,7 +16,7 @@ Where the code lives, after the reorganization. File names are broadly correct g
 |---|---|---|---|---|
 | 000 | `src/fragments/audio_and_gb_emulator/` | 18 | 303 | N64 sound driver (synthesis, heap, sequence player) and the Game Boy emulator (CPU, APU, Transfer Pak) |
 | 001 | `src/fragments/unidentified_001/` | 1 | 1 | not identified yet |
-| 002 | `src/fragments/disk_error_screen/` | 1 | 9 | 64DD / disk error screen |
+| 002 | `src/fragments/title_screen/` | 1 | 9 | Title screen (PUSH START, attract-mode demo battle, 64DD disk errors) |
 | 003 | `src/fragments/n64_logo/` | 1 | 5 | N64 logo intro |
 | 004 | `src/fragments/gb_tower_team_prep/` | 1 | 4 | GB Tower team preparation |
 | 005 | `src/fragments/battle_order_select/` | 1 | 33 | battle order selection |

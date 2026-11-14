@@ -1,11 +1,18 @@
-/* Declarations for the disk_error_screen fragment (src/fragments/disk_error_screen/). */
-#ifndef FRAGMENT_DISK_ERROR_SCREEN_H
-#define FRAGMENT_DISK_ERROR_SCREEN_H
+/* Declarations for the title screen fragment (src/fragments/title_screen/). */
+#ifndef FRAGMENT_TITLE_SCREEN_H
+#define FRAGMENT_TITLE_SCREEN_H
 
 #include "global.h"
 #include "asset_archive.h"
 #include "game_state.h"
 #include "gfx_rect.h"
+
+// Exit codes of TitleScreen_Update and TitleScreen_Main.
+#define TITLE_EXIT_DEMO 0x8010      // idle: attract-mode demo battle
+#define TITLE_EXIT_MAIN_MENU 0x8020 // A or Start pressed
+#define TITLE_EXIT_DISK_BOOT 0xF000 // 64DD boot state reached 10 (disk payload loaded)
+
+// The structs below are used by src/fragments/battle/anim_start_effects.c, not by the title screen.
 
 typedef struct unk_D_83407AC8 {
     /* 0x00 */ u16 unk_00;
@@ -52,4 +59,4 @@ typedef struct unk_func_80031270 {
     /* 0x34 */ s32 unk_34;
 } unk_func_80031270; // size = 0x38
 
-#endif // FRAGMENT_DISK_ERROR_SCREEN_H
+#endif // FRAGMENT_TITLE_SCREEN_H

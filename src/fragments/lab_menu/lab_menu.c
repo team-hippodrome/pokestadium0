@@ -84,7 +84,7 @@ extern s32 D_8A0005F0;
  * Matching note: the empty `if (!D_8A0005F0) {}` before the first call has no
  * effect on behavior. It was found with decomp-permuter and is the only form
  * tried that gives the ROM's register for the address of D_8A0005F0 (v1
- * instead of v0). Same kind of workaround as in func_81200A20.
+ * instead of v0). Same kind of workaround as in TitleScreen_Update.
  * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name guessed from the code; comment kept.
