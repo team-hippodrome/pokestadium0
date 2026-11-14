@@ -710,7 +710,7 @@ void Audio_SetOutputMode(s32 mode) {
 void Cry_SetEnabled(s32 arg0) {
     const f32 D_8007C7C0 = 0.8000000119f;
     if (arg0 != 0) {
-        func_80044BA8(0x7D00, 0x78, 0x640);
+        GbAudio_Reset(0x7D00, 0x78, 0x640);
         D_80075E04[0] = 1;
         D_80075E08 = D_8007C7C0;
         return;
@@ -721,7 +721,7 @@ void Cry_SetEnabled(s32 arg0) {
 /** Plays a Pokemon's cry from the Pokedex. */
 void Cry_PlayFromPokedex(s32 arg0) {
     if (D_80075E04[0] == 0) {
-        func_80044BA8(0x7D00, 0x78, 0x320);
+        GbAudio_Reset(0x7D00, 0x78, 0x320);
         D_80075E04[0] = 1;
         D_80075E10[0] = 1;
         D_80075E08 = 0.0f;

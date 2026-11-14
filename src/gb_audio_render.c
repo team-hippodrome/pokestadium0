@@ -13,7 +13,7 @@ typedef struct GbSoundRegisters {
     /* 0x2B */ char unk2B[1];
     /* 0x2C */ u8 nr52; /* sound on/off; bits 0-3 are the channel-on flags */ /* @unverified: from the code (Game Boy APU, NR10-NR52) */
     /* 0x2D */ char unk2D[0x13];
-    /* 0x40 */ u16 waveRam[16]; /* wave pattern RAM (0xFF30-0xFF3F): value byte, dirty byte */ /* @unverified: register 0x20 on in the 48-register reset loop of func_80044BA8 */
+    /* 0x40 */ u16 waveRam[16]; /* wave pattern RAM (0xFF30-0xFF3F): value byte, dirty byte */ /* @unverified: register 0x20 on in the 48-register reset loop of GbAudio_Reset */
 } GbSoundRegisters; // size = 0x60
 #define GB_REG(n) (((u8*)&D_800FD7E8.regs[n])[0])
 #define GB_REG_DIRTY(n) (((u8*)&D_800FD7E8.regs[n])[1])
@@ -103,33 +103,33 @@ typedef struct GbNoiseEntry {
     /* 0x4 */ f32 pitchStep;
 } GbNoiseEntry;
 #define GB_NOISE_TABLE ((GbNoiseEntry(*)[16])D_800775B0)
-void func_80044D60(u32);
+void GbAudio_RenderSamples(u32);
 void GbAudio_ClearInterpolationHistory();
 void GbAudio_ClearOutputBuffer();
 extern u32 D_800775B0[0x100];
 extern u8 sLoopPointTable[0x3C];
 extern s32 D_80087B80;
 void GbAudio_ApplyQueuedWrites(u16);
-s16 func_800450F0(void);
-s16 func_80045774(void);
-s16 func_80045B9C(void);
+s16 GbAudio_RenderPulse1(void);
+s16 GbAudio_RenderPulse2(void);
+s16 GbAudio_RenderNoise(void);
 
 void GbAudio_GenerateSamples(s16* arg0, s32 arg1, u32 arg2, f32 arg3);
 void GbAudio_QueueRegisterWrite(u16 arg0, u8 arg1, u16 arg2);
 u8 GbAudio_GetRegisterValue(u16 arg0);
-void func_80044BA8(u32 arg0, u8 arg1, u32 arg2);
-void func_80044D60(u32 arg0);
+void GbAudio_Reset(u32 arg0, u8 arg1, u32 arg2);
+void GbAudio_RenderSamples(u32 arg0);
 void GbAudio_ApplyQueuedWrites(u16 arg0);
-s16 func_800450F0(void);
-s16 func_80045774(void);
-s16 func_80045B9C(void);
+s16 GbAudio_RenderPulse1(void);
+s16 GbAudio_RenderPulse2(void);
+s16 GbAudio_RenderNoise(void);
 void GbAudio_ClearInterpolationHistory(void);
 void GbAudio_ClearOutputBuffer(void);
-void func_8004602C(void);
+void GbAudio_UnusedStub(void);
 
 /** Generates emulated Game Boy audio samples. */
 void GbAudio_GenerateSamples(s16* arg0, s32 arg1, u32 arg2, f32 arg3) {
-    func_80044D60(arg2);
+    GbAudio_RenderSamples(arg2);
 }
 
 /** Queues a write to an emulated Game Boy sound register. */
@@ -148,11 +148,16 @@ u8 GbAudio_GetRegisterValue(u16 arg0) {
     return D_800FDE80[arg0 & 0xFF];
 }
 
-void func_80044BA8(u32 arg0, u8 arg1, u32 arg2) {
+/**
+ * Resets the Game Boy sound emulator for output at `sampleRate` Hz (32000): clears every sound register and
+ * the write queue and silences all channels. Called by Cry_SetEnabled and Cry_PlayFromPokedex before a
+ * Gen 1 cry is played through the emulated APU.
+ */
+void GbAudio_Reset(u32 sampleRate, u8 arg1, u32 arg2) {
     u32 temp_t3;
     u8* p;
     s32 i;
-    D_800FD7E4 = arg0 >> 1;
+    D_800FD7E4 = sampleRate >> 1;
     D_800FDEC4 = 1048576.0f / (f32) D_800FD7E4;
 
     p = (u8*) &D_800FD7E8;
@@ -214,7 +219,11 @@ void func_80044BA8(u32 arg0, u8 arg1, u32 arg2) {
     D_800FDEC8 = 2;
 }
 
-void func_80044D60(u32 arg0) {
+/**
+ * Renders `count` / 2 stereo samples of the emulated Game Boy APU (pulse 1, pulse 2 and noise mixed by
+ * NR50/NR51; the wave channel is not mixed), applying queued register writes as their time comes.
+ */
+void GbAudio_RenderSamples(u32 count) {
     s32 pad[3]; // FAKE: stack padding
     s16 sp4C[4];
     u32 i;
@@ -226,20 +235,20 @@ void func_80044D60(u32 arg0) {
 
     var_fs0 = 0.0f;
     var_s4 = 1;
-    arg0 >>= 1;
+    count >>= 1;
 
     var_t = D_800FDEC1;
     var_a0 = ((var_t & 1) ? -1 : 0) + ((var_t & 2) ? -1 : 0) + ((var_t & 8) ? -1 : 0);
 
     if (D_800FDED4 < D_800FDED0) {
-        if ((0xB80 - (arg0 * 4)) < (D_800FDED0 - D_800FDED4)) {
-            arg0++;
+        if ((0xB80 - (count * 4)) < (D_800FDED0 - D_800FDED4)) {
+            count++;
         }
-    } else if ((D_800FDED4 - D_800FDED0) < (arg0 * 4)) {
-        arg0++;
+    } else if ((D_800FDED4 - D_800FDED0) < (count * 4)) {
+        count++;
     }
 
-    for (i = 0; i < arg0; i++) {
+    for (i = 0; i < count; i++) {
         if (var_fs0 <= i) {
             GbAudio_ApplyQueuedWrites(var_s4);
         }
@@ -251,9 +260,9 @@ void func_80044D60(u32 arg0) {
                 D_800FD7E8.nr50Dirty = 0;
             }
 
-            sp4C[0] = func_800450F0();
-            sp4C[1] = func_80045774();
-            sp4C[3] = func_80045B9C();
+            sp4C[0] = GbAudio_RenderPulse1();
+            sp4C[1] = GbAudio_RenderPulse2();
+            sp4C[3] = GbAudio_RenderNoise();
 
             var_t = D_800FD7E8.nr51;
             var_a0 =
@@ -304,7 +313,11 @@ void GbAudio_ApplyQueuedWrites(u16 arg0) {
     }
 }
 
-s16 func_800450F0(void) {
+/**
+ * Returns the next sample of Game Boy channel 1 (pulse with sweep), recomputing period and duty from
+ * NR10-NR14 when they changed.
+ */
+s16 GbAudio_RenderPulse1(void) {
     s32 i;
     s32 changed;
     s32 nr14;
@@ -496,7 +509,10 @@ skip:
     return out;
 }
 
-s16 func_80045774(void) {
+/**
+ * Returns the next sample of Game Boy channel 2 (pulse), from NR21-NR24.
+ */
+s16 GbAudio_RenderPulse2(void) {
     s32 i;
     s32 changed;
     s32 nr24;
@@ -629,7 +645,11 @@ s16 func_80045774(void) {
     return out;
 }
 
-s16 func_80045B9C(void) {
+/**
+ * Returns the next sample of Game Boy channel 4 (noise). Zero plays noise from prerecorded samples picked
+ * by NR43 (table D_800775B0) and DMA'd from ROM when the selection changes.
+ */
+s16 GbAudio_RenderNoise(void) {
     s32 i;
     s32 nr43;
     s32 row;
@@ -771,6 +791,9 @@ void GbAudio_ClearOutputBuffer(void) {
     D_800FDED4 = 0;
 }
 
-void func_8004602C(void) {
+/**
+ * Empty; no callers.
+ */
+void GbAudio_UnusedStub(void) {
 
 }

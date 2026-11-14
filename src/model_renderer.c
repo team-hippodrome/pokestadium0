@@ -44,9 +44,9 @@ void ModelRenderer_AttachSecondaryDisplayObject(DisplayObject* arg0) {
     arg0->node.flags &= ~1;
 }
 
-// FAKE: battle_hud.c defines func_800325B0 with one parameter, but this call
+// FAKE: battle_hud.c defines ModelRenderer_ResetSlot with one parameter, but this call
 // passes object_type as a second argument (a1) in the ROM.
-void func_800325B0(u32 arg0, u32 arg1);
+void ModelRenderer_ResetSlot(u32 arg0, u32 arg1);
 
 /** Initializes a display object for a root and object type. */
 void Model_InitDisplayObject(DisplayObject* display_object, s16 root_id, s16 object_type, ModelNodeView* child) {
@@ -72,7 +72,7 @@ void Model_InitDisplayObject(DisplayObject* display_object, s16 root_id, s16 obj
     display_object->eventTrack.data = 0;
     display_object->node.renderFlags &= ~0x8;
     if (object_type > 0) {
-        func_800325B0(obj->effectSlot, object_type);
+        ModelRenderer_ResetSlot(obj->effectSlot, object_type);
     }
 }
 

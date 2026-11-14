@@ -5,7 +5,7 @@
 
 // Declared here instead of in a header: the callers of these disagree on their types.
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);
-M2C_UNK Announcer_CommentOnTurnStart();
+M2C_UNK Announcer_SetActive();
 M2C_UNK func_82106220();
 M2C_UNK func_821079E8(M2C_UNK);
 M2C_UNK func_82108C0C(s32);
@@ -190,10 +190,10 @@ void BattleScene_InitializeSwitchActions(void) {
 }
 
 extern s32 D_82199DE0;
-M2C_UNK Announcer_CommentOnTurnStart();
+M2C_UNK Announcer_SetActive();
 void func_82121D8C(s32, s32, s8 *);
 /**
- * Calls Announcer_CommentOnTurnStart on both Pokemon's records and clears their +0x10 fields, then calls
+ * Calls Announcer_SetActive on both Pokemon's records and clears their +0x10 fields, then calls
  * func_82121D8C(1, flag, side 1's record) with flag 0 in scene modes 4, 9 and 10, when
  * either side's state byte is 16 or when scene+0x2E is 2, and 1 otherwise. Sets scene+0x44
  * from the scene mode (5 for mode 6, 9 for mode 10, else 1) and advances the phase step.
@@ -205,7 +205,7 @@ void func_82125384(void) {
 
     a = M2C_FIELD(&D_82199DE0, s8 **, 0) + 0x78C;
     b = M2C_FIELD(&D_82199DE0, s8 **, 4) + 0x78C;
-    Announcer_CommentOnTurnStart(1, a, b);
+    Announcer_SetActive(1, a, b);
     M2C_FIELD(a, s32 *, 0x10) = 0;
     M2C_FIELD(b, s32 *, 0x10) = 0;
     st = sBattleScene.scene->mode;
@@ -628,7 +628,7 @@ void BattleScene_InitTurnPresentation(s32 arg0) {
 
     sp34 = sActingPokemon;
     sp30 = sOtherPokemon;
-    Announcer_CommentOnTurnStart(0);
+    Announcer_SetActive(0);
     func_82121D78(arg0, 0x41A00000, 0x457A0000);
     func_82124A40();
     sBattleScene.scene->stepFrameTimer = 0;

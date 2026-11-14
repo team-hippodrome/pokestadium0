@@ -339,7 +339,7 @@ extern s32 D_800FD608;
 extern u32 D_800FD684;
 s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 void func_80037C04(s32, u32);
-void Announcer_CommentOnTurnStart(u32);
+void Announcer_SetActive(u32);
 
 /**
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening.
@@ -360,7 +360,7 @@ s32 Audio_StartMusicTrack(u32 track_id) {
         D_800FD608 = 0;
     }
     if (D_8007754C != 0) {
-        Announcer_CommentOnTurnStart(0);
+        Announcer_SetActive(0);
     }
     file_index[0] = track_id;
     switch (track_id) {
@@ -377,7 +377,7 @@ s32 Audio_StartMusicTrack(u32 track_id) {
             D_80077528 = 0;
             volume_scale[0] = 0x68;
             D_8007752C = 0;
-            Announcer_CommentOnTurnStart(1);
+            Announcer_SetActive(1);
             break;
         case 0x29:
             D_80077524 = 0;
@@ -463,7 +463,7 @@ s32 Audio_StartMusicTrack(u32 track_id) {
             D_8007753C = 1;
             volume_scale[0] = 0xA0;
             D_8007752C = 1;
-            Announcer_CommentOnTurnStart(1);
+            Announcer_SetActive(1);
             break;
         case 0xA:
             D_80077528 = 0;
@@ -588,7 +588,7 @@ s32 Audio_StartMusicTrack(u32 track_id) {
                     Announcer_QueueLine(0xD, 0.0f, 0x80);
                     break;
             }
-            Announcer_CommentOnTurnStart(1);
+            Announcer_SetActive(1);
             break;
         case 0x3:
         case 0x4:
@@ -616,7 +616,7 @@ s32 Audio_StartMusicTrack(u32 track_id) {
 extern s32 D_800FD608;
 extern u8 D_8007752C;
 s32 func_80037AC4(s32, s32);
-void Announcer_CommentOnTurnStart(u32);
+void Announcer_SetActive(u32);
 
 /**
  * Seen in play (2026-11-13) ran when Start was pressed at the title screen (console reset, then N64
@@ -632,7 +632,7 @@ s32 Audio_FadeOutAll(s32 arg0) {
     ret = func_80037AC4(D_800FD608, arg0);
 
     if (D_8007752C == 0) {
-        Announcer_CommentOnTurnStart(0);
+        Announcer_SetActive(0);
     }
     return ret;
 }

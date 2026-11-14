@@ -110,7 +110,7 @@ typedef struct FreeBattleMonGridWindow {
     /* 0x00 */ Window window;
     /* 0x2C */ char unk2C[0xA0];
     /* 0xCC */ ByteMatrix mons; // rows of BattleMon; the cell shows nickname and icon
-    /* 0xDC */ PokeIconRenderer* icons; // @unverified: icon set built by func_80018168/func_80018234, drawn with PokeIcon_GetImage
+    /* 0xDC */ PokeIconRenderer* icons; // @unverified: icon set built by PokeIcon_ResetSlots/PokeIcon_SetSpeciesSlot, drawn with PokeIcon_GetImage
 } FreeBattleMonGridWindow; // size = 0xE0 (FreeBattleScreen.monGridWindow is followed by connectedControllerMask)
 
 /* The Free Battle setup screen: its state machine and every window it switches between

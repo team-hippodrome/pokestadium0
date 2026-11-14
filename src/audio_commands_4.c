@@ -28,7 +28,7 @@ void Audio_ClearWaveDataLoaded(void);
 extern s32 D_800FD608;
 extern u8 D_8007752C;
 s32 func_80037AC4(s32, s32);
-void Announcer_CommentOnTurnStart(s32);
+void Announcer_SetActive(s32);
 s32 func_800376E8(s32);
 s32 func_8003834C(s32, s32, s32, s32, s32, s32, s32);
 extern u8 D_80077524;
@@ -747,7 +747,7 @@ extern u8 D_8007753C;
  * clears the queue and flags.
  */
 void Announcer_Reset(s32 mode, u32 teamSize) {
-    Announcer_CommentOnTurnStart(0);
+    Announcer_SetActive(0);
     D_80077590 = 0;
     D_800FD738 = 0;
     D_80077540 = mode;

@@ -31,7 +31,7 @@ void GbTower_LoadPartyFromDeck(s32 port) {
     }
 
     for (i = 0; i < sGbTowerPartyCount; i++) {
-        func_8001833C(sGbTowerIconRenderer, i, &sGbTowerParty[i], 1);
+        PokeIcon_SetMonSlot(sGbTowerIconRenderer, i, &sGbTowerParty[i], 1);
     }
 }
 

@@ -570,7 +570,7 @@ void Registration_DrawMonCell(s32 x, s32 y, u8* mon, s32 iconId, s32 textFlags, 
         p = &cache->slots[slot];
         if (iconId != *p) {
             *p = iconId;
-            func_8001833C(D_88103074, slot, mon, ((D_88102D78[0].c[1] << 3) & 0x7C0) | ((D_88102D78[0].c[2] >> 2) & 0x3E) | ((D_88102D78[0].c[0] << 8) & 0xF800) | 1);
+            PokeIcon_SetMonSlot(D_88103074, slot, mon, ((D_88102D78[0].c[1] << 3) & 0x7C0) | ((D_88102D78[0].c[2] >> 2) & 0x3E) | ((D_88102D78[0].c[0] << 8) & 0xF800) | 1);
         }
         if (cache) {} // FAKE: keeps cache live through the block above so the textFlags table address takes t1
         gSPDisplayList(gDisplayListHead++, D_80073408);
@@ -1196,7 +1196,7 @@ extern RegistrationScreen* D_881030F8;
 void Registration_AllocScreen(void) {
     D_881030F8 = (RegistrationScreen*)func_80002D98(sizeof(RegistrationScreen));
     Registration_InitScreen(D_881030F8);
-    func_80018234(D_88103074, 0x18, 0x84, 0xF800);
+    PokeIcon_SetSpeciesSlot(D_88103074, 0x18, 0x84, 0xF800);
 }
 
 typedef struct Col88102A2C { u8 r, g, b, a; } Col88102A2C;

@@ -30,7 +30,7 @@ extern ModelLoaderThread D_800AC7A0;
 
 #include "m2c_macros.h"
 
-void func_80016D40(GeoTextureBankNode* arg0, arg1_func_80010CA8 arg1);
+void GeoTextureBank_AdjustColors(GeoTextureBankNode* arg0, arg1_func_80010CA8 arg1);
 Fragment* Jpeg_AllocAndDecodeFragment(MemoryBlock* arg0, PRESJPEG* arg1, PRESJPEG* arg2);
 Fragment* Yay0_AllocAndDecompressFragment(MainPoolState* arg0, PERSSZP* arg1, PERSSZP* arg2);
 Fragment* Asset_AllocAndCopyFragment(MainPoolState* arg0, PERSSZP* arg1, s32 arg2, u32 arg3);
@@ -52,27 +52,30 @@ Fragment* Fragment_LoadAndRelocateFromRomRange(MainPoolState* arg0, u32 arg1, s3
 
 void PokeIcon_ThreadMain(UNUSED void* arg0);
 
-void func_80016D40(GeoTextureBankNode* arg0, arg1_func_80010CA8 arg1) {
+/**
+ * Runs `adjust` over every RGBA16 and RGBA32 texel and every palette entry of a geo texture bank (in place).
+ */
+void GeoTextureBank_AdjustColors(GeoTextureBankNode* bank, arg1_func_80010CA8 adjust) {
     s32 i;
     s32 j;
-    GeoTexture* var_s2 = arg0->textures;
-    GeoPalette* var_s4 = arg0->palettes;
+    GeoTexture* var_s2 = bank->textures;
+    GeoPalette* var_s4 = bank->palettes;
 
-    for (i = 0; i < arg0->textureCount; i++, var_s2++) {
+    for (i = 0; i < bank->textureCount; i++, var_s2++) {
         if (var_s2->fmt == 0) {
             if (var_s2->siz == GEO_TEXTURE_SIZ_2) {
                 u16* var_s1 = (u16*)var_s2->texture;
-                for (j = 0; j < var_s2->num_texels; j++, var_s1++) *var_s1 = Color_AdjustRGB5551(*var_s1, arg1);
+                for (j = 0; j < var_s2->num_texels; j++, var_s1++) *var_s1 = Color_AdjustRGB5551(*var_s1, adjust);
             }
             if (var_s2->siz == GEO_TEXTURE_SIZ_3) {
                 u32* var_s1 = var_s2->texture;
-                for (j = 0; j < var_s2->num_texels; j++, var_s1++) *var_s1 = Color_AdjustRGBA8(*var_s1, arg1);
+                for (j = 0; j < var_s2->num_texels; j++, var_s1++) *var_s1 = Color_AdjustRGBA8(*var_s1, adjust);
             }
         }
     }
-    for (i = 0; i < arg0->paletteCount; i++, var_s4++) {
+    for (i = 0; i < bank->paletteCount; i++, var_s4++) {
         u16* var_s1 = var_s4->data;
-        for (j = 0; j < var_s4->count; j++, var_s1++) *var_s1 = Color_AdjustRGB5551(*var_s1, arg1);
+        for (j = 0; j < var_s4->count; j++, var_s1++) *var_s1 = Color_AdjustRGB5551(*var_s1, adjust);
     }
 }
 
@@ -236,7 +239,7 @@ s32 Fragment_ProcessGeoLayout(MemoryBlock* arg0, Fragment* arg1, arg1_func_80010
         if (temp_v0_2->node.type == 0xE) {
             temp_v0_2->unk_28 = arg1;
             if (arg2.raw != 0) {
-                func_80016D40(temp_v0_2, arg2);
+                GeoTextureBank_AdjustColors(temp_v0_2, arg2);
             }
         }
         temp_v0->unk_08[i] = temp_v0_2;

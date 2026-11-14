@@ -1127,7 +1127,7 @@ void BattleMenu_AddOrderSelectPanel(s16 x, s16 y, TeamRoster* roster, s32 sideba
 
     for (i = 0; i < roster->rosterInfo->numberOfPokemonCanBePicked; i++, j += 4) {
         Pokemon_PrepareBattleMon(&roster->rosterInfo->battleMon[i]);
-        func_8001833C((PokeIconRenderer*)D_82302BCC, j, &roster->rosterInfo->battleMon[i], D_82302800[roster->controllerPort]);
+        PokeIcon_SetMonSlot((PokeIconRenderer*)D_82302BCC, j, &roster->rosterInfo->battleMon[i], D_82302800[roster->controllerPort]);
     }
 
     D_82302B44++;

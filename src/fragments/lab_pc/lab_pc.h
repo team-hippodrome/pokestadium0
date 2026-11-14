@@ -78,7 +78,7 @@ typedef struct PcBoxListWindow {
     /* 0x00 */ Window window; // 552x342 at (44, 95), the ＧＢのボックス１ grid
     /* 0x2C */ GridMenu menu; // the 6x5 grid of the box: columns 6, cells 90x66
     /* 0x54 */ u16 itemFlags[30]; // @unverified: itemFlags of menu
-    /* 0x90 */ s32 iconRenderer; // @unverified: PokeIconRenderer for the icons (func_8001833C, func_800189C0)
+    /* 0x90 */ s32 iconRenderer; // @unverified: PokeIconRenderer for the icons (PokeIcon_SetMonSlot, func_800189C0)
     /* 0x94 */ ByteMatrix mons; // rows over the box's mons, 0x50 bytes each: rows = gbBoxes[0].mons, count 1
 } PcBoxListWindow; // size = 0xA4
 

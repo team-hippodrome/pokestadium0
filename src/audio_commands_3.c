@@ -280,10 +280,14 @@ extern u8 D_800FD6B8;
 extern s32 D_800FD6BC;
 
 /**
- * Turn-start commentary: with `enable` set, compares both sides' HP percentages and may queue a line
- * (close match, both low, both high...). Seen in play (2026-11-14, COM battle, breakpoint): called from BattleScene_InitTurnPresentation with 0.
+ * Starts (`enable` != 0) or stops the announcer and crowd for a battle. Starting plays the crowd loop and
+ * may queue an opening line comparing both sides' HP (close match, both low, both healthy). Stopping
+ * fades out the crowd and any voice clips, clears the comment flags and counts one more stop.
+ * Called with 1 when battle music starts (Audio_StartMusicTrack) and 0 when it changes or fades.
+ * Seen in play (2026-11-14, COM battle, breakpoint): called with 0 from BattleScene_InitTurnPresentation.
+ * Also reached as AudioFrameUpdate (alias, see docs/annotation/alias-backlog.md).
  */
-void Announcer_CommentOnTurnStart(u32 enable) {
+void Announcer_SetActive(u32 enable) {
     s32 d;
     s32 mask;
     s32 ratio[2];

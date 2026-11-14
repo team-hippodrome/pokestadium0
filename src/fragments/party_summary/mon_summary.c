@@ -398,7 +398,7 @@ void PartyScreen_SetupList(PartyScreen* screen) {
     PartyScreen_ReadParty((s8*)&screen->monTable);
     func_80027804((s8*)&screen->monList, (s8*)screen->monPointers, 6, screen->monTable.count);
     for (i = 0; i < screen->monTable.count; i++) {
-        func_8001833C((PokeIconRenderer*)sPartyIconList, i, (BattleMon*)(screen->monTable.rows + i * 0x50),
+        PokeIcon_SetMonSlot((PokeIconRenderer*)sPartyIconList, i, (BattleMon*)(screen->monTable.rows + i * 0x50),
                       GPACK_RGBA5551(D_8A203304.r, D_8A203304.g, D_8A203304.b, 1));
     }
     PartyScreen_InitList(&screen->listWindow, 0x2F, 0x4D, (s32)&screen->monList);
@@ -592,8 +592,8 @@ M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
                     res = arg0->monPointers[arg0->swapIndex];
                     arg0->monPointers[arg0->swapIndex] = arg0->monPointers[arg0->listWindow.menu.cursor];
                     arg0->monPointers[arg0->listWindow.menu.cursor] = res;
-                    func_8001833C((PokeIconRenderer*)sPartyIconList, arg0->swapIndex, (BattleMon*)arg0->monPointers[arg0->swapIndex], 0);
-                    func_8001833C((PokeIconRenderer*)sPartyIconList, arg0->listWindow.menu.cursor, (BattleMon*)arg0->monPointers[arg0->listWindow.menu.cursor], 0);
+                    PokeIcon_SetMonSlot((PokeIconRenderer*)sPartyIconList, arg0->swapIndex, (BattleMon*)arg0->monPointers[arg0->swapIndex], 0);
+                    PokeIcon_SetMonSlot((PokeIconRenderer*)sPartyIconList, arg0->listWindow.menu.cursor, (BattleMon*)arg0->monPointers[arg0->listWindow.menu.cursor], 0);
                     arg0->dirty = 1;
                     arg0->state = 1;
                     arg0->activeWindow = &arg0->listWindow;

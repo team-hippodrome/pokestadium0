@@ -4,7 +4,7 @@
 #include "geo_node.h"
 
 // Declared here instead of in a header: the callers of these disagree on their types.
-M2C_UNK Announcer_CommentOnTurnStart();
+M2C_UNK Announcer_SetActive();
 M2C_UNK func_82106374(s32);
 M2C_UNK func_821079E8(M2C_UNK);
 M2C_UNK func_8212189C();
@@ -28,7 +28,7 @@ extern s32 D_8219A570;
 extern s32 D_8219A574;
 void BattleAi_RecordUsedMove(s32, s32, s32);
 extern s32 D_82199DE0;
-M2C_UNK Announcer_CommentOnTurnStart();
+M2C_UNK Announcer_SetActive();
 void func_82121D8C(s32, s32, s8 *);
 void func_82133868(ActivePokemonState*);
 f32 func_8000F23C(f32, f32, f32, f32);
