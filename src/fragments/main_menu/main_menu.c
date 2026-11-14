@@ -32,10 +32,10 @@ void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void Font_SetColorForFlags(s32);
 
 /**
- * Draws one wide menu row label with the selection highlight.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Menu draw callback for one row of the continue-tournament prompt: the highlight bar when
+ * `flags` bit 3 is set, then the row text.
+ * Seen in play (2026-11-14): with the continue flag poked on, it drew つづきをする (Continue),
+ * つづきをしない (Don't continue) and つづきのデータをけす (Erase the continue data), index 0 first.
  */
 void MainMenu_DrawMenuRow(s32 x, s32 y, char* text, s32 index, s32 flags) {
     if (flags & 8) {
@@ -55,10 +55,9 @@ extern s8 D_88001FD4[];
 extern u8 D_88001FE0[];
 extern u8 D_88001FE4[];
 /**
- * Sets up the prompt window (372x274) and its inner menu.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Sets up the continue-tournament prompt (372x274) and its three-row menu.
+ * Seen in play (2026-11-14): runs from MainMenu_InitScreen at (0x82, 0x6E) when
+ * gSessionContext.sessionFlags bit 0 (poked on in the emulator) says a tournament is in progress.
  */
 M2C_UNK MainMenu_InitPromptWindow(MainMenuPromptWindow* prompt, s32 x, s32 y) {
     MainMenuPromptWindow* obj = prompt;
@@ -90,10 +89,10 @@ void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void Window_DrawFrame(void*);
 void Menu_DrawItems(s8 *, s32, s32, s32, s32);
 /**
- * Draws トーナメントのつづきをする？ (Continue the tournament?).
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Draws トーナメントのつづきをする？ (Continue the tournament?) with its note
+ * 「たいせんちゅうに ゲームを やめると 1かいせんから やりなおしに なります！」 (If you quit
+ * during a battle, you start over from round 1!) and the three choices.
+ * Seen in play (2026-11-14) with the continue flag poked on: the prompt drew over the main menu.
  */
 void MainMenu_DrawContinueTournamentPrompt(MainMenuPromptWindow* prompt) {
     if (func_8002AE6C() == 0) {
@@ -123,9 +122,8 @@ extern s32 D_800603C0;
 
 /**
  * Moves the prompt cursor while the window is open. Returns the 1-based choice on confirm, otherwise 0.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14): A on choice 1 made MainMenu_UpdateScreen return 0x8050 and load the
+ * tournament fragment (id 0x12); choices 2 and 3 went back to the item grid and cleared the flag.
  */
 s32 MainMenu_UpdatePromptCursor(MainMenuPromptWindow* prompt) {
     s32 ret = 0;
@@ -191,9 +189,8 @@ void Ui_DrawTexturedFrame(s32, s32, s32, s32, u8*);
  * G_CC_MODULATEIA_PRIM) and a white primitive color with alpha `alpha` to the current display
  * list, then forwards its first five arguments unchanged to Ui_DrawTexturedFrame (compare
  * Ui_DrawTexturedFrameDecal, which does the same with a decal combiner and no primitive color).
- * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the main menu, the Pokédex,
- * the party screen, the Lab list, Lab sort, registration, the Lab PC and Free Battle setup.
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-14): a breakpoint bound to this fragment hit for each item panel's frame
+ * (first call x 0x4F, y 0x4E, 0x74 x 0x70, the せいとん panel).
  */
 void MainMenu_DrawTexturedFrameWithAlpha(s32 x, s32 y, s32 width, s32 height, u8* texture, s32 alpha) {
     gSPDisplayList(gDisplayListHead++, D_80073450);
@@ -225,8 +222,10 @@ void func_8001ABBC(void);
 #define ICON(i) (((MainMenuImage*)D_88002034)[i])
 
 /**
- * Draws one main menu item with its frame, fading it by `scale` (capped at 0.3 when disabled).
- * Seen in play: runs every frame for the main menu's item panels.
+ * GridMenu draw callback for main menu item `index` (0-8; slot 1 is empty and draws nothing): its
+ * picture, frame and label, faded by `*opacity` (capped at 0.3 when `flags` bit 0 marks it
+ * disabled), plus the cursor frame when `flags` bit 1 is set.
+ * Seen in play (2026-11-14): runs every frame for the item panels; first call index 0 (せいとん).
  */
 void MainMenu_DrawItem(s32 x, s32 y, s32 item, s32 index, s32 flags, f32* opacity) {
     Color_RGBA8 frame_color;
@@ -284,17 +283,19 @@ s32 func_800226BC(s32, s32, s32);
 s32 func_80025BD8();
 void MainMenu_DrawItem();
 /**
- * Sets up the main menu item list and enables the items for `gb_access`.
+ * Sets up the main menu item grid with the cursor on `cursor` and disables (bit 0) the items
+ * that `gb_save_status` (see MainMenu_LoadGbSaveSummary) does not allow.
+ * Seen in play (2026-11-14): with a blank Green save (status 3) ずかん, てもち and とうろく drew greyed out.
  * Seen in play (2026-11-13) ran once each time the main menu came back from another screen, before
  * its eight items were drawn.
  */
-M2C_UNK MainMenu_InitItemList(MainMenuItemList* item_list, s32 cursor, s32 gb_access) {
+M2C_UNK MainMenu_InitItemList(MainMenuItemList* item_list, s32 cursor, s32 gb_save_status) {
     item_list->fadeTimer = 0;
     func_80027410(&item_list->items, &item_list->itemBuffer, 0x30, 9, 9);
     GridMenu_Init(&item_list->menu, &item_list->items, item_list->itemFlags, MainMenu_DrawItem, 3, 0, 0);
     item_list->menu.cursor = cursor;
     item_list->menu.itemFlags[1] |= 1;
-    switch (gb_access) {
+    switch (gb_save_status) {
         case 4:
             item_list->menu.itemFlags[0] |= 1;
             item_list->menu.itemFlags[2] |= 1;
@@ -320,7 +321,7 @@ M2C_UNK MainMenu_InitItemList(MainMenuItemList* item_list, s32 cursor, s32 gb_ac
             item_list->menu.itemFlags[2] |= 1;
             break;
     }
-    if ((gb_access == 1 || gb_access == 2) && func_800226BC(0x20, func_80025BD8(), 0) == 0) {
+    if ((gb_save_status == 1 || gb_save_status == 2) && func_800226BC(0x20, func_80025BD8(), 0) == 0) {
         item_list->menu.itemFlags[5] |= 1;
     }
 }
@@ -361,7 +362,8 @@ extern u8 D_05018868[];
 void GridMenu_DrawInlineItems(void*, s32, s32, s32, f32*);
 
 /**
- * Draws the main menu items with the current fade.
+ * Draws the main menu items with the current fade. `cursor_flags` (2) is OR'd into the item flags
+ * mask once the fade-in is over, so the cursor frame shows; the prompt state passes 0.
  * Seen in play: runs every frame while the main menu's item panels (ずかん, バトル, てもち, GB, とうろく, OFF)
  * are drawn.
  */
@@ -499,9 +501,9 @@ void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 /**
  * Sets up the text window (MainMenuTextWindow; same family as FreeBattle_InitLevelSumWarning):
  * a 0x224x0x60 window with style 0x2800, fill color D_88002230, title `title` and text `text`.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-14): runs from MainMenu_InitScreen whenever the GB save status is above 0,
+ * e.g. title ポケモンセンターにいない (Not at a Pokémon Center) for a save made outside one and
+ * ＧＢのポケモンがいない (No GB Pokémon) for a blank save.
  */
 void MainMenu_InitTextWindow(MainMenuTextWindow* window, s32 x, s32 y, s32 title, s32 text) {
     Window_SetRect(window, x, y, 0x224, 0x60);
@@ -533,7 +535,6 @@ void MainMenu_DrawTextWindow(MainMenuTextWindow* window) {
 
 M2C_UNK MainMenu_InitPromptWindow(MainMenuPromptWindow*, M2C_UNK, M2C_UNK);       /* extern */
 M2C_UNK MainMenu_InitItemList(MainMenuItemList*, s32, s32);            /* extern */
-extern u8 D_800AF985;
 extern M2C_UNK D_88002240;
 
 /**
@@ -543,23 +544,23 @@ extern M2C_UNK D_88002240;
  * Seen in play (2026-11-13) ran once each time the main menu came back from another screen, after
  * MainMenu_LoadGbSaveSummary.
  */
-void MainMenu_InitScreen(MainMenuScreen* screen, s32 gb_access, s32 cursor, MainMenuScreen** unused_screen_ptr) {
+void MainMenu_InitScreen(MainMenuScreen* screen, s32 gb_save_status, s32 cursor, MainMenuScreen** unused_screen_ptr) {
     s32 temp_v0;
 
     if (unused_screen_ptr) {  // karodo
     }
 
-    if (D_800AF985 & 1) {
+    if (gSessionContext.sessionFlags & 1) {
         MainMenu_InitPromptWindow(&screen->promptWindow, 0x82, 0x6E);
         screen->state = 1;
     } else {
         screen->state = 2;
     }
     screen->nextState = 0;
-    MainMenu_InitItemList(&screen->itemList, cursor, gb_access);
-    screen->mode = gb_access;
-    if (gb_access > 0) {
-        temp_v0 = gb_access * 4;
+    MainMenu_InitItemList(&screen->itemList, cursor, gb_save_status);
+    screen->mode = gb_save_status;
+    if (gb_save_status > 0) {
+        temp_v0 = gb_save_status * 4;
         MainMenu_InitTextWindow(&screen->textWindow, 0x2E, 0x53, *((M2C_UNK*)((u8*)&D_88002230 + temp_v0)), *((M2C_UNK*)((u8*)&D_88002240 + temp_v0))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     }
 }
@@ -709,15 +710,18 @@ extern MainMenuScreen* D_88002B20;
 /**
  * Allocates the 0x3B0-byte object stored in D_88002B20 and starts it with
  * MainMenu_InitScreen. Steps:
- *  1. id = func_80025BD8(); D_88002B00 = id; if (D_88002B00 != -1) pass it with
- *     &D_88002B08 to func_80027FF8.
- *  2. Picks a mode from id: id == -1 -> 4; else GbSave_GetSaveState(id) != 0 -> 3;
- *     else GbSave_HasPokedex(id) == 0 -> 2; else func_80022EDC(id) == 0 -> 1; else 0.
+ *  1. port = GbSave_GetActivePort() (-1 when no Transfer Pak cartridge is chosen); D_88002B00 = port;
+ *     if there is one, GbSave_BuildPortSummary fills D_88002B08 for the summary bar.
+ *  2. Picks the GB save status: no port -> 4; GbSave_GetSaveState != 0 -> 3 (no GB Pokémon:
+ *     blank or broken save); no Pokédex -> 2; not saved at a Pokémon Center -> 1; else 0.
  *  3. D_88002B20 = func_80002D98(0x3B0), then
- *     MainMenu_InitScreen(D_88002B20, mode, D_80073400 == 0 ? 4 : D_80073400 - 1, &D_88002B20)
- *     and finally func_8000B2F4(D_800603C0).
- * pad1/pad2 are unused locals that reproduce the retail 0x30-byte frame. What the id,
- * the modes and D_80073400 mean is not established.
+ *     MainMenu_InitScreen(D_88002B20, status, D_80073400 == 0 ? 4 : D_80073400 - 1, &D_88002B20)
+ *     and finally func_8000B2F4(D_800603C0). D_80073400 is the last cursor + 1 (MainMenu_Init
+ *     stores it), so the menu reopens on the item last chosen, and on バトル (4) the first time.
+ * pad1/pad2 are unused locals that reproduce the retail 0x30-byte frame.
+ * Seen in play (2026-11-14) with crafted Green saves: status 0 (full save), 1 (saved outside a
+ * Pokémon Center), 2 (no Pokédex) and 3 (blank save); status 4 was not reached, because without a
+ * cartridge the game stops at the cartridge screen (fragment 0x74) and never loads the menu.
  * Seen in play (2026-11-13) ran once each time the main menu came back from another screen; the
  * menu then showed the GB save summary bar (1P サトシ IDNo/12345).
  */
@@ -749,9 +753,7 @@ void MainMenu_LoadGbSaveSummary(void) {
 
 /**
  * Returns `color` with its RGB scaled by `scale` (alpha kept).
- * Seen in play (2026-11-13) ran as the main menu faded in (console reset, then N64 logo, opening,
- * title and main menu).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14): called by MainMenu_DrawFadeInBackground with color 0xC8C8C8FF.
  */
 Color_RGBA8 MainMenu_ScaleColor(Color_RGBA8 color, f32 scale) {
     Color_RGBA8 scaled;
@@ -766,10 +768,8 @@ Color_RGBA8 MainMenu_ScaleColor(Color_RGBA8 color, f32 scale) {
 M2C_UNK func_80005B98(M2C_UNK);
 extern s32 D_880022C4;
 /**
- * Draws the background, brightening it a little more each call.
- * Seen in play (2026-11-13) ran as the main menu faded in (console reset, then N64 logo, opening,
- * title and main menu).
- * @unverified Name and comment guessed from the code.
+ * Draws the background, brightening it a little more each call (20 frames on the first entry).
+ * Seen in play (2026-11-14): the screen was black three frames into it, then the background rose.
  */
 s32 MainMenu_DrawFadeInBackground(s32 fade_mode) {
     Color_RGBA8 sp24;
@@ -791,10 +791,8 @@ M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern 
 extern M2C_UNK D_88002254;
 
 /**
- * Draws the tinted main menu background.
- * Seen in play (2026-11-13) ran as the main menu faded in (console reset, then N64 logo, opening,
- * title and main menu).
- * @unverified Name and comment guessed from the code.
+ * Draws the tinted main menu background (2 frames after the fade-in on the first entry).
+ * Seen in play (2026-11-14): ran between MainMenu_DrawFadeInBackground and the summary bar slide-in.
  */
 s32 MainMenu_DrawBackground(s32 fade_mode) {
     BgStage_DrawFrame();
@@ -806,10 +804,9 @@ M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
 extern M2C_UNK D_88002A8C;
 
 /**
- * Draws the GB save summary bar sliding in from the top.
- * Seen in play (2026-11-13) ran as the main menu faded in (console reset, then N64 logo, opening,
- * title and main menu).
- * @unverified Name and comment guessed from the code.
+ * Draws the GB save summary bar sliding in from the top (6 frames, y from -0x38 to 0).
+ * Seen in play (2026-11-14): three frames in, the bar was still above the screen; once it ended,
+ * the bar (1P シトシ IDNo/12345 メインメニュー) sat at the top.
  */
 s32 MainMenu_DrawSummaryBarSlideIn(UNUSED s32 fade_mode) {
     static s32 D_880022C8;
@@ -835,10 +832,8 @@ extern s32 D_88002B00;
 extern M2C_UNK D_88002B08;
 
 /**
- * Draws the GB save summary bar.
- * Seen in play (2026-11-13) ran as the main menu faded in (console reset, then N64 logo, opening,
- * title and main menu).
- * @unverified Name and comment guessed from the code.
+ * Draws the GB save summary bar at rest (2 frames after the slide-in on the first entry).
+ * Seen in play (2026-11-14): ran right after MainMenu_DrawSummaryBarSlideIn, before MainMenu_RunFrame.
  */
 s32 MainMenu_DrawSummaryBar(s32 fade_mode) {
     M2C_UNK *var_a1;
@@ -925,9 +920,8 @@ extern MainMenuScreen* D_88002B20;
 
 /**
  * Draws the main menu without updating it.
- * Seen in play (2026-11-13) ran while the GB player prompt (ゲームボーイのポケモン, はい/いいえ) was open over the
- * main menu.
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14): after はい on GB (result 0x8060) it ran with fade_mode 3 while the
+ * screen faded out, and MainMenu_Free followed.
  */
 s32 MainMenu_DrawFrame(s32 fade_mode) {
     MainMenu_DrawScreen(D_88002B20);
@@ -961,10 +955,13 @@ s32 MainMenu_DrawSummaryBarSlideIn(s32 arg0);
 
 /**
  * Entry point: pushes the 'COMP' pool state, loads the font and segments, and sets up the screen.
- * Seen in play (2026-11-13) ran once each time the main menu came back from the Pokédex, party or
- * list screen.
+ * `is_first_entry` 1 plays the full intro (background fade-in, summary bar slide-in); otherwise the
+ * menu fades straight in. Returns the chosen item's result (0x8040 fragment queued, 0x8050 continue
+ * the tournament, 0x8060 GB).
+ * Seen in play (2026-11-14): 1 when the menu followed the cartridge select screen after a reset,
+ * 0 when it came back from the Pokédex with B.
  */
-s32 MainMenu_Init(s32 from_title) {
+s32 MainMenu_Init(s32 is_first_entry) {
     s32 sp1C;
     s32 temp_v0;
 
@@ -975,7 +972,7 @@ s32 MainMenu_Init(s32 from_title) {
     func_80003EB8((u32) ((s32) &D_05000000 & 0x0F000000) >> 0x18, &D_004076E0, &D_004199E0, 0);
     MainMenu_LoadGbSaveSummary();
     func_8000675C();
-    if (from_title == 1) {
+    if (is_first_entry == 1) {
         D_80073400 = 4;
         func_80006828(0x14, &MainMenu_DrawFadeInBackground);
         func_80006828(2, &MainMenu_DrawBackground);
@@ -1008,24 +1005,25 @@ s32 MainMenu_Init(s32 from_title) {
 }
 
 M2C_UNK func_80025BA0(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, s32);
-extern u16 D_800AF986;
 extern M2C_UNK D_82000000;
 extern M2C_UNK D_00166580;
 extern M2C_UNK D_001720F0;
 
 /**
- * Goes straight to the fragment at 0x82000000 when D_800AF986 bit 8 is set, otherwise starts the main menu.
- * Seen in play (2026-11-13) ran once each time a menu screen (Pokédex, party, list) was left with B
- * and the main menu came back.
+ * Queues the バトル (Battle) fragment at 0x82000000 directly when gSessionContext.transitionFlags
+ * bit 8 is set, otherwise runs the main menu. `unused` is never read (0 when coming back from the
+ * Pokédex, &gSessionContext after the cartridge select screen).
+ * Seen in play (2026-11-14): ran with is_first_entry 1 after the cartridge select screen and 0 when
+ * the Pokédex was left with B.
  */
-s32 MainMenu_Enter(s32 from_title, s32 arg1) {
+s32 MainMenu_Enter(s32 is_first_entry, s32 unused) {
     s32 ret;
 
-    if (D_800AF986 & 0x100) {
+    if (gSessionContext.transitionFlags & 0x100) {
         ret = 0x8040;
         func_80025BA0(((u32)((s32)&D_82000000 & 0x0FF00000) >> 0x14) - 0x10, &D_00166580, &D_001720F0, 0, 0);
     } else {
-        ret = MainMenu_Init(from_title);
+        ret = MainMenu_Init(is_first_entry);
     }
     return ret;
 }
