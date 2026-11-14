@@ -164,38 +164,41 @@ s32 func_8002B2B0(void *);
 s32 LabItem_UpdateItemList(void *, u32);
 
 void BgStage_DrawFrame(void);
+void LabItem_DrawOrganizeWindow(LabItemOrganizeWindow*);
+void SavePrompt_Draw(s8*);
+void LabItem_DrawConfirmWindow(LabItemConfirmWindow*);
+void LabItem_DrawDeleteDataWindow(LabItemDeleteDataWindow*, s32);
+void func_890032E4(LabItemSaveDataWindow*);
 /**
  * Draws the item organizer for its current state.
  * Seen in play (2026-11-12): drew the どうぐのせいり screen.
  */
-void LabItem_DrawScreen(void* arg) {
-    s8* arg0 = arg;
-
+void LabItem_DrawScreen(LabItemScreen* arg0) {
     BgStage_DrawFrame();
     LabItem_DrawBackground();
-    switch (M2C_FIELD(arg0, s32*, 0)) {
+    switch (arg0->state) {
         case 1:
-            LabItem_DrawOrganizeWindow(arg0 + 4);
+            LabItem_DrawOrganizeWindow(&arg0->organizeWindow);
             break;
         case 2:
-            LabItem_DrawOrganizeWindow(arg0 + 4);
-            SavePrompt_Draw(arg0 + 0x4E8);
+            LabItem_DrawOrganizeWindow(&arg0->organizeWindow);
+            SavePrompt_Draw(arg0->savePrompt);
             break;
         case 3:
-            LabItem_DrawOrganizeWindow(arg0 + 4);
-            LabItem_DrawConfirmWindow(arg0 + 0x54C);
+            LabItem_DrawOrganizeWindow(&arg0->organizeWindow);
+            LabItem_DrawConfirmWindow(&arg0->confirmWindow);
             break;
         case 4:
-            LabItem_DrawDeleteDataWindow(arg0 + 0x604, 2);
+            LabItem_DrawDeleteDataWindow(&arg0->deleteDataWindow, 2);
             break;
         case 5:
-            LabItem_DrawDeleteDataWindow(arg0 + 0x604, 0x10);
-            func_890032E4(arg0 + 0x68C);
+            LabItem_DrawDeleteDataWindow(&arg0->deleteDataWindow, 0x10);
+            func_890032E4(&arg0->saveDataWindow);
             break;
         case 6:
-            LabItem_DrawDeleteDataWindow(arg0 + 0x604, 0x10);
-            func_890032E4(arg0 + 0x68C);
-            LabItem_DrawConfirmWindow(arg0 + 0x54C);
+            LabItem_DrawDeleteDataWindow(&arg0->deleteDataWindow, 0x10);
+            func_890032E4(&arg0->saveDataWindow);
+            LabItem_DrawConfirmWindow(&arg0->confirmWindow);
             break;
     }
 }

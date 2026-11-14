@@ -1459,7 +1459,7 @@ extern u8 D_8900BFC0[];
 extern u8 D_89010368[];
 extern u8 D_890110F0[];
 
-void func_89002E58(LabItemSaveDataWindow* arg0, s32 arg1, s32 arg2, LabItemSaveSlot* arg3, s32 arg4) {
+void func_89002E58(LabItemSaveDataWindow* arg0, s32 arg1, s32 arg2, LabItemSaveSlot* arg3, ByteMatrix* arg4) {
     Window_SetRect(&arg0->window, arg1, arg2, 0x184, 0x180);
     arg0->window.animTimer = 0;
     arg0->window.title = NULL;
@@ -1486,7 +1486,7 @@ void func_89002E58(LabItemSaveDataWindow* arg0, s32 arg1, s32 arg2, LabItemSaveS
     arg0->operationCursor.cursor = 0;
     arg0->operationCursor.controller = D_800603C0;
     func_8000B2F4(D_800603C0);
-    LabItem_InitItemList(&arg0->itemList, arg0->window.frame.x + 0x88, arg0->window.frame.y + 0x36, arg4);
+    LabItem_InitItemList(&arg0->itemList, arg0->window.frame.x + 0x88, arg0->window.frame.y + 0x36, (s32)arg4);
     arg0->slot = arg3;
     arg0->state = 1;
 }

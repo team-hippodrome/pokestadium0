@@ -178,56 +178,47 @@ s32 func_8002207C(s32);
 void func_8002D7D4(s32);
 void func_800243B8(void);
 void func_800245E0(s32, s32);
-void func_89000494(s32, s32, s32, s8*, s32, void*, s32);
-void LabItem_DrawScreen(void*);
-typedef struct Slot89003880 {
-    /* 0x00 */ s32 active;
-    /* 0x04 */ char unk04[0x10];
-} Slot89003880; // size = 0x14
-typedef struct Ctx89003880 {
-    /* 0x000 */ char unk000[0xA20];
-    /* 0xA20 */ Slot89003880 slots[1];
-} Ctx89003880;
+void LabItem_DrawScreen(LabItemScreen*);
 /**
  * Writes the changed item lists back to the save and flushes it.
  * Seen in play (2026-11-13) ran on レポートしてやめる (ないようが へんこうされています) after moving items in せいとん >
  * どうぐをいどうする.
  */
-void LabItem_SaveChanges(s8* arg0) {
+void LabItem_SaveChanges(LabItemScreen* arg0) {
     s32 locked = 0;
     s32 flush = 0;
 
-    if ((M2C_FIELD(arg0, s32*, 0xA10) != 0) || (M2C_FIELD(arg0, s32*, 0xA14) != 0)) {
+    if ((arg0->dirty[0] != 0) || (arg0->dirty[1] != 0)) {
         locked = 1;
     }
     if (locked) {
         func_80022118(D_89019108);
     }
-    if (M2C_FIELD(arg0, s32*, 0xA10) != 0) {
-        func_89000494(0x23, D_89019108, 0, arg0 + 0x9E0, 0, NULL, -1);
+    if (arg0->dirty[0] != 0) {
+        LabItem_WriteDeckBack(0x23, D_89019108, 0, &arg0->itemTables[0], 0, NULL, -1);
     }
-    if (M2C_FIELD(arg0, s32*, 0xA14) != 0) {
-        func_89000494(0x22, D_89019108, 0, arg0 + 0x9F0, 0, NULL, -1);
+    if (arg0->dirty[1] != 0) {
+        LabItem_WriteDeckBack(0x22, D_89019108, 0, &arg0->itemTables[1], 0, NULL, -1);
     }
-    if (M2C_FIELD(arg0, s32*, 0xA1C) != -1) {
-        if (((Ctx89003880*)arg0)->slots[M2C_FIELD(arg0, s32*, 0xA1C)].active != 0) {
-            if (M2C_FIELD(arg0, s32*, 0xA18) != 0) {
+    if (arg0->gamePakSlot != -1) {
+        if (arg0->saveSlots[arg0->gamePakSlot].present != 0) {
+            if (arg0->dirty[2] != 0) {
                 flush = 1;
-                if (M2C_FIELD(arg0, s32*, 0xA08) == 0) {
-                    func_800245E0(0x12, M2C_FIELD(arg0, s32*, 0xA1C));
+                if (arg0->itemTables[2].count == 0) {
+                    func_800245E0(0x12, arg0->gamePakSlot);
                 } else {
-                    func_89000494(0x12, 0, M2C_FIELD(arg0, s32*, 0xA1C), arg0 + 0xA00, 0, NULL, -1);
+                    LabItem_WriteDeckBack(0x12, 0, arg0->gamePakSlot, &arg0->itemTables[2], 0, NULL, -1);
                 }
             }
-        } else if (M2C_FIELD(arg0, s32*, 0xA08) > 0) {
+        } else if (arg0->itemTables[2].count > 0) {
             flush = 1;
-            func_89000494(0x12, 0, M2C_FIELD(arg0, s32*, 0xA1C), arg0 + 0xA00, 0, D_8901911C, D_89019118);
+            LabItem_WriteDeckBack(0x12, 0, arg0->gamePakSlot, &arg0->itemTables[2], 0, (char*)D_8901911C, D_89019118);
         }
     }
     if (locked) {
         if (func_8002207C(D_89019108) == 0) {
             func_8002D7D4(D_89019108);
-            LabItem_DrawScreen((M2C_UNK*)arg0);
+            LabItem_DrawScreen(arg0);
         }
         func_80022188(D_89019108);
     }
@@ -241,11 +232,11 @@ void LabItem_SaveChanges(s8* arg0) {
  * Seen in play (2026-11-13) ran once when B left the item sort screen after nothing had been moved;
  * the screen closed without asking to save.
  */
-s32 LabItem_HasUnsavedChanges(s32* arg0) {
+s32 LabItem_HasUnsavedChanges(LabItemScreen* arg0) {
     s32 i;
 
     for (i = 0; i < 3; i++) {
-        if (arg0[0x284 + i] != 0) {
+        if (arg0->dirty[i] != 0) {
             return 1;
         }
     }
@@ -254,17 +245,16 @@ s32 LabItem_HasUnsavedChanges(s32* arg0) {
 }
 
 void SavePrompt_Init(s8*, s32, s32);
-void LabItem_InitConfirmWindow(s8*, s32, s32, s8*, s8*);
+void LabItem_InitConfirmWindow(LabItemConfirmWindow*, s32, s32, s8*, s8*);
 s32 SavePrompt_Update(s8*);
 void Save_DrawReportingWindow(s8*);
-s32 LabItem_UpdateConfirmWindow(s8*);
-void LabItem_InitDeleteDataWindow(s8*, s32, s32, s8*);
-s32 LabItem_UpdateDeleteDataCursor(s8*);
-void func_89000448(s32, s32, s32, s8*);
-void func_89002E58(s8*, s32, s32, s8*, s8*);
-s32 func_8900352C(s8*);
-void func_890022D0(s8*);
-s32 LabItem_UpdateOrganizeWindow(s8*);
+s32 LabItem_UpdateConfirmWindow(LabItemConfirmWindow*);
+void LabItem_InitDeleteDataWindow(LabItemDeleteDataWindow*, s32, s32, LabItemSaveSlot*);
+s32 LabItem_UpdateDeleteDataCursor(LabItemDeleteDataWindow*);
+void func_89002E58(LabItemSaveDataWindow*, s32, s32, LabItemSaveSlot*, ByteMatrix*);
+s32 func_8900352C(LabItemSaveDataWindow*);
+void func_890022D0(LabItemOrganizeWindow*);
+s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow*);
 extern s8 D_8901871C[];
 extern s8 D_89018728[];
 extern s8 D_89018760[];
@@ -274,86 +264,86 @@ extern s8 D_8901876C[];
  * Runs the item organizer's state machine for one frame.
  * Seen in play (2026-11-12): ran どうぐのせいり.
  */
-s32 LabItem_UpdateScreen(s8* arg0) {
+s32 LabItem_UpdateScreen(LabItemScreen* arg0) {
     s32 ret = 0;
     s32 res;
 
-    switch (M2C_FIELD(arg0, s32*, 0)) {
+    switch (arg0->state) {
         case 1:
-            res = LabItem_UpdateOrganizeWindow(arg0 + 4);
+            res = LabItem_UpdateOrganizeWindow(&arg0->organizeWindow);
             if (res == -1) {
-                if (LabItem_HasUnsavedChanges((s32*)arg0) != 0) {
-                    M2C_FIELD(arg0, s32*, 0) = 2;
-                    SavePrompt_Init(arg0 + 0x4E8, 0xCA, 0xAD);
+                if (LabItem_HasUnsavedChanges(arg0) != 0) {
+                    arg0->state = 2;
+                    SavePrompt_Init(arg0->savePrompt, 0xCA, 0xAD);
                 } else {
                     ret = 1;
                 }
             } else if (res > 0) {
                 switch (res) {
                     case 1:
-                        M2C_FIELD(arg0, s32*, 0) = 3;
-                        LabItem_InitConfirmWindow(arg0 + 0x54C, 0xBA, 0xAE, D_8901871C, D_89018728);
-                        M2C_FIELD(arg0, s32*, 0x5FC) = 1;
+                        arg0->state = 3;
+                        LabItem_InitConfirmWindow(&arg0->confirmWindow, 0xBA, 0xAE, D_8901871C, D_89018728);
+                        arg0->confirmWindow.choice.cursor = 1;
                         break;
                 }
             }
             break;
         case 2:
-            res = SavePrompt_Update(arg0 + 0x4E8);
+            res = SavePrompt_Update(arg0->savePrompt);
             if (res == -1) {
-                M2C_FIELD(arg0, s32*, 0) = 1;
+                arg0->state = 1;
             } else if (res > 0) {
                 ret = 1;
                 switch (res) {
                     case 2:
                         break;
                     case 1:
-                        Save_DrawReportingWindow(arg0 + 0x4E8);
+                        Save_DrawReportingWindow(arg0->savePrompt);
                         LabItem_SaveChanges(arg0);
                         break;
                 }
             }
             break;
         case 3:
-            res = LabItem_UpdateConfirmWindow(arg0 + 0x54C);
+            res = LabItem_UpdateConfirmWindow(&arg0->confirmWindow);
             if (res == -1) {
-                M2C_FIELD(arg0, s32*, 0) = 1;
+                arg0->state = 1;
             } else if (res == 1) {
-                LabItem_InitDeleteDataWindow(arg0 + 0x604, 0x2B, 0x5C, arg0 + 0xA20);
-                M2C_FIELD(arg0, s32*, 0) = 4;
+                LabItem_InitDeleteDataWindow(&arg0->deleteDataWindow, 0x2B, 0x5C, arg0->saveSlots);
+                arg0->state = 4;
             }
             break;
         case 4:
-            res = LabItem_UpdateDeleteDataCursor(arg0 + 0x604);
+            res = LabItem_UpdateDeleteDataCursor(&arg0->deleteDataWindow);
             if (res == -1) {
-                M2C_FIELD(arg0, s32*, 0) = 1;
-                M2C_FIELD(arg0, s32*, 0xA08) = 0;
+                arg0->state = 1;
+                arg0->itemTables[2].count = 0;
             } else if (res == 1) {
-                func_89000448(0x12, 0, M2C_FIELD(arg0, s32*, 0x658), arg0 + 0xA00);
-                func_89002E58(arg0 + 0x68C, 0xD6, 0x45, (s8*)&((Ctx89003880*)arg0)->slots[M2C_FIELD(arg0, s32*, 0x658)], arg0 + 0xA00);
-                M2C_FIELD(arg0, s32*, 0) = 5;
+                LabItem_ReadDeckEntries(0x12, 0, arg0->deleteDataWindow.menu.cursor, &arg0->itemTables[2]);
+                func_89002E58(&arg0->saveDataWindow, 0xD6, 0x45, &arg0->saveSlots[arg0->deleteDataWindow.menu.cursor], &arg0->itemTables[2]);
+                arg0->state = 5;
             }
             break;
         case 5:
-            res = func_8900352C(arg0 + 0x68C);
+            res = func_8900352C(&arg0->saveDataWindow);
             if (res == -1) {
-                M2C_FIELD(arg0, s32*, 0) = 4;
+                arg0->state = 4;
             } else if (res == 1) {
-                M2C_FIELD(arg0, s32*, 0) = 6;
-                LabItem_InitConfirmWindow(arg0 + 0x54C, 0xBA, 0xAE, D_89018760, D_8901876C);
-                M2C_FIELD(arg0, s32*, 0x5FC) = 1;
+                arg0->state = 6;
+                LabItem_InitConfirmWindow(&arg0->confirmWindow, 0xBA, 0xAE, D_89018760, D_8901876C);
+                arg0->confirmWindow.choice.cursor = 1;
             }
             break;
         case 6:
-            res = LabItem_UpdateConfirmWindow(arg0 + 0x54C);
+            res = LabItem_UpdateConfirmWindow(&arg0->confirmWindow);
             if (res == -1) {
-                M2C_FIELD(arg0, s32*, 0) = 5;
+                arg0->state = 5;
             } else if (res == 1) {
-                M2C_FIELD(arg0, s32*, 0xA1C) = M2C_FIELD(arg0, s32*, 0x658);
-                M2C_FIELD(arg0 + M2C_FIELD(arg0, s32*, 0xA1C) * 0x14, s32*, 0xA20) = 0;
-                M2C_FIELD(arg0, s32*, 0xA08) = 0;
-                func_890022D0(arg0 + 4);
-                M2C_FIELD(arg0, s32*, 0) = 1;
+                arg0->gamePakSlot = arg0->deleteDataWindow.menu.cursor;
+                arg0->saveSlots[arg0->gamePakSlot].present = 0;
+                arg0->itemTables[2].count = 0;
+                func_890022D0(&arg0->organizeWindow);
+                arg0->state = 1;
             }
             break;
     }
@@ -588,8 +578,8 @@ s32 func_8900429C(s32 arg0) {
 
 void Cont_StartReadInputs(void);                            /* extern */
 void Cont_ReadInputs(void);                            /* extern */
-void func_89003650(s8*);
-void LabItem_DrawScreen(void*);
+void func_89003650(LabItemScreen*);
+void LabItem_DrawScreen(LabItemScreen*);
 M2C_UNK PcSort_Init(M2C_UNK *, M2C_UNK *);        /* extern */
 M2C_UNK PcSort_Free(M2C_UNK *);                   /* extern */
 M2C_UNK PcSort_DrawScreen(M2C_UNK *);                   /* extern */
@@ -599,7 +589,7 @@ M2C_UNK PcBox_Free(M2C_UNK *);                   /* extern */
 M2C_UNK PcBox_DrawScreen(M2C_UNK *);                   /* extern */
 s32 PcBox_UpdateScreen(M2C_UNK *);                       /* extern */
 extern M2C_UNK D_89018918;
-extern M2C_UNK D_89019128;
+extern LabItemScreen D_89019128;
 extern M2C_UNK D_89019B98;
 extern M2C_UNK D_89021428;
 extern M2C_UNK D_89028950;
@@ -629,7 +619,7 @@ s32 LabTerminal_RunFrame(s32 arg0) {
                 PcSort_Init(&D_89019B98, &D_89018918);
                 break;
             case 3:                                 /* switch 2 */
-                func_89003650((s8*)&D_89019128);
+                func_89003650(&D_89019128);
                 break;
             case 4:                                 /* switch 2 */
                 PcBox_Init(&D_89021428);
