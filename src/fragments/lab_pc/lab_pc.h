@@ -34,8 +34,8 @@ typedef struct LabItemCountSelector {
     /* 0x04 */ Window window;
     /* 0x30 */ s32 limit; // @unverified: arg4; a value above it opens the text box, then is set back to it
     /* 0x34 */ DigitSelector count;
-    /* 0x48 */ s32 textBox; // first word of a TextBox (TextBox_Init, TextBox_Draw); its size is not established
-} LabItemCountSelector;
+    /* 0x48 */ s8 textBox[0x38]; // @unverified: TextBox_Init, TextBox_Draw; LabItemOrganizeWindow.tables follows at +0x80
+} LabItemCountSelector; // size = 0x80
 
 /* A yes/no question in the Lab item screens (LabItem_InitConfirmWindow). */
 typedef struct LabItemConfirmWindow {
@@ -173,6 +173,35 @@ typedef struct LabItemList {
     /* 0x10C */ s32 x; // @unverified: typed from the function it is passed to
     /* 0x110 */ s32 y; // @unverified: typed from the function it is passed to
 } LabItemList; // size = 0x114
+
+/* The どうぐのせいり (organize items) window: four operation buttons, two box pickers and two item lists
+ * side by side (LabItem_InitOrganizeWindow, LabItem_UpdateOrganizeWindow, LabItem_DrawOrganizeWindow).
+ * The boxes are 0 = てもちの どうぐ (bag), 1 = the PC (name from D_890190F0), 2 = ６４の カセット. */
+typedef struct LabItemOrganizeWindow {
+    /* 0x000 */ s32 state; // @unverified: 1 = picking an operation, 2/3 = box pickers, 4-7 = item lists, 8 = count selector, 9-0xC = text box up
+    /* 0x004 */ Window window; // @unverified: typed from the function it is passed to
+    /* 0x030 */ WindowFrame footerFrame; // @unverified: frame of the bottom strip with the help line (LabItem_DrawHelpText)
+    /* 0x050 */ PcBoxImageButton backButton; // @unverified: operation 3 「メニューへもどる」 (back to the menu)
+    /* 0x07C */ PcBoxImageButton moveButton; // @unverified: operation 0 「どうぐをいどうする」 (move items)
+    /* 0x0A8 */ PcBoxImageButton reorderButton; // @unverified: operation 1 「どうぐをならべかえる」 (reorder items)
+    /* 0x0D4 */ PcBoxImageButton exchangeButton; // @unverified: operation 2 「どうぐをいれかえる」 (exchange items)
+    /* 0x100 */ ChoiceCursor operationCursor; // @unverified: cursor = the operation 0-3 (titles D_8900A650), count = 4
+    /* 0x10C */ LabItemMenuWindow sourceBoxWindow; // @unverified: state 2, sets leftBox (「どこからいどうする？」)
+    /* 0x170 */ LabItemMenuWindow targetBoxWindow; // @unverified: state 3, sets rightBox (「どこへいどうする？」)
+    /* 0x1D4 */ s32 leftBox; // @unverified: index into tables shown in leftList; its icon/name drawn by func_890017FC
+    /* 0x1D8 */ s32 rightBox; // @unverified: index into tables shown in rightList; -1 while it shows reorderView
+    /* 0x1DC */ char** boxNames; // @unverified: D_8900A5F4, the names of the 3 boxes
+    /* 0x1E0 */ s32 boxCount; // @unverified: 3, the row count of the box pickers
+    /* 0x1E4 */ LabItemList leftList; // @unverified: typed from the function it is passed to
+    /* 0x2F8 */ LabItemList rightList; // @unverified: typed from the function it is passed to
+    /* 0x40C */ s32 swapIndex; // @unverified: reorder: the first item picked in leftList
+    /* 0x410 */ LabItemCountSelector countSelector; // @unverified: move: how many of the item to move
+    /* 0x490 */ ByteMatrix* tables; // @unverified: the 3 item tables of the boxes (func_89003650's list0..list2)
+    /* 0x494 */ s32* dirty; // @unverified: one per table, set when it changed
+    /* 0x498 */ s32* gamePakSlot; // @unverified: picking box 2 as target with -1 here ends the window with 1
+    /* 0x49C */ ByteMatrix reorderView; // @unverified: rows of tables[0]; shown in rightList while reordering
+    /* 0x4AC */ s8 textBox[0x38]; // @unverified: TextBox_Init, TextBox_Draw; its size is not established
+} LabItemOrganizeWindow; // size >= 0x4E4
 
 /* The window of the ポケモンを いどうする screen: six operation buttons, two box pickers and two
  * Pokémon lists side by side (PcSort_InitOrganizeWindow, PcSort_UpdateOrganizeWindow). */
@@ -587,10 +616,6 @@ typedef struct unk_func_8821421C_038 {
  * src/fragments/fragment015_238BD0/lab_pc_list_1CEA00_8900379C.c
  * src/fragments/fragment015_238BD0/lab_pc_list_1CEA00_89003880.c
  */
-
-typedef struct Rgba89000D50 {
-    /* 0x00 */ u8 r, g, b, a;
-} Rgba89000D50; // size = 0x4
 
 typedef struct ColorPair890017FC {
     /* 0x0 */ Color_RGBA8 prim;

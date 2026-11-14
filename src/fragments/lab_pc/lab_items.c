@@ -369,7 +369,7 @@ s32 LabItem_UpdateConfirmWindow(LabItemConfirmWindow* arg0) {
     return ret;
 }
 
-extern Rgba89000D50 D_8900A5BC;
+extern Color_RGBA8 D_8900A5BC;
 
 /**
  * Sets up the item count selector (84x52).
@@ -382,7 +382,7 @@ void LabItem_InitCountSelector(LabItemCountSelector* arg0, s32 arg1, s32 arg2, s
     arg0->window.title = 0;
     arg0->window.state = 0;
     arg0->window.frame.style = 0;
-    *(Rgba89000D50*)&arg0->window.frame.color = D_8900A5BC; // copied as an aligned word
+    *(Color_RGBA8*)&arg0->window.frame.color = D_8900A5BC; // copied as an aligned word
     arg0->count.digitCount = 2;
     arg0->count.value = 1;
     arg0->count.min = 1;
@@ -455,7 +455,7 @@ void LabItem_DrawCountSelector(LabItemCountSelector* arg0) {
         func_8001AA60(arg0->window.frame.x + 0x36, arg0->window.frame.y + 0x10, arg0->count.value % 10 + '0');
         Font_EndTexturedTextRendering();
         if (arg0->state == 1) {
-            TextBox_Draw(&arg0->textBox);
+            TextBox_Draw(arg0->textBox);
         }
     }
 }
@@ -490,7 +490,7 @@ s32 LabItem_UpdateCountSelector(LabItemCountSelector* arg0) {
             } else if (temp_v0_2 == 1) {
                 if (arg0->limit < arg0->count.value) {
                     func_8003F6AC(8);
-                    TextBox_Init(&arg0->textBox, &D_89018474, 0, 1, 0);
+                    TextBox_Init(arg0->textBox, &D_89018474, 0, 1, 0);
                     arg0->state = 1;
                 } else {
                     func_8003F6AC(2);
@@ -500,7 +500,7 @@ s32 LabItem_UpdateCountSelector(LabItemCountSelector* arg0) {
         }
         break;
     case 1:
-        if (Ui_CheckConfirmPressed(&arg0->textBox) == 1) {
+        if (Ui_CheckConfirmPressed(arg0->textBox) == 1) {
             arg0->state = 0;
             arg0->count.value = (s32) arg0->limit;
         }
@@ -556,9 +556,9 @@ void LabItem_DisableRow(LabItemMenuWindow* arg0, s32 arg1) {
  * mode.  `index` is unused.  (A shorter sibling of PcSort_DrawMenuRow, which has two more
  * color tables.)
  */
-void Ui_FillRectHighlighted(s32, s32, s32, s32, Rgba89000D50);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);
-extern Rgba89000D50 D_8900A5D4[];
+extern Color_RGBA8 D_8900A5D4[];
 extern u8 D_800734A8[];
 /**
  * Draws one menu row label with the selection highlight (dimmed when disabled).
@@ -566,7 +566,7 @@ extern u8 D_800734A8[];
  * パソコン, 64の カセット).
  */
 void LabItem_DrawMenuRow(s32 x, s32 y, char* str, UNUSED s32 index, s32 flags) {
-    Rgba89000D50 color;
+    Color_RGBA8 color;
     UNUSED s32 pad[4]; // FAKE: stack padding
 
     if (flags & 0x10) {
@@ -574,12 +574,12 @@ void LabItem_DrawMenuRow(s32 x, s32 y, char* str, UNUSED s32 index, s32 flags) {
     }
     Font_BeginTranslucentTextRendering();
     if (flags & 1) {
-        color = ((Rgba89000D50*)&D_800734A8)[1];
+        color = ((Color_RGBA8*)&D_800734A8)[1];
         color.a = 0x4C;
     } else if (flags & 0x100) {
         color = D_8900A5D4[(flags & 2) ? 0 : 1];
     } else {
-        color = ((Rgba89000D50*)&D_800734A8)[(flags & 2) ? 0 : 1];
+        color = ((Color_RGBA8*)&D_800734A8)[(flags & 2) ? 0 : 1];
     }
     func_8001AA9C(color.r, color.g, color.b, color.a);
     Font_SetActive(8, 0);
@@ -603,7 +603,7 @@ void LabItem_InitMenuWindow(LabItemMenuWindow* arg0, s32 arg1, s32 arg2, s32 arg
     arg0->window.title = NULL;
     arg0->window.animTimer = 0;
     arg0->window.frame.style = 0;
-    *(Rgba89000D50*)&arg0->window.frame.color = D_8900A5BC;
+    *(Color_RGBA8*)&arg0->window.frame.color = D_8900A5BC;
     func_80027804((s8*)&arg0->items, arg3, arg4, arg4);
     Menu_Init((s8*)&arg0->menu, (s32)&arg0->items, (s32)arg0->itemFlags, (s32)LabItem_DrawMenuRow, 0xD8, 0x1C);
     arg0->menu.cursor = arg5;
@@ -647,9 +647,9 @@ s32 LabItem_UpdateMenuCursor(LabItemMenuWindow* arg0) {
 }
 
 extern Gfx D_80060270[];
-extern Rgba89000D50 D_8900A5E0;
-extern Rgba89000D50 D_8900A5E8;
-extern Rgba89000D50 D_8900A5EC[];
+extern Color_RGBA8 D_8900A5E0;
+extern Color_RGBA8 D_8900A5E8;
+extern Color_RGBA8 D_8900A5EC[];
 extern char D_8901848C[];
 char* func_8001FDC8(u8, char*);
 s32 func_80031C24(u8);
@@ -674,7 +674,7 @@ void LabItem_DrawItemCountRow(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) 
         func_8001AB6C();
         func_8001A384(8, 0);
         if (func_80031C24(arg2[0]) != 0) {
-            Rgba89000D50 color;
+            Color_RGBA8 color;
 
             color = D_8900A5EC[(arg4 & 2) ? 0 : 1];
             func_8001AA9C(color.r, color.g, color.b, color.a);
@@ -765,8 +765,8 @@ s32 LabItem_UpdateItemList(void* menu, u32 flags) {
 void func_8002B018(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
 void func_80027410(s8*, s8*, s32, s32, s32);
 s32 func_800564D4(char*, const char*, ...);
-extern Rgba89000D50 D_8900A600;
-extern Rgba89000D50 D_8900A604;
+extern Color_RGBA8 D_8900A600;
+extern Color_RGBA8 D_8900A604;
 extern u8 D_8900A580[];
 extern u8 D_8900BFC0[];
 extern u8 D_8900DAD0[];
@@ -776,53 +776,53 @@ extern char D_890184BC[];
 extern char D_890190F0[];
 extern char D_890184CC[];
 extern s32 D_8901911C;
-extern u8 D_8900A5F4[];
+extern char* D_8900A5F4[];
 /**
  * Sets up the どうぐのせいり (organize items) window for %sのパソコン (%s's PC).
  * Seen in play (2026-11-12): opened どうぐのせいり with サトシのパソコン.
  */
-void LabItem_InitOrganizeWindow(s8* arg0, s32 x, s32 y, s8* arg3, s32* arg4, s32* arg5) {
-    Window_SetRect(arg0 + 4, x, y, 0x234, 0x174);
-    M2C_FIELD(arg0, s32*, 0x28) = 0;
-    M2C_FIELD(arg0, s32*, 0x2C) = 0;
-    M2C_FIELD(arg0, s32*, 0x18) = 0x801;
-    M2C_FIELD(arg0, char**, 0x24) = D_890184BC;
-    Window_SetRect(arg0 + 0x30, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x136, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0x38);
-    M2C_FIELD(arg0, s32*, 0x44) = 6;
-    M2C_FIELD(arg0, Rgba89000D50*, 0x48) = D_8900A600;
-    M2C_FIELD(arg0, Rgba89000D50*, 0x4C) = D_8900A604;
-    func_8002B018(arg0 + 0x50, x + 0xFF, y + 0x3A, 0x36, 0x2A, 0x30, (s32)D_8900BFC0);
-    M2C_FIELD(arg0, Rgba89000D50*, 0x68) = ((Rgba89000D50*)D_8900A580)[0];
-    M2C_FIELD(arg0, Rgba89000D50*, 0x6C) = ((Rgba89000D50*)D_8900A580)[1];
-    M2C_FIELD(arg0, Rgba89000D50*, 0x70) = D_8900A5BC;
-    func_8002B018(arg0 + 0x7C, x + 0xFF, y + 0x74, 0x36, 0x2A, 0x30, (s32)D_8900DAD0);
-    M2C_FIELD(arg0, Rgba89000D50*, 0x94) = ((Rgba89000D50*)D_8900A580)[2];
-    M2C_FIELD(arg0, Rgba89000D50*, 0x98) = ((Rgba89000D50*)D_8900A580)[3];
-    M2C_FIELD(arg0, Rgba89000D50*, 0x9C) = D_8900A5BC;
-    func_8002B018(arg0 + 0xA8, x + 0xFF, y + 0xAE, 0x36, 0x2A, 0x30, (s32)D_8900E858);
-    M2C_FIELD(arg0, Rgba89000D50*, 0xC0) = ((Rgba89000D50*)D_8900A580)[4];
-    M2C_FIELD(arg0, Rgba89000D50*, 0xC4) = ((Rgba89000D50*)D_8900A580)[5];
-    M2C_FIELD(arg0, Rgba89000D50*, 0xC8) = D_8900A5BC;
-    func_8002B018(arg0 + 0xD4, x + 0xFF, y + 0xE8, 0x36, 0x2A, 0x30, (s32)D_8900F5E0);
-    M2C_FIELD(arg0, Rgba89000D50*, 0xEC) = ((Rgba89000D50*)D_8900A580)[6];
-    M2C_FIELD(arg0, Rgba89000D50*, 0xF0) = ((Rgba89000D50*)D_8900A580)[7];
-    M2C_FIELD(arg0, Rgba89000D50*, 0xF4) = D_8900A5BC;
-    M2C_FIELD(arg0, s32*, 0x1D8) = 1;
-    M2C_FIELD(arg0, s32*, 0x1D4) = 0;
+void LabItem_InitOrganizeWindow(LabItemOrganizeWindow* arg0, s32 x, s32 y, ByteMatrix* arg3, s32* arg4, s32* arg5) {
+    Window_SetRect(&arg0->window, x, y, 0x234, 0x174);
+    arg0->window.animTimer = 0;
+    arg0->window.state = 0;
+    arg0->window.frame.style = 0x801;
+    arg0->window.title = D_890184BC;
+    Window_SetRect(&arg0->footerFrame, arg0->window.frame.x + 6, arg0->window.frame.y + 0x136, arg0->window.frame.width - 0xC, 0x38);
+    arg0->footerFrame.style = 6;
+    arg0->footerFrame.color = D_8900A600;
+    arg0->footerFrame.color2 = D_8900A604;
+    func_8002B018(&arg0->backButton, x + 0xFF, y + 0x3A, 0x36, 0x2A, 0x30, (s32)D_8900BFC0);
+    arg0->backButton.selectedColor = ((Color_RGBA8*)D_8900A580)[0];
+    arg0->backButton.color = ((Color_RGBA8*)D_8900A580)[1];
+    arg0->backButton.highlightColor = D_8900A5BC;
+    func_8002B018(&arg0->moveButton, x + 0xFF, y + 0x74, 0x36, 0x2A, 0x30, (s32)D_8900DAD0);
+    arg0->moveButton.selectedColor = ((Color_RGBA8*)D_8900A580)[2];
+    arg0->moveButton.color = ((Color_RGBA8*)D_8900A580)[3];
+    arg0->moveButton.highlightColor = D_8900A5BC;
+    func_8002B018(&arg0->reorderButton, x + 0xFF, y + 0xAE, 0x36, 0x2A, 0x30, (s32)D_8900E858);
+    arg0->reorderButton.selectedColor = ((Color_RGBA8*)D_8900A580)[4];
+    arg0->reorderButton.color = ((Color_RGBA8*)D_8900A580)[5];
+    arg0->reorderButton.highlightColor = D_8900A5BC;
+    func_8002B018(&arg0->exchangeButton, x + 0xFF, y + 0xE8, 0x36, 0x2A, 0x30, (s32)D_8900F5E0);
+    arg0->exchangeButton.selectedColor = ((Color_RGBA8*)D_8900A580)[6];
+    arg0->exchangeButton.color = ((Color_RGBA8*)D_8900A580)[7];
+    arg0->exchangeButton.highlightColor = D_8900A5BC;
+    arg0->rightBox = 1;
+    arg0->leftBox = 0;
     func_800564D4(D_890190F0, D_890184CC, &D_8901911C);
-    M2C_FIELD(arg0, u8**, 0x1DC) = D_8900A5F4;
-    M2C_FIELD(arg0, s32*, 0x1E0) = 3;
-    M2C_FIELD(arg0, s32*, 0x108) = 4;
-    M2C_FIELD(arg0, s32*, 0x104) = 0;
-    M2C_FIELD(arg0, s32*, 0x100) = D_800603C0;
+    arg0->boxNames = D_8900A5F4;
+    arg0->boxCount = 3;
+    arg0->operationCursor.count = 4;
+    arg0->operationCursor.cursor = 0;
+    arg0->operationCursor.controller = D_800603C0;
     func_8000B2F4(D_800603C0);
-    M2C_FIELD(arg0, s32*, 0) = 1;
-    M2C_FIELD(arg0, s8**, 0x490) = arg3;
-    M2C_FIELD(arg0, s32**, 0x494) = arg4;
-    M2C_FIELD(arg0, s32**, 0x498) = arg5;
-    LabItem_InitItemList(arg0 + 0x1E4, M2C_FIELD(arg0, s32*, 4) + 0xC, M2C_FIELD(arg0, s32*, 8) + 0x2A, (s32)(arg3 + M2C_FIELD(arg0, s32*, 0x1D4) * 0x10));
-    LabItem_InitItemList(arg0 + 0x2F8, M2C_FIELD(arg0, s32*, 4) + 0x13C, M2C_FIELD(arg0, s32*, 8) + 0x2A, (s32)(arg3 + M2C_FIELD(arg0, s32*, 0x1D8) * 0x10));
-    func_80027410(arg0 + 0x49C, M2C_FIELD(M2C_FIELD(arg0, s8**, 0x490), s8**, 0), 2, M2C_FIELD(M2C_FIELD(arg0, s8**, 0x490), s32*, 4), 0);
+    arg0->state = 1;
+    arg0->tables = arg3;
+    arg0->dirty = arg4;
+    arg0->gamePakSlot = arg5;
+    LabItem_InitItemList(&arg0->leftList, arg0->window.frame.x + 0xC, arg0->window.frame.y + 0x2A, (s32)&arg3[arg0->leftBox]);
+    LabItem_InitItemList(&arg0->rightList, arg0->window.frame.x + 0x13C, arg0->window.frame.y + 0x2A, (s32)&arg3[arg0->rightBox]);
+    func_80027410((s8*)&arg0->reorderView, (s8*)arg0->tables->rows, 2, arg0->tables->capacity, 0);
 }
 
 
@@ -1480,8 +1480,8 @@ extern u8 D_8900A5A0[];
 extern u8 D_8900A5A4[];
 extern u8 D_8900A5A8[];
 extern u8 D_8900A5AC[];
-extern Rgba89000D50 D_8900A6B4;
-extern Rgba89000D50 D_8900A6B8;
+extern Color_RGBA8 D_8900A6B4;
+extern Color_RGBA8 D_8900A6B8;
 extern u8 D_8900BFC0[];
 extern u8 D_89010368[];
 extern u8 D_890110F0[];
@@ -1495,20 +1495,20 @@ void func_89002E58(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Window_SetRect(arg0 + 0x30, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x142,
                   M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0x38);
     M2C_FIELD(arg0, s32*, 0x44) = 6;
-    M2C_FIELD(arg0, Rgba89000D50*, 0x48) = D_8900A6B4;
-    M2C_FIELD(arg0, Rgba89000D50*, 0x4C) = D_8900A6B8;
+    M2C_FIELD(arg0, Color_RGBA8*, 0x48) = D_8900A6B4;
+    M2C_FIELD(arg0, Color_RGBA8*, 0x4C) = D_8900A6B8;
     func_8002B018(arg0 + 0x50, arg1 + 0x2B, arg2 + 0x47, 0x36, 0x2A, 0x30, (s32)D_8900BFC0);
-    M2C_FIELD(arg0, Rgba89000D50*, 0x68) = *(Rgba89000D50*)D_8900A580;
-    M2C_FIELD(arg0, Rgba89000D50*, 0x6C) = *(Rgba89000D50*)D_8900A584;
-    M2C_FIELD(arg0, Rgba89000D50*, 0x70) = D_8900A5BC;
+    M2C_FIELD(arg0, Color_RGBA8*, 0x68) = *(Color_RGBA8*)D_8900A580;
+    M2C_FIELD(arg0, Color_RGBA8*, 0x6C) = *(Color_RGBA8*)D_8900A584;
+    M2C_FIELD(arg0, Color_RGBA8*, 0x70) = D_8900A5BC;
     func_8002B018(arg0 + 0xA8, arg1 + 0x2B, arg2 + 0x9F, 0x36, 0x2A, 0x30, (s32)D_890110F0);
-    M2C_FIELD(arg0, Rgba89000D50*, 0xC0) = *(Rgba89000D50*)D_8900A5A8;
-    M2C_FIELD(arg0, Rgba89000D50*, 0xC4) = *(Rgba89000D50*)D_8900A5AC;
-    M2C_FIELD(arg0, Rgba89000D50*, 0xC8) = D_8900A5BC;
+    M2C_FIELD(arg0, Color_RGBA8*, 0xC0) = *(Color_RGBA8*)D_8900A5A8;
+    M2C_FIELD(arg0, Color_RGBA8*, 0xC4) = *(Color_RGBA8*)D_8900A5AC;
+    M2C_FIELD(arg0, Color_RGBA8*, 0xC8) = D_8900A5BC;
     func_8002B018(arg0 + 0x7C, arg1 + 0x2B, arg2 + 0xF7, 0x36, 0x2A, 0x30, (s32)D_89010368);
-    M2C_FIELD(arg0, Rgba89000D50*, 0x94) = *(Rgba89000D50*)D_8900A5A0;
-    M2C_FIELD(arg0, Rgba89000D50*, 0x98) = *(Rgba89000D50*)D_8900A5A4;
-    M2C_FIELD(arg0, Rgba89000D50*, 0x9C) = D_8900A5BC;
+    M2C_FIELD(arg0, Color_RGBA8*, 0x94) = *(Color_RGBA8*)D_8900A5A0;
+    M2C_FIELD(arg0, Color_RGBA8*, 0x98) = *(Color_RGBA8*)D_8900A5A4;
+    M2C_FIELD(arg0, Color_RGBA8*, 0x9C) = D_8900A5BC;
     M2C_FIELD(arg0, s32*, 0xDC) = 3;
     M2C_FIELD(arg0, s32*, 0xD8) = 0;
     M2C_FIELD(arg0, s32*, 0xD4) = D_800603C0;
@@ -1637,7 +1637,8 @@ s32 func_8900352C(s32* arg0) {
 typedef struct Entry89003650 { s32 unk00; char unk04[0x10]; } Entry89003650;
 typedef struct Ctx89003650 {
     /* 0x000 */ s32 unk000;
-    /* 0x004 */ s8 unk004[0x880];
+    /* 0x004 */ LabItemOrganizeWindow organizeWindow;
+    /* 0x4E8 */ s8 unk4E8[0x39C];
     /* 0x884 */ s8 unk884[0x2A];
     /* 0x8AE */ s8 unk8AE[0x66];
     /* 0x914 */ s8 unk914[0xCC];
@@ -1651,7 +1652,6 @@ typedef struct Ctx89003650 {
 s32 func_890002D4(Entry89003650*, s32, s32*);
 void func_890003C0(Entry89003650*);
 void func_89000448(s32, s32, s32, s8*);
-void LabItem_InitOrganizeWindow(s8*, s32, s32, s8*, s32*, s32*);
 extern s32 D_89019108;
 extern s32 D_89019118;
 extern s32 D_8901911C;
@@ -1674,6 +1674,6 @@ void func_89003650(Ctx89003650* arg0) {
         arg0->sel[i] = 0;
         i++;
     } while (i != 3);
-    LabItem_InitOrganizeWindow(arg0->unk004, 0x26, 0x51, arg0->list0, arg0->sel, &arg0->idx);
+    LabItem_InitOrganizeWindow(&arg0->organizeWindow, 0x26, 0x51, (ByteMatrix*)arg0->list0, arg0->sel, &arg0->idx);
     arg0->unk000 = 1;
 }
