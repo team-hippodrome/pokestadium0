@@ -113,43 +113,7 @@ s32 GbPak_SelectRomAddress(unk_D_8122B2C0* arg0, s32 arg1);
 
 s32 GbPak_SelectRamBank(unk_D_8122B2C0* arg0, s32 arg1);
 
-typedef struct GbpakChannel811023DC {
-    /* 0x00 */ char unk00[0x48];
-    /* 0x48 */ u8 cartType;
-    /* 0x49 */ char unk49[0x3];
-    /* 0x4C */ u8 unk4C;
-    /* 0x4D */ char unk4D[0x1];
-    /* 0x4E */ u8 checksum[2];
-    /* 0x50 */ OSPfs* pfs;
-    /* 0x54 */ u8* buf;
-    /* 0x58 */ u8* romBuf;
-    /* 0x5C */ u8* sramBuf;
-    /* 0x60 */ u8* bankState;
-    /* 0x64 */ u8* sramState;
-    /* 0x68 */ u8* bankList;
-    /* 0x6C */ u8* bankEntry;
-    /* 0x70 */ u8* ramBuf;
-    /* 0x74 */ u8* blockState;
-    /* 0x78 */ u8* verifyBuf;
-    /* 0x7C */ u8* blockDirty;
-    /* 0x80 */ s32 size;
-    /* 0x84 */ s32 sum;
-    /* 0x88 */ char unk88[0x4];
-    /* 0x8C */ s32 addr;
-    /* 0x90 */ u32 ramSize;
-    /* 0x94 */ s32 sramAddr;
-    /* 0x98 */ u8 unk98;
-    /* 0x99 */ volatile u8 request;
-    /* 0x9A */ volatile u8 error;
-    /* 0x9B */ u8 status;
-    /* 0x9C */ u8 channel;
-    /* 0x9D */ char unk9D[0x3];
-    /* 0xA0 */ u8 unkA0;
-    /* 0xA1 */ u8 unkA1;
-    /* 0xA2 */ u8 unkA2;
-    /* 0xA3 */ char unkA3[0x1];
-} GbpakChannel811023DC; // size = 0xA4
-GbpakChannel811023DC D_811561C8[4];
+GbPakChannel D_811561C8[4];
 s32 GbPak_CheckTransferStatus(OSPfs* arg0);
 
 s32 GbPak_ProbeCartridge(u8*);
@@ -188,8 +152,8 @@ s32 GbPak_WriteBackDirtySramBlock(s32 arg0);
  * @unverified Name and comment from the code; no Transfer Pak was emulated.
  */
 s32 GbPak_VerifyRamBlocks(s32 arg0) {
-    GbpakChannel811023DC* ch2;
-    GbpakChannel811023DC* ch;
+    GbPakChannel* ch2;
+    GbPakChannel* ch;
     s32 retries;
     s32 r;
     u32 i;
@@ -299,7 +263,7 @@ void func_81102EB0(u8*, s32);
  * GB item started.
  */
 s32 GbPak_WriteVerifiedSramBlock(s32 arg0, s32 arg1, s32 arg2) {
-    GbpakChannel811023DC* ch = &D_811561C8[arg0];
+    GbPakChannel* ch = &D_811561C8[arg0];
     s32 ret;
     s32 n;
     u8* entry;
@@ -335,7 +299,7 @@ extern OSPfs D_81156018[];
 extern u8 D_81155E18[];
 extern u8 D_81155F18[];
 extern volatile u8 D_81156474;
-s32 func_81102690(GbpakChannel811023DC*, s32);
+s32 func_81102690(GbPakChannel*, s32);
 s32 GbPak_CheckGen1SaveChecksum(s8*);
 
 /**
@@ -352,7 +316,7 @@ void GbPak_IoThreadMain(s32 arg0) {
     s32 pad1; // FAKE
     u8 id[0x50];
     u8* idp;
-    GbpakChannel811023DC* ch;
+    GbPakChannel* ch;
     s32 pad2; // FAKE
 
     for (;;) {
@@ -966,29 +930,8 @@ void func_811047A0(s32 arg0) {
     D_81154C00 = D_81156590;
 }
 
-typedef struct Screen81104930 {
-    /* 0x00 */ u8 unk_00[6];
-    /* 0x06 */ s8 unk_06;
-    /* 0x07 */ s8 unk_07;
-    /* 0x08 */ u8 unk_08[4];
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ u8 unk_0E[2];
-    /* 0x10 */ u8* unk_10;
-    /* 0x14 */ u8 unk_14[8];
-    /* 0x1C */ u8* unk_1C;
-    /* 0x20 */ u8* unk_20;
-    /* 0x24 */ u8 unk_24[0x14];
-    /* 0x38 */ s32 unk_38;
-    /* 0x3C */ u32 unk_3C;
-    /* 0x40 */ u32 unk_40;
-    /* 0x44 */ u8* unk_44;
-    /* 0x48 */ u8* unk_48;
-    /* 0x4C */ s32 framebuffer;
-    /* 0x50 */ u8* unk_50;
-    /* 0x54 */ s32 colorIndex;
-} Screen81104930;
 
-extern Screen81104930 D_81156540;
+extern GbEmuState D_81156540;
 extern u16 D_811223E0[];
 extern u8 D_811208F8[];
 extern u8 D_811541FC[5];
@@ -1170,9 +1113,9 @@ s32 func_80025BD8(void);
 void func_80052DC0(s32);
 void func_8005C280(f32);
 void func_81100020(void);
-void GbPak_QueueNextBankLoad(GbpakChannel811023DC*);
+void GbPak_QueueNextBankLoad(GbPakChannel*);
 void func_81106CC8(u16*, u8 (*)[0xC80], s32, s32);
-void func_81117B20(Screen81104930*);
+void func_81117B20(GbEmuState*);
 extern u8 D_8111E570[];
 extern u8 D_811565A1;
 extern s16 D_800AA148;
@@ -1204,8 +1147,8 @@ extern f32 D_FLT_81154254;
  * copyright screen.
  */
 s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
-    GbpakChannel811023DC* cur;
-    GbpakChannel811023DC* slot;
+    GbPakChannel* cur;
+    GbPakChannel* slot;
     u8* buf;
     s32 i;
     u32 j;
@@ -1218,10 +1161,10 @@ s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     D_811565A0 = arg3;
     D_81156598 = M2C_FIELD(arg4, u8**, 0x21CC);
     D_8115659C = M2C_FIELD(arg4, u8**, 0x21D0);
-    D_81156540.unk_10 = (u8*)GbEmu_AllocAligned64(0x27F80, 0);
-    D_81156540.unk_1C = (u8*)GbEmu_AllocAligned64(0x100000, 0);
-    D_81156540.unk_40 = 0x8000;
-    D_81156540.unk_20 = (u8*)GbEmu_AllocAligned64(D_81156540.unk_40, 0);
+    D_81156540.mem = (u8*)GbEmu_AllocAligned64(0x27F80, 0);
+    D_81156540.rom = (u8*)GbEmu_AllocAligned64(0x100000, 0);
+    D_81156540.sramSize = 0x8000;
+    D_81156540.sram = (u8*)GbEmu_AllocAligned64(D_81156540.sramSize, 0);
     D_81156540.unk_44 = (u8*)GbEmu_AllocAligned64(0xF000, 0);
     D_81156540.unk_48 = (u8*)GbEmu_AllocAligned64(0xF000, 0);
     D_81154C00 = D_81156540.framebuffer = GbEmu_AllocAligned64(0x2800, 0);
@@ -1232,11 +1175,11 @@ s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     D_811565A1 = 0;
     D_811565A5 = 0x20;
     D_811565A4 = 0;
-    func_8004FD20((s32)D_81156540.unk_10, 0xFF80);
-    for (i = 0, p = D_81156540.unk_10 + 0x16B20; i < 0x40; i++) {
+    func_8004FD20((s32)D_81156540.mem, 0xFF80);
+    for (i = 0, p = D_81156540.mem + 0x16B20; i < 0x40; i++) {
         *p++ = 1;
     }
-    for (i = 0, p = D_81156540.unk_10 + 0x16B60; i < 0x20; i++) {
+    for (i = 0, p = D_81156540.mem + 0x16B60; i < 0x20; i++) {
         *p++ = 1;
     }
     func_81103D30();
@@ -1249,30 +1192,30 @@ s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     buf = (u8*)GbEmu_AllocAligned64(0x200, 0);
     for (i = 0; i < 4; i++) {
         slot = &D_811561C8[i];
-        slot->bankState = D_81156540.unk_10 + 0x16B20;
-        slot->sramState = D_81156540.unk_10 + 0x16B60;
-        slot->ramBuf = D_81156540.unk_20;
-        slot->blockState = D_81156540.unk_10 + 0x16B80;
+        slot->bankState = D_81156540.mem + 0x16B20;
+        slot->sramState = D_81156540.mem + 0x16B60;
+        slot->ramBuf = D_81156540.sram;
+        slot->blockState = D_81156540.mem + 0x16B80;
         slot->verifyBuf = buf;
         slot->blockDirty = buf + 0x100;
-        slot->ramSize = D_81156540.unk_40;
-        for (j = 0; j < (D_81156540.unk_40 >> 8); j++) {
+        slot->ramSize = D_81156540.sramSize;
+        for (j = 0; j < (D_81156540.sramSize >> 8); j++) {
             slot->blockDirty[j] = 0xFF;
             slot->blockState[j] = 0xFF;
         }
-        slot->unkA0 = GbPak_IdentifyCartridge((u8*)slot);
-        slot->romBuf = D_81156540.unk_1C;
-        slot->sramBuf = D_81156540.unk_20;
+        slot->gameIndex = GbPak_IdentifyCartridge((u8*)slot);
+        slot->romBuf = D_81156540.rom;
+        slot->sramBuf = D_81156540.sram;
     }
     cur = &D_811561C8[D_811565A0];
     if (cur->error != 0) {
         GbEmu_BlackScreenAndFail(1);
         return (cur->unkA2 != 0) ? 2 : 1;
     }
-    if (cur->unkA0 == 0) {
+    if (cur->gameIndex == 0) {
         return GbEmu_BlackScreenAndFail(1);
     }
-    D_81156540.colorIndex = cur->unkA0 - 1;
+    D_81156540.colorIndex = cur->gameIndex - 1;
     while (D_81156475 != 0) {
     }
     if (GbPak_WriteVerifiedSramBlock(D_811565A0, 0, 0xFF) != 0) {
@@ -1280,10 +1223,10 @@ s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
         return (cur->unkA2 != 0) ? 2 : 1;
     }
     D_81156540.unk_38 = 0xE;
-    if (cur->cartType == 4) {
-        D_81156540.unk_3C = 0x80000;
+    if (cur->romSize == 4) {
+        D_81156540.romSize = 0x80000;
     } else {
-        D_81156540.unk_3C = 0x100000;
+        D_81156540.romSize = 0x100000;
     }
     D_81156540.unk_07 = 0;
     D_81156540.unk_06 = 1;
@@ -1291,10 +1234,10 @@ s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     func_81103D30();
 
     /* FAKE: the unsigned `1U` compares stop the constant 1 from sharing a register with unk_06 = 1. */
-    cur->bankList = (cur->unkA0 == 4)   ? NULL
-                    : (cur->unkA0 == 3) ? ((cur->unk4C == 0) ? D_81122774 : NULL)
-                    : (cur->unkA0 == 2) ? ((cur->unk4C == 1U) ? D_81122694 : (cur->unk4C == 0) ? D_811225B4 : NULL)
-                                        : ((cur->unk4C == 1U) ? D_811224D4 : (cur->unk4C == 0) ? D_811223F4 : NULL);
+    cur->bankList = (cur->gameIndex == 4)   ? NULL
+                    : (cur->gameIndex == 3) ? ((cur->maskRomVersion == 0) ? D_81122774 : NULL)
+                    : (cur->gameIndex == 2) ? ((cur->maskRomVersion == 1U) ? D_81122694 : (cur->maskRomVersion == 0) ? D_811225B4 : NULL)
+                                        : ((cur->maskRomVersion == 1U) ? D_811224D4 : (cur->maskRomVersion == 0) ? D_811223F4 : NULL);
     cur->sum = 0;
 
     if (cur->bankList == NULL) {
@@ -1305,7 +1248,7 @@ s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
         for (i = 0; i < 4; i++) {
             cur->request = 2;
             cur->addr = i * 0x2000;
-            cur->buf = i * 0x2000 + D_81156540.unk_20;
+            cur->buf = i * 0x2000 + D_81156540.sram;
             cur->size = 0x2000;
             func_8004CFB0(&D_81156458, D_811565A0, 1);
             while (D_81156475 != 0) {
@@ -1316,13 +1259,13 @@ s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
                 GbEmu_BlackScreenAndFail(0);
             }
         }
-        for (i = 0; i < (D_81156540.unk_3C >> 13); i++) {
+        for (i = 0; i < (D_81156540.romSize >> 13); i++) {
             cur->request = 1;
             if (1) {} // karodo
             if (1) {} // karodo
             if (1) {} // karodo
             cur->addr = i * 0x2000;
-            cur->buf = i * 0x2000 + D_81156540.unk_1C;
+            cur->buf = i * 0x2000 + D_81156540.rom;
             cur->size = 0x2000;
             func_8004CFB0(&D_81156458, D_811565A0, 1);
             while (D_81156475 != 0) {
@@ -1333,10 +1276,10 @@ s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
                 GbEmu_BlackScreenAndFail(0);
             }
         }
-        for (i = 0; i < (D_81156540.unk_3C >> 14); i++) {
+        for (i = 0; i < (D_81156540.romSize >> 14); i++) {
             cur->bankState[i] = 0;
         }
-        for (i = 0; i < (D_81156540.unk_40 >> 13); i++) {
+        for (i = 0; i < (D_81156540.sramSize >> 13); i++) {
             cur->sramState[i] = 0;
         }
         func_800093E0(D_8112AF3C, D_811645F0);
@@ -1359,11 +1302,11 @@ s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
         }
         D_811565A4 = 1;
         for (i = 0; i < 258; i++) {
-            D_811565A8[i] = D_81156540.unk_1C[i];
-            D_81156540.unk_1C[i] = D_8111E570[i];
+            D_811565A8[i] = D_81156540.rom[i];
+            D_81156540.rom[i] = D_8111E570[i];
         }
-        D_81156540.unk_0C = 0;
-        D_81156540.unk_10[0xFF42] = 0x64;
+        D_81156540.gbPc = 0;
+        D_81156540.mem[0xFF42] = 0x64;
     }
     D_81156540.unk_06 = 0;
     func_81100020();

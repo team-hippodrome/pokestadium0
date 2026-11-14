@@ -22,27 +22,26 @@ void Window_SetRect(s8 *, s32, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
 void func_89109B60(s8*);
 M2C_UNK func_89109C6C(s32, s32);                    /* extern */
-void func_80027D68(s32, s32);
+void func_80027D68(void*, s32);
 void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
 void LabPCList_DrawMonRow();
-void func_89105C54(s8*, s32, s32, s8*, Rgba891024A4);
 extern s32 D_8910D990[];
-extern Rgba891024A4 D_8910A7F4;
+extern Color_RGBA8 D_8910A7F4;
 extern u8 D_8910A844[];
 extern u8 D_8910A848[];
 extern u8 D_8910A804[];
 extern u8 D_8910A84C[];
 
 void func_891000BC(s32 arg0);
-void func_89100294(Ctx89100294* arg0);
-s32 LabPCList_GetColumnCursorX(Ctx89100688* arg0);
+void func_89100294(LabPCListScreen* arg0);
+s32 LabPCList_GetColumnCursorX(LabPCListScreen* arg0);
 extern M2C_UNK D_800734A8;
 
 extern Gfx D_80060270[];
 extern Color_RGBA8 D_8910A85C[2][2];
 extern Color_RGBA8 D_8910A860;
 extern Color_RGBA8 D_8910A86C[2][2];
-extern unk_D_8006FF00 D_80064C5C[];
+extern SpeciesInfo D_80064C5C[];
 extern char D_8910DBCC[];
 extern char D_8910DBD8[];
 extern char D_8910DBDC[];
@@ -56,60 +55,57 @@ void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
 void Font_SetColorForFlags(s32);
 void func_89101238(s32, s32, s8*, s32, s32);
 
-s32 Particle_Field50_SetXZFromField7C_09BB4(void);
+s32 Window_DrawAnimatedFrame(void);
 void func_8002C5A4(s32, s32, s32);
 void Window_DrawFrame(s8*);
 void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
 void ScrollList_DrawScrollArrows(s8*, s32, s32, s32, s32);
 void ScrollList_DrawItems(s8*, s32, s32, s32, s8*);
 void LabPCList_DrawDetailColumns(s8*, s32, s32, s32);
-void func_89105E70(s8*, s32);
-void LabPCList_DrawPopupMenu(s8*, s32);
-void LabPCList_DrawLevelInputWindow(s8*);
-void LabPCList_DrawTypeFilter(s8*);
-void LabPCList_DrawMoveFilter(s8*);
+void LabPCList_DrawPopupMenu(LabPopupMenu*, s32);
+void LabPCList_DrawLevelInputWindow(LabLevelInputWindow*);
 void TextBox_Draw(s8*);
 extern u8 D_8007356C[];
 extern Gfx D_80060270[];
 extern Color_RGBA8 D_8910A88C;
 void LabPCList_DrawRowCursor(s8*, s32, s32);
-void LabPCList_DrawPageHint(s8*);
+void LabPCList_DrawPageHint(LabPCListScreen*);
 void func_89100688(s8*);
-void LabPCList_DrawHeaderCursor(s8*);
+void LabPCList_DrawHeaderCursor(LabPCListScreen*);
 /**
  * Draws the lab PC list screen: page hint, column headers and rows.
  * Seen in play (2026-11-12): the いちらん list with the page hint, column headers and rows.
  */
-void LabPCList_DrawListScreen(s8* arg0) {
+void LabPCList_DrawListScreen(LabPCListScreen* arg0) {
     s32 sel;
     s32 y;
     s32 flags[2]; // FAKE (only [0] is used; has to live on the stack)
 
-    if (Particle_Field50_SetXZFromField7C_09BB4() != 0) {
+    if (Window_DrawAnimatedFrame() != 0) {
         return;
     }
-    func_8002C5A4(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) - 0xA, 0x1F4);
-    Window_DrawFrame(arg0 + 0x4C);
-    Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x23, M2C_FIELD(arg0, s32*, 8), D_8007356C);
+    func_8002C5A4(arg0->window.frame.x, arg0->window.frame.y - 0xA, 0x1F4);
+    Window_DrawFrame((s8*)&arg0->headerFrame);
+    Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->window.frame.y + 0x23, arg0->window.frame.width, D_8007356C);
     LabPCList_DrawPageHint(arg0);
-    ScrollList_DrawScrollArrows(arg0 + 0xB160, M2C_FIELD(arg0, s32*, 0x2C), M2C_FIELD(arg0, s32*, 0x30) - 0x10,
-                  M2C_FIELD(arg0, s32*, 0x38) + M2C_FIELD(arg0, s32*, 0x30), M2C_FIELD(arg0, s32*, 0x34));
-    y = M2C_FIELD(arg0, s32*, 0x30) + 0x16;
-    if (M2C_FIELD(arg0, s32*, 0x8C) == 0) {
-        flags[0] = ((M2C_FIELD(arg0, u32*, 0x88) != 0) ? 0x10 : 0) | 2;
+    ScrollList_DrawScrollArrows((s8*)&arg0->list, arg0->listFrame.x, arg0->listFrame.y - 0x10,
+                  arg0->listFrame.y + arg0->listFrame.height, arg0->listFrame.width);
+    y = arg0->listFrame.y + 0x16;
+    if (arg0->focus == 0) {
+        flags[0] = ((arg0->state != 0) ? 0x10 : 0) | 2;
     } else {
         flags[0] = 0;
     }
-    ScrollList_DrawItems(arg0 + 0xB160, M2C_FIELD(arg0, s32*, 0x2C), y, flags[0] | 0xFFED, arg0);
-    sel = (M2C_FIELD(arg0, s32*, 0x8C) == 1) ? (((M2C_FIELD(arg0, u32*, 0x88) != 0) ? 0x10 : 0) | 2) : 0;
-    LabPCList_DrawDetailColumns(arg0, M2C_FIELD(arg0, s32*, 0x2C), M2C_FIELD(arg0, s32*, 0x30), sel);
+    ScrollList_DrawItems((s8*)&arg0->list, arg0->listFrame.x, y, flags[0] | 0xFFED, arg0);
+    sel = (arg0->focus == 1) ? (((arg0->state != 0) ? 0x10 : 0) | 2) : 0;
+    LabPCList_DrawDetailColumns(arg0, arg0->listFrame.x, arg0->listFrame.y, sel);
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(M2C_FIELD(arg0, s32*, 0x2C), M2C_FIELD(arg0, s32*, 0x30) + 0x14, M2C_FIELD(arg0, s32*, 0x34), 2, D_8910A88C);
-    func_80029028(M2C_FIELD(arg0, s32*, 0x2C) + 0x76, M2C_FIELD(arg0, s32*, 0x30), 2, M2C_FIELD(arg0, s32*, 0x38), D_8910A88C);
-    if (M2C_FIELD(arg0, u32*, 0x88) == 0) {
-        switch (M2C_FIELD(arg0, s32*, 0x8C)) {
+    func_80029028(arg0->listFrame.x, arg0->listFrame.y + 0x14, arg0->listFrame.width, 2, D_8910A88C);
+    func_80029028(arg0->listFrame.x + 0x76, arg0->listFrame.y, 2, arg0->listFrame.height, D_8910A88C);
+    if (arg0->state == 0) {
+        switch (arg0->focus) {
             case 0:
-                LabPCList_DrawRowCursor(arg0 + 0xB160, M2C_FIELD(arg0, s32*, 0x2C), y);
+                LabPCList_DrawRowCursor((s8*)&arg0->list, arg0->listFrame.x, y);
                 break;
             case 1:
                 func_89100688(arg0);
@@ -119,45 +115,45 @@ void LabPCList_DrawListScreen(s8* arg0) {
                 break;
         }
     }
-    switch (M2C_FIELD(arg0, u32*, 0x88)) {
+    switch (arg0->state) {
         case 0:
             break;
         case 1:
-            func_89105E70(arg0 + 0x230, 2);
+            func_89105E70(&arg0->sourceSelectWindow, 2);
             break;
         case 2:
         case 3:
-            LabPCList_DrawPopupMenu(arg0 + 0x9654, 2);
+            LabPCList_DrawPopupMenu(&arg0->popup, 2);
             break;
         case 4:
-            LabPCList_DrawLevelInputWindow(arg0 + 0x9830);
+            LabPCList_DrawLevelInputWindow(&arg0->levelInputWindow);
             break;
         case 5:
-            LabPCList_DrawTypeFilter(arg0 + 0x9920);
+            LabPCList_DrawTypeFilter(&arg0->typeFilterWindow);
             break;
         case 6:
-            LabPCList_DrawMoveFilter(arg0 + 0x9B08);
+            LabPCList_DrawMoveFilter(&arg0->moveFilterWindow);
             break;
         case 7:
-            LabPCList_DrawPopupMenu(arg0 + 0x9654, 2);
+            LabPCList_DrawPopupMenu(&arg0->popup, 2);
             break;
         case 8:
-            LabPCList_DrawPopupMenu(arg0 + 0x9654, 0x10);
-            LabPCList_DrawPopupMenu(arg0 + 0x96D0, 2);
+            LabPCList_DrawPopupMenu(&arg0->popup, 0x10);
+            LabPCList_DrawPopupMenu(&arg0->subPopup, 2);
             break;
         case 9:
-            LabPCList_DrawPopupMenu(arg0 + 0x9654, 0x10);
-            LabPCList_DrawPopupMenu(arg0 + 0x96D0, 0x10);
-            LabPCList_DrawPopupMenu(arg0 + 0x974C, 2);
+            LabPCList_DrawPopupMenu(&arg0->popup, 0x10);
+            LabPCList_DrawPopupMenu(&arg0->subPopup, 0x10);
+            LabPCList_DrawPopupMenu(&arg0->subPopup2, 2);
             break;
         case 10:
-            LabPCList_DrawPopupMenu(arg0 + 0x9654, 0x10);
-            LabPCList_DrawPopupMenu(arg0 + 0x96D0, 0x10);
-            LabPCList_DrawPopupMenu(arg0 + 0x974C, 2);
+            LabPCList_DrawPopupMenu(&arg0->popup, 0x10);
+            LabPCList_DrawPopupMenu(&arg0->subPopup, 0x10);
+            LabPCList_DrawPopupMenu(&arg0->subPopup2, 2);
             break;
         case 11:
         case 12:
-            TextBox_Draw(arg0 + 0xB55C);
+            TextBox_Draw((s8*)arg0->textBox);
             break;
     }
 }
@@ -167,8 +163,8 @@ void LabPCList_DrawListScreen(s8* arg0) {
  * Seen in play (2026-11-12) in いちらん: opening レベルをきめてあつめる called this with 1; it returned 0 with
  * no level filter, and 1 once 006から100 had been applied (かいじょ is then usable).
  */
-s32 LabPCList_HasFilterFlag(s8 *arg0, s32 arg1) {
-    return (M2C_FIELD(arg0, s32 *, 0x7C) & arg1) != 0;
+s32 LabPCList_HasFilterFlag(LabPCListScreen* arg0, s32 arg1) {
+    return (arg0->activeFilters & arg1) != 0;
 }
 
 /**
@@ -176,8 +172,8 @@ s32 LabPCList_HasFilterFlag(s8 *arg0, s32 arg1) {
  * Seen in play (2026-11-12) in いちらん: choosing どく in タイプであつめる and pressing あつめる called this with
  * 2, the flag word at +0x7C went 0 -> 2, and the list then showed only フシギダネ.
  */
-void LabPCList_SetFilterFlag(s8 *arg0, s32 arg1) {
-    M2C_FIELD(arg0, s32 *, 0x7C) = (s32) (M2C_FIELD(arg0, s32 *, 0x7C) | arg1);
+void LabPCList_SetFilterFlag(LabPCListScreen* arg0, s32 arg1) {
+    arg0->activeFilters = (s32) (arg0->activeFilters | arg1);
 }
 
 /**
@@ -185,16 +181,16 @@ void LabPCList_SetFilterFlag(s8 *arg0, s32 arg1) {
  * Seen in play (2026-11-12) in いちらん: pressing かいじょ in タイプであつめる called this with 2, the flag word
  * at +0x7C went 2 -> 0, and all three party Pokémon came back.
  */
-void LabPCList_ClearFilterFlag(s8 *arg0, M2C_UNK arg1) {
-    M2C_FIELD(arg0, s32 *, 0x7C) = (s32) (M2C_FIELD(arg0, s32 *, 0x7C) & ~arg1);
+void LabPCList_ClearFilterFlag(LabPCListScreen* arg0, M2C_UNK arg1) {
+    arg0->activeFilters = (s32) (arg0->activeFilters & ~arg1);
 }
 
 /**
  * Turns off every filter flag.
  * Seen in play (2026-11-12) in いちらん: すべてのせんたくをやめる took the flag word from 0x20 to 0.
  */
-void LabPCList_ClearFilterFlags(s8 *arg0) {
-    M2C_FIELD(arg0, s32 *, 0x7C) = 0;
+void LabPCList_ClearFilterFlags(LabPCListScreen* arg0) {
+    arg0->activeFilters = 0;
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
@@ -213,26 +209,10 @@ s32 LabPCList_ToggleFilterFlag(s8 *arg0, s32 arg1)
   return temp_t7 & new_var;
 }
 
-typedef struct Ctx89101D94 {
-    /* 0x0000 */ char unk0000[0x6C];
-    /* 0x006C */ char unk6C[0xC];
-    /* 0x0078 */ s32 unk78;
-    /* 0x007C */ s32 unk7C;
-    /* 0x0080 */ char unk0080[0x9648 - 0x80];
-    /* 0x9648 */ char unk9648[0x9828 - 0x9648];
-    /* 0x9828 */ char unk9828[0x9918 - 0x9828];
-    /* 0x9918 */ char unk9918[0x9B00 - 0x9918];
-    /* 0x9B00 */ char unk9B00[0x9E58 - 0x9B00];
-    /* 0x9E58 */ char unk9E58[4];
-    /* 0x9E5C */ char unk9E5C[0xB160 - 0x9E5C];
-    /* 0xB160 */ s32 unkB160;
-    /* 0xB164 */ char unkB164[0xB1A4 - 0xB164];
-    /* 0xB1A4 */ char unkB1A4[4];
-} Ctx89101D94;
 extern s32 D_8910D990[];
-void ScrollList_SetItems(s32*, void*, void*);
-void func_80027D94(s32, void*, void*, void*);
-void func_80027D68(s32, s32);
+void ScrollList_SetItems(ScrollList*, PointerList*, u16*);
+void func_80027D94(void*, PointerList*, void*, void*);
+void func_80027D68(void*, s32);
 s32 func_891096F4();
 s32 func_89109720();
 s32 func_891097E4();
@@ -244,75 +224,46 @@ s32 func_89109960();
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): ran when OK was pressed on
  * 「どこのポケモンを いちらん するか」 with てもち chosen, and the list then showed the three party Pokémon.
  */
-M2C_UNK LabPCList_ApplyFiltersAndSort(Ctx89101D94* arg0) {
-    ScrollList_SetItems(&arg0->unkB160, arg0->unk9648, arg0->unkB1A4);
-    if (arg0->unk7C != 0) {
-        if (arg0->unk7C & 1) {
-            func_80027D94(arg0->unkB160, arg0->unk6C, func_891096F4, arg0->unk9828);
-            ScrollList_SetItems(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+M2C_UNK LabPCList_ApplyFiltersAndSort(LabPCListScreen* arg0) {
+    ScrollList_SetItems(&arg0->list, &arg0->rows, arg0->rowFlags);
+    if (arg0->activeFilters != 0) {
+        if (arg0->activeFilters & 1) {
+            func_80027D94(arg0->list.items, &arg0->filteredRows, func_891096F4, &arg0->levelFilterMin);
+            ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
-        if (arg0->unk7C & 2) {
-            func_80027D94(arg0->unkB160, arg0->unk6C, func_89109720, arg0->unk9918);
-            ScrollList_SetItems(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+        if (arg0->activeFilters & 2) {
+            func_80027D94(arg0->list.items, &arg0->filteredRows, func_89109720, &arg0->typeFilterCount);
+            ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
-        if (arg0->unk7C & 4) {
-            func_80027D94(arg0->unkB160, arg0->unk6C, func_891097E4, arg0->unk9B00);
-            ScrollList_SetItems(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+        if (arg0->activeFilters & 4) {
+            func_80027D94(arg0->list.items, &arg0->filteredRows, func_891097E4, &arg0->moveFilterMoves);
+            ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
-        if (arg0->unk7C & 8) {
-            func_80027D94(arg0->unkB160, arg0->unk6C, func_89109884, arg0->unk9E58);
-            ScrollList_SetItems(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+        if (arg0->activeFilters & 8) {
+            func_80027D94(arg0->list.items, &arg0->filteredRows, func_89109884, &arg0->unk_9E58);
+            ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
-        if (arg0->unk7C & 0x10) {
-            func_80027D94(arg0->unkB160, arg0->unk6C, func_89109898, arg0->unk9E5C);
-            ScrollList_SetItems(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+        if (arg0->activeFilters & 0x10) {
+            func_80027D94(arg0->list.items, &arg0->filteredRows, func_89109898, &arg0->sameTypeFilterCount);
+            ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
-        if (arg0->unk7C & 0x20) {
-            func_80027D94(arg0->unkB160, arg0->unk6C, func_89109960, NULL);
-            ScrollList_SetItems(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+        if (arg0->activeFilters & 0x20) {
+            func_80027D94(arg0->list.items, &arg0->filteredRows, func_89109960, NULL);
+            ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
     }
-    func_80027D68(arg0->unkB160, D_8910D990[arg0->unk78]);
+    func_80027D68(arg0->list.items, D_8910D990[arg0->sortKey]);
 }
 
 typedef struct Pair8910D910 { void* a; s32 b; } Pair8910D910;
 extern Pair8910D910 D_8910D910[];
-void LabPCList_InitPopupMenu(s8*, void*, s8*, s32, s32);
-void LabPCList_PlacePopup(s8*);
-void LabPCList_InitTypeFilter(s8*, s32, s32, s8*);
-void LabPCList_InitMoveFilter(s8*, s32, s32, s8*);
-typedef struct Ctx89101F90 {
-    /* 0x0000 */ char unk0000[0x2C];
-    /* 0x002C */ s32 x;
-    /* 0x0030 */ s32 y;
-    /* 0x0034 */ s32 dx;
-    /* 0x0038 */ s32 dy;
-    /* 0x003C */ char unk003C[0x88 - 0x3C];
-    /* 0x0088 */ s32 state;
-    /* 0x008C */ char unk008C[0x9654 - 0x8C];
-    /* 0x9654 */ s8 unk9654[0x966C - 0x9654];
-    /* 0x966C */ Rgba891024A4 color;
-    /* 0x9670 */ char unk9670[0x9680 - 0x9670];
-    /* 0x9680 */ s8 unk9680[0x96C8 - 0x9680];
-    /* 0x96C8 */ s32 posX;
-    /* 0x96CC */ s32 posY;
-    /* 0x96D0 */ char unk96D0[0x97C8 - 0x96D0];
-    /* 0x97C8 */ s8 unk97C8[0x9918 - 0x97C8];
-    /* 0x9918 */ s8 unk9918[0x9920 - 0x9918];
-    /* 0x9920 */ s8 unk9920[0x9B00 - 0x9920];
-    /* 0x9B00 */ s8 unk9B00[0x9B08 - 0x9B00];
-    /* 0x9B08 */ s8 unk9B08[0xB15C - 0x9B08];
-    /* 0xB15C */ s32 mode;
-    /* 0xB160 */ char unkB160[0xB548 - 0xB160];
-    /* 0xB548 */ s32* ranges;
-    /* 0xB54C */ char unkB54C[4];
-    /* 0xB550 */ s32 base;
-} Ctx89101F90;
+void LabPCList_InitPopupMenu(LabPopupMenu*, void*, s8*, s32, s32);
+void LabPCList_PlacePopup(LabPopupMenu*);
 
-void func_89101F90(Ctx89101F90* arg0) {
+void func_89101F90(LabPCListScreen* arg0) {
     s32 sel;
 
-    sel = arg0->ranges[arg0->mode] + arg0->base - 2;
+    sel = arg0->pageColumnStart[arg0->page] + arg0->headerCursor.cursor - 2;
     switch (sel) {
         case 0:
         case 1:
@@ -325,38 +276,33 @@ void func_89101F90(Ctx89101F90* arg0) {
         case 14:
         case 15:
             arg0->state = 3;
-            LabPCList_InitPopupMenu(arg0->unk9654, D_8910D910[sel].a, arg0->unk97C8, D_8910D910[sel].b, 0);
-            Window_SetRect(arg0->unk9680, LabPCList_GetColumnCursorX(arg0), arg0->y, 0, 0x16);
-            arg0->posX = arg0->x + arg0->dx;
-            arg0->posY = arg0->y + arg0->dy;
-            LabPCList_PlacePopup(arg0->unk9654);
-            arg0->color = D_8910A7F4;
+            LabPCList_InitPopupMenu(&arg0->popup, D_8910D910[sel].a, (s8*)&arg0->popupItemFlags, D_8910D910[sel].b, 0);
+            Window_SetRect((s8*)&arg0->popup.anchorX, LabPCList_GetColumnCursorX(arg0), arg0->listFrame.y, 0, 0x16);
+            arg0->popup.limitX = arg0->listFrame.x + arg0->listFrame.width;
+            arg0->popup.limitY = arg0->listFrame.y + arg0->listFrame.height;
+            LabPCList_PlacePopup(&arg0->popup);
+            arg0->popup.window.frame.color = D_8910A7F4;
             break;
         case 4:
         case 5:
-            LabPCList_InitTypeFilter(arg0->unk9920, 0x81, 0x94, arg0->unk9918);
+            LabPCList_InitTypeFilter(&arg0->typeFilterWindow, 0x81, 0x94, &arg0->typeFilterCount);
             arg0->state = 5;
             break;
         case 6:
         case 7:
         case 8:
         case 9:
-            LabPCList_InitMoveFilter(arg0->unk9B08, 0x81, 0x94, arg0->unk9B00);
+            LabPCList_InitMoveFilter(&arg0->moveFilterWindow, 0x81, 0x94, arg0->moveFilterMoves);
             arg0->state = 6;
             break;
     }
 }
 
 typedef struct Str891020F8 { char s[13]; } Str891020F8;
-typedef struct Big891020F8 {
-    /* 0x0000 */ char unk0000[0x96C8];
-    /* 0x96C8 */ s32 right;
-    /* 0x96CC */ s32 bottom;
-} Big891020F8;
 void func_8000A460(s8*, s8*);
 u32 func_800566BC(s8*);
-void LabPCList_InitPopupMenu(s8*, void*, s8*, s32, s32);
-void LabPCList_PlacePopup(s8*);
+void LabPCList_InitPopupMenu(LabPopupMenu*, void*, s8*, s32, s32);
+void LabPCList_PlacePopup(LabPopupMenu*);
 void func_8910A21C(s8*, s8*, s8*, s32);
 extern s8* D_8910A890[];
 extern u8 D_8910A898[];
@@ -369,23 +315,23 @@ extern s8 D_8910E312[];
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): A on フシギダネ built the popup's
  * first row, 「フシギダネをあつめる」.
  */
-void LabPCList_FormatGatherPrompt(s8* arg0) {
-    func_8000A460(D_8910E2D0, *(s8**)D_80064C44[M2C_FIELD(M2C_FIELD(arg0, s8****, 0xB160)[0][M2C_FIELD(arg0, s32*, 0xB168)], u8*, 8)]);
-    func_8000A460(D_8910E2D0 + func_800566BC(D_8910E2D0), D_8910A890[(M2C_FIELD(arg0, s32*, 0x7C) & 8) ? 1 : 0]);
+void LabPCList_FormatGatherPrompt(LabPCListScreen* arg0) {
+    func_8000A460(D_8910E2D0, *(s8**)D_80064C44[M2C_FIELD(((PointerList*)arg0->list.items)->items[arg0->list.cursor], u8*, 8)]);
+    func_8000A460(D_8910E2D0 + func_800566BC(D_8910E2D0), D_8910A890[(arg0->activeFilters & 8) ? 1 : 0]);
     *(Str891020F8*)D_8910E312 = *(Str891020F8*)D_8910DC50;
-    func_8000A460(D_8910E2D0 + (func_800566BC(D_8910E312) + 0x42), D_8910A890[(M2C_FIELD(arg0, s32*, 0x7C) & 0x10) ? 1 : 0]);
-    LabPCList_InitPopupMenu(arg0 + 0x9654, D_8910A898, arg0 + 0x97C8, 4, 0);
-    Window_SetRect(arg0 + 0x9680, M2C_FIELD(arg0, s32*, 0x2C) + 0x26,
-                  M2C_FIELD(arg0, s32*, 0x30) + M2C_FIELD(arg0, s32*, 0xB194) - M2C_FIELD(arg0, s32*, 0xB18C) + 0x16, 0, 0x14);
-    ((Big891020F8*)arg0)->right = M2C_FIELD(arg0, s32*, 0x34) + M2C_FIELD(arg0, s32*, 0x2C);
-    ((Big891020F8*)arg0)->bottom = M2C_FIELD(arg0, s32*, 0x38) + M2C_FIELD(arg0, s32*, 0x30);
-    LabPCList_PlacePopup(arg0 + 0x9654);
-    M2C_FIELD(arg0, Rgba891024A4*, 0x966C) = D_8910A7F4;
-    M2C_FIELD(arg0, s32*, 0x88) = 7;
-    func_80027804(arg0 + 0xAFFC, arg0 + 0xAD54, 0xAA, 0);
-    func_8910A21C(arg0 + 0xAFFC, arg0 + 0xA00C, arg0 + 0x9E64, 3);
+    func_8000A460(D_8910E2D0 + (func_800566BC(D_8910E312) + 0x42), D_8910A890[(arg0->activeFilters & 0x10) ? 1 : 0]);
+    LabPCList_InitPopupMenu(&arg0->popup, D_8910A898, (s8*)arg0->popupItemFlags, 4, 0);
+    Window_SetRect((s8*)&arg0->popup.anchorX, arg0->listFrame.x + 0x26,
+                  arg0->listFrame.y + arg0->list.cursorY - arg0->list.scrollY + 0x16, 0, 0x14);
+    arg0->popup.limitX = arg0->listFrame.x + arg0->listFrame.width;
+    arg0->popup.limitY = arg0->listFrame.y + arg0->listFrame.height;
+    LabPCList_PlacePopup(&arg0->popup);
+    arg0->popup.window.frame.color = D_8910A7F4;
+    arg0->state = 7;
+    func_80027804((s8*)arg0 + 0xAFFC, (s8*)arg0 + 0xAD54, 0xAA, 0);
+    func_8910A21C((s8*)arg0 + 0xAFFC, (s8*)arg0 + 0xA00C, (s8*)arg0->unk_9E64, 3);
     if (M2C_FIELD(arg0, s32*, 0xB004) == 0) {
-        M2C_FIELD(M2C_FIELD(arg0, s8**, 0x9698), u16*, 6) |= 1;
+        M2C_FIELD(arg0->popup.menu.itemFlags, u16*, 6) |= 1;
     }
 }
 
@@ -395,45 +341,29 @@ typedef struct List89102344 {
     /* 0x08 */ s32 count;
 } List89102344;
 
-typedef struct Ctx89102344 {
-    /* 0x0000 */ char unk0000[0x8C];
-    /* 0x008C */ s32 unk8C;
-    /* 0x0090 */ char unk0090[0xB160 - 0x90];
-    /* 0xB160 */ List89102344* list;
-    /* 0xB164 */ char unkB164[4];
-    /* 0xB168 */ s32 cursor;
-    /* 0xB16C */ char unkB16C[4];
-    /* 0xB170 */ s32 unkB170;
-    /* 0xB174 */ char unkB174[0xB18C - 0xB174];
-    /* 0xB18C */ s32 unkB18C;
-    /* 0xB190 */ char unkB190[4];
-    /* 0xB194 */ s32 unkB194;
-    /* 0xB198 */ char unkB198[0xB550 - 0xB198];
-    /* 0xB550 */ s32 unkB550;
-} Ctx89102344;
 
 s32 func_8003F6AC();
 s32 ScrollList_UpdateCursor(void*);
 void ScrollList_SetCursor(void*, s32);
-void LabPCList_FormatGatherPrompt(s8*);
+void LabPCList_FormatGatherPrompt(LabPCListScreen*);
 
 /**
  * Handles list input while the cursor is on the Pokemon rows.
  * Seen in play (2026-11-12): moved the cursor over the rows.
  */
-s32 LabPCList_UpdateListCursor(Ctx89102344* arg0) {
+s32 LabPCList_UpdateListCursor(LabPCListScreen* arg0) {
     s32 ret;
 
-    if ((arg0->unkB194 == 0) && (*(u16*)(D_800603C0 + 6) & 0x800)) {
+    if ((arg0->list.cursorY == 0) && (*(u16*)(D_800603C0 + 6) & 0x800)) {
         func_8003F6AC(1);
-        arg0->unk8C = 2;
-        arg0->unkB550 = 1;
-        ScrollList_SetCursor(&arg0->list, arg0->unkB18C / arg0->unkB170);
+        arg0->focus = 2;
+        arg0->headerCursor.cursor = 1;
+        ScrollList_SetCursor(&arg0->list, arg0->list.scrollY / arg0->list.cellHeight);
         return 1;
     }
-    ret = ScrollList_UpdateCursor(&arg0->list) != 0;
+    ret = ScrollList_UpdateCursor(&arg0->list.items) != 0;
     if ((ret == 0) && (*(u16*)(D_800603C0 + 8) & 0x8000)) {
-        if ((arg0->list->count > 0) && (arg0->list->items[arg0->cursor][8] > 0) && (arg0->list->items[arg0->cursor][8] < 0x98)) {
+        if ((arg0->list.items->count > 0) && (((List89102344*)arg0->list.items)->items[arg0->list.cursor][8] > 0) && (((List89102344*)arg0->list.items)->items[arg0->list.cursor][8] < 0x98)) {
             func_8003F6AC(2);
             LabPCList_FormatGatherPrompt((s8*)arg0);
             ret = 1;
@@ -444,32 +374,12 @@ s32 LabPCList_UpdateListCursor(Ctx89102344* arg0) {
     return ret;
 }
 
-typedef struct Screen891024A4 {
-    /* 0x0000 */ char unk0[0x2C];
-    /* 0x002C */ s32 x;
-    /* 0x0030 */ s32 y;
-    /* 0x0034 */ s32 w;
-    /* 0x0038 */ s32 h;
-    /* 0x003C */ char unk3C[0x40];
-    /* 0x007C */ s32 mode;
-    /* 0x0080 */ char unk80[0x9654 - 0x80];
-    /* 0x9654 */ s8 menu[0x18];
-    /* 0x966C */ Rgba891024A4 color;
-    /* 0x9670 */ char unk9670[0x10];
-    /* 0x9680 */ s8 box[0x18];
-    /* 0x9698 */ s8 *boxItems;
-    /* 0x969C */ char unk969C[0x2C];
-    /* 0x96C8 */ s32 right;
-    /* 0x96CC */ s32 bottom;
-    /* 0x96D0 */ char unk96D0[0xF8];
-    /* 0x97C8 */ s8 items[1];
-} Screen891024A4;
 void func_8000A460(s8 *, s8 *);
 u32 func_800566BC(s8*);
-void LabPCList_InitPopupMenu(s8 *, void *, s8 *, s32, s32);
-void LabPCList_PlacePopup(s8 *);
+void LabPCList_InitPopupMenu(LabPopupMenu*, void *, s8 *, s32, s32);
+void LabPCList_PlacePopup(LabPopupMenu*);
 void Window_SetRect(s8 *, s32, s32, s32, s32);
-extern Rgba891024A4 D_8910A7F4;
+extern Color_RGBA8 D_8910A7F4;
 extern s8 *D_8910A8A8[];
 extern s8 D_8910A8B0[];
 extern u8 D_8910A8C8[];
@@ -479,32 +389,20 @@ extern s8 D_8910E358[];
  * Seen in play (2026-11-12) in いちらん: A on the ポケモン header opened the menu アイウエオじゅんにならべる,
  * ポケモンばんごうでならべる, バトルようのポケモンをあつめる, すべてのせんたくをやめる, いちらんするポケモンをえらぶ.
  */
-void LabPCList_InitSortMenu(Screen891024A4 *arg0) {
+void LabPCList_InitSortMenu(LabPCListScreen *arg0) {
     func_8000A460(D_8910E358, D_8910A8B0);
-    func_8000A460(D_8910E358 + func_800566BC(D_8910E358), D_8910A8A8[(arg0->mode & 0x20) ? 1 : 0]);
-    LabPCList_InitPopupMenu(arg0->menu, D_8910A8C8, arg0->items, 5, 0);
-    Window_SetRect(arg0->box, arg0->x + 0x26, arg0->y, 0, 0x16);
-    arg0->right = arg0->x + arg0->w;
-    arg0->bottom = arg0->y + arg0->h;
-    LabPCList_PlacePopup(arg0->menu);
-    arg0->color = D_8910A7F4;
-    if (arg0->mode == 0) {
-        M2C_FIELD(arg0->boxItems, u16 *, 6) |= 1;
+    func_8000A460(D_8910E358 + func_800566BC(D_8910E358), D_8910A8A8[(arg0->activeFilters & 0x20) ? 1 : 0]);
+    LabPCList_InitPopupMenu(&arg0->popup, D_8910A8C8, (s8*)&arg0->popupItemFlags, 5, 0);
+    Window_SetRect((s8*)&arg0->popup.anchorX, arg0->listFrame.x + 0x26, arg0->listFrame.y, 0, 0x16);
+    arg0->popup.limitX = arg0->listFrame.x + arg0->listFrame.width;
+    arg0->popup.limitY = arg0->listFrame.y + arg0->listFrame.height;
+    LabPCList_PlacePopup(&arg0->popup);
+    arg0->popup.window.frame.color = D_8910A7F4;
+    if (arg0->activeFilters == 0) {
+        M2C_FIELD(arg0->popup.menu.itemFlags, u16 *, 6) |= 1;
     }
 }
 
-typedef struct Ctx891025D8 {
-    /* 0x0000 */ char unk0000[0x88];
-    /* 0x0088 */ s32 unk88;
-    /* 0x008C */ s32 unk8C;
-    /* 0x0090 */ char unk0090[0xB188 - 0x90];
-    /* 0xB188 */ s16 unkB188;
-    /* 0xB18A */ char unkB18A[0xB1A0 - 0xB18A];
-    /* 0xB1A0 */ s32 unkB1A0;
-    /* 0xB1A4 */ char unkB1A4[0xB54C - 0xB1A4];
-    /* 0xB54C */ s32 unkB54C;
-    /* 0xB550 */ s32 unkB550;
-} Ctx891025D8;
 s32 func_8002B390(s32*);
 
 /**
@@ -512,33 +410,33 @@ s32 func_8002B390(s32*);
  * Seen in play (2026-11-12) in いちらん: R moved the focus to the column headers, and D-Left/D-Right
  * moved the highlight between ニックネーム, ID, おや and ばしょ while this ran.
  */
-s32 LabPCList_UpdateHeaderCursor(Ctx891025D8* arg0) {
+s32 LabPCList_UpdateHeaderCursor(LabPCListScreen* arg0) {
     s32 ret = 0;
     s32 button;
 
-    button = func_8002B390(&arg0->unkB54C);
+    button = func_8002B390(&arg0->headerCursor.controller);
     if (button != 0) {
-        if ((button == 0x400) && (arg0->unkB550 == 1)) {
+        if ((button == 0x400) && (arg0->headerCursor.cursor == 1)) {
             func_8003F6AC(1);
-            arg0->unk8C = 0;
-            arg0->unkB1A0 = 8; arg0->unkB188 = 0x400; // FAKE: both stores must share one source line (IDO schedules by line)
+            arg0->focus = 0;
+            arg0->list.repeatTimer = 8; arg0->list.inputDirection = 0x400; // FAKE: both stores must share one source line (IDO schedules by line)
             ret = 1;
         } else {
-            arg0->unk8C = (arg0->unkB550 < 2) ? 2 : 1;
+            arg0->focus = (arg0->headerCursor.cursor < 2) ? 2 : 1;
             ret = 1;
         }
     } else if (*(u16*)(D_800603C0 + 8) & 0x8000) {
-        if (arg0->unkB550 == 0) {
+        if (arg0->headerCursor.cursor == 0) {
             func_8003F6AC(3);
             ret = -1;
-        } else if (arg0->unkB550 == 1) {
+        } else if (arg0->headerCursor.cursor == 1) {
             func_8003F6AC(2);
-            LabPCList_InitSortMenu((Screen891024A4*)arg0);
+            LabPCList_InitSortMenu((LabPCListScreen*)arg0);
             ret = 1;
-            arg0->unk88 = 2;
+            arg0->state = 2;
         } else {
             func_8003F6AC(2);
-            func_89101F90((Ctx89101F90*)arg0);
+            func_89101F90((LabPCListScreen*)arg0);
             ret = 1;
         }
     }
@@ -550,18 +448,18 @@ s32 LabPCList_UpdateHeaderCursor(Ctx891025D8* arg0) {
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): was running while browsing;
  * C-Right turned the detail page from ページおくり1/3 to 2/3 (the move columns).
  */
-s32 LabPCList_UpdateBrowse(Ctx89100294* arg0) {
+s32 LabPCList_UpdateBrowse(LabPCListScreen* arg0) {
     s32 done = FALSE;
     s32 result;
     u16 buttons;
 
-    switch (arg0->unk8C) {
+    switch (arg0->focus) {
         case 0:
-            result = LabPCList_UpdateListCursor((Ctx89102344*)arg0);
+            result = LabPCList_UpdateListCursor((LabPCListScreen*)arg0);
             break;
         case 1:
         case 2:
-            result = LabPCList_UpdateHeaderCursor((Ctx891025D8*)arg0);
+            result = LabPCList_UpdateHeaderCursor((LabPCListScreen*)arg0);
             break;
     }
     if (result == -1) {
@@ -573,54 +471,53 @@ s32 LabPCList_UpdateBrowse(Ctx89100294* arg0) {
             done = TRUE;
         } else if (buttons & 2) {
             func_8003F6AC(2);
-            if (arg0->mode == 0) {
-                arg0->mode += 3;
+            if (arg0->page == 0) {
+                arg0->page += 3;
             }
-            arg0->mode--;
+            arg0->page--;
             func_89100294(arg0);
         } else if (buttons & 1) {
             func_8003F6AC(2);
-            if (arg0->mode >= 2) {
-                arg0->mode -= 3;
+            if (arg0->page >= 2) {
+                arg0->page -= 3;
             }
-            arg0->mode++;
+            arg0->page++;
             func_89100294(arg0);
         } else if (buttons & 0x20) {
-            if (arg0->unk8C != 0) {
+            if (arg0->focus != 0) {
                 func_8003F6AC(2);
-                arg0->unk8C = 0;
+                arg0->focus = 0;
             }
-        } else if ((buttons & 0x10) && (arg0->unk8C != 1)) {
+        } else if ((buttons & 0x10) && (arg0->focus != 1)) {
             func_8003F6AC(2);
-            arg0->unk8C = 1;
-            arg0->unkB550 = 2;
+            arg0->focus = 1;
+            arg0->headerCursor.cursor = 2;
         }
     }
     return done;
 }
 
 M2C_UNK LabPCList_ApplyFiltersAndSort();
-s32 func_89106254(s32);                             /* extern */
 M2C_UNK func_89109C6C(s32, s32);                    /* extern */
 /**
  * Handles the window that chooses which boxes to list.
  * Seen in play (2026-11-12): ran the 「どこのポケモンを いちらん するか えらんでください。」 window (てもち / ゲームボーイのボックス /
  * 64カセットのボックス, OK).
  */
-s32 LabPCList_UpdateSourceSelect(s8 *arg0)
+s32 LabPCList_UpdateSourceSelect(LabPCListScreen* arg0)
 {
   s8 *new_var2; // FAKE: permuter temp
   s32 temp_v0;
   s8 *new_var; // FAKE: permuter temp
-  temp_v0 = func_89106254(arg0 + 0x230);
-  new_var2 = arg0 + 0x9648;
+  temp_v0 = func_89106254(&arg0->sourceSelectWindow);
+  new_var2 = (s8*)&arg0->rows;
   if (temp_v0 == (-1))
   {
     goto block_4;
   }
   if (temp_v0 == 1)
   {
-    new_var = arg0 + 0x420;
+    new_var = (s8*)&arg0->sourceMatrix;
     func_89109C6C(new_var2, new_var);
     LabPCList_ApplyFiltersAndSort(arg0);
     *((s32 *) (((s8 *) arg0) + 0x88)) = 0;
@@ -633,8 +530,6 @@ s32 LabPCList_UpdateSourceSelect(s8 *arg0)
 
 typedef struct Sub89102930 { char unk00[0x10]; s32 unk10; char unk14[0xC]; } Sub89102930; // 0x20
 typedef struct Item89102930 { char unk00[4]; s32 unk04; char unk08[8]; Sub89102930* subs; char unk14[4]; s32 subCount; char unk1C[8]; } Item89102930; // 0x24
-typedef struct Slot89102930 { s32 unk00; s32 unk04; char unk08[0x14]; } Slot89102930; // 0x1C
-typedef struct Ctx89102930 { char unk0000[0x9E68]; Slot89102930 slots[3]; } Ctx89102930;
 s32 func_89102930(arg0) s8* arg0; {
     s32 flags = 0;
     s32 i;
@@ -654,7 +549,7 @@ s32 func_89102930(arg0) s8* arg0; {
         }
     }
     for (i = 0; i < 3; i++) {
-        if (((Ctx89102930*)arg0)->slots[i].unk00 != 0 && ((Ctx89102930*)arg0)->slots[i].unk04 != 0) {
+        if (((LabPCListScreen*)arg0)->unk_9E68[i].unk00 != 0 && ((LabPCListScreen*)arg0)->unk_9E68[i].unk04 != 0) {
             if (i == 0 || i == 1) {
                 flags |= 2;
             } else {
@@ -671,7 +566,7 @@ M2C_UNK func_80022188(s32);                         /* extern */
 M2C_UNK func_800230C4(s32);                         /* extern */
 M2C_UNK func_800243B8();                            /* extern */
 M2C_UNK func_8002D7D4(s32);                         /* extern */
-void LabPCList_DrawListScreen(s8*);
+void LabPCList_DrawListScreen(LabPCListScreen*);
 s32 func_89102930();                                /* extern */
 M2C_UNK func_89109D14(s32);                         /* extern */
 extern s32 D_8910E37C;

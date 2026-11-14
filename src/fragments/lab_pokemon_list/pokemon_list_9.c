@@ -7,34 +7,34 @@ extern Gfx D_8910D028[];
 
 #include "m2c_macros.h"
 
-s32 LabPCList_CompareByLevelAsc(unk_func_88316128* arg0, unk_func_88316128* arg1);
-s32 LabPCList_CompareByLevelDesc(unk_func_88316128* arg0, unk_func_88316128* arg1);
-s32 LabPCList_CompareByHpAsc(unk_func_88316128* arg0, unk_func_88316128* arg1);
-s32 LabPCList_CompareByHpDesc(unk_func_88316128* arg0, unk_func_88316128* arg1);
-s32 LabPCList_CompareByAttackAsc(unk_func_88316128* arg0, unk_func_88316128* arg1);
-s32 LabPCList_CompareByAttackDesc(unk_func_88316128* arg0, unk_func_88316128* arg1);
-s32 LabPCList_CompareByDefenseAsc(unk_func_88316128* arg0, unk_func_88316128* arg1);
-s32 LabPCList_CompareByDefenseDesc(unk_func_88316128* arg0, unk_func_88316128* arg1);
-s32 LabPCList_CompareBySpeedAsc(unk_func_88316128* arg0, unk_func_88316128* arg1);
-s32 LabPCList_CompareBySpeedDesc(unk_func_88316128* arg0, unk_func_88316128* arg1);
-s32 LabPCList_CompareBySpecialAsc(unk_func_88316128* arg0, unk_func_88316128* arg1);
-s32 LabPCList_CompareBySpecialDesc(unk_func_88316128* arg0, unk_func_88316128* arg1);
-s32 LabPCList_CompareById(unk_func_88316128* arg0, unk_func_88316128* arg1);
-s32 LabPCList_CompareByNickname(unk_func_88316128* arg0, unk_func_88316128* arg1);
-s32 LabPCList_CompareBySpeciesRawId(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_0CC* arg1);
-int LabPCList_FilterByLevelRange(unk_func_8830867C_02C_0CC* a0, u8* arg1);
-s32 LabPCList_FilterByAnyType(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_C54_01C* a1);
-s32 LabPCList_FilterByAnyMove(unk_func_8830867C_02C_0CC* a0, unk_func_8830867C_02C_C54_024* a1);
-s32 LabPCList_FilterBySpeciesId(unk_func_8830867C_02C_0CC* arg0, s32* arg1);
-s32 LabPCList_FilterByExactTypePair(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_C54_014* a1);
+s32 LabPCList_CompareByLevelAsc(LabMonEntry* arg0, LabMonEntry* arg1);
+s32 LabPCList_CompareByLevelDesc(LabMonEntry* arg0, LabMonEntry* arg1);
+s32 LabPCList_CompareByHpAsc(LabMonEntry* arg0, LabMonEntry* arg1);
+s32 LabPCList_CompareByHpDesc(LabMonEntry* arg0, LabMonEntry* arg1);
+s32 LabPCList_CompareByAttackAsc(LabMonEntry* arg0, LabMonEntry* arg1);
+s32 LabPCList_CompareByAttackDesc(LabMonEntry* arg0, LabMonEntry* arg1);
+s32 LabPCList_CompareByDefenseAsc(LabMonEntry* arg0, LabMonEntry* arg1);
+s32 LabPCList_CompareByDefenseDesc(LabMonEntry* arg0, LabMonEntry* arg1);
+s32 LabPCList_CompareBySpeedAsc(LabMonEntry* arg0, LabMonEntry* arg1);
+s32 LabPCList_CompareBySpeedDesc(LabMonEntry* arg0, LabMonEntry* arg1);
+s32 LabPCList_CompareBySpecialAsc(LabMonEntry* arg0, LabMonEntry* arg1);
+s32 LabPCList_CompareBySpecialDesc(LabMonEntry* arg0, LabMonEntry* arg1);
+s32 LabPCList_CompareById(LabMonEntry* arg0, LabMonEntry* arg1);
+s32 LabPCList_CompareByNickname(LabMonEntry* arg0, LabMonEntry* arg1);
+s32 LabPCList_CompareBySpeciesRawId(LabMonEntry* arg0, LabMonEntry* arg1);
+int LabPCList_FilterByLevelRange(LabMonEntry* a0, u8* arg1);
+s32 LabPCList_FilterByAnyType(LabMonEntry* arg0, unk_func_8830867C_02C_C54_01C* a1);
+s32 LabPCList_FilterByAnyMove(LabMonEntry* a0, unk_func_8830867C_02C_C54_024* a1);
+s32 LabPCList_FilterBySpeciesId(LabMonEntry* arg0, s32* arg1);
+s32 LabPCList_FilterByExactTypePair(LabMonEntry* arg0, unk_func_8830867C_02C_C54_014* a1);
 
-s32 LabPCList_CompareByPointer(unk_func_88316128* arg0, unk_func_88316128* arg1);
+s32 LabPCList_CompareByPointer(LabMonEntry* arg0, LabMonEntry* arg1);
 
-s32 func_891091C0(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_0CC* arg1) {
-    s32 var_v1 = M2C_FIELD(arg0->unk_00[0], s32*, 0xC) - M2C_FIELD(arg1->unk_00[0], s32*, 0xC);
+s32 func_891091C0(LabMonEntry* arg0, LabMonEntry* arg1) {
+    s32 var_v1 = arg0->unk_00->unk_00->unk_0C - arg1->unk_00->unk_00->unk_0C;
 
     if (var_v1 == 0) {
-        var_v1 = (s32)arg0->unk_00[1] - (s32)arg1->unk_00[1];
+        var_v1 = arg0->unk_00->unk_04 - arg1->unk_00->unk_04;
         if (var_v1 == 0) {
             var_v1 = arg0->unk_04 - arg1->unk_04;
         }
@@ -43,8 +43,8 @@ s32 func_891091C0(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_0CC* ar
 }
 
 /** List comparison: level, ascending. */
-s32 LabPCList_CompareByLevelAsc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
-    s32 var_v0 = arg0->unk_2C - arg1->unk_2C;
+s32 LabPCList_CompareByLevelAsc(LabMonEntry* arg0, LabMonEntry* arg1) {
+    s32 var_v0 = arg0->mon.level - arg1->mon.level;
     s32 ret;
 
     if (var_v0 != 0) {
@@ -56,8 +56,8 @@ s32 LabPCList_CompareByLevelAsc(unk_func_88316128* arg0, unk_func_88316128* arg1
 }
 
 /** List comparison: level, descending. */
-s32 LabPCList_CompareByLevelDesc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
-    s32 var_v0 = arg1->unk_2C - arg0->unk_2C;
+s32 LabPCList_CompareByLevelDesc(LabMonEntry* arg0, LabMonEntry* arg1) {
+    s32 var_v0 = arg1->mon.level - arg0->mon.level;
     s32 ret;
 
     if (var_v0 != 0) {
@@ -69,8 +69,8 @@ s32 LabPCList_CompareByLevelDesc(unk_func_88316128* arg0, unk_func_88316128* arg
 }
 
 /** List comparison: HP, ascending. */
-s32 LabPCList_CompareByHpAsc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
-    s32 var_v0 = arg0->unk_2E - arg1->unk_2E;
+s32 LabPCList_CompareByHpAsc(LabMonEntry* arg0, LabMonEntry* arg1) {
+    s32 var_v0 = arg0->mon.maxHp - arg1->mon.maxHp;
     s32 ret;
 
     if (var_v0 != 0) {
@@ -82,8 +82,8 @@ s32 LabPCList_CompareByHpAsc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
 }
 
 /** List comparison: HP, descending. */
-s32 LabPCList_CompareByHpDesc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
-    s32 var_v0 = arg1->unk_2E - arg0->unk_2E;
+s32 LabPCList_CompareByHpDesc(LabMonEntry* arg0, LabMonEntry* arg1) {
+    s32 var_v0 = arg1->mon.maxHp - arg0->mon.maxHp;
     s32 ret;
 
     if (var_v0 != 0) {
@@ -95,8 +95,8 @@ s32 LabPCList_CompareByHpDesc(unk_func_88316128* arg0, unk_func_88316128* arg1) 
 }
 
 /** List comparison: Attack, ascending. */
-s32 LabPCList_CompareByAttackAsc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
-    s32 var_v0 = arg0->unk_30 - arg1->unk_30;
+s32 LabPCList_CompareByAttackAsc(LabMonEntry* arg0, LabMonEntry* arg1) {
+    s32 var_v0 = arg0->mon.attack - arg1->mon.attack;
     s32 ret;
 
     if (var_v0 != 0) {
@@ -108,8 +108,8 @@ s32 LabPCList_CompareByAttackAsc(unk_func_88316128* arg0, unk_func_88316128* arg
 }
 
 /** List comparison: Attack, descending. */
-s32 LabPCList_CompareByAttackDesc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
-    s32 var_v0 = arg1->unk_30 - arg0->unk_30;
+s32 LabPCList_CompareByAttackDesc(LabMonEntry* arg0, LabMonEntry* arg1) {
+    s32 var_v0 = arg1->mon.attack - arg0->mon.attack;
     s32 ret;
 
     if (var_v0 != 0) {
@@ -121,8 +121,8 @@ s32 LabPCList_CompareByAttackDesc(unk_func_88316128* arg0, unk_func_88316128* ar
 }
 
 /** List comparison: Defense, ascending. */
-s32 LabPCList_CompareByDefenseAsc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
-    s32 var_v0 = arg0->unk_32 - arg1->unk_32;
+s32 LabPCList_CompareByDefenseAsc(LabMonEntry* arg0, LabMonEntry* arg1) {
+    s32 var_v0 = arg0->mon.defense - arg1->mon.defense;
     s32 ret;
 
     if (var_v0 != 0) {
@@ -134,8 +134,8 @@ s32 LabPCList_CompareByDefenseAsc(unk_func_88316128* arg0, unk_func_88316128* ar
 }
 
 /** List comparison: Defense, descending. */
-s32 LabPCList_CompareByDefenseDesc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
-    s32 var_v0 = arg1->unk_32 - arg0->unk_32;
+s32 LabPCList_CompareByDefenseDesc(LabMonEntry* arg0, LabMonEntry* arg1) {
+    s32 var_v0 = arg1->mon.defense - arg0->mon.defense;
     s32 ret;
 
     if (var_v0 != 0) {
@@ -147,8 +147,8 @@ s32 LabPCList_CompareByDefenseDesc(unk_func_88316128* arg0, unk_func_88316128* a
 }
 
 /** List comparison: Speed, ascending. */
-s32 LabPCList_CompareBySpeedAsc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
-    s32 var_v0 = arg0->unk_34 - arg1->unk_34;
+s32 LabPCList_CompareBySpeedAsc(LabMonEntry* arg0, LabMonEntry* arg1) {
+    s32 var_v0 = arg0->mon.speed - arg1->mon.speed;
     s32 ret;
 
     if (var_v0 != 0) {
@@ -160,8 +160,8 @@ s32 LabPCList_CompareBySpeedAsc(unk_func_88316128* arg0, unk_func_88316128* arg1
 }
 
 /** List comparison: Speed, descending. */
-s32 LabPCList_CompareBySpeedDesc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
-    s32 var_v0 = arg1->unk_34 - arg0->unk_34;
+s32 LabPCList_CompareBySpeedDesc(LabMonEntry* arg0, LabMonEntry* arg1) {
+    s32 var_v0 = arg1->mon.speed - arg0->mon.speed;
     s32 ret;
 
     if (var_v0 != 0) {
@@ -173,8 +173,8 @@ s32 LabPCList_CompareBySpeedDesc(unk_func_88316128* arg0, unk_func_88316128* arg
 }
 
 /** List comparison: Special, ascending. */
-s32 LabPCList_CompareBySpecialAsc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
-    s32 var_v0 = arg0->unk_36 - arg1->unk_36;
+s32 LabPCList_CompareBySpecialAsc(LabMonEntry* arg0, LabMonEntry* arg1) {
+    s32 var_v0 = arg0->mon.special - arg1->mon.special;
     s32 ret;
 
     if (var_v0 != 0) {
@@ -186,8 +186,8 @@ s32 LabPCList_CompareBySpecialAsc(unk_func_88316128* arg0, unk_func_88316128* ar
 }
 
 /** List comparison: Special, descending. */
-s32 LabPCList_CompareBySpecialDesc(unk_func_88316128* arg0, unk_func_88316128* arg1) {
-    s32 var_v0 = arg1->unk_36 - arg0->unk_36;
+s32 LabPCList_CompareBySpecialDesc(LabMonEntry* arg0, LabMonEntry* arg1) {
+    s32 var_v0 = arg1->mon.special - arg0->mon.special;
     s32 ret;
 
     if (var_v0 != 0) {
@@ -199,8 +199,8 @@ s32 LabPCList_CompareBySpecialDesc(unk_func_88316128* arg0, unk_func_88316128* a
 }
 
 /** List comparison: by ID. */
-s32 LabPCList_CompareById(unk_func_88316128* arg0, unk_func_88316128* arg1) {
-    s32 var_v0 = arg0->unk_16 - arg1->unk_16;
+s32 LabPCList_CompareById(LabMonEntry* arg0, LabMonEntry* arg1) {
+    s32 var_v0 = arg0->mon.otId - arg1->mon.otId;
     s32 ret;
 
     if (var_v0 != 0) {
@@ -211,7 +211,7 @@ s32 LabPCList_CompareById(unk_func_88316128* arg0, unk_func_88316128* arg1) {
     return ret;
 }
 
-s32 func_89109580(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_0CC* arg1) {
+s32 func_89109580(LabMonEntry* arg0, LabMonEntry* arg1) {
     return func_891091C0(arg0, arg1);
 }
 
@@ -219,11 +219,11 @@ s32 func_89109580(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_0CC* ar
  * Seen in play (2026-11-12) in いちらん: ran when the list was sorted from the おや (OT) column's
  * popup.
  */
-s32 LabPCList_CompareByOtName(unk_func_88316128* arg0, unk_func_88316128* arg1) {
+s32 LabPCList_CompareByOtName(LabMonEntry* arg0, LabMonEntry* arg1) {
     s32 var_v0;
     s32 ret;
 
-    var_v0 = Text_CompareGlyphCodes((u8*)arg0 + 0x48, (u8*)arg1 + 0x48);
+    var_v0 = Text_CompareGlyphCodes(arg0->mon.otName, arg1->mon.otName);
     if (var_v0 != 0) {
         ret = var_v0;
     } else {
@@ -233,11 +233,11 @@ s32 LabPCList_CompareByOtName(unk_func_88316128* arg0, unk_func_88316128* arg1) 
 }
 
 /** List comparison: by nickname. */
-s32 LabPCList_CompareByNickname(unk_func_88316128* arg0, unk_func_88316128* arg1) {
+s32 LabPCList_CompareByNickname(LabMonEntry* arg0, LabMonEntry* arg1) {
     s32 var_v0;
     s32 ret;
 
-    var_v0 = Text_CompareGlyphCodes(&arg0->unk_38, &arg1->unk_38);
+    var_v0 = Text_CompareGlyphCodes(arg0->mon.nickname, arg1->mon.nickname);
     if (var_v0 != 0) {
         ret = var_v0;
     } else {
@@ -262,14 +262,14 @@ s32 func_89109638(u8* arg0, u8* arg1) {
     if (ret != 0) {
         var_v1 = ret;
     } else {
-        var_v1 = LabPCList_CompareByPointer((unk_func_88316128*)arg0, (unk_func_88316128*)arg1);
+        var_v1 = LabPCList_CompareByPointer((LabMonEntry*)arg0, (LabMonEntry*)arg1);
     }
     return var_v1;
 }
 
 /** List comparison: by raw species ID. */
-s32 LabPCList_CompareBySpeciesRawId(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_0CC* arg1) {
-    s32 var_v0 = *(u8*)&arg0->unk_08 - *(u8*)&arg1->unk_08;
+s32 LabPCList_CompareBySpeciesRawId(LabMonEntry* arg0, LabMonEntry* arg1) {
+    s32 var_v0 = arg0->mon.species.id - arg1->mon.species.id;
     s32 ret;
 
     if (var_v0 != 0) {
@@ -281,19 +281,19 @@ s32 LabPCList_CompareBySpeciesRawId(unk_func_8830867C_02C_0CC* arg0, unk_func_88
 }
 
 /** List filter: keeps entries whose level is in a range. */
-int LabPCList_FilterByLevelRange(unk_func_8830867C_02C_0CC* a0, u8* arg1) {
-    unk_func_88316214* arg0 = a0;
-    return (arg0->unk_2C >= arg1[0]) && (arg1[1] >= arg0->unk_2C);
+int LabPCList_FilterByLevelRange(LabMonEntry* a0, u8* arg1) {
+    LabMonEntry* arg0 = a0;
+    return (arg0->mon.level >= arg1[0]) && (arg1[1] >= arg0->mon.level);
 }
 
 /** List filter: keeps entries with any of the given types. */
-s32 LabPCList_FilterByAnyType(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_C54_01C* a1) {
+s32 LabPCList_FilterByAnyType(LabMonEntry* arg0, unk_func_8830867C_02C_C54_01C* a1) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 i;
     s32 j;
     s32 var_v1;
     unk_func_8830867C_02C_C54_01C* arg1 = a1;
-    s32 idx = *(u8*)&arg0->unk_08 - 1;
+    s32 idx = arg0->mon.species.id - 1;
     u8 spC[2];
 
     spC[0] = gSpeciesData[idx].type1;
@@ -321,16 +321,16 @@ s32 LabPCList_FilterByAnyType(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C
 }
 
 /** List filter: keeps entries that know any of the given moves. */
-s32 LabPCList_FilterByAnyMove(unk_func_8830867C_02C_0CC* a0, unk_func_8830867C_02C_C54_024* a1) {
-    unk_func_88316304* arg0 = a0;
+s32 LabPCList_FilterByAnyMove(LabMonEntry* a0, unk_func_8830867C_02C_C54_024* a1) {
+    LabMonEntry* arg0 = a0;
     unk_func_8830867C_02C_C54_024* arg1 = a1;
     s32 i;
     s32 j;
-    s32 temp_v0 = BattleMon_CountMoves(&arg0->unk_08);
+    s32 temp_v0 = BattleMon_CountMoves(&arg0->mon);
 
     for (i = 0; i < arg1->unk_04; i++) {
         for (j = 0; j < temp_v0; j++) {
-            if (arg1->unk_00[i] == arg0->unk_11[j]) {
+            if (arg1->unk_00[i] == arg0->mon.moves[j]) {
                 break;
             }
         }
@@ -344,18 +344,18 @@ s32 LabPCList_FilterByAnyMove(unk_func_8830867C_02C_0CC* a0, unk_func_8830867C_0
 }
 
 /** List filter: keeps entries of the given species. */
-s32 LabPCList_FilterBySpeciesId(unk_func_8830867C_02C_0CC* arg0, s32* arg1) {
-    return *(u8*)&arg0->unk_08 == *arg1;
+s32 LabPCList_FilterBySpeciesId(LabMonEntry* arg0, s32* arg1) {
+    return arg0->mon.species.id == *arg1;
 }
 
 /** List filter: keeps entries with exactly the given pair of types. */
-s32 LabPCList_FilterByExactTypePair(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_C54_014* a1) {
+s32 LabPCList_FilterByExactTypePair(LabMonEntry* arg0, unk_func_8830867C_02C_C54_014* a1) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 i;
     s32 j;
     s32 var_v1;
     unk_func_8830867C_02C_C54_014* arg1 = a1;
-    s32 idx = *(u8*)&arg0->unk_08 - 1;
+    s32 idx = arg0->mon.species.id - 1;
     s32 sp8[2];
 
     sp8[0] = gSpeciesData[idx].type1;

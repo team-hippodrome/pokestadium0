@@ -4,7 +4,7 @@
 // Declared here instead of in a header: the callers of these disagree on their types.
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32);
 M2C_UNK Particle_ApplyMotionStep(s8 *);
-M2C_UNK Particle_SetUnkA6(s8 *, M2C_UNK);
+M2C_UNK Particle_SetParam0(s8 *, M2C_UNK);
 M2C_UNK func_8213C9D0(s8 *);
 M2C_UNK func_821401D4(s8 *, M2C_UNK);
 M2C_UNK func_82143408(s32, M2C_UNK);
@@ -21,17 +21,17 @@ void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
+            if (Particle_DecrementParam0ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
                 ParticleMath_ScaleDirectionToLength(&arg0->motionStep, arg0->motionOffset, D_8219A880, arg0->stepMagnitude);
             }
             break;
 
         case 3:
-            Particle_Field7C_ScaleVec_0B14C(arg0, 1.5f);
+            Particle_MotionStep_ScaleVec_0B14C(arg0, 1.5f);
             if (Particle_TickDelayAndAdvanceLifecycle(arg0, 4) != 0) {
-                Particle_Field74_SetScaled_0AD8C(arg0, 10.0f);
-                Particle_FieldA6_SetS16_0BCA8(arg0, ParticleMath_ScaleDirectionToLength(&arg0->motionStep, arg0->motionOffset, D_8219A880, arg0->stepMagnitude));
+                Particle_StepMagnitude_SetScaled_0AD8C(arg0, 10.0f);
+                Particle_Param0_SetS16_0BCA8(arg0, ParticleMath_ScaleDirectionToLength(&arg0->motionStep, arg0->motionOffset, D_8219A880, arg0->stepMagnitude));
             }
             break;
 
@@ -40,7 +40,7 @@ void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0) {
             Particle_PrimR_Approach_0BAE4(arg0, 0xFF, 4);
             Particle_EnvR_Approach_0BB90(arg0, 0xFF, 8);
             Particle_EnvG_Approach_0BBF0(arg0, 0xFF, 8);
-            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
+            Particle_DecrementParam0ToZeroThenAdvance(arg0);
             break;
 
         case 5:
@@ -61,10 +61,10 @@ void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0) {
 void func_82165BC8(s32 arg0) {
     s16 sp26;
 
-    sp26 = Particle_GetUnkAC();
+    sp26 = Particle_GetSpawnIndex();
     func_821401D4(arg0, 0x3F000000);
     func_8213E14C(arg0, 0x42C80000);
-    Particle_SetUnkA6(arg0, (s16) (sp26 + 1));
+    Particle_SetParam0(arg0, (s16) (sp26 + 1));
     func_82143408(arg0, 8);
     func_82143440(arg0, 0x33);
     func_8213CB5C(arg0);
@@ -85,7 +85,7 @@ void BattleAnim_CallbackDescriptor26BurstEmitter(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
+            if (Particle_DecrementParam0ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
@@ -112,7 +112,7 @@ void BattleAnim_CallbackDescriptor26BurstEmitter(Particle* arg0) {
  */
 void BattleAnim_SetupUnusedGrowingSparkVariant(Particle* arg0) {
     f32 sp24;
-    s16 sp22 = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp22 = Particle_SpawnIndex_GetS16_0C038(arg0);
 
     sp24 = (sp22 + 15.0f) / 20.0f;
     if (sp24 >= 1.0f) {
@@ -122,12 +122,12 @@ void BattleAnim_SetupUnusedGrowingSparkVariant(Particle* arg0) {
     Particle_SetScaleScaled(arg0, sp24);
     Particle_SetScaleTarget(arg0, 8.0f * sp24);
     Particle_SetScaleStep(arg0, D_FLT_8219786C * sp24);
-    Particle_Field38_AddYScaled_08E90(arg0, 10.0f);
+    Particle_PositionOffset_AddYScaled_08E90(arg0, 10.0f);
     Particle_SetTextureFrame(arg0, 0xF);
     ParticleGfx_RecolorPrim(arg0, 0x8);
     ParticleGfx_RecolorEnv(arg0, 0x33);
     Particle_SetPrimAlpha(arg0, 0xFF);
-    Particle_FieldA6_SetS16_0BCA8(arg0, sp22 * 8);
+    Particle_Param0_SetS16_0BCA8(arg0, sp22 * 8);
     Particle_DisableRendering(arg0);
     Particle_AdvanceLifecycle(arg0);
 }

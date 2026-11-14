@@ -2,12 +2,13 @@
 /* C ported from the Stadium 1 decomp: src/fragments/particle_math/particle_math_269820.c, src/gb_save.c. */
 
 #include "gb_save.h"
+#include "menu.h"
 #include "pokemon_stats.h"
 
 // Declared here instead of in a header: the callers of these disagree on their types.
-s32 Particle_Field50_SetXZFromField7C_09BB4(s32* arg0);
-s32 Ui_GetSelectionDirection(unk_func_8002EBD8_arg0* arg0);
-s32 Ui_HandleHorizontalSelectionInput(unk_func_8002DD98_arg0* arg0);
+s32 Window_DrawAnimatedFrame(Window* arg0);
+s32 Ui_GetSelectionDirection(Controller* arg0);
+s32 Ui_HandleHorizontalSelectionInput(UiSelection* arg0);
 extern u32 D_8007360C[];
 extern u8 pad_D_80075944[];
 
@@ -15,21 +16,21 @@ extern ParticleDescriptor gDefaultParticleDescriptor;
 
 #include "m2c_macros.h"
 
-void GbSave_BuildPortSummary(unk_func_8002D860* arg0, s32 arg1);
+void GbSave_BuildPortSummary(GbSavePortSummary* arg0, s32 arg1);
 void Particle_SetVelocityXZFromRotationY(Particle* arg0);
-s32 Ui_AdjustVerticalSelection(unk_func_8002DCB8_arg0* arg0, s32 arg1);
+s32 Ui_AdjustVerticalSelection(UiSelection* arg0, s32 arg1);
 s32 Ui_HandleVerticalSelectionInput(s32 arg0);
-s32 Ui_AdjustHorizontalSelection(unk_func_8002DD98_arg0* arg0, s32 arg1);
-s32 Ui_HandleHorizontalSelectionInput(unk_func_8002DD98_arg0* arg0);
-void Ui_AdjustSteppedScrollSelection(unk_func_8002DE78_arg0* arg0);
-s32 Ui_HandleNumericSelectionInput(unk_func_8820E99C_030_030* arg0);
-s32 Ui_AdjustSteppedRangeSelection(unk_func_8002E128_arg0* arg0);
-s32 Ui_GetSelectionDirection(unk_func_8002EBD8_arg0* arg0);
+s32 Ui_AdjustHorizontalSelection(UiSelection* arg0, s32 arg1);
+s32 Ui_HandleHorizontalSelectionInput(UiSelection* arg0);
+void Ui_AdjustSteppedScrollSelection(UiRangeValue* arg0);
+s32 Ui_HandleNumericSelectionInput(UiNumberInput* arg0);
+s32 Ui_AdjustSteppedRangeSelection(UiRangeValue* arg0);
+s32 Ui_GetSelectionDirection(Controller* arg0);
 Color_RGBA8 Color_InterpolateFromGray(Color_RGBA8 arg0, f32 arg1);
 
-s32 Ui_AdjustNumericSelection(unk_func_8830867C_044_038_030* arg0, s32 arg1);
-s32 Particle_Field50_SetXZFromField7C_09BB4(s32* arg0);
-s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0);
+s32 Ui_AdjustNumericSelection(UiNumberInput* arg0, s32 arg1);
+s32 Window_DrawAnimatedFrame(Window* arg0);
+s32 Window_UpdateAnimation(Window* arg0);
 
 void func_8001AA9C(u8, u8, u8, u8);
 void func_8001AB6C(void);
@@ -114,15 +115,15 @@ void func_80027F8C(s32 arg0) {
  * Builds the display summary of a port's Game Boy save, or clears it when no
  * save is present.
  */
-void GbSave_BuildPortSummary(unk_func_8002D860* arg0, s32 arg1) {
+void GbSave_BuildPortSummary(GbSavePortSummary* arg0, s32 arg1) {
     if (GbSave_GetSaveState(arg1) != 0) {
-        arg0->unk_00 = 1;
+        arg0->isUnavailable = 1;
     } else {
-        arg0->unk_00 = 0;
-        arg0->unk_08 = GbSave_GetTrainerId(arg1);
+        arg0->isUnavailable = 0;
+        arg0->trainerId = GbSave_GetTrainerId(arg1);
         GbSave_GetPlayerName(arg1, &arg0[1]);
     }
-    arg0->unk_04 = GbSave_GetPortGame(arg1);
+    arg0->gameType = GbSave_GetPortGame(arg1);
 }
 
 typedef struct GbSaveSummary {
@@ -291,7 +292,7 @@ extern GbTexLoadFunc4 D_800734F0[];
  * screen after it, as (445, 78, 116, 112) and (79, 202, 116, 112).
  * @unverified Name guessed from the code; comment kept.
  */
-void Ui_DrawTexturedFrame(s32 x, s32 y, s32 w, s32 h, u8* arg4) {
+void Ui_DrawTexturedFrame(s32 x, s32 y, s32 w, s32 h, FrameTextures* arg4) {
     GbTexLoadFunc4 load;
     s32 x2;
     s32 y2;
@@ -306,19 +307,19 @@ void Ui_DrawTexturedFrame(s32 x, s32 y, s32 w, s32 h, u8* arg4) {
     x2 = x + w;
     y2 = y + h;
     y8 = (y + 8) << 2;
-    load = D_800734F0[M2C_FIELD(arg4, s32*, 4)];
-    load(8, 8, M2C_FIELD(arg4, u8**, 8), M2C_FIELD(arg4, s32*, 0));
+    load = D_800734F0[arg4->format];
+    load(8, 8, arg4->top, arg4->loadArg);
     gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x2 - 8U) << 2, y8, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
-    load(8, 8, M2C_FIELD(arg4, u8**, 0x14), M2C_FIELD(arg4, s32*, 0));
+    load(8, 8, arg4->right, arg4->loadArg);
     gSPTextureRectangle(gDisplayListHead++, (x2 - 8) << 2, y << 2, x2 << 2, (y2 - 8U) << 2, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
-    load(8, 8, M2C_FIELD(arg4, u8**, 0x10), M2C_FIELD(arg4, s32*, 0));
+    load(8, 8, arg4->bottom, arg4->loadArg);
     gSPTextureRectangle(gDisplayListHead++, (x + 8) << 2, (y2 - 8) << 2, x2 << 2, y2 << 2, G_TX_RENDERTILE, (w * -0x20) + 0x200, 0, 0x400, 0x400);
-    load(8, 8, M2C_FIELD(arg4, u8**, 0xC), M2C_FIELD(arg4, s32*, 0));
+    load(8, 8, arg4->left, arg4->loadArg);
     gSPTextureRectangle(gDisplayListHead++, x << 2, y8, (x + 8) << 2, y2 << 2, G_TX_RENDERTILE, 0, (h * -0x20) + 0x200, 0x400, 0x400);
 }
 
 extern Gfx D_80073450[];
-void Ui_DrawTexturedFrame(s32, s32, s32, s32, u8*);
+void Ui_DrawTexturedFrame(s32, s32, s32, s32, FrameTextures*);
 
 /**
  * Appends a call of display list D_80073450 and a gDPSetCombineMode(
@@ -346,7 +347,7 @@ extern Gfx D_80073450[];
  * main menu, as (54, 176, width 532).
  * @unverified Name guessed from the code; comment kept.
  */
-void Ui_DrawTexturedDivider(s32 x, s32 y, s32 w, u8* arg3) {
+void Ui_DrawTexturedDivider(s32 x, s32 y, s32 w, FrameTextures* arg3) {
     GbTexLoadFunc load;
     s32 pad[2]; // FAKE
     s32 x2;
@@ -357,12 +358,12 @@ void Ui_DrawTexturedDivider(s32 x, s32 y, s32 w, u8* arg3) {
     }
     x2 = x + w;
     y8 = (y + 8) << 2;
-    load = D_80073500[M2C_FIELD(arg3, s32*, 4)];
+    load = D_80073500[arg3->format];
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-    load(8, 8, M2C_FIELD(arg3, u8**, 0x10), M2C_FIELD(arg3, s32*, 0));
+    load(8, 8, arg3->bottom, arg3->loadArg);
     gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x2 - 8) << 2, y8, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
-    load(8, 8, M2C_FIELD(arg3, u8**, 0x14), M2C_FIELD(arg3, s32*, 0));
+    load(8, 8, arg3->right, arg3->loadArg);
     gSPTextureRectangle(gDisplayListHead++, (x2 - 8) << 2, y << 2, x2 << 2, y8, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
 }
 
@@ -373,7 +374,7 @@ extern GbTexLoadFunc D_80073510[];
  * at (x, y) from the textures at arg3 + 8 and arg3 + 0xC, loaded through
  * D_80073510[arg3 + 4].
  */
-void func_80029864(s32 x, s32 y, s32 h, u8* arg3) {
+void func_80029864(s32 x, s32 y, s32 h, FrameTextures* arg3) {
     GbTexLoadFunc load;
     s32 pad[2]; // FAKE
     s32 y2;
@@ -384,12 +385,12 @@ void func_80029864(s32 x, s32 y, s32 h, u8* arg3) {
     }
     y2 = y + h;
     x8 = (x + 8) << 2;
-    load = D_80073510[M2C_FIELD(arg3, s32*, 4)];
+    load = D_80073510[arg3->format];
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-    load(8, 8, M2C_FIELD(arg3, u8**, 8), M2C_FIELD(arg3, s32*, 0));
+    load(8, 8, arg3->top, arg3->loadArg);
     gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, x8, (y2 - 8) << 2, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
-    load(8, 8, M2C_FIELD(arg3, u8**, 0xC), M2C_FIELD(arg3, s32*, 0));
+    load(8, 8, arg3->left, arg3->loadArg);
     gSPTextureRectangle(gDisplayListHead++, x << 2, (y2 - 8) << 2, x8, y2 << 2, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
 }
 
@@ -629,54 +630,42 @@ void Window_DrawFrame(s32* arg0) {
     }
 }
 
-/*
- * Particle_Field7C_SetXZFromField74AngleY_0B278
- *
- * Advances a small step counter held in the object `arg0`: the counter is
- * the word at offset 0x24 and a second word at offset 0x28 receives a value
- * that depends on it.  Returns 1 or 0.
- *
- *   counter >= 11: word 0x28 = 4, return 1 (counter unchanged);
- *   counter >= 7:  word 0x28 = 3, counter + 1, return 1;
- *   counter <  4:  if counter == 0, func_8003F6AC(4, arg0) first (the
- *                  counter is re-read afterwards); then word 0x28 = 0,
- *                  counter + 1, return 1;
- *   counter 4, 5:  word 0x28 = 1, counter + 1, return 0;
- *   counter == 6:  word 0x28 = 2 (counter unchanged), return 0.
- *
- * What the counter measures is not established.
- */
 M2C_UNK func_8003F6AC();
 
-/** Sets a particle's x and z components from its angle about the y axis. */
-s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0) {
+/**
+ * Steps the open/close animation of a window: animTimer 0-3 opening (state 0, plays sound 4 at 0), 4-5 state 1,
+ * 6 open (state 2, holds); a close starts at 7 (state 3) and ends at 11 (state 4, closed).
+ * Returns 1 unless the window is (nearly) open, so callers draw what is under it.
+ * @unverified Read from the code; the timer values match the Window.animTimer play note.
+ */
+s32 Window_UpdateAnimation(Window* arg0) {
     s32 var_v1;
     s32 var_v0;
 
-    var_v0 = M2C_FIELD(arg0, s32 *, 0x24);
+    var_v0 = arg0->animTimer;
     var_v1 = 1;
     if (var_v0 >= 0xB) {
-        M2C_FIELD(arg0, s32 *, 0x28) = 4;
+        arg0->state = 4;
         return 1;
     }
     if (var_v0 >= 7) {
-        M2C_FIELD(arg0, s32 *, 0x28) = 3;
-        M2C_FIELD(arg0, s32 *, 0x24) = (s32) (var_v0 + 1);
+        arg0->state = 3;
+        arg0->animTimer = (s32) (var_v0 + 1);
     } else if (var_v0 < 4) {
         if (var_v0 == 0) {
             func_8003F6AC(4, arg0);
             var_v1 = 1;
-            var_v0 = M2C_FIELD(arg0, s32 *, 0x24);
+            var_v0 = arg0->animTimer;
         }
-        M2C_FIELD(arg0, s32 *, 0x28) = 0;
-        M2C_FIELD(arg0, s32 *, 0x24) = (s32) (var_v0 + 1);
+        arg0->state = 0;
+        arg0->animTimer = (s32) (var_v0 + 1);
     } else {
         var_v1 = 0;
         if (var_v0 < 6) {
-            M2C_FIELD(arg0, s32 *, 0x28) = 1;
-            M2C_FIELD(arg0, s32 *, 0x24) = (s32) (var_v0 + 1);
+            arg0->state = 1;
+            arg0->animTimer = (s32) (var_v0 + 1);
         } else {
-            M2C_FIELD(arg0, s32 *, 0x28) = 2;
+            arg0->state = 2;
         }
     }
     return var_v1;
@@ -686,8 +675,13 @@ extern u8 D_80073554[];
 void func_8002C1B4(s32, s32, s32, s32);
 void func_8002C5A4(); // no prototype: callers pass a fourth argument the definition ignores
 
-/** Sets a particle's x and z components from another vector in the particle. */
-s32 Particle_Field50_SetXZFromField7C_09BB4(s32* arg0) {
+/**
+ * Draws a window's frame, scaled from 16x16 up to its size while it opens (state 0) and back down
+ * while it closes (state 3), with the fill, title tab (style 0x800) and 0x1000 decoration.
+ * Returns 0 once the window is open (states 1 and 2), so callers draw the contents only then.
+ * @unverified Read from the code.
+ */
+s32 Window_DrawAnimatedFrame(Window* arg0) {
     UNUSED s32 pad1; // FAKE: unused locals that only pad the stack frame
     UNUSED s32 pad2; // FAKE
     UNUSED s32 pad3; // FAKE
@@ -701,62 +695,62 @@ s32 Particle_Field50_SetXZFromField7C_09BB4(s32* arg0) {
     s32 maxH;
     s32 t;
 
-    maxW = (arg0[2] < 0x10) ? 0x10 : arg0[2];
-    maxH = (arg0[3] < 0x10) ? 0x10 : arg0[3];
+    maxW = (arg0->frame.width < 0x10) ? 0x10 : arg0->frame.width;
+    maxH = (arg0->frame.height < 0x10) ? 0x10 : arg0->frame.height;
     ret = 1;
-    switch ((u32)arg0[10]) {
+    switch ((u32)arg0->state) {
         case 4:
             return 1;
         case 3:
-            x = arg0[0];
-            y = arg0[1];
-            t = 0xB - arg0[9];
+            x = arg0->frame.x;
+            y = arg0->frame.y;
+            t = 0xB - arg0->animTimer;
             w = ((maxW - 0x10) * t) / 4 + 0x10;
             h = ((maxH - 0x10) * t) / 4 + 0x10;
             break;
         case 0:
-            t = arg0[9] - 1;
-            x = arg0[0];
-            y = arg0[1];
+            t = arg0->animTimer - 1;
+            x = arg0->frame.x;
+            y = arg0->frame.y;
             w = ((maxW - 0x10) * t) / 4 + 0x10;
             h = ((maxH - 0x10) * t) / 4 + 0x10;
             break;
         case 1:
         case 2:
             ret = 0;
-            x = arg0[0];
-            y = arg0[1];
+            x = arg0->frame.x;
+            y = arg0->frame.y;
             h = maxH;
             w = maxW;
             break;
     }
     if (ret == 0) {
-        if (!(arg0[5] & 1)) {
-            if ((arg0[5] & 2) && (arg0[5] & 4)) {
-                Ui_FillRectPrimEnvColor(x, y, w, h, *(Color_RGBA8*)&arg0[6], *(Color_RGBA8*)&arg0[7]);
-            } else if (((u8*)&arg0[6])[3] == 0xFF) {
+        if (!(arg0->frame.style & 1)) {
+            if ((arg0->frame.style & 2) && (arg0->frame.style & 4)) {
+                Ui_FillRectPrimEnvColor(x, y, w, h, arg0->frame.color, arg0->frame.color2);
+            } else if (arg0->frame.color.a == 0xFF) {
                 gSPDisplayList(gDisplayListHead++, D_80060270);
-                func_80029028(x, y, w, h, *(Color8002A354*)&arg0[6]);
+                func_80029028(x, y, w, h, *(Color8002A354*)&arg0->frame.color);
             } else {
                 gSPDisplayList(gDisplayListHead++, D_80073480);
-                Ui_FillRectPrimColor(x, y, w, h, *(Color_RGBA8*)&arg0[6]);
+                Ui_FillRectPrimColor(x, y, w, h, arg0->frame.color);
             }
         }
     }
     Ui_DrawTexturedFrameDecal(x, y, w, h, D_80073554);
-    if (arg0[5] & 0x800) {
-        func_8002C1B4(x, y - 0x16, arg0[8], arg0[5]);
+    if (arg0->frame.style & 0x800) {
+        func_8002C1B4(x, y - 0x16, (s32)arg0->title, arg0->frame.style);
     }
-    if (arg0[5] & 0x1000) {
-        func_8002C5A4(x, y - 0xA, 0x50, arg0[5]);
+    if (arg0->frame.style & 0x1000) {
+        func_8002C5A4(x, y - 0xA, 0x50, arg0->frame.style);
     }
     return ret;
 }
 
 /** Sets a particle's x and z velocity from its rotation about the y axis. */
 void Particle_SetVelocityXZFromRotationY(Particle* arg0) {
-    Particle_Field7C_SetXZFromField74AngleY_0B278(arg0);
-    Particle_Field50_SetXZFromField7C_09BB4(arg0);
+    Window_UpdateAnimation(arg0);
+    Window_DrawAnimatedFrame(arg0);
 }
 
 /**
@@ -769,16 +763,16 @@ void Particle_SetVelocityXZFromRotationY(Particle* arg0) {
  * main menu, for windows at (411, 189, 72) and (496, 189, 72).
  * @unverified Name guessed from the code; comment kept.
  */
-void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5) {
-    M2C_FIELD(arg0, s32*, 0x24) = 0x14;
-    M2C_FIELD(arg0, s32*, 0x28) = 8;
-    M2C_FIELD(arg0, s32*, 0x2C) = 6;
-    M2C_FIELD(arg0, s32*, 0x30) = 2;
-    M2C_FIELD(arg0, s32*, 0x34) = 0;
-    Window_SetRect(arg0, arg1, arg2, arg3, 0x18);
-    M2C_FIELD(arg0, s32*, 0x14) = 1;
-    M2C_FIELD(arg0, Color_RGBA8*, 0x20) = arg4;
-    M2C_FIELD(arg0, char**, 0x38) = arg5;
+void Window_InitLabeled(LabeledButton* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5) {
+    arg0->unk_24 = 0x14;
+    arg0->fontSize = 8;
+    arg0->labelX = 6;
+    arg0->labelY = 2;
+    arg0->unk_34 = 0;
+    Window_SetRect((s8*)arg0, arg1, arg2, arg3, 0x18);
+    arg0->style = 1;
+    arg0->color = arg4;
+    arg0->label = arg5;
 }
 
 extern Color_RGBA8 D_80073520;
@@ -790,75 +784,75 @@ void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
  * main menu, for the windows set up by Window_InitLabeled.
  * @unverified Name and comment guessed from the code.
  */
-void Window_DrawLabeled(s8* arg0, s32 arg1) {
-    func_8002A32C(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC));
-    if ((M2C_FIELD(arg0, s32*, 0x10) & 8) || (arg1 & 0x10)) {
-        Ui_FillRectHighlighted(M2C_FIELD(arg0, s32*, 0) + 1, M2C_FIELD(arg0, s32*, 4) + 1, M2C_FIELD(arg0, s32*, 8) - 2, M2C_FIELD(arg0, s32*, 0xC) - 2, M2C_FIELD(arg0, Color_RGBA8*, 0x20));
+void Window_DrawLabeled(LabeledButton* arg0, s32 arg1) {
+    func_8002A32C(arg0->x, arg0->y, arg0->width, arg0->height);
+    if ((arg0->flags & 8) || (arg1 & 0x10)) {
+        Ui_FillRectHighlighted(arg0->x + 1, arg0->y + 1, arg0->width - 2, arg0->height - 2, arg0->color);
     } else if (arg1 & 2) {
-        Ui_DrawRoundedFrame(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC), D_80073520);
+        Ui_DrawRoundedFrame(arg0->x, arg0->y, arg0->width, arg0->height, D_80073520);
     }
     func_8001AB6C();
-    func_8001A384(M2C_FIELD(arg0, s32*, 0x28), M2C_FIELD(arg0, s32*, 0x34));
-    Font_SetColorForFlags(M2C_FIELD(arg0, s32*, 0x10) | arg1);
-    func_8001A944(M2C_FIELD(arg0, s32*, 0x2C) + M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 0x30) + M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 0x38));
+    func_8001A384(arg0->fontSize, arg0->unk_34);
+    Font_SetColorForFlags(arg0->flags | arg1);
+    func_8001A944(arg0->x + arg0->labelX, arg0->y + arg0->labelY, arg0->label);
     func_8001ABBC();
 }
 
-/*
- * func_8002B018
- *
- * Calls Window_SetRect(arg0, arg1, arg2, arg3, arg4), which fills the first
- * five words of the object (arg1, arg2, arg3, arg4, 0), then stores arg5 at
- * +0x24 and arg6 at +0x28.
+/**
+ * Sets up an image button: its rect (Window_SetRect, which also clears flags), the image and its width.
  */
-void func_8002B018(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
-    Window_SetRect(arg0, arg1, arg2, arg3, arg4);
-    M2C_FIELD(arg0, s32 *, 0x28) = arg6;
-    M2C_FIELD(arg0, s32 *, 0x24) = arg5;
+void func_8002B018(ImageButton* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
+    Window_SetRect((s8*)arg0, arg1, arg2, arg3, arg4);
+    arg0->image = (u8*)arg6;
+    arg0->imageWidth = arg5;
 }
 
-void func_8002B054(s8* arg0, s32 arg1) {
+/**
+ * Draws an image button. `arg1` bit 0x10 (or flags bit 3) fills it with highlightColor, else bit 2 draws a
+ * rounded frame; bits 0x12 tint the image with selectedColor instead of color.
+ */
+void func_8002B054(ImageButton* arg0, s32 arg1) {
     Color_RGBA8 color;
     Color_RGBA8* src;
 
-    func_8002A32C(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC));
-    if ((M2C_FIELD(arg0, s32*, 0x10) & 8) || (arg1 & 0x10)) {
-        Ui_FillRectHighlighted(M2C_FIELD(arg0, s32*, 0) + 1, M2C_FIELD(arg0, s32*, 4) + 1, M2C_FIELD(arg0, s32*, 8) - 2, M2C_FIELD(arg0, s32*, 0xC) - 2, M2C_FIELD(arg0, Color_RGBA8*, 0x20));
+    func_8002A32C(arg0->x, arg0->y, arg0->width, arg0->height);
+    if ((arg0->flags & 8) || (arg1 & 0x10)) {
+        Ui_FillRectHighlighted(arg0->x + 1, arg0->y + 1, arg0->width - 2, arg0->height - 2, arg0->highlightColor);
     } else if (arg1 & 2) {
-        Ui_DrawRoundedFrame(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC), D_80073520);
+        Ui_DrawRoundedFrame(arg0->x, arg0->y, arg0->width, arg0->height, D_80073520);
     }
     if (arg1 & 0x12) {
-        src = (Color_RGBA8*)(arg0 + 0x18);
+        src = &arg0->selectedColor;
     } else {
-        src = (Color_RGBA8*)(arg0 + 0x1C);
+        src = &arg0->color;
     }
     color = *src;
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
     gDPSetPrimColor(gDisplayListHead++, 0, 0, color.r, color.g, color.b, color.a);
-    Gfx_DrawTextureIa16(M2C_FIELD(arg0, s32*, 0) + 3, M2C_FIELD(arg0, s32*, 4) + 3, M2C_FIELD(arg0, s32*, 8) - 6, M2C_FIELD(arg0, s32*, 0xC) - 6, M2C_FIELD(arg0, u8**, 0x28), M2C_FIELD(arg0, s32*, 0x24), 0);
+    Gfx_DrawTextureIa16(arg0->x + 3, arg0->y + 3, arg0->width - 6, arg0->height - 6, arg0->image, arg0->imageWidth, 0);
 }
 
 /** Moves a vertical menu selection according to a d-pad direction. */
-s32 Ui_AdjustVerticalSelection(unk_func_8002DCB8_arg0* arg0, s32 arg1) {
+s32 Ui_AdjustVerticalSelection(UiSelection* arg0, s32 arg1) {
     s32 ret = 0;
 
     switch (arg1) {
         case 0x800:
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-            if (arg0->unk_04 == 0) {
-                arg0->unk_04 += arg0->unk_08;
+            if (arg0->index == 0) {
+                arg0->index += arg0->count;
             }
-            arg0->unk_04--;
+            arg0->index--;
             ret = 1;
             break;
 
         case 0x400:
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-            if (arg0->unk_04 >= (arg0->unk_08 - 1)) {
-                arg0->unk_04 -= arg0->unk_08;
+            if (arg0->index >= (arg0->count - 1)) {
+                arg0->index -= arg0->count;
             }
-            arg0->unk_04++;
+            arg0->index++;
             ret = 1;
             break;
     }
@@ -875,25 +869,25 @@ s32 Ui_HandleVerticalSelectionInput(s32 arg0) {
 }
 
 /** Moves a horizontal menu selection according to a d-pad direction. */
-s32 Ui_AdjustHorizontalSelection(unk_func_8002DD98_arg0* arg0, s32 arg1) {
+s32 Ui_AdjustHorizontalSelection(UiSelection* arg0, s32 arg1) {
     s32 ret = 0;
 
     switch (arg1) {
         case 0x200:
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-            if (arg0->unk_04 == 0) {
-                arg0->unk_04 += arg0->unk_08;
+            if (arg0->index == 0) {
+                arg0->index += arg0->count;
             }
-            arg0->unk_04--;
+            arg0->index--;
             ret = 1;
             break;
 
         case 0x100:
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-            if (arg0->unk_04 >= (arg0->unk_08 - 1)) {
-                arg0->unk_04 -= arg0->unk_08;
+            if (arg0->index >= (arg0->count - 1)) {
+                arg0->index -= arg0->count;
             }
-            arg0->unk_04++;
+            arg0->index++;
             ret = 1;
             break;
     }
@@ -902,7 +896,7 @@ s32 Ui_AdjustHorizontalSelection(unk_func_8002DD98_arg0* arg0, s32 arg1) {
 }
 
 /** Reads the repeated d-pad input and moves a horizontal menu selection. */
-s32 Ui_HandleHorizontalSelectionInput(unk_func_8002DD98_arg0* arg0) {
+s32 Ui_HandleHorizontalSelectionInput(UiSelection* arg0) {
     s32 sp1C = Input_GetRepeatedDPad() & 0xFFFF;
 
     Ui_AdjustHorizontalSelection(arg0, sp1C);
@@ -910,74 +904,74 @@ s32 Ui_HandleHorizontalSelectionInput(unk_func_8002DD98_arg0* arg0) {
 }
 
 /** Scrolls a selection in steps according to the repeated d-pad input. */
-void Ui_AdjustSteppedScrollSelection(unk_func_8002DE78_arg0* arg0) {
+void Ui_AdjustSteppedScrollSelection(UiRangeValue* arg0) {
     s32 temp_v0 = Input_GetRepeatedDPad();
-    s32 sp18 = arg0->unk_0C;
+    s32 sp18 = arg0->step;
 
     if (gPlayer1Controller->buttonDown & 0x2000) {
-        sp18 = ((arg0->unk_08 - arg0->unk_04) + 1) / 10;
+        sp18 = ((arg0->max - arg0->min) + 1) / 10;
     }
 
     switch (temp_v0) {
         case 0x800:
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-            if (arg0->unk_00 - sp18 < arg0->unk_04) {
-                arg0->unk_00 = arg0->unk_04;
+            if (arg0->value - sp18 < arg0->min) {
+                arg0->value = arg0->min;
             } else {
-                arg0->unk_00 -= sp18;
+                arg0->value -= sp18;
             }
             break;
 
         case 0x400:
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-            if (arg0->unk_08 < arg0->unk_00 + sp18) {
-                arg0->unk_00 = arg0->unk_08;
+            if (arg0->max < arg0->value + sp18) {
+                arg0->value = arg0->max;
             } else {
-                arg0->unk_00 += sp18;
+                arg0->value += sp18;
             }
             break;
     }
 }
 
 /** Changes a numeric selection according to a d-pad direction. */
-s32 Ui_AdjustNumericSelection(unk_func_8830867C_044_038_030* arg0, s32 arg1) {
+s32 Ui_AdjustNumericSelection(UiNumberInput* arg0, s32 arg1) {
     s32 var_t1;
     s32 var_a2;
     s32 i;
 
     var_a2 = 1;
 
-    for (i = arg0->unk_10; i > 0; i--) {
+    for (i = arg0->cursorDigit; i > 0; i--) {
         var_a2 *= 10;
     }
 
     switch (arg1) {
         case 0x200:
-            if (arg0->unk_10 + 1 < arg0->unk_0C) {
-                arg0->unk_10 = arg0->unk_10 + 1;
+            if (arg0->cursorDigit + 1 < arg0->digitCount) {
+                arg0->cursorDigit = arg0->cursorDigit + 1;
             }
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
             var_t1 = 1;
             break;
 
         case 0x100:
-            if (arg0->unk_10 > 0) {
-                arg0->unk_10--;
+            if (arg0->cursorDigit > 0) {
+                arg0->cursorDigit--;
             }
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
             var_t1 = 1;
             break;
 
         case 0x800:
-            if (arg0->unk_00 == arg0->unk_08) {
-                arg0->unk_00 = arg0->unk_00 - ((arg0->unk_00 / var_a2) * var_a2);
-                if (arg0->unk_00 < arg0->unk_04) {
-                    arg0->unk_00 = arg0->unk_04;
+            if (arg0->value == arg0->max) {
+                arg0->value = arg0->value - ((arg0->value / var_a2) * var_a2);
+                if (arg0->value < arg0->min) {
+                    arg0->value = arg0->min;
                 }
             } else {
-                arg0->unk_00 += var_a2;
-                if (arg0->unk_08 < arg0->unk_00) {
-                    arg0->unk_00 = arg0->unk_08;
+                arg0->value += var_a2;
+                if (arg0->max < arg0->value) {
+                    arg0->value = arg0->max;
                 }
             }
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
@@ -985,12 +979,12 @@ s32 Ui_AdjustNumericSelection(unk_func_8830867C_044_038_030* arg0, s32 arg1) {
             break;
 
         case 0x400:
-            if (arg0->unk_00 == arg0->unk_04) {
-                arg0->unk_00 = arg0->unk_08;
+            if (arg0->value == arg0->min) {
+                arg0->value = arg0->max;
             } else {
-                arg0->unk_00 -= var_a2;
-                if (arg0->unk_00 < arg0->unk_04) {
-                    arg0->unk_00 = arg0->unk_04;
+                arg0->value -= var_a2;
+                if (arg0->value < arg0->min) {
+                    arg0->value = arg0->min;
                 }
             }
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
@@ -1001,7 +995,7 @@ s32 Ui_AdjustNumericSelection(unk_func_8830867C_044_038_030* arg0, s32 arg1) {
 }
 
 /** Reads the repeated d-pad input and changes a numeric selection. */
-s32 Ui_HandleNumericSelectionInput(unk_func_8820E99C_030_030* arg0) {
+s32 Ui_HandleNumericSelectionInput(UiNumberInput* arg0) {
     s32 sp1C = Input_GetRepeatedDPad() & 0xFFFF;
 
     Ui_AdjustNumericSelection(arg0, sp1C);
@@ -1012,9 +1006,9 @@ s32 Ui_HandleNumericSelectionInput(unk_func_8820E99C_030_030* arg0) {
  * Changes a selection over a stepped range according to the repeated d-pad
  * input.
  */
-s32 Ui_AdjustSteppedRangeSelection(unk_func_8002E128_arg0* arg0) {
+s32 Ui_AdjustSteppedRangeSelection(UiRangeValue* arg0) {
     s32 sp1C = Input_GetRepeatedDPad() & 0xFFFF;
-    s32 sp18 = arg0->unk_0C;
+    s32 sp18 = arg0->step;
 
     if (sp1C != 0) {
         Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
@@ -1024,12 +1018,12 @@ s32 Ui_AdjustSteppedRangeSelection(unk_func_8002E128_arg0* arg0) {
                 sp18 *= 0xA;
 
             case 0x800:
-                if (arg0->unk_00 >= arg0->unk_08) {
-                    arg0->unk_00 = arg0->unk_04;
-                } else if (arg0->unk_08 < (arg0->unk_00 + sp18)) {
-                    arg0->unk_00 = arg0->unk_08;
+                if (arg0->value >= arg0->max) {
+                    arg0->value = arg0->min;
+                } else if (arg0->max < (arg0->value + sp18)) {
+                    arg0->value = arg0->max;
                 } else {
-                    arg0->unk_00 = arg0->unk_00 + sp18;
+                    arg0->value = arg0->value + sp18;
                 }
                 break;
 
@@ -1037,12 +1031,12 @@ s32 Ui_AdjustSteppedRangeSelection(unk_func_8002E128_arg0* arg0) {
                 sp18 *= 0xA;
 
             case 0x400:
-                if (arg0->unk_04 >= arg0->unk_00) {
-                    arg0->unk_00 = arg0->unk_08;
-                } else if ((arg0->unk_00 - sp18) < arg0->unk_04) {
-                    arg0->unk_00 = arg0->unk_04;
+                if (arg0->min >= arg0->value) {
+                    arg0->value = arg0->max;
+                } else if ((arg0->value - sp18) < arg0->min) {
+                    arg0->value = arg0->min;
                 } else {
-                    arg0->unk_00 = arg0->unk_00 - sp18;
+                    arg0->value = arg0->value - sp18;
                 }
                 break;
         }
@@ -1127,13 +1121,13 @@ void Ui_DrawNumberZeroPadded(s32 x, s32 y, s32 value, s32 digits) {
     }
 }
 
-/** Returns the direction chosen by the d-pad bits in a menu state. */
-s32 Ui_GetSelectionDirection(unk_func_8002EBD8_arg0* arg0) {
+/** Returns -1 when B was pressed, 1 when A was pressed, else 0. */
+s32 Ui_GetSelectionDirection(Controller* arg0) {
     s32 var_v1 = 0;
 
-    if (arg0->unk_08 & 0x4000) {
+    if (arg0->buttonPressed & BTN_B) {
         var_v1 = -1;
-    } else if (arg0->unk_08 & 0x8000) {
+    } else if (arg0->buttonPressed & BTN_A) {
         var_v1 = 1;
     }
 
@@ -1313,24 +1307,24 @@ extern M2C_UNK func_8002C998;
  * Seen in play (2026-11-12) in いちらん: B after using an item opened 「ないようが へんこうされています」 with
  * レポートしてやめる, レポートしないでやめる and キャンセル.
  */
-void SavePrompt_Init(s8 *arg0, s32 arg1, s32 arg2) {
+void SavePrompt_Init(SavePrompt* arg0, s32 arg1, s32 arg2) {
     s8 *sp2C;
     s8 *temp_a0;
 
-    Window_SetRect(arg0, arg1, arg2, 0xF8, 0xAE);
-    M2C_FIELD(arg0, s32 *, 0x24) = 0;
-    M2C_FIELD(arg0, s32 *, 0x20) = 0;
-    M2C_FIELD(arg0, s32 *, 0x28) = 0;
-    M2C_FIELD(arg0, s32 *, 0x14) = 0x1001;
-    temp_a0 = arg0 + 0x50;
+    Window_SetRect((s8*)arg0, arg1, arg2, 0xF8, 0xAE);
+    arg0->window.animTimer = 0;
+    arg0->window.title = NULL;
+    arg0->window.state = 0;
+    arg0->window.frame.style = 0x1001;
+    temp_a0 = (s8*)&arg0->items;
     sp2C = temp_a0;
     func_80027804(temp_a0, &D_800736AC, 3, 3);
-    Menu_Init(arg0 + 0x2C, sp2C, arg0 + 0x5C, &func_8002C998, 0xEC, 0x1C);
-    M2C_FIELD(arg0, s32 *, 0x4C) = (s32) (M2C_FIELD(arg0, s32 *, 0x4C) | 0x10000);
+    Menu_Init((s8*)&arg0->menu, sp2C, (s8*)arg0->itemFlags, &func_8002C998, 0xEC, 0x1C);
+    arg0->menu.options |= 0x10000;
 }
 
 s32 func_8002AE6C();
-void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
+void Ui_DrawTexturedDivider(s32, s32, s32, FrameTextures*);
 void Menu_DrawItems(s8*, s32, s32, s32, s32);
 extern u8 D_8007356C[];
 extern Color_RGBA8 D_800736B8;
@@ -1342,20 +1336,20 @@ extern u8 D_8007B920[];
  * Draws the save-before-leaving window.
  * Seen in play (2026-11-12) in いちらん: drew that window every frame while it was open.
  */
-void SavePrompt_Draw(s32* arg0) {
+void SavePrompt_Draw(SavePrompt* arg0) {
     if (func_8002AE6C() != 0) {
         return;
     }
-    Ui_DrawTexturedDivider(arg0[0], arg0[1] + 0x45, arg0[2], D_8007356C);
-    Ui_FillRectPrimEnvColor(arg0[0] + 6, arg0[1] + 6, arg0[2] - 0xC, 0x40, D_800736B8, D_800736BC);
+    Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->window.frame.y + 0x45, arg0->window.frame.width, D_8007356C);
+    Ui_FillRectPrimEnvColor(arg0->window.frame.x + 6, arg0->window.frame.y + 6, arg0->window.frame.width - 0xC, 0x40, D_800736B8, D_800736BC);
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(arg0[0] + 6, arg0[1] + 0x4C, arg0[2] - 0xC, 0x5C, D_800736C0);
-    Menu_DrawItems((s8*)arg0 + 0x2C, arg0[0] + 6, arg0[1] + 0x50, 0xFFEF, 0);
+    func_80029028(arg0->window.frame.x + 6, arg0->window.frame.y + 0x4C, arg0->window.frame.width - 0xC, 0x5C, D_800736C0);
+    Menu_DrawItems((s8*)&arg0->menu, arg0->window.frame.x + 6, arg0->window.frame.y + 0x50, 0xFFEF, 0);
     func_8001AB6C();
     func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
     func_8001A384(8, 0);
     Font_SetLineHeight(0x1C);
-    func_8001A944(arg0[0] + 0xE, arg0[1] + 0xA, (s32)D_8007B920);
+    func_8001A944(arg0->window.frame.x + 0xE, arg0->window.frame.y + 0xA, (s32)D_8007B920);
     func_8001ABBC();
 }
 
@@ -1367,19 +1361,19 @@ extern u8 D_8007B940[];
  * Seen in play (2026-11-12) in いちらん: after レポートしてやめる it drew 「レポートちゅう」 over the prompt, just
  * before LabPCList_SaveChanges ran.
  */
-void Save_DrawReportingWindow(s32* arg0) {
+void Save_DrawReportingWindow(SavePrompt* arg0) {
     s32 i = 2;
     u8* str = D_8007B940;
     BgStage_AdvanceFrame();
     while (i-- > 0) {
         BgStage_DrawFrame();
-        Ui_FillRectPrimEnvColor(arg0[0] + 6, arg0[1] + 6, arg0[2] - 0xC, 0x40, D_800736C4, D_800736C8);
+        Ui_FillRectPrimEnvColor(arg0->window.frame.x + 6, arg0->window.frame.y + 6, arg0->window.frame.width - 0xC, 0x40, D_800736C4, D_800736C8);
         func_8001AB6C();
         func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
         func_8001A384(0x10, 0);
         func_8001ABE8();
         func_8001AAE4(0xFF, 0xB2, 0xB2, 0xFF);
-        func_8001A944(arg0[0] + 0x20, arg0[1] + 0x16, (s32)str);
+        func_8001A944(arg0->window.frame.x + 0x20, arg0->window.frame.y + 0x16, (s32)str);
         func_8001AC3C();
         func_8001ABBC();
         BgStage_AdvanceFrame();
@@ -1396,20 +1390,20 @@ extern s32 D_800603C0;
  * Seen in play (2026-11-12) in いちらん: returned 1 for レポートしてやめる, 2 for レポートしないでやめる, and -1 for
  * キャンセル or B.
  */
-s32 SavePrompt_Update(s8 *arg0) {
+s32 SavePrompt_Update(SavePrompt* arg0) {
     s32 ret = 0;
 
-    if ((M2C_FIELD(arg0, s32 *, 0x28) != 1) && (M2C_FIELD(arg0, s32 *, 0x28) != 2)) {
+    if ((arg0->window.state != 1) && (arg0->window.state != 2)) {
         return 0;
     }
-    if (Menu_UpdateCursor(arg0 + 0x2C, arg0) == 0) {
+    if (Menu_UpdateCursor(&arg0->menu, arg0) == 0) {
         s32 res = func_8002BC14(D_800603C0);
 
         if (res == -1) {
             func_8003F6AC(3);
             ret = -1;
         } else if (res == 1) {
-            switch (M2C_FIELD(arg0, s32 *, 0x34)) {
+            switch (arg0->menu.cursor) {
                 case 0:
                     ret = 1;
                     func_8003F6AC(0x1D);
@@ -1440,15 +1434,15 @@ void Window_DrawFrame(s32* arg0);
  * Free Battle.
  * @unverified Name and comment guessed from the code.
  */
-s32 Window_DrawBlinkingFrame(s32* arg0) {
-    s32 t = arg0[8]++;
+s32 Window_DrawBlinkingFrame(BlinkingTextBox* arg0) {
+    s32 t = arg0->blinkTimer++;
 
     t %= 8;
-    if ((arg0[9] == 0) && (t >= 4)) {
+    if ((arg0->noBlink == 0) && (t >= 4)) {
         return 1;
     }
-    Window_DrawFrame(arg0);
-    Ui_DrawTexturedFrameDecal(arg0[0], arg0[1], arg0[2], arg0[3], D_80073554);
+    Window_DrawFrame(&arg0->frame);
+    Ui_DrawTexturedFrameDecal(arg0->frame.x, arg0->frame.y, arg0->frame.width, arg0->frame.height, D_80073554);
     return 0;
 }
 
@@ -1463,7 +1457,7 @@ extern u8 D_800736EC[];
  * Seen in play (2026-11-13) ran once when A was pressed on a Free Battle entry row whose Pokémon
  * were all ineligible; a text box sized to 「エントリーできる ポケモンが いません」 then appeared.
  */
-void TextBox_Init(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
+void TextBox_Init(TextBox* arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
     u32 len;
     s32 w;
     s32 h;
@@ -1475,20 +1469,20 @@ void TextBox_Init(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
     } else {
         len = arg4;
     }
-    M2C_FIELD(arg0, s32 *, 0x30) = arg2;
-    M2C_FIELD(arg0, s32 *, 0x34) = arg3;
+    arg0->fontStyle = arg2;
+    arg0->lineCount = arg3;
     cw = D_800736D0[arg2].w;
     ch = D_800736D0[arg2].h;
     w = ch * 2 + len * cw;
     h = ch + (u32)(cw + ch) * arg3;
-    Window_SetRect(arg0, (0x274 - w) / 2, (0x19C - h) / 2 + 0x38, w + 0xC, h + 0xC);
-    M2C_FIELD(arg0, s32 *, 0x24) = 0;
-    M2C_FIELD(arg0, s32 *, 0x20) = 0;
-    M2C_FIELD(arg0, s32 *, 0x28) = 0;
-    M2C_FIELD(arg0, s32 *, 0x14) = 6;
-    M2C_FIELD(arg0, Rgba8002D188 *, 0x18) = *(Rgba8002D188 *)D_800736E8;
-    M2C_FIELD(arg0, Rgba8002D188 *, 0x1C) = *(Rgba8002D188 *)D_800736EC;
-    M2C_FIELD(arg0, s32 *, 0x2C) = arg1;
+    Window_SetRect((s8*)arg0, (0x274 - w) / 2, (0x19C - h) / 2 + 0x38, w + 0xC, h + 0xC);
+    arg0->window.animTimer = 0;
+    arg0->window.title = NULL;
+    arg0->window.state = 0;
+    arg0->window.frame.style = 6;
+    arg0->window.frame.color = *(Color_RGBA8*)D_800736E8;
+    arg0->window.frame.color2 = *(Color_RGBA8*)D_800736EC;
+    arg0->text = (char*)arg1;
 }
 
 extern Rgba8002D188 D_800736F0[];
@@ -1497,17 +1491,17 @@ extern Rgba8002D188 D_800736F0[];
  * Seen in play (2026-11-13) drew the 「エントリーできる ポケモンが いません」 box on the Free Battle entry screen,
  * every frame while it was up.
  */
-void TextBox_Draw(s32* arg0) {
+void TextBox_Draw(TextBox* arg0) {
     if (func_8002AE6C(arg0) != 0) {
         return;
     }
     func_8001AB6C();
-    func_8001A384(D_800736D0[arg0[12]].unk8, 0);
+    func_8001A384(D_800736D0[arg0->fontStyle].unk8, 0);
     func_8001AA9C(D_800736F0[0].r, D_800736F0[0].g, D_800736F0[0].b, D_800736F0[0].a);
-    Font_SetLineHeight(D_800736D0[arg0[12]].w + D_800736D0[arg0[12]].h);
+    Font_SetLineHeight(D_800736D0[arg0->fontStyle].w + D_800736D0[arg0->fontStyle].h);
     func_8001ABE8();
     func_8001AAE4(D_800736F0[1].r, D_800736F0[1].g, D_800736F0[1].b, D_800736F0[1].a);
-    func_8001A944(arg0[0] + D_800736D0[arg0[12]].h + 6, arg0[1] + D_800736D0[arg0[12]].h + 6, arg0[11]);
+    func_8001A944(arg0->window.frame.x + D_800736D0[arg0->fontStyle].h + 6, arg0->window.frame.y + D_800736D0[arg0->fontStyle].h + 6, (s32)arg0->text);
     func_8001AC3C();
     func_8001ABBC();
 }
@@ -1538,7 +1532,7 @@ u32 func_800566BC(s32);
  * Free Battle.
  * @unverified Name and comment guessed from the code.
  */
-void BlinkingTextBox_Init(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
+void BlinkingTextBox_Init(BlinkingTextBox* arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
     u32 len;
     s32 w;
     s32 h;
@@ -1550,19 +1544,19 @@ void BlinkingTextBox_Init(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
     } else {
         len = arg4;
     }
-    M2C_FIELD(arg0, s32 *, 0x2C) = arg2;
-    M2C_FIELD(arg0, s32 *, 0x30) = arg3;
+    arg0->fontStyle = arg2;
+    arg0->lineCount = arg3;
     cw = D_800736D0[arg2].w;
     ch = D_800736D0[arg2].h;
     w = ch * 2 + len * cw;
     h = ch + (u32)(cw + ch) * arg3;
-    Window_SetRect(arg0, (0x274 - w) / 2, (0x19C - h) / 2 + 0x38, w + 0xC, h + 0xC);
-    M2C_FIELD(arg0, s32 *, 0x20) = 0;
-    M2C_FIELD(arg0, s32 *, 0x24) = 0;
-    M2C_FIELD(arg0, s32 *, 0x14) = 6;
-    M2C_FIELD(arg0, Rgba8002D188 *, 0x18) = *(Rgba8002D188 *)D_800736F8;
-    M2C_FIELD(arg0, Rgba8002D188 *, 0x1C) = *(Rgba8002D188 *)D_800736FC;
-    M2C_FIELD(arg0, s32 *, 0x28) = arg1;
+    Window_SetRect((s8*)arg0, (0x274 - w) / 2, (0x19C - h) / 2 + 0x38, w + 0xC, h + 0xC);
+    arg0->blinkTimer = 0;
+    arg0->noBlink = 0;
+    arg0->frame.style = 6;
+    *(Rgba8002D188*)&arg0->frame.color = *(Rgba8002D188 *)D_800736F8;
+    *(Rgba8002D188*)&arg0->frame.color2 = *(Rgba8002D188 *)D_800736FC;
+    arg0->text = (char*)arg1;
 }
 
 extern Rgba8002D188 D_80073700[];
@@ -1573,17 +1567,17 @@ extern Rgba8002D188 D_80073700[];
  * Free Battle.
  * @unverified Name and comment guessed from the code.
  */
-void BlinkingTextBox_Draw(s32* arg0) {
+void BlinkingTextBox_Draw(BlinkingTextBox* arg0) {
     if (Window_DrawBlinkingFrame(arg0) != 0) {
         return;
     }
     func_8001AB6C();
-    func_8001A384(D_800736D0[arg0[11]].unk8, 0);
+    func_8001A384(D_800736D0[arg0->fontStyle].unk8, 0);
     func_8001AA9C(D_80073700[0].r, D_80073700[0].g, D_80073700[0].b, D_80073700[0].a);
-    Font_SetLineHeight(D_800736D0[arg0[11]].w + D_800736D0[arg0[11]].h);
+    Font_SetLineHeight(D_800736D0[arg0->fontStyle].w + D_800736D0[arg0->fontStyle].h);
     func_8001ABE8();
     func_8001AAE4(D_80073700[1].r, D_80073700[1].g, D_80073700[1].b, D_80073700[1].a);
-    func_8001A944(arg0[0] + D_800736D0[arg0[11]].h + 6, arg0[1] + D_800736D0[arg0[11]].h + 6, arg0[10]);
+    func_8001A944(arg0->frame.x + D_800736D0[arg0->fontStyle].h + 6, arg0->frame.y + D_800736D0[arg0->fontStyle].h + 6, arg0->text);
     func_8001AC3C();
     func_8001ABBC();
 }

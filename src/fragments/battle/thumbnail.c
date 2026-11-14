@@ -54,7 +54,7 @@ void BattleThumbnail_ApplyOwnerCameraFraming(ActivePokemon* active_pokemon) {
     side = BattleScene_GetParticipantSideIndex(active_pokemon);
 
     active_pokemon->thumbnail.rotationX = sSidePresentationTransform[side]->rotationX;
-    if (sSidePresentationTransform[side]->unk_10 == 0xFF) {
+    if (sSidePresentationTransform[side]->mirrorBySide == 0xFF) {
         active_pokemon->thumbnail.rotationY = sSidePresentationTransform[side]->rotationY * active_pokemon->thumbnail.side;
         tmp_z = sSidePresentationTransform[side]->coordinates.z * active_pokemon->thumbnail.side;
     } else {
@@ -82,7 +82,7 @@ void BattleThumbnail_TickOwnerCameraFraming(ActivePokemon* active_pokemon) {
 M2C_UNK func_82107290(s8 *, s8 *);              /* extern */
 M2C_UNK func_82107408(s8 *);                      /* extern */
 
-void func_82107428(s32 arg0, s8 *arg1, s32 arg2, s8 *arg3) {
+void func_82107428(s32 arg0, ActivePokemon* arg1, s32 arg2, ActivePokemon* arg3) {
     M2C_FIELD(arg1, s32 *, 0x9CC) = arg0;
     M2C_FIELD(arg3, s32 *, 0x9CC) = arg2;
     func_82107290(arg1, arg3);
@@ -133,25 +133,25 @@ void BattleThumbnail_TickOwnerSlideIn(ActivePokemon* active_pokemon, s32 delta) 
 
 s16 func_8000F1FC(s16, M2C_UNK, M2C_UNK, M2C_UNK);  /* extern */
 
-void func_821075B4(s8 *arg0, M2C_UNK arg1) {
+void func_821075B4(ActivePokemon* arg0, M2C_UNK arg1) {
     s8 *temp_v1;
     s8 *temp_v1_2;
 
-    if (M2C_FIELD(arg0, s32 *, 0x9E0) == 1) {
-        M2C_FIELD(arg0, s32 *, 0x9F4) = 0;
-        M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x9CC), s16 *, 0x1C) = func_8000F1FC(M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x9CC), s16 *, 0x1C), -0x48, arg1, arg1);
+    if (arg0->thumbnail.side == 1) {
+        arg0->thumbnail.status = 0;
+        arg0->thumbnail.camera->viewport.x = func_8000F1FC(arg0->thumbnail.camera->viewport.x, -0x48, arg1, arg1);
         temp_v1 = M2C_FIELD(arg0, s8 **, 0x9CC);
         if (M2C_FIELD(temp_v1, s16 *, 0x1C) == -0x48) {
             M2C_FIELD(temp_v1, u8 *, 1) = (u8) (M2C_FIELD(temp_v1, u8 *, 1) & 0xFFFE);
-            M2C_FIELD(arg0, u8 *, 0x865) = (u8) (M2C_FIELD(arg0, u8 *, 0x865) & 0xFFFE);
+            arg0->thumbnail.displayObject.node.flags = (u8) (arg0->thumbnail.displayObject.node.flags & 0xFFFE);
         }
     } else {
-        M2C_FIELD(arg0, s32 *, 0x9F4) = 0;
-        M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x9CC), s16 *, 0x1C) = func_8000F1FC(M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x9CC), s16 *, 0x1C), 0x15F, arg1, arg1);
+        arg0->thumbnail.status = 0;
+        arg0->thumbnail.camera->viewport.x = func_8000F1FC(arg0->thumbnail.camera->viewport.x, 0x15F, arg1, arg1);
         temp_v1_2 = M2C_FIELD(arg0, s8 **, 0x9CC);
         if (M2C_FIELD(temp_v1_2, s16 *, 0x1C) == 0x15F) {
             M2C_FIELD(temp_v1_2, u8 *, 1) = (u8) (M2C_FIELD(temp_v1_2, u8 *, 1) & 0xFFFE);
-            M2C_FIELD(arg0, u8 *, 0x865) = (u8) (M2C_FIELD(arg0, u8 *, 0x865) & 0xFFFE);
+            arg0->thumbnail.displayObject.node.flags = (u8) (arg0->thumbnail.displayObject.node.flags & 0xFFFE);
         }
     }
 }

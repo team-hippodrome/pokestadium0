@@ -25,9 +25,9 @@ extern u64 njpgdspMainTextStart[];
 extern u64 njpgdspMainDataStart[];
 
 s32 Jpeg_ReadBigEndianU16(u8* arg0);
-void Jpeg_ParseStreamMarkers(unk_func_80003680_sp300* arg0, u8* arg1);
-void Jpeg_InitializeDspTask(UnkStruct80001380* arg0, unk_func_80003680_sp90* arg1);
-void Jpeg_BuildDspOutput(unk_func_80003680_sp90* arg0, u8(arg1)[2][0x80], unk_func_80003680_sp300* arg2);
+void Jpeg_ParseStreamMarkers(JpegStreamInfo* arg0, u8* arg1);
+void Jpeg_InitializeDspTask(SchedTask* arg0, JpegTaskParams* arg1);
+void Jpeg_BuildDspOutput(JpegTaskParams* arg0, u8(arg1)[2][0x80], JpegStreamInfo* arg2);
 
 /** Reads a big-endian 16-bit value from a JPEG stream. */
 s32 Jpeg_ReadBigEndianU16(u8* arg0) {
@@ -35,7 +35,7 @@ s32 Jpeg_ReadBigEndianU16(u8* arg0) {
 }
 
 /** Parses the markers of a JPEG stream, collecting its tables and dimensions. */
-void Jpeg_ParseStreamMarkers(unk_func_80003680_sp300* arg0, u8* arg1) {
+void Jpeg_ParseStreamMarkers(JpegStreamInfo* arg0, u8* arg1) {
     s32 temp_v0_2;
     s32 var_s2;
     s32 var_v0;
@@ -43,7 +43,7 @@ void Jpeg_ParseStreamMarkers(unk_func_80003680_sp300* arg0, u8* arg1) {
     s32 temp_v0;
 
     var_s2 = 1;
-    arg0->unk_01 = 0;
+    arg0->hasRestartMarkers = 0;
 
     while (var_s2 != 0) {
         // JPEG data consists of streams, which are identified by a marker.
@@ -83,7 +83,7 @@ void Jpeg_ParseStreamMarkers(unk_func_80003680_sp300* arg0, u8* arg1) {
 
                 default:
                     if ((temp_v0 >= JPEG_MARKER_RESTART0) && (temp_v0 <= JPEG_MARKER_RESTART7)) {
-                        arg0->unk_01 = 1;
+                        arg0->hasRestartMarkers = 1;
                     } else {
                         arg1 += Jpeg_ReadBigEndianU16(arg1);
                     }
@@ -96,9 +96,9 @@ void Jpeg_ParseStreamMarkers(unk_func_80003680_sp300* arg0, u8* arg1) {
     // this seems weird as it will break entirely if number of components is less than 3.
     // Looking at every JPEG used in the Stadium rom, no JPEGs use this ID, they're all 0x22.
     if (arg0->start_of_frame[7] == 0x21) {
-        arg0->unk_00 = 0;
+        arg0->mode = 0;
     } else {
-        arg0->unk_00 = 2;
+        arg0->mode = 2;
     }
 
     arg0->width = (arg0->start_of_frame[3] << 8) | arg0->start_of_frame[4];
@@ -106,7 +106,7 @@ void Jpeg_ParseStreamMarkers(unk_func_80003680_sp300* arg0, u8* arg1) {
 }
 
 /** Initializes the RSP task used for JPEG decoding. */
-void Jpeg_InitializeDspTask(UnkStruct80001380* arg0, unk_func_80003680_sp90* arg1) {
+void Jpeg_InitializeDspTask(SchedTask* arg0, JpegTaskParams* arg1) {
     arg0->task.t.type = 4;
     arg0->task.t.flags = 0;
     arg0->task.t.ucode_boot = rspbootTextStart;
@@ -128,26 +128,25 @@ void Jpeg_InitializeDspTask(UnkStruct80001380* arg0, unk_func_80003680_sp90* arg
 }
 
 /** Builds the RSP input structure for JPEG decoding. */
-void Jpeg_BuildDspInput(s8 *arg0, s32 arg1, s8 *arg2)
-{
-  *((s32 *) (((s8 *) arg0) + 0)) = (s32) (*((s32 *) (((s8 *) arg2) + 0x14))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  *((u8 *) (((s8 *) arg0) + 4)) = (u8) (*((u8 *) (((s8 *) arg2) + 0))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  *((s8 *) (((s8 *) arg0) + 5)) = 0;
-  *((s32 *) (((s8 *) arg0) + 8)) = arg1;
-  *((s32 *) (((s8 *) arg0) + 0xC)) = (s32) (arg1 + 0xA8);
-  *((s32 *) (((s8 *) arg0) + 0x10)) = (s32) (arg1 + 0x54);
-  *((s32 *) (((s8 *) arg0) + 0x14)) = (s32) (arg1 + 0xFC);
-  *((u8 *) (((s8 *) arg0) + 0x18)) = (u8) (*((u8 *) (((s8 *) arg2) + 1))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+void Jpeg_BuildDspInput(JpegDecoder* arg0, JpegHuffmanTable* arg1, JpegStreamInfo* arg2) {
+    arg0->imageData = arg2->start_of_scan;
+    arg0->mode = arg2->mode;
+    arg0->unk_05 = 0;
+    arg0->hTablePtrs[0] = &arg1[0];
+    arg0->hTablePtrs[1] = &arg1[2];
+    arg0->hTablePtrs[2] = &arg1[1];
+    arg0->hTablePtrs[3] = &arg1[3];
+    arg0->hasRestartMarkers = arg2->hasRestartMarkers;
 }
 
 /** Builds the RSP output structure for JPEG decoding. */
-void Jpeg_BuildDspOutput(unk_func_80003680_sp90* arg0, u8(arg1)[2][0x80], unk_func_80003680_sp300* arg2) {
-    arg0->unk_00 = 0;
-    arg0->unk_08 = arg2->unk_00;
-    arg0->unk_04 = 1;
-    arg0->unk_0C = (u32)&arg1[0] & 0x1FFFFFFF;
-    arg0->unk_10 = (u32)&arg1[1] & 0x1FFFFFFF;
-    arg0->unk_14 = (u32)&arg1[1] & 0x1FFFFFFF;
+void Jpeg_BuildDspOutput(JpegTaskParams* arg0, u8(arg1)[2][0x80], JpegStreamInfo* arg2) {
+    arg0->address = 0;
+    arg0->mode = arg2->mode;
+    arg0->mbCount = 1;
+    arg0->qTableYPtr = (u32)&arg1[0] & 0x1FFFFFFF;
+    arg0->qTableUPtr = (u32)&arg1[1] & 0x1FFFFFFF;
+    arg0->qTableVPtr = (u32)&arg1[1] & 0x1FFFFFFF;
 }
 
 /**
@@ -169,13 +168,13 @@ void Jpeg_WaitForControllerReady(void) {
 
 /** Decodes a JPEG image to the given address. */
 s32 Jpeg_DecodeImage(u32 addr, s32 arg1, u8* arg2) {
-    UnkStruct80001380 sp318;
-    unk_func_80003680_sp300 sp300;
+    SchedTask sp318;
+    JpegStreamInfo sp300;
     u8 sp200[2][0x80];
     JpegHuffmanTable spB0[4];
     u16* temp_s0;
     u8* temp_s3;
-    unk_func_80003680_sp90 sp90;
+    JpegTaskParams sp90;
     JpegDecoder sp74;
     JpegDecoderState sp60;
     u32 var_s1;
@@ -194,7 +193,7 @@ s32 Jpeg_DecodeImage(u32 addr, s32 arg1, u8* arg2) {
     Util_Free(temp_s0);
     Util_Free(temp_s3);
 
-    Jpeg_BuildDspInput(&sp74, &spB0, &sp300);
+    Jpeg_BuildDspInput(&sp74, spB0, &sp300);
     Jpeg_BuildDspOutput(&sp90, &sp200, &sp300);
     Jpeg_InitializeDspTask(&sp318, &sp90);
     Jpeg_WaitForControllerReady();
@@ -209,7 +208,7 @@ s32 Jpeg_DecodeImage(u32 addr, s32 arg1, u8* arg2) {
                 return 0;
             }
 
-            sp90.unk_00 = addr & 0x1FFFFFFF;
+            sp90.address = addr & 0x1FFFFFFF;
             Sched_SubmitTask(&sp318, 1);
             var_s4 = 1;
             Sched_WaitForTaskMessage(&sp318);

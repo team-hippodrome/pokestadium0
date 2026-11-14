@@ -69,25 +69,21 @@ void BattleAnim_CloneParticleState(Particle* arg0, Particle* arg1, ParticleUpdat
 Particle* BattleAnim_CreateProceduralParticle(s16 arg0, s16 arg1, s32 arg2, f32 arg3);
 void BattleAnim_DestroyParticle(Particle* arg0);
 void BattleAnim_InitializeParticleFromEffect(Particle* arg0, ActivePokemon* arg1, BattleAnimEffectSlot* arg2, s16 arg3);
-void BattleAnim_SpawnStandardParticles(s8 *arg0);
-void BattleAnim_SpawnBatchedParticles(s8* arg0);
+void BattleAnim_SpawnStandardParticles(BattleAnimEffectSlot* arg0);
+void BattleAnim_SpawnBatchedParticles(BattleAnimEffectSlot* arg0);
 void BattleAnim_CleanupEffectsRetainingCategories47(void);
 void BattleAnim_CleanupEffectsRetainingCategory4(void);
 void BattleAnim_ClearEffectCallbacks(void);
 void BattleAnim_SetEffectState(s32 arg0);
 Particle* Particle_Alloc(void);
 s32 Particle_CountActive(void);
-s32 Particle_IsInactive(s8 *arg0);
+s32 Particle_IsInactive(Particle* arg0);
 s32 Particle_HasFlags(Particle* arg0, s32 arg1);
 void Particle_UpdateWorldTransform(Particle* arg0);
 void Particle_UpdateFrameCounters(void);
 
 s32 func_800023C4(M2C_UNK, M2C_UNK);                /* extern */
 M2C_UNK func_8004FD20(s32, M2C_UNK);                /* extern */
-extern s32 D_8219CA50;
-extern s32 D_8219CA54;
-extern s32 D_8219CA58;
-extern s32 D_8219CA5C;
 
 /**
  * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
@@ -95,12 +91,12 @@ extern s32 D_8219CA5C;
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_InitParticleSystem(void) {
-    D_8219CA54 = func_800023C4(0x20D0, 0);
-    D_8219CA50 = func_800023C4(0xF3C0, 0);
-    func_8004FD20(D_8219CA54, 0x20D0);
-    func_8004FD20(D_8219CA50, 0xF3C0);
-    D_8219CA5C = 0;
-    D_8219CA58 = 0;
+    gBattleAnimEffectSlots = (void*)func_800023C4(0x20D0, 0);
+    gParticlePool = (Particle*)func_800023C4(sizeof(Particle) * 300, 0);
+    func_8004FD20((s32)gBattleAnimEffectSlots, 0x20D0);
+    func_8004FD20((s32)gParticlePool, sizeof(Particle) * 300);
+    gBattleAnimEffectSlotIndex = 0;
+    gParticlePoolIndex = 0;
 }
 
 /**
@@ -115,18 +111,18 @@ void Particle_ResetDefaults(Particle* arg0) {
     Particle_SetMotionOffset(arg0, 0.0f, 0.0f, 0.0f);
     Particle_SetVelocityTarget(arg0, 0.0f, 0.0f, 0.0f);
     Particle_SetMotionStep(arg0, 0.0f, 0.0f, 0.0f);
-    Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
-    Particle_Field78_SetScaled_0ADA4(arg0, 0.0f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.0f);
+    Particle_MagnitudeStep_SetScaled_0ADA4(arg0, 0.0f);
     Particle_SetRotation(arg0, 0, 0, 0);
     Particle_SetRotationSpeed(arg0, 0, 0, 0);
     Particle_SetTextureFrame(arg0, 0);
-    Particle_FieldA6_SetS16_0BCA8(arg0, 0);
-    Particle_FieldA8_SetS16_0BE14(arg0, 0);
-    Particle_FieldCD_SetS16_0BF38(arg0, 0);
-    Particle_FieldCE_SetS16_0BF24(arg0, 0);
-    Particle_FieldAA_SetS16_0BF10(arg0, 0);
-    Particle_FieldAC_SetS16_0BED8(arg0, 0);
-    Particle_FieldCF_SetU8_0BEEC(arg0, 0);
+    Particle_Param0_SetS16_0BCA8(arg0, 0);
+    Particle_Countdown_SetS16_0BE14(arg0, 0);
+    Particle_ByteParam0_SetS16_0BF38(arg0, 0);
+    Particle_ByteParam2_SetS16_0BF24(arg0, 0);
+    Particle_Param1_SetS16_0BF10(arg0, 0);
+    Particle_SpawnIndex_SetS16_0BED8(arg0, 0);
+    Particle_ByteParam1_SetU8_0BEEC(arg0, 0);
     Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
     Particle_SetEnvColor(arg0, 0xFF, 0xFF, 0xFF);
     Particle_SetPrimAlpha(arg0, 0xFF);
@@ -188,7 +184,7 @@ BattleAnimEffectSlot* BattleAnim_AllocEffectSlot(void) {
     BattleAnimEffectSlot* var_v1 = &gBattleAnimEffectSlots[var_v0];
 
     for (i = 0; i < 300; i++) {
-        if (var_v1->unk_15 == 0) {
+        if (var_v1->inUse == 0) {
             break;
         }
 
@@ -205,7 +201,7 @@ BattleAnimEffectSlot* BattleAnim_AllocEffectSlot(void) {
     if (i >= 300) {
         var_v1 = -1;
     } else {
-        var_v1->unk_15 = -0x1;
+        var_v1->inUse = -0x1;
 
         gBattleAnimEffectSlotIndex = var_v0 + 1;
         if (gBattleAnimEffectSlotIndex >= 300) {
@@ -222,21 +218,16 @@ BattleAnimEffectSlot* BattleAnim_AllocEffectSlot(void) {
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (157 of the moves).
  * @unverified Name from Stadium 1.
  */
-void Particle_Free(s8 *arg0) {
-    s8 **temp_v0;
-    s8 *temp_v0_2;
-
-    temp_v0 = M2C_FIELD(arg0, s8 ***, 4);
-    if (temp_v0 != NULL) {
-        *temp_v0 = M2C_FIELD(arg0, s8 **, 0);
+void Particle_Free(Particle* arg0) {
+    if (arg0->prev != NULL) {
+        arg0->prev->next = arg0->next;
     }
-    temp_v0_2 = M2C_FIELD(arg0, s8 **, 0);
-    if (temp_v0_2 != NULL) {
-        M2C_FIELD(temp_v0_2, s8 ***, 4) = (s8 **) M2C_FIELD(arg0, s8 ***, 4);
+    if (arg0->next != NULL) {
+        arg0->next->prev = arg0->prev;
     }
-    M2C_FIELD(arg0, s8 ***, 4) = NULL;
-    M2C_FIELD(arg0, s8 **, 0) = NULL;
-    M2C_FIELD(arg0, s8 *, 0xCC) = 0;
+    arg0->prev = NULL;
+    arg0->next = NULL;
+    arg0->allocated = 0;
 }
 
 /**
@@ -245,10 +236,10 @@ void Particle_Free(s8 *arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_FreeEffectSlot(BattleAnimEffectSlot* arg0) {
-    arg0->unk_0E = 0;
-    arg0->unk_15 = 0;
-    arg0->unk_14 = 0;
-    arg0->unk_0C = arg0->unk_0E;
+    arg0->delayTimer = 0;
+    arg0->inUse = 0;
+    arg0->repeatCount = 0;
+    arg0->repeatInterval = arg0->delayTimer;
 }
 
 /**
@@ -307,7 +298,7 @@ void BattleAnim_InitializeParticleChain(Particle* arg0, Vec3f arg1, Vec3s arg2, 
         arg0->descriptor = arg4;
         arg0->pokemon = 0;
         arg0->displayObject = 0;
-        arg0->unk_CD = 0xFF;
+        arg0->byteParam0 = 0xFF;
 
         arg0 = arg0->next;
     }
@@ -325,15 +316,15 @@ void BattleAnim_CloneParticleState(Particle* arg0, Particle* arg1, ParticleUpdat
     arg0->updateCallback = arg2;
     arg0->descriptor = arg3;
     arg0->pokemon = arg1->pokemon;
-    arg0->unk_CF = arg1->unk_CF;
-    arg0->unk_CA = arg1->unk_CA;
-    arg0->unk_CC = 0x1C;
-    arg0->unk_CD = 0xFF;
-    arg0->unk_CE = arg1->unk_CE;
-    arg0->unk_CB = arg1->unk_CB;
+    arg0->byteParam1 = arg1->byteParam1;
+    arg0->effectList = arg1->effectList;
+    arg0->anchorMode = 0x1C;
+    arg0->byteParam0 = 0xFF;
+    arg0->byteParam2 = arg1->byteParam2;
+    arg0->resourceListId = arg1->resourceListId;
     arg0->stepMagnitude = arg1->stepMagnitude;
 
-    Particle_FieldAC_SetS16_0BED8(arg0, arg4);
+    Particle_SpawnIndex_SetS16_0BED8(arg0, arg4);
 
     ParticleMath_CopyVec3f(&arg0->positionOffset, &arg1->positionOffset);
     ParticleMath_CopyVec3f(&arg0->motionOffset, &arg1->motionOffset);
@@ -342,8 +333,8 @@ void BattleAnim_CloneParticleState(Particle* arg0, Particle* arg1, ParticleUpdat
     ParticleMath_CopyVec3s(&arg0->rotation, &arg1->rotation);
     ParticleMath_CopyVec3s(&arg0->rotationStep, &arg1->rotationStep);
 
-    if (arg1->unk_CA == 4) {
-        arg0->unk_CA = 0;
+    if (arg1->effectList == 4) {
+        arg0->effectList = 0;
     }
 }
 
@@ -383,8 +374,8 @@ void BattleAnim_EmitParticleBurstWithMetadata(Particle* arg0, ParticleUpdateCall
             break;
         }
         BattleAnim_CloneParticleState(temp_v0, arg0, arg1, arg2, i);
-        temp_v0->unk_CE = arg5;
-        temp_v0->unk_CF = arg4;
+        temp_v0->byteParam2 = arg5;
+        temp_v0->byteParam1 = arg4;
     }
 }
 
@@ -421,7 +412,7 @@ void BattleAnim_InitializeParticleAnchor(Particle* arg0) {
     Vec3f sp30;
     Vec3s sp28;
 
-    switch (arg0->unk_CC) {
+    switch (arg0->anchorMode) {
         case 0:
             BattleScene_GetParticipantModelPosition(arg0->pokemon, &arg0->origin);
             break;
@@ -485,12 +476,12 @@ void BattleAnim_InitializeParticleAnchor(Particle* arg0) {
             break;
 
         case 17:
-            BattleAnim_GetOwnerBonePosition(arg0->pokemon, arg0->unk_CD, &arg0->origin);
-            func_80015908(arg0->pokemon, arg0->unk_CD, &arg0->origin);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, arg0->byteParam0, &arg0->origin);
+            func_80015908(arg0->pokemon, arg0->byteParam0, &arg0->origin);
             break;
 
         case 19:
-            func_80015908(arg0->pokemon, arg0->unk_CD, &arg0->origin);
+            func_80015908(arg0->pokemon, arg0->byteParam0, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
             BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);
@@ -516,7 +507,7 @@ void BattleAnim_UpdateParticleAnchor(Particle* arg0) {
     Vec3f sp30;
     Vec3s sp28;
 
-    switch (arg0->unk_CC) {
+    switch (arg0->anchorMode) {
         case 2:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, 0x64, &arg0->origin);
             break;
@@ -567,11 +558,11 @@ void BattleAnim_UpdateParticleAnchor(Particle* arg0) {
             break;
 
         case 16:
-            BattleAnim_GetOwnerBonePosition(arg0->pokemon, arg0->unk_CD, &arg0->origin);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, arg0->byteParam0, &arg0->origin);
             break;
 
         case 18:
-            BattleAnim_GetOwnerBonePosition(arg0->pokemon, arg0->unk_CD, &arg0->origin);
+            BattleAnim_GetOwnerBonePosition(arg0->pokemon, arg0->byteParam0, &arg0->origin);
             break;
 
         case 29:
@@ -620,69 +611,69 @@ void func_8213A68C(void) {
     }
 }
 
-void func_8213A904(s8 *);
+void func_8213A904(Particle*);
 M2C_UNK func_8213A9C4(s8 *, s32);                 /* extern */
 s32 func_8213CAFC(s8 *, M2C_UNK);                 /* extern */
 s32 func_8213CB1C(s8 *, M2C_UNK);                 /* extern */
 
 void func_8213A784(s32 arg0) {
     s32 var_s3;
-    s8 *var_s0;
-    s8 *var_s2;
+    Particle* var_s0;
+    Particle* var_s2;
 
-    var_s2 = D_8219CA50;
+    var_s2 = gParticlePool;
     var_s3 = 0;
     do {
-        if ((M2C_FIELD(var_s2, s8 *, 0xCC) != 0) && (M2C_FIELD(var_s2, s32 *, 4) == 0) && (func_8213CB1C(var_s2, 8) != 0)) {
+        if ((var_s2->allocated != 0) && (var_s2->prev == NULL) && (func_8213CB1C((s8*)var_s2, 8) != 0)) {
             func_8213A904(var_s2);
             var_s0 = var_s2;
             if (var_s2 != NULL) {
                 do {
-                    if ((func_8213CAFC(var_s0, 4) != 0) && (M2C_FIELD(var_s0, s16 *, 0xAE) >= 2)) {
-                        func_8213A9C4(var_s0, arg0);
+                    if ((func_8213CAFC((s8*)var_s0, 4) != 0) && (var_s0->lifecycle >= 2)) {
+                        func_8213A9C4((s8*)var_s0, arg0);
                     }
-                    var_s0 = M2C_FIELD(var_s0, s8 **, 0);
+                    var_s0 = var_s0->next;
                 } while (var_s0 != NULL);
             }
         }
         var_s3 += 1;
-        var_s2 += 0xD0;
+        var_s2++;
     } while (var_s3 != 0x12C);
 }
 
-void func_8213A904(s8 *);
+void func_8213A904(Particle*);
 M2C_UNK func_8213A9C4(s8 *, s32);                 /* extern */
 s32 func_8213CAFC(s8 *, M2C_UNK);                 /* extern */
 
 void func_8213A858(s32 arg0) {
     s32 var_s1;
-    s8 *var_s0;
+    Particle* var_s0;
 
-    var_s0 = D_8219CA50;
+    var_s0 = gParticlePool;
     var_s1 = 0;
     do {
-        if ((M2C_FIELD(var_s0, s8 *, 0xCC) != 0) && (func_8213CAFC(var_s0, 8) != 0)) {
+        if ((var_s0->allocated != 0) && (func_8213CAFC((s8*)var_s0, 8) != 0)) {
             func_8213A904(var_s0);
-            if ((func_8213CAFC(var_s0, 4) != 0) && (M2C_FIELD(var_s0, s16 *, 0xAE) >= 2)) {
-                func_8213A9C4(var_s0, arg0);
+            if ((func_8213CAFC((s8*)var_s0, 4) != 0) && (var_s0->lifecycle >= 2)) {
+                func_8213A9C4((s8*)var_s0, arg0);
             }
         }
         var_s1 += 1;
-        var_s0 += 0xD0;
+        var_s0++;
     } while (var_s1 != 0x12C);
 }
 
-typedef void (*Fn8213A904)(s8*, s32);
+typedef void (*Fn8213A904)(Particle*, s32);
 /**
  * Draws a particle through its descriptor: picks the render setup display list from the
  * descriptor's mode, then calls the descriptor's draw callback.
  */
-void func_8213A904(s8* arg0) {
-    s8* desc = M2C_FIELD(arg0, s8**, 0xC);
-    s8* sp = M2C_FIELD(desc, s8**, 4);
+void func_8213A904(Particle* arg0) {
+    ParticleDescriptor* desc = arg0->descriptor;
+    ParticleDescriptorChild* sp = desc->payload.a;
 
-    if (M2C_FIELD(desc, s16*, 0) == 1) {
-        switch (M2C_FIELD(sp, s16*, 2)) {
+    if (desc->kind == 1) {
+        switch (sp->renderSetup) {
             case 0:
                 gSPDisplayList(gDisplayListHead++, D_82190548);
                 break;
@@ -690,8 +681,8 @@ void func_8213A904(s8* arg0) {
                 gSPDisplayList(gDisplayListHead++, D_821904C8);
                 break;
         }
-        if (M2C_FIELD(sp, s16*, 0) != 2) {
-            M2C_FIELD(sp, Fn8213A904*, 4)(arg0, *M2C_FIELD(sp, s32**, 0xC));
+        if (sp->drawMode != 2) {
+            ((Fn8213A904)sp->setupCallback)(arg0, sp->setupArg.s->arg);
         }
     }
 }
@@ -704,21 +695,21 @@ typedef void (*ParticleDrawFnCam)(Particle*, CameraNode*);
  * particles.
  */
 void Particle_DispatchDraw(Particle* arg0, CameraNode* arg1) {
-    s8* desc = (s8*)arg0->descriptor;
-    s8* sp18 = M2C_FIELD(desc, s8**, 4);
+    ParticleDescriptor* desc = arg0->descriptor;
+    ParticleDescriptorChild* sp18 = desc->payload.a;
 
-    switch (M2C_FIELD(desc, s16*, 0)) {
+    switch (desc->kind) {
         case 1:
-            if (M2C_FIELD(sp18, s16*, 0) == 2) {
-                M2C_FIELD(sp18, ParticleDrawFn2*, 4)(arg0, M2C_FIELD(M2C_FIELD(sp18, s8**, 0xC), s32*, 0));
-                M2C_FIELD(sp18, ParticleDrawFnCam*, 8)(arg0, arg1);
+            if (sp18->drawMode == 2) {
+                sp18->setupCallback(arg0, sp18->setupArg.s->arg);
+                sp18->drawCallback(arg0, arg1);
             } else {
-                M2C_FIELD(sp18, ParticleDrawFnCam*, 8)(arg0, arg1);
+                sp18->drawCallback(arg0, arg1);
             }
             break;
 
         case 3:
-            M2C_FIELD(desc, ParticleDrawFnCam*, 4)(arg0, arg1);
+            desc->payload.func(arg0, arg1);
             break;
     }
 }
@@ -741,26 +732,26 @@ void BattleAnim_InitializeParticleFromEffect(Particle* arg0, ActivePokemon* arg1
 
     while (arg0 != NULL) {
         arg0->pokemon = arg1;
-        arg0->unk_AC = arg3++;
-        arg0->updateCallback = arg2->unk_00;
-        arg0->descriptor = arg2->unk_04;
-        arg0->unk_CD = arg2->unk_19;
-        arg0->unk_CE = arg2->unk_1A;
-        arg0->unk_AA = arg2->unk_12;
-        arg0->unk_CF = arg2->unk_1B;
-        arg0->unk_CA = arg2->unk_17;
-        arg0->unk_CC = arg2->unk_16;
-        arg0->unk_CB = arg2->unk_18;
+        arg0->spawnIndex = arg3++;
+        arg0->updateCallback = arg2->updateCallback;
+        arg0->descriptor = arg2->descriptor;
+        arg0->byteParam0 = arg2->byteParam0;
+        arg0->byteParam2 = arg2->byteParam2;
+        arg0->param1 = arg2->param1;
+        arg0->byteParam1 = arg2->byteParam1;
+        arg0->effectList = arg2->effectList;
+        arg0->anchorMode = arg2->anchorMode;
+        arg0->resourceListId = arg2->resourceListId;
 
         if (arg1 != NULL) {
             BattleAnim_InitializeParticleAnchor(arg0);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &arg0->rotation);
         }
 
-        if ((arg2->unk_16 & 0xFFFFu) == 0x12) {
-            arg0->unk_A6 = arg2->unk_10 * arg3;
+        if ((arg2->anchorMode & 0xFFFFu) == 0x12) {
+            arg0->param0 = arg2->param0 * arg3;
         } else {
-            arg0->unk_A6 = arg2->unk_10;
+            arg0->param0 = arg2->param0;
         }
 
         arg0 = arg0->next;
@@ -778,23 +769,23 @@ void BattleAnim_InitializeParticleFromEffect(Particle* arg0, ActivePokemon* arg1
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (145 of the moves).
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_SpawnStandardParticles(s8 *arg0) {
+void BattleAnim_SpawnStandardParticles(BattleAnimEffectSlot* arg0) {
     s16 temp_s2;
     s16 var_s0;
     s32 temp_s3;
 
-    temp_s3 = M2C_FIELD(arg0, s32 *, 8);
-    temp_s2 = M2C_FIELD(arg0, s16 *, 0x12);
-    if (M2C_FIELD(M2C_FIELD(arg0, s8 **, 4), s16 *, 2) == 0) {
+    temp_s3 = (s32)arg0->pokemon;
+    temp_s2 = arg0->param1;
+    if (arg0->descriptor->chained == 0) {
         var_s0 = 0;
         if (temp_s2 > 0) {
             do {
-                BattleAnim_InitializeParticleFromEffect((Particle*)func_82139C38(), (ActivePokemon*)temp_s3, (BattleAnimEffectSlot*)arg0, var_s0);
+                BattleAnim_InitializeParticleFromEffect((Particle*)func_82139C38(), (ActivePokemon*)temp_s3, arg0, var_s0);
                 var_s0 += 1;
             } while (var_s0 < temp_s2);
         }
     } else {
-        BattleAnim_InitializeParticleFromEffect((Particle*)func_82139C58(temp_s2 & 0xFF), (ActivePokemon*)temp_s3, (BattleAnimEffectSlot*)arg0, 0);
+        BattleAnim_InitializeParticleFromEffect((Particle*)func_82139C58(temp_s2 & 0xFF), (ActivePokemon*)temp_s3, arg0, 0);
     }
 }
 
@@ -805,26 +796,26 @@ void BattleAnim_SpawnStandardParticles(s8 *arg0) {
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_SpawnBatchedParticles(s8* arg0) {
+void BattleAnim_SpawnBatchedParticles(BattleAnimEffectSlot* arg0) {
     s16 step;
     s16 count;
     s16 i;
     s32 temp_s4;
     s32 temp_v0;
 
-    temp_s4 = M2C_FIELD(arg0, s32 *, 8);
-    step = M2C_FIELD(arg0, s16 *, 0x12);
-    count = M2C_FIELD(arg0, s16 *, 0x10) / step;
-    if (M2C_FIELD(M2C_FIELD(arg0, s8 **, 4), s16 *, 2) == 0) {
+    temp_s4 = (s32)arg0->pokemon;
+    step = arg0->param1;
+    count = arg0->param0 / step;
+    if (arg0->descriptor->chained == 0) {
         for (i = 0; i < count; i++) {
             temp_v0 = func_82139C38();
-            M2C_FIELD(arg0, s16 *, 0x10) = step;
-            BattleAnim_InitializeParticleFromEffect((Particle*)temp_v0, (ActivePokemon*)temp_s4, (BattleAnimEffectSlot*)arg0, i);
+            arg0->param0 = step;
+            BattleAnim_InitializeParticleFromEffect((Particle*)temp_v0, (ActivePokemon*)temp_s4, arg0, i);
         }
     } else {
         temp_v0 = func_82139C58(count & 0xFF);
-        M2C_FIELD(arg0, s16 *, 0x10) = step;
-        BattleAnim_InitializeParticleFromEffect((Particle*)temp_v0, (ActivePokemon*)temp_s4, (BattleAnimEffectSlot*)arg0, 0);
+        arg0->param0 = step;
+        BattleAnim_InitializeParticleFromEffect((Particle*)temp_v0, (ActivePokemon*)temp_s4, arg0, 0);
     }
 }
 
@@ -835,7 +826,7 @@ void BattleAnim_SpawnBatchedParticles(s8* arg0) {
  */
 void BattleAnim_SpawnSingleParticle(BattleAnimEffectSlot* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
-    ActivePokemon* sp18 = arg0->unk_08;
+    ActivePokemon* sp18 = arg0->pokemon;
 
     BattleAnim_InitializeParticleFromEffect(Particle_New(), sp18, arg0, 0);
 }
@@ -848,7 +839,7 @@ void BattleAnim_SpawnSingleParticle(BattleAnimEffectSlot* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_DispatchParticleEmission(BattleAnimEffectSlot* arg0) {
-    switch (arg0->unk_16) {
+    switch (arg0->anchorMode) {
         case 18:
             BattleAnim_SpawnBatchedParticles(arg0);
             break;
@@ -862,11 +853,11 @@ void BattleAnim_DispatchParticleEmission(BattleAnimEffectSlot* arg0) {
             break;
 
         case 23:
-            BattleAnim_SetEffectState(arg0->unk_19);
+            BattleAnim_SetEffectState(arg0->byteParam0);
             break;
 
         case 25:
-            BattleAnim_QueueEffectList9(arg0->unk_19);
+            BattleAnim_QueueEffectList9(arg0->byteParam0);
             break;
 
         case 26:
@@ -891,22 +882,22 @@ void BattleAnim_TickEffectSlots(void) {
     BattleAnimEffectSlot* var_s0 = gBattleAnimEffectSlots;
 
     for (i = 0; i < 300; i++, var_s0++) {
-        if (var_s0->unk_15 != 0) {
-            var_s0->unk_0E--;
-            if (var_s0->unk_0E <= 0) {
-                if (var_s0->unk_14 >= 0) {
+        if (var_s0->inUse != 0) {
+            var_s0->delayTimer--;
+            if (var_s0->delayTimer <= 0) {
+                if (var_s0->repeatCount >= 0) {
                     BattleAnim_DispatchParticleEmission(var_s0);
-                    if (var_s0->unk_14 != 0x7F) {
-                        var_s0->unk_14--;
+                    if (var_s0->repeatCount != 0x7F) {
+                        var_s0->repeatCount--;
                     }
 
-                    if (var_s0->unk_14 <= 0) {
+                    if (var_s0->repeatCount <= 0) {
                         BattleAnim_FreeEffectSlot(var_s0);
                     } else {
-                        var_s0->unk_0E = var_s0->unk_0C;
+                        var_s0->delayTimer = var_s0->repeatInterval;
                     }
-                } else if (var_s0->unk_14 == -1) {
-                    var_s0->unk_0E = var_s0->unk_0C;
+                } else if (var_s0->repeatCount == -1) {
+                    var_s0->delayTimer = var_s0->repeatInterval;
                     BattleAnim_DispatchParticleEmission(var_s0);
                 }
             }
@@ -974,8 +965,8 @@ void BattleAnim_CleanupEffectsRetainingCategories47(void) {
     BattleAnim_ResetSpawnDelay();
 
     for (i = 0; i < 300; i++, var_s0++) {
-        if (var_s0->unk_15 != 0) {
-            if ((var_s0->unk_17 != 4) && (var_s0->unk_17 != 7)) {
+        if (var_s0->inUse != 0) {
+            if ((var_s0->effectList != 4) && (var_s0->effectList != 7)) {
                 BattleAnim_FreeEffectSlot(var_s0);
             }
         }
@@ -983,7 +974,7 @@ void BattleAnim_CleanupEffectsRetainingCategories47(void) {
 
     for (i = 0; i < 300; i++, var_s2++) {
         if (var_s2->allocated != 0) {
-            if ((var_s2->unk_CA != 4) && (var_s2->unk_CA != 7)) {
+            if ((var_s2->effectList != 4) && (var_s2->effectList != 7)) {
                 BattleAnim_DestroyParticle(var_s2);
             }
         }
@@ -1002,13 +993,13 @@ void BattleAnim_CleanupEffectsRetainingCategory4(void) {
     Particle* var_s2 = gParticlePool;
 
     for (i = 0; i < 300; i++, var_s0++) {
-        if ((var_s0->unk_15 != 0) && (var_s0->unk_17 != 4)) {
+        if ((var_s0->inUse != 0) && (var_s0->effectList != 4)) {
             BattleAnim_FreeEffectSlot(var_s0);
         }
     }
 
     for (i = 0; i < 300; i++, var_s2++) {
-        if ((var_s2->allocated != 0) && (var_s2->unk_CA != 4)) {
+        if ((var_s2->allocated != 0) && (var_s2->effectList != 4)) {
             BattleAnim_DestroyParticle(var_s2);
         }
     }
@@ -1122,7 +1113,7 @@ void BattleAnim_StopParticlesForOwnerCategory(u8 arg0, ActivePokemon* arg1) {
     Particle* var_s0 = gParticlePool;
 
     for (i = 0; i < 300; i++, var_s0++) {
-        if ((var_s0->allocated != 0) && (var_s0->unk_CA == 4) && (var_s0->unk_CB == arg0) && (arg1 == var_s0->pokemon)) {
+        if ((var_s0->allocated != 0) && (var_s0->effectList == 4) && (var_s0->resourceListId == arg0) && (arg1 == var_s0->pokemon)) {
             Particle_AdvanceLifecycle(var_s0);
         }
     }
@@ -1178,20 +1169,20 @@ BattleAnimEffectSlot* BattleAnim_CreateEffectSlot(s32 arg0, s32 arg1, s8 arg2, f
     BattleAnimEffectSlot* sp1C = BattleAnim_AllocEffectSlot();
 
     if ((u32)sp1C != -1) {
-        sp1C->unk_0E = arg0 + gBattleAnimSpawnDelay;
-        sp1C->unk_0C = arg1;
-        sp1C->unk_14 = arg2;
-        sp1C->unk_00 = arg3;
-        sp1C->unk_04 = arg4;
-        sp1C->unk_08 = arg5;
-        sp1C->unk_16 = arg8;
-        sp1C->unk_10 = arg6;
-        sp1C->unk_12 = arg7;
-        sp1C->unk_19 = arg9;
-        sp1C->unk_1A = argB;
-        sp1C->unk_1B = argA;
-        sp1C->unk_17 = BattleAnim_GetCurrentEffectList();
-        sp1C->unk_18 = BattleAnim_GetQueuedResourceListId();
+        sp1C->delayTimer = arg0 + gBattleAnimSpawnDelay;
+        sp1C->repeatInterval = arg1;
+        sp1C->repeatCount = arg2;
+        sp1C->updateCallback = arg3;
+        sp1C->descriptor = arg4;
+        sp1C->pokemon = arg5;
+        sp1C->anchorMode = arg8;
+        sp1C->param0 = arg6;
+        sp1C->param1 = arg7;
+        sp1C->byteParam0 = arg9;
+        sp1C->byteParam2 = argB;
+        sp1C->byteParam1 = argA;
+        sp1C->effectList = BattleAnim_GetCurrentEffectList();
+        sp1C->resourceListId = BattleAnim_GetQueuedResourceListId();
     }
     return sp1C;
 }

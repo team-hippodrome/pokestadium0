@@ -3,27 +3,27 @@
 
 #include "gb_audio.h"
 #include "gb_audio_render.h"
-typedef struct unk_D_800FCD70 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-} unk_D_800FCD70;
-typedef struct unk_D_800FCD98 {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ f32 unk_04;
-    /* 0x08 */ f32 unk_08;
-    /* 0x0C */ u8 unk_0C;
-} unk_D_800FCD98;
+typedef struct GbMusicVibrato {
+    /* 0x00 */ u8 vibratoExtent; // @unverified: from the code, as pokered's wChannelVibratoExtents: high nybble = step up, low nybble = step down
+    /* 0x01 */ u8 vibratoRate; // @unverified: from the code, as pokered's wChannelVibratoRates: low nybble counts down, high nybble reloads it
+    /* 0x02 */ u8 frequencyLow; // @unverified: low byte of the note's frequency, the base the vibrato moves around (pokered's wChannelFrequencyLowBytes)
+    /* 0x03 */ u8 vibratoDelayCounter; // @unverified: counts down before the vibrato starts, reloaded from vibratoDelay each note (pokered's wChannelVibratoDelayCounters)
+    /* 0x04 */ u8 vibratoDelay; // @unverified: first byte of the vibrato command (pokered's wChannelVibratoDelayCounterReloadValues)
+} GbMusicVibrato;
+typedef struct GbMusicPitchSlide {
+    /* 0x00 */ f32 current; // @unverified: from the code: current pitch-slide frequency, stepped and written to NRx3/NRx4
+    /* 0x04 */ f32 target; // @unverified: from the code: pitch-slide target frequency (from the slide command's note)
+    /* 0x08 */ f32 step; // @unverified: from the code: (target - current) / length, added each tick
+    /* 0x0C */ u8 length; // @unverified: from the code: first byte of the pitch-slide command, the number of steps
+} GbMusicPitchSlide;
 static u8 D_800B3FD0[8]; // unreferenced; present because the file's .bss is 16-byte aligned (the donor's D_800FCD40)
 static u8 D_800B3FD8[8];
 static u8 D_800B3FE0[8];
 static u8 D_800B3FE8[8];
 static u8 D_800B3FF0[8];
 static u8 D_800B3FF8;
-static unk_D_800FCD70 D_800B4000[8];
-static unk_D_800FCD98 D_800B4028[8];
+static GbMusicVibrato D_800B4000[8];
+static GbMusicPitchSlide D_800B4028[8];
 static u8 D_800B40A8[8];
 static u8 D_800B40B0[8];
 static u8 D_800B40B8[8];
@@ -52,10 +52,6 @@ extern u8 D_80075FC4;
 extern u8 D_80075FC8;
 extern u8 D_80075FCC;
 extern u8 D_80075FD0;
-typedef struct unk_80044A50_008 {
-    u32 unk_00;
-    u32 unk_04;
-} unk_80044A50_008;
 
 void GbMusic_UpdateChannels(void);
 void GbMusic_StartSequenceById(u8 arg0);
@@ -99,7 +95,7 @@ void GbMusic_StartSfx(u8 arg0);
 void GbMusic_ResetApu(void);
 void GbMusic_BindSequenceTracks(u8 arg0);
 s32 GbMusic_CountActiveHighChannels(void);
-void func_8003E0B0(unk_D_800FC6D4* arg0);
+void func_8003E0B0(GbMusicBank* arg0);
 
 void GbMusic_StartMusic(u8 arg0);
 
@@ -149,7 +145,7 @@ s32 GbMusic_StartTableSequence(u16 arg0) {
 
     arg0--;
 
-    a = D_800FD688->entries[arg0].unk_00;
+    a = D_800FD688->entries[arg0].seqId;
     D_800B4144 = a;
     D_800B415C = D_800FD688->entries[arg0].unk_02;
     D_800B415D = D_800FD688->entries[arg0].unk_03;
@@ -166,7 +162,7 @@ s32 GbMusic_StartTableSequence(u16 arg0) {
  */
 void GbMusic_UpdateChannel(u32 arg0) {
     if (D_800B3FE0[arg0] < 2) {
-        D_800B4000[arg0].unk_03 = D_800B4000[arg0].unk_04;
+        D_800B4000[arg0].vibratoDelayCounter = D_800B4000[arg0].vibratoDelay;
         D_800B3FE8[arg0] &= (u8)~0x30;
         GbMusic_DecodeChannelCommands(arg0);
         return;
@@ -185,32 +181,32 @@ void GbMusic_UpdateChannel(u32 arg0) {
     if ((D_800B3FF0[arg0] & 1) || (D_800B3FE8[arg0] & 4)) {
         if (D_800B3FE8[arg0] & 0x10) {
             GbMusic_AdvancePitchSlide(arg0);
-        } else if (D_800B4000[arg0].unk_03 != 0) {
-            D_800B4000[arg0].unk_03--;
-        } else if (D_800B4000[arg0].unk_00 != 0) {
-            if (D_800B4000[arg0].unk_01 & 0xF) {
-                D_800B4000[arg0].unk_01--;
+        } else if (D_800B4000[arg0].vibratoDelayCounter != 0) {
+            D_800B4000[arg0].vibratoDelayCounter--;
+        } else if (D_800B4000[arg0].vibratoExtent != 0) {
+            if (D_800B4000[arg0].vibratoRate & 0xF) {
+                D_800B4000[arg0].vibratoRate--;
             } else {
-                u8 sp2F = D_800B4000[arg0].unk_01;
+                u8 sp2F = D_800B4000[arg0].vibratoRate;
                 sp2F = (sp2F << 4) | ((sp2F >> 4) & 0xF);
 
-                D_800B4000[arg0].unk_01 |= sp2F;
+                D_800B4000[arg0].vibratoRate |= sp2F;
 
                 if ((D_800B3FE8[arg0] & 8) != 0) {
-                    sp2F = D_800B4000[arg0].unk_00 & 0xF;
+                    sp2F = D_800B4000[arg0].vibratoExtent & 0xF;
                     D_800B3FE8[arg0] &= ~8;
-                    if (D_800B4000[arg0].unk_02 < sp2F) {
+                    if (D_800B4000[arg0].frequencyLow < sp2F) {
                         sp2F = D_800B3FE8[arg0] * 0;
                     } else {
-                        sp2F = D_800B4000[arg0].unk_02 - sp2F;
+                        sp2F = D_800B4000[arg0].frequencyLow - sp2F;
                     }
                 } else {
-                    sp2F = (D_800B4000[arg0].unk_00 & 0xF0) >> 4;
+                    sp2F = (D_800B4000[arg0].vibratoExtent & 0xF0) >> 4;
                     D_800B3FE8[arg0] &= 8;
-                    if ((0xFF - sp2F) < D_800B4000[arg0].unk_02) {
+                    if ((0xFF - sp2F) < D_800B4000[arg0].frequencyLow) {
                         sp2F = 0xFF;
                     } else {
-                        sp2F += D_800B4000[arg0].unk_02;
+                        sp2F += D_800B4000[arg0].frequencyLow;
                     }
                 }
                 GbAudio_QueueRegisterWrite(GbMusic_GetChannelRegister(arg0, 3), sp2F, 0);
@@ -378,8 +374,8 @@ u8 GbMusic_CmdSetEnvelope(u32 arg0) {
     u8 temp_t9;
 
     temp_v0 = GbMusic_ReadStreamByte(arg0);
-    D_800B4000[arg0].unk_03 = temp_v0;
-    D_800B4000[arg0].unk_04 = temp_v0;
+    D_800B4000[arg0].vibratoDelayCounter = temp_v0;
+    D_800B4000[arg0].vibratoDelay = temp_v0;
 
     temp_v0 = GbMusic_ReadStreamByte(arg0);
     temp_a0 = temp_v0 & 0xF0;
@@ -390,12 +386,12 @@ u8 GbMusic_CmdSetEnvelope(u32 arg0) {
     temp_a0 = temp_a1 + temp_t9;
     temp_a0 <<= 4;
     temp_t9 = temp_a0 | temp_a1;
-    D_800B4000[arg0].unk_00 = temp_t9;
+    D_800B4000[arg0].vibratoExtent = temp_t9;
 
     temp_t9 = temp_v0 & 0xF;
     temp_v0 = temp_t9 << 4;
     temp_v0 |= temp_t9;
-    D_800B4000[arg0].unk_01 = temp_v0;
+    D_800B4000[arg0].vibratoRate = temp_v0;
     return 0;
 }
 
@@ -404,9 +400,9 @@ u8 GbMusic_CmdPitchSlide(u32 arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     u8 temp_v0;
 
-    D_800B4028[arg0].unk_0C = GbMusic_ReadStreamByte(arg0);
+    D_800B4028[arg0].length = GbMusic_ReadStreamByte(arg0);
     temp_v0 = GbMusic_ReadStreamByte(arg0);
-    D_800B4028[arg0].unk_04 = GbMusic_GetNoteFrequency(temp_v0 & 0xF, (temp_v0 & 0xF0) >> 4);
+    D_800B4028[arg0].target = GbMusic_GetNoteFrequency(temp_v0 & 0xF, (temp_v0 & 0xF0) >> 4);
     D_800B3FE8[arg0] |= 0x10;
     GbMusic_ScheduleNote(arg0, GbMusic_ReadStreamByte(arg0));
     return 1;
@@ -649,7 +645,7 @@ s32 GbMusic_TriggerChannelNote(u32 arg0, u16 arg1, u16 arg2) {
     if (D_800B3FE8[arg0] & 1) {
         var_s1++;
     }
-    D_800B4000[arg0].unk_02 = var_s1 & 0xFF;
+    D_800B4000[arg0].frequencyLow = var_s1 & 0xFF;
     GbMusic_WriteChannelFrequency(arg0, var_s1);
     return 1;
 }
@@ -782,19 +778,19 @@ void GbMusic_AdvancePitchSlide(u32 arg0) {
     u8 sp1E;
     u16 sp1C;
 
-    D_800B4028[arg0].unk_00 += D_800B4028[arg0].unk_08;
+    D_800B4028[arg0].current += D_800B4028[arg0].step;
     if (D_800B3FE8[arg0] & 0x20) {
-        if (D_800B4028[arg0].unk_04 < D_800B4028[arg0].unk_00) {
+        if (D_800B4028[arg0].target < D_800B4028[arg0].current) {
             D_800B3FE8[arg0] &= ~0x30;
             return;
         }
-    } else if (D_800B4028[arg0].unk_00 < D_800B4028[arg0].unk_04) {
+    } else if (D_800B4028[arg0].current < D_800B4028[arg0].target) {
         D_800B3FE8[arg0] &= ~0x30;
         return;
     }
 
-    sp1F = D_800B4028[arg0].unk_00;
-    sp1E = ((u16)D_800B4028[arg0].unk_00 & 0xFF00) >> 8;
+    sp1F = D_800B4028[arg0].current;
+    sp1E = ((u16)D_800B4028[arg0].current & 0xFF00) >> 8;
     sp1C = GbMusic_GetChannelRegister(arg0, 3);
     GbAudio_QueueRegisterWrite(sp1C, sp1F, 0);
     GbAudio_QueueRegisterWrite(sp1C + 1, sp1E, 0);
@@ -802,13 +798,13 @@ void GbMusic_AdvancePitchSlide(u32 arg0) {
 
 /** Starts a pitch slide toward the given frequency. */
 s32 GbMusic_StartPitchSlide(u32 arg0, u16 arg1) {
-    D_800B4028[arg0].unk_00 = arg1;
-    if (arg1 < D_800B4028[arg0].unk_04) {
+    D_800B4028[arg0].current = arg1;
+    if (arg1 < D_800B4028[arg0].target) {
         D_800B3FE8[arg0] &= ~0x20;
     } else {
         D_800B3FE8[arg0] |= 0x20;
     }
-    D_800B4028[arg0].unk_08 = (D_800B4028[arg0].unk_04 - D_800B4028[arg0].unk_00) / D_800B4028[arg0].unk_0C;
+    D_800B4028[arg0].step = (D_800B4028[arg0].target - D_800B4028[arg0].current) / D_800B4028[arg0].length;
     return 1;
 }
 
@@ -900,18 +896,18 @@ void GbMusic_StartMusic(u8 arg0) {
         D_800B40B0[i] = 0;
         D_800B40A8[i] = 0;
 
-        D_800B4000[i].unk_03 = 0;
-        D_800B4000[i].unk_00 = 0;
-        D_800B4000[i].unk_01 = 0;
-        D_800B4000[i].unk_02 = 0;
-        D_800B4000[i].unk_04 = 0;
+        D_800B4000[i].vibratoDelayCounter = 0;
+        D_800B4000[i].vibratoExtent = 0;
+        D_800B4000[i].vibratoRate = 0;
+        D_800B4000[i].frequencyLow = 0;
+        D_800B4000[i].vibratoDelay = 0;
 
         D_800B3FF0[i] = 0;
 
-        D_800B4028[i].unk_0C = 0;
-        D_800B4028[i].unk_00 = 0;
-        D_800B4028[i].unk_04 = 0;
-        D_800B4028[i].unk_08 = 0;
+        D_800B4028[i].length = 0;
+        D_800B4028[i].current = 0;
+        D_800B4028[i].target = 0;
+        D_800B4028[i].step = 0;
 
         D_800B40C0[i] = 1;
         D_800B3FE0[i] = 1;
@@ -961,16 +957,16 @@ void GbMusic_StartSfx(u8 arg0) {
         D_800B40B0[i] = 0;
         D_800B40A8[i] = 0;
 
-        D_800B4000[i].unk_03 = 0;
-        D_800B4000[i].unk_00 = 0;
-        D_800B4000[i].unk_01 = 0;
-        D_800B4000[i].unk_02 = 0;
-        D_800B4000[i].unk_04 = 0;
+        D_800B4000[i].vibratoDelayCounter = 0;
+        D_800B4000[i].vibratoExtent = 0;
+        D_800B4000[i].vibratoRate = 0;
+        D_800B4000[i].frequencyLow = 0;
+        D_800B4000[i].vibratoDelay = 0;
 
-        D_800B4028[i].unk_0C = 0;
-        D_800B4028[i].unk_00 = 0.0f;
-        D_800B4028[i].unk_04 = 0.0f;
-        D_800B4028[i].unk_08 = 0.0f;
+        D_800B4028[i].length = 0;
+        D_800B4028[i].current = 0.0f;
+        D_800B4028[i].target = 0.0f;
+        D_800B4028[i].step = 0.0f;
 
         D_800B40C0[i] = 1;
         D_800B3FE0[i] = 1;
@@ -1024,7 +1020,7 @@ void GbMusic_BindSequenceTracks(u8 arg0) {
     u8 temp;
     u8 temp_v1;
 
-    temp_v1 = ((unk_D_800FC6D4_008*)D_800B4158)->unk_04;
+    temp_v1 = ((GbMusicTrackHeader*)D_800B4158)->channel;
     temp = (temp_v1 >> 6) & 3;
     x = temp_v1 & 0xF;
     i = 0;
@@ -1034,14 +1030,14 @@ void GbMusic_BindSequenceTracks(u8 arg0) {
             D_800B3FE8[x] |= 4;
         }
 
-        D_800B40D8[x] = ((unk_D_800FC6D4_008*)D_800B4158 + i)->unk_00;
+        D_800B40D8[x] = ((GbMusicTrackHeader*)D_800B4158 + i)->data;
         D_800B4118[x] = D_800B40D8[x];
         i++;
         
         if (i > temp) {
             break;
         }
-        x = ((unk_D_800FC6D4_008*)D_800B4158 + i)->unk_04 & 0xF;
+        x = ((GbMusicTrackHeader*)D_800B4158 + i)->channel & 0xF;
     }
 
     if ((arg0 >= D_80075FB8) && (arg0 < D_80075FBC)) {
@@ -1071,21 +1067,21 @@ s32 GbMusic_CountActiveHighChannels(void) {
     return ret;
 }
 
-void func_8003E0B0(unk_D_800FC6D4* arg0) {
+void func_8003E0B0(GbMusicBank* arg0) {
     s32 i, end;
     u32 base;
     u8* temp_v1;
-    unk_80044A50_008* temp_v0;
+    GbMusicTrackHeader* temp_v0;
     if (arg0->flags != 0) return;
-    end = arg0->unk_04;
+    end = arg0->numSequences;
     base = (u32)arg0;
     temp_v1 = arg0->offset;
     temp_v1 += base;
     arg0->offset = (u32)temp_v1;
     for (i = 0; i != (end * 3); i++) {
-        temp_v0 = (unk_80044A50_008*)((u32)i * 8 + (u32)temp_v1);
+        temp_v0 = (GbMusicTrackHeader*)((u32)i * 8 + (u32)temp_v1);
         temp_v0 += 0;
-        temp_v0->unk_00 += base;
+        temp_v0->data += base;
     }
     arg0->flags = 1;
 }

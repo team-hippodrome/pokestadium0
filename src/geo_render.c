@@ -22,10 +22,10 @@ typedef struct unk_D_800AA8C8 {
 extern s32 D_80060480;
 extern u16 D_80060484;
 extern CameraNode* D_80060488;
-extern unk_D_86002F34_alt1* D_8006048C;
-extern unk_D_86002F34_alt1* D_80060490;
+extern GeoType3Node* D_8006048C;
+extern GeoModelRootNode* D_80060490;
 extern CameraNode* D_80060494;
-extern unk_D_86002F34_alt1* D_80060498;
+extern GeoModelRootNode* D_80060498;
 extern DisplayObject* D_8006049C;
 extern func_D_8006F0A4 D_8006062C[];
 extern s32 D_800AB244;
@@ -40,15 +40,6 @@ typedef union AnimFixedFrame {
     };
     s32 raw;
 } AnimFixedFrame;
-typedef struct TransformAnimRaw {
-    /* 0x00 */ s16 animationId;
-    /* 0x04 */ TransformAnimData* data;
-    /* 0x08 */ AnimFixedFrame frameFixed;
-    /* 0x0C */ s32 speedFixed;
-    /* 0x10 */ char unk10[0x2];
-    /* 0x12 */ u16 lastRenderFrame;
-} TransformAnimRaw;
-
 #include "m2c_macros.h"
 
 void GeoRender_InitMatrixStack(void);
@@ -59,8 +50,8 @@ void GeoRender_PushScaledMatrix(Vec3f* arg0);
 MtxF* GeoRender_GetRelativeMatrix(s32 arg0);
 void GeoRender_ResetTransformStack(void);
 void GeoRender_PushScale(Vec3f* arg0);
-f32 ModelAnim_EvaluateTranslationChannel(unk_D_800ABCC0* arg0, s32 arg1);
-s16 ModelAnim_EvaluateRotationChannel(unk_D_800ABCC0* arg0, s32 arg1);
+f32 ModelAnim_EvaluateScaleChannel(ModelAnimCurveContext* arg0, s32 arg1);
+s16 ModelAnim_EvaluateRotationChannel(ModelAnimCurveContext* arg0, s32 arg1);
 s32 ModelAnim_ResolveEventIndex(s32 arg0, unk_func_80017540_arg1* arg1, s32 arg2);
 Vtx* GeoOverlay_BuildFadeQuad(CameraOverlay* arg0, CameraOrthographic* arg1);
 void GeoOverlay_DrawFadeQuad(CameraOverlay* arg0, CameraOrthographic* arg1);
@@ -183,118 +174,110 @@ void GeoRender_PushScale(Vec3f* arg0) {
 }
 
 extern s32 D_800ABCF0;
-extern unk_D_800ABCC0 D_800ABCC0[2];
+extern ModelAnimCurveContext D_800ABCC0[2];
 /*
  * ModelAnim_BeginCurveContext
  *
- * Fills the global record D_800AC690 from the object `arg0` and the data
- * block arg0->unk_4 (`temp_s1`):
- *
- *   - if arg1 != 0, arg0->unk_8 = ModelAnim_AdvanceCurveFrame(arg0) first;
- *   - arg0->unk_12 (halfword at 0x12) = D_80060484;
- *   - D_800AC690[0] = 1;  D_800AC690[1] = first halfword of the block & 4;
- *     D_800AC690 word 4 = the block pointer;
- *     D_800AC690 halfword 2 = (arg0->unk_8) >> 16, clamped to 0 if negative;
- *   - D_800AC690 words 8, 0xC, 0x10, 0x14 = func_80002C80 of the block's
- *     words at 0xC, 0x10, 0x14, 0x18.
- *
- * What the record is used for is not established; ModelAnim_AdvanceCurveFrame and
- * func_80002C80 are not described here.
+ * Loads the global curve context D_800AC690 from a transform animation state:
+ * advances its frame if arg1 != 0, stamps lastRenderFrame, then points the
+ * context at the channel table and the scale, rotation and translation value
+ * streams of its TransformAnimData. Geo_NodeAnimatedPart then evaluates three
+ * channels per part from it.
  */
 s32 func_80002C80(s32);
-s32 ModelAnim_AdvanceCurveFrame(TransformAnimRaw* arg0);
-extern u8 D_800AC690;
+s32 ModelAnim_AdvanceCurveFrame(TransformAnimState* arg0);
+extern ModelAnimCurveContext D_800AC690;
 
 /** Starts evaluating an animation curve set, setting up its channel context. */
-void ModelAnim_BeginCurveContext(void *arg0, s32 arg1) {
-    s16 *temp_s1;
+void ModelAnim_BeginCurveContext(void* arg0, s32 arg1) {
+    TransformAnimData* temp_s1;
 
-    temp_s1 = M2C_FIELD(arg0, s16 **, 4);
+    temp_s1 = ((TransformAnimState*)arg0)->data;
     if (arg1 != 0) {
-        M2C_FIELD(arg0, s32 *, 8) = ModelAnim_AdvanceCurveFrame((TransformAnimRaw*)arg0);
+        ((TransformAnimState*)arg0)->frameFixed = ModelAnim_AdvanceCurveFrame((TransformAnimState*)arg0);
     }
-    M2C_FIELD(arg0, u16 *, 0x12) = (u16) D_80060484;
-    M2C_FIELD(&D_800AC690, s8 *, 0) = 1;
-    M2C_FIELD(&D_800AC690, s8 *, 1) = (s8) (*M2C_FIELD(arg0, s16 **, 4) & 4);
-    M2C_FIELD(&D_800AC690, s16 *, 2) = (s16) ((s32) M2C_FIELD(arg0, s32 *, 8) >> 0x10);
-    M2C_FIELD(&D_800AC690, s16 **, 4) = temp_s1;
-    M2C_FIELD(&D_800AC690, s32 *, 8) = func_80002C80(M2C_FIELD(temp_s1, s32 *, 0xC));
-    M2C_FIELD(&D_800AC690, s32 *, 0xC) = func_80002C80(M2C_FIELD(temp_s1, s32 *, 0x10));
-    M2C_FIELD(&D_800AC690, s32 *, 0x10) = func_80002C80(M2C_FIELD(temp_s1, s32 *, 0x14));
-    M2C_FIELD(&D_800AC690, s32 *, 0x14) = func_80002C80(M2C_FIELD(temp_s1, s32 *, 0x18));
-    if (M2C_FIELD(&D_800AC690, s16 *, 2) < 0) {
-        M2C_FIELD(&D_800AC690, s16 *, 2) = 0;
+    ((TransformAnimState*)arg0)->lastRenderFrame = (u16) D_80060484;
+    D_800AC690.active = 1;
+    D_800AC690.wideTranslation = (s8) (((TransformAnimState*)arg0)->data->flags & 4);
+    D_800AC690.frame = (s16) (((TransformAnimState*)arg0)->frameFixed >> 0x10);
+    D_800AC690.data = temp_s1;
+    D_800AC690.channels = (void*) func_80002C80(temp_s1->channelTable);
+    D_800AC690.scaleValues = (void*) func_80002C80(temp_s1->scaleData);
+    D_800AC690.rotationValues = (void*) func_80002C80(temp_s1->rotationData);
+    D_800AC690.translationValues = (void*) func_80002C80(temp_s1->translationData);
+    if (D_800AC690.frame < 0) {
+        D_800AC690.frame = 0;
     }
 }
 
 /**
- * Evaluates one translation channel of an animation curve at the current
- * frame.
+ * Evaluates one scale channel of an animation curve at the current frame
+ * (values are in thousandths; the result feeds GeoRender_PushScale).
  */
-f32 ModelAnim_EvaluateTranslationChannel(unk_D_800ABCC0* arg0, s32 arg1) {
+f32 ModelAnim_EvaluateScaleChannel(ModelAnimCurveContext* arg0, s32 arg1) {
     f32 ret;
     s32 var_a2;
-    unk_D_800ABCC0_008* temp_v0 = &arg0->unk_08[arg1];
+    ModelAnimChannel* temp_v0 = &arg0->channels[arg1];
 
-    if (temp_v0->unk_00 == 1) {
-        ret = temp_v0->unk_04 / 1000.0f;
+    if (temp_v0->scaleKeyCount == 1) {
+        ret = temp_v0->scaleIndex / 1000.0f;
     } else {
-        if (arg0->unk_02 < temp_v0->unk_00) {
-            var_a2 = temp_v0->unk_04 + arg0->unk_02;
+        if (arg0->frame < temp_v0->scaleKeyCount) {
+            var_a2 = temp_v0->scaleIndex + arg0->frame;
         } else {
-            var_a2 = (temp_v0->unk_04 + temp_v0->unk_00) - 1;
+            var_a2 = (temp_v0->scaleIndex + temp_v0->scaleKeyCount) - 1;
         }
 
-        ret = arg0->unk_0C[var_a2] / 1000.0f;
+        ret = arg0->scaleValues[var_a2] / 1000.0f;
     }
 
     return ret;
 }
 
 /** Evaluates one rotation channel of an animation curve at the current frame. */
-s16 ModelAnim_EvaluateRotationChannel(unk_D_800ABCC0* arg0, s32 arg1) {
+s16 ModelAnim_EvaluateRotationChannel(ModelAnimCurveContext* arg0, s32 arg1) {
     s32 var_a1;
     s16 var_v1;
-    unk_D_800ABCC0_008* temp_v0 = &arg0->unk_08[arg1];
+    ModelAnimChannel* temp_v0 = &arg0->channels[arg1];
 
-    if (temp_v0->unk_01 == 1) {
-        var_v1 = temp_v0->unk_06 * 0x10;
+    if (temp_v0->rotationKeyCount == 1) {
+        var_v1 = temp_v0->rotationIndex * 0x10;
     } else {
-        if (arg0->unk_02 < temp_v0->unk_01) {
-            var_a1 = temp_v0->unk_06 + arg0->unk_02;
+        if (arg0->frame < temp_v0->rotationKeyCount) {
+            var_a1 = temp_v0->rotationIndex + arg0->frame;
         } else {
-            var_a1 = (temp_v0->unk_06 + temp_v0->unk_01) - 1;
+            var_a1 = (temp_v0->rotationIndex + temp_v0->rotationKeyCount) - 1;
         }
-        var_v1 = PackedBits_ReadSigned(arg0->unk_10, var_a1, 0xC) * 0x10;
+        var_v1 = PackedBits_ReadSigned(arg0->rotationValues, var_a1, 0xC) * 0x10;
     }
     return var_v1;
 }
 
-/** Evaluates one scale channel of an animation curve at the current frame. */
-f32 ModelAnim_EvaluateScaleChannel(unk_D_800ABCC0* arg0, s32 arg1) {
+/** Evaluates one translation channel of an animation curve at the current frame (whole units, 12 or 16-bit packed). */
+f32 ModelAnim_EvaluateTranslationChannel(ModelAnimCurveContext* arg0, s32 arg1) {
     f32 var_fv1;
     s16 var_a2;
     s32 var_a1;
-    unk_D_800ABCC0_008* temp_v0 = &arg0->unk_08[arg1];
+    ModelAnimChannel* temp_v0 = &arg0->channels[arg1];
 
-    if (temp_v0->unk_02 == 1) {
-        if (arg0->unk_01 != 0) {
-            var_fv1 = (s16)temp_v0->unk_08;
+    if (temp_v0->translationKeyCount == 1) {
+        if (arg0->wideTranslation != 0) {
+            var_fv1 = (s16)temp_v0->translationIndex;
         } else {
-            var_a2 = temp_v0->unk_08 * 0x10;
+            var_a2 = temp_v0->translationIndex * 0x10;
             var_fv1 = var_a2 >> 4;
         }
     } else {
-        if (arg0->unk_02 < temp_v0->unk_02) {
-            var_a1 = temp_v0->unk_08 + arg0->unk_02;
+        if (arg0->frame < temp_v0->translationKeyCount) {
+            var_a1 = temp_v0->translationIndex + arg0->frame;
         } else {
-            var_a1 = (temp_v0->unk_08 + temp_v0->unk_02) - 1;
+            var_a1 = (temp_v0->translationIndex + temp_v0->translationKeyCount) - 1;
         }
 
-        if (arg0->unk_01 != 0) {
-            var_fv1 = PackedBits_ReadSigned(arg0->unk_14, var_a1, 0x10);
+        if (arg0->wideTranslation != 0) {
+            var_fv1 = PackedBits_ReadSigned(arg0->translationValues, var_a1, 0x10);
         } else {
-            var_fv1 = PackedBits_ReadSigned(arg0->unk_14, var_a1, 0xC);
+            var_fv1 = PackedBits_ReadSigned(arg0->translationValues, var_a1, 0xC);
         }
     }
 
@@ -307,17 +290,17 @@ f32 ModelAnim_EvaluateScaleChannel(unk_D_800ABCC0* arg0, s32 arg1) {
  * a Pound turn.
  * @unverified Name from Stadium 1, matched by code similarity.
  */
-s32 ModelAnim_AdvanceCurveFrame(TransformAnimRaw* arg0) {
+s32 ModelAnim_AdvanceCurveFrame(TransformAnimState* arg0) {
     AnimFixedFrame spC;
     AnimFixedFrame* ptr;
     TransformAnimData* temp_v0;
 
     ptr = &spC;
     temp_v0 = arg0->data;
-    spC.raw = arg0->frameFixed.raw;
+    spC.raw = arg0->frameFixed;
     if (arg0->lastRenderFrame != D_80060484) {
         spC.raw += arg0->speedFixed;
-        if (arg0->speedFixed >= 0) {
+        if ((s32)arg0->speedFixed >= 0) {
             if (ptr->whole >= temp_v0->endFrame) {
                 if (temp_v0->flags & 2) {
                     ptr->whole = temp_v0->endFrame - 1;
@@ -585,8 +568,9 @@ void GeoRender_SetCombineMode(Gfx* arg0, arg1_func_81407874_014_000_010* arg1) {
                       GCCc1w1(arg1->unk_09, arg1->unk_0C, arg1->unk_0E, arg1->unk_0B, arg1->unk_0D, arg1->unk_0F));
 }
 
+
 extern arg1_func_81407874_014_000_010 D_80060534[];
-void func_800128E0(s8 *arg0) {
+void func_800128E0(GeoLayerRenderState* arg0) {
     bzero(arg0, 0x20);
     M2C_FIELD(arg0, u8 *, 0x19) = 0xFF;
     M2C_FIELD(arg0, u32 *, 4) = 0xFFFFFFFF;
@@ -597,18 +581,18 @@ void func_800128E0(s8 *arg0) {
 }
 
 extern s32 D_800604A4[][9];
-s32 func_8001298C(arg0) s8* arg0; {
-    s32 mode = D_800604A4[M2C_FIELD(arg0, u8*, 0x1D)][M2C_FIELD(arg0, u8*, 0x1C)];
+s32 func_8001298C(arg0) GeoLayerRenderState* arg0; {
+    s32 mode = D_800604A4[arg0->flags][arg0->layer];
     Gfx* gfx;
 
-    M2C_FIELD(arg0, s32*, 8) = 0xFFFFFF00;
+    arg0->fogColor = 0xFFFFFF00;
     gfx = gDisplayListHead++;
     gfx->words.w0 = 0xF8000000;
-    gfx->words.w1 = M2C_FIELD(arg0, s32*, 8);
-    if ((D_80060480 & 1) && (M2C_FIELD(arg0, u8*, 0x1D) == 1) && (M2C_FIELD(arg0, u8*, 0x1C) == 5)) {
+    gfx->words.w1 = arg0->fogColor;
+    if ((D_80060480 & 1) && (arg0->flags == 1) && (arg0->layer == 5)) {
         mode = 0x107A58;
     }
-    if (D_80060490->unk_1D != 0) {
+    if (D_80060490->fogEnabled != 0) {
         gSPSetOtherMode(gDisplayListHead++, G_SETOTHERMODE_L, G_MDSFT_RENDERMODE, 29, mode | 0xC8000000);
     } else {
         gSPSetOtherMode(gDisplayListHead++, G_SETOTHERMODE_L, G_MDSFT_RENDERMODE, 29, mode | 0x0C080000);
@@ -622,73 +606,73 @@ typedef union Rgba80012D04 {
     } c;
 } Rgba80012D04;
 
-void func_80012A80(s8* arg0) {
+void func_80012A80(GeoLayerRenderState* arg0) {
     Rgba80012D04 color;
 
-    color.word = M2C_FIELD(arg0, s32*, 4);
-    M2C_FIELD(arg0, s32*, 0xC) = 0;
-    M2C_FIELD(arg0, s32*, 0x10) = 0;
-    M2C_FIELD(arg0, s32*, 0) = 0;
-    M2C_FIELD(arg0, u8*, 0x1A) = 0;
+    color.word = arg0->primColor;
+    arg0->texture = 0;
+    arg0->palette = 0;
+    arg0->unk_00 = 0;
+    arg0->unk_1A = 0;
     gDPPipeSync(gDisplayListHead++);
-    gDPSetPrimColor(gDisplayListHead++, 0, M2C_FIELD(arg0, u8*, 0x19), color.c.r, color.c.g, color.c.b, color.c.a);
+    gDPSetPrimColor(gDisplayListHead++, 0, arg0->primLodFraction, color.c.r, color.c.g, color.c.b, color.c.a);
     gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
     gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF);
-    GeoRender_SetCombineMode(gDisplayListHead++, &D_80060534[M2C_FIELD(arg0, u8*, 0x18)]);
+    GeoRender_SetCombineMode(gDisplayListHead++, &D_80060534[arg0->combineMode]);
     gSPClearGeometryMode(gDisplayListHead++, G_TEXTURE_GEN);
     gSPLookAt(gDisplayListHead++, M2C_FIELD(D_80060488, u32*, 0xA4) & 0x1FFFFFFF);
 }
 
-void func_80012C00(s8 *arg0, s8 *arg1) {
+void func_80012C00(GeoLayerRenderState* arg0, GeoLayerEntry* arg1) {
     Gfx *gfx;
 
-    if (M2C_FIELD(arg0, s32 *, 8) != M2C_FIELD(arg1, s32 *, 0x14)) {
-        if (M2C_FIELD(arg0, u8 *, 0x1E) == 0) {
-            M2C_FIELD(arg0, u8 *, 0x1E) = 1;
+    if (arg1->fogColor != arg0->fogColor) {
+        if (arg0->syncPending == 0) {
+            arg0->syncPending = 1;
             gDPPipeSync(gDisplayListHead++);
         }
         gfx = gDisplayListHead++;
         gfx->words.w0 = 0xF8000000;
-        gfx->words.w1 = M2C_FIELD(arg1, s32 *, 0x14);
-        gSPSetOtherMode(gDisplayListHead++, G_SETOTHERMODE_L, G_MDSFT_RENDERMODE, 29, D_800604A4[M2C_FIELD(arg0, u8 *, 0x1D)][M2C_FIELD(arg0, u8 *, 0x1C)] | 0xC4000000);
-        M2C_FIELD(arg0, s32 *, 8) = M2C_FIELD(arg1, s32 *, 0x14);
+        gfx->words.w1 = arg1->fogColor;
+        gSPSetOtherMode(gDisplayListHead++, G_SETOTHERMODE_L, G_MDSFT_RENDERMODE, 29, D_800604A4[arg0->flags][arg0->layer] | 0xC4000000);
+        arg0->fogColor = arg1->fogColor;
     }
 }
 
 M2C_UNK func_8001298C();                            /* extern */
 
-void func_80012CC0(s8 *arg0, s8 *arg1) {
-    if (M2C_FIELD(arg0, s32 *, 8) & 0xFF) {
+void func_80012CC0(GeoLayerRenderState* arg0, GeoLayerEntry* arg1) {
+    if (arg0->fogColor & 0xFF) {
         func_8001298C();
     }
-    M2C_FIELD(arg0, s32 *, 8) = (s32) M2C_FIELD(arg1, s32 *, 0x14);
+    arg0->fogColor = (s32) arg1->fogColor;
 }
 
-void func_80012D04(s8* arg0, s8* arg1) {
+void func_80012D04(GeoLayerRenderState* arg0, GeoLayerEntry* arg1) {
     Rgba80012D04 color;
 
-    if ((M2C_FIELD(arg0, s32*, 4) != M2C_FIELD(arg1, s32*, 0x10)) || (M2C_FIELD(arg0, u8*, 0x19) != M2C_FIELD(arg1, u8*, 7))) {
-        if (M2C_FIELD(arg0, u8*, 0x1E) == 0) {
-            M2C_FIELD(arg0, u8*, 0x1E) = 1;
+    if ((arg1->primColor != arg0->primColor) || (arg1->lodFraction != arg0->primLodFraction)) {
+        if (arg0->syncPending == 0) {
+            arg0->syncPending = 1;
             gDPPipeSync(gDisplayListHead++);
         }
-        color.word = M2C_FIELD(arg1, s32*, 0x10);
-        gDPSetPrimColor(gDisplayListHead++, 0, M2C_FIELD(arg1, u8*, 7), color.c.r, color.c.g, color.c.b, color.c.a);
-        M2C_FIELD(arg0, s32*, 4) = M2C_FIELD(arg1, s32*, 0x10);
-        M2C_FIELD(arg0, u8*, 0x19) = M2C_FIELD(arg1, u8*, 7);
+        color.word = arg1->primColor;
+        gDPSetPrimColor(gDisplayListHead++, 0, arg1->lodFraction, color.c.r, color.c.g, color.c.b, color.c.a);
+        arg0->primColor = arg1->primColor;
+        arg0->primLodFraction = arg1->lodFraction;
     }
 }
 
 extern arg1_func_81407874_014_000_010 D_80060534[];
 
-void func_80012DC8(s8* arg0, s8* arg1) {
-    if (M2C_FIELD(arg0, u8*, 0x18) != M2C_FIELD(arg1, u8*, 6)) {
-        if (M2C_FIELD(arg0, u8*, 0x1E) == 0) {
-            M2C_FIELD(arg0, u8*, 0x1E) = 1;
+void func_80012DC8(GeoLayerRenderState* arg0, GeoLayerEntry* arg1) {
+    if (arg1->combineMode != arg0->combineMode) {
+        if (arg0->syncPending == 0) {
+            arg0->syncPending = 1;
             gDPPipeSync(gDisplayListHead++);
         }
-        GeoRender_SetCombineMode(gDisplayListHead++, &D_80060534[M2C_FIELD(arg1, u8*, 6)]);
-        M2C_FIELD(arg0, u8*, 0x18) = M2C_FIELD(arg1, u8*, 6);
+        GeoRender_SetCombineMode(gDisplayListHead++, &D_80060534[arg1->combineMode]);
+        arg0->combineMode = arg1->combineMode;
     }
 }
 
@@ -714,35 +698,34 @@ void GeoRender_DisableTexture(s32* arg0, s32 arg1) {
 }
 
 extern s16 D_8006F2A4[];
-extern unk_D_800ABB28* D_800ABCB8;
 extern s16 D_80060624[];
 
 /** Binds a texture for rendering, loading it on first use. */
-void GeoRender_BindTexture(unk_D_800ABB28* arg0, unk_D_800ABB10* arg1) {
-    unk_D_86002F34_alt11_018* temp_t0;
+void GeoRender_BindTexture(GeoLayerRenderState* arg0, GeoLayerEntry* arg1) {
+    GeoTexture* temp_t0;
     s32 var_a3;
 
-    if (M2C_FIELD(arg0, void**, 0xC) == NULL) {
+    if (arg0->texture == NULL) {
         gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
     }
 
-    if ((M2C_FIELD(arg0, void**, 0xC) != M2C_FIELD(arg1, void**, 0x18)) || (M2C_FIELD(arg0, Gfx**, 0x14) != M2C_FIELD(arg1, Gfx**, 0x20))) {
-        temp_t0 = M2C_FIELD(arg1, unk_D_86002F34_alt11_018**, 0x18);
-        if (M2C_FIELD(arg1, void**, 0x1C) != NULL) {
-            gSPDisplayList(gDisplayListHead++, M2C_FIELD(M2C_FIELD(arg1, void**, 0x1C), Gfx**, 8));
+    if ((arg1->texture != arg0->texture) || (arg1->materialDisplayList != arg0->displayList)) {
+        temp_t0 = arg1->texture;
+        if (arg1->palette != NULL) {
+            gSPDisplayList(gDisplayListHead++, ((GeoPalette*)arg1->palette)->loadDisplayList);
         } else {
             gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
         }
 
-        if (temp_t0->unk_01 == 0) {
-            if ((temp_t0->unk_02 % D_80060624[0]) == 0) {
+        if (temp_t0->siz == 0) {
+            if ((temp_t0->width % D_80060624[0]) == 0) {
                 gDPSetTextureImage(gDisplayListHead++, temp_t0->fmt, G_IM_SIZ_16b, 1, temp_t0->texture);
             } else {
-                gDPSetTextureImage(gDisplayListHead++, temp_t0->fmt, G_IM_SIZ_8b, temp_t0->unk_02 >> 1,
+                gDPSetTextureImage(gDisplayListHead++, temp_t0->fmt, G_IM_SIZ_8b, temp_t0->width >> 1,
                                    temp_t0->texture);
             }
-        } else if ((temp_t0->unk_02 % D_80060624[temp_t0->unk_01]) == 0) {
-            if (temp_t0->unk_01 == 3) {
+        } else if ((temp_t0->width % D_80060624[temp_t0->siz]) == 0) {
+            if (temp_t0->siz == 3) {
                 var_a3 = 3;
             } else {
                 var_a3 = 2;
@@ -750,22 +733,21 @@ void GeoRender_BindTexture(unk_D_800ABB28* arg0, unk_D_800ABB10* arg1) {
 
             gDPSetTextureImage(gDisplayListHead++, temp_t0->fmt, var_a3, 1, temp_t0->texture);
         } else {
-            gDPSetTextureImage(gDisplayListHead++, temp_t0->fmt, temp_t0->unk_01, temp_t0->unk_02, temp_t0->texture);
+            gDPSetTextureImage(gDisplayListHead++, temp_t0->fmt, temp_t0->siz, temp_t0->width, temp_t0->texture);
         }
 
-        gSPDisplayList(gDisplayListHead++, M2C_FIELD(arg1, Gfx**, 0x20));
+        gSPDisplayList(gDisplayListHead++, arg1->materialDisplayList);
     }
 
-    M2C_FIELD(arg0, void**, 0xC) = M2C_FIELD(arg1, void**, 0x18);
-    M2C_FIELD(arg0, void**, 0x10) = M2C_FIELD(arg1, void**, 0x1C);
-    M2C_FIELD(arg0, void**, 0x14) = M2C_FIELD(arg1, void**, 0x20);
+    arg0->texture = arg1->texture;
+    arg0->palette = arg1->palette;
+    arg0->displayList = arg1->materialDisplayList;
 }
 
-extern unk_D_800ABB28* D_800ABCB8;
 extern u8 D_1001800[];
 
-void func_80013148(s8* arg0, s32 arg1) {
-    if (M2C_FIELD(arg0, u8 *, 0x1A) == 0) {
+void func_80013148(GeoLayerRenderState* arg0, s32 arg1) {
+    if (arg0->unk_1A == 0) {
         gDPLoadTextureBlock(gDisplayListHead++, D_1001800, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, 1, 1);
         gSPTexture(gDisplayListHead++, 0x1194, 0x1194, 0, G_TX_RENDERTILE, G_ON);
@@ -774,7 +756,7 @@ void func_80013148(s8* arg0, s32 arg1) {
         gSPClearGeometryMode(gDisplayListHead++, G_TEXTURE_GEN_LINEAR);
         gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEI, G_CC_MODULATEI2);
 
-        M2C_FIELD(arg0, u8 *, 0x1A) = 1;
+        arg0->unk_1A = 1;
     }
 }
 
@@ -804,22 +786,11 @@ void func_800132C8(s32* arg0, void* arg1) {
     }
 }
 
-typedef struct GeoRenderCtx80013398 {
-    /* 0x00 */ s32 unk_00[6];
-    /* 0x18 */ u8 unk_18;
-    /* 0x19 */ u8 unk_19;
-    /* 0x1A */ u8 unk_1A;
-    /* 0x1B */ u8 unk_1B;
-    /* 0x1C */ u8 layer;
-    /* 0x1D */ u8 flags;
-    /* 0x1E */ u8 unk_1E;
-    /* 0x1F */ u8 unk_1F;
-} GeoRenderCtx80013398; // size = 0x20
 
 void func_80013398(struct Root80013DC8 *arg0)
 {
   s8 *entry;
-  GeoRenderCtx80013398 ctx;
+  GeoLayerRenderState ctx;
   func_800128E0((s8 *) (&ctx));
   ctx.flags = (*((u8 *) (((s8 *) arg0) + 2))) & 3;
   if (ctx.flags & 1)
@@ -845,21 +816,21 @@ void func_80013398(struct Root80013DC8 *arg0)
         }
         else
         {
-          func_80012CC0((s8 *) (&ctx), entry);
+          func_80012CC0(&ctx, (GeoLayerEntry*) entry);
         }
         if ((*((u8 *) (((s8 *) entry) + 5))) != 0)
         {
-          func_80013148((s8 *) (&ctx), (s32) entry);
+          func_80013148(&ctx, (s32) entry);
         }
         else
         {
           if (ctx.unk_1A == 1)
           {
-            func_80012A80((s8 *) (&ctx));
+            func_80012A80(&ctx);
           }
           if ((*((s32 *) (((s8 *) entry) + 0x18))) != 0)
           {
-            GeoRender_BindTexture((unk_D_800ABB28 *) (&ctx), (unk_D_800ABB10 *) entry);
+            GeoRender_BindTexture((GeoLayerRenderState *) (&ctx), (GeoLayerEntry *) entry);
           }
           else
           {
@@ -871,7 +842,7 @@ void func_80013398(struct Root80013DC8 *arg0)
         func_800132C8((s32 *) (&ctx), entry);
         if ((*((u8 *) (((s8 *) entry) + 4))) != 0)
         {
-          func_80012A80((s8 *) (&ctx));
+          func_80012A80(&ctx);
         }
       }
 
@@ -887,20 +858,6 @@ void func_80013398(struct Root80013DC8 *arg0)
   gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF);
 }
 
-typedef struct GeoLayerEntry {
-    /* 0x00 */ struct GeoLayerEntry* next;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 textureMode;
-    /* 0x06 */ u8 unk_06;
-    /* 0x07 */ u8 lodFraction;
-    /* 0x08 */ s32 dl;
-    /* 0x0C */ s32 mtx;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ s32 unk_18;
-    /* 0x1C */ s32 unk_1C;
-    /* 0x20 */ s32 unk_20;
-} GeoLayerEntry; // size = 0x24
 extern s32 D_800AB240;
 extern s32 D_800AB448;
 extern s32 D_800AB44C;
@@ -922,7 +879,7 @@ void GeoRender_SubmitLayerDisplayList(s16 layer, s32 arg1, s32 arg2, s32 arg3) {
     flag = layer & 0x80;
     layer &= 0xF;
 
-    if (!(D_80060480 & 2) && (D_80060494 != NULL) && ((D_8006049C == NULL) || (D_8006049C->lodFraction != 0))) {
+    if (!(D_80060480 & 2) && (D_80060494 != NULL) && ((D_8006049C == NULL) || (D_8006049C->alpha != 0))) {
         entry = MainPool_AllocAligned((struct MainPoolState*)D_800AB240, sizeof(GeoLayerEntry), 4);
         entry->unk_04 = (arg3 != 0);
         if (arg2 != 0) {
@@ -931,18 +888,18 @@ void GeoRender_SubmitLayerDisplayList(s16 layer, s32 arg1, s32 arg2, s32 arg3) {
             entry->mtx = (s32)D_800AB460.unk_1000[D_800AB460.unk_10A0];
         }
         entry->dl = arg1;
-        entry->unk_06 = D_800AB448;
-        entry->unk_10 = D_800AB450;
-        entry->unk_14 = D_800AB44C;
-        entry->unk_20 = D_800AB45C;
-        entry->unk_18 = D_800AB454;
-        entry->unk_1C = D_800AB458;
+        entry->combineMode = D_800AB448;
+        entry->primColor = D_800AB450;
+        entry->fogColor = D_800AB44C;
+        entry->materialDisplayList = D_800AB45C;
+        entry->texture = D_800AB454;
+        entry->palette = D_800AB458;
         entry->lodFraction = 0xFF;
         entry->textureMode = 0;
         entry->next = NULL;
         if (D_8006049C != NULL) {
-            if (D_8006049C->lodFraction < 0xFF) {
-                entry->lodFraction = D_8006049C->lodFraction;
+            if (D_8006049C->alpha < 0xFF) {
+                entry->lodFraction = D_8006049C->alpha;
                 if (layer == 1) {
                     layer = 8;
                 } else if (layer == 4) {
@@ -986,7 +943,7 @@ void Geo_ProcessNodeChildren(GraphNode* arg0) {
 /** Geo node handler: processes the node it references. */
 void Geo_NodeReference(GraphNode* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
-    GraphNode* temp_a1 = ((unk_D_86002F34*)arg0)->unk_18;
+    GraphNode* temp_a1 = ((GeoReferenceNode*)arg0)->target;
 
     if ((temp_a1 != NULL) && (temp_a1->flags & 1)) {
         D_800AB244 = 0;
@@ -1054,17 +1011,17 @@ void Geo_NodeType3Pass(GraphNode* arg0) {
     D_8006048C = NULL;
 }
 
-extern u8 D_800AC690;
+extern ModelAnimCurveContext D_800AC690;
 extern EventTrackRender D_800AC6A8;
 
 /** Geo node handler: root of a model; processes its children. */
 void Geo_NodeModelRoot(GraphNode* arg0) {
-    unk_D_86002F34_alt1* arg = (unk_D_86002F34_alt1*)arg0;
+    GeoModelRootNode* arg = (GeoModelRootNode*)arg0;
 
     if (arg->node.children != NULL) {
-        arg->unk_1D = 0;
+        arg->fogEnabled = 0;
         arg->lights = Gfx_AllocDisplayList(sizeof(Lights7));
-        arg->unk_1C = 0;
+        arg->lightCount = 0;
         arg->lights->a.l.col[0] = 0;
         arg->lights->a.l.col[1] = 0;
         arg->lights->a.l.col[2] = 0;
@@ -1075,7 +1032,7 @@ void Geo_NodeModelRoot(GraphNode* arg0) {
         gSPTexture(gDisplayListHead++, 0, 0, 0, G_TX_RENDERTILE, G_OFF);
         gDPSetCycleType(gDisplayListHead++, G_CYC_2CYCLE);
 
-        D_800AC690 = 0;
+        D_800AC690.active = 0;
         D_800AC6A8.active = 0;
         GeoRender_InitMatrixStack();
         GeoRender_ResetTransformStack();
@@ -1173,10 +1130,10 @@ void Geo_NodePerspective(GraphNode* arg0) {
 
 /** Geo node handler: fills the viewport with the background. */
 void Geo_NodeBackground(GraphNode* arg0) {
-    unk_D_86002F34_alt2* arg = (unk_D_86002F34_alt2*)arg0;
+    GeoBackgroundNode* arg = (GeoBackgroundNode*)arg0;
     CameraViewport* ptr = &D_80060488->viewport;
 
-    GfxImage_FillRectangle(&gDisplayListHead, ptr->x, ptr->y, ptr->width, ptr->height, arg->unk_18);
+    GfxImage_FillRectangle(&gDisplayListHead, ptr->x, ptr->y, ptr->width, ptr->height, arg->fillColor);
 
     gDPPipeSync(gDisplayListHead++);
     gDPSetCycleType(gDisplayListHead++, G_CYC_2CYCLE);
@@ -1203,13 +1160,13 @@ void Geo_NodeType9Empty(UNUSED GraphNode* arg0) {
  * @unverified Name and comment guessed from the code.
  */
 void GeoRender_SetFog(GraphNode* arg0) {
-    unk_D_86002F34_alt3* arg = (unk_D_86002F34_alt3*)arg0;
+    GeoFogNode* arg = (GeoFogNode*)arg0;
 
-    D_80060490->unk_1D = 1;
+    D_80060490->fogEnabled = 1;
 
-    gSPFogPosition(gDisplayListHead++, arg->unk_18, arg->unk_1A);
+    gSPFogPosition(gDisplayListHead++, arg->fog.near, arg->fog.far);
     gSPSetGeometryMode(gDisplayListHead++, G_FOG);
-    gDPSetColor(gDisplayListHead++, G_SETFOGCOLOR, arg->unk_1C);
+    gDPSetColor(gDisplayListHead++, G_SETFOGCOLOR, arg->fog.color.rgba);
 }
 
 /**
@@ -1220,40 +1177,40 @@ void GeoRender_SetFog(GraphNode* arg0) {
  * @unverified Name and comment guessed from the code.
  */
 void Geo_NodeLight(GraphNode* arg0) {
-    unk_D_86002F34_alt4* arg = (unk_D_86002F34_alt4*)arg0;
+    GeoLightNode* arg = (GeoLightNode*)arg0;
     Light* light;
     Ambient* ambient;
 
-    if (D_80060490->unk_1C >= 7) {
+    if (D_80060490->lightCount >= 7) {
         return;
     }
 
-    light = &D_80060490->lights->l[D_80060490->unk_1C];
+    light = &D_80060490->lights->l[D_80060490->lightCount];
     ambient = &D_80060490->lights->a;
 
-    *(u32*)light->l.col = arg->unk_18.rgba;
-    *(u32*)light->l.colc = arg->unk_18.rgba;
+    *(u32*)light->l.col = arg->color.rgba;
+    *(u32*)light->l.colc = arg->color.rgba;
 
-    light->l.dir[0] = (120.0f * COSS(arg->unk_1C)) * SINS(arg->unk_1E);
-    light->l.dir[1] = (120.0f) * SINS(arg->unk_1C);
-    light->l.dir[2] = (120.0f * COSS(arg->unk_1C)) * COSS(arg->unk_1E);
+    light->l.dir[0] = (120.0f * COSS(arg->pitch)) * SINS(arg->yaw);
+    light->l.dir[1] = (120.0f) * SINS(arg->pitch);
+    light->l.dir[2] = (120.0f * COSS(arg->pitch)) * COSS(arg->yaw);
 
-    ambient->l.col[0] += ((arg->unk_18.r * arg->unk_18.a) / 100);
+    ambient->l.col[0] += ((arg->color.r * arg->color.a) / 100);
     if (ambient->l.col[0] > 0xFF) {
         ambient->l.col[0] = 0xFF;
     }
 
-    ambient->l.col[1] += ((arg->unk_18.g * arg->unk_18.a) / 100);
+    ambient->l.col[1] += ((arg->color.g * arg->color.a) / 100);
     if (ambient->l.col[1] > 0xFF) {
         ambient->l.col[1] = 0xFF;
     }
 
-    ambient->l.col[2] += ((arg->unk_18.b * arg->unk_18.a) / 100);
+    ambient->l.col[2] += ((arg->color.b * arg->color.a) / 100);
     if (ambient->l.col[2] > 0xFF) {
         ambient->l.col[2] = 0xFF;
     }
 
-    D_80060490->unk_1C++;
+    D_80060490->lightCount++;
 }
 
 /** Geo node handler for type 12; does nothing. */
@@ -1265,39 +1222,39 @@ void Geo_NodeType12Empty(UNUSED GraphNode* arg0) {
  * children.
  */
 void Geo_NodeAmbientLight(GraphNode* arg0) {
-    unk_D_86002F34_alt4* arg = (unk_D_86002F34_alt4*)arg0;
+    GeoAmbientLightNode* arg = (GeoAmbientLightNode*)arg0;
     s32 i;
     Lights7* lights;
 
     lights = D_80060490->lights;
-    if ((arg->unk_18.r == 0xFF) && (arg->unk_18.g == 0xFF) && (arg->unk_18.b == 0xFF)) {
+    if ((arg->r == 0xFF) && (arg->g == 0xFF) && (arg->b == 0xFF)) {
         lights->a.l.colc[0] = lights->a.l.col[0];
         lights->a.l.colc[1] = lights->a.l.col[1];
         lights->a.l.colc[2] = lights->a.l.col[2];
     } else {
-        lights->a.l.colc[0] = lights->a.l.col[0] = arg->unk_18.r;
-        lights->a.l.colc[1] = lights->a.l.col[1] = arg->unk_18.g;
-        lights->a.l.colc[2] = lights->a.l.col[2] = arg->unk_18.b;
+        lights->a.l.colc[0] = lights->a.l.col[0] = arg->r;
+        lights->a.l.colc[1] = lights->a.l.col[1] = arg->g;
+        lights->a.l.colc[2] = lights->a.l.col[2] = arg->b;
     }
 
     gSPSetGeometryMode(gDisplayListHead++, G_LIGHTING);
-    gMoveWd(gDisplayListHead++, 2, 0, D_80060490->unk_1C * 0x18);
+    gMoveWd(gDisplayListHead++, 2, 0, D_80060490->lightCount * 0x18);
 
-    for (i = 0; i < D_80060490->unk_1C; i++) {
+    for (i = 0; i < D_80060490->lightCount; i++) {
         gSPLight(gDisplayListHead++, &D_80060490->lights->l[i], i + 1);
     }
 
     gSPLight(gDisplayListHead++, D_80060490->lights, i + 1);
 }
 
-extern unk_D_86002F34_alt11* D_800604A0;
+extern GeoTextureBankNode* D_800604A0;
 extern Gfx D_01002580[];
 /**
- * Geo node handler: records the shadow context from the current matrix, then
+ * Geo node handler: makes this texture bank current (D_800604A0), then
  * processes children.
  */
-void Geo_NodeShadowContext(GraphNode* arg0) {
-    unk_D_86002F34_alt11* arg = (unk_D_86002F34_alt11*)arg0;
+void Geo_NodeTextureBank(GraphNode* arg0) {
+    GeoTextureBankNode* arg = (GeoTextureBankNode*)arg0;
     MtxF* temp_v0 = &D_800AB460.unk_0000[D_800AB460.unk_10A0];
     Vec3f sp2C;
     Vec3s sp24;
@@ -1336,12 +1293,12 @@ void func_8001473C(s8 *arg0)
 
 /** Geo node handler: processes only the child selected by the node's index. */
 void Geo_NodeSwitchCase(GraphNode* arg0) {
-    unk_D_86002F34_alt3* arg = (unk_D_86002F34_alt3*)arg0;
+    GeoSwitchCaseNode* arg = (GeoSwitchCaseNode*)arg0;
     s32 i;
     GraphNode* var_a1 = arg->node.children;
 
     if (var_a1 != NULL) {
-        for (i = 0; i < arg->unk_1A; i++) {
+        for (i = 0; i < arg->selectedChild; i++) {
             var_a1 = var_a1->nextSibling;
         }
     }
@@ -1357,9 +1314,9 @@ void Geo_NodeSwitchCase(GraphNode* arg0) {
  */
 void Geo_NodeTranslateRotate(GraphNode* arg0) {
     MtxF sp20;
-    unk_D_86002F34_alt5* arg = (unk_D_86002F34_alt5*)arg0;
+    GeoTranslateRotateNode* arg = (GeoTranslateRotateNode*)arg0;
 
-    MtxF_SetRotationTranslationF(&sp20, &arg->unk_18, &arg->unk_24);
+    MtxF_SetRotationTranslationF(&sp20, &arg->translation, &arg->rotation);
     GeoRender_PushMultipliedMatrix(&sp20);
     Geo_ProcessNodeChildren(arg0);
 
@@ -1368,9 +1325,9 @@ void Geo_NodeTranslateRotate(GraphNode* arg0) {
 
 /** Geo node handler: pushes a translation matrix, then processes children. */
 void Geo_NodeTranslate(GraphNode* arg0) {
-    unk_D_86002F34_alt5* arg = (unk_D_86002F34_alt5*)arg0;
+    GeoTranslateNode* arg = (GeoTranslateNode*)arg0;
 
-    GeoRender_PushScaledMatrix(&arg->unk_18);
+    GeoRender_PushScaledMatrix(&arg->translation);
     Geo_ProcessNodeChildren(arg0);
 
     D_800AB460.unk_10A0--;
@@ -1390,37 +1347,37 @@ void Geo_NodeAnimatedPart(GraphNode* arg0) {
     Vec3f sp8C;
     Vec3f sp80;
     MtxF sp40;
-    unk_D_86002F34_alt6* arg = (unk_D_86002F34_alt6*)arg0;
+    GeoAnimatedPartNode* arg = (GeoAnimatedPartNode*)arg0;
     s32 idx;
     s32 sp34;
 
-    idx = arg->unk_32 * 3;
+    idx = arg->channelGroup * 3;
     sp34 = 0;
-    sp98 = arg->unk_1E;
-    sp80 = arg->unk_24;
+    sp98 = arg->rotation;
+    sp80 = arg->scale;
 
-    Vec3f_FromVec3s(&sp8C, &arg->unk_18);
-    if ((((unk_D_800ABCC0*)&D_800AC690)->unk_00 == 1) && (idx >= 0) &&
-        (idx + 2 < ((unk_D_800ABCC0*)&D_800AC690)->unk_04->channelCount)) {
-        sp8C.x = ModelAnim_EvaluateScaleChannel((unk_D_800ABCC0*)&D_800AC690, idx + 0);
-        sp8C.y = ModelAnim_EvaluateScaleChannel((unk_D_800ABCC0*)&D_800AC690, idx + 1);
-        sp8C.z = ModelAnim_EvaluateScaleChannel((unk_D_800ABCC0*)&D_800AC690, idx + 2);
+    Vec3f_FromVec3s(&sp8C, &arg->translation);
+    if (((&D_800AC690)->active == 1) && (idx >= 0) &&
+        (idx + 2 < (&D_800AC690)->data->channelCount)) {
+        sp8C.x = ModelAnim_EvaluateTranslationChannel(&D_800AC690, idx + 0);
+        sp8C.y = ModelAnim_EvaluateTranslationChannel(&D_800AC690, idx + 1);
+        sp8C.z = ModelAnim_EvaluateTranslationChannel(&D_800AC690, idx + 2);
 
-        sp98.x = ModelAnim_EvaluateRotationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 0);
-        sp98.y = ModelAnim_EvaluateRotationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 1);
-        sp98.z = ModelAnim_EvaluateRotationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 2);
+        sp98.x = ModelAnim_EvaluateRotationChannel(&D_800AC690, idx + 0);
+        sp98.y = ModelAnim_EvaluateRotationChannel(&D_800AC690, idx + 1);
+        sp98.z = ModelAnim_EvaluateRotationChannel(&D_800AC690, idx + 2);
 
-        sp80.x = ModelAnim_EvaluateTranslationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 0);
-        sp80.y = ModelAnim_EvaluateTranslationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 1);
-        sp80.z = ModelAnim_EvaluateTranslationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 2);
+        sp80.x = ModelAnim_EvaluateScaleChannel(&D_800AC690, idx + 0);
+        sp80.y = ModelAnim_EvaluateScaleChannel(&D_800AC690, idx + 1);
+        sp80.z = ModelAnim_EvaluateScaleChannel(&D_800AC690, idx + 2);
     }
 
-    if (arg->unk_31 & 2) {
+    if (arg->transformMode & 2) {
         func_8000ED9C(&sp40, &sp8C, &sp98, &sp80, &D_80060488->view.floatMatrix,
                       &D_800AB460.unk_0000[D_800AB460.unk_10A0]);
         D_800AB460.unk_10A0++;
         GeoRender_SetMatrix(&sp40);
-    } else if (arg->unk_31 & 1) {
+    } else if (arg->transformMode & 1) {
         MtxF_SetRotationScaleTranslation(&sp40, &sp8C, &sp98, &sp80);
         GeoRender_PushMultipliedMatrix(&sp40);
     } else {
@@ -1443,9 +1400,9 @@ void Geo_NodeAnimatedPart(GraphNode* arg0) {
         sp34 = 1;
     }
 
-    D_800AB248[arg->unk_30] = (s32)D_800AB460.unk_1000[D_800AB460.unk_10A0];
+    D_800AB248[arg->matrixSlot] = (s32)D_800AB460.unk_1000[D_800AB460.unk_10A0];
     Geo_ProcessNodeChildren(arg0);
-    D_800AB248[arg->unk_30] = 0;
+    D_800AB248[arg->matrixSlot] = 0;
     D_800AB460.unk_10A0--;
 
     if (sp34 != 0) {
@@ -1482,15 +1439,15 @@ extern s32 D_800AB248[];
 void Geo_NodeDisplayListPart(void *arg0) {
     s32 temp_a1;
 
-    temp_a1 = M2C_FIELD(arg0, s32 *, 0x18);
+    temp_a1 = (s32)((GeoDisplayListPartNode*)arg0)->displayList;
     if (temp_a1 != 0) {
-        GeoRender_SubmitLayerDisplayList(M2C_FIELD(arg0, u8 *, 3), temp_a1, D_800AB248[M2C_FIELD(arg0, s16 *, 0x1C)], M2C_FIELD(arg0, u8 *, 2) & 4);
+        GeoRender_SubmitLayerDisplayList(((GeoDisplayListPartNode*)arg0)->node.renderLayer, temp_a1, D_800AB248[((GeoDisplayListPartNode*)arg0)->matrixSlot], ((GeoDisplayListPartNode*)arg0)->node.renderFlags & 4);
     }
     func_8001380C(arg0);
 }
 
 void func_80011838(EventTrackState*, s32);
-void func_8000E41C(MtxF*, MtxF*, MtxF*, Vec3f*);
+void MtxF_SetBillboard(MtxF*, MtxF*, MtxF*, Vec3f*);
 extern s32 D_800AB44C;
 /**
  * Renders a display object: evaluates its animation curves and pushes its transform. Stadium 1 name for the same handler.
@@ -1503,7 +1460,7 @@ void Geo_NodeModelPart(GraphNode* arg0) {
     MtxF sp28;
     DisplayObject* arg = (DisplayObject*)arg0;
 
-    if (D_80060490->unk_18 == arg->rootId) {
+    if (D_80060490->rootId == arg->rootId) {
         arg->anchorCount = 0;
         if (arg->transformAnim.data != NULL) {
             ModelAnim_BeginCurveContext(&arg->transformAnim, arg->node.renderFlags & 0x20);
@@ -1515,7 +1472,7 @@ void Geo_NodeModelPart(GraphNode* arg0) {
         if (arg->node.renderFlags & 0x10) {
             MtxF_Multiply(&sp28, &arg->matrix, &D_800AB460.unk_0000[D_800AB460.unk_10A0]);
         } else if (arg->node.renderFlags & 8) {
-            func_8000E41C(&sp28, &D_80060488->view.floatMatrix, &D_800AB460.unk_0000[D_800AB460.unk_10A0], &arg->position);
+            MtxF_SetBillboard(&sp28, &D_80060488->view.floatMatrix, &D_800AB460.unk_0000[D_800AB460.unk_10A0], &arg->position);
         } else if (arg->node.renderFlags & 0x80) {
             MtxF_SetRotationAndTransformTranslation(&sp28, &arg->position, &arg->rotation);
             MtxF_Multiply(&sp28, &sp28, &D_800AB460.unk_0000[D_800AB460.unk_10A0]);
@@ -1545,7 +1502,7 @@ void Geo_NodeModelPart(GraphNode* arg0) {
             D_8006049C = NULL;
         }
 
-        D_800AC690 = 0;
+        D_800AC690.active = 0;
         D_800AC6A8.active = 0;
         D_800AB460.unk_10A0 -= 1;
     }
@@ -1564,16 +1521,16 @@ void Geo_NodeDisplayListMatrix(s8 *arg0) {
     s32 temp_a1;
 
     func_80011294(arg0 + 0x1C);
-    temp_a1 = M2C_FIELD(arg0, s32 *, 0x18);
+    temp_a1 = (s32)((GeoDisplayListMatrixNode*)arg0)->displayList;
     if (temp_a1 != 0) {
-        GeoRender_SubmitLayerDisplayList(M2C_FIELD(arg0, u8 *, 3), temp_a1, 0, M2C_FIELD(arg0, u8 *, 2) & 4);
+        GeoRender_SubmitLayerDisplayList(((GeoDisplayListMatrixNode*)arg0)->node.renderLayer, temp_a1, 0, ((GeoDisplayListMatrixNode*)arg0)->node.renderFlags & 4);
     }
     func_8001380C(arg0);
     D_800AB460.unk_10A0 = (s32) (D_800AB460.unk_10A0 - 1);
 }
 
 M2C_UNK func_8001380C();
-void func_8000E41C(MtxF*, MtxF*, MtxF*, Vec3f*);
+void MtxF_SetBillboard(MtxF*, MtxF*, MtxF*, Vec3f*);
 M2C_UNK func_8001380C(s8 *);
 M2C_UNK func_80011210(MtxF *);                      /* extern */
 
@@ -1583,16 +1540,16 @@ M2C_UNK func_80011210(MtxF *);                      /* extern */
  * logo, opening, title and main menu).
  * @unverified Name and comment guessed from the code.
  */
-void Geo_NodeScale(s8 *arg0) {
+void Geo_NodeBillboard(s8 *arg0) {
     MtxF sp28;
     s32 temp_a1;
 
-    func_8000E41C(&sp28, &D_80060488->view.floatMatrix, &D_800AB460.unk_0000[D_800AB460.unk_10A0], arg0 + 0x1C);
+    MtxF_SetBillboard(&sp28, &D_80060488->view.floatMatrix, &D_800AB460.unk_0000[D_800AB460.unk_10A0], arg0 + 0x1C);
     D_800AB460.unk_10A0 += 1;
     func_80011210(&sp28);
-    temp_a1 = M2C_FIELD(arg0, s32 *, 0x18);
+    temp_a1 = (s32)((GeoBillboardNode*)arg0)->displayList;
     if (temp_a1 != 0) {
-        GeoRender_SubmitLayerDisplayList(M2C_FIELD(arg0, u8 *, 3), temp_a1, 0, M2C_FIELD(arg0, u8 *, 2) & 4);
+        GeoRender_SubmitLayerDisplayList(((GeoBillboardNode*)arg0)->node.renderLayer, temp_a1, 0, ((GeoBillboardNode*)arg0)->node.renderFlags & 4);
     }
     func_8001380C(arg0);
     D_800AB460.unk_10A0 -= 1;
@@ -1623,41 +1580,32 @@ void Geo_NodeDisplayList(s8 *arg0)
   func_8001380C((0, arg0));  // FAKE
 }
 
-typedef struct GeoMaterialNode {
-    /* 0x00 */ GraphNode node;
-    /* 0x18 */ s32 unk_18;
-    /* 0x1C */ s16 unk_1C;
-    /* 0x1E */ s16 unk_1E;
-    /* 0x20 */ s16 eventIndex;
-    /* 0x22 */ u8 unk_22;
-    /* 0x24 */ u32 color;
-} GeoMaterialNode;
 #define GEO_TINT (*(Color_RGBA8_u32*)&D_800AB450)
-void func_80014FC4(GeoMaterialNode *arg0)
+void Geo_NodeMaterial(GeoMaterialNode *arg0)
 {
   u8 tex_index;
 
-  D_800AB448 = arg0->unk_22;
-  if (arg0->unk_22 == 1)
+  D_800AB448 = arg0->mode;
+  if (arg0->mode == 1)
   {
     (*((Color_RGBA8_u32 *) (&D_800AB450))).rgba = -1;
   }
   else
   {
-    (*((Color_RGBA8_u32 *) (&D_800AB450))).rgba = arg0->color;
+    (*((Color_RGBA8_u32 *) (&D_800AB450))).rgba = arg0->color.rgba;
   }
-  D_800AB45C = arg0->unk_18;
-  if (arg0->unk_1C >= 0)
+  D_800AB45C = (s32)arg0->displayList;
+  if (arg0->textureIndex >= 0)
   {
-    D_800AB454 = (s32) (&D_800604A0->unk_18[arg0->unk_1C]);
+    D_800AB454 = (s32) (&D_800604A0->textures[arg0->textureIndex]);
   }
   else
   {
     D_800AB454 = 0;
   }
-  if (arg0->unk_1E >= 0)
+  if (arg0->paletteIndex >= 0)
   {
-    D_800AB458 = (s32) (&D_800604A0->unk_1C[arg0->unk_1E]);
+    D_800AB458 = (s32) (&D_800604A0->palettes[arg0->paletteIndex]);
   }
   else
   {
@@ -1675,7 +1623,7 @@ void func_80014FC4(GeoMaterialNode *arg0)
     if ((arg0->eventIndex >= 0) && (arg0->eventIndex < D_800AC6A8.data->trackCount))
     {
       tex_index = ((u8 *) D_800AC6A8.frameValues)[ModelAnim_ResolveEventIndex(D_800AC6A8.frame, (unk_func_80017540_arg1 *) D_800AC6A8.trackTable, arg0->eventIndex)];
-      D_800AB454 = (s32) (&D_800604A0->unk_18[tex_index]);
+      D_800AB454 = (s32) (&D_800604A0->textures[tex_index]);
     }
     break;
   }
@@ -1702,9 +1650,9 @@ void GeoRender_RecordAnchorPosition(s32 arg0) {
 
 /** Geo node handler: records an anchor position, then processes children. */
 void Geo_NodeAnchor(GraphNode* arg0) {
-    unk_D_86002F34_alt3* arg = (unk_D_86002F34_alt3*)arg0;
+    GeoAnchorNode* arg = (GeoAnchorNode*)arg0;
 
-    GeoRender_RecordAnchorPosition(arg->unk_18);
+    GeoRender_RecordAnchorPosition(arg->anchorId);
     Geo_ProcessNodeChildren(arg0);
 }
 
@@ -1756,7 +1704,7 @@ void Geo_NodeShadow(GraphNode* arg0) {
     f32 sp80;
     MtxF sp40;
     MtxF* sp3C;
-    unk_D_86002F34_alt12* arg = (unk_D_86002F34_alt12*)arg0;
+    GeoShadowNode* arg = (GeoShadowNode*)arg0;
     Gfx* temp_s1;
 
     sp3C = &D_800AB460.unk_0000[D_800AB460.unk_10A0];
@@ -1766,7 +1714,7 @@ void Geo_NodeShadow(GraphNode* arg0) {
         GeoRender_RecordAnchorPosition(0x64);
     }
 
-    Vec3f_SetComponentsDuplicate(&sp9C, sp3C->mf[3][0], sp3C->mf[3][1] + arg->unk_1E, sp3C->mf[3][2]);
+    Vec3f_SetComponentsDuplicate(&sp9C, sp3C->mf[3][0], sp3C->mf[3][1] + arg->heightOffset, sp3C->mf[3][2]);
     sp9C.y = 0.0f;
 
     if (D_8006049C->node.renderFlags & 0x40) {
@@ -1782,15 +1730,15 @@ void Geo_NodeShadow(GraphNode* arg0) {
             sp80 = 1.0f;
         }
 
-        sp84.x *= (arg->unk_1A / 100.0f) * sp80;
-        sp84.z *= (arg->unk_1C / 100.0f) * sp80;
+        sp84.x *= (arg->scaleXPercent / 100.0f) * sp80;
+        sp84.z *= (arg->scaleZPercent / 100.0f) * sp80;
         MtxF_SetOrthonormalBasis(&sp40, &sp90, &sp9C, D_8006049C->rotation.y);
         MtxF_ScaleRows(&D_800AB460.unk_0000[D_800AB460.unk_10A0 + 1], &sp40, &sp84);
 
         D_800AB460.unk_10A0++;
         GeoRender_CommitMatrix();
 
-        if (arg->unk_18 == 0) {
+        if (arg->shape == 0) {
             gSPBranchList(&temp_s1[1], Util_ConvertAddrToVirtAddr(D_01002480));
         } else {
             gSPBranchList(&temp_s1[1], Util_ConvertAddrToVirtAddr(D_01002500));
@@ -1811,7 +1759,7 @@ void Geo_NodeShadow(GraphNode* arg0) {
 
 /** Renders a root graph node and its children. */
 void Geo_RenderRootNode(GraphNode* node) {
-    unk_D_86002F34_alt1* arg = (unk_D_86002F34_alt1*)node;
+    GeoModelRootNode* arg = (GeoModelRootNode*)node;
 
     if (node->flags & 1) {
         gDPPipeSync(gDisplayListHead++);

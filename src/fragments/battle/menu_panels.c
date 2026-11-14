@@ -12,7 +12,7 @@ M2C_UNK Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
 M2C_UNK func_8001A944(s32, s32, s8*);
 M2C_UNK func_8001AA9C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK);
 M2C_UNK func_8001AB6C();
-extern unk_D_84385790 D_80066AA0[];
+extern StatusLabel D_80066AA0[];
 u32 func_8001FA30(s32);
 u32 func_800566BC(s8*);
 void func_8001A384(M2C_UNK, M2C_UNK);
@@ -149,7 +149,7 @@ void BattleMenu_DrawMovePanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3)
     BattleMon* party;
     BattleMonRuntime* runtime;
 
-    party = &arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)]->pokemonPicked[M2C_FIELD(arg0, s32*, 0x9D0)];
+    party = &arg0->side->teamMember[arg0->thumbnail.shownTeamMemberIndex]->pokemonPicked[arg0->thumbnail.shownRosterIndex];
     runtime = &arg0->state.runtime;
 
     func_82116CF4(arg1 + 1, arg2 + 1, 0xC7, 0x38, &D_8218B008 + arg3 * 3, &D_8218B014 + arg3 * 3);
@@ -547,7 +547,7 @@ void BattleMenu_DrawSwitchPanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg
     UNUSED s32 pad[3]; // FAKE
     Colors8211B900 a = D_8218B104;
     Colors8211B900 b = D_8218B114;
-    TeamRoster* roster = arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)];
+    TeamRoster* roster = arg0->side->teamMember[arg0->thumbnail.shownTeamMemberIndex];
     BattleMon* m0 = &arg0->teamRoster->pokemonPicked[0];
     BattleMon* m1 = &arg0->teamRoster->pokemonPicked[1];
     BattleMon* m2 = &arg0->teamRoster->pokemonPicked[2];
@@ -646,16 +646,16 @@ void BattleHud_DrawCompactMonStatusBox(ActivePokemon* arg0, s16 arg1, s16 arg2, 
     u16 val;
 
     state = &arg0->state;
-    mon = &arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)]->pokemonPicked[M2C_FIELD(arg0, s32*, 0x9D0)];
+    mon = &arg0->side->teamMember[arg0->thumbnail.shownTeamMemberIndex]->pokemonPicked[arg0->thumbnail.shownRosterIndex];
     if (mon->hp == 0) {
         status = 1;
     } else {
         status = func_8001FA30(mon->statusCondition);
     }
-    if (state->unk_30 < 0xFF00) {
-        state->unk_30 -= 0x30;
+    if (state->infoBoxBlinkTimer < 0xFF00) {
+        state->infoBoxBlinkTimer -= 0x30;
     }
-    val = state->unk_30;
+    val = state->infoBoxBlinkTimer;
     if ((val >> 8) & 1) {
         color = (u8*)(&D_8218B008 + arg3 * 3);
     } else {
@@ -769,7 +769,7 @@ void BattleMenu_DrawSurrenderPromptWithCursor(ActivePokemon* arg0, s16 arg1, s16
     func_8001A944(arg1 + 0x7A, arg2 + 0x14, D_82195A84);
     func_8001ABBC();
     gSPDisplayList(gDisplayListHead++, D_80060308);
-    Gfx_DrawTextureRgba16Ia8(arg1 + arg0->state.unk_2F * 0x49 + 0x1B, arg2 + 0x14, 0x18, 0xE, D_0300A500, D_0300A7A0, 0x18, 0x100000);
+    Gfx_DrawTextureRgba16Ia8(arg1 + arg0->state.surrenderCursor * 0x49 + 0x1B, arg2 + 0x14, 0x18, 0xE, D_0300A500, D_0300A7A0, 0x18, 0x100000);
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     BattleHud_DrawBorderTile(arg1, arg2, 8, 8, D_030096C0);
@@ -798,7 +798,7 @@ void func_8211C9FC(void) {
     u32 len;
     s8* name;
     ActivePokemonState* state = &sActivePokemon[sBattleScene.scene->actingSide]->state;
-    BattleMon* bm = &sActivePokemon[sBattleScene.scene->actingSide]->sessionTeams->teamMember[0]->pokemonPicked[state->rosterIndex];
+    BattleMon* bm = &sActivePokemon[sBattleScene.scene->actingSide]->side->teamMember[0]->pokemonPicked[state->rosterIndex];
 
     D_8219A4F1 = func_8000F1FC(D_8219A4F1, 0xFF, 5, 5);
     func_8001AB6C();
@@ -1433,7 +1433,6 @@ void BattleDebug_DrawPokeBallViewer(s16 arg0, s16 arg1) {
     func_82116480(buf, arg0 + 0x3C, arg1 + 0x12);
 }
 
-extern s8* D_8219A5A0;
 extern char D_82195FF4[];
 extern char D_82195FF8[];
 /**
@@ -1444,8 +1443,8 @@ void func_8211E794(s16 arg0, s16 arg1) {
     char buf[16];
 
     Ui_DrawPrimColorRect(arg0, arg1, 0x50, 0x1E, 0, 0, 0, 0x3C);
-    func_800564D4(buf, D_82195FF4, M2C_FIELD(M2C_FIELD(D_8219A5A0, s8**, 0xCC), f32*, 0x34));
+    func_800564D4(buf, D_82195FF4, sBattleScene.scene->camera->perspective.nearPlane);
     func_82116480(buf, arg0 + 3, arg1 + 2);
-    func_800564D4(buf, D_82195FF8, M2C_FIELD(M2C_FIELD(D_8219A5A0, s8**, 0xCC), f32*, 0x38));
+    func_800564D4(buf, D_82195FF8, sBattleScene.scene->camera->perspective.farPlane);
     func_82116480(buf, arg0 + 3, arg1 + 0x10);
 }

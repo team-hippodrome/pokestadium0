@@ -8,25 +8,6 @@
 #include "battle.h"
 #include "asset_archive.h"
 
-typedef struct unk_D_84002D18 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-} unk_D_84002D18;
-typedef struct unk_D_84002D28 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-} unk_D_84002D28;
-typedef struct unk_D_84002BE8 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ u8* unk_08;
-    /* 0x0C */ u8* unk_0C;
-} unk_D_84002BE8;
 extern s32 pad_D_84002D10;
 extern s32 pad_D_84002D1C;
 
@@ -40,19 +21,10 @@ extern u8 D_50011D0[];
 extern u8 D_5001680[];
 extern u8 D_50017E8[];
 
-typedef struct unk_D_839006B0 {
-    /* 0x00 */ BattleMon unk_00;
-    /* 0x54 */ char unk54[0x38];
-} unk_D_839006B0;
-typedef struct unk_D_83902700 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ char unk04[0x70];
-} unk_D_83902700;
 
 
 extern char** sUiText;
 extern char** sTrainerNameText;
-extern GymLeaderCastleTrainer sCurrentNodeTrainers[4];
 extern BinArchive* sTrainerDataArchive;
 extern BinArchive* sPortraitArchive;
 extern BinArchive* sBackgroundArchive;
@@ -64,25 +36,12 @@ extern s16 sCurrentHoverNodeIndex;
 #define ELITE_4_TO_GLC 9
 #define GLC_TO_ELITE_4 8
 #define GIOVANNI 7
-extern CastleMapNode sCastleMapNodes[];
 extern s16 sSelectedMapNode;
 extern s16 sCursorMoveTimer;
 extern s16 sRoomDescriptionHeight;
 extern s16 sEliteFourTransition;
 
 #include "math.h"
-typedef struct unk_D_86301730 {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ DisplayObject unk_004;
-    /* 0x16C */ Vec3f unk_16C;
-    /* 0x178 */ s8 unk_178;
-    /* 0x179 */ s8 unk_179;
-    /* 0x17A */ s8 unk_17A;
-    /* 0x17B */ s8 unk_17B;
-    /* 0x17C */ u16 unk_17C;
-    /* 0x17E */ char pad17E[6];
-} unk_D_86301730;
 
 #include "m2c_macros.h"
 
@@ -192,16 +151,16 @@ s32 BattleAi_CalcSpecial(s32 arg0, s32 arg1) {
  * Current HP as a percentage of max HP (battler bytes 0x18 / 0x34), at least 1
  * while the Pokemon has any HP left, 0 when fainted.
  */
-s32 BattleAi_GetHpPercent(s8 *arg0)
+s32 BattleAi_GetHpPercent(ComBattler* arg0)
 {
   s32 var_v1;
   u16 temp_v0;
-  temp_v0 = *((u16 *) (((s8 *) arg0) + 0x18));
+  temp_v0 = arg0->mon.hp;
   if (!temp_v0)
   {
     return 0;
   }
-  var_v1 = ((s32) (temp_v0 * 0x64)) / ((s32) (*((u16 *) (((s8 *) arg0) + 0x34))));
+  var_v1 = ((s32) (temp_v0 * 0x64)) / ((s32) (arg0->mon.maxHp));
   if (var_v1 == 0)
   {
     var_v1 = 1;
@@ -218,21 +177,21 @@ s32 BattleAi_GetHpPercent(s8 *arg0)
  * turns): ran.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAi_CountUnfainted(u8 *arg0) {
+s32 BattleAi_CountUnfainted(ComSide* arg0) {
     s32 count;
     u8 *p;
     s32 n;
 
     count = 0;
-    p = arg0;
-    n = M2C_FIELD(*(void **)arg0, u8 *, 2);
+    p = (u8*)arg0;
+    n = arg0->roster->numberOfPokemonBrought;
     if (n > 0) {
         do {
             if (M2C_FIELD(p, u16 *, 0x1C) != 0) {
                 count++;
             }
             p += 0x90;
-        } while (p < arg0 + n * 0x90);
+        } while (p < n * 0x90 + (u8*)arg0);
     }
     return count;
 }
@@ -279,9 +238,9 @@ void func_82183DC4(void) {
  * for some candidates (the 40% roll), with the candidate battler as the argument.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-void BattleAi_AddRandomPickScore(s8* arg0) {
+void BattleAi_AddRandomPickScore(ComBattler* arg0) {
     BattleAi_StirRandom();
-    M2C_FIELD(arg0, s32*, 4) += (BattleAi_RandomPercent() & 0xF) * 400;
+    arg0->pickScore += (BattleAi_RandomPercent() & 0xF) * 400;
 }
 
 /**
@@ -290,7 +249,7 @@ void BattleAi_AddRandomPickScore(s8* arg0) {
 void func_82183E1C(void) {
 }
 
-extern BattleSlotZ* D_821CF298;
+extern ComSide* D_821CF298;
 
 /**
  * Returns 1 if an unfainted Pokemon of the given species is in the opponent's
@@ -303,7 +262,7 @@ s32 BattleAi_OpponentHasSpecies(s32 arg0) {
     s32 i;
 
     for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
-        if ((D_821CF298[i].hp != 0) && (arg0 == D_821CF298[i].species)) {
+        if ((D_821CF298->battlers[i].mon.hp != 0) && (arg0 == D_821CF298->battlers[i].mon.species)) {
             return 1;
         }
     }
@@ -322,7 +281,7 @@ s32 BattleAi_CountOpponentWaterOrFlying(void) {
 
     count = 0;
     for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
-        if ((D_821CF298[i].type1 == TYPE_WATER) || (D_821CF298[i].type2 == TYPE_WATER) || (D_821CF298[i].type1 == TYPE_FLYING) || (D_821CF298[i].type2 == TYPE_FLYING)) {
+        if ((D_821CF298->battlers[i].mon.type1 == TYPE_WATER) || (D_821CF298->battlers[i].mon.type2 == TYPE_WATER) || (D_821CF298->battlers[i].mon.type1 == TYPE_FLYING) || (D_821CF298->battlers[i].mon.type2 == TYPE_FLYING)) {
             count++;
         }
     }
@@ -341,7 +300,7 @@ s32 BattleAi_CountOpponentGround(void) {
 
     count = 0;
     for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
-        if ((D_821CF298[i].type1 == TYPE_GROUND) || (D_821CF298[i].type2 == TYPE_GROUND)) {
+        if ((D_821CF298->battlers[i].mon.type1 == TYPE_GROUND) || (D_821CF298->battlers[i].mon.type2 == TYPE_GROUND)) {
             count++;
         }
     }
@@ -360,7 +319,7 @@ s32 BattleAi_CountOpponentFighting(void) {
 
     count = 0;
     for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
-        if ((D_821CF298[i].type1 == TYPE_FIGHTING) || (D_821CF298[i].type2 == TYPE_FIGHTING)) {
+        if ((D_821CF298->battlers[i].mon.type1 == TYPE_FIGHTING) || (D_821CF298->battlers[i].mon.type2 == TYPE_FIGHTING)) {
             count++;
         }
     }
@@ -377,7 +336,7 @@ s32 BattleAi_OpponentHasLevel55Tauros(void) {
     s32 i;
 
     for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
-        if ((D_821CF298[i].species == TAUROS) && (D_821CF298[i].level == 55)) {
+        if ((D_821CF298->battlers[i].mon.species == TAUROS) && (D_821CF298->battlers[i].mon.level == 55)) {
             return 1;
         }
     }
@@ -396,7 +355,7 @@ s32 BattleAi_CountOpponentElectricOrPoison(void) {
 
     count = 0;
     for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
-        if ((D_821CF298[i].type1 == TYPE_ELECTRIC) || (D_821CF298[i].type2 == TYPE_ELECTRIC) || (D_821CF298[i].type1 == TYPE_POISON) || (D_821CF298[i].type2 == TYPE_POISON)) {
+        if ((D_821CF298->battlers[i].mon.type1 == TYPE_ELECTRIC) || (D_821CF298->battlers[i].mon.type2 == TYPE_ELECTRIC) || (D_821CF298->battlers[i].mon.type1 == TYPE_POISON) || (D_821CF298->battlers[i].mon.type2 == TYPE_POISON)) {
             count++;
         }
     }
@@ -415,7 +374,7 @@ s32 BattleAi_CountOpponentRockOrWater(void) {
 
     count = 0;
     for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
-        if ((D_821CF298[i].type1 == TYPE_ROCK) || (D_821CF298[i].type2 == TYPE_ROCK) || (D_821CF298[i].type1 == TYPE_WATER) || (D_821CF298[i].type2 == TYPE_WATER)) {
+        if ((D_821CF298->battlers[i].mon.type1 == TYPE_ROCK) || (D_821CF298->battlers[i].mon.type2 == TYPE_ROCK) || (D_821CF298->battlers[i].mon.type1 == TYPE_WATER) || (D_821CF298->battlers[i].mon.type2 == TYPE_WATER)) {
             count++;
         }
     }
@@ -434,14 +393,14 @@ s32 BattleAi_CountOpponentElectric(void) {
 
     count = 0;
     for (i = 0; i < D_821CF298->roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
-        if ((D_821CF298[i].type1 == TYPE_ELECTRIC) || (D_821CF298[i].type2 == TYPE_ELECTRIC)) {
+        if ((D_821CF298->battlers[i].mon.type1 == TYPE_ELECTRIC) || (D_821CF298->battlers[i].mon.type2 == TYPE_ELECTRIC)) {
             count++;
         }
     }
     return count;
 }
 
-extern BattleSlotZ* D_821CF294;
+extern ComSide* D_821CF294;
 s32 BattleAi_NoVenusaurChanseyJynxPicked(s32);
 
 /**
@@ -455,11 +414,11 @@ s32 BattleAi_NoVenusaurChanseyJynxPicked(s32);
  * of the hand-written cases, so none of the opponent checks it calls ran.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-void BattleAi_AddTrainerPickScore(u8* arg0, s32 arg1) {
+void BattleAi_AddTrainerPickScore(ComBattler* arg0, s32 arg1) {
     s32 score = 0;
-    s32 id = D_821CF294->roster->unk_018;
+    s32 id = D_821CF294->roster->trainerId;
 
-    switch (arg0[0x17]) {
+    switch (arg0->mon.species) {
         case GENGAR:
             if ((id == 0x6974) && BattleAi_OpponentHasSpecies(TAUROS)) {
                 score = 30000;
@@ -486,7 +445,7 @@ void BattleAi_AddTrainerPickScore(u8* arg0, s32 arg1) {
             }
             break;
         case DITTO:
-            if (((u8*)D_821CF294)[0x368] != 0) {
+            if (D_821CF294->mode != 0) {
                 score = 1000;
             }
             break;
@@ -601,7 +560,7 @@ void BattleAi_AddTrainerPickScore(u8* arg0, s32 arg1) {
             }
             break;
         case EXEGGUTOR:
-            if (((u8*)D_821CF294)[0x368] != 0) {
+            if (D_821CF294->mode != 0) {
                 score = 1000;
                 break;
             }
@@ -664,15 +623,15 @@ void BattleAi_AddTrainerPickScore(u8* arg0, s32 arg1) {
             }
             break;
         case PINSIR:
-            if (((u8*)D_821CF294)[0x368] != 0) {
+            if (D_821CF294->mode != 0) {
                 score = 1000;
             }
             break;
     }
-    if ((((u8*)D_821CF294)[0x368] == 0) && (arg0[0x17] != DITTO)) {
+    if ((D_821CF294->mode == 0) && (arg0->mon.species != DITTO)) {
         score += 50000;
     }
-    M2C_FIELD(arg0, s32*, 4) += score;
+    arg0->pickScore += score;
 }
 
 /**
@@ -694,7 +653,7 @@ u8* BattleAi_FindByte(u8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     return NULL;
 }
 
-extern Move82184ADC D_8006B190[];
+
 extern u8 D_8218AC50[];
 /**
  * Damage multiplier of a move from attacker arg0 to defender arg1, in percent:
@@ -705,7 +664,7 @@ extern u8 D_8218AC50[];
  * BattleAi_AddMatchupPickScore and returned 100 for neutral matchups.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
-s32 BattleAi_GetTypeMultiplier(s8* arg0, s8* arg1, s32 move) {
+s32 BattleAi_GetTypeMultiplier(ComBattler* arg0, ComBattler* arg1, s32 move) {
     s32 mult = 100;
     u8 def_type1;
     u8 def_type2;
@@ -713,11 +672,11 @@ s32 BattleAi_GetTypeMultiplier(s8* arg0, s8* arg1, s32 move) {
     u8* chart;
 
     if (move != 0) {
-        def_type1 = M2C_FIELD(arg1, u8*, 0x28);
-        def_type2 = M2C_FIELD(arg1, u8*, 0x29);
-        if (D_8006B190[move - 1].power != 0) {
-            type = D_8006B190[move - 1].type;
-            if (type == M2C_FIELD(arg0, u8*, 0x28) || type == M2C_FIELD(arg0, u8*, 0x29)) {
+        def_type1 = arg1->mon.type1;
+        def_type2 = arg1->mon.type2;
+        if (gMoveData[move - 1].power != 0) {
+            type = gMoveData[move - 1].type;
+            if (type == arg0->mon.type1 || type == arg0->mon.type2) {
                 mult = 150;
             }
             for (chart = D_8218AC50; chart[0] != 0xFF; chart += 3) {
@@ -737,7 +696,7 @@ s32 BattleAi_GetTypeMultiplier(s8* arg0, s8* arg1, s32 move) {
  * (0x0B, 0x42, 0x68, 0x75) for COM's Pinsir, whose AI record holds exactly those four moves
  * with 30, 25, 15 and 10 PP.
  */
-s32 BattleAi_CanUseMove(s8 *arg0, s32 arg1) {
+s32 BattleAi_CanUseMove(ComBattler* arg0, s32 arg1) {
     s32 i;
     u8 *p = (u8 *)arg0;
 
@@ -759,19 +718,19 @@ s32 BattleAi_CanUseMove(s8 *arg0, s32 arg1) {
  * Seen in play (2026-11-12): returned 0x69 (Recover) for COM's Gengar after Recover was put in
  * its move slot 3, and 0 for 1P's Nidoqueen, which has no healing move.
  */
-u8 BattleAi_FindUsableHealingMove(u8 *arg0) {
+u8 BattleAi_FindUsableHealingMove(ComBattler* arg0) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        if (arg0[0x2B + i] == 0) {
+        if (arg0->mon.moves[i] == 0) {
             return 0;
         }
-        switch (arg0[0x2B + i]) {
+        switch (arg0->mon.moves[i]) {
             case RECOVER:
             case SOFTBOILED:
             case REST:
-                if (BattleAi_CanUseMove((s8*)arg0, arg0[0x2B + i]) != 0) {
-                    return arg0[0x2B + i];
+                if (BattleAi_CanUseMove((s8*)arg0, arg0->mon.moves[i]) != 0) {
+                    return arg0->mon.moves[i];
                 }
                 break;
         }
@@ -782,8 +741,8 @@ u8 BattleAi_FindUsableHealingMove(u8 *arg0) {
 /**
  * Returns 1 if either of the battler's types is arg1.
  */
-s32 BattleAi_HasType(s8 *arg0, s32 arg1) {
-    if ((arg1 == M2C_FIELD(arg0, u8 *, 0x28)) || (arg1 == M2C_FIELD(arg0, u8 *, 0x29))) {
+s32 BattleAi_HasType(ComBattler* arg0, s32 arg1) {
+    if ((arg1 == arg0->mon.type1) || (arg1 == arg0->mon.type2)) {
         return 1;
     }
     return 0;

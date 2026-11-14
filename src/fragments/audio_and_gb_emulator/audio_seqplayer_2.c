@@ -5,65 +5,14 @@
 void AudioPlayback_NotePoolClear(s8*);
 
 
-typedef struct SeqPlayer81113A44 {
-    /* 0x00 */ u32 enabled : 1;
-    /* 0x00 */ u32 finished : 1;
-    /* 0x00 */ u32 muted : 1;
-    /* 0x00 */ u32 rest : 29;
-    /* 0x04 */ u8 unk04[0xD8 - 0x04];
-    /* 0xD8 */ s32 skipTicks;
-} SeqPlayer81113A44;
-
-typedef struct Channel81113A44 {
-    /* 0x00 */ u32 enabled : 1;
-    /* 0x00 */ u32 finished : 1;
-    /* 0x00 */ u32 stopScript : 1;
-    /* 0x00 */ u32 stopSomething2 : 1;
-    /* 0x00 */ u32 hasInstrument : 1;
-    /* 0x00 */ u32 stereoHeadsetEffects : 1;
-    /* 0x00 */ u32 largeNotes : 1;
-    /* 0x00 */ u32 rest : 17;
-    /* 0x03 */ u8 muteBehavior;
-    /* 0x04 */ u8 unk04[9];
-    /* 0x0D */ u8 velocityRandomVariance;
-    /* 0x0E */ u8 gateTimeRandomVariance;
-    /* 0x0F */ u8 unk0F[0x4C - 0x0F];
-    /* 0x4C */ SeqPlayer81113A44* seqPlayer;
-} Channel81113A44;
-
-typedef struct ScriptState81113A44 {
-    /* 0x00 */ u8* pc;
-} ScriptState81113A44;
-
-typedef struct Layer81113A44 {
-    /* 0x00 */ u8 enabled : 1;
-    /* 0x00 */ u8 finished : 1;
-    /* 0x00 */ u8 stopSomething : 1;
-    /* 0x00 */ u8 continuousNotes : 1;
-    /* 0x00 */ u8 rest : 4;
-    /* 0x01 */ u8 unk01[3];
-    /* 0x04 */ u8 gateTime;
-    /* 0x05 */ u8 unk05[0x2C - 0x05];
-    /* 0x2C */ f32 velocitySquare2;
-    /* 0x30 */ f32 velocitySquare;
-    /* 0x34 */ u8 unk34[0x3C - 0x34];
-    /* 0x3C */ s16 shortNoteDefaultDelay;
-    /* 0x3E */ s16 lastDelay;
-    /* 0x40 */ s16 delay;
-    /* 0x42 */ s16 gateDelay;
-    /* 0x44 */ u8 unk44[0x54 - 0x44];
-    /* 0x54 */ Channel81113A44* channel;
-    /* 0x58 */ ScriptState81113A44 scriptState;
-} Layer81113A44;
-
 extern u32 D_811859CC;
 
-s32 func_81113A44(Layer81113A44* layer, s32 cmd) {
-    ScriptState81113A44* state = &layer->scriptState;
+s32 func_81113A44(SequenceLayer* layer, s32 cmd) {
+    SeqScriptState* state = &layer->scriptState;
     u16 delay;
     s32 velocity;
-    Channel81113A44* channel = layer->channel;
-    SeqPlayer81113A44* seqPlayer = channel->seqPlayer;
+    SequenceChannel* channel = layer->channel;
+    SequencePlayer* seqPlayer = channel->seqPlayer;
     s32 int_delta;
     f32 float_delta;
 
@@ -80,19 +29,19 @@ s32 func_81113A44(Layer81113A44* layer, s32 cmd) {
             case 0x00:
                 delay = AudioSeq_ScriptReadCompressedU16(&state->pc);
                 velocity = *(state->pc++);
-                layer->gateTime = *(state->pc++);
+                layer->noteDuration = *(state->pc++);
                 layer->lastDelay = delay;
                 break;
             case 0x40:
                 delay = AudioSeq_ScriptReadCompressedU16(&state->pc);
                 velocity = *(state->pc++);
-                layer->gateTime = 0;
+                layer->noteDuration = 0;
                 layer->lastDelay = delay;
                 break;
             case 0x80:
                 delay = layer->lastDelay;
                 velocity = *(state->pc++);
-                layer->gateTime = *(state->pc++);
+                layer->noteDuration = *(state->pc++);
                 break;
         }
         if (velocity > 0x7F || velocity < 0) {
@@ -132,7 +81,7 @@ s32 func_81113A44(Layer81113A44* layer, s32 cmd) {
     }
 
     layer->delay = delay;
-    layer->gateDelay = (layer->gateTime * delay) >> 8;
+    layer->gateDelay = (layer->noteDuration * delay) >> 8;
     if (channel->gateTimeRandomVariance != 0) {
         int_delta = (layer->gateDelay * (D_811859CC % channel->velocityRandomVariance)) / 100;
         if ((D_811859CC & 0x4000) != 0) {
@@ -146,7 +95,7 @@ s32 func_81113A44(Layer81113A44* layer, s32 cmd) {
         }
     }
 
-    if ((seqPlayer->muted && (channel->muteBehavior & 0x50)) || channel->stopSomething2) {
+    if ((seqPlayer->muted && (channel->muteBehavior & 0x50)) || channel->muted) {
         layer->stopSomething = 1;
         return -1;
     }
@@ -202,105 +151,16 @@ void func_81113EF4(u8* arg0, u8 arg1) {
     } else {
         ret = M2C_FIELD(arg0, s16*, 0x22) = func_81113E84(arg0, arg1, (u8**)(arg0 + 0x48), arg0 + 0x7C);
         if (ret == 0) {
-            ((AudioStreamFlags*)arg0)->active = 0;
+            ((SequenceChannel*)arg0)->hasInstrument = 0;
             return;
         }
     }
-    ((AudioStreamFlags*)arg0)->active = 1;
+    ((SequenceChannel*)arg0)->hasInstrument = 1;
 }
 
 void func_81113F84(u8* arg0, u8 arg1) {
     *(f32*)(arg0 + 0x2C) = (f32)(s32)arg1 / 127.0f;
 }
-
-typedef struct ScriptState81113FA8 {
-    /* 0x00 */ u8* pc;
-    /* 0x04 */ u8* stack[4];
-    /* 0x14 */ u8 remLoopIters[4];
-    /* 0x18 */ u8 depth;
-    /* 0x19 */ s8 value;
-} ScriptState81113FA8;
-
-typedef struct Layer81113FA8 {
-    /* 0x00 */ u32 enabled : 1;
-    /* 0x00 */ u32 finished : 1;
-    /* 0x00 */ u32 rest : 30;
-    /* 0x04 */ u8 unk04[0x58 - 0x04];
-    /* 0x58 */ u8* pc;
-} Layer81113FA8;
-
-typedef struct SeqPlayer81113FA8 {
-    /* 0x00 */ u32 enabled : 1;
-    /* 0x00 */ u32 finished : 1;
-    /* 0x00 */ u32 muted : 1;
-    /* 0x00 */ u32 rest : 29;
-    /* 0x04 */ u8 seqId;
-    /* 0x05 */ u8 unk05[0x18 - 0x05];
-    /* 0x18 */ u8* seqData;
-    /* 0x1C */ u8 unk1C[0x34 - 0x1C];
-    /* 0x34 */ struct Channel81113FA8* channels[16];
-} SeqPlayer81113FA8;
-
-typedef struct Channel81113FA8 {
-    /* 0x00 */ u8 enabled : 1;
-    /* 0x00 */ u8 finished : 1;
-    /* 0x00 */ u8 stopScript : 1;
-    /* 0x00 */ u8 stopSomething2 : 1;
-    /* 0x00 */ u8 hasInstrument : 1;
-    /* 0x00 */ u8 stereoHeadsetEffects : 1;
-    /* 0x00 */ u8 largeNotes : 1;
-    /* 0x00 */ u8 unused : 1;
-    /* 0x01 */ u8 changeFreqScale : 1;
-    /* 0x01 */ u8 changeVolume : 1;
-    /* 0x01 */ u8 changePan : 1;
-    /* 0x01 */ u8 changeRest : 5;
-    /* 0x02 */ u8 noteAllocPolicy;
-    /* 0x03 */ u8 muteBehavior;
-    /* 0x04 */ u8 reverb;
-    /* 0x05 */ u8 notePriority;
-    /* 0x06 */ u8 someOtherPriority;
-    /* 0x07 */ u8 bankId;
-    /* 0x08 */ u8 reverbIndex;
-    /* 0x09 */ u8 bookOffset;
-    /* 0x0A */ u8 newPan;
-    /* 0x0B */ u8 panChannelWeight;
-    /* 0x0C */ u8 gain;
-    /* 0x0D */ u8 velocityRandomVariance;
-    /* 0x0E */ u8 gateTimeRandomVariance;
-    /* 0x0F */ u8 combFilterSize;
-    /* 0x10 */ u16 vibratoRateStart;
-    /* 0x12 */ u16 vibratoExtentStart;
-    /* 0x14 */ u16 vibratoRateTarget;
-    /* 0x16 */ u16 vibratoExtentTarget;
-    /* 0x18 */ u16 vibratoRateChangeDelay;
-    /* 0x1A */ u16 vibratoExtentChangeDelay;
-    /* 0x1C */ u16 vibratoDelay;
-    /* 0x1E */ u16 delay;
-    /* 0x20 */ u16 combFilterGain;
-    /* 0x22 */ s16 instOrWave;
-    /* 0x24 */ s16 transposition;
-    /* 0x26 */ u8 unk26[2];
-    /* 0x28 */ f32 volumeScale;
-    /* 0x2C */ f32 volume;
-    /* 0x30 */ s32 pan;
-    /* 0x34 */ f32 appliedVolume;
-    /* 0x38 */ f32 freqScale;
-    /* 0x3C */ u8 (*dynTable)[][2];
-    /* 0x40 */ u8 unk40[0x48 - 0x40];
-    /* 0x48 */ u8* instrument;
-    /* 0x4C */ SeqPlayer81113FA8* seqPlayer;
-    /* 0x50 */ Layer81113FA8* layers[4];
-    /* 0x60 */ ScriptState81113FA8 scriptState;
-    /* 0x7C */ u8 decayIndex;
-    /* 0x7D */ u8 sustain;
-    /* 0x7E */ u8 unk7E[2];
-    /* 0x80 */ u8* envelope;
-    /* 0x84 */ u8 notePool[0xC4 - 0x84];
-    /* 0xC4 */ s8 soundScriptIO[8];
-    /* 0xCC */ u16 unk_CC;
-    /* 0xCE */ u8 unkCE[2];
-    /* 0xD0 */ s16* filter;
-} Channel81113FA8;
 
 extern u8* D_811858A8;
 extern u8 D_81138690[];
@@ -316,7 +176,7 @@ s32 AudioSeq_SeqChannelSetLayer(void*, s32);
 void AudioSeq_SeqLayerProcessScript(void*);
 s32 AudioSeq_HandleScriptFlowControl(void*, void*, s32, s32);
 
-void func_81113FA8(Channel81113FA8* channel) {
+void func_81113FA8(SequenceChannel* channel) {
     s32 i;
     u8* data;
     s8 signed_param;
@@ -324,7 +184,7 @@ void func_81113FA8(Channel81113FA8* channel) {
     u8 highBits;
     u8 low_bits;
     u8* test;
-    SeqPlayer81113FA8* seqPlayer;
+    SequencePlayer* seqPlayer;
 
     if (channel->stopScript) {
         goto exit_loop;
@@ -340,7 +200,7 @@ void func_81113FA8(Channel81113FA8* channel) {
     }
 
     while (1) {
-        ScriptState81113FA8* scriptState = &channel->scriptState;
+        SeqScriptState* scriptState = &channel->scriptState;
         UNUSED s16 pad1; // FAKE: stack pad; only reserves frame space
         u16 offset;
         u32 parameters[3];
@@ -398,7 +258,7 @@ void func_81113FA8(Channel81113FA8* channel) {
                         low_bits = D_811858A8[offset];
                         command = D_811858A8[offset + low_bits - command];
                         if (AudioHeap_SearchCaches(1, 2, command)) {
-                            channel->bankId = command;
+                            channel->fontId = command;
                         }
                         parameters[0] = parameters[1];
                     case 0xC1:
@@ -414,39 +274,39 @@ void func_81113FA8(Channel81113FA8* channel) {
                     case 0xDF:
                         command = (u8)parameters[0];
                         func_81113F84((u8*)channel, command);
-                        channel->changeVolume = 1;
+                        channel->changes.s.volume = 1;
                         break;
                     case 0xE0:
                         command = (u8)parameters[0];
                         channel->volumeScale = (f32)(s32)command / 128.0f;
-                        channel->changeVolume = 1;
+                        channel->changes.s.volume = 1;
                         break;
                     case 0xDE:
                         offset = (u16)parameters[0];
                         channel->freqScale = (f32)(s32)offset / 32768.0f;
-                        channel->changeFreqScale = 1;
+                        channel->changes.s.freqScale = 1;
                         break;
                     case 0xD3:
                         command = (u8)parameters[0];
                         command += 0x80;
                         channel->freqScale = D_81135F78[command];
-                        channel->changeFreqScale = 1;
+                        channel->changes.s.freqScale = 1;
                         break;
                     case 0xEE:
                         command = (u8)parameters[0];
                         command += 0x80;
                         channel->freqScale = D_81136378[command];
-                        channel->changeFreqScale = 1;
+                        channel->changes.s.freqScale = 1;
                         break;
                     case 0xDD:
                         command = (u8)parameters[0];
                         channel->newPan = command;
-                        channel->changePan = 1;
+                        channel->changes.s.pan = 1;
                         break;
                     case 0xDC:
                         command = (u8)parameters[0];
                         channel->panChannelWeight = command;
-                        channel->changePan = 1;
+                        channel->changes.s.pan = 1;
                         break;
                     case 0xDB:
                         signed_param = (s8)parameters[0];
@@ -454,11 +314,11 @@ void func_81113FA8(Channel81113FA8* channel) {
                         break;
                     case 0xDA:
                         offset = (u16)parameters[0];
-                        channel->envelope = &seqPlayer->seqData[offset];
+                        channel->adsr.envelope = &seqPlayer->seqData[offset];
                         break;
                     case 0xD9:
                         command = (u8)parameters[0];
-                        channel->decayIndex = command;
+                        channel->adsr.decayIndex = command;
                         break;
                     case 0xD8:
                         command = (u8)parameters[0];
@@ -502,7 +362,7 @@ void func_81113FA8(Channel81113FA8* channel) {
                         low_bits = D_811858A8[offset];
                         command = D_811858A8[offset + low_bits - command];
                         if (AudioHeap_SearchCaches(1, 2, command)) {
-                            channel->bankId = command;
+                            channel->fontId = command;
                         }
                         break;
                     case 0xC7:
@@ -530,7 +390,7 @@ void func_81113FA8(Channel81113FA8* channel) {
                     case 0xCA:
                         command = (u8)parameters[0];
                         channel->muteBehavior = command;
-                        channel->changeVolume = 1;
+                        channel->changes.s.volume = 1;
                         break;
                     case 0xCB:
                         offset = (u16)parameters[0];
@@ -556,7 +416,7 @@ void func_81113FA8(Channel81113FA8* channel) {
                         break;
                     case 0xD2:
                         command = (u8)parameters[0];
-                        channel->sustain = command;
+                        channel->adsr.sustain = command;
                         break;
                     case 0xE5:
                         command = (u8)parameters[0];
@@ -589,7 +449,7 @@ void func_81113FA8(Channel81113FA8* channel) {
                         channel->panChannelWeight = data[-2];
                         channel->reverb = data[-1];
                         channel->reverbIndex = data[0];
-                        channel->changePan = 1;
+                        channel->changes.s.pan = 1;
                         break;
                     case 0xE8:
                         channel->muteBehavior = parameters[0];
@@ -601,7 +461,7 @@ void func_81113FA8(Channel81113FA8* channel) {
                         channel->panChannelWeight = AudioSeq_ScriptReadU8(&scriptState->pc);
                         channel->reverb = AudioSeq_ScriptReadU8(&scriptState->pc);
                         channel->reverbIndex = AudioSeq_ScriptReadU8(&scriptState->pc);
-                        channel->changePan = 1;
+                        channel->changes.s.pan = 1;
                         break;
                     case 0xEC:
                         channel->vibratoExtentTarget = 0;
@@ -612,7 +472,7 @@ void func_81113FA8(Channel81113FA8* channel) {
                         channel->vibratoRateChangeDelay = 0;
                         channel->filter = NULL;
                         channel->gain = 0;
-                        channel->sustain = 0;
+                        channel->adsr.sustain = 0;
                         channel->velocityRandomVariance = 0;
                         channel->gateTimeRandomVariance = 0;
                         channel->combFilterSize = 0;
@@ -687,7 +547,7 @@ void func_81113FA8(Channel81113FA8* channel) {
                 case 0x88:
                     offset = AudioSeq_ScriptReadS16(&scriptState->pc);
                     if (!AudioSeq_SeqChannelSetLayer(channel, low_bits)) {
-                        channel->layers[low_bits]->pc = &seqPlayer->seqData[offset];
+                        channel->layers[low_bits]->scriptState.pc = &seqPlayer->seqData[offset];
                     }
                     break;
                 case 0x90:
@@ -697,7 +557,7 @@ void func_81113FA8(Channel81113FA8* channel) {
                     if (scriptState->value != -1 && AudioSeq_SeqChannelSetLayer(channel, low_bits) != -1) {
                         data = (*channel->dynTable)[scriptState->value];
                         offset = (data[0] << 8) + data[1];
-                        channel->layers[low_bits]->pc = &seqPlayer->seqData[offset];
+                        channel->layers[low_bits]->scriptState.pc = &seqPlayer->seqData[offset];
                     }
                     break;
             }
@@ -709,7 +569,7 @@ void func_81113FA8(Channel81113FA8* channel) {
                     goto exit_loop;
                 case 0x10:
                     channel->soundScriptIO[low_bits] = -1;
-                    if (func_8110E500(channel->bankId, scriptState->value, &channel->soundScriptIO[low_bits]) == -1) {} // karodo
+                    if (func_8110E500(channel->fontId, scriptState->value, &channel->soundScriptIO[low_bits]) == -1) {} // karodo
                     break;
                 case 0x70:
                     channel->soundScriptIO[low_bits] = scriptState->value;
@@ -725,7 +585,7 @@ void func_81113FA8(Channel81113FA8* channel) {
                     break;
                 case 0x20:
                     offset = AudioSeq_ScriptReadS16(&scriptState->pc);
-                    AudioSeq_SequenceChannelEnable((Particle2D68**)seqPlayer, low_bits, (s32)&seqPlayer->seqData[offset]);
+                    AudioSeq_SequenceChannelEnable(seqPlayer, low_bits, &seqPlayer->seqData[offset]);
                     break;
                 case 0x30:
                     command = AudioSeq_ScriptReadU8(&scriptState->pc);

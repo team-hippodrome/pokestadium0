@@ -8,32 +8,32 @@
 
 #define STAT_HP 1
 
-#define STAT_SPECIAL 2
+#define STAT_ATTACK 2
 
-#define STAT_SPEED 3
+#define STAT_DEFENSE 3
 
-#define STAT_DEFENSE 4
+#define STAT_SPEED 4
 
-#define STAT_ATTACK 5
+#define STAT_SPECIAL 5
 
-// Shifted, one-based view used by gBaseStats. Its named stat fields and
-// unk_13 address the same bytes as SpeciesData's stats and growthRate.
+// Shifted, one-based view used by gBaseStats (entry n holds species n from byte 5 on;
+// bytes 0-4 are the tail of the previous entry). Same bytes as SpeciesData.
 typedef struct PokemonStats {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 unk_01;
     /* 0x02 */ u8 unk_02;
     /* 0x03 */ u8 unk_03;
     /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
-    /* 0x06 */ u8 baseHP;
-    /* 0x07 */ u8 baseSpecial;
-    /* 0x08 */ u8 baseSpeed;
-    /* 0x09 */ u8 baseDefense;
-    /* 0x0A */ u8 baseAttack;
+    /* 0x05 */ u8 unk_05; // @unverified: National Dex number in the table (pj64 RAM read: 25 for Pikachu); no code reads it
+    /* 0x06 */ u8 baseHp; // 35 for Pikachu (RAM read of gBaseStats)
+    /* 0x07 */ u8 baseAttack; // 55 for Pikachu, 82 Venusaur (RAM read)
+    /* 0x08 */ u8 baseDefense; // 30 for Pikachu, 83 Venusaur (RAM read)
+    /* 0x09 */ u8 baseSpeed; // 90 for Pikachu, 80 Venusaur (RAM read)
+    /* 0x0A */ u8 baseSpecial; // 50 for Pikachu, 100 Venusaur (RAM read)
     /* 0x0B */ char unk0B[0x4];
     /* 0x0F */ u8 unk_0F[1];
     /* 0x10 */ char unk10[0x3];
-    /* 0x13 */ u8 unk_13;
+    /* 0x13 */ u8 growthRate; // Pokemon_ExpForLevel formula: 0 Pikachu (n^3), 3 Venusaur (medium slow) in the RAM table
     /* 0x14 */ char unk14[0x3];
 } PokemonStats; // size = 0x17
 
@@ -60,116 +60,100 @@ typedef struct unk_D_80071D88 {
     /* 0x04 */ Color_RGBA8 color;
 } unk_D_80071D88; // size = 0x8
 
+// A Gen 1 box Pokemon record (pokered box_struct), copied to and from BattleMon by
+// func_8001FE84 and Pokemon_ToGbRecord. Multi-byte fields are big-endian byte arrays.
 typedef struct GbPokemonRecord {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01[2];
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
-    /* 0x06 */ u8 unk_06;
-    /* 0x07 */ u8 unk_07;
-    /* 0x08 */ u8 unk_08[4];
-    /* 0x0C */ u8 unk_0C[2];
-    /* 0x0E */ u8 unk_0E[3];
-    /* 0x11 */ u8 unk_11[2];
-    /* 0x13 */ u8 unk_13[2];
-    /* 0x15 */ u8 unk_15[2];
-    /* 0x17 */ u8 unk_17[2];
-    /* 0x19 */ u8 unk_19[2];
-    /* 0x1B */ u8 unk_1B[2];
-    /* 0x1D */ u8 unk_1D[4];
+    /* 0x00 */ u8 species; // Gen 1 internal index (0x54 Pikachu seen in play); Species_FromInternalIndex gives BattleMon.species.id
+    /* 0x01 */ u8 hp[2]; // Current HP, big-endian
+    /* 0x03 */ u8 boxLevel; // Level
+    /* 0x04 */ u8 status; // @unverified: BattleMon.statusCondition; pokered box_struct
+    /* 0x05 */ u8 type1; // Gen 1 type ID (0x17 Electric, 0x14 Fire)
+    /* 0x06 */ u8 type2; // Gen 1 type ID; same as type1 for single-type species
+    /* 0x07 */ u8 catchRate; // Catch rate (190 Pikachu, 45 Charmander)
+    /* 0x08 */ u8 moves[4]; // Move IDs; shown in the せいとん summary
+    /* 0x0C */ u8 otId[2]; // Original trainer ID, big-endian
+    /* 0x0E */ u8 exp[3]; // Experience, 24-bit big-endian
+    /* 0x11 */ u8 statExp[5][2]; // @unverified: BattleMon.statExp: HP, Attack, Defense, Speed, Special; pokered box_struct
+    /* 0x1B */ u8 dvs[2]; // DVs (Atk/Def, Spd/Spc nibbles), big-endian
+    /* 0x1D */ u8 pp[4]; // PP of each move
 } GbPokemonRecord; // size = 0x21
 
+// A Gen 1 party Pokemon record (pokered party_struct).
 typedef struct GbPokemonRecordExt {
-    /* 0x00 */ GbPokemonRecord unk_00;
-    /* 0x21 */ u8 unk_21;
+    /* 0x00 */ GbPokemonRecord box; // The box record
+    /* 0x21 */ u8 level; // Level (party copy)
     // Big-endian u16 stats, read and written with GbData_ReadU16BE/GbData_WriteU16BE. Byte arrays
-    // keep the record unaligned: the Japanese GbSaveParty places it at odd offsets.
-    /* 0x22 */ u8 unk_22[2];
-    /* 0x24 */ u8 unk_24[2];
-    /* 0x26 */ u8 unk_26[2];
-    /* 0x28 */ u8 unk_28[2];
-    /* 0x2A */ u8 unk_2A[2];
+    // keep the record unaligned: GbSaveParty places it at even and odd offsets.
+    /* 0x22 */ u8 stats[5][2]; // Max HP, Attack, Defense, Speed, Special, big-endian; the せいとん summary shows them
 } GbPokemonRecordExt; // size = 0x2C
 
 typedef struct DeckHandle {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
+    /* 0x00 */ u8 openMode; // @unverified: 0 read, 1 start empty (count cleared, flags |= 1), 2 append (cursor = count) (Deck_InitializeSaveBackend)
+    /* 0x01 */ u8 deckType; // @unverified: 0x10-0x15 Zero save record kinds (SaveSram), 0x20-0x23 Game Boy party/box/items (Deck_Open switch on & 0xF0)
+    /* 0x02 */ u8 port; // @unverified: GB save port for the 0x20 decks (Deck_GetCount, Deck_ReadEntry)
+    /* 0x03 */ u8 index; // @unverified: record or box number (Deck_GetSaveEntryCount, Deck_GetCount)
+    /* 0x04 */ u8 flags; // @unverified: bit 0 modified, written back on close (Deck_CloseAndFlush)
+    /* 0x05 */ u8 entrySize; // @unverified: Deck_GetSaveRecordSize, Deck_GetEntrySize
+    /* 0x06 */ s16 capacity; // @unverified: Deck_GetSaveRecordCapacity, Deck_GetCapacity; Deck_WriteEntries stops at it
+    /* 0x08 */ s16 count; // @unverified: Deck_GetSaveEntryCount, Deck_GetCount; Deck_ReadEntries stops at it
+    /* 0x0A */ s16 cursor; // @unverified: next entry read or written (Deck_ReadEntries, Deck_WriteEntries)
 } DeckHandle; // size = 0xC
 
+// The party block of a Japanese Gen 1 save (pokered wPartyCount..wPartyMonNicks, names 6 bytes),
+// at offset 0x955 of GbSaveMainData (SRAM 0x2ED5).
 typedef struct GbSaveParty {
-    /* 0x000 */ u8 unk_000;
-    /* 0x001 */ u8 unk_001[1];
-    /* 0x002 */ char unk002[6];
-    /* 0x008 */ GbPokemonRecordExt unk_008[6];
-    /* 0x110 */ char unk_110[6][11];
-    /* 0x152 */ char unk_152[6][11];
-} GbSaveParty; // size = 0x194
+    /* 0x000 */ u8 count; // Party size; せいとん shows it as 02/06
+    /* 0x001 */ u8 species[7]; // Internal species indices ended by 0xFF
+    /* 0x008 */ GbPokemonRecordExt mons[6]; // The party Pokemon
+    /* 0x110 */ char otNames[6][6]; // Original trainer names, GB charset, 0x50-terminated
+    /* 0x134 */ char nicknames[6][6]; // Nicknames, GB charset, 0x50-terminated; shown in せいとん
+} GbSaveParty; // size = 0x158
 
-typedef struct GbSaveBoxEntry {
-    /* 0x000 */ u8 unk_000;
-    /* 0x000 */ u8 unk_001[1];
-    /* 0x002 */ char unk002[0x12];
-} GbSaveBoxEntry; // size = 0x14
+// One Pokemon box of a Japanese Gen 1 save (30 Pokemon, names 6 bytes), as returned by
+// GbSave_GetBoxEntry: the current box in GbSaveMainData, or one of the four boxes of a box bank.
+typedef struct GbSaveBox {
+    /* 0x000 */ u8 count; // Pokemon in the box; せいとん shows it as 00/30
+    /* 0x001 */ u8 species[31]; // internal species indices ended by 0xFF: 54 FF after いちらん moved ピカチュウ (0x54) into GB box 1
+    /* 0x020 */ GbPokemonRecord mons[30]; // the box Pokémon: mons[0] species 0x54, Lv25, HP 60, types 0x17 after the move to GB box 1, and the same bytes at cart SRAM 0x302D + 0x20
+    /* 0x3FE */ char otNames[30][6]; // original trainer names, GB charset, 0x50-terminated: otNames[0] = 8A 93 8B 50 (サトシ), also in cart SRAM
+    /* 0x4B2 */ char nicknames[30][6]; // nicknames, GB charset, 0x50-terminated: nicknames[0] = 99 94 50 (ハナ), also in cart SRAM
+} GbSaveBox; // size = 0x566
 
-typedef struct GbSaveCurrentBox {
-    /* 0x000 */ GbSaveBoxEntry unk_000;
-    /* 0x014 */ char unk014[0x2];
-    /* 0x016 */ GbPokemonRecord unk_016[1];
-    /* 0x037 */ char unk037[0x273];
-    /* 0x2AA */ char unk_2AA[1][11];
-    /* 0x2B5 */ char unk2B5[0xD1];
-    /* 0x386 */ char unk_386[1][11];
-} GbSaveCurrentBox; // size >= 0x391
-
-typedef struct GbSaveChecksumBlock {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ char unk02[0x1];
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ char unk04[0x1C];
-} GbSaveChecksumBlock; // size = 0x20
-
+// The main data of a Japanese Gen 1 save: the 0x1020 bytes read from SRAM 0x2580 (GbSave_ReadMainData)
+// into GbSavePort.mainData. Offsets match a Pocket Monsters Green save; see pokered's SRAM layout.
 typedef struct GbSaveMainData {
-    /* 0x000 */ u8 unk_000[1];
-    /* 0x001 */ char unk001[0x17];
-    /* 0x018 */ u8 unk_018[11];
-    /* 0x023 */ u8 unk_023[1];
-    /* 0x024 */ char unk024[0x12];
-    /* 0x036 */ u8 unk_036[1];
-    /* 0x037 */ char unk037[0x12];
-    /* 0x049 */ u8 unk_049;
-    /* 0x04A */ BattleMonSpecies unk_04A[1];
-    /* 0x04C */ char unk04C[0x2A];
-    /* 0x076 */ u8 unk_076;
-    /* 0x077 */ char unk077[0xE];
-    /* 0x085 */ u8 unk_085;
-    /* 0x086 */ char unk086[0x4];
-    /* 0x08A */ u8 unk_08A;
-    /* 0x08B */ char unk08B[0x1DB];
-    /* 0x266 */ u8 unk_266;
-    /* 0x267 */ BattleMonSpecies unk_267[1];
-    /* 0x269 */ char unk269[0x63];
-    /* 0x2CC */ s8 unk_2CC;
-    /* 0x2CD */ char unk2CD[0x174];
-    /* 0x441 */ u8 unk_441;
-    /* 0x442 */ char unk442[0x35];
-    /* 0x477 */ s8 unk_477;
-    /* 0x478 */ char unk478[0xA5];
-    /* 0x51D */ s8 unk_51D;
-    /* 0x51E */ char unk51E[0x48E];
-    /* 0x9AC */ GbSaveParty unk_9AC;
-    /* 0xB40 */ GbSaveCurrentBox unk_B40;
-    /* 0xED1 */ char unkED1[0xCF];
-    /* 0xFA0 */ GbSaveChecksumBlock unk_FA0;
-} GbSaveMainData; // size = 0xFC0
+    /* 0x000 */ char unk000[0x18];
+    /* 0x018 */ u8 playerName[6]; // GB charset, 0x50-terminated (SRAM 0x2598); checksummed from here (GbSave_VerifyChecksum)
+    /* 0x01E */ u8 pokedexOwned[19]; // One bit per National Dex number, bit (n - 1)
+    /* 0x031 */ u8 pokedexSeen[19]; // One bit per National Dex number, bit (n - 1)
+    // The two item lists hold 2-byte {item ID, quantity} entries ended by an ID of 0xFF. The code copies
+    // them through BattleMon.species (Deck_ReadEntry decks 34 and 35), so they keep that type: the quantity
+    // sits in BattleMonSpecies.isRental (seen in play: quantities 3, 5, 2).
+    /* 0x044 */ u8 numBagItems; // Bag item count; せいとん shows it as 003/020
+    /* 0x045 */ BattleMonSpecies bagItems[20]; // {item ID, quantity} pairs ended by an ID of 0xFF
+    /* 0x06D */ u8 unk_06D; // Untouched; pokered puts the bag list 0xFF terminator here.
+    /* 0x06E */ char unk06E[0x3];
+    /* 0x071 */ u8 rivalName[6]; // GB charset, 0x50-terminated
+    /* 0x077 */ char unk077[0x4];
+    /* 0x07B */ u8 playerId[2]; // Big-endian; the cartridge screen shows it as ID No.
+    /* 0x07D */ char unk07D[0x3];
+    /* 0x080 */ u8 currentMap; // Map ID; a Pokemon Center (0x29) sets GbSavePort.flags 0x4000 (GbSave_CheckSavedAtPokemonCenter)
+    /* 0x081 */ char unk081[0x1DB];
+    /* 0x25C */ u8 numBoxItems; // PC item count; せいとん shows it as 001/050
+    /* 0x25D */ BattleMonSpecies boxItems[50]; // {item ID, quantity} pairs ended by an ID of 0xFF
+    /* 0x2C1 */ u8 unk_2C1; // Untouched; pokered puts the PC item list 0xFF terminator here.
+    /* 0x2C2 */ u8 currentBox[2]; // read as a big-endian u16 >> 8: bit 0x80 boxes in use, low bits the box (GbSave_GetBoxCount); 80 00 with box 1 current
+    /* 0x2C4 */ char unk2C4[0x1A9];
+    /* 0x46D */ s8 pokedexEventFlags; // Event flag byte at SRAM 0x29ED: bit 0x20 got the Pokedex (GbSave_HasPokedex); set, ずかん (Pokedex) is enabled on the main menu
+    /* 0x46E */ char unk46E[0xA5];
+    /* 0x513 */ s8 unk_513; // bit 0 read by func_80022F48
+    /* 0x514 */ char unk514[0x441];
+    /* 0x955 */ GbSaveParty party;
+    /* 0xAAD */ GbSaveBox currentBoxData; // the current box (GbSave_GetBoxEntry): box 1 when currentBox was 0x80; saving wrote it to cart SRAM 0x302D
+    /* 0x1013 */ char unk1013[0x1];
+    /* 0x1014 */ u8 checksum; // (sum of 0x18..0x1013 & 0xFF) ^ 0xFF; SRAM 0x3594 (GbSave_ComputeChecksum)
+    /* 0x1015 */ char unk1015[0xB];
+} GbSaveMainData; // size = 0x1020
 
 #include "table_view.h"
 
@@ -190,8 +174,8 @@ s8* Text_CopyString(s8* arg0, s8* arg1);
 char* Text_CopySpeciesName(char* arg0, s32 arg1);
 char* Text_GetTmHmName(s32 arg0, char* arg1);
 void Pokemon_FromGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1);
-void Pokemon_ToGbRecord(s8 *arg0, s8 *arg1);
-void Pokemon_ToGbRecordExt(unk_func_88205880_00D0* arg0, GbPokemonRecordExt* arg1);
+void Pokemon_ToGbRecord(BattleMon* arg0, GbPokemonRecord* arg1);
+void Pokemon_ToGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1);
 u16 StatExpSqrt(u16 arg0);
 void func_80020188(void);
 u32 CalculateStatValue(s32 statId, s32 speciesId, u16 statModifier, u16 level, u16 dvBits);

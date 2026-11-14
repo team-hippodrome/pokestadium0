@@ -7,9 +7,9 @@
 #include "rom_device.h"
 #include "libnumus/player.h"
 extern u8 pad_D_800FC694[4];
-extern unk_D_800FC6CC* D_800B41E4;
+extern GbNoiseSampleEntry* D_800B41E4;
 extern u8* D_800B41E8;
-extern unk_D_800FC6D4* D_800FD688;
+extern GbMusicBank* D_800FD688;
 extern s16* D_800B41EC;
 extern u32* gAudioRegions;
 extern s32 pad_D_800FC70C;

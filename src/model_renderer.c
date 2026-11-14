@@ -56,7 +56,7 @@ void Model_InitDisplayObject(DisplayObject* display_object, s16 root_id, s16 obj
     MtxF_Identity(&display_object->matrix);
     display_object->rootId = root_id;
     display_object->objectType = object_type;
-    display_object->lodFraction = 0xFF;
+    display_object->alpha = 0xFF;
     display_object->textureMode = 0;
     display_object->node.flags |= 0x1;
     display_object->node.renderFlags &= ~0x4;
@@ -119,7 +119,7 @@ void Model_SetMaterialColor(DisplayObject* display_object, u8 r, u8 g, u8 b, u8 
 
 /** Sets the material alpha (LOD fraction) of a display object. */
 void Model_SetMaterialAlpha(DisplayObject* arg0, u8 arg1) {
-    arg0->lodFraction = arg1;
+    arg0->alpha = arg1;
 }
 
 /*
@@ -150,7 +150,7 @@ ModelAnimationBank* ModelAnim_GetAnimationRecord(DisplayObject* arg0, s32 arg1) 
     return var_v1;
 }
 
-extern unk_D_8006FF00 D_80064C5C[];
+extern SpeciesInfo D_80064C5C[];
 
 /**
  * Derive the material color variant from a non-default nickname, OT id, and OT name.
@@ -162,7 +162,7 @@ arg1_func_80010CA8* Model_ComputeNicknameColorVariant(arg1_func_80010CA8* arg0, 
     UNUSED s32 pad; // FAKE: stack padding
     char sp38[0xB];
     arg1_func_80010CA8 sp34;
-    unk_D_8006FF00* sp30;
+    SpeciesInfo* sp30;
     UNUSED s32 pad2; // FAKE: stack padding
     u8 var_a0;
     s8* var_v1;
@@ -173,7 +173,7 @@ arg1_func_80010CA8* Model_ComputeNicknameColorVariant(arg1_func_80010CA8* arg0, 
     Text_CopySpeciesName(sp38, arg1->species.id);
 
     if (HAL_Strcmp(arg1->nickname, sp38) != 0) {
-        var_a0 = ((arg1->unk_0E >> 8) & 0xFF) + (arg1->unk_0E & 0xFF);
+        var_a0 = ((arg1->otId >> 8) & 0xFF) + (arg1->otId & 0xFF);
 
         if (1) {}  // karodo
 
@@ -189,90 +189,77 @@ arg1_func_80010CA8* Model_ComputeNicknameColorVariant(arg1_func_80010CA8* arg0, 
             var_a0 += 0;
         }
 
-        sp34.unk_00 = ((((sp30->unk_12 - sp30->unk_10) << 6) * var_a0) / 255) + (sp30->unk_10 << 6);
+        sp34.hueShift = ((((sp30->nicknameHueMax - sp30->nicknameHueMin) << 6) * var_a0) / 255) + (sp30->nicknameHueMin << 6);
     }
 
     *arg0 = sp34;
     return arg0;
 }
 
-typedef struct IconLoader19D08 {
-    u8 flags;
-    char pad01[0x17];
-    s32 loadedModel;
-} IconLoader19D08;
-typedef struct Obj80019D08 {
-    u8 flags;
-    u16 unk_02;
-    BattleMon* unk_04;
-    char pad08[8];
-    IconLoader19D08* unk_10;
-    s32 unk_14;
-} Obj80019D08;
 s32 func_80005014(void);
-void func_8001799C(IconLoader19D08*, u16, arg1_func_80010CA8);
-void func_80017D00(IconLoader19D08*);
+void func_8001799C(ModelLoadContext*, u16, arg1_func_80010CA8);
+void func_80017D00(ModelLoadContext*);
 
-void func_80019D08(Obj80019D08* arg0) {
+void func_80019D08(BattleSide* arg0) {
     arg1_func_80010CA8 sp24;
 
     sp24.raw = 0;
-    if (!(arg0->flags & 0x40) && (arg0->flags & 0x80)) {
-        if (arg0->unk_04 != NULL) {
-            Model_ComputeSizeVariant(&sp24, arg0->unk_04);
+    if (!(arg0->modelFlags & 0x40) && (arg0->modelFlags & 0x80)) {
+        if (arg0->displayMon != NULL) {
+            Model_ComputeSizeVariant(&sp24, arg0->displayMon);
         }
-        if (!(arg0->unk_10->flags & 4)) {
+        if (!(arg0->modelLoadContext->flags & 4)) {
             while (func_80005014() != 0) {}
         }
-        func_8001799C(arg0->unk_10, arg0->unk_02, sp24);
-        arg0->flags |= 0x40;
-        arg0->flags &= ~0x10;
-        if (arg0->flags & 0x20) {
-            func_80017D00(arg0->unk_10);
-            arg0->unk_14 = arg0->unk_10->loadedModel;
-            arg0->flags &= ~0xE0;
+        func_8001799C(arg0->modelLoadContext, arg0->displayModel, sp24);
+        arg0->modelFlags |= 0x40;
+        arg0->modelFlags &= ~0x10;
+        if (arg0->modelFlags & 0x20) {
+            func_80017D00(arg0->modelLoadContext);
+            arg0->loadedModel = (ModelNodeView*)arg0->modelLoadContext->loadedModel;
+            arg0->modelFlags &= ~0xE0;
         }
     }
 }
 
-/** Polls the icon loader for a display object's frame load. */
-void PokeIcon_PollFrameLoadForObject(unk_func_8001C248* arg0) {
-    if (PokeIcon_PollFrameLoad(arg0->node.callback)) {
-        arg0->node.callbackArg = arg0->node.callback->loadedModel;
-        arg0->node.type &= ~0xE0;
-        arg0->node.type |= 0x10;
+/** Polls the icon loader for a side's model load. */
+void PokeIcon_PollFrameLoadForObject(BattleSide* arg0) {
+    if (PokeIcon_PollFrameLoad(arg0->modelLoadContext)) {
+        arg0->loadedModel = (ModelNodeView*)arg0->modelLoadContext->loadedModel;
+        arg0->modelFlags &= ~0xE0;
+        arg0->modelFlags |= 0x10;
     }
 }
 
-/** Waits for the icon loader to finish a display object's frame load. */
-void PokeIcon_WaitFrameLoadForObject(unk_func_8001C248* arg0) {
-    if (arg0->node.type & 0x40 && PokeIcon_WaitFrameLoad(arg0->node.callback) != 0) {
-        arg0->node.callbackArg = arg0->node.callback->loadedModel;
-        arg0->node.type &= ~0xE0;
-        arg0->node.type |= 0x10;
+/** Waits for the icon loader to finish a side's model load. */
+void PokeIcon_WaitFrameLoadForObject(BattleSide* arg0) {
+    if (arg0->modelFlags & 0x40 && PokeIcon_WaitFrameLoad(arg0->modelLoadContext) != 0) {
+        arg0->loadedModel = (ModelNodeView*)arg0->modelLoadContext->loadedModel;
+        arg0->modelFlags &= ~0xE0;
+        arg0->modelFlags |= 0x10;
     }
 }
 
-/** Requests a background load for a display object. */
-void PokeIcon_RequestBackgroundForObject(unk_func_8001C248* arg0) {
-    if (!(arg0->unk_01D & 0x40) && (arg0->unk_01D & 0x80)) {
-        PokeIcon_RequestBackgroundLoad(arg0->node.callback, arg0->unk_020, arg0->unk_024);
-        arg0->unk_01D |= 0x40;
-        arg0->unk_01D &= ~0x10;
-        if (arg0->unk_01D & 0x20) {
-            PokeIcon_WaitBackgroundLoad(arg0->node.callback);
-            arg0->unk_024 = arg0->node.callback->loadedBackground;
-            arg0->unk_01D &= ~0xE0;
+/** Requests a side's background load. */
+void PokeIcon_RequestBackgroundForObject(BattleSide* arg0) {
+    if (!(arg0->backgroundLoadFlags & 0x40) && (arg0->backgroundLoadFlags & 0x80)) {
+        PokeIcon_RequestBackgroundLoad(arg0->modelLoadContext, arg0->backgroundFileList, (s32)arg0->background);
+        arg0->backgroundLoadFlags |= 0x40;
+        arg0->backgroundLoadFlags &= ~0x10;
+        if (arg0->backgroundLoadFlags & 0x20) {
+            PokeIcon_WaitBackgroundLoad(arg0->modelLoadContext);
+            arg0->background = (arg1_func_80019420*)arg0->modelLoadContext->loadedBackground;
+            arg0->backgroundLoadFlags &= ~0xE0;
         }
     }
 }
 
-/** Polls the icon loader for a display object's background load. */
-void PokeIcon_PollBackgroundForObject(unk_func_8001C248* arg0) {
-    if (PokeIcon_PollBackgroundLoad(arg0->node.callback) != 0) {
-        arg0->unk_024 = arg0->node.callback->loadedBackground;
-        arg0->unk_01D &= ~0xE0;
-        arg0->unk_01D |= 0x10;
+/** Polls the icon loader for a side's background load. */
+void PokeIcon_PollBackgroundForObject(BattleSide* arg0) {
+    if (PokeIcon_PollBackgroundLoad(arg0->modelLoadContext) != 0) {
+        arg0->background = (arg1_func_80019420*)arg0->modelLoadContext->loadedBackground;
+        arg0->backgroundLoadFlags &= ~0xE0;
+        arg0->backgroundLoadFlags |= 0x10;
     }
 }
 

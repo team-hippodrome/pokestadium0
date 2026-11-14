@@ -22,7 +22,7 @@ M2C_UNK func_80029864(s32, s32, s32, M2C_UNK *);
 extern M2C_UNK D_800734A8;
 extern s8 *D_800603C0;
 extern s8 D_8007356C;
-s32 Particle_Field50_SetXZFromField7C_09BB4();
+s32 Window_DrawAnimatedFrame();
 s32 func_80020CE4(s32, s32, s32);
 u8* func_800196F8(s32);
 void func_8001A384(s32, s32);
@@ -141,7 +141,7 @@ s32 MonSummary_DrawMoveInfo(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
         func_8001A944(arg0 + 9, arg1 + 0x17, D_8A21D9C8);
         func_8001AA9C(type->color.r, type->color.g, type->color.b, type->color.a);
         func_8001A944(arg0 + 0x49, arg1 + 4, type->str);
-        func_8001AA9C(*((u8 *) (((s8 *) (&D_800734A8)) + 0)), *((u8 *) (((s8 *) (&D_800734A8)) + 1)), *((u8 *) (((s8 *) (&D_800734A8)) + 2)), *((u8 *) (((s8 *) (&D_800734A8)) + 3))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+        func_8001AA9C(*((u8 *) (((s8 *) (&D_800734A8)) + 0)), *((u8 *) (((s8 *) (&D_800734A8)) + 1)), *((u8 *) (((s8 *) (&D_800734A8)) + 2)), *((u8 *) (((s8 *) (&D_800734A8)) + 3)));
         Font_SetLineHeight(0x14);
         if (D_8006B190[move].power >= 2)
         {
@@ -190,20 +190,20 @@ void MonSummary_DrawModelPreview(s32 arg0, s32 arg1, s32 arg2) {
  * Sets up the summary page window (552x362) and its move list.
  * Seen in play (2026-11-12): opened by つよさをみる.
  */
-void MonSummary_InitPageWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
+void MonSummary_InitPageWindow(MonSummaryWindow* arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 unused; // FAKE: stack padding
     s32 count;
     s32 i;
     s32 handle;
     s32 move;
 
-    Window_SetRect(arg0, arg1, arg2, 0x228, 0x16A);
-    M2C_FIELD(arg0, s32*, 0x28) = 0;
-    M2C_FIELD(arg0, s32*, 0x20) = 0;
-    M2C_FIELD(arg0, s32*, 0x24) = 0;
-    M2C_FIELD(arg0, s32*, 0x14) = 0x1001;
-    M2C_FIELD(arg0, s32*, 0x34) = 0;
-    M2C_FIELD(arg0, s32*, 0x2C) = arg3;
+    Window_SetRect((s8*)arg0, arg1, arg2, 0x228, 0x16A);
+    arg0->window.state = 0;
+    arg0->window.title = 0;
+    arg0->window.animTimer = 0;
+    arg0->window.frame.style = 0x1001;
+    arg0->modelLoaded = 0;
+    arg0->mon = arg3;
     count = BattleMon_CountMoves((u8*)arg3);
     while (Display_IsFrameReady() == 0) {
     }
@@ -214,44 +214,43 @@ void MonSummary_InitPageWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Draws the summary page: header, stats and trainer info. The てもち page shows no moves.
  * Seen in play (2026-11-12): the つよさをみる page (3D model, No., level, HP, status, stats, types, ID,
  * OT, Exp).
  */
-void MonSummary_DrawPage(s8 *arg0, s32 arg1)
+void MonSummary_DrawPage(MonSummaryWindow* arg0, s32 arg1)
 {
   s32 temp_v0;
-  if (((*((s32 *) (((s8 *) arg0) + 0x28))) != 2) && (Particle_Field50_SetXZFromField7C_09BB4() == 0))
+  if (((arg0->window.state) != 2) && (Window_DrawAnimatedFrame() == 0))
   {
     if (arg1 == 0)
     {
-      func_80029864((*((s32 *) (((s8 *) arg0) + 0))) + 0xF9, *((s32 *) (((s8 *) arg0) + 4)), *((s32 *) (((s8 *) arg0) + 0xC)), &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-      Ui_DrawTexturedDivider(*((s32 *) (((s8 *) arg0) + 0)), (*((s32 *) (((s8 *) arg0) + 4))) + 0xD7, 0x100, &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-      Ui_DrawTexturedDivider((*((s32 *) (((s8 *) arg0) + 0))) + 0xFA, (*((s32 *) (((s8 *) arg0) + 4))) + 0x95, 0x12E, &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-      MonSummary_DrawStats((*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (((s8 *) arg0) + 4))) + 0xDE, *((s32 *) (((s8 *) arg0) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-      MonSummary_DrawHeader((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 6, *((s32 *) (((s8 *) arg0) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-      MonSummary_DrawTrainerInfo((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 0x9C, *((s32 *) (((s8 *) arg0) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      func_80029864((arg0->window.frame.x) + 0xF9, arg0->window.frame.y, arg0->window.frame.height, &D_8007356C);
+      Ui_DrawTexturedDivider(arg0->window.frame.x, (arg0->window.frame.y) + 0xD7, 0x100, &D_8007356C);
+      Ui_DrawTexturedDivider((arg0->window.frame.x) + 0xFA, (arg0->window.frame.y) + 0x95, 0x12E, &D_8007356C);
+      MonSummary_DrawStats((arg0->window.frame.x) + 6, (arg0->window.frame.y) + 0xDE, arg0->mon);
+      MonSummary_DrawHeader((arg0->window.frame.x) + 0x100, (arg0->window.frame.y) + 6, arg0->mon);
+      MonSummary_DrawTrainerInfo((arg0->window.frame.x) + 0x100, (arg0->window.frame.y) + 0x9C, arg0->mon);
     }
     else
     {
-      Ui_DrawTexturedDivider(*((s32 *) (((s8 *) arg0) + 0)), (*((s32 *) (((s8 *) arg0) + 4))) + 0xD7, *((s32 *) (((s8 *) arg0) + 8)), &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-      func_80029864((*((s32 *) (((s8 *) arg0) + 0))) + 0xF9, *((s32 *) (((s8 *) arg0) + 4)), 0xDE, &D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-      MonSummary_DrawSpeciesName((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 6, *((s32 *) (((s8 *) arg0) + 0x2C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-      func_8A2010C8((*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (((s8 *) arg0) + 4))) + 0xDE, *((s32 *) (((s8 *) arg0) + 0x2C)), *((s32 *) (((s8 *) arg0) + 0x30))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-      MonSummary_DrawMoveInfo((*((s32 *) (((s8 *) arg0) + 0))) + 0x100, (*((s32 *) (((s8 *) arg0) + 4))) + 0x54, *((s32 *) (((s8 *) arg0) + 0x2C)), *((s32 *) (((s8 *) arg0) + 0x30))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      Ui_DrawTexturedDivider(arg0->window.frame.x, (arg0->window.frame.y) + 0xD7, arg0->window.frame.width, &D_8007356C);
+      func_80029864((arg0->window.frame.x) + 0xF9, arg0->window.frame.y, 0xDE, &D_8007356C);
+      MonSummary_DrawSpeciesName((arg0->window.frame.x) + 0x100, (arg0->window.frame.y) + 6, arg0->mon);
+      func_8A2010C8((arg0->window.frame.x) + 6, (arg0->window.frame.y) + 0xDE, arg0->mon, arg0->moveSlot);
+      MonSummary_DrawMoveInfo((arg0->window.frame.x) + 0x100, (arg0->window.frame.y) + 0x54, arg0->mon, arg0->moveSlot);
     }
   }
-  temp_v0 = *((s32 *) (((s8 *) arg0) + 0x28));
+  temp_v0 = arg0->window.state;
   if (((temp_v0 ^ 0) == 1) || (temp_v0 == 2)) // FAKE: no-op ^ 0
   {
-    if ((*((s32 *) (((s8 *) arg0) + 0x34))) == 0)
+    if ((arg0->modelLoaded) == 0)
     {
-      *((s32 *) (((s8 *) arg0) + 0x34)) = 1;
-      func_80019008(D_8A21DA4C, *((s32 *) (((s8 *) arg0) + 0x2C)), 0x108D);
+      arg0->modelLoaded = 1;
+      func_80019008(D_8A21DA4C, arg0->mon, 0x108D);
     }
-    MonSummary_DrawModelPreview(0x32, 0x5A, *((s32 *) (((s8 *) arg0) + 0x2C)));
+    MonSummary_DrawModelPreview(0x32, 0x5A, arg0->mon);
   }
 }
 
@@ -261,13 +260,13 @@ void MonSummary_DrawPage(s8 *arg0, s32 arg1)
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-s32 MonSummary_GetCButtonPage(s8 *arg0) {
+s32 MonSummary_GetCButtonPage(MonSummaryWindow* arg0) {
     s32 var_s0;
     u16 temp_v0;
 
     var_s0 = -1;
     if (func_80022B40() != 0) {
-        temp_v0 = M2C_FIELD(D_800603C0, u16 *, 8);
+        temp_v0 = ((Controller*)D_800603C0)->buttonPressed;
         if (temp_v0 & 8) {
             var_s0 = 0;
         } else if (temp_v0 & 1) {
@@ -278,15 +277,15 @@ s32 MonSummary_GetCButtonPage(s8 *arg0) {
             var_s0 = 3;
         }
         if (var_s0 >= 0) {
-            if (BattleMon_GetMoveIndexChecked(M2C_FIELD(arg0, s32 *, 0x2C), var_s0, arg0) == -1) {
+            if (BattleMon_GetMoveIndexChecked(arg0->mon, var_s0, arg0) == -1) {
                 func_8003F6AC(8);
             } else {
                 func_8003F6AC(2);
-                M2C_FIELD(arg0, s32 *, 0x30) = var_s0;
-                if (M2C_FIELD(arg0, s32 *, 0x28) <= 0) {
-                    M2C_FIELD(arg0, s32 *, 0x24) = (s32) M2C_FIELD(arg0, s32 *, 0x24);
+                arg0->moveSlot = var_s0;
+                if (arg0->window.state <= 0) {
+                    arg0->window.animTimer = (s32) arg0->window.animTimer;
                 } else {
-                    M2C_FIELD(arg0, s32 *, 0x24) = 4;
+                    arg0->window.animTimer = 4;
                 }
             }
         }
@@ -299,14 +298,14 @@ s32 MonSummary_GetCButtonPage(s8 *arg0) {
  * Seen in play (2026-11-12): the てもち screen background.
  */
 void PartyScreen_DrawBackground(void) {
-    Ui_DrawTintedScreenBackground(0x38, 0x1E0, M2C_FIELD(&D_8A203300, u8 *, 0), M2C_FIELD(&D_8A203300, u8 *, 1), (s32) M2C_FIELD(&D_8A203300, u8 *, 2));
+    Ui_DrawTintedScreenBackground(0x38, 0x1E0, D_8A203300.r, D_8A203300.g, (s32)D_8A203300.b);
 }
 
 /** Returns the experience points needed to reach a level. */
 s32 LabPC_ComputeExpForLevel(s32 arg0, s32 arg1) {
     s32 sp4;
 
-    switch (gBaseStats[arg0].unk_13) {
+    switch (gBaseStats[arg0].growthRate) {
         case 0:
             sp4 = arg1 * arg1 * arg1;
             break;
@@ -334,15 +333,15 @@ s32 LabPC_ComputeExpForLevel(s32 arg0, s32 arg1) {
     return sp4;
 }
 
-void func_8A202390(s8 *arg0) {
+void func_8A202390(ByteMatrix* arg0) {
     s32 sp1C;
     s32 sp18;
     s32 temp_v0;
 
-    sp1C = M2C_FIELD(arg0, s32 *, 0);
+    sp1C = (s32)arg0->rows;
     temp_v0 = func_80020AFC(0x20, D_8A21DA40, 0, 0);
     sp18 = temp_v0;
-    M2C_FIELD(arg0, s32 *, 8) = func_80020CE4(sp1C, M2C_FIELD(arg0, s32 *, 4), temp_v0);
+    arg0->count = func_80020CE4(sp1C, arg0->capacity, temp_v0);
     func_80020C60(sp18);
 }
 
@@ -374,41 +373,29 @@ void LabPC_WriteDeckBack(s32* arg0, s32 arg1) {
 
 void func_80027410(s8 *, s8 *, s32, s32, s32);
 void func_80027804(s8 *, s8 *, s32, s32);
-void func_8A2024D0(s8 *arg0) {
+void func_8A2024D0(PartyScreen* arg0) {
     s32 i;
 
-    M2C_FIELD(arg0, s32 *, 0) = 1;
-    M2C_FIELD(arg0, s8 **, 8) = arg0 + 0x10;
-    M2C_FIELD(arg0, s32 *, 0x384) = 0;
+    arg0->state = 1;
+    arg0->activeWindow = &arg0->listWindow.window;
+    arg0->dirty = 0;
     for (i = 0; i < 6; i++) {
-        M2C_FIELD(arg0, s8 **, 0x18C + i * 4) = arg0 + 0x1A4 + i * 0x50;
+        arg0->monPointers[i] = &arg0->mons[i];
     }
-    func_80027410(arg0 + 0x170, arg0 + 0x1A4, 0x50, 6, 0);
-    func_8A202390(arg0 + 0x170);
-    func_80027804(arg0 + 0x180, arg0 + 0x18C, 6, M2C_FIELD(arg0, s32 *, 0x178));
-    for (i = 0; i < M2C_FIELD(arg0, s32 *, 0x178); i++) {
-        func_8001833C((unk_func_8001A024*)D_8A21DA50, i, (BattleMon*)(M2C_FIELD(arg0, s32 *, 0x170) + i * 0x50),
+    func_80027410((s8*)&arg0->monTable, (s8*)arg0->mons, 0x50, 6, 0);
+    func_8A202390((s8*)&arg0->monTable);
+    func_80027804((s8*)&arg0->monList, (s8*)arg0->monPointers, 6, arg0->monTable.count);
+    for (i = 0; i < arg0->monTable.count; i++) {
+        func_8001833C((PokeIconRenderer*)D_8A21DA50, i, (BattleMon*)(arg0->monTable.rows + i * 0x50),
                       GPACK_RGBA5551(D_8A203304.r, D_8A203304.g, D_8A203304.b, 1));
     }
-    PartyScreen_InitList(arg0 + 0x10, 0x2F, 0x4D, (s32)(arg0 + 0x180));
+    PartyScreen_InitList(&arg0->listWindow, 0x2F, 0x4D, (s32)&arg0->monList);
 }
 
-typedef struct Ctx8A20261C {
-    /* 0x000 */ s32 state;
-    /* 0x004 */ s32 mode;
-    /* 0x008 */ char unk008[0x8];
-    /* 0x010 */ s8 list[0x24];
-    /* 0x034 */ s32 unk034;
-    /* 0x038 */ s32 unk038;
-    /* 0x03C */ char unk03C[0x34];
-    /* 0x070 */ s8 unk070[0x64];
-    /* 0x0D4 */ s8 unk0D4[0x38];
-    /* 0x10C */ s8 unk10C[0x4];
-} Ctx8A20261C;
-s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0);
+s32 Window_UpdateAnimation(Window* arg0);
 void SavePrompt_Draw(s8*);
-void PartyScreen_DrawList(s8*, s32);
-#define CTX ((Ctx8A20261C*)arg0)
+void PartyScreen_DrawList(PartyListWindow*, s32);
+#define CTX ((PartyScreen*)arg0)
 /**
  * Draws the summary screen for its current state.
  * Seen in play (2026-11-12): draws the てもち screen each frame.
@@ -417,187 +404,185 @@ void PartyScreen_Draw(void* arg0) {
     BgStage_DrawFrame();
     switch (CTX->state) {
         case 1:
-            if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list) != 0) {
+            if (Window_UpdateAnimation(&CTX->listWindow) != 0) {
                 PartyScreen_DrawBackground();
             }
-            PartyScreen_DrawList(CTX->list, 0);
+            PartyScreen_DrawList(&CTX->listWindow, 0);
             break;
         case 2:
-            if ((CTX->mode == 4) || (CTX->mode == 7)) {
+            if ((CTX->nextState == 4) || (CTX->nextState == 7)) {
                 PartyScreen_DrawBackground();
-                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
-                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk070);
-                PartyScreen_DrawList(CTX->list, 1);
-            } else if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk070) != 0) {
-                CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
-                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
-                PartyScreen_DrawList(CTX->list, 1);
-                CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
+                Window_UpdateAnimation(&CTX->listWindow);
+                Window_UpdateAnimation(&CTX->actionMenu);
+                PartyScreen_DrawList(&CTX->listWindow, 1);
+            } else if (Window_UpdateAnimation(&CTX->actionMenu) != 0) {
+                CTX->listWindow.window.animTimer = (CTX->listWindow.window.state <= 0) ? CTX->listWindow.window.animTimer : 4;
+                Window_UpdateAnimation(&CTX->listWindow);
+                PartyScreen_DrawList(&CTX->listWindow, 1);
+                CTX->listWindow.window.animTimer = (CTX->listWindow.window.state <= 0) ? CTX->listWindow.window.animTimer : 4;
             } else {
-                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
-                PartyScreen_DrawList(CTX->list, 1);
+                Window_UpdateAnimation(&CTX->listWindow);
+                PartyScreen_DrawList(&CTX->listWindow, 1);
             }
-            PartyScreen_DrawActionMenu(CTX->unk070);
+            PartyScreen_DrawActionMenu(&CTX->actionMenu);
             break;
         case 3:
-            if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list) != 0) {
+            if (Window_UpdateAnimation(&CTX->listWindow) != 0) {
                 PartyScreen_DrawBackground();
             }
-            PartyScreen_DrawList(CTX->list, 2);
+            PartyScreen_DrawList(&CTX->listWindow, 2);
             break;
         case 4:
-            if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk0D4) != 0) {
+            if (Window_UpdateAnimation(&CTX->summaryWindow) != 0) {
                 PartyScreen_DrawBackground();
             }
-            MonSummary_DrawPage(CTX->unk0D4, 0);
+            MonSummary_DrawPage(&CTX->summaryWindow, 0);
             break;
         case 5:
-            if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk0D4) != 0) {
+            if (Window_UpdateAnimation(&CTX->summaryWindow) != 0) {
                 PartyScreen_DrawBackground();
             }
-            MonSummary_DrawPage(CTX->unk0D4, 1);
+            MonSummary_DrawPage(&CTX->summaryWindow, 1);
             break;
         case 6:
-            if (CTX->mode == 7) {
+            if (CTX->nextState == 7) {
                 PartyScreen_DrawBackground();
-                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
-                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk10C);
-                PartyScreen_DrawList(CTX->list, 0);
-            } else if (Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->unk10C) != 0) {
-                CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
-                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
-                PartyScreen_DrawList(CTX->list, 0);
-                CTX->unk034 = (CTX->unk038 <= 0) ? CTX->unk034 : 4;
+                Window_UpdateAnimation(&CTX->listWindow);
+                Window_UpdateAnimation(&CTX->savePrompt);
+                PartyScreen_DrawList(&CTX->listWindow, 0);
+            } else if (Window_UpdateAnimation(&CTX->savePrompt) != 0) {
+                CTX->listWindow.window.animTimer = (CTX->listWindow.window.state <= 0) ? CTX->listWindow.window.animTimer : 4;
+                Window_UpdateAnimation(&CTX->listWindow);
+                PartyScreen_DrawList(&CTX->listWindow, 0);
+                CTX->listWindow.window.animTimer = (CTX->listWindow.window.state <= 0) ? CTX->listWindow.window.animTimer : 4;
             } else {
-                Particle_Field7C_SetXZFromField74AngleY_0B278(CTX->list);
-                PartyScreen_DrawList(CTX->list, 0);
+                Window_UpdateAnimation(&CTX->listWindow);
+                PartyScreen_DrawList(&CTX->listWindow, 0);
             }
-            SavePrompt_Draw(CTX->unk10C);
+            SavePrompt_Draw(&CTX->savePrompt);
             break;
     }
 }
 #undef CTX
 
-void func_8A202904(s8 *arg0, s32 arg1, s32 arg2) {
-    M2C_FIELD(M2C_FIELD(arg0, s8 **, 8), s32 *, 0x24) = 7;
-    M2C_FIELD(arg0, s32 *, 4) = arg1;
-    M2C_FIELD(arg0, s32 *, 0xC) = arg2;
+void func_8A202904(PartyScreen* arg0, s32 arg1, s32 arg2) {
+    arg0->activeWindow->animTimer = 7;
+    arg0->nextState = arg1;
+    arg0->nextWindow = (Window*)arg2;
 }
 
-typedef struct Ctx8A20291C { char pad[0x18C]; s32 ptrs[6]; } Ctx8A20291C;
 s32 Menu_UpdateCursor(s8*);
 s32 func_8002BC14(s32);
 void SavePrompt_Init(s8*, s32, s32);
 void Menu_ClearItemFlags(s8*);
 s32 SavePrompt_Update(s8*);
 void Save_DrawReportingWindow(s8*);
-s32 PartyScreen_UpdateActionMenu(s8*);
-void PartyScreen_InitActionMenu(s8* arg0, s32 arg1, s32 arg2, u8* arg3);
-s32 MonSummary_GetCButtonPage(s8* arg0);
+s32 PartyScreen_UpdateActionMenu(PartyActionMenuWindow*);
+void PartyScreen_InitActionMenu(PartyActionMenuWindow* arg0, s32 arg1, s32 arg2, u8* arg3);
 void LabPC_WriteDeckBack(s32* arg0, s32 arg1);
 /**
  * Runs the summary screen's state machine for one frame.
  * Seen in play (2026-11-12): runs the てもち screen: list, action menu, summary page and the ならびかえ
  * (reorder) prompt 「どこに いどうしますか？」.
  */
-M2C_UNK PartyScreen_Update(M2C_UNK* ctx) {
+M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
     s32 ret = 0;
-    s8* arg0 = (s8*)ctx;
+    PartyScreen* arg0 = ctx; // FAKE: the copy takes a stack slot; needed to match
     s32 res;
 
-    if (M2C_FIELD(M2C_FIELD(arg0, s8**, 8), s32*, 0x28) == 4) {
-        M2C_FIELD(arg0, s32*, 0) = M2C_FIELD(arg0, s32*, 4);
-        if (M2C_FIELD(arg0, s32*, 0) == 7) {
+    if (arg0->activeWindow->state == 4) {
+        arg0->state = arg0->nextState;
+        if (arg0->state == 7) {
             ret = 1;
         } else {
-            M2C_FIELD(arg0, s32*, 4) = 0;
-            M2C_FIELD(arg0, s8**, 8) = M2C_FIELD(arg0, s8**, 0xC);
+            arg0->nextState = 0;
+            arg0->activeWindow = arg0->nextWindow;
         }
         return ret;
     }
-    if ((M2C_FIELD(M2C_FIELD(arg0, s8**, 8), s32*, 0x28) != 1) && (M2C_FIELD(M2C_FIELD(arg0, s8**, 8), s32*, 0x28) != 2)) {
+    if ((arg0->activeWindow->state != 1) && (arg0->activeWindow->state != 2)) {
         return 0;
     }
 
-    switch (M2C_FIELD(arg0, s32*, 0)) {
+    switch (arg0->state) {
         case 1:
-            if (Menu_UpdateCursor(arg0 + 0x3C) != 0) {
-                M2C_FIELD(arg0, s32*, 0x34) = (M2C_FIELD(arg0, s32*, 0x38) <= 0) ? M2C_FIELD(arg0, s32*, 0x34) : 4;
+            if (Menu_UpdateCursor(&arg0->listWindow.menu) != 0) {
+                arg0->listWindow.window.animTimer = (arg0->listWindow.window.state <= 0) ? arg0->listWindow.window.animTimer : 4;
             } else {
                 res = func_8002BC14((s32)D_800603C0);
                 if (res == -1) {
                     func_8003F6AC(3);
-                    if (M2C_FIELD(arg0, s32*, 0x384) != 0) {
-                        SavePrompt_Init(arg0 + 0x10C, 0xCA, 0xAD);
-                        M2C_FIELD(arg0, s32*, 0) = 6;
-                        M2C_FIELD(arg0, s8**, 8) = arg0 + 0x10C;
+                    if (arg0->dirty != 0) {
+                        SavePrompt_Init(&arg0->savePrompt, 0xCA, 0xAD);
+                        arg0->state = 6;
+                        arg0->activeWindow = &arg0->savePrompt;
                     } else {
                         func_8A202904(arg0, 7, 0);
                     }
                 } else if (res == 1) {
                     func_8003F6AC(2);
-                    PartyScreen_InitActionMenu(arg0 + 0x70, 0x194, 0x123, (u8*)((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)]);
-                    M2C_FIELD(arg0, s32*, 0) = 2;
-                    M2C_FIELD(arg0, s8**, 8) = arg0 + 0x70;
+                    PartyScreen_InitActionMenu(&arg0->actionMenu, 0x194, 0x123, (u8*)arg0->monPointers[arg0->listWindow.menu.cursor]);
+                    arg0->state = 2;
+                    arg0->activeWindow = &arg0->actionMenu;
                 }
             }
             break;
         case 2:
-            res = PartyScreen_UpdateActionMenu(arg0 + 0x70);
+            res = PartyScreen_UpdateActionMenu(&arg0->actionMenu);
             if (res == -1) {
                 func_8003F6AC(3);
-                func_8A202904(arg0, 1, (s32)(arg0 + 0x10));
+                func_8A202904(arg0, 1, (s32)&arg0->listWindow);
             } else if (res > 0) {
                 switch (res) {
                     case 1:
                         func_8003F6AC(2);
-                        func_8A202904(arg0, 4, (s32)(arg0 + 0xD4));
-                        M2C_FIELD(arg0, s32*, 0x104) = 0;
-                        M2C_FIELD(arg0, s32*, 0x34) = 7;
-                        MonSummary_InitPageWindow(arg0 + 0xD4, 0x2C, 0x54, ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)]);
+                        func_8A202904(arg0, 4, (s32)&arg0->summaryWindow);
+                        arg0->summaryWindow.moveSlot = 0;
+                        arg0->listWindow.window.animTimer = 7;
+                        MonSummary_InitPageWindow(&arg0->summaryWindow, 0x2C, 0x54, arg0->monPointers[arg0->listWindow.menu.cursor]);
                         break;
                     case 2:
                         func_8003F6AC(2);
-                        func_8A202904(arg0, 3, (s32)(arg0 + 0x10));
-                        M2C_FIELD(arg0, u16**, 0x40)[M2C_FIELD(arg0, s32*, 0x44)] |= 8;
-                        M2C_FIELD(arg0, s32*, 0x6C) = M2C_FIELD(arg0, s32*, 0x44);
+                        func_8A202904(arg0, 3, (s32)&arg0->listWindow);
+                        arg0->listWindow.menu.itemFlags[arg0->listWindow.menu.cursor] |= 8;
+                        arg0->swapIndex = arg0->listWindow.menu.cursor;
                         break;
                     case 3:
                         func_8003F6AC(3);
-                        if (M2C_FIELD(arg0, s32*, 0x384) != 0) {
-                            SavePrompt_Init(arg0 + 0x10C, 0xD4, 0xAD);
-                            func_8A202904(arg0, 6, (s32)(arg0 + 0x10C));
+                        if (arg0->dirty != 0) {
+                            SavePrompt_Init(&arg0->savePrompt, 0xD4, 0xAD);
+                            func_8A202904(arg0, 6, (s32)&arg0->savePrompt);
                         } else {
                             func_8A202904(arg0, 7, 0);
-                            M2C_FIELD(arg0, s32*, 0x34) = 7;
+                            arg0->listWindow.window.animTimer = 7;
                         }
                         break;
                 }
             }
             break;
         case 3:
-            if (Menu_UpdateCursor(arg0 + 0x3C) != 0) {
-                M2C_FIELD(arg0, s32*, 0x34) = (M2C_FIELD(arg0, s32*, 0x38) <= 0) ? M2C_FIELD(arg0, s32*, 0x34) : 4;
+            if (Menu_UpdateCursor(&arg0->listWindow.menu) != 0) {
+                arg0->listWindow.window.animTimer = (arg0->listWindow.window.state <= 0) ? arg0->listWindow.window.animTimer : 4;
             } else {
                 res = func_8002BC14((s32)D_800603C0);
                 if (res == -1) {
                     func_8003F6AC(3);
-                    M2C_FIELD(arg0, s32*, 0) = 1;
-                    M2C_FIELD(arg0, s8**, 8) = arg0 + 0x10;
-                    M2C_FIELD(arg0, s32*, 0x34) = (M2C_FIELD(arg0, s32*, 0x38) <= 0) ? M2C_FIELD(arg0, s32*, 0x34) : 4;
-                    Menu_ClearItemFlags(arg0 + 0x3C);
+                    arg0->state = 1;
+                    arg0->activeWindow = &arg0->listWindow;
+                    arg0->listWindow.window.animTimer = (arg0->listWindow.window.state <= 0) ? arg0->listWindow.window.animTimer : 4;
+                    Menu_ClearItemFlags(&arg0->listWindow.menu);
                 } else if (res == 1) {
                     func_8003F6AC(0x18);
-                    res = ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x6C)];
-                    ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x6C)] = ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)];
-                    ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)] = res;
-                    func_8001833C((unk_func_8001A024*)D_8A21DA50, M2C_FIELD(arg0, s32*, 0x6C), (BattleMon*)((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x6C)], 0);
-                    func_8001833C((unk_func_8001A024*)D_8A21DA50, M2C_FIELD(arg0, s32*, 0x44), (BattleMon*)((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)], 0);
-                    M2C_FIELD(arg0, s32*, 0x384) = 1;
-                    M2C_FIELD(arg0, s32*, 0) = 1;
-                    M2C_FIELD(arg0, s8**, 8) = arg0 + 0x10;
-                    M2C_FIELD(arg0, s32*, 0x34) = (M2C_FIELD(arg0, s32*, 0x38) <= 0) ? M2C_FIELD(arg0, s32*, 0x34) : 4;
-                    Menu_ClearItemFlags(arg0 + 0x3C);
+                    res = arg0->monPointers[arg0->swapIndex];
+                    arg0->monPointers[arg0->swapIndex] = arg0->monPointers[arg0->listWindow.menu.cursor];
+                    arg0->monPointers[arg0->listWindow.menu.cursor] = res;
+                    func_8001833C((PokeIconRenderer*)D_8A21DA50, arg0->swapIndex, (BattleMon*)arg0->monPointers[arg0->swapIndex], 0);
+                    func_8001833C((PokeIconRenderer*)D_8A21DA50, arg0->listWindow.menu.cursor, (BattleMon*)arg0->monPointers[arg0->listWindow.menu.cursor], 0);
+                    arg0->dirty = 1;
+                    arg0->state = 1;
+                    arg0->activeWindow = &arg0->listWindow;
+                    arg0->listWindow.window.animTimer = (arg0->listWindow.window.state <= 0) ? arg0->listWindow.window.animTimer : 4;
+                    Menu_ClearItemFlags(&arg0->listWindow.menu);
                 }
             }
             break;
@@ -605,43 +590,43 @@ M2C_UNK PartyScreen_Update(M2C_UNK* ctx) {
             res = func_8002BC14((s32)D_800603C0);
             if (res == -1) {
                 func_8003F6AC(3);
-                func_8A202904(arg0, 1, (s32)(arg0 + 0x10));
-                M2C_FIELD(arg0, s32*, 0x34) = 0;
+                func_8A202904(arg0, 1, (s32)&arg0->listWindow);
+                arg0->listWindow.window.animTimer = 0;
             } else if (res == 1) {
                 func_8003F6AC(2);
-                M2C_FIELD(arg0, s32*, 0) = 5;
-                M2C_FIELD(arg0, s32*, 0xF8) = (M2C_FIELD(arg0, s32*, 0xFC) <= 0) ? M2C_FIELD(arg0, s32*, 0xF8) : 4;
+                arg0->state = 5;
+                arg0->summaryWindow.window.animTimer = (arg0->summaryWindow.window.state <= 0) ? arg0->summaryWindow.window.animTimer : 4;
             }
             break;
         case 5:
-            if (MonSummary_GetCButtonPage(arg0 + 0xD4) == 0) {
+            if (MonSummary_GetCButtonPage(&arg0->summaryWindow) == 0) {
                 res = func_8002BC14((s32)D_800603C0);
                 if (res == -1) {
                     func_8003F6AC(3);
-                    M2C_FIELD(arg0, s32*, 0) = 4;
-                    M2C_FIELD(arg0, s32*, 0xF8) = (M2C_FIELD(arg0, s32*, 0xFC) <= 0) ? M2C_FIELD(arg0, s32*, 0xF8) : 4;
+                    arg0->state = 4;
+                    arg0->summaryWindow.window.animTimer = (arg0->summaryWindow.window.state <= 0) ? arg0->summaryWindow.window.animTimer : 4;
                 } else if (res == 1) {
                     func_8003F6AC(2);
-                    func_8A202904(arg0, 1, (s32)(arg0 + 0x10));
-                    M2C_FIELD(arg0, s32*, 0x34) = 0;
+                    func_8A202904(arg0, 1, (s32)&arg0->listWindow);
+                    arg0->listWindow.window.animTimer = 0;
                 }
             }
             break;
         case 6:
-            res = SavePrompt_Update(arg0 + 0x10C);
+            res = SavePrompt_Update(&arg0->savePrompt);
             if (res == -1) {
-                func_8A202904(arg0, 1, (s32)(arg0 + 0x10));
+                func_8A202904(arg0, 1, (s32)&arg0->listWindow);
             } else if (res > 0) {
                 switch (res) {
                     case 1:
-                        Save_DrawReportingWindow(arg0 + 0x10C);
-                        LabPC_WriteDeckBack((s32*)(arg0 + 0x180), (s32)arg0);
+                        Save_DrawReportingWindow(&arg0->savePrompt);
+                        LabPC_WriteDeckBack((s32*)(&arg0->monList), (s32)arg0);
                         func_8A202904(arg0, 7, 0);
-                        M2C_FIELD(arg0, s32*, 0x34) = 7;
+                        arg0->listWindow.window.animTimer = 7;
                         break;
                     case 2:
                         func_8A202904(arg0, 7, 0);
-                        M2C_FIELD(arg0, s32*, 0x34) = 7;
+                        arg0->listWindow.window.animTimer = 7;
                         break;
                 }
             }

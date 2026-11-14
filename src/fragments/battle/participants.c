@@ -107,8 +107,8 @@ void BattleScene_SetParticipantModelScale(ActivePokemon* active_pokemon, f32 sca
  * Seen in play (2026-11-13) in the 165-move sweep (Jump Kick, Sing, Hypnosis, Selfdestruct): it
  * returned 6 for both the 1P and the COM side in a six-on-six free battle.
  */
-u8 ActivePokemon_GetBroughtCount(s8 *arg0) {
-    return M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x860), u8 *, 2);
+u8 ActivePokemon_GetBroughtCount(ActivePokemon* arg0) {
+    return arg0->teamRoster->numberOfPokemonBrought;
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
@@ -221,8 +221,8 @@ f32 ActivePokemon_GetSizeRatio(ActivePokemon* active_pokemon) {
 /**
  * Returns the Pokemon's move id (+0x820).
  */
-u8 func_82107BF4(s8 *arg0) {
-    return M2C_FIELD(arg0, u8 *, 0x820);
+u8 func_82107BF4(ActivePokemon* arg0) {
+    return arg0->state.runtime.usedMove;
 }
 
 extern f32 D_FLT_8218935C[][4];
@@ -235,10 +235,10 @@ extern f32 D_FLT_8218935C[][4];
  * switch in battle.
  * @unverified Named from the code; the sweep hit it but did not check the values.
  */
-void BattleScene_GetParticipantModelSizeScaled(s8* arg0, Vec3f* out) {
-    out->x = M2C_FIELD(arg0, f32*, 0x30) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][0] * 2 / 50.0f);
-    out->y = M2C_FIELD(arg0, f32*, 0x34) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][1] * 2 / 50.0f);
-    out->z = M2C_FIELD(arg0, f32*, 0x30) * (D_FLT_8218935C[M2C_FIELD(arg0, s16*, 0x1A) - 1][0] * 2 / 50.0f);
+void BattleScene_GetParticipantModelSizeScaled(ActivePokemon* arg0, Vec3f* out) {
+    out->x = arg0->displayObject.scale.x * (D_FLT_8218935C[arg0->displayObject.objectType - 1][0] * 2 / 50.0f);
+    out->y = arg0->displayObject.scale.y * (D_FLT_8218935C[arg0->displayObject.objectType - 1][1] * 2 / 50.0f);
+    out->z = arg0->displayObject.scale.x * (D_FLT_8218935C[arg0->displayObject.objectType - 1][0] * 2 / 50.0f);
 }
 
 /**
@@ -269,8 +269,8 @@ u16 Battle_GetActiveMonHp(ActivePokemon* active_pokemon) {
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
-s16 BattleScene_GetParticipantFacingAngle(s8 *arg0) {
-    return (s16) (M2C_FIELD(arg0, s32 *, 0x60C) << 0xE);
+s16 BattleScene_GetParticipantFacingAngle(ActivePokemon* arg0) {
+    return (s16) (arg0->facingDirection << 0xE);
 }
 
 /**
@@ -366,10 +366,10 @@ void BattleScene_GetParticipantScreenAimPoint(ActivePokemon* active_pokemon, Vec
  * Seen in play (2026-11-12): ran during ゆけっ！ゲンのすけ, while the Poké Ball for COM's replacement
  * Gengar was in the air (its shadow on the floor), and not before.
  */
-void ActivePokemon_GetPokeBallAimPoint(s8 *arg0, s8 *arg1) {
-    M2C_FIELD(arg1, f32 *, 0) = (f32) M2C_FIELD(arg0, f32 *, 0x648);
-    M2C_FIELD(arg1, f32 *, 4) = (f32) (M2C_FIELD(arg0, f32 *, 0x64C) + 2.5f);
-    M2C_FIELD(arg1, f32 *, 8) = (f32) M2C_FIELD(arg0, f32 *, 0x650);
+void ActivePokemon_GetPokeBallAimPoint(ActivePokemon* arg0, s8 *arg1) {
+    M2C_FIELD(arg1, f32 *, 0) = (f32) arg0->pokeBall.position.x;
+    M2C_FIELD(arg1, f32 *, 4) = (f32) (arg0->pokeBall.position.y + 2.5f);
+    M2C_FIELD(arg1, f32 *, 8) = (f32) arg0->pokeBall.position.z;
 }
 
 extern f32 D_FLT_82189350[][4];
@@ -408,31 +408,26 @@ f32 BattleScene_GetParticipantModelRadiusScaled(ActivePokemon* active_pokemon) {
  * @unverified Name from Stadium 1.
  */
 ModelNodeView* Battle_GetLoadedModelNode(ActivePokemon* active_pokemon, s32 node_index) {
-    return active_pokemon->sessionTeams->loadedModel->unk_00[2]->unk_00[node_index];
+    return active_pokemon->side->loadedModel->unk_00[2]->unk_00[node_index];
 }
 
 /**
- * Returns the session's display model id (sessionTeams+0x2).
+ * Returns the session's display model id (side+0x2).
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
  * switch in battle.
  * @unverified Name and comment guessed from the code.
  */
-s16 ActivePokemon_GetDisplayModel(s8 *arg0, M2C_UNK arg1) {
-    return M2C_FIELD(M2C_FIELD(arg0, s8 **, 0x85C), s16 *, 2);
+s16 ActivePokemon_GetDisplayModel(ActivePokemon* arg0, M2C_UNK arg1) {
+    return arg0->side->displayModel;
 }
 
-typedef struct {
-    /* 0x0 */ s32 unk_00;
-    /* 0x4 */ s32 unk_04;
-    /* 0x8 */ s32 unk_08;
-} unk_D_8006A9CC; // size = 0xC
-extern unk_D_8006A9CC D_8006A9CC[];
+extern MoveNameView D_8006A9CC[];
 
 /**
  * Returns the name string of the Pokemon's current move (move cache byte at 0x80A).
  */
 s32 ActivePokemon_GetMoveName(u8* arg0) {
-    return D_8006A9CC[arg0[0x80A]].unk_00;
+    return (s32)D_8006A9CC[arg0[0x80A]].name;
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
@@ -545,7 +540,7 @@ void BattleScene_InitializeParticipantModel(ActivePokemon* active_pokemon) {
     ModelAnim_SetAnimation(&active_pokemon->displayObject, 0);
     ModelAnim_SetFrame(&active_pokemon->displayObject, 0);
 
-    active_pokemon->sessionTeams->unk_04 = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->state.rosterIndex];
+    active_pokemon->side->displayMon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->state.rosterIndex];
     if ((active_pokemon->displayObject.objectType == DIGLETT) || (active_pokemon->displayObject.objectType == DUGTRIO)) {
         active_pokemon->displayObject.node.renderFlags &= ~0x40;
     } else {
@@ -559,7 +554,7 @@ void BattleScene_InitializeParticipantModel(ActivePokemon* active_pokemon) {
         BattleScene_PositionParticipantModel(active_pokemon);
         active_pokemon->displayObject.rotation.y = -0x4000;
     }
-    func_8000D41C(&M2C_FIELD(active_pokemon, Vec3f*, 0x5DC), active_pokemon->facingDirection * D_82199DF0[side][0], D_82199DF0[side][1], D_82199DF0[side][2]);
+    func_8000D41C(&active_pokemon->modelTransform.focusOffset, active_pokemon->facingDirection * D_82199DF0[side][0], D_82199DF0[side][1], D_82199DF0[side][2]);
 }
 
 /**
@@ -570,7 +565,7 @@ void BattleScene_InitializeParticipantModel(ActivePokemon* active_pokemon) {
  */
 void BattleScene_InitializeParticipantAuxiliaryModel(ActivePokemon* active_pokemon) {
     DisplayObject* auxiliary_model = &active_pokemon->pokeBall;
-    ModelNodeView* model_view = active_pokemon->sessionTeams->unk_18;
+    ModelNodeView* model_view = active_pokemon->side->unk_18;
 
     ModelRenderer_AttachDisplayObject(auxiliary_model);
     auxiliary_model->effectSlot = 2;
@@ -617,7 +612,7 @@ void BattleScene_ReinitParticipantBodyModel(ActivePokemon* owner, ActivePokemon*
     ModelAnim_SetFrame(&pokemon->displayObject, 0);
     ModelAnim_SetAnimation(&pokemon->displayObject, 0);
 
-    owner->sessionTeams->unk_04 = &owner->teamRoster->pokemonPicked[owner->state.rosterIndex];
+    owner->side->displayMon = &owner->teamRoster->pokemonPicked[owner->state.rosterIndex];
     if ((pokemon->displayObject.objectType == DIGLETT) || (pokemon->displayObject.objectType == DUGTRIO)) {
         pokemon->displayObject.node.renderFlags &= 0xFFBF;
     } else {
@@ -633,7 +628,7 @@ void BattleScene_ReinitParticipantBodyModel(ActivePokemon* owner, ActivePokemon*
             pokemon->displayObject.rotation.y = -0x4000;
         }
     }
-    func_8000D41C(&M2C_FIELD(owner, Vec3f*, 0x5DC), owner->facingDirection * D_82199DF0[side][0], D_82199DF0[side][1], D_82199DF0[side][2]);
+    func_8000D41C(&owner->modelTransform.focusOffset, owner->facingDirection * D_82199DF0[side][0], D_82199DF0[side][1], D_82199DF0[side][2]);
 }
 
 /**
@@ -714,7 +709,7 @@ void Battle_ResetEventTrack(ActivePokemon* active_pokemon) {
     if (active_pokemon->state.flags & ACTIVE_SLEEP) {
         BattleAnim_TrySetModelEventTrackFromRow(active_pokemon, 0xAF, 2);
     } else {
-        active_pokemon->state.unk_36 = 0;
+        active_pokemon->state.modelEventTrackState = 0;
         ModelAnim_SetEventFrame(&active_pokemon->displayObject, 0);
         ModelAnim_SetEventTrack(&active_pokemon->displayObject, -1);
     }
@@ -760,7 +755,7 @@ void Battle_LoadOwnerModelForSwitchIn(ActivePokemon* active_pokemon) {
     BattleScene_ReinitParticipantThumbnailModel(active_pokemon, &active_pokemon->thumbnail, object_type);
     func_82108648(active_pokemon, object_type);
     Battle_ResetEventTrack(active_pokemon);
-    state->unk_2D = 0;
+    state->faintState = 0;
     state->flags &= 0x3800;
     Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.scale, 1.0f, 1.0f, 1.0f);
 }
@@ -815,9 +810,9 @@ void Battle_ReloadDisplayModel(ActivePokemon* active_pokemon) {
  * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
-void ActivePokemon_SetModelTransform(s8 *arg0, s32 arg1, s32 arg2) {
-    M2C_FIELD(arg0, s32 *, 0x610) = arg1;
-    M2C_FIELD(arg0, s32 *, 0x614) = arg2;
+void ActivePokemon_SetModelTransform(ActivePokemon* arg0, s32 arg1, s32 arg2) {
+    arg0->modelTransformId = arg1;
+    arg0->modelTransformTimer = arg2;
 }
 
 /**
@@ -913,10 +908,10 @@ void Battle_SetModelToHitAnim(ActivePokemon* active_pokemon) {
 }
 
 /**
- * Points teamRoster at sessionTeams->teamMember[index].
+ * Points teamRoster at side->teamMember[index].
  * Seen in play (2026-11-12): picked Onix's roster entry when it was switched in.
  */
-void ActivePokemon_SelectTeamRoster(s8 *arg0, s32 arg1) {
+void ActivePokemon_SelectTeamRoster(ActivePokemon* arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0x860) = (s32) M2C_FIELD((M2C_FIELD(arg0, s32 *, 0x85C) + (arg1 * 4)), s32 *, 8);
 }
 
@@ -924,7 +919,7 @@ void ActivePokemon_SelectTeamRoster(s8 *arg0, s32 arg1) {
  * Sets state.teamMemberIndex.
  * Seen in play (2026-11-12): set the switched-in team member (Onix).
  */
-void ActivePokemon_SetTeamMemberIndex(void *arg0, s32 arg1) {
+void ActivePokemon_SetTeamMemberIndex(ActivePokemon* arg0, s32 arg1) {
     M2C_FIELD(arg0, s8 *, 0x7B7) = arg1;
 }
 
@@ -934,7 +929,7 @@ void ActivePokemon_SetTeamMemberIndex(void *arg0, s32 arg1) {
  * B opened the Pokémon menu.
  * @unverified Name and comment guessed from the code.
  */
-void ActivePokemon_SetController(s8 *arg0, s32 arg1) {
+void ActivePokemon_SetController(ActivePokemon* arg0, s32 arg1) {
     M2C_FIELD(arg0, s32 *, 0x858) = arg1;
 }
 
@@ -944,7 +939,7 @@ void ActivePokemon_SetController(s8 *arg0, s32 arg1) {
  * menu.
  * @unverified Name and comment guessed from the code.
  */
-void ActivePokemon_SetReplacementState(void *arg0, s32 arg1) {
+void ActivePokemon_SetReplacementState(ActivePokemon* arg0, s32 arg1) {
     M2C_FIELD(arg0, s8 *, 0x7B9) = arg1;
 }
 
@@ -960,8 +955,8 @@ void BattleScene_RebindParticipantTeamMember(ActivePokemon* pokemon, s32 team_me
 
     BattleScene_BindParticipantTeamRoster(pokemon, team_member_index);
     BattleScene_SetParticipantTeamMember(pokemon, team_member_index);
-    M2C_FIELD(pokemon, s32*, 0x9D0) = state->rosterIndex;
-    M2C_FIELD(pokemon, s32*, 0x9D4) = state->teamMemberIndex;
+    pokemon->thumbnail.shownRosterIndex = state->rosterIndex;
+    pokemon->thumbnail.shownTeamMemberIndex = state->teamMemberIndex;
 }
 
 /**
@@ -981,16 +976,16 @@ s32 Battle_FreezeClauseInEffect(ActivePokemon* active_pokemon) {
 
     for (i = 0; i < BattleScene_GetTeamMemberTeamSize(active_pokemon); i++) {
         pokemon = &active_pokemon->teamRoster->pokemonPicked[i];
-        if ((pokemon->statusCondition & STATUS_FREEZE) && (active_pokemon->state.runtime.roster[state->rosterIndex + state->teamMemberIndex * 3] == 0)) {
+        if ((pokemon->statusCondition & STATUS_FREEZE) && (active_pokemon->state.runtime.restSleepTurns[state->rosterIndex + state->teamMemberIndex * 3] == 0)) {
             return 1;
         }
     }
 
-    if (active_pokemon->sessionTeams->tagTeamSize == 2) {
+    if (active_pokemon->side->tagTeamSize == 2) {
         for (i = 0; i < BattleScene_GetPartnerTeamSize(active_pokemon); i++) {
-            pokemon = &active_pokemon->sessionTeams->teamMember[state->teamMemberIndex == 0]->pokemonPicked[i];
+            pokemon = &active_pokemon->side->teamMember[state->teamMemberIndex == 0]->pokemonPicked[i];
             if ((pokemon->statusCondition & STATUS_FREEZE) &&
-                (active_pokemon->state.runtime.roster[state->rosterIndex + (state->teamMemberIndex == 0) * 3] == 0)) {
+                (active_pokemon->state.runtime.restSleepTurns[state->rosterIndex + (state->teamMemberIndex == 0) * 3] == 0)) {
                 return 1;
             }
         }
@@ -1015,15 +1010,15 @@ s32 Battle_SleepClauseInEffect(ActivePokemon* active_pokemon) {
 
     for (i = 0; i < BattleScene_GetTeamMemberTeamSize(active_pokemon); i++) {
         pokemon = &active_pokemon->teamRoster->pokemonPicked[i];
-        if ((pokemon->statusCondition & STATUS_SLEEP_MASK) && (active_pokemon->state.runtime.roster[state->rosterIndex + state->teamMemberIndex * 3] == 0)) {
+        if ((pokemon->statusCondition & STATUS_SLEEP_MASK) && (active_pokemon->state.runtime.restSleepTurns[state->rosterIndex + state->teamMemberIndex * 3] == 0)) {
             return 1;
         }
     }
 
-    if (active_pokemon->sessionTeams->tagTeamSize == 2) {
+    if (active_pokemon->side->tagTeamSize == 2) {
         for (i = 0; i < BattleScene_GetPartnerTeamSize(active_pokemon); i++) {
-            pokemon = &active_pokemon->sessionTeams->teamMember[state->teamMemberIndex == 0]->pokemonPicked[i];
-            if ((pokemon->statusCondition & STATUS_SLEEP_MASK) && (active_pokemon->state.runtime.roster[state->rosterIndex + (state->teamMemberIndex == 0) * 3] == 0)) {
+            pokemon = &active_pokemon->side->teamMember[state->teamMemberIndex == 0]->pokemonPicked[i];
+            if ((pokemon->statusCondition & STATUS_SLEEP_MASK) && (active_pokemon->state.runtime.restSleepTurns[state->rosterIndex + (state->teamMemberIndex == 0) * 3] == 0)) {
                 return 1;
             }
         }

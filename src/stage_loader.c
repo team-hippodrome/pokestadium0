@@ -14,12 +14,12 @@
 extern s32 gShowCPUProfiler;
 extern s32 gShowMEMProfiler;
 extern s32 D_80068C98_Pad[2];
-extern unk_D_80068CA0* D_8005F760;
-extern unk_D_80068CA0* D_8005F764;
+extern QueuedString* D_8005F760;
+extern QueuedString* D_8005F764;
 extern s32 D_8005F768;
 extern s32 D_80068CAC_Pad[1];
 extern u32 D_8005F770[];
-extern unk_D_800A7450 D_800AA170;
+extern DisplayFrame D_800AA170;
 extern StageContext* stage;
 extern char pad_D_800A74A8[0x8];
 extern Gfx* D_800AA1D0;
@@ -50,7 +50,7 @@ void StageLoader_RunFrames(s32 timer);
 s32 BgStage_RunUntilCondition(u32 timer, s32 (*f)(u8));
 s32 BgStage_WaitForCondition(s32 (*arg0)(u8), s32 arg1, s32 arg2);
 void StageContext_SetClearColor(u16 color);
-DepthBuffer* StageContext_GetCurrentImage(void);
+GfxImage* StageContext_GetCurrentImage(void);
 s32 StageContext_IsHighResolution(void);
 
 s32 StageFade_Start(s32 arg0);
@@ -108,20 +108,19 @@ void func_80005980(void) {
     }
 }
 
-extern s8 *D_800AA184;
 s32 func_80005B98(s32 arg0) {
     s32 var_v1;
 
     var_v1 = 0;
-    if (((D_800AA184 != NULL) && (M2C_FIELD(D_800AA184, u8 *, 0x11) == 1)) || (M2C_FIELD(D_800AA184, u8 *, 0x11) == 0)) {
-        if (M2C_FIELD(D_800AA184, u8 *, 0x11) == 1) {
-            M2C_FIELD(D_800AA184, u8 *, 0x11) = 2U;
+    if (((stage != NULL) && (stage->fadeMode == 1)) || (stage->fadeMode == 0)) {
+        if (stage->fadeMode == 1) {
+            stage->fadeMode = 2U;
         } else {
-            M2C_FIELD(D_800AA184, u8 *, 0x11) = 3U;
+            stage->fadeMode = 3U;
         }
         var_v1 = 1;
-        M2C_FIELD(D_800AA184, s8 *, 0x13) = 0;
-        M2C_FIELD(D_800AA184, s8 *, 0x12) = arg0;
+        stage->fadeFrame = 0;
+        stage->fadeDuration = arg0;
     }
     return var_v1;
 }
@@ -253,12 +252,12 @@ void StageLoader_SwapDisplayListAndReset(void) {
 /** Begins a frame: sets up the render target and the frame parameters. */
 void StageLoader_BeginFrame(void) {
     StageLoader_SetupFrame();
-    D_800AA170.unk_00 = stage->unk_10;
-    D_800AA170.zoom = stage->zoom;
-    D_800AA170.unk_02 = stage->unk_0D;
-    D_800AA170.unk_03 = stage->renderTargetIndex;
-    D_800AA170.unk_0C = stage->renderTargets[stage->renderTargetIndex];
-    Gfx_GetDisplayListRange(&D_800AA170.unk_04, &D_800AA170.unk_08);
+    D_800AA170.retracesPerFrame = stage->retracesPerFrame;
+    D_800AA170.hiRes = stage->zoom;
+    D_800AA170.antiAlias = stage->antiAlias;
+    D_800AA170.renderTargetIndex = stage->renderTargetIndex;
+    D_800AA170.framebuffer = stage->renderTargets[stage->renderTargetIndex];
+    Gfx_GetDisplayListRange(&D_800AA170.dlist, &D_800AA170.dlistSize);
     stage->renderTargetIndex++;
     if (stage->renderTargetIndex == stage->renderTargetCount) {
         stage->renderTargetIndex = 0;
@@ -295,10 +294,10 @@ StageContext* StageContext_Allocate(s8 zoom, s8 arg1, s8 render_target_count, s8
 
         temp_v0->fadeMode = 1;
         temp_v0->zoom = zoom;
-        temp_v0->unk_0D = arg1;
+        temp_v0->antiAlias = arg1;
         temp_v0->renderTargetCount = render_target_count;
         temp_v0->hasDepthBuffer = has_depth_buffer;
-        temp_v0->unk_10 = arg4;
+        temp_v0->retracesPerFrame = arg4;
         temp_v0->clearColor = Display_GetFramebufferClearColor();
         temp_v0->renderTargetIndex = 0;
         temp_v0->clearLeft = 0;
@@ -476,8 +475,8 @@ void BgStage_DrawFrame(void) {
  * Returns the current stage's depth buffer image, or NULL when there is no
  * stage.
  */
-DepthBuffer* StageContext_GetCurrentImage(void) {
-    DepthBuffer* ret = NULL;
+GfxImage* StageContext_GetCurrentImage(void) {
+    GfxImage* ret = NULL;
 
     if (stage != NULL) {
         ret = stage->renderTargets[stage->renderTargetIndex];
@@ -497,7 +496,6 @@ s32 StageContext_IsHighResolution(void) {
     return ret;
 }
 
-extern s8 *D_800AA184;
 
 s32 func_80006B50(s32 *arg0, s32 *arg1, s32 *arg2, s32 *arg3) {
     s16 temp_v1;
@@ -506,22 +504,22 @@ s32 func_80006B50(s32 *arg0, s32 *arg1, s32 *arg2, s32 *arg3) {
     s16 temp_v1_4;
     s32 var_v1;
 
-    if (D_800AA184 == NULL) {
+    if (stage == NULL) {
         return 0;
     }
-    temp_v1 = M2C_FIELD(D_800AA184, s16 *, 4);
+    temp_v1 = stage->clearLeft;
     if (*arg0 < temp_v1) {
         *arg0 = (s32) temp_v1;
     }
-    temp_v1_2 = M2C_FIELD(D_800AA184, s16 *, 6);
+    temp_v1_2 = stage->clearRight;
     if (temp_v1_2 < *arg2) {
         *arg2 = (s32) temp_v1_2;
     }
-    temp_v1_3 = M2C_FIELD(D_800AA184, s16 *, 8);
+    temp_v1_3 = stage->clearTop;
     if (*arg1 < temp_v1_3) {
         *arg1 = (s32) temp_v1_3;
     }
-    temp_v1_4 = M2C_FIELD(D_800AA184, s16 *, 0xA);
+    temp_v1_4 = stage->clearBottom;
     if (temp_v1_4 < *arg3) {
         *arg3 = (s32) temp_v1_4;
     }

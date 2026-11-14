@@ -3,15 +3,8 @@
 #define DMA_H
 
 #include "global.h"
+#include "rsp.h"
 
-struct UnkStruct80000E80 {
-    char unk0;
-    char filler4[0x18];
-    s32 unk1C;
-    u8* unk20;
-    s32 unk24;
-    s32 unk28;
-};
 
 // dma.c
 s32 Storage_QueueRomRead(s32 arg0, void *arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5);

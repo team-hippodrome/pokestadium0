@@ -5,11 +5,11 @@ extern s32 pad_D_8831A4DC[8];
 #include "m2c_macros.h"
 void ScrollList_SetItems(s8*, s32, s8*);
 void func_8900020C(void);
-s32 LabItem_ComputeRemainingCapacity(s32 arg0, unk_func_8820BE14_06C* arg1);
-s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, unk_func_8820BE14_06C* arg1);
-s32 LabItem_FindOrAllocateGamePakBoxSlot(unk_func_8821421C_07C* arg0, s32 arg1, char* arg2);
-void LabItem_LoadGamePakBoxSlots(unk_func_8821421C_07C* arg0);
-void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, unk_func_8820BE14_06C* arg3);
+s32 LabItem_ComputeRemainingCapacity(s32 arg0, ByteMatrix* arg1);
+s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, ByteMatrix* arg1);
+s32 LabItem_FindOrAllocateGamePakBoxSlot(LabItemSaveSlot* arg0, s32 arg1, char* arg2);
+void LabItem_LoadGamePakBoxSlots(LabItemSaveSlot* arg0);
+void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, ByteMatrix* arg3);
 void func_800275E4(s32, s32);
 void ScrollList_SetCursorKeepOffset(s32*, s32);
 void func_800275E4(s32, s32);
@@ -37,12 +37,12 @@ extern Color_RGBA8 D_8900A5CC;
 s32 func_8002B390(s8*);
 s32 func_8002BC14(s32);
 extern s32 D_800603C0;
-extern Rgba89000D50 D_8900A5BC;
+extern Color_RGBA8 D_8900A5BC;
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 void func_8001AA60(s32, s32, s32);
 void Font_SetColorForFlags(s32);
 void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
-void TextBox_Draw(s8*);
+void TextBox_Draw(TextBox*);
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
 extern Color_RGBA8 D_80073520;
@@ -53,18 +53,18 @@ extern u8 D_04002448[];
 extern char D_89018470[];
 extern s32 D_800603C0;
 extern M2C_UNK D_89018474;
-void Ui_FillRectHighlighted(s32, s32, s32, s32, Rgba89000D50);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);
-extern Rgba89000D50 D_8900A5D4[];
+extern Color_RGBA8 D_8900A5D4[];
 extern M2C_UNK D_800734A8;
 void Window_SetRect(s8*, s32, s32, s32, s32);
 void Menu_Init(s8*, s32, s32, s32, s32, s32);
 M2C_UNK func_80027804();
 s32 Menu_UpdateCursorSkipDisabled(void*);
 extern Gfx D_80060270[];
-extern Rgba89000D50 D_8900A5E0;
-extern Rgba89000D50 D_8900A5E8;
-extern Rgba89000D50 D_8900A5EC[];
+extern Color_RGBA8 D_8900A5E0;
+extern Color_RGBA8 D_8900A5E8;
+extern Color_RGBA8 D_8900A5EC[];
 extern char D_8901848C[];
 char* func_8001FDC8(u8, char*);
 s32 func_80031C24(u8);
@@ -80,8 +80,8 @@ extern Gfx D_80073450[];
 extern u8 D_04011AB8[];
 s32 ScrollList_UpdateCursor(void*);
 s32 func_80030230(void*);
-extern ColorPair890017FC D_8900A608;
-extern ColorPair890017FC D_8900A610;
+extern PrimEnvColor D_8900A608;
+extern PrimEnvColor D_8900A610;
 extern u8* D_89017A80[];
 extern u8 D_89017A98[];
 extern s32 D_89019114;
@@ -120,8 +120,8 @@ extern char D_89018660[];
 extern char D_8901866C[];
 void Ui_DrawImageInStrips(void*, s32, s32);
 void Font_SetColorForFlags(s32);
-extern Col89002C10 D_8900A6AC;
-extern Col89002C10 D_8900A6B0;
+extern Color_RGBA8 D_8900A6AC;
+extern Color_RGBA8 D_8900A6B0;
 extern char D_89018678[];
 void LabItem_DrawTrainerInfo();
 void Window_SetRect(s8*, s32, s32, s32, s32);
@@ -133,73 +133,70 @@ void Menu_DrawInlineItems(void*, s32, s32, s32, s32);
 extern u8 D_8007356C[];
 extern u8 D_89018688[];
 s32 Menu_UpdateCursor(void*);
-void func_8002B018(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
 extern u8 D_8900A580[];
 extern u8 D_8900A584[];
 extern u8 D_8900A5A0[];
 extern u8 D_8900A5A4[];
 extern u8 D_8900A5A8[];
 extern u8 D_8900A5AC[];
-extern Rgba89000D50 D_8900A6B4;
-extern Rgba89000D50 D_8900A6B8;
+extern Color_RGBA8 D_8900A6B4;
+extern Color_RGBA8 D_8900A6B8;
 extern u8 D_8900BFC0[];
 extern u8 D_89010368[];
 extern u8 D_890110F0[];
-typedef Color_RGBA8 Rgba8900A6BC; // size = 0x4
-typedef struct Color8900A6BC {
-    /* 0x0 */ Rgba8900A6BC c[2];
-} Color8900A6BC; // size = 0x8
-extern Color8900A6BC D_8900A6BC;
-extern Color8900A6BC D_8900A6C4;
+extern PrimEnvColor D_8900A6BC;
+extern PrimEnvColor D_8900A6C4;
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
 extern u8 D_89017A98[];
 extern char D_890186C0[];
 extern char D_890186CC[];
-void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Rgba8900A6BC, Rgba8900A6BC);
+void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 void Font_SetColorForFlags(s32);
 extern s32 D_8900A6CC[];
 extern s8 *D_8900A6D8[];
 void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
 extern u8 D_800735C4[];
-void func_8002B054(s8*, s32);
 void Window_DrawFrame(void*);
 s32 func_8002B2B0(void *);
 s32 LabItem_UpdateItemList(void *, u32);
 
 void BgStage_DrawFrame(void);
+void LabItem_DrawOrganizeWindow(LabItemOrganizeWindow*);
+void SavePrompt_Draw(SavePrompt*);
+void LabItem_DrawConfirmWindow(LabItemConfirmWindow*);
+void LabItem_DrawDeleteDataWindow(LabItemDeleteDataWindow*, s32);
+void func_890032E4(LabItemSaveDataWindow*);
 /**
  * Draws the item organizer for its current state.
  * Seen in play (2026-11-12): drew the どうぐのせいり screen.
  */
-void LabItem_DrawScreen(void* arg) {
-    s8* arg0 = arg;
-
+void LabItem_DrawScreen(LabItemScreen* arg0) {
     BgStage_DrawFrame();
     LabItem_DrawBackground();
-    switch (M2C_FIELD(arg0, s32*, 0)) {
+    switch (arg0->state) {
         case 1:
-            LabItem_DrawOrganizeWindow(arg0 + 4);
+            LabItem_DrawOrganizeWindow(&arg0->organizeWindow);
             break;
         case 2:
-            LabItem_DrawOrganizeWindow(arg0 + 4);
-            SavePrompt_Draw(arg0 + 0x4E8);
+            LabItem_DrawOrganizeWindow(&arg0->organizeWindow);
+            SavePrompt_Draw(&arg0->savePrompt);
             break;
         case 3:
-            LabItem_DrawOrganizeWindow(arg0 + 4);
-            LabItem_DrawConfirmWindow(arg0 + 0x54C);
+            LabItem_DrawOrganizeWindow(&arg0->organizeWindow);
+            LabItem_DrawConfirmWindow(&arg0->confirmWindow);
             break;
         case 4:
-            LabItem_DrawDeleteDataWindow(arg0 + 0x604, 2);
+            LabItem_DrawDeleteDataWindow(&arg0->deleteDataWindow, 2);
             break;
         case 5:
-            LabItem_DrawDeleteDataWindow(arg0 + 0x604, 0x10);
-            func_890032E4(arg0 + 0x68C);
+            LabItem_DrawDeleteDataWindow(&arg0->deleteDataWindow, 0x10);
+            func_890032E4(&arg0->saveDataWindow);
             break;
         case 6:
-            LabItem_DrawDeleteDataWindow(arg0 + 0x604, 0x10);
-            func_890032E4(arg0 + 0x68C);
-            LabItem_DrawConfirmWindow(arg0 + 0x54C);
+            LabItem_DrawDeleteDataWindow(&arg0->deleteDataWindow, 0x10);
+            func_890032E4(&arg0->saveDataWindow);
+            LabItem_DrawConfirmWindow(&arg0->confirmWindow);
             break;
     }
 }

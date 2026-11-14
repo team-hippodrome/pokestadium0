@@ -194,7 +194,7 @@ void BattleHud_DrawTrainerNameLabelAuto(ActivePokemon* arg0, TeamRoster* arg1, s
  * Stubbed on the battle command menu, both info boxes lost their nickname, level, status, HP bar
  * and HP fraction, leaving only the empty frames.
  */
-void BattleHud_DrawMonInfoBox(ActivePokemon* arg0, BattleMon* arg1, unk_D_84385790* arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 argA) {
+void BattleHud_DrawMonInfoBox(ActivePokemon* arg0, BattleMon* arg1, StatusLabel* arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9, s32 argA) {
     u32 half;
 
     if (arg3 < 0) {
@@ -214,8 +214,8 @@ void BattleHud_DrawMonInfoBox(ActivePokemon* arg0, BattleMon* arg1, unk_D_843857
     half = func_800566BC((s32)arg1->nickname) >> 1;
     func_8001A944((arg3 - (half * 5)) + 0x1D, arg4 + 2, arg1->nickname);
     func_8001A384(1, 0);
-    func_8001AA9C(arg2->unk_04.r, arg2->unk_04.g, arg2->unk_04.b, 0xFF);
-    func_8001A944(arg3 + 0x1F, arg4 + 0xE, arg2->unk_00);
+    func_8001AA9C(arg2->color.r, arg2->color.g, arg2->color.b, 0xFF);
+    func_8001A944(arg3 + 0x1F, arg4 + 0xE, arg2->text);
     func_8001ABBC();
 }
 

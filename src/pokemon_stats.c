@@ -26,14 +26,14 @@ s32 Deck_WriteEntries(u8* arg0, s32 arg1, DeckHandle* arg2);
 
 s32 Deck_GetCount(s32 arg0, s32 arg1, s32 arg2);
 s32 Deck_ReadEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, BattleMon* arg4);
-s32 Deck_WriteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, unk_func_88205880_00D0* arg4);
+s32 Deck_WriteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, BattleMon* arg4);
 
 /** Closes a deck handle, writing back changes. */
 s32 Deck_CloseAndFlush(DeckHandle* arg0) {
     s32 sp1C = 0;
 
-    if ((arg0->unk_01 & 0x10) && (arg0->unk_04 & 1)) {
-        Save_CommitTypedRecord(arg0->unk_01, arg0->unk_03);
+    if ((arg0->deckType & 0x10) && (arg0->flags & 1)) {
+        Save_CommitTypedRecord(arg0->deckType, arg0->index);
         sp1C = 1;
     }
 
@@ -62,15 +62,15 @@ s32 Deck_ReadEntries(u8* arg0, s32 arg1, DeckHandle* arg2) {
     if (tmp) {}  // karodo
 
     if (tmp != 0) {
-        for (; arg2->unk_0A < arg2->unk_08;) {
+        for (; arg2->cursor < arg2->count;) {
             var_v1 = 0;
-            switch (arg2->unk_01 & 0xF0) {
+            switch (arg2->deckType & 0xF0) {
                 case 16:
-                    var_v1 = Deck_ReadSaveEntry(arg2->unk_01, arg2->unk_03, arg2->unk_0A, arg0);
+                    var_v1 = Deck_ReadSaveEntry(arg2->deckType, arg2->index, arg2->cursor, arg0);
                     break;
 
                 case 32:
-                    var_v1 = Deck_ReadEntry(arg2->unk_01, arg2->unk_02, arg2->unk_03, arg2->unk_0A, arg0);
+                    var_v1 = Deck_ReadEntry(arg2->deckType, arg2->port, arg2->index, arg2->cursor, arg0);
                     break;
             }
 
@@ -79,10 +79,10 @@ s32 Deck_ReadEntries(u8* arg0, s32 arg1, DeckHandle* arg2) {
                 break;
             }
 
-            arg2->unk_0A++;
+            arg2->cursor++;
             var_s3 -= 1;
             var_s4 += 1;
-            arg0 += arg2->unk_05;
+            arg0 += arg2->entrySize;
 
             if (!tmp) {
                 break;
@@ -106,17 +106,17 @@ s32 Deck_WriteEntries(u8* arg0, s32 arg1, DeckHandle* arg2) {
     if (tmp) {}  // karodo
 
     if (tmp) {
-        for (; arg2->unk_0A < arg2->unk_06;) {
+        for (; arg2->cursor < arg2->capacity;) {
             var_s2 = 0;
-            switch (arg2->unk_01 & 0xF0) {
+            switch (arg2->deckType & 0xF0) {
                 case 16:
-                    var_s2 = Save_WriteTypedRecord(arg2->unk_01, arg2->unk_03, arg2->unk_0A, arg0);
-                    arg2->unk_08 = Deck_GetSaveEntryCount(arg2->unk_01, arg2->unk_03);
+                    var_s2 = Save_WriteTypedRecord(arg2->deckType, arg2->index, arg2->cursor, arg0);
+                    arg2->count = Deck_GetSaveEntryCount(arg2->deckType, arg2->index);
                     break;
 
                 case 32:
-                    var_s2 = Deck_WriteEntry(arg2->unk_01, arg2->unk_02, arg2->unk_03, arg2->unk_0A, arg0);
-                    arg2->unk_08 = Deck_GetCount(arg2->unk_01, arg2->unk_02, arg2->unk_03);
+                    var_s2 = Deck_WriteEntry(arg2->deckType, arg2->port, arg2->index, arg2->cursor, arg0);
+                    arg2->count = Deck_GetCount(arg2->deckType, arg2->port, arg2->index);
                     break;
             }
 
@@ -126,10 +126,10 @@ s32 Deck_WriteEntries(u8* arg0, s32 arg1, DeckHandle* arg2) {
             }
 
             var_s4 -= 1;
-            arg2->unk_0A++;
+            arg2->cursor++;
             var_s5 += 1;
-            arg0 += arg2->unk_05;
-            arg2->unk_04 |= 1;
+            arg0 += arg2->entrySize;
+            arg2->flags |= 1;
 
             if (!tmp) {
                 break;

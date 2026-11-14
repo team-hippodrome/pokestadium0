@@ -66,9 +66,9 @@ void func_82122628(s32, Vec3f, s32, s32, f32, f32);
  * angles (arg4, arg5) and distance arg2.
  */
 void func_82132EB4(s32 arg0, s32 arg1, f32 arg2, f32 arg3, s16 arg4, s16 arg5) {
-    BattleScene_GetParticipantAimPoint(arg1, &sBattleScene.scene->unk_D0);
-    func_8212254C(arg1, arg0, sBattleScene.scene->unk_D0, 0, 0x4000, arg3, 0.0f);
-    func_82122628(arg0, sBattleScene.scene->unk_D0, arg4, arg5, arg2, 0.0f);
+    BattleScene_GetParticipantAimPoint(arg1, &sBattleScene.scene->anchorPosition);
+    func_8212254C(arg1, arg0, sBattleScene.scene->anchorPosition, 0, 0x4000, arg3, 0.0f);
+    func_82122628(arg0, sBattleScene.scene->anchorPosition, arg4, arg5, arg2, 0.0f);
 }
 
 extern s16 D_8219A4F0[];
@@ -154,14 +154,13 @@ void func_82133028(CameraNode* arg0) {
     D_8219A594 = 0;
 }
 
-extern s8 *D_8219A5A0;
 
 /**
  * Starts the current demo cut and advances the phase step.
  */
 void func_82133318(CameraNode* arg0) {
     func_82133028(arg0);
-    M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
+    sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
 }
 
 M2C_UNK func_82135E80(CameraNode*, s8*);
@@ -187,16 +186,16 @@ void func_8213334C(CameraNode* arg0) {
         case 3:
         case 4:
             if (func_821217DC(0x28) != 0) {
-                M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
+                sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
             }
             break;
         case 5:
             func_82135E80(arg0, D_8219A590);
-            if (D_8219A5A0[1] == 4) {
+            if (sBattleScene.scene->splineSegment == 4) {
                 func_800414B0(0, 0x38, 9, 0);
                 D_8219A4F4 = 1;
                 func_82104C68(D_8219A590, 0x14);
-                M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
+                sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
             }
             break;
     }
@@ -211,11 +210,11 @@ void func_8213334C(CameraNode* arg0) {
  *   - if D_8219A50C == 5: calls func_82135E80(arg0, D_8219A590); if the
  *     upper halfword of the word at offset 0x48 of the object
  *     D_8219A590 points to is 0x26, calls Audio_PlayMoveSound(0x38, 9, 0); and if
- *     func_821217DC(0x37) returns non-zero, sets the word at offset 0x40
- *     of the object D_8219A5A0 points to to 3, calls func_80006998(0xFFFF),
- *     func_80005C4C(4) and Audio_FadeAndClearStoredSounds(), and sets the word at offset
- *     0x20 of that object to 6;
- *   - otherwise adds 1 to that word at offset 0x20.
+ *     func_821217DC(0x37) returns non-zero, sets sBattleScene.scene->winner
+ *     to 3, calls func_80006998(0xFFFF),
+ *     func_80005C4C(4) and Audio_FadeAndClearStoredSounds(), and sets
+ *     sBattleScene.scene->phaseStep to 6;
+ *   - otherwise adds 1 to sBattleScene.scene->phaseStep.
  *
  * The second argument of func_82135E80 is D_8219A590; the first is
  * `arg0` passed straight through (the retail code loads it into $a1 and
@@ -243,19 +242,18 @@ void func_8213346C(CameraNode* arg0) {
             Audio_PlayMoveSound(0x38, 9, 0);
         }
         if (func_821217DC(0x37) != 0) {
-            M2C_FIELD(D_8219A5A0, s32 *, 0x40) = 3;
+            sBattleScene.scene->winner = 3;
             func_80006998(0xFFFF);
             func_80005C4C(4);
             Audio_FadeAndClearStoredSounds();
-            M2C_FIELD(D_8219A5A0, s32 *, 0x20) = 6;
+            sBattleScene.scene->phaseStep = 6;
         }
     } else {
-        M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
+        sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
     }
 }
 
 typedef struct Arr82133534 { u8 b[7]; } Arr82133534;
-typedef struct Mon82133534 { u8 flags; u8 pad1; s16 move; } Mon82133534;
 extern Arr82133534 D_8218B350;
 s16 func_8000F1FC(s16, M2C_UNK, M2C_UNK, M2C_UNK);
 M2C_UNK func_80019B28(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32);
@@ -273,14 +271,14 @@ void func_82133534(CameraNode *arg0)
     v = sp28.b[D_8219A4F0[0xE]];
     if (v == 0xFF)
     {
-      *((s32 *) (((s8 *) D_8219A5A0) + 0x20)) = 6;
+      sBattleScene.scene->phaseStep = 6;
  if (1) { }  // karodo
     }
     else
     {
-      (*((Mon82133534 **) (((s8 *) D_8219A590) + 0x85C)))->move = v;
-      (*((Mon82133534 **) (((s8 *) D_8219A590) + 0x85C)))->flags |= 0x80;
-      (*((s32 *) (((s8 *) D_8219A5A0) + 0x20)))++;
+      ((ActivePokemon*)D_8219A590)->side->displayModel = v;
+      ((ActivePokemon*)D_8219A590)->side->modelFlags |= 0x80;
+      sBattleScene.scene->phaseStep++;
     }
   }
 }
@@ -290,7 +288,6 @@ void Battle_LoadOwnerModelForSwitchIn(ActivePokemon* active_pokemon);           
 M2C_UNK func_8213B31C(M2C_UNK);                     /* extern */
 extern s8 *D_8219A590;
 extern u8 D_8219A594;
-extern s8 *D_8219A5A0;
 
 /**
  * Once the demo Pokemon's model reload is done (bit 0x10), reloads its switch-in model,
@@ -299,15 +296,15 @@ extern s8 *D_8219A5A0;
 void func_82133640(s32 arg0) {
     u8 *temp_v0;
 
-    if (*M2C_FIELD(D_8219A590, u8 **, 0x85C) & 0x10) {
+    if (((ActivePokemon*)D_8219A590)->side->modelFlags & 0x10) {
         func_8213B31C(2);
-        temp_v0 = M2C_FIELD(D_8219A590, u8 **, 0x85C);
+        temp_v0 = &((ActivePokemon*)D_8219A590)->side->modelFlags;
         *temp_v0 &= 0xFF6F;
         Battle_LoadOwnerModelForSwitchIn(D_8219A590);
         func_82133028(arg0);
         func_80019B28(D_8219A590, 0, 0, 0, 0xFF);
         D_8219A594 = 0;
-        M2C_FIELD(D_8219A5A0, s32 *, 0x20) = 2;
+        sBattleScene.scene->phaseStep = 2;
     }
 }
 

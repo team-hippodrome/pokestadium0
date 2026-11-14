@@ -9,9 +9,9 @@
 #include "rom_device.h"
 #include "libnumus/player.h"
 extern u8 pad_D_800FC694[4];
-extern unk_D_800FC6CC* D_800B41E4;
+extern GbNoiseSampleEntry* D_800B41E4;
 extern u8* D_800B41E8;
-extern unk_D_800FC6D4* D_800FD688;
+extern GbMusicBank* D_800FD688;
 extern s16* D_800B41EC;
 extern u32* gAudioRegions;
 extern s32 pad_D_800FC70C;
@@ -55,12 +55,12 @@ typedef struct AudioInitConfig {
     /* 0x08 */ void* bank;
     /* 0x0C */ s32 unk_0C;
     /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
+    /* 0x14 */ s32 synUpdates; // @unverified: same offset/use as libmus's musConfig.syn_updates (forwarded as ALSynConfig.maxUpdates)
     /* 0x18 */ s32 outputRate;
-    /* 0x1C */ s32 unk_1C;
-    /* 0x20 */ s32 unk_20;
-    /* 0x24 */ s32 unk_24;
-    /* 0x28 */ s32 unk_28;
+    /* 0x1C */ s32 synRspCmds; // @unverified: same offset/use as libmus's musConfig.syn_rsp_cmds (forwarded to amCreateAudioMgr)
+    /* 0x20 */ s32 synRetraceCount; // @unverified: same offset/use as libmus's musConfig.syn_retraceCount (amConfig.framesPerField)
+    /* 0x24 */ s32 synNumDmaBufs; // @unverified: same offset/use as libmus's musConfig.syn_num_dma_bufs
+    /* 0x28 */ s32 synDmaBufSize; // @unverified: same offset/use as libmus's musConfig.syn_dma_buf_size
     /* 0x2C */ s32 unk_2C;
 } AudioInitConfig; // size = 0x30
 
@@ -235,7 +235,7 @@ s32 func_8003E1F8(void) {
     D_800B41E4 = func_8005C0D0(0, 0, D_800B41F8, 1, 0x100);
     func_8004609C(D_800B4160->files[6], (u8*)D_800B41E4, 0x100);
     for (i = 0; i < 0x20; i++) {
-        D_800B41E4[i].unk_00 += D_800B4160->files[6];
+        D_800B41E4[i].romAddr += D_800B4160->files[6];
     }
 
     D_800B41E8 = func_8005C0D0(0, 0, D_800B41F8, 1, 0x2328);
@@ -300,11 +300,11 @@ s32 func_8003E1F8(void) {
     config.unk_0C = ((s32*)D_800B41A0)[3];
     config.unk_10 = ((s32*)D_800B41A0)[2];
     config.outputRate = rate;
-    config.unk_14 = 0x100;
-    config.unk_1C = 0x400;
-    config.unk_20 = 1;
-    config.unk_24 = 0x30;
-    config.unk_28 = 0x500;
+    config.synUpdates = 0x100;
+    config.synRspCmds = 0x400;
+    config.synRetraceCount = 1;
+    config.synNumDmaBufs = 0x30;
+    config.synDmaBufSize = 0x500;
     ret = func_800371A4((s8*)&config);
     Audio_SetChannelVolume(2, 2);
     Audio_SetChannelVolume(1, 3);

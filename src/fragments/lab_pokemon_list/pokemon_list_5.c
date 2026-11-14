@@ -28,9 +28,8 @@ void func_89109B60(s8*);
 void func_80027D68(s32, s32);
 void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
 void LabPCList_DrawMonRow();
-void func_89105C54(s8*, s32, s32, s8*, Rgba891024A4);
 extern s32 D_8910D990[];
-extern Rgba891024A4 D_8910A7F4;
+extern Color_RGBA8 D_8910A7F4;
 extern u8 D_8910A844[];
 extern u8 D_8910A848[];
 extern u8 D_8910A804[];
@@ -73,8 +72,8 @@ s32 func_89109898();
 s32 func_89109960();
 void func_8000A460(s8*, s8*);
 u32 func_800566BC(s8*);
-void LabPCList_InitPopupMenu(s8*, void*, s8*, s32, s32);
-void LabPCList_PlacePopup(s8*);
+void LabPCList_InitPopupMenu(LabPopupMenu*, void*, s8*, s32, s32);
+void LabPCList_PlacePopup(LabPopupMenu*);
 void func_8910A21C(s8*, s8*, s8*, s32);
 extern s8* D_8910A890[];
 extern u8 D_8910A898[];
@@ -84,13 +83,13 @@ extern s8 D_8910E312[];
 s32 func_8003F6AC();
 s32 ScrollList_UpdateCursor(void*);
 void ScrollList_SetCursor(void*, s32);
-void LabPCList_FormatGatherPrompt(s8*);
+void LabPCList_FormatGatherPrompt(LabPCListScreen*);
 void func_8000A460(s8 *, s8 *);
 u32 func_800566BC(s8*);
-void LabPCList_InitPopupMenu(s8 *, void *, s8 *, s32, s32);
-void LabPCList_PlacePopup(s8 *);
+void LabPCList_InitPopupMenu(LabPopupMenu*, void *, s8 *, s32, s32);
+void LabPCList_PlacePopup(LabPopupMenu*);
 void Window_SetRect(s8 *, s32, s32, s32, s32);
-extern Rgba891024A4 D_8910A7F4;
+extern Color_RGBA8 D_8910A7F4;
 extern s8 *D_8910A8A8[];
 extern s8 D_8910A8B0[];
 extern u8 D_8910A8C8[];
@@ -99,9 +98,8 @@ s32 LabPCList_UpdateHeaderCursor(void*);
 M2C_UNK LabPCList_ApplyFiltersAndSort();
 extern s32 D_8910E37C;
 
-s32 LabPCList_UpdatePopupMenu(s8*);
+s32 LabPCList_UpdatePopupMenu(LabPopupMenu*);
 void func_80027D68(s32, s32);
-void func_89105C54(s8*, s32, s32, s8*, Rgba891024A4);
 M2C_UNK LabPCList_ApplyFiltersAndSort();
 extern s32 D_8910D9D0;
 extern s32 D_8910D9D4;
@@ -111,44 +109,44 @@ extern s32 D_8910D9D4;
  * Seen in play (2026-11-12) in いちらん: handled that menu: ポケモンばんごうでならべる sorted the party as フシギダネ,
  * ヒトカゲ, ゼニガメ, and アイウエオじゅんにならべる as ゼニガメ, ヒトカゲ, フシギダネ.
  */
-s32 LabPCList_UpdateSortMenu(s8* arg0) {
+s32 LabPCList_UpdateSortMenu(LabPCListScreen* arg0) {
     s32 buttons;
 
-    if (LabPCList_UpdatePopupMenu(arg0 + 0x9654) != 0) {
+    if (LabPCList_UpdatePopupMenu(&arg0->popup) != 0) {
         return 0;
     }
     buttons = ((u16*)D_800603C0)[4];
     if (buttons & 0x4000) {
         func_8003F6AC(3);
-        M2C_FIELD(arg0, s32*, 0x88) = 0;
+        arg0->state = 0;
     } else if (buttons & 0x8000) {
-        if (!(M2C_FIELD(arg0, u16**, 0x9698)[M2C_FIELD(arg0, s32*, 0x969C)] & 1)) {
+        if (!(arg0->popup.menu.itemFlags[arg0->popup.menu.cursor] & 1)) {
             func_8003F6AC(2);
-            switch (M2C_FIELD(arg0, s32*, 0x969C)) {
+            switch (arg0->popup.menu.cursor) {
                 case 0:
-                    M2C_FIELD(arg0, s32*, 0x78) = 0x10;
+                    arg0->sortKey = 0x10;
                     func_80027D68(M2C_FIELD(arg0, s32*, 0xB160), D_8910D9D0);
-                    M2C_FIELD(arg0, s32*, 0x88) = 0;
+                    arg0->state = 0;
                     break;
                 case 1:
-                    M2C_FIELD(arg0, s32*, 0x78) = 0x11;
+                    arg0->sortKey = 0x11;
                     func_80027D68(M2C_FIELD(arg0, s32*, 0xB160), D_8910D9D4);
-                    M2C_FIELD(arg0, s32*, 0x88) = 0;
+                    arg0->state = 0;
                     break;
                 case 2:
                     LabPCList_ToggleFilterFlag(arg0, 0x20);
                     LabPCList_ApplyFiltersAndSort(arg0);
-                    M2C_FIELD(arg0, s32*, 0x88) = 0;
+                    arg0->state = 0;
                     break;
                 case 3:
-                    LabPCList_ResetFilterState((LabPCInitialStateFields*)arg0);
+                    LabPCList_ResetFilterState(arg0);
                     LabPCList_ClearFilterFlags(arg0);
                     LabPCList_ApplyFiltersAndSort(arg0);
-                    M2C_FIELD(arg0, s32*, 0x88) = 0;
+                    arg0->state = 0;
                     break;
                 case 4:
-                    M2C_FIELD(arg0, s32*, 0x88) = 1;
-                    func_89105C54(arg0 + 0x230, 0x78, 0x67, arg0 + 0x420, D_8910A7F4);
+                    arg0->state = 1;
+                    func_89105C54(&arg0->sourceSelectWindow, 0x78, 0x67, (s8*)&arg0->sourceMatrix, D_8910A7F4);
                     return 0;
             }
         } else {

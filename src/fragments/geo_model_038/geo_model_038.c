@@ -17,11 +17,12 @@ s32 func_8F400020(s32 arg0) {
 }
 
 s32 func_8F400020(s32);                             /* extern */
-extern s8 *D_8006049C;
+extern DisplayObject* D_8006049C;
 
-void func_8F400088(s32 arg0, s8 *arg1) {
+void func_8F400088(s32 arg0, GeoSwitchCaseNode* arg1) {
     if (arg0 == 2) {
-        M2C_FIELD(arg1, s32 *, 0xC) = func_8F400020(M2C_FIELD(arg1, s32 *, 0xC));
-        M2C_FIELD(arg1, s16 *, 0x1A) = (s16) M2C_FIELD(D_8006049C, s32 *, 0x14);
+        // Without the expected cartridge bus response the child list becomes -1 (@unverified: looks like a copy protection check).
+        arg1->node.children = (struct CameraNode*)func_8F400020((s32)arg1->node.children);
+        arg1->selectedChild = (s16) D_8006049C->node.callbackArg;
     }
 }

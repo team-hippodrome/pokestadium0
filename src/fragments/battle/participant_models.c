@@ -6,6 +6,8 @@
 #include "math.h"
 /* Spline camera path state (scene spline block pointer, keyframe buffer) and helper shared by the func_82135xxx camera path functions. */
 extern s8 D_FLT_8219A5B0;
+// FAKE: sBattleScene.scene under a second symbol at the same address, so IDO does not
+// treat its loads and stores as aliasing sBattleScene; needed to match these functions.
 extern BattleScene* D_8219A5A0;
 void Battle_ComputeSplineWeightsVariantC(f32* arg0, f32 arg1);
 extern u8* sBattleAnimAssetPointers[256];
@@ -476,10 +478,10 @@ void func_821351F8(CameraNode* arg0, ActivePokemon* arg1) {
     s16 sp3E;
     s16 sp3C;
 
-    M2C_FIELD(D_8219A5A0, s8*, 0) = 0x19;
-    M2C_FIELD(D_8219A5A0, s8*, 1) = 1;
-    M2C_FIELD(D_8219A5A0, f32*, 4) = 0.0f;
-    D_8219A5A0->visibilityPolicy = 0;
+    D_8219A5A0->splineSegmentFrames = 0x19;
+    D_8219A5A0->splineSegment = 1;
+    D_8219A5A0->splineT = 0.0f;
+    D_8219A5A0->splineKeyframeCount = 0;
     count = 0;
     func_82135108(arg1);
     p = (Vec3f*)&D_FLT_8219A5B0;
@@ -490,7 +492,7 @@ loop:
         p[-1].y = M2C_FIELD(arg1, f32*, 0x28) + p[-1].y;
         goto loop;
     }
-    D_8219A5A0->visibilityPolicy = count;
+    D_8219A5A0->splineKeyframeCount = count;
     BattleScene_GetParticipantAimPoint(arg1, &D_FLT_8219A718);
     func_8212254C((s32)arg1, (s32)arg0, *(Vec3f*)&D_FLT_8219A718, 0, 0, 0.0f, (f32)0.0);
     D_FLT_8219A718 *= arg1->facingDirection;
@@ -542,7 +544,7 @@ void func_82135458(ActivePokemon* arg0, CameraNode* arg1) {
     s16 sp2E;
     s16 sp2C;
 
-    BattleAnim_Vec3fCopy(&arg1->view.eyePosition, &sBattleScene.scene->unk_C4);
+    BattleAnim_Vec3fCopy(&arg1->view.eyePosition, &sBattleScene.scene->savedCameraEye);
     BattleScene_GetParticipantCameraAnchor(arg0, &sp58);
     BattleAnim_CalculateDistanceAngles(&sp58, &M2C_FIELD(arg0, Vec3f*, 0x5D0), &sp30, &sp2E, &sp2C);
     BattleAnim_Vec3fCopy(&sp34, &arg1->view.targetPosition);
@@ -550,7 +552,7 @@ void func_82135458(ActivePokemon* arg0, CameraNode* arg1) {
         Camera_ComputeEyeFromAngles(&sp58, &sp4C, M2C_FIELD(ptr, f32*, 0x38), M2C_FIELD(ptr, s16*, 0x30), M2C_FIELD(ptr, s16*, 0x32));
         BattleAnim_CalculateDistanceAngles(&sp34, &sp4C, &sp30, &sp2E, &sp2C);
     } else {
-        BattleAnim_CalculateDistanceAngles(&sp34, &sBattleScene.scene->unk_B8, &sp30, &sp2E, &sp2C);
+        BattleAnim_CalculateDistanceAngles(&sp34, &sBattleScene.scene->savedCameraAt, &sp30, &sp2E, &sp2C);
     }
     Camera_ComputeEyeFromAngles(&sp34, &arg1->view.targetPosition, sp30 * D_FLT_82196810, sp2E, sp2C);
 }
@@ -581,7 +583,7 @@ void func_8213558C(ActivePokemon* arg0, CameraNode* arg1, Vec3f* arg2, f32* arg3
     arg2->x = (((arg3[0] * sp28[0].x) + (arg3[1] * sp28[1].x)) + (arg3[2] * sp28[2].x)) + (arg3[3] * sp28[3].x);
     arg2->y = (((arg3[0] * sp28[0].y) + (arg3[1] * sp28[1].y)) + (arg3[2] * sp28[2].y)) + (arg3[3] * sp28[3].y);
     arg2->z = (((arg3[0] * sp28[0].z) + (arg3[1] * sp28[1].z)) + (arg3[2] * sp28[2].z)) + (arg3[3] * sp28[3].z);
-    M2C_FIELD(sBattleScene.scene, f32*, 4) += 1.0f / (f32)M2C_FIELD(sBattleScene.scene, s8*, 0);
+    sBattleScene.scene->splineT += 1.0f / (f32)sBattleScene.scene->splineSegmentFrames;
 }
 
 /*
@@ -607,29 +609,29 @@ s32 func_82135734(CameraNode* arg0, ActivePokemon* arg1) {
     if ((temp_v0 != 0x5F) && (temp_v0 != 0x52)) {
         func_82135458(arg1, arg0);
     }
-    var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
-    if (D_8219A5A0->visibilityPolicy < (var_v1 + 3)) {
+    var_v1 = D_8219A5A0->splineSegment;
+    if (D_8219A5A0->splineKeyframeCount < (var_v1 + 3)) {
         return 1;
     }
     if (var_v1 == 1) {
-        Battle_ComputeSplineWeightsVariantB(sp28, M2C_FIELD(D_8219A5A0, f32*, 4));
-        var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+        Battle_ComputeSplineWeightsVariantB(sp28, D_8219A5A0->splineT);
+        var_v1 = D_8219A5A0->splineSegment;
     }
     if (var_v1 == 2) {
-        Battle_ComputeSplineWeightsVariantC(sp28, M2C_FIELD(D_8219A5A0, f32*, 4));
-        var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+        Battle_ComputeSplineWeightsVariantC(sp28, D_8219A5A0->splineT);
+        var_v1 = D_8219A5A0->splineSegment;
     }
     if (var_v1 >= 3) {
-        Battle_ComputeSplineWeightsVariantA(sp28, M2C_FIELD(D_8219A5A0, f32*, 4));
-        var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+        Battle_ComputeSplineWeightsVariantA(sp28, D_8219A5A0->splineT);
+        var_v1 = D_8219A5A0->splineSegment;
     }
     func_8213558C(arg1, arg0, &arg0->view.eyePosition, sp28, (Vec3f*)&D_FLT_8219A5B0, var_v1 - 1);
     if (arg0->view.eyePosition.y < 15.0f) {
         arg0->view.eyePosition.y = 15.0f;
     }
-    if ((f64)M2C_FIELD(D_8219A5A0, f32*, 4) >= 1.0) {
-        M2C_FIELD(D_8219A5A0, s8*, 1) = (s8)(M2C_FIELD(D_8219A5A0, s8*, 1) + 1);
-        M2C_FIELD(sBattleScene.scene, f32*, 4) = 0.0f;
+    if ((f64)D_8219A5A0->splineT >= 1.0) {
+        D_8219A5A0->splineSegment = (s8)(D_8219A5A0->splineSegment + 1);
+        sBattleScene.scene->splineT = 0.0f;
     }
     return 0;
 }
@@ -655,34 +657,34 @@ s32 func_82135894(CameraNode* arg0, ActivePokemon* arg1) {
     s16 temp_a0;
     s8 var_v1;
 
-    var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
-    if ((var_v1 + 3) >= D_8219A5A0->visibilityPolicy) {
+    var_v1 = D_8219A5A0->splineSegment;
+    if ((var_v1 + 3) >= D_8219A5A0->splineKeyframeCount) {
         return 1;
     }
     temp_a0 = arg1->displayObject.objectType;
     if ((temp_a0 != 0x5F) && (temp_a0 != 0x52)) {
         func_82135458(arg1, arg0);
-        var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+        var_v1 = D_8219A5A0->splineSegment;
     }
     if (var_v1 == 1) {
-        Battle_ComputeSplineWeightsVariantB(sp30, M2C_FIELD(D_8219A5A0, f32*, 4));
-        var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+        Battle_ComputeSplineWeightsVariantB(sp30, D_8219A5A0->splineT);
+        var_v1 = D_8219A5A0->splineSegment;
     }
     if (var_v1 == 2) {
-        Battle_ComputeSplineWeightsVariantC(sp30, M2C_FIELD(D_8219A5A0, f32*, 4));
-        var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+        Battle_ComputeSplineWeightsVariantC(sp30, D_8219A5A0->splineT);
+        var_v1 = D_8219A5A0->splineSegment;
     }
     if (var_v1 >= 3) {
-        Battle_ComputeSplineWeightsVariantA(sp30, M2C_FIELD(D_8219A5A0, f32*, 4));
-        var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+        Battle_ComputeSplineWeightsVariantA(sp30, D_8219A5A0->splineT);
+        var_v1 = D_8219A5A0->splineSegment;
     }
     func_8213558C(arg1, arg0, &arg0->view.eyePosition, sp30, (Vec3f*)&D_FLT_8219A5B0, var_v1 - 1);
     if (arg0->view.eyePosition.y < 15.0f) {
         arg0->view.eyePosition.y = 15.0f;
     }
-    if ((f64)M2C_FIELD(D_8219A5A0, f32*, 4) >= 1.0) {
-        M2C_FIELD(D_8219A5A0, s8*, 1) = (s8)(M2C_FIELD(D_8219A5A0, s8*, 1) + 1);
-        M2C_FIELD(sBattleScene.scene, f32*, 4) = 0.0f;
+    if ((f64)D_8219A5A0->splineT >= 1.0) {
+        D_8219A5A0->splineSegment = (s8)(D_8219A5A0->splineSegment + 1);
+        sBattleScene.scene->splineT = 0.0f;
     }
     return 0;
 }
@@ -721,10 +723,10 @@ void func_82135A54(CameraNode* arg0, ActivePokemon* arg1) {
     s16 sp3E;
     s16 sp3C;
 
-    M2C_FIELD(D_8219A5A0, u8*, 0) = D_8219A4F4;
-    M2C_FIELD(D_8219A5A0, s8*, 1) = 1;
-    M2C_FIELD(D_8219A5A0, f32*, 4) = 0.0f;
-    D_8219A5A0->visibilityPolicy = 0;
+    D_8219A5A0->splineSegmentFrames = D_8219A4F4;
+    D_8219A5A0->splineSegment = 1;
+    D_8219A5A0->splineT = 0.0f;
+    D_8219A5A0->splineKeyframeCount = 0;
     count = 0;
     func_82135A04((s32)arg1);
     p = (Vec3f*)&D_FLT_8219A5B0;
@@ -735,7 +737,7 @@ loop:
         p[-1].y = M2C_FIELD(arg1, f32*, 0x28) + p[-1].y;
         goto loop;
     }
-    D_8219A5A0->visibilityPolicy = count;
+    D_8219A5A0->splineKeyframeCount = count;
     BattleScene_GetParticipantAimPoint(arg1, &D_FLT_8219A718);
     func_8212254C((s32)arg1, (s32)arg0, *(Vec3f*)&D_FLT_8219A718, 0, 0, 0.0f, (f32)0.0);
     D_FLT_8219A718 *= arg1->facingDirection;
@@ -797,7 +799,7 @@ void func_82135CD8(ActivePokemon* arg0, CameraNode* arg1, Vec3f* arg2, f32* arg3
     arg2->x = (((arg3[0] * sp28[0].x) + (arg3[1] * sp28[1].x)) + (arg3[2] * sp28[2].x)) + (arg3[3] * sp28[3].x);
     arg2->y = (((arg3[0] * sp28[0].y) + (arg3[1] * sp28[1].y)) + (arg3[2] * sp28[2].y)) + (arg3[3] * sp28[3].y);
     arg2->z = (((arg3[0] * sp28[0].z) + (arg3[1] * sp28[1].z)) + (arg3[2] * sp28[2].z)) + (arg3[3] * sp28[3].z);
-    M2C_FIELD(sBattleScene.scene, f32*, 4) += 1.0f / (f32)M2C_FIELD(sBattleScene.scene, s8*, 0);
+    sBattleScene.scene->splineT += 1.0f / (f32)sBattleScene.scene->splineSegmentFrames;
 }
 
 /*
@@ -819,29 +821,29 @@ s32 func_82135E80(CameraNode* arg0, ActivePokemon* arg1) {
     s8 var_v1;
 
     func_82135BE4(arg1, arg0);
-    var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
-    if (D_8219A5A0->visibilityPolicy < (var_v1 + 3)) {
+    var_v1 = D_8219A5A0->splineSegment;
+    if (D_8219A5A0->splineKeyframeCount < (var_v1 + 3)) {
         return 1;
     }
     if (var_v1 == 1) {
-        Battle_ComputeSplineWeightsVariantB(sp30, M2C_FIELD(D_8219A5A0, f32*, 4));
-        var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+        Battle_ComputeSplineWeightsVariantB(sp30, D_8219A5A0->splineT);
+        var_v1 = D_8219A5A0->splineSegment;
     }
     if (var_v1 == 2) {
-        Battle_ComputeSplineWeightsVariantC(sp30, M2C_FIELD(D_8219A5A0, f32*, 4));
-        var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+        Battle_ComputeSplineWeightsVariantC(sp30, D_8219A5A0->splineT);
+        var_v1 = D_8219A5A0->splineSegment;
     }
     if (var_v1 >= 3) {
-        Battle_ComputeSplineWeightsVariantA(sp30, M2C_FIELD(D_8219A5A0, f32*, 4));
-        var_v1 = M2C_FIELD(D_8219A5A0, s8*, 1);
+        Battle_ComputeSplineWeightsVariantA(sp30, D_8219A5A0->splineT);
+        var_v1 = D_8219A5A0->splineSegment;
     }
     func_82135CD8(arg1, arg0, &arg0->view.eyePosition, sp30, (Vec3f*)&D_FLT_8219A5B0, var_v1 - 1);
     if (arg0->view.eyePosition.y < 15.0f) {
         arg0->view.eyePosition.y = 15.0f;
     }
-    if ((f64)M2C_FIELD(D_8219A5A0, f32*, 4) >= 1.0) {
-        M2C_FIELD(D_8219A5A0, s8*, 1) = (s8)(M2C_FIELD(D_8219A5A0, s8*, 1) + 1);
-        M2C_FIELD(sBattleScene.scene, f32*, 4) = 0.0f;
+    if ((f64)D_8219A5A0->splineT >= 1.0) {
+        D_8219A5A0->splineSegment = (s8)(D_8219A5A0->splineSegment + 1);
+        sBattleScene.scene->splineT = 0.0f;
     }
     return 0;
 }
