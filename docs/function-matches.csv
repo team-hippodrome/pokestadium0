@@ -3930,7 +3930,7 @@ func_8E000020,0x8E000020,src/fragments/main_menu_launcher/main_menu_launcher.c,f
 func_8E100020,0x8E100020,src/fragments/launcher_relay_021/launcher_relay_021.c,func_8E100020,m2c,m2c,c
 func_8E200020,0x8E200020,src/fragments/launcher_relay_022/launcher_relay_022.c,func_8E200020,m2c,m2c,c
 func_8E300020,0x8E300020,src/fragments/launcher_relay_023/launcher_relay_023.c,func_8E300020,m2c,m2c,c
-func_8E400020,0x8E400020,src/fragments/launcher_relay_024/launcher_relay_024.c,func_8E400020,m2c,m2c,c
+func_8E400020,0x8E400020,src/fragments/unused_relay_024/unused_relay_024.c,UnusedRelay024_QueueMainMenuLauncher,m2c,m2c,c
 func_81600020,0x81600020,src/fragments/fatal_error_screen/fatal_error_screen.c,TransferPakError_DrawBackgroundPattern,s1,stadium1:src/fragments/fatal_error_screen/fatal_error_screen.c,c
 func_816001A8,0x816001A8,src/fragments/fatal_error_screen/fatal_error_screen.c,FatalError_DrawIcon,hand,,c
 func_816002AC,0x816002AC,src/fragments/fatal_error_screen/fatal_error_screen.c,FatalError_DrawMessagePanel,hand,,c
