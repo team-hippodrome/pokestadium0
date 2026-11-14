@@ -135,8 +135,8 @@ void func_8002572C(BattleSide *arg0, TeamRoster *arg1) {
     arg0->loadedModel = NULL;
     arg0->teamMember[0] = arg1;
     arg0->teamMember[1] = NULL;
-    arg0->assetIsBusy = 0;
-    arg0->unk_20 = 0;
+    arg0->backgroundLoadFlags = 0;
+    arg0->backgroundFileList = 0;
 }
 
 M2C_UNK Session_InitHumanTrainer(M2C_UNK, TeamRoster *, ExtendedRosterInfo *, s32);

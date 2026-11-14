@@ -146,19 +146,19 @@ typedef struct TeamRoster {
 
 // One side of a battle: its trainer(s) (two in a tag battle), the Pokémon model it shows and model load state.
 typedef struct BattleSide {
-    /* 0x00 */ u8 modelFlags; // @unverified: bit 0x80 asks for the side's model to be reloaded, 0x10 is set once it is loaded (owner_animation.c, phases_2.c)
+    /* 0x00 */ u8 modelFlags; // @unverified: 0x80 load requested, 0x40 loading, 0x20 wait for it, 0x10 loaded (Trainer_RequestPokeIcon, owner_animation.c, phases_2.c)
     /* 0x01 */ u8 tagTeamSize;
     /* 0x02 */ s16 displayModel;
     /* 0x04 */ BattleMon* displayMon; // @unverified: party BattleMon whose model the side shows (set with displayModel)
     /* 0x08 */ TeamRoster* teamMember[2];
-    /* 0x10 */ ModelLoadContext* unk_10;
-    /* 0x14 */ ModelNodeView* loadedModel;
+    /* 0x10 */ ModelLoadContext* modelLoadContext; // @unverified: loader Trainer_RequestPokeIcon and the PokeIcon_*ForObject functions use
+    /* 0x14 */ ModelNodeView* loadedModel; // @unverified: modelLoadContext->loadedModel once the model load finishes
     /* 0x18 */ ModelNodeView* unk_18;
     /* 0x1C */ u8 unk_1C;
-    /* 0x1D */ u8 assetIsBusy;
+    /* 0x1D */ u8 backgroundLoadFlags; // @unverified: as modelFlags, for the background load (PokeIcon_RequestBackgroundForObject)
     /* 0x1E */ u8 unk_1E;
-    /* 0x20 */ s32 unk_20;
-    /* 0x24 */ arg1_func_80019420* unk_24;
+    /* 0x20 */ s32 backgroundFileList; // @unverified: file list passed to PokeIcon_RequestBackgroundLoad
+    /* 0x24 */ arg1_func_80019420* background; // @unverified: buffer passed to PokeIcon_RequestBackgroundLoad, then modelLoadContext->loadedBackground
 } BattleSide; // size = 0x28
 
 // Zero's layout (offsets checked against func_80025910, func_8002572C and func_80025830, which

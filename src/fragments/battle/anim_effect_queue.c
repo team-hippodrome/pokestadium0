@@ -681,9 +681,9 @@ void BattleAnim_BuildResourceListForMove(s16 arg0) {
 void BattleAnim_LoadMoveResourceList(BattleSide* battle_session_teams, s16 move_id) {
     if (move_id != 0xFF) {
         BattleAnim_BuildResourceListForMove(move_id);
-        battle_session_teams->assetIsBusy |= 0x80;
-        battle_session_teams->unk_20 = sBattleAnimResourceList;
-        battle_session_teams->unk_24 = sBattleAnimResourceTablePointers;
+        battle_session_teams->backgroundLoadFlags |= 0x80;
+        battle_session_teams->backgroundFileList = sBattleAnimResourceList;
+        battle_session_teams->background = sBattleAnimResourceTablePointers;
     }
 }
 
@@ -703,9 +703,9 @@ void BattleAnim_LoadModeResourceList(BattleSide* battle_session_teams, s16 mode)
     }
 
     sBattleAnimResourceList[index] = -1;
-    battle_session_teams->unk_20 = sBattleAnimResourceList;
-    battle_session_teams->assetIsBusy |= 0x80;
-    battle_session_teams->unk_24 = sBattleAnimResourceTablePointers;
+    battle_session_teams->backgroundFileList = sBattleAnimResourceList;
+    battle_session_teams->backgroundLoadFlags |= 0x80;
+    battle_session_teams->background = sBattleAnimResourceTablePointers;
 }
 
 /**
@@ -733,7 +733,7 @@ void BattleAnim_RegisterAllAssetTables(void) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RegisterAssetTablesForSession(BattleSide* battle_session_teams) {
-    battle_session_teams->assetIsBusy &= ~0x10;
+    battle_session_teams->backgroundLoadFlags &= ~0x10;
     BattleAnim_RegisterAllAssetTables();
 }
 

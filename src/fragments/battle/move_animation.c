@@ -294,14 +294,14 @@ void BattleAnim_ClearRockThrowingMoveFlag(ActivePokemon* active_pokemon) {
  * @unverified Name from Stadium 1.
  */
 s32 BattleAnim_IsAssetLoadBusy(ActivePokemon* arg0) {
-    return arg0->side->assetIsBusy & 0xD0;
+    return arg0->side->backgroundLoadFlags & 0xD0;
 }
 
 M2C_UNK func_80019F20(BattleSide*);                      /* extern */
 
 s32 func_82101F94(ActivePokemon* arg0) {
     func_80019F20(arg0->side);
-    return arg0->side->assetIsBusy & 0xC0;
+    return arg0->side->backgroundLoadFlags & 0xC0;
 }
 
 /**

@@ -938,8 +938,8 @@ void FreeBattle_ClearSideRoster(BattleSide* arg0) {
     arg0->loadedModel = NULL;
     arg0->teamMember[0] = NULL;
     arg0->teamMember[1] = NULL;
-    arg0->assetIsBusy = 0;
-    arg0->unk_20 = 0;
+    arg0->backgroundLoadFlags = 0;
+    arg0->backgroundFileList = 0;
 }
 
 extern SessionContext* D_8200ACF8;
