@@ -76,7 +76,7 @@ s32 AudioHeap_SearchRegularCaches(s32 arg0, s32 arg1, s32 arg2);
 s32 AudioHeap_SearchPermanentCache(s32 arg0, s32 arg1);
 extern s16 D_811371D8[];
 extern s16 D_811373C8[];
-extern Reverb8110AA50 D_81184110[];
+extern SynthesisReverb D_81184110[];
 extern s8 D_8118427B;
 extern s16 D_811858C2;
 extern AudioSpec D_811526C4[];
@@ -107,7 +107,6 @@ void AudioPlayback_NoteInitAll(void);
 void func_8111539C(s32);
 void func_81115480(void);
 #define EXTERNAL_POOL_AFF0 (*(AudioAllocPool*)&D_811842A0)
-#define REVERBS_AFF0 ((SynthesisReverb*)D_81184110)
 
 
 

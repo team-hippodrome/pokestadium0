@@ -777,7 +777,7 @@ void AudioHeap_LoadFilter(s16* arg0, s32 arg1, s32 arg2) {
     }
 }
 
-extern Reverb8110AA50 D_81184110[];
+extern SynthesisReverb D_81184110[];
 extern s8 D_8118427B;
 /**
  * Steps every reverb's settings once per audio frame. Zelda 64 audio driver.
@@ -937,7 +937,6 @@ void func_8111539C(s32);
 void func_81115480(void);
 
 #define EXTERNAL_POOL_AFF0 (*(AudioAllocPool*)&D_811842A0)
-#define REVERBS_AFF0 ((SynthesisReverb*)D_81184110)
 
 /**
  * Lays out the audio heap and reverbs for the current audio spec. Zelda 64 audio driver.
@@ -1018,12 +1017,12 @@ void AudioHeap_Init(void) {
         D_81185900[i] = (void*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, D_811858E4 * 8);
     }
     for (i = 0; i < 1; i++) {
-        reverb = &REVERBS_AFF0[i];
+        reverb = &D_81184110[i];
         reverb->useReverb = 0;
     }
     D_8118427B = spec->numReverbs;
     for (i = 0; i < D_8118427B; i++) {
-        reverb = &REVERBS_AFF0[i];
+        reverb = &D_81184110[i];
         settings = &spec->reverbSettings[i];
 
         reverb->downsampleRate = settings->downsampleRate;
@@ -1044,13 +1043,13 @@ void AudioHeap_Init(void) {
         reverb->bufSizePerChan = reverb->windowSize;
         reverb->framesToIgnore = 2;
         reverb->resampleFlags = 1;
-        reverb->soundSample = &reverb->sample;
+        reverb->sound.sample = &reverb->sample;
         reverb->sample.loop = &reverb->loop;
-        reverb->soundTuning = 1.0f;
+        reverb->sound.tuning = 1.0f;
         reverb->sample.codec = 3;
         reverb->sample.medium = 0;
         reverb->sample.size = reverb->windowSize * 2;
-        reverb->sample.sampleAddr = reverb->leftRingBuf;
+        reverb->sample.sampleAddr = (u8*)reverb->leftRingBuf;
         reverb->loop.start = 0;
         reverb->loop.count = 1;
         reverb->loop.end = reverb->windowSize;

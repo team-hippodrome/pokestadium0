@@ -121,12 +121,6 @@ typedef struct AudioPermanentCache {
 
 
 
-typedef struct Reverb8110AA50 {
-    /* 0x000 */ char unk000[0xC];
-    /* 0x00C */ u16 decayRatio; // @unverified: same offset/use as OoT's SynthesisReverb.decayRatio (AudioHeap_UpdateReverbs)
-    /* 0x00E */ char unk00E[0x14A];
-} Reverb8110AA50; // size = 0x158
-
 typedef struct ReverbSettings {
     /* 0x00 */ u8 downsampleRate;
     /* 0x01 */ u8 windowSize;
@@ -164,16 +158,68 @@ typedef struct LoopAFF0 {
     /* 0x08 */ u32 count;
 } LoopAFF0;
 
-typedef struct SampleAFF0 {
-    /* 0x00 */ u32 codec : 4;
-    /* 0x00 */ u32 medium : 2;
-    /* 0x00 */ u32 unk_bit26 : 1;
-    /* 0x00 */ u32 unk_bit25 : 1;
-    /* 0x01 */ u32 size : 24;
-    /* 0x04 */ s16* sampleAddr;
-    /* 0x08 */ struct LoopAFF0* loop;
-    /* 0x0C */ void* book;
-} SampleAFF0; // size = 0x10
+typedef struct Sample {
+    /* 0x0 */ u32 codec : 4; // @unverified: same bits/use as OoT's Sample.codec (2 = s8 PCM)
+    /* 0x0 */ u32 medium : 2; // @unverified: same bits/use as OoT's Sample.medium (0 = RAM)
+    /* 0x0 */ u32 unk_bit26 : 1;
+    /* 0x0 */ u32 isRelocated : 1; // @unverified: same bit/use as OoT's Sample.isRelocated
+    /* 0x0 */ u32 size : 24; // @unverified: same bits/use as OoT's Sample.size
+    /* 0x4 */ u8* sampleAddr; // @unverified: same offset/use as OoT's Sample.sampleAddr
+    /* 0x8 */ void* loop; // @unverified: same offset/use as OoT's Sample.loop
+    /* 0xC */ void* book; // @unverified: same offset/use as OoT's Sample.book
+} Sample; // size = 0x10
+
+/* A queued sample preload (OoT's AudioPreloadReq), D_81184B78 */
+typedef struct AudioPreloadReq {
+    /* 0x00 */ u32 endAndMediumKey; // @unverified: same offset/use as OoT's AudioPreloadReq.endAndMediumKey (sampleAddr + size + medium)
+    /* 0x04 */ Sample* sample; // @unverified: same offset/use as OoT's AudioPreloadReq.sample
+    /* 0x08 */ u8* ramAddr; // @unverified: same offset/use as OoT's AudioPreloadReq.ramAddr
+    /* 0x0C */ u32 encodedInfo; // @unverified: same offset/use as OoT's AudioPreloadReq.encodedInfo
+    /* 0x10 */ s32 isFree; // @unverified: same offset/use as OoT's AudioPreloadReq.isFree
+} AudioPreloadReq; // size = 0x14
+
+/* One entry of an audio table (OoT's AudioTableEntry): sequences, sound fonts or sample banks */
+typedef struct AudioTableEntry {
+    /* 0x00 */ u32 romAddr; // @unverified: same offset/use as OoT's AudioTableEntry.romAddr
+    /* 0x04 */ u32 size; // @unverified: same offset/use as OoT's AudioTableEntry.size
+    /* 0x08 */ s8 medium; // @unverified: same offset/use as OoT's AudioTableEntry.medium
+    /* 0x09 */ s8 cachePolicy; // @unverified: same offset/use as OoT's AudioTableEntry.cachePolicy
+    /* 0x0A */ s16 shortData1; // @unverified: same offset/use as OoT's AudioTableEntry.shortData1
+    /* 0x0C */ s16 shortData2; // @unverified: same offset/use as OoT's AudioTableEntry.shortData2
+    /* 0x0E */ s16 shortData3; // @unverified: same offset/use as OoT's AudioTableEntry.shortData3
+} AudioTableEntry; // size = 0x10
+
+/* An audio table header followed by its entries (OoT's AudioTable) */
+typedef struct AudioTable {
+    /* 0x00 */ s16 numEntries; // @unverified: same offset/use as OoT's AudioTable.numEntries
+    /* 0x02 */ s16 unkMediumParam; // @unverified: same offset/use as OoT's AudioTable.unkMediumParam
+    /* 0x04 */ u32 romAddr; // @unverified: same offset/use as OoT's AudioTable.romAddr
+    /* 0x08 */ char pad[0x8];
+    /* 0x10 */ AudioTableEntry entries[1];
+} AudioTable;
+
+/* A slow sample load (OoT's AudioSlowLoad): AudioLoad_ProcessSlowLoads (func_8110E500 starts one,
+   func_8110E71C finishes it) */
+typedef struct AudioSlowLoad {
+    /* 0x00 */ u8 medium; // @unverified: same offset/use as OoT's AudioSlowLoad.medium
+    /* 0x01 */ u8 seqOrFontId; // @unverified: same offset/use as OoT's AudioSlowLoad.seqOrFontId
+    /* 0x02 */ u8 instId; // @unverified: same offset/use as OoT's AudioSlowLoad.instId
+    /* 0x04 */ s32 curDevAddr; // @unverified: same offset/use as OoT's AudioSlowLoad.curDevAddr
+    /* 0x08 */ s32 curRamAddr; // @unverified: same offset/use as OoT's AudioSlowLoad.curRamAddr (the allocation; advanced while loading)
+    /* 0x0C */ s32 ramAddr; // @unverified: same offset/use as OoT's AudioSlowLoad.ramAddr (start of the loaded sample)
+    /* 0x10 */ s32 state; // @unverified: same offset/use as OoT's AudioSlowLoad.state (1 start, 2 loading, 3 done)
+    /* 0x14 */ s32 bytesRemaining; // @unverified: same offset/use as OoT's AudioSlowLoad.bytesRemaining
+    /* 0x18 */ s8* status; // @unverified: same offset/use as OoT's AudioSlowLoad.status
+    /* 0x1C */ Sample sample; // @unverified: same offset/use as OoT's AudioSlowLoad.sample (copy of the font's sample header)
+    /* 0x2C */ OSMesgQueue msgQueue; // @unverified: same offset/use as OoT's AudioSlowLoad.msgQueue (func_8110E910)
+    /* 0x44 */ OSMesg msg; // @unverified: same offset/use as OoT's AudioSlowLoad.msg
+    /* 0x48 */ OSIoMesg ioMesg; // @unverified: same offset/use as OoT's AudioSlowLoad.ioMesg
+} AudioSlowLoad; // size = 0x60
+
+typedef struct SoundFontSound {
+    /* 0x0 */ Sample* sample; // @unverified: same offset/use as OoT's SoundFontSound.sample
+    /* 0x4 */ f32 tuning; // @unverified: same offset/use as OoT's SoundFontSound.tuning
+} SoundFontSound; // size = 0x8
 
 typedef struct ReverbRingBufferItem {
     /* 0x00 */ s16 numSamplesAfterDownsampling;
@@ -211,9 +257,8 @@ typedef struct SynthesisReverb {
     /* 0x104 */ s16* filterRight;
     /* 0x108 */ s16* filterLeftState;
     /* 0x10C */ s16* filterRightState;
-    /* 0x110 */ SampleAFF0* soundSample;
-    /* 0x114 */ f32 soundTuning;
-    /* 0x118 */ SampleAFF0 sample;
+    /* 0x110 */ SoundFontSound sound; // @unverified: same offset/use as OoT's SynthesisReverb.sound (AudioSeq layers play it for instrument ids 0xC0+)
+    /* 0x118 */ Sample sample;
     /* 0x128 */ LoopAFF0 loop;
     /* 0x134 */ u8 unk134[0x158 - 0x134];
 } SynthesisReverb; // size = 0x158
@@ -517,68 +562,6 @@ typedef struct Portamento {
     /* 0xC */ f32 extent; // @unverified: same offset/use as OoT's Portamento.extent
 } Portamento; // size = 0x10
 
-typedef struct Sample {
-    /* 0x0 */ u32 codec : 4; // @unverified: same bits/use as OoT's Sample.codec (2 = s8 PCM)
-    /* 0x0 */ u32 medium : 2; // @unverified: same bits/use as OoT's Sample.medium (0 = RAM)
-    /* 0x0 */ u32 unk_bit26 : 1;
-    /* 0x0 */ u32 isRelocated : 1; // @unverified: same bit/use as OoT's Sample.isRelocated
-    /* 0x0 */ u32 size : 24; // @unverified: same bits/use as OoT's Sample.size
-    /* 0x4 */ u8* sampleAddr; // @unverified: same offset/use as OoT's Sample.sampleAddr
-    /* 0x8 */ void* loop; // @unverified: same offset/use as OoT's Sample.loop
-    /* 0xC */ void* book; // @unverified: same offset/use as OoT's Sample.book
-} Sample; // size = 0x10
-
-/* A queued sample preload (OoT's AudioPreloadReq), D_81184B78 */
-typedef struct AudioPreloadReq {
-    /* 0x00 */ u32 endAndMediumKey; // @unverified: same offset/use as OoT's AudioPreloadReq.endAndMediumKey (sampleAddr + size + medium)
-    /* 0x04 */ Sample* sample; // @unverified: same offset/use as OoT's AudioPreloadReq.sample
-    /* 0x08 */ u8* ramAddr; // @unverified: same offset/use as OoT's AudioPreloadReq.ramAddr
-    /* 0x0C */ u32 encodedInfo; // @unverified: same offset/use as OoT's AudioPreloadReq.encodedInfo
-    /* 0x10 */ s32 isFree; // @unverified: same offset/use as OoT's AudioPreloadReq.isFree
-} AudioPreloadReq; // size = 0x14
-
-/* One entry of an audio table (OoT's AudioTableEntry): sequences, sound fonts or sample banks */
-typedef struct AudioTableEntry {
-    /* 0x00 */ u32 romAddr; // @unverified: same offset/use as OoT's AudioTableEntry.romAddr
-    /* 0x04 */ u32 size; // @unverified: same offset/use as OoT's AudioTableEntry.size
-    /* 0x08 */ s8 medium; // @unverified: same offset/use as OoT's AudioTableEntry.medium
-    /* 0x09 */ s8 cachePolicy; // @unverified: same offset/use as OoT's AudioTableEntry.cachePolicy
-    /* 0x0A */ s16 shortData1; // @unverified: same offset/use as OoT's AudioTableEntry.shortData1
-    /* 0x0C */ s16 shortData2; // @unverified: same offset/use as OoT's AudioTableEntry.shortData2
-    /* 0x0E */ s16 shortData3; // @unverified: same offset/use as OoT's AudioTableEntry.shortData3
-} AudioTableEntry; // size = 0x10
-
-/* An audio table header followed by its entries (OoT's AudioTable) */
-typedef struct AudioTable {
-    /* 0x00 */ s16 numEntries; // @unverified: same offset/use as OoT's AudioTable.numEntries
-    /* 0x02 */ s16 unkMediumParam; // @unverified: same offset/use as OoT's AudioTable.unkMediumParam
-    /* 0x04 */ u32 romAddr; // @unverified: same offset/use as OoT's AudioTable.romAddr
-    /* 0x08 */ char pad[0x8];
-    /* 0x10 */ AudioTableEntry entries[1];
-} AudioTable;
-
-/* A slow sample load (OoT's AudioSlowLoad): AudioLoad_ProcessSlowLoads (func_8110E500 starts one,
-   func_8110E71C finishes it) */
-typedef struct AudioSlowLoad {
-    /* 0x00 */ u8 medium; // @unverified: same offset/use as OoT's AudioSlowLoad.medium
-    /* 0x01 */ u8 seqOrFontId; // @unverified: same offset/use as OoT's AudioSlowLoad.seqOrFontId
-    /* 0x02 */ u8 instId; // @unverified: same offset/use as OoT's AudioSlowLoad.instId
-    /* 0x04 */ s32 curDevAddr; // @unverified: same offset/use as OoT's AudioSlowLoad.curDevAddr
-    /* 0x08 */ s32 curRamAddr; // @unverified: same offset/use as OoT's AudioSlowLoad.curRamAddr (the allocation; advanced while loading)
-    /* 0x0C */ s32 ramAddr; // @unverified: same offset/use as OoT's AudioSlowLoad.ramAddr (start of the loaded sample)
-    /* 0x10 */ s32 state; // @unverified: same offset/use as OoT's AudioSlowLoad.state (1 start, 2 loading, 3 done)
-    /* 0x14 */ s32 bytesRemaining; // @unverified: same offset/use as OoT's AudioSlowLoad.bytesRemaining
-    /* 0x18 */ s8* status; // @unverified: same offset/use as OoT's AudioSlowLoad.status
-    /* 0x1C */ Sample sample; // @unverified: same offset/use as OoT's AudioSlowLoad.sample (copy of the font's sample header)
-    /* 0x2C */ OSMesgQueue msgQueue; // @unverified: same offset/use as OoT's AudioSlowLoad.msgQueue (func_8110E910)
-    /* 0x44 */ OSMesg msg; // @unverified: same offset/use as OoT's AudioSlowLoad.msg
-    /* 0x48 */ OSIoMesg ioMesg; // @unverified: same offset/use as OoT's AudioSlowLoad.ioMesg
-} AudioSlowLoad; // size = 0x60
-
-typedef struct SoundFontSound {
-    /* 0x0 */ Sample* sample; // @unverified: same offset/use as OoT's SoundFontSound.sample
-    /* 0x4 */ f32 tuning; // @unverified: same offset/use as OoT's SoundFontSound.tuning
-} SoundFontSound; // size = 0x8
 
 typedef struct Drum {
     /* 0x0 */ u8 adsrDecayIndex; // @unverified: same offset/use as OoT's Drum.adsrDecayIndex (copied to the layer's release rate)
