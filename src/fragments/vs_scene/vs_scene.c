@@ -284,7 +284,7 @@ void VsScene_ZoomIntoScreen(void) {
     s32 sp3C;
     s32 temp_s0_2;
 
-    sp3C = M2C_FIELD(D_82203240, s32 *, 0xC);
+    sp3C = (s32)D_82203240->children;
     if (D_822036A4->mode == 0) {
         func_800273E8(sp7C, (s32) &D_82202CD0);
         func_800273E8(sp40, (s32) &D_82202CEC);
@@ -317,7 +317,7 @@ void func_82200714(void) {
     s32 rec;
     s32 done;
 
-    rec = M2C_FIELD(D_82203240, s32 *, 0xC);
+    rec = (s32)D_82203240->children;
     if (D_822036A4->mode == 0) {
         func_800273E8(sp8C, (s32) &D_82202D08);
         func_800273E8(sp50, (s32) &D_82202D24);
@@ -708,7 +708,7 @@ void func_82201600(s32 arg0) {
                 for (k = 0; k < team->numberOfPokemonBrought; k++) {
                     if (arg0 == team->pokemonPicked[k].faintBatch) {
                         idx = i * 6 + j * 3 + k;
-                        func_82201348(*(DepthBuffer**)(M2C_FIELD(D_82203264, s8**, 8) + idx * 0x14 + 0xC));
+                        func_82201348(((unk_func_8001A024*)D_82203264)->unk_08[idx].unk_0C);
                         Audio_PlayCommand(0x3D, 2, idx + 1);
                     }
                 }
@@ -718,7 +718,7 @@ void func_82201600(s32 arg0) {
             for (k = 0; k < team->numberOfPokemonBrought; k++) {
                 if (arg0 == (team->pokemonPicked + k)->faintBatch) {
                     idx = i * 6 + k;
-                    func_82201348(*(DepthBuffer**)(M2C_FIELD(D_82203264, s8**, 8) + idx * 0x14 + 0xC));
+                    func_82201348(((unk_func_8001A024*)D_82203264)->unk_08[idx].unk_0C);
                     Audio_PlayCommand(0x3D, 2, idx + 1);
                 }
             }
@@ -816,7 +816,7 @@ void func_82201A3C(void) {
     } else {
         Audio_PlayCommand(0x3D, 4, 0);
     }
-    M2C_FIELD(&D_82203268, u8 *, 2) = (u8) (M2C_FIELD(&D_82203268, u8 *, 2) | 0x20);
+    D_82203268.node.renderFlags |= 0x20;
     func_8001107C(&D_82203268, 0, &D_8F6256E0);
     func_80006828(0x96, &VsScene_DrawFrame);
 }
