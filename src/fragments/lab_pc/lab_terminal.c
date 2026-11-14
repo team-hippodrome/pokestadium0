@@ -379,17 +379,17 @@ M2C_UNK func_80027804();
  * Sets up a terminal menu window with its rows and title.
  * Seen in play (2026-11-12) in せいとん: ran on entry as the せいとん menu window appeared.
  */
-void LabTerminal_InitMenuWindow(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, char *arg5, s32 arg6, char *arg7, s32 arg8, char *arg9) {
+void LabTerminal_InitMenuWindow(LabTerminalMenuWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, char* arg5, s32 arg6, char* arg7, s32 arg8, char* arg9) {
 
-    Window_SetRect(((s8 *)arg0), arg1, arg2, arg3, arg4);
-    M2C_FIELD(((s8 *)arg0), s32 *, 0x28) = 0;
-    M2C_FIELD(((s8 *)arg0), s32 *, 0x24) = 0;
-    M2C_FIELD(((s8 *)arg0), s32 *, 0x14) = 0x801;
-    M2C_FIELD(((s8 *)arg0), char **, 0x20) = arg9;
-    func_80027804(((s8 *)arg0) + 0x50, arg5, arg6, arg6);
-    Menu_Init(((s8 *)arg0) + 0x2C, (s32)(((s8 *)arg0) + 0x50), (s32)(((s8 *)arg0) + 0x5C), (s32)LabTerminal_DrawMenuRow, arg3 - 0xC, 0x20);
-    M2C_FIELD(((s8 *)arg0), char **, 0x7C) = arg7;
-    M2C_FIELD(((s8 *)arg0), s32 *, 0x80) = arg8;
+    Window_SetRect((s8*)&arg0->window, arg1, arg2, arg3, arg4);
+    arg0->window.state = 0;
+    arg0->window.animTimer = 0;
+    arg0->window.frame.style = 0x801;
+    arg0->window.title = arg9;
+    func_80027804(&arg0->items, arg5, arg6, arg6);
+    Menu_Init((s8*)&arg0->menu, (s32)&arg0->items, (s32)arg0->itemFlags, (s32)LabTerminal_DrawMenuRow, arg3 - 0xC, 0x20);
+    arg0->descriptions = (char**)arg7;
+    arg0->descriptionLines = arg8;
 }
 
 extern Color_RGBA8 D_8900A6FC;
@@ -398,24 +398,24 @@ extern Color_RGBA8 D_8900A700;
  * Draws a terminal menu window.
  * Seen in play (2026-11-12): the せいとん menu with its description.
  */
-void LabTerminal_DrawMenuWindow(s8* arg0) {
+void LabTerminal_DrawMenuWindow(LabTerminalMenuWindow* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 sp38;
     s32 h;
 
     if (func_8002AE6C() == 0) {
-        h = (M2C_FIELD(M2C_FIELD(arg0, s8**, 0x2C), s32*, 8) << 5) + 8;
-        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + h + 5, M2C_FIELD(arg0, s32*, 8), D_8007356C);
+        h = (arg0->menu.items->count << 5) + 8;
+        Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->window.frame.y + h + 5, arg0->window.frame.width, D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, h, *(Color_RGBA8*)&D_8900A5BC);
-        Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + h + 0xC, M2C_FIELD(arg0, s32*, 8) - 0xC, M2C_FIELD(arg0, s32*, 0x80) * 0x1C, D_8900A6FC, D_8900A700);
-        sp38 = M2C_FIELD(arg0, s32*, 8) - 0xC;
-        Menu_DrawItems(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0xA, 0xFFEF, (s32)&sp38);
+        func_80029028(arg0->window.frame.x + 6, arg0->window.frame.y + 6, arg0->window.frame.width - 0xC, h, *(Color_RGBA8*)&D_8900A5BC);
+        Ui_FillRectPrimEnvColor(arg0->window.frame.x + 6, arg0->window.frame.y + h + 0xC, arg0->window.frame.width - 0xC, arg0->descriptionLines * 0x1C, D_8900A6FC, D_8900A700);
+        sp38 = arg0->window.frame.width - 0xC;
+        Menu_DrawItems(&arg0->menu, arg0->window.frame.x + 6, arg0->window.frame.y + 0xA, 0xFFEF, (s32)&sp38);
         Font_BeginTranslucentTextRendering();
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         Font_SetActive(8, 0);
         Font_SetLineHeight(0x1C);
-        Font_Printf(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + h + 0x10, (*(char***)(arg0 + 0x7C))[M2C_FIELD(arg0, s32*, 0x34)]);
+        Font_Printf(arg0->window.frame.x + 0xE, arg0->window.frame.y + h + 0x10, arg0->descriptions[arg0->menu.cursor]);
         Font_EndTexturedTextRendering();
     }
 }
@@ -424,23 +424,23 @@ void LabTerminal_DrawMenuWindow(s8* arg0) {
  * Handles input on a terminal menu window while it is open.
  * Seen in play (2026-11-12): moved over the せいとん menu.
  */
-s32 LabTerminal_UpdateMenuWindow(s8* arg0) {
+s32 LabTerminal_UpdateMenuWindow(LabTerminalMenuWindow* arg0) {
     s32 ret = 0;
     s32 temp_v0;
 
-    switch (M2C_FIELD(arg0, s32*, 0x28)) {
+    switch (arg0->window.state) {
         case 1:
         case 2:
             break;
         default:
             return 0;
     }
-    if (Menu_UpdateCursor(arg0 + 0x2C) == 0) {
+    if (Menu_UpdateCursor(&arg0->menu) == 0) {
         temp_v0 = func_8002BC14(D_800603C0);
         if (temp_v0 == -1) {
             ret = -1;
         } else if (temp_v0 == 1) {
-            ret = M2C_FIELD(arg0, s32*, 0x34) + 1;
+            ret = arg0->menu.cursor + 1;
         }
     }
     return ret;
@@ -449,7 +449,7 @@ s32 LabTerminal_UpdateMenuWindow(s8* arg0) {
 extern char D_8900A704[];
 extern char D_8900A710[];
 extern char D_890188F4[];
-void LabTerminal_InitMenuWindow(s32, s32, s32, s32, s32, char*, s32, char*, s32, char*);
+void LabTerminal_InitMenuWindow(LabTerminalMenuWindow*, s32, s32, s32, s32, char*, s32, char*, s32, char*);
 
 /**
  * Calls LabTerminal_InitMenuWindow with its own first argument passed straight through
@@ -458,13 +458,13 @@ void LabTerminal_InitMenuWindow(s32, s32, s32, s32, s32, char*, s32, char*, s32,
  * arguments mean are not established.
  * Seen in play (2026-11-12) in せいとん: set up the first menu: ポケモンを いどうする, どうぐを いどうする, ボックスを いどうする.
  */
-void LabTerminal_InitMainMenu(s32 arg0) {
+void LabTerminal_InitMainMenu(LabTerminalMenuWindow* arg0) {
     LabTerminal_InitMenuWindow(arg0, 0x30, 0x5C, 0x170, 0xCE, D_8900A704, 3, D_8900A710, 3, D_890188F4);
 }
 
 void BgStage_DrawFrame(void);                            /* extern */
 M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
-void LabTerminal_DrawMenuWindow(s8*);
+void LabTerminal_DrawMenuWindow(LabTerminalMenuWindow*);
 extern M2C_UNK D_89018900;
 extern s32 D_89019108;
 extern M2C_UNK D_89019110;
@@ -473,7 +473,7 @@ extern M2C_UNK D_89019110;
  * Draws the GB save summary bar and the background.
  * Seen in play (2026-11-12): the せいとん screen with the 1P サトシ IDNo/12345 bar.
  */
-void LabTerminal_DrawMainScreen(s32 arg0) {
+void LabTerminal_DrawMainScreen(LabTerminalMenuWindow* arg0) {
     M2C_UNK *var_a1;
 
     BgStage_DrawFrame();
@@ -493,7 +493,7 @@ void LabTerminal_DrawMainScreen(s32 arg0) {
  * plus 1; any other result returns 0. (Same pattern as FreeBattle_UpdateBattleModeWindow.)
  * Seen in play (2026-11-12): returned the せいとん menu pick.
  */
-s32 LabTerminal_UpdateMainMenu(s8* arg0) {
+s32 LabTerminal_UpdateMainMenu(LabTerminalMenuWindow* arg0) {
     s32 result = 0;
     s32 tmp;
 
@@ -503,13 +503,13 @@ s32 LabTerminal_UpdateMainMenu(s8* arg0) {
         result = -1;
     } else if (tmp > 0) {
         func_8003F6AC(2);
-        result = M2C_FIELD(arg0, s32*, 0x34) + 1;
+        result = arg0->menu.cursor + 1;
     }
     return result;
 }
 
 extern M2C_UNK D_89019110;
-extern M2C_UNK D_89028950;
+extern LabTerminalMenuWindow D_89028950;
 extern s32 D_890289D4;
 s32 func_80025BD8();
 M2C_UNK func_80027FF8(M2C_UNK *, s32);
@@ -592,7 +592,7 @@ extern M2C_UNK D_89018918;
 extern LabItemScreen D_89019128;
 extern M2C_UNK D_89019B98;
 extern M2C_UNK D_89021428;
-extern M2C_UNK D_89028950;
+extern LabTerminalMenuWindow D_89028950;
 extern s32 D_890289D4;
 
 /**

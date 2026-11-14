@@ -234,6 +234,17 @@ typedef struct LabItemOrganizeWindow {
     /* 0x4AC */ s8 textBox[0x38]; // @unverified: TextBox_Init, TextBox_Draw; LabItemScreen.savePrompt follows
 } LabItemOrganizeWindow; // size = 0x4E4
 
+/* The せいとん (organize) menu window of the Lab terminal, D_89028950: ポケモンを いどうする / どうぐを
+ * いどうする / ボックスを いどうする with a description of the row under the cursor (LabTerminal_InitMenuWindow). */
+typedef struct LabTerminalMenuWindow {
+    /* 0x00 */ Window window; // @unverified: typed from the function it is passed to
+    /* 0x2C */ Menu menu; // @unverified: rows drawn by LabTerminal_DrawMenuRow
+    /* 0x50 */ PointerList items; // @unverified: func_80027804 over the row names (arg5)
+    /* 0x5C */ u16 itemFlags[16]; // @unverified: itemFlags of menu; the main menu uses 3
+    /* 0x7C */ char** descriptions; // @unverified: printed under the rows for menu.cursor (D_8900A710)
+    /* 0x80 */ s32 descriptionLines; // @unverified: 3; height of the description fill in 0x1C-pixel lines
+} LabTerminalMenuWindow; // size = 0x84
+
 /* The どうぐのせいり screen, D_89019128 (func_89003650, LabItem_UpdateScreen, LabItem_DrawScreen). */
 typedef struct LabItemScreen {
     /* 0x000 */ s32 state; // @unverified: 1 = organizeWindow, 2 = save prompt, 3-6 = deleting a ６４の カセット save (LabItem_UpdateScreen)
