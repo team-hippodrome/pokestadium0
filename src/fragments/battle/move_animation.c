@@ -1247,23 +1247,7 @@ void BattleScene_Row13PlaySequences14And21(ActivePokemon* active_pokemon) {
     sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
 }
 
-/**
- * An 0xB-byte record of the table that D_82189180[...] points to; only the
- * byte at offset 4 is used here.
- */
-typedef struct Record82104AFC {
-    /* 0x00 */ u8 unk_00[4];
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05[6];
-} Record82104AFC; // size = 0xB
 
-typedef struct Entry82199E14 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-} Entry82199E14;
-extern Entry82199E14 D_82199E14[];
-extern s32 D_8218A7B0;
-extern s32 D_82199E48;
 extern u8* D_82189180[];
 extern f32 D_FLT_82189354[];
 void ActivePokemon_PlayLandingSoundBySize(ActivePokemon*);
@@ -1274,12 +1258,11 @@ void ActivePokemon_PlayLandingSoundBySize(ActivePokemon*);
  *
  * Reads the Pokemon's move/animation id (u16 at +0x1A).  For an id whose D_FLT_82189354
  * row has a non-zero first float -- except ids 0x16, 0x52 and 0x8E -- it only stores
- * D_8218A7B0 into the first word of entry D_82199E48 of D_82199E14 and returns.
+ * sBattleSceneStateTickSentinel into the current tick slot's callback and returns.
  * Otherwise, when byte 4 of the side's cue record (sSideBattleCues[side] + 0x72D,
  * `side` from BattleScene_GetParticipantSideIndex) plus one equals the animation timer
  * at +0x620 and BattleAnim_IsAssetLoadBusy reports nothing pending, it calls ActivePokemon_PlayLandingSoundBySize and then
- * performs the same store.  (What D_82199E14 / D_8218A7B0 are used for is not
- * established here.)
+ * performs the same store (this ends the tick slot).
  */
 /**
  * Faint row (row 0) tick: when the fainting animation reaches its last frame, plays the landing
@@ -1296,12 +1279,12 @@ void BattleScene_TickFaintRowPlayLandingSound(ActivePokemon* active_pokemon) {
 
     id = active_pokemon->displayObject.objectType;
     if ((((f32(*)[4])D_FLT_82189354)[(int)id][0] != 0.0f) && (id != 0x16) && (id != 0x52) && (id != 0x8E)) {
-        D_82199E14[D_82199E48].unk_00 = D_8218A7B0;
+        sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
         return;
     }
     if (((cue[4] + 1) == M2C_FIELD(active_pokemon, s32*, 0x620)) && (BattleAnim_IsAssetLoadBusy((s8*)active_pokemon) == 0)) {
         ActivePokemon_PlayLandingSoundBySize(active_pokemon);
-        D_82199E14[D_82199E48].unk_00 = D_8218A7B0;
+        sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
     }
 }
 
@@ -1529,18 +1512,18 @@ void func_800199F8(ActivePokemon*, u8);
 void func_821054C4(ActivePokemon*, s32);
 
 /**
- * Animation row tick: once the model is ready, resets the timer, sets the D_82199E14 entry,
+ * Animation row tick: once the model is ready, resets the timer, sets the tick slot callback,
  * and starts the side's record animation for row D_82189190[D_8219A50C].
  */
 void func_821049E8(ActivePokemon* arg0) {
     s32 pad; // FAKE: stack padding
-    Record82104AFC* rec =
-        &((Record82104AFC*)D_82189180[BattleScene_GetParticipantSideIndex(arg0)])[D_82189190[D_8219A50C] - 1];
+    MovePresentationCue* rec =
+        &((MovePresentationCue*)D_82189180[BattleScene_GetParticipantSideIndex(arg0)])[D_82189190[D_8219A50C] - 1];
 
     if (func_82101FD4(arg0) != 0) {
         arg0->animationTimer = 0;
-        D_82199E14[D_82199E48].unk_00 = D_8218A7B0;
-        func_800199F8(arg0, rec->unk_00[0]);
+        sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
+        func_800199F8(arg0, rec->id);
         func_821054C4(arg0, D_82189190[D_8219A50C] - 1);
     }
 }
@@ -1564,21 +1547,21 @@ void func_82101B54(ActivePokemon*, s32);
  * Selects the record (D_82189190[D_8219A50C] - 1) of the table chosen by
  * func_82107A5C(). When D_8219A50C == 5, and the record's byte 4 plus one equals
  * the word at offset 0x620 of arg0 and BattleAnim_IsAssetLoadBusy(arg0) returns 0, it calls
- * func_82101B54(arg0, D_82189190[D_8219A50C]) and stores D_8218A7B0 into the
- * first word of entry D_82199E48 of D_82199E14. For every other value of
+ * func_82101B54(arg0, D_82189190[D_8219A50C]) and stores sBattleSceneStateTickSentinel into the
+ * callback of the current tick slot. For every other value of
  * D_8219A50C only the store is done.
  */
 void func_82104AFC(ActivePokemon* arg0) {
-    Record82104AFC* rec;
+    MovePresentationCue* rec;
 
-    rec = (Record82104AFC*)D_82189180[func_82107A5C()] + (D_82189190[D_8219A50C] - 1);
+    rec = (MovePresentationCue*)D_82189180[func_82107A5C()] + (D_82189190[D_8219A50C] - 1);
     if (D_8219A50C == 5) {
-        if (((rec->unk_04 + 1) == M2C_FIELD(arg0, s32*, 0x620)) && (BattleAnim_IsAssetLoadBusy(arg0) == 0)) {
+        if (((rec->animationDuration + 1) == M2C_FIELD(arg0, s32*, 0x620)) && (BattleAnim_IsAssetLoadBusy(arg0) == 0)) {
             func_82101B54((ActivePokemon*)arg0, D_82189190[D_8219A50C]);
-            D_82199E14[D_82199E48].unk_00 = D_8218A7B0;
+            sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
         }
     } else {
-        D_82199E14[D_82199E48].unk_00 = D_8218A7B0;
+        sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
     }
 }
 
@@ -1649,22 +1632,18 @@ void BattleScene_TickStateCallbacks(void) {
  *
  * If the word at offset 0x620 of the object `arg0` equals D_8219A754 and
  * BattleAnim_IsAssetLoadBusy(arg0) returns 0: calls ActivePokemon_PlayLandingSoundBySize(arg0) and stores
- * D_8218A7B0 into the first word of entry D_82199E48 of the table
- * D_82199E14, whose entries are 8 bytes each (the index is scaled by 8 in
- * the ROM; the second word of an entry is not touched here).
- *
- * What the table and the compared values mean is not established.
+ * sBattleSceneStateTickSentinel into the current tick slot's callback, which ends the slot.
  */
 extern s32 D_8219A754;
 
 /**
  * Animation row tick: when the timer (+0x620) reaches D_8219A754 and no asset load is
- * pending, plays the landing sound by size and sets the D_82199E14 entry.
+ * pending, plays the landing sound by size and sets the tick slot callback.
  */
 void func_82104DB0(ActivePokemon* arg0) {
     if ((D_8219A754 == arg0->animationTimer) && (BattleAnim_IsAssetLoadBusy(arg0) == 0)) {
         ActivePokemon_PlayLandingSoundBySize(arg0);
-        D_82199E14[D_82199E48].unk_00 = D_8218A7B0;
+        sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
     }
 }
 
@@ -2820,7 +2799,6 @@ void BattleScene_ResetParticipantAuxTransform(UNUSED ActivePokemon* owner, Activ
     active_pokemon->facingDirection = facing_direction;
 }
 
-extern Entry82199E14 D_82199E10[];
 void Battle_InitBothParticipants(void);
 /**
  * Loads battle string tables, clears tick slots and initializes facing,
@@ -2833,7 +2811,7 @@ void BattleScene_InitializeRuntime(BattleSide* session_teams) {
     s32 i;
 
     for (i = 0; i < 7; i++) {
-        D_82199E10[i].unk_04 = D_8218A7B0;
+        sBattleSceneStateTickSlots[i].callback = sBattleSceneStateTickSentinel;
     }
     BattleScene_ResetParticipantAuxTransform(sActivePokemon[0], sActivePokemon[0], 1);
     BattleScene_ResetParticipantAuxTransform(sActivePokemon[1], sActivePokemon[1], -1);

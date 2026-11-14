@@ -79,12 +79,6 @@ typedef struct unk_D_84392040 {
 
 #define NINETY_DEGREES 0x4000
 
-typedef struct Cue8212B270 {
-    /* 0x00 */ u8 unk_00[6];
-    /* 0x06 */ u8 unk_06;
-    /* 0x07 */ u8 unk_07[3];
-    /* 0x0A */ u8 unk_0A;
-} Cue8212B270; // size = 0xB
 
 typedef struct SurfWaterGridPoint {
     /* 0x00 */ Vec3f position; // @unverified: grid point; y is the water height

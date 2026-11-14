@@ -80,15 +80,15 @@ void BattleAnim_RenderNop2(void) {
  */
 void BattleScene_ReactionMultiHitEnd(CameraNode* arg0, void* arg1) {
     BattleMonRuntime* sp24 = &(sActingPokemon)->state.runtime;
-    Cue8212B270* temp_v1 = (sp24->usedMove - 1) + (Cue8212B270*)D_82189180[func_82107A5C(sOtherPokemon)];
+    MovePresentationCue* temp_v1 = (sp24->usedMove - 1) + (MovePresentationCue*)D_82189180[func_82107A5C(sOtherPokemon)];
     volatile s32 sp1C;
 
     if (sOtherPokemon->displayObject.objectType == 0x98) {
         sp1C = 0xF;
-    } else if (temp_v1->unk_0A == 0xFF) {
-        sp1C = M2C_FIELD((sActingPokemon)->displayObject.transformAnim.data, u16*, 0xA) - temp_v1->unk_06;
+    } else if (temp_v1->frameCounter == 0xFF) {
+        sp1C = M2C_FIELD((sActingPokemon)->displayObject.transformAnim.data, u16*, 0xA) - temp_v1->currentFrame;
     } else {
-        sp1C = temp_v1->unk_0A - temp_v1->unk_06;
+        sp1C = temp_v1->frameCounter - temp_v1->currentFrame;
     }
 
     switch (sBattleScene.scene->phaseSubstep) {
