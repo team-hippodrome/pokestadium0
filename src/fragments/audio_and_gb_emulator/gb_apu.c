@@ -10,6 +10,8 @@ extern volatile u32 D_811859D4;
  * Seen in play (2026-11-12) during Pocket Monsters Green's intro: turned wave period 0x773 into
  * step 0x4F53. That is 65536 / (2048 - 1907) = 464.8 Hz, times 32 steps per cycle at 48 kHz, in
  * 16.16 fixed point.
+ * Seen in play (2026-11-14) ran while Green's intro played in the GB Tower; called from
+ * GbApu_WriteRegister.
  */
 u32 GbApu_FreqToStep(u16 arg0) {
   u32 temp;
@@ -25,7 +27,8 @@ u32 GbApu_FreqToStep(u16 arg0) {
  * the playback step for the clock divider.
  * Seen in play (2026-11-13) ran while Pocket Monsters Green played sound in the GB player; also
  * when quitting the GB player (C-Up menu, Quit game, Yes) back to the main menu.
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-14) ran while Green's intro played in the GB Tower; called from
+ * GbApu_WriteRegister.
  */
 u32 GbApu_ConfigureNoiseTable(u16 arg0, u16 arg1, u16 arg2) {
     u32 temp;
@@ -44,6 +47,8 @@ u32 GbApu_ConfigureNoiseTable(u16 arg0, u16 arg1, u16 arg2) {
  * Seen in play (2026-11-12) during Pocket Monsters Green's intro in the GB Tower: turned square
  * period 0x5AC into step 0x2588. That is 131072 / (2048 - 1452) = 219.9 Hz, times 32 steps per
  * cycle at 48 kHz, in 16.16 fixed point.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbApu_WriteRegister.
  */
 u32 GbApu_FreqToStep2x(u16 arg0) {
   u32 temp;
@@ -51,7 +56,13 @@ u32 GbApu_FreqToStep2x(u16 arg0) {
   return temp;
 }
 
-void func_81115AF0(void) {
+/**
+ * Empty.
+ * No caller (2026-11-14): nothing in the built ROM jumps to it or holds its address, so play
+ * cannot reach it.
+ * @unverified Name from the code; it never runs.
+ */
+void GbApu_Unused1(void) {
 }
 
 /**
@@ -60,7 +71,8 @@ void func_81115AF0(void) {
  * Types 4 and 5 are unused and return nothing.
  * Seen in play (2026-11-13) ran while Pocket Monsters Green played sound in the GB player; also
  * when the GB player C-Up menu opened.
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbApu_UpdateSquare1Channel.
  */
 s32 GbApu_GetWaveformSample(u32 arg0, s32 arg1) {
     switch (arg0) {
@@ -99,6 +111,8 @@ s32 GbApu_GetWaveformSample(u32 arg0, s32 arg1) {
  * envelope (NR12) and length timer. A stopped channel decays to silence instead of cutting off.
  * Seen in play (2026-11-13) ran every audio frame while JP Green played its title screen music in
  * the N64 GB player, together with the square 2, wave and noise channel updates.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbApu_RenderBuffer.
  */
 u16 GbApu_UpdateSquare1Channel(void) {
     u16 var_t0;
@@ -196,6 +210,8 @@ u16 GbApu_UpdateSquare1Channel(void) {
  * Produces one sample of square channel 2 (GbApu_UpdateSquare1Channel without the sweep).
  * Seen in play (2026-11-13) ran every audio frame while JP Green played its title screen music in
  * the N64 GB player, together with the square 1, wave and noise channel updates.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbApu_RenderBuffer.
  */
 s32 GbApu_UpdateSquare2Channel(void) {
     s32 temp_v0;
@@ -273,6 +289,8 @@ s32 GbApu_UpdateSquare2Channel(void) {
  * the previous sample. On a retrigger the old note fades out before the phase restarts.
  * Seen in play (2026-11-13) ran every audio frame while JP Green played its title screen music in
  * the N64 GB player, together with the two square channel updates and the noise channel update.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbApu_RenderBuffer.
  */
 u16 GbApu_UpdateWaveChannel(void) {
     u16 temp_v0;
@@ -335,7 +353,13 @@ u16 GbApu_UpdateWaveChannel(void) {
     return temp_a0;
 }
 
-u16 func_81207C5C_Empty(void) {
+/**
+ * Empty.
+ * No caller (2026-11-14): nothing in the built ROM jumps to it or holds its address, so play
+ * cannot reach it.
+ * @unverified Name from the code; it never runs.
+ */
+u16 GbApu_Unused2(void) {
     
 }
 
@@ -344,6 +368,8 @@ u16 func_81207C5C_Empty(void) {
  * value over ~128 samples and the applied amplitude moves one unit every 95 samples.
  * Seen in play (2026-11-13) ran every audio frame while JP Green played its title screen music in
  * the N64 GB player, together with the two square channel updates and the wave channel update.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbApu_RenderBuffer.
  */
 u16 GbApu_UpdateNoiseChannel(void) {
     static s32 D_8120EB6C = 0;
@@ -426,6 +452,8 @@ u16 GbApu_UpdateNoiseChannel(void) {
  * Applies one queued write to sound register 0xFF00 + reg (NR10-NR52, wave RAM 0x30-0x3F).
  * Seen in play (2026-11-12) during Pocket Monsters Green's intro in the GB Tower: the next
  * GbApu_RenderBuffer applied that queued write as (0x24, 0x77).
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbApu_RenderBuffer.
  */
 void GbApu_WriteRegister(u16 reg, u8 value) {
     s32 pad; // FAKE: stack padding
@@ -642,6 +670,8 @@ void GbApu_WriteRegister(u16 reg, u8 value) {
  * Seen in play (2026-11-12) during Pocket Monsters Green's intro in the GB Tower: ran once a
  * frame from GbAudio_UpdateFrame with 0x310 (784) samples, drained the queued NR50 write, and
  * called the square, wave and noise channel updates once per sample.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbAudio_UpdateFrame.
  */
 void GbApu_RenderBuffer(s32 num_samples, s16* out) {
     s32 i;
@@ -769,6 +799,8 @@ void GbApu_RenderBuffer(s32 num_samples, s16* out) {
  * Seen in play (2026-11-12) during Pocket Monsters Green's intro in the GB Tower: called from the
  * CPU core's I/O write with (0xFF24, 0x77, timestamp 0x42FA), Green writing NR50; it returned the
  * value 0x77.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbCpu_Reset.
  */
 void GbApu_QueueRegisterWrite(u16 arg0, u8 arg1, u16 arg2) {
     s32 temp_v1;
@@ -830,6 +862,8 @@ void GbApu_QueueRegisterWrite(u16 arg0, u8 arg1, u16 arg2) {
  * GbApu_WriteRegister and silences all four channels.
  * Seen in play (2026-11-13) ran once as the GB session ended (JP Green, "report is not correct"
  * panel), next to GbAudio_RampToSilence.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbApu_Reset.
  */
 void GbApu_ResetChannels(void) {
   s32 pad[6]; // FAKE: stack padding
@@ -856,7 +890,8 @@ void GbApu_ResetChannels(void) {
  * noise_table: the decompressed noise waveforms (GbEmu_Init / GbEmu_InitContext).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbEmu_Init.
  */
 void GbApu_Reset(s32 arg0) {
   D_81180704 = arg0;
@@ -868,6 +903,8 @@ void GbApu_Reset(s32 arg0) {
  * avoiding a click when audio stops. No C callers.
  * Seen in play (2026-11-13) ran once as the GB session ended (JP Green, "report is not correct"
  * panel); the game's music stopped there.
+ * Seen in play (2026-11-14) ran when はい on the ゲームをやめる prompt left the GB Tower; called from
+ * GbEmu_RunFrame.
  */
 void GbAudio_RampToSilence(void) {
     void* sp34 = D_811859B8[0];
@@ -892,7 +929,12 @@ void GbAudio_RampToSilence(void) {
     osGbSetNextBuffer(sp34, 0xA00);
 }
 
-void func_811173F4(void) {
+/**
+ * Empty; GbEmu_RunFrame calls it every frame.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbEmu_RunFrame.
+ */
+void GbAudio_FrameStub(void) {
 }
 
 /**
@@ -900,6 +942,8 @@ void func_811173F4(void) {
  * state; every other address is read straight from gGbMemoryMap.
  * Seen in play (2026-11-12) during Pocket Monsters Green's intro in the GB Tower: Green read
  * 0xFF26 (NR52) and got 0x8F: sound on, all four channels active.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbEmu_UpdateAudioOrBlankVideo.
  */
 u8 GbMem_ReadIoRegister(u16 arg0) {
   u8 var_a0;
@@ -940,6 +984,8 @@ u8 GbMem_ReadIoRegister(u16 arg0) {
  * to [min, max]. Source is the GB APU, or the menu sounds while sGbAudioMenuSoundMode is set.
  * Seen in play (2026-11-12) during Pocket Monsters Green's intro in the GB Tower: ran once a
  * frame and called GbApu_RenderBuffer for 784 samples.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbEmu_UpdateAudioOrBlankVideo.
  */
 s32 GbAudio_UpdateFrame(void) {
     u32 ai_len;
@@ -1000,7 +1046,7 @@ s32 GbAudio_UpdateFrame(void) {
     if (D_81138B80 == 0) {
         GbApu_RenderBuffer(*len, buf);
     } else {
-        func_811177E8(*len, buf);
+        GbAudio_RenderMenuSounds(*len, buf);
     }
     osWritebackDCache(buf, *len * 4);
     D_811859CC = osGetCount() * (D_811859CC + D_811858F0);
@@ -1012,6 +1058,8 @@ s32 GbAudio_UpdateFrame(void) {
  * 1 while the GB Tower pause/options menu is open: output menu sounds instead of the GB APU mix.
  * Seen in play (2026-11-12): called with 1 when C-Up opened the GB Tower menu over Pocket
  * Monsters Green.
+ * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbEmu_PauseAndBlankScreen.
  */
 void GbAudio_SetMenuSoundMode(s32 arg0) {
   D_81138B80 = arg0;
@@ -1020,6 +1068,7 @@ void GbAudio_SetMenuSoundMode(s32 arg0) {
 /**
  * Starts menu sound `id` (index into sGbMenuSoundData) on the next GbAudio_RenderMenuSounds.
  * Seen in play (2026-11-12): called with sound 1 when C-Up opened the GB Tower menu.
+ * Seen in play (2026-11-14) ran when C-Up opened the GB Tower menu; called from GbEmu_RunFrame.
  */
 void GbAudio_PlayMenuSound(s32 arg0) {
   D_81138B84.id = arg0;
