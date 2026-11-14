@@ -220,7 +220,7 @@ M2C_UNK Menu_Init(void*, void*, void*, void (*)(s32, s32, char *, s32, s32, s32 
  * Sets up a titled menu window with item and description tables.
  * Seen in play: A on フリーバトル opens 「たいせんルールせんたく」 (フリーバトル, L 1～30 バトル, L50～55 バトル) and runs this.
  */
-void FreeBattle_InitMenuWindow(FreeBattleMenuWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, char** arg7, s32 arg8, char* arg9) {
+void FreeBattle_InitMenuWindow(MenuWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, char** arg7, s32 arg8, char* arg9) {
     Window_SetRect(&arg0->window, arg1, arg2, arg3, arg4);
     arg0->window.state = 0;
     arg0->window.animTimer = 0;
@@ -246,7 +246,7 @@ extern Color_RGBA8 D_82009108;
  * What the constants mean is not established. `pad` places sp38 at sp+0x38 as in the ROM.
  * Seen in play: draws the 「たいせんルールせんたく」 list window with its description box.
  */
-void FreeBattle_DrawMenuWindow(FreeBattleMenuWindow* arg0, s32 arg1) {
+void FreeBattle_DrawMenuWindow(MenuWindow* arg0, s32 arg1) {
     s32 pad; // FAKE: stack padding
     s32 sp38;
     s32 temp_s1;
@@ -280,7 +280,7 @@ extern s32 D_800603C0;
  * (FreeBattle_UpdatePopupMenu is the same pattern without the mode check.)
  * Seen in play: runs while the 「たいせんルールせんたく」 list is open.
  */
-s32 FreeBattle_UpdateMenuWindow(FreeBattleMenuWindow* arg0) {
+s32 FreeBattle_UpdateMenuWindow(MenuWindow* arg0) {
     s32 result = 0;
     s32 tmp;
 
@@ -305,7 +305,7 @@ s32 FreeBattle_UpdateMenuWindow(FreeBattleMenuWindow* arg0) {
  * Draws one popup menu row with the selection highlight.
  * Seen in play: draws each numbered row of the ルールをみる rules list.
  */
-void FreeBattle_DrawPopupRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, FreeBattleMenuWindow* arg5) {
+void FreeBattle_DrawPopupRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, MenuWindow* arg5) {
     if (arg4 & 0x18) {
         Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, arg5->window.frame.width - 0x12, 0x1E, arg5->window.frame.color);
     }
@@ -326,7 +326,7 @@ typedef struct List820061F0 {
  * Seen in play: ルールをみる opens the rules list (「1) 6ぴきの ポケモンを エントリー」 … 「5) エントリーできるポケモン 33しゅるい」) as
  * this popup.
  */
-void FreeBattle_InitPopupMenu(FreeBattleMenuWindow* arg0, s32 arg1, s32 arg2, List820061F0 *arg3, s8 *arg4, Color_RGBA8 arg5) {
+void FreeBattle_InitPopupMenu(MenuWindow* arg0, s32 arg1, s32 arg2, List820061F0 *arg3, s8 *arg4, Color_RGBA8 arg5) {
     s32 i;
     s32 w;
     s32 max = 0;
@@ -358,7 +358,7 @@ void Menu_DrawItems(void*, s32, s32, s32, s8 *);  /* extern */
  * Draws a popup menu's items.
  * Seen in play: draws the ルールをみる rules list window.
  */
-void FreeBattle_DrawPopupMenu(FreeBattleMenuWindow* arg0, s32 arg1)
+void FreeBattle_DrawPopupMenu(MenuWindow* arg0, s32 arg1)
 {
   Menu *new_var; // FAKE: permuter temp
   if (func_8002AE6C() == 0)
@@ -377,7 +377,7 @@ extern s32 D_800603C0;
  * Moves a popup menu's cursor. Returns -1 on cancel, the 1-based row on confirm.
  * Seen in play: runs while the rules list is open; D-Down moves the highlight down the rules.
  */
-s32 FreeBattle_UpdatePopupMenu(FreeBattleMenuWindow* arg0) {
+s32 FreeBattle_UpdatePopupMenu(MenuWindow* arg0) {
     s32 sp1C = 0;
     s32 dir;
 

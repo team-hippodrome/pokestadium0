@@ -4,6 +4,7 @@
 
 #include "global.h"
 #include "controller.h"
+#include "gb_save.h"
 #include "game_state.h"
 #include "memory.h"
 #include "poke_icon.h"
@@ -11,8 +12,8 @@
 
 /* The resident menu library (src/menu.c). A menu draws the items of an item table through a
  * callback and moves a cursor over them. Menu is a one-column list, GridMenu lays the items out
- * in columns, and ScrollMenu (ScrollList_*, ScrollGrid_*) shows a window of visibleRows rows that
- * scrolls smoothly. The three share the first 0x24 bytes. */
+ * in columns, and ScrollList and ScrollGrid show a window of visibleRows rows that
+ * scrolls smoothly. All four share the first 0x24 bytes. */
 typedef void (*MenuDrawItemFunc)(s32 x, s32 y, u8* item, s32 index, s32 flags, s32 arg);
 
 typedef struct Menu {
@@ -40,7 +41,31 @@ typedef struct GridMenu {
     /* 0x24 */ s32 columns; // @unverified: GridMenu_UpdateCursor and GridMenu_DrawItems lay the items out in this many columns
 } GridMenu; // size = 0x28
 
-typedef struct ScrollMenu {
+/* A scrolling one-column list (ScrollList_*). Some screens put other fields right after its 0x44
+ * bytes (RegistrationTeamList.itemFlags), so it is not the start of a ScrollGrid there. */
+typedef struct ScrollList {
+    /* 0x00 */ ByteMatrix* items;
+    /* 0x04 */ u16* itemFlags;
+    /* 0x08 */ s32 cursor;
+    /* 0x0C */ s32 cellWidth;
+    /* 0x10 */ s32 cellHeight;
+    /* 0x14 */ MenuDrawItemFunc drawItem;
+    /* 0x18 */ Controller* controller;
+    /* 0x1C */ s32 unk_1C;
+    /* 0x20 */ s32 options;
+    /* 0x24 */ s32 visibleRows; // 3 in the Free Battle entry list (エントリーポケモンのせんたく)
+    /* 0x28 */ u16 inputDirection; // direction pressed this frame (0x800 up, 0x400 down, 0x200 left = page up, 0x100 right = page down); once repeatTimer runs out, the buttons held
+    /* 0x2A */ u16 scrollFlags; // the same direction bits while the cursor or the page is still moving: 0x800 for 2 frames after D-Up
+    /* 0x2C */ s32 scrollY; // pixel offset of the first visible row: 100 with the cursor on the 4th of 100-pixel rows
+    /* 0x30 */ s32 pageTargetY; // @unverified: scrollY a page scroll moves to (ScrollList_UpdateCursor, ScrollList_AnimateScroll)
+    /* 0x34 */ s32 cursorY; // cursor's pixel position, moved toward cursor * cellHeight: 300, 260, 200 after D-Up from row 3
+    /* 0x38 */ s32 cursorStep; // pixels the cursor moves per frame: cellHeight * 4 / 10 (40)
+    /* 0x3C */ s32 pageStep; // pixels a page scroll moves per frame: visibleRows * cellHeight * 2 / 10 (60)
+    /* 0x40 */ s32 repeatTimer; // frames before a held direction repeats: 8 after a press, counts down
+} ScrollList; // size = 0x44
+
+/* A scrolling grid (ScrollGrid_*): the ScrollList fields, then the column fields. */
+typedef struct ScrollGrid {
     /* 0x00 */ ByteMatrix* items;
     /* 0x04 */ u16* itemFlags;
     /* 0x08 */ s32 cursor;
@@ -62,7 +87,18 @@ typedef struct ScrollMenu {
     /* 0x44 */ s32 cursorX; // @unverified: ScrollGrid: cursor's pixel position across the row (ScrollGrid_AnimateScroll)
     /* 0x48 */ s32 columns; // @unverified: ScrollGrid only (ScrollGrid_Init, ScrollGrid_DrawItems); 0 in a ScrollList
     /* 0x4C */ s32 cursorStepX; // @unverified: ScrollGrid: cellWidth * 4 / 10 (ScrollGrid_Init)
-} ScrollMenu; // size = 0x50
+} ScrollGrid; // size = 0x50
+
+/* A window with a one-column menu and a description of the cursor item under it
+ * (FreeBattle_InitMenuWindow, FreeBattle_InitPopupMenu, Registration_InitMainMenu). */
+typedef struct MenuWindow {
+    /* 0x00 */ Window window;
+    /* 0x2C */ Menu menu;
+    /* 0x50 */ PointerList itemList; // the item strings: フリーバトル, L 1～30 バトル, L50～55 バトル
+    /* 0x5C */ u16 itemFlags[16]; // FreeBattle_InitMenuWindow and Registration_InitMainMenu; the Free Battle popup takes its flags from the caller
+    /* 0x7C */ char** descriptions; // printed under the list for the cursor row: 「４０しゅるいの　ポケモンの　なかから」... for フリーバトル
+    /* 0x80 */ s32 descriptionLines; // 3 in the rule window; the description box is 0x1C pixels per line
+} MenuWindow; // size = 0x84
 
 typedef struct unk_D_88400138 {
     /* 0x00 */ s32 unk_00;
@@ -887,7 +923,7 @@ typedef void (*func8850CD44)(unk_func_8850CD44*, s32, MemoryPool*);
 typedef void (*func8850CF00)(unk_func_8850CD44*, Controller*);
 
 // menu.c
-void WidgetTree_SetPagedGridSelectionWithOffset(ScrollMenu*, s32, s32);
+void WidgetTree_SetPagedGridSelectionWithOffset(ScrollList*, s32, s32);
 
 // functions defined in assembly
 void WidgetTree_ClearEntryFlags(unk_func_88200FA0_030_030*);
