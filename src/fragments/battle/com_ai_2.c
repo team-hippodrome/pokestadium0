@@ -1209,38 +1209,38 @@ extern ComBattler* D_821CF2A0;
  * showed 44/ 69) and only the two moves Nidoqueen had used, Poison Sting and Tail Whip, out of its
  * four.
  */
-void BattleAi_CopyVisibleBattleState(s8 *arg0, s8 *arg1)
+void BattleAi_CopyVisibleBattleState(BattleMonRuntime* arg0, BattleMonRuntime* arg1)
 {
   long temp_v1;
   u8 *new_var; // FAKE: permuter temp
-  *((u16 *) (((s8 *) arg0) + 0x28)) = (u16) (*((u16 *) (((s8 *) arg1) + 0x28))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  *((u16 *) (((s8 *) arg0) + 0xC)) = (u16) (*((u16 *) (((s8 *) arg1) + 0xC))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  *((u8 *) (((s8 *) arg0) + 0x15)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x15))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  func_80058410(arg1 + 0x44, arg0 + 0x44, 6);
-  *((u8 *) (((s8 *) arg0) + 0x4A)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x4A))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  *((u8 *) (((s8 *) arg0) + 0x4B)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x4B))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  *((u8 *) (((s8 *) arg0) + 0x4C)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x4C))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  *((u8 *) (((s8 *) arg0) + 0x4D)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x4D))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  *((u8 *) (((s8 *) arg0) + 0x4E)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x4E))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  *((u16 *) (((s8 *) arg0) + 0x54)) = (u16) (*((u16 *) (((s8 *) arg1) + 0x54))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  *((u8 *) (((s8 *) arg0) + 0x56)) = (u8) (*(new_var = (u8 *) (((s8 *) arg1) + 0x56))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  *((u8 *) (((s8 *) arg0) + 0x57)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x57))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  *((u8 *) (((s8 *) arg0) + 0x58)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x58))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  *((u8 *) (((s8 *) arg0) + 0x59)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x59))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  *((u8 *) (((s8 *) arg0) + 0x5A)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x5A))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  *((u8 *) (((s8 *) arg0) + 0x5B)) = (u8) (*((u8 *) (((s8 *) arg1) + 0x5B))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  func_80058410(arg1 + 0x5C, arg0 + 0x5C, 8);
-  if ((*((u8 *) (((s8 *) arg1) + 0x4E))) & 8)
+  arg0->maxHp = (u16) (arg1->maxHp);
+  arg0->hp = (u16) (arg1->hp);
+  arg0->pendingStatusCondition = (u8) (arg1->pendingStatusCondition);
+  func_80058410(&arg1->moveCache, &arg0->moveCache, 6);
+  arg0->unk_4A = (u8) (arg1->unk_4A);
+  arg0->unk_4B = (u8) (arg1->unk_4B);
+  arg0->immobilizedReason = (u8) (arg1->immobilizedReason);
+  arg0->volatileStatusFlags = (u8) (arg1->volatileStatusFlags);
+  arg0->uniqueStatusFlags = (u8) (arg1->uniqueStatusFlags);
+  arg0->effectCounter = (u16) (arg1->effectCounter);
+  arg0->scaleResize = (u8) (*(new_var = (u8 *) (((s8 *) arg1) + 0x56)));
+  arg0->disabledMove = (u8) (arg1->disabledMove);
+  arg0->lastMove = (u8) (arg1->lastMove);
+  arg0->substituteHp = (u8) (arg1->substituteHp);
+  arg0->usedMove = (u8) (arg1->usedMove);
+  arg0->receivedCritFlag = (u8) (arg1->receivedCritFlag);
+  func_80058410(arg1->statStages, arg0->statStages, 8);
+  if ((arg1->uniqueStatusFlags) & 8)
   {
-    BattleAi_CopyMoveList(arg1 + 0x1F, arg0 + 0x1F);
-    func_80058410(arg1 + 0x32, arg0 + 0x32, 4);
+    BattleAi_CopyMoveList(arg1->moves, arg0->moves);
+    func_80058410(arg1->pp, arg0->pp, 4);
     return;
   }
   temp_v1 = D_821CF2A0->moveCount;
   if (((s32) temp_v1) < 4)
   {
-    *((u8 *) (((s8 *) (arg0 + temp_v1)) + 0x1F)) = (u8) (*((u8 *) (((s8 *) (arg1 + temp_v1)) + 0x1F))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-    *((u8 *) (((s8 *) (arg0 + (D_821CF2A0->moveCount))) + 0x32)) = (u8) (D_821CF2A0->unk_79); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+    arg0->moves[temp_v1] = arg1->moves[temp_v1];
+    arg0->pp[D_821CF2A0->moveCount] = D_821CF2A0->unk_79;
   }
 }
 

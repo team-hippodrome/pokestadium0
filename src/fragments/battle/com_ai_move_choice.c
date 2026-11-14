@@ -331,7 +331,7 @@ extern ComSide D_821CF998;
 extern ComSide* D_821CF298;
 extern s32 D_821CF288;
 void func_80058410(u8 *, u8 *, s32);
-void BattleAi_CopyVisibleBattleState(s8 *, u8 *);
+void BattleAi_CopyVisibleBattleState(BattleMonRuntime*, BattleMonRuntime*);
 void BattleAi_ResetBattleStats(BattleMonRuntime*, BattleMon *);
 s32 BattleAi_ChooseSwitch(void);
 s32 BattleAi_ChooseRandomMove(void);
