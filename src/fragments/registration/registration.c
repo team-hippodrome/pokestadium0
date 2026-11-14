@@ -1260,7 +1260,7 @@ void Registration_AllocScreen(void) {
 typedef struct Col88102A2C { u8 r, g, b, a; } Col88102A2C;
 extern s32 D_88102DCC;
 extern s32 D_88102DD0;
-/* Second name for D_88102DCC; see func_8A202F50 in lab_pc_icons.c. */
+/* Second name for D_88102DCC; see PartyScreen_FadeFrame in party_summary/mon_summary.c. */
 extern s32 D_88102DCC_2;
 extern M2C_UNK D_88103018;
 void func_800189C0(s32, s32);
