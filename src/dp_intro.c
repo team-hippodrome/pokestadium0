@@ -10,7 +10,7 @@
 #include "profiler.h"
 #include "stage_loader.h"
 extern u64 F3DEX2_data_bin[];
-extern s32 D_800733F0;
+extern s32 sImageGridDisplayList;
 extern u64 D_80087B88[0x100 / sizeof(u64)];
 extern u64 D_80087C88[0x408 / sizeof(u64)];
 extern u64 D_80088090[0xC08 / sizeof(u64)];

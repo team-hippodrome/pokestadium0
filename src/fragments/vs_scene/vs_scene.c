@@ -269,17 +269,17 @@ s32 VsScene_DrawFrame(s32 unused) {
 }
 
 M2C_UNK func_80006780();                            /* extern */
-s32 func_80027214(s8 *, s32);                       /* extern */
+s32 BezierPath_Step(s8 *, s32);                       /* extern */
 
 /*
  * VsScene_ZoomIntoScreen
  *
  * Reads the word at offset 0xC of D_82203240 (the `children` pointer of
  * that GraphNode; call it `rec`), fills two
- * 0x3C-byte local buffers with func_800273E8: from D_82202CD0 and D_82202CEC
+ * 0x3C-byte local buffers with BezierPath_InitEased: from D_82202CD0 and D_82202CEC
  * when D_822036A4->mode is 0, from D_82202C60 and D_82202C7C otherwise.
- * Then, while func_80027214(buf1, rec + 0xA8) returns non-zero, it calls
- * func_80027214(buf2, rec + 0xB4), then VsScene_DrawFrameToImage(0) and
+ * Then, while BezierPath_Step(buf1, rec + 0xA8) returns non-zero, it calls
+ * BezierPath_Step(buf2, rec + 0xB4), then VsScene_DrawFrameToImage(0) and
  * func_80006780(), and stops as soon as VsScene_DrawFrameToImage returns non-zero.
  *
  * Same buffer pair and loop as CartridgeCheck_PlayExitToTitle. What the buffers, the record
@@ -305,16 +305,16 @@ void VsScene_ZoomIntoScreen(void) {
 
     sp3C = (s32)D_82203240->children;
     if (D_822036A4->mode == 0) {
-        func_800273E8(sp7C, (s32) &D_82202CD0);
-        func_800273E8(sp40, (s32) &D_82202CEC);
+        BezierPath_InitEased(sp7C, (s32) &D_82202CD0);
+        BezierPath_InitEased(sp40, (s32) &D_82202CEC);
     } else {
-        func_800273E8(sp7C, (s32) &D_82202C60);
-        func_800273E8(sp40, (s32) &D_82202C7C);
+        BezierPath_InitEased(sp7C, (s32) &D_82202C60);
+        BezierPath_InitEased(sp40, (s32) &D_82202C7C);
     }
     do {  // karodo
     } while (0);
-    while (func_80027214(sp7C, sp3C + 0xA8) != 0) {
-        func_80027214(sp40, sp3C + 0xB4);
+    while (BezierPath_Step(sp7C, sp3C + 0xA8) != 0) {
+        BezierPath_Step(sp40, sp3C + 0xB4);
         temp_s0_2 = VsScene_DrawFrameToImage(0);
         func_80006780();
         if (temp_s0_2 != 0) {
@@ -346,20 +346,20 @@ void VsScene_ZoomOutOfScreen(void) {
 
     rec = (s32)D_82203240->children;
     if (D_822036A4->mode == 0) {
-        func_800273E8(sp8C, (s32) &D_82202D08);
-        func_800273E8(sp50, (s32) &D_82202D24);
+        BezierPath_InitEased(sp8C, (s32) &D_82202D08);
+        BezierPath_InitEased(sp50, (s32) &D_82202D24);
     } else {
-        func_800273E8(sp8C, (s32) &D_82202C98);
-        func_800273E8(sp50, (s32) &D_82202CB4);
+        BezierPath_InitEased(sp8C, (s32) &D_82202C98);
+        BezierPath_InitEased(sp50, (s32) &D_82202CB4);
     }
     do {  // karodo
     } while (0);
-    while (func_80027214(sp8C, rec + 0xA8) != 0) {
+    while (BezierPath_Step(sp8C, rec + 0xA8) != 0) {
         if (i++ == 0x14) {
             func_80005B98(0x20);
             func_8000A7FC(0x3C);
         }
-        func_80027214(sp50, rec + 0xB4);
+        BezierPath_Step(sp50, rec + 0xB4);
         done = VsScene_DrawFrameToImage(0);
         func_80006780();
         if (done != 0) {
@@ -1184,7 +1184,7 @@ extern u8 D_8F619890[];
 extern u8 D_8EB300B0[];
 extern u8 D_8EB37440[];
 extern u8 D_8F20A788[];
-void func_800270B4(s32 arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5);
+void ImageGrid_Create(s32 arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5);
 
 /**
  * Builds the scene's geo layouts: the stadium for the current stage kind (D_822036A8: Free Battle,
@@ -1229,9 +1229,9 @@ void VsScene_LoadGeoLayout(s32 round) {
     MainPool_FinalizeAllocation(block);
 
     if (D_822036A8 == 0) {
-        func_800270B4(0, 0xD89, -0x2C07, D_82203208->img_p, 0x16A8, 0x10FE);
+        ImageGrid_Create(0, 0xD89, -0x2C07, D_82203208->img_p, 0x16A8, 0x10FE);
     } else {
-        func_800270B4(0, 0, 0, D_82203208->img_p, 0xC80, 0x960);
+        ImageGrid_Create(0, 0, 0, D_82203208->img_p, 0xC80, 0x960);
         ModelAnim_BindTransformCurve(D_82203200, 1, D_8F20A788, 0x10000);
     }
     VsScene_AllocNameImages();
@@ -1379,7 +1379,7 @@ s32 VsScene_Run(s32 kind, SessionContext* session) {
     }
 
     StageContext_Deactivate();
-    Display_DisableBlackout();
+    ImageGrid_Clear();
     Gfx_FreeDisplayListBuffers();
     main_pool_pop_state('BTLS');
     return 0;

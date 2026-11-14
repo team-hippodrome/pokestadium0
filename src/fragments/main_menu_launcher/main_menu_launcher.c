@@ -15,7 +15,7 @@ extern u8 D_88000000[]; // main menu (fragment 014) load address
  * of the fragment entry are ignored.
  * Unreferenced: in the whole ROM only fragments 021-024 load this fragment (their ROM start
  * 0x2B1360 appears nowhere else as a start address), and nothing loads 021-024. The resident
- * code queues the main menu itself (func_800260C4 in game_state.c passes the
+ * code queues the main menu itself (State_MainMenu in game_state.c passes the
  * session context), so this fragment is likely a leftover.
  * @unverified Name and comment from the code; the fragment never loads in normal play.
  */

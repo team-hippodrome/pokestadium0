@@ -32,7 +32,7 @@ M2C_UNK func_8001ABBC();
 M2C_UNK Save_GetGbTowerSettings(s8 *, M2C_UNK);
 s32 func_800023C4(M2C_UNK, M2C_UNK);
 s32 func_800051F0(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32);
-s32 func_80027214(s8*, s32);
+s32 BezierPath_Step(s8*, s32);
 void MainPool_FinalizeAllocation(struct MemoryBlock* block);
 void func_8000A7FC(s32);
 void func_80041374(s32, s32);
@@ -198,8 +198,8 @@ void CartridgeCheck_RunGameBoyGiftEvent(void) {
     func_80006828(0x2D, &CartridgeCheck_DrawFrame);
 }
 
-void func_800273E8(s8* arg0, s32 arg1);
-s32 func_80027214(s8*, s32);
+void BezierPath_InitEased(s8* arg0, s32 arg1);
+s32 BezierPath_Step(s8*, s32);
 extern M2C_UNK D_88403648;
 extern s8 D_88402D98;
 extern s8 D_88402DB4;
@@ -217,25 +217,25 @@ void CartridgeCheck_PlayBootIntro(void) {
     s32 pad; // FAKE: stack padding
 
     rec = M2C_FIELD(D_88403370, s32 *, 0xC);
-    func_800273E8(sp8C, (s32) &D_88402DB4);
-    func_800273E8(sp50, (s32) &D_88402D98);
-    if (func_80027214(sp8C, rec + 0xA8) != 0) {
+    BezierPath_InitEased(sp8C, (s32) &D_88402DB4);
+    BezierPath_InitEased(sp50, (s32) &D_88402D98);
+    if (BezierPath_Step(sp8C, rec + 0xA8) != 0) {
         do {
             if (i++ == 0x2A) {
                 M2C_FIELD(&D_88403648, s32 *, 0x14) = 1;
                 func_8003F6AC(0x10);
                 M2C_FIELD(&D_88403648, u8 *, 2) |= 0x20;
             }
-            func_80027214(sp50, rec + 0xB4);
+            BezierPath_Step(sp50, rec + 0xB4);
             CartridgeCheck_DrawFrame(0);
             func_80006780();
-        } while (func_80027214(sp8C, rec + 0xA8) != 0);
+        } while (BezierPath_Step(sp8C, rec + 0xA8) != 0);
     }
     func_80006828(0x19, &CartridgeCheck_DrawFrame);
 }
 
-void func_800273E8(s8* arg0, s32 arg1);
-s32 func_80027214(s8*, s32);
+void BezierPath_InitEased(s8* arg0, s32 arg1);
+s32 BezierPath_Step(s8*, s32);
 extern M2C_UNK D_88403648;
 extern s8 D_88402DD0;
 extern s8 D_88402DEC;
@@ -261,19 +261,19 @@ void CartridgeCheck_PlayCupWinIntro(void) {
     if (gSessionContext.transitionFlags & 0x18) {
         CartridgeCheck_RunGameBoyGiftEvent();
     }
-    func_800273E8(sp8C, (s32) &D_88402DEC);
-    func_800273E8(sp50, (s32) &D_88402DD0);
-    if (func_80027214(sp8C, rec + 0xA8) != 0) {
+    BezierPath_InitEased(sp8C, (s32) &D_88402DEC);
+    BezierPath_InitEased(sp50, (s32) &D_88402DD0);
+    if (BezierPath_Step(sp8C, rec + 0xA8) != 0) {
         do {
             if (i++ == 0xA) {
                 M2C_FIELD(&D_88403648, s32 *, 0x14) = 1;
                 M2C_FIELD(&D_88403648, u8 *, 2) |= 0x20;
                 func_8003F6AC(0x10);
             }
-            func_80027214(sp50, rec + 0xB4);
+            BezierPath_Step(sp50, rec + 0xB4);
             CartridgeCheck_DrawFrame(0);
             func_80006780();
-        } while (func_80027214(sp8C, rec + 0xA8) != 0);
+        } while (BezierPath_Step(sp8C, rec + 0xA8) != 0);
     }
     func_80006828(0x19, &CartridgeCheck_DrawFrame);
 }
@@ -619,8 +619,8 @@ void CartridgeCheck_PlayExitToTitle(void) {
     s32 sp34;
 
     sp34 = M2C_FIELD(D_88403370, s32 *, 0xC);
-    func_800273E8(sp74, (s32)&D_88402E24);
-    func_800273E8(sp38, (s32)&D_88402E08);
+    BezierPath_InitEased(sp74, (s32)&D_88402E24);
+    BezierPath_InitEased(sp38, (s32)&D_88402E08);
     func_80010F8C(&D_88403648, 0xFFFF0000);
     func_80010F9C(&D_88403648, 0x2E);
     M2C_FIELD(&D_88403648, u8 *, 2) |= 0x20;
@@ -629,8 +629,8 @@ void CartridgeCheck_PlayExitToTitle(void) {
     func_8000A7FC(0x3C);
     func_80041374(0x46, 0x3C);
     func_8003F6AC(0x23);
-    while (func_80027214(sp74, sp34 + 0xA8)) {
-        func_80027214(sp38, sp34 + 0xB4);
+    while (BezierPath_Step(sp74, sp34 + 0xA8)) {
+        BezierPath_Step(sp38, sp34 + 0xB4);
         CartridgeCheck_DrawFrame(0);
         func_80006780();
     }
@@ -687,17 +687,17 @@ void CartridgeCheck_PlayZoomIntoMonitor(void) {
 
     temp_s0 = M2C_FIELD(D_88403370, s32 *, 0xC);
     func_8000A7FC(0x32);
-    func_800273E8(sp7C, (s32) &D_88402E5C);
-    func_800273E8(sp40, (s32) &D_88402E40);
-    if (func_80027214(sp7C, temp_s0 + 0xA8) != 0) {
+    BezierPath_InitEased(sp7C, (s32) &D_88402E5C);
+    BezierPath_InitEased(sp40, (s32) &D_88402E40);
+    if (BezierPath_Step(sp7C, temp_s0 + 0xA8) != 0) {
         do {
-            func_80027214(sp40, temp_s0 + 0xB4);
+            BezierPath_Step(sp40, temp_s0 + 0xB4);
             if (D_88403360 < 0x19) {
                 D_88403360 += 1;
             }
             CartridgeCheck_DrawFrame(0);
             func_80006780();
-        } while (func_80027214(sp7C, temp_s0 + 0xA8) != 0);
+        } while (BezierPath_Step(sp7C, temp_s0 + 0xA8) != 0);
     }
 }
 
@@ -719,9 +719,9 @@ void CartridgeCheck_PlayZoomOutOfMonitor(void) {
     s32 pad; // FAKE: stack padding
 
     temp_s1 = M2C_FIELD(D_88403370, s32 *, 0xC);
-    func_800273E8(sp94, (s32) &D_88402E94);
-    func_800273E8(sp58, (s32) &D_88402E78);
-    if (func_80027214(sp94, temp_s1 + 0xA8) != 0) {
+    BezierPath_InitEased(sp94, (s32) &D_88402E94);
+    BezierPath_InitEased(sp58, (s32) &D_88402E78);
+    if (BezierPath_Step(sp94, temp_s1 + 0xA8) != 0) {
         do {
             if (i++ == 0xF) {
                 M2C_FIELD(&D_88403648, u8 *, 2) |= 0x20;
@@ -730,10 +730,10 @@ void CartridgeCheck_PlayZoomOutOfMonitor(void) {
                 }
                 func_8003F6AC(0x11);
             }
-            func_80027214(sp58, temp_s1 + 0xB4);
+            BezierPath_Step(sp58, temp_s1 + 0xB4);
             CartridgeCheck_DrawFrame(0);
             func_80006780();
-        } while (func_80027214(sp94, temp_s1 + 0xA8) != 0);
+        } while (BezierPath_Step(sp94, temp_s1 + 0xA8) != 0);
     }
 }
 
@@ -794,7 +794,7 @@ s32 CartridgeCheck_EnterFromBoot(void) {
  * the main menu without the cartridge check loop. Always returns 1.
  * Seen in play (2026-11-14) with transitionFlags poked to 0x0A at CartridgeCheck_Main entry.
  * @unverified "CupWin": transitionFlags 2 is set only in VsScene's win handler (func_82200F08),
- * and func_800260C4 skips this fragment when flag 1 is set without 2, so only a win should
+ * and State_MainMenu skips this fragment when flag 1 is set without 2, so only a win should
  * reach here; a real cup win was not played.
  */
 s32 CartridgeCheck_EnterAfterCupWin(void) {

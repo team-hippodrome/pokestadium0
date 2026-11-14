@@ -104,7 +104,7 @@ void func_8003BC9C(s32);
 void func_800418F0(s32);
 
 /**
- * Boot logo sequence: the fragment's entry point. Its only loader is func_80025F3C, the boot
+ * Boot logo sequence: the fragment's entry point. Its only loader is State_Boot, the boot
  * state (0x8001) of Game_RunStateLoop, which passes 0 for both arguments through func_80025B60
  * and ignores the return value. //@src/game_state.c
  * Fades in the Nintendo 64 logo over 3 frames, applies the saved sound options (bit 0 = mono
