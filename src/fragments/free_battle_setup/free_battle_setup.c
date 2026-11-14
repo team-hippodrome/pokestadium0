@@ -872,7 +872,6 @@ void Font_SetColorForFlags(s32);
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color82001CCC);
 void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
 void Ui_DrawNumberUnpadded(s32, s32, u8);
-void func_8001833C(s32, s32, s32*, u16);
 s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 /**
@@ -905,7 +904,7 @@ void FreeBattle_DrawMonCell(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 
         idx = cache->base + key % cache->count;
         if (key != cache->slots[idx]) {
             cache->slots[idx] = key;
-            func_8001833C(D_8200AC50, idx, entry, ((D_82008F58.c[1] << 3) & 0x7C0) | ((D_82008F58.c[2] >> 2) & 0x3E) | ((D_82008F58.c[0] << 8) & 0xF800) | 1);
+            func_8001833C((unk_func_8001A024*)D_8200AC50, idx, (BattleMon*)entry, ((D_82008F58.c[1] << 3) & 0x7C0) | ((D_82008F58.c[2] >> 2) & 0x3E) | ((D_82008F58.c[0] << 8) & 0xF800) | 1);
         }
         gSPDisplayList(gDisplayListHead++, D_80073408);
         func_8001B884(x + 0x56, y + 6, 0x28, 0x28, PokeIcon_GetImage(D_8200AC50, idx), 0x28, 0x200000);

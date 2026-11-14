@@ -3,6 +3,18 @@
 #define FRAGMENT_FREE_BATTLE_SETUP_H
 
 #include "global.h"
+#include "gb_save.h"
+#include "menu.h"
+
+/* A window with a one-column menu (FreeBattle_InitMenuWindow, FreeBattle_InitPopupMenu). */
+typedef struct FreeBattleMenuWindow {
+    /* 0x00 */ Window window;
+    /* 0x2C */ Menu menu;
+    /* 0x50 */ PointerList itemList; // the item strings: フリーバトル, L 1～30 バトル, L50～55 バトル
+    /* 0x5C */ u16 itemFlags[16]; // FreeBattle_InitMenuWindow only; the popup takes its flags from the caller
+    /* 0x7C */ char** descriptions; // printed under the list for the cursor row: 「４０しゅるいの　ポケモンの　なかから」... for フリーバトル
+    /* 0x80 */ s32 descriptionLines; // 3 in the rule window; the description box is 0x1C pixels per line
+} FreeBattleMenuWindow; // size = 0x84
 
 /* Struct types that were defined identically in each of these files; this is
  * now the one definition they all include:

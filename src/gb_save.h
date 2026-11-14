@@ -5,6 +5,21 @@
 #include "global.h"
 #include "m2c_macros.h"
 
+/* The header of a window (Window_SetRect, Window_DrawFrame and the screens that embed one). */
+typedef struct Window {
+    /* 0x00 */ s32 x; // 64 for the Free Battle rule window; poking 200 moved it right
+    /* 0x04 */ s32 y;
+    /* 0x08 */ s32 width; // 408 for the rule window
+    /* 0x0C */ s32 height;
+    /* 0x10 */ s32 unk_10; // cleared by Window_SetRect
+    /* 0x14 */ s32 style; // @unverified: Window_DrawFrame: bit 0 = no fill, 2|4 = two-color fill, 0x800 = title tab from `title`
+    /* 0x18 */ Color_RGBA8 color; // @unverified: fill color (Window_DrawFrame)
+    /* 0x1C */ Color_RGBA8 color2; // @unverified: second fill color with style bits 2|4
+    /* 0x20 */ char* title; // text of the title tab with style 0x800: 「たいせんルールせんたく」 in the rule window
+    /* 0x24 */ s32 animTimer; // @unverified: frames into the open or close animation
+    /* 0x28 */ s32 state; // 0..4, 2 while the rule window is open; the Free Battle windows take input only in states 1 and 2
+} Window; // size = 0x2C
+
 typedef struct unk_func_8002EBD8_arg0 {
     /* 0x00 */ char unk00[0x8];
     /* 0x08 */ u16 unk_08;

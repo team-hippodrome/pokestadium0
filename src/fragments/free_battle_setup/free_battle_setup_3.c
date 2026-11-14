@@ -205,74 +205,65 @@ void FreeBattle_DrawMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, 
 /*
  * FreeBattle_InitMenuWindow
  *
- * Initializes the object arg0 (layout not established): calls
- * Window_SetRect(arg0, arg1, arg2, arg3, arg4), clears the words at 0x28 and
- * 0x24, sets the word at 0x14 to 0x801 and the word at 0x20 to arg9. Calls
- * func_80027804 on the sub-object at arg0 + 0x50 with (arg5, arg6, arg6),
- * then Menu_Init on the sub-objects at 0x2C, 0x50 and 0x5C with the
- * callback FreeBattle_DrawMenuRow, the value arg3 - 0xC and 0x20. Finally sets bit
- * 0x10000 in the word at 0x4C and stores arg7 at 0x7C and arg8 at 0x80.
+ * Sets the window rect, style 0x801 and title arg9, points the item list at the arg6 strings
+ * in arg5, sets up the menu (FreeBattle_DrawMenuRow rows of width arg3 - 0xC, 32 pixels
+ * apart) and stores the description table arg7 and its line count arg8.
  *
- * Same shape as FreeBattle_InitBattleModeWindow. What the object is and what the values mean
- * is not established. As there, the address arg0 + 0x50 is written out
- * twice rather than cached in a local, which moves the compiler's stack
- * spill and changes the frame size.
+ * Same shape as FreeBattle_InitBattleModeWindow. As there, &arg0->itemList is written out
+ * twice rather than cached in a local, which moves the compiler's stack spill and changes
+ * the frame size.
  */
-void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-M2C_UNK func_80027804(s8 *, s32, s32, s32);         /* extern */
-M2C_UNK Menu_Init(s8 *, s8 *, s8 *, void (*)(s32, s32, char *, s32, s32, s32 *), s32, s32); /* extern */
+void Window_SetRect(void* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+M2C_UNK func_80027804(void*, s32, s32, s32);         /* extern */
+M2C_UNK Menu_Init(void*, void*, void*, void (*)(s32, s32, char *, s32, s32, s32 *), s32, s32); /* extern */
 /**
  * Sets up a titled menu window with item and description tables.
  * Seen in play: A on フリーバトル opens 「たいせんルールせんたく」 (フリーバトル, L 1～30 バトル, L50～55 バトル) and runs this.
  */
-void FreeBattle_InitMenuWindow(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8, s32 arg9) {
-    Window_SetRect(arg0, arg1, arg2, arg3, arg4);
-    M2C_FIELD(arg0, s32 *, 0x28) = 0;
-    M2C_FIELD(arg0, s32 *, 0x24) = 0;
-    M2C_FIELD(arg0, s32 *, 0x14) = 0x801;
-    M2C_FIELD(arg0, s32 *, 0x20) = arg9;
-    func_80027804(arg0 + 0x50, arg5, arg6, arg6);
-    Menu_Init(arg0 + 0x2C, arg0 + 0x50, arg0 + 0x5C, FreeBattle_DrawMenuRow, arg3 - 0xC, 0x20);
-    M2C_FIELD(arg0, s32 *, 0x4C) = (s32) (M2C_FIELD(arg0, s32 *, 0x4C) | 0x10000);
-    M2C_FIELD(arg0, s32 *, 0x7C) = arg7;
-    M2C_FIELD(arg0, s32 *, 0x80) = arg8;
+void FreeBattle_InitMenuWindow(FreeBattleMenuWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, char** arg7, s32 arg8, char* arg9) {
+    Window_SetRect(&arg0->window, arg1, arg2, arg3, arg4);
+    arg0->window.state = 0;
+    arg0->window.animTimer = 0;
+    arg0->window.style = 0x801;
+    arg0->window.title = arg9;
+    func_80027804(&arg0->itemList, arg5, arg6, arg6);
+    Menu_Init(&arg0->menu, &arg0->itemList, arg0->itemFlags, FreeBattle_DrawMenuRow, arg3 - 0xC, 0x20);
+    arg0->menu.options = (s32) (arg0->menu.options | 0x10000);
+    arg0->descriptions = arg7;
+    arg0->descriptionLines = arg8;
 }
 
 s32 func_8002AE6C();
-void Menu_DrawItems(s32, s32, s32, s32, s8 *);
+void Menu_DrawItems(void*, s32, s32, s32, s8 *);
 extern Color_RGBA8 D_82009104;
 extern Color_RGBA8 D_82009108;
 
 /**
- * Draws the object arg0 (layout not established; x at +0, y at +4, width at +8) while
- * func_8002AE6C() is zero. The sub-object at +0x2C is a list whose word at +8 is the
- * number of rows; the panel height is temp_s1 = rows * 32 + 8. Draws the frame via
- * Ui_DrawTexturedDivider, a filled bar (color D_82009100, height temp_s1) via func_80029028, a
- * highlight band via Ui_FillRectPrimEnvColor (colors D_82009104 / D_82009108, height = word at
- * +0x80 * 0x1C), the list via Menu_DrawItems (flags arg1 | 0xFFED, width passed by
- * pointer in sp38), and the text pointer at index [+0x34] of the table in the word at
- * +0x7C, printed in the color from D_800734A8 via func_8001A944.
+ * Draws the window while func_8002AE6C() is zero: the list panel (rows * 32 + 8 high), the
+ * description box (descriptionLines * 0x1C high), the menu rows via Menu_DrawItems (flags
+ * arg1 | 0xFFED, row width passed by pointer in sp38) and descriptions[menu.cursor] in the
+ * color from D_800734A8.
  * What the constants mean is not established. `pad` places sp38 at sp+0x38 as in the ROM.
  * Seen in play: draws the 「たいせんルールせんたく」 list window with its description box.
  */
-void FreeBattle_DrawMenuWindow(s8* arg0, s32 arg1) {
+void FreeBattle_DrawMenuWindow(FreeBattleMenuWindow* arg0, s32 arg1) {
     s32 pad; // FAKE: stack padding
     s32 sp38;
     s32 temp_s1;
 
     if (func_8002AE6C() == 0) {
-        temp_s1 = (M2C_FIELD(M2C_FIELD(arg0, s8**, 0x2C), s32*, 8) << 5) + 8;
-        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + temp_s1 + 5, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
+        temp_s1 = (arg0->menu.items->count << 5) + 8;
+        Ui_DrawTexturedDivider(arg0->window.x, arg0->window.y + temp_s1 + 5, arg0->window.width, &D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) - 0xC, temp_s1, *(Color82001CCC*)&D_82009100);
-        Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + temp_s1 + 0xC, M2C_FIELD(arg0, s32*, 8) - 0xC, M2C_FIELD(arg0, s32*, 0x80) * 0x1C, D_82009104, D_82009108);
-        sp38 = M2C_FIELD(arg0, s32*, 8) - 0xC;
-        Menu_DrawItems(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0xA, arg1 | 0xFFED, (s8*)&sp38);
+        func_80029028(arg0->window.x + 6, arg0->window.y + 6, arg0->window.width - 0xC, temp_s1, *(Color82001CCC*)&D_82009100);
+        Ui_FillRectPrimEnvColor(arg0->window.x + 6, arg0->window.y + temp_s1 + 0xC, arg0->window.width - 0xC, arg0->descriptionLines * 0x1C, D_82009104, D_82009108);
+        sp38 = arg0->window.width - 0xC;
+        Menu_DrawItems(&arg0->menu, arg0->window.x + 6, arg0->window.y + 0xA, arg1 | 0xFFED, (s8*)&sp38);
         func_8001AB6C();
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
         func_8001A384(8, 0);
         Font_SetLineHeight(0x1C);
-        func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + temp_s1 + 0x10, ((char**)M2C_FIELD(arg0, s32*, 0x7C))[M2C_FIELD(arg0, s32*, 0x34)]);
+        func_8001A944(arg0->window.x + 0xE, arg0->window.y + temp_s1 + 0x10, arg0->descriptions[arg0->menu.cursor]);
         func_8001ABBC();
     }
 }
@@ -289,22 +280,22 @@ extern s32 D_800603C0;
  * (FreeBattle_UpdatePopupMenu is the same pattern without the mode check.)
  * Seen in play: runs while the 「たいせんルールせんたく」 list is open.
  */
-s32 FreeBattle_UpdateMenuWindow(void* arg0) {
+s32 FreeBattle_UpdateMenuWindow(FreeBattleMenuWindow* arg0) {
     s32 result = 0;
     s32 tmp;
 
-    tmp = M2C_FIELD(arg0, s32*, 0x28);
+    tmp = arg0->window.state;
     if ((tmp != 1) && (tmp != 2)) {
         return 0;
     }
-    if (Menu_UpdateCursor((u8*)arg0 + 0x2C, arg0) == 0) {
+    if (Menu_UpdateCursor(&arg0->menu, arg0) == 0) {
         tmp = func_8002BC14(D_800603C0);
         if (tmp == -1) {
             func_8003F6AC(3);
             result = -1;
         } else if (tmp == 1) {
             func_8003F6AC(2);
-            result = M2C_FIELD(arg0, s32*, 0x34) + 1;
+            result = arg0->menu.cursor + 1;
         }
     }
     return result;
@@ -314,9 +305,9 @@ s32 FreeBattle_UpdateMenuWindow(void* arg0) {
  * Draws one popup menu row with the selection highlight.
  * Seen in play: draws each numbered row of the ルールをみる rules list.
  */
-void FreeBattle_DrawPopupRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s8* arg5) {
+void FreeBattle_DrawPopupRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, FreeBattleMenuWindow* arg5) {
     if (arg4 & 0x18) {
-        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, M2C_FIELD(arg5, s32*, 8) - 0x12, 0x1E, M2C_FIELD(arg5, Color_RGBA8*, 0x18));
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, arg5->window.width - 0x12, 0x1E, arg5->window.color);
     }
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(arg4);
@@ -335,7 +326,7 @@ typedef struct List820061F0 {
  * Seen in play: ルールをみる opens the rules list (「1) 6ぴきの ポケモンを エントリー」 … 「5) エントリーできるポケモン 33しゅるい」) as
  * this popup.
  */
-void FreeBattle_InitPopupMenu(s8 *arg0, s32 arg1, s32 arg2, List820061F0 *arg3, s8 *arg4, Color_RGBA8 arg5) {
+void FreeBattle_InitPopupMenu(FreeBattleMenuWindow* arg0, s32 arg1, s32 arg2, List820061F0 *arg3, s8 *arg4, Color_RGBA8 arg5) {
     s32 i;
     s32 w;
     s32 max = 0;
@@ -347,35 +338,35 @@ void FreeBattle_InitPopupMenu(s8 *arg0, s32 arg1, s32 arg2, List820061F0 *arg3, 
             max = w;
         }
     }
-    func_80027804(arg0 + 0x50, (s32)arg3->items, arg3->count, arg3->count);
+    func_80027804(&arg0->itemList, (s32)arg3->items, arg3->count, arg3->count);
     h = max * 0x18 + 0x18;
-    Menu_Init(arg0 + 0x2C, arg0 + 0x50, arg4, (void (*)(s32, s32, char *, s32, s32, s32 *))FreeBattle_DrawPopupRow, h, 0x24);
-    M2C_FIELD(arg0, s32 *, 0x4C) |= 0x10000;
-    Window_SetRect(arg0, arg1, arg2, h + 0xC, arg3->count * 0x24 + 0x18);
-    M2C_FIELD(arg0, s32 *, 0x24) = 0;
-    M2C_FIELD(arg0, s32 *, 0x20) = 0;
-    M2C_FIELD(arg0, s32 *, 0x28) = 0;
-    M2C_FIELD(arg0, s32 *, 0x14) = 0x800;
-    M2C_FIELD(arg0, s32 *, 0x20) = arg3->unk8;
-    M2C_FIELD(arg0, Color_RGBA8 *, 0x18) = arg5;
+    Menu_Init(&arg0->menu, &arg0->itemList, arg4, (void (*)(s32, s32, char *, s32, s32, s32 *))FreeBattle_DrawPopupRow, h, 0x24);
+    arg0->menu.options |= 0x10000;
+    Window_SetRect(&arg0->window, arg1, arg2, h + 0xC, arg3->count * 0x24 + 0x18);
+    arg0->window.animTimer = 0;
+    arg0->window.title = 0;
+    arg0->window.state = 0;
+    arg0->window.style = 0x800;
+    arg0->window.title = arg3->unk8;
+    arg0->window.color = arg5;
 }
 
 s32 func_8002AE6C();                                /* extern */
-void Menu_DrawItems(s32, s32, s32, s32, s8 *);  /* extern */
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
+void Menu_DrawItems(void*, s32, s32, s32, s8 *);  /* extern */
+// FAKE: permuter output (the new_var temp and the no-op test).
 /**
  * Draws a popup menu's items.
  * Seen in play: draws the ルールをみる rules list window.
  */
-void FreeBattle_DrawPopupMenu(s8 *arg0, s32 arg1)
+void FreeBattle_DrawPopupMenu(FreeBattleMenuWindow* arg0, s32 arg1)
 {
-  s8 *new_var; // FAKE: permuter temp
+  Menu *new_var; // FAKE: permuter temp
   if (func_8002AE6C() == 0)
   {
     if (arg0 && arg0)
     {
     }
-    Menu_DrawItems(new_var = arg0 + 0x2C, (*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (((s8 *) arg0) + 4))) + 0xC, arg1 | 0xFFED, arg0); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+    Menu_DrawItems(new_var = &arg0->menu, arg0->window.x + 6, arg0->window.y + 0xC, arg1 | 0xFFED, (s8*)arg0);
   }
 }
 
@@ -386,17 +377,17 @@ extern s32 D_800603C0;
  * Moves a popup menu's cursor. Returns -1 on cancel, the 1-based row on confirm.
  * Seen in play: runs while the rules list is open; D-Down moves the highlight down the rules.
  */
-s32 FreeBattle_UpdatePopupMenu(s32 arg0) {
+s32 FreeBattle_UpdatePopupMenu(FreeBattleMenuWindow* arg0) {
     s32 sp1C = 0;
     s32 dir;
 
-    if (Menu_UpdateCursor((u8*)arg0 + 0x2C) == 0) {
+    if (Menu_UpdateCursor(&arg0->menu) == 0) {
         dir = func_8002BC14(D_800603C0);
         if (dir == -1) {
             func_8003F6AC(3);
             sp1C = -1;
         } else if (dir == 1) {
-            sp1C = M2C_FIELD(arg0, s32*, 0x34) + 1;
+            sp1C = arg0->menu.cursor + 1;
         }
     }
     return sp1C;
@@ -469,7 +460,7 @@ void FreeBattle_DrawControllerPanel(s32 x, s32 y, s32 present, s32 active, s32 m
 }
 
 void FreeBattle_DrawOpponentOption(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
-void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void Window_SetRect(void* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 M2C_UNK Menu_SkipDisabledForward(s8 *, s32);                   /* extern */
 extern M2C_UNK D_8200917C;
 extern M2C_UNK D_82009F70;
@@ -772,8 +763,8 @@ void func_82006DF8(s8* arg0) {
             maskB = 0xFFD;
             maskA = 0xFEF;
         }
-        Menu_DrawItems((s32)(arg0 + 0x48), M2C_FIELD(arg0, s32*, 4) + 0x22, M2C_FIELD(arg0, s32*, 8) + 0xD1, maskB, NULL);
-        Menu_DrawItems((s32)(arg0 + 0x6C), M2C_FIELD(arg0, s32*, 4) + 0xFC, M2C_FIELD(arg0, s32*, 8) + 0x99, maskA, NULL);
+        Menu_DrawItems(arg0 + 0x48, M2C_FIELD(arg0, s32*, 4) + 0x22, M2C_FIELD(arg0, s32*, 8) + 0xD1, maskB, NULL);
+        Menu_DrawItems(arg0 + 0x6C, M2C_FIELD(arg0, s32*, 4) + 0xFC, M2C_FIELD(arg0, s32*, 8) + 0x99, maskA, NULL);
         switch (M2C_FIELD(arg0, s32*, 0x50)) {
             case 0:
                 markA = 1;
@@ -961,7 +952,7 @@ void FreeBattle_DrawBattleModeCard(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 
  * address arg0 + 0x54 is written out twice instead of being kept in a local:
  * a local moves the compiler's spill of it from sp+0x34 to sp+0x30.
  */
-void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void Window_SetRect(void* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 M2C_UNK func_80027410(s8 *, s32, M2C_UNK, M2C_UNK, s32); /* extern */
 M2C_UNK GridMenu_Init(s8 *, s8 *, s8 *, M2C_UNK *, s32, s32, s32); /* extern */
 
@@ -1183,7 +1174,6 @@ typedef struct Cfg82007C30 {
 } Cfg82007C30; // size = 0xC
 extern Color_RGBA8 D_820091E4[2];
 extern Cfg82007C30 D_820091EC[2];
-M2C_UNK func_80018234(s8*, s32, u8, u16);
 
 /**
  * Initializes the object arg0 (size and layout not established) and fills in a
@@ -1228,7 +1218,7 @@ void func_82007C30(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s
     M2C_FIELD(arg0, s8**, 0xDC) = arg6;
     for (i = 0; i < M2C_FIELD(arg0, s32*, 0xD4); i++) {
         color = D_820091E4[i & 1];
-        func_80018234(M2C_FIELD(arg0, s8**, 0xDC), i, *entry,
+        func_80018234(M2C_FIELD(arg0, unk_func_8001A024**, 0xDC), i, *entry,
                       ((color.r << 8) & 0xF800) | ((color.g * 8) & 0x7C0) | ((color.b >> 2) & 0x3E) | 1);
         entry += 0x50;
     }
@@ -1301,7 +1291,7 @@ s32 func_82008044(void* arg0) {
 typedef struct Str4_820080B8 {
     char c[4];
 } Str4_820080B8;
-void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
+void Window_SetRect(void* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 extern Str4_820080B8 D_8200920C;
 extern Str4_820080B8 D_82009210;
 extern u8 D_8200A0A0[];
