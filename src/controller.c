@@ -175,7 +175,12 @@ void Cont_ReadInputs(void) {
 
 extern u8 D_800AAFF8;
 
-u8 func_8000B2E8(void) {
+/**
+ * Returns the bit mask of connected controllers from the last osContInit (bit n = port n).
+ * Seen in play (2026-11-14, title screen thread): patched to return 0, the title screen hid PUSH START,
+ * so bit 0 is controller 1 connected.
+ */
+u8 Cont_GetConnectedMask(void) {
     return D_800AAFF8;
 }
 
@@ -281,7 +286,12 @@ s32 Cont_AttemptReadEeprom(u8* buffer, u32 size, s32 inaddr) {
     return result;
 }
 
-s32 func_8000B4D4(u8* buffer, u32 size, s32 inaddr) {
+/**
+ * Writes `size` bytes from `buffer` to EEPROM block `inaddr`, retrying up to 4 times. Does nothing
+ * and returns 1 when no EEPROM was detected. Counterpart of Cont_AttemptReadEeprom; Zero saves to SRAM,
+ * so this has no callers.
+ */
+s32 Cont_AttemptWriteEeprom(u8* buffer, u32 size, s32 inaddr) {
     s32 result = 1;
     if (gEepromProbe) {
         s32 i = 4;

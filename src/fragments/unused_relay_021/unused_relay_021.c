@@ -10,7 +10,7 @@ extern u8 D_002B13F0[];
 /**
  * Entry point of fragment 021. Queues fragment 020 (the main menu launcher, VRAM 0x8E000000,
  * ROM D_002B1360..D_002B13F0) with entry arguments 0, 0, and returns 0x8040 so the fragment
- * loop in func_800260C4 runs the queued call. Fragment 020 in turn queues the main menu.
+ * loop in State_MainMenu runs the queued call. Fragment 020 in turn queues the main menu.
  * All arguments are ignored. The loader passes only two (FragmentEntry), but the retail code
  * spills a third argument register, so the definition takes three (fragment 022 too; 023 and
  * 024 take two).

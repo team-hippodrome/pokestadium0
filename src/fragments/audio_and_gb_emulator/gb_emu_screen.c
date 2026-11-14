@@ -323,7 +323,7 @@ void func_81117288(s32);
  * and loads the cartridge, then reads the speed-up level and the START/SELECT bindings from the
  * Stadium save.
  * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
- * Transfer Pak; called from func_8000AB98.
+ * Transfer Pak; called from GbPlayer_EmulatorThreadEntry.
  */
 void GbEmu_Init(s8* params) {
 
@@ -415,7 +415,7 @@ void GbPak_StopIoThread(s32);
  * button config (7-10), the quit prompt (11), the 「レポートできませんでした」 cartridge recovery (20-26) and
  * the shutdown, which writes the bindings back to the save.
  * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
- * Transfer Pak; called from func_8000AB98.
+ * Transfer Pak; called from GbPlayer_EmulatorThreadEntry.
  */
 void GbEmu_RunFrame(s8* params) {
     s32 sel;

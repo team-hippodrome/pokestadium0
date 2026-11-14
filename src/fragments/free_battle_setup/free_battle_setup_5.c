@@ -183,14 +183,14 @@ void FreeBattle_SetScreenState(FreeBattleScreen* screen, s32 state, s32 flags) {
 }
 
 u8 GbSave_GetSaveState(s32 arg0);
-u8 func_8000B2E8(void);
+u8 Cont_GetConnectedMask(void);
 
 /**
  * FreeBattle_InitBattleModeScreen
  *
  * Recomputes two masks in the object at screen and then calls
  * FreeBattle_SetScreenState(screen, 1, 0). gbSaveReadyMask gets bit i set for each i in 0..3
- * where GbSave_GetSaveState(i) returns 0. connectedControllerMask is set to func_8000B2E8()
+ * where GbSave_GetSaveState(i) returns 0. connectedControllerMask is set to Cont_GetConnectedMask()
  * and connectedControllerCount to the number of bits among bits 0..3 of that value that
  * are set.
  * Seen in play (2026-11-13) ran once as the バトルモード window (フリーバトル / トーナメント) opened from the main
@@ -205,7 +205,7 @@ void FreeBattle_InitBattleModeScreen(FreeBattleScreen* screen) {
             screen->gbSaveReadyMask |= 1 << i;
         }
     }
-    screen->connectedControllerMask = func_8000B2E8();
+    screen->connectedControllerMask = Cont_GetConnectedMask();
     screen->connectedControllerCount = 0;
     for (i = 0; i < 4; i++) {
         if ((screen->connectedControllerMask >> i) & 1) {
@@ -330,7 +330,7 @@ typedef struct Blobs82004E9C {
 
 void func_80027814(s8*, s8*, s32);
 s32 func_8002BC14(s32);
-void func_8003F6AC(s32);
+void Audio_PlaySystemSound(s32);
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
 void FreeBattle_ClearIndices(void*, s32, s32);
 void FreeBattle_InitEntryListCursor(s8*);
@@ -428,7 +428,7 @@ s32 FreeBattle_UpdateScreen(FreeBattleScreen* screen) {
                 sel = (screen->unk_4370 == 0) ? 2 : 3;
                 FreeBattle_SetScreenState(screen, sel, 1);
             } else if (res > 0) {
-                func_8003F6AC(2);
+                Audio_PlaySystemSound(2);
                 if (res == D_82009278[screen->unk_4374].count) {
                     FreeBattle_SetScreenState(screen, 0xE, 1);
                 } else {
@@ -439,7 +439,7 @@ s32 FreeBattle_UpdateScreen(FreeBattleScreen* screen) {
         case 13:
             res = func_8002BC14(D_800603C0);
             if ((res == -1) || (res == 1)) {
-                func_8003F6AC(3);
+                Audio_PlaySystemSound(3);
                 FreeBattle_SetScreenState(screen, 0xC, 3);
             }
             break;
@@ -764,7 +764,7 @@ void func_800040B4(s32, u8*, u8*);
 void func_80003EB8(s32, u8*, u8*, s32);
 s32 func_80001B10(u8*);
 void FreeBattle_RestoreMenuState(FreeBattleScreen*);
-void func_80005B98(s32);
+s32 StageFade_Start(s32);
 void func_80006828(s32, void*);
 void func_8000A7B0(s32);
 void func_80006998(s32);
@@ -834,7 +834,7 @@ M2C_UNK FreeBattle_RunSetupScreen(void) {
     if (gSessionContext.transitionFlags & 0x100) {
         gSessionContext.transitionFlags &= ~0x100;
         FreeBattle_RestoreMenuState(D_8200AD28);
-        func_80005B98(0xF);
+        StageFade_Start(0xF);
         func_80006828(0x11, FreeBattle_DrawScreenWithSummary);
         func_8000A7B0(9);
     } else {
@@ -844,7 +844,7 @@ M2C_UNK FreeBattle_RunSetupScreen(void) {
 
     if (D_82008F84 == 0x8050) {
         func_80006998(0xFFFF);
-        func_80005B98(0xF);
+        StageFade_Start(0xF);
         func_80006828(0x11, FreeBattle_DrawScreenWithSummary);
         func_8000A7FC(0xF);
     } else {

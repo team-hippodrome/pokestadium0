@@ -22,7 +22,7 @@ extern u16 D_82302800[];
 
 extern void* D_84803784;
 extern char** D_84803790;
-void func_8001CC90(s32, s32, s32, s32, s32);
+void Gfx_DrawPatternRows(s32, s32, s32, s32, s32);
 extern char D_82302A08[];
 extern char D_82302A0C[];
 extern char D_82302A10[];
@@ -34,7 +34,7 @@ extern char D_82302A20[];
  * Seen in play (2026-11-14, L50-55 tournament, rental team vs マサハル): ran on the screen's first frames; the hints stay on screen.
  */
 void BattleMenu_DrawBottomActionButtons(void) {
-    func_8001CC90(0, 0x1E0, 0xAB, 0x49, 0x66);
+    Gfx_DrawPatternRows(0, 0x1E0, 0xAB, 0x49, 0x66);
 
     gSPDisplayList(gDisplayListHead++, D_80060290);
 
@@ -337,7 +337,7 @@ extern u8 D_03001110[];
 extern u8 D_03001C70[];
 extern u8 D_03000B60[];
 extern u8 D_030016C0[];
-void func_8001D148(s32 x, s32 y, s32 width, s32 height, s32 r, s32 g, s32 b);
+void Gfx_DrawPatternRect(s32 x, s32 y, s32 width, s32 height, s32 r, s32 g, s32 b);
 s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
 extern char D_82302A34[];
 extern s32 D_82302BCC;
@@ -400,9 +400,9 @@ void BattleMenu_DrawOrderSelectPartyGrid(OrderSelectPanel* panel) {
 
     if (panel->popupEraseFrames > 0) {
         if (panel->sidebarTeam == 0) {
-            func_8001D148(0xC8, 0x81, 0x15F, 0x53, 0xAB, 0x49, 0x66);
+            Gfx_DrawPatternRect(0xC8, 0x81, 0x15F, 0x53, 0xAB, 0x49, 0x66);
         } else {
-            func_8001D148(0x50, 0xF0, 0x15F, 0x53, 0xAB, 0x49, 0x66);
+            Gfx_DrawPatternRect(0x50, 0xF0, 0x15F, 0x53, 0xAB, 0x49, 0x66);
         }
         panel->popupEraseFrames -= 1;
     }
@@ -1127,7 +1127,7 @@ void BattleMenu_AddOrderSelectPanel(s16 x, s16 y, TeamRoster* roster, s32 sideba
 
     for (i = 0; i < roster->rosterInfo->numberOfPokemonCanBePicked; i++, j += 4) {
         Pokemon_PrepareBattleMon(&roster->rosterInfo->battleMon[i]);
-        func_8001833C((PokeIconRenderer*)D_82302BCC, j, &roster->rosterInfo->battleMon[i], D_82302800[roster->controllerPort]);
+        PokeIcon_SetMonSlot((PokeIconRenderer*)D_82302BCC, j, &roster->rosterInfo->battleMon[i], D_82302800[roster->controllerPort]);
     }
 
     D_82302B44++;

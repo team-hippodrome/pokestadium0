@@ -30,10 +30,10 @@ typedef struct DisplayWorker {
     /* 0x9D4 */ OSMesgQueue doneQueue; // @unverified: the worker sends 'DONE' after each request (Display_WaitForCompletion)
     /* 0x9EC */ SchedClient client; // @unverified: retrace client registered in DisplayWorker_ThreadMain
     /* 0xA18 */ SchedTask task; // @unverified: the graphics task (DisplayTask_Initialize, DisplayTask_Submit)
-    /* 0xA80 */ s16 nmiClearStep; // @unverified: func_80001558 clears 16 lines of the shown framebuffer per step after a pre-NMI, 15 steps
+    /* 0xA80 */ s16 nmiClearStep; // @unverified: Display_ClearForReset clears 16 lines of the shown framebuffer per step after a pre-NMI, 15 steps
     /* 0xA82 */ u8 isWaitingForRequest; // @unverified: 1 while DisplayWorker_ThreadMain blocks on frameQueue
     /* 0xA83 */ u8 padA83;
-    /* 0xA84 */ DisplayFrame requestFrame; // @unverified: the latest request (func_800012AC), rendered next
+    /* 0xA84 */ DisplayFrame requestFrame; // @unverified: the latest request (Display_AcceptFrameRequest), rendered next
     /* 0xA94 */ DisplayFrame renderFrame; // @unverified: rendered last frame, shown in this one
     /* 0xAA4 */ DisplayFrame shownFrame; // @unverified: on screen now
 } DisplayWorker; // size = 0xAB4

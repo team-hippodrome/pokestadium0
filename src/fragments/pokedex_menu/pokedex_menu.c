@@ -23,8 +23,8 @@
 #include "stage_loader.h"
 #include "ui_graphics.h"
 
-M2C_UNK func_8001CC90(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
-void func_8003F6AC(s32); // Audio_PlaySoundEffectById
+M2C_UNK Gfx_DrawPatternRows(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
+void Audio_PlaySystemSound(s32); // Audio_PlaySoundEffectById
 extern s32 sPokedexMenuSelection; // the selected item, 0-5
 extern char sPokedexMenuTitleText[]; // "ポケモンずかん"
 extern char sPokedexMenuPokedexText[]; // "ずかん"
@@ -56,7 +56,7 @@ void PokedexMenu_DrawItem(s32 index, s32 x, s32 y, char* text) {
  */
 s32 PokedexMenu_Draw(s32 fade_mode) {
     BgStage_DrawFrame();
-    func_8001CC90(0, 0x1E0, 0x32, 0x64, 0xA2);
+    Gfx_DrawPatternRows(0, 0x1E0, 0x32, 0x64, 0xA2);
     Ui_DrawTextureMarker(0xA0, (sPokedexMenuSelection * 0x1E) + 0xC8);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(0x20, 0);
@@ -92,14 +92,14 @@ void PokedexMenu_UpdateCursor(void) {
     dpad = Input_GetRepeatedDPad();
     if (dpad != D_JPAD) {
         if (dpad == U_JPAD) {
-            func_8003F6AC(SFX_MENU_SCROLL);
+            Audio_PlaySystemSound(SFX_MENU_SCROLL);
             sPokedexMenuSelection -= 1;
             if (sPokedexMenuSelection < 0) {
                 sPokedexMenuSelection = 5;
             }
         }
     } else {
-        func_8003F6AC(SFX_MENU_SCROLL);
+        Audio_PlaySystemSound(SFX_MENU_SCROLL);
         sPokedexMenuSelection += 1;
         if (sPokedexMenuSelection >= 6) {
             sPokedexMenuSelection = 0;
@@ -167,11 +167,11 @@ s32 PokedexMenu_RunFrame(s32 fade_mode) {
         StageFade_Start(8);
     } else if (fade_mode == 0) {
         if (gPlayer1Controller->buttonPressed & A_BUTTON) {
-            func_8003F6AC(SFX_MENU_CONFIRM);
+            Audio_PlaySystemSound(SFX_MENU_CONFIRM);
             PokedexMenu_LoadSelectedFragment();
             ret = 0x8000;
         } else if (gPlayer1Controller->buttonPressed & B_BUTTON) {
-            func_8003F6AC(SFX_MENU_BACK);
+            Audio_PlaySystemSound(SFX_MENU_BACK);
             Fragment_QueueCall(((u32) ((s32) &D_88000000 & 0x0FF00000) >> 0x14) - 0x10, &D_00235D70, &D_00238BD0, 0, 0);
             ret = 0x8000;
         } else {

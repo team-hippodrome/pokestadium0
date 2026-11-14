@@ -17,16 +17,16 @@ extern Vec3fCounter* D_800B32C0;
 extern PosBlend D_800B32C8[0x10];
 extern Mtx D_800B35C8;
 
-s32 func_80033280(s32 arg0);
-s32 func_800332B0(s32 arg0);
+s32 Model_GetSkinnedModelSize(s32 arg0);
+s32 Model_GetNormalBufferSize(s32 arg0);
 f32 Math_FAbs(f32 value);
 void Math_CrossProduct(f32 ax, f32 ay, f32 az, f32 bx, f32 by, f32 bz, f32* cx, f32* cy, f32* cz);
-f32 func_80033360(
+f32 Math_ProjectPointOnSegment(
     f32 px, f32 py, f32 pz,
     f32 ax, f32 ay, f32 az,
     f32 bx, f32 by, f32 bz
 );
-f32 func_80033408(
+f32 Math_DistancePointToSegment(
     f32 px, f32 py, f32 pz,
     f32 ax, f32 ay, f32 az,
     f32 bx, f32 by, f32 bz,
@@ -40,18 +40,26 @@ s16 Model_GetVertexTargetClass(s16* arg0, s32 arg1);
 s16 Model_GetVertexSourceClass(s16* arg0, s32 arg1);
 s16 Model_GetVertexMatrixClass(s16* arg0, s32 arg1);
 
-s32 func_80033280(s32 arg0) {
+/**
+ * Returns the size of a skinned model with `vertexCount` vertices (0x170 + 0x94 each).
+ * @unverified Name read from the code; no callers.
+ */
+s32 Model_GetSkinnedModelSize(s32 vertexCount) {
     u8 stack[4];
     u8* ptr = stack;
 
-    return ((u8*)((s32)ptr + (arg0 * 0x94)) - ptr) + 0x170;
+    return ((u8*)((s32)ptr + (vertexCount * 0x94)) - ptr) + 0x170;
 }
 
-s32 func_800332B0(s32 arg0) {
+/**
+ * Returns the size of a normal accumulation buffer for `vertexCount` vertices (0x10 each).
+ * @unverified Name read from the code; no callers.
+ */
+s32 Model_GetNormalBufferSize(s32 vertexCount) {
     u8 stack[4];
     u8* ptr = stack;
 
-    return ((u8*)(s32)ptr + (arg0 * 0x10)) - ptr;
+    return ((u8*)(s32)ptr + (vertexCount * 0x10)) - ptr;
 }
 
 /** Returns the absolute value of a float. */
@@ -72,7 +80,11 @@ void Math_CrossProduct(f32 ax, f32 ay, f32 az, f32 bx, f32 by, f32 bz, f32* cx, 
     *cz = (ax * by) - (ay * bx);
 }
 
-f32 func_80033360(
+/**
+ * Returns where point p projects onto the line through a and b, as a fraction of a->b (0 at a, 1 at
+ * b); 0 when a and b coincide.
+ */
+f32 Math_ProjectPointOnSegment(
     f32 px, f32 py, f32 pz,
     f32 ax, f32 ay, f32 az,
     f32 bx, f32 by, f32 bz
@@ -89,7 +101,12 @@ f32 func_80033360(
     return (((bx - ax) * (px - ax)) + ((by - ay) * (py - ay)) + ((bz - az) * (pz - az))) / len_sq;
 }
 
-f32 func_80033408(
+/**
+ * Returns the distance from point p to its projection on the line through a and b, and writes the
+ * projection to out. Returns -1 when a and b coincide and -2 when the projection falls further than
+ * half a segment outside a->b.
+ */
+f32 Math_DistancePointToSegment(
     f32 px, f32 py, f32 pz,
     f32 ax, f32 ay, f32 az,
     f32 bx, f32 by, f32 bz,

@@ -7,12 +7,11 @@
 #include "memory_main.h"
 #include "pokemon_stats.h"
 
-M2C_UNK func_80023268(s32, u8, M2C_UNK);            /* extern */
 extern s32 D_89019108;
 
 /**
  * Marks every species in a Game Boy box as seen, owned and held in the cartridge's
- * Pokédex (func_80023268 with 3), after the box is written back.
+ * Pokédex (GbSave_SetSeenOwnedBits with 3), after the box is written back.
  * Seen in play (2026-11-14): ran in PcBox_SaveChanges on レポートしてやめる after a box move; the same pass
  * in PcSort_MarkListInPokedex set bits that had been cleared in RAM.
  */
@@ -24,7 +23,7 @@ void PcBox_MarkBoxInPokedex(PcBoxStorage* box) {
     var_s1 = 0;
     if (box->count > 0) {
         do {
-            func_80023268(D_89019108, *var_s0, 3);
+            GbSave_SetSeenOwnedBits(D_89019108, *var_s0, 3);
             var_s1 += 1;
             var_s0 += 0x50;
         } while (var_s1 < box->count);
@@ -48,8 +47,8 @@ s32 func_8002207C(s32);
 void func_80022118(s32);
 void func_80022188(s32);
 void func_800230C4(s32);
-void func_800243B8(void);
-void func_8002D7D4(s32);
+void Save_CommitPokemonRecords(void);
+void GbSave_RunReportErrorLoop(s32);
 void PcBox_DrawScreen(PcBoxScreen* arg0);
 
 /**
@@ -90,13 +89,13 @@ void PcBox_SaveChanges(PcBoxScreen* screen) {
     if (any != 0) {
         func_800230C4(D_89019108);
         if (func_8002207C(D_89019108) == 0) {
-            func_8002D7D4(D_89019108);
+            GbSave_RunReportErrorLoop(D_89019108);
             PcBox_DrawScreen(screen);
         }
         func_80022188(D_89019108);
     }
     if (any2 != 0) {
-        func_800243B8();
+        Save_CommitPokemonRecords();
     }
 }
 
@@ -234,7 +233,7 @@ void func_8001AB6C(void);
 void func_8001A384(s32, s32);
 void func_8001ABBC(void);
 void func_8001AA9C(u8, u8, u8, u8);
-void func_8001A944(s32, s32, const char*, ...);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 
 typedef struct Entry8006A9D4 {
     /* 0x00 */ u8 unk_00;
@@ -269,7 +268,7 @@ void PcBox_DrawMoveName(s32 x, s32 y, s32 move, s32 centered) {
     if (centered != 0) {
         x = x - (func_800566BC(str) >> 1) * 20 + 0x8C;
     }
-    func_8001A944(x, y, str);
+    Font_Printf(x, y, str);
 }
 
 
@@ -287,7 +286,7 @@ void PcBox_DrawTypeName(s32 x, s32 y, s32 mon, s32 typeSlot) {
         func_8001AB6C();
         func_8001A384(8, 0);
         func_8001AA9C(c.r, c.g, c.b, c.a);
-        func_8001A944(x, y, D_80066AD8[idx].str);
+        Font_Printf(x, y, D_80066AD8[idx].str);
         func_8001ABBC();
     }
 }
@@ -363,27 +362,27 @@ void PcBox_DrawMonStatusWindow(PcBoxConfirmWindow* win) {
         func_8001A384(8, 0);
         func_8001ABE8();
         func_8001AAE4(0x7F, 0xA8, 0xFF, 0xFF);
-        func_8001A944(x + 0xA, y + 5, (char*)win->mon->nickname);
+        Font_Printf(x + 0xA, y + 5, (char*)win->mon->nickname);
         func_8001AC3C();
         func_8001A384(4, -1);
         func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
-        func_8001A944(x + 0x84, y + 9, D_89018E80);
-        func_8001A944(x + 0x112, y + 9, D_89018E84);
+        Font_Printf(x + 0x84, y + 9, D_89018E80);
+        Font_Printf(x + 0x112, y + 9, D_89018E84);
         func_8001A384(8, 0);
-        func_8001A944(x + 0xB2, y + 5, D_89018E88, win->mon->level);
-        func_8001A944(x + 0x140, y + 5, D_89018E8C, win->mon->maxHp);
-        func_8001A944(x + 0x88, y + 0x28, D_89018E90);
+        Font_Printf(x + 0xB2, y + 5, D_89018E88, win->mon->level);
+        Font_Printf(x + 0x140, y + 5, D_89018E8C, win->mon->maxHp);
+        Font_Printf(x + 0x88, y + 0x28, D_89018E90);
         if (Pokemon_GetTypeIndex((s32)win->mon, 1) != -1) {
-            func_8001A944(x + 0x88, y + 0x64, D_89018E9C);
+            Font_Printf(x + 0x88, y + 0x64, D_89018E9C);
         }
-        func_8001A944(x + 0x102, y + 0x28, D_89018EA8);
-        func_8001A944(x + 0x102, y + 0x44, D_89018EB4);
-        func_8001A944(x + 0x102, y + 0x60, D_89018EC0);
-        func_8001A944(x + 0x102, y + 0x7C, D_89018ECC);
-        func_8001A944(x + 0x15C, y + 0x28, D_89018ED8, win->mon->attack);
-        func_8001A944(x + 0x15C, y + 0x44, D_89018EDC, win->mon->defense);
-        func_8001A944(x + 0x15C, y + 0x60, D_89018EE0, win->mon->speed);
-        func_8001A944(x + 0x15C, y + 0x7C, D_89018EE4, win->mon->special);
+        Font_Printf(x + 0x102, y + 0x28, D_89018EA8);
+        Font_Printf(x + 0x102, y + 0x44, D_89018EB4);
+        Font_Printf(x + 0x102, y + 0x60, D_89018EC0);
+        Font_Printf(x + 0x102, y + 0x7C, D_89018ECC);
+        Font_Printf(x + 0x15C, y + 0x28, D_89018ED8, win->mon->attack);
+        Font_Printf(x + 0x15C, y + 0x44, D_89018EDC, win->mon->defense);
+        Font_Printf(x + 0x15C, y + 0x60, D_89018EE0, win->mon->speed);
+        Font_Printf(x + 0x15C, y + 0x7C, D_89018EE4, win->mon->special);
         for (i = 0; i < count; i++) {
             PcBox_DrawMoveName(D_8900A884[i].x + x, D_8900A884[i].y + y, BattleMon_GetMoveIndex(win->mon, i), D_8900A884[i].centered);
         }
@@ -399,7 +398,7 @@ void PcBox_DrawMonStatusWindow(PcBoxConfirmWindow* win) {
             func_8001AB6C();
             func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
             func_8001A384(8, 0);
-            func_8001A944(win->window.frame.x + 0xE, win->window.frame.y + 0x102, win->title);
+            Font_Printf(win->window.frame.x + 0xE, win->window.frame.y + 0x102, win->title);
             func_8001ABBC();
             Window_DrawLabeled((char*)&win->yesButton, (win->choice.cursor == 0) ? 2 : 0);
             Window_DrawLabeled((char*)&win->noButton, (win->choice.cursor == 1) ? 2 : 0);
@@ -493,7 +492,7 @@ void PcBox_DrawListCell(s32 x, s32 y, BattleMon* mon, s32 index, s32 flags, s32 
         func_8001AB6C();
         Font_SetColorForFlags(flags);
         func_8001A384(4, 0);
-        func_8001A944(x + 5, y + 0x30, (char*)mon->nickname);
+        Font_Printf(x + 5, y + 0x30, (char*)mon->nickname);
         func_8001ABBC();
         gSPDisplayList(gDisplayListHead++, D_80073408);
         func_8001B884(x + 0x2C, y + 4, 0x28, 0x28, PokeIcon_GetImage(renderer, index), 0x28, 0x200000);
@@ -503,7 +502,7 @@ void PcBox_DrawListCell(s32 x, s32 y, BattleMon* mon, s32 index, s32 flags, s32 
 
 typedef struct Str8900806C { char s[13]; } Str8900806C;
 char* func_8000A460(char*, const char*);
-void func_80018168(s32);
+void PokeIcon_ResetSlots(s32);
 void func_80027410(void*, s8*, s32, s32, s32);
 void GridMenu_Init(void*, s8*, s8*, void*, s32, s32, s32);
 extern char D_89018EE8[];
@@ -532,11 +531,11 @@ void PcBox_InitListWindow(PcBoxListWindow* win, s32 x, s32 y, PcBoxStorage* box,
     func_80027410((s8*)&win->mons, (s8*)box, 0x50, 0x1E, box->count);
     GridMenu_Init((s8*)&win->menu, (s8*)&win->mons, (s8*)win->itemFlags, PcBox_DrawListCell, 6, 0x5A, 0x42);
     win->menu.options |= 0x10000;
-    func_80018168(renderer);
+    PokeIcon_ResetSlots(renderer);
     for (p = (u8*)box, i = 0; i < box->count; i++, p += 0x50) {
         Color_RGBA8 c = D_8900A5BC;
 
-        func_8001833C((PokeIconRenderer*)renderer, i, (BattleMon*)p, GPACK_RGBA5551(c.r, c.g, c.b, 1));
+        PokeIcon_SetMonSlot((PokeIconRenderer*)renderer, i, (BattleMon*)p, GPACK_RGBA5551(c.r, c.g, c.b, 1));
     }
     win->iconRenderer = renderer;
 }
@@ -562,7 +561,7 @@ void PcBox_DrawList(PcBoxListWindow* win, s32 flags) {
 
 s32 GridMenu_UpdateCursor(void*);
 s32 func_8002BC14(s32);
-M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 extern s32 D_800603C0;
 /**
  * Moves the box contents cursor. Returns -1 on cancel, the 1-based cell on confirm,
@@ -575,7 +574,7 @@ s32 PcBox_UpdateListCursor(PcBoxListWindow* win) {
     if (GridMenu_UpdateCursor(&win->menu) == 0) {
         dir = func_8002BC14(D_800603C0);
         if (dir == -1) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             sp1C = -1;
         } else if (dir == 1) {
             sp1C = win->menu.cursor + 1;
@@ -627,7 +626,7 @@ void PcBox_DrawGbBoxRow(s32 x, s32 y, LabPCBoxEntry* entry, s32 index, s32 flags
         color.a = 0x4C;
     }
     func_8001AA9C(color.r, color.g, color.b, color.a);
-    func_8001A944(x + 8, y + 4, D_89018F08, index + 1);
+    Font_Printf(x + 8, y + 4, D_89018F08, index + 1);
     func_8001ABBC();
     if (entry->box->count > 0) {
         Ui_DrawImageInStrips(D_80073614, x + 0x78, y + 4);
@@ -670,10 +669,10 @@ void PcBox_DrawStadiumBoxRow(s32 x, s32 y, LabPCBoxEntry* entry, s32 index, s32 
         color.a = 0x4C;
     }
     func_8001AA9C(color.r, color.g, color.b, color.a);
-    func_8001A944(x + 8, y + 0x10, D_89018F14, index + 1);
+    Font_Printf(x + 8, y + 0x10, D_89018F14, index + 1);
     func_8001A384(4, -1);
     func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
-    func_8001A944(x + 0xB0, y + 0x14, D_89018F20, entry->box->count, 0x1E);
+    Font_Printf(x + 0xB0, y + 0x14, D_89018F20, entry->box->count, 0x1E);
     func_8001ABBC();
     if (entry->box->count > 0) {
         Ui_DrawImageInStrips(D_80073634, x + 0x8C, y + 0x10);
@@ -760,27 +759,27 @@ void PcBox_InitOperationWindow(PcBoxOperationWindow* win, s32 x, s32 y, ByteMatr
     win->footerFrame.style = 6;
     win->footerFrame.color = D_8900A91C;
     win->footerFrame.color2 = D_8900A920;
-    func_8002B018(&win->backButton, x + 0xE4, y + 0xE, 0x36, 0x2A, 0x30, (s32)D_8900BFC0);
+    ImageButton_Init(&win->backButton, x + 0xE4, y + 0xE, 0x36, 0x2A, 0x30, (s32)D_8900BFC0);
     win->backButton.selectedColor = D_8900A580[0];
     win->backButton.color = D_8900A580[1];
     win->backButton.highlightColor = D_8900A5BC;
-    func_8002B018(&win->moveTo64Button, x + 0xE4, y + 0x3C, 0x36, 0x2A, 0x30, (s32)D_8900DAD0);
+    ImageButton_Init(&win->moveTo64Button, x + 0xE4, y + 0x3C, 0x36, 0x2A, 0x30, (s32)D_8900DAD0);
     win->moveTo64Button.selectedColor = D_8900A580[2];
     win->moveTo64Button.color = D_8900A580[3];
     win->moveTo64Button.highlightColor = D_8900A5BC;
-    func_8002B018(&win->moveToGbButton, x + 0xE4, y + 0x6A, 0x36, 0x2A, 0x30, (s32)D_8900CD48);
+    ImageButton_Init(&win->moveToGbButton, x + 0xE4, y + 0x6A, 0x36, 0x2A, 0x30, (s32)D_8900CD48);
     win->moveToGbButton.selectedColor = D_8900A580[2];
     win->moveToGbButton.color = D_8900A580[3];
     win->moveToGbButton.highlightColor = D_8900A5BC;
-    func_8002B018(&win->reorderButton, x + 0xE4, y + 0x98, 0x36, 0x2A, 0x30, (s32)D_8900E858);
+    ImageButton_Init(&win->reorderButton, x + 0xE4, y + 0x98, 0x36, 0x2A, 0x30, (s32)D_8900E858);
     win->reorderButton.selectedColor = D_8900A580[4];
     win->reorderButton.color = D_8900A580[5];
     win->reorderButton.highlightColor = D_8900A5BC;
-    func_8002B018(&win->exchangeButton, x + 0xE4, y + 0xC6, 0x36, 0x2A, 0x30, (s32)D_8900F5E0);
+    ImageButton_Init(&win->exchangeButton, x + 0xE4, y + 0xC6, 0x36, 0x2A, 0x30, (s32)D_8900F5E0);
     win->exchangeButton.selectedColor = D_8900A580[6];
     win->exchangeButton.color = D_8900A580[7];
     win->exchangeButton.highlightColor = D_8900A5BC;
-    func_8002B018(&win->viewButton, x + 0xE4, y + 0xF4, 0x36, 0x2A, 0x30, (s32)D_89010368);
+    ImageButton_Init(&win->viewButton, x + 0xE4, y + 0xF4, 0x36, 0x2A, 0x30, (s32)D_89010368);
     win->viewButton.selectedColor = D_8900A580[8];
     win->viewButton.color = D_8900A580[9];
     win->viewButton.highlightColor = D_8900A5BC;
@@ -868,12 +867,12 @@ void PcBox_DrawOperationWindow(PcBoxOperationWindow* win) {
             flags[(win->boxCursor.cursor < 8) ? 0 : 1] |= 2;
             break;
     }
-    func_8002B054(&win->backButton, (win->operationCursor.cursor == 5) ? sel : 0);
-    func_8002B054(&win->moveTo64Button, (win->operationCursor.cursor == 0) ? sel : 0);
-    func_8002B054(&win->moveToGbButton, (win->operationCursor.cursor == 1) ? sel : 0);
-    func_8002B054(&win->reorderButton, (win->operationCursor.cursor == 2) ? sel : 0);
-    func_8002B054(&win->exchangeButton, (win->operationCursor.cursor == 3) ? sel : 0);
-    func_8002B054(&win->viewButton, (win->operationCursor.cursor == 4) ? sel : 0);
+    ImageButton_Draw(&win->backButton, (win->operationCursor.cursor == 5) ? sel : 0);
+    ImageButton_Draw(&win->moveTo64Button, (win->operationCursor.cursor == 0) ? sel : 0);
+    ImageButton_Draw(&win->moveToGbButton, (win->operationCursor.cursor == 1) ? sel : 0);
+    ImageButton_Draw(&win->reorderButton, (win->operationCursor.cursor == 2) ? sel : 0);
+    ImageButton_Draw(&win->exchangeButton, (win->operationCursor.cursor == 3) ? sel : 0);
+    ImageButton_Draw(&win->viewButton, (win->operationCursor.cursor == 4) ? sel : 0);
     PcBox_DrawStorageLabel(win->window.frame.x + 0x10, win->window.frame.y + 0x10, 2, 0);
     PcBox_DrawStorageLabel(win->window.frame.x + 0x120, win->window.frame.y + 0x10, 2, 1);
     Menu_DrawInlineItems(&win->gbBoxMenu, win->window.frame.x + 0x10, win->window.frame.y + 0x3C, flags[0], 0);
@@ -1054,51 +1053,51 @@ s32 PcBox_UpdateOperationWindow(PcBoxOperationWindow* win) {
             if (func_8002B2B0(&win->operationCursor) == 0) {
                 r = func_8002BC14(D_800603C0);
                 if (r == -1) {
-                    func_8003F6AC(3);
+                    Audio_PlaySystemSound(3);
                     ret = -1;
                 } else if (r == 1) {
                     switch ((u32)win->operationCursor.cursor) {
                         case 5:
-                            func_8003F6AC(3);
+                            Audio_PlaySystemSound(3);
                             ret = -1;
                             break;
                         case 0:
                             if (LabPC_AllBoxesEmpty(win->gbBoxMenu.items) != 0) {
-                                func_8003F6AC(8);
+                                Audio_PlaySystemSound(8);
                                 win->state = 7;
                                 TextBox_Init(&win->textBox, D_8900A954[win->operationCursor.cursor], 0, 1, 0);
                             } else if (LabPC_NoEmptyBoxAvailable(win->stadiumBoxMenu.items) != 0) {
-                                func_8003F6AC(8);
+                                Audio_PlaySystemSound(8);
                                 win->state = 7;
                                 TextBox_Init(&win->textBox, D_8900A96C, 0, 1, 0);
                             } else {
-                                func_8003F6AC(2);
+                                Audio_PlaySystemSound(2);
                                 next = 2;
                                 PcBox_SetActiveLists(win, &win->gbBoxMenu, &win->stadiumBoxMenu);
                             }
                             break;
                         case 1:
                             if (LabPC_AllBoxesEmpty(win->stadiumBoxMenu.items) != 0) {
-                                func_8003F6AC(8);
+                                Audio_PlaySystemSound(8);
                                 win->state = 7;
                                 TextBox_Init(&win->textBox, D_8900A954[win->operationCursor.cursor], 0, 1, 0);
                             } else if (LabPC_NoEmptyBoxAvailable(win->gbBoxMenu.items) != 0) {
-                                func_8003F6AC(8);
+                                Audio_PlaySystemSound(8);
                                 win->state = 7;
                                 TextBox_Init(&win->textBox, D_8900A96C, 0, 1, 0);
                             } else {
-                                func_8003F6AC(2);
+                                Audio_PlaySystemSound(2);
                                 next = 2;
                                 PcBox_SetActiveLists(win, &win->stadiumBoxMenu, &win->gbBoxMenu);
                             }
                             break;
                         case 2:
                             if (LabPC_AllBoxesEmpty(win->gbBoxMenu.items) != 0) {
-                                func_8003F6AC(8);
+                                Audio_PlaySystemSound(8);
                                 win->state = 7;
                                 TextBox_Init(&win->textBox, D_8900A954[win->operationCursor.cursor], 0, 1, 0);
                             } else {
-                                func_8003F6AC(2);
+                                Audio_PlaySystemSound(2);
                                 win->state = 2;
                                 PcBox_SetActiveLists(win, &win->gbBoxMenu, NULL);
                             }
@@ -1106,11 +1105,11 @@ s32 PcBox_UpdateOperationWindow(PcBoxOperationWindow* win) {
                         case 3:
                             if ((LabPC_AllBoxesEmpty(win->gbBoxMenu.items) != 0) ||
                                 (LabPC_AllBoxesEmpty(win->stadiumBoxMenu.items) != 0)) {
-                                func_8003F6AC(8);
+                                Audio_PlaySystemSound(8);
                                 win->state = 7;
                                 TextBox_Init(&win->textBox, D_8900A954[win->operationCursor.cursor], 0, 1, 0);
                             } else {
-                                func_8003F6AC(2);
+                                Audio_PlaySystemSound(2);
                                 next = 2;
                                 PcBox_SetActiveLists(win, &win->gbBoxMenu, &win->stadiumBoxMenu);
                             }
@@ -1118,11 +1117,11 @@ s32 PcBox_UpdateOperationWindow(PcBoxOperationWindow* win) {
                         case 4:
                             if ((LabPC_AllBoxesEmpty(win->gbBoxMenu.items) != 0) &&
                                 (LabPC_AllBoxesEmpty(win->stadiumBoxMenu.items) != 0)) {
-                                func_8003F6AC(8);
+                                Audio_PlaySystemSound(8);
                                 win->state = 7;
                                 TextBox_Init(&win->textBox, D_8900A954[win->operationCursor.cursor], 0, 1, 0);
                             } else {
-                                func_8003F6AC(2);
+                                Audio_PlaySystemSound(2);
                                 next = 6;
                             }
                             break;
@@ -1137,13 +1136,13 @@ s32 PcBox_UpdateOperationWindow(PcBoxOperationWindow* win) {
                 back = 1;
             } else if (r == 1) {
                 if ((win->operationCursor.cursor == 0) || (win->operationCursor.cursor == 1)) {
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     next = 3;
                 } else if (win->operationCursor.cursor == 3) {
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     next = 4;
                 } else {
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     list = win->sourceMenu;
                     list->itemFlags[list->cursor] |= 8;
                     win->swapIndex = win->sourceMenu->cursor;
@@ -1159,9 +1158,9 @@ s32 PcBox_UpdateOperationWindow(PcBoxOperationWindow* win) {
             } else if (r == 1) {
                 e = win->targetMenu->cursor + *(LabPCBoxEntry**)win->targetMenu->items;
                 if (e->box->count > 0) {
-                    func_8003F6AC(8);
+                    Audio_PlaySystemSound(8);
                 } else {
-                    func_8003F6AC(0x18);
+                    Audio_PlaySystemSound(0x18);
                     PcBox_SwapSelectedEntries(win);
                     if ((LabPC_AllBoxesEmpty(win->sourceMenu->items) != 0) ||
                         (LabPC_NoEmptyBoxAvailable(win->targetMenu->items) != 0)) {
@@ -1179,7 +1178,7 @@ s32 PcBox_UpdateOperationWindow(PcBoxOperationWindow* win) {
                 win->sourceMenu->itemFlags[win->swapIndex] &= ~8;
                 win->state = 2;
             } else if (r == 1) {
-                func_8003F6AC(0x18);
+                Audio_PlaySystemSound(0x18);
                 PcBox_SwapEntriesInList(win);
                 win->sourceMenu->itemFlags[win->swapIndex] &= ~8;
                 win->state = 2;
@@ -1193,9 +1192,9 @@ s32 PcBox_UpdateOperationWindow(PcBoxOperationWindow* win) {
             } else if (r == 1) {
                 e = win->targetMenu->cursor + *(LabPCBoxEntry**)win->targetMenu->items;
                 if (e->box->count == 0) {
-                    func_8003F6AC(8);
+                    Audio_PlaySystemSound(8);
                 } else {
-                    func_8003F6AC(0x18);
+                    Audio_PlaySystemSound(0x18);
                     PcBox_SwapSelectedEntries(win);
                     win->state = 2;
                 }
@@ -1215,10 +1214,10 @@ s32 PcBox_UpdateOperationWindow(PcBoxOperationWindow* win) {
             } else {
                 r = func_8002BC14(D_800603C0);
                 if (r == -1) {
-                    func_8003F6AC(3);
+                    Audio_PlaySystemSound(3);
                     back = 1;
                 } else if (r == 1) {
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     ret = 2;
                 }
             }
@@ -1442,9 +1441,9 @@ s32 PcBox_UpdateScreen(PcBoxScreen* screen) {
                 ent2 = screen->operationWindow.sourceMenu->cursor + *(LabPCBoxEntry**)screen->operationWindow.sourceMenu->items;
                 entry = &ent2->box->mons[screen->listWindow.menu.cursor];
                 if ((entry->species.id <= 0) || (entry->species.id >= 0x98)) {
-                    func_8003F6AC(8);
+                    Audio_PlaySystemSound(8);
                 } else {
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     screen->state = 3;
                     PcBox_InitMonStatusWindow(&screen->statusWindow, 0x69, 0x7D, (s32)entry, 0, D_800603C0, screen->monRenderer);
                 }
@@ -1453,7 +1452,7 @@ s32 PcBox_UpdateScreen(PcBoxScreen* screen) {
         case 3:
             r = func_8002BC14(D_800603C0);
             if ((r == -1) || (r == 1)) {
-                func_8003F6AC(3);
+                Audio_PlaySystemSound(3);
                 screen->state = 2;
             }
             break;

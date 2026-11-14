@@ -269,17 +269,17 @@ s32 VsScene_DrawFrame(s32 unused) {
 }
 
 M2C_UNK func_80006780();                            /* extern */
-s32 func_80027214(s8 *, s32);                       /* extern */
+s32 BezierPath_Step(s8 *, s32);                       /* extern */
 
 /*
  * VsScene_ZoomIntoScreen
  *
  * Reads the word at offset 0xC of D_82203240 (the `children` pointer of
  * that GraphNode; call it `rec`), fills two
- * 0x3C-byte local buffers with func_800273E8: from D_82202CD0 and D_82202CEC
+ * 0x3C-byte local buffers with BezierPath_InitEased: from D_82202CD0 and D_82202CEC
  * when D_822036A4->mode is 0, from D_82202C60 and D_82202C7C otherwise.
- * Then, while func_80027214(buf1, rec + 0xA8) returns non-zero, it calls
- * func_80027214(buf2, rec + 0xB4), then VsScene_DrawFrameToImage(0) and
+ * Then, while BezierPath_Step(buf1, rec + 0xA8) returns non-zero, it calls
+ * BezierPath_Step(buf2, rec + 0xB4), then VsScene_DrawFrameToImage(0) and
  * func_80006780(), and stops as soon as VsScene_DrawFrameToImage returns non-zero.
  *
  * Same buffer pair and loop as CartridgeCheck_PlayExitToTitle. What the buffers, the record
@@ -305,16 +305,16 @@ void VsScene_ZoomIntoScreen(void) {
 
     sp3C = (s32)D_82203240->children;
     if (D_822036A4->mode == 0) {
-        func_800273E8(sp7C, (s32) &D_82202CD0);
-        func_800273E8(sp40, (s32) &D_82202CEC);
+        BezierPath_InitEased(sp7C, (s32) &D_82202CD0);
+        BezierPath_InitEased(sp40, (s32) &D_82202CEC);
     } else {
-        func_800273E8(sp7C, (s32) &D_82202C60);
-        func_800273E8(sp40, (s32) &D_82202C7C);
+        BezierPath_InitEased(sp7C, (s32) &D_82202C60);
+        BezierPath_InitEased(sp40, (s32) &D_82202C7C);
     }
     do {  // karodo
     } while (0);
-    while (func_80027214(sp7C, sp3C + 0xA8) != 0) {
-        func_80027214(sp40, sp3C + 0xB4);
+    while (BezierPath_Step(sp7C, sp3C + 0xA8) != 0) {
+        BezierPath_Step(sp40, sp3C + 0xB4);
         temp_s0_2 = VsScene_DrawFrameToImage(0);
         func_80006780();
         if (temp_s0_2 != 0) {
@@ -327,12 +327,12 @@ extern s8 D_82202C98;
 extern s8 D_82202CB4;
 extern s8 D_82202D08;
 extern s8 D_82202D24;
-M2C_UNK func_80005B98(M2C_UNK);
+s32 StageFade_Start(s32);
 M2C_UNK func_8000A7FC(M2C_UNK);
 /**
  * The reverse of VsScene_ZoomIntoScreen: moves the camera along the path from the big screen back
  * out to the stadium (D_82202D08/D_82202D24 in Free Battle, D_82202C98/D_82202CB4 in tournaments),
- * one frame per step. On step 20 it calls func_80005B98(0x20) and func_8000A7FC(0x3C) (@unverified:
+ * one frame per step. On step 20 it calls StageFade_Start(0x20) and func_8000A7FC(0x3C) (@unverified:
  * the screen fades to white as the step runs).
  * Seen in play (2026-11-14) at the end of the pre-battle panels, the results board and the
  * next-round panels: the camera pulls back out of the screen to the field, then the screen fades.
@@ -346,20 +346,20 @@ void VsScene_ZoomOutOfScreen(void) {
 
     rec = (s32)D_82203240->children;
     if (D_822036A4->mode == 0) {
-        func_800273E8(sp8C, (s32) &D_82202D08);
-        func_800273E8(sp50, (s32) &D_82202D24);
+        BezierPath_InitEased(sp8C, (s32) &D_82202D08);
+        BezierPath_InitEased(sp50, (s32) &D_82202D24);
     } else {
-        func_800273E8(sp8C, (s32) &D_82202C98);
-        func_800273E8(sp50, (s32) &D_82202CB4);
+        BezierPath_InitEased(sp8C, (s32) &D_82202C98);
+        BezierPath_InitEased(sp50, (s32) &D_82202CB4);
     }
     do {  // karodo
     } while (0);
-    while (func_80027214(sp8C, rec + 0xA8) != 0) {
+    while (BezierPath_Step(sp8C, rec + 0xA8) != 0) {
         if (i++ == 0x14) {
-            func_80005B98(0x20);
+            StageFade_Start(0x20);
             func_8000A7FC(0x3C);
         }
-        func_80027214(sp50, rec + 0xB4);
+        BezierPath_Step(sp50, rec + 0xB4);
         done = VsScene_DrawFrameToImage(0);
         func_80006780();
         if (done != 0) {
@@ -396,7 +396,7 @@ void VsScene_LoadTeamIcons(VsSceneSide* side, s32 sideIndex) {
 
     for (i = 0; i < 6; i++) {
         if (i < side->rosterInfo[0]->numberOfPokemonCanBePicked) {
-            func_8001833C((PokeIconRenderer*)D_82203264, slot, &side->rosterInfo[0]->battleMon[i], 1);
+            PokeIcon_SetMonSlot((PokeIconRenderer*)D_82203264, slot, &side->rosterInfo[0]->battleMon[i], 1);
         }
         side->iconImages[i] = PokeIcon_GetImage((PokeIconRenderer*)D_82203264, slot++);
     }
@@ -544,8 +544,8 @@ void VsScene_Play(void) {
     }
 }
 
-M2C_UNK func_80025100(s8 *, M2C_UNK);               /* extern */
-M2C_UNK func_80025168(s8);                          /* extern */
+M2C_UNK Save_GetGbTowerSettings(s8 *, M2C_UNK);               /* extern */
+M2C_UNK Save_SetGbTowerFrameTier(s8);                          /* extern */
 
 /**
  * Unlocks the next GB Tower frame (reads the count with func_80025100, stores it + 1 with
@@ -556,14 +556,14 @@ M2C_UNK func_80025168(s8);                          /* extern */
 void Tournament_UnlockGbTowerFrame(void) {
     s8 sp1F;
 
-    func_80025100(&sp1F, 0);
+    Save_GetGbTowerSettings(&sp1F, 0);
     switch (sp1F) {                                 /* irregular */
     case 0:
-        func_80025168((s8) (sp1F + 1));
+        Save_SetGbTowerFrameTier((s8) (sp1F + 1));
         D_822036A4->transitionFlags |= 8;
         return;
     case 1:
-        func_80025168((s8) (sp1F + 1));
+        Save_SetGbTowerFrameTier((s8) (sp1F + 1));
         D_822036A4->transitionFlags |= 0x10;
         return;
     }
@@ -750,7 +750,7 @@ void VsScene_LoadBroughtIcons(VsSceneSide* side, s32 sideIndex) {
         for (i = 0; i < 2; i++) {
             for (j = 0; j < 3; j++) {
                 if (j < side->teamMember[i]->numberOfPokemonBrought) {
-                    func_8001833C((PokeIconRenderer*)D_82203264, slot, &side->teamMember[i]->pokemonPicked[j], 1);
+                    PokeIcon_SetMonSlot((PokeIconRenderer*)D_82203264, slot, &side->teamMember[i]->pokemonPicked[j], 1);
                 }
                 side->iconImages[i * 3 + j] = PokeIcon_GetImage((PokeIconRenderer*)D_82203264, slot);
                 side->hpBarImages[i * 3 + j] = D_82203210[slot]->img_p;
@@ -760,7 +760,7 @@ void VsScene_LoadBroughtIcons(VsSceneSide* side, s32 sideIndex) {
     } else {
         for (j = 0; j < 6; j++) {
             if (j < side->teamMember[0]->numberOfPokemonBrought) {
-                func_8001833C((PokeIconRenderer*)D_82203264, slot, &side->teamMember[0]->pokemonPicked[j], 1);
+                PokeIcon_SetMonSlot((PokeIconRenderer*)D_82203264, slot, &side->teamMember[0]->pokemonPicked[j], 1);
             }
             side->iconImages[j] = PokeIcon_GetImage((PokeIconRenderer*)D_82203264, slot);
             side->hpBarImages[j] = D_82203210[slot]->img_p;
@@ -936,7 +936,7 @@ extern char D_82203128[];
 extern char D_8220314C[];
 extern u8 D_8F625F00[];
 extern Gfx D_80060290[];
-void func_80025830(void);
+void Tournament_SaveContinueData(void);
 
 /**
  * Asks トーナメントをつづけますか？ (Continue the tournament?) with つづける (Continue) / ちゅうだんする (Quit), plus the GB cartridge warning.
@@ -977,7 +977,7 @@ s32 Tournament_RunContinuePrompt(void) {
     } while (!(gPlayer1Controller->buttonPressed & BTN_A));
     if (sel == 1) {
         Audio_PlaySoundEffectById(0x1D);
-        func_80025830();
+        Tournament_SaveContinueData();
         do {
             VsScene_DrawFrame(0);
             Ui_DrawGradientPanel(0x1E, 0xAA, 0x104, 0x32, &top, &bottom);
@@ -1040,7 +1040,7 @@ extern u8 D_8F61F87C[];
 void VsScene_LoadBroughtIcons(VsSceneSide* side, s32 sideIndex);
 void VsScene_DrawHpBars(s32);
 void VsScene_ZoomOutOfScreen(void);
-void func_80041374(s32 arg0, s32 arg1);
+void Audio_StopSoundByCategory(s32 arg0, s32 arg1);
 
 /**
  * VS_SCENE_FREE_BATTLE_RESULTS: the scene after a Free Battle. Loads the brought Pokémon's icons,
@@ -1070,7 +1070,7 @@ void VsScene_PlayFreeBattleResults(void) {
     VsScene_ZoomIntoScreen();
     VsScene_PlayResultsBoard();
     VsScene_PlayWinLose();
-    func_80041374(0x3D, 0);
+    Audio_StopSoundByCategory(0x3D, 0);
     VsScene_ZoomOutOfScreen();
     ModelRenderer_ClearDisplayObject(&D_82203268);
     D_822036A4->transitionFlags |= 1;
@@ -1153,7 +1153,7 @@ void VsScene_PlayTournamentResults(void) {
     } else {
         Tournament_PlayNextRoundTitle();
     }
-    func_80041374(0x3D, 0);
+    Audio_StopSoundByCategory(0x3D, 0);
     VsScene_ZoomOutOfScreen();
     ModelRenderer_ClearDisplayObject(&D_82203268);
 }
@@ -1184,7 +1184,7 @@ extern u8 D_8F619890[];
 extern u8 D_8EB300B0[];
 extern u8 D_8EB37440[];
 extern u8 D_8F20A788[];
-void func_800270B4(s32 arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5);
+void ImageGrid_Create(s32 arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5);
 
 /**
  * Builds the scene's geo layouts: the stadium for the current stage kind (D_822036A8: Free Battle,
@@ -1229,9 +1229,9 @@ void VsScene_LoadGeoLayout(s32 round) {
     MainPool_FinalizeAllocation(block);
 
     if (D_822036A8 == 0) {
-        func_800270B4(0, 0xD89, -0x2C07, D_82203208->img_p, 0x16A8, 0x10FE);
+        ImageGrid_Create(0, 0xD89, -0x2C07, D_82203208->img_p, 0x16A8, 0x10FE);
     } else {
-        func_800270B4(0, 0, 0, D_82203208->img_p, 0xC80, 0x960);
+        ImageGrid_Create(0, 0, 0, D_82203208->img_p, 0xC80, 0x960);
         ModelAnim_BindTransformCurve(D_82203200, 1, D_8F20A788, 0x10000);
     }
     VsScene_AllocNameImages();
@@ -1275,7 +1275,7 @@ extern u8 D_0037B090[];
 extern u8 D_00380D60[];
 extern u8 D_00385D60[];
 extern u8 D_0038A540[];
-s32 func_80023C30(void);
+s32 Save_LoadSram(void);
 s32 Font_Init(s32 load_size, s32 side);
 
 #define DEMO_FRAGMENT_ID(vram) ((((u32)(vram) & 0x0FF00000) >> 0x14) - 0x10)
@@ -1318,7 +1318,7 @@ s32 VsScene_Run(s32 kind, SessionContext* session) {
     sp24 = round;
 
     main_pool_push_state('BTLS');
-    func_80023C30();
+    Save_LoadSram();
     Gfx_InitDisplayListBuffers(0x10000, 0);
     D_82203204 = StageContext_Allocate(0, 1, 3, 1, 2, 1);
     D_82203208 = GfxImage_Allocate(0, 2, 0x140, 0xF0, 1);
@@ -1379,7 +1379,7 @@ s32 VsScene_Run(s32 kind, SessionContext* session) {
     }
 
     StageContext_Deactivate();
-    Display_DisableBlackout();
+    ImageGrid_Clear();
     Gfx_FreeDisplayListBuffers();
     main_pool_pop_state('BTLS');
     return 0;

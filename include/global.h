@@ -453,8 +453,8 @@ typedef struct GeoTexture {
 } GeoTexture; // size = 0xC
 
 typedef struct GeoPalette {
-    /* 0x00 */ s32 count; // @unverified: number of 16-bit colors recolored in func_80016D40
-    /* 0x04 */ s16* data; // @unverified: RGBA5551 colors recolored in func_80016D40
+    /* 0x00 */ s32 count; // @unverified: number of 16-bit colors recolored in GeoTextureBank_AdjustColors
+    /* 0x04 */ s16* data; // @unverified: RGBA5551 colors recolored in GeoTextureBank_AdjustColors
     /* 0x08 */ Gfx* loadDisplayList; // @unverified: called by GeoRender_BindTexture before the texture image (TLUT load)
 } GeoPalette; // size = 0xC
 

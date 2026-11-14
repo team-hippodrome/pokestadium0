@@ -53,8 +53,8 @@ extern s32 pad_D_80075664;
 extern s32 gCurrentGameState;
 extern s32 gLastGameState;
 extern s32 pad_D_80075670;
-extern s16 D_800733D4;
-extern s16 D_800733D8;
+extern s16 gActiveGbPort;
+extern s16 gActiveGbPortChanged;
 extern unk_D_800AE520 D_800AF990;
 extern s32 pad_D_800AE534[2];
 extern SessionContext gSessionContext;
@@ -515,7 +515,7 @@ void PikachuReward_ShowDeclinedEnding(void) {
     PikachuReward_ShowTextForFrames(sTextSurfNotLearned, 0x1E);
 }
 
-M2C_UNK func_800414B0(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
+M2C_UNK Announcer_CallMove(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
 extern s32 sHidePikachuWhenAnimDone;
 extern char* sTextTakeCareOfPikachu;
 
@@ -527,7 +527,7 @@ extern char* sTextTakeCareOfPikachu;
 void PikachuReward_ShowSuccessEnding(void) {
     ModelAnim_SetAnimation(&sSceneObjects[0], 9);
     ModelAnim_SetEventTrack(&sSceneObjects[0], 6);
-    func_800414B0(0, 0x39, 0x19, 0);
+    Announcer_CallMove(0, 0x39, 0x19, 0);
     sHidePikachuWhenAnimDone = 1;
     Audio_PlayMusicIfChanged(0x13);
     PikachuReward_ScrollTextIn(sTextTakeCareOfPikachu);

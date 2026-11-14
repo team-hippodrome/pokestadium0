@@ -419,10 +419,10 @@ void func_82134DA0(s16 arg0, s32 arg1) {
     Audio_PlayCommand(5, arg1, arg1);
 }
 
-M2C_UNK func_80041374(M2C_UNK, s32);                /* extern */
+M2C_UNK Audio_StopSoundByCategory(M2C_UNK, s32);                /* extern */
 
 void func_82134DC8(s32 arg0) {
-    func_80041374(5, arg0);
+    Audio_StopSoundByCategory(5, arg0);
 }
 
 /*
@@ -491,36 +491,36 @@ void BattleAnim_PlayBattleSequenceById(ActivePokemon* active_pokemon, s32 sequen
     }
 }
 
-M2C_UNK func_80041940();
-void func_80042508(s32);
+M2C_UNK Announcer_SetHp();
+void Announcer_CommentOnMove(s32);
 s32 func_82107A5C(s8*);
 /*
  * func_82134FD0
  *
  * Takes the active Pokemon's roster entry (teamRoster->pokemonPicked indexed
- * by state.rosterIndex) and calls func_80041940 with the side index of the
+ * by state.rosterIndex) and calls Announcer_SetHp with the side index of the
  * Pokemon (func_82107A5C), the entry's hp and its unk_26.  Unless the display
- * object's objectType is 0x98, it then calls func_80042508 with the side index,
+ * object's objectType is 0x98, it then calls Announcer_CommentOnMove with the side index,
  * OR-ed with 0x10 when the entry's status byte has a sleep bit (mask 0x07) or
  * the freeze bit (0x20) set, or when the scene's unk_48 is 0x1F or 0x1B.
- * Related to func_82135098, which makes the func_80041940 call alone.
- * Notes: func_80041940 is declared without a prototype because this function
+ * Related to func_82135098, which makes the Announcer_SetHp call alone.
+ * Notes: Announcer_SetHp is declared without a prototype because this function
  * passes three arguments while func_82135098 passes four; the unused "pad"
  * local only reproduces the retail stack slot of "mon" (0x18).  What
- * func_80041940/func_80042508 do is not established here (they look like
+ * Announcer_SetHp/Announcer_CommentOnMove do is not established here (they look like
  * audio calls, but that is a guess).
  */
 void func_82134FD0(ActivePokemon* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     BattleMon* mon = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
 
-    func_80041940(func_82107A5C(arg0), mon->hp, mon->maxHp);
+    Announcer_SetHp(func_82107A5C(arg0), mon->hp, mon->maxHp);
     if (arg0->displayObject.objectType != 0x98) {
         if ((mon->statusCondition & 7) || (mon->statusCondition & 0x20) ||
             (sBattleScene.scene->moveEffectKind == 0x1F) || (sBattleScene.scene->moveEffectKind == 0x1B)) {
-            func_80042508(func_82107A5C(arg0) | 0x10);
+            Announcer_CommentOnMove(func_82107A5C(arg0) | 0x10);
         } else {
-            func_80042508(func_82107A5C(arg0));
+            Announcer_CommentOnMove(func_82107A5C(arg0));
         }
     }
 }
@@ -535,6 +535,6 @@ void func_82135098(s8 *arg0)
   if ((*((s16 *) (((s8 *) arg0) + 0x1A))) != 0x98)
   {
     sp18 = temp_v1;
-    func_80041940(func_82107A5C(arg0), *((u16 *) (((s8 *) arg0) + 0x7D2)), *((u16 *) (((s8 *) temp_v1) + 0x26)), arg0); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+    Announcer_SetHp(func_82107A5C(arg0), *((u16 *) (((s8 *) arg0) + 0x7D2)), *((u16 *) (((s8 *) temp_v1) + 0x26)), arg0); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   }
 }

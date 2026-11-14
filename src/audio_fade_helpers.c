@@ -5,33 +5,39 @@
 #include "audio_fade_helpers.h"
 
 /*
- * func_80047490
+ * Audio_FadeOutHandle
  *
  * Calls func_80037AC4(arg0, arg1) with arg1 replaced by 1 when it is 0.
- * (The sibling func_800474B8 does the same for func_8003798C.)  What the
+ * (The sibling Audio_FadeOutHandleAlt does the same for func_8003798C.)  What the
  * second argument means is not known; only the "0 becomes 1" rule is
  * confirmed by the assembly.
  */
 void func_80037AC4(s32 arg0, s32 arg1);
-void func_80047490(s32 arg0, s32 arg1) {
-    if (arg1 == 0) {
-        arg1 = 1;
+/**
+ * Fades out sound `handle` over `frames` (at least 1). @unverified: what func_80037AC4 does is read from callers.
+ */
+void Audio_FadeOutHandle(s32 handle, s32 frames) {
+    if (frames == 0) {
+        frames = 1;
     }
-    func_80037AC4(arg0, arg1);
+    func_80037AC4(handle, frames);
 }
 
 /*
- * func_800474B8
+ * Audio_FadeOutHandleAlt
  *
  * Calls func_8003798C(arg0, arg1) with arg1 replaced by 1 when it is 0.
- * Same pattern as func_80047490, which targets func_80037AC4 instead.
+ * Same pattern as Audio_FadeOutHandle, which targets func_80037AC4 instead.
  */
 void func_8003798C(s32 arg0, s32 arg1);
-void func_800474B8(s32 arg0, s32 arg1) {
-    if (arg1 == 0) {
-        arg1 = 1;
+/**
+ * Same as Audio_FadeOutHandle through func_8003798C. @unverified: difference between the two not known.
+ */
+void Audio_FadeOutHandleAlt(s32 handle, s32 frames) {
+    if (frames == 0) {
+        frames = 1;
     }
-    func_8003798C(arg0, arg1);
+    func_8003798C(handle, frames);
 }
 
 /**

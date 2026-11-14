@@ -118,7 +118,7 @@ void Registration_WriteAllTeams(PointerList* teams) {
     }
 }
 
-s32 func_80024ADC(s32, s32);
+s32 Deck_GetSaveEntryCount(s32, s32);
 void func_80027410(void*, void*, s32, s32, s32);
 s32 Deck_GetSaveEntryTrainerId(s32, s32);
 s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2);
@@ -134,7 +134,7 @@ void Registration_LoadRegisteredTeams(ByteMatrix* table) {
         if (func_800246A8(0x10, i) == 0) {
             continue;
         }
-        if (func_80024ADC(0x10, i) == 0) {
+        if (Deck_GetSaveEntryCount(0x10, i) == 0) {
             continue;
         }
         p->unk_00 = 0;
@@ -152,7 +152,7 @@ void Registration_LoadRegisteredTeams(ByteMatrix* table) {
 
 s32 func_80021894(s32);
 s32 GbSave_GetTrainerId(s32 arg0);
-void func_80022D84(s32, u8*);
+void GbSave_GetPlayerName(s32, u8*);
 /**
  * Reads the party of each Game Boy cartridge in the four Transfer Paks (deck 0x20).
  * Seen in play (2026-11-12): ポケモンを とうろくする listed the 1P cartridge's party.
@@ -172,7 +172,7 @@ void Registration_LoadGbTeams(ByteMatrix* table) {
         func_80027410(&p->mons, p->monBuffer, sizeof(TeamMonSlot), 6, 0);
         Registration_ReadTeam(p->source, p->pak, p->slot, &p->mons);
         p->trainerId = GbSave_GetTrainerId(p->pak);
-        func_80022D84(p->pak, p->name);
+        GbSave_GetPlayerName(p->pak, p->name);
         p++;
     }
     table->count = p - (RegisteredTeam*)table->rows;
@@ -270,14 +270,14 @@ void Registration_DrawMainMenu(MenuWindow* menu, s32 flags) {
 
 s32 Menu_UpdateCursor(void*);
 M2C_UNK func_8002BC14(s32);
-M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 extern s32 D_800603C0;
 
 /**
  * Menu-list input handler (same pattern as PartyScreen_UpdateActionMenu and FreeBattle_UpdatePopupMenu). Returns 0
  * immediately unless the window state is 1 or 2. Then, while Menu_UpdateCursor(&menu->menu)
  * is zero, reads the input result from func_8002BC14(D_800603C0): -1 plays sound
- * func_8003F6AC(3) and returns -1; 1 checks bit 0 of the cursor item's menu.itemFlags
+ * Audio_PlaySystemSound(3) and returns -1; 1 checks bit 0 of the cursor item's menu.itemFlags
  * -- if it is clear it plays sound 2 and returns
  * cursor + 1, otherwise it plays sound 8 and returns 0. Every other case returns 0.
  * (The meaning of the table bit is inferred from the sound choice only.)
@@ -297,14 +297,14 @@ s32 Registration_UpdateMainMenu(MenuWindow* menu) {
     if (Menu_UpdateCursor(&menu->menu) == 0) {
         dir = func_8002BC14(D_800603C0);
         if (dir == -1) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             ret = -1;
         } else if (dir == 1) {
             if (!(menu->menu.itemFlags[menu->menu.cursor] & 1)) {
-                func_8003F6AC(2);
+                Audio_PlaySystemSound(2);
                 ret = menu->menu.cursor + 1;
             } else {
-                func_8003F6AC(8);
+                Audio_PlaySystemSound(8);
             }
         }
     }
@@ -487,7 +487,7 @@ extern Gfx D_80073450[];
 extern u8 D_04010918[];
 void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
 u8 GbSave_GetPortGame(s32 arg0);
-void func_8002BC58(s32, s32, u8, s32);
+void GbSave_DrawCartridgeIcon(s32, s32, u8, s32);
 void Ui_DrawImageInStrips(u8*, s32, s32);
 void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
 /**
@@ -501,7 +501,7 @@ void Registration_DrawTrainerPanel(s32 x, s32 y, s32 textFlags, RegisteredTeam* 
     func_80029028(x, y, 0x88, 0x64, D_88102D7C);
     if (team->unk_00 == 0) {
         if (team->source == 0x20) {
-            func_8002BC58(x + 5, y + 4, team->pak, GbSave_GetPortGame(team->pak));
+            GbSave_DrawCartridgeIcon(x + 5, y + 4, team->pak, GbSave_GetPortGame(team->pak));
         } else if (team->source == 0x10) {
             Ui_DrawImageInStrips(D_88102DB8, x + 4, y + 4);
             Font_BeginTranslucentTextRendering();
@@ -570,7 +570,7 @@ void Registration_DrawMonCell(s32 x, s32 y, u8* mon, s32 iconId, s32 textFlags, 
         p = &cache->slots[slot];
         if (iconId != *p) {
             *p = iconId;
-            func_8001833C(D_88103074, slot, mon, ((D_88102D78[0].c[1] << 3) & 0x7C0) | ((D_88102D78[0].c[2] >> 2) & 0x3E) | ((D_88102D78[0].c[0] << 8) & 0xF800) | 1);
+            PokeIcon_SetMonSlot(D_88103074, slot, mon, ((D_88102D78[0].c[1] << 3) & 0x7C0) | ((D_88102D78[0].c[2] >> 2) & 0x3E) | ((D_88102D78[0].c[0] << 8) & 0xF800) | 1);
         }
         if (cache) {} // FAKE: keeps cache live through the block above so the textFlags table address takes t1
         gSPDisplayList(gDisplayListHead++, D_80073408);
@@ -932,10 +932,10 @@ s32 Registration_UpdateTeamList(RegistrationTeamList* list) {
             if (ScrollList_UpdateCursor(&list->list) == 0) {
                 res = func_8002BC14(D_800603C0);
                 if (res == -1) {
-                    func_8003F6AC(3);
+                    Audio_PlaySystemSound(3);
                     ret = -1;
                 } else if (res == 1) {
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     list->state = 3;
                     Registration_InitConfirmWindow(&list->confirmWindow, list->window.frame.x + 0x56, list->window.frame.y + 0x79, (s32)D_88102F34);
                     list->selectedTeam = *((RegisteredTeam**)list->list.items->rows)[list->list.cursor];
@@ -946,7 +946,7 @@ s32 Registration_UpdateTeamList(RegistrationTeamList* list) {
             break;
         case 1:
             if ((ScrollList_UpdateCursor(&list->list) == 0) && (func_8002BC14(D_800603C0) == -1)) {
-                func_8003F6AC(3);
+                Audio_PlaySystemSound(3);
                 ret = -1;
             }
             break;
@@ -954,11 +954,11 @@ s32 Registration_UpdateTeamList(RegistrationTeamList* list) {
             if (ScrollList_UpdateCursor(&list->list) == 0) {
                 res = func_8002BC14(D_800603C0);
                 if (res == -1) {
-                    func_8003F6AC(3);
+                    Audio_PlaySystemSound(3);
                     ret = -1;
                     Registration_WriteAllTeams(list->teams);
                 } else if (res == 1) {
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     list->selectedTeam = *((RegisteredTeam**)list->list.items->rows)[list->list.cursor];
                     Registration_InitConfirmWindow(&list->confirmWindow, list->window.frame.x + 0x56, list->window.frame.y + 0x79, (s32)D_88102F54);
                     list->confirmWindow.choice.cursor = 1;
@@ -969,10 +969,10 @@ s32 Registration_UpdateTeamList(RegistrationTeamList* list) {
         case 3:
             res = Registration_UpdateConfirmWindow((s32)(&list->confirmWindow));
             if (res == -1) {
-                func_8003F6AC(3);
+                Audio_PlaySystemSound(3);
                 list->state = 0;
             } else if (res == 1) {
-                func_8003F6AC(2);
+                Audio_PlaySystemSound(2);
                 Registration_WriteTeam(((RegisteredTeam**)list->list.items->rows)[list->list.cursor], Registration_FindFreeSlot());
                 Registration_InitTimer(&list->timer, list->selectedTeam.mons.count);
                 list->state = 4;
@@ -983,7 +983,7 @@ s32 Registration_UpdateTeamList(RegistrationTeamList* list) {
                 Audio_PlayMoveSound(0x90, 1, 0);
             }
             if (Registration_StepTimer(&list->timer) != 0) {
-                func_8003F6AC(0x1E);
+                Audio_PlaySystemSound(0x1E);
                 Registration_InitMessageWindow(&list->messageWindow, list->window.frame.x + 0x58, list->window.frame.y + 0x78, (s32)D_88102F6C);
                 list->state = 5;
             }
@@ -991,17 +991,17 @@ s32 Registration_UpdateTeamList(RegistrationTeamList* list) {
         case 5:
             res = Registration_UpdateMessageWindow((s32)(&list->messageWindow));
             if ((res == -1) || (res == 1)) {
-                func_8003F6AC(2);
+                Audio_PlaySystemSound(2);
                 ret = -1;
             }
             break;
         case 6:
             res = Registration_UpdateConfirmWindow((s32)(&list->confirmWindow));
             if (res == -1) {
-                func_8003F6AC(3);
+                Audio_PlaySystemSound(3);
                 list->state = 2;
             } else if (res == 1) {
-                func_8003F6AC(2);
+                Audio_PlaySystemSound(2);
                 Registration_InitTimerFull(&list->timer, list->selectedTeam.mons.count);
                 list->state = 7;
             }
@@ -1011,7 +1011,7 @@ s32 Registration_UpdateTeamList(RegistrationTeamList* list) {
                 Audio_PlayMoveSound(0x90, 1, 0);
             }
             if (Registration_StepTimerDown((s32*)(&list->timer)) != 0) {
-                func_8003F6AC(0x1F);
+                Audio_PlaySystemSound(0x1F);
                 func_80027868(list->teams, list->list.cursor);
                 Registration_WriteAllTeams(list->teams);
                 Registration_InitMessageWindow(&list->messageWindow, list->window.frame.x + 0x58, list->window.frame.y + 0x78, (s32)D_88102FC8);
@@ -1021,7 +1021,7 @@ s32 Registration_UpdateTeamList(RegistrationTeamList* list) {
         case 8:
             res = Registration_UpdateMessageWindow((s32)(&list->messageWindow));
             if ((res == -1) || (res == 1)) {
-                func_8003F6AC(2);
+                Audio_PlaySystemSound(2);
                 ret = -1;
             }
             break;
@@ -1196,7 +1196,7 @@ extern RegistrationScreen* D_881030F8;
 void Registration_AllocScreen(void) {
     D_881030F8 = (RegistrationScreen*)func_80002D98(sizeof(RegistrationScreen));
     Registration_InitScreen(D_881030F8);
-    func_80018234(D_88103074, 0x18, 0x84, 0xF800);
+    PokeIcon_SetSpeciesSlot(D_88103074, 0x18, 0x84, 0xF800);
 }
 
 typedef struct Col88102A2C { u8 r, g, b, a; } Col88102A2C;

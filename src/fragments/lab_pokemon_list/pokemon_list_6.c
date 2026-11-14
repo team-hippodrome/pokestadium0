@@ -39,7 +39,7 @@ s32 LabPCList_GetColumnCursorX();
 extern Entry80066AD8 D_80066AD8[];
 s32 Pokemon_GetTypeIndex(u8*, s32);
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);
-M2C_UNK func_8001A944(s32, s32, M2C_UNK *, ...);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);
 M2C_UNK func_8001AB6C();
 M2C_UNK func_8001ABBC();
@@ -81,7 +81,7 @@ extern u8 D_8910A898[];
 extern u8 D_8910DC50[];
 extern s8 D_8910E2D0[];
 extern s8 D_8910E312[];
-s32 func_8003F6AC();
+s32 Audio_PlaySystemSound();
 s32 ScrollList_UpdateCursor(void*);
 void ScrollList_SetCursor(void*, s32);
 void LabPCList_FormatGatherPrompt(LabPCListScreen*);
@@ -120,10 +120,10 @@ s32 LabPCList_UpdateColumnMenu(LabPCListScreen* screen) {
     sel = screen->headerCursor.cursor + screen->pageColumnStart[screen->page] - 2;
     LabPCList_UpdatePopupMenu(&screen->popup);
     if (((u16*)D_800603C0)[4] & 0x4000) {
-        func_8003F6AC(3);
+        Audio_PlaySystemSound(3);
         screen->state = 0;
     } else if (((u16*)D_800603C0)[4] & 0x8000) {
-        func_8003F6AC(2);
+        Audio_PlaySystemSound(2);
         switch (screen->popup.menu.cursor) {
             case 0:
                 switch (sel) {
@@ -421,13 +421,13 @@ s32 LabPCList_UpdateMonMenu(LabPCListScreen* screen) {
 
     LabPCList_UpdatePopupMenu(&screen->popup);
     if (((u16*)D_800603C0)[4] & 0x4000) {
-        func_8003F6AC(3);
+        Audio_PlaySystemSound(3);
         screen->state = 0;
     } else if (((u16*)D_800603C0)[4] & 0x8000) {
         entry = ((PointerList*)screen->list.items)->items[screen->list.cursor];
         switch (screen->popup.menu.cursor) {
             case 0:
-                func_8003F6AC(2);
+                Audio_PlaySystemSound(2);
                 if (LabPCList_ToggleFilterFlag(screen, 8) != 0) {
                     screen->unk_9E58 = M2C_FIELD(entry, u8*, 8);
                 }
@@ -435,7 +435,7 @@ s32 LabPCList_UpdateMonMenu(LabPCListScreen* screen) {
                 screen->state = 0;
                 break;
             case 1:
-                func_8003F6AC(2);
+                Audio_PlaySystemSound(2);
                 if (LabPCList_ToggleFilterFlag(screen, 0x10) != 0) {
                     s32 id;
 
@@ -452,22 +452,22 @@ s32 LabPCList_UpdateMonMenu(LabPCListScreen* screen) {
                 break;
             case 2:
                 if (LabPCList_IsLastPartyMon((s8**)entry) != 0) {
-                    func_8003F6AC(8);
+                    Audio_PlaySystemSound(8);
                     TextBox_Init((s8*)screen->textBox, (s32)D_8910DD40, 0, 1, 0);
                     screen->state = 0xB;
                 } else {
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     LabPCList_OpenDestinationMenu(screen, (s8**)entry);
                     screen->state = 8;
                 }
                 break;
             case 3:
                 if (!(screen->popup.menu.itemFlags[screen->popup.menu.cursor] & 1)) {
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     screen->state = 0;
                     ret = 2;
                 } else {
-                    func_8003F6AC(8);
+                    Audio_PlaySystemSound(8);
                     TextBox_Init((s8*)screen->textBox, (s32)D_8910DD58, 0, 1, 0);
                     screen->state = 0xC;
                 }

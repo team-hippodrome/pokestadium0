@@ -314,7 +314,7 @@ void LabItem_InitConfirmWindow(LabItemConfirmWindow* win, s32 x, s32 y, char *ti
 
 s32 func_8002AE6C();                                /* extern */
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);            /* extern */
-M2C_UNK func_8001A944(s32, s32, ...);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);              /* extern */
 void Font_SetLineHeight(s32 arg0);                     /* extern */
 M2C_UNK func_8001AB6C();                            /* extern */
@@ -346,7 +346,7 @@ void LabItem_DrawConfirmWindow(LabItemConfirmWindow* win) {
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
         Font_SetLineHeight(0x1C);
-        func_8001A944(win->window.frame.x + 0xE, win->window.frame.y + 0xA, win->text);
+        Font_Printf(win->window.frame.x + 0xE, win->window.frame.y + 0xA, win->text);
         func_8001ABBC();
         Window_DrawLabeled(&win->yesButton, (win->choice.cursor == 0) ? 2 : 0);
         Window_DrawLabeled(&win->noButton, (win->choice.cursor == 1) ? 2 : 0);
@@ -412,7 +412,7 @@ void LabItem_InitCountSelector(LabItemCountSelector* sel, s32 x, s32 y, s32 max,
 }
 
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
-void func_8001AA60(s32, s32, s32);
+void Font_DrawCharAt(s32 x, s32 y, s32 chr);
 void Font_SetColorForFlags(s32);
 void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 void TextBox_Draw(TextBox*);
@@ -456,21 +456,21 @@ void LabItem_DrawCountSelector(LabItemCountSelector* sel) {
         Font_SetActive(8, 0);
         Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2],
                       D_800734A8[3]);
-        func_8001A944(sel->window.frame.x + 0xA, sel->window.frame.y + 0x10, D_89018470);
+        Font_Printf(sel->window.frame.x + 0xA, sel->window.frame.y + 0x10, D_89018470);
         if (sel->count.digit == 1) {
             v = 2;
         } else {
             v = 0;
         }
         Font_SetColorForFlags(v);
-        func_8001AA60(sel->window.frame.x + 0x20, sel->window.frame.y + 0x10, sel->count.value / 10 + '0');
+        Font_DrawCharAt(sel->window.frame.x + 0x20, sel->window.frame.y + 0x10, sel->count.value / 10 + '0');
         if (sel->count.digit == 0) {
             v = 2;
         } else {
             v = 0;
         }
         Font_SetColorForFlags(v);
-        func_8001AA60(sel->window.frame.x + 0x36, sel->window.frame.y + 0x10, sel->count.value % 10 + '0');
+        Font_DrawCharAt(sel->window.frame.x + 0x36, sel->window.frame.y + 0x10, sel->count.value % 10 + '0');
         Font_EndTexturedTextRendering();
         if (sel->state == 1) {
             TextBox_Draw(&sel->textBox);
@@ -482,7 +482,7 @@ s32 func_8002B638(s8 *);                          /* extern */
 s32 func_8002BC14(s32);                             /* extern */
 void TextBox_Init(TextBox*, char*, s32, s32, s32);
 s32 Ui_CheckConfirmPressed(TextBox*);
-M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);                     /* extern */
 extern s32 D_800603C0;
 extern M2C_UNK D_89018474;
 
@@ -503,15 +503,15 @@ s32 LabItem_UpdateCountSelector(LabItemCountSelector* sel) {
         if (func_8002B638(&sel->count) == 0) {
             temp_v0_2 = func_8002BC14(D_800603C0);
             if (temp_v0_2 == -1) {
-                func_8003F6AC(3);
+                Audio_PlaySystemSound(3);
                 sp2C = -1;
             } else if (temp_v0_2 == 1) {
                 if (sel->limit < sel->count.value) {
-                    func_8003F6AC(8);
+                    Audio_PlaySystemSound(8);
                     TextBox_Init(&sel->textBox, &D_89018474, 0, 1, 0);
                     sel->state = 1;
                 } else {
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     sp2C = 1;
                 }
             }
@@ -656,7 +656,7 @@ s32 LabItem_UpdateMenuCursor(LabItemMenuWindow* win) {
     if (Menu_UpdateCursorSkipDisabled(&win->menu) == 0) {
         dir = func_8002BC14(D_800603C0);
         if (dir == -1) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             sp1C = -1;
         } else if (dir == 1) {
             sp1C = win->menu.cursor + 1;
@@ -699,10 +699,10 @@ void LabItem_DrawItemCountRow(s32 x, s32 y, u8* row, s32 index, s32 flags) {
         } else {
             Font_SetColorForFlags(flags);
         }
-        func_8001A944(x + 8, y + 4, func_8001FDC8(row[0], buf));
+        Font_Printf(x + 8, y + 4, func_8001FDC8(row[0], buf));
         if (func_80031CC8(row[0]) == 0) {
             func_8001A384(4, 0);
-            func_8001A944(x + 0xB4, y + 8, D_8901848C, row[1]);
+            Font_Printf(x + 0xB4, y + 8, D_8901848C, row[1]);
         }
         func_8001ABBC();
     }
@@ -731,7 +731,7 @@ void LabItem_InitItemList(LabItemList* list, s32 x, s32 y, s32 table) {
     list->list.options |= 0x10000;
 }
 
-void func_8002F9D8(void *, s32, s32, s32, s32);
+void ScrollList_DrawSmoothScroll(void *, s32, s32, s32, s32);
 void ScrollList_DrawInlineItems(void *, s32, s32, s32, s32);
 void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, void *, s32, s32);
@@ -743,7 +743,7 @@ extern u8 D_04011AB8[];
  */
 void LabItem_DrawItemList(LabItemList* list, s32 flags) {
     if (flags & 0x200) {
-        func_8002F9D8(&list->list, list->x, list->y + 0x10, flags | 0xFFED, 0);
+        ScrollList_DrawSmoothScroll(&list->list, list->x, list->y + 0x10, flags | 0xFFED, 0);
     } else {
         ScrollList_DrawInlineItems(&list->list, list->x, list->y + 0x10, flags | 0xFFED, 0);
     }
@@ -755,7 +755,7 @@ void LabItem_DrawItemList(LabItemList* list, s32 flags) {
 }
 
 s32 ScrollList_UpdateCursor(void*);
-s32 func_80030230(void*);
+s32 ScrollList_UpdateSmoothScroll(void*);
 
 /**
  * Moves the item list cursor (paged when `flags` has 0x200, which also allows the empty row
@@ -768,14 +768,14 @@ s32 LabItem_UpdateItemList(void* menu, u32 flags) {
     s32 action;
 
     if (flags & 0x200) {
-        moved = func_80030230(menu);
+        moved = ScrollList_UpdateSmoothScroll(menu);
     } else {
         moved = ScrollList_UpdateCursor(menu);
     }
     if (moved == 0) {
         action = func_8002BC14(D_800603C0);
         if (action == -1) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             result = -1;
         } else if (action == 1) {
             result = 1;
@@ -812,19 +812,19 @@ void LabItem_InitOrganizeWindow(LabItemOrganizeWindow* win, s32 x, s32 y, ByteMa
     win->footerFrame.style = 6;
     win->footerFrame.color = D_8900A600;
     win->footerFrame.color2 = D_8900A604;
-    func_8002B018(&win->backButton, x + 0xFF, y + 0x3A, 0x36, 0x2A, 0x30, (s32)D_8900BFC0);
+    ImageButton_Init(&win->backButton, x + 0xFF, y + 0x3A, 0x36, 0x2A, 0x30, (s32)D_8900BFC0);
     win->backButton.selectedColor = ((Color_RGBA8*)D_8900A580)[0];
     win->backButton.color = ((Color_RGBA8*)D_8900A580)[1];
     win->backButton.highlightColor = D_8900A5BC;
-    func_8002B018(&win->moveButton, x + 0xFF, y + 0x74, 0x36, 0x2A, 0x30, (s32)D_8900DAD0);
+    ImageButton_Init(&win->moveButton, x + 0xFF, y + 0x74, 0x36, 0x2A, 0x30, (s32)D_8900DAD0);
     win->moveButton.selectedColor = ((Color_RGBA8*)D_8900A580)[2];
     win->moveButton.color = ((Color_RGBA8*)D_8900A580)[3];
     win->moveButton.highlightColor = D_8900A5BC;
-    func_8002B018(&win->reorderButton, x + 0xFF, y + 0xAE, 0x36, 0x2A, 0x30, (s32)D_8900E858);
+    ImageButton_Init(&win->reorderButton, x + 0xFF, y + 0xAE, 0x36, 0x2A, 0x30, (s32)D_8900E858);
     win->reorderButton.selectedColor = ((Color_RGBA8*)D_8900A580)[4];
     win->reorderButton.color = ((Color_RGBA8*)D_8900A580)[5];
     win->reorderButton.highlightColor = D_8900A5BC;
-    func_8002B018(&win->exchangeButton, x + 0xFF, y + 0xE8, 0x36, 0x2A, 0x30, (s32)D_8900F5E0);
+    ImageButton_Init(&win->exchangeButton, x + 0xFF, y + 0xE8, 0x36, 0x2A, 0x30, (s32)D_8900F5E0);
     win->exchangeButton.selectedColor = ((Color_RGBA8*)D_8900A580)[6];
     win->exchangeButton.color = ((Color_RGBA8*)D_8900A580)[7];
     win->exchangeButton.highlightColor = D_8900A5BC;
@@ -887,13 +887,13 @@ void LabItem_DrawListTab(LabItemOrganizeWindow* win, s32 x, s32 y, s32 flags, s3
         func_8001AB6C();
         Font_SetColorForFlags(flags);
         func_8001A384(8, 0);
-        func_8001A944(x + 0x21, y + 4, win->boxNames[icon]);
+        Font_Printf(x + 0x21, y + 4, win->boxNames[icon]);
         func_8001ABBC();
     }
 }
 
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);            /* extern */
-M2C_UNK func_8001A944(s32, s32, ...);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);              /* extern */
 M2C_UNK func_8001AAE4(u8, u8, u8, u8);              /* extern */
 M2C_UNK func_8001AB6C();                            /* extern */
@@ -912,7 +912,7 @@ void LabItem_DrawTitleText(s32 x, s32 y, s32 text, PrimEnvColor* colors) {
     func_8001AA9C(colors->prim.r, colors->prim.g, colors->prim.b, colors->prim.a);
     func_8001ABE8();
     func_8001AAE4(colors->env.r, colors->env.g, colors->env.b, colors->env.a);
-    func_8001A944(((u32) (0x178 - ((func_800566BC(text) >> 1) << 5)) >> 1) + x, y + 0xC, text);
+    Font_Printf(((u32) (0x178 - ((func_800566BC(text) >> 1) << 5)) >> 1) + x, y + 0xC, text);
     func_8001AC3C();
     func_8001ABBC();
 }
@@ -933,7 +933,7 @@ void LabItem_DrawCenteredText(s32 x, s32 y, char* text) {
 }
 
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);            /* extern */
-M2C_UNK func_8001A944(s32, s32, ...);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);              /* extern */
 void Font_SetLineHeight(s32 arg0);                     /* extern */
 M2C_UNK func_8001AB6C();                            /* extern */
@@ -949,7 +949,7 @@ void LabItem_DrawSmallText(s32 x, s32 y, s32 text) {
     func_8001A384(8, 0);
     func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
     Font_SetLineHeight(0x1C);
-    func_8001A944(x + 8, y + 4, text);
+    Font_Printf(x + 8, y + 4, text);
     func_8001ABBC();
 }
 
@@ -1013,10 +1013,10 @@ void LabItem_DrawOrganizeWindow(LabItemOrganizeWindow* win) {
         Ui_DrawTexturedFrameDecal(win->window.frame.x + 0xA, win->window.frame.y + 0xA, 0xF0, 0x122, D_800735C4);
         Ui_DrawTexturedFrameDecal(win->window.frame.x + 0x13A, win->window.frame.y + 0xA, 0xF0, 0x122, D_800735C4);
         v = (win->state == 1) ? 2 : 0x10;
-        func_8002B054(&win->backButton, (win->operationCursor.cursor == 3) ? v : 0);
-        func_8002B054(&win->moveButton, (win->operationCursor.cursor == 0) ? v : 0);
-        func_8002B054(&win->reorderButton, (win->operationCursor.cursor == 1) ? v : 0);
-        func_8002B054(&win->exchangeButton, (win->operationCursor.cursor == 2) ? v : 0);
+        ImageButton_Draw(&win->backButton, (win->operationCursor.cursor == 3) ? v : 0);
+        ImageButton_Draw(&win->moveButton, (win->operationCursor.cursor == 0) ? v : 0);
+        ImageButton_Draw(&win->reorderButton, (win->operationCursor.cursor == 1) ? v : 0);
+        ImageButton_Draw(&win->exchangeButton, (win->operationCursor.cursor == 2) ? v : 0);
         LabItem_DrawListTab(win, win->window.frame.x + 0xC, win->window.frame.y + 0xC, 0, win->leftBox);
         LabItem_DrawListTab(win, win->window.frame.x + 0x13C, win->window.frame.y + 0xC, 0, win->rightBox);
         LabItem_DrawItemList(&win->leftList, ((win->state == 4) || (win->state == 7)) ? 2 : ((win->state == 5) || (win->state == 6)) ? 0x10 : 0);
@@ -1142,7 +1142,7 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* win) {
             }
             v = func_8002BC14(D_800603C0);
             if (v == -1) {
-                func_8003F6AC(3);
+                Audio_PlaySystemSound(3);
                 ret = -1;
                 break;
             }
@@ -1150,11 +1150,11 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* win) {
                 break;
             }
             if (win->operationCursor.cursor == 3) {
-                func_8003F6AC(3);
+                Audio_PlaySystemSound(3);
                 ret = -1;
                 break;
             }
-            func_8003F6AC(2);
+            Audio_PlaySystemSound(2);
             next = 2;
             if (win->operationCursor.cursor != 1) {
                 break;
@@ -1175,10 +1175,10 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* win) {
             if (win->sourceBoxWindow.menu.itemFlags[win->sourceBoxWindow.menu.cursor] & 0x100) {
                 win->state = 9;
                 TextBox_Init(&win->textBox, (void*)D_8900A688[win->operationCursor.cursor], 0, 1, 0);
-                func_8003F6AC(8);
+                Audio_PlaySystemSound(8);
                 break;
             }
-            func_8003F6AC(2);
+            Audio_PlaySystemSound(2);
             idx = win->sourceBoxWindow.menu.cursor;
             win->leftBox = idx;
             LabItem_SetItemList(&win->leftList, (s32)&win->tables[idx]);
@@ -1199,12 +1199,12 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* win) {
                 break;
             }
             if (win->targetBoxWindow.menu.itemFlags[win->targetBoxWindow.menu.cursor] & 0x100) {
-                func_8003F6AC(8);
+                Audio_PlaySystemSound(8);
                 win->state = 10;
                 TextBox_Init(&win->textBox, (void*)D_8900A688[win->operationCursor.cursor], 0, 1, 0);
                 break;
             }
-            func_8003F6AC(2);
+            Audio_PlaySystemSound(2);
             if (win->targetBoxWindow.menu.cursor == 2) {
                 if (*win->gamePakSlot == -1) {
                     ret = 1;
@@ -1226,19 +1226,19 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* win) {
             ptr = win->leftList.list.items->rows + win->leftList.list.cursor * 2;
             if (win->operationCursor.cursor == 0) {
                 if (func_80031C24(*ptr) != 0 && win->rightBox == 2) {
-                    func_8003F6AC(8);
+                    Audio_PlaySystemSound(8);
                     TextBox_Init(&win->textBox, (void*)D_8900A694, 1, 2, 0xC);
                     win->state = 11;
                     break;
                 }
                 v = LabItem_ComputeMaxTransferQuantity(*ptr, win->rightList.list.items);
                 if (v == 0) {
-                    func_8003F6AC(8);
+                    Audio_PlaySystemSound(8);
                     win->state = 11;
                     TextBox_Init(&win->textBox, D_89018648, 0, 1, 0);
                     break;
                 }
-                func_8003F6AC(2);
+                Audio_PlaySystemSound(2);
                 if (func_80031CC8(*ptr) == 0) {
                     LabItem_InitCountSelector(&win->countSelector, win->leftList.x + 0x98,
                                   win->leftList.y + win->leftList.list.cursorY - win->leftList.list.scrollY + 0x2C,
@@ -1251,16 +1251,16 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* win) {
             }
             if (win->operationCursor.cursor == 2) {
                 if (func_80031C24(*ptr) != 0 && win->rightBox == 2) {
-                    func_8003F6AC(8);
+                    Audio_PlaySystemSound(8);
                     TextBox_Init(&win->textBox, (void*)D_8900A694, 1, 2, 0xC);
                     win->state = 11;
                     break;
                 }
-                func_8003F6AC(2);
+                Audio_PlaySystemSound(2);
                 win->state = 6;
                 break;
             }
-            func_8003F6AC(2);
+            Audio_PlaySystemSound(2);
             win->leftList.list.itemFlags[win->leftList.list.cursor] |= 8;
             win->swapIndex = win->leftList.list.cursor;
             win->state = 7;
@@ -1286,7 +1286,7 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* win) {
             if (v != 1) {
                 break;
             }
-            func_8003F6AC(0x18);
+            Audio_PlaySystemSound(0x18);
             LabItem_MoveSelectedItem(win);
             if (win->leftList.list.items->count == 0) {
                 win->state = 1;
@@ -1305,7 +1305,7 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* win) {
             if (v != 1) {
                 break;
             }
-            func_8003F6AC(0x18);
+            Audio_PlaySystemSound(0x18);
             LabItem_SwapWithinList(win);
             Menu_ClearItemFlags((Menu*)&win->leftList.list);
             win->state = 4;
@@ -1323,12 +1323,12 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* win) {
             ptr2 = win->rightList.list.items->rows + win->rightList.list.cursor * 2;
             if (func_80031C24(*ptr2) != 0 &&
                 win->leftBox == 2) {
-                func_8003F6AC(8);
+                Audio_PlaySystemSound(8);
                 TextBox_Init(&win->textBox, (void*)D_8900A694, 1, 2, 0xC);
                 win->state = 12;
                 break;
             }
-            func_8003F6AC(0x18);
+            Audio_PlaySystemSound(0x18);
             LabItem_SwapBetweenLists(win);
             win->state = 4;
             break;
@@ -1453,7 +1453,7 @@ void LabItem_DrawDeleteDataWindow(LabItemDeleteDataWindow* win, s32 flags) {
         }
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         Font_SetLineHeight(0x1C);
-        func_8001A944(win->footerFrame.x + 8, win->footerFrame.y + 8, D_89018688);
+        Font_Printf(win->footerFrame.x + 8, win->footerFrame.y + 8, D_89018688);
         func_8001ABBC();
     }
 }
@@ -1511,15 +1511,15 @@ void LabItem_InitSaveDataWindow(LabItemSaveDataWindow* win, s32 x, s32 y, LabIte
     win->footerFrame.style = 6;
     win->footerFrame.color = D_8900A6B4;
     win->footerFrame.color2 = D_8900A6B8;
-    func_8002B018(&win->backButton, x + 0x2B, y + 0x47, 0x36, 0x2A, 0x30, (s32)D_8900BFC0);
+    ImageButton_Init(&win->backButton, x + 0x2B, y + 0x47, 0x36, 0x2A, 0x30, (s32)D_8900BFC0);
     win->backButton.selectedColor = *(Color_RGBA8*)D_8900A580;
     win->backButton.color = *(Color_RGBA8*)D_8900A584;
     win->backButton.highlightColor = D_8900A5BC;
-    func_8002B018(&win->discardButton, x + 0x2B, y + 0x9F, 0x36, 0x2A, 0x30, (s32)D_890110F0);
+    ImageButton_Init(&win->discardButton, x + 0x2B, y + 0x9F, 0x36, 0x2A, 0x30, (s32)D_890110F0);
     win->discardButton.selectedColor = *(Color_RGBA8*)D_8900A5A8;
     win->discardButton.color = *(Color_RGBA8*)D_8900A5AC;
     win->discardButton.highlightColor = D_8900A5BC;
-    func_8002B018(&win->viewItemsButton, x + 0x2B, y + 0xF7, 0x36, 0x2A, 0x30, (s32)D_89010368);
+    ImageButton_Init(&win->viewItemsButton, x + 0x2B, y + 0xF7, 0x36, 0x2A, 0x30, (s32)D_89010368);
     win->viewItemsButton.selectedColor = *(Color_RGBA8*)D_8900A5A0;
     win->viewItemsButton.color = *(Color_RGBA8*)D_8900A5A4;
     win->viewItemsButton.highlightColor = D_8900A5BC;
@@ -1608,9 +1608,9 @@ void LabItem_DrawSaveDataWindow(LabItemSaveDataWindow* win) {
         func_80029028(win->window.frame.x + 0x174, win->window.frame.y + 6, 0xA, 0x136, *(Color_RGBA8*)&D_8900A5BC);
         Ui_DrawTexturedFrameDecal(win->window.frame.x + 0x86, win->window.frame.y + 0xA, 0xF0, 0x12E, D_800735C4);
         v = (win->state == 1) ? 2 : 0x10;
-        func_8002B054(&win->backButton, (win->operationCursor.cursor == 2) ? v : 0);
-        func_8002B054(&win->discardButton, (win->operationCursor.cursor == 0) ? v : 0);
-        func_8002B054(&win->viewItemsButton, (win->operationCursor.cursor == 1) ? v : 0);
+        ImageButton_Draw(&win->backButton, (win->operationCursor.cursor == 2) ? v : 0);
+        ImageButton_Draw(&win->discardButton, (win->operationCursor.cursor == 0) ? v : 0);
+        ImageButton_Draw(&win->viewItemsButton, (win->operationCursor.cursor == 1) ? v : 0);
         LabItem_DrawSaveDataOwner(win->window.frame.x + 0x88, win->window.frame.y + 0xC, win->slot, 0);
         LabItem_DrawItemList(&win->itemList, (win->state == 2) ? 2 : 0);
         LabItem_DrawSaveDataHelpText(win);
@@ -1632,20 +1632,20 @@ s32 LabItem_UpdateSaveDataWindow(LabItemSaveDataWindow* win) {
             if (func_8002B2B0(&win->operationCursor) == 0) {
                 s32 r = func_8002BC14(D_800603C0);
                 if (r == -1) {
-                        func_8003F6AC(3);
+                        Audio_PlaySystemSound(3);
                         ret = -1;
                 } else if (r == 1) {
                         switch (win->operationCursor.cursor) {
                             case 1:
-                                func_8003F6AC(2);
+                                Audio_PlaySystemSound(2);
                                 win->state = 2;
                                 break;
                             case 0:
-                                func_8003F6AC(2);
+                                Audio_PlaySystemSound(2);
                                 ret = 1;
                                 break;
                             case 2:
-                                func_8003F6AC(3);
+                                Audio_PlaySystemSound(3);
                                 ret = -1;
                                 break;
                         }

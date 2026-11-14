@@ -88,7 +88,7 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
       func_8001AB6C();
       Font_SetColorForFlags(flags);
       func_8001A384(4, -1);
-      func_8001A944(x + 0x28, y + 2, (M2C_UNK *) D_8910DBCC);
+      Font_Printf(x + 0x28, y + 2, (M2C_UNK *) D_8910DBCC);
       func_8001ABBC();
     }
     else
@@ -103,7 +103,7 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
         Font_SetColorForFlags(flags);
       }
       func_8001A384(4, -1);
-      func_8001A944(x + 0x28, y + 2, (M2C_UNK *) D_80064C5C[entry->species - 1].name);
+      Font_Printf(x + 0x28, y + 2, (M2C_UNK *) D_80064C5C[entry->species - 1].name);
       func_8001ABBC();
     }
     cx = x + 0x78;
@@ -225,8 +225,8 @@ void LabPCList_DrawPageHint(LabPCListScreen* screen) {
     func_8001AB6C();
     func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
     func_8001A384(8, 0);
-    func_8001A944(screen->headerFrame.x + 0x22, screen->headerFrame.y + 5, (M2C_UNK*)D_8910DBF0);
-    func_8001A944(screen->headerFrame.x + 0x152, screen->headerFrame.y + 5, (M2C_UNK*)D_8910DC04,
+    Font_Printf(screen->headerFrame.x + 0x22, screen->headerFrame.y + 5, (M2C_UNK*)D_8910DBF0);
+    Font_Printf(screen->headerFrame.x + 0x152, screen->headerFrame.y + 5, (M2C_UNK*)D_8910DC04,
                   screen->page + 1);
     func_8001ABBC();
     gSPDisplayList(gDisplayListHead++, D_80060290);

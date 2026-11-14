@@ -13,7 +13,7 @@ typedef struct RegisteredTeam {
     /* 0x002 */ u8 pak; // the Transfer Pak (controller) of a Game Boy party
     /* 0x003 */ u8 slot; // save slot of a registered team; Registration_FindFreeSlot for a new one
     /* 0x004 */ s32 trainerId; // IDNo; Deck_GetSaveEntryTrainerId or GbSave_GetTrainerId
-    /* 0x008 */ u8 name[0x10]; // trainer name, Deck_GetSaveEntryName or func_80022D84
+    /* 0x008 */ u8 name[0x10]; // trainer name, Deck_GetSaveEntryName or GbSave_GetPlayerName
     /* 0x018 */ ByteMatrix mons; // rows of TeamMonSlot in monBuffer; count = Pokémon read
     /* 0x028 */ TeamMonSlot monBuffer[6];
 } RegisteredTeam; // size = 0x220

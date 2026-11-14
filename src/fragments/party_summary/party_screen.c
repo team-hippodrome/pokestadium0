@@ -20,7 +20,7 @@ s32 Pokemon_GetTypeIndex(s32, s32);
 s32 func_8001FA30(u8);
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void func_8001A384(s32, s32);
-void func_8001A944(s32, s32, const char*, ...);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 void func_8001AA9C(u8, u8, u8, u8);
 void func_8001AAE4(s32, s32, s32, s32);
 void func_8001AB6C(void);
@@ -161,7 +161,7 @@ void PartyScreen_DrawList(PartyListWindow* window, s32 mode) {
         Ui_FillRectPrimEnvColor(window->window.frame.x + 6, window->window.frame.y + 0x13E, window->window.frame.width - 0xC, 0x24, D_8A203350, D_8A203354);
         func_8001AB6C();
         func_8001A384(0x10, 0);
-        func_8001A944(window->window.frame.x + 0x36, window->window.frame.y + 0x144, (mode == 2) ? D_8A20335C : D_8A203358);
+        Font_Printf(window->window.frame.x + 0x36, window->window.frame.y + 0x144, (mode == 2) ? D_8A20335C : D_8A203358);
         func_8001ABBC();
 
         x = window->window.frame.x + 6;
@@ -265,7 +265,7 @@ void PartyScreen_DrawActionMenu(PartyActionMenuWindow* window) {
 }
 
 extern s8 *D_800603C0;
-M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 s32 Menu_UpdateCursor(s8*);
 s32 func_8002BC14(s32);
 /**
@@ -287,7 +287,7 @@ s32 PartyScreen_UpdateActionMenu(PartyActionMenuWindow* window) {
             if (!(window->menu.itemFlags[idx] & 1)) {
                 sp1C = idx + 1;
             } else {
-                func_8003F6AC(8);
+                Audio_PlaySystemSound(8);
             }
         }
     }
@@ -312,15 +312,15 @@ void MonSummary_DrawStats(s32 x, s32 y, BattleMon* mon) {
     func_8001AB6C();
     func_8001A384(0x10, 0);
     func_8001AA9C(0xFF, 0xC8, 0xC8, 0xFF);
-    func_8001A944(x + 0xE, y + 7, D_8A21D8BC);
-    func_8001A944(x + 0xE, y + 0x27, D_8A21D8C8);
-    func_8001A944(x + 0xE, y + 0x47, D_8A21D8D4);
-    func_8001A944(x + 0xE, y + 0x67, D_8A21D8E0);
+    Font_Printf(x + 0xE, y + 7, D_8A21D8BC);
+    Font_Printf(x + 0xE, y + 0x27, D_8A21D8C8);
+    Font_Printf(x + 0xE, y + 0x47, D_8A21D8D4);
+    Font_Printf(x + 0xE, y + 0x67, D_8A21D8E0);
     func_8001AA9C(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
-    func_8001A944(x + 0x9E, y + 7, D_8A21D8EC, mon->attack);
-    func_8001A944(x + 0x9E, y + 0x27, D_8A21D8F0, mon->defense);
-    func_8001A944(x + 0x9E, y + 0x47, D_8A21D8F4, mon->speed);
-    func_8001A944(x + 0x9E, y + 0x67, D_8A21D8F8, mon->special);
+    Font_Printf(x + 0x9E, y + 7, D_8A21D8EC, mon->attack);
+    Font_Printf(x + 0x9E, y + 0x27, D_8A21D8F0, mon->defense);
+    Font_Printf(x + 0x9E, y + 0x47, D_8A21D8F4, mon->speed);
+    Font_Printf(x + 0x9E, y + 0x67, D_8A21D8F8, mon->special);
     func_8001ABBC();
 }
 
@@ -341,16 +341,16 @@ void MonSummary_DrawHeader(s32 x, s32 y, BattleMon* mon) {
     Font_EnableTwoCycleTexturing();
     func_8001A384(0x10, 0);
     Gfx_SetPrimColor(0x5A, 0x6B, 0xFF, 0xFF);
-    func_8001A944(x + 0x25, y + 0x1E, mon->nickname);
+    Font_Printf(x + 0x25, y + 0x1E, mon->nickname);
     Font_DisableTwoCycleTexturing();
     func_8001A384(8, 0);
     func_8001AA9C(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
-    func_8001A944(x + 9, y + 6, D_8A21D8FC, mon->species.id);
-    func_8001A944(x + 0xC9, y + 0x21, D_8A21D904, mon->level);
-    func_8001A944(x + 0x45, y + 0x44, D_8A21D908);
-    func_8001A944(x + 0x8D, y + 0x58, D_8A21D90C, mon->hp, mon->maxHp);
+    Font_Printf(x + 9, y + 6, D_8A21D8FC, mon->species.id);
+    Font_Printf(x + 0xC9, y + 0x21, D_8A21D904, mon->level);
+    Font_Printf(x + 0x45, y + 0x44, D_8A21D908);
+    Font_Printf(x + 0x8D, y + 0x58, D_8A21D90C, mon->hp, mon->maxHp);
     func_8001AA9C(0xFF, 0xC7, 0xC7, 0xFF);
-    func_8001A944(x + 0x23, y + 0x74, D_8A21D914);
+    Font_Printf(x + 0x23, y + 0x74, D_8A21D914);
     MonSummary_DrawStatusCondition(x + 0xAF, y + 0x74, mon);
     func_8001ABBC();
     BattleHud_DrawHpBarTexture(x + 0x85, y + 0x48, 0x94, mon->hp, mon->maxHp);
@@ -369,7 +369,7 @@ void MonSummary_DrawTypeName(s32 x, s32 y, s32 fontSize, s32 mon, s32 typeSlot) 
         func_8001AB6C();
         func_8001A384(fontSize, 0);
         func_8001AA9C(c.r, c.g, c.b, c.a);
-        func_8001A944(x, y, D_80066AD8[idx].str);
+        Font_Printf(x, y, D_80066AD8[idx].str);
         func_8001ABBC();
     }
 }
@@ -409,26 +409,26 @@ void MonSummary_DrawTrainerInfo(s32 x, s32 y, s32 mon) {
     func_8001AB6C();
     func_8001A384(8, 0);
     func_8001AA9C(0xFF, 0xDA, 0xC7, 0xFF);
-    func_8001A944(x + 0x37, y + 0xC, D_8A21D920);
+    Font_Printf(x + 0x37, y + 0xC, D_8A21D920);
     if (Pokemon_GetTypeIndex(mon, 1) != -1) {
-        func_8001A944(x + 0x37, y + 0x28, D_8A21D92C);
+        Font_Printf(x + 0x37, y + 0x28, D_8A21D92C);
     }
     func_8001AA9C(0xFF, 0xFF, 0xC7, 0xFF);
-    func_8001A944(x + 0xF, y + 0x4C, D_8A21D938);
+    Font_Printf(x + 0xF, y + 0x4C, D_8A21D938);
     func_8001AA9C(0xED, 0xFF, 0xC7, 0xFF);
-    func_8001A944(x + 0xF, y + 0x68, D_8A21D940);
+    Font_Printf(x + 0xF, y + 0x68, D_8A21D940);
     func_8001AA9C(0xDA, 0xFF, 0xC7, 0xFF);
-    func_8001A944(x + 0xF, y + 0x8C, D_8A21D950);
+    Font_Printf(x + 0xF, y + 0x8C, D_8A21D950);
     func_8001AA9C(0xC7, 0xFF, 0xDA, 0xFF);
-    func_8001A944(x + 0xF, y + 0xA8, D_8A21D95C);
-    func_8001A944(x + 0xA5, y + 0xA8, D_8A21D964);
-    func_8001A944(x + 0xC3, y + 0xA8, D_8A21D968);
+    Font_Printf(x + 0xF, y + 0xA8, D_8A21D95C);
+    Font_Printf(x + 0xA5, y + 0xA8, D_8A21D964);
+    Font_Printf(x + 0xC3, y + 0xA8, D_8A21D968);
     func_8001AA9C(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
-    func_8001A944(x + 0xAF, y + 0x4C, D_8A21D96C, ((BattleMon*)mon)->otId);
-    func_8001A944(x + 0xAF, y + 0x68, (char*)mon + 0x40);
-    func_8001A944(x + 0x87, y + 0x8C, D_8A21D974, ((BattleMon*)mon)->exp);
-    func_8001A944(x + 0x40, y + 0xA8, D_8A21D978, to_next);
-    func_8001A944(x + 0xD7, y + 0xA8, D_8A21D97C, next_level);
+    Font_Printf(x + 0xAF, y + 0x4C, D_8A21D96C, ((BattleMon*)mon)->otId);
+    Font_Printf(x + 0xAF, y + 0x68, (char*)mon + 0x40);
+    Font_Printf(x + 0x87, y + 0x8C, D_8A21D974, ((BattleMon*)mon)->exp);
+    Font_Printf(x + 0x40, y + 0xA8, D_8A21D978, to_next);
+    Font_Printf(x + 0xD7, y + 0xA8, D_8A21D97C, next_level);
     func_8001ABBC();
     MonSummary_DrawTypeName(x + 0xAF, y + 0xC, 8, mon, 0);
     MonSummary_DrawTypeName(x + 0xAF, y + 0x28, 8, mon, 1);
@@ -507,7 +507,7 @@ void MonSummary_DrawMoveList(s32 baseX, s32 baseY, s32 mon, s32 selectedSlot) {
         if (D_8A203384[i].center) {
             x = x - (func_800566BC(str) >> 1) * 0x14 + 0x8C;
         }
-        func_8001A944(x, D_8A203384[i].nameY + baseY, str);
+        Font_Printf(x, D_8A203384[i].nameY + baseY, str);
         func_8001ABBC();
         if (move != -2) {
             cur = ((u8*)mon)[i + 0x20];
@@ -519,7 +519,7 @@ void MonSummary_DrawMoveList(s32 baseX, s32 baseY, s32 mon, s32 selectedSlot) {
             func_8001AB6C();
             func_8001A384(4, 0);
             Font_SetColorForFlags(hl);
-            func_8001A944(D_8A203384[i].ppX + baseX, D_8A203384[i].ppY + baseY, D_8A21D990, cur & 0x3F, max);
+            Font_Printf(D_8A203384[i].ppX + baseX, D_8A203384[i].ppY + baseY, D_8A21D990, cur & 0x3F, max);
             func_8001ABBC();
         }
     }
@@ -538,17 +538,17 @@ void MonSummary_DrawMovesHeader(s32 x, s32 y, BattleMon* mon) {
     func_8001ABE8();
     func_8001A384(0x10, 0);
     func_8001AAE4(0x5A, 0x6B, 0xFF, 0xFF);
-    func_8001A944(x + 0x25, y + 0x1E, *(char**)D_80064C44[mon->species.id]);
+    Font_Printf(x + 0x25, y + 0x1E, *(char**)D_80064C44[mon->species.id]);
     func_8001AC3C();
     func_8001A384(8, 0);
     func_8001AA9C(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
-    func_8001A944(x + 9, y + 6, "No.%03d", mon->species.id);
-    func_8001A944(x + 0xC9, y + 0x21, "L%d", mon->level);
+    Font_Printf(x + 9, y + 6, "No.%03d", mon->species.id);
+    Font_Printf(x + 0xC9, y + 0x21, "L%d", mon->level);
     func_8001A384(4, 0);
-    func_8001A944(x + 9, y + 0x3C, "タイプ"); // "Type"
-    func_8001A944(x + 0x4F, y + 0x3C, "1/");
+    Font_Printf(x + 9, y + 0x3C, "タイプ"); // "Type"
+    Font_Printf(x + 0x4F, y + 0x3C, "1/");
     if (Pokemon_GetTypeIndex((s32)mon, 1) != -1) {
-        func_8001A944(x + 0xB9, y + 0x3C, "2/");
+        Font_Printf(x + 0xB9, y + 0x3C, "2/");
     }
     MonSummary_DrawTypeName(x + 0x6F, y + 0x3C, 4, (s32)mon, 0);
     MonSummary_DrawTypeName(x + 0xD9, y + 0x3C, 4, (s32)mon, 1);

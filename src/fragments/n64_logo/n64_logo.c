@@ -98,13 +98,13 @@ void N64Logo_ScanTransferPaks(void) {
     main_pool_pop_state('GPAK');
 }
 
-void func_80023C30(void);
-u8 func_80025214(void);
-void func_8003BC9C(s32);
-void func_800418F0(s32);
+void Save_LoadSram(void);
+u8 Save_GetOptionFlags(void);
+void Audio_SetOutputMode(s32);
+void Announcer_SetEnabled(s32);
 
 /**
- * Boot logo sequence: the fragment's entry point. Its only loader is func_80025F3C, the boot
+ * Boot logo sequence: the fragment's entry point. Its only loader is State_Boot, the boot
  * state (0x8001) of Game_RunStateLoop, which passes 0 for both arguments through func_80025B60
  * and ignores the return value. //@src/game_state.c
  * Fades in the Nintendo 64 logo over 3 frames, applies the saved sound options (bit 0 = mono
@@ -127,22 +127,22 @@ s32 N64Logo_Main(UNUSED s32 loaderArg0, UNUSED s32 loaderArg1) {
     ASSET_LOAD(D_1000000, common_menu1_ui, 0);
     ASSET_LOAD(D_2000000, n64_logo_texture, 0);
 
-    func_80023C30();
+    Save_LoadSram();
     StageContext_Activate(stageContext);
     StageFade_Start(1);
     BgStage_RunUntilCondition(3, N64Logo_DrawFrame);
-    soundOptions = func_80025214();
+    soundOptions = Save_GetOptionFlags();
 
     if (soundOptions & 1) {
-        func_8003BC9C(0);
+        Audio_SetOutputMode(0);
     } else {
-        func_8003BC9C(1);
+        Audio_SetOutputMode(1);
     }
 
     if (soundOptions & 2) {
-        func_800418F0(0);
+        Announcer_SetEnabled(0);
     } else {
-        func_800418F0(1);
+        Announcer_SetEnabled(1);
     }
 
     Audio_PlaySoundEffectById(SFX_N64_LOGO);

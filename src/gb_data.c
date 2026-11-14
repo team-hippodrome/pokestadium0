@@ -44,7 +44,7 @@ char* Text_GetTmHmName(s32 arg0, char* arg1);
 void Pokemon_FromGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1);
 void Pokemon_ToGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1);
 u16 StatExpSqrt(u16 square);
-void func_80020188(void);
+void GbData_UnusedStub(void);
 u16 GetPokemonDV(s32 statId, u16 dvBits);
 u32 CalculateStatValue(s32 statId, s32 speciesId, u16 statModifier, u16 level, u16 dvBits);
 void Pokemon_RecalcStats(BattleMon* arg0);
@@ -53,7 +53,7 @@ u32 Pokemon_ExpForLevel(s32 arg0, u16 arg1);
 u16 Pokemon_LevelFromExp(s32 arg0, u32 arg1);
 void Pokemon_PrepareBattleMon(BattleMon* arg0);
 u8 Move_GetIdFromTableIndex(s32 tm_hm_index);
-u8 func_80020984(s32 arg0);
+u8 Species_ToInternalIndex(s32 arg0);
 u8 Species_FromInternalIndex(s32 arg0);
 void Deck_InitializeSaveBackend(DeckHandle* arg0);
 void Deck_InitializeBoxBackend(DeckHandle* arg0);
@@ -228,7 +228,7 @@ s16 func_8001FAB0(s8 *);                          /* extern */
 s32 func_8001FAC8(s8 *);                          /* extern */
 M2C_UNK func_80056690(s8 *, s8 *, M2C_UNK);     /* extern */
 
-void func_8001FE84(BattleMon* arg0, GbPokemonRecord* arg1) {
+void Pokemon_FromGbRecord(BattleMon* arg0, GbPokemonRecord* arg1) {
     arg0->species.id = Species_FromInternalIndex(arg1->species);
     arg0->species.isRental = 0;
     arg0->hp = func_8001FAB0(arg1->hp);
@@ -266,7 +266,7 @@ M2C_UNK func_80056690(s8 *, s8 *, M2C_UNK);     /* extern */
 
 /** Converts a battle Pokemon to a Game Boy Pokemon record. */
 void Pokemon_ToGbRecord(BattleMon* arg0, GbPokemonRecord* arg1) {
-    arg1->species = func_80020984(arg0->species.id);
+    arg1->species = Species_ToInternalIndex(arg0->species.id);
     func_8001FAE8(arg1->hp, arg0->hp);
     arg1->boxLevel = arg0->boxLevel;
     arg1->status = arg0->statusCondition;
@@ -308,7 +308,10 @@ u16 StatExpSqrt(u16 square) {
     return i;
 }
 
-void func_80020188(void) {
+/**
+ * Empty; no callers.
+ */
+void GbData_UnusedStub(void) {
 }
 
 u16 GetPokemonDV(s32 stat_id, u16 dv_bits) { //GetPokemonDV
@@ -498,10 +501,14 @@ u8 Move_GetIdFromTableIndex(s32 tm_hm_index) {
     return D_8006B8C4[tm_hm_index];
 }
 
-u8 func_80020984(s32 arg0) {
+/**
+ * Converts a dex number to the Game Boy internal species index (table D_8006B8FB: 1 → 0x99
+ * Bulbasaur, 2 → 0x09 Ivysaur, ...). Inverse of Species_FromInternalIndex. Checked against the ROM table.
+ */
+u8 Species_ToInternalIndex(s32 dexNo) {
     extern u8 D_8006B8FB[];
 
-    return D_8006B8FB[arg0];
+    return D_8006B8FB[dexNo];
 }
 
 /** Converts a Game Boy internal species index to the species id. */
@@ -512,13 +519,22 @@ u8 Species_FromInternalIndex(s32 arg0) {
 }
 
 extern s8 D_8006BA53;
-u8 func_800209A4(s32 arg0) {
-    return *(&D_8006BA53 + arg0);
+/**
+ * Returns the dex number at position `pos` (1-based) of the kana (あいうえお) sort order; the table
+ * D_8006BA53 starts with Ekans (アーボ) and Arbok. Used by the Pokédex index when sorted by name.
+ * Checked against the ROM table.
+ */
+u8 Species_GetKanaOrderEntry(s32 pos) {
+    return *(&D_8006BA53 + pos);
 }
 
 extern s8 D_8006BAEB;
-u8 func_800209B4(s32 arg0) {
-    return *(&D_8006BAEB + arg0);
+/**
+ * Returns entry `pos` of a second species order table (D_8006BAEB) beside the kana order.
+ * @unverified: no caller found and the order is not recognised.
+ */
+u8 Species_GetAltOrderEntry(s32 pos) {
+    return *(&D_8006BAEB + pos);
 }
 
 /** Initializes a deck that is stored in the save data. */

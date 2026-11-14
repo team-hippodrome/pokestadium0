@@ -31,7 +31,7 @@ void GbTower_LoadPartyFromDeck(s32 port) {
     }
 
     for (i = 0; i < sGbTowerPartyCount; i++) {
-        func_8001833C(sGbTowerIconRenderer, i, &sGbTowerParty[i], 1);
+        PokeIcon_SetMonSlot(sGbTowerIconRenderer, i, &sGbTowerParty[i], 1);
     }
 }
 
@@ -49,8 +49,8 @@ s32 GbTower_PartyIconsFrameCallback(u8 fadeMode) {
     return 0;
 }
 
-s32 func_80023C30(void);
-s32 func_80025100(s8*, s32*);
+s32 Save_LoadSram(void);
+s32 Save_GetGbTowerSettings(s8*, s32*);
 
 /**
  * Fills the GB emulator's launch parameters: the saved frame and button options, the party count
@@ -63,7 +63,7 @@ void GbTower_FillLaunchParams(GbTowerLaunchParams* params) {
     s32 buttonConfig;
     u16(*icon)[0x640] = params->partyIcons[0];
 
-    func_80025100(&framesUnlocked, &buttonConfig);
+    Save_GetGbTowerSettings(&framesUnlocked, &buttonConfig);
     params->framesUnlocked = framesUnlocked;
     params->buttonConfig = buttonConfig;
     params->partyCount = sGbTowerPartyCount;
@@ -100,7 +100,7 @@ s32 GbTower_PreparePartyIcons(s32 port, GbTowerLaunchParams* params) {
     sGbTowerIconRenderer = PokeIcon_CreateRenderList(sGbTowerIconFramebuffers, 6, 0x28, 0x28);
     PokeIcon_OpenModelArchives();
     GbTower_LoadPartyFromDeck(port);
-    func_80023C30();
+    Save_LoadSram();
     StageContext_Activate(stageCtx);
     BgStage_RunUntilCondition(8, GbTower_PartyIconsFrameCallback);
     StageContext_Deactivate();

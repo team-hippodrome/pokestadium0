@@ -576,7 +576,7 @@ void osViBlack(u8);
  * emulated NR52 (0xFF26) register into GB memory; while D_800AA148 is set it blanks video.
  * Seen in play (2026-11-13) ran every frame from the moment JP Green booted in the N64 GB player.
  * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
- * Transfer Pak; called from func_8000AAE0.
+ * Transfer Pak; called from GbPlayer_OutputThreadEntry.
  */
 void GbEmu_UpdateAudioOrBlankVideo(UNUSED s32 arg0) {
     if ((*(u8*)&D_81156546 == 0) && (D_800AA148 == 0)) {

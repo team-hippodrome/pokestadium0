@@ -31,7 +31,7 @@ s32 func_80037AC4(s32, s32);
 void func_80037C04(s32, u32);
 s32 func_8003834C(s32, s32, s32, s32, s32, s32, s32);
 s32 func_80047260(s32);
-void func_80043B00(s32, s32);
+void Announcer_Reset(s32, s32);
 
 /** Plays an audio command with the given parameters. */
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2) {
@@ -170,13 +170,13 @@ s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2) {
                 D_80077544 = arg2;
             }
             if (arg1 == 10) {
-                func_80043B00(1, 1);
+                Announcer_Reset(1, 1);
                 return 0;
             }
             if (arg1 >= 9) {
                 return 0;
             }
-            func_80043B00(arg1, arg2);
+            Announcer_Reset(arg1, arg2);
             if (arg1 == 0) {
                 ret = func_8003834C(D_800B4188, D_800B41A4, 0x23, 0xA0, 0x80, 0, -1);
             } else {
@@ -329,22 +329,27 @@ extern s32 D_800FD66C;
 extern s32 D_800FD658[];
 extern s32 D_800FD738;
 extern s32 D_800FD680;
-s32 func_80041374(s32 arg0, s32 arg1) {
+/**
+ * Fades out the stored sound handle of `category` (0 music, 3, 4, 5 = per-slot, 0x3D, 0x46) over
+ * `frames` (at least 1; some categories use fixed times) and clears it. Returns 0 for an unknown category.
+ * @unverified: categories named from the handles they use.
+ */
+s32 Audio_StopSoundByCategory(s32 category, s32 frames) {
     s32 idx;
 
-    switch (arg0) {
+    switch (category) {
         case 0:
-            if (arg1 == 0) {
-                arg1 = 1;
+            if (frames == 0) {
+                frames = 1;
             }
-            func_80037AC4(D_800FD654, arg1);
+            func_80037AC4(D_800FD654, frames);
             D_800FD654 = 0;
             break;
         case 4:
-            if (arg1 == 0) {
-                arg1 = 1;
+            if (frames == 0) {
+                frames = 1;
             }
-            func_80037AC4(D_800B3CE4, arg1);
+            func_80037AC4(D_800B3CE4, frames);
             D_800B3CE4 = 0;
             break;
         case 3:
@@ -352,7 +357,7 @@ s32 func_80041374(s32 arg0, s32 arg1) {
             D_800FD66C = 0;
             break;
         case 5:
-            idx = arg1 - 1;
+            idx = frames - 1;
             func_80037AC4(D_800FD658[idx ^ 0], 0xA); // FAKE: keeps idx unfolded in v0
             D_800FD658[idx] = 0;
             break;
@@ -361,10 +366,10 @@ s32 func_80041374(s32 arg0, s32 arg1) {
             D_800FD738 = 0;
             break;
         case 0x46:
-            if (arg1 == 0) {
-                arg1 = 1;
+            if (frames == 0) {
+                frames = 1;
             }
-            func_80037AC4(D_800FD680, arg1);
+            func_80037AC4(D_800FD680, frames);
             D_800FD680 = 0;
             break;
         default:

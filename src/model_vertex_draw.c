@@ -18,15 +18,15 @@ extern Vec3fCounter* D_800B32C0;
 extern PosBlend D_800B32C8[0x10];
 extern Mtx D_800B35C8;
 
-void func_80035500(PosBlend* src, PosBlend* dst, f32 totalTime, f32 elapsed, f32 stiffness);
-void func_80035694(StadiumModel* model);
+void Model_PullVertexToward(PosBlend* src, PosBlend* dst, f32 totalTime, f32 elapsed, f32 stiffness);
+void Model_BuildVertexLinks(StadiumModel* model);
 void Model_ApplyTransformCommands(ModelSegment* segment, ModelVertex* vertices, StadiumModel* model, f32 deltaTime);
-void func_800359C0(ModelSegment* segment, ModelVertex* vertices, StadiumModel* model, f32 deltaTime);
+void Model_ApplyVertexLinks(ModelSegment* segment, ModelVertex* vertices, StadiumModel* model, f32 deltaTime);
 void Model_OffsetVertexHeights(ModelSegment* segment, ModelVertex* vertices, f32 yOffset);
-void func_80035BA8(ModelSegment* segment, ModelVertex* vertices, f32 yOffset);
-void func_80035CCC(ModelSegment* segment, ModelVertex* vertices, f32 arg2, StadiumModel* arg3);
-void func_80035E48(ModelSegment* segment, ModelVertex* vertices);
-void func_80036064(StadiumModel* model, MtxF* mtx);
+void Model_RaiseTopVertices(ModelSegment* segment, ModelVertex* vertices, f32 yOffset);
+void Model_RaiseTopVerticesFixed(ModelSegment* segment, ModelVertex* vertices, f32 arg2, StadiumModel* arg3);
+void Model_ApplyVertexOffsets(ModelSegment* segment, ModelVertex* vertices);
+void Model_UpdateVertexPositions(StadiumModel* model, MtxF* mtx);
 void Model_WriteVtxBuffer(StadiumModel* model, Vtx* vtxBuf);
 Gfx* Model_Draw(Gfx* gfx, StadiumModel* model, Vtx* vtxBuf);
 
@@ -35,21 +35,26 @@ s16 Model_GetVertexClass(s16* table, s32 index);
 s16 Model_GetVertexThreshold(s16* arg0, s32 arg1);
 s16 Model_GetVertexJoint(s16* arg0, s32 arg1);
 s16 Model_GetVertexHeightClass(s16* arg0, s32 arg1);
-void func_800341E8(ModelSegment* segment, ModelVertex* vertices);
+void Model_ComputeVertexNormals(ModelSegment* segment, ModelVertex* vertices);
 void Model_ApplyVertexTransforms(StadiumModel* model);
-void func_80034A74(u32 modelSegment, StadiumTransform* xf, s32 index, ModelVertex* vertices);
-void func_800350E8(ModelSegment* segment, MtxF* mtx, ModelVertex* mvtx);
+void Model_ApplySkinBoneInRange(u32 modelSegment, StadiumTransform* xf, s32 index, ModelVertex* vertices);
+void Model_InitializeVertexPositionsAlt(ModelSegment* segment, MtxF* mtx, ModelVertex* mvtx);
 f32 Model_ComputeScaledDistance(Vec3f* a, Vec3f* b, Vec3f* scale);
 f32 Model_ComputeDistance(s16 (*a)[3], s16 (*b)[3]);
 void Model_ExtrapolateVertexPosition(Vec3f* from, Vec3f* to, f32 currentTime, f32 deltaTime, f32 scale);
 
-void func_80035500(PosBlend* src, PosBlend* dst, f32 total_time, f32 elapsed, f32 stiffness) {
+/**
+ * Spring step between two linked vertices: moves `dst` toward or away from `src` so their distance
+ * `dist` approaches `restLength`, scaled by `stiffness` (halved when compressed).
+ * @unverified Name read from the code.
+ */
+void Model_PullVertexToward(PosBlend* src, PosBlend* dst, f32 restLength, f32 dist, f32 stiffness) {
     f32 sp3C;
     f32 sp38;
     f32 sp34;
     f32 var_fv0;
 
-    if (!(elapsed < 10e-05f)) {
+    if (!(dist < 10e-05f)) {
         if (Math_FAbs(dst->base.x) < 10e-05f) {
             dst->base.x = 0.0f;
         }
@@ -62,8 +67,8 @@ void func_80035500(PosBlend* src, PosBlend* dst, f32 total_time, f32 elapsed, f3
         sp3C = dst->base.x - src->base.x;
         sp38 = dst->base.y - src->base.y;
         sp34 = dst->base.z - src->base.z;
-        stiffness *= ((total_time - elapsed) / elapsed);
-        if (elapsed < total_time) {
+        stiffness *= ((restLength - dist) / dist);
+        if (dist < restLength) {
             stiffness /= 2.0f;
         }
         dst->base.x += sp3C * stiffness;
@@ -75,7 +80,13 @@ void func_80035500(PosBlend* src, PosBlend* dst, f32 total_time, f32 elapsed, f3
     }
 }
 
-void func_80035694(StadiumModel* model) {
+/**
+ * Builds the spring links between neighboring vertices of a deformable model (joint order and
+ * threshold class decide which pairs are linked) and their rest lengths.
+ * Seen in play (2026-11-14): Model_InitSkinned runs it at boot.
+ * @unverified Name read from the code.
+ */
+void Model_BuildVertexLinks(StadiumModel* model) {
     s32 i;
     s32 pad1[4]; // FAKE: stack padding
     s16* sp70;
@@ -196,7 +207,11 @@ void Model_ApplyTransformCommands(ModelSegment* segment, ModelVertex* vertices, 
     }
 }
 
-void func_800359C0(ModelSegment* segment, ModelVertex* vertices, StadiumModel* model, f32 delta_time) {
+/**
+ * Runs one spring step (Model_PullVertexToward) for every enabled vertex link of a deformable model.
+ * @unverified Name read from the code.
+ */
+void Model_ApplyVertexLinks(ModelSegment* segment, ModelVertex* vertices, StadiumModel* model, f32 stiffness) {
     f32 temp_fs0;
     s16 temp_v1;
     s16 var_a0;
@@ -232,7 +247,7 @@ void func_800359C0(ModelSegment* segment, ModelVertex* vertices, StadiumModel* m
             if ((var_a0 != 0) || (var_a2 != 0)) {
                 temp_s0 = &temp_a3->position;
                 temp_s1 = &temp_v0_2->position;
-                func_80035500(temp_s0, temp_s1, temp_fs0, Model_ComputeScaledDistance(&temp_s0->base, &temp_s1->base, &model->scale), delta_time);
+                Model_PullVertexToward(temp_s0, temp_s1, temp_fs0, Model_ComputeScaledDistance(&temp_s0->base, &temp_s1->base, &model->scale), stiffness);
             }
             continue;
         }
@@ -259,7 +274,11 @@ void Model_OffsetVertexHeights(ModelSegment* segment, ModelVertex* vertices, f32
     }
 }
 
-void func_80035BA8(ModelSegment* segment, ModelVertex* vertices, f32 y_offset) {
+/**
+ * Raises the y of a model's top-class vertices by `yOffset` (class 1) or a quarter of it (class 2).
+ * @unverified Name read from the code.
+ */
+void Model_RaiseTopVertices(ModelSegment* segment, ModelVertex* vertices, f32 yOffset) {
     s16* index_table;
     s16* var_s2;
     s32 temp_v0;
@@ -276,10 +295,10 @@ void func_80035BA8(ModelSegment* segment, ModelVertex* vertices, f32 y_offset) {
             temp_v0_2 = &tmp->position;
             switch (temp_v0) {
             case 1:
-                temp_v0_2->base.y += y_offset;
+                temp_v0_2->base.y += yOffset;
                 break;
             case 2:
-                temp_v0_2->base.y += y_offset * 0.25f;
+                temp_v0_2->base.y += yOffset * 0.25f;
                 break;
             }
         }
@@ -288,7 +307,11 @@ void func_80035BA8(ModelSegment* segment, ModelVertex* vertices, f32 y_offset) {
     }
 }
 
-void func_80035CCC(ModelSegment* segment, ModelVertex* vertices, f32 arg2, StadiumModel* arg3) {
+/**
+ * Same as Model_RaiseTopVertices with a fixed offset; the model argument is unused.
+ * @unverified Name read from the code.
+ */
+void Model_RaiseTopVerticesFixed(ModelSegment* segment, ModelVertex* vertices, f32 yOffset, StadiumModel* model) {
     s16* index_table;
     s16* remap;
     s32 type;
@@ -309,12 +332,12 @@ void func_80035CCC(ModelSegment* segment, ModelVertex* vertices, f32 arg2, Stadi
             switch (type) {
             case 1:
                 position->base.x += zero;
-                position->base.y += arg2 * one;
+                position->base.y += yOffset * one;
                 position->base.z += zero;
                 break;
             case 2:
                 position->base.x = position->base.x + zero;
-                position->base.y = position->base.y + (quarter * arg2 * one);
+                position->base.y = position->base.y + (quarter * yOffset * one);
                 position->base.z = position->base.z + zero;
                 break;
             }
@@ -324,7 +347,12 @@ void func_80035CCC(ModelSegment* segment, ModelVertex* vertices, f32 arg2, Stadi
     }
 }
 
-void func_80035E48(ModelSegment* segment, ModelVertex* vertices) {
+/**
+ * Adds each primary vertex's pending offset to its position (divided by its draw group count when
+ * set) and decays the offset by 30%.
+ * @unverified Name read from the code.
+ */
+void Model_ApplyVertexOffsets(ModelSegment* segment, ModelVertex* vertices) {
     f32 drawGroup;
     s16* index_table;
     s16* remap;
@@ -370,7 +398,14 @@ void func_80035E48(ModelSegment* segment, ModelVertex* vertices) {
     }
 }
 
-void func_80036064(StadiumModel* model, MtxF* mtx) {
+/**
+ * Per-frame vertex update of a deformable model by its segment type: start positions from `mtx`,
+ * then sag, normals, bones, offsets and springs as that type uses them; duplicate vertices copy their
+ * primary.
+ * Seen in play (2026-11-14): ModelRenderer_UpdateSlotVertices runs it during the opening.
+ * @unverified Name read from the code.
+ */
+void Model_UpdateVertexPositions(StadiumModel* model, MtxF* mtx) {
     s32 var_s0;
     s32 var_v1;
 
@@ -378,58 +413,58 @@ void func_80036064(StadiumModel* model, MtxF* mtx) {
     ModelSegment* segment = Memmap_GetSegmentVaddr(model->modelSegment);
     switch (segment->type) {
     case 3:
-        func_800350E8(segment, mtx, mvtx);
+        Model_InitializeVertexPositionsAlt(segment, mtx, mvtx);
         Model_OffsetVertexHeights(segment, mvtx, model->scale.y * -10.0f);
-        func_800341E8(segment, mvtx);
+        Model_ComputeVertexNormals(segment, mvtx);
         for(var_s0 = 0; var_s0 < model->transformCount; var_s0++) {
-            func_80034A74(segment, &model->transforms[var_s0], var_s0, mvtx);
+            Model_ApplySkinBoneInRange(segment, &model->transforms[var_s0], var_s0, mvtx);
         }
-        func_80035E48(segment, mvtx);
+        Model_ApplyVertexOffsets(segment, mvtx);
         Model_ApplyTransformCommands(segment, mvtx, model, 0.7f);        
         break;
     case 4:
-        func_800350E8(segment, mtx, mvtx);
+        Model_InitializeVertexPositionsAlt(segment, mtx, mvtx);
         Model_OffsetVertexHeights(segment, mvtx, model->scale.y * -10.0f);
-        func_800341E8(segment, mvtx);
-        func_80035E48(segment, mvtx);
+        Model_ComputeVertexNormals(segment, mvtx);
+        Model_ApplyVertexOffsets(segment, mvtx);
         break;
     case 10:
-        func_800350E8(segment, mtx, mvtx);
-        func_80035BA8(segment, mvtx, model->scale.y * 160.0f);
-        func_80035E48(segment, mvtx);
-        func_800359C0(segment, mvtx, model, 1.0f);
+        Model_InitializeVertexPositionsAlt(segment, mtx, mvtx);
+        Model_RaiseTopVertices(segment, mvtx, model->scale.y * 160.0f);
+        Model_ApplyVertexOffsets(segment, mvtx);
+        Model_ApplyVertexLinks(segment, mvtx, model, 1.0f);
         break;
     case 11:
-        func_800350E8(segment, mtx, mvtx);
-        func_80035CCC(segment, mvtx, 160.0f, model);
-        func_80035E48(segment, mvtx);
-        func_800359C0(segment, mvtx, model, 1.0f);
+        Model_InitializeVertexPositionsAlt(segment, mtx, mvtx);
+        Model_RaiseTopVerticesFixed(segment, mvtx, 160.0f, model);
+        Model_ApplyVertexOffsets(segment, mvtx);
+        Model_ApplyVertexLinks(segment, mvtx, model, 1.0f);
         break;
     case 1:
-        func_800350E8(segment, mtx, mvtx);
-        func_800341E8(segment, mvtx);
-        func_80035E48(segment, mvtx);
+        Model_InitializeVertexPositionsAlt(segment, mtx, mvtx);
+        Model_ComputeVertexNormals(segment, mvtx);
+        Model_ApplyVertexOffsets(segment, mvtx);
         break;
     case 2:
-        func_800350E8(segment, mtx, mvtx);
+        Model_InitializeVertexPositionsAlt(segment, mtx, mvtx);
         Model_OffsetVertexHeights(segment, mvtx, model->scale.y * -10.0f);
-        func_800341E8(segment, mvtx);
-        func_80035E48(segment, mvtx);
+        Model_ComputeVertexNormals(segment, mvtx);
+        Model_ApplyVertexOffsets(segment, mvtx);
         break;
     case 5:
-        func_800350E8(segment, mtx, mvtx);
-        func_800341E8(segment, mvtx);
-        func_80035E48(segment, mvtx);
+        Model_InitializeVertexPositionsAlt(segment, mtx, mvtx);
+        Model_ComputeVertexNormals(segment, mvtx);
+        Model_ApplyVertexOffsets(segment, mvtx);
         break;
     case 6:
-        func_800350E8(segment, mtx, mvtx);
-        func_800341E8(segment, mvtx);
-        func_80035E48(segment, mvtx);
+        Model_InitializeVertexPositionsAlt(segment, mtx, mvtx);
+        Model_ComputeVertexNormals(segment, mvtx);
+        Model_ApplyVertexOffsets(segment, mvtx);
         break;
     case 9:
-        func_800350E8(segment, mtx, mvtx);
+        Model_InitializeVertexPositionsAlt(segment, mtx, mvtx);
         Model_ApplyVertexTransforms(model);
-        func_800341E8(segment, mvtx);
+        Model_ComputeVertexNormals(segment, mvtx);
         break;
     default:
         return;

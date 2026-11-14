@@ -4,9 +4,9 @@ Each row is one function address that the source still reaches under more than o
 
 | Name kept | Other names |
 |---|---|
-| `AudioFrameUpdate` | `func_800419F8` |
+| `Announcer_SetActive` | `AudioFrameUpdate` |
 | `Audio_PlayCommand` | `func_800407B0` |
-| `Audio_PlaySoundEffectById` | `func_8003F6AC` |
+| `Audio_PlaySystemSound` | `Audio_PlaySoundEffectById` (gb_save.c calls it with two arguments, cartridge_check_options.c with another parameter type) |
 | `Audio_QueueSetMonoOutputCommand` | `func_80037B7C` |
 | `Audio_SetChannelVolume` | `func_80046170` |
 | `BattleAi_CalcDamage` | `func_8210EDBC` |
@@ -155,7 +155,7 @@ Each row is one function address that the source still reaches under more than o
 | `MewtwoIntro_RenderFrame` | `func_82200510` |
 | `MiniFx_UpdateParticles` | `func_82124194` |
 | `ModelAnim_BeginCurveContext` | `func_8001148C` |
-| `ModelAnim_StartDisplayObjectAnimation` | `func_800325B0` |
+| `ModelRenderer_ResetSlot` | `ModelAnim_StartDisplayObjectAnimation` (Stadium 1 name, stale prototype in battle_hud.h) |
 | `Model_ComputeNicknameColorVariant` | `Model_ComputeSizeVariant` |
 | `Model_InitDisplayObject` | `func_80019924` |
 | `ParticleGfx_RecolorEnv` | `func_82143440` |
@@ -244,16 +244,15 @@ Each row is one function address that the source still reaches under more than o
 | `PokeIcon_AllocFramebuffers` | `func_80017860` |
 | `PokeIcon_GetImage` | `func_80018DEC` |
 | `PokeIcon_WaitBackgroundLoad` | `func_80017D38` |
-| `PokeIcon_WaitFrameLoad` | `func_80017D00` |
 | `Pokedex_DrawAreaMapFrame` | `func_8A104B00` |
 | `Pokedex_RedrawAreaMapTransition` | `func_8A1011A4` |
 | `Pokemon_CreateDefault` | `func_80025540` |
 | `Pokemon_FromGbRecord` | `func_8001FE84` |
 | `Pokemon_ToGbRecord` | `func_8001FFE8` |
 | `Radial20_VariantD` | `func_82175440` |
+| `StageFade_Start` | `func_80005B98` (only in demo_battle_setup.c, whose call needs a void prototype to match) |
 | `Save_WriteTypedRecord` | `func_80024F14` |
 | `Species_FromInternalIndex` | `func_80020994` |
-| `StageFade_Start` | `func_80005B98` |
 | `Stage_ShowIntro` | `func_81800634` |
 | `Trainer_RequestPokeIcon` | `func_80019D08` |
 | `Ui_DrawTexturedRect8x8` | `func_8001D370` |

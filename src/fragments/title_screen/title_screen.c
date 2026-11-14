@@ -5,7 +5,7 @@
 #include "title_screen.h"
 #include "leo.h"
 
-s32 func_8000B2E8(void);
+s32 Cont_GetConnectedMask(void);
 void Font_BeginTranslucentTextRendering(void);
 void Font_SetActive(s32 mask, s32 arg1);
 void Font_DrawCharAt(s32 x, s32 y, s32 chr);
@@ -17,8 +17,8 @@ extern s32 sNoControllerScroll;
  * Scrolls コントローラ１がせつぞくされていません。でんげんをきって、コントローラを
  * コントローラコネクタ１にさしこんでください。 ("Controller 1 is not connected. Turn the
  * power off and plug a controller into controller connector 1.") right to left along the
- * PUSH START line, one pixel per frame, while bit 0 of func_8000B2E8() is clear.
- * Seen in play (2026-11-14): with func_8000B2E8 patched to return 0 on the title screen, PUSH START
+ * PUSH START line, one pixel per frame, while bit 0 of Cont_GetConnectedMask() is clear.
+ * Seen in play (2026-11-14): with Cont_GetConnectedMask patched to return 0 on the title screen, PUSH START
  * gave way to this message (scrolling).
  */
 void TitleScreen_DrawNoControllerTicker(void) {
@@ -28,7 +28,7 @@ void TitleScreen_DrawNoControllerTicker(void) {
     s32 idx;
     s32 i;
 
-    if (!(func_8000B2E8() & 1)) {
+    if (!(Cont_GetConnectedMask() & 1)) {
         len = strlen((const char*)sNoControllerMessage) >> 1;
         x = 16 - (sNoControllerScroll % 16);
         idx = sNoControllerScroll / 16;
@@ -299,7 +299,7 @@ void Cont_ReadInputs(void);
 void BgStage_DrawFrame(void);
 void StageContext_SetClearColor(u16 color);
 M2C_UNK Audio_FadeCategoriesAndStreams(M2C_UNK);
-M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 extern void *D_800603C0;
 extern LeoBootDescriptor* sDiskBootBlock;
 
@@ -341,7 +341,7 @@ s32 TitleScreen_Update(s32 fadeMode) {
             result = TITLE_EXIT_DISK_BOOT;
         } else if (M2C_FIELD(D_800603C0, u16 *, 8) & 0x9000) {
             if (TitleScreen_CanAcceptInput((bootStatus >> 0x10) & 0xFFFF) != 0) {
-                func_8003F6AC(0xF);
+                Audio_PlaySystemSound(0xF);
                 result = TITLE_EXIT_MAIN_MENU;
             }
         } else if (TitleScreen_ShouldStartDemo((bootStatus >> 0x10) & 0xFFFF) != 0) {
@@ -351,7 +351,7 @@ s32 TitleScreen_Update(s32 fadeMode) {
     }
     BgStage_DrawFrame();
     TitleScreen_DrawBackground();
-    if (func_8000B2E8() & 1) {
+    if (Cont_GetConnectedMask() & 1) {
         TitleScreen_DrawPushStart(0x74, 0xC0);
     }
     TitleScreen_DrawNoControllerTicker();

@@ -11,7 +11,7 @@ extern u8 D_002B13F0[];
 /**
  * Entry point of fragment 023. Queues fragment 020 (the main menu launcher, VRAM 0x8E000000,
  * ROM D_002B1360..D_002B13F0, //@src/fragments/main_menu_launcher) with entry arguments 0, 0,
- * and returns 0x8040 so the fragment loop in func_800260C4 runs the queued call. Fragment 020
+ * and returns 0x8040 so the fragment loop in State_MainMenu runs the queued call. Fragment 020
  * in turn queues the main menu. Both arguments are ignored.
  *
  * Fragments 021, 022 and 024 are byte-for-byte the same relay at 0x8E100000, 0x8E200000 and

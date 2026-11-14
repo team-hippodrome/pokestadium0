@@ -215,7 +215,7 @@ void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 void func_8001AB6C(void);
 void func_8001AA9C(u8, u8, u8, u8);
 void func_8001A384(s32, s32);
-void func_8001A944(s32, s32, s32);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 void func_8001ABBC(void);
 
 // D_88002034 is declared as raw bytes in this file; each 0x18 byte row is one MainMenuImage.
@@ -269,7 +269,7 @@ void MainMenu_DrawItem(s32 x, s32 y, s32 item, s32 index, s32 flags, f32* opacit
         func_8001AB6C();
         func_8001AA9C(text_color.r, text_color.g, text_color.b, text_color.a);
         func_8001A384(0x10, D_8800219C[index].unk_08);
-        func_8001A944(D_8800210C[index].x + D_8800219C[index].x, D_8800210C[index].y + D_8800219C[index].y, D_8800219C[index].text);
+        Font_Printf(D_8800210C[index].x + D_8800219C[index].x, D_8800210C[index].y + D_8800219C[index].y, D_8800219C[index].text);
         func_8001ABBC();
     }
     if (flags & 2) {
@@ -629,7 +629,7 @@ s32 MainMenu_UpdateScreen(MainMenuScreen* screen) {
             } else {
                 switch (MainMenu_UpdatePromptCursor(&screen->promptWindow)) {
                     case 1:
-                        func_8003F6AC(0x1E);
+                        Audio_PlaySystemSound(0x1E);
                         gSessionContext.sessionFlags |= 2;
                         screen->result = 0x8050;
                         screen->promptWindow.window.animTimer = 7;
@@ -637,13 +637,13 @@ s32 MainMenu_UpdateScreen(MainMenuScreen* screen) {
                         screen->itemList.fadeTimer = 0xD;
                         break;
                     case 2:
-                        func_8003F6AC(3);
+                        Audio_PlaySystemSound(3);
                         gSessionContext.sessionFlags &= ~1;
                         screen->promptWindow.window.animTimer = 7;
                         screen->nextState = 2;
                         break;
                     case 3:
-                        func_8003F6AC(0x1F);
+                        Audio_PlaySystemSound(0x1F);
                         func_800245E0(0x15, 0);
                         gSessionContext.sessionFlags &= ~1;
                         screen->promptWindow.window.animTimer = 7;
@@ -656,9 +656,9 @@ s32 MainMenu_UpdateScreen(MainMenuScreen* screen) {
             if (GridMenu_UpdateCursorSkipDisabled(&screen->itemList.menu) == 0) {
                 dir = func_8002BC14(D_800603C0);
                 if (dir == -1) {
-                    func_8003F6AC(8);
+                    Audio_PlaySystemSound(8);
                 } else if (dir == 1) {
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     screen->state = 3;
                     idx = screen->itemList.menu.cursor;
                     MainMenu_InitMessageWindow(&screen->messageWindow, 0x36, 0x57, D_88002258[idx], D_8800227C[idx], D_880022A0[idx], D_88001FEC[idx], (s32)D_88002034[idx]);
@@ -674,14 +674,14 @@ s32 MainMenu_UpdateScreen(MainMenuScreen* screen) {
             } else {
                 dir = MainMenu_UpdateMessageWindow(&screen->messageWindow);
                 if (dir == -1) {
-                    func_8003F6AC(3);
+                    Audio_PlaySystemSound(3);
                     screen->messageWindow.window.animTimer = 7;
                     screen->nextState = 2;
                 } else if (dir == 1) {
                     if (screen->itemList.menu.cursor == 7) {
-                        func_8003F6AC(2);
+                        Audio_PlaySystemSound(2);
                     } else {
-                        func_8003F6AC(0x1C);
+                        Audio_PlaySystemSound(0x1C);
                     }
                     screen->result = MainMenu_LoadSelectedFragment(screen->itemList.menu.cursor);
                     screen->messageWindow.window.animTimer = 7;
@@ -765,7 +765,7 @@ Color_RGBA8 MainMenu_ScaleColor(Color_RGBA8 color, f32 scale) {
     return scaled;
 }
 
-M2C_UNK func_80005B98(M2C_UNK);
+M2C_UNK StageFade_Start(M2C_UNK);
 extern s32 D_880022C4;
 /**
  * Draws the background, brightening it a little more each call (20 frames on the first entry).
@@ -777,7 +777,7 @@ s32 MainMenu_DrawFadeInBackground(s32 fade_mode) {
     if (fade_mode == 1) {
         /* Dead read of the counter; the retail code loads it here. */
         if (D_880022C4) {}  // karodo
-        func_80005B98(1);
+        StageFade_Start(1);
     }
     BgStage_DrawFrame();
     sp24 = MainMenu_ScaleColor(*(Color_RGBA8*)&D_88002254, D_880022C4 / 20.0);
@@ -848,7 +848,7 @@ s32 MainMenu_DrawSummaryBar(s32 fade_mode) {
     return 0;
 }
 
-M2C_UNK func_80005B98(M2C_UNK);                     /* extern */
+M2C_UNK StageFade_Start(M2C_UNK);                     /* extern */
 void BgStage_DrawFrame(void);                            /* extern */
 M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
 M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
@@ -867,7 +867,7 @@ s32 MainMenu_DrawSummaryBarAndBackground(s32 fade_mode) {
     M2C_UNK *var_a1;
 
     if (fade_mode == 1) {
-        func_80005B98(0xF);
+        StageFade_Start(0xF);
     }
     BgStage_DrawFrame();
     if (D_88002B00 == -1) {
@@ -931,7 +931,7 @@ s32 MainMenu_DrawFrame(s32 fade_mode) {
 M2C_UNK func_8000256C(M2C_UNK);                     /* extern */
 M2C_UNK func_80002620(M2C_UNK);                     /* extern */
 M2C_UNK func_80003EB8(u32, M2C_UNK *, M2C_UNK *, M2C_UNK); /* extern */
-M2C_UNK func_80005B98(M2C_UNK);                     /* extern */
+M2C_UNK StageFade_Start(M2C_UNK);                     /* extern */
 M2C_UNK func_80006724();                            /* extern */
 M2C_UNK func_8000675C();                            /* extern */
 s32 func_80006828(M2C_UNK, M2C_UNK *);              /* extern */
@@ -991,7 +991,7 @@ s32 MainMenu_Init(s32 is_first_entry) {
         } else {
             func_80006998(1);
         }
-        func_80005B98(0xF);
+        StageFade_Start(0xF);
         func_80006828(0x11, &MainMenu_DrawFrame);
         func_8000A7FC(0xF);
     } else {

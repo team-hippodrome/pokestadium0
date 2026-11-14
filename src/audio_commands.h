@@ -57,7 +57,7 @@ typedef struct GbMusicTrackHeader {
 typedef struct GbMusicBank {
     /* 0x00 */ u16 flags;
     /* 0x02 */ u16 num_entries;
-    /* 0x04 */ u16 numSequences; // @unverified: from the code: func_8003E0B0 relocates numSequences * 3 track pointers
+    /* 0x04 */ u16 numSequences; // @unverified: from the code: GbMusic_RelocateBank relocates numSequences * 3 track pointers
     /* 0x06 */ u16 unk_06;
     /* 0x08 */ GbMusicTrackHeader* offset;
     /* 0x0C */ char unk_0C[0x4];
@@ -96,7 +96,7 @@ extern u32* gAudioRegions;
 void Audio_CreateFrameTaskWrapper(void* arg0);
 void Audio_RelocateOffsets(u32* arg0, u32 arg1, s32 arg2);
 void Audio_FadeAndClearStoredSounds(void);
-M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);                     /* extern */
 
 // audio_commands_2.c
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
@@ -105,7 +105,7 @@ s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
 void Audio_UpdateBattleAudioFrame(void);
 s32 Audio_LoadWaveTablesAndMusic(u8*);
 void Audio_ClearWaveDataLoaded(void);
-void func_80043A10(void);
+void Announcer_CommentOnBattleEnd(void);
 
 // libultra/audio/synthesizer.c
 void func_80056950(void);

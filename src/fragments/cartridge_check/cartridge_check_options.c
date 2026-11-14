@@ -21,21 +21,21 @@
 #include "ui_graphics.h"
 
 // Declared here instead of in a header: the callers of these disagree on their types.
-M2C_UNK func_80005B98(M2C_UNK);
+M2C_UNK StageFade_Start(M2C_UNK);
 M2C_UNK func_80006828(M2C_UNK, M2C_UNK *);
 M2C_UNK func_80006998(M2C_UNK);
 M2C_UNK func_800199E4(M2C_UNK *);
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);
-M2C_UNK func_8001A944(M2C_UNK, M2C_UNK, s32);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 M2C_UNK func_8001AB6C();
 M2C_UNK func_8001ABBC();
-M2C_UNK func_80025100(s8 *, M2C_UNK);
+M2C_UNK Save_GetGbTowerSettings(s8 *, M2C_UNK);
 s32 func_800023C4(M2C_UNK, M2C_UNK);
 s32 func_800051F0(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32);
-s32 func_80027214(s8*, s32);
+s32 BezierPath_Step(s8*, s32);
 void MainPool_FinalizeAllocation(struct MemoryBlock* block);
 void func_8000A7FC(s32);
-void func_80041374(s32, s32);
+void Audio_StopSoundByCategory(s32, s32);
 
 extern M2C_UNK D_88402E40;
 extern M2C_UNK D_88402E5C;
@@ -127,12 +127,12 @@ void CartridgeCheck_ShowMessageUntilA(s32 text) {
         func_8001AB6C();
         func_8001A384(4, -1);
         Font_SetLineHeight(0x14);
-        func_8001A944(0x2E, 0x28, text);
+        Font_Printf(0x2E, 0x28, text);
         CartridgeCheck_DrawNextArrow(0x104, 0x3C);
         func_8001ABBC();
         func_80006780();
     } while (!(gPlayer1Controller->buttonPressed & 0x8000));
-    func_8003F6AC(1);
+    Audio_PlaySystemSound(1);
     D_88402D70 = text;
 }
 
@@ -198,12 +198,12 @@ void CartridgeCheck_RunGameBoyGiftEvent(void) {
     func_80006828(0x2D, &CartridgeCheck_DrawFrame);
 }
 
-void func_800273E8(s8* arg0, s32 arg1);
-s32 func_80027214(s8*, s32);
+void BezierPath_InitEased(s8* arg0, s32 arg1);
+s32 BezierPath_Step(s8*, s32);
 extern M2C_UNK D_88403648;
 extern s8 D_88402D98;
 extern s8 D_88402DB4;
-M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 /**
  * Camera move that opens the scene after the title screen: follows the eye/target paths
  * D_88402DB4/D_88402D98 until they end, and on frame 42 shows the console model and plays sound 0x10.
@@ -217,30 +217,30 @@ void CartridgeCheck_PlayBootIntro(void) {
     s32 pad; // FAKE: stack padding
 
     rec = M2C_FIELD(D_88403370, s32 *, 0xC);
-    func_800273E8(sp8C, (s32) &D_88402DB4);
-    func_800273E8(sp50, (s32) &D_88402D98);
-    if (func_80027214(sp8C, rec + 0xA8) != 0) {
+    BezierPath_InitEased(sp8C, (s32) &D_88402DB4);
+    BezierPath_InitEased(sp50, (s32) &D_88402D98);
+    if (BezierPath_Step(sp8C, rec + 0xA8) != 0) {
         do {
             if (i++ == 0x2A) {
                 M2C_FIELD(&D_88403648, s32 *, 0x14) = 1;
-                func_8003F6AC(0x10);
+                Audio_PlaySystemSound(0x10);
                 M2C_FIELD(&D_88403648, u8 *, 2) |= 0x20;
             }
-            func_80027214(sp50, rec + 0xB4);
+            BezierPath_Step(sp50, rec + 0xB4);
             CartridgeCheck_DrawFrame(0);
             func_80006780();
-        } while (func_80027214(sp8C, rec + 0xA8) != 0);
+        } while (BezierPath_Step(sp8C, rec + 0xA8) != 0);
     }
     func_80006828(0x19, &CartridgeCheck_DrawFrame);
 }
 
-void func_800273E8(s8* arg0, s32 arg1);
-s32 func_80027214(s8*, s32);
+void BezierPath_InitEased(s8* arg0, s32 arg1);
+s32 BezierPath_Step(s8*, s32);
 extern M2C_UNK D_88403648;
 extern s8 D_88402DD0;
 extern s8 D_88402DEC;
 
-M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 /**
  * Opening of the scene on the CartridgeCheck_EnterAfterCupWin path: runs the Game Boy present
  * event when transitionFlags has 8 or 0x10, then the camera move along D_88402DEC/D_88402DD0
@@ -261,19 +261,19 @@ void CartridgeCheck_PlayCupWinIntro(void) {
     if (gSessionContext.transitionFlags & 0x18) {
         CartridgeCheck_RunGameBoyGiftEvent();
     }
-    func_800273E8(sp8C, (s32) &D_88402DEC);
-    func_800273E8(sp50, (s32) &D_88402DD0);
-    if (func_80027214(sp8C, rec + 0xA8) != 0) {
+    BezierPath_InitEased(sp8C, (s32) &D_88402DEC);
+    BezierPath_InitEased(sp50, (s32) &D_88402DD0);
+    if (BezierPath_Step(sp8C, rec + 0xA8) != 0) {
         do {
             if (i++ == 0xA) {
                 M2C_FIELD(&D_88403648, s32 *, 0x14) = 1;
                 M2C_FIELD(&D_88403648, u8 *, 2) |= 0x20;
-                func_8003F6AC(0x10);
+                Audio_PlaySystemSound(0x10);
             }
-            func_80027214(sp50, rec + 0xB4);
+            BezierPath_Step(sp50, rec + 0xB4);
             CartridgeCheck_DrawFrame(0);
             func_80006780();
-        } while (func_80027214(sp8C, rec + 0xA8) != 0);
+        } while (BezierPath_Step(sp8C, rec + 0xA8) != 0);
     }
     func_80006828(0x19, &CartridgeCheck_DrawFrame);
 }
@@ -443,7 +443,7 @@ s32 Options_RunClearSavePrompt(s32 secondAsk, s32 row, u8 flags) {
         Options_DrawMenu(row, flags);
         buttons = gPlayer1Controller->buttonPressed;
         if (buttons & 0x300) {
-            func_8003F6AC(1);
+            Audio_PlaySystemSound(1);
             sel ^= 1;
         } else if (buttons & 0x8000) {
             loop = 0;
@@ -458,12 +458,12 @@ s32 Options_RunClearSavePrompt(s32 secondAsk, s32 row, u8 flags) {
     loop = sel == 0;
     if (loop) {
         if (secondAsk == 0) {
-            func_8003F6AC(2);
+            Audio_PlaySystemSound(2);
         } else {
-            func_8003F6AC(0x1F);
+            Audio_PlaySystemSound(0x1F);
         }
     } else {
-        func_8003F6AC(3);
+        Audio_PlaySystemSound(3);
     }
     return loop;
 }
@@ -491,12 +491,12 @@ void Save_ResetAll(void) {
     func_800245E0(19, 0);
     func_800245E0(20, 0);
     func_800245E0(21, 0);
-    func_8003BC9C(1);
-    func_800418F0(1);
+    Audio_SetOutputMode(1);
+    Announcer_SetEnabled(1);
 }
 
-s32 func_80025214(void);
-void func_80025224(u8);
+s32 Save_GetOptionFlags(void);
+void Save_SetOptionFlags(u8);
 void Save_CommitTypedRecord(s32, s32);
 /**
  * Loop for the options menu: Up/Down move the cursor through four entries and the chosen settings are saved.
@@ -506,7 +506,7 @@ void Save_CommitTypedRecord(s32, s32);
 void Options_RunMenu(void) {
     s32 done = 0;
     s32 sel = 0;
-    u8 flags = func_80025214();
+    u8 flags = Save_GetOptionFlags();
     u8 diff;
 
     do {
@@ -515,25 +515,25 @@ void Options_RunMenu(void) {
             if (sel < 0) {
                 sel = 3;
             }
-            func_8003F6AC(1);
+            Audio_PlaySystemSound(1);
         } else if (gPlayer1Controller->buttonPressed & 0x400) {
             sel++;
             if (sel >= 4) {
                 sel = 0;
             }
-            func_8003F6AC(1);
+            Audio_PlaySystemSound(1);
         } else if (gPlayer1Controller->buttonPressed & 0x8000) {
             switch (sel) {
                 case 0:
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     flags ^= 1;
                     break;
                 case 1:
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     flags ^= 2;
                     break;
                 case 2:
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     if (Options_RunClearSavePrompt(0, sel, flags) != 0 && Options_RunClearSavePrompt(1, sel, flags) != 0) {
                         flags = 0;
                         Save_ResetAll();
@@ -541,35 +541,35 @@ void Options_RunMenu(void) {
                     break;
                 case 3:
                     done = 1;
-                    func_8003F6AC(0x1D);
+                    Audio_PlaySystemSound(0x1D);
                     break;
             }
         } else if (gPlayer1Controller->buttonPressed & 0x4000) {
             done = 2;
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
         }
         CartridgeCheck_DrawFrame(0);
         Options_DrawMenu(sel, flags);
         func_80006780();
     } while (done == 0);
     if (done == 1) {
-        diff = func_80025214() ^ flags;
+        diff = Save_GetOptionFlags() ^ flags;
         if (diff != 0) {
             if (diff & 1) {
                 if (flags & 1) {
-                    func_8003BC9C(0);
+                    Audio_SetOutputMode(0);
                 } else {
-                    func_8003BC9C(1);
+                    Audio_SetOutputMode(1);
                 }
             }
             if (diff & 2) {
                 if (flags & 2) {
-                    func_800418F0(0);
+                    Announcer_SetEnabled(0);
                 } else {
-                    func_800418F0(1);
+                    Announcer_SetEnabled(1);
                 }
             }
-            func_80025224(flags);
+            Save_SetOptionFlags(flags);
             Save_CommitTypedRecord(0x14, 0);
         }
     }
@@ -593,12 +593,12 @@ s32 CartridgeCheck_RunScreen(void) {
         func_80006780();
         if (gPlayer1Controller->buttonPressed & 0x8000) {
             var_s0 = 1;
-            func_8003F6AC(0x1B);
+            Audio_PlaySystemSound(0x1B);
         } else if (gPlayer1Controller->buttonPressed & 0x4000) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             var_s0 = 2;
         } else if (gPlayer1Controller->buttonPressed & 1) {
-            func_8003F6AC(2);
+            Audio_PlaySystemSound(2);
             Options_RunMenu();
         }
     } while (var_s0 == 0);
@@ -619,18 +619,18 @@ void CartridgeCheck_PlayExitToTitle(void) {
     s32 sp34;
 
     sp34 = M2C_FIELD(D_88403370, s32 *, 0xC);
-    func_800273E8(sp74, (s32)&D_88402E24);
-    func_800273E8(sp38, (s32)&D_88402E08);
+    BezierPath_InitEased(sp74, (s32)&D_88402E24);
+    BezierPath_InitEased(sp38, (s32)&D_88402E08);
     func_80010F8C(&D_88403648, 0xFFFF0000);
     func_80010F9C(&D_88403648, 0x2E);
     M2C_FIELD(&D_88403648, u8 *, 2) |= 0x20;
     func_80006998(0xFFFF);
-    func_80005B98(0x1E);
+    StageFade_Start(0x1E);
     func_8000A7FC(0x3C);
-    func_80041374(0x46, 0x3C);
-    func_8003F6AC(0x23);
-    while (func_80027214(sp74, sp34 + 0xA8)) {
-        func_80027214(sp38, sp34 + 0xB4);
+    Audio_StopSoundByCategory(0x46, 0x3C);
+    Audio_PlaySystemSound(0x23);
+    while (BezierPath_Step(sp74, sp34 + 0xA8)) {
+        BezierPath_Step(sp38, sp34 + 0xB4);
         CartridgeCheck_DrawFrame(0);
         func_80006780();
     }
@@ -646,7 +646,7 @@ void CartridgeCheck_PlayExitToTitle(void) {
 void CartridgeCheck_PlaySetCartridgeAnimation(void) {
     s8 sp1F;
 
-    func_80025100(&sp1F, 0);
+    Save_GetGbTowerSettings(&sp1F, 0);
     func_8001107C(&D_88403648, 1, &D_8F4889B8);
     func_80010F14(&D_88403648, 1, &D_8F4014CC, 0x10000);
     func_80010F9C(&D_88403648, 0x2E);
@@ -656,7 +656,7 @@ void CartridgeCheck_PlaySetCartridgeAnimation(void) {
         func_80010F14(&D_88403378, 1, *((M2C_UNK*)((u8*)&D_88402D74 + (sp1F * 4))), 0x10000);
         func_80010F9C(&D_88403378, 0x2E);
     }
-    func_8003F6AC(0xB);
+    Audio_PlaySystemSound(0xB);
     func_80006828(0x14, (s32 *) CartridgeCheck_DrawFrame);
 }
 
@@ -687,17 +687,17 @@ void CartridgeCheck_PlayZoomIntoMonitor(void) {
 
     temp_s0 = M2C_FIELD(D_88403370, s32 *, 0xC);
     func_8000A7FC(0x32);
-    func_800273E8(sp7C, (s32) &D_88402E5C);
-    func_800273E8(sp40, (s32) &D_88402E40);
-    if (func_80027214(sp7C, temp_s0 + 0xA8) != 0) {
+    BezierPath_InitEased(sp7C, (s32) &D_88402E5C);
+    BezierPath_InitEased(sp40, (s32) &D_88402E40);
+    if (BezierPath_Step(sp7C, temp_s0 + 0xA8) != 0) {
         do {
-            func_80027214(sp40, temp_s0 + 0xB4);
+            BezierPath_Step(sp40, temp_s0 + 0xB4);
             if (D_88403360 < 0x19) {
                 D_88403360 += 1;
             }
             CartridgeCheck_DrawFrame(0);
             func_80006780();
-        } while (func_80027214(sp7C, temp_s0 + 0xA8) != 0);
+        } while (BezierPath_Step(sp7C, temp_s0 + 0xA8) != 0);
     }
 }
 
@@ -705,7 +705,7 @@ extern M2C_UNK D_88403378;
 extern M2C_UNK D_88403648;
 extern s8 D_88402E78;
 extern s8 D_88402E94;
-M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 /**
  * First part of coming back from the main menu: the camera moves along D_88402E94/D_88402E78
  * out of the monitor; on frame 15 it starts the console (and Game Boy) animation and plays sound 0x11.
@@ -719,21 +719,21 @@ void CartridgeCheck_PlayZoomOutOfMonitor(void) {
     s32 pad; // FAKE: stack padding
 
     temp_s1 = M2C_FIELD(D_88403370, s32 *, 0xC);
-    func_800273E8(sp94, (s32) &D_88402E94);
-    func_800273E8(sp58, (s32) &D_88402E78);
-    if (func_80027214(sp94, temp_s1 + 0xA8) != 0) {
+    BezierPath_InitEased(sp94, (s32) &D_88402E94);
+    BezierPath_InitEased(sp58, (s32) &D_88402E78);
+    if (BezierPath_Step(sp94, temp_s1 + 0xA8) != 0) {
         do {
             if (i++ == 0xF) {
                 M2C_FIELD(&D_88403648, u8 *, 2) |= 0x20;
                 if (D_88403358 >= 0) {
                     M2C_FIELD(&D_88403378, u8 *, 2) |= 0x20;
                 }
-                func_8003F6AC(0x11);
+                Audio_PlaySystemSound(0x11);
             }
-            func_80027214(sp58, temp_s1 + 0xB4);
+            BezierPath_Step(sp58, temp_s1 + 0xB4);
             CartridgeCheck_DrawFrame(0);
             func_80006780();
-        } while (func_80027214(sp94, temp_s1 + 0xA8) != 0);
+        } while (BezierPath_Step(sp94, temp_s1 + 0xA8) != 0);
     }
 }
 
@@ -751,7 +751,7 @@ void CartridgeCheck_TransitionToMainMenu(void) {
     CartridgeCheck_PlayZoomIntoMonitor();
     func_80006998(1);
     func_80006828(2, &CartridgeCheck_DrawFrame);
-    func_80041374(0x46, 0x1E);
+    Audio_StopSoundByCategory(0x46, 0x1E);
     if (D_88403358 < 0 || D_88403310[D_88403358].saveState != 0) {
         func_80006828(0x14, &CartridgeCheck_DrawFrame);
     }
@@ -773,7 +773,7 @@ s32 CartridgeCheck_EnterFromBoot(void) {
     CartridgeCheck_ReadInputs();
     func_800067BC(1);
     func_8000A7B0(0xA);
-    func_80005B98(0x1E);
+    StageFade_Start(0x1E);
     func_8000D520(sp18 + 0xB4, &D_88402D98 + 2);
     func_8000D520(sp18 + 0xA8, &D_88402DB4 + 2);
     func_80006828(5, &CartridgeCheck_DrawFrame);
@@ -794,7 +794,7 @@ s32 CartridgeCheck_EnterFromBoot(void) {
  * the main menu without the cartridge check loop. Always returns 1.
  * Seen in play (2026-11-14) with transitionFlags poked to 0x0A at CartridgeCheck_Main entry.
  * @unverified "CupWin": transitionFlags 2 is set only in VsScene's win handler (func_82200F08),
- * and func_800260C4 skips this fragment when flag 1 is set without 2, so only a win should
+ * and State_MainMenu skips this fragment when flag 1 is set without 2, so only a win should
  * reach here; a real cup win was not played.
  */
 s32 CartridgeCheck_EnterAfterCupWin(void) {
@@ -805,7 +805,7 @@ s32 CartridgeCheck_EnterAfterCupWin(void) {
     D_88403360 = 0;
     CartridgeCheck_ReadInputs();
     func_800067BC(1);
-    func_80005B98(0x1E);
+    StageFade_Start(0x1E);
     func_8000D520(sp1C + 0xB4, &D_88402DD0 + 2);
     func_8000D520(sp1C + 0xA8, &D_88402DEC + 2);
     func_80006828(5, &CartridgeCheck_DrawFrame);
@@ -941,7 +941,7 @@ void CartridgeCheck_InitModels(s32 fromMainMenu) {
     func_80010F9C(&D_88403648, 0x4A);
     M2C_FIELD(&D_88403648, u8 *, 2) &= ~0x20;
     if (D_88403358 >= 0) {
-        func_80025100(&sp27, 0);
+        Save_GetGbTowerSettings(&sp27, 0);
         Model_InitDisplayObject(&D_88403378, 0, 0, *((M2C_UNK*)((u8*)&D_884037B0 + (sp27 * 4))));
         func_80010F14(&D_88403378, 1, *((M2C_UNK**)((u8*)&D_88402D74 + (sp27 * 4))), 0xFFFF0000);
         func_80010F9C(&D_88403378, 0x4A);
