@@ -464,9 +464,11 @@ Functions that ran on each screen were caught with breakpoints. A name lost
 its tag only where the screen showed what the name says. About 30 helpers on
 these screens got names from their code and from the moment they ran.
 
-Not reached: the screens after a tournament win. Scripted inputs in a
-tournament battle didn't land reliably, and setting COM HP mid-battle stalled
-the next send-out once.
+The screens after a tournament win were reached on 2026-11-14 (see
+`src/fragments/cup_clear/cup_clear.c`): round 1 of the L1～30 Poké Ball Cup
+with `gSessionContext.roundOrDemoId` set to 8 and the COM team's HP set to
+1/0 in both the active slot and the roster, then one attack. That plays かち,
+チャンピオン!, the team parade and the cup-cleared trophy scene.
 
 ## The GB item with a Japanese cartridge
 

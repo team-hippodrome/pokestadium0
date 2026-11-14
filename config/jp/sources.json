@@ -94,7 +94,7 @@
   "src/fragments/registration/registration.c",
   "src/fragments/nintendo_cup_teams/nintendo_cup_teams.c",
   "src/fragments/pikachu_reward/pikachu_reward.c",
-  "src/fragments/cup_select/cup_select.c",
+  "src/fragments/cup_clear/cup_clear.c",
   "src/fragments/battle/command_menu.c",
   "src/fragments/battle/demo_battle_setup.c",
   "src/fragments/battle/anim_bone_drift_particle.c",
