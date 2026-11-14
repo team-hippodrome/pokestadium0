@@ -501,7 +501,6 @@ void Battle_Effect_LeechSeed(void) {
 s32 BattleMessage_Format(s32, s32, s32, ...);
 extern s32 D_8218C8CC;
 extern s32 D_8219A520;
-extern s8 *D_8219A5A0;
 
 /**
  * Move effect 0x55 (Gen 1 SplashEffect).

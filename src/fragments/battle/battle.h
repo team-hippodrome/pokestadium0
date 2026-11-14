@@ -202,7 +202,7 @@ typedef struct ActivePokemonState {
     /* 0x2A */ u8 moveSelectionLocked;
     /* 0x2B */ u8 teamMemberIndex;
     /* 0x2C */ u8 prevMenuTeamMemberIndex; // @unverified: menuTeamMemberIndex before a tag-team partner took the menu (BattleMenu_TakeControlOn*)
-    /* 0x2D */ u8 menuTeamMemberIndex; // @unverified: tag-team member (sessionTeams->teamMember index) whose controller drives the menus and whose party the switch menu lists
+    /* 0x2D */ u8 menuTeamMemberIndex; // @unverified: tag-team member (side->teamMember index) whose controller drives the menus and whose party the switch menu lists
     /* 0x2E */ u8 faintState; // 0 healthy; 0x11 fainting (Battle_HandleFaint), 0x10 fainted, back to 0 at the send-out; 0x12 the side's last Pokémon reached 0 HP, 0x13 once it vanished (0xF also seen in turn.c)
     /* 0x2F */ u8 alpha;
     /* 0x30 */ u8 surrenderCursor; // こうさんしますか？ (Surrender?) prompt: 0 いいえ (No), 1 はい (Yes)
@@ -224,7 +224,7 @@ typedef struct ThumbnailState {
     /* 0x000 */ DisplayObject displayObject;
     /* 0x168 */ CameraNode* camera;
     /* 0x16C */ s32 shownRosterIndex; // roster slot (pokemonPicked index) of the Pokémon the HUD boxes show; poking 1 put the bench Pokémon's name, level and HP in 1P's box
-    /* 0x170 */ s32 shownTeamMemberIndex; // @unverified: tag-team member (sessionTeams->teamMember index) owning that Pokémon; set from state.teamMemberIndex
+    /* 0x170 */ s32 shownTeamMemberIndex; // @unverified: tag-team member (side->teamMember index) owning that Pokémon; set from state.teamMemberIndex
     /* 0x174 */ s32 showing;
     /* 0x178 */ char unk178[0x4];
     /* 0x17C */ s32 side;
@@ -278,7 +278,7 @@ typedef struct ActivePokemon {
     /* 0x620 */ s32 animationTimer;
     /* 0x624 */ DisplayObject pokeBall;
     /* 0x78C */ ActivePokemonState state;
-    /* 0x85C */ BattleSide* sessionTeams;
+    /* 0x85C */ BattleSide* side; // @unverified: this side's session block (team, display model, status flags)
     /* 0x860 */ TeamRoster* teamRoster;
     /* 0x864 */ ThumbnailState thumbnail;
     /* 0xA04 */ MonCaptionState captionState;
@@ -340,8 +340,11 @@ typedef struct PokemonBattleCues {
 #define TYPE_EFFECTIVENESS_SUPER 20
 
 typedef struct BattleScene {
-    /* 0x00 */ char unk00[0x8];
-    /* 0x08 */ s8 visibilityPolicy;
+    /* 0x00 */ s8 splineSegmentFrames; // @unverified: frames per camera spline segment; splineT advances by 1/this a frame (participant_models.c)
+    /* 0x01 */ s8 splineSegment; // @unverified: current camera spline segment, from 1; demo_mode11 waits for it to reach 4
+    /* 0x02 */ char unk02[0x2];
+    /* 0x04 */ f32 splineT; // @unverified: 0..1 parameter within splineSegment, reset when it reaches 1
+    /* 0x08 */ s8 splineKeyframeCount; // @unverified: keyframes in D_FLT_8219A5B0, counted by func_821351F8
     /* 0x0C */ s32 bRollShotIndex;
     /* 0x10 */ s32 substepFrameCounter;
     /* 0x14 */ s32 stepFrameTimer;
@@ -1575,8 +1578,8 @@ extern BattleMonRuntime* sBattleUser;
 
 extern BattleMonRuntime* sBattleTarget;
 // The other Pokémon and the acting one in the battle scene; BattleScene_UpdateActiveOwnerPointers sets both from scene->actingSide.
-extern ActivePokemon* D_8219A540;
-extern ActivePokemon* D_8219A544;
+extern ActivePokemon* sOtherPokemon; // @unverified: the one not acting
+extern ActivePokemon* sActingPokemon; // @unverified: the one whose action is running
 
 extern unk_D_843901A0* gBattleMessageQueues;
 
@@ -1741,6 +1744,8 @@ extern s32 gMiniFxEmitterIndex;
 // libnumus/player.c
 void Audio_FadeCategoriesAndStreams(s32);
 s32 Team_IsOpponentIndexUsed(s32 arg0);
+// The callers pass the COM's teamRoster as a fifth argument that the function never reads.
+s32 BattleAi_ChooseTurnAction(BattleMonRuntime* arg0, BattleMonRuntime* arg1, s32 arg2, s32 arg3, TeamRoster* arg4);
 
 // stage.c
 s32 Battle_StageGeoDispatchCallback(s32 event, GraphNode* node);

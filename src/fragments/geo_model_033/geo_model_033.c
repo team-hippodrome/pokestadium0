@@ -76,9 +76,9 @@ void func_8F600214(s32 arg0, DemoGeoNode* arg1) {
         teams = D_80060490->node.callbackArg;
         team = ((u32)arg1->node.callbackArg >> 16) & 0xFFFF;
         slot = (u32)arg1->node.callbackArg & 0xFFFF;
-        if (slot < teams[team].unk_38[0][2]) {
+        if (slot < teams[team].trainers[0]->numberOfPokemonBrought) {
             D_8F626620[0] = 9;
-            _bcopy(teams[team].unk_38[0] + slot * 0x50 + 0x4C, &D_8F626620[1], 0xC);
+            _bcopy(teams[team].trainers[0]->pokemonPicked[slot].nickname, &D_8F626620[1], 0xC);
             arg1->unk_24 = D_8F626620;
         } else {
             arg1->unk_24 = NULL;
@@ -91,7 +91,7 @@ void func_8F6002C4(s32 arg0, GeoModelRootNode* arg1) {
 
     if (arg0 == 2) {
         teams = D_80060490->node.callbackArg;
-        arg1->unk_1A = teams[arg1->rootId].unk_00 != 0;
+        arg1->unk_1A = teams[arg1->rootId].trainerCount != 0;
     }
 }
 
@@ -112,7 +112,7 @@ void func_8F600360(s32 arg0, DemoGeoNode *arg1)
     teams = D_80060490->node.callbackArg;
     team = (((u32) arg1->node.callbackArg) >> 16) & 0xFFFF;
     slot = ((u32) arg1->node.callbackArg) & 0xFFFF;
-    if (slot < teams[team].unk_38[0][2])
+    if (slot < teams[team].trainers[0]->numberOfPokemonBrought)
     {
       arg1->displayList = Gfx_AllocDisplayList(0x10);
       func_8F600300(arg1->displayList, teams[team].unk_08[slot]);
@@ -144,14 +144,14 @@ void func_8F600480(s32 arg0, DemoGeoNode* arg1) {
         teams = D_80060490->node.callbackArg;
         team = ((u32)arg1->node.callbackArg >> 16) & 0xFFFF;
         slot = (u32)arg1->node.callbackArg & 0xFFFF;
-        if (teams[team].unk_00 == 2) {
-            if (slot % 3 < teams[team].unk_38[slot / 3][2]) {
+        if (teams[team].trainerCount == 2) {
+            if (slot % 3 < teams[team].trainers[slot / 3]->numberOfPokemonBrought) {
                 arg1->displayList = Gfx_AllocDisplayList(0x10);
                 func_8F600420(arg1->displayList, teams[team].unk_08[slot]);
             } else {
                 arg1->displayList = NULL;
             }
-        } else if (slot < teams[team].unk_38[0][2]) {
+        } else if (slot < teams[team].trainers[0]->numberOfPokemonBrought) {
             arg1->displayList = Gfx_AllocDisplayList(0x10);
             func_8F600420(arg1->displayList, teams[team].unk_08[slot]);
         } else {
@@ -177,14 +177,14 @@ void func_8F600648(s32 arg0, DemoGeoNode* arg1) {
         teams = D_80060490->node.callbackArg;
         team = ((u32)arg1->node.callbackArg >> 16) & 0xFFFF;
         slot = (u32)arg1->node.callbackArg & 0xFFFF;
-        if (teams[team].unk_00 == 2) {
-            if (slot % 3 < teams[team].unk_38[slot / 3][2]) {
+        if (teams[team].trainerCount == 2) {
+            if (slot % 3 < teams[team].trainers[slot / 3]->numberOfPokemonBrought) {
                 arg1->displayList = Gfx_AllocDisplayList(0x10);
                 func_8F6005E8(arg1->displayList, teams[team].unk_20[slot]);
             } else {
                 arg1->displayList = NULL;
             }
-        } else if (slot < teams[team].unk_38[0][2]) {
+        } else if (slot < teams[team].trainers[0]->numberOfPokemonBrought) {
             arg1->displayList = Gfx_AllocDisplayList(0x10);
             func_8F6005E8(arg1->displayList, teams[team].unk_20[slot]);
         } else {

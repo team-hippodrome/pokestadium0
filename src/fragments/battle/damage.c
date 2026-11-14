@@ -336,7 +336,6 @@ extern s8 D_82199F31;
 extern s16 D_82199F50;
 extern s8 *D_8219A3C0;
 extern s8 *D_8219A3C4;
-extern s8 *D_8219A5A0;
 
 /**
  * Marks the move as missed: clears the damage, sets the missed flag and clears the user's
@@ -460,7 +459,7 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
 
     sp28 = &arg0->state;
     sp24 = &arg0->state.runtime;
-    sp34 = &arg0->sessionTeams->teamMember[sp28->menuTeamMemberIndex]->pokemonPicked[sp28->rosterIndex];
+    sp34 = &arg0->side->teamMember[sp28->menuTeamMemberIndex]->pokemonPicked[sp28->rosterIndex];
 
     sp24->rosterIndex = sp28->rosterIndex;
     sp24->species = sp34->species.id;

@@ -151,14 +151,14 @@ typedef struct BattleSide {
     /* 0x02 */ s16 displayModel;
     /* 0x04 */ BattleMon* displayMon; // party BattleMon whose model the side shows; moved from pokemonPicked[0] to [3] with displayModel 95 to 31 when 1P switched Onix for Nidoqueen
     /* 0x08 */ TeamRoster* teamMember[2];
-    /* 0x10 */ ModelLoadContext* unk_10;
-    /* 0x14 */ ModelNodeView* loadedModel;
+    /* 0x10 */ ModelLoadContext* modelLoadContext; // @unverified: loader Trainer_RequestPokeIcon and the PokeIcon_*ForObject functions use
+    /* 0x14 */ ModelNodeView* loadedModel; // @unverified: modelLoadContext->loadedModel once the model load finishes
     /* 0x18 */ ModelNodeView* unk_18;
     /* 0x1C */ u8 unk_1C;
-    /* 0x1D */ u8 assetIsBusy;
+    /* 0x1D */ u8 backgroundLoadFlags; // @unverified: as modelFlags, for the background load (PokeIcon_RequestBackgroundForObject)
     /* 0x1E */ u8 unk_1E;
-    /* 0x20 */ s32 unk_20;
-    /* 0x24 */ arg1_func_80019420* unk_24;
+    /* 0x20 */ s32 backgroundFileList; // @unverified: file list passed to PokeIcon_RequestBackgroundLoad
+    /* 0x24 */ arg1_func_80019420* background; // @unverified: buffer passed to PokeIcon_RequestBackgroundLoad, then modelLoadContext->loadedBackground
 } BattleSide; // size = 0x28
 
 // Zero's layout (offsets checked against func_80025910, func_8002572C and func_80025830, which
@@ -180,7 +180,7 @@ typedef struct SessionContext {
     /* 0x1091 */ char unk1091[0x1];
     /* 0x1092 */ u8 inRound2;
     /* 0x1093 */ u8 continueCount;
-    /* 0x1094 */ u8 unk_1094; // @unverified: GB port of the continued team, 0xFF for rentals (func_80025A64)
+    /* 0x1094 */ u8 teamGbPort; // @unverified: GB port of the continued team, 0xFF for rentals (func_80025A64); passed to Session_LoadPortSnapshot
     /* 0x1095 */ u8 sessionFlags;
     /* 0x1096 */ u16 transitionFlags;
 } SessionContext; // size = 0x1098

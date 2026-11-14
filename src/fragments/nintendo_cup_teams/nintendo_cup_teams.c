@@ -38,8 +38,8 @@ void func_824000F0(BattleSide* arg0, TeamRoster* arg1) {
     arg0->displayMon = NULL;
     arg0->loadedModel = NULL;
     arg0->teamMember[0] = arg1;
-    arg0->assetIsBusy = 0;
-    arg0->unk_20 = 0;
+    arg0->backgroundLoadFlags = 0;
+    arg0->backgroundFileList = 0;
 }
 
 s32 func_82400118(SessionContext* arg0) {

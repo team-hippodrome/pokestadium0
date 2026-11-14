@@ -3,6 +3,7 @@
 #include "global.h"
 #include "m2c_macros.h"
 #include "free_battle_setup.h"
+#include "game_state.h"
 
 typedef struct {
     /* 0x00 */ u8 id;
@@ -875,7 +876,6 @@ typedef struct Src82004020 {
     /* 0x18 */ s32 count;
     /* 0x1C */ Entry82004020 entries[1];
 } Src82004020;
-extern u8 D_800AAF74[];
 extern char D_82009D28[];
 extern char D_82009D40[];
 char* func_8000A460(char*, const char*);
@@ -887,66 +887,66 @@ void func_80058410(void*, void*, s32, s32);
  * Seen in play (2026-11-13) ran twice once both sides had confirmed 「このデータでエントリーします。」, once for
  * 1P's ガール team and once for the COM team.
  */
-void FreeBattle_CopyTeamToRoster(u8* arg0, u8* arg1, s32 arg2, Src82004020* arg3) {
+void FreeBattle_CopyTeamToRoster(TeamRoster* arg0, ExtendedRosterInfo* arg1, s32 arg2, Src82004020* arg3) {
     s32 i;
     s32 n;
     char* name;
 
     if (arg2 == 5) {
-        arg0[0] = 2;
-        arg0[1] = 1;
-        M2C_FIELD(arg0, u8**, 4) = D_800AAF74;
-        name = (char*)(arg0 + 8);
+        arg0->isHuman = 2;
+        arg0->controllerPort = 1;
+        arg0->controller = &gControllers[1];
+        name = arg0->trainerName;
         *(Str82009D28*)name = *(Str82009D28*)D_82009D28;
-        M2C_FIELD(arg0, s32*, 0x18) = 0;
+        arg0->trainerId = 0;
     } else {
-        arg0[0] = 1;
-        arg0[1] = arg2 - 1;
-        M2C_FIELD(arg0, u8**, 4) = D_800AAF50 + (arg2 - 1) * 0x24;
-        name = (char*)(arg0 + 8);
+        arg0->isHuman = 1;
+        arg0->controllerPort = arg2 - 1;
+        arg0->controller = &gControllers[arg2 - 1];
+        name = arg0->trainerName;
         if (arg3->unk_01 == 0x20 && arg2 == arg3->unk_02 + 1) {
             func_8000A460(name, arg3->name);
-            M2C_FIELD(arg0, s32*, 0x18) = arg3->unk_04;
+            arg0->trainerId = arg3->unk_04;
         } else {
-            M2C_FIELD(arg0, s32*, 0x18) = 0;
+            arg0->trainerId = 0;
             func_8000A460(name, ((char**)&D_820090C0)[arg2]);
         }
     }
     for (i = 0, n = 0; i < arg3->count; i++) {
         if (arg3->entries[i].unk_00 == 0) {
-            ((Mon82004020*)(arg0 + 0x1C))[n++] = arg3->entries[i].mon;
+            ((Mon82004020*)arg0->pokemonPicked)[n++] = arg3->entries[i].mon;
         }
     }
-    arg0[2] = n;
-    M2C_FIELD(arg0, u8**, 0x1FC) = arg1;
-    M2C_FIELD(arg1, s16*, 0) = 0;
-    arg1[2] = arg0[2];
-    func_80058410(arg0 + 0x1C, arg1 + 0x28, 0x1E0, n);
-    *(Str82009D40*)(arg1 + 4) = *(Str82009D40*)D_82009D40;
-    func_8000A460((char*)(arg1 + 0x14), name);
+    arg0->numberOfPokemonBrought = n;
+    arg0->rosterInfo = arg1;
+    arg1->unk_000 = 0;
+    arg1->numberOfPokemonCanBePicked = arg0->numberOfPokemonBrought;
+    func_80058410(arg0->pokemonPicked, arg1->battleMon, 0x1E0, n);
+    *(Str82009D40*)arg1->title = *(Str82009D40*)D_82009D40;
+    func_8000A460(arg1->fullName, name);
 }
 
 /**
- * Zeroes one side's roster header in D_8200ACF8.
+ * Zeroes one side's roster header in gSessionContext.battleSides.
  * Seen in play: runs on 「エントリーけってい」.
  */
-void FreeBattle_ClearSideRoster(s8 *arg0) {
-    M2C_FIELD(arg0, s8 *, 0) = 0;
-    M2C_FIELD(arg0, s8 *, 1) = 0;
-    M2C_FIELD(arg0, s16 *, 2) = 0;
-    M2C_FIELD(arg0, s32 *, 4) = 0;
-    M2C_FIELD(arg0, s32 *, 0x14) = 0;
-    M2C_FIELD(arg0, s32 *, 8) = 0;
-    M2C_FIELD(arg0, s32 *, 0xC) = 0;
-    M2C_FIELD(arg0, s8 *, 0x1D) = 0;
-    M2C_FIELD(arg0, s32 *, 0x20) = 0;
+void FreeBattle_ClearSideRoster(BattleSide* arg0) {
+    arg0->modelFlags = 0;
+    arg0->tagTeamSize = 0;
+    arg0->displayModel = 0;
+    arg0->displayMon = NULL;
+    arg0->loadedModel = NULL;
+    arg0->teamMember[0] = NULL;
+    arg0->teamMember[1] = NULL;
+    arg0->backgroundLoadFlags = 0;
+    arg0->backgroundFileList = 0;
 }
 
-extern s8* D_8200ACF8;
+extern SessionContext* D_8200ACF8;
 void Session_LoadPortSnapshot(u8);
 
 /**
- * Builds the battle rosters in D_8200ACF8 for each side's picked teams
+ * Builds the battle rosters in gSessionContext (through D_8200ACF8) for each side's picked teams
  * (FreeBattle_CopyTeamToRoster), clears both side headers first and, in modes 1 and 2, loads the
  * picked port's session snapshot.
  * Seen in play: runs on 「エントリーけってい」.
@@ -956,49 +956,50 @@ void Session_LoadPortSnapshot(u8);
 void FreeBattle_BuildBattleRosters(s32* arg0, s32* arg1, Src82004020** arg2, s32 arg3, s32 arg4, s32 arg5) {
     Src82004020* src;
 
-    D_8200ACF8[0] = arg3;
-    D_8200ACF8[1] = arg4;
-    if (D_8200ACF8[0] == 2) {
-        D_8200ACF8[2] = arg5;
+    D_8200ACF8->mode = arg3;
+    D_8200ACF8->ruleCategory = arg4;
+    if (D_8200ACF8->mode == 2) {
+        D_8200ACF8->modeSelection = arg5;
     }
-    if ((D_8200ACF8[0] == 1) || (D_8200ACF8[0] == 2)) {
+    if ((D_8200ACF8->mode == 1) || (D_8200ACF8->mode == 2)) {
         if (arg0[0] > 0) {
             src = arg2[arg0[0] - 1];
             if (src->unk_01 == 0x20) {
-                M2C_FIELD(D_8200ACF8, u8*, 0x1094) = src->unk_02;
+                D_8200ACF8->teamGbPort = src->unk_02;
             } else {
-                M2C_FIELD(D_8200ACF8, s8*, 0x1094) = -1;
+                *(s8*)&D_8200ACF8->teamGbPort = -1; // FAKE: an s8 store is needed to match
             }
-            Session_LoadPortSnapshot(M2C_FIELD(D_8200ACF8, u8*, 0x1094));
+            Session_LoadPortSnapshot(D_8200ACF8->teamGbPort);
         }
     }
-    M2C_FIELD(D_8200ACF8, u32*, 0x108C) = -1;
-    M2C_FIELD(D_8200ACF8, u32*, 0x1090) = -1;
-    FreeBattle_ClearSideRoster(D_8200ACF8 + 0x1034);
-    FreeBattle_ClearSideRoster(D_8200ACF8 + 0x105C);
-    D_8200ACF8[4] = 0;
-    D_8200ACF8[0x208] = 0;
-    D_8200ACF8[0x40C] = 0;
-    D_8200ACF8[0x610] = 0;
+    // One word store over aiDifficulty..moveLimitSeconds and one over gbStarterChoice..continueCount.
+    *(u32*)&D_8200ACF8->aiDifficulty = -1;
+    *(u32*)&D_8200ACF8->gbStarterChoice = -1;
+    FreeBattle_ClearSideRoster(&D_8200ACF8->battleSides[0]);
+    FreeBattle_ClearSideRoster(&D_8200ACF8->battleSides[1]);
+    D_8200ACF8->trainerSlots[0].isHuman = 0;
+    D_8200ACF8->trainerSlots[1].isHuman = 0;
+    D_8200ACF8->trainerSlots[2].isHuman = 0;
+    D_8200ACF8->trainerSlots[3].isHuman = 0;
     if (arg0[0] > 0) {
-        FreeBattle_CopyTeamToRoster(D_8200ACF8 + 4, D_8200ACF8 + 0x814, arg0[0], arg2[arg0[0] - 1]);
-        M2C_FIELD(D_8200ACF8, s8**, 0x103C + M2C_FIELD(D_8200ACF8, u8*, 0x1035) * 4) = D_8200ACF8 + 4;
-        M2C_FIELD(D_8200ACF8, u8*, 0x1035)++;
+        FreeBattle_CopyTeamToRoster(&D_8200ACF8->trainerSlots[0], &D_8200ACF8->rosterInfo[0], arg0[0], arg2[arg0[0] - 1]);
+        D_8200ACF8->battleSides[0].teamMember[D_8200ACF8->battleSides[0].tagTeamSize] = &D_8200ACF8->trainerSlots[0];
+        D_8200ACF8->battleSides[0].tagTeamSize++;
     }
     if (arg0[1] > 0) {
-        FreeBattle_CopyTeamToRoster(D_8200ACF8 + 0x208, D_8200ACF8 + 0xA1C, arg0[1], arg2[arg0[1] - 1]);
-        M2C_FIELD(D_8200ACF8, s8**, 0x103C + M2C_FIELD(D_8200ACF8, u8*, 0x1035) * 4) = D_8200ACF8 + 0x208;
-        M2C_FIELD(D_8200ACF8, u8*, 0x1035)++;
+        FreeBattle_CopyTeamToRoster(&D_8200ACF8->trainerSlots[1], &D_8200ACF8->rosterInfo[1], arg0[1], arg2[arg0[1] - 1]);
+        D_8200ACF8->battleSides[0].teamMember[D_8200ACF8->battleSides[0].tagTeamSize] = &D_8200ACF8->trainerSlots[1];
+        D_8200ACF8->battleSides[0].tagTeamSize++;
     }
     if (arg1[0] > 0) {
-        FreeBattle_CopyTeamToRoster(D_8200ACF8 + 0x40C, D_8200ACF8 + 0xC24, arg1[0], arg2[arg1[0] - 1]);
-        M2C_FIELD(D_8200ACF8, s8**, 0x1064 + M2C_FIELD(D_8200ACF8, u8*, 0x105D) * 4) = D_8200ACF8 + 0x40C;
-        M2C_FIELD(D_8200ACF8, u8*, 0x105D)++;
+        FreeBattle_CopyTeamToRoster(&D_8200ACF8->trainerSlots[2], &D_8200ACF8->rosterInfo[2], arg1[0], arg2[arg1[0] - 1]);
+        D_8200ACF8->battleSides[1].teamMember[D_8200ACF8->battleSides[1].tagTeamSize] = &D_8200ACF8->trainerSlots[2];
+        D_8200ACF8->battleSides[1].tagTeamSize++;
     }
     if (arg1[1] > 0) {
-        FreeBattle_CopyTeamToRoster(D_8200ACF8 + 0x610, D_8200ACF8 + 0xE2C, arg1[1], arg2[arg1[1] - 1]);
-        M2C_FIELD(D_8200ACF8, s8**, 0x1064 + M2C_FIELD(D_8200ACF8, u8*, 0x105D) * 4) = D_8200ACF8 + 0x610;
-        M2C_FIELD(D_8200ACF8, u8*, 0x105D)++;
+        FreeBattle_CopyTeamToRoster(&D_8200ACF8->trainerSlots[3], &D_8200ACF8->rosterInfo[3], arg1[1], arg2[arg1[1] - 1]);
+        D_8200ACF8->battleSides[1].teamMember[D_8200ACF8->battleSides[1].tagTeamSize] = &D_8200ACF8->trainerSlots[3];
+        D_8200ACF8->battleSides[1].tagTeamSize++;
     }
 }
 

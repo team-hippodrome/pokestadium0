@@ -149,7 +149,7 @@ void BattleMenu_DrawMovePanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3)
     BattleMon* party;
     BattleMonRuntime* runtime;
 
-    party = &arg0->sessionTeams->teamMember[arg0->thumbnail.shownTeamMemberIndex]->pokemonPicked[arg0->thumbnail.shownRosterIndex];
+    party = &arg0->side->teamMember[arg0->thumbnail.shownTeamMemberIndex]->pokemonPicked[arg0->thumbnail.shownRosterIndex];
     runtime = &arg0->state.runtime;
 
     func_82116CF4(arg1 + 1, arg2 + 1, 0xC7, 0x38, &D_8218B008 + arg3 * 3, &D_8218B014 + arg3 * 3);
@@ -547,7 +547,7 @@ void BattleMenu_DrawSwitchPanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg
     UNUSED s32 pad[3]; // FAKE
     Colors8211B900 a = D_8218B104;
     Colors8211B900 b = D_8218B114;
-    TeamRoster* roster = arg0->sessionTeams->teamMember[arg0->thumbnail.shownTeamMemberIndex];
+    TeamRoster* roster = arg0->side->teamMember[arg0->thumbnail.shownTeamMemberIndex];
     BattleMon* m0 = &arg0->teamRoster->pokemonPicked[0];
     BattleMon* m1 = &arg0->teamRoster->pokemonPicked[1];
     BattleMon* m2 = &arg0->teamRoster->pokemonPicked[2];
@@ -646,7 +646,7 @@ void BattleHud_DrawCompactMonStatusBox(ActivePokemon* arg0, s16 arg1, s16 arg2, 
     u16 val;
 
     state = &arg0->state;
-    mon = &arg0->sessionTeams->teamMember[arg0->thumbnail.shownTeamMemberIndex]->pokemonPicked[arg0->thumbnail.shownRosterIndex];
+    mon = &arg0->side->teamMember[arg0->thumbnail.shownTeamMemberIndex]->pokemonPicked[arg0->thumbnail.shownRosterIndex];
     if (mon->hp == 0) {
         status = 1;
     } else {
@@ -798,7 +798,7 @@ void func_8211C9FC(void) {
     u32 len;
     s8* name;
     ActivePokemonState* state = &sActivePokemon[sBattleScene.scene->actingSide]->state;
-    BattleMon* bm = &sActivePokemon[sBattleScene.scene->actingSide]->sessionTeams->teamMember[0]->pokemonPicked[state->rosterIndex];
+    BattleMon* bm = &sActivePokemon[sBattleScene.scene->actingSide]->side->teamMember[0]->pokemonPicked[state->rosterIndex];
 
     D_8219A4F1 = func_8000F1FC(D_8219A4F1, 0xFF, 5, 5);
     func_8001AB6C();
@@ -1433,7 +1433,6 @@ void BattleDebug_DrawPokeBallViewer(s16 arg0, s16 arg1) {
     func_82116480(buf, arg0 + 0x3C, arg1 + 0x12);
 }
 
-extern s8* D_8219A5A0;
 extern char D_82195FF4[];
 extern char D_82195FF8[];
 /**

@@ -300,7 +300,7 @@ void func_821202AC(CameraNode* arg0) {
         BattleAnim_GetOwnerDefaultAnchorPosition(ap, &sBattleScene.scene->anchorPosition);
         sBattleScene.scene->orbitDistance = BattleScene_ScaleCameraDistance(ap, 4.0f, 300.0f);
         BattleScene_SetCameraAtFromAnchor(ap, arg0, sBattleScene.scene->anchorPosition, 0, BattleScene_GetParticipantFacingAngle(ap), 0.0f, 0);
-        BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->anchorPosition, (M2C_FIELD(sBattleScene.scene, s16*, 0x6E) = -0x1554), BattleScene_GetParticipantFacingAngle(ap), sBattleScene.scene->orbitDistance, 0.0f);
+        BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->anchorPosition, (sBattleScene.scene->unk_6E = -0x1554), BattleScene_GetParticipantFacingAngle(ap), sBattleScene.scene->orbitDistance, 0.0f);
         sBattleScene.scene->phaseStep += 1;
     }
 }
@@ -624,8 +624,8 @@ void func_82120E70(CameraNode* arg0) {
         BattleScene_SelectNextBRollCameraShot(arg0);
         return;
     }
-    BattleAnim_StepToS16(&M2C_FIELD(sBattleScene.scene, s16*, 0x6E), 0x149E, 0x2D);
-    func_82122628((s32)arg0, sBattleScene.scene->anchorPosition, M2C_FIELD(sBattleScene.scene, s16*, 0x6E),
+    BattleAnim_StepToS16(&sBattleScene.scene->unk_6E, 0x149E, 0x2D);
+    func_82122628((s32)arg0, sBattleScene.scene->anchorPosition, sBattleScene.scene->unk_6E,
                   BattleScene_GetParticipantFacingAngle(sActivePokemon[sBattleScene.scene->actingSide]), sBattleScene.scene->orbitDistance, 0.0f);
     BattleAnim_ApproachF(&M2C_FIELD(arg0, f32*, 0x2C), sBattleScene.scene->verticalFieldOfView, 0.08f);
     temp_f0 = sBattleScene.scene->verticalFieldOfView;
@@ -707,14 +707,13 @@ void func_8212188C(void);
  */
 void func_8212116C(CameraNode* arg0) {
     func_82135734(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
-    if (M2C_FIELD(sBattleScene.scene, s8*, 1) == 0x10) {
+    if (sBattleScene.scene->splineSegment == 0x10) {
         func_8212188C();
         sBattleScene.scene->phaseStep = 0x1B;
     }
 }
 
 s32 func_821217DC(M2C_UNK);                         /* extern */
-extern s8 *D_8219A5A0;
 
 /**
  * After 440 frames, sets the phase step to 29.
@@ -731,8 +730,8 @@ void func_821211D4(s32 arg0) {
  * Sets the camera's clip planes to 20.0f (near) and 4000.0f (far), the same
  * call that BattleScene_InitializeBattlePresentation makes.  Then, if any of
  * the bits in 0xE03F is set in the halfword at offset 8 of the structure that
- * D_800603C0 points to, calls Audio_FadeCategoriesAndStreams(1) and stores 3 at offset 0x40 of
- * the structure that D_8219A5A0 points to.  What those two structures are is
+ * D_800603C0 points to, calls Audio_FadeCategoriesAndStreams(1) and stores 3 in
+ * sBattleScene.scene->winner.  What those two structures are is
  * not established from this function alone.
  */
 extern u8* D_800603C0;

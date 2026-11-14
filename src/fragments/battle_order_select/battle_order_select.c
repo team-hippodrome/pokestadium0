@@ -113,32 +113,32 @@ void BattleMenu_DrawScrollingInstructionPanel(void) {
     }
 }
 
-void func_823003B8(OrderSidebarIcons* arg0, u8* arg1, s32 arg2) {
+void func_823003B8(OrderSidebarIcons* arg0, BattleSide* arg1, s32 arg2) {
     s32 i;
 
-    arg0->unk_00 = 0;
-    arg0->unk_01 = 0;
+    arg0->iconCount = 0;
+    arg0->isCom = 0;
     for (i = 0; i < 6; i++) {
-        arg0->unk_02[i] = 0;
-        arg0->unk_08[i] = 1;
+        arg0->slotIcons[i] = 0;
+        arg0->slotIconGrowth[i] = 1;
     }
     if (arg2 != 0) {
         i = 3;
         do {
-            arg0->unk_02[i] = -1;
+            arg0->slotIcons[i] = -1;
             i++;
         } while (i < 6);
     }
-    if (arg1[1] == 1) {
-        arg0->unk_0E = (*(u8**)(arg1 + 8))[1];
-        arg0->unk_0F = -1;
-        arg0->unk_01 = ((*(u8**)(arg1 + 8))[0] & 2) != 0;
-    } else if ((*(u8**)(arg1 + 8))[1] < (*(u8**)(arg1 + 0xC))[1]) {
-        arg0->unk_0E = (*(u8**)(arg1 + 8))[1];
-        arg0->unk_0F = (*(u8**)(arg1 + 0xC))[1];
+    if (arg1->tagTeamSize == 1) {
+        arg0->firstPort = arg1->teamMember[0]->controllerPort;
+        arg0->secondPort = -1;
+        arg0->isCom = (arg1->teamMember[0]->isHuman & 2) != 0;
+    } else if (arg1->teamMember[0]->controllerPort < arg1->teamMember[1]->controllerPort) {
+        arg0->firstPort = arg1->teamMember[0]->controllerPort;
+        arg0->secondPort = arg1->teamMember[1]->controllerPort;
     } else {
-        arg0->unk_0E = (*(u8**)(arg1 + 0xC))[1];
-        arg0->unk_0F = (*(u8**)(arg1 + 8))[1];
+        arg0->firstPort = arg1->teamMember[1]->controllerPort;
+        arg0->secondPort = arg1->teamMember[0]->controllerPort;
     }
 }
 
@@ -155,24 +155,24 @@ extern u8* D_823028E4[][3];
 void BattleMenu_DrawSidebarLeadIcon(s32 arg0, s32 arg1, OrderSidebarIcons* arg2) {
     u8* sp2C;
 
-    if (arg2->unk_0F == -1) {
-        if (arg2->unk_01 != 0) {
+    if (arg2->secondPort == -1) {
+        if (arg2->isCom != 0) {
             func_8001B884(arg0, arg1, 0x24, 0x1A, D_03008880, 0x24, 0x200000);
         } else {
-            func_8001B884(arg0, arg1, 0x24, 0x1A, D_823028CC[arg2->unk_0E], 0x24, 0x200000);
+            func_8001B884(arg0, arg1, 0x24, 0x1A, D_823028CC[arg2->firstPort], 0x24, 0x200000);
         }
     } else {
-        switch (arg2->unk_0E) {
+        switch (arg2->firstPort) {
             case 0:
-                sp2C = D_823028D8[arg2->unk_0F];
+                sp2C = D_823028D8[arg2->secondPort];
                 break;
 
             case 1:
-                sp2C = D_823028E0[arg2->unk_0F];
+                sp2C = D_823028E0[arg2->secondPort];
                 break;
 
             case 2:
-                sp2C = D_823028E4[0][arg2->unk_0F];
+                sp2C = D_823028E4[0][arg2->secondPort];
                 break;
         }
         func_8001B884(arg0, arg1, 0x24, 0x2D, sp2C, 0x24, 0x200000);
@@ -222,7 +222,7 @@ void BattleMenu_DrawTeamOrderSidebarTeam0(void) {
     s16 var_s2;
     s32 var_s1;
 
-    if (temp_v0->unk_0F == -1) {
+    if (temp_v0->secondPort == -1) {
         var_s2 = 0x3F;
     } else {
         var_s2 = 0x4A;
@@ -237,7 +237,7 @@ void BattleMenu_DrawTeamOrderSidebarTeam0(void) {
     func_8001B884(0x2D, var_s2 + 0x51, 0x20, 0x17, D_30050C0, 0x20, 0x200000);
     func_8001B884(0x25, var_s2 + 0x68, 0x28, 0x2E, D_3002E20, 0x28, 0x200000);
 
-    if (temp_v0->unk_0F == -1) {
+    if (temp_v0->secondPort == -1) {
         BattleMenu_DrawSidebarLeadIcon(0x2D, 0x21, &D_82302B20[0]);
     } else {
         BattleMenu_DrawSidebarLeadIcon(0x2D, 0x1D, &D_82302B20[0]);
@@ -245,7 +245,7 @@ void BattleMenu_DrawTeamOrderSidebarTeam0(void) {
 
     var_s1 = var_s2 + 0x76;
     for (i = 0; i < 6; i++) {
-        temp_v0->unk_02[i] = BattleMenu_DrawSidebarRowTypeIcon(0x2D, var_s1 - i * 0x17, temp_v0->unk_02[i], temp_v0->unk_08[i]);
+        temp_v0->slotIcons[i] = BattleMenu_DrawSidebarRowTypeIcon(0x2D, var_s1 - i * 0x17, temp_v0->slotIcons[i], temp_v0->slotIconGrowth[i]);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -261,7 +261,7 @@ void BattleMenu_DrawTeamOrderSidebarTeam1(void) {
     s16 var_s2;
     s32 var_s1;
 
-    if (temp_v0->unk_0F == -1) {
+    if (temp_v0->secondPort == -1) {
         var_s2 = 0xF1;
     } else {
         var_s2 = 0xE6;
@@ -276,7 +276,7 @@ void BattleMenu_DrawTeamOrderSidebarTeam1(void) {
     func_8001B884(0x2D, var_s2 + 0x71, 0x20, 0x17, D_30050C0, 0x20, 0x200000);
     func_8001B884(0x2D, var_s2 + 0x88, 0x20, 0xE, D_3004D40, 0x20, 0x200000);
 
-    if (temp_v0->unk_0F == -1) {
+    if (temp_v0->secondPort == -1) {
         BattleMenu_DrawSidebarLeadIcon(0x2D, 0x189, &D_82302B20[1]);
     } else {
         BattleMenu_DrawSidebarLeadIcon(0x2D, 0x17C, &D_82302B20[1]);
@@ -284,7 +284,7 @@ void BattleMenu_DrawTeamOrderSidebarTeam1(void) {
 
     var_s1 = var_s2 + 0xC;
     for (i = 0; i < 6; i++) {
-        temp_v0->unk_02[i] = BattleMenu_DrawSidebarRowTypeIcon(0x2D, var_s1 + i * 0x17, temp_v0->unk_02[i], temp_v0->unk_08[i]);
+        temp_v0->slotIcons[i] = BattleMenu_DrawSidebarRowTypeIcon(0x2D, var_s1 + i * 0x17, temp_v0->slotIcons[i], temp_v0->slotIconGrowth[i]);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -297,9 +297,9 @@ void BattleMenu_DrawTeamOrderSidebarTeam1(void) {
 void BattleMenu_AppendOrderSlotIcon(s32 arg0, s32 arg1) {
     OrderSidebarIcons* temp_v0 = &D_82302B20[arg0];
 
-    temp_v0->unk_02[temp_v0->unk_00] = ((arg1 + 1) << 4) | (temp_v0->unk_02[temp_v0->unk_00] & 0xF);
-    temp_v0->unk_08[temp_v0->unk_00] = 1;
-    temp_v0->unk_00++;
+    temp_v0->slotIcons[temp_v0->iconCount] = ((arg1 + 1) << 4) | (temp_v0->slotIcons[temp_v0->iconCount] & 0xF);
+    temp_v0->slotIconGrowth[temp_v0->iconCount] = 1;
+    temp_v0->iconCount++;
 }
 
 /**
@@ -311,9 +311,9 @@ void BattleMenu_ResetOrderSlotIcons(s32 arg0) {
     s32 i;
 
     for (i = 0; i < 6; i++) {
-        ptr->unk_08[i] = -1;
+        ptr->slotIconGrowth[i] = -1;
     }
-    ptr->unk_00 = 0;
+    ptr->iconCount = 0;
 }
 
 /**
@@ -1035,7 +1035,7 @@ void BattleMenu_SetLeadTagTeamMember(BattleSide* arg0, OrderSidebarIcons* arg1) 
     s32 tmp;
 
     if (arg0->tagTeamSize == 2) {
-        tmp = ((arg1->unk_02[0] >> 4) & 0xF) - 1;
+        tmp = ((arg1->slotIcons[0] >> 4) & 0xF) - 1;
         if (tmp == arg0->teamMember[1]->controllerPort) {
             temp_v0 = arg0->teamMember[0];
             arg0->teamMember[0] = arg0->teamMember[1];

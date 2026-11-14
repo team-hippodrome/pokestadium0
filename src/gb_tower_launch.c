@@ -106,7 +106,7 @@ u8 func_8000C610(u8);
  * session.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
-void GbTower_Start(UnkInputStruct8000D738* arg0) {
+void GbTower_Start(GbTowerLaunchParams* arg0) {
     void* temp_v0;
 
     main_pool_push_state('GBEM');
@@ -116,7 +116,7 @@ void GbTower_Start(UnkInputStruct8000D738* arg0) {
     temp_v0 = BinArchive_Open(D_002B2C80, D_002E0BE0, 1, 1);
     M2C_FIELD(D_800AAF40, void**, 0x21CC) = BinArchive_GetFile(temp_v0, 0);
     M2C_FIELD(D_800AAF40, void**, 0x21D0) = BinArchive_GetFile(temp_v0, 1);
-    M2C_FIELD(D_800AAF40, UnkInputStruct8000D738*, 0x2200) = *arg0;
+    M2C_FIELD(D_800AAF40, GbTowerLaunchParams*, 0x2200) = *arg0;
     func_800567E0(D_800AAF40 + 0x21B4, D_800AAF40 + 0x21B0, 1);
     func_80051B20(D_800AAF44, 9, func_8000AAE0, 0, D_800AAF44 + 0x21B0, 0x11);
     func_80051B20(D_800AAF40, 8, func_8000AB98, 0, D_800AAF40 + 0x21B0, 0xF);
@@ -148,8 +148,8 @@ void func_80002620(s32);
  * main menu.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-void GbTower_Stop(UnkInputStruct8000D738* arg0) {
-    *arg0 = M2C_FIELD(D_800AAF40, UnkInputStruct8000D738*, 0x2200);
+void GbTower_Stop(GbTowerLaunchParams* arg0) {
+    *arg0 = M2C_FIELD(D_800AAF40, GbTowerLaunchParams*, 0x2200);
     func_8000C610(D_800AAF48);
     func_80052DC0(1);
     Display_ApplyPendingVideoMode();

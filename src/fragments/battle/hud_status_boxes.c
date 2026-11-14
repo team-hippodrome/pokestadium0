@@ -79,11 +79,11 @@ void BattleHud_DrawPartyBallRow(ActivePokemon* arg0, s16 arg1, s16 arg2) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
     if (arg0 == sActivePokemon[0]) {
-        if (arg0->sessionTeams->tagTeamSize == 1) {
-            for (i = 0; i < arg0->sessionTeams->teamMember[0]->numberOfPokemonBrought; i++) {
-                if (arg0->sessionTeams->teamMember[0]->pokemonPicked[i].hp == 0) {
+        if (arg0->side->tagTeamSize == 1) {
+            for (i = 0; i < arg0->side->teamMember[0]->numberOfPokemonBrought; i++) {
+                if (arg0->side->teamMember[0]->pokemonPicked[i].hp == 0) {
                     var_v0_2 = 2;
-                } else if (arg0->sessionTeams->teamMember[0]->pokemonPicked[i].statusCondition != 0) {
+                } else if (arg0->side->teamMember[0]->pokemonPicked[i].statusCondition != 0) {
                     var_v0_2 = 1;
                 } else {
                     var_v0_2 = 0;
@@ -91,10 +91,10 @@ void BattleHud_DrawPartyBallRow(ActivePokemon* arg0, s16 arg1, s16 arg2) {
                 Gfx_DrawTextureRgba16(arg1 + i * 7, arg2, 8, 6, sp74[var_v0_2], 8, 0);
             }
         } else {
-            for (i = 0; i < arg0->sessionTeams->teamMember[0]->numberOfPokemonBrought; i++) {
-                if (arg0->sessionTeams->teamMember[0]->pokemonPicked[i].hp == 0) {
+            for (i = 0; i < arg0->side->teamMember[0]->numberOfPokemonBrought; i++) {
+                if (arg0->side->teamMember[0]->pokemonPicked[i].hp == 0) {
                     var_v0_2 = 2;
-                } else if (arg0->sessionTeams->teamMember[0]->pokemonPicked[i].statusCondition != 0) {
+                } else if (arg0->side->teamMember[0]->pokemonPicked[i].statusCondition != 0) {
                     var_v0_2 = 1;
                 } else {
                     var_v0_2 = 0;
@@ -102,10 +102,10 @@ void BattleHud_DrawPartyBallRow(ActivePokemon* arg0, s16 arg1, s16 arg2) {
                 Gfx_DrawTextureRgba16(arg1 + i * 7, arg2, 8, 6, sp74[var_v0_2], 8, 0);
             }
 
-            for (j = 0; j < arg0->sessionTeams->teamMember[1]->numberOfPokemonBrought; j++) {
-                if (arg0->sessionTeams->teamMember[1]->pokemonPicked[j].hp == 0) {
+            for (j = 0; j < arg0->side->teamMember[1]->numberOfPokemonBrought; j++) {
+                if (arg0->side->teamMember[1]->pokemonPicked[j].hp == 0) {
                     var_v0_2 = 2;
-                } else if (arg0->sessionTeams->teamMember[1]->pokemonPicked[j].statusCondition != 0) {
+                } else if (arg0->side->teamMember[1]->pokemonPicked[j].statusCondition != 0) {
                     var_v0_2 = 1;
                 } else {
                     var_v0_2 = 0;
@@ -116,11 +116,11 @@ void BattleHud_DrawPartyBallRow(ActivePokemon* arg0, s16 arg1, s16 arg2) {
     }
 
     if (arg0 == sActivePokemon[1]) {
-        if (arg0->sessionTeams->tagTeamSize == 1) {
-            for (i = 0; i < arg0->sessionTeams->teamMember[0]->numberOfPokemonBrought; i++) {
-                if (arg0->sessionTeams->teamMember[0]->pokemonPicked[i].hp == 0) {
+        if (arg0->side->tagTeamSize == 1) {
+            for (i = 0; i < arg0->side->teamMember[0]->numberOfPokemonBrought; i++) {
+                if (arg0->side->teamMember[0]->pokemonPicked[i].hp == 0) {
                     var_v0_2 = 2;
-                } else if (arg0->sessionTeams->teamMember[0]->pokemonPicked[i].statusCondition != 0) {
+                } else if (arg0->side->teamMember[0]->pokemonPicked[i].statusCondition != 0) {
                     var_v0_2 = 1;
                 } else {
                     var_v0_2 = 0;
@@ -128,10 +128,10 @@ void BattleHud_DrawPartyBallRow(ActivePokemon* arg0, s16 arg1, s16 arg2) {
                 Gfx_DrawTextureRgba16(arg1 - i * 7, arg2, 8, 6, sp74[var_v0_2], 8, 0);
             }
         } else {
-            for (i = 0; i < arg0->sessionTeams->teamMember[0]->numberOfPokemonBrought; i++) {
-                if (arg0->sessionTeams->teamMember[0]->pokemonPicked[i].hp == 0) {
+            for (i = 0; i < arg0->side->teamMember[0]->numberOfPokemonBrought; i++) {
+                if (arg0->side->teamMember[0]->pokemonPicked[i].hp == 0) {
                     var_v0_2 = 2;
-                } else if (arg0->sessionTeams->teamMember[0]->pokemonPicked[i].statusCondition != 0) {
+                } else if (arg0->side->teamMember[0]->pokemonPicked[i].statusCondition != 0) {
                     var_v0_2 = 1;
                 } else {
                     var_v0_2 = 0;
@@ -139,10 +139,10 @@ void BattleHud_DrawPartyBallRow(ActivePokemon* arg0, s16 arg1, s16 arg2) {
                 Gfx_DrawTextureRgba16(arg1 - i * 7, arg2, 8, 6, sp74[var_v0_2], 8, 0);
             }
 
-            for (j = 0; j < arg0->sessionTeams->teamMember[1]->numberOfPokemonBrought; j++) {
-                if (arg0->sessionTeams->teamMember[1]->pokemonPicked[j].hp == 0) {
+            for (j = 0; j < arg0->side->teamMember[1]->numberOfPokemonBrought; j++) {
+                if (arg0->side->teamMember[1]->pokemonPicked[j].hp == 0) {
                     var_v0_2 = 2;
-                } else if (arg0->sessionTeams->teamMember[1]->pokemonPicked[j].statusCondition != 0) {
+                } else if (arg0->side->teamMember[1]->pokemonPicked[j].statusCondition != 0) {
                     var_v0_2 = 1;
                 } else {
                     var_v0_2 = 0;
@@ -169,8 +169,8 @@ void BattleHud_DrawMonStatusBoxPlayer(ActivePokemon* arg0, s16 arg1, s16 arg2, u
     Color_RGB8* temp_v0_2;
     u32 var_v1;
 
-    sp80 = arg0->sessionTeams->teamMember[arg0->thumbnail.shownTeamMemberIndex];
-    sp7C = &arg0->sessionTeams->teamMember[arg0->thumbnail.shownTeamMemberIndex]->pokemonPicked[arg0->thumbnail.shownRosterIndex];
+    sp80 = arg0->side->teamMember[arg0->thumbnail.shownTeamMemberIndex];
+    sp7C = &arg0->side->teamMember[arg0->thumbnail.shownTeamMemberIndex]->pokemonPicked[arg0->thumbnail.shownRosterIndex];
 
     if (sp7C->hp == 0) {
         var_v1 = 1;
@@ -263,8 +263,8 @@ void BattleHud_DrawMonStatusBoxOpponent(ActivePokemon* arg0, s16 arg1, s16 arg2,
     Color_RGB8* temp_v0;
     u32 var_v1;
 
-    sp80 = arg0->sessionTeams->teamMember[arg0->thumbnail.shownTeamMemberIndex];
-    sp7C = &arg0->sessionTeams->teamMember[arg0->thumbnail.shownTeamMemberIndex]->pokemonPicked[arg0->thumbnail.shownRosterIndex];
+    sp80 = arg0->side->teamMember[arg0->thumbnail.shownTeamMemberIndex];
+    sp7C = &arg0->side->teamMember[arg0->thumbnail.shownTeamMemberIndex]->pokemonPicked[arg0->thumbnail.shownRosterIndex];
 
     if (sp7C->hp == 0) {
         var_v1 = 1;

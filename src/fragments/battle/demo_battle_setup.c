@@ -15,8 +15,8 @@ void func_821337A0(s8 *arg0)
 /*
  * func_821337B4
  *
- * Resets some fields of the battle scene object (D_8219A5A0, named
- * sBattleScene in symbol_addrs.txt; D_82199DE0 is sActivePokemon, an array
+ * Resets some fields of the battle scene object (sBattleScene.scene;
+ * D_82199DE0 is sActivePokemon, an array
  * of two pointers):
  *
  *   - BattleScene_SetCameraSubstate(1, 0) is called.
@@ -36,7 +36,6 @@ void func_821337A0(s8 *arg0)
 M2C_UNK func_82121D8C(M2C_UNK, M2C_UNK);            /* extern */
 void func_82133868();
 extern M2C_UNK D_82199DE0;
-extern void *D_8219A5A0;
 
 /**
  * Sets up the scene mode 11 demo battle: switches the camera to mode 0 for both sides, runs
@@ -307,7 +306,7 @@ void func_82133B6C(void) {
             }
             if ((D_8219A4F0.timer == 25) && (D_8219A4F0.flags & 0x10)) {
                 if (D_8219A4F0.index == 4) {
-                    ((ActivePokemon*)((s8**)&D_82199DE0)[0])->sessionTeams->displayModel = 0x96;
+                    ((ActivePokemon*)((s8**)&D_82199DE0)[0])->side->displayModel = 0x96;
                 } else {
                     M2C_FIELD(M2C_FIELD(mons[0], u8**, 0x85C), s16*, 2) = D_8218B5D0[D_8219A4F0.index + 1].unk0A;
                 }
@@ -321,9 +320,9 @@ void func_82133B6C(void) {
                     *M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C) &= ~0x90;
                     Battle_LoadOwnerModelForSwitchIn(((s8**)&D_82199DE0)[0]);
                     if (D_8219A4F0.index == 4) {
-                        ((ActivePokemon*)((s8**)&D_82199DE0)[0])->sessionTeams->displayModel = 0x96;
+                        ((ActivePokemon*)((s8**)&D_82199DE0)[0])->side->displayModel = 0x96;
                     }
-                    ((ActivePokemon*)((s8**)&D_82199DE0)[1])->sessionTeams->displayModel = D_8218B5D0[D_8219A4F0.index + 1].unk0B;
+                    ((ActivePokemon*)((s8**)&D_82199DE0)[1])->side->displayModel = D_8218B5D0[D_8219A4F0.index + 1].unk0B;
                     *M2C_FIELD(((s8**)&D_82199DE0)[1], u8**, 0x85C) |= 0x80;
                     D_8219A4F0.flags |= 4;
                     D_8219A4F0.flags &= ~2;
