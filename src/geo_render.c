@@ -577,41 +577,9 @@ void GeoRender_SetCombineMode(Gfx* arg0, arg1_func_81407874_014_000_010* arg1) {
                       GCCc1w1(arg1->unk_09, arg1->unk_0C, arg1->unk_0E, arg1->unk_0B, arg1->unk_0D, arg1->unk_0F));
 }
 
-// Render state cache used while func_80013398 draws the layer lists.
-typedef struct GeoRenderCtx80013398 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 primColor; // @unverified: last gDPSetPrimColor color (func_80012A80)
-    /* 0x08 */ s32 fogColor; // @unverified: last G_SETFOGCOLOR word, compared with the layer entry (func_80012C00)
-    /* 0x0C */ s32 texture; // @unverified: bound texture; 0 means none (GeoRender_DisableTexture/BindTexture)
-    /* 0x10 */ s32 palette; // @unverified: cleared with texture in func_80012A80
-    /* 0x14 */ s32 displayList; // @unverified: last material display list (GeoRender_BindTexture)
-    /* 0x18 */ u8 combineMode; // @unverified: index into D_80060534 combine modes
-    /* 0x19 */ u8 primLodFraction; // @unverified: last gDPSetPrimColor LOD fraction
-    /* 0x1A */ u8 unk_1A;
-    /* 0x1B */ u8 unk_1B;
-    /* 0x1C */ u8 layer;
-    /* 0x1D */ u8 flags;
-    /* 0x1E */ u8 syncPending; // @unverified: set once a gDPPipeSync has been emitted for the entry
-    /* 0x1F */ u8 unk_1F;
-} GeoRenderCtx80013398; // size = 0x20
-
-typedef struct GeoLayerEntry {
-    /* 0x00 */ struct GeoLayerEntry* next;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 textureMode;
-    /* 0x06 */ u8 unk_06;
-    /* 0x07 */ u8 lodFraction;
-    /* 0x08 */ s32 dl;
-    /* 0x0C */ s32 mtx;
-    /* 0x10 */ s32 unk_10;
-    /* 0x14 */ s32 unk_14;
-    /* 0x18 */ s32 unk_18;
-    /* 0x1C */ s32 unk_1C;
-    /* 0x20 */ s32 unk_20;
-} GeoLayerEntry; // size = 0x24
 
 extern arg1_func_81407874_014_000_010 D_80060534[];
-void func_800128E0(s8 *arg0) {
+void func_800128E0(GeoLayerRenderState* arg0) {
     bzero(arg0, 0x20);
     M2C_FIELD(arg0, u8 *, 0x19) = 0xFF;
     M2C_FIELD(arg0, u32 *, 4) = 0xFFFFFFFF;
@@ -622,15 +590,15 @@ void func_800128E0(s8 *arg0) {
 }
 
 extern s32 D_800604A4[][9];
-s32 func_8001298C(arg0) s8* arg0; {
-    s32 mode = D_800604A4[M2C_FIELD(arg0, u8*, 0x1D)][M2C_FIELD(arg0, u8*, 0x1C)];
+s32 func_8001298C(arg0) GeoLayerRenderState* arg0; {
+    s32 mode = D_800604A4[arg0->flags][arg0->layer];
     Gfx* gfx;
 
-    M2C_FIELD(arg0, s32*, 8) = 0xFFFFFF00;
+    arg0->fogColor = 0xFFFFFF00;
     gfx = gDisplayListHead++;
     gfx->words.w0 = 0xF8000000;
-    gfx->words.w1 = M2C_FIELD(arg0, s32*, 8);
-    if ((D_80060480 & 1) && (M2C_FIELD(arg0, u8*, 0x1D) == 1) && (M2C_FIELD(arg0, u8*, 0x1C) == 5)) {
+    gfx->words.w1 = arg0->fogColor;
+    if ((D_80060480 & 1) && (arg0->flags == 1) && (arg0->layer == 5)) {
         mode = 0x107A58;
     }
     if (D_80060490->fogEnabled != 0) {
@@ -647,7 +615,7 @@ typedef union Rgba80012D04 {
     } c;
 } Rgba80012D04;
 
-void func_80012A80(GeoRenderCtx80013398* arg0) {
+void func_80012A80(GeoLayerRenderState* arg0) {
     Rgba80012D04 color;
 
     color.word = arg0->primColor;
@@ -664,56 +632,56 @@ void func_80012A80(GeoRenderCtx80013398* arg0) {
     gSPLookAt(gDisplayListHead++, M2C_FIELD(D_80060488, u32*, 0xA4) & 0x1FFFFFFF);
 }
 
-void func_80012C00(s8 *arg0, s8 *arg1) {
+void func_80012C00(GeoLayerRenderState* arg0, GeoLayerEntry* arg1) {
     Gfx *gfx;
 
-    if (M2C_FIELD(arg0, s32 *, 8) != M2C_FIELD(arg1, s32 *, 0x14)) {
-        if (M2C_FIELD(arg0, u8 *, 0x1E) == 0) {
-            M2C_FIELD(arg0, u8 *, 0x1E) = 1;
+    if (arg1->fogColor != arg0->fogColor) {
+        if (arg0->syncPending == 0) {
+            arg0->syncPending = 1;
             gDPPipeSync(gDisplayListHead++);
         }
         gfx = gDisplayListHead++;
         gfx->words.w0 = 0xF8000000;
-        gfx->words.w1 = M2C_FIELD(arg1, s32 *, 0x14);
-        gSPSetOtherMode(gDisplayListHead++, G_SETOTHERMODE_L, G_MDSFT_RENDERMODE, 29, D_800604A4[M2C_FIELD(arg0, u8 *, 0x1D)][M2C_FIELD(arg0, u8 *, 0x1C)] | 0xC4000000);
-        M2C_FIELD(arg0, s32 *, 8) = M2C_FIELD(arg1, s32 *, 0x14);
+        gfx->words.w1 = arg1->fogColor;
+        gSPSetOtherMode(gDisplayListHead++, G_SETOTHERMODE_L, G_MDSFT_RENDERMODE, 29, D_800604A4[arg0->flags][arg0->layer] | 0xC4000000);
+        arg0->fogColor = arg1->fogColor;
     }
 }
 
 M2C_UNK func_8001298C();                            /* extern */
 
-void func_80012CC0(GeoRenderCtx80013398* arg0, GeoLayerEntry* arg1) {
+void func_80012CC0(GeoLayerRenderState* arg0, GeoLayerEntry* arg1) {
     if (arg0->fogColor & 0xFF) {
         func_8001298C();
     }
-    arg0->fogColor = (s32) arg1->unk_14;
+    arg0->fogColor = (s32) arg1->fogColor;
 }
 
-void func_80012D04(s8* arg0, s8* arg1) {
+void func_80012D04(GeoLayerRenderState* arg0, GeoLayerEntry* arg1) {
     Rgba80012D04 color;
 
-    if ((M2C_FIELD(arg0, s32*, 4) != M2C_FIELD(arg1, s32*, 0x10)) || (M2C_FIELD(arg0, u8*, 0x19) != M2C_FIELD(arg1, u8*, 7))) {
-        if (M2C_FIELD(arg0, u8*, 0x1E) == 0) {
-            M2C_FIELD(arg0, u8*, 0x1E) = 1;
+    if ((arg1->primColor != arg0->primColor) || (arg1->lodFraction != arg0->primLodFraction)) {
+        if (arg0->syncPending == 0) {
+            arg0->syncPending = 1;
             gDPPipeSync(gDisplayListHead++);
         }
-        color.word = M2C_FIELD(arg1, s32*, 0x10);
-        gDPSetPrimColor(gDisplayListHead++, 0, M2C_FIELD(arg1, u8*, 7), color.c.r, color.c.g, color.c.b, color.c.a);
-        M2C_FIELD(arg0, s32*, 4) = M2C_FIELD(arg1, s32*, 0x10);
-        M2C_FIELD(arg0, u8*, 0x19) = M2C_FIELD(arg1, u8*, 7);
+        color.word = arg1->primColor;
+        gDPSetPrimColor(gDisplayListHead++, 0, arg1->lodFraction, color.c.r, color.c.g, color.c.b, color.c.a);
+        arg0->primColor = arg1->primColor;
+        arg0->primLodFraction = arg1->lodFraction;
     }
 }
 
 extern arg1_func_81407874_014_000_010 D_80060534[];
 
-void func_80012DC8(s8* arg0, s8* arg1) {
-    if (M2C_FIELD(arg0, u8*, 0x18) != M2C_FIELD(arg1, u8*, 6)) {
-        if (M2C_FIELD(arg0, u8*, 0x1E) == 0) {
-            M2C_FIELD(arg0, u8*, 0x1E) = 1;
+void func_80012DC8(GeoLayerRenderState* arg0, GeoLayerEntry* arg1) {
+    if (arg1->combineMode != arg0->combineMode) {
+        if (arg0->syncPending == 0) {
+            arg0->syncPending = 1;
             gDPPipeSync(gDisplayListHead++);
         }
-        GeoRender_SetCombineMode(gDisplayListHead++, &D_80060534[M2C_FIELD(arg1, u8*, 6)]);
-        M2C_FIELD(arg0, u8*, 0x18) = M2C_FIELD(arg1, u8*, 6);
+        GeoRender_SetCombineMode(gDisplayListHead++, &D_80060534[arg1->combineMode]);
+        arg0->combineMode = arg1->combineMode;
     }
 }
 
@@ -739,35 +707,34 @@ void GeoRender_DisableTexture(s32* arg0, s32 arg1) {
 }
 
 extern s16 D_8006F2A4[];
-extern unk_D_800ABB28* D_800ABCB8;
 extern s16 D_80060624[];
 
 /** Binds a texture for rendering, loading it on first use. */
-void GeoRender_BindTexture(unk_D_800ABB28* arg0, unk_D_800ABB10* arg1) {
-    unk_D_86002F34_alt11_018* temp_t0;
+void GeoRender_BindTexture(GeoLayerRenderState* arg0, GeoLayerEntry* arg1) {
+    GeoTexture* temp_t0;
     s32 var_a3;
 
-    if (M2C_FIELD(arg0, void**, 0xC) == NULL) {
+    if (arg0->texture == NULL) {
         gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_ON);
     }
 
-    if ((M2C_FIELD(arg0, void**, 0xC) != M2C_FIELD(arg1, void**, 0x18)) || (M2C_FIELD(arg0, Gfx**, 0x14) != M2C_FIELD(arg1, Gfx**, 0x20))) {
-        temp_t0 = M2C_FIELD(arg1, unk_D_86002F34_alt11_018**, 0x18);
-        if (M2C_FIELD(arg1, void**, 0x1C) != NULL) {
-            gSPDisplayList(gDisplayListHead++, M2C_FIELD(M2C_FIELD(arg1, void**, 0x1C), Gfx**, 8));
+    if ((arg1->texture != arg0->texture) || (arg1->materialDisplayList != arg0->displayList)) {
+        temp_t0 = arg1->texture;
+        if (arg1->palette != NULL) {
+            gSPDisplayList(gDisplayListHead++, ((GeoPalette*)arg1->palette)->loadDisplayList);
         } else {
             gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
         }
 
-        if (temp_t0->unk_01 == 0) {
-            if ((temp_t0->unk_02 % D_80060624[0]) == 0) {
+        if (temp_t0->siz == 0) {
+            if ((temp_t0->width % D_80060624[0]) == 0) {
                 gDPSetTextureImage(gDisplayListHead++, temp_t0->fmt, G_IM_SIZ_16b, 1, temp_t0->texture);
             } else {
-                gDPSetTextureImage(gDisplayListHead++, temp_t0->fmt, G_IM_SIZ_8b, temp_t0->unk_02 >> 1,
+                gDPSetTextureImage(gDisplayListHead++, temp_t0->fmt, G_IM_SIZ_8b, temp_t0->width >> 1,
                                    temp_t0->texture);
             }
-        } else if ((temp_t0->unk_02 % D_80060624[temp_t0->unk_01]) == 0) {
-            if (temp_t0->unk_01 == 3) {
+        } else if ((temp_t0->width % D_80060624[temp_t0->siz]) == 0) {
+            if (temp_t0->siz == 3) {
                 var_a3 = 3;
             } else {
                 var_a3 = 2;
@@ -775,22 +742,21 @@ void GeoRender_BindTexture(unk_D_800ABB28* arg0, unk_D_800ABB10* arg1) {
 
             gDPSetTextureImage(gDisplayListHead++, temp_t0->fmt, var_a3, 1, temp_t0->texture);
         } else {
-            gDPSetTextureImage(gDisplayListHead++, temp_t0->fmt, temp_t0->unk_01, temp_t0->unk_02, temp_t0->texture);
+            gDPSetTextureImage(gDisplayListHead++, temp_t0->fmt, temp_t0->siz, temp_t0->width, temp_t0->texture);
         }
 
-        gSPDisplayList(gDisplayListHead++, M2C_FIELD(arg1, Gfx**, 0x20));
+        gSPDisplayList(gDisplayListHead++, arg1->materialDisplayList);
     }
 
-    M2C_FIELD(arg0, void**, 0xC) = M2C_FIELD(arg1, void**, 0x18);
-    M2C_FIELD(arg0, void**, 0x10) = M2C_FIELD(arg1, void**, 0x1C);
-    M2C_FIELD(arg0, void**, 0x14) = M2C_FIELD(arg1, void**, 0x20);
+    arg0->texture = arg1->texture;
+    arg0->palette = arg1->palette;
+    arg0->displayList = arg1->materialDisplayList;
 }
 
-extern unk_D_800ABB28* D_800ABCB8;
 extern u8 D_1001800[];
 
-void func_80013148(s8* arg0, s32 arg1) {
-    if (M2C_FIELD(arg0, u8 *, 0x1A) == 0) {
+void func_80013148(GeoLayerRenderState* arg0, s32 arg1) {
+    if (arg0->unk_1A == 0) {
         gDPLoadTextureBlock(gDisplayListHead++, D_1001800, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, 1, 1);
         gSPTexture(gDisplayListHead++, 0x1194, 0x1194, 0, G_TX_RENDERTILE, G_ON);
@@ -799,7 +765,7 @@ void func_80013148(s8* arg0, s32 arg1) {
         gSPClearGeometryMode(gDisplayListHead++, G_TEXTURE_GEN_LINEAR);
         gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEI, G_CC_MODULATEI2);
 
-        M2C_FIELD(arg0, u8 *, 0x1A) = 1;
+        arg0->unk_1A = 1;
     }
 }
 
@@ -833,7 +799,7 @@ void func_800132C8(s32* arg0, void* arg1) {
 void func_80013398(struct Root80013DC8 *arg0)
 {
   s8 *entry;
-  GeoRenderCtx80013398 ctx;
+  GeoLayerRenderState ctx;
   func_800128E0((s8 *) (&ctx));
   ctx.flags = (*((u8 *) (((s8 *) arg0) + 2))) & 3;
   if (ctx.flags & 1)
@@ -863,7 +829,7 @@ void func_80013398(struct Root80013DC8 *arg0)
         }
         if ((*((u8 *) (((s8 *) entry) + 5))) != 0)
         {
-          func_80013148((s8 *) (&ctx), (s32) entry);
+          func_80013148(&ctx, (s32) entry);
         }
         else
         {
@@ -873,7 +839,7 @@ void func_80013398(struct Root80013DC8 *arg0)
           }
           if ((*((s32 *) (((s8 *) entry) + 0x18))) != 0)
           {
-            GeoRender_BindTexture((unk_D_800ABB28 *) (&ctx), (unk_D_800ABB10 *) entry);
+            GeoRender_BindTexture((GeoLayerRenderState *) (&ctx), (GeoLayerEntry *) entry);
           }
           else
           {
@@ -931,12 +897,12 @@ void GeoRender_SubmitLayerDisplayList(s16 layer, s32 arg1, s32 arg2, s32 arg3) {
             entry->mtx = (s32)D_800AB460.unk_1000[D_800AB460.unk_10A0];
         }
         entry->dl = arg1;
-        entry->unk_06 = D_800AB448;
-        entry->unk_10 = D_800AB450;
-        entry->unk_14 = D_800AB44C;
-        entry->unk_20 = D_800AB45C;
-        entry->unk_18 = D_800AB454;
-        entry->unk_1C = D_800AB458;
+        entry->combineMode = D_800AB448;
+        entry->primColor = D_800AB450;
+        entry->fogColor = D_800AB44C;
+        entry->materialDisplayList = D_800AB45C;
+        entry->texture = D_800AB454;
+        entry->palette = D_800AB458;
         entry->lodFraction = 0xFF;
         entry->textureMode = 0;
         entry->next = NULL;
@@ -1290,14 +1256,14 @@ void Geo_NodeAmbientLight(GraphNode* arg0) {
     gSPLight(gDisplayListHead++, D_80060490->lights, i + 1);
 }
 
-extern unk_D_86002F34_alt11* D_800604A0;
+extern GeoTextureBankNode* D_800604A0;
 extern Gfx D_01002580[];
 /**
  * Geo node handler: makes this texture bank current (D_800604A0), then
  * processes children.
  */
 void Geo_NodeTextureBank(GraphNode* arg0) {
-    unk_D_86002F34_alt11* arg = (unk_D_86002F34_alt11*)arg0;
+    GeoTextureBankNode* arg = (GeoTextureBankNode*)arg0;
     MtxF* temp_v0 = &D_800AB460.unk_0000[D_800AB460.unk_10A0];
     Vec3f sp2C;
     Vec3s sp24;
@@ -1640,7 +1606,7 @@ void Geo_NodeMaterial(GeoMaterialNode *arg0)
   D_800AB45C = (s32)arg0->displayList;
   if (arg0->textureIndex >= 0)
   {
-    D_800AB454 = (s32) (&D_800604A0->unk_18[arg0->textureIndex]);
+    D_800AB454 = (s32) (&D_800604A0->textures[arg0->textureIndex]);
   }
   else
   {
@@ -1648,7 +1614,7 @@ void Geo_NodeMaterial(GeoMaterialNode *arg0)
   }
   if (arg0->paletteIndex >= 0)
   {
-    D_800AB458 = (s32) (&D_800604A0->unk_1C[arg0->paletteIndex]);
+    D_800AB458 = (s32) (&D_800604A0->palettes[arg0->paletteIndex]);
   }
   else
   {
@@ -1666,7 +1632,7 @@ void Geo_NodeMaterial(GeoMaterialNode *arg0)
     if ((arg0->eventIndex >= 0) && (arg0->eventIndex < D_800AC6A8.data->trackCount))
     {
       tex_index = ((u8 *) D_800AC6A8.frameValues)[ModelAnim_ResolveEventIndex(D_800AC6A8.frame, (unk_func_80017540_arg1 *) D_800AC6A8.trackTable, arg0->eventIndex)];
-      D_800AB454 = (s32) (&D_800604A0->unk_18[tex_index]);
+      D_800AB454 = (s32) (&D_800604A0->textures[tex_index]);
     }
     break;
   }

@@ -334,20 +334,6 @@ typedef struct GeoMaterialNode {
     /* 0x24 */ Color_RGBA8_u32 color; // @unverified: material tint, multiplied by DisplayObject.textureTint
 } GeoMaterialNode; // size >= 0x28
 
-typedef struct unk_D_86002F34_alt11_018 {
-    /* 0x00 */ u8 fmt;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ char unk04[0x4];
-    /* 0x08 */ u8* texture;
-} unk_D_86002F34_alt11_018; // size >= 0xC
-
-typedef struct unk_D_86002F34_alt11 {
-    /* 0x00 */ GraphNode node;
-    /* 0x18 */ unk_D_86002F34_alt11_018* unk_18;
-    /* 0x1C */ unk_D_86002F34_alt11_018* unk_1C;
-} unk_D_86002F34_alt11; // size >= 0x20
-
 // Graph node type 0xF.
 typedef struct GeoShadowNode {
     /* 0x00 */ GraphNode node;
@@ -453,30 +439,30 @@ typedef struct GeoGroupNode {
 
 typedef void* (*func_unk_D_800ABE10)(s32, s32);
 
-#define unk_D_86002F34_018_GFX_TYPE_1 1 // 8-bit per texel
-#define unk_D_86002F34_018_GFX_TYPE_2 2 // 16-bit per texel
-#define unk_D_86002F34_018_GFX_TYPE_3 3 // 32-bit per texel
+#define GEO_TEXTURE_SIZ_1 1 // 8-bit per texel
+#define GEO_TEXTURE_SIZ_2 2 // 16-bit per texel
+#define GEO_TEXTURE_SIZ_3 3 // 32-bit per texel
 
-typedef struct unk_D_86002F34_018 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 type;
+typedef struct GeoTexture {
+    /* 0x00 */ u8 fmt; // @unverified: G_IM_FMT_* passed to gDPSetTextureImage (GeoRender_BindTexture); 0 (RGBA) gets color variants
+    /* 0x01 */ u8 siz; // @unverified: G_IM_SIZ_* passed to gDPSetTextureImage; 2 = 16-bit, 3 = 32-bit texels
     /* 0x02 */ s16 width;
     /* 0x04 */ s16 height;
     /* 0x06 */ s16 num_texels;
     /* 0x08 */ u32* texture;
-} unk_D_86002F34_018; // size = 0xC
+} GeoTexture; // size = 0xC
 
-typedef struct unk_D_86002F34_01C {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s16* unk_04;
-    /* 0x08 */ char unk08[0x4];
-} unk_D_86002F34_01C; // size = 0xC
+typedef struct GeoPalette {
+    /* 0x00 */ s32 count; // @unverified: number of 16-bit colors recolored in func_80016D40
+    /* 0x04 */ s16* data; // @unverified: RGBA5551 colors recolored in func_80016D40
+    /* 0x08 */ Gfx* loadDisplayList; // @unverified: called by GeoRender_BindTexture before the texture image (TLUT load)
+} GeoPalette; // size = 0xC
 
 // Graph node type 0xE: textures and palettes for the GeoMaterialNodes below it (was called a shadow context).
 typedef struct GeoTextureBankNode {
     /* 0x00 */ GraphNode node;
-    /* 0x18 */ unk_D_86002F34_018* textures; // @unverified: indexed by GeoMaterialNode.textureIndex
-    /* 0x1C */ unk_D_86002F34_01C* palettes; // @unverified: indexed by GeoMaterialNode.paletteIndex; 16-bit data, maybe TLUTs
+    /* 0x18 */ GeoTexture* textures; // @unverified: indexed by GeoMaterialNode.textureIndex
+    /* 0x1C */ GeoPalette* palettes; // @unverified: indexed by GeoMaterialNode.paletteIndex; 16-bit data, maybe TLUTs
     /* 0x20 */ Vtx* vertices; // @unverified: GeoNode_CreateTextureBank arg7
     /* 0x24 */ u8 textureCount; // @unverified: count stored with textures
     /* 0x25 */ u8 paletteCount; // @unverified: count stored with palettes

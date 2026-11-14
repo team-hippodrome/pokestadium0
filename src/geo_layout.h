@@ -176,8 +176,8 @@ typedef struct GeoLayoutCmdCreateTextureBank {
     /* 0x02 */ s16 textureCount; // @unverified: geo_layout_cmd: GeoNode_CreateTextureBank argument
     /* 0x04 */ s16 paletteCount; // @unverified: geo_layout_cmd: GeoNode_CreateTextureBank argument
     /* 0x06 */ s16 vertexCount; // @unverified: geo_layout_cmd: GeoNode_CreateTextureBank argument
-    /* 0x08 */ unk_D_86002F34_018* textures; // @unverified: geo_layout_cmd: GeoNode_CreateTextureBank argument
-    /* 0x0C */ unk_D_86002F34_01C* palettes; // @unverified: geo_layout_cmd: GeoNode_CreateTextureBank argument
+    /* 0x08 */ GeoTexture* textures; // @unverified: geo_layout_cmd: GeoNode_CreateTextureBank argument
+    /* 0x0C */ GeoPalette* palettes; // @unverified: geo_layout_cmd: GeoNode_CreateTextureBank argument
     /* 0x10 */ Vtx* vertices; // @unverified: geo_layout_cmd: GeoNode_CreateTextureBank argument
 } GeoLayoutCmdCreateTextureBank; // size = 0x14
 

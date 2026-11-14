@@ -39,7 +39,7 @@ GeoFogNode* GeoNode_CreateFog(s32 arg0, GeoFogNode* arg1, s16 arg2, s16 arg3, u8
 GeoLightNode* GeoNode_CreateLight(MainPoolState* arg0, GeoLightNode* arg1, s16 arg2, s16 arg3, u8 r, u8 g, u8 b, u8 a);
 GeoAmbientLightNode* GeoNode_CreateAmbientLight(MainPoolState* arg0, GeoAmbientLightNode* arg1, u8 r, u8 g, u8 b);
 GeoTextureBankNode* GeoNode_CreateTextureBank(MainPoolState* arg0, GeoTextureBankNode* arg1, s32 arg2,
-                              unk_D_86002F34_018* arg3, s32 arg4, unk_D_86002F34_01C* arg5,
+                              GeoTexture* arg3, s32 arg4, GeoPalette* arg5,
                               s32 arg6, Vtx* arg7);
 GeoShadowNode* GeoNode_CreateShadow(MainPoolState* arg0, GeoShadowNode* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
 GeoCullDistanceNode* GeoNode_CreateCullDistance(MainPoolState* arg0, GeoCullDistanceNode* arg1, s16 arg2, s16 arg3);
