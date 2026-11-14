@@ -4,7 +4,7 @@
 #include "global.h"
 #include "audio_and_gb_emulator.h"
 
-extern unk_D_81234690 D_811858B8;
+extern AudioBufferParameters D_811858B8;
 extern volatile s32 D_811858F0;
 extern s32 D_811858F8;
 extern s32 D_811858FC;
@@ -51,10 +51,10 @@ void AudioHeap_ResetLoadStatus(void) {
 
 /* One 0xCC-byte record; only the fields AudioHeap_DiscardFont touches are named. */
 
-s32 AudioPlayback_NoteDisable(Rec81109678*);
-s32 AudioPlayback_AudioListRemove(Rec81109678*);
-s32 AudioSeq_AudioListPushBack(s8*, Rec81109678*);
-extern Rec81109678* D_81184664;
+s32 AudioPlayback_NoteDisable(Note81109678*);
+s32 AudioPlayback_AudioListRemove(Note81109678*);
+s32 AudioSeq_AudioListPushBack(s8*, Note81109678*);
+extern Note81109678* D_81184664;
 extern s8 D_81184938;
 extern s32 D_811858E8;
 
@@ -81,7 +81,7 @@ extern s32 D_811858E8;
  */
 void AudioHeap_DiscardFont(s32 arg0) {
     s32 i;
-    Rec81109678* p;
+    Note81109678* p;
 
     for (i = 0; i < D_811858E8; i++) {
         p = &D_81184664[i];
@@ -350,22 +350,8 @@ void AudioHeap_InitTemporaryCache(s8 *arg0) {
     AudioHeap_TemporaryCacheClear(&D_81184400);
 }
 
-typedef struct PersistentCache81109C0C {
-    /* 0x00 */ u32 numEntries;
-    /* 0x04 */ AudioAllocPool pool;
-    /* 0x14 */ CacheEntry81109C0C entries[1];
-} PersistentCache81109C0C; // size = 0x20
 
-typedef struct TemporaryCache81109C0C {
-    /* 0x00 */ u32 nextSide;
-    /* 0x04 */ AudioAllocPool pool;
-    /* 0x14 */ CacheEntry81109C0C entries[2];
-} TemporaryCache81109C0C; // size = 0x2C
 
-typedef struct Cache81109C0C {
-    /* 0x00 */ PersistentCache81109C0C persistent;
-    /* 0x20 */ TemporaryCache81109C0C temporary;
-} Cache81109C0C;
 
 extern u8 D_81184654[1];
 extern u8 D_81184655[1];
@@ -379,8 +365,8 @@ void AudioLoad_SetFontLoadStatus(s32, s32);
  * @unverified Name and comment guessed from the code.
  */
 void* AudioHeap_AllocCached(s32 table_type, s32 size, s32 cache, s32 id) {
-    Cache81109C0C* loaded_cache;
-    TemporaryCache81109C0C* t_cache;
+    AudioCache* loaded_cache;
+    AudioTemporaryCache* t_cache;
     AudioAllocPool* temp_pool;
     void* persistent_addr;
     void* temp_addr;
@@ -391,15 +377,15 @@ void* AudioHeap_AllocCached(s32 table_type, s32 size, s32 cache, s32 id) {
 
     switch (table_type) {
         case 0:
-            loaded_cache = (Cache81109C0C*)&D_81184320;
+            loaded_cache = (AudioCache*)&D_81184320;
             load_status = D_81184656;
             break;
         case 1:
-            loaded_cache = (Cache81109C0C*)&D_81184380;
+            loaded_cache = (AudioCache*)&D_81184380;
             load_status = D_81184655;
             break;
         case 2:
-            loaded_cache = (Cache81109C0C*)&D_811843E0;
+            loaded_cache = (AudioCache*)&D_811843E0;
             load_status = D_81184654;
             break;
     }
@@ -916,22 +902,17 @@ s32 AudioHeap_ResetStep(void) {
     return 1;
 }
 
-typedef struct SplitAFF0 {
-    /* 0x00 */ s32 a;
-    /* 0x04 */ s32 b;
-    /* 0x08 */ s32 c;
-} SplitAFF0;
 
-extern AudioSpecAFF0 D_811526C4[];
+extern AudioSpec D_811526C4[];
 extern s16 D_811526F8;
 extern u16 D_81184278;
 extern s16 D_8118427C;
 extern void* D_81184288;
 extern s32 D_81184298;
-extern SessionSplitAFF0 D_81184620;
-extern SplitAFF0 D_81184630;
-extern SplitAFF0 D_81184638;
-extern SplitAFF0 D_81184648;
+extern AudioSessionPoolSplit D_81184620;
+extern AudioCachePoolSplit D_81184630;
+extern AudioCommonPoolSplit D_81184638;
+extern AudioCommonPoolSplit D_81184648;
 extern u8 D_81184658;
 extern s32 D_811858E4;
 extern s16 D_811858EC;
@@ -955,7 +936,7 @@ void func_8111539C(s32);
 void func_81115480(void);
 
 #define EXTERNAL_POOL_AFF0 (*(AudioAllocPool*)&D_811842A0)
-#define REVERBS_AFF0 ((SynthesisReverbAFF0*)D_81184110)
+#define REVERBS_AFF0 ((SynthesisReverb*)D_81184110)
 
 /**
  * Lays out the audio heap and reverbs for the current audio spec. Zelda 64 audio driver.
@@ -971,9 +952,9 @@ void AudioHeap_Init(void) {
     s32 want_misc;
     s32 j;
     s32 i;
-    ReverbSettingsAFF0* settings;
-    SynthesisReverbAFF0* reverb;
-    AudioSpecAFF0* spec = &D_811526C4[D_81184658];
+    ReverbSettings* settings;
+    SynthesisReverb* reverb;
+    AudioSpec* spec = &D_811526C4[D_81184658];
 
     D_8118568C = 0;
     D_811858B8.samplingFrequency = spec->frequency;
@@ -1012,23 +993,23 @@ void AudioHeap_Init(void) {
     D_81184620.miscPoolSize = want_misc;
     D_81184620.cachePoolSize = total_mem;
     AudioHeap_InitSessionPools((s8*)&D_81184620);
-    D_81184630.a = persistent_mem;
-    D_81184630.b = temporary_mem;
+    D_81184630.persistentCommonPoolSize = persistent_mem;
+    D_81184630.temporaryCommonPoolSize = temporary_mem;
     AudioHeap_InitCachePools((s8*)&D_81184630);
-    D_81184638.a = spec->persistentSeqMem;
-    D_81184638.b = spec->persistentFontMem;
-    D_81184638.c = spec->persistentSampleMem;
+    D_81184638.seqCacheSize = spec->persistentSeqMem;
+    D_81184638.fontCacheSize = spec->persistentFontMem;
+    D_81184638.sampleBankCacheSize = spec->persistentSampleMem;
     AudioHeap_InitPersistentCache((s8*)&D_81184638);
-    D_81184648.a = spec->temporarySeqMem;
-    D_81184648.b = spec->temporaryFontMem;
-    D_81184648.c = spec->temporarySampleMem;
+    D_81184648.seqCacheSize = spec->temporarySeqMem;
+    D_81184648.fontCacheSize = spec->temporaryFontMem;
+    D_81184648.sampleBankCacheSize = spec->temporarySampleMem;
     AudioHeap_InitTemporaryCache((s8*)&D_81184648);
     AudioHeap_InitSampleCaches(spec->persistentSampleCacheSize, spec->temporarySampleCacheSize);
     if (EXTERNAL_POOL_AFF0.startRamAddr != NULL) {
         EXTERNAL_POOL_AFF0.curRamAddr = EXTERNAL_POOL_AFF0.startRamAddr;
     }
     AudioHeap_ResetLoadStatus();
-    D_81184664 = (Rec81109678*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, D_811858E8 * 0xCC);
+    D_81184664 = (Note81109678*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, D_811858E8 * 0xCC);
     AudioPlayback_NoteInitAll();
     AudioPlayback_InitNoteFreeList();
     D_81184288 = (void*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, D_811858B8.ticksPerUpdate * D_811858E8 * 0x18);

@@ -4,7 +4,7 @@
 #include "global.h"
 #include "audio_and_gb_emulator.h"
 
-extern unk_D_81234690 D_811858B8;
+extern AudioBufferParameters D_811858B8;
 extern volatile s32 D_811858F0;
 extern s32 D_811858F8;
 extern s32 D_811858FC;
@@ -25,10 +25,10 @@ extern u8 D_81184656[1];
 
 /* Declarations copied from gb_tower_emulator_86920.c. */
 s32 AudioHeap_SearchCaches(s32, M2C_UNK, s32);
-s32 AudioPlayback_NoteDisable(Rec81109678*);
-s32 AudioPlayback_AudioListRemove(Rec81109678*);
-s32 AudioSeq_AudioListPushBack(s8*, Rec81109678*);
-extern Rec81109678* D_81184664;
+s32 AudioPlayback_NoteDisable(Note81109678*);
+s32 AudioPlayback_AudioListRemove(Note81109678*);
+s32 AudioSeq_AudioListPushBack(s8*, Note81109678*);
+extern Note81109678* D_81184664;
 extern s8 D_81184938;
 extern s32 D_811858E8;
 M2C_UNK AudioSeq_SequencePlayerDisable(M2C_UNK *);                   /* extern */
@@ -68,20 +68,6 @@ extern M2C_UNK D_811843A0;
 extern M2C_UNK D_811843A4;
 extern M2C_UNK D_81184400;
 extern M2C_UNK D_81184404;
-typedef struct PersistentCache81109C0C {
-    /* 0x00 */ s32 numEntries;
-    /* 0x04 */ AudioAllocPool pool;
-    /* 0x14 */ CacheEntry81109C0C entries[1];
-} PersistentCache81109C0C; // size = 0x20
-typedef struct TemporaryCache81109C0C {
-    /* 0x00 */ s32 nextSide;
-    /* 0x04 */ AudioAllocPool pool;
-    /* 0x14 */ CacheEntry81109C0C entries[2];
-} TemporaryCache81109C0C; // size = 0x2C
-typedef struct Cache81109C0C {
-    /* 0x00 */ PersistentCache81109C0C persistent;
-    /* 0x20 */ TemporaryCache81109C0C temporary;
-} Cache81109C0C;
 extern u8 D_81184654[1];
 extern u8 D_81184655[1];
 extern u8 D_81184656[1];
@@ -93,21 +79,16 @@ extern s16 D_811373C8[];
 extern Voice8110AA50 D_81184110[];
 extern s8 D_8118427B;
 extern s16 D_811858C2;
-typedef struct SplitAFF0 {
-    /* 0x00 */ s32 a;
-    /* 0x04 */ s32 b;
-    /* 0x08 */ s32 c;
-} SplitAFF0;
-extern AudioSpecAFF0 D_811526C4[];
+extern AudioSpec D_811526C4[];
 extern s16 D_811526F8;
 extern u16 D_81184278;
 extern s16 D_8118427C;
 extern void* D_81184288;
 extern s32 D_81184298;
-extern SessionSplitAFF0 D_81184620;
-extern SplitAFF0 D_81184630;
-extern SplitAFF0 D_81184638;
-extern SplitAFF0 D_81184648;
+extern AudioSessionPoolSplit D_81184620;
+extern AudioCachePoolSplit D_81184630;
+extern AudioCommonPoolSplit D_81184638;
+extern AudioCommonPoolSplit D_81184648;
 extern u8 D_81184658;
 extern s32 D_811858E4;
 extern s16 D_811858EC;
@@ -126,22 +107,11 @@ void AudioPlayback_NoteInitAll(void);
 void func_8111539C(s32);
 void func_81115480(void);
 #define EXTERNAL_POOL_AFF0 (*(AudioAllocPool*)&D_811842A0)
-#define REVERBS_AFF0 ((SynthesisReverbAFF0*)D_81184110)
+#define REVERBS_AFF0 ((SynthesisReverb*)D_81184110)
 
-typedef struct unk_D_81184450 {
-    /* 0x0 */ s32 unk_0;
-    /* 0x4 */ s32 unk_4;
-    /* 0x8 */ s16 unk_8;
-    /* 0xA */ s16 unk_A;
-} unk_D_81184450; // size = 0xC
 
-typedef struct unk_D_81184440 {
-    /* 0x00 */ char unk00[0xC];
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ unk_D_81184450 unk_10[1];
-} unk_D_81184440;
 
-extern unk_D_81184440 D_81184440;
+extern AudioPermanentCache D_81184440;
 /**
  * Returns the permanent cache entry for table `arg0`, id `arg1`, or 0. Name follows the Zelda 64 audio driver, whose loader this matches.
  * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
@@ -151,9 +121,9 @@ extern unk_D_81184440 D_81184440;
 s32 AudioHeap_SearchPermanentCache(s32 arg0, s32 arg1) {
     s32 i;
 
-    for (i = 0; i < D_81184440.unk_0C; i++) {
-        if (arg0 == D_81184440.unk_10[i].unk_8 && arg1 == D_81184440.unk_10[i].unk_A) {
-            return D_81184440.unk_10[i].unk_0;
+    for (i = 0; i < D_81184440.pool.numEntries; i++) {
+        if (arg0 == D_81184440.entries[i].tableType && arg1 == D_81184440.entries[i].id) {
+            return D_81184440.entries[i].ramAddr;
         }
     }
 
@@ -168,15 +138,15 @@ s32 AudioHeap_SearchPermanentCache(s32 arg0, s32 arg1) {
  */
 s32 AudioHeap_AllocPermanent(s32 x, s32 y, s32 size) {
     UNUSED s32 pad; // FAKE: stack padding
-    s32 index = D_81184440.unk_0C;
+    s32 index = D_81184440.pool.numEntries;
 
-    D_81184440.unk_10[index].unk_0 = func_81109868((M2C_UNK*)&D_81184440, size);
-    if (D_81184440.unk_10[index].unk_0 == 0) {
+    D_81184440.entries[index].ramAddr = func_81109868((M2C_UNK*)&D_81184440, size);
+    if (D_81184440.entries[index].ramAddr == 0) {
         return 0;
     }
-    D_81184440.unk_10[index].unk_8 = x;
-    D_81184440.unk_10[index].unk_A = y;
-    D_81184440.unk_10[index].unk_4 = size;
+    D_81184440.entries[index].tableType = x;
+    D_81184440.entries[index].id = y;
+    D_81184440.entries[index].size = size;
     // No return here; the original falls off the end with the allocation still in v0.
 }
 

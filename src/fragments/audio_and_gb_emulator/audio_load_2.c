@@ -201,7 +201,7 @@ extern s32 D_8118568C;
 extern s32 D_81152700;
 extern s32 D_81152704;
 extern u8 D_811842B0[];
-extern struct Table81184440 D_81184440;
+extern AudioPermanentCache D_81184440;
 extern volatile s8 D_81184657;
 extern s8 D_81184658;
 extern AudioTable8110DCC0* D_8118589C;
@@ -1148,18 +1148,6 @@ void AudioLoad_PreloadSamplesForFont(s32 font_id, s32 async, RelocInfo8110EF7C* 
     }
 }
 
-typedef struct Entry81184450 {
-    /* 0x0 */ s32 unk_0;
-    /* 0x4 */ char unk4[0x4];
-    /* 0x8 */ s16 unk_8;
-    /* 0xA */ s16 unk_A;
-} Entry81184450; // size = 0xC
-typedef struct Table81184440 {
-    /* 0x00 */ char unk00[0xC];
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ Entry81184450 unk_10[1];
-} Table81184440;
-extern Table81184440 D_81184440;
 extern s32 D_8118444C;
 typedef struct Entry8110D840 {
     /* 0x00 */ char unk00[8];
@@ -1181,8 +1169,8 @@ void func_8110FAF4(void) {
     s32 id;
 
     for (i = 0; i < D_8118444C; i++) {
-        if (D_81184440.unk_10[i].unk_8 == 1) {
-            id = AudioLoad_GetRealTableIndex(1, D_81184440.unk_10[i].unk_A);
+        if (D_81184440.entries[i].tableType == 1) {
+            id = AudioLoad_GetRealTableIndex(1, D_81184440.entries[i].id);
             buf[0] = D_811858B0[id].unk_02;
             buf[0] = AudioLoad_GetRealTableIndex(2, buf[0]);
             buf[1] = D_811858B0[id].unk_03;

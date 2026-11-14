@@ -2,7 +2,7 @@
 #include "audio_and_gb_emulator.h"
 
 // Declared here instead of in a header: the callers of these disagree on their types.
-extern unk_D_81234690 D_811858B8;
+extern AudioBufferParameters D_811858B8;
 extern volatile u32 D_811859D4;
 
 /**

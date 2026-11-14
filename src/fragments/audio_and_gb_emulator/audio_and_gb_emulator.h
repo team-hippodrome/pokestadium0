@@ -78,20 +78,20 @@ typedef struct unk_D_81234650 {
     /* 0x04 */ s32 unk_04;
 } unk_D_81234650;
 
-typedef struct Rec81109678Flags {
+typedef struct SeqLayerFlags81109678 {
     /* 0x0 */ u8 enabled : 1; // @unverified: same use as OoT's SequenceLayer.enabled (AudioHeap_DiscardFont)
     /* 0x0 */ u8 finished : 1; // @unverified: same use as OoT's SequenceLayer.finished (AudioHeap_DiscardFont)
     /* 0x0 */ u8 rest : 6;
-} Rec81109678Flags;
+} SeqLayerFlags81109678;
 
-typedef struct Rec81109678 {
+typedef struct Note81109678 {
     /* 0x00 */ u8 pad00[0x30];
     /* 0x30 */ u8 priority; // @unverified: same offset/use as OoT's Note.playbackState.priority (AudioHeap_DiscardFont)
     /* 0x31 */ u8 pad31[2];
     /* 0x33 */ u8 fontId; // @unverified: same offset/use as OoT's Note.playbackState.fontId (compared with the font being discarded)
     /* 0x34 */ u8 unk_34;
     /* 0x35 */ u8 pad35[0x44 - 0x35];
-    /* 0x44 */ Rec81109678Flags* parentLayer; // @unverified: same offset/use as OoT's Note.playbackState.parentLayer
+    /* 0x44 */ SeqLayerFlags81109678* parentLayer; // @unverified: same offset/use as OoT's Note.playbackState.parentLayer
     /* 0x48 */ u8 pad48[0x5C - 0x48];
     /* 0x5C */ u8 adsrAction; // @unverified: same offset/use as OoT's Note.playbackState.adsr.action (0x10 = release)
     /* 0x5D */ u8 adsrState; // @unverified: same offset/use as OoT's Note.playbackState.adsr.action.s.state
@@ -101,14 +101,38 @@ typedef struct Rec81109678 {
     /* 0xB4 */ u32 enabled : 1; // @unverified: same offset/use as OoT's Note.sampleState.bitField0.enabled
     /* 0xB4 */ u32 restB4 : 31;
     /* 0xB8 */ u8 padB8[0xCC - 0xB8];
-} Rec81109678; // size = 0xCC
+} Note81109678; // size = 0xCC
 
-typedef struct CacheEntry81109C0C {
-    /* 0x00 */ u8* ramAddr;
-    /* 0x04 */ u32 size;
-    /* 0x08 */ s16 tableType;
-    /* 0x0A */ s16 id;
-} CacheEntry81109C0C; // size = 0xC
+typedef struct AudioCacheEntry {
+    /* 0x00 */ u8* ramAddr; // @unverified: same offset/use as OoT's AudioCacheEntry.addr
+    /* 0x04 */ u32 size; // @unverified: same offset/use as OoT's AudioCacheEntry.size
+    /* 0x08 */ s16 tableType; // @unverified: same offset/use as OoT's AudioCacheEntry.tableType (0 sequence, 1 font, 2 sample bank)
+    /* 0x0A */ s16 id; // @unverified: same offset/use as OoT's AudioCacheEntry.id
+} AudioCacheEntry; // size = 0xC
+
+typedef struct AudioPersistentCache {
+    /* 0x00 */ u32 numEntries;
+    /* 0x04 */ AudioAllocPool pool;
+    /* 0x14 */ AudioCacheEntry entries[1];
+} AudioPersistentCache; // size = 0x20
+
+typedef struct AudioTemporaryCache {
+    /* 0x00 */ u32 nextSide;
+    /* 0x04 */ AudioAllocPool pool;
+    /* 0x14 */ AudioCacheEntry entries[2];
+} AudioTemporaryCache; // size = 0x2C
+
+/* One of the sequence, font and sample bank caches (D_81184320, D_81184380, D_811843E0; 0x60 apart). */
+typedef struct AudioCache {
+    /* 0x00 */ AudioPersistentCache persistent;
+    /* 0x20 */ AudioTemporaryCache temporary;
+} AudioCache;
+
+/* The permanent pool and the entries allocated from it (D_81184440). */
+typedef struct AudioPermanentCache {
+    /* 0x00 */ AudioAllocPool pool; // @unverified: allocated from by AudioLoad's permanent alloc; pool.numEntries indexes the next entry (OoT's permanentPool)
+    /* 0x10 */ AudioCacheEntry entries[1]; // @unverified: same use as OoT's AudioContext.permanentCache
+} AudioPermanentCache;
 
 
 typedef struct SeqPlayer81109C0C {
@@ -128,7 +152,7 @@ typedef struct Voice8110AA50 {
     /* 0x00E */ char unk00E[0x14A];
 } Voice8110AA50; // size = 0x158
 
-typedef struct ReverbSettingsAFF0 {
+typedef struct ReverbSettings {
     /* 0x00 */ u8 downsampleRate;
     /* 0x01 */ u8 windowSize;
     /* 0x02 */ u16 decayRatio;
@@ -139,15 +163,15 @@ typedef struct ReverbSettingsAFF0 {
     /* 0x0C */ u16 mixReverbStrength; // @unverified: copied to SynthesisReverb.mixReverbStrength (OoT's ReverbSettings.unk_12)
     /* 0x0E */ s16 lowPassFilterCutoffLeft;
     /* 0x10 */ s16 lowPassFilterCutoffRight;
-} ReverbSettingsAFF0; // size = 0x12
+} ReverbSettings; // size = 0x12
 
-typedef struct AudioSpecAFF0 {
+typedef struct AudioSpec {
     /* 0x00 */ u32 frequency;
     /* 0x04 */ u8 unk_04;
     /* 0x05 */ u8 numNotes;
     /* 0x06 */ u8 numSequencePlayers;
     /* 0x07 */ u8 numReverbs;
-    /* 0x08 */ ReverbSettingsAFF0* reverbSettings;
+    /* 0x08 */ ReverbSettings* reverbSettings;
     /* 0x0C */ u16 unk_0C;
     /* 0x10 */ s32 persistentSeqMem;
     /* 0x14 */ s32 persistentFontMem;
@@ -157,7 +181,7 @@ typedef struct AudioSpecAFF0 {
     /* 0x24 */ s32 temporarySampleMem;
     /* 0x28 */ s32 persistentSampleCacheSize;
     /* 0x2C */ s32 temporarySampleCacheSize;
-} AudioSpecAFF0; // size = 0x30
+} AudioSpec; // size = 0x30
 
 typedef struct LoopAFF0 {
     /* 0x00 */ u32 start;
@@ -176,15 +200,15 @@ typedef struct SampleAFF0 {
     /* 0x0C */ void* book;
 } SampleAFF0; // size = 0x10
 
-typedef struct ReverbItemAFF0 {
+typedef struct ReverbRingBufferItem {
     /* 0x00 */ s16 numSamplesAfterDownsampling;
     /* 0x02 */ s16 chunkLen;
     /* 0x04 */ s16* toDownsampleLeft;
     /* 0x08 */ s16* toDownsampleRight;
     /* 0x0C */ u8 unk0C[8];
-} ReverbItemAFF0; // size = 0x14
+} ReverbRingBufferItem; // size = 0x14
 
-typedef struct SynthesisReverbAFF0 {
+typedef struct SynthesisReverb {
     /* 0x000 */ u8 resampleFlags;
     /* 0x001 */ u8 useReverb;
     /* 0x002 */ u8 framesToIgnore;
@@ -207,7 +231,7 @@ typedef struct SynthesisReverbAFF0 {
     /* 0x02C */ void* resampleStateRight; // @unverified: 0x20-byte aResample state, right (OoT's SynthesisReverb.unk_34)
     /* 0x030 */ void* unk_30;
     /* 0x034 */ void* unk_34;
-    /* 0x038 */ ReverbItemAFF0 items[2][5];
+    /* 0x038 */ ReverbRingBufferItem items[2][5];
     /* 0x100 */ s16* filterLeft;
     /* 0x104 */ s16* filterRight;
     /* 0x108 */ s16* filterLeftState;
@@ -217,14 +241,25 @@ typedef struct SynthesisReverbAFF0 {
     /* 0x118 */ SampleAFF0 sample;
     /* 0x128 */ LoopAFF0 loop;
     /* 0x134 */ u8 unk134[0x158 - 0x134];
-} SynthesisReverbAFF0; // size = 0x158
+} SynthesisReverb; // size = 0x158
 
-typedef struct SessionSplitAFF0 {
+typedef struct AudioSessionPoolSplit {
     /* 0x00 */ s32 miscPoolSize;
     /* 0x04 */ s32 unk_04;
     /* 0x08 */ s32 unk_08;
     /* 0x0C */ s32 cachePoolSize;
-} SessionSplitAFF0;
+} AudioSessionPoolSplit; // size = 0x10
+
+typedef struct AudioCachePoolSplit {
+    /* 0x00 */ s32 persistentCommonPoolSize; // @unverified: same offset/use as OoT's AudioCachePoolSplit.persistentCommonPoolSize
+    /* 0x04 */ s32 temporaryCommonPoolSize; // @unverified: same offset/use as OoT's AudioCachePoolSplit.temporaryCommonPoolSize
+} AudioCachePoolSplit; // size = 0x8
+
+typedef struct AudioCommonPoolSplit {
+    /* 0x00 */ s32 seqCacheSize; // @unverified: same offset/use as OoT's AudioCommonPoolSplit.seqCacheSize
+    /* 0x04 */ s32 fontCacheSize; // @unverified: same offset/use as OoT's AudioCommonPoolSplit.fontCacheSize
+    /* 0x08 */ s32 sampleBankCacheSize; // @unverified: same offset/use as OoT's AudioCommonPoolSplit.sampleBankCacheSize
+} AudioCommonPoolSplit; // size = 0xC
 
 
 typedef struct GbApuChannelState {
@@ -354,7 +389,7 @@ typedef union GbApuMesg {
     GbApuWrite write;
 } GbApuMesg;
 
-typedef struct unk_D_81234690 {
+typedef struct AudioBufferParameters {
     /* 0x00 */ s16 specUnk4; // @unverified: same offset/use as OoT's AudioBufferParameters.specUnk4 (set from AudioSpec.unk_04; 2 doubles the AI buffer bounds)
     /* 0x02 */ u16 samplingFrequency; // @unverified: same offset/use as OoT's AudioBufferParameters.samplingFrequency
     /* 0x04 */ s16 aiSamplingFrequency; // @unverified: same offset/use as OoT's AudioBufferParameters.aiSamplingFrequency (osAiSetFrequency result)
@@ -372,7 +407,7 @@ typedef struct unk_D_81234690 {
     /* 0x20 */ f32 ticksPerUpdateInvScaled; // @unverified: same offset/use as OoT's AudioBufferParameters.ticksPerUpdateInvScaled
     /* 0x24 */ f32 ticksPerUpdateScaled; // @unverified: same offset/use as OoT's AudioBufferParameters.ticksPerUpdateScaled
     /* 0x28 */ u8 pad28[0x38 - 0x28];
-} unk_D_81234690;
+} AudioBufferParameters;
 
 typedef struct unk_D_81287B08_jp {
     /* 0x000 */ u8 unk_000;
