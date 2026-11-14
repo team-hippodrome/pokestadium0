@@ -72,7 +72,6 @@ extern char D_800735C4[];
 
 void func_82003688(s32 arg0);
 
-void FreeBattle_ClearSideRoster(s8 *arg0);
 
 M2C_UNK FreeBattle_BuildBattleRosters(s8 *, s8 *, s8 *, s32, s32, s32); /* extern */
 
@@ -160,7 +159,6 @@ extern s32 D_8200ACFC;
 extern s32 D_8200AD00;
 extern s32 D_8200AD04;
 extern s32 D_8200AD28;
-extern s8 D_800AE8F0;
 extern s32 D_82008F84;
 M2C_UNK func_820059EC(void);
 
@@ -171,9 +169,7 @@ M2C_UNK func_820059EC();                            /* extern */
 M2C_UNK func_82008F14();                            /* extern */
 extern s8 D_00235D70;
 extern s8 D_00238BD0;
-extern s8 D_800AE8F0;
 extern s32 D_82008F84;
-extern M2C_UNK *D_8200ACF8;
 extern s8 D_88000000;
 s32 func_82005CCC(s32 arg0, M2C_UNK arg1);
 
