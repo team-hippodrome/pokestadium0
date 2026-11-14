@@ -44,7 +44,7 @@ Where the code lives, after the reorganization. File names are broadly correct g
 | 031 | `src/fragments/particle_data/` | 2 | 8 | particle data |
 | 032 | `src/fragments/vs_trainer_panel/` | 1 | 9 | VS screen trainer panels (portrait, title, name, team icons, nicknames) and the battle-title round switch |
 | 033 | `src/fragments/geo_model_033/` | 1 | 13 | geo layout callbacks for models |
-| 034 | `src/fragments/geo_model_034/` | 1 | 8 | geo layout callbacks for models |
+| 034 | `src/fragments/tournament_badge_cap/` | 1 | 8 | trainer cap with the eight tournament badges, shown after a tournament win |
 | 038 | `src/fragments/cartridge_check_models/` | 1 | 2 | models of the Game Boy cartridge check (P-OS terminal) and its anti-piracy check |
 | 039 | `src/fragments/doduo_game_boy_model/` | 1 | 1 | Doduo Game Boy (Pocket) prize model and its screen glare callback |
 | 040 | `src/fragments/dodrio_game_boy_model/` | 1 | 1 | Dodrio Game Boy (Pocket) prize model shown on the cartridge check screen |
