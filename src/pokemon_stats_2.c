@@ -242,7 +242,6 @@ s32 GbSave_WriteMainDataChecksum(s32 arg0) {
     return 0;
 }
 
-extern GbSavePort D_800AC910[4];
 /** Reads one Pokemon box bank from the cartridge. */
 s32 GbSave_ReadBoxBank(s32 arg0, s32 arg1) {
     UNUSED s32 pad[2]; // FAKE: stack padding
@@ -454,7 +453,6 @@ s32 GbSave_LoadPort(s32 arg0) {
     return temp_s1;
 }
 
-extern GbSavePort D_800AC910[4];
 /*
  * GbSave_PollCartRemoval
  *
