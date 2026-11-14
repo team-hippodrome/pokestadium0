@@ -314,7 +314,7 @@ void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void Window_DrawLabeled(s8*, s32);
 extern u8 D_8007356C[];
-extern M2C_UNK D_800734A8;
+extern u8 D_800734A8[];
 extern Gfx D_80060270[];
 extern Color_RGBA8 D_8900A5C4;
 extern Color_RGBA8 D_8900A5C8;
@@ -335,7 +335,7 @@ void LabItem_DrawConfirmWindow(s8* arg0) {
         func_8001AB6C();
         if (!arg0) { // FAKE: empty test only changes register allocation; needed to match
         }
-        func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
+        func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
         Font_SetLineHeight(0x1C);
         func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0xE, M2C_FIELD(arg0, s32*, 4) + 0xA, M2C_FIELD(arg0, s32*, 0x30));
@@ -448,8 +448,8 @@ void LabItem_DrawCountSelector(s8* arg0) {
         Ui_DrawRoundedFrame(x - 3, M2C_FIELD(arg0, s32*, 8) + 0xD, 0x1A, 0x1A, D_80073520);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(8, 0);
-        Gfx_SetEnvColor(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2),
-                      M2C_FIELD(&D_800734A8, u8*, 3));
+        Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2],
+                      D_800734A8[3]);
         func_8001A944(M2C_FIELD(arg0, s32*, 4) + 0xA, M2C_FIELD(arg0, s32*, 8) + 0x10, D_89018470);
         if (M2C_FIELD(arg0, s32*, 0x44) == 1) {
             v = 2;
@@ -571,7 +571,7 @@ void LabItem_DisableRow(s8 *arg0, s32 arg1) {
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Rgba89000D50);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);
 extern Rgba89000D50 D_8900A5D4[];
-extern M2C_UNK D_800734A8;
+extern u8 D_800734A8[];
 /**
  * Draws one menu row label with the selection highlight (dimmed when disabled).
  * Seen in play (2026-11-13) drew the rows of the item sort screen's source window (てもちの どうぐ, サトシの
@@ -903,7 +903,7 @@ void LabItem_DrawTitleText(s32 arg0, s32 arg1, s32 arg2, s8 *arg3) {
     func_8001ABBC();
 }
 
-extern M2C_UNK D_800734A8;
+extern u8 D_800734A8[];
 
 /**
  * Draws `arg2` centered in the 376-pixel help area.
@@ -913,7 +913,7 @@ extern M2C_UNK D_800734A8;
 void LabItem_DrawCenteredText(s32 arg0, s32 arg1, char* arg2) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(0x10, 0);
-    Gfx_SetEnvColor(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
+    Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
     Font_Printf(((0x178 - (strlen(arg2) / 2) * 0x18) / 2) + arg0, arg1 + 0x10, arg2);
     Font_EndTexturedTextRendering();
 }
@@ -924,7 +924,7 @@ M2C_UNK func_8001AA9C(u8, u8, u8, u8);              /* extern */
 void Font_SetLineHeight(s32 arg0);                     /* extern */
 M2C_UNK func_8001AB6C();                            /* extern */
 M2C_UNK func_8001ABBC();                            /* extern */
-extern M2C_UNK D_800734A8;
+extern u8 D_800734A8[];
 
 /**
  * Draws `arg2` in the small font.
@@ -935,7 +935,7 @@ extern M2C_UNK D_800734A8;
 void LabItem_DrawSmallText(s32 arg0, s32 arg1, s32 arg2) {
     func_8001AB6C();
     func_8001A384(8, 0);
-    func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
+    func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
     Font_SetLineHeight(0x1C);
     func_8001A944(arg0 + 8, arg1 + 4, arg2);
     func_8001ABBC();
@@ -1464,7 +1464,7 @@ void LabItem_DrawDeleteDataWindow(s8* arg0, s32 arg1) {
         func_8001A384(8, 0);
         if (!arg0) { // FAKE: empty test only changes register allocation; needed to match
         }
-        func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
+        func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         Font_SetLineHeight(0x1C);
         func_8001A944(M2C_FIELD(arg0, s32*, 0x2C) + 8, M2C_FIELD(arg0, s32*, 0x30) + 8, D_89018688);
         func_8001ABBC();

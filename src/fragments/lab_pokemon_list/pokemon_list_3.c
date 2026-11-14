@@ -36,7 +36,7 @@ extern u8 D_8910A84C[];
 void func_891000BC(s32 arg0);
 void func_89100294(Ctx89100294* arg0);
 s32 LabPCList_GetColumnCursorX(Ctx89100688* arg0);
-extern M2C_UNK D_800734A8;
+extern u8 D_800734A8[];
 
 extern Gfx D_80060270[];
 extern Color_RGBA8 D_8910A85C[2][2];
@@ -227,7 +227,7 @@ void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
  */
 void LabPCList_DrawPageHint(s8* arg0) {
     func_8001AB6C();
-    func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
+    func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
     func_8001A384(8, 0);
     func_8001A944(M2C_FIELD(arg0, s32*, 0x4C) + 0x22, M2C_FIELD(arg0, s32*, 0x50) + 5, (M2C_UNK*)D_8910DBF0);
     func_8001A944(M2C_FIELD(arg0, s32*, 0x4C) + 0x152, M2C_FIELD(arg0, s32*, 0x50) + 5, (M2C_UNK*)D_8910DC04,

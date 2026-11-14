@@ -36,7 +36,7 @@ typedef struct Entry8006A9D4 {
     /* 0x08 */ s32 unk_08;
 } Entry8006A9D4; // size = 0xC
 extern Entry8006A9D4 D_8006A9D4[];
-extern M2C_UNK D_800734A8;
+extern u8 D_800734A8[];
 extern char D_82009B90[];
 u32 func_800566BC(const char*);
 
@@ -260,7 +260,7 @@ void FreeBattle_DrawMenuWindow(MenuWindow* arg0, s32 arg1) {
         sp38 = arg0->window.frame.width - 0xC;
         Menu_DrawItems(&arg0->menu, arg0->window.frame.x + 6, arg0->window.frame.y + 0xA, arg1 | 0xFFED, (s8*)&sp38);
         func_8001AB6C();
-        func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
+        func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
         Font_SetLineHeight(0x1C);
         func_8001A944(arg0->window.frame.x + 0xE, arg0->window.frame.y + temp_s1 + 0x10, arg0->descriptions[arg0->menu.cursor]);
@@ -393,7 +393,7 @@ s32 FreeBattle_UpdatePopupMenu(MenuWindow* arg0) {
     return sp1C;
 }
 
-extern M2C_UNK D_800734A8;
+extern u8 D_800734A8[];
 /**
  * Draws one opponent choice in 「あいてをせんたく」 (2P, 3P, 4P, COM): highlight box when selected (flag
  * 0x10), dimmed when unavailable (flag 1).
@@ -542,7 +542,7 @@ void FreeBattle_DrawOpponentSelect(FreeBattleOpponentWindow* arg0) {
         func_80029028(arg0->window.frame.x + 6, arg0->window.frame.y + 0x99, arg0->window.frame.width - 0xC, 0x70, *(Color82001CCC*)&D_82009100);
         Ui_DrawImageInStrips(D_8200910C, arg0->window.frame.x + 0xA9, arg0->window.frame.y + 0xC1);
         func_8001AB6C();
-        func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
+        func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
         func_8001A944(arg0->window.frame.x + 0x36, arg0->window.frame.y + 0xC3, D_82009F84);
         func_8001ABBC();
@@ -980,7 +980,7 @@ void FreeBattle_DrawBattleModeWindow(FreeBattleModeWindow* arg0) {
         Ui_FillRectPrimEnvColor(arg0->window.frame.x + 6, arg0->window.frame.y + 0xE8, arg0->window.frame.width - 0xC, 0x40, D_820091BC, D_820091C0);
         GridMenu_DrawInlineItems(&arg0->menu, arg0->window.frame.x + 0x10, arg0->window.frame.y + 0x10, 0xFFEF, 0);
         func_8001AB6C();
-        func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
+        func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
         Font_SetLineHeight(0x1C);
         func_8001A944(arg0->window.frame.x + 0x14, arg0->window.frame.y + 0xEC, ((FreeBattleModeEntry*)arg0->modes)[arg0->menu.cursor].text);
@@ -1225,7 +1225,7 @@ void func_82007D94(s8* arg0, s32 arg1) {
         entry = M2C_FIELD(arg0, s8**, 0xCC);
         for (i = 0; i < M2C_FIELD(arg0, s32*, 0xD4); i++) {
             func_8001AB6C();
-            func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
+            func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
             func_8001A384(4, -1);
             x = (i % 7) * 0x4F + x0;
             y = (i / 7) * 0x3C + y0;
@@ -1292,7 +1292,7 @@ void func_8001A384(s32, s32);
 void Font_SetLineHeight(s32 arg0);
 void func_8001A944(s32, s32, const char*, ...);
 void func_8001ABBC(void);
-extern M2C_UNK D_800734A8;
+extern u8 D_800734A8[];
 extern char D_8200A0B0[];
 
 /**
@@ -1304,7 +1304,7 @@ extern char D_8200A0B0[];
 void FreeBattle_DrawDuplicateWarning(FreeBattleDuplicateWarning* arg0) {
     if (func_8002AE6C() == 0) {
         func_8001AB6C();
-        func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
+        func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
         Font_SetLineHeight(0x1C);
         func_8001A944(arg0->window.frame.x + 0xE, arg0->window.frame.y + 0xE, D_8200A0B0, arg0->value);
@@ -1375,7 +1375,7 @@ void FreeBattle_DrawShortageWarning(FreeBattleShortageWarning* arg0) {
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(arg0->window.frame.x + 6, arg0->window.frame.y + 0x68, arg0->window.frame.width - 0xC, 0x24, *(Color82001CCC*)&D_82009100);
         func_8001AB6C();
-        func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
+        func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
         Font_SetLineHeight(0x1C);
         func_8001A944(arg0->window.frame.x + 0xE, arg0->window.frame.y + 0xE, D_8200A124, arg0->count, arg0->count);
@@ -1485,7 +1485,7 @@ void FreeBattle_DrawLevelSumWarning(FreeBattleLevelSumWarning* arg0) {
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(arg0->window.frame.x + 6, arg0->window.frame.y + 0x68, arg0->window.frame.width - 0xC, 0x24, *(Color82001CCC*)&D_82009100);
         func_8001AB6C();
-        func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
+        func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
         Font_SetLineHeight(0x1C);
         func_8001A944(arg0->window.frame.x + 0xE, arg0->window.frame.y + 0xE, D_8200A198);
@@ -1592,7 +1592,7 @@ void FreeBattle_DrawEntryConfirm(FreeBattleRentalConfirm* arg0) {
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(arg0->window.frame.x + 6, arg0->window.frame.y + 0x3C, arg0->window.frame.width - 0xC, 0x24, *(Color82001CCC*)&D_82009100);
         func_8001AB6C();
-        func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
+        func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(0x10, 0);
         func_8001A944(arg0->window.frame.x + 0x12, arg0->window.frame.y + 0x12, D_8200A208);
         func_8001ABBC();
