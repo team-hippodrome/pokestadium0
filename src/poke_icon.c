@@ -174,7 +174,7 @@ void PokeIcon_AdjustImageColors(u8* arg0, arg1_func_80010CA8 arg1) {
     // clang-format on
 }
 
-extern unk_D_8006FF00 D_80064C5C[];
+extern SpeciesInfo D_80064C5C[];
 /**
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the party screen, registration
  * and Free Battle setup.

@@ -898,20 +898,21 @@ typedef struct Rectangle {
 extern struct DisplayNodeHeader D_800AD1D0;
 extern struct DisplayNodeHeader D_800AD1E8;
 
-typedef struct unk_D_8006FF00 {
-	/* 0x00 */ u8 unk_00;
+/* One species of the 0x1C-byte table D_80064C5C (index = species - 1): Pokedex data, model scale and nickname colors. */
+typedef struct SpeciesInfo {
+	/* 0x00 */ u8 dexNumber; // @unverified: Pokédex number, printed %03d (Pokedex entry page)
 	/* 0x01 */ u8 unk_01;
-	/* 0x02 */ s16 unk_02;
+	/* 0x02 */ s16 modelScale; // @unverified: model scale in percent (poke_icon_2.c divides it by 100.0f)
 	/* 0x04 */ char* name;
-	/* 0x08 */ s32 unk_08;
-	/* 0x0C */ u8 cupEligibilityFlags;
-	/* 0x0D */ u8 unk_0D;
-	/* 0x0E */ s16 unk_0E;
-	/* 0x10 */ s16 unk_10;
-	/* 0x12 */ s16 unk_12;
+	/* 0x08 */ char* category; // @unverified: printed as 「%sポケモン」 (... Pokémon) on the Pokedex entry page
+	/* 0x0C */ u8 cupEligibilityFlags; // @unverified: Free Battle species flags: bit 0 battle-usable, bit 1 L1-30 eligible (docs/stadium-zero-battle-roster.md)
+	/* 0x0D */ u8 heightTenths; // @unverified: height in tenths of a meter (Pokedex_DrawTenthsValue)
+	/* 0x0E */ s16 weightTenths; // @unverified: weight in tenths of a kilogram (Pokedex_DrawTenthsValue)
+	/* 0x10 */ s16 nicknameHueMin; // @unverified: low end of the nickname color variant hue (Model_ComputeNicknameColorVariant)
+	/* 0x12 */ s16 nicknameHueMax; // @unverified: high end of that hue range
 	/* 0x14 */ u32 unk_14;
-	/* 0x18 */ u32 unk_18;
-} unk_D_8006FF00; // size = 0x1C
+	/* 0x18 */ char* description; // @unverified: the Pokédex entry text, drawn when func_800231C8 returns 2 or more (Pokédex entry page)
+} SpeciesInfo; // size = 0x1C
 
 
 typedef struct FontSet {

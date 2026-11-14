@@ -41,7 +41,7 @@ extern Gfx D_80060270[];
 extern Color_RGBA8 D_8910A85C[2][2];
 extern Color_RGBA8 D_8910A860;
 extern Color_RGBA8 D_8910A86C[2][2];
-extern unk_D_8006FF00 D_80064C5C[];
+extern SpeciesInfo D_80064C5C[];
 extern char D_8910DBCC[];
 extern char D_8910DBD8[];
 extern char D_8910DBDC[];

@@ -82,7 +82,7 @@ PokeModelPreview* PokeIcon_CreateModelPreview(ModelLoadContext* arg0, s16 arg1, 
     return temp_v0;
 }
 
-extern unk_D_8006FF00 D_80064C5C[];
+extern SpeciesInfo D_80064C5C[];
 
 /** Sets the Pokemon shown in the preview. */
 void PokeIcon_SetPreviewMon(PokeModelPreview* arg0, BattleMon* arg1, u16 arg2) {
@@ -96,7 +96,7 @@ void PokeIcon_SetPreviewMon(PokeModelPreview* arg0, BattleMon* arg1, u16 arg2) {
     arg0->spinSpeed = 0x100;
     arg0->idleTimer = 0;
     arg0->fillColor = arg2;
-    arg0->scale = D_80064C5C[arg1->species.id - 1].unk_02 / 100.0f;
+    arg0->scale = D_80064C5C[arg1->species.id - 1].modelScale / 100.0f;
 
     arg0->displayObject->position.x = tmp1;
     arg0->displayObject->position.y = tmp2;
@@ -113,7 +113,7 @@ void PokeIcon_SetPreviewMon(PokeModelPreview* arg0, BattleMon* arg1, u16 arg2) {
     arg0->displayObject->node.renderFlags |= 0x80;
 }
 
-extern unk_D_8006FF00 D_80064C5C[];
+extern SpeciesInfo D_80064C5C[];
 
 /** Sets the species shown in the preview. */
 void PokeIcon_SetPreviewSpecies(PokeModelPreview* arg0, s32 arg1, u16 arg2) {
@@ -127,7 +127,7 @@ void PokeIcon_SetPreviewSpecies(PokeModelPreview* arg0, s32 arg1, u16 arg2) {
     arg0->spinSpeed = 0x100;
     arg0->idleTimer = 0;
     arg0->fillColor = arg2;
-    arg0->scale = D_80064C5C[arg1 - 1].unk_02 / 100.0f;
+    arg0->scale = D_80064C5C[arg1 - 1].modelScale / 100.0f;
 
     arg0->displayObject->position.x = tmp1;
     arg0->displayObject->position.y = tmp2;
