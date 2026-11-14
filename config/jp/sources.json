@@ -219,7 +219,7 @@
   "src/fragments/party_summary/mon_summary.c",
   "src/fragments/main_menu_launcher/main_menu_launcher.c",
   "src/fragments/launcher_relay_021/launcher_relay_021.c",
-  "src/fragments/launcher_relay_022/launcher_relay_022.c",
+  "src/fragments/unused_relay_022/unused_relay_022.c",
   "src/fragments/launcher_relay_023/launcher_relay_023.c",
   "src/fragments/launcher_relay_024/launcher_relay_024.c",
   "src/fragments/fatal_error_screen/fatal_error_screen.c",
