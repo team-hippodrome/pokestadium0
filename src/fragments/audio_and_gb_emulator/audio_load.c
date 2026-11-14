@@ -1006,24 +1006,22 @@ void func_8110D054(s32 arg0) {
     }
 }
 
-extern s16 D_811843BE;
-extern s16 D_811843CA;
 void func_8110D110(s32 arg0) {
-    Cache8110A368* tbl2;
+    AudioPersistentCache* persistent;
     s32 none;
-    Cache8110A368* tbl = (Cache8110A368*)&D_81184380;
+    AudioCache* tbl = (AudioCache*)&D_81184380;
     u32 i;
 
     none = -1;
-    if (arg0 == ((Cache8110A368*)((u8*)tbl + 0x20))->entries[0].id) {
-        D_811843BE = none;
-    } else if (arg0 == D_811843CA) {
-        D_811843CA = none;
+    if (arg0 == tbl->temporary.entries[0].id) {
+        tbl->temporary.entries[0].id = none;
+    } else if (arg0 == tbl->temporary.entries[1].id) {
+        tbl->temporary.entries[1].id = none;
     }
-    tbl2 = tbl;
-    for (i = 0; i < tbl2->numEntries; i++) {
-        if (arg0 == tbl2->entries[i].id) {
-            tbl2->entries[i].id = none;
+    persistent = &tbl->persistent;
+    for (i = 0; i < persistent->numEntries; i++) {
+        if (arg0 == persistent->entries[i].id) {
+            persistent->entries[i].id = none;
         }
     }
     AudioHeap_DiscardFont(arg0);

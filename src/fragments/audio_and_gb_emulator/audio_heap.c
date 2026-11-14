@@ -627,36 +627,37 @@ s32 AudioHeap_SearchCaches(s32 arg0, s32 arg1, s32 arg2) {
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioHeap_SearchRegularCaches(s32 arg0, s32 arg1, s32 arg2) {
-    Cache8110A368* sub;
-    Cache8110A368* tbl;
+    AudioTemporaryCache* temporary;
+    AudioCache* tbl;
+    AudioPersistentCache* persistent;
     u32 i;
     switch (arg0) {
     case 0:
-        tbl = (Cache8110A368*)&D_81184320;
+        tbl = (AudioCache*)&D_81184320;
         break;
     case 1:
-        tbl = (Cache8110A368*)&D_81184380;
+        tbl = (AudioCache*)&D_81184380;
         break;
     case 2:
-        tbl = (Cache8110A368*)&D_811843E0;
+        tbl = (AudioCache*)&D_811843E0;
         break;
     }
-    sub = (Cache8110A368*)((u8*)tbl + 0x20);
+    temporary = &tbl->temporary;
     if (arg1 == 0) {
-        if (arg2 == sub->entries[0].id) {
-            sub->numEntries = 1;
-            return sub->entries[0].ramAddr;
+        if (arg2 == temporary->entries[0].id) {
+            temporary->nextSide = 1;
+            return (s32)temporary->entries[0].ramAddr;
         }
-        if (arg2 == sub->entries[1].id) {
-            sub->numEntries = 0;
-            return sub->entries[1].ramAddr;
+        if (arg2 == temporary->entries[1].id) {
+            temporary->nextSide = 0;
+            return (s32)temporary->entries[1].ramAddr;
         }
         return 0;
     }
-    sub = tbl;
-    for (i = 0; i < sub->numEntries; i++) {
-        if (arg2 == tbl->entries[i].id) {
-            return tbl->entries[i].ramAddr;
+    persistent = &tbl->persistent;
+    for (i = 0; i < persistent->numEntries; i++) {
+        if (arg2 == tbl->persistent.entries[i].id) {
+            return (s32)tbl->persistent.entries[i].ramAddr;
         }
     }
     if (arg1 == 2) {

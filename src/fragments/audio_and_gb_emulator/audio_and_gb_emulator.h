@@ -120,9 +120,6 @@ typedef struct AudioPermanentCache {
 } AudioPermanentCache;
 
 
-typedef struct CacheEntry8110A368 { s32 ramAddr; char pad4[6]; s16 id; } CacheEntry8110A368; // @unverified: same offset/use as OoT's AudioCacheEntry.id
-
-typedef struct Cache8110A368 { u32 numEntries; char pad4[0x10]; CacheEntry8110A368 entries[1]; } Cache8110A368; // @unverified: persistent cache numEntries; for the temporary cache this word is nextSide
 
 typedef struct Reverb8110AA50 {
     /* 0x000 */ char unk000[0xC];
