@@ -5,7 +5,7 @@
 #include "font.h"
 #include "fragments/cartridge_check/cartridge_check.h"
 #include "fragments/main_menu/main_menu.h"
-#include "fragments/unidentified_001/unidentified_001.h"
+#include "fragments/model_callbacks/model_callbacks.h"
 #include "gb_save.h"
 #include "geo_render.h"
 #include "input.h"

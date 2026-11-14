@@ -864,5 +864,11 @@
   "src/libultra/os/exceptasm.c": {
     ".data": "0x80077BF0",
     ".rodata": "0x8007F560"
+  },
+  "src/fragments/model_callbacks/model_callbacks_4.c": {
+    ".rodata": {
+      "address": "0x81002400",
+      "size": "0x494"
+    }
   }
 }
