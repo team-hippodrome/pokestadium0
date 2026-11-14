@@ -170,53 +170,53 @@ extern u8 D_81136998[];
  * @unverified Name and comment guessed from the code.
  */
 void AudioSeq_InitSequenceChannel(void* obj) {
-    s8* arg0 = obj;
+    SequenceChannel* channel = obj;
     s32 i;
 
-    if ((SequenceChannel*)arg0 != &D_81184850) {
-        ((SequenceChannel*)arg0)->enabled = 0;
-        ((SequenceChannel*)arg0)->finished = 0;
-        ((SequenceChannel*)arg0)->stopScript = 0;
-        ((SequenceChannel*)arg0)->muted = 0;
-        ((SequenceChannel*)arg0)->hasInstrument = 0;
-        ((SequenceChannel*)arg0)->stereoHeadsetEffects = 0;
-        M2C_FIELD(arg0, s16*, 0x24) = 0;
-        ((SequenceChannel*)arg0)->largeNotes = 0;
-        M2C_FIELD(arg0, s8*, 9) = 0;
-        M2C_FIELD(arg0, u8*, 1) = 0xFF;
-        M2C_FIELD(arg0, s8*, 0x78) = 0;
-        M2C_FIELD(arg0, s8*, 0xA) = 0x40;
-        M2C_FIELD(arg0, u8*, 0xB) = 0x80;
-        M2C_FIELD(arg0, s8*, 0xD) = 0;
-        M2C_FIELD(arg0, s8*, 0xE) = 0;
-        M2C_FIELD(arg0, s32*, 0x40) = 0;
-        M2C_FIELD(arg0, s8*, 8) = 0;
-        M2C_FIELD(arg0, s8*, 4) = 0;
-        M2C_FIELD(arg0, s8*, 0xC) = 0;
-        M2C_FIELD(arg0, s8*, 5) = 3;
-        M2C_FIELD(arg0, s8*, 6) = 1;
-        M2C_FIELD(arg0, s16*, 0x1E) = 0;
-        M2C_FIELD(arg0, u8**, 0x80) = D_81136998;
-        M2C_FIELD(arg0, s8*, 0x7C) = 0x20;
-        M2C_FIELD(arg0, s16*, 0x14) = 0x800;
-        M2C_FIELD(arg0, s16*, 0x10) = 0x800;
-        M2C_FIELD(arg0, s8*, 0x7D) = 0;
-        M2C_FIELD(arg0, s16*, 0x16) = 0;
-        M2C_FIELD(arg0, s16*, 0x12) = 0;
-        M2C_FIELD(arg0, s16*, 0x18) = 0;
-        M2C_FIELD(arg0, s16*, 0x1A) = 0;
-        M2C_FIELD(arg0, s16*, 0x1C) = 0;
-        M2C_FIELD(arg0, s32*, 0xD0) = 0;
-        M2C_FIELD(arg0, s16*, 0x20) = 0;
-        M2C_FIELD(arg0, s8*, 0xF) = 0;
-        M2C_FIELD(arg0, f32*, 0x2C) = 1.0f;
-        M2C_FIELD(arg0, f32*, 0x28) = 1.0f;
-        M2C_FIELD(arg0, f32*, 0x38) = 1.0f;
+    if (channel != &D_81184850) {
+        channel->enabled = 0;
+        channel->finished = 0;
+        channel->stopScript = 0;
+        channel->muted = 0;
+        channel->hasInstrument = 0;
+        channel->stereoHeadsetEffects = 0;
+        channel->transposition = 0;
+        channel->largeNotes = 0;
+        channel->bookOffset = 0;
+        channel->changes.asByte = 0xFF;
+        channel->scriptState.depth = 0;
+        channel->newPan = 0x40;
+        channel->panChannelWeight = 0x80;
+        channel->velocityRandomVariance = 0;
+        channel->gateTimeRandomVariance = 0;
+        channel->noteUnused = 0;
+        channel->reverbIndex = 0;
+        channel->reverb = 0;
+        channel->gain = 0;
+        channel->notePriority = 3;
+        channel->someOtherPriority = 1;
+        channel->delay = 0;
+        channel->adsr.envelope = D_81136998;
+        channel->adsr.decayIndex = 0x20;
+        channel->vibratoRateTarget = 0x800;
+        channel->vibratoRateStart = 0x800;
+        channel->adsr.sustain = 0;
+        channel->vibratoExtentTarget = 0;
+        channel->vibratoExtentStart = 0;
+        channel->vibratoRateChangeDelay = 0;
+        channel->vibratoExtentChangeDelay = 0;
+        channel->vibratoDelay = 0;
+        channel->filter = 0;
+        channel->combFilterGain = 0;
+        channel->combFilterSize = 0;
+        channel->volume = 1.0f;
+        channel->volumeScale = 1.0f;
+        channel->freqScale = 1.0f;
         for (i = 0; i < 8; i++) {
-            M2C_FIELD(arg0, s8*, 0xC4 + i) = -1;
+            channel->soundScriptIO[i] = -1;
         }
-        ((SequenceChannel*)arg0)->unused = 0;
-        AudioPlayback_InitNoteLists(arg0 + 0x84);
+        channel->unused = 0;
+        AudioPlayback_InitNoteLists(&channel->notePool);
     }
 }
 
