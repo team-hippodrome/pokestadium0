@@ -212,7 +212,7 @@
   "src/fragments/lab_pokemon_list/popup_menus.c",
   "src/fragments/lab_pokemon_list/pokemon_list_9.c",
   "src/fragments/lab_pokemon_list/pokemon_list_10.c",
-  "src/fragments/lab_menu/lab_menu.c",
+  "src/fragments/pokedex_menu/pokedex_menu.c",
   "src/fragments/pokedex/pokedex.c",
   "src/fragments/pokedex/pokedex_2.c",
   "src/fragments/party_summary/party_screen.c",
