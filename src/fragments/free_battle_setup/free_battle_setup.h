@@ -60,9 +60,9 @@ typedef struct FreeBattleShortageWarning {
 /* The confirm window of the rental and entry screens: two or three buttons (FreeBattle_InitRentalConfirm). */
 typedef struct FreeBattleRentalConfirm {
     /* 0x00 */ Window window;
-    /* 0x2C */ LabeledButton buttons[3]; // @unverified: labels D_8200A1EC, D_8200A1F4, D_8200A1FC; the third only with hasThirdButton
+    /* 0x2C */ LabeledButton buttons[3]; // はい (Yes), いいえ (No), レンタル (Rental) under 「このデータでエントリーします。」 (Enter with this data) in play; the third only with hasThirdButton
     /* 0xE0 */ ChoiceCursor choice;
-    /* 0xEC */ s32 hasThirdButton; // @unverified: arg3 of FreeBattle_InitRentalConfirm; choice.count is 3 with it, else 2
+    /* 0xEC */ s32 hasThirdButton; // @unverified: arg3 of FreeBattle_InitRentalConfirm; choice.count is 3 with it, else 2 (1 and 3 with the レンタル button in play; poking 0 later did not hide it)
 } FreeBattleRentalConfirm; // size = 0xF0
 
 /* The opponent select window (FreeBattle_InitOpponentSelect): a menu of four opponents next to
