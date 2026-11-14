@@ -279,7 +279,7 @@ typedef struct PcSortScreen {
     /* 0x0000 */ s32 state; // @unverified: PcSort_UpdateScreen
     /* 0x0004 */ s8* iconFramebuffers; // @unverified: PokeIcon_AllocFramebuffers
     /* 0x0008 */ u16* monRenderer; // @unverified: func_80018F2C; the anim of statusWindow
-    /* 0x000C */ s32 mode; // @unverified: PcSort_Init's arg1
+    /* 0x000C */ s32 title; // PcSort_Init's title: LabTerminal_RunFrame passes the ポケモンのせいり string D_89018918 (seen 2026-11-14); never read
     /* 0x0010 */ PcSortOrganizeWindow organizeWindow; // the ポケモンのせいり window
     /* 0x0408 */ SavePrompt savePrompt; // @unverified: typed from the function it is passed to
     /* 0x046C */ PcBoxConfirmWindow statusWindow; // @unverified: typed from the function it is passed to

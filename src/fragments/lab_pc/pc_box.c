@@ -10,6 +10,12 @@
 M2C_UNK func_80023268(s32, u8, M2C_UNK);            /* extern */
 extern s32 D_89019108;
 
+/**
+ * Marks every species in a Game Boy box as seen, owned and held in the cartridge's
+ * Pokédex (func_80023268 with 3), after the box is written back.
+ * Seen in play (2026-11-14): ran in PcBox_SaveChanges on レポートしてやめる after a box move; the same pass
+ * in PcSort_MarkListInPokedex set bits that had been cleared in RAM.
+ */
 void PcBox_MarkBoxInPokedex(PcBoxStorage* box) {
     s32 var_s1;
     u8 *var_s0;
@@ -46,6 +52,12 @@ void func_800243B8(void);
 void func_8002D7D4(s32);
 void PcBox_DrawScreen(PcBoxScreen* arg0);
 
+/**
+ * Writes the changed GB boxes (deck 0x21, then PcBox_MarkBoxInPokedex) and 64 boxes
+ * (deck 0x11) back and flushes the saves.
+ * Seen in play (2026-11-14): レポートしてやめる after moving GBのボックス1 to 64のボックス1 wrote deck 0x21
+ * box 0 and deck 0x11 box 0.
+ */
 void PcBox_SaveChanges(PcBoxScreen* screen) {
     s32 any;
     s32 i;
@@ -103,6 +115,11 @@ s32 PcBox_ReadDeck(s32 deckType, s32 port, s32 index, s8* out, s32 max) {
 }
 
 s32 PcBox_ReadDeck(M2C_UNK, M2C_UNK, s32, s8 *, s32); /* extern */
+/**
+ * Reads `count` boxes of deck `deckType` into consecutive 0x964-byte box buffers
+ * (30 Pokémon each, the read count stored after them).
+ * Seen in play (2026-11-14): ボックスを いどうする read the 8 GB boxes (deck 0x21) and the 4 64 boxes (0x11).
+ */
 void PcBox_ReadBoxes(s8 *boxes, M2C_UNK deckType, M2C_UNK port, s32 count)
 {
   s32 temp_v0;
@@ -129,9 +146,8 @@ void PcBox_ReadBoxes(s8 *boxes, M2C_UNK deckType, M2C_UNK port, s32 count)
 
 
 /**
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Returns 1 when every box in the table holds Pokémon (no empty box to move into).
+ * Seen in play (2026-11-14): ran for the destination side of 64へボックスをいどうする and GBへボックスをいどうする.
  */
 s32 LabPC_NoEmptyBoxAvailable(ByteMatrix* table) {
     s32 i;
@@ -171,8 +187,10 @@ extern u8 D_8900A870[];
 extern char D_89018E60[];
 extern char D_89018E68[];
 /**
- * Sets up the confirm window (430x292) with its labeled Yes/No buttons.
- * Seen in play (2026-11-13) set up the ほんとうにいいの？ はい/いいえ window in せいとん > ポケモンをにがす.
+ * Sets up the Pokémon status window (430x292): nickname, LV, HP, types, stats, moves and
+ * the animated model. With a `prompt` it also shows that question with はい/いいえ buttons.
+ * Seen in play (2026-11-14): ポケモンをみる (no prompt) and ポケモンをにがす (「ほんとうにいいの？」) in
+ * ポケモンのせいり, and A on a Pokémon in ボックスのなかをみる.
  */
 void PcBox_InitMonStatusWindow(PcBoxConfirmWindow* win, s32 x, s32 y, s32 mon, s32 prompt, s32 controller, u16* renderer) {
     Window_SetRect((s8*)&win->window, x, y, 0x1AE, 0x124);
@@ -449,6 +467,10 @@ void Ui_DrawNumberUnpadded(s32, s32, u8);
 void Font_SetColorForFlags(s32);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
+/**
+ * Draws one cell of the box contents grid: the Pokémon's icon, L%d and nickname.
+ * Seen in play (2026-11-14): ホ L6 and タ L4 in GBのボックス2 and 64のボックス1.
+ */
 void PcBox_DrawListCell(s32 x, s32 y, BattleMon* mon, s32 index, s32 flags, s32 renderer) {
     s32 pad[4]; // FAKE
 
@@ -489,6 +511,11 @@ extern char D_89018EF0[];
 extern char D_89018EF8[];
 extern s8 D_890289E0[];
 void PcBox_DrawListCell();
+/**
+ * Sets up the box contents window titled ＧＢ/６４のボックスN (`isStadium` picks the
+ * prefix, `boxIndex` the digit) with a 6 x 5 icon grid of the box's Pokémon.
+ * Seen in play (2026-11-14): ボックスのなかをみる opened 「64のボックス1」 and 「GBのボックス2」.
+ */
 void PcBox_InitListWindow(PcBoxListWindow* win, s32 x, s32 y, PcBoxStorage* box, s32 renderer, s32 isStadium, s32 boxIndex) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s32 i;
@@ -520,10 +547,8 @@ s32 func_8002AE6C();                                /* extern */
 M2C_UNK GridMenu_DrawInlineItems(void*, s32, s32, s32, s32);  /* extern */
 
 /**
- * Draws the list window's rows (refreshing the icons unless flag 0x10 is set).
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Draws the box contents grid, refreshing the icons unless flag 0x10 is set (it is while the
+ * status window is open). Seen in play (2026-11-14).
  */
 void PcBox_DrawList(PcBoxListWindow* win, s32 flags) {
     if (func_8002AE6C() == 0) {
@@ -540,10 +565,8 @@ s32 func_8002BC14(s32);
 M2C_UNK func_8003F6AC(M2C_UNK);
 extern s32 D_800603C0;
 /**
- * Moves the list cursor. Returns -1 on cancel, the 1-based row on confirm, otherwise 0.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Moves the box contents cursor. Returns -1 on cancel, the 1-based cell on confirm,
+ * otherwise 0. Seen in play (2026-11-14): A on ホ opened its status window.
  */
 s32 PcBox_UpdateListCursor(PcBoxListWindow* win) {
     s32 sp1C = 0;
@@ -578,8 +601,9 @@ extern Gfx D_80073450[];
 void Ui_DrawNumber(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, u8*, s32, s32);
 /**
- * Draws ボックス%d (Box %d).
- * Seen in play (2026-11-12): ボックス1 ... ボックス4 on the 64 side.
+ * Draws one row of the GB cartridge column: ボックス%d, a Poké Ball icon when the box holds
+ * Pokémon, and its %2d/30 count; empty boxes use the dim colors.
+ * Seen in play (2026-11-14): the left column, ボックス１ 2/30 ... ボックス８ 0/30.
  */
 void PcBox_DrawGbBoxRow(s32 x, s32 y, LabPCBoxEntry* entry, s32 index, s32 flags) {
     Color_RGBA8 color;
@@ -620,8 +644,9 @@ extern char D_89018F20[];
 extern u8 D_80073634[];
 
 /**
- * Draws ボックス%d (Box %d) and its %2d/%2d fill count.
- * Seen in play (2026-11-12): ボックス1 0/30 ... ボックス8 0/30.
+ * Draws one row of the 64 cassette column: ボックス%d in the large font with its %2d/%2d
+ * count and a Poké Ball icon when it holds Pokémon.
+ * Seen in play (2026-11-14): the right column, ボックス１ 0/30 ... ボックス４ 0/30.
  */
 void PcBox_DrawStadiumBoxRow(s32 x, s32 y, LabPCBoxEntry* entry, s32 index, s32 flags) {
     Color_RGBA8 color;
@@ -773,6 +798,11 @@ void PcBox_InitOperationWindow(PcBoxOperationWindow* win, s32 x, s32 y, ByteMatr
 extern s32 D_8900A924[];
 extern s32 D_8900A93C[];
 void LabItem_DrawTitleText(s32, s32, s32, s32);
+/**
+ * Draws the selected operation's caption while the operation column has the cursor.
+ * Seen in play (2026-11-14): 「６４へボックスをいどうする」, 「ＧＢへボックスをいどうする」,
+ * 「ボックスをならべかえる」 and 「ボックスのなかをみる」.
+ */
 void PcBox_DrawHelpText(PcBoxOperationWindow* win) {
     if (win->state == 1) {
         if (0) {}  // karodo
@@ -857,10 +887,8 @@ void PcBox_DrawOperationWindow(PcBoxOperationWindow* win) {
 s32 Menu_UpdateCursorSkipDisabled(void* arg0);
 
 /**
- * Moves a menu cursor. Returns -1 on cancel, 1 on confirm, otherwise 0.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Moves a box column cursor, skipping disabled rows. Returns -1 on cancel, 1 on confirm,
+ * otherwise 0. Seen in play (2026-11-14): picking source and destination boxes.
  */
 s32 PcBox_UpdateSimpleCursor(Menu* menu) {
     s32 sp1C = 0;
@@ -880,15 +908,12 @@ s32 PcBox_UpdateSimpleCursor(Menu* menu) {
 
 
 /**
- * Swaps the box of the entry selected in sourceMenu with
- * that of the entry selected in targetMenu, then sets the second
- * word (dirty) of both entries to 1. The entry is `rows[cursor]` of the menu's item
- * table, written `cursor + *(LabPCBoxEntry**)menu->items` (rows is the first field) because
- * a cast of `items->rows` or the other operand order changes the load order; that form gives the
- * retail temp numbering.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name guessed from the code; comment kept.
+ * Swaps the boxes of the entries selected in sourceMenu and targetMenu and marks both
+ * changed. The entry is `rows[cursor]` of the menu's item table, written
+ * `cursor + *(LabPCBoxEntry**)menu->items` (rows is the first field) because a cast of
+ * `items->rows` or the other operand order changes the load order.
+ * Seen in play (2026-11-14): moved GBのボックス1 (2/30) into 64のボックス1 and back again with
+ * GBへボックスをいどうする, and swapped GBのボックス2 with 64のボックス1 (operation 3).
  */
 void PcBox_SwapSelectedEntries(PcBoxOperationWindow* win) {
     LabPCBoxEntry* a;
@@ -905,10 +930,8 @@ void PcBox_SwapSelectedEntries(PcBoxOperationWindow* win) {
 }
 
 /**
- * Swaps two entries of the same box list and marks both dirty.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Swaps two boxes of the same column (swapIndex and the cursor) and marks both changed.
+ * Seen in play (2026-11-14) in ボックスをならべかえる: GBのボックス2's Pokémon (2/30) moved to GBのボックス1.
  */
 void PcBox_SwapEntriesInList(PcBoxOperationWindow* win) {
     LabPCBoxEntry* a = win->swapIndex + *(LabPCBoxEntry**)win->sourceMenu->items;
@@ -923,10 +946,8 @@ void PcBox_SwapEntriesInList(PcBoxOperationWindow* win) {
 
 s32 Menu_SkipDisabledForward(void*);
 /**
- * Disables the list rows of boxes that hold no Pokemon.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Disables the rows of boxes with no Pokémon, then moves the cursor to the first enabled row
+ * and returns Menu_SkipDisabledForward's result (negative when every box is empty). Seen in play (2026-11-14): only the boxes holding Pokémon stayed selectable as sources.
  */
 s32 PcBox_DisableEmptyBoxes(Menu* menu) {
     s32 i;
@@ -945,10 +966,8 @@ s32 PcBox_DisableEmptyBoxes(Menu* menu) {
 
 
 /**
- * Disables the list rows of boxes that already hold Pokemon.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Disables the rows of boxes that already hold Pokémon (the destination of a move must be
+ * empty). Seen in play (2026-11-14): GBのボックス2 (2/30) was greyed out as a destination of GBへボックスをいどうする.
  */
 void PcBox_DisableNonEmptyBoxes(Menu* menu) {
     s32 i;
@@ -966,10 +985,8 @@ void PcBox_DisableNonEmptyBoxes(Menu* menu) {
 }
 
 /**
- * Sets the left and right box lists (either may be NULL) and resets their cursors.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Sets the source and destination box columns (either may be NULL) and resets their cursors.
+ * Seen in play (2026-11-14): GB then 64 for 64へボックスをいどうする, the reverse for GBへ.
  */
 void PcBox_SetActiveLists(PcBoxOperationWindow* win, Menu* source, Menu* target) {
     if (source != NULL) {
@@ -983,6 +1000,12 @@ void PcBox_SetActiveLists(PcBoxOperationWindow* win, Menu* source, Menu* target)
 }
 
 s32 func_8002B204();
+/**
+ * Steps the ボックスのなかをみる cursor over all 12 boxes (GB 1-8, then 64 1-4) with the
+ * D-pad, skipping disabled (empty) boxes, and sets sourceMenu to the column it lands in.
+ * Returns nonzero when the cursor moved. Seen in play (2026-11-14): ran while D-Down moved between the
+ * non-empty boxes; A then opened the box under the cursor.
+ */
 s32 PcBox_StepViewCursorSkipEmpty(PcBoxOperationWindow* win, s32 buttons) {
     s32 r;
     s32 idx;

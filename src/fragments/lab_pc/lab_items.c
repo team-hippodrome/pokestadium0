@@ -46,6 +46,12 @@ s32 LabItem_FindOrAllocateGamePakBoxSlot(LabItemSaveSlot* arg0, s32 arg1, char* 
 void LabItem_LoadGamePakBoxSlots(LabItemSaveSlot* arg0);
 void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, ByteMatrix* arg3);
 
+/**
+ * Inserts `row` into the list's table at the list's cursor (the third word of the
+ * ScrollList, typed here as LabMonEntryList.count), shifting later rows down.
+ * Seen in play (2026-11-14) in せいとん: moving a Pokémon or a quantityless item put it at the row the
+ * cursor picked in the destination list (ホ went to the top of てもち).
+ */
 void LabList_InsertRowAtCursor(LabMonEntryList* list, s32 (*row)(s32, s32)) {
     func_800274E0(list->items, row, list->count);
 }
@@ -92,6 +98,13 @@ void func_800275E4(s32, s32);
 int func_800274E0();
 void ScrollList_SetCursorKeepOffset(s32*, s32);
 
+/**
+ * Adds `quantity` of `itemId` to the item list at its cursor. Rows that already hold
+ * the item are removed first (their counts are added in, and the cursor moves up past
+ * each one removed), then the total is inserted as stacks of at most 99.
+ * Seen in play (2026-11-14) in どうぐをいどうする: moving 2 of キズぐすり ×03 into サトシのパソコン put a
+ * キズぐすり ×02 row at the picked position.
+ */
 void LabItem_InsertItemStacks(s32* list, s32 itemId, s32 quantity) {
     s32 i;
     s32 var_s3;
@@ -153,10 +166,20 @@ void LabItem_DecreaseSelectedCount(ScrollList* list, s32 count) {
     temp_v1[1] -= count;
 }
 
+/**
+ * Empty and never called: no jal, j or address word for it in any built fragment or the
+ * resident code (scanned 2026-11-14).
+ */
 void LabItem_Unused(void) {
 }
 
-/** Returns how many more items a box can hold. */
+/**
+ * Returns how many more of `itemId` a full table can take: 99 minus the count of
+ * every row that already holds it, summed.
+ * Seen in play (2026-11-14): with the bag poked to 20/20 rows and ふしぎなアメ ×95 in row 0, picking
+ * ふしぎなアメ ×05 in サトシのパソコン to move into the bag returned 4, and the count
+ * selector's limit was 4.
+ */
 s32 LabItem_ComputeRemainingCapacity(s32 itemId, ByteMatrix* table) {
     s32 i;
     s32 var_v1 = 0;
@@ -268,10 +291,9 @@ extern char D_89018460[];
 extern char D_89018468[];
 extern s32 D_800603C0;
 /**
- * Sets up the confirm window (268x146) with message `arg3` and labeled Yes/No buttons.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Sets up a はい/いいえ question window with a title and text; the caller sets the cursor.
+ * Seen in play (2026-11-14): 「ちゅうい！ ６４カセットに あきが ありません どれかけしますか？」 when the
+ * 64 cassette had no free save, and 「このデータをすてますか？」.
  */
 void LabItem_InitConfirmWindow(LabItemConfirmWindow* win, s32 x, s32 y, char *title, s32 text) {
     Window_SetRect(win, x, y, 0x10C, 0x92);
@@ -309,10 +331,8 @@ extern Color_RGBA8 D_8900A5C8;
 extern Color_RGBA8 D_8900A5CC;
 
 /**
- * Draws the confirm window: divider, message and buttons.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Draws a はい/いいえ question window.
+ * Seen in play (2026-11-14): drew both ちゅうい！ questions above.
  */
 void LabItem_DrawConfirmWindow(LabItemConfirmWindow* win) {
     if (func_8002AE6C() == 0) {
@@ -338,10 +358,8 @@ s32 func_8002BC14(s32);
 extern s32 D_800603C0;
 
 /**
- * Handles input on the confirm window while it is open.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Moves the はい/いいえ cursor. Returns 1 on はい, -1 on いいえ or B, otherwise 0.
+ * Seen in play (2026-11-14): D-Left and A on はい went on to データをけす; いいえ is the default.
  */
 s32 LabItem_UpdateConfirmWindow(LabItemConfirmWindow* win) {
     s32 ret = 0;
@@ -510,7 +528,9 @@ s32 LabItem_UpdateCountSelector(LabItemCountSelector* sel) {
 }
 
 /**
- * Sets flag 0x100 (empty) on the rows of the box picker whose item table has no rows.
+ * Sets flag 0x100 on each of the three list rows (てもちの どうぐ, %sのパソコン,
+ * 64の カセット) whose item table is empty; picking such a row shows a warning text box.
+ * Seen in play (2026-11-14): ran as the source window of どうぐをいどうする opened.
  */
 void LabItem_DisableEmptyLists(LabItemMenuWindow* win, ByteMatrix* tables) {
     s32 var_v0;
@@ -655,9 +675,8 @@ s32 func_80031C24(u8);
 s32 func_80031CC8(u8);
 void Font_SetColorForFlags(s32);
 /**
- * Draws an item row with its ×%02d count.
- * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Lab PC.
- * @unverified Name and comment guessed from the code; ran in play on empty item lists only.
+ * Draws one item row: the item name, and ×count unless the item has no quantity.
+ * Seen in play (2026-11-14): キズぐすり ×03, モンスターボール ×05, わざマシン０１ ×01.
  */
 void LabItem_DrawItemCountRow(s32 x, s32 y, u8* row, s32 index, s32 flags) {
     char buf[0x30];
@@ -689,6 +708,11 @@ void LabItem_DrawItemCountRow(s32 x, s32 y, u8* row, s32 index, s32 flags) {
     }
 }
 
+/**
+ * Points the item list at another item table.
+ * Seen in play (2026-11-14): switched the left list to the picked source and the right list to the picked
+ * destination (サトシのパソコン, 64の カセット).
+ */
 void LabItem_SetItemList(LabItemList* list, s32 table) {
     ScrollList_SetItems((s8*)&list->list, table, (s8*)list->itemFlags);
 }
@@ -734,10 +758,9 @@ s32 ScrollList_UpdateCursor(void*);
 s32 func_80030230(void*);
 
 /**
- * Navigate the selected menu mode, then report cancel or confirm input.
- * Seen in play (2026-11-13) ran while picking an item and a list in せいとん > どうぐをいどうする and in its
- * swap command (どこのどうぐをいれかえる？).
- * @unverified Name guessed from the code; comment kept.
+ * Moves the item list cursor (paged when `flags` has 0x200, which also allows the empty row
+ * past the end as an insert position). Returns -1 on cancel, 1 on confirm, otherwise 0.
+ * Seen in play (2026-11-14) picking items and destination rows in どうぐをいどうする.
  */
 s32 LabItem_UpdateItemList(void* menu, u32 flags) {
     s32 result = 0;
@@ -835,6 +858,11 @@ void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
 void Font_SetColorForFlags(s32);
 s32 func_8002BC44(s32);
 
+/**
+ * Draws the tab above an item list: the list's icon and name from `win->boxNames`
+ * (てもちの どうぐ, %sのパソコン, 64の カセット), or a blank tab for -1 (the reorder view).
+ * Seen in play (2026-11-14): drew the てもちの どうぐ and サトシのパソコン tabs, and 64の カセット after it was picked.
+ */
 void LabItem_DrawListTab(LabItemOrganizeWindow* win, s32 x, s32 y, s32 flags, s32 icon) {
     PrimEnvColor* colors;
 
@@ -913,10 +941,8 @@ M2C_UNK func_8001ABBC();                            /* extern */
 extern u8 D_800734A8[];
 
 /**
- * Draws `arg2` in the small font.
- * Seen in play (2026-11-13) ran while picking an item and a list in せいとん > どうぐをいどうする and in its
- * swap command (どこのどうぐをいれかえる？).
- * @unverified Name and comment guessed from the code.
+ * Draws `text` in the small font in the help area.
+ * Seen in play (2026-11-14): the item descriptions (「たたかいで うしなった HPを 20かいふく する。」).
  */
 void LabItem_DrawSmallText(s32 x, s32 y, s32 text) {
     func_8001AB6C();
@@ -1013,6 +1039,12 @@ void LabItem_DrawOrganizeWindow(LabItemOrganizeWindow* win) {
     }
 }
 
+/**
+ * Moves the selected item from the left list to the right one and marks both lists
+ * changed. A quantityless item moves as its row; anything else moves the count from the
+ * count selector (LabItem_InsertItemStacks, then LabItem_DecreaseSelectedCount).
+ * Seen in play (2026-11-14): moving 2 of キズぐすり ×03 left ×01 in てもち and added ×02 to サトシのパソコン.
+ */
 void LabItem_MoveSelectedItem(LabItemOrganizeWindow* win) {
     u8* item;
 
@@ -1031,6 +1063,11 @@ void LabItem_MoveSelectedItem(LabItemOrganizeWindow* win) {
 void func_80027654(ByteMatrix* matrix, u8* out, s32 row);
 void func_80027700(ByteMatrix* matrix, u8* in, s32 row);
 
+/**
+ * Swaps the selected rows of the left and right item lists and marks both changed.
+ * Seen in play (2026-11-14) in どうぐをいれかえる: キズぐすり ×01 (てもち) and モンスターボール ×05
+ * (サトシのパソコン) traded places.
+ */
 void LabItem_SwapBetweenLists(LabItemOrganizeWindow* win) {
     u8 row[4];
     ByteMatrix* matrix;
@@ -1046,6 +1083,10 @@ void LabItem_SwapBetweenLists(LabItemOrganizeWindow* win) {
 void func_80027654(ByteMatrix* matrix, u8* out, s32 row);
 void func_80027700(ByteMatrix* matrix, u8* in, s32 row);
 
+/**
+ * Swaps the row picked first (swapIndex) with the selected row of the same list and marks it
+ * changed. Seen in play (2026-11-14) in どうぐをならべかえる: キズぐすり and モンスターボール traded rows in てもち.
+ */
 void LabItem_SwapWithinList(LabItemOrganizeWindow* win) {
     u8 row[4];
     ByteMatrix* matrix = win->leftList.list.items;
@@ -1057,6 +1098,11 @@ void LabItem_SwapWithinList(LabItemOrganizeWindow* win) {
 }
 
 
+/**
+ * Shows the destination list picked in 「どこへいどうする？」 on the right and moves on to
+ * picking the item (state 4). Seen in play (2026-11-14): opened サトシのパソコン and 64の カセット as the destination.
+ * Also called after a 64 save slot is freed, to open 64の カセット.
+ */
 void LabItem_OpenTargetList(LabItemOrganizeWindow* win) {
     s32 temp_v0;
     LabItemList* temp_a0;
@@ -1339,10 +1385,8 @@ extern char D_8901866C[];
 void Ui_DrawImageInStrips(void*, s32, s32);
 void Font_SetColorForFlags(s32);
 /**
- * Draws なまえ/%s (Name) and ID No/%05d.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Draws one row of the データをけす list: cassette icon, なまえ/%s and ID No/%05d.
+ * Seen in play (2026-11-14): the four rows タケシ 01000 ... エリカ 04000 (poked in RAM).
  */
 void LabItem_DrawTrainerInfo(s32 x, s32 y, LabItemSaveSlot* slot, s32 index, s32 flags) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -1370,10 +1414,9 @@ void Window_SetRect(s8*, s32, s32, s32, s32);
 void Menu_Init(s8*, s32, s32, s32, s32, s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
 /**
- * Sets up the データをけす (delete data) window.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Sets up the データをけす window over the four 64 item saves, with
+ * 「セーブは４つぶんだけです けすデータをえらんでください」.
+ * Seen in play (2026-11-14): opened after はい on 「６４カセットに あきが ありません」.
  */
 void LabItem_InitDeleteDataWindow(LabItemDeleteDataWindow* win, s32 x, s32 y, LabItemSaveSlot* slots) {
     s32 pad[2]; // FAKE: stack padding
@@ -1397,10 +1440,7 @@ void Menu_DrawInlineItems(void*, s32, s32, s32, s32);
 extern u8 D_8007356C[];
 extern u8 D_89018688[];
 /**
- * Draws the delete data window.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Draws the データをけす window. Seen in play (2026-11-14).
  */
 void LabItem_DrawDeleteDataWindow(LabItemDeleteDataWindow* win, s32 flags) {
     if (func_8002AE6C() == 0) {
@@ -1421,10 +1461,8 @@ void LabItem_DrawDeleteDataWindow(LabItemDeleteDataWindow* win, s32 flags) {
 s32 Menu_UpdateCursor(void*);
 
 /**
- * Moves the delete data cursor. Returns -1 on cancel, 1 on confirm.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Moves the データをけす cursor. Returns -1 on cancel, 1 on confirm, otherwise 0.
+ * Seen in play (2026-11-14): D-Down moved from タケシ to カスミ, A opened カスミ's save.
  */
 s32 LabItem_UpdateDeleteDataCursor(LabItemDeleteDataWindow* win) {
     s32 sp1C = 0;
@@ -1455,6 +1493,13 @@ extern u8 D_8900BFC0[];
 extern u8 D_89010368[];
 extern u8 D_890110F0[];
 
+/**
+ * Sets up the window for one 64 item save picked in データをけす: the owner's なまえ and
+ * ID No, its item list, and three buttons (メニューへもどる, このデータをすてる,
+ * どうぐをかくにんする).
+ * Seen in play (2026-11-14): with all four 64 item saves poked in RAM to other trainers (タケシ 01000 ... エリカ
+ * 04000), picking カスミ opened it with her (empty) item list, 000/100.
+ */
 void LabItem_InitSaveDataWindow(LabItemSaveDataWindow* win, s32 x, s32 y, LabItemSaveSlot* slot, ByteMatrix* items) {
     Window_SetRect(&win->window, x, y, 0x184, 0x180);
     win->window.animTimer = 0;
@@ -1496,6 +1541,10 @@ extern char D_890186C0[];
 extern char D_890186CC[];
 void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 void Font_SetColorForFlags(s32);
+/**
+ * Draws the save owner's なまえ/%s and ID No/%05d with the cassette icon.
+ * Seen in play (2026-11-14): なまえ／カスミ, ID No／02000.
+ */
 void LabItem_DrawSaveDataOwner(s32 x, s32 y, LabItemSaveSlot* slot, s32 flags) {
     PrimEnvColor* color;
 
@@ -1519,6 +1568,11 @@ void LabItem_DrawSaveDataOwner(s32 x, s32 y, LabItemSaveSlot* slot, s32 flags) {
 
 extern s32 D_8900A6CC[];
 extern PrimEnvColor* D_8900A6D8[];
+/**
+ * Draws the save data window's help line: the selected button's caption, or the
+ * selected item's description while the item list has the cursor.
+ * Seen in play (2026-11-14): 「このデータをすてる」 and 「どうぐをかくにんする」.
+ */
 void LabItem_DrawSaveDataHelpText(LabItemSaveDataWindow* win) {
     char sp2C[0x54];
     ScrollList* list;
@@ -1537,6 +1591,10 @@ void LabItem_DrawSaveDataHelpText(LabItemSaveDataWindow* win) {
 void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
 extern u8 D_800735C4[];
 void Window_DrawFrame(void*);
+/**
+ * Draws the save data window: frame, buttons, owner, item list and help line.
+ * Seen in play (2026-11-14): drew カスミ's save.
+ */
 void LabItem_DrawSaveDataWindow(LabItemSaveDataWindow* win) {
     s32 v;
 
@@ -1561,6 +1619,11 @@ void LabItem_DrawSaveDataWindow(LabItemSaveDataWindow* win) {
 
 s32 func_8002B2B0(void *);
 s32 LabItem_UpdateItemList(void *, u32);
+/**
+ * Runs the save data window. Returns 1 for このデータをすてる, -1 for B or
+ * メニューへもどる, otherwise 0; どうぐをかくにんする scrolls the item list until B.
+ * Seen in play (2026-11-14): このデータをすてる led to 「このデータをすてますか？」.
+ */
 s32 LabItem_UpdateSaveDataWindow(LabItemSaveDataWindow* win) {
     s32 ret = 0;
 
@@ -1602,6 +1665,13 @@ extern s32 D_89019108;
 extern s32 D_89019118;
 extern s32 D_8901911C;
 
+/**
+ * Sets up どうぐのせいり: builds the bag (20), PC (50) and 64 cassette (100) item tables,
+ * reads the bag (deck 0x23) and the PC items (0x22), finds this trainer's 64 item save
+ * (deck 0x12, four slots keyed by trainer ID and name) and reads it if present, clears the
+ * dirty flags and opens the organize window.
+ * Seen in play (2026-11-14): どうぐを いどうする opened the screen with 003/020, 002/050 and 000/100.
+ */
 void LabItem_Init(LabItemScreen* screen) {
     s32 i;
 

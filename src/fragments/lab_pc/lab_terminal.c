@@ -450,11 +450,9 @@ extern char D_890188F4[];
 void LabTerminal_InitMenuWindow(LabTerminalMenuWindow*, s32, s32, s32, s32, char*, s32, char*, s32, char*);
 
 /**
- * Calls LabTerminal_InitMenuWindow with its own first argument passed straight through
- * followed by 0x30, 0x5C, 0x170, 0xCE, D_8900A704, 3, D_8900A710, 3 and
- * D_890188F4. What LabTerminal_InitMenuWindow does (it is still assembly) and what the
- * arguments mean are not established.
- * Seen in play (2026-11-12) in せいとん: set up the first menu: ポケモンを いどうする, どうぐを いどうする, ボックスを いどうする.
+ * Sets up the せいとん menu window at (0x30, 0x5C), 0x170 x 0xCE: ポケモンを いどうする,
+ * どうぐを いどうする and ボックスを いどうする, each with a three-line description.
+ * Seen in play (2026-11-14) in せいとん.
  */
 void LabTerminal_InitMainMenu(LabTerminalMenuWindow* win) {
     LabTerminal_InitMenuWindow(win, 0x30, 0x5C, 0x170, 0xCE, D_8900A704, 3, D_8900A710, 3, D_890188F4);
@@ -513,13 +511,9 @@ s32 func_80025BD8();
 M2C_UNK func_80027FF8(M2C_UNK *, s32);
 
 /**
- * Stores the result of func_80025BD8() in D_89019108. If it is not -1, passes it with
- * &D_89019110 to func_80027FF8. Then calls LabTerminal_InitMainMenu(&D_89028950) and sets
- * D_890289D4 to 1. (The value is re-read from D_89019108 after the store, which is
- * what the retail register allocation needs.) What the value means is not established.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name guessed from the code; comment kept.
+ * Picks the Game Boy cartridge (func_80025BD8) into D_89019108, loads its summary bar
+ * data when there is one, and sets up the せいとん menu.
+ * Seen in play (2026-11-14): ran as せいとん opened.
  */
 void LabTerminal_InitScreen(void) {
     D_89019108 = func_80025BD8();
@@ -543,6 +537,11 @@ extern s32 D_8900A71C_2;
 extern M2C_UNK D_8901890C;
 M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void func_8002C8D8(Col8900429C*, Col8900429C, f32);
+/**
+ * BgStage callback for the fade into and out of せいとん: draws the background and summary
+ * bar and steps the tint over 8 frames.
+ * Seen in play (2026-11-14): ran for the frames before the せいとん menu appeared.
+ */
 s32 LabTerminal_UpdateFade(s32 unused) {
     Col8900429C sp2C;
     M2C_UNK *var_a1;
@@ -677,9 +676,8 @@ s32 LabTerminal_UpdateFade(s32);
  *      D_01000000 / D_04000000.
  *   4. LabTerminal_InitScreen() and StageLoader_UpdateSegments() are called.
  *   5. BgStage_RunUntilCondition is run three times, with timer values 8, 0
- *      and 8: the first and third with callback LabTerminal_UpdateFade, the second
- *      with LabTerminal_RunFrame.  What those callbacks do is not established
- *      (LabTerminal_UpdateFade is still assembly).
+ *      and 8: the fade in and out (LabTerminal_UpdateFade) around the menu loop
+ *      (LabTerminal_RunFrame), which runs until B leaves the せいとん menu.
  *   6. StageLoader_WaitForRetrace() and main_pool_pop_state('TERM').
  *   7. Fragment_QueueCall queues a call to the fragment whose id comes from
  *      the address D_88000000 (bits 20-27, minus 0x10), with the ROM range

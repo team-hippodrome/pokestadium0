@@ -33,16 +33,24 @@ void PcSort_WriteDeck(s32 deckType, s32 port, s32 index, ByteMatrix* table) {
     }
 }
 
+/**
+ * Empty and never called: no jal, j or address word for it in any built fragment or the
+ * resident code (scanned 2026-11-14).
+ */
 void PcSort_Unused1(void) {
 }
 
+/**
+ * Empty and never called: no jal, j or address word for it in any built fragment or the
+ * resident code (scanned 2026-11-14).
+ */
 void PcSort_Unused2(void) {
 }
 
 /**
  * Sets the 0x100 flag on each of the 13 box rows whose box is empty.
  * Seen in play (2026-11-13) ran once when the せいとん (sort) screen opened its list of 13 target boxes
- * (てもち, GBのボックス1 to 12).
+ * (てもち, GBのボックス1-8 and 64のボックス1-4).
  */
 void PcSort_DisableEmptyBoxes(PcSortMenuWindow* win, ByteMatrix* tables) {
     s32 i;
@@ -71,7 +79,7 @@ void PcSort_DisableIfSingleMon(PcSortMenuWindow* win, ByteMatrix* tables) {
 /**
  * Sets the 0x400 flag on each of the 13 box rows whose box is full.
  * Seen in play (2026-11-13) ran once when the Pokémon sort screen opened its target box list (てもち,
- * GBのボックス1 to 12, 64のボックス); no box was full, and no row was greyed out.
+ * GBのボックス1-8, 64のボックス1-4); no box was full, and no row was greyed out.
  */
 void PcSort_DisableFullBoxes(PcSortMenuWindow* win, ByteMatrix* tables) {
     s32 i;
@@ -299,6 +307,10 @@ s32 PcSort_UpdateMonList(PcSortMonList* menu, u32 flags) {
 }
 
 
+/**
+ * Grid menu callback that draws one of the six operation buttons of ポケモンのせいり.
+ * Seen in play (2026-11-14): drew the いどうする, メニューへもどる, いれかえる, ならべかえる, みる and にがす buttons.
+ */
 void PcSort_DrawOperationButton(s32 x, M2C_UNK y, M2C_UNK button, M2C_UNK index, s32 flags) {
     func_8002B054(button, flags);
 }
@@ -632,10 +644,8 @@ void func_80027654(ByteMatrix* matrix, u8* out, s32 row);
 void func_80027700(ByteMatrix* matrix, u8* in, s32 row);
 
 /**
- * Swaps two entries of the source list.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Swaps the Pokémon picked first (swapIndex) with the selected one in the same list and
+ * marks it changed. Seen in play (2026-11-14) in ポケモンをならべかえる: ハナ and カメ traded rows in てもち.
  */
 void PcSort_SwapWithinList(PcSortOrganizeWindow* win) {
     u8 row[0x50];
@@ -649,10 +659,8 @@ void PcSort_SwapWithinList(PcSortOrganizeWindow* win) {
 
 
 /**
- * Swaps the selected entries of the source and destination lists.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment guessed from the code.
+ * Swaps the selected Pokémon of the left and right lists and marks both changed.
+ * Seen in play (2026-11-14) in ポケモンをいれかえる: ハナ (てもち) and ハヒ (GBのボックス1) traded places.
  */
 void PcSort_SwapBetweenLists(PcSortOrganizeWindow* win) {
     u8 row[0x50];
@@ -930,7 +938,7 @@ void PcSort_Init(PcSortScreen* screen, s32 title) {
     screen->monRenderer = (u16*)func_80018F2C(screen->iconFramebuffers, 0x80, 0x78, 0, 0, 0x78, 0x78, 0);
     PokeIcon_OpenModelArchives();
     Fragment_Load(((((u32)D_81000000) & 0x0FF00000) >> 0x14) - 0x10, D_0015B1A0, D_0015E220);
-    screen->mode = title;
+    screen->title = title;
     func_80027410(&screen->partyTable, screen->partyMons, 0x50, 6, 0);
     for (i = 0; i < 8; i++) {
         func_80027410(&screen->gbBoxTables[i], screen->gbBoxMons[i], 0x50, 0x1E, 0);
@@ -1000,10 +1008,10 @@ M2C_UNK func_80023268(s32, u8, M2C_UNK);            /* extern */
 extern s32 D_89019108;
 
 /**
- * Requests the icon of each species in list `arg0`.
- * Seen in play (2026-11-13) ran when leaving せいとん with レポートしてやめる after moving フシギダネ and ヒトカゲ into
- * GBのボックス1.
- * @unverified Name and comment guessed from the code.
+ * Marks every species in a GB Pokémon list as seen, owned and held in the cartridge's Pokédex
+ * (func_80023268 with 3) after the list is written back.
+ * Seen in play (2026-11-14): after moving ホ (ポッポ, #16) into てもち, its seen, owned and held bits were cleared
+ * in RAM; レポートしてやめる set all three again.
  */
 void PcSort_MarkListInPokedex(ByteMatrix* table) {
     s32 var_s1;
