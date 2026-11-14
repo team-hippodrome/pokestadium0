@@ -308,33 +308,9 @@ void AudioLoad_Init(void) {
     func_811098C0(&D_81184440, ram_addr, D_81152704);
 }
 
-typedef struct Sample8110E500 {
-    /* 0x00 */ u32 codec : 4;
-    /* 0x00 */ u32 medium : 2;
-    /* 0x00 */ u32 unk_00 : 2;
-    /* 0x00 */ u32 size : 24;
-    /* 0x04 */ s32 devAddr;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-} Sample8110E500; // size = 0x10
-
-typedef struct SlowLoad8110E500 {
-    /* 0x00 */ u8 medium;
-    /* 0x01 */ u8 seqOrFontId; // @unverified: same offset/use as OoT's AudioSlowLoad.seqOrFontId
-    /* 0x02 */ u8 instId; // @unverified: same offset/use as OoT's AudioSlowLoad.instId
-    /* 0x04 */ s32 curDevAddr; // @unverified: same offset/use as OoT's AudioSlowLoad.curDevAddr
-    /* 0x08 */ s32 curRamAddr; // @unverified: same offset/use as OoT's AudioSlowLoad.curRamAddr (the allocation; advanced while loading)
-    /* 0x0C */ s32 ramAddr; // @unverified: same offset/use as OoT's AudioSlowLoad.ramAddr (start of the loaded sample)
-    /* 0x10 */ s32 state;
-    /* 0x14 */ s32 bytesRemaining; // @unverified: same offset/use as OoT's AudioSlowLoad.bytesRemaining
-    /* 0x18 */ s8* status;
-    /* 0x1C */ Sample8110E500 sample; // @unverified: same offset/use as OoT's AudioSlowLoad.sample (copy of the font's sample header)
-    /* 0x2C */ u8 unk_2C[0x34];
-} SlowLoad8110E500; // size = 0x60
-
 typedef struct SlowLoads8110E500 {
     /* 0x00 */ s32 index;
-    /* 0x04 */ SlowLoad8110E500 slots[2];
+    /* 0x04 */ AudioSlowLoad slots[2];
 } SlowLoads8110E500;
 
 extern SlowLoads8110E500 D_81180610;
@@ -342,8 +318,8 @@ s32 AudioHeap_AllocTemporarySampleCache(s32, s32, s32, s8);
 s32 func_8110E6B0(s32 arg0, s32 arg1);
 
 s32 func_8110E500(s32 arg0, u8 arg1, s8* status) {
-    Sample8110E500* header = (Sample8110E500*)func_8110E6B0(arg0, arg1);
-    SlowLoad8110E500* load;
+    Sample* header = (Sample*)func_8110E6B0(arg0, arg1);
+    AudioSlowLoad* load;
 
     if (header == NULL) {
         *status = 0;
@@ -359,7 +335,7 @@ s32 func_8110E500(s32 arg0, u8 arg1, s8* status) {
     }
     load->sample = *header;
     load->status = status;
-    load->curRamAddr = AudioHeap_AllocTemporarySampleCache(header->size, arg0, header->devAddr, header->medium);
+    load->curRamAddr = AudioHeap_AllocTemporarySampleCache(header->size, arg0, (s32)header->sampleAddr, header->medium);
     if (load->curRamAddr == 0) {
         if ((header->medium == 1) || (header->codec == 2)) {
             *status = 0;
@@ -371,7 +347,7 @@ s32 func_8110E500(s32 arg0, u8 arg1, s8* status) {
     load->state = 1;
     load->bytesRemaining = ALIGN16(header->size);
     load->ramAddr = load->curRamAddr;
-    load->curDevAddr = header->devAddr;
+    load->curDevAddr = (s32)header->sampleAddr;
     load->medium = header->medium;
     load->seqOrFontId = arg0;
     load->instId = arg1;
@@ -404,11 +380,6 @@ s32 func_8110E6B0(s32 arg0, s32 arg1) {
 void func_8110E714(void) {
 }
 
-/** Four consecutive words, copied as a unit. */
-typedef struct Words4_8110E71C {
-    s32 w[4];
-} Words4_8110E71C;
-
 /** The Sample that func_8110E6B0 returns for a font instrument or drum. */
 typedef struct Sample8110E71C {
     /* 0x00 */ u8 flags; // @unverified: Sample byte 0 (codec/medium/flags); func_8110E71C clears medium (bits 2-3) to RAM
@@ -418,36 +389,26 @@ typedef struct Sample8110E71C {
     /* 0x0C */ s32 unk_0C;
 } Sample8110E71C;
 
-/** A slow sample load (OoT AudioSlowLoad), as func_8110E71C (OoT AudioLoad_FinishSlowLoad) sees it. */
-typedef struct SlowLoad8110E71C {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 seqOrFontId; // @unverified: same offset/use as OoT's AudioSlowLoad.seqOrFontId
-    /* 0x02 */ u8 instId; // @unverified: same offset/use as OoT's AudioSlowLoad.instId
-    /* 0x03 */ u8 unk_03[9];
-    /* 0x0C */ s32 ramAddr; // @unverified: same offset/use as OoT's AudioSlowLoad.ramAddr
-    /* 0x10 */ u8 unk_10[0xC];
-    /* 0x1C */ Words4_8110E71C sample; // @unverified: same offset/use as OoT's AudioSlowLoad.sample
-} SlowLoad8110E71C;
 
 /**
  * Looks up the entry for (keyA, keyB) with func_8110E6B0. If one exists, its
- * 16 bytes are copied into arg0->copy, the entry's second word is
- * overwritten with arg0->unk_0C, and bits 2 and 3 of its first byte are
+ * 16 bytes are copied into arg0->sample, the entry's second word is
+ * overwritten with arg0->ramAddr, and bits 2 and 3 of its first byte are
  * cleared.
  */
-void func_8110E71C(SlowLoad8110E71C* arg0) {
+void func_8110E71C(AudioSlowLoad* arg0) {
     Sample8110E71C* entry;
 
     entry = (Sample8110E71C*)func_8110E6B0(arg0->seqOrFontId, arg0->instId);
     if (entry != NULL) {
-        arg0->sample = *(Words4_8110E71C*)entry;
+        arg0->sample = *(Sample*)entry;
         entry->sampleAddr = arg0->ramAddr;
         entry->flags &= 0xFFF3;
     }
 }
 
 s32 func_8004D1C0(OSMesgQueue*, u32*, s32);
-void func_8110E910(s8* arg0, s32 arg1);
+void func_8110E910(AudioSlowLoad* arg0, s32 arg1);
 void func_8110E994(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
 
 /**
@@ -460,14 +421,14 @@ void func_8110E994(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
  */
 void AudioLoad_ProcessSlowLoads(s32 reset_status) {
     u8* table = D_811858A4;
-    SlowLoad8110E500* load;
+    AudioSlowLoad* load;
     s32 i;
 
     for (i = 0; i < 2; i++) {
         load = &D_81180610.slots[i];
         switch (D_81180610.slots[i].state) {
             case 2:
-                func_8004D1C0((OSMesgQueue*)load->unk_2C, NULL, 1);
+                func_8004D1C0(&load->msgQueue, NULL, 1);
                 if (reset_status != 0) {
                     load->state = 3;
                     break;
@@ -475,7 +436,7 @@ void AudioLoad_ProcessSlowLoads(s32 reset_status) {
             case 1:
                 load->state = 2;
                 if (load->bytesRemaining == 0) {
-                    func_8110E71C((SlowLoad8110E71C*)load);
+                    func_8110E71C(load);
                     load->state = 3;
                     *load->status = 1;
                 } else if (load->bytesRemaining < 0x1000) {
@@ -484,14 +445,14 @@ void AudioLoad_ProcessSlowLoads(s32 reset_status) {
 
                         func_8110E994(load->curDevAddr, load->curRamAddr, size, *(s16*)(table + 2));
                     } else {
-                        func_8110E910((s8*)load, load->bytesRemaining);
+                        func_8110E910(load, load->bytesRemaining);
                     }
                     load->bytesRemaining = 0;
                 } else {
                     if (load->medium == 1) {
                         func_8110E994(load->curDevAddr, load->curRamAddr, 0x1000, *(s16*)(table + 2));
                     } else {
-                        func_8110E910((s8*)load, 0x1000);
+                        func_8110E910(load, 0x1000);
                     }
                     load->bytesRemaining -= 0x1000;
                     load->curRamAddr += 0x1000;
@@ -505,10 +466,10 @@ void AudioLoad_ProcessSlowLoads(s32 reset_status) {
 extern u8 D_81137E3C[];
 void AudioLoad_Dma(s8*, s32, s32, s32, s32, s32, OSMesgQueue*, s32, u8*);
 
-void func_8110E910(s8* arg0, s32 arg1) {
-    osInvalDCache((void*)M2C_FIELD(arg0, s32*, 8), arg1);
-    osCreateMesgQueue((OSMesgQueue*)(arg0 + 0x2C), (OSMesg*)(arg0 + 0x44), 1);
-    AudioLoad_Dma(arg0 + 0x48, 0, 0, M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), arg1, (OSMesgQueue*)(arg0 + 0x2C), *(u8*)arg0, D_81137E3C);
+void func_8110E910(AudioSlowLoad* arg0, s32 arg1) {
+    osInvalDCache((void*)arg0->curRamAddr, arg1);
+    osCreateMesgQueue(&arg0->msgQueue, &arg0->msg, 1);
+    AudioLoad_Dma((s8*)&arg0->ioMesg, 0, 0, arg0->curDevAddr, arg0->curRamAddr, arg1, &arg0->msgQueue, arg0->medium, D_81137E3C);
 }
 
 void func_8110E994(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {

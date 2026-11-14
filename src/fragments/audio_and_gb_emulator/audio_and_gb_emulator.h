@@ -531,6 +531,24 @@ typedef struct Sample {
     /* 0xC */ void* book; // @unverified: same offset/use as OoT's Sample.book
 } Sample; // size = 0x10
 
+/* A slow sample load (OoT's AudioSlowLoad): AudioLoad_ProcessSlowLoads (func_8110E500 starts one,
+   func_8110E71C finishes it) */
+typedef struct AudioSlowLoad {
+    /* 0x00 */ u8 medium; // @unverified: same offset/use as OoT's AudioSlowLoad.medium
+    /* 0x01 */ u8 seqOrFontId; // @unverified: same offset/use as OoT's AudioSlowLoad.seqOrFontId
+    /* 0x02 */ u8 instId; // @unverified: same offset/use as OoT's AudioSlowLoad.instId
+    /* 0x04 */ s32 curDevAddr; // @unverified: same offset/use as OoT's AudioSlowLoad.curDevAddr
+    /* 0x08 */ s32 curRamAddr; // @unverified: same offset/use as OoT's AudioSlowLoad.curRamAddr (the allocation; advanced while loading)
+    /* 0x0C */ s32 ramAddr; // @unverified: same offset/use as OoT's AudioSlowLoad.ramAddr (start of the loaded sample)
+    /* 0x10 */ s32 state; // @unverified: same offset/use as OoT's AudioSlowLoad.state (1 start, 2 loading, 3 done)
+    /* 0x14 */ s32 bytesRemaining; // @unverified: same offset/use as OoT's AudioSlowLoad.bytesRemaining
+    /* 0x18 */ s8* status; // @unverified: same offset/use as OoT's AudioSlowLoad.status
+    /* 0x1C */ Sample sample; // @unverified: same offset/use as OoT's AudioSlowLoad.sample (copy of the font's sample header)
+    /* 0x2C */ OSMesgQueue msgQueue; // @unverified: same offset/use as OoT's AudioSlowLoad.msgQueue (func_8110E910)
+    /* 0x44 */ OSMesg msg; // @unverified: same offset/use as OoT's AudioSlowLoad.msg
+    /* 0x48 */ OSIoMesg ioMesg; // @unverified: same offset/use as OoT's AudioSlowLoad.ioMesg
+} AudioSlowLoad; // size = 0x60
+
 typedef struct SoundFontSound {
     /* 0x0 */ Sample* sample; // @unverified: same offset/use as OoT's SoundFontSound.sample
     /* 0x4 */ f32 tuning; // @unverified: same offset/use as OoT's SoundFontSound.tuning
