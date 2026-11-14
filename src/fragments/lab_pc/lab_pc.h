@@ -47,6 +47,99 @@ typedef struct LabItemConfirmWindow {
     /* 0xAC */ ChoiceCursor choice;
 } LabItemConfirmWindow; // size = 0xB8
 
+/* One box of the Lab PC box screens (せいとん): its Pokémon and how many are stored. PcBox_ReadDeck fills
+ * it from a deck, LabPC_WriteBoxEntries writes it back. */
+typedef struct PcBoxStorage {
+    /* 0x000 */ BattleMon mons[30];
+    /* 0x960 */ s32 count; // @unverified: shown as N/30 beside the box name (PcBox_DrawBoxName, PcBox_DrawBoxCount)
+} PcBoxStorage; // size = 0x964
+
+/* A row of the box tables of the box screens: a box and whether it was changed. */
+typedef struct LabPCBoxEntry {
+    /* 0x0 */ PcBoxStorage* box;
+    /* 0x4 */ s32 dirty; // @unverified: set by the swaps; func_890070BC writes back the boxes that have it, PcBox_HasUnsavedChanges asks to save
+} LabPCBoxEntry; // size = 0x8
+
+/* A button that shows an image (func_8002B018, func_8002B054 in gb_save.c), e.g. the operation buttons of
+ * ボックスのそうさ. */
+typedef struct PcBoxImageButton {
+    /* 0x00 */ s32 x;
+    /* 0x04 */ s32 y;
+    /* 0x08 */ s32 width;
+    /* 0x0C */ s32 height;
+    /* 0x10 */ s32 flags; // @unverified: bit 3 = highlighted (func_8002B054)
+    /* 0x14 */ char unk14[0x4];
+    /* 0x18 */ Color_RGBA8 selectedColor; // @unverified: image tint when the draw flags have 0x12 (func_8002B054)
+    /* 0x1C */ Color_RGBA8 color; // @unverified: image tint otherwise (func_8002B054)
+    /* 0x20 */ Color_RGBA8 highlightColor; // @unverified: fill when highlighted (func_8002B054)
+    /* 0x24 */ s32 imageWidth; // @unverified: texture width passed to Gfx_DrawTextureIa16 (func_8002B018 arg5)
+    /* 0x28 */ u8* image; // @unverified: texture passed to Gfx_DrawTextureIa16 (func_8002B018 arg6)
+} PcBoxImageButton; // size = 0x2C
+
+/* The ほんとうにいいの？ はい/いいえ window of the box screens with the Pokémon's stats and moves
+ * (PcBox_InitConfirmWindow, PcBox_DrawMonStatusWindow). Without a title it only shows the stats. */
+typedef struct PcBoxConfirmWindow {
+    /* 0x00 */ Window window;
+    /* 0x2C */ LabeledButton yesButton; // @unverified: label D_89018E60
+    /* 0x68 */ LabeledButton noButton; // @unverified: label D_89018E68
+    /* 0xA4 */ ChoiceCursor choice;
+    /* 0xB0 */ BattleMon* mon;
+    /* 0xB4 */ char* title; // @unverified: question printed above the buttons; NULL hides the buttons
+    /* 0xB8 */ s32 animLoaded; // @unverified: set once func_80019008 loaded the Pokémon's image into anim
+    /* 0xBC */ u16* anim; // @unverified: renderer from func_80018F2C; bits 1 and 2 of its flags cleared while a question is up
+} PcBoxConfirmWindow; // size = 0xC0
+
+/* The window of one box's Pokémon in the box screens (func_8900806C, PcBox_DrawList). */
+typedef struct PcBoxListWindow {
+    /* 0x00 */ Window window;
+    /* 0x2C */ GridMenu menu;
+    /* 0x54 */ u16 itemFlags[30]; // @unverified: itemFlags of menu
+    /* 0x90 */ s32 iconRenderer; // @unverified: PokeIconRenderer for the icons (func_8001833C, func_800189C0)
+    /* 0x94 */ ByteMatrix mons; // @unverified: rows over the box's mons, 0x50 bytes each
+} PcBoxListWindow; // size = 0xA4
+
+/* The ボックスのそうさ window: six operation buttons and the GB and 64 box lists
+ * (PcBox_InitOperationWindow, PcBox_UpdateOperationWindow). */
+typedef struct PcBoxOperationWindow {
+    /* 0x000 */ s32 state; // @unverified: 1 = picking an operation, 2-6 = picking boxes, 7 = text box up (PcBox_UpdateOperationWindow)
+    /* 0x004 */ Window window;
+    /* 0x030 */ WindowFrame footerFrame; // @unverified: frame of the bottom strip (Window_DrawFrame)
+    /* 0x050 */ PcBoxImageButton backButton; // @unverified: operation 5 「メニューへもどる」 (back to the menu)
+    /* 0x07C */ PcBoxImageButton moveToGbButton; // @unverified: operation 1 「ＧＢへボックスをいどうする」 (move a box to the GB)
+    /* 0x0A8 */ PcBoxImageButton moveTo64Button; // @unverified: operation 0 「６４へボックスをいどうする」 (move a box to the 64)
+    /* 0x0D4 */ PcBoxImageButton reorderButton; // @unverified: operation 2 「ボックスをならべかえる」 (reorder the boxes)
+    /* 0x100 */ PcBoxImageButton exchangeButton; // @unverified: operation 3 「ボックスをいれかえる」 (exchange boxes)
+    /* 0x12C */ PcBoxImageButton viewButton; // @unverified: operation 4 「ボックスのなかをみる」 (look inside a box)
+    /* 0x158 */ ChoiceCursor operationCursor; // @unverified: cursor = the operation 0-5 (titles D_8900A924), count = 6
+    /* 0x164 */ ChoiceCursor boxCursor; // @unverified: operation 4: 0-7 = the GB boxes, 8-11 the 64 boxes
+    /* 0x170 */ Menu gbBoxMenu; // @unverified: the GB box list (PcBox_DrawBoxName)
+    /* 0x194 */ Menu stadiumBoxMenu; // @unverified: the 64 box list (PcBox_DrawBoxCount)
+    /* 0x1B8 */ u16 gbBoxFlags[8]; // @unverified: itemFlags of gbBoxMenu
+    /* 0x1C8 */ u16 stadiumBoxFlags[8]; // @unverified: itemFlags of stadiumBoxMenu
+    /* 0x1D8 */ Menu* sourceMenu; // @unverified: the box list picked first (PcBox_SetActiveLists)
+    /* 0x1DC */ Menu* targetMenu; // @unverified: the box list picked second (PcBox_SetActiveLists)
+    /* 0x1E0 */ s8 textBox[0x38]; // TextBox_Init, TextBox_Draw; its size is not established
+    /* 0x218 */ s32 swapIndex; // @unverified: operation 2: the first box picked, swapped with the second
+} PcBoxOperationWindow; // size = 0x21C
+
+/* The ボックスのそうさ screen (PcBox_Init, PcBox_UpdateScreen, PcBox_DrawScreen). */
+typedef struct PcBoxScreen {
+    /* 0x0000 */ s32 state; // @unverified: 1 = operation window, 2 = box list, 3 = mon status, 4 = save prompt (PcBox_UpdateScreen)
+    /* 0x0004 */ PcBoxOperationWindow operationWindow;
+    /* 0x0220 */ s8 savePrompt[0x64]; // SavePrompt_Init, SavePrompt_Update, SavePrompt_Draw
+    /* 0x0284 */ PcBoxListWindow listWindow;
+    /* 0x0328 */ PcBoxConfirmWindow statusWindow;
+    /* 0x03E8 */ PcBoxStorage gbBoxes[8]; // @unverified: read from deck 0x21 of the GB cart (D_89019108)
+    /* 0x4F08 */ PcBoxStorage stadiumBoxes[4]; // @unverified: read from deck 0x11, the 64 boxes
+    /* 0x7498 */ LabPCBoxEntry gbBoxEntries[8];
+    /* 0x74D8 */ LabPCBoxEntry stadiumBoxEntries[4];
+    /* 0x74F8 */ ByteMatrix gbBoxTable; // @unverified: rows = gbBoxEntries; items of operationWindow.gbBoxMenu
+    /* 0x7508 */ ByteMatrix stadiumBoxTable; // @unverified: rows = stadiumBoxEntries; items of operationWindow.stadiumBoxMenu
+    /* 0x7518 */ s8* iconFramebuffers; // PokeIcon_AllocFramebuffers
+    /* 0x751C */ u16* monRenderer; // @unverified: func_80018F2C; the anim of statusWindow
+    /* 0x7520 */ s32 iconRenderer; // @unverified: func_80017FDC; the icons of listWindow
+} PcBoxScreen; // size = 0x7524
+
 typedef struct unk_func_88208C5C {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ unk_func_8850143C* unk_2C;
