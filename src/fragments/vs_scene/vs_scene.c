@@ -29,28 +29,6 @@ extern u8 D_300B980[];
 extern u8 D_300BAD0[];
 extern u8 D_300BED0[];
 extern u8 D_300C2D0[];
-// Scene state passed in by the caller of this fragment; D_822036A4 points at it.
-typedef struct DemoPlayer {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ char unk01[0xC];
-    /* 0x0D */ u8 unk_0D;
-    /* 0x0E */ char unk0E[0x6];
-    /* 0x14 */ TeamRoster* unk_14[2];
-    /* 0x1C */ char unk1C[0xC];
-} DemoPlayer; // size = 0x28
-
-typedef struct DemoState {
-    /* 0x0000 */ s8 unk_0000;
-    /* 0x0001 */ s8 unk_0001;
-    /* 0x0002 */ s8 unk_0002;
-    /* 0x0003 */ s8 unk_0003;
-    /* 0x0004 */ char unk0004[0x1024];
-    /* 0x1028 */ DemoPlayer players[2];
-    /* 0x1078 */ char unk1078[0x1C];
-    /* 0x1094 */ u8 unk_1094;
-    /* 0x1095 */ u8 unk_1095;
-    /* 0x1096 */ u16 unk_1096;
-} DemoState;
 
 typedef struct unk_D_82203170 {
     /* 0x00 */ u8 unk_00;
@@ -93,7 +71,7 @@ extern DisplayObject D_82203538;
 extern s32 D_8220354C;
 extern s16 D_82203550;
 extern Color_RGBA8 D_822036A0;
-extern s8* D_822036A4;
+extern SessionContext* D_822036A4; // the session (gSessionContext) passed to VsScene_Run
 extern s32 D_822036A8;
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
 s32 Completion_LightAngleCallbackA(s32, GraphNode*);
@@ -170,21 +148,21 @@ void VsScene_PrepareTeams(void) {
     main_pool_push_state('ICON');
 
     for (i = 0, team = D_82203170; i < 2; i++, team++) {
-        if (((DemoState*)D_822036A4)->unk_0001 != 0) {
+        if (D_822036A4->ruleCategory != 0) {
             team->unk_00 = 0;
-        } else if (((DemoState*)D_822036A4)->players[i].unk_0D == 2) {
+        } else if (D_822036A4->battleSides[i].tagTeamSize == 2) {
             team->unk_00 = 2;
         } else {
             team->unk_00 = 1;
         }
 
-        team->unk_38[0] = ((DemoState*)D_822036A4)->players[i].unk_14[0];
-        team->unk_40[0] = ((DemoState*)D_822036A4)->players[i].unk_14[0]->rosterInfo;
+        team->unk_38[0] = D_822036A4->battleSides[i].teamMember[0];
+        team->unk_40[0] = D_822036A4->battleSides[i].teamMember[0]->rosterInfo;
         team->unk_04 = BinArchive_GetFile(D_8220325C, team->unk_40[0]->unk_003);
 
-        if (((DemoState*)D_822036A4)->players[i].unk_0D == 2) {
-            team->unk_38[1] = ((DemoState*)D_822036A4)->players[i].unk_14[1];
-            team->unk_40[1] = ((DemoState*)D_822036A4)->players[i].unk_14[1]->rosterInfo;
+        if (D_822036A4->battleSides[i].tagTeamSize == 2) {
+            team->unk_38[1] = D_822036A4->battleSides[i].teamMember[1];
+            team->unk_40[1] = D_822036A4->battleSides[i].teamMember[1]->rosterInfo;
         } else {
             team->unk_38[1] = NULL;
             team->unk_40[1] = NULL;
@@ -279,7 +257,7 @@ s32 func_80027214(s8 *, s32);                       /* extern */
  * Reads the word at offset 0xC of D_82203240 (the `children` pointer of
  * that GraphNode; call it `rec`), fills two
  * 0x3C-byte local buffers with func_800273E8: from D_82202CD0 and D_82202CEC
- * when the byte *D_822036A4 is 0, from D_82202C60 and D_82202C7C otherwise.
+ * when D_822036A4->mode is 0, from D_82202C60 and D_82202C7C otherwise.
  * Then, while func_80027214(buf1, rec + 0xA8) returns non-zero, it calls
  * func_80027214(buf2, rec + 0xB4), then VsScene_DrawFrameToImage(0) and
  * func_80006780(), and stops as soon as VsScene_DrawFrameToImage returns non-zero.
@@ -306,7 +284,7 @@ void VsScene_ZoomIntoScreen(void) {
     s32 temp_s0_2;
 
     sp3C = M2C_FIELD(D_82203240, s32 *, 0xC);
-    if (*D_822036A4 == 0) {
+    if (D_822036A4->mode == 0) {
         func_800273E8(sp7C, (s32) &D_82202CD0);
         func_800273E8(sp40, (s32) &D_82202CEC);
     } else {
@@ -339,7 +317,7 @@ void func_82200714(void) {
     s32 done;
 
     rec = M2C_FIELD(D_82203240, s32 *, 0xC);
-    if (*D_822036A4 == 0) {
+    if (D_822036A4->mode == 0) {
         func_800273E8(sp8C, (s32) &D_82202D08);
         func_800273E8(sp50, (s32) &D_82202D24);
     } else {
@@ -404,7 +382,7 @@ void VsScene_PlayBattleTitle(void) {
     DisplayObject* obj = (DisplayObject*)((GraphNode*)D_82203244->children)->children;
     s32 pad2; // FAKE
 
-    switch (((DemoState*)D_822036A4)->unk_0001) {
+    switch (D_822036A4->ruleCategory) {
         case 0:
             if (!D_82203244->children) { // FAKE: karodo, empty if needed for regalloc
             }
@@ -414,7 +392,7 @@ void VsScene_PlayBattleTitle(void) {
             track = 1;
             break;
         case 2:
-            switch (((DemoState*)D_822036A4)->unk_0002) {
+            switch (D_822036A4->modeSelection) {
                 case 0:
                     track = 2;
                     break;
@@ -430,31 +408,31 @@ void VsScene_PlayBattleTitle(void) {
             }
             break;
     }
-    if (((DemoState*)D_822036A4)->unk_0000 == 0) {
+    if (D_822036A4->mode == 0) {
         Audio_PlayCommand(0x3C, 0, track);
     } else {
-        Audio_PlayCommand(0x3C, ((DemoState*)D_822036A4)->unk_0003, track);
+        Audio_PlayCommand(0x3C, D_822036A4->roundOrDemoId, track);
     }
-    obj->rootId = ((DemoState*)D_822036A4)->unk_0003;
-    if (((DemoState*)D_822036A4)->unk_0000 != 0) {
-        if (((DemoState*)D_822036A4)->unk_0003 == 7) {
-            Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_82203248);
+    obj->rootId = D_822036A4->roundOrDemoId;
+    if (D_822036A4->mode != 0) {
+        if (D_822036A4->roundOrDemoId == 7) {
+            Model_InitDisplayObject(&D_82203268, D_822036A4->roundOrDemoId, 0, (ModelNodeView*)D_82203248);
             ModelAnim_BindTransformCurve(&D_82203268, 1, D_8ED0FACC, 0x10000);
             BgStage_RunUntilCondition(0x6E, (s32(*)(u8))VsScene_DrawFrame);
             ModelRenderer_ClearDisplayObject(&D_82203268);
-        } else if (((DemoState*)D_822036A4)->unk_0003 == 8) {
-            Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_82203248);
+        } else if (D_822036A4->roundOrDemoId == 8) {
+            Model_InitDisplayObject(&D_82203268, D_822036A4->roundOrDemoId, 0, (ModelNodeView*)D_82203248);
             ModelAnim_BindTransformCurve(&D_82203268, 1, D_8EE0FDE0, 0x10000);
             BgStage_RunUntilCondition(0x6E, (s32(*)(u8))VsScene_DrawFrame);
             ModelRenderer_ClearDisplayObject(&D_82203268);
         } else {
-            Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_82203248);
+            Model_InitDisplayObject(&D_82203268, D_822036A4->roundOrDemoId, 0, (ModelNodeView*)D_82203248);
             ModelAnim_BindTransformCurve(&D_82203268, 1, D_8EC145CC, 0x10000);
             BgStage_RunUntilCondition(0x64, (s32(*)(u8))VsScene_DrawFrame);
             ModelRenderer_ClearDisplayObject(&D_82203268);
         }
     }
-    Model_InitDisplayObject(&D_82203268, ((DemoState*)D_822036A4)->unk_0003, 0, (ModelNodeView*)D_8220324C);
+    Model_InitDisplayObject(&D_82203268, D_822036A4->roundOrDemoId, 0, (ModelNodeView*)D_8220324C);
     if ((D_82203170[0].unk_00 == 2) || (D_82203170[1].unk_00 == 2)) {
         ModelAnim_BindTransformCurve(&D_82203268, 1, D_8F5054C8, 0x10000);
         BgStage_RunUntilCondition(0x64, (s32(*)(u8))VsScene_DrawFrame);
@@ -486,7 +464,7 @@ void VsScene_Play(void) {
     VsScene_PrepareTeams();
     VsScene_LoadTeamIcons(&D_82203170[0], 0);
     VsScene_LoadTeamIcons(&D_82203170[1], 1);
-    if (((DemoState*)D_822036A4)->unk_0000 == 0) {
+    if (D_822036A4->mode == 0) {
         Vec3f_FromVec3s(&camera->view.targetPosition, (Vec3s*)(D_82202CEC + 2));
         Vec3f_FromVec3s(&camera->view.eyePosition, (Vec3s*)(D_82202CD0 + 2));
     } else {
@@ -495,7 +473,7 @@ void VsScene_Play(void) {
     }
     StageLoader_RunFrames(2);
     StageFade_Start(0x80);
-    if (((DemoState*)D_822036A4)->unk_0000 == 0) {
+    if (D_822036A4->mode == 0) {
         Audio_PlayMusicIfChanged(0x12);
     } else {
         Audio_PlayMusicIfChanged(6);
@@ -505,9 +483,9 @@ void VsScene_Play(void) {
     VsScene_PlayBattleTitle();
     func_82200714();
     ModelRenderer_ClearDisplayObject(&D_82203268);
-    if (((DemoState*)D_822036A4)->unk_1095 & 2) {
+    if (D_822036A4->sessionFlags & 2) {
         Save_ResetAndCommitTypedRecord(0x15, 0);
-        ((DemoState*)D_822036A4)->unk_1095 &= ~3;
+        D_822036A4->sessionFlags &= ~3;
     }
 }
 
@@ -521,18 +499,18 @@ void func_82200DA4(void) {
     switch (sp1F) {                                 /* irregular */
     case 0:
         func_80025168((s8) (sp1F + 1));
-        M2C_FIELD(D_822036A4, u16 *, 0x1096) = (u16) (M2C_FIELD(D_822036A4, u16 *, 0x1096) | 8);
+        D_822036A4->transitionFlags |= 8;
         return;
     case 1:
         func_80025168((s8) (sp1F + 1));
-        M2C_FIELD(D_822036A4, u16 *, 0x1096) = (u16) (M2C_FIELD(D_822036A4, u16 *, 0x1096) | 0x10);
+        D_822036A4->transitionFlags |= 0x10;
         return;
     }
 }
 
 
 void func_82200E2C(void) {
-    DemoState* state = (DemoState*)D_822036A4;
+    SessionContext* state = D_822036A4;
     s32 player = state->unk_1094;
     TeamRoster* roster;
     ExtendedRosterInfo* info;
@@ -541,7 +519,7 @@ void func_82200E2C(void) {
     s32 j;
 
     if ((player >= 0) && (player < 4)) {
-        roster = state->players[0].unk_14[0];
+        roster = state->battleSides[0].teamMember[0];
         info = roster->rosterInfo;
         for (i = 0; i < info->numberOfPokemonCanBePicked; i++) {
             if (info->battleMon[i].species.unk_01 != 0) {
@@ -560,7 +538,7 @@ void func_82200E2C(void) {
                         return;
                     }
                 }
-                state->unk_1096 |= 0x20;
+                state->transitionFlags |= 0x20;
                 return;
             }
         }
@@ -574,10 +552,10 @@ void func_82200F08(void) {
     u16 lo = Save_GetProgressFlags() & 0xFF;
     u16 hi = (Save_GetProgressFlags() >> 8) & 0xFF;
 
-    ((DemoState*)D_822036A4)->unk_1096 |= 2;
+    D_822036A4->transitionFlags |= 2;
 
-    if (((DemoState*)D_822036A4)->unk_0000 == 1) {
-        ((DemoState*)D_822036A4)->unk_1096 |= 4;
+    if (D_822036A4->mode == 1) {
+        D_822036A4->transitionFlags |= 4;
         func_82200E2C();
         if (!(hi & 1)) {
             hi |= 1;
@@ -585,14 +563,14 @@ void func_82200F08(void) {
             func_82200DA4();
             Save_CommitTypedRecord(0x14, 0);
         }
-    } else if (((DemoState*)D_822036A4)->unk_0000 == 2) {
-        if (((DemoState*)D_822036A4)->unk_0002 >= lo) {
+    } else if (D_822036A4->mode == 2) {
+        if (D_822036A4->modeSelection >= lo) {
             lo++;
             Save_SetProgressFlags((hi << 8) | lo);
             Save_CommitTypedRecord(0x14, 0);
         }
-        if (((DemoState*)D_822036A4)->unk_0002 == 3) {
-            ((DemoState*)D_822036A4)->unk_1096 |= 4;
+        if (D_822036A4->modeSelection == 3) {
+            D_822036A4->transitionFlags |= 4;
             func_82200E2C();
             if (!(hi & 2)) {
                 hi |= 2;
@@ -720,9 +698,9 @@ void func_82201600(s32 arg0) {
     s32 i;
 
     for (i = 0; i != 2; i++) {
-        if (((DemoState*)D_822036A4)->players[i].unk_0D == 2) {
+        if (D_822036A4->battleSides[i].tagTeamSize == 2) {
             for (j = 0; j != 2; j++) {
-                team = ((DemoState*)D_822036A4)->players[i].unk_14[j];
+                team = D_822036A4->battleSides[i].teamMember[j];
                 // Fake match: an empty check found by the permuter fixes register allocation.
                 if (team == NULL && team == NULL && team == NULL) {  // FAKE
                 }
@@ -735,7 +713,7 @@ void func_82201600(s32 arg0) {
                 }
             }
         } else {
-            team = ((DemoState*)D_822036A4)->players[i].unk_14[0];
+            team = D_822036A4->battleSides[i].teamMember[0];
             for (k = 0; k < team->numberOfPokemonBrought; k++) {
                 if (arg0 == (team->pokemonPicked + k)->faintBatch) {
                     idx = i * 6 + k;
@@ -810,7 +788,7 @@ void func_822018EC(void) {
         } while (func_80018E24(D_82203264) == 0);
     }
     var_s0_2 = 1;
-    if ((M2C_FIELD(D_822036A4, s8 *, 0) == 0) && (M2C_FIELD(D_822036A4, s8 *, 1) == 0)) {
+    if ((D_822036A4->mode == 0) && (D_822036A4->ruleCategory == 0)) {
         var_s0_3 = 1;
         do {
             func_82201600(var_s0_3);
@@ -832,7 +810,7 @@ s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);   /* extern */
 extern M2C_UNK D_8F6256E0;
 
 void func_82201A3C(void) {
-    if (M2C_FIELD(D_822036A4, u8 *, 0x1050) == 1) {
+    if (D_822036A4->battleSides[0].unk_1C == 1) {
         Audio_PlayCommand(0x3D, 3, 0);
     } else {
         Audio_PlayCommand(0x3D, 4, 0);
@@ -918,14 +896,14 @@ s32 Tournament_RunContinuePrompt(void);
 s32 func_82201DF8(void) {
     s32 sp24 = 0;
 
-    if (((DemoState*)D_822036A4)->players[1].unk_00 == 1) {
+    if (D_822036A4->battleSides[0].unk_1C == 1) {
         Model_InitDisplayObject(&D_822033D0, 1, 0, D_82203254);
         Model_InitDisplayObject(&D_82203538, 1, 0, D_82203258);
-        ModelAnim_BindTransformCurve(&D_822033D0, 1, D_82202C1C[((DemoState*)D_822036A4)->unk_0003], 0x10000);
-        ModelAnim_BindTransformCurve(&D_82203538, 1, D_82202C3C[((DemoState*)D_822036A4)->unk_0003], 0x10000);
+        ModelAnim_BindTransformCurve(&D_822033D0, 1, D_82202C1C[D_822036A4->roundOrDemoId], 0x10000);
+        ModelAnim_BindTransformCurve(&D_82203538, 1, D_82202C3C[D_822036A4->roundOrDemoId], 0x10000);
         Audio_PlayCommand(0x50, 0, 0);
-        D_8220354C = ((DemoState*)D_822036A4)->unk_0003 - 1;
-        if (((DemoState*)D_822036A4)->unk_0003 == 8) {
+        D_8220354C = D_822036A4->roundOrDemoId - 1;
+        if (D_822036A4->roundOrDemoId == 8) {
             BgStage_RunUntilCondition(0x5A, VsScene_DrawFrame);
             Audio_PlayCommand(0x51, 0, 0);
             BgStage_RunUntilCondition(0x19, VsScene_DrawFrame);
@@ -959,7 +937,7 @@ void func_82201F90(void) {
     Vec3f_SetComponentsDuplicate(&camera->view.eyePosition, 200.0f, 50.0f, 0.0f);
     StageLoader_RunFrames(2);
     Model_InitDisplayObject(&D_82203268, 1, 0, D_82203250);
-    if (((DemoState*)D_822036A4)->players[1].unk_00 == 1) {
+    if (D_822036A4->battleSides[0].unk_1C == 1) {
         ModelAnim_BindTransformCurve(&D_82203268, 1, D_8F625614, 0x10000);
     } else {
         ModelAnim_BindTransformCurve(&D_82203268, 1, D_8F61F87C, 0x10000);
@@ -974,7 +952,7 @@ void func_82201F90(void) {
     func_80041374(0x3D, 0);
     func_82200714();
     ModelRenderer_ClearDisplayObject(&D_82203268);
-    ((DemoState*)D_822036A4)->unk_1096 |= 1;
+    D_822036A4->transitionFlags |= 1;
 }
 
 extern u8 D_82400000[];
@@ -984,11 +962,11 @@ void VsScene_PrepareTeams(void);
 void VsScene_PlayBattleTitle(void);
 
 void func_822020FC(void) {
-    DemoState* state = (DemoState*)D_822036A4;
+    SessionContext* state = D_822036A4;
 
-    if (state->players[1].unk_00 == 1) {
-        if (state->unk_0003 < 8) {
-            state->unk_0003++;
+    if (state->battleSides[0].unk_1C == 1) {
+        if (state->roundOrDemoId < 8) {
+            state->roundOrDemoId++;
             ModelRenderer_ClearDisplayObject(&D_82203268);
             main_pool_pop_state('ICON');
             Fragment_LoadAndCall((((u32)D_82400000 & 0x0FF00000) >> 0x14) - 0x10, D_00175570, D_0017BE70, 0,
@@ -996,16 +974,16 @@ void func_822020FC(void) {
             VsScene_PrepareTeams();
             VsScene_LoadTeamIcons(&D_82203170[0], 0);
             VsScene_LoadTeamIcons(&D_82203170[1], 1);
-            D_822033E8 = ((DemoState*)D_822036A4)->unk_0003;
-            D_82203550 = ((DemoState*)D_822036A4)->unk_0003;
+            D_822033E8 = D_822036A4->roundOrDemoId;
+            D_82203550 = D_822036A4->roundOrDemoId;
             Audio_PlayMusicIfChanged(0xF);
             VsScene_PlayBattleTitle();
         } else {
             BgStage_RunUntilCondition(0x20, VsScene_DrawFrame);
-            ((DemoState*)D_822036A4)->unk_1096 |= 1;
+            D_822036A4->transitionFlags |= 1;
         }
     } else {
-        state->unk_1096 |= 1;
+        state->transitionFlags |= 1;
     }
 }
 
@@ -1019,14 +997,14 @@ void func_82202228(void) {
     Vec3f_SetComponentsDuplicate(&camera->view.eyePosition, 200.0f, 50.0f, 0.0f);
     StageLoader_RunFrames(2);
     Model_InitDisplayObject(&D_82203268, 1, 0, D_82203250);
-    if (((DemoState*)D_822036A4)->players[1].unk_00 == 1) {
+    if (D_822036A4->battleSides[0].unk_1C == 1) {
         ModelAnim_BindTransformCurve(&D_82203268, 1, D_8F625614, 0x10000);
     } else {
         ModelAnim_BindTransformCurve(&D_82203268, 1, D_8F61F87C, 0x10000);
     }
     D_82203268.node.renderFlags &= ~0x20;
     StageFade_Start(0x20);
-    if (((DemoState*)D_822036A4)->unk_0003 < 8) {
+    if (D_822036A4->roundOrDemoId < 8) {
         Audio_PlayMusicIfChanged(0xD);
     } else {
         Audio_PlayMusicIfChanged(0x10);
@@ -1036,7 +1014,7 @@ void func_82202228(void) {
     func_822018EC();
     func_82201A3C();
     if (func_82201DF8() != 0) {
-        ((DemoState*)D_822036A4)->unk_1096 |= 0x41;
+        D_822036A4->transitionFlags |= 0x41;
     } else {
         func_822020FC();
     }
@@ -1170,24 +1148,24 @@ s32 Font_Init(s32 load_size, s32 side);
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-s32 VsScene_Run(s32 arg0, s8* arg1) {
+s32 VsScene_Run(s32 arg0, SessionContext* arg1) {
     s32 round;
     s32 sp24;
 
     D_822036A4 = arg1;
     round = 0;
-    ((DemoState*)D_822036A4)->unk_1096 = 0;
+    D_822036A4->transitionFlags = 0;
 
     if (arg0 == 0) {
-        round = ((DemoState*)D_822036A4)->unk_0003;
+        round = D_822036A4->roundOrDemoId;
     } else if (arg0 == 2) {
-        round = ((DemoState*)D_822036A4)->unk_0003 + 1;
+        round = D_822036A4->roundOrDemoId + 1;
         if (round >= 9) {
             round = 8;
         }
     }
 
-    if (((DemoState*)D_822036A4)->unk_0000 == 0) {
+    if (D_822036A4->mode == 0) {
         D_822036A8 = 0;
     } else if (round < 7) {
         D_822036A8 = 1;
