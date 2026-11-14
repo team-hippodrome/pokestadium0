@@ -2481,8 +2481,6 @@ void BattleScene_CleanupParticipantEffectMode(ActivePokemon* active_pokemon) {
     }
 }
 
-extern ActivePokemon* D_8219A540;
-extern ActivePokemon* D_8219A544;
 extern ActivePokemon* sSide2ActivePokemon;
 extern u8 D_8219A4F4;
 void func_82136708(s32, ActivePokemon*);
@@ -2587,15 +2585,15 @@ void func_821065B4(ActivePokemon *arg0)
 
   if (sBattleScene.scene->cameraPresetId == 2)
   {
-    D_8219A544->displayObject.node.flags &= ~1;
+    sActingPokemon->displayObject.node.flags &= ~1;
   }
   if (sBattleScene.scene->cameraPresetId == 4)
   {
-    D_8219A540->displayObject.node.flags &= ~1;
+    sOtherPokemon->displayObject.node.flags &= ~1;
   }
   if (sBattleScene.scene->cameraPresetId == 1)
   {
-    D_8219A544->displayObject.node.flags |= 1;
+    sActingPokemon->displayObject.node.flags |= 1;
   }
   if (sBattleScene.scene->cameraPresetId == 3)
   {

@@ -456,7 +456,7 @@ s32 Battle_StepPartyHpToDisplay(ActivePokemon* arg0) {
         if (arg0->displayObject.objectType == 0x98) {
             return 1;
         }
-        func_80043860(BattleScene_GetParticipantSideIndex(D_8219A540));
+        func_80043860(BattleScene_GetParticipantSideIndex(sOtherPokemon));
         return 1;
     }
     return 0;
