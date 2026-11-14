@@ -26,7 +26,7 @@ extern u64 njpgdspMainDataStart[];
 
 s32 Jpeg_ReadBigEndianU16(u8* arg0);
 void Jpeg_ParseStreamMarkers(unk_func_80003680_sp300* arg0, u8* arg1);
-void Jpeg_InitializeDspTask(UnkStruct80001380* arg0, unk_func_80003680_sp90* arg1);
+void Jpeg_InitializeDspTask(SchedTask* arg0, unk_func_80003680_sp90* arg1);
 void Jpeg_BuildDspOutput(unk_func_80003680_sp90* arg0, u8(arg1)[2][0x80], unk_func_80003680_sp300* arg2);
 
 /** Reads a big-endian 16-bit value from a JPEG stream. */
@@ -106,7 +106,7 @@ void Jpeg_ParseStreamMarkers(unk_func_80003680_sp300* arg0, u8* arg1) {
 }
 
 /** Initializes the RSP task used for JPEG decoding. */
-void Jpeg_InitializeDspTask(UnkStruct80001380* arg0, unk_func_80003680_sp90* arg1) {
+void Jpeg_InitializeDspTask(SchedTask* arg0, unk_func_80003680_sp90* arg1) {
     arg0->task.t.type = 4;
     arg0->task.t.flags = 0;
     arg0->task.t.ucode_boot = rspbootTextStart;
@@ -169,7 +169,7 @@ void Jpeg_WaitForControllerReady(void) {
 
 /** Decodes a JPEG image to the given address. */
 s32 Jpeg_DecodeImage(u32 addr, s32 arg1, u8* arg2) {
-    UnkStruct80001380 sp318;
+    SchedTask sp318;
     unk_func_80003680_sp300 sp300;
     u8 sp200[2][0x80];
     JpegHuffmanTable spB0[4];

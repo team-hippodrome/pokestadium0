@@ -10,17 +10,6 @@
 #include <macros.h>
 #include "gfx_rect.h"
 
-typedef struct unk_D_800A7450 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 zoom;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ Gfx* unk_04;
-    /* 0x08 */ Gfx* unk_08;
-    /* 0x0C */ void* unk_0C;
-    /* 0x10 */ char unk10[0x4];
-} unk_D_800A7450; // size >= 0x14
-
 typedef struct StageContext {
     /* 0x00 */ s16 width;
     /* 0x02 */ s16 height;
@@ -29,10 +18,10 @@ typedef struct StageContext {
     /* 0x08 */ s16 clearTop;
     /* 0x0A */ s16 clearBottom;
     /* 0x0C */ s8 zoom; // 1 selects 640x480; other values select 320x240.
-    /* 0x0D */ s8 unk_0D;
+    /* 0x0D */ s8 antiAlias; // @unverified: copied to DisplayFrame.antiAlias, the column of the VI mode table D_8005F664; 1 in every caller
     /* 0x0E */ s8 renderTargetCount; // Number of slots used in renderTargets.
     /* 0x0F */ s8 hasDepthBuffer;
-    /* 0x10 */ s8 unk_10;
+    /* 0x10 */ s8 retracesPerFrame; // @unverified: copied to DisplayFrame.retracesPerFrame; 2 in most screens, 1 in the GB Tower team prep
     /* 0x11 */ u8 fadeMode; // 0 transparent, 1 opaque, 2 fading in, 3 fading out.
     /* 0x12 */ u8 fadeDuration;
     /* 0x13 */ u8 fadeFrame;
@@ -59,12 +48,13 @@ typedef StageContext unk_func_80007444;
  * src/stage_loader_2.c
  */
 
-typedef struct unk_D_80068CA0 {
-    /* 0x00 */ struct unk_D_80068CA0* next;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s8 unk_08[4];
-} unk_D_80068CA0;
+// A string queued by HAL_Printf or TextRenderer_QueuePersistentString.
+typedef struct QueuedString {
+    /* 0x00 */ struct QueuedString* next;
+    /* 0x04 */ s16 x; // @unverified: TextRenderer_DrawString x
+    /* 0x06 */ s16 y; // @unverified: TextRenderer_DrawString y
+    /* 0x08 */ s8 text[4]; // @unverified: NUL-terminated string, allocated past the struct end (HAL_Printf)
+} QueuedString;
 
 // stage_loader.c
 s32 StageFade_StartFromOpaque(s32 arg0);

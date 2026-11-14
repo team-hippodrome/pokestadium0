@@ -42,7 +42,7 @@ typedef struct unk_func_80003680_sp90 {
 // jpeg_stream.c
 s32 Jpeg_ReadBigEndianU16(u8* arg0);
 void Jpeg_ParseStreamMarkers(unk_func_80003680_sp300* arg0, u8* arg1);
-void Jpeg_InitializeDspTask(UnkStruct80001380* arg0, unk_func_80003680_sp90* arg1);
+void Jpeg_InitializeDspTask(SchedTask* arg0, unk_func_80003680_sp90* arg1);
 void Jpeg_BuildDspInput(s8 *arg0, s32 arg1, s8 *arg2);
 void Jpeg_BuildDspOutput(unk_func_80003680_sp90* arg0, u8(arg1)[2][0x80], unk_func_80003680_sp300* arg2);
 s32 Jpeg_DecodeImage(u32 addr, s32 arg1, u8* arg2);

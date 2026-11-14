@@ -174,30 +174,6 @@ typedef struct SessionContext {
 // 26: Cutscene
 #define SESSION_FLAG_REVEAL_MEWTWO 0x04
 
-typedef struct UnkStruct80083CA0_2 {
-    /* 0x000 */ OSThread thread;
-    /* 0x1B0 */ OSMesg unk_1B0;
-    /* 0x1B4 */ char unk1B4[0xC];
-    /* 0x1C0 */ OSMesgQueue unk_1C0;
-    /* 0x1D8 */ s32 unk_1D8;
-    /* 0x1DC */ s32 unk_1DC;
-    /* 0x1E0 */ u8 unk1E0[0x800];
-    /* 0x9E0 */ struct unk_D_80068BB0* unk_9E0;
-    /* 0x9E4 */ OSMesg unk_9E4;
-    /* 0x9E8 */ OSMesg unk_9E8;
-    /* 0x9EC */ OSMesgQueue unk_9EC;
-    /* 0xA04 */ OSMesgQueue unk_A04;
-    /* 0xA1C */ char unkA1C[0x4];
-    /* 0xA20 */ UnkStruct80001380 unk_A20;
-    /* 0xA88 */ u16 unk_A88;
-    /* 0xA8A */ u8 unk_A8A;
-    /* 0xA8B */ u8 unk_A8B;
-    /* 0xA8C */ UnkArray4 unk_A8C;
-    /* 0xA9C */ UnkArray4 unk_A9C;
-    /* 0xAAC */ UnkArray4 unk_AAC;
-    /* 0xABC */ char unkABC[0x4];
-} UnkStruct80083CA0_2; // size = 0xAC0
-
 extern u16 D_8006BBB0[16][256];
 
 extern s32 gCurrentGameState;
