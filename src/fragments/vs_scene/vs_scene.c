@@ -7,8 +7,10 @@
  * (VsScene_ZoomIntoScreen), then VsScene_PlayTitleAndRevealTeams plays, in tournaments only, the
  * flaming round title (バトル-2 etc.) and then the two trainer panels: they slide in, the VS letters
  * fly in, and the panels flip over to show each side's Pokémon. That flip is a model animation curve
- * (D_8F5054AC), not code; the panel's contents come from the geo callbacks of fragment 032 (portrait,
- * title, name, six icons and nicknames). VsScene_ZoomOutOfScreen then pulls back to the field.
+ * (D_8F5054AC), not code; the panel's contents come from the geo callbacks in
+ * src/fragments/vs_trainer_panel (fragment 032: VsPanel_PortraitCallback, VsPanel_TitleTextCallback,
+ * VsPanel_NameTextCallback, VsPanel_IconCallback, VsPanel_NicknameCallback).
+ * VsScene_ZoomOutOfScreen then pulls back to the field.
  *
  * After a battle: VsScene_PlayFreeBattleResults or VsScene_PlayTournamentResults show the results
  * board (icons of the Pokémon brought, HP bars draining to what is left, a red cross on each fainted
@@ -280,7 +282,7 @@ s32 func_80027214(s8 *, s32);                       /* extern */
  * func_80027214(buf2, rec + 0xB4), then VsScene_DrawFrameToImage(0) and
  * func_80006780(), and stops as soon as VsScene_DrawFrameToImage returns non-zero.
  *
- * Same buffer pair and loop as func_88401E24. What the buffers, the record
+ * Same buffer pair and loop as CartridgeCheck_PlayExitToTitle. What the buffers, the record
  * and the helpers are is not established.
  *
  * Matching notes: `sp3C` is a stack local (as m2c reported it), the
@@ -415,8 +417,9 @@ extern u8 D_8F5054C8[];
  *    geo layout VsScene_LoadGeoLayout picked by round) runs one curve and is cleared:
  *    D_8EC145CC for rounds 1-6 (100 frames), D_8ED0FACC for round 7 and D_8EE0FDE0 for round 8
  *    (110 frames each). Seen: バトル-2 flies in letter by letter over the flames and shrinks away.
- * 3. The trainer panels (model on D_8220324C, fragment 032's geo layout D_8F504830; its callbacks
- *    fill in portrait, トレーナー, name, the six icons from VsScene_LoadTeamIcons and nicknames).
+ * 3. The trainer panels (model on D_8220324C, geo layout D_8F504830 in vs_trainer_panel; its
+ *    VsPanel_* callbacks fill in portrait, トレーナー, name, the six icons from VsScene_LoadTeamIcons
+ *    and nicknames).
  *    Curve D_8F5054AC (160 frames) when neither side is a two-trainer team: the 1P panel slides in
  *    from the top right and the other side's from the bottom, the V and S letters fly in, then both
  *    panels rotate about their horizontal axis so their backs, with the team's Pokémon, face the
@@ -1186,7 +1189,8 @@ void func_800270B4(s32 arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5);
 /**
  * Builds the scene's geo layouts: the stadium for the current stage kind (D_822036A8: Free Battle,
  * or tournament rounds 1-6, 7, 8), the scene root, the round title for `round`, the trainer panels
- * (fragment 032), the results board (fragment 033), the badge cap and its sparkles (fragment 034).
+ * (vs_trainer_panel), the results board (geo_model_033), the badge cap and its sparkles
+ * (tournament_badge_cap).
  * Seen in play (2026-11-13) ran once as the VS screen started; 2026-11-14 called from VsScene_Run.
  */
 void VsScene_LoadGeoLayout(s32 round) {

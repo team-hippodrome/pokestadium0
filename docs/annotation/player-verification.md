@@ -407,9 +407,9 @@ the orbit, which a still frame can't tell apart.
 On the order select screen (`battle_order_select.c`, Free Battle against the
 COM), presses were matched to the functions they reached:
 
-* Each pick reaches `BattleMenu_AppendOrderSlotIcon`, the level-sum check and
+* Each pick reaches `BattleMenu_AddSidebarPickBall`, the level-sum check and
   the completeness check.
-* L reaches `BattleMenu_ResetOrderSlotIcons`.
+* L reaches `BattleMenu_ShrinkSidebarPickBalls`.
 * The sixth pick opens 「これで いいですか？ はい えらびなおす」
   (`BattleMenu_DrawOrderSelectConfirmPrompt`, `..._ConfirmInput`).
 
@@ -464,9 +464,11 @@ Functions that ran on each screen were caught with breakpoints. A name lost
 its tag only where the screen showed what the name says. About 30 helpers on
 these screens got names from their code and from the moment they ran.
 
-Not reached: the screens after a tournament win. Scripted inputs in a
-tournament battle didn't land reliably, and setting COM HP mid-battle stalled
-the next send-out once.
+The screens after a tournament win were reached on 2026-11-14 (see
+`src/fragments/cup_clear/cup_clear.c`): round 1 of the L1～30 Poké Ball Cup
+with `gSessionContext.roundOrDemoId` set to 8 and the COM team's HP set to
+1/0 in both the active slot and the roster, then one attack. That plays かち,
+チャンピオン!, the team parade and the cup-cleared trophy scene.
 
 ## The GB item with a Japanese cartridge
 
@@ -813,7 +815,7 @@ On the order screen of a COM free battle:
 
 * COM's panel is ready at once (じゅんび かんりょう！) from scripted input
   (`BattleMenu_FeedScriptedComOrderInput`).
-* Each C/A/B button adds a slot (`BattleMenu_SelectSlotOrShowSummary`), and L
+* Each C/A/B button adds a slot (`BattleMenu_PickOrderSlot`), and L
   clears the picks (`BattleMenu_UndoSelections`).
 * After six picks, 「これで いいですか？ はい / えらびなおす」 appears, and はい
   commits the order (`BattleMenu_CommitOrderSelection`).
