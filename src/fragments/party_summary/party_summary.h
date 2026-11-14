@@ -74,15 +74,15 @@ typedef struct Entry80066AD8 {
 /* The てもち (party) list window: one row per party Pokémon (PartyScreen_InitList, PartyScreen_DrawList). */
 typedef struct PartyListWindow {
     /* 0x00 */ Window window; // @unverified: typed from the function it is passed to
-    /* 0x2C */ Menu menu; // @unverified: rows drawn by PartyScreen_DrawListRow; items = PartyScreen.monList
-    /* 0x50 */ u16 itemFlags[6]; // @unverified: bit 3 = the Pokémon picked first when reordering (PartyScreen_DrawList)
+    /* 0x2C */ Menu menu; // rows drawn by PartyScreen_DrawListRow; items = PartyScreen.monList; D-Down moved menu.cursor to カコ
+    /* 0x50 */ u16 itemFlags[6]; // bit 3 = the Pokémon picked first when reordering: {0, 8, ...} after ならびかえ on カコ, cleared after the swap
 } PartyListWindow; // size = 0x5C
 
 /* The menu that opens on a party Pokémon (PartyScreen_InitActionMenu): 3 rows. */
 typedef struct PartyActionMenuWindow {
     /* 0x00 */ Window window; // @unverified: typed from the function it is passed to
-    /* 0x2C */ Menu menu; // @unverified: rows drawn by PartyScreen_DrawActionMenuRow
-    /* 0x50 */ PointerList items; // @unverified: func_80027804 over the 3 strings D_8A203364
+    /* 0x2C */ Menu menu; // rows drawn by PartyScreen_DrawActionMenuRow: つよさをみる, ならびかえ, やめる
+    /* 0x50 */ PointerList items; // func_80027804 over the 3 strings D_8A203364 (count 3)
     /* 0x5C */ u16 itemFlags[3]; // @unverified: bit 0 = disabled (PartyScreen_UpdateActionMenu)
     /* 0x62 */ char pad62[0x2];
 } PartyActionMenuWindow; // size = 0x64
@@ -90,27 +90,27 @@ typedef struct PartyActionMenuWindow {
 /* The summary page of one party Pokémon (MonSummary_InitPageWindow, MonSummary_DrawPage). */
 typedef struct MonSummaryWindow {
     /* 0x00 */ Window window; // @unverified: typed from the function it is passed to
-    /* 0x2C */ s32 mon; // @unverified: the BattleMon shown (MonSummary_InitPageWindow arg3, MonSummary_DrawModelPreview)
+    /* 0x2C */ s32 mon; // the BattleMon shown: &PartyScreen.mons[0] (ハナ) after つよさをみる on it
     /* 0x30 */ s32 moveSlot; // @unverified: the move picked with the C buttons (MonSummary_GetCButtonPage)
-    /* 0x34 */ s32 modelLoaded; // @unverified: set once func_80019008 loaded the Pokémon's model (MonSummary_DrawPage)
+    /* 0x34 */ s32 modelLoaded; // 1 once func_80019008 loaded the Pokémon's model (the ピカチュウ model was up)
 } MonSummaryWindow; // size = 0x38
 
 /* The てもち (party) screen (func_8A2024D0, PartyScreen_Update, PartyScreen_Draw). */
 typedef struct PartyScreen {
-    /* 0x000 */ s32 state; // @unverified: PartyScreen_Update
-    /* 0x004 */ s32 nextState; // @unverified: becomes state once activeWindow has closed (func_8A202904)
-    /* 0x008 */ Window* activeWindow; // @unverified: the window taking input; func_8A202904 closes it
-    /* 0x00C */ Window* nextWindow; // @unverified: becomes activeWindow once it has closed (func_8A202904)
-    /* 0x010 */ PartyListWindow listWindow; // @unverified: typed from the function it is passed to
-    /* 0x06C */ s32 swapIndex; // @unverified: reorder: the Pokémon picked first (listWindow.menu.cursor)
-    /* 0x070 */ PartyActionMenuWindow actionMenu; // @unverified: typed from the function it is passed to
-    /* 0x0D4 */ MonSummaryWindow summaryWindow; // @unverified: typed from the function it is passed to
-    /* 0x10C */ SavePrompt savePrompt; // @unverified: typed from the function it is passed to
-    /* 0x170 */ ByteMatrix monTable; // @unverified: rows = mons, 0x50 bytes each
-    /* 0x180 */ PointerList monList; // @unverified: over monPointers; items of listWindow.menu
-    /* 0x18C */ BattleMon* monPointers[6]; // @unverified: swapped when reordering
-    /* 0x1A4 */ BattleMon mons[6]; // @unverified: rows of monTable
-    /* 0x384 */ s32 dirty; // @unverified: set by a reorder; asks to save (state 6)
+    /* 0x000 */ s32 state; // 1 = the list, 2 = the action menu, 3 = picking the second Pokémon of ならびかえ, 4 = the summary, 6 = the save prompt (seen in play)
+    /* 0x004 */ s32 nextState; // becomes state once activeWindow has closed: 4 while the action menu closed for つよさをみる
+    /* 0x008 */ Window* activeWindow; // the window taking input: listWindow at state 1, actionMenu at 2, summaryWindow at 4
+    /* 0x00C */ Window* nextWindow; // becomes activeWindow once it has closed: summaryWindow while the action menu closed
+    /* 0x010 */ PartyListWindow listWindow; // the てもち list window
+    /* 0x06C */ s32 swapIndex; // reorder: the Pokémon picked first (listWindow.menu.cursor): 1 after ならびかえ on カコ
+    /* 0x070 */ PartyActionMenuWindow actionMenu; // the A-button menu つよさをみる / ならびかえ / やめる
+    /* 0x0D4 */ MonSummaryWindow summaryWindow; // the つよさをみる page
+    /* 0x10C */ SavePrompt savePrompt; // 「ないようが へんこうされています」 at state 6 after a reorder
+    /* 0x170 */ ByteMatrix monTable; // rows = mons, 0x50 bytes each: capacity 6, count 2
+    /* 0x180 */ PointerList monList; // over monPointers, count 2; items of listWindow.menu
+    /* 0x18C */ BattleMon* monPointers[6]; // swapped when reordering: {&mons[1], &mons[0]} after swapping ハナ and カコ, and the list showed カコ first
+    /* 0x1A4 */ BattleMon mons[6]; // rows of monTable: mons[0] Lv25 ハナ, mons[1] Lv10 カコ
+    /* 0x384 */ s32 dirty; // 1 after a reorder; B then opened the save prompt (state 6)
 } PartyScreen; // size >= 0x388
 
 extern Entry80066AA0 D_80066AA8;
