@@ -960,12 +960,12 @@ typedef struct BattleAnimEffectSlot {
     /* 0x00 */ func_unk_D_8140E724 updateCallback; // @unverified: copied to Particle.updateCallback at spawn
     /* 0x04 */ ParticleDescriptor* descriptor; // @unverified: copied to Particle.descriptor at spawn
     /* 0x08 */ struct ActivePokemon* pokemon; // @unverified: owner, passed to BattleAnim_InitializeParticleFromEffect
-    /* 0x0C */ s16 repeatInterval; // @unverified: reloads delayTimer after each emission (BattleAnim_TickEffectSlots)
-    /* 0x0E */ s16 delayTimer; // @unverified: frames until the next emission, counts down in BattleAnim_TickEffectSlots
+    /* 0x0C */ s16 repeatInterval; // reloads delayTimer after each emission (BattleAnim_TickEffectSlots); 3 for a Body Slam slot in play
+    /* 0x0E */ s16 delayTimer; // frames until the next emission: counted 39 down to 0 a frame in play, then reloaded to repeatInterval
     /* 0x10 */ s16 param0; // @unverified: copied to Particle.param0
     /* 0x12 */ s16 param1; // @unverified: copied to Particle.param1
-    /* 0x14 */ s8 repeatCount; // @unverified: emissions left; 0x7F repeats forever, -1 emits every interval
-    /* 0x15 */ s8 inUse; // @unverified: nonzero while allocated (BattleAnim_AllocEffectSlot sets -1)
+    /* 0x14 */ s8 repeatCount; // emissions left (2, then 1 after an emission, then the slot was freed in play); 0x7F repeats forever, -1 emits every interval
+    /* 0x15 */ s8 inUse; // -1 while allocated (BattleAnim_AllocEffectSlot), 0 once the last emission is done (seen in play)
     /* 0x16 */ u8 anchorMode; // @unverified: emission kind (18, 22-26 are special in BattleAnim_DispatchParticleEmission), else copied to Particle.anchorMode
     /* 0x17 */ u8 effectList; // @unverified: BattleAnim_GetCurrentEffectList() at creation
     /* 0x18 */ u8 resourceListId; // @unverified: BattleAnim_GetQueuedResourceListId() at creation
