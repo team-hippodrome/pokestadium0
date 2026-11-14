@@ -241,7 +241,7 @@ void func_80027FF8(void*, s32);
 s32 func_800246A8(s32, s32);
 s32 Deck_GetSaveEntryTrainerId(s32, s32);
 s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2);
-s32 func_80024ADC(s32, s32);
+s32 Deck_GetSaveEntryCount(s32, s32);
 s32 func_8000A4E8(char*, char*);
 void LabPCList_InitDeckCategories(unk_func_8830867C_02C_154* decks, void* bagBuffer, void* pcBuffer, void* cartBuffer) {
     UNUSED s32 pad; // FAKE: stack padding
@@ -270,7 +270,7 @@ void LabPCList_InitDeckCategories(unk_func_8830867C_02C_154* decks, void* bagBuf
     func_80027FF8(&sp48, decks->unk_01);
 
     for (i = 0; i < 4; i++) {
-        if ((func_800246A8(0x12, i) != 0) && (func_80024ADC(0x12, i) > 0)) {
+        if ((func_800246A8(0x12, i) != 0) && (Deck_GetSaveEntryCount(0x12, i) > 0)) {
             temp_s1 = Deck_GetSaveEntryTrainerId(0x12, i);
             Deck_GetSaveEntryName(0x12, i, sp38);
             if ((sp48.trainerId == temp_s1) && (func_8000A4E8(sp54, sp38) == 0)) {

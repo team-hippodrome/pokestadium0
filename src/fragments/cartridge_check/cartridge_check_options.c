@@ -29,7 +29,7 @@ M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);
 M2C_UNK func_8001A944(M2C_UNK, M2C_UNK, s32);
 M2C_UNK func_8001AB6C();
 M2C_UNK func_8001ABBC();
-M2C_UNK func_80025100(s8 *, M2C_UNK);
+M2C_UNK Save_GetGbTowerSettings(s8 *, M2C_UNK);
 s32 func_800023C4(M2C_UNK, M2C_UNK);
 s32 func_800051F0(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32);
 s32 func_80027214(s8*, s32);
@@ -495,8 +495,8 @@ void Save_ResetAll(void) {
     func_800418F0(1);
 }
 
-s32 func_80025214(void);
-void func_80025224(u8);
+s32 Save_GetOptionFlags(void);
+void Save_SetOptionFlags(u8);
 void Save_CommitTypedRecord(s32, s32);
 /**
  * Loop for the options menu: Up/Down move the cursor through four entries and the chosen settings are saved.
@@ -506,7 +506,7 @@ void Save_CommitTypedRecord(s32, s32);
 void Options_RunMenu(void) {
     s32 done = 0;
     s32 sel = 0;
-    u8 flags = func_80025214();
+    u8 flags = Save_GetOptionFlags();
     u8 diff;
 
     do {
@@ -553,7 +553,7 @@ void Options_RunMenu(void) {
         func_80006780();
     } while (done == 0);
     if (done == 1) {
-        diff = func_80025214() ^ flags;
+        diff = Save_GetOptionFlags() ^ flags;
         if (diff != 0) {
             if (diff & 1) {
                 if (flags & 1) {
@@ -569,7 +569,7 @@ void Options_RunMenu(void) {
                     func_800418F0(1);
                 }
             }
-            func_80025224(flags);
+            Save_SetOptionFlags(flags);
             Save_CommitTypedRecord(0x14, 0);
         }
     }
@@ -646,7 +646,7 @@ void CartridgeCheck_PlayExitToTitle(void) {
 void CartridgeCheck_PlaySetCartridgeAnimation(void) {
     s8 sp1F;
 
-    func_80025100(&sp1F, 0);
+    Save_GetGbTowerSettings(&sp1F, 0);
     func_8001107C(&D_88403648, 1, &D_8F4889B8);
     func_80010F14(&D_88403648, 1, &D_8F4014CC, 0x10000);
     func_80010F9C(&D_88403648, 0x2E);
@@ -941,7 +941,7 @@ void CartridgeCheck_InitModels(s32 fromMainMenu) {
     func_80010F9C(&D_88403648, 0x4A);
     M2C_FIELD(&D_88403648, u8 *, 2) &= ~0x20;
     if (D_88403358 >= 0) {
-        func_80025100(&sp27, 0);
+        Save_GetGbTowerSettings(&sp27, 0);
         Model_InitDisplayObject(&D_88403378, 0, 0, *((M2C_UNK*)((u8*)&D_884037B0 + (sp27 * 4))));
         func_80010F14(&D_88403378, 1, *((M2C_UNK**)((u8*)&D_88402D74 + (sp27 * 4))), 0xFFFF0000);
         func_80010F9C(&D_88403378, 0x4A);

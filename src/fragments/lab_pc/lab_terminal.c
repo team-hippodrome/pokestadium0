@@ -174,7 +174,7 @@ void func_80022118(s32);
 void func_80022188(s32);
 s32 func_8002207C(s32);
 void func_8002D7D4(s32);
-void func_800243B8(void);
+void Save_CommitPokemonRecords(void);
 void func_800245E0(s32, s32);
 void LabItem_DrawScreen(LabItemScreen*);
 /**
@@ -221,7 +221,7 @@ void LabItem_SaveChanges(LabItemScreen* screen) {
         func_80022188(D_89019108);
     }
     if (flush) {
-        func_800243B8();
+        Save_CommitPokemonRecords();
     }
 }
 

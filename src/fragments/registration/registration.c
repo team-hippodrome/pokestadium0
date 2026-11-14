@@ -118,7 +118,7 @@ void Registration_WriteAllTeams(PointerList* teams) {
     }
 }
 
-s32 func_80024ADC(s32, s32);
+s32 Deck_GetSaveEntryCount(s32, s32);
 void func_80027410(void*, void*, s32, s32, s32);
 s32 Deck_GetSaveEntryTrainerId(s32, s32);
 s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2);
@@ -134,7 +134,7 @@ void Registration_LoadRegisteredTeams(ByteMatrix* table) {
         if (func_800246A8(0x10, i) == 0) {
             continue;
         }
-        if (func_80024ADC(0x10, i) == 0) {
+        if (Deck_GetSaveEntryCount(0x10, i) == 0) {
             continue;
         }
         p->unk_00 = 0;

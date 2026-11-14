@@ -544,8 +544,8 @@ void VsScene_Play(void) {
     }
 }
 
-M2C_UNK func_80025100(s8 *, M2C_UNK);               /* extern */
-M2C_UNK func_80025168(s8);                          /* extern */
+M2C_UNK Save_GetGbTowerSettings(s8 *, M2C_UNK);               /* extern */
+M2C_UNK Save_SetGbTowerFrameTier(s8);                          /* extern */
 
 /**
  * Unlocks the next GB Tower frame (reads the count with func_80025100, stores it + 1 with
@@ -556,14 +556,14 @@ M2C_UNK func_80025168(s8);                          /* extern */
 void Tournament_UnlockGbTowerFrame(void) {
     s8 sp1F;
 
-    func_80025100(&sp1F, 0);
+    Save_GetGbTowerSettings(&sp1F, 0);
     switch (sp1F) {                                 /* irregular */
     case 0:
-        func_80025168((s8) (sp1F + 1));
+        Save_SetGbTowerFrameTier((s8) (sp1F + 1));
         D_822036A4->transitionFlags |= 8;
         return;
     case 1:
-        func_80025168((s8) (sp1F + 1));
+        Save_SetGbTowerFrameTier((s8) (sp1F + 1));
         D_822036A4->transitionFlags |= 0x10;
         return;
     }
@@ -936,7 +936,7 @@ extern char D_82203128[];
 extern char D_8220314C[];
 extern u8 D_8F625F00[];
 extern Gfx D_80060290[];
-void func_80025830(void);
+void Tournament_SaveContinueData(void);
 
 /**
  * Asks トーナメントをつづけますか？ (Continue the tournament?) with つづける (Continue) / ちゅうだんする (Quit), plus the GB cartridge warning.
@@ -977,7 +977,7 @@ s32 Tournament_RunContinuePrompt(void) {
     } while (!(gPlayer1Controller->buttonPressed & BTN_A));
     if (sel == 1) {
         Audio_PlaySoundEffectById(0x1D);
-        func_80025830();
+        Tournament_SaveContinueData();
         do {
             VsScene_DrawFrame(0);
             Ui_DrawGradientPanel(0x1E, 0xAA, 0x104, 0x32, &top, &bottom);
@@ -1275,7 +1275,7 @@ extern u8 D_0037B090[];
 extern u8 D_00380D60[];
 extern u8 D_00385D60[];
 extern u8 D_0038A540[];
-s32 func_80023C30(void);
+s32 Save_LoadSram(void);
 s32 Font_Init(s32 load_size, s32 side);
 
 #define DEMO_FRAGMENT_ID(vram) ((((u32)(vram) & 0x0FF00000) >> 0x14) - 0x10)
@@ -1318,7 +1318,7 @@ s32 VsScene_Run(s32 kind, SessionContext* session) {
     sp24 = round;
 
     main_pool_push_state('BTLS');
-    func_80023C30();
+    Save_LoadSram();
     Gfx_InitDisplayListBuffers(0x10000, 0);
     D_82203204 = StageContext_Allocate(0, 1, 3, 1, 2, 1);
     D_82203208 = GfxImage_Allocate(0, 2, 0x140, 0xF0, 1);

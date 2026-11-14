@@ -24,7 +24,7 @@ typedef struct ModeSettings {
     /* 0x07 */ u8 mewtwoUnlocked; // Set when clearedModes reaches 0xF8.
 } ModeSettings; // size = 0x8
 
-// Zero's 32 KiB cartridge SRAM, loaded whole into the buffer at D_800AE8E0
+// Zero's 32 KiB cartridge SRAM, loaded whole into the buffer at gSaveBuffer
 // (docs/n64-save-format.md). Every record is stored twice, primary then backup,
 // and each copy ends with a SaveFooter. Fields without a tag were seen in play in pj64
 // (2026-11-14: a team registered in とうろく, a Pokemon and items moved in せいとん, the
@@ -38,7 +38,7 @@ typedef struct SaveFooter {
 } SaveFooter; // size = 0x6
 
 // A Pokemon as kept in Zero's save: the Gen 1 box struct plus its names in the GB charset.
-// Read by func_80023D3C and written by BattleMon_ToGbSaveRecord.
+// Read by BattleMon_FromGbSaveRecord and written by BattleMon_ToGbSaveRecord.
 typedef struct SaveMonRecord {
     /* 0x00 */ GbPokemonRecord mon;
     /* 0x21 */ u8 nickname[6];
@@ -100,7 +100,7 @@ typedef struct SaveOptionsRecord {
     /* 0xA */ SaveFooter footer;
 } SaveOptionsRecord; // size = 0x10
 
-// Where a paused tournament stands; built by func_80025830 from gSessionContext.
+// Where a paused tournament stands; built by Tournament_SaveContinueData from gSessionContext.
 typedef struct SaveContinueSession {
     /* 0x0 */ u8 mode; // @unverified: per docs/n64-save-format.md, not rechecked. 1 L50-55, 2 L1-30 cups.
     /* 0x1 */ u8 modeSelection; // @unverified: per docs/n64-save-format.md, not rechecked. Cup (0 Monster Ball Cup).
@@ -152,10 +152,10 @@ s32 Deck_ReadSaveEntry(s32 arg0, s32 arg1, s32 arg2, u8* arg3);
 s32 Save_WriteTypedRecord(s32 arg0, s32 arg1, s32 arg2, u8* arg3);
 void Save_WriteContinueData(SaveContinueSession* arg0, GbSavePortSnapshot* arg1, BattleMon* arg2, s32 arg3);
 void func_80024044(void);
-s32 Audio_GetFreeVoiceCount(void);
+s32 Save_GetBuffer(void);
 void func_800245E0(s32 arg0, s32 arg1);
 
 // functions defined in assembly
-s16 Deck_GetSaveEntryCount(s32 arg0, s32 arg1);
+s32 Deck_GetSaveEntryCount(); // Some callers pass no arguments and reuse their own a0/a1.
 
 #endif // SAVE_DATA_H

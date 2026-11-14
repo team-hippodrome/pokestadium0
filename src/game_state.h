@@ -161,7 +161,7 @@ typedef struct BattleSide {
     /* 0x24 */ arg1_func_80019420* background; // @unverified: buffer passed to PokeIcon_RequestBackgroundLoad, then modelLoadContext->loadedBackground
 } BattleSide; // size = 0x28
 
-// Zero's layout (offsets checked against func_80025910, func_8002572C and func_80025830, which
+// Zero's layout (offsets checked against func_80025910, func_8002572C and Tournament_SaveContinueData, which
 // reach these fields by raw offset). gSessionContext at 0x800AE8F0 is defined in game_state.c.
 typedef struct SessionContext {
     /* 0x0000 */ s8 mode;
@@ -180,7 +180,7 @@ typedef struct SessionContext {
     /* 0x1091 */ char unk1091[0x1];
     /* 0x1092 */ u8 inRound2;
     /* 0x1093 */ u8 continueCount;
-    /* 0x1094 */ u8 teamGbPort; // @unverified: GB port of the continued team, 0xFF for rentals (func_80025A64); passed to Session_LoadPortSnapshot
+    /* 0x1094 */ u8 teamGbPort; // @unverified: GB port of the continued team, 0xFF for rentals (Tournament_LoadContinueData); passed to Session_LoadPortSnapshot
     /* 0x1095 */ u8 sessionFlags;
     /* 0x1096 */ u16 transitionFlags;
 } SessionContext; // size = 0x1098
