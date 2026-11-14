@@ -651,7 +651,7 @@ func_81200A20,0x81200A20,src/fragments/title_screen/title_screen.c,TitleScreen_U
 func_81200B80,0x81200B80,src/fragments/title_screen/title_screen.c,TitleScreen_Main,m2c,m2c,c
 func_81500020,0x81500020,src/fragments/n64_logo/n64_logo.c,N64Logo_DrawLogoTexture,s1,stadium1:src/fragments/n64_logo/n64_logo.c,c
 func_815002B4,0x815002B4,src/fragments/n64_logo/n64_logo.c,N64Logo_DrawFrame,s1,stadium1:src/fragments/n64_logo/n64_logo.c,c
-func_815002F0,0x815002F0,src/fragments/n64_logo/n64_logo.c,N64Logo_WaitForElapsed,s1,stadium1:src/fragments/n64_logo/n64_logo.c,c
+func_815002F0,0x815002F0,src/fragments/n64_logo/n64_logo.c,N64Logo_HoldForOneSecond,s1,stadium1:src/fragments/n64_logo/n64_logo.c,c
 func_8150036C,0x8150036C,src/fragments/n64_logo/n64_logo.c,N64Logo_ScanTransferPaks,s1,stadium1:src/fragments/n64_logo/n64_logo.c,c
 func_815003A4,0x815003A4,src/fragments/n64_logo/n64_logo.c,N64Logo_Main,s1,,c
 func_81300020,0x81300020,src/fragments/gb_tower_team_prep/gb_tower_team_prep.c,GbTower_LoadPartyFromDeck,s1,stadium1:src/fragments/gb_tower_team_prep/gb_tower_team_prep.c,c
