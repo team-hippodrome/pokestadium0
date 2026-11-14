@@ -710,7 +710,7 @@ typedef struct Radial20 {
     /* 0x004 */ s16 frame; // @unverified: counts up each frame until duration
     /* 0x006 */ s16 duration; // @unverified: frames the effect runs
     /* 0x008 */ s16 variant; // @unverified: motion and draw mode switch (0-9) in Radial20_UpdateNode/Draw
-    /* 0x00A */ Color_RGBA8 color; // Stadium 1 follows this with a Color_RGB8
+    /* 0x00A */ Color_RGBA8 color; // vertex color (rgb); poking FF0000 turned Onix's light-blue move streak red in play. Stadium 1 follows this with a Color_RGB8
     /* 0x010 */ f32 maxHalfWidth; // @unverified: cap for each node's halfWidth
     /* 0x014 */ f32 angleStep; // @unverified: added to each node's angle per frame
     /* 0x018 */ Vtx* vtx; // @unverified: vertices allocated each frame in Radial20_Draw
