@@ -887,7 +887,7 @@ void AudioSeq_SeqLayerDisable(SequenceLayer* arg0);
 void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1);
 void Particle31_ResetAllSlots(DisplayObject* arg0);
 void AudioSeq_SequenceChannelEnable(SequencePlayer* seqPlayer, u8 channelIndex, void* script);
-s32 AudioSeq_AudioListPopBack(s8 *arg0);
+s32 AudioSeq_AudioListPopBack(AudioListItem* list);
 void AudioSeq_InitLayerFreelist(void);
 u8 AudioSeq_ScriptReadU8(u8 **arg0);
 s16 AudioSeq_ScriptReadS16(u8** arg0);

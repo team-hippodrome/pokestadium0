@@ -691,7 +691,7 @@ void AudioPlayback_NotePoolClear(NotePool* pool) {
     }
 }
 
-s32 AudioSeq_AudioListPopBack(s8 *);
+s32 AudioSeq_AudioListPopBack(AudioListItem* list);
 /**
  * Takes `arg1` notes from the global free lists into a pool. Zelda 64 audio driver.
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
@@ -888,7 +888,7 @@ void AudioPlayback_NoteReleaseAndTakeOwnership(s8 *arg0, s8 *arg1)
  * Returns the entry, or 0 if there was none.  What AudioPlayback_NoteInitForLayer does with
  * arg1 is not established (it is still assembly).
  */
-s32 AudioSeq_AudioListPopBack(s8 *);
+s32 AudioSeq_AudioListPopBack(AudioListItem* list);
 void AudioPlayback_NoteInitForLayer(s8*, s8*);
 
 /**
@@ -920,7 +920,7 @@ s32 AudioPlayback_AllocNoteFromDisabled(s8 *arg0, s32 arg1) {
  * returns the word at offset 8 of that node, or 0 if the list is empty.
  * Returns that entry, or 0 if there was none; nothing else happens then.
  */
-s32 AudioSeq_AudioListPopBack(s8 *);
+s32 AudioSeq_AudioListPopBack(AudioListItem* list);
 
 /**
  * Takes over a decaying note for a layer. Zelda 64 audio driver.

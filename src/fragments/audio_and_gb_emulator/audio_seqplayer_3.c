@@ -14,7 +14,7 @@ void AudioLoad_SetFontLoadStatus(s32, s32);
 void AudioLoad_SetSeqLoadStatus(s32, s32);
 u16 AudioSeq_GetScriptControlFlowArgument(u8** stream, u8 kind);
 s32 AudioSeq_HandleScriptFlowControl(void*, void*, s32, s32);
-void AudioSeq_SequencePlayerSetupChannels(s8* arg0, u16 mask);
+void AudioSeq_SequencePlayerSetupChannels(SequencePlayer* seqPlayer, u16 mask);
 void AudioSeq_SequencePlayerDisable(u8* arg0);
 void func_81112B84(SequenceChannel*);
 
@@ -142,7 +142,7 @@ void func_81114B54(SequencePlayer* seq_player) {
                         break;
                     case 0xD7:
                         temp = AudioSeq_ScriptReadS16(&state->pc);
-                        AudioSeq_SequencePlayerSetupChannels((s8*)seq_player, temp);
+                        AudioSeq_SequencePlayerSetupChannels(seq_player, temp);
                         break;
                     case 0xD6:
                         AudioSeq_ScriptReadS16(&state->pc);

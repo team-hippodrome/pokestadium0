@@ -221,7 +221,7 @@ void AudioSeq_InitSequenceChannel(void* obj) {
 }
 
 extern struct AudioListItem D_81184928;
-s32 AudioSeq_AudioListPopBack(s8*);
+s32 AudioSeq_AudioListPopBack(AudioListItem* list);
 void AudioPlayback_SeqLayerNoteDecay();
 /**
  * Gives channel `arg0` a layer in slot `arg1`, taking one from the free list when needed. Zelda 64 audio driver.
@@ -318,16 +318,16 @@ void Particle31_ResetAllSlots(DisplayObject* arg0) {
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-void AudioSeq_SequencePlayerSetupChannels(s8* arg0, u16 mask) {
+void AudioSeq_SequencePlayerSetupChannels(SequencePlayer* seqPlayer, u16 mask) {
     s32 i;
-    s8* item;
+    SequenceChannel* channel;
 
     for (i = 0; i < 16; i++) {
         if (mask & 1) {
-            item = M2C_FIELD(arg0, s8**, 0x34 + i * 4);
-            M2C_FIELD(item, u8*, 7) = M2C_FIELD(arg0, u8*, 5);
-            M2C_FIELD(item, u8*, 3) = M2C_FIELD(arg0, u8*, 3);
-            M2C_FIELD(item, u8*, 2) = M2C_FIELD(arg0, u8*, 2);
+            channel = seqPlayer->channels[i];
+            channel->fontId = seqPlayer->defaultFont;
+            channel->muteBehavior = seqPlayer->muteBehavior;
+            channel->noteAllocPolicy = seqPlayer->noteAllocPolicy;
         }
         mask = (s32)mask >> 1;
     }
@@ -424,18 +424,18 @@ void AudioSeq_AudioListPushBack(s8 *arg0, s8 *arg1)
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-s32 AudioSeq_AudioListPopBack(s8 *arg0) {
-    s8 *temp_v1;
+s32 AudioSeq_AudioListPopBack(AudioListItem* list) {
+    AudioListItem* item;
 
-    temp_v1 = M2C_FIELD(arg0, s8 **, 0);
-    if (temp_v1 == arg0) {
+    item = list->prev;
+    if (item == list) {
         return 0;
     }
-    M2C_FIELD(M2C_FIELD(temp_v1, s8 **, 0), s8 **, 4) = arg0;
-    M2C_FIELD(arg0, s8 **, 0) = (s8 *) M2C_FIELD(temp_v1, s8 **, 0);
-    M2C_FIELD(temp_v1, s8 **, 0) = NULL;
-    M2C_FIELD(arg0, s32 *, 8) = (s32) (M2C_FIELD(arg0, s32 *, 8) - 1);
-    return M2C_FIELD(temp_v1, s32 *, 8);
+    item->prev->next = list;
+    list->prev = item->prev;
+    item->prev = NULL;
+    list->u.count = (s32)(list->u.count - 1);
+    return (s32)item->u.value;
 }
 
 /**
