@@ -28,7 +28,7 @@ typedef struct unk_D_800AE520 {
 
 typedef struct BattleMonSpecies {
     /* 0x00 */ u8 id;
-    /* 0x01 */ u8 unk_01;
+    /* 0x01 */ u8 isRental; // 1 for a rental picked in the tournament entry screen (seen: a rented Pikachu); 0 for GB Pokemon (Pokemon_FromGbRecord). Free Battle rentals had 0. func_82200E2C skips its Pikachu-without-Surf check (likely the Surf Pikachu reward) when any team member has it
 } BattleMonSpecies; // size = 0x2
 
 typedef struct BattleMon {

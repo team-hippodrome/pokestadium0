@@ -916,11 +916,11 @@ void Save_WriteContinueData(SaveContinueSession* arg0, GbSavePortSnapshot* arg1,
         f->session = *arg0;
         f->gbSnapshot = *arg1;
         f->count = arg3;
-        f->speciesFlagMask = 0;
+        f->rentalMask = 0;
         for (i = 0; i < arg3; i++) {
             BattleMon_ToGbSaveRecord(&arg2[i], &f->team[i]);
-            if (arg2[i].species.unk_01 == 1) {
-                f->speciesFlagMask |= 1 << i;
+            if (arg2[i].species.isRental == 1) {
+                f->rentalMask |= 1 << i;
             }
         }
     }
@@ -945,8 +945,8 @@ s16 Save_ReadContinueData(SaveContinueSession* arg0, GbSavePortSnapshot* arg1, B
             count = blk->count;
             for (i = 0; i < count; i++) {
                 func_80023D3C((s32)&arg2[i], (s32)&blk->team[i]);
-                if (blk->speciesFlagMask & (1 << i)) {
-                    arg2[i].species.unk_01 = 1;
+                if (blk->rentalMask & (1 << i)) {
+                    arg2[i].species.isRental = 1;
                 }
             }
         }

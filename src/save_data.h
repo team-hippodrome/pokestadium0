@@ -117,7 +117,7 @@ typedef struct SaveContinueRecord {
     /* 0x00E */ s16 count;
     /* 0x010 */ SaveMonRecord team[6];
     /* 0x11E */ GbSavePortSnapshot gbSnapshot; // @unverified: per docs/n64-save-format.md, not rechecked. All zero for rentals; a GB team resumes only if the cartridge still matches.
-    /* 0x280 */ u8 speciesFlagMask; // @unverified: bit n set when team[n]'s BattleMon.species.unk_01 == 1 (Save_WriteContinueData)
+    /* 0x280 */ u8 rentalMask; // @unverified: bit n set when team[n]'s BattleMon.species.isRental == 1 (Save_WriteContinueData)
     /* 0x281 */ char unk_281[0x1];
     /* 0x282 */ SaveFooter footer;
 } SaveContinueRecord; // size = 0x288

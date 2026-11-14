@@ -230,7 +230,7 @@ M2C_UNK func_80056690(s8 *, s8 *, M2C_UNK);     /* extern */
 
 void func_8001FE84(BattleMon* arg0, GbPokemonRecord* arg1) {
     arg0->species.id = Species_FromInternalIndex(arg1->species);
-    arg0->species.unk_01 = 0;
+    arg0->species.isRental = 0;
     arg0->hp = func_8001FAB0(arg1->hp);
     arg0->boxLevel = arg1->boxLevel;
     arg0->statusCondition = arg1->status;

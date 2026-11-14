@@ -127,7 +127,8 @@ typedef struct GbSaveMainData {
     /* 0x01E */ u8 pokedexOwned[19]; // One bit per National Dex number, bit (n - 1)
     /* 0x031 */ u8 pokedexSeen[19]; // One bit per National Dex number, bit (n - 1)
     // The two item lists hold 2-byte {item ID, quantity} entries ended by an ID of 0xFF. The code copies
-    // them through BattleMon.species (Deck_ReadEntry decks 34 and 35), so they keep that type.
+    // them through BattleMon.species (Deck_ReadEntry decks 34 and 35), so they keep that type: the quantity
+    // sits in BattleMonSpecies.isRental (seen in play: quantities 3, 5, 2).
     /* 0x044 */ u8 numBagItems; // Bag item count; せいとん shows it as 003/020
     /* 0x045 */ BattleMonSpecies bagItems[20]; // {item ID, quantity} pairs ended by an ID of 0xFF
     /* 0x06D */ u8 unk_06D; // Untouched; pokered puts the bag list 0xFF terminator here.
