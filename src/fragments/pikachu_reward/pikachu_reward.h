@@ -25,23 +25,32 @@ typedef struct unk_D_832027C8 {
 #define BTN_IS_PRESSED(controller, combo) (((controller)->buttonPressed & (combo)) != 0)
 
 // pikachu_reward.c
-s32 PikachuReward_PositionSurfingPikachuModel(s32 arg0, DisplayObject* arg1);
-void PikachuReward_UpdateLeadPikachuAnimation(void);
-void PikachuReward_UpdateFollowerVisibility(void);
-s32 PikachuReward_RenderFrame(u8 arg0);
-void PikachuReward_DrawBlinkingStarIcon(s16 arg0, s16 arg1);
-void PikachuReward_DrawTextBoxPanel(s16 arg0, s16 arg1, s16 arg2, s16 arg3);
-void PikachuReward_DrawSelectionCursor(s16 arg0, s16 arg1);
-void PikachuReward_ShowTextForFrames(char* arg0, s32 arg1);
-void PikachuReward_ShowTextWaitForA(char* arg0, s32 arg1);
-void PikachuReward_ScrollTextIn(s8* arg0);
-s32 PikachuReward_ConfirmYesNoPrompt(char* arg0);
-s32 PikachuReward_SelectMoveToForget(char* arg0);
-void PikachuReward_PlayIntroCamera(void);
-void PikachuReward_ShowSaveStatusScreen(s32 arg0);
-void PikachuReward_SetupFollowerModel(DisplayObject* arg0, s16 arg1, s16 arg2, s16 arg3);
-void PikachuReward_SetupScene(void);
-s32 Stadium_BonusPikachuReward(UNUSED s32 arg0, UNUSED s32 arg1);
+s32 PikachuReward_SpinSunburst(s32 stage, DisplayObject* sunburst);
+s32 PikachuReward_FindPikachuInCartParty(s32 gb_port);
+s32 PikachuReward_CountKnownMoves(void);
 void Controller_PollInputs(void);
+void PikachuReward_UpdatePikachuAnimation(void);
+void PikachuReward_UpdateQuestionMarks(void);
+s32 PikachuReward_RenderFrame(u8 unused);
+void PikachuReward_DrawBlinkingNextArrow(s16 x, s16 y);
+void PikachuReward_DrawTextBoxPanel(s16 x, s16 y, s16 width, s16 height);
+void PikachuReward_DrawSelectionCursor(s16 x, s16 y);
+void PikachuReward_ShowTextForFrames(char* text, s32 frames);
+void PikachuReward_ShowTextWaitForA(char* text, s32 show_arrow);
+void PikachuReward_ScrollTextIn(s8* text);
+s32 PikachuReward_ConfirmYesNoPrompt(char* question);
+s32 PikachuReward_SelectMoveToForget(char* prompt);
+void PikachuReward_ShowDeclinedEnding(void);
+void PikachuReward_ShowSuccessEnding(void);
+void PikachuReward_PlayIntroCamera(void);
+s32 PikachuReward_ShowIntroAndConfirm(void);
+s32 PikachuReward_ResolveMoveSlot(void);
+void PikachuReward_ShowSaveStatusScreen(s32 status);
+void PikachuReward_SaveToCartridge(s32 gb_port);
+void PikachuReward_TeachSurfToPikachu(s32 move_slot);
+void PikachuReward_RunSequence(void);
+void PikachuReward_SetupQuestionMarkModel(DisplayObject* mark, s16 x, s16 y, s16 rotation_z);
+void PikachuReward_SetupScene(void);
+s32 Stadium_BonusPikachuReward(UNUSED s32 arg0, s32 session);
 
 #endif // FRAGMENT_PIKACHU_REWARD_H
