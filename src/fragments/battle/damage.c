@@ -312,13 +312,13 @@ extern u8 D_8218AC34[][2];
  */
 void Battle_CalcHitChance(void) {
 
-    s32 idx = ((u8*)D_8219A3C0)[0x60];
+    s32 idx = sBattleUser->statStages[4];
     s32 i;
     s32 v;
 
-    i = ((u8*)D_8219A3C4)[0x61];
+    i = sBattleTarget->statStages[5];
     i = 14 - i;
-    v = ((u8*)D_8219A3C0)[0x48] * D_8218AC34[idx - 1][0] / D_8218AC34[idx - 1][1];
+    v = sBattleUser->moveCache.accuracy * D_8218AC34[idx - 1][0] / D_8218AC34[idx - 1][1];
     if (v == 0) {
         v = 1;
     }
@@ -329,7 +329,7 @@ void Battle_CalcHitChance(void) {
     if (v >= 0x100) {
         v = 0xFF;
     }
-    ((u8*)D_8219A3C0)[0x48] = v;
+    sBattleUser->moveCache.accuracy = v;
 }
 
 extern s8 D_82199F31;
@@ -348,7 +348,7 @@ void Battle_MoveMissed(void) {
     D_82199F50 = 0;
     temp_v0 = sBattleScene.scene->mode;
     if ((temp_v0 == 5) || (temp_v0 == 9) || (temp_v0 == 6) || (temp_v0 == 0xA)) {
-        if (M2C_FIELD(D_8219A3C4, u8 *, 0x4C) & 0x40) {
+        if (sBattleTarget->immobilizedReason & 0x40) {
             D_82199F31 = 1;
         } else {
             D_82199F31 = 0;
@@ -356,7 +356,7 @@ void Battle_MoveMissed(void) {
     } else {
         D_82199F31 = 1;
     }
-    M2C_FIELD(D_8219A3C0, u8 *, 0x4C) = (u8) (M2C_FIELD(D_8219A3C0, u8 *, 0x4C) & 0xFFDF);
+    sBattleUser->immobilizedReason = (u8) (sBattleUser->immobilizedReason & 0xFFDF);
 }
 
 void Battle_MoveMissed(void);
@@ -369,11 +369,11 @@ void Battle_MoveHitTest(void) {
     s8* p = D_8219A3C0;
     u8 effect = M2C_FIELD(p, u8*, 0x45);
 
-    if ((effect == 8) && !(M2C_FIELD(D_8219A3C4, u8*, 0x15) & 7)) {
+    if ((effect == 8) && !(sBattleTarget->pendingStatusCondition & 7)) {
         Battle_MoveMissed();
         return;
     }
-    if (M2C_FIELD(D_8219A3C4, u8*, 0x4D) & 0x10) {
+    if (sBattleTarget->volatileStatusFlags & 0x10) {
         if (effect == 0x11) {
             return;
         }
@@ -382,11 +382,11 @@ void Battle_MoveHitTest(void) {
             return;
         }
     }
-    if (M2C_FIELD(D_8219A3C4, u8*, 0x4C) & 0x40) {
+    if (sBattleTarget->immobilizedReason & 0x40) {
         Battle_MoveMissed();
         return;
     }
-    if ((((effect >= 0x12) && (effect < 0x1A)) || ((effect >= 0x3A) && (effect < 0x42))) && (M2C_FIELD(D_8219A3C4, u8*, 0x4D) & 2)) {
+    if ((((effect >= 0x12) && (effect < 0x1A)) || ((effect >= 0x3A) && (effect < 0x42))) && (sBattleTarget->volatileStatusFlags & 2)) {
         Battle_MoveMissed();
         return;
     }
@@ -394,7 +394,7 @@ void Battle_MoveHitTest(void) {
         return;
     }
     Battle_CalcHitChance();
-    if (Battle_Random() >= M2C_FIELD(D_8219A3C0, u8*, 0x48)) {
+    if (Battle_Random() >= sBattleUser->moveCache.accuracy) {
         Battle_MoveMissed();
     }
 }
@@ -684,20 +684,20 @@ void Battle_PrintCriticalOHKOText(void) {
 void Battle_ApplyAttackToTarget(void) {
     s32 n;
 
-    switch (((u8*)D_8219A3C0)[0x45]) {
+    switch (sBattleUser->moveCache.effect) {
         case 0x26:
             break;
         case 0x28:
-            D_82199F50 = M2C_FIELD(D_8219A3C4, u16*, 0xC) / 2;
+            D_82199F50 = sBattleTarget->hp / 2;
             if ((u16)D_82199F50 == 0) {
                 D_82199F50 = 1;
             }
             break;
         case 0x29:
-            switch (((u8*)D_8219A3C0)[0x44]) {
+            switch (sBattleUser->moveCache.lastMove) {
                 case 0x45:
                 case 0x65:
-                    n = ((u8*)D_8219A3C0)[0x26];
+                    n = sBattleUser->level;
                     break;
                 case 0x31:
                     n = 0x14;
@@ -708,7 +708,7 @@ void Battle_ApplyAttackToTarget(void) {
                 default:
                     {
                         s32 r;
-                        n = ((u8*)D_8219A3C0)[0x26];
+                        n = sBattleUser->level;
                         n = (n >> 1) + n;
                         do {
                             do {
@@ -722,7 +722,7 @@ void Battle_ApplyAttackToTarget(void) {
             D_82199F50 = n;
             break;
         default:
-            if (((u8*)D_8219A3C0)[0x46] == 0) {
+            if (sBattleUser->moveCache.power == 0) {
                 return;
             }
             break;

@@ -69,13 +69,13 @@ extern s8 *D_8219A5A0;
 s32 Battle_TryLoadFollowupMoveFromTarget(void) {
     u8 temp_v0;
 
-    temp_v0 = M2C_FIELD(D_8219A3C4, u8 *, 0x58);
+    temp_v0 = sBattleTarget->lastMove;
     if ((temp_v0 == 0x77) || (temp_v0 == 0)) {
         sBattleScene.scene->moveEffectKind = 0x1C;
         BattleMessage_Format(D_8219A520 + 0x88, 0x20, D_8218C784);
         return 0;
     }
-    M2C_FIELD(D_8219A3C0, u8 *, 0x5A) = temp_v0;
+    sBattleUser->usedMove = temp_v0;
     func_821115F4();
     func_82110FC0();
     return 1;
@@ -217,11 +217,11 @@ s32 Battle_CheckCriticalHit(void) {
     s32 v;
 
     D_82199F32 = 0;
-    v = D_80065CED[M2C_FIELD(D_8219A3C0, u8*, 0xB) * 23] >> 1;
-    if (M2C_FIELD(D_8219A3C0, u8*, 0x46) == 0) {
+    v = D_80065CED[sBattleUser->species * 23] >> 1;
+    if (sBattleUser->moveCache.power == 0) {
         return 0;
     }
-    if (M2C_FIELD(D_8219A3C0, u8*, 0x4D) & 4) {
+    if (sBattleUser->volatileStatusFlags & 4) {
         v >>= 1;
     } else {
         v <<= 1;
@@ -229,7 +229,7 @@ s32 Battle_CheckCriticalHit(void) {
             v = 0xFF;
         }
     }
-    if (func_8210FA2C(M2C_FIELD(D_8219A3C0, u8*, 0x44), D_8218ADEC, 4) != 0) {
+    if (func_8210FA2C(sBattleUser->moveCache.lastMove, D_8218ADEC, 4) != 0) {
         v <<= 2;
         if (v >= 0x100) {
             v = 0xFF;
