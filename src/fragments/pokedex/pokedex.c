@@ -436,7 +436,7 @@ void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
  * Seen in play (2026-11-12): No.001 フシギダネ, たねポケモン, たかさ 0.7m, おもさ 6.9kg.
  */
 void Pokedex_DrawEntryInfo(s32 arg0, s32 arg1) {
-    u8* entry = (u8*)&D_80064C5C + D_8A12FFB8 * 0x1C;
+    unk_D_8006FF00* entry = (unk_D_8006FF00*)((u8*)&D_80064C5C + D_8A12FFB8 * 0x1C);
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1, 0x122, 0xD2, D_8A1057D4);
@@ -446,10 +446,10 @@ void Pokedex_DrawEntryInfo(s32 arg0, s32 arg1) {
     Font_EnableTwoCycleTexturing();
     Font_SetActive(0x20, 0);
     Gfx_SetPrimColor(0x96, 0x96, 0xFF, 0xFF);
-    Font_Printf(arg0 + 0x70, arg1 + 0x38, M2C_FIELD(entry, char**, 4));
+    Font_Printf(arg0 + 0x70, arg1 + 0x38, entry->name);
     Font_SetActive(0x10, 0);
     Gfx_SetPrimColor(0x96, 0xFF, 0x96, 0xFF);
-    Font_Printf(arg0 + 8, arg1 + 0x6A, D_8A12FCE4, M2C_FIELD(entry, s32*, 8));
+    Font_Printf(arg0 + 8, arg1 + 0x6A, D_8A12FCE4, entry->unk_08);
     Gfx_SetPrimColor(0xFF, 0xFF, 0x96, 0xFF);
     Font_Printf(arg0 + 0xD, arg1 + 0x8E, D_8A12FCF0);
     Gfx_SetPrimColor(0xFF, 0x96, 0x96, 0xFF);
@@ -457,10 +457,10 @@ void Pokedex_DrawEntryInfo(s32 arg0, s32 arg1) {
     Font_DisableTwoCycleTexturing();
     Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
     Font_Printf(arg0 + 0x12, arg1 + 0x12, D_8A12FD00);
-    Font_Printf(arg0 + 0x4E, arg1 + 0x12, D_8A12FD04, entry[0]);
-    if (func_800231C8(D_8A12FFB0, entry[0]) >= 2) {
-        Pokedex_DrawTenthsValue(arg0 + 0x79, arg1 + 0x8E, entry[0xD]);
-        Pokedex_DrawTenthsValue(arg0 + 0x79, arg1 + 0xB2, M2C_FIELD(entry, s16*, 0xE));
+    Font_Printf(arg0 + 0x4E, arg1 + 0x12, D_8A12FD04, entry->unk_00);
+    if (func_800231C8(D_8A12FFB0, entry->unk_00) >= 2) {
+        Pokedex_DrawTenthsValue(arg0 + 0x79, arg1 + 0x8E, entry->unk_0D);
+        Pokedex_DrawTenthsValue(arg0 + 0x79, arg1 + 0xB2, entry->unk_0E);
     } else {
         Font_Printf(arg0 + 0x79, arg1 + 0x8E, D_8A12FD0C);
         Font_Printf(arg0 + 0x79, arg1 + 0xB2, D_8A12FD10);
@@ -483,14 +483,14 @@ extern s32 D_8A12FFB8;
  * Seen in play (2026-11-12): the フシギダネ name bar on the entry page.
  */
 void Pokedex_DrawEntryNameBar(s32 arg0, s32 arg1) {
-    u8 *entry = (u8 *)&D_80064C5C + D_8A12FFB8 * 0x1C;
+    unk_D_8006FF00* entry = (unk_D_8006FF00*)((u8*)&D_80064C5C + D_8A12FFB8 * 0x1C);
 
     Ui_FillRectPrimEnvColor(arg0, arg1, 0x21C, 0x78, *(Rgba8A100F20 *)D_8A1057F8, *(Rgba8A100F20 *)D_8A1057FC);
     func_8001AB6C();
     func_8001A384(0x10, 0);
     Font_SetLineHeight(0x24);
-    if (func_800231C8(D_8A12FFB0, entry[0]) >= 2) {
-        func_8001A944(arg0 + 0x2A, arg1 + 0xC, M2C_FIELD(entry, char **, 0x18));
+    if (func_800231C8(D_8A12FFB0, entry->unk_00) >= 2) {
+        func_8001A944(arg0 + 0x2A, arg1 + 0xC, (char*)entry->unk_18);
     } else {
         func_8001A944(arg0 + 0x2A, arg1 + 0xC, D_8A12FD1C);
     }
