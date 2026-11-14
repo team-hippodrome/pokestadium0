@@ -3,7 +3,7 @@
 
 // Declared here instead of in a header: the callers of these disagree on their types.
 M2C_UNK func_81111DC8(s8 *);
-extern Entry811151C8 D_81184668[];
+extern SeqPlayer811151C8 D_81184668[];
 void AudioPlayback_NotePoolClear(s8*);
 void func_8110FD90(s32 cmd, s8 arg1);
 void func_8110FDF0(void);
@@ -16,7 +16,7 @@ u16 AudioSeq_GetScriptControlFlowArgument(u8** stream, u8 kind);
 s32 AudioSeq_HandleScriptFlowControl(void*, void*, s32, s32);
 void AudioSeq_SequencePlayerSetupChannels(s8* arg0, u16 mask);
 void AudioSeq_SequencePlayerDisable(u8* arg0);
-void func_81112B84(Item8111539C*);
+void func_81112B84(Channel8111539C*);
 
 typedef struct ScriptState81114B54 {
     /* 0x00 */ u8* pc;
@@ -268,11 +268,11 @@ void func_81114B54(SeqPlayer81114B54* seq_player) {
                         }
                         break;
                     case 0x40:
-                        func_81112B84((Item8111539C*)seq_player->channels[lo_bits]);
+                        func_81112B84((Channel8111539C*)seq_player->channels[lo_bits]);
                         break;
                     case 0x90:
                         temp = AudioSeq_ScriptReadS16(&state->pc);
-                        AudioSeq_SequenceChannelEnable((Particle2D68**)seq_player, lo_bits, (s32)(seq_player->seqData + temp));
+                        AudioSeq_SequenceChannelEnable((Channel81112D68**)seq_player, lo_bits, (s32)(seq_player->seqData + temp));
                         break;
                     case 0x60:
                     case 0xA0:
@@ -293,7 +293,7 @@ void func_811151C8(s32 arg0) {
     u32 i;
 
     for (i = 0; i < D_811858CC; i++) {
-        if (D_81184668[i].b80 == 1) {
+        if (D_81184668[i].enabled == 1) {
             func_81114B54((s8*)&D_81184668[i]);
             func_81111DC8((s8*)&D_81184668[i]);
         }
@@ -320,144 +320,144 @@ void func_81115254(s8 *arg0)
   }
 }
 
-typedef struct Chan811152A4 {
+typedef struct SeqPlayer811152A4 {
     /* 0x00 */ u8 bit80 : 1;
     /* 0x00 */ u8 bits : 5;
-    /* 0x00 */ u8 bit02 : 1;
+    /* 0x00 */ u8 stopScript : 1; // @unverified: same offset/use as OoT's SequencePlayer.stopScript (AudioSeq_ResetSequencePlayer)
     /* 0x00 */ u8 bit01 : 1;
-    /* 0x01 */ u8 unk01;
-    /* 0x02 */ u8 unk02;
+    /* 0x01 */ u8 state; // @unverified: same offset/use as OoT's SequencePlayer.state (AudioSeq_ResetSequencePlayer)
+    /* 0x02 */ u8 noteAllocPolicy; // @unverified: same offset/use as OoT's SequencePlayer.noteAllocPolicy (AudioSeq_ResetSequencePlayer)
     /* 0x03 */ char unk03[5];
-    /* 0x08 */ s16 unk08;
-    /* 0x0A */ s16 unk0A;
-    /* 0x0C */ s16 unk0C;
-    /* 0x0E */ s16 unk0E;
-    /* 0x10 */ s16 unk10;
-    /* 0x12 */ s16 unk12;
-    /* 0x14 */ s16 unk14;
+    /* 0x08 */ s16 tempo; // @unverified: same offset/use as OoT's SequencePlayer.tempo (AudioSeq_ResetSequencePlayer); reset to 0x1680 = 120 BPM * 48
+    /* 0x0A */ s16 tempoAcc; // @unverified: same offset/use as OoT's SequencePlayer.tempoAcc (AudioSeq_ResetSequencePlayer)
+    /* 0x0C */ s16 tempoChange; // @unverified: same offset/use as OoT's SequencePlayer.tempoChange (AudioSeq_ResetSequencePlayer)
+    /* 0x0E */ s16 transposition; // @unverified: same offset/use as OoT's SequencePlayer.transposition (AudioSeq_ResetSequencePlayer)
+    /* 0x10 */ s16 delay; // @unverified: same offset/use as OoT's SequencePlayer.delay (AudioSeq_ResetSequencePlayer)
+    /* 0x12 */ s16 fadeTimer; // @unverified: same offset/use as OoT's SequencePlayer.fadeTimer (AudioSeq_ResetSequencePlayer)
+    /* 0x14 */ s16 fadeTimerUnkEu; // @unverified: same offset/use as OoT's SequencePlayer.fadeTimerUnkEu (AudioSeq_ResetSequencePlayer)
     /* 0x16 */ char unk16[6];
-    /* 0x1C */ f32 unk1C;
-    /* 0x20 */ f32 unk20;
-    /* 0x24 */ f32 unk24;
-    /* 0x28 */ f32 unk28;
-    /* 0x2C */ f32 unk2C;
+    /* 0x1C */ f32 fadeVolume; // @unverified: same offset/use as OoT's SequencePlayer.fadeVolume (AudioSeq_ResetSequencePlayer)
+    /* 0x20 */ f32 fadeVelocity; // @unverified: same offset/use as OoT's SequencePlayer.fadeVelocity (AudioSeq_ResetSequencePlayer)
+    /* 0x24 */ f32 volume; // @unverified: same offset/use as OoT's SequencePlayer.volume (AudioSeq_ResetSequencePlayer)
+    /* 0x28 */ f32 muteVolumeScale; // @unverified: same offset/use as OoT's SequencePlayer.muteVolumeScale (AudioSeq_ResetSequencePlayer)
+    /* 0x2C */ f32 fadeVolumeScale; // @unverified: same offset/use as OoT's SequencePlayer.fadeVolumeScale (AudioSeq_ResetSequencePlayer)
     /* 0x30 */ char unk30[4];
-    /* 0x34 */ void* items[16];
+    /* 0x34 */ void* channels[16]; // @unverified: same offset/use as OoT's SequencePlayer.channels (AudioSeq_ResetSequencePlayer)
     /* 0x74 */ char unk74[0x1C];
-    /* 0x90 */ void* unk90;
-    /* 0x94 */ void* unk94;
+    /* 0x90 */ void* shortNoteVelocityTable; // @unverified: same offset/use as OoT's SequencePlayer.shortNoteVelocityTable (AudioSeq_ResetSequencePlayer)
+    /* 0x94 */ void* shortNoteGateTimeTable; // @unverified: same offset/use as OoT's SequencePlayer.shortNoteGateTimeTable (AudioSeq_ResetSequencePlayer)
     /* 0x98 */ char unk98[0x44];
-    /* 0xDC */ s32 unkDC;
+    /* 0xDC */ s32 scriptCounter; // @unverified: same offset/use as OoT's SequencePlayer.scriptCounter (AudioSeq_ResetSequencePlayer)
     /* 0xE0 */ char unkE0[0x7C];
-} Chan811152A4; // size = 0x15C
+} SeqPlayer811152A4; // size = 0x15C
 extern u8 D_81136978[];
 extern u8 D_81136988[];
 void AudioSeq_InitSequenceChannel(void*);
 void func_811152A4(s32 arg0) {
-    Chan811152A4* chan = (Chan811152A4*)&D_81184668[arg0];
+    SeqPlayer811152A4* chan = (SeqPlayer811152A4*)&D_81184668[arg0];
     s32 i;
 
     AudioSeq_SequencePlayerDisable((u8*)chan);
-    chan->bit02 = 0;
-    chan->unk10 = 0;
-    chan->unk01 = 1;
-    chan->unk12 = 0;
-    chan->unk14 = 0;
-    chan->unk0A = 0;
-    chan->unk08 = 0x1680;
-    chan->unk0C = 0;
-    chan->unk0E = 0;
-    chan->unk02 = 0;
-    chan->unk90 = D_81136978;
-    chan->unk94 = D_81136988;
-    chan->unkDC = 0;
-    chan->unk1C = 1.0f;
-    chan->unk2C = 1.0f;
-    chan->unk20 = 0.0f;
-    chan->unk24 = 0.0f;
-    chan->unk28 = 0.5f;
+    chan->stopScript = 0;
+    chan->delay = 0;
+    chan->state = 1;
+    chan->fadeTimer = 0;
+    chan->fadeTimerUnkEu = 0;
+    chan->tempoAcc = 0;
+    chan->tempo = 0x1680;
+    chan->tempoChange = 0;
+    chan->transposition = 0;
+    chan->noteAllocPolicy = 0;
+    chan->shortNoteVelocityTable = D_81136978;
+    chan->shortNoteGateTimeTable = D_81136988;
+    chan->scriptCounter = 0;
+    chan->fadeVolume = 1.0f;
+    chan->fadeVolumeScale = 1.0f;
+    chan->fadeVelocity = 0.0f;
+    chan->volume = 0.0f;
+    chan->muteVolumeScale = 0.5f;
     for (i = 0; i < 16; i++) {
-        AudioSeq_InitSequenceChannel(chan->items[i]);
+        AudioSeq_InitSequenceChannel(chan->channels[i]);
     }
 }
 
-typedef struct Rec8111539C {
+typedef struct SeqPlayer8111539C {
     /* 0x00 */ char unk00[0x34];
-    /* 0x34 */ Item8111539C* items[16];
+    /* 0x34 */ Channel8111539C* channels[16]; // @unverified: same offset/use as OoT's SequencePlayer.channels (0xD4-byte channels allocated here)
     /* 0x74 */ char unk74[0xE8];
-} Rec8111539C;
+} SeqPlayer8111539C;
 extern u8 D_811842C0[];
-extern Item8111539C D_81184850;
+extern Channel8111539C D_81184850;
 void* func_811097E8(void*, s32);
 void func_8111539C(s32 arg0) {
-    Rec8111539C* rec = (Rec8111539C*)&D_81184668[arg0];
+    SeqPlayer8111539C* rec = (SeqPlayer8111539C*)&D_81184668[arg0];
     s32 i;
     s32 j;
-    Item8111539C* item;
+    Channel8111539C* item;
 
     for (i = 0; i < 16; i++) {
-        rec->items[i] = func_811097E8(D_811842C0, 0xD4);
-        if (rec->items[i] == NULL) {
-            rec->items[i] = &D_81184850;
+        rec->channels[i] = func_811097E8(D_811842C0, 0xD4);
+        if (rec->channels[i] == NULL) {
+            rec->channels[i] = &D_81184850;
         } else {
-            item = rec->items[i];
-            item->active = 0;
-            item->owners[0] = rec;
+            item = rec->channels[i];
+            item->enabled = 0;
+            item->seqPlayer = rec;
             for (j = 0; j < 1; j++) {
-                item->owners[j + 1] = NULL;
+                item->layers[j] = NULL;
             }
         }
     }
 }
 
-typedef struct Emu81115480 {
-    u8 b80 : 1;
+typedef struct Layer81115480 {
+    u8 enabled : 1; // @unverified: cleared for every layer in AudioSeq_InitSequencePlayers, OoT's SequenceLayer.enabled
     u8 rest : 7;
     char pad01[0x53];
-    s32 unk54;
+    s32 channel; // @unverified: same offset/use as OoT's SequenceLayer.channel (cleared in AudioSeq_InitSequencePlayers)
     char pad58[0x2C];
-} Emu81115480; // size = 0x84
-typedef struct Rec81115480 {
-    u8 b80 : 1;
+} Layer81115480; // size = 0x84
+typedef struct SeqPlayer81115480 {
+    u8 enabled : 1; // @unverified: same offset/use as OoT's SequencePlayer.enabled (AudioSeq_InitSequencePlayers)
     u8 b40 : 1;
-    u8 b20 : 1;
-    u8 b10 : 1;
-    u8 b08 : 1;
+    u8 muted : 1; // @unverified: same offset/use as OoT's SequencePlayer.muted (AudioSeq_InitSequencePlayers)
+    u8 seqDmaInProgress : 1; // @unverified: same offset/use as OoT's SequencePlayer.seqDmaInProgress (AudioSeq_InitSequencePlayers)
+    u8 fontDmaInProgress : 1; // @unverified: same offset/use as OoT's SequencePlayer.fontDmaInProgress (AudioSeq_InitSequencePlayers)
     u8 b04 : 1;
     u8 b02 : 1;
     u8 b01 : 1;
     u8 pad01[2];
-    u8 unk03;
+    u8 muteBehavior; // @unverified: same offset/use as OoT's SequencePlayer.muteBehavior (AudioSeq_InitSequencePlayers); 0x60 = stop notes | soften
     char pad04[0x30];
-    Item8111539C* items[16];
+    Channel8111539C* channels[16]; // @unverified: same offset/use as OoT's SequencePlayer.channels (AudioSeq_InitSequencePlayers)
     char pad74[0x24];
-    u8 unk98[0xBC];
-    s8 unk154;
+    u8 notePool[0xBC]; // @unverified: same offset/use as OoT's SequencePlayer.notePool (AudioSeq_InitSequencePlayers)
+    s8 seqScriptIO0; // @unverified: first byte of the script IO array (SeqPlayer81114B54.soundScriptIO), set to -1 in AudioSeq_InitSequencePlayers
     char pad155[7];
-} Rec81115480; // size = 0x15C
+} SeqPlayer81115480; // size = 0x15C
 void AudioPlayback_InitNoteLists(void*);
 void func_81115480(void) {
     s32 i;
     s32 j;
-    Rec81115480* rec;
+    SeqPlayer81115480* rec;
 
     AudioSeq_InitLayerFreelist();
     for (i = 0; i < 1; i++) {
-        ((Emu81115480*)D_811847C8)[i].unk54 = 0;
-        ((Emu81115480*)D_811847C8)[i].b80 = 0;
+        ((Layer81115480*)D_811847C8)[i].channel = 0;
+        ((Layer81115480*)D_811847C8)[i].enabled = 0;
     }
     for (i = 0; i < 1; i++) {
-        rec = (Rec81115480*)&D_81184668[i];
+        rec = (SeqPlayer81115480*)&D_81184668[i];
         for (j = 0; j < 16; j++) {
-            rec->items[j] = &D_81184850;
+            rec->channels[j] = &D_81184850;
         }
-        rec->unk154 = -1;
-        rec->unk03 = 0x60;
-        rec->b80 = 0;
-        rec->b20 = 0;
-        rec->b08 = 0;
-        rec->b10 = 0;
-        AudioPlayback_InitNoteLists(rec->unk98);
+        rec->seqScriptIO0 = -1;
+        rec->muteBehavior = 0x60;
+        rec->enabled = 0;
+        rec->muted = 0;
+        rec->fontDmaInProgress = 0;
+        rec->seqDmaInProgress = 0;
+        AudioPlayback_InitNoteLists(rec->notePool);
         func_811152A4(i);
     }
 }

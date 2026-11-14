@@ -2,11 +2,11 @@
 #include "audio_and_gb_emulator.h"
 
 // Declared here instead of in a header: the callers of these disagree on their types.
-extern Entry811151C8 D_81184668[];
+extern SeqPlayer811151C8 D_81184668[];
 extern AudioBufferParameters D_811858B8;
 extern volatile u32 D_811859D4;
 void AudioPlayback_NotePoolClear(s8*);
-void AudioPlayback_SeqLayerNoteDecay(Particle31FlagsA*);
+void AudioPlayback_SeqLayerNoteDecay(SeqLayerFlags*);
 void AudioSeq_AudioListPushBack(s8 *arg0, s8 *arg1);
 
 extern u8 D_81138690[];
@@ -57,11 +57,11 @@ extern u8 D_81138B40[0x10];
 extern u32 D_81138B50[9];
 extern s32 D_81138B80;
 extern GbAudioStream D_81138B84;
-extern struct GbEmuListZ D_81184928;
-extern GbEmuListZ D_81184928;
-extern GbEmuEntryZ D_811847C8[1];
+extern struct AudioListItem D_81184928;
+extern AudioListItem D_81184928;
+extern SeqLayer811847C8 D_811847C8[1];
 extern s16 D_811858CC;
-extern Entry811151C8 D_81184668[];
+extern SeqPlayer811151C8 D_81184668[];
 
 /**
  * Reads the argument of a control-flow command of kind `kind` from the script stream. Zelda 64 audio driver (seqplayer.c), same position and shape.
@@ -170,7 +170,7 @@ s32 AudioSeq_HandleScriptFlowControl(SeqPlayer811126B8* seq_player, SeqScriptSta
     return 0;
 }
 
-extern Item8111539C D_81184850;
+extern Channel8111539C D_81184850;
 
 void AudioPlayback_InitNoteLists(void*);
 typedef struct ChannelFlags81112894 {
@@ -194,7 +194,7 @@ void AudioSeq_InitSequenceChannel(void* obj) {
     s8* arg0 = obj;
     s32 i;
 
-    if ((Item8111539C*)arg0 != &D_81184850) {
+    if ((Channel8111539C*)arg0 != &D_81184850) {
         ((ChannelFlags81112894*)arg0)->enabled = 0;
         ((ChannelFlags81112894*)arg0)->finished = 0;
         ((ChannelFlags81112894*)arg0)->stopScript = 0;
@@ -241,7 +241,7 @@ void AudioSeq_InitSequenceChannel(void* obj) {
     }
 }
 
-extern struct GbEmuListZ D_81184928;
+extern struct AudioListItem D_81184928;
 typedef struct AdsrSettings811129E0 { u8 decayIndex; u8 pad[3]; s32 envelope; } AdsrSettings811129E0; // @unverified: same offset as OoT's AdsrSettings.envelope
 typedef struct Layer811129E0 {
     u8 enabled : 1; // @unverified: same bit/use as OoT's SequenceLayer.enabled (AudioSeq_SeqChannelSetLayer)
@@ -338,11 +338,11 @@ s32 AudioSeq_SeqChannelSetLayer(Channel811129E0* arg0, s32 arg1) {
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
-void AudioSeq_SeqLayerDisable(Particle31FlagsA* arg0) {
+void AudioSeq_SeqLayerDisable(SeqLayerFlags* arg0) {
     if (arg0 != NULL) {
         AudioPlayback_SeqLayerNoteDecay(arg0);
-        arg0->b80 = 0;
-        arg0->b40 = 1;
+        arg0->enabled = 0;
+        arg0->finished = 1;
     }
 }
 
@@ -357,7 +357,7 @@ void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1) {
 
     if (temp != NULL) {
         AudioSeq_AudioListPushBack((s8*)&D_81184928, temp + 0x74);
-        AudioSeq_SeqLayerDisable((Particle31FlagsA*)temp);
+        AudioSeq_SeqLayerDisable((SeqLayerFlags*)temp);
         arg0[arg1 + 0x14] = NULL;
     }
 }
@@ -370,8 +370,8 @@ void Particle31_ResetAllSlots(DisplayObject* arg0) {
         AudioSeq_SeqLayerFree(arg0, i);
     }
     AudioPlayback_NotePoolClear((s8*)arg0 + 0x84);
-    ((Particle31Flags*)arg0)->b80 = 0;
-    ((Particle31Flags*)arg0)->b40 = 1;
+    ((SeqChannelFlags*)arg0)->enabled = 0;
+    ((SeqChannelFlags*)arg0)->finished = 1;
 }
 
 /**
@@ -395,7 +395,7 @@ void AudioSeq_SequencePlayerSetupChannels(s8* arg0, u16 mask) {
     }
 }
 
-void func_81112B84(Item8111539C*);
+void func_81112B84(Channel8111539C*);
 
 /**
  * Disables each channel selected in `channel_bits`. Zelda 64 audio driver.
@@ -404,11 +404,11 @@ void func_81112B84(Item8111539C*);
  * @unverified Name and comment guessed from the code.
  */
 void AudioSeq_SequencePlayerDisableChannels(u8* seqPlayer, s32 channel_bits) {
-    Item8111539C* channel;
+    Channel8111539C* channel;
     s32 i;
 
     for (i = 0; i < 16; i++) {
-        channel = M2C_FIELD(seqPlayer, Item8111539C**, 0x34 + i * 4);
+        channel = M2C_FIELD(seqPlayer, Channel8111539C**, 0x34 + i * 4);
         if (((u32)channel != (u32)&D_81184850) == 1) {
             func_81112B84(channel);
         }
@@ -421,17 +421,17 @@ void AudioSeq_SequencePlayerDisableChannels(u8* seqPlayer, s32 channel_bits) {
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-void AudioSeq_SequenceChannelEnable(Particle2D68** arg0, u8 arg1, s32 arg2) {
-    Particle2D68* p = arg0[arg1 + 13];
+void AudioSeq_SequenceChannelEnable(Channel81112D68** arg0, u8 arg1, s32 arg2) {
+    Channel81112D68* p = arg0[arg1 + 13];
     s32 i;
 
-    p->unk_78 = 0;
-    p->unk_60 = arg2;
-    p->b80 = 1;
-    p->b40 = 0;
-    p->unk_1E = 0;
+    p->scriptDepth = 0;
+    p->scriptPc = arg2;
+    p->enabled = 1;
+    p->finished = 0;
+    p->delay = 0;
     for (i = 0; i < 4; i++) {
-        if (p->unk_50[i] != NULL) {
+        if (p->layers[i] != NULL) {
             AudioSeq_SeqLayerFree((s8**)p, i);
         }
     }
@@ -509,14 +509,14 @@ s32 AudioSeq_AudioListPopBack(s8 *arg0) {
 void AudioSeq_InitLayerFreelist(void) {
     s32 i;
 
-    D_81184928.next = &D_81184928;
     D_81184928.prev = &D_81184928;
+    D_81184928.next = &D_81184928;
     D_81184928.count = 0;
-    D_81184928.unk_0C = 0;
+    D_81184928.pool = 0;
     for (i = 0; i < 1; i++) {
-        D_811847C8[i].owner = &D_811847C8[i];
-        D_811847C8[i].next = NULL;
-        AudioSeq_AudioListPushBack((s8*)&D_81184928, (s8*)&D_811847C8[i].next);
+        D_811847C8[i].listItemValue = &D_811847C8[i];
+        D_811847C8[i].listItemPrev = NULL;
+        AudioSeq_AudioListPushBack((s8*)&D_81184928, (s8*)&D_811847C8[i].listItemPrev);
     }
 }
 
@@ -600,7 +600,7 @@ void AudioSeq_SeqLayerProcessScript(Layer8111303C* arg0) {
         if (arg0->delay >= 2) {
             arg0->delay--;
             if (!arg0->stopSomething && arg0->gateDelay >= arg0->delay) {
-                AudioPlayback_SeqLayerNoteDecay((Particle31FlagsA*)arg0);
+                AudioPlayback_SeqLayerNoteDecay((SeqLayerFlags*)arg0);
                 arg0->stopSomething = 1;
             }
         } else {
@@ -615,7 +615,7 @@ void AudioSeq_SeqLayerProcessScript(Layer8111303C* arg0) {
                     AudioSeq_SeqLayerProcessScriptStep5(arg0, ret);
                 }
                 if (arg0->stopSomething == 1 && (arg0->note != 0 || arg0->continuousNotes)) {
-                    AudioPlayback_SeqLayerNoteDecay((Particle31FlagsA*)arg0);
+                    AudioPlayback_SeqLayerNoteDecay((SeqLayerFlags*)arg0);
                 }
             }
         }
@@ -628,19 +628,19 @@ void AudioSeq_SeqLayerProcessScript(Layer8111303C* arg0) {
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-void AudioSeq_SeqLayerProcessScriptStep1(Particle3140* arg0) {
-    if (!arg0->b10) {
-        AudioPlayback_SeqLayerNoteDecay((Particle31FlagsA*)arg0);
-    } else if (arg0->unk_48 != NULL && arg0 == arg0->unk_48->unk_48) {
-        AudioPlayback_SeqLayerNoteDecay((Particle31FlagsA*)arg0);
+void AudioSeq_SeqLayerProcessScriptStep1(Layer81113140* arg0) {
+    if (!arg0->continuousNotes) {
+        AudioPlayback_SeqLayerNoteDecay((SeqLayerFlags*)arg0);
+    } else if (arg0->note != NULL && arg0 == arg0->note->wantedParentLayer) {
+        AudioPlayback_SeqLayerNoteDecay((SeqLayerFlags*)arg0);
     }
-    switch (arg0->unk_08 & ~0x80) {
+    switch (arg0->portamentoMode & ~0x80) {
         case 1:
         case 2:
-            arg0->unk_08 = 0;
+            arg0->portamentoMode = 0;
             break;
     }
-    arg0->b04 = 1;
+    arg0->notePropertiesNeedInit = 1;
 }
 
 s8* AudioPlayback_AllocNote(s8*);
@@ -700,7 +700,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep5(Layer811131CC* layer, u32 same_sound) {
     if (layer->continuousNotes != 1 || layer->note == NULL || !layer->status || same_sound != 1 ||
         layer != layer->note->parentLayer) {
         if (same_sound == 0) {
-            AudioPlayback_SeqLayerNoteDecay((Particle31FlagsA*)layer);
+            AudioPlayback_SeqLayerNoteDecay((SeqLayerFlags*)layer);
         }
         layer->note = (Note811131CC*)AudioPlayback_AllocNote((s8*)layer);
     }
@@ -796,7 +796,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep2(Layer811132E4* layer) {
             if (AudioSeq_HandleScriptFlowControl(seqPlayer, state, cmd, cmd_arg16) == 0) {
                 continue;
             }
-            AudioSeq_SeqLayerDisable((Particle31FlagsA*)layer);
+            AudioSeq_SeqLayerDisable((SeqLayerFlags*)layer);
             return -1;
         }
 
@@ -827,7 +827,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep2(Layer811132E4* layer) {
                     layer->continuousNotes = 0;
                 }
                 layer->bit1 = 0;
-                AudioPlayback_SeqLayerNoteDecay((Particle31FlagsA*)layer);
+                AudioPlayback_SeqLayerNoteDecay((SeqLayerFlags*)layer);
                 break;
             case 0xC3:
                 cmd_arg16 = AudioSeq_ScriptReadCompressedU16(&state->pc);

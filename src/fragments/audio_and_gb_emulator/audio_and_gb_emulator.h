@@ -445,63 +445,73 @@ typedef struct GbStereoSample {
     /* 0x2 */ s16 right;
 } GbStereoSample;
 
-typedef struct Particle31FlagsA {
-    u8 b80 : 1;
-    u8 b40 : 1;
-} Particle31FlagsA;
+typedef struct SeqLayerFlags {
+    u8 enabled : 1; // @unverified: cleared by AudioSeq_SeqLayerDisable, OoT's SequenceLayer.enabled
+    u8 finished : 1; // @unverified: set by AudioSeq_SeqLayerDisable, OoT's SequenceLayer.finished
+} SeqLayerFlags;
 
-typedef struct Particle31Flags {
-    u8 b80 : 1;
-    u8 b40 : 1;
-} Particle31Flags;
+typedef struct SeqChannelFlags {
+    u8 enabled : 1; // @unverified: cleared when a channel is disabled, OoT's SequenceChannel.enabled
+    u8 finished : 1; // @unverified: set when a channel is disabled, OoT's SequenceChannel.finished
+} SeqChannelFlags;
 
-typedef struct Particle2D68 {
-    u8 b80 : 1;
-    u8 b40 : 1;
+typedef struct Channel81112D68 {
+    u8 enabled : 1; // @unverified: set by AudioSeq_SequenceChannelEnable, OoT's SequenceChannel.enabled
+    u8 finished : 1; // @unverified: cleared by AudioSeq_SequenceChannelEnable, OoT's SequenceChannel.finished
     char pad01[0x1E - 1];
-    s16 unk_1E;
+    s16 delay; // @unverified: same offset/use as OoT's SequenceChannel.delay (zeroed on enable)
     char pad20[0x50 - 0x20];
-    s8* unk_50[4];
-    s32 unk_60;
+    s8* layers[4]; // @unverified: same offset/use as OoT's SequenceChannel.layers
+    s32 scriptPc; // @unverified: same offset/use as OoT's SequenceChannel.scriptState.pc (script start)
     char pad64[0x78 - 0x64];
-    u8 unk_78;
-} Particle2D68;
+    u8 scriptDepth; // @unverified: same offset/use as OoT's SequenceChannel.scriptState.depth
+} Channel81112D68;
 
-typedef struct GbEmuListZ {
-    /* 0x00 */ void* next;
-    /* 0x04 */ void* prev;
-    /* 0x08 */ s32 count;
-    /* 0x0C */ s32 unk_0C;
-} GbEmuListZ; // size = 0x10
+/* A node or head of a circular list (D_81184928 is the free list of sequence layers). */
+typedef struct AudioListItem {
+    /* 0x00 */ void* prev; // @unverified: same offset/use as OoT's AudioListItem.prev (NULL when not on a list)
+    /* 0x04 */ void* next; // @unverified: same offset/use as OoT's AudioListItem.next
+    /* 0x08 */ s32 count; // @unverified: same offset/use as OoT's AudioListItem.u.count (list heads)
+    /* 0x0C */ s32 pool; // @unverified: same offset/use as OoT's AudioListItem.pool
+} AudioListItem; // size = 0x10
 
-typedef struct GbEmuEntryZ {
+/* A sequence layer (D_811847C8[]), only its list item. */
+typedef struct SeqLayer811847C8 {
     /* 0x00 */ u8 pad00[0x74];
-    /* 0x74 */ void* next;
-    /* 0x78 */ void* prev;
-    /* 0x7C */ struct GbEmuEntryZ* owner;
-    /* 0x80 */ s32 unk_80;
-} GbEmuEntryZ; // size = 0x84
+    /* 0x74 */ void* listItemPrev; // @unverified: same use as OoT's SequenceLayer.listItem.prev (cleared before the push)
+    /* 0x78 */ void* listItemNext;
+    /* 0x7C */ struct SeqLayer811847C8* listItemValue; // @unverified: points back at the layer, OoT's listItem.u.value
+    /* 0x80 */ s32 listItemPool;
+} SeqLayer811847C8; // size = 0x84
 
-typedef struct Particle3140 {
-    u32 b80 : 1;
-    u32 b40 : 1;
-    u32 b20 : 1;
-    u32 b10 : 1;
-    u32 b08 : 1;
-    u32 b04 : 1;
+struct Layer81113140;
+
+/* The note a layer plays, as AudioSeq_SeqLayerProcessScriptStep1 sees it. */
+typedef struct Note81113140 {
+    /* 0x00 */ char pad00[0x48];
+    /* 0x48 */ struct Layer81113140* wantedParentLayer; // @unverified: same offset/use as OoT's Note.playbackState.wantedParentLayer
+} Note81113140;
+
+typedef struct Layer81113140 {
+    u32 enabled : 1;
+    u32 finished : 1;
+    u32 stopSomething : 1;
+    u32 continuousNotes : 1; // @unverified: same bit/use as OoT's SequenceLayer.continuousNotes (AudioSeq_SeqLayerProcessScriptStep1)
+    u32 bit3 : 1;
+    u32 notePropertiesNeedInit : 1; // @unverified: set at the end of AudioSeq_SeqLayerProcessScriptStep1, as OoT's SequenceLayer.notePropertiesNeedInit
     u32 rest : 26;
     char pad04[4];
-    u8 unk_08;
+    u8 portamentoMode; // @unverified: same offset/use as OoT's SequenceLayer.portamento.mode (modes 1 and 2 reset to 0)
     char pad09[0x48 - 0x09];
-    struct Particle3140* unk_48;
-} Particle3140;
+    Note81113140* note; // @unverified: same offset/use as OoT's SequenceLayer.note
+} Layer81113140;
 
 struct SeqPlayer81114B54;
 
-typedef struct Entry811151C8 {
-    u32 b80 : 1;
+typedef struct SeqPlayer811151C8 {
+    u32 enabled : 1; // @unverified: players with this bit are stepped each update, OoT's SequencePlayer.enabled
     char pad[0x15C - 4];
-} Entry811151C8;
+} SeqPlayer811151C8;
 
 /* Struct types that were defined identically in each of these files; this is
  * now the one definition they all include:
@@ -509,11 +519,11 @@ typedef struct Entry811151C8 {
  * src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81113A44.c
  */
 
-typedef struct AudioStreamFlags {
+typedef struct ChannelFlags81113EF4 {
     u8 pad0 : 4;
-    u8 active : 1;
+    u8 hasInstrument : 1; // @unverified: cleared when the instrument lookup fails, OoT's SequenceChannel.hasInstrument (AudioSeq_SetInstrument)
     u8 pad1 : 3;
-} AudioStreamFlags;
+} ChannelFlags81113EF4;
 
 /* Struct types that were defined identically in each of these files; this is
  * now the one definition they all include:
@@ -521,12 +531,13 @@ typedef struct AudioStreamFlags {
  * src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81114B54.c
  */
 
-typedef struct Item8111539C {
-    /* 0x00 */ u32 active : 1;
+typedef struct Channel8111539C {
+    /* 0x00 */ u32 enabled : 1; // @unverified: cleared when the channel is allocated, OoT's SequenceChannel.enabled
     /* 0x00 */ u32 unk00 : 31;
     /* 0x04 */ char unk04[0x48];
-    /* 0x4C */ void* owners[2];
-} Item8111539C;
+    /* 0x4C */ void* seqPlayer; // @unverified: same offset/use as OoT's SequenceChannel.seqPlayer
+    /* 0x50 */ void* layers[1]; // @unverified: same offset as OoT's SequenceChannel.layers (only layers[0] is cleared here)
+} Channel8111539C;
 
 // Yay0 files in fragment1_misc_yay0 (retail ROM 0xADC80), named by their retail ROM address.
 // Offsets from the segment rather than fixed addresses, so they follow it when an earlier
@@ -625,9 +636,9 @@ extern u8 D_8115265C[0x24];
 
 extern u8 D_81152680[0x24];
 
-extern struct GbEmuListZ D_81184928;
+extern struct AudioListItem D_81184928;
 
-extern GbEmuEntryZ D_811847C8[1];
+extern SeqLayer811847C8 D_811847C8[1];
 
 extern s16 D_811858CC;
 
@@ -653,15 +664,15 @@ void BattleAnim_ClearEffectStateFlag(void);
 void AudioPlayback_ProcessNotes(void);
 
 // audio_seqplayer.c
-void AudioSeq_SeqLayerDisable(Particle31FlagsA* arg0);
+void AudioSeq_SeqLayerDisable(SeqLayerFlags* arg0);
 void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1);
 void Particle31_ResetAllSlots(DisplayObject* arg0);
-void AudioSeq_SequenceChannelEnable(Particle2D68** arg0, u8 arg1, s32 arg2);
+void AudioSeq_SequenceChannelEnable(Channel81112D68** arg0, u8 arg1, s32 arg2);
 s32 AudioSeq_AudioListPopBack(s8 *arg0);
 void AudioSeq_InitLayerFreelist(void);
 u8 AudioSeq_ScriptReadU8(u8 **arg0);
 s16 AudioSeq_ScriptReadS16(u8** arg0);
-void AudioSeq_SeqLayerProcessScriptStep1(Particle3140* arg0);
+void AudioSeq_SeqLayerProcessScriptStep1(Layer81113140* arg0);
 
 // audio_seqplayer_2.c
 /*

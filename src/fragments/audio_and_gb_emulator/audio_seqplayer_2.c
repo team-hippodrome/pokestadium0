@@ -202,11 +202,11 @@ void func_81113EF4(u8* arg0, u8 arg1) {
     } else {
         ret = M2C_FIELD(arg0, s16*, 0x22) = func_81113E84(arg0, arg1, (u8**)(arg0 + 0x48), arg0 + 0x7C);
         if (ret == 0) {
-            ((AudioStreamFlags*)arg0)->active = 0;
+            ((ChannelFlags81113EF4*)arg0)->hasInstrument = 0;
             return;
         }
     }
-    ((AudioStreamFlags*)arg0)->active = 1;
+    ((ChannelFlags81113EF4*)arg0)->hasInstrument = 1;
 }
 
 void func_81113F84(u8* arg0, u8 arg1) {
@@ -725,7 +725,7 @@ void func_81113FA8(Channel81113FA8* channel) {
                     break;
                 case 0x20:
                     offset = AudioSeq_ScriptReadS16(&scriptState->pc);
-                    AudioSeq_SequenceChannelEnable((Particle2D68**)seqPlayer, low_bits, (s32)&seqPlayer->seqData[offset]);
+                    AudioSeq_SequenceChannelEnable((Channel81112D68**)seqPlayer, low_bits, (s32)&seqPlayer->seqData[offset]);
                     break;
                 case 0x30:
                     command = AudioSeq_ScriptReadU8(&scriptState->pc);
