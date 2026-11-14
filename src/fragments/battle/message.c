@@ -18,7 +18,7 @@ void func_8211F3E4(void);
 void func_8211F3EC(void);
 void BattleScene_ResetMessageQueue(void);
 
-void func_8211B484(TeamRoster*, s32, s32, s32);
+void BattleMenu_DrawRosterPanel(TeamRoster*, s32, s32, s32);
 void BattleMenu_DrawSwitchPanel(ActivePokemon*, s32, s32, s32);
 void BattleMenu_DrawConfirmButton(ActivePokemon*, s32, s32, s32);
 void BattleMenu_DrawBackConfirmBar(ActivePokemon*, s32, s32, s32);
@@ -42,10 +42,10 @@ void BattleMenu_DrawSide0Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
             case 2:
                 if (arg1->showingCommandOptions == 1) {
                     if ((arg0->side->tagTeamSize == 2) && (arg0->teamRoster->numberOfPokemonBrought == 3)) {
-                        func_8211B484(arg0->side->teamMember[0], 0x60, 0xF, arg0->side->teamMember[0]->controllerPort);
-                        func_8211B484(arg0->side->teamMember[1], 0xC6, 0xF, arg0->side->teamMember[1]->controllerPort);
+                        BattleMenu_DrawRosterPanel(arg0->side->teamMember[0], 0x60, 0xF, arg0->side->teamMember[0]->controllerPort);
+                        BattleMenu_DrawRosterPanel(arg0->side->teamMember[1], 0xC6, 0xF, arg0->side->teamMember[1]->controllerPort);
                     } else if (arg0->teamRoster->numberOfPokemonBrought == 3) {
-                        func_8211B484(arg0->side->teamMember[0], 0x60, 0xF, sp2C->controllerPort);
+                        BattleMenu_DrawRosterPanel(arg0->side->teamMember[0], 0x60, 0xF, sp2C->controllerPort);
                     } else {
                         BattleMenu_DrawSwitchPanel(arg0, 0x60, 0xF, sp2C->controllerPort);
                     }
@@ -90,10 +90,10 @@ void BattleMenu_DrawSide1Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
             case 2:
                 if (arg1->showingCommandOptions == 1) {
                     if ((arg0->side->tagTeamSize == 2) && (arg0->teamRoster->numberOfPokemonBrought == 3)) {
-                        func_8211B484(arg0->side->teamMember[0], 0x16, 0x79, arg0->side->teamMember[0]->controllerPort);
-                        func_8211B484(arg0->side->teamMember[1], 0x7C, 0x79, arg0->side->teamMember[1]->controllerPort);
+                        BattleMenu_DrawRosterPanel(arg0->side->teamMember[0], 0x16, 0x79, arg0->side->teamMember[0]->controllerPort);
+                        BattleMenu_DrawRosterPanel(arg0->side->teamMember[1], 0x7C, 0x79, arg0->side->teamMember[1]->controllerPort);
                     } else if (arg0->teamRoster->numberOfPokemonBrought == 3) {
-                        func_8211B484(arg0->side->teamMember[0], 0x7C, 0x79, sp2C->controllerPort);
+                        BattleMenu_DrawRosterPanel(arg0->side->teamMember[0], 0x7C, 0x79, sp2C->controllerPort);
                     } else {
                         BattleMenu_DrawSwitchPanel(arg0, 0x18, 0x79, sp2C->controllerPort);
                     }
@@ -426,10 +426,10 @@ void BattleScene_ResetMessageQueue(void) {
 }
 
 void func_8211F1E0(ActivePokemon*, ActivePokemonState*, ActivePokemonState*);
-void func_8211CC8C(ActivePokemon*, ActivePokemonState*, ActivePokemonState*);
+void BattleText_DrawTextBox(ActivePokemon*, ActivePokemonState*, ActivePokemonState*);
 void func_8211D3A8(void);
-void func_8211D06C(void);
-void func_8211C9FC(ActivePokemon*, ActivePokemonState*, ActivePokemonState*);
+void BattleText_DrawTextBoxFrame(void);
+void BattleHud_DrawActingPokemonNickname(ActivePokemon*, ActivePokemonState*, ActivePokemonState*);
 
 /**
  * Draws the battle HUD for the current camera mode.
@@ -466,11 +466,11 @@ void Battle_RenderHud(void) {
             break;
         case 9:
         case 10:
-            func_8211CC8C(sActivePokemon[0], s0, s1);
-            func_8211D06C();
+            BattleText_DrawTextBox(sActivePokemon[0], s0, s1);
+            BattleText_DrawTextBoxFrame();
             break;
         case 7:
-            func_8211C9FC(sActivePokemon[0], s0, s1);
+            BattleHud_DrawActingPokemonNickname(sActivePokemon[0], s0, s1);
             break;
     }
 }

@@ -10,9 +10,9 @@ M2C_UNK func_821079E8(M2C_UNK);
 M2C_UNK func_8212189C();
 M2C_UNK func_821224F4();
 M2C_UNK BattleScene_FrameParticipantImpact(s32, s32, f32);
-M2C_UNK func_821243DC(s32, s32, f32);
-M2C_UNK func_82124544(s32, s32, f32, f32, f32, f32, s32);
-M2C_UNK func_82124664(s32, s32, M2C_UNK);
+M2C_UNK BattleScene_StepImpactFraming(s32, s32, f32);
+M2C_UNK BattleScene_StartOrbitFraming(s32, s32, f32, f32, f32, f32, s32);
+M2C_UNK BattleScene_StepOrbitFraming(s32, s32, M2C_UNK);
 M2C_UNK func_82124A40();
 extern s32 D_82199DE0;
 extern u8 D_82199F31;
@@ -30,7 +30,7 @@ void BattleAi_RecordUsedMove(s32, s32, s32);
 extern s32 D_82199DE0;
 M2C_UNK func_800419F8();
 void func_82121D8C(s32, s32, s8 *);
-void func_82133868(ActivePokemonState*);
+void DemoBattle_SetupDemoMove(ActivePokemonState*);
 f32 func_8000F23C(f32, f32, f32, f32);
 void func_8210C104(s16*, s16, s16);
 void ModelAnim_SetFrame(DisplayObject* display_object, s16 animation_timer);
@@ -567,7 +567,7 @@ void BattleScene_ActionSetupAnimationVariantB(CameraNode* arg0) {
             break;
 
         case 1:
-            func_821243DC((s32)arg0, sOtherPokemon, 0.0f);
+            BattleScene_StepImpactFraming((s32)arg0, sOtherPokemon, 0.0f);
             if (sBattleScene.scene->orbitDistance <= 1.0f) {
                 BattleScene_CleanupParticipantEffectMode(sActingPokemon);
                 sBattleScene.scene->phaseStep++;
@@ -595,7 +595,7 @@ void BattleScene_ImpactCameraAbove(CameraNode* camera) {
             break;
         case 1:
             if (BattleAnim_IsModelBusy(sOtherPokemon) == 0) {
-                func_821243DC((s32)camera, sOtherPokemon, BattleScene_GetParticipantHeight(sOtherPokemon) * 2.0f);
+                BattleScene_StepImpactFraming((s32)camera, sOtherPokemon, BattleScene_GetParticipantHeight(sOtherPokemon) * 2.0f);
                 if (sBattleScene.scene->orbitDistance <= 1.0f) {
                     BattleScene_CleanupParticipantEffectMode(sActingPokemon);
                     sBattleScene.scene->phaseStep++;
@@ -625,7 +625,7 @@ void BattleScene_ImpactCameraBelow(s32 camera) {
         BattleScene_FrameParticipantImpact(camera, sOtherPokemon, -BattleScene_GetParticipantHeight(sOtherPokemon) * D_FLT_821963A0);
         return;
     case 1:
-        func_821243DC(camera, sOtherPokemon, -BattleScene_GetParticipantHeight(sOtherPokemon) * D_FLT_821963A4);
+        BattleScene_StepImpactFraming(camera, sOtherPokemon, -BattleScene_GetParticipantHeight(sOtherPokemon) * D_FLT_821963A4);
         if (sBattleScene.scene->orbitDistance <= 1.0f) {
             func_82106374(sActingPokemon);
             func_82125570();
@@ -637,7 +637,7 @@ void BattleScene_ImpactCameraBelow(s32 camera) {
 }
 
 /**
- * Impact camera variant 3: orbits the target (func_82124544 with 8, 6, 2.5, 6 and angle 0)
+ * Impact camera variant 3: orbits the target (BattleScene_StartOrbitFraming with 8, 6, 2.5, 6 and angle 0)
  * until the zoom is close to the stored distance, then advances the phase step.
  * @unverified Name guessed from the code.
  */
@@ -651,10 +651,10 @@ void BattleScene_ImpactCameraOrbit(CameraNode* camera) {
         func_8213B31C(1);
         func_821224F4();
         func_82125580();
-        func_82124544((s32)camera, sOtherPokemon, 8.0f, 6.0f, 2.5f, 6.0f, 0);
+        BattleScene_StartOrbitFraming((s32)camera, sOtherPokemon, 8.0f, 6.0f, 2.5f, 6.0f, 0);
         return;
     case 1:
-        func_82124664((s32)camera, sOtherPokemon, 0);
+        BattleScene_StepOrbitFraming((s32)camera, sOtherPokemon, 0);
         if (sBattleScene.scene->orbitDistance < (sBattleScene.scene->distance + D_FLT_821963A8)) {
             func_82106374(sActingPokemon);
             sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
@@ -680,10 +680,10 @@ void BattleScene_ImpactCameraWideOrbit(s32 camera) {
         func_8213B31C(1);
         func_821224F4();
         func_82125580();
-        func_82124544(camera, sOtherPokemon, 10.0f, 12.0f, 3.5f, 6.0f, 0x11C6);
+        BattleScene_StartOrbitFraming(camera, sOtherPokemon, 10.0f, 12.0f, 3.5f, 6.0f, 0x11C6);
         return;
     case 1:
-        func_82124664(camera, sOtherPokemon, 0x11C6);
+        BattleScene_StepOrbitFraming(camera, sOtherPokemon, 0x11C6);
         if (sBattleScene.scene->orbitDistance <= (sBattleScene.scene->distance + 1.0f)) {
             func_82106374(sActingPokemon);
             sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);

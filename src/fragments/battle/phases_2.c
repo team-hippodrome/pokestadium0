@@ -26,7 +26,7 @@ void BattleScene_ResidualPhaseNop(ActivePokemon*);
 void func_82106374(ActivePokemon*);
 void func_82107408(ActivePokemon*);
 void func_82108C0C(ActivePokemon*);
-void func_82124874(void*, void*);
+void BattleScene_FrameParticipantFrontAltThunk(void*, void*);
 void func_82124A40(void);
 void func_82135098(ActivePokemon*);
 
@@ -57,7 +57,7 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
                 func_82108C0C(sActingPokemon);
                 Audio_FadeAndClearStoredSounds();
                 BattleAnim_CleanupEffects(1);
-                func_82124894(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
+                BattleScene_FrameParticipantFrontWide(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
                 func_82104C68(sActivePokemon[sBattleScene.scene->actingSide], 0xD);
                 if (sp2C->statusCondition & 0x18) {
                     BattleMessage_ShowForSide((s32)gBattleMessageQueues->messageBuffers[7], sBattleScene.scene->actingSide);
@@ -80,7 +80,7 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
             break;
 
         case 2:
-            func_82124894(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
+            BattleScene_FrameParticipantFrontWide(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
             D_8219A560 = Battle_StepPartyHpToDisplay(sActivePokemon[sBattleScene.scene->actingSide]);
             D_8219A564 = Battle_StepPartyHpToDisplay(sActivePokemon[!sBattleScene.scene->actingSide]);
             if ((D_8219A560 == 1) && (D_8219A564 == 1) && (BattleScene_AdvanceCameraFrameCounterUntil(0x32) != 0)) {
@@ -104,7 +104,7 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
             break;
 
         case 3:
-            func_82124894(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
+            BattleScene_FrameParticipantFrontWide(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
             D_8219A560 = Battle_StepPartyHpToDisplay(sActivePokemon[sBattleScene.scene->actingSide]);
             D_8219A564 = Battle_StepPartyHpToDisplay(sActivePokemon[!sBattleScene.scene->actingSide]);
             if ((BattleScene_AdvanceCameraFrameCounterUntil(0x32) != 0) && (D_8219A560 == 1) && (D_8219A564 == 1)) {
@@ -122,7 +122,7 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
 
         case 5:
             func_82124A40();
-            func_82124894(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
+            BattleScene_FrameParticipantFrontWide(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
             D_8219A560 = Battle_StepPartyHpToDisplay(sActivePokemon[sBattleScene.scene->actingSide]);
             D_8219A564 = Battle_StepPartyHpToDisplay(sActivePokemon[!sBattleScene.scene->actingSide]);
             BattleScene_ResolveDisplayedHpCompletion(arg0);
@@ -155,7 +155,7 @@ void BattleScene_PhaseResidualDamageFaintCheck(CameraNode* arg0) {
             func_82108C0C(sActingPokemon);
             Audio_FadeAndClearStoredSounds();
             BattleAnim_CleanupEffects(1);
-            func_82124874(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
+            BattleScene_FrameParticipantFrontAltThunk(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
             func_82104C68(sActivePokemon[sBattleScene.scene->actingSide], 0xD);
             BattleMessage_ShowForSide((s32)gBattleMessageQueues->messageBuffers[7], sBattleScene.scene->actingSide);
             sp1C->hp = sp1C->hpAfterPoisonBurn;
@@ -164,7 +164,7 @@ void BattleScene_PhaseResidualDamageFaintCheck(CameraNode* arg0) {
             break;
 
         case 2:
-            func_82124874(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
+            BattleScene_FrameParticipantFrontAltThunk(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
             D_8219A560 = Battle_StepPartyHpToDisplay(sActivePokemon[sBattleScene.scene->actingSide]);
             D_8219A564 = 1;
 
@@ -473,7 +473,7 @@ void BattleScene_UpdatePhase(CameraNode* arg0) {
         BattleScene_PhaseDisable(arg0);
         break;
     case 23:
-        func_8212F9FC(arg0);
+        BattleScene_PhaseDrainHp(arg0);
         break;
     case 10:
         func_82130494(arg0);

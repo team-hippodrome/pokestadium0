@@ -22,7 +22,7 @@ void BattleAnim_DrawFullScreenColorOverlay(u8 arg0, u8 arg1, u8 arg2, u8 arg3) {
     gSPDisplayList(gDisplayListHead++, gDL_EndColorFill);
 }
 
-void func_8216D9D0(void);
+void BattleAnim_RenderEffectsFrameNop(void);
 void func_8216D948(s32, M2C_UNK);
 void func_8216D924(s32, M2C_UNK);
 extern Gfx D_82190100[];
@@ -57,7 +57,7 @@ void BattleAnim_RenderEffectsFrame(CameraNode* arg0) {
 
     gSPDisplayList(gDisplayListHead++, D_82190100);
 
-    func_8216D9D0();
+    BattleAnim_RenderEffectsFrameNop();
     ParticleGfx_SetPrimColor(D_8219A8BA, D_8219A8BC, D_8219A8BE, D_8219A8C0);
     ParticleGfx_SetFogColor(D_8219A8CA, D_8219A8CC, D_8219A8CE, D_8219A8D0);
     ParticleGfx_SetEnvColor(D_8219A8C2, D_8219A8C4, D_8219A8C6, D_8219A8C8);

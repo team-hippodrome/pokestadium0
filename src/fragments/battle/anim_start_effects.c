@@ -33,7 +33,7 @@ s32 Gallery_SetSceneRenderState();
 s32 Gallery_SetSceneGraphNode();
 s32 func_800303C8();
 void func_82150D1C(void);
-void func_82183DA4(void);
+void ComAi_UnusedNopC(void);
 typedef union unk_func_80026268_arg0_000_raw {
     struct {
         u8 unk_00;

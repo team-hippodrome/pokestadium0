@@ -420,42 +420,43 @@ void BattleMenu_DrawSwitchPanelEntry(TeamRoster* arg0, BattleMon* arg1, s32 arg2
 /**
  * Draws a Pokemon's HUD details at (arg2, arg3): level, HP bar and HP fraction, a gender or
  * marker icon chosen by arg4, and a status icon when it has one.
+ * @unverified Name guessed from the code.
  */
-void func_8211B208(TeamRoster* arg0, BattleMon* arg1, s32 arg2, s32 arg3, s32 arg4) {
+void BattleMenu_DrawRosterMemberDetails(TeamRoster* roster, BattleMon* mon, s32 x, s32 y, s32 member_index) {
     s32 var_t0;
 
-    BattleHud_DrawLevelNumber(arg2 + 3, arg3 + 4, arg1->level);
-    Widget_DrawMeterBar(arg2 + 0x1E, arg3 + 0xE, arg1->hp, arg1->maxHp);
-    BattleHud_DrawHpFractionText(arg2 + 0x26, arg3 + 0x14, arg1->hp, arg1->maxHp);
+    BattleHud_DrawLevelNumber(x + 3, y + 4, mon->level);
+    Widget_DrawMeterBar(x + 0x1E, y + 0xE, mon->hp, mon->maxHp);
+    BattleHud_DrawHpFractionText(x + 0x26, y + 0x14, mon->hp, mon->maxHp);
 
     gSPDisplayList(gDisplayListHead++, D_80060308);
 
-    if (arg4 == 0) {
-        Gfx_DrawTextureRgba16Ia8(arg2 + 8, arg3 + 0xD, 0x10, 0xE, D_030078C0, D_03007A80, 0x10, 0x100000);
+    if (member_index == 0) {
+        Gfx_DrawTextureRgba16Ia8(x + 8, y + 0xD, 0x10, 0xE, D_030078C0, D_03007A80, 0x10, 0x100000);
     }
-    if (arg4 == 1) {
-        Gfx_DrawTextureRgba16Ia8(arg2 + 8, arg3 + 0xD, 0x10, 0xE, D_030070E0, D_030072A0, 0x10, 0x100000);
+    if (member_index == 1) {
+        Gfx_DrawTextureRgba16Ia8(x + 8, y + 0xD, 0x10, 0xE, D_030070E0, D_030072A0, 0x10, 0x100000);
     }
-    if (arg4 == 2) {
-        Gfx_DrawTextureRgba16Ia8(arg2 + 8, arg3 + 0xD, 0x10, 0xE, D_03007380, D_03007540, 0x10, 0x100000);
+    if (member_index == 2) {
+        Gfx_DrawTextureRgba16Ia8(x + 8, y + 0xD, 0x10, 0xE, D_03007380, D_03007540, 0x10, 0x100000);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
     Font_BeginTranslucentTextRendering();
     Font_SetActive(1, 0);
-    Font_Printf(arg2 + 0x18, arg3 + 2, arg1->nickname);
+    Font_Printf(x + 0x18, y + 2, mon->nickname);
     Font_EndTexturedTextRendering();
 
-    if (arg0->pokemonPicked[arg4].hp == 0) {
+    if (roster->pokemonPicked[member_index].hp == 0) {
         var_t0 = 1;
     } else {
-        var_t0 = LabPC_StatusToIconIndex(arg0->pokemonPicked[arg4].statusCondition);
+        var_t0 = LabPC_StatusToIconIndex(roster->pokemonPicked[member_index].statusCondition);
     }
 
     if (var_t0 != 0) {
         gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
-        Gfx_DrawTextureRgba16(arg2 + 0x49, arg3 + 2, 0x18, 0xB, D_8218AFDC[var_t0], 0x18, 0);
+        Gfx_DrawTextureRgba16(x + 0x49, y + 2, 0x18, 0xB, D_8218AFDC[var_t0], 0x18, 0);
         gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
     }
 }
@@ -472,15 +473,16 @@ extern u8* D_8218AFF8[];
 /**
  * Draws a three-Pokemon roster panel at (arg1, arg2) for team arg0: each member's details
  * and name, then a drop shadow around the panel.
+ * @unverified Name guessed from the code.
  */
-void func_8211B484(TeamRoster* arg0, s16 arg1, s16 arg2, s32 arg3) {
+void BattleMenu_DrawRosterPanel(TeamRoster* roster, s16 x, s16 y, s32 color_index) {
     UNUSED s32 pad; // FAKE
     s8* sp88[] = {D_8218B02C, D_8218B044, D_8218B05C, D_8218B074};
     s8* sp78[] = {D_8218B038, D_8218B050, D_8218B068, D_8218B080};
     UNUSED s32 pad2[4]; // FAKE
-    BattleMon* mon0 = &arg0->pokemonPicked[0];
-    BattleMon* mon1 = &arg0->pokemonPicked[1];
-    BattleMon* mon2 = &arg0->pokemonPicked[2];
+    BattleMon* mon0 = &roster->pokemonPicked[0];
+    BattleMon* mon1 = &roster->pokemonPicked[1];
+    BattleMon* mon2 = &roster->pokemonPicked[2];
     s32 i;
     s32 icon; // status icon index, computed but never used here
 
@@ -499,34 +501,34 @@ void func_8211B484(TeamRoster* arg0, s16 arg1, s16 arg2, s32 arg3) {
     } else {
         icon = func_8001FA30(mon2->statusCondition);
     }
-    func_82116CF4(arg1 + 1, arg2 + 1, 0x63, 0xF, sp88[arg3], sp78[arg3]);
-    func_82116CF4(arg1 + 1, arg2 + 0x10, 0x63, 0x1D, sp88[arg3] + 3, sp78[arg3] + 3);
-    func_82116CF4(arg1 + 1, arg2 + 0x2D, 0x63, 0x1D, sp88[arg3] + 6, sp78[arg3] + 6);
-    func_82116CF4(arg1 + 1, arg2 + 0x4A, 0x63, 0x1D, sp88[arg3] + 9, sp78[arg3] + 9);
-    BattleHud_DrawPlainText(arg1 + 0x2C, arg2 + 3, arg0->trainerName);
-    func_8211B208(arg0, mon0, arg1 + 1, arg2 + 0x10, 0);
-    func_8211B208(arg0, mon1, arg1 + 1, arg2 + 0x2D, 1);
-    func_8211B208(arg0, mon2, arg1 + 1, arg2 + 0x4A, 2);
+    func_82116CF4(x + 1, y + 1, 0x63, 0xF, sp88[color_index], sp78[color_index]);
+    func_82116CF4(x + 1, y + 0x10, 0x63, 0x1D, sp88[color_index] + 3, sp78[color_index] + 3);
+    func_82116CF4(x + 1, y + 0x2D, 0x63, 0x1D, sp88[color_index] + 6, sp78[color_index] + 6);
+    func_82116CF4(x + 1, y + 0x4A, 0x63, 0x1D, sp88[color_index] + 9, sp78[color_index] + 9);
+    BattleHud_DrawPlainText(x + 0x2C, y + 3, roster->trainerName);
+    BattleMenu_DrawRosterMemberDetails(roster, mon0, x + 1, y + 0x10, 0);
+    BattleMenu_DrawRosterMemberDetails(roster, mon1, x + 1, y + 0x2D, 1);
+    BattleMenu_DrawRosterMemberDetails(roster, mon2, x + 1, y + 0x4A, 2);
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
-    func_8001B884(arg1 + 1, arg2, 0x18, 0x10, D_8218AFF8[arg3], 0x18, 0);
+    func_8001B884(x + 1, y, 0x18, 0x10, D_8218AFF8[color_index], 0x18, 0);
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
-    BattleHud_DrawBorderTile(arg1, arg2 - 1, 8, 8, D_030096C0);
+    BattleHud_DrawBorderTile(x, y - 1, 8, 8, D_030096C0);
     for (i = 7; i < 0x62; i += 7) {
-        BattleHud_DrawBorderTile(arg1, arg2 + i, 8, 8, D_030095C0);
-        BattleHud_DrawBorderTile(arg1 + 0x5D, arg2 + i, 8, 8, D_03009740);
+        BattleHud_DrawBorderTile(x, y + i, 8, 8, D_030095C0);
+        BattleHud_DrawBorderTile(x + 0x5D, y + i, 8, 8, D_03009740);
     }
 
-    BattleHud_DrawBorderTile(arg1, arg2 + 0x60, 8, 8, D_03009640);
-    BattleHud_DrawBorderTile(arg1 + 0x5D, arg2 - 1, 8, 8, D_03009840);
-    BattleHud_DrawBorderTile(arg1 + 0x5D, arg2 + 0x60, 8, 8, D_030097C0);
+    BattleHud_DrawBorderTile(x, y + 0x60, 8, 8, D_03009640);
+    BattleHud_DrawBorderTile(x + 0x5D, y - 1, 8, 8, D_03009840);
+    BattleHud_DrawBorderTile(x + 0x5D, y + 0x60, 8, 8, D_030097C0);
     for (i = 7; i < 0x62; i += 7) {
-        BattleHud_DrawBorderTile(arg1 + i, arg2 - 1, 8, 8, D_03009940);
-        BattleHud_DrawBorderTile(arg1 + i, arg2 + 0x60, 8, 8, D_030098C0);
+        BattleHud_DrawBorderTile(x + i, y - 1, 8, 8, D_03009940);
+        BattleHud_DrawBorderTile(x + i, y + 0x60, 8, 8, D_030098C0);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
-    BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 0x69, 0x6A, 0);
+    BattleHud_DrawTranslucentShadowRect(x - 2, y - 2, 0x69, 0x6A, 0);
 }
 
 typedef struct Colors8211B900 {
@@ -793,8 +795,9 @@ u8 func_8000F1FC(u8, s32, s32, s32);
 /**
  * Draws the acting Pokemon's nickname centered near the bottom of the screen, fading it in
  * by 5 a frame.
+ * @unverified Name guessed from the code.
  */
-void func_8211C9FC(void) {
+void BattleHud_DrawActingPokemonNickname(void) {
     u32 len;
     s8* name;
     ActivePokemonState* state = &sActivePokemon[sBattleScene.scene->actingSide]->state;
@@ -841,8 +844,9 @@ extern s8 D_8219A4C8[];
 /**
  * Splits str at its first space: the first word goes to D_8219A4A0 and the rest to
  * D_8219A4C8. Returns 1 if there was a space, 0 otherwise.
+ * @unverified Name guessed from the code.
  */
-s32 func_8211CBCC(s8* str) {
+s32 BattleText_SplitAtFirstSpace(s8* str) {
     s8 i = 0;
     s8 j = 0;
 
@@ -886,8 +890,9 @@ s32 func_8000A4E8(s8*, char*);
 /**
  * Draws the battle text box at its stored position, fading it in (or out) by 10 a frame and
  * drawing its lines.
+ * @unverified Name guessed from the code.
  */
-void func_8211CC8C(void) {
+void BattleText_DrawTextBox(void) {
     UNUSED s32 pad[4]; // FAKE
     s16 x = *(s16*)&D_8219A4F0[0x16]; // FAKE: the text box is read as raw bytes; a struct pointer gets folded
     s16 y = *(s16*)&D_8219A4F0[0x18]; // FAKE
@@ -951,7 +956,7 @@ void func_8211CC8C(void) {
         c = (Rgb8211CC8C*)D_8218B124;
         c += (D_82189D8C[i].color << 1) + 1;
         func_8001AAE4(c->r, c->g, c->b, D_8219A4F0[2]);
-        if ((func_8211CBCC(D_82189D8C[i].str) == 0) || (D_82189D8C[i].color == 1)) {
+        if ((BattleText_SplitAtFirstSpace(D_82189D8C[i].str) == 0) || (D_82189D8C[i].color == 1)) {
             len = func_800566BC(D_82189D8C[i].str) >> 1;
             func_8001A384(2, -1);
             func_8001A944(x - len * 6 - 6, ty, D_82189D8C[i].str);
@@ -975,8 +980,9 @@ extern u8 D_03001DA0[];
 /**
  * Fades the text box frame in or out by 5 a frame (flag 0x80), and when flag 0x40 is set
  * draws it with the env color as a translucent textured box.
+ * @unverified Name guessed from the code.
  */
-void func_8211D06C(void) {
+void BattleText_DrawTextBoxFrame(void) {
     s32 i;
     u8* tex;
 
@@ -1043,9 +1049,10 @@ extern Gfx D_80060398[];
 /**
  * Draws a list panel at (arg0, arg1): a translucent black box, the entries from D_8218B13C
  * (dimmed when D_8219A730 is set) and the cursor next to entry D_8219A732.
+ * @unverified Name guessed from the code.
  */
-void func_8211D3D8(s16 arg0, s16 arg1) {
-    Ui_DrawPrimColorRect(arg0, arg1, 0x64, 0x7D, 0, 0, 0, 0x3C);
+void BattleMenu_DrawListPanelUnused(s16 x, s16 y) {
+    Ui_DrawPrimColorRect(x, y, 0x64, 0x7D, 0, 0, 0, 0x3C);
     func_8001AB6C();
     if (D_8219A730 == 0) {
         func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
@@ -1053,19 +1060,19 @@ void func_8211D3D8(s16 arg0, s16 arg1) {
         func_8001AA9C(0xFF, 0xFF, 0xFF, 0x78);
     }
     func_8001A384(1, 0);
-    func_8001A944(arg0 + 0x18, arg1 + 4, D_8218B13C[0]);
-    func_8001A944(arg0 + 0x18, arg1 + 0x10, D_8218B13C[1]);
-    func_8001A944(arg0 + 0x18, arg1 + 0x1C, D_8218B13C[2]);
-    func_8001A944(arg0 + 0x18, arg1 + 0x28, D_8218B13C[3]);
-    func_8001A944(arg0 + 0x18, arg1 + 0x34, D_8218B13C[4]);
-    func_8001A944(arg0 + 0x18, arg1 + 0x40, D_8218B13C[5]);
-    func_8001A944(arg0 + 0x18, arg1 + 0x4C, D_8218B13C[6]);
-    func_8001A944(arg0 + 0x18, arg1 + 0x58, D_8218B13C[7]);
+    func_8001A944(x + 0x18, y + 4, D_8218B13C[0]);
+    func_8001A944(x + 0x18, y + 0x10, D_8218B13C[1]);
+    func_8001A944(x + 0x18, y + 0x1C, D_8218B13C[2]);
+    func_8001A944(x + 0x18, y + 0x28, D_8218B13C[3]);
+    func_8001A944(x + 0x18, y + 0x34, D_8218B13C[4]);
+    func_8001A944(x + 0x18, y + 0x40, D_8218B13C[5]);
+    func_8001A944(x + 0x18, y + 0x4C, D_8218B13C[6]);
+    func_8001A944(x + 0x18, y + 0x58, D_8218B13C[7]);
     func_8001AA9C(0xFF, 0xFF, 0, 0xFF);
-    func_8001A944(arg0 + 0x18, arg1 + 0x69, D_8218B13C[D_8219A731]);
+    func_8001A944(x + 0x18, y + 0x69, D_8218B13C[D_8219A731]);
     func_8001ABBC();
     gSPDisplayList(gDisplayListHead++, D_80060308);
-    Gfx_DrawTextureRgba16Ia8(arg0 + 2, arg1 + D_8219A732 * 0xC + 3, 0x18, 0xE, D_0300A500, D_0300A7A0, 0x18, 0x100000);
+    Gfx_DrawTextureRgba16Ia8(x + 2, y + D_8219A732 * 0xC + 3, 0x18, 0xE, D_0300A500, D_0300A7A0, 0x18, 0x100000);
     gSPDisplayList(gDisplayListHead++, D_80060398);
 }
 
@@ -1439,13 +1446,14 @@ extern char D_82195FF8[];
 /**
  * Draws a small translucent panel at (arg0, arg1) with two formatted values from the
  * scene's +0xCC object (its fields 0x34 and 0x38).
+ * @unverified Name guessed from the code.
  */
-void func_8211E794(s16 arg0, s16 arg1) {
+void BattleDebug_DrawCameraClipPlanes(s16 x, s16 y) {
     char buf[16];
 
-    Ui_DrawPrimColorRect(arg0, arg1, 0x50, 0x1E, 0, 0, 0, 0x3C);
+    Ui_DrawPrimColorRect(x, y, 0x50, 0x1E, 0, 0, 0, 0x3C);
     func_800564D4(buf, D_82195FF4, sBattleScene.scene->camera->perspective.nearPlane);
-    func_82116480(buf, arg0 + 3, arg1 + 2);
+    func_82116480(buf, x + 3, y + 2);
     func_800564D4(buf, D_82195FF8, sBattleScene.scene->camera->perspective.farPlane);
-    func_82116480(buf, arg0 + 3, arg1 + 0x10);
+    func_82116480(buf, x + 3, y + 0x10);
 }

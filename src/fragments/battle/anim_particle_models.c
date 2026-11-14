@@ -24,7 +24,7 @@ void BattleAnim_SetupReflectiveCamera(void) {
                     temp_v0->view.upDirection.y, temp_v0->view.upDirection.z);
 }
 
-void func_82154704(s8*);
+void BattleAnim_OffsetParticleForSpecies(s8*);
 /**
  * Lifecycle init for a model particle: the CF parameter picks the model and animation
  * assets (and sometimes an offset, color or species scale). arg1 0 plays the animation,
@@ -44,7 +44,7 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
             sp2A = 0x23;
             sp28 = 0x24;
             Particle_PositionOffset_AddYScaled_08E90(arg0, 10.0f);
-            func_82154704(arg0);
+            BattleAnim_OffsetParticleForSpecies(arg0);
             break;
 
         case 0:
@@ -68,7 +68,7 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
         case 3:
             sp2A = 0x73;
             sp28 = 0x74;
-            sp2C = func_8215AEA4(arg0);
+            sp2C = BattleAnim_GetLargeSpeciesParticleScale(arg0);
             Particle_SetPrimAlpha(arg0, 0);
             Particle_PositionOffset_SetYScaled_08CA0(arg0, 5.0f);
             break;
@@ -128,7 +128,7 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
         case 11:
             sp2A = 0x88;
             sp28 = 0x89;
-            sp2C = func_8215B6A4(arg0);
+            sp2C = BattleAnim_OffsetAndScaleParticleForLargeSpecies(arg0);
             break;
 
         case 12:

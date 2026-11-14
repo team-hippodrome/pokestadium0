@@ -7,7 +7,7 @@
 M2C_UNK func_8000EEBC(s32, s32, f32, s16, s32);
 extern f32 D_FLT_82189358[];
 f32 BattleScene_GetParticipantHeight();
-void func_82124874();
+void BattleScene_FrameParticipantFrontAltThunk();
 
 extern f32 D_8219A534;
 extern f32 D_FLT_82189358[];
@@ -986,7 +986,7 @@ void BattleScene_ApproachCameraZoom(CameraNode* arg0, ActivePokemon* arg1) {
 }
 
 /**
- * Moves the camera target toward the framing of func_82124874 for the Pokemon while keeping
+ * Moves the camera target toward the framing of BattleScene_FrameParticipantFrontAltThunk for the Pokemon while keeping
  * the current eye angles and distance.
  * @unverified Name guessed from the code.
  */
@@ -1004,7 +1004,7 @@ void BattleScene_EaseCameraToRecoilFraming(CameraNode* camera, ActivePokemon* ac
 
     BattleAnim_Vec3fCopy(&sp50, &camera->view.targetPosition);
     BattleAnim_Vec3fCopy(&sp44, &camera->view.eyePosition);
-    func_82124874(camera, active_pokemon);
+    BattleScene_FrameParticipantFrontAltThunk(camera, active_pokemon);
     BattleAnim_CalculateDistanceAngles(&camera->view.targetPosition, &camera->view.eyePosition, &D_8219A534, &sp34, &sp38);
     BattleAnim_CalculateDistanceAngles(&sp50, &sp44, &gCameraDistTarget, &sp36, &sp3A);
     BattleAnim_ApproachF(&gCameraDistTarget, D_8219A534, 0.5f);

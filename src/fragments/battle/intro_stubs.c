@@ -62,58 +62,64 @@ s32 Diorama_GroupStateCallback(s32, GraphNode*);
 
 extern unk_D_86B10BE0 D_8219A82C;
 
-void func_8216D990(void);
-void func_8216D998(void);
-void func_8216D9A0(void);
-void func_8216D9A8(void);
-void func_8216D9B0(void);
-void func_8216D9B8(void);
+void BattleIntroStubs_UnusedNopA(void);
+void BattleIntroStubs_UnusedNopB(void);
+void BattleIntroStubs_UnusedNopC(void);
+void BattleIntroStubs_UnusedNopD(void);
+void BattleIntroStubs_UnusedNopE(void);
+void BattleIntroStubs_UnusedNopF(void);
 void BattleScene_IntroStepNop(UNUSED CameraNode* arg0);
-void func_8216D9C8(UNUSED s32 arg0);
-void func_8216D9D0(void);
+void BattleIntroStubs_UnusedNopG(UNUSED s32 arg0);
+void BattleAnim_RenderEffectsFrameNop(void);
 void BattleAnim_DrawStoredColorOverlay(void);
 void BattleAnim_ReinitAuxiliaryEffects(void);
-void func_8216DA30(void);
+void BattleAnim_EffectListFillerNopA(void);
 void MewtwoIntro_DrawOverlay(void);
 s32 BattleAnim_DefaultStartEffect_CompleteImmediately(void);
 s32 BattleAnim_DefaultEndEffect_CompleteImmediately(void);
-void func_8216DA50(void);
-void func_8216DA58(void);
+void BattleAnim_EffectListFillerNopB(void);
+void BattleAnim_EffectListFillerNopC(void);
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8216D990(void) {
+void BattleIntroStubs_UnusedNopA(void) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8216D998(void) {
+void BattleIntroStubs_UnusedNopB(void) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8216D9A0(void) {
+void BattleIntroStubs_UnusedNopC(void) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8216D9A8(void) {
+void BattleIntroStubs_UnusedNopD(void) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8216D9B0(void) {
+void BattleIntroStubs_UnusedNopE(void) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8216D9B8(void) {
+void BattleIntroStubs_UnusedNopF(void) {
 }
 
 /**
@@ -127,14 +133,16 @@ void BattleScene_IntroStepNop(UNUSED CameraNode* arg0) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8216D9C8(UNUSED s32 arg0) {
+void BattleIntroStubs_UnusedNopG(UNUSED s32 arg0) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8216D9D0(void) {
+void BattleAnim_RenderEffectsFrameNop(void) {
 }
 
 /**
@@ -158,8 +166,9 @@ void BattleAnim_ReinitAuxiliaryEffects(void) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8216DA30(void) {
+void BattleAnim_EffectListFillerNopA(void) {
 }
 
 /**
@@ -190,12 +199,14 @@ s32 BattleAnim_DefaultEndEffect_CompleteImmediately(void) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8216DA50(void) {
+void BattleAnim_EffectListFillerNopB(void) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8216DA58(void) {
+void BattleAnim_EffectListFillerNopC(void) {
 }

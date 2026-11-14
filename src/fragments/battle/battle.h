@@ -33,9 +33,9 @@ typedef struct { f32 v; f32 pad[3]; } CameraTargetOffsetRow;
 
 typedef struct MoveAnimInfoZ {
     /* 0x00 */ u8 pad00[2];
-    /* 0x02 */ u16 userCameraShot; // @unverified: func_8212C78C plays it with BattleCamera_PlayUserShot
+    /* 0x02 */ u16 userCameraShot; // @unverified: BattleCamera_PlayMoveUserShot plays it with BattleCamera_PlayUserShot
     /* 0x04 */ u16 travelCameraShot; // @unverified: checked for 6 in BattleScene_ActionStepTravel
-    /* 0x06 */ u16 targetCameraShot; // @unverified: func_8212F044 plays it with BattleCamera_PlayTargetShot
+    /* 0x06 */ u16 targetCameraShot; // @unverified: BattleCamera_PlayMoveTargetShot plays it with BattleCamera_PlayTargetShot
     /* 0x08 */ u8 pad08[2];
 } MoveAnimInfoZ; // size = 0xA
 
@@ -364,7 +364,7 @@ typedef struct BattleScene {
     /* 0x48 */ s32 moveEffectKind;
     /* 0x4C */ s32 rageFollowupPhase;
     /* 0x50 */ s32 cameraPresetId;
-    /* 0x54 */ s32 easeFovAfterUserShot; // @unverified: func_8212C78C sets 1 for move camera shot 4; the effect phases then ease the camera's 0x2C toward 60
+    /* 0x54 */ s32 easeFovAfterUserShot; // @unverified: BattleCamera_PlayMoveUserShot sets 1 for move camera shot 4; the effect phases then ease the camera's 0x2C toward 60
     /* 0x58 */ s16 rotationX; // camera pitch about the look-at point
     /* 0x5A */ s16 rotationY; // camera yaw about the look-at point (the B-roll orbit sweeps it)
     /* 0x5C */ f32 distance;
@@ -2037,8 +2037,8 @@ void Battle_MoveHitTest(void);
 void ApplyParalysisSpeedCut(ActivePokemon* active_pokemon);
 void ApplyBurnAttackCut(ActivePokemon* active_pokemon);
 void Battle_InitPokemonRuntimeState(ActivePokemon* active_pokemon);
-void func_82110FB0(void);
-void func_82110FB8(void);
+void Damage_UnusedNopA(void);
+void Damage_UnusedNopB(void);
 void Battle_LoadMoveCache(void);
 void Battle_HandleBuildingRage(void);
 void Battle_DisplayEffectiveness(void);
@@ -2050,7 +2050,7 @@ s32 Battle_Effect_Metronome(void);
 void Battle_ApplyPoisonOrBurnDamage(void);
 void Battle_ApplyLeechSeedDamage(void);
 s32 Battle_ApplyResidualEffects(void);
-void func_82111870(void);
+void Battle_ResidualEffectsNop(void);
 
 // turn.c
 void BattleAnim_EffectEndNop(void);
@@ -2231,10 +2231,10 @@ void BattleScene_SetCameraPresetCloseThunk(CameraNode* arg0, ActivePokemon* arg1
 void BattleScene_SetCameraPresetHighCloseThunk(CameraNode* arg0, ActivePokemon* arg1);
 void BattleScene_SetCameraPresetLowCloseThunk(CameraNode* arg0, ActivePokemon* arg1);
 void BattleScene_CameraShotTargetCloseThunk(CameraNode* arg0, ActivePokemon* arg1);
-void func_821247D0(CameraNode* arg0, ActivePokemon* arg1);
+void BattleScene_FrameParticipantFrontThunk(CameraNode* arg0, ActivePokemon* arg1);
 // Called with (CameraNode*, ActivePokemon*); the arguments pass through untouched.
 
-void func_82124894(CameraNode* arg0, ActivePokemon* arg1);
+void BattleScene_FrameParticipantFrontWide(CameraNode* arg0, ActivePokemon* arg1);
 
 // owner_animation.c
 void BattleScene_ResetAnimationStep(void);
@@ -2317,8 +2317,8 @@ void BattleScene_ActionStepUseMove(CameraNode*, s32);
 
 // action_steps_2.c
 void BattleScene_ActionStepTravel(CameraNode* arg0, s32 arg1);
-void func_8212A5AC(ActivePokemon* arg0, CameraNode* arg1);
-void func_8212A67C(ActivePokemon* arg0, CameraNode* arg1);
+void BattleCamera_PlayRandomReactionFraming3(ActivePokemon* arg0, CameraNode* arg1);
+void BattleCamera_PlayRandomReactionFraming4(ActivePokemon* arg0, CameraNode* arg1);
 
 // phases.c
 void BattleAnim_RenderNop1(void);
@@ -2328,12 +2328,12 @@ void BattleScene_ReactionSideEffect(CameraNode* arg0, void* arg1);
 void BattleScene_ActionStepReaction(CameraNode* arg0, void* arg1);
 void BattleScene_PhaseFirstAction(CameraNode* arg0);
 void BattleScene_PhaseSecondAction(CameraNode* arg0);
-void func_8212C398(s32 arg0);
-void func_8212C454(s32 arg0);
-void func_8212C530(s32 arg0);
+void BattleCamera_PlayRandomUserShot3(s32 arg0);
+void BattleCamera_PlayRandomUserShot4(s32 arg0);
+void BattleCamera_PlayRandomUserShotWith4(s32 arg0);
 void BattleCamera_PlayUserShot(s32 arg0, s32 arg1);
 void BattleCamera_PlayTargetShot(ActivePokemon* arg0, CameraNode* arg1, s32 arg2);
-void func_8212C78C(s32 arg0);
+void BattleCamera_PlayMoveUserShot(s32 arg0);
 void BattleScene_PhaseSelfEffect(CameraNode* arg0);
 void BattleScene_PhaseExplosion(CameraNode* arg0);
 void BattleScene_PhaseMoveFailedMessage(CameraNode* arg0);
@@ -2342,19 +2342,19 @@ void BattleScene_PhaseTransform(CameraNode* arg0);
 void BattleScene_PhaseSubstitute(CameraNode* arg0);
 void BattleScene_PhaseFlyUp(CameraNode* arg0);
 void BattleScene_PhaseCannotMove(CameraNode* arg0);
-void func_8212E9C8(ActivePokemon* arg0);
+void BattleScene_ReturnToGroundHeight(ActivePokemon* arg0);
 void BattleScene_PhaseConfusionSelfHit(CameraNode* arg0);
 void BattleScene_PhaseFullParalysis(CameraNode* arg0);
-void func_8212EEC0(ActivePokemon* arg0, CameraNode* arg1);
-void func_8212EF74(ActivePokemon*, CameraNode*);
-void func_8212F044(CameraNode* arg0);
+void BattleCamera_PlayRandomTargetFraming3(ActivePokemon* arg0, CameraNode* arg1);
+void BattleCamera_PlayRandomTargetFraming4(ActivePokemon*, CameraNode*);
+void BattleCamera_PlayMoveTargetShot(CameraNode* arg0);
 void BattleScene_PhaseEndTurn(s32 arg0);
 void BattleScene_PhaseCrashDamage(CameraNode* arg0);
 void BattleScene_PhaseMoveMissed(CameraNode* arg0);
 void BattleScene_PhaseInflictStatus(CameraNode* arg0);
 void BattleScene_PhaseLowerStat(CameraNode* arg0);
 void BattleScene_PhaseDisable(CameraNode* arg0);
-void func_8212F9FC(CameraNode* arg0);
+void BattleScene_PhaseDrainHp(CameraNode* arg0);
 void BattleScene_PhaseResidualDamageAfterMove(CameraNode* arg0);
 void BattleScene_Phase10(CameraNode* arg0);
 void BattleScene_PhaseBide(CameraNode* arg0);
@@ -2394,7 +2394,7 @@ void BattleScene_OpeningStepLowerCameraAndThrowSide0(CameraNode* arg0);
 void BattleScene_RunOpeningSendOut(CameraNode* arg0);
 
 // showcase_mode7.c
-void func_821329F0(void);
+void SceneMode7_UnusedNop(void);
 
 // demo_mode11.c
 void SceneMode11_UnusedNop(void);
@@ -2884,7 +2884,7 @@ void ParticleGfx_DrawBillboardPrimEnvRotatedQuad(Particle* arg0, CameraNode* arg
 void ParticleGfx_DrawPrimEnvTransformedQuad(Particle* arg0, CameraNode* arg1);
 
 // anim_draw.c
-void func_82142678(UNUSED ActivePokemon* active_pokemon, UNUSED s32 unused);
+void ParticleGfx_DrawNop(UNUSED ActivePokemon* active_pokemon, UNUSED s32 unused);
 void BattleAnim_DrawAsset76Ia8FrameWithAsset77I4Overlay(Particle* arg0, CameraNode* arg1);
 void BattleAnim_DrawFlameHit(Particle* arg0, CameraNode* arg1);
 void BattleAnim_DrawFlameUse(Particle* arg0, CameraNode* arg1);
@@ -3210,7 +3210,7 @@ void BattleAnim_InitializeRazorWindUse(void);
 void BattleAnim_SetupBoomUseEffect4(Particle* arg0);
 void Particle_CreateDisplayList_CustomColors(s32 arg0, arg1_func_84344CE8* arg1);
 void BattleAnim_SetupBoomHitEffect3(Particle* arg0);
-void func_821597B8(UNUSED ActivePokemon* active_pokemon, UNUSED s32 unused);
+void BattleAnim_ModelEffectNop(UNUSED ActivePokemon* active_pokemon, UNUSED s32 unused);
 void BattleAnim_TransformNop(UNUSED ActivePokemon* owner, UNUSED ActivePokemon* animated_pokemon);
 void BattleAnim_SetupBitingEffect(Particle* arg0);
 void Particle_CreateDisplayList_TempColors(s32 arg0, arg1_func_84344CE8* arg1);
@@ -3313,7 +3313,7 @@ void BattleAnim_InitializeScreenMove(void);
 void BattleAnim_ApplyEffect125ModelScaleOffset(Particle* arg0);
 void BattleAnim_InitEffect125Model(Particle* arg0, UNUSED s16 arg1);
 void BattleAnim_CallbackStartEffect125ModelBurstEmitter(Particle* arg0);
-void func_82155084(void);
+void BattleAnim_StartEffect123ModelBurst(void);
 void BattleAnim_InitEffect65Overlay(Particle* arg0);
 void BattleAnim_RunSporePowderMoveOverlay(Particle* arg0);
 /*
@@ -3385,13 +3385,13 @@ void BattleAnim_CallbackStartEffect69ModelPhaseWait(Particle* arg0);
 void BattleAnim_InitializeDigBurrowUse(void);
 void BattleAnim_InitializeDigHit(void);
 void BattleAnim_InitializeBoneClubUse(void);
-f32 func_8215AEA4(Particle* arg0);
+f32 BattleAnim_GetLargeSpeciesParticleScale(Particle* arg0);
 void BattleAnim_InitializeEarthquakeFissureUse(void);
 void BattleAnim_InitializeDefenseCurlUse(void);
 void BattleAnim_InitializeSharpenUse(void);
-void func_8215B5B8(void);
+void BattleAnim_StartEffect112QuickAttackHiJumpKick(void);
 void BattleAnim_InitializeLickUse(void);
-f32 func_8215B6A4(Particle* arg0);
+f32 BattleAnim_OffsetAndScaleParticleForLargeSpecies(Particle* arg0);
 void BattleAnim_InitializeLovelyKissUse(void);
 void BattleAnim_InitializeLovelyKissHit(void);
 void BattleAnim_CallbackStartEffects95To97EndEffects62And63ModelFadeIn_InitParticle(s8 *arg0);
@@ -3403,7 +3403,7 @@ M2C_UNK func_8215C8FC(s8 *);                      /* extern */
 void BattleAnim_CallbackStartEffects21And93ModelAlphaAnchorFollow(Particle* arg0);
 M2C_UNK func_8215CA14();                            /* extern */
 void BattleAnim_ConfuseRayParticleUpdate(Particle* arg0);
-void func_8215CCF0(void);
+void BattleAnim_EndEffect51GlobalTintFade(void);
 void BattleAnim_InitializeConfuseRayUse(void);
 void BattleAnim_InitializeConfuseRayHit(void);
 void BattleAnim_InitializeWaterfallUse(void);
@@ -3699,21 +3699,21 @@ void func_8216D988(void);
 
 // intro_stubs.c
 void BattleScene_IntroStepNop(UNUSED CameraNode* arg0);
-void func_8216D9C8(UNUSED s32 arg0);
+void BattleIntroStubs_UnusedNopG(UNUSED s32 arg0);
 void BattleAnim_DrawStoredColorOverlay(void);
 void BattleAnim_ReinitAuxiliaryEffects(void);
 s32 BattleAnim_DefaultStartEffect_CompleteImmediately(void);
 s32 BattleAnim_DefaultEndEffect_CompleteImmediately(void);
-void func_8216D990(void);
-void func_8216D998(void);
-void func_8216D9A0(void);
-void func_8216D9A8(void);
-void func_8216D9B8(void);
-void func_8216D9D0(void);
-void func_8216DA30(void);
+void BattleIntroStubs_UnusedNopA(void);
+void BattleIntroStubs_UnusedNopB(void);
+void BattleIntroStubs_UnusedNopC(void);
+void BattleIntroStubs_UnusedNopD(void);
+void BattleIntroStubs_UnusedNopF(void);
+void BattleAnim_RenderEffectsFrameNop(void);
+void BattleAnim_EffectListFillerNopA(void);
 void MewtwoIntro_DrawOverlay(void);
-void func_8216DA50(void);
-void func_8216DA58(void);
+void BattleAnim_EffectListFillerNopB(void);
+void BattleAnim_EffectListFillerNopC(void);
 
 // anim_owner_effects.c
 void BattleAnim_EffectSecondaryOwnerAnchorPosition(Vec3f* arg0);
@@ -3975,17 +3975,17 @@ void BattleScene_DrawStripWipe(void);
 
 // com_ai.c
 s32 BattleAi_RandomPercent(void);
-void func_82183D9C(void);
-void func_82183DA4(void);
-void func_82183DAC(void);
-void func_82183DC4(void);
-void func_82183E1C(void);
+void ComAi_UnusedNopB(void);
+void ComAi_UnusedNopC(void);
+void ComAi_UnusedNopD(void);
+void ComAi_UnusedNopG(void);
+void ComAi_UnusedNopH(void);
 
 // com_ai_2.c
 s32 BattleAi_OpponentCannotAct(ComBattler* arg0, ComBattler* arg1);
-void func_821853EC(void);
-void func_821853F4(void);
-void func_821853FC(void);
+void ComAi_UnusedNopI(void);
+void ComAi_UnusedNopJ(void);
+void ComAi_UnusedNopK(void);
 
 // com_ai_move_choice.c
 void BattleAi_RecordUsedMove(UNUSED s32 arg0, UNUSED s32 arg1, s32 arg2);

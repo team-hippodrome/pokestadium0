@@ -45,18 +45,18 @@ extern s16 sEliteFourTransition;
 
 #include "m2c_macros.h"
 
-void func_82183BA8(void);
-void func_82183D9C(void);
-void func_82183DA4(void);
-void func_82183DAC(void);
-void func_82183DB4(void);
-void func_82183DBC(void);
-void func_82183DC4(void);
-void func_82183E1C(void);
-void func_821853EC(void);
-void func_821853F4(void);
-void func_821853FC(void);
-void func_82185404(void);
+void ComAi_UnusedNopA(void);
+void ComAi_UnusedNopB(void);
+void ComAi_UnusedNopC(void);
+void ComAi_UnusedNopD(void);
+void ComAi_UnusedNopE(void);
+void ComAi_UnusedNopF(void);
+void ComAi_UnusedNopG(void);
+void ComAi_UnusedNopH(void);
+void ComAi_UnusedNopI(void);
+void ComAi_UnusedNopJ(void);
+void ComAi_UnusedNopK(void);
+void ComAi_UnusedNopL(void);
 
 extern s32 D_821CF2B0;
 extern u32 D_821CF2B4;
@@ -97,8 +97,9 @@ void BattleAi_StirRandom(void) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82183BA8(void) {
+void ComAi_UnusedNopA(void) {
 }
 
 f32 func_80055340(f32);                             /* extern */
@@ -198,38 +199,44 @@ s32 BattleAi_CountUnfainted(ComSide* arg0) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82183D9C(void) {
+void ComAi_UnusedNopB(void) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82183DA4(void) {
+void ComAi_UnusedNopC(void) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82183DAC(void) {
+void ComAi_UnusedNopD(void) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82183DB4(void) {
+void ComAi_UnusedNopE(void) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82183DBC(void) {
+void ComAi_UnusedNopF(void) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82183DC4(void) {
+void ComAi_UnusedNopG(void) {
 }
 
 /**
@@ -245,8 +252,9 @@ void BattleAi_AddRandomPickScore(ComBattler* arg0) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82183E1C(void) {
+void ComAi_UnusedNopH(void) {
 }
 
 extern ComSide* D_821CF298;

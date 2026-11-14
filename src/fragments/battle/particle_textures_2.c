@@ -34,7 +34,11 @@ void ParticleGfx_LoadTextureCallbackI4FrameDiv2Mod8_64x64(UNUSED Particle* arg0,
 
 M2C_UNK func_8216BFE8(s32, M2C_UNK, M2C_UNK);       /* extern */
 
-void func_82140EAC(s8 *arg0, s32 arg1) {
+/**
+ * Texture callback: loads 64x64 I4 frame (byte 0xC3) of the texture at arg1.
+ * @unverified Name guessed from the code.
+ */
+void ParticleGfx_LoadTextureCallbackI4FrameC3_64x64(s8 *arg0, s32 arg1) {
     func_8216BFE8((M2C_FIELD(arg0, s8 *, 0xC3) << 0xB) + arg1, 0x40, 0x40);
 }
 
@@ -101,10 +105,11 @@ s32 ParticleGfx_DrawDoubleSidedPrimEnvTransformedQuad(Particle* arg0, UNUSED Cam
 /**
  * Particle draw callback: sets the particle's prim/env colors and draws camera-facing quad
  * D_82190E50 at its position and scale.
+ * @unverified Name guessed from the code.
  */
-void func_82141128(Particle* arg0, CameraNode* arg1) {
-    ParticleGfx_SetPrimEnvColorCombine(arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->env_r, arg0->env_g, arg0->env_b, arg0->prim_a);
-    ParticleGfx_DrawModelQuad(arg1, arg0->worldPosition, arg0->scale, D_82190E50);
+void ParticleGfx_DrawBillboardQuadE50(Particle* particle, CameraNode* camera) {
+    ParticleGfx_SetPrimEnvColorCombine(particle->prim_r, particle->prim_g, particle->prim_b, particle->env_r, particle->env_g, particle->env_b, particle->prim_a);
+    ParticleGfx_DrawModelQuad(camera, particle->worldPosition, particle->scale, D_82190E50);
 }
 
 extern Vtx D_82190FC0[];
@@ -134,11 +139,12 @@ void ParticleGfx_DrawBillboardDefaultQuad(Particle* arg0, CameraNode* arg1) {
 
 void func_8216936C(u8 prim_r, u8 prim_g, u8 prim_b, u8 env_r, u8 env_g, u8 env_b, u8 prim_a);
 /**
- * Particle draw callback: like func_82141128 but sets the colors with func_8216936C.
+ * Particle draw callback: like ParticleGfx_DrawBillboardQuadE50 but sets the colors with func_8216936C.
+ * @unverified Name guessed from the code.
  */
-void func_8214127C(Particle* arg0, CameraNode* arg1) {
-    func_8216936C(arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->env_r, arg0->env_g, arg0->env_b, arg0->prim_a);
-    ParticleGfx_DrawModelQuad(arg1, arg0->worldPosition, arg0->scale, D_82190E50);
+void ParticleGfx_DrawBillboardNoiseQuadE50(Particle* particle, CameraNode* camera) {
+    func_8216936C(particle->prim_r, particle->prim_g, particle->prim_b, particle->env_r, particle->env_g, particle->env_b, particle->prim_a);
+    ParticleGfx_DrawModelQuad(camera, particle->worldPosition, particle->scale, D_82190E50);
 }
 
 /**
@@ -164,28 +170,31 @@ void BattleAnim_FireSpinParticleDraw(Particle* arg0, CameraNode* arg1) {
 /**
  * Particle draw callback: sets the particle's colors and draws camera-facing quad
  * D_82191080.
+ * @unverified Name guessed from the code.
  */
-void func_82141428(Particle* arg0, CameraNode* arg1) {
-    ParticleGfx_SetPrimEnvColorCombine(arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->env_r, arg0->env_g, arg0->env_b, arg0->prim_a);
-    ParticleGfx_DrawModelQuad(arg1, arg0->worldPosition, arg0->scale, D_82191080);
+void ParticleGfx_DrawBillboardQuad1080(Particle* particle, CameraNode* camera) {
+    ParticleGfx_SetPrimEnvColorCombine(particle->prim_r, particle->prim_g, particle->prim_b, particle->env_r, particle->env_g, particle->env_b, particle->prim_a);
+    ParticleGfx_DrawModelQuad(camera, particle->worldPosition, particle->scale, D_82191080);
 }
 
 /**
  * Particle draw callback: sets the particle's colors and draws camera-facing quad
  * D_82191040.
+ * @unverified Name guessed from the code.
  */
-void func_821414B4(Particle* arg0, CameraNode* arg1) {
-    ParticleGfx_SetPrimEnvColorCombine(arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->env_r, arg0->env_g, arg0->env_b, arg0->prim_a);
-    ParticleGfx_DrawModelQuad(arg1, arg0->worldPosition, arg0->scale, D_82191040);
+void ParticleGfx_DrawBillboardQuad1040(Particle* particle, CameraNode* camera) {
+    ParticleGfx_SetPrimEnvColorCombine(particle->prim_r, particle->prim_g, particle->prim_b, particle->env_r, particle->env_g, particle->env_b, particle->prim_a);
+    ParticleGfx_DrawModelQuad(camera, particle->worldPosition, particle->scale, D_82191040);
 }
 
 /**
  * Particle draw callback: sets the particle's colors and draws camera-facing quad
  * D_82191440.
+ * @unverified Name guessed from the code.
  */
-void func_82141540(Particle* arg0, CameraNode* arg1) {
-    ParticleGfx_SetPrimEnvColorCombine(arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->env_r, arg0->env_g, arg0->env_b, arg0->prim_a);
-    ParticleGfx_DrawModelQuad(arg1, arg0->worldPosition, arg0->scale, D_82191440);
+void ParticleGfx_DrawBillboardQuad1440(Particle* particle, CameraNode* camera) {
+    ParticleGfx_SetPrimEnvColorCombine(particle->prim_r, particle->prim_g, particle->prim_b, particle->env_r, particle->env_g, particle->env_b, particle->prim_a);
+    ParticleGfx_DrawModelQuad(camera, particle->worldPosition, particle->scale, D_82191440);
 }
 
 /**

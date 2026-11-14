@@ -4,8 +4,12 @@
 #include "battle.h"
 #include "m2c_macros.h"
 
+/**
+ * Copies the Pokemon's battle HP (0x7D2) into the first team member's HP.
+ * @unverified Name guessed from the code.
+ */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_821337A0(s8 *arg0)
+void DemoBattle_CopyHpToFirstMember(s8 *arg0)
 {
   int new_var; // FAKE: permuter temp
   new_var = (*((s32 *) (((s8 *) arg0) + 0x860))) + 0x1C;
@@ -13,7 +17,7 @@ void func_821337A0(s8 *arg0)
 }
 
 /*
- * func_821337B4
+ * DemoBattle_Setup
  *
  * Resets some fields of the battle scene object (sBattleScene.scene;
  * D_82199DE0 is sActivePokemon, an array
@@ -25,23 +29,24 @@ void func_821337A0(s8 *arg0)
  *   - The word at +0x38 is cleared, and the halfword at +0x32 is cleared in
  *     the structure at 0x78C bytes into each of the two active Pokemon.
  *   - If the word at +0x1C is 9, the word at +0x44 is set to 10.
- *   - func_82133868 is called with the saved halfword, and the halfword is
+ *   - DemoBattle_SetupDemoMove is called with the saved halfword, and the halfword is
  *     then written back to +0x2C.
  *
- * What the individual fields mean and what func_82133868 does are not
- * established here.  The saved value is kept in an s32 and func_82133868 is
+ * What the individual fields mean and what DemoBattle_SetupDemoMove does are not
+ * established here.  The saved value is kept in an s32 and DemoBattle_SetupDemoMove is
  * declared with an s32 parameter because that is what reproduces the retail
  * code (a word-sized stack spill and no halfword mask on the argument).
  */
 M2C_UNK func_82121D8C(M2C_UNK, M2C_UNK);            /* extern */
-void func_82133868();
+void DemoBattle_SetupDemoMove();
 extern M2C_UNK D_82199DE0;
 
 /**
  * Sets up the scene mode 11 demo battle: switches the camera to mode 0 for both sides, runs
- * func_82133868 for the selected side and restores the side index.
+ * DemoBattle_SetupDemoMove for the selected side and restores the side index.
+ * @unverified Name guessed from the code.
  */
-void func_821337B4(void) {
+void DemoBattle_Setup(void) {
     s32 saved;
     void *sp20;
     void *sp1C;
@@ -58,7 +63,7 @@ void func_821337B4(void) {
     if (sBattleScene.scene->mode == 9) {
         sBattleScene.scene->modeAfterTransition = 0xA;
     }
-    func_82133868(saved);
+    DemoBattle_SetupDemoMove(saved);
     sBattleScene.scene->actingSide = saved;
 }
 
@@ -71,8 +76,9 @@ extern s8 D_82199FCD;
  * Sets up the demo move for the selected side: both sides get 900 HP, the move state is
  * reset, and the move picks the demo effect (String Shot, Harden/Minimize/Splash, Sing and
  * Rest each set their own effect kind; Sing puts the target and Rest the user to sleep).
+ * @unverified Name guessed from the code.
  */
-void func_82133868(void) {
+void DemoBattle_SetupDemoMove(void) {
     s8* self;
     s8* other;
     u16 idx;
@@ -86,8 +92,8 @@ void func_82133868(void) {
     M2C_FIELD(self, s16*, 0x7D2) = 900;
     M2C_FIELD(other, s16*, 0xC) = 900;
     self += 0x7C6;
-    func_821337A0(((s8**)&D_82199DE0)[(idx == 0) * 0]); // FAKE: keeps idx == 0 live
-    func_821337A0(((s8**)&D_82199DE0)[1]);
+    DemoBattle_CopyHpToFirstMember(((s8**)&D_82199DE0)[(idx == 0) * 0]); // FAKE: keeps idx == 0 live
+    DemoBattle_CopyHpToFirstMember(((s8**)&D_82199DE0)[1]);
     D_82199FCC = 1;
     D_82199FCD = 1;
     sBattleScene.scene->hitReactionKind = 0;
@@ -123,18 +129,19 @@ M2C_UNK func_8213B31C(M2C_UNK);
 /**
  * Clears the Pokemon's status for the demo: plays reaction 3 if it was asleep, clears its
  * roster status byte, state flags and pending status, and resets both camera modes.
+ * @unverified Name guessed from the code.
  */
-void func_821339CC(ActivePokemon* arg0) {
+void DemoBattle_ClearStatus(ActivePokemon* active_pokemon) {
     s32 pad; // FAKE: stack padding
-    s8* sp20 = (s8*)arg0->teamRoster + 0x1C;
-    BattleMonRuntime* rt = &arg0->state.runtime;
+    s8* sp20 = (s8*)active_pokemon->teamRoster + 0x1C;
+    BattleMonRuntime* rt = &active_pokemon->state.runtime;
 
     func_82101AD0();
     if (rt->statusCondition & 7) {
-        func_82136708(3, arg0);
+        func_82136708(3, active_pokemon);
     }
     M2C_FIELD(sp20, s8*, 5) = 0;
-    M2C_FIELD(arg0, s16*, 0x7C2) = 0;
+    M2C_FIELD(active_pokemon, s16*, 0x7C2) = 0;
     rt->statusCondition = 0;
     func_8213B31C(1);
     func_8213B31C(2);
@@ -176,8 +183,9 @@ extern u16 D_82199ED0[][0x12];
 /**
  * Steps side 0's scripted demo input: when its timer runs out, takes the next (duration,
  * value) entry of the script for demo D_8219A4F0.index and outputs the value for one frame.
+ * @unverified Name guessed from the code.
  */
-void func_82133A44(void) {
+void DemoBattle_StepScriptedInputSide0(void) {
     s32 i = 0; // FAKE: constant side index kept in a variable
 
     D_82199ED0[i][0] = 0;
@@ -194,9 +202,10 @@ void func_82133A44(void) {
 }
 
 /**
- * Same as func_82133A44 for side 1.
+ * Same as DemoBattle_StepScriptedInputSide0 for side 1.
+ * @unverified Name guessed from the code.
  */
-void func_82133AD8(void) {
+void DemoBattle_StepScriptedInputSide1(void) {
     s32 i = 1; // FAKE: constant side index kept in a variable
 
     D_82199ED0[i][0] = 0;
@@ -234,12 +243,13 @@ void func_8210BE1C(f32*, f32, s16);
 s16 func_8210BEE0(f32, f32, f32, f32);
 f32 func_8210BFA4(f32, f32, f32, f32);
 void func_82121D5C(s32, s32);
-/*
+/**
  * Per-frame update for the scripted battle demo: advances the cue timers for
- * both sides (func_82133A44 / func_82133AD8) and reacts to the cue flags in
+ * both sides (DemoBattle_StepScriptedInputSide0 / DemoBattle_StepScriptedInputSide1) and reacts to the cue flags in
  * D_82199ED0[side][0].
+ * @unverified Name guessed from the code.
  */
-void func_82133B6C(void) {
+void DemoBattle_Update(void) {
     s8* rt0 = ((s8**)&D_82199DE0)[0] + 0x78C;
     s8* rt1 = ((s8**)&D_82199DE0)[1] + 0x78C;
     s8* other0 = ((s8**)&D_82199DE0)[0] + 0x7C6;
@@ -255,8 +265,8 @@ void func_82133B6C(void) {
         D_8219A4F0.unk_1E++;
         D_8219A4F0.unk_20++;
         D_8219A4F0.timer++;
-        func_82133A44();
-        func_82133AD8();
+        DemoBattle_StepScriptedInputSide0();
+        DemoBattle_StepScriptedInputSide1();
         if (D_82199ED0[side][0] & 0x8000) {
             D_8219A4F0.unk03++;
             D_8219A4F0.unk1C++;
@@ -294,7 +304,7 @@ void func_82133B6C(void) {
                 }
                 M2C_FIELD(rt1, s32*, 0x10) = 3;
                 if ((M2C_FIELD(rt0, s32*, 0x10) == 3) && (M2C_FIELD(rt1, s32*, 0x10) == 3)) {
-                    func_821337B4();
+                    DemoBattle_Setup();
                 }
             }
             if (D_82199ED0[0][0] & 0x4000) {
@@ -343,8 +353,8 @@ void func_82133B6C(void) {
                     sBattleScene.scene->bRollShotIndex = 0;
                     func_82121D5C(9, 0x32);
                     sBattleScene.scene->bRollShotIndex = 0;
-                    func_821339CC(((ActivePokemon**)&D_82199DE0)[0]);
-                    func_821339CC((ActivePokemon*)D_82199DE4);
+                    DemoBattle_ClearStatus(((ActivePokemon**)&D_82199DE0)[0]);
+                    DemoBattle_ClearStatus((ActivePokemon*)D_82199DE4);
                 }
             }
             if (D_82199ED0[0][0] & 0x8000) {

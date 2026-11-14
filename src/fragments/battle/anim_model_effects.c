@@ -132,8 +132,9 @@ void func_8213D790(s8*, f32);
 /**
  * Raises or lowers the particle by a per-species offset (species from the owner at +0x10):
  * -10, 10 or 15 for the listed species, and also pushes it forward for species 0x3B.
+ * @unverified Name guessed from the code.
  */
-void func_82154704(s8* arg0) {
+void BattleAnim_OffsetParticleForSpecies(s8* arg0) {
     f32 var_f20 = 0.0f;
 
     switch (func_82107CF0(M2C_FIELD(arg0, s32*, 0x10))) {
@@ -422,8 +423,9 @@ void BattleAnim_AllocateEffect125DisplayList(s32 arg0, arg1_func_84344CE8* arg1)
 /**
  * Queues two effect slots on the current owner: func_82154EA4 at once (lifetime 30) and
  * func_82144750 after 20 frames (lifetime 80).
+ * @unverified Name guessed from the code.
  */
-void func_82155084(void) {
+void BattleAnim_StartEffect123ModelBurst(void) {
     func_8213B560(0, &func_82154EA4, &D_8218E580, 0x1E, 1, 7, 0, 0, 0);
     func_8213B560(0x14, &func_82144750, &D_8218E580, 0x50, 1, 0, 0, 0x33, 0);
 }
@@ -2371,8 +2373,9 @@ void BattleAnim_InitializeBoomHit(void) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_821597B8(UNUSED ActivePokemon* active_pokemon, UNUSED s32 unused) {
+void BattleAnim_ModelEffectNop(UNUSED ActivePokemon* active_pokemon, UNUSED s32 unused) {
 }
 
 /**
@@ -3078,11 +3081,12 @@ void ParticleEffect_PaletteMultiBurst(void) {
 /**
  * Returns the particle scale for the owner's species: 0.3 for Onix, 0.25 for Gyarados, 0.4
  * for Lapras, 0.5 for any other.
+ * @unverified Name guessed from the code.
  */
-f32 func_8215AEA4(Particle* arg0) {
+f32 BattleAnim_GetLargeSpeciesParticleScale(Particle* particle) {
     f32 sp1C = 0.5f;
 
-    switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
+    switch (BattleAnim_GetOwnerSpecies(particle->pokemon)) {
         case ONIX:
             sp1C = 0.3f;
             break;
@@ -3277,8 +3281,9 @@ void BattleAnim_InitializeSpeedLines(void) {
 
 /**
  * Sets the spawn timing (0, 32, 14) and starts the Quick Attack / Hi Jump Kick use effect.
+ * @unverified Name guessed from the code.
  */
-void func_8215B5B8(void) {
+void BattleAnim_StartEffect112QuickAttackHiJumpKick(void) {
     func_8213B644(0, 0x20, 0xE);
     BattleAnim_InitializeQuickAttackHiJumpKickUse();
 }
@@ -3307,14 +3312,15 @@ void BattleAnim_InitializeLickUse(void) {
  * Adjusts the particle for large species and returns its scale: Onix is moved 15 to the
  * side, Onix, Gyarados and Lapras are raised by 10, and the scale is 0.5 (Onix), 0.4
  * (Gyarados, Lapras) or 1.
+ * @unverified Name guessed from the code.
  */
-f32 func_8215B6A4(Particle* arg0) {
+f32 BattleAnim_OffsetAndScaleParticleForLargeSpecies(Particle* particle) {
     f32 a = 0.0f;
     f32 b = 1.0f;
 
-    switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
+    switch (BattleAnim_GetOwnerSpecies(particle->pokemon)) {
         case ONIX:
-            Particle_AddPositionOffsetAlongRotationYMinus90(arg0, 15.0f);
+            Particle_AddPositionOffsetAlongRotationYMinus90(particle, 15.0f);
             a = 10.0f;
             b = 0.5f;
             break;
@@ -3327,7 +3333,7 @@ f32 func_8215B6A4(Particle* arg0) {
             b = 0.4f;
             break;
     }
-    Particle_PositionOffset_AddYScaled_08E90(arg0, a);
+    Particle_PositionOffset_AddYScaled_08E90(particle, a);
     return b;
 }
 
@@ -3869,8 +3875,9 @@ void ParticleEffect_WaterAnimBurst(void) {
 
 /**
  * Sets the spawn timing (16, 16, 8).
+ * @unverified Name guessed from the code.
  */
-void func_8215CCF0(void) {
+void BattleAnim_EndEffect51GlobalTintFade(void) {
     func_8213B644(0x10, 0x10, 8);
 }
 

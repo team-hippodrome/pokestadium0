@@ -23,7 +23,7 @@ extern u8 D_82199F31;
 f32 BattleScene_GetParticipantHeight(s32);
 s32 Battle_StepPartyHpToDisplay(s32);
 s32 func_80041374(s32, u32);
-s32 func_82124810(void*, void*);
+s32 BattleScene_FrameParticipantFromAboveThunk(void*, void*);
 u16 func_82107CA0(ActivePokemon* active_pokemon);
 void BattleMessage_ShowForSide(s32, s32);
 void BattleScene_CameraShotTargetHighThunk(void*, void*);
@@ -32,8 +32,8 @@ void func_80041940(s32, s32, s32, s32);
 void func_8210C1A8(f32*, f32, f32);
 void func_8211EE8C(void);
 void func_8212188C(void);
-void func_82124830(void*, void*);
-void func_82124874(void*, void*);
+void BattleScene_FrameParticipantFromBelowClamped(void*, void*);
+void BattleScene_FrameParticipantFrontAltThunk(void*, void*);
 
 extern s32 D_8219A570;
 extern s32 D_8219A574;
@@ -231,7 +231,7 @@ void BattleScene_BeginCameraReturnTransition(void) {
     sBattleScene.scene->phaseStep++;
 }
 
-void func_82133868(ActivePokemonState*);
+void DemoBattle_SetupDemoMove(ActivePokemonState*);
 
 // Stadium 1 counterpart: Battle_ActSecondAttacker (no phase/arg handling here).
 /**
@@ -251,7 +251,7 @@ void BattleScene_StartSecondAction(void) {
     if ((temp_a3->faintState == 0xF) || (temp_a3->faintState == 0x10)) {
         BeginBattleForEntity(sActivePokemon[sBattleScene.scene->actingSide]);
     } else if (sBattleScene.scene->mode == 0xA) {
-        func_82133868(temp_a3);
+        DemoBattle_SetupDemoMove(temp_a3);
     } else {
         Battle_ResolveMonAction();
     }
@@ -670,13 +670,13 @@ void BattleCamera_PlayFaintShot(void* arg0, void* arg1, s32 arg2) {
             BattleScene_CameraShotTargetHighThunk(arg1, arg0);
             break;
         case 1:
-            func_82124810(arg1, arg0);
+            BattleScene_FrameParticipantFromAboveThunk(arg1, arg0);
             break;
         case 2:
-            func_82124830(arg1, arg0);
+            BattleScene_FrameParticipantFromBelowClamped(arg1, arg0);
             break;
         default:
-            func_82124874(arg1, arg0);
+            BattleScene_FrameParticipantFrontAltThunk(arg1, arg0);
             break;
     }
 }

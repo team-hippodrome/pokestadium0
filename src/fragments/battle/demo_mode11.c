@@ -34,13 +34,13 @@ void SceneMode11_UnusedNop(void) {
 }
 
 void BattleScene_CameraShotTargetHighThunk(s32, s32);
-void func_82124810(s32, s32);
-void func_82124830(s32, s32);
-void func_82124874(s32, s32);
+void BattleScene_FrameParticipantFromAboveThunk(s32, s32);
+void BattleScene_FrameParticipantFromBelowClamped(s32, s32);
+void BattleScene_FrameParticipantFrontAltThunk(s32, s32);
 
 /**
  * Runs one of four camera framings on Pokemon arg0 with camera arg1, chosen by arg2 (0 the
- * high target shot, 1-3 func_82124810/830/874).
+ * high target shot, 1-3 BattleScene_FrameParticipantFromAboveThunk/830/874).
  * @unverified Name guessed from the code.
  */
 void SceneMode11_FrameDemoPokemon(s32 active_pokemon, s32 camera, s32 framing) {
@@ -49,13 +49,13 @@ void SceneMode11_FrameDemoPokemon(s32 active_pokemon, s32 camera, s32 framing) {
             BattleScene_CameraShotTargetHighThunk(camera, active_pokemon);
             break;
         case 1:
-            func_82124810(camera, active_pokemon);
+            BattleScene_FrameParticipantFromAboveThunk(camera, active_pokemon);
             break;
         case 2:
-            func_82124830(camera, active_pokemon);
+            BattleScene_FrameParticipantFromBelowClamped(camera, active_pokemon);
             break;
         case 3:
-            func_82124874(camera, active_pokemon);
+            BattleScene_FrameParticipantFrontAltThunk(camera, active_pokemon);
             break;
     }
 }

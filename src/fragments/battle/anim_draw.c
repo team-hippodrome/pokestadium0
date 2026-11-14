@@ -62,7 +62,7 @@ extern Vtx D_82190E50[];
 void ParticleEffect_Noop(UNUSED s32 arg0, UNUSED s32 arg1);
 void BattleAnim_DrawFlameHit(Particle* arg0, CameraNode* arg1);
 void BattleAnim_DrawFlameUse(Particle* arg0, CameraNode* arg1);
-void func_82142678(UNUSED ActivePokemon* active_pokemon, UNUSED s32 unused);
+void ParticleGfx_DrawNop(UNUSED ActivePokemon* active_pokemon, UNUSED s32 unused);
 
 void BattleAnim_DrawAsset76Ia8FrameWithAsset77I4Overlay(Particle* arg0, CameraNode* arg1);
 
@@ -226,25 +226,27 @@ void BattleAnim_DrawAsset87AnimatedI4Quad(Particle* arg0, UNUSED CameraNode* arg
 /**
  * Particle draw callback: draws 64x64 I4 atlas asset 0x19 as a 2D sprite at the particle's
  * screen position, Z rotation and scale with its colors.
+ * @unverified Name guessed from the code.
  */
-void func_82141F6C(Particle* arg0, u8* arg1) {
-    ParticleGfx_Push2DTransformYScaled(arg0->worldPosition.x, arg0->worldPosition.y, arg0->rotation.z, arg0->scale);
+void ParticleGfx_DrawI4AtlasSpriteAsset19(Particle* particle, u8* arg1) {
+    ParticleGfx_Push2DTransformYScaled(particle->worldPosition.x, particle->worldPosition.y, particle->rotation.z, particle->scale);
 
     gSPDisplayList(gDisplayListHead++, D_821904C8);
 
-    ParticleGfx_SetPrimEnvColorCombine(arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->env_r, arg0->env_g, arg0->env_b, arg0->prim_a);
+    ParticleGfx_SetPrimEnvColorCombine(particle->prim_r, particle->prim_g, particle->prim_b, particle->env_r, particle->env_g, particle->env_b, particle->prim_a);
     ParticleGfx_DrawI4TextureAtlas(sBattleAnimAssetPointers[0x19], D_82191480, 0x40, 0x40, 0x40, 0x40);
 }
 
 /**
- * Same as func_82141F6C with atlas asset 0x5E.
+ * Same as ParticleGfx_DrawI4AtlasSpriteAsset19 with atlas asset 0x5E.
+ * @unverified Name guessed from the code.
  */
-void func_82142048(Particle* arg0, u8* arg1) {
-    ParticleGfx_Push2DTransformYScaled(arg0->worldPosition.x, arg0->worldPosition.y, arg0->rotation.z, arg0->scale);
+void ParticleGfx_DrawI4AtlasSpriteAsset5E(Particle* particle, u8* arg1) {
+    ParticleGfx_Push2DTransformYScaled(particle->worldPosition.x, particle->worldPosition.y, particle->rotation.z, particle->scale);
 
     gSPDisplayList(gDisplayListHead++, D_821904C8);
 
-    ParticleGfx_SetPrimEnvColorCombine(arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->env_r, arg0->env_g, arg0->env_b, arg0->prim_a);
+    ParticleGfx_SetPrimEnvColorCombine(particle->prim_r, particle->prim_g, particle->prim_b, particle->env_r, particle->env_g, particle->env_b, particle->prim_a);
     ParticleGfx_DrawI4TextureAtlas(sBattleAnimAssetPointers[0x5E], D_82191480, 0x40, 0x40, 0x40, 0x40);
 }
 
@@ -338,8 +340,9 @@ void BattleAnim_DrawAsset1DRotatedI4Quad(Particle* arg0, UNUSED CameraNode* arg1
 
 /**
  * Empty function. Not referenced in C.
+ * @unverified Name guessed from the code.
  */
-void func_82142678(UNUSED ActivePokemon* active_pokemon, UNUSED s32 unused) {
+void ParticleGfx_DrawNop(UNUSED ActivePokemon* active_pokemon, UNUSED s32 unused) {
 }
 
 extern Vtx D_82191100[];
@@ -386,14 +389,15 @@ extern Vtx D_82191180[];
 /**
  * Particle draw callback: draws a double-sided quad with frame (frame counter mod 8) of the
  * 32x96 I4 texture asset 0x13, at the particle's position, rotation and scale.
+ * @unverified Name guessed from the code.
  */
-void func_821428F8(Particle* arg0, UNUSED CameraNode* arg1) {
+void ParticleGfx_DrawAnimatedQuadAsset13(Particle* particle, UNUSED CameraNode* camera) {
     gSPDisplayList(gDisplayListHead++, D_82190548);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     ParticleGfx_LoadTextureI4Alias(sBattleAnimAssetPointers[0x13] + (gParticleFrameMod8 * 0x600), 0x20, 0x60);
-    ParticleGfx_SetPrimEnvColorCombine(arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->env_r, arg0->env_g, arg0->env_b, arg0->prim_a);
-    ParticleGfx_DrawTransformedQuadYScaled(arg0->worldPosition, arg0->rotation, arg0->scale, D_82191180);
+    ParticleGfx_SetPrimEnvColorCombine(particle->prim_r, particle->prim_g, particle->prim_b, particle->env_r, particle->env_g, particle->env_b, particle->prim_a);
+    ParticleGfx_DrawTransformedQuadYScaled(particle->worldPosition, particle->rotation, particle->scale, D_82191180);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
@@ -420,15 +424,16 @@ void BattleAnim_DrawAsset13FrameI4ModelQuadA(Particle* arg0, CameraNode* arg1) {
 extern Vtx D_82191140[];
 
 /**
- * Like func_821428F8 but draws a camera-facing quad rotated by rotation.z.
+ * Like ParticleGfx_DrawAnimatedQuadAsset13 but draws a camera-facing quad rotated by rotation.z.
+ * @unverified Name guessed from the code.
  */
-void func_82142B60(Particle* arg0, CameraNode* arg1) {
+void ParticleGfx_DrawAnimatedBillboardAsset13(Particle* particle, CameraNode* camera) {
     gSPDisplayList(gDisplayListHead++, D_82190548);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     ParticleGfx_LoadTextureI4Alias(sBattleAnimAssetPointers[0x13] + (gParticleFrameMod8 * 0x600), 0x20, 0x60);
-    ParticleGfx_SetPrimEnvColorCombine(arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->env_r, arg0->env_g, arg0->env_b, arg0->prim_a);
-    ParticleGfx_DrawModelQuadRotatedYScaled(arg1, arg0->worldPosition, arg0->scale, D_82191140, arg0->rotation.z);
+    ParticleGfx_SetPrimEnvColorCombine(particle->prim_r, particle->prim_g, particle->prim_b, particle->env_r, particle->env_g, particle->env_b, particle->prim_a);
+    ParticleGfx_DrawModelQuadRotatedYScaled(camera, particle->worldPosition, particle->scale, D_82191140, particle->rotation.z);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
@@ -472,14 +477,15 @@ extern Vtx D_82190D60[];
 /**
  * Particle draw callback: draws a double-sided triangle textured with the 16x256 I4 asset
  * 0x1B, white prim and the particle's color as env.
+ * @unverified Name guessed from the code.
  */
-void func_82142EDC(Particle* arg0, UNUSED CameraNode* arg1) {
+void ParticleGfx_DrawTriangleAsset1B(Particle* particle, UNUSED CameraNode* camera) {
     gSPDisplayList(gDisplayListHead++, D_821904C8);
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     ParticleGfx_LoadTextureI4Alias(sBattleAnimAssetPointers[0x1B], 0x10, 0x100);
-    ParticleGfx_SetPrimEnvColorCombine(0xFF, 0xFF, 0xFF, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->prim_a);
-    ParticleGfx_DrawTransformedTriangle(arg0->worldPosition, arg0->rotation, arg0->scale, D_82190D60);
+    ParticleGfx_SetPrimEnvColorCombine(0xFF, 0xFF, 0xFF, particle->prim_r, particle->prim_g, particle->prim_b, particle->prim_a);
+    ParticleGfx_DrawTransformedTriangle(particle->worldPosition, particle->rotation, particle->scale, D_82190D60);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
 }
@@ -536,6 +542,11 @@ void BattleAnim_DrawAssetA9I4XYScaledQuad(Particle* arg0, UNUSED CameraNode* arg
 
 M2C_UNK func_8216D640(u8, u8, u8, u8);              /* extern */
 
-void func_82143344(s8 *arg0, M2C_UNK arg1) {
+/**
+ * Particle draw callback: draws a full-screen overlay in the particle's color (bytes 0xBA-0xBC,
+ * alpha 0xC0).
+ * @unverified Name guessed from the code.
+ */
+void ParticleGfx_DrawFullScreenColorOverlay(s8 *arg0, M2C_UNK arg1) {
     func_8216D640(M2C_FIELD(arg0, u8 *, 0xBA), M2C_FIELD(arg0, u8 *, 0xBB), M2C_FIELD(arg0, u8 *, 0xBC), M2C_FIELD(arg0, u8 *, 0xC0));
 }

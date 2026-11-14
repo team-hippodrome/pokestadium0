@@ -62,7 +62,7 @@ void BattleScene_InitTurnPresentation(s32 arg0);
 void BattleScene_SetPhase(CameraNode* arg0, s32 arg1);
 void BattleScene_OpeningStepInitCamera(CameraNode* arg0);
 void BattleScene_IntroStepInitOverheadCamera(CameraNode* arg0);
-void func_821329F8(s32 arg0);
+void SceneMode7_StepInit(s32 arg0);
 void SceneMode11_StepInit(CameraNode* arg0);
 /**
  * Starts the battle scene: clears the winner, sets the field of view to 30 and runs the
@@ -101,7 +101,7 @@ void BattleScene_StartPresentationForMode(CameraNode* arg0, UNUSED s32 arg1, UNU
             BattleScene_IntroStepInitOverheadCamera(arg0);
             break;
         case 7:
-            func_821329F8((s32)arg0);
+            SceneMode7_StepInit((s32)arg0);
             break;
         case 11:
             SceneMode11_StepInit(arg0);
