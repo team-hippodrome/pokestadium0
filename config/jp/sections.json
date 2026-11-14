@@ -120,7 +120,7 @@
       "size": "0xC"
     }
   },
-  "src/fragments/disk_error_screen/disk_error_screen.c": {
+  "src/fragments/title_screen/title_screen.c": {
     ".rodata": {
       "address": "0x81200FF4",
       "size": "0x14"
