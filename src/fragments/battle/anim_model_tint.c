@@ -28,14 +28,14 @@ void BattleAnim_SetupDrainFlameHueChange(Particle* arg0) {
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
-s32 Particle_IsRunning(s8 *arg0);                          /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
+s32 Particle_IsRunning(Particle* arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 s32 Particle_ApproachScratchA(s8 *, s16, u8);                 /* extern */
 s32 func_821436A0(s8 *, u8, u8);                  /* extern */
 M2C_UNK func_82144130(s8 *);                      /* extern */
 
-void BattleAnim_CallbackOwnerModelTintPaletteFade(s8 *arg0) {
+void BattleAnim_CallbackOwnerModelTintPaletteFade(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -174,13 +174,13 @@ void BattleAnim_SetupInvisibility(Particle* arg0) {
 }
 
 M2C_UNK func_80019B6C(s32, u8);                     /* extern */
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
-s32 Particle_IsRunning(s8 *arg0);                          /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
+s32 Particle_IsRunning(Particle* arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 s32 Particle_ApproachPrimAlpha(s8 *, u8, u8);                  /* extern */
 M2C_UNK func_82144644(s8 *);                      /* extern */
 
-void BattleAnim_CallbackOwnerModelAlphaFade(s8 *arg0) {
+void BattleAnim_CallbackOwnerModelAlphaFade(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -215,10 +215,10 @@ void BattleAnim_SetupParticleRecolorTransparent(Particle* arg0) {
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_82144710(s8 *);                      /* extern */
 
-void func_82144750(s8 *arg0) {
+void func_82144750(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -373,10 +373,10 @@ void func_82144A54(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 s32 func_82140690();                                /* extern */
 
-void BattleAnim_CallbackDescriptor25AlphaHoldDetach(s8 *arg0) {
+void BattleAnim_CallbackDescriptor25AlphaHoldDetach(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);

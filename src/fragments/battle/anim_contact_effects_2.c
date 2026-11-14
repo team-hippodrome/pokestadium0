@@ -12,9 +12,9 @@ M2C_UNK Particle_SetMagnitudeStepScaled(s8 *, M2C_UNK);
 M2C_UNK Particle_SetParam0(s8 *, M2C_UNK);
 M2C_UNK func_8213E77C(s8 *);
 s32 func_82140690(s8 *);
-void BattleAnim_RunDigHitDust(s8 *arg0);
-void BattleAnim_RunDigHitRocks(s8 *arg0);
-void func_82164AD0(s8 *arg0);
+void BattleAnim_RunDigHitDust(Particle* arg0);
+void BattleAnim_RunDigHitRocks(Particle* arg0);
+void func_82164AD0(Particle* arg0);
 
 /**
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -218,7 +218,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
  * Particle callback: shared vertical-fade init, wait for the spawn step, the later stages,
  * then inactive.
  */
-void func_82164AD0(s8 *arg0) {
+void func_82164AD0(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -296,7 +296,7 @@ void BattleAnim_ApplySpeciesKeyedSpawnOffset(Particle* arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Surf.
  */
-void BattleAnim_RunSplashOfWater(s8 *arg0) {
+void BattleAnim_RunSplashOfWater(Particle* arg0) {
     s16 temp_v0;
     s16 temp_v0_2;
 
@@ -346,7 +346,7 @@ void BattleAnim_RunSplashOfWater(s8 *arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Dig.
  */
-void BattleAnim_RunDigHitDust(s8 *arg0) {
+void BattleAnim_RunDigHitDust(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -379,7 +379,7 @@ void BattleAnim_RunDigHitDust(s8 *arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Dig.
  */
-void BattleAnim_RunDigHitRocks(s8 *arg0) {
+void BattleAnim_RunDigHitRocks(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -473,7 +473,7 @@ void BattleAnim_CallbackDescriptor50BurstChild_InitParticle(Particle* arg0) {
  * Particle callback: init, loops frames 1-7 until the spawn step is done, then fades; falls
  * with speed -1.5 by 0.1 while running.
  */
-void func_82165224(s8 *arg0) {
+void func_82165224(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -563,7 +563,7 @@ void BattleAnim_EndEffect16_NoOpInit(void) {
 /**
  * Like func_82165224 with the shared vertical-fade init and a fall step of 0.2.
  */
-void func_8216547C(s8 *arg0) {
+void func_8216547C(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);

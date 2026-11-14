@@ -47,14 +47,14 @@ void BattleAnim_SetupStrongElectricSpark(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_8213E5C8(s8 *);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214E590(s8 *);                      /* extern */
 
-void func_8214E67C(s8 *arg0) {
+void func_8214E67C(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -287,14 +287,14 @@ void BattleAnim_SetupSharedDirectionalSprayFade(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_8213E5C8(s8 *);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214EC88(s8 *);                      /* extern */
 
-void func_8214ED30(s8 *arg0) {
+void func_8214ED30(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -337,14 +337,14 @@ void BattleAnim_SetupDirectionalSprayScaledFade(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_8213E5C8(s8 *);                      /* extern */
 M2C_UNK func_821402B8(s8 *);                      /* extern */
 M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214EDE0(s8 *);                      /* extern */
 
-void func_8214EEE0(s8 *arg0) {
+void func_8214EEE0(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -391,14 +391,14 @@ void BattleAnim_SetupThunderShockOuterJolts(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_8213E5C8(s8 *);                      /* extern */
 M2C_UNK func_821402B8(s8 *);                      /* extern */
 M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214EF84(s8 *);                      /* extern */
 
-void func_8214F06C(s8 *arg0) {
+void func_8214F06C(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -448,14 +448,14 @@ void BattleAnim_SetupUnregisteredStraightDirectionalStreamFade(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_8213E5C8(s8 *);                      /* extern */
 M2C_UNK func_821402B8(s8 *);                      /* extern */
 M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214F110(s8 *);                      /* extern */
 
-void func_8214F1E8(s8 *arg0) {
+void func_8214F1E8(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -505,14 +505,14 @@ void BattleAnim_SetupEndEffect28Descriptor10UpwardBurstFade(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_8213E5C8(s8 *);                      /* extern */
 M2C_UNK func_821402B8(s8 *);                      /* extern */
 M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214F28C(s8 *);                      /* extern */
 
-void func_8214F3D4(s8 *arg0) {
+void func_8214F3D4(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -559,14 +559,14 @@ void BattleAnim_SetupEndEffect28Descriptor10WideScatterBurstFade(Particle* arg0)
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_8213E5C8(s8 *);                      /* extern */
 M2C_UNK func_821402B8(s8 *);                      /* extern */
 M2C_UNK func_82140548(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214F478(s8 *);                      /* extern */
 
-void func_8214F55C(s8 *arg0) {
+void func_8214F55C(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);

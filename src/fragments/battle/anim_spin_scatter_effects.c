@@ -181,7 +181,7 @@ void BattleAnim_SetupOrphanDescriptor2EScatterFade(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CA80(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 s32 func_8213CB7C(s8 *);                          /* extern */
@@ -190,7 +190,7 @@ M2C_UNK Particle_AddRotationZ(s8 *, M2C_UNK);             /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_821519AC(s8 *);                      /* extern */
 
-void func_82151A5C(s8 *arg0) {
+void func_82151A5C(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);

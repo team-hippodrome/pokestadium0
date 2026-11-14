@@ -25,7 +25,7 @@ M2C_UNK func_82143478(s8 *, u16);
 s16 Particle_GetUnkCE();
 s32 func_82140690(s8 *);
 u16 func_8213C484(s8 *);
-void func_82163D7C(s8 *arg0);
+void func_82163D7C(Particle* arg0);
 
 /**
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -76,7 +76,7 @@ void BattleAnim_SetupSlashingMoveUse(Particle* arg0) {
  * Particle callback (lifecycle at 0xAE): init, loop frames 0-7 once, fade alpha out by 64,
  * then mark inactive. Scale moves toward 3.5 by 0.25 every frame.
  */
-void func_8215FAA4(s8 *arg0) {
+void func_8215FAA4(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -294,7 +294,7 @@ void BattleAnim_SetupSlashingMoveFullScreenFlash(Particle* arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Scratch, Cut, Vine Whip, Fury Swipes, Slash.
  */
-void BattleAnim_RunSlashingMoveFullScreenFlash(s8 *arg0) {
+void BattleAnim_RunSlashingMoveFullScreenFlash(Particle* arg0) {
     s16 sp26;
     s16 temp_v1;
 
@@ -339,7 +339,7 @@ void BattleAnim_SetupSlashMoveWhiteFlashOverlay(Particle* arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Scratch, Cut, Vine Whip, Crabhammer, Fury Swipes, Slash.
  */
-void BattleAnim_RunSlashMoveWhiteFlashOverlay(s8 *arg0) {
+void BattleAnim_RunSlashMoveWhiteFlashOverlay(Particle* arg0) {
     s16 sp26;
     s16 temp_v1;
 
@@ -396,7 +396,7 @@ void BattleAnim_SlashGrowFade_InitParticle(Particle* arg0) {
  * Particle callback: init, an 8-frame countdown, a fade-out by 32, then inactive. Loops
  * frames 0-7 and moves scale toward 5 by 0.4 every frame.
  */
-void func_821603C8(s8 *arg0) {
+void func_821603C8(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -441,7 +441,7 @@ void BattleAnim_HeavyHitBurstChild_InitParticle(Particle* arg0) {
  * Particle callback: init, wait the delay in field A2, then the later stages of
  * func_82160494's effect before it is marked inactive.
  */
-void func_82160528(s8 *arg0) {
+void func_82160528(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -492,7 +492,7 @@ void BattleAnim_SetupSmallSand(s8 *arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Sand Attack.
  */
-void BattleAnim_RunSmallSand(s8 *arg0) {
+void BattleAnim_RunSmallSand(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -542,7 +542,7 @@ void BattleAnim_SetupLargeSand(s8 *arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Sand Attack.
  */
-void BattleAnim_RunLargeSand(s8 *arg0) {
+void BattleAnim_RunLargeSand(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -589,7 +589,7 @@ void BattleAnim_SetupSandAttackUseEffect(Particle* arg0) {
  * Particle callback of the Sand Attack animation. Player sweep (all 165 moves used in battle):
  * only Sand Attack reached this function.
  */
-void BattleAnim_SandAttackParticleUpdate(s8 *arg0) {
+void BattleAnim_SandAttackParticleUpdate(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -632,7 +632,7 @@ void func_82160BB8(s8 *arg0) {
  * Particle callback for the spreading particle of func_82160BB8: loops frames 0-7 while it
  * shrinks toward 0.75, slows its step to 0.5 and rises, then fades and is marked inactive.
  */
-void func_82160CCC(s8 *arg0) {
+void func_82160CCC(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -681,7 +681,7 @@ void BattleAnim_SetupSandAttackHitEffect(Particle* arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Sand Attack.
  */
-void BattleAnim_RunSandAttackHitEffect(s8 *arg0) {
+void BattleAnim_RunSandAttackHitEffect(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -800,7 +800,7 @@ void BattleAnim_SetupIceBeamIcePunchEffect(Particle* arg0) {
  * Particle callback: init, wait the delay in field A2, run the effect stages, then mark
  * inactive.
  */
-void func_82161288(s8 *arg0) {
+void func_82161288(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -849,7 +849,7 @@ void BattleAnim_CallbackOrphanDescriptor34ColorFadeDetach_InitParticle(Particle*
 /**
  * Particle callback: init, wait the delay in field A2, run the effect stages, then detach.
  */
-void func_8216140C(s8 *arg0) {
+void func_8216140C(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -942,7 +942,7 @@ void BattleAnim_SetupUnusedGlitterVariant(Particle* arg0) {
  * Particle callback: init, then speeds up toward step magnitude 2 and fades out once the
  * spawn step reports done. Moves along its rotation while running.
  */
-void func_821616BC(s8 *arg0) {
+void func_821616BC(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1005,7 +1005,7 @@ void BattleAnim_SetupPointyMoveHitSparkChild(Particle* arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Horn Attack, Poison Sting, Twineedle, Pin Missile, Peck, Spike Cannon.
  */
-void BattleAnim_RunPointyMoveHitSparkChild(s8 *arg0) {
+void BattleAnim_RunPointyMoveHitSparkChild(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1932,7 +1932,7 @@ void BattleAnim_SetupFirePunchUseEffect2(Particle* arg0) {
  * Particle callback of the Fire Punch animation. Player sweep (all 165 moves used in battle):
  * only Fire Punch reached this function.
  */
-void BattleAnim_FirePunchParticleUpdate(s8 *arg0) {
+void BattleAnim_FirePunchParticleUpdate(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -2005,7 +2005,7 @@ void BattleAnim_SetupThunderPunchUseEffect(Particle* arg0) {
  * Particle callback: init, wait the delay in field A2, run the effect stages, then mark
  * inactive.
  */
-void func_821639EC(s8 *arg0) {
+void func_821639EC(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -2122,7 +2122,7 @@ void BattleAnim_PowderCloudScaleMotion_InitParticle(Particle* arg0) {
  * Particle callback: init, wait the delay in field A2, run the effect stages, then mark
  * inactive.
  */
-void func_82163D7C(s8 *arg0) {
+void func_82163D7C(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);

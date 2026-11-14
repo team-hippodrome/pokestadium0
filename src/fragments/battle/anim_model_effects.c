@@ -581,7 +581,7 @@ void BattleAnim_SetupLeechSeedUseEffect1(Particle* arg0) {
  * Particle callback of the Leech Seed animation. Player sweep (all 165 moves used in battle):
  * only Leech Seed reached this function.
  */
-void BattleAnim_LeechSeedParticleUpdate(s8 *arg0) {
+void BattleAnim_LeechSeedParticleUpdate(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -683,7 +683,7 @@ void BattleAnim_InitEffect31Model(Particle* arg0) {
  * then when the spawn step reports done spawns a func_821624FC hit effect, and finishes once
  * the owner's model animation (+0x14) ends.
  */
-void func_821558F4(s8 *arg0) {
+void func_821558F4(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -842,7 +842,7 @@ void BattleAnim_SetupBlizzard(Particle* arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Blizzard.
  */
-void BattleAnim_RunBlizzard(s8 *arg0) {
+void BattleAnim_RunBlizzard(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1436,7 +1436,7 @@ void BattleAnim_InitEffects10And50Model(Particle* arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Strength, Rock Throw, Rock Slide.
  */
-void BattleAnim_RunFallingRock(s8 *arg0) {
+void BattleAnim_RunFallingRock(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1938,7 +1938,7 @@ void BattleAnim_SetupBoomUseEffect3(Particle* arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Self-Destruct, Explosion.
  */
-void BattleAnim_RunBoomUseEffect3(s8 *arg0) {
+void BattleAnim_RunBoomUseEffect3(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1996,7 +1996,7 @@ void BattleAnim_SetupBoomUseEffect4(Particle* arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Self-Destruct, Explosion.
  */
-void BattleAnim_RunBoomUseEffect4(s8 *arg0) {
+void BattleAnim_RunBoomUseEffect4(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -2066,7 +2066,7 @@ void Particle_CreateDisplayList_CustomColors(s32 arg0, arg1_func_84344CE8* arg1)
  * then grows toward scale 7 by 0.25 with 5-frame delays between stages before it is marked
  * inactive.
  */
-void func_821588C0(s8 *arg0) {
+void func_821588C0(Particle* arg0) {
     s16 temp_v1;
 
     Particle_GetUnkCE();
@@ -2161,7 +2161,7 @@ void BattleAnim_RunBoomUseEffect6(Particle* arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Self-Destruct, Explosion.
  */
-void BattleAnim_RunBoomHitEffect1(s8 *arg0) {
+void BattleAnim_RunBoomHitEffect1(Particle* arg0) {
     s16 temp_v1;
 
     Particle_GetUnkCE();
@@ -2227,7 +2227,7 @@ void BattleAnim_SetupBoomHitEffect2(Particle* arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Self-Destruct, Explosion.
  */
-void BattleAnim_RunBoomHitEffect2(s8 *arg0) {
+void BattleAnim_RunBoomHitEffect2(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -2290,7 +2290,7 @@ void BattleAnim_SetupBoomHitEffect3(Particle* arg0) {
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Self-Destruct, Explosion.
  */
-void BattleAnim_RunBoomHitEffect3(s8 *arg0) {
+void BattleAnim_RunBoomHitEffect3(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -3766,7 +3766,7 @@ void BattleAnim_SetupConfuseRayUseSpotlight(Particle* arg0) {
  * Particle callback: init, then fades in to full alpha while field AE moves toward 200.
  * Always turns the particle to face away from the camera (camera yaw + 0x8000).
  */
-void func_8215C984(s8 *arg0) {
+void func_8215C984(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -3804,7 +3804,7 @@ void BattleAnim_SetupConfuseRayHitSpotlight(Particle* arg0) {
  * Particle callback of the Confuse Ray animation. Player sweep (all 165 moves used in battle):
  * only Confuse Ray reached this function.
  */
-void BattleAnim_ConfuseRayParticleUpdate(s8 *arg0) {
+void BattleAnim_ConfuseRayParticleUpdate(Particle* arg0) {
     if (M2C_FIELD(arg0, s16 *, 0xAE) == 1) {
         func_8215CA14();
     }
@@ -4017,7 +4017,7 @@ void BattleAnim_SetupBarrageEffect(Particle* arg0) {
  * Particle callback: init, then loops frames 0-7 while fading alpha toward 32, then detaches.
  * Scale moves toward 0.5 by 0.1 every frame.
  */
-void func_8215D76C(s8 *arg0) {
+void func_8215D76C(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -4123,7 +4123,7 @@ void BattleAnim_SetupBarrageHitEffect(Particle* arg0) {
  * Particle callback: init, then emits one func_8215D76C child per frame while spinning and
  * counting down 7 frames, then detaches. Moves along its rotation while the countdown runs.
  */
-void func_8215DAEC(s8 *arg0) {
+void func_8215DAEC(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -4671,7 +4671,7 @@ void BattleAnim_InitializeHornAttackUse(void) {
  * Particle callback: starts a model animation (func_82152730 0), then fades alpha in and
  * marks itself inactive once the model animation ends.
  */
-void func_8215F1B0(s8 *arg0) {
+void func_8215F1B0(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -4750,7 +4750,7 @@ void BattleAnim_CallbackStartEffects127And128Descriptor39ScaleFade_InitParticle(
  * Particle callback with several staged waits: init, wait for the spawn step, then a
  * 10-frame delay, then the approach steps of func_821402B8 / func_82140548, then inactive.
  */
-void func_8215F3EC(s8 *arg0) {
+void func_8215F3EC(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);

@@ -299,7 +299,7 @@ void BattleAnim_SetupBackgroundRecolor(Particle* arg0) {
 }
 
 s32 func_8213C494(s8 *);                          /* extern */
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK Particle_StorePrimColorInTemp(s8 *);                      /* extern */
 s32 func_821436A0(s8 *, u8, s32);                 /* extern */
@@ -343,8 +343,8 @@ void BattleAnim_SetupTargetHueChange(Particle* arg0) {
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
-s32 Particle_IsRunning(s8 *arg0);                          /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
+s32 Particle_IsRunning(Particle* arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 s32 Particle_ApproachScratchA(s8 *, u8, s16);                 /* extern */
 M2C_UNK func_821439D0(s8 *);                      /* extern */
@@ -432,8 +432,8 @@ void func_82143C08(void) {
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
-s32 Particle_IsRunning(s8 *arg0);                          /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
+s32 Particle_IsRunning(Particle* arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_82143AD0(s8 *);                      /* extern */
@@ -473,8 +473,8 @@ void func_82143CE0(Particle* arg0) {
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
-s32 Particle_IsRunning(s8 *arg0);                          /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
+s32 Particle_IsRunning(Particle* arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK Particle_SetScratchA(s8 *, M2C_UNK);             /* extern */
 
@@ -511,8 +511,8 @@ void func_82143DE8(Particle* arg0) {
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
-s32 Particle_IsRunning(s8 *arg0);                          /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
+s32 Particle_IsRunning(Particle* arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 
 void func_82143E30(s8 *arg0) {
@@ -593,8 +593,8 @@ void func_82144010(Particle* arg0) {
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
-s32 Particle_IsRunning(s8 *arg0);                          /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
+s32 Particle_IsRunning(Particle* arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_82140874(s8 *, M2C_UNK, u8);         /* extern */
 

@@ -9,8 +9,8 @@ void BattleAnim_InitStingerTrailColor(Particle* arg0);
 void BattleAnim_InitStingerTrailColorDuplicate(Particle* arg0);
 void BattleAnim_InitStingerMoveParticle(Particle* arg0, u8 arg1);
 
-void BattleAnim_UpdateNeedleBlueFadeGrow(s8 *arg0);
-void BattleAnim_UpdateSecondaryOwnerParticleBlueGrow(s8 *arg0);
+void BattleAnim_UpdateNeedleBlueFadeGrow(Particle* arg0);
+void BattleAnim_UpdateSecondaryOwnerParticleBlueGrow(Particle* arg0);
 
 /**
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -24,8 +24,8 @@ void BattleAnim_InitStingerTrailColor(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
-s32 Particle_IsRunning(s8 *arg0);                          /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
+s32 Particle_IsRunning(Particle* arg0);                          /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
@@ -35,7 +35,7 @@ M2C_UNK func_82140920(s8 *);                      /* extern */
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Poison Sting, Twineedle, Pin Missile and Spike Cannon.
  */
-void BattleAnim_UpdateNeedleBlueFadeGrow(s8 *arg0) {
+void BattleAnim_UpdateNeedleBlueFadeGrow(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -68,11 +68,11 @@ void BattleAnim_InitStingerTrailColorDuplicate(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-s32 Particle_IsRunning(s8 *arg0);                          /* extern */
+s32 Particle_IsRunning(Particle* arg0);                          /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82140A48();                            /* extern */
 
-void BattleAnim_UpdateSecondaryOwnerParticleBlueGrow(s8 *arg0) {
+void BattleAnim_UpdateSecondaryOwnerParticleBlueGrow(Particle* arg0) {
     if (M2C_FIELD(arg0, s16 *, 0xAE) == 1) {
         func_82140A48();
     }

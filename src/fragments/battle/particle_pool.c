@@ -77,7 +77,7 @@ void BattleAnim_ClearEffectCallbacks(void);
 void BattleAnim_SetEffectState(s32 arg0);
 Particle* Particle_Alloc(void);
 s32 Particle_CountActive(void);
-s32 Particle_IsInactive(s8 *arg0);
+s32 Particle_IsInactive(Particle* arg0);
 s32 Particle_HasFlags(Particle* arg0, s32 arg1);
 void Particle_UpdateWorldTransform(Particle* arg0);
 void Particle_UpdateFrameCounters(void);

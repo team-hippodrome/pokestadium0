@@ -65,7 +65,7 @@ void BattleAnim_SetupSurfHitSpark(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 s32 func_8213CB7C(s8 *);                          /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
@@ -82,7 +82,7 @@ M2C_UNK func_82149660(s8 *);                      /* extern */
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Surf.
  */
-void BattleAnim_RunSurfHitSpark(s8 *arg0) {
+void BattleAnim_RunSurfHitSpark(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -198,7 +198,7 @@ void BattleAnim_ContinueBubbleBeamBubblesSlow(Particle* arg0) {
 }
 
 u32 ParticleMath_RandomRange(u32 arg0);                         /* extern */
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 s32 func_8213CB7C(s8 *);                          /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
@@ -214,7 +214,7 @@ M2C_UNK func_82149C20(s8 *);                      /* extern */
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Bubble Beam.
  */
-void BattleAnim_RunBubbleBeamBubblesSlow(s8 *arg0) {
+void BattleAnim_RunBubbleBeamBubblesSlow(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -277,7 +277,7 @@ void BattleAnim_SetupBubbleBeamBubblesFast(Particle* arg0) {
 }
 
 u32 ParticleMath_RandomRange(u32 arg0);                         /* extern */
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
@@ -291,7 +291,7 @@ M2C_UNK func_82149D74(s8 *);                      /* extern */
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Bubble Beam.
  */
-void BattleAnim_RunBubbleBeamBubblesFast(s8 *arg0) {
+void BattleAnim_RunBubbleBeamBubblesFast(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -404,7 +404,7 @@ void BattleAnim_MotionUnusedRotatingSparkVariant(Particle* arg0) {
     }
 }
 
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 s32 func_8213CB7C(s8 *);                          /* extern */
 M2C_UNK func_8213D238(s8 *);                      /* extern */
@@ -413,7 +413,7 @@ s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82149FD8(s8 *);                      /* extern */
 M2C_UNK func_8214A190(s8 *);                      /* extern */
 
-void func_8214A220(s8 *arg0) {
+void func_8214A220(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -572,7 +572,7 @@ void BattleAnim_SetupHydroPumpBurstChild(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CA80(s8 *, M2C_UNK);             /* extern */
 M2C_UNK Particle_AddPosOffsetYScaled(s8 *, M2C_UNK);             /* extern */
 void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
@@ -581,7 +581,7 @@ M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214A634(s8 *);                      /* extern */
 
-void func_8214A6B4(s8 *arg0) {
+void func_8214A6B4(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -621,13 +621,13 @@ void BattleAnim_SetupHydroPumpMetadataBurstChild(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 s32 Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);        /* extern */
 M2C_UNK func_8214A77C(s8 *);                      /* extern */
 
-void func_8214A7F4(s8 *arg0) {
+void func_8214A7F4(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -700,7 +700,7 @@ void BattleAnim_SetupWaterGunProjectileChild(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CA80(s8 *, M2C_UNK);             /* extern */
 M2C_UNK Particle_AddPosOffsetYScaled(s8 *, M2C_UNK);             /* extern */
 void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
@@ -708,7 +708,7 @@ M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214A9DC(s8 *);                      /* extern */
 
-void func_8214AA60(s8 *arg0) {
+void func_8214AA60(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -753,13 +753,13 @@ void BattleAnim_SetupWaterGunProjectileMetadata(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 s32 Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);        /* extern */
 M2C_UNK func_8214AB14(s8 *);                      /* extern */
 
-void func_8214ABAC(s8 *arg0) {
+void func_8214ABAC(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -852,7 +852,7 @@ void BattleAnim_ContinueIceBeamColdBreath(Particle* arg0) {
     }
 }
 
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 s32 func_8213CB7C(s8 *);                          /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
@@ -866,7 +866,7 @@ M2C_UNK func_8214AF08(s8 *);                      /* extern */
  * Particle callback of the Ice Beam animation. Player sweep (all 165 moves used in battle): only
  * Ice Beam reached this function.
  */
-void BattleAnim_IceBeamParticleUpdateA(s8 *arg0) {
+void BattleAnim_IceBeamParticleUpdateA(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -986,7 +986,7 @@ void BattleAnim_SetupPulsingBeamEmanator(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_821401F8(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_82140210(s8 *, M2C_UNK);             /* extern */
 s32 func_821402E4(s8 *);                          /* extern */
@@ -998,7 +998,7 @@ M2C_UNK func_8214B280(s8 *);                      /* extern */
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam, Psybeam, Aurora Beam, Hyper Beam.
  */
-void BattleAnim_RunPulsingBeamEmanator(s8 *arg0) {
+void BattleAnim_RunPulsingBeamEmanator(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1186,8 +1186,8 @@ void BattleAnim_SetupStrongOutwardMovingLargeHitSpark(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
-s32 Particle_IsRunning(s8 *arg0);                          /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
+s32 Particle_IsRunning(Particle* arg0);                          /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
 M2C_UNK Particle_ApproachStepMagnitude(s8 *, f32, f32);    /* extern */
@@ -1200,7 +1200,7 @@ M2C_UNK func_8214B84C(s8 *);                      /* extern */
  * for Hydro Pump, Hyper Beam, Ice Beam and Waterfall (the sweep used only the charge turn of
  * Solar Beam and Sky Attack).
  */
-void BattleAnim_RunStrongOutwardMovingLargeHitSpark(s8 *arg0) {
+void BattleAnim_RunStrongOutwardMovingLargeHitSpark(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1236,8 +1236,8 @@ void BattleAnim_SetupBlizzardHitUpwardColdAir(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
-s32 Particle_IsRunning(s8 *arg0);                          /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
+s32 Particle_IsRunning(Particle* arg0);                          /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
 M2C_UNK Particle_ApproachStepMagnitude(s8 *, f32, f32);    /* extern */
@@ -1249,7 +1249,7 @@ M2C_UNK func_8214B9A8(s8 *);                      /* extern */
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Blizzard.
  */
-void BattleAnim_RunBlizzardHitUpwardColdAir(s8 *arg0) {
+void BattleAnim_RunBlizzardHitUpwardColdAir(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1285,8 +1285,8 @@ void BattleAnim_SetupWaterGunHitEffect(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
-s32 Particle_IsRunning(s8 *arg0);                          /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
+s32 Particle_IsRunning(Particle* arg0);                          /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
 M2C_UNK Particle_ApproachStepMagnitude(s8 *, f32, f32);    /* extern */
@@ -1297,7 +1297,7 @@ M2C_UNK func_8214BAFC(s8 *);                      /* extern */
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Water Gun.
  */
-void BattleAnim_RunWaterGunHitEffect(s8 *arg0) {
+void BattleAnim_RunWaterGunHitEffect(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1350,8 +1350,8 @@ void BattleAnim_SetupWeakBeamHitEffect(Particle* arg0) {
 }
 
 s16 func_8213C484();                                /* extern */
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
-s32 Particle_IsRunning(s8 *arg0);                          /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
+s32 Particle_IsRunning(Particle* arg0);                          /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
 M2C_UNK Particle_ApproachStepMagnitude(s8 *, f32, f32);    /* extern */
@@ -1368,7 +1368,7 @@ extern s32 D_8219A790;
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Psybeam, Bubble Beam, Aurora Beam.
  */
-void BattleAnim_RunWeakBeamHitEffect(s8 *arg0) {
+void BattleAnim_RunWeakBeamHitEffect(Particle* arg0) {
     s16 sp2E;
     s16 temp_v1;
 
@@ -1448,7 +1448,7 @@ void BattleAnim_SetupTriAttackHitSpark(Particle* arg0) {
 }
 
 M2C_UNK Particle_GetUnkCE();                            /* extern */
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
@@ -1463,7 +1463,7 @@ M2C_UNK func_8214BEE8(s8 *);                      /* extern */
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Tri Attack.
  */
-void BattleAnim_RunTriAttackHitSpark(s8 *arg0) {
+void BattleAnim_RunTriAttackHitSpark(Particle* arg0) {
     s16 temp_v1;
 
     Particle_GetUnkCE();
@@ -1512,7 +1512,7 @@ void BattleAnim_SetupStrongOutwardMovingSmallHitSpark(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
@@ -1522,7 +1522,7 @@ M2C_UNK Particle_SetParam0(s8 *, M2C_UNK);             /* extern */
 s32 func_82140690(s8 *);                          /* extern */
 M2C_UNK func_8214C134(s8 *);                      /* extern */
 
-void func_8214C208(s8 *arg0) {
+void func_8214C208(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1574,7 +1574,7 @@ void BattleAnim_SetupUnusedIndexedFadeVariantA(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
@@ -1584,7 +1584,7 @@ M2C_UNK Particle_SetParam0(s8 *, M2C_UNK);             /* extern */
 s32 func_82140690(s8 *);                          /* extern */
 M2C_UNK func_8214C300(s8 *);                      /* extern */
 
-void func_8214C3C8(s8 *arg0) {
+void func_8214C3C8(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1636,14 +1636,14 @@ void BattleAnim_SetupUnusedIndexedFadeVariantB(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214C4C4(s8 *);                      /* extern */
 
-void func_8214C598(s8 *arg0) {
+void func_8214C598(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1754,7 +1754,7 @@ void BattleAnim_SetupHydroPumpColorShiftFade(Particle* arg0) {
 }
 
 M2C_UNK func_82137AB4(s8 *, M2C_UNK, M2C_UNK);    /* extern */
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, s32);        /* extern */
 M2C_UNK Particle_ApproachPrimRed(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_ApproachPrimGreen(s8 *, M2C_UNK, M2C_UNK);    /* extern */
@@ -1833,7 +1833,7 @@ void BattleAnim_SetupWaterGunEmitterColoration(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
 M2C_UNK func_821402B8(s8 *);                      /* extern */
 M2C_UNK Particle_ApproachPrimRed(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_ApproachPrimGreen(s8 *, M2C_UNK, M2C_UNK);    /* extern */
@@ -1850,7 +1850,7 @@ M2C_UNK func_8214CA90(s8 *);                      /* extern */
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Water Gun.
  */
-void BattleAnim_RunWaterGunEmitterColoration(s8 *arg0) {
+void BattleAnim_RunWaterGunEmitterColoration(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1896,7 +1896,7 @@ void BattleAnim_SetupHydroPumpWaterGunProjectileHit(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CA80(s8 *, M2C_UNK);             /* extern */
 M2C_UNK Particle_AddPosOffsetYScaled(s8 *, M2C_UNK);             /* extern */
 void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
@@ -1909,7 +1909,7 @@ M2C_UNK func_8214CC90(s8 *);                      /* extern */
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Water Gun, Hydro Pump.
  */
-void BattleAnim_RunHydroPumpWaterGunProjectileHit(s8 *arg0) {
+void BattleAnim_RunHydroPumpWaterGunProjectileHit(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);

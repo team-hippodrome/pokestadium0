@@ -340,7 +340,7 @@ void BattleAnim_ContinueFireBreathFlameGeometry(Particle* arg0) {
     }
 }
 
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 s32 func_8213CB7C(s8 *);                          /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
@@ -351,7 +351,7 @@ s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_821452FC(s8 *);                      /* extern */
 M2C_UNK func_821453F4(s8 *);                      /* extern */
 
-void func_82145498(s8 *arg0) {
+void func_82145498(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -644,7 +644,7 @@ void BattleAnim_SetupOscillatingFlameUnderneathPokemon(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
@@ -668,7 +668,7 @@ M2C_UNK func_82145C28(s8 *);                      /* extern */
  * for Fire Spin, Rage, Sky Attack and Metronome (through the move it called). Bide did not use
  * it.
  */
-void BattleAnim_RunOscillatingFlameUnderneathPokemon(s8 *arg0) {
+void BattleAnim_RunOscillatingFlameUnderneathPokemon(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -730,7 +730,7 @@ M2C_UNK func_82145E04(s8 *);                      /* extern */
  * Particle callback of the Fire Spin animation. Player sweep (all 165 moves used in battle): only
  * Fire Spin reached this function.
  */
-void BattleAnim_FireSpinParticleUpdate(s8 *arg0) {
+void BattleAnim_FireSpinParticleUpdate(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -820,7 +820,7 @@ void BattleAnim_SetupEmberProjectileAfterimages(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
@@ -830,7 +830,7 @@ M2C_UNK func_821460C8(s8 *);                      /* extern */
  * Particle callback of the Ember animation. Player sweep (all 165 moves used in battle): only
  * Ember reached this function.
  */
-void BattleAnim_EmberParticleUpdateB(s8 *arg0) {
+void BattleAnim_EmberParticleUpdateB(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -863,7 +863,7 @@ void BattleAnim_SetupEmberProjectile(Particle* arg0) {
 }
 
 M2C_UNK func_82139E5C(s8 *, M2C_UNK *, M2C_UNK *, M2C_UNK); /* extern */
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CA80(s8 *, M2C_UNK);             /* extern */
 s32 func_8213CB7C(s8 *);                          /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
@@ -877,7 +877,7 @@ extern M2C_UNK D_8218E7D0;
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ember.
  */
-void BattleAnim_RunEmberProjectile(s8 *arg0) {
+void BattleAnim_RunEmberProjectile(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -916,7 +916,7 @@ void BattleAnim_SetupEmberBurstEmitter(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CA80(s8 *, M2C_UNK);             /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8213E6BC(s8 *);                      /* extern */
@@ -928,7 +928,7 @@ M2C_UNK func_82146314(s8 *);                      /* extern */
  * Particle callback of the Ember animation. Player sweep (all 165 moves used in battle): only
  * Ember reached this function.
  */
-void BattleAnim_EmberParticleUpdateA(s8 *arg0) {
+void BattleAnim_EmberParticleUpdateA(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1182,7 +1182,7 @@ void BattleAnim_SetupBoomSmallExplosion(Particle* arg0) {
 }
 
 M2C_UNK Particle_GetUnkCE();                            /* extern */
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_8213E6BC(s8 *);                      /* extern */
@@ -1196,7 +1196,7 @@ M2C_UNK func_821469BC(s8 *);                      /* extern */
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Explosion and Selfdestruct.
  */
-void BattleAnim_RunBoomSmallExplosion(s8 *arg0) {
+void BattleAnim_RunBoomSmallExplosion(Particle* arg0) {
     s16 temp_v1;
 
     Particle_GetUnkCE();
@@ -1258,7 +1258,7 @@ void BattleAnim_SetupEggBombHitEffect(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
@@ -1267,7 +1267,7 @@ M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82146BEC(s8 *);                      /* extern */
 
-void BattleAnim_CallbackEndEffect40Descriptor48SpreadScaleAlphaFade(s8 *arg0) {
+void BattleAnim_CallbackEndEffect40Descriptor48SpreadScaleAlphaFade(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1318,7 +1318,7 @@ void BattleAnim_SetupSecondaryBombExplosion(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK Particle_AddPosOffsetYScaled(s8 *, M2C_UNK);             /* extern */
@@ -1338,7 +1338,7 @@ M2C_UNK func_82146E1C(s8 *);                      /* extern */
  * Seen in play (2026-11-12): in the per-move sweep it ran only for Egg Bomb (not for Explosion or
  * Selfdestruct).
  */
-void BattleAnim_RunSecondaryBombExplosion(s8 *arg0) {
+void BattleAnim_RunSecondaryBombExplosion(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1400,7 +1400,7 @@ void BattleAnim_SetupEmberHitFireball(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
@@ -1409,7 +1409,7 @@ M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82147050(s8 *);                      /* extern */
 
-void BattleAnim_CallbackEndEffect56Descriptor46RisingScaleAlphaFade(s8 *arg0) {
+void BattleAnim_CallbackEndEffect56Descriptor46RisingScaleAlphaFade(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1519,7 +1519,7 @@ void BattleAnim_SetupFirePunchLingeringHitSpark(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK Particle_AddPosOffsetYScaled(s8 *, M2C_UNK);             /* extern */
@@ -1539,7 +1539,7 @@ M2C_UNK func_821474CC(s8 *);                      /* extern */
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Fire Punch, Ember.
  */
-void BattleAnim_RunFirePunchLingeringHitSpark(s8 *arg0) {
+void BattleAnim_RunFirePunchLingeringHitSpark(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1601,7 +1601,7 @@ void BattleAnim_SetupAfterImpactSmoke(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
@@ -1614,7 +1614,7 @@ M2C_UNK func_82147710(s8 *);                      /* extern */
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Egg Bomb and Fire Punch.
  */
-void BattleAnim_RunAfterImpactSmoke(s8 *arg0) {
+void BattleAnim_RunAfterImpactSmoke(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1670,7 +1670,7 @@ void BattleAnim_SetupFirePunchHitEffect(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
@@ -1685,7 +1685,7 @@ M2C_UNK func_8214795C(s8 *);                      /* extern */
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Fire Punch.
  */
-void BattleAnim_RunFirePunchHitEffect(s8 *arg0) {
+void BattleAnim_RunFirePunchHitEffect(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1886,7 +1886,7 @@ void BattleAnim_ContinueFireBlastHitFrontFlames(Particle* arg0) {
     }
 }
 
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 s32 func_8213CB7C(s8 *);                          /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
@@ -1897,7 +1897,7 @@ s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82147ED0(s8 *);                      /* extern */
 M2C_UNK func_82147FF0(s8 *);                      /* extern */
 
-void func_82148090(s8 *arg0) {
+void func_82148090(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -2067,7 +2067,7 @@ void BattleAnim_SetupDaimonjiColoration(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void Particle_MarkInactive(s8 *arg0);                      /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 s32 func_8213CB7C(s8 *);                          /* extern */
@@ -2086,7 +2086,7 @@ M2C_UNK func_8214851C(s8 *);                      /* extern */
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Fire Blast.
  */
-void BattleAnim_RunDaimonjiColoration(s8 *arg0) {
+void BattleAnim_RunDaimonjiColoration(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
