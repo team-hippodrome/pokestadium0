@@ -5,9 +5,9 @@
 #include "global.h"
 
 // gb_tower_team_prep.c
-void GbTower_LoadPartyFromDeck(s32 arg0);
-s32 GbTower_TeamPrepFrameCallback(u8 arg0);
-void GbTower_BuildPartyResult(GbTowerLaunchParams* arg0);
-s32 GbTower_TeamPrep(s32 arg0, GbTowerLaunchParams* arg1);
+void GbTower_LoadPartyFromDeck(s32 port);
+s32 GbTower_PartyIconsFrameCallback(u8 fadeMode);
+void GbTower_FillLaunchParams(GbTowerLaunchParams* params);
+s32 GbTower_PreparePartyIcons(s32 port, GbTowerLaunchParams* params);
 
 #endif // FRAGMENT_GB_TOWER_TEAM_PREP_H

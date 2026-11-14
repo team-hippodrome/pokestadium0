@@ -702,7 +702,7 @@ void State_GbTower(void) {
 
     GbSave_ForceReloadPort(D_800733D4);
     func_80023C30();
-    func_80025130(sp24.unk_00);
+    func_80025130(sp24.buttonConfig);
     Save_CommitTypedRecord(0x14, 0);
     D_800733C8 = D_800733CC;
     D_800AF988 = 1;

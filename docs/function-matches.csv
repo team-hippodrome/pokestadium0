@@ -655,9 +655,9 @@ func_815002F0,0x815002F0,src/fragments/n64_logo/n64_logo.c,N64Logo_WaitForElapse
 func_8150036C,0x8150036C,src/fragments/n64_logo/n64_logo.c,N64Logo_ScanTransferPaks,s1,stadium1:src/fragments/n64_logo/n64_logo.c,c
 func_815003A4,0x815003A4,src/fragments/n64_logo/n64_logo.c,N64Logo_Main,s1,,c
 func_81300020,0x81300020,src/fragments/gb_tower_team_prep/gb_tower_team_prep.c,GbTower_LoadPartyFromDeck,s1,stadium1:src/fragments/gb_tower_team_prep/gb_tower_team_prep.c,c
-func_813000F0,0x813000F0,src/fragments/gb_tower_team_prep/gb_tower_team_prep.c,GbTower_TeamPrepFrameCallback,s1,stadium1:src/fragments/gb_tower_team_prep/gb_tower_team_prep.c (VERSION_JP),c
-func_81300144,0x81300144,src/fragments/gb_tower_team_prep/gb_tower_team_prep.c,GbTower_BuildPartyResult,hand,,c
-func_81300228,0x81300228,src/fragments/gb_tower_team_prep/gb_tower_team_prep.c,GbTower_TeamPrep,hand,,c
+func_813000F0,0x813000F0,src/fragments/gb_tower_team_prep/gb_tower_team_prep.c,GbTower_PartyIconsFrameCallback,s1,stadium1:src/fragments/gb_tower_team_prep/gb_tower_team_prep.c (VERSION_JP),c
+func_81300144,0x81300144,src/fragments/gb_tower_team_prep/gb_tower_team_prep.c,GbTower_FillLaunchParams,hand,,c
+func_81300228,0x81300228,src/fragments/gb_tower_team_prep/gb_tower_team_prep.c,GbTower_PreparePartyIcons,hand,,c
 func_82300020,0x82300020,src/fragments/battle_order_select/battle_order_select.c,BattleMenu_DrawBottomActionButtons,hand,,c
 func_8230016C,0x8230016C,src/fragments/battle_order_select/battle_order_select.c,BattleMenu_DrawScrollingInstructionPanel,hand,,c
 func_823003B8,0x823003B8,src/fragments/battle_order_select/battle_order_select.c,func_823003B8,hand,,c
@@ -3926,21 +3926,21 @@ func_8A202EF4,0x8A202EF4,src/fragments/party_summary/mon_summary.c,BattlePrep_Re
 func_8A202F50,0x8A202F50,src/fragments/party_summary/mon_summary.c,func_8A202F50,hand,,c
 func_8A203070,0x8A203070,src/fragments/party_summary/mon_summary.c,PartyScreen_RunFrame,m2c,m2c,c
 func_8A2030C0,0x8A2030C0,src/fragments/party_summary/mon_summary.c,MonSummary_Init,hand,,c
-func_8E000020,0x8E000020,src/fragments/main_menu_launcher/main_menu_launcher.c,func_8E000020,m2c,m2c,c
-func_8E100020,0x8E100020,src/fragments/launcher_relay_021/launcher_relay_021.c,func_8E100020,m2c,m2c,c
+func_8E000020,0x8E000020,src/fragments/main_menu_launcher/main_menu_launcher.c,MainMenuLauncher_QueueMainMenu,m2c,m2c,c
+func_8E100020,0x8E100020,src/fragments/unused_relay_021/unused_relay_021.c,UnusedRelay021_QueueMainMenuLauncher,m2c,m2c,c
 func_8E200020,0x8E200020,src/fragments/launcher_relay_022/launcher_relay_022.c,func_8E200020,m2c,m2c,c
-func_8E300020,0x8E300020,src/fragments/launcher_relay_023/launcher_relay_023.c,func_8E300020,m2c,m2c,c
+func_8E300020,0x8E300020,src/fragments/unused_relay_023/unused_relay_023.c,UnusedRelay023_QueueMainMenuLauncher,m2c,m2c,c
 func_8E400020,0x8E400020,src/fragments/launcher_relay_024/launcher_relay_024.c,func_8E400020,m2c,m2c,c
-func_81600020,0x81600020,src/fragments/fatal_error_screen/fatal_error_screen.c,TransferPakError_DrawBackgroundPattern,s1,stadium1:src/fragments/fatal_error_screen/fatal_error_screen.c,c
-func_816001A8,0x816001A8,src/fragments/fatal_error_screen/fatal_error_screen.c,FatalError_DrawIcon,hand,,c
+func_81600020,0x81600020,src/fragments/fatal_error_screen/fatal_error_screen.c,FatalError_DrawBackground,s1,stadium1:src/fragments/fatal_error_screen/fatal_error_screen.c,c
+func_816001A8,0x816001A8,src/fragments/fatal_error_screen/fatal_error_screen.c,FatalError_DrawWarningIcon,hand,,c
 func_816002AC,0x816002AC,src/fragments/fatal_error_screen/fatal_error_screen.c,FatalError_DrawMessagePanel,hand,,c
 func_81600334,0x81600334,src/fragments/fatal_error_screen/fatal_error_screen.c,FatalError_DrawPortDiagram,hand,,c
-func_81600778,0x81600778,src/fragments/fatal_error_screen/fatal_error_screen.c,TransferPakError_DrawFrame,s1,stadium1:src/fragments/fatal_error_screen/fatal_error_screen.c,c
-func_816007C4,0x816007C4,src/fragments/fatal_error_screen/fatal_error_screen.c,TransferPakError_Main,hand,,c
-func_8F100020,0x8F100020,src/fragments/geo_model_030/geo_model_030.c,func_8F100020,hand,,c
-func_8F100118,0x8F100118,src/fragments/geo_model_030/geo_model_030.c,func_8F100118,m2c,m2c,c
-func_8F100154,0x8F100154,src/fragments/geo_model_030/geo_model_030.c,func_8F100154,hand,,c
-func_8F100214,0x8F100214,src/fragments/geo_model_030/geo_model_030.c,func_8F100214,m2c,m2c,c
+func_81600778,0x81600778,src/fragments/fatal_error_screen/fatal_error_screen.c,FatalError_DrawFrame,s1,stadium1:src/fragments/fatal_error_screen/fatal_error_screen.c,c
+func_816007C4,0x816007C4,src/fragments/fatal_error_screen/fatal_error_screen.c,FatalError_Main,hand,,c
+func_8F100020,0x8F100020,src/fragments/pokedex_kanto_map/pokedex_kanto_map.c,KantoMap_BuildSeaDisplayList,hand,,c
+func_8F100118,0x8F100118,src/fragments/pokedex_kanto_map/pokedex_kanto_map.c,KantoMap_SeaGeoCallback,m2c,m2c,c
+func_8F100154,0x8F100154,src/fragments/pokedex_kanto_map/pokedex_kanto_map.c,KantoMap_BuildRiversDisplayList,hand,,c
+func_8F100214,0x8F100214,src/fragments/pokedex_kanto_map/pokedex_kanto_map.c,KantoMap_RiversGeoCallback,m2c,m2c,c
 func_8F200020,0x8F200020,src/fragments/particle_data/particle_data.c,func_8F200020,hand,,c
 func_8F20010C,0x8F20010C,src/fragments/particle_data/particle_data.c,func_8F20010C,m2c,m2c,c
 func_8F200160,0x8F200160,src/fragments/particle_data/particle_data_2.c,func_8F200160,hand,,c
