@@ -28,7 +28,7 @@ typedef struct unk_D_800AE520 {
 
 typedef struct BattleMonSpecies {
     /* 0x00 */ u8 id;
-    /* 0x01 */ u8 unk_01;
+    /* 0x01 */ u8 unk_01; // 0 on rental Pokémon; func_82200E2C (vs_scene) gives the Surf Pikachu reward only when every team-pool Pokémon has 0 here (so it may mark a Game Boy Pokémon; not established)
 } BattleMonSpecies; // size = 0x2
 
 typedef struct BattleMon {
