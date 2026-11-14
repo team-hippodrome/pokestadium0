@@ -3,6 +3,7 @@
 #include "global.h"
 #include "m2c_macros.h"
 #include "free_battle_setup.h"
+#include "game_state.h"
 
 
 void FreeBattle_SetScreenState(s8*, s32, s32);
@@ -559,16 +560,16 @@ s32 FreeBattle_UpdateScreen(s8* arg0) {
  * FreeBattle_RestoreMenuState
  *
  * Writes two words in the structure `arg0` points to, derived from the
- * bytes D_800AE8F0[0] and D_800AE8F0[1] of the session context, and then
+ * bytes gSessionContext.mode[0] and gSessionContext.mode[1] of the session context, and then
  * calls FreeBattle_SetScreenState(arg0, 2, 0) or FreeBattle_SetScreenState(arg0, 3, 0).
  *
- *   D_800AE8F0[0] == 0:
+ *   gSessionContext.mode[0] == 0:
  *     arg0->0x43AC = 0
- *     arg0->0x4418 = 0 if D_800AE8F0[1] == 0, else 1 if it is 2, else 2
+ *     arg0->0x4418 = 0 if gSessionContext.mode[1] == 0, else 1 if it is 2, else 2
  *     FreeBattle_SetScreenState(arg0, 2, 0)
  *   otherwise:
  *     arg0->0x43AC = 1
- *     arg0->0x4418 = 0 if D_800AE8F0[0] == 2, else 1
+ *     arg0->0x4418 = 0 if gSessionContext.mode[0] == 2, else 1
  *     FreeBattle_SetScreenState(arg0, 3, 0)
  *
  * FreeBattle_SetScreenState is still assembly, so what the 2 / 3 select is not
@@ -576,7 +577,6 @@ s32 FreeBattle_UpdateScreen(s8* arg0) {
  * never writes $a0 before the call, so it is the caller's argument passed
  * through.
  */
-extern s8 D_800AE8F0;
 
 /**
  * Reopens the rule menu with the choice saved from the previous visit.
@@ -587,12 +587,12 @@ extern s8 D_800AE8F0;
 void FreeBattle_RestoreMenuState(s32 arg0) {
     s32 var_v0;
 
-    if (D_800AE8F0 == 0) {
+    if (gSessionContext.mode == 0) {
         M2C_FIELD((void*)arg0, s32 *, 0x43AC) = 0;
-        if (((s8*)&D_800AE8F0)[1] == 0) {
+        if (gSessionContext.ruleCategory == 0) {
             M2C_FIELD((void*)arg0, s32 *, 0x4418) = 0;
         } else {
-            if (((s8*)&D_800AE8F0)[1] == 2) {
+            if (gSessionContext.ruleCategory == 2) {
                 var_v0 = 1;
             } else {
                 var_v0 = 2;
@@ -603,7 +603,7 @@ void FreeBattle_RestoreMenuState(s32 arg0) {
         return;
     }
     M2C_FIELD((void*)arg0, s32 *, 0x43AC) = 1;
-    if (D_800AE8F0 == 2) {
+    if (gSessionContext.mode == 2) {
         M2C_FIELD((void*)arg0, s32 *, 0x4418) = 0;
     } else {
         M2C_FIELD((void*)arg0, s32 *, 0x4418) = 1;
@@ -777,7 +777,6 @@ extern s32 D_8200ACFC;
 extern s32 D_8200AD00;
 extern s32 D_8200AD04;
 extern s32 D_8200AD28;
-extern s8 D_800AE8F0;
 extern s32 D_82008F84;
 M2C_UNK func_820059EC(void) {
     Font_Init(0x3C, 0);
@@ -803,8 +802,8 @@ M2C_UNK func_820059EC(void) {
     func_8200573C();
     func_8000675C();
 
-    if (M2C_FIELD(&D_800AE8F0, u16*, 0x1096) & 0x100) {
-        M2C_FIELD(&D_800AE8F0, u16*, 0x1096) &= ~0x100;
+    if (gSessionContext.transitionFlags & 0x100) {
+        gSessionContext.transitionFlags &= ~0x100;
         FreeBattle_RestoreMenuState(D_8200AD28);
         func_80005B98(0xF);
         func_80006828(0x11, FreeBattle_DrawScreenWithSummary);
@@ -833,15 +832,14 @@ M2C_UNK func_820059EC();                            /* extern */
 M2C_UNK func_82008F14();                            /* extern */
 extern s8 D_00235D70;
 extern s8 D_00238BD0;
-extern s8 D_800AE8F0;
 extern s32 D_82008F84;
-extern s8* D_8200ACF8;
+extern SessionContext* D_8200ACF8;
 extern s8 D_88000000;
 s32 func_82005CCC(s32 arg0, M2C_UNK arg1)
 {
   s32 temp_v1;
   func_8000256C(0x4D454E54);
-  D_8200ACF8 = &D_800AE8F0;
+  D_8200ACF8 = &gSessionContext;
   if (arg0 == 1)
   {
     func_82008F14();
