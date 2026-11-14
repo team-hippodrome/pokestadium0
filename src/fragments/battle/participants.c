@@ -545,7 +545,7 @@ void BattleScene_InitializeParticipantModel(ActivePokemon* active_pokemon) {
     ModelAnim_SetAnimation(&active_pokemon->displayObject, 0);
     ModelAnim_SetFrame(&active_pokemon->displayObject, 0);
 
-    active_pokemon->sessionTeams->unk_04 = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->state.rosterIndex];
+    active_pokemon->sessionTeams->displayMon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->state.rosterIndex];
     if ((active_pokemon->displayObject.objectType == DIGLETT) || (active_pokemon->displayObject.objectType == DUGTRIO)) {
         active_pokemon->displayObject.node.renderFlags &= ~0x40;
     } else {
@@ -617,7 +617,7 @@ void BattleScene_ReinitParticipantBodyModel(ActivePokemon* owner, ActivePokemon*
     ModelAnim_SetFrame(&pokemon->displayObject, 0);
     ModelAnim_SetAnimation(&pokemon->displayObject, 0);
 
-    owner->sessionTeams->unk_04 = &owner->teamRoster->pokemonPicked[owner->state.rosterIndex];
+    owner->sessionTeams->displayMon = &owner->teamRoster->pokemonPicked[owner->state.rosterIndex];
     if ((pokemon->displayObject.objectType == DIGLETT) || (pokemon->displayObject.objectType == DUGTRIO)) {
         pokemon->displayObject.node.renderFlags &= 0xFFBF;
     } else {
@@ -760,7 +760,7 @@ void Battle_LoadOwnerModelForSwitchIn(ActivePokemon* active_pokemon) {
     BattleScene_ReinitParticipantThumbnailModel(active_pokemon, &active_pokemon->thumbnail, object_type);
     func_82108648(active_pokemon, object_type);
     Battle_ResetEventTrack(active_pokemon);
-    state->unk_2E = 0;
+    state->faintState = 0;
     state->flags &= 0x3800;
     Vec3f_SetComponentsDuplicate(&active_pokemon->displayObject.scale, 1.0f, 1.0f, 1.0f);
 }

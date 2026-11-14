@@ -167,8 +167,8 @@ void func_82132C14(UNUSED CameraNode* arg0) {
         st->rosterIndex++;
         mon = &((ActivePokemon*)D_8219A580)->teamRoster->pokemonPicked[st->rosterIndex];
         ((ActivePokemon*)D_8219A580)->sessionTeams->displayModel = mon->species.id;
-        ((ActivePokemon*)D_8219A580)->sessionTeams->unk_04 = (TeamRoster*)&((ActivePokemon*)D_8219A580)->teamRoster->pokemonPicked[st->rosterIndex];
-        ((ActivePokemon*)D_8219A580)->sessionTeams->uniqueStatusFlags |= 0x80;
+        ((ActivePokemon*)D_8219A580)->sessionTeams->displayMon = &((ActivePokemon*)D_8219A580)->teamRoster->pokemonPicked[st->rosterIndex];
+        ((ActivePokemon*)D_8219A580)->sessionTeams->modelFlags |= 0x80;
         sBattleScene.scene->phaseStep = sBattleScene.scene->phaseStep + 1;
     }
 }

@@ -460,7 +460,7 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
 
     sp28 = &arg0->state;
     sp24 = &arg0->state.runtime;
-    sp34 = &arg0->sessionTeams->teamMember[sp28->replacementState]->pokemonPicked[sp28->rosterIndex];
+    sp34 = &arg0->sessionTeams->teamMember[sp28->menuTeamMemberIndex]->pokemonPicked[sp28->rosterIndex];
 
     sp24->rosterIndex = sp28->rosterIndex;
     sp24->species = sp34->species.id;

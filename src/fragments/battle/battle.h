@@ -196,9 +196,9 @@ typedef struct ActivePokemonState {
     /* 0x28 */ u16 foeHpBeforeMove; // the opponent's HP when ShowDamageMessage ran, for the damage-dealt comment
     /* 0x2A */ u8 moveSelectionLocked;
     /* 0x2B */ u8 teamMemberIndex;
-    /* 0x2C */ u8 ownerTeamMemberIndex;
-    /* 0x2D */ u8 replacementState;
-    /* 0x2E */ u8 unk_2E;
+    /* 0x2C */ u8 prevMenuTeamMemberIndex; // @unverified: menuTeamMemberIndex before a tag-team partner took the menu (BattleMenu_TakeControlOn*)
+    /* 0x2D */ u8 menuTeamMemberIndex; // @unverified: tag-team member (sessionTeams->teamMember index) whose controller drives the menus and whose party the switch menu lists
+    /* 0x2E */ u8 faintState; // 0 healthy; 0x11 fainting (Battle_HandleFaint), 0x10 fainted, back to 0 at the send-out; 0x12 the side's last Pokémon reached 0 HP, 0x13 once it vanished (0xF also seen in turn.c)
     /* 0x2F */ u8 alpha;
     /* 0x30 */ u8 surrenderCursor; // こうさんしますか？ (Surrender?) prompt: 0 いいえ (No), 1 はい (Yes)
     /* 0x32 */ u16 infoBoxBlinkTimer; // counts down by 0x30 a frame; bit 8 picks the info box color
@@ -353,18 +353,18 @@ typedef struct BattleScene {
     /* 0x18 */ u16 transitionStage;
     /* 0x1A */ u8 hitReactionKind;
     /* 0x1B */ u8 unk_1B;
-    /* 0x1C */ s32 mode;
+    /* 0x1C */ s32 mode; // BattleScene_Update mode: 1 at the command menu, 2 while a turn plays out
     /* 0x20 */ s32 phaseStep;
     /* 0x24 */ s32 modelReloadStep;
     /* 0x28 */ char unk28[0x2];
     /* 0x2A */ u16 sideCurrentlySwitching;
-    /* 0x2C */ u16 actingSide;
+    /* 0x2C */ u16 actingSide; // side whose action is presented (0 1P, 1 COM); flips between the two actions of a turn
     /* 0x2E */ u16 transitionStyle;
     /* 0x30 */ s32 transitionStep;
     /* 0x34 */ s32 actionPass;
-    /* 0x38 */ s32 phase;
+    /* 0x38 */ s32 phase; // BattleScene_UpdatePhase case: 1 command, 2 first action, 3 second action, 15 Transform, ...
     /* 0x3C */ s32 phaseSubstep;
-    /* 0x40 */ s32 winner;
+    /* 0x40 */ s32 winner; // 0 while the battle runs, otherwise the winning side + 1 (1 when 1P knocked out COM's last Pokémon)
     /* 0x44 */ s32 unk_44;
     /* 0x48 */ s32 moveEffectKind;
     /* 0x4C */ s32 rageFollowupPhase;
@@ -1023,7 +1023,7 @@ typedef struct ParticleEmitter {
     /* 0x2B */ s8 unk_2B;
     /* 0x2C */ u8 unk_2C;
     /* 0x2D */ u8 unk_2D;
-    /* 0x2E */ u8 unk_2E;
+    /* 0x2E */ u8 unk_2E; // 0 healthy; 0x11 fainting (Battle_HandleFaint), 0x10 fainted, back to 0 at the send-out; 0x12 the side's last Pokémon reached 0 HP, 0x13 once it vanished (0xF also seen in turn.c)
     /* 0x2F */ u8 unk_2F;
 } ParticleEmitter; // size = 0x30
 

@@ -451,11 +451,11 @@ void ActivePokemon_LoadSpeciesModelAssets(ActivePokemon* arg0) {
  */
 void BattleScene_TickRow10CleanupAndEnterState18(ActivePokemon* active_pokemon) {
     if (active_pokemon->animationTimer == 20) {
-        active_pokemon->sessionTeams->uniqueStatusFlags |= 0x80;
+        active_pokemon->sessionTeams->modelFlags |= 0x80;
     }
 
-    if (active_pokemon->sessionTeams->uniqueStatusFlags & 0x10) {
-        active_pokemon->sessionTeams->uniqueStatusFlags &= ~0x90;
+    if (active_pokemon->sessionTeams->modelFlags & 0x10) {
+        active_pokemon->sessionTeams->modelFlags &= ~0x90;
         Battle_LoadOwnerModelForSwitchIn(active_pokemon);
         BattleThumbnail_TickOwnerCameraFraming(active_pokemon);
         Audio_PlayCommand(2, 0, 0);
@@ -1041,7 +1041,7 @@ void func_82103998(ActivePokemon* active_pokemon) {
 
     if (BattleAnim_TryRegisterAssetTables(active_pokemon) != 0) {
         active_pokemon->sessionTeams->displayModel = active_pokemon->state.runtime.species;
-        active_pokemon->sessionTeams->unk_04 = (TeamRoster*)&active_pokemon->teamRoster->pokemonPicked[active_pokemon->state.rosterIndex];
+        active_pokemon->sessionTeams->displayMon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->state.rosterIndex];
         active_pokemon->animationTimer = 0;
         BattleScene_QueueRowEffectList3(active_pokemon, sBattleSceneStateRowTable[row_index].mode);
         Audio_PlayCommand(3, 0, 0);
@@ -1075,11 +1075,11 @@ void BattleScene_TickQueueRowEffectList3OnFirstFrame(ActivePokemon* active_pokem
  */
 void BattleScene_TickRow21CleanupAndEnterState18(ActivePokemon* active_pokemon) {
     if (active_pokemon->animationTimer == 79) {
-        active_pokemon->sessionTeams->uniqueStatusFlags |= 0x80;
+        active_pokemon->sessionTeams->modelFlags |= 0x80;
     }
 
-    if (active_pokemon->sessionTeams->uniqueStatusFlags & 0x10) {
-        active_pokemon->sessionTeams->uniqueStatusFlags &= ~0x90;
+    if (active_pokemon->sessionTeams->modelFlags & 0x10) {
+        active_pokemon->sessionTeams->modelFlags &= ~0x90;
 
         Battle_LoadOwnerModelForSwitchIn(active_pokemon);
         BattleThumbnail_TickOwnerCameraFraming(active_pokemon);
@@ -1099,8 +1099,8 @@ void BattleScene_TickRow21CleanupAndEnterState18(ActivePokemon* active_pokemon) 
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_ResetOwnerModelIfLoaded(ActivePokemon* active_pokemon) {
-    if (active_pokemon->sessionTeams->uniqueStatusFlags & 0x10) {
-        active_pokemon->sessionTeams->uniqueStatusFlags &= ~0x90;
+    if (active_pokemon->sessionTeams->modelFlags & 0x10) {
+        active_pokemon->sessionTeams->modelFlags &= ~0x90;
         Battle_ResetOwnerModelToSubstituteDoll(active_pokemon);
     }
 }
@@ -2553,7 +2553,7 @@ void func_821065B4(ActivePokemon *arg0)
   {
     arg0->displayObject.node.renderFlags &= ~0x20;
   }
-  if ((state->unk_2E == 0x10) || (state->unk_2E == 0x13))
+  if ((state->faintState == 0x10) || (state->faintState == 0x13))
   {
     arg0->displayObject.node.flags &= ~1;
     Battle_ClearRuntimeFlags((s8 *) arg0, 0x100);
@@ -2746,8 +2746,8 @@ void BattleScene_InitializeParticipantController(ActivePokemon* arg0) {
     ActivePokemon_SetController(arg0, sp24);
     M2C_FIELD(arg0, s32*, 0x9D0) = 0;
     M2C_FIELD(arg0, s32*, 0x9D4) = 0;
-    state->replacementState = 0;
-    state->ownerTeamMemberIndex = 0;
+    state->menuTeamMemberIndex = 0;
+    state->prevMenuTeamMemberIndex = 0;
 }
 
 extern s32 D_84390174;

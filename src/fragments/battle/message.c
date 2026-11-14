@@ -49,7 +49,7 @@ void BattleMenu_DrawSide0Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
                     } else {
                         BattleMenu_DrawSwitchPanel(arg0, 0x60, 0xF, sp2C->controllerPort);
                     }
-                } else if (arg1->unk_2E == 0x10) {
+                } else if (arg1->faintState == 0x10) {
                     BattleMenu_DrawConfirmButton(arg0, 0x60, 0xF, sp2C->controllerPort);
                 } else {
                     BattleMenu_DrawBackConfirmBar(arg0, 0x60, 0xF, sp2C->controllerPort);
@@ -97,7 +97,7 @@ void BattleMenu_DrawSide1Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
                     } else {
                         BattleMenu_DrawSwitchPanel(arg0, 0x18, 0x79, sp2C->controllerPort);
                     }
-                } else if (arg1->unk_2E == 0x10) {
+                } else if (arg1->faintState == 0x10) {
                     BattleMenu_DrawConfirmButton(arg0, 0x9A, 0xCE, sp2C->controllerPort);
                 } else {
                     BattleMenu_DrawBackConfirmBar(arg0, 0x62, 0xCE, sp2C->controllerPort);
@@ -353,7 +353,7 @@ void func_8211F274(s8 *arg0) {
  * @unverified Name from the code.
  */
 void ActivePokemon_ShowCaption(ActivePokemon* arg0, s8* arg1, ...) {
-    *(u8*)D_8219A520 = (*(u8***)((u8*)arg0 + 0x85C))[arg0->state.replacementState + 2][1];
+    *(u8*)D_8219A520 = (*(u8***)((u8*)arg0 + 0x85C))[arg0->state.menuTeamMemberIndex + 2][1];
     arg0->captionState.active = 1;
     func_8211EEC0(&arg0->captionState.fullText, arg1);
 }

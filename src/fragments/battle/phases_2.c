@@ -325,7 +325,7 @@ void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0) {
         case 1:
             if (BattleAnim_TryRegisterAssetTables(temp_s0) != 0) {
                 temp_s0->sessionTeams->displayModel = sp2C->species;
-                temp_s0->sessionTeams->unk_04 = (TeamRoster*)&temp_s0->teamRoster->pokemonPicked[temp_s0->state.rosterIndex];
+                temp_s0->sessionTeams->displayMon = &temp_s0->teamRoster->pokemonPicked[temp_s0->state.rosterIndex];
                 BattleScene_SetParticipantModelTransform(temp_s0, 2, 0);
                 BattleAnim_QueueEffectList3(0xD, temp_s0, temp_s0, 0xFF, 0xFF);
                 sBattleScene.scene->phaseStep += 1;
@@ -344,19 +344,19 @@ void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0) {
 
         case 3:
             temp_s0->pokeBall.node.flags &= ~1;
-            temp_s0->sessionTeams->uniqueStatusFlags |= 0x80;
+            temp_s0->sessionTeams->modelFlags |= 0x80;
             sBattleScene.scene->phaseStep += 1;
             break;
 
         case 4:
-            if (temp_s0->sessionTeams->uniqueStatusFlags & 0x10) {
-                temp_s0->sessionTeams->uniqueStatusFlags &= ~0x90;
+            if (temp_s0->sessionTeams->modelFlags & 0x10) {
+                temp_s0->sessionTeams->modelFlags &= ~0x90;
                 Battle_LoadOwnerModelForSwitchIn(temp_s0);
                 BattleThumbnail_TickOwnerCameraFraming(temp_s0);
                 Audio_PlayCommand(2, 0, 0);
                 temp_s0->thumbnail.shownRosterIndex = sp3C->rosterIndex;
                 temp_s0->thumbnail.shownTeamMemberIndex = sp3C->teamMemberIndex;
-                BattleScene_RebindParticipantTeamMember(temp_s0, sp3C->replacementState);
+                BattleScene_RebindParticipantTeamMember(temp_s0, sp3C->menuTeamMemberIndex);
                 BattleScene_ResetCameraFrameCounter();
                 BattleAnim_QueueEffectList3(3, temp_s0, temp_s0, 0xFF, 0xFF);
                 BattleScene_EnterStateRow(temp_s0, 0x12);
@@ -389,7 +389,7 @@ void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0) {
                 Battle_ClearMessageCursor();
                 BattleScene_ResetCameraFrameCounter();
                 Vec3f_SetComponentsDuplicate(&temp_s0->displayObject.scale, 1.0f, 1.0f, 1.0f);
-                if (sp38->unk_2E != 0x10) {
+                if (sp38->faintState != 0x10) {
                     sBattleScene.scene->actionPass = 3;
                 }
                 sBattleScene.scene->transitionStyle = 2;

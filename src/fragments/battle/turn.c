@@ -641,8 +641,8 @@ void Battle_HandleFaint(ActivePokemon* arg0) {
     temp_a11->scaleResize = 0;
     temp_a11->lastMove = 0;
 
-    if (temp_a10->unk_2E != 0xF) {
-        temp_a10->unk_2E = 0x11;
+    if (temp_a10->faintState != 0xF) {
+        temp_a10->faintState = 0x11;
     }
 
     func_8210F730(arg0);
@@ -681,7 +681,7 @@ void Battle_CheckAllBroughtFainted_PoisonBurn(ActivePokemon* arg0) {
 
     if (var_s2 == 0) {
         Battle_FormatDamageComment(arg0);
-        ptr1->unk_2E = 0x12;
+        ptr1->faintState = 0x12;
     } else {
         Battle_HandleFaint(arg0);
     }
@@ -721,7 +721,7 @@ void Battle_CheckAllBroughtFainted_LeechSeed(ActivePokemon* arg0) {
 
     if (var_s2 == 0) {
         Battle_FormatDamageComment(arg0);
-        ptr1->unk_2E = 0x12;
+        ptr1->faintState = 0x12;
     } else {
         Battle_HandleFaint(arg0);
     }
@@ -760,7 +760,7 @@ void Battle_CheckAllBroughtFainted_PendingHp(ActivePokemon* arg0) {
 
     if (var_s2 == 0) {
         Battle_FormatDamageComment(arg0);
-        ptr1->unk_2E = 0x12;
+        ptr1->faintState = 0x12;
     } else {
         Battle_HandleFaint(arg0);
     }
@@ -797,7 +797,7 @@ void Battle_CheckAllBroughtFainted_Hp(ActivePokemon* arg0) {
 
     if (var_s2 == 0) {
         Battle_FormatDamageComment(arg0);
-        ptr1->unk_2E = 0x12;
+        ptr1->faintState = 0x12;
     } else {
         Battle_HandleFaint(arg0);
     }
@@ -831,7 +831,7 @@ s32 Battle_CheckSideDefeatAfterResidualStatus(ActivePokemon* arg0) {
             }
 
             if (var_s2 == 0) {
-                ptr1->unk_2E = 0x12;
+                ptr1->faintState = 0x12;
                 return 1;
             }
             Battle_HandleFaint(arg0);

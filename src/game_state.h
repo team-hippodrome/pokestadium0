@@ -84,10 +84,10 @@ typedef struct TeamRoster {
 } TeamRoster; // size = 0x204 (Stadium 1: 0x21C)
 
 typedef struct BattleSessionTeams {
-    /* 0x00 */ u8 uniqueStatusFlags;
+    /* 0x00 */ u8 modelFlags; // @unverified: bit 0x80 asks for the side's model to be reloaded, 0x10 is set once it is loaded (owner_animation.c, phases_2.c)
     /* 0x01 */ u8 tagTeamSize;
     /* 0x02 */ s16 displayModel;
-    /* 0x04 */ TeamRoster* unk_04;
+    /* 0x04 */ BattleMon* displayMon; // @unverified: party BattleMon whose model the side shows (set with displayModel)
     /* 0x08 */ TeamRoster* teamMember[2];
     /* 0x10 */ ModelLoadContext* unk_10;
     /* 0x14 */ ModelNodeView* loadedModel;
