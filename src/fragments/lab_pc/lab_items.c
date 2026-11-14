@@ -250,14 +250,14 @@ void LabItem_WriteDeckBack(s32 arg0, s32 arg1, s32 arg2, ByteMatrix* arg3, s32 a
 }
 
 M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
-extern M2C_UNK D_8900A5B8;
+extern Color_RGBA8 D_8900A5B8;
 
 /**
  * Draws the tinted terminal screen background.
  * Seen in play (2026-11-12): the せいとん background.
  */
 void LabItem_DrawBackground(void) {
-    Ui_DrawTintedScreenBackground(0x38, 0x1E0, M2C_FIELD(&D_8900A5B8, u8 *, 0), M2C_FIELD(&D_8900A5B8, u8 *, 1), (s32) M2C_FIELD(&D_8900A5B8, u8 *, 2));
+    Ui_DrawTintedScreenBackground(0x38, 0x1E0, D_8900A5B8.r, D_8900A5B8.g, (s32)D_8900A5B8.b);
 }
 
 void Window_SetRect(s8*, s32, s32, s32, s32);
@@ -825,8 +825,8 @@ void LabItem_InitOrganizeWindow(LabItemOrganizeWindow* arg0, s32 x, s32 y, ByteM
 }
 
 
-extern ColorPair890017FC D_8900A608;
-extern ColorPair890017FC D_8900A610;
+extern PrimEnvColor D_8900A608;
+extern PrimEnvColor D_8900A610;
 extern u8* D_89017A80[];
 extern u8 D_89017A98[];
 extern s32 D_89019114;
@@ -837,7 +837,7 @@ void Font_SetColorForFlags(s32);
 s32 func_8002BC44(s32);
 
 void func_890017FC(LabItemOrganizeWindow* arg0, s32 x, s32 y, s32 flags, s32 icon) {
-    ColorPair890017FC* colors;
+    PrimEnvColor* colors;
 
     if (flags & 2) {
         colors = &D_8900A608;
@@ -879,12 +879,12 @@ u32 func_800566BC(s32);                             /* extern */
  * Draws title text with the two-color (prim/env) font style from `arg3`.
  * Seen in play (2026-11-12): the ポケモンのせいり / どうぐのせいり titles.
  */
-void LabItem_DrawTitleText(s32 arg0, s32 arg1, s32 arg2, s8 *arg3) {
+void LabItem_DrawTitleText(s32 arg0, s32 arg1, s32 arg2, PrimEnvColor* arg3) {
     func_8001AB6C();
     func_8001A384(0x20, 0);
-    func_8001AA9C(M2C_FIELD(arg3, u8 *, 0), M2C_FIELD(arg3, u8 *, 1), M2C_FIELD(arg3, u8 *, 2), M2C_FIELD(arg3, u8 *, 3));
+    func_8001AA9C(arg3->prim.r, arg3->prim.g, arg3->prim.b, arg3->prim.a);
     func_8001ABE8();
-    func_8001AAE4(M2C_FIELD(arg3, u8 *, 4), M2C_FIELD(arg3, u8 *, 5), M2C_FIELD(arg3, u8 *, 6), M2C_FIELD(arg3, u8 *, 7));
+    func_8001AAE4(arg3->env.r, arg3->env.g, arg3->env.b, arg3->env.a);
     func_8001A944(((u32) (0x178 - ((func_800566BC(arg2) >> 1) << 5)) >> 1) + arg0, arg1 + 0xC, arg2);
     func_8001AC3C();
     func_8001ABBC();
@@ -928,15 +928,10 @@ void LabItem_DrawSmallText(s32 arg0, s32 arg1, s32 arg2) {
     func_8001ABBC();
 }
 
-typedef struct List89001B88 {
-    /* 0x00 */ u8** data;
-    /* 0x04 */ s32 unk4;
-    /* 0x08 */ s32 index;
-} List89001B88;
 extern s32 D_8900A650[];
 extern char* D_8900A660[];
 extern char* D_8900A66C[];
-extern s8* D_8900A678[];
+extern PrimEnvColor* D_8900A678[];
 s32 func_80031BC0(u8, char *);
 /**
  * Draws the help line for the organize window's current state.
@@ -1496,28 +1491,24 @@ void func_89002E58(LabItemSaveDataWindow* arg0, s32 arg1, s32 arg2, LabItemSaveS
     arg0->state = 1;
 }
 
-typedef Color_RGBA8 Rgba8900A6BC; // size = 0x4
-typedef struct Color8900A6BC {
-    /* 0x0 */ Rgba8900A6BC c[2];
-} Color8900A6BC; // size = 0x8
-extern Color8900A6BC D_8900A6BC;
-extern Color8900A6BC D_8900A6C4;
+extern PrimEnvColor D_8900A6BC;
+extern PrimEnvColor D_8900A6C4;
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
 extern u8 D_89017A98[];
 extern char D_890186C0[];
 extern char D_890186CC[];
-void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Rgba8900A6BC, Rgba8900A6BC);
+void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
 void Font_SetColorForFlags(s32);
 void func_890030C8(s32 arg0, s32 arg1, LabItemSaveSlot* arg2, s32 arg3) {
-    Color8900A6BC* color;
+    PrimEnvColor* color;
 
     if (arg3 & 2) {
         color = &D_8900A6BC;
     } else {
         color = &D_8900A6C4;
     }
-    Ui_FillRectPrimEnvColor(arg0, arg1, 0xEC, 0x2A, color->c[0], color->c[1]);
+    Ui_FillRectPrimEnvColor(arg0, arg1, 0xEC, 0x2A, color->prim, color->env);
     gSPDisplayList(gDisplayListHead++, D_80073408);
     Gfx_DrawTextureRgba16(arg0 + 6, arg1 + 8, 0x2E, 0x1A, D_89017A98, 0x30, 0x200000);
     gSPDisplayList(gDisplayListHead++, D_80073438);
@@ -1531,7 +1522,7 @@ void func_890030C8(s32 arg0, s32 arg1, LabItemSaveSlot* arg2, s32 arg3) {
 }
 
 extern s32 D_8900A6CC[];
-extern s8 *D_8900A6D8[];
+extern PrimEnvColor* D_8900A6D8[];
 void func_8900323C(LabItemSaveDataWindow* arg0) {
     char sp2C[0x54];
     ScrollList* list;

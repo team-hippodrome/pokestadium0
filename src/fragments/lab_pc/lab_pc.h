@@ -659,12 +659,12 @@ typedef struct unk_func_8821421C_038 {
  * src/fragments/fragment015_238BD0/lab_pc_list_1CEA00_89003880.c
  */
 
-typedef struct ColorPair890017FC {
+/* The prim and env colors of a two-color fill or font (Ui_FillRectPrimEnvColor, LabItem_DrawTitleText). */
+typedef struct PrimEnvColor {
     /* 0x0 */ Color_RGBA8 prim;
     /* 0x4 */ Color_RGBA8 env;
-} ColorPair890017FC;
+} PrimEnvColor; // size = 0x8
 
-typedef struct Col89002C10 { u8 r, g, b, a; } Col89002C10;
 
 typedef void (*func889000C4)(unk_func_889000C4*, s32, WidgetAnimatedPanel*, s32, char**, MemoryPool*);
 
