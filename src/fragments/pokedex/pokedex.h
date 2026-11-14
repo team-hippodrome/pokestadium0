@@ -104,6 +104,34 @@ typedef struct unk_D_80064C60 {
     /* 0x04 */ char unk04[0x18];
 } unk_D_80064C60; // size = 0x1C
 
+/* The ずかんもくじ (index) list window: 151 rows of number, name and caught icon, and the アイウエオじゅん /
+ * ばんごうじゅん (kana / number order) bar (Pokedex_InitListWindow, Pokedex_DrawSortOrderMenu). */
+typedef struct PokedexListWindow {
+    /* 0x000 */ Window window; // @unverified: typed from the function it is passed to
+    /* 0x02C */ ScrollList list; // @unverified: rows drawn by Pokedex_DrawListRow
+    /* 0x070 */ ByteMatrix entries; // @unverified: rows = the 0x1C-byte entries of D_80064C5C, 0x97 of them
+    /* 0x080 */ u16 itemFlags[0x97]; // @unverified: itemFlags of list
+    /* 0x1AE */ char pad1AE[0x2];
+    /* 0x1B0 */ s32 sortByKana; // @unverified: A toggles it (Pokedex_UpdateListCursor); picks the bar text and the row order
+} PokedexListWindow; // size = 0x1B4
+
+/* The データをみる / なきごえ / ぶんぷをみる / やめる (data, cry, area, quit) menu window (Pokedex_InitSortMenuWindow). */
+typedef struct PokedexMenuWindow {
+    /* 0x00 */ Window window; // @unverified: typed from the function it is passed to
+    /* 0x2C */ Menu menu; // @unverified: rows drawn by Pokedex_DrawMenuRow
+    /* 0x50 */ u16 itemFlags[4]; // @unverified: itemFlags of menu; bit 0 = disabled (func_8A1013C0)
+    /* 0x58 */ PointerList items; // @unverified: func_80027804 over the 4 strings D_8A1057E8
+} PokedexMenuWindow; // size = 0x64
+
+/* The ずかんもくじ screen, D_8A12FFC0 (Pokedex_InitIndexWindows). The code also reaches the windows through
+ * their own symbols D_8A130174, D_8A1301A0 and D_8A130204. */
+typedef struct PokedexIndexScreen {
+    /* 0x000 */ PokedexListWindow listWindow; // @unverified: typed from the function it is passed to
+    /* 0x1B4 */ Window countsWindow; // @unverified: みつけたかず / つかまえたかず / もっているかず (Pokedex_DrawCounts)
+    /* 0x1E0 */ PokedexMenuWindow menuWindow; // @unverified: typed from the function it is passed to
+    /* 0x244 */ Window entryWindow; // @unverified: the データをみる page (Pokedex_InitEntryWindow), also reached as D_8A130204
+} PokedexIndexScreen; // size = 0x270
+
 #include "controller.h"
 
 // pokedex.c
