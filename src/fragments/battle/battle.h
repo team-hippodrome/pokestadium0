@@ -604,13 +604,13 @@ typedef struct TexturedRibbonSheetNode {
 } TexturedRibbonSheetNode; // size = 0x50
 
 typedef struct TexturedRibbonSheet {
-    /* 0x000 */ s16 active; // @unverified: 1 while running
+    /* 0x000 */ s16 active; // 1 while running; poking 0 each frame removed Swift's stars in play
     /* 0x002 */ s16 phase; // @unverified: 0 rise, 1 fly toward the target after frame 11
     /* 0x004 */ s16 frame; // @unverified: counts up each frame until duration + 10
     /* 0x006 */ s16 duration; // @unverified: frames the effect runs
     /* 0x008 */ s16 direction; // @unverified: -1 or 1 from the sign of the start x
     /* 0x00A */ Color_RGB8 color; // @unverified: vertex color
-    /* 0x010 */ f32 scale; // @unverified: half the secondary owner's model scale
+    /* 0x010 */ f32 scale; // half the secondary owner's model scale; also scales the star model; tripling it filled the screen with a star in play
     /* 0x014 */ f32 angleStep; // @unverified: added to the head node's angle per frame
     /* 0x018 */ Vtx* vtx; // @unverified: vertices allocated each frame
     /* 0x01C */ char unk01C[0x1C];
