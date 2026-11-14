@@ -131,12 +131,12 @@ void func_821339CC(ActivePokemon* arg0) {
     BattleMonRuntime* rt = &arg0->state.runtime;
 
     func_82101AD0();
-    if (rt->pendingStatusCondition & 7) {
+    if (rt->statusCondition & 7) {
         func_82136708(3, arg0);
     }
     M2C_FIELD(sp20, s8*, 5) = 0;
     M2C_FIELD(arg0, s16*, 0x7C2) = 0;
-    rt->pendingStatusCondition = 0;
+    rt->statusCondition = 0;
     func_8213B31C(1);
     func_8213B31C(2);
 }

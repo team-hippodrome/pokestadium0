@@ -71,7 +71,7 @@ s32 BattleAi_EstimateDamage(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u8 m
     score = power;
     switch (move) {
         case DREAM_EATER:
-            if (arg1->pendingStatusCondition & 7) {
+            if (arg1->statusCondition & 7) {
                 break;
             }
         case LEECH_SEED:
@@ -471,7 +471,7 @@ s32 BattleAi_SleepClauseAllows(ComSide *arg0)
 {
   s32 i;
   int new_var; // FAKE: permuter temp
-  if ((arg0 == D_821CF298) && (D_821CF2A0->mon.pendingStatusCondition & 7))
+  if ((arg0 == D_821CF298) && (D_821CF2A0->mon.statusCondition & 7))
   {
     new_var = !D_821CF288;
     if ((new_var && (!D_821CF288)) && (!D_821CF288))
@@ -481,7 +481,7 @@ s32 BattleAi_SleepClauseAllows(ComSide *arg0)
   }
   for (i = 0; i < D_821CF288; i++)
   {
-    if (((arg0->battlers[i].mon.hp != 0) && (arg0->battlers[i].mon.pendingStatusCondition & 7)) && (arg0->battlers[i].restSleepTurns == 0))
+    if (((arg0->battlers[i].mon.hp != 0) && (arg0->battlers[i].mon.statusCondition & 7)) && (arg0->battlers[i].restSleepTurns == 0))
     {
       return 0;
     }
@@ -651,7 +651,7 @@ s32 BattleAi_PickToxicOrLeechSeed(ComBattler* arg0) {
     if (r >= 0) {
         return r;
     }
-    if ((D_821CF2A0->mon.pendingStatusCondition == 0) && (BattleAi_HasType(D_821CF2A0, TYPE_POISON) == 0)) {
+    if ((D_821CF2A0->mon.statusCondition == 0) && (BattleAi_HasType(D_821CF2A0, TYPE_POISON) == 0)) {
         for (i = 0; i < 4; i++) {
             if (arg0->mon.moves[i] == 0) {
                 break;
@@ -661,7 +661,7 @@ s32 BattleAi_PickToxicOrLeechSeed(ComBattler* arg0) {
             }
         }
     }
-    if (!(D_821CF2A0->mon.pendingStatusCondition & 8)) {
+    if (!(D_821CF2A0->mon.statusCondition & 8)) {
         return -1;
     }
     if ((D_821CF29C->leechSeededMask & D_821CF2A0->partyBit) || (BattleAi_HasType(D_821CF2A0, TYPE_GRASS) != 0)) {
@@ -762,7 +762,7 @@ s32 BattleAi_IsMoveUseful(s32 move) {
             if (BattleAi_HasType(D_821CF2A0, TYPE_POISON) != 0) {
                 goto fail;
             }
-            if (D_821CF2A0->mon.pendingStatusCondition != 0) {
+            if (D_821CF2A0->mon.statusCondition != 0) {
                 goto fail;
             }
             if (BattleAi_OpponentCannotAct(D_821CF29C, D_821CF2A0) == 0) {
@@ -793,7 +793,7 @@ s32 BattleAi_IsMoveUseful(s32 move) {
             if (func_82185494() == 0) {
                 goto fail;
             }
-            if (D_821CF2A0->mon.pendingStatusCondition != 0) {
+            if (D_821CF2A0->mon.statusCondition != 0) {
                 goto fail;
             }
             if (BattleAi_HasType(D_821CF2A0, D_8006B190[move - 1].type) == 0) {
@@ -801,7 +801,7 @@ s32 BattleAi_IsMoveUseful(s32 move) {
             }
             return 0;
         case 8:
-            if ((D_821CF2A0->mon.pendingStatusCondition & 7) == 0) {
+            if ((D_821CF2A0->mon.statusCondition & 7) == 0) {
                 goto fail;
             }
             if (func_82185494() == 0) {
@@ -853,8 +853,8 @@ s32 BattleAi_IsMoveUseful(s32 move) {
                     goto done;
                 }
             }
-            if (D_821CF29C->mon.pendingStatusCondition != 0) break;
-            if (D_821CF2A0->mon.pendingStatusCondition != 0) break;
+            if (D_821CF29C->mon.statusCondition != 0) break;
+            if (D_821CF2A0->mon.statusCondition != 0) break;
             if (D_821CF29C->mon.disabledMove != 0) break;
             if (D_821CF2A0->mon.disabledMove != 0) break;
             if (D_821CF29C->mon.immobilizedReason != 0) break;
@@ -877,7 +877,7 @@ s32 BattleAi_IsMoveUseful(s32 move) {
             }
             return 0;
         case 32:
-            if (D_821CF2A0->mon.pendingStatusCondition != 0) {
+            if (D_821CF2A0->mon.statusCondition != 0) {
                 goto fail;
             }
             if (BattleAi_OpponentCannotAct(D_821CF29C, D_821CF2A0) != 0) {
@@ -942,7 +942,7 @@ s32 BattleAi_IsMoveUseful(s32 move) {
             }
             return 0;
         case 67:
-            if (D_821CF2A0->mon.pendingStatusCondition != 0) {
+            if (D_821CF2A0->mon.statusCondition != 0) {
                 goto fail;
             }
             if (D_8006B190[move - 1].type == 0x17) {
@@ -997,7 +997,7 @@ extern ComBattler* D_821CF29C;
 s32 BattleAi_PickParalysisMove(ComBattler* arg0, ComBattler* arg1) {
     s32 i;
 
-    if ((arg1->mon.pendingStatusCondition != 0) || (BattleAi_OpponentCannotAct(D_821CF29C, D_821CF2A0) != 0) || (BattleAi_GetHpPercent(D_821CF2A0) < 30) ||
+    if ((arg1->mon.statusCondition != 0) || (BattleAi_OpponentCannotAct(D_821CF29C, D_821CF2A0) != 0) || (BattleAi_GetHpPercent(D_821CF2A0) < 30) ||
         (BattleAi_GetHpPercent(D_821CF29C) < 0x1E)) {
         return -1;
     }
@@ -1028,7 +1028,7 @@ s32 BattleAi_SleepClauseAllows();
 s32 BattleAi_PickSleepMove(ComBattler* arg0, ComBattler* arg1) {
     s32 i;
 
-    if ((arg1->mon.pendingStatusCondition != 0) || (BattleAi_OpponentCannotAct(D_821CF29C, D_821CF2A0) != 0) || (BattleAi_SleepClauseAllows(D_821CF298) == 0) ||
+    if ((arg1->mon.statusCondition != 0) || (BattleAi_OpponentCannotAct(D_821CF29C, D_821CF2A0) != 0) || (BattleAi_SleepClauseAllows(D_821CF298) == 0) ||
         (BattleAi_GetHpPercent(D_821CF2A0) < 30) || (BattleAi_GetHpPercent(D_821CF29C) < 0x1E)) {
         return -1;
     }
@@ -1155,7 +1155,7 @@ void BattleAi_LoadBattlerFromPartyMon(BattleMonRuntime* arg0, BattleMon* arg1) {
     arg0->species = arg1->species.id;
     arg0->hp = arg1->hp;
     arg0->rosterIndex = arg1->boxLevel;
-    arg0->pendingStatusCondition = arg1->statusCondition;
+    arg0->statusCondition = arg1->statusCondition;
     arg0->type1 = arg1->type1;
     arg0->type2 = arg1->type2;
     BattleAi_CopyMoveList(arg1->moves, arg0->moves);
@@ -1215,7 +1215,7 @@ void BattleAi_CopyVisibleBattleState(BattleMonRuntime* arg0, BattleMonRuntime* a
   u8 *new_var; // FAKE: permuter temp
   arg0->maxHp = (u16) (arg1->maxHp);
   arg0->hp = (u16) (arg1->hp);
-  arg0->pendingStatusCondition = (u8) (arg1->pendingStatusCondition);
+  arg0->statusCondition = (u8) (arg1->statusCondition);
   func_80058410(&arg1->moveCache, &arg0->moveCache, 6);
   arg0->unk_4A = (u8) (arg1->unk_4A);
   arg0->unk_4B = (u8) (arg1->unk_4B);
@@ -1338,13 +1338,13 @@ void BattleAi_AddMatchupPickScore(ComBattler* arg0, ComBattler* arg1) {
     if (arg0->mon.hp != 0) {
         score = 32768;
     }
-    if (!(arg0->mon.pendingStatusCondition & 0x20)) {
+    if (!(arg0->mon.statusCondition & 0x20)) {
         score += 16384;
     }
     if (!(arg0->mon.uniqueStatusFlags & 1) || (arg0->rechargeTurns < 3)) {
         score += 8192;
     }
-    if (!(arg0->mon.pendingStatusCondition & 7)) {
+    if (!(arg0->mon.statusCondition & 7)) {
         score += 4096;
     }
     if (BattleAi_FindUsableHealingMove(arg0) != 0) {
@@ -1643,9 +1643,9 @@ s32 BattleAi_ChooseSwitch(void) {
     flag = 0;
     k = 0;
     best = -1;
-    if (D_821CF29C->mon.hp == 0 || (D_821CF29C->mon.pendingStatusCondition & 0x20) || (D_821CF29C->mon.uniqueStatusFlags & 1)) {
+    if (D_821CF29C->mon.hp == 0 || (D_821CF29C->mon.statusCondition & 0x20) || (D_821CF29C->mon.uniqueStatusFlags & 1)) {
         flag = 1;
-    } else if ((D_821CF29C->mon.pendingStatusCondition & 7) && D_821CF29C->mon.statStages[5] < 10) {
+    } else if ((D_821CF29C->mon.statusCondition & 7) && D_821CF29C->mon.statStages[5] < 10) {
         flag = 1;
     }
     if (D_821CF29C->mon.hp == 0) {
@@ -1676,7 +1676,7 @@ s32 BattleAi_ChooseSwitch(void) {
             case 2:
                 if (fa[i] < f20) break;
             case 3:
-                if (D_821CF294->battlers[i].mon.pendingStatusCondition & 7) break;
+                if (D_821CF294->battlers[i].mon.statusCondition & 7) break;
             case 4:
                 if (D_821CF294->battlers[i].mon.uniqueStatusFlags & 1) break;
             case 5:
@@ -1686,7 +1686,7 @@ s32 BattleAi_ChooseSwitch(void) {
             case 7:
                 if (BattleAi_GetHpPercent(&D_821CF294->battlers[i]) < 0x37) break;
             case 8:
-                if (D_821CF294->battlers[i].mon.pendingStatusCondition & 0x20) break;
+                if (D_821CF294->battlers[i].mon.statusCondition & 0x20) break;
             default:
             case 9:
                 D_821CF294->switchThreshold = 10.0f;

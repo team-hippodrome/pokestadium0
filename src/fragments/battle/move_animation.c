@@ -1230,17 +1230,17 @@ void BattleScene_EnterMissRowPlaySound(ActivePokemon* active_pokemon) {
  * then retires the slot.
  * Seen in play (2026-11-13) (Free Battle, crafted states): ran as the state-row-13 callback for
  * 1P's Onix after its move in four battles, each time with the poison bit (0x08) set in its
- * pendingStatusCondition.
+ * statusCondition.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_Row13PlaySequences14And21(ActivePokemon* active_pokemon) {
     BattleMonRuntime* runtime = &active_pokemon->state.runtime;
 
-    if (runtime->pendingStatusCondition & 8) {
+    if (runtime->statusCondition & 8) {
         BattleAnim_PlayBattleSequenceById(active_pokemon, 20);
     }
 
-    if (runtime->pendingStatusCondition & 0x10) {
+    if (runtime->statusCondition & 0x10) {
         BattleAnim_PlayBattleSequenceById(active_pokemon, 33);
     }
 

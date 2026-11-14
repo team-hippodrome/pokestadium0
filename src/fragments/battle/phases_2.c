@@ -61,11 +61,11 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
                 BattleAnim_CleanupEffects(1);
                 func_82124894(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
                 func_82104C68(sActivePokemon[sBattleScene.scene->actingSide], 0xD);
-                if (sp2C->pendingStatusCondition & 0x18) {
+                if (sp2C->statusCondition & 0x18) {
                     BattleMessage_ShowForSide(D_8219A520 + 0x248, sBattleScene.scene->actingSide);
                     sp2C->hp = sp2C->hpAfterPoisonBurn;
                     sp28->hp = sp28->hpAfterPoisonBurn;
-                    if (sp2C->pendingStatusCondition & 0x10) {
+                    if (sp2C->statusCondition & 0x10) {
                         BattleAnim_QueueEffectList(6, D_8219A544);
                     } else {
                         BattleAnim_QueueEffectList(5, D_8219A544);

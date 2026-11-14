@@ -81,7 +81,7 @@ typedef struct BattleMonRuntime {
     /* 0x10 */ u16 hpAfterLeechSeed; // the user's HP after the drain, the target's after the heal; 900 when none is pending
     /* 0x12 */ u16 pendingHp; // HP while damage is worked out; 0xFFFF between turns
     /* 0x14 */ u8 rosterIndex; // copy of ActivePokemonState.rosterIndex
-    /* 0x15 */ u8 pendingStatusCondition;
+    /* 0x15 */ u8 statusCondition; // the active Pokémon's Gen 1 status (sleep turns in bits 0-2, 0x08 poison, 0x10 burn, 0x20 freeze, 0x40 paralysis), copied from and back to BattleMon.statusCondition; poking 0x08 made the HUD show どく (poison)
     /* 0x16 */ u8 restSleepTurns[6]; // per brought Pokémon (rosterIndex + teamMemberIndex * 3): sleep turns left from Rest, which sets 2
     /* 0x1C */ u8 type1;
     /* 0x1D */ u8 type2;

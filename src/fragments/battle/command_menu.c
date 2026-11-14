@@ -780,7 +780,7 @@ void BattleScene_CollectPlayerAction(ActivePokemon* arg0, ActivePokemon* arg1) {
             sp1C->immobilizedReason &= ~8;
             if (!(sp20->immobilizedReason & 0x12)) {
                 if (BattleScene_HandlePlayerActionInput(arg0) == 0) {
-                    if (!(sp20->pendingStatusCondition & 0x27)) {
+                    if (!(sp20->statusCondition & 0x27)) {
                         if (!(sp20->immobilizedReason & 0x21)) {
                             if (sp1C->immobilizedReason & 0x20) {
                                 BattleScene_HandlePlayerMoveSelectionLocked(arg0, arg0->state.controller);
@@ -1072,7 +1072,7 @@ s32 BattleScene_CollectCpuAction(ActivePokemon* arg0, ActivePokemon* arg1) {
                 return 0;
             }
 
-            if (!(sp34->pendingStatusCondition & 0x27)) {
+            if (!(sp34->statusCondition & 0x27)) {
                 if (!(sp34->immobilizedReason & 0x21)) {
                     if (sp30->immobilizedReason & 0x20) {
                         BattleScene_AutoConfirmCpuMove(arg0, arg1);

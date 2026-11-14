@@ -215,7 +215,7 @@ s32 BattleAi_ChooseMove(void)
 
   BattleAi_MovesFirst(D_821CF29C, D_821CF2A0);
   r = -1;
-  if ((BattleAi_MovesFirst(D_821CF29C, D_821CF2A0) != 0) && (BattleAi_OpponentCannotAct(D_821CF29C, D_821CF2A0) == 0) && (!(D_821CF2A0->mon.pendingStatusCondition & 0x27)) && (BattleAi_PickStrongestMove(BattleAi_GetHpPercent(D_821CF2A0)) != 0))
+  if ((BattleAi_MovesFirst(D_821CF29C, D_821CF2A0) != 0) && (BattleAi_OpponentCannotAct(D_821CF29C, D_821CF2A0) == 0) && (!(D_821CF2A0->mon.statusCondition & 0x27)) && (BattleAi_PickStrongestMove(BattleAi_GetHpPercent(D_821CF2A0)) != 0))
   {
     r = BattleAi_PickHealingMove(D_821CF29C);
   }

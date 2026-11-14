@@ -369,7 +369,7 @@ void Battle_MoveHitTest(void) {
     s8* p = D_8219A3C0;
     u8 effect = M2C_FIELD(p, u8*, 0x45);
 
-    if ((effect == 8) && !(sBattleTarget->pendingStatusCondition & 7)) {
+    if ((effect == 8) && !(sBattleTarget->statusCondition & 7)) {
         Battle_MoveMissed();
         return;
     }
@@ -408,7 +408,7 @@ void Battle_MoveHitTest(void) {
 void ActivePokemon_CommitPendingStatus(ActivePokemon* arg0) {
     BattleMon* ptr = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
 
-    ptr->statusCondition = arg0->state.runtime.pendingStatusCondition;
+    ptr->statusCondition = arg0->state.runtime.statusCondition;
 }
 
 /**
@@ -419,7 +419,7 @@ void ActivePokemon_CommitPendingStatus(ActivePokemon* arg0) {
 void ApplyParalysisSpeedCut(ActivePokemon* arg0) {
     BattleMonRuntime* temp_v0 = &arg0->state.runtime;
 
-    if (arg0->state.runtime.pendingStatusCondition & 0x40) {
+    if (arg0->state.runtime.statusCondition & 0x40) {
         temp_v0->speed >>= 2;
         if (temp_v0->speed == 0) {
             temp_v0->speed = 1;
@@ -435,7 +435,7 @@ void ApplyParalysisSpeedCut(ActivePokemon* arg0) {
 void ApplyBurnAttackCut(ActivePokemon* arg0) {
     BattleMonRuntime* temp_v0 = &arg0->state.runtime;
 
-    if (arg0->state.runtime.pendingStatusCondition & 0x10) {
+    if (arg0->state.runtime.statusCondition & 0x10) {
         temp_v0->modifiedAttack >>= 1;
         if (temp_v0->modifiedAttack == 0) {
             temp_v0->modifiedAttack = 1;
@@ -465,7 +465,7 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     sp24->rosterIndex = sp28->rosterIndex;
     sp24->species = sp34->species.id;
     sp24->hp = sp34->hp;
-    sp24->pendingStatusCondition = sp34->statusCondition;
+    sp24->statusCondition = sp34->statusCondition;
     sp24->type1 = sp34->type1;
     sp24->type2 = sp34->type2;
     sp24->catchRate = sp34->catchRate;
@@ -864,7 +864,7 @@ void Battle_ApplyLeechSeedDamage(void) {
     s32 amount;
     s32 v;
 
-    if (!(sBattleUser->pendingStatusCondition & 0x18)) {
+    if (!(sBattleUser->statusCondition & 0x18)) {
         v = sBattleUser->pendingHp;
         if (v != 0xFFFF) {
             sBattleUser->hpAfterLeechSeed = v;
@@ -923,8 +923,8 @@ s32 Battle_ApplyResidualEffects(void) {
         return 0;
     }
 
-    if (sBattleUser->pendingStatusCondition & 0x18) {
-        if (sBattleUser->pendingStatusCondition & 8) {
+    if (sBattleUser->statusCondition & 0x18) {
+        if (sBattleUser->statusCondition & 8) {
             BattleMessage_Format(D_8219A520 + 0x248, 0, D_8218C704, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
         } else {
             BattleMessage_Format(D_8219A520 + 0x248, 1, D_8218C708, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));

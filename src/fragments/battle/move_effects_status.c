@@ -37,13 +37,13 @@ void Battle_Effect_Sleep(void) {
     sBattleTarget->volatileStatusFlags &= ~0x20;
 
     if (sp24 == 0) {
-        if (sBattleTarget->pendingStatusCondition & 7) {
+        if (sBattleTarget->statusCondition & 7) {
             sConfused = 0;
             BattleMessage_Format(D_8219A520 + 0x88, -0x80, D_8218C7BC, ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
             return;
         }
 
-        if (sBattleTarget->pendingStatusCondition == 0) {
+        if (sBattleTarget->statusCondition == 0) {
             Battle_MoveHitTest();
             if ((sBattleMoveFailed == 0) && (Battle_SleepClauseInEffect(sActivePokemon[!sBattleScene.scene->actingSide]) == 0)) {
                 goto block_9;
@@ -62,7 +62,7 @@ block_9:
         do {
             var_v1 = Battle_Random() & 3;
         } while (var_v1 == 0);
-        sBattleTarget->pendingStatusCondition = var_v1;
+        sBattleTarget->statusCondition = var_v1;
         BattleMessage_Format(D_8219A520 + 0x88, -0x7E, D_8218C7C4, ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
     }
 }
@@ -85,7 +85,7 @@ extern s32 D_8218C7D4;
 void Battle_Effect_Poison(void) {
     s32 sp1C = D_8219A520 + 0x88;
 
-    if (!(sBattleTarget->volatileStatusFlags & 0x10) && (sBattleTarget->pendingStatusCondition == 0) && (sBattleTarget->type1 != 3) &&
+    if (!(sBattleTarget->volatileStatusFlags & 0x10) && (sBattleTarget->statusCondition == 0) && (sBattleTarget->type1 != 3) &&
         (sBattleTarget->type2 != 3)) {
         switch (sBattleUser->moveCache.effect) {
             case 2:
@@ -120,7 +120,7 @@ void Battle_Effect_Poison(void) {
                 break;
         }
 
-        sBattleTarget->pendingStatusCondition |= 8;
+        sBattleTarget->statusCondition |= 8;
         if (sBattleUser->moveCache.lastMove == TOXIC) {
             sBattleTarget->uniqueStatusFlags |= 1;
             sBattleTarget->toxicCounter = 0;
@@ -175,7 +175,7 @@ void Battle_Effect_DrainHP(void) {
 void BattleEffect_Explosion(void) {
     sBattleScene.scene->moveEffectKind = 0x1E;
     sBattleUser->hp = 0;
-    sBattleUser->pendingStatusCondition = 0;
+    sBattleUser->statusCondition = 0;
     sBattleUser->volatileStatusFlags &= ~0x80;
 }
 
@@ -193,9 +193,9 @@ void Battle_Effect_FreezeBurnParalyze(void) {
         return;
     }
 
-    if (sBattleTarget->pendingStatusCondition != 0) {
-        if ((sBattleTarget->pendingStatusCondition & 0x20) && (sBattleUser->moveCache.type == 0x14)) {
-            sBattleTarget->pendingStatusCondition = 0;
+    if (sBattleTarget->statusCondition != 0) {
+        if ((sBattleTarget->statusCondition & 0x20) && (sBattleUser->moveCache.type == 0x14)) {
+            sBattleTarget->statusCondition = 0;
             BattleMessage_Format(D_8219A520 + 0x88, -0x77, D_8218C7E0, ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
         }
         return;
@@ -214,7 +214,7 @@ void Battle_Effect_FreezeBurnParalyze(void) {
         switch (sBattleUser->moveCache.effect) {
             case 4:
             case 34:
-                sBattleTarget->pendingStatusCondition = 0x10;
+                sBattleTarget->statusCondition = 0x10;
                 ApplyBurnAttackCut(sActivePokemon[!sBattleScene.scene->actingSide]);
                 BattleMessage_Format(D_8219A520 + 0x208, -0x76, D_8218C7E4, ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
                 break;
@@ -223,14 +223,14 @@ void Battle_Effect_FreezeBurnParalyze(void) {
             case 35:
                 if (Battle_FreezeClauseInEffect(sActivePokemon[!sBattleScene.scene->actingSide]) == 0) {
                     sBattleTarget->volatileStatusFlags &= ~0x20;
-                    sBattleTarget->pendingStatusCondition = 0x20;
+                    sBattleTarget->statusCondition = 0x20;
                     BattleMessage_Format(D_8219A520 + 0x208, -0x75, D_8218C7E8, ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
                 }
                 break;
 
             case 6:
             case 36:
-                sBattleTarget->pendingStatusCondition = 0x40;
+                sBattleTarget->statusCondition = 0x40;
                 ApplyParalysisSpeedCut(sActivePokemon[!sBattleScene.scene->actingSide]);
                 BattleMessage_Format(D_8219A520 + 0x208, -0x74, D_8218C7EC, ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
                 break;

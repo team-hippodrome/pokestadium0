@@ -360,11 +360,11 @@ extern s32 D_8218C8B8;
  */
 void Battle_Effect_Paralyze(void) {
     sBattleScene.scene->moveEffectKind = 0x16;
-    if (sBattleTarget->pendingStatusCondition == 0) {
+    if (sBattleTarget->statusCondition == 0) {
         if ((sBattleUser->moveCache.type != TYPE_ELECTRIC) || ((sBattleTarget->type1 != TYPE_GROUND) && (sBattleTarget->type2 != TYPE_GROUND))) {
             Battle_MoveHitTest();
             if (sBattleMoveFailed == 0) {
-                sBattleTarget->pendingStatusCondition |= 0x40;
+                sBattleTarget->statusCondition |= 0x40;
                 ApplyParalysisSpeedCut(sActivePokemon[!sBattleScene.scene->actingSide]);
                 BattleMessage_Format(D_8219A520 + 0x88, -0x43, D_8218C8B0, ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
                 return;
@@ -607,11 +607,11 @@ void Battle_Effect_Haze(void) {
     temp_a3->speed = temp_a3->unmodifiedSpeed;
     temp_a3->modifiedSpecial = temp_a3->unmodifiedSpecial;
 
-    if (sBattleTarget->pendingStatusCondition & 0x27) {
+    if (sBattleTarget->statusCondition & 0x27) {
         sBattleTarget->usedMove = 0xFF;
     }
 
-    sBattleTarget->pendingStatusCondition = 0;
+    sBattleTarget->statusCondition = 0;
 
     temp_t0->disabledMoveState = temp_a3->disabledMoveState = 0;
     temp_t0->disabledMove = temp_a3->disabledMove = 0;
@@ -650,9 +650,9 @@ void Battle_Effect_Heal(void) {
     sBattleScene.scene->moveEffectKind = 0x15;
     if (sBattleUser->hp != sBattleUser->maxHp) {
         if (sBattleUser->moveCache.lastMove == REST) {
-            temp_v0 = sBattleUser->pendingStatusCondition;
+            temp_v0 = sBattleUser->statusCondition;
 
-            sBattleUser->pendingStatusCondition = 2;
+            sBattleUser->statusCondition = 2;
             temp_a2->restSleepTurns[temp_a1->rosterIndex + temp_a1->teamMemberIndex * 3] = 2;
 
             if (temp_v0 != 0) {

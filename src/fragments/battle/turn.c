@@ -294,12 +294,12 @@ s32 Battle_CheckMonCanAct(void) {
     temp_v0 = &sActivePokemon[sBattleScene.scene->actingSide]->state;
     temp_v1 = &sActivePokemon[sBattleScene.scene->actingSide]->state.runtime;
 
-    if (sBattleUser->pendingStatusCondition & 7) {
-        sBattleUser->pendingStatusCondition = (sBattleUser->pendingStatusCondition & 7) - 1;
+    if (sBattleUser->statusCondition & 7) {
+        sBattleUser->statusCondition = (sBattleUser->statusCondition & 7) - 1;
         if (temp_v1->restSleepTurns[temp_v0->rosterIndex + temp_v0->teamMemberIndex * 3] != 0) {
             temp_v1->restSleepTurns[temp_v0->rosterIndex + temp_v0->teamMemberIndex * 3]--;
         }
-        if (sBattleUser->pendingStatusCondition != 0) {
+        if (sBattleUser->statusCondition != 0) {
             BattleMessage_Format(D_8219A520 + 0x88, 5, D_8218C718, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
             sBattleScene.scene->moveEffectKind = 0x11;
         } else {
@@ -310,7 +310,7 @@ s32 Battle_CheckMonCanAct(void) {
         return 0;
     }
 
-    if (sBattleUser->pendingStatusCondition & 0x20) {
+    if (sBattleUser->statusCondition & 0x20) {
         BattleMessage_Format(D_8219A520 + 0x88, 7, D_8218C720, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
         sBattleUser->lastMove = 0;
         sBattleScene.scene->moveEffectKind = 0x11;
@@ -389,7 +389,7 @@ s32 Battle_CheckMonCanAct(void) {
         return 0;
     }
 
-    if ((sBattleUser->pendingStatusCondition & 0x40) && (Battle_Random() < 0x3F)) {
+    if ((sBattleUser->statusCondition & 0x40) && (Battle_Random() < 0x3F)) {
         BattleMessage_Format(D_8219A520 + 0x88, 0x10, D_8218C744, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
         sBattleScene.scene->moveEffectKind = 0x1F;
     label1:
@@ -815,7 +815,7 @@ s32 Battle_CheckSideDefeatAfterResidualStatus(ActivePokemon* arg0) {
     s32 i;
     s32 var_s2;
 
-    if (arg0->state.runtime.pendingStatusCondition & 0x18) {
+    if (arg0->state.runtime.statusCondition & 0x18) {
         var_s2 = 0;
         if (arg0->state.runtime.hpAfterPoisonBurn == 0) {
             for (i = 0; i < BattleScene_GetTeamMemberTeamSize(arg0); i++) {
@@ -859,7 +859,7 @@ s32 Battle_CheckFaintAfterMove(void) {
     if ((sBattleUser->hp != 0) && (sBattleTarget->hp != 0) && (sBattleUser->pendingHp == 0)) {
         Battle_CheckAllBroughtFainted_PendingHp(sActivePokemon[sBattleScene.scene->actingSide]);
         return 0;
-    } else if ((sBattleUser->hp != 0) && (sBattleTarget->hp != 0) && (sBattleUser->pendingStatusCondition & 0x18) &&
+    } else if ((sBattleUser->hp != 0) && (sBattleTarget->hp != 0) && (sBattleUser->statusCondition & 0x18) &&
                (sBattleUser->hpAfterPoisonBurn == 0)) {
         Battle_CheckAllBroughtFainted_PoisonBurn(sActivePokemon[sBattleScene.scene->actingSide]);
         return 0;

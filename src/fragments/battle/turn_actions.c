@@ -469,7 +469,7 @@ void BattleScene_UpdateDisplayedHpAndTransition(CameraNode* arg0) {
         func_82125990(0xA);
     } else if (sBattleScene.scene->moveEffectKind == 9) {
         func_82125930(9);
-    } else if ((sp1C->pendingStatusCondition & 0x18) || (sp1C->volatileStatusFlags & 0x80)) {
+    } else if ((sp1C->statusCondition & 0x18) || (sp1C->volatileStatusFlags & 0x80)) {
         func_82125930(6);
     } else {
         func_821259E8(arg0);
@@ -597,7 +597,7 @@ s32 BattleScene_PrepareResidualStatusPresentation(void) {
     s32 idx = sBattleScene.scene->actingSide;
     BattleMonRuntime* temp_v1_2 = &sActivePokemon[idx]->state.runtime;
 
-    if (((temp_v1_2->volatileStatusFlags & 0x80) || (temp_v1_2->pendingStatusCondition & 0x18)) && (temp_v1_2->usedMove == 0xFF)) {
+    if (((temp_v1_2->volatileStatusFlags & 0x80) || (temp_v1_2->statusCondition & 0x18)) && (temp_v1_2->usedMove == 0xFF)) {
         return BattleScene_TransitionToPhaseFull(0x23);
     }
     return 0;
