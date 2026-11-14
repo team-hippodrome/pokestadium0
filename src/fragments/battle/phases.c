@@ -1265,7 +1265,7 @@ void BattleScene_PhaseFlyUp(CameraNode* arg0) {
                 func_82125570();
                 Battle_ClearMessageCursor();
                 func_82104C68(sActingPokemon, 8);
-                sBattleScene.scene->unk_84.y = 0.5f;
+                sBattleScene.scene->easeRates.y = 0.5f;
                 BattleAnim_Vec3fCopy(&sBattleScene.scene->savedCameraAt, &arg0->view.targetPosition);
                 BattleAnim_Vec3fCopy(&sBattleScene.scene->savedCameraEye, &arg0->view.eyePosition);
                 sBattleScene.scene->phaseStep++;
@@ -1273,8 +1273,8 @@ void BattleScene_PhaseFlyUp(CameraNode* arg0) {
             break;
 
         case 1:
-            BattleAnim_ApproachF(&sBattleScene.scene->unk_84.y, 0.0f, 0.06f);
-            func_8212311C(arg0, sActingPokemon, sBattleScene.scene->unk_84.y);
+            BattleAnim_ApproachF(&sBattleScene.scene->easeRates.y, 0.0f, 0.06f);
+            func_8212311C(arg0, sActingPokemon, sBattleScene.scene->easeRates.y);
             if ((sActingPokemon)->displayObject.position.y - D_FLT_82189354[(sActingPokemon)->displayObject.objectType][0] >= 800.0f) {
                 BattleMessage_ShowForSide(D_8219A520 + 0x148, sBattleScene.scene->actingSide);
                 sBattleScene.scene->phaseStep++;

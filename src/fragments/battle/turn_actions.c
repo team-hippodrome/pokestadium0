@@ -107,9 +107,9 @@ void Battle_StartTurn(void) {
     temp_s0->infoBoxBlinkTimer = 0;
     temp_s1->infoBoxBlinkTimer = 0;
     if (sBattleScene.scene->mode == 5) {
-        sBattleScene.scene->unk_44 = 6;
+        sBattleScene.scene->modeAfterTransition = 6;
     } else {
-        sBattleScene.scene->unk_44 = 2;
+        sBattleScene.scene->modeAfterTransition = 2;
     }
     Battle_ResolveMonAction();
     sBattleScene.scene->actingSide = sp24;
@@ -174,7 +174,7 @@ void BattleScene_InitializeSwitchActions(void) {
         sBattleScene.scene->actingSide = 0;
         sBattleScene.scene->sideCurrentlySwitching = 0;
         sBattleScene.scene->phase = 0;
-        sBattleScene.scene->unk_44 = 2;
+        sBattleScene.scene->modeAfterTransition = 2;
         BeginBattleForEntity(sActivePokemon[0]);
         sBattleScene.scene->actingSide = sp2C;
     } else {
@@ -184,7 +184,7 @@ void BattleScene_InitializeSwitchActions(void) {
         sBattleScene.scene->actingSide = 1;
         sBattleScene.scene->sideCurrentlySwitching = 1;
         sBattleScene.scene->phase = 0;
-        sBattleScene.scene->unk_44 = 2;
+        sBattleScene.scene->modeAfterTransition = 2;
         BeginBattleForEntity(sActivePokemon[1]);
         sBattleScene.scene->actingSide = sp2C;
     }
@@ -219,11 +219,11 @@ void func_82125384(void) {
     }
     st = sBattleScene.scene->mode;
     if (st == 6) {
-        sBattleScene.scene->unk_44 = 5;
+        sBattleScene.scene->modeAfterTransition = 5;
     } else if (st == 0xA) {
-        sBattleScene.scene->unk_44 = 9;
+        sBattleScene.scene->modeAfterTransition = 9;
     } else {
-        sBattleScene.scene->unk_44 = 1;
+        sBattleScene.scene->modeAfterTransition = 1;
     }
     sBattleScene.scene->phaseStep++;
 }
@@ -254,7 +254,7 @@ void BattleScene_StartSecondAction(void) {
     }
 
     sBattleScene.scene->actionPass = 1;
-    sBattleScene.scene->unk_90.z = 0.0f;
+    sBattleScene.scene->easeRampRates.z = 0.0f;
 }
 
 /**
@@ -1055,8 +1055,8 @@ void func_82126F70(CameraNode* arg0) {
     s8* sp30 = (s8*)sOtherPokemon;
 
     if (sBattleScene.scene->mode == 0xA) {
-        sBattleScene.scene->unk_90.z = func_8000F23C(sBattleScene.scene->unk_90.z, 0.05f, 0.03f, 0.03f);
-        func_8210C1A8(&sBattleScene.scene->orbitDistance, 120.0f, sBattleScene.scene->unk_90.z);
+        sBattleScene.scene->easeRampRates.z = func_8000F23C(sBattleScene.scene->easeRampRates.z, 0.05f, 0.03f, 0.03f);
+        func_8210C1A8(&sBattleScene.scene->orbitDistance, 120.0f, sBattleScene.scene->easeRampRates.z);
         func_8210C104(&sBattleScene.scene->rotationX, 0xE38, sBattleScene.scene->orbitDistance);
         func_8210C1A8(&sBattleScene.scene->distance, 250.0f, 0.055f);
         func_8210C1A8(&arg0->perspective.verticalFieldOfView, 80.0f, 0.03f);
@@ -1067,14 +1067,14 @@ void func_82126F70(CameraNode* arg0) {
     } else {
         func_821079E8(0x2E36);
         if ((M2C_FIELD(sp34, f32*, 0x28) > 100.0f) && (M2C_FIELD(sp30, f32*, 0x28) > 100.0f)) {
-            sBattleScene.scene->unk_90.z = func_8000F23C(sBattleScene.scene->unk_90.z, 0.1f, 0.1f, 0.1f);
-            func_8210C1A8(&sBattleScene.scene->orbitDistance, 120.0f, sBattleScene.scene->unk_90.z);
+            sBattleScene.scene->easeRampRates.z = func_8000F23C(sBattleScene.scene->easeRampRates.z, 0.1f, 0.1f, 0.1f);
+            func_8210C1A8(&sBattleScene.scene->orbitDistance, 120.0f, sBattleScene.scene->easeRampRates.z);
             func_8210C104(&sBattleScene.scene->rotationX, 0xE38, sBattleScene.scene->orbitDistance);
             func_8210C1A8(&sBattleScene.scene->distance, 350.0f, 0.2f);
             func_8210C1A8(&arg0->perspective.verticalFieldOfView, 80.0f, 0.02f);
         } else {
-            sBattleScene.scene->unk_90.z = func_8000F23C(sBattleScene.scene->unk_90.z, 0.2f, 0.1f, 0.1f);
-            func_8210C1A8(&sBattleScene.scene->orbitDistance, 120.0f, sBattleScene.scene->unk_90.z);
+            sBattleScene.scene->easeRampRates.z = func_8000F23C(sBattleScene.scene->easeRampRates.z, 0.2f, 0.1f, 0.1f);
+            func_8210C1A8(&sBattleScene.scene->orbitDistance, 120.0f, sBattleScene.scene->easeRampRates.z);
             func_8210C104(&sBattleScene.scene->rotationX, 0xE38, sBattleScene.scene->orbitDistance);
             func_8210C1A8(&sBattleScene.scene->distance, 250.0f, 0.2f);
             func_8210C1A8(&arg0->perspective.verticalFieldOfView, 80.0f, 0.02f);
@@ -1153,7 +1153,7 @@ void func_82127354(CameraNode* arg0) {
                 func_82108C0C(sActingPokemon);
                 func_82108C0C(sOtherPokemon);
                 func_8213B31C(2);
-                sBattleScene.scene->unk_1B = 0;
+                sBattleScene.scene->hitCountWaitFrames = 0;
                 func_821272C0((s8*)sActingPokemon);
                 func_821255EC((s8*)arg0);
                 BattleAnim_GetOwnerDefaultAnchorPosition(sActingPokemon, &sBattleScene.scene->anchorPosition);
@@ -1171,8 +1171,8 @@ void func_82127354(CameraNode* arg0) {
                 step = 0.3f;
                 sp58 = sBattleScene.scene->orbitDistance;
                 for (;;) {
-                    sBattleScene.scene->unk_84.z = func_8000F23C(sBattleScene.scene->unk_90.z, 0.7f, step, step);
-                    func_8210C1A8(&sp58, 0.0f, sBattleScene.scene->unk_84.z);
+                    sBattleScene.scene->easeRates.z = func_8000F23C(sBattleScene.scene->easeRampRates.z, 0.7f, step, step);
+                    func_8210C1A8(&sp58, 0.0f, sBattleScene.scene->easeRates.z);
                     if (sp58 <= 0.05f) {
                         break;
                     }
@@ -1188,8 +1188,8 @@ void func_82127354(CameraNode* arg0) {
             if (func_82101FD4(sActingPokemon) != 0) {
                 func_82121750(sActingPokemon, 3.5f, 300.0f);
                 step = 0.3f;
-                sBattleScene.scene->unk_84.z = func_8000F23C(sBattleScene.scene->unk_90.z, 0.7f, step, step);
-                func_8210C1A8(&sBattleScene.scene->orbitDistance, 0.0f, sBattleScene.scene->unk_84.z);
+                sBattleScene.scene->easeRates.z = func_8000F23C(sBattleScene.scene->easeRampRates.z, 0.7f, step, step);
+                func_8210C1A8(&sBattleScene.scene->orbitDistance, 0.0f, sBattleScene.scene->easeRates.z);
                 BattleScene_SetCameraAtFromAnchor(sActingPokemon, arg0, sBattleScene.scene->anchorPosition, 0, 0, sBattleScene.scene->orbitDistance, 0.0);
                 sBattleScene.scene->anchorPosition.x = arg0->view.targetPosition.x;
                 sBattleScene.scene->anchorPosition.z = arg0->view.targetPosition.z;
@@ -1219,7 +1219,7 @@ void func_82127724(CameraNode* arg0) {
         case 0:
             if (func_82124A50(sActingPokemon) == 0) {
                 func_8213B31C(2);
-                sBattleScene.scene->unk_1B = 0;
+                sBattleScene.scene->hitCountWaitFrames = 0;
                 func_821272C0((s8*)sActingPokemon);
                 func_821255EC((s8*)arg0);
                 func_82124EB4();
@@ -1234,12 +1234,12 @@ void func_82127724(CameraNode* arg0) {
                 func_821224F4();
                 BattleMessage_ShowForSide(D_8219A520 + 0x188, sBattleScene.scene->actingSide);
                 i = 0;
-                sBattleScene.scene->unk_84.x = 50.0f;
+                sBattleScene.scene->easeRates.x = 50.0f;
                 step = 0.3f;
                 for (;;) {
                     dist = func_82121750(sActingPokemon, 3.5f, 300.0f);
-                    func_8210C1A8(&sBattleScene.scene->unk_84.x, 8.0f, step);
-                    rate = (sBattleScene.scene->rotationY - (sActingPokemon)->facingDirection * 0x38E0) / (s16)sBattleScene.scene->unk_84.x;
+                    func_8210C1A8(&sBattleScene.scene->easeRates.x, 8.0f, step);
+                    rate = (sBattleScene.scene->rotationY - (sActingPokemon)->facingDirection * 0x38E0) / (s16)sBattleScene.scene->easeRates.x;
                     if (rate < 0) {
                         rate *= -1;
                     }
@@ -1247,11 +1247,11 @@ void func_82127724(CameraNode* arg0) {
                         rate = 30;
                     }
                     if (BattleAnim_StepToS16(&sBattleScene.scene->rotationY, (sActingPokemon)->facingDirection * 0x38E0, rate) != 0) {
-                        func_8210C1A8(&sBattleScene.scene->unk_84.z, step, 0.02f);
-                        func_8210C1A8(&sBattleScene.scene->orbitDistance, 0.0f, sBattleScene.scene->unk_84.z);
+                        func_8210C1A8(&sBattleScene.scene->easeRates.z, step, 0.02f);
+                        func_8210C1A8(&sBattleScene.scene->orbitDistance, 0.0f, sBattleScene.scene->easeRates.z);
                     } else {
-                        func_8210C1A8(&sBattleScene.scene->unk_84.y, 0.5f, 0.03f);
-                        func_8210C1A8(&sBattleScene.scene->distance, dist, sBattleScene.scene->unk_84.y);
+                        func_8210C1A8(&sBattleScene.scene->easeRates.y, 0.5f, 0.03f);
+                        func_8210C1A8(&sBattleScene.scene->distance, dist, sBattleScene.scene->easeRates.y);
                     }
                     BattleScene_SetCameraAtFromAnchor(sActingPokemon, arg0, sBattleScene.scene->anchorPosition, 0, (sActingPokemon)->facingDirection << 0xE, sBattleScene.scene->orbitDistance, 0.0);
                     BattleScene_SetCameraEyeFromAt(arg0, 0, sBattleScene.scene->rotationY, sBattleScene.scene->distance, 0.0f);
@@ -1267,15 +1267,15 @@ void func_82127724(CameraNode* arg0) {
                     arg0->view.eyePosition.y = 25.0f;
                 }
                 func_821224F4();
-                sBattleScene.scene->unk_84.x = 50.0f;
+                sBattleScene.scene->easeRates.x = 50.0f;
             }
             break;
         case 1:
             if (func_82101FD4(sActingPokemon) != 0) {
                 step = 0.3f;
                 dist = func_82121750(sActingPokemon, 3.5f, 300.0f);
-                func_8210C1A8(&sBattleScene.scene->unk_84.x, 8.0f, step);
-                rate = (sBattleScene.scene->rotationY - (sActingPokemon)->facingDirection * 0x38E0) / (s16)sBattleScene.scene->unk_84.x;
+                func_8210C1A8(&sBattleScene.scene->easeRates.x, 8.0f, step);
+                rate = (sBattleScene.scene->rotationY - (sActingPokemon)->facingDirection * 0x38E0) / (s16)sBattleScene.scene->easeRates.x;
                 if (rate < 0) {
                     rate *= -1;
                 }
@@ -1283,11 +1283,11 @@ void func_82127724(CameraNode* arg0) {
                     rate = 30;
                 }
                 if (BattleAnim_StepToS16(&sBattleScene.scene->rotationY, (sActingPokemon)->facingDirection * 0x38E0, rate) != 0) {
-                    func_8210C1A8(&sBattleScene.scene->unk_84.z, step, 0.02f);
-                    func_8210C1A8(&sBattleScene.scene->orbitDistance, 0.0f, sBattleScene.scene->unk_84.z);
+                    func_8210C1A8(&sBattleScene.scene->easeRates.z, step, 0.02f);
+                    func_8210C1A8(&sBattleScene.scene->orbitDistance, 0.0f, sBattleScene.scene->easeRates.z);
                 } else {
-                    func_8210C1A8(&sBattleScene.scene->unk_84.y, 0.5f, 0.03f);
-                    func_8210C1A8(&sBattleScene.scene->distance, dist, sBattleScene.scene->unk_84.y);
+                    func_8210C1A8(&sBattleScene.scene->easeRates.y, 0.5f, 0.03f);
+                    func_8210C1A8(&sBattleScene.scene->distance, dist, sBattleScene.scene->easeRates.y);
                 }
                 BattleScene_SetCameraAtFromAnchor(sActingPokemon, arg0, sBattleScene.scene->anchorPosition, 0, (sActingPokemon)->facingDirection << 0xE, sBattleScene.scene->orbitDistance, 0.0);
                 BattleScene_SetCameraEyeFromAt(arg0, 0, sBattleScene.scene->rotationY, sBattleScene.scene->distance, 0.0f);
@@ -1326,7 +1326,7 @@ void func_82127DFC(CameraNode* arg0) {
                 func_82108C0C(sActingPokemon);
                 func_82108C0C(sOtherPokemon);
                 func_8213B31C(2);
-                sBattleScene.scene->unk_1B = 0;
+                sBattleScene.scene->hitCountWaitFrames = 0;
                 func_821272C0((s8*)sActingPokemon);
                 func_821255EC((s8*)arg0);
                 BattleAnim_GetOwnerDefaultAnchorPosition(sActingPokemon, &sBattleScene.scene->anchorPosition);
@@ -1342,8 +1342,8 @@ void func_82127DFC(CameraNode* arg0) {
                 step = 0.1f;
                 sp68 = arg0->view.targetPosition.y;
                 while (TRUE) {
-                    sBattleScene.scene->unk_84.z = func_8000F23C(sBattleScene.scene->unk_84.z, 0.2f, step, step);
-                    func_8210C1A8(&sp68, sBattleScene.scene->anchorPosition.y + D_FLT_8218935C[(sActingPokemon)->displayObject.objectType - 1][3], sBattleScene.scene->unk_84.z);
+                    sBattleScene.scene->easeRates.z = func_8000F23C(sBattleScene.scene->easeRates.z, 0.2f, step, step);
+                    func_8210C1A8(&sp68, sBattleScene.scene->anchorPosition.y + D_FLT_8218935C[(sActingPokemon)->displayObject.objectType - 1][3], sBattleScene.scene->easeRates.z);
                     if (sp68 <= (sBattleScene.scene->anchorPosition.y + step) + D_FLT_8218935C[(sActingPokemon)->displayObject.objectType - 1][3]) {
                         break;
                     }
@@ -1357,8 +1357,8 @@ void func_82127DFC(CameraNode* arg0) {
             sBattleScene.scene->cameraPresetId = 4;
             if (func_82101FD4(sActingPokemon) != 0) {
                 step = 0.1f;
-                sBattleScene.scene->unk_84.z = func_8000F23C(sBattleScene.scene->unk_84.z, 0.2f, step, step);
-                func_8210C1A8(&arg0->view.targetPosition.y, sBattleScene.scene->anchorPosition.y + D_FLT_8218935C[(sActingPokemon)->displayObject.objectType - 1][3], sBattleScene.scene->unk_84.z);
+                sBattleScene.scene->easeRates.z = func_8000F23C(sBattleScene.scene->easeRates.z, 0.2f, step, step);
+                func_8210C1A8(&arg0->view.targetPosition.y, sBattleScene.scene->anchorPosition.y + D_FLT_8218935C[(sActingPokemon)->displayObject.objectType - 1][3], sBattleScene.scene->easeRates.z);
                 if (arg0->view.targetPosition.y <= (sBattleScene.scene->anchorPosition.y + step) + D_FLT_8218935C[(sActingPokemon)->displayObject.objectType - 1][3]) {
                     BattleMessage_ShowForSide(D_8219A520 + 0x388, sBattleScene.scene->actingSide);
                     sBattleScene.scene->phaseStep++;
@@ -1391,7 +1391,7 @@ void func_8212817C(CameraNode* arg0) {
                 func_82108C0C(sActingPokemon);
                 func_82108C0C(sOtherPokemon);
                 func_8213B31C(2);
-                sBattleScene.scene->unk_1B = 0;
+                sBattleScene.scene->hitCountWaitFrames = 0;
                 func_821272C0((s8*)sActingPokemon);
                 func_821255EC((s8*)arg0);
                 BattleAnim_GetOwnerDefaultAnchorPosition(sActingPokemon, &sBattleScene.scene->anchorPosition);
@@ -1407,8 +1407,8 @@ void func_8212817C(CameraNode* arg0) {
                 step = 0.1f;
                 sp68 = arg0->view.targetPosition.y;
                 while (TRUE) {
-                    sBattleScene.scene->unk_84.z = func_8000F23C(sBattleScene.scene->unk_84.z, 0.2f, step, step);
-                    func_8210C1A8(&sp68, sBattleScene.scene->anchorPosition.y + D_FLT_8218935C[(sActingPokemon)->displayObject.objectType - 1][3], sBattleScene.scene->unk_84.z);
+                    sBattleScene.scene->easeRates.z = func_8000F23C(sBattleScene.scene->easeRates.z, 0.2f, step, step);
+                    func_8210C1A8(&sp68, sBattleScene.scene->anchorPosition.y + D_FLT_8218935C[(sActingPokemon)->displayObject.objectType - 1][3], sBattleScene.scene->easeRates.z);
                     if ((sBattleScene.scene->anchorPosition.y - step) + D_FLT_8218935C[(sActingPokemon)->displayObject.objectType - 1][3] <= sp68) {
                         break;
                     }
@@ -1422,8 +1422,8 @@ void func_8212817C(CameraNode* arg0) {
             sBattleScene.scene->cameraPresetId = 4;
             if ((func_82124A50(sActingPokemon) == 0) && (func_82101FD4(sActingPokemon) != 0)) {
                 step = 0.1f;
-                sBattleScene.scene->unk_84.z = func_8000F23C(sBattleScene.scene->unk_84.z, 0.2f, step, step);
-                func_8210C1A8(&arg0->view.targetPosition.y, sBattleScene.scene->anchorPosition.y + D_FLT_8218935C[(sActingPokemon)->displayObject.objectType - 1][3], sBattleScene.scene->unk_84.z);
+                sBattleScene.scene->easeRates.z = func_8000F23C(sBattleScene.scene->easeRates.z, 0.2f, step, step);
+                func_8210C1A8(&arg0->view.targetPosition.y, sBattleScene.scene->anchorPosition.y + D_FLT_8218935C[(sActingPokemon)->displayObject.objectType - 1][3], sBattleScene.scene->easeRates.z);
                 if (D_FLT_8218935C[(sActingPokemon)->displayObject.objectType - 1][3] + (sBattleScene.scene->anchorPosition.y - step) <= arg0->view.targetPosition.y) {
                     BattleMessage_ShowForSide(D_8219A520 + 0x388, sBattleScene.scene->actingSide);
                     sBattleScene.scene->phaseStep++;
@@ -1456,7 +1456,7 @@ void func_82128510(CameraNode* arg0) {
                 func_82108C0C(sActingPokemon);
                 func_82108C0C(sOtherPokemon);
                 func_8213B31C(2);
-                D_8219A5A0->unk_1B = 0;
+                D_8219A5A0->hitCountWaitFrames = 0;
                 func_821272C0((s8*)sActingPokemon);
                 func_821255EC((s8*)arg0);
                 BattleAnim_GetOwnerDefaultAnchorPosition(sActingPokemon, &sBattleScene.scene->anchorPosition);
@@ -1474,8 +1474,8 @@ void func_82128510(CameraNode* arg0) {
         case 1:
             scene->cameraPresetId = 4;
             if (func_82101FD4(sActingPokemon) != 0) {
-                func_8210C1A8(&D_8219A5A0->unk_84.z, 0.4f, 0.01f);
-                func_8210C1A8(&arg0->view.targetPosition.y, D_8219A5A0->anchorPosition.y, D_8219A5A0->unk_84.z);
+                func_8210C1A8(&D_8219A5A0->easeRates.z, 0.4f, 0.01f);
+                func_8210C1A8(&arg0->view.targetPosition.y, D_8219A5A0->anchorPosition.y, D_8219A5A0->easeRates.z);
                 if ((D_8219A5A0->anchorPosition.y - 1.0f) <= arg0->view.targetPosition.y) {
                     BattleMessage_ShowForSide(D_8219A520 + 0x388, D_8219A5A0->actingSide);
                     D_8219A5A0->phaseStep++;
@@ -1529,7 +1529,7 @@ void func_82128848(CameraNode* arg0) {
                 func_82108C0C(sActingPokemon);
                 func_82108C0C(sOtherPokemon);
                 func_8213B31C(2);
-                sBattleScene.scene->unk_1B = 0;
+                sBattleScene.scene->hitCountWaitFrames = 0;
                 func_821272C0((s8*)sActingPokemon);
                 func_821255EC((s8*)arg0);
                 func_82134FD0(sActingPokemon);
@@ -1540,7 +1540,7 @@ void func_82128848(CameraNode* arg0) {
                 BattleScene_SetCameraAtFromAnchor(sActingPokemon, arg0, sBattleScene.scene->anchorPosition, 0,
                                                   BattleScene_GetParticipantFacingAngle(sActingPokemon), 0.0f, 0.0);
                 BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->anchorPosition,
-                                                     sBattleScene.scene->unk_6E = -0x1554,
+                                                     sBattleScene.scene->orbitPitch = -0x1554,
                                                      BattleScene_GetParticipantFacingAngle(sActingPokemon),
                                                      sBattleScene.scene->orbitDistance, 0.0);
                 BattleMessage_ShowForSide(D_8219A520 + 0x188, sBattleScene.scene->actingSide);
@@ -1551,9 +1551,9 @@ void func_82128848(CameraNode* arg0) {
                 // Dry-run the camera move to count how many frames it takes.
                 i = 0;
                 for (;;) {
-                    BattleAnim_StepToS16(&sBattleScene.scene->unk_6E, 0x149E, 0x2D);
+                    BattleAnim_StepToS16(&sBattleScene.scene->orbitPitch, 0x149E, 0x2D);
                     BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->anchorPosition,
-                                                         sBattleScene.scene->unk_6E,
+                                                         sBattleScene.scene->orbitPitch,
                                                          BattleScene_GetParticipantFacingAngle(sActingPokemon),
                                                          sBattleScene.scene->orbitDistance, 0.0);
                     func_8210C1A8(&arg0->perspective.verticalFieldOfView, sBattleScene.scene->verticalFieldOfView, 0.08f);
@@ -1573,7 +1573,7 @@ void func_82128848(CameraNode* arg0) {
                 BattleScene_SetCameraAtFromAnchor(sActingPokemon, arg0, sBattleScene.scene->anchorPosition, 0,
                                                   BattleScene_GetParticipantFacingAngle(sActingPokemon), 0.0f, 0.0);
                 BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->anchorPosition,
-                                                     sBattleScene.scene->unk_6E = -0x1554,
+                                                     sBattleScene.scene->orbitPitch = -0x1554,
                                                      BattleScene_GetParticipantFacingAngle(sActingPokemon),
                                                      sBattleScene.scene->orbitDistance, 0.0);
                 func_821224F4();
@@ -1583,9 +1583,9 @@ void func_82128848(CameraNode* arg0) {
         case 1:
             if (func_82101FD4(sActingPokemon) != 0) {
                 sBattleScene.scene->cameraPresetId = 4;
-                BattleAnim_StepToS16(&sBattleScene.scene->unk_6E, 0x149E, 0x2D);
+                BattleAnim_StepToS16(&sBattleScene.scene->orbitPitch, 0x149E, 0x2D);
                 BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->anchorPosition,
-                                                     sBattleScene.scene->unk_6E,
+                                                     sBattleScene.scene->orbitPitch,
                                                      BattleScene_GetParticipantFacingAngle(sActingPokemon),
                                                      sBattleScene.scene->orbitDistance, 0.0);
                 func_8210C1A8(&arg0->perspective.verticalFieldOfView, sBattleScene.scene->verticalFieldOfView, 0.08f);

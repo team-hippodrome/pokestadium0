@@ -134,7 +134,7 @@ void BattleScene_OpeningStepOrbitCamera(CameraNode* arg0) {
     sBattleScene.scene->rotationY += 0x2D8;
     func_8000EEBC(&arg0->view.targetPosition, &arg0->view.eyePosition, sBattleScene.scene->orbitDistance, sBattleScene.scene->rotationX, sBattleScene.scene->rotationY);
     func_8210BCF0(&arg0->view.targetPosition, &arg0->view.eyePosition, &sBattleScene.scene->orbitDistance, &sBattleScene.scene->rotationX, &sBattleScene.scene->rotationY);
-    sBattleScene.scene->unk_90.z = 0.0f;
+    sBattleScene.scene->easeRampRates.z = 0.0f;
 }
 
 f32 func_8000F23C(f32, f32, f32, f32);
@@ -156,12 +156,12 @@ void BattleScene_OpeningStepLowerCameraAndThrowSide0(CameraNode* arg0) {
     if (sBattleScene.scene->stepFrameTimer == 0x3C) {
         func_80041374(4, 0x3C);
     }
-    sBattleScene.scene->unk_90.z = func_8000F23C(sBattleScene.scene->unk_90.z, 0.02f, 0.0007f, 0.0007f);
+    sBattleScene.scene->easeRampRates.z = func_8000F23C(sBattleScene.scene->easeRampRates.z, 0.02f, 0.0007f, 0.0007f);
     (*(u8**)&D_82199DE0)[1] &= ~1;
     ((u8**)&D_82199DE0)[1][1] &= ~1;
-    func_8210C1A8(&sBattleScene.scene->orbitDistance, 1250.0f, sBattleScene.scene->unk_90.z / 2);
-    func_8210C1A8(&arg0->view.targetPosition.y, 100.0f, sBattleScene.scene->unk_90.z);
-    func_8210C1A8(&arg0->view.eyePosition.y, 450.0f, sBattleScene.scene->unk_90.z);
+    func_8210C1A8(&sBattleScene.scene->orbitDistance, 1250.0f, sBattleScene.scene->easeRampRates.z / 2);
+    func_8210C1A8(&arg0->view.targetPosition.y, 100.0f, sBattleScene.scene->easeRampRates.z);
+    func_8210C1A8(&arg0->view.eyePosition.y, 450.0f, sBattleScene.scene->easeRampRates.z);
     sBattleScene.scene->rotationY += 0x2D8;
     func_8210BCF0(&arg0->view.targetPosition, &arg0->view.eyePosition, (s8*)&sp3C, (s8*)&sp3A, (s8*)&sp38);
     func_8000EEBC(&arg0->view.targetPosition, &arg0->view.eyePosition, sBattleScene.scene->orbitDistance, sp3A, sBattleScene.scene->rotationY);

@@ -350,7 +350,7 @@ typedef struct BattleScene {
     /* 0x14 */ s32 stepFrameTimer;
     /* 0x18 */ u16 transitionStage;
     /* 0x1A */ u8 hitReactionKind;
-    /* 0x1B */ u8 unk_1B;
+    /* 0x1B */ u8 hitCountWaitFrames; // @unverified: BattleScene_ActionStepSetHitCount counts it to 10 while message buffer 12 is non-empty
     /* 0x1C */ s32 mode; // BattleScene_Update mode: 1 at the command menu, 2 while a turn plays out
     /* 0x20 */ s32 phaseStep;
     /* 0x24 */ s32 modelReloadStep;
@@ -363,7 +363,7 @@ typedef struct BattleScene {
     /* 0x38 */ s32 phase; // BattleScene_UpdatePhase case: 1 command, 2 first action, 3 second action, 15 Transform, ...
     /* 0x3C */ s32 phaseSubstep;
     /* 0x40 */ s32 winner; // 0 while the battle runs, otherwise the winning side + 1 (1 when 1P knocked out COM's last Pokémon)
-    /* 0x44 */ s32 unk_44;
+    /* 0x44 */ s32 modeAfterTransition; // @unverified: func_82121DAC passes it to func_82121D5C, which stores it in mode
     /* 0x48 */ s32 moveEffectKind;
     /* 0x4C */ s32 rageFollowupPhase;
     /* 0x50 */ s32 cameraPresetId;
@@ -375,12 +375,12 @@ typedef struct BattleScene {
     /* 0x64 */ f32 stageScale; // @unverified: eased toward 1.0 and passed to Battle_SetStageScale in phases_2.c
     /* 0x68 */ f32 shakeAmplitude;
     /* 0x6C */ s16 shakeAngle; // camera shake phase: BattleScene_ApplyCameraShake adds 0x4000 a frame; with shakeAmplitude poked to 40 the look-at bobbed with its cosine
-    /* 0x6E */ s16 unk_6E;
+    /* 0x6E */ s16 orbitPitch; // @unverified: pitch passed to BattleScene_SetCameraEyeFromPosition, eased to 0x149E
     /* 0x70 */ char unk70[0x4];
     /* 0x74 */ f32 orbitDistance; // @unverified: eye-to-look-at distance that func_8210BCF0 measures next to rotationX/rotationY
     /* 0x78 */ char unk78[0xC];
-    /* 0x84 */ Vec3f unk_84;
-    /* 0x90 */ Vec3f unk_90;
+    /* 0x84 */ Vec3f easeRates; // @unverified: .y/.z used as per-frame step sizes for camera easing (scene_camera_2.c, phases.c)
+    /* 0x90 */ Vec3f easeRampRates; // @unverified: .z ramps up and feeds easeRates.z or camera steps (opening.c, turn_actions.c)
     /* 0x9C */ char unk9C[0xC];
     /* 0xA8 */ Vec3f savedCameraAt; // camera look-at saved around a shot; each write in play equaled the live camera's targetPosition
     /* 0xB4 */ Vec3f savedCameraEye; // camera eye saved with savedCameraAt; each write in play equaled the live eyePosition
@@ -455,26 +455,9 @@ typedef struct unk_D_843901A0_4C8 {
 
 typedef struct unk_D_843901A0 {
     /* 0x000 */ u8 unk_000;
-    /* 0x004 */ s32 unk_004;
-    /* 0x008 */ u8 unk_008[4];
-    /* 0x00C */ char unk00C[0x3C];
-    /* 0x048 */ u8 unk_048[64];
-    /* 0x088 */ s8 unk_088[64];
-    /* 0x0C8 */ s8 unk_0C8[64];
-    /* 0x148 */ s8 unk_108[64];
-    /* 0x148 */ s8 unk_148[64];
-    /* 0x188 */ s8 unk_188[64];
-    /* 0x1C8 */ s8 unk_1C8[64];
-    /* 0x208 */ s8 unk_208[64];
-    /* 0x248 */ s8 unk_248[64];
-    /* 0x288 */ s8 unk_288[64];
-    /* 0x2C8 */ s8 unk_2C8[64];
-    /* 0x2C8 */ s8 unk_308[64];
-    /* 0x348 */ s8 unk_348[64];
-    /* 0x388 */ s8 unk_388[64];
-    /* 0x3C8 */ s8 unk_3C8[64];
-    /* 0x408 */ s8 unk_408[64];
-    /* 0x448 */ s8 unk_448[2][64];
+    /* 0x004 */ s32 cursor; // @unverified: write index into lines[0], reset by BattleScene_ResetMessageQueue
+    /* 0x008 */ u8 lines[2][64]; // @unverified: both cleared by Battle_ClearMessageCursor ("both line buffers")
+    /* 0x088 */ s8 messageBuffers[17][64]; // @unverified: 64-byte strings cleared by Battle_ClearAllMessageQueues; +0xC8/+0x148 go to BattleMessage_ShowForSide
     /* 0x4C8 */ unk_D_843901A0_4C8 unk_4C8;
 } unk_D_843901A0; // size = 0x4F4
 

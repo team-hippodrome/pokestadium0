@@ -282,24 +282,24 @@ void func_82121D5C(s32, s32);
  */
 void func_82121DAC(void) {
     if (sBattleScene.scene->transitionStage == 2) {
-        if (sBattleScene.scene->unk_44 == 1) {
+        if (sBattleScene.scene->modeAfterTransition == 1) {
             func_82121D5C(1, 0x32);
         }
-        if (sBattleScene.scene->unk_44 == 2) {
+        if (sBattleScene.scene->modeAfterTransition == 2) {
             sBattleScene.scene->actingSide = sBattleScene.scene->sideCurrentlySwitching;
             func_82121D5C(2, 0);
         }
-        if (sBattleScene.scene->unk_44 == 5) {
+        if (sBattleScene.scene->modeAfterTransition == 5) {
             func_82121D5C(5, 0x32);
         }
-        if (sBattleScene.scene->unk_44 == 6) {
+        if (sBattleScene.scene->modeAfterTransition == 6) {
             sBattleScene.scene->actingSide = sBattleScene.scene->sideCurrentlySwitching;
             func_82121D5C(6, 0);
         }
-        if (sBattleScene.scene->unk_44 == 9) {
+        if (sBattleScene.scene->modeAfterTransition == 9) {
             func_82121D5C(9, 0x32);
         }
-        if (sBattleScene.scene->unk_44 == 0xA) {
+        if (sBattleScene.scene->modeAfterTransition == 0xA) {
             sBattleScene.scene->actingSide = sBattleScene.scene->sideCurrentlySwitching;
             func_82121D5C(0xA, 0);
         }
@@ -515,8 +515,8 @@ void func_82122458(CameraNode* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ClearCameraOffsetVectors(void) {
-    Vec3f_SetComponentsDuplicate(&sBattleScene.scene->unk_84, 0.0f, 0.0f, 0.0f);
-    Vec3f_SetComponentsDuplicate(&sBattleScene.scene->unk_90, 0.0f, 0.0f, 0.0f);
+    Vec3f_SetComponentsDuplicate(&sBattleScene.scene->easeRates, 0.0f, 0.0f, 0.0f);
+    Vec3f_SetComponentsDuplicate(&sBattleScene.scene->easeRampRates, 0.0f, 0.0f, 0.0f);
 }
 
 /**

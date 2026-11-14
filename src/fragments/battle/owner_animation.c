@@ -138,7 +138,7 @@ s32 BattleScene_AdvanceBothOwnerAnimations(void) {
     ActivePokemonState* temp_a1 = &sActivePokemon[0]->state;
     ActivePokemonState* temp_a2 = &sActivePokemon[1]->state;
 
-    if (sBattleScene.scene->unk_44 != 1) {
+    if (sBattleScene.scene->modeAfterTransition != 1) {
         return 0;
     }
 

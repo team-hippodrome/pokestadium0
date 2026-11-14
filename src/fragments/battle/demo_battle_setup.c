@@ -56,7 +56,7 @@ void func_821337B4(void) {
     M2C_FIELD(sp20, s16 *, 0x32) = 0;
     M2C_FIELD(sp1C, s16 *, 0x32) = 0;
     if (sBattleScene.scene->mode == 9) {
-        sBattleScene.scene->unk_44 = 0xA;
+        sBattleScene.scene->modeAfterTransition = 0xA;
     }
     func_82133868(saved);
     sBattleScene.scene->actingSide = saved;

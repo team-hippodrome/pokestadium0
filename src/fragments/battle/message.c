@@ -126,36 +126,36 @@ void BattleMenu_DrawSide1Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
  * @unverified Name from Stadium 1.
  */
 void Battle_ClearAllMessageQueues(void) {
-    gBattleMessageQueues->unk_088[0] = 0;
-    gBattleMessageQueues->unk_088[1] = 0;
-    gBattleMessageQueues->unk_0C8[0] = 0;
-    gBattleMessageQueues->unk_0C8[1] = 0;
-    gBattleMessageQueues->unk_108[0] = 0;
-    gBattleMessageQueues->unk_108[1] = 0;
-    gBattleMessageQueues->unk_148[0] = 0;
-    gBattleMessageQueues->unk_148[1] = 0;
-    gBattleMessageQueues->unk_188[0] = 0;
-    gBattleMessageQueues->unk_188[1] = 0;
-    gBattleMessageQueues->unk_1C8[0] = 0;
-    gBattleMessageQueues->unk_1C8[1] = 0;
-    gBattleMessageQueues->unk_448[0][0] = 0;
-    gBattleMessageQueues->unk_448[0][1] = 0;
-    gBattleMessageQueues->unk_448[1][0] = 0;
-    gBattleMessageQueues->unk_448[1][1] = 0;
-    gBattleMessageQueues->unk_208[0] = 0;
-    gBattleMessageQueues->unk_208[1] = 0;
-    gBattleMessageQueues->unk_308[0] = 0;
-    gBattleMessageQueues->unk_308[1] = 0;
-    gBattleMessageQueues->unk_2C8[0] = 0;
-    gBattleMessageQueues->unk_2C8[1] = 0;
-    gBattleMessageQueues->unk_348[0] = 0;
-    gBattleMessageQueues->unk_348[1] = 0;
-    gBattleMessageQueues->unk_388[0] = 0;
-    gBattleMessageQueues->unk_388[1] = 0;
-    gBattleMessageQueues->unk_3C8[0] = 0;
-    gBattleMessageQueues->unk_3C8[1] = 0;
-    gBattleMessageQueues->unk_408[0] = 0;
-    gBattleMessageQueues->unk_408[1] = 0;
+    gBattleMessageQueues->messageBuffers[0][0] = 0;
+    gBattleMessageQueues->messageBuffers[0][1] = 0;
+    gBattleMessageQueues->messageBuffers[1][0] = 0;
+    gBattleMessageQueues->messageBuffers[1][1] = 0;
+    gBattleMessageQueues->messageBuffers[2][0] = 0;
+    gBattleMessageQueues->messageBuffers[2][1] = 0;
+    gBattleMessageQueues->messageBuffers[3][0] = 0;
+    gBattleMessageQueues->messageBuffers[3][1] = 0;
+    gBattleMessageQueues->messageBuffers[4][0] = 0;
+    gBattleMessageQueues->messageBuffers[4][1] = 0;
+    gBattleMessageQueues->messageBuffers[5][0] = 0;
+    gBattleMessageQueues->messageBuffers[5][1] = 0;
+    gBattleMessageQueues->messageBuffers[15][0] = 0;
+    gBattleMessageQueues->messageBuffers[15][1] = 0;
+    gBattleMessageQueues->messageBuffers[16][0] = 0;
+    gBattleMessageQueues->messageBuffers[16][1] = 0;
+    gBattleMessageQueues->messageBuffers[6][0] = 0;
+    gBattleMessageQueues->messageBuffers[6][1] = 0;
+    gBattleMessageQueues->messageBuffers[10][0] = 0;
+    gBattleMessageQueues->messageBuffers[10][1] = 0;
+    gBattleMessageQueues->messageBuffers[9][0] = 0;
+    gBattleMessageQueues->messageBuffers[9][1] = 0;
+    gBattleMessageQueues->messageBuffers[11][0] = 0;
+    gBattleMessageQueues->messageBuffers[11][1] = 0;
+    gBattleMessageQueues->messageBuffers[12][0] = 0;
+    gBattleMessageQueues->messageBuffers[12][1] = 0;
+    gBattleMessageQueues->messageBuffers[13][0] = 0;
+    gBattleMessageQueues->messageBuffers[13][1] = 0;
+    gBattleMessageQueues->messageBuffers[14][0] = 0;
+    gBattleMessageQueues->messageBuffers[14][1] = 0;
 }
 
 /**
@@ -164,11 +164,11 @@ void Battle_ClearAllMessageQueues(void) {
  * @unverified Name from Stadium 1.
  */
 void Battle_ClearMessageCursor(void) {
-    gBattleMessageQueues->unk_004 = 0;
-    gBattleMessageQueues->unk_048[0] = 0;
-    gBattleMessageQueues->unk_048[1] = 0;
-    gBattleMessageQueues->unk_008[0] = 0;
-    gBattleMessageQueues->unk_008[1] = 0;
+    gBattleMessageQueues->cursor = 0;
+    gBattleMessageQueues->lines[1][0] = 0;
+    gBattleMessageQueues->lines[1][1] = 0;
+    gBattleMessageQueues->lines[0][0] = 0;
+    gBattleMessageQueues->lines[0][1] = 0;
 }
 
 /**
@@ -426,8 +426,8 @@ void func_8211F3F4(void) {
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ResetMessageQueue(void) {
-    gBattleMessageQueues->unk_004 = 0;
-    gBattleMessageQueues->unk_008[gBattleMessageQueues->unk_004] = 0;
+    gBattleMessageQueues->cursor = 0;
+    gBattleMessageQueues->lines[0][gBattleMessageQueues->cursor] = 0;
     Battle_ClearMessageCursor();
 }
 
