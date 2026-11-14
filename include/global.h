@@ -476,12 +476,12 @@ typedef struct unk_D_86002F30 {
     /* 0x08 */ ModelNodeView* unk_08;
 } unk_D_86002F30; // size = 0x18 ??
 
-typedef struct UnkInputStruct8000D738 {
+typedef struct GbTowerLaunchParams {
     /* 0x00 */ s16 unk_00;
     /* 0x02 */ u8 unk_02;
     /* 0x03 */ u8 partyCount; // @unverified: number of party Pokémon GbTower_BuildPartyResult read from the GB save deck
     /* 0x04 */ u16 (*partyIcons)[6][0x640]; // @unverified: 40x40 icon images of the party, copied by GbTower_BuildPartyResult
-} UnkInputStruct8000D738; // size = 0x8
+} GbTowerLaunchParams; // size = 0x8
 
 typedef struct unk_D_800AA660 {
     /* 0x0000 */ OSThread thread;
@@ -494,7 +494,7 @@ typedef struct unk_D_800AA660 {
     /* 0x21E4 */ OSMesgQueue queue2;
     /* 0x21FC */ u8* font1;
     /* 0x2200 */ u8* font2;
-    /* 0x2204 */ UnkInputStruct8000D738 unk_2204;
+    /* 0x2204 */ GbTowerLaunchParams unk_2204;
     /* 0x220C */ char unk220C[4];
 } unk_D_800AA660; // size = 0x2210
 

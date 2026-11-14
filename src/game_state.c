@@ -666,9 +666,9 @@ extern s32 D_800733CC;
 void func_8000A838(s32);
 void func_8000A8DC(void);
 void func_8000A904(void);
-void GbTower_Start(UnkInputStruct8000D738*);
+void GbTower_Start(GbTowerLaunchParams*);
 s32 func_8000ADE8(void);
-void func_8000AE1C(UnkInputStruct8000D738*);
+void func_8000AE1C(GbTowerLaunchParams*);
 void func_800268E4(s32, s32);
 void GbSave_ForceReloadPort(s32);
 void func_80023C30(void);
@@ -678,7 +678,7 @@ void Save_CommitTypedRecord(s32, s32);
 /** Game state: runs Game Boy Tower. */
 void State_GbTower(void) {
     s32 sp2C;
-    UnkInputStruct8000D738 sp24;
+    GbTowerLaunchParams sp24;
 
     main_pool_push_state('EMU0');
     func_8000A838(1);
