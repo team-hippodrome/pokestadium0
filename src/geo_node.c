@@ -9,23 +9,6 @@
 // Declared here instead of in a header: the callers of these disagree on their types.
 void* MainPool_AllocAligned(struct MainPoolState* state, s32 arg1, s32 arg2);
 
-typedef union AnimFixedFrame {
-    struct {
-        s16 whole;
-        s16 fraction; // low 16 bits; signed declaration retained for matching
-    };
-    s32 raw;
-} AnimFixedFrame;
-typedef struct TransformAnimRaw {
-    /* 0x00 */ s16 animationId;
-    /* 0x04 */ TransformAnimData* data;
-    /* 0x08 */ AnimFixedFrame frameFixed;
-    /* 0x0C */ s32 speedFixed;
-    /* 0x10 */ char unk10[0x2];
-    /* 0x12 */ u16 lastRenderFrame;
-} TransformAnimRaw;
-
-
 void GeoNode_Init(GraphNode* arg0, u8 arg1);
 void GeoNode_SetCallback(GraphNode* arg0, GraphNodeCallback arg1, void* arg2);
 GraphNode* GeoNode_CreateContainer(MainPoolState* arg0, GraphNode* arg1);

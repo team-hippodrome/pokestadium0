@@ -40,15 +40,6 @@ typedef union AnimFixedFrame {
     };
     s32 raw;
 } AnimFixedFrame;
-typedef struct TransformAnimRaw {
-    /* 0x00 */ s16 animationId;
-    /* 0x04 */ TransformAnimData* data;
-    /* 0x08 */ AnimFixedFrame frameFixed;
-    /* 0x0C */ s32 speedFixed;
-    /* 0x10 */ char unk10[0x2];
-    /* 0x12 */ u16 lastRenderFrame;
-} TransformAnimRaw;
-
 #include "m2c_macros.h"
 
 void GeoRender_InitMatrixStack(void);
@@ -194,21 +185,21 @@ extern ModelAnimCurveContext D_800ABCC0[2];
  * channels per part from it.
  */
 s32 func_80002C80(s32);
-s32 ModelAnim_AdvanceCurveFrame(TransformAnimRaw* arg0);
+s32 ModelAnim_AdvanceCurveFrame(TransformAnimState* arg0);
 extern ModelAnimCurveContext D_800AC690;
 
 /** Starts evaluating an animation curve set, setting up its channel context. */
 void ModelAnim_BeginCurveContext(void* arg0, s32 arg1) {
     TransformAnimData* temp_s1;
 
-    temp_s1 = ((TransformAnimRaw*)arg0)->data;
+    temp_s1 = ((TransformAnimState*)arg0)->data;
     if (arg1 != 0) {
-        ((TransformAnimRaw*)arg0)->frameFixed.raw = ModelAnim_AdvanceCurveFrame((TransformAnimRaw*)arg0);
+        ((TransformAnimState*)arg0)->frameFixed = ModelAnim_AdvanceCurveFrame((TransformAnimState*)arg0);
     }
-    ((TransformAnimRaw*)arg0)->lastRenderFrame = (u16) D_80060484;
+    ((TransformAnimState*)arg0)->lastRenderFrame = (u16) D_80060484;
     D_800AC690.active = 1;
-    D_800AC690.wideTranslation = (s8) (((TransformAnimRaw*)arg0)->data->flags & 4);
-    D_800AC690.frame = (s16) (((TransformAnimRaw*)arg0)->frameFixed.raw >> 0x10);
+    D_800AC690.wideTranslation = (s8) (((TransformAnimState*)arg0)->data->flags & 4);
+    D_800AC690.frame = (s16) (((TransformAnimState*)arg0)->frameFixed >> 0x10);
     D_800AC690.data = temp_s1;
     D_800AC690.channels = (void*) func_80002C80(temp_s1->channelTable);
     D_800AC690.scaleValues = (void*) func_80002C80(temp_s1->scaleData);
@@ -299,17 +290,17 @@ f32 ModelAnim_EvaluateTranslationChannel(ModelAnimCurveContext* arg0, s32 arg1) 
  * a Pound turn.
  * @unverified Name from Stadium 1, matched by code similarity.
  */
-s32 ModelAnim_AdvanceCurveFrame(TransformAnimRaw* arg0) {
+s32 ModelAnim_AdvanceCurveFrame(TransformAnimState* arg0) {
     AnimFixedFrame spC;
     AnimFixedFrame* ptr;
     TransformAnimData* temp_v0;
 
     ptr = &spC;
     temp_v0 = arg0->data;
-    spC.raw = arg0->frameFixed.raw;
+    spC.raw = arg0->frameFixed;
     if (arg0->lastRenderFrame != D_80060484) {
         spC.raw += arg0->speedFixed;
-        if (arg0->speedFixed >= 0) {
+        if ((s32)arg0->speedFixed >= 0) {
             if (ptr->whole >= temp_v0->endFrame) {
                 if (temp_v0->flags & 2) {
                     ptr->whole = temp_v0->endFrame - 1;
