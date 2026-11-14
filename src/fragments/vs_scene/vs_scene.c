@@ -512,7 +512,7 @@ void func_82200DA4(void) {
 
 void func_82200E2C(void) {
     SessionContext* state = D_822036A4;
-    s32 player = state->unk_1094;
+    s32 player = state->teamGbPort;
     TeamRoster* roster;
     ExtendedRosterInfo* info;
     BattleMon* mon;

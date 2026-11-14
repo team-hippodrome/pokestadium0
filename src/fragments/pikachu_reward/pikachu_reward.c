@@ -770,7 +770,7 @@ M2C_UNK func_817015B0(s32 arg0) {
     }
     M2C_FIELD(D_817027A8 + arg0, u8*, 9) = 0x39;
     M2C_FIELD(D_817027A8 + arg0, u8*, 0x20) = D_8006B2E5;
-    func_817014A4(D_8170201C->unk_1094);
+    func_817014A4(D_8170201C->teamGbPort);
     func_81700630((s32)D_81701B44, 1);
     func_81700E04();
 }
@@ -864,7 +864,7 @@ s32 Stadium_BonusPikachuReward(UNUSED s32 arg0, s32 arg1) {
     D_8170201C = (SessionContext*)arg1;
     main_pool_push_state('PIKA');
 
-    if ((D_8170201C->transitionFlags & 0x20) && (func_81700064(D_8170201C->unk_1094) != 0)) {
+    if ((D_8170201C->transitionFlags & 0x20) && (func_81700064(D_8170201C->teamGbPort) != 0)) {
         Gfx_InitDisplayListBuffers(0x10000, 0);
         sp20 = StageContext_Allocate(0, 1, 3, 1, 2, 1);
         Font_Init(6, 0);

@@ -965,11 +965,11 @@ void FreeBattle_BuildBattleRosters(s32* arg0, s32* arg1, Src82004020** arg2, s32
         if (arg0[0] > 0) {
             src = arg2[arg0[0] - 1];
             if (src->unk_01 == 0x20) {
-                D_8200ACF8->unk_1094 = src->unk_02;
+                D_8200ACF8->teamGbPort = src->unk_02;
             } else {
-                *(s8*)&D_8200ACF8->unk_1094 = -1; // FAKE: an s8 store is needed to match
+                *(s8*)&D_8200ACF8->teamGbPort = -1; // FAKE: an s8 store is needed to match
             }
-            Session_LoadPortSnapshot(D_8200ACF8->unk_1094);
+            Session_LoadPortSnapshot(D_8200ACF8->teamGbPort);
         }
     }
     // One word store over aiDifficulty..moveLimitSeconds and one over gbStarterChoice..continueCount.

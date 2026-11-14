@@ -254,17 +254,17 @@ s32 func_80057910(s8 *, M2C_UNK *, M2C_UNK);        /* extern */
  * buffer. If it returns -1 the function returns 0. Otherwise the result is
  * stored to trainerSlots[0].numberOfPokemonBrought and:
  *  - if buf[0] == 0: calls func_80025910(buf[0]), sets bit 0 of the byte at
- *    gSessionContext.sessionFlags, sets unk_1094 to 0xFF, calls
+ *    gSessionContext.sessionFlags, sets teamGbPort to 0xFF, calls
  *    Session_LoadPortSnapshot(-1) and returns 1;
  *  - otherwise, if D_800733D4 is in 0..3, GbSave_CopyPortSnapshot(D_800733D4,
  *    &D_800AF9A8) is non-zero and func_80057910(buf, &D_800AF9A8, 0x162)
  *    returns 0 (func_80057910 is libultra bcmp, so: the 0x162 bytes of buf
  *    equal the snapshot just copied): calls func_80025910(buf[0]), sets
- *    bit 0 of sessionFlags, stores D_800733D4 in unk_1094, calls
+ *    bit 0 of sessionFlags, stores D_800733D4 in teamGbPort, calls
  *    Session_LoadPortSnapshot(D_800733D4) and returns 1;
  *  - in every other case returns 0.
  *
- * What the buffer, gSessionContext.sessionFlags and unk_1094 and the two helpers do is not
+ * What the buffer, gSessionContext.sessionFlags and teamGbPort and the two helpers do is not
  * established. Matching notes: the unused `pad` local sits between the
  * buffer and `ret` as in the ROM's frame (buffer at sp+0x34, ret at sp+0x2C),
  * and the bit-0 update is written before the store of 0xFF to match the
@@ -284,13 +284,13 @@ s32 func_80025A64(void) {
         if (buf[0] == 0) {
             func_80025910(buf[0]);
             gSessionContext.sessionFlags = (u8) (gSessionContext.sessionFlags | 1);
-            gSessionContext.unk_1094 = 0xFF;
+            gSessionContext.teamGbPort = 0xFF;
             Session_LoadPortSnapshot(-1);
             ret = 1;
         } else if ((D_800733D4 >= 0) && (D_800733D4 < 4) && (GbSave_CopyPortSnapshot(D_800733D4, &D_800AF9A8) != 0) && (func_80057910(buf, &D_800AF9A8, 0x162) == 0)) {
             func_80025910(buf[0]);
             gSessionContext.sessionFlags = (u8) (gSessionContext.sessionFlags | 1);
-            gSessionContext.unk_1094 = (s8) D_800733D4;
+            gSessionContext.teamGbPort = (s8) D_800733D4;
             Session_LoadPortSnapshot((s32) D_800733D4);
             ret = 1;
         }

@@ -180,7 +180,7 @@ typedef struct SessionContext {
     /* 0x1091 */ char unk1091[0x1];
     /* 0x1092 */ u8 inRound2;
     /* 0x1093 */ u8 continueCount;
-    /* 0x1094 */ u8 unk_1094; // @unverified: GB port of the continued team, 0xFF for rentals (func_80025A64)
+    /* 0x1094 */ u8 teamGbPort; // @unverified: GB port of the continued team, 0xFF for rentals (func_80025A64); passed to Session_LoadPortSnapshot
     /* 0x1095 */ u8 sessionFlags;
     /* 0x1096 */ u16 transitionFlags;
 } SessionContext; // size = 0x1098
