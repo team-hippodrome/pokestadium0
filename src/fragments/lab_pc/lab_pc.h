@@ -140,7 +140,8 @@ typedef struct PcBoxScreen {
     /* 0x7520 */ s32 iconRenderer; // @unverified: func_80017FDC; the icons of listWindow
 } PcBoxScreen; // size = 0x7524
 
-/* A box picker of the ポケモンを いどうする screen (PcSort_InitMenuWindow): the box names D_8900A758. */
+/* A box picker of the ポケモンを いどうする screen (PcSort_InitMenuWindow) over the box names D_8900A758.
+ * LabItemMenuWindow is the same with room for 4 rows. */
 typedef struct PcSortMenuWindow {
     /* 0x00 */ Window window;
     /* 0x2C */ Menu menu;
@@ -149,6 +150,14 @@ typedef struct PcSortMenuWindow {
     /* 0x76 */ char pad76[0x2];
 } PcSortMenuWindow; // size = 0x78
 
+/* A pop-up list of the Lab item screens (LabItem_InitMenuWindow); PcSortMenuWindow with 4 rows. */
+typedef struct LabItemMenuWindow {
+    /* 0x00 */ Window window;
+    /* 0x2C */ Menu menu;
+    /* 0x50 */ PointerList items; // @unverified: func_80027804 over the names (LabItem_InitMenuWindow arg3)
+    /* 0x5C */ u16 itemFlags[4];
+} LabItemMenuWindow; // size = 0x64
+
 /* A Pokémon list of the ポケモンを いどうする screen (PcSort_InitMonList, PcSort_DrawMonList). */
 typedef struct PcSortMonList {
     /* 0x00 */ ScrollList list; // @unverified: items = the box's ByteMatrix of BattleMon rows
@@ -156,6 +165,14 @@ typedef struct PcSortMonList {
     /* 0x80 */ s32 x;
     /* 0x84 */ s32 y;
 } PcSortMonList; // size = 0x88
+
+/* An item list of the Lab item screens (LabItem_InitItemList, LabItem_DrawItemList). */
+typedef struct LabItemList {
+    /* 0x000 */ ScrollList list; // @unverified: items = an item table with 2-byte rows (LabItem_DrawItemCountRow)
+    /* 0x044 */ u16 itemFlags[100];
+    /* 0x10C */ s32 x;
+    /* 0x110 */ s32 y;
+} LabItemList; // size = 0x114
 
 /* The window of the ポケモンを いどうする screen: six operation buttons, two box pickers and two
  * Pokémon lists side by side (PcSort_InitOrganizeWindow, PcSort_UpdateOrganizeWindow). */
