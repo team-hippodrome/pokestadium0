@@ -172,7 +172,7 @@ s32 GbSave_GameToCategoryIndex(s32 arg0);
 Color_RGBA8 Color_InterpolateFromGray(Color_RGBA8 arg0, f32 arg1);
 s32 BattleMon_CountMoves(u8* arg0);
 void BattleInfoWidget_DrawLabel(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
-void Particle_SetVelocityXZFromRotationY(Particle* arg0);
+void Window_UpdateAndDrawFrame(Window* window);
 s32 Window_UpdateAnimation(Window* arg0);
 void Font_SetColorForFlags(s32);
 s32 BattleMon_GetMoveIndexChecked();                /* extern */

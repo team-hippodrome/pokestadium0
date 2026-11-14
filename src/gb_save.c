@@ -17,7 +17,7 @@ extern ParticleDescriptor gDefaultParticleDescriptor;
 #include "m2c_macros.h"
 
 void GbSave_BuildPortSummary(GbSavePortSummary* arg0, s32 arg1);
-void Particle_SetVelocityXZFromRotationY(Particle* arg0);
+void Window_UpdateAndDrawFrame(Window* window);
 s32 Ui_AdjustVerticalSelection(UiSelection* arg0, s32 arg1);
 s32 Ui_HandleVerticalSelectionInput(s32 arg0);
 s32 Ui_AdjustHorizontalSelection(UiSelection* arg0, s32 arg1);
@@ -747,10 +747,15 @@ s32 Window_DrawAnimatedFrame(Window* arg0) {
     return ret;
 }
 
-/** Sets a particle's x and z velocity from its rotation about the y axis. */
-void Particle_SetVelocityXZFromRotationY(Particle* arg0) {
-    Window_UpdateAnimation(arg0);
-    Window_DrawAnimatedFrame(arg0);
+/**
+ * Advances a window's open/close animation and draws its frame and background for this frame.
+ * Verified in play (2026-11-14): with the function stubbed at the main menu's バトル prompt, the
+ * prompt's frame and background vanished and only its text stayed; restoring it brought them back.
+ * Every main menu message window calls it each frame through MainMenu_DrawMessageWindow.
+ */
+void Window_UpdateAndDrawFrame(Window* window) {
+    Window_UpdateAnimation(window);
+    Window_DrawAnimatedFrame(window);
 }
 
 /**
