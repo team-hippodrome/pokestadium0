@@ -489,7 +489,7 @@ void LabTerminal_DrawMainScreen(LabTerminalMenuWindow* arg0) {
 
 /**
  * Wrapper around LabTerminal_UpdateMenuWindow(arg0): -1 calls func_8003F6AC(3) and returns -1;
- * a positive result calls func_8003F6AC(2) and returns the word at arg0 + 0x34
+ * a positive result calls func_8003F6AC(2) and returns menu.cursor
  * plus 1; any other result returns 0. (Same pattern as FreeBattle_UpdateBattleModeWindow.)
  * Seen in play (2026-11-12): returned the せいとん menu pick.
  */
