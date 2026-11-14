@@ -31,11 +31,11 @@ extern f32 D_FLT_8218935C[][4];
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 BattleScene_AreBothParticipantModelsCompact(void) {
-    if ((D_FLT_8218935C[M2C_FIELD(sActivePokemon[0], s16*, 0x1A) - 1][1] + D_FLT_8218935C[M2C_FIELD(sActivePokemon[1], s16*, 0x1A) - 1][1] <= 85.0f) &&
-        (D_FLT_8218935C[M2C_FIELD(sActivePokemon[0], s16*, 0x1A) - 1][2] == 0.0f) &&
-        (D_FLT_8218935C[M2C_FIELD(sActivePokemon[1], s16*, 0x1A) - 1][2] == 0.0f) &&
-        (M2C_FIELD(sActivePokemon[0], f32*, 0x28) == 0.0f) &&
-        (M2C_FIELD(sActivePokemon[1], f32*, 0x28) == 0.0f)) {
+    if ((D_FLT_8218935C[sActivePokemon[0]->displayObject.objectType - 1][1] + D_FLT_8218935C[sActivePokemon[1]->displayObject.objectType - 1][1] <= 85.0f) &&
+        (D_FLT_8218935C[sActivePokemon[0]->displayObject.objectType - 1][2] == 0.0f) &&
+        (D_FLT_8218935C[sActivePokemon[1]->displayObject.objectType - 1][2] == 0.0f) &&
+        (sActivePokemon[0]->displayObject.position.y == 0.0f) &&
+        (sActivePokemon[1]->displayObject.position.y == 0.0f)) {
         return 1;
     }
     return 0;
@@ -506,11 +506,11 @@ void BattleScene_SelectNextBRollCameraShot(CameraNode*);
  * reproduces the retail FPU register allocation.
  */
 void func_82120AC8(CameraNode* arg0) {
-    BattleAnim_ApproachF(&M2C_FIELD(sBattleScene.scene, f32*, 0x8C), 0.1f, 0.02f);
-    BattleAnim_ApproachF(&M2C_FIELD(arg0, f32*, 0xB8),
-                         M2C_FIELD(sBattleScene.scene, f32*, 0xC4) + D_FLT_82189358[M2C_FIELD(sActivePokemon[sBattleScene.scene->actingSide], s16*, 0x1A)][0],
-                         M2C_FIELD(sBattleScene.scene, f32*, 0x8C));
-    if (M2C_FIELD(arg0, f32*, 0xB8) < (M2C_FIELD(sBattleScene.scene, f32*, 0xC4) + D_FLT_82189358[M2C_FIELD(sActivePokemon[sBattleScene.scene->actingSide], s16*, 0x1A)][0] + 0.5f)) {
+    BattleAnim_ApproachF(&sBattleScene.scene->unk_94.z, 0.1f, 0.02f);
+    BattleAnim_ApproachF(&arg0->view.targetPosition.y,
+                         sBattleScene.scene->unk_D0.y + D_FLT_82189358[sActivePokemon[sBattleScene.scene->actingSide]->displayObject.objectType][0],
+                         sBattleScene.scene->unk_94.z);
+    if (arg0->view.targetPosition.y < (sBattleScene.scene->unk_D0.y + D_FLT_82189358[sActivePokemon[sBattleScene.scene->actingSide]->displayObject.objectType][0] + 0.5f)) {
         BattleScene_SelectNextBRollCameraShot(arg0);
     }
 }
@@ -571,11 +571,11 @@ void func_82120C44(CameraNode* arg0) {
         BattleScene_SelectNextBRollCameraShot(arg0);
         return;
     }
-    BattleAnim_ApproachF(&M2C_FIELD(sBattleScene.scene, f32*, 0x8C), 0.1f, 0.02f);
-    BattleAnim_ApproachF(&M2C_FIELD(arg0, f32*, 0xB8),
-                         M2C_FIELD(sBattleScene.scene, f32*, 0xC4) * 1.5f + D_FLT_82189358[M2C_FIELD(sActivePokemon[sBattleScene.scene->actingSide], s16*, 0x1A)][0],
-                         M2C_FIELD(sBattleScene.scene, f32*, 0x8C));
-    if (((D_FLT_82189358[M2C_FIELD(sActivePokemon[sBattleScene.scene->actingSide], s16*, 0x1A)][0] + M2C_FIELD(sBattleScene.scene, f32*, 0xC4) * 1.5f) - 0.5f) < M2C_FIELD(arg0, f32*, 0xB8)) {
+    BattleAnim_ApproachF(&sBattleScene.scene->unk_94.z, 0.1f, 0.02f);
+    BattleAnim_ApproachF(&arg0->view.targetPosition.y,
+                         sBattleScene.scene->unk_D0.y * 1.5f + D_FLT_82189358[sActivePokemon[sBattleScene.scene->actingSide]->displayObject.objectType][0],
+                         sBattleScene.scene->unk_94.z);
+    if (((D_FLT_82189358[sActivePokemon[sBattleScene.scene->actingSide]->displayObject.objectType][0] + sBattleScene.scene->unk_D0.y * 1.5f) - 0.5f) < M2C_FIELD(arg0, f32*, 0xB8)) {
         BattleScene_SelectNextBRollCameraShot(arg0);
     }
 }
@@ -627,10 +627,10 @@ void func_82120E70(CameraNode* arg0) {
     BattleAnim_StepToS16(&M2C_FIELD(sBattleScene.scene, s16*, 0x6E), 0x149E, 0x2D);
     func_82122628((s32)arg0, sBattleScene.scene->unk_D0, M2C_FIELD(sBattleScene.scene, s16*, 0x6E),
                   BattleScene_GetParticipantFacingAngle(sActivePokemon[sBattleScene.scene->actingSide]), sBattleScene.scene->unk_74, 0.0f);
-    BattleAnim_ApproachF(&M2C_FIELD(arg0, f32*, 0x2C), sBattleScene.scene->verticalFieldOfView, 0.08f);
+    BattleAnim_ApproachF(&arg0->perspective.verticalFieldOfView, sBattleScene.scene->verticalFieldOfView, 0.08f);
     temp_f0 = sBattleScene.scene->verticalFieldOfView;
-    if (M2C_FIELD(arg0, f32*, 0x2C) < (temp_f0 + 1.0f)) {
-        M2C_FIELD(arg0, f32*, 0x2C) = temp_f0;
+    if (arg0->perspective.verticalFieldOfView < (temp_f0 + 1.0f)) {
+        arg0->perspective.verticalFieldOfView = temp_f0;
         BattleScene_SelectNextBRollCameraShot(arg0);
     }
 }
@@ -721,7 +721,7 @@ extern s8 *D_8219A5A0;
  */
 void func_821211D4(s32 arg0) {
     if (func_821217DC(0x1B8) != 0) {
-        M2C_FIELD(D_8219A5A0, s32 *, 0x20) = 0x1D;
+        sBattleScene.scene->phaseStep = 0x1D;
     }
 }
 
@@ -746,6 +746,6 @@ void func_8212120C(CameraNode* arg0) {
     func_82121D78(arg0, 20.0f, 4000.0f);
     if (*(u16*)(D_800603C0 + 8) & 0xE03F) {
         Audio_FadeCategoriesAndStreams(1);
-        M2C_FIELD(D_8219A5A0, s32 *, 0x40) = 3;
+        sBattleScene.scene->winner = 3;
     }
 }
