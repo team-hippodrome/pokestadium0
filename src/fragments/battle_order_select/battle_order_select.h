@@ -78,7 +78,7 @@ void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* arg0, OrderSelec
 void BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(Controller* arg0, OrderSelectPanel* arg1);
 s32 BattleMenu_UpdateOrderSelectPanel(s32 arg0, OrderSelectPanel* arg1);
 s32 BattleMenu_UpdateOrderSelect(s32 arg0);
-void BattleMenu_SetLeadTagTeamMember(BattleSessionTeams* arg0, OrderSidebarIcons* arg1);
+void BattleMenu_SetLeadTagTeamMember(BattleSide* arg0, OrderSidebarIcons* arg1);
 void BattleMenu_AppendUnpickedSlots(s8* arg0, s32 arg1);
 void BattleMenu_CommitOrderSelection(void);
 void BattleMenu_AddOrderSelectPanel(s16 arg0, s16 arg1, TeamRoster* arg2, s32 arg3, s32 arg4);
@@ -86,7 +86,7 @@ void BattleMenu_InitOrderSelectPanels(SessionContext* arg0);
 s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 arg1);
 
 // functions defined in assembly
-void BattleMenu_InitTeamOrderState(OrderSidebarIcons* arg0, BattleSessionTeams* arg1, s32 arg2);
+void BattleMenu_InitTeamOrderState(OrderSidebarIcons* arg0, BattleSide* arg1, s32 arg2);
 void BattleMenu_SelectOrderSlot(OrderSelectPanel* arg0, s8 arg1, s32 arg2);
 
 #endif // FRAGMENT_BATTLE_ORDER_SELECT_H

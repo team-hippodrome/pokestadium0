@@ -113,7 +113,7 @@ extern GraphNode* sSide1ThumbnailRoot;
 extern GraphNode* sSide2ThumbnailRoot;
 extern DepthBuffer* sSide1PokemonThumbnail;
 extern DepthBuffer* sSide2PokemonThumbnail;
-extern BattleSessionTeams* sBattleSides;
+extern BattleSide* sBattleSides;
 extern s32 sIsPaused;
 extern s32 sNextFaintBatch;
 extern Color_RGBA8_u32 sTintColor;

@@ -147,7 +147,8 @@ typedef struct TeamRoster {
     /* 0x200 */ char unk200[0x4];
 } TeamRoster; // size = 0x204 (Stadium 1: 0x21C)
 
-typedef struct BattleSessionTeams {
+// One side of a battle: its trainer(s) (two in a tag battle), the Pokémon model it shows and model load state.
+typedef struct BattleSide {
     /* 0x00 */ u8 modelFlags; // @unverified: bit 0x80 asks for the side's model to be reloaded, 0x10 is set once it is loaded (owner_animation.c, phases_2.c)
     /* 0x01 */ u8 tagTeamSize;
     /* 0x02 */ s16 displayModel;
@@ -161,7 +162,7 @@ typedef struct BattleSessionTeams {
     /* 0x1E */ u8 unk_1E;
     /* 0x20 */ s32 unk_20;
     /* 0x24 */ arg1_func_80019420* unk_24;
-} BattleSessionTeams; // size = 0x28
+} BattleSide; // size = 0x28
 
 // Offsets are for US 1.0. In VERSION_JP, TeamRoster and ExtendedRosterInfo are 0x18 bytes shorter,
 // so rosterInfo starts at 0x0814, battleSides at 0x10D4, and the struct is 0x1138 bytes.
@@ -172,7 +173,7 @@ typedef struct SessionContext {
     /* 0x0003 */ s8 roundOrDemoId; // One-based battle round; scene ID in non-battle attract demos.
     /* 0x0004 */ TeamRoster trainerSlots[4];
     /* 0x0874 */ ExtendedRosterInfo rosterInfo[4];
-    /* 0x1194 */ BattleSessionTeams battleSides[2];
+    /* 0x1194 */ BattleSide battleSides[2];
     /* 0x11E4 */ u8 opponentHistory[2][4]; // Eight contiguous entries; the first subscript is not a battle side.
     /* 0x11EC */ u8 aiDifficulty; // Free Battle: 0 = Hard, 1 = Normal, 2 = Easy.
     /* 0x11ED */ u8 timeLimitsEnabled;

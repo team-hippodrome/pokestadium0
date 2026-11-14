@@ -25,7 +25,7 @@ void BattleMenu_ResetOrderSlotIcons(s32 arg0);
 void BattleMenu_DrawPanelBorder(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
 s32 BattleMenu_IsSlotAlreadySelected(OrderSelectPanel* arg0, s8 arg1);
 void BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(Controller* arg0, OrderSelectPanel* arg1);
-void BattleMenu_SetLeadTagTeamMember(BattleSessionTeams* arg0, OrderSidebarIcons* arg1);
+void BattleMenu_SetLeadTagTeamMember(BattleSide* arg0, OrderSidebarIcons* arg1);
 void BattleMenu_AppendUnpickedSlots(s8* arg0, s32 arg1);
 
 extern void* D_84803784;
@@ -1030,7 +1030,7 @@ s32 BattleMenu_UpdateOrderSelect(s32 arg0) {
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment from Stadium 1.
  */
-void BattleMenu_SetLeadTagTeamMember(BattleSessionTeams* arg0, OrderSidebarIcons* arg1) {
+void BattleMenu_SetLeadTagTeamMember(BattleSide* arg0, OrderSidebarIcons* arg1) {
     TeamRoster* temp_v0;
     s32 tmp;
 
@@ -1157,7 +1157,7 @@ extern Controller D_82302BD8;
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleMenu_InitOrderSelectPanels(SessionContext* arg0) {
-    BattleSessionTeams* temp_s0 = &arg0->battleSides[0];
+    BattleSide* temp_s0 = &arg0->battleSides[0];
 
     D_82302BD0 = arg0;
     D_82302B44 = 0;

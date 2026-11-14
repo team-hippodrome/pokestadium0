@@ -71,15 +71,15 @@ void BattleScene_StateCallbackNop(ActivePokemon* active_pokemon);
 void BattleScene_RegisterStateTickCallback(ActivePokemon* active_pokemon, BattleSceneStateCallback callback);
 void BattleScene_SetOpponentEventTrackA6(ActivePokemon* active_pokemon);
 void func_82105E64(ActivePokemon* active_pokemon);
-void BattleScene_AllocateParticipants(BattleSessionTeams* battle_teams);
+void BattleScene_AllocateParticipants(BattleSide* battle_teams);
 void BattleScene_UpdateParticipantsAndQueueEffects(UNUSED ActivePokemon* side1_pokemon, UNUSED ActivePokemon* side2_pokemon);
-s32 BattleScene_DispatchLifecycle(s32 lifecycle_stage, BattleSessionTeams* session_teams);
+s32 BattleScene_DispatchLifecycle(s32 lifecycle_stage, BattleSide* session_teams);
 void BattleThumbnail_SetFlagToUpdatePokemonThumbnail(CameraNode* camera);
 
 void BattleAnim_SetModelEventTrackFromRow(ActivePokemon* pokemon, s32 cue_index);
 void BattleScene_TryQueueIdleCueEffect(ActivePokemon* active_pokemon);
-void BattleScene_AllocateParticipantRecord(BattleSessionTeams* session_teams, s32 side_index);
-void BattleScene_InitializeRuntime(BattleSessionTeams* session_teams);
+void BattleScene_AllocateParticipantRecord(BattleSide* session_teams, s32 side_index);
+void BattleScene_InitializeRuntime(BattleSide* session_teams);
 
 /**
  * Resets all seven state tick slots to the sentinel (no-op) callback.
@@ -2687,7 +2687,7 @@ void BattleAnim_TriggerStatusAfflictionCry(ActivePokemon* active_pokemon) {
  * each time.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-void BattleScene_AllocateParticipantRecord(BattleSessionTeams* session_teams, s32 side_index) {
+void BattleScene_AllocateParticipantRecord(BattleSide* session_teams, s32 side_index) {
     ActivePokemon* active_pokemon = main_pool_alloc(0xA8C, 0);
 
     sActivePokemon[side_index] = active_pokemon;
@@ -2717,7 +2717,7 @@ void Battle_InitMessageQueues(void) {
 /**
  * Allocates both participants and the message queues.
  */
-void BattleScene_AllocateParticipants(BattleSessionTeams* battle_teams) {
+void BattleScene_AllocateParticipants(BattleSide* battle_teams) {
     BattleScene_AllocateParticipantRecord(&battle_teams[0], 0);
     BattleScene_AllocateParticipantRecord(&battle_teams[1], 1);
     Battle_InitMessageQueues();
@@ -2771,7 +2771,7 @@ void func_8211F274(ActivePokemon*);
  * menu.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-void BattleScene_InitializePresentation(UNUSED BattleSessionTeams* session_teams) {
+void BattleScene_InitializePresentation(UNUSED BattleSide* session_teams) {
     BattleScene_InitializeParticipantController(sActivePokemon[0]);
     BattleScene_InitializeParticipantController(sActivePokemon[1]);
     BattleScene_InitializeParticipantModel(sActivePokemon[0]);
@@ -2834,7 +2834,7 @@ void Battle_InitBothParticipants(void);
  * menu.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
-void BattleScene_InitializeRuntime(BattleSessionTeams* session_teams) {
+void BattleScene_InitializeRuntime(BattleSide* session_teams) {
     s32 i;
 
     for (i = 0; i < 7; i++) {
@@ -2862,7 +2862,7 @@ void BattleScene_UpdateParticipantsAndQueueEffects(UNUSED ActivePokemon* side1_p
  * Battle scene lifecycle dispatcher: allocate (0), update (1, 2),
  * initialize (3) and HUD render (5). Always returns 0.
  */
-s32 BattleScene_DispatchLifecycle(s32 lifecycle_stage, BattleSessionTeams* session_teams) {
+s32 BattleScene_DispatchLifecycle(s32 lifecycle_stage, BattleSide* session_teams) {
     switch (lifecycle_stage) {
         case 0:
             BattleScene_AllocateParticipants(session_teams);

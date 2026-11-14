@@ -34,7 +34,7 @@ extern GraphNode* sSide1ThumbnailRoot;
 extern GraphNode* sSide2ThumbnailRoot;
 extern DepthBuffer* sSide1PokemonThumbnail;
 extern DepthBuffer* sSide2PokemonThumbnail;
-extern BattleSessionTeams* sBattleSides;
+extern BattleSide* sBattleSides;
 extern s32 sIsPaused;
 extern s32 sNextFaintBatch;
 extern Color_RGBA8_u32 sTintColor;
@@ -61,7 +61,7 @@ void func_82100CC0(void);
 s32 BattleScene_UpdateFrame(s32 fade_mode);
 s32 BattleScene_UpdatePausedFrame(s32 fade_mode);
 void Battle_CompleteRosterOrder(u8* roster_order, s32 number_of_pokemon_picked);
-void BattleScene_InitializeParticipantPresentation(BattleSessionTeams* side, unk_D_86002F30* model);
+void BattleScene_InitializeParticipantPresentation(BattleSide* side, unk_D_86002F30* model);
 void func_8210186C(void);
 
 void Battle_DrawStageBackdrop(void);
@@ -331,7 +331,7 @@ void Battle_ResetFaintBatches(void) {
     s32 trainer_index;
     s32 pokemon_index;
     TeamRoster* roster;
-    BattleSessionTeams* side = &sBattleSides[0];
+    BattleSide* side = &sBattleSides[0];
 
     for (side_index = 0; side_index < 2; side_index++, side++) {
         for (trainer_index = 0; trainer_index < side->tagTeamSize; trainer_index++) {
@@ -357,7 +357,7 @@ void Battle_UpdateFaintBatches(void) {
     s32 pokemon_index;
     s32 found_faint = 0;
     TeamRoster* roster;
-    BattleSessionTeams* side = &sBattleSides[0];
+    BattleSide* side = &sBattleSides[0];
 
     for (side_index = 0; side_index < 2; side_index++, side++) {
         for (trainer_index = 0; trainer_index < side->tagTeamSize; trainer_index++) {
@@ -643,7 +643,7 @@ void Battle_SelectComRoster(void) {
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
-void BattleScene_InitializeParticipantPresentation(BattleSessionTeams* side, unk_D_86002F30* model) {
+void BattleScene_InitializeParticipantPresentation(BattleSide* side, unk_D_86002F30* model) {
     TeamRoster* first_trainer = side->teamMember[0];
 
     side->unk_18 = model->unk_08->unk_00[0];
@@ -809,7 +809,7 @@ s32 func_82101874(s32 arg0, SessionContext *arg1)
   SessionContext *ctx;
   int new_var; // FAKE
   ctx = (D_82198D10 = arg1);
-  sBattleSides = (BattleSessionTeams *) (((u8 *) arg1) + 0x1034);
+  sBattleSides = (BattleSide *) (((u8 *) arg1) + 0x1034);
   sCompletionGate = -2;
   new_var2 = ctx; // FAKE
   if (ctx->mode == 0)
