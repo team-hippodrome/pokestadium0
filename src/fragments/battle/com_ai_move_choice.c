@@ -324,8 +324,8 @@ s32 BattleAi_FindSlotWithPp(s32 arg0) {
 
 extern f64 D_DBL_82198A10;
 extern s32 D_821CF2A4;
-extern u8 *D_821CF2A8;
-extern u8 *D_821CF2AC;
+extern BattleMonRuntime* D_821CF2A8;
+extern BattleMonRuntime* D_821CF2AC;
 extern ComSide D_821CF618;
 extern ComSide D_821CF998;
 extern ComSide* D_821CF298;
@@ -340,7 +340,7 @@ s32 BattleAi_ChooseRandomMove(void);
  * visible state) into the AI's model, updates its turn bookkeeping, then returns
  * a move slot (0..3) or 4 + a party slot to switch, also stored in D_821CF2A4.
  */
-s32 BattleAi_ChooseTurnAction(u8* arg0, u8* arg1, s32 arg2, s32 arg3) {
+s32 BattleAi_ChooseTurnAction(BattleMonRuntime* arg0, BattleMonRuntime* arg1, s32 arg2, s32 arg3) {
     s32 move;
     s32 r;
     s32 one; // FAKE
@@ -351,7 +351,7 @@ s32 BattleAi_ChooseTurnAction(u8* arg0, u8* arg1, s32 arg2, s32 arg3) {
     D_821CF2A0 = &D_821CF298->battlers[arg3];
     D_821CF2A8 = arg0;
     D_821CF2AC = arg1;
-    func_80058410(arg0, (u8*)&D_821CF29C->mon, 0x64);
+    func_80058410((u8*)arg0, (u8*)&D_821CF29C->mon, sizeof(BattleMonRuntime));
     if (D_821CF29C->prevHp != D_821CF29C->mon.hp) {
         if (D_821CF29C->mon.receivedCritFlag != 0) {
             D_821CF29C->damageTaken = (D_821CF29C->prevHp - D_821CF29C->mon.hp) / 2;
@@ -360,7 +360,7 @@ s32 BattleAi_ChooseTurnAction(u8* arg0, u8* arg1, s32 arg2, s32 arg3) {
         }
         D_821CF29C->prevHp = D_821CF29C->mon.hp;
     }
-    BattleAi_CopyVisibleBattleState((s8*)&D_821CF2A0->mon, arg1);
+    BattleAi_CopyVisibleBattleState(&D_821CF2A0->mon, arg1);
     if (D_821CF29C->mon.uniqueStatusFlags & 1) {
         D_821CF29C->rechargeTurns++;
     } else {
@@ -380,8 +380,8 @@ s32 BattleAi_ChooseTurnAction(u8* arg0, u8* arg1, s32 arg2, s32 arg3) {
         D_821CF294->opponentTurnsIn++;
     }
     for (move = 0; move < D_821CF288; move++) {
-        D_821CF294->battlers[move].unk_7B = arg0[move + 0x16];
-        D_821CF298->battlers[move].unk_7B = arg1[move + 0x16];
+        D_821CF294->battlers[move].unk_7B = arg0->restSleepTurns[move];
+        D_821CF298->battlers[move].unk_7B = arg1->restSleepTurns[move];
     }
 
     move = BattleAi_ChooseSwitch();
@@ -408,8 +408,6 @@ s32 BattleAi_ChooseTurnAction(u8* arg0, u8* arg1, s32 arg2, s32 arg3) {
 }
 
 extern s32 D_821CF2A4;
-extern u8* D_821CF2A8;
-extern u8* D_821CF2AC;
 extern u8 D_8006B18F[];
 
 /**
@@ -429,12 +427,12 @@ void BattleAi_RecordUsedMove(s32 arg0, s32 arg1, s32 arg2) {
     if (D_821CF2A4 == 0xFEDC) {
         return;
     }
-    move = D_821CF2AC[0x5A];
+    move = D_821CF2AC->usedMove;
     if (move != 0) {
         for (i = 0; i < 4; i++) {
             if (D_821CF2A0->mon.moves[i] == 0) {
                 D_821CF2A0->mon.moves[i] = move;
-                pp = D_8006B18F[D_821CF2AC[0x5A] * 6];
+                pp = D_8006B18F[D_821CF2AC->usedMove * 6];
                 bonus = (pp / 5 >= 8) ? 7 : pp / 5;
                 pp += bonus * 3;
                 D_821CF2A0->mon.pp[i] = pp - 1;
@@ -454,13 +452,13 @@ void BattleAi_RecordUsedMove(s32 arg0, s32 arg1, s32 arg2) {
         D_821CF29C->lastMoves[1] = D_821CF29C->lastMoves[0];
         D_821CF29C->lastMoves[0] = D_821CF29C->mon.usedMove;
     }
-    if (!(D_821CF2AC[0x4E] & 8)) {
+    if (!(D_821CF2AC->uniqueStatusFlags & 8)) {
         if (arg2 == 0) {
-            if (((D_821CF2A8[0x5A] != QUICK_ATTACK) || (D_821CF2AC[0x5A] == QUICK_ATTACK)) && ((D_821CF2A8[0x5A] == COUNTER) || (D_821CF2AC[0x5A] != COUNTER))) {
+            if (((D_821CF2A8->usedMove != QUICK_ATTACK) || (D_821CF2AC->usedMove == QUICK_ATTACK)) && ((D_821CF2A8->usedMove == COUNTER) || (D_821CF2AC->usedMove != COUNTER))) {
                 D_821CF29C->outspedMask |= D_821CF2A0->partyBit;
             }
         } else if (arg2 == 1) {
-            if (((D_821CF2AC[0x5A] != QUICK_ATTACK) || (D_821CF2A8[0x5A] == QUICK_ATTACK)) && ((D_821CF2AC[0x5A] == COUNTER) || (D_821CF2A8[0x5A] != COUNTER))) {
+            if (((D_821CF2AC->usedMove != QUICK_ATTACK) || (D_821CF2A8->usedMove == QUICK_ATTACK)) && ((D_821CF2AC->usedMove == COUNTER) || (D_821CF2A8->usedMove != COUNTER))) {
                 D_821CF29C->outspedMask &= ~D_821CF2A0->partyBit;
             }
         }
