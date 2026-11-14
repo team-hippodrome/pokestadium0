@@ -126,9 +126,9 @@ typedef struct BattleMonRuntime {
 typedef struct ExtendedRosterInfo {
     /* 0x000 */ u16 unk_000;
     /* 0x002 */ u8 numberOfPokemonCanBePicked; // size of the team the order screen picks from (battleMon[0..n-1]); 6 for a tournament template team
-    /* 0x003 */ u8 trainerIndex; // @unverified: index of the trainer's BinArchive file the VS screen loads (vs_scene); nintendo_cup_teams sets the template index or round + 0x16
-    /* 0x004 */ char title[0x10]; // in Free Battle both sides held 「トレーナー」 (Trainer) in play; copied from the trainer template's title, e.g. 「ほっかいどう」 (Hokkaido) or 「トレーナー」 (Trainer)
-    /* 0x014 */ char fullName[0x14]; // in Free Battle it held the trainerName (1P, ＣＯＭ) in play; copied from the template's two-line name, e.g. 「むしとり\nしょうねん」 (Bug Catcher)
+    /* 0x003 */ u8 trainerIndex; // @unverified: index of the trainer's BinArchive file the VS screen loads (vs_scene), 23 for 1P and 15 for the round-1 bug catcher in play; nintendo_cup_teams sets the template index or round + 0x16
+    /* 0x004 */ char title[0x10]; // the small line over the name on the VS screen: poking the bug catcher's to ＡＢ showed ＡＢ there; 「トレーナー」 (Trainer) for both sides in Free Battle and the round-1 tournament; copied from the trainer template's title, e.g. 「ほっかいどう」 (Hokkaido) or 「トレーナー」 (Trainer)
+    /* 0x014 */ char fullName[0x14]; // the name on the VS screen (「むしとり\nしょうねん」 in round 1); the trainerName (1P, ＣＯＭ) in Free Battle; copied from the template's two-line name, e.g. 「むしとり\nしょうねん」 (Bug Catcher)
     /* 0x028 */ BattleMon battleMon[6];
 } ExtendedRosterInfo; // size = 0x208 (Stadium 1: 0x248)
 

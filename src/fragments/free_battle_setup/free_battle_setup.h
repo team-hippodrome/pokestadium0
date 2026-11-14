@@ -9,7 +9,7 @@
 /* One battle mode card of the battle mode window (D_8200752C rows). */
 typedef struct FreeBattleModeEntry {
     /* 0x0 */ s32 unk0;
-    /* 0x4 */ char* text; // @unverified: description printed under the cards for the cursor card
+    /* 0x4 */ char* text; // description printed under the cards for the cursor card; swapping the two entries' texts showed the トーナメント (Tournament) text under フリーバトル (Free Battle)
     /* 0x8 */ s32 unk8;
 } FreeBattleModeEntry; // size = 0xC
 
