@@ -42,8 +42,8 @@ void ScrollList_SetItems(s8*, s32, s8*);
 void func_8900020C(void);
 s32 LabItem_ComputeRemainingCapacity(s32 arg0, ByteMatrix* arg1);
 s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, ByteMatrix* arg1);
-s32 LabItem_FindOrAllocateGamePakBoxSlot(unk_func_8821421C_07C* arg0, s32 arg1, char* arg2);
-void LabItem_LoadGamePakBoxSlots(unk_func_8821421C_07C* arg0);
+s32 LabItem_FindOrAllocateGamePakBoxSlot(LabItemSaveSlot* arg0, s32 arg1, char* arg2);
+void LabItem_LoadGamePakBoxSlots(LabItemSaveSlot* arg0);
 void LabItem_ReadDeckEntries(s32 arg0, s32 arg1, s32 arg2, ByteMatrix* arg3);
 
 void func_89000020(LabMonEntryList* arg0, s32 (*arg1)(s32, s32)) {
@@ -190,17 +190,17 @@ s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, ByteMatrix* arg1) {
 }
 
 /** Finds the item box slot for a Game Pak box, allocating one if needed. */
-s32 LabItem_FindOrAllocateGamePakBoxSlot(unk_func_8821421C_07C* arg0, s32 arg1, char* arg2) {
+s32 LabItem_FindOrAllocateGamePakBoxSlot(LabItemSaveSlot* arg0, s32 arg1, char* arg2) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        if ((arg0[i].unk_00 != 0) && (arg1 == arg0[i].unk_04) && (HAL_Strcmp(arg0[i].unk_08, arg2) == 0)) {
+        if ((arg0[i].present != 0) && (arg1 == arg0[i].trainerId) && (HAL_Strcmp(arg0[i].trainerName, arg2) == 0)) {
             return i;
         }
     }
 
     for (i = 0; i < 4; i++) {
-        if (arg0[i].unk_00 == 0) {
+        if (arg0[i].present == 0) {
             return i;
         }
     }
@@ -209,14 +209,14 @@ s32 LabItem_FindOrAllocateGamePakBoxSlot(unk_func_8821421C_07C* arg0, s32 arg1, 
 }
 
 /** Loads the item box slots for the Game Pak boxes. */
-void LabItem_LoadGamePakBoxSlots(unk_func_8821421C_07C* arg0) {
+void LabItem_LoadGamePakBoxSlots(LabItemSaveSlot* arg0) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        arg0[i].unk_00 = Deck_IsSaveEntryPresent(0x12, i);
-        if (arg0[i].unk_00 != 0) {
-            arg0[i].unk_04 = Deck_GetSaveEntryTrainerId(0x12, i) & 0xFFFF;
-            Deck_GetSaveEntryName(0x12, i, arg0[i].unk_08);
+        arg0[i].present = Deck_IsSaveEntryPresent(0x12, i);
+        if (arg0[i].present != 0) {
+            arg0[i].trainerId = Deck_GetSaveEntryTrainerId(0x12, i) & 0xFFFF;
+            Deck_GetSaveEntryName(0x12, i, arg0[i].trainerName);
         }
     }
 }
@@ -1352,7 +1352,7 @@ void Font_SetColorForFlags(s32);
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-void LabItem_DrawTrainerInfo(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4) {
+void LabItem_DrawTrainerInfo(s32 arg0, s32 arg1, LabItemSaveSlot* arg2, s32 arg3, s32 arg4) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1 + 1, 0x13C, 0x3C, *(Color_RGBA8*)&D_8900A5BC);
     func_80029028(arg0, arg1, 0x13C, 1, D_8900A698);
@@ -1364,26 +1364,14 @@ void LabItem_DrawTrainerInfo(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4) {
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(arg4);
     Font_SetActive(0x10, 0);
-    Font_Printf(arg0 + 0x53, arg1 + 6, D_89018660, arg2 + 8);
+    Font_Printf(arg0 + 0x53, arg1 + 6, D_89018660, arg2->trainerName);
     Font_SetActive(8, 0);
-    Font_Printf(arg0 + 0x58, arg1 + 0x24, D_8901866C, M2C_FIELD(arg2, s32*, 4));
+    Font_Printf(arg0 + 0x58, arg1 + 0x24, D_8901866C, arg2->trainerId);
     Font_EndTexturedTextRendering();
 }
 
-typedef struct Win89002C10 {
-    s32 x; s32 y; s32 w; s32 h; s32 unk10; s32 unk14; s32 unk18; s32 unk1C;
-    void* unk20; s32 unk24; s32 unk28;
-    char unk2C[0x14];
-    s32 unk40;
-    Col89002C10 unk44;
-    Col89002C10 unk48;
-    char unk4C[0x20];
-    s32 unk6C;
-    char unk70[0x10];
-    char unk80[1];
-} Win89002C10;
-extern Col89002C10 D_8900A6AC;
-extern Col89002C10 D_8900A6B0;
+extern Color_RGBA8 D_8900A6AC;
+extern Color_RGBA8 D_8900A6B0;
 extern char D_89018678[];
 void LabItem_DrawTrainerInfo();
 void Window_SetRect(s8*, s32, s32, s32, s32);
@@ -1395,21 +1383,20 @@ void func_80027410(s8*, s8*, s32, s32, s32);
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-void LabItem_InitDeleteDataWindow(s8* arg, s32 arg1, s32 arg2, s8* arg3) {
-    Win89002C10* arg0 = (Win89002C10*)arg;
-    s32 pad; // FAKE: stack padding
-    Window_SetRect(arg, arg1, arg2, 0x148, 0x14A);
-    arg0->unk24 = 0;
-    arg0->unk28 = 0;
-    arg0->unk14 = 0x801;
-    arg0->unk20 = D_89018678;
-    Window_SetRect((s8*)arg0->unk2C, arg0->x + 6, arg0->y + 0x104, arg0->w - 0xC, 0x40);
-    arg0->unk40 = 6;
-    arg0->unk44 = D_8900A6AC;
-    arg0->unk48 = D_8900A6B0;
-    func_80027410((s8*)arg0->unk70, arg3, 0x14, 4, 4);
-    Menu_Init((s8*)arg0->unk4C, (s32)arg0->unk70, (s32)arg0->unk80, (s32)LabItem_DrawTrainerInfo, 0x13C, 0x3E);
-    arg0->unk6C |= 0x10000;
+void LabItem_InitDeleteDataWindow(LabItemDeleteDataWindow* arg0, s32 arg1, s32 arg2, LabItemSaveSlot* arg3) {
+    s32 pad[2]; // FAKE: stack padding
+    Window_SetRect((s8*)&arg0->window, arg1, arg2, 0x148, 0x14A);
+    arg0->window.animTimer = 0;
+    arg0->window.state = 0;
+    arg0->window.frame.style = 0x801;
+    arg0->window.title = D_89018678;
+    Window_SetRect((s8*)&arg0->footerFrame, arg0->window.frame.x + 6, arg0->window.frame.y + 0x104, arg0->window.frame.width - 0xC, 0x40);
+    arg0->footerFrame.style = 6;
+    arg0->footerFrame.color = D_8900A6AC;
+    arg0->footerFrame.color2 = D_8900A6B0;
+    func_80027410((s8*)&arg0->slotTable, (s8*)arg3, 0x14, 4, 4);
+    Menu_Init((s8*)&arg0->menu, (s32)&arg0->slotTable, (s32)arg0->itemFlags, (s32)LabItem_DrawTrainerInfo, 0x13C, 0x3E);
+    arg0->menu.options |= 0x10000;
 }
 
 void Ui_DrawTexturedDivider(s32, s32, s32, void*);
@@ -1423,18 +1410,18 @@ extern u8 D_89018688[];
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-void LabItem_DrawDeleteDataWindow(s8* arg0, s32 arg1) {
+void LabItem_DrawDeleteDataWindow(LabItemDeleteDataWindow* arg0, s32 arg1) {
     if (func_8002AE6C() == 0) {
-        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 0x30) - 7, M2C_FIELD(arg0, s32*, 8), D_8007356C);
-        Window_DrawFrame(arg0 + 0x2C);
-        Menu_DrawInlineItems(arg0 + 0x4C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, 0xFFEF, 0);
+        Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->footerFrame.y - 7, arg0->window.frame.width, D_8007356C);
+        Window_DrawFrame(&arg0->footerFrame);
+        Menu_DrawInlineItems(&arg0->menu, arg0->window.frame.x + 6, arg0->window.frame.y + 6, 0xFFEF, 0);
         func_8001AB6C();
         func_8001A384(8, 0);
         if (!arg0) { // FAKE: empty test only changes register allocation; needed to match
         }
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         Font_SetLineHeight(0x1C);
-        func_8001A944(M2C_FIELD(arg0, s32*, 0x2C) + 8, M2C_FIELD(arg0, s32*, 0x30) + 8, D_89018688);
+        func_8001A944(arg0->footerFrame.x + 8, arg0->footerFrame.y + 8, D_89018688);
         func_8001ABBC();
     }
 }
@@ -1447,11 +1434,11 @@ s32 Menu_UpdateCursor(void*);
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-s32 LabItem_UpdateDeleteDataCursor(unk_func_8820E99C_030* arg0) {
+s32 LabItem_UpdateDeleteDataCursor(LabItemDeleteDataWindow* arg0) {
     s32 sp1C = 0;
     s32 dir;
 
-    if (Menu_UpdateCursor((u8*)arg0 + 0x4C) == 0) {
+    if (Menu_UpdateCursor(&arg0->menu) == 0) {
         dir = Ui_GetSelectionDirection(gPlayer1Controller);
         if (dir == -1) {
             Audio_PlaySoundEffectById(3);
@@ -1477,36 +1464,36 @@ extern u8 D_8900BFC0[];
 extern u8 D_89010368[];
 extern u8 D_890110F0[];
 
-void func_89002E58(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
-    Window_SetRect(arg0 + 4, arg1, arg2, 0x184, 0x180);
-    M2C_FIELD(arg0, s32*, 0x28) = 0;
-    M2C_FIELD(arg0, s32*, 0x24) = 0;
-    M2C_FIELD(arg0, s32*, 0x2C) = 0;
-    M2C_FIELD(arg0, s32*, 0x18) = 0x1001;
-    Window_SetRect(arg0 + 0x30, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x142,
-                  M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0x38);
-    M2C_FIELD(arg0, s32*, 0x44) = 6;
-    M2C_FIELD(arg0, Color_RGBA8*, 0x48) = D_8900A6B4;
-    M2C_FIELD(arg0, Color_RGBA8*, 0x4C) = D_8900A6B8;
-    func_8002B018(arg0 + 0x50, arg1 + 0x2B, arg2 + 0x47, 0x36, 0x2A, 0x30, (s32)D_8900BFC0);
-    M2C_FIELD(arg0, Color_RGBA8*, 0x68) = *(Color_RGBA8*)D_8900A580;
-    M2C_FIELD(arg0, Color_RGBA8*, 0x6C) = *(Color_RGBA8*)D_8900A584;
-    M2C_FIELD(arg0, Color_RGBA8*, 0x70) = D_8900A5BC;
-    func_8002B018(arg0 + 0xA8, arg1 + 0x2B, arg2 + 0x9F, 0x36, 0x2A, 0x30, (s32)D_890110F0);
-    M2C_FIELD(arg0, Color_RGBA8*, 0xC0) = *(Color_RGBA8*)D_8900A5A8;
-    M2C_FIELD(arg0, Color_RGBA8*, 0xC4) = *(Color_RGBA8*)D_8900A5AC;
-    M2C_FIELD(arg0, Color_RGBA8*, 0xC8) = D_8900A5BC;
-    func_8002B018(arg0 + 0x7C, arg1 + 0x2B, arg2 + 0xF7, 0x36, 0x2A, 0x30, (s32)D_89010368);
-    M2C_FIELD(arg0, Color_RGBA8*, 0x94) = *(Color_RGBA8*)D_8900A5A0;
-    M2C_FIELD(arg0, Color_RGBA8*, 0x98) = *(Color_RGBA8*)D_8900A5A4;
-    M2C_FIELD(arg0, Color_RGBA8*, 0x9C) = D_8900A5BC;
-    M2C_FIELD(arg0, s32*, 0xDC) = 3;
-    M2C_FIELD(arg0, s32*, 0xD8) = 0;
-    M2C_FIELD(arg0, s32*, 0xD4) = D_800603C0;
+void func_89002E58(LabItemSaveDataWindow* arg0, s32 arg1, s32 arg2, LabItemSaveSlot* arg3, s32 arg4) {
+    Window_SetRect(&arg0->window, arg1, arg2, 0x184, 0x180);
+    arg0->window.animTimer = 0;
+    arg0->window.title = NULL;
+    arg0->window.state = 0;
+    arg0->window.frame.style = 0x1001;
+    Window_SetRect(&arg0->footerFrame, arg0->window.frame.x + 6, arg0->window.frame.y + 0x142,
+                  arg0->window.frame.width - 0xC, 0x38);
+    arg0->footerFrame.style = 6;
+    arg0->footerFrame.color = D_8900A6B4;
+    arg0->footerFrame.color2 = D_8900A6B8;
+    func_8002B018(&arg0->backButton, arg1 + 0x2B, arg2 + 0x47, 0x36, 0x2A, 0x30, (s32)D_8900BFC0);
+    arg0->backButton.selectedColor = *(Color_RGBA8*)D_8900A580;
+    arg0->backButton.color = *(Color_RGBA8*)D_8900A584;
+    arg0->backButton.highlightColor = D_8900A5BC;
+    func_8002B018(&arg0->discardButton, arg1 + 0x2B, arg2 + 0x9F, 0x36, 0x2A, 0x30, (s32)D_890110F0);
+    arg0->discardButton.selectedColor = *(Color_RGBA8*)D_8900A5A8;
+    arg0->discardButton.color = *(Color_RGBA8*)D_8900A5AC;
+    arg0->discardButton.highlightColor = D_8900A5BC;
+    func_8002B018(&arg0->viewItemsButton, arg1 + 0x2B, arg2 + 0xF7, 0x36, 0x2A, 0x30, (s32)D_89010368);
+    arg0->viewItemsButton.selectedColor = *(Color_RGBA8*)D_8900A5A0;
+    arg0->viewItemsButton.color = *(Color_RGBA8*)D_8900A5A4;
+    arg0->viewItemsButton.highlightColor = D_8900A5BC;
+    arg0->operationCursor.count = 3;
+    arg0->operationCursor.cursor = 0;
+    arg0->operationCursor.controller = D_800603C0;
     func_8000B2F4(D_800603C0);
-    LabItem_InitItemList(arg0 + 0xE0, M2C_FIELD(arg0, s32*, 4) + 0x88, M2C_FIELD(arg0, s32*, 8) + 0x36, arg4);
-    M2C_FIELD(arg0, s32*, 0x1F4) = arg3;
-    M2C_FIELD(arg0, s32*, 0) = 1;
+    LabItem_InitItemList(&arg0->itemList, arg0->window.frame.x + 0x88, arg0->window.frame.y + 0x36, arg4);
+    arg0->slot = arg3;
+    arg0->state = 1;
 }
 
 typedef Color_RGBA8 Rgba8900A6BC; // size = 0x4
@@ -1522,7 +1509,7 @@ extern char D_890186C0[];
 extern char D_890186CC[];
 void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Rgba8900A6BC, Rgba8900A6BC);
 void Font_SetColorForFlags(s32);
-void func_890030C8(s32 arg0, s32 arg1, s8* arg2, s32 arg3) {
+void func_890030C8(s32 arg0, s32 arg1, LabItemSaveSlot* arg2, s32 arg3) {
     Color8900A6BC* color;
 
     if (arg3 & 2) {
@@ -1537,25 +1524,25 @@ void func_890030C8(s32 arg0, s32 arg1, s8* arg2, s32 arg3) {
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(arg3);
     Font_SetActive(8, 0);
-    Font_Printf(arg0 + 0x34, arg1 + 2, D_890186C0, arg2 + 8);
+    Font_Printf(arg0 + 0x34, arg1 + 2, D_890186C0, arg2->trainerName);
     Font_SetActive(4, 0);
-    Font_Printf(arg0 + 0x38, arg1 + 0x18, D_890186CC, M2C_FIELD(arg2, s32*, 4));
+    Font_Printf(arg0 + 0x38, arg1 + 0x18, D_890186CC, arg2->trainerId);
     Font_EndTexturedTextRendering();
 }
 
 extern s32 D_8900A6CC[];
 extern s8 *D_8900A6D8[];
-void func_8900323C(s32 *arg0) {
+void func_8900323C(LabItemSaveDataWindow* arg0) {
     char sp2C[0x54];
-    List89001B88 *list;
+    ScrollList* list;
 
-    switch (arg0[0]) {
+    switch (arg0->state) {
         case 1:
-            LabItem_DrawTitleText(arg0[0xC], arg0[0xD], D_8900A6CC[arg0[0x36]], D_8900A6D8[arg0[0x36]]);
+            LabItem_DrawTitleText(arg0->footerFrame.x, arg0->footerFrame.y, D_8900A6CC[arg0->operationCursor.cursor], D_8900A6D8[arg0->operationCursor.cursor]);
             break;
         case 2:
-            list = (List89001B88 *)(arg0 + 0x38);
-            LabItem_DrawSmallText(arg0[0xC], arg0[0xD], func_80031BC0((*list->data)[list->index * 2], sp2C));
+            list = &arg0->itemList.list;
+            LabItem_DrawSmallText(arg0->footerFrame.x, arg0->footerFrame.y, func_80031BC0(list->items->rows[list->cursor * 2], sp2C));
             break;
     }
 }
@@ -1564,45 +1551,45 @@ void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
 extern u8 D_800735C4[];
 void func_8002B054(s8*, s32);
 void Window_DrawFrame(void*);
-void func_890032E4(s8* arg0) {
+void func_890032E4(LabItemSaveDataWindow* arg0) {
     s32 v;
 
-    if (func_8002AE6C(arg0 + 4) == 0) {
-        Window_DrawFrame(arg0 + 0x30);
-        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 0x34) - 7, M2C_FIELD(arg0, s32*, 0xC), D_8007356C);
+    if (func_8002AE6C(&arg0->window) == 0) {
+        Window_DrawFrame(&arg0->footerFrame);
+        Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->footerFrame.y - 7, arg0->window.frame.width, D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 6, 0x82, 0x136, *(Color_RGBA8*)&D_8900A5BC);
-        func_80029028(M2C_FIELD(arg0, s32*, 4) + 0x88, M2C_FIELD(arg0, s32*, 8) + 6, 0xEC, 6, *(Color_RGBA8*)&D_8900A5BC);
-        func_80029028(M2C_FIELD(arg0, s32*, 4) + 0x88, M2C_FIELD(arg0, s32*, 8) + 0x136, 0xEC, 6, *(Color_RGBA8*)&D_8900A5BC);
-        func_80029028(M2C_FIELD(arg0, s32*, 4) + 0x174, M2C_FIELD(arg0, s32*, 8) + 6, 0xA, 0x136, *(Color_RGBA8*)&D_8900A5BC);
-        Ui_DrawTexturedFrameDecal(M2C_FIELD(arg0, s32*, 4) + 0x86, M2C_FIELD(arg0, s32*, 8) + 0xA, 0xF0, 0x12E, D_800735C4);
-        v = (M2C_FIELD(arg0, s32*, 0) == 1) ? 2 : 0x10;
-        func_8002B054(arg0 + 0x50, (M2C_FIELD(arg0, s32*, 0xD8) == 2) ? v : 0);
-        func_8002B054(arg0 + 0xA8, (M2C_FIELD(arg0, s32*, 0xD8) == 0) ? v : 0);
-        func_8002B054(arg0 + 0x7C, (M2C_FIELD(arg0, s32*, 0xD8) == 1) ? v : 0);
-        func_890030C8(M2C_FIELD(arg0, s32*, 4) + 0x88, M2C_FIELD(arg0, s32*, 8) + 0xC, M2C_FIELD(arg0, s8**, 0x1F4), 0);
-        LabItem_DrawItemList(arg0 + 0xE0, (M2C_FIELD(arg0, s32*, 0) == 2) ? 2 : 0);
-        func_8900323C((s32*)arg0);
+        func_80029028(arg0->window.frame.x + 6, arg0->window.frame.y + 6, 0x82, 0x136, *(Color_RGBA8*)&D_8900A5BC);
+        func_80029028(arg0->window.frame.x + 0x88, arg0->window.frame.y + 6, 0xEC, 6, *(Color_RGBA8*)&D_8900A5BC);
+        func_80029028(arg0->window.frame.x + 0x88, arg0->window.frame.y + 0x136, 0xEC, 6, *(Color_RGBA8*)&D_8900A5BC);
+        func_80029028(arg0->window.frame.x + 0x174, arg0->window.frame.y + 6, 0xA, 0x136, *(Color_RGBA8*)&D_8900A5BC);
+        Ui_DrawTexturedFrameDecal(arg0->window.frame.x + 0x86, arg0->window.frame.y + 0xA, 0xF0, 0x12E, D_800735C4);
+        v = (arg0->state == 1) ? 2 : 0x10;
+        func_8002B054(&arg0->backButton, (arg0->operationCursor.cursor == 2) ? v : 0);
+        func_8002B054(&arg0->discardButton, (arg0->operationCursor.cursor == 0) ? v : 0);
+        func_8002B054(&arg0->viewItemsButton, (arg0->operationCursor.cursor == 1) ? v : 0);
+        func_890030C8(arg0->window.frame.x + 0x88, arg0->window.frame.y + 0xC, arg0->slot, 0);
+        LabItem_DrawItemList(&arg0->itemList, (arg0->state == 2) ? 2 : 0);
+        func_8900323C(arg0);
     }
 }
 
 s32 func_8002B2B0(void *);
 s32 LabItem_UpdateItemList(void *, u32);
-s32 func_8900352C(s32* arg0) {
+s32 func_8900352C(LabItemSaveDataWindow* arg0) {
     s32 ret = 0;
 
-    switch (arg0[0]) {
+    switch (arg0->state) {
         case 1:
-            if (func_8002B2B0(arg0 + 0x35) == 0) {
+            if (func_8002B2B0(&arg0->operationCursor) == 0) {
                 s32 r = func_8002BC14(D_800603C0);
                 if (r == -1) {
                         func_8003F6AC(3);
                         ret = -1;
                 } else if (r == 1) {
-                        switch (arg0[0x36]) {
+                        switch (arg0->operationCursor.cursor) {
                             case 1:
                                 func_8003F6AC(2);
-                                arg0[0] = 2;
+                                arg0->state = 2;
                                 break;
                             case 0:
                                 func_8003F6AC(2);
@@ -1617,54 +1604,36 @@ s32 func_8900352C(s32* arg0) {
             }
             break;
         case 2:
-            if (LabItem_UpdateItemList(arg0 + 0x38, 0) == -1) {
-                arg0[0] = 1;
+            if (LabItem_UpdateItemList(&arg0->itemList, 0) == -1) {
+                arg0->state = 1;
             }
             break;
     }
     return ret;
 }
 
-typedef struct Entry89003650 { s32 unk00; char unk04[0x10]; } Entry89003650;
-typedef struct Ctx89003650 {
-    /* 0x000 */ s32 unk000;
-    /* 0x004 */ LabItemOrganizeWindow organizeWindow;
-    /* 0x4E8 */ s8 unk4E8[0x39C];
-    /* 0x884 */ s8 unk884[0x2A];
-    /* 0x8AE */ s8 unk8AE[0x66];
-    /* 0x914 */ s8 unk914[0xCC];
-    /* 0x9E0 */ s8 list0[0x10];
-    /* 0x9F0 */ s8 list1[0x10];
-    /* 0xA00 */ s8 list2[0x10];
-    /* 0xA10 */ s32 sel[3];
-    /* 0xA1C */ s32 idx;
-    /* 0xA20 */ Entry89003650 entries[1];
-} Ctx89003650;
-s32 func_890002D4(Entry89003650*, s32, s32*);
-void func_890003C0(Entry89003650*);
-void func_89000448(s32, s32, s32, s8*);
 extern s32 D_89019108;
 extern s32 D_89019118;
 extern s32 D_8901911C;
 
-void func_89003650(Ctx89003650* arg0) {
+void func_89003650(LabItemScreen* arg0) {
     s32 i;
 
-    func_80027410(arg0->list0, arg0->unk884, 2, 0x14, 0);
-    func_80027410(arg0->list1, arg0->unk8AE, 2, 0x32, 0);
-    func_80027410(arg0->list2, arg0->unk914, 2, 0x64, 0);
-    func_89000448(0x23, D_89019108, 0, arg0->list0);
-    func_89000448(0x22, D_89019108, 0, arg0->list1);
-    func_890003C0(arg0->entries);
-    arg0->idx = func_890002D4(arg0->entries, D_89019118, &D_8901911C);
-    if ((arg0->idx != -1) && (arg0->entries[arg0->idx].unk00 != 0)) {
-        func_89000448(0x12, 0, arg0->idx, arg0->list2);
+    func_80027410((s8*)&arg0->itemTables[0], (s8*)arg0->bagItemRows, 2, 0x14, 0);
+    func_80027410((s8*)&arg0->itemTables[1], (s8*)arg0->pcItemRows, 2, 0x32, 0);
+    func_80027410((s8*)&arg0->itemTables[2], (s8*)arg0->gamePakItemRows, 2, 0x64, 0);
+    LabItem_ReadDeckEntries(0x23, D_89019108, 0, &arg0->itemTables[0]);
+    LabItem_ReadDeckEntries(0x22, D_89019108, 0, &arg0->itemTables[1]);
+    LabItem_LoadGamePakBoxSlots(arg0->saveSlots);
+    arg0->gamePakSlot = LabItem_FindOrAllocateGamePakBoxSlot(arg0->saveSlots, D_89019118, (char*)&D_8901911C);
+    if ((arg0->gamePakSlot != -1) && (arg0->saveSlots[arg0->gamePakSlot].present != 0)) {
+        LabItem_ReadDeckEntries(0x12, 0, arg0->gamePakSlot, &arg0->itemTables[2]);
     }
     i = 0;
     do {
-        arg0->sel[i] = 0;
+        arg0->dirty[i] = 0;
         i++;
     } while (i != 3);
-    LabItem_InitOrganizeWindow(&arg0->organizeWindow, 0x26, 0x51, (ByteMatrix*)arg0->list0, arg0->sel, &arg0->idx);
-    arg0->unk000 = 1;
+    LabItem_InitOrganizeWindow(&arg0->organizeWindow, 0x26, 0x51, arg0->itemTables, arg0->dirty, &arg0->gamePakSlot);
+    arg0->state = 1;
 }
