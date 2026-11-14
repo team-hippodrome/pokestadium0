@@ -224,7 +224,7 @@ void FreeBattle_InitMenuWindow(FreeBattleMenuWindow* arg0, s32 arg1, s32 arg2, s
     Window_SetRect(&arg0->window, arg1, arg2, arg3, arg4);
     arg0->window.state = 0;
     arg0->window.animTimer = 0;
-    arg0->window.style = 0x801;
+    arg0->window.frame.style = 0x801;
     arg0->window.title = arg9;
     func_80027804(&arg0->itemList, arg5, arg6, arg6);
     Menu_Init(&arg0->menu, &arg0->itemList, arg0->itemFlags, FreeBattle_DrawMenuRow, arg3 - 0xC, 0x20);
@@ -253,17 +253,17 @@ void FreeBattle_DrawMenuWindow(FreeBattleMenuWindow* arg0, s32 arg1) {
 
     if (func_8002AE6C() == 0) {
         temp_s1 = (arg0->menu.items->count << 5) + 8;
-        Ui_DrawTexturedDivider(arg0->window.x, arg0->window.y + temp_s1 + 5, arg0->window.width, &D_8007356C);
+        Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->window.frame.y + temp_s1 + 5, arg0->window.frame.width, &D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(arg0->window.x + 6, arg0->window.y + 6, arg0->window.width - 0xC, temp_s1, *(Color82001CCC*)&D_82009100);
-        Ui_FillRectPrimEnvColor(arg0->window.x + 6, arg0->window.y + temp_s1 + 0xC, arg0->window.width - 0xC, arg0->descriptionLines * 0x1C, D_82009104, D_82009108);
-        sp38 = arg0->window.width - 0xC;
-        Menu_DrawItems(&arg0->menu, arg0->window.x + 6, arg0->window.y + 0xA, arg1 | 0xFFED, (s8*)&sp38);
+        func_80029028(arg0->window.frame.x + 6, arg0->window.frame.y + 6, arg0->window.frame.width - 0xC, temp_s1, *(Color82001CCC*)&D_82009100);
+        Ui_FillRectPrimEnvColor(arg0->window.frame.x + 6, arg0->window.frame.y + temp_s1 + 0xC, arg0->window.frame.width - 0xC, arg0->descriptionLines * 0x1C, D_82009104, D_82009108);
+        sp38 = arg0->window.frame.width - 0xC;
+        Menu_DrawItems(&arg0->menu, arg0->window.frame.x + 6, arg0->window.frame.y + 0xA, arg1 | 0xFFED, (s8*)&sp38);
         func_8001AB6C();
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
         func_8001A384(8, 0);
         Font_SetLineHeight(0x1C);
-        func_8001A944(arg0->window.x + 0xE, arg0->window.y + temp_s1 + 0x10, arg0->descriptions[arg0->menu.cursor]);
+        func_8001A944(arg0->window.frame.x + 0xE, arg0->window.frame.y + temp_s1 + 0x10, arg0->descriptions[arg0->menu.cursor]);
         func_8001ABBC();
     }
 }
@@ -307,7 +307,7 @@ s32 FreeBattle_UpdateMenuWindow(FreeBattleMenuWindow* arg0) {
  */
 void FreeBattle_DrawPopupRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, FreeBattleMenuWindow* arg5) {
     if (arg4 & 0x18) {
-        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, arg5->window.width - 0x12, 0x1E, arg5->window.color);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, arg5->window.frame.width - 0x12, 0x1E, arg5->window.frame.color);
     }
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(arg4);
@@ -346,9 +346,9 @@ void FreeBattle_InitPopupMenu(FreeBattleMenuWindow* arg0, s32 arg1, s32 arg2, Li
     arg0->window.animTimer = 0;
     arg0->window.title = 0;
     arg0->window.state = 0;
-    arg0->window.style = 0x800;
+    arg0->window.frame.style = 0x800;
     arg0->window.title = arg3->unk8;
-    arg0->window.color = arg5;
+    arg0->window.frame.color = arg5;
 }
 
 s32 func_8002AE6C();                                /* extern */
@@ -366,7 +366,7 @@ void FreeBattle_DrawPopupMenu(FreeBattleMenuWindow* arg0, s32 arg1)
     if (arg0 && arg0)
     {
     }
-    Menu_DrawItems(new_var = &arg0->menu, arg0->window.x + 6, arg0->window.y + 0xC, arg1 | 0xFFED, (s8*)arg0);
+    Menu_DrawItems(new_var = &arg0->menu, arg0->window.frame.x + 6, arg0->window.frame.y + 0xC, arg1 | 0xFFED, (s8*)arg0);
   }
 }
 
@@ -491,7 +491,7 @@ void FreeBattle_InitOpponentSelect(FreeBattleOpponentWindow* arg0, s32 arg1, s32
     Window_SetRect(&arg0->window, arg1, arg2, 0x192, 0x10F);
     arg0->window.animTimer = 0;
     arg0->window.state = 0;
-    arg0->window.style = 0x801;
+    arg0->window.frame.style = 0x801;
     arg0->window.title = (char*)&D_82009F70;
     sp2C = (s8*)&arg0->itemList;
     func_80027804(sp2C, (s32)&D_8200917C, 4, 4);
@@ -537,16 +537,16 @@ void FreeBattle_DrawOpponentSelect(FreeBattleOpponentWindow* arg0) {
 
     sp2C = 0;
     if (func_8002AE6C() == 0) {
-        Ui_DrawTexturedDivider(arg0->window.x, arg0->window.y + 0x92, arg0->window.width, &D_8007356C);
+        Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->window.frame.y + 0x92, arg0->window.frame.width, &D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(arg0->window.x + 6, arg0->window.y + 0x99, arg0->window.width - 0xC, 0x70, *(Color82001CCC*)&D_82009100);
-        Ui_DrawImageInStrips(D_8200910C, arg0->window.x + 0xA9, arg0->window.y + 0xC1);
+        func_80029028(arg0->window.frame.x + 6, arg0->window.frame.y + 0x99, arg0->window.frame.width - 0xC, 0x70, *(Color82001CCC*)&D_82009100);
+        Ui_DrawImageInStrips(D_8200910C, arg0->window.frame.x + 0xA9, arg0->window.frame.y + 0xC1);
         func_8001AB6C();
         func_8001AA9C(M2C_FIELD(&D_800734A8, u8*, 0), M2C_FIELD(&D_800734A8, u8*, 1), M2C_FIELD(&D_800734A8, u8*, 2), M2C_FIELD(&D_800734A8, u8*, 3));
         func_8001A384(8, 0);
-        func_8001A944(arg0->window.x + 0x36, arg0->window.y + 0xC3, D_82009F84);
+        func_8001A944(arg0->window.frame.x + 0x36, arg0->window.frame.y + 0xC3, D_82009F84);
         func_8001ABBC();
-        Menu_DrawItems(&arg0->menu, arg0->window.x + 0x110, arg0->window.y + 0x99, 0xFEF, 0);
+        Menu_DrawItems(&arg0->menu, arg0->window.frame.x + 0x110, arg0->window.frame.y + 0x99, 0xFEF, 0);
         switch (arg0->menu.cursor) {
             case 0:
                 sp2C = 2;
@@ -558,7 +558,7 @@ void FreeBattle_DrawOpponentSelect(FreeBattleOpponentWindow* arg0) {
                 sp2C = 8;
                 break;
         }
-        FreeBattle_DrawControllerPanel(arg0->window.x + 6, arg0->window.y + 6, arg0->controllerMask, arg0->unk_70, 1, sp2C);
+        FreeBattle_DrawControllerPanel(arg0->window.frame.x + 6, arg0->window.frame.y + 6, arg0->controllerMask, arg0->unk_70, 1, sp2C);
     }
 }
 
