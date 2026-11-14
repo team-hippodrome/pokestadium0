@@ -316,16 +316,16 @@ typedef struct PokemonBattleCues {
     /* 0x000 */ MovePresentationCue moveCues[165];
     /* 0x717 */ MovePresentationCue idleCues;
     /* 0x722 */ MovePresentationCue unk_722;
-    /* 0x72D */ MovePresentationCue faintCue;
+    /* 0x72D */ MovePresentationCue faintCue; // @unverified: cue 167; BattleScene_TickFaintRowPlayLandingSound reads its animationDuration (raw +0x72D)
     /* 0x738 */ MovePresentationCue hitCue;
-    /* 0x743 */ MovePresentationCue chargeCues[6];
+    /* 0x743 */ MovePresentationCue unk_743[6];
     /* 0x785 */ MovePresentationCue sleepIdleCue;
     /* 0x790 */ MovePresentationCue flyingIdleCue;
     /* 0x79B */ MovePresentationCue unk_79B;
-    /* 0x7A6 */ MovePresentationCue hitReactionOverride;
+    /* 0x7A6 */ MovePresentationCue unk_7A6;
     /* 0x7B1 */ MovePresentationCue unk_7B1[5];
     /* 0x7E8 */ u8 unk_7E8;
-    /* 0x7E9 */ u8 wakeUpEventTrack;
+    /* 0x7E9 */ u8 unk_7E9;
 } PokemonBattleCues; // size >= 0x7EA
 
 // moveCues[] has one entry per move, so cue indices past the last move alias the
