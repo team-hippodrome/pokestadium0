@@ -1151,22 +1151,22 @@ M2C_UNK func_80058410(s8*, s8*, M2C_UNK);
  * (BattleMon layout): species, HP, status, types, moves, DVs, level, max HP,
  * stats and PP.
  */
-void BattleAi_LoadBattlerFromPartyMon(s8* arg0, s8* arg1) {
-    M2C_FIELD(arg0, u8*, 0xB) = M2C_FIELD(arg1, u8*, 0);
-    M2C_FIELD(arg0, u16*, 0xC) = M2C_FIELD(arg1, u16*, 2);
-    M2C_FIELD(arg0, u8*, 0x14) = M2C_FIELD(arg1, u8*, 4);
-    M2C_FIELD(arg0, u8*, 0x15) = M2C_FIELD(arg1, u8*, 5);
-    M2C_FIELD(arg0, u8*, 0x1C) = M2C_FIELD(arg1, u8*, 6);
-    M2C_FIELD(arg0, u8*, 0x1D) = M2C_FIELD(arg1, u8*, 7);
-    BattleAi_CopyMoveList(arg1 + 9, arg0 + 0x1F);
-    M2C_FIELD(arg0, u16*, 0x24) = M2C_FIELD(arg1, u16*, 0x1E);
-    M2C_FIELD(arg0, u8*, 0x26) = M2C_FIELD(arg1, u8*, 0x24);
-    M2C_FIELD(arg0, u16*, 0x28) = M2C_FIELD(arg1, u16*, 0x26);
-    M2C_FIELD(arg0, u16*, 0x2A) = M2C_FIELD(arg1, u16*, 0x28);
-    M2C_FIELD(arg0, u16*, 0x2C) = M2C_FIELD(arg1, u16*, 0x2A);
-    M2C_FIELD(arg0, u16*, 0x2E) = M2C_FIELD(arg1, u16*, 0x2C);
-    M2C_FIELD(arg0, u16*, 0x30) = M2C_FIELD(arg1, u16*, 0x2E);
-    func_80058410(arg1 + 0x20, arg0 + 0x32, 4);
+void BattleAi_LoadBattlerFromPartyMon(BattleMonRuntime* arg0, s8* arg1) {
+    arg0->species = M2C_FIELD(arg1, u8*, 0);
+    arg0->hp = M2C_FIELD(arg1, u16*, 2);
+    arg0->rosterIndex = M2C_FIELD(arg1, u8*, 4);
+    arg0->pendingStatusCondition = M2C_FIELD(arg1, u8*, 5);
+    arg0->type1 = M2C_FIELD(arg1, u8*, 6);
+    arg0->type2 = M2C_FIELD(arg1, u8*, 7);
+    BattleAi_CopyMoveList(arg1 + 9, arg0->moves);
+    arg0->dvs = M2C_FIELD(arg1, u16*, 0x1E);
+    arg0->level = M2C_FIELD(arg1, u8*, 0x24);
+    arg0->maxHp = M2C_FIELD(arg1, u16*, 0x26);
+    arg0->modifiedAttack = M2C_FIELD(arg1, u16*, 0x28);
+    arg0->modifiedDefense = M2C_FIELD(arg1, u16*, 0x2A);
+    arg0->speed = M2C_FIELD(arg1, u16*, 0x2C);
+    arg0->modifiedSpecial = M2C_FIELD(arg1, u16*, 0x2E);
+    func_80058410(arg1 + 0x20, arg0->pp, 4);
 }
 
 typedef struct BaseStats821868E8 { u8 species; u8 hp; u8 atk; u8 def; u8 spd; u8 spc; u8 type1; u8 type2; char unk08[0xF]; } BaseStats821868E8;
@@ -1179,21 +1179,21 @@ s32 BattleAi_CalcSpecial(s32, s32);
  * hidden: species, HP and max HP, types, DVs 0x7777, level and stats computed with
  * BattleAi_CalcStat.
  */
-void BattleAi_LoadBattlerFromSpecies(s8* arg0, s32 species, s32 level) {
+void BattleAi_LoadBattlerFromSpecies(BattleMonRuntime* arg0, s32 species, s32 level) {
     BaseStats821868E8* stats;
 
     if (species != 0 && species < 0x98) {
-        M2C_FIELD(arg0, u8*, 0xB) = species;
+        arg0->species = species;
         stats = &((BaseStats821868E8*)D_80065D00)[species - 1];
-        M2C_FIELD(arg0, s16*, 0xC) = M2C_FIELD(arg0, s16*, 0x28) = BattleAi_CalcMaxHp(stats->hp, level);
-        M2C_FIELD(arg0, u8*, 0x1C) = stats->type1;
-        M2C_FIELD(arg0, u8*, 0x1D) = stats->type2;
-        M2C_FIELD(arg0, s16*, 0x24) = 0x7777;
-        M2C_FIELD(arg0, u8*, 0x26) = level;
-        M2C_FIELD(arg0, s16*, 0x2A) = BattleAi_CalcAttack(stats->atk, level);
-        M2C_FIELD(arg0, s16*, 0x2C) = BattleAi_CalcDefense(stats->def, level);
-        M2C_FIELD(arg0, s16*, 0x2E) = BattleAi_CalcSpeed(stats->spd, level);
-        M2C_FIELD(arg0, s16*, 0x30) = BattleAi_CalcSpecial(stats->spc, level);
+        arg0->hp = arg0->maxHp = BattleAi_CalcMaxHp(stats->hp, level);
+        arg0->type1 = stats->type1;
+        arg0->type2 = stats->type2;
+        arg0->dvs = 0x7777;
+        arg0->level = level;
+        arg0->modifiedAttack = BattleAi_CalcAttack(stats->atk, level);
+        arg0->modifiedDefense = BattleAi_CalcDefense(stats->def, level);
+        arg0->speed = BattleAi_CalcSpeed(stats->spd, level);
+        arg0->modifiedSpecial = BattleAi_CalcSpecial(stats->spc, level);
     }
 }
 
