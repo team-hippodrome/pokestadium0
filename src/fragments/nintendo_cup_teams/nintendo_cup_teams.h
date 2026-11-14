@@ -13,8 +13,8 @@
 typedef struct TournamentOpponentTemplate {
     /* 0x00 */ u16 unk_00; // copied to ExtendedRosterInfo.unk_000; 0, 1 or 2 in the data
     /* 0x02 */ u16 trainerId; // @unverified: copied to TeamRoster.trainerId (0x755B, 0x6974, ...)
-    /* 0x04 */ char* title; // @unverified: region or 「トレーナー」 (Trainer), as in the ROM data
-    /* 0x08 */ char* fullName; // @unverified: two-line real name or trainer class, as in the ROM data
+    /* 0x04 */ char* title; // region or 「トレーナー」 (Trainer); seen on the VS screen's trainer panel (2026-11-14)
+    /* 0x08 */ char* fullName; // two-line real name or trainer class; seen on the VS screen's trainer panel (2026-11-14)
     /* 0x0C */ char* shortName; // @unverified: copied to TeamRoster.trainerName, e.g. 「マサハル」
     /* 0x10 */ BattleMon mons[6];
 } TournamentOpponentTemplate; // size = 0x1F0
