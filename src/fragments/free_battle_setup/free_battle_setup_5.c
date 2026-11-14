@@ -560,16 +560,16 @@ s32 FreeBattle_UpdateScreen(s8* arg0) {
  * FreeBattle_RestoreMenuState
  *
  * Writes two words in the structure `arg0` points to, derived from the
- * bytes gSessionContext.mode[0] and gSessionContext.mode[1] of the session context, and then
+ * gSessionContext.mode and gSessionContext.ruleCategory, and then
  * calls FreeBattle_SetScreenState(arg0, 2, 0) or FreeBattle_SetScreenState(arg0, 3, 0).
  *
- *   gSessionContext.mode[0] == 0:
+ *   gSessionContext.mode == 0:
  *     arg0->0x43AC = 0
- *     arg0->0x4418 = 0 if gSessionContext.mode[1] == 0, else 1 if it is 2, else 2
+ *     arg0->0x4418 = 0 if gSessionContext.ruleCategory == 0, else 1 if it is 2, else 2
  *     FreeBattle_SetScreenState(arg0, 2, 0)
  *   otherwise:
  *     arg0->0x43AC = 1
- *     arg0->0x4418 = 0 if gSessionContext.mode[0] == 2, else 1
+ *     arg0->0x4418 = 0 if gSessionContext.mode == 2, else 1
  *     FreeBattle_SetScreenState(arg0, 3, 0)
  *
  * FreeBattle_SetScreenState is still assembly, so what the 2 / 3 select is not
