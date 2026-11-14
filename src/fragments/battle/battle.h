@@ -879,30 +879,30 @@ typedef struct AuxiliaryEffect {
 
 typedef struct BeamTrailSegment {
     /* 0x00 */ f32 startDelay; // @unverified: frames the segment waits at the owner (2 x index)
-    /* 0x04 */ f32 halfWidth; // @unverified: grows by 3 a frame up to maxHalfWidth
-    /* 0x08 */ f32 angle; // @unverified: roll angle in radians, advanced by angleStep
-    /* 0x0C */ Vec3f position; // @unverified: segment center
+    /* 0x04 */ f32 halfWidth; // grows by 3 a frame up to maxHalfWidth; poking 40 widened Ice Beam's ribbons in play
+    /* 0x08 */ f32 angle; // roll angle in radians, advanced by angleStep; poking 1.57 flattened the ribbons in play
+    /* 0x0C */ Vec3f position; // segment center; adding 3 to y each frame lifted Ice Beam in play
     /* 0x18 */ Vec3f velocity; // @unverified: added to position once moving; also the beam direction
 } BeamTrailSegment; // size = 0x24
 
 typedef struct BeamTrail {
-    /* 0x000 */ s16 active; // @unverified: 1 while running
-    /* 0x002 */ s16 widthMode; // @unverified: 0 rotates the width about the beam, 1 faces it to the camera
+    /* 0x000 */ s16 active; // 1 while running; poking 0 each frame cut Ice Beam short in play
+    /* 0x002 */ s16 widthMode; // 0 rotates the width about the beam, 1 faces it to the camera; poking 1 changed the ribbon shape in play
     /* 0x004 */ s16 frame; // @unverified: counts up each frame until duration
-    /* 0x006 */ s16 duration; // @unverified: frames the beam runs
-    /* 0x008 */ PrimLodColor primColor; // @unverified: primitive color
-    /* 0x00D */ PrimLodColor envColor; // @unverified: environment color
+    /* 0x006 */ s16 duration; // frames the beam runs; poking 10 ended Ice Beam's ribbons early in play
+    /* 0x008 */ PrimLodColor primColor; // primitive color; poking red turned Ice Beam's ribbons red in play
+    /* 0x00D */ PrimLodColor envColor; // environment color; poking green tinted them green in play
     /* 0x014 */ f32 primAlphaScale; // @unverified: fades by 0.1 a frame after fadeStartFrame
     /* 0x018 */ f32 envAlphaScale; // @unverified: fades by 0.1 a frame after fadeStartFrame
     /* 0x01C */ s16 fadeStartFrame; // @unverified: 0x46, compared with the shared frame counter D_821CD9E0
-    /* 0x020 */ s32 textureA; // @unverified: sBattleAnimAssetPointers index of tile 0
-    /* 0x024 */ s32 textureB; // @unverified: sBattleAnimAssetPointers index of tile 1
+    /* 0x020 */ s32 textureA; // sBattleAnimAssetPointers index of tile 0; poking 100 changed the ribbon texture in play
+    /* 0x024 */ s32 textureB; // sBattleAnimAssetPointers index of tile 1; poking 100 changed the ribbon texture in play
     /* 0x028 */ CombinerCycleArgs combineCycle0; // @unverified: color combiner cycle 1
     /* 0x048 */ CombinerCycleArgs combineCycle1; // @unverified: color combiner cycle 2
     /* 0x068 */ TextureScroll scrollA; // @unverified: tile 0 scroll
     /* 0x074 */ TextureScroll scrollB; // @unverified: tile 1 scroll
-    /* 0x080 */ f32 maxHalfWidth; // @unverified: cap for the segments' halfWidth
-    /* 0x084 */ f32 angleStep; // @unverified: added to the moving segments' angle per frame
+    /* 0x080 */ f32 maxHalfWidth; // cap for the segments' halfWidth; poking 60 made Ice Beam's ribbons much wider in play
+    /* 0x084 */ f32 angleStep; // added to the moving segments' angle per frame; poking 1.0 changed the ribbon twist in play
     /* 0x088 */ Vtx* vtx; // @unverified: 40 vertices allocated each frame
     /* 0x08C */ char unk08C[0x18];
     /* 0x0A4 */ BeamTrailSegment segments[20]; // @unverified: beam segments
