@@ -128,19 +128,19 @@ struct ComSide;
 typedef struct ComBattler {
     /* 0x00 */ struct ComSide* side; // set by BattleAi_InitSide
     /* 0x04 */ s32 pickScore; // @unverified: summed by the BattleAi_Add*PickScore helpers in team selection
-    /* 0x08 */ f32 matchupRatio; // @unverified: best damage it deals / best damage it takes against the active opponent (BattleAi_ChooseSwitch)
+    /* 0x08 */ f32 matchupRatio; // best damage it deals / best damage it takes against the active opponent (BattleAi_ChooseSwitch); vs Onix Nidoking 1.83, Pikachu 0.03
     /* 0x0C */ BattleMonRuntime mon; // copied from the battle each turn (BattleAi_ChooseTurnAction), or built from party or base stats
-    /* 0x70 */ u16 prevHp; // @unverified: mon.hp at the previous turn (BattleAi_ChooseTurnAction)
-    /* 0x72 */ u16 damageTaken; // @unverified: prevHp - mon.hp, halved when the hit was a critical (BattleAi_ChooseTurnAction)
-    /* 0x74 */ u8 species; // @unverified: party species, copied by BattleAi_InitSide
-    /* 0x75 */ u8 partyBit; // @unverified: 1 << party slot (BattleAi_InitSide)
-    /* 0x76 */ u8 outspedMask; // @unverified: partyBits of opponents it was seen to move before (BattleAi_RecordUsedMove), read by BattleAi_MovesFirst
+    /* 0x70 */ u16 prevHp; // mon.hp at the previous turn (BattleAi_ChooseTurnAction); COM Pinsir 75, then 52 after Onix's hit
+    /* 0x72 */ u16 damageTaken; // prevHp - mon.hp, halved after a critical: Onix's critical Body Slam took 23 and it held 11; the next hit of 8 gave 8
+    /* 0x74 */ u8 species; // party species (BattleAi_InitSide): 127, 57, 94, 132, 34, 25 for the COM team in play
+    /* 0x75 */ u8 partyBit; // 1 << party slot (BattleAi_InitSide): 1, 2, 4, ... 0x20 in play
+    /* 0x76 */ u8 outspedMask; // partyBits of opponents it was seen to move before (BattleAi_RecordUsedMove): 1 after Pinsir hit first against Onix (slot 0)
     /* 0x77 */ u8 leechSeededMask; // @unverified: partyBits of opponents it has used Leech Seed on (BattleAi_RecordUsedMove)
-    /* 0x78 */ u8 moveCount; // @unverified: moves before an empty slot or Mimic (BattleAi_InitSide)
-    /* 0x79 */ u8 revealedMovePp; // @unverified: 16 from BattleAi_InitSide; the PP BattleAi_CopyVisibleBattleState gives an opponent move it first sees
+    /* 0x78 */ u8 moveCount; // moves before an empty slot or Mimic (BattleAi_InitSide): 1 for Ditto (Transform only), 4 for the others
+    /* 0x79 */ u8 revealedMovePp; // 16 from BattleAi_InitSide; the PP BattleAi_CopyVisibleBattleState gives an opponent move it first sees: the 1P model learned Body Slam with PP from 16
     /* 0x7A */ u8 rechargeTurns; // @unverified: turns in a row with mon.uniqueStatusFlags bit 0 set (BattleAi_ChooseTurnAction)
     /* 0x7B */ u8 restSleepTurns; // @unverified: copy of the battle's BattleMonRuntime.restSleepTurns for this slot; the Sleep Clause skips Rest sleep
-    /* 0x7C */ u8 lastMoves[3]; // @unverified: its last three moves, newest first (BattleAi_RecordUsedMove)
+    /* 0x7C */ u8 lastMoves[3]; // its last moves, newest first (BattleAi_RecordUsedMove): 66 (Submission) after Pinsir used it
     /* 0x7F */ char unk7F[0x11];
 } ComBattler; // size = 0x90
 
@@ -148,10 +148,10 @@ typedef struct ComBattler {
 typedef struct ComSide {
     /* 0x000 */ TeamRoster* roster;
     /* 0x004 */ ComBattler battlers[6];
-    /* 0x364 */ f32 switchThreshold; // @unverified: matchup gain a switch needs; 0.5, 10.0 from mode 2, decays each turn (BattleAi_ChooseSwitch)
+    /* 0x364 */ f32 switchThreshold; // matchup gain a switch needs (BattleAi_ChooseSwitch); 10.0 in mode 2, then 9.95, 9.9, 9.85 over three turns
     /* 0x368 */ u8 mode; // @unverified: AI mode 0..3 from BattleAi_InitSide; 3 picks moves at random
-    /* 0x369 */ u8 lastOpponentSlot; // @unverified: opponent party slot seen last turn (BattleAi_ChooseTurnAction)
-    /* 0x36A */ u8 opponentTurnsIn; // @unverified: turns that opponent has stayed in (BattleAi_ChooseTurnAction)
+    /* 0x369 */ u8 lastOpponentSlot; // opponent party slot seen last turn (BattleAi_ChooseTurnAction): 0 for Onix
+    /* 0x36A */ u8 opponentTurnsIn; // turns that opponent has stayed in (BattleAi_ChooseTurnAction): 1, then 2 as Onix stayed in
     /* 0x36B */ u8 unk_36B;
     /* 0x36C */ u8 usableMask; // @unverified: party slots picked in team selection, then the unfainted brought ones (BattleAi_ChooseSwitch)
     /* 0x36D */ char unk36D[0x13];
