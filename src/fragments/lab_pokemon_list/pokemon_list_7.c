@@ -20,12 +20,12 @@ extern u8 D_80073520[];
 M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 extern s32 D_8910A7F8[3];
 void func_80027410(void*, void*, s32, s32, s32);
-void func_89109990(void*, void*, void*, s32);
+void LabPCList_InitSourceBoxes(void*, void*, void*, s32);
 extern s32 D_800603C0;
 void func_8000B2F4(s32);
 void Window_SetRect(s8 *, s32, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
-void func_89109B60(s8*);
+void LabPCList_LoadAllBoxes(s8*);
 void func_80027D68(s32, s32);
 void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
 void LabPCList_DrawMonRow();
@@ -65,17 +65,17 @@ extern s32 D_8910D990[];
 void ScrollList_SetItems(s32*, void*, void*);
 void func_80027D94(s32, void*, void*, void*);
 void func_80027D68(s32, s32);
-s32 func_891096F4();
-s32 func_89109720();
-s32 func_891097E4();
-s32 func_89109884();
-s32 func_89109898();
-s32 func_89109960();
+int LabPCList_FilterByLevelRange();
+s32 LabPCList_FilterByAnyType();
+s32 LabPCList_FilterByAnyMove();
+s32 LabPCList_FilterBySpeciesId();
+s32 LabPCList_FilterByExactTypePair();
+s32 LabPCList_FilterByBattleEligible();
 void func_8000A460(s8*, s8*);
 u32 func_800566BC(s8*);
 void LabPCList_InitPopupMenu(LabPopupMenu*, void*, s8*, s32, s32);
 void LabPCList_PlacePopup(LabPopupMenu*);
-void func_8910A21C(s8*, s8*, s8*, s32);
+void LabPCList_BuildUsableItemList(s8*, s8*, s8*, s32);
 extern s8* D_8910A890[];
 extern u8 D_8910A898[];
 extern u8 D_8910DC50[];
@@ -120,18 +120,18 @@ u32 func_800566BC(s8*);
  * Seen in play (2026-11-12) in いちらん: kind 0 gave てもち, kind 1 box 0 gave GB 1, and kind 2 box 0
  * gave 64 1, all in the いどう message.
  */
-void LabPCList_FormatLocationName(s8* arg0, s32 arg1, s32 arg2) {
-    switch (arg1) {
+void LabPCList_FormatLocationName(s8* buf, s32 sourceKind, s32 box) {
+    switch (sourceKind) {
         case 0:
-            *(Str7_89103620*)arg0 = *(Str7_89103620*)"てもち"; // "Party"
+            *(Str7_89103620*)buf = *(Str7_89103620*)"てもち"; // "Party"
             break;
         case 1:
-            *(Str9_89103620*)arg0 = *(Str9_89103620*)"ＧＢ　０"; // "GB 0"
-            arg0[func_800566BC(arg0) - 1] += arg2 + 1;
+            *(Str9_89103620*)buf = *(Str9_89103620*)"ＧＢ　０"; // "GB 0"
+            buf[func_800566BC(buf) - 1] += box + 1;
             break;
         case 2:
-            *(Str9_89103620*)arg0 = *(Str9_89103620*)"６４　０"; // "64 0"
-            arg0[func_800566BC(arg0) - 1] += arg2 + 1;
+            *(Str9_89103620*)buf = *(Str9_89103620*)"６４　０"; // "64 0"
+            buf[func_800566BC(buf) - 1] += box + 1;
             break;
     }
 }
