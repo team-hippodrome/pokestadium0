@@ -6,12 +6,12 @@
 #include "game_state.h"
 
 typedef struct OrderSidebarIcons {
-    /* 0x00 */ s8 unk_00;
-    /* 0x01 */ s8 unk_01;
-    /* 0x02 */ s8 unk_02[6];
-    /* 0x08 */ s8 unk_08[6];
-    /* 0x0E */ s8 unk_0E;
-    /* 0x0F */ s8 unk_0F;
+    /* 0x00 */ s8 iconCount; // @unverified: picks so far; BattleMenu_AppendOrderSlotIcon appends at this index
+    /* 0x01 */ s8 isCom; // @unverified: the single trainer's isHuman has bit 1 set (2 = COM, as FreeBattle_CopyTeamToRoster sets)
+    /* 0x02 */ s8 slotIcons[6]; // @unverified: per order slot, high nibble picking port + 1; -1 marks slots 3-5 unused (func_823003B8)
+    /* 0x08 */ s8 slotIconGrowth[6]; // @unverified: 1 grow, -1 shrink (BattleMenu_ResetOrderSlotIcons), passed to BattleMenu_DrawSidebarRowTypeIcon
+    /* 0x0E */ s8 firstPort; // @unverified: lower controller port of the side's trainers (func_823003B8)
+    /* 0x0F */ s8 secondPort; // @unverified: the other tag partner's port, -1 without one
 } OrderSidebarIcons; // size = 0x10
 
 typedef struct OrderSelectPanel {
