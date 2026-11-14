@@ -251,7 +251,7 @@ s32 AudioSeq_SeqChannelSetLayer(SequenceChannel* arg0, s32 arg1) {
     p->ignoreDrumPan = 0;
     p->adsr.decayIndex = 0;
     p->bit1 = 0;
-    p->stereo = 0x40;
+    p->stereo.asByte = 0x40;
     p->portamento.mode = 0;
     p->scriptState.depth = 0;
     p->status = 0;
@@ -449,7 +449,7 @@ void AudioSeq_InitLayerFreelist(void) {
 
     D_81184928.prev = &D_81184928;
     D_81184928.next = &D_81184928;
-    D_81184928.count = 0;
+    D_81184928.u.count = 0;
     D_81184928.pool = 0;
     for (i = 0; i < 1; i++) {
         D_811847C8[i].listItemValue = &D_811847C8[i];
@@ -748,7 +748,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep2(SequenceLayer* layer) {
                 layer->ignoreDrumPan = 1;
                 break;
             case 0xCD:
-                layer->stereo = AudioSeq_ScriptReadU8(&state->pc);
+                layer->stereo.asByte = AudioSeq_ScriptReadU8(&state->pc);
                 break;
             case 0xCE:
                 layer->bend = D_81136378[(u8)(AudioSeq_ScriptReadU8(&state->pc) + 0x80)];

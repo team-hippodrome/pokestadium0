@@ -3,52 +3,21 @@
 #include "global.h"
 #include "audio_and_gb_emulator.h"
 #include "m2c_macros.h"
-struct LayerE3C;
-void AudioPlayback_SeqLayerDecayRelease(struct LayerE3C*, s32);
 
-void AudioPlayback_NoteSetResamplingRate(s8* arg0, f32 arg1);
-
-typedef struct Stereo81110210 {
-    /* 0x0 */ u8 bit0 : 1;
-    /* 0x0 */ u8 bit1 : 1;
-    /* 0x0 */ u8 bit2 : 1;
-    /* 0x0 */ u8 usesHeadsetPanEffects : 1;
-    /* 0x0 */ u8 stereoHeadsetEffects : 2;
-    /* 0x0 */ u8 strongRight : 1;
-    /* 0x0 */ u8 strongLeft : 1;
-} Stereo81110210;
-
-typedef struct NoteSampleStateAttrs81110210 {
-    /* 0x00 */ u8 reverbVol;
+/* The attributes AudioPlayback_InitSampleState is given (built on the stack from a note's attributes). */
+typedef struct NoteSubAttributes {
+    /* 0x00 */ u8 reverbVol; // @unverified: same offset/use as OoT's NoteSubAttributes.reverbVol
     /* 0x01 */ u8 gain; // @unverified: same offset/use as OoT's NoteSampleStateAttributes.gain (from channel->gain)
-    /* 0x02 */ u8 pan;
-    /* 0x03 */ Stereo81110210 reverbBits;
-    /* 0x04 */ f32 freqScale;
-    /* 0x08 */ f32 velocity;
+    /* 0x02 */ u8 pan; // @unverified: same offset/use as OoT's NoteSubAttributes.pan
+    /* 0x03 */ Stereo reverbBits; // @unverified: same offset/use as OoT's NoteSubAttributes.reverbBits
+    /* 0x04 */ f32 freqScale; // @unverified: same offset/use as OoT's NoteSubAttributes.frequency
+    /* 0x08 */ f32 velocity; // @unverified: same offset/use as OoT's NoteSubAttributes.velocity
     /* 0x0C */ s32 unk0C;
     /* 0x10 */ s32 filter; // @unverified: takes channel->filter / NoteAttributes.filter, like OoT's NoteSampleStateAttributes.filter
-} NoteSampleStateAttrs81110210;
+} NoteSubAttributes;
+void AudioPlayback_SeqLayerDecayRelease(struct SequenceLayer*, s32);
 
-typedef struct NoteSampleState81110210 {
-    /* 0x00 */ volatile u8 enabled : 1;
-    /* 0x00 */ u8 needsInit : 1;
-    /* 0x00 */ u8 finished : 1;
-    /* 0x00 */ u8 envMixerNeedsInit : 1;
-    /* 0x00 */ u8 stereoStrongRight : 1;
-    /* 0x00 */ u8 stereoStrongLeft : 1;
-    /* 0x00 */ u8 stereoHeadsetEffects : 1;
-    /* 0x00 */ u8 usesHeadsetPanEffects : 1;
-    /* 0x01 */ u8 unk01;
-    /* 0x02 */ u8 gain; // @unverified: same offset/use as OoT's NoteSampleState.gain
-    /* 0x03 */ u8 headsetPanRight;
-    /* 0x04 */ u8 headsetPanLeft;
-    /* 0x05 */ u8 reverbVol;
-    /* 0x06 */ u8 unk06[2];
-    /* 0x08 */ u16 targetVolLeft;
-    /* 0x0A */ u16 targetVolRight;
-    /* 0x0C */ u8 unk0C[8];
-    /* 0x14 */ s32 filter; // @unverified: same offset/use as OoT's NoteSampleState.filter
-} NoteSampleState81110210;
+void AudioPlayback_NoteSetResamplingRate(s8* arg0, f32 arg1);
 
 extern s8 D_811858EE;
 extern u16 D_811369D8[];
@@ -62,8 +31,8 @@ extern f32 D_81136ED8[];
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-void AudioPlayback_InitSampleState(s8* note, NoteSampleStateAttrs81110210* reverb_info) {
-    NoteSampleState81110210* sub;
+void AudioPlayback_InitSampleState(s8* note, NoteSubAttributes* reverb_info) {
+    NoteSampleState* sub;
     f32 vol_right;
     f32 vol_left;
     s32 small_pan_index;
@@ -74,14 +43,14 @@ void AudioPlayback_InitSampleState(s8* note, NoteSampleStateAttrs81110210* rever
     f32 velocity;
     u8 pan;
     u8 reverbVol;
-    Stereo81110210 reverbBits;
+    Stereo reverbBits;
 
     AudioPlayback_NoteSetResamplingRate(note, reverb_info->freqScale);
     velocity = reverb_info->velocity;
     pan = reverb_info->pan;
     reverbVol = reverb_info->reverbVol;
     reverbBits = reverb_info->reverbBits;
-    sub = (NoteSampleState81110210*)(note + 0xB4);
+    sub = (NoteSampleState*)(note + 0xB4);
     pan &= 0x7F;
 
     if (sub->stereoHeadsetEffects && D_811858EE == 1) {
@@ -110,20 +79,20 @@ void AudioPlayback_InitSampleState(s8* note, NoteSampleStateAttrs81110210* rever
         }
         sub->stereoStrongRight = strongRight;
         sub->stereoStrongLeft = strongLeft;
-        switch (reverbBits.stereoHeadsetEffects) {
+        switch (reverbBits.s.stereoHeadsetEffects) {
             case 0:
-                sub->stereoStrongRight = reverbBits.strongRight;
-                sub->stereoStrongLeft = reverbBits.strongLeft;
+                sub->stereoStrongRight = reverbBits.s.strongRight;
+                sub->stereoStrongLeft = reverbBits.s.strongLeft;
                 break;
             case 1:
                 break;
             case 2:
-                sub->stereoStrongRight = reverbBits.strongRight | strongRight;
-                sub->stereoStrongLeft = reverbBits.strongLeft | strongLeft;
+                sub->stereoStrongRight = reverbBits.s.strongRight | strongRight;
+                sub->stereoStrongLeft = reverbBits.s.strongLeft | strongLeft;
                 break;
             case 3:
-                sub->stereoStrongRight = reverbBits.strongRight ^ strongRight;
-                sub->stereoStrongLeft = reverbBits.strongLeft ^ strongLeft;
+                sub->stereoStrongRight = reverbBits.s.strongRight ^ strongRight;
+                sub->stereoStrongLeft = reverbBits.s.strongLeft ^ strongLeft;
                 break;
         }
     } else if (D_811858EE == 3) {
@@ -190,34 +159,7 @@ void AudioPlayback_NoteSetResamplingRate(s8* arg0, f32 arg1) {
     M2C_FIELD(arg0, s16*, 0xC0) = pan * 32768.0f;
 }
 
-typedef struct NoteSampleStateBytes {
-    s32 w[6];
-} NoteSampleStateBytes;
-typedef struct Channel81110694 {
-    char pad00[0x80];
-    s32 adsrEnvelope; // @unverified: same offset/use as OoT's SequenceChannel.adsr.envelope (AudioPlayback_NoteInit)
-} Channel81110694;
-typedef struct Layer81110694 {
-    char pad00[0x18];
-    u8 adsrDecayIndex; // @unverified: same offset/use as OoT's SequenceLayer.adsr.decayIndex (0 = use the channel's envelope)
-    s32 adsrEnvelope; // @unverified: same offset/use as OoT's SequenceLayer.adsr.envelope
-    char pad20[0x54 - 0x20];
-    Channel81110694* channel; // @unverified: same offset/use as OoT's SequenceLayer.channel
-} Layer81110694;
-typedef struct Note81110694 {
-    char pad00[0x34];
-    u8 unk_34;
-    char pad35;
-    s16 adsrVolScale; // @unverified: same offset/use as OoT's Note.playbackState.adsrVolScaleUnused (passed to the ADSR init)
-    char pad38[0x44 - 0x38];
-    Layer81110694* parentLayer; // @unverified: same offset/use as OoT's Note.playbackState.parentLayer
-    char pad48[0x5C - 0x48];
-    u8 adsr; // @unverified: start of OoT's Note.playbackState.adsr (passed to the ADSR init)
-    u8 adsrState; // @unverified: same offset/use as OoT's adsr.action.s.state (set to 1, initial)
-    char pad5E[0xB4 - 0x5E];
-    NoteSampleStateBytes sampleState; // @unverified: same offset/use as OoT's Note.sampleState (reset from a zero template)
-} Note81110694;
-extern NoteSampleStateBytes D_811369C0;
+extern NoteSampleState D_811369C0;
 void func_8111235C(u8*, s32, char*);
 
 /**
@@ -226,45 +168,18 @@ void func_8111235C(u8*, s32, char*);
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-void AudioPlayback_NoteInit(Note81110694* arg0) {
-    Layer81110694* def = arg0->parentLayer;
+void AudioPlayback_NoteInit(Note* arg0) {
+    SequenceLayer* def = arg0->playbackState.parentLayer;
 
-    if (def->adsrDecayIndex == 0) {
-        func_8111235C(&arg0->adsr, def->channel->adsrEnvelope, &arg0->adsrVolScale);
+    if (def->adsr.decayIndex == 0) {
+        func_8111235C(&arg0->playbackState.adsr.action, def->channel->adsr.envelope, &arg0->playbackState.adsrVolScale);
     } else {
-        func_8111235C(&arg0->adsr, def->adsrEnvelope, &arg0->adsrVolScale);
+        func_8111235C(&arg0->playbackState.adsr.action, def->adsr.envelope, &arg0->playbackState.adsrVolScale);
     }
-    arg0->unk_34 = 0;
-    arg0->adsrState = 1;
+    arg0->playbackState.unk_04 = 0;
+    arg0->playbackState.adsr.state = 1;
     arg0->sampleState = D_811369C0;
 }
-
-typedef struct NoteSampleState8111073C {
-    /* 0x0 */ volatile u32 enabled : 1; // volatile like SM64 NoteSubEu.enabled; stops IDO reusing the flag byte
-    /* 0x0 */ u32 needsInit : 1;
-    /* 0x0 */ u32 finished : 1;
-    /* 0x0 */ u32 rest : 29;
-} NoteSampleState8111073C;
-
-typedef struct PlaybackState8111073C {
-    /* 0x00 */ u8 priority;
-    /* 0x01 */ char unk01[3];
-    /* 0x04 */ u8 unk04;
-    /* 0x05 */ char unk05[0xB];
-    /* 0x10 */ void* prevParentLayer;
-    /* 0x14 */ void* parentLayer;
-    /* 0x18 */ char unk18[0x2D - 0x18];
-    /* 0x2D */ u8 adsrState;
-    /* 0x2E */ char unk2E[0x40 - 0x2E];
-    /* 0x40 */ f32 adsrCurrent;
-} PlaybackState8111073C;
-
-typedef struct Note8111073C {
-    /* 0x00 */ char unk00[0x30];
-    /* 0x30 */ PlaybackState8111073C playbackState;
-    /* 0x74 */ char unk74[0xB4 - 0x74];
-    /* 0xB4 */ NoteSampleState8111073C noteSubEu;
-} Note8111073C;
 
 /**
  * Turns a note off and clears its playback state. Zelda 64 audio driver.
@@ -272,122 +187,33 @@ typedef struct Note8111073C {
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-void AudioPlayback_NoteDisable(Note8111073C* note) {
-    if (note->noteSubEu.needsInit == 1) {
-        note->noteSubEu.needsInit = 0;
+void AudioPlayback_NoteDisable(Note* note) {
+    if (note->sampleState.needsInit == 1) {
+        note->sampleState.needsInit = 0;
     }
     note->playbackState.priority = 0;
-    note->playbackState.unk04 = 0;
-    note->noteSubEu.enabled = 0;
+    note->playbackState.unk_04 = 0;
+    note->sampleState.enabled = 0;
     note->playbackState.parentLayer = (void*)-1;
     note->playbackState.prevParentLayer = (void*)-1;
-    note->noteSubEu.finished = 0;
-    note->playbackState.adsrState = 0;
-    note->playbackState.adsrCurrent = 0.0f;
+    note->sampleState.finished = 0;
+    note->playbackState.adsr.state = 0;
+    note->playbackState.adsr.current = 0.0f;
 }
 
-typedef struct SeqPlayer81110798 {
-    /* 0x00 */ u32 enabled : 1;
-    /* 0x00 */ u32 finished : 1;
-    /* 0x00 */ u32 muted : 1;
-    /* 0x00 */ u32 rest : 29;
-} SeqPlayer81110798;
-
-typedef struct Channel81110798 {
-    /* 0x00 */ u8 unk00[3];
-    /* 0x03 */ u8 muteBehavior;
-    /* 0x04 */ u8 targetReverbVol; // @unverified: same offset/use as OoT's SequenceChannel.targetReverbVol
-    /* 0x05 */ u8 unk05[4];
-    /* 0x09 */ u8 bookOffset;
-    /* 0x0A */ u8 unk0A[2];
-    /* 0x0C */ u8 gain;
-    /* 0x0D */ u8 unk0D[0x4C - 0x0D];
-    /* 0x4C */ SeqPlayer81110798* seqPlayer;
-    /* 0x50 */ u8 unk50[0xD0 - 0x50];
-    /* 0xD0 */ s32 filter;
-} Channel81110798;
-
-typedef struct Layer81110798 {
-    /* 0x00 */ u8 enabled : 1;
-    /* 0x00 */ u8 rest : 6;
-    /* 0x00 */ u8 finished : 1; // @unverified: same bit/use as OoT's SequenceLayer.finished (AudioPlayback_ProcessNotes)
-    /* 0x01 */ Stereo81110210 stereo;
-    /* 0x02 */ u8 unk02[5];
-    /* 0x07 */ u8 notePan;
-    /* 0x08 */ u8 unk08[0x34 - 0x08];
-    /* 0x34 */ f32 noteVelocity;
-    /* 0x38 */ f32 noteFreqScale;
-    /* 0x3C */ u8 unk3C[0x48 - 0x3C];
-    /* 0x48 */ struct Note81110798* note;
-    /* 0x4C */ u8 unk4C[0x54 - 0x4C];
-    /* 0x54 */ Channel81110798* channel;
-} Layer81110798;
-
-typedef struct NoteSubEu81110798 {
-    /* 0x00 */ volatile u32 enabled : 1;
-    /* 0x00 */ u32 needsInit : 1;
-    /* 0x00 */ u32 finished : 1;
-    /* 0x00 */ u32 unk : 8;
-    /* 0x01 */ u32 bookOffset : 2;
-    /* 0x01 */ u32 rest : 19;
-} NoteSubEu81110798;
-
-typedef struct NoteAttributes81110798 {
-    /* 0x00 */ u8 reverbVol;
-    /* 0x01 */ u8 gain; // @unverified: same position as OoT's NoteAttributes.gain; copied into the sample-state attributes' gain
-    /* 0x02 */ u8 pan;
-    /* 0x03 */ Stereo81110210 reverbBits;
-    /* 0x04 */ f32 freqScale;
-    /* 0x08 */ f32 velocity;
-    /* 0x0C */ s32 filter; // @unverified: copied into the sample-state attributes' filter, SM64 Shindou's NoteAttributes.filter (same offset)
-} NoteAttributes81110798;
-
-typedef struct Adsr81110798 {
-    /* 0x00 */ u8 action;
-    /* 0x01 */ u8 state;
-    /* 0x02 */ u8 unk02[0xE];
-    /* 0x10 */ f32 fadeOutVel;
-    /* 0x14 */ f32 current;
-} Adsr81110798;
-
-typedef struct PlaybackState81110798 {
-    /* 0x00 */ u8 priority;
-    /* 0x01 */ u8 unk01[3];
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk05[3];
-    /* 0x08 */ f32 portamentoFreqScale;
-    /* 0x0C */ f32 vibratoFreqScale;
-    /* 0x10 */ Layer81110798* prevParentLayer;
-    /* 0x14 */ Layer81110798* parentLayer;
-    /* 0x18 */ Layer81110798* wantedParentLayer;
-    /* 0x1C */ NoteAttributes81110798 attributes;
-    /* 0x2C */ Adsr81110798 adsr;
-} PlaybackState81110798;
-
-typedef struct Note81110798 {
-    /* 0x00 */ u8 unk00[0xC];
-    /* 0x0C */ s8* pool;
-    /* 0x10 */ u8 unk10[0x30 - 0x10];
-    /* 0x30 */ PlaybackState81110798 playbackState;
-    /* 0x74 */ u8 unk74[0xB4 - 0x74];
-    /* 0xB4 */ NoteSubEu81110798 noteSubEu;
-    /* 0xB8 */ u8 unkB8[0xCC - 0xB8];
-} Note81110798; // size = 0xCC
-
-struct Note81111130;
-extern struct Note81111130* D_81184664;
+extern struct Note* D_81184664;
 extern s32 D_811858E8;
 extern f32 D_811858D0;
 extern f32 D_811858D4;
 void AudioPlayback_SeqLayerNoteRelease(Particle* arg0);
 void AudioPlayback_AudioListRemove(s8*);
 void AudioPlayback_AudioListPushFront(M2C_UNK* arg0, M2C_UNK* arg1);
-s32 AudioSeq_AudioListPushBack(s8*, struct Note81111130*);
+s32 AudioSeq_AudioListPushBack(s8*, struct Note*);
 void AudioPlayback_NoteInitForLayer(s8* arg0, s8* arg1);
-void func_81112B84(Channel81110798*);
-void func_81112278(Note81110798*);
+void func_81112B84(SequenceChannel*);
+void func_81112278(Note*);
 f32 AudioEffects_UpdateAdsr(u8*);
-void func_8111220C(Note81110798*);
+void func_8111220C(Note*);
 
 /**
  * Updates every note once per audio frame: envelopes, releases, pitch, volume and pan. Zelda 64 audio driver.
@@ -397,20 +223,20 @@ void func_8111220C(Note81110798*);
  */
 void AudioPlayback_ProcessNotes(void)
 {
-  Note81110798 *note;
-  PlaybackState81110798 *playbackState;
-  NoteSubEu81110798 *noteSubEu;
-  NoteAttributes81110798 *attrs;
+  Note *note;
+  NotePlaybackState *playbackState;
+  NoteSampleState *noteSubEu;
+  NoteAttributes *attrs;
   s32 pad[2]; // FAKE
-  NoteSampleStateAttrs81110210 sub_attrs;
+  NoteSubAttributes sub_attrs;
   u8 bookOffset;
   f32 scale;
   s32 i;
   for (i = 0; i < D_811858E8; i++)
   {
-    note = (Note81110798 *) (i * 0xCC + (u32) D_81184664); // FAKE: integer-cast address form
+    note = (Note *) (i * 0xCC + (u32) D_81184664); // FAKE: integer-cast address form
     playbackState = &note->playbackState;
-    if (playbackState->parentLayer != ((Layer81110798 *) (-1)))
+    if (playbackState->parentLayer != ((SequenceLayer *) (-1)))
     {
       if (((u32) playbackState->parentLayer) < 0x7FFFFFFF)
       {
@@ -446,7 +272,7 @@ void AudioPlayback_ProcessNotes(void)
       }
       AudioPlayback_SeqLayerNoteRelease((Particle *) playbackState->parentLayer);
       AudioPlayback_AudioListRemove((s8 *) note);
-      AudioPlayback_AudioListPushFront((M2C_UNK *) (note->pool + 0x10), (M2C_UNK *) note);
+      AudioPlayback_AudioListPushFront((M2C_UNK*)&note->listItem.pool->decaying, (M2C_UNK *) note);
       playbackState->priority = 1;
       playbackState->unk_04 = 2;
     }
@@ -460,38 +286,38 @@ void AudioPlayback_ProcessNotes(void)
     {
       if (1)
       {
-        noteSubEu = &note->noteSubEu;
+        noteSubEu = &note->sampleState;
       }
       if ((playbackState->unk_04 >= 1) || noteSubEu->finished)
       {
         if ((playbackState->adsr.state == 0) || noteSubEu->finished)
         {
-          if (playbackState->wantedParentLayer != ((Layer81110798 *) (-1)))
+          if (playbackState->wantedParentLayer != ((SequenceLayer *) (-1)))
           {
-            AudioPlayback_NoteDisable((Note8111073C *) note);
+            AudioPlayback_NoteDisable((Note *) note);
             if (playbackState->wantedParentLayer->channel != 0)
             {
               AudioPlayback_NoteInitForLayer((s8 *) note, (s8 *) playbackState->wantedParentLayer);
               func_81112278(note);
               AudioPlayback_AudioListRemove((s8 *) note);
-              AudioSeq_AudioListPushBack(note->pool + 0x30, (struct Note81111130 *) note);
-              playbackState->wantedParentLayer = (Layer81110798 *) (-1);
+              AudioSeq_AudioListPushBack(&note->listItem.pool->active, (struct Note *) note);
+              playbackState->wantedParentLayer = (SequenceLayer *) (-1);
               goto process;
             }
-            AudioPlayback_NoteDisable((Note8111073C *) note);
+            AudioPlayback_NoteDisable((Note *) note);
             AudioPlayback_AudioListRemove((s8 *) note);
-            AudioSeq_AudioListPushBack(note->pool, (struct Note81111130 *) note);
-            playbackState->wantedParentLayer = (Layer81110798 *) (-1);
+            AudioSeq_AudioListPushBack(&note->listItem.pool->disabled, (struct Note *) note);
+            playbackState->wantedParentLayer = (SequenceLayer *) (-1);
           }
           else
           {
-            if (playbackState->parentLayer != ((Layer81110798 *) (-1)))
+            if (playbackState->parentLayer != ((SequenceLayer *) (-1)))
             {
-              playbackState->parentLayer->finished = 1;
+              playbackState->parentLayer->bit1 = 1;
             }
-            AudioPlayback_NoteDisable((Note8111073C *) note);
+            AudioPlayback_NoteDisable((Note *) note);
             AudioPlayback_AudioListRemove((s8 *) note);
-            AudioSeq_AudioListPushBack(note->pool, (struct Note81111130 *) note);
+            AudioSeq_AudioListPushBack(&note->listItem.pool->disabled, (struct Note *) note);
           }
         }
         else
@@ -502,13 +328,13 @@ void AudioPlayback_ProcessNotes(void)
       else
         if (playbackState->adsr.state == 0)
       {
-        if (playbackState->parentLayer != ((Layer81110798 *) (-1)))
+        if (playbackState->parentLayer != ((SequenceLayer *) (-1)))
         {
-          playbackState->parentLayer->finished = 1;
+          playbackState->parentLayer->bit1 = 1;
         }
-        AudioPlayback_NoteDisable((Note8111073C *) note);
+        AudioPlayback_NoteDisable((Note *) note);
         AudioPlayback_AudioListRemove((s8 *) note);
-        AudioSeq_AudioListPushBack(note->pool, (struct Note81111130 *) note);
+        AudioSeq_AudioListPushBack(&note->listItem.pool->disabled, (struct Note *) note);
       }
       else
       {
@@ -523,20 +349,20 @@ void AudioPlayback_ProcessNotes(void)
           sub_attrs.velocity = attrs->velocity;
           sub_attrs.pan = attrs->pan;
           sub_attrs.reverbVol = attrs->reverbVol;
-          sub_attrs.reverbBits = attrs->reverbBits;
+          sub_attrs.reverbBits = attrs->stereo;
           sub_attrs.gain = attrs->gain;
           sub_attrs.filter = attrs->filter;
           bookOffset = noteSubEu->bookOffset;
         }
         else
         {
-          Channel81110798 *channel = playbackState->parentLayer->channel;
-          Layer81110798 *layer = playbackState->parentLayer;
+          SequenceChannel *channel = playbackState->parentLayer->channel;
+          SequenceLayer *layer = playbackState->parentLayer;
           sub_attrs.freqScale = layer->noteFreqScale;
           sub_attrs.velocity = layer->noteVelocity;
           sub_attrs.pan = layer->notePan;
           sub_attrs.reverbBits = layer->stereo;
-          sub_attrs.reverbVol = channel->targetReverbVol;
+          sub_attrs.reverbVol = channel->reverb;
           sub_attrs.gain = channel->gain;
           sub_attrs.filter = channel->filter;
           bookOffset = channel->bookOffset & 7;
@@ -638,101 +464,8 @@ u8* AudioPlayback_GetDrum(s32 arg0, s32 arg1) {
     return ret;
 }
 
-typedef struct StereoE3C {
-    u8 type : 2;
-    u8 strongRight : 1;
-    u8 strongLeft : 1;
-    u8 stereoHeadsetEffects : 1;
-    u8 usesHeadsetPanEffects : 1;
-    u8 pad : 2;
-} StereoE3C;
-
-typedef struct SeqPlayerE3C {
-    /* 0x00 */ u32 enabled : 1;
-    /* 0x00 */ u32 finished : 1;
-    /* 0x00 */ u32 muted : 1;
-    /* 0x00 */ u32 rest : 29;
-} SeqPlayerE3C;
-
-typedef struct ChannelE3C {
-    /* 0x00 */ u8 unk00[3];
-    /* 0x03 */ u8 muteBehavior;
-    /* 0x04 */ u8 targetReverbVol; // @unverified: same offset/use as OoT's SequenceChannel.targetReverbVol
-    /* 0x05 */ u8 notePriority;
-    /* 0x06 */ u8 someOtherPriority;
-    /* 0x07 */ u8 unk07[5];
-    /* 0x0C */ u8 gain;
-    /* 0x0D */ u8 unk0D[0x4C - 0x0D];
-    /* 0x4C */ SeqPlayerE3C* seqPlayer;
-    /* 0x50 */ u8 unk50[0x7C - 0x50];
-    /* 0x7C */ u8 decayIndex;
-    /* 0x7D */ u8 sustain;
-    /* 0x7E */ u8 unk7E[0xD0 - 0x7E];
-    /* 0xD0 */ s16* filter;
-} ChannelE3C;
-
-typedef struct LayerE3C {
-    /* 0x00 */ u8 flags;
-    /* 0x01 */ StereoE3C stereo;
-    /* 0x02 */ u8 unk02;
-    /* 0x03 */ u8 status;
-    /* 0x04 */ u8 unk04[3];
-    /* 0x07 */ u8 notePan;
-    /* 0x08 */ u8 unk08[0x18 - 0x08];
-    /* 0x18 */ u8 decayIndex;
-    /* 0x19 */ u8 unk19[0x34 - 0x19];
-    /* 0x34 */ f32 noteVelocity;
-    /* 0x38 */ f32 noteFreqScale;
-    /* 0x3C */ u8 unk3C[0x48 - 0x3C];
-    /* 0x48 */ struct NoteE3C* note;
-    /* 0x4C */ u8 unk4C[0x54 - 0x4C];
-    /* 0x54 */ ChannelE3C* channel;
-} LayerE3C;
-
-typedef struct NoteAttributesE3C {
-    /* 0x00 */ u8 reverbVol; // @unverified: same offset/use as OoT's NoteAttributes.reverb (from channel->targetReverbVol)
-    /* 0x01 */ u8 gain;
-    /* 0x02 */ u8 pan;
-    /* 0x03 */ StereoE3C stereo;
-    /* 0x04 */ f32 freqScale;
-    /* 0x08 */ f32 velocity;
-    /* 0x0C */ s16* filter;
-} NoteAttributesE3C;
-
 #define ADSR_ACTION_RELEASE_E3C 0x10
 #define ADSR_ACTION_DECAY_E3C 0x20
-
-typedef struct AdsrE3C {
-    /* 0x00 */ u8 action;
-    /* 0x01 */ u8 state;
-    /* 0x02 */ u8 unk02[6];
-    /* 0x08 */ f32 sustain;
-    /* 0x0C */ u8 unk0C[4];
-    /* 0x10 */ f32 fadeOutVel;
-    /* 0x14 */ f32 current;
-} AdsrE3C;
-
-typedef struct NoteE3C {
-    /* 0x00 */ void* prev;
-    /* 0x04 */ void* next;
-    /* 0x08 */ void* value;
-    /* 0x0C */ s8* pool;
-    /* 0x10 */ u8 unk10[0x30 - 0x10];
-    /* 0x30 */ u8 priority;
-    /* 0x31 */ u8 unk31[3];
-    /* 0x34 */ u8 unk_04;
-    /* 0x35 */ u8 unk35[0x40 - 0x35];
-    /* 0x40 */ LayerE3C* prevParentLayer;
-    /* 0x44 */ LayerE3C* parentLayer;
-    /* 0x48 */ LayerE3C* wantedParentLayer;
-    /* 0x4C */ NoteAttributesE3C attributes;
-    /* 0x5C */ AdsrE3C adsr;
-    /* 0x74 */ u8 unk74[0xB4 - 0x74];
-    /* 0xB4 */ u8 noteSubEuEnabled : 1;
-    /* 0xB4 */ u8 noteSubEuNeedsInit : 1;
-    /* 0xB4 */ u8 noteSubEuFinished : 1;
-    /* 0xB4 */ u8 noteSubEuRest : 5;
-} NoteE3C;
 
 extern f32 D_811858D4;
 extern f32 D_811858D8;
@@ -745,11 +478,11 @@ void AudioPlayback_AudioListPushFront(M2C_UNK* arg0, M2C_UNK* arg1);
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
-void AudioPlayback_SeqLayerDecayRelease(LayerE3C* layer, s32 target) {
-    NoteE3C* note;
-    NoteAttributesE3C* attrs;
+void AudioPlayback_SeqLayerDecayRelease(SequenceLayer* layer, s32 target) {
+    Note* note;
+    NoteAttributes* attrs;
 
-    if (layer == (LayerE3C*)-1) {
+    if (layer == (SequenceLayer*)-1) {
         return;
     }
 
@@ -760,59 +493,59 @@ void AudioPlayback_SeqLayerDecayRelease(LayerE3C* layer, s32 target) {
     }
 
     note = layer->note;
-    attrs = &note->attributes;
+    attrs = &note->playbackState.attributes;
 
-    if (note->wantedParentLayer == layer) {
-        note->wantedParentLayer = (LayerE3C*)-1;
+    if (note->playbackState.wantedParentLayer == layer) {
+        note->playbackState.wantedParentLayer = (SequenceLayer*)-1;
     }
 
-    if (note->parentLayer != layer) {
-        if (note->parentLayer == (LayerE3C*)-1 && note->wantedParentLayer == (LayerE3C*)-1 &&
-            note->prevParentLayer == layer && target != 6) {
-            note->adsr.fadeOutVel = D_811858D4;
-            note->adsr.action |= ADSR_ACTION_RELEASE_E3C;
+    if (note->playbackState.parentLayer != layer) {
+        if (note->playbackState.parentLayer == (SequenceLayer*)-1 && note->playbackState.wantedParentLayer == (SequenceLayer*)-1 &&
+            note->playbackState.prevParentLayer == layer && target != 6) {
+            note->playbackState.adsr.fadeOutVel = D_811858D4;
+            note->playbackState.adsr.action |= ADSR_ACTION_RELEASE_E3C;
         }
         return;
     }
 
-    if (note->adsr.state != 6) {
+    if (note->playbackState.adsr.state != 6) {
         attrs->freqScale = layer->noteFreqScale;
         attrs->velocity = layer->noteVelocity;
         attrs->pan = layer->notePan;
         attrs->stereo = layer->stereo;
         if (layer->channel != NULL) {
-            attrs->reverbVol = layer->channel->targetReverbVol;
+            attrs->reverbVol = layer->channel->reverb;
             attrs->gain = layer->channel->gain;
             attrs->filter = layer->channel->filter;
             if (layer->channel->seqPlayer->muted && (layer->channel->muteBehavior & 8)) {
-                note->noteSubEuFinished = 1;
+                note->sampleState.finished = 1;
             }
-            note->priority = layer->channel->someOtherPriority;
+            note->playbackState.priority = layer->channel->someOtherPriority;
         } else {
-            note->priority = 1;
+            note->playbackState.priority = 1;
         }
 
-        note->prevParentLayer = note->parentLayer;
-        note->parentLayer = (LayerE3C*)-1;
+        note->playbackState.prevParentLayer = note->playbackState.parentLayer;
+        note->playbackState.parentLayer = (SequenceLayer*)-1;
         if (target == 7) {
-            note->adsr.fadeOutVel = D_811858D4;
-            note->adsr.action |= ADSR_ACTION_RELEASE_E3C;
-            note->unk_04 = 2;
+            note->playbackState.adsr.fadeOutVel = D_811858D4;
+            note->playbackState.adsr.action |= ADSR_ACTION_RELEASE_E3C;
+            note->playbackState.unk_04 = 2;
         } else {
-            note->unk_04 = 1;
-            note->adsr.action |= ADSR_ACTION_DECAY_E3C;
-            if (layer->decayIndex == 0) {
-                note->adsr.fadeOutVel = layer->channel->decayIndex * D_811858D8;
+            note->playbackState.unk_04 = 1;
+            note->playbackState.adsr.action |= ADSR_ACTION_DECAY_E3C;
+            if (layer->adsr.decayIndex == 0) {
+                note->playbackState.adsr.fadeOutVel = layer->channel->adsr.decayIndex * D_811858D8;
             } else {
-                note->adsr.fadeOutVel = layer->decayIndex * D_811858D8;
+                note->playbackState.adsr.fadeOutVel = layer->adsr.decayIndex * D_811858D8;
             }
-            note->adsr.sustain = ((f32)(s32)layer->channel->sustain * note->adsr.current) / 256.0f;
+            note->playbackState.adsr.sustain = ((f32)(s32)layer->channel->adsr.sustain * note->playbackState.adsr.current) / 256.0f;
         }
     }
 
     if (target == 6) {
         AudioPlayback_AudioListRemove((s8*)note);
-        AudioPlayback_AudioListPushFront((M2C_UNK*)(note->pool + 0x10), (M2C_UNK*)note);
+        AudioPlayback_AudioListPushFront((M2C_UNK*)&note->listItem.pool->decaying, (M2C_UNK*)note);
     }
 }
 
@@ -823,7 +556,7 @@ void AudioPlayback_SeqLayerDecayRelease(LayerE3C* layer, s32 target) {
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_SeqLayerNoteDecay(Particle* arg0) {
-    AudioPlayback_SeqLayerDecayRelease((struct LayerE3C*)arg0, 6);
+    AudioPlayback_SeqLayerDecayRelease((struct SequenceLayer*)arg0, 6);
 }
 
 /**
@@ -833,7 +566,7 @@ void AudioPlayback_SeqLayerNoteDecay(Particle* arg0) {
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_SeqLayerNoteRelease(Particle* arg0) {
-    AudioPlayback_SeqLayerDecayRelease((struct LayerE3C*)arg0, 7);
+    AudioPlayback_SeqLayerDecayRelease((struct SequenceLayer*)arg0, 7);
 }
 
 /**
@@ -873,16 +606,8 @@ void AudioPlayback_InitNoteLists(s8 *arg0) {
     M2C_FIELD(arg0, s8 **, 0x3C) = arg0;
 }
 
-/* Same 0xCC-byte record array as AudioHeap_DiscardFont (gb_tower_emulator_86920.c); only the fields used here are named. */
-typedef struct Note81111130 {
-    /* 0x00 */ s32 listItemPrev; // @unverified: same offset/use as OoT's Note.listItem.prev (cleared in AudioPlayback_InitNoteFreeList)
-    /* 0x04 */ u8 pad04[4];
-    /* 0x08 */ struct Note81111130* listItemValue; // @unverified: same offset/use as OoT's Note.listItem.u.value (points back at the note)
-    /* 0x0C */ u8 pad0C[0xCC - 0xC];
-} Note81111130; // size = 0xCC
-
-s32 AudioSeq_AudioListPushBack(s8*, Note81111130*);
-extern Note81111130* D_81184664;
+s32 AudioSeq_AudioListPushBack(s8*, Note*);
+extern Note* D_81184664;
 extern s8 D_81184938;
 extern s32 D_811858E8;
 
@@ -904,25 +629,11 @@ void AudioPlayback_InitNoteFreeList(void) {
 
     AudioPlayback_InitNoteLists(&D_81184938);
     for (i = 0; i < D_811858E8; i++) {
-        D_81184664[i].listItemValue = &D_81184664[i];
-        D_81184664[i].listItemPrev = 0;
+        D_81184664[i].listItem.u.value = &D_81184664[i];
+        D_81184664[i].listItem.prev = 0;
         AudioSeq_AudioListPushBack(&D_81184938, &D_81184664[i]);
     }
 }
-
-typedef struct ListItem811111E0 {
-    /* 0x00 */ struct ListItem811111E0* prev;
-    /* 0x04 */ struct ListItem811111E0* next;
-    /* 0x08 */ void* u;
-    /* 0x0C */ void* pool;
-} ListItem811111E0; // size = 0x10
-
-typedef struct NotePool811111E0 {
-    /* 0x00 */ ListItem811111E0 disabled;
-    /* 0x10 */ ListItem811111E0 decaying;
-    /* 0x20 */ ListItem811111E0 releasing;
-    /* 0x30 */ ListItem811111E0 active;
-} NotePool811111E0;
 
 extern s8 D_81184948;
 extern s8 D_81184958;
@@ -937,10 +648,10 @@ void AudioPlayback_AudioListRemove(s8*);
  * quitting).
  * @unverified Name guessed from the code; comment kept.
  */
-void AudioPlayback_NotePoolClear(NotePool811111E0* pool) {
+void AudioPlayback_NotePoolClear(NotePool* pool) {
     s32 i;
-    ListItem811111E0* source;
-    ListItem811111E0* cur;
+    AudioListItem* source;
+    AudioListItem* cur;
     s8* dest;
 
     for (i = 0; i < 4; i++) {
@@ -975,7 +686,7 @@ void AudioPlayback_NotePoolClear(NotePool811111E0* pool) {
                 break;
             }
             AudioPlayback_AudioListRemove((s8*)cur);
-            AudioSeq_AudioListPushBack(dest, (Note81111130*)cur);
+            AudioSeq_AudioListPushBack(dest, (Note*)cur);
         }
     }
 }
@@ -995,7 +706,7 @@ void AudioPlayback_NotePoolFill(s8* arg0, s32 arg1) {
     s32 pass;
     s32 r;
 
-    AudioPlayback_NotePoolClear((NotePool811111E0*)arg0);
+    AudioPlayback_NotePoolClear((NotePool*)arg0);
     for (pass = 0, n = 0; n < arg1; pass++) {
         if (pass == 4) {
             return;
@@ -1023,7 +734,7 @@ void AudioPlayback_NotePoolFill(s8* arg0, s32 arg1) {
             if (r == 0) {
                 break;
             }
-            AudioSeq_AudioListPushBack(dst, (Note81111130*)r);
+            AudioSeq_AudioListPushBack(dst, (Note*)r);
             n++;
         }
     }
@@ -1097,23 +808,6 @@ s8 *AudioPlayback_FindNodeWithPrioLessThan(s8 *arg0, s32 arg1) {
     return temp_a0;
 }
 
-typedef struct NoteSampleState81111568 {
-    /* 0x0 */ u32 pad0 : 6;
-    /* 0x0 */ u32 stereoHeadsetEffects : 1; // @unverified: copied from the channel's stereoHeadsetEffects bit, as in OoT's Audio_NoteInitForLayer
-    /* 0x0 */ u32 pad0b : 1;
-    /* 0x1 */ u8 reverbIndex : 3; // @unverified: channel->reverbIndex & 3, OoT's NoteSampleState.bitField1.reverbIndex
-    /* 0x1 */ u8 pad1 : 2;
-    /* 0x1 */ u8 isSyntheticWave : 2; // @unverified: set for instruments 0x80-0xBF (synthetic waves), OoT's bitField1.isSyntheticWave
-    /* 0x1 */ u8 pad1b : 1;
-    /* 0x2 */ char pad2[0xE];
-    /* 0x10 */ s32 tunedSample; // @unverified: taken from the layer at 0x50, OoT's NoteSampleState.tunedSample
-} NoteSampleState81111568;
-typedef struct ChannelFlags81111568 {
-    /* 0x0 */ u32 pad : 5;
-    /* 0x0 */ u32 stereoHeadsetEffects : 1; // @unverified: same bit/use as OoT's SequenceChannel.stereoHeadsetEffects
-    /* 0x0 */ u32 rest : 26;
-} ChannelFlags81111568;
-typedef struct LayerFlags81111568 { u8 pad : 5; u8 bit2 : 1; u8 rest : 2; } LayerFlags81111568; // @unverified: layer byte 0 bit 0x04, set when a note is given to the layer (OoT's SequenceLayer.bit2)
 /**
  * Gives note `arg0` to layer `arg1` and sets it up from the layer's instrument. Zelda 64 audio driver.
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
@@ -1121,21 +815,21 @@ typedef struct LayerFlags81111568 { u8 pad : 5; u8 bit2 : 1; u8 rest : 2; } Laye
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_NoteInitForLayer(s8* arg0, s8* arg1) {
-    NoteSampleState81111568* flags;
+    NoteSampleState* flags;
     s32 v;
 
     M2C_FIELD(arg0, s32*, 0x40) = -1;
     M2C_FIELD(arg0, s8**, 0x44) = arg1;
     M2C_FIELD(arg0, u8*, 0x30) = M2C_FIELD(M2C_FIELD(arg1, u8**, 0x54), u8*, 5);
-    ((LayerFlags81111568*)arg1)->bit2 = 1;
+    ((SequenceLayer*)arg1)->notePropertiesNeedInit = 1;
     M2C_FIELD(arg1, u8*, 3) = 3;
     M2C_FIELD(arg1, s8**, 0x48) = arg0;
     M2C_FIELD(M2C_FIELD(arg1, s8**, 0x54), s8**, 0x40) = arg0;
     M2C_FIELD(M2C_FIELD(arg1, s8**, 0x54), s8**, 0x44) = arg1;
     M2C_FIELD(arg1, f32*, 0x34) = 0.0f;
-    AudioPlayback_NoteInit((Note81110694*)arg0);
+    AudioPlayback_NoteInit((Note*)arg0);
     v = M2C_FIELD(arg1, u8*, 2);
-    flags = (NoteSampleState81111568*)(arg0 + 0xB4);
+    flags = (NoteSampleState*)(arg0 + 0xB4);
     if (v == 0xFF) {
         v = M2C_FIELD(M2C_FIELD(arg1, s8**, 0x54), s16*, 0x22);
     }
@@ -1146,7 +840,7 @@ void AudioPlayback_NoteInitForLayer(s8* arg0, s8* arg1) {
         flags->isSyntheticWave = 0;
     }
     M2C_FIELD(arg0, u8*, 0x33) = M2C_FIELD(M2C_FIELD(arg1, u8**, 0x54), u8*, 7);
-    flags->stereoHeadsetEffects = M2C_FIELD(arg1, ChannelFlags81111568**, 0x54)->stereoHeadsetEffects;
+    flags->stereoHeadsetEffects = M2C_FIELD(arg1, SequenceChannel**, 0x54)->stereoHeadsetEffects;
     flags->reverbIndex = M2C_FIELD(M2C_FIELD(arg1, u8**, 0x54), u8*, 8) & 3;
 }
 
@@ -1277,7 +971,7 @@ s8 *AudioPlayback_AllocNoteFromActive(s8 *arg0, s8 *arg1)
   {
     AudioPlayback_AudioListRemove(b);
     AudioPlayback_NoteReleaseOwnerAndQueueLayer(b, (s32) arg1);
-    AudioSeq_AudioListPushBack(arg0 + 0x20, (Note81111130 *) b);
+    AudioSeq_AudioListPushBack(arg0 + 0x20, (Note *) b);
     *((u8 *) (((s8 *) b) + 0x30)) = *((u8 *) (((s8 *) (*((u8 **) (((s8 *) arg1) + 0x54)))) + 5)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     return b;
   }
@@ -1301,7 +995,7 @@ s8* AudioPlayback_AllocNote(s8* arg0) {
         if ((voice != NULL) && (arg0 == M2C_FIELD(voice, s8**, 0x40)) && (M2C_FIELD(voice, s32*, 0x48) == -1)) {
             AudioPlayback_NoteReleaseAndTakeOwnership(voice, arg0);
             AudioPlayback_AudioListRemove(voice);
-            AudioSeq_AudioListPushBack(M2C_FIELD(voice, s8**, 0xC) + 0x20, (Note81111130*)voice);
+            AudioSeq_AudioListPushBack(M2C_FIELD(voice, s8**, 0xC) + 0x20, (Note*)voice);
             return voice;
         }
     }
@@ -1340,35 +1034,7 @@ s8* AudioPlayback_AllocNote(s8* arg0) {
     return NULL;
 }
 
-typedef struct Note81111AF4 {
-    /* 0x00 */ char pad00[0x1C];
-    /* 0x1C */ s32 synthesisBuffers; // @unverified: same offset/use as OoT's Note.synthesisState.synthesisBuffers (0x80 bytes)
-    /* 0x20 */ char pad20[0x10];
-    /* 0x30 */ s8 priority; // @unverified: same offset/use as OoT's Note.playbackState.priority
-    /* 0x31 */ s8 waveId; // @unverified: same offset/use as OoT's Note.playbackState.waveId
-    /* 0x32 */ char pad32[2];
-    /* 0x34 */ s8 unk_34;
-    /* 0x35 */ char pad35;
-    /* 0x36 */ s16 adsrVolScale; // @unverified: same offset/use as OoT's Note.playbackState.adsrVolScaleUnused
-    /* 0x38 */ char pad38[8];
-    /* 0x40 */ s32 prevParentLayer; // @unverified: same offset/use as OoT's Note.playbackState.prevParentLayer (NO_LAYER)
-    /* 0x44 */ s32 parentLayer; // @unverified: same offset/use as OoT's Note.playbackState.parentLayer (NO_LAYER)
-    /* 0x48 */ s32 wantedParentLayer; // @unverified: same offset/use as OoT's Note.playbackState.wantedParentLayer (NO_LAYER)
-    /* 0x4C */ char pad4C[8];
-    /* 0x54 */ f32 attributesVelocity; // @unverified: same offset/use as OoT's Note.playbackState.attributes.velocity
-    /* 0x58 */ char pad58[4];
-    /* 0x5C */ s8 adsrAction; // @unverified: same offset/use as OoT's Note.playbackState.adsr.action
-    /* 0x5D */ s8 adsrState; // @unverified: same position as SM64 Shindou's AdsrState.state (cleared in note init)
-    /* 0x5E */ char pad5E[0x84 - 0x5E];
-    /* 0x84 */ f32 portamentoCur; // @unverified: same offset/use as SM64 Shindou's Note.portamento.cur (+0xC)
-    /* 0x88 */ f32 portamentoSpeed; // @unverified: same offset/use as SM64 Shindou's Note.portamento.speed (+0xC)
-    /* 0x8C */ char pad8C[0xA4 - 0x8C];
-    /* 0xA4 */ s8 vibratoActive; // @unverified: same offset/use as SM64 Shindou's Note.vibratoState.active (+0xC)
-    /* 0xA5 */ char padA5[0xB4 - 0xA5];
-    /* 0xB4 */ NoteSampleStateBytes sampleState; // @unverified: same offset/use as OoT's Note.sampleState (reset from a zero template)
-    /* 0xCC */
-} Note81111AF4; // size = 0xCC
-extern NoteSampleStateBytes D_811369A8;
+extern NoteSampleState D_811369A8;
 extern s8 D_811842C0;
 s32 func_81109868(s8 *, s32);
 /**
@@ -1379,24 +1045,24 @@ s32 func_81109868(s8 *, s32);
  */
 void AudioPlayback_NoteInitAll(void) {
     s32 i;
-    Note81111AF4* rec;
+    Note* rec;
 
     for (i = 0; i < D_811858E8; i++) {
-        rec = (Note81111AF4*)&D_81184664[i];
+        rec = (Note*)&D_81184664[i];
         rec->sampleState = D_811369A8;
-        rec->priority = 0;
-        rec->unk_34 = 0;
-        rec->parentLayer = -1;
-        rec->wantedParentLayer = -1;
-        rec->prevParentLayer = -1;
-        rec->waveId = 0;
-        rec->attributesVelocity = 0.0f;
-        rec->adsrVolScale = 0;
-        rec->adsrState = 0;
-        rec->adsrAction = 0;
-        rec->vibratoActive = 0;
-        rec->portamentoCur = 0.0f;
-        rec->portamentoSpeed = 0.0f;
-        rec->synthesisBuffers = func_81109868(&D_811842C0, 0x80);
+        rec->playbackState.priority = 0;
+        rec->playbackState.unk_04 = 0;
+        rec->playbackState.parentLayer = -1;
+        rec->playbackState.wantedParentLayer = -1;
+        rec->playbackState.prevParentLayer = -1;
+        rec->playbackState.waveId = 0;
+        rec->playbackState.attributes.velocity = 0.0f;
+        rec->playbackState.adsrVolScale = 0;
+        rec->playbackState.adsr.state = 0;
+        rec->playbackState.adsr.action = 0;
+        rec->playbackState.vibratoState.active = 0;
+        rec->playbackState.portamento.cur = 0.0f;
+        rec->playbackState.portamento.speed = 0.0f;
+        rec->synthesisState.synthesisBuffers = func_81109868(&D_811842C0, 0x80);
     }
 }

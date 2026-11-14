@@ -469,10 +469,13 @@ typedef struct Channel81112D68 {
 
 /* A node or head of a circular list (D_81184928 is the free list of sequence layers). */
 typedef struct AudioListItem {
-    /* 0x00 */ void* prev; // @unverified: same offset/use as OoT's AudioListItem.prev (NULL when not on a list)
-    /* 0x04 */ void* next; // @unverified: same offset/use as OoT's AudioListItem.next
-    /* 0x08 */ s32 count; // @unverified: same offset/use as OoT's AudioListItem.u.count (list heads)
-    /* 0x0C */ s32 pool; // @unverified: same offset/use as OoT's AudioListItem.pool
+    /* 0x00 */ struct AudioListItem* prev; // @unverified: same offset/use as OoT's AudioListItem.prev (NULL when not on a list)
+    /* 0x04 */ struct AudioListItem* next; // @unverified: same offset/use as OoT's AudioListItem.next
+    /* 0x08 */ union {
+        void* value; // @unverified: same offset/use as OoT's AudioListItem.u.value (the note or layer an item belongs to)
+        s32 count; // @unverified: same offset/use as OoT's AudioListItem.u.count (list heads)
+    } u;
+    /* 0x0C */ struct NotePool* pool; // @unverified: same offset/use as OoT's AudioListItem.pool
 } AudioListItem; // size = 0x10
 
 /* The shared sequence player, channel, layer and note types. Their layouts were put together from the
@@ -543,6 +546,19 @@ typedef struct Drum {
     /* 0x4 */ SoundFontSound sound; // @unverified: same offset/use as OoT's Drum.sound
     /* 0xC */ EnvelopePoint* envelope; // @unverified: same offset/use as OoT's Drum.envelope
 } Drum; // size = 0x10
+
+typedef union Stereo {
+    struct {
+        u8 bit0 : 1;
+        u8 bit1 : 1;
+        u8 bit2 : 1;
+        u8 usesHeadsetPanEffects : 1; // @unverified: same bit/use as OoT's Stereo.s.usesHeadsetPanEffects
+        u8 stereoHeadsetEffects : 2; // @unverified: same bits/use as OoT's Stereo.s.stereoHeadsetEffects (switch in AudioPlayback_InitSampleState)
+        u8 strongRight : 1; // @unverified: same bit/use as OoT's Stereo.s.strongRight
+        u8 strongLeft : 1; // @unverified: same bit/use as OoT's Stereo.s.strongLeft
+    } s;
+    u8 asByte;
+} Stereo; // size = 0x1
 
 typedef struct SequencePlayer {
     /* 0x000 */ u32 enabled : 1; // @unverified: players with this bit are stepped each update, OoT's SequencePlayer.enabled
@@ -652,8 +668,8 @@ typedef struct SequenceLayer {
     /* 0x00 */ u8 bit3 : 1;
     /* 0x00 */ u8 notePropertiesNeedInit : 1; // @unverified: set at the end of AudioSeq_SeqLayerProcessScriptStep1, as OoT's SequenceLayer.notePropertiesNeedInit
     /* 0x00 */ u8 ignoreDrumPan : 1; // @unverified: same bit/use as OoT's SequenceLayer.ignoreDrumPan
-    /* 0x00 */ u8 bit1 : 1;
-    /* 0x01 */ u8 stereo; // @unverified: same offset/use as OoT's SequenceLayer.stereo
+    /* 0x00 */ u8 bit1 : 1; // @unverified: set by AudioPlayback_ProcessNotes when the note is released; tested with continuousNotes in AudioSeq_SeqLayerProcessScriptStep5
+    /* 0x01 */ Stereo stereo; // @unverified: same offset/use as OoT's SequenceLayer.stereo
     /* 0x02 */ u8 instOrWave; // @unverified: same offset/use as OoT's SequenceLayer.instOrWave
     /* 0x03 */ u8 status; // @unverified: compared with 1/2 in the layer step functions
     /* 0x04 */ u8 noteDuration; // @unverified: same offset/use as OoT's SequenceLayer.gateTime
@@ -698,7 +714,7 @@ typedef struct NoteAttributes {
     /* 0x0 */ u8 reverbVol; // @unverified: same offset/use as OoT's NoteAttributes.reverb
     /* 0x1 */ u8 gain; // @unverified: same offset/use as OoT's NoteAttributes.gain
     /* 0x2 */ u8 pan; // @unverified: same offset/use as OoT's NoteAttributes.pan
-    /* 0x3 */ u8 stereo; // @unverified: same offset/use as OoT's NoteAttributes.stereo
+    /* 0x3 */ Stereo stereo; // @unverified: same offset/use as OoT's NoteAttributes.stereo
     /* 0x4 */ f32 freqScale; // @unverified: same offset/use as OoT's NoteAttributes.freqScale
     /* 0x8 */ f32 velocity; // @unverified: same offset/use as OoT's NoteAttributes.velocity
     /* 0xC */ s16* filter; // @unverified: same offset/use as OoT's NoteAttributes.filter
