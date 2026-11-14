@@ -298,13 +298,11 @@ s32 PcSort_UpdateMonList(PcSortMonList* menu, u32 flags) {
     return result;
 }
 
-M2C_UNK func_8002B054(M2C_UNK, s32);                /* extern */
 
 void func_89005068(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3, s32 arg4) {
     func_8002B054(arg2, arg4);
 }
 
-void func_8002B018(s8*, s32, s32, s32, s32, s32, void*);
 void GridMenu_Init(s8*, s8*, s8*, void*, s32, s32, s32);
 void func_80027410(s8*, s8*, s32, s32, s32);
 extern Color_RGBA8 D_8900A580[];

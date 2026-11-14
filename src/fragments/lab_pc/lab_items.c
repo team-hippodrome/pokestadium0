@@ -761,7 +761,6 @@ s32 LabItem_UpdateItemList(void* menu, u32 flags) {
     return result;
 }
 
-void func_8002B018(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
 void func_80027410(s8*, s8*, s32, s32, s32);
 s32 func_800564D4(char*, const char*, ...);
 extern Color_RGBA8 D_8900A600;
@@ -966,7 +965,6 @@ void LabItem_DrawHelpText(LabItemOrganizeWindow* arg0) {
 
 void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
 extern u8 D_800735C4[];
-void func_8002B054(s8*, s32);
 void Window_DrawFrame(void*);
 void LabItem_DrawItemList(LabItemList* arg0, s32 arg1);
 /**
@@ -1446,7 +1444,6 @@ s32 LabItem_UpdateDeleteDataCursor(LabItemDeleteDataWindow* arg0) {
     return sp1C;
 }
 
-void func_8002B018(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
 extern u8 D_8900A580[];
 extern u8 D_8900A584[];
 extern u8 D_8900A5A0[];
@@ -1540,7 +1537,6 @@ void func_8900323C(LabItemSaveDataWindow* arg0) {
 
 void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
 extern u8 D_800735C4[];
-void func_8002B054(s8*, s32);
 void Window_DrawFrame(void*);
 void func_890032E4(LabItemSaveDataWindow* arg0) {
     s32 v;

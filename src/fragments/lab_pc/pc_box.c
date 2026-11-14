@@ -710,7 +710,6 @@ void PcBox_DrawStorageLabel(s32 x, s32 y, s32 flags, s32 kind) {
     Font_EndTexturedTextRendering();
 }
 
-void func_8002B018(void* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
 void Menu_Init(void* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5);
 extern Color_RGBA8 D_8900A91C;
 extern Color_RGBA8 D_8900A920;
@@ -784,7 +783,6 @@ void func_89008EF0(PcBoxOperationWindow* arg0) {
 void Window_DrawFrame(void*);
 void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
 void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
-void func_8002B054(void*, s32);
 void Menu_DrawInlineItems(void*, s32, s32, s32, s32);
 void TextBox_Draw(void*);
 extern u8 D_8007356C[];

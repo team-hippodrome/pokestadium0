@@ -68,6 +68,25 @@ typedef struct LabeledButton {
     /* 0x38 */ char* label;
 } LabeledButton; // size = 0x3C
 
+/* A button that shows an image (func_8002B018, func_8002B054), e.g. the operation buttons of the Lab PC
+ * screens (ボックスのそうさ, どうぐのせいり). */
+typedef struct ImageButton {
+    /* 0x00 */ s32 x; // @unverified: typed from the function it is passed to
+    /* 0x04 */ s32 y; // @unverified: typed from the function it is passed to
+    /* 0x08 */ s32 width; // @unverified: typed from the function it is passed to
+    /* 0x0C */ s32 height; // @unverified: typed from the function it is passed to
+    /* 0x10 */ s32 flags; // @unverified: bit 3 = highlighted (func_8002B054)
+    /* 0x14 */ char unk14[0x4];
+    /* 0x18 */ Color_RGBA8 selectedColor; // @unverified: image tint when the draw flags have 0x12 (func_8002B054)
+    /* 0x1C */ Color_RGBA8 color; // @unverified: image tint otherwise (func_8002B054)
+    /* 0x20 */ Color_RGBA8 highlightColor; // @unverified: fill when highlighted (func_8002B054)
+    /* 0x24 */ s32 imageWidth; // @unverified: texture width passed to Gfx_DrawTextureIa16 (func_8002B018 arg5)
+    /* 0x28 */ u8* image; // @unverified: texture passed to Gfx_DrawTextureIa16 (func_8002B018 arg6)
+} ImageButton; // size = 0x2C
+
+void func_8002B018(ImageButton* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
+void func_8002B054(ImageButton* arg0, s32 arg1);
+
 typedef struct unk_func_8002EBD8_arg0 {
     /* 0x00 */ char unk00[0x8];
     /* 0x08 */ u16 unk_08;

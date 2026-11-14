@@ -60,22 +60,6 @@ typedef struct LabPCBoxEntry {
     /* 0x4 */ s32 dirty; // @unverified: set by the swaps; func_890070BC writes back the boxes that have it, PcBox_HasUnsavedChanges asks to save
 } LabPCBoxEntry; // size = 0x8
 
-/* A button that shows an image (func_8002B018, func_8002B054 in gb_save.c), e.g. the operation buttons of
- * ボックスのそうさ. */
-typedef struct PcBoxImageButton {
-    /* 0x00 */ s32 x; // @unverified: typed from the function it is passed to
-    /* 0x04 */ s32 y; // @unverified: typed from the function it is passed to
-    /* 0x08 */ s32 width; // @unverified: typed from the function it is passed to
-    /* 0x0C */ s32 height; // @unverified: typed from the function it is passed to
-    /* 0x10 */ s32 flags; // @unverified: bit 3 = highlighted (func_8002B054)
-    /* 0x14 */ char unk14[0x4];
-    /* 0x18 */ Color_RGBA8 selectedColor; // @unverified: image tint when the draw flags have 0x12 (func_8002B054)
-    /* 0x1C */ Color_RGBA8 color; // @unverified: image tint otherwise (func_8002B054)
-    /* 0x20 */ Color_RGBA8 highlightColor; // @unverified: fill when highlighted (func_8002B054)
-    /* 0x24 */ s32 imageWidth; // @unverified: texture width passed to Gfx_DrawTextureIa16 (func_8002B018 arg5)
-    /* 0x28 */ u8* image; // @unverified: texture passed to Gfx_DrawTextureIa16 (func_8002B018 arg6)
-} PcBoxImageButton; // size = 0x2C
-
 /* The ほんとうにいいの？ はい/いいえ window of the box screens with the Pokémon's stats and moves
  * (PcBox_InitConfirmWindow, PcBox_DrawMonStatusWindow). Without a title it only shows the stats. */
 typedef struct PcBoxConfirmWindow {
@@ -104,12 +88,12 @@ typedef struct PcBoxOperationWindow {
     /* 0x000 */ s32 state; // @unverified: 1 = picking an operation, 2-6 = picking boxes, 7 = text box up (PcBox_UpdateOperationWindow)
     /* 0x004 */ Window window; // @unverified: typed from the function it is passed to
     /* 0x030 */ WindowFrame footerFrame; // @unverified: frame of the bottom strip (Window_DrawFrame)
-    /* 0x050 */ PcBoxImageButton backButton; // @unverified: operation 5 「メニューへもどる」 (back to the menu)
-    /* 0x07C */ PcBoxImageButton moveToGbButton; // @unverified: operation 1 「ＧＢへボックスをいどうする」 (move a box to the GB)
-    /* 0x0A8 */ PcBoxImageButton moveTo64Button; // @unverified: operation 0 「６４へボックスをいどうする」 (move a box to the 64)
-    /* 0x0D4 */ PcBoxImageButton reorderButton; // @unverified: operation 2 「ボックスをならべかえる」 (reorder the boxes)
-    /* 0x100 */ PcBoxImageButton exchangeButton; // @unverified: operation 3 「ボックスをいれかえる」 (exchange boxes)
-    /* 0x12C */ PcBoxImageButton viewButton; // @unverified: operation 4 「ボックスのなかをみる」 (look inside a box)
+    /* 0x050 */ ImageButton backButton; // @unverified: operation 5 「メニューへもどる」 (back to the menu)
+    /* 0x07C */ ImageButton moveToGbButton; // @unverified: operation 1 「ＧＢへボックスをいどうする」 (move a box to the GB)
+    /* 0x0A8 */ ImageButton moveTo64Button; // @unverified: operation 0 「６４へボックスをいどうする」 (move a box to the 64)
+    /* 0x0D4 */ ImageButton reorderButton; // @unverified: operation 2 「ボックスをならべかえる」 (reorder the boxes)
+    /* 0x100 */ ImageButton exchangeButton; // @unverified: operation 3 「ボックスをいれかえる」 (exchange boxes)
+    /* 0x12C */ ImageButton viewButton; // @unverified: operation 4 「ボックスのなかをみる」 (look inside a box)
     /* 0x158 */ ChoiceCursor operationCursor; // @unverified: cursor = the operation 0-5 (titles D_8900A924), count = 6
     /* 0x164 */ ChoiceCursor boxCursor; // @unverified: operation 4: 0-7 = the GB boxes, 8-11 the 64 boxes
     /* 0x170 */ Menu gbBoxMenu; // @unverified: the GB box list (PcBox_DrawBoxName)
@@ -197,9 +181,9 @@ typedef struct LabItemSaveDataWindow {
     /* 0x000 */ s32 state; // @unverified: 1 = picking an operation, 2 = scrolling itemList (func_8900352C)
     /* 0x004 */ Window window; // @unverified: typed from the function it is passed to
     /* 0x030 */ WindowFrame footerFrame; // @unverified: frame of the bottom strip with the help line (func_8900323C)
-    /* 0x050 */ PcBoxImageButton backButton; // @unverified: operation 2 「データせんたくにもどる」 (back to picking data)
-    /* 0x07C */ PcBoxImageButton viewItemsButton; // @unverified: operation 1 「どうぐをかくにんする」 (check the items)
-    /* 0x0A8 */ PcBoxImageButton discardButton; // @unverified: operation 0 「このデータをすてる」 (discard this data)
+    /* 0x050 */ ImageButton backButton; // @unverified: operation 2 「データせんたくにもどる」 (back to picking data)
+    /* 0x07C */ ImageButton viewItemsButton; // @unverified: operation 1 「どうぐをかくにんする」 (check the items)
+    /* 0x0A8 */ ImageButton discardButton; // @unverified: operation 0 「このデータをすてる」 (discard this data)
     /* 0x0D4 */ ChoiceCursor operationCursor; // @unverified: cursor = the operation 0-2 (titles D_8900A6CC), count = 3
     /* 0x0E0 */ LabItemList itemList; // @unverified: the save's items (func_89002E58 arg4)
     /* 0x1F4 */ LabItemSaveSlot* slot; // @unverified: name and ID drawn by func_890030C8
@@ -212,10 +196,10 @@ typedef struct LabItemOrganizeWindow {
     /* 0x000 */ s32 state; // @unverified: 1 = picking an operation, 2/3 = box pickers, 4-7 = item lists, 8 = count selector, 9-0xC = text box up
     /* 0x004 */ Window window; // @unverified: typed from the function it is passed to
     /* 0x030 */ WindowFrame footerFrame; // @unverified: frame of the bottom strip with the help line (LabItem_DrawHelpText)
-    /* 0x050 */ PcBoxImageButton backButton; // @unverified: operation 3 「メニューへもどる」 (back to the menu)
-    /* 0x07C */ PcBoxImageButton moveButton; // @unverified: operation 0 「どうぐをいどうする」 (move items)
-    /* 0x0A8 */ PcBoxImageButton reorderButton; // @unverified: operation 1 「どうぐをならべかえる」 (reorder items)
-    /* 0x0D4 */ PcBoxImageButton exchangeButton; // @unverified: operation 2 「どうぐをいれかえる」 (exchange items)
+    /* 0x050 */ ImageButton backButton; // @unverified: operation 3 「メニューへもどる」 (back to the menu)
+    /* 0x07C */ ImageButton moveButton; // @unverified: operation 0 「どうぐをいどうする」 (move items)
+    /* 0x0A8 */ ImageButton reorderButton; // @unverified: operation 1 「どうぐをならべかえる」 (reorder items)
+    /* 0x0D4 */ ImageButton exchangeButton; // @unverified: operation 2 「どうぐをいれかえる」 (exchange items)
     /* 0x100 */ ChoiceCursor operationCursor; // @unverified: cursor = the operation 0-3 (titles D_8900A650), count = 4
     /* 0x10C */ LabItemMenuWindow sourceBoxWindow; // @unverified: state 2, sets leftBox (「どこからいどうする？」)
     /* 0x170 */ LabItemMenuWindow targetBoxWindow; // @unverified: state 3, sets rightBox (「どこへいどうする？」)
@@ -268,12 +252,12 @@ typedef struct PcSortOrganizeWindow {
     /* 0x000 */ s32 state; // @unverified: 1 = picking an operation, 2/3 = box pickers, 4-7 = Pokémon lists, 0xA-0xD = text box up
     /* 0x004 */ Window window; // @unverified: typed from the function it is passed to
     /* 0x030 */ WindowFrame footerFrame; // @unverified: frame of the bottom strip
-    /* 0x050 */ PcBoxImageButton moveButton; // @unverified: operation 0 (いどうする, move); same image as PcBoxOperationWindow.moveTo64Button
-    /* 0x07C */ PcBoxImageButton backButton; // @unverified: operation 1; same image as PcBoxOperationWindow.backButton
-    /* 0x0A8 */ PcBoxImageButton exchangeButton; // @unverified: operation 2 (いれかえる, exchange)
-    /* 0x0D4 */ PcBoxImageButton reorderButton; // @unverified: operation 3 (ならべかえる, reorder)
-    /* 0x100 */ PcBoxImageButton viewButton; // @unverified: operation 4 (みる, look)
-    /* 0x12C */ PcBoxImageButton releaseButton; // @unverified: operation 5 (にがす, release)
+    /* 0x050 */ ImageButton moveButton; // @unverified: operation 0 (いどうする, move); same image as PcBoxOperationWindow.moveTo64Button
+    /* 0x07C */ ImageButton backButton; // @unverified: operation 1; same image as PcBoxOperationWindow.backButton
+    /* 0x0A8 */ ImageButton exchangeButton; // @unverified: operation 2 (いれかえる, exchange)
+    /* 0x0D4 */ ImageButton reorderButton; // @unverified: operation 3 (ならべかえる, reorder)
+    /* 0x100 */ ImageButton viewButton; // @unverified: operation 4 (みる, look)
+    /* 0x12C */ ImageButton releaseButton; // @unverified: operation 5 (にがす, release)
     /* 0x158 */ ByteMatrix buttonTable; // @unverified: rows = the six buttons, items of operationMenu
     /* 0x168 */ GridMenu operationMenu; // @unverified: cursor = the operation; error texts D_8900A84C
     /* 0x190 */ u16 operationFlags[6]; // @unverified: typed from the function it is passed to

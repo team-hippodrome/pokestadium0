@@ -804,39 +804,39 @@ void Window_DrawLabeled(s8* arg0, s32 arg1) {
     func_8001ABBC();
 }
 
-/*
- * func_8002B018
- *
- * Calls Window_SetRect(arg0, arg1, arg2, arg3, arg4), which fills the first
- * five words of the object (arg1, arg2, arg3, arg4, 0), then stores arg5 at
- * +0x24 and arg6 at +0x28.
+/**
+ * Sets up an image button: its rect (Window_SetRect, which also clears flags), the image and its width.
  */
-void func_8002B018(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
-    Window_SetRect(arg0, arg1, arg2, arg3, arg4);
-    M2C_FIELD(arg0, s32 *, 0x28) = arg6;
-    M2C_FIELD(arg0, s32 *, 0x24) = arg5;
+void func_8002B018(ImageButton* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6) {
+    Window_SetRect((s8*)arg0, arg1, arg2, arg3, arg4);
+    arg0->image = (u8*)arg6;
+    arg0->imageWidth = arg5;
 }
 
-void func_8002B054(s8* arg0, s32 arg1) {
+/**
+ * Draws an image button. `arg1` bit 0x10 (or flags bit 3) fills it with highlightColor, else bit 2 draws a
+ * rounded frame; bits 0x12 tint the image with selectedColor instead of color.
+ */
+void func_8002B054(ImageButton* arg0, s32 arg1) {
     Color_RGBA8 color;
     Color_RGBA8* src;
 
-    func_8002A32C(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC));
-    if ((M2C_FIELD(arg0, s32*, 0x10) & 8) || (arg1 & 0x10)) {
-        Ui_FillRectHighlighted(M2C_FIELD(arg0, s32*, 0) + 1, M2C_FIELD(arg0, s32*, 4) + 1, M2C_FIELD(arg0, s32*, 8) - 2, M2C_FIELD(arg0, s32*, 0xC) - 2, M2C_FIELD(arg0, Color_RGBA8*, 0x20));
+    func_8002A32C(arg0->x, arg0->y, arg0->width, arg0->height);
+    if ((arg0->flags & 8) || (arg1 & 0x10)) {
+        Ui_FillRectHighlighted(arg0->x + 1, arg0->y + 1, arg0->width - 2, arg0->height - 2, arg0->highlightColor);
     } else if (arg1 & 2) {
-        Ui_DrawRoundedFrame(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC), D_80073520);
+        Ui_DrawRoundedFrame(arg0->x, arg0->y, arg0->width, arg0->height, D_80073520);
     }
     if (arg1 & 0x12) {
-        src = (Color_RGBA8*)(arg0 + 0x18);
+        src = &arg0->selectedColor;
     } else {
-        src = (Color_RGBA8*)(arg0 + 0x1C);
+        src = &arg0->color;
     }
     color = *src;
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
     gDPSetPrimColor(gDisplayListHead++, 0, 0, color.r, color.g, color.b, color.a);
-    Gfx_DrawTextureIa16(M2C_FIELD(arg0, s32*, 0) + 3, M2C_FIELD(arg0, s32*, 4) + 3, M2C_FIELD(arg0, s32*, 8) - 6, M2C_FIELD(arg0, s32*, 0xC) - 6, M2C_FIELD(arg0, u8**, 0x28), M2C_FIELD(arg0, s32*, 0x24), 0);
+    Gfx_DrawTextureIa16(arg0->x + 3, arg0->y + 3, arg0->width - 6, arg0->height - 6, arg0->image, arg0->imageWidth, 0);
 }
 
 /** Moves a vertical menu selection according to a d-pad direction. */
