@@ -194,7 +194,7 @@ u16 func_82121954(ActivePokemon* arg0, CameraNode* arg1, ActivePokemon* a2, s16 
         sp5C = 1;
     }
 
-    if ((M2C_FIELD(D_8219A5A0, s32*, 0x1C) == 2) || (M2C_FIELD(D_8219A5A0, s32*, 0x1C) == 6)) {
+    if ((sBattleScene.scene->mode == 2) || (sBattleScene.scene->mode == 6)) {
         BattleScene_GetParticipantCameraAnchor(arg0, &sp60);
         sp60.y = a2->displayObject.position.y;
         radius = BattleScene_GetParticipantModelRadiusScaled(arg0);
@@ -318,7 +318,7 @@ void func_82121DAC(void) {
 void BattleScene_SetDamageShakeAmplitude(ActivePokemon* arg0) {
     BattleMon* ptr = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
 
-    sBattleScene.scene->shakeAmplitude = ((ptr->hp - M2C_FIELD(arg0, u16*, 0x7D2)) / 996.0f) * 450.0f;
+    sBattleScene.scene->shakeAmplitude = ((ptr->hp - arg0->state.runtime.hp) / 996.0f) * 450.0f;
 
     if (sBattleScene.scene->shakeAmplitude == 0.0f) {
         sBattleScene.scene->shakeAmplitude = 0.0f;
@@ -411,22 +411,22 @@ s32 BattleScene_ApproachCameraRotationY(s32 arg0, s16 arg1, s16 arg2) {
     s16 var_v0;
 
     if (arg1 > 0) {
-        M2C_FIELD(D_8219A5A0, s16 *, 0x5A) = (s16) (M2C_FIELD(D_8219A5A0, s16 *, 0x5A) - arg1);
-        var_v0 = M2C_FIELD(D_8219A5A0, s16 *, 0x5A);
+        sBattleScene.scene->rotationY = (s16) (sBattleScene.scene->rotationY - arg1);
+        var_v0 = sBattleScene.scene->rotationY;
         if ((var_v0 < arg2) && ((arg2 - arg1) < var_v0)) {
-            M2C_FIELD(D_8219A5A0, s16 *, 0x5A) = arg2;
+            sBattleScene.scene->rotationY = arg2;
             return 1;
         }
         goto block_7;
     }
-    M2C_FIELD(D_8219A5A0, s16 *, 0x5A) = (s16) (M2C_FIELD(D_8219A5A0, s16 *, 0x5A) - arg1);
-    var_v0 = M2C_FIELD(D_8219A5A0, s16 *, 0x5A);
+    sBattleScene.scene->rotationY = (s16) (sBattleScene.scene->rotationY - arg1);
+    var_v0 = sBattleScene.scene->rotationY;
     if ((arg2 < var_v0) && (var_v0 < (arg2 - arg1))) {
-        M2C_FIELD(D_8219A5A0, s16 *, 0x5A) = arg2;
+        sBattleScene.scene->rotationY = arg2;
         return 1;
     }
 block_7:
-    func_8000EEBC(arg0 + 0xB4, arg0 + 0xA8, M2C_FIELD(D_8219A5A0, f32 *, 0x5C), M2C_FIELD(D_8219A5A0, s16 *, 0x58), (s32) var_v0);
+    func_8000EEBC(arg0 + 0xB4, arg0 + 0xA8, sBattleScene.scene->distance, sBattleScene.scene->rotationX, (s32) var_v0);
     return 0;
 }
 
@@ -458,9 +458,9 @@ s32 BattleScene_ApproachCameraRotationYNoEyeUpdate(UNUSED CameraNode* arg0, s16 
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleScene_SetCameraAnglesAndDistance(s16 arg0, s16 arg1, f32 arg2) {
-    M2C_FIELD(D_8219A5A0, s16 *, 0x58) = arg0;
-    M2C_FIELD(D_8219A5A0, s16 *, 0x5A) = arg1;
-    M2C_FIELD(D_8219A5A0, f32 *, 0x5C) = arg2;
+    sBattleScene.scene->rotationX = arg0;
+    sBattleScene.scene->rotationY = arg1;
+    sBattleScene.scene->distance = arg2;
 }
 
 /**
