@@ -140,13 +140,6 @@ void func_8002572C(BattleSessionTeams *arg0, TeamRoster *arg1) {
 }
 
 M2C_UNK Session_InitHumanTrainer(M2C_UNK, TeamRoster *, ExtendedRosterInfo *, s32);
-extern M2C_UNK D_800AE8F4;
-extern M2C_UNK D_800AEAF8;
-typedef struct { s16 unk_00; u8 unk_02; u8 unk_03; } Unk800AF104;
-extern Unk800AF104 D_800AF104;
-extern M2C_UNK D_800AF30C;
-extern M2C_UNK D_800AF924;
-extern M2C_UNK D_800AF94C;
 
 /**
  * Sets the session mode to `arg0` and sets up both trainer slots and battle sides.
@@ -158,10 +151,10 @@ M2C_UNK Session_InitTwoTrainers(M2C_UNK arg0, M2C_UNK arg1, M2C_UNK arg2) {
     gSessionContext.mode = arg0;
     gSessionContext.ruleCategory = 1;
     gSessionContext.roundOrDemoId = 1;
-    Session_InitHumanTrainer(0, (TeamRoster *)&D_800AE8F4, (ExtendedRosterInfo *)&D_800AF104, arg1);
-    Session_InitHumanTrainer(1, (TeamRoster *)&D_800AEAF8, (ExtendedRosterInfo *)&D_800AF30C, arg2);
-    func_8002572C((BattleSessionTeams *)&D_800AF924, (TeamRoster *)&D_800AE8F4);
-    func_8002572C((BattleSessionTeams *)&D_800AF94C, (TeamRoster *)&D_800AEAF8);
+    Session_InitHumanTrainer(0, &gSessionContext.trainerSlots[0], &gSessionContext.rosterInfo[0], arg1);
+    Session_InitHumanTrainer(1, &gSessionContext.trainerSlots[1], &gSessionContext.rosterInfo[1], arg2);
+    func_8002572C(&gSessionContext.battleSides[0], &gSessionContext.trainerSlots[0]);
+    func_8002572C(&gSessionContext.battleSides[1], &gSessionContext.trainerSlots[1]);
 }
 
 /*
@@ -189,7 +182,6 @@ void Session_LoadPortSnapshot(s32 arg0) {
     D_800AF9A8.gameType = 0;
 }
 
-extern M2C_UNK D_800AF974;
 
 void func_80025830(void) {
     SaveContinueSession sp1C;
@@ -198,22 +190,20 @@ void func_80025830(void) {
     sp1C.mode = gSessionContext.mode;
     sp1C.modeSelection = gSessionContext.modeSelection;
     sp1C.round = gSessionContext.roundOrDemoId + 1;
-    _bcopy(&D_800AF974, sp1C.opponentHistory, 8);
+    _bcopy(gSessionContext.opponentHistory, sp1C.opponentHistory, 8);
     Save_WriteContinueData(&sp1C, &D_800AF9A8, info->battleMon, info->numberOfPokemonCanBePicked);
     Save_CommitTypedRecord(0x15, 0);
 }
 
 M2C_UNK func_80058410();
-extern M2C_UNK D_800AF974;
-extern M2C_UNK D_800AFB10;
-extern M2C_UNK D_800AFB14;
+extern SaveContinueSession D_800AFB10;
 
 void func_800258B4(void) {
-    gSessionContext.mode = (u8) M2C_FIELD(&D_800AFB10, u8 *, 0);
-    gSessionContext.ruleCategory = (u8) M2C_FIELD(&D_800AFB10, u8 *, 0);
-    gSessionContext.modeSelection = (u8) M2C_FIELD(&D_800AFB10, u8 *, 1);
-    gSessionContext.roundOrDemoId = (u8) M2C_FIELD(&D_800AFB10, u8 *, 2);
-    func_80058410(&D_800AFB14, &D_800AF974, 8, &D_800AFB10);
+    gSessionContext.mode = (u8) D_800AFB10.mode;
+    gSessionContext.ruleCategory = (u8) D_800AFB10.mode;
+    gSessionContext.modeSelection = (u8) D_800AFB10.modeSelection;
+    gSessionContext.roundOrDemoId = (u8) D_800AFB10.round;
+    func_80058410(D_800AFB10.opponentHistory, gSessionContext.opponentHistory, 8, &D_800AFB10);
 }
 
 typedef struct { u8 b[3]; } Unk3Bytes;
@@ -226,12 +216,6 @@ extern s16 D_800733D4;
 extern M2C_UNK D_8007B7C0;
 extern M2C_UNK D_8007B7C4;
 
-extern s32 D_800AE90C;
-extern M2C_UNK D_800AE910;
-extern M2C_UNK D_800AF108;
-extern M2C_UNK D_800AF118;
-extern M2C_UNK D_800AF12C;
-extern s8 D_800AE8F6;
 
 void func_80025910(s32 arg0)
 {
@@ -262,16 +246,14 @@ void func_80025910(s32 arg0)
 s8 Save_ReadContinueData(M2C_UNK *, s8 *, M2C_UNK *);       /* extern */
 void func_80025910(s32);                          /* extern */
 s32 func_80057910(s8 *, M2C_UNK *, M2C_UNK);        /* extern */
-extern s8 D_800AE8F6;
-extern M2C_UNK D_800AE910;
 
 /*
  * func_80025A64
  *
  * Clears the byte at gSessionContext.sessionFlags, then calls
- * Save_ReadContinueData(&D_800AFB10, buf, &D_800AE910) with a 0x162-byte local
+ * Save_ReadContinueData(&D_800AFB10, buf, gSessionContext.trainerSlots[0].pokemonPicked) with a 0x162-byte local
  * buffer. If it returns -1 the function returns 0. Otherwise the result is
- * stored to the byte D_800AE8F6 and:
+ * stored to trainerSlots[0].numberOfPokemonBrought and:
  *  - if buf[0] == 0: calls func_80025910(buf[0]), sets bit 0 of the byte at
  *    gSessionContext.sessionFlags, sets unk_1094 to 0xFF, calls
  *    Session_LoadPortSnapshot(-1) and returns 1;
@@ -297,9 +279,9 @@ s32 func_80025A64(void) {
 
     ret = 0;
     gSessionContext.sessionFlags = 0U;
-    temp_v0 = Save_ReadContinueData(&D_800AFB10, buf, &D_800AE910);
+    temp_v0 = Save_ReadContinueData(&D_800AFB10, buf, gSessionContext.trainerSlots[0].pokemonPicked);
     if (temp_v0 != -1) {
-        D_800AE8F6 = temp_v0;
+        gSessionContext.trainerSlots[0].numberOfPokemonBrought = temp_v0;
         if (buf[0] == 0) {
             func_80025910(buf[0]);
             gSessionContext.sessionFlags = (u8) (gSessionContext.sessionFlags | 1);
@@ -524,7 +506,6 @@ extern u8 D_00162BE0[];
 extern u8 D_00166580[];
 extern u8 D_00235D70[];
 extern u8 D_00238BD0[];
-extern s16 D_800AF986;
 extern StageContext *D_800AF9A4;
 s32 GbSave_LoadPort(s32 arg0);
 s32 func_80021E64(s32);
@@ -534,7 +515,7 @@ u8 GbSave_GetSaveState(s32 arg0);
 s32 GbSave_GetBoxCount(s32);
 void func_80023C30(void);
 void Save_RunGbReportErrorScreen(s32);
-// FAKE: the `* 0` in the D_800AF986 store at the end is decomp slop.
+// FAKE: the `* 0` in the transitionFlags store at the end is decomp slop.
 void func_800260C4(void)
 {
   s32 pushed = 0;
@@ -590,7 +571,7 @@ void func_800260C4(void)
     D_800733C8 = Fragment_LoadAndCall(D_800AF990.fragment_id, D_800AF990.rom_start, D_800AF990.rom_end, D_800AF990.arg0, D_800AF990.arg1);
   }
 
-  D_800AF986 = (!(gSessionContext.transitionFlags & 2)) * 0;
+  gSessionContext.transitionFlags = (!(gSessionContext.transitionFlags & 2)) * 0;
   StageContext_Deactivate();
   Gfx_FreeDisplayListBuffers();
   main_pool_pop_state('OVLY');
