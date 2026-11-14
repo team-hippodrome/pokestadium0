@@ -1,6 +1,21 @@
 /* Stadium Zero fragment010_17BE70. */
 /* C ported from the Stadium 1 decomp: src/fragments/pikachu_reward/pikachu_reward.c, src/game_state.c. */
 
+/*
+ * The Surfing Pikachu reward. VsScene queues this fragment (transitionFlags 0x20) after a tournament
+ * win with a Game Boy team that brought a Pikachu without Surf. The scene congratulates the player,
+ * offers Surf, lets them forget a move if Pikachu knows four, and writes the edited Pikachu back to
+ * the Game Boy cartridge's party.
+ *
+ * Seen in play (2026-11-14, pj64-pokestadium-debug, a crafted Pocket Monsters Green save whose party
+ * is one L50 Pikachu knowing ThunderShock, Growl, Thunder Wave and Flash; the post-round
+ * transitionFlags were set to 0x21 after an L50-55 tournament round): every function in this file
+ * hit a breakpoint. Picking Flash in the forget list played the error sound and stayed in the list,
+ * picking Growl showed 「ピカチュウは なきごえの つかいかたを きれいに わすれた！」, and the cartridge
+ * save afterwards held Surf (0x39, PP 15) in Growl's slot. Answering no twice showed
+ * 「ピカチュウに なみのりを おぼえさせませんでした。」.
+ */
+
 #include "pikachu_reward.h"
 #include "display_object_textures.h"
 #include "font.h"
@@ -21,14 +36,14 @@
 
 // Declared here instead of in a header: the callers of these disagree on their types.
 void MainPool_FinalizeAllocation(struct MemoryBlock* block);
-extern GraphNode* D_81702010;
-extern GraphNode* D_81702014;
-extern unk_D_86002F30* D_81702018;
-extern DisplayObject D_81702020[4];
-extern unk_D_832025C8 D_817025C0;
-extern s32 D_81701B04;
-extern char* D_81701B08;
-extern u32 D_81701B4C[];
+extern GraphNode* sSceneRootNode;
+extern GraphNode* sQuestionMarkGeo;
+extern unk_D_86002F30* sPikachuModel;
+extern DisplayObject sSceneObjects[4];
+extern unk_D_832025C8 sNextArrowBlink;
+extern s32 sQuestionMarkTimer;
+extern char* sShownText;
+extern u32 sSceneGeoLayout[];
 
 #include "functions.h"
 #include "lib/ultralib/include/PR/os_internal_reg.h"
@@ -46,53 +61,52 @@ extern SessionContext gSessionContext;
 
 #include "m2c_macros.h"
 
-s32 PikachuReward_PositionSurfingPikachuModel(s32 arg0, DisplayObject* arg1);
+s32 PikachuReward_SpinSunburst(s32 stage, DisplayObject* sunburst);
 void Controller_PollInputs(void);
-void PikachuReward_UpdateFollowerVisibility(void);
-s32 PikachuReward_RenderFrame(u8 arg0);
-void PikachuReward_DrawTextBoxPanel(s16 arg0, s16 arg1, s16 arg2, s16 arg3);
-void PikachuReward_DrawSelectionCursor(s16 arg0, s16 arg1);
-void PikachuReward_ShowTextForFrames(char* arg0, s32 arg1);
-void PikachuReward_ScrollTextIn(s8* arg0);
+void PikachuReward_UpdateQuestionMarks(void);
+s32 PikachuReward_RenderFrame(u8 unused);
+void PikachuReward_DrawTextBoxPanel(s16 x, s16 y, s16 width, s16 height);
+void PikachuReward_DrawSelectionCursor(s16 x, s16 y);
+void PikachuReward_ShowTextForFrames(char* text, s32 frames);
+void PikachuReward_ScrollTextIn(s8* text);
 void PikachuReward_PlayIntroCamera(void);
-void PikachuReward_SetupFollowerModel(DisplayObject* arg0, s16 arg1, s16 arg2, s16 arg3);
+void PikachuReward_SetupQuestionMarkModel(DisplayObject* mark, s16 x, s16 y, s16 rotation_z);
 void PikachuReward_SetupScene(void);
 
-void PikachuReward_UpdateLeadPikachuAnimation(void);
+void PikachuReward_UpdatePikachuAnimation(void);
 
-/** Positions the surfing Pikachu model during its animation phase. */
-s32 PikachuReward_PositionSurfingPikachuModel(s32 arg0, DisplayObject* arg1) {
-    if (arg0 == 2) {
-        arg1->rotation.z -= 0x80;
-        arg1->position.x = D_81702020->position.x;
-        arg1->position.y = D_81702020->position.y + 70.0f;
+/**
+ * Geo callback of the scene's sunburst background: at stage 2 it spins the sunburst and keeps it
+ * centered 70 units above Pikachu. Stubbing it in play stopped the rays from turning.
+ */
+s32 PikachuReward_SpinSunburst(s32 stage, DisplayObject* sunburst) {
+    if (stage == 2) {
+        sunburst->rotation.z -= 0x80;
+        sunburst->position.x = sSceneObjects->position.x;
+        sunburst->position.y = sSceneObjects->position.y + 70.0f;
     }
     return 0;
 }
 
-typedef struct Rec81700064 {
-    /* 0x00 */ u8 id;
-    /* 0x01 */ u8 unk01[0x4F];
-} Rec81700064; // size = 0x50
-s32 func_80020AFC(M2C_UNK, s32, M2C_UNK, M2C_UNK);
-s32 func_80020CE4(void*, s32, s32);
-M2C_UNK func_80020C60(s32);
-s32 func_80021894(s32);
-extern s32 D_817025C4;
-extern Rec81700064 D_817025C8[];
-extern s8* D_817027A8;
+extern s32 sPartyCount;
+extern BattleMon sPartyMons[];
+extern BattleMon* sPikachuPartyMon;
 
-s32 func_81700064(s32 arg0) {
+/**
+ * Reads the party of the Game Boy cartridge in `gb_port` and points sPikachuPartyMon at its first
+ * Pikachu. Returns 1 when there is one, else 0 (and the scene is skipped).
+ */
+s32 PikachuReward_FindPikachuInCartParty(s32 gb_port) {
     s32 i;
-    s32 handle;
+    DeckHandle* handle;
 
-    if ((arg0 != -1) && (func_80021894(arg0) != 0)) {
-        handle = func_80020AFC(0x20, arg0, 0, 0);
-        D_817025C4 = func_80020CE4(D_817025C8, 6, handle);
-        func_80020C60(handle);
-        for (i = 0; i < D_817025C4; i++) {
-            if (D_817025C8[i].id == 0x19) {
-                D_817027A8 = (s8*)&D_817025C8[i];
+    if ((gb_port != -1) && (GbSave_EnsureMainDataLoaded(gb_port) != 0)) {
+        handle = Deck_Open(0x20, gb_port, 0, 0);
+        sPartyCount = Deck_ReadEntries((u8*)sPartyMons, 6, handle);
+        Deck_CloseAndFlush(handle);
+        for (i = 0; i < sPartyCount; i++) {
+            if (sPartyMons[i].species.id == 0x19) {
+                sPikachuPartyMon = &sPartyMons[i];
                 return 1;
             }
         }
@@ -100,23 +114,22 @@ s32 func_81700064(s32 arg0) {
     return 0;
 }
 
-extern s8 *D_817027A8;
+/** Returns how many moves Pikachu knows (the filled move slots before the first empty one). */
+s32 PikachuReward_CountKnownMoves(void) {
+    s32 count;
+    s8 *move;
 
-s32 func_81700130(void) {
-    s32 var_v1;
-    s8 *var_v0;
-
-    var_v0 = D_817027A8;
-    var_v1 = 0;
+    move = (s8*)sPikachuPartyMon;
+    count = 0;
 loop_1:
-    if (M2C_FIELD(var_v0, u8 *, 9) != 0) {
-        var_v1 += 1;
-        var_v0 += 1;
-        if (var_v1 != 4) {
+    if (M2C_FIELD(move, u8 *, 9) != 0) {
+        count += 1;
+        move += 1;
+        if (count != 4) {
             goto loop_1;
         }
     }
-    return var_v1;
+    return count;
 }
 
 /** Starts and finishes a controller read. */
@@ -126,164 +139,170 @@ void Controller_PollInputs(void) {
     Input_ResetRepeatState();
 }
 
-extern s32 D_81701B00;
-/** Updates the lead Pikachu's animation each frame. */
-void PikachuReward_UpdateLeadPikachuAnimation(void) {
+extern s32 sHidePikachuWhenAnimDone;
+/**
+ * Updates Pikachu's model each frame: replays event track 0xA every 60 frames unless animation 5 or
+ * 9 is playing, and when an animation ends either hides Pikachu (once an ending has started) or
+ * returns to the idle animation 0.
+ */
+void PikachuReward_UpdatePikachuAnimation(void) {
     static s32 D_83202004 = 0;
 
-    if ((D_81702020[0].transformAnim.animationId != 0x9) && (D_81702020[0].transformAnim.animationId != 5)) {
+    if ((sSceneObjects[0].transformAnim.animationId != 0x9) && (sSceneObjects[0].transformAnim.animationId != 5)) {
         D_83202004++;
         if (D_83202004 == 0x3C) {
             D_83202004 = 0;
-            ModelAnim_SetEventTrack(&D_81702020[0], -1);
-            ModelAnim_SetEventTrack(&D_81702020[0], 0xA);
+            ModelAnim_SetEventTrack(&sSceneObjects[0], -1);
+            ModelAnim_SetEventTrack(&sSceneObjects[0], 0xA);
         }
     }
 
-    if ((D_81702020[0].transformAnim.animationId != 0) && (ModelAnim_IsFinished(&D_81702020[0]) != 0)) {
-        if (D_81701B00 != 0) {
-            D_81702020[0].node.flags &= ~1;
+    if ((sSceneObjects[0].transformAnim.animationId != 0) && (ModelAnim_IsFinished(&sSceneObjects[0]) != 0)) {
+        if (sHidePikachuWhenAnimDone != 0) {
+            sSceneObjects[0].node.flags &= ~1;
         } else {
-            ModelAnim_SetAnimation(&D_81702020[0], 0);
+            ModelAnim_SetAnimation(&sSceneObjects[0], 0);
         }
     }
 }
 
-/** Shows or hides the follower models. */
-void PikachuReward_UpdateFollowerVisibility(void) {
-    if (D_81701B04 == -1) {
-        D_81702020[1].node.flags &= ~1;
-        D_81702020[2].node.flags &= ~1;
-        D_81702020[3].node.flags &= ~1;
+/**
+ * Pops up the three blue question marks over Pikachu's head while it forgets a move, one every 8
+ * frames from sQuestionMarkTimer 0, and hides them again from frame 70. A timer of -1 hides them all.
+ * Seen in play during 「１ ２ の ・・・ ポカン！」.
+ */
+void PikachuReward_UpdateQuestionMarks(void) {
+    if (sQuestionMarkTimer == -1) {
+        sSceneObjects[1].node.flags &= ~1;
+        sSceneObjects[2].node.flags &= ~1;
+        sSceneObjects[3].node.flags &= ~1;
         return;
     }
 
-    switch (D_81701B04) {
+    switch (sQuestionMarkTimer) {
         case 0x0:
-            D_81702020[1].node.flags |= 1;
+            sSceneObjects[1].node.flags |= 1;
             break;
 
         case 0x8:
-            D_81702020[2].node.flags |= 1;
+            sSceneObjects[2].node.flags |= 1;
             break;
 
         case 0x10:
-            D_81702020[3].node.flags |= 1;
+            sSceneObjects[3].node.flags |= 1;
             break;
 
         case 0x46:
-            D_81702020[1].node.flags &= ~1;
+            sSceneObjects[1].node.flags &= ~1;
             break;
 
         case 0x4E:
-            D_81702020[2].node.flags &= ~1;
+            sSceneObjects[2].node.flags &= ~1;
             break;
 
         case 0x56:
-            D_81702020[3].node.flags &= ~1;
+            sSceneObjects[3].node.flags &= ~1;
             break;
     }
 
-    if (D_81701B04 < 0x57) {
-        D_81701B04++;
+    if (sQuestionMarkTimer < 0x57) {
+        sQuestionMarkTimer++;
     }
 }
 
 /** Renders one frame of the Pikachu reward scene. */
-s32 PikachuReward_RenderFrame(u8 arg0) {
+s32 PikachuReward_RenderFrame(u8 unused) {
     GeoRender_AdvanceFrameCounter();
-    PikachuReward_UpdateLeadPikachuAnimation();
-    PikachuReward_UpdateFollowerVisibility();
+    PikachuReward_UpdatePikachuAnimation();
+    PikachuReward_UpdateQuestionMarks();
     BgStage_DrawFrame();
     GfxImage_FillCurrent(&gDisplayListHead, 1);
-    Geo_RenderRootNode(D_81702010);
+    Geo_RenderRootNode(sSceneRootNode);
     return 0;
 }
 
-/** Draws the blinking star icon. */
-void PikachuReward_DrawBlinkingStarIcon(s16 arg0, s16 arg1) {
-    s32 var_a3;
+/** Draws the ▼ "press A" arrow at the text box's corner, fading it in and out over 61 frames. */
+void PikachuReward_DrawBlinkingNextArrow(s16 x, s16 y) {
+    s32 alpha;
 
-    if (D_817025C0.unk_00 < 0x10) {
-        var_a3 = D_817025C0.unk_00 * 0x10;
-    } else if (D_817025C0.unk_00 < 0x23) {
-        var_a3 = 0xFF;
-    } else if (D_817025C0.unk_00 < 0x32) {
-        var_a3 = (-D_817025C0.unk_00 * 0x10) + 0x320;
+    if (sNextArrowBlink.unk_00 < 0x10) {
+        alpha = sNextArrowBlink.unk_00 * 0x10;
+    } else if (sNextArrowBlink.unk_00 < 0x23) {
+        alpha = 0xFF;
+    } else if (sNextArrowBlink.unk_00 < 0x32) {
+        alpha = (-sNextArrowBlink.unk_00 * 0x10) + 0x320;
     } else {
-        var_a3 = 0;
+        alpha = 0;
     }
 
-    D_817025C0.unk_00++;
-    if (D_817025C0.unk_00 >= 0x3D) {
-        D_817025C0.unk_00 = 0;
+    sNextArrowBlink.unk_00++;
+    if (sNextArrowBlink.unk_00 >= 0x3D) {
+        sNextArrowBlink.unk_00 = 0;
     }
 
-    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, var_a3);
-    Font_DrawCharAt(arg0, arg1, 0x2177);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, alpha);
+    Font_DrawCharAt(x, y, 0x2177);
 }
 
-/** Draws the panel behind the text box. */
-void PikachuReward_DrawTextBoxPanel(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
+/** Draws a blue gradient panel, the background of the text box and the menus. */
+void PikachuReward_DrawTextBoxPanel(s16 x, s16 y, s16 width, s16 height) {
     Color_RGB8 sp24 = { 0x00, 0x00, 0x32 }; // #000032
     Color_RGB8 sp20 = { 0x00, 0x00, 0xC8 }; // #0000C8
 
-    Ui_DrawGradientPanel(arg0, arg1, arg2, arg3, &sp24, &sp20);
+    Ui_DrawGradientPanel(x, y, width, height, &sp24, &sp20);
 }
 
-/** Draws the selection cursor. */
-void PikachuReward_DrawSelectionCursor(s16 arg0, s16 arg1) {
+/** Draws the pointing-hand selection cursor. */
+void PikachuReward_DrawSelectionCursor(s16 x, s16 y) {
     gSPDisplayList(gDisplayListHead++, D_80060290);
 
-    Gfx_DrawTextureRgba16(arg0, arg1, 0x18, 0xE, Util_ConvertAddrToVirtAddr(D_8FC00090), 0x18, 0x200000);
+    Gfx_DrawTextureRgba16(x, y, 0x18, 0xE, Util_ConvertAddrToVirtAddr(D_8FC00090), 0x18, 0x200000);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-/** Shows a text message for a number of frames. */
-void PikachuReward_ShowTextForFrames(char* arg0, s32 arg1) {
-    while (arg1-- > 0) {
+/** Shows `text` in the text box for `frames` frames. */
+void PikachuReward_ShowTextForFrames(char* text, s32 frames) {
+    while (frames-- > 0) {
         Controller_PollInputs();
         PikachuReward_RenderFrame(0);
         PikachuReward_DrawTextBoxPanel(0x1E, 0x20, 0x104, 0x30);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(2, 0);
         Font_SetLineHeight(0x10);
-        Font_Printf(0x2E, 0x28, arg0);
+        Font_Printf(0x2E, 0x28, text);
         Font_EndTexturedTextRendering();
         BgStage_AdvanceFrame();
     }
 
-    D_81701B08 = arg0;
+    sShownText = text;
 }
 
-M2C_UNK func_81700160();
-
-/** Shows a text message and waits for the A button. */
-void PikachuReward_ShowTextWaitForA(char* arg0, s32 arg1) {
-    D_817025C0.unk_00 = 0x10;
+/** Shows `text` in the text box until A is pressed, with the blinking ▼ arrow when `show_arrow`. */
+void PikachuReward_ShowTextWaitForA(char* text, s32 show_arrow) {
+    sNextArrowBlink.unk_00 = 0x10;
 
     do {
-        func_81700160();
+        Controller_PollInputs();
         PikachuReward_RenderFrame(0);
         PikachuReward_DrawTextBoxPanel(0x1E, 0x20, 0x104, 0x30);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(2, 0);
         Font_SetLineHeight(0x10);
-        Font_Printf(0x2E, 0x28, arg0);
-        if (arg1 != 0) {
-            PikachuReward_DrawBlinkingStarIcon(0x104, 0x38);
+        Font_Printf(0x2E, 0x28, text);
+        if (show_arrow != 0) {
+            PikachuReward_DrawBlinkingNextArrow(0x104, 0x38);
         }
         Font_EndTexturedTextRendering();
         BgStage_AdvanceFrame();
     } while (!BTN_IS_PRESSED(gPlayer1Controller, BTN_A));
 
     Audio_PlaySoundEffectById(1);
-    D_81701B08 = arg0;
+    sShownText = text;
 }
 
-/** Scrolls a text message into the text box. */
-void PikachuReward_ScrollTextIn(s8* arg0) {
+/** Scrolls the shown text up out of the text box over 8 frames while `text` scrolls in below it. */
+void PikachuReward_ScrollTextIn(s8* text) {
     s32 i;
     s32 x1 = 0x1E;
     s32 x2 = 0x122;
@@ -300,77 +319,80 @@ void PikachuReward_ScrollTextIn(s8* arg0) {
         Font_BeginTranslucentTextRendering();
         Font_SetActive(2, 0);
         Font_SetLineHeight(0x10);
-        Font_Printf(0x2E, y1 - i * 4, D_81701B08);
-        Font_Printf(0x2E, y2 - i * 4, arg0);
+        Font_Printf(0x2E, y1 - i * 4, sShownText);
+        Font_Printf(0x2E, y2 - i * 4, text);
         Font_EndTexturedTextRendering();
         BgStage_AdvanceFrame();
     }
 
-    D_81701B08 = arg0;
+    sShownText = (char*)text;
 }
 
 extern char** D_83202020;
-extern char D_81701EFC[];
-extern char D_81701F04[];
-/** Shows a text message with a yes/no choice and returns the choice. */
-s32 PikachuReward_ConfirmYesNoPrompt(char* arg0) {
-    s32 temp_s3;
-    s32 var_a2;
-    s32 var_s1;
-    s32 var_s2;
+extern char sTextYes[];
+extern char sTextNo[];
+/**
+ * Shows `question` with a はい/いいえ (yes/no) menu. D-pad up or down toggles, A confirms, B picks no.
+ * Returns 1 for yes and 0 for no.
+ */
+s32 PikachuReward_ConfirmYesNoPrompt(char* question) {
+    s32 is_yes;
+    s32 blue;
+    s32 cursor;
+    s32 waiting;
 
-    var_s2 = 1;
-    var_s1 = 0;
+    waiting = 1;
+    cursor = 0;
 
     do {
         Controller_PollInputs();
         if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DUP | BTN_DDOWN)) {
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-            var_s1 ^= 1;
+            cursor ^= 1;
         } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_A)) {
-            var_s2 = 0;
+            waiting = 0;
         } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_B)) {
-            var_s1 = 1;
-            var_s2 = 0;
+            cursor = 1;
+            waiting = 0;
         }
 
-        temp_s3 = var_s1 == 0;
+        is_yes = cursor == 0;
         PikachuReward_RenderFrame(0);
         PikachuReward_DrawTextBoxPanel(0x1E, 0x20, 0x104, 0x30);
         PikachuReward_DrawTextBoxPanel(0xD2, 0x54, 0x50, 0x2C);
-        PikachuReward_DrawSelectionCursor(0xDA, (var_s1 * 0x10) + 0x5C);
+        PikachuReward_DrawSelectionCursor(0xDA, (cursor * 0x10) + 0x5C);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(2, 0);
         Font_SetLineHeight(0x10);
-        Font_Printf(0x2E, 0x28, arg0);
+        Font_Printf(0x2E, 0x28, question);
 
-        if (temp_s3 != 0) {
-            var_a2 = 0;
+        if (is_yes != 0) {
+            blue = 0;
         } else {
-            var_a2 = 0xFF;
+            blue = 0xFF;
         }
 
-        Gfx_SetEnvColor(0xFF, 0xFF, var_a2, 0xFF);
-        Font_Printf(0xF2, 0x5C, D_81701EFC);
+        Gfx_SetEnvColor(0xFF, 0xFF, blue, 0xFF);
+        Font_Printf(0xF2, 0x5C, sTextYes);
 
-        if (var_s1 == 1) {
-            var_a2 = 0;
+        if (cursor == 1) {
+            blue = 0;
         } else {
-            var_a2 = 0xFF;
+            blue = 0xFF;
         }
 
-        Gfx_SetEnvColor(0xFF, 0xFF, var_a2, 0xFF);
-        Font_Printf(0xF2, 0x6C, D_81701F04);
+        Gfx_SetEnvColor(0xFF, 0xFF, blue, 0xFF);
+        Font_Printf(0xF2, 0x6C, sTextNo);
         Font_EndTexturedTextRendering();
         BgStage_AdvanceFrame();
-    } while (var_s2 != 0);
+    } while (waiting != 0);
 
-    if (temp_s3 != 0) {
+    if (is_yes != 0) {
         Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
     } else {
         Audio_PlaySoundEffectById(SFX_MENU_BACK);
     }
-    return temp_s3;
+    return is_yes;
 }
 
 extern unk_D_832027C8 D_832027C8;
@@ -382,199 +404,195 @@ typedef struct MoveNameEntryZ {
 } MoveNameEntryZ; // size = 0xC
 extern MoveNameEntryZ D_8006A9D4[];
 
-/** Shows the move list and returns the move the player picks to forget. */
-s32 PikachuReward_SelectMoveToForget(char* arg0) {
-    s32 var_a2;
-    s32 var_s0;
-    s32 var_s4;
+/**
+ * Shows `prompt` next to Pikachu's four moves and returns the slot the player picks to forget, or
+ * -1 for B. The HMs Cut, Fly, Strength and Flash (0x0F, 0x13, 0x46, 0x94) cannot be picked: A on
+ * one plays the error sound and the list stays open (seen with Flash).
+ */
+s32 PikachuReward_SelectMoveToForget(char* prompt) {
+    s32 blue;
+    s32 cursor;
+    s32 waiting;
 
-    var_s4 = 1;
-    var_s0 = 0;
+    waiting = 1;
+    cursor = 0;
 
-    while (var_s4 != 0) {
+    while (waiting != 0) {
         Controller_PollInputs();
 
         if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DUP)) {
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-            var_s0--;
-            if (var_s0 < 0) {
-                var_s0 = 3;
+            cursor--;
+            if (cursor < 0) {
+                cursor = 3;
             }
         }
 
         if (BTN_IS_PRESSED(gPlayer1Controller, BTN_DDOWN)) {
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-            var_s0++;
-            if (var_s0 >= 4) {
-                var_s0 = 0;
+            cursor++;
+            if (cursor >= 4) {
+                cursor = 0;
             }
         } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_A)) {
-            if ((M2C_FIELD(D_817027A8 + var_s0, u8*, 9) == 0xF) || (M2C_FIELD(D_817027A8 + var_s0, u8*, 9) == 0x13) ||
-                (M2C_FIELD(D_817027A8 + var_s0, u8*, 9) == 0x46) || (M2C_FIELD(D_817027A8 + var_s0, u8*, 9) == 0x94)) {
+            if ((sPikachuPartyMon->moves[cursor] == 0xF) || (sPikachuPartyMon->moves[cursor] == 0x13) ||
+                (sPikachuPartyMon->moves[cursor] == 0x46) || (sPikachuPartyMon->moves[cursor] == 0x94)) {
                 Audio_PlaySoundEffectById(SFX_MENU_ERROR);
             } else {
-                var_s4 = 0;
+                waiting = 0;
                 Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
             }
         } else if (BTN_IS_PRESSED(gPlayer1Controller, BTN_B)) {
-            var_s4 = 0;
-            var_s0 = -1;
+            waiting = 0;
+            cursor = -1;
             Audio_PlaySoundEffectById(SFX_MENU_BACK);
         }
 
         PikachuReward_RenderFrame(0);
         PikachuReward_DrawTextBoxPanel(0x1E, 0x20, 0x82, 0x30);
         PikachuReward_DrawTextBoxPanel(0x96, 0x20, 0x8C, 0x4C);
-        PikachuReward_DrawSelectionCursor(0x9E, (var_s0 * 0x10) + 0x28);
+        PikachuReward_DrawSelectionCursor(0x9E, (cursor * 0x10) + 0x28);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(2, 0);
         Font_SetLineHeight(0x10);
-        Font_Printf(0x2E, 0x28, arg0);
+        Font_Printf(0x2E, 0x28, prompt);
 
-        if (var_s0 == 0) {
-            var_a2 = 0;
+        if (cursor == 0) {
+            blue = 0;
         } else {
-            var_a2 = 0xFF;
+            blue = 0xFF;
         }
-        Gfx_SetEnvColor(0xFF, 0xFF, var_a2, 0xFF);
-        Font_Printf(0xB6, 0x28, D_8006A9D4[M2C_FIELD(D_817027A8, u8*, 9) - 1].name);
+        Gfx_SetEnvColor(0xFF, 0xFF, blue, 0xFF);
+        Font_Printf(0xB6, 0x28, D_8006A9D4[sPikachuPartyMon->moves[0] - 1].name);
 
-        if (var_s0 == 1) {
-            var_a2 = 0;
+        if (cursor == 1) {
+            blue = 0;
         } else {
-            var_a2 = 0xFF;
+            blue = 0xFF;
         }
-        Gfx_SetEnvColor(0xFF, 0xFF, var_a2, 0xFF);
-        Font_Printf(0xB6, 0x38, D_8006A9D4[M2C_FIELD(D_817027A8, u8*, 0xA) - 1].name);
+        Gfx_SetEnvColor(0xFF, 0xFF, blue, 0xFF);
+        Font_Printf(0xB6, 0x38, D_8006A9D4[sPikachuPartyMon->moves[1] - 1].name);
 
-        if (var_s0 == 2) {
-            var_a2 = 0;
+        if (cursor == 2) {
+            blue = 0;
         } else {
-            var_a2 = 0xFF;
+            blue = 0xFF;
         }
-        Gfx_SetEnvColor(0xFF, 0xFF, var_a2, 0xFF);
-        Font_Printf(0xB6, 0x48, D_8006A9D4[M2C_FIELD(D_817027A8, u8*, 0xB) - 1].name);
+        Gfx_SetEnvColor(0xFF, 0xFF, blue, 0xFF);
+        Font_Printf(0xB6, 0x48, D_8006A9D4[sPikachuPartyMon->moves[2] - 1].name);
 
-        if (var_s0 == 3) {
-            var_a2 = 0;
+        if (cursor == 3) {
+            blue = 0;
         } else {
-            var_a2 = 0xFF;
+            blue = 0xFF;
         }
-        Gfx_SetEnvColor(0xFF, 0xFF, var_a2, 0xFF);
-        Font_Printf(0xB6, 0x58, D_8006A9D4[M2C_FIELD(D_817027A8, u8*, 0xC) - 1].name);
+        Gfx_SetEnvColor(0xFF, 0xFF, blue, 0xFF);
+        Font_Printf(0xB6, 0x58, D_8006A9D4[sPikachuPartyMon->moves[3] - 1].name);
 
         Font_EndTexturedTextRendering();
         BgStage_AdvanceFrame();
     }
 
-    return var_s0;
+    return cursor;
 }
 
-M2C_UNK func_80005B98(M2C_UNK);                     /* extern */
-M2C_UNK func_8000A7FC(M2C_UNK);                     /* extern */
-M2C_UNK func_800199F8(M2C_UNK *, M2C_UNK);          /* extern */
-M2C_UNK func_80019A90(M2C_UNK *, M2C_UNK);          /* extern */
-M2C_UNK func_81700588(s32, M2C_UNK);                /* extern */
-M2C_UNK func_8170070C(s32);                         /* extern */
-extern s32 D_81701B00;
-extern s32 D_81701B1C;
-extern M2C_UNK D_FLT_81702020;
+extern s32 sHidePikachuWhenAnimDone;
+extern char* sTextSurfNotLearned;
 
-void func_81700D7C(void) {
-    func_8170070C(D_81701B1C);
-    M2C_FIELD(&D_FLT_81702020, s16 *, 0x20) = -0x800;
-    func_800199F8(&D_FLT_81702020, 5);
-    func_80019A90(&D_FLT_81702020, 0);
-    D_81701B00 = 1;
-    func_81700588(D_81701B1C, 0x46);
-    func_80005B98(0x1E);
-    func_8000A7FC(0x3C);
-    func_81700588(D_81701B1C, 0x1E);
+/**
+ * Ending when the player declines Surf: 「ピカチュウに なみのりを おぼえさせませんでした。」
+ * ("Pikachu did not learn Surf."), Pikachu turns away and leaves, and the scene fades out.
+ */
+void PikachuReward_ShowDeclinedEnding(void) {
+    PikachuReward_ScrollTextIn(sTextSurfNotLearned);
+    sSceneObjects[0].rotation.y = -0x800;
+    ModelAnim_SetAnimation(&sSceneObjects[0], 5);
+    ModelAnim_SetEventTrack(&sSceneObjects[0], 0);
+    sHidePikachuWhenAnimDone = 1;
+    PikachuReward_ShowTextForFrames(sTextSurfNotLearned, 0x46);
+    StageFade_Start(0x1E);
+    Audio_StopMusic(0x3C);
+    PikachuReward_ShowTextForFrames(sTextSurfNotLearned, 0x1E);
 }
 
-M2C_UNK func_80005B98(M2C_UNK);                     /* extern */
-M2C_UNK func_8000A7B0(M2C_UNK);                     /* extern */
-M2C_UNK func_800199F8(M2C_UNK *, M2C_UNK);          /* extern */
-M2C_UNK func_80019A90(M2C_UNK *, M2C_UNK);          /* extern */
 M2C_UNK func_800414B0(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
-M2C_UNK func_81700588(s32, M2C_UNK);                /* extern */
-M2C_UNK func_8170070C(s32);                         /* extern */
-extern s32 D_81701B00;
-extern s32 D_81701B48;
-extern M2C_UNK D_FLT_81702020;
+extern s32 sHidePikachuWhenAnimDone;
+extern char* sTextTakeCareOfPikachu;
 
-void func_81700E04(void) {
-    func_800199F8(&D_FLT_81702020, 9);
-    func_80019A90(&D_FLT_81702020, 6);
+/**
+ * Ending after Pikachu learns Surf: Pikachu surfs off on its board to Surf's sound (move 0x39,
+ * species 0x19) and music 0x13 while 「ピカチュウを だいじに してあげてね。」 ("Take good care of
+ * Pikachu.") shows, then the scene fades out.
+ */
+void PikachuReward_ShowSuccessEnding(void) {
+    ModelAnim_SetAnimation(&sSceneObjects[0], 9);
+    ModelAnim_SetEventTrack(&sSceneObjects[0], 6);
     func_800414B0(0, 0x39, 0x19, 0);
-    D_81701B00 = 1;
-    func_8000A7B0(0x13);
-    func_8170070C(D_81701B48);
-    func_81700588(D_81701B48, 0x98);
-    func_80005B98(0x1E);
-    func_81700588(D_81701B48, 0x1E);
+    sHidePikachuWhenAnimDone = 1;
+    Audio_PlayMusicIfChanged(0x13);
+    PikachuReward_ScrollTextIn(sTextTakeCareOfPikachu);
+    PikachuReward_ShowTextForFrames(sTextTakeCareOfPikachu, 0x98);
+    StageFade_Start(0x1E);
+    PikachuReward_ShowTextForFrames(sTextTakeCareOfPikachu, 0x1E);
 }
 
-/** Plays the intro camera movement. */
+/** Lowers the camera onto Pikachu over 120 frames while Pikachu spins in. */
 void PikachuReward_PlayIntroCamera(void) {
     s32 i;
-    CameraNode* temp_s1 = D_81702010->children;
+    CameraNode* camera = sSceneRootNode->children;
 
-    D_81702020->rotation.y = 0x1000;
+    sSceneObjects->rotation.y = 0x1000;
 
     for (i = 0; i < 120; i++) {
         Controller_PollInputs();
-        temp_s1->view.targetPosition.y = 0x320 - ((i * 0x1E0) / 120);
-        temp_s1->view.eyePosition.y = 0x320 - ((i * 0x1E0) / 120);
-        D_81702020->rotation.y += 0x200;
+        camera->view.targetPosition.y = 0x320 - ((i * 0x1E0) / 120);
+        camera->view.eyePosition.y = 0x320 - ((i * 0x1E0) / 120);
+        sSceneObjects->rotation.y += 0x200;
         PikachuReward_RenderFrame(0);
         BgStage_AdvanceFrame();
     }
 }
 
-M2C_UNK func_80006780();                            /* extern */
-M2C_UNK func_800199F8(M2C_UNK *, M2C_UNK);          /* extern */
-M2C_UNK func_81700160();                            /* extern */
-M2C_UNK func_81700370(M2C_UNK);                     /* extern */
-M2C_UNK func_81700468(s16, s16, s16, s16);          /* extern */
-M2C_UNK func_81700630(s32, M2C_UNK);                /* extern */
-M2C_UNK func_8170070C(s32);                         /* extern */
-s32 func_817008B4(s32);                             /* extern */
-extern s32 D_81701B0C;
-extern s32 D_81701B10;
-extern s32 D_81701B14;
-extern s32 D_81701B18;
-extern M2C_UNK D_FLT_81702020;
+extern char* sTextCongratulations;
+extern char* sTextSurfReward;
+extern char* sTextTeachSurfPrompt;
+extern char* sTextStopLearningSurfPrompt;
 
-s32 func_81700F78(void) {
-    s16 var_s0;
-    s16 var_s1;
-    s32 var_s2;
+/**
+ * Opens the text box, shows 「おめでとう！ ピカチュウを つかって ゆうしょうしました。」
+ * ("Congratulations! You won the tournament with Pikachu.") and 「ごほうびに ピカチュウが なみのりを
+ * おぼえられるように してあげます。」 ("As a reward, Pikachu can learn Surf."), then asks whether to
+ * teach Surf until the player says yes (returns 1) or confirms giving up (declined ending, returns 0).
+ */
+s32 PikachuReward_ShowIntroAndConfirm(void) {
+    s16 width;
+    s16 height;
+    s32 i;
 
-    var_s0 = 0x14;
-    var_s1 = 0x10;
-    func_800199F8(&D_FLT_81702020, 8);
-    var_s2 = 0;
+    width = 0x14;
+    height = 0x10;
+    ModelAnim_SetAnimation(&sSceneObjects[0], 8);
+    i = 0;
     do {
-        func_81700160();
-        func_81700370(0);
-        func_81700468((s16) (0xA0 - (var_s0 / 2)), (s16) (0x38 - (var_s1 / 2)), var_s0, var_s1);
-        func_80006780();
-        var_s2 += 1;
-        var_s0 += 0x1E;
-        var_s1 += 4;
-    } while (var_s2 != 8);
-    func_81700630(D_81701B0C, 1);
-    func_8170070C(D_81701B10);
-    func_81700630(D_81701B10, 1);
+        Controller_PollInputs();
+        PikachuReward_RenderFrame(0);
+        PikachuReward_DrawTextBoxPanel((s16) (0xA0 - (width / 2)), (s16) (0x38 - (height / 2)), width, height);
+        BgStage_AdvanceFrame();
+        i += 1;
+        width += 0x1E;
+        height += 4;
+    } while (i != 8);
+    PikachuReward_ShowTextWaitForA(sTextCongratulations, 1);
+    PikachuReward_ScrollTextIn(sTextSurfReward);
+    PikachuReward_ShowTextWaitForA(sTextSurfReward, 1);
 loop_3:
-    func_8170070C(D_81701B14);
-    if (func_817008B4(D_81701B14) != 0) {
+    PikachuReward_ScrollTextIn(sTextTeachSurfPrompt);
+    if (PikachuReward_ConfirmYesNoPrompt(sTextTeachSurfPrompt) != 0) {
         return 1;
     }
-    func_8170070C(D_81701B18);
-    if (func_817008B4(D_81701B18) != 0) {
-        func_81700D7C();
+    PikachuReward_ScrollTextIn(sTextStopLearningSurfPrompt);
+    if (PikachuReward_ConfirmYesNoPrompt(sTextStopLearningSurfPrompt) != 0) {
+        PikachuReward_ShowDeclinedEnding();
         return 0;
     }
     goto loop_3;
@@ -585,82 +603,93 @@ typedef struct SpeciesNameEntry817010E8 {
     /* 0x04 */ char unk04[8];
 } SpeciesNameEntry817010E8; // size = 0xC
 
+// The move name table (D_8006A9D4) seen from 8 bytes earlier, so [move].name is the name of move id `move`.
 extern SpeciesNameEntry817010E8 D_8006A9CC[];
-extern s32 D_81701B20;
-extern s32 D_81701B24;
-extern s32 D_81701B28;
-extern s32 D_81701B2C;
-extern s32 D_81701B30;
-extern s32 D_81701B34;
-extern s32 D_81701B38;
-extern char* D_81701B3C;
-extern s32 D_81701B40;
-s32 func_81700A80(s32);
+extern char* sTextWantsToLearnSurf;
+extern char* sTextFourMovesAlready;
+extern char* sTextForgetMovePrompt;
+extern char* sTextGiveUpSurfPrompt;
+extern char* sTextWhichMoveToForget;
+extern char* sTextOneTwo;
+extern char* sTextOneTwoPoof;
+extern char* sTextForgotMoveFormat;
+extern char* sTextAndThen;
 void Audio_PlayMoveSound(s32, s32, s32);
-s32 func_800564D4(char*, const char*, ...);
 
-s32 func_817010E8(void) {
+/**
+ * Returns the move slot Surf goes into: the first empty slot when Pikachu knows fewer than four
+ * moves, else the slot the player picks to forget after 「しかし ピカチュウは わざを４つ おぼえるので
+ * せいいっぱいだ！」 (with the 「１ ２ の ・・・ ポカン！」 question marks and 「ピカチュウは %sの
+ * つかいかたを きれいに わすれた！」). Returns -1 when the player gives up Surf instead.
+ */
+s32 PikachuReward_ResolveMoveSlot(void) {
     char (*text)[0x78];
     s32 result;
     s32 choice;
     char buf[0x78];
 
-    result = func_81700130();
+    result = PikachuReward_CountKnownMoves();
     if (result == 4) {
         /* Reading buf through this pointer is what gives the ROM's register allocation. */
-        text = &buf;
+        text = &buf; // FAKE
     while (TRUE) {
-        func_8170070C(D_81701B20);
-        func_81700630(D_81701B20, 1);
-        func_8170070C(D_81701B24);
-        func_81700630(D_81701B24, 1);
-        func_8170070C(D_81701B28);
-        if (func_817008B4(D_81701B28) != 0) {
-            func_8170070C(D_81701B30);
-            choice = func_81700A80(D_81701B30);
+        PikachuReward_ScrollTextIn(sTextWantsToLearnSurf);
+        PikachuReward_ShowTextWaitForA(sTextWantsToLearnSurf, 1);
+        PikachuReward_ScrollTextIn(sTextFourMovesAlready);
+        PikachuReward_ShowTextWaitForA(sTextFourMovesAlready, 1);
+        PikachuReward_ScrollTextIn(sTextForgetMovePrompt);
+        if (PikachuReward_ConfirmYesNoPrompt(sTextForgetMovePrompt) != 0) {
+            PikachuReward_ScrollTextIn(sTextWhichMoveToForget);
+            choice = PikachuReward_SelectMoveToForget(sTextWhichMoveToForget);
             if (choice >= 0) {
-                func_81700588(D_81701B34, 0x1E);
-                func_800199F8(&D_FLT_81702020, 0xA);
-                D_81701B04 = 0;
+                PikachuReward_ShowTextForFrames(sTextOneTwo, 0x1E);
+                ModelAnim_SetAnimation(&sSceneObjects[0], 0xA);
+                sQuestionMarkTimer = 0;
                 Audio_PlayMoveSound(0x85, 0x19, 0);
-                func_81700630(D_81701B38, 1);
-                func_800564D4(buf, D_81701B3C, D_8006A9CC[M2C_FIELD(D_817027A8 + choice, u8*, 9)].name);
-                func_8000A7FC(0x3C);
-                func_8170070C((s32)*text);
-                func_81700630((s32)buf, 1);
-                func_8170070C(D_81701B40);
-                func_81700630(D_81701B40, 1);
-                D_81701B04 = -1;
+                PikachuReward_ShowTextWaitForA(sTextOneTwoPoof, 1);
+                sprintf(buf, sTextForgotMoveFormat, D_8006A9CC[sPikachuPartyMon->moves[choice]].name);
+                Audio_StopMusic(0x3C);
+                PikachuReward_ScrollTextIn((s8*)*text);
+                PikachuReward_ShowTextWaitForA(buf, 1);
+                PikachuReward_ScrollTextIn(sTextAndThen);
+                PikachuReward_ShowTextWaitForA(sTextAndThen, 1);
+                sQuestionMarkTimer = -1;
                 return choice;
             }
         }
-        func_8170070C(D_81701B2C);
-        if (func_817008B4(D_81701B2C) != 0) {
-            func_81700D7C();
+        PikachuReward_ScrollTextIn(sTextGiveUpSurfPrompt);
+        if (PikachuReward_ConfirmYesNoPrompt(sTextGiveUpSurfPrompt) != 0) {
+            PikachuReward_ShowDeclinedEnding();
             return -1;
         }
     }
     }
-    func_8000A7FC(0x3C);
+    Audio_StopMusic(0x3C);
     return result;
 }
 
-extern char* D_81701B44;
-extern char D_81701F0C[];
-extern char D_81701F20[];
-extern char D_81701F30[];
-extern char D_81701F54[];
-extern char D_81701F74[];
-extern char D_81701F94[];
-extern char D_81701FA8[];
-extern char D_81701FC4[];
-extern char D_81701FE4[];
-/** Shows the save status screen. */
-void PikachuReward_ShowSaveStatusScreen(s32 arg0) {
+extern char* sTextLearnedSurf;
+extern char sTextSaving[];
+extern char sTextSaveHelpLine1[];
+extern char sTextSaveHelpLine2[];
+extern char sTextSaveHelpLine3[];
+extern char sTextSaveHelpLine4[];
+extern char sTextDontTurnOffPower[];
+extern char sTextSaveFailed[];
+extern char sTextWrongCartridgeLine1[];
+extern char sTextWrongCartridgeLine2[];
+/**
+ * Draws one frame of the cartridge save screen under 「ピカチュウは あたらしく なみのりを おぼえた！」.
+ * `status` 0 shows 「レポートちゅうです」 ("Saving"); 1 shows how to reseat the Game Boy cartridge
+ * without turning off the N64; 2 adds 「レポートできませんでした」 ("Could not save"); 3 adds
+ * 「カートリッジがちがいます または データが かわってしまいました」 ("Wrong cartridge, or the data
+ * changed"). Only status 0 was seen in play.
+ */
+void PikachuReward_ShowSaveStatusScreen(s32 status) {
     PikachuReward_RenderFrame(0);
     PikachuReward_DrawTextBoxPanel(0x1E, 0x20, 0x104, 0x30);
 
-    if (arg0 == 0) {
+    if (status == 0) {
         PikachuReward_DrawTextBoxPanel(0x4C, 0x64, 0xA8, 0x28);
     } else {
         PikachuReward_DrawTextBoxPanel(0x30, 0x54, 0xE0, 0x78);
@@ -669,28 +698,28 @@ void PikachuReward_ShowSaveStatusScreen(s32 arg0) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
     Font_SetLineHeight(0x10);
-    Font_Printf(0x2E, 0x28, D_81701B44);
+    Font_Printf(0x2E, 0x28, sTextLearnedSurf);
 
-    if (arg0 == 0) {
+    if (status == 0) {
         Font_BeginTranslucentTextRendering();
         Font_SetActive(4, -1);
-        Font_Printf(0x5C, 0x70, D_81701F0C);
+        Font_Printf(0x5C, 0x70, sTextSaving);
         Font_EndTexturedTextRendering();
     } else {
-        Font_Printf(0x40, 0x84, D_81701F20);
-        Font_Printf(0x40, 0x94, D_81701F30);
-        Font_Printf(0x40, 0xA4, D_81701F54);
-        Font_Printf(0x40, 0xB4, D_81701F74);
+        Font_Printf(0x40, 0x84, sTextSaveHelpLine1);
+        Font_Printf(0x40, 0x94, sTextSaveHelpLine2);
+        Font_Printf(0x40, 0xA4, sTextSaveHelpLine3);
+        Font_Printf(0x40, 0xB4, sTextSaveHelpLine4);
         Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF);
-        Font_Printf(0x94, 0x84, D_81701F94);
+        Font_Printf(0x94, 0x84, sTextDontTurnOffPower);
         Gfx_SetEnvColor(0xFF, 0xFF, 0x64, 0xFF);
 
-        if (arg0 == 2) {
+        if (status == 2) {
             Font_SetActive(4, -2);
-            Font_Printf(0x4C, 0x64, D_81701FA8);
-        } else if (arg0 == 3) {
-            Font_Printf(0x40, 0x5C, D_81701FC4);
-            Font_Printf(0x40, 0x6C, D_81701FE4);
+            Font_Printf(0x4C, 0x64, sTextSaveFailed);
+        } else if (status == 3) {
+            Font_Printf(0x40, 0x5C, sTextWrongCartridgeLine1);
+            Font_Printf(0x40, 0x6C, sTextWrongCartridgeLine2);
         }
     }
 
@@ -698,149 +727,132 @@ void PikachuReward_ShowSaveStatusScreen(s32 arg0) {
     BgStage_AdvanceFrame();
 }
 
-s32 func_80020AFC(M2C_UNK, s32, M2C_UNK, M2C_UNK);  /* extern */
-M2C_UNK func_80020C60(s32);                         /* extern */
-/**
- * M2C_UNK func_80020DF0(M2C_UNK *, s32, s32);         /* extern
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
- */
-/**
- * s32 GbSave_PollCartRemoval(s32);                             /* extern
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
- */
-s32 GbSave_CommitMainData(s32);                             /* extern */
-M2C_UNK func_80022118(s32);                         /* extern */
-M2C_UNK func_80022188(s32);                         /* extern */
-M2C_UNK func_817012C0(M2C_UNK);                     /* extern */
-extern s32 D_817025C4;
-extern Rec81700064 D_817025C8[];
+extern s32 sPartyCount;
+extern BattleMon sPartyMons[];
 
 /**
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Writes the edited party back to the Game Boy cartridge in `gb_port`, showing the save screen, and
+ * keeps asking the player to reseat the cartridge until the write succeeds. Seen in play: the
+ * cartridge save held Surf afterwards.
  */
-void func_817014A4(s32 arg0) {
-    M2C_UNK var_s0;
-    s32 temp_v0;
-    s32 temp_v0_2;
+void PikachuReward_SaveToCartridge(s32 gb_port) {
+    M2C_UNK status;
+    DeckHandle* handle;
+    s32 poll;
 
-    temp_v0 = func_80020AFC(0x20, arg0, 0, 1);
-    func_80020DF0(&D_817025C8, D_817025C4, temp_v0);
-    func_80020C60(temp_v0);
-    func_817012C0(0);
-    func_817012C0(0);
-    func_80022118(arg0);
-    if (GbSave_CommitMainData(arg0) == 0) {
+    handle = Deck_Open(0x20, gb_port, 0, 1);
+    Deck_WriteEntries((u8*)&sPartyMons, sPartyCount, handle);
+    Deck_CloseAndFlush(handle);
+    PikachuReward_ShowSaveStatusScreen(0);
+    PikachuReward_ShowSaveStatusScreen(0);
+    GbSave_ValidateBeforeWrite(gb_port);
+    if (GbSave_CommitMainData(gb_port) == 0) {
         do {
-            var_s0 = 2;
+            status = 2;
 loop_3:
-            temp_v0_2 = GbSave_PollCartRemoval(arg0);
-            if (temp_v0_2 == 1) {
-                var_s0 = 1;
+            poll = GbSave_PollCartRemoval(gb_port);
+            if (poll == 1) {
+                status = 1;
             }
-            if (temp_v0_2 == 3) {
-                var_s0 = 3;
+            if (poll == 3) {
+                status = 3;
             }
-            func_817012C0(var_s0);
-            if (temp_v0_2 != 2) {
+            PikachuReward_ShowSaveStatusScreen(status);
+            if (poll != 2) {
                 goto loop_3;
             }
-            func_817012C0(0);
-            func_817012C0(0);
-        } while (GbSave_CommitMainData(arg0) == 0);
+            PikachuReward_ShowSaveStatusScreen(0);
+            PikachuReward_ShowSaveStatusScreen(0);
+        } while (GbSave_CommitMainData(gb_port) == 0);
     }
-    func_80022188(arg0);
+    GbSave_RequirePakPresent(gb_port);
 }
 
 void Audio_PlayCry(s32, s32);
-M2C_UNK func_81700588(s32, M2C_UNK);
-M2C_UNK func_8170070C(s32);
-M2C_UNK func_81700630(s32, M2C_UNK);
 extern u8 D_8006B2E5;
-extern SessionContext* D_8170201C;
-M2C_UNK func_817015B0(s32 arg0) {
+extern SessionContext* sSessionContext;
+/**
+ * Plays Pikachu's cry, shows 「ピカチュウは あたらしく なみのりを おぼえた！」 ("Pikachu learned Surf!"),
+ * clears the move slots after the known moves, puts Surf (0x39) with its full PP in `move_slot`,
+ * saves the party to the cartridge and plays the success ending. D_8006B2E5 is Surf's PP in
+ * gMoveData. Seen in play with `move_slot` 1 (Growl's slot).
+ */
+void PikachuReward_TeachSurfToPikachu(s32 move_slot) {
     s32 i;
 
     Audio_PlayCry(0x19, 0);
-    func_8170070C((s32)D_81701B44);
-    func_81700588((s32)D_81701B44, 1);
-    for (i = func_81700130(); i < 4; i++) {
-        M2C_FIELD(D_817027A8 + i, u8*, 9) = 0;
-        M2C_FIELD(D_817027A8 + i, u8*, 0x20) = 0;
+    PikachuReward_ScrollTextIn(sTextLearnedSurf);
+    PikachuReward_ShowTextForFrames(sTextLearnedSurf, 1);
+    for (i = PikachuReward_CountKnownMoves(); i < 4; i++) {
+        sPikachuPartyMon->moves[i] = 0;
+        sPikachuPartyMon->pp[i] = 0;
     }
-    M2C_FIELD(D_817027A8 + arg0, u8*, 9) = 0x39;
-    M2C_FIELD(D_817027A8 + arg0, u8*, 0x20) = D_8006B2E5;
-    func_817014A4(D_8170201C->teamGbPort);
-    func_81700630((s32)D_81701B44, 1);
-    func_81700E04();
+    sPikachuPartyMon->moves[move_slot] = 0x39;
+    sPikachuPartyMon->pp[move_slot] = D_8006B2E5;
+    PikachuReward_SaveToCartridge(sSessionContext->teamGbPort);
+    PikachuReward_ShowTextWaitForA(sTextLearnedSurf, 1);
+    PikachuReward_ShowSuccessEnding();
 }
 
-M2C_UNK func_80005B98(M2C_UNK);                     /* extern */
-M2C_UNK func_800067BC(M2C_UNK);                     /* extern */
-M2C_UNK func_80006828(M2C_UNK, M2C_UNK *);          /* extern */
-M2C_UNK func_8000A7B0(M2C_UNK);                     /* extern */
-M2C_UNK func_81700E98();                            /* extern */
-s32 func_81700F78();                                /* extern */
-s32 func_817010E8();                                /* extern */
-M2C_UNK func_817015B0(s32);                         /* extern */
 
-void func_81701710(void) {
-    s32 temp_v0;
+/** Runs the reward scene: music 0x11, fade in, intro camera, the Surf offer, and Surf if accepted. */
+void PikachuReward_RunSequence(void) {
+    s32 slot;
 
-    func_8000A7B0(0x11);
-    func_800067BC(2);
-    func_80005B98(0x28);
-    func_80006828(0xA, &func_81700370);
-    func_81700E98();
-    if (func_81700F78() != 0) {
-        temp_v0 = func_817010E8();
-        if (temp_v0 >= 0) {
-            func_817015B0(temp_v0);
+    Audio_PlayMusicIfChanged(0x11);
+    StageLoader_RunFrames(2);
+    StageFade_Start(0x28);
+    BgStage_RunUntilCondition(0xA, PikachuReward_RenderFrame);
+    PikachuReward_PlayIntroCamera();
+    if (PikachuReward_ShowIntroAndConfirm() != 0) {
+        slot = PikachuReward_ResolveMoveSlot();
+        if (slot >= 0) {
+            PikachuReward_TeachSurfToPikachu(slot);
         }
     }
-    func_800067BC(2);
+    StageLoader_RunFrames(2);
 }
 
-/** Sets up a follower model with its position and animation. */
-void PikachuReward_SetupFollowerModel(DisplayObject* arg0, s16 arg1, s16 arg2, s16 arg3) {
-    Model_InitDisplayObject(arg0, 0, 0, D_81702014);
-    ModelAnim_BindTransformCurve(arg0, 0, D_8FC011C4, 0x10000);
-    arg0->node.flags &= ~1;
-    Vec3f_SetComponentsDuplicate(&arg0->scale, 1.5f, 1.5f, 1.5f);
-    arg0->position.x = arg1;
-    arg0->position.y = arg2;
-    arg0->rotation.z = arg3;
+/** Sets up one of the three question-mark models at (`x`, `y`), turned by `rotation_z`, hidden. */
+void PikachuReward_SetupQuestionMarkModel(DisplayObject* mark, s16 x, s16 y, s16 rotation_z) {
+    Model_InitDisplayObject(mark, 0, 0, sQuestionMarkGeo);
+    ModelAnim_BindTransformCurve(mark, 0, D_8FC011C4, 0x10000);
+    mark->node.flags &= ~1;
+    Vec3f_SetComponentsDuplicate(&mark->scale, 1.5f, 1.5f, 1.5f);
+    mark->position.x = x;
+    mark->position.y = y;
+    mark->rotation.z = rotation_z;
 }
 
-/** Sets up the models, cameras and state of the Pikachu reward scene. */
+/** Sets up the scene: Pikachu's model (object 0, scale 16) and the three question marks (objects 1-3). */
 void PikachuReward_SetupScene(void) {
-    MemoryBlock* temp_v0;
+    MemoryBlock* block;
     s32 i;
 
-    temp_v0 = MainPool_AllocState(main_pool_get_available(), 0);
-    D_81702010 = process_geo_layout(temp_v0, D_81701B4C);
-    D_81702014 = process_geo_layout(temp_v0, D_8FC01070);
+    block = MainPool_AllocState(main_pool_get_available(), 0);
+    sSceneRootNode = process_geo_layout(block, sSceneGeoLayout);
+    sQuestionMarkGeo = process_geo_layout(block, D_8FC01070);
 
-    MainPool_FinalizeAllocation(temp_v0);
+    MainPool_FinalizeAllocation(block);
     ModelRenderer_InitDisplayRoots();
 
     for (i = 0; i < 4; i++) {
-        ModelRenderer_AttachDisplayObject(&D_81702020[i]);
+        ModelRenderer_AttachDisplayObject(&sSceneObjects[i]);
     }
 
-    Model_InitDisplayObject(&D_81702020[0], 0, 0, D_81702018->unk_08->unk_00[0]);
-    Vec3f_SetComponentsDuplicate(&D_81702020[0].scale, 16.0f, 16.0f, 16.0f);
-    ModelAnim_SetAnimation(&D_81702020[0], 0);
-    D_81702020->node.renderFlags &= ~0x40;
-    PikachuReward_SetupFollowerModel(&D_81702020[1], -0x50, 0x17C, 0x1800);
-    PikachuReward_SetupFollowerModel(&D_81702020[2], 0, 0x17C, 0);
-    PikachuReward_SetupFollowerModel(&D_81702020[3], 0x50, 0x17C, -0x1800);
+    Model_InitDisplayObject(&sSceneObjects[0], 0, 0, sPikachuModel->unk_08->unk_00[0]);
+    Vec3f_SetComponentsDuplicate(&sSceneObjects[0].scale, 16.0f, 16.0f, 16.0f);
+    ModelAnim_SetAnimation(&sSceneObjects[0], 0);
+    sSceneObjects->node.renderFlags &= ~0x40;
+    PikachuReward_SetupQuestionMarkModel(&sSceneObjects[1], -0x50, 0x17C, 0x1800);
+    PikachuReward_SetupQuestionMarkModel(&sSceneObjects[2], 0, 0x17C, 0);
+    PikachuReward_SetupQuestionMarkModel(&sSceneObjects[3], 0x50, 0x17C, -0x1800);
 }
 
 extern char** D_83202020;
 extern char** D_8320201C;
 extern unk_D_832027C8 D_832027C8;
-extern SessionContext* D_8170201C;
+extern SessionContext* sSessionContext;
 
 extern u8 D_81000000[];
 extern u8 D_8FC00000[];
@@ -851,22 +863,23 @@ extern u8 D_0042C4A0[];
 extern u8 D_0042CC80[];
 extern u8 D_002E0BE0[];
 extern u8 D_002E2B90[];
-s32 func_81700064(s32);
 s32 Font_Init(s32 load_size, s32 side);
 
-void func_81701710(void);
 
-/** Runs the bonus Pikachu reward scene. */
-s32 Stadium_BonusPikachuReward(UNUSED s32 arg0, s32 arg1) {
+/**
+ * Fragment entry: `session` is gSessionContext. Runs the reward scene when VsScene set
+ * transitionFlags 0x20 and the cartridge in teamGbPort has a Pikachu in its party.
+ */
+s32 Stadium_BonusPikachuReward(UNUSED s32 arg0, s32 session) {
     UNUSED s32 pad; // FAKE: stack padding
-    StageContext* sp20;
+    StageContext* stage;
 
-    D_8170201C = (SessionContext*)arg1;
+    sSessionContext = (SessionContext*)session;
     main_pool_push_state('PIKA');
 
-    if ((D_8170201C->transitionFlags & 0x20) && (func_81700064(D_8170201C->teamGbPort) != 0)) {
+    if ((sSessionContext->transitionFlags & 0x20) && (PikachuReward_FindPikachuInCartParty(sSessionContext->teamGbPort) != 0)) {
         Gfx_InitDisplayListBuffers(0x10000, 0);
-        sp20 = StageContext_Allocate(0, 1, 3, 1, 2, 1);
+        stage = StageContext_Allocate(0, 1, 3, 1, 2, 1);
         Font_Init(6, 0);
 
         Fragment_Load(((((u32)D_81000000) & 0x0FF00000) >> 0x14) - 0x10, D_0015B1A0, D_0015E220);
@@ -874,10 +887,10 @@ s32 Stadium_BonusPikachuReward(UNUSED s32 arg0, s32 arg1) {
         Asset_LoadToSegment(((u32)D_01000000 & 0x0F000000) >> 0x18, D_002E0BE0, D_002E2B90, 0);
 
         PokeIcon_OpenModelArchives();
-        D_81702018 = Model_LoadForPokemon((BattleMon*)D_817027A8);
+        sPikachuModel = Model_LoadForPokemon(sPikachuPartyMon);
         PikachuReward_SetupScene();
-        StageContext_Activate(sp20);
-        func_81701710();
+        StageContext_Activate(stage);
+        PikachuReward_RunSequence();
         StageContext_Deactivate();
         Font_Free();
         Gfx_FreeDisplayListBuffers();
