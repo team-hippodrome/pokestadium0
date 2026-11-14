@@ -306,7 +306,7 @@ void PartyScreen_DrawBackground(void) {
 s32 LabPC_ComputeExpForLevel(s32 arg0, s32 arg1) {
     s32 sp4;
 
-    switch (gBaseStats[arg0].unk_13) {
+    switch (gBaseStats[arg0].growthRate) {
         case 0:
             sp4 = arg1 * arg1 * arg1;
             break;

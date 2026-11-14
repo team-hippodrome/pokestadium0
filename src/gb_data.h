@@ -8,32 +8,32 @@
 
 #define STAT_HP 1
 
-#define STAT_SPECIAL 2
+#define STAT_ATTACK 2
 
-#define STAT_SPEED 3
+#define STAT_DEFENSE 3
 
-#define STAT_DEFENSE 4
+#define STAT_SPEED 4
 
-#define STAT_ATTACK 5
+#define STAT_SPECIAL 5
 
-// Shifted, one-based view used by gBaseStats. Its named stat fields and
-// unk_13 address the same bytes as SpeciesData's stats and growthRate.
+// Shifted, one-based view used by gBaseStats (entry n holds species n from byte 5 on;
+// bytes 0-4 are the tail of the previous entry). Same bytes as SpeciesData.
 typedef struct PokemonStats {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 unk_01;
     /* 0x02 */ u8 unk_02;
     /* 0x03 */ u8 unk_03;
     /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
-    /* 0x06 */ u8 baseHP;
-    /* 0x07 */ u8 baseSpecial;
-    /* 0x08 */ u8 baseSpeed;
-    /* 0x09 */ u8 baseDefense;
-    /* 0x0A */ u8 baseAttack;
+    /* 0x05 */ u8 unk_05; // @unverified: National Dex number in the table (pj64 RAM read: 25 for Pikachu); no code reads it
+    /* 0x06 */ u8 baseHp; // 35 for Pikachu (RAM read of gBaseStats)
+    /* 0x07 */ u8 baseAttack; // 55 for Pikachu, 82 Venusaur (RAM read)
+    /* 0x08 */ u8 baseDefense; // 30 for Pikachu, 83 Venusaur (RAM read)
+    /* 0x09 */ u8 baseSpeed; // 90 for Pikachu, 80 Venusaur (RAM read)
+    /* 0x0A */ u8 baseSpecial; // 50 for Pikachu, 100 Venusaur (RAM read)
     /* 0x0B */ char unk0B[0x4];
     /* 0x0F */ u8 unk_0F[1];
     /* 0x10 */ char unk10[0x3];
-    /* 0x13 */ u8 unk_13;
+    /* 0x13 */ u8 growthRate; // Pokemon_ExpForLevel formula: 0 Pikachu (n^3), 3 Venusaur (medium slow) in the RAM table
     /* 0x14 */ char unk14[0x3];
 } PokemonStats; // size = 0x17
 

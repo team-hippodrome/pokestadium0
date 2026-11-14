@@ -315,26 +315,26 @@ u16 GetPokemonDV(s32 stat_id, u16 dv_bits) { //GetPokemonDV
     u16 dv_value;
 
     switch (stat_id) {
-        case STAT_HP: // HP DV (derived from the LSBs of other DVs)
-            dv_value = ((dv_bits & 0x1000) >> 9)  // Special DV bit 0 → HP DV bit 0
-                    | ((dv_bits & 0x0100) >> 6)  // Speed DV bit 0 → HP DV bit 1
-                    | ((dv_bits & 0x0010) >> 3)  // Defense DV bit 0 → HP DV bit 2
-                    | (dv_bits & 0x0001);        // Attack DV bit 0 → HP DV bit 3
-            break;
-
-        case STAT_SPECIAL: // Special DV
-            dv_value = (dv_bits >> 12) & 0xF;
-            break;
-
-        case STAT_SPEED: // Speed DV
-            dv_value = (dv_bits >> 8) & 0xF;
-            break;
-
-        case STAT_DEFENSE: // Defense DV
-            dv_value = (dv_bits >> 4) & 0xF;
+        case STAT_HP: // HP DV (built from the low bits of the other DVs)
+            dv_value = ((dv_bits & 0x1000) >> 9)  // Attack DV bit 0 → HP DV bit 3
+                    | ((dv_bits & 0x0100) >> 6)  // Defense DV bit 0 → HP DV bit 2
+                    | ((dv_bits & 0x0010) >> 3)  // Speed DV bit 0 → HP DV bit 1
+                    | (dv_bits & 0x0001);        // Special DV bit 0 → HP DV bit 0
             break;
 
         case STAT_ATTACK: // Attack DV
+            dv_value = (dv_bits >> 12) & 0xF;
+            break;
+
+        case STAT_DEFENSE: // Defense DV
+            dv_value = (dv_bits >> 8) & 0xF;
+            break;
+
+        case STAT_SPEED: // Speed DV
+            dv_value = (dv_bits >> 4) & 0xF;
+            break;
+
+        case STAT_SPECIAL: // Special DV
             dv_value = dv_bits & 0xF;
             break;
     }
@@ -350,19 +350,19 @@ u32 CalculateStatValue(s32 stat_id, s32 species_id, u16 stat_modifier, u16 level
 
     switch (stat_id) {
         case STAT_HP:
-            base_stat = gBaseStats[species_id].baseHP;
+            base_stat = gBaseStats[species_id].baseHp;
             break;
-        case STAT_SPECIAL:
-            base_stat = gBaseStats[species_id].baseSpecial;
-            break;
-        case STAT_SPEED:
-            base_stat = gBaseStats[species_id].baseSpeed;
+        case STAT_ATTACK:
+            base_stat = gBaseStats[species_id].baseAttack;
             break;
         case STAT_DEFENSE:
             base_stat = gBaseStats[species_id].baseDefense;
             break;
-        case STAT_ATTACK:
-            base_stat = gBaseStats[species_id].baseAttack;
+        case STAT_SPEED:
+            base_stat = gBaseStats[species_id].baseSpeed;
+            break;
+        case STAT_SPECIAL:
+            base_stat = gBaseStats[species_id].baseSpecial;
             break;
     }
 
@@ -419,7 +419,7 @@ u16 Pokemon_StatExpForTarget(s32 arg0, s32 arg1, u16 arg2, u16 arg3, u16 arg4) {
 u32 Pokemon_ExpForLevel(s32 arg0, u16 arg1) {
     u32 sp4;
 
-    switch (gBaseStats[arg0].unk_13) {
+    switch (gBaseStats[arg0].growthRate) {
         case 0:
             sp4 = arg1 * arg1 * arg1;
             break;
