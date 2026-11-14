@@ -6,6 +6,6 @@
 #include "m2c_macros.h"
 
 // main_menu_launcher.c
-s32 func_8E000020(s32 arg0, M2C_UNK arg1);
+s32 MainMenuLauncher_QueueMainMenu(s32 unused0, s32 unused1);
 
 #endif // MAIN_MENU_LAUNCHER_H
