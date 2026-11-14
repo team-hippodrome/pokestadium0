@@ -26,7 +26,7 @@ extern u64 njpgdspMainDataStart[];
 
 void Dma_InitializeCompletionQueue(void);
 void Yay0_DecompressAndRelocate(u8* in_header, u8* memory);
-void Dma_ReadChunks(u8* arg0, s32 arg1, s32 arg2, s32 arg3);
+void Sram_TransferChunked(u8* arg0, s32 arg1, s32 arg2, s32 arg3);
 void* Jpeg_LoadDecodedImage(u8* addr, PRESJPEG* arg1, s32 side);
 s32 Yay0_LoadDecompressedAsset(s32 arg0, PERSSZP* arg1, s32 side);
 u32* Asset_CopyUncompressed(u8* arg0, s32 arg1, u32 arg2, s32 arg3);
@@ -85,7 +85,7 @@ void Yay0_DecompressAndRelocate(u8* in_header, u8* memory) {
 }
 
 /** Reads data from the cartridge in chunks, waiting for each DMA to complete. */
-void Dma_ReadChunks(u8* arg0, s32 arg1, s32 arg2, s32 arg3) {
+void Sram_TransferChunked(u8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 var_s0;
     OSMesgQueue* mesq = &D_800A96F0;
 

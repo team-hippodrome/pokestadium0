@@ -6,7 +6,7 @@
 #include "jpeg_decoder.h"
 #include "util.h"
 #include "lib/ultralib/include/PR/leo.h"
-s32 func_80005014(void);
+s32 Sched_IsGfxTaskPending(void);
 #include "m2c_macros.h"
 typedef enum {
     JPEG_MARKER_START_OF_FRAME = 0xC0,
@@ -150,7 +150,7 @@ void Jpeg_BuildDspOutput(JpegTaskParams* arg0, u8(arg1)[2][0x80], JpegStreamInfo
 }
 
 /**
- * Spins (with a capped counter) until func_80005014 returns 0 and at least one
+ * Spins (with a capped counter) until Sched_IsGfxTaskPending returns 0 and at least one
  * controller is connected.
  * Seen in play (2026-11-13) ran just after Start at the title screen (console reset, then N64 logo,
  * opening, title and main menu).
@@ -159,7 +159,7 @@ void Jpeg_BuildDspOutput(JpegTaskParams* arg0, u8(arg1)[2][0x80], JpegStreamInfo
 void Jpeg_WaitForControllerReady(void) {
     s32 timeout = 0;
 
-    while ((func_80005014() != 0) || (Cont_GetControllerBits() == 0)) {
+    while ((Sched_IsGfxTaskPending() != 0) || (Cont_GetControllerBits() == 0)) {
         if (timeout < 1000000) {
             timeout++;
         }

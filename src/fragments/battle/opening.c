@@ -87,7 +87,7 @@ void func_8212188C(void);
 void func_8000D41C(Vec3f*, f32, f32, f32);
 void func_8210BCF0(Vec3f*, Vec3f*, s8*, s8*, s8*);
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
-void func_80041914(s32, s32);
+void Announcer_SetTeamSizes(s32, s32);
 void func_82136918(u8*, s32);
 /**
  * Battle opening, step 0 (BattleScene_RunOpeningSendOut): puts the camera high above the field
@@ -102,7 +102,7 @@ void BattleScene_OpeningStepInitCamera(CameraNode* arg0) {
     (*(u8**)&D_82199DE0)[1] &= ~1;
     ((u8**)&D_82199DE0)[1][1] &= ~1;
     Audio_PlayCommand(4, 0, 0);
-    func_80041914(*(u8*)(*(u8**)(((u8**)&D_82199DE0)[0] + 0x860) + 2), *(u8*)(*(u8**)(((u8**)&D_82199DE0)[1] + 0x860) + 2));
+    Announcer_SetTeamSizes(*(u8*)(*(u8**)(((u8**)&D_82199DE0)[0] + 0x860) + 2), *(u8*)(*(u8**)(((u8**)&D_82199DE0)[1] + 0x860) + 2));
     func_82136918(*(u8**)((*(u8**)&D_82199DE0) + 0x85C), 3);
     sBattleScene.scene->phaseStep++;
 }
@@ -139,7 +139,7 @@ void BattleScene_OpeningStepOrbitCamera(CameraNode* arg0) {
 
 f32 func_8000F23C(f32, f32, f32, f32);
 void func_8210C1A8(f32*, f32, f32);
-void func_80041374(s32, s32);
+void Audio_StopSoundByCategory(s32, s32);
 M2C_UNK ActivePokemon_SetModelTransform(ActivePokemon*, M2C_UNK, M2C_UNK);
 M2C_UNK func_821365B0(M2C_UNK, s8*, s8*, M2C_UNK, s32);
 /**
@@ -154,7 +154,7 @@ void BattleScene_OpeningStepLowerCameraAndThrowSide0(CameraNode* arg0) {
     s16 sp38;
 
     if (sBattleScene.scene->stepFrameTimer == 0x3C) {
-        func_80041374(4, 0x3C);
+        Audio_StopSoundByCategory(4, 0x3C);
     }
     sBattleScene.scene->easeRampRates.z = func_8000F23C(sBattleScene.scene->easeRampRates.z, 0.02f, 0.0007f, 0.0007f);
     (*(u8**)&D_82199DE0)[1] &= ~1;

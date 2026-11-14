@@ -1107,7 +1107,7 @@ void BattleScene_PhaseSubstitute(CameraNode* arg0) {
     }
 }
 
-void func_80042A6C(s32);
+void Announcer_CommentOnSideMessage(s32);
 
 /**
  * Phase 27 (moveEffectKind 0x1B): Bide, when it starts and while it stores energy.
@@ -1119,7 +1119,7 @@ void BattleScene_PhaseBide(CameraNode* arg0) {
         case 0:
             if (func_82105724(sActingPokemon, 0x1E) != 0) {
                 func_821255B4(arg0);
-                func_80042A6C(0x2E);
+                Announcer_CommentOnSideMessage(0x2E);
                 BattleMessage_ShowForSide((s32)gBattleMessageQueues->messageBuffers[1], sBattleScene.scene->actingSide);
                 func_8212C78C((s32)arg0);
                 ActivePokemon_CommitPendingStatus(sActingPokemon);

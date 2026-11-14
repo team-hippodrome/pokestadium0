@@ -31,7 +31,8 @@ extern u8 D_81184656[1];
  * Corresponds to OoT AudioHeap_ResetLoadStatus (original name Nas_ResetIDtable).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioHeap_ResetLoadStatus(void) {
     s32 i;
@@ -144,7 +145,8 @@ void AudioHeap_DiscardSequence(s32 arg0)
  * did not fit.
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name follows the OoT counterpart; comment from Stadium 1.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioHeap_Init.
  */
 u32 AudioHeap_AllocZeroed(AudioAllocPool* arg0, s32 arg1) {
   s32 temp_v0;
@@ -171,7 +173,8 @@ u32 AudioHeap_AllocZeroed(AudioAllocPool* arg0, s32 arg1) {
  * test and entry count. Stadium 1's name GbApu_Alloc did not fit.
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name follows the OoT counterpart; comment from Stadium 1.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioLoad_Init.
  */
 s32 AudioHeap_Alloc(AudioAllocPool* arg0, s32 arg1) {
   s32 temp_a2;
@@ -194,7 +197,8 @@ s32 AudioHeap_Alloc(AudioAllocPool* arg0, s32 arg1) {
  * GbApu_InitAllocator did not fit.
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name follows the OoT counterpart; comment from Stadium 1.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioHeap_InitMainPools.
  */
 void AudioHeap_InitPool(AudioAllocPool* arg0, s32 arg1, s32 arg2) {
   arg0->startRamAddr = ALIGN16(arg1);
@@ -209,7 +213,8 @@ void AudioHeap_InitPool(AudioAllocPool* arg0, s32 arg1, s32 arg2) {
  * AudioHeap_PersistentCacheClear; OoT and MM use AudioHeap_InitPersistentCache for this reset.
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioHeap_InitPersistentPoolsAndCaches.
  */
 void AudioHeap_InitPersistentCache(s8 *arg0) {
     M2C_FIELD(arg0, s32 *, 0x10) = 0;
@@ -234,7 +239,8 @@ void AudioHeap_InitPersistentCache(s8 *arg0) {
  * AudioHeap_TemporaryCacheClear; OoT and MM use AudioHeap_InitTemporaryCache for this reset.
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioHeap_InitTemporaryPoolsAndCaches.
  */
 void AudioHeap_InitTemporaryCache(s32* arg0) {
     arg0[4] = 0;
@@ -273,7 +279,8 @@ extern s32 D_811842A0;
  * Corresponds to OoT AudioHeap_InitMainPools (original name Nas_SzHeapReset).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioLoad_Init.
  */
 void AudioHeap_InitMainPools(s32 arg0) {
     func_811098C0(&D_811842B0, (s32)D_81186270, arg0);
@@ -292,7 +299,8 @@ extern M2C_UNK D_811842F0;
  * Corresponds to OoT AudioHeap_InitSessionPools (original name Nas_SzHeapDivide).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioHeap_InitSessionPools(s8 *arg0) {
     M2C_FIELD(&D_81184290, s32 *, 4) = (s32) M2C_FIELD(&D_81184290, s32 *, 0);
@@ -311,7 +319,8 @@ extern M2C_UNK D_81184310;
  * Corresponds to OoT AudioHeap_InitCachePools (original name Nas_SzDataDivide).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioHeap_InitCachePools(s8 *arg0) {
     M2C_FIELD(&D_811842F0, s32 *, 4) = (s32) M2C_FIELD(&D_811842F0, s32 *, 0);
@@ -335,7 +344,8 @@ extern M2C_UNK D_811843E4;
  * was AudioHeap_InitPersistentCache, which OoT uses for the reset above.
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioHeap_InitPersistentPoolsAndCaches(s8 *arg0) {
     M2C_FIELD(&D_81184300, s32 *, 4) = (s32) M2C_FIELD(&D_81184300, s32 *, 0);
@@ -363,7 +373,8 @@ extern M2C_UNK D_81184404;
  * was AudioHeap_InitTemporaryCache, which OoT uses for the reset above.
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioHeap_InitTemporaryPoolsAndCaches(s8 *arg0) {
     M2C_FIELD(&D_81184310, s32 *, 4) = (s32) M2C_FIELD(&D_81184310, s32 *, 0);
@@ -870,7 +881,8 @@ void AudioHeap_DiscardSampleCaches(void);
  * no sample-bank discard.
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioLoad_Init.
  */
 s32 AudioHeap_ResetStep(void) {
     s32 i;
@@ -985,7 +997,8 @@ void AudioSeq_InitSequencePlayers(void);
  * pool, ADSR decay table and the slow/async/script load initializers.
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioHeap_ResetStep.
  */
 void AudioHeap_Init(void) {
     UNUSED s32 pad[5]; // FAKE: stack pad of unknown origin; only reserves frame space

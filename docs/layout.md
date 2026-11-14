@@ -16,38 +16,38 @@ Where the code lives, after the reorganization. File names are broadly correct g
 |---|---|---|---|---|
 | 000 | `src/fragments/audio_and_gb_emulator/` | 18 | 303 | N64 sound driver (synthesis, heap, sequence player) and the Game Boy emulator (CPU, APU, Transfer Pak) |
 | 001 | `src/fragments/model_callbacks/` | 7 | 25 | Pokémon model display-list callbacks (flame textures, species particle effects, scrolling textures), called through an entry slot table |
-| 002 | `src/fragments/disk_error_screen/` | 1 | 9 | 64DD / disk error screen |
+| 002 | `src/fragments/title_screen/` | 1 | 9 | Title screen (PUSH START, attract-mode demo battle, 64DD disk errors) |
 | 003 | `src/fragments/n64_logo/` | 1 | 5 | N64 logo intro |
-| 004 | `src/fragments/gb_tower_team_prep/` | 1 | 4 | GB Tower team preparation |
+| 004 | `src/fragments/gb_tower_team_prep/` | 1 | 4 | GB mode party icon render (before the GB emulator) |
 | 005 | `src/fragments/battle_order_select/` | 1 | 33 | battle order selection |
 | 006 | `src/fragments/cartridge_check/` | 2 | 40 | Game Boy cartridge check |
 | 007 | `src/fragments/free_battle_setup/` | 5 | 108 | Free Battle setup and rental teams |
 | 008 | `src/fragments/registration/` | 1 | 51 | team registration |
 | 009 | `src/fragments/nintendo_cup_teams/` | 1 | 8 | Nintendo Cup '97 finalist teams |
 | 010 | `src/fragments/pikachu_reward/` | 1 | 27 | Pikachu reward |
-| 011 | `src/fragments/cup_select/` | 1 | 12 | cup selection |
+| 011 | `src/fragments/cup_clear/` | 1 | 12 | cup-cleared trophy scene after a tournament win |
 | 012 | `src/fragments/battle/` | 98 | 2527 | battle engine, move animations, particles and COM AI |
 | 013 | `src/fragments/vs_scene/` | 1 | 33 | VS screen before a battle |
 | 014 | `src/fragments/main_menu/` | 2 | 33 | main menu |
 | 015 | `src/fragments/lab_pc/` | 5 | 137 | Lab PC |
 | 016 | `src/fragments/lab_pokemon_list/` | 11 | 163 | Lab Pokémon list |
-| 017 | `src/fragments/lab_menu/` | 1 | 6 | Lab menu |
+| 017 | `src/fragments/pokedex_menu/` | 1 | 6 | unused ポケモンずかん menu (nothing in the retail ROM loads it) |
 | 018 | `src/fragments/pokedex/` | 2 | 56 | Pokédex |
 | 019 | `src/fragments/party_summary/` | 2 | 34 | party summary |
-| 020 | `src/fragments/main_menu_launcher/` | 1 | 1 | launches the main menu |
-| 021 | `src/fragments/launcher_relay_021/` | 1 | 1 | launcher relay |
+| 020 | `src/fragments/main_menu_launcher/` | 1 | 1 | queues the main menu; only loaded by 021–024, which nothing loads |
+| 021 | `src/fragments/unused_relay_021/` | 1 | 1 | unused relay that queues the main menu launcher (020); never loaded |
 | 022 | `src/fragments/launcher_relay_022/` | 1 | 1 | launcher relay |
-| 023 | `src/fragments/launcher_relay_023/` | 1 | 1 | launcher relay |
-| 024 | `src/fragments/launcher_relay_024/` | 1 | 1 | launcher relay |
+| 023 | `src/fragments/unused_relay_023/` | 1 | 1 | unused relay that queues the main menu launcher (020); never loaded |
+| 024 | `src/fragments/unused_relay_024/` | 1 | 1 | unused relay back to the main menu (via 020) |
 | 025 | `src/fragments/fatal_error_screen/` | 1 | 6 | fatal error screen |
-| 030 | `src/fragments/geo_model_030/` | 1 | 4 | geo layout callbacks for models |
-| 031 | `src/fragments/particle_data/` | 2 | 8 | particle data |
-| 032 | `src/fragments/geo_model_032/` | 1 | 9 | geo layout callbacks for models |
-| 033 | `src/fragments/geo_model_033/` | 1 | 13 | geo layout callbacks for models |
-| 034 | `src/fragments/geo_model_034/` | 1 | 8 | geo layout callbacks for models |
-| 038 | `src/fragments/geo_model_038/` | 1 | 2 | geo layout callbacks for models |
-| 039 | `src/fragments/geo_model_039/` | 1 | 1 | geo layout callbacks for models |
-| 040 | `src/fragments/geo_model_040/` | 1 | 1 | geo layout callbacks for models |
+| 030 | `src/fragments/pokedex_kanto_map/` | 1 | 4 | 3D Kanto map model for the Pokédex habitat screen |
+| 031 | `src/fragments/particle_data/` | 2 | 8 | fire effects for the VS scene (backdrop, panel and title overlays) |
+| 032 | `src/fragments/vs_trainer_panel/` | 1 | 9 | VS screen trainer panels (portrait, title, name, team icons, nicknames) and the battle-title round switch |
+| 033 | `src/fragments/vs_results_board/` | 1 | 13 | VS scene results board after a battle (HP bars, fainted marks) and the win/lose trainer panels |
+| 034 | `src/fragments/tournament_badge_cap/` | 1 | 8 | trainer cap with the eight tournament badges, shown after a tournament win |
+| 038 | `src/fragments/cartridge_check_models/` | 1 | 2 | models of the Game Boy cartridge check (P-OS terminal) and its anti-piracy check |
+| 039 | `src/fragments/doduo_game_boy_model/` | 1 | 1 | Doduo Game Boy (Pocket) prize model and its screen glare callback |
+| 040 | `src/fragments/dodrio_game_boy_model/` | 1 | 1 | Dodrio Game Boy (Pocket) prize model shown on the cartridge check screen |
 | 106–258 | `src/fragments/model_data/` | 153 | 153 | model data, one file per fragment |
 
 ## Resident files

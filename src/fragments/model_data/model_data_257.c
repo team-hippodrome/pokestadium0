@@ -1,17 +1,24 @@
-/* Stadium Zero fragment257_B8BFE0. */
+/* Stadium Zero fragment257_B8BFE0: the Substitute doll model. */
 
 #include "global.h"
 #include "m2c_macros.h"
 #include "model_data.h"
 
-extern M2C_UNK D_8FF1336C;
+extern M2C_UNK sSubstituteDollModelHeader;
 
-M2C_UNK *func_8FF00020_257(s32 arg0, M2C_UNK arg1) {
-    M2C_UNK *var_v1;
+/**
+ * Returns the Substitute doll model's header when `index` is 0, and NULL otherwise.
+ * This fragment is file 151 of the model archive (ROM 0x500000), after the 151 species.
+ * Seen in play: Free Battle, 1P Pikachu's first move poked to Substitute (0xA4); file 151
+ * loaded the turn it ran, and the blue doll stood in Pikachu's place (ぶんしんが あらわれた).
+ * Its header's species field reads 152 (SUBSTITUTE_DOLL).
+ */
+M2C_UNK *SubstituteDollModel_GetHeader(s32 index, UNUSED M2C_UNK arg1) {
+    M2C_UNK *header;
 
-    var_v1 = NULL;
-    if (arg0 == 0) {
-        var_v1 = &D_8FF1336C;
+    header = NULL;
+    if (index == 0) {
+        header = &sSubstituteDollModelHeader;
     }
-    return var_v1;
+    return header;
 }

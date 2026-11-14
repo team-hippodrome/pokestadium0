@@ -14,7 +14,7 @@ void GbAudio_UpdateFrame();
 void GbEmu_BlitWithPixelOp(u16* dst, u16* src, s32 mode, s32 width, s32 height);
 void GbEmu_BlendScrollingLayer(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4);
 
-s32 func_811020A8(void *arg0);
+s32 GbPak_VerifyProbeBlock(void *arg0);
 
 extern GbPakChannel D_811561C8[4];
 extern volatile u8 D_81156475;
@@ -33,11 +33,11 @@ extern u8 D_811565A0;
 void func_80058410(void*, void*, s32);
 extern s32 D_81154C48;
 
-void func_81103D30(void);
+void GbEmu_ClearStatusBar(void);
 void GbEmu_DrawAccessIcon(u16* arg0, s32 arg1, s32 arg2);
-void func_81104618(s32 arg0);
-void func_811047A0(s32 arg0);
-void func_81104930(void);
+void GbEmu_DrawSpeedIndicator(s32 arg0);
+void GbEmu_DrawAccessOverlay(s32 arg0);
+void GbEmu_DrawStatusBar(void);
 
 
 typedef struct GbEmuTask {
@@ -96,12 +96,12 @@ void func_800093E0(void*, void*);
 void GbPak_QueueNextBankLoad(GbPakChannel*);
 void Cont_StartReadInputs(void);
 void Cont_ReadInputs(void);
-u8 func_81118018(void*, s32);
+u8 GbCpu_Run(void*, s32);
 void func_80056730(void*, s32, void*);
 void func_811177D0(s32);
 
 /**
- * Runs one frame of the GB Tower emulator (Stadium 1's GbEmu_UpdateFrame).
+ * Runs one frame of the GB Player emulator (Stadium 1's GbEmu_UpdateFrame).
  * Services the Transfer Pak, builds the emulated joypad from the controller,
  * lets C-Right cycle the emulation speed, steps the CPU core that many times
  * and queues the RSP task that draws the Game Boy screen. When enabled, Z
@@ -110,6 +110,8 @@ void func_811177D0(s32);
  * stopped, otherwise 0.
  * Seen in play (2026-11-12): runs Green frame by frame and, while banks load, restores the header
  * bytes once the GB PC (gbPc) reaches 0x100.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbEmu_RunFrame.
  */
 s32 GbEmu_UpdateFrame(void) {
     s32 i;
@@ -156,8 +158,8 @@ s32 GbEmu_UpdateFrame(void) {
             GbEmu_DrawAccessIcon((u16*)(GB_RUN->unk_50 + 0xB0), 0, D_811565A3);
             GB_RUN->buttons = 0;
         } else {
-            func_81103D30();
-            func_81104930();
+            GbEmu_ClearStatusBar();
+            GbEmu_DrawStatusBar();
         }
     } else {
         for (i = 0; i < 5; i++) {
@@ -195,7 +197,7 @@ s32 GbEmu_UpdateFrame(void) {
                             break;
                     }
                     GB_MEM[0x101B9] = btn;
-                    func_81104618(GB_RUN->framebuffer);
+                    GbEmu_DrawSpeedIndicator(GB_RUN->framebuffer);
                 }
             }
         } else if (D_811561C8[D_811565A0].error != 0) {
@@ -203,7 +205,7 @@ s32 GbEmu_UpdateFrame(void) {
         } else {
             if (err == 2) {
                 if (D_811565A1 == 0) {
-                    func_811047A0(1);
+                    GbEmu_DrawAccessOverlay(1);
                 }
                 D_811565A1 = 10;
             }
@@ -216,7 +218,7 @@ s32 GbEmu_UpdateFrame(void) {
             D_811565A1--;
         }
         if (!D_811565A1) {
-            func_81104930();
+            GbEmu_DrawStatusBar();
         } else {
             if (++*(u8*)&D_811565A2 >= 11) { // FAKE
                 *(u8*)&D_811565A2 = 0; // FAKE
@@ -269,7 +271,7 @@ s32 GbEmu_UpdateFrame(void) {
             } else {
                 GB_MEM[0x101C1] = 1;
             }
-            i = func_81118018(&D_81156540, 0);
+            i = GbCpu_Run(&D_81156540, 0);
             if ((i != 0) || (GB_MEM[0x1017D] != 0) || (cycles += 17248, GB_MEM[0x10181] != 0) ||
                 (GB_MEM[0x1018D] != 0)) {
                 if ((s32)src * 0) {} // FAKE
@@ -423,7 +425,12 @@ s32 GbEmu_UpdateFrame(void) {
 extern OSMesgQueue D_81156458;
 extern u8 D_811565A0;
 
-s32 func_811064DC(void) {
+/**
+ * Asks the I/O thread for a connector check (request 8) and spins until it is done. Returns -1
+ * when the channel reports an error.
+ * Seen in play (2026-11-14) ran when C-Up opened the GB Player menu; called from GbEmu_RunFrame.
+ */
+s32 GbPak_CheckConnectionBlocking(void) {
     volatile u8* chan = (volatile u8*)&D_811561C8[D_811565A0];
 
     while (chan[0x99] != 0) {
@@ -443,7 +450,14 @@ s32 func_811064DC(void) {
 
 extern u8 D_811565A0;
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s32 func_8110659C(void)
+/**
+ * Asks the I/O thread to re-init the pak and read the cartridge ID into the channel (request
+ * 0x80), waits, and then checks the RAM probe block. Returns the error, or 0 when it is the same
+ * cartridge.
+ * Seen in play (2026-11-14) ran in the 「レポートできませんでした」 recovery flow (state forced to 20, cartridge
+ * removal faked by stubbing GbPak_IsCartridgeInserted); called from GbEmu_RunFrame.
+ */
+s32 GbPak_ReidentifyCartridge(void)
 {
   GbPakChannel *ch = &D_811561C8[D_811565A0];
   ch->unk00[0x99] = 0x80;
@@ -459,12 +473,18 @@ s32 func_8110659C(void)
   }
   if (ch->unk00[0x98] != 0)
   {
-    return func_811020A8(ch);
+    return GbPak_VerifyProbeBlock(ch);
   }
   return 0;
 }
 
-s32 func_8110665C(void) {
+/**
+ * Asks the I/O thread for a status check (request 8), waits, and returns the GB cartridge-present
+ * bit (0x80) of the pak status.
+ * Seen in play (2026-11-14) ran in the 「レポートできませんでした」 recovery flow (state forced to 20, cartridge
+ * removal faked by stubbing GbPak_IsCartridgeInserted); called from GbEmu_RunFrame.
+ */
+s32 GbPak_IsCartridgeInserted(void) {
     u8 idx = D_811565A0;
     volatile GbPakChannel* ch = &D_811561C8[idx];
 
@@ -479,7 +499,13 @@ s32 func_8110665C(void) {
 extern M2C_UNK D_8115623C;
 extern u8 D_811565A1;
 
-s32 func_81106700(void) {
+/**
+ * Returns 1 when D_811565A1 is set or any of the 128 cartridge RAM blocks is still waiting to be
+ * written back; the menu then goes to the 「レポートできませんでした」 recovery instead of failing.
+ * Seen in play (2026-11-14) ran when the emulator result D_81154C40 was poked to -1 from the GB
+ * Tower menu; the game went to 「レポートできませんでした」; called from GbEmu_RunFrame.
+ */
+s32 GbPak_HasUnsavedSramBlocks(void) {
     s32 var_v0;
     u8 *var_v1;
 
@@ -513,7 +539,12 @@ extern u8 D_81156261[];
 extern OSMesgQueue D_81156458;
 extern volatile u8 D_81156475;
 
-void func_811067B0(void) {
+/**
+ * Asks the I/O thread to power the Transfer Pak off (request 4) and waits.
+ * Seen in play (2026-11-14) ran in the 「レポートできませんでした」 recovery flow (state forced to 20, cartridge
+ * removal faked by stubbing GbPak_IsCartridgeInserted); called from GbEmu_RunFrame.
+ */
+void GbPak_PowerOff(void) {
     D_81156261[D_811565A0 * 0xA4] = 4;
     osSendMesg(&D_81156458, (OSMesg)(u32)D_811565A0, OS_MESG_BLOCK);
     while (D_81156475 != 0) {
@@ -522,7 +553,12 @@ void func_811067B0(void) {
 
 extern s8 D_81156546;
 
-void func_81106820(void) {
+/**
+ * Sets D_81156546, which stops the per-frame GB audio update.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbEmu_PauseAndBlankScreen.
+ */
+void GbEmu_PauseEmulation(void) {
     D_81156546 = 1;
 }
 
@@ -535,10 +571,12 @@ extern s32 D_81156550;
 void GbAudio_UpdateFrame(void);
 void osViBlack(u8);
 /**
- * Per-frame tail of the GB Tower emulator: unless emulation is paused (D_81156546) or
+ * Per-frame tail of the GB Player emulator: unless emulation is paused (D_81156546) or
  * the screen is being blanked (D_800AA148), runs the GB audio frame and mirrors the
  * emulated NR52 (0xFF26) register into GB memory; while D_800AA148 is set it blanks video.
  * Seen in play (2026-11-13) ran every frame from the moment JP Green booted in the N64 GB player.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbPlayer_OutputThreadEntry.
  */
 void GbEmu_UpdateAudioOrBlankVideo(UNUSED s32 arg0) {
     if ((*(u8*)&D_81156546 == 0) && (D_800AA148 == 0)) {
@@ -596,7 +634,13 @@ extern u16 D_8112A538[];
 extern u16 D_81129638[];
 extern u8 D_811565E1;
 
-void func_81106AA0(s32 addr, s32 frame) {
+/**
+ * Draws frame `frame` of the cable animation between the party panels on the loading screen.
+ * Not reached in play (2026-11-14): it did not run in the GB Player with JP Green (boot, intro,
+ * menu, button config, speed-up, recovery, quit).
+ * @unverified Name from the code and Stadium 1.
+ */
+void GbEmu_DrawTransferAnimation(s32 addr, s32 frame) {
     s32 i;
 
     for (i = 0; i < 6; i++) {
@@ -661,7 +705,14 @@ void GbEmu_DrawTextCommands(u16*, u8*);
 void GbEmu_DrawFramedPanel(u16* arg0);
 u32 func_80053A80(void);
 M2C_UNK func_8005C0A0();
-void func_81106CC8(u16* dst, u8 (*arg1)[0xC80], s32 arg2, s32 arg3) {
+/**
+ * Draws the cartridge loading screen: the background, the six party icons in framed panels, the
+ * Game Boy for `port` and the cartridge picture for `version`, then starts the cable animation.
+ * Not reached in play (2026-11-14): it did not run in the GB Player with JP Green (boot, intro,
+ * menu, button config, speed-up, recovery, quit).
+ * @unverified Name from the code and Stadium 1.
+ */
+void GbEmu_DrawLoadingScreen(u16* dst, u8 (*partyIcons)[0xC80], s32 port, s32 version) {
     s32 y;
     s32 x;
     u16* row;
@@ -687,8 +738,8 @@ void func_81106CC8(u16* dst, u8 (*arg1)[0xC80], s32 arg2, s32 arg3) {
 
     for (i = 0; i < 6; i++) {
         GbEmu_DrawFramedPanel(dst + 0xB916 + i * 46);
-        osInvalDCache(arg1[i], sizeof(arg1[i]));
-        GbEmu_BlitWithPixelOp(dst + 0xBCD9 + i * 46, (u16*)arg1[i], 0, 40, 40);
+        osInvalDCache(partyIcons[i], sizeof(partyIcons[i]));
+        GbEmu_BlitWithPixelOp(dst + 0xBCD9 + i * 46, (u16*)partyIcons[i], 0, 40, 40);
     }
 
     for (j = 0; j < 6; j++) {
@@ -709,7 +760,7 @@ void func_81106CC8(u16* dst, u8 (*arg1)[0xC80], s32 arg2, s32 arg3) {
         }
     }
 
-    switch (arg2) {
+    switch (port) {
         case 1:
             D_811565C4 = (s32)((u8*)dst + 2);
             break;
@@ -727,7 +778,7 @@ void func_81106CC8(u16* dst, u8 (*arg1)[0xC80], s32 arg2, s32 arg3) {
     GbEmu_BlitWithPixelOp(dst + 0x4E38, D_81127B88, 0, 0x56, 0x21);
     GbEmu_BlitWithPixelOp((u16*)(D_811565C4 + 0x61E0), D_81124DC0, 0, 0x3C, 0x4B);
 
-    switch (arg3) {
+    switch (version) {
         case 0:
             GbEmu_BlitWithPixelOp((u16*)(D_811565C4 + 0x7608), D_811270E8, 0, 0x13, 0x11);
             break;
@@ -742,8 +793,8 @@ void func_81106CC8(u16* dst, u8 (*arg1)[0xC80], s32 arg2, s32 arg3) {
             break;
     }
 
-    D_811565E1 = arg2;
-    func_81106AA0(D_811565C4 + 0x87BA, 0);
+    D_811565E1 = port;
+    GbEmu_DrawTransferAnimation(D_811565C4 + 0x87BA, 0);
     func_8005C0A0();
     D_811565E0 = 0;
     D_811565D8 = 0x800000;
@@ -793,12 +844,18 @@ extern u32 D_811565CC;
 extern s32 D_811565C0;
 extern u16* D_811565D4;
 extern u16* D_811565D0;
-void func_81106AA0(s32, s32);
-void func_8110724C(void) {
+void GbEmu_DrawTransferAnimation(s32, s32);
+/**
+ * Advances the loading-screen cable animation one step when its timer runs out.
+ * Not reached in play (2026-11-14): it did not run in the GB Player with JP Green (boot, intro,
+ * menu, button config, speed-up, recovery, quit).
+ * @unverified Name from the code and Stadium 1.
+ */
+void GbEmu_AnimateLoadingScreen(void) {
     if ((osGetCount() - D_811565DC) > D_811565D8) {
         D_811565DC = osGetCount();
         D_811565E0 = (D_811565E0 + 1) & 7;
-        func_81106AA0(D_811565C4 + 0x87BA, D_811565E0);
+        GbEmu_DrawTransferAnimation(D_811565C4 + 0x87BA, D_811565E0);
         if (D_811565D8 > 0x80000) {
             D_811565D8 -= D_811565D8 >> 8;
         }

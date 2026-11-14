@@ -11,13 +11,13 @@
 
 #include "m2c_macros.h"
 
-void func_8110FC30(void);
-void func_8110FC38(void);
-void func_8110FC40(void);
-void func_8110FE90(void);
+void AudioThread_Unused1(void);
+void AudioThread_Unused2(void);
+void AudioThread_Unused3(void);
+void AudioThread_Unused4(void);
 s32 AudioThread_GetFontsForSequence(s32 arg0);
 void AudioThread_ResetExternalPool(void);
-void func_81110164(void);
+void AudioThread_Unused5(void);
 void AudioThread_InitMesgQueues(void);
 
 void AudioThread_InitMesgQueuesImpl(void);
@@ -26,22 +26,31 @@ void AudioThread_InitMesgQueuesImpl(void);
  * Empty.
  * No OoT counterpart. Zero's audio thread file starts with three empty stubs; OoT's thread.c starts
  * with AudioThread_Update.
+ * No caller (2026-11-14): nothing in the built ROM jumps to it or holds its address, so play
+ * cannot reach it.
+ * @unverified Name from the code; it never runs.
  */
-void func_8110FC30(void) {
+void AudioThread_Unused1(void) {
 }
 
 /**
  * Empty.
- * See func_8110FC30.
+ * See AudioThread_Unused1.
+ * No caller (2026-11-14): nothing in the built ROM jumps to it or holds its address, so play
+ * cannot reach it.
+ * @unverified Name from the code; it never runs.
  */
-void func_8110FC38(void) {
+void AudioThread_Unused2(void) {
 }
 
 /**
  * Empty.
- * See func_8110FC30.
+ * See AudioThread_Unused1.
+ * No caller (2026-11-14): nothing in the built ROM jumps to it or holds its address, so play
+ * cannot reach it.
+ * @unverified Name from the code; it never runs.
  */
-void func_8110FC40(void) {
+void AudioThread_Unused3(void) {
 }
 
 M2C_UNK func_800567E0(M2C_UNK *, M2C_UNK *, M2C_UNK); /* extern */
@@ -63,7 +72,8 @@ extern M2C_UNK *D_81186250;
  * queues of 1, 4 and 1 messages. Stadium 1's name BattleAnim_DisableEffectSpawning did not fit.
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioThread_InitMesgQueues.
  */
 void AudioThread_InitMesgQueuesImpl(void) {
     D_811861DA = 0;
@@ -205,8 +215,11 @@ void AudioThread_ResetCmdQueue(void) {
  * Empty.
  * No OoT counterpart. It sits where OoT has AudioThread_ProcessCmd (Nap_Process1Command) and
  * AudioThread_ProcessCmds (Nap_AudioPortProcess).
+ * No caller (2026-11-14): nothing in the built ROM jumps to it or holds its address, so play
+ * cannot reach it.
+ * @unverified Name from the code; it never runs.
  */
-void func_8110FE90(void) {
+void AudioThread_Unused4(void) {
 }
 
 s32 func_8004D1C0(M2C_UNK *, u32 *, M2C_UNK);       /* extern */
@@ -391,14 +404,19 @@ void AudioThread_ResetExternalPool(void) {
 /**
  * Empty.
  * No OoT counterpart; OoT's no-op command handlers are elsewhere in thread.c.
+ * No caller (2026-11-14): nothing in the built ROM jumps to it or holds its address, so play
+ * cannot reach it.
+ * @unverified Name from the code; it never runs.
  */
-void func_81110164(void) {
+void AudioThread_Unused5(void) {
 }
 
 /**
  * Sets up the audio thread message queues.
  * Corresponds to OoT AudioThread_InitMesgQueues (original name Nas_InitGAudio). Stadium 1's name
  * BattleAnim_DisableEffectSpawningAlias did not fit.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioLoad_Init.
  */
 void AudioThread_InitMesgQueues(void) {
     AudioThread_InitMesgQueuesImpl();

@@ -260,10 +260,10 @@ void Ui_DrawBorderedPanelStyleB(s32 x1, s32 y1, s32 width, s32 height, u16 color
 extern Gfx D_800602C8[];
 extern Gfx D_80060398[];
 /**
- * Draws a 282x130 YUV image at (x + 6, y + 6) as 16x16 tiles (the last column and row
- * are cut to 10 and 2 pixels), then draws border style A around it.
+ * Draws a 282x130 YUV image (16x16 blocks of 0x200 bytes, as the JPEG decoder outputs) at (x + 6, y + 6)
+ * inside a style-A border. @unverified: no callers found in the resident code.
  */
-void func_8001E24C(s32 x, s32 y, u8* image) {
+void Ui_DrawFramedYuvImage(s32 x, s32 y, u8* image) {
     s32 j;
     s32 i;
     s32 w;
@@ -360,7 +360,11 @@ void Ui_Draw20x20Icon(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 extern u8 D_01003920[];
-void func_8001E9A0(s32 arg0, s32 arg1) {
+/**
+ * Draws the 132x22 RGBA16 image at segment 0x01 offset 0x3920 at (x, y), two rows per load.
+ * @unverified: no callers found; what the image shows is unknown.
+ */
+void Ui_DrawSegment1Banner(s32 x, s32 y) {
     s32 i;
 
     gSPDisplayList(gDisplayListHead++, D_80060290);
@@ -370,8 +374,8 @@ void func_8001E9A0(s32 arg0, s32 arg1) {
         gDPLoadTextureBlock(gDisplayListHead++, D_01003920 + i * 0x108, G_IM_FMT_RGBA, G_IM_SIZ_16b, 132, 2, 0,
                             G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                             G_TX_NOLOD, G_TX_NOLOD);
-        gSPTextureRectangle(gDisplayListHead++, arg0 << 2, (arg1 + i) << 2, (arg0 + 0x83) << 2,
-                            (arg1 + 1 + i) << 2, G_TX_RENDERTILE, 0, 0, 0x1000, 0x0400);
+        gSPTextureRectangle(gDisplayListHead++, x << 2, (y + i) << 2, (x + 0x83) << 2,
+                            (y + 1 + i) << 2, G_TX_RENDERTILE, 0, 0, 0x1000, 0x0400);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);

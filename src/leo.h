@@ -35,7 +35,7 @@ s32 Leo_HandleResetCompletion(void);
 s32 Leo_HandleBootBlockCompletion(LeoBootDescriptor* arg0);
 s32 Leo_HandlePayloadCompletion(void);
 s32 Leo_PollDiskReady(void);
-void func_8000D0D4(void);
+void Leo_UnusedStub(void);
 s32 Leo_RunBootStateMachine(LeoBootDescriptor* arg0);
 s32 Leo_InitializeBootState(void);
 void Leo_AbortPendingBootRequest(void);

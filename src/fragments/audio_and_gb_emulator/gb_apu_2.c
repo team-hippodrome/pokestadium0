@@ -1,7 +1,13 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "audio_and_gb_emulator.h"
 
-void func_811177E8(s32 num_samples, s16* out) {
+/**
+ * Renders `num_samples` stereo samples of the GB Player menu sounds: starts the sound
+ * GbAudio_PlayMenuSound queued and mixes it with the previous one, which fades out.
+ * Seen in play (2026-11-14) ran when C-Up opened the GB Player menu; called from
+ * GbAudio_UpdateFrame.
+ */
+void GbAudio_RenderMenuSounds(s32 num_samples, s16* out) {
     static u32 D_8122869C = 0;
 
     s32 i;
@@ -61,8 +67,20 @@ void func_811177E8(s32 num_samples, s16* out) {
 }
 
 
-void func_81117AFC(UNUSED s32 arg0) {
+/**
+ * Empty.
+ * No caller (2026-11-14): nothing in the built ROM jumps to it or holds its address, so play
+ * cannot reach it.
+ * @unverified Name from the code; it never runs.
+ */
+void GbAudio_Unused1(UNUSED s32 arg0) {
 }
 
-void func_81218104_jp(UNUSED s32 arg0) {
+/**
+ * Empty.
+ * No caller (2026-11-14): nothing in the built ROM jumps to it or holds its address, so play
+ * cannot reach it.
+ * @unverified Name from the code; it never runs.
+ */
+void GbAudio_Unused2(UNUSED s32 arg0) {
 }

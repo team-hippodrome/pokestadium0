@@ -96,12 +96,15 @@ extern u8 sMusicSeqTables[0x134];
 extern s32 D_800AAE30;
 extern s32 D_800AAF3C;
 
-void func_8000A780(void);
+void Misc_UnusedStub(void);
 void func_80035208_empty();
 void func_800420F0_empty();
-void func_8000A798(void);
+void Misc_UnusedStub2(void);
 
-void func_8000A780(void) {
+/**
+ * Empty; no callers.
+ */
+void Misc_UnusedStub(void) {
 
 }
 
@@ -113,5 +116,8 @@ void func_800420F0_empty() {
     
 }
 
-void func_8000A798(void) {
+/**
+ * Empty; no callers.
+ */
+void Misc_UnusedStub2(void) {
 }

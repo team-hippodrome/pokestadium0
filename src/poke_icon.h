@@ -59,8 +59,8 @@ typedef struct PokeIconRenderer {
 
 // poke_icon.c
 PokeIconRenderer* PokeIcon_CreateRenderList(ModelLoadContext*, s16, s16, s16);
-void func_80018234(PokeIconRenderer*, s32, s32, u16);
-void func_8001833C(PokeIconRenderer*, s32, BattleMon*, u16);
+void PokeIcon_SetSpeciesSlot(PokeIconRenderer*, s32, s32, u16);
+void PokeIcon_SetMonSlot(PokeIconRenderer*, s32, BattleMon*, u16);
 s32 PokeIcon_ProcessNextSlot(PokeIconRenderer*, s32);
 s32 PokeIcon_ProcessAllSlots(PokeIconRenderer*, s32);
 s32 PokeIcon_RenderNextSlotBlocking(PokeIconRenderer*, s32);

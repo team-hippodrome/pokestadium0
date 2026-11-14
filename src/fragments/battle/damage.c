@@ -442,7 +442,7 @@ void ApplyBurnAttackCut(ActivePokemon* arg0) {
 }
 
 void Battle_CheckMovesetLegality(ActivePokemon*);
-void func_80041940(s32, s32, s32);
+void Announcer_SetHp(s32, s32, s32);
 
 /**
  * Populate runtime species, HP, types, moves, stats and neutral stages from the selected roster.
@@ -526,7 +526,7 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     // clang-format on
 
     Battle_CheckMovesetLegality(arg0);
-    func_80041940(BattleScene_GetParticipantSideIndex(arg0), sp34->hp, sp34->maxHp);
+    Announcer_SetHp(BattleScene_GetParticipantSideIndex(arg0), sp34->hp, sp34->maxHp);
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.

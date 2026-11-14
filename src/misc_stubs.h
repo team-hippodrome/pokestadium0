@@ -5,6 +5,6 @@
 #include "global.h"
 
 // misc_stubs.c
-void func_8000A798(void);
+void Misc_UnusedStub2(void);
 
 #endif // MISC_STUBS_H

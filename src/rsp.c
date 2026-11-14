@@ -185,7 +185,7 @@ void* Storage_WriteRtc(StorageLeoRequest* arg0) {
 }
 
 /** Main loop of the storage thread: serves queued storage requests. */
-void thread20_rsp(UNUSED void* arg) {
+void Storage_ThreadEntry(UNUSED void* arg) {
     StorageRequest* sp2C;
     OSMesg var_v0;
 
@@ -252,13 +252,16 @@ extern M2C_UNK D_80086EE0;
 extern M2C_UNK D_80086EFC;
 extern M2C_UNK D_80086FBC;
 extern M2C_UNK D_80086FFC;
-extern M2C_UNK func_80000A58;
 
-void func_80000C14(void) {
+/**
+ * Creates the storage queues and the PI manager, then starts the storage thread (id 10,
+ * Storage_ThreadEntry) that serves ROM, SRAM and 64DD requests. Called from Idle_ThreadEntry at boot.
+ */
+void Storage_StartThread(void) {
     func_800567E0(&D_80087000.ioDoneQueue, &D_80086FFC, 1);
     func_800567E0(&D_80087000.requestQueue, &D_80086FBC, 0x10);
     func_80054AB0(0x96, &D_80087000.piCmdQueue, &D_80086EFC, 0x20);
-    func_80051B20(&D_80084D30, 0xA, &func_80000A58, 0, &D_80086EE0, 0x5A);
+    func_80051B20(&D_80084D30, 0xA, &Storage_ThreadEntry, 0, &D_80086EE0, 0x5A);
     func_8005C130(&D_80084D30);
 }
 

@@ -463,7 +463,7 @@ void BattleScene_TickRow10CleanupAndEnterState18(ActivePokemon* active_pokemon) 
     }
 }
 
-void func_800414B0(u8, s32, s32, s32);
+void Announcer_CallMove(u8, s32, s32, s32);
 /**
  * Enter callback of presentation row 3 (sBattleSceneStateRowTable): starts the user's body
  * animation for its move (the move's cue) and its event track. In play row 3 was entered on the
@@ -483,7 +483,7 @@ void BattleScene_EnterMoveUseRow(ActivePokemon* active_pokemon) {
     if (!(state->flags & 2)) {
         active_pokemon->animationTimer = 0;
         id = species + 1;
-        func_800414B0(BattleScene_GetParticipantSideIndex(active_pokemon), runtime->usedMove, id ^ 0, 0); // FAKE
+        Announcer_CallMove(BattleScene_GetParticipantSideIndex(active_pokemon), runtime->usedMove, id ^ 0, 0); // FAKE
         if ((state->flags & 0x4000) && (id == 0x33)) {
             Battle_ClearRuntimeFlags(active_pokemon, 8);
             active_pokemon->displayObject.node.renderFlags |= 0x20;
@@ -891,7 +891,7 @@ void BattleScene_EnterConfusionSelfHitRow(ActivePokemon* active_pokemon) {
     func_82134EBC(active_pokemon, 0x1E);
 }
 
-void func_800414B0(u8, s32, s32, s32);
+void Announcer_CallMove(u8, s32, s32, s32);
 /**
  * First enter callback of rows 1, 16 and 18: sets the idle animation (the sleeping, flying or
  * normal idle cue, depending on status) unless the Pokemon is frozen or underground. In play row
@@ -925,9 +925,9 @@ void BattleScene_EnterIdleRow(ActivePokemon* active_pokemon) {
             ModelAnim_SetFrame(&active_pokemon->displayObject, 0);
             ModelAnim_SetAnimation(&active_pokemon->displayObject, cue->id);
             if (state->flags & 0x200) {
-                func_800414B0(BattleScene_GetParticipantSideIndex(active_pokemon), 0, active_pokemon->displayObject.objectType, 0x1A);
+                Announcer_CallMove(BattleScene_GetParticipantSideIndex(active_pokemon), 0, active_pokemon->displayObject.objectType, 0x1A);
             } else {
-                func_800414B0(BattleScene_GetParticipantSideIndex(active_pokemon), 0, active_pokemon->displayObject.objectType, 0xA);
+                Announcer_CallMove(BattleScene_GetParticipantSideIndex(active_pokemon), 0, active_pokemon->displayObject.objectType, 0xA);
             }
         }
     }
@@ -987,11 +987,11 @@ void func_821036F4(ActivePokemon *active_pokemon)
       }
       if (state->flags & 0x200)
       {
-        func_800414B0(BattleScene_GetParticipantSideIndex(active_pokemon), 0, active_pokemon->displayObject.objectType, 0x1B);
+        Announcer_CallMove(BattleScene_GetParticipantSideIndex(active_pokemon), 0, active_pokemon->displayObject.objectType, 0x1B);
       }
       else
       {
-        func_800414B0(BattleScene_GetParticipantSideIndex(active_pokemon), 0, active_pokemon->displayObject.objectType, 0xB);
+        Announcer_CallMove(BattleScene_GetParticipantSideIndex(active_pokemon), 0, active_pokemon->displayObject.objectType, 0xB);
       }
       sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
     }
@@ -1020,9 +1020,9 @@ void BattleScene_TickSendOutRowPlayCry(ActivePokemon* active_pokemon) {
                 Audio_PlayCry(species ^ 0, 4); // FAKE
             }
             if (state->flags & 0x200) {
-                func_800414B0(BattleScene_GetParticipantSideIndex(active_pokemon), 0, active_pokemon->displayObject.objectType, 0x1B);
+                Announcer_CallMove(BattleScene_GetParticipantSideIndex(active_pokemon), 0, active_pokemon->displayObject.objectType, 0x1B);
             } else {
-                func_800414B0(BattleScene_GetParticipantSideIndex(active_pokemon), 0, active_pokemon->displayObject.objectType, 0xB);
+                Announcer_CallMove(BattleScene_GetParticipantSideIndex(active_pokemon), 0, active_pokemon->displayObject.objectType, 0xB);
             }
             sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
         }

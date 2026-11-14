@@ -10,7 +10,7 @@
 #include "profiler.h"
 #include "stage_loader.h"
 extern u64 F3DEX2_data_bin[];
-extern s32 D_800733F0;
+extern s32 sImageGridDisplayList;
 extern u64 D_80087B88[0x100 / sizeof(u64)];
 extern u64 D_80087C88[0x408 / sizeof(u64)];
 extern u64 D_80088090[0xC08 / sizeof(u64)];
@@ -88,8 +88,12 @@ M2C_UNK DpIntro_SetViMode(s8 arg0, s8 arg1) {
     osViSetSpecialFeatures(OS_VI_DIVOT_ON);
 }
 
-void func_800012AC(DisplayFrame* arg0) {
-    if (arg0 == NULL) {
+/**
+ * Copies a frame request (display list, framebuffer, resolution, anti-alias, retraces per frame) into
+ * the display thread's pending frame; NULL clears the request and keeps the current video settings.
+ */
+void Display_AcceptFrameRequest(DisplayFrame* frame) {
+    if (frame == NULL) {
         D_800870D0.requestFrame.dlist = 0;
         D_800870D0.requestFrame.dlistSize = 0;
         D_800870D0.requestFrame.framebuffer = 0;
@@ -98,18 +102,18 @@ void func_800012AC(DisplayFrame* arg0) {
         D_800870D0.requestFrame.retracesPerFrame = D_800870D0.renderFrame.retracesPerFrame;
         return;
     }
-    D_800870D0.requestFrame.hiRes = arg0->hiRes;
-    D_800870D0.requestFrame.antiAlias = arg0->antiAlias;
-    D_800870D0.requestFrame.retracesPerFrame = arg0->retracesPerFrame;
-    D_800870D0.requestFrame.dlist = arg0->dlist;
-    D_800870D0.requestFrame.dlistSize = arg0->dlistSize;
-    D_800870D0.requestFrame.framebuffer = arg0->framebuffer;
-    D_800870D0.requestFrame.renderTargetIndex = arg0->renderTargetIndex;
+    D_800870D0.requestFrame.hiRes = frame->hiRes;
+    D_800870D0.requestFrame.antiAlias = frame->antiAlias;
+    D_800870D0.requestFrame.retracesPerFrame = frame->retracesPerFrame;
+    D_800870D0.requestFrame.dlist = frame->dlist;
+    D_800870D0.requestFrame.dlistSize = frame->dlistSize;
+    D_800870D0.requestFrame.framebuffer = frame->framebuffer;
+    D_800870D0.requestFrame.renderTargetIndex = frame->renderTargetIndex;
 }
 
 void func_8000460C(void*);
-void func_80004920(void*);
-void func_8000494C(void*);
+void SchedClient_WaitMessage(void*);
+void SchedClient_PollMessage(void*);
 M2C_UNK DpIntro_SetViMode(s8, s8);
 
 /**
@@ -130,11 +134,11 @@ void DisplayWorker_ProcessFrame(void) {
     }
 
     for (i = 1; i < D_800870D0.shownFrame.retracesPerFrame; i++) {
-        func_80004920(&D_800870D0.client);
+        SchedClient_WaitMessage(&D_800870D0.client);
     }
 
     while (D_800870D0.client.queue.validCount > 0) {
-        func_8000494C(&D_800870D0.client);
+        SchedClient_PollMessage(&D_800870D0.client);
     }
 
     if (D_800870D0.renderFrame.framebuffer != NULL) {
@@ -160,10 +164,14 @@ void DisplayWorker_ProcessFrame(void) {
     D_800870D0.shownFrame = D_800870D0.renderFrame;
     D_800870D0.renderFrame = D_800870D0.requestFrame;
     profiler_log_thread5_time(THREAD5_END);
-    func_80004920(&D_800870D0.client);
+    SchedClient_WaitMessage(&D_800870D0.client);
 }
 
-void func_80001558(void) {
+/**
+ * Run by the display thread once the reset button is pressed: clears 16 more lines of the shown framebuffer
+ * each call (15 steps), then drains and waits for retraces, so the screen goes black before the reset.
+ */
+void Display_ClearForReset(void) {
     s32 width;
     s32 i;
     s32 j;
@@ -187,23 +195,23 @@ void func_80001558(void) {
         D_800870D0.nmiClearStep++;
         func_8005C0A0();
     }
-    func_80004920(&D_800870D0.client);
+    SchedClient_WaitMessage(&D_800870D0.client);
     while (D_800870D0.client.queue.validCount > 0) {
-        func_8000494C(&D_800870D0.client);
+        SchedClient_PollMessage(&D_800870D0.client);
     }
-    func_80004920(&D_800870D0.client);
+    SchedClient_WaitMessage(&D_800870D0.client);
 }
 
 void func_800594D0(u32);
 void func_80001A30(void*, u8, u8, u8, u8, s32, s32, s32);
-void func_80004EA8(SchedClient*);
+void Sched_AddClient(SchedClient*);
 void func_80001140(void*);
 void func_800081E0(s32);
 s32 func_8004D1C0(OSMesgQueue*, OSMesg*, s32);
 s32 func_8004CFB0(OSMesgQueue*, OSMesg, s32);
-void func_800012AC(DisplayFrame* arg0);
+void Display_AcceptFrameRequest(DisplayFrame* arg0);
 void func_80001328(void);
-void func_80001558(void);
+void Display_ClearForReset(void);
 
 /**
  * Seen in play (2026-11-13) ran at boot (console reset, then N64 logo, opening, title and main
@@ -217,11 +225,11 @@ void DisplayWorker_ThreadMain(UNUSED void* arg0) {
     func_80001A30(&D_800870D0.shownFrame, 0, 1, 2, 0xFF, 0, 0, 0);
     func_80001A30(&D_800870D0.renderFrame, 0, 1, 2, 0xFF, 0, 0, 0);
     func_800567E0(&D_800870D0.client.queue, D_800870D0.client.mesgBuf, 4);
-    func_80004EA8(&D_800870D0.client);
+    Sched_AddClient(&D_800870D0.client);
     func_80001140(&D_800870D0.task);
     while (1) {
         if (D_800A9710.preNmiFrames > 0) {
-            func_80001558();
+            Display_ClearForReset();
             continue;
         }
         func_800081E0(0);
@@ -230,7 +238,7 @@ void DisplayWorker_ThreadMain(UNUSED void* arg0) {
         D_800870D0.isWaitingForRequest = 0;
         func_800081E0(1);
         func_800081E0(2);
-        func_800012AC(msg);
+        Display_AcceptFrameRequest(msg);
         func_80001328();
         func_8004CFB0(&D_800870D0.doneQueue, (OSMesg)0x444F4E45, 0);
     }

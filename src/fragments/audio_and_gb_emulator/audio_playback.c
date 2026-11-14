@@ -591,7 +591,8 @@ void AudioPlayback_SeqLayerNoteRelease(Particle* arg0) {
  * Corresponds to OoT Audio_InitNoteList (original name __Nas_InitList).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioPlayback_InitNoteLists.
  */
 void AudioPlayback_InitNoteList(s8 *arg0) {
     M2C_FIELD(arg0, s8 **, 0) = arg0;
@@ -612,7 +613,8 @@ void AudioPlayback_InitNoteList(s8 *arg0) {
  * Corresponds to OoT Audio_InitNoteLists (original name Nas_InitChNode).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioPlayback_InitNoteFreeList.
  */
 void AudioPlayback_InitNoteLists(s8 *arg0) {
     AudioPlayback_InitNoteList(arg0);
@@ -642,7 +644,8 @@ extern s32 D_811858E8;
  * Corresponds to OoT Audio_InitNoteFreeList (original name Nas_InitChannelList).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioPlayback_InitNoteFreeList(void) {
     s32 i;
@@ -667,7 +670,8 @@ void AudioPlayback_AudioListRemove(s8*);
  * Corresponds to OoT Audio_NotePoolClear (original name Nas_DeAllocAllVoices).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioSeq_SequencePlayerDisable.
  */
 void AudioPlayback_NotePoolClear(NotePool* pool) {
     s32 i;
@@ -1077,7 +1081,8 @@ s32 func_81109868(s8 *, s32);
  * AudioHeap_Alloc; OoT uses AudioHeap_AllocDmaMemory.
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioPlayback_NoteInitAll(void) {
     s32 i;

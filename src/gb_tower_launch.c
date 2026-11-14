@@ -5,23 +5,28 @@
 #include "gb_tower_launch.h"
 
 M2C_UNK (*func_80002C80(M2C_UNK *))(s32);           /* extern */
-M2C_UNK func_80004920(s32);                         /* extern */
-M2C_UNK func_80004EA8(s32);                         /* extern */
+M2C_UNK SchedClient_WaitMessage(s32);                         /* extern */
+M2C_UNK Sched_AddClient(s32);                         /* extern */
 M2C_UNK func_800567E0(s32, s32, M2C_UNK);           /* extern */
 M2C_UNK func_800594D0(M2C_UNK);                     /* extern */
 extern M2C_UNK D_800A9710;
 extern s32 D_800AAF44;
 extern M2C_UNK D_81106830;
 
-void func_8000AAE0(s32 arg0) {
+/**
+ * Second GB Player thread (id 9, started by GbPlayer_EmulatorThreadEntry): each retrace, unless the console
+ * is about to reset, calls the emulator fragment's output routine (Stadium 1 name GbEmu_UpdateAudioOrBlankVideo).
+ * @unverified: what the fragment routine outputs is from Stadium 1.
+ */
+void GbPlayer_OutputThreadEntry(s32 arg0) {
     M2C_UNK (*temp_s2)(s32);
 
     temp_s2 = func_80002C80(&D_81106830);
     func_800594D0(0x01000F00);
     func_800567E0(D_800AAF44 + 0x21C0, D_800AAF44 + 0x21B0, 1);
-    func_80004EA8(D_800AAF44 + 0x21B0);
+    Sched_AddClient(D_800AAF44 + 0x21B0);
 loop_1:
-    func_80004920(D_800AAF44 + 0x21B0);
+    SchedClient_WaitMessage(D_800AAF44 + 0x21B0);
     if (M2C_FIELD(&D_800A9710, s16 *, 0xA38) >= 0x15) {
         goto loop_1;
     }
@@ -30,8 +35,8 @@ loop_1:
 }
 
 M2C_UNK (*func_80002C80(M2C_UNK *))(s32);           /* extern */
-M2C_UNK func_80004920(s32);                         /* extern */
-M2C_UNK func_80004EA8(s32);                         /* extern */
+M2C_UNK SchedClient_WaitMessage(s32);                         /* extern */
+M2C_UNK Sched_AddClient(s32);                         /* extern */
 M2C_UNK func_800567E0(s32, s32, M2C_UNK);           /* extern */
 M2C_UNK func_800594D0(M2C_UNK);                     /* extern */
 M2C_UNK func_8005C130(s32);                         /* extern */
@@ -40,7 +45,11 @@ extern s32 D_800AAF40;
 extern s32 D_800AAF44;
 extern M2C_UNK D_811008DC;
 extern M2C_UNK D_81100C84;
-void func_8000AB98(s32 arg0) {
+/**
+ * Main GB Player thread (id 8, started by GbTower_Start): runs the emulator fragment's init, starts the
+ * output thread, then runs one emulator step per retrace until the console resets.
+ */
+void GbPlayer_EmulatorThreadEntry(s32 arg0) {
     M2C_UNK (*temp_s1)(s32);
     M2C_UNK (*temp_s2)(s32);
 
@@ -48,11 +57,11 @@ void func_8000AB98(s32 arg0) {
     temp_s2 = func_80002C80(&D_81100C84);
     func_800594D0(0x01000F00);
     func_800567E0(D_800AAF40 + 0x21E4, D_800AAF40 + 0x21D4, 1);
-    func_80004EA8(D_800AAF40 + 0x21D4);
+    Sched_AddClient(D_800AAF40 + 0x21D4);
     temp_s1(D_800AAF40);
     func_8005C130(D_800AAF44);
 loop_1:
-    func_80004920(D_800AAF40 + 0x21D4);
+    SchedClient_WaitMessage(D_800AAF40 + 0x21D4);
     if (M2C_FIELD(&D_800A9710, s16 *, 0xA38) >= 0x15) {
         goto loop_1;
     }
@@ -76,8 +85,8 @@ loop_1:
  *      (GbTower_Stop copies it back);
  *   4. create a one-slot message queue at D_800AAF40 + 0x21B4 with its
  *      buffer at +0x21B0, then create the audio thread (id 9, priority 0x11,
- *      func_8000AAE0) and the emulator thread (id 8, priority 0xF,
- *      func_8000AB98), each with its stack top at its block + 0x21B0;
+ *      GbPlayer_OutputThreadEntry) and the emulator thread (id 8, priority 0xF,
+ *      GbPlayer_EmulatorThreadEntry), each with its stack top at its block + 0x21B0;
  *   5. record the previous GbTower_SetPollMask(0) value in D_800AAF48 and
  *      start the emulator thread.
  *
@@ -118,8 +127,8 @@ void GbTower_Start(GbTowerLaunchParams* arg0) {
     M2C_FIELD(D_800AAF40, void**, 0x21D0) = BinArchive_GetFile(temp_v0, 1);
     M2C_FIELD(D_800AAF40, GbTowerLaunchParams*, 0x2200) = *arg0;
     func_800567E0(D_800AAF40 + 0x21B4, D_800AAF40 + 0x21B0, 1);
-    func_80051B20(D_800AAF44, 9, func_8000AAE0, 0, D_800AAF44 + 0x21B0, 0x11);
-    func_80051B20(D_800AAF40, 8, func_8000AB98, 0, D_800AAF40 + 0x21B0, 0xF);
+    func_80051B20(D_800AAF44, 9, GbPlayer_OutputThreadEntry, 0, D_800AAF44 + 0x21B0, 0x11);
+    func_80051B20(D_800AAF40, 8, GbPlayer_EmulatorThreadEntry, 0, D_800AAF40 + 0x21B0, 0xF);
     D_800AAF48 = func_8000C610(0);
     func_8005C130(D_800AAF40);
 }
@@ -127,7 +136,11 @@ void GbTower_Start(GbTowerLaunchParams* arg0) {
 M2C_UNK func_8004D1C0(s32, s32 *, M2C_UNK);         /* extern */
 extern s32 D_800AAF40;
 
-s32 func_8000ADE8(void) {
+/**
+ * Blocks until the GB Player threads post their exit message and returns it. State_GbTower passes a
+ * nonzero result to func_800268E4 with the active port.
+ */
+s32 GbPlayer_WaitForExit(void) {
     s32 sp1C;
 
     func_8004D1C0(D_800AAF40 + 0x21B4, &sp1C, 1);

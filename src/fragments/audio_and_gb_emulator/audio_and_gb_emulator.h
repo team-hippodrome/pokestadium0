@@ -955,8 +955,8 @@ extern SequenceLayer D_811847C8[1];
 extern s16 D_811858CC;
 
 // audio_load_2.c
-void func_8110DC90(void);
-void func_8110DC98(void);
+void AudioLoad_Unused1A(void);
+void AudioLoad_Unused1B(void);
 void AudioLoad_Unused2(void);
 void AudioLoad_ProcessLoads(s32 reset_status);
 void AudioLoad_ProcessSlowLoads(s32 reset_status);
@@ -966,11 +966,11 @@ void AudioLoad_ProcessAsyncLoads(s32 arg0);
 // audio_thread.c
 s32 AudioThread_GetFontsForSequence(s32 arg0);
 void AudioThread_QueueCmdS32(s32 cmd, s32 arg1);
-void func_8110FC30(void);
-void func_8110FE90(void);
+void AudioThread_Unused1(void);
+void AudioThread_Unused4(void);
 void AudioThread_InitMesgQueuesImpl(void);
 void AudioThread_InitMesgQueues(void);
-void func_81110164(void);
+void AudioThread_Unused5(void);
 void AudioThread_ResetExternalPool(void);
 
 // audio_playback.c
@@ -1000,16 +1000,16 @@ void AudioSeq_SeqLayerProcessScriptStep1(SequenceLayer* arg0);
 void AudioSeq_SequenceChannelSetVolume(u8* arg0, u8 arg1);
 
 // audio_seqplayer_3.c
-void func_811155A0(void);
+void Audio_ScheduleProcessCmds(void);
 void Audio_QueueGlobalMute(void);
 void Audio_QueueGlobalUnmute(void);
-void func_81215C14_jp(s32 arg0, s32 arg1, u8 arg2);
-void func_81215C9C_jp(s32 arg0, s32 arg1);
-void func_81115704(void);
+void Audio_FadeSeqPlayerVolumeToPercent(s32 arg0, s32 arg1, u8 arg2);
+void Audio_FadeSeqPlayerVolumeBack(s32 arg0, s32 arg1);
+void Audio_Unused1(void);
 void Audio_QueueChannelMute(s32 arg0, s32 arg1, s32 arg2);
-void func_81215D50_jp(void);
-void func_81215D8C_jp(s32 arg0, s32 arg1, s32 arg2);
-void func_81215DDC_jp(void);
+void Audio_InitSfxSeqPlayer(void);
+void Audio_SetSfxSeqPlayerIo(s32 arg0, s32 arg1, s32 arg2);
+void Audio_ClearSfxSeqPlayerIo4(void);
 void GbApu_SetNoiseLoopBounds(s32 arg0, s32 arg1);
 void AudioSeq_SequencePlayerProcessSequence(struct SequencePlayer*);
 void AudioSeq_ProcessSequences(s32 arg0);
@@ -1019,26 +1019,26 @@ void AudioSeq_SkipForwardSequence(s8 *arg0);
 u32 GbApu_FreqToStep(u16 arg0);
 u32 GbApu_ConfigureNoiseTable(u16 arg0, u16 arg1, u16 arg2);
 u32 GbApu_FreqToStep2x(u16 arg0);
-void func_81115AF0(void);
+void GbApu_Unused1(void);
 s32 GbApu_GetWaveformSample(u32 arg0, s32 arg1);
 u16 GbApu_UpdateSquare1Channel(void);
 s32 GbApu_UpdateSquare2Channel(void);
 u16 GbApu_UpdateWaveChannel(void);
-u16 func_81207C5C_Empty(void);
+u16 GbApu_Unused2(void);
 u16 GbApu_UpdateNoiseChannel(void);
 void GbApu_WriteRegister(u16 reg, u8 value);
 void GbApu_RenderBuffer(s32 numSamples, s16* out);
 void GbApu_QueueRegisterWrite(u16 arg0, u8 arg1, u16 arg2);
 void GbApu_ResetChannels(void);
 void GbAudio_RampToSilence(void);
-void func_811173F4(void);
+void GbAudio_FrameStub(void);
 u8 GbMem_ReadIoRegister(u16 arg0);
 void GbAudio_SetMenuSoundMode(s32 arg0);
 void GbAudio_PlayMenuSound(s32 arg0);
 
 // gb_apu_2.c
-void func_811177E8(s32 numSamples, s16* out);
-void func_81117AFC(UNUSED s32 arg0);
-void func_81218104_jp(UNUSED s32 arg0);
+void GbAudio_RenderMenuSounds(s32 numSamples, s16* out);
+void GbAudio_Unused1(UNUSED s32 arg0);
+void GbAudio_Unused2(UNUSED s32 arg0);
 
 #endif // FRAGMENT_AUDIO_AND_GB_EMULATOR_H
