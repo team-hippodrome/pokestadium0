@@ -765,7 +765,7 @@ Color_RGBA8 MainMenu_ScaleColor(Color_RGBA8 color, f32 scale) {
     return scaled;
 }
 
-M2C_UNK func_80005B98(M2C_UNK);
+M2C_UNK StageFade_Start(M2C_UNK);
 extern s32 D_880022C4;
 /**
  * Draws the background, brightening it a little more each call (20 frames on the first entry).
@@ -777,7 +777,7 @@ s32 MainMenu_DrawFadeInBackground(s32 fade_mode) {
     if (fade_mode == 1) {
         /* Dead read of the counter; the retail code loads it here. */
         if (D_880022C4) {}  // karodo
-        func_80005B98(1);
+        StageFade_Start(1);
     }
     BgStage_DrawFrame();
     sp24 = MainMenu_ScaleColor(*(Color_RGBA8*)&D_88002254, D_880022C4 / 20.0);
@@ -848,7 +848,7 @@ s32 MainMenu_DrawSummaryBar(s32 fade_mode) {
     return 0;
 }
 
-M2C_UNK func_80005B98(M2C_UNK);                     /* extern */
+M2C_UNK StageFade_Start(M2C_UNK);                     /* extern */
 void BgStage_DrawFrame(void);                            /* extern */
 M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
 M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern */
@@ -867,7 +867,7 @@ s32 MainMenu_DrawSummaryBarAndBackground(s32 fade_mode) {
     M2C_UNK *var_a1;
 
     if (fade_mode == 1) {
-        func_80005B98(0xF);
+        StageFade_Start(0xF);
     }
     BgStage_DrawFrame();
     if (D_88002B00 == -1) {
@@ -931,7 +931,7 @@ s32 MainMenu_DrawFrame(s32 fade_mode) {
 M2C_UNK func_8000256C(M2C_UNK);                     /* extern */
 M2C_UNK func_80002620(M2C_UNK);                     /* extern */
 M2C_UNK func_80003EB8(u32, M2C_UNK *, M2C_UNK *, M2C_UNK); /* extern */
-M2C_UNK func_80005B98(M2C_UNK);                     /* extern */
+M2C_UNK StageFade_Start(M2C_UNK);                     /* extern */
 M2C_UNK func_80006724();                            /* extern */
 M2C_UNK func_8000675C();                            /* extern */
 s32 func_80006828(M2C_UNK, M2C_UNK *);              /* extern */
@@ -991,7 +991,7 @@ s32 MainMenu_Init(s32 is_first_entry) {
         } else {
             func_80006998(1);
         }
-        func_80005B98(0xF);
+        StageFade_Start(0xF);
         func_80006828(0x11, &MainMenu_DrawFrame);
         func_8000A7FC(0xF);
     } else {

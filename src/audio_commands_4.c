@@ -54,7 +54,7 @@ extern s32 D_800775A8;
 s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 s32 func_80037AC4(s32, s32);
 s32 func_8003834C(s32, s32, s32, s32, s32, s32, s32);
-void func_8003A710(u8*);
+void Block_RelocateSelf(u8*);
 void func_80037D4C(s32, f32);
 void func_80037E84(s32, s32);
 void func_80037DF4(s32, s32);

@@ -327,7 +327,7 @@ extern s8 D_82202C98;
 extern s8 D_82202CB4;
 extern s8 D_82202D08;
 extern s8 D_82202D24;
-M2C_UNK func_80005B98(M2C_UNK);
+M2C_UNK StageFade_Start(M2C_UNK);
 M2C_UNK func_8000A7FC(M2C_UNK);
 /**
  * The reverse of VsScene_ZoomIntoScreen: moves the camera along the path from the big screen back
@@ -356,7 +356,7 @@ void VsScene_ZoomOutOfScreen(void) {
     } while (0);
     while (BezierPath_Step(sp8C, rec + 0xA8) != 0) {
         if (i++ == 0x14) {
-            func_80005B98(0x20);
+            StageFade_Start(0x20);
             func_8000A7FC(0x3C);
         }
         BezierPath_Step(sp50, rec + 0xB4);

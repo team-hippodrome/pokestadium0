@@ -225,7 +225,7 @@ typedef struct Step82133B6C {
 } Step82133B6C; // size = 0xE
 extern Step82133B6C D_8218B5D0[];
 extern s8* D_82199DE4;
-void func_80005B98(s32);
+void func_80005B98(s32); // StageFade_Start; declared void here because the s32 prototype changes register allocation
 void func_80006998(s32);
 f32 func_8000F23C(f32, f32, f32, f32);
 void func_80010B3C(void*, s16, s16, s16, s16);

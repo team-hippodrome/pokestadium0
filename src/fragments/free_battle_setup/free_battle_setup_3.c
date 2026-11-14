@@ -125,7 +125,7 @@ void func_800040B4(s32, u8*, u8*);
 void func_80003EB8(s32, u8*, u8*, s32);
 s32 func_80001B10(u8*);
 void FreeBattle_RestoreMenuState(s32);
-void func_80005B98(s32);
+s32 StageFade_Start(s32);
 void func_80006828(s32, void*);
 void func_8000A7B0(s32);
 void func_80006998(s32);

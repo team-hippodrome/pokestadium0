@@ -129,7 +129,7 @@ void Rom_InitDevice(s32);
 void func_8004609C(u32, u8*, s32);
 void func_80047FB0(u8*, s32, s32);
 void func_80037F48(s32, s32);
-void func_8003A710(u8*);
+void Block_RelocateSelf(u8*);
 s32 func_800371A4(s8*);
 void Audio_SetChannelVolume(s32 arg0, u32 arg1);
 
@@ -170,7 +170,7 @@ s32 func_8003E1F8(void) {
     func_8004609C(D_800B4168[0], D_800B41F0, D_800B4168[1] - D_800B4168[0]);
     D_800B41A0 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0xAC0);
     func_80047FB0(D_800B41F0, D_800B41A0, 0xAC0);
-    func_8003A710((u8*)D_800B41A0);
+    Block_RelocateSelf((u8*)D_800B41A0);
     func_8004609C(D_800B4168[1], D_800B41F0, D_800B4168[2] - D_800B4168[1]);
     D_800B4184 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0xD60);
     func_80047FB0(D_800B41F0, D_800B4184, 0xD60);
@@ -182,7 +182,7 @@ s32 func_8003E1F8(void) {
     func_8004609C(D_800B416C[0], D_800B41F0, D_800B416C[1] - D_800B416C[0]);
     D_800B41A4 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0xC80);
     func_80047FB0(D_800B41F0, D_800B41A4, 0xC80);
-    func_8003A710((u8*)D_800B41A4);
+    Block_RelocateSelf((u8*)D_800B41A4);
     func_8004609C(D_800B416C[1], D_800B41F0, D_800B416C[2] - D_800B416C[1]);
     D_800B4188 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0x2060);
     func_80047FB0(D_800B41F0, D_800B4188, 0x2060);
@@ -223,7 +223,7 @@ s32 func_8003E1F8(void) {
     func_8004609C(D_800B4170[0], D_800B41F0, D_800B4170[1] - D_800B4170[0]);
     D_800B41A8 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0xC80);
     func_80047FB0(D_800B41F0, D_800B41A8, 0xC80);
-    func_8003A710((u8*)D_800B41A8);
+    Block_RelocateSelf((u8*)D_800B41A8);
     func_8004609C(D_800B4170[1], D_800B41F0, D_800B4170[2] - D_800B4170[1]);
     D_800B418C = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 0x5EE0);
     func_80047FB0(D_800B41F0, D_800B418C, 0x5EE0);
@@ -747,7 +747,7 @@ extern s32 D_800775A8;
 s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 s32 func_80037AC4(s32, s32);
 s32 func_8003834C(s32, s32, s32, s32, s32, s32, s32);
-void func_8003A710(u8*);
+void Block_RelocateSelf(u8*);
 void func_80037D4C(s32, f32);
 void func_80037E84(s32, s32);
 void func_80037DF4(s32, s32);
@@ -787,7 +787,7 @@ s32 Audio_PlayCry(u32 arg0, u32 arg1) {
     }
     Rom_DmaRead(start, (u32)D_800B41F0, size);
     Audio_CopyDataWithCacheSync((s32)D_800B41F0, D_800B41B0[D_80077520], 0x140);
-    func_8003A710(D_800B41B0[D_80077520]);
+    Block_RelocateSelf(D_800B41B0[D_80077520]);
     switch (arg1) {
         case 0:
             D_800FD5F8[D_80077520] = func_8003834C(D_800B4190, (s32)D_800B41B0[D_80077520], 1, 0xA0, 0x80, 0, -1);
@@ -1103,7 +1103,7 @@ skip:
 
     func_8004609C(D_800B4178->files[move_id], D_800B41F0, size);
     func_80047FB0(D_800B41F0, (s32)D_800B41C0[D_800FD604], 0x320);
-    func_8003A710(D_800B41C0[D_800FD604]);
+    Block_RelocateSelf(D_800B41C0[D_800FD604]);
 
     if (sound_kind == 0xFF) {
         ret = func_8003834C(D_800B4194, (s32)D_800B41C0[D_800FD604], var + 1, 0x80, 0x80, 0, -1);

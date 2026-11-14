@@ -58,7 +58,12 @@ void StageLoader_SetupFrame(void);
 void BgStage_DrawFrame(void);
 
 extern Gfx D_8005F728[];
-void func_80005980(void) {
+/**
+ * Draws the full-screen fade in the stage clear color: opaque in mode 1, fading out in mode 2,
+ * fading in in mode 3, over fadeDuration frames. At the end mode 2 drops to 0 (no fade) and mode 3
+ * holds at 1 (opaque). Seen in play: the fades between menus come from StageFade_Start.
+ */
+void StageFade_Draw(void) {
     u8 a;
     u8 b;
     u8 g;
@@ -108,7 +113,11 @@ void func_80005980(void) {
     }
 }
 
-s32 func_80005B98(s32 arg0) {
+/**
+ * Starts a fade of `duration` frames: from opaque it fades the screen in (mode 2), from clear it
+ * fades to the clear color (mode 3). Returns 0 if a fade is already running.
+ */
+s32 StageFade_Start(s32 duration) {
     s32 var_v1;
 
     var_v1 = 0;
@@ -120,7 +129,7 @@ s32 func_80005B98(s32 arg0) {
         }
         var_v1 = 1;
         stage->fadeFrame = 0;
-        stage->fadeDuration = arg0;
+        stage->fadeDuration = duration;
     }
     return var_v1;
 }
@@ -199,7 +208,7 @@ extern Mtx D_800AA188;
 extern Mtx D_8005F688;
 extern Vp D_8005F6C8;
 extern Vp D_8005F6D8;
-void func_80005980(void);
+void StageFade_Draw(void);
 void Util_DrawMemoryProfiler(Gfx**);
 
 /** Sets the render target and viewport for the frame. */
@@ -221,7 +230,7 @@ void StageLoader_SetupFrame(void) {
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, stage->width, stage->height);
     }
 
-    func_80005980();
+    StageFade_Draw();
 
     if (gShowCPUProfiler != 0) {
         print_profiler_metrics();
@@ -497,7 +506,11 @@ s32 StageContext_IsHighResolution(void) {
 }
 
 
-s32 func_80006B50(s32 *arg0, s32 *arg1, s32 *arg2, s32 *arg3) {
+/**
+ * Clips the rectangle (*x1, *y1)-(*x2, *y2) to the stage's clear area. Returns 1 when something is
+ * left, 0 when it is empty or there is no stage.
+ */
+s32 Stage_ClipRectToClearArea(s32 *x1, s32 *y1, s32 *x2, s32 *y2) {
     s16 temp_v1;
     s16 temp_v1_2;
     s16 temp_v1_3;
@@ -508,24 +521,24 @@ s32 func_80006B50(s32 *arg0, s32 *arg1, s32 *arg2, s32 *arg3) {
         return 0;
     }
     temp_v1 = stage->clearLeft;
-    if (*arg0 < temp_v1) {
-        *arg0 = (s32) temp_v1;
+    if (*x1 < temp_v1) {
+        *x1 = (s32) temp_v1;
     }
     temp_v1_2 = stage->clearRight;
-    if (temp_v1_2 < *arg2) {
-        *arg2 = (s32) temp_v1_2;
+    if (temp_v1_2 < *x2) {
+        *x2 = (s32) temp_v1_2;
     }
     temp_v1_3 = stage->clearTop;
-    if (*arg1 < temp_v1_3) {
-        *arg1 = (s32) temp_v1_3;
+    if (*y1 < temp_v1_3) {
+        *y1 = (s32) temp_v1_3;
     }
     temp_v1_4 = stage->clearBottom;
-    if (temp_v1_4 < *arg3) {
-        *arg3 = (s32) temp_v1_4;
+    if (temp_v1_4 < *y2) {
+        *y2 = (s32) temp_v1_4;
     }
-    var_v1 = *arg2 >= *arg0;
+    var_v1 = *x2 >= *x1;
     if (var_v1 != 0) {
-        var_v1 = *arg3 >= *arg1;
+        var_v1 = *y2 >= *y1;
     }
     return var_v1;
 }

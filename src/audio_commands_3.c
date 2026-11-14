@@ -20,7 +20,7 @@ s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 s32 func_80037AC4(s32, s32);
 void func_8004609C(u32, u8*, s32);
 void func_80047FB0(u8*, s32, s32);
-void func_8003A710(s32);
+void Block_RelocateSelf(s32);
 s32 func_8003834C(s32, s32, s32, s32, s32, s32, s32);
 
 // FAKE: callers pass four arguments. `hi` has to be a u8 that owns no stack slot
@@ -108,7 +108,7 @@ s32 func_800414B0(u8 arg0, u32 arg1, u32 arg2, u32 arg3, u8 hi) {
     }
     func_8004609C(addr, D_800B41F0, size);
     func_80047FB0(D_800B41F0, D_800B41D0[D_800FD605], 0x200);
-    func_8003A710(D_800B41D0[D_800FD605]);
+    Block_RelocateSelf(D_800B41D0[D_800FD605]);
     return (D_800FD670[arg0] = func_8003834C(D_800B4198, D_800B41D0[D_800FD605], flags, 0x80, 0x80, 0, -1));
 }
 

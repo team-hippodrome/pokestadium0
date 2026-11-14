@@ -21,7 +21,7 @@
 #include "ui_graphics.h"
 
 // Declared here instead of in a header: the callers of these disagree on their types.
-M2C_UNK func_80005B98(M2C_UNK);
+M2C_UNK StageFade_Start(M2C_UNK);
 M2C_UNK func_80006828(M2C_UNK, M2C_UNK *);
 M2C_UNK func_80006998(M2C_UNK);
 M2C_UNK func_800199E4(M2C_UNK *);
@@ -625,7 +625,7 @@ void CartridgeCheck_PlayExitToTitle(void) {
     func_80010F9C(&D_88403648, 0x2E);
     M2C_FIELD(&D_88403648, u8 *, 2) |= 0x20;
     func_80006998(0xFFFF);
-    func_80005B98(0x1E);
+    StageFade_Start(0x1E);
     func_8000A7FC(0x3C);
     func_80041374(0x46, 0x3C);
     func_8003F6AC(0x23);
@@ -773,7 +773,7 @@ s32 CartridgeCheck_EnterFromBoot(void) {
     CartridgeCheck_ReadInputs();
     func_800067BC(1);
     func_8000A7B0(0xA);
-    func_80005B98(0x1E);
+    StageFade_Start(0x1E);
     func_8000D520(sp18 + 0xB4, &D_88402D98 + 2);
     func_8000D520(sp18 + 0xA8, &D_88402DB4 + 2);
     func_80006828(5, &CartridgeCheck_DrawFrame);
@@ -805,7 +805,7 @@ s32 CartridgeCheck_EnterAfterCupWin(void) {
     D_88403360 = 0;
     CartridgeCheck_ReadInputs();
     func_800067BC(1);
-    func_80005B98(0x1E);
+    StageFade_Start(0x1E);
     func_8000D520(sp1C + 0xB4, &D_88402DD0 + 2);
     func_8000D520(sp1C + 0xA8, &D_88402DEC + 2);
     func_80006828(5, &CartridgeCheck_DrawFrame);

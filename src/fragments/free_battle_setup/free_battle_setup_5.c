@@ -764,7 +764,7 @@ void func_800040B4(s32, u8*, u8*);
 void func_80003EB8(s32, u8*, u8*, s32);
 s32 func_80001B10(u8*);
 void FreeBattle_RestoreMenuState(FreeBattleScreen*);
-void func_80005B98(s32);
+s32 StageFade_Start(s32);
 void func_80006828(s32, void*);
 void func_8000A7B0(s32);
 void func_80006998(s32);
@@ -834,7 +834,7 @@ M2C_UNK FreeBattle_RunSetupScreen(void) {
     if (gSessionContext.transitionFlags & 0x100) {
         gSessionContext.transitionFlags &= ~0x100;
         FreeBattle_RestoreMenuState(D_8200AD28);
-        func_80005B98(0xF);
+        StageFade_Start(0xF);
         func_80006828(0x11, FreeBattle_DrawScreenWithSummary);
         func_8000A7B0(9);
     } else {
@@ -844,7 +844,7 @@ M2C_UNK FreeBattle_RunSetupScreen(void) {
 
     if (D_82008F84 == 0x8050) {
         func_80006998(0xFFFF);
-        func_80005B98(0xF);
+        StageFade_Start(0xF);
         func_80006828(0x11, FreeBattle_DrawScreenWithSummary);
         func_8000A7FC(0xF);
     } else {

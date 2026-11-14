@@ -23,7 +23,7 @@
 #include "stage_loader.h"
 #include "ui_graphics.h"
 
-M2C_UNK func_8001CC90(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
+M2C_UNK Gfx_DrawPatternRows(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 void func_8003F6AC(s32); // Audio_PlaySoundEffectById
 extern s32 sPokedexMenuSelection; // the selected item, 0-5
 extern char sPokedexMenuTitleText[]; // "ポケモンずかん"
@@ -56,7 +56,7 @@ void PokedexMenu_DrawItem(s32 index, s32 x, s32 y, char* text) {
  */
 s32 PokedexMenu_Draw(s32 fade_mode) {
     BgStage_DrawFrame();
-    func_8001CC90(0, 0x1E0, 0x32, 0x64, 0xA2);
+    Gfx_DrawPatternRows(0, 0x1E0, 0x32, 0x64, 0xA2);
     Ui_DrawTextureMarker(0xA0, (sPokedexMenuSelection * 0x1E) + 0xC8);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(0x20, 0);
