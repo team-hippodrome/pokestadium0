@@ -59,8 +59,8 @@ void GeoRender_PushScaledMatrix(Vec3f* arg0);
 MtxF* GeoRender_GetRelativeMatrix(s32 arg0);
 void GeoRender_ResetTransformStack(void);
 void GeoRender_PushScale(Vec3f* arg0);
-f32 ModelAnim_EvaluateTranslationChannel(unk_D_800ABCC0* arg0, s32 arg1);
-s16 ModelAnim_EvaluateRotationChannel(unk_D_800ABCC0* arg0, s32 arg1);
+f32 ModelAnim_EvaluateScaleChannel(ModelAnimCurveContext* arg0, s32 arg1);
+s16 ModelAnim_EvaluateRotationChannel(ModelAnimCurveContext* arg0, s32 arg1);
 s32 ModelAnim_ResolveEventIndex(s32 arg0, unk_func_80017540_arg1* arg1, s32 arg2);
 Vtx* GeoOverlay_BuildFadeQuad(CameraOverlay* arg0, CameraOrthographic* arg1);
 void GeoOverlay_DrawFadeQuad(CameraOverlay* arg0, CameraOrthographic* arg1);
@@ -183,118 +183,110 @@ void GeoRender_PushScale(Vec3f* arg0) {
 }
 
 extern s32 D_800ABCF0;
-extern unk_D_800ABCC0 D_800ABCC0[2];
+extern ModelAnimCurveContext D_800ABCC0[2];
 /*
  * ModelAnim_BeginCurveContext
  *
- * Fills the global record D_800AC690 from the object `arg0` and the data
- * block arg0->unk_4 (`temp_s1`):
- *
- *   - if arg1 != 0, arg0->unk_8 = ModelAnim_AdvanceCurveFrame(arg0) first;
- *   - arg0->unk_12 (halfword at 0x12) = D_80060484;
- *   - D_800AC690[0] = 1;  D_800AC690[1] = first halfword of the block & 4;
- *     D_800AC690 word 4 = the block pointer;
- *     D_800AC690 halfword 2 = (arg0->unk_8) >> 16, clamped to 0 if negative;
- *   - D_800AC690 words 8, 0xC, 0x10, 0x14 = func_80002C80 of the block's
- *     words at 0xC, 0x10, 0x14, 0x18.
- *
- * What the record is used for is not established; ModelAnim_AdvanceCurveFrame and
- * func_80002C80 are not described here.
+ * Loads the global curve context D_800AC690 from a transform animation state:
+ * advances its frame if arg1 != 0, stamps lastRenderFrame, then points the
+ * context at the channel table and the scale, rotation and translation value
+ * streams of its TransformAnimData. Geo_NodeAnimatedPart then evaluates three
+ * channels per part from it.
  */
 s32 func_80002C80(s32);
 s32 ModelAnim_AdvanceCurveFrame(TransformAnimRaw* arg0);
-extern u8 D_800AC690;
+extern ModelAnimCurveContext D_800AC690;
 
 /** Starts evaluating an animation curve set, setting up its channel context. */
-void ModelAnim_BeginCurveContext(void *arg0, s32 arg1) {
-    s16 *temp_s1;
+void ModelAnim_BeginCurveContext(void* arg0, s32 arg1) {
+    TransformAnimData* temp_s1;
 
-    temp_s1 = M2C_FIELD(arg0, s16 **, 4);
+    temp_s1 = ((TransformAnimRaw*)arg0)->data;
     if (arg1 != 0) {
-        M2C_FIELD(arg0, s32 *, 8) = ModelAnim_AdvanceCurveFrame((TransformAnimRaw*)arg0);
+        ((TransformAnimRaw*)arg0)->frameFixed.raw = ModelAnim_AdvanceCurveFrame((TransformAnimRaw*)arg0);
     }
-    M2C_FIELD(arg0, u16 *, 0x12) = (u16) D_80060484;
-    M2C_FIELD(&D_800AC690, s8 *, 0) = 1;
-    M2C_FIELD(&D_800AC690, s8 *, 1) = (s8) (*M2C_FIELD(arg0, s16 **, 4) & 4);
-    M2C_FIELD(&D_800AC690, s16 *, 2) = (s16) ((s32) M2C_FIELD(arg0, s32 *, 8) >> 0x10);
-    M2C_FIELD(&D_800AC690, s16 **, 4) = temp_s1;
-    M2C_FIELD(&D_800AC690, s32 *, 8) = func_80002C80(M2C_FIELD(temp_s1, s32 *, 0xC));
-    M2C_FIELD(&D_800AC690, s32 *, 0xC) = func_80002C80(M2C_FIELD(temp_s1, s32 *, 0x10));
-    M2C_FIELD(&D_800AC690, s32 *, 0x10) = func_80002C80(M2C_FIELD(temp_s1, s32 *, 0x14));
-    M2C_FIELD(&D_800AC690, s32 *, 0x14) = func_80002C80(M2C_FIELD(temp_s1, s32 *, 0x18));
-    if (M2C_FIELD(&D_800AC690, s16 *, 2) < 0) {
-        M2C_FIELD(&D_800AC690, s16 *, 2) = 0;
+    ((TransformAnimRaw*)arg0)->lastRenderFrame = (u16) D_80060484;
+    D_800AC690.active = 1;
+    D_800AC690.wideTranslation = (s8) (((TransformAnimRaw*)arg0)->data->flags & 4);
+    D_800AC690.frame = (s16) (((TransformAnimRaw*)arg0)->frameFixed.raw >> 0x10);
+    D_800AC690.data = temp_s1;
+    D_800AC690.channels = (void*) func_80002C80(temp_s1->channelTable);
+    D_800AC690.scaleValues = (void*) func_80002C80(temp_s1->scaleData);
+    D_800AC690.rotationValues = (void*) func_80002C80(temp_s1->rotationData);
+    D_800AC690.translationValues = (void*) func_80002C80(temp_s1->translationData);
+    if (D_800AC690.frame < 0) {
+        D_800AC690.frame = 0;
     }
 }
 
 /**
- * Evaluates one translation channel of an animation curve at the current
- * frame.
+ * Evaluates one scale channel of an animation curve at the current frame
+ * (values are in thousandths; the result feeds GeoRender_PushScale).
  */
-f32 ModelAnim_EvaluateTranslationChannel(unk_D_800ABCC0* arg0, s32 arg1) {
+f32 ModelAnim_EvaluateScaleChannel(ModelAnimCurveContext* arg0, s32 arg1) {
     f32 ret;
     s32 var_a2;
-    unk_D_800ABCC0_008* temp_v0 = &arg0->unk_08[arg1];
+    ModelAnimChannel* temp_v0 = &arg0->channels[arg1];
 
-    if (temp_v0->unk_00 == 1) {
-        ret = temp_v0->unk_04 / 1000.0f;
+    if (temp_v0->scaleKeyCount == 1) {
+        ret = temp_v0->scaleIndex / 1000.0f;
     } else {
-        if (arg0->unk_02 < temp_v0->unk_00) {
-            var_a2 = temp_v0->unk_04 + arg0->unk_02;
+        if (arg0->frame < temp_v0->scaleKeyCount) {
+            var_a2 = temp_v0->scaleIndex + arg0->frame;
         } else {
-            var_a2 = (temp_v0->unk_04 + temp_v0->unk_00) - 1;
+            var_a2 = (temp_v0->scaleIndex + temp_v0->scaleKeyCount) - 1;
         }
 
-        ret = arg0->unk_0C[var_a2] / 1000.0f;
+        ret = arg0->scaleValues[var_a2] / 1000.0f;
     }
 
     return ret;
 }
 
 /** Evaluates one rotation channel of an animation curve at the current frame. */
-s16 ModelAnim_EvaluateRotationChannel(unk_D_800ABCC0* arg0, s32 arg1) {
+s16 ModelAnim_EvaluateRotationChannel(ModelAnimCurveContext* arg0, s32 arg1) {
     s32 var_a1;
     s16 var_v1;
-    unk_D_800ABCC0_008* temp_v0 = &arg0->unk_08[arg1];
+    ModelAnimChannel* temp_v0 = &arg0->channels[arg1];
 
-    if (temp_v0->unk_01 == 1) {
-        var_v1 = temp_v0->unk_06 * 0x10;
+    if (temp_v0->rotationKeyCount == 1) {
+        var_v1 = temp_v0->rotationIndex * 0x10;
     } else {
-        if (arg0->unk_02 < temp_v0->unk_01) {
-            var_a1 = temp_v0->unk_06 + arg0->unk_02;
+        if (arg0->frame < temp_v0->rotationKeyCount) {
+            var_a1 = temp_v0->rotationIndex + arg0->frame;
         } else {
-            var_a1 = (temp_v0->unk_06 + temp_v0->unk_01) - 1;
+            var_a1 = (temp_v0->rotationIndex + temp_v0->rotationKeyCount) - 1;
         }
-        var_v1 = PackedBits_ReadSigned(arg0->unk_10, var_a1, 0xC) * 0x10;
+        var_v1 = PackedBits_ReadSigned(arg0->rotationValues, var_a1, 0xC) * 0x10;
     }
     return var_v1;
 }
 
-/** Evaluates one scale channel of an animation curve at the current frame. */
-f32 ModelAnim_EvaluateScaleChannel(unk_D_800ABCC0* arg0, s32 arg1) {
+/** Evaluates one translation channel of an animation curve at the current frame (whole units, 12 or 16-bit packed). */
+f32 ModelAnim_EvaluateTranslationChannel(ModelAnimCurveContext* arg0, s32 arg1) {
     f32 var_fv1;
     s16 var_a2;
     s32 var_a1;
-    unk_D_800ABCC0_008* temp_v0 = &arg0->unk_08[arg1];
+    ModelAnimChannel* temp_v0 = &arg0->channels[arg1];
 
-    if (temp_v0->unk_02 == 1) {
-        if (arg0->unk_01 != 0) {
-            var_fv1 = (s16)temp_v0->unk_08;
+    if (temp_v0->translationKeyCount == 1) {
+        if (arg0->wideTranslation != 0) {
+            var_fv1 = (s16)temp_v0->translationIndex;
         } else {
-            var_a2 = temp_v0->unk_08 * 0x10;
+            var_a2 = temp_v0->translationIndex * 0x10;
             var_fv1 = var_a2 >> 4;
         }
     } else {
-        if (arg0->unk_02 < temp_v0->unk_02) {
-            var_a1 = temp_v0->unk_08 + arg0->unk_02;
+        if (arg0->frame < temp_v0->translationKeyCount) {
+            var_a1 = temp_v0->translationIndex + arg0->frame;
         } else {
-            var_a1 = (temp_v0->unk_08 + temp_v0->unk_02) - 1;
+            var_a1 = (temp_v0->translationIndex + temp_v0->translationKeyCount) - 1;
         }
 
-        if (arg0->unk_01 != 0) {
-            var_fv1 = PackedBits_ReadSigned(arg0->unk_14, var_a1, 0x10);
+        if (arg0->wideTranslation != 0) {
+            var_fv1 = PackedBits_ReadSigned(arg0->translationValues, var_a1, 0x10);
         } else {
-            var_fv1 = PackedBits_ReadSigned(arg0->unk_14, var_a1, 0xC);
+            var_fv1 = PackedBits_ReadSigned(arg0->translationValues, var_a1, 0xC);
         }
     }
 
@@ -1054,7 +1046,7 @@ void Geo_NodeType3Pass(GraphNode* arg0) {
     D_8006048C = NULL;
 }
 
-extern u8 D_800AC690;
+extern ModelAnimCurveContext D_800AC690;
 extern EventTrackRender D_800AC6A8;
 
 /** Geo node handler: root of a model; processes its children. */
@@ -1075,7 +1067,7 @@ void Geo_NodeModelRoot(GraphNode* arg0) {
         gSPTexture(gDisplayListHead++, 0, 0, 0, G_TX_RENDERTILE, G_OFF);
         gDPSetCycleType(gDisplayListHead++, G_CYC_2CYCLE);
 
-        D_800AC690 = 0;
+        D_800AC690.active = 0;
         D_800AC6A8.active = 0;
         GeoRender_InitMatrixStack();
         GeoRender_ResetTransformStack();
@@ -1400,19 +1392,19 @@ void Geo_NodeAnimatedPart(GraphNode* arg0) {
     sp80 = arg->unk_24;
 
     Vec3f_FromVec3s(&sp8C, &arg->unk_18);
-    if ((((unk_D_800ABCC0*)&D_800AC690)->unk_00 == 1) && (idx >= 0) &&
-        (idx + 2 < ((unk_D_800ABCC0*)&D_800AC690)->unk_04->channelCount)) {
-        sp8C.x = ModelAnim_EvaluateScaleChannel((unk_D_800ABCC0*)&D_800AC690, idx + 0);
-        sp8C.y = ModelAnim_EvaluateScaleChannel((unk_D_800ABCC0*)&D_800AC690, idx + 1);
-        sp8C.z = ModelAnim_EvaluateScaleChannel((unk_D_800ABCC0*)&D_800AC690, idx + 2);
+    if (((&D_800AC690)->active == 1) && (idx >= 0) &&
+        (idx + 2 < (&D_800AC690)->data->channelCount)) {
+        sp8C.x = ModelAnim_EvaluateTranslationChannel(&D_800AC690, idx + 0);
+        sp8C.y = ModelAnim_EvaluateTranslationChannel(&D_800AC690, idx + 1);
+        sp8C.z = ModelAnim_EvaluateTranslationChannel(&D_800AC690, idx + 2);
 
-        sp98.x = ModelAnim_EvaluateRotationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 0);
-        sp98.y = ModelAnim_EvaluateRotationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 1);
-        sp98.z = ModelAnim_EvaluateRotationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 2);
+        sp98.x = ModelAnim_EvaluateRotationChannel(&D_800AC690, idx + 0);
+        sp98.y = ModelAnim_EvaluateRotationChannel(&D_800AC690, idx + 1);
+        sp98.z = ModelAnim_EvaluateRotationChannel(&D_800AC690, idx + 2);
 
-        sp80.x = ModelAnim_EvaluateTranslationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 0);
-        sp80.y = ModelAnim_EvaluateTranslationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 1);
-        sp80.z = ModelAnim_EvaluateTranslationChannel((unk_D_800ABCC0*)&D_800AC690, idx + 2);
+        sp80.x = ModelAnim_EvaluateScaleChannel(&D_800AC690, idx + 0);
+        sp80.y = ModelAnim_EvaluateScaleChannel(&D_800AC690, idx + 1);
+        sp80.z = ModelAnim_EvaluateScaleChannel(&D_800AC690, idx + 2);
     }
 
     if (arg->unk_31 & 2) {
@@ -1545,7 +1537,7 @@ void Geo_NodeModelPart(GraphNode* arg0) {
             D_8006049C = NULL;
         }
 
-        D_800AC690 = 0;
+        D_800AC690.active = 0;
         D_800AC6A8.active = 0;
         D_800AB460.unk_10A0 -= 1;
     }

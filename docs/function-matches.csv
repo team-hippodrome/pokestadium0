@@ -4445,9 +4445,9 @@ func_800113B4,0x800113B4,src/geo_render.c,GeoRender_GetRelativeMatrix,s1,stadium
 func_800113E0,0x800113E0,src/geo_render.c,GeoRender_ResetTransformStack,s1,stadium1:src/geo_render.c,c
 func_80011410,0x80011410,src/geo_render.c,GeoRender_PushScale,s1,stadium1:src/geo_render.c,c
 func_8001148C,0x8001148C,src/geo_render.c,ModelAnim_BeginCurveContext,hand,,c
-func_80011548,0x80011548,src/geo_render.c,ModelAnim_EvaluateTranslationChannel,s1,stadium1:src/model_animation.c,c
+func_80011548,0x80011548,src/geo_render.c,ModelAnim_EvaluateScaleChannel,s1,stadium1:src/model_animation.c,c
 func_800115FC,0x800115FC,src/geo_render.c,ModelAnim_EvaluateRotationChannel,s1,stadium1:src/model_animation.c,c
-func_80011690,0x80011690,src/geo_render.c,ModelAnim_EvaluateScaleChannel,hand,,c
+func_80011690,0x80011690,src/geo_render.c,ModelAnim_EvaluateTranslationChannel,hand,,c
 func_80011774,0x80011774,src/geo_render.c,ModelAnim_AdvanceCurveFrame,hand,,c
 func_80011838,0x80011838,src/geo_render.c,func_80011838,hand,,c
 func_800118DC,0x800118DC,src/geo_render.c,ModelAnim_ResolveEventIndex,s1,stadium1:src/model_animation_events.c,c

@@ -99,9 +99,9 @@ typedef struct TransformAnimData {
     /* 0x08 */ u16 channelCount;
     /* 0x0A */ u16 endFrame;
     /* 0x0C */ u32 channelTable;
-    /* 0x10 */ u32 translationData;
+    /* 0x10 */ u32 scaleData; // @unverified: read as thousandths by ModelAnim_EvaluateScaleChannel; was named translationData
     /* 0x14 */ u32 rotationData;
-    /* 0x18 */ u32 scaleData;
+    /* 0x18 */ u32 translationData; // @unverified: whole-unit keys for ModelAnim_EvaluateTranslationChannel; was named scaleData
 } TransformAnimData; // size >= 0x1C
 
 typedef struct TransformAnimState {

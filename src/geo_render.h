@@ -50,26 +50,26 @@ typedef struct unk_D_800ABB10 {
 
 struct Root80013DC8;
 
-typedef struct unk_D_800ABCC0_008 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
+typedef struct ModelAnimChannel {
+    /* 0x00 */ u8 scaleKeyCount; // @unverified: keys in the scale curve; 1 means scaleIndex is the constant value (ModelAnim_Evaluate*Channel)
+    /* 0x01 */ u8 rotationKeyCount; // @unverified: keys in the rotation curve; 1 means rotationIndex is the constant value (ModelAnim_Evaluate*Channel)
+    /* 0x02 */ u8 translationKeyCount; // @unverified: keys in the translation curve; 1 means translationIndex is the constant value (ModelAnim_Evaluate*Channel)
     /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u16 unk_04;
-    /* 0x06 */ u16 unk_06;
-    /* 0x08 */ u16 unk_08;
-} unk_D_800ABCC0_008; // size = 0xA
+    /* 0x04 */ u16 scaleIndex; // @unverified: first key in scaleValues, or the constant value (ModelAnim_Evaluate*Channel)
+    /* 0x06 */ u16 rotationIndex; // @unverified: first key in rotationValues, or the constant value (ModelAnim_Evaluate*Channel)
+    /* 0x08 */ u16 translationIndex; // @unverified: first key in translationValues, or the constant value (ModelAnim_Evaluate*Channel)
+} ModelAnimChannel; // size = 0xA
 
-typedef struct unk_D_800ABCC0 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ TransformAnimData* unk_04;
-    /* 0x08 */ unk_D_800ABCC0_008* unk_08;
-    /* 0x0C */ s16* unk_0C;
-    /* 0x10 */ s16* unk_10;
-    /* 0x14 */ s16* unk_14;
-} unk_D_800ABCC0; // size = 0x18
+typedef struct ModelAnimCurveContext {
+    /* 0x00 */ u8 active; // @unverified: set by ModelAnim_BeginCurveContext, cleared by the model root and model part nodes (ModelAnim_Evaluate*Channel)
+    /* 0x01 */ u8 wideTranslation; // @unverified: TransformAnimData.flags & 4: translation keys are 16-bit instead of 12-bit (ModelAnim_Evaluate*Channel)
+    /* 0x02 */ s16 frame; // @unverified: whole part of the playback frame, clamped to 0 (ModelAnim_Evaluate*Channel)
+    /* 0x04 */ TransformAnimData* data;
+    /* 0x08 */ ModelAnimChannel* channels; // @unverified: three channels (x, y, z) per animated part (ModelAnim_Evaluate*Channel)
+    /* 0x0C */ s16* scaleValues; // @unverified: s16 thousandths (ModelAnim_Evaluate*Channel)
+    /* 0x10 */ s16* rotationValues; // @unverified: 12-bit packed, scaled by 0x10 to binary angles (ModelAnim_Evaluate*Channel)
+    /* 0x14 */ s16* translationValues; // @unverified: 12- or 16-bit packed whole units (ModelAnim_Evaluate*Channel)
+} ModelAnimCurveContext; // size = 0x18
 
 typedef struct unk_func_80017540_arg1 {
     /* 0x00 */ u16 unk_00;
@@ -142,9 +142,9 @@ void GeoRender_DisableTexture(s32* arg0, s32 arg1);
 void GeoRender_BindTexture(unk_D_800ABB28* arg0, unk_D_800ABB10* arg1);
 M2C_UNK func_8001560C(s32);                         /* extern */
 M2C_UNK func_800158C0();                            /* extern */
-f32 ModelAnim_EvaluateTranslationChannel(unk_D_800ABCC0* arg0, s32 arg1);
-s16 ModelAnim_EvaluateRotationChannel(unk_D_800ABCC0* arg0, s32 arg1);
-f32 ModelAnim_EvaluateScaleChannel(unk_D_800ABCC0* arg0, s32 arg1);
+f32 ModelAnim_EvaluateScaleChannel(ModelAnimCurveContext* arg0, s32 arg1);
+s16 ModelAnim_EvaluateRotationChannel(ModelAnimCurveContext* arg0, s32 arg1);
+f32 ModelAnim_EvaluateTranslationChannel(ModelAnimCurveContext* arg0, s32 arg1);
 void ModelAnim_BeginCurveContext(void *arg0, s32 arg1);
 s32 ModelAnim_ResolveEventIndex(s32 arg0, unk_func_80017540_arg1* arg1, s32 arg2);
 s16 ModelAnim_AdvanceEventFrame(EventTrackState* arg0);
