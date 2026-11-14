@@ -523,37 +523,37 @@ u8 func_800209B4(s32 arg0) {
 
 /** Initializes a deck that is stored in the save data. */
 void Deck_InitializeSaveBackend(DeckHandle* arg0) {
-    if (arg0->unk_00 == 1) {
-        arg0->unk_04 |= 1;
-        Deck_SetSaveEntryCount(arg0->unk_01, arg0->unk_03, 0);
+    if (arg0->openMode == 1) {
+        arg0->flags |= 1;
+        Deck_SetSaveEntryCount(arg0->deckType, arg0->index, 0);
     }
 
-    arg0->unk_05 = Deck_GetSaveRecordSize(arg0->unk_01);
-    arg0->unk_06 = Deck_GetSaveRecordCapacity(arg0->unk_01);
-    arg0->unk_08 = Deck_GetSaveEntryCount(arg0->unk_01, arg0->unk_03);
+    arg0->entrySize = Deck_GetSaveRecordSize(arg0->deckType);
+    arg0->capacity = Deck_GetSaveRecordCapacity(arg0->deckType);
+    arg0->count = Deck_GetSaveEntryCount(arg0->deckType, arg0->index);
 
-    if (arg0->unk_00 == 2) {
-        arg0->unk_0A = arg0->unk_08;
+    if (arg0->openMode == 2) {
+        arg0->cursor = arg0->count;
     } else {
-        arg0->unk_0A = 0;
+        arg0->cursor = 0;
     }
 }
 
 /** Initializes a deck that is stored in a box. */
 void Deck_InitializeBoxBackend(DeckHandle* arg0) {
-    if (arg0->unk_00 == 1) {
-        arg0->unk_04 |= 1;
-        Deck_DeleteEntry(arg0->unk_01, arg0->unk_02, arg0->unk_03, 0);
+    if (arg0->openMode == 1) {
+        arg0->flags |= 1;
+        Deck_DeleteEntry(arg0->deckType, arg0->port, arg0->index, 0);
     }
 
-    arg0->unk_05 = Deck_GetEntrySize(arg0->unk_01);
-    arg0->unk_06 = Deck_GetCapacity(arg0->unk_01);
-    arg0->unk_08 = Deck_GetCount(arg0->unk_01, arg0->unk_02, arg0->unk_03);
+    arg0->entrySize = Deck_GetEntrySize(arg0->deckType);
+    arg0->capacity = Deck_GetCapacity(arg0->deckType);
+    arg0->count = Deck_GetCount(arg0->deckType, arg0->port, arg0->index);
 
-    if (arg0->unk_00 == 2) {
-        arg0->unk_0A = arg0->unk_08;
+    if (arg0->openMode == 2) {
+        arg0->cursor = arg0->count;
     } else {
-        arg0->unk_0A = 0;
+        arg0->cursor = 0;
     }
 }
 
@@ -563,11 +563,11 @@ DeckHandle* Deck_Open(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 
     sp1C = Util_Malloc(sizeof(DeckHandle));
     if (sp1C != NULL) {
-        sp1C->unk_00 = arg3;
-        sp1C->unk_01 = arg0;
-        sp1C->unk_02 = arg1;
-        sp1C->unk_03 = arg2;
-        sp1C->unk_04 = 0;
+        sp1C->openMode = arg3;
+        sp1C->deckType = arg0;
+        sp1C->port = arg1;
+        sp1C->index = arg2;
+        sp1C->flags = 0;
 
         switch (arg0 & 0xF0) {
             case 16:
@@ -600,8 +600,8 @@ DeckHandle* Deck_OpenAndSetName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, char* ar
 s32 Deck_CloseAndFlushBox(DeckHandle* arg0) {
     s32 sp1C = 0;
 
-    if ((arg0->unk_01 & 0x10) && (arg0->unk_04 & 1)) {
-        Save_InvalidateTypedRecord(arg0->unk_01, arg0->unk_03);
+    if ((arg0->deckType & 0x10) && (arg0->flags & 1)) {
+        Save_InvalidateTypedRecord(arg0->deckType, arg0->index);
         sp1C = 1;
     }
 

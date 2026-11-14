@@ -88,15 +88,15 @@ typedef struct GbPokemonRecordExt {
 } GbPokemonRecordExt; // size = 0x2C
 
 typedef struct DeckHandle {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
+    /* 0x00 */ u8 openMode; // @unverified: 0 read, 1 start empty (count cleared, flags |= 1), 2 append (cursor = count) (Deck_InitializeSaveBackend)
+    /* 0x01 */ u8 deckType; // @unverified: 0x10-0x15 Zero save record kinds (SaveSram), 0x20-0x23 Game Boy party/box/items (Deck_Open switch on & 0xF0)
+    /* 0x02 */ u8 port; // @unverified: GB save port for the 0x20 decks (Deck_GetCount, Deck_ReadEntry)
+    /* 0x03 */ u8 index; // @unverified: record or box number (Deck_GetSaveEntryCount, Deck_GetCount)
+    /* 0x04 */ u8 flags; // @unverified: bit 0 modified, written back on close (Deck_CloseAndFlush)
+    /* 0x05 */ u8 entrySize; // @unverified: Deck_GetSaveRecordSize, Deck_GetEntrySize
+    /* 0x06 */ s16 capacity; // @unverified: Deck_GetSaveRecordCapacity, Deck_GetCapacity; Deck_WriteEntries stops at it
+    /* 0x08 */ s16 count; // @unverified: Deck_GetSaveEntryCount, Deck_GetCount; Deck_ReadEntries stops at it
+    /* 0x0A */ s16 cursor; // @unverified: next entry read or written (Deck_ReadEntries, Deck_WriteEntries)
 } DeckHandle; // size = 0xC
 
 // The party block of a Japanese Gen 1 save (pokered wPartyCount..wPartyMonNicks, names 6 bytes),
