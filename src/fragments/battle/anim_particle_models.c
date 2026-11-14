@@ -44,7 +44,7 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
         case 30:
             sp2A = 0x23;
             sp28 = 0x24;
-            Particle_Field38_AddYScaled_08E90(arg0, 10.0f);
+            Particle_PositionOffset_AddYScaled_08E90(arg0, 10.0f);
             func_82154704(arg0);
             break;
 
@@ -71,7 +71,7 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
             sp28 = 0x74;
             sp2C = func_8215AEA4(arg0);
             Particle_SetPrimAlpha(arg0, 0);
-            Particle_Field38_SetYScaled_08CA0(arg0, 5.0f);
+            Particle_PositionOffset_SetYScaled_08CA0(arg0, 5.0f);
             break;
 
         case 4:
@@ -117,7 +117,7 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
             sp2A = 0x83;
             sp28 = 0x84;
             Particle_SetFlags(arg0, 0x800);
-            Particle_Field38_AddYScaled_08E90(arg0, 5.0f);
+            Particle_PositionOffset_AddYScaled_08E90(arg0, 5.0f);
             break;
 
         case 10:
@@ -144,11 +144,11 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
 
             switch (sp24) {
                 case 1:
-                    Particle_Field94_AddY_0A594(arg0, 0x6000);
+                    Particle_Rotation_AddY_0A594(arg0, 0x6000);
                     break;
 
                 case 2:
-                    Particle_Field94_AddY_0A594(arg0, -0x4000);
+                    Particle_Rotation_AddY_0A594(arg0, -0x4000);
                     break;
             }
             break;
@@ -172,7 +172,7 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
             switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
                 case ONIX:
                     Particle_AddPositionOffsetAlongRotationYPlus180(arg0, 15.0f);
-                    Particle_Field38_SetYScaled_08CA0(arg0, 15.0f);
+                    Particle_PositionOffset_SetYScaled_08CA0(arg0, 15.0f);
                     break;
 
                 case GYARADOS:
@@ -206,7 +206,7 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
 
         case 21:
             sp2A = 0xAD;
-            Particle_FieldAE_SetS16_0BF4C(arg0, 0xBE);
+            Particle_ScratchA_SetS16_0BF4C(arg0, 0xBE);
             Particle_SetPrimAlpha(arg0, 0);
             break;
 
@@ -230,7 +230,7 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
             sp28 = 0xB0;
             Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0);
             Particle_SetEnvColor(arg0, 0xFF, 0, 0);
-            Particle_Field38_SetYScaled_08CA0(arg0, 10.0f);
+            Particle_PositionOffset_SetYScaled_08CA0(arg0, 10.0f);
             break;
 
         case 26:
@@ -283,7 +283,7 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
         case 34:
             sp2A = 0x2E;
             sp28 = 0x2F;
-            Particle_Field94_AddY_0A594(arg0, -0x4000);
+            Particle_Rotation_AddY_0A594(arg0, -0x4000);
             sp2C = 0.5f;
             break;
 
@@ -309,7 +309,7 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
                     sp26 = 0x2000;
                     break;
             }
-            Particle_Field94_AddY_0A594(arg0, sp26);
+            Particle_Rotation_AddY_0A594(arg0, sp26);
             break;
 
         case 37:
@@ -643,9 +643,9 @@ void ParticleEffect_AllocateGfxAndDraw(s32 arg0, arg1_func_84344CE8* arg1) {
  */
 void BattleAnim_SetupMove86EndDescriptor24(Particle* arg0) {
     Particle_SetScaleScaled(arg0, 3.0f);
-    Particle_Field38_AddYScaled_08E90(arg0, 10.0f);
+    Particle_PositionOffset_AddYScaled_08E90(arg0, 10.0f);
     Particle_AddPositionOffsetAlongRotationY(arg0, 15.0f);
-    Particle_Field74_SetScaled_0AD8C(arg0, -5.0f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, -5.0f);
     ParticleGfx_RecolorPrim(arg0, 8);
     ParticleGfx_RecolorEnv(arg0, 0x17);
     Particle_AdvanceLifecycle(arg0);
@@ -662,7 +662,7 @@ void BattleAnim_RunThunderWaveHitEffect(Particle* arg0) {
             break;
 
         case 2:
-            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
+            Particle_DecrementParam0ToZeroThenAdvance(arg0);
             break;
 
         case 3:
@@ -711,9 +711,9 @@ void BattleAnim_SetupMove86StartDescriptor24(Particle* arg0) {
             break;
     }
 
-    Particle_Field38_AddVecScaledFromVec3f_08D78(arg0, sp34);
-    Particle_Field38_AddYScaled_08E90(arg0, 10.0f);
-    Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
+    Particle_PositionOffset_AddVecScaledFromVec3f_08D78(arg0, sp34);
+    Particle_PositionOffset_AddYScaled_08E90(arg0, 10.0f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.0f);
     ParticleGfx_RecolorPrim(arg0, 8);
     ParticleGfx_RecolorEnv(arg0, 0x17);
     Particle_AdvanceLifecycle(arg0);
@@ -818,7 +818,7 @@ void BattleAnim_ApplyEffect1SpeciesMotion(Particle* arg0) {
             break;
         case GYARADOS:
             scale = D_FLT_82196EC8;
-            Particle_Field38_AddYScaled_08E90(arg0, 5.0f);
+            Particle_PositionOffset_AddYScaled_08E90(arg0, 5.0f);
             break;
         case LAPRAS:
             scale = D_FLT_82196ECC;

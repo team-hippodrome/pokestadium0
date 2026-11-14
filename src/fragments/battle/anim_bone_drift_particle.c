@@ -11,7 +11,7 @@ void Particle_SetStepMagnitudeScaled(Particle*, f32);
 void Particle_SetMotionStepYScaled(Particle*, f32);
 void func_82143478(Particle*, s32);
 void Particle_SetPrimAlpha(s8 *arg0, char arg1);
-void Particle_SetUnkA6(Particle*, s32);
+void Particle_SetParam0(Particle*, s32);
 void func_8213C9D0(Particle*);
 
 /**
@@ -26,7 +26,7 @@ void func_82168C20(Particle* arg0) {
     Particle_SetMotionStepYScaled(arg0, 0.44f);
     func_82143478(arg0, 0x1A);
     Particle_SetPrimAlpha(arg0, 0xFF);
-    Particle_SetUnkA6(arg0, 2);
+    Particle_SetParam0(arg0, 2);
     func_8213C9D0(arg0);
 }
 
@@ -48,7 +48,7 @@ void func_82168CC4(Particle* arg0) {
             Particle_ApproachScale(arg0, 0.2f, 0.053f);
             Particle_ApproachPrimAlphaThenAdvance(arg0, 0x10, 0x1A);
             Particle_PrimG_Approach_0BB14(arg0, 0, 0x40);
-            if (Particle_DecrementUnkA6ToZero(arg0) != 0) {
+            if (Particle_DecrementParam0ToZero(arg0) != 0) {
                 Particle_PrimR_Approach_0BAE4(arg0, 0, 8);
                 Particle_EnvR_Approach_0BB90(arg0, 0, 0xE);
             }

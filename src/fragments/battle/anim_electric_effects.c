@@ -35,14 +35,14 @@ void BattleAnim_SetupStrongElectricSpark(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     Vec3s sp2C;
 
-    Particle_FieldAC_GetS16_0C038(arg0);
+    Particle_SpawnIndex_GetS16_0C038(arg0);
     Particle_SetScaleScaled(arg0, 0.05f);
     sp2C.x = ParticleMath_RandomRange(0x8000) - 0x4000;
     sp2C.y = ParticleMath_RandomRange(0x10000);
     sp2C.z = ParticleMath_RandomRange(0x800) - 0x400;
-    Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp2C);
+    Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp2C);
     Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRange(0xA));
-    Particle_Field94_AddX_0A578(arg0, 0x4000);
+    Particle_Rotation_AddX_0A578(arg0, 0x4000);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_AdvanceLifecycle(arg0);
 }
@@ -123,7 +123,7 @@ void BattleAnim_ApplyThunderThunderboltUseRadialOffset(Particle* arg0) {
  */
 void BattleAnim_SetupThunderThunderboltUseEffect(Particle* arg0) {
     Particle_SetScaleScaled(arg0, 0.1f);
-    Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.0f);
     BattleAnim_ApplyThunderThunderboltUseRadialOffset(arg0);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x17);
     Particle_AdvanceLifecycle(arg0);
@@ -141,7 +141,7 @@ void BattleAnim_RunThunderThunderboltUseEffect(Particle* arg0) {
 
         case 2:
             Particle_ApproachScale(arg0, 4.0f, 0.5f);
-            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
+            Particle_DecrementParam0ToZeroThenAdvance(arg0);
             break;
 
         case 3:
@@ -160,16 +160,16 @@ void BattleAnim_RunThunderThunderboltUseEffect(Particle* arg0) {
  * only for Hyper Beam, ThunderShock, Thunderbolt and Thunder.
  */
 void BattleAnim_SetupDelayedRisingColumnFade(Particle* arg0) {
-    s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp2E = Particle_SpawnIndex_GetS16_0C038(arg0);
     Vec3s sp28;
 
-    Particle_Field38_SetYScaled_08CA0(arg0, 15.0f);
+    Particle_PositionOffset_SetYScaled_08CA0(arg0, 15.0f);
     Particle_SetScaleScaled(arg0, 0.1f);
-    Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.0f);
     sp28.x = 0x4000 - ParticleMath_RandomRange(0x8000);
     sp28.y = sp2E << 0xD;
     sp28.z = 0;
-    Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp28);
+    Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp28);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_DisableRendering(arg0);
     Particle_AdvanceLifecycle(arg0);
@@ -188,14 +188,14 @@ void BattleAnim_RunDeterministicRotatingBoltOfLightning(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_TickDelayAndAdvanceLifecycle(arg0, Particle_FieldAC_GetS16_0C038(arg0)) != 0) {
+            if (Particle_TickDelayAndAdvanceLifecycle(arg0, Particle_SpawnIndex_GetS16_0C038(arg0)) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
 
         case 3:
             Particle_ApproachScale(arg0, 3.0f, 0.1f);
-            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
+            Particle_DecrementParam0ToZeroThenAdvance(arg0);
             break;
 
         case 4:
@@ -207,7 +207,7 @@ void BattleAnim_RunDeterministicRotatingBoltOfLightning(Particle* arg0) {
             break;
     }
 
-    Particle_Field94_AddY_0A594(arg0, 0x400);
+    Particle_Rotation_AddY_0A594(arg0, 0x400);
     Particle_AddVelocityFromRotationTemplate1(arg0);
 }
 
@@ -216,16 +216,16 @@ void BattleAnim_RunDeterministicRotatingBoltOfLightning(Particle* arg0) {
  * only for Hyper Beam, ThunderShock, Thunderbolt and Thunder.
  */
 void BattleAnim_SetupDelayedRisingColumnRandomScale(Particle* arg0) {
-    s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
+    s16 sp2E = Particle_SpawnIndex_GetS16_0C038(arg0);
     Vec3s sp28;
 
-    Particle_Field38_SetYScaled_08CA0(arg0, 15.0f);
+    Particle_PositionOffset_SetYScaled_08CA0(arg0, 15.0f);
     Particle_SetScaleScaled(arg0, 0.1f);
-    Particle_Field74_SetScaled_0AD8C(arg0, MathUtil_Random_ZeroOne());
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, MathUtil_Random_ZeroOne());
     sp28.x = 0x3000 - ParticleMath_RandomRange(0x6000);
     sp28.y = sp2E << 0xD;
     sp28.z = 0;
-    Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp28);
+    Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp28);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_DisableRendering(arg0);
     Particle_AdvanceLifecycle(arg0);
@@ -244,14 +244,14 @@ void BattleAnim_RunRandomRotatingBoltOfLightning(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_TickDelayAndAdvanceLifecycle(arg0, Particle_FieldAC_GetS16_0C038(arg0)) != 0) {
+            if (Particle_TickDelayAndAdvanceLifecycle(arg0, Particle_SpawnIndex_GetS16_0C038(arg0)) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
 
         case 3:
             Particle_ApproachScale(arg0, 3.5f, 0.1f);
-            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
+            Particle_DecrementParam0ToZeroThenAdvance(arg0);
             break;
 
         case 4:
@@ -263,7 +263,7 @@ void BattleAnim_RunRandomRotatingBoltOfLightning(Particle* arg0) {
             break;
     }
 
-    Particle_Field94_AddY_0A594(arg0, 0x400);
+    Particle_Rotation_AddY_0A594(arg0, 0x400);
     Particle_AddVelocityFromRotationTemplate1(arg0);
 }
 
@@ -276,13 +276,13 @@ void BattleAnim_RunRandomRotatingBoltOfLightning(Particle* arg0) {
 void BattleAnim_SetupSharedDirectionalSprayFade(Particle* arg0) {
     Vec3s sp28;
 
-    Particle_FieldAC_GetS16_0C038(arg0);
+    Particle_SpawnIndex_GetS16_0C038(arg0);
     Particle_SetScaleScaled(arg0, 0.5f);
-    Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.0f);
     sp28.x = -0x4000;
     sp28.y = 0;
     sp28.z = (ParticleMath_RandomRange(0x10) << 0xB) - 0x4000;
-    Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp28);
+    Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp28);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_AdvanceLifecycle(arg0);
 }
@@ -324,15 +324,15 @@ void BattleAnim_SetupDirectionalSprayScaledFade(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     Vec3s sp2C;
 
-    Particle_FieldAC_GetS16_0C038(arg0);
+    Particle_SpawnIndex_GetS16_0C038(arg0);
     Particle_SetScaleScaled(arg0, 0.5f);
     Particle_SetScaleTarget(arg0, (MathUtil_Random_ZeroOne() * 5.0f) + 1.0f);
     Particle_SetScaleStep(arg0, 0.2f);
-    Particle_Field74_SetScaled_0AD8C(arg0, MathUtil_Random_ZeroOne() * 4.0f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, MathUtil_Random_ZeroOne() * 4.0f);
     sp2C.x = -0x4000;
     sp2C.y = 0;
     sp2C.z = (ParticleMath_RandomRange(0x10) << 0xB) - 0x4000;
-    Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp2C);
+    Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp2C);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_AdvanceLifecycle(arg0);
 }
@@ -375,18 +375,18 @@ void BattleAnim_SetupThunderShockOuterJolts(Particle* arg0) {
     Vec3s sp2C;
     UNUSED s32 pad2[2]; // FAKE: stack padding
 
-    Particle_FieldAC_GetS16_0C038(arg0);
+    Particle_SpawnIndex_GetS16_0C038(arg0);
     Particle_SetScaleScaled(arg0, 0.1f);
     Particle_SetScaleTarget(arg0, 1.4f);
     Particle_SetScaleStep(arg0, 0.1f);
     MathUtil_Random_ZeroOne();
-    Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.0f);
     sp2C.x = -0x4000;
     sp2C.y = 0;
     sp2C.z = (ParticleMath_RandomRange(0x10) << 0xB) - 0x4000;
-    Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp2C);
+    Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp2C);
     Particle_AddPositionFromRotationTemplate1(arg0, 150.0f);
-    Particle_Field94_AddZConstant_0A334(arg0);
+    Particle_Rotation_AddZConstant_0A334(arg0);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_AdvanceLifecycle(arg0);
 }
@@ -432,18 +432,18 @@ void BattleAnim_SetupUnregisteredStraightDirectionalStreamFade(Particle* arg0) {
     Vec3s sp2C;
     UNUSED s32 pad2[2]; // FAKE: stack padding
 
-    Particle_FieldAC_GetS16_0C038(arg0);
+    Particle_SpawnIndex_GetS16_0C038(arg0);
     Particle_SetScaleScaled(arg0, 0.1f);
     Particle_SetScaleTarget(arg0, 1.4f);
     Particle_SetScaleStep(arg0, 0.1f);
     MathUtil_Random_ZeroOne();
-    Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.0f);
     sp2C.x = -0x4000;
     sp2C.y = 0;
     sp2C.z = 0;
-    Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp2C);
+    Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp2C);
     Particle_AddPositionFromRotationTemplate1(arg0, 150.0f);
-    Particle_Field94_AddZConstant_0A334(arg0);
+    Particle_Rotation_AddZConstant_0A334(arg0);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_AdvanceLifecycle(arg0);
 }
@@ -489,18 +489,18 @@ void BattleAnim_SetupEndEffect28Descriptor10UpwardBurstFade(Particle* arg0) {
     Vec3f sp30;
     Vec3s sp28;
 
-    Particle_FieldAC_GetS16_0C038(arg0);
+    Particle_SpawnIndex_GetS16_0C038(arg0);
     Particle_SetScaleScaled(arg0, 0.1f);
     Particle_SetScaleTarget(arg0, 2.0f);
     Particle_SetScaleStep(arg0, 0.1f);
     sp28.x = 0;
     sp28.y = 0;
     sp28.z = -0x8000;
-    Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp28);
+    Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp28);
     sp30.x = ParticleMath_RandomRange(0x64) + -50.0f;
     sp30.y = 200.0f;
     sp30.z = ParticleMath_RandomRange(0x64) + -50.0f;
-    Particle_Field38_AddVecScaledFromVec3f_08D78(arg0, sp30);
+    Particle_PositionOffset_AddVecScaledFromVec3f_08D78(arg0, sp30);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_AdvanceLifecycle(arg0);
 }
@@ -545,16 +545,16 @@ void BattleAnim_SetupEndEffect28Descriptor10WideScatterBurstFade(Particle* arg0)
     UNUSED s32 pad[4]; // FAKE: stack padding
     Vec3s sp28;
 
-    Particle_FieldAC_GetS16_0C038(arg0);
+    Particle_SpawnIndex_GetS16_0C038(arg0);
     Particle_SetScaleScaled(arg0, 0.1f);
     Particle_SetScaleTarget(arg0, 2.0f);
     Particle_SetScaleStep(arg0, 0.1f);
     sp28.x = -0x1000 - ParticleMath_RandomRange(0x6000);
     sp28.y = ParticleMath_RandomRange(0x10000);
     sp28.z = ParticleMath_RandomRange(0x800) - 0x400;
-    Particle_Field94_AddVecFromVec3s_0A4F0(arg0, sp28);
+    Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp28);
     Particle_AddPositionFromRotationTemplate1(arg0, 200.0f);
-    Particle_Field94_AddX_0A578(arg0, -0x4000);
+    Particle_Rotation_AddX_0A578(arg0, -0x4000);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
     Particle_AdvanceLifecycle(arg0);
 }

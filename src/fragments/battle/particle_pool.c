@@ -115,18 +115,18 @@ void Particle_ResetDefaults(Particle* arg0) {
     Particle_SetMotionOffset(arg0, 0.0f, 0.0f, 0.0f);
     Particle_SetVelocityTarget(arg0, 0.0f, 0.0f, 0.0f);
     Particle_SetMotionStep(arg0, 0.0f, 0.0f, 0.0f);
-    Particle_Field74_SetScaled_0AD8C(arg0, 0.0f);
-    Particle_Field78_SetScaled_0ADA4(arg0, 0.0f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.0f);
+    Particle_MagnitudeStep_SetScaled_0ADA4(arg0, 0.0f);
     Particle_SetRotation(arg0, 0, 0, 0);
     Particle_SetRotationSpeed(arg0, 0, 0, 0);
     Particle_SetTextureFrame(arg0, 0);
-    Particle_FieldA6_SetS16_0BCA8(arg0, 0);
-    Particle_FieldA8_SetS16_0BE14(arg0, 0);
-    Particle_FieldCD_SetS16_0BF38(arg0, 0);
-    Particle_FieldCE_SetS16_0BF24(arg0, 0);
-    Particle_FieldAA_SetS16_0BF10(arg0, 0);
-    Particle_FieldAC_SetS16_0BED8(arg0, 0);
-    Particle_FieldCF_SetU8_0BEEC(arg0, 0);
+    Particle_Param0_SetS16_0BCA8(arg0, 0);
+    Particle_Countdown_SetS16_0BE14(arg0, 0);
+    Particle_ByteParam0_SetS16_0BF38(arg0, 0);
+    Particle_ByteParam2_SetS16_0BF24(arg0, 0);
+    Particle_Param1_SetS16_0BF10(arg0, 0);
+    Particle_SpawnIndex_SetS16_0BED8(arg0, 0);
+    Particle_ByteParam1_SetU8_0BEEC(arg0, 0);
     Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
     Particle_SetEnvColor(arg0, 0xFF, 0xFF, 0xFF);
     Particle_SetPrimAlpha(arg0, 0xFF);
@@ -328,7 +328,7 @@ void BattleAnim_CloneParticleState(Particle* arg0, Particle* arg1, ParticleUpdat
     arg0->resourceListId = arg1->resourceListId;
     arg0->stepMagnitude = arg1->stepMagnitude;
 
-    Particle_FieldAC_SetS16_0BED8(arg0, arg4);
+    Particle_SpawnIndex_SetS16_0BED8(arg0, arg4);
 
     ParticleMath_CopyVec3f(&arg0->positionOffset, &arg1->positionOffset);
     ParticleMath_CopyVec3f(&arg0->motionOffset, &arg1->motionOffset);

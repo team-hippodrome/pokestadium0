@@ -23,7 +23,7 @@ void BattleAnim_SetupDescriptor25PaletteFadeIn(Particle* arg0);
  */
 void BattleAnim_SetupDrainFlameHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_FieldAE_SetS16_0BF4C(arg0, 0);
+    Particle_ScratchA_SetS16_0BF4C(arg0, 0);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -31,7 +31,7 @@ M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
 void Particle_MarkInactive(s8 *arg0);                      /* extern */
 s32 Particle_IsRunning(s8 *arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
-s32 Particle_ApproachUnkAE(s8 *, s16, u8);                 /* extern */
+s32 Particle_ApproachScratchA(s8 *, s16, u8);                 /* extern */
 s32 func_821436A0(s8 *, u8, u8);                  /* extern */
 M2C_UNK func_82144130(s8 *);                      /* extern */
 
@@ -44,7 +44,7 @@ void BattleAnim_CallbackOwnerModelTintPaletteFade(s8 *arg0) {
         func_82144130(arg0);
         break;
     case 2:
-        if (Particle_ApproachUnkAE(arg0, M2C_FIELD(arg0, s16 *, 0xA2), M2C_FIELD(arg0, u8 *, 0xCA)) != 0) {
+        if (Particle_ApproachScratchA(arg0, M2C_FIELD(arg0, s16 *, 0xA2), M2C_FIELD(arg0, u8 *, 0xCA)) != 0) {
             func_8213C9D0(arg0);
         }
         break;
@@ -71,14 +71,14 @@ void BattleAnim_CallbackOwnerModelTintPaletteFade(s8 *arg0) {
  */
 void BattleAnim_SetupOwnerModelTintRandomPaletteCycle(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, gParticlePaletteSetA[ParticleMath_RandomRange(6)]);
-    Particle_FieldCF_SetU8_0BEEC(arg0, gParticlePaletteSetA[ParticleMath_RandomRange(6)]);
+    Particle_ByteParam1_SetU8_0BEEC(arg0, gParticlePaletteSetA[ParticleMath_RandomRange(6)]);
     Particle_SetPrimAlpha(arg0, arg0->byteParam0);
 
     if (arg0->param1 == 0) {
         arg0->param1 = 1;
     }
 
-    Particle_FieldA6_SetS16_0BCA8(arg0, 0xFF / arg0->param1);
+    Particle_Param0_SetS16_0BCA8(arg0, 0xFF / arg0->param1);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -97,9 +97,9 @@ void BattleAnim_CallbackOwnerModelTintRandomPaletteCycle(Particle* arg0) {
 
         case 2:
             ParticleGfx_ApproachPrimPalette(arg0, arg0->byteParam1, arg0->param1);
-            if (Particle_DecrementUnkA6ToZero(arg0) != 0) {
-                Particle_FieldA6_SetS16_0BCA8(arg0, 0xFF / arg0->param1);
-                Particle_FieldCF_SetU8_0BEEC(arg0, gParticlePaletteSetA[ParticleMath_RandomRange(6)]);
+            if (Particle_DecrementParam0ToZero(arg0) != 0) {
+                Particle_Param0_SetS16_0BCA8(arg0, 0xFF / arg0->param1);
+                Particle_ByteParam1_SetU8_0BEEC(arg0, gParticlePaletteSetA[ParticleMath_RandomRange(6)]);
             }
             Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->prim_a);
             break;
@@ -113,15 +113,15 @@ void BattleAnim_CallbackOwnerModelTintRandomPaletteCycle(Particle* arg0) {
  */
 void BattleAnim_SetupRainbowHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, gParticlePaletteSetA[0]);
-    Particle_FieldAE_SetS16_0BF4C(arg0, 1);
-    Particle_FieldCF_SetU8_0BEEC(arg0, gParticlePaletteSetA[1]);
+    Particle_ScratchA_SetS16_0BF4C(arg0, 1);
+    Particle_ByteParam1_SetU8_0BEEC(arg0, gParticlePaletteSetA[1]);
     Particle_SetPrimAlpha(arg0, arg0->byteParam0);
 
     if (arg0->param1 == 0) {
         arg0->param1 = 1;
     }
 
-    Particle_FieldA8_SetS16_0BE14(arg0, 0xFF / arg0->param1);
+    Particle_Countdown_SetS16_0BE14(arg0, 0xFF / arg0->param1);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -137,11 +137,11 @@ void BattleAnim_RunRainbowHueChange(Particle* arg0) {
             break;
 
         case 2:
-            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
-            if (Particle_DecrementUnkA8ToZero(arg0) != 0) {
-                Particle_FieldA8_SetS16_0BE14(arg0, 0xFF / arg0->param1);
+            Particle_DecrementParam0ToZeroThenAdvance(arg0);
+            if (Particle_DecrementCountdownToZero(arg0) != 0) {
+                Particle_Countdown_SetS16_0BE14(arg0, 0xFF / arg0->param1);
                 arg0->scratchA = (arg0->scratchA + 1) % 6;
-                Particle_FieldCF_SetU8_0BEEC(arg0, gParticlePaletteSetA[arg0->scratchA]);
+                Particle_ByteParam1_SetU8_0BEEC(arg0, gParticlePaletteSetA[arg0->scratchA]);
             }
             ParticleGfx_ApproachPrimPalette(arg0, arg0->byteParam1, arg0->param1);
             Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->prim_a);
@@ -273,7 +273,7 @@ void BattleAnim_RunWhiteHueChange(Particle* arg0) {
             break;
 
         case 3:
-            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
+            Particle_DecrementParam0ToZeroThenAdvance(arg0);
             break;
 
         case 4:
@@ -318,7 +318,7 @@ void BattleAnim_RunFullScreenHueChange(Particle* arg0) {
             break;
 
         case 2:
-            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
+            Particle_DecrementParam0ToZeroThenAdvance(arg0);
             break;
 
         case 3:
@@ -357,7 +357,7 @@ void BattleAnim_RunPokemonAndFullScreenHueChange(Particle* arg0) {
             break;
 
         case 3:
-            if (Particle_DecrementUnkA6ToZero(arg0) != 0) {
+            if (Particle_DecrementParam0ToZero(arg0) != 0) {
                 Particle_MarkInactive(arg0);
             }
             break;
@@ -419,7 +419,7 @@ void BattleAnim_CallbackDescriptor25PaletteFadeOut(Particle* arg0) {
             break;
 
         case 2:
-            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
+            Particle_DecrementParam0ToZeroThenAdvance(arg0);
             break;
 
         case 3:
@@ -463,7 +463,7 @@ void BattleAnim_CallbackDescriptor25PaletteFadeIn(Particle* arg0) {
             break;
 
         case 3:
-            if (Particle_DecrementUnkA6ToZero(arg0) != 0) {
+            if (Particle_DecrementParam0ToZero(arg0) != 0) {
                 Particle_MarkInactive(arg0);
             }
             break;

@@ -338,7 +338,7 @@ void func_82143934(s8 *arg0) {
  */
 void BattleAnim_SetupTargetHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_FieldAE_SetS16_0BF4C(arg0, arg0->param0);
+    Particle_ScratchA_SetS16_0BF4C(arg0, arg0->param0);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -346,7 +346,7 @@ M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
 void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
 s32 Particle_IsRunning(s8 *arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
-s32 Particle_ApproachUnkAE(s8 *, u8, s16);                 /* extern */
+s32 Particle_ApproachScratchA(s8 *, u8, s16);                 /* extern */
 M2C_UNK func_821439D0(s8 *);                      /* extern */
 
 void func_82143A18(s8 *arg0) {
@@ -358,7 +358,7 @@ void func_82143A18(s8 *arg0) {
         func_821439D0(arg0);
         break;
     case 2:
-        if (Particle_ApproachUnkAE(arg0, M2C_FIELD(arg0, u8 *, 0xC9), M2C_FIELD(arg0, s16 *, 0xA6)) != 0) {
+        if (Particle_ApproachScratchA(arg0, M2C_FIELD(arg0, u8 *, 0xC9), M2C_FIELD(arg0, s16 *, 0xA6)) != 0) {
             func_8213C9D0(arg0);
         }
         break;
@@ -382,7 +382,7 @@ void func_82143A18(s8 *arg0) {
  */
 void BattleAnim_SetupUserHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_FieldAE_SetS16_0BF4C(arg0, arg0->byteParam2);
+    Particle_ScratchA_SetS16_0BF4C(arg0, arg0->byteParam2);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -400,17 +400,17 @@ void BattleAnim_RunUserHueChange(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_FieldAE_Approach_0BF60(arg0, arg0->byteParam0, arg0->param1) != 0) {
+            if (Particle_ScratchA_Approach_0BF60(arg0, arg0->byteParam0, arg0->param1) != 0) {
                 Particle_AdvanceLifecycle(arg0);
             }
             break;
 
         case 3:
-            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
+            Particle_DecrementParam0ToZeroThenAdvance(arg0);
             break;
 
         case 4:
-            if (Particle_FieldAE_Approach_0BF60(arg0, 0, arg0->param1) != 0) {
+            if (Particle_ScratchA_Approach_0BF60(arg0, 0, arg0->param1) != 0) {
                 Particle_AdvanceLifecycle(arg0);
             }
             break;
@@ -450,7 +450,7 @@ void func_82143C10(s8 *arg0) {
         func_821406B4(arg0);
         break;
     case 3:
-        if (Particle_ApproachUnkAE(arg0, 0, M2C_FIELD(arg0, s16 *, 0xA6)) != 0) {
+        if (Particle_ApproachScratchA(arg0, 0, M2C_FIELD(arg0, s16 *, 0xA6)) != 0) {
             func_8213C9D0(arg0);
         }
         break;
@@ -468,7 +468,7 @@ void func_82143C10(s8 *arg0) {
  */
 void func_82143CE0(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_FieldAE_SetS16_0BF4C(arg0, arg0->param0);
+    Particle_ScratchA_SetS16_0BF4C(arg0, arg0->param0);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -476,7 +476,7 @@ M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
 void Particle_MarkInactive(s8 *arg0);                      /* extern */
 s32 Particle_IsRunning(s8 *arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
-M2C_UNK Particle_SetUnkAE(s8 *, M2C_UNK);             /* extern */
+M2C_UNK Particle_SetScratchA(s8 *, M2C_UNK);             /* extern */
 
 void func_82143D28(s8 *arg0) {
     s16 temp_v0;
@@ -488,7 +488,7 @@ void func_82143D28(s8 *arg0) {
         break;
     case 2:
         if (func_821436A0(arg0, M2C_FIELD(arg0, u8 *, 0xC9), M2C_FIELD(arg0, u8 *, 0xA7)) != 0) {
-            Particle_SetUnkAE(arg0, 0);
+            Particle_SetScratchA(arg0, 0);
             func_8213C9D0(arg0);
         }
         break;
@@ -506,7 +506,7 @@ void func_82143D28(s8 *arg0) {
  */
 void func_82143DE8(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_FieldAE_SetS16_0BF4C(arg0, arg0->param0);
+    Particle_ScratchA_SetS16_0BF4C(arg0, arg0->param0);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -544,7 +544,7 @@ void func_82143E30(s8 *arg0) {
  */
 void BattleAnim_SetupIceBeamBlizzardHitHueChange(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_FieldAE_SetS16_0BF4C(arg0, 0);
+    Particle_ScratchA_SetS16_0BF4C(arg0, 0);
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -560,7 +560,7 @@ void BattleAnim_RunIceBeamBlizzardHitHueChange(Particle* arg0) {
             break;
 
         case 2:
-            Particle_ApproachUnkAEThenAdvance(arg0, arg0->param0, arg0->byteParam2);
+            Particle_ApproachScratchAThenAdvance(arg0, arg0->param0, arg0->byteParam2);
             break;
 
         case 3:
@@ -570,7 +570,7 @@ void BattleAnim_RunIceBeamBlizzardHitHueChange(Particle* arg0) {
             break;
 
         case 4:
-            Particle_ApproachUnkAEThenAdvance(arg0, 0, arg0->byteParam2);
+            Particle_ApproachScratchAThenAdvance(arg0, 0, arg0->byteParam2);
             break;
 
         case 5:
@@ -588,7 +588,7 @@ void BattleAnim_RunIceBeamBlizzardHitHueChange(Particle* arg0) {
  */
 void func_82144010(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_FieldAE_SetS16_0BF4C(arg0, arg0->param0);
+    Particle_ScratchA_SetS16_0BF4C(arg0, arg0->param0);
     Particle_AdvanceLifecycle(arg0);
 }
 

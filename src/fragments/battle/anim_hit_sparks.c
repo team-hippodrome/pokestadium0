@@ -24,7 +24,7 @@ void BattleAnim_CallbackUnusedGrowingSparkVariant(Particle* arg0) {
             break;
 
         case 2:
-            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
+            if (Particle_DecrementParam0ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
             }
             break;
