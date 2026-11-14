@@ -197,7 +197,7 @@ void Session_LoadPortSnapshot(s32 arg0) {
         GbSave_CopyPortSnapshot(arg0, &D_800AF9A8);
         return;
     }
-    D_800AF9A8.unk_000 = 0;
+    D_800AF9A8.gameType = 0;
 }
 
 typedef struct ContinueDataZ {

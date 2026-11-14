@@ -14,49 +14,33 @@ typedef enum {
     POKEMON_ROM_YELLOW = 7,
 } PokemonRomType;
 
-typedef struct GbSavePortSnapshot {
-    /* 0x000 */ u8 unk_000;
-    /* 0x001 */ u8 unk_001;
-    /* 0x002 */ u16 unk_002;
-    /* 0x004 */ char unk_004[11];
-    /* 0x00F */ GbSaveParty unk_00F;
-} GbSavePortSnapshot; // size >= 0x1A3
-
-typedef struct GbSaveBoxPair {
-    /* 0x000 */ GbSaveBoxEntry unk_000;
-    /* 0x000 */ GbSaveBoxEntry unk_014;
-    /* 0x028 */ char unk028[0x43A];
-} GbSaveBoxPair; // size = 0x462
-
-typedef struct GbSaveBoxBank {
-    /* 0x0000 */ GbSaveBoxPair unk_0000[6];
-    /* 0x1A4C */ char unk1A4C[0x14];
-} GbSaveBoxBank; // size = 0x1A60
-
-typedef struct GbSaveBoxData {
-    /* 0x0000 */ GbSaveBoxBank unk_0000[2];
-} GbSaveBoxData; // size = 0x34C0
-
+// The cached trainer of a port (GbSave_RefreshPlayerIdentity, GbSave_CopyPlayerIdentity).
 typedef struct GbSavePlayerIdentity {
-    /* 0x00 */ u16 unk_00;
-    /* 0x02 */ char unk_02[11];
-    /* 0x0D */ u8 unk_0D[2];
-    /* 0x0F */ char unkF[0x1];
-} GbSavePlayerIdentity; // size = 0x10
+    /* 0x00 */ u16 playerId; // @unverified: GbSaveMainData.playerId
+    /* 0x02 */ u8 playerName[6]; // @unverified: GbSaveMainData.playerName; a 0x50 terminator when no save (GbSave_ScanAllPorts)
+} GbSavePlayerIdentity; // size = 0x8
 
+// Zero's per-port Game Boy save state (sGbSavePorts, D_800AD210); Stadium 1's is 0x58 bytes.
 typedef struct GbSavePort {
-    /* 0x00 */ u16 unk_00;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
-    /* 0x06 */ u8 unk_06[0x13];
-    /* 0x19 */ u8 unk_19[0x20];
-    /* 0x39 */ char unk39[0x7];
-    /* 0x40 */ GbSavePlayerIdentity unk_40;
-    /* 0x50 */ GbSaveMainData* unk_50;
-    /* 0x54 */ GbSaveBoxData* unk_54;
-} GbSavePort; // size = 0x58
+    /* 0x00 */ u16 flags; // @unverified: 1 main data loaded, 2 box data loaded, 0x20 take the next checksum read as the reference (GbSave_ReadMainData), 0x4000 saved at a Pokemon Center
+    /* 0x02 */ u8 gameType; // PokemonRomType (GbCart_IdentifyGame), @unverified
+    /* 0x03 */ u8 saveState; // @unverified: GbSave_ScanAllPorts: 0 loaded, 1 no cartridge, 2 not a Pokemon cartridge, 3 main data unreadable
+    /* 0x04 */ u8 checksum; // @unverified: the save checksum when read (GbSave_ReadMainData); later reads must match
+    /* 0x05 */ u8 heldSpecies[19]; // one bit per species held in the party or boxes (GbSave_RebuildHeldSpecies, GbSave_CountHeldSpecies)
+    /* 0x18 */ u8 pakId[0x20]; // @unverified: identifies the cartridge across a removal (GbTower_ProbePak, GbTower_VerifyPakStillInserted)
+    /* 0x38 */ GbSavePlayerIdentity identity;
+    /* 0x40 */ GbSaveMainData* mainData; // @unverified: 0x1020 bytes from SRAM 0x2580, allocated as 'DAT0'+port (GbSave_OpenMainData)
+    /* 0x44 */ u8* boxData; // @unverified: two 0x15A0-byte box banks from SRAM 0x4000 and 0x6000, four GbSaveBox each, allocated as 'BOX0'+port (GbSave_OpenBoxData)
+} GbSavePort; // size = 0x48
+
+// A copy of a port's save summary (GbSave_CopyPortSnapshot).
+typedef struct GbSavePortSnapshot {
+    /* 0x000 */ u8 gameType; // @unverified: GbSavePort.gameType
+    /* 0x001 */ u8 checksum; // @unverified: GbSavePort.checksum
+    /* 0x002 */ u16 playerId; // @unverified: GbSavePort.identity.playerId
+    /* 0x004 */ u8 playerName[6]; // @unverified: GbSavePort.identity.playerName
+    /* 0x00A */ GbSaveParty party; // @unverified: GbSaveMainData.party
+} GbSavePortSnapshot; // size = 0x162
 
 #include "game_state.h"
 #include "table_view.h"
@@ -93,7 +77,7 @@ s32 GbSave_CommitMainData(s32 arg0);
 s32 GbSave_RebuildAndWriteSave(s32 arg0);
 void GbSave_ValidateBeforeWrite(s32 arg0);
 void GbSave_RequirePakPresent(s32 arg0);
-GbSaveBoxEntry* GbSave_GetBoxEntry(s32 arg0, s32 arg1);
+GbSaveBox* GbSave_GetBoxEntry(s32 arg0, s32 arg1);
 void GbSave_LoadMainPokemon(BattleMon* arg0, s32 arg1, s32 arg2);
 void GbSave_SaveMainPokemon(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2);
 void GbSave_LoadBoxPokemon(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3);
