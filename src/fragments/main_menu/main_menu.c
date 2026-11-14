@@ -203,11 +203,13 @@ void MainMenu_DrawTexturedFrameWithAlpha(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
 }
 
 extern u8 D_88002034[][0x18];
-typedef struct unk_88002034 { s32 x; s32 y; s32 w; s32 h; s32 stride; u8* pixels; } unk_88002034;
-typedef struct unk_8800210C { s32 x; s32 y; s32 w; s32 h; } unk_8800210C;
+/* A main menu item's frame. */
+typedef struct MainMenuRect { s32 x; s32 y; s32 w; s32 h; } MainMenuRect;
+/* A main menu item's label: x, y offset in the frame, an argument of func_8001A384 and the text (none when NULL). */
+typedef struct MainMenuLabel { s32 x; s32 y; s32 unk_08; char* text; } MainMenuLabel;
 extern Color_RGBA8 D_88002010[];
-extern unk_8800210C D_8800210C[];
-extern unk_8800210C D_8800219C[];
+extern MainMenuRect D_8800210C[];
+extern MainMenuLabel D_8800219C[];
 extern Gfx D_80073480[];
 extern Color_RGBA8 D_80073520;
 extern u8 D_80073554[];
@@ -219,8 +221,8 @@ void func_8001A384(s32, s32);
 void func_8001A944(s32, s32, s32);
 void func_8001ABBC(void);
 
-// D_88002034 is declared as raw bytes in this file; each 0x18 byte row is one unk_88002034.
-#define ICON(i) (((unk_88002034*)D_88002034)[i])
+// D_88002034 is declared as raw bytes in this file; each 0x18 byte row is one MainMenuImage.
+#define ICON(i) (((MainMenuImage*)D_88002034)[i])
 
 /**
  * Draws one main menu item with its frame, fading it by `scale` (capped at 0.3 when disabled).
@@ -244,11 +246,11 @@ void MainMenu_DrawItem(s32 a0, s32 a1, s32 a2, s32 mode, s32 flags, f32* scale) 
         return;
     }
     alpha = (s32)(fade * 255.0f);
-    MainMenu_DrawImageWithAlpha(D_8800210C[mode].x + ICON(mode).x, D_8800210C[mode].y + ICON(mode).y, ICON(mode).w, ICON(mode).h,
+    MainMenu_DrawImageWithAlpha(D_8800210C[mode].x + ICON(mode).x, D_8800210C[mode].y + ICON(mode).y, ICON(mode).width, ICON(mode).height,
                   ICON(mode).stride, ICON(mode).pixels, alpha);
     frame_color = D_88002010[mode];
     frame_color.a = alpha;
-    if (D_8800219C[mode].h) {
+    if (D_8800219C[mode].text) {
         gSPDisplayList(gDisplayListHead++, D_80073480);
         Ui_FillRectPrimColor(D_8800210C[mode].x + 6, D_8800210C[mode].y + 6, D_8800210C[mode].w - 12, 4, frame_color);
         Ui_FillRectPrimColor(D_8800210C[mode].x + 6, D_8800210C[mode].y + 6, 4, D_8800219C[mode].y - 10, frame_color);
@@ -262,13 +264,13 @@ void MainMenu_DrawItem(s32 a0, s32 a1, s32 a2, s32 mode, s32 flags, f32* scale) 
         Ui_FillRectPrimColor(D_8800210C[mode].x + D_8800210C[mode].w - 15, D_8800210C[mode].y + 14, 9, D_8800210C[mode].h - 28, frame_color);
     }
     MainMenu_DrawTexturedFrameWithAlpha(D_8800210C[mode].x, D_8800210C[mode].y, D_8800210C[mode].w, D_8800210C[mode].h, D_80073554, alpha);
-    if (D_8800219C[mode].h) {
+    if (D_8800219C[mode].text) {
         text_color = *(Color_RGBA8*)D_800734A8;
         text_color.a = alpha;
         func_8001AB6C();
         func_8001AA9C(text_color.r, text_color.g, text_color.b, text_color.a);
-        func_8001A384(0x10, D_8800219C[mode].w);
-        func_8001A944(D_8800210C[mode].x + D_8800219C[mode].x, D_8800210C[mode].y + D_8800219C[mode].y, D_8800219C[mode].h);
+        func_8001A384(0x10, D_8800219C[mode].unk_08);
+        func_8001A944(D_8800210C[mode].x + D_8800219C[mode].x, D_8800210C[mode].y + D_8800219C[mode].y, D_8800219C[mode].text);
         func_8001ABBC();
     }
     if (flags & 2) {
