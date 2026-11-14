@@ -152,10 +152,10 @@ typedef struct PcSortMonList {
 
 /* An item list of the Lab item screens (LabItem_InitItemList, LabItem_DrawItemList). */
 typedef struct LabItemList {
-    /* 0x000 */ ScrollList list; // @unverified: items = an item table with 2-byte rows (LabItem_DrawItemCountRow)
+    /* 0x000 */ ScrollList list; // items = an item table with 2-byte rows (LabItem_DrawItemCountRow); D-Down moved list.cursor
     /* 0x044 */ u16 itemFlags[100]; // @unverified: typed from the function it is passed to
-    /* 0x10C */ s32 x; // @unverified: typed from the function it is passed to
-    /* 0x110 */ s32 y; // @unverified: typed from the function it is passed to
+    /* 0x10C */ s32 x; // left of the list: 50 (left list) and 354 (right list)
+    /* 0x110 */ s32 y; // top of the list: 123
 } LabItemList; // size = 0x114
 
 /* One of the 4 item saves of the ６４の カセット box (deck 0x12), listed in the データをけす window. */
@@ -193,55 +193,55 @@ typedef struct LabItemSaveDataWindow {
  * side by side (LabItem_InitOrganizeWindow, LabItem_UpdateOrganizeWindow, LabItem_DrawOrganizeWindow).
  * The boxes are 0 = てもちの どうぐ (bag), 1 = the PC (name from D_890190F0), 2 = ６４の カセット. */
 typedef struct LabItemOrganizeWindow {
-    /* 0x000 */ s32 state; // @unverified: 1 = picking an operation, 2/3 = box pickers, 4-7 = item lists, 8 = count selector, 9-0xC = text box up
+    /* 0x000 */ s32 state; // 1 = picking an operation, 2/3 = box pickers, 4-7 = item lists, 8 = count selector, 9-0xC = text box up; seen 1, 2, 3, 4, 5, 7, 8 in play
     /* 0x004 */ Window window; // @unverified: typed from the function it is passed to
-    /* 0x030 */ WindowFrame footerFrame; // @unverified: frame of the bottom strip with the help line (LabItem_DrawHelpText)
-    /* 0x050 */ ImageButton backButton; // @unverified: operation 3 「メニューへもどる」 (back to the menu)
-    /* 0x07C */ ImageButton moveButton; // @unverified: operation 0 「どうぐをいどうする」 (move items)
-    /* 0x0A8 */ ImageButton reorderButton; // @unverified: operation 1 「どうぐをならべかえる」 (reorder items)
+    /* 0x030 */ WindowFrame footerFrame; // the bottom strip with the help line, 552x56 at (44, 391)
+    /* 0x050 */ ImageButton backButton; // operation 3 「メニューへもどる」 (back to the menu), the top (house) button
+    /* 0x07C */ ImageButton moveButton; // operation 0 「どうぐをいどうする」 (move items), highlighted at open
+    /* 0x0A8 */ ImageButton reorderButton; // operation 1 「どうぐをならべかえる」 (reorder items); A on it emptied the right list for reordering
     /* 0x0D4 */ ImageButton exchangeButton; // @unverified: operation 2 「どうぐをいれかえる」 (exchange items)
-    /* 0x100 */ ChoiceCursor operationCursor; // @unverified: cursor = the operation 0-3 (titles D_8900A650), count = 4
-    /* 0x10C */ LabItemMenuWindow sourceBoxWindow; // @unverified: state 2, sets leftBox (「どこからいどうする？」)
+    /* 0x100 */ ChoiceCursor operationCursor; // cursor = the operation 0-3 (titles D_8900A650), count = 4; D-Up from 0 went to 3 (メニューへもどる)
+    /* 0x10C */ LabItemMenuWindow sourceBoxWindow; // state 2, sets leftBox: 「どこからいどうする？」 over てもちの どうぐ, サトシのパソコン, ６４の カセット
     /* 0x170 */ LabItemMenuWindow targetBoxWindow; // @unverified: state 3, sets rightBox (「どこへいどうする？」)
-    /* 0x1D4 */ s32 leftBox; // @unverified: index into tables shown in leftList; its icon/name drawn by func_890017FC
-    /* 0x1D8 */ s32 rightBox; // @unverified: index into tables shown in rightList; -1 while it shows reorderView
+    /* 0x1D4 */ s32 leftBox; // the box shown in leftList: 0 (てもちの どうぐ)
+    /* 0x1D8 */ s32 rightBox; // the box shown in rightList: 1 (サトシのパソコン); -1 while it shows reorderView (どうぐをならべかえる)
     /* 0x1DC */ char** boxNames; // @unverified: D_8900A5F4, the names of the 3 boxes
-    /* 0x1E0 */ s32 boxCount; // @unverified: 3, the row count of the box pickers
-    /* 0x1E4 */ LabItemList leftList; // @unverified: typed from the function it is passed to
-    /* 0x2F8 */ LabItemList rightList; // @unverified: typed from the function it is passed to
-    /* 0x40C */ s32 swapIndex; // @unverified: reorder: the first item picked in leftList
-    /* 0x410 */ LabItemCountSelector countSelector; // @unverified: move: how many of the item to move
+    /* 0x1E0 */ s32 boxCount; // 3, the row count of the box pickers
+    /* 0x1E4 */ LabItemList leftList; // the left item list at (50, 123); D-Down moved its cursor
+    /* 0x2F8 */ LabItemList rightList; // the right item list at (354, 123)
+    /* 0x40C */ s32 swapIndex; // reorder: the first item picked in leftList (2 after picking ふしぎなアメ)
+    /* 0x410 */ LabItemCountSelector countSelector; // move: how many of the item to move; ×01 box at (202, 195), max 5 for モンスターボール x5
     /* 0x490 */ ByteMatrix* tables; // @unverified: the 3 item tables of the boxes (func_89003650's list0..list2)
     /* 0x494 */ s32* dirty; // @unverified: one per table, set when it changed
     /* 0x498 */ s32* gamePakSlot; // @unverified: picking box 2 as target with -1 here ends the window with 1
-    /* 0x49C */ ByteMatrix reorderView; // @unverified: func_80027410 over the rows of tables[0] with no rows in use; rightList shows it while reordering
+    /* 0x49C */ ByteMatrix reorderView; // func_80027410 over the rows of tables[0] with no rows in use; rightList shows it (000/020) while reordering
     /* 0x4AC */ TextBox textBox; // @unverified: typed from the function it is passed to
 } LabItemOrganizeWindow; // size = 0x4E4
 
 /* The せいとん (organize) menu window of the Lab terminal, D_89028950: ポケモンを いどうする / どうぐを
  * いどうする / ボックスを いどうする with a description of the row under the cursor (LabTerminal_InitMenuWindow). */
 typedef struct LabTerminalMenuWindow {
-    /* 0x00 */ Window window; // @unverified: typed from the function it is passed to
-    /* 0x2C */ Menu menu; // @unverified: rows drawn by LabTerminal_DrawMenuRow
-    /* 0x50 */ PointerList items; // @unverified: func_80027804 over the row names (arg5)
+    /* 0x00 */ Window window; // 368x206 at (48, 92), the せいとん window
+    /* 0x2C */ Menu menu; // rows drawn by LabTerminal_DrawMenuRow; D-Down moved menu.cursor 0 -> 1 (どうぐを いどうする)
+    /* 0x50 */ PointerList items; // func_80027804 over the row names (arg5): count 3
     /* 0x5C */ u16 itemFlags[16]; // @unverified: itemFlags of menu; the main menu uses 3
-    /* 0x7C */ char** descriptions; // @unverified: printed under the rows for menu.cursor (D_8900A710)
-    /* 0x80 */ s32 descriptionLines; // @unverified: 3; height of the description fill in 0x1C-pixel lines
+    /* 0x7C */ char** descriptions; // printed under the rows for menu.cursor (D_8900A710): changed to てもちのどうぐを せいりする。 with cursor 1
+    /* 0x80 */ s32 descriptionLines; // 3; height of the blue description fill in 0x1C-pixel lines (poking 1 shrank it to one line)
 } LabTerminalMenuWindow; // size = 0x84
 
 /* The どうぐのせいり screen, D_89019128 (func_89003650, LabItem_UpdateScreen, LabItem_DrawScreen). */
 typedef struct LabItemScreen {
-    /* 0x000 */ s32 state; // @unverified: 1 = organizeWindow, 2 = save prompt, 3-6 = deleting a ６４の カセット save (LabItem_UpdateScreen)
-    /* 0x004 */ LabItemOrganizeWindow organizeWindow; // @unverified: typed from the function it is passed to
-    /* 0x4E8 */ SavePrompt savePrompt; // @unverified: typed from the function it is passed to
+    /* 0x000 */ s32 state; // 1 = organizeWindow, 2 = save prompt (seen after メニューへもどる with changes), 3-6 = deleting a ６４の カセット save (LabItem_UpdateScreen)
+    /* 0x004 */ LabItemOrganizeWindow organizeWindow; // the どうぐのせいり window, 564x372 at (38, 81)
+    /* 0x4E8 */ SavePrompt savePrompt; // 「ないようが へんこうされています」 (contents changed): レポートしてやめる / レポートしないでやめる / キャンセル at state 2
     /* 0x54C */ LabItemConfirmWindow confirmWindow; // @unverified: typed from the function it is passed to
     /* 0x604 */ LabItemDeleteDataWindow deleteDataWindow; // @unverified: typed from the function it is passed to
     /* 0x68C */ LabItemSaveDataWindow saveDataWindow; // @unverified: typed from the function it is passed to
-    /* 0x884 */ u8 bagItemRows[0x2A]; // @unverified: rows of itemTables[0], 0x14 rows of 2 bytes
-    /* 0x8AE */ u8 pcItemRows[0x66]; // @unverified: rows of itemTables[1], 0x32 rows of 2 bytes
+    /* 0x884 */ u8 bagItemRows[0x2A]; // rows of itemTables[0], 0x14 rows of 2 bytes {item, count}: 14 03, 04 05, 28 02 = キズぐすり x3, モンスターボール x5, ふしぎなアメ x2
+    /* 0x8AE */ u8 pcItemRows[0x66]; // rows of itemTables[1], 0x32 rows of 2 bytes: 14 01 (キズぐすり x1), then 04 02 in front after 2 モンスターボール were moved in
     /* 0x914 */ u8 gamePakItemRows[0xCC]; // @unverified: rows of itemTables[2], 0x64 rows of 2 bytes
-    /* 0x9E0 */ ByteMatrix itemTables[3]; // @unverified: the bag (GB deck 0x23), the PC (GB deck 0x22) and the ６４の カセット (deck 0x12)
-    /* 0xA10 */ s32 dirty[3]; // @unverified: set when a table changed; LabItem_SaveChanges writes those back
+    /* 0x9E0 */ ByteMatrix itemTables[3]; // the bag (GB deck 0x23, capacity 20, shown 003/020), the PC (GB deck 0x22, 001/050) and the ６４の カセット (deck 0x12, capacity 100)
+    /* 0xA10 */ s32 dirty[3]; // set when a table changed: {1, 1, 0} after moving モンスターボール from the bag to the PC; LabItem_SaveChanges writes those back
     /* 0xA1C */ s32 gamePakSlot; // @unverified: the LabItemSaveSlot itemTables[2] is read from and saved to; -1 = none free
     /* 0xA20 */ LabItemSaveSlot saveSlots[4]; // @unverified: LabItem_LoadGamePakBoxSlots
 } LabItemScreen; // size = 0xA70
