@@ -535,19 +535,19 @@ typedef struct CameraFacingQuad {
 
 typedef struct Radial20Node {
     /* 0x00 */ f32 startDelay; // @unverified: frames before the node starts moving (Radial20_UpdateNode)
-    /* 0x04 */ u8 alpha; // @unverified: vertex alpha in Radial20_Draw
-    /* 0x08 */ f32 halfWidth; // @unverified: grows by 1 a frame up to Radial20.maxHalfWidth; vertex offset length
-    /* 0x0C */ f32 angle; // @unverified: roll angle in radians, advanced by angleStep
+    /* 0x04 */ u8 alpha; // vertex alpha in Radial20_Draw; poking 0 on all nodes hid Bind's streak in play
+    /* 0x08 */ f32 halfWidth; // grows by 1 a frame up to Radial20.maxHalfWidth; vertex offset length; poking 30 on all nodes made Bind's streak a wide band in play
+    /* 0x0C */ f32 angle; // roll angle in radians, advanced by angleStep; poking 1.57 on all nodes flattened the streak in play
     /* 0x10 */ Vec3f position; // @unverified: node center, moves by velocity
     /* 0x1C */ Vec3f velocity; // @unverified: added to position every frame
     /* 0x28 */ char unk28[0x20];
 } Radial20Node; // size = 0x48
 
 typedef struct Radial20 {
-    /* 0x000 */ s16 active; // @unverified: 1 while running (Radial20_IsComplete)
+    /* 0x000 */ s16 active; // 1 while running (Radial20_IsComplete); poking 0 each frame removed Bind's blue streak in play
     /* 0x002 */ s16 auxEffectId; // @unverified: AuxiliaryEffect_Alloc() id, passed to AuxiliaryEffect_Update/Spawn/Draw
     /* 0x004 */ s16 frame; // @unverified: counts up each frame until duration
-    /* 0x006 */ s16 duration; // @unverified: frames the effect runs
+    /* 0x006 */ s16 duration; // frames the effect runs; poking 2 ended Bind's streak at once in play
     /* 0x008 */ s16 variant; // @unverified: motion and draw mode switch (0-9) in Radial20_UpdateNode/Draw
     /* 0x00A */ Color_RGBA8 color; // vertex color (rgb); poking FF0000 turned Onix's light-blue move streak red in play. Stadium 1 follows this with a Color_RGB8
     /* 0x010 */ f32 maxHalfWidth; // @unverified: cap for each node's halfWidth
