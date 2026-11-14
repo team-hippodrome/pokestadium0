@@ -94,6 +94,16 @@ typedef struct TextBox {
     /* 0x34 */ s32 lineCount; // @unverified: TextBox_Init arg3; sets the window height
 } TextBox; // size = 0x38
 
+/* A frame with text that blinks (BlinkingTextBox_Init, BlinkingTextBox_Draw), e.g. the Free Battle entry message. */
+typedef struct BlinkingTextBox {
+    /* 0x00 */ WindowFrame frame; // @unverified: centered on the screen around the text (BlinkingTextBox_Init)
+    /* 0x20 */ s32 blinkTimer; // @unverified: counts up each draw; hidden for 4 of every 8 frames (Window_DrawBlinkingFrame)
+    /* 0x24 */ s32 noBlink; // @unverified: nonzero = always shown (Window_DrawBlinkingFrame); BlinkingTextBox_Init clears it
+    /* 0x28 */ char* text; // @unverified: BlinkingTextBox_Init arg1
+    /* 0x2C */ s32 fontStyle; // @unverified: index into D_800736D0 (character width and height, font)
+    /* 0x30 */ s32 lineCount; // @unverified: BlinkingTextBox_Init arg3; sets the frame height
+} BlinkingTextBox; // size = 0x34
+
 void func_8002B018(ImageButton* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
 void func_8002B054(ImageButton* arg0, s32 arg1);
 

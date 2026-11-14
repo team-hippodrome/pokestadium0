@@ -1441,15 +1441,15 @@ void Window_DrawFrame(s32* arg0);
  * Free Battle.
  * @unverified Name and comment guessed from the code.
  */
-s32 Window_DrawBlinkingFrame(s32* arg0) {
-    s32 t = arg0[8]++;
+s32 Window_DrawBlinkingFrame(BlinkingTextBox* arg0) {
+    s32 t = arg0->blinkTimer++;
 
     t %= 8;
-    if ((arg0[9] == 0) && (t >= 4)) {
+    if ((arg0->noBlink == 0) && (t >= 4)) {
         return 1;
     }
-    Window_DrawFrame(arg0);
-    Ui_DrawTexturedFrameDecal(arg0[0], arg0[1], arg0[2], arg0[3], D_80073554);
+    Window_DrawFrame(&arg0->frame);
+    Ui_DrawTexturedFrameDecal(arg0->frame.x, arg0->frame.y, arg0->frame.width, arg0->frame.height, D_80073554);
     return 0;
 }
 
@@ -1539,7 +1539,7 @@ u32 func_800566BC(s32);
  * Free Battle.
  * @unverified Name and comment guessed from the code.
  */
-void BlinkingTextBox_Init(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
+void BlinkingTextBox_Init(BlinkingTextBox* arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
     u32 len;
     s32 w;
     s32 h;
@@ -1551,19 +1551,19 @@ void BlinkingTextBox_Init(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
     } else {
         len = arg4;
     }
-    M2C_FIELD(arg0, s32 *, 0x2C) = arg2;
-    M2C_FIELD(arg0, s32 *, 0x30) = arg3;
+    arg0->fontStyle = arg2;
+    arg0->lineCount = arg3;
     cw = D_800736D0[arg2].w;
     ch = D_800736D0[arg2].h;
     w = ch * 2 + len * cw;
     h = ch + (u32)(cw + ch) * arg3;
-    Window_SetRect(arg0, (0x274 - w) / 2, (0x19C - h) / 2 + 0x38, w + 0xC, h + 0xC);
-    M2C_FIELD(arg0, s32 *, 0x20) = 0;
-    M2C_FIELD(arg0, s32 *, 0x24) = 0;
-    M2C_FIELD(arg0, s32 *, 0x14) = 6;
-    M2C_FIELD(arg0, Rgba8002D188 *, 0x18) = *(Rgba8002D188 *)D_800736F8;
-    M2C_FIELD(arg0, Rgba8002D188 *, 0x1C) = *(Rgba8002D188 *)D_800736FC;
-    M2C_FIELD(arg0, s32 *, 0x28) = arg1;
+    Window_SetRect((s8*)arg0, (0x274 - w) / 2, (0x19C - h) / 2 + 0x38, w + 0xC, h + 0xC);
+    arg0->blinkTimer = 0;
+    arg0->noBlink = 0;
+    arg0->frame.style = 6;
+    *(Rgba8002D188*)&arg0->frame.color = *(Rgba8002D188 *)D_800736F8;
+    *(Rgba8002D188*)&arg0->frame.color2 = *(Rgba8002D188 *)D_800736FC;
+    arg0->text = (char*)arg1;
 }
 
 extern Rgba8002D188 D_80073700[];
@@ -1574,17 +1574,17 @@ extern Rgba8002D188 D_80073700[];
  * Free Battle.
  * @unverified Name and comment guessed from the code.
  */
-void BlinkingTextBox_Draw(s32* arg0) {
+void BlinkingTextBox_Draw(BlinkingTextBox* arg0) {
     if (Window_DrawBlinkingFrame(arg0) != 0) {
         return;
     }
     func_8001AB6C();
-    func_8001A384(D_800736D0[arg0[11]].unk8, 0);
+    func_8001A384(D_800736D0[arg0->fontStyle].unk8, 0);
     func_8001AA9C(D_80073700[0].r, D_80073700[0].g, D_80073700[0].b, D_80073700[0].a);
-    Font_SetLineHeight(D_800736D0[arg0[11]].w + D_800736D0[arg0[11]].h);
+    Font_SetLineHeight(D_800736D0[arg0->fontStyle].w + D_800736D0[arg0->fontStyle].h);
     func_8001ABE8();
     func_8001AAE4(D_80073700[1].r, D_80073700[1].g, D_80073700[1].b, D_80073700[1].a);
-    func_8001A944(arg0[0] + D_800736D0[arg0[11]].h + 6, arg0[1] + D_800736D0[arg0[11]].h + 6, arg0[10]);
+    func_8001A944(arg0->frame.x + D_800736D0[arg0->fontStyle].h + 6, arg0->frame.y + D_800736D0[arg0->fontStyle].h + 6, arg0->text);
     func_8001AC3C();
     func_8001ABBC();
 }
