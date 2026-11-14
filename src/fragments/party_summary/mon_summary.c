@@ -394,7 +394,7 @@ void func_8A2024D0(PartyScreen* arg0) {
 
 s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0);
 void SavePrompt_Draw(s8*);
-void PartyScreen_DrawList(s8*, s32);
+void PartyScreen_DrawList(PartyListWindow*, s32);
 #define CTX ((PartyScreen*)arg0)
 /**
  * Draws the summary screen for its current state.
@@ -477,8 +477,8 @@ void SavePrompt_Init(s8*, s32, s32);
 void Menu_ClearItemFlags(s8*);
 s32 SavePrompt_Update(s8*);
 void Save_DrawReportingWindow(s8*);
-s32 PartyScreen_UpdateActionMenu(s8*);
-void PartyScreen_InitActionMenu(s8* arg0, s32 arg1, s32 arg2, u8* arg3);
+s32 PartyScreen_UpdateActionMenu(PartyActionMenuWindow*);
+void PartyScreen_InitActionMenu(PartyActionMenuWindow* arg0, s32 arg1, s32 arg2, u8* arg3);
 void LabPC_WriteDeckBack(s32* arg0, s32 arg1);
 /**
  * Runs the summary screen's state machine for one frame.

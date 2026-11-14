@@ -161,9 +161,9 @@ void PartyScreen_DrawHpLevel(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3);
 void UI_DrawTextureRgba16(s32 arg0, s32 arg1, s32 arg2);
 /* PartyScreen_DrawListRow is defined in lab_pc_icons.c. */
 
-void PartyScreen_InitList(s8 *arg0, s32 arg1, s32 arg2, s32 arg3);
+void PartyScreen_InitList(PartyListWindow* arg0, s32 arg1, s32 arg2, s32 arg3);
 void PartyScreen_DrawActionMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
-void PartyScreen_DrawActionMenu(s8 *arg0);
+void PartyScreen_DrawActionMenu(PartyActionMenuWindow* arg0);
 void MonSummary_DrawTypeName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 void MonSummary_DrawSpeciesName(s32 arg0, s32 arg1, BattleMon* arg2);
 void MonSummary_DrawStats(s32, s32, BattleMon*);

@@ -84,7 +84,7 @@ void PartyScreen_DrawHpLevel(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3) {
 void UI_DrawTextureRgba16(s32 arg0, s32 arg1, s32 arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060290);
 
-    Gfx_DrawTextureRgba16(arg0, arg1, 0x28, 0x28, M2C_FIELD(M2C_FIELD(M2C_FIELD(D_8A21DA50, s8**, 8) + arg2 * 0x14, s8**, 0xC), u8**, 8), 0x28, 0x200000);
+    Gfx_DrawTextureRgba16(arg0, arg1, 0x28, 0x28, ((PokeIconRenderer*)D_8A21DA50)->slots[arg2].image->img_p, 0x28, 0x200000);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
@@ -123,13 +123,13 @@ void PartyScreen_DrawListRow(s32 arg0, s32 arg1, BattleMon *arg2, s32 arg3, s32 
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-void PartyScreen_InitList(s8 *arg0, s32 arg1, s32 arg2, s32 arg3) {
-    Window_SetRect(arg0, arg1, arg2, 0x221, 0x168);
-    M2C_FIELD(arg0, s32 *, 0x24) = 0;
-    M2C_FIELD(arg0, s32 *, 0x20) = 0;
-    M2C_FIELD(arg0, s32 *, 0x28) = 0;
-    M2C_FIELD(arg0, s32 *, 0x14) = 0x1001;
-    Menu_Init(arg0 + 0x2C, arg3, arg0 + 0x50, (M2C_UNK *)PartyScreen_DrawListRow, 0x215, 0x33);
+void PartyScreen_InitList(PartyListWindow* arg0, s32 arg1, s32 arg2, s32 arg3) {
+    Window_SetRect((s8*)arg0, arg1, arg2, 0x221, 0x168);
+    arg0->window.animTimer = 0;
+    arg0->window.title = NULL;
+    arg0->window.state = 0;
+    arg0->window.frame.style = 0x1001;
+    Menu_Init((s8*)&arg0->menu, arg3, (s8*)arg0->itemFlags, (M2C_UNK *)PartyScreen_DrawListRow, 0x215, 0x33);
 }
 
 extern s8 D_8007356C;
@@ -145,28 +145,28 @@ void BgStage_DrawFrame(void);
  * Draws the Pokemon list window: divider, footer bar and the rows.
  * Seen in play (2026-11-12): the party list window with the footer 「ポケモンを えらんで ください」.
  */
-void PartyScreen_DrawList(s8* arg0, s32 arg1) {
+void PartyScreen_DrawList(PartyListWindow* arg0, s32 arg1) {
     s32 flags = 0xFFED;
     s32 i;
     s32 x;
     s32 y;
 
-    if ((M2C_FIELD(arg0, s32*, 0x28) != 2) && (Particle_Field50_SetXZFromField7C_09BB4() == 0)) {
-        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x137, M2C_FIELD(arg0, s32*, 8), &D_8007356C);
-        Ui_FillRectPrimEnvColor(M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x13E, M2C_FIELD(arg0, s32*, 8) - 0xC, 0x24, D_8A203350, D_8A203354);
+    if ((arg0->window.state != 2) && (Particle_Field50_SetXZFromField7C_09BB4() == 0)) {
+        Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->window.frame.y + 0x137, arg0->window.frame.width, &D_8007356C);
+        Ui_FillRectPrimEnvColor(arg0->window.frame.x + 6, arg0->window.frame.y + 0x13E, arg0->window.frame.width - 0xC, 0x24, D_8A203350, D_8A203354);
         func_8001AB6C();
         func_8001A384(0x10, 0);
-        func_8001A944(M2C_FIELD(arg0, s32*, 0) + 0x36, M2C_FIELD(arg0, s32*, 4) + 0x144, (arg1 == 2) ? D_8A20335C : D_8A203358);
+        func_8001A944(arg0->window.frame.x + 0x36, arg0->window.frame.y + 0x144, (arg1 == 2) ? D_8A20335C : D_8A203358);
         func_8001ABBC();
 
-        x = M2C_FIELD(arg0, s32*, 0) + 6;
-        y = M2C_FIELD(arg0, s32*, 4) + 6;
+        x = arg0->window.frame.x + 6;
+        y = arg0->window.frame.y + 6;
         for (i = 0; i < 6; i++) {
             gSPDisplayList(gDisplayListHead++, D_80060270);
-            func_80029028(x, y + 1, M2C_FIELD(arg0, s32*, 0x38), M2C_FIELD(arg0, s32*, 0x3C), D_8A203304);
-            func_80029028(x, y, M2C_FIELD(arg0, s32*, 0x38), 1, D_8A20334C);
-            func_80029028(x, (y + M2C_FIELD(arg0, s32*, 0x3C)) - 1, M2C_FIELD(arg0, s32*, 0x38), 1, D_8A20334C);
-            y += M2C_FIELD(arg0, s32*, 0x3C);
+            func_80029028(x, y + 1, arg0->menu.cellWidth, arg0->menu.cellHeight, D_8A203304);
+            func_80029028(x, y, arg0->menu.cellWidth, 1, D_8A20334C);
+            func_80029028(x, (y + arg0->menu.cellHeight) - 1, arg0->menu.cellWidth, 1, D_8A20334C);
+            y += arg0->menu.cellHeight;
         }
 
         switch (arg1) {
@@ -178,24 +178,24 @@ void PartyScreen_DrawList(s8* arg0, s32 arg1) {
                 flags = 0xFFFD;
                 break;
         }
-        Menu_DrawItems(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 6, flags, (s32)&arg1);
+        Menu_DrawItems((s8*)&arg0->menu, arg0->window.frame.x + 6, arg0->window.frame.y + 6, flags, (s32)&arg1);
     }
 
-    if ((M2C_FIELD(arg0, s32*, 0x28) == 1) || (M2C_FIELD(arg0, s32*, 0x28) == 2)) {
+    if ((arg0->window.state == 1) || (arg0->window.state == 2)) {
         func_800189C0(D_8A21DA50, 0);
         BgStage_DrawFrame();
-        x = M2C_FIELD(arg0, s32*, 0) + 6;
-        y = M2C_FIELD(arg0, s32*, 4) + 6;
-        for (i = 0; i < M2C_FIELD(M2C_FIELD(arg0, s8**, 0x2C), s32*, 8); i++) {
-            if (((arg1 == 1) && (i == M2C_FIELD(arg0, s32*, 0x34))) ||
-                ((arg1 == 2) && (M2C_FIELD(arg0, u16**, 0x30)[i] & 8))) {
+        x = arg0->window.frame.x + 6;
+        y = arg0->window.frame.y + 6;
+        for (i = 0; i < arg0->menu.items->count; i++) {
+            if (((arg1 == 1) && (i == arg0->menu.cursor)) ||
+                ((arg1 == 2) && (arg0->menu.itemFlags[i] & 8))) {
                 Ui_FillRectHighlighted(x + 0x14, y + 5, 0x28, 0x28, D_8A203304);
             } else {
                 gSPDisplayList(gDisplayListHead++, D_80060270);
                 func_80029028(x + 0x14, y + 5, 0x28, 0x28, D_8A203304);
             }
             UI_DrawTextureRgba16(x + 0x14, y + 5, i);
-            y += M2C_FIELD(arg0, s32*, 0x3C);
+            y += arg0->menu.cellHeight;
         }
     }
 }
@@ -222,38 +222,38 @@ void func_80027804(s8*, void*, s32, s32);
  * Sets up the small menu window (180x132).
  * Seen in play (2026-11-12): opens when a party Pokemon is picked: つよさをみる / ならびかえ / やめる.
  */
-void PartyScreen_InitActionMenu(s8 *arg0, s32 arg1, s32 arg2, u8 *arg3)
+void PartyScreen_InitActionMenu(PartyActionMenuWindow* arg0, s32 arg1, s32 arg2, u8* arg3)
 {
-  s8 *new_var; // FAKE: permuter temp
+  s32* new_var; // FAKE: permuter temp
   s8 *sp2C;
-  Window_SetRect(arg0, arg1, arg2, 0xB4, 0x84);
-  *((s32 *) (((s8 *) arg0) + 0x24)) = 0;
-  new_var = ((s8 *) arg0) + 0x28;
-  *((s32 *) (((s8 *) arg0) + 0x20)) = 0;
-  *((s32 *) new_var) = 0;
-  *((s32 *) (((s8 *) arg0) + 0x14)) = 0;
-  *((Color_RGBA8 *) (((s8 *) arg0) + 0x18)) = D_8A203304;
-  sp2C = arg0 + 0x50;
+  Window_SetRect((s8*)arg0, arg1, arg2, 0xB4, 0x84);
+  arg0->window.animTimer = 0;
+  new_var = &arg0->window.state;
+  arg0->window.title = NULL;
+  *new_var = 0;
+  arg0->window.frame.style = 0;
+  arg0->window.frame.color = D_8A203304;
+  sp2C = (s8*)&arg0->items;
   func_80027804(sp2C, D_8A203364, 3, 3);
-  Menu_Init(arg0 + 0x2C, sp2C, arg0 + 0x5C, (M2C_UNK *) PartyScreen_DrawActionMenuRow, 0xA8, 0x24);
+  Menu_Init((s8*)&arg0->menu, sp2C, (s8*)arg0->itemFlags, (M2C_UNK *) PartyScreen_DrawActionMenuRow, 0xA8, 0x24);
   if ((!arg0) && (!arg0))
   {
   }
-  *((s32 *) (((s8 *) arg0) + 0x4C)) |= 0x10000;
+  arg0->menu.options |= 0x10000;
   if (((arg3[0] > 0) && (arg3[0] < 0x98)) && (BattleMon_CountMoves(arg3) != 0))
   {
     return;
   }
-  *(*((u16 **) (((s8 *) arg0) + 0x30))) |= 1;
+  *arg0->menu.itemFlags |= 1;
 }
 
 /**
  * Draws the menu window's items.
  * Seen in play (2026-11-12): draws the つよさをみる / ならびかえ / やめる menu.
  */
-void PartyScreen_DrawActionMenu(s8 *arg0) {
+void PartyScreen_DrawActionMenu(PartyActionMenuWindow* arg0) {
     if (Particle_Field50_SetXZFromField7C_09BB4() == 0) {
-        Menu_DrawItems(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0xC, 0xFEF, 0);
+        Menu_DrawItems((s8*)&arg0->menu, arg0->window.frame.x + 6, arg0->window.frame.y + 0xC, 0xFEF, 0);
     }
 }
 
@@ -271,18 +271,18 @@ s32 func_8002BC14(s32);
  * -- is inferred from the sound call only.)
  * Seen in play (2026-11-12): moves the cursor over つよさをみる / ならびかえ / やめる and returns the pick.
  */
-s32 PartyScreen_UpdateActionMenu(s8* arg0) {
+s32 PartyScreen_UpdateActionMenu(PartyActionMenuWindow* arg0) {
     s32 sp1C = 0;
     s32 dir;
     s32 idx;
 
-    if (Menu_UpdateCursor(arg0 + 0x2C) == 0) {
+    if (Menu_UpdateCursor((s8*)&arg0->menu) == 0) {
         dir = func_8002BC14((s32)D_800603C0);
         if (dir == -1) {
             sp1C = -1;
         } else if (dir == 1) {
-            idx = M2C_FIELD(arg0, s32*, 0x34);
-            if (!(M2C_FIELD(arg0, u16**, 0x30)[idx] & 1)) {
+            idx = arg0->menu.cursor;
+            if (!(arg0->menu.itemFlags[idx] & 1)) {
                 sp1C = idx + 1;
             } else {
                 func_8003F6AC(8);
