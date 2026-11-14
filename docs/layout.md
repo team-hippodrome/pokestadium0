@@ -47,7 +47,7 @@ Where the code lives, after the reorganization. File names are broadly correct g
 | 034 | `src/fragments/geo_model_034/` | 1 | 8 | geo layout callbacks for models |
 | 038 | `src/fragments/cartridge_check_models/` | 1 | 2 | models of the Game Boy cartridge check (P-OS terminal) and its anti-piracy check |
 | 039 | `src/fragments/doduo_game_boy_model/` | 1 | 1 | Doduo Game Boy (Pocket) prize model and its screen glare callback |
-| 040 | `src/fragments/geo_model_040/` | 1 | 1 | geo layout callbacks for models |
+| 040 | `src/fragments/dodrio_game_boy_model/` | 1 | 1 | Dodrio Game Boy (Pocket) prize model shown on the cartridge check screen |
 | 106–258 | `src/fragments/model_data/` | 153 | 153 | model data, one file per fragment |
 
 ## Resident files
