@@ -30,15 +30,16 @@ extern u8 D_300BAD0[];
 extern u8 D_300BED0[];
 extern u8 D_300C2D0[];
 
-typedef struct unk_D_82203170 {
-    /* 0x00 */ u8 unk_00;
+// One side's trainer panel on the VS screen (D_82203170[2]).
+typedef struct VsSceneSide {
+    /* 0x00 */ u8 teamLayout; // @unverified: VsScene_PrepareTeams sets 0 when ruleCategory != 0, 2 for a two-trainer side, else 1
     /* 0x01 */ char unk01[0x3];
-    /* 0x04 */ void* unk_04;
-    /* 0x08 */ u8* unk_08[6];
-    /* 0x20 */ u8* unk_20[6];
-    /* 0x38 */ TeamRoster* unk_38[2];
-    /* 0x40 */ ExtendedRosterInfo* unk_40[2];
-} unk_D_82203170; // size = 0x48
+    /* 0x04 */ void* trainerFile; // @unverified: BinArchive file picked by rosterInfo[0]->unk_003 in VsScene_PrepareTeams
+    /* 0x08 */ u8* iconImages[6]; // @unverified: PokeIcon_GetImage results for the side's Pokémon (VsScene_LoadTeamIcons)
+    /* 0x20 */ u8* hpBarImages[6]; // @unverified: images of the D_82203210 render targets func_82201084 draws HP bars into
+    /* 0x38 */ TeamRoster* teamMember[2];
+    /* 0x40 */ ExtendedRosterInfo* rosterInfo[2];
+} VsSceneSide; // size = 0x48
 
 extern u8* D_82202C1C[];
 extern u8* D_82202C3C[];
@@ -51,7 +52,7 @@ extern u8 D_82202DDC[];
 extern u8 D_82202E9C[];
 extern u8 D_82202F5C[];
 extern u8 D_8220301C[];
-extern unk_D_82203170 D_82203170[2];
+extern VsSceneSide D_82203170[2];
 extern DisplayObject* D_82203200;
 extern DepthBuffer* D_82203208;
 extern DepthBuffer* D_82203210[12];
@@ -142,30 +143,30 @@ s32 VsScene_BeginFrame(void) {
  * Seen in play: runs as the VS scene opens before a tournament battle.
  */
 void VsScene_PrepareTeams(void) {
-    unk_D_82203170* team;
+    VsSceneSide* team;
     s32 i;
 
     main_pool_push_state('ICON');
 
     for (i = 0, team = D_82203170; i < 2; i++, team++) {
         if (D_822036A4->ruleCategory != 0) {
-            team->unk_00 = 0;
+            team->teamLayout = 0;
         } else if (D_822036A4->battleSides[i].tagTeamSize == 2) {
-            team->unk_00 = 2;
+            team->teamLayout = 2;
         } else {
-            team->unk_00 = 1;
+            team->teamLayout = 1;
         }
 
-        team->unk_38[0] = D_822036A4->battleSides[i].teamMember[0];
-        team->unk_40[0] = D_822036A4->battleSides[i].teamMember[0]->rosterInfo;
-        team->unk_04 = BinArchive_GetFile(D_8220325C, team->unk_40[0]->unk_003);
+        team->teamMember[0] = D_822036A4->battleSides[i].teamMember[0];
+        team->rosterInfo[0] = D_822036A4->battleSides[i].teamMember[0]->rosterInfo;
+        team->trainerFile = BinArchive_GetFile(D_8220325C, team->rosterInfo[0]->unk_003);
 
         if (D_822036A4->battleSides[i].tagTeamSize == 2) {
-            team->unk_38[1] = D_822036A4->battleSides[i].teamMember[1];
-            team->unk_40[1] = D_822036A4->battleSides[i].teamMember[1]->rosterInfo;
+            team->teamMember[1] = D_822036A4->battleSides[i].teamMember[1];
+            team->rosterInfo[1] = D_822036A4->battleSides[i].teamMember[1]->rosterInfo;
         } else {
-            team->unk_38[1] = NULL;
-            team->unk_40[1] = NULL;
+            team->teamMember[1] = NULL;
+            team->rosterInfo[1] = NULL;
         }
     }
 }
@@ -352,15 +353,15 @@ void func_82200850(void) {
  * Seen in play: runs as the VS scene opens; the trainer portraits (1P's cap, the むしとり しょうねん)
  * appear in its panels.
  */
-void VsScene_LoadTeamIcons(unk_D_82203170* arg0, s32 arg1) {
+void VsScene_LoadTeamIcons(VsSceneSide* arg0, s32 arg1) {
     s32 i;
     s32 slot = arg1 * 6;
 
     for (i = 0; i < 6; i++) {
-        if (i < arg0->unk_40[0]->numberOfPokemonCanBePicked) {
-            func_8001833C((unk_func_8001A024*)D_82203264, slot, &arg0->unk_40[0]->battleMon[i], 1);
+        if (i < arg0->rosterInfo[0]->numberOfPokemonCanBePicked) {
+            func_8001833C((unk_func_8001A024*)D_82203264, slot, &arg0->rosterInfo[0]->battleMon[i], 1);
         }
-        arg0->unk_08[i] = PokeIcon_GetImage((unk_func_8001A024*)D_82203264, slot++);
+        arg0->iconImages[i] = PokeIcon_GetImage((unk_func_8001A024*)D_82203264, slot++);
     }
 }
 
@@ -433,7 +434,7 @@ void VsScene_PlayBattleTitle(void) {
         }
     }
     Model_InitDisplayObject(&D_82203268, D_822036A4->roundOrDemoId, 0, (ModelNodeView*)D_8220324C);
-    if ((D_82203170[0].unk_00 == 2) || (D_82203170[1].unk_00 == 2)) {
+    if ((D_82203170[0].teamLayout == 2) || (D_82203170[1].teamLayout == 2)) {
         ModelAnim_BindTransformCurve(&D_82203268, 1, D_8F5054C8, 0x10000);
         BgStage_RunUntilCondition(0x64, (s32(*)(u8))VsScene_DrawFrame);
     } else {
@@ -607,18 +608,18 @@ void func_82201084(s32 arg0) {
     s32 i;
     s32 j;
     s32 k;
-    unk_D_82203170* p;
+    VsSceneSide* p;
 
     for (i = 0; i < 2; i++) {
         p = &D_82203170[i];
-        if (p->unk_00 == 2) {
+        if (p->teamLayout == 2) {
             BattleMon* mon;
             s32 hp;
             s32 scaled;
 
             for (j = 0; j < 2; j++) {
-                mon = p->unk_38[j]->pokemonPicked;
-                for (k = 0; k < p->unk_38[j]->numberOfPokemonBrought; k++, mon++) {
+                mon = p->teamMember[j]->pokemonPicked;
+                for (k = 0; k < p->teamMember[j]->numberOfPokemonBrought; k++, mon++) {
                     scaled = (mon->maxHp * arg0) / 100;
                     hp = (mon->hp >= scaled) ? mon->hp : scaled;
                     GfxImage_SetRenderTarget(&gDisplayListHead, D_82203210[i * 6 + j * 3 + k]);
@@ -630,8 +631,8 @@ void func_82201084(s32 arg0) {
             s32 hp;
             s32 scaled;
 
-            mon = p->unk_38[0]->pokemonPicked;
-            for (k = 0; k < p->unk_38[0]->numberOfPokemonBrought; k++, mon++) {
+            mon = p->teamMember[0]->pokemonPicked;
+            for (k = 0; k < p->teamMember[0]->numberOfPokemonBrought; k++, mon++) {
                 scaled = (mon->maxHp * arg0) / 100;
                 hp = (mon->hp >= scaled) ? mon->hp : scaled;
                 GfxImage_SetRenderTarget(&gDisplayListHead, D_82203210[i * 6 + k]);
@@ -661,29 +662,29 @@ void func_82201348(DepthBuffer* arg0) {
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-void VsScene_LoadTagTeamIcons(unk_D_82203170* arg0, s32 arg1) {
+void VsScene_LoadTagTeamIcons(VsSceneSide* arg0, s32 arg1) {
     s32 slot = arg1 * 6;
     s32 i;
     s32 j;
 
-    if (arg0->unk_00 == 2) {
+    if (arg0->teamLayout == 2) {
         for (i = 0; i < 2; i++) {
             for (j = 0; j < 3; j++) {
-                if (j < arg0->unk_38[i]->numberOfPokemonBrought) {
-                    func_8001833C((unk_func_8001A024*)D_82203264, slot, &arg0->unk_38[i]->pokemonPicked[j], 1);
+                if (j < arg0->teamMember[i]->numberOfPokemonBrought) {
+                    func_8001833C((unk_func_8001A024*)D_82203264, slot, &arg0->teamMember[i]->pokemonPicked[j], 1);
                 }
-                arg0->unk_08[i * 3 + j] = PokeIcon_GetImage((unk_func_8001A024*)D_82203264, slot);
-                arg0->unk_20[i * 3 + j] = D_82203210[slot]->img_p;
+                arg0->iconImages[i * 3 + j] = PokeIcon_GetImage((unk_func_8001A024*)D_82203264, slot);
+                arg0->hpBarImages[i * 3 + j] = D_82203210[slot]->img_p;
                 slot++;
             }
         }
     } else {
         for (j = 0; j < 6; j++) {
-            if (j < arg0->unk_38[0]->numberOfPokemonBrought) {
-                func_8001833C((unk_func_8001A024*)D_82203264, slot, &arg0->unk_38[0]->pokemonPicked[j], 1);
+            if (j < arg0->teamMember[0]->numberOfPokemonBrought) {
+                func_8001833C((unk_func_8001A024*)D_82203264, slot, &arg0->teamMember[0]->pokemonPicked[j], 1);
             }
-            arg0->unk_08[j] = PokeIcon_GetImage((unk_func_8001A024*)D_82203264, slot);
-            arg0->unk_20[j] = D_82203210[slot]->img_p;
+            arg0->iconImages[j] = PokeIcon_GetImage((unk_func_8001A024*)D_82203264, slot);
+            arg0->hpBarImages[j] = D_82203210[slot]->img_p;
             slot++;
         }
     }
@@ -726,7 +727,7 @@ void func_82201600(s32 arg0) {
 }
 
 s32 func_822017F0(void) {
-    unk_D_82203170* p;
+    VsSceneSide* p;
     BattleMon* mon;
     s32 i;
     s32 j;
@@ -734,18 +735,18 @@ s32 func_822017F0(void) {
 
     for (i = 0; i < 2; i++) {
         p = &D_82203170[i];
-        if (p->unk_00 == 2) {
+        if (p->teamLayout == 2) {
             for (j = 0; j < 2; j++) {
-                mon = p->unk_38[j]->pokemonPicked;
-                for (k = 0; k < p->unk_38[j]->numberOfPokemonBrought; k++, mon++) {
+                mon = p->teamMember[j]->pokemonPicked;
+                for (k = 0; k < p->teamMember[j]->numberOfPokemonBrought; k++, mon++) {
                     if (mon->hp < mon->maxHp) {
                         return 1;
                     }
                 }
             }
         } else {
-            mon = p->unk_38[0]->pokemonPicked;
-            for (k = 0; k < p->unk_38[0]->numberOfPokemonBrought; k++, mon++) {
+            mon = p->teamMember[0]->pokemonPicked;
+            for (k = 0; k < p->teamMember[0]->numberOfPokemonBrought; k++, mon++) {
                 if (mon->hp < mon->maxHp) {
                     return 1;
                 }
@@ -922,7 +923,7 @@ s32 func_82201DF8(void) {
 
 extern u8 D_8F625614[];
 extern u8 D_8F61F87C[];
-void VsScene_LoadTagTeamIcons(unk_D_82203170* arg0, s32 arg1);
+void VsScene_LoadTagTeamIcons(VsSceneSide* arg0, s32 arg1);
 void func_82201084(s32);
 void func_82200714(void);
 void func_80041374(s32 arg0, s32 arg1);
