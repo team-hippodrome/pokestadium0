@@ -165,13 +165,7 @@ s32 BattleScene_EndStatusAnimationsAndCommit(ActivePokemon* arg0) {
     Battle_ApplyAnimStateEffects(arg0);
 }
 
-typedef struct Entry811858B0 {
-    /* 0x00 */ u8 unk_00[2];
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ char unk04[8];
-} Entry811858B0; // size = 0xC
-extern Entry811858B0* D_811858B0;
+extern SoundFont* D_811858B0;
 
 extern volatile s32 D_811859D4;
 extern s32 D_811526FC;
@@ -299,12 +293,12 @@ void AudioLoad_Init(void) {
     func_8110CB70((AudioTable8110DCC0*)D_811858A4, D_0015AA60, 0);
 
     num_fonts = D_811858A0->numEntries;
-    D_811858B0 = func_81109868(D_811842B0, num_fonts * sizeof(Entry811858B0));
+    D_811858B0 = func_81109868(D_811842B0, num_fonts * sizeof(SoundFont));
     for (i = 0; i < num_fonts; i++) {
-        D_811858B0[i].unk_02 = D_811858A0->entries[i].shortData1 >> 8 & 0xFF;
-        D_811858B0[i].unk_03 = D_811858A0->entries[i].shortData1 & 0xFF;
-        D_811858B0[i].unk_00[0] = D_811858A0->entries[i].shortData2 >> 8 & 0xFF;
-        D_811858B0[i].unk_00[1] = D_811858A0->entries[i].shortData2 & 0xFF;
+        D_811858B0[i].sampleBankId1 = D_811858A0->entries[i].shortData1 >> 8 & 0xFF;
+        D_811858B0[i].sampleBankId2 = D_811858A0->entries[i].shortData1 & 0xFF;
+        D_811858B0[i].numInstruments = D_811858A0->entries[i].shortData2 >> 8 & 0xFF;
+        D_811858B0[i].numDrums = D_811858A0->entries[i].shortData2 & 0xFF;
     }
 
     ram_addr = func_81109868(D_811842B0, D_81152704);
@@ -314,7 +308,7 @@ void AudioLoad_Init(void) {
     func_811098C0(&D_81184440, ram_addr, D_81152704);
 }
 
-typedef struct SampleHeader8110E500 {
+typedef struct Sample8110E500 {
     /* 0x00 */ u32 codec : 4;
     /* 0x00 */ u32 medium : 2;
     /* 0x00 */ u32 unk_00 : 2;
@@ -322,34 +316,34 @@ typedef struct SampleHeader8110E500 {
     /* 0x04 */ s32 devAddr;
     /* 0x08 */ s32 unk_08;
     /* 0x0C */ s32 unk_0C;
-} SampleHeader8110E500; // size = 0x10
+} Sample8110E500; // size = 0x10
 
-typedef struct SampleLoad8110E500 {
+typedef struct SlowLoad8110E500 {
     /* 0x00 */ u8 medium;
-    /* 0x01 */ u8 arg0;
-    /* 0x02 */ u8 arg1;
-    /* 0x04 */ s32 devAddr;
-    /* 0x08 */ s32 ramAddr;
-    /* 0x0C */ s32 curRamAddr;
+    /* 0x01 */ u8 seqOrFontId; // @unverified: same offset/use as OoT's AudioSlowLoad.seqOrFontId
+    /* 0x02 */ u8 instId; // @unverified: same offset/use as OoT's AudioSlowLoad.instId
+    /* 0x04 */ s32 curDevAddr; // @unverified: same offset/use as OoT's AudioSlowLoad.curDevAddr
+    /* 0x08 */ s32 curRamAddr; // @unverified: same offset/use as OoT's AudioSlowLoad.curRamAddr (the allocation; advanced while loading)
+    /* 0x0C */ s32 ramAddr; // @unverified: same offset/use as OoT's AudioSlowLoad.ramAddr (start of the loaded sample)
     /* 0x10 */ s32 state;
-    /* 0x14 */ s32 size;
+    /* 0x14 */ s32 bytesRemaining; // @unverified: same offset/use as OoT's AudioSlowLoad.bytesRemaining
     /* 0x18 */ s8* status;
-    /* 0x1C */ SampleHeader8110E500 header;
+    /* 0x1C */ Sample8110E500 sample; // @unverified: same offset/use as OoT's AudioSlowLoad.sample (copy of the font's sample header)
     /* 0x2C */ u8 unk_2C[0x34];
-} SampleLoad8110E500; // size = 0x60
+} SlowLoad8110E500; // size = 0x60
 
-typedef struct SampleLoads8110E500 {
+typedef struct SlowLoads8110E500 {
     /* 0x00 */ s32 index;
-    /* 0x04 */ SampleLoad8110E500 slots[2];
-} SampleLoads8110E500;
+    /* 0x04 */ SlowLoad8110E500 slots[2];
+} SlowLoads8110E500;
 
-extern SampleLoads8110E500 D_81180610;
+extern SlowLoads8110E500 D_81180610;
 s32 AudioHeap_AllocTemporarySampleCache(s32, s32, s32, s8);
 s32 func_8110E6B0(s32 arg0, s32 arg1);
 
 s32 func_8110E500(s32 arg0, u8 arg1, s8* status) {
-    SampleHeader8110E500* header = (SampleHeader8110E500*)func_8110E6B0(arg0, arg1);
-    SampleLoad8110E500* load;
+    Sample8110E500* header = (Sample8110E500*)func_8110E6B0(arg0, arg1);
+    SlowLoad8110E500* load;
 
     if (header == NULL) {
         *status = 0;
@@ -363,10 +357,10 @@ s32 func_8110E500(s32 arg0, u8 arg1, s8* status) {
     if (load->state == 3) {
         load->state = 0;
     }
-    load->header = *header;
+    load->sample = *header;
     load->status = status;
-    load->ramAddr = AudioHeap_AllocTemporarySampleCache(header->size, arg0, header->devAddr, header->medium);
-    if (load->ramAddr == 0) {
+    load->curRamAddr = AudioHeap_AllocTemporarySampleCache(header->size, arg0, header->devAddr, header->medium);
+    if (load->curRamAddr == 0) {
         if ((header->medium == 1) || (header->codec == 2)) {
             *status = 0;
             return -1;
@@ -375,12 +369,12 @@ s32 func_8110E500(s32 arg0, u8 arg1, s8* status) {
         return -1;
     }
     load->state = 1;
-    load->size = ALIGN16(header->size);
-    load->curRamAddr = load->ramAddr;
-    load->devAddr = header->devAddr;
+    load->bytesRemaining = ALIGN16(header->size);
+    load->ramAddr = load->curRamAddr;
+    load->curDevAddr = header->devAddr;
     load->medium = header->medium;
-    load->arg0 = arg0;
-    load->arg1 = arg1;
+    load->seqOrFontId = arg0;
+    load->instId = arg1;
     D_81180610.index ^= 1;
     return 0;
 }
@@ -415,25 +409,25 @@ typedef struct Words4_8110E71C {
     s32 w[4];
 } Words4_8110E71C;
 
-/** Entry returned by func_8110E6B0: four words, the first of which starts with a flag byte. */
-typedef struct Entry8110E71C {
-    /* 0x00 */ u8 flags;
+/** The Sample that func_8110E6B0 returns for a font instrument or drum. */
+typedef struct Sample8110E71C {
+    /* 0x00 */ u8 flags; // @unverified: Sample byte 0 (codec/medium/flags); func_8110E71C clears medium (bits 2-3) to RAM
     /* 0x01 */ u8 unk_01[3];
-    /* 0x04 */ s32 unk_04;
+    /* 0x04 */ s32 sampleAddr; // @unverified: Sample.sampleAddr, pointed at the slow-loaded copy (OoT's AudioLoad_FinishSlowLoad)
     /* 0x08 */ s32 unk_08;
     /* 0x0C */ s32 unk_0C;
-} Entry8110E71C;
+} Sample8110E71C;
 
-/** Object that receives a copy of the entry; only the used fields are named. */
-typedef struct Owner8110E71C {
+/** A slow sample load (OoT AudioSlowLoad), as func_8110E71C (OoT AudioLoad_FinishSlowLoad) sees it. */
+typedef struct SlowLoad8110E71C {
     /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 keyA;
-    /* 0x02 */ u8 keyB;
+    /* 0x01 */ u8 seqOrFontId; // @unverified: same offset/use as OoT's AudioSlowLoad.seqOrFontId
+    /* 0x02 */ u8 instId; // @unverified: same offset/use as OoT's AudioSlowLoad.instId
     /* 0x03 */ u8 unk_03[9];
-    /* 0x0C */ s32 unk_0C;
+    /* 0x0C */ s32 ramAddr; // @unverified: same offset/use as OoT's AudioSlowLoad.ramAddr
     /* 0x10 */ u8 unk_10[0xC];
-    /* 0x1C */ Words4_8110E71C copy;
-} Owner8110E71C;
+    /* 0x1C */ Words4_8110E71C sample; // @unverified: same offset/use as OoT's AudioSlowLoad.sample
+} SlowLoad8110E71C;
 
 /**
  * Looks up the entry for (keyA, keyB) with func_8110E6B0. If one exists, its
@@ -441,13 +435,13 @@ typedef struct Owner8110E71C {
  * overwritten with arg0->unk_0C, and bits 2 and 3 of its first byte are
  * cleared.
  */
-void func_8110E71C(Owner8110E71C* arg0) {
-    Entry8110E71C* entry;
+void func_8110E71C(SlowLoad8110E71C* arg0) {
+    Sample8110E71C* entry;
 
-    entry = (Entry8110E71C*)func_8110E6B0(arg0->keyA, arg0->keyB);
+    entry = (Sample8110E71C*)func_8110E6B0(arg0->seqOrFontId, arg0->instId);
     if (entry != NULL) {
-        arg0->copy = *(Words4_8110E71C*)entry;
-        entry->unk_04 = arg0->unk_0C;
+        arg0->sample = *(Words4_8110E71C*)entry;
+        entry->sampleAddr = arg0->ramAddr;
         entry->flags &= 0xFFF3;
     }
 }
@@ -466,7 +460,7 @@ void func_8110E994(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
  */
 void AudioLoad_ProcessSlowLoads(s32 reset_status) {
     u8* table = D_811858A4;
-    SampleLoad8110E500* load;
+    SlowLoad8110E500* load;
     s32 i;
 
     for (i = 0; i < 2; i++) {
@@ -480,28 +474,28 @@ void AudioLoad_ProcessSlowLoads(s32 reset_status) {
                 }
             case 1:
                 load->state = 2;
-                if (load->size == 0) {
-                    func_8110E71C((Owner8110E71C*)load);
+                if (load->bytesRemaining == 0) {
+                    func_8110E71C((SlowLoad8110E71C*)load);
                     load->state = 3;
                     *load->status = 1;
-                } else if (load->size < 0x1000) {
+                } else if (load->bytesRemaining < 0x1000) {
                     if (load->medium == 1) {
-                        u32 size = load->size;
+                        u32 size = load->bytesRemaining;
 
-                        func_8110E994(load->devAddr, load->ramAddr, size, *(s16*)(table + 2));
+                        func_8110E994(load->curDevAddr, load->curRamAddr, size, *(s16*)(table + 2));
                     } else {
-                        func_8110E910((s8*)load, load->size);
+                        func_8110E910((s8*)load, load->bytesRemaining);
                     }
-                    load->size = 0;
+                    load->bytesRemaining = 0;
                 } else {
                     if (load->medium == 1) {
-                        func_8110E994(load->devAddr, load->ramAddr, 0x1000, *(s16*)(table + 2));
+                        func_8110E994(load->curDevAddr, load->curRamAddr, 0x1000, *(s16*)(table + 2));
                     } else {
                         func_8110E910((s8*)load, 0x1000);
                     }
-                    load->size -= 0x1000;
-                    load->ramAddr += 0x1000;
-                    load->devAddr += 0x1000;
+                    load->bytesRemaining -= 0x1000;
+                    load->curRamAddr += 0x1000;
+                    load->curDevAddr += 0x1000;
                 }
                 break;
         }
@@ -649,8 +643,8 @@ void func_8110EB40(Entry8110EABC* load, s32 reset_status) {
             case 1:
                 font_id = (u8)(info >> 8);
                 AudioLoad_SetFontLoadStatus(font_id, (u8)info);
-                sampleBankId1 = D_811858B0[font_id].unk_02;
-                sampleBankId2 = D_811858B0[font_id].unk_03;
+                sampleBankId1 = D_811858B0[font_id].sampleBankId1;
+                sampleBankId2 = D_811858B0[font_id].sampleBankId2;
                 reloc_info.sampleBankId1 = sampleBankId1;
                 reloc_info.sampleBankId2 = sampleBankId2;
                 reloc_info.baseAddr1 = (sampleBankId1 != 0xFF) ? func_8110D408(sampleBankId1, &reloc_info.medium1) : 0;
@@ -695,18 +689,16 @@ void func_8110EE28(s32 arg0, M2C_UNK arg1, u32 arg2, M2C_UNK arg3) {
 
 }
 
-/* First word of a record, split into bit ranges (big-endian, most significant
- * bit first). The field names only say which bits they are; what they mean is
- * not established. */
+/* First word of a Sample (OoT layout: codec, medium, unk_bit26, isRelocated, size). */
 typedef struct {
     u32 bits31_28 : 4;
-    u32 bits27_26 : 2;
-    u32 bit25 : 1;
+    u32 medium : 2; // @unverified: Sample.medium bits (OoT layout)
+    u32 unk_bit26 : 1; // @unverified: Sample bit 26, same position as OoT's Sample.unk_bit26
     u32 bit24 : 1;
-    u32 low24 : 24;
-} PackedWordRec;
+    u32 size : 24; // @unverified: Sample.size (24 bits)
+} SampleFlags8110F64C;
 
-extern PackedWordRec *D_81184978[];
+extern SampleFlags8110F64C *D_81184978[];
 extern s32 D_81185578;
 
 typedef struct Sample8110EE3C {
@@ -763,7 +755,7 @@ void AudioLoad_RelocateSample(Sample8110EE3C** sampleP, s32 font_data_addr, Relo
 
             sample->isRelocated = 1;
             if (sample->unk_bit26 && (sample->medium != 0)) {
-                D_81184978[D_81185578++] = (PackedWordRec*)sample;
+                D_81184978[D_81185578++] = (SampleFlags8110F64C*)sample;
             }
         }
     }
@@ -975,8 +967,8 @@ s32 func_8110F4D0(Item8110F4D0* arg0, s32 count, Item8110F4D0** list) {
 s32 func_8110F518(s32 arg0, Item8110F4D0** arg1) {
     s32 count = 0;
     s32 i;
-    s32 n1 = D_811858B0[arg0].unk_00[1];
-    s32 n0 = D_811858B0[arg0].unk_00[0];
+    s32 n1 = D_811858B0[arg0].numDrums;
+    s32 n0 = D_811858B0[arg0].numInstruments;
     s32* p;
     u8* q;
 
@@ -1018,11 +1010,11 @@ s32 func_8110F518(s32 arg0, Item8110F4D0** arg1) {
  * sequence; the equivalent masks and shifts on a plain word differ in
  * temporary register numbering.
  */
-void func_8110F64C(PackedWordRec **arg0) {
-    PackedWordRec *rec;
+void func_8110F64C(SampleFlags8110F64C **arg0) {
+    SampleFlags8110F64C *rec;
 
     rec = *arg0;
-    if (rec->low24 && rec->bit25 && rec->bits27_26) {
+    if (rec->size && rec->unk_bit26 && rec->medium) {
         D_81184978[D_81185578] = rec;
         D_81185578 += 1;
     }
@@ -1054,27 +1046,27 @@ void AudioLoad_PreloadSamplesForFont(s32 font_id, s32 async, RelocInfo8110EF7C* 
         preload_in_progress = 1;
     }
     D_81185578 = 0;
-    num_instruments = D_811858B0[font_id].unk_00[0];
-    num_drums = D_811858B0[font_id].unk_00[1];
+    num_instruments = D_811858B0[font_id].numInstruments;
+    num_drums = D_811858B0[font_id].numDrums;
 
     for (i = 0; i < num_instruments; i++) {
         instrument = (u8*)AudioPlayback_GetInstrumentInner(font_id, i);
         if (instrument != NULL) {
             if (instrument[1] != 0) {
-                func_8110F64C((PackedWordRec**)(instrument + 8));
+                func_8110F64C((SampleFlags8110F64C**)(instrument + 8));
                 if (!reloc_info->medium2) {} // FAKE
             }
             if (instrument[2] != 0x7F) {
-                func_8110F64C((PackedWordRec**)(instrument + 0x18));
+                func_8110F64C((SampleFlags8110F64C**)(instrument + 0x18));
             }
-            func_8110F64C((PackedWordRec**)(instrument + 0x10));
+            func_8110F64C((SampleFlags8110F64C**)(instrument + 0x10));
         }
     }
 
     for (i = 0; i < num_drums; i++) {
         drum = (u8*)AudioPlayback_GetDrum(font_id, i);
         if (drum != NULL) {
-            func_8110F64C((PackedWordRec**)(drum + 4));
+            func_8110F64C((SampleFlags8110F64C**)(drum + 4));
         }
     }
 
@@ -1171,9 +1163,9 @@ void func_8110FAF4(void) {
     for (i = 0; i < D_8118444C; i++) {
         if (D_81184440.entries[i].tableType == 1) {
             id = AudioLoad_GetRealTableIndex(1, D_81184440.entries[i].id);
-            buf[0] = D_811858B0[id].unk_02;
+            buf[0] = D_811858B0[id].sampleBankId1;
             buf[0] = AudioLoad_GetRealTableIndex(2, buf[0]);
-            buf[1] = D_811858B0[id].unk_03;
+            buf[1] = D_811858B0[id].sampleBankId2;
             buf[1] = AudioLoad_GetRealTableIndex(2, buf[1]);
             buf[4] = base->entries[buf[0]].unk_08;
             idx = buf[1];

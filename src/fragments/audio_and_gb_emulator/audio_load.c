@@ -347,21 +347,20 @@ SampleCacheEntry8110BA8C* AudioHeap_AllocTemporarySampleCacheEntry(u32 size) {
     return entry;
 }
 
-/* One-byte flags field; only the 2-bit value at bits 2-3 is touched by AudioHeap_UnapplySampleCache. */
+/* First byte of a Sample; AudioHeap_UnapplySampleCache restores its medium (bits 2-3). */
 typedef struct {
     u8 pad0 : 4;
-    u8 field : 2;
+    u8 medium : 2; // @unverified: bits 2-3 of Sample byte 0; AudioHeap_UnapplySampleCache restores the original medium here (OoT's Sample.medium)
     u8 pad1 : 2;
-} Flags2Bit;
+} SampleMedium8110D4E0;
 
-typedef struct Entry8110D4E0 { u8 unk00; u8 unk01; u8 unk02; u8 unk03; u8** instruments; u8** drums; } Entry8110D4E0;
-extern Entry8110D4E0* D_811858B0;
+extern SoundFont* D_811858B0;
 extern u8* D_811858A0;
 s32 AudioLoad_IsFontLoadComplete(s32 arg0);
 u8* AudioPlayback_GetInstrumentInner(s32, s32);
 u8* AudioPlayback_GetDrum(s32, s32);
 
-void AudioHeap_UnapplySampleCache(u8* arg0, Flags2Bit* arg1);
+void AudioHeap_UnapplySampleCache(u8* arg0, SampleMedium8110D4E0* arg1);
 
 /**
  * Points every font that used a cached sample back at the original sample. Zelda 64 audio driver.
@@ -381,30 +380,30 @@ void AudioHeap_DiscardSampleCacheEntry(SampleCacheEntry8110BA8C* entry) {
 
     num_fonts = *(s16*)D_811858A0;
     for (font_id = 0; font_id < num_fonts; font_id++) {
-        sample_bank_id1 = D_811858B0[font_id].unk02;
-        sample_bank_id2 = D_811858B0[font_id].unk03;
+        sample_bank_id1 = D_811858B0[font_id].sampleBankId1;
+        sample_bank_id2 = D_811858B0[font_id].sampleBankId2;
         if (((sample_bank_id1 != 0xFF) && (entry->sampleBankId == sample_bank_id1)) ||
             ((sample_bank_id2 != 0xFF) && (entry->sampleBankId == sample_bank_id2)) || entry->sampleBankId == 0) {
             if (AudioHeap_SearchCaches(1, 2, font_id) != 0) {
                 if (AudioLoad_IsFontLoadComplete(font_id) != 0) {
-                    for (inst_id = 0; inst_id < D_811858B0[font_id].unk00; inst_id++) {
+                    for (inst_id = 0; inst_id < D_811858B0[font_id].numInstruments; inst_id++) {
                         inst = AudioPlayback_GetInstrumentInner(font_id, inst_id);
                         if (inst != NULL) {
                             if (inst[1] != 0) {
-                                AudioHeap_UnapplySampleCache((u8*)entry, M2C_FIELD(inst, Flags2Bit**, 8));
+                                AudioHeap_UnapplySampleCache((u8*)entry, M2C_FIELD(inst, SampleMedium8110D4E0**, 8));
                             }
                             if (inst[2] != 0x7F) {
                                 if (1) {
-                                    AudioHeap_UnapplySampleCache((u8*)entry, M2C_FIELD(inst, Flags2Bit**, 0x18));
+                                    AudioHeap_UnapplySampleCache((u8*)entry, M2C_FIELD(inst, SampleMedium8110D4E0**, 0x18));
                                 }
                             }
-                            AudioHeap_UnapplySampleCache((u8*)entry, M2C_FIELD(inst, Flags2Bit**, 0x10));
+                            AudioHeap_UnapplySampleCache((u8*)entry, M2C_FIELD(inst, SampleMedium8110D4E0**, 0x10));
                         }
                     }
-                    for (drum_id = 0; drum_id < D_811858B0[font_id].unk01; drum_id++) {
+                    for (drum_id = 0; drum_id < D_811858B0[font_id].numDrums; drum_id++) {
                         drum = AudioPlayback_GetDrum(font_id, drum_id);
                         if (drum != NULL) {
-                            AudioHeap_UnapplySampleCache((u8*)entry, M2C_FIELD(drum, Flags2Bit**, 4));
+                            AudioHeap_UnapplySampleCache((u8*)entry, M2C_FIELD(drum, SampleMedium8110D4E0**, 4));
                         }
                     }
                 }
@@ -424,10 +423,10 @@ void AudioHeap_DiscardSampleCacheEntry(SampleCacheEntry8110BA8C* entry) {
  * in a tour of the menus and a COM battle.
  * @unverified Name guessed from the code; comment kept.
  */
-void AudioHeap_UnapplySampleCache(u8* arg0, Flags2Bit* arg1) {
+void AudioHeap_UnapplySampleCache(u8* arg0, SampleMedium8110D4E0* arg1) {
     if ((arg1 != NULL) && (M2C_FIELD(arg0, s32*, 8) == M2C_FIELD(arg1, s32*, 4))) {
         M2C_FIELD(arg1, s32*, 4) = M2C_FIELD(arg0, s32*, 0xC);
-        arg1->field = M2C_FIELD(arg0, s8*, 1);
+        arg1->medium = M2C_FIELD(arg0, s8*, 1);
     }
 }
 
@@ -479,8 +478,8 @@ void AudioHeap_DiscardSampleCaches(void) {
 
     count = *(s16*)D_811858A0;
     for (i = 0; i < count; i++) {
-        a = D_811858B0[i].unk02;
-        b = D_811858B0[i].unk03;
+        a = D_811858B0[i].sampleBankId1;
+        b = D_811858B0[i].sampleBankId2;
         if ((a != 0xFF) || (b != 0xFFU)) {
             off = 0x12;
             if ((AudioHeap_SearchCaches(1, 3, i) != 0) && (AudioLoad_IsFontLoadComplete(i) != 0)) {
@@ -490,22 +489,22 @@ void AudioHeap_DiscardSampleCaches(void) {
                         break;
                     }
                     {
-                        for (k = 0; k < D_811858B0[i].unk00; k++) {
+                        for (k = 0; k < D_811858B0[i].numInstruments; k++) {
                             p = AudioPlayback_GetInstrumentInner(i, k);
                             if (p != NULL) {
                                 if (p[1] != 0) {
-                                    AudioHeap_UnapplySampleCache(slot + 0x10, M2C_FIELD(p, Flags2Bit**, 8));
+                                    AudioHeap_UnapplySampleCache(slot + 0x10, M2C_FIELD(p, SampleMedium8110D4E0**, 8));
                                 }
                                 if (p[2] != 0x7F) {
-                                    AudioHeap_UnapplySampleCache(slot + 0x10, M2C_FIELD(p, Flags2Bit**, 0x18));
+                                    AudioHeap_UnapplySampleCache(slot + 0x10, M2C_FIELD(p, SampleMedium8110D4E0**, 0x18));
                                 }
-                                AudioHeap_UnapplySampleCache(slot + 0x10, M2C_FIELD(p, Flags2Bit**, 0x10));
+                                AudioHeap_UnapplySampleCache(slot + 0x10, M2C_FIELD(p, SampleMedium8110D4E0**, 0x10));
                             }
                         }
-                        for (m = 0; m < D_811858B0[i].unk01; m++) {
+                        for (m = 0; m < D_811858B0[i].numDrums; m++) {
                             p = AudioPlayback_GetDrum(i, m);
                             if (p != NULL) {
-                                AudioHeap_UnapplySampleCache(slot + 0x10, M2C_FIELD(p, Flags2Bit**, 4));
+                                AudioHeap_UnapplySampleCache(slot + 0x10, M2C_FIELD(p, SampleMedium8110D4E0**, 4));
                             }
                         }
                     }
@@ -515,16 +514,16 @@ void AudioHeap_DiscardSampleCaches(void) {
     }
 }
 
-typedef struct Timer8110C1C0 {
+typedef struct SampleDma8110C1C0 {
     /* 0x00 */ u8* ramAddr;
     /* 0x04 */ u32 devAddr;
     /* 0x08 */ u16 sizeUnused;
     /* 0x0A */ u16 size;
     /* 0x0C */ u8 unused;
-    /* 0x0D */ u8 slot;
-    /* 0x0E */ u8 count;
-} Timer8110C1C0; // size = 0x10
-extern Timer8110C1C0* D_81185688;
+    /* 0x0D */ u8 reuseIndex; // @unverified: same offset/use as OoT's SampleDma.reuseIndex
+    /* 0x0E */ u8 ttl; // @unverified: same offset/use as OoT's SampleDma.ttl (counted down in AudioLoad_DecreaseSampleDmaTtls)
+} SampleDma8110C1C0; // size = 0x10
+extern SampleDma8110C1C0* D_81185688;
 extern u32 D_8118568C;
 extern u32 D_81185690;
 extern s32 D_81185694;
@@ -540,21 +539,21 @@ extern u8 D_8118589B;
  */
 void AudioLoad_DecreaseSampleDmaTtls(void) {
     u32 i;
-    Timer8110C1C0* t;
+    SampleDma8110C1C0* t;
     for (i = 0; i < D_81185690; i++) {
         t = &D_81185688[i];
-        if (t->count != 0) {
-            if (--t->count == 0) {
-                t->slot = D_8118589A;
+        if (t->ttl != 0) {
+            if (--t->ttl == 0) {
+                t->reuseIndex = D_8118589A;
                 D_81185698[D_8118589A++] = i;
             }
         }
     }
     for (i = D_81185690; i < D_8118568C; i++) {
         t = &D_81185688[i];
-        if (t->count != 0) {
-            if (--t->count == 0) {
-                t->slot = D_8118589B;
+        if (t->ttl != 0) {
+            if (--t->ttl == 0) {
+                t->reuseIndex = D_8118589B;
                 D_81185798[D_8118589B++] = i;
             }
         }
@@ -578,7 +577,7 @@ s32 AudioLoad_Dma();
  */
 void* AudioLoad_DmaSampleData(u32 devAddr, u32 size, s32 arg2, u8* dma_index_ref, s32 medium) {
     UNUSED s32 pad1; // FAKE: stack padding
-    Timer8110C1C0* dma;
+    SampleDma8110C1C0* dma;
     s32 has_dma = FALSE;
     u32 dma_dev_addr;
     UNUSED u32 pad2; // FAKE: stack padding
@@ -592,14 +591,14 @@ void* AudioLoad_DmaSampleData(u32 devAddr, u32 size, s32 arg2, u8* dma_index_ref
             dma = &D_81185688[i];
             buffer_pos = devAddr - dma->devAddr;
             if (0 <= buffer_pos && (u32)buffer_pos <= (dma->size - size)) {
-                if (dma->count == 0 && D_81185899 != D_8118589B) {
-                    if (dma->slot != D_81185899) {
-                        D_81185798[dma->slot] = D_81185798[D_81185899];
-                        D_81185688[D_81185798[D_81185899]].slot = dma->slot;
+                if (dma->ttl == 0 && D_81185899 != D_8118589B) {
+                    if (dma->reuseIndex != D_81185899) {
+                        D_81185798[dma->reuseIndex] = D_81185798[D_81185899];
+                        D_81185688[D_81185798[D_81185899]].reuseIndex = dma->reuseIndex;
                     }
                     D_81185899++;
                 }
-                dma->count = 32;
+                dma->ttl = 32;
                 *dma_index_ref = (u8)i;
                 return (dma->ramAddr + devAddr) - dma->devAddr;
             }
@@ -615,14 +614,14 @@ void* AudioLoad_DmaSampleData(u32 devAddr, u32 size, s32 arg2, u8* dma_index_ref
         dma = D_81185688 + *dma_index_ref;
         buffer_pos = devAddr - dma->devAddr;
         if (0 <= buffer_pos && (u32)buffer_pos <= dma->size - size) {
-            if (dma->count == 0) {
-                if (dma->slot != D_81185898) {
-                    D_81185698[dma->slot] = D_81185698[D_81185898];
-                    D_81185688[D_81185698[D_81185898]].slot = dma->slot;
+            if (dma->ttl == 0) {
+                if (dma->reuseIndex != D_81185898) {
+                    D_81185698[dma->reuseIndex] = D_81185698[D_81185898];
+                    D_81185688[D_81185698[D_81185898]].reuseIndex = dma->reuseIndex;
                 }
                 D_81185898++;
             }
-            dma->count = 2;
+            dma->ttl = 2;
             return (dma->ramAddr + devAddr) - dma->devAddr;
         }
     }
@@ -638,7 +637,7 @@ void* AudioLoad_DmaSampleData(u32 devAddr, u32 size, s32 arg2, u8* dma_index_ref
 
     transfer = dma->size;
     dma_dev_addr = devAddr & ~0xF;
-    dma->count = 3;
+    dma->ttl = 3;
     dma->devAddr = dma_dev_addr;
     dma->sizeUnused = transfer;
     AudioLoad_Dma(&D_81185638[D_811858F4++ * 0x18], 0, 0, dma_dev_addr, dma->ramAddr, transfer, D_81185618, medium, D_81137ACC);
@@ -663,7 +662,7 @@ void AudioLoad_InitSampleDmaBuffers(s32 num_notes) {
     s32 i;
 
     D_811858E0 = 0xA0;
-    D_81185688 = (Timer8110C1C0*)func_81109868(&D_811842C0, 4 * D_811858E8 * sizeof(Timer8110C1C0) * D_811858B8.specUnk4);
+    D_81185688 = (SampleDma8110C1C0*)func_81109868(&D_811842C0, 4 * D_811858E8 * sizeof(SampleDma8110C1C0) * D_811858B8.specUnk4);
     for (i = 0; i < 3 * D_811858E8 * D_811858B8.specUnk4; i++) {
         if ((D_81185688[D_8118568C].ramAddr = (u8*)func_81109868(&D_811842C0, D_811858E0)) == NULL) {
             if (D_811842A0 == 0) {
@@ -677,13 +676,13 @@ void AudioLoad_InitSampleDmaBuffers(s32 num_notes) {
         D_81185688[D_8118568C].devAddr = 0;
         D_81185688[D_8118568C].sizeUnused = 0;
         D_81185688[D_8118568C].unused = 0;
-        D_81185688[D_8118568C].count = 0;
+        D_81185688[D_8118568C].ttl = 0;
         D_8118568C++;
     }
 
     for (i = 0; (u32)i < D_8118568C; i++) {
         D_81185698[i] = i;
-        D_81185688[i].slot = i;
+        D_81185688[i].reuseIndex = i;
     }
 
     for (i = D_8118568C; i < 0x100; i++) {
@@ -708,13 +707,13 @@ void AudioLoad_InitSampleDmaBuffers(s32 num_notes) {
         D_81185688[D_8118568C].devAddr = 0;
         D_81185688[D_8118568C].sizeUnused = 0;
         D_81185688[D_8118568C].unused = 0;
-        D_81185688[D_8118568C].count = 0;
+        D_81185688[D_8118568C].ttl = 0;
         D_8118568C++;
     }
 
     for (i = D_81185690; (u32)i < D_8118568C; i++) {
         D_81185798[i - D_81185690] = i;
-        D_81185688[i].slot = i - D_81185690;
+        D_81185688[i].reuseIndex = i - D_81185690;
     }
 
     for (i = D_8118568C; i < 0x100; i++) {
@@ -895,33 +894,33 @@ void func_8110CC94(s32 arg0, s32 arg1) {
     }
 }
 
-typedef struct Stream8110CD0C {
+typedef struct Sample8110CD0C {
     /* 0x00 */ u32 unk00_0 : 4;
-    /* 0x00 */ u32 mode : 2;
+    /* 0x00 */ u32 medium : 2; // @unverified: Sample.medium bits (0 = RAM after the load), as in OoT's AudioLoad_SyncLoadSample
     /* 0x00 */ u32 unk00_6 : 1;
-    /* 0x00 */ u32 enabled : 1;
-    /* 0x00 */ u32 addr : 24;
-    /* 0x04 */ s32 unk04;
-} Stream8110CD0C;
+    /* 0x00 */ u32 isRelocated : 1; // @unverified: bit 7 of Sample byte 0, OoT's Sample.isRelocated (load only relocated samples)
+    /* 0x00 */ u32 size : 24; // @unverified: Sample.size (24 bits), passed as the DMA size
+    /* 0x04 */ s32 sampleAddr; // @unverified: Sample.sampleAddr: ROM address in, RAM address out
+} Sample8110CD0C;
 void func_8110DB8C(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
 void AudioLoad_SyncDma(s32, s32, u32, s32);
 extern u8* D_811858A4;
-s32 func_8110CD0C(Stream8110CD0C* arg0, s32 arg1) {
+s32 func_8110CD0C(Sample8110CD0C* arg0, s32 arg1) {
     s32 ret;
 
-    if (arg0->enabled == 1) {
-        if (arg0->mode != 0) {
-            ret = AudioHeap_AllocPersistentSampleCache(arg0->addr, arg1, arg0->unk04, arg0->mode);
+    if (arg0->isRelocated == 1) {
+        if (arg0->medium != 0) {
+            ret = AudioHeap_AllocPersistentSampleCache(arg0->size, arg1, arg0->sampleAddr, arg0->medium);
             if (ret == 0) {
                 return -1;
             }
-            if (arg0->mode == 1) {
-                func_8110DB8C(arg0->unk04, ret, arg0->addr, *(s16*)(D_811858A4 + 2));
+            if (arg0->medium == 1) {
+                func_8110DB8C(arg0->sampleAddr, ret, arg0->size, *(s16*)(D_811858A4 + 2));
             } else {
-                AudioLoad_SyncDma(arg0->unk04, ret, arg0->addr, arg0->mode);
+                AudioLoad_SyncDma(arg0->sampleAddr, ret, arg0->size, arg0->medium);
             }
-            arg0->mode = 0;
-            arg0->unk04 = ret;
+            arg0->medium = 0;
+            arg0->sampleAddr = ret;
         }
     }
 }
@@ -937,18 +936,18 @@ s32 func_8110CDF0(s32 arg0, s32 arg1, s32 arg2) {
             return -1;
         }
         if (p[1] != 0) {
-            func_8110CD0C(M2C_FIELD(p, Stream8110CD0C **, 8), arg0);
+            func_8110CD0C(M2C_FIELD(p, Sample8110CD0C **, 8), arg0);
         }
-        func_8110CD0C(M2C_FIELD(p, Stream8110CD0C **, 0x10), arg0);
+        func_8110CD0C(M2C_FIELD(p, Sample8110CD0C **, 0x10), arg0);
         if (p[2] != 0x7F) {
-            func_8110CD0C(M2C_FIELD(p, Stream8110CD0C **, 0x18), arg0);
+            func_8110CD0C(M2C_FIELD(p, Sample8110CD0C **, 0x18), arg0);
         }
     } else if (arg1 == 0x7F) {
         p = AudioPlayback_GetDrum(arg0, arg2);
         if (p == NULL) {
             return -1;
         }
-        func_8110CD0C(M2C_FIELD(p, Stream8110CD0C **, 4), arg0);
+        func_8110CD0C(M2C_FIELD(p, Sample8110CD0C **, 4), arg0);
         return 0;
     }
 }
@@ -1043,11 +1042,11 @@ void func_8110D110(s32 arg0) {
     AudioHeap_DiscardFont(arg0);
 }
 
-typedef struct Slot8110D214 {
-    /* 0x000 */ s32 unk_000;
+typedef struct SeqPlayerFromD8_8110D214 {
+    /* 0x000 */ s32 skipTicks; // @unverified: this view starts at SequencePlayer+0xD8, OoT's SequencePlayer.skipTicks (set by AudioLoad_SyncInitSeqPlayerSkipTicks)
     /* 0x004 */ char unk004[0x158];
-} Slot8110D214; // size = 0x15C
-extern Slot8110D214 D_81184740[];
+} SeqPlayerFromD8_8110D214; // size = 0x15C
+extern SeqPlayerFromD8_8110D214 D_81184740[];
 s32 AudioLoad_SyncInitSeqPlayerInternal(s32, s32, s32);
 
 /**
@@ -1064,7 +1063,7 @@ s32 AudioLoad_SyncInitSeqPlayer(s32 arg0, s32 arg1, s32 arg2) {
     if (D_811859D4 != 0) {
         return 0;
     }
-    D_81184740[arg0].unk_000 = 0;
+    D_81184740[arg0].skipTicks = 0;
     return AudioLoad_SyncInitSeqPlayerInternal(arg0, arg1, arg2);
 }
 
@@ -1078,15 +1077,15 @@ s32 AudioLoad_SyncInitSeqPlayerSkipTicks(s32 arg0, s32 arg1, s32 arg2) {
     if (D_811859D4 != 0) {
         return 0;
     }
-    D_81184740[arg0].unk_000 = arg2;
+    D_81184740[arg0].skipTicks = arg2;
     return AudioLoad_SyncInitSeqPlayerInternal(arg0, arg1, 0);
 }
 
-typedef struct Flags8110D278 {
-    u8 b80 : 1;
-    u8 b40 : 1;
+typedef struct SeqPlayerFlags8110D278 {
+    u8 enabled : 1; // @unverified: set when the player starts, OoT's SequencePlayer.enabled (AudioLoad_SyncInitSeqPlayerInternal)
+    u8 finished : 1; // @unverified: cleared when the player starts, OoT's SequencePlayer.finished
     u8 rest : 6;
-} Flags8110D278;
+} SeqPlayerFlags8110D278;
 s32 func_8110D3D4(s32);
 void func_811152A4(s32);
 void func_81115254(s8*);
@@ -1126,12 +1125,12 @@ s32 AudioLoad_SyncInitSeqPlayerInternal(s32 arg0, s32 arg1, s32 arg2) {
     func_811152A4(arg0);
     M2C_FIELD(slot, s8*, 4) = arg1;
     M2C_FIELD(slot, u8*, 5) = id;
-    ((Flags8110D278*)slot)->b80 = 1;
+    ((SeqPlayerFlags8110D278*)slot)->enabled = 1;
     M2C_FIELD(slot, s32*, 0x18) = r;
     M2C_FIELD(slot, s32*, 0x74) = r;
     M2C_FIELD(slot, s8*, 0x8C) = 0;
     M2C_FIELD(slot, s16*, 0x10) = 0;
-    ((Flags8110D278*)slot)->b40 = 0;
+    ((SeqPlayerFlags8110D278*)slot)->finished = 0;
     func_81115254(slot);
     for (i = 0; i < 16; i++) {
     }
@@ -1188,8 +1187,8 @@ s32 func_8110D4E0(s32 arg0) {
     s32 sp20[4];
 
     arg0 = AudioLoad_GetRealTableIndex(1, arg0);
-    a = D_811858B0[arg0].unk02;
-    b = D_811858B0[arg0].unk03;
+    a = D_811858B0[arg0].sampleBankId1;
+    b = D_811858B0[arg0].sampleBankId2;
     sp20[0] = a;
     sp20[1] = b;
     if (a != 0xFF) {
@@ -1406,9 +1405,9 @@ void AudioLoad_RelocateFont(s32 font_id, u32 font_data, void* reloc_info) {
     s32 i;
     u8* drum;
     u32* ptrs = (u32*)font_data;
-    s32 num_drums = D_811858B0[font_id].unk01;
+    s32 num_drums = D_811858B0[font_id].numDrums;
     u8* inst;
-    s32 num_instruments = D_811858B0[font_id].unk00;
+    s32 num_instruments = D_811858B0[font_id].numInstruments;
 
     reloc2 = ptrs[0];
     if ((reloc2 != 0) && (num_drums != 0)) {

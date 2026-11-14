@@ -576,15 +576,9 @@ u8* AudioPlayback_GetInstrumentTunedSample(u8* arg0, s32 arg1) {
     return ret;
 }
 
-typedef struct ParticleBank81110CA8 {
-    /* 0x0 */ u8 count;
-    /* 0x1 */ u8 count2;
-    /* 0x4 */ u8** entries;
-    /* 0x8 */ u8** entries2;
-} ParticleBank81110CA8; // size = 0xC
 
 s32 AudioLoad_IsFontLoadComplete(s32 arg0);
-extern ParticleBank81110CA8* D_811858B0;
+extern SoundFont* D_811858B0;
 extern s32 D_811859D0;
 
 /**
@@ -594,19 +588,19 @@ extern s32 D_811859D0;
  * @unverified Name and comment guessed from the code.
  */
 u8* AudioPlayback_GetInstrumentInner(s32 arg0, s32 arg1) {
-    ParticleBank81110CA8* bank;
+    SoundFont* bank;
     u8* ret;
 
     if (AudioLoad_IsFontLoadComplete(arg0) == 0) {
         D_811859D0 = arg0 + 0x10000000;
         return NULL;
     }
-    bank = (ParticleBank81110CA8*)((u8*)D_811858B0 + arg0 * sizeof(ParticleBank81110CA8));
-    if (arg1 >= bank->count) {
+    bank = (SoundFont*)((u8*)D_811858B0 + arg0 * sizeof(SoundFont));
+    if (arg1 >= bank->numInstruments) {
         D_811859D0 = (arg0 << 8) + arg1 + 0x03000000;
         return NULL;
     }
-    ret = bank->entries[arg1];
+    ret = bank->instruments[arg1];
     if (ret == NULL) {
         D_811859D0 = (arg0 << 8) + arg1 + 0x01000000;
         return ret;
@@ -621,22 +615,22 @@ u8* AudioPlayback_GetInstrumentInner(s32 arg0, s32 arg1) {
  * @unverified Name and comment guessed from the code.
  */
 u8* AudioPlayback_GetDrum(s32 arg0, s32 arg1) {
-    ParticleBank81110CA8* bank;
+    SoundFont* bank;
     u8* ret;
 
     if (AudioLoad_IsFontLoadComplete(arg0) == 0) {
         D_811859D0 = arg0 + 0x10000000;
         return NULL;
     }
-    bank = (ParticleBank81110CA8*)((u8*)D_811858B0 + arg0 * sizeof(ParticleBank81110CA8));
-    if (arg1 >= bank->count2) {
+    bank = (SoundFont*)((u8*)D_811858B0 + arg0 * sizeof(SoundFont));
+    if (arg1 >= bank->numDrums) {
         D_811859D0 = (arg0 << 8) + arg1 + 0x04000000;
         return NULL;
     }
-    if ((u32)bank->entries2 < 0x80000000) {
+    if ((u32)bank->drums < 0x80000000) {
         return NULL;
     }
-    ret = bank->entries2[arg1];
+    ret = bank->drums[arg1];
     if (ret == NULL) {
         D_811859D0 = (arg0 << 8) + arg1 + 0x05000000;
     }

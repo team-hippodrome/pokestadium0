@@ -122,6 +122,16 @@ typedef struct AudioTemporaryCache {
     /* 0x14 */ AudioCacheEntry entries[2];
 } AudioTemporaryCache; // size = 0x2C
 
+/* A loaded font (D_811858B0[fontId]). */
+typedef struct SoundFont {
+    /* 0x00 */ u8 numInstruments; // @unverified: same offset/use as OoT's SoundFont.numInstruments (high byte of shortData2; instrument loop bound)
+    /* 0x01 */ u8 numDrums; // @unverified: same offset/use as OoT's SoundFont.numDrums (low byte of shortData2; drum loop bound)
+    /* 0x02 */ u8 sampleBankId1; // @unverified: same offset/use as OoT's SoundFont.sampleBankId1 (high byte of shortData1)
+    /* 0x03 */ u8 sampleBankId2; // @unverified: same offset/use as OoT's SoundFont.sampleBankId2 (low byte of shortData1)
+    /* 0x04 */ u8** instruments; // @unverified: same offset/use as OoT's SoundFont.instruments (AudioPlayback_GetInstrumentInner)
+    /* 0x08 */ u8** drums; // @unverified: same offset/use as OoT's SoundFont.drums (AudioPlayback_GetDrum)
+} SoundFont; // size = 0xC
+
 /* One of the sequence, font and sample bank caches (D_81184320, D_81184380, D_811843E0; 0x60 apart). */
 typedef struct AudioCache {
     /* 0x00 */ AudioPersistentCache persistent;
