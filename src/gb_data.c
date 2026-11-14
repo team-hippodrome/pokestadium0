@@ -64,7 +64,7 @@ s32 Deck_CloseAndFlushBox(DeckHandle* arg0);
 char* Text_UntranscodeName(char* arg0, char* arg1);
 s8* Text_CopyString(s8* arg0, s8* arg1);
 void Pokemon_FromGbRecord(BattleMon* arg0, GbPokemonRecord* arg1);
-void Pokemon_ToGbRecord(s8 *arg0, s8 *arg1);
+void Pokemon_ToGbRecord(BattleMon* arg0, GbPokemonRecord* arg1);
 s32 Deck_WriteEntries(u8* arg0, s32 arg1, DeckHandle* arg2);
 s32 GbSave_HasPlayerNameMarker(u8* arg0);
 s32 Deck_GetCapacity(s32 arg0);
@@ -228,36 +228,36 @@ s16 func_8001FAB0(s8 *);                          /* extern */
 s32 func_8001FAC8(s8 *);                          /* extern */
 M2C_UNK func_80056690(s8 *, s8 *, M2C_UNK);     /* extern */
 
-void func_8001FE84(s8 *arg0, s8 *arg1) {
-    M2C_FIELD(arg0, s8 *, 0) = Species_FromInternalIndex(M2C_FIELD(arg1, u8 *, 0));
-    M2C_FIELD(arg0, s8 *, 1) = 0;
-    M2C_FIELD(arg0, s16 *, 2) = func_8001FAB0(arg1 + 1);
-    M2C_FIELD(arg0, u8 *, 4) = (u8) M2C_FIELD(arg1, u8 *, 3);
-    M2C_FIELD(arg0, u8 *, 5) = (u8) M2C_FIELD(arg1, u8 *, 4);
-    M2C_FIELD(arg0, u8 *, 6) = (u8) M2C_FIELD(arg1, u8 *, 5);
-    M2C_FIELD(arg0, u8 *, 7) = (u8) M2C_FIELD(arg1, u8 *, 6);
-    M2C_FIELD(arg0, u8 *, 8) = (u8) M2C_FIELD(arg1, u8 *, 7);
-    M2C_FIELD(arg0, s16 *, 0xE) = func_8001FAB0(arg1 + 0xC);
-    M2C_FIELD(arg0, s32 *, 0x10) = func_8001FAC8(arg1 + 0xE);
-    M2C_FIELD(arg0, s16 *, 0x14) = func_8001FAB0(arg1 + 0x11);
-    M2C_FIELD(arg0, s16 *, 0x16) = func_8001FAB0(arg1 + 0x13);
-    M2C_FIELD(arg0, s16 *, 0x18) = func_8001FAB0(arg1 + 0x15);
-    M2C_FIELD(arg0, s16 *, 0x1A) = func_8001FAB0(arg1 + 0x17);
-    M2C_FIELD(arg0, s16 *, 0x1C) = func_8001FAB0(arg1 + 0x19);
-    M2C_FIELD(arg0, s16 *, 0x1E) = func_8001FAB0(arg1 + 0x1B);
-    func_80056690(arg0 + 9, arg1 + 8, 4);
-    func_80056690(arg0 + 0x20, arg1 + 0x1D, 4);
+void func_8001FE84(BattleMon* arg0, GbPokemonRecord* arg1) {
+    arg0->species.id = Species_FromInternalIndex(arg1->species);
+    arg0->species.isRental = 0;
+    arg0->hp = func_8001FAB0(arg1->hp);
+    arg0->boxLevel = arg1->boxLevel;
+    arg0->statusCondition = arg1->status;
+    arg0->type1 = arg1->type1;
+    arg0->type2 = arg1->type2;
+    arg0->catchRate = arg1->catchRate;
+    arg0->otId = func_8001FAB0(arg1->otId);
+    arg0->exp = func_8001FAC8(arg1->exp);
+    arg0->statExp[0] = func_8001FAB0(arg1->statExp[0]);
+    arg0->statExp[1] = func_8001FAB0(arg1->statExp[1]);
+    arg0->statExp[2] = func_8001FAB0(arg1->statExp[2]);
+    arg0->statExp[3] = func_8001FAB0(arg1->statExp[3]);
+    arg0->statExp[4] = func_8001FAB0(arg1->statExp[4]);
+    arg0->dvs = func_8001FAB0(arg1->dvs);
+    func_80056690(arg0->moves, arg1->moves, 4);
+    func_80056690(arg0->pp, arg1->pp, 4);
 }
 
 /** Converts an extended Game Boy Pokemon record to a battle Pokemon. */
 void Pokemon_FromGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1) {
-    Pokemon_FromGbRecord(arg0, &arg1->unk_00);
-    arg0->level = arg1->unk_21;
-    arg0->maxHp = GbData_ReadU16BE(arg1->unk_22);
-    arg0->attack = GbData_ReadU16BE(arg1->unk_24);
-    arg0->defense = GbData_ReadU16BE(arg1->unk_26);
-    arg0->speed = GbData_ReadU16BE(arg1->unk_28);
-    arg0->special = GbData_ReadU16BE(arg1->unk_2A);
+    Pokemon_FromGbRecord(arg0, &arg1->box);
+    arg0->level = arg1->level;
+    arg0->maxHp = GbData_ReadU16BE(arg1->stats[0]);
+    arg0->attack = GbData_ReadU16BE(arg1->stats[1]);
+    arg0->defense = GbData_ReadU16BE(arg1->stats[2]);
+    arg0->speed = GbData_ReadU16BE(arg1->stats[3]);
+    arg0->special = GbData_ReadU16BE(arg1->stats[4]);
 }
 
 M2C_UNK func_8001FAE8(s8 *, u16);                 /* extern */
@@ -265,35 +265,35 @@ M2C_UNK func_8001FAF8(s8 *, s32);                 /* extern */
 M2C_UNK func_80056690(s8 *, s8 *, M2C_UNK);     /* extern */
 
 /** Converts a battle Pokemon to a Game Boy Pokemon record. */
-void Pokemon_ToGbRecord(s8 *arg0, s8 *arg1) {
-    M2C_FIELD(arg1, s8 *, 0) = func_80020984(M2C_FIELD(arg0, u8 *, 0));
-    func_8001FAE8(arg1 + 1, M2C_FIELD(arg0, u16 *, 2));
-    M2C_FIELD(arg1, u8 *, 3) = (u8) M2C_FIELD(arg0, u8 *, 4);
-    M2C_FIELD(arg1, u8 *, 4) = (u8) M2C_FIELD(arg0, u8 *, 5);
-    M2C_FIELD(arg1, u8 *, 5) = (u8) M2C_FIELD(arg0, u8 *, 6);
-    M2C_FIELD(arg1, u8 *, 6) = (u8) M2C_FIELD(arg0, u8 *, 7);
-    M2C_FIELD(arg1, u8 *, 7) = (u8) M2C_FIELD(arg0, u8 *, 8);
-    func_8001FAE8(arg1 + 0xC, M2C_FIELD(arg0, u16 *, 0xE));
-    func_8001FAF8(arg1 + 0xE, M2C_FIELD(arg0, s32 *, 0x10));
-    func_8001FAE8(arg1 + 0x11, M2C_FIELD(arg0, u16 *, 0x14));
-    func_8001FAE8(arg1 + 0x13, M2C_FIELD(arg0, u16 *, 0x16));
-    func_8001FAE8(arg1 + 0x15, M2C_FIELD(arg0, u16 *, 0x18));
-    func_8001FAE8(arg1 + 0x17, M2C_FIELD(arg0, u16 *, 0x1A));
-    func_8001FAE8(arg1 + 0x19, M2C_FIELD(arg0, u16 *, 0x1C));
-    func_8001FAE8(arg1 + 0x1B, M2C_FIELD(arg0, u16 *, 0x1E));
-    func_80056690(arg1 + 8, arg0 + 9, 4);
-    func_80056690(arg1 + 0x1D, arg0 + 0x20, 4);
+void Pokemon_ToGbRecord(BattleMon* arg0, GbPokemonRecord* arg1) {
+    arg1->species = func_80020984(arg0->species.id);
+    func_8001FAE8(arg1->hp, arg0->hp);
+    arg1->boxLevel = arg0->boxLevel;
+    arg1->status = arg0->statusCondition;
+    arg1->type1 = arg0->type1;
+    arg1->type2 = arg0->type2;
+    arg1->catchRate = arg0->catchRate;
+    func_8001FAE8(arg1->otId, arg0->otId);
+    func_8001FAF8(arg1->exp, arg0->exp);
+    func_8001FAE8(arg1->statExp[0], arg0->statExp[0]);
+    func_8001FAE8(arg1->statExp[1], arg0->statExp[1]);
+    func_8001FAE8(arg1->statExp[2], arg0->statExp[2]);
+    func_8001FAE8(arg1->statExp[3], arg0->statExp[3]);
+    func_8001FAE8(arg1->statExp[4], arg0->statExp[4]);
+    func_8001FAE8(arg1->dvs, arg0->dvs);
+    func_80056690(arg1->moves, arg0->moves, 4);
+    func_80056690(arg1->pp, arg0->pp, 4);
 }
 
 /** Converts a battle Pokemon to an extended Game Boy Pokemon record. */
 void Pokemon_ToGbRecordExt(unk_func_88205880_00D0* arg0, GbPokemonRecordExt* arg1) {
-    Pokemon_ToGbRecord(arg0->unk_000, arg1);
-    arg1->unk_21 = arg0->unk_000[0].level;
-    GbData_WriteU16BE(arg1->unk_22, arg0->unk_000[0].maxHp);
-    GbData_WriteU16BE(arg1->unk_24, arg0->unk_000[0].attack);
-    GbData_WriteU16BE(arg1->unk_26, arg0->unk_000[0].defense);
-    GbData_WriteU16BE(arg1->unk_28, arg0->unk_000[0].speed);
-    GbData_WriteU16BE(arg1->unk_2A, arg0->unk_000[0].special);
+    Pokemon_ToGbRecord(arg0->unk_000, &arg1->box);
+    arg1->level = arg0->unk_000[0].level;
+    GbData_WriteU16BE(arg1->stats[0], arg0->unk_000[0].maxHp);
+    GbData_WriteU16BE(arg1->stats[1], arg0->unk_000[0].attack);
+    GbData_WriteU16BE(arg1->stats[2], arg0->unk_000[0].defense);
+    GbData_WriteU16BE(arg1->stats[3], arg0->unk_000[0].speed);
+    GbData_WriteU16BE(arg1->stats[4], arg0->unk_000[0].special);
 }
 
 /** Returns the integer square root used for stat experience, found by search. */
@@ -315,26 +315,26 @@ u16 GetPokemonDV(s32 stat_id, u16 dv_bits) { //GetPokemonDV
     u16 dv_value;
 
     switch (stat_id) {
-        case STAT_HP: // HP DV (derived from the LSBs of other DVs)
-            dv_value = ((dv_bits & 0x1000) >> 9)  // Special DV bit 0 → HP DV bit 0
-                    | ((dv_bits & 0x0100) >> 6)  // Speed DV bit 0 → HP DV bit 1
-                    | ((dv_bits & 0x0010) >> 3)  // Defense DV bit 0 → HP DV bit 2
-                    | (dv_bits & 0x0001);        // Attack DV bit 0 → HP DV bit 3
-            break;
-
-        case STAT_SPECIAL: // Special DV
-            dv_value = (dv_bits >> 12) & 0xF;
-            break;
-
-        case STAT_SPEED: // Speed DV
-            dv_value = (dv_bits >> 8) & 0xF;
-            break;
-
-        case STAT_DEFENSE: // Defense DV
-            dv_value = (dv_bits >> 4) & 0xF;
+        case STAT_HP: // HP DV (built from the low bits of the other DVs)
+            dv_value = ((dv_bits & 0x1000) >> 9)  // Attack DV bit 0 → HP DV bit 3
+                    | ((dv_bits & 0x0100) >> 6)  // Defense DV bit 0 → HP DV bit 2
+                    | ((dv_bits & 0x0010) >> 3)  // Speed DV bit 0 → HP DV bit 1
+                    | (dv_bits & 0x0001);        // Special DV bit 0 → HP DV bit 0
             break;
 
         case STAT_ATTACK: // Attack DV
+            dv_value = (dv_bits >> 12) & 0xF;
+            break;
+
+        case STAT_DEFENSE: // Defense DV
+            dv_value = (dv_bits >> 8) & 0xF;
+            break;
+
+        case STAT_SPEED: // Speed DV
+            dv_value = (dv_bits >> 4) & 0xF;
+            break;
+
+        case STAT_SPECIAL: // Special DV
             dv_value = dv_bits & 0xF;
             break;
     }
@@ -350,19 +350,19 @@ u32 CalculateStatValue(s32 stat_id, s32 species_id, u16 stat_modifier, u16 level
 
     switch (stat_id) {
         case STAT_HP:
-            base_stat = gBaseStats[species_id].baseHP;
+            base_stat = gBaseStats[species_id].baseHp;
             break;
-        case STAT_SPECIAL:
-            base_stat = gBaseStats[species_id].baseSpecial;
-            break;
-        case STAT_SPEED:
-            base_stat = gBaseStats[species_id].baseSpeed;
+        case STAT_ATTACK:
+            base_stat = gBaseStats[species_id].baseAttack;
             break;
         case STAT_DEFENSE:
             base_stat = gBaseStats[species_id].baseDefense;
             break;
-        case STAT_ATTACK:
-            base_stat = gBaseStats[species_id].baseAttack;
+        case STAT_SPEED:
+            base_stat = gBaseStats[species_id].baseSpeed;
+            break;
+        case STAT_SPECIAL:
+            base_stat = gBaseStats[species_id].baseSpecial;
             break;
     }
 
@@ -419,7 +419,7 @@ u16 Pokemon_StatExpForTarget(s32 arg0, s32 arg1, u16 arg2, u16 arg3, u16 arg4) {
 u32 Pokemon_ExpForLevel(s32 arg0, u16 arg1) {
     u32 sp4;
 
-    switch (gBaseStats[arg0].unk_13) {
+    switch (gBaseStats[arg0].growthRate) {
         case 0:
             sp4 = arg1 * arg1 * arg1;
             break;
@@ -523,37 +523,37 @@ u8 func_800209B4(s32 arg0) {
 
 /** Initializes a deck that is stored in the save data. */
 void Deck_InitializeSaveBackend(DeckHandle* arg0) {
-    if (arg0->unk_00 == 1) {
-        arg0->unk_04 |= 1;
-        Deck_SetSaveEntryCount(arg0->unk_01, arg0->unk_03, 0);
+    if (arg0->openMode == 1) {
+        arg0->flags |= 1;
+        Deck_SetSaveEntryCount(arg0->deckType, arg0->index, 0);
     }
 
-    arg0->unk_05 = Deck_GetSaveRecordSize(arg0->unk_01);
-    arg0->unk_06 = Deck_GetSaveRecordCapacity(arg0->unk_01);
-    arg0->unk_08 = Deck_GetSaveEntryCount(arg0->unk_01, arg0->unk_03);
+    arg0->entrySize = Deck_GetSaveRecordSize(arg0->deckType);
+    arg0->capacity = Deck_GetSaveRecordCapacity(arg0->deckType);
+    arg0->count = Deck_GetSaveEntryCount(arg0->deckType, arg0->index);
 
-    if (arg0->unk_00 == 2) {
-        arg0->unk_0A = arg0->unk_08;
+    if (arg0->openMode == 2) {
+        arg0->cursor = arg0->count;
     } else {
-        arg0->unk_0A = 0;
+        arg0->cursor = 0;
     }
 }
 
 /** Initializes a deck that is stored in a box. */
 void Deck_InitializeBoxBackend(DeckHandle* arg0) {
-    if (arg0->unk_00 == 1) {
-        arg0->unk_04 |= 1;
-        Deck_DeleteEntry(arg0->unk_01, arg0->unk_02, arg0->unk_03, 0);
+    if (arg0->openMode == 1) {
+        arg0->flags |= 1;
+        Deck_DeleteEntry(arg0->deckType, arg0->port, arg0->index, 0);
     }
 
-    arg0->unk_05 = Deck_GetEntrySize(arg0->unk_01);
-    arg0->unk_06 = Deck_GetCapacity(arg0->unk_01);
-    arg0->unk_08 = Deck_GetCount(arg0->unk_01, arg0->unk_02, arg0->unk_03);
+    arg0->entrySize = Deck_GetEntrySize(arg0->deckType);
+    arg0->capacity = Deck_GetCapacity(arg0->deckType);
+    arg0->count = Deck_GetCount(arg0->deckType, arg0->port, arg0->index);
 
-    if (arg0->unk_00 == 2) {
-        arg0->unk_0A = arg0->unk_08;
+    if (arg0->openMode == 2) {
+        arg0->cursor = arg0->count;
     } else {
-        arg0->unk_0A = 0;
+        arg0->cursor = 0;
     }
 }
 
@@ -563,11 +563,11 @@ DeckHandle* Deck_Open(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 
     sp1C = Util_Malloc(sizeof(DeckHandle));
     if (sp1C != NULL) {
-        sp1C->unk_00 = arg3;
-        sp1C->unk_01 = arg0;
-        sp1C->unk_02 = arg1;
-        sp1C->unk_03 = arg2;
-        sp1C->unk_04 = 0;
+        sp1C->openMode = arg3;
+        sp1C->deckType = arg0;
+        sp1C->port = arg1;
+        sp1C->index = arg2;
+        sp1C->flags = 0;
 
         switch (arg0 & 0xF0) {
             case 16:
@@ -600,8 +600,8 @@ DeckHandle* Deck_OpenAndSetName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, char* ar
 s32 Deck_CloseAndFlushBox(DeckHandle* arg0) {
     s32 sp1C = 0;
 
-    if ((arg0->unk_01 & 0x10) && (arg0->unk_04 & 1)) {
-        Save_InvalidateTypedRecord(arg0->unk_01, arg0->unk_03);
+    if ((arg0->deckType & 0x10) && (arg0->flags & 1)) {
+        Save_InvalidateTypedRecord(arg0->deckType, arg0->index);
         sp1C = 1;
     }
 

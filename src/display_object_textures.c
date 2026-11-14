@@ -35,7 +35,7 @@ Fragment* Jpeg_AllocAndDecodeFragment(MemoryBlock* arg0, PRESJPEG* arg1, PRESJPE
 Fragment* Yay0_AllocAndDecompressFragment(MainPoolState* arg0, PERSSZP* arg1, PERSSZP* arg2);
 Fragment* Asset_AllocAndCopyFragment(MainPoolState* arg0, PERSSZP* arg1, s32 arg2, u32 arg3);
 Fragment* Fragment_LoadFromRomRange(MainPoolState* arg0, s32 start, s32 end, PERSSZP* arg3, s32 arg4);
-Fragment* Fragment_LoadFromLbaRange(MainPoolState* arg0, unk_func_800041C0* arg1, PERSSZP* arg2, u32 arg3);
+Fragment* Fragment_LoadFromLbaRange(MainPoolState* arg0, StorageLbaRange* arg1, PERSSZP* arg2, u32 arg3);
 void Fragment_RelocateAndCommit(MainPoolState* arg0, u32 arg1, Fragment* arg2);
 Fragment* BinArchive_LoadFileFromRomRange(MainPoolState* arg0, BinArchive* arg1, BinArchiveFile* arg2, u32 arg3, s32 arg4);
 Fragment* BinArchive_LoadFileFromLbaRange(MainPoolState* arg0, BinArchive* arg1, BinArchiveFile* arg2, u32 arg3, s32 arg4);
@@ -83,10 +83,10 @@ Fragment* Jpeg_AllocAndDecodeFragment(MemoryBlock* arg0, PRESJPEG* arg1, PRESJPE
     s32 temp_v0_2;
 
     sp18 = arg0->size;
-    sp1C = MainPool_AllocAligned(arg0, arg2->unk_0C + 0x100, 0x10);
+    sp1C = MainPool_AllocAligned(arg0, arg2->decodedSize + 0x100, 0x10);
 
     if (sp1C != NULL) {
-        temp_v0_2 = Jpeg_DecodeImage(sp1C, arg2->unk_0C + 0x100, (u8*)arg2 + arg2->unk_08);
+        temp_v0_2 = Jpeg_DecodeImage(sp1C, arg2->decodedSize + 0x100, (u8*)arg2 + arg2->dataOffset);
         if (temp_v0_2 == 0) {
             MainPool_ResetStateToOffset(arg0, sp18);
             sp1C = NULL;
@@ -143,18 +143,18 @@ Fragment* Fragment_LoadFromRomRange(MainPoolState* arg0, s32 start, s32 end, PER
  * Loads a fragment from a block-address range into a pool, decompressing it as
  * needed.
  */
-Fragment* Fragment_LoadFromLbaRange(MainPoolState* arg0, unk_func_800041C0* arg1, PERSSZP* arg2, u32 arg3) {
+Fragment* Fragment_LoadFromLbaRange(MainPoolState* arg0, StorageLbaRange* arg1, PERSSZP* arg2, u32 arg3) {
     s32 sp3C;
     Fragment* sp38;
     PERSSZP* temp_s1;
 
-    LeoLBAToByte(arg1->unk_00, arg1->unk_02, &sp3C);
+    LeoLBAToByte(arg1->startLba, arg1->lbaCount, &sp3C);
     sp3C = ALIGN16(sp3C);
 
     if (arg3 >= sp3C) {
-        temp_s1 = arg1->unk_04 + (u8*)arg2;
+        temp_s1 = arg1->dataOffset + (u8*)arg2;
 
-        Storage_QueueDiskTransfer(0, arg2, arg1->unk_00, arg1->unk_02, &D_800AC7A0.unk_9EC, 0);
+        Storage_QueueDiskTransfer(0, arg2, arg1->startLba, arg1->lbaCount, &D_800AC7A0.unk_9EC, 0);
         osRecvMesg(&D_800AC7A0.unk_9EC, NULL, 1);
 
         if (((u32*)temp_s1->magic)[0] == 'PERS' && (((u32*)temp_s1->magic)[1] == '-SZP')) {
@@ -162,7 +162,7 @@ Fragment* Fragment_LoadFromLbaRange(MainPoolState* arg0, unk_func_800041C0* arg1
         } else if (((u32*)temp_s1->magic)[0] == 'PRES' && (((u32*)temp_s1->magic)[1] == 'JPEG')) {
             sp38 = Jpeg_AllocAndDecodeFragment(arg0, arg2, temp_s1);
         } else {
-            sp38 = Asset_AllocAndCopyFragment(arg0, arg2, arg1->unk_04, arg1->unk_08);
+            sp38 = Asset_AllocAndCopyFragment(arg0, arg2, arg1->dataOffset, arg1->size);
         }
     }
 
@@ -177,16 +177,16 @@ void Fragment_RelocateAndCommit(MainPoolState* arg0, u32 arg1, Fragment* arg2) {
 
 /** Loads an archive file into a pool from a ROM range. */
 Fragment* BinArchive_LoadFileFromRomRange(MainPoolState* arg0, BinArchive* arg1, BinArchiveFile* arg2, u32 arg3, s32 arg4) {
-    s32 temp_a1 = arg1->unk_04 + arg2->offset;
+    s32 temp_a1 = arg1->source + arg2->offset;
 
     return Fragment_LoadFromRomRange(arg0, temp_a1, arg2->size + temp_a1, arg3, arg4);
 }
 
 /** Loads an archive file into a pool from a block-address range. */
 Fragment* BinArchive_LoadFileFromLbaRange(MainPoolState* arg0, BinArchive* arg1, BinArchiveFile* arg2, u32 arg3, s32 arg4) {
-    unk_func_800041C0 sp1C;
+    StorageLbaRange sp1C;
 
-    Storage_SetByteRange(&sp1C, arg1->unk_04, arg2->offset, arg2->size);
+    Storage_SetByteRange(&sp1C, arg1->source, arg2->offset, arg2->size);
     return Fragment_LoadFromLbaRange(arg0, &sp1C, arg3, arg4);
 }
 
@@ -197,12 +197,12 @@ Fragment* BinArchive_LoadFileToPool(MainPoolState* arg0, BinArchive* arg1, s32 a
     BinArchiveFile* sp2C = (u8*)arg1 + sizeof(BinArchive) + (arg2 * sizeof(BinArchiveFile));
 
     if (arg2 < arg1->num_files) {
-        if (arg1->unk_00 & 1) {
+        if (arg1->flags & 1) {
             var_s0 = (u8*)arg1 + sp2C->offset;
-        } else if (!(arg1->unk_00 & 4) && (sp2C->unk_08 != NULL)) {
-            var_s0 = sp2C->unk_08;
+        } else if (!(arg1->flags & 4) && (sp2C->cached != NULL)) {
+            var_s0 = sp2C->cached;
         } else {
-            if (arg1->unk_00 & 0x80) {
+            if (arg1->flags & 0x80) {
                 var_s0 = BinArchive_LoadFileFromLbaRange(arg0, arg1, sp2C, arg3, arg4);
             } else {
                 var_s0 = BinArchive_LoadFileFromRomRange(arg0, arg1, sp2C, arg3, arg4);
@@ -210,9 +210,9 @@ Fragment* BinArchive_LoadFileToPool(MainPoolState* arg0, BinArchive* arg1, s32 a
 
             if (var_s0 != NULL) {
                 if ((((u32*)var_s0->magic)[0] == 'FRAG') && (((u32*)var_s0->magic)[1] == 'MENT')) {
-                    Fragment_RelocateAndCommit(arg0, arg1->unk_02, var_s0);
+                    Fragment_RelocateAndCommit(arg0, arg1->fragmentId, var_s0);
                 }
-                sp2C->unk_08 = var_s0;
+                sp2C->cached = var_s0;
             }
         }
     }

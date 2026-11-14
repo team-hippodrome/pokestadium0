@@ -517,7 +517,7 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     ApplyParalysisSpeedCut(arg0);
     ApplyBurnAttackCut(arg0);
 
-    sp24->baseHp = gBaseStats[sp24->species].baseHP;
+    sp24->baseHp = gBaseStats[sp24->species].baseHp;
     sp24->unmodifiedAttack = sp34->attack;
     sp24->unmodifiedDefense = sp34->defense;
     sp24->unmodifiedSpeed = sp34->speed;

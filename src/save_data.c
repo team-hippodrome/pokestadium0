@@ -79,6 +79,7 @@ void Save_WriteFooter(u8* arg0, s32 arg1, s32 arg2) {
 M2C_UNK func_80058410(s32, s32, s32);
 M2C_UNK func_80003774(s32, M2C_UNK, M2C_UNK, M2C_UNK);
 extern s32 D_800AE8E0;
+#define gSaveSram (*(SaveSram**)&D_800AE8E0)
 void func_80023890(s32 arg0, s32 arg1, s32 arg2) {
     s32 sp1C = arg1 - D_800AE8E0;
 
@@ -155,17 +156,6 @@ void func_800239C4(s32 arg0, s32 arg1) {
     func_80058410(arg0 + arg1, arg0, arg1);
 }
 
-typedef struct SaveRecA80023F38 { s16 flags; char pad[0x24E]; } SaveRecA80023F38;
-typedef struct SaveRecB80023F38 { s16 flags; char pad[0xABE]; } SaveRecB80023F38;
-typedef struct SaveRecC80023F38 { s16 flags; char pad[0x1BE]; } SaveRecC80023F38;
-typedef struct Save80023F38 {
-    SaveRecA80023F38 a[16];
-    SaveRecB80023F38 b[4];
-    SaveRecC80023F38 c[4];
-    s16 d; char padD[0x7A40 - 0x5702];
-    s16 e; char padE[0x7A60 - 0x7A42];
-    s16 f;
-} Save80023F38;
 
 M2C_UNK func_8004FD20();                            /* extern */
 void func_800239F0(arg0)
@@ -186,40 +176,36 @@ void func_80023A20(s32 arg0, s32 arg1) {
     s32 primary;
     s32 backup;
     s32 status;
-    s32 base;
 
     switch (arg0) {
         case 16:
-            base = (s32)(*(SaveRecA80023F38**)&D_800AE8E0 + arg1);
-            primary = base;
-            backup = base + 0x128;
+            primary = (s32)&gSaveSram->teams[arg1][0];
+            backup = (s32)&gSaveSram->teams[arg1][1];
             size = 0x128;
             break;
         case 17:
-            base = (s32)(*(SaveRecB80023F38**)&D_800AE8E0 + arg1);
-            primary = base + 0x2500;
-            backup = base + 0x2A60;
+            primary = (s32)&gSaveSram->boxes[arg1][0];
+            backup = (s32)&gSaveSram->boxes[arg1][1];
             size = 0x560;
             break;
         case 18:
-            base = (s32)(*(SaveRecC80023F38**)&D_800AE8E0 + arg1);
-            primary = base + 0x5000;
-            backup = base + 0x50E0;
+            primary = (s32)&gSaveSram->items[arg1][0];
+            backup = (s32)&gSaveSram->items[arg1][1];
             size = 0xE0;
             break;
         case 19:
-            primary = D_800AE8E0 + 0x5700;
-            backup = D_800AE8E0 + 0x68A0;
+            primary = (s32)&gSaveSram->list[0];
+            backup = (s32)&gSaveSram->list[1];
             size = 0x11A0;
             break;
         case 20:
-            primary = D_800AE8E0 + 0x7A40;
-            backup = D_800AE8E0 + 0x7A50;
+            primary = (s32)&gSaveSram->options[0];
+            backup = (s32)&gSaveSram->options[1];
             size = 0x10;
             break;
         case 21:
-            primary = D_800AE8E0 + 0x7A60;
-            backup = D_800AE8E0 + 0x7CE8;
+            primary = (s32)&gSaveSram->continueData[0];
+            backup = (s32)&gSaveSram->continueData[1];
             size = 0x288;
             break;
     }
@@ -300,18 +286,20 @@ M2C_UNK func_8001FE84();                            /* extern */
 M2C_UNK func_800203FC(s32);                         /* extern */
 M2C_UNK func_80058410(s32, s32, M2C_UNK);           /* extern */
 
+// Unpacks a save record (arg1, SaveMonRecord*) into a BattleMon (arg0). The arguments stay s32:
+// typing them as pointers grows the stack frame.
 void func_80023D3C(s32 arg0, s32 arg1) {
     s32 sp24;
     s32 temp_a0;
 
     func_8001FE84();
     func_800203FC(arg0);
-    temp_a0 = arg1 + 0x27;
+    temp_a0 = (s32)((SaveMonRecord*)arg1)->otName;
     sp24 = temp_a0;
-    func_80058410(temp_a0, arg0 + 0x3D, 3);
-    func_80058410(arg1 + 0x2A, arg0 + 0x4D, 3);
-    func_8001FB10(arg0 + 0x30, arg1 + 0x21);
-    func_8001FB10(arg0 + 0x40, sp24);
+    func_80058410(temp_a0, (s32)((BattleMon*)arg0)->gbOtNameHead, 3);
+    func_80058410((s32)&((SaveMonRecord*)arg1)->otName[3], (s32)((BattleMon*)arg0)->gbOtNameTail, 3);
+    func_8001FB10((s32)((BattleMon*)arg0)->nickname, (s32)((SaveMonRecord*)arg1)->nickname);
+    func_8001FB10((s32)((BattleMon*)arg0)->otName, sp24);
 }
 
 /**
@@ -320,12 +308,12 @@ void func_80023D3C(s32 arg0, s32 arg1) {
  * (とうろく > ポケモンをとうろくする, はい).
  * @unverified Name and comment guessed from the code.
  */
-void BattleMon_ToGbSaveRecord(s32 arg0, s32 arg1) {
-    M2C_FIELD(arg0, u8*, 4) = M2C_FIELD(arg0, u8*, 0x24);
-    Pokemon_ToGbRecord((BattleMon*)arg0, (GbPokemonRecord*)arg1);
-    Text_TranscodeName((char*)(arg1 + 0x21), (char*)(arg0 + 0x30));
-    func_80058410(arg0 + 0x3D, arg1 + 0x27, 3);
-    func_80058410(arg0 + 0x4D, arg1 + 0x2A, 3);
+void BattleMon_ToGbSaveRecord(BattleMon* arg0, SaveMonRecord* arg1) {
+    arg0->boxLevel = arg0->level;
+    Pokemon_ToGbRecord(arg0, &arg1->mon);
+    Text_TranscodeName((char*)arg1->nickname, (char*)arg0->nickname);
+    func_80058410((s32)arg0->gbOtNameHead, (s32)arg1->otName, 3);
+    func_80058410((s32)arg0->gbOtNameTail, (s32)&arg1->otName[3], 3);
 }
 
 /**
@@ -341,22 +329,22 @@ s32 Save_IsTypedRecordFlagSet(arg0, arg1, arg2)
     s32 ret = 0;
     switch (arg0) {
     case 16:
-        ret = ((*(Save80023F38**)&D_800AE8E0)->a[arg1].flags & arg2) != 0;
+        ret = (gSaveSram->teams[arg1][0].flags & arg2) != 0;
         break;
     case 17:
-        ret = ((*(Save80023F38**)&D_800AE8E0)->b[arg1].flags & arg2) != 0;
+        ret = (gSaveSram->boxes[arg1][0].flags & arg2) != 0;
         break;
     case 18:
-        ret = ((*(Save80023F38**)&D_800AE8E0)->c[arg1].flags & arg2) != 0;
+        ret = (gSaveSram->items[arg1][0].flags & arg2) != 0;
         break;
     case 19:
-        ret = ((*(Save80023F38**)&D_800AE8E0)->d & arg2) != 0;
+        ret = (gSaveSram->list[0].flags & arg2) != 0;
         break;
     case 20:
-        ret = ((*(Save80023F38**)&D_800AE8E0)->e & arg2) != 0;
+        ret = (gSaveSram->options[0].flags & arg2) != 0;
         break;
     case 21:
-        ret = ((*(Save80023F38**)&D_800AE8E0)->f & arg2) != 0;
+        ret = (gSaveSram->continueData[0].flags & arg2) != 0;
         break;
     }
     return ret;
@@ -369,22 +357,22 @@ M2C_UNK func_80023F38(arg0, arg1, arg2)
 {
     switch (arg0) {
     case 16:
-        (*(Save80023F38**)&D_800AE8E0)->a[arg1].flags |= arg2;
+        gSaveSram->teams[arg1][0].flags |= arg2;
         break;
     case 17:
-        (*(Save80023F38**)&D_800AE8E0)->b[arg1].flags |= arg2;
+        gSaveSram->boxes[arg1][0].flags |= arg2;
         break;
     case 18:
-        (*(Save80023F38**)&D_800AE8E0)->c[arg1].flags |= arg2;
+        gSaveSram->items[arg1][0].flags |= arg2;
         break;
     case 19:
-        (*(Save80023F38**)&D_800AE8E0)->d |= arg2;
+        gSaveSram->list[0].flags |= arg2;
         break;
     case 20:
-        (*(Save80023F38**)&D_800AE8E0)->e |= arg2;
+        gSaveSram->options[0].flags |= arg2;
         break;
     case 21:
-        (*(Save80023F38**)&D_800AE8E0)->f |= arg2;
+        gSaveSram->continueData[0].flags |= arg2;
         break;
     }
 }
@@ -401,22 +389,22 @@ void func_800238D8(); // Called with two or three arguments.
 void Save_CommitTypedRecord(s32 arg0, s32 arg1) {
     switch (arg0) {
     case 16:
-        func_800238D8((*(s32 *)&D_800AE8E0) + (arg1 * 0x250), 0x128, arg1);
+        func_800238D8((s32)gSaveSram->teams[arg1], 0x128, arg1);
         return;
     case 17:
-        func_800238D8((*(s32 *)&D_800AE8E0) + (arg1 * 0xAC0) + 0x2500, 0x560, arg1);
+        func_800238D8((s32)gSaveSram->boxes[arg1], 0x560, arg1);
         return;
     case 18:
-        func_800238D8((*(s32 *)&D_800AE8E0) + (arg1 * 0x1C0) + 0x5000, 0xE0, arg1);
+        func_800238D8((s32)gSaveSram->items[arg1], 0xE0, arg1);
         return;
     case 19:
-        func_800238D8((*(s32 *)&D_800AE8E0) + 0x5700, 0x11A0, arg1);
+        func_800238D8((s32)gSaveSram->list, 0x11A0, arg1);
         return;
     case 20:
-        func_800238D8((*(s32 *)&D_800AE8E0) + 0x7A40, 0x10, arg1);
+        func_800238D8((s32)gSaveSram->options, 0x10, arg1);
         return;
     case 21:
-        func_800238D8((*(s32 *)&D_800AE8E0) + 0x7A60, 0x288, arg1);
+        func_800238D8((s32)gSaveSram->continueData, 0x288, arg1);
         /* fallthrough */
     default:
         return;
@@ -432,22 +420,22 @@ void func_80023954(); // Called with three arguments; the third is ignored.
 void Save_InvalidateTypedRecord(s32 arg0, s32 arg1) {
     switch (arg0) {
     case 16:
-        func_80023954((*(s32 *)&D_800AE8E0) + (arg1 * 0x250), 0x128, arg1);
+        func_80023954((s32)gSaveSram->teams[arg1], 0x128, arg1);
         return;
     case 17:
-        func_80023954((*(s32 *)&D_800AE8E0) + (arg1 * 0xAC0) + 0x2500, 0x560, arg1);
+        func_80023954((s32)gSaveSram->boxes[arg1], 0x560, arg1);
         return;
     case 18:
-        func_80023954((*(s32 *)&D_800AE8E0) + (arg1 * 0x1C0) + 0x5000, 0xE0, arg1);
+        func_80023954((s32)gSaveSram->items[arg1], 0xE0, arg1);
         return;
     case 19:
-        func_80023954((*(s32 *)&D_800AE8E0) + 0x5700, 0x11A0, arg1);
+        func_80023954((s32)gSaveSram->list, 0x11A0, arg1);
         return;
     case 20:
-        func_80023954((*(s32 *)&D_800AE8E0) + 0x7A40, 0x10, arg1);
+        func_80023954((s32)gSaveSram->options, 0x10, arg1);
         return;
     case 21:
-        func_80023954((*(s32 *)&D_800AE8E0) + 0x7A60, 0x288, arg1);
+        func_80023954((s32)gSaveSram->continueData, 0x288, arg1);
         /* fallthrough */
     default:
         return;
@@ -457,22 +445,22 @@ void Save_InvalidateTypedRecord(s32 arg0, s32 arg1) {
 void func_80024294(s32 arg0, s32 arg1) {
     switch (arg0) {
     case 16:
-        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->a[arg1], 0x128);
+        func_800239C4((s32)gSaveSram->teams[arg1], 0x128);
         break;
     case 17:
-        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->b[arg1], 0x560);
+        func_800239C4((s32)gSaveSram->boxes[arg1], 0x560);
         break;
     case 18:
-        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->c[arg1], 0xE0);
+        func_800239C4((s32)gSaveSram->items[arg1], 0xE0);
         break;
     case 19:
-        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->d, 0x11A0);
+        func_800239C4((s32)gSaveSram->list, 0x11A0);
         break;
     case 20:
-        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->e, 0x10);
+        func_800239C4((s32)gSaveSram->options, 0x10);
         break;
     case 21:
-        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->f, 0x288);
+        func_800239C4((s32)gSaveSram->continueData, 0x288);
         break;
     }
 }
@@ -500,39 +488,39 @@ void func_800243B8(void) {
 void Save_ClearTypedRecord(s32 arg0, s32 arg1) {
     switch (arg0) {
     case 16: {
-        SaveRecA80023F38* rec = &(*(Save80023F38**)&D_800AE8E0)->a[arg1];
-        func_800239F0(rec, 0x128);
-        ((s8*)rec)[2] = 0x50;
-        ((s8*)rec)[0xA] = 0x50;
+        SaveTeamRecord* rec = &gSaveSram->teams[arg1][0];
+        func_800239F0(&rec->flags, 0x128);
+        rec->trainerName[0] = 0x50;
+        rec->secondName[0] = 0x50;
         break;
     }
     case 17: {
-        SaveRecB80023F38* rec = &(*(Save80023F38**)&D_800AE8E0)->b[arg1];
-        func_800239F0(rec, 0x560);
-        ((s8*)rec)[2] = 0x50;
-        ((s8*)rec)[0xA] = 0x50;
+        SaveBoxRecord* rec = &gSaveSram->boxes[arg1][0];
+        func_800239F0(&rec->flags, 0x560);
+        rec->trainerName[0] = 0x50;
+        rec->secondName[0] = 0x50;
         break;
     }
     case 18: {
-        SaveRecC80023F38* rec = &(*(Save80023F38**)&D_800AE8E0)->c[arg1];
-        func_800239F0(rec, 0xE0);
-        ((s8*)rec)[2] = 0x50;
+        SaveItemRecord* rec = &gSaveSram->items[arg1][0];
+        func_800239F0(&rec->flags, 0xE0);
+        rec->trainerName[0] = 0x50;
         break;
     }
     case 19: {
-        s16* rec = &(*(Save80023F38**)&D_800AE8E0)->d;
+        s16* rec = &gSaveSram->list[0].flags;
         func_800239F0(rec, 0x11A0);
         *rec |= 1;
         break;
     }
     case 20: {
-        s16* rec = &(*(Save80023F38**)&D_800AE8E0)->e;
+        s16* rec = &gSaveSram->options[0].flags;
         func_800239F0(rec, 0x10);
         *rec |= 1;
         break;
     }
     case 21:
-        func_800239F0(&(*(Save80023F38**)&D_800AE8E0)->f, 0x288);
+        func_800239F0(&gSaveSram->continueData[0].flags, 0x288);
         break;
     }
 }
@@ -614,13 +602,13 @@ s32 Deck_GetSaveEntryTrainerId(s32 arg0, s32 arg1) {
     if (func_800246A8(arg0, arg1) != 0) {
         switch (arg0) {
             case 16:
-                ret = *(u16*)((*(s32*)&D_800AE8E0) + (arg1 * 0x250) + 8);
+                ret = gSaveSram->teams[arg1][0].trainerId;
                 break;
             case 17:
-                ret = *(u16*)((*(s32*)&D_800AE8E0) + (arg1 * 0xAC0) + 0x2508);
+                ret = gSaveSram->boxes[arg1][0].trainerId;
                 break;
             case 18:
-                ret = *(u16*)((*(s32*)&D_800AE8E0) + (arg1 * 0x1C0) + 0x5008);
+                ret = gSaveSram->items[arg1][0].trainerId;
                 break;
         }
     }
@@ -638,13 +626,13 @@ s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2) {
         src = 0;
         switch (arg0) {
             case 16:
-                src = (*(s32*)&D_800AE8E0) + (arg1 * 0x250) + 2;
+                src = (s32)gSaveSram->teams[arg1][0].trainerName;
                 break;
             case 17:
-                src = (*(s32*)&D_800AE8E0) + (arg1 * 0xAC0) + 0x2502;
+                src = (s32)gSaveSram->boxes[arg1][0].trainerName;
                 break;
             case 18:
-                src = (*(s32*)&D_800AE8E0) + (arg1 * 0x1C0) + 0x5002;
+                src = (s32)gSaveSram->items[arg1][0].trainerName;
                 break;
         }
         if (src != 0) {
@@ -664,10 +652,10 @@ s32 func_8002488C(s32 arg0, s32 arg1, u8* arg2) {
         src = 0;
         switch (arg0) {
             case 16:
-                src = (*(s32*)&D_800AE8E0) + (arg1 * 0x250) + 0xA;
+                src = (s32)gSaveSram->teams[arg1][0].secondName;
                 break;
             case 17:
-                src = (*(s32*)&D_800AE8E0) + (arg1 * 0xAC0) + 0x250A;
+                src = (s32)gSaveSram->boxes[arg1][0].secondName;
                 break;
         }
         if (src != 0) {
@@ -681,40 +669,40 @@ s32 func_8002488C(s32 arg0, s32 arg1, u8* arg2) {
 void Deck_SetSaveEntryTrainerIdAndName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
     switch (arg0) {
         case 16: {
-            s8* rec = (s8*)&(*(Save80023F38**)&D_800AE8E0)->a[arg1];
+            SaveTeamRecord* rec = &gSaveSram->teams[arg1][0];
             if ((s32)arg4 >= 0) {
-                *(u16*)(rec + 8) = arg4;
+                rec->trainerId = arg4;
             }
             if (arg3 != 0) {
-                func_8001FBE4(rec + 2, arg3);
+                func_8001FBE4(rec->trainerName, arg3);
             }
             if (arg2 != 0) {
-                func_8001FBE4(rec + 0xA, arg2);
+                func_8001FBE4(rec->secondName, arg2);
             }
             func_80023F38(arg0, arg1, 3);
             break;
         }
         case 17: {
-            s8* rec = (s8*)&(*(Save80023F38**)&D_800AE8E0)->b[arg1];
+            SaveBoxRecord* rec = &gSaveSram->boxes[arg1][0];
             if ((s32)arg4 >= 0) {
-                *(u16*)(rec + 8) = arg4;
+                rec->trainerId = arg4;
             }
             if (arg3 != 0) {
-                func_8001FBE4(rec + 2, arg3);
+                func_8001FBE4(rec->trainerName, arg3);
             }
             if (arg2 != 0) {
-                func_8001FBE4(rec + 0xA, arg2);
+                func_8001FBE4(rec->secondName, arg2);
             }
             func_80023F38(arg0, arg1, 3);
             break;
         }
         case 18: {
-            s8* rec = (s8*)&(*(Save80023F38**)&D_800AE8E0)->c[arg1];
+            SaveItemRecord* rec = &gSaveSram->items[arg1][0];
             if ((s32)arg4 >= 0) {
-                *(u16*)(rec + 8) = arg4;
+                rec->trainerId = arg4;
             }
             if (arg3 != 0) {
-                func_8001FBE4(rec + 2, arg3);
+                func_8001FBE4(rec->trainerName, arg3);
             }
             func_80023F38(arg0, arg1, 3);
             break;
@@ -728,16 +716,16 @@ s32 func_80024ADC(arg0, arg1) s32 arg0; s32 arg1; {
 
     switch (arg0) {
         case 16:
-            ret = *(s16 *)((u8 *)&(*(Save80023F38 **)&D_800AE8E0)->a[arg1] + 0x12);
+            ret = gSaveSram->teams[arg1][0].count;
             break;
         case 17:
-            ret = *(s16 *)((u8 *)&(*(Save80023F38 **)&D_800AE8E0)->b[arg1] + 0x12);
+            ret = gSaveSram->boxes[arg1][0].count;
             break;
         case 18:
-            ret = *(s16 *)((u8 *)&(*(Save80023F38 **)&D_800AE8E0)->c[arg1] + 0xA);
+            ret = gSaveSram->items[arg1][0].count;
             break;
         case 19:
-            ret = *(s16 *)((u8 *)&(*(Save80023F38 **)&D_800AE8E0)->d + 2);
+            ret = gSaveSram->list[0].count;
             break;
     }
     return ret;
@@ -755,16 +743,16 @@ void Deck_SetSaveEntryCount(s32 arg0, s32 arg1, s32 arg2) {
     if (arg2 < func_80024ADC()) {
         switch (arg0) {                             /* irregular */
         case 16:
-            M2C_FIELD((D_800AE8E0 + (arg1 * 0x250)), s16 *, 0x12) = (s16) arg2;
+            gSaveSram->teams[arg1][0].count = (s16) arg2;
             break;
         case 17:
-            M2C_FIELD((D_800AE8E0 + (arg1 * 0xAC0)), s16 *, 0x2512) = (s16) arg2;
+            gSaveSram->boxes[arg1][0].count = (s16) arg2;
             break;
         case 18:
-            M2C_FIELD((D_800AE8E0 + (arg1 * 0x1C0)), s16 *, 0x500A) = (s16) arg2;
+            gSaveSram->items[arg1][0].count = (s16) arg2;
             break;
         case 19:
-            M2C_FIELD(D_800AE8E0, s16 *, 0x5702) = (s16) arg2;
+            gSaveSram->list[0].count = (s16) arg2;
             break;
         }
         func_80023F38(arg0, arg1, 2);
@@ -782,23 +770,22 @@ void func_80024C80(s32 arg0, s32 arg1) {
     if (sp1C < Deck_GetSaveRecordCapacity(arg0)) {
         switch (arg0) {                             /* irregular */
         case 16:
-            M2C_FIELD((D_800AE8E0 + (arg1 * 0x250)), s16 *, 0x12) = (s16) (sp1C + 1);
+            gSaveSram->teams[arg1][0].count = (s16) (sp1C + 1);
             break;
         case 17:
-            M2C_FIELD((D_800AE8E0 + (arg1 * 0xAC0)), s16 *, 0x2512) = (s16) (sp1C + 1);
+            gSaveSram->boxes[arg1][0].count = (s16) (sp1C + 1);
             break;
         case 18:
-            M2C_FIELD((D_800AE8E0 + (arg1 * 0x1C0)), s16 *, 0x500A) = (s16) (sp1C + 1);
+            gSaveSram->items[arg1][0].count = (s16) (sp1C + 1);
             break;
         case 19:
-            M2C_FIELD(D_800AE8E0, s16 *, 0x5702) = (s16) (sp1C + 1);
+            gSaveSram->list[0].count = (s16) (sp1C + 1);
             break;
         }
         func_80023F38(arg0, arg1, 2);
     }
 }
 
-typedef struct { u8 a; u8 b; } Pair80024D88;
 /** Reads a deck entry from the save data. */
 s32 Deck_ReadSaveEntry(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     s32 ret = 0;
@@ -806,16 +793,16 @@ s32 Deck_ReadSaveEntry(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     if (arg2 < func_80024ADC()) {
         switch (arg0) {
             case 16:
-                func_80023D3C((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->a[arg1] + arg2 * 0x2D + 0x14));
+                func_80023D3C((s32)arg3, (s32)&gSaveSram->teams[arg1][0].mons[arg2]);
                 break;
             case 17:
-                func_80023D3C((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->b[arg1] + arg2 * 0x2D + 0x14));
+                func_80023D3C((s32)arg3, (s32)&gSaveSram->boxes[arg1][0].mons[arg2]);
                 break;
             case 19:
-                func_80023D3C((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->d + arg2 * 0x2D + 4));
+                func_80023D3C((s32)arg3, (s32)&gSaveSram->list[0].mons[arg2]);
                 break;
             case 18:
-                *(Pair80024D88*)arg3 = ((Pair80024D88*)((u8*)&(*(Save80023F38**)&D_800AE8E0)->c[arg1] + 0xC))[arg2];
+                *(SaveItemSlot*)arg3 = gSaveSram->items[arg1][0].items[arg2];
                 break;
         }
         ret = 1;
@@ -832,16 +819,16 @@ s32 Save_WriteTypedRecord(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     if ((arg2 < count) || ((arg2 == count) && (arg2 < max))) {
         switch (arg0) {
             case 16:
-                BattleMon_ToGbSaveRecord((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->a[arg1] + arg2 * 0x2D + 0x14));
+                BattleMon_ToGbSaveRecord((BattleMon*)arg3, &gSaveSram->teams[arg1][0].mons[arg2]);
                 break;
             case 17:
-                BattleMon_ToGbSaveRecord((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->b[arg1] + arg2 * 0x2D + 0x14));
+                BattleMon_ToGbSaveRecord((BattleMon*)arg3, &gSaveSram->boxes[arg1][0].mons[arg2]);
                 break;
             case 19:
-                BattleMon_ToGbSaveRecord((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->d + arg2 * 0x2D + 4));
+                BattleMon_ToGbSaveRecord((BattleMon*)arg3, &gSaveSram->list[0].mons[arg2]);
                 break;
             case 18:
-                ((Pair80024D88*)((u8*)&(*(Save80023F38**)&D_800AE8E0)->c[arg1] + 0xC))[arg2] = *(Pair80024D88*)arg3;
+                gSaveSram->items[arg1][0].items[arg2] = *(SaveItemSlot*)arg3;
                 break;
         }
         if (arg2 == count) {
@@ -856,10 +843,10 @@ s32 Save_WriteTypedRecord(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
 
 s32 func_80025100(s8 *arg0, s32 *arg1) {
     if (arg0 != NULL) {
-        *arg0 = M2C_FIELD(D_800AE8E0, s8 *, 0x7A42);
+        *arg0 = gSaveSram->options[0].towerFrames;
     }
     if (arg1 != NULL) {
-        *arg1 = M2C_FIELD(D_800AE8E0, s32 *, 0x7A44);
+        *arg1 = gSaveSram->options[0].towerButtons;
     }
     return 1;
 }
@@ -867,7 +854,7 @@ s32 func_80025100(s8 *arg0, s32 *arg1) {
 M2C_UNK func_80023F38(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 
 s32 func_80025130(s32 arg0) {
-    M2C_FIELD(D_800AE8E0, s32 *, 0x7A44) = arg0;
+    gSaveSram->options[0].towerButtons = arg0;
     func_80023F38(0x14, 0, 2);
     return 1;
 }
@@ -875,21 +862,19 @@ s32 func_80025130(s32 arg0) {
 M2C_UNK func_80023F38(s32, s32, M2C_UNK);
 M2C_UNK func_80023F38(M2C_UNK, M2C_UNK, M2C_UNK);
 s32 func_80025168(s8 arg0) {
-    M2C_FIELD(D_800AE8E0, s8 *, 0x7A42) = arg0;
+    gSaveSram->options[0].towerFrames = arg0;
     func_80023F38(0x14, 0, 2);
     return 1;
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 /**
  * Returns the 16-bit progress flags at save offset 0x7A48.
  * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-s32 Save_GetProgressFlags(void)
-{
-  return (((*((u8 *) (((s8 *) (*((s8 **) (&D_800AE8E0)))) + 0x7A48))) << 8) | (*((u8 *) (((s8 *) (*((s8 **) (&D_800AE8E0)))) + 0x7A49)))) & 0xFFFF; // FAKE: decomp slop, raw pointer casts stand in for struct fields
+s32 Save_GetProgressFlags(void) {
+    return ((gSaveSram->options[0].progress[0] << 8) | gSaveSram->options[0].progress[1]) & 0xFFFF;
 }
 
 /**
@@ -899,71 +884,47 @@ s32 Save_GetProgressFlags(void)
  * @unverified Name and comment guessed from the code.
  */
 void Save_SetProgressFlags(u16 arg0) {
-    M2C_FIELD(D_800AE8E0, u8 *, 0x7A48) = (arg0 >> 8) & 0xFF;
-    M2C_FIELD(D_800AE8E0, u8 *, 0x7A49) = arg0 & 0xFF;
+    gSaveSram->options[0].progress[0] = (arg0 >> 8) & 0xFF;
+    gSaveSram->options[0].progress[1] = arg0 & 0xFF;
     func_80023F38(0x14, 0, 2);
 }
 
 u8 func_80025214(void) {
-    return M2C_FIELD(D_800AE8E0, u8 *, 0x7A43);
+    return gSaveSram->options[0].soundFlags;
 }
 
 M2C_UNK func_80023F38(s32, s32, M2C_UNK);
 M2C_UNK func_80023F38(M2C_UNK, M2C_UNK, M2C_UNK);
 void func_80025224(s8 arg0) {
-    M2C_FIELD(D_800AE8E0, s8 *, 0x7A43) = arg0;
+    gSaveSram->options[0].soundFlags = arg0;
     func_80023F38(0x14, 0, 2);
 }
 
-typedef struct { u8 b[0xC]; } SaveName80025260;
-typedef struct { s16 h[0xB1]; } SaveBlob80025260;
-typedef struct { u8 unk0; u8 unk1; u8 pad[0x4E]; } SaveMon80025260;
-typedef struct SaveF80025260 {
-    /* 0x000 */ s16 flags;
-    /* 0x002 */ SaveName80025260 name;
-    /* 0x00E */ s16 count;
-    /* 0x010 */ u8 records[6][0x2D];
-    /* 0x11E */ SaveBlob80025260 blob;
-    /* 0x280 */ u8 mask;
-} SaveF80025260;
 /**
  * Fills the continue block at save offset 0x7A60 with the name, session and Pokemon data.
  * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-void Save_WriteContinueData(SaveName80025260* arg0, SaveBlob80025260* arg1, SaveMon80025260* arg2, s32 arg3) {
-    SaveF80025260* f;
+void Save_WriteContinueData(SaveContinueSession* arg0, GbSavePortSnapshot* arg1, BattleMon* arg2, s32 arg3) {
+    SaveContinueRecord* f;
     s32 i;
 
-    if (D_800AE8E0 != 0) {
-        f = (SaveF80025260*)(D_800AE8E0 + 0x7A60);
+    if (gSaveSram != NULL) {
+        f = &gSaveSram->continueData[0];
         f->flags |= 3;
-        f->name = *arg0;
-        f->blob = *arg1;
+        f->session = *arg0;
+        f->gbSnapshot = *arg1;
         f->count = arg3;
-        f->mask = 0;
+        f->rentalMask = 0;
         for (i = 0; i < arg3; i++) {
-            BattleMon_ToGbSaveRecord((s32)&arg2[i], (s32)f->records[i]);
-            if (arg2[i].unk1 == 1) {
-                f->mask |= 1 << i;
+            BattleMon_ToGbSaveRecord(&arg2[i], &f->team[i]);
+            if (arg2[i].species.isRental == 1) {
+                f->rentalMask |= 1 << i;
             }
         }
     }
 }
-
-typedef struct { s16 h[6]; } Unk12Bytes;
-typedef struct { s16 h[0xB1]; } Unk162Bytes;
-typedef struct { u8 b[0x2D]; } Unk2DBytes;
-typedef struct {
-    /* 0x000 */ s16 flags;
-    /* 0x002 */ Unk12Bytes header;
-    /* 0x00E */ s16 count;
-    /* 0x010 */ Unk2DBytes records[6];
-    /* 0x11E */ Unk162Bytes extra;
-    /* 0x280 */ u8 mask;
-} ContinueBlock7A60;
-typedef struct { u8 unk_00; u8 unk_01; u8 pad[0x4E]; } Mon50;
 
 /**
  * Reads the continue block at save offset 0x7A60 back; returns -1 when it is empty.
@@ -971,21 +932,21 @@ typedef struct { u8 unk_00; u8 unk_01; u8 pad[0x4E]; } Mon50;
  * reset, then N64 logo, opening, title and main menu).
  * @unverified Name and comment guessed from the code.
  */
-s16 Save_ReadContinueData(Unk12Bytes* arg0, Unk162Bytes* arg1, Mon50* arg2) {
+s16 Save_ReadContinueData(SaveContinueSession* arg0, GbSavePortSnapshot* arg1, BattleMon* arg2) {
     s16 count = -1;
-    ContinueBlock7A60* blk;
+    SaveContinueRecord* blk;
     s32 i;
 
-    if (D_800AE8E0 != NULL) {
-        blk = (ContinueBlock7A60*)((s8*)D_800AE8E0 + 0x7A60);
+    if (gSaveSram != NULL) {
+        blk = &gSaveSram->continueData[0];
         if (blk->flags & 1) {
-            *arg0 = blk->header;
-            *arg1 = blk->extra;
+            *arg0 = blk->session;
+            *arg1 = blk->gbSnapshot;
             count = blk->count;
             for (i = 0; i < count; i++) {
-                func_80023D3C((s32)&arg2[i], (s32)&blk->records[i]);
-                if (blk->mask & (1 << i)) {
-                    arg2[i].unk_01 = 1;
+                func_80023D3C((s32)&arg2[i], (s32)&blk->team[i]);
+                if (blk->rentalMask & (1 << i)) {
+                    arg2[i].species.isRental = 1;
                 }
             }
         }

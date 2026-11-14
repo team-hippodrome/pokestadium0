@@ -28,7 +28,7 @@ typedef struct unk_D_800AE520 {
 
 typedef struct BattleMonSpecies {
     /* 0x00 */ u8 id;
-    /* 0x01 */ u8 unk_01;
+    /* 0x01 */ u8 isRental; // 1 for a rental picked in the tournament entry screen (seen: a rented Pikachu); 0 for GB Pokemon (Pokemon_FromGbRecord). Free Battle rentals had 0. func_82200E2C skips its Pikachu-without-Surf check (likely the Surf Pikachu reward) when any team member has it
 } BattleMonSpecies; // size = 0x2
 
 typedef struct BattleMon {
@@ -75,8 +75,7 @@ typedef struct TeamRoster {
     /* 0x001 */ u8 controllerPort;
     /* 0x002 */ u8 numberOfPokemonBrought;
     /* 0x004 */ Controller* controller;
-    /* 0x008 */ char trainerName[4];
-    /* 0x00C */ char unk00C[0xC];
+    /* 0x008 */ char trainerName[0x10]; // NUL-terminated; "1P" (Session_InitHumanTrainer copies 5 bytes) and full-width ＣＯ... for the COM side (EUC-JP A3 C3 A3 CF, FreeBattle_CopyTeamToRoster copies 7 bytes) seen in battle
     /* 0x018 */ s32 unk_018;
     /* 0x01C */ BattleMon pokemonPicked[6];
     /* 0x1FC */ ExtendedRosterInfo* rosterInfo;
@@ -99,29 +98,29 @@ typedef struct BattleSessionTeams {
     /* 0x24 */ arg1_func_80019420* unk_24;
 } BattleSessionTeams; // size = 0x28
 
-// Offsets are for US 1.0. In VERSION_JP, TeamRoster and ExtendedRosterInfo are 0x18 bytes shorter,
-// so rosterInfo starts at 0x0814, battleSides at 0x10D4, and the struct is 0x1138 bytes.
+// Zero's layout (offsets checked against func_80025910, func_8002572C and func_80025830, which
+// reach these fields by raw offset). gSessionContext at 0x800AE8F0 is defined in game_state.c.
 typedef struct SessionContext {
     /* 0x0000 */ s8 mode;
     /* 0x0001 */ s8 ruleCategory;
     /* 0x0002 */ s8 modeSelection; // Cup division or castle location, depending on mode.
     /* 0x0003 */ s8 roundOrDemoId; // One-based battle round; scene ID in non-battle attract demos.
     /* 0x0004 */ TeamRoster trainerSlots[4];
-    /* 0x0874 */ ExtendedRosterInfo rosterInfo[4];
-    /* 0x1194 */ BattleSessionTeams battleSides[2];
-    /* 0x11E4 */ u8 opponentHistory[2][4]; // Eight contiguous entries; the first subscript is not a battle side.
-    /* 0x11EC */ u8 aiDifficulty; // Free Battle: 0 = Hard, 1 = Normal, 2 = Easy.
-    /* 0x11ED */ u8 timeLimitsEnabled;
-    /* 0x11EE */ u8 battleLimitMinutes;
-    /* 0x11EF */ u8 moveLimitSeconds;
-    /* 0x11F0 */ u8 gbStarterChoice;
-    /* 0x11F1 */ char unk11F1[0x1];
-    /* 0x11F2 */ u8 inRound2;
-    /* 0x11F3 */ u8 continueCount;
-    /* 0x11F4 */ u8 unk_11F4;
-    /* 0x11F5 */ u8 sessionFlags;
-    /* 0x11F6 */ u16 transitionFlags;
-} SessionContext; // size = 0x11F8 (JP: 0x1138)
+    /* 0x0814 */ ExtendedRosterInfo rosterInfo[4];
+    /* 0x1034 */ BattleSessionTeams battleSides[2];
+    /* 0x1084 */ u8 opponentHistory[2][4]; // Eight contiguous entries; the first subscript is not a battle side.
+    /* 0x108C */ u8 aiDifficulty; // Free Battle: 0 = Hard, 1 = Normal, 2 = Easy.
+    /* 0x108D */ u8 timeLimitsEnabled;
+    /* 0x108E */ u8 battleLimitMinutes;
+    /* 0x108F */ u8 moveLimitSeconds;
+    /* 0x1090 */ u8 gbStarterChoice;
+    /* 0x1091 */ char unk1091[0x1];
+    /* 0x1092 */ u8 inRound2;
+    /* 0x1093 */ u8 continueCount;
+    /* 0x1094 */ u8 unk_1094; // @unverified: GB port of the continued team, 0xFF for rentals (func_80025A64)
+    /* 0x1095 */ u8 sessionFlags;
+    /* 0x1096 */ u16 transitionFlags;
+} SessionContext; // size = 0x1098
 
 #define RULE_CATEGORY_ANYTHING_GOES 0
 
@@ -173,30 +172,6 @@ typedef struct SessionContext {
 
 // 26: Cutscene
 #define SESSION_FLAG_REVEAL_MEWTWO 0x04
-
-typedef struct UnkStruct80083CA0_2 {
-    /* 0x000 */ OSThread thread;
-    /* 0x1B0 */ OSMesg unk_1B0;
-    /* 0x1B4 */ char unk1B4[0xC];
-    /* 0x1C0 */ OSMesgQueue unk_1C0;
-    /* 0x1D8 */ s32 unk_1D8;
-    /* 0x1DC */ s32 unk_1DC;
-    /* 0x1E0 */ u8 unk1E0[0x800];
-    /* 0x9E0 */ struct unk_D_80068BB0* unk_9E0;
-    /* 0x9E4 */ OSMesg unk_9E4;
-    /* 0x9E8 */ OSMesg unk_9E8;
-    /* 0x9EC */ OSMesgQueue unk_9EC;
-    /* 0xA04 */ OSMesgQueue unk_A04;
-    /* 0xA1C */ char unkA1C[0x4];
-    /* 0xA20 */ UnkStruct80001380 unk_A20;
-    /* 0xA88 */ u16 unk_A88;
-    /* 0xA8A */ u8 unk_A8A;
-    /* 0xA8B */ u8 unk_A8B;
-    /* 0xA8C */ UnkArray4 unk_A8C;
-    /* 0xA9C */ UnkArray4 unk_A9C;
-    /* 0xAAC */ UnkArray4 unk_AAC;
-    /* 0xABC */ char unkABC[0x4];
-} UnkStruct80083CA0_2; // size = 0xAC0
 
 extern u16 D_8006BBB0[16][256];
 

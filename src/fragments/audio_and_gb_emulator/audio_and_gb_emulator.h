@@ -367,6 +367,70 @@ typedef union GbApuMesg {
     GbApuWrite write;
 } GbApuMesg;
 
+// The Game Boy emulator core's state (D_81156540). Merges Screen81104930 (gb_emu_draw.c and
+// gb_emu_frame.c) and GbEmuRunState (gb_emu_frame.c), three views of the same variable.
+typedef struct GbEmuState {
+    /* 0x00 */ u8 unk_00[6];
+    /* 0x06 */ u8 unk_06; // set to 1 around the core start in GbEmu_LoadCartridge, cleared in GbEmu_UpdateFrame
+    /* 0x07 */ u8 unk_07;
+    /* 0x08 */ u8 unk_08[4];
+    /* 0x0C */ u16 gbPc; // GB program counter saved when the core stops (seen in play); 0 after the boot ROM is patched in
+    /* 0x0E */ u8 unk_0E[2];
+    /* 0x10 */ u8* mem; // @unverified: 0x27F80-byte GB address space and emulator tables (GbEmu_LoadCartridge); 0xFF42 is SCY
+    /* 0x14 */ u8 unk_14[8];
+    /* 0x1C */ u8* rom; // cartridge ROM buffer (seen in play)
+    /* 0x20 */ u8* sram; // @unverified: cartridge RAM buffer, sramSize bytes (GbEmu_LoadCartridge)
+    /* 0x24 */ u32 buttons;
+    /* 0x28 */ u8 unk_28[0x10];
+    /* 0x38 */ s32 unk_38;
+    /* 0x3C */ u32 romSize; // @unverified: 0x80000 or 0x100000 from GbPakChannel.romSize (GbEmu_LoadCartridge)
+    /* 0x40 */ u32 sramSize; // @unverified: 0x8000 (GbEmu_LoadCartridge)
+    /* 0x44 */ u8* unk_44;
+    /* 0x48 */ u8* unk_48;
+    /* 0x4C */ s32 framebuffer;
+    /* 0x50 */ u8* unk_50;
+    /* 0x54 */ s32 colorIndex;
+} GbEmuState; // size = 0x58
+
+// One Transfer Pak channel of the Game Boy emulator (D_811561C8[4]). Merges the three identical
+// copies that gb_emu_draw.c, gb_emu_frame.c and gb_pak.c had.
+typedef struct GbPakChannel {
+    /* 0x00 */ char unk00[0x48]; // the start of an OSGbpakId (osGbpakReadId in gb_emu_draw.c)
+    /* 0x48 */ u8 romSize; // @unverified: OSGbpakId.rom_size; 4 selects a 512 KiB ROM, else 1 MiB (gb_emu_draw.c)
+    /* 0x49 */ char unk49[0x3];
+    /* 0x4C */ u8 maskRomVersion; // @unverified: OSGbpakId.version; picks the bank list of a game revision (gb_emu_draw.c)
+    /* 0x4D */ char unk4D[0x1];
+    /* 0x4E */ u8 checksum[2];
+    /* 0x50 */ OSPfs* pfs;
+    /* 0x54 */ u8* buf;
+    /* 0x58 */ u8* romBuf;
+    /* 0x5C */ u8* sramBuf;
+    /* 0x60 */ volatile u8* bankState;
+    /* 0x64 */ volatile u8* sramState;
+    /* 0x68 */ u8* bankList;
+    /* 0x6C */ u8* bankEntry;
+    /* 0x70 */ u8* ramBuf;
+    /* 0x74 */ u8* blockState;
+    /* 0x78 */ u8* verifyBuf;
+    /* 0x7C */ u8* blockDirty;
+    /* 0x80 */ s32 size;
+    /* 0x84 */ s32 sum;
+    /* 0x88 */ char unk88[0x4];
+    /* 0x8C */ s32 addr;
+    /* 0x90 */ u32 ramSize;
+    /* 0x94 */ s32 sramAddr;
+    /* 0x98 */ u8 unk98;
+    /* 0x99 */ volatile u8 request;
+    /* 0x9A */ volatile u8 error;
+    /* 0x9B */ u8 status;
+    /* 0x9C */ u8 channel;
+    /* 0x9D */ char unk9D[0x3];
+    /* 0xA0 */ u8 gameIndex; // @unverified: GbPak_IdentifyCartridge, 0 not a supported game; colorIndex is gameIndex - 1
+    /* 0xA1 */ u8 unkA1;
+    /* 0xA2 */ u8 unkA2;
+    /* 0xA3 */ char unkA3[0x1];
+} GbPakChannel; // size = 0xA4
+
 typedef struct AudioBufferParameters {
     /* 0x00 */ s16 specUnk4; // @unverified: same offset/use as OoT's AudioBufferParameters.specUnk4 (set from AudioSpec.unk_04; 2 doubles the AI buffer bounds)
     /* 0x02 */ u16 samplingFrequency; // @unverified: same offset/use as OoT's AudioBufferParameters.samplingFrequency

@@ -607,14 +607,14 @@ void func_82200E2C(void) {
         roster = state->players[0].unk_14[0];
         info = roster->rosterInfo;
         for (i = 0; i < info->numberOfPokemonCanBePicked; i++) {
-            if (info->battleMon[i].species.unk_01 != 0) {
+            if (info->battleMon[i].species.isRental != 0) {
                 return;
             }
         }
 
         for (i = 0; i < roster->numberOfPokemonBrought; i++) {
             mon = &roster->pokemonPicked[i];
-            if ((mon->species.id == 0x19) && (mon->species.unk_01 == 0)) {
+            if ((mon->species.id == 0x19) && (mon->species.isRental == 0)) {
                 for (j = 0; j < 4; j++) {
                     if (mon->moves[j] == 0) {
                         break;

@@ -243,7 +243,7 @@ void func_89109E5C(unk_func_8830867C_02C_154* arg0, void* arg1, void* arg2, void
     UNUSED s32 pad; // FAKE: stack padding
     s32 temp_s1;
     char sp54[4];
-    unk_func_8002D860 sp48;
+    GbSavePortSummary sp48;
     char sp38[16];
     s32 i;
 
@@ -269,7 +269,7 @@ void func_89109E5C(unk_func_8830867C_02C_154* arg0, void* arg1, void* arg2, void
         if ((func_800246A8(0x12, i) != 0) && (func_80024ADC(0x12, i) > 0)) {
             temp_s1 = Deck_GetSaveEntryTrainerId(0x12, i);
             Deck_GetSaveEntryName(0x12, i, sp38);
-            if ((sp48.unk_08 == temp_s1) && (func_8000A4E8(sp54, sp38) == 0)) {
+            if ((sp48.trainerId == temp_s1) && (func_8000A4E8(sp54, sp38) == 0)) {
                 break;
             }
         }

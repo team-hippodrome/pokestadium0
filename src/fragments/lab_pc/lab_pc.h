@@ -204,7 +204,7 @@ typedef struct unk_func_8821421C_02C_06C_02C_068 {
 typedef struct unk_func_8820E99C_030 {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ WidgetAnimatedPanel* unk_2C;
-    /* 0x30 */ unk_func_8820E99C_030_030 unk_30;
+    /* 0x30 */ UiNumberInput unk_30;
     /* 0x44 */ unk_func_8820E99C_030_044* unk_44;
 } unk_func_8820E99C_030; // size = 0x48
 
