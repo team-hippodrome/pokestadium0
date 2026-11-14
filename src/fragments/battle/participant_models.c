@@ -400,26 +400,25 @@ extern u8* sMoveAnimEffectScripts[][5];
 
 #include "m2c_macros.h"
 
-void func_82135100(void);
-void func_821351EC(UNUSED s32 arg0, UNUSED s32 arg1);
-void func_82136010(void);
-void func_82136018(void);
+void ParticipantModels_UnusedNopA(void);
+void ParticipantModels_UnusedNopB(UNUSED s32 arg0, UNUSED s32 arg1);
+void ParticipantModels_UnusedNopC(void);
+void ParticipantModels_UnusedNopD(void);
 void BattleAnim_RegisterEffectSlot(func_D_84390300 arg0, func_D_84390320 arg1);
 void BattleAnim_SetQueuedEffectList(u8 effect_list_index);
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82135100(void) {
+void ParticipantModels_UnusedNopA(void) {
 }
 
 M2C_UNK func_80003824(M2C_UNK *, s8 *, s8 *, M2C_UNK); /* extern */
 extern s8 D_00434C00;
 extern u32 D_8218A2DC[];
 extern u32 D_8218A544[];
-/*
- * func_82135108
- *
+/**
  * Picks one of two model records by the participant's object type
  * (display object objectType - 1 indexes the two word tables D_8218A544 and
  * D_8218A2DC; the low 24 bits of each entry are an offset from D_00434C00)
@@ -431,15 +430,16 @@ extern u32 D_8218A544[];
  * addresses (0x168 is the size of a DisplayObject) is not established here.
  * Note: the local pad arrays only reproduce the retail stack layout, and the
  * order of the two table lookups matches the register allocation.
+ * @unverified Name guessed from the code.
  */
-void func_82135108(ActivePokemon* arg0) {
+void BattleCamera_LoadSpeciesPathPoints(ActivePokemon* active_pokemon) {
     s16 temp_a2;
     UNUSED s32 padC[2]; // FAKE: stack padding
     s8* temp_a1;
     UNUSED s32 padA[1]; // FAKE: stack padding
     s8* sp18;
 
-    temp_a2 = arg0->displayObject.objectType - 1;
+    temp_a2 = active_pokemon->displayObject.objectType - 1;
     temp_a1 = (s8*)((D_8218A2DC[temp_a2] & 0xFFFFFF) + (u32)&D_00434C00);
     sp18 = (s8*)((D_8218A544[temp_a2] & 0xFFFFFF) + (u32)&D_00434C00);
     if (sBattleScene.scene->mode == 9) {
@@ -455,8 +455,9 @@ void func_82135108(ActivePokemon* arg0) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_821351EC(UNUSED s32 arg0, UNUSED s32 arg1) {
+void ParticipantModels_UnusedNopB(UNUSED s32 unused0, UNUSED s32 unused1) {
 }
 
 void BattleScene_GetParticipantAimPoint(ActivePokemon*, f32*);
@@ -467,10 +468,11 @@ extern f32 D_FLT_8219A718;
 
 /**
  * Starts camera path 0x19 on Pokemon arg1: loads its path points into D_FLT_8219A5B0
- * (func_82135108), mirrors them to its side, places the eye on the first point around its
+ * (BattleCamera_LoadSpeciesPathPoints), mirrors them to its side, places the eye on the first point around its
  * aim point and captures the model orbit.
+ * @unverified Name guessed from the code.
  */
-void func_821351F8(CameraNode* arg0, ActivePokemon* arg1) {
+void BattleCamera_StartSpeciesPath(CameraNode* camera, ActivePokemon* active_pokemon) {
     s32 count;
     Vec3f* p;
     s16* sp3Cp;
@@ -483,22 +485,22 @@ void func_821351F8(CameraNode* arg0, ActivePokemon* arg1) {
     D_8219A5A0->splineT = 0.0f;
     D_8219A5A0->splineKeyframeCount = 0;
     count = 0;
-    func_82135108(arg1);
+    BattleCamera_LoadSpeciesPathPoints(active_pokemon);
     p = (Vec3f*)&D_FLT_8219A5B0;
 loop:
     if (p->x != 1000.0f) {
         count++;
         p++;
-        p[-1].y = M2C_FIELD(arg1, f32*, 0x28) + p[-1].y;
+        p[-1].y = M2C_FIELD(active_pokemon, f32*, 0x28) + p[-1].y;
         goto loop;
     }
     D_8219A5A0->splineKeyframeCount = count;
-    BattleScene_GetParticipantAimPoint(arg1, &D_FLT_8219A718);
-    func_8212254C((s32)arg1, (s32)arg0, *(Vec3f*)&D_FLT_8219A718, 0, 0, 0.0f, (f32)0.0);
-    D_FLT_8219A718 *= arg1->facingDirection;
+    BattleScene_GetParticipantAimPoint(active_pokemon, &D_FLT_8219A718);
+    func_8212254C((s32)active_pokemon, (s32)camera, *(Vec3f*)&D_FLT_8219A718, 0, 0, 0.0f, (f32)0.0);
+    D_FLT_8219A718 *= active_pokemon->facingDirection;
     func_8210BCF0(&D_FLT_8219A718, (Vec3f*)&D_FLT_8219A5B0, &sp40, &sp3E, &sp3C);
-    func_8000EEBC((u8*)arg0 + 0xB4, (Vec3f*)((u8*)arg0 + 0xA8), sp40, sp3E, M2C_FIELD(arg1, u32*, 0x60C) * *(sp3Cp = &sp3C));
-    BattleCamera_CaptureModelOrbit(arg1, arg0);
+    func_8000EEBC((u8*)camera + 0xB4, (Vec3f*)((u8*)camera + 0xA8), sp40, sp3E, M2C_FIELD(active_pokemon, u32*, 0x60C) * *(sp3Cp = &sp3C));
+    BattleCamera_CaptureModelOrbit(active_pokemon, camera);
 }
 
 void BattleScene_GetParticipantAimPoint(ActivePokemon*, f32*);
@@ -508,34 +510,34 @@ extern f32 D_FLT_8219A718;
 /**
  * Places the camera eye on path point arg4 + arg5 around Pokemon arg0's aim point, mirrored
  * to its side, writing the result to arg3[arg5].
+ * @unverified Name guessed from the code.
  */
-void func_82135384(ActivePokemon* arg0, CameraNode* arg1, Vec3f* arg2, Vec3f* arg3, s32 arg4, s32 arg5) {
+void BattleCamera_PlacePathPointAroundParticipant(ActivePokemon* active_pokemon, CameraNode* camera, Vec3f* points, Vec3f* out_points, s32 base_index, s32 index) {
     f32 sp2C;
     s16 pad2A; // FAKE: stack padding
     s16 sp28;
     s16 sp26;
     s16* sp26p;
-    BattleScene_GetParticipantAimPoint(arg0, &D_FLT_8219A718);
-    D_FLT_8219A718 *= arg0->facingDirection;
-    func_8210BCF0(&D_FLT_8219A718, &arg2[arg4 + arg5], &sp2C, &sp28, &sp26);
-    func_8000EEBC((u8*)arg1 + 0xB4, &arg3[arg5], sp2C, sp28, M2C_FIELD(arg0, u32*, 0x60C) * *(sp26p = &sp26));
+    BattleScene_GetParticipantAimPoint(active_pokemon, &D_FLT_8219A718);
+    D_FLT_8219A718 *= active_pokemon->facingDirection;
+    func_8210BCF0(&D_FLT_8219A718, &points[base_index + index], &sp2C, &sp28, &sp26);
+    func_8000EEBC((u8*)camera + 0xB4, &out_points[index], sp2C, sp28, M2C_FIELD(active_pokemon, u32*, 0x60C) * *(sp26p = &sp26));
 }
 
 extern f32 D_FLT_82189350[][4];
 extern f32 D_FLT_82196810;
 
-/*
- * func_82135458
- *
- * Same camera-target easing as func_82122FD8 (see func_82122A7C for the
+/**
+ * Same camera-target easing as BattleScene_EaseCameraTargetFromSavedEye (see BattleScene_EaseCameraTargetToParticipant for the
  * step-by-step description) with the arguments in the opposite order (the
  * participant first, the camera second). It first copies the scene's saved eye
  * (+0xB4) into the camera's eye position, uses the bare object-type table width
  * (D_FLT_82189350[type][0]) as the distance threshold and eases the camera
  * target by D_FLT_82196810 times the remaining distance.
+ * @unverified Name guessed from the code.
  */
-void func_82135458(ActivePokemon* arg0, CameraNode* arg1) {
-    u8* ptr = (u8*)&arg0->modelTransform;
+void BattleCamera_EaseTargetFromSavedEye(ActivePokemon* active_pokemon, CameraNode* camera) {
+    u8* ptr = (u8*)&active_pokemon->modelTransform;
     Vec3f sp58;
     Vec3f sp4C;
     UNUSED s32 pad[3]; // FAKE: stack padding
@@ -544,25 +546,23 @@ void func_82135458(ActivePokemon* arg0, CameraNode* arg1) {
     s16 sp2E;
     s16 sp2C;
 
-    BattleAnim_Vec3fCopy(&arg1->view.eyePosition, &sBattleScene.scene->savedCameraEye);
-    BattleScene_GetParticipantCameraAnchor(arg0, &sp58);
-    BattleAnim_CalculateDistanceAngles(&sp58, &M2C_FIELD(arg0, Vec3f*, 0x5D0), &sp30, &sp2E, &sp2C);
-    BattleAnim_Vec3fCopy(&sp34, &arg1->view.targetPosition);
-    if (D_FLT_82189350[arg0->displayObject.objectType][0] <= sp30) {
+    BattleAnim_Vec3fCopy(&camera->view.eyePosition, &sBattleScene.scene->savedCameraEye);
+    BattleScene_GetParticipantCameraAnchor(active_pokemon, &sp58);
+    BattleAnim_CalculateDistanceAngles(&sp58, &M2C_FIELD(active_pokemon, Vec3f*, 0x5D0), &sp30, &sp2E, &sp2C);
+    BattleAnim_Vec3fCopy(&sp34, &camera->view.targetPosition);
+    if (D_FLT_82189350[active_pokemon->displayObject.objectType][0] <= sp30) {
         Camera_ComputeEyeFromAngles(&sp58, &sp4C, M2C_FIELD(ptr, f32*, 0x38), M2C_FIELD(ptr, s16*, 0x30), M2C_FIELD(ptr, s16*, 0x32));
         BattleAnim_CalculateDistanceAngles(&sp34, &sp4C, &sp30, &sp2E, &sp2C);
     } else {
         BattleAnim_CalculateDistanceAngles(&sp34, &sBattleScene.scene->savedCameraAt, &sp30, &sp2E, &sp2C);
     }
-    Camera_ComputeEyeFromAngles(&sp34, &arg1->view.targetPosition, sp30 * D_FLT_82196810, sp2E, sp2C);
+    Camera_ComputeEyeFromAngles(&sp34, &camera->view.targetPosition, sp30 * D_FLT_82196810, sp2E, sp2C);
 }
 
-void func_82135384(ActivePokemon*, CameraNode*, Vec3f*, Vec3f*, s32, s32);
+void BattleCamera_PlacePathPointAroundParticipant(ActivePokemon*, CameraNode*, Vec3f*, Vec3f*, s32, s32);
 
-/*
- * func_8213558C
- *
- * Evaluates one step of the spline camera path. func_82135384 is called four
+/**
+ * Evaluates one step of the spline camera path. BattleCamera_PlacePathPointAroundParticipant is called four
  * times to turn the keyframes arg4[arg5 + 0..3] into points relative to the
  * participant and camera (stored in a local array of four vectors); arg2 then
  * receives the weighted sum of those four points using the four weights in
@@ -570,44 +570,44 @@ void func_82135384(ActivePokemon*, CameraNode*, Vec3f*, Vec3f*, s32, s32);
  * the Stadium 1 Battle_ComputeSplineWeights variants). Finally the scene's path
  * parameter (+0x04, f32) advances by 1 / (s8 at +0x00).
  *
- * func_82135CD8 has an identical body (it is the same step with a different
+ * BattleCamera_BlendDemoPathPoints has an identical body (it is the same step with a different
  * caller).
+ * @unverified Name guessed from the code.
  */
-void func_8213558C(ActivePokemon* arg0, CameraNode* arg1, Vec3f* arg2, f32* arg3, Vec3f* arg4, s32 arg5) {
+void BattleCamera_BlendPathPoints(ActivePokemon* active_pokemon, CameraNode* camera, Vec3f* out, f32* weights, Vec3f* points, s32 base_index) {
     Vec3f sp28[4];
 
-    func_82135384(arg0, arg1, arg4, sp28, arg5, 0);
-    func_82135384(arg0, arg1, arg4, sp28, arg5, 1);
-    func_82135384(arg0, arg1, arg4, sp28, arg5, 2);
-    func_82135384(arg0, arg1, arg4, sp28, arg5, 3);
-    arg2->x = (((arg3[0] * sp28[0].x) + (arg3[1] * sp28[1].x)) + (arg3[2] * sp28[2].x)) + (arg3[3] * sp28[3].x);
-    arg2->y = (((arg3[0] * sp28[0].y) + (arg3[1] * sp28[1].y)) + (arg3[2] * sp28[2].y)) + (arg3[3] * sp28[3].y);
-    arg2->z = (((arg3[0] * sp28[0].z) + (arg3[1] * sp28[1].z)) + (arg3[2] * sp28[2].z)) + (arg3[3] * sp28[3].z);
+    BattleCamera_PlacePathPointAroundParticipant(active_pokemon, camera, points, sp28, base_index, 0);
+    BattleCamera_PlacePathPointAroundParticipant(active_pokemon, camera, points, sp28, base_index, 1);
+    BattleCamera_PlacePathPointAroundParticipant(active_pokemon, camera, points, sp28, base_index, 2);
+    BattleCamera_PlacePathPointAroundParticipant(active_pokemon, camera, points, sp28, base_index, 3);
+    out->x = (((weights[0] * sp28[0].x) + (weights[1] * sp28[1].x)) + (weights[2] * sp28[2].x)) + (weights[3] * sp28[3].x);
+    out->y = (((weights[0] * sp28[0].y) + (weights[1] * sp28[1].y)) + (weights[2] * sp28[2].y)) + (weights[3] * sp28[3].y);
+    out->z = (((weights[0] * sp28[0].z) + (weights[1] * sp28[1].z)) + (weights[2] * sp28[2].z)) + (weights[3] * sp28[3].z);
     sBattleScene.scene->splineT += 1.0f / (f32)sBattleScene.scene->splineSegmentFrames;
 }
 
-/*
- * func_82135734
- *
+/**
  * Advances the spline camera path by one frame. Unless the participant is an
- * Onix (95) or object type 0x52, it first runs func_82135458 to ease the camera
+ * Onix (95) or object type 0x52, it first runs BattleCamera_EaseTargetFromSavedEye to ease the camera
  * target. The scene holds the current segment (s8 at +0x01), the parameter t
  * (f32 at +0x04) and the keyframe count (s8 at +0x08). Returns 1 without doing
  * anything else once segment + 3 reaches the keyframe count. Otherwise it picks
  * the weight formula for the segment (VariantB for segment 1, VariantC for
  * segment 2, VariantA for segment 3 and up), blends the keyframes in
- * D_FLT_8219A5B0 into the camera's eye position with func_8213558C, raises the
+ * D_FLT_8219A5B0 into the camera's eye position with BattleCamera_BlendPathPoints, raises the
  * eye Y to at least 15, and moves to the next segment (resetting t) once t has
  * reached 1. Returns 0.
+ * @unverified Name guessed from the code.
  */
-s32 func_82135734(CameraNode* arg0, ActivePokemon* arg1) {
+s32 BattleCamera_StepPath(CameraNode* camera, ActivePokemon* active_pokemon) {
     f32 sp28[4];
     s16 temp_v0;
     s8 var_v1;
 
-    temp_v0 = arg1->displayObject.objectType;
+    temp_v0 = active_pokemon->displayObject.objectType;
     if ((temp_v0 != 0x5F) && (temp_v0 != 0x52)) {
-        func_82135458(arg1, arg0);
+        BattleCamera_EaseTargetFromSavedEye(active_pokemon, camera);
     }
     var_v1 = D_8219A5A0->splineSegment;
     if (D_8219A5A0->splineKeyframeCount < (var_v1 + 3)) {
@@ -625,9 +625,9 @@ s32 func_82135734(CameraNode* arg0, ActivePokemon* arg1) {
         Battle_ComputeSplineWeightsVariantA(sp28, D_8219A5A0->splineT);
         var_v1 = D_8219A5A0->splineSegment;
     }
-    func_8213558C(arg1, arg0, &arg0->view.eyePosition, sp28, (Vec3f*)&D_FLT_8219A5B0, var_v1 - 1);
-    if (arg0->view.eyePosition.y < 15.0f) {
-        arg0->view.eyePosition.y = 15.0f;
+    BattleCamera_BlendPathPoints(active_pokemon, camera, &camera->view.eyePosition, sp28, (Vec3f*)&D_FLT_8219A5B0, var_v1 - 1);
+    if (camera->view.eyePosition.y < 15.0f) {
+        camera->view.eyePosition.y = 15.0f;
     }
     if ((f64)D_8219A5A0->splineT >= 1.0) {
         D_8219A5A0->splineSegment = (s8)(D_8219A5A0->splineSegment + 1);
@@ -636,22 +636,21 @@ s32 func_82135734(CameraNode* arg0, ActivePokemon* arg1) {
     return 0;
 }
 
-/*
- * func_82135894
- *
+/**
  * Advances the spline camera path by one frame (the variant used when the
- * target easing runs after the end-of-path test, paired with func_82135734).
+ * target easing runs after the end-of-path test, paired with BattleCamera_StepPath).
  * The scene holds the current segment (s8 at +0x01), the parameter t (f32 at
  * +0x04) and the keyframe count (s8 at +0x08). Returns 1 immediately once
  * segment + 3 reaches the keyframe count. Otherwise, unless the participant is
- * an Onix (95) or object type 0x52, it runs func_82135458 to ease the camera
+ * an Onix (95) or object type 0x52, it runs BattleCamera_EaseTargetFromSavedEye to ease the camera
  * target. It then picks the weight formula for the segment (VariantB for
  * segment 1, VariantC for segment 2, VariantA for segment 3 and up), blends
  * the keyframes in D_FLT_8219A5B0 into the camera's eye position with
- * func_8213558C, raises the eye Y to at least 15, and moves to the next
+ * BattleCamera_BlendPathPoints, raises the eye Y to at least 15, and moves to the next
  * segment (resetting t) once t has reached 1. Returns 0.
+ * @unverified Name guessed from the code.
  */
-s32 func_82135894(CameraNode* arg0, ActivePokemon* arg1) {
+s32 BattleCamera_StepPathLateEase(CameraNode* camera, ActivePokemon* active_pokemon) {
     f32 sp30[4];
     UNUSED s32 pad[2]; // FAKE: stack padding
     s16 temp_a0;
@@ -661,9 +660,9 @@ s32 func_82135894(CameraNode* arg0, ActivePokemon* arg1) {
     if ((var_v1 + 3) >= D_8219A5A0->splineKeyframeCount) {
         return 1;
     }
-    temp_a0 = arg1->displayObject.objectType;
+    temp_a0 = active_pokemon->displayObject.objectType;
     if ((temp_a0 != 0x5F) && (temp_a0 != 0x52)) {
-        func_82135458(arg1, arg0);
+        BattleCamera_EaseTargetFromSavedEye(active_pokemon, camera);
         var_v1 = D_8219A5A0->splineSegment;
     }
     if (var_v1 == 1) {
@@ -678,9 +677,9 @@ s32 func_82135894(CameraNode* arg0, ActivePokemon* arg1) {
         Battle_ComputeSplineWeightsVariantA(sp30, D_8219A5A0->splineT);
         var_v1 = D_8219A5A0->splineSegment;
     }
-    func_8213558C(arg1, arg0, &arg0->view.eyePosition, sp30, (Vec3f*)&D_FLT_8219A5B0, var_v1 - 1);
-    if (arg0->view.eyePosition.y < 15.0f) {
-        arg0->view.eyePosition.y = 15.0f;
+    BattleCamera_BlendPathPoints(active_pokemon, camera, &camera->view.eyePosition, sp30, (Vec3f*)&D_FLT_8219A5B0, var_v1 - 1);
+    if (camera->view.eyePosition.y < 15.0f) {
+        camera->view.eyePosition.y = 15.0f;
     }
     if ((f64)D_8219A5A0->splineT >= 1.0) {
         D_8219A5A0->splineSegment = (s8)(D_8219A5A0->splineSegment + 1);
@@ -696,8 +695,9 @@ extern s8 D_FLT_8219A5B0;
 /**
  * Copies the 0x168-byte camera path table at D_8218A2D4 (30 points) from ROM into
  * D_FLT_8219A5B0.
+ * @unverified Name guessed from the code.
  */
-void func_82135A04(s32 arg0) {
+void BattleCamera_LoadDemoPathPoints(s32 unused) {
     s8 *temp_a1;
 
     temp_a1 = (D_8218A2D4 & 0xFFFFFF) + &D_00434C00;
@@ -712,10 +712,11 @@ void func_8212254C(s32, s32, Vec3f, s32, s32, f32, f32);
 extern f32 D_FLT_8219A718;
 
 /**
- * Same as func_821351F8 but uses path D_8219A4F4 and loads the points from the ROM table
- * (func_82135A04).
+ * Same as BattleCamera_StartSpeciesPath but uses path D_8219A4F4 and loads the points from the ROM table
+ * (BattleCamera_LoadDemoPathPoints).
+ * @unverified Name guessed from the code.
  */
-void func_82135A54(CameraNode* arg0, ActivePokemon* arg1) {
+void BattleCamera_StartDemoPath(CameraNode* camera, ActivePokemon* active_pokemon) {
     s32 count;
     Vec3f* p;
     s16* sp3Cp;
@@ -728,40 +729,39 @@ void func_82135A54(CameraNode* arg0, ActivePokemon* arg1) {
     D_8219A5A0->splineT = 0.0f;
     D_8219A5A0->splineKeyframeCount = 0;
     count = 0;
-    func_82135A04((s32)arg1);
+    BattleCamera_LoadDemoPathPoints((s32)active_pokemon);
     p = (Vec3f*)&D_FLT_8219A5B0;
 loop:
     if (p->x != 1000.0f) {
         count++;
         p++;
-        p[-1].y = M2C_FIELD(arg1, f32*, 0x28) + p[-1].y;
+        p[-1].y = M2C_FIELD(active_pokemon, f32*, 0x28) + p[-1].y;
         goto loop;
     }
     D_8219A5A0->splineKeyframeCount = count;
-    BattleScene_GetParticipantAimPoint(arg1, &D_FLT_8219A718);
-    func_8212254C((s32)arg1, (s32)arg0, *(Vec3f*)&D_FLT_8219A718, 0, 0, 0.0f, (f32)0.0);
-    D_FLT_8219A718 *= arg1->facingDirection;
+    BattleScene_GetParticipantAimPoint(active_pokemon, &D_FLT_8219A718);
+    func_8212254C((s32)active_pokemon, (s32)camera, *(Vec3f*)&D_FLT_8219A718, 0, 0, 0.0f, (f32)0.0);
+    D_FLT_8219A718 *= active_pokemon->facingDirection;
     func_8210BCF0(&D_FLT_8219A718, (Vec3f*)&D_FLT_8219A5B0, &sp40, &sp3E, &sp3C);
-    func_8000EEBC((u8*)arg0 + 0xB4, (Vec3f*)((u8*)arg0 + 0xA8), sp40, sp3E, M2C_FIELD(arg1, u32*, 0x60C) * *(sp3Cp = &sp3C));
-    BattleCamera_CaptureModelOrbit(arg1, arg0);
+    func_8000EEBC((u8*)camera + 0xB4, (Vec3f*)((u8*)camera + 0xA8), sp40, sp3E, M2C_FIELD(active_pokemon, u32*, 0x60C) * *(sp3Cp = &sp3C));
+    BattleCamera_CaptureModelOrbit(active_pokemon, camera);
 }
 
 extern f32 D_FLT_82189350[][4];
 extern f32 D_FLT_82196814;
 
-/*
- * func_82135BE4
- *
- * Another variant of the camera-target easing in func_82122A7C (see there).
+/**
+ * Another variant of the camera-target easing in BattleScene_EaseCameraTargetToParticipant (see there).
  * It measures the participant's anchor against the point at +0x5D0, rebuilds
  * the goal from the anchor and the model transform's distance and angles
  * (+0x38 / +0x30 / +0x32 within the transform) and measures the camera target
  * against that goal. Only when that distance is at least the object type's
  * table width (D_FLT_82189350[type][0]) does it ease the camera target towards
  * the goal, by D_FLT_82196814 times the remaining distance.
+ * @unverified Name guessed from the code.
  */
-void func_82135BE4(ActivePokemon* arg0, CameraNode* arg1) {
-    u8* ptr = (u8*)&arg0->modelTransform;
+void BattleCamera_EaseTargetToOrbitIfFar(ActivePokemon* active_pokemon, CameraNode* camera) {
+    u8* ptr = (u8*)&active_pokemon->modelTransform;
     Vec3f sp58;
     Vec3f sp4C;
     UNUSED s32 pad[3]; // FAKE: stack padding
@@ -770,57 +770,55 @@ void func_82135BE4(ActivePokemon* arg0, CameraNode* arg1) {
     s16 sp2E;
     s16 sp2C;
 
-    BattleScene_GetParticipantCameraAnchor(arg0, &sp58);
-    BattleAnim_CalculateDistanceAngles(&sp58, &M2C_FIELD(arg0, Vec3f*, 0x5D0), &sp30, &sp2E, &sp2C);
-    BattleAnim_Vec3fCopy(&sp34, &arg1->view.targetPosition);
+    BattleScene_GetParticipantCameraAnchor(active_pokemon, &sp58);
+    BattleAnim_CalculateDistanceAngles(&sp58, &M2C_FIELD(active_pokemon, Vec3f*, 0x5D0), &sp30, &sp2E, &sp2C);
+    BattleAnim_Vec3fCopy(&sp34, &camera->view.targetPosition);
     Camera_ComputeEyeFromAngles(&sp58, &sp4C, M2C_FIELD(ptr, f32*, 0x38), M2C_FIELD(ptr, s16*, 0x30), M2C_FIELD(ptr, s16*, 0x32));
     BattleAnim_CalculateDistanceAngles(&sp34, &sp4C, &sp30, &sp2E, &sp2C);
-    if (D_FLT_82189350[arg0->displayObject.objectType][0] <= sp30) {
-        Camera_ComputeEyeFromAngles(&sp34, &arg1->view.targetPosition, sp30 * D_FLT_82196814, sp2E, sp2C);
+    if (D_FLT_82189350[active_pokemon->displayObject.objectType][0] <= sp30) {
+        Camera_ComputeEyeFromAngles(&sp34, &camera->view.targetPosition, sp30 * D_FLT_82196814, sp2E, sp2C);
     }
 }
 
-void func_82135384(ActivePokemon*, CameraNode*, Vec3f*, Vec3f*, s32, s32);
+void BattleCamera_PlacePathPointAroundParticipant(ActivePokemon*, CameraNode*, Vec3f*, Vec3f*, s32, s32);
 
-/*
- * func_82135CD8
- *
- * Identical in code to func_8213558C (see there): evaluates one step of the
+/**
+ * Identical in code to BattleCamera_BlendPathPoints (see there): evaluates one step of the
  * spline camera path from four keyframes and advances the scene's path
- * parameter by 1 / (s8 at +0x00). Called by func_82135E80.
+ * parameter by 1 / (s8 at +0x00). Called by BattleCamera_StepDemoPath.
+ * @unverified Name guessed from the code.
  */
-void func_82135CD8(ActivePokemon* arg0, CameraNode* arg1, Vec3f* arg2, f32* arg3, Vec3f* arg4, s32 arg5) {
+void BattleCamera_BlendDemoPathPoints(ActivePokemon* active_pokemon, CameraNode* camera, Vec3f* out, f32* weights, Vec3f* points, s32 base_index) {
     Vec3f sp28[4];
 
-    func_82135384(arg0, arg1, arg4, sp28, arg5, 0);
-    func_82135384(arg0, arg1, arg4, sp28, arg5, 1);
-    func_82135384(arg0, arg1, arg4, sp28, arg5, 2);
-    func_82135384(arg0, arg1, arg4, sp28, arg5, 3);
-    arg2->x = (((arg3[0] * sp28[0].x) + (arg3[1] * sp28[1].x)) + (arg3[2] * sp28[2].x)) + (arg3[3] * sp28[3].x);
-    arg2->y = (((arg3[0] * sp28[0].y) + (arg3[1] * sp28[1].y)) + (arg3[2] * sp28[2].y)) + (arg3[3] * sp28[3].y);
-    arg2->z = (((arg3[0] * sp28[0].z) + (arg3[1] * sp28[1].z)) + (arg3[2] * sp28[2].z)) + (arg3[3] * sp28[3].z);
+    BattleCamera_PlacePathPointAroundParticipant(active_pokemon, camera, points, sp28, base_index, 0);
+    BattleCamera_PlacePathPointAroundParticipant(active_pokemon, camera, points, sp28, base_index, 1);
+    BattleCamera_PlacePathPointAroundParticipant(active_pokemon, camera, points, sp28, base_index, 2);
+    BattleCamera_PlacePathPointAroundParticipant(active_pokemon, camera, points, sp28, base_index, 3);
+    out->x = (((weights[0] * sp28[0].x) + (weights[1] * sp28[1].x)) + (weights[2] * sp28[2].x)) + (weights[3] * sp28[3].x);
+    out->y = (((weights[0] * sp28[0].y) + (weights[1] * sp28[1].y)) + (weights[2] * sp28[2].y)) + (weights[3] * sp28[3].y);
+    out->z = (((weights[0] * sp28[0].z) + (weights[1] * sp28[1].z)) + (weights[2] * sp28[2].z)) + (weights[3] * sp28[3].z);
     sBattleScene.scene->splineT += 1.0f / (f32)sBattleScene.scene->splineSegmentFrames;
 }
 
-/*
- * func_82135E80
- *
- * Advances the spline camera path by one frame using the func_82135BE4 /
- * func_82135CD8 pair (the counterpart of func_82135734). It always eases the
- * camera target with func_82135BE4 first. The scene holds the current segment
+/**
+ * Advances the spline camera path by one frame using the BattleCamera_EaseTargetToOrbitIfFar /
+ * BattleCamera_BlendDemoPathPoints pair (the counterpart of BattleCamera_StepPath). It always eases the
+ * camera target with BattleCamera_EaseTargetToOrbitIfFar first. The scene holds the current segment
  * (s8 at +0x01), the parameter t (f32 at +0x04) and the keyframe count (s8 at
  * +0x08). Returns 1 without doing anything else once segment + 3 reaches the
  * keyframe count. Otherwise it picks the weight formula for the segment
  * (VariantB for segment 1, VariantC for segment 2, VariantA for segment 3 and
  * up), blends the keyframes in D_FLT_8219A5B0 into the camera's eye position
- * with func_82135CD8, raises the eye Y to at least 15, and moves to the next
+ * with BattleCamera_BlendDemoPathPoints, raises the eye Y to at least 15, and moves to the next
  * segment (resetting t) once t has reached 1. Returns 0.
+ * @unverified Name guessed from the code.
  */
-s32 func_82135E80(CameraNode* arg0, ActivePokemon* arg1) {
+s32 BattleCamera_StepDemoPath(CameraNode* camera, ActivePokemon* active_pokemon) {
     f32 sp30[4];
     s8 var_v1;
 
-    func_82135BE4(arg1, arg0);
+    BattleCamera_EaseTargetToOrbitIfFar(active_pokemon, camera);
     var_v1 = D_8219A5A0->splineSegment;
     if (D_8219A5A0->splineKeyframeCount < (var_v1 + 3)) {
         return 1;
@@ -837,9 +835,9 @@ s32 func_82135E80(CameraNode* arg0, ActivePokemon* arg1) {
         Battle_ComputeSplineWeightsVariantA(sp30, D_8219A5A0->splineT);
         var_v1 = D_8219A5A0->splineSegment;
     }
-    func_82135CD8(arg1, arg0, &arg0->view.eyePosition, sp30, (Vec3f*)&D_FLT_8219A5B0, var_v1 - 1);
-    if (arg0->view.eyePosition.y < 15.0f) {
-        arg0->view.eyePosition.y = 15.0f;
+    BattleCamera_BlendDemoPathPoints(active_pokemon, camera, &camera->view.eyePosition, sp30, (Vec3f*)&D_FLT_8219A5B0, var_v1 - 1);
+    if (camera->view.eyePosition.y < 15.0f) {
+        camera->view.eyePosition.y = 15.0f;
     }
     if ((f64)D_8219A5A0->splineT >= 1.0) {
         D_8219A5A0->splineSegment = (s8)(D_8219A5A0->splineSegment + 1);
@@ -854,7 +852,12 @@ M2C_UNK func_8213A68C();                            /* extern */
 M2C_UNK func_8213AE68();                            /* extern */
 M2C_UNK func_8216D970();                            /* extern */
 
-void func_82135FD0(s32 arg0) {
+/**
+ * Runs the per-frame updates of the battle effect systems: queued effects, effect slots and the
+ * particle passes.
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_UpdateEffectSystems(s32 unused) {
     func_82136E48();
     func_82136338();
     func_8213AE68();
@@ -864,14 +867,16 @@ void func_82135FD0(s32 arg0) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82136010(void) {
+void ParticipantModels_UnusedNopC(void) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82136018(void) {
+void ParticipantModels_UnusedNopD(void) {
 }
 
 /**
@@ -917,7 +922,7 @@ void BattleAnim_RegisterEffectSlot(func_D_84390300 arg0, func_D_84390320 arg1) {
 }
 
 
-void func_82136430(u8);
+void BattleAnim_SetCurrentEffectListKind(u8);
 
 extern u8* D_8218F154[];
 extern u8* D_8218F198[];
@@ -938,7 +943,7 @@ void func_8213608C(s16 arg0);
 void BattleAnim_RunEffectList(s32 arg0, s32 arg1, s32 arg2) {
     u8* sp2C;
 
-    func_82136430(arg1);
+    BattleAnim_SetCurrentEffectListKind(arg1);
 
     if (arg2 == 1) {
         switch (arg1) {
@@ -1032,7 +1037,12 @@ void BattleAnim_SetQueuedEffectList(u8 effect_list_index) {
 }
 
 extern s8 D_8219A808;
-void func_82136430(u8 arg0)
+/**
+ * Stores the kind of effect list that BattleAnim_RunEffectList is about to run (0-1 move scripts, 3
+ * and up other lists).
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_SetCurrentEffectListKind(u8 list_kind)
 {
-  D_8219A808 = arg0;
+  D_8219A808 = list_kind;
 }

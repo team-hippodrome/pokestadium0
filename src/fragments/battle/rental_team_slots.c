@@ -11,12 +11,12 @@ void func_8212187C(s32);
 void BattleCamera_CaptureModelOrbit(ActivePokemon*, CameraNode*);
 extern f32 D_FLT_82196040;
 void BattleCamera_CaptureModelOrbit(ActivePokemon*, CameraNode*);
-void func_8212054C(CameraNode*);
+void BattleScene_BRollShotFrontClose(CameraNode*);
 extern const f64 D_DBL_821960A0;
 extern f32 D_FLT_82189358[][4];
 void BattleScene_SelectNextBRollCameraShot(CameraNode*);
 void BattleScene_SelectNextBRollCameraShot(CameraNode*);
-void func_82122FD8(CameraNode*, ActivePokemon*);
+void BattleScene_EaseCameraTargetFromSavedEye(CameraNode*, ActivePokemon*);
 s32 func_821217DC(M2C_UNK);
 extern f32 D_FLT_82189358[][4];
 void BattleScene_SelectNextBRollCameraShot(CameraNode*);
@@ -24,7 +24,7 @@ void BattleScene_SelectNextBRollCameraShot(CameraNode*);
 s32 func_821217DC(M2C_UNK);
 void func_82122628(s32, Vec3f, s32, s32, f32, f32);
 extern f32 D_FLT_821960A8;
-void func_82122A7C(CameraNode*, ActivePokemon*);
+void BattleScene_EaseCameraTargetToParticipant(CameraNode*, ActivePokemon*);
 void func_8212188C(void);
 extern u8* D_800603C0;
 
@@ -45,43 +45,43 @@ void Rental_TeamSlotsUpdate(CameraNode* arg0) {
             func_82120A90(arg0);
             break;
         case 5:
-            func_82120AC8(arg0);
+            BattleScene_BRollTiltUpToHead(arg0);
             break;
         case 7:
-            func_82120BB8(arg0);
+            BattleScene_BRollHoldFollow60Frames(arg0);
             break;
         case 9:
-            func_82120BB8(arg0);
+            BattleScene_BRollHoldFollow60Frames(arg0);
             break;
         case 11:
-            func_82120C44(arg0);
+            BattleScene_BRollTiltUpHigh(arg0);
             break;
         case 13:
-            func_82120D94(arg0);
+            BattleScene_BRollHoldOrbit(arg0);
             break;
         case 15:
-            func_82120D94(arg0);
+            BattleScene_BRollHoldOrbit(arg0);
             break;
         case 17:
-            func_82120E70(arg0);
+            BattleScene_BRollPitchUpRestoreFov(arg0);
             break;
         case 19:
-            func_82120E70(arg0);
+            BattleScene_BRollPitchUpRestoreFov(arg0);
             break;
         case 21:
-            func_82120FB0(arg0);
+            BattleScene_BRollDollyIn(arg0);
             break;
         case 23:
             BattleScene_BRollCameraUpdatePresetHold(arg0);
             break;
         case 25:
-            func_8212116C(arg0);
+            BattleScene_BRollStepOrbitUntilEnd(arg0);
             break;
         case 27:
-            func_821211D4((s32)arg0);
+            BattleScene_BRollWait440Frames((s32)arg0);
             break;
         case 29:
-            func_8212120C(arg0);
+            BattleScene_BRollWaitForButtonToExit(arg0);
             break;
         case 50:
             func_82121434(arg0);

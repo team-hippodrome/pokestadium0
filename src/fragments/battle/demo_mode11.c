@@ -95,7 +95,7 @@ s32 func_8003F6AC(s32);
 void func_800199F8(s8*, s32);
 void func_80010F9C(s8*, s32);
 s32 func_82107A5C(s8*);
-void func_82135A54(CameraNode*, s8*);
+void BattleCamera_StartDemoPath(CameraNode*, s8*);
 extern PokemonBattleCues* D_82189180[];
 extern s16 D_8219A50C;
 extern u8 D_8219A4F4;
@@ -148,7 +148,7 @@ void func_82133028(CameraNode* arg0) {
             func_8003F6AC(0x17);
             func_80010F9C(D_8219A590, sp38[D_8219A50C]);
             D_8219A4F4 = 0xA;
-            func_82135A54(arg0, D_8219A590);
+            BattleCamera_StartDemoPath(arg0, D_8219A590);
             break;
     }
     D_8219A594 = 0;
@@ -163,7 +163,7 @@ void func_82133318(CameraNode* arg0) {
     sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
 }
 
-M2C_UNK func_82135E80(CameraNode*, s8*);
+M2C_UNK BattleCamera_StepDemoPath(CameraNode*, s8*);
 extern s16 D_8219A50C;
 M2C_UNK func_80019B28(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32);
 s32 func_821217DC(M2C_UNK);
@@ -190,7 +190,7 @@ void func_8213334C(CameraNode* arg0) {
             }
             break;
         case 5:
-            func_82135E80(arg0, D_8219A590);
+            BattleCamera_StepDemoPath(arg0, D_8219A590);
             if (sBattleScene.scene->splineSegment == 4) {
                 func_800414B0(0, 0x38, 9, 0);
                 D_8219A4F4 = 1;
@@ -207,7 +207,7 @@ void func_8213334C(CameraNode* arg0) {
  * Entry 3 of the 7-way dispatch in func_821336EC (see its comment).  Its
  * argument is typed CameraNode* in this file.  Sets D_8219A594 (a byte) to
  * 0xFF, then:
- *   - if D_8219A50C == 5: calls func_82135E80(arg0, D_8219A590); if the
+ *   - if D_8219A50C == 5: calls BattleCamera_StepDemoPath(arg0, D_8219A590); if the
  *     upper halfword of the word at offset 0x48 of the object
  *     D_8219A590 points to is 0x26, calls Audio_PlayMoveSound(0x38, 9, 0); and if
  *     func_821217DC(0x37) returns non-zero, sets sBattleScene.scene->winner
@@ -216,7 +216,7 @@ void func_8213334C(CameraNode* arg0) {
  *     sBattleScene.scene->phaseStep to 6;
  *   - otherwise adds 1 to sBattleScene.scene->phaseStep.
  *
- * The second argument of func_82135E80 is D_8219A590; the first is
+ * The second argument of BattleCamera_StepDemoPath is D_8219A590; the first is
  * `arg0` passed straight through (the retail code loads it into $a1 and
  * leaves $a0 untouched).  What these values mean is not established.
  */
@@ -225,7 +225,7 @@ M2C_UNK func_80006998(M2C_UNK);
 M2C_UNK Audio_PlayMoveSound(M2C_UNK, M2C_UNK, M2C_UNK);
 M2C_UNK Audio_FadeAndClearStoredSounds();
 s32 func_821217DC(M2C_UNK);
-M2C_UNK func_82135E80(CameraNode*, s8*);
+M2C_UNK BattleCamera_StepDemoPath(CameraNode*, s8*);
 extern s16 D_8219A50C;
 extern u8 D_8219A594;
 
@@ -237,7 +237,7 @@ extern u8 D_8219A594;
 void func_8213346C(CameraNode* arg0) {
     D_8219A594 = 0xFF;
     if (D_8219A50C == 5) {
-        func_82135E80(arg0, D_8219A590);
+        BattleCamera_StepDemoPath(arg0, D_8219A590);
         if (((s32) M2C_FIELD(D_8219A590, s32 *, 0x48) >> 0x10) == 0x26) {
             Audio_PlayMoveSound(0x38, 9, 0);
         }

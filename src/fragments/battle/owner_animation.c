@@ -2,8 +2,8 @@
 #include "battle.h"
 
 // Declared here instead of in a header: the callers of these disagree on their types.
-void func_821020FC(ActivePokemon*);
-void func_8210211C(ActivePokemon* active_pokemon);
+void BattleAnim_SwapToSubstituteModel(ActivePokemon*);
+void BattleAnim_RestoreDisplayModel(ActivePokemon* active_pokemon);
 
 /**
  * Resets the scene's model-reload step to 0.
@@ -33,7 +33,7 @@ s32 func_82124A50(ActivePokemon* arg0) {
 
     switch (sBattleScene.scene->modelReloadStep) {
         case 0:
-            func_8210211C(arg0);
+            BattleAnim_RestoreDisplayModel(arg0);
             sp1C = 1;
             sBattleScene.scene->modelReloadStep++;
             break;
@@ -70,7 +70,7 @@ s32 BattleScene_AdvanceOwnerAnimation98(ActivePokemon* arg0) {
 
     switch (sBattleScene.scene->modelReloadStep) {
         case 0:
-            func_821020FC(arg0);
+            BattleAnim_SwapToSubstituteModel(arg0);
             sp1C = 1;
             sBattleScene.scene->modelReloadStep++;
             break;
@@ -103,7 +103,7 @@ s32 func_82124BF8(ActivePokemon* arg0) {
 
     switch (sBattleScene.scene->modelReloadStep) {
         case 0:
-            func_8210211C(arg0);
+            BattleAnim_RestoreDisplayModel(arg0);
             sp1C = 1;
             sBattleScene.scene->modelReloadStep++;
             break;
@@ -149,7 +149,7 @@ s32 BattleScene_AdvanceBothOwnerAnimations(void) {
     switch (sBattleScene.scene->modelReloadStep) {
         case 0:
             if (temp_a1->flags & 0x2000) {
-                func_821020FC(sActivePokemon[0]);
+                BattleAnim_SwapToSubstituteModel(sActivePokemon[0]);
             }
             sp1C = 1;
             sBattleScene.scene->modelReloadStep = sBattleScene.scene->modelReloadStep + 1;
@@ -170,7 +170,7 @@ s32 BattleScene_AdvanceBothOwnerAnimations(void) {
 
         case 2:
             if (temp_a2->flags & 0x2000) {
-                func_821020FC(sActivePokemon[1]);
+                BattleAnim_SwapToSubstituteModel(sActivePokemon[1]);
             }
             sp1C = 1;
             sBattleScene.scene->modelReloadStep = sBattleScene.scene->modelReloadStep + 1;

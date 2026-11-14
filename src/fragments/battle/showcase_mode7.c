@@ -73,14 +73,14 @@ void func_82132AC4(s32 arg0) {
 /*
  * func_82132B04
  *
- * Clears the byte at D_8219A4F1, calls func_821351F8(arg0, D_8219A580) and
+ * Clears the byte at D_8219A4F1, calls BattleCamera_StartSpeciesPath(arg0, D_8219A580) and
  * func_82104C68(D_8219A580, 1), then adds 1 to
  * sBattleScene.scene->phaseStep, which is advanced by neighboring
  * functions in this file in the same way (see func_82132AC4), so it
  * is a step counter.
  */
 extern s8 D_8219A4F1;
-void func_821351F8(CameraNode* arg0, s8* arg1);
+void BattleCamera_StartSpeciesPath(CameraNode* arg0, s8* arg1);
 void func_82104C68(s8* arg0, s32 arg1);
 
 /**
@@ -88,7 +88,7 @@ void func_82104C68(s8* arg0, s32 arg1);
  */
 void func_82132B04(CameraNode* arg0) {
     D_8219A4F1 = 0;
-    func_821351F8(arg0, D_8219A580);
+    BattleCamera_StartSpeciesPath(arg0, D_8219A580);
     func_82104C68(D_8219A580, 1);
     sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
 }
@@ -96,19 +96,19 @@ void func_82132B04(CameraNode* arg0) {
 /*
  * func_82132B54
  *
- * Calls func_82135894(arg0, D_8219A580).  If that returns non-zero, adds 1
+ * Calls BattleCamera_StepPathLateEase(arg0, D_8219A580).  If that returns non-zero, adds 1
  * to sBattleScene.scene->phaseStep.
  * func_82132AC4, just above, is the same pattern with func_82101FD4 and a
  * single argument.  What the counter at +0x20 counts is not established
  * from the code alone.
  */
-s32 func_82135894(CameraNode* arg0, s8* arg1);
+s32 BattleCamera_StepPathLateEase(CameraNode* arg0, s8* arg1);
 
 /**
  * Advances the phase step once the camera path on the featured Pokemon finishes.
  */
 void func_82132B54(CameraNode* arg0) {
-    if (func_82135894(arg0, D_8219A580) != 0) {
+    if (BattleCamera_StepPathLateEase(arg0, D_8219A580) != 0) {
         sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
     }
 }

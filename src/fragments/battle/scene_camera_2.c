@@ -5,10 +5,10 @@
 // Declared here instead of in a header: the callers of these disagree on their types.
 void func_8210C1A8(f32*, f32, f32);
 void func_8212254C(s32, s32, Vec3f, s32, s32, f32, f32);
-void func_82123D4C(CameraNode* arg0, ActivePokemon* arg1);
+void BattleScene_FrameParticipantFront(CameraNode* arg0, ActivePokemon* arg1);
 
 /**
- * Steps an impact framing started by func_82124284: eases the zoom toward 0 (speed
+ * Steps an impact framing started by BattleScene_FrameParticipantImpact: eases the zoom toward 0 (speed
  * ramping up to 2.8) and keeps the eye 5 times the Pokemon's size (at least 400) away
  * offset by arg2, at least 15 high.
  */
@@ -89,10 +89,10 @@ void BattleScene_CameraShotTargetCloseThunk(CameraNode* arg0, ActivePokemon* arg
 }
 
 /**
- * Forwards both arguments to func_82123D4C.
+ * Forwards both arguments to BattleScene_FrameParticipantFront.
  */
 void func_821247D0(CameraNode* arg0, ActivePokemon* arg1) {
-    func_82123D4C(arg0, arg1);
+    BattleScene_FrameParticipantFront(arg0, arg1);
 }
 
 /**
@@ -106,10 +106,10 @@ void BattleScene_CameraShotTargetHighThunk(CameraNode* arg0, ActivePokemon* arg1
 }
 
 /**
- * Forwards both arguments to func_82123F44.
+ * Forwards both arguments to BattleScene_FrameParticipantFromAbove.
  */
 void func_82124810(CameraNode* arg0, ActivePokemon* arg1) {
-    func_82123F44(arg0, arg1);
+    BattleScene_FrameParticipantFromAbove(arg0, arg1);
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
@@ -118,7 +118,7 @@ void func_82124830(s8 *arg0, ActivePokemon* arg1)
   if (arg0)
   {
   }
-  func_82124054((CameraNode*)arg0, arg1);
+  BattleScene_FrameParticipantFromBelow((CameraNode*)arg0, arg1);
   if ((*((f32 *) (((s8 *) arg0) + 0xB8))) <= 20.0f)
   {
     *((f32 *) (((s8 *) arg0) + 0xB8)) = 20.0f;

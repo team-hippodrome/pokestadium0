@@ -1022,7 +1022,7 @@ void BattleAnim_DrawEffectCallbacks(UNUSED CameraNode* arg0) {
     }
 }
 
-M2C_UNK func_82135FD0(s32);                         /* extern */
+M2C_UNK BattleAnim_UpdateEffectSystems(s32);                         /* extern */
 M2C_UNK func_82137000(s32);                         /* extern */
 M2C_UNK func_82137160();                            /* extern */
 M2C_UNK func_8216D720(s32);                         /* extern */
@@ -1042,7 +1042,7 @@ s32 func_821370DC(u32 arg0, s32 arg1) {
         break;
     case 2:
         D_8219A878 = arg1;
-        func_82135FD0(arg1);
+        BattleAnim_UpdateEffectSystems(arg1);
         func_82137000(arg1);
         break;
     case 5:

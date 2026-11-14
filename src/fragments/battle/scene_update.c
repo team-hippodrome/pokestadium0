@@ -53,7 +53,7 @@ void BattleScene_AvoidDegenerateCameraLookAt(CameraNode* arg0) {
 void func_82105E6C(void);
 void func_82124A40(void);
 void func_82106374(ActivePokemon*);
-void func_821054A8(ActivePokemon*);
+void BattleAnim_ClearHardenTexture(ActivePokemon*);
 
 /**
  * Runs the default (fade) camera transition step by step.
@@ -100,8 +100,8 @@ void BattleScene_TickCameraSubstateDefault(CameraNode* arg0) {
                 if ((sBattleScene.scene->modeAfterTransition == 1) || (sBattleScene.scene->modeAfterTransition == 5) || (sBattleScene.scene->modeAfterTransition == 9)) {
                     BattleAnim_CleanupEffects(2);
                 }
-                func_821054A8(sActivePokemon[0]);
-                func_821054A8(sActivePokemon[1]);
+                BattleAnim_ClearHardenTexture(sActivePokemon[0]);
+                BattleAnim_ClearHardenTexture(sActivePokemon[1]);
                 sBattleScene.scene->transitionStage = 2;
                 GeoCamera_SetBackgroundTexture(arg0, 0xA, 0x12C, 2, Util_ConvertAddrToVirtAddr((u32)D_1000000));
                 GeoCamera_SetBackground(arg0, 4, 0xA, 0, 0, 0);
@@ -187,8 +187,8 @@ void BattleScene_TickCameraSubstateStripWipe(CameraNode* arg0) {
                 if ((sBattleScene.scene->modeAfterTransition == 1) || (sBattleScene.scene->modeAfterTransition == 5) || (sBattleScene.scene->modeAfterTransition == 9)) {
                     BattleAnim_CleanupEffects(2);
                 }
-                func_821054A8(sActivePokemon[0]);
-                func_821054A8(sActivePokemon[1]);
+                BattleAnim_ClearHardenTexture(sActivePokemon[0]);
+                BattleAnim_ClearHardenTexture(sActivePokemon[1]);
                 sBattleScene.scene->transitionStage = 2;
                 BattleScene_SetStripWipeState(2, 0x1E);
                 BattleScene_UpdateStripWipe();
@@ -227,16 +227,16 @@ void BattleScene_TickCameraSubstate(CameraNode* arg0) {
     }
 }
 
-void func_82121DAC(void);
+void BattleScene_ApplyModeAfterTransition(void);
 void BattleScene_RunOpeningSendOut(CameraNode*);
 void Rental_TeamSlotsUpdate(CameraNode*);
 void func_82132D60(CameraNode*);
 void func_821336EC(CameraNode*);
-void func_82121C3C(CameraNode*);
+void BattleScene_UpdateParticipantsInView(CameraNode*);
 void func_82133B6C(void);
-void func_821065B4(ActivePokemon*);
-void func_82122458(CameraNode*);
-void func_82122374(CameraNode*);
+void BattleScene_UpdateParticipantVisuals(ActivePokemon*);
+void BattleScene_UpdateCameraClipPlanes(CameraNode*);
+void BattleScene_ClampCameraEyeHeight(CameraNode*);
 extern ActivePokemon* sSide1ActivePokemon;
 extern ActivePokemon* sSide2ActivePokemon;
 /**
@@ -247,7 +247,7 @@ extern ActivePokemon* sSide2ActivePokemon;
  */
 void BattleScene_Update(CameraNode* arg0) {
     BattleScene_TickCameraSubstate(arg0);
-    func_82121DAC();
+    BattleScene_ApplyModeAfterTransition();
 
     switch (sBattleScene.scene->mode) {
         case 0:
@@ -289,17 +289,17 @@ void BattleScene_Update(CameraNode* arg0) {
     }
 
     if ((sBattleScene.scene->mode != 4) && (sBattleScene.scene->mode != 8)) {
-        func_82121C3C(arg0);
+        BattleScene_UpdateParticipantsInView(arg0);
     }
     if ((sBattleScene.scene->mode == 9) || (sBattleScene.scene->mode == 10)) {
         func_82133B6C();
     }
     BattleScene_TickStateCallbacks();
-    func_821065B4(sSide1ActivePokemon);
-    func_821065B4(sSide2ActivePokemon);
-    func_82122458(arg0);
+    BattleScene_UpdateParticipantVisuals(sSide1ActivePokemon);
+    BattleScene_UpdateParticipantVisuals(sSide2ActivePokemon);
+    BattleScene_UpdateCameraClipPlanes(arg0);
     BattleScene_ApplyCameraShake(arg0);
-    func_82122374(arg0);
+    BattleScene_ClampCameraEyeHeight(arg0);
     BattleScene_CameraHelperNop(arg0);
     BattleScene_AvoidDegenerateCameraLookAt(arg0);
 }

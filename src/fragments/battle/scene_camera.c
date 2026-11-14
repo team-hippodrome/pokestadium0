@@ -145,14 +145,15 @@ void BattleScene_GetParticipantCameraAnchor(ActivePokemon* arg0, Vec3f* arg1) {
 void func_8210BCF0(Vec3f*, Vec3f*, f32*, s16*, s16*);
 f32 BattleAnim_Vec3fDistance(Vec3f a, Vec3f b);
 f32 BattleScene_GetParticipantModelRadiusScaled(ActivePokemon* active_pokemon);
-/*
+/**
  * Stadium 0 counterpart of Stadium 1's BattleScene_IsOwnerInViewWedgeAlt.
  * Returns 1 when a2 lies inside the wedge in front of the camera eye
  * (half-angle arg3, length arg4). In camera modes 2 and 6 the result is
  * cleared again when the eye is within 1.5x arg0's BattleScene_GetParticipantModelRadiusScaled radius of
  * arg0's anchor point.
+ * @unverified Name guessed from the code.
  */
-u16 func_82121954(ActivePokemon* arg0, CameraNode* arg1, ActivePokemon* a2, s16 arg3, f32 arg4) {
+u16 BattleScene_IsParticipantInViewWedge(ActivePokemon* owner, CameraNode* camera, ActivePokemon* a2, s16 half_angle, f32 length) {
     UNUSED s32 pad[6]; // FAKE: stack padding
     f32 sp94;
     f32 sp90;
@@ -171,13 +172,13 @@ u16 func_82121954(ActivePokemon* arg0, CameraNode* arg1, ActivePokemon* a2, s16 
     f32 radius;
 
     sp5C = 0;
-    func_8210BCF0(&arg1->view.targetPosition, &arg1->view.eyePosition, &sp70, &sp6E, &sp6C);
-    sp60.z = (COSS((sp6C - 0x8000)) * 30.0f) + arg1->view.eyePosition.z;
-    sp60.x = (SINS((sp6C - 0x8000)) * 30.0f) + arg1->view.eyePosition.x;
-    sp7C = (COSS(((sp6C - arg3) + 0x8000)) * arg4) + sp60.z;
-    sp88 = (SINS(((sp6C - arg3) + 0x8000)) * arg4) + sp60.x;
-    sp78 = (COSS((sp6C + arg3 + 0x8000)) * arg4) + sp60.z;
-    sp84 = (SINS((sp6C + arg3 + 0x8000)) * arg4) + sp60.x;
+    func_8210BCF0(&camera->view.targetPosition, &camera->view.eyePosition, &sp70, &sp6E, &sp6C);
+    sp60.z = (COSS((sp6C - 0x8000)) * 30.0f) + camera->view.eyePosition.z;
+    sp60.x = (SINS((sp6C - 0x8000)) * 30.0f) + camera->view.eyePosition.x;
+    sp7C = (COSS(((sp6C - half_angle) + 0x8000)) * length) + sp60.z;
+    sp88 = (SINS(((sp6C - half_angle) + 0x8000)) * length) + sp60.x;
+    sp78 = (COSS((sp6C + half_angle + 0x8000)) * length) + sp60.z;
+    sp84 = (SINS((sp6C + half_angle + 0x8000)) * length) + sp60.x;
 
     arg2 = a2;
 
@@ -193,10 +194,10 @@ u16 func_82121954(ActivePokemon* arg0, CameraNode* arg1, ActivePokemon* a2, s16 
     }
 
     if ((sBattleScene.scene->mode == 2) || (sBattleScene.scene->mode == 6)) {
-        BattleScene_GetParticipantCameraAnchor(arg0, &sp60);
+        BattleScene_GetParticipantCameraAnchor(owner, &sp60);
         sp60.y = a2->displayObject.position.y;
-        radius = BattleScene_GetParticipantModelRadiusScaled(arg0);
-        if (BattleAnim_Vec3fDistance(arg1->view.eyePosition, sp60) <= (radius * 1.5f)) {
+        radius = BattleScene_GetParticipantModelRadiusScaled(owner);
+        if (BattleAnim_Vec3fDistance(camera->view.eyePosition, sp60) <= (radius * 1.5f)) {
             sp5C = 0;
         }
     }
@@ -205,32 +206,31 @@ u16 func_82121954(ActivePokemon* arg0, CameraNode* arg1, ActivePokemon* a2, s16 
 
 extern f32 D_FLT_82196230;
 extern f32 D_FLT_82196234;
-u16 func_82121954(ActivePokemon*, CameraNode*, ActivePokemon*, s16, f32);
-/*
- * func_82121C3C
- *
+u16 BattleScene_IsParticipantInViewWedge(ActivePokemon*, CameraNode*, ActivePokemon*, s16, f32);
+/**
  * Unless the scene's unk_1C is one of 4, 7, 8, 9, 0xA or 0xB, it calls
- * func_82121954 once for each of the two active Pokemon (sActivePokemon[0]
+ * BattleScene_IsParticipantInViewWedge once for each of the two active Pokemon (sActivePokemon[0]
  * and [1]).  Each call gets the Pokemon (twice), arg0, the halfword at offset
  * 0x34 of that Pokemon's state block, and a float (D_FLT_82196230 for the
  * first Pokemon, D_FLT_82196234 for the second).  Bit 0 of the byte at offset 1
  * of the Pokemon is set when the call returns non-zero and cleared when it
- * returns zero.  What func_82121954 tests and what that bit means is not
+ * returns zero.  What BattleScene_IsParticipantInViewWedge tests and what that bit means is not
  * established here.
  * Note: sActivePokemon[0]/[1] are re-read after each call rather than held in
  * locals, which is what the ROM does.
+ * @unverified Name guessed from the code.
  */
-void func_82121C3C(s32 arg0) {
+void BattleScene_UpdateParticipantsInView(s32 camera) {
     ActivePokemonState* first_state = &sActivePokemon[0]->state;
     ActivePokemonState* second_state = &sActivePokemon[1]->state;
     s32 mode = sBattleScene.scene->mode;
     if ((mode != 4) && (mode != 8) && (mode != 7) && (mode != 0xB) && (mode != 9) && (mode != 0xA)) {
-        if (func_82121954(sActivePokemon[0], (CameraNode*)arg0, sActivePokemon[0], M2C_FIELD(first_state, s16*, 0x34), D_FLT_82196230) != 0) {
+        if (BattleScene_IsParticipantInViewWedge(sActivePokemon[0], (CameraNode*)camera, sActivePokemon[0], M2C_FIELD(first_state, s16*, 0x34), D_FLT_82196230) != 0) {
             M2C_FIELD(sActivePokemon[0], u8*, 1) |= 1;
         } else {
             M2C_FIELD(sActivePokemon[0], u8*, 1) &= 0xFFFE;
         }
-        if (func_82121954(sActivePokemon[1], (CameraNode*)arg0, sActivePokemon[1], M2C_FIELD(second_state, s16*, 0x34), D_FLT_82196234) != 0) {
+        if (BattleScene_IsParticipantInViewWedge(sActivePokemon[1], (CameraNode*)camera, sActivePokemon[1], M2C_FIELD(second_state, s16*, 0x34), D_FLT_82196234) != 0) {
             M2C_FIELD(sActivePokemon[1], u8*, 1) |= 1;
         } else {
             M2C_FIELD(sActivePokemon[1], u8*, 1) &= 0xFFFE;
@@ -269,9 +269,7 @@ void BattleScene_SetCameraSubstate(s32 arg0, u16 arg1) {
 }
 
 void func_82121D5C(s32, s32);
-/*
- * func_82121DAC
- *
+/**
  * Only runs when the scene's unk_18 is 2.  It then checks the scene's unk_44
  * against 1, 2, 5, 6, 9 and 0xA in turn (the field is re-read after every
  * call, so a call may change it and a later check can then also succeed) and
@@ -279,8 +277,9 @@ void func_82121D5C(s32, s32);
  * 9, and with 0 for 2, 6 and 0xA.  Before the calls for 2, 6 and 0xA it also
  * copies the scene's unk_2A into unk_2C.  What unk_44 values 1/2, 5/6 and 9/0xA
  * stand for, and what func_82121D5C does with them, is not established here.
+ * @unverified Name guessed from the code.
  */
-void func_82121DAC(void) {
+void BattleScene_ApplyModeAfterTransition(void) {
     if (sBattleScene.scene->transitionStage == 2) {
         if (sBattleScene.scene->modeAfterTransition == 1) {
             func_82121D5C(1, 0x32);
@@ -358,8 +357,9 @@ void BattleScene_ApplyCameraShake(CameraNode* arg0) {
 
 /**
  * Resets scene+0x68 to 30 and scene+0x6C to 0.
+ * @unverified Name guessed from the code.
  */
-void func_82122104(s32 arg0) {
+void BattleScene_ResetCameraShake(s32 camera) {
     sBattleScene.scene->shakeAmplitude = 30.0f;
     sBattleScene.scene->shakeAngle = 0;
 }
@@ -462,10 +462,11 @@ void BattleScene_SetCameraAnglesAndDistance(s16 arg0, s16 arg1, f32 arg2) {
 
 /**
  * Keeps the camera eye at least 15 high (+0xAC).
+ * @unverified Name guessed from the code.
  */
-void func_82122374(s8 *arg0) {
-    if (M2C_FIELD(arg0, f32 *, 0xAC) <= 15.0f) {
-        M2C_FIELD(arg0, f32 *, 0xAC) = 15.0f;
+void BattleScene_ClampCameraEyeHeight(s8 *camera) {
+    if (M2C_FIELD(camera, f32 *, 0xAC) <= 15.0f) {
+        M2C_FIELD(camera, f32 *, 0xAC) = 15.0f;
     }
 }
 
@@ -491,18 +492,19 @@ void func_82121D78(CameraNode*, f32, f32);
 /**
  * Sets the camera clip planes for the scene mode: 20-4000 normally, 20-32000 in modes 4 and
  * 8, and 60-32000 in mode 9 when D_8219A4F4 is 5 (except at phase step 29).
+ * @unverified Name guessed from the code.
  */
-void func_82122458(CameraNode* arg0) {
+void BattleScene_UpdateCameraClipPlanes(CameraNode* camera) {
     s32 var_v0;
 
-    func_82121D78(arg0, 20.0f, 4000.0f);
+    func_82121D78(camera, 20.0f, 4000.0f);
     var_v0 = sBattleScene.scene->mode;
     if ((var_v0 == 4) || (var_v0 == 8)) {
-        func_82121D78(arg0, 20.0f, 32000.0f);
+        func_82121D78(camera, 20.0f, 32000.0f);
         var_v0 = sBattleScene.scene->mode;
     }
     if ((var_v0 == 9) && (D_8219A4F4 == 5) && (sBattleScene.scene->phaseStep != 0x1D)) {
-        func_82121D78(arg0, 60.0f, 32000.0f);
+        func_82121D78(camera, 60.0f, 32000.0f);
     }
 }
 
@@ -591,10 +593,8 @@ void BattleScene_SetCameraEyeAndStoreAnglesFromAt(CameraNode* arg0, s16 arg1, s1
 void BattleScene_CameraHelperNop(UNUSED CameraNode* arg0) {
 }
 
-/*
- * func_821227C0
- *
- * Called at the end of func_821228B0.  Measures distance and angles between
+/**
+ * Called at the end of BattleScene_FollowParticipantOrbit.  Measures distance and angles between
  * the scene's saved eye (+0xB4) and saved target (+0xA8) vectors with
  * BattleAnim_CalculateDistanceAngles.  Only when the last angle output,
  * divided by 182 (0xB6, about one degree in 16-bit angle units), is exactly
@@ -605,8 +605,9 @@ void BattleScene_CameraHelperNop(UNUSED CameraNode* arg0) {
  * target vectors, the eased distance and the two angles to func_8000EEBC.
  * What func_8000EEBC does with them is not established here.
  * Note: the "pad" array only reproduces the retail frame size.
+ * @unverified Name guessed from the code.
  */
-void func_821227C0(CameraNode* arg0, ActivePokemon* arg1) {
+void BattleScene_EaseSideOnCameraDistance(CameraNode* camera, ActivePokemon* active_pokemon) {
     UNUSED s32 pad[9]; // FAKE: stack padding
     f32 sp38;
     s16 sp36;
@@ -616,25 +617,26 @@ void func_821227C0(CameraNode* arg0, ActivePokemon* arg1) {
     s16 sp2C;
     BattleAnim_CalculateDistanceAngles(&sBattleScene.scene->savedCameraEye, &sBattleScene.scene->savedCameraAt, &sp30, &sp2E, &sp2C);
     if (((sp2C / 182) == 0x5A) || ((sp2C / 182) == -0x5A)) {
-        BattleAnim_CalculateDistanceAngles(&M2C_FIELD(arg0, Vec3f*, 0xB4), &M2C_FIELD(arg0, Vec3f*, 0xA8), &sp38, &sp36, &sp34);
-        if (arg1->displayObject.objectType == 0x65) {
+        BattleAnim_CalculateDistanceAngles(&M2C_FIELD(camera, Vec3f*, 0xB4), &M2C_FIELD(camera, Vec3f*, 0xA8), &sp38, &sp36, &sp34);
+        if (active_pokemon->displayObject.objectType == 0x65) {
             BattleAnim_ApproachF(&sp38, sp30 * 1.5f, 1.0f);
         } else {
             BattleAnim_ApproachF(&sp38, sp30, 0.5f);
         }
-        func_8000EEBC((s32)arg0 + 0xB4, (s32)arg0 + 0xA8, sp38, sp36, sp34);
+        func_8000EEBC((s32)camera + 0xB4, (s32)camera + 0xA8, sp38, sp36, sp34);
     }
 }
 
-void func_821227C0(CameraNode*, ActivePokemon*);
+void BattleScene_EaseSideOnCameraDistance(CameraNode*, ActivePokemon*);
 
 /**
  * Follows a Pokemon's camera anchor: moves the camera target 5% of the way toward the eye
  * point given by the model's stored orbit (distance and angles at +0x38/+0x30/+0x32) when
- * it is at least 5 away, then calls func_821227C0.
+ * it is at least 5 away, then calls BattleScene_EaseSideOnCameraDistance.
+ * @unverified Name guessed from the code.
  */
-void func_821228B0(CameraNode* arg0, ActivePokemon* arg1) {
-    SwayState* ptr = &arg1->modelTransform;
+void BattleScene_FollowParticipantOrbit(CameraNode* camera, ActivePokemon* active_pokemon) {
+    SwayState* ptr = &active_pokemon->modelTransform;
     Vec3f sp50;
     Vec3f sp44;
     Vec3f sp38;
@@ -643,16 +645,16 @@ void func_821228B0(CameraNode* arg0, ActivePokemon* arg1) {
     s16 sp30;
     Vec3f* sp28;
 
-    BattleScene_GetParticipantCameraAnchor(arg1, &sp50);
-    BattleAnim_CalculateDistanceAngles(&sp50, &arg1->modelTransform.orbitCenter, &sp34, &sp32, &sp30);
-    sp28 = &arg0->view.targetPosition;
+    BattleScene_GetParticipantCameraAnchor(active_pokemon, &sp50);
+    BattleAnim_CalculateDistanceAngles(&sp50, &active_pokemon->modelTransform.orbitCenter, &sp34, &sp32, &sp30);
+    sp28 = &camera->view.targetPosition;
     BattleAnim_Vec3fCopy(&sp38, sp28);
     Camera_ComputeEyeFromAngles(&sp50, &sp44, ptr->orbitDistance, ptr->orbitRotationX, ptr->orbitRotationY);
     BattleAnim_CalculateDistanceAngles(&sp38, &sp44, &sp34, &sp32, &sp30);
     if (sp34 >= 5.0) {
         Camera_ComputeEyeFromAngles(&sp38, sp28, sp34 * 0.05f, sp32, sp30);
     }
-    func_821227C0(arg0, arg1);
+    BattleScene_EaseSideOnCameraDistance(camera, active_pokemon);
 }
 
 /**
@@ -682,9 +684,7 @@ void BattleScene_ApproachCameraTarget(CameraNode* arg0, ActivePokemon* arg1) {
 extern f32 D_FLT_82189350[][4];
 extern f32 D_FLT_82196240;
 
-/*
- * func_82122A7C
- *
+/**
  * Moves the camera's target point towards the participant. Works out the
  * participant's camera anchor (BattleScene_GetParticipantCameraAnchor) and its distance/angles to the
  * point modelTransform.orbitCenter, then eases camera->view.targetPosition: if that
@@ -693,9 +693,10 @@ extern f32 D_FLT_82196240;
  * angles (orbitDistance, orbitRotationX, orbitRotationY); otherwise the goal is the
  * scene's stored vector at +0xA8. The target then moves along the direction to
  * the goal by D_FLT_82196240 times the remaining distance.
+ * @unverified Name guessed from the code.
  */
-void func_82122A7C(CameraNode* arg0, ActivePokemon* arg1) {
-    SwayState* ptr = &arg1->modelTransform;
+void BattleScene_EaseCameraTargetToParticipant(CameraNode* camera, ActivePokemon* active_pokemon) {
+    SwayState* ptr = &active_pokemon->modelTransform;
     Vec3f sp50;
     Vec3f sp44;
     Vec3f sp38;
@@ -704,11 +705,11 @@ void func_82122A7C(CameraNode* arg0, ActivePokemon* arg1) {
     s16 sp30;
     Vec3f* sp28;
 
-    BattleScene_GetParticipantCameraAnchor(arg1, &sp50);
-    BattleAnim_CalculateDistanceAngles(&sp50, &arg1->modelTransform.orbitCenter, &sp34, &sp32, &sp30);
-    sp28 = &arg0->view.targetPosition;
+    BattleScene_GetParticipantCameraAnchor(active_pokemon, &sp50);
+    BattleAnim_CalculateDistanceAngles(&sp50, &active_pokemon->modelTransform.orbitCenter, &sp34, &sp32, &sp30);
+    sp28 = &camera->view.targetPosition;
     BattleAnim_Vec3fCopy(&sp38, sp28);
-    if (D_FLT_82189350[arg1->displayObject.objectType][0] <= sp34) {
+    if (D_FLT_82189350[active_pokemon->displayObject.objectType][0] <= sp34) {
         Camera_ComputeEyeFromAngles(&sp50, &sp44, ptr->orbitDistance, ptr->orbitRotationX, ptr->orbitRotationY);
         BattleAnim_CalculateDistanceAngles(&sp38, &sp44, &sp34, &sp32, &sp30);
     } else {
@@ -720,17 +721,16 @@ void func_82122A7C(CameraNode* arg0, ActivePokemon* arg1) {
 extern f32 D_FLT_82189350[][4];
 extern f32 D_FLT_82196244;
 
-/*
- * func_82122B9C
- *
- * Variant of func_82122A7C that is skipped while the participant's
+/**
+ * Variant of BattleScene_EaseCameraTargetToParticipant that is skipped while the participant's
  * modelTransformId is 6 or 4 and eases the camera target by
- * D_FLT_82196244 instead of D_FLT_82196240 (see func_82122A7C for the
+ * D_FLT_82196244 instead of D_FLT_82196240 (see BattleScene_EaseCameraTargetToParticipant for the
  * step-by-step description). The meaning of transform ids 4 and 6 has not been
  * established.
+ * @unverified Name guessed from the code.
  */
-void func_82122B9C(CameraNode* arg0, ActivePokemon* arg1) {
-    SwayState* ptr = &arg1->modelTransform;
+void BattleScene_EaseCameraTargetUnlessTransformed(CameraNode* camera, ActivePokemon* active_pokemon) {
+    SwayState* ptr = &active_pokemon->modelTransform;
     Vec3f sp58;
     Vec3f sp4C;
     Vec3f sp40;
@@ -739,12 +739,12 @@ void func_82122B9C(CameraNode* arg0, ActivePokemon* arg1) {
     s16 sp38;
     Vec3f* sp30;
 
-    if ((arg1->modelTransformId != 6) && (arg1->modelTransformId != 4)) {
-        BattleScene_GetParticipantCameraAnchor(arg1, &sp58);
-        BattleAnim_CalculateDistanceAngles(&sp58, &arg1->modelTransform.orbitCenter, &sp3C, &sp3A, &sp38);
-        sp30 = &arg0->view.targetPosition;
+    if ((active_pokemon->modelTransformId != 6) && (active_pokemon->modelTransformId != 4)) {
+        BattleScene_GetParticipantCameraAnchor(active_pokemon, &sp58);
+        BattleAnim_CalculateDistanceAngles(&sp58, &active_pokemon->modelTransform.orbitCenter, &sp3C, &sp3A, &sp38);
+        sp30 = &camera->view.targetPosition;
         BattleAnim_Vec3fCopy(&sp40, sp30);
-        if (D_FLT_82189350[arg1->displayObject.objectType][0] <= sp3C) {
+        if (D_FLT_82189350[active_pokemon->displayObject.objectType][0] <= sp3C) {
             Camera_ComputeEyeFromAngles(&sp58, &sp4C, ptr->orbitDistance, ptr->orbitRotationX, ptr->orbitRotationY);
             BattleAnim_CalculateDistanceAngles(&sp40, &sp4C, &sp3C, &sp3A, &sp38);
         } else {
@@ -758,16 +758,15 @@ extern f32 D_FLT_82189350[][4];
 extern f32 D_FLT_82196248;
 extern f32 D_FLT_8219624C;
 
-/*
- * func_82122CCC
- *
- * Variant of func_82122A7C: the distance threshold is the object type's table
+/**
+ * Variant of BattleScene_EaseCameraTargetToParticipant: the distance threshold is the object type's table
  * width multiplied by D_FLT_82196248 (rather than the bare width), and the
  * camera target is eased by D_FLT_8219624C times the remaining distance. See
- * func_82122A7C for the step-by-step description.
+ * BattleScene_EaseCameraTargetToParticipant for the step-by-step description.
+ * @unverified Name guessed from the code.
  */
-void func_82122CCC(CameraNode* arg0, ActivePokemon* arg1) {
-    SwayState* ptr = &arg1->modelTransform;
+void BattleScene_EaseCameraTargetToParticipantWide(CameraNode* camera, ActivePokemon* active_pokemon) {
+    SwayState* ptr = &active_pokemon->modelTransform;
     Vec3f sp50;
     Vec3f sp44;
     Vec3f sp38;
@@ -776,11 +775,11 @@ void func_82122CCC(CameraNode* arg0, ActivePokemon* arg1) {
     s16 sp30;
     Vec3f* sp28;
 
-    BattleScene_GetParticipantCameraAnchor(arg1, &sp50);
-    BattleAnim_CalculateDistanceAngles(&sp50, &arg1->modelTransform.orbitCenter, &sp34, &sp32, &sp30);
-    sp28 = &arg0->view.targetPosition;
+    BattleScene_GetParticipantCameraAnchor(active_pokemon, &sp50);
+    BattleAnim_CalculateDistanceAngles(&sp50, &active_pokemon->modelTransform.orbitCenter, &sp34, &sp32, &sp30);
+    sp28 = &camera->view.targetPosition;
     BattleAnim_Vec3fCopy(&sp38, sp28);
-    if ((D_FLT_82189350[arg1->displayObject.objectType][0] * D_FLT_82196248) <= sp34) {
+    if ((D_FLT_82189350[active_pokemon->displayObject.objectType][0] * D_FLT_82196248) <= sp34) {
         Camera_ComputeEyeFromAngles(&sp50, &sp44, ptr->orbitDistance, ptr->orbitRotationX, ptr->orbitRotationY);
         BattleAnim_CalculateDistanceAngles(&sp38, &sp44, &sp34, &sp32, &sp30);
     } else {
@@ -789,15 +788,13 @@ void func_82122CCC(CameraNode* arg0, ActivePokemon* arg1) {
     Camera_ComputeEyeFromAngles(&sp38, sp28, sp34 * D_FLT_8219624C, sp32, sp30);
 }
 
-void func_82122CCC(CameraNode* arg0, ActivePokemon* arg1);
+void BattleScene_EaseCameraTargetToParticipantWide(CameraNode* arg0, ActivePokemon* arg1);
 void BattleScene_GetParticipantScreenAimPoint(ActivePokemon* active_pokemon, Vec3f* out);
 
-/*
- * func_82122DFC
- *
+/**
  * Earlier relative of Stadium 1's BattleScene_FrameCamera (that version also
  * handles underground and Fire Spin cases, which this one does not). Unless the
- * participant is an Onix it first runs func_82122CCC. It then saves the camera's
+ * participant is an Onix it first runs BattleScene_EaseCameraTargetToParticipantWide. It then saves the camera's
  * current target and eye, asks BattleScene_GetParticipantScreenAimPoint for the participant's anchor and
  * sets the camera from it using the facing angle and a distance from
  * BattleScene_ScaleCameraDistance(3.5, 300). The new eye distance and angles are
@@ -806,8 +803,9 @@ void BattleScene_GetParticipantScreenAimPoint(ActivePokemon* active_pokemon, Vec
  * rebuilt from those values. The target is also moved one hundredth of the way
  * from its saved position to its new one. Returns 1 once both angles have
  * reached their goals, otherwise 0.
+ * @unverified Name guessed from the code.
  */
-s32 func_82122DFC(CameraNode* arg0, ActivePokemon* arg1) {
+s32 BattleScene_FrameReactingParticipant(CameraNode* camera, ActivePokemon* active_pokemon) {
     Vec3f sp5C;
     Vec3f sp50;
     Vec3f sp44;
@@ -819,22 +817,22 @@ s32 func_82122DFC(CameraNode* arg0, ActivePokemon* arg1) {
     s16 sp36;
     s16 sp34;
 
-    if (arg1->displayObject.objectType != ONIX) {
-        func_82122CCC(arg0, arg1);
+    if (active_pokemon->displayObject.objectType != ONIX) {
+        BattleScene_EaseCameraTargetToParticipantWide(camera, active_pokemon);
     }
-    BattleAnim_Vec3fCopy(&sp50, &arg0->view.targetPosition);
-    BattleAnim_Vec3fCopy(&sp44, &arg0->view.eyePosition);
-    BattleScene_GetParticipantScreenAimPoint(arg1, &sp5C);
-    gCameraDistTarget = BattleScene_ScaleCameraDistance(arg1, 3.5f, 300.0f);
-    BattleScene_SetCameraEyeFromPosition(arg0, sp5C, 0, BattleScene_GetParticipantFacingAngle(arg1), gCameraDistTarget, 0.0f);
-    BattleAnim_CalculateDistanceAngles(&arg0->view.targetPosition, &arg0->view.eyePosition, &D_8219A534, &sp34, &sp38);
+    BattleAnim_Vec3fCopy(&sp50, &camera->view.targetPosition);
+    BattleAnim_Vec3fCopy(&sp44, &camera->view.eyePosition);
+    BattleScene_GetParticipantScreenAimPoint(active_pokemon, &sp5C);
+    gCameraDistTarget = BattleScene_ScaleCameraDistance(active_pokemon, 3.5f, 300.0f);
+    BattleScene_SetCameraEyeFromPosition(camera, sp5C, 0, BattleScene_GetParticipantFacingAngle(active_pokemon), gCameraDistTarget, 0.0f);
+    BattleAnim_CalculateDistanceAngles(&camera->view.targetPosition, &camera->view.eyePosition, &D_8219A534, &sp34, &sp38);
     BattleAnim_CalculateDistanceAngles(&sp50, &sp44, &gCameraDistTarget, &sp36, &sp3A);
     BattleAnim_ApproachF(&gCameraDistTarget, D_8219A534, 0.05f);
     BattleAnim_StepToS16(&sp3A, sp38, 0x111);
     BattleAnim_StepToS16(&sp36, sp34, 0x5B);
-    BattleAnim_CalculateDistanceAngles(&sp50, &arg0->view.targetPosition, &sp40, &sp3E, &sp3C);
-    Camera_ComputeEyeFromAngles(&sp50, &arg0->view.targetPosition, sp40 / 100.0f, sp3E, sp3C);
-    BattleScene_SetCameraEyeFromAt(arg0, sp36, sp3A, gCameraDistTarget, 0.0f);
+    BattleAnim_CalculateDistanceAngles(&sp50, &camera->view.targetPosition, &sp40, &sp3E, &sp3C);
+    Camera_ComputeEyeFromAngles(&sp50, &camera->view.targetPosition, sp40 / 100.0f, sp3E, sp3C);
+    BattleScene_SetCameraEyeFromAt(camera, sp36, sp3A, gCameraDistTarget, 0.0f);
     if ((sp34 == sp36) && (sp38 == sp3A)) {
         return 1;
     }
@@ -845,17 +843,16 @@ extern f32 D_FLT_82189350[][4];
 extern f32 D_FLT_82196250;
 extern f32 D_FLT_82196254;
 
-/*
- * func_82122FD8
- *
- * Variant of func_82122A7C that first copies the scene's vector at +0xB4 into
+/**
+ * Variant of BattleScene_EaseCameraTargetToParticipant that first copies the scene's vector at +0xB4 into
  * the camera's eye position. The distance threshold is the object type's table
  * width scaled by D_FLT_82196250 and the camera target is eased by
- * D_FLT_82196254 times the remaining distance. See func_82122A7C for the
+ * D_FLT_82196254 times the remaining distance. See BattleScene_EaseCameraTargetToParticipant for the
  * step-by-step description.
+ * @unverified Name guessed from the code.
  */
-void func_82122FD8(CameraNode* arg0, ActivePokemon* arg1) {
-    SwayState* ptr = &arg1->modelTransform;
+void BattleScene_EaseCameraTargetFromSavedEye(CameraNode* camera, ActivePokemon* active_pokemon) {
+    SwayState* ptr = &active_pokemon->modelTransform;
     Vec3f sp58;
     Vec3f sp4C;
     UNUSED s32 pad[3]; // FAKE: stack padding
@@ -864,25 +861,26 @@ void func_82122FD8(CameraNode* arg0, ActivePokemon* arg1) {
     s16 sp2E;
     s16 sp2C;
 
-    BattleAnim_Vec3fCopy(&arg0->view.eyePosition, &sBattleScene.scene->savedCameraEye);
-    BattleScene_GetParticipantCameraAnchor(arg1, &sp58);
-    BattleAnim_CalculateDistanceAngles(&sp58, &arg1->modelTransform.orbitCenter, &sp30, &sp2E, &sp2C);
-    BattleAnim_Vec3fCopy(&sp34, &arg0->view.targetPosition);
-    if ((D_FLT_82189350[arg1->displayObject.objectType][0] * D_FLT_82196250) <= sp30) {
+    BattleAnim_Vec3fCopy(&camera->view.eyePosition, &sBattleScene.scene->savedCameraEye);
+    BattleScene_GetParticipantCameraAnchor(active_pokemon, &sp58);
+    BattleAnim_CalculateDistanceAngles(&sp58, &active_pokemon->modelTransform.orbitCenter, &sp30, &sp2E, &sp2C);
+    BattleAnim_Vec3fCopy(&sp34, &camera->view.targetPosition);
+    if ((D_FLT_82189350[active_pokemon->displayObject.objectType][0] * D_FLT_82196250) <= sp30) {
         Camera_ComputeEyeFromAngles(&sp58, &sp4C, ptr->orbitDistance, ptr->orbitRotationX, ptr->orbitRotationY);
         BattleAnim_CalculateDistanceAngles(&sp34, &sp4C, &sp30, &sp2E, &sp2C);
     } else {
         BattleAnim_CalculateDistanceAngles(&sp34, &sBattleScene.scene->savedCameraAt, &sp30, &sp2E, &sp2C);
     }
-    Camera_ComputeEyeFromAngles(&sp34, &arg0->view.targetPosition, sp30 * D_FLT_82196254, sp2E, sp2C);
+    Camera_ComputeEyeFromAngles(&sp34, &camera->view.targetPosition, sp30 * D_FLT_82196254, sp2E, sp2C);
 }
 
 /**
  * Eases the camera toward a front view of the Pokemon (size-scaled distance): the target
  * moves a sixth of the way, the distance 5% and the eye angles by 0xB6 and 0x108 per frame.
  * arg2 is unused.
+ * @unverified Name guessed from the code.
  */
-void func_8212311C(CameraNode* arg0, ActivePokemon* arg1, Color_RGBA8 arg2) {
+void BattleScene_EaseCameraToFrontView(CameraNode* camera, ActivePokemon* active_pokemon, Color_RGBA8 unused_color) {
     Vec3f sp74;
     Vec3f sp68;
     Vec3f sp5C;
@@ -894,28 +892,29 @@ void func_8212311C(CameraNode* arg0, ActivePokemon* arg1, Color_RGBA8 arg2) {
     s16 sp4E;
     s16 sp4C;
 
-    BattleAnim_Vec3fCopy(&sp68, &arg0->view.targetPosition);
-    BattleAnim_Vec3fCopy(&sp5C, &arg0->view.eyePosition);
-    BattleAnim_GetOwnerDefaultAnchorPosition(arg1, &sp74);
-    gCameraDistTarget = BattleScene_ScaleCameraDistance(arg1, 3.5f, 300.0f);
-    BattleScene_SetCameraAtFromAnchor(arg1, arg0, sp74, 0, BattleScene_GetParticipantFacingAngle(arg1), 0.0f, 0.0f);
-    BattleScene_SetCameraEyeFromPosition(arg0, sp74, 0, BattleScene_GetParticipantFacingAngle(arg1), gCameraDistTarget, 0.0f);
-    BattleAnim_CalculateDistanceAngles(&arg0->view.targetPosition, &arg0->view.eyePosition, &D_8219A534, &sp4C, &sp50);
+    BattleAnim_Vec3fCopy(&sp68, &camera->view.targetPosition);
+    BattleAnim_Vec3fCopy(&sp5C, &camera->view.eyePosition);
+    BattleAnim_GetOwnerDefaultAnchorPosition(active_pokemon, &sp74);
+    gCameraDistTarget = BattleScene_ScaleCameraDistance(active_pokemon, 3.5f, 300.0f);
+    BattleScene_SetCameraAtFromAnchor(active_pokemon, camera, sp74, 0, BattleScene_GetParticipantFacingAngle(active_pokemon), 0.0f, 0.0f);
+    BattleScene_SetCameraEyeFromPosition(camera, sp74, 0, BattleScene_GetParticipantFacingAngle(active_pokemon), gCameraDistTarget, 0.0f);
+    BattleAnim_CalculateDistanceAngles(&camera->view.targetPosition, &camera->view.eyePosition, &D_8219A534, &sp4C, &sp50);
     BattleAnim_CalculateDistanceAngles(&sp68, &sp5C, &gCameraDistTarget, &sp4E, &sp52);
     BattleAnim_ApproachF(&gCameraDistTarget, D_8219A534, 0.05f);
     BattleAnim_StepToS16(&sp52, sp50, 0x108);
     BattleAnim_StepToS16(&sp4E, sp4C, 0xB6);
-    BattleAnim_CalculateDistanceAngles(&sp68, &arg0->view.targetPosition, &sp58, &sp56, &sp54);
-    Camera_ComputeEyeFromAngles(&sp68, &arg0->view.targetPosition, sp58 / 6, sp56, sp54);
-    BattleScene_SetCameraEyeFromAt(arg0, sp4E, sp52, gCameraDistTarget, 0.0f);
+    BattleAnim_CalculateDistanceAngles(&sp68, &camera->view.targetPosition, &sp58, &sp56, &sp54);
+    Camera_ComputeEyeFromAngles(&sp68, &camera->view.targetPosition, sp58 / 6, sp56, sp54);
+    BattleScene_SetCameraEyeFromAt(camera, sp4E, sp52, gCameraDistTarget, 0.0f);
 }
 
 /**
  * Moves the camera target's height toward the Pokemon's orbit eye point by the factor
  * D_FLT_82196258, keeping it at least 15.
+ * @unverified Name guessed from the code.
  */
-void func_82123314(CameraNode* arg0, ActivePokemon* arg1) {
-    SwayState* ptr = &arg1->modelTransform;
+void BattleScene_EaseCameraTargetHeight(CameraNode* camera, ActivePokemon* active_pokemon) {
+    SwayState* ptr = &active_pokemon->modelTransform;
     Vec3f sp50;
     Vec3f sp44;
     Vec3f sp38;
@@ -924,14 +923,14 @@ void func_82123314(CameraNode* arg0, ActivePokemon* arg1) {
     s16 sp26;
     s16 sp24;
 
-    BattleScene_GetParticipantCameraAnchor(arg1, &sp50);
-    BattleAnim_Vec3fCopy(&sp38, &arg0->view.targetPosition);
+    BattleScene_GetParticipantCameraAnchor(active_pokemon, &sp50);
+    BattleAnim_Vec3fCopy(&sp38, &camera->view.targetPosition);
     Camera_ComputeEyeFromAngles(&sp50, &sp44, ptr->orbitDistance, ptr->orbitRotationX, ptr->orbitRotationY);
     BattleAnim_CalculateDistanceAngles(&sp38, &sp44, &sp28, &sp26, &sp24);
     Camera_ComputeEyeFromAngles(&sp38, &sp2C, sp28 * D_FLT_82196258, sp26, sp24);
-    arg0->view.targetPosition.y = sp2C.y;
-    if (arg0->view.targetPosition.y <= 15.0f) {
-        arg0->view.targetPosition.y = 15.0f;
+    camera->view.targetPosition.y = sp2C.y;
+    if (camera->view.targetPosition.y <= 15.0f) {
+        camera->view.targetPosition.y = 15.0f;
     }
 }
 
@@ -989,8 +988,9 @@ void BattleScene_ApproachCameraZoom(CameraNode* arg0, ActivePokemon* arg1) {
 /**
  * Moves the camera target toward the framing of func_82124874 for the Pokemon while keeping
  * the current eye angles and distance.
+ * @unverified Name guessed from the code.
  */
-void func_82123684(CameraNode* arg0, ActivePokemon* arg1) {
+void BattleScene_EaseCameraToRecoilFraming(CameraNode* camera, ActivePokemon* active_pokemon) {
     UNUSED s32 pad[3]; // FAKE: stack padding
     Vec3f sp50;
     Vec3f sp44;
@@ -1002,17 +1002,17 @@ void func_82123684(CameraNode* arg0, ActivePokemon* arg1) {
     s16 sp36;
     s16 sp34;
 
-    BattleAnim_Vec3fCopy(&sp50, &arg0->view.targetPosition);
-    BattleAnim_Vec3fCopy(&sp44, &arg0->view.eyePosition);
-    func_82124874(arg0, arg1);
-    BattleAnim_CalculateDistanceAngles(&arg0->view.targetPosition, &arg0->view.eyePosition, &D_8219A534, &sp34, &sp38);
+    BattleAnim_Vec3fCopy(&sp50, &camera->view.targetPosition);
+    BattleAnim_Vec3fCopy(&sp44, &camera->view.eyePosition);
+    func_82124874(camera, active_pokemon);
+    BattleAnim_CalculateDistanceAngles(&camera->view.targetPosition, &camera->view.eyePosition, &D_8219A534, &sp34, &sp38);
     BattleAnim_CalculateDistanceAngles(&sp50, &sp44, &gCameraDistTarget, &sp36, &sp3A);
     BattleAnim_ApproachF(&gCameraDistTarget, D_8219A534, 0.5f);
     BattleAnim_StepToS16(&sp3A, sp38, 0x108);
     BattleAnim_StepToS16(&sp36, sp34, 0xB6);
-    BattleAnim_CalculateDistanceAngles(&sp50, &arg0->view.targetPosition, &sp40, &sp3E, &sp3C);
-    Camera_ComputeEyeFromAngles(&sp50, &arg0->view.targetPosition, sp40, sp3E, sp3C);
-    BattleScene_SetCameraEyeFromAt(arg0, sp36, sp3A, gCameraDistTarget, 0.0f);
+    BattleAnim_CalculateDistanceAngles(&sp50, &camera->view.targetPosition, &sp40, &sp3E, &sp3C);
+    Camera_ComputeEyeFromAngles(&sp50, &camera->view.targetPosition, sp40, sp3E, sp3C);
+    BattleScene_SetCameraEyeFromAt(camera, sp36, sp3A, gCameraDistTarget, 0.0f);
 }
 
 /**
@@ -1094,12 +1094,13 @@ void BattleScene_CameraShotTargetClose(CameraNode* arg0, ActivePokemon* arg1) {
 /**
  * Frames the Pokemon from the front of its facing at a size-scaled distance (3.5 times its
  * size, at least 300).
+ * @unverified Name guessed from the code.
  */
-void func_82123D4C(CameraNode* arg0, ActivePokemon* arg1) {
-    BattleAnim_GetOwnerDefaultAnchorPosition(arg1, &sBattleScene.scene->anchorPosition);
-    gCameraDistTarget = BattleScene_ScaleCameraDistance(arg1, 3.5f, 300.0f);
-    BattleScene_SetCameraAtFromAnchor(arg1, arg0, sBattleScene.scene->anchorPosition, 0, BattleScene_GetParticipantFacingAngle(arg1), 0.0f, 0.0f);
-    BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->anchorPosition, 0, BattleScene_GetParticipantFacingAngle(arg1), gCameraDistTarget, 0.0f);
+void BattleScene_FrameParticipantFront(CameraNode* camera, ActivePokemon* active_pokemon) {
+    BattleAnim_GetOwnerDefaultAnchorPosition(active_pokemon, &sBattleScene.scene->anchorPosition);
+    gCameraDistTarget = BattleScene_ScaleCameraDistance(active_pokemon, 3.5f, 300.0f);
+    BattleScene_SetCameraAtFromAnchor(active_pokemon, camera, sBattleScene.scene->anchorPosition, 0, BattleScene_GetParticipantFacingAngle(active_pokemon), 0.0f, 0.0f);
+    BattleScene_SetCameraEyeFromPosition(camera, sBattleScene.scene->anchorPosition, 0, BattleScene_GetParticipantFacingAngle(active_pokemon), gCameraDistTarget, 0.0f);
 }
 
 /**
@@ -1118,50 +1119,54 @@ void BattleScene_CameraShotTargetHigh(CameraNode* arg0, ActivePokemon* arg1) {
 /**
  * Frames the Pokemon from its side's fixed facing at 5 times its size (at least 400), with
  * the eye two heights above it.
+ * @unverified Name guessed from the code.
  */
-void func_82123F44(CameraNode* arg0, ActivePokemon* arg1) {
-    BattleAnim_GetOwnerDefaultAnchorPosition(arg1, &sBattleScene.scene->anchorPosition);
-    gCameraDistTarget = BattleScene_ScaleCameraDistance(arg1, 5.0f, 400.0f);
-    BattleScene_SetCameraAtFromAnchor(arg1, arg0, sBattleScene.scene->anchorPosition, 0, arg1->facingDirection << 0xE, 0.0f, 0.0f);
-    BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->anchorPosition, 0, arg1->facingDirection * 0xE38, gCameraDistTarget, 2.0f * BattleScene_GetParticipantHeight(arg1));
+void BattleScene_FrameParticipantFromAbove(CameraNode* camera, ActivePokemon* active_pokemon) {
+    BattleAnim_GetOwnerDefaultAnchorPosition(active_pokemon, &sBattleScene.scene->anchorPosition);
+    gCameraDistTarget = BattleScene_ScaleCameraDistance(active_pokemon, 5.0f, 400.0f);
+    BattleScene_SetCameraAtFromAnchor(active_pokemon, camera, sBattleScene.scene->anchorPosition, 0, active_pokemon->facingDirection << 0xE, 0.0f, 0.0f);
+    BattleScene_SetCameraEyeFromPosition(camera, sBattleScene.scene->anchorPosition, 0, active_pokemon->facingDirection * 0xE38, gCameraDistTarget, 2.0f * BattleScene_GetParticipantHeight(active_pokemon));
 }
 
 /**
- * Like func_82123F44 with the eye below the Pokemon (by D_FLT_82196268 heights), keeping the
+ * Like BattleScene_FrameParticipantFromAbove with the eye below the Pokemon (by D_FLT_82196268 heights), keeping the
  * eye at least 15 high.
+ * @unverified Name guessed from the code.
  */
-void func_82124054(CameraNode* arg0, ActivePokemon* arg1) {
-    BattleAnim_GetOwnerDefaultAnchorPosition(arg1, &sBattleScene.scene->anchorPosition);
-    gCameraDistTarget = BattleScene_ScaleCameraDistance(arg1, 5.0f, 400.0f);
-    BattleScene_SetCameraAtFromAnchor(arg1, arg0, sBattleScene.scene->anchorPosition, 0, arg1->facingDirection << 0xE, 0.0f, 0.0f);
-    BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->anchorPosition, 0, arg1->facingDirection * 0xE38, gCameraDistTarget, -BattleScene_GetParticipantHeight(arg1) * D_FLT_82196268);
-    if (M2C_FIELD(arg0, f32*, 0xAC) <= 15.0f) {
-        M2C_FIELD(arg0, f32*, 0xAC) = 15.0f;
+void BattleScene_FrameParticipantFromBelow(CameraNode* camera, ActivePokemon* active_pokemon) {
+    BattleAnim_GetOwnerDefaultAnchorPosition(active_pokemon, &sBattleScene.scene->anchorPosition);
+    gCameraDistTarget = BattleScene_ScaleCameraDistance(active_pokemon, 5.0f, 400.0f);
+    BattleScene_SetCameraAtFromAnchor(active_pokemon, camera, sBattleScene.scene->anchorPosition, 0, active_pokemon->facingDirection << 0xE, 0.0f, 0.0f);
+    BattleScene_SetCameraEyeFromPosition(camera, sBattleScene.scene->anchorPosition, 0, active_pokemon->facingDirection * 0xE38, gCameraDistTarget, -BattleScene_GetParticipantHeight(active_pokemon) * D_FLT_82196268);
+    if (M2C_FIELD(camera, f32*, 0xAC) <= 15.0f) {
+        M2C_FIELD(camera, f32*, 0xAC) = 15.0f;
     }
 }
 
 /**
- * Same framing as func_82123D4C.
+ * Same framing as BattleScene_FrameParticipantFront.
+ * @unverified Name guessed from the code.
  */
-void func_82124194(CameraNode* arg0, ActivePokemon* arg1) {
-    BattleAnim_GetOwnerDefaultAnchorPosition(arg1, &sBattleScene.scene->anchorPosition);
-    gCameraDistTarget = BattleScene_ScaleCameraDistance(arg1, 3.5f, 300.0f);
-    BattleScene_SetCameraAtFromAnchor(arg1, arg0, sBattleScene.scene->anchorPosition, 0, BattleScene_GetParticipantFacingAngle(arg1), 0.0f, 0.0f);
-    BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->anchorPosition, 0, BattleScene_GetParticipantFacingAngle(arg1), gCameraDistTarget, 0.0f);
+void BattleScene_FrameParticipantFrontUnused(CameraNode* camera, ActivePokemon* active_pokemon) {
+    BattleAnim_GetOwnerDefaultAnchorPosition(active_pokemon, &sBattleScene.scene->anchorPosition);
+    gCameraDistTarget = BattleScene_ScaleCameraDistance(active_pokemon, 3.5f, 300.0f);
+    BattleScene_SetCameraAtFromAnchor(active_pokemon, camera, sBattleScene.scene->anchorPosition, 0, BattleScene_GetParticipantFacingAngle(active_pokemon), 0.0f, 0.0f);
+    BattleScene_SetCameraEyeFromPosition(camera, sBattleScene.scene->anchorPosition, 0, BattleScene_GetParticipantFacingAngle(active_pokemon), gCameraDistTarget, 0.0f);
 }
 
 /**
  * Starts an impact framing on the Pokemon: target from its side's facing at zoom 3.5 times
  * its size (at least 200), eye 5 times its size (at least 400) away offset by arg2, and the
  * eye at least 15 high.
+ * @unverified Name guessed from the code.
  */
-void func_82124284(CameraNode* arg0, ActivePokemon* arg1, f32 arg2) {
-    BattleAnim_GetOwnerDefaultAnchorPosition(arg1, &sBattleScene.scene->anchorPosition);
-    D_8219A530 = BattleScene_ScaleCameraDistance(arg1, 3.5f, 200.0f);
-    D_8219A534 = BattleScene_ScaleCameraDistance(arg1, 5.0f, 400.0f);
-    BattleScene_SetCameraAtFromAnchor(arg1, arg0, sBattleScene.scene->anchorPosition, 0, arg1->facingDirection << 14, sBattleScene.scene->orbitDistance = D_8219A530, 0.0f);
-    BattleScene_SetCameraEyeFromPosition(arg0, sBattleScene.scene->anchorPosition, 0, arg1->facingDirection * 0x1555, D_8219A534, arg2);
-    if (M2C_FIELD(arg0, f32*, 0xAC) <= 15.0f) {
-        M2C_FIELD(arg0, f32*, 0xAC) = 15.0f;
+void BattleScene_FrameParticipantImpact(CameraNode* camera, ActivePokemon* active_pokemon, f32 eye_height) {
+    BattleAnim_GetOwnerDefaultAnchorPosition(active_pokemon, &sBattleScene.scene->anchorPosition);
+    D_8219A530 = BattleScene_ScaleCameraDistance(active_pokemon, 3.5f, 200.0f);
+    D_8219A534 = BattleScene_ScaleCameraDistance(active_pokemon, 5.0f, 400.0f);
+    BattleScene_SetCameraAtFromAnchor(active_pokemon, camera, sBattleScene.scene->anchorPosition, 0, active_pokemon->facingDirection << 14, sBattleScene.scene->orbitDistance = D_8219A530, 0.0f);
+    BattleScene_SetCameraEyeFromPosition(camera, sBattleScene.scene->anchorPosition, 0, active_pokemon->facingDirection * 0x1555, D_8219A534, eye_height);
+    if (M2C_FIELD(camera, f32*, 0xAC) <= 15.0f) {
+        M2C_FIELD(camera, f32*, 0xAC) = 15.0f;
     }
 }
