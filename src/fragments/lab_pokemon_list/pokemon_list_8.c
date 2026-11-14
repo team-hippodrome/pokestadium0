@@ -153,7 +153,7 @@ void LabPCList_MoveMonTo(LabPCListScreen* arg0, Ref89103740* arg1, s32 arg2, s32
     func_80027814(sub->unk14, arg1, sub->count);
     old->unk10 = 1;
     sub->unk10 = 1;
-    arg0->unk_B558 = 1;
+    arg0->hasChanges = 1;
 }
 
 typedef struct List89103C54 {

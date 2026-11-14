@@ -161,7 +161,7 @@ void LabPCList_InitListWindow(LabPCListScreen* arg0, s32 arg1, s32 arg2, s32 arg
     arg0->list.options &= ~0x100000;
     arg0->pageColumnStart = D_8910A84C;
     func_89100294(arg0);
-    arg0->unk_B558 = 0;
+    arg0->hasChanges = 0;
     arg0->msg = arg3;
     LabPCList_ResetFilterState(arg0);
     arg0->state = 1;

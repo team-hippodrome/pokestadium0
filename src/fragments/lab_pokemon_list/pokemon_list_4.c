@@ -88,9 +88,9 @@ void LabPCList_DrawListScreen(LabPCListScreen* arg0) {
     if (Particle_Field50_SetXZFromField7C_09BB4() != 0) {
         return;
     }
-    func_8002C5A4(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) - 0xA, 0x1F4);
+    func_8002C5A4(arg0->window.frame.x, arg0->window.frame.y - 0xA, 0x1F4);
     Window_DrawFrame((s8*)&arg0->headerFrame);
-    Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4) + 0x23, M2C_FIELD(arg0, s32*, 8), D_8007356C);
+    Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->window.frame.y + 0x23, arg0->window.frame.width, D_8007356C);
     LabPCList_DrawPageHint(arg0);
     ScrollList_DrawScrollArrows((s8*)&arg0->list, arg0->listFrame.x, arg0->listFrame.y - 0x10,
                   arg0->listFrame.y + arg0->listFrame.height, arg0->listFrame.width);

@@ -694,7 +694,7 @@ typedef struct LabPCListScreen {
     /* 0x9B04 */ s32 unk_9B04;
     /* 0x9B08 */ char moveFilterWindow[0x9E58 - 0x9B08]; // @unverified: LabPCList_DrawMoveFilter
     /* 0x9E58 */ s32 unk_9E58;
-    /* 0x9E5C */ s32 unk_9E5C;
+    /* 0x9E5C */ s32 unk_9E5C; // @unverified: number of types in unk_9E60/unk_9E61 for the おなじタイプをあつめる filter (LabPCList_UpdateMonMenu)
     /* 0x9E60 */ u8 unk_9E60;
     /* 0x9E61 */ u8 unk_9E61;
     /* 0x9E62 */ char pad9E62[2];
@@ -706,7 +706,7 @@ typedef struct LabPCListScreen {
     /* 0xB1A4 */ u16 rowFlags[LAB_PC_LIST_MAX_ROWS]; // @unverified: Menu.itemFlags of list
     /* 0xB548 */ s32* pageColumnStart; // @unverified: first column index of each detail page (LabPCList_GetColumnCursorX)
     /* 0xB54C */ ChoiceCursor headerCursor; // @unverified: the header buttons; D-Left/D-Right moved it between ニックネーム, ID, おや, ばしょ
-    /* 0xB558 */ s32 unk_B558;
+    /* 0xB558 */ s32 hasChanges; // @unverified: set by LabPCList_MoveMonTo and after an item is used; LabPCList_UpdateScreen then asks to save on exit
     /* 0xB55C */ char textBox[0xB594 - 0xB55C]; // @unverified: TextBox_Init, TextBox_Draw
     /* 0xB594 */ void* msg; // @unverified: message box given to LabPCList_MoveMonTo; last argument of LabPCList_InitListWindow
 } LabPCListScreen; // size = 0xB598
