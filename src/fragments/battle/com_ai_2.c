@@ -1151,22 +1151,22 @@ M2C_UNK func_80058410(s8*, s8*, M2C_UNK);
  * (BattleMon layout): species, HP, status, types, moves, DVs, level, max HP,
  * stats and PP.
  */
-void BattleAi_LoadBattlerFromPartyMon(BattleMonRuntime* arg0, s8* arg1) {
-    arg0->species = M2C_FIELD(arg1, u8*, 0);
-    arg0->hp = M2C_FIELD(arg1, u16*, 2);
-    arg0->rosterIndex = M2C_FIELD(arg1, u8*, 4);
-    arg0->pendingStatusCondition = M2C_FIELD(arg1, u8*, 5);
-    arg0->type1 = M2C_FIELD(arg1, u8*, 6);
-    arg0->type2 = M2C_FIELD(arg1, u8*, 7);
-    BattleAi_CopyMoveList(arg1 + 9, arg0->moves);
-    arg0->dvs = M2C_FIELD(arg1, u16*, 0x1E);
-    arg0->level = M2C_FIELD(arg1, u8*, 0x24);
-    arg0->maxHp = M2C_FIELD(arg1, u16*, 0x26);
-    arg0->modifiedAttack = M2C_FIELD(arg1, u16*, 0x28);
-    arg0->modifiedDefense = M2C_FIELD(arg1, u16*, 0x2A);
-    arg0->speed = M2C_FIELD(arg1, u16*, 0x2C);
-    arg0->modifiedSpecial = M2C_FIELD(arg1, u16*, 0x2E);
-    func_80058410(arg1 + 0x20, arg0->pp, 4);
+void BattleAi_LoadBattlerFromPartyMon(BattleMonRuntime* arg0, BattleMon* arg1) {
+    arg0->species = arg1->species.id;
+    arg0->hp = arg1->hp;
+    arg0->rosterIndex = arg1->boxLevel;
+    arg0->pendingStatusCondition = arg1->statusCondition;
+    arg0->type1 = arg1->type1;
+    arg0->type2 = arg1->type2;
+    BattleAi_CopyMoveList(arg1->moves, arg0->moves);
+    arg0->dvs = arg1->dvs;
+    arg0->level = arg1->level;
+    arg0->maxHp = arg1->maxHp;
+    arg0->modifiedAttack = arg1->attack;
+    arg0->modifiedDefense = arg1->defense;
+    arg0->speed = arg1->speed;
+    arg0->modifiedSpecial = arg1->special;
+    func_80058410(arg1->pp, arg0->pp, 4);
 }
 
 typedef struct BaseStats821868E8 { u8 species; u8 hp; u8 atk; u8 def; u8 spd; u8 spc; u8 type1; u8 type2; char unk08[0xF]; } BaseStats821868E8;
@@ -1245,51 +1245,6 @@ void BattleAi_CopyVisibleBattleState(s8 *arg0, s8 *arg1)
 }
 
 void func_8004FD20(void*, s32);
-typedef struct PartyMon82186AF4 {
-    /* 0x00 */ u8 species;
-    /* 0x01 */ u8 unk01;
-    /* 0x02 */ u16 hp;
-    /* 0x04 */ u8 unk04[5];
-    /* 0x09 */ u8 moves[4];
-    /* 0x0D */ u8 unk0D[0x17];
-    /* 0x24 */ u8 level;
-    /* 0x25 */ u8 unk25;
-    /* 0x26 */ u16 maxHp;
-    /* 0x28 */ u8 unk28[0x28];
-} PartyMon82186AF4; // size = 0x50
-
-typedef struct Party82186AF4 {
-    /* 0x000 */ u8 flags;
-    /* 0x001 */ u8 unk001[0x1B];
-    /* 0x01C */ PartyMon82186AF4 mons[6];
-    /* 0x1FC */ u8* info;
-} Party82186AF4;
-
-typedef struct Slot82186AF4 {
-    /* 0x00 */ void* owner;
-    /* 0x04 */ u8 unk04[8];
-    /* 0x0C */ u8 mon[0x0C];
-    /* 0x18 */ u16 hp;
-    /* 0x1A */ u8 unk1A[0x56];
-    /* 0x70 */ u16 hp2;
-    /* 0x72 */ u8 unk72[2];
-    /* 0x74 */ u8 species;
-    /* 0x75 */ u8 mask;
-    /* 0x76 */ u8 unk76[2];
-    /* 0x78 */ u8 moveCount;
-    /* 0x79 */ u8 unk79;
-    /* 0x7A */ u8 unk7A[0x16];
-} Slot82186AF4; // size = 0x90
-
-typedef struct Side82186AF4 {
-    /* 0x000 */ Party82186AF4* party;
-    /* 0x004 */ Slot82186AF4 slots[6];
-    /* 0x364 */ f32 unk364;
-    /* 0x368 */ s8 unk368;
-    /* 0x369 */ u8 unk369;
-    /* 0x36A */ u8 unk36A;
-    /* 0x36B */ u8 unk36B;
-} Side82186AF4;
 
 /**
  * Initializes one side of the AI's model from a party: links each battler to the
@@ -1297,49 +1252,49 @@ typedef struct Side82186AF4 {
  * from base stats, and counts its moves (stopping at an empty slot or Mimic). arg2 is the AI
  * mode byte; mode 2 and up raises the switch threshold to 10.
  */
-void BattleAi_InitSide(Side82186AF4 *arg0, Party82186AF4 *arg1, s32 arg2)
+void BattleAi_InitSide(ComSide *arg0, TeamRoster *arg1, s32 arg2)
 {
   s32 i;
   s32 j;
   u8 species;
   u8 level;
-  arg0->party = arg1;
-  arg0->unk368 = arg2;
-  arg0->unk369 = 0xFF;
-  arg0->unk36B = 0xFF;
-  arg0->unk364 = 0.5f;
+  arg0->roster = arg1;
+  arg0->mode = arg2;
+  arg0->lastOpponentSlot = 0xFF;
+  arg0->unk_36B = 0xFF;
+  arg0->switchThreshold = 0.5f;
   if (arg2 >= 2)
   {
-    arg0->unk364 = 10.0f;
+    arg0->switchThreshold = 10.0f;
   }
   for (i = 0; i < 6; i++)
   {
-    func_8004FD20(&arg0->slots[i], sizeof(Slot82186AF4));
-    arg0->slots[i].mask = 1 << i;
-    arg0->slots[i].owner = arg0;
-    arg0->slots[i].species = arg1->mons[i].species;
-    if (i < arg1->info[2])
+    func_8004FD20(&arg0->battlers[i], sizeof(ComBattler));
+    arg0->battlers[i].partyBit = 1 << i;
+    arg0->battlers[i].side = arg0;
+    arg0->battlers[i].species = arg1->pokemonPicked[i].species.id;
+    if (i < arg1->rosterInfo->numberOfPokemonCanBePicked)
     {
-      species = arg1->mons[i].species;
-      if (((species != 0) && (arg1->mons[i].hp != 0)) && (arg1->mons[i].maxHp != 0))
+      species = arg1->pokemonPicked[i].species.id;
+      if (((species != 0) && (arg1->pokemonPicked[i].hp != 0)) && (arg1->pokemonPicked[i].maxHp != 0))
       {
-        level = arg1->mons[i].level;
+        level = arg1->pokemonPicked[i].level;
         if (level != 0)
         {
           j = 0; // FAKE: permuter; early init of the move counter
-          level = arg1->mons[i].level; // FAKE: permuter; redundant reload of level
-          if (arg1->flags & 2)
+          level = arg1->pokemonPicked[i].level; // FAKE: permuter; redundant reload of level
+          if (arg1->isHuman & 2)
           {
-            BattleAi_LoadBattlerFromPartyMon((s8 *) arg0->slots[i].mon, (s8 *) (&arg1->mons[i]));
-            arg0->slots[i].hp2 = arg0->slots[i].hp;
+            BattleAi_LoadBattlerFromPartyMon(&arg0->battlers[i].mon, &arg1->pokemonPicked[i]);
+            arg0->battlers[i].prevHp = arg0->battlers[i].mon.hp;
           }
           else
           {
-            BattleAi_LoadBattlerFromSpecies((s8 *) arg0->slots[i].mon, arg1->mons[i].species, level);
+            BattleAi_LoadBattlerFromSpecies(&arg0->battlers[i].mon, arg1->pokemonPicked[i].species.id, level);
           }
           for (j = 0; j < 4; j++)
           {
-            if ((arg1->mons[i].moves[j] == 0) || (arg1->mons[i].moves[j] == MIMIC))
+            if ((arg1->pokemonPicked[i].moves[j] == 0) || (arg1->pokemonPicked[i].moves[j] == MIMIC))
             {
               break;
             }
@@ -1348,8 +1303,8 @@ void BattleAi_InitSide(Side82186AF4 *arg0, Party82186AF4 *arg1, s32 arg2)
         }
       }
     }
-    arg0->slots[i].moveCount = j;
-    arg0->slots[i].unk79 = 0x10;
+    arg0->battlers[i].moveCount = j;
+    arg0->battlers[i].unk_79 = 0x10;
   }
 
 }
