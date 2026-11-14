@@ -4,7 +4,15 @@
 
 #include "global.h"
 #include "controller.h"
+#include "game_state.h"
 #include "m2c_macros.h"
+
+/* One Pokémon of a team in a team list: a flags word, then the Pokémon read from the save
+ * (Registration_ReadTeam, FreeBattle_ReadTeam). */
+typedef struct TeamMonSlot {
+    /* 0x00 */ s32 flags; // @unverified: cleared for each Pokémon read; Free Battle tests bits 0x1, 0x10, 0x26 and 0x40
+    /* 0x04 */ BattleMon mon; // @unverified: filled by func_80020CE4 from the save
+} TeamMonSlot; // size = 0x54
 
 /* The rect, style and fill of a window: all that Window_SetRect and Window_DrawFrame touch. Some
  * windows draw a second, inner frame of only these fields (MainMenuPromptWindow.textFrame). */

@@ -422,7 +422,7 @@ void MainMenu_InitMessageWindow(MainMenuMessageWindow* arg0, s32 arg1, s32 arg2,
     Window_InitLabeled(&arg0->noButton, arg0->window.frame.x + 0x1BA, arg0->window.frame.y + 0x66, 0x48, *(Color_RGBA8 *)D_8800222C, D_880023C8);
     arg0->choice.count = 2;
     arg0->choice.cursor = 0;
-    arg0->choice.controller = D_800603C0;
+    arg0->choice.controller = (Controller*)D_800603C0;
     func_8000B2F4(D_800603C0);
     arg0->color = arg6;
     arg0->image = arg7;
