@@ -151,11 +151,11 @@ void func_81113EF4(u8* arg0, u8 arg1) {
     } else {
         ret = M2C_FIELD(arg0, s16*, 0x22) = func_81113E84(arg0, arg1, (u8**)(arg0 + 0x48), arg0 + 0x7C);
         if (ret == 0) {
-            ((ChannelFlags81113EF4*)arg0)->hasInstrument = 0;
+            ((SequenceChannel*)arg0)->hasInstrument = 0;
             return;
         }
     }
-    ((ChannelFlags81113EF4*)arg0)->hasInstrument = 1;
+    ((SequenceChannel*)arg0)->hasInstrument = 1;
 }
 
 void func_81113F84(u8* arg0, u8 arg1) {

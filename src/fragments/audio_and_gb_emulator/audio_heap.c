@@ -51,10 +51,10 @@ void AudioHeap_ResetLoadStatus(void) {
 
 /* One 0xCC-byte record; only the fields AudioHeap_DiscardFont touches are named. */
 
-s32 AudioPlayback_NoteDisable(Note81109678*);
-s32 AudioPlayback_AudioListRemove(Note81109678*);
-s32 AudioSeq_AudioListPushBack(s8*, Note81109678*);
-extern Note81109678* D_81184664;
+s32 AudioPlayback_NoteDisable(Note*);
+s32 AudioPlayback_AudioListRemove(Note*);
+s32 AudioSeq_AudioListPushBack(s8*, Note*);
+extern Note* D_81184664;
 extern s8 D_81184938;
 extern s32 D_811858E8;
 
@@ -81,14 +81,14 @@ extern s32 D_811858E8;
  */
 void AudioHeap_DiscardFont(s32 arg0) {
     s32 i;
-    Note81109678* p;
+    Note* p;
 
     for (i = 0; i < D_811858E8; i++) {
         p = &D_81184664[i];
-        if (arg0 == p->fontId) {
-            if ((p->unk_34 == 0) && (p->priority != 0)) {
-                p->parentLayer->enabled = 0;
-                p->parentLayer->finished = 1;
+        if (arg0 == p->playbackState.fontId) {
+            if ((p->playbackState.unk_04 == 0) && (p->playbackState.priority != 0)) {
+                p->playbackState.parentLayer->enabled = 0;
+                p->playbackState.parentLayer->finished = 1;
             }
             AudioPlayback_NoteDisable(p);
             AudioPlayback_AudioListRemove(p);
@@ -409,7 +409,7 @@ void* AudioHeap_AllocCached(s32 table_type, s32 size, s32 cache, s32 id) {
         if (table_type == 1) {
             if (load_status_entry0 == 4) {
                 for (i = 0; i < D_811858E8; i++) {
-                    if (D_81184664[i].fontId == t_cache->entries[0].id && D_81184664[i].enabled) {
+                    if (D_81184664[i].playbackState.fontId == t_cache->entries[0].id && D_81184664[i].sampleState.enabled) {
                         break;
                     }
                 }
@@ -422,7 +422,7 @@ void* AudioHeap_AllocCached(s32 table_type, s32 size, s32 cache, s32 id) {
 
             if (load_status_entry1 == 4) {
                 for (i = 0; i < D_811858E8; i++) {
-                    if (D_81184664[i].fontId == t_cache->entries[1].id && D_81184664[i].enabled) {
+                    if (D_81184664[i].playbackState.fontId == t_cache->entries[1].id && D_81184664[i].sampleState.enabled) {
                         break;
                     }
                 }
@@ -448,7 +448,7 @@ void* AudioHeap_AllocCached(s32 table_type, s32 size, s32 cache, s32 id) {
             if (table_type == 0) {
                 if (load_status_entry0 == 2) {
                     for (i = 0; i < D_811858CC; i++) {
-                        if (((SeqPlayer81109C0C*)&D_81184668)[i].enabled && ((SeqPlayer81109C0C*)&D_81184668)[i].seqId == t_cache->entries[0].id) {
+                        if (((SequencePlayer*)&D_81184668)[i].enabled && ((SequencePlayer*)&D_81184668)[i].seqId == t_cache->entries[0].id) {
                             break;
                         }
                     }
@@ -459,7 +459,7 @@ void* AudioHeap_AllocCached(s32 table_type, s32 size, s32 cache, s32 id) {
                 }
                 if (load_status_entry1 == 2) {
                     for (i = 0; i < D_811858CC; i++) {
-                        if (((SeqPlayer81109C0C*)&D_81184668)[i].enabled && ((SeqPlayer81109C0C*)&D_81184668)[i].seqId == t_cache->entries[1].id) {
+                        if (((SequencePlayer*)&D_81184668)[i].enabled && ((SequencePlayer*)&D_81184668)[i].seqId == t_cache->entries[1].id) {
                             break;
                         }
                     }
@@ -471,7 +471,7 @@ void* AudioHeap_AllocCached(s32 table_type, s32 size, s32 cache, s32 id) {
             } else if (table_type == 1) {
                 if (load_status_entry0 == 2) {
                     for (i = 0; i < D_811858E8; i++) {
-                        if (D_81184664[i].fontId == t_cache->entries[0].id && D_81184664[i].enabled) {
+                        if (D_81184664[i].playbackState.fontId == t_cache->entries[0].id && D_81184664[i].sampleState.enabled) {
                             break;
                         }
                     }
@@ -482,7 +482,7 @@ void* AudioHeap_AllocCached(s32 table_type, s32 size, s32 cache, s32 id) {
                 }
                 if (load_status_entry1 == 2) {
                     for (i = 0; i < D_811858E8; i++) {
-                        if (D_81184664[i].fontId == t_cache->entries[1].id && D_81184664[i].enabled) {
+                        if (D_81184664[i].playbackState.fontId == t_cache->entries[1].id && D_81184664[i].sampleState.enabled) {
                             break;
                         }
                     }
@@ -855,9 +855,9 @@ s32 AudioHeap_ResetStep(void) {
                 AudioHeap_UpdateReverbs();
             } else {
                 for (i = 0; i < D_811858E8; i++) {
-                    if (D_81184664[i].enabled && D_81184664[i].adsrState != 0) {
-                        D_81184664[i].adsrFadeOutVel = D_811858B8.ticksPerUpdateInv;
-                        D_81184664[i].adsrAction |= 0x10;
+                    if (D_81184664[i].sampleState.enabled && D_81184664[i].playbackState.adsr.state != 0) {
+                        D_81184664[i].playbackState.adsr.fadeOutVel = D_811858B8.ticksPerUpdateInv;
+                        D_81184664[i].playbackState.adsr.action |= 0x10;
                     }
                 }
                 D_8118465C = 16 / sp24;
@@ -1009,7 +1009,7 @@ void AudioHeap_Init(void) {
         EXTERNAL_POOL_AFF0.curRamAddr = EXTERNAL_POOL_AFF0.startRamAddr;
     }
     AudioHeap_ResetLoadStatus();
-    D_81184664 = (Note81109678*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, D_811858E8 * 0xCC);
+    D_81184664 = (Note*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, D_811858E8 * 0xCC);
     AudioPlayback_NoteInitAll();
     AudioPlayback_InitNoteFreeList();
     D_81184288 = (void*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, D_811858B8.ticksPerUpdate * D_811858E8 * 0x18);

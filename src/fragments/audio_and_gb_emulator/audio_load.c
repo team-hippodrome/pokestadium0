@@ -25,10 +25,10 @@ extern u8 D_81184656[1];
 
 /* Declarations copied from gb_tower_emulator_86920.c. */
 s32 AudioHeap_SearchCaches(s32, M2C_UNK, s32);
-s32 AudioPlayback_NoteDisable(Note81109678*);
-s32 AudioPlayback_AudioListRemove(Note81109678*);
-s32 AudioSeq_AudioListPushBack(s8*, Note81109678*);
-extern Note81109678* D_81184664;
+s32 AudioPlayback_NoteDisable(Note*);
+s32 AudioPlayback_AudioListRemove(Note*);
+s32 AudioSeq_AudioListPushBack(s8*, Note*);
+extern Note* D_81184664;
 extern s8 D_81184938;
 extern s32 D_811858E8;
 M2C_UNK AudioSeq_SequencePlayerDisable(M2C_UNK *);                   /* extern */
@@ -1042,11 +1042,11 @@ void func_8110D110(s32 arg0) {
     AudioHeap_DiscardFont(arg0);
 }
 
-typedef struct SeqPlayerFromD8_8110D214 {
+typedef struct SequencePlayerFromSkipTicks {
     /* 0x000 */ s32 skipTicks; // @unverified: this view starts at SequencePlayer+0xD8, OoT's SequencePlayer.skipTicks (set by AudioLoad_SyncInitSeqPlayerSkipTicks)
     /* 0x004 */ char unk004[0x158];
-} SeqPlayerFromD8_8110D214; // size = 0x15C
-extern SeqPlayerFromD8_8110D214 D_81184740[];
+} SequencePlayerFromSkipTicks; // size = 0x15C
+extern SequencePlayerFromSkipTicks D_81184740[];
 s32 AudioLoad_SyncInitSeqPlayerInternal(s32, s32, s32);
 
 /**
@@ -1081,11 +1081,6 @@ s32 AudioLoad_SyncInitSeqPlayerSkipTicks(s32 arg0, s32 arg1, s32 arg2) {
     return AudioLoad_SyncInitSeqPlayerInternal(arg0, arg1, 0);
 }
 
-typedef struct SeqPlayerFlags8110D278 {
-    u8 enabled : 1; // @unverified: set when the player starts, OoT's SequencePlayer.enabled (AudioLoad_SyncInitSeqPlayerInternal)
-    u8 finished : 1; // @unverified: cleared when the player starts, OoT's SequencePlayer.finished
-    u8 rest : 6;
-} SeqPlayerFlags8110D278;
 s32 func_8110D3D4(s32);
 void func_811152A4(s32);
 void func_81115254(s8*);
@@ -1125,12 +1120,12 @@ s32 AudioLoad_SyncInitSeqPlayerInternal(s32 arg0, s32 arg1, s32 arg2) {
     func_811152A4(arg0);
     M2C_FIELD(slot, s8*, 4) = arg1;
     M2C_FIELD(slot, u8*, 5) = id;
-    ((SeqPlayerFlags8110D278*)slot)->enabled = 1;
+    ((SequencePlayer*)slot)->enabled = 1;
     M2C_FIELD(slot, s32*, 0x18) = r;
     M2C_FIELD(slot, s32*, 0x74) = r;
     M2C_FIELD(slot, s8*, 0x8C) = 0;
     M2C_FIELD(slot, s16*, 0x10) = 0;
-    ((SeqPlayerFlags8110D278*)slot)->finished = 0;
+    ((SequencePlayer*)slot)->finished = 0;
     func_81115254(slot);
     for (i = 0; i < 16; i++) {
     }

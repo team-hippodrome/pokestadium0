@@ -261,17 +261,10 @@ void func_81110060(void) {
     D_81184657 = 0;
 }
 
-typedef struct SeqPlayer8111009C {
-    /* 0x000 */ u32 enabled : 1; // @unverified: same bit/use as OoT's SequencePlayer.enabled (channel IO is read only from enabled players)
-    /* 0x000 */ u32 unk_000_0 : 31;
-    /* 0x004 */ char unk004[0x30];
-    /* 0x034 */ s8* channels[(0x15C - 0x34) / 4]; // @unverified: same offset/use as OoT's SequencePlayer.channels
-} SeqPlayer8111009C; // size = 0x15C
-
-extern SeqPlayer8111009C D_81184668[];
+extern SequencePlayer D_81184668[];
 
 s8 func_8111009C(s32 arg0, s32 arg1, s32 arg2) {
-    SeqPlayer8111009C* ch = &D_81184668[arg0];
+    SequencePlayer* ch = &D_81184668[arg0];
     s8* p;
 
     if (ch->enabled) {

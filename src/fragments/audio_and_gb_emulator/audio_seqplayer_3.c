@@ -375,7 +375,7 @@ void GbApu_ClearActiveFlag(void) {
 }
 
 void func_81215C14_jp(s32 arg0, s32 arg1, u8 arg2) {
-    unk_D_81287B08_jp* ch = &D_81287B08_jp[arg0];
+    SequencePlayer* ch = &D_81287B08_jp[arg0];
     f32 target;
 
     ch->fadeTimer = 0;
@@ -391,7 +391,7 @@ void func_81215C14_jp(s32 arg0, s32 arg1, u8 arg2) {
 }
 
 void func_81215C9C_jp(s32 arg0, s32 arg1) {
-    unk_D_81287B08_jp* ch = &D_81287B08_jp[arg0];
+    SequencePlayer* ch = &D_81287B08_jp[arg0];
 
     ch->fadeTimer = 0;
     if (arg1 == 0) {

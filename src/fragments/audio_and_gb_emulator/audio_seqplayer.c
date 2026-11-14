@@ -6,7 +6,7 @@ extern SequencePlayer D_81184668[];
 extern AudioBufferParameters D_811858B8;
 extern volatile u32 D_811859D4;
 void AudioPlayback_NotePoolClear(s8*);
-void AudioPlayback_SeqLayerNoteDecay(SeqLayerFlags*);
+void AudioPlayback_SeqLayerNoteDecay(SequenceLayer*);
 void AudioSeq_AudioListPushBack(s8 *arg0, s8 *arg1);
 
 extern u8 D_81138690[];
@@ -36,7 +36,7 @@ extern s16* D_811859B8[3];
 extern s16 D_811859C4[3];
 extern u32 D_811859CC;
 extern volatile u32 D_811859D4;
-extern unk_D_81287B08_jp D_81287B08_jp[];
+extern SequencePlayer D_81287B08_jp[];
 extern OSMesgQueue* D_812896A0_jp;
 extern s32 D_81138A70;
 extern u8 D_81138A80[0x10];
@@ -53,7 +53,7 @@ extern s32 D_81138B80;
 extern GbAudioStream D_81138B84;
 extern struct AudioListItem D_81184928;
 extern AudioListItem D_81184928;
-extern SeqLayer811847C8 D_811847C8[1];
+extern SequenceLayer D_811847C8[1];
 extern s16 D_811858CC;
 extern SequencePlayer D_81184668[];
 
@@ -276,7 +276,7 @@ s32 AudioSeq_SeqChannelSetLayer(SequenceChannel* arg0, s32 arg1) {
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
-void AudioSeq_SeqLayerDisable(SeqLayerFlags* arg0) {
+void AudioSeq_SeqLayerDisable(SequenceLayer* arg0) {
     if (arg0 != NULL) {
         AudioPlayback_SeqLayerNoteDecay(arg0);
         arg0->enabled = 0;
@@ -295,7 +295,7 @@ void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1) {
 
     if (temp != NULL) {
         AudioSeq_AudioListPushBack((s8*)&D_81184928, temp + 0x74);
-        AudioSeq_SeqLayerDisable((SeqLayerFlags*)temp);
+        AudioSeq_SeqLayerDisable((SequenceLayer*)temp);
         arg0[arg1 + 0x14] = NULL;
     }
 }
@@ -308,8 +308,8 @@ void Particle31_ResetAllSlots(DisplayObject* arg0) {
         AudioSeq_SeqLayerFree(arg0, i);
     }
     AudioPlayback_NotePoolClear((s8*)arg0 + 0x84);
-    ((SeqChannelFlags*)arg0)->enabled = 0;
-    ((SeqChannelFlags*)arg0)->finished = 1;
+    ((SequenceChannel*)arg0)->enabled = 0;
+    ((SequenceChannel*)arg0)->finished = 1;
 }
 
 /**
@@ -452,9 +452,9 @@ void AudioSeq_InitLayerFreelist(void) {
     D_81184928.u.count = 0;
     D_81184928.pool = 0;
     for (i = 0; i < 1; i++) {
-        D_811847C8[i].listItemValue = &D_811847C8[i];
-        D_811847C8[i].listItemPrev = NULL;
-        AudioSeq_AudioListPushBack((s8*)&D_81184928, (s8*)&D_811847C8[i].listItemPrev);
+        D_811847C8[i].listItem.u.value = &D_811847C8[i];
+        D_811847C8[i].listItem.prev = NULL;
+        AudioSeq_AudioListPushBack((s8*)&D_81184928, (s8*)&D_811847C8[i].listItem);
     }
 }
 
@@ -526,7 +526,7 @@ void AudioSeq_SeqLayerProcessScript(SequenceLayer* arg0) {
         if (arg0->delay >= 2) {
             arg0->delay--;
             if (!arg0->stopSomething && arg0->gateDelay >= arg0->delay) {
-                AudioPlayback_SeqLayerNoteDecay((SeqLayerFlags*)arg0);
+                AudioPlayback_SeqLayerNoteDecay((SequenceLayer*)arg0);
                 arg0->stopSomething = 1;
             }
         } else {
@@ -541,7 +541,7 @@ void AudioSeq_SeqLayerProcessScript(SequenceLayer* arg0) {
                     AudioSeq_SeqLayerProcessScriptStep5(arg0, ret);
                 }
                 if (arg0->stopSomething == 1 && (arg0->note != 0 || arg0->continuousNotes)) {
-                    AudioPlayback_SeqLayerNoteDecay((SeqLayerFlags*)arg0);
+                    AudioPlayback_SeqLayerNoteDecay((SequenceLayer*)arg0);
                 }
             }
         }
@@ -556,9 +556,9 @@ void AudioSeq_SeqLayerProcessScript(SequenceLayer* arg0) {
  */
 void AudioSeq_SeqLayerProcessScriptStep1(SequenceLayer* arg0) {
     if (!arg0->continuousNotes) {
-        AudioPlayback_SeqLayerNoteDecay((SeqLayerFlags*)arg0);
+        AudioPlayback_SeqLayerNoteDecay((SequenceLayer*)arg0);
     } else if (arg0->note != NULL && arg0 == arg0->note->playbackState.wantedParentLayer) {
-        AudioPlayback_SeqLayerNoteDecay((SeqLayerFlags*)arg0);
+        AudioPlayback_SeqLayerNoteDecay((SequenceLayer*)arg0);
     }
     switch (arg0->portamento.mode & ~0x80) {
         case 1:
@@ -624,7 +624,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep5(SequenceLayerFlagsU32* layer, u32 same_s
     if (layer->continuousNotes != 1 || layer->note == NULL || !layer->status || same_sound != 1 ||
         layer != (SequenceLayerFlagsU32*)layer->note->playbackState.parentLayer) {
         if (same_sound == 0) {
-            AudioPlayback_SeqLayerNoteDecay((SeqLayerFlags*)layer);
+            AudioPlayback_SeqLayerNoteDecay((SequenceLayer*)layer);
         }
         layer->note = (Note*)AudioPlayback_AllocNote((s8*)layer);
     }
@@ -663,7 +663,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep2(SequenceLayer* layer) {
             if (AudioSeq_HandleScriptFlowControl(seqPlayer, state, cmd, cmd_arg16) == 0) {
                 continue;
             }
-            AudioSeq_SeqLayerDisable((SeqLayerFlags*)layer);
+            AudioSeq_SeqLayerDisable((SequenceLayer*)layer);
             return -1;
         }
 
@@ -694,7 +694,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep2(SequenceLayer* layer) {
                     layer->continuousNotes = 0;
                 }
                 layer->bit1 = 0;
-                AudioPlayback_SeqLayerNoteDecay((SeqLayerFlags*)layer);
+                AudioPlayback_SeqLayerNoteDecay((SequenceLayer*)layer);
                 break;
             case 0xC3:
                 cmd_arg16 = AudioSeq_ScriptReadCompressedU16(&state->pc);
