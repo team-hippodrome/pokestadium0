@@ -57,13 +57,13 @@ typedef struct LabeledButton {
     /* 0x04 */ s32 y;
     /* 0x08 */ s32 width;
     /* 0x0C */ s32 height;
-    /* 0x10 */ s32 flags; // @unverified: OR'd into the label's color flags by Window_DrawLabeled; bit 3 = highlighted
+    /* 0x10 */ s32 flags; // OR'd into the label's color flags by Window_DrawLabeled; bit 3 = highlighted; poking 8 lit the いいえ (No) button of the entry confirm window in play
     /* 0x14 */ char unk14[0xC];
     /* 0x20 */ Color_RGBA8 color; // @unverified: highlight fill (Window_DrawLabeled)
     /* 0x24 */ s32 unk_24;
-    /* 0x28 */ s32 fontSize; // @unverified: first argument of func_8001A384 in Window_DrawLabeled; 8 by default
-    /* 0x2C */ s32 labelX; // @unverified: label x offset in the button; 6 by default
-    /* 0x30 */ s32 labelY; // @unverified: label y offset in the button; 2 by default
+    /* 0x28 */ s32 fontSize; // first argument of func_8001A384 in Window_DrawLabeled; 8 by default; poking 16 drew the いいえ label larger in play
+    /* 0x2C */ s32 labelX; // label x offset in the button; 6 by default; poking 30 moved the いいえ label right in play
+    /* 0x30 */ s32 labelY; // label y offset in the button; 2 by default; poking 12 moved it down in play
     /* 0x34 */ s32 unk_34;
     /* 0x38 */ char* label;
 } LabeledButton; // size = 0x3C

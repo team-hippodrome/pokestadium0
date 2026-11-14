@@ -538,19 +538,19 @@ typedef struct CameraFacingQuad {
 
 typedef struct Radial20Node {
     /* 0x00 */ f32 startDelay; // @unverified: frames before the node starts moving (Radial20_UpdateNode)
-    /* 0x04 */ u8 alpha; // @unverified: vertex alpha in Radial20_Draw
-    /* 0x08 */ f32 halfWidth; // @unverified: grows by 1 a frame up to Radial20.maxHalfWidth; vertex offset length
-    /* 0x0C */ f32 angle; // @unverified: roll angle in radians, advanced by angleStep
+    /* 0x04 */ u8 alpha; // vertex alpha in Radial20_Draw; poking 0 on all nodes hid Bind's streak in play
+    /* 0x08 */ f32 halfWidth; // grows by 1 a frame up to Radial20.maxHalfWidth; vertex offset length; poking 30 on all nodes made Bind's streak a wide band in play
+    /* 0x0C */ f32 angle; // roll angle in radians, advanced by angleStep; poking 1.57 on all nodes flattened the streak in play
     /* 0x10 */ Vec3f position; // @unverified: node center, moves by velocity
     /* 0x1C */ Vec3f velocity; // @unverified: added to position every frame
     /* 0x28 */ char unk28[0x20];
 } Radial20Node; // size = 0x48
 
 typedef struct Radial20 {
-    /* 0x000 */ s16 active; // @unverified: 1 while running (Radial20_IsComplete)
+    /* 0x000 */ s16 active; // 1 while running (Radial20_IsComplete); poking 0 each frame removed Bind's blue streak in play
     /* 0x002 */ s16 auxEffectId; // @unverified: AuxiliaryEffect_Alloc() id, passed to AuxiliaryEffect_Update/Spawn/Draw
     /* 0x004 */ s16 frame; // @unverified: counts up each frame until duration
-    /* 0x006 */ s16 duration; // @unverified: frames the effect runs
+    /* 0x006 */ s16 duration; // frames the effect runs; poking 2 ended Bind's streak at once in play
     /* 0x008 */ s16 variant; // @unverified: motion and draw mode switch (0-9) in Radial20_UpdateNode/Draw
     /* 0x00A */ Color_RGBA8 color; // vertex color (rgb); poking FF0000 turned Onix's light-blue move streak red in play. Stadium 1 follows this with a Color_RGB8
     /* 0x010 */ f32 maxHalfWidth; // @unverified: cap for each node's halfWidth
@@ -607,13 +607,13 @@ typedef struct TexturedRibbonSheetNode {
 } TexturedRibbonSheetNode; // size = 0x50
 
 typedef struct TexturedRibbonSheet {
-    /* 0x000 */ s16 active; // @unverified: 1 while running
+    /* 0x000 */ s16 active; // 1 while running; poking 0 each frame removed Swift's stars in play
     /* 0x002 */ s16 phase; // @unverified: 0 rise, 1 fly toward the target after frame 11
     /* 0x004 */ s16 frame; // @unverified: counts up each frame until duration + 10
     /* 0x006 */ s16 duration; // @unverified: frames the effect runs
     /* 0x008 */ s16 direction; // @unverified: -1 or 1 from the sign of the start x
     /* 0x00A */ Color_RGB8 color; // @unverified: vertex color
-    /* 0x010 */ f32 scale; // @unverified: half the secondary owner's model scale
+    /* 0x010 */ f32 scale; // half the secondary owner's model scale; also scales the star model; tripling it filled the screen with a star in play
     /* 0x014 */ f32 angleStep; // @unverified: added to the head node's angle per frame
     /* 0x018 */ Vtx* vtx; // @unverified: vertices allocated each frame
     /* 0x01C */ char unk01C[0x1C];
@@ -687,7 +687,8 @@ typedef void (*ParticleUpdateCallback)(struct Particle*);
 /*
  * Same record as Stadium 1's Particle, but 4 bytes shorter: from 0x28 on, every
  * field sits 4 bytes lower than in Stadium 1. Field names without a trailing comment
- * follow Stadium 1 and are @unverified; the commented ones say where they came from.
+ * follow Stadium 1 and are @unverified; the commented ones say where they came from
+ * (those without @unverified were checked in play, mostly on Pinsir's Vice Grip dust).
  */
 typedef struct Particle {
     /* 0x00 */ struct Particle* next;
@@ -698,33 +699,33 @@ typedef struct Particle {
     /* 0x14 */ DisplayObject* displayObject;
     /* 0x18 */ u32 flags;
     /* 0x1C */ f32 scale; // draw scale; poking 1.0 over 5.4 shrank Transform's smoke puffs in play
-    /* 0x20 */ f32 scaleTarget;
+    /* 0x20 */ f32 scaleTarget; // scale approached by Particle_ApproachScaleTarget; poking 2.0 grew the Vice Grip dust puffs in play
     /* 0x24 */ f32 scaleStep;
-    /* 0x28 */ Vec3f worldPosition;
-    /* 0x34 */ Vec3f positionOffset;
+    /* 0x28 */ Vec3f worldPosition; // drawn position, recomputed each frame as origin + positionOffset + motionOffset (watched in play; pokes are overwritten)
+    /* 0x34 */ Vec3f positionOffset; // poking y = 80 lifted the Vice Grip dust into the air in play
     /* 0x40 */ char unk40[0xC];
-    /* 0x4C */ Vec3f motionOffset;
+    /* 0x4C */ Vec3f motionOffset; // accumulated motion; poking y = 80 lifted the Vice Grip dust in play
     /* 0x58 */ Vec3f motionTarget;
     /* 0x64 */ Vec3f origin; // anchor position; poking x = -200 moved Transform's smoke off screen in play
-    /* 0x70 */ f32 stepMagnitude;
+    /* 0x70 */ f32 stepMagnitude; // speed along rotation.y; poking 40 flung the Vice Grip dust far to the sides in play
     /* 0x74 */ f32 magnitudeStep;
-    /* 0x78 */ Vec3f motionStep;
+    /* 0x78 */ Vec3f motionStep; // per-frame velocity; poking y = 15 made the Vice Grip dust rise away in play
     /* 0x84 */ char unk84[0xC];
-    /* 0x90 */ Vec3s rotation;
+    /* 0x90 */ Vec3s rotation; // rotation.y is the travel heading; poking 0 sent all Vice Grip dust the same way in play
     /* 0x96 */ Vec3s rotationStep;
     /* 0x9C */ Vec3s rotationTarget;
-    /* 0xA2 */ s16 param0; // @unverified: from BattleAnimEffectSlot.param0 at spawn (times spawnIndex for kind 18); per-effect countdown or alpha target
+    /* 0xA2 */ s16 param0; // from BattleAnimEffectSlot.param0 at spawn (times spawnIndex for kind 18); per-effect countdown or alpha target; on the Vice Grip dust the delay before it rises (poking 99 kept it low in play)
     /* 0xA4 */ s16 countdown; // @unverified: per-effect countdown, only set and counted down by the particle.c helpers
     /* 0xA6 */ s16 param1; // @unverified: from BattleAnimEffectSlot.param1 at spawn; per-effect step (palette/alpha approach speed)
     /* 0xA8 */ s16 spawnIndex; // @unverified: index of the particle within its spawn batch/burst (BattleAnim_InitializeParticleFromEffect, CloneParticleState)
     /* 0xAA */ s16 scratchA; // @unverified: per-effect scratch value (alpha, angle step, palette index), meaning set by each callback
     /* 0xAC */ s16 scratchB; // @unverified: per-effect scratch value (env alpha, angle target), meaning set by each callback
-    /* 0xAE */ s16 lifecycle;
+    /* 0xAE */ s16 lifecycle; // state machine step; poking 4 made the dust batch free itself (allocated 0) in play
     /* 0xB0 */ char unkB0[0x2];
-    /* 0xB2 */ s16 frameTimer;
-    /* 0xB4 */ s16 phase;
+    /* 0xB2 */ s16 frameTimer; // frames until the next texture frame; poking 100 froze textureFrame at 0 in play
+    /* 0xB4 */ s16 phase; // poking 1 each frame made the Vice Grip spark emitter fire a burst every frame in play
     /* 0xB6 */ s16 phaseTimer;
-    /* 0xB8 */ s16 delayTimer;
+    /* 0xB8 */ s16 delayTimer; // start delay; counts down per frame, poking 0 started all five Vice Grip sparks at once in play
     /* 0xBA */ u8 prim_r; // primitive color; poking FF0000 into prim_r/g/b turned Transform's smoke red in play
     /* 0xBB */ u8 prim_g;
     /* 0xBC */ u8 prim_b;
@@ -733,8 +734,8 @@ typedef struct Particle {
     /* 0xBF */ u8 env_b;
     /* 0xC0 */ u8 prim_a; // primitive alpha; poking 0 hid Transform's smoke in play, it fades 0x78 -> 0x40 on its own
     /* 0xC1 */ char unkC1[0x1];
-    /* 0xC2 */ s8 loopsRemaining;
-    /* 0xC3 */ s8 textureFrame;
+    /* 0xC2 */ s8 loopsRemaining; // animation loops left; poking 5 made the dust cycle frames 0-7 again, counting 5 -> 3 in play
+    /* 0xC3 */ s8 textureFrame; // texture animation frame; counts 0-7 on the Vice Grip dust, poking 3 changed the puffs in play
     /* 0xC4 */ char unkC4[0x2];
     /* 0xC6 */ u8 effectList; // @unverified: effect list the particle belongs to; lists 4 and 7 survive BattleAnim_CleanupEffects*
     /* 0xC7 */ u8 resourceListId; // @unverified: queued resource list id; BattleAnim_StopParticlesForOwnerCategory matches it
@@ -742,7 +743,7 @@ typedef struct Particle {
     /* 0xC9 */ u8 byteParam0; // @unverified: from BattleAnimEffectSlot.byteParam0; 0xFF by default; bone id or alpha target per effect
     /* 0xCA */ u8 byteParam2; // @unverified: from BattleAnimEffectSlot.byteParam2; per-effect step value
     /* 0xCB */ u8 byteParam1; // @unverified: from BattleAnimEffectSlot.byteParam1; per-effect palette/color target
-    /* 0xCC */ s8 allocated;
+    /* 0xCC */ s8 allocated; // pool slot in use; went 1 -> 0 when the particle reached lifecycle 4 in play
 } Particle; // size = 0xD0
 
 typedef struct OwnerLinkedFourStream {
@@ -777,7 +778,7 @@ typedef struct OwnerAnchoredFourStream {
 
 typedef struct Trail50EffectNode {
     /* 0x00 */ u8 alpha; // @unverified: vertex alpha, fades along the trail
-    /* 0x04 */ f32 halfWidth; // @unverified: grows by 2 a frame up to maxHalfWidth
+    /* 0x04 */ f32 halfWidth; // grows by 2 a frame up to maxHalfWidth; poking 30 on all nodes made wide fans in play
     /* 0x08 */ f32 angle; // @unverified: roll angle in radians
     /* 0x0C */ Vec3f position; // @unverified: node center
     /* 0x18 */ Vec3f velocity; // @unverified: phase 1 motion
@@ -789,14 +790,14 @@ typedef struct Trail50EffectNode {
 } Trail50EffectNode; // size = 0x50
 
 typedef struct Trail50Effect {
-    /* 0x000 */ s16 active; // @unverified: 1 while running
+    /* 0x000 */ s16 active; // 1 while running; poking 0 each frame removed Petal Dance's petals in play
     /* 0x002 */ s16 phase; // @unverified: 0 swirl, 1 fly (after frame 21, frame restarts)
     /* 0x004 */ s16 frame; // @unverified: counts up each frame
     /* 0x006 */ s16 duration; // @unverified: frames of phase 1
     /* 0x008 */ s16 direction; // @unverified: -1 or 1 from the sign of the start x
-    /* 0x00A */ Color_RGB8 color; // @unverified: vertex color
-    /* 0x010 */ f32 scale; // @unverified: model scale; swirl strength and draw scale
-    /* 0x014 */ f32 maxHalfWidth; // @unverified: cap for the nodes' halfWidth
+    /* 0x00A */ Color_RGB8 color; // vertex color; poking green turned Petal Dance's petals green in play
+    /* 0x010 */ f32 scale; // model scale; swirl strength and draw scale; tripling it filled the screen with petal in play
+    /* 0x014 */ f32 maxHalfWidth; // cap for the nodes' halfWidth; poking 40 widened the petal trails into fans in play
     /* 0x018 */ f32 angleStep; // @unverified: added to the head node's angle per frame
     /* 0x01C */ char unk01C[0x4];
     /* 0x020 */ Vtx* vtx; // @unverified: vertices allocated each frame
@@ -881,30 +882,30 @@ typedef struct AuxiliaryEffect {
 
 typedef struct BeamTrailSegment {
     /* 0x00 */ f32 startDelay; // @unverified: frames the segment waits at the owner (2 x index)
-    /* 0x04 */ f32 halfWidth; // @unverified: grows by 3 a frame up to maxHalfWidth
-    /* 0x08 */ f32 angle; // @unverified: roll angle in radians, advanced by angleStep
-    /* 0x0C */ Vec3f position; // @unverified: segment center
+    /* 0x04 */ f32 halfWidth; // grows by 3 a frame up to maxHalfWidth; poking 40 widened Ice Beam's ribbons in play
+    /* 0x08 */ f32 angle; // roll angle in radians, advanced by angleStep; poking 1.57 flattened the ribbons in play
+    /* 0x0C */ Vec3f position; // segment center; adding 3 to y each frame lifted Ice Beam in play
     /* 0x18 */ Vec3f velocity; // @unverified: added to position once moving; also the beam direction
 } BeamTrailSegment; // size = 0x24
 
 typedef struct BeamTrail {
-    /* 0x000 */ s16 active; // @unverified: 1 while running
-    /* 0x002 */ s16 widthMode; // @unverified: 0 rotates the width about the beam, 1 faces it to the camera
+    /* 0x000 */ s16 active; // 1 while running; poking 0 each frame cut Ice Beam short in play
+    /* 0x002 */ s16 widthMode; // 0 rotates the width about the beam, 1 faces it to the camera; poking 1 changed the ribbon shape in play
     /* 0x004 */ s16 frame; // @unverified: counts up each frame until duration
-    /* 0x006 */ s16 duration; // @unverified: frames the beam runs
-    /* 0x008 */ PrimLodColor primColor; // @unverified: primitive color
-    /* 0x00D */ PrimLodColor envColor; // @unverified: environment color
+    /* 0x006 */ s16 duration; // frames the beam runs; poking 10 ended Ice Beam's ribbons early in play
+    /* 0x008 */ PrimLodColor primColor; // primitive color; poking red turned Ice Beam's ribbons red in play
+    /* 0x00D */ PrimLodColor envColor; // environment color; poking green tinted them green in play
     /* 0x014 */ f32 primAlphaScale; // @unverified: fades by 0.1 a frame after fadeStartFrame
     /* 0x018 */ f32 envAlphaScale; // @unverified: fades by 0.1 a frame after fadeStartFrame
     /* 0x01C */ s16 fadeStartFrame; // @unverified: 0x46, compared with the shared frame counter D_821CD9E0
-    /* 0x020 */ s32 textureA; // @unverified: sBattleAnimAssetPointers index of tile 0
-    /* 0x024 */ s32 textureB; // @unverified: sBattleAnimAssetPointers index of tile 1
+    /* 0x020 */ s32 textureA; // sBattleAnimAssetPointers index of tile 0; poking 100 changed the ribbon texture in play
+    /* 0x024 */ s32 textureB; // sBattleAnimAssetPointers index of tile 1; poking 100 changed the ribbon texture in play
     /* 0x028 */ CombinerCycleArgs combineCycle0; // @unverified: color combiner cycle 1
     /* 0x048 */ CombinerCycleArgs combineCycle1; // @unverified: color combiner cycle 2
     /* 0x068 */ TextureScroll scrollA; // @unverified: tile 0 scroll
     /* 0x074 */ TextureScroll scrollB; // @unverified: tile 1 scroll
-    /* 0x080 */ f32 maxHalfWidth; // @unverified: cap for the segments' halfWidth
-    /* 0x084 */ f32 angleStep; // @unverified: added to the moving segments' angle per frame
+    /* 0x080 */ f32 maxHalfWidth; // cap for the segments' halfWidth; poking 60 made Ice Beam's ribbons much wider in play
+    /* 0x084 */ f32 angleStep; // added to the moving segments' angle per frame; poking 1.0 changed the ribbon twist in play
     /* 0x088 */ Vtx* vtx; // @unverified: 40 vertices allocated each frame
     /* 0x08C */ char unk08C[0x18];
     /* 0x0A4 */ BeamTrailSegment segments[20]; // @unverified: beam segments
