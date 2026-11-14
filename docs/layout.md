@@ -38,7 +38,7 @@ Where the code lives, after the reorganization. File names are broadly correct g
 | 021 | `src/fragments/unused_relay_021/` | 1 | 1 | unused relay that queues the main menu launcher (020); never loaded |
 | 022 | `src/fragments/launcher_relay_022/` | 1 | 1 | launcher relay |
 | 023 | `src/fragments/unused_relay_023/` | 1 | 1 | unused relay that queues the main menu launcher (020); never loaded |
-| 024 | `src/fragments/launcher_relay_024/` | 1 | 1 | launcher relay |
+| 024 | `src/fragments/unused_relay_024/` | 1 | 1 | unused relay back to the main menu (via 020) |
 | 025 | `src/fragments/fatal_error_screen/` | 1 | 6 | fatal error screen |
 | 030 | `src/fragments/pokedex_kanto_map/` | 1 | 4 | 3D Kanto map model for the Pokédex habitat screen |
 | 031 | `src/fragments/particle_data/` | 2 | 8 | particle data |

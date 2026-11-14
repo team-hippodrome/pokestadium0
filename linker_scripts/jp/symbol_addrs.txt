@@ -5000,3 +5000,4 @@ sPartyModelPreview = 0x8A21DA4C; // type:data
 sMoveBackdropArchive = 0x8A21DA54; // type:data
 sMoveBackdropPools = 0x8A21DA60; // type:data
 sMoveBackdrops = 0x8A21DA70; // type:data
+UnusedRelay024_QueueMainMenuLauncher = 0x8E400020; // type:func
