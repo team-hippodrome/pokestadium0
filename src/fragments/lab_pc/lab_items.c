@@ -837,7 +837,7 @@ void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
 void Font_SetColorForFlags(s32);
 s32 func_8002BC44(s32);
 
-void func_890017FC(s8* arg0, s32 x, s32 y, s32 flags, s32 icon) {
+void func_890017FC(LabItemOrganizeWindow* arg0, s32 x, s32 y, s32 flags, s32 icon) {
     ColorPair890017FC* colors;
 
     if (flags & 2) {
@@ -861,7 +861,7 @@ void func_890017FC(s8* arg0, s32 x, s32 y, s32 flags, s32 icon) {
         func_8001AB6C();
         Font_SetColorForFlags(flags);
         func_8001A384(8, 0);
-        func_8001A944(x + 0x21, y + 4, M2C_FIELD(arg0, s32**, 0x1DC)[icon]);
+        func_8001A944(x + 0x21, y + 4, arg0->boxNames[icon]);
         func_8001ABBC();
     }
 }
@@ -943,29 +943,29 @@ s32 func_80031BC0(u8, char *);
  * Draws the help line for the organize window's current state.
  * Seen in play (2026-11-12): 「どうぐをいどうする」.
  */
-void LabItem_DrawHelpText(s32* arg0) {
+void LabItem_DrawHelpText(LabItemOrganizeWindow* arg0) {
     char sp2C[0x54];
-    List89001B88* list;
+    ScrollList* list;
 
-    switch (arg0[0]) {
+    switch (arg0->state) {
         case 1:
-            LabItem_DrawTitleText(arg0[0xC] + 0x58, arg0[0xD], D_8900A650[arg0[0x41]], D_8900A678[arg0[0x41]]);
+            LabItem_DrawTitleText(arg0->footerFrame.x + 0x58, arg0->footerFrame.y, D_8900A650[arg0->operationCursor.cursor], D_8900A678[arg0->operationCursor.cursor]);
             break;
         case 2:
-            LabItem_DrawCenteredText(arg0[0xC] + 0x58, arg0[0xD], D_8900A660[arg0[0x41]]);
+            LabItem_DrawCenteredText(arg0->footerFrame.x + 0x58, arg0->footerFrame.y, D_8900A660[arg0->operationCursor.cursor]);
             break;
         case 3:
-            LabItem_DrawCenteredText(arg0[0xC] + 0x58, arg0[0xD], D_8900A66C[arg0[0x41]]);
+            LabItem_DrawCenteredText(arg0->footerFrame.x + 0x58, arg0->footerFrame.y, D_8900A66C[arg0->operationCursor.cursor]);
             break;
         case 4:
         case 6:
         case 7:
-            if (arg0[0] == 6) {
-                list = (List89001B88*)(arg0 + 0xBE);
+            if (arg0->state == 6) {
+                list = &arg0->rightList.list;
             } else {
-                list = (List89001B88*)(arg0 + 0x79);
+                list = &arg0->leftList.list;
             }
-            LabItem_DrawSmallText(arg0[0xC] + 0x58, arg0[0xD], func_80031BC0((*list->data)[list->index * 2], sp2C));
+            LabItem_DrawSmallText(arg0->footerFrame.x + 0x58, arg0->footerFrame.y, func_80031BC0(list->items->rows[list->cursor * 2], sp2C));
             break;
     }
 }
@@ -974,114 +974,106 @@ void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
 extern u8 D_800735C4[];
 void func_8002B054(s8*, s32);
 void Window_DrawFrame(void*);
-void func_890017FC(s8* arg0, s32 x, s32 y, s32 flags, s32 icon);
 void LabItem_DrawItemList(LabItemList* arg0, s32 arg1);
 /**
  * Draws the organize items window: frame, lists and help line.
  * Seen in play (2026-11-12): the どうぐのせいり window.
  */
-void LabItem_DrawOrganizeWindow(s8 *arg0)
-{
-  s32 v;
-  s32 flags;
-  if (func_8002AE6C(arg0 + 4) == 0)
-  {
-    Window_DrawFrame(arg0 + 0x30);
-    gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028((*((s32 *) (((s8 *) arg0) + 4))) + 6, (*((s32 *) (((s8 *) arg0) + 8))) + 6, (*((s32 *) (((s8 *) arg0) + 0xC))) - 0xC, 6, *((Color_RGBA8 *) (&D_8900A5BC))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-    func_80029028((*((s32 *) (((s8 *) arg0) + 4))) + 6, (*((s32 *) (((s8 *) arg0) + 8))) + 0x12A, (*((s32 *) (((s8 *) arg0) + 0xC))) - 0xC, 6, *((Color_RGBA8 *) (&D_8900A5BC))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-    func_80029028((*((s32 *) (((s8 *) arg0) + 4))) + 6, (*((s32 *) (((s8 *) arg0) + 8))) + 0xC, 6, 0x11E, *((Color_RGBA8 *) (&D_8900A5BC))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-    func_80029028(((*((s32 *) (((s8 *) arg0) + 0xC))) + (*((s32 *) (((s8 *) arg0) + 4)))) - 0xC, (*((s32 *) (((s8 *) arg0) + 8))) + 0xC, 6, 0x11E, *((Color_RGBA8 *) (&D_8900A5BC))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-    func_80029028((*((s32 *) (((s8 *) arg0) + 4))) + 0xF8, (*((s32 *) (((s8 *) arg0) + 8))) + 0xC, 0x44, 0x11E, *((Color_RGBA8 *) (&D_8900A5BC))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-    Ui_DrawTexturedDivider(*((s32 *) (((s8 *) arg0) + 4)), (*((s32 *) (((s8 *) arg0) + 8))) + 0x12F, *((s32 *) (((s8 *) arg0) + 0xC)), D_8007356C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-    Ui_DrawTexturedFrameDecal((*((s32 *) (((s8 *) arg0) + 4))) + 0xA, (*((s32 *) (((s8 *) arg0) + 8))) + 0xA, 0xF0, 0x122, D_800735C4); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-    Ui_DrawTexturedFrameDecal((*((s32 *) (((s8 *) arg0) + 4))) + 0x13A, (*((s32 *) (((s8 *) arg0) + 8))) + 0xA, 0xF0, 0x122, D_800735C4); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-    v = ((*((s32 *) (((s8 *) arg0) + 0))) == 1) ? (2) : (0x10);
-    func_8002B054(arg0 + 0x50, ((*((s32 *) (((s8 *) arg0) + 0x104))) == 3) ? (v) : (0));
-    func_8002B054(arg0 + 0x7C, ((*((s32 *) (((s8 *) arg0) + 0x104))) == 0) ? (v) : (0));
-    func_8002B054(arg0 + 0xA8, ((*((s32 *) (((s8 *) arg0) + 0x104))) == 1) ? (v) : (0));
- func_8002B054(arg0 + 0xD4, ((*((s32 *) (((s8 *) arg0) + 0x104))) == 2) ? (v) : (0)); func_890017FC(arg0, (*((s32 *) (((s8 *) arg0) + 4))) + 0xC, (*((s32 *) (((s8 *) arg0) + 8))) + 0xC, 0, *((s32 *) (((s8 *) arg0) + 0x1D4))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-    func_890017FC(arg0, (*((s32 *) (((s8 *) arg0) + 4))) + 0x13C, (*((s32 *) (((s8 *) arg0) + 8))) + 0xC, 0, *((s32 *) (((s8 *) arg0) + 0x1D8))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-    LabItem_DrawItemList(arg0 + 0x1E4, (((*((s32 *) (((s8 *) arg0) + 0))) == 4) || ((*((s32 *) (((s8 *) arg0) + 0))) == 7)) ? (2) : ((((*((s32 *) (((s8 *) arg0) + 0))) == 5) || ((*((s32 *) (((s8 *) arg0) + 0))) == 6)) ? (0x10) : (0))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-    flags = ((((*((s32 *) (((s8 *) arg0) + 0))) == 5) || ((*((s32 *) (((s8 *) arg0) + 0))) == 6)) ? 2 : 0); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-    flags |= (((*((s32 *) (((s8 *) arg0) + 0))) == 5) ? 0x200 : 0);
-    LabItem_DrawItemList(arg0 + 0x2F8, flags);
-    if (((*((s32 *) (((s8 *) arg0) + 0))) == 2) || ((*((s32 *) (((s8 *) arg0) + 0))) == 9)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
-    {
-      LabItem_DrawMenu(arg0 + 0x10C);
+void LabItem_DrawOrganizeWindow(LabItemOrganizeWindow* arg0) {
+    s32 v;
+    s32 flags;
+
+    if (func_8002AE6C(&arg0->window) == 0) {
+        Window_DrawFrame(&arg0->footerFrame);
+        gSPDisplayList(gDisplayListHead++, D_80060270);
+        func_80029028(arg0->window.frame.x + 6, arg0->window.frame.y + 6, arg0->window.frame.width - 0xC, 6, D_8900A5BC);
+        func_80029028(arg0->window.frame.x + 6, arg0->window.frame.y + 0x12A, arg0->window.frame.width - 0xC, 6, D_8900A5BC);
+        func_80029028(arg0->window.frame.x + 6, arg0->window.frame.y + 0xC, 6, 0x11E, D_8900A5BC);
+        func_80029028(arg0->window.frame.x + arg0->window.frame.width - 0xC, arg0->window.frame.y + 0xC, 6, 0x11E, D_8900A5BC);
+        func_80029028(arg0->window.frame.x + 0xF8, arg0->window.frame.y + 0xC, 0x44, 0x11E, D_8900A5BC);
+        Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->window.frame.y + 0x12F, arg0->window.frame.width, D_8007356C);
+        Ui_DrawTexturedFrameDecal(arg0->window.frame.x + 0xA, arg0->window.frame.y + 0xA, 0xF0, 0x122, D_800735C4);
+        Ui_DrawTexturedFrameDecal(arg0->window.frame.x + 0x13A, arg0->window.frame.y + 0xA, 0xF0, 0x122, D_800735C4);
+        v = (arg0->state == 1) ? 2 : 0x10;
+        func_8002B054(&arg0->backButton, (arg0->operationCursor.cursor == 3) ? v : 0);
+        func_8002B054(&arg0->moveButton, (arg0->operationCursor.cursor == 0) ? v : 0);
+        func_8002B054(&arg0->reorderButton, (arg0->operationCursor.cursor == 1) ? v : 0);
+        func_8002B054(&arg0->exchangeButton, (arg0->operationCursor.cursor == 2) ? v : 0);
+        func_890017FC(arg0, arg0->window.frame.x + 0xC, arg0->window.frame.y + 0xC, 0, arg0->leftBox);
+        func_890017FC(arg0, arg0->window.frame.x + 0x13C, arg0->window.frame.y + 0xC, 0, arg0->rightBox);
+        LabItem_DrawItemList(&arg0->leftList, ((arg0->state == 4) || (arg0->state == 7)) ? 2 : ((arg0->state == 5) || (arg0->state == 6)) ? 0x10 : 0);
+        flags = ((arg0->state == 5) || (arg0->state == 6)) ? 2 : 0;
+        flags |= (arg0->state == 5) ? 0x200 : 0;
+        LabItem_DrawItemList(&arg0->rightList, flags);
+        if ((arg0->state == 2) || (arg0->state == 9)) {
+            LabItem_DrawMenu(&arg0->sourceBoxWindow);
+        }
+        if ((arg0->state == 3) || (arg0->state == 0xA)) {
+            LabItem_DrawMenu(&arg0->targetBoxWindow);
+        }
+        LabItem_DrawHelpText(arg0);
+        if ((arg0->state == 9) || (arg0->state == 0xA) || (arg0->state == 0xB) || (arg0->state == 0xC)) {
+            TextBox_Draw(arg0->textBox);
+        }
+        if (arg0->state == 8) {
+            LabItem_DrawCountSelector(&arg0->countSelector);
+        }
     }
-    if (((*((s32 *) (((s8 *) arg0) + 0))) == 3) || ((*((s32 *) (((s8 *) arg0) + 0))) == 0xA)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
-    {
-      LabItem_DrawMenu(arg0 + 0x170);
-    }
-    LabItem_DrawHelpText((s32 *) arg0);
-    if (((((*((s32 *) (((s8 *) arg0) + 0))) == 9) || ((*((s32 *) (((s8 *) arg0) + 0))) == 0xA)) || ((*((s32 *) (((s8 *) arg0) + 0))) == 0xB)) || ((*((s32 *) (((s8 *) arg0) + 0))) == 0xC)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
-    {
-      TextBox_Draw(arg0 + 0x4AC);
-    }
-    if ((*((s32 *) (((s8 *) arg0) + 0))) == 8)
-    {
-      LabItem_DrawCountSelector(arg0 + 0x410);
-    }
-  }
 }
 
-#define CURSOR(p) ((ScrollList*)((p) + 0x1E4))
-
-void func_890020C0(u8* arg0) {
+void func_890020C0(LabItemOrganizeWindow* arg0) {
     u8* item;
 
-    item = CURSOR(arg0)->items->rows + CURSOR(arg0)->cursor * 2;
-    M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x1A4)] = 1;
-    M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x140)] = M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x1A4)];
+    item = arg0->leftList.list.items->rows + arg0->leftList.list.cursor * 2;
+    arg0->dirty[arg0->targetBoxWindow.menu.cursor] = 1;
+    arg0->dirty[arg0->sourceBoxWindow.menu.cursor] = arg0->dirty[arg0->targetBoxWindow.menu.cursor];
     if (LabItem_IsQuantitylessItemForOperation(item[0]) != 0) {
-        func_89000020((LabMonEntryList*)(arg0 + 0x2F8), (void*)(CURSOR(arg0)->items->rows + CURSOR(arg0)->items->rowSize * CURSOR(arg0)->cursor));
-        LabList_RemoveSelectedEntry((ScrollList*)CURSOR(arg0));
+        func_89000020((LabMonEntryList*)&arg0->rightList, (void*)(arg0->leftList.list.items->rows + arg0->leftList.list.items->rowSize * arg0->leftList.list.cursor));
+        LabList_RemoveSelectedEntry(&arg0->leftList.list);
     } else {
-        func_890000A4((s32*)(arg0 + 0x2F8), item[0], M2C_FIELD(arg0, s32*, 0x444));
-        LabItem_SubtractSelectedItemQuantity((unk_func_8820BE14_02C_038*)CURSOR(arg0), M2C_FIELD(arg0, s32*, 0x444));
+        func_890000A4((s32*)&arg0->rightList, item[0], arg0->countSelector.count.value);
+        LabItem_SubtractSelectedItemQuantity((unk_func_8820BE14_02C_038*)&arg0->leftList, arg0->countSelector.count.value);
     }
 }
-#undef CURSOR
 
-void func_80027654(s32* matrix, u8* out, s32 row);
-void func_80027700(s32* matrix, u8* in, s32 row);
+void func_80027654(ByteMatrix* matrix, u8* out, s32 row);
+void func_80027700(ByteMatrix* matrix, u8* in, s32 row);
 
-void func_8900219C(s8* arg0) {
+void func_8900219C(LabItemOrganizeWindow* arg0) {
     u8 row[4];
-    s32* matrix;
+    ByteMatrix* matrix;
 
-    func_80027654(M2C_FIELD(arg0, s32**, 0x2F8), row, M2C_FIELD(arg0, s32*, 0x300));
-    matrix = M2C_FIELD(arg0, s32**, 0x1E4);
-    func_80027700(M2C_FIELD(arg0, s32**, 0x2F8), (u8*)(matrix[3] * M2C_FIELD(arg0, s32*, 0x1EC) + matrix[0]), M2C_FIELD(arg0, s32*, 0x300));
-    func_80027700(M2C_FIELD(arg0, s32**, 0x1E4), row, M2C_FIELD(arg0, s32*, 0x1EC));
-    M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x1D8)] = 1;
-    M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x1D4)] = M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x1D8)];
+    func_80027654(arg0->rightList.list.items, row, arg0->rightList.list.cursor);
+    matrix = arg0->leftList.list.items;
+    func_80027700(arg0->rightList.list.items, matrix->rows + matrix->rowSize * arg0->leftList.list.cursor, arg0->rightList.list.cursor);
+    func_80027700(arg0->leftList.list.items, row, arg0->leftList.list.cursor);
+    arg0->dirty[arg0->rightBox] = 1;
+    arg0->dirty[arg0->leftBox] = arg0->dirty[arg0->rightBox];
 }
 
-void func_80027654(s32* matrix, u8* out, s32 row);
-void func_80027700(s32* matrix, u8* in, s32 row);
+void func_80027654(ByteMatrix* matrix, u8* out, s32 row);
+void func_80027700(ByteMatrix* matrix, u8* in, s32 row);
 
-void func_89002248(s8* arg0) {
+void func_89002248(LabItemOrganizeWindow* arg0) {
     u8 row[4];
-    s32* matrix = M2C_FIELD(arg0, s32**, 0x1E4);
+    ByteMatrix* matrix = arg0->leftList.list.items;
 
-    func_80027654(matrix, row, M2C_FIELD(arg0, s32*, 0x1EC));
-    func_80027700(matrix, (u8*)(matrix[3] * M2C_FIELD(arg0, s32*, 0x40C) + matrix[0]), M2C_FIELD(arg0, s32*, 0x1EC));
-    func_80027700(matrix, row, M2C_FIELD(arg0, s32*, 0x40C));
-    M2C_FIELD(arg0, s32**, 0x494)[M2C_FIELD(arg0, s32*, 0x1D4)] = 1;
+    func_80027654(matrix, row, arg0->leftList.list.cursor);
+    func_80027700(matrix, matrix->rows + matrix->rowSize * arg0->swapIndex, arg0->leftList.list.cursor);
+    func_80027700(matrix, row, arg0->swapIndex);
+    arg0->dirty[arg0->leftBox] = 1;
 }
 
 
-void func_890022D0(s8 *arg0) {
+void func_890022D0(LabItemOrganizeWindow* arg0) {
     s32 temp_v0;
-    s8 *temp_a0;
+    LabItemList* temp_a0;
 
-    temp_v0 = M2C_FIELD(arg0, s32 *, 0x1A4);
-    temp_a0 = arg0 + 0x2F8;
-    M2C_FIELD(temp_a0, s32 *, -0x120) = temp_v0;
-    func_89001230(temp_a0, M2C_FIELD(arg0, s32 *, 0x490) + (temp_v0 * 0x10));
-    M2C_FIELD(arg0, s32 *, 0) = 4;
+    temp_v0 = arg0->targetBoxWindow.menu.cursor;
+    temp_a0 = &arg0->rightList;
+    arg0->rightBox = temp_v0;
+    func_89001230(temp_a0, (s32)&arg0->tables[temp_v0]);
+    arg0->state = 4;
 }
 
 s32 func_8002B2B0(void *);
