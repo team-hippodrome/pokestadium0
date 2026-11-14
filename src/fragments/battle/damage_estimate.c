@@ -28,7 +28,6 @@ extern ActivePokemon* sSide1ActivePokemon;
 extern ActivePokemon* sSide2ActivePokemon;
 extern MovePresentationCue* sCurrentAnimation;
 extern ModelDimensions sPokemonModelDimensions[2];
-extern SwayLayoutConfig sDefaultSwayLayout;
 extern BattleSceneStateTickSlot sBattleSceneStateTickSlots[7];
 extern s32 sBattleSceneStateTickSlotIndex;
 extern PokemonBattleCues* sSideBattleCues[];

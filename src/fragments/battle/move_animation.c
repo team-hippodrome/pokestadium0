@@ -19,7 +19,6 @@ extern ActivePokemon* sSide1ActivePokemon;
 extern ActivePokemon* sSide2ActivePokemon;
 extern MovePresentationCue* sCurrentAnimation;
 extern ModelDimensions sPokemonModelDimensions[2];
-extern SwayLayoutConfig sDefaultSwayLayout;
 extern BattleSceneStateTickSlot sBattleSceneStateTickSlots[7];
 extern s32 sBattleSceneStateTickSlotIndex;
 extern PokemonBattleCues* sSideBattleCues[];
@@ -2752,7 +2751,6 @@ void BattleScene_InitializeParticipantController(ActivePokemon* arg0) {
 }
 
 extern s32 D_84390174;
-extern unk_D_84390178 D_84390178;
 void func_821079E8(s32);
 
 void BattleScene_InitializeParticipantModel(ActivePokemon*);

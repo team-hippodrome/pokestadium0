@@ -94,7 +94,6 @@ extern GameOptions sAreaSelectGameOptions;
 
 #include "moves.h"
 #include "pokemon.h"
-extern unk_D_843901B0 gCameraPreset;
 extern f32 gCameraDistTarget;
 extern f32 D_8219A534;
 

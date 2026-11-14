@@ -360,16 +360,6 @@ typedef struct SpeciesLearnsetBuffer {
     /* 0x0E */ char unk0E[0x12];
 } SpeciesLearnsetBuffer; // size = 0x20
 
-typedef struct SwayLayoutConfig {
-    /* 0x00 */ Vec3f frontCameraShotOffset;
-    /* 0x0C */ Vec3f backCameraShotOffset;
-    /* 0x18 */ u8 unk_18;
-    /* 0x19 */ u8 unk_19;
-    /* 0x1A */ u8 unk_1A;
-    /* 0x1B */ u8 unk_1B;
-    /* 0x1C */ char unk1C[4];
-} SwayLayoutConfig; // size = 0x20
-
 typedef struct SwayState {
     /* 0x00 */ Vec3f unk_00;
     /* 0x0C */ Vec3f rotation;
@@ -541,11 +531,6 @@ typedef struct TagTeamPartners {
     /* 0x02 */ char names[14];
 } TagTeamPartners; // size = 0x10
 
-typedef struct unk_D_84390178 {
-    /* 0x00 */ s32 timeLeft;
-    /* 0x04 */ char unk04[0x14];
-} unk_D_84390178; // size >= 0x18
-
 typedef struct SpeciesModelTransform {
     /* 0x00 */ Vec3f coordinates;
     /* 0x0C */ s16 rotationX;
@@ -576,27 +561,6 @@ typedef struct unk_D_843847BC {
     /* 0x10 */ f32 farPlane;
     /* 0x14 */ s16 side;
 } ThumbnailSettings; // size = 0x18
-
-typedef struct unk_D_843901B0 {
-    /* 0x00 */Vec3f unk_00;
-    /* 0x0C */s16 unk_0C;
-    /* 0x0E */s16 unk_0E;
-    /* 0x10 */char unk10[0x2];
-    /* 0x12 */s16 unk_12;
-    /* 0x14 */s16 unk_14;
-    /* 0x18 */f32 unk_18;
-    /* 0x1C */f32 unk_1C;
-    /* 0x20 */s16 unk_20;
-    /* 0x22 */s16 unk_22;
-    /* 0x24 */char unk24[0x2];
-    /* 0x26 */s16 unk_26;
-    /* 0x28 */s16 unk_28;
-    /* 0x2C */f32 unk_2C;
-    /* 0x30 */f32 unk_30;
-    /* 0x34 */f32 unk_34;
-    /* 0x38 */f32 unk_38;
-    /* 0x3C */f32 unk_3C;
-} unk_D_843901B0; // size >= 0x40
 
 typedef struct unk_D_843901A0_4C8 {
     /* 0x00 */ s32 unk_00;
@@ -1367,24 +1331,6 @@ struct ActivePokemon;
 
 struct BattleAnimEffectSlot;
 
-typedef struct ParticleEmitter {
-    /* 0x00 */ f32 unk_00;
-    /* 0x04 */ Vec3f origin;
-    /* 0x10 */ Vec3s rotation;
-    /* 0x18 */ ParticleUpdateCallback updateCallback;
-    /* 0x1C */ ParticleDescriptor* descriptor;
-    /* 0x20 */ s32 unk_20;
-    /* 0x24 */ u16 unk_24;
-    /* 0x26 */ s16 unk_26;
-    /* 0x28 */ s16 unk_28;
-    /* 0x2A */ s8 unk_2A;
-    /* 0x2B */ s8 unk_2B;
-    /* 0x2C */ u8 unk_2C;
-    /* 0x2D */ u8 unk_2D;
-    /* 0x2E */ u8 unk_2E;
-    /* 0x2F */ u8 unk_2F;
-} ParticleEmitter; // size = 0x30
-
 typedef void (*func_unk_D_8140E724)(struct Particle*);
 
 typedef struct BattleAnimEffectSlot {
@@ -1404,81 +1350,6 @@ typedef struct BattleAnimEffectSlot {
     /* 0x1A */ u8 byteParam2; // @unverified: copied to Particle.byteParam2
     /* 0x1B */ u8 byteParam1; // @unverified: copied to Particle.byteParam1
 } BattleAnimEffectSlot; // size = 0x1C
-
-typedef struct arg1_func_81407874_014_000_014_000_000 {
-    /* 0x00 */ Color_RGBA8 color;
-    /* 0x04 */ u8 l;
-} arg1_func_81407874_014_000_014_000_000; // size = 0x5
-
-typedef struct arg1_func_81407874_014_000_018_000_000 {
-    /* 0x00 */ Color_RGBA8 color;
-} arg1_func_81407874_014_000_018_000_000; // size = 0x4
-
-typedef union arg1_func_81407874_014_000_014_000 {
-    arg1_func_81407874_014_000_014_000_000* ptr5;
-    arg1_func_81407874_014_000_018_000_000* ptr4;
-    Color_RGBA8_u32 color;
-    u8** texture;
-} arg1_func_81407874_014_000_014_000; // size = 0x4
-
-typedef struct arg1_func_81407874_014_000_014 {
-    /* 0x00 */ arg1_func_81407874_014_000_014_000 unk_00;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-} arg1_func_81407874_014_000_014; // size >= 0x08
-
-typedef struct arg1_func_81407874_014_000_01C {
-    /* 0x00 */ u16 unk_00;
-    /* 0x02 */ u16 unk_02;
-} arg1_func_81407874_014_000_01C; // size >= 0x04
-
-typedef struct arg1_func_81407874_014_000 {
-    /* 0x00 */ struct arg1_func_81407874_014_000* unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ char unk08[0x8];
-    /* 0x10 */ arg1_func_81407874_014_000_010* unk_10;
-    /* 0x14 */ arg1_func_81407874_014_000_014* unk_14;
-    /* 0x18 */ arg1_func_81407874_014_000_014* unk_18;
-    /* 0x1C */ arg1_func_81407874_014_000_01C* unk_1C;
-} arg1_func_81407874_014_000; // size >= 0x20
-
-typedef struct arg1_func_81407874_014_004_008 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-} arg1_func_81407874_014_004_008; // size >= 0xA
-
-typedef struct arg1_func_81407874_014_004_004 {
-    /* 0x00 */ s16 fmt;
-    /* 0x02 */ s16 size;
-    /* 0x04 */ s16 width;
-    /* 0x06 */ s16 height;
-    /* 0x08 */ s16 cms;
-    /* 0x0A */ s16 cmt;
-    /* 0x0C */ s16 masks;
-    /* 0x0E */ s16 maskt;
-    /* 0x10 */ s16 shfits;
-    /* 0x12 */ s16 shiftt;
-} arg1_func_81407874_014_004_004; // size >= 0x14
-
-typedef struct arg1_func_81407874_014_004 {
-    /* 0x00 */ arg1_func_81407874_014_000* unk_00;
-    /* 0x04 */ arg1_func_81407874_014_004_004* unk_04;
-    /* 0x08 */ arg1_func_81407874_014_004_008* unk_08;
-    /* 0x0C */ arg1_func_81407874_014_000_014* unk_0C;
-} arg1_func_81407874_014_004; // size >= 0x4
-
-typedef struct arg1_func_81407874_014 {
-    /* 0x00 */ arg1_func_81407874_014_000* unk_00;
-    /* 0x04 */ arg1_func_81407874_014_004* unk_04;
-} arg1_func_81407874_014; // size >= 0x8
-
-typedef struct arg1_func_81407874 {
-    /* 0x00 */ char unk00[0x14];
-    /* 0x00 */ arg1_func_81407874_014* unk_14;
-} arg1_func_81407874; // size >= 0x18
 
 typedef struct ParticleCameraState {
     /* 0x00 */ MtxF viewMatrix;
@@ -1659,7 +1530,6 @@ typedef struct unk_D_82F20A88 {
 #include "gfx_rect.h"
 #include "stage_loader.h"
 
-extern unk_D_843901B0 gCameraPreset;
 
 extern f32 gCameraDistTarget;
 
@@ -1827,7 +1697,6 @@ extern MovePresentationCue* sCurrentAnimation;
 
 extern ModelDimensions sPokemonModelDimensions[2];
 
-extern SwayLayoutConfig sDefaultSwayLayout;
 
 extern BattleSceneStateTickSlot sBattleSceneStateTickSlots[7];
 
@@ -2318,7 +2187,6 @@ extern s32 gParticleMatrixPoolIndex;
 
 extern ParticleRenderContext gParticleRenderContext;
 
-extern ParticleCameraState* gParticleCameraState;
 
 extern u32 gParticleFrameCounter;
 
@@ -2370,7 +2238,6 @@ extern Particle* gParticlePool;
 
 extern BattleAnimEffectSlot* gBattleAnimEffectSlots;
 
-extern ParticleEmitter* gMiniFxEmitters;
 
 extern s32 gParticlePoolIndex;
 
