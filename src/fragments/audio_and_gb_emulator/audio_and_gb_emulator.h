@@ -519,6 +519,31 @@ typedef struct Portamento {
     /* 0xC */ f32 extent; // @unverified: same offset/use as OoT's Portamento.extent
 } Portamento; // size = 0x10
 
+typedef struct Sample {
+    /* 0x0 */ u32 codec : 4; // @unverified: same bits/use as OoT's Sample.codec (2 = s8 PCM)
+    /* 0x0 */ u32 medium : 2; // @unverified: same bits/use as OoT's Sample.medium (0 = RAM)
+    /* 0x0 */ u32 unk_bit26 : 1;
+    /* 0x0 */ u32 isRelocated : 1; // @unverified: same bit/use as OoT's Sample.isRelocated
+    /* 0x0 */ u32 size : 24; // @unverified: same bits/use as OoT's Sample.size
+    /* 0x4 */ u8* sampleAddr; // @unverified: same offset/use as OoT's Sample.sampleAddr
+    /* 0x8 */ void* loop; // @unverified: same offset/use as OoT's Sample.loop
+    /* 0xC */ void* book; // @unverified: same offset/use as OoT's Sample.book
+} Sample; // size = 0x10
+
+typedef struct SoundFontSound {
+    /* 0x0 */ Sample* sample; // @unverified: same offset/use as OoT's SoundFontSound.sample
+    /* 0x4 */ f32 tuning; // @unverified: same offset/use as OoT's SoundFontSound.tuning
+} SoundFontSound; // size = 0x8
+
+typedef struct Drum {
+    /* 0x0 */ u8 adsrDecayIndex; // @unverified: same offset/use as OoT's Drum.adsrDecayIndex (copied to the layer's release rate)
+    /* 0x1 */ u8 pan; // @unverified: same offset/use as OoT's Drum.pan
+    /* 0x2 */ u8 isRelocated;
+    /* 0x3 */ u8 unk_03;
+    /* 0x4 */ SoundFontSound sound; // @unverified: same offset/use as OoT's Drum.sound
+    /* 0xC */ EnvelopePoint* envelope; // @unverified: same offset/use as OoT's Drum.envelope
+} Drum; // size = 0x10
+
 typedef struct SequencePlayer {
     /* 0x000 */ u32 enabled : 1; // @unverified: players with this bit are stepped each update, OoT's SequencePlayer.enabled
     /* 0x000 */ u32 finished : 1; // @unverified: same bit/use as OoT's SequencePlayer.finished
@@ -564,7 +589,7 @@ typedef struct SequenceChannel {
     /* 0x00 */ u8 enabled : 1; // @unverified: same bit/use as OoT's SequenceChannel.enabled
     /* 0x00 */ u8 finished : 1; // @unverified: same bit/use as OoT's SequenceChannel.finished
     /* 0x00 */ u8 stopScript : 1; // @unverified: same bit/use as OoT's SequenceChannel.stopScript
-    /* 0x00 */ u8 stopSomething2 : 1; // @unverified: same bit as SM64's SequenceChannel.stopSomething2 (OoT's muted)
+    /* 0x00 */ u8 muted : 1; // @unverified: same bit as OoT's SequenceChannel.muted (SM64's stopSomething2)
     /* 0x00 */ u8 hasInstrument : 1; // @unverified: cleared when the instrument lookup fails, OoT's SequenceChannel.hasInstrument
     /* 0x00 */ u8 stereoHeadsetEffects : 1; // @unverified: same bit/use as OoT's SequenceChannel.stereoHeadsetEffects
     /* 0x00 */ u8 largeNotes : 1; // @unverified: same bit/use as OoT's SequenceChannel.largeNotes
@@ -637,7 +662,7 @@ typedef struct SequenceLayer {
     /* 0x07 */ u8 notePan; // @unverified: same offset/use as OoT's SequenceLayer.notePan
     /* 0x08 */ Portamento portamento; // @unverified: same offset/use as OoT's SequenceLayer.portamento
     /* 0x18 */ AdsrSettings adsr; // @unverified: same offset/use as OoT's SequenceLayer.adsr
-    /* 0x20 */ s16 portamentoTime; // @unverified: same offset/use as OoT's SequenceLayer.portamentoTime
+    /* 0x20 */ u16 portamentoTime; // @unverified: same offset/use as OoT's SequenceLayer.portamentoTime
     /* 0x22 */ s16 transposition; // @unverified: same offset/use as OoT's SequenceLayer.transposition
     /* 0x24 */ f32 freqScale; // @unverified: same offset/use as OoT's SequenceLayer.freqScale
     /* 0x28 */ f32 bend; // @unverified: same offset/use as OoT's SequenceLayer.bend
@@ -653,11 +678,111 @@ typedef struct SequenceLayer {
     /* 0x46 */ u8 unk_46[2];
     /* 0x48 */ struct Note* note; // @unverified: same offset/use as OoT's SequenceLayer.note
     /* 0x4C */ u8* instrument; // @unverified: same offset/use as OoT's SequenceLayer.instrument
-    /* 0x50 */ void* sound; // @unverified: same offset/use as OoT's SequenceLayer.sound
+    /* 0x50 */ SoundFontSound* sound; // @unverified: same offset/use as OoT's SequenceLayer.sound
     /* 0x54 */ struct SequenceChannel* channel; // @unverified: same offset/use as OoT's SequenceLayer.channel
     /* 0x58 */ SeqScriptState scriptState; // @unverified: same offset/use as OoT's SequenceLayer.scriptState
     /* 0x74 */ AudioListItem listItem; // @unverified: same offset/use as OoT's SequenceLayer.listItem (D_81184928 is the free list)
 } SequenceLayer; // size = 0x84
+
+typedef struct NoteSynthesisState {
+    /* 0x00 */ u8 unk_00[4];
+    /* 0x04 */ u8 reverbVol; // @unverified: same offset/use as OoT's NoteSynthesisState.reverbVol
+    /* 0x05 */ u8 unk_05[7];
+    /* 0x0C */ void* synthesisBuffers; // @unverified: same offset/use as OoT's NoteSynthesisState.synthesisBuffers
+    /* 0x10 */ u16 curVolLeft; // @unverified: same offset/use as OoT's NoteSynthesisState.curVolLeft
+    /* 0x12 */ u16 curVolRight; // @unverified: same offset/use as OoT's NoteSynthesisState.curVolRight
+    /* 0x14 */ u8 unk_14[0xC];
+} NoteSynthesisState; // size = 0x20
+
+typedef struct NoteAttributes {
+    /* 0x0 */ u8 reverbVol; // @unverified: same offset/use as OoT's NoteAttributes.reverb
+    /* 0x1 */ u8 gain; // @unverified: same offset/use as OoT's NoteAttributes.gain
+    /* 0x2 */ u8 pan; // @unverified: same offset/use as OoT's NoteAttributes.pan
+    /* 0x3 */ u8 stereo; // @unverified: same offset/use as OoT's NoteAttributes.stereo
+    /* 0x4 */ f32 freqScale; // @unverified: same offset/use as OoT's NoteAttributes.freqScale
+    /* 0x8 */ f32 velocity; // @unverified: same offset/use as OoT's NoteAttributes.velocity
+    /* 0xC */ s16* filter; // @unverified: same offset/use as OoT's NoteAttributes.filter
+} NoteAttributes; // size = 0x10
+
+typedef struct AdsrState {
+    /* 0x00 */ u8 action; // @unverified: same offset/use as OoT's AdsrState.action (0x10 = release)
+    /* 0x01 */ u8 state; // @unverified: same offset/use as OoT's AdsrState.action.s.state
+    /* 0x02 */ s16 envIndex; // @unverified: same offset/use as OoT's AdsrState.envIndex
+    /* 0x04 */ s16 delay; // @unverified: same offset/use as OoT's AdsrState.delay
+    /* 0x06 */ u8 unk_06[2];
+    /* 0x08 */ f32 sustain; // @unverified: same offset/use as OoT's AdsrState.sustain
+    /* 0x0C */ f32 velocity; // @unverified: same offset/use as OoT's AdsrState.velocity
+    /* 0x10 */ f32 fadeOutVel; // @unverified: same offset/use as OoT's AdsrState.fadeOutVel
+    /* 0x14 */ f32 current; // @unverified: same offset/use as OoT's AdsrState.current
+    /* 0x18 */ f32 target; // @unverified: same offset/use as OoT's AdsrState.target
+    /* 0x1C */ u8 unk_1C[4];
+    /* 0x20 */ EnvelopePoint* envelope; // @unverified: same offset/use as OoT's AdsrState.envelope
+} AdsrState; // size = 0x24
+
+typedef struct VibratoState {
+    /* 0x00 */ struct SequenceChannel* channel; // @unverified: same offset/use as OoT's VibratoState.channel
+    /* 0x04 */ u32 time; // @unverified: same offset/use as OoT's VibratoState.time
+    /* 0x08 */ s16* curve; // @unverified: same offset/use as OoT's VibratoState.curve
+    /* 0x0C */ f32 extent; // @unverified: same offset/use as OoT's VibratoState.extent
+    /* 0x10 */ f32 rate; // @unverified: same offset/use as OoT's VibratoState.rate
+    /* 0x14 */ u8 active; // @unverified: same offset/use as OoT's VibratoState.active
+    /* 0x16 */ u16 rateChangeTimer; // @unverified: same offset/use as OoT's VibratoState.rateChangeTimer
+    /* 0x18 */ u16 extentChangeTimer; // @unverified: same offset/use as OoT's VibratoState.extentChangeTimer
+    /* 0x1A */ u16 delay; // @unverified: same offset/use as OoT's VibratoState.delay
+} VibratoState; // size = 0x1C
+
+typedef struct NotePlaybackState {
+    /* 0x00 */ u8 priority; // @unverified: same offset/use as OoT's NotePlaybackState.priority
+    /* 0x01 */ u8 waveId; // @unverified: same offset/use as OoT's NotePlaybackState.waveId
+    /* 0x02 */ u8 sampleCountIndex; // @unverified: same offset/use as OoT's NotePlaybackState.harmonicIndex
+    /* 0x03 */ u8 fontId; // @unverified: same offset/use as OoT's NotePlaybackState.fontId
+    /* 0x04 */ u8 unk_04;
+    /* 0x05 */ u8 unk_05;
+    /* 0x06 */ s16 adsrVolScale; // @unverified: same offset/use as OoT's NotePlaybackState.adsrVolScaleUnused
+    /* 0x08 */ f32 portamentoFreqScale; // @unverified: same offset/use as OoT's NotePlaybackState.portamentoFreqScale
+    /* 0x0C */ f32 vibratoFreqScale; // @unverified: same offset/use as OoT's NotePlaybackState.vibratoFreqScale
+    /* 0x10 */ struct SequenceLayer* prevParentLayer; // @unverified: same offset/use as OoT's NotePlaybackState.prevParentLayer
+    /* 0x14 */ struct SequenceLayer* parentLayer; // @unverified: same offset/use as OoT's NotePlaybackState.parentLayer
+    /* 0x18 */ struct SequenceLayer* wantedParentLayer; // @unverified: same offset/use as OoT's NotePlaybackState.wantedParentLayer
+    /* 0x1C */ NoteAttributes attributes; // @unverified: same offset/use as OoT's NotePlaybackState.attributes
+    /* 0x2C */ AdsrState adsr; // @unverified: same offset/use as OoT's NotePlaybackState.adsr
+    /* 0x50 */ Portamento portamento; // @unverified: same offset/use as OoT's NotePlaybackState.portamento
+    /* 0x60 */ VibratoState vibratoState; // @unverified: same offset/use as OoT's NotePlaybackState.vibratoState
+    /* 0x7C */ u8 unk_7C[8];
+} NotePlaybackState; // size = 0x84
+
+typedef struct NoteSampleState {
+    /* 0x00 */ volatile u8 enabled : 1; // @unverified: same bit/use as OoT's NoteSampleState.bitField0.enabled
+    /* 0x00 */ u8 needsInit : 1; // @unverified: same bit/use as OoT's NoteSampleState.bitField0.needsInit
+    /* 0x00 */ u8 finished : 1; // @unverified: same bit/use as OoT's NoteSampleState.bitField0.finished
+    /* 0x00 */ u8 envMixerNeedsInit : 1; // @unverified: same bit/use as OoT's NoteSampleState.bitField0.unused
+    /* 0x00 */ u8 stereoStrongRight : 1; // @unverified: same bit/use as OoT's NoteSampleState.bitField0.strongRight
+    /* 0x00 */ u8 stereoStrongLeft : 1; // @unverified: same bit/use as OoT's NoteSampleState.bitField0.strongLeft
+    /* 0x00 */ u8 stereoHeadsetEffects : 1; // @unverified: same bit/use as OoT's NoteSampleState.bitField0.stereoHeadsetEffects
+    /* 0x00 */ u8 usesHeadsetPanEffects : 1; // @unverified: same bit/use as OoT's NoteSampleState.bitField0.usesHeadsetPanEffects
+    /* 0x01 */ u8 reverbIndex : 3; // @unverified: same bits/use as OoT's NoteSampleState.bitField1.reverbIndex
+    /* 0x01 */ u8 bookOffset : 2; // @unverified: same bits/use as OoT's NoteSampleState.bitField1.bookOffset
+    /* 0x01 */ u8 isSyntheticWave : 2; // @unverified: same bits as OoT's isSyntheticWave and hasTwoParts, read together
+    /* 0x01 */ u8 bit1_0 : 1;
+    /* 0x02 */ u8 gain; // @unverified: same offset/use as OoT's NoteSampleState.gain
+    /* 0x03 */ u8 headsetPanRight; // @unverified: same offset/use as OoT's NoteSampleState.haasEffectRightDelaySize
+    /* 0x04 */ u8 headsetPanLeft; // @unverified: same offset/use as OoT's NoteSampleState.haasEffectLeftDelaySize
+    /* 0x05 */ u8 reverbVol; // @unverified: same offset/use as OoT's NoteSampleState.targetReverbVol
+    /* 0x06 */ u8 harmonicIndexCurAndPrev; // @unverified: same offset/use as OoT's NoteSampleState.harmonicIndexCurAndPrev
+    /* 0x07 */ u8 unk_07;
+    /* 0x08 */ u16 targetVolLeft; // @unverified: same offset/use as OoT's NoteSampleState.targetVolLeft
+    /* 0x0A */ u16 targetVolRight; // @unverified: same offset/use as OoT's NoteSampleState.targetVolRight
+    /* 0x0C */ u8 unk_0C[4];
+    /* 0x10 */ s32 tunedSample; // @unverified: same offset/use as OoT's NoteSampleState.tunedSample
+    /* 0x14 */ s16* filter; // @unverified: same offset/use as OoT's NoteSampleState.filter
+} NoteSampleState; // size = 0x18
+
+typedef struct Note {
+    /* 0x00 */ AudioListItem listItem; // @unverified: same offset/use as OoT's Note.listItem
+    /* 0x10 */ NoteSynthesisState synthesisState; // @unverified: same offset/use as OoT's Note.synthesisState
+    /* 0x30 */ NotePlaybackState playbackState; // @unverified: same offset/use as OoT's Note.playbackState
+    /* 0xB4 */ NoteSampleState sampleState; // @unverified: same offset/use as OoT's Note.sampleState
+} Note; // size = 0xCC
 
 /* A sequence layer (D_811847C8[]), only its list item. */
 typedef struct SeqLayer811847C8 {
@@ -850,12 +975,12 @@ void AudioPlayback_ProcessNotes(void);
 void AudioSeq_SeqLayerDisable(SeqLayerFlags* arg0);
 void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1);
 void Particle31_ResetAllSlots(DisplayObject* arg0);
-void AudioSeq_SequenceChannelEnable(Channel81112D68** arg0, u8 arg1, s32 arg2);
+void AudioSeq_SequenceChannelEnable(SequencePlayer* seqPlayer, u8 channelIndex, void* script);
 s32 AudioSeq_AudioListPopBack(s8 *arg0);
 void AudioSeq_InitLayerFreelist(void);
 u8 AudioSeq_ScriptReadU8(u8 **arg0);
 s16 AudioSeq_ScriptReadS16(u8** arg0);
-void AudioSeq_SeqLayerProcessScriptStep1(Layer81113140* arg0);
+void AudioSeq_SeqLayerProcessScriptStep1(SequenceLayer* arg0);
 
 // audio_seqplayer_2.c
 /*

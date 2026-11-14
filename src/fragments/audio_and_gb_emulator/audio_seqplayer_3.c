@@ -218,7 +218,7 @@ void func_81114B54(SequencePlayer* seq_player) {
                         break;
                     case 0x90:
                         temp = AudioSeq_ScriptReadS16(&state->pc);
-                        AudioSeq_SequenceChannelEnable((SequenceChannel**)seq_player, lo_bits, (s32)(seq_player->seqData + temp));
+                        AudioSeq_SequenceChannelEnable(seq_player, lo_bits, seq_player->seqData + temp);
                         break;
                     case 0x60:
                     case 0xA0:

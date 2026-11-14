@@ -95,7 +95,7 @@ s32 func_81113A44(SequenceLayer* layer, s32 cmd) {
         }
     }
 
-    if ((seqPlayer->muted && (channel->muteBehavior & 0x50)) || channel->stopSomething2) {
+    if ((seqPlayer->muted && (channel->muteBehavior & 0x50)) || channel->muted) {
         layer->stopSomething = 1;
         return -1;
     }
@@ -585,7 +585,7 @@ void func_81113FA8(SequenceChannel* channel) {
                     break;
                 case 0x20:
                     offset = AudioSeq_ScriptReadS16(&scriptState->pc);
-                    AudioSeq_SequenceChannelEnable((SequenceChannel**)seqPlayer, low_bits, (s32)&seqPlayer->seqData[offset]);
+                    AudioSeq_SequenceChannelEnable(seqPlayer, low_bits, &seqPlayer->seqData[offset]);
                     break;
                 case 0x30:
                     command = AudioSeq_ScriptReadU8(&scriptState->pc);
