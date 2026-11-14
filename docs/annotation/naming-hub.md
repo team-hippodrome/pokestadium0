@@ -21,7 +21,7 @@ The hub merges them one at a time and keeps `make rom` byte-identical on every m
 ## Known gaps from the 2026-11-13 blind test
 - The VS scene's reveal helpers (trainer-card rotation etc.) are unnamed.
 - Some "not reached" notes are stale.
-- Dead Stadium 1 names remain in `battle_prep.h`.
+- Dead Stadium 1 battle-prep names (see `src/fragments/battle/intro_stubs.c`) need checking against Zero.
 
 ## Emulator use
 Run one emulator per agent at a time, and stagger play checks: build first, then play.
