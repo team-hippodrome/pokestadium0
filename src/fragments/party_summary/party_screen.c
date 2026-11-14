@@ -64,7 +64,7 @@ void MonSummary_DrawStatusCondition(s32 arg0, s32 arg1, BattleMon* arg2) {
  * Draws HP:, L%d and %3d/%3d.
  * Seen in play (2026-11-12): HP: and L5 19/ 19 on the party rows.
  */
-void PartyScreen_DrawHpLevel(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3) {
+void PartyScreen_DrawRowText(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3) {
     BattleHud_DrawHpBarTexture(arg0 + 0x16D, arg1 + 9, 0x94, arg2->hp, arg2->maxHp);
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(arg3);
@@ -81,7 +81,7 @@ void PartyScreen_DrawHpLevel(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3) {
 }
 
 /** Draws an RGBA16 texture at a position. */
-void UI_DrawTextureRgba16(s32 arg0, s32 arg1, s32 arg2) {
+void PartyScreen_DrawIcon(s32 arg0, s32 arg1, s32 arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060290);
 
     Gfx_DrawTextureRgba16(arg0, arg1, 0x28, 0x28, ((PokeIconRenderer*)D_8A21DA50)->slots[arg2].image->img_p, 0x28, 0x200000);
@@ -106,7 +106,7 @@ void PartyScreen_DrawListRow(s32 arg0, s32 arg1, BattleMon *arg2, s32 arg3, s32 
     if (arg4 & 0x18) {
         Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0x20F, 0x2D, D_8A203304);
     }
-    PartyScreen_DrawHpLevel(arg0, arg1, arg2, arg4);
+    PartyScreen_DrawRowText(arg0, arg1, arg2, arg4);
     if (arg4 & 0x12) {
         if (kind == 2) {
             color = &D_8A203348;
@@ -194,7 +194,7 @@ void PartyScreen_DrawList(PartyListWindow* arg0, s32 arg1) {
                 gSPDisplayList(gDisplayListHead++, D_80060270);
                 func_80029028(x + 0x14, y + 5, 0x28, 0x28, D_8A203304);
             }
-            UI_DrawTextureRgba16(x + 0x14, y + 5, i);
+            PartyScreen_DrawIcon(x + 0x14, y + 5, i);
             y += arg0->menu.cellHeight;
         }
     }
@@ -387,7 +387,7 @@ extern char D_8A21D974[];
 extern char D_8A21D978[];
 extern char D_8A21D97C[];
 void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
-s32 func_8A20219C(s32, s32);
+s32 MonSummary_GetExpForLevel(s32, s32);
 /**
  * Draws Type 1/2, ID No., おやのなまえ (OT name), けいけんち (Exp) and the Exp to the next level.
  * Seen in play (2026-11-12): タイプ1/2, ID No./ 12345, おやのなまえ/ サトシ, けいけんち/ 135 and あと 44で L6.
@@ -401,7 +401,7 @@ void MonSummary_DrawTrainerInfo(s32 arg0, s32 arg1, s32 arg2) {
     } else {
         next_level = ((BattleMon*)arg2)->level + 1;
     }
-    to_next = func_8A20219C(((BattleMon*)arg2)->species.id, next_level) - ((BattleMon*)arg2)->exp;
+    to_next = MonSummary_GetExpForLevel(((BattleMon*)arg2)->species.id, next_level) - ((BattleMon*)arg2)->exp;
     Ui_FillRectPrimEnvColor(arg0, arg1, 0x122, 0xC8, D_8A203370, D_8A203374);
     func_8001AB6C();
     func_8001A384(8, 0);
@@ -459,7 +459,7 @@ void Ui_DrawImageInStrips(s32, s32, s32);
 
 s32 BattleMon_GetMoveIndex(u8*, s32);
 u32 func_800566BC(const char*);
-void func_8A2010C8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+void MonSummary_DrawMoveList(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 pad; // FAKE
     s32 count;
     s32 pad2; // FAKE
@@ -522,7 +522,7 @@ void func_8A2010C8(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-void MonSummary_DrawSpeciesName(s32 arg0, s32 arg1, BattleMon* arg2) {
+void MonSummary_DrawMovesHeader(s32 arg0, s32 arg1, BattleMon* arg2) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1, 0x122, 0x4E, D_8A203304);
     func_8001AB6C();

@@ -91,11 +91,11 @@ typedef struct PartyActionMenuWindow {
 typedef struct MonSummaryWindow {
     /* 0x00 */ Window window; // @unverified: typed from the function it is passed to
     /* 0x2C */ s32 mon; // the BattleMon shown: &PartyScreen.mons[0] (ハナ) after つよさをみる on it
-    /* 0x30 */ s32 moveSlot; // @unverified: the move picked with the C buttons (MonSummary_GetCButtonPage)
+    /* 0x30 */ s32 moveSlot; // @unverified: the move picked with the C buttons (MonSummary_UpdateMoveCursor)
     /* 0x34 */ s32 modelLoaded; // 1 once func_80019008 loaded the Pokémon's model (the ピカチュウ model was up)
 } MonSummaryWindow; // size = 0x38
 
-/* The てもち (party) screen (func_8A2024D0, PartyScreen_Update, PartyScreen_Draw). */
+/* The てもち (party) screen (PartyScreen_SetupList, PartyScreen_Update, PartyScreen_Draw). */
 typedef struct PartyScreen {
     /* 0x000 */ s32 state; // 1 = the list, 2 = the action menu, 3 = picking the second Pokémon of ならびかえ, 4 = the summary, 6 = the save prompt (seen in play)
     /* 0x004 */ s32 nextState; // becomes state once activeWindow has closed: 4 while the action menu closed for つよさをみる
@@ -157,35 +157,35 @@ extern void* D_8A21DA60[4];
 
 // party_screen.c
 void MonSummary_DrawStatusCondition(s32 arg0, s32 arg1, BattleMon* arg2);
-void PartyScreen_DrawHpLevel(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3);
-void UI_DrawTextureRgba16(s32 arg0, s32 arg1, s32 arg2);
+void PartyScreen_DrawRowText(s32 arg0, s32 arg1, BattleMon* arg2, s32 arg3);
+void PartyScreen_DrawIcon(s32 arg0, s32 arg1, s32 arg2);
 /* PartyScreen_DrawListRow is defined in lab_pc_icons.c. */
 
 void PartyScreen_InitList(PartyListWindow* arg0, s32 arg1, s32 arg2, s32 arg3);
 void PartyScreen_DrawActionMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
 void PartyScreen_DrawActionMenu(PartyActionMenuWindow* arg0);
 void MonSummary_DrawTypeName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-void MonSummary_DrawSpeciesName(s32 arg0, s32 arg1, BattleMon* arg2);
+void MonSummary_DrawMovesHeader(s32 arg0, s32 arg1, BattleMon* arg2);
 void MonSummary_DrawStats(s32, s32, BattleMon*);
 void MonSummary_DrawHeader();
 void MonSummary_DrawTrainerInfo(s32, s32, s32);
-void func_8A2010C8(s32, s32, s32, s32);
+void MonSummary_DrawMoveList(s32, s32, s32, s32);
 
 // mon_summary.c
-void BattlePrep_RenderFrame(void);
-s32 LabPC_ComputeExpForLevel(s32 arg0, s32 arg1);
+void PartyScreen_Load(void);
+s32 MonSummary_GetExpForLevel(s32 arg0, s32 arg1);
 void MonSummary_DrawModelPreview(s32 arg0, s32 arg1, s32 arg2);
 s32 MonSummary_DrawMoveInfo(s32, s32, s32, s32);
 void MonSummary_DrawPage(MonSummaryWindow* arg0, s32 arg1);
-s32 MonSummary_GetCButtonPage(MonSummaryWindow* arg0);
+s32 MonSummary_UpdateMoveCursor(MonSummaryWindow* arg0);
 void PartyScreen_DrawBackground(void);
-void func_8A202390(ByteMatrix* arg0);
+void PartyScreen_ReadParty(ByteMatrix* arg0);
 void PartyScreen_Draw(void*);
-void LabPC_WriteDeckBack(s32* arg0, s32 arg1);
-void func_8A202904(PartyScreen* arg0, s32 arg1, s32 arg2);
+void PartyScreen_WriteParty(s32* arg0, s32 arg1);
+void PartyScreen_CloseWindow(PartyScreen* arg0, s32 arg1, s32 arg2);
 M2C_UNK PartyScreen_Update(PartyScreen*);
 void PartyScreen_RunFrame(s32 arg0);
-s32 func_8A202F50(u8);
-s32 MonSummary_Init(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2);
+s32 PartyScreen_FadeFrame(u8);
+s32 PartyScreen_Init(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2);
 
 #endif // FRAGMENT_PARTY_SUMMARY_H

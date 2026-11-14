@@ -55,7 +55,7 @@ extern s32 D_8A21DA70[];
  * Draws a 282x130 YUV image at (x, y) as 16x16 tiles (the last column and row are cut
  * to 10 and 2 pixels).
  */
-void func_8A201598(s32 x, s32 y, u8* image) {
+void MonSummary_DrawMoveBackdrop(s32 x, s32 y, u8* image) {
     s32 j;
     s32 i;
     s32 w;
@@ -99,7 +99,7 @@ void func_8A201598(s32 x, s32 y, u8* image) {
     gDPSetTextureConvert(gDisplayListHead++, G_TC_FILT);
 }
 
-void func_8A201598(s32, s32, u8*);
+void MonSummary_DrawMoveBackdrop(s32, s32, u8*);
 s32 func_8001FA8C(s32);
 extern Color_RGBA8 D_8A203424;
 extern char D_8A21D9B4[];
@@ -120,7 +120,7 @@ extern Entry8006A9DC D_8006A9DC[];
 s32 MonSummary_DrawMoveInfo(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
 {
     s32 move;
-    func_8A201598(arg0 + 4, arg1 + 2, (u8*)D_8A21DA70[arg3]);
+    MonSummary_DrawMoveBackdrop(arg0 + 4, arg1 + 2, (u8*)D_8A21DA70[arg3]);
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1, 0x122, 2, D_8A203424);
     func_80029028(arg0, arg1 + 2, 4, 0x82, D_8A203424);
@@ -237,8 +237,8 @@ void MonSummary_DrawPage(MonSummaryWindow* arg0, s32 arg1)
     {
       Ui_DrawTexturedDivider(arg0->window.frame.x, (arg0->window.frame.y) + 0xD7, arg0->window.frame.width, &D_8007356C);
       func_80029864((arg0->window.frame.x) + 0xF9, arg0->window.frame.y, 0xDE, &D_8007356C);
-      MonSummary_DrawSpeciesName((arg0->window.frame.x) + 0x100, (arg0->window.frame.y) + 6, arg0->mon);
-      func_8A2010C8((arg0->window.frame.x) + 6, (arg0->window.frame.y) + 0xDE, arg0->mon, arg0->moveSlot);
+      MonSummary_DrawMovesHeader((arg0->window.frame.x) + 0x100, (arg0->window.frame.y) + 6, arg0->mon);
+      MonSummary_DrawMoveList((arg0->window.frame.x) + 6, (arg0->window.frame.y) + 0xDE, arg0->mon, arg0->moveSlot);
       MonSummary_DrawMoveInfo((arg0->window.frame.x) + 0x100, (arg0->window.frame.y) + 0x54, arg0->mon, arg0->moveSlot);
     }
   }
@@ -260,7 +260,7 @@ void MonSummary_DrawPage(MonSummaryWindow* arg0, s32 arg1)
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-s32 MonSummary_GetCButtonPage(MonSummaryWindow* arg0) {
+s32 MonSummary_UpdateMoveCursor(MonSummaryWindow* arg0) {
     s32 var_s0;
     u16 temp_v0;
 
@@ -302,7 +302,7 @@ void PartyScreen_DrawBackground(void) {
 }
 
 /** Returns the experience points needed to reach a level. */
-s32 LabPC_ComputeExpForLevel(s32 arg0, s32 arg1) {
+s32 MonSummary_GetExpForLevel(s32 arg0, s32 arg1) {
     s32 sp4;
 
     switch (gBaseStats[arg0].growthRate) {
@@ -333,7 +333,7 @@ s32 LabPC_ComputeExpForLevel(s32 arg0, s32 arg1) {
     return sp4;
 }
 
-void func_8A202390(ByteMatrix* arg0) {
+void PartyScreen_ReadParty(ByteMatrix* arg0) {
     s32 sp1C;
     s32 sp18;
     s32 temp_v0;
@@ -350,7 +350,7 @@ void func_8A202390(ByteMatrix* arg0) {
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-void LabPC_WriteDeckBack(s32* arg0, s32 arg1) {
+void PartyScreen_WriteParty(s32* arg0, s32 arg1) {
     s32* sp2C;
     s32 i;
     s32 temp_s3;
@@ -373,7 +373,7 @@ void LabPC_WriteDeckBack(s32* arg0, s32 arg1) {
 
 void func_80027410(s8 *, s8 *, s32, s32, s32);
 void func_80027804(s8 *, s8 *, s32, s32);
-void func_8A2024D0(PartyScreen* arg0) {
+void PartyScreen_SetupList(PartyScreen* arg0) {
     s32 i;
 
     arg0->state = 1;
@@ -383,7 +383,7 @@ void func_8A2024D0(PartyScreen* arg0) {
         arg0->monPointers[i] = &arg0->mons[i];
     }
     func_80027410((s8*)&arg0->monTable, (s8*)arg0->mons, 0x50, 6, 0);
-    func_8A202390((s8*)&arg0->monTable);
+    PartyScreen_ReadParty((s8*)&arg0->monTable);
     func_80027804((s8*)&arg0->monList, (s8*)arg0->monPointers, 6, arg0->monTable.count);
     for (i = 0; i < arg0->monTable.count; i++) {
         func_8001833C((PokeIconRenderer*)D_8A21DA50, i, (BattleMon*)(arg0->monTable.rows + i * 0x50),
@@ -465,7 +465,7 @@ void PartyScreen_Draw(void* arg0) {
 }
 #undef CTX
 
-void func_8A202904(PartyScreen* arg0, s32 arg1, s32 arg2) {
+void PartyScreen_CloseWindow(PartyScreen* arg0, s32 arg1, s32 arg2) {
     arg0->activeWindow->animTimer = 7;
     arg0->nextState = arg1;
     arg0->nextWindow = (Window*)arg2;
@@ -479,7 +479,7 @@ s32 SavePrompt_Update(s8*);
 void Save_DrawReportingWindow(s8*);
 s32 PartyScreen_UpdateActionMenu(PartyActionMenuWindow*);
 void PartyScreen_InitActionMenu(PartyActionMenuWindow* arg0, s32 arg1, s32 arg2, u8* arg3);
-void LabPC_WriteDeckBack(s32* arg0, s32 arg1);
+void PartyScreen_WriteParty(s32* arg0, s32 arg1);
 /**
  * Runs the summary screen's state machine for one frame.
  * Seen in play (2026-11-12): runs the てもち screen: list, action menu, summary page and the ならびかえ
@@ -517,7 +517,7 @@ M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
                         arg0->state = 6;
                         arg0->activeWindow = &arg0->savePrompt;
                     } else {
-                        func_8A202904(arg0, 7, 0);
+                        PartyScreen_CloseWindow(arg0, 7, 0);
                     }
                 } else if (res == 1) {
                     func_8003F6AC(2);
@@ -531,19 +531,19 @@ M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
             res = PartyScreen_UpdateActionMenu(&arg0->actionMenu);
             if (res == -1) {
                 func_8003F6AC(3);
-                func_8A202904(arg0, 1, (s32)&arg0->listWindow);
+                PartyScreen_CloseWindow(arg0, 1, (s32)&arg0->listWindow);
             } else if (res > 0) {
                 switch (res) {
                     case 1:
                         func_8003F6AC(2);
-                        func_8A202904(arg0, 4, (s32)&arg0->summaryWindow);
+                        PartyScreen_CloseWindow(arg0, 4, (s32)&arg0->summaryWindow);
                         arg0->summaryWindow.moveSlot = 0;
                         arg0->listWindow.window.animTimer = 7;
                         MonSummary_InitPageWindow(&arg0->summaryWindow, 0x2C, 0x54, arg0->monPointers[arg0->listWindow.menu.cursor]);
                         break;
                     case 2:
                         func_8003F6AC(2);
-                        func_8A202904(arg0, 3, (s32)&arg0->listWindow);
+                        PartyScreen_CloseWindow(arg0, 3, (s32)&arg0->listWindow);
                         arg0->listWindow.menu.itemFlags[arg0->listWindow.menu.cursor] |= 8;
                         arg0->swapIndex = arg0->listWindow.menu.cursor;
                         break;
@@ -551,9 +551,9 @@ M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
                         func_8003F6AC(3);
                         if (arg0->dirty != 0) {
                             SavePrompt_Init(&arg0->savePrompt, 0xD4, 0xAD);
-                            func_8A202904(arg0, 6, (s32)&arg0->savePrompt);
+                            PartyScreen_CloseWindow(arg0, 6, (s32)&arg0->savePrompt);
                         } else {
-                            func_8A202904(arg0, 7, 0);
+                            PartyScreen_CloseWindow(arg0, 7, 0);
                             arg0->listWindow.window.animTimer = 7;
                         }
                         break;
@@ -590,7 +590,7 @@ M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
             res = func_8002BC14((s32)D_800603C0);
             if (res == -1) {
                 func_8003F6AC(3);
-                func_8A202904(arg0, 1, (s32)&arg0->listWindow);
+                PartyScreen_CloseWindow(arg0, 1, (s32)&arg0->listWindow);
                 arg0->listWindow.window.animTimer = 0;
             } else if (res == 1) {
                 func_8003F6AC(2);
@@ -599,7 +599,7 @@ M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
             }
             break;
         case 5:
-            if (MonSummary_GetCButtonPage(&arg0->summaryWindow) == 0) {
+            if (MonSummary_UpdateMoveCursor(&arg0->summaryWindow) == 0) {
                 res = func_8002BC14((s32)D_800603C0);
                 if (res == -1) {
                     func_8003F6AC(3);
@@ -607,7 +607,7 @@ M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
                     arg0->summaryWindow.window.animTimer = (arg0->summaryWindow.window.state <= 0) ? arg0->summaryWindow.window.animTimer : 4;
                 } else if (res == 1) {
                     func_8003F6AC(2);
-                    func_8A202904(arg0, 1, (s32)&arg0->listWindow);
+                    PartyScreen_CloseWindow(arg0, 1, (s32)&arg0->listWindow);
                     arg0->listWindow.window.animTimer = 0;
                 }
             }
@@ -615,17 +615,17 @@ M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
         case 6:
             res = SavePrompt_Update(&arg0->savePrompt);
             if (res == -1) {
-                func_8A202904(arg0, 1, (s32)&arg0->listWindow);
+                PartyScreen_CloseWindow(arg0, 1, (s32)&arg0->listWindow);
             } else if (res > 0) {
                 switch (res) {
                     case 1:
                         Save_DrawReportingWindow(&arg0->savePrompt);
-                        LabPC_WriteDeckBack((s32*)(&arg0->monList), (s32)arg0);
-                        func_8A202904(arg0, 7, 0);
+                        PartyScreen_WriteParty((s32*)(&arg0->monList), (s32)arg0);
+                        PartyScreen_CloseWindow(arg0, 7, 0);
                         arg0->listWindow.window.animTimer = 7;
                         break;
                     case 2:
-                        func_8A202904(arg0, 7, 0);
+                        PartyScreen_CloseWindow(arg0, 7, 0);
                         arg0->listWindow.window.animTimer = 7;
                         break;
                 }
@@ -643,13 +643,13 @@ M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-void BattlePrep_RenderFrame(void) {
+void PartyScreen_Load(void) {
     D_8A21DA40 = func_80025BD8();
     D_8A21DE08 = D_8A21DA40;
     if (D_8A21DE08 != -1) {
         func_80027FF8(&D_8A21DE10, D_8A21DE08);
     }
-    func_8A2024D0(&D_8A21DA80);
+    PartyScreen_SetupList(&D_8A21DA80);
 }
 
 typedef struct ColF50 { u8 r, g, b, a; } ColF50;
@@ -665,7 +665,7 @@ extern s32 D_8A203428_2;
 extern M2C_UNK D_8A21D9E4;
 M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void func_8002C8D8(ColF50*, ColF50, f32);
-s32 func_8A202F50(u8 arg0) {
+s32 PartyScreen_FadeFrame(u8 arg0) {
     ColF50 sp2C;
     M2C_UNK *var_a1;
     s32 n;
@@ -716,7 +716,7 @@ void PartyScreen_RunFrame(s32 arg0) {
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name and comment guessed from the code.
  */
-s32 MonSummary_Init(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
+s32 PartyScreen_Init(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
     s32 i;
 
     main_pool_push_state('VIEW');
@@ -736,11 +736,11 @@ s32 MonSummary_Init(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
         D_8A21DA60[i] = main_pool_alloc(0x14800, 0);
     }
 
-    BattlePrep_RenderFrame();
+    PartyScreen_Load();
     StageLoader_UpdateSegments();
-    BgStage_RunUntilCondition(8, func_8A202F50);
+    BgStage_RunUntilCondition(8, PartyScreen_FadeFrame);
     BgStage_RunUntilCondition(0, (s32 (*)(u8))PartyScreen_RunFrame);
-    BgStage_RunUntilCondition(8, func_8A202F50);
+    BgStage_RunUntilCondition(8, PartyScreen_FadeFrame);
     StageLoader_WaitForRetrace();
     Font_Free();
     main_pool_pop_state('VIEW');
