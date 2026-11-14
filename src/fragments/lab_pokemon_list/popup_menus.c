@@ -382,17 +382,14 @@ void PcSort_DrawBoxName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Font_EndTexturedTextRendering();
 }
 
-typedef struct Rgba8910576C {
-    u8 r, g, b, a;
-} Rgba8910576C;
 
 void PcSort_DrawBoxName();
 void func_891053E8(void* arg0);
 
-void func_8910576C(void* arg0, s32 arg1, s32 arg2, void* arg3, s32 arg4, Rgba8910576C arg5) {
+void func_8910576C(void* arg0, s32 arg1, s32 arg2, void* arg3, s32 arg4, Color_RGBA8 arg5) {
     Window_SetRect((s8*)arg0, arg1, arg2, 0x9C, M2C_FIELD(arg3, s32*, 8) * 0x1C + 8);
     M2C_FIELD(arg0, s32*, 0x14) = 0;
-    M2C_FIELD(arg0, Rgba8910576C*, 0x18) = arg5;
+    M2C_FIELD(arg0, Color_RGBA8*, 0x18) = arg5;
     Menu_Init((s8*)arg0 + 0x20, arg3, arg4, PcSort_DrawBoxName, 0x9C, 0x1C);
     func_891053E8(arg0);
 }
@@ -550,16 +547,16 @@ void func_89105AD4(s32 arg0, s32 arg1, char** arg2, s32 arg3, s32 arg4) {
     Font_EndTexturedTextRendering();
 }
 
-void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Rgba8910576C arg4, char* arg5);
-void func_8910576C(void* arg0, s32 arg1, s32 arg2, void* arg3, s32 arg4, Rgba8910576C arg5);
+void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5);
+void func_8910576C(void* arg0, s32 arg1, s32 arg2, void* arg3, s32 arg4, Color_RGBA8 arg5);
 void func_89105AD4(s32 arg0, s32 arg1, char** arg2, s32 arg3, s32 arg4);
 void func_891059FC(u8* widget);
 void func_8000B2F4(s32);
 extern s32 D_800603C0;
-extern Rgba8910576C D_8910A93C;
-extern Rgba8910576C D_8910A940;
+extern Color_RGBA8 D_8910A93C;
+extern Color_RGBA8 D_8910A940;
 extern char D_8910E024[];
-void func_89105C54(s8* arg0, s32 arg1, s32 arg2, s8* arg3, Rgba8910576C arg4) {
+void func_89105C54(s8* arg0, s32 arg1, s32 arg2, s8* arg3, Color_RGBA8 arg4) {
     s32 pad[5]; // FAKE: stack padding
     s32 list;
 
@@ -568,14 +565,14 @@ void func_89105C54(s8* arg0, s32 arg1, s32 arg2, s8* arg3, Rgba8910576C arg4) {
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x2C) = 0;
     M2C_FIELD(arg0, s32*, 0x18) = 1;
-    M2C_FIELD(arg0, Rgba8910576C*, 0x1C) = arg4;
+    M2C_FIELD(arg0, Color_RGBA8*, 0x1C) = arg4;
     Window_SetRect(arg0 + 0x30, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0x40);
     M2C_FIELD(arg0, s32*, 0x44) = 6;
-    M2C_FIELD(arg0, Rgba8910576C*, 0x48) = D_8910A93C;
-    M2C_FIELD(arg0, Rgba8910576C*, 0x4C) = D_8910A940;
+    M2C_FIELD(arg0, Color_RGBA8*, 0x48) = D_8910A93C;
+    M2C_FIELD(arg0, Color_RGBA8*, 0x4C) = D_8910A940;
     Window_SetRect(arg0 + 0x50, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x4C, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0x7C);
     M2C_FIELD(arg0, s32*, 0x64) = 0;
-    M2C_FIELD(arg0, Rgba8910576C*, 0x68) = arg4;
+    M2C_FIELD(arg0, Color_RGBA8*, 0x68) = arg4;
     Window_InitLabeled(arg0 + 0x94, M2C_FIELD(arg0, s32*, 0x50) + 0x70, M2C_FIELD(arg0, s32*, 0x54) + 0x5C, 0x48, arg4, D_8910E024);
     M2C_FIELD(arg0, s32*, 0xC0) = 0xA;
     M2C_FIELD(arg0, s32*, 0xC8) = 0xC;
@@ -743,55 +740,37 @@ void LabPCList_DrawPopupRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, 
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): A on フシギダネ set up the popup
  * (フシギダネをあつめる, おなじタイプをあつめる, いどうする, どうぐをつかう).
  */
-void LabPCList_InitPopupMenu(s8 *arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4) {
+void LabPCList_InitPopupMenu(LabPopupMenu* arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 i;
     s32 w;
     s32 max = 0;
     s32 h;
 
-    M2C_FIELD(arg0, s32 *, 0x70) = arg4;
+    arg0->title = arg4;
     for (i = 0; i < arg3; i++) {
         w = func_800566BC(arg1[i]) >> 1;
         if (max < w) {
             max = w;
         }
     }
-    func_80027804(arg0 + 0x64, arg1, arg3, arg3);
+    func_80027804((s8*)&arg0->itemList, arg1, arg3, arg3);
     h = max * 0x14 + 0x10;
-    Menu_Init(arg0 + 0x40, arg0 + 0x64, arg2, LabPCList_DrawPopupRow, h, 0x1C);
-    M2C_FIELD(arg0, s32 *, 0x60) |= 0x10000;
-    Window_SetRect(arg0, 0, 0, h + 0xC, M2C_FIELD(arg0, s32 *, 0x6C) * 0x1C + 0x14);
-    M2C_FIELD(arg0, s32 *, 0x24) = 0;
+    Menu_Init((s8*)&arg0->menu, (s8*)&arg0->itemList, arg2, LabPCList_DrawPopupRow, h, 0x1C);
+    arg0->menu.options |= 0x10000;
+    Window_SetRect(arg0, 0, 0, h + 0xC, arg0->itemList.count * 0x1C + 0x14);
+    arg0->window.animTimer = 0;
     M2C_FIELD(arg0, s32 *, 0x20) = 0;
-    M2C_FIELD(arg0, s32 *, 0x28) = 0;
+    arg0->window.state = 0;
     if (arg4 != 0) {
-        M2C_FIELD(arg0, s32 *, 0x14) = 0x800;
+        arg0->window.frame.style = 0x800;
     } else {
-        M2C_FIELD(arg0, s32 *, 0x14) = 0;
+        arg0->window.frame.style = 0;
     }
     if (arg4 != 0) {
         M2C_FIELD(arg0, s32 *, 0x20) = arg4;
     }
 }
 
-typedef struct Popup89106570 {
-    /* 0x00 */ s32 x;
-    /* 0x04 */ s32 y;
-    /* 0x08 */ s32 width;
-    /* 0x0C */ s32 height;
-    /* 0x10 */ char unk10[0x4];
-    /* 0x14 */ s32 flags;
-    /* 0x18 */ char unk18[0xC];
-    /* 0x24 */ s32 unk24;
-    /* 0x28 */ char unk28[0x4];
-    /* 0x2C */ s32 anchorX;
-    /* 0x30 */ s32 anchorY;
-    /* 0x34 */ s32 anchorW;
-    /* 0x38 */ s32 anchorH;
-    /* 0x3C */ char unk3C[0x38];
-    /* 0x74 */ s32 limitX;
-    /* 0x78 */ s32 limitY;
-} Popup89106570;
 
 /**
  * LabPCList_PlacePopup
@@ -804,35 +783,35 @@ typedef struct Popup89106570 {
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): placed that popup over the
  * list next to the selected row.
  */
-void LabPCList_PlacePopup(Popup89106570* arg0) {
+void LabPCList_PlacePopup(LabPopupMenu* arg0) {
     s32 over;
 
-    if (arg0->flags & 0x01000000) {
-        if (arg0->limitY >= arg0->anchorY + arg0->height) {
-            arg0->y = arg0->anchorY;
+    if (arg0->window.frame.style & 0x01000000) {
+        if (arg0->limitY >= arg0->anchorY + arg0->window.frame.height) {
+            arg0->window.frame.y = arg0->anchorY;
         } else {
-            over = (arg0->anchorY + arg0->height) - arg0->limitY;
-            arg0->y = arg0->anchorY - ((over > 8) ? over : 8);
+            over = (arg0->anchorY + arg0->window.frame.height) - arg0->limitY;
+            arg0->window.frame.y = arg0->anchorY - ((over > 8) ? over : 8);
         }
-        if (arg0->limitX >= arg0->anchorX + arg0->anchorW + arg0->width) {
-            arg0->x = arg0->anchorX + arg0->anchorW;
+        if (arg0->limitX >= arg0->anchorX + arg0->anchorW + arg0->window.frame.width) {
+            arg0->window.frame.x = arg0->anchorX + arg0->anchorW;
         } else {
-            arg0->x = arg0->anchorX - arg0->width;
+            arg0->window.frame.x = arg0->anchorX - arg0->window.frame.width;
         }
     } else {
-        if (arg0->limitX >= arg0->anchorX + arg0->width) {
-            arg0->x = arg0->anchorX;
+        if (arg0->limitX >= arg0->anchorX + arg0->window.frame.width) {
+            arg0->window.frame.x = arg0->anchorX;
         } else {
-            over = (arg0->anchorX + arg0->width) - arg0->limitX;
-            arg0->x = arg0->anchorX - ((over > 8) ? over : 8);
+            over = (arg0->anchorX + arg0->window.frame.width) - arg0->limitX;
+            arg0->window.frame.x = arg0->anchorX - ((over > 8) ? over : 8);
         }
-        if (arg0->limitY >= arg0->anchorY + arg0->anchorH + arg0->height) {
-            arg0->y = arg0->anchorY + arg0->anchorH;
+        if (arg0->limitY >= arg0->anchorY + arg0->anchorH + arg0->window.frame.height) {
+            arg0->window.frame.y = arg0->anchorY + arg0->anchorH;
         } else {
-            arg0->y = arg0->anchorY - arg0->height;
+            arg0->window.frame.y = arg0->anchorY - arg0->window.frame.height;
         }
     }
-    arg0->unk24 = 0;
+    arg0->window.animTimer = 0;
 }
 
 s32 func_8002AE6C();                                /* extern */
@@ -842,7 +821,7 @@ M2C_UNK Menu_DrawItems(s32, s32, s32, s32, s8 *);  /* extern */
  * Draws a popup menu's items.
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): drew that popup's four rows.
  */
-void LabPCList_DrawPopupMenu(s8 *arg0, s32 arg1)
+void LabPCList_DrawPopupMenu(LabPopupMenu* arg0, s32 arg1)
 {
   s8 *new_var; // FAKE: permuter temp
   if (func_8002AE6C() == 0)
@@ -851,7 +830,7 @@ void LabPCList_DrawPopupMenu(s8 *arg0, s32 arg1)
     if ((arg0 && arg0) && arg0)
     {
     }
-    Menu_DrawItems(arg0 + 0x40, (*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (new_var + 4))) + 0xA, arg1 | 0xFFED, arg0); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+    Menu_DrawItems((s8*)&arg0->menu, (*((s32 *) (((s8 *) arg0) + 0))) + 6, (*((s32 *) (new_var + 4))) + 0xA, arg1 | 0xFFED, arg0); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     if (arg1)
     {
     }
@@ -865,12 +844,12 @@ M2C_UNK Menu_UpdateCursor(s32);                         /* extern */
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): D-Down twice moved the popup
  * cursor from フシギダネをあつめる to いどうする.
  */
-s32 LabPCList_UpdatePopupMenu(s32 arg0) {
-    return Menu_UpdateCursor(arg0 + 0x40);
+s32 LabPCList_UpdatePopupMenu(LabPopupMenu* arg0) {
+    return Menu_UpdateCursor((s32)&arg0->menu);
 }
 
 extern char D_8910E064[];
-extern Rgba8910576C D_8910A94C;
+extern Color_RGBA8 D_8910A94C;
 extern char D_8910E07C[];
 extern char D_8910E088[];
 /**
@@ -878,35 +857,35 @@ extern char D_8910E088[];
  * Seen in play (2026-11-12) in いちらん: レベルをきめてあつめる (page 3/3, A on the レベル header) ran this once
  * and opened 「001 から 100」; かいじょ is greyed out when no level filter is active.
  */
-void LabPCList_InitLevelInputWindow(s8* arg0, s32 arg1, s32 arg2, Rgba8910576C arg3, s32 arg4, s32 arg5, s32 arg6) {
+void LabPCList_InitLevelInputWindow(LabLevelInputWindow* arg0, s32 arg1, s32 arg2, Color_RGBA8 arg3, s32 arg4, s32 arg5, s32 arg6) {
     Window_SetRect(arg0, arg1, arg2, 0x13C, 0x50);
-    M2C_FIELD(arg0, s32*, 0x24) = 0;
-    M2C_FIELD(arg0, s32*, 0x28) = 0;
-    M2C_FIELD(arg0, s32*, 0x14) = 0x800;
-    M2C_FIELD(arg0, char**, 0x20) = D_8910E064;
-    M2C_FIELD(arg0, Rgba8910576C*, 0x18) = arg3;
-    M2C_FIELD(arg0, s32*, 0xB0) = 3;
-    M2C_FIELD(arg0, s32*, 0xA4) = arg4;
-    M2C_FIELD(arg0, s32*, 0xA8) = 1; M2C_FIELD(arg0, s32*, 0xAC) = 0x64; // FAKE: same line
-    M2C_FIELD(arg0, s32*, 0xB4) = 0;
-    M2C_FIELD(arg0, s32*, 0xC4) = 3;
-    M2C_FIELD(arg0, s32*, 0xB8) = arg5;
-    M2C_FIELD(arg0, s32*, 0xC8) = 0;
-    M2C_FIELD(arg0, s32*, 0xC0) = 0x64;
-    M2C_FIELD(arg0, s32*, 0xBC) = 1;
-    Window_InitLabeled(arg0 + 0x68, M2C_FIELD(arg0, s32*, 0) + 0xD2, M2C_FIELD(arg0, s32*, 4) + 0xE, 0x5C, D_8910A94C, D_8910E07C);
-    Window_InitLabeled(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 0xD2, M2C_FIELD(arg0, s32*, 4) + 0x2A, 0x5C, D_8910A94C, D_8910E088);
+    arg0->window.animTimer = 0;
+    arg0->window.state = 0;
+    arg0->window.frame.style = 0x800;
+    arg0->window.title = D_8910E064;
+    arg0->window.frame.color = arg3;
+    arg0->minLevel.digitCount = 3;
+    arg0->minLevel.value = arg4;
+    arg0->minLevel.min = 1; arg0->minLevel.max = 0x64; // FAKE: same line
+    arg0->minLevel.digit = 0;
+    arg0->maxLevel.digitCount = 3;
+    arg0->maxLevel.value = arg5;
+    arg0->maxLevel.digit = 0;
+    arg0->maxLevel.max = 0x64;
+    arg0->maxLevel.min = 1;
+    Window_InitLabeled((s8*)&arg0->gatherButton, arg0->window.frame.x + 0xD2, arg0->window.frame.y + 0xE, 0x5C, D_8910A94C, D_8910E07C);
+    Window_InitLabeled((s8*)&arg0->clearButton, arg0->window.frame.x + 0xD2, arg0->window.frame.y + 0x2A, 0x5C, D_8910A94C, D_8910E088);
     if (arg6 == 0) {
-        M2C_FIELD(arg0, s32*, 0x3C) |= 1;
+        arg0->clearButton.flags |= 1;
     }
-    M2C_FIELD(arg0, s32*, 0xD0) = 0;
-    M2C_FIELD(arg0, s32*, 0xD4) = 2;
+    arg0->cursor.cursor = 0;
+    arg0->cursor.count = 2;
     M2C_FIELD(arg0, s32*, 0xCC) = D_800603C0;
     func_8000B2F4(D_800603C0);
-    M2C_FIELD(arg0, s32*, 0xDC) = 2; M2C_FIELD(arg0, s32*, 0xE0) = 7; // FAKE: same line
-    M2C_FIELD(arg0, s32*, 0xD8) = D_800603C0;
+    arg0->column = 2; arg0->unk_E0 = 7; // FAKE: same line
+    arg0->unk_D8 = D_800603C0;
     func_8000B2F4(D_800603C0);
-    M2C_FIELD(arg0, s32*, 0xE4) = 0;
+    arg0->focus = 0;
 }
 
 extern Gfx D_80073408[];
@@ -970,17 +949,17 @@ extern char D_8910E094[];
  * Seen in play (2026-11-12) in いちらん: ran every frame while the window showed 「001 から 100」.
  * D_8910E094 is から ("from"), not "Empty".
  */
-void LabPCList_DrawLevelInputWindow(s8 *arg0) {
+void LabPCList_DrawLevelInputWindow(LabLevelInputWindow* arg0) {
     if (func_8002AE6C() == 0) {
         func_8001AB6C();
         func_8001A384(4, 0);
         func_8001AA9C(0xC8, 0xC8, 0xFF, 0xFF);
-        func_8001A944(M2C_FIELD(arg0, s32 *, 0) + 0x54, M2C_FIELD(arg0, s32 *, 4) + 0x13, D_8910E094);
+        func_8001A944(arg0->window.frame.x + 0x54, arg0->window.frame.y + 0x13, D_8910E094);
         func_8001ABBC();
-        LabPCList_DrawLevelInput(arg0 + 0xA4, M2C_FIELD(arg0, s32 *, 0) + 0xE, M2C_FIELD(arg0, s32 *, 4) + 0x10, (M2C_FIELD(arg0, s32 *, 0xE4) == 0) ? 2 : 0);
-        LabPCList_DrawLevelInput(arg0 + 0xB8, M2C_FIELD(arg0, s32 *, 0) + 0x7A, M2C_FIELD(arg0, s32 *, 4) + 0x10, (M2C_FIELD(arg0, s32 *, 0xE4) == 1) ? 2 : 0);
-        Window_DrawLabeled(arg0 + 0x68, (M2C_FIELD(arg0, s32 *, 0xE4) == 2 && M2C_FIELD(arg0, s32 *, 0xD0) == 0) ? 2 : 0);
-        Window_DrawLabeled(arg0 + 0x2C, (M2C_FIELD(arg0, s32 *, 0xE4) == 2 && M2C_FIELD(arg0, s32 *, 0xD0) == 1) ? 2 : 0);
+        LabPCList_DrawLevelInput((s8*)&arg0->minLevel, arg0->window.frame.x + 0xE, arg0->window.frame.y + 0x10, (arg0->focus == 0) ? 2 : 0);
+        LabPCList_DrawLevelInput((s8*)&arg0->maxLevel, arg0->window.frame.x + 0x7A, arg0->window.frame.y + 0x10, (arg0->focus == 1) ? 2 : 0);
+        Window_DrawLabeled((s8*)&arg0->gatherButton, (arg0->focus == 2 && arg0->cursor.cursor == 0) ? 2 : 0);
+        Window_DrawLabeled((s8*)&arg0->clearButton, (arg0->focus == 2 && arg0->cursor.cursor == 1) ? 2 : 0);
     }
 }
 
@@ -997,7 +976,7 @@ extern s32 D_800603C0;
  * Seen in play (2026-11-12) in いちらん: D-Up raised the selected digit (001 to 006), D-Right moved
  * across the six digits to あつめる/かいじょ, and A on those returned 1 or 2.
  */
-s32 LabPCList_UpdateLevelInput(s8 *arg0) {
+s32 LabPCList_UpdateLevelInput(LabLevelInputWindow* arg0) {
     s32 sp1C;
     s32 temp_v0;
     s32 temp_v0_2;
@@ -1007,29 +986,29 @@ s32 LabPCList_UpdateLevelInput(s8 *arg0) {
     sp1C = 0;
     temp_v1 = func_8000B30C() & 0xFFFF;
     if (temp_v1 & 0x300) {
-        func_8002B2E4(arg0 + 0xD8, temp_v1, arg0);
-        temp_v1_2 = M2C_FIELD(arg0, s32 *, 0xDC);
+        func_8002B2E4((s8*)&arg0->unk_D8, temp_v1, arg0);
+        temp_v1_2 = arg0->column;
         if (temp_v1_2 < 3) {
-            M2C_FIELD(arg0, s32 *, 0xE4) = 0;
-            M2C_FIELD(arg0, s32 *, 0xB4) = (s32) (2 - temp_v1_2);
+            arg0->focus = 0;
+            arg0->minLevel.digit = (s32) (2 - temp_v1_2);
         } else if (temp_v1_2 < 6) {
-            M2C_FIELD(arg0, s32 *, 0xE4) = 1;
-            M2C_FIELD(arg0, s32 *, 0xC8) = (s32) (5 - temp_v1_2);
+            arg0->focus = 1;
+            arg0->maxLevel.digit = (s32) (5 - temp_v1_2);
         } else {
-            M2C_FIELD(arg0, s32 *, 0xE4) = 2;
-            M2C_FIELD(arg0, s32 *, 0xD0) = 0;
+            arg0->focus = 2;
+            arg0->cursor.cursor = 0;
         }
     } else if (temp_v1 & 0xC00) {
-        temp_v0 = M2C_FIELD(arg0, s32 *, 0xE4);
+        temp_v0 = arg0->focus;
         switch (temp_v0) {                          /* irregular */
         case 0:
-            func_8002B4B4(arg0 + 0xA4, temp_v1, arg0);
+            func_8002B4B4((s8*)&arg0->minLevel, temp_v1, arg0);
             break;
         case 1:
-            func_8002B4B4(arg0 + 0xB8, temp_v1, arg0);
+            func_8002B4B4((s8*)&arg0->maxLevel, temp_v1, arg0);
             break;
         case 2:
-            func_8002B204(arg0 + 0xCC, temp_v1, arg0);
+            func_8002B204((s8*)&arg0->cursor, temp_v1, arg0);
             break;
         }
     } else if (temp_v1 == 0) {
@@ -1037,11 +1016,11 @@ s32 LabPCList_UpdateLevelInput(s8 *arg0) {
         if (temp_v0_2 == -1) {
             func_8003F6AC(3);
             sp1C = -1;
-        } else if ((temp_v0_2 == 1) && (M2C_FIELD(arg0, s32 *, 0xE4) == 2)) {
-            if (M2C_FIELD(arg0, s32 *, 0xD0) == 0) {
+        } else if ((temp_v0_2 == 1) && (arg0->focus == 2)) {
+            if (arg0->cursor.cursor == 0) {
                 func_8003F6AC(2);
                 sp1C = 1;
-            } else if (!(M2C_FIELD(arg0, s32 *, 0x3C) & 1)) {
+            } else if (!(arg0->clearButton.flags & 1)) {
                 func_8003F6AC(2);
                 sp1C = 2;
             } else {
@@ -1158,7 +1137,7 @@ typedef struct Lab891071A4 {
     /* 0x004 */ s32 y;
     /* 0x008 */ char unk008[0xC];
     /* 0x014 */ s32 unk14;
-    /* 0x018 */ Rgba8910576C color;
+    /* 0x018 */ Color_RGBA8 color;
     /* 0x01C */ char unk01C[4];
     /* 0x020 */ char* unk20;
     /* 0x024 */ s32 unk24;
@@ -1187,10 +1166,10 @@ typedef struct Entry891071A4 {
 } Entry891071A4;
 
 void ScrollList_Init(s8*, s32, s32, s32, void*, s32, s32);
-void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Rgba8910576C arg4, char* arg5);
+void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5);
 void func_8000B2F4(s32);
 extern Entry891071A4 D_80066AD8[];
-extern Rgba8910576C D_8910A974;
+extern Color_RGBA8 D_8910A974;
 extern char D_8910E09C[];
 extern char D_8910E0B0[];
 extern char D_8910E0B8[];
@@ -1425,7 +1404,7 @@ typedef struct Lab89107A60 {
     /* 0x004 */ s32 y;
     /* 0x008 */ char unk008[0xC];
     /* 0x014 */ s32 unk14;
-    /* 0x018 */ Rgba8910576C color;
+    /* 0x018 */ Color_RGBA8 color;
     /* 0x01C */ char unk01C[4];
     /* 0x020 */ char* unk20;
     /* 0x024 */ s32 unk24;
@@ -1449,11 +1428,11 @@ typedef struct Lab89107A60 {
 } Lab89107A60;
 
 void ScrollList_Init(s8*, s32, s32, s32, void*, s32, s32);
-void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Rgba8910576C arg4, char* arg5);
+void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5);
 void func_8000B2F4(s32);
 extern u8 D_8910A978[];
 extern u8 D_8910AA1C[];
-extern Rgba8910576C D_8910AACC;
+extern Color_RGBA8 D_8910AACC;
 extern char D_8910E0D0[];
 extern char D_8910E0E0[];
 extern char D_8910E0E8[];
@@ -1838,7 +1817,7 @@ void PcSort_DrawUseItemPrompt(s8* arg0) {
             Font_EndTexturedTextRendering();
             switch (M2C_FIELD(arg0, s32*, 0x1B0)) {
                 case 1:
-                    LabPCList_DrawPopupMenu(arg0 + 0x94, 2);
+                    LabPCList_DrawPopupMenu((LabPopupMenu *) (arg0 + 0x94), 2);
                     break;
                 case 2:
                 case 3:
@@ -1887,11 +1866,11 @@ s32 LabPCList_UpdateItemWindow(s8 *arg0)
         if (!((*((u16 **) (((s8 *) self) + 0x50)))[*((s32 *) (((s8 *) self) + 0x54))] & 1)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
           func_8003F6AC(2);
-          LabPCList_InitPopupMenu(self + 0x94, (s32 *) D_8910AAE8, (s32) (self + 0x90), 1, 0);
+          LabPCList_InitPopupMenu((LabPopupMenu *) (self + 0x94), (s32 *) D_8910AAE8, (s32) (self + 0x90), 1, 0);
           Window_SetRect(self + 0xC0, (*((s32 *) (((s8 *) self) + 0))) + 6, (((*((s32 *) (((s8 *) self) + 4))) + (*((s32 *) (((s8 *) self) + 0x80)))) - (*((s32 *) (((s8 *) self) + 0x78)))) + 0x16, (*((s32 *) (((s8 *) self) + 8))) - 0xC, 0x1C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
           *((s32 *) (((s8 *) self) + 0x108)) = ((*((s32 *) (((s8 *) self) + 8))) + (*((s32 *) (((s8 *) self) + 0)))) - 6; // FAKE: decomp slop, raw pointer casts stand in for struct fields
           *((s32 *) (((s8 *) self) + 0x10C)) = (*((s32 *) (((s8 *) self) + 4))) + 0xF6; // FAKE: decomp slop, raw pointer casts stand in for struct fields
-          LabPCList_PlacePopup((Popup89106570 *) (self + 0x94));
+          LabPCList_PlacePopup((LabPopupMenu *) (self + 0x94));
           *((Rgba891084B4 *) (((s8 *) self) + 0xAC)) = D_8910AAEC;
           *((u32 *) (((s8 *) self) + 0x1B0)) = 1;
         }
@@ -1904,7 +1883,7 @@ s32 LabPCList_UpdateItemWindow(s8 *arg0)
       break;
 
     case 1:
-      if (LabPCList_UpdatePopupMenu((s32) (self + 0x94)) == 0)
+      if (LabPCList_UpdatePopupMenu((LabPopupMenu *) (self + 0x94)) == 0)
     {
       if (((u16 *) D_800603C0)[4] & 0x4000)
       {

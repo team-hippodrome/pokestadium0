@@ -25,17 +25,17 @@ M2C_UNK func_89109C6C(s32, s32);                    /* extern */
 void func_80027D68(s32, s32);
 void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
 void LabPCList_DrawMonRow();
-void func_89105C54(s8*, s32, s32, s8*, Rgba891024A4);
+void func_89105C54(s8*, s32, s32, s8*, Color_RGBA8);
 extern s32 D_8910D990[];
-extern Rgba891024A4 D_8910A7F4;
+extern Color_RGBA8 D_8910A7F4;
 extern u8 D_8910A844[];
 extern u8 D_8910A848[];
 extern u8 D_8910A804[];
 extern u8 D_8910A84C[];
 
 void func_891000BC(s32 arg0);
-void func_89100294(Ctx89100294* arg0);
-s32 LabPCList_GetColumnCursorX(Ctx89100688* arg0);
+void func_89100294(LabPCListScreen* arg0);
+s32 LabPCList_GetColumnCursorX(LabPCListScreen* arg0);
 extern u8 D_800734A8[];
 
 extern Gfx D_80060270[];
@@ -60,24 +60,24 @@ void func_89101238(s32, s32, s8*, s32, s32);
  * Draws one Pokemon row of the list with the columns of the current detail page.
  * Seen in play (2026-11-12): the rows 0001 フシギダネ ハナ 12345 サトシ てもち くさ どく, 0002 ヒトカゲ, 0003 ゼニガメ.
  */
-void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, Ctx891012A8 *ctx)
+void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, LabPCListScreen *ctx)
 {
   s32 col;
   s32 cx;
   Color_RGBA8 *colors;
   Color_RGBA8 *loop_colors;
-  Ctx891012A8 *c = ctx;
+  LabPCListScreen *c = ctx;
   gSPDisplayList(gDisplayListHead++, D_80060270);
   colors = D_8910A85C[row & 1];
   loop_colors = D_8910A86C[row & 1];
   func_80029028(x, y, 0x26, 0x14, colors[0]);
   func_80029028(x + 0x26, y, 0x50, 0x14, colors[1]);
-  col = c->ranges[c->mode];
+  col = c->pageColumnStart[c->page];
   cx = x + 0x78;
-  for (; cx < c->right; col++)
+  for (; cx < c->listFrame.width; col++)
   {
-    func_80029028(cx, y, c->widths[col], 0x14, loop_colors[col & 1]);
-    cx += c->widths[col];
+    func_80029028(cx, y, c->columnWidths[col], 0x14, loop_colors[col & 1]);
+    cx += c->columnWidths[col];
   }
 
   if (entry != 0)
@@ -111,7 +111,7 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
       func_8001ABBC();
     }
     cx = x + 0x78;
-    for (col = c->ranges[c->mode]; cx < c->right; col++)
+    for (col = c->pageColumnStart[c->page]; cx < c->listFrame.width; col++)
     {
       switch (col)
       {
@@ -173,7 +173,7 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
 
       }
 
-      cx += c->widths[col];
+      cx += c->columnWidths[col];
     }
 
   }
@@ -225,19 +225,19 @@ void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
  * Draws タテ／ヨコきりかえ (switch vertical/horizontal) and ページおくり%d/3 (page %d/3).
  * Seen in play (2026-11-12): Lタテ／ヨコきりかえR and ページおくり1／3.
  */
-void LabPCList_DrawPageHint(s8* arg0) {
+void LabPCList_DrawPageHint(LabPCListScreen* arg0) {
     func_8001AB6C();
     func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
     func_8001A384(8, 0);
-    func_8001A944(M2C_FIELD(arg0, s32*, 0x4C) + 0x22, M2C_FIELD(arg0, s32*, 0x50) + 5, (M2C_UNK*)D_8910DBF0);
-    func_8001A944(M2C_FIELD(arg0, s32*, 0x4C) + 0x152, M2C_FIELD(arg0, s32*, 0x50) + 5, (M2C_UNK*)D_8910DC04,
-                  M2C_FIELD(arg0, s32*, 0xB15C) + 1);
+    func_8001A944(arg0->headerFrame.x + 0x22, arg0->headerFrame.y + 5, (M2C_UNK*)D_8910DBF0);
+    func_8001A944(arg0->headerFrame.x + 0x152, arg0->headerFrame.y + 5, (M2C_UNK*)D_8910DC04,
+                  arg0->page + 1);
     func_8001ABBC();
     gSPDisplayList(gDisplayListHead++, D_80060290);
-    Gfx_DrawTextureRgba16(M2C_FIELD(arg0, s32*, 0x4C) + 4, M2C_FIELD(arg0, s32*, 0x50) + 3, 0x1A, 0x18, D_8910C370, 0x20, 0x200000);
-    Gfx_DrawTextureRgba16(M2C_FIELD(arg0, s32*, 0x4C) + 0xDA, M2C_FIELD(arg0, s32*, 0x50) + 3, 0x1A, 0x18, D_8910C978, 0x20, 0x200000);
-    Gfx_DrawTextureRgba16(M2C_FIELD(arg0, s32*, 0x4C) + 0x134, M2C_FIELD(arg0, s32*, 0x50) + 2, 0x1A, 0x1A, D_04006170, 0x1C, 0x200000);
-    Gfx_DrawTextureRgba16(M2C_FIELD(arg0, s32*, 0x4C) + 0x20A, M2C_FIELD(arg0, s32*, 0x50) + 2, 0x1A, 0x1A, D_04006CE0, 0x1C, 0x200000);
+    Gfx_DrawTextureRgba16(arg0->headerFrame.x + 4, arg0->headerFrame.y + 3, 0x1A, 0x18, D_8910C370, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(arg0->headerFrame.x + 0xDA, arg0->headerFrame.y + 3, 0x1A, 0x18, D_8910C978, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(arg0->headerFrame.x + 0x134, arg0->headerFrame.y + 2, 0x1A, 0x1A, D_04006170, 0x1C, 0x200000);
+    Gfx_DrawTextureRgba16(arg0->headerFrame.x + 0x20A, arg0->headerFrame.y + 2, 0x1A, 0x1A, D_04006CE0, 0x1C, 0x200000);
     gSPDisplayList(gDisplayListHead++, D_80060398);
 }
 

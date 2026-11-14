@@ -568,16 +568,6 @@ typedef struct Entry89100FC4 {
  * src/fragments/fragment016_252E10/89100020_891019E4.c
  */
 
-typedef struct Ctx891012A8 {
-    /* 0x0000 */ char unk0000[0x34];
-    /* 0x0034 */ s32 right;
-    /* 0x0038 */ char unk0038[0x84 - 0x38];
-    /* 0x0084 */ s32* widths;
-    /* 0x0088 */ char unk0088[0xB15C - 0x88];
-    /* 0xB15C */ s32 mode;
-    /* 0xB160 */ char unkB160[0xB548 - 0xB160];
-    /* 0xB548 */ s32* ranges;
-} Ctx891012A8;
 
 typedef struct Entry891012A8 {
     /* 0x00 */ u8 unk00[8];
@@ -617,50 +607,9 @@ typedef struct Entry89100140 {
     /* 0x20 */ s32 unk_20;
 } Entry89100140; // size = 0x24
 
-typedef struct Ctx89100140 {
-    /* 0x000 */ char unk000[0x3B4];
-    /* 0x3B4 */ Entry89100140 unk_3B4[3];
-    /* 0x420 */ char unk_420[1];
-} Ctx89100140;
 
-typedef struct Ctx89100294 {
-    /* 0x0000 */ char unk0000[0x8C];
-    /* 0x008C */ s32 unk8C;
-    /* 0x0090 */ char unk0090[0xB15C - 0x90];
-    /* 0xB15C */ s32 mode;
-    /* 0xB160 */ char unkB160[0xB548 - 0xB160];
-    /* 0xB548 */ s32* ranges;
-    /* 0xB54C */ s32 unkB54C;
-    /* 0xB550 */ s32 unkB550;
-    /* 0xB554 */ s32 unkB554;
-} Ctx89100294;
 
-typedef struct Big891003A4 {
-    /* 0x0000 */ char unk0000[0xB15C];
-    /* 0xB15C */ s32 unkB15C;
-    /* 0xB160 */ char unkB160[0x20];
-    /* 0xB180 */ s32 unkB180;
-    /* 0xB184 */ char unkB184[0x3C4];
-    /* 0xB548 */ u8* unkB548;
-    /* 0xB54C */ char unkB54C[0xC];
-    /* 0xB558 */ s32 unkB558;
-    /* 0xB55C */ char unkB55C[0x38];
-    /* 0xB594 */ s32 unkB594;
-} Big891003A4;
 
-typedef struct Ctx89100688 {
-    /* 0x0000 */ char unk0000[0x2C];
-    /* 0x002C */ s32 x;
-    /* 0x0030 */ s32 y;
-    /* 0x0034 */ char unk0034[0x84 - 0x34];
-    /* 0x0084 */ s32* widths;
-    /* 0x0088 */ char unk0088[0xB15C - 0x88];
-    /* 0xB15C */ s32 mode;
-    /* 0xB160 */ char unkB160[0xB548 - 0xB160];
-    /* 0xB548 */ s32* ranges;
-    /* 0xB54C */ s32 unkB54C;
-    /* 0xB550 */ s32 cursor;
-} Ctx89100688;
 
 /* Struct types that were defined identically in each of these files; this is
  * now the one definition they all include:
@@ -670,17 +619,6 @@ typedef struct Ctx89100688 {
  * src/fragments/fragment016_252E10/89100020_89102AB8.c
  */
 
-typedef struct LabPCInitialStateFields {
-    u8 pad0000[0x9828];
-    u8 unk_9828;
-    u8 unk_9829;
-    u8 pad982A[2];
-    s32 unk_982C;
-    u8 pad9830[0xE8];
-    s32 unk_9918;
-    u8 pad991C[0x1E8];
-    s32 unk_9B04;
-} LabPCInitialStateFields;
 
 /* Struct types that were defined identically in each of these files; this is
  * now the one definition they all include:
@@ -693,7 +631,100 @@ typedef struct LabPCInitialStateFields {
  * src/fragments/fragment016_252E10/89100020_89103740.c
  */
 
-typedef struct Rgba891024A4 { u8 r, g, b, a; } Rgba891024A4;
+
+
+/* A popup menu in the いちらん (Pokémon list) screen (LabPCList_InitPopupMenu, LabPCList_PlacePopup,
+ * LabPCList_DrawPopupMenu): a window, the rectangle it opens next to, then its menu. */
+typedef struct LabPopupMenu {
+    /* 0x00 */ Window window;
+    /* 0x2C */ s32 anchorX; // @unverified: LabPCList_PlacePopup puts the popup next to this rectangle
+    /* 0x30 */ s32 anchorY;
+    /* 0x34 */ s32 anchorW;
+    /* 0x38 */ s32 anchorH;
+    /* 0x3C */ s32 unk_3C;
+    /* 0x40 */ Menu menu;
+    /* 0x64 */ PointerList itemList; // @unverified: the item strings: フシギダネをあつめる, おなじタイプをあつめる, いどうする, どうぐをつかう
+    /* 0x70 */ s32 title; // @unverified: text of the title tab when nonzero (LabPCList_InitPopupMenu sets window style 0x800)
+    /* 0x74 */ s32 limitX; // @unverified: LabPCList_PlacePopup keeps the popup left of this
+    /* 0x78 */ s32 limitY; // @unverified: and above this
+} LabPopupMenu; // @unverified: size = 0x7C
+
+typedef struct Slot89102930 {
+    /* 0x00 */ s32 unk00;
+    /* 0x04 */ s32 unk04;
+    /* 0x08 */ char unk08[0x14];
+} Slot89102930; // @unverified: size = 0x1C
+
+/* The レベルのにゅうりょく (level input) window of the いちらん screen: 「001 から 100」
+ * (LabPCList_InitLevelInputWindow). */
+typedef struct LabLevelInputWindow {
+    /* 0x00 */ Window window;
+    /* 0x2C */ LabeledButton clearButton; // かいじょ; flags bit 0 (greyed out) when no level filter is active
+    /* 0x68 */ LabeledButton gatherButton; // あつめる
+    /* 0xA4 */ DigitSelector minLevel; // @unverified: 3 digits, 1 to 100 (LabPCList_InitLevelInputWindow)
+    /* 0xB8 */ DigitSelector maxLevel; // @unverified: 3 digits, 1 to 100
+    /* 0xCC */ ChoiceCursor cursor; // @unverified: count 2
+    /* 0xD8 */ s32 unk_D8;
+    /* 0xDC */ s32 column; // @unverified: L/R position: 0-2 the digits of minLevel, 3-5 of maxLevel, 6 the buttons (LabPCList_UpdateLevelInput)
+    /* 0xE0 */ s32 unk_E0;
+    /* 0xE4 */ s32 focus; // @unverified: 0 = minLevel, 1 = maxLevel, 2 = the buttons
+} LabLevelInputWindow; // size = 0xE8
+
+#define LAB_PC_LIST_MAX_ROWS 466
+
+/* The いちらん (Pokémon list) screen of the Lab PC (LabPCList_InitListWindow). Its functions used to
+ * take it through a dozen partial views (Ctx891012A8, Ctx89100294, Big891003A4, ...). */
+typedef struct LabPCListScreen {
+    /* 0x0000 */ Window window; // @unverified: 564x382 (LabPCList_InitListWindow)
+    /* 0x002C */ WindowFrame listFrame; // @unverified: the rows area, 552x302 at (6, 0x3A) in the window
+    /* 0x004C */ WindowFrame headerFrame; // @unverified: the column header strip, 552x30 at (6, 6)
+    /* 0x006C */ PointerList filteredRows; // @unverified: what PointerList_Filter leaves of rows (LabPCList_ApplyFiltersAndSort)
+    /* 0x0078 */ s32 sortKey; // @unverified: index into D_8910D990, the comparator given to PointerList_Sort
+    /* 0x007C */ s32 activeFilters; // @unverified: LabPCList_ApplyFiltersAndSort: 1 level, 2 type, 4 move, 8 and 0x10 (unk_9E58, unk_9E5C), 0x20
+    /* 0x0080 */ s32 unk_0080;
+    /* 0x0084 */ s32* columnWidths; // @unverified: pixel width of each detail column (LabPCList_GetColumnCursorX)
+    /* 0x0088 */ s32 state; // @unverified: LabPCList_UpdateHeaderCursor sets 2 when it opens the sort menu
+    /* 0x008C */ s32 focus; // @unverified: 0 = the rows, 1 = the header buttons, 2 = the column headers (R moved the focus to ニックネーム, ID, おや, ばしょ)
+    /* 0x0090 */ char unk_0090[0x230 - 0x90];
+    /* 0x0230 */ char sourceSelectWindow[0x3B4 - 0x230]; // @unverified: 「どこのポケモンを いちらん するか えらんでください。」 (LabPCList_UpdateSourceSelect)
+    /* 0x03B4 */ Entry89100140 sources[3]; // @unverified: rows of sourceMatrix: てもち, ゲームボーイのボックス, 64カセットのボックス
+    /* 0x0420 */ ByteMatrix sourceMatrix; // @unverified: over sources (func_89100140)
+    /* 0x0430 */ char unk_0430[0x87B8 - 0x430];
+    /* 0x87B8 */ void* rowBuffer[LAB_PC_LIST_MAX_ROWS]; // @unverified: storage of rows
+    /* 0x8F00 */ void* filteredRowBuffer[LAB_PC_LIST_MAX_ROWS]; // @unverified: storage of filteredRows
+    /* 0x9648 */ PointerList rows; // @unverified: the listed Pokémon, built from the chosen sources (func_89109C6C)
+    /* 0x9654 */ LabPopupMenu popup; // @unverified: the A-button popup on a row: フシギダネをあつめる, おなじタイプをあつめる, いどうする, どうぐをつかう
+    /* 0x96D0 */ LabPopupMenu subPopup; // @unverified: drawn over popup (LabPCList_DrawWindows)
+    /* 0x974C */ LabPopupMenu subPopup2; // @unverified: drawn over subPopup
+    /* 0x97C8 */ u16 popupItemFlags[3][16]; // @unverified: Menu.itemFlags of popups
+    /* 0x9828 */ u8 levelFilterMin; // @unverified: play note on LabPCList_RunLevelFilter: あつめる with 006から100 stored 6 here
+    /* 0x9829 */ u8 levelFilterMax; // @unverified: and 100 here; LabPCList_ResetFilterState sets 1 and 100
+    /* 0x982A */ char pad982A[2];
+    /* 0x982C */ s32 unk_982C;
+    /* 0x9830 */ LabLevelInputWindow levelInputWindow;
+    /* 0x9918 */ s32 unk_9918; // @unverified: LabPCList_CommitTypeFilter writes here; 0 turns the type filter off
+    /* 0x991C */ s32 unk_991C;
+    /* 0x9920 */ char typeFilterWindow[0x9B00 - 0x9920]; // @unverified: LabPCList_DrawTypeFilter
+    /* 0x9B00 */ s32 unk_9B00; // @unverified: LabPCList_CommitMoveFilter writes here
+    /* 0x9B04 */ s32 unk_9B04;
+    /* 0x9B08 */ char moveFilterWindow[0x9E58 - 0x9B08]; // @unverified: LabPCList_DrawMoveFilter
+    /* 0x9E58 */ s32 unk_9E58;
+    /* 0x9E5C */ s32 unk_9E5C; // @unverified: number of types in unk_9E60/unk_9E61 for the おなじタイプをあつめる filter (LabPCList_UpdateMonMenu)
+    /* 0x9E60 */ u8 unk_9E60;
+    /* 0x9E61 */ u8 unk_9E61;
+    /* 0x9E62 */ char pad9E62[2];
+    /* 0x9E64 */ char unk_9E64[4];
+    /* 0x9E68 */ Slot89102930 unk_9E68[3];
+    /* 0x9EBC */ char unk_9EBC[0xB15C - 0x9EBC];
+    /* 0xB15C */ s32 page; // @unverified: detail page 0-2 (ページおくり1/3); C-Right turned 1/3 to 2/3, the move columns
+    /* 0xB160 */ ScrollList list; // @unverified: over rows (or filteredRows), 14 rows of 20 pixels
+    /* 0xB1A4 */ u16 rowFlags[LAB_PC_LIST_MAX_ROWS]; // @unverified: Menu.itemFlags of list
+    /* 0xB548 */ s32* pageColumnStart; // @unverified: first column index of each detail page (LabPCList_GetColumnCursorX)
+    /* 0xB54C */ ChoiceCursor headerCursor; // @unverified: the header buttons; D-Left/D-Right moved it between ニックネーム, ID, おや, ばしょ
+    /* 0xB558 */ s32 hasChanges; // @unverified: set by LabPCList_MoveMonTo and after an item is used; LabPCList_UpdateScreen then asks to save on exit
+    /* 0xB55C */ char textBox[0xB594 - 0xB55C]; // @unverified: TextBox_Init, TextBox_Draw
+    /* 0xB594 */ void* msg; // @unverified: message box given to LabPCList_MoveMonTo; last argument of LabPCList_InitListWindow
+} LabPCListScreen; // size = 0xB598
 
 #include "gfx_rect.h"
 #include "poke_icon.h"

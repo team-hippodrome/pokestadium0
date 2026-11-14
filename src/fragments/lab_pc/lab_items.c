@@ -537,10 +537,10 @@ void func_89000CF0(s8 *arg0, s8 *arg1)
  * Seen in play (2026-11-13) ran when the てもちのどうぐ / サトシのパソコン / 64のカセット list menu opened in せいとん >
  * どうぐをいどうする; the list already chosen as the source was greyed out as a destination.
  */
-void LabItem_DisableRow(s8 *arg0, s32 arg1) {
+void LabItem_DisableRow(LabItemMenuWindow* arg0, s32 arg1) {
     u16 *temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s32 *, 0x30) + (arg1 * 2);
+    temp_v0 = &arg0->menu.itemFlags[arg1];
     *temp_v0 |= 1;
 }
 
@@ -595,19 +595,19 @@ M2C_UNK func_80027804();
  * Seen in play (2026-11-13) in せいとん > どうぐを いどうする, A opened the three-row source window (てもちの どうぐ,
  * サトシの パソコン, 64の カセット) and this ran once as it appeared.
  */
-void LabItem_InitMenuWindow(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
+void LabItem_InitMenuWindow(LabItemMenuWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5) {
     s32 pad[2]; // FAKE: stack padding
 
-    Window_SetRect((s8 *)arg0, arg1, arg2, 0xE4, (arg4 * 0x1C) + 0x14);
-    M2C_FIELD(arg0, s32 *, 0x28) = 0;
-    M2C_FIELD(arg0, s32 *, 0x20) = 0;
-    M2C_FIELD(arg0, s32 *, 0x24) = 0;
-    M2C_FIELD(arg0, s32 *, 0x14) = 0;
-    M2C_FIELD(arg0, Rgba89000D50 *, 0x18) = D_8900A5BC;
-    func_80027804((s8 *)arg0 + 0x50, arg3, arg4, arg4);
-    Menu_Init((s8 *)arg0 + 0x2C, (s32)((s8 *)arg0 + 0x50), (s32)((s8 *)arg0 + 0x5C), (s32)LabItem_DrawMenuRow, 0xD8, 0x1C);
-    M2C_FIELD(arg0, s32 *, 0x34) = arg5;
-    M2C_FIELD(arg0, s32 *, 0x4C) |= 0x10000;
+    Window_SetRect((s8*)&arg0->window, arg1, arg2, 0xE4, (arg4 * 0x1C) + 0x14);
+    arg0->window.state = 0;
+    arg0->window.title = NULL;
+    arg0->window.animTimer = 0;
+    arg0->window.frame.style = 0;
+    *(Rgba89000D50*)&arg0->window.frame.color = D_8900A5BC;
+    func_80027804((s8*)&arg0->items, arg3, arg4, arg4);
+    Menu_Init((s8*)&arg0->menu, (s32)&arg0->items, (s32)arg0->itemFlags, (s32)LabItem_DrawMenuRow, 0xD8, 0x1C);
+    arg0->menu.cursor = arg5;
+    arg0->menu.options |= 0x10000;
 }
 
 s32 func_8002AE6C();                                /* extern */
@@ -618,9 +618,9 @@ M2C_UNK Menu_DrawItems(s8 *, s32, s32, M2C_UNK, s32); /* extern */
  * Seen in play (2026-11-13) drew the three-row source window (てもちの どうぐ, サトシの パソコン, 64の カセット) on the
  * item sort screen.
  */
-void LabItem_DrawMenu(s8 *arg0) {
+void LabItem_DrawMenu(LabItemMenuWindow* arg0) {
     if (func_8002AE6C() == 0) {
-        Menu_DrawItems(arg0 + 0x2C, M2C_FIELD(arg0, s32 *, 0) + 6, M2C_FIELD(arg0, s32 *, 4) + 0xA, 0xFFEF, 0);
+        Menu_DrawItems((s8*)&arg0->menu, arg0->window.frame.x + 6, arg0->window.frame.y + 0xA, 0xFFEF, 0);
     }
 }
 
@@ -630,17 +630,17 @@ s32 Menu_UpdateCursorSkipDisabled(void*);
  * Seen in play (2026-11-13) ran every frame while the item sort screen's source window (てもちの どうぐ,
  * サトシの パソコン, 64の カセット) had the cursor.
  */
-s32 LabItem_UpdateMenuCursor(s32 arg0) {
+s32 LabItem_UpdateMenuCursor(LabItemMenuWindow* arg0) {
     s32 sp1C = 0;
     s32 dir;
 
-    if (Menu_UpdateCursorSkipDisabled((u8*)arg0 + 0x2C) == 0) {
+    if (Menu_UpdateCursorSkipDisabled(&arg0->menu) == 0) {
         dir = func_8002BC14(D_800603C0);
         if (dir == -1) {
             func_8003F6AC(3);
             sp1C = -1;
         } else if (dir == 1) {
-            sp1C = M2C_FIELD(arg0, s32*, 0x34) + 1;
+            sp1C = arg0->menu.cursor + 1;
         }
     }
     return sp1C;
@@ -690,8 +690,8 @@ void LabItem_DrawItemCountRow(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) 
     }
 }
 
-void func_89001230(s8* arg0, s32 arg1) {
-    ScrollList_SetItems(arg0, arg1, arg0 + 0x44);
+void func_89001230(LabItemList* arg0, s32 arg1) {
+    ScrollList_SetItems((s8*)&arg0->list, arg1, (s8*)arg0->itemFlags);
 }
 
 void ScrollList_Init(s8*, s32, s8*, s32, void*, s32, s32);
@@ -701,11 +701,11 @@ void LabItem_DrawItemCountRow();
  * Sets up the scrolling item list at (`arg1`, `arg2`) with LabItem_DrawItemCountRow rows.
  * Seen in play (2026-11-12): set up the てもちの どうぐ and サトシのパソコン lists.
  */
-void LabItem_InitItemList(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
-    M2C_FIELD(arg0, s32*, 0x10C) = arg1;
-    M2C_FIELD(arg0, s32*, 0x110) = arg2;
-    ScrollList_Init(arg0, arg3, arg0 + 0x44, 8, LabItem_DrawItemCountRow, 0xEC, 0x1C);
-    M2C_FIELD(arg0, s32*, 0x20) |= 0x10000;
+void LabItem_InitItemList(LabItemList* arg0, s32 arg1, s32 arg2, s32 arg3) {
+    arg0->x = arg1;
+    arg0->y = arg2;
+    ScrollList_Init((s8*)&arg0->list, arg3, (s8*)arg0->itemFlags, 8, LabItem_DrawItemCountRow, 0xEC, 0x1C);
+    arg0->list.options |= 0x10000;
 }
 
 void func_8002F9D8(void *, s32, s32, s32, s32);
@@ -718,17 +718,17 @@ extern u8 D_04011AB8[];
  * Draws the scrolling item list and its scroll bar.
  * Seen in play (2026-11-12): those lists with 000/020 and 000/050.
  */
-void LabItem_DrawItemList(s8 *arg0, s32 arg1) {
+void LabItem_DrawItemList(LabItemList* arg0, s32 arg1) {
     if (arg1 & 0x200) {
-        func_8002F9D8(arg0, M2C_FIELD(arg0, s32 *, 0x10C), M2C_FIELD(arg0, s32 *, 0x110) + 0x10, arg1 | 0xFFED, 0);
+        func_8002F9D8(&arg0->list, arg0->x, arg0->y + 0x10, arg1 | 0xFFED, 0);
     } else {
-        ScrollList_DrawInlineItems(arg0, M2C_FIELD(arg0, s32 *, 0x10C), M2C_FIELD(arg0, s32 *, 0x110) + 0x10, arg1 | 0xFFED, 0);
+        ScrollList_DrawInlineItems(&arg0->list, arg0->x, arg0->y + 0x10, arg1 | 0xFFED, 0);
     }
-    Ui_DrawNumberZeroPadded(M2C_FIELD(arg0, s32 *, 0x10C) + 0xA8, M2C_FIELD(arg0, s32 *, 0x110) + 0xF2, M2C_FIELD(M2C_FIELD(arg0, s8 **, 0), s32 *, 8), 3);
-    Ui_DrawNumberZeroPadded(M2C_FIELD(arg0, s32 *, 0x10C) + 0xCE, M2C_FIELD(arg0, s32 *, 0x110) + 0xF2, M2C_FIELD(M2C_FIELD(arg0, s8 **, 0), s32 *, 4), 3);
+    Ui_DrawNumberZeroPadded(arg0->x + 0xA8, arg0->y + 0xF2, arg0->list.items->count, 3);
+    Ui_DrawNumberZeroPadded(arg0->x + 0xCE, arg0->y + 0xF2, arg0->list.items->capacity, 3);
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-    func_8001BCB4(M2C_FIELD(arg0, s32 *, 0x10C) + 0xC4, M2C_FIELD(arg0, s32 *, 0x110) + 0xF4, 8, 0xA, D_04011AB8, 8, 0);
+    func_8001BCB4(arg0->x + 0xC4, arg0->y + 0xF4, 8, 0xA, D_04011AB8, 8, 0);
 }
 
 s32 ScrollList_UpdateCursor(void*);
@@ -975,7 +975,7 @@ extern u8 D_800735C4[];
 void func_8002B054(s8*, s32);
 void Window_DrawFrame(void*);
 void func_890017FC(s8* arg0, s32 x, s32 y, s32 flags, s32 icon);
-void LabItem_DrawItemList(s8* arg0, s32 arg1);
+void LabItem_DrawItemList(LabItemList* arg0, s32 arg1);
 /**
  * Draws the organize items window: frame, lists and help line.
  * Seen in play (2026-11-12): the どうぐのせいり window.

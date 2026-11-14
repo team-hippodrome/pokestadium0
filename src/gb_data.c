@@ -42,7 +42,7 @@ char* Text_UntranscodeFixedName(char* arg0, char* arg1);
 char* Text_CopySpeciesName(char* arg0, s32 arg1);
 char* Text_GetTmHmName(s32 arg0, char* arg1);
 void Pokemon_FromGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1);
-void Pokemon_ToGbRecordExt(unk_func_88205880_00D0* arg0, GbPokemonRecordExt* arg1);
+void Pokemon_ToGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1);
 u16 StatExpSqrt(u16 square);
 void func_80020188(void);
 u16 GetPokemonDV(s32 statId, u16 dvBits);
@@ -286,14 +286,14 @@ void Pokemon_ToGbRecord(BattleMon* arg0, GbPokemonRecord* arg1) {
 }
 
 /** Converts a battle Pokemon to an extended Game Boy Pokemon record. */
-void Pokemon_ToGbRecordExt(unk_func_88205880_00D0* arg0, GbPokemonRecordExt* arg1) {
-    Pokemon_ToGbRecord(arg0->unk_000, &arg1->box);
-    arg1->level = arg0->unk_000[0].level;
-    GbData_WriteU16BE(arg1->stats[0], arg0->unk_000[0].maxHp);
-    GbData_WriteU16BE(arg1->stats[1], arg0->unk_000[0].attack);
-    GbData_WriteU16BE(arg1->stats[2], arg0->unk_000[0].defense);
-    GbData_WriteU16BE(arg1->stats[3], arg0->unk_000[0].speed);
-    GbData_WriteU16BE(arg1->stats[4], arg0->unk_000[0].special);
+void Pokemon_ToGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1) {
+    Pokemon_ToGbRecord(arg0, &arg1->box);
+    arg1->level = arg0->level;
+    GbData_WriteU16BE(arg1->stats[0], arg0->maxHp);
+    GbData_WriteU16BE(arg1->stats[1], arg0->attack);
+    GbData_WriteU16BE(arg1->stats[2], arg0->defense);
+    GbData_WriteU16BE(arg1->stats[3], arg0->speed);
+    GbData_WriteU16BE(arg1->stats[4], arg0->special);
 }
 
 /** Returns the integer square root used for stat experience, found by search. */

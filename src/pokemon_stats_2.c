@@ -743,13 +743,13 @@ void GbSave_LoadMainPokemon(BattleMon* arg0, s32 arg1, s32 arg2) {
  * Same structure as GbSave_SaveMainPokemon in the Stadium 1 decomp.
  * Seen in play (2026-11-12) in a せいとん save: called by Deck_WriteEntry for party slots 0 and 1.
  */
-void GbSave_SaveMainPokemon(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2) {
+void GbSave_SaveMainPokemon(BattleMon* arg0, s32 arg1, s32 arg2) {
     GbSaveParty* sp24 = &sGbSavePorts[arg1].mainData->party;
 
     Pokemon_ToGbRecordExt(arg0, &sp24->mons[arg2]);
-    Text_TranscodeName(sp24->nicknames[arg2], (char*)arg0->unk_000[0].nickname);
-    _bcopy(arg0->unk_000[0].gbOtNameHead, sp24->otNames[arg2], 3);
-    _bcopy(arg0->unk_000[0].gbOtNameTail, sp24->otNames[arg2] + 3, 3);
+    Text_TranscodeName(sp24->nicknames[arg2], (char*)arg0->nickname);
+    _bcopy(arg0->gbOtNameHead, sp24->otNames[arg2], 3);
+    _bcopy(arg0->gbOtNameTail, sp24->otNames[arg2] + 3, 3);
     sp24->species[arg2] = sp24->mons[arg2].box.species;
 }
 
@@ -1036,7 +1036,7 @@ s32 Deck_ReadEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, BattleMon* arg4) {
  * (entries 0 and 1) and the moved one to deck 0x21 entry 0. The .sav then had party count 2 and
  * box count 1.
  */
-s32 Deck_WriteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, unk_func_88205880_00D0* arg4) {
+s32 Deck_WriteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, BattleMon* arg4) {
     s32 sp2C = 0;
     s32 sp28 = Deck_GetCapacity(arg0);
     s32 sp24 = Deck_GetCount(arg0, arg1, arg2);
@@ -1054,11 +1054,11 @@ s32 Deck_WriteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, unk_func_88205880_00
                 break;
 
             case 35:
-                ptr->bagItems[arg3] = arg4->unk_000[0].species;
+                ptr->bagItems[arg3] = arg4->species;
                 break;
 
             case 34:
-                ptr->boxItems[arg3] = arg4->unk_000[0].species;
+                ptr->boxItems[arg3] = arg4->species;
                 break;
         }
 
