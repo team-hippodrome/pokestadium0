@@ -430,12 +430,7 @@ void BattleEffect_Rage(void) {
     sBattleUser->volatileStatusFlags |= 0x40;
 }
 
-typedef struct {
-    /* 0x0 */ s32 unk_00;
-    /* 0x4 */ s32 unk_04;
-    /* 0x8 */ s32 unk_08;
-} unk_D_8006A9CC; // size = 0xC
-extern unk_D_8006A9CC D_8006A9CC[];
+extern MoveNameView D_8006A9CC[];
 extern u8 D_82199F37;
 extern s32 D_8218C8BC;
 extern s32 D_8218C8C0;
@@ -465,7 +460,7 @@ void BattleEffect_Mimic(void) {
         } while (temp_v0 == 0);
 
         sBattleUser->moves[sp34->selectedMoveIndex] = temp_v0;
-        BattleMessage_Format((s32)gBattleMessageQueues->messageBuffers[0], -0x40, D_8218C8BC, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]), D_8006A9CC[sBattleTarget->moves[var_t0]].unk_00);
+        BattleMessage_Format((s32)gBattleMessageQueues->messageBuffers[0], -0x40, D_8218C8BC, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]), (s32)D_8006A9CC[sBattleTarget->moves[var_t0]].name);
         return;
     }
 
@@ -531,7 +526,7 @@ void Battle_Effect_Disable(void) {
             turns = Battle_Random() & 7;
             sBattleTarget->disabledMoveState = (slot << 4) + turns + 1;
             sBattleTarget->disabledMove = sBattleTarget->moves[slot];
-            name = D_8006A9CC[sBattleTarget->disabledMove].unk_00;
+            name = (s32)D_8006A9CC[sBattleTarget->disabledMove].name;
             BattleMessage_Format((s32)gBattleMessageQueues->messageBuffers[0], -0x3B, D_8218C8D0, ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]), name);
             return;
         }

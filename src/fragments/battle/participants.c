@@ -421,18 +421,13 @@ s16 ActivePokemon_GetDisplayModel(ActivePokemon* arg0, M2C_UNK arg1) {
     return arg0->side->displayModel;
 }
 
-typedef struct {
-    /* 0x0 */ s32 unk_00;
-    /* 0x4 */ s32 unk_04;
-    /* 0x8 */ s32 unk_08;
-} unk_D_8006A9CC; // size = 0xC
-extern unk_D_8006A9CC D_8006A9CC[];
+extern MoveNameView D_8006A9CC[];
 
 /**
  * Returns the name string of the Pokemon's current move (move cache byte at 0x80A).
  */
 s32 ActivePokemon_GetMoveName(u8* arg0) {
-    return D_8006A9CC[arg0[0x80A]].unk_00;
+    return (s32)D_8006A9CC[arg0[0x80A]].name;
 }
 
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
@@ -559,7 +554,7 @@ void BattleScene_InitializeParticipantModel(ActivePokemon* active_pokemon) {
         BattleScene_PositionParticipantModel(active_pokemon);
         active_pokemon->displayObject.rotation.y = -0x4000;
     }
-    func_8000D41C(&M2C_FIELD(active_pokemon, Vec3f*, 0x5DC), active_pokemon->facingDirection * D_82199DF0[side][0], D_82199DF0[side][1], D_82199DF0[side][2]);
+    func_8000D41C(&active_pokemon->modelTransform.focusOffset, active_pokemon->facingDirection * D_82199DF0[side][0], D_82199DF0[side][1], D_82199DF0[side][2]);
 }
 
 /**
@@ -633,7 +628,7 @@ void BattleScene_ReinitParticipantBodyModel(ActivePokemon* owner, ActivePokemon*
             pokemon->displayObject.rotation.y = -0x4000;
         }
     }
-    func_8000D41C(&M2C_FIELD(owner, Vec3f*, 0x5DC), owner->facingDirection * D_82199DF0[side][0], D_82199DF0[side][1], D_82199DF0[side][2]);
+    func_8000D41C(&owner->modelTransform.focusOffset, owner->facingDirection * D_82199DF0[side][0], D_82199DF0[side][1], D_82199DF0[side][2]);
 }
 
 /**

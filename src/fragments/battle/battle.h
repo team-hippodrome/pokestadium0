@@ -246,10 +246,14 @@ typedef struct SpeciesLearnsetBuffer {
 } SpeciesLearnsetBuffer; // size = 0x20
 
 typedef struct SwayState {
-    /* 0x00 */ Vec3f unk_00;
+    /* 0x00 */ Vec3f translation; // @unverified: zeroed together with rotation when a Pokémon is reset (turn.c)
     /* 0x0C */ Vec3f rotation;
     /* 0x18 */ Vec3f orbitCenter; // @unverified: model point the camera orbit is measured from (BattleCamera_CaptureModelOrbit)
-    /* 0x24 */ char unk24[0x18];
+    /* 0x24 */ Vec3f focusOffset; // @unverified: per-side point from D_82199DF0 (x scaled by facingDirection); orbitCenter is built from it
+    /* 0x30 */ s16 orbitRotationX; // @unverified: angles/distance from orbitCenter to the camera target, saved by BattleCamera_CaptureModelOrbit
+    /* 0x32 */ s16 orbitRotationY; // @unverified: see orbitRotationX
+    /* 0x34 */ char unk34[0x4];
+    /* 0x38 */ f32 orbitDistance; // @unverified: see orbitRotationX
 } SwayState; // size = 0x3C
 
 typedef struct ActivePokemon {
@@ -877,6 +881,13 @@ typedef struct StatStageMultiplier {
     /* 0x00 */ u8 multiplier;
     /* 0x01 */ u8 divisor;
 } StatStageMultiplier; // size = 0x2
+
+/* The move name table at 0x8006A9C8 (12-byte entries indexed by move id) seen from +4
+   (D_8006A9CC), so that .name lines up with entry 0 */
+typedef struct MoveNameView {
+    /* 0x0 */ char* name;
+    /* 0x4 */ char unk4[0x8];
+} MoveNameView; // size = 0xC
 
 typedef struct TypeEffectivenessEntry {
     /* 0x00 */ u8 attackType; // @unverified: compared with the move type in Battle_ApplyTypeEffectAndSTAB; 0xFF ends the table

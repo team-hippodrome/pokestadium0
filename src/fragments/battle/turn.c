@@ -250,10 +250,6 @@ s32 Battle_CheckForDisobedience(void) {
     return 1;
 }
 
-typedef struct MoveName82111DCC {
-    /* 0x0 */ char* name;
-    /* 0x4 */ char unk4[0x8];
-} MoveName82111DCC; // size = 0xC
 
 s32 ActivePokemon_GetNickname(ActivePokemon*);
 extern s32 D_8218C718;
@@ -271,7 +267,7 @@ extern s32 D_8218C744;
 extern s32 D_8218C748;
 extern s32 D_8218C74C;
 extern s32 D_8218C750;
-extern MoveName82111DCC D_8006A9CC[];
+extern MoveNameView D_8006A9CC[];
 
 /**
  * Before-move checks for the acting Pokemon: sleep countdown, freeze, and the
@@ -977,7 +973,7 @@ void BeginBattleForEntity(ActivePokemon* arg0) {
     sBattleTarget = ptr2;
 
     Battle_FormatDamageComment(arg0);
-    Vec3f_SetComponentsDuplicate(&arg0->modelTransform.unk_00, 0.0f, 0.0f, 0.0f);
+    Vec3f_SetComponentsDuplicate(&arg0->modelTransform.translation, 0.0f, 0.0f, 0.0f);
     Vec3f_SetComponentsDuplicate(&arg0->modelTransform.rotation, 0.0f, 0.0f, 0.0f);
     Battle_InitPokemonRuntimeState(arg0);
 
