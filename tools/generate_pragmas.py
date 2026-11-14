@@ -66,6 +66,13 @@ def entry_stub_table(data, entry):
     return (position, targets) if len(targets) > 1 else (entry, [])
 
 
+# Uncalled functions that the first-pass splitter leaves inside the function before
+# them (no call site or address reference anywhere in the ROM). Image index ->
+# offsets. Fragment 001: the two helpers after the particle slot reset; the matching
+# C in src/fragments/model_callbacks/model_callbacks_4.c confirms the boundaries.
+UNCALLED_ENTRIES = {1: (0x60C, 0x65C)}
+
+
 def merge_owners(section, data, base, transfers, stub_end=None):
     """Do not split ordinary branch destinations or switch cases into functions.
 
@@ -180,6 +187,7 @@ def generate(rom, mapping, sections, flow):
         stub_end, stub_targets = entry_stub_table(data, entries[0])
         stub_entries = [target - (base & 0x0FFFFFFF) for target in stub_targets
                         if 0 <= target - (base & 0x0FFFFFFF) < stop]
+        stub_entries.extend(UNCALLED_ENTRIES.get(index, ()))
         for transfer in detail["transfers"]:
             if transfer["status"] == "known_initializer_candidates_runtime_unresolved":
                 entries.extend(int(target, 0) for target in transfer.get("targets", []))

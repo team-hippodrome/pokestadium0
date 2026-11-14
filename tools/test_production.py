@@ -64,7 +64,7 @@ class ExtractedAssetsTests(unittest.TestCase):
                 start, end = int(owner['start'], 0), int(owner['end'], 0)
                 self.assertEqual(image[start:end], bytes(owner['size']), owner['name'])
                 count += 1
-        self.assertEqual(count, 5466)
+        self.assertEqual(count, 5468)
 
 
 @unittest.skipUnless(shutil.which('mips-linux-gnu-as'), 'MIPS GNU assembler unavailable')
