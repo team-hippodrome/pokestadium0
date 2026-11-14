@@ -9,25 +9,24 @@
 #include "stage_loader.h"
 #include "ui_graphics.h"
 #include "fatal_error_screen.h"
-extern s32 D_81600A70;
-extern s32 D_81600A74;
+extern s32 sFatalErrorPort;
+extern s32 sFatalErrorMessageId;
 
-s32 TransferPakError_DrawFrame(u8 arg0);
+s32 FatalError_DrawFrame(u8 fadeMode);
 
-void TransferPakError_DrawBackgroundPattern(s32 arg0, s32 arg1, s32 arg2);
-void FatalError_DrawMessagePanel(s32 arg0);
-void FatalError_DrawPortDiagram(s32 arg0);
+void FatalError_DrawBackground(s32 unused0, s32 unused1, s32 unused2);
+void FatalError_DrawMessagePanel(s32 messageId);
+void FatalError_DrawPortDiagram(s32 port);
 
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 /**
  * Fills the 320x240 screen with the green Poke Ball wallpaper from transfer_pak_error_ui
  * (64x64 RGBA16 at segment offset 0x0), drawn in COPY mode as 64x16 strips.
- * The three arguments (0x55, 0x70, 0x88 from TransferPakError_DrawFrame) are unused.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment from Stadium 1.
+ * The three arguments (0x55, 0x70, 0x88 from FatalError_DrawFrame) are unused.
+ * Seen in play (2026-11-14): stubbed together with FatalError_DrawPortDiagram, the old diagram
+ * stayed on screen; restoring this function painted the wallpaper over it.
  */
-void TransferPakError_DrawBackgroundPattern(s32 arg0, s32 arg1, s32 arg2) {
+void FatalError_DrawBackground(s32 unused0, s32 unused1, s32 unused2) {
     s32 i;
     s32 j;
     s32 idx;
@@ -48,35 +47,53 @@ void TransferPakError_DrawBackgroundPattern(s32 arg0, s32 arg1, s32 arg2) {
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-/** Draws the icon of the fatal error screen. */
-void FatalError_DrawIcon(s32 arg0, s32 arg1) {
+/**
+ * Draws the yellow "!" warning icon (24x24, segment offset 0x2000) at (x, y), left of the message.
+ * Seen in play (2026-11-14): stubbing it removed only the icon.
+ */
+void FatalError_DrawWarningIcon(s32 x, s32 y) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetCycleType(gDisplayListHead++, G_CYC_COPY);
     gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
     gDPSetRenderMode(gDisplayListHead++, G_RM_NOOP, G_RM_NOOP2);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
 
-    func_8001B884(arg0, arg1, 0x18, 0x18, D_2002000, 0x18, 0x200000);
+    func_8001B884(x, y, 0x18, 0x18, D_2002000, 0x18, 0x200000);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
-extern char** D_81100938;
-extern char* D_816008DC[];
+extern char* sFatalErrorMessages[];
 
-/** Draws the message panel of the fatal error screen. */
-void FatalError_DrawMessagePanel(s32 arg0) {
+/**
+ * Draws the bordered message panel, the warning icon and message messageId of
+ * sFatalErrorMessages:
+ * 1 "６４ＧＢパックが ただしくセットされていません。" (64GB Pak not inserted correctly; turn the power
+ *   off and check the connection),
+ * 2 "ゲームボーイカートリッジの コネクタぶが いじょうです。" (Game Boy cartridge connector fault; see
+ *   the 64GB Pak manual),
+ * 3 "レポートがただしくないので つづきからあそぶことはできません。" (the Game Boy save is invalid, so
+ *   Continue is not possible; reset and choose New Game). Entry 0 is NULL.
+ * Seen in play (2026-11-14): stubbing it removed the panel, icon and text; writing 2 and 3 to
+ * sFatalErrorMessageId showed those texts.
+ */
+void FatalError_DrawMessagePanel(s32 messageId) {
     Ui_DrawBorderedPanel(0x16, 0x10, 0x114, 0x76, 0x11C5);
-    FatalError_DrawIcon(0x27, 0x22);
+    FatalError_DrawWarningIcon(0x27, 0x22);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
     Font_SetLineHeight(0x10);
-    Font_Printf(0x52, 0x21, D_816008DC[arg0]);
+    Font_Printf(0x52, 0x21, sFatalErrorMessages[messageId]);
     Font_EndTexturedTextRendering();
 }
 
-/** Draws the controller port diagram of the fatal error screen. */
-void FatalError_DrawPortDiagram(s32 arg0) {
+/**
+ * Draws the diagram under the message: a controller with a crossed-out 64GB Pak, cabled to the
+ * console, with the cable running into controller port `port` (0-3, x from sp80).
+ * Seen in play (2026-11-14): stubbing it removed the diagram; writing 1, 2 and 3 to
+ * sFatalErrorPort moved the cable's plug to ports 2, 3 and 4.
+ */
+void FatalError_DrawPortDiagram(s32 port) {
     u16 sp80[] = {
         0x00BC,
         0x00C6,
@@ -104,52 +121,52 @@ void FatalError_DrawPortDiagram(s32 arg0) {
 
     gSPTextureRectangle(gDisplayListHead++, 0x026C, 0x02A4, 0x028C, 0x0350, G_TX_RENDERTILE, 0, 0, 0x0400, 0);
 
-    func_8001B884(sp80[arg0], 0xD4, 8, 8, D_2006920, 8, 0);
+    func_8001B884(sp80[port], 0xD4, 8, 8, D_2006920, 8, 0);
 
-    gSPTextureRectangle(gDisplayListHead++, 0x028C, 0x0350, sp80[arg0] << 2, 0x0370, G_TX_RENDERTILE, 0, 0, 0, 0x0400);
+    gSPTextureRectangle(gDisplayListHead++, 0x028C, 0x0350, sp80[port] << 2, 0x0370, G_TX_RENDERTILE, 0, 0, 0, 0x0400);
 
-    func_8001B884(sp80[arg0], 0xC0, 8, 8, D_2006820, 8, 0);
+    func_8001B884(sp80[port], 0xC0, 8, 8, D_2006820, 8, 0);
 
-    gSPTextureRectangle(gDisplayListHead++, sp80[arg0] << 2, 0x0320, (sp80[arg0] + 8) << 2, 0x0350, G_TX_RENDERTILE, 0,
+    gSPTextureRectangle(gDisplayListHead++, sp80[port] << 2, 0x0320, (sp80[port] + 8) << 2, 0x0350, G_TX_RENDERTILE, 0,
                         0x00E0, 0x0400, 0);
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
 /**
- * Per-frame draw callback: wallpaper, message window and port diagram for the stored error.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment from Stadium 1.
+ * Per-frame draw callback for BgStage_WaitForCondition: wallpaper, message panel and port
+ * diagram for the stored error. fadeMode is unused, and it always returns 0, so the screen never
+ * fades out.
+ * Seen in play (2026-11-14): breakpoint hit every frame on the error screen.
  */
-s32 TransferPakError_DrawFrame(u8 arg0) {
+s32 FatalError_DrawFrame(u8 fadeMode) {
     BgStage_DrawFrame();
-    TransferPakError_DrawBackgroundPattern(0x55, 0x70, 0x88);
-    FatalError_DrawMessagePanel(D_81600A74);
-    FatalError_DrawPortDiagram(D_81600A70);
+    FatalError_DrawBackground(0x55, 0x70, 0x88);
+    FatalError_DrawMessagePanel(sFatalErrorMessageId);
+    FatalError_DrawPortDiagram(sFatalErrorPort);
     return 0;
 }
 
-extern char** D_81100938;
 /**
  * Entry point of the Transfer Pak fatal error screen, reached only through
  * Game_ShutdownAndLoadFragment(port, message_id) after the game has blanked video, powered off
  * all Transfer Paks and faded out audio. //@src/game_state.c
- * Callers in gb_tower.c and pokemon_stats.c mostly pass 1 for Transfer Pak communication
+ * Callers in gb_tower.c and pokemon_stats_2.c mostly pass 1 for Transfer Pak communication
  * failures (osGbpak* errors, failed connection polling, Game Boy save changed before a write)
  * and 2 for cartridge-side failures (connector check, cartridge RAM detection, cartridge reset
- * or removal); State_GbTower forwards the Game Boy emulator exit code, where 3 means an invalid
- * Game Boy opcode or an emulator heap allocation failure.
- * Loads transfer_pak_error_ui and text file 0xD, then draws forever: the only exit is turning
+ * or removal); State_GbTower forwards a nonzero Game Boy emulator exit code, and message 3 says
+ * the Game Boy save is invalid. See FatalError_DrawMessagePanel for the texts.
+ * Loads common_menu1_ui and transfer_pak_error_ui, then draws forever: the only exit is turning
  * the console off, as the message instructs.
- * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
- * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
- * @unverified Name and comment from Stadium 1, matched by code similarity.
+ * Seen in play (2026-11-14): pulling the Transfer Pak (tpak.remove port 1) on the Game Boy
+ * cartridge select screen made GbTower_PollPakConnection call
+ * Game_ShutdownAndLoadFragment(0, 1); the breakpoint here hit with port 0, messageId 1, and the
+ * screen showed message 1 with the cable in controller port 1.
  */
-void TransferPakError_Main(s32 arg0, s32 arg1) {
+void FatalError_Main(s32 port, s32 messageId) {
     StageContext* temp_s0;
 
-    D_81600A70 = arg0;
-    D_81600A74 = arg1;
+    sFatalErrorPort = port;
+    sFatalErrorMessageId = messageId;
 
     main_pool_push_state('FATL');
 
@@ -161,6 +178,6 @@ void TransferPakError_Main(s32 arg0, s32 arg1) {
     StageContext_Activate(temp_s0);
 
     while (TRUE) {
-        BgStage_WaitForCondition(TransferPakError_DrawFrame, 8, 8);
+        BgStage_WaitForCondition(FatalError_DrawFrame, 8, 8);
     }
 }
