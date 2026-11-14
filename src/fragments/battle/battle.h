@@ -333,8 +333,8 @@ typedef struct ActivePokemonState {
 typedef struct ThumbnailState {
     /* 0x000 */ DisplayObject displayObject;
     /* 0x168 */ CameraNode* camera;
-    /* 0x16C */ s32 tagTeam;
-    /* 0x170 */ char unk170_zero[0x4];
+    /* 0x16C */ s32 shownRosterIndex; // @unverified: roster slot (pokemonPicked index) of the Pokémon the thumbnail and HUD boxes show; set from state.rosterIndex in participants.c
+    /* 0x170 */ s32 shownTeamMemberIndex; // @unverified: tag-team member (sessionTeams->teamMember index) owning that Pokémon; set from state.teamMemberIndex
     /* 0x174 */ s32 showing;
     /* 0x178 */ char unk174[0x4];
     /* 0x17C */ s32 side;

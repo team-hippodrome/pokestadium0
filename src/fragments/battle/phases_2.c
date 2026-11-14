@@ -192,7 +192,7 @@ void BattleScene_PhaseResidualDamageFaintCheck(CameraNode* arg0) {
  * flag 0x20.
  */
 void func_82130D48(ActivePokemon* active_pokemon) {
-    BattleMon* party_pokemon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->thumbnail.tagTeam];
+    BattleMon* party_pokemon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->thumbnail.shownRosterIndex];
 
     if (party_pokemon->statusCondition & 0x20) {
         BattleAnim_StopOwnerCategoryParticles(1, active_pokemon);
@@ -354,8 +354,8 @@ void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0) {
                 Battle_LoadOwnerModelForSwitchIn(temp_s0);
                 BattleThumbnail_TickOwnerCameraFraming(temp_s0);
                 Audio_PlayCommand(2, 0, 0);
-                temp_s0->thumbnail.tagTeam = sp3C->rosterIndex;
-                M2C_FIELD(temp_s0, s32*, 0x9D4) = sp3C->teamMemberIndex;
+                temp_s0->thumbnail.shownRosterIndex = sp3C->rosterIndex;
+                temp_s0->thumbnail.shownTeamMemberIndex = sp3C->teamMemberIndex;
                 BattleScene_RebindParticipantTeamMember(temp_s0, sp3C->replacementState);
                 BattleScene_ResetCameraFrameCounter();
                 BattleAnim_QueueEffectList3(3, temp_s0, temp_s0, 0xFF, 0xFF);

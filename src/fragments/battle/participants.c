@@ -960,8 +960,8 @@ void BattleScene_RebindParticipantTeamMember(ActivePokemon* pokemon, s32 team_me
 
     BattleScene_BindParticipantTeamRoster(pokemon, team_member_index);
     BattleScene_SetParticipantTeamMember(pokemon, team_member_index);
-    pokemon->thumbnail.tagTeam = state->rosterIndex;
-    M2C_FIELD(pokemon, s32*, 0x9D4) = state->teamMemberIndex;
+    pokemon->thumbnail.shownRosterIndex = state->rosterIndex;
+    pokemon->thumbnail.shownTeamMemberIndex = state->teamMemberIndex;
 }
 
 /**

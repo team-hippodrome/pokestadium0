@@ -1171,7 +1171,7 @@ void BattleScene_EnterCannotMoveRow(ActivePokemon* active_pokemon) {
     s32 cue;
     UNUSED s32 pad2; // FAKE: stack padding
 
-    mon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->thumbnail.tagTeam];
+    mon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->thumbnail.shownRosterIndex];
     active_pokemon->animationTimer = 0;
     if (!(active_pokemon->state.flags & 2)) {
         if (mon->statusCondition & 7) {
@@ -2497,7 +2497,7 @@ void func_80019A90(ActivePokemon*, s32);
 void func_821065B4(ActivePokemon *arg0)
 {
   s32 pad; // FAKE: unused stack word
-  BattleMon *mon = &arg0->teamRoster->pokemonPicked[arg0->thumbnail.tagTeam];
+  BattleMon *mon = &arg0->teamRoster->pokemonPicked[arg0->thumbnail.shownRosterIndex];
   ActivePokemonState *state;
   state = &arg0->state;
   if (mon->hp != 0)

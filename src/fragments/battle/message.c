@@ -29,7 +29,7 @@ void BattleMenu_DrawCommandMenu(ActivePokemon*, s32, s32, s32);
  * Draws side 0's status box and whichever battle menu its state has open (command, move, confirm, surrender).
  */
 void BattleMenu_DrawSide0Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
-    TeamRoster* sp2C = arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)];
+    TeamRoster* sp2C = arg0->sessionTeams->teamMember[arg0->thumbnail.shownTeamMemberIndex];
 
     if (arg1->selectedCommandOption == 3) {
         BattleHud_DrawMonStatusBoxPlayer(arg0, arg0->thumbnail.camera->viewport.x - 2, arg0->thumbnail.camera->viewport.y - 0x3A, arg1->actionDelayTimer, 1);
@@ -77,7 +77,7 @@ void func_82118738(ActivePokemon*, s16, s16, u16, s32);
  * Draws side 1's status box and whichever battle menu its state has open (command, move, confirm, surrender).
  */
 void BattleMenu_DrawSide1Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
-    TeamRoster* sp2C = arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)];
+    TeamRoster* sp2C = arg0->sessionTeams->teamMember[arg0->thumbnail.shownTeamMemberIndex];
 
     if (arg1->selectedCommandOption == 3) {
         func_82118738(arg0, arg0->thumbnail.camera->viewport.x - 0x20, arg0->thumbnail.camera->viewport.y - 2, arg1->actionDelayTimer, 1);
@@ -257,7 +257,7 @@ void BattleMessage_ShowForSide(s8* arg0, s32 side) {
 
     func_8211EE8C();
     ap = sActivePokemon[side];
-    *(u8*)D_8219A520 = (*(u8***)((u8*)ap + 0x85C))[*(s32*)((u8*)ap + 0x9D4) + 2][1];
+    *(u8*)D_8219A520 = ap->sessionTeams->teamMember[ap->thumbnail.shownTeamMemberIndex]->controllerPort;
     func_8211EEC0((u8*)D_8219A520 + 0x48, arg0 + 1);
     if (!(arg0[0] & 0x80)) {
         func_80042A6C(arg0[0] & 0x7F);
@@ -318,8 +318,8 @@ void Battle_DrawCompactStatusBoxesIfVisible(void) {
     ActivePokemon* ptr2 = sActivePokemon[1];
 
     if (sBattleScene.scene->transitionStep == 0) {
-        BattleHud_DrawCompactMonStatusBox(ptr1, 0x15, 0xF, ptr1->sessionTeams->teamMember[M2C_FIELD(ptr1, s32*, 0x9D4)]->controllerPort);
-        BattleHud_DrawCompactMonStatusBox(ptr2, 0xE1, 0xF, ptr2->sessionTeams->teamMember[M2C_FIELD(ptr2, s32*, 0x9D4)]->controllerPort);
+        BattleHud_DrawCompactMonStatusBox(ptr1, 0x15, 0xF, ptr1->sessionTeams->teamMember[ptr1->thumbnail.shownTeamMemberIndex]->controllerPort);
+        BattleHud_DrawCompactMonStatusBox(ptr2, 0xE1, 0xF, ptr2->sessionTeams->teamMember[ptr2->thumbnail.shownTeamMemberIndex]->controllerPort);
         BattleMessage_TickTypewriter();
     }
 }
