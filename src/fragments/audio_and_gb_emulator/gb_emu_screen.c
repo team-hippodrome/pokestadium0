@@ -16,7 +16,7 @@ extern s32 D_81154C3C;
 /**
  * Stops the menu sounds, pauses emulation, blanks the display, waits 20 ms, resets the X scale,
  * shows the current framebuffer and clears it to black.
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from GbEmu_Init.
  */
 void GbEmu_PauseAndBlankScreen(void) {
@@ -43,10 +43,10 @@ void GbEmu_DrawTextCommands(s8* arg0, u8* arg1);
 s32 func_81103C40(s32, s32*, s32, s32, s32);
 extern s32 D_8111C568;
 /**
- * Draws the GB Tower menu (メニュー) over the GB screen: ゲームをつづける, ゲームをやめる and せつめい・コンフィグ with the
+ * Draws the GB Player menu (メニュー) over the GB screen: ゲームをつづける, ゲームをやめる and せつめい・コンフィグ with the
  * pointer on item `cursor` and that item's help text; `cursor` 5 draws the menu behind the ゲームをやめる
  * prompt.
- * Seen in play (2026-11-14) ran when C-Up opened the GB Tower menu; called from GbEmu_RunFrame.
+ * Seen in play (2026-11-14) ran when C-Up opened the GB Player menu; called from GbEmu_RunFrame.
  */
 void GbEmu_DrawPauseMenu(s8* fb, u8 cursor) {
     s32 i;
@@ -158,7 +158,7 @@ extern u8 D_8111E4AC[];
 /*
  * Draws the せつめい・コンフィグ screen into `screen`: the START and SELECT bindings, the B ボタンでもどる hint and, while
  * `slide` animates the row open, the button choices for the binding picked by bit 3 of `cursor`.
- * GB Tower option screen. Draws the panel frame tiles into the framebuffer
+ * GB Player option screen. Draws the panel frame tiles into the framebuffer
  * (three loops), then the two cursors and the selected options.
  * Register allocation depends on reusing the same few locals: one IDO live
  * range per local, so i, j, q and r each carry several roles on purpose.
@@ -270,7 +270,7 @@ void GbEmu_DrawQuitConfirm(s8* fb, s32 no) {
     func_81103C40((s32)&((u16*)(fb + 0x13B00))[no ? 0xE : 0x45], &D_8111C568, 0, 0x10, 0xA);
 }
 
-typedef struct GbTowerTask {
+typedef struct GbPlayerTask {
     /* 0x00 */ OSMesg mesg[1];
     /* 0x04 */ OSMesgQueue queue;
     /* 0x1C */ u8 unk_1C[4];
@@ -280,7 +280,7 @@ typedef struct GbTowerTask {
     /* 0x40 */ u8 unk_40[8];
     /* 0x48 */ s32 unk_48;
     /* 0x4C */ u8 unk_4C[0x1C];
-} GbTowerTask; // size = 0x68
+} GbPlayerTask; // size = 0x68
 
 extern u8 D_000DA9B0[];
 extern u8 D_0015A9B0[];
@@ -291,7 +291,7 @@ extern s16 D_8111E30C;
 extern s16 D_8111E310;
 extern u8 D_8111E314[2];
 extern u8 D_8112A960[];
-extern GbTowerTask D_81154B20[2];
+extern GbPlayerTask D_81154B20[2];
 extern u8 D_81154B24[];
 extern u8 D_81154B88[];
 extern u8 D_81154B8C[];
@@ -318,11 +318,11 @@ void AudioLoad_Init(void);
 void func_811171DC(void);
 void func_81117288(s32);
 /**
- * GB Tower entry: allocates both framebuffers and the emulator heap, decompresses the emulator
+ * GB Player entry: allocates both framebuffers and the emulator heap, decompresses the emulator
  * data, inits the sound driver, the GB APU and the video mode, starts the Transfer Pak I/O thread
  * and loads the cartridge, then reads the speed-up level and the START/SELECT bindings from the
  * Stadium save.
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from func_8000AB98.
  */
 void GbEmu_Init(s8* params) {
@@ -411,17 +411,17 @@ s32 GbPak_VerifyRamBlocks(u8);
 void GbPak_StopIoThread(s32);
 
 /**
- * GB Tower per-frame state machine: runs the emulator, fades in, and drives the menu (4), the
+ * GB Player per-frame state machine: runs the emulator, fades in, and drives the menu (4), the
  * button config (7-10), the quit prompt (11), the 「レポートできませんでした」 cartridge recovery (20-26) and
  * the shutdown, which writes the bindings back to the save.
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from func_8000AB98.
  */
 void GbEmu_RunFrame(s8* params) {
     s32 sel;
     u8* fade;
     s32 keep;
-    GbTowerTask* task;
+    GbPlayerTask* task;
     static u8 D_81154C50;
     static u8 D_81154C51;
     static u8 D_81154C52;

@@ -173,7 +173,7 @@ extern u8 D_81136998[];
  * Corresponds to OoT AudioSeq_InitSequenceChannel (original name Nas_InitSubTrack).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from AudioSeq_ResetSequencePlayer.
  */
 void AudioSeq_InitSequenceChannel(void* obj) {
@@ -298,7 +298,7 @@ void AudioSeq_SeqLayerDisable(SequenceLayer* arg0) {
  * Corresponds to OoT AudioSeq_SeqLayerFree (original name Nas_CloseNoteTrack).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from AudioSeq_SequenceChannelDisable.
  */
 void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1) {
@@ -315,7 +315,7 @@ void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1) {
  * Turns a sequence channel off and frees its layers and notes.
  * Corresponds to OoT AudioSeq_SequenceChannelDisable (original name Nas_ReleaseSubTrack). Stadium
  * 1's name Particle31_ResetAllSlots did not fit.
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from AudioSeq_SequencePlayerDisableChannels.
  */
 void AudioSeq_SequenceChannelDisable(DisplayObject* arg0) {
@@ -358,7 +358,7 @@ void func_81112B84(SequenceChannel*);
  * Corresponds to OoT AudioSeq_SequencePlayerDisableChannels (original name Nas_DeAllocSub).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from AudioSeq_SequencePlayerDisable.
  */
 void AudioSeq_SequencePlayerDisableChannels(u8* seqPlayer, s32 channel_bits) {
@@ -402,7 +402,7 @@ void AudioSeq_SequenceChannelEnable(SequencePlayer* seqPlayer, u8 channelIndex, 
  * releases the notes of the player's fonts (AudioHeap_ReleaseNotesForFont).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from AudioSeq_ResetSequencePlayer.
  */
 void AudioSeq_SequencePlayerDisable(u8* arg0) {
@@ -428,7 +428,7 @@ void AudioSeq_SequencePlayerDisable(u8* arg0) {
  * Corresponds to OoT AudioSeq_AudioListPushBack (original name Nas_AddList).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from AudioPlayback_InitNoteFreeList.
  */
 void AudioSeq_AudioListPushBack(s8 *arg0, s8 *arg1)
@@ -470,7 +470,7 @@ s32 AudioSeq_AudioListPopBack(AudioListItem* list) {
  * Corresponds to OoT AudioSeq_InitLayerFreelist (original name Nas_InitNoteList).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from AudioSeq_InitSequencePlayers.
  */
 void AudioSeq_InitLayerFreelist(void) {

@@ -238,7 +238,7 @@ void AudioLoad_InitTable(AudioTable*, u8*, s32);
  * handlers and moves the per-font loop into AudioLoad_InitSoundFont (__SetVlute).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from GbEmu_Init.
  */
 void AudioLoad_Init(void) {
@@ -1181,7 +1181,7 @@ void AudioLoad_PreloadSamplesForFont(s32, s32, RelocInfo8110EF7C*);
 /**
  * Preloads the samples of every permanently cached font.
  * Corresponds to OoT AudioLoad_LoadPermanentSamples (original name EmemReload).
- * Seen in play (2026-11-14) ran when the GB Tower started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
  * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioLoad_LoadPermanentSamples(void) {

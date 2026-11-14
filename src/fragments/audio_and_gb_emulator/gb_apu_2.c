@@ -2,9 +2,9 @@
 #include "audio_and_gb_emulator.h"
 
 /**
- * Renders `num_samples` stereo samples of the GB Tower menu sounds: starts the sound
+ * Renders `num_samples` stereo samples of the GB Player menu sounds: starts the sound
  * GbAudio_PlayMenuSound queued and mixes it with the previous one, which fades out.
- * Seen in play (2026-11-14) ran when C-Up opened the GB Tower menu; called from
+ * Seen in play (2026-11-14) ran when C-Up opened the GB Player menu; called from
  * GbAudio_UpdateFrame.
  */
 void GbAudio_RenderMenuSounds(s32 num_samples, s16* out) {

@@ -7,7 +7,7 @@
  * Puts the emulated Game Boy CPU in its post-boot-ROM state: registers (SP 0xFFFE, PC 0x0100), the
  * sound registers NR52 0x8F, NR50 0x77 and NR51 0xFF through GbApu_QueueRegisterWrite, and zeroes a
  * block of emulator memory.
- * Seen in play (2026-11-14) ran once when the GB Tower started with JP Green, from
+ * Seen in play (2026-11-14) ran once when the GB Player started with JP Green, from
  * GbEmu_LoadCartridge, before Green's boot logo.
  */
 #ifdef NON_MATCHING
