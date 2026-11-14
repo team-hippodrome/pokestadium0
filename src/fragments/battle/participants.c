@@ -408,17 +408,17 @@ f32 BattleScene_GetParticipantModelRadiusScaled(ActivePokemon* active_pokemon) {
  * @unverified Name from Stadium 1.
  */
 ModelNodeView* Battle_GetLoadedModelNode(ActivePokemon* active_pokemon, s32 node_index) {
-    return active_pokemon->sessionTeams->loadedModel->unk_00[2]->unk_00[node_index];
+    return active_pokemon->side->loadedModel->unk_00[2]->unk_00[node_index];
 }
 
 /**
- * Returns the session's display model id (sessionTeams+0x2).
+ * Returns the session's display model id (side+0x2).
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
  * switch in battle.
  * @unverified Name and comment guessed from the code.
  */
 s16 ActivePokemon_GetDisplayModel(ActivePokemon* arg0, M2C_UNK arg1) {
-    return arg0->sessionTeams->displayModel;
+    return arg0->side->displayModel;
 }
 
 typedef struct {
@@ -545,7 +545,7 @@ void BattleScene_InitializeParticipantModel(ActivePokemon* active_pokemon) {
     ModelAnim_SetAnimation(&active_pokemon->displayObject, 0);
     ModelAnim_SetFrame(&active_pokemon->displayObject, 0);
 
-    active_pokemon->sessionTeams->displayMon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->state.rosterIndex];
+    active_pokemon->side->displayMon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->state.rosterIndex];
     if ((active_pokemon->displayObject.objectType == DIGLETT) || (active_pokemon->displayObject.objectType == DUGTRIO)) {
         active_pokemon->displayObject.node.renderFlags &= ~0x40;
     } else {
@@ -570,7 +570,7 @@ void BattleScene_InitializeParticipantModel(ActivePokemon* active_pokemon) {
  */
 void BattleScene_InitializeParticipantAuxiliaryModel(ActivePokemon* active_pokemon) {
     DisplayObject* auxiliary_model = &active_pokemon->pokeBall;
-    ModelNodeView* model_view = active_pokemon->sessionTeams->unk_18;
+    ModelNodeView* model_view = active_pokemon->side->unk_18;
 
     ModelRenderer_AttachDisplayObject(auxiliary_model);
     auxiliary_model->effectSlot = 2;
@@ -617,7 +617,7 @@ void BattleScene_ReinitParticipantBodyModel(ActivePokemon* owner, ActivePokemon*
     ModelAnim_SetFrame(&pokemon->displayObject, 0);
     ModelAnim_SetAnimation(&pokemon->displayObject, 0);
 
-    owner->sessionTeams->displayMon = &owner->teamRoster->pokemonPicked[owner->state.rosterIndex];
+    owner->side->displayMon = &owner->teamRoster->pokemonPicked[owner->state.rosterIndex];
     if ((pokemon->displayObject.objectType == DIGLETT) || (pokemon->displayObject.objectType == DUGTRIO)) {
         pokemon->displayObject.node.renderFlags &= 0xFFBF;
     } else {
@@ -913,7 +913,7 @@ void Battle_SetModelToHitAnim(ActivePokemon* active_pokemon) {
 }
 
 /**
- * Points teamRoster at sessionTeams->teamMember[index].
+ * Points teamRoster at side->teamMember[index].
  * Seen in play (2026-11-12): picked Onix's roster entry when it was switched in.
  */
 void ActivePokemon_SelectTeamRoster(ActivePokemon* arg0, s32 arg1) {
@@ -986,9 +986,9 @@ s32 Battle_FreezeClauseInEffect(ActivePokemon* active_pokemon) {
         }
     }
 
-    if (active_pokemon->sessionTeams->tagTeamSize == 2) {
+    if (active_pokemon->side->tagTeamSize == 2) {
         for (i = 0; i < BattleScene_GetPartnerTeamSize(active_pokemon); i++) {
-            pokemon = &active_pokemon->sessionTeams->teamMember[state->teamMemberIndex == 0]->pokemonPicked[i];
+            pokemon = &active_pokemon->side->teamMember[state->teamMemberIndex == 0]->pokemonPicked[i];
             if ((pokemon->statusCondition & STATUS_FREEZE) &&
                 (active_pokemon->state.runtime.restSleepTurns[state->rosterIndex + (state->teamMemberIndex == 0) * 3] == 0)) {
                 return 1;
@@ -1020,9 +1020,9 @@ s32 Battle_SleepClauseInEffect(ActivePokemon* active_pokemon) {
         }
     }
 
-    if (active_pokemon->sessionTeams->tagTeamSize == 2) {
+    if (active_pokemon->side->tagTeamSize == 2) {
         for (i = 0; i < BattleScene_GetPartnerTeamSize(active_pokemon); i++) {
-            pokemon = &active_pokemon->sessionTeams->teamMember[state->teamMemberIndex == 0]->pokemonPicked[i];
+            pokemon = &active_pokemon->side->teamMember[state->teamMemberIndex == 0]->pokemonPicked[i];
             if ((pokemon->statusCondition & STATUS_SLEEP_MASK) && (active_pokemon->state.runtime.restSleepTurns[state->rosterIndex + (state->teamMemberIndex == 0) * 3] == 0)) {
                 return 1;
             }

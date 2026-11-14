@@ -672,9 +672,9 @@ void Battle_CheckAllBroughtFainted_PoisonBurn(ActivePokemon* arg0) {
         }
     }
 
-    if (arg0->sessionTeams->tagTeamSize == 2) {
+    if (arg0->side->tagTeamSize == 2) {
         for (i = 0; i < BattleScene_GetPartnerTeamSize(arg0); i++) {
-            temp_v0 = &arg0->sessionTeams->teamMember[!ptr1->teamMemberIndex]->pokemonPicked[i];
+            temp_v0 = &arg0->side->teamMember[!ptr1->teamMemberIndex]->pokemonPicked[i];
             var_s2 += temp_v0->hp;
         }
     }
@@ -712,9 +712,9 @@ void Battle_CheckAllBroughtFainted_LeechSeed(ActivePokemon* arg0) {
         }
     }
 
-    if (arg0->sessionTeams->tagTeamSize == 2) {
+    if (arg0->side->tagTeamSize == 2) {
         for (i = 0; i < BattleScene_GetPartnerTeamSize(arg0); i++) {
-            temp_v0 = &arg0->sessionTeams->teamMember[!ptr1->teamMemberIndex]->pokemonPicked[i];
+            temp_v0 = &arg0->side->teamMember[!ptr1->teamMemberIndex]->pokemonPicked[i];
             var_s2 += temp_v0->hp;
         }
     }
@@ -751,9 +751,9 @@ void Battle_CheckAllBroughtFainted_PendingHp(ActivePokemon* arg0) {
         }
     }
 
-    if (arg0->sessionTeams->tagTeamSize == 2) {
+    if (arg0->side->tagTeamSize == 2) {
         for (i = 0; i < BattleScene_GetPartnerTeamSize(arg0); i++) {
-            temp_v0 = &arg0->sessionTeams->teamMember[!ptr1->teamMemberIndex]->pokemonPicked[i];
+            temp_v0 = &arg0->side->teamMember[!ptr1->teamMemberIndex]->pokemonPicked[i];
             var_s2 += temp_v0->hp;
         }
     }
@@ -788,9 +788,9 @@ void Battle_CheckAllBroughtFainted_Hp(ActivePokemon* arg0) {
         }
     }
 
-    if (arg0->sessionTeams->tagTeamSize == 2) {
+    if (arg0->side->tagTeamSize == 2) {
         for (i = 0; i < BattleScene_GetPartnerTeamSize(arg0); i++) {
-            temp_v0 = &arg0->sessionTeams->teamMember[!ptr1->teamMemberIndex]->pokemonPicked[i];
+            temp_v0 = &arg0->side->teamMember[!ptr1->teamMemberIndex]->pokemonPicked[i];
             var_s2 += temp_v0->hp;
         }
     }
@@ -823,9 +823,9 @@ s32 Battle_CheckSideDefeatAfterResidualStatus(ActivePokemon* arg0) {
                 var_s2 += temp_v0->hp;
             }
 
-            if (arg0->sessionTeams->tagTeamSize == 2) {
+            if (arg0->side->tagTeamSize == 2) {
                 for (i = 0; i < BattleScene_GetPartnerTeamSize(arg0); i++) {
-                    temp_v0 = &arg0->sessionTeams->teamMember[!ptr1->teamMemberIndex]->pokemonPicked[i];
+                    temp_v0 = &arg0->side->teamMember[!ptr1->teamMemberIndex]->pokemonPicked[i];
                     var_s2 += temp_v0->hp;
                 }
             }

@@ -59,7 +59,7 @@ void BattleScene_SelectActiveController(ActivePokemon* arg0) {
     ActivePokemonState* ptr = &arg0->state;
 
     arg0->state.menuTeamMemberIndex = arg0->state.prevMenuTeamMemberIndex;
-    ptr->controller = &gControllers[arg0->sessionTeams->teamMember[arg0->state.menuTeamMemberIndex]->controllerPort];
+    ptr->controller = &gControllers[arg0->side->teamMember[arg0->state.menuTeamMemberIndex]->controllerPort];
 }
 
 s32 func_82107A5C(void);
@@ -372,7 +372,7 @@ extern s32 D_8218C6FC;
  * @unverified Name from Stadium 1.
  */
 s32 BattleScene_ValidateSelectedPartyMember(ActivePokemon* arg0) {
-    if (arg0->sessionTeams->teamMember[arg0->state.menuTeamMemberIndex]->pokemonPicked[arg0->state.actionChosen].hp != 0) {
+    if (arg0->side->teamMember[arg0->state.menuTeamMemberIndex]->pokemonPicked[arg0->state.actionChosen].hp != 0) {
         return 1;
     }
 
@@ -395,7 +395,7 @@ void BattleMenu_TakeControlOnBPress(ActivePokemon* arg0, u8* arg1, u8* arg2, s32
     s32 m; // FAKE
 
     m = 0x4000;
-    if (arg0->sessionTeams->teamMember[0]->numberOfPokemonBrought == 3) {
+    if (arg0->side->teamMember[0]->numberOfPokemonBrought == 3) {
         mask = m;
     } else {
         mask = 0x4000;
@@ -435,7 +435,7 @@ void BattleMenu_TakeControlOnCButtonPress(ActivePokemon* arg0, u8* arg1, u8* arg
     ActivePokemonState* state = &arg0->state;
     u16 mask;
 
-    if (arg0->sessionTeams->teamMember[0]->numberOfPokemonBrought == 3) {
+    if (arg0->side->teamMember[0]->numberOfPokemonBrought == 3) {
         mask = 0xD;
     } else {
         mask = 0xC00F;
@@ -548,13 +548,13 @@ void BattleMenu_UpdateSwitchMenu(ActivePokemon* arg0) {
     Controller* c1;
     Controller* c2;
 
-    if (arg0->sessionTeams->tagTeamSize == 1) {
-        c1 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
-        c2 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+    if (arg0->side->tagTeamSize == 1) {
+        c1 = &gControllers[arg0->side->teamMember[0]->controllerPort];
+        c2 = &gControllers[arg0->side->teamMember[0]->controllerPort];
     } else {
-        c1 = &gControllers[arg0->sessionTeams->teamMember[sp18->menuTeamMemberIndex]->controllerPort];
+        c1 = &gControllers[arg0->side->teamMember[sp18->menuTeamMemberIndex]->controllerPort];
         idx = sp18->menuTeamMemberIndex == 0;
-        c2 = &gControllers[arg0->sessionTeams->teamMember[idx]->controllerPort];
+        c2 = &gControllers[arg0->side->teamMember[idx]->controllerPort];
     }
 
     if (arg0->captionState.active != 0) {
@@ -595,8 +595,8 @@ s32 BattleScene_HandlePlayerFaintedSwitch(ActivePokemon* arg0, ActivePokemon* ar
     ActivePokemonState* state = &arg0->state;
     ActivePokemonState* other = &arg1->state;
 
-    if (arg0->sessionTeams->tagTeamSize == 1) {
-        c1 = c2 = &D_800AAF50[M2C_FIELD(arg0->sessionTeams->teamMember[0], u8*, 1) * 0x24];
+    if (arg0->side->tagTeamSize == 1) {
+        c1 = c2 = &D_800AAF50[M2C_FIELD(arg0->side->teamMember[0], u8*, 1) * 0x24];
     } else {
         team = M2C_FIELD(arg0, s8**, 0x85C);
         c1 = &D_800AAF50[M2C_FIELD(M2C_FIELD(team, s8**, 8), u8*, 1) * 0x24];
@@ -617,7 +617,7 @@ s32 BattleScene_HandlePlayerFaintedSwitch(ActivePokemon* arg0, ActivePokemon* ar
         state->selectedCommandOption = 2;
         other->selectedCommandOption = 3;
         other->selectedCommand = 1;
-        BattleMenu_TakeControlOnCButtonPress(arg0, c1, c2, arg0->sessionTeams->tagTeamSize);
+        BattleMenu_TakeControlOnCButtonPress(arg0, c1, c2, arg0->side->tagTeamSize);
         BattleMenu_UpdateSwitchMenu(arg0);
         return 1;
     }
@@ -639,12 +639,12 @@ void BattleMenu_UpdateSurrenderPrompt(ActivePokemon* arg0) {
     Controller* c1;
     Controller* c2;
 
-    if (arg0->sessionTeams->tagTeamSize == 1) {
-        c1 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
-        c2 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
+    if (arg0->side->tagTeamSize == 1) {
+        c1 = &gControllers[arg0->side->teamMember[0]->controllerPort];
+        c2 = &gControllers[arg0->side->teamMember[0]->controllerPort];
     } else {
-        c1 = &gControllers[arg0->sessionTeams->teamMember[0]->controllerPort];
-        c2 = &gControllers[arg0->sessionTeams->teamMember[1]->controllerPort];
+        c1 = &gControllers[arg0->side->teamMember[0]->controllerPort];
+        c2 = &gControllers[arg0->side->teamMember[1]->controllerPort];
     }
 
     if (temp_a0->selectedCommandOption == 4) {
@@ -699,8 +699,8 @@ void func_8210D6BC(ActivePokemon* arg0) {
     if (M2C_FIELD(state, s32*, 0x10) != 0) {
         return;
     }
-    if (arg0->sessionTeams->tagTeamSize == 1U) {
-        c1 = c2 = &D_800AAF50[M2C_FIELD(arg0->sessionTeams->teamMember[0], u8*, 1) * 0x24];
+    if (arg0->side->tagTeamSize == 1U) {
+        c1 = c2 = &D_800AAF50[M2C_FIELD(arg0->side->teamMember[0], u8*, 1) * 0x24];
     } else {
         team = M2C_FIELD(arg0, s8**, 0x85C);
         c1 = &D_800AAF50[M2C_FIELD(M2C_FIELD(team, s8**, 8), u8*, 1) * 0x24];
@@ -712,7 +712,7 @@ void func_8210D6BC(ActivePokemon* arg0) {
         buttons = M2C_FIELD(c2, u16*, 8) | M2C_FIELD(c1, u16*, 8);
         if (buttons & 0x4000) {
             M2C_FIELD(state, s32*, 4) = 2;
-            BattleMenu_TakeControlOnBPress(arg0, c1, c2, arg0->sessionTeams->tagTeamSize);
+            BattleMenu_TakeControlOnBPress(arg0, c1, c2, arg0->side->tagTeamSize);
         } else if (buttons & 0x1000) {
             M2C_FIELD(state, s32*, 4) = 3;
         } else {

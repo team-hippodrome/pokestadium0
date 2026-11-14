@@ -294,21 +294,21 @@ void BattleAnim_ClearRockThrowingMoveFlag(ActivePokemon* active_pokemon) {
  * @unverified Name from Stadium 1.
  */
 s32 BattleAnim_IsAssetLoadBusy(ActivePokemon* arg0) {
-    return arg0->sessionTeams->assetIsBusy & 0xD0;
+    return arg0->side->assetIsBusy & 0xD0;
 }
 
 M2C_UNK func_80019F20(BattleSide*);                      /* extern */
 
 s32 func_82101F94(ActivePokemon* arg0) {
-    func_80019F20(arg0->sessionTeams);
-    return arg0->sessionTeams->assetIsBusy & 0xC0;
+    func_80019F20(arg0->side);
+    return arg0->side->assetIsBusy & 0xC0;
 }
 
 /**
  * Returns the busy bits (0xD0) of the Pokemon's model state byte (the record at +0x85C).
  */
 s32 func_82101FC4(ActivePokemon* arg0) {
-    return arg0->sessionTeams->modelFlags & 0xD0;
+    return arg0->side->modelFlags & 0xD0;
 }
 
 /**
@@ -320,7 +320,7 @@ s32 func_82101FC4(ActivePokemon* arg0) {
  */
 s32 BattleAnim_TryRegisterAssetTables(ActivePokemon* active_pokemon) {
     if (BattleAnim_PollAssetLoadBusyFlags(active_pokemon) == 0) {
-        BattleAnim_RegisterAssetTablesForSession(active_pokemon->sessionTeams);
+        BattleAnim_RegisterAssetTablesForSession(active_pokemon->side);
         return 1;
     }
     return 0;
@@ -335,9 +335,9 @@ s32 BattleAnim_TryRegisterAssetTables(ActivePokemon* active_pokemon) {
 void BattleScene_LoadMoveResourceList(ActivePokemon* active_pokemon) {
     // FAKE
     if (sBattleScene.scene->moveEffectKind == 0xE) {
-        BattleAnim_LoadMoveResourceList(active_pokemon->sessionTeams, BattleScene_GetParticipantUsedMove(active_pokemon));
+        BattleAnim_LoadMoveResourceList(active_pokemon->side, BattleScene_GetParticipantUsedMove(active_pokemon));
     } else {
-        BattleAnim_LoadMoveResourceList(active_pokemon->sessionTeams, BattleScene_GetParticipantUsedMove(active_pokemon));
+        BattleAnim_LoadMoveResourceList(active_pokemon->side, BattleScene_GetParticipantUsedMove(active_pokemon));
     }
 }
 
@@ -350,14 +350,14 @@ void BattleScene_LoadMoveResourceList(ActivePokemon* active_pokemon) {
 void BattleScene_LoadRowResourceList(ActivePokemon* active_pokemon) {
     s32 row_index = active_pokemon->animationState;
 
-    BattleAnim_LoadModeResourceList(active_pokemon->sessionTeams, sBattleSceneStateRowTable[row_index].mode);
+    BattleAnim_LoadModeResourceList(active_pokemon->side, sBattleSceneStateRowTable[row_index].mode);
 }
 
 s16 func_82107BF4();                                /* extern */
 M2C_UNK func_821368B0(s32, s16);                    /* extern */
 
 void func_821020C8(ActivePokemon* arg0) {
-    func_821368B0(arg0->sessionTeams, func_82107BF4());
+    func_821368B0(arg0->side, func_82107BF4());
 }
 
 /**
@@ -367,8 +367,8 @@ void func_821020C8(ActivePokemon* arg0) {
 void func_821020FC(ActivePokemon* arg0) {
     BattleSide* temp_v0;
 
-    arg0->sessionTeams->displayModel = 0x98;
-    temp_v0 = arg0->sessionTeams;
+    arg0->side->displayModel = 0x98;
+    temp_v0 = arg0->side;
     temp_v0->modelFlags = (u8) (temp_v0->modelFlags | 0x80);
 }
 
@@ -379,9 +379,9 @@ void func_821020FC(ActivePokemon* arg0) {
 void func_8210211C(ActivePokemon* arg0) {
     BattleSide* temp_v0;
 
-    temp_v0 = arg0->sessionTeams;
+    temp_v0 = arg0->side;
     temp_v0->modelFlags = (u8) (temp_v0->modelFlags | 0x80);
-    arg0->sessionTeams->displayModel = (s16) arg0->state.model;
+    arg0->side->displayModel = (s16) arg0->state.model;
 }
 
 void func_80003824(void*, s8*, s8*, s32);
@@ -450,11 +450,11 @@ void ActivePokemon_LoadSpeciesModelAssets(ActivePokemon* arg0) {
  */
 void BattleScene_TickRow10CleanupAndEnterState18(ActivePokemon* active_pokemon) {
     if (active_pokemon->animationTimer == 20) {
-        active_pokemon->sessionTeams->modelFlags |= 0x80;
+        active_pokemon->side->modelFlags |= 0x80;
     }
 
-    if (active_pokemon->sessionTeams->modelFlags & 0x10) {
-        active_pokemon->sessionTeams->modelFlags &= ~0x90;
+    if (active_pokemon->side->modelFlags & 0x10) {
+        active_pokemon->side->modelFlags &= ~0x90;
         Battle_LoadOwnerModelForSwitchIn(active_pokemon);
         BattleThumbnail_TickOwnerCameraFraming(active_pokemon);
         Audio_PlayCommand(2, 0, 0);
@@ -1039,8 +1039,8 @@ void func_82103998(ActivePokemon* active_pokemon) {
     s32 row_index = active_pokemon->animationState;
 
     if (BattleAnim_TryRegisterAssetTables(active_pokemon) != 0) {
-        active_pokemon->sessionTeams->displayModel = active_pokemon->state.runtime.species;
-        active_pokemon->sessionTeams->displayMon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->state.rosterIndex];
+        active_pokemon->side->displayModel = active_pokemon->state.runtime.species;
+        active_pokemon->side->displayMon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->state.rosterIndex];
         active_pokemon->animationTimer = 0;
         BattleScene_QueueRowEffectList3(active_pokemon, sBattleSceneStateRowTable[row_index].mode);
         Audio_PlayCommand(3, 0, 0);
@@ -1074,11 +1074,11 @@ void BattleScene_TickQueueRowEffectList3OnFirstFrame(ActivePokemon* active_pokem
  */
 void BattleScene_TickRow21CleanupAndEnterState18(ActivePokemon* active_pokemon) {
     if (active_pokemon->animationTimer == 79) {
-        active_pokemon->sessionTeams->modelFlags |= 0x80;
+        active_pokemon->side->modelFlags |= 0x80;
     }
 
-    if (active_pokemon->sessionTeams->modelFlags & 0x10) {
-        active_pokemon->sessionTeams->modelFlags &= ~0x90;
+    if (active_pokemon->side->modelFlags & 0x10) {
+        active_pokemon->side->modelFlags &= ~0x90;
 
         Battle_LoadOwnerModelForSwitchIn(active_pokemon);
         BattleThumbnail_TickOwnerCameraFraming(active_pokemon);
@@ -1098,8 +1098,8 @@ void BattleScene_TickRow21CleanupAndEnterState18(ActivePokemon* active_pokemon) 
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_ResetOwnerModelIfLoaded(ActivePokemon* active_pokemon) {
-    if (active_pokemon->sessionTeams->modelFlags & 0x10) {
-        active_pokemon->sessionTeams->modelFlags &= ~0x90;
+    if (active_pokemon->side->modelFlags & 0x10) {
+        active_pokemon->side->modelFlags &= ~0x90;
         Battle_ResetOwnerModelToSubstituteDoll(active_pokemon);
     }
 }
@@ -1553,7 +1553,7 @@ extern s16 D_8219A4F0[];
  */
 void func_82104AB0(ActivePokemon* arg0) {
     arg0->state.runtime.usedMove = D_82189190[D_8219A4F0[0xE]];
-    func_821368B0(arg0->sessionTeams, D_82189190[D_8219A4F0[0xE]]);
+    func_821368B0(arg0->side, D_82189190[D_8219A4F0[0xE]]);
 }
 
 extern s16 D_8219A50C;
@@ -2699,7 +2699,7 @@ void BattleScene_AllocateParticipantRecord(BattleSide* session_teams, s32 side_i
     bzero(&sActivePokemon[side_index]->state.unk_A0, sizeof(unk_D_84390010_654_09C));
     bzero(&sActivePokemon[side_index]->state.unk_B0, sizeof(unk_D_84390010_654_0AC));
     bzero(&sActivePokemon[side_index]->captionState, sizeof(MonCaptionState));
-    sActivePokemon[side_index]->sessionTeams = session_teams;
+    sActivePokemon[side_index]->side = session_teams;
 }
 
 M2C_UNK func_8211F3F4();                            /* extern */
@@ -2736,7 +2736,7 @@ void ActivePokemon_SetController(ActivePokemon*, u8*);
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
 void BattleScene_InitializeParticipantController(ActivePokemon* arg0) {
-    u8* sp24 = &D_800AAF50[arg0->sessionTeams->teamMember[0]->controllerPort * 0x24];
+    u8* sp24 = &D_800AAF50[arg0->side->teamMember[0]->controllerPort * 0x24];
     ActivePokemonState* state = &arg0->state;
 
     ActivePokemon_SelectTeamRoster(arg0, 0);

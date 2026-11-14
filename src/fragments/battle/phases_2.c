@@ -316,14 +316,14 @@ void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0) {
             BattleScene_ResetCameraFrameCounter();
             Battle_ClearMessageCursor();
             BattleMessage_ShowForSide(D_8219A520 + 0x88, sBattleScene.scene->actingSide);
-            BattleAnim_LoadModeResourceList(temp_s0->sessionTeams, 3);
+            BattleAnim_LoadModeResourceList(temp_s0->side, 3);
             sBattleScene.scene->phaseStep += 1;
             break;
 
         case 1:
             if (BattleAnim_TryRegisterAssetTables(temp_s0) != 0) {
-                temp_s0->sessionTeams->displayModel = sp2C->species;
-                temp_s0->sessionTeams->displayMon = &temp_s0->teamRoster->pokemonPicked[temp_s0->state.rosterIndex];
+                temp_s0->side->displayModel = sp2C->species;
+                temp_s0->side->displayMon = &temp_s0->teamRoster->pokemonPicked[temp_s0->state.rosterIndex];
                 BattleScene_SetParticipantModelTransform(temp_s0, 2, 0);
                 BattleAnim_QueueEffectList3(0xD, temp_s0, temp_s0, 0xFF, 0xFF);
                 sBattleScene.scene->phaseStep += 1;
@@ -342,13 +342,13 @@ void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0) {
 
         case 3:
             temp_s0->pokeBall.node.flags &= ~1;
-            temp_s0->sessionTeams->modelFlags |= 0x80;
+            temp_s0->side->modelFlags |= 0x80;
             sBattleScene.scene->phaseStep += 1;
             break;
 
         case 4:
-            if (temp_s0->sessionTeams->modelFlags & 0x10) {
-                temp_s0->sessionTeams->modelFlags &= ~0x90;
+            if (temp_s0->side->modelFlags & 0x10) {
+                temp_s0->side->modelFlags &= ~0x90;
                 Battle_LoadOwnerModelForSwitchIn(temp_s0);
                 BattleThumbnail_TickOwnerCameraFraming(temp_s0);
                 Audio_PlayCommand(2, 0, 0);
@@ -528,7 +528,7 @@ void BattleScene_IntroStepInitOverheadCamera(CameraNode* arg0) {
     Battle_SetStageScale(sBattleScene.scene->stageScale);
     Audio_PlayCommand(4, 0, 0);
     func_80041914(sActivePokemon[0]->teamRoster->numberOfPokemonBrought, sActivePokemon[1]->teamRoster->numberOfPokemonBrought);
-    BattleAnim_LoadModeResourceList(sActivePokemon[0]->sessionTeams, 3);
+    BattleAnim_LoadModeResourceList(sActivePokemon[0]->side, 3);
     sBattleScene.scene->phaseStep += 1;
 }
 

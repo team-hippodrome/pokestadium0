@@ -307,7 +307,7 @@ void func_82133B6C(void) {
             }
             if ((D_8219A4F0.timer == 25) && (D_8219A4F0.flags & 0x10)) {
                 if (D_8219A4F0.index == 4) {
-                    ((ActivePokemon*)((s8**)&D_82199DE0)[0])->sessionTeams->displayModel = 0x96;
+                    ((ActivePokemon*)((s8**)&D_82199DE0)[0])->side->displayModel = 0x96;
                 } else {
                     M2C_FIELD(M2C_FIELD(mons[0], u8**, 0x85C), s16*, 2) = D_8218B5D0[D_8219A4F0.index + 1].unk0A;
                 }
@@ -321,9 +321,9 @@ void func_82133B6C(void) {
                     *M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C) &= ~0x90;
                     Battle_LoadOwnerModelForSwitchIn(((s8**)&D_82199DE0)[0]);
                     if (D_8219A4F0.index == 4) {
-                        ((ActivePokemon*)((s8**)&D_82199DE0)[0])->sessionTeams->displayModel = 0x96;
+                        ((ActivePokemon*)((s8**)&D_82199DE0)[0])->side->displayModel = 0x96;
                     }
-                    ((ActivePokemon*)((s8**)&D_82199DE0)[1])->sessionTeams->displayModel = D_8218B5D0[D_8219A4F0.index + 1].unk0B;
+                    ((ActivePokemon*)((s8**)&D_82199DE0)[1])->side->displayModel = D_8218B5D0[D_8219A4F0.index + 1].unk0B;
                     *M2C_FIELD(((s8**)&D_82199DE0)[1], u8**, 0x85C) |= 0x80;
                     D_8219A4F0.flags |= 4;
                     D_8219A4F0.flags &= ~2;

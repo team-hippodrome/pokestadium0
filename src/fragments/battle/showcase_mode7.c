@@ -149,9 +149,9 @@ s32 func_821217DC(s32);
  *
  * Once func_821217DC(0xA) returns non-zero it advances the roster index of the
  * Pokemon in D_8219A580 (state.rosterIndex) by one and makes that roster entry
- * the current one in the session teams block: sessionTeams->displayModel gets
- * the first byte of the new entry, sessionTeams->unk_04 is pointed at the entry
- * itself, and bit 0x80 is set in sessionTeams->uniqueStatusFlags.  It then adds
+ * the current one in the session teams block: side->displayModel gets
+ * the first byte of the new entry, side->unk_04 is pointed at the entry
+ * itself, and bit 0x80 is set in side->uniqueStatusFlags.  It then adds
  * 1 to the word at offset 0x20 of the structure D_8219A5A0 points to, the same
  * step counter that func_82132AC4 and func_82132B04 advance.
  * The meaning of the entry's first byte and of flag 0x80 is not established
@@ -166,9 +166,9 @@ void func_82132C14(UNUSED CameraNode* arg0) {
     if (func_821217DC(0xA) != 0) {
         st->rosterIndex++;
         mon = &((ActivePokemon*)D_8219A580)->teamRoster->pokemonPicked[st->rosterIndex];
-        ((ActivePokemon*)D_8219A580)->sessionTeams->displayModel = mon->species.id;
-        ((ActivePokemon*)D_8219A580)->sessionTeams->displayMon = &((ActivePokemon*)D_8219A580)->teamRoster->pokemonPicked[st->rosterIndex];
-        ((ActivePokemon*)D_8219A580)->sessionTeams->modelFlags |= 0x80;
+        ((ActivePokemon*)D_8219A580)->side->displayModel = mon->species.id;
+        ((ActivePokemon*)D_8219A580)->side->displayMon = &((ActivePokemon*)D_8219A580)->teamRoster->pokemonPicked[st->rosterIndex];
+        ((ActivePokemon*)D_8219A580)->side->modelFlags |= 0x80;
         sBattleScene.scene->phaseStep = sBattleScene.scene->phaseStep + 1;
     }
 }

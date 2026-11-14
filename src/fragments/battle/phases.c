@@ -997,18 +997,18 @@ void BattleScene_PhaseTransform(CameraNode* arg0) {
                 func_821233EC(arg0, D_8219A544);
                 if (sp30->volatileStatusFlags & 0x10) {
                     if (sp2C->uniqueStatusFlags & 8) {
-                        sp28->model = (D_8219A544)->sessionTeams->displayModel = sp24->transformSpecies;
-                    } else if (D_8219A540->sessionTeams->displayModel == 0x98) {
-                        sp28->model = (D_8219A544)->sessionTeams->displayModel = sp2C->species;
+                        sp28->model = (D_8219A544)->side->displayModel = sp24->transformSpecies;
+                    } else if (D_8219A540->side->displayModel == 0x98) {
+                        sp28->model = (D_8219A544)->side->displayModel = sp2C->species;
                     } else {
-                        sp28->model = (D_8219A544)->sessionTeams->displayModel = D_8219A540->sessionTeams->displayModel;
+                        sp28->model = (D_8219A544)->side->displayModel = D_8219A540->side->displayModel;
                     }
                 } else if (sp2C->uniqueStatusFlags & 8) {
-                    (D_8219A544)->sessionTeams->displayModel = sp24->transformSpecies;
-                } else if (D_8219A540->sessionTeams->displayModel == 0x98) {
-                    (D_8219A544)->sessionTeams->displayModel = sp2C->species;
+                    (D_8219A544)->side->displayModel = sp24->transformSpecies;
+                } else if (D_8219A540->side->displayModel == 0x98) {
+                    (D_8219A544)->side->displayModel = sp2C->species;
                 } else {
-                    (D_8219A544)->sessionTeams->displayModel = D_8219A540->sessionTeams->displayModel;
+                    (D_8219A544)->side->displayModel = D_8219A540->side->displayModel;
                 }
                 *M2C_FIELD(D_8219A544, u8**, 0x85C) |= 0x80;
                 sBattleScene.scene->phaseStep++;
