@@ -684,7 +684,8 @@ typedef void (*ParticleUpdateCallback)(struct Particle*);
 /*
  * Same record as Stadium 1's Particle, but 4 bytes shorter: from 0x28 on, every
  * field sits 4 bytes lower than in Stadium 1. Field names without a trailing comment
- * follow Stadium 1 and are @unverified; the commented ones say where they came from.
+ * follow Stadium 1 and are @unverified; the commented ones say where they came from
+ * (those without @unverified were checked in play, mostly on Pinsir's Vice Grip dust).
  */
 typedef struct Particle {
     /* 0x00 */ struct Particle* next;
@@ -695,33 +696,33 @@ typedef struct Particle {
     /* 0x14 */ DisplayObject* displayObject;
     /* 0x18 */ u32 flags;
     /* 0x1C */ f32 scale; // draw scale; poking 1.0 over 5.4 shrank Transform's smoke puffs in play
-    /* 0x20 */ f32 scaleTarget;
+    /* 0x20 */ f32 scaleTarget; // scale approached by Particle_ApproachScaleTarget; poking 2.0 grew the Vice Grip dust puffs in play
     /* 0x24 */ f32 scaleStep;
-    /* 0x28 */ Vec3f worldPosition;
-    /* 0x34 */ Vec3f positionOffset;
+    /* 0x28 */ Vec3f worldPosition; // drawn position, recomputed each frame as origin + positionOffset + motionOffset (watched in play; pokes are overwritten)
+    /* 0x34 */ Vec3f positionOffset; // poking y = 80 lifted the Vice Grip dust into the air in play
     /* 0x40 */ char unk40[0xC];
-    /* 0x4C */ Vec3f motionOffset;
+    /* 0x4C */ Vec3f motionOffset; // accumulated motion; poking y = 80 lifted the Vice Grip dust in play
     /* 0x58 */ Vec3f motionTarget;
     /* 0x64 */ Vec3f origin; // anchor position; poking x = -200 moved Transform's smoke off screen in play
-    /* 0x70 */ f32 stepMagnitude;
+    /* 0x70 */ f32 stepMagnitude; // speed along rotation.y; poking 40 flung the Vice Grip dust far to the sides in play
     /* 0x74 */ f32 magnitudeStep;
-    /* 0x78 */ Vec3f motionStep;
+    /* 0x78 */ Vec3f motionStep; // per-frame velocity; poking y = 15 made the Vice Grip dust rise away in play
     /* 0x84 */ char unk84[0xC];
-    /* 0x90 */ Vec3s rotation;
+    /* 0x90 */ Vec3s rotation; // rotation.y is the travel heading; poking 0 sent all Vice Grip dust the same way in play
     /* 0x96 */ Vec3s rotationStep;
     /* 0x9C */ Vec3s rotationTarget;
-    /* 0xA2 */ s16 param0; // @unverified: from BattleAnimEffectSlot.param0 at spawn (times spawnIndex for kind 18); per-effect countdown or alpha target
+    /* 0xA2 */ s16 param0; // from BattleAnimEffectSlot.param0 at spawn (times spawnIndex for kind 18); per-effect countdown or alpha target; on the Vice Grip dust the delay before it rises (poking 99 kept it low in play)
     /* 0xA4 */ s16 countdown; // @unverified: per-effect countdown, only set and counted down by the particle.c helpers
     /* 0xA6 */ s16 param1; // @unverified: from BattleAnimEffectSlot.param1 at spawn; per-effect step (palette/alpha approach speed)
     /* 0xA8 */ s16 spawnIndex; // @unverified: index of the particle within its spawn batch/burst (BattleAnim_InitializeParticleFromEffect, CloneParticleState)
     /* 0xAA */ s16 scratchA; // @unverified: per-effect scratch value (alpha, angle step, palette index), meaning set by each callback
     /* 0xAC */ s16 scratchB; // @unverified: per-effect scratch value (env alpha, angle target), meaning set by each callback
-    /* 0xAE */ s16 lifecycle;
+    /* 0xAE */ s16 lifecycle; // state machine step; poking 4 made the dust batch free itself (allocated 0) in play
     /* 0xB0 */ char unkB0[0x2];
-    /* 0xB2 */ s16 frameTimer;
-    /* 0xB4 */ s16 phase;
+    /* 0xB2 */ s16 frameTimer; // frames until the next texture frame; poking 100 froze textureFrame at 0 in play
+    /* 0xB4 */ s16 phase; // poking 1 each frame made the Vice Grip spark emitter fire a burst every frame in play
     /* 0xB6 */ s16 phaseTimer;
-    /* 0xB8 */ s16 delayTimer;
+    /* 0xB8 */ s16 delayTimer; // start delay; counts down per frame, poking 0 started all five Vice Grip sparks at once in play
     /* 0xBA */ u8 prim_r; // primitive color; poking FF0000 into prim_r/g/b turned Transform's smoke red in play
     /* 0xBB */ u8 prim_g;
     /* 0xBC */ u8 prim_b;
@@ -730,8 +731,8 @@ typedef struct Particle {
     /* 0xBF */ u8 env_b;
     /* 0xC0 */ u8 prim_a; // primitive alpha; poking 0 hid Transform's smoke in play, it fades 0x78 -> 0x40 on its own
     /* 0xC1 */ char unkC1[0x1];
-    /* 0xC2 */ s8 loopsRemaining;
-    /* 0xC3 */ s8 textureFrame;
+    /* 0xC2 */ s8 loopsRemaining; // animation loops left; poking 5 made the dust cycle frames 0-7 again, counting 5 -> 3 in play
+    /* 0xC3 */ s8 textureFrame; // texture animation frame; counts 0-7 on the Vice Grip dust, poking 3 changed the puffs in play
     /* 0xC4 */ char unkC4[0x2];
     /* 0xC6 */ u8 effectList; // @unverified: effect list the particle belongs to; lists 4 and 7 survive BattleAnim_CleanupEffects*
     /* 0xC7 */ u8 resourceListId; // @unverified: queued resource list id; BattleAnim_StopParticlesForOwnerCategory matches it
@@ -739,7 +740,7 @@ typedef struct Particle {
     /* 0xC9 */ u8 byteParam0; // @unverified: from BattleAnimEffectSlot.byteParam0; 0xFF by default; bone id or alpha target per effect
     /* 0xCA */ u8 byteParam2; // @unverified: from BattleAnimEffectSlot.byteParam2; per-effect step value
     /* 0xCB */ u8 byteParam1; // @unverified: from BattleAnimEffectSlot.byteParam1; per-effect palette/color target
-    /* 0xCC */ s8 allocated;
+    /* 0xCC */ s8 allocated; // pool slot in use; went 1 -> 0 when the particle reached lifecycle 4 in play
 } Particle; // size = 0xD0
 
 typedef struct OwnerLinkedFourStream {
