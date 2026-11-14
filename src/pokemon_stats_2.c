@@ -190,16 +190,16 @@ s32 func_800210AC(s8 *, M2C_UNK);                 /* extern */
 extern s8 D_800AD210;
 s32 func_80021334(s32 arg0) {
     s32 var_s0;
-    s8 *temp_s1;
-    s8 *temp_s3;
+    GbSaveMainData* temp_s1;
+    GbSavePort* temp_s3;
 
-    temp_s3 = (arg0 * 0x48) + &D_800AD210;
-    temp_s1 = M2C_FIELD(temp_s3, s8 **, 0x40);
-    func_8002107C(temp_s1 + 0x18, temp_s1 + 0x1014);
+    temp_s3 = (GbSavePort*)((arg0 * 0x48) + &D_800AD210);
+    temp_s1 = temp_s3->mainData;
+    func_8002107C((s32)temp_s1->playerName, (s32)&temp_s1->checksum);
     var_s0 = 0;
-    M2C_FIELD(temp_s3, u8 *, 4) = (u8) M2C_FIELD(temp_s1, u8 *, 0x1014);
+    temp_s3->checksum = temp_s1->checksum;
 loop_1:
-    if ((func_8000C238(arg0, temp_s1, 0x2580, 0x1020) == 0) && (func_8000C1B4(arg0, &D_800AD338, 0x2580, 0x1020) == 0) && (func_800210AC(temp_s1, 0x1020) != 0)) {
+    if ((func_8000C238(arg0, (s8*)temp_s1, 0x2580, 0x1020) == 0) && (func_8000C1B4(arg0, (M2C_UNK*)&D_800AD338, 0x2580, 0x1020) == 0) && (func_800210AC((s8*)temp_s1, 0x1020) != 0)) {
         return 1;
     }
     var_s0 += 1;
@@ -290,19 +290,19 @@ s32 GbSave_WriteBoxBank(s32 arg0, s32 arg1) {
 extern s8 D_800AD210;
 /** Frees the save buffers held for a port. */
 void GbSave_ReleasePortBuffers(s32 arg0, u32 arg1) {
-    s8 *temp_v0;
-    s8 *temp_v0_2;
+    GbSavePort* temp_v0;
+    GbSavePort* temp_v0_2;
 
     if ((arg1 >= 0x44415430U) && (arg1 < 0x44415434U)) {
-        temp_v0 = ((arg1 - 0x44415430) * 0x48) + &D_800AD210;
-        M2C_FIELD(temp_v0, s32 *, 0x40) = 0;
-        M2C_FIELD(temp_v0, u16 *, 0) = (u16) (M2C_FIELD(temp_v0, u16 *, 0) & 0xFFF6);
+        temp_v0 = (GbSavePort*)(((arg1 - 0x44415430) * 0x48) + &D_800AD210);
+        temp_v0->mainData = NULL;
+        temp_v0->flags = (u16) (temp_v0->flags & 0xFFF6);
         return;
     }
     if ((arg1 >= 0x424F5830U) && (arg1 < 0x424F5834U)) {
-        temp_v0_2 = ((arg1 - 0x424F5830) * 0x48) + &D_800AD210;
-        M2C_FIELD(temp_v0_2, s32 *, 0x44) = 0;
-        M2C_FIELD(temp_v0_2, u16 *, 0) = (u16) (M2C_FIELD(temp_v0_2, u16 *, 0) & 0xFFED);
+        temp_v0_2 = (GbSavePort*)(((arg1 - 0x424F5830) * 0x48) + &D_800AD210);
+        temp_v0_2->boxData = NULL;
+        temp_v0_2->flags = (u16) (temp_v0_2->flags & 0xFFED);
     }
 }
 
@@ -1078,10 +1078,9 @@ s32 GbSave_GetPresentPortMask(void) {
     return D_800AD330;
 }
 
-extern s8 D_800AD213;
 /** Returns the save state of a port. */
 u8 GbSave_GetSaveState(s32 arg0) {
-    return *(&D_800AD213 + (arg0 * 0x48));
+    return sGbSavePorts[arg0].saveState;
 }
 
 /** Returns whether a port's cartridge is available. */
@@ -1099,10 +1098,9 @@ s32 GbSave_GetPortAvailability(s32 arg0) {
     return 0;
 }
 
-extern s8 D_800AD212;
 /** Returns which game's save is loaded for a port. */
 u8 GbSave_GetPortGame(s32 arg0) {
-    return *(&D_800AD212 + (arg0 * 0x48));
+    return sGbSavePorts[arg0].gameType;
 }
 
 /*
@@ -1160,13 +1158,13 @@ void GbSave_CopyPlayerIdentity(s32 arg0, void* arg1) {
 extern s8 D_800AD210;
 /** Returns the trainer ID stored in a port's save data. */
 s32 GbSave_GetTrainerId(s32 arg0) {
-    s8 *temp_v0;
+    GbSavePort* temp_v0;
 
-    temp_v0 = (arg0 * 0x48) + &D_800AD210;
-    if (!(M2C_FIELD(temp_v0, u16 *, 0) & 1)) {
+    temp_v0 = (GbSavePort*)((arg0 * 0x48) + &D_800AD210);
+    if (!(temp_v0->flags & 1)) {
         return -1;
     }
-    return func_8001FAB0((u8*)M2C_FIELD(temp_v0, s32 *, 0x40) + 0x7B);
+    return func_8001FAB0(temp_v0->mainData->playerId);
 }
 
 /** Writes the trainer ID into a port's loaded save data. */
@@ -1194,54 +1192,52 @@ s32 GbSave_GetBoxCount(s32 arg0) {
 
 s32 func_8001FCC0(M2C_UNK, s32, M2C_UNK);           /* extern */
 extern s8 D_800AD210;
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s32 func_80022D84(s32 arg0, M2C_UNK arg1)
-{
-  s8 *temp_v0;
-  temp_v0 = (arg0 * 0x48) + (&D_800AD210);
-  if (!((*((u16 *) (((s8 *) temp_v0) + 0))) & 1))
-  {
-    return 0;
-  }
-  return func_8001FCC0(arg1 & 0xFFFFFFFFFFFFFFFF, (*((s32 *) (((s8 *) temp_v0) + 0x40))) + 0x18, arg1);  // FAKE
+// FAKE: the arg1 mask is decomp slop that reproduces the retail register choice.
+s32 func_80022D84(s32 arg0, M2C_UNK arg1) {
+    GbSavePort* temp_v0;
+
+    temp_v0 = (GbSavePort*)((arg0 * 0x48) + &D_800AD210);
+    if (!(temp_v0->flags & 1)) {
+        return 0;
+    }
+    return func_8001FCC0(arg1 & 0xFFFFFFFFFFFFFFFF, (s32)temp_v0->mainData->playerName, arg1); // FAKE
 }
 
 s32 func_8001FBE4(s32);                             /* extern */
 extern s8 D_800AD210;
 s32 func_80022DDC(s32 arg0) {
-    s8 *temp_v0;
+    GbSavePort* temp_v0;
 
-    temp_v0 = (arg0 * 0x48) + &D_800AD210;
-    if (!(M2C_FIELD(temp_v0, u16 *, 0) & 1)) {
+    temp_v0 = (GbSavePort*)((arg0 * 0x48) + &D_800AD210);
+    if (!(temp_v0->flags & 1)) {
         return 0;
     }
-    return func_8001FBE4(M2C_FIELD(temp_v0, s32 *, 0x40) + 0x18);
+    return func_8001FBE4((s32)temp_v0->mainData->playerName);
 }
 
 s32 func_8001FCC0(M2C_UNK, s32, M2C_UNK);           /* extern */
 extern s8 D_800AD210;
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-s32 func_80022E30(s32 arg0, M2C_UNK arg1)
-{
-  s8 *temp_v0;
-  temp_v0 = (arg0 * 0x48) + (&D_800AD210);
-  if (!((*((u16 *) (((s8 *) temp_v0) + 0))) & 1))
-  {
-    return 0;
-  }
-  return func_8001FCC0(arg1 ^ 0, (*((s32 *) (((s8 *) temp_v0) + 0x40))) + 0x71, arg1);  // FAKE
+// FAKE: the arg1 ^ 0 is decomp slop that reproduces the retail register choice.
+s32 func_80022E30(s32 arg0, M2C_UNK arg1) {
+    GbSavePort* temp_v0;
+
+    temp_v0 = (GbSavePort*)((arg0 * 0x48) + &D_800AD210);
+    if (!(temp_v0->flags & 1)) {
+        return 0;
+    }
+    return func_8001FCC0(arg1 ^ 0, (s32)temp_v0->mainData->rivalName, arg1); // FAKE
 }
 
 s32 func_8001FBE4(s32);                             /* extern */
 extern s8 D_800AD210;
 s32 func_80022E88(s32 arg0) {
-    s8 *temp_v0;
+    GbSavePort* temp_v0;
 
-    temp_v0 = (arg0 * 0x48) + &D_800AD210;
-    if (!(M2C_FIELD(temp_v0, u16 *, 0) & 1)) {
+    temp_v0 = (GbSavePort*)((arg0 * 0x48) + &D_800AD210);
+    if (!(temp_v0->flags & 1)) {
         return 0;
     }
-    return func_8001FBE4(M2C_FIELD(temp_v0, s32 *, 0x40) + 0x71);
+    return func_8001FBE4((s32)temp_v0->mainData->rivalName);
 }
 
 /*
@@ -1269,13 +1265,13 @@ extern s8 D_800AD210;
  */
 s32 GbSave_HasPokedex(s32 arg0) {
     s32 var_v1;
-    s8 *temp_v0;
+    GbSavePort* temp_v0;
 
     var_v1 = 0;
     if (arg0 >= 0) {
-        temp_v0 = (arg0 * 0x48) + &D_800AD210;
-        if (M2C_FIELD(temp_v0, u16 *, 0) & 1) {
-            var_v1 = (M2C_FIELD(M2C_FIELD(temp_v0, s8 **, 0x40), s8 *, 0x46D) & 0x20) != 0;
+        temp_v0 = (GbSavePort*)((arg0 * 0x48) + &D_800AD210);
+        if (temp_v0->flags & 1) {
+            var_v1 = (temp_v0->mainData->unk_46D & 0x20) != 0;
         }
     }
     return var_v1;
@@ -1284,13 +1280,13 @@ s32 GbSave_HasPokedex(s32 arg0) {
 extern s8 D_800AD210;
 s32 func_80022F48(s32 arg0) {
     s32 var_v1;
-    s8 *temp_v0;
+    GbSavePort* temp_v0;
 
     var_v1 = 0;
     if (arg0 >= 0) {
-        temp_v0 = (arg0 * 0x48) + &D_800AD210;
-        if (M2C_FIELD(temp_v0, u16 *, 0) & 1) {
-            var_v1 = (M2C_FIELD(M2C_FIELD(temp_v0, s8 **, 0x40), s8 *, 0x513) & 1) != 0;
+        temp_v0 = (GbSavePort*)((arg0 * 0x48) + &D_800AD210);
+        if (temp_v0->flags & 1) {
+            var_v1 = (temp_v0->mainData->unk_513 & 1) != 0;
         }
     }
     return var_v1;

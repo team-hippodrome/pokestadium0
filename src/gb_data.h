@@ -143,9 +143,9 @@ typedef struct GbSaveMainData {
     /* 0x2C1 */ u8 boxItemsEnd;
     /* 0x2C2 */ u8 currentBox[2]; // @unverified: read as a big-endian u16 >> 8: bit 0x80 boxes in use, low bits the box (GbSave_GetBoxCount); pokered wCurrentBoxNum
     /* 0x2C4 */ char unk2C4[0x1A9];
-    /* 0x46D */ u8 unk_46D; // an event flag byte (SRAM 0x29ED): bit 0x20 is the got-Pokedex flag (GbSave_HasPokedex)
+    /* 0x46D */ s8 unk_46D; // an event flag byte (SRAM 0x29ED): bit 0x20 is the got-Pokedex flag (GbSave_HasPokedex)
     /* 0x46E */ char unk46E[0xA5];
-    /* 0x513 */ u8 unk_513; // bit 0 read by func_80022F48
+    /* 0x513 */ s8 unk_513; // bit 0 read by func_80022F48
     /* 0x514 */ char unk514[0x441];
     /* 0x955 */ GbSaveParty party;
     /* 0xAAD */ GbSaveBox currentBoxData; // @unverified: GbSave_GetBoxEntry for the current box; pokered wBoxDataStart
