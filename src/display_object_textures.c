@@ -26,7 +26,7 @@ typedef struct ret_func_unk_D_800ABE10 {
     /* 0x0C */ char unk0C[0x8];
     /* 0x14 */ func_unk_D_800ABE10 unk_14;
 } ret_func_unk_D_800ABE10;
-extern unk_D_800ABE10 D_800AC7A0;
+extern ModelLoaderThread D_800AC7A0;
 
 #include "m2c_macros.h"
 
@@ -42,8 +42,8 @@ Fragment* BinArchive_LoadFileFromLbaRange(MainPoolState* arg0, BinArchive* arg1,
 Fragment* BinArchive_LoadFileToPool(MainPoolState* arg0, BinArchive* arg1, s32 arg2, u32 arg3, s32 arg4);
 s32 Fragment_ProcessGeoLayout(MemoryBlock* arg0, Fragment* arg1, arg1_func_80010CA8 arg2);
 void Fragment_ProcessGeoLayoutList(MemoryBlock* arg0, arg1_func_80019420* arg1);
-void PokeIcon_LoadModelArchive(unk_func_80019600* arg0);
-void PokeIcon_LoadMultipleModels(unk_func_80019600* arg0);
+void PokeIcon_LoadModelArchive(ModelLoadRequest* arg0);
+void PokeIcon_LoadMultipleModels(ModelLoadRequest* arg0);
 void PokeIcon_StartThread(void);
 unk_D_86002F30* Model_LoadByArchiveIndex(s32 arg0);
 unk_D_86002F30* Model_LoadForPokemon(BattleMon* arg0);
@@ -154,8 +154,8 @@ Fragment* Fragment_LoadFromLbaRange(MainPoolState* arg0, unk_func_800041C0* arg1
     if (arg3 >= sp3C) {
         temp_s1 = arg1->unk_04 + (u8*)arg2;
 
-        Storage_QueueDiskTransfer(0, arg2, arg1->unk_00, arg1->unk_02, &D_800AC7A0.unk_9EC, 0);
-        osRecvMesg(&D_800AC7A0.unk_9EC, NULL, 1);
+        Storage_QueueDiskTransfer(0, arg2, arg1->unk_00, arg1->unk_02, &D_800AC7A0.diskQueue, 0);
+        osRecvMesg(&D_800AC7A0.diskQueue, NULL, 1);
 
         if (((u32*)temp_s1->magic)[0] == 'PERS' && (((u32*)temp_s1->magic)[1] == '-SZP')) {
             sp38 = Yay0_AllocAndDecompressFragment(arg0, arg2, temp_s1);
@@ -257,38 +257,38 @@ void Fragment_ProcessGeoLayoutList(MemoryBlock* arg0, arg1_func_80019420* arg1) 
 }
 
 /** Loads a Pokemon icon model archive on the loader thread. */
-void PokeIcon_LoadModelArchive(unk_func_80019600* arg0) {
+void PokeIcon_LoadModelArchive(ModelLoadRequest* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     MemoryBlock* sp28;
     Fragment* sp24;
 
     sp28 = MainPool_InitState(arg0->pool, arg0->size);
-    sp24 = BinArchive_LoadFileToPool(sp28, D_800AC7A0.unk_A04.unk_00, arg0->unk_02, D_800AC7A0.unk_A04.unk_08, 0x28000);
+    sp24 = BinArchive_LoadFileToPool(sp28, D_800AC7A0.archives.modelArchive, arg0->fileIndex, D_800AC7A0.archives.scratchBuffer, 0x28000);
 
     if (sp24 != NULL) {
-        arg0->unk_08 = Fragment_ProcessGeoLayout(sp28, sp24, arg0->unk_18);
+        arg0->result = Fragment_ProcessGeoLayout(sp28, sp24, arg0->colorVariant);
     } else {
-        arg0->unk_08 = 0;
+        arg0->result = 0;
     }
 
     arg0->size = sp28->size + 0x10;
 }
 
 /** Loads several Pokemon icon models on the loader thread. */
-void PokeIcon_LoadMultipleModels(unk_func_80019600* arg0) {
+void PokeIcon_LoadMultipleModels(ModelLoadRequest* arg0) {
     Fragment* temp_v0;
     MainPoolState* temp_s3;
     s32 var_s2;
     s32* temp_s6;
     s16* var_s0;
 
-    temp_s6 = arg0->unk_08;
+    temp_s6 = arg0->result;
     var_s2 = 0;
     temp_s3 = MainPool_InitState(arg0->pool, arg0->size);
-    var_s0 = arg0->unk_0C;
+    var_s0 = arg0->fileList;
 
     while (*var_s0 != -1) {
-        temp_v0 = BinArchive_LoadFileToPool(temp_s3, D_800AC7A0.unk_A04.unk_04, *var_s0, D_800AC7A0.unk_A04.unk_08, 0x28000);
+        temp_v0 = BinArchive_LoadFileToPool(temp_s3, D_800AC7A0.archives.resourceArchive, *var_s0, D_800AC7A0.archives.scratchBuffer, 0x28000);
         if (temp_v0 == NULL) {
             break;
         }
@@ -305,14 +305,14 @@ void PokeIcon_LoadMultipleModels(unk_func_80019600* arg0) {
 
 /** Main loop of the thread that loads Pokemon icon models on request. */
 void PokeIcon_ThreadMain(UNUSED void* arg0) {
-    unk_func_80019600* sp34;
+    ModelLoadRequest* sp34;
 
     __osSetFpcCsr(0x01000F00);
 
     while (true) {
-        osRecvMesg(&D_800AC7A0.unk_9D0, &sp34, 1);
+        osRecvMesg(&D_800AC7A0.requestQueue, &sp34, 1);
 
-        switch (sp34->unk_00) {
+        switch (sp34->kind) {
             case 1:
                 PokeIcon_LoadModelArchive(sp34);
                 break;
@@ -330,10 +330,10 @@ void PokeIcon_ThreadMain(UNUSED void* arg0) {
 
 /** Creates the message queues and starts the icon loader thread. */
 void PokeIcon_StartThread(void) {
-    osCreateMesgQueue(&D_800AC7A0.unk_9D0, &D_800AC7A0.unk_9B0, 8);
-    osCreateMesgQueue(&D_800AC7A0.unk_9EC, &D_800AC7A0.unk_9E8, 1);
-    osCreateThread(&D_800AC7A0.unk_000, 7, PokeIcon_ThreadMain, NULL, &D_800AC7A0.unk_9B0, 0xA);
-    osStartThread(&D_800AC7A0.unk_000);
+    osCreateMesgQueue(&D_800AC7A0.requestQueue, D_800AC7A0.requestMsgs, 8);
+    osCreateMesgQueue(&D_800AC7A0.diskQueue, &D_800AC7A0.diskMsg, 1);
+    osCreateThread(&D_800AC7A0.thread, 7, PokeIcon_ThreadMain, NULL, D_800AC7A0.stack + sizeof(D_800AC7A0.stack), 0xA);
+    osStartThread(&D_800AC7A0.thread);
 }
 
 s8 *func_800023C4(M2C_UNK, M2C_UNK);              /* extern */
@@ -385,31 +385,31 @@ void PokeIcon_OpenModelArchives(void) {
 /** Sends a model load request to the icon loader thread. */
 s32 PokeIcon_RequestFrameLoad(ModelLoadContext* arg0, u16 arg1, arg1_func_80010CA8 arg2) {
     s32 sp1C;
-    sp18_func_800198E4* sp18;
+    ModelLoadRequest* sp18;
     s32 var_v1;
 
     sp1C = 0;
     if ((arg0->flags & 1) && !(arg0->pendingLoads & 1)) {
-        sp18 = Util_Malloc(sizeof(sp18_func_800198E4));
+        sp18 = Util_Malloc(sizeof(ModelLoadRequest));
         if (sp18 != NULL) {
             var_v1 = arg0->bufferIndex;
             if (arg0->flags & 4) {
                 var_v1 ^= 1;
             }
 
-            sp18->unk_00 = 1;
-            sp18->unk_02 = arg1 - 1;
-            sp18->unk_04 = &arg0->modelQueue;
-            sp18->unk_08 = 0;
-            sp18->unk_0C = 0;
-            sp18->unk_10 = arg0->modelBuffers[var_v1];
-            sp18->unk_14 = 0x3C000;
-            sp18->unk_18 = arg2;
+            sp18->kind = 1;
+            sp18->fileIndex = arg1 - 1;
+            sp18->queue = &arg0->modelQueue;
+            sp18->result = 0;
+            sp18->fileList = 0;
+            sp18->pool = arg0->modelBuffers[var_v1];
+            sp18->size = 0x3C000;
+            sp18->colorVariant = arg2;
 
-            if ((arg0->loadedModel != NULL) && (arg0->loadedModel->modelId == arg1) && (arg0->colorVariant.raw == sp18->unk_18.raw)) {
-                osSendMesg(sp18->unk_04, sp18, 1);
+            if ((arg0->loadedModel != NULL) && (arg0->loadedModel->modelId == arg1) && (arg0->colorVariant.raw == sp18->colorVariant.raw)) {
+                osSendMesg(sp18->queue, sp18, 1);
             } else {
-                osSendMesg(&D_800AC7A0.unk_9D0, sp18, 1);
+                osSendMesg(&D_800AC7A0.requestQueue, sp18, 1);
             }
 
             arg0->pendingLoads |= 1;
@@ -423,20 +423,20 @@ s32 PokeIcon_RequestFrameLoad(ModelLoadContext* arg0, u16 arg1, arg1_func_80010C
 /** Sends a background model load request to the icon loader thread. */
 s32 PokeIcon_RequestBackgroundLoad(ModelLoadContext* arg0, s32 arg1, s32 arg2) {
     s32 sp1C = 0;
-    sp18_func_800198E4* temp_v0;
+    ModelLoadRequest* temp_v0;
 
     if ((arg0->flags & 2) && !(arg0->pendingLoads & 2)) {
-        temp_v0 = Util_Malloc(sizeof(sp18_func_800198E4));
+        temp_v0 = Util_Malloc(sizeof(ModelLoadRequest));
         if (temp_v0 != NULL) {
-            temp_v0->unk_00 = 2;
-            temp_v0->unk_02 = 0;
-            temp_v0->unk_04 = &arg0->backgroundQueue;
-            temp_v0->unk_08 = arg2;
-            temp_v0->unk_0C = arg1;
-            temp_v0->unk_10 = arg0->backgroundBuffer;
-            temp_v0->unk_14 = 0x18000;
+            temp_v0->kind = 2;
+            temp_v0->fileIndex = 0;
+            temp_v0->queue = &arg0->backgroundQueue;
+            temp_v0->result = arg2;
+            temp_v0->fileList = arg1;
+            temp_v0->pool = arg0->backgroundBuffer;
+            temp_v0->size = 0x18000;
 
-            osSendMesg(&D_800AC7A0.unk_9D0, temp_v0, 1);
+            osSendMesg(&D_800AC7A0.requestQueue, temp_v0, 1);
 
             sp1C = 1;
             arg0->pendingLoads |= 2;
@@ -447,27 +447,27 @@ s32 PokeIcon_RequestBackgroundLoad(ModelLoadContext* arg0, s32 arg1, s32 arg2) {
 }
 
 /** Applies a load result received from the icon loader thread. */
-s32 PokeIcon_ApplyLoadResult(ModelLoadContext* arg0, sp18_func_800198E4* arg1) {
+s32 PokeIcon_ApplyLoadResult(ModelLoadContext* arg0, ModelLoadRequest* arg1) {
     s32 sp1C = 0;
 
-    switch (arg1->unk_00) {
+    switch (arg1->kind) {
         case 1:
             arg0->pendingLoads &= ~1;
-            if (arg1->unk_08 != 0) {
+            if (arg1->result != 0) {
                 if (arg0->flags & 4) {
                     arg0->bufferIndex ^= 1;
                 }
-                arg0->loadedModel = arg1->unk_08;
-                arg0->modelSize = arg1->unk_14;
-                arg0->colorVariant = arg1->unk_18;
+                arg0->loadedModel = arg1->result;
+                arg0->modelSize = arg1->size;
+                arg0->colorVariant = arg1->colorVariant;
             }
             sp1C = 1;
             break;
 
         case 2:
             arg0->pendingLoads &= ~2;
-            arg0->loadedBackground = arg1->unk_08;
-            arg0->backgroundSize = arg1->unk_14;
+            arg0->loadedBackground = arg1->result;
+            arg0->backgroundSize = arg1->size;
             sp1C = 1;
             break;
     }
@@ -478,7 +478,7 @@ s32 PokeIcon_ApplyLoadResult(ModelLoadContext* arg0, sp18_func_800198E4* arg1) {
 
 /** Checks whether the icon loader has finished a requested model. */
 s32 PokeIcon_PollFrameLoad(ModelLoadContext* arg0) {
-    sp18_func_800198E4* sp1C;
+    ModelLoadRequest* sp1C;
     s32 sp18 = 0;
 
     if (osRecvMesg(&arg0->modelQueue, &sp1C, 0) != -1) {
@@ -494,7 +494,7 @@ s32 PokeIcon_PollFrameLoad(ModelLoadContext* arg0) {
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 PokeIcon_PollBackgroundLoad(ModelLoadContext* arg0) {
-    sp18_func_800198E4* sp1C;
+    ModelLoadRequest* sp1C;
     s32 sp18 = 0;
 
     if (osRecvMesg((OSMesgQueue*)((u8*)arg0 + 0x44), &sp1C, 0) != -1) {
@@ -532,7 +532,7 @@ unk_D_86002F30* Model_LoadByArchiveIndex(s32 arg0) {
     unk_D_86002F30* sp24 = NULL;
     MemoryBlock* sp20;
 
-    sp2C = BinArchive_GetFile(D_800AC7A0.unk_A04.unk_00, arg0 - 1);
+    sp2C = BinArchive_GetFile(D_800AC7A0.archives.modelArchive, arg0 - 1);
     if (sp2C != NULL) {
         sp20 = MainPool_AllocState(main_pool_get_available(), 0);
         sp28.raw = 0;
@@ -550,7 +550,7 @@ unk_D_86002F30* Model_LoadForPokemon(BattleMon* arg0) {
     unk_D_86002F30* sp24 = NULL;
     MemoryBlock* sp20;
 
-    sp2C = BinArchive_GetFile(D_800AC7A0.unk_A04.unk_00, arg0->species.id - 1);
+    sp2C = BinArchive_GetFile(D_800AC7A0.archives.modelArchive, arg0->species.id - 1);
     if (sp2C != NULL) {
         sp20 = MainPool_AllocState(main_pool_get_available(), 0);
         Model_ComputeSizeVariant(&sp28, arg0);
@@ -567,7 +567,7 @@ arg1_func_80019420* BattleAnim_LoadResourceTable(s32 arg0) {
     MemoryBlock* sp1C;
 
     sp20 = NULL;
-    sp24 = BinArchive_GetFile(D_800AC7A0.unk_A04.unk_04, arg0);
+    sp24 = BinArchive_GetFile(D_800AC7A0.archives.resourceArchive, arg0);
     if (sp24 != NULL) {
         sp1C = MainPool_AllocState(main_pool_get_available(), 0);
         sp20 = sp24->data;

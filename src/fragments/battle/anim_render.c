@@ -64,9 +64,9 @@ void BattleAnim_RenderEffectsFrame(CameraNode* arg0) {
     ParticleGfx_SetBlendColor(gBlendColorR, gBlendColorG, D_8219A8D6, D_8219A8D8);
     Battle_SetStageTintColor(gSavedPrimColorR, gSavedPrimColorG, gSavedPrimColorB);
     func_8216D948(0, (M2C_UNK)arg0);
-    guOrtho(&gParticleMatrixPool->unk_5B80, 0.0f, 320.0f, 240.0f, 0.0f, -2.0f, 2.0f, 1.0f);
+    guOrtho(&gParticleMatrixPool->orthoMatrix, 0.0f, 320.0f, 240.0f, 0.0f, -2.0f, 2.0f, 1.0f);
 
-    gSPMatrix(gDisplayListHead++, (u32)&gParticleMatrixPool->unk_5B80 & 0x1FFFFFFF,
+    gSPMatrix(gDisplayListHead++, (u32)&gParticleMatrixPool->orthoMatrix & 0x1FFFFFFF,
               G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_PROJECTION);
     gSPDisplayList(gDisplayListHead++, gDL_BeginUIOverlay);
 

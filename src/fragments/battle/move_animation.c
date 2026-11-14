@@ -206,7 +206,7 @@ void func_8210568C(ActivePokemon*, s32, s32);
 void BattleScene_TickStartRowAnimRecord(ActivePokemon* active_pokemon) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 row_index = active_pokemon->animationState;
-    s32 cue_index = sBattleSceneStateRowTable[row_index].unk_20;
+    s32 cue_index = sBattleSceneStateRowTable[row_index].cueIndex;
     MovePresentationCue* cue;
 
     cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[cue_index];
@@ -229,7 +229,7 @@ extern ModelDimensions D_8218934C[];
  */
 void BattleScene_TickQueueRowEffectList3AtAnimEnd(ActivePokemon* active_pokemon) {
     s32 row_index = active_pokemon->animationState;
-    s32 cue_index = sBattleSceneStateRowTable[row_index].unk_20;
+    s32 cue_index = sBattleSceneStateRowTable[row_index].cueIndex;
     MovePresentationCue* cue;
 
     cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[cue_index];
@@ -606,7 +606,7 @@ void Battle_HandleStatBoostingMoveAnimation(ActivePokemon* active_pokemon) {
     BattleScene_GetParticipantSideIndex(active_pokemon);
     anim = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[runtime->usedMove - 1];
 
-    if (active_pokemon->animationTimer == (anim->unk_09 + 1)) {
+    if (active_pokemon->animationTimer == (anim->statUpEffectFrame + 1)) {
         if (BattleAnim_IsAssetLoadBusy(active_pokemon) == 0) {
             if (((move == GROWTH) || (move == MEDITATE) || (move == AGILITY) || (move == HARDEN) || (move == WITHDRAW) ||
                  (move == SWORDS_DANCE) || (move == DOUBLE_TEAM) || (move == MINIMIZE) || (move == DEFENSE_CURL) || (move == BARRIER) ||
@@ -632,7 +632,7 @@ void BattleScene_TickMoveUseEnd(ActivePokemon* active_pokemon) {
 
     runtime = &active_pokemon->state.runtime;
     cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[runtime->usedMove - 1];
-    if ((active_pokemon->animationTimer == (cue->unk_09 + 0x1F)) && (BattleAnim_IsAssetLoadBusy(active_pokemon) == 0)) {
+    if ((active_pokemon->animationTimer == (cue->statUpEffectFrame + 0x1F)) && (BattleAnim_IsAssetLoadBusy(active_pokemon) == 0)) {
         if (runtime->usedMove == 0x6A) {
             Model_SetMaterialTextureMode(&active_pokemon->displayObject, 1);
         }
@@ -706,8 +706,8 @@ void BattleScene_EnterRepeatHitRow(ActivePokemon* active_pokemon) {
             BattleAnim_SetFlagForRockThrowingMoves(active_pokemon);
             ModelAnim_SetAnimation(&active_pokemon->displayObject, cue->id);
             ModelAnim_SetFrame(&active_pokemon->displayObject, cue->currentFrame);
-            if (cue->unk_01 != 0xFF) {
-                ModelAnim_SetEventTrack(&active_pokemon->displayObject, cue->unk_01);
+            if (cue->eventTrack != 0xFF) {
+                ModelAnim_SetEventTrack(&active_pokemon->displayObject, cue->eventTrack);
                 ModelAnim_SetEventFrame(&active_pokemon->displayObject, cue->currentFrame);
                 state->modelEventTrackState = 1;
             }
@@ -903,7 +903,7 @@ void func_800414B0(u8, s32, s32, s32);
  */
 void BattleScene_EnterIdleRow(ActivePokemon* active_pokemon) {
     s32 row_index = active_pokemon->animationState;
-    s32 cue_index = sBattleSceneStateRowTable[row_index].unk_20;
+    s32 cue_index = sBattleSceneStateRowTable[row_index].cueIndex;
     MovePresentationCue* cue;
     BattleMon* party_pokemon;
     ActivePokemonState* state;
@@ -1380,7 +1380,7 @@ void BattleScene_TickFaintRowQueueCollapseEffect(ActivePokemon* active_pokemon) 
 }
 
 /**
- * Same as BattleScene_TickQueueList3Selector2OrC, using cue unk_B10.
+ * Same as BattleScene_TickQueueList3Selector2OrC, using cue unk79B.
  * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
  * once, from the command menu to the end of its turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
@@ -1488,7 +1488,7 @@ void BattleScene_TickStatDownPlayEffect(ActivePokemon* active_pokemon) {
 
     cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon) == 0]->moveCues[active_pokemon->state.runtime.usedMove - 1];
     other = BattleScene_GetParticipantSideIndex(active_pokemon) == 0;
-    if ((cue->unk_08 + 1) == sActivePokemon[other]->animationTimer) {
+    if ((cue->statDownEffectFrame + 1) == sActivePokemon[other]->animationTimer) {
         if (BattleAnim_IsAssetLoadBusy((s8*)active_pokemon) == 0) {
             if (sStatCanBeChangedFurther == 1) {
                 BattleAnim_QueueEffectList6(1, sActivePokemon[other]);
@@ -1600,14 +1600,14 @@ void BattleScene_RegisterStateTickCallback(ActivePokemon* active_pokemon, Battle
     for (i = 0; i < 7; i++) {
         if (sBattleSceneStateTickSentinel == sBattleSceneStateTickSlots[i].callback) {
             sBattleSceneStateTickSlots[i].callback = callback;
-            sBattleSceneStateTickSlots[i].unk_00 = active_pokemon;
+            sBattleSceneStateTickSlots[i].pokemon = active_pokemon;
             break;
         }
     }
 }
 
 /**
- * Sets the cue 166 (unkA60) event track on the participant at this side index.
+ * Sets the cue 166 (unk722) event track on the participant at this side index.
  */
 void BattleScene_SetOpponentEventTrackA6(ActivePokemon* active_pokemon) {
     BattleAnim_SetModelEventTrackFromRow(sActivePokemon[BattleScene_GetParticipantSideIndex(active_pokemon)], BATTLE_CUE_A60);
@@ -1622,14 +1622,14 @@ void BattleScene_SetOpponentEventTrackA6(ActivePokemon* active_pokemon) {
 void BattleScene_EnterStateRow(ActivePokemon* active_pokemon, s32 row_index) {
     active_pokemon->animationState = row_index;
 
-    sBattleSceneStateRowTable[row_index].unk_04[0](active_pokemon);
-    sBattleSceneStateRowTable[row_index].unk_04[1](active_pokemon);
-    sBattleSceneStateRowTable[row_index].unk_04[2](active_pokemon);
+    sBattleSceneStateRowTable[row_index].callbacks[0](active_pokemon);
+    sBattleSceneStateRowTable[row_index].callbacks[1](active_pokemon);
+    sBattleSceneStateRowTable[row_index].callbacks[2](active_pokemon);
 
-    BattleScene_RegisterStateTickCallback(active_pokemon, sBattleSceneStateRowTable[row_index].unk_04[3]);
-    BattleScene_RegisterStateTickCallback(active_pokemon, sBattleSceneStateRowTable[row_index].unk_04[4]);
-    BattleScene_RegisterStateTickCallback(active_pokemon, sBattleSceneStateRowTable[row_index].unk_04[5]);
-    BattleScene_RegisterStateTickCallback(active_pokemon, sBattleSceneStateRowTable[row_index].unk_04[6]);
+    BattleScene_RegisterStateTickCallback(active_pokemon, sBattleSceneStateRowTable[row_index].callbacks[3]);
+    BattleScene_RegisterStateTickCallback(active_pokemon, sBattleSceneStateRowTable[row_index].callbacks[4]);
+    BattleScene_RegisterStateTickCallback(active_pokemon, sBattleSceneStateRowTable[row_index].callbacks[5]);
+    BattleScene_RegisterStateTickCallback(active_pokemon, sBattleSceneStateRowTable[row_index].callbacks[6]);
 }
 
 /**
@@ -1642,7 +1642,7 @@ void BattleScene_TickStateCallbacks(void) {
     sActivePokemon[1]->animationTimer++;
 
     for (sBattleSceneStateTickSlotIndex = 0; sBattleSceneStateTickSlotIndex < 7; sBattleSceneStateTickSlotIndex++) {
-        sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback(sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].unk_00);
+        sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback(sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].pokemon);
     }
 }
 
@@ -1928,7 +1928,7 @@ void BattleAnim_SetModelEventTrackFromRow(ActivePokemon* pokemon, s32 cue_index)
     ActivePokemonState* pokemon_state = &pokemon->state;
 
     if (func_82101FC4(pokemon) == 0) {
-        event_track = sSideBattleCues[BattleScene_GetParticipantSideIndex(pokemon)]->moveCues[cue_index].unk_01;
+        event_track = sSideBattleCues[BattleScene_GetParticipantSideIndex(pokemon)]->moveCues[cue_index].eventTrack;
         if ((event_track != 0xFF) && (pokemon_state->modelEventTrackState != 2)) {
             if ((cue_index == BATTLE_CUE_IDLE) && (pokemon->displayObject.objectType == DUGTRIO)) {
                 ModelAnim_SetEventFrame(&pokemon->displayObject, 0);
@@ -1963,7 +1963,7 @@ s32 BattleAnim_TrySetModelEventTrackFromRow(ActivePokemon* active_pokemon, s32 c
         return 0;
     }
 
-    event_track = sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[cue_index].unk_01;
+    event_track = sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[cue_index].eventTrack;
     if (event_track == 0xFF) {
         return 1;
     }
@@ -1985,7 +1985,7 @@ void func_8210568C(ActivePokemon* active_pokemon, s32 cue_index, s32 event_state
     s32 event_track;
 
     if (func_82101FC4(active_pokemon) == 0) {
-        event_track = sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[cue_index].unk_01;
+        event_track = sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->moveCues[cue_index].eventTrack;
         if (event_track != 0xFF) {
             ModelAnim_SetEventFrame(&active_pokemon->displayObject, 0);
             ModelAnim_SetEventTrack(&active_pokemon->displayObject, event_track);
@@ -2019,7 +2019,7 @@ s32 func_82105724(ActivePokemon* arg0, s32 arg1) {
 }
 
 /**
- * Like BattleScene_IsRowWaitComplete, but waits the unkA60 cue's frame count
+ * Like BattleScene_IsRowWaitComplete, but waits the unk722 cue's frame count
  * when it is at least 11.
  * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran
  * while the new Pokémon was sent out.
@@ -2969,7 +2969,7 @@ void BattleThumbnail_LoadOwnerCameraFramingConstants(ActivePokemon* active_pokem
     active_pokemon->thumbnail.camera->viewport.x = sSideThumbnailSettings[side].x;
     active_pokemon->thumbnail.camera->viewport.y = sSideThumbnailSettings[side].y;
 
-    active_pokemon->thumbnail.side = sSideThumbnailSettings[side].unk_14;
+    active_pokemon->thumbnail.side = sSideThumbnailSettings[side].side;
 
     active_pokemon->thumbnail.camera->perspective.nearPlane = sSideThumbnailSettings[side].nearPlane;
     active_pokemon->thumbnail.camera->perspective.farPlane = sSideThumbnailSettings[side].farPlane;

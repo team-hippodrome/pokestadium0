@@ -131,8 +131,8 @@ void BattleScene_ShowSecondaryModelsAtMainTransform(ActivePokemon* pokemon) {
     s16 sp64[] = { 0x0, 0xE38, 0xF1C8 }; // D_821891A8
 
     for (i = 0; i < 3; i++) {
-        pokemon->afterimages[i].unk_16C = 0;
-        pokemon->afterimages[i].unk_16A = sp64[i];
+        pokemon->afterimages[i].orbitSpeed = 0;
+        pokemon->afterimages[i].orbitAngle = sp64[i];
         pokemon->afterimages[i].displayObject.lodFraction = 0;
         pokemon->afterimages[i].displayObject.node.flags |= 1;
         BattleAnim_Vec3fCopy(&pokemon->afterimages[i].displayObject.position, &pokemon->displayObject.position);
@@ -156,11 +156,11 @@ void BattleScene_UpdateSecondaryModelOrbit(ActivePokemon* pokemon) {
 
     for (i = 0; i < 3; i++) {
         pokemon->afterimages[i].displayObject.lodFraction = Math_StepToS32(pokemon->afterimages[i].displayObject.lodFraction, 0x3C, 5, 5);
-        pokemon->afterimages[i].unk_16C = Math_StepToS32(pokemon->afterimages[i].unk_16C, 0x38E, 0x64, 0x64);
-        pokemon->afterimages[i].unk_16C = Math_StepToS32(pokemon->afterimages[i].unk_16C, 0x38E, 0x64, 0x64);
-        pokemon->afterimages[i].unk_16A += pokemon->afterimages[i].unk_16C;
+        pokemon->afterimages[i].orbitSpeed = Math_StepToS32(pokemon->afterimages[i].orbitSpeed, 0x38E, 0x64, 0x64);
+        pokemon->afterimages[i].orbitSpeed = Math_StepToS32(pokemon->afterimages[i].orbitSpeed, 0x38E, 0x64, 0x64);
+        pokemon->afterimages[i].orbitAngle += pokemon->afterimages[i].orbitSpeed;
 
-        tmp = SINS(pokemon->afterimages[i].unk_16A) * (BattleScene_GetParticipantModelRadiusScaled(pokemon) * sp4C[i]);
+        tmp = SINS(pokemon->afterimages[i].orbitAngle) * (BattleScene_GetParticipantModelRadiusScaled(pokemon) * sp4C[i]);
         BattleAnim_Vec3fSetPolarXZ(&sp5C, tmp, pokemon->displayObject.rotation.y);
 
         pokemon->afterimages[i].displayObject.position.x = pokemon->displayObject.position.x + sp5C.x;

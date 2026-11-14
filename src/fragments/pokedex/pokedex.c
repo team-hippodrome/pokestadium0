@@ -806,7 +806,7 @@ s32 Pokedex_DrawEntryScreen(s32 arg0, s32 arg1) {
 
 /** Loads a Pokemon icon for the Pokedex. */
 void Pokedex_LoadIcon(u8* arg0, s32 arg1) {
-    unk_func_8001A024* sp1C;
+    PokeIconRenderer* sp1C;
     void* sp18;
 
     main_pool_push_state('ICON');
@@ -839,7 +839,7 @@ extern u8 D_8A105818;
 void Pokedex_CreateModelPreview(s32 arg0, s32 arg1) {
     main_pool_push_state(0x50494354);
     D_8A12FF98 = (s32)PokeIcon_CreateModelPreview((ModelLoadContext*)arg0, 0x100, 0xD2, 0, 0, 0xF4, 0xD2, &D_8A105818);
-    PokeIcon_SetPreviewSpecies((unk_func_8001B1FC*)D_8A12FF98, arg1, 0x108D);
+    PokeIcon_SetPreviewSpecies((PokeModelPreview*)D_8A12FF98, arg1, 0x108D);
 }
 
 M2C_UNK func_80002620(M2C_UNK);                     /* extern */

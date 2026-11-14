@@ -998,7 +998,7 @@ s32 BattleMenu_UpdateOrderSelect(s32 arg0) {
     Input_ResetRepeatState();
     BattleMenu_FeedScriptedComOrderInput();
     GeoRender_AdvanceFrameCounter();
-    i = PokeIcon_ProcessAllSlots((unk_func_8001A024*)D_82302BCC, 0);
+    i = PokeIcon_ProcessAllSlots((PokeIconRenderer*)D_82302BCC, 0);
     if (i != -1) {
         (D_82302B48)[i % 4].unk_0006 = 3;
     }
@@ -1157,7 +1157,7 @@ void BattleMenu_AddOrderSelectPanel(s16 arg0, s16 arg1, TeamRoster* arg2, s32 ar
 
     for (i = 0; i < arg2->rosterInfo->numberOfPokemonCanBePicked; i++, j += 4) {
         Pokemon_PrepareBattleMon(&arg2->rosterInfo->battleMon[i]);
-        func_8001833C((unk_func_8001A024*)D_82302BCC, j, &arg2->rosterInfo->battleMon[i], D_82302800[arg2->controllerPort]);
+        func_8001833C((PokeIconRenderer*)D_82302BCC, j, &arg2->rosterInfo->battleMon[i], D_82302800[arg2->controllerPort]);
     }
 
     D_82302B44++;

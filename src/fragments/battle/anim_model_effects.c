@@ -268,8 +268,8 @@ void BattleAnim_BuildReflectiveTextureDisplayList(Gfx* arg0, s32 arg1, u16 arg2)
  */
 void BattleAnim_AllocateReflectiveTextureDisplayList(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        BattleAnim_BuildReflectiveTextureDisplayList(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        BattleAnim_BuildReflectiveTextureDisplayList(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -417,8 +417,8 @@ void BattleAnim_BuildEffect125DisplayList(Gfx* arg0, u16 arg1) {
  */
 void BattleAnim_AllocateEffect125DisplayList(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 10);
-        BattleAnim_BuildEffect125DisplayList(arg1->unk_18, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 10);
+        BattleAnim_BuildEffect125DisplayList(arg1->displayList, D_80060484);
     }
 }
 
@@ -768,8 +768,8 @@ void ParticleEffect_DrawSimple(Gfx* arg0, u8* arg1) {
  */
 void ParticleEffect_CreateSimpleDL(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        ParticleEffect_DrawSimple(arg1->unk_18, arg1->unk_14);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        ParticleEffect_DrawSimple(arg1->displayList, arg1->texture);
     }
 }
 
@@ -920,8 +920,8 @@ void ParticleEffect_DrawNode(Gfx* arg0, s32 arg1, u16 arg2) {
  */
 void ParticleEffect_CreateNodeDL(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        ParticleEffect_DrawNode(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        ParticleEffect_DrawNode(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -944,8 +944,8 @@ void ParticleEffect_DrawNodeVariant(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED 
  */
 void ParticleEffect_CreateNodeVariantDL(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        ParticleEffect_DrawNodeVariant(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        ParticleEffect_DrawNodeVariant(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -970,8 +970,8 @@ void ParticleEffect_DrawSimpleOffsetTileNoCamera(Gfx* arg0, u8* arg1, UNUSED u16
  */
 void ParticleEffect_CreateSimpleOffsetTileNoCameraDL(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        ParticleEffect_DrawSimpleOffsetTileNoCamera(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        ParticleEffect_DrawSimpleOffsetTileNoCamera(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -1165,8 +1165,8 @@ void BattleAnim_BuildEffect49DisplayList(Gfx* arg0, UNUSED s32 arg1, UNUSED u16 
  */
 void BattleAnim_AllocateEffect49DisplayList(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        BattleAnim_BuildEffect49DisplayList(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        BattleAnim_BuildEffect49DisplayList(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -1293,8 +1293,8 @@ void BattleAnim_BuildEffect63DisplayList(Gfx* arg0, s32 arg1, u16 arg2) {
  */
 void BattleAnim_AllocateEffect63DisplayList(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        BattleAnim_BuildEffect63DisplayList(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        BattleAnim_BuildEffect63DisplayList(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -1323,8 +1323,8 @@ void BattleAnim_BuildEffect75DisplayList(Gfx* arg0, UNUSED s32 arg1, UNUSED u16 
  */
 void BattleAnim_AllocateEffect75DisplayList(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        BattleAnim_BuildEffect75DisplayList(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        BattleAnim_BuildEffect75DisplayList(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -1584,8 +1584,8 @@ void Gfx_DrawParticleAlpha(Gfx* arg0, s32 arg1, u16 arg2) {
  */
 void Particle_CreateDisplayList_Alpha(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        Gfx_DrawParticleAlpha(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        Gfx_DrawParticleAlpha(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -1620,8 +1620,8 @@ void Gfx_DrawParticleTexture4b(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
  */
 void Particle_CreateDisplayList_Texture4b(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        Gfx_DrawParticleTexture4b(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        Gfx_DrawParticleTexture4b(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -1656,8 +1656,8 @@ void Gfx_DrawParticleGreenPrim(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
  */
 void Particle_CreateDisplayList_GreenPrim(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        Gfx_DrawParticleGreenPrim(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        Gfx_DrawParticleGreenPrim(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -1791,8 +1791,8 @@ void Gfx_DrawParticleCyanEnv(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg
  */
 void Particle_CreateDisplayList_CyanEnv(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        Gfx_DrawParticleCyanEnv(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        Gfx_DrawParticleCyanEnv(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -1822,8 +1822,8 @@ void Gfx_DrawParticleBluePrim(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 ar
  */
 void Particle_CreateDisplayList_BluePrim(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        Gfx_DrawParticleBluePrim(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        Gfx_DrawParticleBluePrim(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -2056,8 +2056,8 @@ void Gfx_DrawParticleCustomColors(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u1
  */
 void Particle_CreateDisplayList_CustomColors(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        Gfx_DrawParticleCustomColors(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        Gfx_DrawParticleCustomColors(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -2480,8 +2480,8 @@ void Gfx_DrawParticleFromTempColors(Gfx* arg0, s32 arg1, u16 arg2) {
  */
 void Particle_CreateDisplayList_TempColors(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        Gfx_DrawParticleFromTempColors(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        Gfx_DrawParticleFromTempColors(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -2555,8 +2555,8 @@ void Gfx_DrawParticleDualTileDiagonal4(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
  */
 void Particle_CreateDisplayList_DualTileDiagonal4(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        Gfx_DrawParticleDualTileDiagonal4(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        Gfx_DrawParticleDualTileDiagonal4(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -2581,8 +2581,8 @@ void Gfx_DrawParticleDualTileAntiDiagonal1(Gfx* arg0, u8* arg1, UNUSED u16 arg2)
  */
 void Particle_CreateDisplayList_DualTileAntiDiagonal1(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        Gfx_DrawParticleDualTileAntiDiagonal1(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        Gfx_DrawParticleDualTileAntiDiagonal1(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -2870,8 +2870,8 @@ void Gfx_DrawParticlePaletteBased(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
  */
 void Gfx_ParticlePaletteCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        Gfx_DrawParticlePaletteBased(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        Gfx_DrawParticlePaletteBased(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -2947,8 +2947,8 @@ void Gfx_ParticlePaletteDL(Gfx* arg0, UNUSED arg1_func_8434E21C* arg1, UNUSED u1
  */
 void Gfx_ParticlePaletteColorOnlyCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        Gfx_ParticlePaletteDL(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        Gfx_ParticlePaletteDL(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -3117,8 +3117,8 @@ void Gfx_ParticleTextureTileCallback(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED
  */
 void Gfx_ParticleTextureTileAllocCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        Gfx_ParticleTextureTileCallback(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        Gfx_ParticleTextureTileCallback(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -3144,8 +3144,8 @@ void Gfx_ParticleRedPrimCallback(Gfx* arg0, UNUSED arg1_func_8434E21C* arg1, UNU
  */
 void Gfx_ParticleRedPrimAllocCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        Gfx_ParticleRedPrimCallback(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        Gfx_ParticleRedPrimCallback(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -3259,8 +3259,8 @@ void Gfx_PokemonPortraitCallback(Gfx* arg0, u8 arg1, UNUSED u16 arg2) {
  */
 void Gfx_PokemonPortraitAllocCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        Gfx_PokemonPortraitCallback(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        Gfx_PokemonPortraitCallback(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -3648,8 +3648,8 @@ void Gfx_PaletteParticleDL(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
  */
 void Gfx_PaletteParticleDLCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        Gfx_PaletteParticleDL(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        Gfx_PaletteParticleDL(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -3847,8 +3847,8 @@ void Gfx_WaterAnimPrimEnvDL(Gfx* arg0, u8 arg1, UNUSED u16 arg2) {
  */
 void Gfx_WaterAnimPrimEnvDLCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        Gfx_WaterAnimPrimEnvDL(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        Gfx_WaterAnimPrimEnvDL(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -3935,8 +3935,8 @@ void Gfx_WaterAnimDL(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
  */
 void Gfx_WaterAnimDLCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        Gfx_WaterAnimDL(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        Gfx_WaterAnimDL(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -4227,8 +4227,8 @@ void Gfx_SimpleNodeDL(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg2) {
  */
 void Gfx_SimpleNodeDLCallback(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        Gfx_SimpleNodeDL(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        Gfx_SimpleNodeDL(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 
@@ -4417,7 +4417,7 @@ void ParticleEffect_DrawQuad(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg
     var_t2 = 0xFF;
     var_s1 = 0x20;
     var_t5 = 5;
-    tmp = arg1->unk_0A;
+    tmp = arg1->variant;
 
     switch (tmp) {
         case 1:
@@ -4498,12 +4498,12 @@ void ParticleEffect_DrawQuad(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg
     gDPPipeSync(arg0++);
     gDPSetPrimColor(arg0++, 0, var_t1, 255, var_t2, 0, temp_v0->prim_a);
 
-    gDPLoadTextureTile_4b(arg0++, arg1->unk_00, G_IM_FMT_I, 32, 32, 0, 0, 31, 31, 0, G_TX_NOMIRROR | G_TX_WRAP,
+    gDPLoadTextureTile_4b(arg0++, arg1->textureA, G_IM_FMT_I, 32, 32, 0, 0, 31, 31, 0, G_TX_NOMIRROR | G_TX_WRAP,
                           G_TX_NOMIRROR | G_TX_WRAP, 5, 5, sp7A, sp78);
 
     ParticleGfx_SetAnimatedTileSizeOnList(arg0++, sp82, sp80, 0x20, 0x20);
 
-    gDPLoadMultiTile_4b(arg0++, arg1->unk_04, 0x0100, 1, G_IM_FMT_I, var_s1, 0, 0, 0, var_s1 - 1, var_s1 - 1, 0,
+    gDPLoadMultiTile_4b(arg0++, arg1->textureB, 0x0100, 1, G_IM_FMT_I, var_s1, 0, 0, 0, var_s1 - 1, var_s1 - 1, 0,
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, var_t5, var_t5, sp76, sp74);
 
     ParticleGfx_SetAnimatedAuxTileSizeOnList(arg0++, sp7E, sp7C, var_s1, var_s1);
@@ -4519,8 +4519,8 @@ void ParticleEffect_DrawQuad(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg
  */
 void ParticleEffect_AllocateDisplayList(s32 arg0, arg1_func_84344CE8* arg1) {
     if (arg0 == 2) {
-        arg1->unk_18 = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
-        ParticleEffect_DrawQuad(arg1->unk_18, arg1->unk_14, D_80060484);
+        arg1->displayList = Gfx_AllocDisplayList(sizeof(Gfx) * 30);
+        ParticleEffect_DrawQuad(arg1->displayList, arg1->texture, D_80060484);
     }
 }
 

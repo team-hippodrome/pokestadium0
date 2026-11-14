@@ -290,8 +290,8 @@ typedef struct unk_D_84390010_168 {
     /* 0x000 */ DisplayObject displayObject;
     /* 0x168 */ char unk168[0x1];
     /* 0x169 */ u8 minimized;
-    /* 0x16A */ s16 unk_16A;
-    /* 0x16C */ s16 unk_16C;
+    /* 0x16A */ s16 orbitAngle;
+    /* 0x16C */ s16 orbitSpeed;
     /* 0x16E */ char unk16E[0x2];
 } PokemonAfterimage; // size = 0x170
 
@@ -373,7 +373,7 @@ typedef struct SwayLayoutConfig {
 typedef struct SwayState {
     /* 0x00 */ Vec3f unk_00;
     /* 0x0C */ Vec3f rotation;
-    /* 0x18 */ Vec3f unk_18;
+    /* 0x18 */ Vec3f orbitCenter; // @unverified: model point the camera orbit is measured from (BattleCamera_CaptureModelOrbit)
     /* 0x24 */ char unk24[0x18];
 } SwayState; // size = 0x3C
 
@@ -406,31 +406,31 @@ typedef struct ActivePokemon {
 
 typedef struct MovePresentationCue {
     /* 0x00 */ u8 id;
-    /* 0x01 */ u8 unk_01;
+    /* 0x01 */ u8 eventTrack; // @unverified: model event track set for the cue, 0xFF for none
     /* 0x02 */ u8 defaultAnchor;
     /* 0x03 */ u8 alternateAnchor;
     /* 0x04 */ u8 animationDuration;
     /* 0x05 */ u8 flags1;
     /* 0x06 */ u8 currentFrame;
     /* 0x07 */ u8 endFrame;
-    /* 0x08 */ u8 unk_08;
-    /* 0x09 */ u8 unk_09;
+    /* 0x08 */ u8 statDownEffectFrame; // @unverified: target's animationTimer frame (minus 1) that queues the stat-down effect
+    /* 0x09 */ u8 statUpEffectFrame; // @unverified: animationTimer frame (minus 1) that queues the stat-up effect
     /* 0x0A */ u8 frameCounter;
 } MovePresentationCue; // size = 0xB (Stadium 1: 0x10)
 
 typedef struct unk_D_8438E7B0 {
     /* 0x000 */ MovePresentationCue moveCues[165];
     /* 0x717 */ MovePresentationCue idleCues;
-    /* 0x722 */ MovePresentationCue unkA60;
+    /* 0x722 */ MovePresentationCue unk722;
     /* 0x72D */ MovePresentationCue faintCue;
     /* 0x738 */ MovePresentationCue hitCue;
     /* 0x743 */ MovePresentationCue chargeCues[6];
     /* 0x785 */ MovePresentationCue sleepIdleCue;
     /* 0x790 */ MovePresentationCue flyingIdleCue;
-    /* 0x79B */ MovePresentationCue unk_B10;
+    /* 0x79B */ MovePresentationCue unk79B;
     /* 0x7A6 */ MovePresentationCue hitReactionOverride;
-    /* 0x7B1 */ MovePresentationCue unkB30[5];
-    /* 0x7E8 */ u8 unkB30_tail;
+    /* 0x7B1 */ MovePresentationCue unk7B1[5];
+    /* 0x7E8 */ u8 unk7E8;
     /* 0x7E9 */ u8 wakeUpEventTrack;
 } PokemonBattleCues; // size >= 0x7EA
 
@@ -438,7 +438,7 @@ typedef struct unk_D_8438E7B0 {
 // named cues that follow it (each MovePresentationCue is 0xB bytes in Zero).
 #define BATTLE_CUE_IDLE 165       // idleCues (0x717)
 
-#define BATTLE_CUE_A60 166        // unkA60 (0x722)
+#define BATTLE_CUE_A60 166        // unk722
 
 #define BATTLE_CUE_FAINT 167      // faintCue (0x72D)
 
@@ -513,8 +513,8 @@ typedef void (*BattleSceneStateCallback)(ActivePokemon*);
 
 typedef struct BattleSceneStateRow {
     /* 0x00 */ s16 unk_00;
-    /* 0x04 */ BattleSceneStateCallback unk_04[7];
-    /* 0x20 */ s32 unk_20;
+    /* 0x04 */ BattleSceneStateCallback callbacks[7]; // @unverified: 0-2 called on entry, 3 registered as the row's tick callback (BattleScene_EnterStateRow)
+    /* 0x20 */ s32 cueIndex; // @unverified: index into PokemonBattleCues.moveCues
     /* 0x24 */ s32 mode;
     /* 0x28 */ s32 unk_28;
 } BattleSceneStateRow; // size = 0x2C
@@ -531,7 +531,7 @@ typedef struct unk_D_843C4DEC {
 } unk_D_843C4DEC; // size = 0x58
 
 typedef struct BattleSceneStateTickSlot {
-    /* 0x00 */ s32 unk_00;
+    /* 0x00 */ s32 pokemon; // @unverified: ActivePokemon passed to callback
     /* 0x04 */ BattleSceneStateCallback callback;
 } BattleSceneStateTickSlot; // size = 0x8
 
@@ -574,7 +574,7 @@ typedef struct unk_D_843847BC {
     /* 0x08 */ f32 verticalFieldOfView;
     /* 0x0C */ f32 nearPlane;
     /* 0x10 */ f32 farPlane;
-    /* 0x14 */ s16 unk_14;
+    /* 0x14 */ s16 side;
 } ThumbnailSettings; // size = 0x18
 
 typedef struct unk_D_843901B0 {
@@ -643,15 +643,15 @@ typedef struct unk_D_84385790 {
 
 typedef struct arg1_func_84344CE8 {
     /* 0x00 */ char unk00[0x14];
-    /* 0x14 */ u8* unk_14;
-    /* 0x18 */ Gfx* unk_18;
+    /* 0x14 */ u8* texture; // @unverified: texture passed to the effect display list builders
+    /* 0x18 */ Gfx* displayList; // @unverified: display list allocated per frame by the effect
 } arg1_func_84344CE8; // size >= 0x1C
 
 typedef struct arg1_func_8434E21C {
-    /* 0x00 */ u8* unk_00;
-    /* 0x04 */ u8* unk_04;
+    /* 0x00 */ u8* textureA; // @unverified: I4 tile 0 (gDPLoadTextureTile_4b)
+    /* 0x04 */ u8* textureB; // @unverified: I4 tile 1 (gDPLoadMultiTile_4b)
     /* 0x08 */ char unk08[0x2];
-    /* 0x0A */ s16 unk_0A;
+    /* 0x0A */ s16 variant; // @unverified: switch value in anim_model_effects.c
 } arg1_func_8434E21C; // size >= 0xC
 
 typedef struct RibbonMeshVertexState {
@@ -1500,9 +1500,9 @@ typedef struct ParticleRenderContext {
 } ParticleRenderContext; // size = 0x8C
 
 typedef struct ParticleMatrixPool {
-    /* 0x0000 */ MtxF unk_0000[364];
+    /* 0x0000 */ MtxF matrices[364]; // @unverified: per-frame model matrices, indexed by gParticleMatrixPoolIndex
     /* 0x5B00 */ char unk5B00[0x80];
-    /* 0x5B80 */ Mtx unk_5B80;
+    /* 0x5B80 */ Mtx orthoMatrix; // @unverified: 320x240 guOrtho for screen-space particles
     /* 0x5BC0 */ char unk5BC0[0x20];
 } ParticleMatrixPool; // size = 0x5BE0
 
@@ -1524,7 +1524,7 @@ typedef struct unk_D_8423D3A8 {
     /* 0x16 */ unk_D_800A7440 unk_16;
     /* 0x20 */ s32 unk_20;
     /* 0x24 */ ModelLoadContext* unk_24;
-    /* 0x28 */ unk_func_8001B1FC* unk_28;
+    /* 0x28 */ PokeModelPreview* unk_28;
     /* 0x2C */ unk_D_838067F0_0168_0000* unk_2C;
 } unk_D_8423D3A8; // size >= 0x30
 

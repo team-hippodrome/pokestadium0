@@ -308,7 +308,7 @@ s32 VsScene_DrawFrameToImage(s32 arg0) {
     s32 sp24 = VsScene_BeginFrame();
 
     GeoRender_AdvanceFrameCounter();
-    PokeIcon_ProcessNextSlot((unk_func_8001A024*)D_82203264, 0);
+    PokeIcon_ProcessNextSlot((PokeIconRenderer*)D_82203264, 0);
     GfxImage_SetRenderTarget(&gDisplayListHead, D_82203208);
     GfxImage_ClearDepthRectangle(&gDisplayListHead, 0, 0, 0x140, 0xF0);
     Geo_RenderRootNode(D_82203244);
@@ -326,7 +326,7 @@ s32 VsScene_DrawFrame(s32 arg0) {
     s32 sp24 = VsScene_BeginFrame();
 
     GeoRender_AdvanceFrameCounter();
-    PokeIcon_ProcessNextSlot((unk_func_8001A024*)D_82203264, 0);
+    PokeIcon_ProcessNextSlot((PokeIconRenderer*)D_82203264, 0);
     BgStage_DrawFrame();
     GfxImage_ClearDepthRectangle(&gDisplayListHead, 0, 0, 0x140, 0xF0);
     Geo_RenderRootNode(D_82203244);
@@ -443,9 +443,9 @@ void VsScene_LoadTeamIcons(unk_D_82203170* arg0, s32 arg1) {
 
     for (i = 0; i < 6; i++) {
         if (i < arg0->unk_40[0]->numberOfPokemonCanBePicked) {
-            func_8001833C((unk_func_8001A024*)D_82203264, slot, &arg0->unk_40[0]->battleMon[i], 1);
+            func_8001833C((PokeIconRenderer*)D_82203264, slot, &arg0->unk_40[0]->battleMon[i], 1);
         }
-        arg0->unk_08[i] = PokeIcon_GetImage((unk_func_8001A024*)D_82203264, slot++);
+        arg0->unk_08[i] = PokeIcon_GetImage((PokeIconRenderer*)D_82203264, slot++);
     }
 }
 
@@ -755,9 +755,9 @@ void VsScene_LoadTagTeamIcons(unk_D_82203170* arg0, s32 arg1) {
         for (i = 0; i < 2; i++) {
             for (j = 0; j < 3; j++) {
                 if (j < arg0->unk_38[i]->numberOfPokemonBrought) {
-                    func_8001833C((unk_func_8001A024*)D_82203264, slot, &arg0->unk_38[i]->pokemonPicked[j], 1);
+                    func_8001833C((PokeIconRenderer*)D_82203264, slot, &arg0->unk_38[i]->pokemonPicked[j], 1);
                 }
-                arg0->unk_08[i * 3 + j] = PokeIcon_GetImage((unk_func_8001A024*)D_82203264, slot);
+                arg0->unk_08[i * 3 + j] = PokeIcon_GetImage((PokeIconRenderer*)D_82203264, slot);
                 arg0->unk_20[i * 3 + j] = D_82203210[slot]->img_p;
                 slot++;
             }
@@ -765,9 +765,9 @@ void VsScene_LoadTagTeamIcons(unk_D_82203170* arg0, s32 arg1) {
     } else {
         for (j = 0; j < 6; j++) {
             if (j < arg0->unk_38[0]->numberOfPokemonBrought) {
-                func_8001833C((unk_func_8001A024*)D_82203264, slot, &arg0->unk_38[0]->pokemonPicked[j], 1);
+                func_8001833C((PokeIconRenderer*)D_82203264, slot, &arg0->unk_38[0]->pokemonPicked[j], 1);
             }
-            arg0->unk_08[j] = PokeIcon_GetImage((unk_func_8001A024*)D_82203264, slot);
+            arg0->unk_08[j] = PokeIcon_GetImage((PokeIconRenderer*)D_82203264, slot);
             arg0->unk_20[j] = D_82203210[slot]->img_p;
             slot++;
         }

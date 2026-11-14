@@ -543,7 +543,7 @@ void func_8900806C(s8* arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5, s
     for (p = arg3, i = 0; i < M2C_FIELD(arg3, s32*, 0x960); i++, p += 0x50) {
         Rgba8900806C c = D_8900A5BC;
 
-        func_8001833C((unk_func_8001A024*)arg4, i, (BattleMon*)p, GPACK_RGBA5551(c.r, c.g, c.b, 1));
+        func_8001833C((PokeIconRenderer*)arg4, i, (BattleMon*)p, GPACK_RGBA5551(c.r, c.g, c.b, 1));
     }
     M2C_FIELD(arg0, s32*, 0x90) = arg4;
 }

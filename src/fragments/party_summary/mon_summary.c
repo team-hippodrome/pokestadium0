@@ -387,7 +387,7 @@ void func_8A2024D0(s8 *arg0) {
     func_8A202390(arg0 + 0x170);
     func_80027804(arg0 + 0x180, arg0 + 0x18C, 6, M2C_FIELD(arg0, s32 *, 0x178));
     for (i = 0; i < M2C_FIELD(arg0, s32 *, 0x178); i++) {
-        func_8001833C((unk_func_8001A024*)D_8A21DA50, i, (BattleMon*)(M2C_FIELD(arg0, s32 *, 0x170) + i * 0x50),
+        func_8001833C((PokeIconRenderer*)D_8A21DA50, i, (BattleMon*)(M2C_FIELD(arg0, s32 *, 0x170) + i * 0x50),
                       GPACK_RGBA5551(D_8A203304.r, D_8A203304.g, D_8A203304.b, 1));
     }
     PartyScreen_InitList(arg0 + 0x10, 0x2F, 0x4D, (s32)(arg0 + 0x180));
@@ -591,8 +591,8 @@ M2C_UNK PartyScreen_Update(M2C_UNK* ctx) {
                     res = ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x6C)];
                     ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x6C)] = ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)];
                     ((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)] = res;
-                    func_8001833C((unk_func_8001A024*)D_8A21DA50, M2C_FIELD(arg0, s32*, 0x6C), (BattleMon*)((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x6C)], 0);
-                    func_8001833C((unk_func_8001A024*)D_8A21DA50, M2C_FIELD(arg0, s32*, 0x44), (BattleMon*)((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)], 0);
+                    func_8001833C((PokeIconRenderer*)D_8A21DA50, M2C_FIELD(arg0, s32*, 0x6C), (BattleMon*)((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x6C)], 0);
+                    func_8001833C((PokeIconRenderer*)D_8A21DA50, M2C_FIELD(arg0, s32*, 0x44), (BattleMon*)((Ctx8A20291C*)arg0)->ptrs[M2C_FIELD(arg0, s32*, 0x44)], 0);
                     M2C_FIELD(arg0, s32*, 0x384) = 1;
                     M2C_FIELD(arg0, s32*, 0) = 1;
                     M2C_FIELD(arg0, s8**, 8) = arg0 + 0x10;
