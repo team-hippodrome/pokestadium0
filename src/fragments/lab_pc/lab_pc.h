@@ -28,7 +28,7 @@ struct unk_func_8821421C_02C;
 
 /* A two-digit number picker (func_8002B638). */
 typedef struct DigitSelector {
-    /* 0x00 */ s32 value; // the ×count shown: ×01, ×02 ... ×05 for ほのおのいし (fire stone)
+    /* 0x00 */ s32 value; // @unverified: the ×count LabItem_DrawCountSelector prints (seen drawn as ×01 ... ×05 for ほのおのいし, fire stone)
     /* 0x04 */ s32 min; // @unverified: 1 in LabItem_InitCountSelector
     /* 0x08 */ s32 max; // @unverified: arg3 of LabItem_InitCountSelector
     /* 0x0C */ s32 digitCount; // @unverified: 2
