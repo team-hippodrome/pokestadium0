@@ -60,36 +60,31 @@ typedef struct unk_D_80071D88 {
     /* 0x04 */ Color_RGBA8 color;
 } unk_D_80071D88; // size = 0x8
 
+// A Gen 1 box Pokemon record (pokered box_struct), copied to and from BattleMon by
+// func_8001FE84 and Pokemon_ToGbRecord. Multi-byte fields are big-endian byte arrays.
 typedef struct GbPokemonRecord {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01[2];
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
-    /* 0x06 */ u8 unk_06;
-    /* 0x07 */ u8 unk_07;
-    /* 0x08 */ u8 unk_08[4];
-    /* 0x0C */ u8 unk_0C[2];
-    /* 0x0E */ u8 unk_0E[3];
-    /* 0x11 */ u8 unk_11[2];
-    /* 0x13 */ u8 unk_13[2];
-    /* 0x15 */ u8 unk_15[2];
-    /* 0x17 */ u8 unk_17[2];
-    /* 0x19 */ u8 unk_19[2];
-    /* 0x1B */ u8 unk_1B[2];
-    /* 0x1D */ u8 unk_1D[4];
+    /* 0x00 */ u8 species; // @unverified: Gen 1 internal index; Species_FromInternalIndex gives BattleMon.species.id (func_8001FE84)
+    /* 0x01 */ u8 hp[2]; // @unverified: BattleMon.hp (func_8001FE84, Pokemon_ToGbRecord); pokered box_struct
+    /* 0x03 */ u8 boxLevel; // @unverified: BattleMon.boxLevel; pokered box_struct
+    /* 0x04 */ u8 status; // @unverified: BattleMon.statusCondition; pokered box_struct
+    /* 0x05 */ u8 type1; // @unverified: BattleMon.type1; pokered box_struct
+    /* 0x06 */ u8 type2; // @unverified: BattleMon.type2; pokered box_struct
+    /* 0x07 */ u8 catchRate; // @unverified: BattleMon.catchRate; pokered box_struct
+    /* 0x08 */ u8 moves[4]; // @unverified: BattleMon.moves; pokered box_struct
+    /* 0x0C */ u8 otId[2]; // @unverified: BattleMon.otId; pokered box_struct
+    /* 0x0E */ u8 exp[3]; // @unverified: BattleMon.exp, 24-bit; pokered box_struct
+    /* 0x11 */ u8 statExp[5][2]; // @unverified: BattleMon.statExp: HP, Attack, Defense, Speed, Special; pokered box_struct
+    /* 0x1B */ u8 dvs[2]; // @unverified: BattleMon.dvs; pokered box_struct
+    /* 0x1D */ u8 pp[4]; // @unverified: BattleMon.pp; pokered box_struct
 } GbPokemonRecord; // size = 0x21
 
+// A Gen 1 party Pokemon record (pokered party_struct).
 typedef struct GbPokemonRecordExt {
-    /* 0x00 */ GbPokemonRecord unk_00;
-    /* 0x21 */ u8 unk_21;
+    /* 0x00 */ GbPokemonRecord box;
+    /* 0x21 */ u8 level; // @unverified: BattleMon.level (Pokemon_FromGbRecordExt, Pokemon_ToGbRecordExt); pokered party_struct
     // Big-endian u16 stats, read and written with GbData_ReadU16BE/GbData_WriteU16BE. Byte arrays
     // keep the record unaligned: the Japanese GbSaveParty places it at odd offsets.
-    /* 0x22 */ u8 unk_22[2];
-    /* 0x24 */ u8 unk_24[2];
-    /* 0x26 */ u8 unk_26[2];
-    /* 0x28 */ u8 unk_28[2];
-    /* 0x2A */ u8 unk_2A[2];
+    /* 0x22 */ u8 stats[5][2]; // @unverified: BattleMon.maxHp, attack, defense, speed, special (Pokemon_FromGbRecordExt); pokered party_struct
 } GbPokemonRecordExt; // size = 0x2C
 
 typedef struct DeckHandle {
@@ -190,7 +185,7 @@ s8* Text_CopyString(s8* arg0, s8* arg1);
 char* Text_CopySpeciesName(char* arg0, s32 arg1);
 char* Text_GetTmHmName(s32 arg0, char* arg1);
 void Pokemon_FromGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1);
-void Pokemon_ToGbRecord(s8 *arg0, s8 *arg1);
+void Pokemon_ToGbRecord(BattleMon* arg0, GbPokemonRecord* arg1);
 void Pokemon_ToGbRecordExt(unk_func_88205880_00D0* arg0, GbPokemonRecordExt* arg1);
 u16 StatExpSqrt(u16 arg0);
 void func_80020188(void);

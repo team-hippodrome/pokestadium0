@@ -805,7 +805,7 @@ void GbSave_SaveMainPokemon(unk_func_88205880_00D0* arg0, s32 arg1, s32 arg2) {
     Text_TranscodeName(sp24->unk_134[arg2], (char*)arg0->unk_000[0].nickname);
     _bcopy(arg0->unk_000[0].gbOtNameHead, sp24->unk_110[arg2], 3);
     _bcopy(arg0->unk_000[0].gbOtNameTail, sp24->unk_110[arg2] + 3, 3);
-    sp24->unk_001[arg2] = sp24->unk_008[arg2].unk_00.unk_00;
+    sp24->unk_001[arg2] = sp24->unk_008[arg2].box.species;
 }
 
 /**
@@ -847,7 +847,7 @@ void GbSave_SaveBoxPokemon(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
         Text_TranscodeName(sp2C->unk_4B2[arg3], (char*)arg0->nickname);
         _bcopy(arg0->gbOtNameHead, sp2C->unk_3FE[arg3], 3);
         _bcopy(arg0->gbOtNameTail, sp2C->unk_3FE[arg3] + 3, 3);
-        sp2C->unk_001[arg3] = sp2C->unk_020[arg3].unk_00;
+        sp2C->unk_001[arg3] = sp2C->unk_020[arg3].species;
     }
 }
 

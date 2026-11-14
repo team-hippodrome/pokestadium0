@@ -64,7 +64,7 @@ s32 Deck_CloseAndFlushBox(DeckHandle* arg0);
 char* Text_UntranscodeName(char* arg0, char* arg1);
 s8* Text_CopyString(s8* arg0, s8* arg1);
 void Pokemon_FromGbRecord(BattleMon* arg0, GbPokemonRecord* arg1);
-void Pokemon_ToGbRecord(s8 *arg0, s8 *arg1);
+void Pokemon_ToGbRecord(BattleMon* arg0, GbPokemonRecord* arg1);
 s32 Deck_WriteEntries(u8* arg0, s32 arg1, DeckHandle* arg2);
 s32 GbSave_HasPlayerNameMarker(u8* arg0);
 s32 Deck_GetCapacity(s32 arg0);
@@ -228,36 +228,36 @@ s16 func_8001FAB0(s8 *);                          /* extern */
 s32 func_8001FAC8(s8 *);                          /* extern */
 M2C_UNK func_80056690(s8 *, s8 *, M2C_UNK);     /* extern */
 
-void func_8001FE84(s8 *arg0, s8 *arg1) {
-    M2C_FIELD(arg0, s8 *, 0) = Species_FromInternalIndex(M2C_FIELD(arg1, u8 *, 0));
-    M2C_FIELD(arg0, s8 *, 1) = 0;
-    M2C_FIELD(arg0, s16 *, 2) = func_8001FAB0(arg1 + 1);
-    M2C_FIELD(arg0, u8 *, 4) = (u8) M2C_FIELD(arg1, u8 *, 3);
-    M2C_FIELD(arg0, u8 *, 5) = (u8) M2C_FIELD(arg1, u8 *, 4);
-    M2C_FIELD(arg0, u8 *, 6) = (u8) M2C_FIELD(arg1, u8 *, 5);
-    M2C_FIELD(arg0, u8 *, 7) = (u8) M2C_FIELD(arg1, u8 *, 6);
-    M2C_FIELD(arg0, u8 *, 8) = (u8) M2C_FIELD(arg1, u8 *, 7);
-    M2C_FIELD(arg0, s16 *, 0xE) = func_8001FAB0(arg1 + 0xC);
-    M2C_FIELD(arg0, s32 *, 0x10) = func_8001FAC8(arg1 + 0xE);
-    M2C_FIELD(arg0, s16 *, 0x14) = func_8001FAB0(arg1 + 0x11);
-    M2C_FIELD(arg0, s16 *, 0x16) = func_8001FAB0(arg1 + 0x13);
-    M2C_FIELD(arg0, s16 *, 0x18) = func_8001FAB0(arg1 + 0x15);
-    M2C_FIELD(arg0, s16 *, 0x1A) = func_8001FAB0(arg1 + 0x17);
-    M2C_FIELD(arg0, s16 *, 0x1C) = func_8001FAB0(arg1 + 0x19);
-    M2C_FIELD(arg0, s16 *, 0x1E) = func_8001FAB0(arg1 + 0x1B);
-    func_80056690(arg0 + 9, arg1 + 8, 4);
-    func_80056690(arg0 + 0x20, arg1 + 0x1D, 4);
+void func_8001FE84(BattleMon* arg0, GbPokemonRecord* arg1) {
+    arg0->species.id = Species_FromInternalIndex(arg1->species);
+    arg0->species.unk_01 = 0;
+    arg0->hp = func_8001FAB0(arg1->hp);
+    arg0->boxLevel = arg1->boxLevel;
+    arg0->statusCondition = arg1->status;
+    arg0->type1 = arg1->type1;
+    arg0->type2 = arg1->type2;
+    arg0->catchRate = arg1->catchRate;
+    arg0->otId = func_8001FAB0(arg1->otId);
+    arg0->exp = func_8001FAC8(arg1->exp);
+    arg0->statExp[0] = func_8001FAB0(arg1->statExp[0]);
+    arg0->statExp[1] = func_8001FAB0(arg1->statExp[1]);
+    arg0->statExp[2] = func_8001FAB0(arg1->statExp[2]);
+    arg0->statExp[3] = func_8001FAB0(arg1->statExp[3]);
+    arg0->statExp[4] = func_8001FAB0(arg1->statExp[4]);
+    arg0->dvs = func_8001FAB0(arg1->dvs);
+    func_80056690(arg0->moves, arg1->moves, 4);
+    func_80056690(arg0->pp, arg1->pp, 4);
 }
 
 /** Converts an extended Game Boy Pokemon record to a battle Pokemon. */
 void Pokemon_FromGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1) {
-    Pokemon_FromGbRecord(arg0, &arg1->unk_00);
-    arg0->level = arg1->unk_21;
-    arg0->maxHp = GbData_ReadU16BE(arg1->unk_22);
-    arg0->attack = GbData_ReadU16BE(arg1->unk_24);
-    arg0->defense = GbData_ReadU16BE(arg1->unk_26);
-    arg0->speed = GbData_ReadU16BE(arg1->unk_28);
-    arg0->special = GbData_ReadU16BE(arg1->unk_2A);
+    Pokemon_FromGbRecord(arg0, &arg1->box);
+    arg0->level = arg1->level;
+    arg0->maxHp = GbData_ReadU16BE(arg1->stats[0]);
+    arg0->attack = GbData_ReadU16BE(arg1->stats[1]);
+    arg0->defense = GbData_ReadU16BE(arg1->stats[2]);
+    arg0->speed = GbData_ReadU16BE(arg1->stats[3]);
+    arg0->special = GbData_ReadU16BE(arg1->stats[4]);
 }
 
 M2C_UNK func_8001FAE8(s8 *, u16);                 /* extern */
@@ -265,35 +265,35 @@ M2C_UNK func_8001FAF8(s8 *, s32);                 /* extern */
 M2C_UNK func_80056690(s8 *, s8 *, M2C_UNK);     /* extern */
 
 /** Converts a battle Pokemon to a Game Boy Pokemon record. */
-void Pokemon_ToGbRecord(s8 *arg0, s8 *arg1) {
-    M2C_FIELD(arg1, s8 *, 0) = func_80020984(M2C_FIELD(arg0, u8 *, 0));
-    func_8001FAE8(arg1 + 1, M2C_FIELD(arg0, u16 *, 2));
-    M2C_FIELD(arg1, u8 *, 3) = (u8) M2C_FIELD(arg0, u8 *, 4);
-    M2C_FIELD(arg1, u8 *, 4) = (u8) M2C_FIELD(arg0, u8 *, 5);
-    M2C_FIELD(arg1, u8 *, 5) = (u8) M2C_FIELD(arg0, u8 *, 6);
-    M2C_FIELD(arg1, u8 *, 6) = (u8) M2C_FIELD(arg0, u8 *, 7);
-    M2C_FIELD(arg1, u8 *, 7) = (u8) M2C_FIELD(arg0, u8 *, 8);
-    func_8001FAE8(arg1 + 0xC, M2C_FIELD(arg0, u16 *, 0xE));
-    func_8001FAF8(arg1 + 0xE, M2C_FIELD(arg0, s32 *, 0x10));
-    func_8001FAE8(arg1 + 0x11, M2C_FIELD(arg0, u16 *, 0x14));
-    func_8001FAE8(arg1 + 0x13, M2C_FIELD(arg0, u16 *, 0x16));
-    func_8001FAE8(arg1 + 0x15, M2C_FIELD(arg0, u16 *, 0x18));
-    func_8001FAE8(arg1 + 0x17, M2C_FIELD(arg0, u16 *, 0x1A));
-    func_8001FAE8(arg1 + 0x19, M2C_FIELD(arg0, u16 *, 0x1C));
-    func_8001FAE8(arg1 + 0x1B, M2C_FIELD(arg0, u16 *, 0x1E));
-    func_80056690(arg1 + 8, arg0 + 9, 4);
-    func_80056690(arg1 + 0x1D, arg0 + 0x20, 4);
+void Pokemon_ToGbRecord(BattleMon* arg0, GbPokemonRecord* arg1) {
+    arg1->species = func_80020984(arg0->species.id);
+    func_8001FAE8(arg1->hp, arg0->hp);
+    arg1->boxLevel = arg0->boxLevel;
+    arg1->status = arg0->statusCondition;
+    arg1->type1 = arg0->type1;
+    arg1->type2 = arg0->type2;
+    arg1->catchRate = arg0->catchRate;
+    func_8001FAE8(arg1->otId, arg0->otId);
+    func_8001FAF8(arg1->exp, arg0->exp);
+    func_8001FAE8(arg1->statExp[0], arg0->statExp[0]);
+    func_8001FAE8(arg1->statExp[1], arg0->statExp[1]);
+    func_8001FAE8(arg1->statExp[2], arg0->statExp[2]);
+    func_8001FAE8(arg1->statExp[3], arg0->statExp[3]);
+    func_8001FAE8(arg1->statExp[4], arg0->statExp[4]);
+    func_8001FAE8(arg1->dvs, arg0->dvs);
+    func_80056690(arg1->moves, arg0->moves, 4);
+    func_80056690(arg1->pp, arg0->pp, 4);
 }
 
 /** Converts a battle Pokemon to an extended Game Boy Pokemon record. */
 void Pokemon_ToGbRecordExt(unk_func_88205880_00D0* arg0, GbPokemonRecordExt* arg1) {
-    Pokemon_ToGbRecord(arg0->unk_000, arg1);
-    arg1->unk_21 = arg0->unk_000[0].level;
-    GbData_WriteU16BE(arg1->unk_22, arg0->unk_000[0].maxHp);
-    GbData_WriteU16BE(arg1->unk_24, arg0->unk_000[0].attack);
-    GbData_WriteU16BE(arg1->unk_26, arg0->unk_000[0].defense);
-    GbData_WriteU16BE(arg1->unk_28, arg0->unk_000[0].speed);
-    GbData_WriteU16BE(arg1->unk_2A, arg0->unk_000[0].special);
+    Pokemon_ToGbRecord(arg0->unk_000, &arg1->box);
+    arg1->level = arg0->unk_000[0].level;
+    GbData_WriteU16BE(arg1->stats[0], arg0->unk_000[0].maxHp);
+    GbData_WriteU16BE(arg1->stats[1], arg0->unk_000[0].attack);
+    GbData_WriteU16BE(arg1->stats[2], arg0->unk_000[0].defense);
+    GbData_WriteU16BE(arg1->stats[3], arg0->unk_000[0].speed);
+    GbData_WriteU16BE(arg1->stats[4], arg0->unk_000[0].special);
 }
 
 /** Returns the integer square root used for stat experience, found by search. */
