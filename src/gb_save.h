@@ -58,7 +58,8 @@ typedef struct LabeledButton {
     /* 0x08 */ s32 width;
     /* 0x0C */ s32 height;
     /* 0x10 */ s32 flags; // OR'd into the label's color flags by Window_DrawLabeled; bit 3 = highlighted; poking 8 lit the いいえ (No) button of the entry confirm window in play
-    /* 0x14 */ char unk14[0xC];
+    /* 0x14 */ s32 style; // @unverified: set to 1 (no fill) by Window_InitLabeled; the WindowFrame.style slot, as Window_SetRect sets x..0x10
+    /* 0x18 */ char unk18[0x8];
     /* 0x20 */ Color_RGBA8 color; // @unverified: highlight fill (Window_DrawLabeled)
     /* 0x24 */ s32 unk_24;
     /* 0x28 */ s32 fontSize; // first argument of func_8001A384 in Window_DrawLabeled; 8 by default; poking 16 drew the いいえ label larger in play

@@ -770,16 +770,16 @@ void Particle_SetVelocityXZFromRotationY(Particle* arg0) {
  * main menu, for windows at (411, 189, 72) and (496, 189, 72).
  * @unverified Name guessed from the code; comment kept.
  */
-void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5) {
-    M2C_FIELD(arg0, s32*, 0x24) = 0x14;
-    M2C_FIELD(arg0, s32*, 0x28) = 8;
-    M2C_FIELD(arg0, s32*, 0x2C) = 6;
-    M2C_FIELD(arg0, s32*, 0x30) = 2;
-    M2C_FIELD(arg0, s32*, 0x34) = 0;
-    Window_SetRect(arg0, arg1, arg2, arg3, 0x18);
-    M2C_FIELD(arg0, s32*, 0x14) = 1;
-    M2C_FIELD(arg0, Color_RGBA8*, 0x20) = arg4;
-    M2C_FIELD(arg0, char**, 0x38) = arg5;
+void Window_InitLabeled(LabeledButton* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5) {
+    arg0->unk_24 = 0x14;
+    arg0->fontSize = 8;
+    arg0->labelX = 6;
+    arg0->labelY = 2;
+    arg0->unk_34 = 0;
+    Window_SetRect((s8*)arg0, arg1, arg2, arg3, 0x18);
+    arg0->style = 1;
+    arg0->color = arg4;
+    arg0->label = arg5;
 }
 
 extern Color_RGBA8 D_80073520;
@@ -791,17 +791,17 @@ void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
  * main menu, for the windows set up by Window_InitLabeled.
  * @unverified Name and comment guessed from the code.
  */
-void Window_DrawLabeled(s8* arg0, s32 arg1) {
-    func_8002A32C(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC));
-    if ((M2C_FIELD(arg0, s32*, 0x10) & 8) || (arg1 & 0x10)) {
-        Ui_FillRectHighlighted(M2C_FIELD(arg0, s32*, 0) + 1, M2C_FIELD(arg0, s32*, 4) + 1, M2C_FIELD(arg0, s32*, 8) - 2, M2C_FIELD(arg0, s32*, 0xC) - 2, M2C_FIELD(arg0, Color_RGBA8*, 0x20));
+void Window_DrawLabeled(LabeledButton* arg0, s32 arg1) {
+    func_8002A32C(arg0->x, arg0->y, arg0->width, arg0->height);
+    if ((arg0->flags & 8) || (arg1 & 0x10)) {
+        Ui_FillRectHighlighted(arg0->x + 1, arg0->y + 1, arg0->width - 2, arg0->height - 2, arg0->color);
     } else if (arg1 & 2) {
-        Ui_DrawRoundedFrame(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC), D_80073520);
+        Ui_DrawRoundedFrame(arg0->x, arg0->y, arg0->width, arg0->height, D_80073520);
     }
     func_8001AB6C();
-    func_8001A384(M2C_FIELD(arg0, s32*, 0x28), M2C_FIELD(arg0, s32*, 0x34));
-    Font_SetColorForFlags(M2C_FIELD(arg0, s32*, 0x10) | arg1);
-    func_8001A944(M2C_FIELD(arg0, s32*, 0x2C) + M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 0x30) + M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 0x38));
+    func_8001A384(arg0->fontSize, arg0->unk_34);
+    Font_SetColorForFlags(arg0->flags | arg1);
+    func_8001A944(arg0->x + arg0->labelX, arg0->y + arg0->labelY, arg0->label);
     func_8001ABBC();
 }
 
