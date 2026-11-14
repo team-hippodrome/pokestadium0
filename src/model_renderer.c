@@ -200,7 +200,7 @@ s32 func_80005014(void);
 void func_8001799C(ModelLoadContext*, u16, arg1_func_80010CA8);
 void func_80017D00(ModelLoadContext*);
 
-void Trainer_RequestPokeIcon(BattleSide* arg0) {
+void func_80019D08(BattleSide* arg0) {
     arg1_func_80010CA8 sp24;
 
     sp24.raw = 0;
