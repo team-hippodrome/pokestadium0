@@ -310,27 +310,27 @@ void func_82133B6C(void) {
                 } else {
                     M2C_FIELD(M2C_FIELD(mons[0], u8**, 0x85C), s16*, 2) = D_8218B5D0[D_8219A4F0.index + 1].unk0A;
                 }
-                *M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C) |= 0x80;
+                ((ActivePokemon*)((s8**)&D_82199DE0)[0])->side->modelFlags |= 0x80;
                 D_8219A4F0.flags |= 2;
                 D_8219A4F0.flags &= ~0x10;
                 sBattleScene.scene->camera->perspective.verticalFieldOfView = 30.0f;
             }
             if (D_8219A4F0.flags & 2) {
-                if (*M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C) & 0x10) {
-                    *M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C) &= ~0x90;
+                if (((ActivePokemon*)((s8**)&D_82199DE0)[0])->side->modelFlags & 0x10) {
+                    ((ActivePokemon*)((s8**)&D_82199DE0)[0])->side->modelFlags &= ~0x90;
                     Battle_LoadOwnerModelForSwitchIn(((s8**)&D_82199DE0)[0]);
                     if (D_8219A4F0.index == 4) {
                         ((ActivePokemon*)((s8**)&D_82199DE0)[0])->side->displayModel = 0x96;
                     }
                     ((ActivePokemon*)((s8**)&D_82199DE0)[1])->side->displayModel = D_8218B5D0[D_8219A4F0.index + 1].unk0B;
-                    *M2C_FIELD(((s8**)&D_82199DE0)[1], u8**, 0x85C) |= 0x80;
+                    ((ActivePokemon*)((s8**)&D_82199DE0)[1])->side->modelFlags |= 0x80;
                     D_8219A4F0.flags |= 4;
                     D_8219A4F0.flags &= ~2;
                 }
             }
             if (D_8219A4F0.flags & 4) {
-                if (*M2C_FIELD(((s8**)&D_82199DE0)[1], u8**, 0x85C) & 0x10) {
-                    *M2C_FIELD(((s8**)&D_82199DE0)[1], u8**, 0x85C) &= ~0x90;
+                if (((ActivePokemon*)((s8**)&D_82199DE0)[1])->side->modelFlags & 0x10) {
+                    ((ActivePokemon*)((s8**)&D_82199DE0)[1])->side->modelFlags &= ~0x90;
                     Battle_LoadOwnerModelForSwitchIn(((s8**)&D_82199DE0)[1]);
                     D_8219A4F0.flags &= ~4;
                     func_80005B98(0x18);
