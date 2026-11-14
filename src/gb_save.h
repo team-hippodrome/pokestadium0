@@ -40,15 +40,15 @@ typedef struct WindowFrame {
 typedef struct Window {
     /* 0x00 */ WindowFrame frame;
     /* 0x20 */ char* title; // text of the title tab with style 0x800: 「たいせんルールせんたく」 in the rule window
-    /* 0x24 */ s32 animTimer; // @unverified: frames into the open or close animation; 7 starts the close (state 3, then 4 at 11)
+    /* 0x24 */ s32 animTimer; // step of the open or close animation: in play the main menu confirm window opened 0, 3, 5, 6 (state 0 to 2) and closed 7, 10, 11 (state 3, then 4)
     /* 0x28 */ s32 state; // 0..4, 2 while the rule window is open; the Free Battle windows take input only in states 1 and 2; 4 = closed
 } Window; // size = 0x2C
 
 /* A two-choice row of labeled buttons (はい/いいえ, yes/no) driven by func_8002B390. */
 typedef struct ChoiceCursor {
-    /* 0x00 */ Controller* controller; // @unverified: gControllers (D_800603C0), as in Menu.controller
-    /* 0x04 */ s32 cursor; // @unverified: 0 = the first button, 1 = the second (MainMenu_UpdateMessageWindow)
-    /* 0x08 */ s32 count; // @unverified: 2 in MainMenu_InitMessageWindow
+    /* 0x00 */ Controller* controller; // gControllers (0x800AAF50) in the main menu confirm window
+    /* 0x04 */ s32 cursor; // 0 = the first button, 1 = the second; D-Right moved it from はい (Yes) to いいえ (No) in play
+    /* 0x08 */ s32 count; // 2 in the main menu confirm window
 } ChoiceCursor; // size = 0xC
 
 /* A button with a label (Window_InitLabeled, Window_DrawLabeled). */
