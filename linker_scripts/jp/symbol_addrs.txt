@@ -4987,3 +4987,4 @@ sDiskBootBlock = 0x81201014; // type:data
 sTitleFrameCounter = 0x81201018; // type:data
 sTitleAudioHeap = 0x8120101C; // type:data
 sPushStartBlinkTimer = 0x81201020; // type:data
+DoduoGameBoy_ScrollScreenGlare = 0x8E800020; // type:func
