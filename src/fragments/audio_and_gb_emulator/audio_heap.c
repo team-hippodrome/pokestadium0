@@ -627,36 +627,36 @@ s32 AudioHeap_SearchCaches(s32 arg0, s32 arg1, s32 arg2) {
  * @unverified Name and comment guessed from the code.
  */
 s32 AudioHeap_SearchRegularCaches(s32 arg0, s32 arg1, s32 arg2) {
-    Tbl8110A368* sub;
-    Tbl8110A368* tbl;
+    Cache8110A368* sub;
+    Cache8110A368* tbl;
     u32 i;
     switch (arg0) {
     case 0:
-        tbl = (Tbl8110A368*)&D_81184320;
+        tbl = (Cache8110A368*)&D_81184320;
         break;
     case 1:
-        tbl = (Tbl8110A368*)&D_81184380;
+        tbl = (Cache8110A368*)&D_81184380;
         break;
     case 2:
-        tbl = (Tbl8110A368*)&D_811843E0;
+        tbl = (Cache8110A368*)&D_811843E0;
         break;
     }
-    sub = (Tbl8110A368*)((u8*)tbl + 0x20);
+    sub = (Cache8110A368*)((u8*)tbl + 0x20);
     if (arg1 == 0) {
-        if (arg2 == sub->entries[0].key) {
-            sub->count = 1;
-            return sub->entries[0].val;
+        if (arg2 == sub->entries[0].id) {
+            sub->numEntries = 1;
+            return sub->entries[0].ramAddr;
         }
-        if (arg2 == sub->entries[1].key) {
-            sub->count = 0;
-            return sub->entries[1].val;
+        if (arg2 == sub->entries[1].id) {
+            sub->numEntries = 0;
+            return sub->entries[1].ramAddr;
         }
         return 0;
     }
     sub = tbl;
-    for (i = 0; i < sub->count; i++) {
-        if (arg2 == tbl->entries[i].key) {
-            return tbl->entries[i].val;
+    for (i = 0; i < sub->numEntries; i++) {
+        if (arg2 == tbl->entries[i].id) {
+            return tbl->entries[i].ramAddr;
         }
     }
     if (arg1 == 2) {
@@ -776,7 +776,7 @@ void AudioHeap_LoadFilter(s16* arg0, s32 arg1, s32 arg2) {
     }
 }
 
-extern Voice8110AA50 D_81184110[];
+extern Reverb8110AA50 D_81184110[];
 extern s8 D_8118427B;
 /**
  * Steps every reverb's settings once per audio frame. Zelda 64 audio driver.
@@ -796,7 +796,7 @@ void AudioHeap_UpdateReverbs(void) {
     }
     for (i = 0; i < D_8118427B; i++) {
         for (j = 0; j < n; j++) {
-            D_81184110[i].unk_0C -= D_81184110[i].unk_0C / 3;
+            D_81184110[i].decayRatio -= D_81184110[i].decayRatio / 3;
         }
     }
 }

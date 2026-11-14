@@ -152,15 +152,15 @@ typedef struct SeqPlayer81109C0C {
     /* 0x005 */ u8 pad5[0x15C - 0x5];
 } SeqPlayer81109C0C; // size = 0x15C
 
-typedef struct Entry8110A368 { s32 val; char pad4[6]; s16 key; } Entry8110A368;
+typedef struct CacheEntry8110A368 { s32 ramAddr; char pad4[6]; s16 id; } CacheEntry8110A368; // @unverified: same offset/use as OoT's AudioCacheEntry.id
 
-typedef struct Tbl8110A368 { u32 count; char pad4[0x10]; Entry8110A368 entries[1]; } Tbl8110A368;
+typedef struct Cache8110A368 { u32 numEntries; char pad4[0x10]; CacheEntry8110A368 entries[1]; } Cache8110A368; // @unverified: persistent cache numEntries; for the temporary cache this word is nextSide
 
-typedef struct Voice8110AA50 {
+typedef struct Reverb8110AA50 {
     /* 0x000 */ char unk000[0xC];
-    /* 0x00C */ u16 unk_0C;
+    /* 0x00C */ u16 decayRatio; // @unverified: same offset/use as OoT's SynthesisReverb.decayRatio (AudioHeap_UpdateReverbs)
     /* 0x00E */ char unk00E[0x14A];
-} Voice8110AA50; // size = 0x158
+} Reverb8110AA50; // size = 0x158
 
 typedef struct ReverbSettings {
     /* 0x00 */ u8 downsampleRate;

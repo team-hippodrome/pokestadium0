@@ -76,7 +76,7 @@ s32 AudioHeap_SearchRegularCaches(s32 arg0, s32 arg1, s32 arg2);
 s32 AudioHeap_SearchPermanentCache(s32 arg0, s32 arg1);
 extern s16 D_811371D8[];
 extern s16 D_811373C8[];
-extern Voice8110AA50 D_81184110[];
+extern Reverb8110AA50 D_81184110[];
 extern s8 D_8118427B;
 extern s16 D_811858C2;
 extern AudioSpec D_811526C4[];
@@ -1022,21 +1022,21 @@ void func_8110D054(s32 arg0) {
 extern s16 D_811843BE;
 extern s16 D_811843CA;
 void func_8110D110(s32 arg0) {
-    Tbl8110A368* tbl2;
+    Cache8110A368* tbl2;
     s32 none;
-    Tbl8110A368* tbl = (Tbl8110A368*)&D_81184380;
+    Cache8110A368* tbl = (Cache8110A368*)&D_81184380;
     u32 i;
 
     none = -1;
-    if (arg0 == ((Tbl8110A368*)((u8*)tbl + 0x20))->entries[0].key) {
+    if (arg0 == ((Cache8110A368*)((u8*)tbl + 0x20))->entries[0].id) {
         D_811843BE = none;
     } else if (arg0 == D_811843CA) {
         D_811843CA = none;
     }
     tbl2 = tbl;
-    for (i = 0; i < tbl2->count; i++) {
-        if (arg0 == tbl2->entries[i].key) {
-            tbl2->entries[i].key = none;
+    for (i = 0; i < tbl2->numEntries; i++) {
+        if (arg0 == tbl2->entries[i].id) {
+            tbl2->entries[i].id = none;
         }
     }
     AudioHeap_DiscardFont(arg0);
