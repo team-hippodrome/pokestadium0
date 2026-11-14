@@ -1,17 +1,25 @@
-/* Stadium Zero fragment114_571890. */
+/* Stadium Zero fragment114_571890: Blastoise's model. */
 
 #include "global.h"
 #include "m2c_macros.h"
 #include "model_data.h"
 
-extern M2C_UNK D_8FF24E1C;
+extern M2C_UNK sBlastoiseModelHeader;
 
-M2C_UNK *func_8FF00020_114(s32 arg0, M2C_UNK arg1) {
-    M2C_UNK *var_v1;
+/**
+ * Returns Blastoise's model header when `index` is 0, and NULL otherwise.
+ * This fragment is file 8 of the model archive (ROM 0x500000), which
+ * Model_LoadForPokemon indexes by species - 1; Fragment_ProcessGeoLayout calls
+ * it with (0, 0) and processes the geo layouts the header lists.
+ * Seen in play: the Pokédex data view (データをみる) loaded this file for its species'
+ * entry, and the model shown matched (2026-11-14, every entry No.001-151 swept).
+ */
+M2C_UNK *BlastoiseModel_GetHeader(s32 index, UNUSED M2C_UNK arg1) {
+    M2C_UNK *header;
 
-    var_v1 = NULL;
-    if (arg0 == 0) {
-        var_v1 = &D_8FF24E1C;
+    header = NULL;
+    if (index == 0) {
+        header = &sBlastoiseModelHeader;
     }
-    return var_v1;
+    return header;
 }
