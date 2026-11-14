@@ -13,14 +13,14 @@ M2C_UNK LabPCList_InitDeckCategories(s32, s32, s32, s32);          /* extern */
  * Sets up the three item decks (Game Boy bag, Game Boy PC, 64 cartridge) and reads each one that exists.
  * Seen in play (2026-11-14) in いちらん: ran on entry; the どうぐをつかう window later listed the bag's items (マックスアップ ×5 ...).
  */
-void LabPCList_LoadItemDecks(s32 arg0)
+void LabPCList_LoadItemDecks(s32 screen)
 {
   s32 var_s0;
   s32 var_s1;
   s8 *var_s2;
-  LabPCList_InitDeckCategories(arg0 + 0x9E64, arg0 + 0x9EB8, arg0 + 0x9EE0, arg0 + 0x9F44);
-  var_s2 = arg0 + 0x8000;
- do { var_s0 = arg0; var_s1 = 0; do { if ((*((s32 *) (((s8 *) var_s2) + 0x1E68))) != 0) { LabPCList_ReadDeckCategory((unk_func_8830867C_02C_154*)(var_s0 + 0x9E64)); } var_s1 += 0x1C; var_s0 += 0x1C; var_s2 += 0x1C; } while (var_s1 != 0x54); } while (0);  // FAKE
+  LabPCList_InitDeckCategories(screen + 0x9E64, screen + 0x9EB8, screen + 0x9EE0, screen + 0x9F44);
+  var_s2 = screen + 0x8000;
+ do { var_s0 = screen; var_s1 = 0; do { if ((*((s32 *) (((s8 *) var_s2) + 0x1E68))) != 0) { LabPCList_ReadDeckCategory((unk_func_8830867C_02C_154*)(var_s0 + 0x9E64)); } var_s1 += 0x1C; var_s0 += 0x1C; var_s2 += 0x1C; } while (var_s1 != 0x54); } while (0);  // FAKE
 }
 
 
@@ -28,13 +28,13 @@ void LabPCList_LoadItemDecks(s32 arg0)
  * Writes back every item deck that exists and was changed.
  * Seen in play (2026-11-14) in いちらん: ran from LabPCList_SaveChanges on レポートしてやめる after a TM was used.
  */
-void LabPCList_SaveDirtyItemDecks(s32 arg0) {
+void LabPCList_SaveDirtyItemDecks(s32 screen) {
     s32 var_s1;
     s32 var_s2;
     s8 *var_s0;
 
-    var_s0 = arg0 + 0x8000;
-    var_s1 = arg0;
+    var_s0 = screen + 0x8000;
+    var_s1 = screen;
     var_s2 = 0;
     do {
         if ((M2C_FIELD(var_s0, s32 *, 0x1E68) != 0) && (M2C_FIELD(var_s0, s32 *, 0x1E6C) != 0)) {
@@ -54,31 +54,31 @@ void LabPCList_InitSourceBoxes(void*, void*, void*, s32);
  * Sets up the three sources of the list: てもち (6 slots), the 8 Game Boy boxes and the 4 64 cartridge boxes (30 slots each).
  * Seen in play (2026-11-14) in いちらん: ran on entry; 「どこのポケモンを いちらん するか」 then offered てもち, ゲームボーイのボックス (ボックス1-8) and 64カセットのボックス (ボックス1-4).
  */
-void LabPCList_InitSources(LabPCListScreen* arg0) {
+void LabPCList_InitSources(LabPCListScreen* screen) {
     s32 i;
 
-    arg0->sources[0].unk_04 = 0x20;
-    arg0->sources[0].unk_08 = func_80025BD8();
-    arg0->sources[0].unk_0C = 0;
-    arg0->sources[0].unk_20 = 6;
-    func_80027410(&arg0->sources[0].boxes, (s8*)arg0 + 0x90, 0x20, 1, 0);
-    LabPCList_InitSourceBoxes(&arg0->sources[0], (s8*)arg0 + 0x8200, (s8*)arg0 + 0x430, 6);
-    arg0->sources[1].unk_04 = 0x21;
-    arg0->sources[1].unk_08 = arg0->sources[0].unk_08;
-    arg0->sources[1].unk_0C = 1;
-    arg0->sources[1].unk_20 = 0x1E;
-    func_80027410(&arg0->sources[1].boxes, (s8*)arg0 + 0xB0, 0x20, 8, 0);
-    LabPCList_InitSourceBoxes(&arg0->sources[1], (s8*)arg0 + 0x8218, (s8*)arg0 + 0x640, 0x1E);
-    arg0->sources[2].unk_04 = 0x11;
-    arg0->sources[2].unk_08 = 0;
-    arg0->sources[2].unk_0C = 2;
-    arg0->sources[2].unk_20 = 0x1E;
-    func_80027410(&arg0->sources[2].boxes, (s8*)arg0 + 0x1B0, 0x20, 4, 0);
-    LabPCList_InitSourceBoxes(&arg0->sources[2], (s8*)arg0 + 0x85D8, (s8*)arg0 + 0x58C0, 0x1E);
+    screen->sources[0].unk_04 = 0x20;
+    screen->sources[0].unk_08 = func_80025BD8();
+    screen->sources[0].unk_0C = 0;
+    screen->sources[0].unk_20 = 6;
+    func_80027410(&screen->sources[0].boxes, (s8*)screen + 0x90, 0x20, 1, 0);
+    LabPCList_InitSourceBoxes(&screen->sources[0], (s8*)screen + 0x8200, (s8*)screen + 0x430, 6);
+    screen->sources[1].unk_04 = 0x21;
+    screen->sources[1].unk_08 = screen->sources[0].unk_08;
+    screen->sources[1].unk_0C = 1;
+    screen->sources[1].unk_20 = 0x1E;
+    func_80027410(&screen->sources[1].boxes, (s8*)screen + 0xB0, 0x20, 8, 0);
+    LabPCList_InitSourceBoxes(&screen->sources[1], (s8*)screen + 0x8218, (s8*)screen + 0x640, 0x1E);
+    screen->sources[2].unk_04 = 0x11;
+    screen->sources[2].unk_08 = 0;
+    screen->sources[2].unk_0C = 2;
+    screen->sources[2].unk_20 = 0x1E;
+    func_80027410(&screen->sources[2].boxes, (s8*)screen + 0x1B0, 0x20, 4, 0);
+    LabPCList_InitSourceBoxes(&screen->sources[2], (s8*)screen + 0x85D8, (s8*)screen + 0x58C0, 0x1E);
     for (i = 0; i < 3; i++) {
-        arg0->sources[i].unk_00 = D_8910A7F8[i];
+        screen->sources[i].unk_00 = D_8910A7F8[i];
     }
-    func_80027410((s8*)arg0 + 0x420, arg0->sources, 0x24, 3, 3);
+    func_80027410((s8*)screen + 0x420, screen->sources, 0x24, 3, 3);
 }
 
 extern s32 D_800603C0;
@@ -87,27 +87,27 @@ void func_8000B2F4(s32);
  * Sets the header cursor's range for the current detail page (1/3: six columns, 2/3: the move block, 3/3: six stat columns).
  * Seen in play (2026-11-14) in いちらん: ran on entry and on every C-Left/C-Right page turn (ページおくり1/3 -> 2/3 -> 3/3).
  */
-void LabPCList_ResetHeaderCursor(LabPCListScreen* arg0) {
+void LabPCList_ResetHeaderCursor(LabPCListScreen* screen) {
     s32 count;
 
-    switch (arg0->page) {
+    switch (screen->page) {
         case 0:
-            count = arg0->pageColumnStart[arg0->page + 1] - arg0->pageColumnStart[arg0->page] - 1;
+            count = screen->pageColumnStart[screen->page + 1] - screen->pageColumnStart[screen->page] - 1;
             break;
         case 1:
             count = 1;
             break;
         case 2:
-            count = arg0->pageColumnStart[arg0->page + 1] - arg0->pageColumnStart[arg0->page];
+            count = screen->pageColumnStart[screen->page + 1] - screen->pageColumnStart[screen->page];
             break;
     }
-    if (arg0->focus == 2) {
-        arg0->headerCursor.cursor = arg0->headerCursor.cursor; // FAKE: self-assignment is required to match (retail reloads and stores the field)
+    if (screen->focus == 2) {
+        screen->headerCursor.cursor = screen->headerCursor.cursor; // FAKE: self-assignment is required to match (retail reloads and stores the field)
     } else {
-        arg0->headerCursor.cursor = 2;
+        screen->headerCursor.cursor = 2;
     }
-    arg0->headerCursor.count = count + 2;
-    arg0->headerCursor.controller = D_800603C0;
+    screen->headerCursor.count = count + 2;
+    screen->headerCursor.controller = D_800603C0;
     func_8000B2F4(D_800603C0);
 }
 
@@ -142,111 +142,108 @@ extern u8 D_8910A84C[];
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): ran on entry as the list
  * window appeared.
  */
-void LabPCList_InitListWindow(LabPCListScreen* arg0, s32 arg1, s32 arg2, s32 arg3) {
+void LabPCList_InitListWindow(LabPCListScreen* screen, s32 x, s32 y, s32 msgBox) {
     UNUSED s32 pad[1]; // FAKE: stack padding
 
-    LabPCList_InitSources(arg0);
-    Window_SetRect(arg0, arg1, arg2, 0x234, 0x17E);
-    arg0->window.animTimer = 0;
-    M2C_FIELD(arg0, s32*, 0x20) = 0;
-    arg0->window.state = 0;
-    arg0->window.frame.style = 1;
-    Window_SetRect((s8*)&arg0->headerFrame, arg1 + 6, arg2 + 6, 0x228, 0x1E);
-    arg0->headerFrame.style = 6;
-    arg0->headerFrame.color = *(Color_RGBA8*)D_8910A844;
-    arg0->headerFrame.color2 = *(Color_RGBA8*)D_8910A848;
-    Window_SetRect((s8*)&arg0->listFrame, arg1 + 6, arg2 + 0x3A, 0x228, 0x12E);
-    arg0->listFrame.style = 1;
-    func_80027804((s8*)&arg0->rows, (s8*)arg0->rowBuffer, 0x1D2, 0);
-    func_80027804((s8*)&arg0->filteredRows, (s8*)arg0->filteredRowBuffer, 0x1D2, 0);
-    LabPCList_LoadAllBoxes((s8*)&arg0->sourceMatrix);
-    arg0->activeFilters = 0;
-    arg0->columnWidths = D_8910A804;
-    LabPCList_FlattenEntries(&arg0->rows, (unk_func_8830867C_02C_144*)&arg0->sourceMatrix);
-    arg0->sortKey = 0;
-    func_80027D68((s32)((s8*)&arg0->rows), D_8910D990[0]);
-    arg0->focus = 0;
-    LabPCList_LoadItemDecks((s32)arg0);
-    arg0->unk_0080 = 0;
-    arg0->page = 0;
-    ScrollList_Init((s8*)&arg0->list, (s8*)&arg0->rows, (s8*)arg0->rowFlags, 0xE, LabPCList_DrawMonRow, 0x228, 0x14);
-    arg0->list.options &= ~0x100000;
-    arg0->pageColumnStart = D_8910A84C;
-    LabPCList_ResetHeaderCursor(arg0);
-    arg0->hasChanges = 0;
-    arg0->msg = arg3;
-    LabPCList_ResetFilterState(arg0);
-    arg0->state = 1;
-    LabSourceSelect_Init(&arg0->sourceSelectWindow, 0x78, 0x67, (s8*)&arg0->sourceMatrix, D_8910A7F4);
+    LabPCList_InitSources(screen);
+    Window_SetRect(screen, x, y, 0x234, 0x17E);
+    screen->window.animTimer = 0;
+    M2C_FIELD(screen, s32*, 0x20) = 0;
+    screen->window.state = 0;
+    screen->window.frame.style = 1;
+    Window_SetRect((s8*)&screen->headerFrame, x + 6, y + 6, 0x228, 0x1E);
+    screen->headerFrame.style = 6;
+    screen->headerFrame.color = *(Color_RGBA8*)D_8910A844;
+    screen->headerFrame.color2 = *(Color_RGBA8*)D_8910A848;
+    Window_SetRect((s8*)&screen->listFrame, x + 6, y + 0x3A, 0x228, 0x12E);
+    screen->listFrame.style = 1;
+    func_80027804((s8*)&screen->rows, (s8*)screen->rowBuffer, 0x1D2, 0);
+    func_80027804((s8*)&screen->filteredRows, (s8*)screen->filteredRowBuffer, 0x1D2, 0);
+    LabPCList_LoadAllBoxes((s8*)&screen->sourceMatrix);
+    screen->activeFilters = 0;
+    screen->columnWidths = D_8910A804;
+    LabPCList_FlattenEntries(&screen->rows, (unk_func_8830867C_02C_144*)&screen->sourceMatrix);
+    screen->sortKey = 0;
+    func_80027D68((s32)((s8*)&screen->rows), D_8910D990[0]);
+    screen->focus = 0;
+    LabPCList_LoadItemDecks((s32)screen);
+    screen->unk_0080 = 0;
+    screen->page = 0;
+    ScrollList_Init((s8*)&screen->list, (s8*)&screen->rows, (s8*)screen->rowFlags, 0xE, LabPCList_DrawMonRow, 0x228, 0x14);
+    screen->list.options &= ~0x100000;
+    screen->pageColumnStart = D_8910A84C;
+    LabPCList_ResetHeaderCursor(screen);
+    screen->hasChanges = 0;
+    screen->msg = msgBox;
+    LabPCList_ResetFilterState(screen);
+    screen->state = 1;
+    LabSourceSelect_Init(&screen->sourceSelectWindow, 0x78, 0x67, (s8*)&screen->sourceMatrix, D_8910A7F4);
 }
 
 /**
  * Returns the x position of the header cursor for the current detail page.
  * Seen in play (2026-11-14) in いちらん: placed the header frame and the column popups under ニックネーム, ID, おや, ばしょ and the stat columns.
  */
-s32 LabPCList_GetColumnCursorX(LabPCListScreen* arg0) {
+s32 LabPCList_GetColumnCursorX(LabPCListScreen* screen) {
     s32 i;
     s32 x = 0;
     s32 end;
 
-    for (i = arg0->pageColumnStart[arg0->page], end = arg0->pageColumnStart[arg0->page] + arg0->headerCursor.cursor - 2; i < end; i++) {
-        x += arg0->columnWidths[i];
+    for (i = screen->pageColumnStart[screen->page], end = screen->pageColumnStart[screen->page] + screen->headerCursor.cursor - 2; i < end; i++) {
+        x += screen->columnWidths[i];
     }
-    return arg0->listFrame.x + x + 0x78;
+    return screen->listFrame.x + x + 0x78;
 }
 
 /**
  * Draws the yellow frame around the selected column header; on page 1 the two type columns share one frame.
  * Seen in play (2026-11-14) in いちらん: framed ニックネーム, ID, おや, ばしょ and タイプ1/タイプ2 while R and D-Right moved the header cursor.
  */
-void LabPCList_DrawColumnCursor(LabPCListScreen* arg0) {
+void LabPCList_DrawColumnCursor(LabPCListScreen* screen) {
     s32 end;
     s32* r;
     s32 i;
     s32 w;
 
-    switch (arg0->page) {
+    switch (screen->page) {
         case 0:
-            end = arg0->pageColumnStart[arg0->page] + arg0->headerCursor.cursor - 2;
+            end = screen->pageColumnStart[screen->page] + screen->headerCursor.cursor - 2;
             i = end;
             if (i == 4) {
-                w = arg0->columnWidths[i] + arg0->columnWidths[i + 1];
+                w = screen->columnWidths[i] + screen->columnWidths[i + 1];
             } else {
-                w = arg0->columnWidths[i];
+                w = screen->columnWidths[i];
             }
-            Ui_DrawRoundedFrame(LabPCList_GetColumnCursorX(arg0), arg0->listFrame.y, w, 0x14, *(Color_RGBA8*)D_80073520);
+            Ui_DrawRoundedFrame(LabPCList_GetColumnCursorX(screen), screen->listFrame.y, w, 0x14, *(Color_RGBA8*)D_80073520);
             break;
         case 1:
             w = 0;
-            r = &arg0->pageColumnStart[arg0->page];
-            i = r[0] + arg0->headerCursor.cursor - 2;
+            r = &screen->pageColumnStart[screen->page];
+            i = r[0] + screen->headerCursor.cursor - 2;
             end = r[1] - r[0] + i;
             for (; i < end; i++) {
-                w += arg0->columnWidths[i];
+                w += screen->columnWidths[i];
             }
-            Ui_DrawRoundedFrame(LabPCList_GetColumnCursorX(arg0), arg0->listFrame.y, w, 0x14, *(Color_RGBA8*)D_80073520);
+            Ui_DrawRoundedFrame(LabPCList_GetColumnCursorX(screen), screen->listFrame.y, w, 0x14, *(Color_RGBA8*)D_80073520);
             break;
         case 2:
-            Ui_DrawRoundedFrame(LabPCList_GetColumnCursorX(arg0), arg0->listFrame.y, arg0->columnWidths[arg0->pageColumnStart[arg0->page] + arg0->headerCursor.cursor - 2], 0x14, *(Color_RGBA8*)D_80073520);
+            Ui_DrawRoundedFrame(LabPCList_GetColumnCursorX(screen), screen->listFrame.y, screen->columnWidths[screen->pageColumnStart[screen->page] + screen->headerCursor.cursor - 2], 0x14, *(Color_RGBA8*)D_80073520);
             break;
     }
 }
 
 /**
- * Draws a highlight rectangle (via Ui_DrawRoundedFrame) for the screen object arg0, positioned from
- * the two words at arg0 + 0x2C / 0x30 (what they mean is not established). The word at
- * arg0 + 0xB550 selects the shape: 0 draws a 0x26 x 0x14 rectangle at the origin, 1 a
- * 0x50 x 0x14 rectangle offset 0x26 to the right; other values draw nothing. The color is
- * read from D_80073520. (Compare LabPCList_DrawRowCursor.)
+ * Draws the frame of header cursor positions 0 (the 0x26-wide icon that leaves the list) and 1 (the
+ * 0x50-wide ポケモン header that opens the sort menu); the column headers use LabPCList_DrawColumnCursor.
  * Seen in play (2026-11-14) in いちらん: D-Up from the first row framed the ポケモン header (cursor 1), whose A opens the sort menu.
  */
-void LabPCList_DrawHeaderCursor(LabPCListScreen* arg0) {
-    switch (arg0->headerCursor.cursor) {
+void LabPCList_DrawHeaderCursor(LabPCListScreen* screen) {
+    switch (screen->headerCursor.cursor) {
         case 0:
-            Ui_DrawRoundedFrame(arg0->listFrame.x, arg0->listFrame.y, 0x26, 0x14, *(Color_RGBA8*)D_80073520);
+            Ui_DrawRoundedFrame(screen->listFrame.x, screen->listFrame.y, 0x26, 0x14, *(Color_RGBA8*)D_80073520);
             return;
         case 1:
-            Ui_DrawRoundedFrame(arg0->listFrame.x + 0x26, arg0->listFrame.y, 0x50, 0x14, *(Color_RGBA8*)D_80073520);
+            Ui_DrawRoundedFrame(screen->listFrame.x + 0x26, screen->listFrame.y, 0x50, 0x14, *(Color_RGBA8*)D_80073520);
             return;
     }
 }

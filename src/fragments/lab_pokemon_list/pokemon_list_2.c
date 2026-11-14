@@ -30,7 +30,7 @@ extern char D_8910DB7C[];
 extern char D_8910DB88[];
 extern char D_8910DB94[];
 extern char D_8910DBA0[];
-s32 LabPCList_GetColumnCursorX(LabPCListScreen* arg0);
+s32 LabPCList_GetColumnCursorX(LabPCListScreen* screen);
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void Font_SetColorForFlags(s32);
@@ -44,101 +44,101 @@ void Font_Printf(s32 x, s32 y, const char* fmt, ...);
  * Draws the list column headers: Pokemon, nickname, ID, OT, location, Type 1/2, level, HP, Attack...
  * Seen in play (2026-11-12): the headers ポケモン, ニックネーム, ID, おや, ばしょ, タイプ1, タイプ2.
  */
-void LabPCList_DrawDetailColumns(LabPCListScreen* arg0, s32 arg1, s32 arg2, s32 arg3) {
+void LabPCList_DrawDetailColumns(LabPCListScreen* screen, s32 left, s32 top, s32 flags) {
     s32 x;
     s32 i;
     s32 hl;
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(arg1, arg0->listFrame.y, 0x26, 0x14, *(Color_RGBA8*)D_8910A85C);
-    func_80029028(arg1 + 0x26, arg0->listFrame.y, 0x50, 0x14, *(Color_RGBA8*)D_8910A860);
-    i = arg0->pageColumnStart[arg0->page];
-    for (x = arg1 + 0x78; x < arg0->listFrame.width; i++) {
-        func_80029028(x, arg2, arg0->columnWidths[i], 0x14, *(Color_RGBA8*)&D_8910A85C[(i & 1) * 4]);
-        x += arg0->columnWidths[i];
+    func_80029028(left, screen->listFrame.y, 0x26, 0x14, *(Color_RGBA8*)D_8910A85C);
+    func_80029028(left + 0x26, screen->listFrame.y, 0x50, 0x14, *(Color_RGBA8*)D_8910A860);
+    i = screen->pageColumnStart[screen->page];
+    for (x = left + 0x78; x < screen->listFrame.width; i++) {
+        func_80029028(x, top, screen->columnWidths[i], 0x14, *(Color_RGBA8*)&D_8910A85C[(i & 1) * 4]);
+        x += screen->columnWidths[i];
     }
-    if (arg3 & 0x10) {
-        Ui_FillRectHighlighted(LabPCList_GetColumnCursorX(arg0) + 1, arg2 + 1, arg0->columnWidths[arg0->pageColumnStart[arg0->page] + arg0->headerCursor.cursor - 2] - 2, 0x12, *(Color_RGBA8*)D_8910A860);
+    if (flags & 0x10) {
+        Ui_FillRectHighlighted(LabPCList_GetColumnCursorX(screen) + 1, top + 1, screen->columnWidths[screen->pageColumnStart[screen->page] + screen->headerCursor.cursor - 2] - 2, 0x12, *(Color_RGBA8*)D_8910A860);
     }
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-    Gfx_DrawTextureIa8(arg1 + 4, arg2 + 1, 0x1E, 0x12, D_8910AB08, 0x20, 0);
+    Gfx_DrawTextureIa8(left + 4, top + 1, 0x1E, 0x12, D_8910AB08, 0x20, 0);
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
     Font_SetActive(4, 0);
-    Font_Printf(arg1 + 0x2E, arg2 + 2, D_8910DAF8);
+    Font_Printf(left + 0x2E, top + 2, D_8910DAF8);
     Font_EndTexturedTextRendering();
     Font_BeginTranslucentTextRendering();
-    for (x = arg1 + 0x78, i = arg0->pageColumnStart[arg0->page]; x < arg0->listFrame.width; i++) {
-        hl = (i + 2 == arg0->pageColumnStart[arg0->page] + arg0->headerCursor.cursor) ? 0x12 : 0;
-        Font_SetColorForFlags(hl & arg3);
+    for (x = left + 0x78, i = screen->pageColumnStart[screen->page]; x < screen->listFrame.width; i++) {
+        hl = (i + 2 == screen->pageColumnStart[screen->page] + screen->headerCursor.cursor) ? 0x12 : 0;
+        Font_SetColorForFlags(hl & flags);
         switch (i) {
             case 0:
                 Font_SetActive(4, -1);
-                Font_Printf(x + 1, arg2 + 2, D_8910DB04);
+                Font_Printf(x + 1, top + 2, D_8910DB04);
                 break;
             case 1:
                 Font_SetActive(4, 0);
-                Font_Printf(x + 0xA, arg2 + 2, D_8910DB14);
+                Font_Printf(x + 0xA, top + 2, D_8910DB14);
                 break;
             case 2:
                 Font_SetActive(4, 0xC);
-                Font_Printf(x + 0x16, arg2 + 2, D_8910DB18);
+                Font_Printf(x + 0x16, top + 2, D_8910DB18);
                 break;
             case 3:
                 Font_SetActive(4, 0);
-                Font_Printf(x + 4, arg2 + 2, D_8910DB20);
+                Font_Printf(x + 4, top + 2, D_8910DB20);
                 break;
             case 4:
                 Font_SetActive(4, 0);
-                Font_Printf(x + 4, arg2 + 2, D_8910DB28);
+                Font_Printf(x + 4, top + 2, D_8910DB28);
                 break;
             case 5:
                 Font_SetActive(4, 0);
-                Font_Printf(x + 4, arg2 + 2, D_8910DB34);
+                Font_Printf(x + 4, top + 2, D_8910DB34);
                 break;
             case 6:
                 Font_SetActive(4, 0);
-                Font_Printf(x + 0x16, arg2 + 2, D_8910DB40);
+                Font_Printf(x + 0x16, top + 2, D_8910DB40);
                 break;
             case 7:
                 Font_SetActive(4, 0);
-                Font_Printf(x + 0x16, arg2 + 2, D_8910DB4C);
+                Font_Printf(x + 0x16, top + 2, D_8910DB4C);
                 break;
             case 8:
                 Font_SetActive(4, 0);
-                Font_Printf(x + 0x16, arg2 + 2, D_8910DB58);
+                Font_Printf(x + 0x16, top + 2, D_8910DB58);
                 break;
             case 9:
                 Font_SetActive(4, 0);
-                Font_Printf(x + 0x16, arg2 + 2, D_8910DB64);
+                Font_Printf(x + 0x16, top + 2, D_8910DB64);
                 break;
             case 10:
                 Font_SetActive(4, 0);
-                Font_Printf(x + 0xC, arg2 + 2, D_8910DB70);
+                Font_Printf(x + 0xC, top + 2, D_8910DB70);
                 break;
             case 11:
                 Font_SetActive(4, 0xC);
-                Font_Printf(x + 0xE, arg2 + 2, D_8910DB78);
+                Font_Printf(x + 0xE, top + 2, D_8910DB78);
                 break;
             case 12:
                 Font_SetActive(4, 0);
-                Font_Printf(x + 4, arg2 + 2, D_8910DB7C);
+                Font_Printf(x + 4, top + 2, D_8910DB7C);
                 break;
             case 13:
                 Font_SetActive(4, 0);
-                Font_Printf(x + 4, arg2 + 2, D_8910DB88);
+                Font_Printf(x + 4, top + 2, D_8910DB88);
                 break;
             case 14:
                 Font_SetActive(4, 0);
-                Font_Printf(x + 4, arg2 + 2, D_8910DB94);
+                Font_Printf(x + 4, top + 2, D_8910DB94);
                 break;
             case 15:
                 Font_SetActive(4, 0);
-                Font_Printf(x + 4, arg2 + 2, D_8910DBA0);
+                Font_Printf(x + 4, top + 2, D_8910DBA0);
                 break;
         }
-        x += arg0->columnWidths[i];
+        x += screen->columnWidths[i];
     }
     Font_EndTexturedTextRendering();
 }
@@ -159,19 +159,19 @@ M2C_UNK func_8001AB6C();
 M2C_UNK func_8001ABBC();
 
 /**
- * Draws the colored type icon for type slot `arg3` of Pokemon `arg2`.
+ * Draws the colored type icon for type slot `typeSlot` of Pokemon `mon`.
  * Seen in play (2026-11-12): くさ, どく, ほのお and みず in their type colors.
  */
-void LabPCList_DrawTypeIcon(s32 arg0, s32 arg1, u8* arg2, s32 arg3) {
+void LabPCList_DrawTypeIcon(s32 x, s32 y, u8* mon, s32 typeSlot) {
     Color82000BC4 c;
     s32 idx;
 
-    if ((*arg2 > 0) && (*arg2 < 0x98) && ((idx = Pokemon_GetTypeIndex(arg2, arg3)) != -1)) {
+    if ((*mon > 0) && (*mon < 0x98) && ((idx = Pokemon_GetTypeIndex(mon, typeSlot)) != -1)) {
         c = D_80066AD8[idx].color;
         func_8001AB6C();
         func_8001A384(4, 0);
         func_8001AA9C(c.r, c.g, c.b, c.a);
-        func_8001A944(arg0, arg1, (M2C_UNK*)D_80066AD8[idx].str);
+        func_8001A944(x, y, (M2C_UNK*)D_80066AD8[idx].str);
         func_8001ABBC();
     }
 }
@@ -188,12 +188,12 @@ s32 BattleMon_GetMoveIndexChecked(s32, s32);
  * Draws move slot `slot` of a Pokémon in its type's color, or the empty-slot dash; nothing for a missing slot.
  * Seen in play (2026-11-14) in いちらん: drew the わざ1-4 columns of page 2/3.
  */
-void LabPCList_DrawMoveName(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+void LabPCList_DrawMoveName(s32 x, s32 y, s32 mon, s32 slot) {
     const char* str;
     Color82000BC4 color;
     s32 idx;
 
-    idx = BattleMon_GetMoveIndexChecked(arg2, arg3);
+    idx = BattleMon_GetMoveIndexChecked(mon, slot);
     if (idx != -1) {
         if (idx == -2) {
             color = *(Color82000BC4*)&D_800734A8;
@@ -205,7 +205,7 @@ void LabPCList_DrawMoveName(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
         func_8001AB6C();
         func_8001A384(4, -1);
         func_8001AA9C(color.r, color.g, color.b, color.a);
-        func_8001A944(arg0, arg1, (M2C_UNK*)str);
+        func_8001A944(x, y, (M2C_UNK*)str);
         func_8001ABBC();
     }
 }
@@ -227,42 +227,42 @@ extern M2C_UNK D_8910DBC4;
  * cartridge box number, and so on.
  * Seen in play (2026-11-12): てもち in the ばしょ column for the three party Pokemon.
  */
-void LabPCList_DrawLocation(s32 arg0, s32 arg1, s8 ***arg2) {
+void LabPCList_DrawLocation(s32 x, s32 y, s8 ***entry) {
     s32 temp_v0;
 
     func_8001AB6C();
     func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
-    temp_v0 = M2C_FIELD(**arg2, s32 *, 4);
+    temp_v0 = M2C_FIELD(**entry, s32 *, 4);
     switch (temp_v0) {                              /* irregular */
     case 32:
         func_8001A384(4, 0);
-        func_8001A944(arg0, arg1, &D_8910DBB4);
+        func_8001A944(x, y, &D_8910DBB4);
         break;
     case 33:
         func_8001A384(4, -1);
-        func_8001AA60(arg0 + 0x22, arg1, M2C_FIELD(*arg2, s32 *, 4) + 0x31);
+        func_8001AA60(x + 0x22, y, M2C_FIELD(*entry, s32 *, 4) + 0x31);
         func_8001AA9C(0xFFU, 0xC8U, 0xFFU, 0xFFU);
-        func_8001A944(arg0 - 2, arg1, &D_8910DBBC);
+        func_8001A944(x - 2, y, &D_8910DBBC);
         break;
     case 17:
         func_8001A384(4, -1);
-        func_8001AA60(arg0 + 0x22, arg1, M2C_FIELD(*arg2, s32 *, 4) + 0x31);
+        func_8001AA60(x + 0x22, y, M2C_FIELD(*entry, s32 *, 4) + 0x31);
         func_8001AA9C(0x96U, 0xDCU, 0xD2U, 0xFFU);
-        func_8001A944(arg0 - 2, arg1, &D_8910DBC0);
+        func_8001A944(x - 2, y, &D_8910DBC0);
         break;
     case 19:
         func_8001A384(4, 0);
-        func_8001A944(arg0, arg1, &D_8910DBC4);
+        func_8001A944(x, y, &D_8910DBC4);
         break;
     }
     func_8001ABBC();
 }
 
 /** Draws a line of plain text in a Lab PC list. */
-void LabPCList_DrawPlainText(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4) {
+void LabPCList_DrawPlainText(s32 x, s32 y, s8* fmt, s32 value, s32 fontFlags) {
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
-    Font_SetActive(4, arg4);
-    Font_Printf(arg0, arg1, arg2, arg3);
+    Font_SetActive(4, fontFlags);
+    Font_Printf(x, y, fmt, value);
     Font_EndTexturedTextRendering();
 }

@@ -411,30 +411,30 @@ typedef struct LabPCList {
 extern Gfx D_8910D028[];
 
 // pokemon_list_2.c
-void LabPCList_DrawPlainText(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4);
+void LabPCList_DrawPlainText(s32 x, s32 y, s8* fmt, s32 value, s32 fontFlags);
 
 // pokemon_list_8.c
 void LabPCList_Setup(void);
 
 // popup_menus.c
-void LabMoveSelect_DisableHmMoves(LabMoveSelectWindow* arg0);
-void LabBoxList_UpdateItemFlags(LabBoxListWindow* arg0);
-void LabSourceSelect_ApplyCheck(LabSourceSelectWindow* arg0, s32 arg1);
-void LabSourceSelect_Init(LabSourceSelectWindow* arg0, s32 arg1, s32 arg2, s8* arg3, Color_RGBA8 arg4);
-void LabSourceSelect_Draw(LabSourceSelectWindow* arg0, s32 arg1);
-s32 LabSourceSelect_UpdateSources(LabSourceSelectWindow* arg0);
-s32 LabSourceSelect_Update(LabSourceSelectWindow* arg0);
-void LabPCList_InitTypeFilter(LabTypeFilterWindow* arg0, s32 x, s32 y, s32* arg3);
-void LabPCList_DrawTypeFilter(LabTypeFilterWindow* arg0);
-s32 LabPCList_UpdateTypeFilter(LabTypeFilterWindow* arg0);
-void LabPCList_CommitTypeFilter(LabTypeFilterWindow* arg0, s32* arg1);
-void LabPCList_InitMoveFilter(LabMoveFilterWindow* arg0, s32 x, s32 y, u8* arg3);
-void LabPCList_DrawMoveFilter(LabMoveFilterWindow* arg0);
-s32 LabPCList_UpdateMoveFilter(LabMoveFilterWindow* arg0);
-void LabPCList_CommitMoveFilter(LabMoveFilterWindow* arg0, u8* arg1);
+void LabMoveSelect_DisableHmMoves(LabMoveSelectWindow* window);
+void LabBoxList_UpdateItemFlags(LabBoxListWindow* boxList);
+void LabSourceSelect_ApplyCheck(LabSourceSelectWindow* window, s32 row);
+void LabSourceSelect_Init(LabSourceSelectWindow* window, s32 x, s32 y, s8* sources, Color_RGBA8 color);
+void LabSourceSelect_Draw(LabSourceSelectWindow* window, s32 flags);
+s32 LabSourceSelect_UpdateSources(LabSourceSelectWindow* window);
+s32 LabSourceSelect_Update(LabSourceSelectWindow* window);
+void LabPCList_InitTypeFilter(LabTypeFilterWindow* window, s32 x, s32 y, s32* filter);
+void LabPCList_DrawTypeFilter(LabTypeFilterWindow* window);
+s32 LabPCList_UpdateTypeFilter(LabTypeFilterWindow* window);
+void LabPCList_CommitTypeFilter(LabTypeFilterWindow* window, s32* filter);
+void LabPCList_InitMoveFilter(LabMoveFilterWindow* window, s32 x, s32 y, u8* filter);
+void LabPCList_DrawMoveFilter(LabMoveFilterWindow* window);
+s32 LabPCList_UpdateMoveFilter(LabMoveFilterWindow* window);
+void LabPCList_CommitMoveFilter(LabMoveFilterWindow* window, u8* filter);
 void LabPCList_UnusedStub1(void);
 void LabPCList_UnusedStub2(void);
-s32 LabPCList_TypeIdToListIndex(s32 arg0);
+s32 LabPCList_TypeIdToListIndex(s32 a);
 
 // pokemon_list_9.c
 s32 LabPCList_CompareByLevelAsc(LabMonEntry*, LabMonEntry*);
@@ -450,17 +450,17 @@ s32 LabPCList_CompareBySpeedDesc(LabMonEntry*, LabMonEntry*);
 s32 LabPCList_CompareBySpecialAsc(LabMonEntry*, LabMonEntry*);
 s32 LabPCList_CompareBySpecialDesc(LabMonEntry*, LabMonEntry*);
 s32 LabPCList_CompareById(LabMonEntry*, LabMonEntry*);
-s32 LabPCList_CompareByOtName(LabMonEntry* arg0, LabMonEntry* arg1);
+s32 LabPCList_CompareByOtName(LabMonEntry* a, LabMonEntry* b);
 s32 LabPCList_CompareByNickname(LabMonEntry*, LabMonEntry*);
 s32 LabPCList_CompareBySpeciesNumber(LabMonEntry*, LabMonEntry*);
-int LabPCList_FilterByLevelRange(LabMonEntry* arg0, u8* arg1);
-s32 LabPCList_FilterByAnyType(LabMonEntry* arg0, unk_func_8830867C_02C_C54_01C* arg1);
-s32 LabPCList_FilterByAnyMove(LabMonEntry* arg0, unk_func_8830867C_02C_C54_024* arg1);
-s32 LabPCList_FilterBySpeciesId(LabMonEntry* arg0, s32* arg1);
-s32 LabPCList_FilterByExactTypePair(LabMonEntry* arg0, unk_func_8830867C_02C_C54_014* arg1);
+int LabPCList_FilterByLevelRange(LabMonEntry* entryArg, u8* range);
+s32 LabPCList_FilterByAnyType(LabMonEntry* entry, unk_func_8830867C_02C_C54_01C* filterArg);
+s32 LabPCList_FilterByAnyMove(LabMonEntry* entryArg, unk_func_8830867C_02C_C54_024* filterArg);
+s32 LabPCList_FilterBySpeciesId(LabMonEntry* entry, s32* species);
+s32 LabPCList_FilterByExactTypePair(LabMonEntry* entry, unk_func_8830867C_02C_C54_014* filterArg);
 
 // pokemon_list_10.c
-s32 LabPCList_CanLearnMoveByLevelUp(s32 arg0, s32 arg1);
+s32 LabPCList_CanLearnMoveByLevelUp(s32 species, s32 tmIndex);
 void LabPCList_FlattenEntries(PointerList*, unk_func_8830867C_02C_144*);
 void LabPCList_ReadDeckCategory(unk_func_8830867C_02C_154*);
 void LabPCList_WriteDeckCategory(unk_func_8830867C_02C_154*);

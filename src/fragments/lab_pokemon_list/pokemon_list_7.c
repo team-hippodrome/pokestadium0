@@ -120,18 +120,18 @@ u32 func_800566BC(s8*);
  * Seen in play (2026-11-12) in いちらん: kind 0 gave てもち, kind 1 box 0 gave GB 1, and kind 2 box 0
  * gave 64 1, all in the いどう message.
  */
-void LabPCList_FormatLocationName(s8* arg0, s32 arg1, s32 arg2) {
-    switch (arg1) {
+void LabPCList_FormatLocationName(s8* buf, s32 sourceKind, s32 box) {
+    switch (sourceKind) {
         case 0:
-            *(Str7_89103620*)arg0 = *(Str7_89103620*)"てもち"; // "Party"
+            *(Str7_89103620*)buf = *(Str7_89103620*)"てもち"; // "Party"
             break;
         case 1:
-            *(Str9_89103620*)arg0 = *(Str9_89103620*)"ＧＢ　０"; // "GB 0"
-            arg0[func_800566BC(arg0) - 1] += arg2 + 1;
+            *(Str9_89103620*)buf = *(Str9_89103620*)"ＧＢ　０"; // "GB 0"
+            buf[func_800566BC(buf) - 1] += box + 1;
             break;
         case 2:
-            *(Str9_89103620*)arg0 = *(Str9_89103620*)"６４　０"; // "64 0"
-            arg0[func_800566BC(arg0) - 1] += arg2 + 1;
+            *(Str9_89103620*)buf = *(Str9_89103620*)"６４　０"; // "64 0"
+            buf[func_800566BC(buf) - 1] += box + 1;
             break;
     }
 }

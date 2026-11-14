@@ -109,44 +109,44 @@ extern s32 D_8910D9D4;
  * Seen in play (2026-11-12) in いちらん: handled that menu: ポケモンばんごうでならべる sorted the party as フシギダネ,
  * ヒトカゲ, ゼニガメ, and アイウエオじゅんにならべる as ゼニガメ, ヒトカゲ, フシギダネ.
  */
-s32 LabPCList_UpdateSortMenu(LabPCListScreen* arg0) {
+s32 LabPCList_UpdateSortMenu(LabPCListScreen* screen) {
     s32 buttons;
 
-    if (LabPCList_UpdatePopupMenu(&arg0->popup) != 0) {
+    if (LabPCList_UpdatePopupMenu(&screen->popup) != 0) {
         return 0;
     }
     buttons = ((u16*)D_800603C0)[4];
     if (buttons & 0x4000) {
         func_8003F6AC(3);
-        arg0->state = 0;
+        screen->state = 0;
     } else if (buttons & 0x8000) {
-        if (!(arg0->popup.menu.itemFlags[arg0->popup.menu.cursor] & 1)) {
+        if (!(screen->popup.menu.itemFlags[screen->popup.menu.cursor] & 1)) {
             func_8003F6AC(2);
-            switch (arg0->popup.menu.cursor) {
+            switch (screen->popup.menu.cursor) {
                 case 0:
-                    arg0->sortKey = 0x10;
-                    func_80027D68(M2C_FIELD(arg0, s32*, 0xB160), D_8910D9D0);
-                    arg0->state = 0;
+                    screen->sortKey = 0x10;
+                    func_80027D68(M2C_FIELD(screen, s32*, 0xB160), D_8910D9D0);
+                    screen->state = 0;
                     break;
                 case 1:
-                    arg0->sortKey = 0x11;
-                    func_80027D68(M2C_FIELD(arg0, s32*, 0xB160), D_8910D9D4);
-                    arg0->state = 0;
+                    screen->sortKey = 0x11;
+                    func_80027D68(M2C_FIELD(screen, s32*, 0xB160), D_8910D9D4);
+                    screen->state = 0;
                     break;
                 case 2:
-                    LabPCList_ToggleFilterFlag(arg0, 0x20);
-                    LabPCList_ApplyFiltersAndSort(arg0);
-                    arg0->state = 0;
+                    LabPCList_ToggleFilterFlag(screen, 0x20);
+                    LabPCList_ApplyFiltersAndSort(screen);
+                    screen->state = 0;
                     break;
                 case 3:
-                    LabPCList_ResetFilterState(arg0);
-                    LabPCList_ClearFilterFlags(arg0);
-                    LabPCList_ApplyFiltersAndSort(arg0);
-                    arg0->state = 0;
+                    LabPCList_ResetFilterState(screen);
+                    LabPCList_ClearFilterFlags(screen);
+                    LabPCList_ApplyFiltersAndSort(screen);
+                    screen->state = 0;
                     break;
                 case 4:
-                    arg0->state = 1;
-                    LabSourceSelect_Init(&arg0->sourceSelectWindow, 0x78, 0x67, (s8*)&arg0->sourceMatrix, D_8910A7F4);
+                    screen->state = 1;
+                    LabSourceSelect_Init(&screen->sourceSelectWindow, 0x78, 0x67, (s8*)&screen->sourceMatrix, D_8910A7F4);
                     return 0;
             }
         } else {

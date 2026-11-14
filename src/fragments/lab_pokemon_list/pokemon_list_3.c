@@ -29,9 +29,9 @@ extern u8 D_8910A848[];
 extern u8 D_8910A804[];
 extern u8 D_8910A84C[];
 
-void LabPCList_SaveDirtyItemDecks(s32 arg0);
-void LabPCList_ResetHeaderCursor(LabPCListScreen* arg0);
-s32 LabPCList_GetColumnCursorX(LabPCListScreen* arg0);
+void LabPCList_SaveDirtyItemDecks(s32 screen);
+void LabPCList_ResetHeaderCursor(LabPCListScreen* screen);
+s32 LabPCList_GetColumnCursorX(LabPCListScreen* screen);
 extern u8 D_800734A8[];
 
 extern Gfx D_80060270[];
@@ -191,19 +191,19 @@ typedef struct ListMenu8910179C {
 
 /**
  * Draws a fixed-size (0x50 x 0x14) cursor rectangle via Ui_DrawRoundedFrame for a scrolling list
- * menu: x = arg1 + 0x26, y = scrollTarget + arg2 - scroll, minus (cellHeight - 1) when flag
+ * menu: x = left + 0x26, y = scrollTarget + top - scroll, minus (cellHeight - 1) when flag
  * 0x400 is set; color read from D_80073520. Compare ScrollGrid_DrawCursor and ScrollList_DrawCursor.
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): drew the cursor on the フシギダネ
  * row.
  */
-void LabPCList_DrawRowCursor(ListMenu8910179C* arg0, s32 arg1, s32 arg2) {
+void LabPCList_DrawRowCursor(ListMenu8910179C* list, s32 left, s32 top) {
     s32 y;
 
-    y = arg0->scrollTarget + arg2 - arg0->scroll;
-    if (arg0->flags & 0x400) {
-        y = y - arg0->cellHeight + 1;
+    y = list->scrollTarget + top - list->scroll;
+    if (list->flags & 0x400) {
+        y = y - list->cellHeight + 1;
     }
-    Ui_DrawRoundedFrame(arg1 + 0x26, y, 0x50, 0x14, *(Color_RGBA8*)D_80073520);
+    Ui_DrawRoundedFrame(left + 0x26, y, 0x50, 0x14, *(Color_RGBA8*)D_80073520);
 }
 
 extern u8 D_04006170[];
@@ -221,19 +221,19 @@ void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
  * Draws タテ／ヨコきりかえ (switch vertical/horizontal) and ページおくり%d/3 (page %d/3).
  * Seen in play (2026-11-12): Lタテ／ヨコきりかえR and ページおくり1／3.
  */
-void LabPCList_DrawPageHint(LabPCListScreen* arg0) {
+void LabPCList_DrawPageHint(LabPCListScreen* screen) {
     func_8001AB6C();
     func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
     func_8001A384(8, 0);
-    func_8001A944(arg0->headerFrame.x + 0x22, arg0->headerFrame.y + 5, (M2C_UNK*)D_8910DBF0);
-    func_8001A944(arg0->headerFrame.x + 0x152, arg0->headerFrame.y + 5, (M2C_UNK*)D_8910DC04,
-                  arg0->page + 1);
+    func_8001A944(screen->headerFrame.x + 0x22, screen->headerFrame.y + 5, (M2C_UNK*)D_8910DBF0);
+    func_8001A944(screen->headerFrame.x + 0x152, screen->headerFrame.y + 5, (M2C_UNK*)D_8910DC04,
+                  screen->page + 1);
     func_8001ABBC();
     gSPDisplayList(gDisplayListHead++, D_80060290);
-    Gfx_DrawTextureRgba16(arg0->headerFrame.x + 4, arg0->headerFrame.y + 3, 0x1A, 0x18, D_8910C370, 0x20, 0x200000);
-    Gfx_DrawTextureRgba16(arg0->headerFrame.x + 0xDA, arg0->headerFrame.y + 3, 0x1A, 0x18, D_8910C978, 0x20, 0x200000);
-    Gfx_DrawTextureRgba16(arg0->headerFrame.x + 0x134, arg0->headerFrame.y + 2, 0x1A, 0x1A, D_04006170, 0x1C, 0x200000);
-    Gfx_DrawTextureRgba16(arg0->headerFrame.x + 0x20A, arg0->headerFrame.y + 2, 0x1A, 0x1A, D_04006CE0, 0x1C, 0x200000);
+    Gfx_DrawTextureRgba16(screen->headerFrame.x + 4, screen->headerFrame.y + 3, 0x1A, 0x18, D_8910C370, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(screen->headerFrame.x + 0xDA, screen->headerFrame.y + 3, 0x1A, 0x18, D_8910C978, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(screen->headerFrame.x + 0x134, screen->headerFrame.y + 2, 0x1A, 0x1A, D_04006170, 0x1C, 0x200000);
+    Gfx_DrawTextureRgba16(screen->headerFrame.x + 0x20A, screen->headerFrame.y + 2, 0x1A, 0x1A, D_04006CE0, 0x1C, 0x200000);
     gSPDisplayList(gDisplayListHead++, D_80060398);
 }
 
