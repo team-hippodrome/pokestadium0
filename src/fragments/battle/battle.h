@@ -33,9 +33,9 @@ typedef struct { f32 v; f32 pad[3]; } CameraTargetOffsetRow;
 
 typedef struct MoveAnimInfoZ {
     /* 0x00 */ u8 pad00[2];
-    /* 0x02 */ u16 unk_02;
-    /* 0x04 */ u16 unk_04;
-    /* 0x06 */ u16 unk_06;
+    /* 0x02 */ u16 userCameraShot; // @unverified: func_8212C78C plays it with BattleCamera_PlayUserShot
+    /* 0x04 */ u16 travelCameraShot; // @unverified: checked for 6 in BattleScene_ActionStepTravel
+    /* 0x06 */ u16 targetCameraShot; // @unverified: func_8212F044 plays it with BattleCamera_PlayTargetShot
     /* 0x08 */ u8 pad08[2];
 } MoveAnimInfoZ; // size = 0xA
 

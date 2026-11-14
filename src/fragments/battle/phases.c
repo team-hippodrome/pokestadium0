@@ -660,17 +660,17 @@ void func_8212C78C(s32 arg0) {
 
     runtime = &(sActingPokemon)->state.runtime;
     sBattleScene.scene->easeFovAfterUserShot = 0;
-    if (D_80073D90[runtime->usedMove - 1].unk_02 == 5) {
+    if (D_80073D90[runtime->usedMove - 1].userCameraShot == 5) {
         func_8212C398(arg0);
-    } else if (D_80073D90[runtime->usedMove - 1].unk_02 == 6) {
+    } else if (D_80073D90[runtime->usedMove - 1].userCameraShot == 6) {
         func_8212C454(arg0);
-    } else if (D_80073D90[runtime->usedMove - 1].unk_02 == 7) {
+    } else if (D_80073D90[runtime->usedMove - 1].userCameraShot == 7) {
         func_8212C530(arg0);
-    } else if (D_80073D90[runtime->usedMove - 1].unk_02 == 4) {
+    } else if (D_80073D90[runtime->usedMove - 1].userCameraShot == 4) {
         sBattleScene.scene->easeFovAfterUserShot = 1;
-        BattleCamera_PlayUserShot(arg0, D_80073D90[runtime->usedMove - 1].unk_02);
+        BattleCamera_PlayUserShot(arg0, D_80073D90[runtime->usedMove - 1].userCameraShot);
     } else {
-        BattleCamera_PlayUserShot(arg0, D_80073D90[runtime->usedMove - 1].unk_02);
+        BattleCamera_PlayUserShot(arg0, D_80073D90[runtime->usedMove - 1].userCameraShot);
     }
 }
 
@@ -1632,14 +1632,14 @@ void func_8212F044(CameraNode* arg0) {
     ActivePokemon* opp = sActivePokemon[other];
     BattleMonRuntime* runtime = &opp->state.runtime;
 
-    if (D_80073D90[runtime->usedMove - 1].unk_06 == 5) {
+    if (D_80073D90[runtime->usedMove - 1].targetCameraShot == 5) {
         BattleCamera_PlayTargetShot(opp, arg0, D_8219A568);
-    } else if (D_80073D90[runtime->usedMove - 1].unk_06 == 4) {
+    } else if (D_80073D90[runtime->usedMove - 1].targetCameraShot == 4) {
         func_8212EEC0(opp, arg0);
-    } else if (D_80073D90[runtime->usedMove - 1].unk_06 == 6) {
+    } else if (D_80073D90[runtime->usedMove - 1].targetCameraShot == 6) {
         func_8212EF74(opp, arg0);
     } else {
-        BattleCamera_PlayTargetShot(opp, arg0, D_80073D90[runtime->usedMove - 1].unk_06);
+        BattleCamera_PlayTargetShot(opp, arg0, D_80073D90[runtime->usedMove - 1].targetCameraShot);
     }
 }
 
