@@ -9,14 +9,14 @@ void func_81111C20(SequenceChannel* arg0, u32 force) {
     s32 i;
     SequenceLayer* v;
 
-    if (arg0->changeVolume || force) {
+    if (arg0->changes.s.volume || force) {
         vol = arg0->volume * arg0->volumeScale * arg0->seqPlayer->appliedFadeVolume;
         if (arg0->seqPlayer->muted && (M2C_FIELD(arg0, u8*, 3) & 0x20)) {
             vol = arg0->seqPlayer->muteVolumeScale * vol;
         }
         arg0->appliedVolume = vol * vol;
     }
-    if (arg0->changePan) {
+    if (arg0->changes.s.pan) {
         arg0->pan = arg0->newPan * arg0->panChannelWeight;
     }
     for (i = 0; i < 4; i++) {
@@ -28,13 +28,13 @@ void func_81111C20(SequenceChannel* arg0, u32 force) {
                 v->notePan = (arg0->pan + v->pan * (0x80 - arg0->panChannelWeight)) >> 7;
                 v->notePropertiesNeedInit = 0;
             } else {
-                if (arg0->changeFreqScale) {
+                if (arg0->changes.s.freqScale) {
                     v->noteFreqScale = v->freqScale * arg0->freqScale;
                 }
-                if (arg0->changeVolume || force) {
+                if (arg0->changes.s.volume || force) {
                     v->noteVelocity = v->velocitySquare2 * arg0->appliedVolume;
                 }
-                if (arg0->changePan) {
+                if (arg0->changes.s.pan) {
                     v->notePan = (arg0->pan + v->pan * (0x80 - arg0->panChannelWeight)) >> 7;
                 }
             }

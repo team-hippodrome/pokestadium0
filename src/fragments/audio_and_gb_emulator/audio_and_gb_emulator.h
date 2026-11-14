@@ -544,10 +544,15 @@ typedef struct SequenceChannel {
     /* 0x00 */ u8 stereoHeadsetEffects : 1; // @unverified: same bit/use as OoT's SequenceChannel.stereoHeadsetEffects
     /* 0x00 */ u8 largeNotes : 1; // @unverified: same bit/use as OoT's SequenceChannel.largeNotes
     /* 0x00 */ u8 unused : 1;
-    /* 0x01 */ u8 changeFreqScale : 1; // @unverified: same bit/use as OoT's SequenceChannel.changes.s.freqScale
-    /* 0x01 */ u8 changeVolume : 1; // @unverified: same bit/use as OoT's SequenceChannel.changes.s.volume
-    /* 0x01 */ u8 changePan : 1; // @unverified: same bit/use as OoT's SequenceChannel.changes.s.pan
-    /* 0x01 */ u8 changeRest : 5;
+    /* 0x01 */ union {
+        struct {
+            u8 freqScale : 1; // @unverified: same bit/use as OoT's SequenceChannel.changes.s.freqScale
+            u8 volume : 1; // @unverified: same bit/use as OoT's SequenceChannel.changes.s.volume
+            u8 pan : 1; // @unverified: same bit/use as OoT's SequenceChannel.changes.s.pan
+            u8 rest : 5;
+        } s;
+        u8 asByte; // @unverified: set to 0xFF when a channel is initialized, as OoT's changes.asByte
+    } changes;
     /* 0x02 */ u8 noteAllocPolicy; // @unverified: same offset/use as OoT's SequenceChannel.noteAllocPolicy
     /* 0x03 */ u8 muteBehavior; // @unverified: same offset/use as OoT's SequenceChannel.muteFlags
     /* 0x04 */ u8 reverb; // @unverified: same offset/use as OoT's SequenceChannel.reverb (target reverb volume)

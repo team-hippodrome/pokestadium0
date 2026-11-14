@@ -274,39 +274,39 @@ void func_81113FA8(SequenceChannel* channel) {
                     case 0xDF:
                         command = (u8)parameters[0];
                         func_81113F84((u8*)channel, command);
-                        channel->changeVolume = 1;
+                        channel->changes.s.volume = 1;
                         break;
                     case 0xE0:
                         command = (u8)parameters[0];
                         channel->volumeScale = (f32)(s32)command / 128.0f;
-                        channel->changeVolume = 1;
+                        channel->changes.s.volume = 1;
                         break;
                     case 0xDE:
                         offset = (u16)parameters[0];
                         channel->freqScale = (f32)(s32)offset / 32768.0f;
-                        channel->changeFreqScale = 1;
+                        channel->changes.s.freqScale = 1;
                         break;
                     case 0xD3:
                         command = (u8)parameters[0];
                         command += 0x80;
                         channel->freqScale = D_81135F78[command];
-                        channel->changeFreqScale = 1;
+                        channel->changes.s.freqScale = 1;
                         break;
                     case 0xEE:
                         command = (u8)parameters[0];
                         command += 0x80;
                         channel->freqScale = D_81136378[command];
-                        channel->changeFreqScale = 1;
+                        channel->changes.s.freqScale = 1;
                         break;
                     case 0xDD:
                         command = (u8)parameters[0];
                         channel->newPan = command;
-                        channel->changePan = 1;
+                        channel->changes.s.pan = 1;
                         break;
                     case 0xDC:
                         command = (u8)parameters[0];
                         channel->panChannelWeight = command;
-                        channel->changePan = 1;
+                        channel->changes.s.pan = 1;
                         break;
                     case 0xDB:
                         signed_param = (s8)parameters[0];
@@ -390,7 +390,7 @@ void func_81113FA8(SequenceChannel* channel) {
                     case 0xCA:
                         command = (u8)parameters[0];
                         channel->muteBehavior = command;
-                        channel->changeVolume = 1;
+                        channel->changes.s.volume = 1;
                         break;
                     case 0xCB:
                         offset = (u16)parameters[0];
@@ -449,7 +449,7 @@ void func_81113FA8(SequenceChannel* channel) {
                         channel->panChannelWeight = data[-2];
                         channel->reverb = data[-1];
                         channel->reverbIndex = data[0];
-                        channel->changePan = 1;
+                        channel->changes.s.pan = 1;
                         break;
                     case 0xE8:
                         channel->muteBehavior = parameters[0];
@@ -461,7 +461,7 @@ void func_81113FA8(SequenceChannel* channel) {
                         channel->panChannelWeight = AudioSeq_ScriptReadU8(&scriptState->pc);
                         channel->reverb = AudioSeq_ScriptReadU8(&scriptState->pc);
                         channel->reverbIndex = AudioSeq_ScriptReadU8(&scriptState->pc);
-                        channel->changePan = 1;
+                        channel->changes.s.pan = 1;
                         break;
                     case 0xEC:
                         channel->vibratoExtentTarget = 0;
