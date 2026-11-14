@@ -12,7 +12,7 @@ extern u16 D_82199F54;
 extern u16 D_82199F56;
 extern u16 D_82199F58;
 extern u8 D_82199F32;
-extern unk_D_843C6148 D_8219A494;
+extern MoveData D_8219A494;
 
 #include "moves.h"
 #include "pokemon_types.h"
@@ -80,7 +80,7 @@ void BattleScene_IntroInitNop(void);
 u16 BattleAi_ApplyMoveEffectDamageOverride(BattleMonRuntime* arg0, BattleMonRuntime* arg1) {
     s32 var_v0;
 
-    switch (D_8219A494.unk_01) {
+    switch (D_8219A494.effect) {
         case 38:
             break;
 
@@ -92,7 +92,7 @@ u16 BattleAi_ApplyMoveEffectDamageOverride(BattleMonRuntime* arg0, BattleMonRunt
             break;
 
         case 41:
-            switch (D_8219A494.unk_00) {
+            switch (D_8219A494.moveId) {
                 case SEISMIC_TOSS:
                 case NIGHT_SHADE:
                     var_v0 = arg0->level;
@@ -115,7 +115,7 @@ u16 BattleAi_ApplyMoveEffectDamageOverride(BattleMonRuntime* arg0, BattleMonRunt
             break;
 
         default:
-            if (D_8219A494.unk_02 == 0) {
+            if (D_8219A494.power == 0) {
                 return D_82199F50;
             }
             break;
@@ -179,17 +179,17 @@ void BattleCalc_ApplyTypeEffectAndStab(u8* attacker, u8* defender) {
 void BattleAi_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u8 arg2) {
     MoveData* temp_v0 = &gMoveData[arg2 - 1];
 
-    D_8219A494.unk_00 = temp_v0->moveId;
-    D_8219A494.unk_01 = temp_v0->effect;
-    D_8219A494.unk_02 = temp_v0->power;
-    D_8219A494.unk_03 = temp_v0->type;
-    D_8219A494.unk_04 = temp_v0->accuracy;
-    D_8219A494.unk_05 = temp_v0->pp;
+    D_8219A494.moveId = temp_v0->moveId;
+    D_8219A494.effect = temp_v0->effect;
+    D_8219A494.power = temp_v0->power;
+    D_8219A494.type = temp_v0->type;
+    D_8219A494.accuracy = temp_v0->accuracy;
+    D_8219A494.pp = temp_v0->pp;
 
     D_82199F50 = 0;
-    D_82199F52 = D_8219A494.unk_02;
+    D_82199F52 = D_8219A494.power;
     if (D_82199F52) {
-        if (D_8219A494.unk_03 < TYPE_FIRE) { // physical types come before Fire
+        if (D_8219A494.type < TYPE_FIRE) { // physical types come before Fire
             D_82199F56 = arg1->modifiedDefense;
             if (arg1->uniqueStatusFlags & 4) {
                 D_82199F56 *= 2;
@@ -240,7 +240,7 @@ void BattleAi_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* a
  * @unverified Name and comment guessed from the code.
  */
 void BattleCalc_AddBaseDamage(UNUSED u8* arg0, UNUSED u8* arg1) {
-    u8 tmp = D_8219A494.unk_01;
+    u8 tmp = D_8219A494.effect;
 
     if (tmp == 7) {
         D_82199F56 >>= 1;

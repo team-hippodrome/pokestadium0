@@ -11,7 +11,7 @@ extern u16 D_82199F54;
 extern u16 D_82199F56;
 extern u16 D_82199F58;
 extern u8 D_82199F32;
-extern unk_D_843C6148 D_8219A494;
+extern MoveData D_8219A494;
 
 #include "global.h"
 

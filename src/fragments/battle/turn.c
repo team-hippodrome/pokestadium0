@@ -149,10 +149,10 @@ void Battle_ApplyTypeEffectAndSTAB(void) {
         D_82199F3F |= 0x80;
     }
     entry = D_8218AC50;
-    while (entry->unk_00 != 0xFF) {
-        if ((entry->unk_00 == move_type) && ((entry->unk_01 == target_type1) || (entry->unk_01 == target_type2))) {
-            D_82199F3F = (D_82199F3F & 0x80) + entry->unk_02;
-            sBattleDamage = (sBattleDamage * entry->unk_02) / 10;
+    while (entry->attackType != 0xFF) {
+        if ((entry->attackType == move_type) && ((entry->defenderType == target_type1) || (entry->defenderType == target_type2))) {
+            D_82199F3F = (D_82199F3F & 0x80) + entry->multiplier;
+            sBattleDamage = (sBattleDamage * entry->multiplier) / 10;
             if (sBattleDamage == 0) {
                 sBattleMoveFailed = 1;
             }

@@ -164,7 +164,6 @@ typedef struct ComSide {
  * src/fragments/fragment012_17ED00/battle_engine_com_ai_2_82184DC8.c
  */
 
-typedef struct Move82184ADC { u8 unk00; u8 unk01; u8 power; u8 type; u8 unk04; u8 unk05; } Move82184ADC;
 
 typedef s32 (*func_D_84390300)(void);
 
@@ -453,13 +452,13 @@ typedef struct unk_D_843901A0_4C8 {
     /* 0x2A */ s16 unk_2A;
 } unk_D_843901A0_4C8; // size = 0x2C
 
-typedef struct unk_D_843901A0 {
+typedef struct BattleMessageQueues {
     /* 0x000 */ u8 unk_000;
     /* 0x004 */ s32 cursor; // @unverified: write index into lines[0], reset by BattleScene_ResetMessageQueue
     /* 0x008 */ u8 lines[2][64]; // @unverified: both cleared by Battle_ClearMessageCursor ("both line buffers")
     /* 0x088 */ s8 messageBuffers[17][64]; // @unverified: 64-byte strings cleared by Battle_ClearAllMessageQueues; +0xC8/+0x148 go to BattleMessage_ShowForSide
     /* 0x4C8 */ unk_D_843901A0_4C8 unk_4C8;
-} unk_D_843901A0; // size = 0x4F4
+} BattleMessageQueues; // size = 0x4F4
 
 typedef struct unk_D_84385790 {
     /* 0x00 */ s32 unk_00;
@@ -899,20 +898,10 @@ typedef struct StatStageMultiplier {
 } StatStageMultiplier; // size = 0x2
 
 typedef struct TypeEffectivenessEntry {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
+    /* 0x00 */ u8 attackType; // @unverified: compared with the move type in Battle_ApplyTypeEffectAndSTAB; 0xFF ends the table
+    /* 0x01 */ u8 defenderType; // @unverified: compared with the target types
+    /* 0x02 */ u8 multiplier; // @unverified: damage = damage * multiplier / 10
 } TypeEffectivenessEntry; // size = 0x3
-
-typedef struct unk_D_843C6148 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
-    /* 0x06 */ char unk06[0x2];
-} unk_D_843C6148; // size <= 0x8
 
 struct Particle;
 
@@ -1564,7 +1553,7 @@ extern BattleMonRuntime* sBattleTarget;
 extern ActivePokemon* sOtherPokemon; // @unverified: the one not acting
 extern ActivePokemon* sActingPokemon; // @unverified: the one whose action is running
 
-extern unk_D_843901A0* gBattleMessageQueues;
+extern BattleMessageQueues* gBattleMessageQueues;
 
 extern unk_D_84390240 sBattleScene;
 

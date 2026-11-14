@@ -653,7 +653,7 @@ u8* BattleAi_FindByte(u8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     return NULL;
 }
 
-extern Move82184ADC D_8006B190[];
+
 extern u8 D_8218AC50[];
 /**
  * Damage multiplier of a move from attacker arg0 to defender arg1, in percent:
@@ -674,8 +674,8 @@ s32 BattleAi_GetTypeMultiplier(ComBattler* arg0, ComBattler* arg1, s32 move) {
     if (move != 0) {
         def_type1 = arg1->mon.type1;
         def_type2 = arg1->mon.type2;
-        if (D_8006B190[move - 1].power != 0) {
-            type = D_8006B190[move - 1].type;
+        if (gMoveData[move - 1].power != 0) {
+            type = gMoveData[move - 1].type;
             if (type == arg0->mon.type1 || type == arg0->mon.type2) {
                 mult = 150;
             }

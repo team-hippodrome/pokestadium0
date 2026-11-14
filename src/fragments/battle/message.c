@@ -5,7 +5,7 @@
 #include "memory_main.h"
 #include "stdarg.h"
 #include "moves.h"
-extern unk_D_843901A0* gBattleMessageQueues;
+extern BattleMessageQueues* gBattleMessageQueues;
 
 
 
