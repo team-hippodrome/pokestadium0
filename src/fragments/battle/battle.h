@@ -775,7 +775,7 @@ typedef struct OwnerAnchoredFourStream {
 
 typedef struct Trail50EffectNode {
     /* 0x00 */ u8 alpha; // @unverified: vertex alpha, fades along the trail
-    /* 0x04 */ f32 halfWidth; // @unverified: grows by 2 a frame up to maxHalfWidth
+    /* 0x04 */ f32 halfWidth; // grows by 2 a frame up to maxHalfWidth; poking 30 on all nodes made wide fans in play
     /* 0x08 */ f32 angle; // @unverified: roll angle in radians
     /* 0x0C */ Vec3f position; // @unverified: node center
     /* 0x18 */ Vec3f velocity; // @unverified: phase 1 motion
@@ -787,14 +787,14 @@ typedef struct Trail50EffectNode {
 } Trail50EffectNode; // size = 0x50
 
 typedef struct Trail50Effect {
-    /* 0x000 */ s16 active; // @unverified: 1 while running
+    /* 0x000 */ s16 active; // 1 while running; poking 0 each frame removed Petal Dance's petals in play
     /* 0x002 */ s16 phase; // @unverified: 0 swirl, 1 fly (after frame 21, frame restarts)
     /* 0x004 */ s16 frame; // @unverified: counts up each frame
     /* 0x006 */ s16 duration; // @unverified: frames of phase 1
     /* 0x008 */ s16 direction; // @unverified: -1 or 1 from the sign of the start x
-    /* 0x00A */ Color_RGB8 color; // @unverified: vertex color
-    /* 0x010 */ f32 scale; // @unverified: model scale; swirl strength and draw scale
-    /* 0x014 */ f32 maxHalfWidth; // @unverified: cap for the nodes' halfWidth
+    /* 0x00A */ Color_RGB8 color; // vertex color; poking green turned Petal Dance's petals green in play
+    /* 0x010 */ f32 scale; // model scale; swirl strength and draw scale; tripling it filled the screen with petal in play
+    /* 0x014 */ f32 maxHalfWidth; // cap for the nodes' halfWidth; poking 40 widened the petal trails into fans in play
     /* 0x018 */ f32 angleStep; // @unverified: added to the head node's angle per frame
     /* 0x01C */ char unk01C[0x4];
     /* 0x020 */ Vtx* vtx; // @unverified: vertices allocated each frame
