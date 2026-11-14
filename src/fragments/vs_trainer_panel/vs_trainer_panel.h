@@ -3,7 +3,7 @@
 #define VS_TRAINER_PANEL_H
 
 #include "global.h"
-#include "fragments/geo_model_033/geo_model_033.h"
+#include "fragments/vs_results_board/vs_results_board.h"
 
 // vs_trainer_panel.c
 s32 VsPanel_CheckBootCode(s32 displayList);

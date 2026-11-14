@@ -43,7 +43,7 @@ Where the code lives, after the reorganization. File names are broadly correct g
 | 030 | `src/fragments/pokedex_kanto_map/` | 1 | 4 | 3D Kanto map model for the Pokédex habitat screen |
 | 031 | `src/fragments/particle_data/` | 2 | 8 | fire effects for the VS scene (backdrop, panel and title overlays) |
 | 032 | `src/fragments/vs_trainer_panel/` | 1 | 9 | VS screen trainer panels (portrait, title, name, team icons, nicknames) and the battle-title round switch |
-| 033 | `src/fragments/geo_model_033/` | 1 | 13 | geo layout callbacks for models |
+| 033 | `src/fragments/vs_results_board/` | 1 | 13 | VS scene results board after a battle (HP bars, fainted marks) and the win/lose trainer panels |
 | 034 | `src/fragments/tournament_badge_cap/` | 1 | 8 | trainer cap with the eight tournament badges, shown after a tournament win |
 | 038 | `src/fragments/cartridge_check_models/` | 1 | 2 | models of the Game Boy cartridge check (P-OS terminal) and its anti-piracy check |
 | 039 | `src/fragments/doduo_game_boy_model/` | 1 | 1 | Doduo Game Boy (Pocket) prize model and its screen glare callback |
