@@ -31,7 +31,7 @@ extern u8* D_81180704;
 extern GbApuWrite D_81180848[GB_APU_WRITE_QUEUE_LEN];
 extern u8 D_81182468[0x40];
 extern s32 D_811824A8;
-extern unk_D_8122EEA8 D_811824B8;
+extern GbApuStatusOverride D_811824B8;
 extern OSMesgQueue D_811824C0;
 extern OSMesg D_811824D8[GB_APU_WRITE_QUEUE_LEN + 1];
 extern AudioBufferParameters D_811858B8;

@@ -273,50 +273,50 @@ typedef struct AudioCommonPoolSplit {
 
 
 typedef struct GbApuChannelState {
-  /* 0x00 */ u8 unk_00;
-  /* 0x02 */ char unk02[0x02];
-  /* 0x04 */ s32 unk_04;
+  /* 0x00 */ u8 enabled; // @unverified: from the code: channel on (the NR52 status bit); set on trigger, cleared at length/envelope end and on power-off
+  /* 0x01 */ char unk01[0x3];
+  /* 0x04 */ s32 retriggerTimer; // @unverified: from the code: wave channel only; set to 0x140 on trigger, the old note fades out while it counts down
   /* 0x08 */ union {
-      u16 unk_00;
-      s32 unk_02;
-  } unk_08;
-  /* 0x0C */ u32 unk_0C;
-  /* 0x10 */ u16 unk_10;
+      u16 index; // @unverified: top half of the accumulator, passed to GbApu_GetWaveformSample
+      s32 acc; // @unverified: the accumulator, advanced by step and masked to 21 bits
+  } phase; // @unverified: from the code: waveform phase, a 21-bit accumulator whose top bits index the waveform
+  /* 0x0C */ u32 step; // @unverified: from the code: phase increment per sample, from the frequency (GbApu_FreqToStep*) or the NR43 noise table
+  /* 0x10 */ u16 frequency; // @unverified: from the code: the 11-bit NRx3/NRx4 frequency (noise: the NR43 shift); changed by the square 1 sweep
   /* 0x12 */ u16 unk_12;
-  /* 0x14 */ s32 unk_14;
-  /* 0x18 */ s32 unk_18;
-  /* 0x1C */ s32 unk_1C;
-  /* 0x20 */ u8 unk_20;
-  /* 0x21 */ u8 unk_21;
+  /* 0x14 */ s32 lengthTimer; // @unverified: from the code: length * 200 samples, counted down while lengthEnabled; 0 turns the channel off
+  /* 0x18 */ s32 lengthEnabled; // @unverified: from the code: NRx4 bit 6 (counter/consecutive)
+  /* 0x1C */ s32 length; // @unverified: from the code: 64 - NRx1 length (256 - NR31 for the wave channel)
+  /* 0x20 */ u8 amplitude; // @unverified: from the code: target output level, from the envelope volume through a table
+  /* 0x21 */ u8 initialVolume; // @unverified: from the code: NRx2 initial volume (NR32 output level for the wave channel)
   /* 0x22 */ char unk22[0x2];
-  /* 0x24 */ u32 unk_24;
-  /* 0x28 */ u32 unk_28;
+  /* 0x24 */ u32 envelopeCounter; // @unverified: from the code: samples since the last envelope step
+  /* 0x28 */ u32 envelopePeriod; // @unverified: from the code: NRx2 envelope sweep * 800 samples; 0 = envelope off
   /* 0x2C */ char unk2C[0x1];
-  /* 0x2D */ u8 unk_2D;
-  /* 0x2E */ u8 unk_2E;
+  /* 0x2D */ u8 envelopeVolume; // @unverified: from the code: current envelope volume 0-15
+  /* 0x2E */ u8 envelopeDir; // @unverified: from the code: NRx2 envelope direction (0 down, 1 up)
   /* 0x2F */ char unk2F[0x1];
-  /* 0x30 */ u32 unk_30;
-  /* 0x34 */ u32 unk_34;
-  /* 0x38 */ u8 unk_38;
-  /* 0x39 */ u8 unk_39;
-  /* 0x3A */ u8 unk_3A;
-  /* 0x3B */ u8 unk_3B;
-  /* 0x3C */ u8 unk_3C;
+  /* 0x30 */ u32 sweepCounter; // @unverified: from the code: square 1 only; samples since the last frequency sweep step
+  /* 0x34 */ u32 sweepPeriod; // @unverified: from the code: square 1 only; NR10 sweep time * 400 samples
+  /* 0x38 */ u8 sweepShift; // @unverified: from the code: square 1 only; NR10 sweep shift
+  /* 0x39 */ u8 sweepDir; // @unverified: from the code: square 1 only; NR10 sweep direction (0 up, 1 down)
+  /* 0x3A */ u8 sweepEnabled; // @unverified: from the code: square 1 only; set when sweepPeriod != 0
+  /* 0x3B */ u8 duty; // @unverified: from the code: NRx1 duty (index of the square waveform)
+  /* 0x3C */ u8 appliedAmplitude; // @unverified: from the code: amplitude actually multiplied into the sample; fades to 0 after the channel stops
   /* 0x3D */ char unk3D[0x3];
-  /* 0x40 */ u32 unk_40;
-  /* 0x44 */ u16 unk_44;
+  /* 0x40 */ u32 appliedStep; // @unverified: from the code: step kept for the fade-out; the noise channel slews it toward step
+  /* 0x44 */ u16 prevSample; // @unverified: from the code: wave channel only; last output, averaged with the next sample
   /* 0x46 */ u16 unk46;
-  /* 0x48 */ u32 unk_48;
-  /* 0x4C */ u8 unk_4C;
+  /* 0x48 */ u32 stepSlew; // @unverified: from the code: noise channel only; per-sample change of appliedStep, |step - appliedStep| >> 7
+  /* 0x4C */ u8 outOfRange; // @unverified: from the code: 1 while the frequency is outside 1-0x7FE, the channel then fades out
   /* 0x4D */ char unk4D[0x3];
 } GbApuChannelState;
 
-typedef struct unk_D_8122EEA8 {
-  /* 0x00 */ u8 unk_00;
-  /* 0x01 */ u8 unk_01;
-  /* 0x02 */ u8 unk_02;
-  /* 0x03 */ u8 unk_03;
-} unk_D_8122EEA8;
+typedef struct GbApuStatusOverride {
+  /* 0x00 */ u8 square1; // @unverified: from the code (GbApu_QueueRegisterWrite, GbMem_ReadIoRegister): pending NR52 status of square 1: 0 none, 1 off, 2 triggered, until the queued write is rendered
+  /* 0x01 */ u8 square2; // @unverified: from the code (GbApu_QueueRegisterWrite, GbMem_ReadIoRegister): same for square 2
+  /* 0x02 */ u8 wave; // @unverified: from the code (GbApu_QueueRegisterWrite, GbMem_ReadIoRegister): same for the wave channel
+  /* 0x03 */ u8 noise; // @unverified: from the code (GbApu_QueueRegisterWrite, GbMem_ReadIoRegister): same for the noise channel
+} GbApuStatusOverride;
 
 typedef struct GbApuRegs {
     /* 0x00 NR10 */ u32 : 1;
@@ -580,7 +580,7 @@ extern u8 D_81182468[0x40];
 
 extern s32 D_811824A8;
 
-extern unk_D_8122EEA8 D_811824B8;
+extern GbApuStatusOverride D_811824B8;
 
 extern OSMesgQueue D_811824C0;
 

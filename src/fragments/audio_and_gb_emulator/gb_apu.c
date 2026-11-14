@@ -103,90 +103,90 @@ s32 GbApu_GetWaveformSample(u32 arg0, s32 arg1) {
 u16 GbApu_UpdateSquare1Channel(void) {
     u16 var_t0;
 
-    if (gGbApuSquare1.unk_00 == 0) {
-        if (gGbApuSquare1.unk_3C == 0) {
+    if (gGbApuSquare1.enabled == 0) {
+        if (gGbApuSquare1.appliedAmplitude == 0) {
             return 0U;
         }
-        gGbApuSquare1.unk_3C--;
-        gGbApuSquare1.unk_20 = gGbApuSquare1.unk_3C;
-        gGbApuSquare1.unk_0C = (s32) gGbApuSquare1.unk_40;
+        gGbApuSquare1.appliedAmplitude--;
+        gGbApuSquare1.amplitude = gGbApuSquare1.appliedAmplitude;
+        gGbApuSquare1.step = (s32) gGbApuSquare1.appliedStep;
     }
-    if ((s32) gGbApuSquare1.unk_10 <= 0) {
-        gGbApuSquare1.unk_4C = 1U;
-    } else if (((s32) gGbApuSquare1.unk_10 >= 0x7FF) && (gGbApuSquare1.unk_39 == 0)) {
-        gGbApuSquare1.unk_4C = 1U;
+    if ((s32) gGbApuSquare1.frequency <= 0) {
+        gGbApuSquare1.outOfRange = 1U;
+    } else if (((s32) gGbApuSquare1.frequency >= 0x7FF) && (gGbApuSquare1.sweepDir == 0)) {
+        gGbApuSquare1.outOfRange = 1U;
     } else {
-        gGbApuSquare1.unk_4C = 0U;
+        gGbApuSquare1.outOfRange = 0U;
     }
     {
-        s32 temp_v0 = GbApu_GetWaveformSample(gGbApuSquare1.unk_3B, gGbApuSquare1.unk_08.unk_00);
-        gGbApuSquare1.unk_08.unk_02 += gGbApuSquare1.unk_0C;
-        gGbApuSquare1.unk_08.unk_02 &= 0x1FFFFF;
-        if (gGbApuSquare1.unk_4C == 1) {
-            if (gGbApuSquare1.unk_3C != 0) {
-                gGbApuSquare1.unk_3C--;
+        s32 temp_v0 = GbApu_GetWaveformSample(gGbApuSquare1.duty, gGbApuSquare1.phase.index);
+        gGbApuSquare1.phase.acc += gGbApuSquare1.step;
+        gGbApuSquare1.phase.acc &= 0x1FFFFF;
+        if (gGbApuSquare1.outOfRange == 1) {
+            if (gGbApuSquare1.appliedAmplitude != 0) {
+                gGbApuSquare1.appliedAmplitude--;
             }
-            var_t0 = ((temp_v0 & 0xFFFF) * gGbApuSquare1.unk_3C);
+            var_t0 = ((temp_v0 & 0xFFFF) * gGbApuSquare1.appliedAmplitude);
         } else {
-            gGbApuSquare1.unk_40 = (s32) gGbApuSquare1.unk_0C;
-            gGbApuSquare1.unk_3C = (u8) gGbApuSquare1.unk_20;
-            var_t0 = ((temp_v0 & 0xFFFF) * gGbApuSquare1.unk_20);
+            gGbApuSquare1.appliedStep = (s32) gGbApuSquare1.step;
+            gGbApuSquare1.appliedAmplitude = (u8) gGbApuSquare1.amplitude;
+            var_t0 = ((temp_v0 & 0xFFFF) * gGbApuSquare1.amplitude);
         }
     }
-    if ((gGbApuSquare1.unk_3A != 0) && (((++gGbApuSquare1.unk_30 % (u32) gGbApuSquare1.unk_34) == 0))) {
-        s32 temp_a2 = ((s32) gGbApuSquare1.unk_10 >> gGbApuSquare1.unk_38) & 0xFFFF;
-        switch (gGbApuSquare1.unk_39) {
+    if ((gGbApuSquare1.sweepEnabled != 0) && (((++gGbApuSquare1.sweepCounter % (u32) gGbApuSquare1.sweepPeriod) == 0))) {
+        s32 temp_a2 = ((s32) gGbApuSquare1.frequency >> gGbApuSquare1.sweepShift) & 0xFFFF;
+        switch (gGbApuSquare1.sweepDir) {
         case 0:
-            gGbApuSquare1.unk_10 += temp_a2;
+            gGbApuSquare1.frequency += temp_a2;
             break;
         case 1:
-            gGbApuSquare1.unk_10 = (gGbApuSquare1.unk_10 - temp_a2) - 1;;
+            gGbApuSquare1.frequency = (gGbApuSquare1.frequency - temp_a2) - 1;;
             break;
         }
-        if (gGbApuSquare1.unk_10 <= 0) {
-            gGbApuSquare1.unk_00 = 0U;
+        if (gGbApuSquare1.frequency <= 0) {
+            gGbApuSquare1.enabled = 0U;
             return var_t0;
         } else {
-            if ((gGbApuSquare1.unk_10 >= 0x800) && (gGbApuSquare1.unk_39 == 0)) {
-                gGbApuSquare1.unk_10 = 0x7FFU;
-                gGbApuSquare1.unk_00 = 0U;
+            if ((gGbApuSquare1.frequency >= 0x800) && (gGbApuSquare1.sweepDir == 0)) {
+                gGbApuSquare1.frequency = 0x7FFU;
+                gGbApuSquare1.enabled = 0U;
             }
-            gGbApuSquare1.unk_0C = GbApu_FreqToStep2x(gGbApuSquare1.unk_10);
+            gGbApuSquare1.step = GbApu_FreqToStep2x(gGbApuSquare1.frequency);
         }
     }
-    if (gGbApuSquare1.unk_28 != 0) {
-        gGbApuSquare1.unk_24++;
-        if ((gGbApuSquare1.unk_24 % (u32) gGbApuSquare1.unk_28) == 0) {
-            switch (gGbApuSquare1.unk_2E) {
+    if (gGbApuSquare1.envelopePeriod != 0) {
+        gGbApuSquare1.envelopeCounter++;
+        if ((gGbApuSquare1.envelopeCounter % (u32) gGbApuSquare1.envelopePeriod) == 0) {
+            switch (gGbApuSquare1.envelopeDir) {
             case 0:
-                if (gGbApuSquare1.unk_2D != 0) {
-                    gGbApuSquare1.unk_2D--;
+                if (gGbApuSquare1.envelopeVolume != 0) {
+                    gGbApuSquare1.envelopeVolume--;
                 }
-                if (!gGbApuSquare1.unk_2D) {
-                    gGbApuSquare1.unk_00 = 0;
+                if (!gGbApuSquare1.envelopeVolume) {
+                    gGbApuSquare1.enabled = 0;
                 }
                 break;
             
             case 1:
-                if (gGbApuSquare1.unk_2D < 0xF) {
-                    gGbApuSquare1.unk_2D++;
+                if (gGbApuSquare1.envelopeVolume < 0xF) {
+                    gGbApuSquare1.envelopeVolume++;
                 }
                 break;
             
             default:
                 break;
             }
-        gGbApuSquare1.unk_20 = D_81138B1C[gGbApuSquare1.unk_2D];
+        gGbApuSquare1.amplitude = D_81138B1C[gGbApuSquare1.envelopeVolume];
         }
     } else {
-        gGbApuSquare1.unk_20 = D_81138B1C[gGbApuSquare1.unk_2D];
+        gGbApuSquare1.amplitude = D_81138B1C[gGbApuSquare1.envelopeVolume];
     }
-    if (gGbApuSquare1.unk_18 == 1U) {
-        if (gGbApuSquare1.unk_14 != 0) {
-            gGbApuSquare1.unk_14--;
+    if (gGbApuSquare1.lengthEnabled == 1U) {
+        if (gGbApuSquare1.lengthTimer != 0) {
+            gGbApuSquare1.lengthTimer--;
         }
-        if (gGbApuSquare1.unk_14 == 0) {
-            gGbApuSquare1.unk_00 = 0U;
+        if (gGbApuSquare1.lengthTimer == 0) {
+            gGbApuSquare1.enabled = 0U;
         }
     }
     return var_t0;
@@ -202,67 +202,67 @@ s32 GbApu_UpdateSquare2Channel(void) {
     s32 var_a3;
     u8 var_v0;
 
-    if (gGbApuSquare2.unk_00 == 0) {
-        if (gGbApuSquare2.unk_3C == 0) {
+    if (gGbApuSquare2.enabled == 0) {
+        if (gGbApuSquare2.appliedAmplitude == 0) {
             return 0;
         }
-        gGbApuSquare2.unk_3C--;
-        gGbApuSquare2.unk_20 = gGbApuSquare2.unk_3C;
-        gGbApuSquare2.unk_0C = (s32) gGbApuSquare2.unk_40;
+        gGbApuSquare2.appliedAmplitude--;
+        gGbApuSquare2.amplitude = gGbApuSquare2.appliedAmplitude;
+        gGbApuSquare2.step = (s32) gGbApuSquare2.appliedStep;
     }
-    if ((s32) gGbApuSquare2.unk_10 >= 0x7FF) {
-        gGbApuSquare2.unk_4C = 1U;
+    if ((s32) gGbApuSquare2.frequency >= 0x7FF) {
+        gGbApuSquare2.outOfRange = 1U;
     } else {
-        gGbApuSquare2.unk_4C = 0U;
+        gGbApuSquare2.outOfRange = 0U;
     }
-    temp_v0 = GbApu_GetWaveformSample(gGbApuSquare2.unk_3B, gGbApuSquare2.unk_08.unk_00);
-    gGbApuSquare2.unk_08.unk_02 += gGbApuSquare2.unk_0C;
-    gGbApuSquare2.unk_08.unk_02 &= 0x1FFFFF;
-    if (gGbApuSquare2.unk_4C == 1) {
-        if (gGbApuSquare2.unk_3C != 0) {
-            gGbApuSquare2.unk_3C--;
+    temp_v0 = GbApu_GetWaveformSample(gGbApuSquare2.duty, gGbApuSquare2.phase.index);
+    gGbApuSquare2.phase.acc += gGbApuSquare2.step;
+    gGbApuSquare2.phase.acc &= 0x1FFFFF;
+    if (gGbApuSquare2.outOfRange == 1) {
+        if (gGbApuSquare2.appliedAmplitude != 0) {
+            gGbApuSquare2.appliedAmplitude--;
         }
-        var_a3 = ((temp_v0 & 0xFFFF) * gGbApuSquare2.unk_3C) & 0xFFFF;
+        var_a3 = ((temp_v0 & 0xFFFF) * gGbApuSquare2.appliedAmplitude) & 0xFFFF;
     } else {
-        if (gGbApuSquare2.unk_20 != gGbApuSquare2.unk_3C) {
-            gGbApuSquare2.unk_3C = (u8) gGbApuSquare2.unk_20;
+        if (gGbApuSquare2.amplitude != gGbApuSquare2.appliedAmplitude) {
+            gGbApuSquare2.appliedAmplitude = (u8) gGbApuSquare2.amplitude;
         }
-        gGbApuSquare2.unk_40 = (s32) gGbApuSquare2.unk_0C;
-        var_a3 = ((temp_v0 & 0xFFFF) * gGbApuSquare2.unk_20) & 0xFFFF;
+        gGbApuSquare2.appliedStep = (s32) gGbApuSquare2.step;
+        var_a3 = ((temp_v0 & 0xFFFF) * gGbApuSquare2.amplitude) & 0xFFFF;
     }
-    if (gGbApuSquare2.unk_28 != 0) {
-        gGbApuSquare2.unk_24++;
-        if ((gGbApuSquare2.unk_24 % (u32) gGbApuSquare2.unk_28) == 0) {
-            switch (gGbApuSquare2.unk_2E) {
+    if (gGbApuSquare2.envelopePeriod != 0) {
+        gGbApuSquare2.envelopeCounter++;
+        if ((gGbApuSquare2.envelopeCounter % (u32) gGbApuSquare2.envelopePeriod) == 0) {
+            switch (gGbApuSquare2.envelopeDir) {
                 case 0:
-                    if (gGbApuSquare2.unk_2D != 0) {
-                        gGbApuSquare2.unk_2D--;
+                    if (gGbApuSquare2.envelopeVolume != 0) {
+                        gGbApuSquare2.envelopeVolume--;
                     }
-                    if (!gGbApuSquare2.unk_2D) {
-                        gGbApuSquare2.unk_00 = 0;
+                    if (!gGbApuSquare2.envelopeVolume) {
+                        gGbApuSquare2.enabled = 0;
                     }
                     break;
                 
                 case 1:
-                    if (gGbApuSquare2.unk_2D < 0xF) {
-                        gGbApuSquare2.unk_2D++;
+                    if (gGbApuSquare2.envelopeVolume < 0xF) {
+                        gGbApuSquare2.envelopeVolume++;
                     }
                     break;
                 
                 default:
                     break;
                 }
-            gGbApuSquare2.unk_20 = D_81138B1C[gGbApuSquare2.unk_2D];
+            gGbApuSquare2.amplitude = D_81138B1C[gGbApuSquare2.envelopeVolume];
         }
     } else {
-        gGbApuSquare2.unk_20 = D_81138B1C[gGbApuSquare2.unk_2D];
+        gGbApuSquare2.amplitude = D_81138B1C[gGbApuSquare2.envelopeVolume];
     }
-    if (gGbApuSquare2.unk_18 == 1U) {
-        if (gGbApuSquare2.unk_14 != 0) {
-            gGbApuSquare2.unk_14--;
+    if (gGbApuSquare2.lengthEnabled == 1U) {
+        if (gGbApuSquare2.lengthTimer != 0) {
+            gGbApuSquare2.lengthTimer--;
         }
-        if (gGbApuSquare2.unk_14 == 0) {
-            gGbApuSquare2.unk_00 = 0U;
+        if (gGbApuSquare2.lengthTimer == 0) {
+            gGbApuSquare2.enabled = 0U;
         }
     }
     return var_a3;
@@ -280,56 +280,56 @@ u16 GbApu_UpdateWaveChannel(void) {
     u16 temp_a1;
     u16 var_a0;
 
-    if (gGbApuWave.unk_00 == 0) {
-        if (gGbApuWave.unk_3C == 0) {
+    if (gGbApuWave.enabled == 0) {
+        if (gGbApuWave.appliedAmplitude == 0) {
             return 0U;
         }
-        gGbApuWave.unk_3C--;
-        gGbApuWave.unk_20 = gGbApuWave.unk_3C;
-        gGbApuWave.unk_0C = (s32) gGbApuWave.unk_40;
+        gGbApuWave.appliedAmplitude--;
+        gGbApuWave.amplitude = gGbApuWave.appliedAmplitude;
+        gGbApuWave.step = (s32) gGbApuWave.appliedStep;
     } else {    
-        if (gGbApuWave.unk_04 != 0) {
-            gGbApuWave.unk_04--;
-            if (gGbApuWave.unk_04 >= 0x21) {
-                if (gGbApuWave.unk_3C == 0) {
-                    gGbApuWave.unk_04 = 0x20;
-                    gGbApuWave.unk_08.unk_02 = 0;
-                    gGbApuWave.unk_0C = GbApu_FreqToStep(gGbApuWave.unk_10);
-                    gGbApuWave.unk_20 = D_81138B2C[gGbApuWave.unk_21];
+        if (gGbApuWave.retriggerTimer != 0) {
+            gGbApuWave.retriggerTimer--;
+            if (gGbApuWave.retriggerTimer >= 0x21) {
+                if (gGbApuWave.appliedAmplitude == 0) {
+                    gGbApuWave.retriggerTimer = 0x20;
+                    gGbApuWave.phase.acc = 0;
+                    gGbApuWave.step = GbApu_FreqToStep(gGbApuWave.frequency);
+                    gGbApuWave.amplitude = D_81138B2C[gGbApuWave.initialVolume];
                 } else {
-                    if (!(gGbApuWave.unk_04 & 7)) {
-                        gGbApuWave.unk_3C--;
+                    if (!(gGbApuWave.retriggerTimer & 7)) {
+                        gGbApuWave.appliedAmplitude--;
                     }
-                    gGbApuWave.unk_20 = gGbApuWave.unk_3C;
-                    gGbApuWave.unk_0C = (s32) gGbApuWave.unk_40;
+                    gGbApuWave.amplitude = gGbApuWave.appliedAmplitude;
+                    gGbApuWave.step = (s32) gGbApuWave.appliedStep;
                 }
             }
         }
     }
-    temp_a0 = GbApu_GetWaveformSample(7, gGbApuWave.unk_08.unk_00);
-    gGbApuWave.unk_08.unk_02 += gGbApuWave.unk_0C;
-    gGbApuWave.unk_08.unk_02 &= 0x1FFFFF;
-    if (gGbApuWave.unk_4C - 1 == 0) {
+    temp_a0 = GbApu_GetWaveformSample(7, gGbApuWave.phase.index);
+    gGbApuWave.phase.acc += gGbApuWave.step;
+    gGbApuWave.phase.acc &= 0x1FFFFF;
+    if (gGbApuWave.outOfRange - 1 == 0) {
 
-        if (gGbApuWave.unk_3C != 0) {
-            gGbApuWave.unk_3C--;
+        if (gGbApuWave.appliedAmplitude != 0) {
+            gGbApuWave.appliedAmplitude--;
         }
-        temp_a1 = gGbApuWave.unk_3C;
+        temp_a1 = gGbApuWave.appliedAmplitude;
     } else {
-        gGbApuWave.unk_3C = gGbApuWave.unk_20;
-        gGbApuWave.unk_40 = gGbApuWave.unk_0C;
-        temp_a1 = gGbApuWave.unk_20;
+        gGbApuWave.appliedAmplitude = gGbApuWave.amplitude;
+        gGbApuWave.appliedStep = gGbApuWave.step;
+        temp_a1 = gGbApuWave.amplitude;
     }
 
     temp_a0 *= temp_a1;
-    temp_a0 = (gGbApuWave.unk_44 + temp_a0) >> 1;
-    gGbApuWave.unk_44 = temp_a0;
-    if (gGbApuWave.unk_18 == 1) {
-        if (gGbApuWave.unk_14 != 0) {
-            gGbApuWave.unk_14--;
+    temp_a0 = (gGbApuWave.prevSample + temp_a0) >> 1;
+    gGbApuWave.prevSample = temp_a0;
+    if (gGbApuWave.lengthEnabled == 1) {
+        if (gGbApuWave.lengthTimer != 0) {
+            gGbApuWave.lengthTimer--;
         }
-        if (gGbApuWave.unk_14 == 0) {
-            gGbApuWave.unk_00 = 0U;
+        if (gGbApuWave.lengthTimer == 0) {
+            gGbApuWave.enabled = 0U;
         }
     }
     return temp_a0;
@@ -350,72 +350,72 @@ u16 GbApu_UpdateNoiseChannel(void) {
     u16 temp_v0;
     u32 var_a2;
 
-    if (gGbApuNoise.unk_0C < gGbApuNoise.unk_40) {
-        gGbApuNoise.unk_40 -= gGbApuNoise.unk_48;
-        var_a2 = gGbApuNoise.unk_40;
-    } else if (gGbApuNoise.unk_40 < gGbApuNoise.unk_0C) {
-        gGbApuNoise.unk_40 += gGbApuNoise.unk_48;
-        var_a2 = gGbApuNoise.unk_40;
+    if (gGbApuNoise.step < gGbApuNoise.appliedStep) {
+        gGbApuNoise.appliedStep -= gGbApuNoise.stepSlew;
+        var_a2 = gGbApuNoise.appliedStep;
+    } else if (gGbApuNoise.appliedStep < gGbApuNoise.step) {
+        gGbApuNoise.appliedStep += gGbApuNoise.stepSlew;
+        var_a2 = gGbApuNoise.appliedStep;
     } else {
-        var_a2 = gGbApuNoise.unk_40;
+        var_a2 = gGbApuNoise.appliedStep;
     }
 
-    if (gGbApuNoise.unk_00 == 0) {
-        if (gGbApuNoise.unk_3C == 0) {
+    if (gGbApuNoise.enabled == 0) {
+        if (gGbApuNoise.appliedAmplitude == 0) {
             return 0;
         }
-        gGbApuNoise.unk_3C--;
-        gGbApuNoise.unk_20 = gGbApuNoise.unk_3C;
-        gGbApuNoise.unk_0C = gGbApuNoise.unk_40;
+        gGbApuNoise.appliedAmplitude--;
+        gGbApuNoise.amplitude = gGbApuNoise.appliedAmplitude;
+        gGbApuNoise.step = gGbApuNoise.appliedStep;
     }
-    temp_v0 = GbApu_GetWaveformSample(6, gGbApuNoise.unk_08.unk_00);
-    gGbApuNoise.unk_08.unk_02 += var_a2;
-    if (gGbApuNoise.unk_08.unk_00  >= (u32)D_81138AD4) {
-        gGbApuNoise.unk_08.unk_00  = D_81138AD0;
+    temp_v0 = GbApu_GetWaveformSample(6, gGbApuNoise.phase.index);
+    gGbApuNoise.phase.acc += var_a2;
+    if (gGbApuNoise.phase.index  >= (u32)D_81138AD4) {
+        gGbApuNoise.phase.index  = D_81138AD0;
     }
-    temp_v0 *= gGbApuNoise.unk_3C;
-    if ((gGbApuNoise.unk_3C != gGbApuNoise.unk_20) && ((D_8120EB6C % 95) == 0)) {
-        if (gGbApuNoise.unk_3C > gGbApuNoise.unk_20) {
-            gGbApuNoise.unk_3C--;
+    temp_v0 *= gGbApuNoise.appliedAmplitude;
+    if ((gGbApuNoise.appliedAmplitude != gGbApuNoise.amplitude) && ((D_8120EB6C % 95) == 0)) {
+        if (gGbApuNoise.appliedAmplitude > gGbApuNoise.amplitude) {
+            gGbApuNoise.appliedAmplitude--;
         } else {
-            gGbApuNoise.unk_3C++;
+            gGbApuNoise.appliedAmplitude++;
         }
     }
     D_8120EB6C++;
-    if (gGbApuNoise.unk_28 != 0) {
-        gGbApuNoise.unk_24++;
-        if ((gGbApuNoise.unk_24 % (u32) gGbApuNoise.unk_28) == 0) {
-            switch (gGbApuNoise.unk_2E) {             /* irregular */
+    if (gGbApuNoise.envelopePeriod != 0) {
+        gGbApuNoise.envelopeCounter++;
+        if ((gGbApuNoise.envelopeCounter % (u32) gGbApuNoise.envelopePeriod) == 0) {
+            switch (gGbApuNoise.envelopeDir) {             /* irregular */
             case 0:
-                if (gGbApuNoise.unk_2D) {
-                    gGbApuNoise.unk_2D--;
+                if (gGbApuNoise.envelopeVolume) {
+                    gGbApuNoise.envelopeVolume--;
                 }
-                if (gGbApuNoise.unk_2D == 0) {
-                    gGbApuNoise.unk_00 = 0;
+                if (gGbApuNoise.envelopeVolume == 0) {
+                    gGbApuNoise.enabled = 0;
                 }
                 break;
             case 1:
-                if (gGbApuNoise.unk_2D < 0xF) {
-                    gGbApuNoise.unk_2D++;
+                if (gGbApuNoise.envelopeVolume < 0xF) {
+                    gGbApuNoise.envelopeVolume++;
                 }
                 break;
             }
             switch ((D_81138A90 << 0x14) >> 0x1F) {                    /* switch 1; irregular */
             case 0:                                 /* switch 1 */
-                gGbApuNoise.unk_20 = D_81138B30[gGbApuNoise.unk_2D];
+                gGbApuNoise.amplitude = D_81138B30[gGbApuNoise.envelopeVolume];
                 break;
             case 1:                                 /* switch 1 */
-                gGbApuNoise.unk_20 = D_81138B40[gGbApuNoise.unk_2D];
+                gGbApuNoise.amplitude = D_81138B40[gGbApuNoise.envelopeVolume];
                 break;
             }
         }
     }
-    if (gGbApuNoise.unk_18 == 1) {
-        if (gGbApuNoise.unk_14 != 0) {
-            gGbApuNoise.unk_14--;
+    if (gGbApuNoise.lengthEnabled == 1) {
+        if (gGbApuNoise.lengthTimer != 0) {
+            gGbApuNoise.lengthTimer--;
         }
-        if (gGbApuNoise.unk_14 == 0) {
-            gGbApuNoise.unk_00 = 0U;
+        if (gGbApuNoise.lengthTimer == 0) {
+            gGbApuNoise.enabled = 0U;
         }
     }
     
@@ -446,110 +446,110 @@ void GbApu_WriteRegister(u16 reg, u8 value) {
 
     switch (reg) {
         case 0x10:
-            gGbApuSquare1.unk_34 = GB_APU_REGS.sweepTime * 400;
-            gGbApuSquare1.unk_39 = GB_APU_REGS.sweepDir;
-            gGbApuSquare1.unk_38 = GB_APU_REGS.sweepShift;
-            if (gGbApuSquare1.unk_3A == 0) {
-                gGbApuSquare1.unk_30 = 0;
+            gGbApuSquare1.sweepPeriod = GB_APU_REGS.sweepTime * 400;
+            gGbApuSquare1.sweepDir = GB_APU_REGS.sweepDir;
+            gGbApuSquare1.sweepShift = GB_APU_REGS.sweepShift;
+            if (gGbApuSquare1.sweepEnabled == 0) {
+                gGbApuSquare1.sweepCounter = 0;
             }
-            if (gGbApuSquare1.unk_34 == 0) {
-                gGbApuSquare1.unk_3A = 0;
+            if (gGbApuSquare1.sweepPeriod == 0) {
+                gGbApuSquare1.sweepEnabled = 0;
             } else {
-                gGbApuSquare1.unk_3A = 1;
+                gGbApuSquare1.sweepEnabled = 1;
             }
             break;
         case 0x11:
-            gGbApuSquare1.unk_3B = GB_APU_REGS.duty1;
-            gGbApuSquare1.unk_1C = 0x40 - GB_APU_REGS.length1;
+            gGbApuSquare1.duty = GB_APU_REGS.duty1;
+            gGbApuSquare1.length = 0x40 - GB_APU_REGS.length1;
             break;
         case 0x12:
-            gGbApuSquare1.unk_21 = GB_APU_REGS.volume1;
+            gGbApuSquare1.initialVolume = GB_APU_REGS.volume1;
             if ((GB_APU_REGS.volume1 == 0) && (GB_APU_REGS.envDir1 == 0)) {
-                gGbApuSquare1.unk_00 = 0;
+                gGbApuSquare1.enabled = 0;
             }
             break;
         case 0x13:
-            gGbApuSquare1.unk_10 = GB_APU_REGS.freqLo1 | (GB_APU_REGS.freqHi1 << 8);
-            gGbApuSquare1.unk_0C = GbApu_FreqToStep2x(gGbApuSquare1.unk_10);
+            gGbApuSquare1.frequency = GB_APU_REGS.freqLo1 | (GB_APU_REGS.freqHi1 << 8);
+            gGbApuSquare1.step = GbApu_FreqToStep2x(gGbApuSquare1.frequency);
             break;
         case 0x14:
-            gGbApuSquare1.unk_18 = GB_APU_REGS.counter1;
-            gGbApuSquare1.unk_10 = GB_APU_REGS.freqLo1 | (GB_APU_REGS.freqHi1 << 8);
-            gGbApuSquare1.unk_0C = GbApu_FreqToStep2x(gGbApuSquare1.unk_10);
+            gGbApuSquare1.lengthEnabled = GB_APU_REGS.counter1;
+            gGbApuSquare1.frequency = GB_APU_REGS.freqLo1 | (GB_APU_REGS.freqHi1 << 8);
+            gGbApuSquare1.step = GbApu_FreqToStep2x(gGbApuSquare1.frequency);
             if ((s32)GB_APU_REGS.trigger1 == 1) {
-                gGbApuSquare1.unk_14 = gGbApuSquare1.unk_1C * 200;
-                gGbApuSquare1.unk_20 = D_81138B1C[gGbApuSquare1.unk_21];
-                gGbApuSquare1.unk_24 = 0;
-                gGbApuSquare1.unk_30 = 0;
-                gGbApuSquare1.unk_2E = GB_APU_REGS.envDir1;
-                gGbApuSquare1.unk_28 = GB_APU_REGS.envSweep1 * 800;
-                gGbApuSquare1.unk_2D = gGbApuSquare1.unk_21;
+                gGbApuSquare1.lengthTimer = gGbApuSquare1.length * 200;
+                gGbApuSquare1.amplitude = D_81138B1C[gGbApuSquare1.initialVolume];
+                gGbApuSquare1.envelopeCounter = 0;
+                gGbApuSquare1.sweepCounter = 0;
+                gGbApuSquare1.envelopeDir = GB_APU_REGS.envDir1;
+                gGbApuSquare1.envelopePeriod = GB_APU_REGS.envSweep1 * 800;
+                gGbApuSquare1.envelopeVolume = gGbApuSquare1.initialVolume;
                 if (GB_APU_REGS.power) {
-                    gGbApuSquare1.unk_00 = 1;
+                    gGbApuSquare1.enabled = 1;
                 }
             }
-            if (gGbApuSquare1.unk_34 == 0) {
-                gGbApuSquare1.unk_3A = 0;
+            if (gGbApuSquare1.sweepPeriod == 0) {
+                gGbApuSquare1.sweepEnabled = 0;
             } else {
-                gGbApuSquare1.unk_3A = 1;
+                gGbApuSquare1.sweepEnabled = 1;
             }
             break;
         case 0x16:
-            gGbApuSquare2.unk_3B = GB_APU_REGS.duty2;
-            gGbApuSquare2.unk_1C = 0x40 - GB_APU_REGS.length2;
+            gGbApuSquare2.duty = GB_APU_REGS.duty2;
+            gGbApuSquare2.length = 0x40 - GB_APU_REGS.length2;
             break;
         case 0x17:
-            gGbApuSquare2.unk_21 = GB_APU_REGS.volume2;
+            gGbApuSquare2.initialVolume = GB_APU_REGS.volume2;
             if ((GB_APU_REGS.volume2 == 0) && (GB_APU_REGS.envDir2 == 0)) {
-                gGbApuSquare2.unk_00 = 0;
+                gGbApuSquare2.enabled = 0;
             }
             break;
         case 0x18:
-            gGbApuSquare2.unk_10 = GB_APU_REGS.freqLo2 | (GB_APU_REGS.freqHi2 << 8);
-            gGbApuSquare2.unk_0C = GbApu_FreqToStep2x(gGbApuSquare2.unk_10);
+            gGbApuSquare2.frequency = GB_APU_REGS.freqLo2 | (GB_APU_REGS.freqHi2 << 8);
+            gGbApuSquare2.step = GbApu_FreqToStep2x(gGbApuSquare2.frequency);
             break;
         case 0x19:
-            gGbApuSquare2.unk_18 = GB_APU_REGS.counter2;
-            gGbApuSquare2.unk_10 = GB_APU_REGS.freqLo2 | (GB_APU_REGS.freqHi2 << 8);
-            gGbApuSquare2.unk_0C = GbApu_FreqToStep2x(gGbApuSquare2.unk_10);
+            gGbApuSquare2.lengthEnabled = GB_APU_REGS.counter2;
+            gGbApuSquare2.frequency = GB_APU_REGS.freqLo2 | (GB_APU_REGS.freqHi2 << 8);
+            gGbApuSquare2.step = GbApu_FreqToStep2x(gGbApuSquare2.frequency);
             if ((s32)GB_APU_REGS.trigger2 == 1) {
-                gGbApuSquare2.unk_14 = gGbApuSquare2.unk_1C * 200;
-                gGbApuSquare2.unk_08.unk_02 = 0;
-                gGbApuSquare2.unk_20 = D_81138B1C[gGbApuSquare2.unk_21];
-                gGbApuSquare2.unk_24 = 0;
-                gGbApuSquare2.unk_2E = GB_APU_REGS.envDir2;
-                gGbApuSquare2.unk_28 = GB_APU_REGS.envSweep2 * 800;
-                gGbApuSquare2.unk_2D = gGbApuSquare2.unk_21;
+                gGbApuSquare2.lengthTimer = gGbApuSquare2.length * 200;
+                gGbApuSquare2.phase.acc = 0;
+                gGbApuSquare2.amplitude = D_81138B1C[gGbApuSquare2.initialVolume];
+                gGbApuSquare2.envelopeCounter = 0;
+                gGbApuSquare2.envelopeDir = GB_APU_REGS.envDir2;
+                gGbApuSquare2.envelopePeriod = GB_APU_REGS.envSweep2 * 800;
+                gGbApuSquare2.envelopeVolume = gGbApuSquare2.initialVolume;
                 if (GB_APU_REGS.power) {
-                    gGbApuSquare2.unk_00 = 1;
+                    gGbApuSquare2.enabled = 1;
                 }
             }
             break;
         case 0x1A:
             if (GB_APU_REGS.waveOn == 0) {
-                gGbApuWave.unk_00 = GB_APU_REGS.waveOn;
+                gGbApuWave.enabled = GB_APU_REGS.waveOn;
             }
             break;
         case 0x1B:
-            gGbApuWave.unk_1C = 0x100 - GB_APU_REGS.length3;
+            gGbApuWave.length = 0x100 - GB_APU_REGS.length3;
             break;
         case 0x1C:
-            gGbApuWave.unk_21 = GB_APU_REGS.level3;
-            gGbApuWave.unk_20 = D_81138B2C[gGbApuWave.unk_21];
+            gGbApuWave.initialVolume = GB_APU_REGS.level3;
+            gGbApuWave.amplitude = D_81138B2C[gGbApuWave.initialVolume];
             break;
         case 0x1D:
-            gGbApuWave.unk_10 = GB_APU_REGS.freqLo3 | (GB_APU_REGS.freqHi3 << 8);
-            gGbApuWave.unk_0C = GbApu_FreqToStep(gGbApuWave.unk_10);
+            gGbApuWave.frequency = GB_APU_REGS.freqLo3 | (GB_APU_REGS.freqHi3 << 8);
+            gGbApuWave.step = GbApu_FreqToStep(gGbApuWave.frequency);
             break;
         case 0x1E:
-            gGbApuWave.unk_10 = GB_APU_REGS.freqLo3 | (GB_APU_REGS.freqHi3 << 8);
-            gGbApuWave.unk_0C = GbApu_FreqToStep(gGbApuWave.unk_10);
-            gGbApuWave.unk_18 = GB_APU_REGS.counter3;
+            gGbApuWave.frequency = GB_APU_REGS.freqLo3 | (GB_APU_REGS.freqHi3 << 8);
+            gGbApuWave.step = GbApu_FreqToStep(gGbApuWave.frequency);
+            gGbApuWave.lengthEnabled = GB_APU_REGS.counter3;
             if ((s32)GB_APU_REGS.trigger3 == 1) {
-                gGbApuWave.unk_14 = gGbApuWave.unk_1C * 200;
-                gGbApuWave.unk_04 = 0x140;
+                gGbApuWave.lengthTimer = gGbApuWave.length * 200;
+                gGbApuWave.retriggerTimer = 0x140;
                 if (GB_APU_REGS.power && ((s32)GB_APU_REGS.waveOn == 1)) {
-                    gGbApuWave.unk_00 = 1;
+                    gGbApuWave.enabled = 1;
                 }
             }
             break;
@@ -573,63 +573,63 @@ void GbApu_WriteRegister(u16 reg, u8 value) {
             D_81182468[(reg - 0x30) * 2 + 1] = D_81138A80[reg - 0x10] & 0xF;
             break;
         case 0x20:
-            gGbApuNoise.unk_1C = 0x40 - GB_APU_REGS.length4;
+            gGbApuNoise.length = 0x40 - GB_APU_REGS.length4;
             break;
         case 0x21:
-            gGbApuNoise.unk_21 = GB_APU_REGS.volume4;
+            gGbApuNoise.initialVolume = GB_APU_REGS.volume4;
             if ((GB_APU_REGS.volume4 == 0) && (GB_APU_REGS.envDir4 == 0)) {
-                gGbApuNoise.unk_00 = 0;
+                gGbApuNoise.enabled = 0;
             }
             break;
         case 0x22:
-            gGbApuNoise.unk_10 = GB_APU_REGS.shift4;
-            gGbApuNoise.unk_0C = GbApu_ConfigureNoiseTable(GB_APU_REGS.shift4, GB_APU_REGS.width4, GB_APU_REGS.ratio4);
-            if (gGbApuNoise.unk_00 == 0) {
-                gGbApuNoise.unk_40 = gGbApuNoise.unk_0C;
+            gGbApuNoise.frequency = GB_APU_REGS.shift4;
+            gGbApuNoise.step = GbApu_ConfigureNoiseTable(GB_APU_REGS.shift4, GB_APU_REGS.width4, GB_APU_REGS.ratio4);
+            if (gGbApuNoise.enabled == 0) {
+                gGbApuNoise.appliedStep = gGbApuNoise.step;
             }
-            if (gGbApuNoise.unk_40 < gGbApuNoise.unk_0C) {
-                gGbApuNoise.unk_48 = gGbApuNoise.unk_0C - gGbApuNoise.unk_40;
+            if (gGbApuNoise.appliedStep < gGbApuNoise.step) {
+                gGbApuNoise.stepSlew = gGbApuNoise.step - gGbApuNoise.appliedStep;
             } else {
-                gGbApuNoise.unk_48 = gGbApuNoise.unk_40 - gGbApuNoise.unk_0C;
+                gGbApuNoise.stepSlew = gGbApuNoise.appliedStep - gGbApuNoise.step;
             }
-            gGbApuNoise.unk_48 >>= 7;
-            if (gGbApuNoise.unk_48 == 0) {
-                gGbApuNoise.unk_48 = 1;
+            gGbApuNoise.stepSlew >>= 7;
+            if (gGbApuNoise.stepSlew == 0) {
+                gGbApuNoise.stepSlew = 1;
             }
             break;
         case 0x23:
-            gGbApuNoise.unk_18 = GB_APU_REGS.counter4;
+            gGbApuNoise.lengthEnabled = GB_APU_REGS.counter4;
             if ((s32)GB_APU_REGS.trigger4 == 1) {
-                gGbApuNoise.unk_14 = gGbApuNoise.unk_1C * 200;
-                if (gGbApuNoise.unk_00 == 0) {
-                    gGbApuNoise.unk_08.unk_02 = 0;
+                gGbApuNoise.lengthTimer = gGbApuNoise.length * 200;
+                if (gGbApuNoise.enabled == 0) {
+                    gGbApuNoise.phase.acc = 0;
                 }
-                gGbApuNoise.unk_2D = gGbApuNoise.unk_21;
+                gGbApuNoise.envelopeVolume = gGbApuNoise.initialVolume;
                 switch ((s32)GB_APU_REGS.width4) {
                     case 0:
-                        gGbApuNoise.unk_20 = D_81138B30[gGbApuNoise.unk_2D];
+                        gGbApuNoise.amplitude = D_81138B30[gGbApuNoise.envelopeVolume];
                         break;
                     case 1:
-                        gGbApuNoise.unk_20 = D_81138B40[gGbApuNoise.unk_2D];
+                        gGbApuNoise.amplitude = D_81138B40[gGbApuNoise.envelopeVolume];
                         break;
                 }
-                if ((gGbApuNoise.unk_00 == 0) || (gGbApuNoise.unk_3C < gGbApuNoise.unk_20)) {
-                    gGbApuNoise.unk_3C = gGbApuNoise.unk_20;
+                if ((gGbApuNoise.enabled == 0) || (gGbApuNoise.appliedAmplitude < gGbApuNoise.amplitude)) {
+                    gGbApuNoise.appliedAmplitude = gGbApuNoise.amplitude;
                 }
-                gGbApuNoise.unk_24 = 0;
-                gGbApuNoise.unk_2E = GB_APU_REGS.envDir4;
-                gGbApuNoise.unk_28 = GB_APU_REGS.envSweep4 * 800;
+                gGbApuNoise.envelopeCounter = 0;
+                gGbApuNoise.envelopeDir = GB_APU_REGS.envDir4;
+                gGbApuNoise.envelopePeriod = GB_APU_REGS.envSweep4 * 800;
                 if (GB_APU_REGS.power) {
-                    gGbApuNoise.unk_00 = 1;
+                    gGbApuNoise.enabled = 1;
                 }
             }
             break;
         case 0x26:
             if (!(value & 0x80)) {
-                gGbApuSquare1.unk_00 = 0;
-                gGbApuSquare2.unk_00 = 0;
-                gGbApuWave.unk_00 = 0;
-                gGbApuNoise.unk_00 = 0;
+                gGbApuSquare1.enabled = 0;
+                gGbApuSquare2.enabled = 0;
+                gGbApuWave.enabled = 0;
+                gGbApuNoise.enabled = 0;
             }
             break;
     }
@@ -756,10 +756,10 @@ void GbApu_RenderBuffer(s32 num_samples, s16* out) {
         idx++;
     }
 
-    D_811824B8.unk_00 = 0;
-    D_811824B8.unk_01 = 0;
-    D_811824B8.unk_02 = 0;
-    D_811824B8.unk_03 = 0;
+    D_811824B8.square1 = 0;
+    D_811824B8.square2 = 0;
+    D_811824B8.wave = 0;
+    D_811824B8.noise = 0;
 }
 
 /**
@@ -779,47 +779,47 @@ void GbApu_QueueRegisterWrite(u16 arg0, u8 arg1, u16 arg2) {
     switch (temp_v1) {
     case 20:
         if (arg1 & 0x80) {
-            D_811824B8.unk_00 = 2;
+            D_811824B8.square1 = 2;
             return;
         }
     default:
         return;
     case 25:
         if (arg1 & 0x80) {
-            D_811824B8.unk_01 = 2;
+            D_811824B8.square2 = 2;
             return;
         }
         break;
     case 30:
         if (arg1 & 0x80) {
-            D_811824B8.unk_02 = 2;
+            D_811824B8.wave = 2;
             return;
         }
         break;
     case 35:
         if (arg1 & 0x80) {
-            D_811824B8.unk_03 = 2;
+            D_811824B8.noise = 2;
             return;
         }
         break;
     case 38:
         if (!(arg1 & 1)) {
-            D_811824B8.unk_00 = 1;
+            D_811824B8.square1 = 1;
         }
         if (!(arg1 & 2)) {
-            D_811824B8.unk_01 = 1;
+            D_811824B8.square2 = 1;
         }
         if (!(arg1 & 4)) {
-            D_811824B8.unk_02 = 1;
+            D_811824B8.wave = 1;
         }
         if (!(arg1 & 8)) {
-            D_811824B8.unk_03 = 1;
+            D_811824B8.noise = 1;
         }
         if (!(arg1 & 0x80)) {
-            D_811824B8.unk_00 = 1;
-            D_811824B8.unk_01 = 1;
-            D_811824B8.unk_02 = 1;
-            D_811824B8.unk_03 = 1;
+            D_811824B8.square1 = 1;
+            D_811824B8.square2 = 1;
+            D_811824B8.wave = 1;
+            D_811824B8.noise = 1;
         }
         break;
     }
@@ -842,14 +842,14 @@ void GbApu_ResetChannels(void) {
   for (i = 0x50; i > 0xF; i--) {
       GbApu_WriteRegister(i, 0);
   }
-  gGbApuSquare1.unk_3C = 0;
-  gGbApuSquare2.unk_3C = 0;
-  gGbApuWave.unk_3C = 0;
-  gGbApuNoise.unk_3C = 0;
-  gGbApuSquare1.unk_08.unk_02 = 0;
-  gGbApuSquare2.unk_08.unk_02 = 0;
-  gGbApuWave.unk_08.unk_02 = 0;
-  gGbApuNoise.unk_08.unk_02 = 0;
+  gGbApuSquare1.appliedAmplitude = 0;
+  gGbApuSquare2.appliedAmplitude = 0;
+  gGbApuWave.appliedAmplitude = 0;
+  gGbApuNoise.appliedAmplitude = 0;
+  gGbApuSquare1.phase.acc = 0;
+  gGbApuSquare2.phase.acc = 0;
+  gGbApuWave.phase.acc = 0;
+  gGbApuNoise.phase.acc = 0;
 }
 
 /**
@@ -908,25 +908,25 @@ u8 GbMem_ReadIoRegister(u16 arg0) {
   u8 var_v1;
   u8 temp;
   if ((arg0 & 0xFFFF) == 0xFF26) {
-      if (D_811824B8.unk_00 != 0) {
-          var_v1 = (D_811824B8.unk_00 - 1) & 0xFF;
+      if (D_811824B8.square1 != 0) {
+          var_v1 = (D_811824B8.square1 - 1) & 0xFF;
       } else {
-          var_v1 = gGbApuSquare1.unk_00;
+          var_v1 = gGbApuSquare1.enabled;
       }
-      if (D_811824B8.unk_01 != 0) {
-          var_a0 = (D_811824B8.unk_01 - 1) & 0xFF;
+      if (D_811824B8.square2 != 0) {
+          var_a0 = (D_811824B8.square2 - 1) & 0xFF;
       } else {
-          var_a0 = gGbApuSquare2.unk_00;
+          var_a0 = gGbApuSquare2.enabled;
       }
-      if (D_811824B8.unk_02 != 0) {
-          var_a1 = (D_811824B8.unk_02 - 1) & 0xFF;
+      if (D_811824B8.wave != 0) {
+          var_a1 = (D_811824B8.wave - 1) & 0xFF;
       } else {
-          var_a1 = gGbApuWave.unk_00;
+          var_a1 = gGbApuWave.enabled;
       }
-      if (D_811824B8.unk_03 != 0) {
-          var_a2 = (D_811824B8.unk_03 - 1) & 0xFF;
+      if (D_811824B8.noise != 0) {
+          var_a2 = (D_811824B8.noise - 1) & 0xFF;
       } else {
-          var_a2 = gGbApuNoise.unk_00;
+          var_a2 = gGbApuNoise.enabled;
       }
       temp = ((((u32)D_81138A96 >> 0xF) << 7) | (var_a2 * 8) | (var_a1 * 4) | (var_a0 * 2) | var_v1);
       return temp;
