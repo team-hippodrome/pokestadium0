@@ -150,7 +150,7 @@ ModelAnimationBank* ModelAnim_GetAnimationRecord(DisplayObject* arg0, s32 arg1) 
     return var_v1;
 }
 
-extern unk_D_8006FF00 D_80064C5C[];
+extern SpeciesInfo D_80064C5C[];
 
 /**
  * Derive the material color variant from a non-default nickname, OT id, and OT name.
@@ -162,7 +162,7 @@ arg1_func_80010CA8* Model_ComputeNicknameColorVariant(arg1_func_80010CA8* arg0, 
     UNUSED s32 pad; // FAKE: stack padding
     char sp38[0xB];
     arg1_func_80010CA8 sp34;
-    unk_D_8006FF00* sp30;
+    SpeciesInfo* sp30;
     UNUSED s32 pad2; // FAKE: stack padding
     u8 var_a0;
     s8* var_v1;
@@ -189,7 +189,7 @@ arg1_func_80010CA8* Model_ComputeNicknameColorVariant(arg1_func_80010CA8* arg0, 
             var_a0 += 0;
         }
 
-        sp34.hueShift = ((((sp30->unk_12 - sp30->unk_10) << 6) * var_a0) / 255) + (sp30->unk_10 << 6);
+        sp34.hueShift = ((((sp30->nicknameHueMax - sp30->nicknameHueMin) << 6) * var_a0) / 255) + (sp30->nicknameHueMin << 6);
     }
 
     *arg0 = sp34;

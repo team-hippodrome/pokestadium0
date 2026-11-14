@@ -52,7 +52,7 @@ typedef struct PokeIconRenderer {
     /* 0x0C */ GraphNode* rootNode; // @unverified: geo root drawn into each slot image
     /* 0x10 */ DisplayObject* displayObject; // @unverified: model drawn for the icon
     /* 0x14 */ GfxImage* depthImage; // @unverified: depth image shared by every slot
-    /* 0x18 */ unk_D_8006FF00* unk_18;
+    /* 0x18 */ SpeciesInfo* unk_18;
 } PokeIconRenderer; // size = 0x1C
 
 #include "game_state.h"

@@ -58,7 +58,8 @@ typedef struct LabeledButton {
     /* 0x08 */ s32 width;
     /* 0x0C */ s32 height;
     /* 0x10 */ s32 flags; // OR'd into the label's color flags by Window_DrawLabeled; bit 3 = highlighted; poking 8 lit the いいえ (No) button of the entry confirm window in play
-    /* 0x14 */ char unk14[0xC];
+    /* 0x14 */ s32 style; // @unverified: set to 1 (no fill) by Window_InitLabeled; the WindowFrame.style slot, as Window_SetRect sets x..0x10
+    /* 0x18 */ char unk18[0x8];
     /* 0x20 */ Color_RGBA8 color; // @unverified: highlight fill (Window_DrawLabeled)
     /* 0x24 */ s32 unk_24;
     /* 0x28 */ s32 fontSize; // first argument of func_8001A384 in Window_DrawLabeled; 8 by default; poking 16 drew the いいえ label larger in play
@@ -92,6 +93,27 @@ typedef struct TextBox {
     /* 0x30 */ s32 fontStyle; // @unverified: index into D_800736D0 (character width and height, font)
     /* 0x34 */ s32 lineCount; // @unverified: TextBox_Init arg3; sets the window height
 } TextBox; // size = 0x38
+
+/* The 8x8 edge textures of a textured frame (Ui_DrawTexturedFrame) or divider (Ui_DrawTexturedDivider,
+ * func_80029864), e.g. D_8007356C. */
+typedef struct FrameTextures {
+    /* 0x00 */ s32 loadArg; // @unverified: last argument of the texture loader
+    /* 0x04 */ s32 format; // @unverified: index of the loader in D_800734F0, D_80073500 or D_80073510
+    /* 0x08 */ u8* top; // @unverified: drawn along the top edge by Ui_DrawTexturedFrame
+    /* 0x0C */ u8* left; // @unverified: along the left edge
+    /* 0x10 */ u8* bottom; // @unverified: along the bottom edge
+    /* 0x14 */ u8* right; // @unverified: along the right edge
+} FrameTextures; // size = 0x18
+
+/* A frame with text that blinks (BlinkingTextBox_Init, BlinkingTextBox_Draw), e.g. the Free Battle entry message. */
+typedef struct BlinkingTextBox {
+    /* 0x00 */ WindowFrame frame; // @unverified: centered on the screen around the text (BlinkingTextBox_Init)
+    /* 0x20 */ s32 blinkTimer; // @unverified: counts up each draw; hidden for 4 of every 8 frames (Window_DrawBlinkingFrame)
+    /* 0x24 */ s32 noBlink; // @unverified: nonzero = always shown (Window_DrawBlinkingFrame); BlinkingTextBox_Init clears it
+    /* 0x28 */ char* text; // @unverified: BlinkingTextBox_Init arg1
+    /* 0x2C */ s32 fontStyle; // @unverified: index into D_800736D0 (character width and height, font)
+    /* 0x30 */ s32 lineCount; // @unverified: BlinkingTextBox_Init arg3; sets the frame height
+} BlinkingTextBox; // size = 0x34
 
 void func_8002B018(ImageButton* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
 void func_8002B054(ImageButton* arg0, s32 arg1);
@@ -151,7 +173,7 @@ Color_RGBA8 Color_InterpolateFromGray(Color_RGBA8 arg0, f32 arg1);
 s32 BattleMon_CountMoves(u8* arg0);
 void BattleInfoWidget_DrawLabel(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
 void Particle_SetVelocityXZFromRotationY(Particle* arg0);
-s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0);
+s32 Window_UpdateAnimation(Window* arg0);
 void Font_SetColorForFlags(s32);
 s32 BattleMon_GetMoveIndexChecked();                /* extern */
 void Trade_DrawSolidFillRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8 arg4);

@@ -29,7 +29,6 @@ void func_89109B60(s8*);
 void func_80027D68(s32, s32);
 void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
 void LabPCList_DrawMonRow();
-void func_89105C54(s8*, s32, s32, s8*, Color_RGBA8);
 extern s32 D_8910D990[];
 extern Color_RGBA8 D_8910A7F4;
 extern u8 D_8910A844[];
@@ -101,7 +100,6 @@ M2C_UNK LabPCList_ApplyFiltersAndSort();
 extern s32 D_8910E37C;
 s32 LabPCList_UpdatePopupMenu(LabPopupMenu*);
 void func_80027D68(s32, s32);
-void func_89105C54(s8*, s32, s32, s8*, Color_RGBA8);
 M2C_UNK LabPCList_ApplyFiltersAndSort();
 extern s32 D_8910D9D0;
 extern s32 D_8910D9D4;
@@ -245,21 +243,19 @@ s32 LabPCList_RunLevelFilter(s8 *arg)
   return 0;
 }
 
-s32 LabPCList_UpdateTypeFilter(s8*);
-void LabPCList_CommitTypeFilter(s8*, s8*);
 /**
  * Runs the type filter window and turns filter flag 2 on or off.
  * Seen in play (2026-11-12) in いちらん: ran while the タイプであつめる window was open.
  */
 s32 LabPCList_RunTypeFilter(LabPCListScreen* arg0) {
-    s8* sp24 = (s8*)arg0->typeFilterWindow;
+    LabTypeFilterWindow* sp24 = &arg0->typeFilterWindow;
     s32 ret = LabPCList_UpdateTypeFilter(sp24);
 
     if (ret == -1) {
         arg0->state = 0;
     } else if (ret == 1) {
-        LabPCList_CommitTypeFilter(sp24, (s8*)&arg0->unk_9918);
-        if (arg0->unk_9918 == 0) {
+        LabPCList_CommitTypeFilter(sp24, &arg0->typeFilterCount);
+        if (arg0->typeFilterCount == 0) {
             LabPCList_ClearFilterFlag(arg0, 2);
         } else {
             LabPCList_SetFilterFlag(arg0, 2);
@@ -267,7 +263,7 @@ s32 LabPCList_RunTypeFilter(LabPCListScreen* arg0) {
         LabPCList_ApplyFiltersAndSort(arg0);
         arg0->state = 0;
     } else if (ret == 2) {
-        arg0->unk_9918 = 0;
+        arg0->typeFilterCount = 0;
         LabPCList_ClearFilterFlag(arg0, 2);
         LabPCList_ApplyFiltersAndSort(arg0);
         arg0->state = 0;
@@ -275,22 +271,20 @@ s32 LabPCList_RunTypeFilter(LabPCListScreen* arg0) {
     return 0;
 }
 
-s32 LabPCList_UpdateMoveFilter(s8*);
-void LabPCList_CommitMoveFilter(s8*, s8*);
 /**
  * Runs the move filter window and turns filter flag 4 on or off.
  * Seen in play (2026-11-12) in いちらん: あつめる with ひっかく set filter flag 4 and left only ヒトカゲ (ひっさつまえば
  * left the list empty); かいじょ cleared flag 4 and all three party Pokémon returned.
  */
 s32 LabPCList_RunMoveFilter(LabPCListScreen* arg0) {
-    s8* sp24 = (s8*)arg0->moveFilterWindow;
+    LabMoveFilterWindow* sp24 = &arg0->moveFilterWindow;
     s32 ret = LabPCList_UpdateMoveFilter(sp24);
 
     if (ret == -1) {
         arg0->state = 0;
     } else if (ret == 1) {
-        LabPCList_CommitMoveFilter(sp24, (s8*)&arg0->unk_9B00);
-        if (arg0->unk_9B04 == 0) {
+        LabPCList_CommitMoveFilter(sp24, arg0->moveFilterMoves);
+        if (arg0->moveFilterCount == 0) {
             LabPCList_ClearFilterFlag(arg0, 4);
         } else {
             LabPCList_SetFilterFlag(arg0, 4);
@@ -298,7 +292,7 @@ s32 LabPCList_RunMoveFilter(LabPCListScreen* arg0) {
         LabPCList_ApplyFiltersAndSort(arg0);
         arg0->state = 0;
     } else if (ret == 2) {
-        arg0->unk_9B04 = 0;
+        arg0->moveFilterCount = 0;
         LabPCList_ClearFilterFlag(arg0, 4);
         LabPCList_ApplyFiltersAndSort(arg0);
         arg0->state = 0;
@@ -431,11 +425,11 @@ s32 LabPCList_UpdateMonMenu(LabPCListScreen* arg0) {
                     s32 id;
 
                     id = M2C_FIELD(entry, u8*, 8) - 1;
-                    arg0->unk_9E5C = 1;
-                    M2C_FIELD(arg0, u8*, 0x9E60) = D_80065D00[id].unk06;
+                    arg0->sameTypeFilterCount = 1;
+                    arg0->sameTypeFilterTypes[0] = D_80065D00[id].unk06;
                     if (D_80065D00[id].unk06 != D_80065D00[id].unk07) {
-                        M2C_FIELD(arg0, u8*, 0x9E61) = D_80065D00[id].unk07;
-                        arg0->unk_9E5C++;
+                        arg0->sameTypeFilterTypes[1] = D_80065D00[id].unk07;
+                        arg0->sameTypeFilterCount++;
                     }
                 }
                 LabPCList_ApplyFiltersAndSort(arg0);

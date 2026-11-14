@@ -436,7 +436,7 @@ void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
  * Seen in play (2026-11-12): No.001 フシギダネ, たねポケモン, たかさ 0.7m, おもさ 6.9kg.
  */
 void Pokedex_DrawEntryInfo(s32 arg0, s32 arg1) {
-    unk_D_8006FF00* entry = (unk_D_8006FF00*)((u8*)&D_80064C5C + D_8A12FFB8 * 0x1C);
+    SpeciesInfo* entry = (SpeciesInfo*)((u8*)&D_80064C5C + D_8A12FFB8 * 0x1C);
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1, 0x122, 0xD2, D_8A1057D4);
@@ -449,7 +449,7 @@ void Pokedex_DrawEntryInfo(s32 arg0, s32 arg1) {
     Font_Printf(arg0 + 0x70, arg1 + 0x38, entry->name);
     Font_SetActive(0x10, 0);
     Gfx_SetPrimColor(0x96, 0xFF, 0x96, 0xFF);
-    Font_Printf(arg0 + 8, arg1 + 0x6A, D_8A12FCE4, entry->unk_08);
+    Font_Printf(arg0 + 8, arg1 + 0x6A, D_8A12FCE4, entry->category);
     Gfx_SetPrimColor(0xFF, 0xFF, 0x96, 0xFF);
     Font_Printf(arg0 + 0xD, arg1 + 0x8E, D_8A12FCF0);
     Gfx_SetPrimColor(0xFF, 0x96, 0x96, 0xFF);
@@ -457,10 +457,10 @@ void Pokedex_DrawEntryInfo(s32 arg0, s32 arg1) {
     Font_DisableTwoCycleTexturing();
     Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
     Font_Printf(arg0 + 0x12, arg1 + 0x12, D_8A12FD00);
-    Font_Printf(arg0 + 0x4E, arg1 + 0x12, D_8A12FD04, entry->unk_00);
-    if (func_800231C8(D_8A12FFB0, entry->unk_00) >= 2) {
-        Pokedex_DrawTenthsValue(arg0 + 0x79, arg1 + 0x8E, entry->unk_0D);
-        Pokedex_DrawTenthsValue(arg0 + 0x79, arg1 + 0xB2, entry->unk_0E);
+    Font_Printf(arg0 + 0x4E, arg1 + 0x12, D_8A12FD04, entry->dexNumber);
+    if (func_800231C8(D_8A12FFB0, entry->dexNumber) >= 2) {
+        Pokedex_DrawTenthsValue(arg0 + 0x79, arg1 + 0x8E, entry->heightTenths);
+        Pokedex_DrawTenthsValue(arg0 + 0x79, arg1 + 0xB2, entry->weightTenths);
     } else {
         Font_Printf(arg0 + 0x79, arg1 + 0x8E, D_8A12FD0C);
         Font_Printf(arg0 + 0x79, arg1 + 0xB2, D_8A12FD10);
@@ -483,14 +483,14 @@ extern s32 D_8A12FFB8;
  * Seen in play (2026-11-12): the フシギダネ name bar on the entry page.
  */
 void Pokedex_DrawEntryNameBar(s32 arg0, s32 arg1) {
-    unk_D_8006FF00* entry = (unk_D_8006FF00*)((u8*)&D_80064C5C + D_8A12FFB8 * 0x1C);
+    SpeciesInfo* entry = (SpeciesInfo*)((u8*)&D_80064C5C + D_8A12FFB8 * 0x1C);
 
     Ui_FillRectPrimEnvColor(arg0, arg1, 0x21C, 0x78, *(Rgba8A100F20 *)D_8A1057F8, *(Rgba8A100F20 *)D_8A1057FC);
     func_8001AB6C();
     func_8001A384(0x10, 0);
     Font_SetLineHeight(0x24);
-    if (func_800231C8(D_8A12FFB0, entry->unk_00) >= 2) {
-        func_8001A944(arg0 + 0x2A, arg1 + 0xC, (char*)entry->unk_18);
+    if (func_800231C8(D_8A12FFB0, entry->dexNumber) >= 2) {
+        func_8001A944(arg0 + 0x2A, arg1 + 0xC, entry->description);
     } else {
         func_8001A944(arg0 + 0x2A, arg1 + 0xC, D_8A12FD1C);
     }
@@ -500,7 +500,7 @@ void Pokedex_DrawEntryNameBar(s32 arg0, s32 arg1) {
 s32 Ui_DrawTexturedDivider(s32, s32, s32, void*);
 s32 func_80029864(s32, s32, s32, void*);
 s32 Ui_DrawImageInStrips(void*, s32, s32);
-s32 Particle_Field50_SetXZFromField7C_09BB4();
+s32 Window_DrawAnimatedFrame();
 void func_8A100A24(s32, s32, s32, u8*);
 void Pokedex_DrawEntryInfo(s32, s32);
 void Pokedex_DrawEntryNameBar(s32, s32);
@@ -516,7 +516,7 @@ extern u8 D_8A11FC18;
  * offsets 0 and 4 act as an x/y origin that the draw calls below offset
  * (x + 0xF9, y + 0xD7 and so on), the word at offset 8 is passed to
  * Ui_DrawTexturedDivider, and the word at offset 0x28 is a mode value. When the mode
- * is not 2 and Particle_Field50_SetXZFromField7C_09BB4() returns 0, it runs Ui_DrawTexturedDivider,
+ * is not 2 and Window_DrawAnimatedFrame() returns 0, it runs Ui_DrawTexturedDivider,
  * func_80029864, Pokedex_DrawEntryInfo and Pokedex_DrawEntryNameBar at those offsets. When the
  * mode is 1 or 2 it also calls Ui_DrawImageInStrips on D_8A11FC18 with (0x32, 0x5A)
  * and then func_8A100A24(0x32, 0x5A, v, arg1), where v is 0xFF if arg2 >= 2
@@ -527,7 +527,7 @@ extern u8 D_8A11FC18;
 void Pokedex_DrawEntryWindow(Window* arg0, s32 arg1, s32 arg2) {
     s32 temp_v0;
 
-    if ((arg0->state != 2) && (Particle_Field50_SetXZFromField7C_09BB4() == 0)) {
+    if ((arg0->state != 2) && (Window_DrawAnimatedFrame() == 0)) {
         Ui_DrawTexturedDivider(arg0->frame.x, arg0->frame.y + 0xD7, arg0->frame.width, &D_8007356C);
         func_80029864(arg0->frame.x + 0xF9, arg0->frame.y, 0xDE, &D_8007356C);
         Pokedex_DrawEntryInfo(arg0->frame.x + 0x100, arg0->frame.y + 6);
@@ -783,7 +783,7 @@ s32 Pokedex_ShowEntryMenu(void) {
 extern s32 D_8A12FF98;
 extern u8 D_8A130204[];
 s32 func_800196F8(s32);
-s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0);
+s32 Window_UpdateAnimation(Window* arg0);
 void Pokedex_DrawEntryWindow(Window*, s32, s32);
 
 /**
@@ -797,7 +797,7 @@ s32 Pokedex_DrawEntryScreen(s32 arg0, s32 arg1) {
     GeoRender_AdvanceFrameCounter();
     sp1C = func_800196F8(D_8A12FF98);
     BgStage_DrawFrame();
-    if (Particle_Field7C_SetXZFromField74AngleY_0B278(D_8A130204) != 0) {
+    if (Window_UpdateAnimation(D_8A130204) != 0) {
         Pokedex_DrawBackground();
     }
     Pokedex_DrawEntryWindow(D_8A130204, sp1C, arg1);

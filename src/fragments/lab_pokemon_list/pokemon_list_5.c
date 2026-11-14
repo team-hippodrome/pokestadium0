@@ -28,7 +28,6 @@ void func_89109B60(s8*);
 void func_80027D68(s32, s32);
 void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
 void LabPCList_DrawMonRow();
-void func_89105C54(s8*, s32, s32, s8*, Color_RGBA8);
 extern s32 D_8910D990[];
 extern Color_RGBA8 D_8910A7F4;
 extern u8 D_8910A844[];
@@ -101,7 +100,6 @@ extern s32 D_8910E37C;
 
 s32 LabPCList_UpdatePopupMenu(LabPopupMenu*);
 void func_80027D68(s32, s32);
-void func_89105C54(s8*, s32, s32, s8*, Color_RGBA8);
 M2C_UNK LabPCList_ApplyFiltersAndSort();
 extern s32 D_8910D9D0;
 extern s32 D_8910D9D4;
@@ -148,7 +146,7 @@ s32 LabPCList_UpdateSortMenu(LabPCListScreen* arg0) {
                     break;
                 case 4:
                     arg0->state = 1;
-                    func_89105C54((s8*)arg0->sourceSelectWindow, 0x78, 0x67, (s8*)&arg0->sourceMatrix, D_8910A7F4);
+                    func_89105C54(&arg0->sourceSelectWindow, 0x78, 0x67, (s8*)&arg0->sourceMatrix, D_8910A7F4);
                     return 0;
             }
         } else {

@@ -15,7 +15,7 @@ extern Entry80066AA0 D_80066AA0[];
 extern M2C_UNK D_800734A8;
 extern s8 *D_800603C0;
 extern s8 D_8007356C;
-s32 Particle_Field50_SetXZFromField7C_09BB4();
+s32 Window_DrawAnimatedFrame();
 s32 Pokemon_GetTypeIndex(s32, s32);
 s32 func_8001FA30(u8);
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
@@ -151,7 +151,7 @@ void PartyScreen_DrawList(PartyListWindow* arg0, s32 arg1) {
     s32 x;
     s32 y;
 
-    if ((arg0->window.state != 2) && (Particle_Field50_SetXZFromField7C_09BB4() == 0)) {
+    if ((arg0->window.state != 2) && (Window_DrawAnimatedFrame() == 0)) {
         Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->window.frame.y + 0x137, arg0->window.frame.width, &D_8007356C);
         Ui_FillRectPrimEnvColor(arg0->window.frame.x + 6, arg0->window.frame.y + 0x13E, arg0->window.frame.width - 0xC, 0x24, D_8A203350, D_8A203354);
         func_8001AB6C();
@@ -252,7 +252,7 @@ void PartyScreen_InitActionMenu(PartyActionMenuWindow* arg0, s32 arg1, s32 arg2,
  * Seen in play (2026-11-12): draws the つよさをみる / ならびかえ / やめる menu.
  */
 void PartyScreen_DrawActionMenu(PartyActionMenuWindow* arg0) {
-    if (Particle_Field50_SetXZFromField7C_09BB4() == 0) {
+    if (Window_DrawAnimatedFrame() == 0) {
         Menu_DrawItems((s8*)&arg0->menu, arg0->window.frame.x + 6, arg0->window.frame.y + 0xC, 0xFEF, 0);
     }
 }

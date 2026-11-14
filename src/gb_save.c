@@ -6,7 +6,7 @@
 #include "pokemon_stats.h"
 
 // Declared here instead of in a header: the callers of these disagree on their types.
-s32 Particle_Field50_SetXZFromField7C_09BB4(s32* arg0);
+s32 Window_DrawAnimatedFrame(Window* arg0);
 s32 Ui_GetSelectionDirection(Controller* arg0);
 s32 Ui_HandleHorizontalSelectionInput(UiSelection* arg0);
 extern u32 D_8007360C[];
@@ -29,8 +29,8 @@ s32 Ui_GetSelectionDirection(Controller* arg0);
 Color_RGBA8 Color_InterpolateFromGray(Color_RGBA8 arg0, f32 arg1);
 
 s32 Ui_AdjustNumericSelection(UiNumberInput* arg0, s32 arg1);
-s32 Particle_Field50_SetXZFromField7C_09BB4(s32* arg0);
-s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0);
+s32 Window_DrawAnimatedFrame(Window* arg0);
+s32 Window_UpdateAnimation(Window* arg0);
 
 void func_8001AA9C(u8, u8, u8, u8);
 void func_8001AB6C(void);
@@ -292,7 +292,7 @@ extern GbTexLoadFunc4 D_800734F0[];
  * screen after it, as (445, 78, 116, 112) and (79, 202, 116, 112).
  * @unverified Name guessed from the code; comment kept.
  */
-void Ui_DrawTexturedFrame(s32 x, s32 y, s32 w, s32 h, u8* arg4) {
+void Ui_DrawTexturedFrame(s32 x, s32 y, s32 w, s32 h, FrameTextures* arg4) {
     GbTexLoadFunc4 load;
     s32 x2;
     s32 y2;
@@ -307,19 +307,19 @@ void Ui_DrawTexturedFrame(s32 x, s32 y, s32 w, s32 h, u8* arg4) {
     x2 = x + w;
     y2 = y + h;
     y8 = (y + 8) << 2;
-    load = D_800734F0[M2C_FIELD(arg4, s32*, 4)];
-    load(8, 8, M2C_FIELD(arg4, u8**, 8), M2C_FIELD(arg4, s32*, 0));
+    load = D_800734F0[arg4->format];
+    load(8, 8, arg4->top, arg4->loadArg);
     gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x2 - 8U) << 2, y8, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
-    load(8, 8, M2C_FIELD(arg4, u8**, 0x14), M2C_FIELD(arg4, s32*, 0));
+    load(8, 8, arg4->right, arg4->loadArg);
     gSPTextureRectangle(gDisplayListHead++, (x2 - 8) << 2, y << 2, x2 << 2, (y2 - 8U) << 2, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
-    load(8, 8, M2C_FIELD(arg4, u8**, 0x10), M2C_FIELD(arg4, s32*, 0));
+    load(8, 8, arg4->bottom, arg4->loadArg);
     gSPTextureRectangle(gDisplayListHead++, (x + 8) << 2, (y2 - 8) << 2, x2 << 2, y2 << 2, G_TX_RENDERTILE, (w * -0x20) + 0x200, 0, 0x400, 0x400);
-    load(8, 8, M2C_FIELD(arg4, u8**, 0xC), M2C_FIELD(arg4, s32*, 0));
+    load(8, 8, arg4->left, arg4->loadArg);
     gSPTextureRectangle(gDisplayListHead++, x << 2, y8, (x + 8) << 2, y2 << 2, G_TX_RENDERTILE, 0, (h * -0x20) + 0x200, 0x400, 0x400);
 }
 
 extern Gfx D_80073450[];
-void Ui_DrawTexturedFrame(s32, s32, s32, s32, u8*);
+void Ui_DrawTexturedFrame(s32, s32, s32, s32, FrameTextures*);
 
 /**
  * Appends a call of display list D_80073450 and a gDPSetCombineMode(
@@ -347,7 +347,7 @@ extern Gfx D_80073450[];
  * main menu, as (54, 176, width 532).
  * @unverified Name guessed from the code; comment kept.
  */
-void Ui_DrawTexturedDivider(s32 x, s32 y, s32 w, u8* arg3) {
+void Ui_DrawTexturedDivider(s32 x, s32 y, s32 w, FrameTextures* arg3) {
     GbTexLoadFunc load;
     s32 pad[2]; // FAKE
     s32 x2;
@@ -358,12 +358,12 @@ void Ui_DrawTexturedDivider(s32 x, s32 y, s32 w, u8* arg3) {
     }
     x2 = x + w;
     y8 = (y + 8) << 2;
-    load = D_80073500[M2C_FIELD(arg3, s32*, 4)];
+    load = D_80073500[arg3->format];
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-    load(8, 8, M2C_FIELD(arg3, u8**, 0x10), M2C_FIELD(arg3, s32*, 0));
+    load(8, 8, arg3->bottom, arg3->loadArg);
     gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x2 - 8) << 2, y8, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
-    load(8, 8, M2C_FIELD(arg3, u8**, 0x14), M2C_FIELD(arg3, s32*, 0));
+    load(8, 8, arg3->right, arg3->loadArg);
     gSPTextureRectangle(gDisplayListHead++, (x2 - 8) << 2, y << 2, x2 << 2, y8, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
 }
 
@@ -374,7 +374,7 @@ extern GbTexLoadFunc D_80073510[];
  * at (x, y) from the textures at arg3 + 8 and arg3 + 0xC, loaded through
  * D_80073510[arg3 + 4].
  */
-void func_80029864(s32 x, s32 y, s32 h, u8* arg3) {
+void func_80029864(s32 x, s32 y, s32 h, FrameTextures* arg3) {
     GbTexLoadFunc load;
     s32 pad[2]; // FAKE
     s32 y2;
@@ -385,12 +385,12 @@ void func_80029864(s32 x, s32 y, s32 h, u8* arg3) {
     }
     y2 = y + h;
     x8 = (x + 8) << 2;
-    load = D_80073510[M2C_FIELD(arg3, s32*, 4)];
+    load = D_80073510[arg3->format];
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-    load(8, 8, M2C_FIELD(arg3, u8**, 8), M2C_FIELD(arg3, s32*, 0));
+    load(8, 8, arg3->top, arg3->loadArg);
     gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, x8, (y2 - 8) << 2, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
-    load(8, 8, M2C_FIELD(arg3, u8**, 0xC), M2C_FIELD(arg3, s32*, 0));
+    load(8, 8, arg3->left, arg3->loadArg);
     gSPTextureRectangle(gDisplayListHead++, x << 2, (y2 - 8) << 2, x8, y2 << 2, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
 }
 
@@ -630,54 +630,42 @@ void Window_DrawFrame(s32* arg0) {
     }
 }
 
-/*
- * Particle_Field7C_SetXZFromField74AngleY_0B278
- *
- * Advances a small step counter held in the object `arg0`: the counter is
- * the word at offset 0x24 and a second word at offset 0x28 receives a value
- * that depends on it.  Returns 1 or 0.
- *
- *   counter >= 11: word 0x28 = 4, return 1 (counter unchanged);
- *   counter >= 7:  word 0x28 = 3, counter + 1, return 1;
- *   counter <  4:  if counter == 0, func_8003F6AC(4, arg0) first (the
- *                  counter is re-read afterwards); then word 0x28 = 0,
- *                  counter + 1, return 1;
- *   counter 4, 5:  word 0x28 = 1, counter + 1, return 0;
- *   counter == 6:  word 0x28 = 2 (counter unchanged), return 0.
- *
- * What the counter measures is not established.
- */
 M2C_UNK func_8003F6AC();
 
-/** Sets a particle's x and z components from its angle about the y axis. */
-s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0) {
+/**
+ * Steps the open/close animation of a window: animTimer 0-3 opening (state 0, plays sound 4 at 0), 4-5 state 1,
+ * 6 open (state 2, holds); a close starts at 7 (state 3) and ends at 11 (state 4, closed).
+ * Returns 1 unless the window is (nearly) open, so callers draw what is under it.
+ * @unverified Read from the code; the timer values match the Window.animTimer play note.
+ */
+s32 Window_UpdateAnimation(Window* arg0) {
     s32 var_v1;
     s32 var_v0;
 
-    var_v0 = M2C_FIELD(arg0, s32 *, 0x24);
+    var_v0 = arg0->animTimer;
     var_v1 = 1;
     if (var_v0 >= 0xB) {
-        M2C_FIELD(arg0, s32 *, 0x28) = 4;
+        arg0->state = 4;
         return 1;
     }
     if (var_v0 >= 7) {
-        M2C_FIELD(arg0, s32 *, 0x28) = 3;
-        M2C_FIELD(arg0, s32 *, 0x24) = (s32) (var_v0 + 1);
+        arg0->state = 3;
+        arg0->animTimer = (s32) (var_v0 + 1);
     } else if (var_v0 < 4) {
         if (var_v0 == 0) {
             func_8003F6AC(4, arg0);
             var_v1 = 1;
-            var_v0 = M2C_FIELD(arg0, s32 *, 0x24);
+            var_v0 = arg0->animTimer;
         }
-        M2C_FIELD(arg0, s32 *, 0x28) = 0;
-        M2C_FIELD(arg0, s32 *, 0x24) = (s32) (var_v0 + 1);
+        arg0->state = 0;
+        arg0->animTimer = (s32) (var_v0 + 1);
     } else {
         var_v1 = 0;
         if (var_v0 < 6) {
-            M2C_FIELD(arg0, s32 *, 0x28) = 1;
-            M2C_FIELD(arg0, s32 *, 0x24) = (s32) (var_v0 + 1);
+            arg0->state = 1;
+            arg0->animTimer = (s32) (var_v0 + 1);
         } else {
-            M2C_FIELD(arg0, s32 *, 0x28) = 2;
+            arg0->state = 2;
         }
     }
     return var_v1;
@@ -687,8 +675,13 @@ extern u8 D_80073554[];
 void func_8002C1B4(s32, s32, s32, s32);
 void func_8002C5A4(); // no prototype: callers pass a fourth argument the definition ignores
 
-/** Sets a particle's x and z components from another vector in the particle. */
-s32 Particle_Field50_SetXZFromField7C_09BB4(s32* arg0) {
+/**
+ * Draws a window's frame, scaled from 16x16 up to its size while it opens (state 0) and back down
+ * while it closes (state 3), with the fill, title tab (style 0x800) and 0x1000 decoration.
+ * Returns 0 once the window is open (states 1 and 2), so callers draw the contents only then.
+ * @unverified Read from the code.
+ */
+s32 Window_DrawAnimatedFrame(Window* arg0) {
     UNUSED s32 pad1; // FAKE: unused locals that only pad the stack frame
     UNUSED s32 pad2; // FAKE
     UNUSED s32 pad3; // FAKE
@@ -702,62 +695,62 @@ s32 Particle_Field50_SetXZFromField7C_09BB4(s32* arg0) {
     s32 maxH;
     s32 t;
 
-    maxW = (arg0[2] < 0x10) ? 0x10 : arg0[2];
-    maxH = (arg0[3] < 0x10) ? 0x10 : arg0[3];
+    maxW = (arg0->frame.width < 0x10) ? 0x10 : arg0->frame.width;
+    maxH = (arg0->frame.height < 0x10) ? 0x10 : arg0->frame.height;
     ret = 1;
-    switch ((u32)arg0[10]) {
+    switch ((u32)arg0->state) {
         case 4:
             return 1;
         case 3:
-            x = arg0[0];
-            y = arg0[1];
-            t = 0xB - arg0[9];
+            x = arg0->frame.x;
+            y = arg0->frame.y;
+            t = 0xB - arg0->animTimer;
             w = ((maxW - 0x10) * t) / 4 + 0x10;
             h = ((maxH - 0x10) * t) / 4 + 0x10;
             break;
         case 0:
-            t = arg0[9] - 1;
-            x = arg0[0];
-            y = arg0[1];
+            t = arg0->animTimer - 1;
+            x = arg0->frame.x;
+            y = arg0->frame.y;
             w = ((maxW - 0x10) * t) / 4 + 0x10;
             h = ((maxH - 0x10) * t) / 4 + 0x10;
             break;
         case 1:
         case 2:
             ret = 0;
-            x = arg0[0];
-            y = arg0[1];
+            x = arg0->frame.x;
+            y = arg0->frame.y;
             h = maxH;
             w = maxW;
             break;
     }
     if (ret == 0) {
-        if (!(arg0[5] & 1)) {
-            if ((arg0[5] & 2) && (arg0[5] & 4)) {
-                Ui_FillRectPrimEnvColor(x, y, w, h, *(Color_RGBA8*)&arg0[6], *(Color_RGBA8*)&arg0[7]);
-            } else if (((u8*)&arg0[6])[3] == 0xFF) {
+        if (!(arg0->frame.style & 1)) {
+            if ((arg0->frame.style & 2) && (arg0->frame.style & 4)) {
+                Ui_FillRectPrimEnvColor(x, y, w, h, arg0->frame.color, arg0->frame.color2);
+            } else if (arg0->frame.color.a == 0xFF) {
                 gSPDisplayList(gDisplayListHead++, D_80060270);
-                func_80029028(x, y, w, h, *(Color8002A354*)&arg0[6]);
+                func_80029028(x, y, w, h, *(Color8002A354*)&arg0->frame.color);
             } else {
                 gSPDisplayList(gDisplayListHead++, D_80073480);
-                Ui_FillRectPrimColor(x, y, w, h, *(Color_RGBA8*)&arg0[6]);
+                Ui_FillRectPrimColor(x, y, w, h, arg0->frame.color);
             }
         }
     }
     Ui_DrawTexturedFrameDecal(x, y, w, h, D_80073554);
-    if (arg0[5] & 0x800) {
-        func_8002C1B4(x, y - 0x16, arg0[8], arg0[5]);
+    if (arg0->frame.style & 0x800) {
+        func_8002C1B4(x, y - 0x16, (s32)arg0->title, arg0->frame.style);
     }
-    if (arg0[5] & 0x1000) {
-        func_8002C5A4(x, y - 0xA, 0x50, arg0[5]);
+    if (arg0->frame.style & 0x1000) {
+        func_8002C5A4(x, y - 0xA, 0x50, arg0->frame.style);
     }
     return ret;
 }
 
 /** Sets a particle's x and z velocity from its rotation about the y axis. */
 void Particle_SetVelocityXZFromRotationY(Particle* arg0) {
-    Particle_Field7C_SetXZFromField74AngleY_0B278(arg0);
-    Particle_Field50_SetXZFromField7C_09BB4(arg0);
+    Window_UpdateAnimation(arg0);
+    Window_DrawAnimatedFrame(arg0);
 }
 
 /**
@@ -770,16 +763,16 @@ void Particle_SetVelocityXZFromRotationY(Particle* arg0) {
  * main menu, for windows at (411, 189, 72) and (496, 189, 72).
  * @unverified Name guessed from the code; comment kept.
  */
-void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5) {
-    M2C_FIELD(arg0, s32*, 0x24) = 0x14;
-    M2C_FIELD(arg0, s32*, 0x28) = 8;
-    M2C_FIELD(arg0, s32*, 0x2C) = 6;
-    M2C_FIELD(arg0, s32*, 0x30) = 2;
-    M2C_FIELD(arg0, s32*, 0x34) = 0;
-    Window_SetRect(arg0, arg1, arg2, arg3, 0x18);
-    M2C_FIELD(arg0, s32*, 0x14) = 1;
-    M2C_FIELD(arg0, Color_RGBA8*, 0x20) = arg4;
-    M2C_FIELD(arg0, char**, 0x38) = arg5;
+void Window_InitLabeled(LabeledButton* arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4, char* arg5) {
+    arg0->unk_24 = 0x14;
+    arg0->fontSize = 8;
+    arg0->labelX = 6;
+    arg0->labelY = 2;
+    arg0->unk_34 = 0;
+    Window_SetRect((s8*)arg0, arg1, arg2, arg3, 0x18);
+    arg0->style = 1;
+    arg0->color = arg4;
+    arg0->label = arg5;
 }
 
 extern Color_RGBA8 D_80073520;
@@ -791,17 +784,17 @@ void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
  * main menu, for the windows set up by Window_InitLabeled.
  * @unverified Name and comment guessed from the code.
  */
-void Window_DrawLabeled(s8* arg0, s32 arg1) {
-    func_8002A32C(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC));
-    if ((M2C_FIELD(arg0, s32*, 0x10) & 8) || (arg1 & 0x10)) {
-        Ui_FillRectHighlighted(M2C_FIELD(arg0, s32*, 0) + 1, M2C_FIELD(arg0, s32*, 4) + 1, M2C_FIELD(arg0, s32*, 8) - 2, M2C_FIELD(arg0, s32*, 0xC) - 2, M2C_FIELD(arg0, Color_RGBA8*, 0x20));
+void Window_DrawLabeled(LabeledButton* arg0, s32 arg1) {
+    func_8002A32C(arg0->x, arg0->y, arg0->width, arg0->height);
+    if ((arg0->flags & 8) || (arg1 & 0x10)) {
+        Ui_FillRectHighlighted(arg0->x + 1, arg0->y + 1, arg0->width - 2, arg0->height - 2, arg0->color);
     } else if (arg1 & 2) {
-        Ui_DrawRoundedFrame(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC), D_80073520);
+        Ui_DrawRoundedFrame(arg0->x, arg0->y, arg0->width, arg0->height, D_80073520);
     }
     func_8001AB6C();
-    func_8001A384(M2C_FIELD(arg0, s32*, 0x28), M2C_FIELD(arg0, s32*, 0x34));
-    Font_SetColorForFlags(M2C_FIELD(arg0, s32*, 0x10) | arg1);
-    func_8001A944(M2C_FIELD(arg0, s32*, 0x2C) + M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 0x30) + M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 0x38));
+    func_8001A384(arg0->fontSize, arg0->unk_34);
+    Font_SetColorForFlags(arg0->flags | arg1);
+    func_8001A944(arg0->x + arg0->labelX, arg0->y + arg0->labelY, arg0->label);
     func_8001ABBC();
 }
 
@@ -1331,7 +1324,7 @@ void SavePrompt_Init(SavePrompt* arg0, s32 arg1, s32 arg2) {
 }
 
 s32 func_8002AE6C();
-void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
+void Ui_DrawTexturedDivider(s32, s32, s32, FrameTextures*);
 void Menu_DrawItems(s8*, s32, s32, s32, s32);
 extern u8 D_8007356C[];
 extern Color_RGBA8 D_800736B8;
@@ -1441,15 +1434,15 @@ void Window_DrawFrame(s32* arg0);
  * Free Battle.
  * @unverified Name and comment guessed from the code.
  */
-s32 Window_DrawBlinkingFrame(s32* arg0) {
-    s32 t = arg0[8]++;
+s32 Window_DrawBlinkingFrame(BlinkingTextBox* arg0) {
+    s32 t = arg0->blinkTimer++;
 
     t %= 8;
-    if ((arg0[9] == 0) && (t >= 4)) {
+    if ((arg0->noBlink == 0) && (t >= 4)) {
         return 1;
     }
-    Window_DrawFrame(arg0);
-    Ui_DrawTexturedFrameDecal(arg0[0], arg0[1], arg0[2], arg0[3], D_80073554);
+    Window_DrawFrame(&arg0->frame);
+    Ui_DrawTexturedFrameDecal(arg0->frame.x, arg0->frame.y, arg0->frame.width, arg0->frame.height, D_80073554);
     return 0;
 }
 
@@ -1539,7 +1532,7 @@ u32 func_800566BC(s32);
  * Free Battle.
  * @unverified Name and comment guessed from the code.
  */
-void BlinkingTextBox_Init(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
+void BlinkingTextBox_Init(BlinkingTextBox* arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
     u32 len;
     s32 w;
     s32 h;
@@ -1551,19 +1544,19 @@ void BlinkingTextBox_Init(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
     } else {
         len = arg4;
     }
-    M2C_FIELD(arg0, s32 *, 0x2C) = arg2;
-    M2C_FIELD(arg0, s32 *, 0x30) = arg3;
+    arg0->fontStyle = arg2;
+    arg0->lineCount = arg3;
     cw = D_800736D0[arg2].w;
     ch = D_800736D0[arg2].h;
     w = ch * 2 + len * cw;
     h = ch + (u32)(cw + ch) * arg3;
-    Window_SetRect(arg0, (0x274 - w) / 2, (0x19C - h) / 2 + 0x38, w + 0xC, h + 0xC);
-    M2C_FIELD(arg0, s32 *, 0x20) = 0;
-    M2C_FIELD(arg0, s32 *, 0x24) = 0;
-    M2C_FIELD(arg0, s32 *, 0x14) = 6;
-    M2C_FIELD(arg0, Rgba8002D188 *, 0x18) = *(Rgba8002D188 *)D_800736F8;
-    M2C_FIELD(arg0, Rgba8002D188 *, 0x1C) = *(Rgba8002D188 *)D_800736FC;
-    M2C_FIELD(arg0, s32 *, 0x28) = arg1;
+    Window_SetRect((s8*)arg0, (0x274 - w) / 2, (0x19C - h) / 2 + 0x38, w + 0xC, h + 0xC);
+    arg0->blinkTimer = 0;
+    arg0->noBlink = 0;
+    arg0->frame.style = 6;
+    *(Rgba8002D188*)&arg0->frame.color = *(Rgba8002D188 *)D_800736F8;
+    *(Rgba8002D188*)&arg0->frame.color2 = *(Rgba8002D188 *)D_800736FC;
+    arg0->text = (char*)arg1;
 }
 
 extern Rgba8002D188 D_80073700[];
@@ -1574,17 +1567,17 @@ extern Rgba8002D188 D_80073700[];
  * Free Battle.
  * @unverified Name and comment guessed from the code.
  */
-void BlinkingTextBox_Draw(s32* arg0) {
+void BlinkingTextBox_Draw(BlinkingTextBox* arg0) {
     if (Window_DrawBlinkingFrame(arg0) != 0) {
         return;
     }
     func_8001AB6C();
-    func_8001A384(D_800736D0[arg0[11]].unk8, 0);
+    func_8001A384(D_800736D0[arg0->fontStyle].unk8, 0);
     func_8001AA9C(D_80073700[0].r, D_80073700[0].g, D_80073700[0].b, D_80073700[0].a);
-    Font_SetLineHeight(D_800736D0[arg0[11]].w + D_800736D0[arg0[11]].h);
+    Font_SetLineHeight(D_800736D0[arg0->fontStyle].w + D_800736D0[arg0->fontStyle].h);
     func_8001ABE8();
     func_8001AAE4(D_80073700[1].r, D_80073700[1].g, D_80073700[1].b, D_80073700[1].a);
-    func_8001A944(arg0[0] + D_800736D0[arg0[11]].h + 6, arg0[1] + D_800736D0[arg0[11]].h + 6, arg0[10]);
+    func_8001A944(arg0->frame.x + D_800736D0[arg0->fontStyle].h + 6, arg0->frame.y + D_800736D0[arg0->fontStyle].h + 6, arg0->text);
     func_8001AC3C();
     func_8001ABBC();
 }

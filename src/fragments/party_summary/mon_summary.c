@@ -22,7 +22,7 @@ M2C_UNK func_80029864(s32, s32, s32, M2C_UNK *);
 extern M2C_UNK D_800734A8;
 extern s8 *D_800603C0;
 extern s8 D_8007356C;
-s32 Particle_Field50_SetXZFromField7C_09BB4();
+s32 Window_DrawAnimatedFrame();
 s32 func_80020CE4(s32, s32, s32);
 u8* func_800196F8(s32);
 void func_8001A384(s32, s32);
@@ -222,7 +222,7 @@ void MonSummary_InitPageWindow(MonSummaryWindow* arg0, s32 arg1, s32 arg2, s32 a
 void MonSummary_DrawPage(MonSummaryWindow* arg0, s32 arg1)
 {
   s32 temp_v0;
-  if (((arg0->window.state) != 2) && (Particle_Field50_SetXZFromField7C_09BB4() == 0))
+  if (((arg0->window.state) != 2) && (Window_DrawAnimatedFrame() == 0))
   {
     if (arg1 == 0)
     {
@@ -392,7 +392,7 @@ void func_8A2024D0(PartyScreen* arg0) {
     PartyScreen_InitList(&arg0->listWindow, 0x2F, 0x4D, (s32)&arg0->monList);
 }
 
-s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0);
+s32 Window_UpdateAnimation(Window* arg0);
 void SavePrompt_Draw(s8*);
 void PartyScreen_DrawList(PartyListWindow*, s32);
 #define CTX ((PartyScreen*)arg0)
@@ -404,7 +404,7 @@ void PartyScreen_Draw(void* arg0) {
     BgStage_DrawFrame();
     switch (CTX->state) {
         case 1:
-            if (Particle_Field7C_SetXZFromField74AngleY_0B278(&CTX->listWindow) != 0) {
+            if (Window_UpdateAnimation(&CTX->listWindow) != 0) {
                 PartyScreen_DrawBackground();
             }
             PartyScreen_DrawList(&CTX->listWindow, 0);
@@ -412,34 +412,34 @@ void PartyScreen_Draw(void* arg0) {
         case 2:
             if ((CTX->nextState == 4) || (CTX->nextState == 7)) {
                 PartyScreen_DrawBackground();
-                Particle_Field7C_SetXZFromField74AngleY_0B278(&CTX->listWindow);
-                Particle_Field7C_SetXZFromField74AngleY_0B278(&CTX->actionMenu);
+                Window_UpdateAnimation(&CTX->listWindow);
+                Window_UpdateAnimation(&CTX->actionMenu);
                 PartyScreen_DrawList(&CTX->listWindow, 1);
-            } else if (Particle_Field7C_SetXZFromField74AngleY_0B278(&CTX->actionMenu) != 0) {
+            } else if (Window_UpdateAnimation(&CTX->actionMenu) != 0) {
                 CTX->listWindow.window.animTimer = (CTX->listWindow.window.state <= 0) ? CTX->listWindow.window.animTimer : 4;
-                Particle_Field7C_SetXZFromField74AngleY_0B278(&CTX->listWindow);
+                Window_UpdateAnimation(&CTX->listWindow);
                 PartyScreen_DrawList(&CTX->listWindow, 1);
                 CTX->listWindow.window.animTimer = (CTX->listWindow.window.state <= 0) ? CTX->listWindow.window.animTimer : 4;
             } else {
-                Particle_Field7C_SetXZFromField74AngleY_0B278(&CTX->listWindow);
+                Window_UpdateAnimation(&CTX->listWindow);
                 PartyScreen_DrawList(&CTX->listWindow, 1);
             }
             PartyScreen_DrawActionMenu(&CTX->actionMenu);
             break;
         case 3:
-            if (Particle_Field7C_SetXZFromField74AngleY_0B278(&CTX->listWindow) != 0) {
+            if (Window_UpdateAnimation(&CTX->listWindow) != 0) {
                 PartyScreen_DrawBackground();
             }
             PartyScreen_DrawList(&CTX->listWindow, 2);
             break;
         case 4:
-            if (Particle_Field7C_SetXZFromField74AngleY_0B278(&CTX->summaryWindow) != 0) {
+            if (Window_UpdateAnimation(&CTX->summaryWindow) != 0) {
                 PartyScreen_DrawBackground();
             }
             MonSummary_DrawPage(&CTX->summaryWindow, 0);
             break;
         case 5:
-            if (Particle_Field7C_SetXZFromField74AngleY_0B278(&CTX->summaryWindow) != 0) {
+            if (Window_UpdateAnimation(&CTX->summaryWindow) != 0) {
                 PartyScreen_DrawBackground();
             }
             MonSummary_DrawPage(&CTX->summaryWindow, 1);
@@ -447,16 +447,16 @@ void PartyScreen_Draw(void* arg0) {
         case 6:
             if (CTX->nextState == 7) {
                 PartyScreen_DrawBackground();
-                Particle_Field7C_SetXZFromField74AngleY_0B278(&CTX->listWindow);
-                Particle_Field7C_SetXZFromField74AngleY_0B278(&CTX->savePrompt);
+                Window_UpdateAnimation(&CTX->listWindow);
+                Window_UpdateAnimation(&CTX->savePrompt);
                 PartyScreen_DrawList(&CTX->listWindow, 0);
-            } else if (Particle_Field7C_SetXZFromField74AngleY_0B278(&CTX->savePrompt) != 0) {
+            } else if (Window_UpdateAnimation(&CTX->savePrompt) != 0) {
                 CTX->listWindow.window.animTimer = (CTX->listWindow.window.state <= 0) ? CTX->listWindow.window.animTimer : 4;
-                Particle_Field7C_SetXZFromField74AngleY_0B278(&CTX->listWindow);
+                Window_UpdateAnimation(&CTX->listWindow);
                 PartyScreen_DrawList(&CTX->listWindow, 0);
                 CTX->listWindow.window.animTimer = (CTX->listWindow.window.state <= 0) ? CTX->listWindow.window.animTimer : 4;
             } else {
-                Particle_Field7C_SetXZFromField74AngleY_0B278(&CTX->listWindow);
+                Window_UpdateAnimation(&CTX->listWindow);
                 PartyScreen_DrawList(&CTX->listWindow, 0);
             }
             SavePrompt_Draw(&CTX->savePrompt);
