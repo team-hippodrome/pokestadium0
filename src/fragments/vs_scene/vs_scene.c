@@ -1189,7 +1189,7 @@ void func_800270B4(s32 arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5);
 /**
  * Builds the scene's geo layouts: the stadium for the current stage kind (D_822036A8: Free Battle,
  * or tournament rounds 1-6, 7, 8), the scene root, the round title for `round`, the trainer panels
- * (vs_trainer_panel), the results board (geo_model_033), the badge cap and its sparkles
+ * (vs_trainer_panel), the results board (vs_results_board), the badge cap and its sparkles
  * (tournament_badge_cap).
  * Seen in play (2026-11-13) ran once as the VS screen started; 2026-11-14 called from VsScene_Run.
  */

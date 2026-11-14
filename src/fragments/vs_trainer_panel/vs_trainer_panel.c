@@ -6,7 +6,7 @@
  * portrait, the title line, the name, and a row of six Pokémon icons with nicknames. Each node's
  * callbackArg is the side (index into D_82203170), or (side << 16) | slot for the six
  * icon and nickname nodes. The panels show the whole team the order screen picks from
- * (rosterInfo[0]), not the picked Pokémon. geo_model_033 is the panel model of the other VS
+ * (rosterInfo[0]), not the picked Pokémon. vs_results_board is the panel model of the other VS
  * routines (VsScene_PlayFreeBattleResults, VsScene_PlayTournamentResults), which read the picked teams (teamMember).
  * Seen in play (2026-11-14, Free Battle 1P vs COM): the two panels flip in after the 「VS」
  * letters, first with portrait, 「トレーナー」 and 1P / ＣＯＭ, then turned over to the six icons
@@ -17,7 +17,7 @@
  */
 
 #include "global.h"
-#include "fragments/geo_model_033/geo_model_033.h"
+#include "fragments/vs_results_board/vs_results_board.h"
 #include "geo_render.h"
 #include "gfx_buffer.h"
 #include "m2c_macros.h"
@@ -31,7 +31,7 @@ extern u8 sVsPanelNicknameText[];
  * Boot-code check: with interrupts masked and the PI idle, reads the cartridge word at ROM 0xD10
  * (inside the IPL3 boot code, 0x00800400 in the retail ROM) and returns -1 instead of
  * `displayList` when its low half is not 0x0400. A copier or a ROM with other boot code then gets
- * a broken display list pointer. geo_model_033 and geo_model_038
+ * a broken display list pointer. vs_results_board and geo_model_038
  * (CartridgeCheckModels_CheckBootCode) have the same check on other boot-code words.
  * Seen in play (2026-11-14): called for both portraits every frame of the panels; forcing it to
  * return -1 turned the whole screen black from the panels on.

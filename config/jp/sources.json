@@ -227,7 +227,7 @@
   "src/fragments/particle_data/particle_data.c",
   "src/fragments/particle_data/particle_data_2.c",
   "src/fragments/vs_trainer_panel/vs_trainer_panel.c",
-  "src/fragments/geo_model_033/geo_model_033.c",
+  "src/fragments/vs_results_board/vs_results_board.c",
   "src/fragments/cartridge_check_models/cartridge_check_models.c",
   "src/fragments/doduo_game_boy_model/doduo_game_boy_model.c",
   "src/fragments/dodrio_game_boy_model/dodrio_game_boy_model.c",
