@@ -47,7 +47,7 @@ Where the code lives, after the reorganization. File names are broadly correct g
 | 034 | `src/fragments/geo_model_034/` | 1 | 8 | geo layout callbacks for models |
 | 038 | `src/fragments/geo_model_038/` | 1 | 2 | geo layout callbacks for models |
 | 039 | `src/fragments/geo_model_039/` | 1 | 1 | geo layout callbacks for models |
-| 040 | `src/fragments/geo_model_040/` | 1 | 1 | geo layout callbacks for models |
+| 040 | `src/fragments/dodrio_game_boy_model/` | 1 | 1 | Dodrio Game Boy (Pocket) prize model shown on the cartridge check screen |
 | 106–258 | `src/fragments/model_data/` | 153 | 153 | model data, one file per fragment |
 
 ## Resident files

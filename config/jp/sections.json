@@ -638,7 +638,7 @@
   "src/fragments/geo_model_039/geo_model_039.c": {
     ".bss": "0x8E825728"
   },
-  "src/fragments/geo_model_040/geo_model_040.c": {
+  "src/fragments/dodrio_game_boy_model/dodrio_game_boy_model.c": {
     ".bss": "0x8E923EB0"
   },
   "src/game_state.c": {
