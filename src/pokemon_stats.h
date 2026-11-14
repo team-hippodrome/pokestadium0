@@ -16,20 +16,20 @@ typedef enum {
 
 // The cached trainer of a port (GbSave_RefreshPlayerIdentity, GbSave_CopyPlayerIdentity).
 typedef struct GbSavePlayerIdentity {
-    /* 0x00 */ u16 playerId; // @unverified: GbSaveMainData.playerId
-    /* 0x02 */ u8 playerName[6]; // @unverified: GbSaveMainData.playerName; a 0x50 terminator when no save (GbSave_ScanAllPorts)
+    /* 0x00 */ u16 playerId; // GbSaveMainData.playerId
+    /* 0x02 */ u8 playerName[6]; // GbSaveMainData.playerName; a 0x50 terminator when no save (GbSave_ScanAllPorts)
 } GbSavePlayerIdentity; // size = 0x8
 
 // Zero's per-port Game Boy save state (sGbSavePorts, D_800AD210); Stadium 1's is 0x58 bytes.
 typedef struct GbSavePort {
-    /* 0x00 */ u16 flags; // @unverified: 1 main data loaded, 2 box data loaded, 0x20 take the next checksum read as the reference (GbSave_ReadMainData), 0x4000 saved at a Pokemon Center
-    /* 0x02 */ u8 gameType; // PokemonRomType (GbCart_IdentifyGame), @unverified
-    /* 0x03 */ u8 saveState; // @unverified: GbSave_ScanAllPorts: 0 loaded, 1 no cartridge, 2 not a Pokemon cartridge, 3 main data unreadable
-    /* 0x04 */ u8 checksum; // @unverified: the save checksum when read (GbSave_ReadMainData); later reads must match
+    /* 0x00 */ u16 flags; // 1 main data loaded, 2 box data loaded, 0x4000 saved at a Pokemon Center; 0x20 take the next checksum read as the reference (@unverified, GbSave_ReadMainData)
+    /* 0x02 */ u8 gameType; // PokemonRomType (GbCart_IdentifyGame): 2 for Green
+    /* 0x03 */ u8 saveState; // GbSave_ScanAllPorts: 0 loaded (seen); @unverified: 1 no cartridge, 2 not a Pokemon cartridge, 3 main data unreadable
+    /* 0x04 */ u8 checksum; // The save checksum when read (GbSave_ReadMainData); later reads must match
     /* 0x05 */ u8 heldSpecies[19]; // one bit per species held in the party or boxes (GbSave_RebuildHeldSpecies, GbSave_CountHeldSpecies)
     /* 0x18 */ u8 pakId[0x20]; // @unverified: identifies the cartridge across a removal (GbTower_ProbePak, GbTower_VerifyPakStillInserted)
     /* 0x38 */ GbSavePlayerIdentity identity;
-    /* 0x40 */ GbSaveMainData* mainData; // @unverified: 0x1020 bytes from SRAM 0x2580, allocated as 'DAT0'+port (GbSave_OpenMainData)
+    /* 0x40 */ GbSaveMainData* mainData; // 0x1020 bytes from SRAM 0x2580, allocated as 'DAT0'+port when the cartridge is picked (GbSave_OpenMainData)
     /* 0x44 */ u8* boxData; // @unverified: two 0x15A0-byte box banks from SRAM 0x4000 and 0x6000, four GbSaveBox each, allocated as 'BOX0'+port (GbSave_OpenBoxData)
 } GbSavePort; // size = 0x48
 

@@ -26,14 +26,15 @@ typedef struct ModeSettings {
 
 // Zero's 32 KiB cartridge SRAM, loaded whole into the buffer at D_800AE8E0
 // (docs/n64-save-format.md). Every record is stored twice, primary then backup,
-// and each copy ends with a SaveFooter. Fields without a tag were seen in play
-// (pj64, 2026-11-12/13, see the doc).
+// and each copy ends with a SaveFooter. Fields without a tag were seen in play in pj64
+// (2026-11-14: a team registered in とうろく, a Pokemon and items moved in せいとん, the
+// sound options toggled, then the buffer read back and the footer sums recomputed).
 
 // "POKE" and a u16 sum of every byte of the copy before it; "XXXX" and sum ^ 0xFF
 // when invalidated. Written by Save_WriteFooter, checked by Save_RecordIsValid.
 typedef struct SaveFooter {
-    /* 0x0 */ u8 magic[4];
-    /* 0x4 */ u16 checksum;
+    /* 0x0 */ u8 magic[4]; // "POKE" in every committed copy seen
+    /* 0x4 */ u16 checksum; // Sum of every byte of the copy before it; recomputed from a box, team and item copy
 } SaveFooter; // size = 0x6
 
 // A Pokemon as kept in Zero's save: the Gen 1 box struct plus its names in the GB charset.
@@ -92,20 +93,20 @@ typedef struct SaveListRecord {
 
 typedef struct SaveOptionsRecord {
     /* 0x0 */ s16 flags;
-    /* 0x2 */ s8 towerFrames; // GB Tower picture frames unlocked: 0-2 (1 Doduo, 2 Dodrio).
+    /* 0x2 */ s8 towerFrames; // @unverified: per docs/n64-save-format.md, not rechecked. GB Tower picture frames unlocked: 0-2 (1 Doduo, 2 Dodrio).
     /* 0x3 */ u8 soundFlags; // Bit 0 mono sound, bit 1 commentary off.
-    /* 0x4 */ s32 towerButtons; // GB Tower config: bits 8-15 START button, bits 0-7 SELECT button - 1.
-    /* 0x8 */ u8 progress[2]; // Big-endian u16 (Save_GetProgressFlags): high byte bit 0 L50-55 won (code), bit 1 Master Ball Cup won; low byte L1-30 cups cleared.
+    /* 0x4 */ s32 towerButtons; // @unverified: per docs/n64-save-format.md, not rechecked; 0 (START S, SELECT L) seen. GB Tower config: bits 8-15 START button, bits 0-7 SELECT button - 1.
+    /* 0x8 */ u8 progress[2]; // @unverified: per docs/n64-save-format.md, not rechecked. Big-endian u16 (Save_GetProgressFlags): high byte bit 0 L50-55 won (code), bit 1 Master Ball Cup won; low byte L1-30 cups cleared.
     /* 0xA */ SaveFooter footer;
 } SaveOptionsRecord; // size = 0x10
 
 // Where a paused tournament stands; built by func_80025830 from gSessionContext.
 typedef struct SaveContinueSession {
-    /* 0x0 */ u8 mode; // 1 L50-55, 2 L1-30 cups.
-    /* 0x1 */ u8 modeSelection; // Cup (0 Monster Ball Cup).
-    /* 0x2 */ u8 round; // Next round: 3 after two wins.
-    /* 0x3 */ u8 pad03; // Stack garbage.
-    /* 0x4 */ u8 opponentHistory[8]; // Opponents faced so far.
+    /* 0x0 */ u8 mode; // @unverified: per docs/n64-save-format.md, not rechecked. 1 L50-55, 2 L1-30 cups.
+    /* 0x1 */ u8 modeSelection; // @unverified: per docs/n64-save-format.md, not rechecked. Cup (0 Monster Ball Cup).
+    /* 0x2 */ u8 round; // @unverified: per docs/n64-save-format.md, not rechecked. Next round: 3 after two wins.
+    /* 0x3 */ u8 pad03; // @unverified: per docs/n64-save-format.md, not rechecked. Stack garbage.
+    /* 0x4 */ u8 opponentHistory[8]; // @unverified: per docs/n64-save-format.md, not rechecked. Opponents faced so far.
 } SaveContinueSession; // size = 0xC
 
 // Tournament continue data, written at the continue-tournament prompt and read at the
@@ -115,7 +116,7 @@ typedef struct SaveContinueRecord {
     /* 0x002 */ SaveContinueSession session;
     /* 0x00E */ s16 count;
     /* 0x010 */ SaveMonRecord team[6];
-    /* 0x11E */ GbSavePortSnapshot gbSnapshot; // All zero for rentals; a GB team resumes only if the cartridge still matches.
+    /* 0x11E */ GbSavePortSnapshot gbSnapshot; // @unverified: per docs/n64-save-format.md, not rechecked. All zero for rentals; a GB team resumes only if the cartridge still matches.
     /* 0x280 */ u8 speciesFlagMask; // @unverified: bit n set when team[n]'s BattleMon.species.unk_01 == 1 (Save_WriteContinueData)
     /* 0x281 */ char unk_281[0x1];
     /* 0x282 */ SaveFooter footer;

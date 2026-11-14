@@ -1271,7 +1271,7 @@ s32 GbSave_HasPokedex(s32 arg0) {
     if (arg0 >= 0) {
         temp_v0 = (GbSavePort*)((arg0 * 0x48) + &D_800AD210);
         if (temp_v0->flags & 1) {
-            var_v1 = (temp_v0->mainData->unk_46D & 0x20) != 0;
+            var_v1 = (temp_v0->mainData->pokedexEventFlags & 0x20) != 0;
         }
     }
     return var_v1;
