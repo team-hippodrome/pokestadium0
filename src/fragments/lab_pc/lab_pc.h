@@ -199,7 +199,7 @@ typedef struct LabItemOrganizeWindow {
     /* 0x490 */ ByteMatrix* tables; // @unverified: the 3 item tables of the boxes (func_89003650's list0..list2)
     /* 0x494 */ s32* dirty; // @unverified: one per table, set when it changed
     /* 0x498 */ s32* gamePakSlot; // @unverified: picking box 2 as target with -1 here ends the window with 1
-    /* 0x49C */ ByteMatrix reorderView; // @unverified: rows of tables[0]; shown in rightList while reordering
+    /* 0x49C */ ByteMatrix reorderView; // @unverified: func_80027410 over the rows of tables[0] with no rows in use; rightList shows it while reordering
     /* 0x4AC */ s8 textBox[0x38]; // @unverified: TextBox_Init, TextBox_Draw; its size is not established
 } LabItemOrganizeWindow; // size >= 0x4E4
 

@@ -509,27 +509,26 @@ s32 LabItem_UpdateCountSelector(LabItemCountSelector* arg0) {
     return sp2C;
 }
 
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_89000CF0(s8 *arg0, s8 *arg1)
-{
-  s32 var_v0;
-  u16 *temp_a1;
-  s8 *var_v1;
-  s8 *new_var; // FAKE: permuter temp
-  var_v0 = 0;
-  new_var = ((s8 *) arg0) + 0x30;
-  var_v1 = arg1;
-  do
-  {
-    if ((*((s32 *) (((s8 *) var_v1) + 8))) == 0)
-    {
-      temp_a1 = (*((s32 *) new_var)) + (var_v0 * 2);
-      *temp_a1 |= 0x100;
-    }
-    var_v0 += 1;
-    var_v1 += 0x10;
-  }
-  while (var_v0 != 3);
+/**
+ * Sets flag 0x100 (empty) on the rows of the box picker whose item table has no rows.
+ */
+void func_89000CF0(LabItemMenuWindow* arg0, ByteMatrix* arg1) {
+    s32 var_v0;
+    u16* temp_a1;
+    ByteMatrix* var_v1;
+    u16** new_var; // FAKE: permuter temp
+
+    var_v0 = 0;
+    new_var = &arg0->menu.itemFlags;
+    var_v1 = arg1;
+    do {
+        if (var_v1->count == 0) {
+            temp_a1 = *new_var + var_v0;
+            *temp_a1 |= 0x100;
+        }
+        var_v0 += 1;
+        var_v1 += 1;
+    } while (var_v0 != 3);
 }
 
 /**
@@ -1078,7 +1077,7 @@ void func_890022D0(LabItemOrganizeWindow* arg0) {
 
 s32 func_8002B2B0(void *);
 s32 func_89000258(u8, s32);
-s32 Menu_SkipDisabledForward(s8*);
+s32 Menu_SkipDisabledForward(Menu*);
 extern s32 D_8900A688[];
 extern s32 D_8900A694;
 extern s8 D_89018648[];
@@ -1090,7 +1089,7 @@ typedef struct Ent89002318 { char unk0[0x10]; } Ent89002318;
  * Runs the organize items window's state machine (move, toss, deposit, withdraw).
  * Seen in play (2026-11-12): ran どうぐのせいり.
  */
-s32 LabItem_UpdateOrganizeWindow(s8* arg0) {
+s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* arg0) {
     s32 ret = 0;
     s32 idx;
     s32 next = 0;
@@ -1098,9 +1097,9 @@ s32 LabItem_UpdateOrganizeWindow(s8* arg0) {
     s32 v;
     u8* ptr2;
 
-    switch (*(s32*)arg0) {
+    switch (arg0->state) {
         case 1:
-            if (func_8002B2B0(arg0 + 0x100) != 0) {
+            if (func_8002B2B0(&arg0->operationCursor) != 0) {
                 break;
             }
             v = func_8002BC14(D_800603C0);
@@ -1112,48 +1111,48 @@ s32 LabItem_UpdateOrganizeWindow(s8* arg0) {
             if (v != 1) {
                 break;
             }
-            if (*(s32*)(arg0 + 0x104) == 3) {
+            if (arg0->operationCursor.cursor == 3) {
                 func_8003F6AC(3);
                 ret = -1;
                 break;
             }
             func_8003F6AC(2);
             next = 2;
-            if (*(s32*)(arg0 + 0x104) != 1) {
+            if (arg0->operationCursor.cursor != 1) {
                 break;
             }
-            func_89001230(arg0 + 0x2F8, arg0 + 0x49C);
-            *(s32*)(arg0 + 0x1D8) = -1;
+            func_89001230(&arg0->rightList, &arg0->reorderView);
+            arg0->rightBox = -1;
             break;
 
         case 2:
-            v = LabItem_UpdateMenuCursor(arg0 + 0x10C);
+            v = LabItem_UpdateMenuCursor(&arg0->sourceBoxWindow);
             if (v == -1) {
-                *(s32*)arg0 = 1;
+                arg0->state = 1;
                 break;
             }
             if (v <= 0) {
                 break;
             }
-            if ((*(u16**)(arg0 + 0x13C))[*(s32*)(arg0 + 0x140)] & 0x100) {
-                *(s32*)arg0 = 9;
-                TextBox_Init(arg0 + 0x4AC, (void*)D_8900A688[*(s32*)(arg0 + 0x104)], 0, 1, 0);
+            if (arg0->sourceBoxWindow.menu.itemFlags[arg0->sourceBoxWindow.menu.cursor] & 0x100) {
+                arg0->state = 9;
+                TextBox_Init(arg0->textBox, (void*)D_8900A688[arg0->operationCursor.cursor], 0, 1, 0);
                 func_8003F6AC(8);
                 break;
             }
             func_8003F6AC(2);
-            idx = *(s32*)(arg0 + 0x140);
-            *(s32*)(arg0 + 0x1D4) = idx;
-            func_89001230(arg0 + 0x1E4, *(s32*)(arg0 + 0x490) + (idx * 0x10));
-            if (*(s32*)(arg0 + 0x104) == 1) {
-                *(s32*)arg0 = 4;
+            idx = arg0->sourceBoxWindow.menu.cursor;
+            arg0->leftBox = idx;
+            func_89001230(&arg0->leftList, (s32)&arg0->tables[idx]);
+            if (arg0->operationCursor.cursor == 1) {
+                arg0->state = 4;
                 break;
             }
             next = 3;
             break;
 
         case 3:
-            v = LabItem_UpdateMenuCursor(arg0 + 0x170);
+            v = LabItem_UpdateMenuCursor(&arg0->targetBoxWindow);
             if (v == -1) {
                 next = 2;
                 break;
@@ -1161,15 +1160,15 @@ s32 LabItem_UpdateOrganizeWindow(s8* arg0) {
             if (v <= 0) {
                 break;
             }
-            if ((*(u16**)(arg0 + 0x1A0))[*(s32*)(arg0 + 0x1A4)] & 0x100) {
+            if (arg0->targetBoxWindow.menu.itemFlags[arg0->targetBoxWindow.menu.cursor] & 0x100) {
                 func_8003F6AC(8);
-                *(s32*)arg0 = 10;
-                TextBox_Init(arg0 + 0x4AC, (void*)D_8900A688[*(s32*)(arg0 + 0x104)], 0, 1, 0);
+                arg0->state = 10;
+                TextBox_Init(arg0->textBox, (void*)D_8900A688[arg0->operationCursor.cursor], 0, 1, 0);
                 break;
             }
             func_8003F6AC(2);
-            if (*(s32*)(arg0 + 0x1A4) == 2) {
-                if (*(s32*)(*(s32*)(arg0 + 0x498)) == -1) {
+            if (arg0->targetBoxWindow.menu.cursor == 2) {
+                if (*arg0->gamePakSlot == -1) {
                     ret = 1;
                     break;
                 }
@@ -1178,91 +1177,91 @@ s32 LabItem_UpdateOrganizeWindow(s8* arg0) {
             break;
 
         case 4:
-            v = LabItem_UpdateItemList(arg0 + 0x1E4, 0);
+            v = LabItem_UpdateItemList(&arg0->leftList, 0);
             if (v == -1) {
-                *(s32*)arg0 = 1;
+                arg0->state = 1;
                 break;
             }
             if (v != 1) {
                 break;
             }
-            ptr = ((ScrollList*)(arg0 + 0x1E4))->items->rows + ((ScrollList*)(arg0 + 0x1E4))->cursor * 2;
-            if (*(s32*)(arg0 + 0x104) == 0) {
-                if (func_80031C24(*ptr) != 0 && *(s32*)(arg0 + 0x1D8) == 2) {
+            ptr = arg0->leftList.list.items->rows + arg0->leftList.list.cursor * 2;
+            if (arg0->operationCursor.cursor == 0) {
+                if (func_80031C24(*ptr) != 0 && arg0->rightBox == 2) {
                     func_8003F6AC(8);
-                    TextBox_Init(arg0 + 0x4AC, (void*)D_8900A694, 1, 2, 0xC);
-                    *(s32*)arg0 = 11;
+                    TextBox_Init(arg0->textBox, (void*)D_8900A694, 1, 2, 0xC);
+                    arg0->state = 11;
                     break;
                 }
-                v = func_89000258(*ptr, *(s32*)(arg0 + 0x2F8));
+                v = func_89000258(*ptr, arg0->rightList.list.items);
                 if (v == 0) {
                     func_8003F6AC(8);
-                    *(s32*)arg0 = 11;
-                    TextBox_Init(arg0 + 0x4AC, D_89018648, 0, 1, 0);
+                    arg0->state = 11;
+                    TextBox_Init(arg0->textBox, D_89018648, 0, 1, 0);
                     break;
                 }
                 func_8003F6AC(2);
                 if (func_80031CC8(*ptr) == 0) {
-                    LabItem_InitCountSelector(arg0 + 0x410, *(s32*)(arg0 + 0x2F0) + 0x98,
-                                  *(s32*)(arg0 + 0x2F4) + *(s32*)(arg0 + 0x218) - *(s32*)(arg0 + 0x210) + 0x2C,
+                    LabItem_InitCountSelector(&arg0->countSelector, arg0->leftList.x + 0x98,
+                                  arg0->leftList.y + arg0->leftList.list.cursorY - arg0->leftList.list.scrollY + 0x2C,
                                   ptr[1], v);
-                    *(s32*)arg0 = 8;
+                    arg0->state = 8;
                 } else {
-                    *(s32*)arg0 = 5;
+                    arg0->state = 5;
                 }
                 break;
             }
-            if (*(s32*)(arg0 + 0x104) == 2) {
-                if (func_80031C24(*ptr) != 0 && *(s32*)(arg0 + 0x1D8) == 2) {
+            if (arg0->operationCursor.cursor == 2) {
+                if (func_80031C24(*ptr) != 0 && arg0->rightBox == 2) {
                     func_8003F6AC(8);
-                    TextBox_Init(arg0 + 0x4AC, (void*)D_8900A694, 1, 2, 0xC);
-                    *(s32*)arg0 = 11;
+                    TextBox_Init(arg0->textBox, (void*)D_8900A694, 1, 2, 0xC);
+                    arg0->state = 11;
                     break;
                 }
                 func_8003F6AC(2);
-                *(s32*)arg0 = 6;
+                arg0->state = 6;
                 break;
             }
             func_8003F6AC(2);
-            (*(u16**)(arg0 + 0x1E8))[*(s32*)(arg0 + 0x1EC)] |= 8;
-            *(s32*)(arg0 + 0x40C) = *(s32*)(arg0 + 0x1EC);
-            *(s32*)arg0 = 7;
+            arg0->leftList.list.itemFlags[arg0->leftList.list.cursor] |= 8;
+            arg0->swapIndex = arg0->leftList.list.cursor;
+            arg0->state = 7;
             break;
 
         case 8:
-            v = LabItem_UpdateCountSelector(arg0 + 0x410);
+            v = LabItem_UpdateCountSelector(&arg0->countSelector);
             if (v == -1) {
-                *(s32*)arg0 = 4;
+                arg0->state = 4;
                 break;
             }
             if (v == 1) {
-                *(s32*)arg0 = 5;
+                arg0->state = 5;
             }
             break;
 
         case 5:
-            v = LabItem_UpdateItemList(arg0 + 0x2F8, 0x200);
+            v = LabItem_UpdateItemList(&arg0->rightList, 0x200);
             if (v == -1) {
-                *(s32*)arg0 = 4;
+                arg0->state = 4;
                 break;
             }
             if (v != 1) {
                 break;
             }
             func_8003F6AC(0x18);
-            func_890020C0((u8*)arg0);
-            if (*(s32*)(*(s32*)(arg0 + 0x1E4) + 8) == 0) {
-                *(s32*)arg0 = 1;
+            func_890020C0(arg0);
+            if (arg0->leftList.list.items->count == 0) {
+                arg0->state = 1;
                 break;
             }
-            *(s32*)arg0 = 4;
+            arg0->state = 4;
             break;
 
         case 7:
-            v = LabItem_UpdateItemList(arg0 + 0x1E4, 0);
+            v = LabItem_UpdateItemList(&arg0->leftList, 0);
             if (v == -1) {
-                Menu_ClearItemFlags(arg0 + 0x1E4);
-                *(s32*)arg0 = 4;
+                Menu_ClearItemFlags((Menu*)&arg0->leftList.list);
+                arg0->state = 4;
                 break;
             }
             if (v != 1) {
@@ -1270,50 +1269,50 @@ s32 LabItem_UpdateOrganizeWindow(s8* arg0) {
             }
             func_8003F6AC(0x18);
             func_89002248(arg0);
-            Menu_ClearItemFlags(arg0 + 0x1E4);
-            *(s32*)arg0 = 4;
+            Menu_ClearItemFlags((Menu*)&arg0->leftList.list);
+            arg0->state = 4;
             break;
 
         case 6:
-            v = LabItem_UpdateItemList(arg0 + 0x2F8, 0);
+            v = LabItem_UpdateItemList(&arg0->rightList, 0);
             if (v == -1) {
-                *(s32*)arg0 = 4;
+                arg0->state = 4;
                 break;
             }
             if (v != 1) {
                 break;
             }
-            ptr2 = ((ScrollList*)(arg0 + 0x2F8))->items->rows + ((ScrollList*)(arg0 + 0x2F8))->cursor * 2;
+            ptr2 = arg0->rightList.list.items->rows + arg0->rightList.list.cursor * 2;
             if (func_80031C24(*ptr2) != 0 &&
-                *(s32*)(arg0 + 0x1D4) == 2) {
+                arg0->leftBox == 2) {
                 func_8003F6AC(8);
-                TextBox_Init(arg0 + 0x4AC, (void*)D_8900A694, 1, 2, 0xC);
-                *(s32*)arg0 = 12;
+                TextBox_Init(arg0->textBox, (void*)D_8900A694, 1, 2, 0xC);
+                arg0->state = 12;
                 break;
             }
             func_8003F6AC(0x18);
             func_8900219C(arg0);
-            *(s32*)arg0 = 4;
+            arg0->state = 4;
             break;
 
         case 9:
-            if (Ui_CheckConfirmPressed(arg0 + 0x4AC) == 1) {
-                *(s32*)arg0 = 2;
+            if (Ui_CheckConfirmPressed(arg0->textBox) == 1) {
+                arg0->state = 2;
             }
             break;
         case 10:
-            if (Ui_CheckConfirmPressed(arg0 + 0x4AC) == 1) {
-                *(s32*)arg0 = 3;
+            if (Ui_CheckConfirmPressed(arg0->textBox) == 1) {
+                arg0->state = 3;
             }
             break;
         case 11:
-            if (Ui_CheckConfirmPressed(arg0 + 0x4AC) == 1) {
-                *(s32*)arg0 = 4;
+            if (Ui_CheckConfirmPressed(arg0->textBox) == 1) {
+                arg0->state = 4;
             }
             break;
         case 12:
-            if (Ui_CheckConfirmPressed(arg0 + 0x4AC) == 1) {
-                *(s32*)arg0 = 6;
+            if (Ui_CheckConfirmPressed(arg0->textBox) == 1) {
+                arg0->state = 6;
             }
             break;
     }
@@ -1321,22 +1320,22 @@ s32 LabItem_UpdateOrganizeWindow(s8* arg0) {
     if (next > 0) {
         switch (next) {
             case 2:
-                LabItem_InitMenuWindow(arg0 + 0x10C, *(s32*)(arg0 + 4) + 0x1F, *(s32*)(arg0 + 8) + 0x29, *(s32*)(arg0 + 0x1DC),
-                              *(s32*)(arg0 + 0x1E0), *(s32*)(arg0 + 0x1D4));
-                func_89000CF0(arg0 + 0x10C, *(s8**)(arg0 + 0x490));
+                LabItem_InitMenuWindow(&arg0->sourceBoxWindow, arg0->window.frame.x + 0x1F, arg0->window.frame.y + 0x29, (s32)arg0->boxNames,
+                              arg0->boxCount, arg0->leftBox);
+                func_89000CF0(&arg0->sourceBoxWindow, arg0->tables);
                 break;
             case 3:
-                LabItem_InitMenuWindow(arg0 + 0x170, *(s32*)(arg0 + 4) + 0x14F, *(s32*)(arg0 + 8) + 0x29, *(s32*)(arg0 + 0x1DC),
-                              *(s32*)(arg0 + 0x1E0), *(s32*)(arg0 + 0x1D8));
-                if (*(s32*)(arg0 + 0x104) == 2) {
-                    func_89000CF0(arg0 + 0x170, *(s8**)(arg0 + 0x490));
+                LabItem_InitMenuWindow(&arg0->targetBoxWindow, arg0->window.frame.x + 0x14F, arg0->window.frame.y + 0x29, (s32)arg0->boxNames,
+                              arg0->boxCount, arg0->rightBox);
+                if (arg0->operationCursor.cursor == 2) {
+                    func_89000CF0(&arg0->targetBoxWindow, arg0->tables);
                 }
-                LabItem_DisableRow(arg0 + 0x170, *(s32*)(arg0 + 0x1D4));
-                *(s32*)(arg0 + 0x1A4) = 0;
-                Menu_SkipDisabledForward(arg0 + 0x19C);
+                LabItem_DisableRow(&arg0->targetBoxWindow, arg0->leftBox);
+                arg0->targetBoxWindow.menu.cursor = 0;
+                Menu_SkipDisabledForward(&arg0->targetBoxWindow.menu);
                 break;
         }
-        *(s32*)arg0 = next;
+        arg0->state = next;
     }
     return ret;
 }
