@@ -11,7 +11,7 @@ s32 GbSave_GetTrainerId(s32 arg0);
 s32 func_80020AFC(s32, s32, s32, s32);
 u8 func_80020CE4(void*, s32, s32);
 void func_80020C60(s32);
-void func_80022D84(s32, void*);
+void GbSave_GetPlayerName(s32, void*);
 void func_80058410(void*, void*, s32);
 void func_8000A460(void*, void*);
 
@@ -37,7 +37,7 @@ void FreeBattle_LoadGbCartTrainer(TeamRoster* slot, ExtendedRosterInfo* info, s3
     sp2C = func_80020AFC(0x20, gbPort, 0, 0);
     slot->numberOfPokemonBrought = func_80020CE4(slot->pokemonPicked, 6, sp2C);
     func_80020C60(sp2C);
-    func_80022D84(gbPort, slot->trainerName);
+    GbSave_GetPlayerName(gbPort, slot->trainerName);
     info->unk_000 = 0;
     info->numberOfPokemonCanBePicked = slot->numberOfPokemonBrought;
     info->trainerIndex = gbPort;

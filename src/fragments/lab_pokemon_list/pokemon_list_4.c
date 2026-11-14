@@ -53,7 +53,7 @@ void Font_SetColorForFlags(s32);
 void LabPCList_DrawPlainText(s32, s32, s8*, s32, s32);
 
 s32 Window_DrawAnimatedFrame(void);
-void func_8002C5A4(s32, s32, s32);
+void Window_DrawHeaderStripe(s32, s32, s32);
 void Window_DrawFrame(s8*);
 void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
 void ScrollList_DrawScrollArrows(s8*, s32, s32, s32, s32);
@@ -81,7 +81,7 @@ void LabPCList_DrawListScreen(LabPCListScreen* screen) {
     if (Window_DrawAnimatedFrame() != 0) {
         return;
     }
-    func_8002C5A4(screen->window.frame.x, screen->window.frame.y - 0xA, 0x1F4);
+    Window_DrawHeaderStripe(screen->window.frame.x, screen->window.frame.y - 0xA, 0x1F4);
     Window_DrawFrame((s8*)&screen->headerFrame);
     Ui_DrawTexturedDivider(screen->window.frame.x, screen->window.frame.y + 0x23, screen->window.frame.width, D_8007356C);
     LabPCList_DrawPageHint(screen);
@@ -343,7 +343,7 @@ typedef struct List89102344 {
 } List89102344;
 
 
-s32 func_8003F6AC();
+s32 Audio_PlaySystemSound();
 s32 ScrollList_UpdateCursor(void*);
 void ScrollList_SetCursor(void*, s32);
 void LabPCList_FormatGatherPrompt(LabPCListScreen*);
@@ -356,7 +356,7 @@ s32 LabPCList_UpdateListCursor(LabPCListScreen* screen) {
     s32 ret;
 
     if ((screen->list.cursorY == 0) && (*(u16*)(D_800603C0 + 6) & 0x800)) {
-        func_8003F6AC(1);
+        Audio_PlaySystemSound(1);
         screen->focus = 2;
         screen->headerCursor.cursor = 1;
         ScrollList_SetCursor(&screen->list, screen->list.scrollY / screen->list.cellHeight);
@@ -365,11 +365,11 @@ s32 LabPCList_UpdateListCursor(LabPCListScreen* screen) {
     ret = ScrollList_UpdateCursor(&screen->list.items) != 0;
     if ((ret == 0) && (*(u16*)(D_800603C0 + 8) & 0x8000)) {
         if ((screen->list.items->count > 0) && (((List89102344*)screen->list.items)->items[screen->list.cursor][8] > 0) && (((List89102344*)screen->list.items)->items[screen->list.cursor][8] < 0x98)) {
-            func_8003F6AC(2);
+            Audio_PlaySystemSound(2);
             LabPCList_FormatGatherPrompt((s8*)screen);
             ret = 1;
         } else {
-            func_8003F6AC(8);
+            Audio_PlaySystemSound(8);
         }
     }
     return ret;
@@ -418,7 +418,7 @@ s32 LabPCList_UpdateHeaderCursor(LabPCListScreen* screen) {
     button = func_8002B390(&screen->headerCursor.controller);
     if (button != 0) {
         if ((button == 0x400) && (screen->headerCursor.cursor == 1)) {
-            func_8003F6AC(1);
+            Audio_PlaySystemSound(1);
             screen->focus = 0;
             screen->list.repeatTimer = 8; screen->list.inputDirection = 0x400; // FAKE: both stores must share one source line (IDO schedules by line)
             ret = 1;
@@ -428,15 +428,15 @@ s32 LabPCList_UpdateHeaderCursor(LabPCListScreen* screen) {
         }
     } else if (*(u16*)(D_800603C0 + 8) & 0x8000) {
         if (screen->headerCursor.cursor == 0) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             ret = -1;
         } else if (screen->headerCursor.cursor == 1) {
-            func_8003F6AC(2);
+            Audio_PlaySystemSound(2);
             LabPCList_InitSortMenu((LabPCListScreen*)screen);
             ret = 1;
             screen->state = 2;
         } else {
-            func_8003F6AC(2);
+            Audio_PlaySystemSound(2);
             LabPCList_OpenColumnMenu((LabPCListScreen*)screen);
             ret = 1;
         }
@@ -468,17 +468,17 @@ s32 LabPCList_UpdateBrowse(LabPCListScreen* screen) {
     } else if (result == 0) {
         buttons = *(u16*)(D_800603C0 + 8);
         if (buttons & 0x4000) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             done = TRUE;
         } else if (buttons & 2) {
-            func_8003F6AC(2);
+            Audio_PlaySystemSound(2);
             if (screen->page == 0) {
                 screen->page += 3;
             }
             screen->page--;
             LabPCList_ResetHeaderCursor(screen);
         } else if (buttons & 1) {
-            func_8003F6AC(2);
+            Audio_PlaySystemSound(2);
             if (screen->page >= 2) {
                 screen->page -= 3;
             }
@@ -486,11 +486,11 @@ s32 LabPCList_UpdateBrowse(LabPCListScreen* screen) {
             LabPCList_ResetHeaderCursor(screen);
         } else if (buttons & 0x20) {
             if (screen->focus != 0) {
-                func_8003F6AC(2);
+                Audio_PlaySystemSound(2);
                 screen->focus = 0;
             }
         } else if ((buttons & 0x10) && (screen->focus != 1)) {
-            func_8003F6AC(2);
+            Audio_PlaySystemSound(2);
             screen->focus = 1;
             screen->headerCursor.cursor = 2;
         }
@@ -569,7 +569,7 @@ M2C_UNK func_80022118(s32);                         /* extern */
 M2C_UNK func_80022188(s32);                         /* extern */
 M2C_UNK func_800230C4(s32);                         /* extern */
 M2C_UNK Save_CommitPokemonRecords();                            /* extern */
-M2C_UNK func_8002D7D4(s32);                         /* extern */
+M2C_UNK GbSave_RunReportErrorLoop(s32);                         /* extern */
 void LabPCList_DrawListScreen(LabPCListScreen*);
 s32 LabPCList_GetChangedSaveFlags();                                /* extern */
 M2C_UNK LabPCList_SaveDirtyBoxes(s32);                         /* extern */
@@ -596,7 +596,7 @@ void LabPCList_SaveChanges(s32 screen) {
             func_800230C4(D_8910E37C);
         }
         if (func_8002207C(D_8910E37C) == 0) {
-            func_8002D7D4(D_8910E37C);
+            GbSave_RunReportErrorLoop(D_8910E37C);
             LabPCList_DrawListScreen((s8*)screen);
         }
         func_80022188(D_8910E37C);

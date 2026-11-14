@@ -175,7 +175,7 @@ void PcSort_DrawMenu(PcSortMenuWindow* win) {
 
 s32 Menu_UpdateCursorSkipDisabled(void*);
 s32 func_8002BC14(s32);
-M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 extern s32 D_800603C0;
 /**
  * Moves the menu cursor. Returns -1 on cancel, the 1-based row on confirm, otherwise 0.
@@ -188,7 +188,7 @@ s32 PcSort_UpdateMenuCursor(PcSortMenuWindow* win) {
     if (Menu_UpdateCursorSkipDisabled(&win->menu) == 0) {
         dir = func_8002BC14(D_800603C0);
         if (dir == -1) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             sp1C = -1;
         } else if (dir == 1) {
             sp1C = win->menu.cursor + 1;
@@ -253,7 +253,7 @@ void PcSort_InitMonList(PcSortMonList* list, s32 x, s32 y, s32 table) {
     list->list.options |= 0x10000;
 }
 
-void func_8002F9D8(void *, s32, s32, s32, s32);
+void ScrollList_DrawSmoothScroll(void *, s32, s32, s32, s32);
 void ScrollList_DrawInlineItems(void *, s32, s32, s32, s32);
 void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, void *, s32, s32);
@@ -265,7 +265,7 @@ extern u8 D_04011AB8[];
  */
 void PcSort_DrawMonList(PcSortMonList* list, s32 flags) {
     if (flags & 0x200) {
-        func_8002F9D8(&list->list, list->x, list->y + 0x10, flags | 0xFFED, 0);
+        ScrollList_DrawSmoothScroll(&list->list, list->x, list->y + 0x10, flags | 0xFFED, 0);
     } else {
         ScrollList_DrawInlineItems(&list->list, list->x, list->y + 0x10, flags | 0xFFED, 0);
     }
@@ -277,7 +277,7 @@ void PcSort_DrawMonList(PcSortMonList* list, s32 flags) {
 }
 
 s32 ScrollList_UpdateCursor(void*);
-s32 func_80030230(void*);
+s32 ScrollList_UpdateSmoothScroll(void*);
 
 /**
  * Navigate the selected menu mode, then report cancel or confirm input.
@@ -290,14 +290,14 @@ s32 PcSort_UpdateMonList(PcSortMonList* menu, u32 flags) {
     s32 action;
 
     if (flags & 0x200) {
-        moved = func_80030230(menu);
+        moved = ScrollList_UpdateSmoothScroll(menu);
     } else {
         moved = ScrollList_UpdateCursor(menu);
     }
     if (moved == 0) {
         action = func_8002BC14(D_800603C0);
         if (action == -1) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             result = -1;
         } else if (action == 1) {
             result = 1;
@@ -312,7 +312,7 @@ s32 PcSort_UpdateMonList(PcSortMonList* menu, u32 flags) {
  * Seen in play (2026-11-14): drew the いどうする, メニューへもどる, いれかえる, ならべかえる, みる and にがす buttons.
  */
 void PcSort_DrawOperationButton(s32 x, M2C_UNK y, M2C_UNK button, M2C_UNK index, s32 flags) {
-    func_8002B054(button, flags);
+    ImageButton_Draw(button, flags);
 }
 
 void GridMenu_Init(s8*, s8*, s8*, void*, s32, s32, s32);
@@ -343,27 +343,27 @@ void PcSort_InitOrganizeWindow(PcSortOrganizeWindow* win, s32 x, s32 y, ByteMatr
     win->footerFrame.style = 6;
     win->footerFrame.color = D_8900A750;
     win->footerFrame.color2 = D_8900A754;
-    func_8002B018(&win->moveButton, x + 0xE1, y + 0x48, 0x36, 0x2A, 0x30, D_8900DAD0);
+    ImageButton_Init(&win->moveButton, x + 0xE1, y + 0x48, 0x36, 0x2A, 0x30, D_8900DAD0);
     win->moveButton.selectedColor = D_8900A580[2];
     win->moveButton.color = D_8900A580[3];
     win->moveButton.highlightColor = D_8900A5BC;
-    func_8002B018(&win->backButton, x + 0x11D, y + 0x48, 0x36, 0x2A, 0x30, D_8900BFC0);
+    ImageButton_Init(&win->backButton, x + 0x11D, y + 0x48, 0x36, 0x2A, 0x30, D_8900BFC0);
     win->backButton.selectedColor = D_8900A580[0];
     win->backButton.color = D_8900A580[1];
     win->backButton.highlightColor = D_8900A5BC;
-    func_8002B018(&win->exchangeButton, x + 0xE1, y + 0x78, 0x36, 0x2A, 0x30, D_8900F5E0);
+    ImageButton_Init(&win->exchangeButton, x + 0xE1, y + 0x78, 0x36, 0x2A, 0x30, D_8900F5E0);
     win->exchangeButton.selectedColor = D_8900A580[6];
     win->exchangeButton.color = D_8900A580[7];
     win->exchangeButton.highlightColor = D_8900A5BC;
-    func_8002B018(&win->reorderButton, x + 0x11D, y + 0x78, 0x36, 0x2A, 0x30, D_8900E858);
+    ImageButton_Init(&win->reorderButton, x + 0x11D, y + 0x78, 0x36, 0x2A, 0x30, D_8900E858);
     win->reorderButton.selectedColor = D_8900A580[4];
     win->reorderButton.color = D_8900A580[5];
     win->reorderButton.highlightColor = D_8900A5BC;
-    func_8002B018(&win->viewButton, x + 0xE1, y + 0xA8, 0x36, 0x2A, 0x30, D_89010368);
+    ImageButton_Init(&win->viewButton, x + 0xE1, y + 0xA8, 0x36, 0x2A, 0x30, D_89010368);
     win->viewButton.selectedColor = D_8900A580[8];
     win->viewButton.color = D_8900A580[9];
     win->viewButton.highlightColor = D_8900A5BC;
-    func_8002B018(&win->releaseButton, x + 0x11D, y + 0xA8, 0x36, 0x2A, 0x30, D_89011E78);
+    ImageButton_Init(&win->releaseButton, x + 0x11D, y + 0xA8, 0x36, 0x2A, 0x30, D_89011E78);
     win->releaseButton.selectedColor = D_8900A580[12];
     win->releaseButton.color = D_8900A580[13];
     win->releaseButton.highlightColor = D_8900A5BC;
@@ -380,7 +380,7 @@ void PcSort_InitOrganizeWindow(PcSortOrganizeWindow* win, s32 x, s32 y, ByteMatr
 }
 
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);
-M2C_UNK func_8001A944(s32, s32, s32);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 M2C_UNK func_8001AB6C();
 M2C_UNK func_8001ABBC();
 void func_8001B884(s32, s32, s32, s32, void*, s32, s32);
@@ -434,7 +434,7 @@ void PcSort_DrawBoxTab(s32 win, s32 x, s32 y, s32 flags, u32 idx) {
         func_8001AB6C();
         Font_SetColorForFlags(flags);
         func_8001A384(8, 0);
-        func_8001A944(x + 0x2B, y + 5, D_8900A758[idx]);
+        Font_Printf(x + 0x2B, y + 5, D_8900A758[idx]);
         func_8001ABBC();
     }
 }
@@ -506,7 +506,7 @@ void PcSort_DrawMonStats(s32 x, s32 y, u8* mon) {
 }
 
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);            /* extern */
-M2C_UNK func_8001A944(s32, s32, s32);               /* extern */
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);              /* extern */
 void Font_SetLineHeight(s32 arg0);                     /* extern */
 M2C_UNK func_8001AB6C();                            /* extern */
@@ -522,7 +522,7 @@ void PcSort_DrawSmallText(s32 x, s32 y, s32 text) {
     func_8001A384(0x10, 0);
     func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
     Font_SetLineHeight(0x2C);
-    func_8001A944(x + 0xC, y + 0x14, text);
+    Font_Printf(x + 0xC, y + 0x14, text);
     func_8001ABBC();
 }
 
@@ -731,14 +731,14 @@ s32 PcSort_UpdateOrganizeWindow(PcSortOrganizeWindow* win) {
             if (GridMenu_UpdateCursor(&win->operationMenu) == 0) {
                 res = func_8002BC14(D_800603C0);
                 if (res == -1) {
-                    func_8003F6AC(3);
+                    Audio_PlaySystemSound(3);
                     ret = -1;
                 } else if (res == 1) {
                     if (win->operationMenu.cursor == 1) {
-                        func_8003F6AC(3);
+                        Audio_PlaySystemSound(3);
                         ret = -1;
                     } else {
-                        func_8003F6AC(2);
+                        Audio_PlaySystemSound(2);
                         next = 2;
                         if ((win->operationMenu.cursor == 3) || (win->operationMenu.cursor == 4) || (win->operationMenu.cursor == 5)) {
                             PcSort_SetMonList(&win->rightList, (s32)(&win->partyView));
@@ -757,13 +757,13 @@ s32 PcSort_UpdateOrganizeWindow(PcSortOrganizeWindow* win) {
                 if (flags & 0x100) {
                     win->state = 0xA;
                     TextBox_Init(&win->textBox, D_8900A84C[win->operationMenu.cursor], 0, 1, 0);
-                    func_8003F6AC(8);
+                    Audio_PlaySystemSound(8);
                 } else if (flags & 0x200) {
-                    func_8003F6AC(8);
+                    Audio_PlaySystemSound(8);
                     win->state = 0xA;
                     TextBox_Init(&win->textBox, D_89018D8C, 0, 1, 0);
                 } else {
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     win->leftBox = win->sourceBoxWindow.menu.cursor;
                     PcSort_SetMonList(&win->leftList, (s32)(win->boxTables + win->sourceBoxWindow.menu.cursor));
                     if ((win->operationMenu.cursor == 3) || (win->operationMenu.cursor == 4) || (win->operationMenu.cursor == 5)) {
@@ -781,15 +781,15 @@ s32 PcSort_UpdateOrganizeWindow(PcSortOrganizeWindow* win) {
             } else if (res > 0) {
                 flags = win->targetBoxWindow.menu.itemFlags[win->targetBoxWindow.menu.cursor];
                 if (flags & 0x100) {
-                    func_8003F6AC(8);
+                    Audio_PlaySystemSound(8);
                     win->state = 0xB;
                     TextBox_Init(&win->textBox, D_8900A84C[win->operationMenu.cursor], 0, 1, 0);
                 } else if (flags & 0x400) {
-                    func_8003F6AC(8);
+                    Audio_PlaySystemSound(8);
                     win->state = 0xB;
                     TextBox_Init(&win->textBox, D_89018DA4, 0, 1, 0);
                 } else {
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     PcSort_OpenBox(win);
                 }
             }
@@ -800,31 +800,31 @@ s32 PcSort_UpdateOrganizeWindow(PcSortOrganizeWindow* win) {
                 win->state = 1;
             } else if (res == 1) {
                 if (win->operationMenu.cursor == 0) {
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     win->state = 5;
                 } else if (win->operationMenu.cursor == 2) {
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     win->state = 7;
                 } else if (win->operationMenu.cursor == 3) {
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     win->leftList.list.itemFlags[win->leftList.list.cursor] |= 8;
                     win->swapIndex = win->leftList.list.cursor;
                     win->state = 6;
                 } else if (win->operationMenu.cursor == 4) {
                     mon = win->leftList.list.cursor + *(BattleMon**)win->leftList.list.items;
                     if ((mon->species.id <= 0) || (mon->species.id >= 0x98)) {
-                        func_8003F6AC(8);
+                        Audio_PlaySystemSound(8);
                     } else {
-                        func_8003F6AC(2);
+                        Audio_PlaySystemSound(2);
                         ret = 2;
                     }
                 } else {
                     mon = win->leftList.list.cursor + *(BattleMon**)win->leftList.list.items;
                     species = mon->species.id;
                     if ((species <= 0) || (species >= 0x98)) {
-                        func_8003F6AC(8);
+                        Audio_PlaySystemSound(8);
                     } else {
-                        func_8003F6AC(2);
+                        Audio_PlaySystemSound(2);
                         ret = 3;
                     }
                 }
@@ -835,7 +835,7 @@ s32 PcSort_UpdateOrganizeWindow(PcSortOrganizeWindow* win) {
             if (res == -1) {
                 win->state = 4;
             } else if (res == 1) {
-                func_8003F6AC(0x18);
+                Audio_PlaySystemSound(0x18);
                 PcSort_MoveSelectedMon(win);
                 if ((((win->leftBox == 0) ? 1 : 0) == win->leftList.list.items->count) ||
                     (win->rightList.list.items->count == win->rightList.list.items->capacity)) {
@@ -851,7 +851,7 @@ s32 PcSort_UpdateOrganizeWindow(PcSortOrganizeWindow* win) {
                 Menu_ClearItemFlags(&win->leftList);
                 win->state = 4;
             } else if (res == 1) {
-                func_8003F6AC(0x18);
+                Audio_PlaySystemSound(0x18);
                 PcSort_SwapWithinList(win);
                 Menu_ClearItemFlags(&win->leftList);
                 win->state = 4;
@@ -862,7 +862,7 @@ s32 PcSort_UpdateOrganizeWindow(PcSortOrganizeWindow* win) {
             if (res == -1) {
                 win->state = 4;
             } else if (res == 1) {
-                func_8003F6AC(0x18);
+                Audio_PlaySystemSound(0x18);
                 PcSort_SwapBetweenLists(win);
                 win->state = 4;
             }
@@ -1008,7 +1008,7 @@ extern s32 D_89019108;
 
 /**
  * Marks every species in a GB Pokémon list as seen, owned and held in the cartridge's Pokédex
- * (func_80023268 with 3) after the list is written back.
+ * (GbSave_SetSeenOwnedBits with 3) after the list is written back.
  * Seen in play (2026-11-14): after moving ホ (ポッポ, #16) into てもち, its seen, owned and held bits were cleared
  * in RAM; レポートしてやめる set all three again.
  */
@@ -1032,7 +1032,7 @@ void func_800230C4(s32);
 s32 func_8002207C(s32);
 void func_80022188(s32);
 void Save_CommitPokemonRecords(void);
-void func_8002D7D4(s32);
+void GbSave_RunReportErrorLoop(s32);
 /**
  * Writes the changed boxes back to the save and flushes it.
  * Seen in play (2026-11-12) in せいとん: レポートしてやめる after the move ran this, which wrote decks 0x20
@@ -1074,7 +1074,7 @@ void PcSort_SaveChanges(PcSortScreen* screen) {
     if (dirty != 0) {
         func_800230C4(D_89019108);
         if (func_8002207C(D_89019108) == 0) {
-            func_8002D7D4(D_89019108);
+            GbSave_RunReportErrorLoop(D_89019108);
             PcSort_DrawScreen(screen);
         }
         func_80022188(D_89019108);
@@ -1161,14 +1161,14 @@ s32 PcSort_UpdateScreen(PcSortScreen* screen) {
         case 3:
             res = func_8002BC14(D_800603C0);
             if ((res == -1) || (res == 1)) {
-                func_8003F6AC(3);
+                Audio_PlaySystemSound(3);
                 screen->state = 1;
             }
             break;
         case 4:
             res = PcBox_UpdateConfirmCursor(&screen->statusWindow);
             if (res == -1) {
-                func_8003F6AC(3);
+                Audio_PlaySystemSound(3);
                 screen->state = 1;
             } else if (res == 1) {
                 Audio_PlayCommand(0x57, 0, 0);

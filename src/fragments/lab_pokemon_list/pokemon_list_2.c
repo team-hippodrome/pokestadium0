@@ -153,7 +153,7 @@ typedef struct Entry80066AD8 {
 extern Entry80066AD8 D_80066AD8[];
 s32 Pokemon_GetTypeIndex(u8*, s32);
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);
-M2C_UNK func_8001A944(s32, s32, M2C_UNK *, ...);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);
 M2C_UNK func_8001AB6C();
 M2C_UNK func_8001ABBC();
@@ -171,7 +171,7 @@ void LabPCList_DrawTypeIcon(s32 x, s32 y, u8* mon, s32 typeSlot) {
         func_8001AB6C();
         func_8001A384(4, 0);
         func_8001AA9C(c.r, c.g, c.b, c.a);
-        func_8001A944(x, y, (M2C_UNK*)D_80066AD8[idx].str);
+        Font_Printf(x, y, (M2C_UNK*)D_80066AD8[idx].str);
         func_8001ABBC();
     }
 }
@@ -205,14 +205,14 @@ void LabPCList_DrawMoveName(s32 x, s32 y, s32 mon, s32 slot) {
         func_8001AB6C();
         func_8001A384(4, -1);
         func_8001AA9C(color.r, color.g, color.b, color.a);
-        func_8001A944(x, y, (M2C_UNK*)str);
+        Font_Printf(x, y, (M2C_UNK*)str);
         func_8001ABBC();
     }
 }
 
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);            /* extern */
-M2C_UNK func_8001A944(s32, s32, M2C_UNK *, ...);         /* extern */
-M2C_UNK func_8001AA60(s32, s32, s32);               /* extern */
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
+void Font_DrawCharAt(s32 x, s32 y, s32 chr);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);              /* extern */
 M2C_UNK func_8001AB6C();                            /* extern */
 M2C_UNK func_8001ABBC();                            /* extern */
@@ -236,23 +236,23 @@ void LabPCList_DrawLocation(s32 x, s32 y, s8 ***entry) {
     switch (temp_v0) {                              /* irregular */
     case 32:
         func_8001A384(4, 0);
-        func_8001A944(x, y, &D_8910DBB4);
+        Font_Printf(x, y, &D_8910DBB4);
         break;
     case 33:
         func_8001A384(4, -1);
-        func_8001AA60(x + 0x22, y, M2C_FIELD(*entry, s32 *, 4) + 0x31);
+        Font_DrawCharAt(x + 0x22, y, M2C_FIELD(*entry, s32 *, 4) + 0x31);
         func_8001AA9C(0xFFU, 0xC8U, 0xFFU, 0xFFU);
-        func_8001A944(x - 2, y, &D_8910DBBC);
+        Font_Printf(x - 2, y, &D_8910DBBC);
         break;
     case 17:
         func_8001A384(4, -1);
-        func_8001AA60(x + 0x22, y, M2C_FIELD(*entry, s32 *, 4) + 0x31);
+        Font_DrawCharAt(x + 0x22, y, M2C_FIELD(*entry, s32 *, 4) + 0x31);
         func_8001AA9C(0x96U, 0xDCU, 0xD2U, 0xFFU);
-        func_8001A944(x - 2, y, &D_8910DBC0);
+        Font_Printf(x - 2, y, &D_8910DBC0);
         break;
     case 19:
         func_8001A384(4, 0);
-        func_8001A944(x, y, &D_8910DBC4);
+        Font_Printf(x, y, &D_8910DBC4);
         break;
     }
     func_8001ABBC();

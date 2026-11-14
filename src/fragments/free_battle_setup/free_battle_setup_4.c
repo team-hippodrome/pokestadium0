@@ -33,7 +33,7 @@ void func_8001AB6C(void);
 void func_8001A384(s32, s32);
 void func_8001ABBC(void);
 void func_8001AA9C(u8, u8, u8, u8);
-void func_8001A944(s32, s32, const char*, ...);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 extern M2C_UNK D_800734A8;
 void Menu_ClearItemFlags(FlagOwner*);
 extern Gfx D_80060270[];
@@ -199,7 +199,7 @@ void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 M2C_UNK ScrollList_Init(s8*, s32, s8*, M2C_UNK, M2C_UNK*, s32, s32);
 M2C_UNK ScrollGrid_Init(s8*, s8*, s8*, M2C_UNK, s32, M2C_UNK*, s32, s32);
 M2C_UNK func_80027410(s8*, s32, M2C_UNK, M2C_UNK, s32);
-void func_80018168(s8* arg0);
+void PokeIcon_ResetSlots(s8* arg0);
 void FreeBattle_InitEntryListCursor(s8*);
 
 /**
@@ -214,7 +214,7 @@ void FreeBattle_InitEntryListCursor(s8*);
  *   - when ruleCategory != 0, builds the record view at +0x684 (source D_8200ACFC if ruleCategory == 1,
  *     otherwise D_8200AD00, with different dimensions), links it through ScrollGrid_Init
  *     at +0x6E4/+0x694 (passing &FreeBattle_DrawMonCell) and sets bit 0x10000 at +0x704,
- *   - finally calls func_80018168 on D_8200AC50.
+ *   - finally calls PokeIcon_ResetSlots on D_8200AC50.
  * The meaning of x..ruleCategory beyond what is stored above is not established.
  * Seen in play: runs as 「エントリーポケモンのせんたく 1Pせんたくちゅう」 opens.
  */
@@ -246,7 +246,7 @@ void FreeBattle_InitEntrySelect(s8* entry, s32 x, s32 y, s32 teams, s32 picks, s
         ScrollGrid_Init(entry + 0x6E4, var_s1, entry + 0x694, 4, 3, &FreeBattle_DrawMonCell, 0x84, 0x32);
         M2C_FIELD(entry, s32*, 0x704) = M2C_FIELD(entry, s32*, 0x704) | 0x10000;
     }
-    func_80018168((s8*)D_8200AC50);
+    PokeIcon_ResetSlots((s8*)D_8200AC50);
 }
 
 extern Gfx D_80073450[];
@@ -273,7 +273,7 @@ void FreeBattle_DrawRentalTitle(s32 x, s32 y, s32 width) {
     func_8001AB6C();
     func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
     func_8001A384(4, 0);
-    func_8001A944(x + 0x10, y + 2, D_82009CC8);
+    Font_Printf(x + 0x10, y + 2, D_82009CC8);
     func_8001ABBC();
 }
 
@@ -300,7 +300,7 @@ void FreeBattle_DrawChoosingLabel(s8* entry) {
     func_8001AB6C();
     func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
     func_8001A384(4, 0);
-    func_8001A944(M2C_FIELD(entry, s32*, 0x14) + 0x12A, M2C_FIELD(entry, s32*, 0x18) - 0x10, D_82009CF0, D_820090A8[M2C_FIELD(entry, s32*, 0x738)]);
+    Font_Printf(M2C_FIELD(entry, s32*, 0x14) + 0x12A, M2C_FIELD(entry, s32*, 0x18) - 0x10, D_82009CF0, D_820090A8[M2C_FIELD(entry, s32*, 0x738)]);
     func_8001ABBC();
 }
 
@@ -623,7 +623,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
       next = func_8002BC14(*((s32 *) (((s8 *) entry) + 0x744)));
       if (next == (-1))
       {
-        func_8003F6AC(3);
+        Audio_PlaySystemSound(3);
         ret = -1;
       }
       else
@@ -633,13 +633,13 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
         rec = (*(*((u8 ****) (((s8 *) entry) + 0xC4))))[*((s32 *) (((s8 *) entry) + 0x48))]; // FAKE: decomp slop, raw pointer casts stand in for struct fields
         if (((*((s32 *) (((s8 *) entry) + 0x740))) == 0) && ((FreeBattle_FindFlaggedSlot(rec + 0x1C, &sp40), sp40 == 6)))
         {
-          func_8003F6AC(8);
+          Audio_PlaySystemSound(8);
           TextBox_Init(entry + 0x74C, D_82009D04, 1, 2, 9);
           FreeBattle_SetEntryScreenState(entry, 0xC, 0);
         }
         else
         {
-          func_8003F6AC(2);
+          Audio_PlaySystemSound(2);
           *((s32 *) (((s8 *) entry) + 0x784)) = 0;
           if (rec[0] & 2)
           {
@@ -669,7 +669,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
       next = func_8002BC14(*((s32 *) (((s8 *) entry) + 0x744)));
       if (next == (-1))
       {
-        func_8003F6AC(3);
+        Audio_PlaySystemSound(3);
         FreeBattle_SetEntryScreenState(entry, 1, 1);
       }
       else
@@ -677,12 +677,12 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
       {
         if (((TeamMonSlot *) (entry + 0xE4))[*((s32 *) (((s8 *) entry) + 0x300))].flags & 0x40) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
-          func_8003F6AC(2);
+          Audio_PlaySystemSound(2);
           FreeBattle_SetEntryScreenState(entry, 3, 0);
         }
         else
         {
-          func_8003F6AC(8);
+          Audio_PlaySystemSound(8);
         }
       }
     }
@@ -697,7 +697,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
     else
       if (next == 1)
     {
-      func_8003F6AC(2);
+      Audio_PlaySystemSound(2);
       FreeBattle_EnableNonDuplicateRows(entry + 0x2F8);
       FreeBattle_KeepChosenDuplicate(entry + 0xE4, *((s32 *) (((s8 *) entry) + 0x300)));
       FreeBattle_MarkSlotsToReplace(entry + 0x2F8);
@@ -714,7 +714,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
     else
       if (next == 1)
     {
-      func_8003F6AC(2);
+      Audio_PlaySystemSound(2);
       FreeBattle_SetEntryScreenState(entry, 8, 1);
     }
       break;
@@ -742,7 +742,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
       next = func_8002BC14(*((s32 *) (((s8 *) entry) + 0x744)));
       if (next == (-1))
       {
-        func_8003F6AC(3);
+        Audio_PlaySystemSound(3);
         if ((*((s32 *) (((s8 *) entry) + 0x784))) & 2)
         {
           FreeBattle_SetEntryScreenState(entry, 1, 0);
@@ -755,7 +755,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
       else
         if (next == 1)
       {
-        func_8003F6AC(2);
+        Audio_PlaySystemSound(2);
         if (((TeamMonSlot *) (entry + 0xE4))[*((s32 *) (((s8 *) entry) + 0x300))].flags & 1) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
           FreeBattle_SetEntryScreenState(entry, 8, 0);
@@ -774,7 +774,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
       next = func_8002BC14(*((s32 *) (((s8 *) entry) + 0x744)));
       if (next == (-1))
       {
-        func_8003F6AC(3);
+        Audio_PlaySystemSound(3);
         if ((*((s32 *) (((s8 *) entry) + 0x748))) != 0)
         {
           FreeBattle_SetEntryScreenState(entry, 1, 0);
@@ -789,12 +789,12 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
       {
         if (!((*((u16 **) (((s8 *) entry) + 0x6E8)))[*((s32 *) (((s8 *) entry) + 0x6EC))] & 1)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
-          func_8003F6AC(2);
+          Audio_PlaySystemSound(2);
           FreeBattle_SetEntryScreenState(entry, 9, 0);
         }
         else
         {
-          func_8003F6AC(8);
+          Audio_PlaySystemSound(8);
         }
       }
     }
@@ -809,7 +809,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
     else
       if (next == 1)
     {
-      func_8003F6AC(2);
+      Audio_PlaySystemSound(2);
       FreeBattle_SetEntryScreenState(entry, 8, 1);
     }
       break;
@@ -823,7 +823,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
     else
       if (next == 1)
     {
-      func_8003F6AC(0x22);
+      Audio_PlaySystemSound(0x22);
       FreeBattle_RentSelectedMon(entry);
       FreeBattle_SetEntryScreenState(entry, FreeBattle_CheckEntryRules(entry), 1);
     }
@@ -838,7 +838,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
     else
       if (next == 2)
     {
-      func_8003F6AC(2);
+      Audio_PlaySystemSound(2);
       *((s32 *) (((s8 *) entry) + 0x300)) = 0;
       *((s32 *) (((s8 *) entry) + 0x6EC)) = 0;
       FreeBattle_SetEntryScreenState(entry, 6, 1);
@@ -846,7 +846,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
     else
       if (next == 1)
     {
-      func_8003F6AC(0x20);
+      Audio_PlaySystemSound(0x20);
       FreeBattle_SetEntryScreenState(entry, 0xB, 1);
     }
       break;
@@ -858,7 +858,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
     case 12:
       if ((*((u16 *) (((s8 *) (*((u16 **) (((s8 *) entry) + 0x744)))) + 8))) & 0xC000) // FAKE: decomp slop, raw pointer casts stand in for struct fields
     {
-      func_8003F6AC(2);
+      Audio_PlaySystemSound(2);
       FreeBattle_SetEntryScreenState(entry, 1, 1);
     }
       break;

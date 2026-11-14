@@ -173,7 +173,7 @@ extern u8 D_8901911C[];
 void func_80022118(s32);
 void func_80022188(s32);
 s32 func_8002207C(s32);
-void func_8002D7D4(s32);
+void GbSave_RunReportErrorLoop(s32);
 void Save_CommitPokemonRecords(void);
 void func_800245E0(s32, s32);
 void LabItem_DrawScreen(LabItemScreen*);
@@ -215,7 +215,7 @@ void LabItem_SaveChanges(LabItemScreen* screen) {
     }
     if (locked) {
         if (func_8002207C(D_89019108) == 0) {
-            func_8002D7D4(D_89019108);
+            GbSave_RunReportErrorLoop(D_89019108);
             LabItem_DrawScreen(screen);
         }
         func_80022188(D_89019108);
@@ -350,7 +350,7 @@ s32 LabItem_UpdateScreen(LabItemScreen* screen) {
 
 extern Color_RGBA8 D_8900A6E8;
 extern Color_RGBA8 D_80073520;
-void func_8002A354(s32, s32, s32, s32, Color_RGBA8);
+void Ui_DrawFilledFrame(s32, s32, s32, s32, Color_RGBA8);
 void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 void Font_SetColorForFlags(s32);
 /**
@@ -361,7 +361,7 @@ void LabTerminal_DrawMenuRow(s32 x, s32 y, char* text, s32 index, s32 flags, s32
     s32 temp_v0 = *width;
 
     if (flags & 8) {
-        func_8002A354(x + 3, y + 3, temp_v0 - 6, 0x1A, D_8900A6E8);
+        Ui_DrawFilledFrame(x + 3, y + 3, temp_v0 - 6, 0x1A, D_8900A6E8);
     } else if (flags & 2) {
         Ui_DrawRoundedFrame(x + 2, y + 2, temp_v0 - 4, 0x1C, D_80073520);
     }
@@ -484,8 +484,8 @@ void LabTerminal_DrawMainScreen(LabTerminalMenuWindow* win) {
 }
 
 /**
- * Wrapper around LabTerminal_UpdateMenuWindow(arg0): -1 calls func_8003F6AC(3) and returns -1;
- * a positive result calls func_8003F6AC(2) and returns menu.cursor
+ * Wrapper around LabTerminal_UpdateMenuWindow(arg0): -1 calls Audio_PlaySystemSound(3) and returns -1;
+ * a positive result calls Audio_PlaySystemSound(2) and returns menu.cursor
  * plus 1; any other result returns 0. (Same pattern as FreeBattle_UpdateBattleModeWindow.)
  * Seen in play (2026-11-12): returned the せいとん menu pick.
  */
@@ -495,10 +495,10 @@ s32 LabTerminal_UpdateMainMenu(LabTerminalMenuWindow* win) {
 
     tmp = LabTerminal_UpdateMenuWindow(win);
     if (tmp == -1) {
-        func_8003F6AC(3);
+        Audio_PlaySystemSound(3);
         result = -1;
     } else if (tmp > 0) {
-        func_8003F6AC(2);
+        Audio_PlaySystemSound(2);
         result = win->menu.cursor + 1;
     }
     return result;

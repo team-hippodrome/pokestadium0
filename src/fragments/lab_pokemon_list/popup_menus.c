@@ -21,7 +21,7 @@ typedef struct unk_func_88313894 {
 #include "m2c_macros.h"
 
 void func_8001A384(s32, s32);
-void func_8001A944(s32 x, s32 y, const char* fmt, ...);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 void func_8001AB6C(void);
 void func_8001ABBC(void);
 void LabPCList_UnusedStub1(void);
@@ -243,7 +243,7 @@ void LabMoveSelect_Draw(LabMoveSelectWindow* window) {
     }
 }
 
-M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 
 /**
  * Runs the 60-frame learn animation: the old move fades out, then at frame 29 the new move replaces it and fades in. Returns 1 when done.
@@ -265,7 +265,7 @@ s32 LabMoveSelect_DrawLearnAnimation(LabMoveSelectWindow* window) {
     } else {
         if (window->learnTimer == 29) {
             window->moves[window->learnSlot] = window->learnMove;
-            func_8003F6AC(0x22);
+            Audio_PlaySystemSound(0x22);
         }
         color = 0xFEED;
         params[0] = ((30 - window->learnTimer) * 0xFF) / 30;
@@ -460,7 +460,7 @@ void LabBoxList_Draw(LabBoxListWindow* boxList, s32 flags) {
     Menu_DrawInlineItems(&boxList->menu, boxList->frame.x, boxList->frame.y + 4, flags | 0xFFED, boxList);
 }
 
-M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 extern s32 D_800603C0;
 
 /**
@@ -475,16 +475,16 @@ s32 LabBoxList_Update(LabBoxListWindow* boxList) {
 
     res = Menu_UpdateCursor(&boxList->menu);
     if (res == 0x200) {
-        func_8003F6AC(1);
+        Audio_PlaySystemSound(1);
         ret = 2;
     } else if (res == 0) {
         buttons = ((u16*)D_800603C0)[4];
         if (buttons & 0x8000) {
-            func_8003F6AC(2);
+            Audio_PlaySystemSound(2);
             ret = 1;
             boxList->menu.itemFlags[boxList->menu.cursor] ^= 8;
         } else if (buttons & 0x4000) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             ret = -1;
         }
     }
@@ -718,23 +718,23 @@ s32 LabSourceSelect_UpdateSources(LabSourceSelectWindow* window) {
     res = func_8002B2B0(&window->cursor);
     if (res == 0x100) {
         if (window->cursor.cursor == 1) {
-            func_8003F6AC(1);
+            Audio_PlaySystemSound(1);
             window->openBoxList = 1;
         } else if (window->cursor.cursor == 2) {
-            func_8003F6AC(1);
+            Audio_PlaySystemSound(1);
             window->openBoxList = 2;
         }
     } else if (res == 0) {
         buttons = ((u16*)D_800603C0)[4];
         if (buttons & 0x8000) {
             if (window->cursor.cursor == 3) {
-                func_8003F6AC(2);
+                Audio_PlaySystemSound(2);
                 LabSourceSelect_ApplyCheck(window, 0);
                 LabBoxList_ApplyChecks(&window->gbBoxes);
                 LabBoxList_ApplyChecks(&window->cartBoxes);
                 ret = 1;
             } else {
-                func_8003F6AC(2);
+                Audio_PlaySystemSound(2);
                 window->menu.itemFlags[window->menu.cursor] ^= 8;
                 if (window->cursor.cursor == 1) {
                     LabBoxList_SetAllChecked((u8*)(&window->gbBoxes), window->menu.itemFlags[window->menu.cursor] & 8);
@@ -743,7 +743,7 @@ s32 LabSourceSelect_UpdateSources(LabSourceSelectWindow* window) {
                 }
             }
         } else if (buttons & 0x4000) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             ret = -1;
         }
     }
@@ -971,7 +971,7 @@ extern u8 D_04002340[];
 extern u8 D_04002448[];
 void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 extern Color_RGBA8 D_80073520;
-M2C_UNK func_8001AA60(s32, s32, s32);
+void Font_DrawCharAt(s32 x, s32 y, s32 chr);
 
 /**
  * Draws the level input digits and the up/down arrows.
@@ -1005,13 +1005,13 @@ void LabPCList_DrawLevelInput(s8* input, s32 x, s32 y, s32 flags) {
     func_8001A384(8, 2);
     v = (M2C_FIELD(input, s32*, 0x10) == 2) ? hl : 0;
     Font_SetColorForFlags(v);
-    func_8001AA60(x, y, M2C_FIELD(input, s32*, 0) / 100 + '0');
+    Font_DrawCharAt(x, y, M2C_FIELD(input, s32*, 0) / 100 + '0');
     v = (M2C_FIELD(input, s32*, 0x10) == 1) ? hl : 0;
     Font_SetColorForFlags(v);
-    func_8001AA60(x + 0x16, y, M2C_FIELD(input, s32*, 0) / 10 % 10 + '0');
+    Font_DrawCharAt(x + 0x16, y, M2C_FIELD(input, s32*, 0) / 10 % 10 + '0');
     v = (M2C_FIELD(input, s32*, 0x10) == 0) ? hl : 0;
     Font_SetColorForFlags(v);
-    func_8001AA60(x + 0x2C, y, M2C_FIELD(input, s32*, 0) % 10 + '0');
+    Font_DrawCharAt(x + 0x2C, y, M2C_FIELD(input, s32*, 0) % 10 + '0');
     func_8001ABBC();
 }
 
@@ -1029,7 +1029,7 @@ void LabPCList_DrawLevelInputWindow(LabLevelInputWindow* window) {
         func_8001AB6C();
         func_8001A384(4, 0);
         func_8001AA9C(0xC8, 0xC8, 0xFF, 0xFF);
-        func_8001A944(window->window.frame.x + 0x54, window->window.frame.y + 0x13, D_8910E094);
+        Font_Printf(window->window.frame.x + 0x54, window->window.frame.y + 0x13, D_8910E094);
         func_8001ABBC();
         LabPCList_DrawLevelInput((s8*)&window->minLevel, window->window.frame.x + 0xE, window->window.frame.y + 0x10, (window->focus == 0) ? 2 : 0);
         LabPCList_DrawLevelInput((s8*)&window->maxLevel, window->window.frame.x + 0x7A, window->window.frame.y + 0x10, (window->focus == 1) ? 2 : 0);
@@ -1043,7 +1043,7 @@ M2C_UNK func_8002B204(s8 *, s32, s8 *);         /* extern */
 M2C_UNK func_8002B2E4(s32, s32, s8 *);            /* extern */
 M2C_UNK func_8002B4B4(s8 *, s32, s8 *);         /* extern */
 s32 func_8002BC14(s32, s32, s8 *);                /* extern */
-M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);                     /* extern */
 extern s32 D_800603C0;
 
 /**
@@ -1089,17 +1089,17 @@ s32 LabPCList_UpdateLevelInput(LabLevelInputWindow* window) {
     } else if (temp_v1 == 0) {
         temp_v0_2 = func_8002BC14(D_800603C0, temp_v1, window);
         if (temp_v0_2 == -1) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             sp1C = -1;
         } else if ((temp_v0_2 == 1) && (window->focus == 2)) {
             if (window->cursor.cursor == 0) {
-                func_8003F6AC(2);
+                Audio_PlaySystemSound(2);
                 sp1C = 1;
             } else if (!(window->clearButton.flags & 1)) {
-                func_8003F6AC(2);
+                Audio_PlaySystemSound(2);
                 sp1C = 2;
             } else {
-                func_8003F6AC(8);
+                Audio_PlaySystemSound(8);
             }
         }
     }
@@ -1333,24 +1333,24 @@ s32 LabPCList_UpdateTypeFilter(LabTypeFilterWindow* window) {
             if (func_8002B2B0(&window->cursor) == 0) {
                 buttons = ((u16*)D_800603C0)[4];
                 if (buttons & 0x4000) {
-                    func_8003F6AC(3);
+                    Audio_PlaySystemSound(3);
                     ret = -1;
                 } else if (buttons & 0x8000) {
                     switch (window->cursor.cursor) {
                         case 0:
                         case 1:
-                            func_8003F6AC(2);
+                            Audio_PlaySystemSound(2);
                             window->mode = 1;
                             break;
                         case 2:
-                            func_8003F6AC(2);
+                            Audio_PlaySystemSound(2);
                             ret = 1;
                             break;
                         case 3:
                             if (window->clearButton.flags & 1) {
-                                func_8003F6AC(8);
+                                Audio_PlaySystemSound(8);
                             } else {
-                                func_8003F6AC(2);
+                                Audio_PlaySystemSound(2);
                                 ret = 2;
                             }
                             break;
@@ -1362,15 +1362,15 @@ s32 LabPCList_UpdateTypeFilter(LabTypeFilterWindow* window) {
             if (ScrollList_UpdateCursor(&window->list) == 0) {
                 buttons = ((u16*)D_800603C0)[4];
                 if (buttons & 0x4000) {
-                    func_8003F6AC(3);
+                    Audio_PlaySystemSound(3);
                     window->mode = 0;
                 } else if (buttons & 0x8000) {
                     if (window->list.itemFlags[window->list.cursor] & 8) {
-                        func_8003F6AC(8);
+                        Audio_PlaySystemSound(8);
                     } else {
                         s32 prev;
 
-                        func_8003F6AC(2);
+                        Audio_PlaySystemSound(2);
                         prev = window->slots[window->cursor.cursor].index;
                         if (prev != -1) {
                             window->list.itemFlags[prev] &= ~8;
@@ -1532,7 +1532,7 @@ s32 LabPCList_UpdateMoveFilter(LabMoveFilterWindow* window) {
             if (func_8002B2B0(&window->cursor) == 0) {
                 buttons = ((u16*)D_800603C0)[4];
                 if (buttons & 0x4000) {
-                    func_8003F6AC(3);
+                    Audio_PlaySystemSound(3);
                     ret = -1;
                 } else if (buttons & 0x8000) {
                     switch (window->cursor.cursor) {
@@ -1540,18 +1540,18 @@ s32 LabPCList_UpdateMoveFilter(LabMoveFilterWindow* window) {
                         case 1:
                         case 2:
                         case 3:
-                            func_8003F6AC(2);
+                            Audio_PlaySystemSound(2);
                             window->mode = 1;
                             break;
                         case 4:
-                            func_8003F6AC(2);
+                            Audio_PlaySystemSound(2);
                             ret = 1;
                             break;
                         case 5:
                             if (window->clearButton.flags & 1) {
-                                func_8003F6AC(8);
+                                Audio_PlaySystemSound(8);
                             } else {
-                                func_8003F6AC(2);
+                                Audio_PlaySystemSound(2);
                                 ret = 2;
                             }
                             break;
@@ -1563,15 +1563,15 @@ s32 LabPCList_UpdateMoveFilter(LabMoveFilterWindow* window) {
             if (ScrollList_UpdateCursor(&window->list) == 0) {
                 buttons = ((u16*)D_800603C0)[4];
                 if (buttons & 0x4000) {
-                    func_8003F6AC(3);
+                    Audio_PlaySystemSound(3);
                     window->mode = 0;
                 } else if (buttons & 0x8000) {
                     if (window->list.itemFlags[window->list.cursor] & 8) {
-                        func_8003F6AC(8);
+                        Audio_PlaySystemSound(8);
                     } else {
                         s32 prev;
 
-                        func_8003F6AC(2);
+                        Audio_PlaySystemSound(2);
                         prev = window->slots[window->cursor.cursor].index;
                         if (prev != -1) {
                             window->list.itemFlags[prev] &= ~8;
@@ -1639,20 +1639,20 @@ void LabPCList_DrawItemRow(s32 x, s32 y, u8** item, UNUSED s32 index, s32 flags)
         func_8001AB6C();
         Font_SetColorForFlags(flags);
         func_8001A384(8, 0);
-        func_8001A944(x + 8, y + 4, func_8001FDC8(item[0][0], buf));
+        Font_Printf(x + 8, y + 4, func_8001FDC8(item[0][0], buf));
         if (item[1][0] == 0x12) {
             func_8001A384(8, 0);
-            func_8001A944(x + 0x120, y + 4, D_8910E100);
+            Font_Printf(x + 0x120, y + 4, D_8910E100);
         } else if (item[1][0] == 0x22) {
             func_8001A384(8, 0);
-            func_8001A944(x + 0x120, y + 4, D_8910E104);
+            Font_Printf(x + 0x120, y + 4, D_8910E104);
         } else {
             func_8001A384(8, 0);
-            func_8001A944(x + 0x120, y + 4, D_8910E110);
+            Font_Printf(x + 0x120, y + 4, D_8910E110);
         }
         if (func_80031CC8(item[0][0]) == 0) {
             func_8001A384(8, 0);
-            func_8001A944(x + 0xBC, y + 4, D_8910E118, item[0][1]);
+            Font_Printf(x + 0xBC, y + 4, D_8910E118, item[0][1]);
         }
         func_8001ABBC();
     }
@@ -1825,7 +1825,7 @@ s32 LabPCList_UpdateItemWindow(s8 *window)
     {
       if (((u16 *) D_800603C0)[4] & 0x4000)
       {
-        func_8003F6AC(3);
+        Audio_PlaySystemSound(3);
         ret = -1;
       }
       else
@@ -1833,7 +1833,7 @@ s32 LabPCList_UpdateItemWindow(s8 *window)
       {
         if (!((*((u16 **) (((s8 *) self) + 0x50)))[*((s32 *) (((s8 *) self) + 0x54))] & 1)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
-          func_8003F6AC(2);
+          Audio_PlaySystemSound(2);
           LabPCList_InitPopupMenu((LabPopupMenu *) (self + 0x94), (s32 *) D_8910AAE8, (s32) (self + 0x90), 1, 0);
           Window_SetRect(self + 0xC0, (*((s32 *) (((s8 *) self) + 0))) + 6, (((*((s32 *) (((s8 *) self) + 4))) + (*((s32 *) (((s8 *) self) + 0x80)))) - (*((s32 *) (((s8 *) self) + 0x78)))) + 0x16, (*((s32 *) (((s8 *) self) + 8))) - 0xC, 0x1C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
           *((s32 *) (((s8 *) self) + 0x108)) = ((*((s32 *) (((s8 *) self) + 8))) + (*((s32 *) (((s8 *) self) + 0)))) - 6; // FAKE: decomp slop, raw pointer casts stand in for struct fields
@@ -1844,7 +1844,7 @@ s32 LabPCList_UpdateItemWindow(s8 *window)
         }
         else
         {
-          func_8003F6AC(8);
+          Audio_PlaySystemSound(8);
         }
       }
     }
@@ -1855,7 +1855,7 @@ s32 LabPCList_UpdateItemWindow(s8 *window)
     {
       if (((u16 *) D_800603C0)[4] & 0x4000)
       {
-        func_8003F6AC(3);
+        Audio_PlaySystemSound(3);
         *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
       }
       else
@@ -1867,7 +1867,7 @@ s32 LabPCList_UpdateItemWindow(s8 *window)
           if ((*((s32 *) (((s8 *) entry) + 8))) >= 100)
           {
             n = BattleMon_CountMoves((*((u8 **) (((s8 *) self) + 0x1AC))) + 8);
-            func_8003F6AC(2);
+            Audio_PlaySystemSound(2);
             if (n < 4)
             {
               *((u32 *) (((s8 *) self) + 0x1B0)) = 4;
@@ -1893,7 +1893,7 @@ s32 LabPCList_UpdateItemWindow(s8 *window)
           else
             if ((*((s32 *) (((s8 *) entry) + 8))) >= 50)
           {
-            func_8003F6AC(2);
+            Audio_PlaySystemSound(2);
             LabMoveSelect_Init(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8); // FAKE: decomp slop, raw pointer casts stand in for struct fields
             for (i = 0; i < 4; i++)
             {
@@ -1907,14 +1907,14 @@ s32 LabPCList_UpdateItemWindow(s8 *window)
           }
           else
           {
-            func_8003F6AC(0x22);
+            Audio_PlaySystemSound(0x22);
             *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
             ret = 1;
           }
         }
         else
         {
-          func_8003F6AC(3);
+          Audio_PlaySystemSound(3);
           *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
         }
       }
@@ -1926,7 +1926,7 @@ s32 LabPCList_UpdateItemWindow(s8 *window)
     {
       if (((u16 *) D_800603C0)[4] & 0x4000)
       {
-        func_8003F6AC(3);
+        Audio_PlaySystemSound(3);
         *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
       }
       else
@@ -1934,13 +1934,13 @@ s32 LabPCList_UpdateItemWindow(s8 *window)
       {
         if (!((*((u16 **) (((s8 *) self) + 0x140)))[*((s32 *) (((s8 *) self) + 0x144))] & 1)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
-          func_8003F6AC(0x22);
+          Audio_PlaySystemSound(0x22);
           *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
           ret = 2;
         }
         else
         {
-          func_8003F6AC(8);
+          Audio_PlaySystemSound(8);
         }
       }
     }
@@ -1951,7 +1951,7 @@ s32 LabPCList_UpdateItemWindow(s8 *window)
     {
       if (((u16 *) D_800603C0)[4] & 0x4000)
       {
-        func_8003F6AC(3);
+        Audio_PlaySystemSound(3);
         *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
       }
       else
@@ -1970,13 +1970,13 @@ s32 LabPCList_UpdateItemWindow(s8 *window)
           {
             sp38 = (*entry2[0]) - 146;
           }
-          func_8003F6AC(2);
+          Audio_PlaySystemSound(2);
           LabMoveSelect_StartLearnAnimation(self + 0x110, *((s32 *) (((s8 *) self) + 0x144)), func_80020974(sp38));
           *((u32 *) (((s8 *) self) + 0x1B0)) = 4;
         }
         else
         {
-          func_8003F6AC(8);
+          Audio_PlaySystemSound(8);
         }
       }
     }
@@ -1985,7 +1985,7 @@ s32 LabPCList_UpdateItemWindow(s8 *window)
     case 4:
       if (((*((s32 *) (((s8 *) self) + 0x188))) == 0) && (((u16 *) D_800603C0)[4] & 0xC000)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
     {
-      func_8003F6AC(3);
+      Audio_PlaySystemSound(3);
       *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
       ret = 3;
     }
@@ -2062,7 +2062,7 @@ void LabPCList_DrawMessageWindow(LabMessageWindow* window) {
     }
 }
 
-M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);                     /* extern */
 
 /**
  * Returns 1 once the message has been confirmed.
@@ -2074,7 +2074,7 @@ s32 LabPCList_UpdateMessageWindow(LabMessageWindow* window) {
 
     var_v1 = 0;
     if (M2C_FIELD(D_800603C0, u16 *, 8) & 0xC000) {
-        func_8003F6AC(3);
+        Audio_PlaySystemSound(3);
         var_v1 = 1;
     }
     return var_v1;

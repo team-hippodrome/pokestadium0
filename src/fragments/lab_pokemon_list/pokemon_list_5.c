@@ -80,7 +80,7 @@ extern u8 D_8910A898[];
 extern u8 D_8910DC50[];
 extern s8 D_8910E2D0[];
 extern s8 D_8910E312[];
-s32 func_8003F6AC();
+s32 Audio_PlaySystemSound();
 s32 ScrollList_UpdateCursor(void*);
 void ScrollList_SetCursor(void*, s32);
 void LabPCList_FormatGatherPrompt(LabPCListScreen*);
@@ -117,11 +117,11 @@ s32 LabPCList_UpdateSortMenu(LabPCListScreen* screen) {
     }
     buttons = ((u16*)D_800603C0)[4];
     if (buttons & 0x4000) {
-        func_8003F6AC(3);
+        Audio_PlaySystemSound(3);
         screen->state = 0;
     } else if (buttons & 0x8000) {
         if (!(screen->popup.menu.itemFlags[screen->popup.menu.cursor] & 1)) {
-            func_8003F6AC(2);
+            Audio_PlaySystemSound(2);
             switch (screen->popup.menu.cursor) {
                 case 0:
                     screen->sortKey = 0x10;
@@ -150,7 +150,7 @@ s32 LabPCList_UpdateSortMenu(LabPCListScreen* screen) {
                     return 0;
             }
         } else {
-            func_8003F6AC(8);
+            Audio_PlaySystemSound(8);
         }
     }
     return 0;

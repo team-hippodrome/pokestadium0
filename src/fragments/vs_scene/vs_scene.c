@@ -327,12 +327,12 @@ extern s8 D_82202C98;
 extern s8 D_82202CB4;
 extern s8 D_82202D08;
 extern s8 D_82202D24;
-M2C_UNK StageFade_Start(M2C_UNK);
+s32 StageFade_Start(s32);
 M2C_UNK func_8000A7FC(M2C_UNK);
 /**
  * The reverse of VsScene_ZoomIntoScreen: moves the camera along the path from the big screen back
  * out to the stadium (D_82202D08/D_82202D24 in Free Battle, D_82202C98/D_82202CB4 in tournaments),
- * one frame per step. On step 20 it calls func_80005B98(0x20) and func_8000A7FC(0x3C) (@unverified:
+ * one frame per step. On step 20 it calls StageFade_Start(0x20) and func_8000A7FC(0x3C) (@unverified:
  * the screen fades to white as the step runs).
  * Seen in play (2026-11-14) at the end of the pre-battle panels, the results board and the
  * next-round panels: the camera pulls back out of the screen to the field, then the screen fades.
@@ -396,7 +396,7 @@ void VsScene_LoadTeamIcons(VsSceneSide* side, s32 sideIndex) {
 
     for (i = 0; i < 6; i++) {
         if (i < side->rosterInfo[0]->numberOfPokemonCanBePicked) {
-            func_8001833C((PokeIconRenderer*)D_82203264, slot, &side->rosterInfo[0]->battleMon[i], 1);
+            PokeIcon_SetMonSlot((PokeIconRenderer*)D_82203264, slot, &side->rosterInfo[0]->battleMon[i], 1);
         }
         side->iconImages[i] = PokeIcon_GetImage((PokeIconRenderer*)D_82203264, slot++);
     }
@@ -750,7 +750,7 @@ void VsScene_LoadBroughtIcons(VsSceneSide* side, s32 sideIndex) {
         for (i = 0; i < 2; i++) {
             for (j = 0; j < 3; j++) {
                 if (j < side->teamMember[i]->numberOfPokemonBrought) {
-                    func_8001833C((PokeIconRenderer*)D_82203264, slot, &side->teamMember[i]->pokemonPicked[j], 1);
+                    PokeIcon_SetMonSlot((PokeIconRenderer*)D_82203264, slot, &side->teamMember[i]->pokemonPicked[j], 1);
                 }
                 side->iconImages[i * 3 + j] = PokeIcon_GetImage((PokeIconRenderer*)D_82203264, slot);
                 side->hpBarImages[i * 3 + j] = D_82203210[slot]->img_p;
@@ -760,7 +760,7 @@ void VsScene_LoadBroughtIcons(VsSceneSide* side, s32 sideIndex) {
     } else {
         for (j = 0; j < 6; j++) {
             if (j < side->teamMember[0]->numberOfPokemonBrought) {
-                func_8001833C((PokeIconRenderer*)D_82203264, slot, &side->teamMember[0]->pokemonPicked[j], 1);
+                PokeIcon_SetMonSlot((PokeIconRenderer*)D_82203264, slot, &side->teamMember[0]->pokemonPicked[j], 1);
             }
             side->iconImages[j] = PokeIcon_GetImage((PokeIconRenderer*)D_82203264, slot);
             side->hpBarImages[j] = D_82203210[slot]->img_p;
@@ -1040,7 +1040,7 @@ extern u8 D_8F61F87C[];
 void VsScene_LoadBroughtIcons(VsSceneSide* side, s32 sideIndex);
 void VsScene_DrawHpBars(s32);
 void VsScene_ZoomOutOfScreen(void);
-void func_80041374(s32 arg0, s32 arg1);
+void Audio_StopSoundByCategory(s32 arg0, s32 arg1);
 
 /**
  * VS_SCENE_FREE_BATTLE_RESULTS: the scene after a Free Battle. Loads the brought Pokémon's icons,
@@ -1070,7 +1070,7 @@ void VsScene_PlayFreeBattleResults(void) {
     VsScene_ZoomIntoScreen();
     VsScene_PlayResultsBoard();
     VsScene_PlayWinLose();
-    func_80041374(0x3D, 0);
+    Audio_StopSoundByCategory(0x3D, 0);
     VsScene_ZoomOutOfScreen();
     ModelRenderer_ClearDisplayObject(&D_82203268);
     D_822036A4->transitionFlags |= 1;
@@ -1153,7 +1153,7 @@ void VsScene_PlayTournamentResults(void) {
     } else {
         Tournament_PlayNextRoundTitle();
     }
-    func_80041374(0x3D, 0);
+    Audio_StopSoundByCategory(0x3D, 0);
     VsScene_ZoomOutOfScreen();
     ModelRenderer_ClearDisplayObject(&D_82203268);
 }

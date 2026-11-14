@@ -420,7 +420,7 @@ void func_8001AB6C(void);
 void func_8001A384(s32, s32);
 void func_8001ABBC(void);
 void func_8001AA9C(u8, u8, u8, u8);
-void func_8001A944(s32, s32, const char*, ...);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 
 typedef struct Entry8006A9D4 {
     /* 0x00 */ u8 unk_00;
@@ -457,7 +457,7 @@ void FreeBattle_DrawMoveName(s32 x, s32 y, s32 move, s32 centered) {
     if (centered != 0) {
         x = x - (func_800566BC(str) >> 1) * 20 + 0x8C;
     }
-    func_8001A944(x, y, str);
+    Font_Printf(x, y, str);
 }
 
 /**
@@ -473,7 +473,7 @@ void FreeBattle_DrawTypeName(s32 x, s32 y, s32 mon, s32 typeSlot) {
         func_8001AB6C();
         func_8001A384(8, 0);
         func_8001AA9C(c.r, c.g, c.b, c.a);
-        func_8001A944(x, y, D_80066AD8[idx].str);
+        Font_Printf(x, y, D_80066AD8[idx].str);
         func_8001ABBC();
     }
 }
@@ -574,34 +574,34 @@ void FreeBattle_DrawMonStatusWindow(Screen82000C5C* window) {
         func_8001AB6C();
         func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
         func_8001A384(8, 0);
-        func_8001A944(window->x + 0xE, window->y + 0x102, window->title);
+        Font_Printf(window->x + 0xE, window->y + 0x102, window->title);
         func_8001ABBC();
         func_8001AB6C();
         func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
         func_8001A384(8, 0);
         func_8001ABE8();
         func_8001AAE4(0x7F, 0xA8, 0xFF, 0xFF);
-        func_8001A944(x + 0xA, y + 5, window->mon->nickname);
+        Font_Printf(x + 0xA, y + 5, window->mon->nickname);
         func_8001AC3C();
         func_8001A384(4, -1);
         func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
-        func_8001A944(x + 0x84, y + 9, D_82009BA0);
-        func_8001A944(x + 0x112, y + 9, D_82009BA4);
+        Font_Printf(x + 0x84, y + 9, D_82009BA0);
+        Font_Printf(x + 0x112, y + 9, D_82009BA4);
         func_8001A384(8, 0);
-        func_8001A944(x + 0xB2, y + 5, D_82009BA8, window->mon->level);
-        func_8001A944(x + 0x140, y + 5, D_82009BAC, window->mon->maxHp);
-        func_8001A944(x + 0x88, y + 0x28, D_82009BB0);
+        Font_Printf(x + 0xB2, y + 5, D_82009BA8, window->mon->level);
+        Font_Printf(x + 0x140, y + 5, D_82009BAC, window->mon->maxHp);
+        Font_Printf(x + 0x88, y + 0x28, D_82009BB0);
         if (Pokemon_GetTypeIndex((s32)window->mon, 1) != -1) {
-            func_8001A944(x + 0x88, y + 0x64, D_82009BBC);
+            Font_Printf(x + 0x88, y + 0x64, D_82009BBC);
         }
-        func_8001A944(x + 0x102, y + 0x28, D_82009BC8);
-        func_8001A944(x + 0x102, y + 0x44, D_82009BD4);
-        func_8001A944(x + 0x102, y + 0x60, D_82009BE0);
-        func_8001A944(x + 0x102, y + 0x7C, D_82009BEC);
-        func_8001A944(x + 0x15C, y + 0x28, D_82009BF8, window->mon->attack);
-        func_8001A944(x + 0x15C, y + 0x44, D_82009BFC, window->mon->defense);
-        func_8001A944(x + 0x15C, y + 0x60, D_82009C00, window->mon->speed);
-        func_8001A944(x + 0x15C, y + 0x7C, D_82009C04, window->mon->special);
+        Font_Printf(x + 0x102, y + 0x28, D_82009BC8);
+        Font_Printf(x + 0x102, y + 0x44, D_82009BD4);
+        Font_Printf(x + 0x102, y + 0x60, D_82009BE0);
+        Font_Printf(x + 0x102, y + 0x7C, D_82009BEC);
+        Font_Printf(x + 0x15C, y + 0x28, D_82009BF8, window->mon->attack);
+        Font_Printf(x + 0x15C, y + 0x44, D_82009BFC, window->mon->defense);
+        Font_Printf(x + 0x15C, y + 0x60, D_82009C00, window->mon->speed);
+        Font_Printf(x + 0x15C, y + 0x7C, D_82009C04, window->mon->special);
         for (i = 0; i < count; i++) {
             FreeBattle_DrawMoveName(D_82009040[i].x + x, D_82009040[i].y + y, BattleMon_GetMoveIndex(window->mon, i), D_82009040[i].centered);
         }
@@ -890,7 +890,7 @@ void FreeBattle_DrawMonCell(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 
         func_8001AB6C();
         Font_SetColorForFlags(flags);
         func_8001A384(4, 0);
-        func_8001A944(x + 4, y + 4, (char*)entry + 0x30);
+        Font_Printf(x + 4, y + 4, (char*)entry + 0x30);
         func_8001ABBC();
         gSPDisplayList(gDisplayListHead++, D_80073450);
         gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
@@ -990,7 +990,7 @@ void FreeBattle_DrawRentalPrompt(s32 x, s32 y, s32 flags) {
     Font_SetLineHeight(0x2A);
     func_8001ABE8();
     func_8001AAE4(0xFF, 0x64, 0xFF, 0xFF);
-    func_8001A944(x + 0xAE, y + 0xE, D_82009C08);
+    Font_Printf(x + 0xAE, y + 0xE, D_82009C08);
     func_8001AC3C();
     func_8001ABBC();
 }
@@ -1020,7 +1020,7 @@ u8 GbSave_GetPortGame(s32 arg0);
 void Font_SetColorForFlags(s32);
 void Ui_DrawImageInStrips(Img82001E20*, s32, s32);
 void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
-void func_8002BC58(s32, s32, s32, s32);
+void GbSave_DrawCartridgeIcon(s32, s32, s32, s32);
 void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
 /**
  * Draws the レンタルポケモン (Rental Pokemon) list with its なまえ (Name) header.
@@ -1034,13 +1034,13 @@ void FreeBattle_DrawRentalNameList(s32 x, s32 y, s32 flags, Slot82001E20* team) 
     FreeBattle_FillTrainerPanel(x, y, D_82008F5C);
     if (team->flags == 0) {
         if (team->kind == 0x20) {
-            func_8002BC58(x + 5, y + 4, team->species, GbSave_GetPortGame(team->species));
+            GbSave_DrawCartridgeIcon(x + 5, y + 4, team->species, GbSave_GetPortGame(team->species));
         } else if (team->kind == 0x10) {
             Ui_DrawImageInStrips(&D_82008F64, x + 4, y + 4);
             func_8001AB6C();
             Font_SetColorForFlags(flags);
             func_8001A384(8, 0);
-            func_8001A944(x + 0x1B, y + 0x1A, D_82009C2C, team->index + 1);
+            Font_Printf(x + 0x1B, y + 0x1A, D_82009C2C, team->index + 1);
             func_8001ABBC();
         }
     } else if (team->flags & 4) {
@@ -1052,17 +1052,17 @@ void FreeBattle_DrawRentalNameList(s32 x, s32 y, s32 flags, Slot82001E20* team) 
         func_8001AB6C();
         Font_SetColorForFlags(flags);
         func_8001A384(4, 0);
-        func_8001A944(x + 4, y + 0x41, D_82009C34);
+        Font_Printf(x + 4, y + 0x41, D_82009C34);
         func_8001ABBC();
         return;
     }
     func_8001AB6C();
     func_8001AA9C(0xFF, 0xC8, 0xC8, 0xFF);
     func_8001A384(4, -1);
-    func_8001A944(x + 4, y + 0x41, D_82009C48);
+    Font_Printf(x + 4, y + 0x41, D_82009C48);
     Font_SetColorForFlags(flags);
     func_8001A384(4, 0);
-    func_8001A944(x + 0x38, y + 0x41, team->name);
+    Font_Printf(x + 0x38, y + 0x41, team->name);
     func_8001ABBC();
     if (team->value != 0) {
         gSPDisplayList(gDisplayListHead++, D_80073450);

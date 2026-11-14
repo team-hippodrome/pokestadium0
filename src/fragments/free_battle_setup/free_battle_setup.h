@@ -148,7 +148,7 @@ typedef struct FreeBattleScreen {
     /* 0x4F08 */ char popupMenuText[0x14]; // @unverified: text buffer passed with popupMenu
     /* 0x4F1C */ char popupMenu2Text[0x14]; // @unverified: text buffer passed with popupMenu2
     /* 0x4F30 */ FreeBattleMonGridWindow monGridWindow; // @unverified: state 14, FreeBattle_InitUsableMonGrid
-    /* 0x5010 */ s32 connectedControllerMask; // @unverified: func_8000B2E8 (the controller-present mask controller.c builds gControllers from)
+    /* 0x5010 */ s32 connectedControllerMask; // @unverified: Cont_GetConnectedMask (the controller-present mask controller.c builds gControllers from)
     /* 0x5014 */ s32 connectedControllerCount; // @unverified: bits set in connectedControllerMask
     /* 0x5018 */ s32 gbSaveReadyMask; // @unverified: bit i set when GbSave_GetSaveState(i) is 0
     /* 0x501C */ s32 unk_501C;

@@ -27,7 +27,7 @@ void func_8001A384(s32, s32);
 void func_8001ABBC(void);
 void Font_SetLineHeight(s32 arg0);
 void func_8001AA9C(u8, u8, u8, u8);
-void func_8001A944(s32, s32, const char*, ...);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 
 typedef struct Entry8006A9D4 {
     /* 0x00 */ u8 unk_00;
@@ -46,7 +46,7 @@ void FreeBattle_DrawTypeName(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
 s32 func_8002B390(s32);
 s32 func_8002BC14(s32);
-M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 
 s32 FreeBattle_UpdateRentalConfirmChoice(s8* arg0);
 
@@ -268,7 +268,7 @@ void FreeBattle_DrawMenuWindow(MenuWindow* window, s32 flags) {
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
         Font_SetLineHeight(0x1C);
-        func_8001A944(window->window.frame.x + 0xE, window->window.frame.y + temp_s1 + 0x10, window->descriptions[window->menu.cursor]);
+        Font_Printf(window->window.frame.x + 0xE, window->window.frame.y + temp_s1 + 0x10, window->descriptions[window->menu.cursor]);
         func_8001ABBC();
     }
 }
@@ -280,7 +280,7 @@ extern s32 D_800603C0;
  *
  * Returns 0 immediately unless the word at window + 0x28 is 1 or 2. Otherwise,
  * if Menu_UpdateCursor(window + 0x2C, window) returns 0, it reads func_8002BC14(D_800603C0):
- * -1 calls func_8003F6AC(3) and returns -1; 1 calls func_8003F6AC(2) and
+ * -1 calls Audio_PlaySystemSound(3) and returns -1; 1 calls Audio_PlaySystemSound(2) and
  * returns the word at window + 0x34 plus 1; any other value returns 0.
  * (FreeBattle_UpdatePopupMenu is the same pattern without the mode check.)
  * Seen in play: runs while the 「たいせんルールせんたく」 list is open.
@@ -296,10 +296,10 @@ s32 FreeBattle_UpdateMenuWindow(MenuWindow* window) {
     if (Menu_UpdateCursor(&window->menu, window) == 0) {
         tmp = func_8002BC14(D_800603C0);
         if (tmp == -1) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             result = -1;
         } else if (tmp == 1) {
-            func_8003F6AC(2);
+            Audio_PlaySystemSound(2);
             result = window->menu.cursor + 1;
         }
     }
@@ -376,7 +376,7 @@ void FreeBattle_DrawPopupMenu(MenuWindow* window, s32 flags)
 }
 
 s32 func_8002BC14(s32);
-M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 extern s32 D_800603C0;
 /**
  * Moves a popup menu's cursor. Returns -1 on cancel, the 1-based row on confirm.
@@ -389,7 +389,7 @@ s32 FreeBattle_UpdatePopupMenu(MenuWindow* window) {
     if (Menu_UpdateCursor(&window->menu) == 0) {
         dir = func_8002BC14(D_800603C0);
         if (dir == -1) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             sp1C = -1;
         } else if (dir == 1) {
             sp1C = window->menu.cursor + 1;
@@ -549,7 +549,7 @@ void FreeBattle_DrawOpponentSelect(FreeBattleOpponentWindow* window) {
         func_8001AB6C();
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
-        func_8001A944(window->window.frame.x + 0x36, window->window.frame.y + 0xC3, D_82009F84);
+        Font_Printf(window->window.frame.x + 0x36, window->window.frame.y + 0xC3, D_82009F84);
         func_8001ABBC();
         Menu_DrawItems(&window->menu, window->window.frame.x + 0x110, window->window.frame.y + 0x99, 0xFEF, 0);
         switch (window->menu.cursor) {
@@ -571,8 +571,8 @@ void FreeBattle_DrawOpponentSelect(FreeBattleOpponentWindow* window) {
  * Variant of FreeBattle_UpdateBattleModeWindow whose sub-object is at window + 0x38. Returns 0
  * immediately unless the word at window + 0x28 is 1 or 2. Otherwise, if
  * Menu_UpdateCursorSkipDisabled(window + 0x38, window) returns 0, it reads
- * func_8002BC14(D_800603C0): -1 calls func_8003F6AC(3) and returns -1; 1 calls
- * func_8003F6AC(2), returns 1 and maps the word at window + 0x40 (0..3) to the
+ * func_8002BC14(D_800603C0): -1 calls Audio_PlaySystemSound(3) and returns -1; 1 calls
+ * Audio_PlaySystemSound(2), returns 1 and maps the word at window + 0x40 (0..3) to the
  * value 2..5 stored in the word at window + 0x64. Any other value returns 0.
  * Seen in play: runs while 「あいてをせんたく」 is open.
  */
@@ -587,10 +587,10 @@ s32 FreeBattle_UpdateOpponentSelect(FreeBattleOpponentWindow* window) {
     if (Menu_UpdateCursorSkipDisabled(&window->menu, window) == 0) {
         tmp = func_8002BC14(D_800603C0);
         if (tmp == -1) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             result = -1;
         } else if (tmp == 1) {
-            func_8003F6AC(2);
+            Audio_PlaySystemSound(2);
             result = 1;
             switch (window->menu.cursor) {
                 case 0:
@@ -818,10 +818,10 @@ s32 FreeBattle_UpdateTagOpponentSelect(FreeBattleTeamOpponentWindow* window) {
             if (Menu_UpdateCursorSkipDisabled((u8*)&window->sideMenu, window) == 0) {
                 res = func_8002BC14(D_800603C0);
                 if (res == -1) {
-                    func_8003F6AC(3);
+                    Audio_PlaySystemSound(3);
                     result = -1;
                 } else if (res == 1) {
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     window->focus = 0;
                     switch ((u32)window->sideMenu.cursor) {
                         case 0:
@@ -866,12 +866,12 @@ s32 FreeBattle_UpdateTagOpponentSelect(FreeBattleTeamOpponentWindow* window) {
         if (Menu_UpdateCursorSkipDisabled((u8*)&window->opponentMenu, window) == 0) {
             res = func_8002BC14(D_800603C0);
             if (res == -1) {
-                func_8003F6AC(3);
+                Audio_PlaySystemSound(3);
                 window->focus = 1;
                 Menu_ClearItemFlags((u8*)&window->opponentMenu, window);
                 FreeBattle_DisableAbsentTagOpponents(window);
             } else if (res == 1) {
-                func_8003F6AC(2);
+                Audio_PlaySystemSound(2);
                 switch ((u32)window->opponentMenu.cursor) {
                     case 0:
                         SET_PAIR_82007030(window, 2, 0, 1);
@@ -979,7 +979,7 @@ M2C_UNK GridMenu_DrawInlineItems(s8*, s32, s32, s32, s32);
  * panel via Ui_FillRectPrimEnvColor (colors D_820091BC / D_820091C0), the sub-object at +0x2C via
  * GridMenu_DrawInlineItems, and the text pointer stored at index [+0x34] of the table of 12-byte
  * records pointed to by the word at +0x68 (the pointer is the second word of a record),
- * printed in the color from D_800734A8 via func_8001A944.
+ * printed in the color from D_800734A8 via Font_Printf.
  * What the constants mean is not established.
  * Matching note: Ui_DrawTexturedDivider must be declared void (see FreeBattle_DrawOpponentSelect).
  * Seen in play: draws the 「バトルモード」 window (フリーバトル / トーナメント pictures and the description below)
@@ -997,7 +997,7 @@ void FreeBattle_DrawBattleModeWindow(FreeBattleModeWindow* window) {
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
         Font_SetLineHeight(0x1C);
-        func_8001A944(window->window.frame.x + 0x14, window->window.frame.y + 0xEC, ((FreeBattleModeEntry*)window->modes)[window->menu.cursor].text);
+        Font_Printf(window->window.frame.x + 0x14, window->window.frame.y + 0xEC, ((FreeBattleModeEntry*)window->modes)[window->menu.cursor].text);
         func_8001ABBC();
     }
 }
@@ -1009,7 +1009,7 @@ extern s32 D_800603C0;
  *
  * Returns 0 immediately unless the word at window + 0x28 is 1 or 2. Otherwise,
  * if GridMenu_UpdateCursor(window + 0x2C, window) returns 0, it reads func_8002BC14(D_800603C0):
- * -1 calls func_8003F6AC(3) and returns -1; 1 calls func_8003F6AC(2) and
+ * -1 calls Audio_PlaySystemSound(3) and returns -1; 1 calls Audio_PlaySystemSound(2) and
  * returns the word at window + 0x34 plus 1; any other value returns 0.
  * (FreeBattle_UpdatePopupMenu is the same pattern without the mode check.)
  * Seen in play: runs while the バトルモード window is up; D-Right moves the highlight to トーナメント and
@@ -1026,10 +1026,10 @@ s32 FreeBattle_UpdateBattleModeWindow(FreeBattleModeWindow* window) {
     if (GridMenu_UpdateCursor(&window->menu, window) == 0) {
         tmp = func_8002BC14(D_800603C0);
         if (tmp == -1) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             result = -1;
         } else if (tmp == 1) {
-            func_8003F6AC(2);
+            Audio_PlaySystemSound(2);
             result = window->menu.cursor + 1;
         }
     }
@@ -1043,7 +1043,7 @@ typedef struct {
 
 extern Gfx D_80060290[];
 extern Gfx D_80060398[];
-void func_80027F8C(s32);
+void Ui_SetTextColorForFlags(s32);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 
 /**
@@ -1067,7 +1067,7 @@ void FreeBattle_DrawCupRow(s32 x, s32 y, IconPanel* cup, s32 index, s32 flags) {
     }
     sp28 = y + 6;
     Font_BeginTranslucentTextRendering();
-    func_80027F8C(flags);
+    Ui_SetTextColorForFlags(flags);
     Font_SetActive(0x10, 0);
     Font_Printf(x + 0xC, sp28, cup->text);
     Font_EndTexturedTextRendering();
@@ -1125,11 +1125,11 @@ void FreeBattle_DrawCupSelect(FreeBattleCupWindow* window, s32 flags) {
 /**
  * Variant of FreeBattle_UpdateBattleModeWindow with an extra check. Returns 0 immediately unless the
  * word at window + 0x28 is 1 or 2. Otherwise, if Menu_UpdateCursorSkipDisabled(window + 0x2C, window)
- * returns 0, it reads func_8002BC14(D_800603C0): -1 calls func_8003F6AC(3) and
+ * returns 0, it reads func_8002BC14(D_800603C0): -1 calls Audio_PlaySystemSound(3) and
  * returns -1; 1 looks at bit 0 of the u16 at index window->unk_34 of the array
  * pointed to by the word at window + 0x30. If that bit is clear it calls
- * func_8003F6AC(2) and returns unk_34 + 1; if it is set it calls
- * func_8003F6AC(8) and returns 0. Any other value returns 0.
+ * Audio_PlaySystemSound(2) and returns unk_34 + 1; if it is set it calls
+ * Audio_PlaySystemSound(8) and returns 0. Any other value returns 0.
  * Seen in play: runs while 「カップせんたく」 is open.
  */
 s32 FreeBattle_UpdateCupSelect(FreeBattleCupWindow* window) {
@@ -1143,14 +1143,14 @@ s32 FreeBattle_UpdateCupSelect(FreeBattleCupWindow* window) {
     if (Menu_UpdateCursorSkipDisabled((u8*)&window->menu, window) == 0) {
         tmp = func_8002BC14(D_800603C0);
         if (tmp == -1) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             result = -1;
         } else if (tmp == 1) {
             if (!(window->menu.itemFlags[window->menu.cursor] & 1)) {
-                func_8003F6AC(2);
+                Audio_PlaySystemSound(2);
                 result = window->menu.cursor + 1;
             } else {
-                func_8003F6AC(8);
+                Audio_PlaySystemSound(8);
             }
         }
     }
@@ -1192,12 +1192,12 @@ void FreeBattle_InitUsableMonGrid(FreeBattleMonGridWindow* window, s32 x, s32 y,
     window->window.title = cfg->title;
     size = cfg->count;
     func_80027410(&window->mons, cfg->mons, sizeof(BattleMon), size, size);
-    func_80018168(icons);
+    PokeIcon_ResetSlots(icons);
     entry = window->mons.rows;
     window->icons = icons;
     for (i = 0; i < window->mons.count; i++) {
         color = D_820091E4[i & 1];
-        func_80018234(window->icons, i, *entry,
+        PokeIcon_SetSpeciesSlot(window->icons, i, *entry,
                       ((color.r << 8) & 0xF800) | ((color.g * 8) & 0x7C0) | ((color.b >> 2) & 0x3E) | 1);
         entry += 0x50;
     }
@@ -1236,7 +1236,7 @@ void FreeBattle_DrawUsableMonGrid(FreeBattleMonGridWindow* window, s32 flags) {
             func_8001A384(4, -1);
             x = (i % 7) * 0x4F + x0;
             y = (i / 7) * 0x3C + y0;
-            func_8001A944(x + 2, y + 0x2A, entry + 0x30);
+            Font_Printf(x + 2, y + 0x2A, entry + 0x30);
             func_8001ABBC();
             gSPDisplayList(gDisplayListHead++, D_80073408);
             func_8001B884(x + 0x26, y + 2, 0x28, 0x28, PokeIcon_GetImage(window->icons, i), 0x28, 0x200000);
@@ -1262,7 +1262,7 @@ s32 FreeBattle_UpdateUsableMonGrid(FreeBattleMonGridWindow* window) {
     }
     tmp = func_8002BC14(D_800603C0);
     if ((tmp == -1) || (tmp == 1)) {
-        func_8003F6AC(3);
+        Audio_PlaySystemSound(3);
         result = -1;
     }
     return result;
@@ -1293,7 +1293,7 @@ void func_8001AB6C(void);
 void func_8001AA9C(u8, u8, u8, u8);
 void func_8001A384(s32, s32);
 void Font_SetLineHeight(s32 arg0);
-void func_8001A944(s32, s32, const char*, ...);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 void func_8001ABBC(void);
 extern u8 D_800734A8[];
 extern char D_8200A0B0[];
@@ -1309,7 +1309,7 @@ void FreeBattle_DrawDuplicateWarning(FreeBattleDuplicateWarning* window) {
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
         Font_SetLineHeight(0x1C);
-        func_8001A944(window->window.frame.x + 0xE, window->window.frame.y + 0xE, D_8200A0B0, window->value);
+        Font_Printf(window->window.frame.x + 0xE, window->window.frame.y + 0xE, D_8200A0B0, window->value);
         func_8001ABBC();
     }
 }
@@ -1363,7 +1363,7 @@ extern char D_8200A124[];
  * Draws the FreeBattleShortageWarning window: the same drawing code as
  * FreeBattle_DrawLevelSumWarning with different colors (D_8200921C / D_82009220) and text
  * (D_8200A124), which is printed with the word at +0xB0 passed twice as extra
- * arguments to func_8001A944. See FreeBattle_DrawLevelSumWarning for the sequence of calls; the
+ * arguments to Font_Printf. See FreeBattle_DrawLevelSumWarning for the sequence of calls; the
  * selection index at +0xA8 again decides which of the two sub-objects (+0x2C,
  * +0x68) gets 2 from Window_DrawLabeled and which gets 0.
  * What the constants mean is not established.
@@ -1380,7 +1380,7 @@ void FreeBattle_DrawShortageWarning(FreeBattleShortageWarning* window) {
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
         Font_SetLineHeight(0x1C);
-        func_8001A944(window->window.frame.x + 0xE, window->window.frame.y + 0xE, D_8200A124, window->count, window->count);
+        Font_Printf(window->window.frame.x + 0xE, window->window.frame.y + 0xE, D_8200A124, window->count, window->count);
         func_8001ABBC();
         Window_DrawLabeled(&window->yesButton, (window->choice.cursor == 0) ? 2 : 0);
         Window_DrawLabeled(&window->noButton, (window->choice.cursor == 1) ? 2 : 0);
@@ -1389,7 +1389,7 @@ void FreeBattle_DrawShortageWarning(FreeBattleShortageWarning* window) {
 
 s32 func_8002B390(s32);
 s32 func_8002BC14(s32);
-M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 
 /**
  * Handles the too few usable Pokemon warning.
@@ -1403,7 +1403,7 @@ s32 FreeBattle_UpdateShortageWarning(FreeBattleShortageWarning* window) {
     if (func_8002B390(&window->choice) == 0) {
         temp_v0 = func_8002BC14(window->controller);
         if (temp_v0 == -1) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             ret = -1;
         } else if (temp_v0 == 1) {
             switch (window->choice.cursor) {
@@ -1411,7 +1411,7 @@ s32 FreeBattle_UpdateShortageWarning(FreeBattleShortageWarning* window) {
                     ret = 1;
                     break;
                 case 1:
-                    func_8003F6AC(3);
+                    Audio_PlaySystemSound(3);
                     ret = -1;
                     break;
             }
@@ -1471,7 +1471,7 @@ extern char D_8200A198[];
  * while func_8002AE6C() is non-zero. Otherwise it draws the frame with
  * Ui_DrawTexturedDivider and Ui_FillRectPrimEnvColor, emits D_80060270 and fills a bar with
  * func_80029028 (color D_82009100), then prints the string D_8200A198 with the
- * font color from D_800734A8 via func_8001A944, and finally calls Window_DrawLabeled
+ * font color from D_800734A8 via Font_Printf, and finally calls Window_DrawLabeled
  * on the two sub-objects with 2 for the one whose index (0 for +0x2C, 1 for +0x68)
  * equals the selection at +0xA8 and 0 for the other.
  * What the constants mean is not established.
@@ -1487,7 +1487,7 @@ void FreeBattle_DrawLevelSumWarning(FreeBattleLevelSumWarning* window) {
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
         Font_SetLineHeight(0x1C);
-        func_8001A944(window->window.frame.x + 0xE, window->window.frame.y + 0xE, D_8200A198);
+        Font_Printf(window->window.frame.x + 0xE, window->window.frame.y + 0xE, D_8200A198);
         func_8001ABBC();
         Window_DrawLabeled(&window->yesButton, (window->choice.cursor == 0) ? 2 : 0);
         Window_DrawLabeled(&window->noButton, (window->choice.cursor == 1) ? 2 : 0);
@@ -1496,7 +1496,7 @@ void FreeBattle_DrawLevelSumWarning(FreeBattleLevelSumWarning* window) {
 
 s32 func_8002B390(s32);
 s32 func_8002BC14(s32);
-M2C_UNK func_8003F6AC(M2C_UNK);
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 
 /**
  * Handles the level sum warning.
@@ -1509,7 +1509,7 @@ s32 FreeBattle_UpdateLevelSumWarning(FreeBattleLevelSumWarning* window) {
     if (func_8002B390(&window->choice) == 0) {
         temp_v0 = func_8002BC14(window->controller);
         if (temp_v0 == -1) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             ret = -1;
         } else if (temp_v0 == 1) {
             switch (window->choice.cursor) {
@@ -1517,7 +1517,7 @@ s32 FreeBattle_UpdateLevelSumWarning(FreeBattleLevelSumWarning* window) {
                     ret = 1;
                     break;
                 case 1:
-                    func_8003F6AC(3);
+                    Audio_PlaySystemSound(3);
                     ret = -1;
                     break;
             }
@@ -1591,7 +1591,7 @@ void FreeBattle_DrawEntryConfirm(FreeBattleRentalConfirm* window) {
         func_8001AB6C();
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(0x10, 0);
-        func_8001A944(window->window.frame.x + 0x12, window->window.frame.y + 0x12, D_8200A208);
+        Font_Printf(window->window.frame.x + 0x12, window->window.frame.y + 0x12, D_8200A208);
         func_8001ABBC();
         Window_DrawLabeled(&window->buttons[0], (window->choice.cursor == 0) ? 2 : 0);
         Window_DrawLabeled(&window->buttons[1], (window->choice.cursor == 1) ? 2 : 0);
@@ -1603,7 +1603,7 @@ void FreeBattle_DrawEntryConfirm(FreeBattleRentalConfirm* window) {
 
 s32 func_8002B390(s32);                             /* extern */
 s32 func_8002BC14(s32);                             /* extern */
-M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);                     /* extern */
 
 /**
  * Handles the rental confirm window.
@@ -1618,7 +1618,7 @@ s32 FreeBattle_UpdateRentalConfirm(FreeBattleRentalConfirm* window) {
     if (func_8002B390(&window->choice) == 0) {
         temp_v0 = func_8002BC14(window->choice.controller);
         if (temp_v0 == -1) {
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
             var_s0 = -1;
         } else if (temp_v0 == 1) {
             temp_v0_2 = window->choice.cursor;
@@ -1631,7 +1631,7 @@ s32 FreeBattle_UpdateRentalConfirm(FreeBattleRentalConfirm* window) {
                 break;
             case 1:
                 var_s0 = -1;
-                func_8003F6AC(3);
+                Audio_PlaySystemSound(3);
                 break;
             }
         }

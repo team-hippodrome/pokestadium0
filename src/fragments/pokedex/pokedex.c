@@ -36,10 +36,10 @@ void Pokedex_DrawOwnedIcon(s32 x, s32 y, s32 is_held) {
     gSPDisplayList(gDisplayListHead++, D_80060398);
 }
 
-s32 func_800209A4();
+s32 Species_GetKanaOrderEntry();
 
 /**
- * Returns the 0-based dex index under the list cursor, mapping through the kana order (func_800209A4) when
+ * Returns the 0-based dex index under the list cursor, mapping through the kana order (Species_GetKanaOrderEntry) when
  * the list is sorted アイウエオじゅん.
  * Seen in play (2026-11-12): データをみる opened the entry of the row under the cursor (No.001).
  */
@@ -47,7 +47,7 @@ s32 Pokedex_GetCursorDexIndex(PokedexListWindow* list_window) {
     s32 var_v1;
 
     if (list_window->sortByKana != 0) {
-        var_v1 = func_800209A4(list_window->list.cursor + 1, list_window) - 1;
+        var_v1 = Species_GetKanaOrderEntry(list_window->list.cursor + 1, list_window) - 1;
     } else {
         var_v1 = list_window->list.cursor;
     }
@@ -76,7 +76,7 @@ void Pokedex_DrawListRow(s32 x, s32 y, char* item, s32 row, s32 flags, s32* sort
 
     sorted = *sort_by_kana;
     if (sorted != 0) {
-        idx = func_800209A4(row + 1) - 1;
+        idx = Species_GetKanaOrderEntry(row + 1) - 1;
     } else {
         idx = row;
     }
@@ -457,7 +457,7 @@ void Pokedex_DrawEntryDescription(s32 x, s32 y) {
 }
 
 s32 Ui_DrawTexturedDivider(s32, s32, s32, void*);
-s32 func_80029864(s32, s32, s32, void*);
+s32 Ui_DrawFrameLeftCorners(s32, s32, s32, void*);
 s32 Ui_DrawImageInStrips(void*, s32, s32);
 s32 Window_DrawAnimatedFrame();
 extern u8 D_8007356C;
@@ -474,7 +474,7 @@ void Pokedex_DrawEntryWindow(Window* window, s32 preview, s32 progress) {
 
     if ((window->state != 2) && (Window_DrawAnimatedFrame() == 0)) {
         Ui_DrawTexturedDivider(window->frame.x, window->frame.y + 0xD7, window->frame.width, &D_8007356C);
-        func_80029864(window->frame.x + 0xF9, window->frame.y, 0xDE, &D_8007356C);
+        Ui_DrawFrameLeftCorners(window->frame.x + 0xF9, window->frame.y, 0xDE, &D_8007356C);
         Pokedex_DrawEntryInfo(window->frame.x + 0x100, window->frame.y + 6);
         Pokedex_DrawEntryDescription(window->frame.x + 6, window->frame.y + 0xDE);
     }
@@ -548,7 +548,7 @@ s32 Pokedex_DrawIndexScreen(UNUSED u8 unused) {
 void Pokedex_DrawListWindow(PokedexListWindow*, u32);
 /* Audio_PlaySoundEffectById, called by address with an s32 argument: battle.h's u32 prototype changes the
  * codegen of these callers (the constant 2 stays in a saved register). */
-s32 func_8003F6AC(s32);
+s32 Audio_PlaySystemSound(s32);
 void Cont_StartReadInputs(void);
 void Cont_ReadInputs(void);
 M2C_UNK func_8000B2F4(s32);
@@ -571,15 +571,15 @@ s32 Pokedex_RunIndexScreen(void) {
             temp_s0 = Pokedex_UpdateListCursor(&sIndexScreen.listWindow);
             sSelectedDexIndex = Pokedex_GetCursorDexIndex(&sIndexScreen.listWindow);
             if (temp_s0 == -1) {
-                func_8003F6AC(3);
+                Audio_PlaySystemSound(3);
                 sIndexScreen.listWindow.window.animTimer = 7;
                 sIndexScreen.countsWindow.animTimer = 7;
                 sIndexScreen.menuWindow.window.animTimer = 7;
             } else if (temp_s0 == 1) {
                 if (GbSave_GetSpeciesProgressLevel(sGbPort, sSelectedDexIndex + 1) == 0) {
-                    func_8003F6AC(8);
+                    Audio_PlaySystemSound(8);
                 } else {
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     var_s4 = 2;
                     sIndexScreen.menuWindow.menu.cursor = 0;
                 }
@@ -614,7 +614,7 @@ s32 Pokedex_HandleActionMenuResult(s32 menu_result, s32 *next_screen) {
 
     if (menu_result == 1) {
         if (sIndexScreen.menuWindow.menu.itemFlags[sIndexScreen.menuWindow.menu.cursor] & 1) {
-            func_8003F6AC(8);
+            Audio_PlaySystemSound(8);
         } else {
             switch (sIndexScreen.menuWindow.menu.cursor) {
                 case 0:
@@ -628,19 +628,19 @@ s32 Pokedex_HandleActionMenuResult(s32 menu_result, s32 *next_screen) {
                     *next_screen = 4;
                     break;
                 case 2:
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     ret = 1;
                     *next_screen = 5;
                     break;
                 case 3:
-                    func_8003F6AC(3);
+                    Audio_PlaySystemSound(3);
                     ret = 2;
                     *next_screen = 0;
                     break;
             }
         }
     } else if (menu_result == -1) {
-        func_8003F6AC(3);
+        Audio_PlaySystemSound(3);
         ret = 1;
         *next_screen = 1;
     }
@@ -740,7 +740,7 @@ void Pokedex_LoadIcon(u8* dest, s32 species) {
     main_pool_push_state('ICON');
     sp1C = PokeIcon_CreateRenderList(sIconFramebuffers, 1, 0x50, 0x50);
     sp18 = PokeIcon_GetImage(sp1C, 0);
-    func_80018234(sp1C, 0, species, 0x9530);
+    PokeIcon_SetSpeciesSlot(sp1C, 0, species, 0x9530);
     PokeIcon_ProcessAllSlots(sp1C, 0);
     StageLoader_RunFrames(2);
     osInvalDCache(sp18, 0x3200);
@@ -797,7 +797,7 @@ s32 Pokedex_ShowEntry(void) {
         Input_ResetRepeatState();
         if (((sIndexScreen.entryWindow.state == 1) || (sIndexScreen.entryWindow.state == 2)) && (((Controller*)D_800603C0)->buttonPressed & 0xC000) && (Cry_IsPlaying() == 0)) {
             sIndexScreen.entryWindow.animTimer = 7;
-            func_8003F6AC(3);
+            Audio_PlaySystemSound(3);
         }
         Pokedex_DrawEntryScreen(0, temp_s1);
         BgStage_AdvanceFrame();

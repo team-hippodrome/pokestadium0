@@ -83,7 +83,7 @@ extern u8 D_8910A898[];
 extern u8 D_8910DC50[];
 extern s8 D_8910E2D0[];
 extern s8 D_8910E312[];
-s32 func_8003F6AC();
+s32 Audio_PlaySystemSound();
 s32 ScrollList_UpdateCursor(void*);
 void ScrollList_SetCursor(void*, s32);
 void LabPCList_FormatGatherPrompt(LabPCListScreen*);
@@ -170,13 +170,13 @@ s32 LabPCList_UpdateDestinationMenu(LabPCListScreen* screen) {
 
     LabPCList_UpdatePopupMenu(&screen->subPopup.window.frame.x);
     if (*(u16*)(D_800603C0 + 8) & 0x4000) {
-        func_8003F6AC(3);
+        Audio_PlaySystemSound(3);
         screen->state = 7;
     } else if (*(u16*)(D_800603C0 + 8) & 0x8000) {
         if (!(screen->subPopup.menu.itemFlags[screen->subPopup.menu.cursor] & 1)) {
             switch (screen->subPopup.menu.cursor) {
                 case 0:
-                    func_8003F6AC(0x18);
+                    Audio_PlaySystemSound(0x18);
                     cursor = screen->list.cursor;
                     top = screen->list.cursor - screen->list.scrollY / screen->list.cellHeight;
                     LabPCList_MoveMonTo((LabPCListScreen*)screen, ((List89103C54*)screen->list.items)->items[screen->list.cursor], 0, 0, screen->msg);
@@ -187,7 +187,7 @@ s32 LabPCList_UpdateDestinationMenu(LabPCListScreen* screen) {
                     ret = 3;
                     break;
                 case 3:
-                    func_8003F6AC(0x18);
+                    Audio_PlaySystemSound(0x18);
                     cursor = screen->list.cursor;
                     top = screen->list.cursor - screen->list.scrollY / screen->list.cellHeight;
                     LabPCList_MoveMonTo((LabPCListScreen*)screen, ((List89103C54*)screen->list.items)->items[screen->list.cursor], 3, 0, screen->msg);
@@ -198,7 +198,7 @@ s32 LabPCList_UpdateDestinationMenu(LabPCListScreen* screen) {
                     ret = 3;
                     break;
                 case 1:
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     LabPCList_InitPopupMenu(&screen->subPopup2, D_8910A8E8, (s8*)&screen->popupItemFlags[2], 8, 0);
                     Window_SetRect((s8*)&screen->subPopup2.anchorX, screen->subPopup.window.frame.x + 0xE, screen->subPopup.window.frame.y + 0x1C, 0xE4, 0x1C);
                     screen->subPopup2.window.frame.style |= 0x01000000;
@@ -210,7 +210,7 @@ s32 LabPCList_UpdateDestinationMenu(LabPCListScreen* screen) {
                     screen->state = 9;
                     break;
                 case 2:
-                    func_8003F6AC(2);
+                    Audio_PlaySystemSound(2);
                     LabPCList_InitPopupMenu(&screen->subPopup2, D_8910A8E8, (s8*)&screen->popupItemFlags[2], 4, 0);
                     Window_SetRect((s8*)&screen->subPopup2.anchorX, screen->subPopup.window.frame.x + 0xE, screen->subPopup.window.frame.y + 0x38, 0xE4, 0x1C);
                     screen->subPopup2.window.frame.style |= 0x01000000;
@@ -223,7 +223,7 @@ s32 LabPCList_UpdateDestinationMenu(LabPCListScreen* screen) {
                     break;
             }
         } else {
-            func_8003F6AC(8);
+            Audio_PlaySystemSound(8);
         }
     }
     return ret;
@@ -242,13 +242,13 @@ s32 LabPCList_UpdateGbBoxMenu(LabPCListScreen* screen) {
 
     LabPCList_UpdatePopupMenu(&screen->subPopup2);
     if (*(u16*)(D_800603C0 + 8) & 0x4000) {
-        func_8003F6AC(3);
+        Audio_PlaySystemSound(3);
         screen->state = 8;
     } else if (*(u16*)(D_800603C0 + 8) & 0x8000) {
         if (!(screen->subPopup2.menu.itemFlags[screen->subPopup2.menu.cursor] & 1)) {
             cursor = screen->list.cursor;
             top = screen->list.cursor - screen->list.scrollY / screen->list.cellHeight;
-            func_8003F6AC(0x18);
+            Audio_PlaySystemSound(0x18);
             LabPCList_MoveMonTo((LabPCListScreen*)screen, ((List89103C54*)screen->list.items)->items[screen->list.cursor], 1, screen->subPopup2.menu.cursor, screen->msg);
             LabPCList_FlattenEntries(&screen->rows, (unk_func_8830867C_02C_144*)&screen->sourceMatrix);
             LabPCList_ApplyFiltersAndSort(screen);
@@ -256,7 +256,7 @@ s32 LabPCList_UpdateGbBoxMenu(LabPCListScreen* screen) {
             screen->state = 0;
             ret = 3;
         } else {
-            func_8003F6AC(8);
+            Audio_PlaySystemSound(8);
         }
     }
     return ret;
@@ -274,13 +274,13 @@ s32 LabPCList_UpdateStadiumBoxMenu(LabPCListScreen* screen) {
 
     LabPCList_UpdatePopupMenu(&screen->subPopup2);
     if (*(u16*)(D_800603C0 + 8) & 0x4000) {
-        func_8003F6AC(3);
+        Audio_PlaySystemSound(3);
         screen->state = 8;
     } else if (*(u16*)(D_800603C0 + 8) & 0x8000) {
         if (!(screen->subPopup2.menu.itemFlags[screen->subPopup2.menu.cursor] & 1)) {
             cursor = screen->list.cursor;
             top = screen->list.cursor - screen->list.scrollY / screen->list.cellHeight;
-            func_8003F6AC(0x18);
+            Audio_PlaySystemSound(0x18);
             LabPCList_MoveMonTo((LabPCListScreen*)screen, ((List89103C54*)screen->list.items)->items[screen->list.cursor], 2, screen->subPopup2.menu.cursor, screen->msg);
             LabPCList_FlattenEntries(&screen->rows, (unk_func_8830867C_02C_144*)&screen->sourceMatrix);
             LabPCList_ApplyFiltersAndSort(screen);
@@ -288,7 +288,7 @@ s32 LabPCList_UpdateStadiumBoxMenu(LabPCListScreen* screen) {
             screen->state = 0;
             ret = 3;
         } else {
-            func_8003F6AC(8);
+            Audio_PlaySystemSound(8);
         }
     }
     return ret;
