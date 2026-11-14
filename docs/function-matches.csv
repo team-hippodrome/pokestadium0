@@ -4285,8 +4285,8 @@ func_8002A3F8,0x8002A3F8,src/gb_save.c,Ui_DrawImageInStrips,hand,,c
 func_8002A550,0x8002A550,src/gb_save.c,Ui_FillRectPrimEnvColor,hand,,c
 func_8002A8C4,0x8002A8C4,src/gb_save.c,Window_SetRect,m2c,m2c+permuter,c
 func_8002A8E0,0x8002A8E0,src/gb_save.c,Window_DrawFrame,hand,,c
-func_8002AAC4,0x8002AAC4,src/gb_save.c,Particle_Field7C_SetXZFromField74AngleY_0B278,hand,,c
-func_8002AB84,0x8002AB84,src/gb_save.c,Particle_Field50_SetXZFromField7C_09BB4,hand,,c
+func_8002AAC4,0x8002AAC4,src/gb_save.c,Window_UpdateAnimation,hand,,c
+func_8002AB84,0x8002AB84,src/gb_save.c,Window_DrawAnimatedFrame,hand,,c
 func_8002AE6C,0x8002AE6C,src/gb_save.c,Particle_SetVelocityXZFromRotationY,s1,stadium1:src/fragments/particle_math/particle_math_269820.c,c
 func_8002AE94,0x8002AE94,src/gb_save.c,Window_InitLabeled,hand,,c
 func_8002AF04,0x8002AF04,src/gb_save.c,Window_DrawLabeled,hand,,c

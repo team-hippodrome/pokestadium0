@@ -1652,7 +1652,7 @@ void PcSort_DrawUseItemPrompt(LabItemWindow* arg0) {
     s32 y;
     char buf[0x70];
 
-    if (Particle_Field50_SetXZFromField7C_09BB4() == 0) {
+    if (Window_DrawAnimatedFrame() == 0) {
         Window_DrawFrame(&arg0->textFrame);
         Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->textFrame.y - 7, arg0->window.frame.width, D_8007356C);
         flags = 0xFFED;

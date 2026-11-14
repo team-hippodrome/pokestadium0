@@ -500,7 +500,7 @@ void Pokedex_DrawEntryNameBar(s32 arg0, s32 arg1) {
 s32 Ui_DrawTexturedDivider(s32, s32, s32, void*);
 s32 func_80029864(s32, s32, s32, void*);
 s32 Ui_DrawImageInStrips(void*, s32, s32);
-s32 Particle_Field50_SetXZFromField7C_09BB4();
+s32 Window_DrawAnimatedFrame();
 void func_8A100A24(s32, s32, s32, u8*);
 void Pokedex_DrawEntryInfo(s32, s32);
 void Pokedex_DrawEntryNameBar(s32, s32);
@@ -516,7 +516,7 @@ extern u8 D_8A11FC18;
  * offsets 0 and 4 act as an x/y origin that the draw calls below offset
  * (x + 0xF9, y + 0xD7 and so on), the word at offset 8 is passed to
  * Ui_DrawTexturedDivider, and the word at offset 0x28 is a mode value. When the mode
- * is not 2 and Particle_Field50_SetXZFromField7C_09BB4() returns 0, it runs Ui_DrawTexturedDivider,
+ * is not 2 and Window_DrawAnimatedFrame() returns 0, it runs Ui_DrawTexturedDivider,
  * func_80029864, Pokedex_DrawEntryInfo and Pokedex_DrawEntryNameBar at those offsets. When the
  * mode is 1 or 2 it also calls Ui_DrawImageInStrips on D_8A11FC18 with (0x32, 0x5A)
  * and then func_8A100A24(0x32, 0x5A, v, arg1), where v is 0xFF if arg2 >= 2
@@ -527,7 +527,7 @@ extern u8 D_8A11FC18;
 void Pokedex_DrawEntryWindow(Window* arg0, s32 arg1, s32 arg2) {
     s32 temp_v0;
 
-    if ((arg0->state != 2) && (Particle_Field50_SetXZFromField7C_09BB4() == 0)) {
+    if ((arg0->state != 2) && (Window_DrawAnimatedFrame() == 0)) {
         Ui_DrawTexturedDivider(arg0->frame.x, arg0->frame.y + 0xD7, arg0->frame.width, &D_8007356C);
         func_80029864(arg0->frame.x + 0xF9, arg0->frame.y, 0xDE, &D_8007356C);
         Pokedex_DrawEntryInfo(arg0->frame.x + 0x100, arg0->frame.y + 6);
@@ -783,7 +783,7 @@ s32 Pokedex_ShowEntryMenu(void) {
 extern s32 D_8A12FF98;
 extern u8 D_8A130204[];
 s32 func_800196F8(s32);
-s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0);
+s32 Window_UpdateAnimation(Window* arg0);
 void Pokedex_DrawEntryWindow(Window*, s32, s32);
 
 /**
@@ -797,7 +797,7 @@ s32 Pokedex_DrawEntryScreen(s32 arg0, s32 arg1) {
     GeoRender_AdvanceFrameCounter();
     sp1C = func_800196F8(D_8A12FF98);
     BgStage_DrawFrame();
-    if (Particle_Field7C_SetXZFromField74AngleY_0B278(D_8A130204) != 0) {
+    if (Window_UpdateAnimation(D_8A130204) != 0) {
         Pokedex_DrawBackground();
     }
     Pokedex_DrawEntryWindow(D_8A130204, sp1C, arg1);

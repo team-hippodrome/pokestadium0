@@ -6,7 +6,7 @@
 #include "pokemon_stats.h"
 
 // Declared here instead of in a header: the callers of these disagree on their types.
-s32 Particle_Field50_SetXZFromField7C_09BB4(s32* arg0);
+s32 Window_DrawAnimatedFrame(Window* arg0);
 s32 Ui_GetSelectionDirection(Controller* arg0);
 s32 Ui_HandleHorizontalSelectionInput(UiSelection* arg0);
 extern u32 D_8007360C[];
@@ -29,8 +29,8 @@ s32 Ui_GetSelectionDirection(Controller* arg0);
 Color_RGBA8 Color_InterpolateFromGray(Color_RGBA8 arg0, f32 arg1);
 
 s32 Ui_AdjustNumericSelection(UiNumberInput* arg0, s32 arg1);
-s32 Particle_Field50_SetXZFromField7C_09BB4(s32* arg0);
-s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0);
+s32 Window_DrawAnimatedFrame(Window* arg0);
+s32 Window_UpdateAnimation(Window* arg0);
 
 void func_8001AA9C(u8, u8, u8, u8);
 void func_8001AB6C(void);
@@ -630,54 +630,42 @@ void Window_DrawFrame(s32* arg0) {
     }
 }
 
-/*
- * Particle_Field7C_SetXZFromField74AngleY_0B278
- *
- * Advances a small step counter held in the object `arg0`: the counter is
- * the word at offset 0x24 and a second word at offset 0x28 receives a value
- * that depends on it.  Returns 1 or 0.
- *
- *   counter >= 11: word 0x28 = 4, return 1 (counter unchanged);
- *   counter >= 7:  word 0x28 = 3, counter + 1, return 1;
- *   counter <  4:  if counter == 0, func_8003F6AC(4, arg0) first (the
- *                  counter is re-read afterwards); then word 0x28 = 0,
- *                  counter + 1, return 1;
- *   counter 4, 5:  word 0x28 = 1, counter + 1, return 0;
- *   counter == 6:  word 0x28 = 2 (counter unchanged), return 0.
- *
- * What the counter measures is not established.
- */
 M2C_UNK func_8003F6AC();
 
-/** Sets a particle's x and z components from its angle about the y axis. */
-s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0) {
+/**
+ * Steps the open/close animation of a window: animTimer 0-3 opening (state 0, plays sound 4 at 0), 4-5 state 1,
+ * 6 open (state 2, holds); a close starts at 7 (state 3) and ends at 11 (state 4, closed).
+ * Returns 1 unless the window is (nearly) open, so callers draw what is under it.
+ * @unverified Read from the code; the timer values match the Window.animTimer play note.
+ */
+s32 Window_UpdateAnimation(Window* arg0) {
     s32 var_v1;
     s32 var_v0;
 
-    var_v0 = M2C_FIELD(arg0, s32 *, 0x24);
+    var_v0 = arg0->animTimer;
     var_v1 = 1;
     if (var_v0 >= 0xB) {
-        M2C_FIELD(arg0, s32 *, 0x28) = 4;
+        arg0->state = 4;
         return 1;
     }
     if (var_v0 >= 7) {
-        M2C_FIELD(arg0, s32 *, 0x28) = 3;
-        M2C_FIELD(arg0, s32 *, 0x24) = (s32) (var_v0 + 1);
+        arg0->state = 3;
+        arg0->animTimer = (s32) (var_v0 + 1);
     } else if (var_v0 < 4) {
         if (var_v0 == 0) {
             func_8003F6AC(4, arg0);
             var_v1 = 1;
-            var_v0 = M2C_FIELD(arg0, s32 *, 0x24);
+            var_v0 = arg0->animTimer;
         }
-        M2C_FIELD(arg0, s32 *, 0x28) = 0;
-        M2C_FIELD(arg0, s32 *, 0x24) = (s32) (var_v0 + 1);
+        arg0->state = 0;
+        arg0->animTimer = (s32) (var_v0 + 1);
     } else {
         var_v1 = 0;
         if (var_v0 < 6) {
-            M2C_FIELD(arg0, s32 *, 0x28) = 1;
-            M2C_FIELD(arg0, s32 *, 0x24) = (s32) (var_v0 + 1);
+            arg0->state = 1;
+            arg0->animTimer = (s32) (var_v0 + 1);
         } else {
-            M2C_FIELD(arg0, s32 *, 0x28) = 2;
+            arg0->state = 2;
         }
     }
     return var_v1;
@@ -687,8 +675,13 @@ extern u8 D_80073554[];
 void func_8002C1B4(s32, s32, s32, s32);
 void func_8002C5A4(); // no prototype: callers pass a fourth argument the definition ignores
 
-/** Sets a particle's x and z components from another vector in the particle. */
-s32 Particle_Field50_SetXZFromField7C_09BB4(s32* arg0) {
+/**
+ * Draws a window's frame, scaled from 16x16 up to its size while it opens (state 0) and back down
+ * while it closes (state 3), with the fill, title tab (style 0x800) and 0x1000 decoration.
+ * Returns 0 once the window is open (states 1 and 2), so callers draw the contents only then.
+ * @unverified Read from the code.
+ */
+s32 Window_DrawAnimatedFrame(Window* arg0) {
     UNUSED s32 pad1; // FAKE: unused locals that only pad the stack frame
     UNUSED s32 pad2; // FAKE
     UNUSED s32 pad3; // FAKE
@@ -702,62 +695,62 @@ s32 Particle_Field50_SetXZFromField7C_09BB4(s32* arg0) {
     s32 maxH;
     s32 t;
 
-    maxW = (arg0[2] < 0x10) ? 0x10 : arg0[2];
-    maxH = (arg0[3] < 0x10) ? 0x10 : arg0[3];
+    maxW = (arg0->frame.width < 0x10) ? 0x10 : arg0->frame.width;
+    maxH = (arg0->frame.height < 0x10) ? 0x10 : arg0->frame.height;
     ret = 1;
-    switch ((u32)arg0[10]) {
+    switch ((u32)arg0->state) {
         case 4:
             return 1;
         case 3:
-            x = arg0[0];
-            y = arg0[1];
-            t = 0xB - arg0[9];
+            x = arg0->frame.x;
+            y = arg0->frame.y;
+            t = 0xB - arg0->animTimer;
             w = ((maxW - 0x10) * t) / 4 + 0x10;
             h = ((maxH - 0x10) * t) / 4 + 0x10;
             break;
         case 0:
-            t = arg0[9] - 1;
-            x = arg0[0];
-            y = arg0[1];
+            t = arg0->animTimer - 1;
+            x = arg0->frame.x;
+            y = arg0->frame.y;
             w = ((maxW - 0x10) * t) / 4 + 0x10;
             h = ((maxH - 0x10) * t) / 4 + 0x10;
             break;
         case 1:
         case 2:
             ret = 0;
-            x = arg0[0];
-            y = arg0[1];
+            x = arg0->frame.x;
+            y = arg0->frame.y;
             h = maxH;
             w = maxW;
             break;
     }
     if (ret == 0) {
-        if (!(arg0[5] & 1)) {
-            if ((arg0[5] & 2) && (arg0[5] & 4)) {
-                Ui_FillRectPrimEnvColor(x, y, w, h, *(Color_RGBA8*)&arg0[6], *(Color_RGBA8*)&arg0[7]);
-            } else if (((u8*)&arg0[6])[3] == 0xFF) {
+        if (!(arg0->frame.style & 1)) {
+            if ((arg0->frame.style & 2) && (arg0->frame.style & 4)) {
+                Ui_FillRectPrimEnvColor(x, y, w, h, arg0->frame.color, arg0->frame.color2);
+            } else if (arg0->frame.color.a == 0xFF) {
                 gSPDisplayList(gDisplayListHead++, D_80060270);
-                func_80029028(x, y, w, h, *(Color8002A354*)&arg0[6]);
+                func_80029028(x, y, w, h, *(Color8002A354*)&arg0->frame.color);
             } else {
                 gSPDisplayList(gDisplayListHead++, D_80073480);
-                Ui_FillRectPrimColor(x, y, w, h, *(Color_RGBA8*)&arg0[6]);
+                Ui_FillRectPrimColor(x, y, w, h, arg0->frame.color);
             }
         }
     }
     Ui_DrawTexturedFrameDecal(x, y, w, h, D_80073554);
-    if (arg0[5] & 0x800) {
-        func_8002C1B4(x, y - 0x16, arg0[8], arg0[5]);
+    if (arg0->frame.style & 0x800) {
+        func_8002C1B4(x, y - 0x16, (s32)arg0->title, arg0->frame.style);
     }
-    if (arg0[5] & 0x1000) {
-        func_8002C5A4(x, y - 0xA, 0x50, arg0[5]);
+    if (arg0->frame.style & 0x1000) {
+        func_8002C5A4(x, y - 0xA, 0x50, arg0->frame.style);
     }
     return ret;
 }
 
 /** Sets a particle's x and z velocity from its rotation about the y axis. */
 void Particle_SetVelocityXZFromRotationY(Particle* arg0) {
-    Particle_Field7C_SetXZFromField74AngleY_0B278(arg0);
-    Particle_Field50_SetXZFromField7C_09BB4(arg0);
+    Window_UpdateAnimation(arg0);
+    Window_DrawAnimatedFrame(arg0);
 }
 
 /**

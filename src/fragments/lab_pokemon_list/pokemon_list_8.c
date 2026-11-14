@@ -647,7 +647,7 @@ void LabPCList_DrawBackground(void) {
 }
 
 void BgStage_DrawFrame(void);
-s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0);
+s32 Window_UpdateAnimation(Window* arg0);
 void SavePrompt_Draw(SavePrompt*);
 void PcSort_DrawUseItemPrompt(LabItemWindow*);
 void LabPCList_DrawMessageWindow(LabMessageWindow*);
@@ -660,29 +660,29 @@ M2C_UNK LabPCList_DrawScreen(LabPCList* arg0) {
     BgStage_DrawFrame();
     switch (arg0->state) {
         case 0:
-            if (Particle_Field7C_SetXZFromField74AngleY_0B278(&arg0->listScreen) != 0) {
+            if (Window_UpdateAnimation(&arg0->listScreen) != 0) {
                 LabPCList_DrawBackground();
             }
             LabPCList_DrawListScreen(&arg0->listScreen);
             break;
         case 1:
-            if (Particle_Field7C_SetXZFromField74AngleY_0B278(&arg0->listScreen) != 0) {
+            if (Window_UpdateAnimation(&arg0->listScreen) != 0) {
                 LabPCList_DrawBackground();
             }
             LabPCList_DrawListScreen(&arg0->listScreen);
             SavePrompt_Draw(&arg0->savePrompt);
             break;
         case 2:
-            if (Particle_Field7C_SetXZFromField74AngleY_0B278(&arg0->listScreen) != 0) {
+            if (Window_UpdateAnimation(&arg0->listScreen) != 0) {
                 LabPCList_DrawBackground();
             }
-            if (Particle_Field7C_SetXZFromField74AngleY_0B278(&arg0->itemWindow) != 0) {
+            if (Window_UpdateAnimation(&arg0->itemWindow) != 0) {
                 LabPCList_DrawListScreen(&arg0->listScreen);
             }
             PcSort_DrawUseItemPrompt(&arg0->itemWindow);
             break;
         case 3:
-            if (Particle_Field7C_SetXZFromField74AngleY_0B278(&arg0->listScreen) != 0) {
+            if (Window_UpdateAnimation(&arg0->listScreen) != 0) {
                 LabPCList_DrawBackground();
             }
             LabPCList_DrawListScreen(&arg0->listScreen);

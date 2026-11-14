@@ -162,7 +162,7 @@ Color_RGBA8 Color_InterpolateFromGray(Color_RGBA8 arg0, f32 arg1);
 s32 BattleMon_CountMoves(u8* arg0);
 void BattleInfoWidget_DrawLabel(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4);
 void Particle_SetVelocityXZFromRotationY(Particle* arg0);
-s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0);
+s32 Window_UpdateAnimation(Window* arg0);
 void Font_SetColorForFlags(s32);
 s32 BattleMon_GetMoveIndexChecked();                /* extern */
 void Trade_DrawSolidFillRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8 arg4);
