@@ -758,7 +758,7 @@ void func_80026898(void) {
 void State_N64ddBootUnused(void) {
     Audio_WaitForIdle(1);
     Display_WaitForFrames(2);
-    LeoBootGame(D_800AB200.unk_08);
+    LeoBootGame(D_800AB200.loadAddr);
 }
 
 void func_800268DC(void) {

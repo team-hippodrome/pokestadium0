@@ -31,9 +31,9 @@ void* Jpeg_LoadDecodedImage(u8* addr, PRESJPEG* arg1, s32 side);
 s32 Yay0_LoadDecompressedAsset(s32 arg0, PERSSZP* arg1, s32 side);
 u32* Asset_CopyUncompressed(u8* arg0, s32 arg1, u32 arg2, s32 arg3);
 void* Asset_LoadCompressed(u8* romStart, u8* romEnd, s32 arg2, s32 arg3);
-void* Storage_LoadAssetByLbaRange(unk_func_800041C0* arg0, s32 arg1);
-unk_func_800041C0* Storage_SetLbaRange(unk_func_800041C0* arg0, s32 arg1, s32 arg2);
-unk_func_800041C0* Storage_SetByteRange(unk_func_800041C0* arg0, u32 arg1, u32 offset, u32 size);
+void* Storage_LoadAssetByLbaRange(StorageLbaRange* arg0, s32 arg1);
+StorageLbaRange* Storage_SetLbaRange(StorageLbaRange* arg0, s32 arg1, s32 arg2);
+StorageLbaRange* Storage_SetByteRange(StorageLbaRange* arg0, u32 arg1, u32 offset, u32 size);
 void Storage_PrefetchLbaRange(s32 arg0, s32 arg1, s32 arg2);
 void Memmap_ClearSegmentOnBlockFree(u32 block_addr, u32 addr);
 u8* Asset_LoadToSegment(s32 id, u8* rom_start, u8* rom_end, s32 arg3);
@@ -72,7 +72,7 @@ void Yay0_DecompressAndRelocate(u8* in_header, u8* memory) {
 
     Yay0_Decompress(in_header + header->header_size, memory);
 
-    for (var_v0 = 0; var_v0 < header->unk_14; var_v0++) {
+    for (var_v0 = 0; var_v0 < header->relocCount; var_v0++) {
         *(u32*)(memory + sp2C[1]) = sp2C[0];
         sp2C += 2;
     }
@@ -130,10 +130,10 @@ void Dma_WriteChunks(u32 write_start, u32 buffer_start, u32 buffer_end, s32 arg3
 
 /** Allocates memory for and decodes a JPEG image. */
 void* Jpeg_LoadDecodedImage(u8* addr, PRESJPEG* arg1, s32 side) {
-    s32 new_addr = main_pool_alloc(arg1->unk_0C + 0x100, side);
+    s32 new_addr = main_pool_alloc(arg1->decodedSize + 0x100, side);
 
     if (new_addr != NULL) {
-        s32 size = Jpeg_DecodeImage(new_addr, arg1->unk_0C + 0x100, (u32)arg1 + arg1->unk_08);
+        s32 size = Jpeg_DecodeImage(new_addr, arg1->decodedSize + 0x100, (u32)arg1 + arg1->dataOffset);
 
         if (size == 0) {
             main_pool_try_free(new_addr);
@@ -213,7 +213,7 @@ void* Asset_LoadCompressed(u8* romStart, u8* romEnd, s32 arg2, s32 arg3) {
 }
 
 /** Loads an asset from a range described by a storage descriptor. */
-void* Storage_LoadAssetByLbaRange(unk_func_800041C0* arg0, s32 arg1) {
+void* Storage_LoadAssetByLbaRange(StorageLbaRange* arg0, s32 arg1) {
     s32 sp44;
     u32* sp40;
     PERSSZP* temp_s0;
@@ -226,15 +226,15 @@ void* Storage_LoadAssetByLbaRange(unk_func_800041C0* arg0, s32 arg1) {
         var_s0 = 0;
     }
 
-    LeoLBAToByte(arg0->unk_00, arg0->unk_02, &sp44);
+    LeoLBAToByte(arg0->startLba, arg0->lbaCount, &sp44);
     sp44 = ALIGN16(sp44);
 
     temp_v0 = main_pool_alloc(sp44, var_s0);
 
     if (temp_v0 != NULL) {
-        temp_s0 = arg0->unk_04 + temp_v0;
+        temp_s0 = arg0->dataOffset + temp_v0;
 
-        Storage_QueueDiskTransfer(0, temp_v0, arg0->unk_00, arg0->unk_02, &D_800A96F0, 0);
+        Storage_QueueDiskTransfer(0, temp_v0, arg0->startLba, arg0->lbaCount, &D_800A96F0, 0);
         osRecvMesg(&D_800A96F0, NULL, 1);
 
         if (((u32*)temp_s0->magic)[0] == 'PERS' && (((u32*)temp_s0->magic)[1] == '-SZP')) {
@@ -242,7 +242,7 @@ void* Storage_LoadAssetByLbaRange(unk_func_800041C0* arg0, s32 arg1) {
         } else if (((u32*)temp_s0->magic)[0] == 'PRES' && (((u32*)temp_s0->magic)[1] == 'JPEG')) {
             sp40 = Jpeg_LoadDecodedImage(temp_v0, temp_s0, arg1);
         } else {
-            sp40 = Asset_CopyUncompressed(temp_v0, arg0->unk_04, arg0->unk_08, arg1);
+            sp40 = Asset_CopyUncompressed(temp_v0, arg0->dataOffset, arg0->size, arg1);
         }
     }
 
@@ -250,18 +250,18 @@ void* Storage_LoadAssetByLbaRange(unk_func_800041C0* arg0, s32 arg1) {
 }
 
 /** Fills a storage descriptor with a block-address range. */
-unk_func_800041C0* Storage_SetLbaRange(unk_func_800041C0* arg0, s32 arg1, s32 arg2) {
-    arg0->unk_00 = arg1;
-    arg0->unk_02 = arg2 - arg1;
-    arg0->unk_04 = 0;
+StorageLbaRange* Storage_SetLbaRange(StorageLbaRange* arg0, s32 arg1, s32 arg2) {
+    arg0->startLba = arg1;
+    arg0->lbaCount = arg2 - arg1;
+    arg0->dataOffset = 0;
 
-    LeoLBAToByte(arg0->unk_00, arg0->unk_02, &arg0->unk_08);
+    LeoLBAToByte(arg0->startLba, arg0->lbaCount, &arg0->size);
 
     return arg0;
 }
 
 /** Fills a storage descriptor with a byte range. */
-unk_func_800041C0* Storage_SetByteRange(unk_func_800041C0* arg0, u32 arg1, u32 offset, u32 size) {
+StorageLbaRange* Storage_SetByteRange(StorageLbaRange* arg0, u32 arg1, u32 offset, u32 size) {
     s32 sp2C;
     s32 sp28;
     s32 sp24;
@@ -277,17 +277,17 @@ unk_func_800041C0* Storage_SetByteRange(unk_func_800041C0* arg0, u32 arg1, u32 o
         sp2C = 0;
     }
 
-    arg0->unk_00 = sp28 + arg1;
-    arg0->unk_02 = (sp24 - sp28) + 1;
-    arg0->unk_04 = offset - sp2C;
-    arg0->unk_08 = size;
+    arg0->startLba = sp28 + arg1;
+    arg0->lbaCount = (sp24 - sp28) + 1;
+    arg0->dataOffset = offset - sp2C;
+    arg0->size = size;
 
     return arg0;
 }
 
 /** Prefetches a block-address range into memory. */
 void Storage_PrefetchLbaRange(s32 arg0, s32 arg1, s32 arg2) {
-    unk_func_800041C0 sp1C;
+    StorageLbaRange sp1C;
 
     Storage_SetLbaRange(&sp1C, arg0, arg1);
     Storage_LoadAssetByLbaRange(&sp1C, arg2);
@@ -317,7 +317,7 @@ u8* Asset_LoadToSegment(s32 id, u8* rom_start, u8* rom_end, s32 arg3) {
 /** Loads an asset from a block-address range and maps it at a segment. */
 MainPoolBlock* Asset_LoadToSegmentByLbaRange(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     UNUSED s32 pad; // FAKE: stack padding
-    unk_func_800041C0 sp28;
+    StorageLbaRange sp28;
     MainPoolBlock* temp_v0 = Storage_LoadAssetByLbaRange(Storage_SetLbaRange(&sp28, arg1, arg2), arg3);
 
     if ((temp_v0 != NULL) && (arg0 > 0)) {
@@ -370,7 +370,7 @@ ret_func_80004454 Fragment_Load(s32 arg0, u8* romStart, u8* romEnd) {
 /** Loads a fragment from a block-address range and registers it. */
 void* Fragment_LoadByLbaRange(s32 arg0, s32 arg1, s32 arg2) {
     Fragment* sp2C;
-    unk_func_800041C0 sp20;
+    StorageLbaRange sp20;
 
     sp2C = Storage_LoadAssetByLbaRange(Storage_SetLbaRange(&sp20, arg1, arg2), 0);
     if (sp2C != NULL) {
@@ -428,7 +428,7 @@ BinArchive* BinArchive_Open(u8* romStart, u8* romEnd, s32 arg2, s32 arg3) {
     }
 
     if (ret != NULL) {
-        ret->unk_04 = romStart;
+        ret->source = romStart;
     }
 
     return ret;
@@ -437,7 +437,7 @@ BinArchive* BinArchive_Open(u8* romStart, u8* romEnd, s32 arg2, s32 arg3) {
 /** Loads a bin archive from a block-address range. */
 void* BinArchive_LoadByLbaRange(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     BinArchive* var_a0;
-    unk_func_800041C0 sp20;
+    StorageLbaRange sp20;
 
     switch (arg2) {
         default:
@@ -448,7 +448,7 @@ void* BinArchive_LoadByLbaRange(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
             var_a0 = Storage_LoadAssetByLbaRange(&sp20, 0);
             if (var_a0 != NULL) {
                 main_pool_realloc(var_a0, var_a0->total_size);
-                var_a0->unk_00 |= 1;
+                var_a0->flags |= 1;
             }
             break;
 
@@ -457,9 +457,9 @@ void* BinArchive_LoadByLbaRange(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
             var_a0 = Storage_LoadAssetByLbaRange(&sp20, 0);
             if (var_a0 != NULL) {
                 main_pool_realloc(var_a0, (var_a0->num_files * sizeof(BinArchiveFile)) + sizeof(BinArchive));
-                var_a0->unk_00 |= 2;
+                var_a0->flags |= 2;
                 if (arg3 == 1) {
-                    var_a0->unk_00 |= 4;
+                    var_a0->flags |= 4;
                 }
             }
             break;
@@ -468,14 +468,14 @@ void* BinArchive_LoadByLbaRange(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
             Storage_SetLbaRange(&sp20, arg0, arg0 + 1);
             var_a0 = Storage_LoadAssetByLbaRange(&sp20, 1);
             if (arg3 == 1) {
-                var_a0->unk_00 |= 4;
+                var_a0->flags |= 4;
             }
             break;
     }
 
     if (var_a0 != NULL) {
-        var_a0->unk_00 |= 0x80;
-        var_a0->unk_04 = arg0;
+        var_a0->flags |= 0x80;
+        var_a0->source = arg0;
     }
 
     return var_a0;
@@ -488,16 +488,16 @@ void BinArchive_Free(void* arg0) {
 
 /** Loads one archive file directly from the ROM. */
 Fragment* BinArchive_LoadFileFromRom(BinArchive* arg0, BinArchiveFile* arg1) {
-    u8* temp_a0 = arg0->unk_04 + arg1->offset;
+    u8* temp_a0 = arg0->source + arg1->offset;
 
     return Asset_LoadCompressed(temp_a0, arg1->size + temp_a0, 0, 0);
 }
 
 /** Loads one archive file through the buffered storage path. */
 void* BinArchive_LoadFileBuffered(BinArchive* arg0, BinArchiveFile* arg1) {
-    unk_func_800041C0 sp1C;
+    StorageLbaRange sp1C;
 
-    Storage_SetByteRange(&sp1C, arg0->unk_04, arg1->offset, arg1->size);
+    Storage_SetByteRange(&sp1C, arg0->source, arg1->offset, arg1->size);
     return Storage_LoadAssetByLbaRange(&sp1C, 0);
 }
 
@@ -508,12 +508,12 @@ void* BinArchive_GetFile(BinArchive* archive, s32 file_number) {
     BinArchiveFile* sp18 = (u8*)archive + sizeof(BinArchive) + (file_number * sizeof(BinArchiveFile));
 
     if (file_number < archive->num_files) {
-        if (archive->unk_00 & 1) {
+        if (archive->flags & 1) {
             var_a2 = (u8*)archive + sp18->offset;
-        } else if (!(archive->unk_00 & 4) && (sp18->unk_08 != NULL)) {
-            var_a2 = sp18->unk_08;
+        } else if (!(archive->flags & 4) && (sp18->cached != NULL)) {
+            var_a2 = sp18->cached;
         } else {
-            if (archive->unk_00 & 0x80) {
+            if (archive->flags & 0x80) {
                 var_a2 = BinArchive_LoadFileBuffered(archive, sp18);
             } else {
                 var_a2 = BinArchive_LoadFileFromRom(archive, sp18);
@@ -521,10 +521,10 @@ void* BinArchive_GetFile(BinArchive* archive, s32 file_number) {
 
             if (var_a2 != NULL) {
                 if ((((u32*)var_a2->magic)[0] == 'FRAG') && (((u32*)var_a2->magic)[1] == 'MENT')) {
-                    Fragment_Register(archive->unk_02, var_a2);
+                    Fragment_Register(archive->fragmentId, var_a2);
                 }
 
-                sp18->unk_08 = var_a2;
+                sp18->cached = var_a2;
             }
         }
     }
@@ -538,7 +538,7 @@ s32 BinArchive_GetCachedFile(BinArchive* archive, s32 file_number) {
     s32 var_v1 = 0;
 
     if (file_number < archive->num_files) {
-        var_v1 = sp18->unk_08;
+        var_v1 = sp18->cached;
     }
     return var_v1;
 }
