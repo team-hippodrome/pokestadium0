@@ -34,8 +34,8 @@ extern u8 D_8910A804[];
 extern u8 D_8910A84C[];
 
 void func_891000BC(s32 arg0);
-void func_89100294(Ctx89100294* arg0);
-s32 LabPCList_GetColumnCursorX(Ctx89100688* arg0);
+void func_89100294(LabPCListScreen* arg0);
+s32 LabPCList_GetColumnCursorX(LabPCListScreen* arg0);
 extern u8 D_800734A8[];
 
 extern Gfx D_80060270[];
@@ -60,24 +60,24 @@ void func_89101238(s32, s32, s8*, s32, s32);
  * Draws one Pokemon row of the list with the columns of the current detail page.
  * Seen in play (2026-11-12): the rows 0001 フシギダネ ハナ 12345 サトシ てもち くさ どく, 0002 ヒトカゲ, 0003 ゼニガメ.
  */
-void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, Ctx891012A8 *ctx)
+void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags, LabPCListScreen *ctx)
 {
   s32 col;
   s32 cx;
   Color_RGBA8 *colors;
   Color_RGBA8 *loop_colors;
-  Ctx891012A8 *c = ctx;
+  LabPCListScreen *c = ctx;
   gSPDisplayList(gDisplayListHead++, D_80060270);
   colors = D_8910A85C[row & 1];
   loop_colors = D_8910A86C[row & 1];
   func_80029028(x, y, 0x26, 0x14, colors[0]);
   func_80029028(x + 0x26, y, 0x50, 0x14, colors[1]);
-  col = c->ranges[c->mode];
+  col = c->pageColumnStart[c->page];
   cx = x + 0x78;
-  for (; cx < c->right; col++)
+  for (; cx < c->listFrame.width; col++)
   {
-    func_80029028(cx, y, c->widths[col], 0x14, loop_colors[col & 1]);
-    cx += c->widths[col];
+    func_80029028(cx, y, c->columnWidths[col], 0x14, loop_colors[col & 1]);
+    cx += c->columnWidths[col];
   }
 
   if (entry != 0)
@@ -111,7 +111,7 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
       func_8001ABBC();
     }
     cx = x + 0x78;
-    for (col = c->ranges[c->mode]; cx < c->right; col++)
+    for (col = c->pageColumnStart[c->page]; cx < c->listFrame.width; col++)
     {
       switch (col)
       {
@@ -173,7 +173,7 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
 
       }
 
-      cx += c->widths[col];
+      cx += c->columnWidths[col];
     }
 
   }

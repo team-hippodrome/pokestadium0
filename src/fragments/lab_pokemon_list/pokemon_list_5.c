@@ -141,7 +141,7 @@ s32 LabPCList_UpdateSortMenu(s8* arg0) {
                     M2C_FIELD(arg0, s32*, 0x88) = 0;
                     break;
                 case 3:
-                    LabPCList_ResetFilterState((LabPCInitialStateFields*)arg0);
+                    LabPCList_ResetFilterState((LabPCListScreen*)arg0);
                     LabPCList_ClearFilterFlags(arg0);
                     LabPCList_ApplyFiltersAndSort(arg0);
                     M2C_FIELD(arg0, s32*, 0x88) = 0;

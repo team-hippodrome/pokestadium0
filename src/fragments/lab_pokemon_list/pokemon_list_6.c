@@ -438,11 +438,6 @@ extern Info891033A0 D_80065D00[];
 extern s8 D_8910DD40[];
 extern s8 D_8910DD58[];
 
-typedef struct Big891033A0 {
-    /* 0x0000 */ char unk0000[0x9E58];
-    /* 0x9E58 */ s32 unk9E58;
-    /* 0x9E5C */ s32 unk9E5C;
-} Big891033A0;
 /**
  * Handles the menu opened on a selected Pokemon.
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): was handling the popup
@@ -462,7 +457,7 @@ s32 LabPCList_UpdateMonMenu(s8* arg0) {
             case 0:
                 func_8003F6AC(2);
                 if (LabPCList_ToggleFilterFlag(arg0, 8) != 0) {
-                    ((Big891033A0*)arg0)->unk9E58 = M2C_FIELD(entry, u8*, 8);
+                    ((LabPCListScreen*)arg0)->unk_9E58 = M2C_FIELD(entry, u8*, 8);
                 }
                 LabPCList_ApplyFiltersAndSort(arg0);
                 M2C_FIELD(arg0, s32*, 0x88) = 0;
@@ -473,11 +468,11 @@ s32 LabPCList_UpdateMonMenu(s8* arg0) {
                     s32 id;
 
                     id = M2C_FIELD(entry, u8*, 8) - 1;
-                    ((Big891033A0*)arg0)->unk9E5C = 1;
+                    ((LabPCListScreen*)arg0)->unk_9E5C = 1;
                     M2C_FIELD(arg0, u8*, 0x9E60) = D_80065D00[id].unk06;
                     if (D_80065D00[id].unk06 != D_80065D00[id].unk07) {
                         M2C_FIELD(arg0, u8*, 0x9E61) = D_80065D00[id].unk07;
-                        ((Big891033A0*)arg0)->unk9E5C++;
+                        ((LabPCListScreen*)arg0)->unk_9E5C++;
                     }
                 }
                 LabPCList_ApplyFiltersAndSort(arg0);

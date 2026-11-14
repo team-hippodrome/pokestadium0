@@ -22,7 +22,7 @@ void Window_SetRect(s8 *, s32, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
 void func_89109B60(s8*);
 M2C_UNK func_89109C6C(s32, s32);                    /* extern */
-void func_80027D68(s32, s32);
+void func_80027D68(void*, s32);
 void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
 void LabPCList_DrawMonRow();
 void func_89105C54(s8*, s32, s32, s8*, Rgba891024A4);
@@ -34,8 +34,8 @@ extern u8 D_8910A804[];
 extern u8 D_8910A84C[];
 
 void func_891000BC(s32 arg0);
-void func_89100294(Ctx89100294* arg0);
-s32 LabPCList_GetColumnCursorX(Ctx89100688* arg0);
+void func_89100294(LabPCListScreen* arg0);
+s32 LabPCList_GetColumnCursorX(LabPCListScreen* arg0);
 extern M2C_UNK D_800734A8;
 
 extern Gfx D_80060270[];
@@ -213,26 +213,10 @@ s32 LabPCList_ToggleFilterFlag(s8 *arg0, s32 arg1)
   return temp_t7 & new_var;
 }
 
-typedef struct Ctx89101D94 {
-    /* 0x0000 */ char unk0000[0x6C];
-    /* 0x006C */ char unk6C[0xC];
-    /* 0x0078 */ s32 unk78;
-    /* 0x007C */ s32 unk7C;
-    /* 0x0080 */ char unk0080[0x9648 - 0x80];
-    /* 0x9648 */ char unk9648[0x9828 - 0x9648];
-    /* 0x9828 */ char unk9828[0x9918 - 0x9828];
-    /* 0x9918 */ char unk9918[0x9B00 - 0x9918];
-    /* 0x9B00 */ char unk9B00[0x9E58 - 0x9B00];
-    /* 0x9E58 */ char unk9E58[4];
-    /* 0x9E5C */ char unk9E5C[0xB160 - 0x9E5C];
-    /* 0xB160 */ s32 unkB160;
-    /* 0xB164 */ char unkB164[0xB1A4 - 0xB164];
-    /* 0xB1A4 */ char unkB1A4[4];
-} Ctx89101D94;
 extern s32 D_8910D990[];
-void ScrollList_SetItems(s32*, void*, void*);
-void func_80027D94(s32, void*, void*, void*);
-void func_80027D68(s32, s32);
+void ScrollList_SetItems(ScrollList*, PointerList*, u16*);
+void func_80027D94(void*, PointerList*, void*, void*);
+void func_80027D68(void*, s32);
 s32 func_891096F4();
 s32 func_89109720();
 s32 func_891097E4();
@@ -244,35 +228,35 @@ s32 func_89109960();
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): ran when OK was pressed on
  * 「どこのポケモンを いちらん するか」 with てもち chosen, and the list then showed the three party Pokémon.
  */
-M2C_UNK LabPCList_ApplyFiltersAndSort(Ctx89101D94* arg0) {
-    ScrollList_SetItems(&arg0->unkB160, arg0->unk9648, arg0->unkB1A4);
-    if (arg0->unk7C != 0) {
-        if (arg0->unk7C & 1) {
-            func_80027D94(arg0->unkB160, arg0->unk6C, func_891096F4, arg0->unk9828);
-            ScrollList_SetItems(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+M2C_UNK LabPCList_ApplyFiltersAndSort(LabPCListScreen* arg0) {
+    ScrollList_SetItems(&arg0->list, &arg0->rows, arg0->rowFlags);
+    if (arg0->activeFilters != 0) {
+        if (arg0->activeFilters & 1) {
+            func_80027D94(arg0->list.items, &arg0->filteredRows, func_891096F4, &arg0->unk_9828);
+            ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
-        if (arg0->unk7C & 2) {
-            func_80027D94(arg0->unkB160, arg0->unk6C, func_89109720, arg0->unk9918);
-            ScrollList_SetItems(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+        if (arg0->activeFilters & 2) {
+            func_80027D94(arg0->list.items, &arg0->filteredRows, func_89109720, &arg0->unk_9918);
+            ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
-        if (arg0->unk7C & 4) {
-            func_80027D94(arg0->unkB160, arg0->unk6C, func_891097E4, arg0->unk9B00);
-            ScrollList_SetItems(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+        if (arg0->activeFilters & 4) {
+            func_80027D94(arg0->list.items, &arg0->filteredRows, func_891097E4, &arg0->unk_9B00);
+            ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
-        if (arg0->unk7C & 8) {
-            func_80027D94(arg0->unkB160, arg0->unk6C, func_89109884, arg0->unk9E58);
-            ScrollList_SetItems(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+        if (arg0->activeFilters & 8) {
+            func_80027D94(arg0->list.items, &arg0->filteredRows, func_89109884, &arg0->unk_9E58);
+            ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
-        if (arg0->unk7C & 0x10) {
-            func_80027D94(arg0->unkB160, arg0->unk6C, func_89109898, arg0->unk9E5C);
-            ScrollList_SetItems(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+        if (arg0->activeFilters & 0x10) {
+            func_80027D94(arg0->list.items, &arg0->filteredRows, func_89109898, &arg0->unk_9E5C);
+            ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
-        if (arg0->unk7C & 0x20) {
-            func_80027D94(arg0->unkB160, arg0->unk6C, func_89109960, NULL);
-            ScrollList_SetItems(&arg0->unkB160, arg0->unk6C, arg0->unkB1A4);
+        if (arg0->activeFilters & 0x20) {
+            func_80027D94(arg0->list.items, &arg0->filteredRows, func_89109960, NULL);
+            ScrollList_SetItems(&arg0->list, &arg0->filteredRows, arg0->rowFlags);
         }
     }
-    func_80027D68(arg0->unkB160, D_8910D990[arg0->unk78]);
+    func_80027D68(arg0->list.items, D_8910D990[arg0->sortKey]);
 }
 
 typedef struct Pair8910D910 { void* a; s32 b; } Pair8910D910;
@@ -348,11 +332,6 @@ void func_89101F90(Ctx89101F90* arg0) {
 }
 
 typedef struct Str891020F8 { char s[13]; } Str891020F8;
-typedef struct Big891020F8 {
-    /* 0x0000 */ char unk0000[0x96C8];
-    /* 0x96C8 */ s32 right;
-    /* 0x96CC */ s32 bottom;
-} Big891020F8;
 void func_8000A460(s8*, s8*);
 u32 func_800566BC(s8*);
 void LabPCList_InitPopupMenu(s8*, void*, s8*, s32, s32);
@@ -377,8 +356,8 @@ void LabPCList_FormatGatherPrompt(s8* arg0) {
     LabPCList_InitPopupMenu(arg0 + 0x9654, D_8910A898, arg0 + 0x97C8, 4, 0);
     Window_SetRect(arg0 + 0x9680, M2C_FIELD(arg0, s32*, 0x2C) + 0x26,
                   M2C_FIELD(arg0, s32*, 0x30) + M2C_FIELD(arg0, s32*, 0xB194) - M2C_FIELD(arg0, s32*, 0xB18C) + 0x16, 0, 0x14);
-    ((Big891020F8*)arg0)->right = M2C_FIELD(arg0, s32*, 0x34) + M2C_FIELD(arg0, s32*, 0x2C);
-    ((Big891020F8*)arg0)->bottom = M2C_FIELD(arg0, s32*, 0x38) + M2C_FIELD(arg0, s32*, 0x30);
+    ((LabPCListScreen*)arg0)->popup.limitX = M2C_FIELD(arg0, s32*, 0x34) + M2C_FIELD(arg0, s32*, 0x2C);
+    ((LabPCListScreen*)arg0)->popup.limitY = M2C_FIELD(arg0, s32*, 0x38) + M2C_FIELD(arg0, s32*, 0x30);
     LabPCList_PlacePopup(arg0 + 0x9654);
     M2C_FIELD(arg0, Rgba891024A4*, 0x966C) = D_8910A7F4;
     M2C_FIELD(arg0, s32*, 0x88) = 7;
@@ -395,22 +374,6 @@ typedef struct List89102344 {
     /* 0x08 */ s32 count;
 } List89102344;
 
-typedef struct Ctx89102344 {
-    /* 0x0000 */ char unk0000[0x8C];
-    /* 0x008C */ s32 unk8C;
-    /* 0x0090 */ char unk0090[0xB160 - 0x90];
-    /* 0xB160 */ List89102344* list;
-    /* 0xB164 */ char unkB164[4];
-    /* 0xB168 */ s32 cursor;
-    /* 0xB16C */ char unkB16C[4];
-    /* 0xB170 */ s32 unkB170;
-    /* 0xB174 */ char unkB174[0xB18C - 0xB174];
-    /* 0xB18C */ s32 unkB18C;
-    /* 0xB190 */ char unkB190[4];
-    /* 0xB194 */ s32 unkB194;
-    /* 0xB198 */ char unkB198[0xB550 - 0xB198];
-    /* 0xB550 */ s32 unkB550;
-} Ctx89102344;
 
 s32 func_8003F6AC();
 s32 ScrollList_UpdateCursor(void*);
@@ -421,19 +384,19 @@ void LabPCList_FormatGatherPrompt(s8*);
  * Handles list input while the cursor is on the Pokemon rows.
  * Seen in play (2026-11-12): moved the cursor over the rows.
  */
-s32 LabPCList_UpdateListCursor(Ctx89102344* arg0) {
+s32 LabPCList_UpdateListCursor(LabPCListScreen* arg0) {
     s32 ret;
 
-    if ((arg0->unkB194 == 0) && (*(u16*)(D_800603C0 + 6) & 0x800)) {
+    if ((arg0->list.cursorY == 0) && (*(u16*)(D_800603C0 + 6) & 0x800)) {
         func_8003F6AC(1);
-        arg0->unk8C = 2;
-        arg0->unkB550 = 1;
-        ScrollList_SetCursor(&arg0->list, arg0->unkB18C / arg0->unkB170);
+        arg0->focus = 2;
+        arg0->headerCursor.cursor = 1;
+        ScrollList_SetCursor(&arg0->list, arg0->list.scrollY / arg0->list.cellHeight);
         return 1;
     }
-    ret = ScrollList_UpdateCursor(&arg0->list) != 0;
+    ret = ScrollList_UpdateCursor(&arg0->list.items) != 0;
     if ((ret == 0) && (*(u16*)(D_800603C0 + 8) & 0x8000)) {
-        if ((arg0->list->count > 0) && (arg0->list->items[arg0->cursor][8] > 0) && (arg0->list->items[arg0->cursor][8] < 0x98)) {
+        if ((arg0->list.items->count > 0) && (((List89102344*)arg0->list.items)->items[arg0->list.cursor][8] > 0) && (((List89102344*)arg0->list.items)->items[arg0->list.cursor][8] < 0x98)) {
             func_8003F6AC(2);
             LabPCList_FormatGatherPrompt((s8*)arg0);
             ret = 1;
@@ -493,18 +456,6 @@ void LabPCList_InitSortMenu(Screen891024A4 *arg0) {
     }
 }
 
-typedef struct Ctx891025D8 {
-    /* 0x0000 */ char unk0000[0x88];
-    /* 0x0088 */ s32 unk88;
-    /* 0x008C */ s32 unk8C;
-    /* 0x0090 */ char unk0090[0xB188 - 0x90];
-    /* 0xB188 */ s16 unkB188;
-    /* 0xB18A */ char unkB18A[0xB1A0 - 0xB18A];
-    /* 0xB1A0 */ s32 unkB1A0;
-    /* 0xB1A4 */ char unkB1A4[0xB54C - 0xB1A4];
-    /* 0xB54C */ s32 unkB54C;
-    /* 0xB550 */ s32 unkB550;
-} Ctx891025D8;
 s32 func_8002B390(s32*);
 
 /**
@@ -512,30 +463,30 @@ s32 func_8002B390(s32*);
  * Seen in play (2026-11-12) in いちらん: R moved the focus to the column headers, and D-Left/D-Right
  * moved the highlight between ニックネーム, ID, おや and ばしょ while this ran.
  */
-s32 LabPCList_UpdateHeaderCursor(Ctx891025D8* arg0) {
+s32 LabPCList_UpdateHeaderCursor(LabPCListScreen* arg0) {
     s32 ret = 0;
     s32 button;
 
-    button = func_8002B390(&arg0->unkB54C);
+    button = func_8002B390(&arg0->headerCursor.controller);
     if (button != 0) {
-        if ((button == 0x400) && (arg0->unkB550 == 1)) {
+        if ((button == 0x400) && (arg0->headerCursor.cursor == 1)) {
             func_8003F6AC(1);
-            arg0->unk8C = 0;
-            arg0->unkB1A0 = 8; arg0->unkB188 = 0x400; // FAKE: both stores must share one source line (IDO schedules by line)
+            arg0->focus = 0;
+            arg0->list.repeatTimer = 8; arg0->list.inputDirection = 0x400; // FAKE: both stores must share one source line (IDO schedules by line)
             ret = 1;
         } else {
-            arg0->unk8C = (arg0->unkB550 < 2) ? 2 : 1;
+            arg0->focus = (arg0->headerCursor.cursor < 2) ? 2 : 1;
             ret = 1;
         }
     } else if (*(u16*)(D_800603C0 + 8) & 0x8000) {
-        if (arg0->unkB550 == 0) {
+        if (arg0->headerCursor.cursor == 0) {
             func_8003F6AC(3);
             ret = -1;
-        } else if (arg0->unkB550 == 1) {
+        } else if (arg0->headerCursor.cursor == 1) {
             func_8003F6AC(2);
             LabPCList_InitSortMenu((Screen891024A4*)arg0);
             ret = 1;
-            arg0->unk88 = 2;
+            arg0->state = 2;
         } else {
             func_8003F6AC(2);
             func_89101F90((Ctx89101F90*)arg0);
@@ -550,18 +501,18 @@ s32 LabPCList_UpdateHeaderCursor(Ctx891025D8* arg0) {
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): was running while browsing;
  * C-Right turned the detail page from ページおくり1/3 to 2/3 (the move columns).
  */
-s32 LabPCList_UpdateBrowse(Ctx89100294* arg0) {
+s32 LabPCList_UpdateBrowse(LabPCListScreen* arg0) {
     s32 done = FALSE;
     s32 result;
     u16 buttons;
 
-    switch (arg0->unk8C) {
+    switch (arg0->focus) {
         case 0:
-            result = LabPCList_UpdateListCursor((Ctx89102344*)arg0);
+            result = LabPCList_UpdateListCursor((LabPCListScreen*)arg0);
             break;
         case 1:
         case 2:
-            result = LabPCList_UpdateHeaderCursor((Ctx891025D8*)arg0);
+            result = LabPCList_UpdateHeaderCursor((LabPCListScreen*)arg0);
             break;
     }
     if (result == -1) {
@@ -573,27 +524,27 @@ s32 LabPCList_UpdateBrowse(Ctx89100294* arg0) {
             done = TRUE;
         } else if (buttons & 2) {
             func_8003F6AC(2);
-            if (arg0->mode == 0) {
-                arg0->mode += 3;
+            if (arg0->page == 0) {
+                arg0->page += 3;
             }
-            arg0->mode--;
+            arg0->page--;
             func_89100294(arg0);
         } else if (buttons & 1) {
             func_8003F6AC(2);
-            if (arg0->mode >= 2) {
-                arg0->mode -= 3;
+            if (arg0->page >= 2) {
+                arg0->page -= 3;
             }
-            arg0->mode++;
+            arg0->page++;
             func_89100294(arg0);
         } else if (buttons & 0x20) {
-            if (arg0->unk8C != 0) {
+            if (arg0->focus != 0) {
                 func_8003F6AC(2);
-                arg0->unk8C = 0;
+                arg0->focus = 0;
             }
-        } else if ((buttons & 0x10) && (arg0->unk8C != 1)) {
+        } else if ((buttons & 0x10) && (arg0->focus != 1)) {
             func_8003F6AC(2);
-            arg0->unk8C = 1;
-            arg0->unkB550 = 2;
+            arg0->focus = 1;
+            arg0->headerCursor.cursor = 2;
         }
     }
     return done;
@@ -633,8 +584,6 @@ s32 LabPCList_UpdateSourceSelect(s8 *arg0)
 
 typedef struct Sub89102930 { char unk00[0x10]; s32 unk10; char unk14[0xC]; } Sub89102930; // 0x20
 typedef struct Item89102930 { char unk00[4]; s32 unk04; char unk08[8]; Sub89102930* subs; char unk14[4]; s32 subCount; char unk1C[8]; } Item89102930; // 0x24
-typedef struct Slot89102930 { s32 unk00; s32 unk04; char unk08[0x14]; } Slot89102930; // 0x1C
-typedef struct Ctx89102930 { char unk0000[0x9E68]; Slot89102930 slots[3]; } Ctx89102930;
 s32 func_89102930(arg0) s8* arg0; {
     s32 flags = 0;
     s32 i;
@@ -654,7 +603,7 @@ s32 func_89102930(arg0) s8* arg0; {
         }
     }
     for (i = 0; i < 3; i++) {
-        if (((Ctx89102930*)arg0)->slots[i].unk00 != 0 && ((Ctx89102930*)arg0)->slots[i].unk04 != 0) {
+        if (((LabPCListScreen*)arg0)->unk_9E68[i].unk00 != 0 && ((LabPCListScreen*)arg0)->unk_9E68[i].unk04 != 0) {
             if (i == 0 || i == 1) {
                 flags |= 2;
             } else {

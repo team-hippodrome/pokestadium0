@@ -126,7 +126,6 @@ typedef struct Sub89103740 { Head89103740* head; s32 unk04; char unk08[8]; s32 u
 typedef struct Item89103740 { char unk00[0x10]; Sub89103740* subs; char unk14[0x10]; } Item89103740; // 0x24
 typedef struct Ref89103740 { Sub89103740* sub; s32 unk04; } Ref89103740;
 typedef struct Msg89103740 { void* unk00; s32 unk04; void* unk08; void* unk0C; } Msg89103740;
-typedef struct Ctx89103740 { char unk0000[0xB558]; s32 unkB558; } Ctx89103740;
 extern char D_8910DD94[];
 extern char D_8910E398[];
 extern char D_8910E3A8[];
@@ -137,7 +136,7 @@ void func_80027814(s8*, Ref89103740*, s32);
  * Seen in play (2026-11-12) in いちらん: ran with kind 1 (GB) or 2 (64 cartridge) and box 0, showed
  * the いどう message and left two Pokémon in the party.
  */
-void LabPCList_MoveMonTo(Ctx89103740* arg0, Ref89103740* arg1, s32 arg2, s32 arg3, Msg89103740* arg4) {
+void LabPCList_MoveMonTo(LabPCListScreen* arg0, Ref89103740* arg1, s32 arg2, s32 arg3, Msg89103740* arg4) {
     Item89103740* items = M2C_FIELD(arg0, Item89103740**, 0x420);
     Sub89103740* sub = &items[arg2].subs[arg3];
     Sub89103740* old = arg1->sub;
@@ -154,7 +153,7 @@ void LabPCList_MoveMonTo(Ctx89103740* arg0, Ref89103740* arg1, s32 arg2, s32 arg
     func_80027814(sub->unk14, arg1, sub->count);
     old->unk10 = 1;
     sub->unk10 = 1;
-    arg0->unkB558 = 1;
+    arg0->unk_B558 = 1;
 }
 
 typedef struct List89103C54 {
@@ -225,7 +224,7 @@ s32 LabPCList_UpdateDestinationMenu(Ctx89103858* arg0) {
                     func_8003F6AC(0x18);
                     cursor = arg0->cursor;
                     top = arg0->cursor - arg0->unkB18C / arg0->unkB170;
-                    LabPCList_MoveMonTo((Ctx89103740*)arg0, arg0->list->items[arg0->cursor], 0, 0, arg0->msg);
+                    LabPCList_MoveMonTo((LabPCListScreen*)arg0, arg0->list->items[arg0->cursor], 0, 0, arg0->msg);
                     func_89109C6C(arg0->unk9648, (s8*)&arg0->unk420);
                     LabPCList_ApplyFiltersAndSort(arg0);
                     func_800307D4(&arg0->list, cursor, top);
@@ -236,7 +235,7 @@ s32 LabPCList_UpdateDestinationMenu(Ctx89103858* arg0) {
                     func_8003F6AC(0x18);
                     cursor = arg0->cursor;
                     top = arg0->cursor - arg0->unkB18C / arg0->unkB170;
-                    LabPCList_MoveMonTo((Ctx89103740*)arg0, arg0->list->items[arg0->cursor], 3, 0, arg0->msg);
+                    LabPCList_MoveMonTo((LabPCListScreen*)arg0, arg0->list->items[arg0->cursor], 3, 0, arg0->msg);
                     func_89109C6C(arg0->unk9648, (s8*)&arg0->unk420);
                     LabPCList_ApplyFiltersAndSort(arg0);
                     func_800307D4(&arg0->list, cursor, top);
@@ -315,7 +314,7 @@ s32 LabPCList_UpdateGbBoxMenu(Ctx89103C54* arg0) {
             cursor = arg0->cursor;
             top = arg0->cursor - arg0->unkB18C / arg0->unkB170;
             func_8003F6AC(0x18);
-            LabPCList_MoveMonTo((Ctx89103740*)arg0, arg0->list->items[arg0->cursor], 1, arg0->index, arg0->msg);
+            LabPCList_MoveMonTo((LabPCListScreen*)arg0, arg0->list->items[arg0->cursor], 1, arg0->index, arg0->msg);
             func_89109C6C(arg0->unk9648, arg0->unk0420);
             LabPCList_ApplyFiltersAndSort(arg0);
             func_800307D4(&arg0->list, cursor, top);
@@ -347,7 +346,7 @@ s32 LabPCList_UpdateStadiumBoxMenu(Ctx89103C54* arg0) {
             cursor = arg0->cursor;
             top = arg0->cursor - arg0->unkB18C / arg0->unkB170;
             func_8003F6AC(0x18);
-            LabPCList_MoveMonTo((Ctx89103740*)arg0, arg0->list->items[arg0->cursor], 2, arg0->index, arg0->msg);
+            LabPCList_MoveMonTo((LabPCListScreen*)arg0, arg0->list->items[arg0->cursor], 2, arg0->index, arg0->msg);
             func_89109C6C(arg0->unk9648, arg0->unk0420);
             LabPCList_ApplyFiltersAndSort(arg0);
             func_800307D4(&arg0->list, cursor, top);
