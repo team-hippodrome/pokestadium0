@@ -138,7 +138,7 @@ typedef struct TeamRoster {
     /* 0x002 */ u8 numberOfPokemonBrought;
     /* 0x004 */ Controller* controller;
     /* 0x008 */ char trainerName[0x10];
-    /* 0x018 */ s32 trainerId; // @unverified: id word BattleAi_AddTrainerPickScore switches the COM picks on (0x6974, 0x95EC, ...)
+    /* 0x018 */ s32 trainerId; // @unverified: id word BattleAi_AddTrainerPickScore switches the COM picks on; tournament templates set it (0x755B Hokkaido, ...)
     /* 0x01C */ BattleMon pokemonPicked[6];
     /* 0x1FC */ ExtendedRosterInfo* rosterInfo;
     /* 0x200 */ char unk200[0x4];

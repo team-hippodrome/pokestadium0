@@ -380,8 +380,8 @@ s32 BattleAi_ChooseTurnAction(BattleMonRuntime* arg0, BattleMonRuntime* arg1, s3
         D_821CF294->opponentTurnsIn++;
     }
     for (move = 0; move < D_821CF288; move++) {
-        D_821CF294->battlers[move].unk_7B = arg0->restSleepTurns[move];
-        D_821CF298->battlers[move].unk_7B = arg1->restSleepTurns[move];
+        D_821CF294->battlers[move].restSleepTurns = arg0->restSleepTurns[move];
+        D_821CF298->battlers[move].restSleepTurns = arg1->restSleepTurns[move];
     }
 
     move = BattleAi_ChooseSwitch();

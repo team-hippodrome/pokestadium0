@@ -136,13 +136,13 @@ typedef struct ComBattler {
     /* 0x72 */ u16 damageTaken; // @unverified: prevHp - mon.hp, halved when the hit was a critical (BattleAi_ChooseTurnAction)
     /* 0x74 */ u8 species; // @unverified: party species, copied by BattleAi_InitSide
     /* 0x75 */ u8 partyBit; // @unverified: 1 << party slot (BattleAi_InitSide)
-    /* 0x76 */ u8 outspedMask;
-    /* 0x77 */ u8 leechSeededMask;
+    /* 0x76 */ u8 outspedMask; // @unverified: partyBits of opponents it was seen to move before (BattleAi_RecordUsedMove), read by BattleAi_MovesFirst
+    /* 0x77 */ u8 leechSeededMask; // @unverified: partyBits of opponents it has used Leech Seed on (BattleAi_RecordUsedMove)
     /* 0x78 */ u8 moveCount; // @unverified: moves before an empty slot or Mimic (BattleAi_InitSide)
-    /* 0x79 */ u8 unk_79;
-    /* 0x7A */ u8 rechargeTurns;
-    /* 0x7B */ u8 unk_7B;
-    /* 0x7C */ u8 lastMoves[3];
+    /* 0x79 */ u8 revealedMovePp; // @unverified: 16 from BattleAi_InitSide; the PP BattleAi_CopyVisibleBattleState gives an opponent move it first sees
+    /* 0x7A */ u8 rechargeTurns; // @unverified: turns in a row with mon.uniqueStatusFlags bit 0 set (BattleAi_ChooseTurnAction)
+    /* 0x7B */ u8 restSleepTurns; // @unverified: copy of the battle's BattleMonRuntime.restSleepTurns for this slot; the Sleep Clause skips Rest sleep
+    /* 0x7C */ u8 lastMoves[3]; // @unverified: its last three moves, newest first (BattleAi_RecordUsedMove)
     /* 0x7F */ char unk7F[0x11];
 } ComBattler; // size = 0x90
 
@@ -150,43 +150,15 @@ typedef struct ComBattler {
 typedef struct ComSide {
     /* 0x000 */ TeamRoster* roster;
     /* 0x004 */ ComBattler battlers[6];
-    /* 0x364 */ f32 switchThreshold;
-    /* 0x368 */ u8 mode;
-    /* 0x369 */ u8 lastOpponentSlot;
-    /* 0x36A */ u8 opponentTurnsIn;
+    /* 0x364 */ f32 switchThreshold; // @unverified: matchup gain a switch needs; 0.5, 10.0 from mode 2, decays each turn (BattleAi_ChooseSwitch)
+    /* 0x368 */ u8 mode; // @unverified: AI mode 0..3 from BattleAi_InitSide; 3 picks moves at random
+    /* 0x369 */ u8 lastOpponentSlot; // @unverified: opponent party slot seen last turn (BattleAi_ChooseTurnAction)
+    /* 0x36A */ u8 opponentTurnsIn; // @unverified: turns that opponent has stayed in (BattleAi_ChooseTurnAction)
     /* 0x36B */ u8 unk_36B;
-    /* 0x36C */ u8 usableMask;
+    /* 0x36C */ u8 usableMask; // @unverified: party slots picked in team selection, then the unfainted brought ones (BattleAi_ChooseSwitch)
     /* 0x36D */ char unk36D[0x13];
 } ComSide; // size = 0x380
 
-/*
- * BattleSlotZ is a 0x90-byte view of the AI's side model (D_821CF618 /
- * D_821CF998) shifted by four bytes: each side is a party pointer followed by
- * six 0x90-byte battler records, and D_821CF29C / D_821CF2A0 point at a
- * record (slot + 4). In record terms the battle Pokemon (BattleMonRuntime,
- * 0x64 bytes) starts at +0xC; see docs/annotation/com-ai.md.
- */
-typedef struct BattleSlotZ {
-    /* 0x00 */ TeamRoster* roster;
-    /* 0x04 */ u8 record[4]; // @unverified: first bytes of the 0x90-byte battler record (slot + 4); code passes its address to the BattleAi_* helpers
-    /* 0x08 */ s32 pickScore;
-    /* 0x0C */ f32 matchupRatio;
-    /* 0x10 */ u8 pad10[0xB];
-    /* 0x1B */ u8 species;
-    /* 0x1C */ u16 hp;
-    /* 0x1E */ u8 pad1E[7];
-    /* 0x25 */ u8 status;
-    /* 0x26 */ u8 pad26[6];
-    /* 0x2C */ u8 type1;
-    /* 0x2D */ u8 type2;
-    /* 0x2E */ u8 pad2E[8];
-    /* 0x36 */ u8 level;
-    /* 0x37 */ u8 pad37[0x27];
-    /* 0x5E */ u8 unk_5E;
-    /* 0x5F */ u8 pad5F[0x20];
-    /* 0x7F */ u8 unk_7F;
-    /* 0x80 */ u8 pad80[0x10];
-} BattleSlotZ; // size = 0x90
 
 /* Struct types that were defined identically in each of these files; this is
  * now the one definition they all include:

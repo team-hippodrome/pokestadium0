@@ -481,7 +481,7 @@ s32 BattleAi_SleepClauseAllows(ComSide *arg0)
   }
   for (i = 0; i < D_821CF288; i++)
   {
-    if (((arg0->battlers[i].mon.hp != 0) && (arg0->battlers[i].mon.pendingStatusCondition & 7)) && (arg0->battlers[i].unk_7B == 0))
+    if (((arg0->battlers[i].mon.hp != 0) && (arg0->battlers[i].mon.pendingStatusCondition & 7)) && (arg0->battlers[i].restSleepTurns == 0))
     {
       return 0;
     }
@@ -1240,7 +1240,7 @@ void BattleAi_CopyVisibleBattleState(BattleMonRuntime* arg0, BattleMonRuntime* a
   if (((s32) temp_v1) < 4)
   {
     arg0->moves[temp_v1] = arg1->moves[temp_v1];
-    arg0->pp[D_821CF2A0->moveCount] = D_821CF2A0->unk_79;
+    arg0->pp[D_821CF2A0->moveCount] = D_821CF2A0->revealedMovePp;
   }
 }
 
@@ -1304,7 +1304,7 @@ void BattleAi_InitSide(ComSide *arg0, TeamRoster *arg1, s32 arg2)
       }
     }
     arg0->battlers[i].moveCount = j;
-    arg0->battlers[i].unk_79 = 0x10;
+    arg0->battlers[i].revealedMovePp = 0x10;
   }
 
 }
@@ -1609,8 +1609,8 @@ s32 BattleAi_SelectTeam(u8* arg0, u8* arg1, s32 arg2, s8* arg3, s32 arg4) {
     D_821CF2A0 = D_821CF298->battlers;
     for (i = 0; i < 6; i++) {
         D_821CF280[i] = 0;
-        D_821CF294->battlers[i].unk_7B = 0;
-        D_821CF298->battlers[i].unk_7B = 0;
+        D_821CF294->battlers[i].restSleepTurns = 0;
+        D_821CF298->battlers[i].restSleepTurns = 0;
     }
     ret = BattleAi_PickTeam(arg4);
     if (ret == 0) {
