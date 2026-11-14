@@ -3734,14 +3734,14 @@ func_89104E38,0x89104E38,src/fragments/lab_pokemon_list/popup_menus.c,func_89104
 func_89104E94,0x89104E94,src/fragments/lab_pokemon_list/popup_menus.c,func_89104E94,m2c,m2c,c
 func_89104EB4,0x89104EB4,src/fragments/lab_pokemon_list/popup_menus.c,func_89104EB4,hand,,c
 func_89104FC0,0x89104FC0,src/fragments/lab_pokemon_list/popup_menus.c,func_89104FC0,hand,,c
-func_89105144,0x89105144,src/fragments/lab_pokemon_list/popup_menus.c,BattleMoveListWidget_DisableRestrictedMoves,hand,,c
+func_89105144,0x89105144,src/fragments/lab_pokemon_list/popup_menus.c,LabMoveSelect_DisableHmMoves,hand,,c
 func_891051A4,0x891051A4,src/fragments/lab_pokemon_list/popup_menus.c,func_891051A4,hand,,c
 func_89105200,0x89105200,src/fragments/lab_pokemon_list/popup_menus.c,func_89105200,hand,,c
 func_89105340,0x89105340,src/fragments/lab_pokemon_list/popup_menus.c,func_89105340,m2c,m2c+permuter,c
 func_89105390,0x89105390,src/fragments/lab_pokemon_list/popup_menus.c,func_89105390,m2c,m2c,c
 func_891053B0,0x891053B0,src/fragments/lab_pokemon_list/popup_menus.c,func_891053B0,m2c,m2c,c
 func_891053E0,0x891053E0,src/fragments/lab_pokemon_list/popup_menus.c,func_891053E0,s1,stadium1:src/fragments/lab_pc_list/lab_pc_list_1D7B40.c,c
-func_891053E8,0x891053E8,src/fragments/lab_pokemon_list/popup_menus.c,BattleInfoWidget_UpdateEntryFlags,hand,,c
+func_891053E8,0x891053E8,src/fragments/lab_pokemon_list/popup_menus.c,LabBoxList_UpdateItemFlags,hand,,c
 func_8910548C,0x8910548C,src/fragments/lab_pokemon_list/popup_menus.c,func_8910548C,hand,,c
 func_89105504,0x89105504,src/fragments/lab_pokemon_list/popup_menus.c,func_89105504,hand,,c
 func_89105560,0x89105560,src/fragments/lab_pokemon_list/popup_menus.c,PcSort_DrawBoxName,hand,,c
@@ -3751,7 +3751,7 @@ func_8910587C,0x8910587C,src/fragments/lab_pokemon_list/popup_menus.c,func_89105
 func_89105924,0x89105924,src/fragments/lab_pokemon_list/popup_menus.c,func_89105924,hand,,c
 func_8910597C,0x8910597C,src/fragments/lab_pokemon_list/popup_menus.c,func_8910597C,hand,,c
 func_891059FC,0x891059FC,src/fragments/lab_pokemon_list/popup_menus.c,func_891059FC,hand,,c
-func_89105A98,0x89105A98,src/fragments/lab_pokemon_list/popup_menus.c,BattleInfoWidget_ApplyEntrySelection,hand,,c
+func_89105A98,0x89105A98,src/fragments/lab_pokemon_list/popup_menus.c,LabSourceSelect_ApplyCheck,hand,,c
 func_89105AD4,0x89105AD4,src/fragments/lab_pokemon_list/popup_menus.c,func_89105AD4,hand,,c
 func_89105C54,0x89105C54,src/fragments/lab_pokemon_list/popup_menus.c,func_89105C54,hand,,c
 func_89105E70,0x89105E70,src/fragments/lab_pokemon_list/popup_menus.c,func_89105E70,hand,,c

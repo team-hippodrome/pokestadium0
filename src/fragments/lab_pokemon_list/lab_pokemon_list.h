@@ -417,9 +417,9 @@ void LabPCList_DrawPlainText(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4);
 void LabPCList_Setup(void);
 
 // popup_menus.c
-void BattleMoveListWidget_DisableRestrictedMoves(LabMoveSelectWindow* arg0);
-void BattleInfoWidget_UpdateEntryFlags(LabBoxListWindow* arg0);
-void BattleInfoWidget_ApplyEntrySelection(LabSourceSelectWindow* arg0, s32 arg1);
+void LabMoveSelect_DisableHmMoves(LabMoveSelectWindow* arg0);
+void LabBoxList_UpdateItemFlags(LabBoxListWindow* arg0);
+void LabSourceSelect_ApplyCheck(LabSourceSelectWindow* arg0, s32 arg1);
 void func_89105C54(LabSourceSelectWindow* arg0, s32 arg1, s32 arg2, s8* arg3, Color_RGBA8 arg4);
 void func_89105E70(LabSourceSelectWindow* arg0, s32 arg1);
 s32 func_891060BC(LabSourceSelectWindow* arg0);

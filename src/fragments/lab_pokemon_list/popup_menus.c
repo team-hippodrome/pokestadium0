@@ -180,7 +180,7 @@ void func_89104FC0(LabMoveSelectWindow* arg0, s32 arg1, s32 arg2, u8* arg3) {
 
 extern s32 D_8910A920[5];
 /** Disables the move list entries that are restricted for the current cup. */
-void BattleMoveListWidget_DisableRestrictedMoves(LabMoveSelectWindow* arg0) {
+void LabMoveSelect_DisableHmMoves(LabMoveSelectWindow* arg0) {
     s32 j;
     s32 i;
 
@@ -281,7 +281,7 @@ void func_891053E0(void) {
 }
 
 /** Updates the flags of every entry in the info widget. */
-void BattleInfoWidget_UpdateEntryFlags(LabBoxListWindow* arg0) {
+void LabBoxList_UpdateItemFlags(LabBoxListWindow* arg0) {
     s32 i;
     ByteMatrix** sub = &arg0->menu.items;
     s8* var_s2 = (*sub)->rows;
@@ -378,7 +378,7 @@ void func_8910576C(LabBoxListWindow* arg0, s32 arg1, s32 arg2, ByteMatrix* arg3,
     arg0->frame.style = 0;
     arg0->frame.color = arg5;
     Menu_Init(&arg0->menu, arg3, arg4, PcSort_DrawBoxName, 0x9C, 0x1C);
-    BattleInfoWidget_UpdateEntryFlags(arg0);
+    LabBoxList_UpdateItemFlags(arg0);
 }
 
 M2C_UNK Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, M2C_UNK *); /* extern */
@@ -494,7 +494,7 @@ void func_891059FC(u8* widget) {
 }
 
 /** Applies the selection state to an info widget entry. */
-void BattleInfoWidget_ApplyEntrySelection(LabSourceSelectWindow* arg0, s32 arg1) {
+void LabSourceSelect_ApplyCheck(LabSourceSelectWindow* arg0, s32 arg1) {
     s8* ptr = (s8*)arg0->menu.items->rows + arg1 * 0x24;
     s8* ptr2 = M2C_FIELD(ptr, s8**, 0x10);
 
@@ -642,7 +642,7 @@ s32 func_891060BC(LabSourceSelectWindow* arg0) {
         if (buttons & 0x8000) {
             if (arg0->cursor.cursor == 3) {
                 func_8003F6AC(2);
-                BattleInfoWidget_ApplyEntrySelection(arg0, 0);
+                LabSourceSelect_ApplyCheck(arg0, 0);
                 func_89105504(&arg0->gbBoxes);
                 func_89105504(&arg0->cartBoxes);
                 ret = 1;
