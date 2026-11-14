@@ -1,4 +1,5 @@
-/* Stadium Zero fragment001_15B1A0: model display-list callbacks. */
+/* Stadium Zero fragment 001 (model callbacks): per-species particle effects
+ * (Koffing, Weezing, Gastly, Ponyta, Rapidash, Vaporeon, Articuno, Moltres). */
 #include "global.h"
 #include "model_callbacks.h"
 #include "gfx_buffer.h"
@@ -7,98 +8,68 @@
 #include "battle_hud.h"
 #include "vector_math.h"
 
-extern s16 D_800AFB28;
-Gfx* func_80032D90(Gfx* gfx);
-
-typedef struct ModelParticle {
-    /* 0x00 */ s16 active;
-    /* 0x02 */ char unk02[0x2];
-    /* 0x04 */ Vec3f position;
-    /* 0x10 */ Vec3f velocity;
-    /* 0x1C */ Vec3f scale;
-    /* 0x28 */ s16 misc;
-    /* 0x2A */ char unk2A[0x2];
-} ModelParticle; // size = 0x2C
-
-extern Vec3f D_8100239C;
-extern Vec3f D_810023A8;
-extern Vec3f D_810023B4;
-extern ModelParticle D_810028A0[][10];
-extern s32 D_81002C10;
-extern s32 D_81002C14;
-extern Vec3f D_810023C0;
-
-typedef struct ModelParticleTiming {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04[3];
-    /* 0x0A */ s16 unk_0A;
-} ModelParticleTiming; // size = 0xC
-
-extern ModelParticleTiming D_810022A0[18];
-extern s16 D_81002378[18];
+extern Vec3f sModelParticleResetPosition;
+extern Vec3f sModelParticleResetVelocity;
+extern Vec3f sModelParticleResetScale;
+extern Vec3f sModelParticleSpawnScale;
+extern ModelParticle sModelParticles[][MODEL_PARTICLE_COUNT];
+extern s32 sModelParticleDrawCount;
+extern s32 sModelParticleCallbackCount;
+extern ModelSmokeSpawnFrames sModelSmokeSpawnFrames[18];
+extern s16 sModelSmokeSpawnFrameSets[18];
 extern CameraNode* D_80060488;
-extern Gfx D_810023D0[];
-extern s16 D_81002C20;
 
-typedef struct ModelScrollTextures {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s32 unk_04[6];
-} ModelScrollTextures; // size = 0x1C
+/** Clears particle `index` of an effect slot. Hit in play. */
+void ModelParticle_ResetSlot(s32 effect_slot, s32 index) {
+    s32 pad[2]; // FAKE
+    Vec3f sp1C = sModelParticleResetPosition;
+    Vec3f sp10 = sModelParticleResetVelocity;
+    Vec3f sp4 = sModelParticleResetScale;
 
-typedef struct ModelScrollTexturesState {
-    /* 0x00 */ char unk00[0x14];
-    /* 0x14 */ u32* unk_14;
-    /* 0x18 */ Gfx* unk_18;
-} ModelScrollTexturesState; // size = 0x1C
-
-typedef struct TextureState {
-    /* 0x00 */ char unk00[0x14];
-    /* 0x14 */ u32* textures;
-    /* 0x18 */ Gfx* gfx;
-} TextureState; // size = 0x1C
-
-extern s16 D_800AFB26;
-
-void func_81000510(s32 arg0, s32 arg1) {
-    s32 pad[2];
-    Vec3f sp1C = D_8100239C;
-    Vec3f sp10 = D_810023A8;
-    Vec3f sp4 = D_810023B4;
-
-    D_810028A0[arg0][arg1].active = 0;
-    D_810028A0[arg0][arg1].misc = 0;
-    D_810028A0[arg0][arg1].position = sp1C;
-    D_810028A0[arg0][arg1].velocity = sp10;
-    D_810028A0[arg0][arg1].scale = sp4;
+    sModelParticles[effect_slot][index].active = 0;
+    sModelParticles[effect_slot][index].age = 0;
+    sModelParticles[effect_slot][index].position = sp1C;
+    sModelParticles[effect_slot][index].velocity = sp10;
+    sModelParticles[effect_slot][index].scale = sp4;
 }
 
-void func_8100060C(s32 arg0) {
+/**
+ * Clears every particle of an effect slot. Resident func_800325B0 calls it through
+ * Util_ConvertAddrToVirtAddr when a display object animation starts (hit in play).
+ */
+void ModelParticle_ResetEffectSlot(s32 effect_slot) {
     s32 i;
 
     for (i = 0; i < 10; i++) {
-        func_81000510(arg0, i);
+        ModelParticle_ResetSlot(effect_slot, i);
     }
 }
 
-void func_8100065C(void) {
-    D_81002C10 = 0;
-    D_81002C14 = 0;
+/**
+ * Resets the per-frame draw and callback counters. Resident
+ * ModelAnim_UpdateDisplayObjectAnimation calls it every frame through Util_ConvertAddrToVirtAddr.
+ */
+void ModelParticle_ResetFrameCounters(void) {
+    sModelParticleDrawCount = 0;
+    sModelParticleCallbackCount = 0;
 }
 
-void func_81000670(ModelParticle* arg0) {
+/**
+ * Spawns one particle into the first free slot of `particles`, at the model's root with a
+ * species-specific spread, scale and outward speed. Hit for Articuno and Moltres in Free Battle.
+ */
+void ModelParticle_Spawn(ModelParticle* particles) {
     s32 var_v0;
     Vec3f sp90;
     Vec3f sp84;
     Vec3f sp78;
     s32 var_s1;
     f32 temp_fv0_2;
-    Vec3f sp64 = D_810023C0;
+    Vec3f sp64 = sModelParticleSpawnScale;
     f32 sp60;
     f32 sp5C;
     f32 sp58;
-    u32 pad[2];
+    u32 pad[2]; // FAKE
     f32 var_fs0;
 
     var_s1 = 10;
@@ -172,7 +143,7 @@ void func_81000670(ModelParticle* arg0) {
         if (var_v0 >= var_s1) {
             break;
         }
-        if (arg0->active == 0) {
+        if (particles->active == 0) {
             sp78.x = sp84.x - sp90.x;
             sp78.y = sp84.y - sp90.y;
             sp78.z = sp84.z - sp90.z;
@@ -182,21 +153,26 @@ void func_81000670(ModelParticle* arg0) {
                 sp78.y /= temp_fv0_2;
                 sp78.z /= temp_fv0_2;
             }
-            arg0->velocity.x = (f32)(var_fs0 * sp78.x);
-            arg0->velocity.y = (f32)(var_fs0 * sp78.y);
-            arg0->velocity.z = (f32)(var_fs0 * sp78.z);
-            arg0->position = sp84;
-            arg0->scale = sp64;
-            arg0->misc = 0;
-            arg0->active = 1;
+            particles->velocity.x = (f32)(var_fs0 * sp78.x);
+            particles->velocity.y = (f32)(var_fs0 * sp78.y);
+            particles->velocity.z = (f32)(var_fs0 * sp78.z);
+            particles->position = sp84;
+            particles->scale = sp64;
+            particles->age = 0;
+            particles->active = 1;
             break;
         }
-        arg0++;
+        particles++;
     }
 }
 
-void func_81000CC8(ModelParticle* arg0) {
-    s32 pad[1];
+/**
+ * Decides whether the current model spawns a particle this frame: on fixed animation frames for
+ * Koffing and Weezing and every 8th frame for Gastly, otherwise at random. Hit for Articuno and
+ * Moltres in Free Battle.
+ */
+void ModelParticle_UpdateSpawn(ModelParticle* particles) {
+    s32 pad[1]; // FAKE
     s16 temp_v1;
     s32 var_a1;
     s16 temp_a0;
@@ -208,20 +184,20 @@ void func_81000CC8(ModelParticle* arg0) {
         case 0x6D:
         case 0x6E:
             temp_v1 = D_8006049C->transformAnim.animationId;
-            temp_a0 = D_81002378[D_81002C14 % 18];
+            temp_a0 = sModelSmokeSpawnFrameSets[sModelParticleCallbackCount % 18];
             switch (temp_v1) {
                 case 4:
-                    if (var_a1 == D_810022A0[temp_a0].unk_02) {
-                        func_81000670(arg0);
+                    if (var_a1 == sModelSmokeSpawnFrames[temp_a0].animation4Frame) {
+                        ModelParticle_Spawn(particles);
                         return;
                     }
                     break;
                 case 3:
                     var_v0 = 0;
-                    var_v1 = &D_810022A0[temp_a0].unk_00;
+                    var_v1 = &sModelSmokeSpawnFrames[temp_a0].defaultFrame; // FAKE: walks animation3Frames as var_v1[2..4]
                     do {
                         if (var_a1 == var_v1[2]) {
-                            func_81000670(arg0);
+                            ModelParticle_Spawn(particles);
                         }
                         var_v0 += 2;
                         var_v1++;
@@ -229,14 +205,14 @@ void func_81000CC8(ModelParticle* arg0) {
                     return;
                     break;
                 case 2:
-                    if (var_a1 == D_810022A0[temp_a0].unk_0A) {
-                        func_81000670(arg0);
+                    if (var_a1 == sModelSmokeSpawnFrames[temp_a0].animation2Frame) {
+                        ModelParticle_Spawn(particles);
                         return;
                     }
                     break;
                 default:
-                    if (var_a1 == D_810022A0[temp_a0].unk_00) {
-                        func_81000670(arg0);
+                    if (var_a1 == sModelSmokeSpawnFrames[temp_a0].defaultFrame) {
+                        ModelParticle_Spawn(particles);
                         return;
                     }
                     return;
@@ -244,245 +220,256 @@ void func_81000CC8(ModelParticle* arg0) {
             break;
         case 0x92:
             if ((guRandom() % 60) == 0) {
-                func_81000670(arg0);
+                ModelParticle_Spawn(particles);
                 return;
             }
             break;
         case 0x90:
             if ((guRandom() % 30) == 0) {
-                func_81000670(arg0);
+                ModelParticle_Spawn(particles);
                 return;
             }
             break;
         case 0x86:
             if ((guRandom() % 7) == 0) {
-                func_81000670(arg0);
+                ModelParticle_Spawn(particles);
                 return;
             }
             break;
         case 0x5C:
             if ((var_a1 & 7) == 0) {
-                func_81000670(arg0);
+                ModelParticle_Spawn(particles);
                 return;
             }
             break;
         case 0x4D:
         case 0x4E:
             if ((guRandom() % 7) == 0) {
-                func_81000670(arg0);
+                ModelParticle_Spawn(particles);
             }
             break;
     }
 }
 
-Gfx* func_81000F18(Gfx* gfx, ModelParticle* arg1, DisplayListAddresses* arg2, s16 arg3) {
+/**
+ * Draws one particle as a camera-facing billboard with a species-specific texture and color, then
+ * ages and moves it. Hit for Articuno and Moltres in Free Battle.
+ */
+Gfx* ModelParticle_Draw(Gfx* gfx, ModelParticle* particle, DisplayListAddresses* addresses, s16 effect_slot) {
     Mtx* sp1EC;
     Mtx sp1A8;
     Mtx sp168;
     Mtx sp128;
-    s32 pad;
+    s32 pad; // FAKE
     MtxF spE4;
     DisplayObject* ptr;
 
     sp1EC = Gfx_AllocDisplayList(0x40);
     MtxF_ExtractScale(&spE4, &D_80060488->view.floatMatrix);
     guMtxF2L(spE4.mf, &sp128);
-    guScale(&sp1A8, D_8006049C->scale.x * arg1->scale.x * 0.1f, D_8006049C->scale.y * arg1->scale.y * 0.1f,
-            D_8006049C->scale.z * arg1->scale.z * 0.1f);
-    guTranslate(&sp168, arg1->position.x, arg1->position.y, arg1->position.z);
+    guScale(&sp1A8, D_8006049C->scale.x * particle->scale.x * 0.1f, D_8006049C->scale.y * particle->scale.y * 0.1f,
+            D_8006049C->scale.z * particle->scale.z * 0.1f);
+    guTranslate(&sp168, particle->position.x, particle->position.y, particle->position.z);
     guMtxCatL(&sp1A8, &sp168, sp1EC);
     guMtxCatL(&sp128, sp1EC, sp1EC);
     gSPMatrix(gfx++, sp1EC, G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gSPDisplayList(gfx++, arg2->segments[0]);
+    gSPDisplayList(gfx++, addresses->segments[0]);
     switch (D_8006049C->objectType) {
         case 0x6D:
         case 0x6E:
-            gDPLoadTextureBlock_4b(gfx++, arg2->textures[arg1->misc / 2], G_IM_FMT_I, 32, 32, 0,
+            gDPLoadTextureBlock_4b(gfx++, addresses->textures[particle->age / 2], G_IM_FMT_I, 32, 32, 0,
                                    G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                    G_TX_NOLOD, G_TX_NOLOD);
-            gDPSetPrimColor(gfx++, 0, 0, 0x0A, 0x00, 0x00, 0xC8 - (arg1->misc * 0xD));
+            gDPSetPrimColor(gfx++, 0, 0, 0x0A, 0x00, 0x00, 0xC8 - (particle->age * 0xD));
             break;
         case 0x5C:
-            gDPLoadTextureBlock_4b(gfx++, arg2->textures[arg1->misc / 2], G_IM_FMT_I, 32, 32, 0,
+            gDPLoadTextureBlock_4b(gfx++, addresses->textures[particle->age / 2], G_IM_FMT_I, 32, 32, 0,
                                    G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                    G_TX_NOLOD, G_TX_NOLOD);
             gDPSetEnvColor(gfx++, 0x32, 0x14, 0x46, 0x00);
-            if (arg1->misc < 0xA) {
+            if (particle->age < 0xA) {
                 gDPSetPrimColor(gfx++, 0, 0, 0x64, 0x46, 0x82, 0xFF);
             } else {
-                gDPSetPrimColor(gfx++, 0, 0, 0x64, 0x46, 0x82, 0x28F - (arg1->misc * 0x28));
+                gDPSetPrimColor(gfx++, 0, 0, 0x64, 0x46, 0x82, 0x28F - (particle->age * 0x28));
             }
             break;
         case 0x92:
         case 0x4D:
         case 0x4E:
-            gDPLoadTextureBlock_4b(gfx++, arg2->textures[arg1->misc / 2], G_IM_FMT_I, 32, 32, 0,
+            gDPLoadTextureBlock_4b(gfx++, addresses->textures[particle->age / 2], G_IM_FMT_I, 32, 32, 0,
                                    G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                    G_TX_NOLOD, G_TX_NOLOD);
-            gDPSetPrimColor(gfx++, 0, 0, 0xFF, 0xFF, 0x00, 0xFA - (arg1->misc * 3));
+            gDPSetPrimColor(gfx++, 0, 0, 0xFF, 0xFF, 0x00, 0xFA - (particle->age * 3));
             break;
         case 0x86:
         case 0x90:
-            gDPLoadTextureBlock(gfx++, arg2->textures[arg1->misc / 2], G_IM_FMT_IA, G_IM_SIZ_16b, 32, 32, 0,
+            gDPLoadTextureBlock(gfx++, addresses->textures[particle->age / 2], G_IM_FMT_IA, G_IM_SIZ_16b, 32, 32, 0,
                                 G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
-            if (arg1->misc < 4) {
-                gDPSetPrimColor(gfx++, 0, 0, 0xFF, 0xFF, 0xFF, (arg1->misc * 0x14) + 0xB4);
+            if (particle->age < 4) {
+                gDPSetPrimColor(gfx++, 0, 0, 0xFF, 0xFF, 0xFF, (particle->age * 0x14) + 0xB4);
             } else {
-                gDPSetPrimColor(gfx++, 0, 0, 0xFF, 0xFF, 0xFF, 0x122 - (arg1->misc * 0xA));
+                gDPSetPrimColor(gfx++, 0, 0, 0xFF, 0xFF, 0xFF, 0x122 - (particle->age * 0xA));
             }
             break;
         default:
-            gDPLoadTextureBlock_4b(gfx++, arg2->textures[arg1->misc / 2], G_IM_FMT_I, 32, 32, 0,
+            gDPLoadTextureBlock_4b(gfx++, addresses->textures[particle->age / 2], G_IM_FMT_I, 32, 32, 0,
                                    G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                    G_TX_NOLOD, G_TX_NOLOD);
-            gDPSetPrimColor(gfx++, 0, 0, 0x0A, 0x00, 0x00, 0xC8 - (arg1->misc * 0xD));
+            gDPSetPrimColor(gfx++, 0, 0, 0x0A, 0x00, 0x00, 0xC8 - (particle->age * 0xD));
             break;
     }
-    gSPDisplayList(gfx++, arg2->segments[1]);
+    gSPDisplayList(gfx++, addresses->segments[1]);
     gSPPopMatrix(gfx++, G_MTX_MODELVIEW);
     if (ModelPhase_IsIdle() == 0) {
         ptr = D_8006049C;
         switch (ptr->objectType) {
             case 0x6D:
             case 0x6E:
-                arg1->position.y += 0.5f * ptr->scale.y;
-                arg1->misc++;
-                arg1->scale.x += 0.1f;
-                arg1->scale.y += 0.1f;
-                arg1->scale.z += 0.1f;
-                if (arg1->misc >= 0x10) {
-                    arg1->active = 0;
+                particle->position.y += 0.5f * ptr->scale.y;
+                particle->age++;
+                particle->scale.x += 0.1f;
+                particle->scale.y += 0.1f;
+                particle->scale.z += 0.1f;
+                if (particle->age >= 0x10) {
+                    particle->active = 0;
                 }
                 break;
             case 0x5C:
-                arg1->misc++;
-                if (arg1->misc >= 0x10) {
-                    arg1->active = 0;
+                particle->age++;
+                if (particle->age >= 0x10) {
+                    particle->active = 0;
                 }
                 break;
             case 0x92:
-                arg1->position.y += 1.5f * ptr->scale.y;
-                arg1->misc++;
-                arg1->scale.x += 0.005f;
-                arg1->scale.y += 0.005f;
-                arg1->scale.z += 0.005f;
-                if (arg1->misc >= 0x10) {
-                    arg1->active = 0;
+                particle->position.y += 1.5f * ptr->scale.y;
+                particle->age++;
+                particle->scale.x += 0.005f;
+                particle->scale.y += 0.005f;
+                particle->scale.z += 0.005f;
+                if (particle->age >= 0x10) {
+                    particle->active = 0;
                 }
                 break;
             case 0x4D:
-                arg1->position.y += 0.75f * ptr->scale.y;
-                arg1->misc++;
-                arg1->scale.x += 0.005f;
-                arg1->scale.y += 0.005f;
-                arg1->scale.z += 0.005f;
-                if (arg1->misc >= 0x10) {
-                    arg1->active = 0;
+                particle->position.y += 0.75f * ptr->scale.y;
+                particle->age++;
+                particle->scale.x += 0.005f;
+                particle->scale.y += 0.005f;
+                particle->scale.z += 0.005f;
+                if (particle->age >= 0x10) {
+                    particle->active = 0;
                 }
                 break;
             case 0x4E:
-                arg1->position.y += ptr->scale.y;
-                arg1->misc++;
-                arg1->scale.x += 0.005f;
-                arg1->scale.y += 0.005f;
-                arg1->scale.z += 0.005f;
-                if (arg1->misc >= 0x10) {
-                    arg1->active = 0;
+                particle->position.y += ptr->scale.y;
+                particle->age++;
+                particle->scale.x += 0.005f;
+                particle->scale.y += 0.005f;
+                particle->scale.z += 0.005f;
+                if (particle->age >= 0x10) {
+                    particle->active = 0;
                 }
                 break;
             case 0x90:
-                arg1->position.y -= 0.5f * ptr->scale.y;
-                if (arg1->misc < 4) {
-                    arg1->scale.x += 0.15f;
-                    arg1->scale.y += 0.15f;
-                    arg1->scale.z += 0.15f;
+                particle->position.y -= 0.5f * ptr->scale.y;
+                if (particle->age < 4) {
+                    particle->scale.x += 0.15f;
+                    particle->scale.y += 0.15f;
+                    particle->scale.z += 0.15f;
                 } else {
-                    arg1->scale.x -= 0.075f;
-                    arg1->scale.y -= 0.075f;
-                    arg1->scale.z -= 0.075f;
+                    particle->scale.x -= 0.075f;
+                    particle->scale.y -= 0.075f;
+                    particle->scale.z -= 0.075f;
                 }
-                arg1->misc++;
-                if ((arg1->misc >= 0xC) || (arg1->position.y < 0.0f)) {
-                    arg1->active = 0;
+                particle->age++;
+                if ((particle->age >= 0xC) || (particle->position.y < 0.0f)) {
+                    particle->active = 0;
                 }
                 break;
             case 0x86:
-                if (arg1->misc < 4) {
-                    arg1->scale.x += 0.15f;
-                    arg1->scale.y += 0.15f;
-                    arg1->scale.z += 0.15f;
+                if (particle->age < 4) {
+                    particle->scale.x += 0.15f;
+                    particle->scale.y += 0.15f;
+                    particle->scale.z += 0.15f;
                 } else {
-                    arg1->scale.x -= 0.075f;
-                    arg1->scale.y -= 0.075f;
-                    arg1->scale.z -= 0.075f;
+                    particle->scale.x -= 0.075f;
+                    particle->scale.y -= 0.075f;
+                    particle->scale.z -= 0.075f;
                 }
-                arg1->misc++;
-                if ((arg1->misc >= 0xC) || (arg1->position.y < 0.0f)) {
-                    arg1->active = 0;
+                particle->age++;
+                if ((particle->age >= 0xC) || (particle->position.y < 0.0f)) {
+                    particle->active = 0;
                 }
                 break;
             default:
-                arg1->misc++;
-                if (arg1->misc >= 0x10) {
-                    arg1->active = 0;
+                particle->age++;
+                if (particle->age >= 0x10) {
+                    particle->active = 0;
                 }
                 break;
         }
-        arg1->position.x = (f32)(arg1->position.x + arg1->velocity.x);
-        arg1->position.y = (f32)(arg1->position.y + arg1->velocity.y);
-        arg1->position.z = (f32)(arg1->position.z + arg1->velocity.z);
-        arg1->velocity.x *= 0.9f;
-        arg1->velocity.y *= 0.9f;
-        arg1->velocity.z *= 0.9f;
+        particle->position.x = (f32)(particle->position.x + particle->velocity.x);
+        particle->position.y = (f32)(particle->position.y + particle->velocity.y);
+        particle->position.z = (f32)(particle->position.z + particle->velocity.z);
+        particle->velocity.x *= 0.9f;
+        particle->velocity.y *= 0.9f;
+        particle->velocity.z *= 0.9f;
     }
     return gfx;
 }
 
-Gfx* func_81001A64(Gfx* gfx, ModelParticle* arg1, DisplayListAddresses* arg2, s16 arg3) {
+/** Draws every active particle of an effect slot. Hit in Free Battle. */
+Gfx* ModelParticle_DrawAll(Gfx* gfx, ModelParticle* particles, DisplayListAddresses* addresses, s16 effect_slot) {
     s32 i;
 
-    for (i = 0; i < 10; i++, arg1++) {
-        if (arg1->active == 1) {
-            gfx = func_81000F18(gfx, arg1, arg2, arg3);
-            D_81002C10++;
+    for (i = 0; i < 10; i++, particles++) {
+        if (particles->active == 1) {
+            gfx = ModelParticle_Draw(gfx, particles, addresses, effect_slot);
+            sModelParticleDrawCount++;
         }
     }
     return gfx;
 }
 
-void func_81001B24(s32 arg0, DisplayListState* state) {
-    s32 pad0[2];
+/**
+ * Model callback for species particle effects. Phase 2 updates spawning and draws the particles
+ * of the model's effect slot, on the first call of the frame only. Used by Ponyta, Rapidash,
+ * Gastly, Koffing, Weezing, Vaporeon, Articuno and Moltres model data; hit for Vaporeon,
+ * Articuno and Moltres.
+ */
+void ModelCallback_Particles(s32 phase, DisplayListState* state) {
+    s32 pad0[2]; // FAKE
     DisplayListAddresses* sp4C;
-    s32 pad;
+    s32 pad; // FAKE
     s16 temp_v1;
-    s32 pad3[3];
+    s32 pad3[3]; // FAKE
     ModelParticle* sp1C;
     s32 sp18;
     ModelParticle* temp_a1;
     Gfx* gfx;
-    s32 pad4[1];
+    s32 pad4[1]; // FAKE
 
     sp4C = state->addresses;
-    if (arg0 == 0) {
-    } else if (arg0 == 2) {
-        if (D_81002C14 == 0) {
+    if (phase == 0) { // karodo
+    } else if (phase == 2) {
+        if (sModelParticleCallbackCount == 0) {
             state->gfx = Gfx_AllocDisplayList(0x418);
         } else {
             state->gfx = Gfx_AllocDisplayList(8);
         }
         gfx = state->gfx;
         temp_v1 = D_8006049C->effectSlot;
-        if ((temp_v1 < 2) && (D_81002C10 >= 0) && (D_81002C10 < 11)) {
-            temp_a1 = D_810028A0[temp_v1];
+        if ((temp_v1 < 2) && (sModelParticleDrawCount >= 0) && (sModelParticleDrawCount < 11)) {
+            temp_a1 = sModelParticles[temp_v1];
             sp1C = temp_a1;
             sp18 = temp_v1;
-            func_81000CC8(temp_a1);
-            if (D_81002C14 == 0) {
-                gfx = func_81001A64(gfx, temp_a1, sp4C, temp_v1);
+            ModelParticle_UpdateSpawn(temp_a1);
+            if (sModelParticleCallbackCount == 0) {
+                gfx = ModelParticle_DrawAll(gfx, temp_a1, sp4C, temp_v1);
             }
         }
         gSPEndDisplayList(gfx++);
     }
-    D_81002C14++;
+    sModelParticleCallbackCount++;
 }
