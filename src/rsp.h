@@ -8,12 +8,12 @@
 // A request for the storage thread (thread20_rsp), allocated by the Storage_Queue* functions in dma.c.
 // It starts with the space of a LEOCmd, which the 64DD requests use (see StorageLeoRequest).
 typedef struct StorageRequest {
-    /* 0x00 */ u8 command; // 0xF0/0xF1 ROM read, 0xF2/0xF3 SRAM read/write, else a LEO command (5 read, 6 write, 7 seek, ...)
+    /* 0x00 */ u8 command; // @unverified: 0xF0/0xF1 ROM read, 0xF2/0xF3 SRAM read/write, else a LEO command (5 read, 6 write, 7 seek, ...)
     /* 0x01 */ char filler1[0x1B];
-    /* 0x1C */ s32 devAddr; // ROM or SRAM address, or 64DD LBA
-    /* 0x20 */ void* dramAddr;
-    /* 0x24 */ s32 size; // bytes, or the number of LBAs on the 64DD
-    /* 0x28 */ s32 replyQueue; // OSMesgQueue* that gets the result, or 0
+    /* 0x1C */ s32 devAddr; // @unverified: ROM or SRAM address, or 64DD LBA
+    /* 0x20 */ void* dramAddr; // @unverified: passed as the DMA RAM address
+    /* 0x24 */ s32 size; // @unverified: bytes, or the number of LBAs on the 64DD
+    /* 0x28 */ s32 replyQueue; // @unverified: OSMesgQueue* that gets the result, or 0
 } StorageRequest; // size = 0x2C
 
 // The StorageRequest of the 64DD commands that take a LEOCmd.

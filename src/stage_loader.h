@@ -50,7 +50,7 @@ typedef StageContext unk_func_80007444;
 
 // A string queued by HAL_Printf or TextRenderer_QueuePersistentString.
 typedef struct QueuedString {
-    /* 0x00 */ struct QueuedString* next;
+    /* 0x00 */ struct QueuedString* next; // @unverified: list link walked by the string queue draw
     /* 0x04 */ s16 x; // @unverified: TextRenderer_DrawString x
     /* 0x06 */ s16 y; // @unverified: TextRenderer_DrawString y
     /* 0x08 */ s8 text[4]; // @unverified: NUL-terminated string, allocated past the struct end (HAL_Printf)

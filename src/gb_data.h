@@ -80,7 +80,7 @@ typedef struct GbPokemonRecord {
 
 // A Gen 1 party Pokemon record (pokered party_struct).
 typedef struct GbPokemonRecordExt {
-    /* 0x00 */ GbPokemonRecord box;
+    /* 0x00 */ GbPokemonRecord box; // @unverified: pokered party_struct starts with box_struct
     /* 0x21 */ u8 level; // @unverified: BattleMon.level (Pokemon_FromGbRecordExt, Pokemon_ToGbRecordExt); pokered party_struct
     // Big-endian u16 stats, read and written with GbData_ReadU16BE/GbData_WriteU16BE. Byte arrays
     // keep the record unaligned: GbSaveParty places it at even and odd offsets.
@@ -130,7 +130,7 @@ typedef struct GbSaveMainData {
     // them through BattleMon.species (Deck_ReadEntry decks 34 and 35), so they keep that type.
     /* 0x044 */ u8 numBagItems; // @unverified: Deck_GetCount deck 35 (capacity 20); pokered wNumBagItems
     /* 0x045 */ BattleMonSpecies bagItems[20]; // @unverified: Deck_ReadEntry deck 35; pokered wBagItems
-    /* 0x06D */ u8 bagItemsEnd;
+    /* 0x06D */ u8 unk_06D; // Untouched; pokered puts the bag list 0xFF terminator here.
     /* 0x06E */ char unk06E[0x3];
     /* 0x071 */ u8 rivalName[6]; // @unverified: func_80022E30/func_80022E88; pokered wRivalName
     /* 0x077 */ char unk077[0x4];
@@ -140,7 +140,7 @@ typedef struct GbSaveMainData {
     /* 0x081 */ char unk081[0x1DB];
     /* 0x25C */ u8 numBoxItems; // @unverified: Deck_GetCount deck 34 (capacity 50); pokered wNumBoxItems
     /* 0x25D */ BattleMonSpecies boxItems[50]; // @unverified: Deck_ReadEntry deck 34; pokered wBoxItems
-    /* 0x2C1 */ u8 boxItemsEnd;
+    /* 0x2C1 */ u8 unk_2C1; // Untouched; pokered puts the PC item list 0xFF terminator here.
     /* 0x2C2 */ u8 currentBox[2]; // @unverified: read as a big-endian u16 >> 8: bit 0x80 boxes in use, low bits the box (GbSave_GetBoxCount); pokered wCurrentBoxNum
     /* 0x2C4 */ char unk2C4[0x1A9];
     /* 0x46D */ s8 unk_46D; // an event flag byte (SRAM 0x29ED): bit 0x20 is the got-Pokedex flag (GbSave_HasPokedex)

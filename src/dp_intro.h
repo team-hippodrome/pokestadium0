@@ -22,10 +22,10 @@ typedef struct DisplayFrame {
 // The display worker thread (D_800870D0): renders a requested frame and shows the one before.
 typedef struct DisplayWorker {
     /* 0x000 */ OSThread thread;
-    /* 0x1B0 */ u8 stack[0x800];
+    /* 0x1B0 */ u8 stack[0x800]; // @unverified: osCreateThread stack top in the display init
     /* 0x9B0 */ struct unk_D_80068BB0* lineImage; // @unverified: one 640-pixel line image (Display_ClearFramebufferLine); also the top of stack
-    /* 0x9B4 */ OSMesg frameMesgBuf;
-    /* 0x9B8 */ OSMesg doneMesgBuf;
+    /* 0x9B4 */ OSMesg frameMesgBuf; // @unverified: buffer of the frame request queue
+    /* 0x9B8 */ OSMesg doneMesgBuf; // @unverified: buffer of the frame done queue
     /* 0x9BC */ OSMesgQueue frameQueue; // @unverified: gets DisplayFrame requests (Display_QueueFramebufferRequest)
     /* 0x9D4 */ OSMesgQueue doneQueue; // @unverified: the worker sends 'DONE' after each request (Display_WaitForCompletion)
     /* 0x9EC */ SchedClient client; // @unverified: retrace client registered in DisplayWorker_ThreadMain

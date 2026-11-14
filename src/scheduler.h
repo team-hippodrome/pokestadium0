@@ -6,8 +6,8 @@
 
 // A task (graphics, audio or JPEG) handed to the scheduler thread.
 typedef struct SchedTask {
-    /* 0x00 */ OSMesg mesg; // buffer of queue
-    /* 0x04 */ OSMesgQueue queue; // gets 'DONE' when the task finished
+    /* 0x00 */ OSMesg mesg; // @unverified: buffer of queue
+    /* 0x04 */ OSMesgQueue queue; // @unverified: gets 'DONE' when the task finished
     /* 0x1C */ u16 state; // @unverified: from Sched_StartTask/Sched_HandleRspCompletion: 0 queued, 1 running, 2 yield requested, 3 RSP done
     /* 0x1E */ u16 rdpState; // @unverified: from Sched_StartTask/Sched_HandleRdpCompletion: 1 RDP busy, 2 RDP done (or no RDP work)
     /* 0x20 */ OSTask task;
@@ -24,7 +24,7 @@ typedef struct SchedClient {
 typedef struct Scheduler {
     /* 0x000 */ OSThread thread;
     /* 0x1B0 */ u8 threadStack[0x800]; // @unverified: Sched_Init passes its end (mesgBuf) as the thread's stack pointer
-    /* 0x9B0 */ OSMesg mesgBuf[16]; // buffer of queue (also the top of threadStack)
+    /* 0x9B0 */ OSMesg mesgBuf[16]; // @unverified: buffer of queue (also the top of threadStack)
     /* 0x9F0 */ OSMesgQueue queue;
     /* 0xA08 */ u64 time;
     /* 0xA10 */ SchedClient* clients; // @unverified: head of the retrace client list (func_80004EA8, func_800049E8)
