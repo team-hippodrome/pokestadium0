@@ -33,15 +33,7 @@ typedef struct AudioCmd {
     /* 0x04 */ u32 w1;
 } AudioCmd; // size = 0x8
 
-typedef struct NoteSampleState811077FC {
-    /* 0x00 */ u32 active : 1;
-    /* 0x00 */ u32 needsInit : 1; // @unverified: same offset/use as OoT's NoteSampleState.bitField0.needsInit (AudioSynth_SyncSampleStates clears it)
-    /* 0x00 */ u32 unk00 : 30;
-    /* 0x04 */ char unk04[2];
-    /* 0x06 */ u8 harmonicIndexCurAndPrev; // @unverified: same offset/use as OoT's NoteSampleState.harmonicIndexCurAndPrev (cleared each sync)
-    /* 0x07 */ char unk07[0x11];
-} NoteSampleState811077FC; // size = 0x18
-extern NoteSampleState811077FC* D_81184288;
+extern NoteSampleState* D_81184288;
 
 /* Reverb ring-buffer view of an Reverb81107E70 entry (same 0x158-byte layout). */
 typedef struct ReverbItem81107390 {
@@ -165,18 +157,14 @@ void AudioSynth_DisableSampleStates(s32 update_index, s32 voice_index) {
 
     for (i = update_index + 1; i < D_811858B8.ticksPerUpdate; i++) {
         if (!(&(D_81184288 + D_811858E8 * i)[voice_index])->needsInit) {
-            (&(D_81184288 + D_811858E8 * i)[voice_index])->active = 0;
+            (&(D_81184288 + D_811858E8 * i)[voice_index])->enabled = 0;
         } else {
             break;
         }
     }
 }
 
-typedef struct Note811077FC {
-    /* 0x00 */ char unk00[0xB4];
-    /* 0xB4 */ NoteSampleState811077FC voice;
-} Note811077FC; // size = 0xCC
-extern Note811077FC* D_81184664;
+extern Note* D_81184664;
 extern s32 D_811858E8;
 /**
  * Copies each note's sample state into the per-update state. Zelda 64 audio driver.
@@ -186,17 +174,17 @@ extern s32 D_811858E8;
  */
 void AudioSynth_SyncSampleStates(u32 arg0) {
     s32 i;
-    NoteSampleState811077FC* src;
-    NoteSampleState811077FC* dst;
+    NoteSampleState* src;
+    NoteSampleState* dst;
 
     for (i = 0; i < D_811858E8; i++) {
-        src = &D_81184664[i].voice;
+        src = &D_81184664[i].sampleState;
         dst = &D_81184288[D_811858E8 * arg0 + i];
-        if (src->active) {
+        if (src->enabled) {
             *dst = *src;
             src->needsInit = 0;
         } else {
-            dst->active = 0;
+            dst->enabled = 0;
         }
         src->harmonicIndexCurAndPrev = 0;
     }
@@ -376,19 +364,6 @@ void* func_8110807C(void* cmd, s16 channel, s16 slot) {
 }
 
 #define ZSHIFTL_814C(v, s, w) ((u32)(((u32)(v) & ((0x01 << (w)) - 1)) << (s)))
-typedef struct Sub8110814C {
-    /* 0x00 */ u32 enabled : 1;
-    /* 0x00 */ u32 unk00_1 : 7;
-    /* 0x01 */ u8 reverbIndex : 3;
-    /* 0x01 */ u8 unk01_3 : 5;
-    /* 0x02 */ char unk02[0x16];
-} Sub8110814C; // size = 0x18
-
-typedef struct Note8110814C {
-    /* 0x00 */ char unk00[0x10];
-    /* 0x10 */ char synthesisState[0xBC];
-} Note8110814C; // size = 0xCC
-
 typedef struct Reverb8110814C {
     /* 0x000 */ u8 resampleFlags;
     /* 0x001 */ u8 useReverb;
@@ -410,8 +385,7 @@ void* func_81107E70(void* cmd, s16 channel, s16 slot);
 void* func_81107F40(AudioCmd* cmd, s16 channel, s16 slot);
 void* func_8110807C(void* cmd, s16 channel, s16 slot);
 struct ZNoteSubEu;
-struct ZNoteSynthesisState;
-AudioCmd* AudioSynth_ProcessSample(s32 noteIndex, struct ZNoteSubEu* noteSubEu, struct ZNoteSynthesisState* synthesisState, s16* aiBuf, s32 bufLen, AudioCmd* cmd, s32 updateIndex);
+AudioCmd* AudioSynth_ProcessSample(s32 noteIndex, struct ZNoteSubEu* noteSubEu, struct NoteSynthesisState* synthesisState, s16* aiBuf, s32 bufLen, AudioCmd* cmd, s32 updateIndex);
 
 /**
  * Builds the commands for one audio update: reverbs, every note, then the mix into the AI buffer. Zelda 64 audio driver.
@@ -421,8 +395,8 @@ AudioCmd* AudioSynth_ProcessSample(s32 noteIndex, struct ZNoteSubEu* noteSubEu, 
  */
 AudioCmd* AudioSynth_DoOneAudioUpdate(s32* ai_buf, s32 aiBufLen, AudioCmd* cmd, s32 updateIndex) {
     u8 sp94[0x3C];
-    Sub8110814C* noteSubEu;
-    UNUSED Sub8110814C* note_sub_eu2; // FAKE: unused, keeps the frame size
+    NoteSampleState* noteSubEu;
+    UNUSED NoteSampleState* note_sub_eu2; // FAKE: unused, keeps the frame size
     s16 count;
     s16 reverbIndex;
     s32 i;
@@ -430,14 +404,14 @@ AudioCmd* AudioSynth_DoOneAudioUpdate(s32* ai_buf, s32 aiBufLen, AudioCmd* cmd, 
     count = 0;
     if (D_8118427B == 0) {
         for (i = 0; i < D_811858E8; i++) {
-            if (((Sub8110814C*)D_81184288)[D_811858E8 * updateIndex + i].enabled) {
+            if (((NoteSampleState*)D_81184288)[D_811858E8 * updateIndex + i].enabled) {
                 sp94[count++] = i;
             }
         }
     } else {
         for (reverbIndex = 0; reverbIndex < D_8118427B; reverbIndex++) {
             for (i = 0; i < D_811858E8; i++) {
-                noteSubEu = (D_811858E8 * updateIndex + i) + (Sub8110814C*)D_81184288;
+                noteSubEu = (D_811858E8 * updateIndex + i) + (NoteSampleState*)D_81184288;
                 if (count && count && count) {} // FAKE: block boundary that stops as1 propagating the noteSubEu copy
                 if (cmd && cmd && cmd) {} // FAKE: same barrier, also balances register priority
                 if (noteSubEu->enabled && noteSubEu->reverbIndex == reverbIndex) {
@@ -446,7 +420,7 @@ AudioCmd* AudioSynth_DoOneAudioUpdate(s32* ai_buf, s32 aiBufLen, AudioCmd* cmd, 
             }
         }
         for (i = 0; i < D_811858E8; i++) {
-            noteSubEu = (D_811858E8 * updateIndex + i) + (Sub8110814C*)D_81184288;
+            noteSubEu = (D_811858E8 * updateIndex + i) + (NoteSampleState*)D_81184288;
             if (count && count && count) {} // FAKE: block boundary that stops as1 propagating the noteSubEu copy
             if (noteSubEu->enabled && noteSubEu->reverbIndex >= D_8118427B) {
                 sp94[count++] = i;
@@ -464,9 +438,9 @@ AudioCmd* AudioSynth_DoOneAudioUpdate(s32* ai_buf, s32 aiBufLen, AudioCmd* cmd, 
             if (reverbIndex) {} // FAKE: register priority
         }
         while (i < count) {
-            if (((Sub8110814C*)D_81184288)[sp94[i] + updateIndex * D_811858E8].reverbIndex == reverbIndex) {
-                cmd = AudioSynth_ProcessSample(sp94[i], (struct ZNoteSubEu*)&((Sub8110814C*)D_81184288)[sp94[i] + updateIndex * D_811858E8],
-                                    (struct ZNoteSynthesisState*)&((Note8110814C*)D_81184664)[sp94[i]].synthesisState, (s16*)ai_buf, aiBufLen, cmd, updateIndex);
+            if (((NoteSampleState*)D_81184288)[sp94[i] + updateIndex * D_811858E8].reverbIndex == reverbIndex) {
+                cmd = AudioSynth_ProcessSample(sp94[i], (struct ZNoteSubEu*)&((NoteSampleState*)D_81184288)[sp94[i] + updateIndex * D_811858E8],
+                                    (struct NoteSynthesisState*)&((Note*)D_81184664)[sp94[i]].synthesisState, (s16*)ai_buf, aiBufLen, cmd, updateIndex);
             } else {
                 break;
             }
@@ -493,8 +467,8 @@ AudioCmd* AudioSynth_DoOneAudioUpdate(s32* ai_buf, s32 aiBufLen, AudioCmd* cmd, 
     }
 
     while (i < count) {
-        cmd = AudioSynth_ProcessSample(sp94[i], (struct ZNoteSubEu*)&((Sub8110814C*)D_81184288)[sp94[i] + updateIndex * D_811858E8],
-                            (struct ZNoteSynthesisState*)&((Note8110814C*)D_81184664)[sp94[i]].synthesisState, (s16*)ai_buf, aiBufLen, cmd, updateIndex);
+        cmd = AudioSynth_ProcessSample(sp94[i], (struct ZNoteSubEu*)&((NoteSampleState*)D_81184288)[sp94[i] + updateIndex * D_811858E8],
+                            (struct NoteSynthesisState*)&((Note*)D_81184664)[sp94[i]].synthesisState, (s16*)ai_buf, aiBufLen, cmd, updateIndex);
         i++;
     }
 
@@ -566,20 +540,6 @@ typedef struct ZSynthesisBuffers {
     /* 0x60 */ s16 filterBuffer[0x10];
 } ZSynthesisBuffers;
 
-typedef struct ZNoteSynthesisState {
-    /* 0x00 */ u8 restart;
-    /* 0x01 */ u8 sampleDmaIndex;
-    /* 0x02 */ u8 prevHeadsetPanRight;
-    /* 0x03 */ u8 prevHeadsetPanLeft;
-    /* 0x04 */ u8 reverbVol;
-    /* 0x05 */ u8 numParts; // @unverified: same offset/use as OoT's NoteSynthesisState.numParts (compared with the part count)
-    /* 0x06 */ u16 samplePosFrac;
-    /* 0x08 */ s32 samplePosInt;
-    /* 0x0C */ ZSynthesisBuffers* synthesisBuffers;
-    /* 0x10 */ s16 curVolLeft;
-    /* 0x12 */ s16 curVolRight;
-} ZNoteSynthesisState;
-
 typedef struct ZNote {
     /* 0x00 */ char unk00[0xB4];
     /* 0xB4 */ ZNoteSubEu noteSubEu;
@@ -588,7 +548,7 @@ typedef struct ZNote {
 void* AudioSynth_FinalResample(AudioCmd*, s8*, s32, u16, u16, s32);
 extern s16 D_81136A58[];
 u8* AudioLoad_DmaSampleData(u8*, s32, s32, u8*, u32);
-AudioCmd* AudioSynth_ProcessEnvelope(AudioCmd*, ZNoteSubEu*, ZNoteSynthesisState*, s32, u16, s32, s32);
+AudioCmd* AudioSynth_ProcessEnvelope(AudioCmd*, ZNoteSubEu*, NoteSynthesisState*, s32, u16, s32, s32);
 
 #define ZALIGN(val, amnt) (((val) + (1 << amnt) - 1) & ~((1 << amnt) - 1))
 #define ZSHIFTL(v, s, w) ((u32)(((u32)(v) & ((0x01 << (w)) - 1)) << (s)))
@@ -618,7 +578,7 @@ AudioCmd* AudioSynth_ProcessEnvelope(AudioCmd*, ZNoteSubEu*, ZNoteSynthesisState
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-AudioCmd* AudioSynth_ProcessSample(s32 note_index, ZNoteSubEu* noteSubEu, ZNoteSynthesisState* synthesisState, s16* ai_buf,
+AudioCmd* AudioSynth_ProcessSample(s32 note_index, ZNoteSubEu* noteSubEu, NoteSynthesisState* synthesisState, s16* ai_buf,
                         s32 bufLen, AudioCmd* cmd, s32 update_index) {
     UNUSED s32 pad0[3]; // FAKE
     ZAudioBankSample* audioBookSample;
@@ -958,33 +918,13 @@ void* AudioSynth_FinalResample(AudioCmd* cmd, s8* arg1, s32 arg2, u16 count, u16
     return cmd;
 }
 
-typedef struct Src8110938C {
-    /* 0x00 */ u32 unk00_0 : 4;
-    /* 0x00 */ u32 stereoStrongRight : 1; // @unverified: bit 4 of NoteSubEu byte 0, passed to the envelope mixer like OoT's stereoStrongRight
-    /* 0x00 */ u32 stereoStrongLeft : 1; // @unverified: bit 5 of NoteSubEu byte 0, passed to the envelope mixer like OoT's stereoStrongLeft
-    /* 0x00 */ u32 unk00_6 : 26;
-    /* 0x04 */ char unk04[1];
-    /* 0x05 */ u8 reverbVol; // @unverified: same offset/use as OoT's NoteSampleState.reverbVol
-    /* 0x06 */ char unk06[2];
-    /* 0x08 */ u16 targetVolLeft; // @unverified: same offset/use as OoT's NoteSampleState.targetVolLeft
-    /* 0x0A */ u16 targetVolRight; // @unverified: same offset/use as OoT's NoteSampleState.targetVolRight
-} Src8110938C;
-
-typedef struct State8110938C {
-    /* 0x00 */ char unk00[4];
-    /* 0x04 */ u8 reverbVol; // @unverified: same offset/use as OoT's NoteSynthesisState.reverbVol
-    /* 0x05 */ char unk05[0xB];
-    /* 0x10 */ u16 curVolLeft; // @unverified: same offset/use as OoT's NoteSynthesisState.curVolLeft
-    /* 0x12 */ u16 curVolRight; // @unverified: same offset/use as OoT's NoteSynthesisState.curVolRight
-} State8110938C;
-
 /**
  * Adds the envelope (volume ramp, pan, reverb send) commands for a note. Zelda 64 audio driver.
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-AudioCmd* AudioSynth_ProcessEnvelope(AudioCmd* cmd, ZNoteSubEu* note_sub_eu, ZNoteSynthesisState* synthesis_state, s32 ai_buf_len, u16 in_buf, s32 headset_pan_settings, s32 flags) {
+AudioCmd* AudioSynth_ProcessEnvelope(AudioCmd* cmd, ZNoteSubEu* note_sub_eu, NoteSynthesisState* synthesis_state, s32 ai_buf_len, u16 in_buf, s32 headset_pan_settings, s32 flags) {
     s32 reverbVol;
     u16 cur_vol_left;
     u16 target_vol_left;
@@ -996,10 +936,10 @@ AudioCmd* AudioSynth_ProcessEnvelope(AudioCmd* cmd, ZNoteSubEu* note_sub_eu, ZNo
     u16 target_vol_right;
     s16 ramp_reverb;
 
-    cur_vol_left = ((State8110938C*)synthesis_state)->curVolLeft;
-    cur_vol_right = ((State8110938C*)synthesis_state)->curVolRight;
-    target_vol_left = ((Src8110938C*)note_sub_eu)->targetVolLeft;
-    target_vol_right = ((Src8110938C*)note_sub_eu)->targetVolRight;
+    cur_vol_left = ((NoteSynthesisState*)synthesis_state)->curVolLeft;
+    cur_vol_right = ((NoteSynthesisState*)synthesis_state)->curVolRight;
+    target_vol_left = ((NoteSampleState*)note_sub_eu)->targetVolLeft;
+    target_vol_right = ((NoteSampleState*)note_sub_eu)->targetVolRight;
     target_vol_left <<= 4;
     target_vol_right <<= 4;
 
@@ -1014,23 +954,23 @@ AudioCmd* AudioSynth_ProcessEnvelope(AudioCmd* cmd, ZNoteSubEu* note_sub_eu, ZNo
         ramp_right = 0;
     }
 
-    source_reverb_vol = ((State8110938C*)synthesis_state)->reverbVol;
+    source_reverb_vol = ((NoteSynthesisState*)synthesis_state)->reverbVol;
     // FAKE: dead assignment, reverbVol is overwritten before any use
-    reverbVol = ((Src8110938C*)note_sub_eu)->reverbVol;
-    if (((Src8110938C*)note_sub_eu)->reverbVol != source_reverb_vol) {
-        reverbVol = ((((Src8110938C*)note_sub_eu)->reverbVol & 0x7F) - (source_reverb_vol & 0x7F)) << 9;
+    reverbVol = ((NoteSampleState*)note_sub_eu)->reverbVol;
+    if (((NoteSampleState*)note_sub_eu)->reverbVol != source_reverb_vol) {
+        reverbVol = ((((NoteSampleState*)note_sub_eu)->reverbVol & 0x7F) - (source_reverb_vol & 0x7F)) << 9;
         ramp_reverb = reverbVol / (ai_buf_len >> 3);
-        ((State8110938C*)synthesis_state)->reverbVol = ((Src8110938C*)note_sub_eu)->reverbVol;
+        ((NoteSynthesisState*)synthesis_state)->reverbVol = ((NoteSampleState*)note_sub_eu)->reverbVol;
     } else {
         ramp_reverb = 0;
     }
 
-    ((State8110938C*)synthesis_state)->curVolLeft = cur_vol_left + (ramp_left * (ai_buf_len >> 3));
-    ((State8110938C*)synthesis_state)->curVolRight = cur_vol_right + (ramp_right * (ai_buf_len >> 3));
+    ((NoteSynthesisState*)synthesis_state)->curVolLeft = cur_vol_left + (ramp_left * (ai_buf_len >> 3));
+    ((NoteSynthesisState*)synthesis_state)->curVolRight = cur_vol_right + (ramp_right * (ai_buf_len >> 3));
 
     // each command is kept on one line (as a macro would expand), the line numbers affect codegen
     { AudioCmd* _a = cmd++; _a->w0 = (((u32) ((((u32) 0x12) & ((0x01 << 8) - 1)) << 24)) | ((u32) ((((u32) ((source_reverb_vol & 0x7F) * 2)) & ((0x01 << 8) - 1)) << 16))) | ((u32) ((((u32) ramp_reverb) & ((0x01 << 16) - 1)) << 0)); _a->w1 = ((u32) ((((u32) ramp_left) & ((0x01 << 16) - 1)) << 16)) | ((u32) ((((u32) ramp_right) & ((0x01 << 16) - 1)) << 0)); }
     { AudioCmd* _a = cmd++; _a->w0 = (u32) ((((u32) 0x16) & ((0x01 << 8) - 1)) << 24); _a->w1 = ((u32) ((((u32) cur_vol_left) & ((0x01 << 16) - 1)) << 16)) | ((u32) ((((u32) cur_vol_right) & ((0x01 << 16) - 1)) << 0)); }
-    { AudioCmd* _a = cmd++; _a->w0 = ((((((u32) ((((u32) 0x13) & ((0x01 << 8) - 1)) << 24)) | ((u32) ((((u32) (in_buf >> 4)) & ((0x01 << 8) - 1)) << 16))) | ((u32) ((((u32) ai_buf_len) & ((0x01 << 8) - 1)) << 8))) | ((u32) ((((u32) ((source_reverb_vol & 0x80) >> 7)) & ((0x01 << 1) - 1)) << 2))) | ((u32) ((((u32) ((Src8110938C*)note_sub_eu)->stereoStrongRight) & ((0x01 << 1) - 1)) << 1))) | ((u32) ((((u32) ((Src8110938C*)note_sub_eu)->stereoStrongLeft) & ((0x01 << 1) - 1)) << 0)); _a->w1 = 0x94AEC8E2; }
+    { AudioCmd* _a = cmd++; _a->w0 = ((((((u32) ((((u32) 0x13) & ((0x01 << 8) - 1)) << 24)) | ((u32) ((((u32) (in_buf >> 4)) & ((0x01 << 8) - 1)) << 16))) | ((u32) ((((u32) ai_buf_len) & ((0x01 << 8) - 1)) << 8))) | ((u32) ((((u32) ((source_reverb_vol & 0x80) >> 7)) & ((0x01 << 1) - 1)) << 2))) | ((u32) ((((u32) ((NoteSampleState*)note_sub_eu)->stereoStrongRight) & ((0x01 << 1) - 1)) << 1))) | ((u32) ((((u32) ((NoteSampleState*)note_sub_eu)->stereoStrongLeft) & ((0x01 << 1) - 1)) << 0)); _a->w1 = 0x94AEC8E2; }
     return cmd;
 }

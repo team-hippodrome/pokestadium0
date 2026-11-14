@@ -635,10 +635,15 @@ typedef struct SequenceLayer {
 } SequenceLayer; // size = 0x84
 
 typedef struct NoteSynthesisState {
-    /* 0x00 */ u8 unk_00[4];
+    /* 0x00 */ u8 restart; // @unverified: same offset/use as OoT's NoteSynthesisState.atLoopPoint/stopLoop byte
+    /* 0x01 */ u8 sampleDmaIndex; // @unverified: same offset/use as OoT's NoteSynthesisState.sampleDmaIndex
+    /* 0x02 */ u8 prevHeadsetPanRight; // @unverified: same offset/use as OoT's NoteSynthesisState.prevHaasEffectRightDelaySize
+    /* 0x03 */ u8 prevHeadsetPanLeft; // @unverified: same offset/use as OoT's NoteSynthesisState.prevHaasEffectLeftDelaySize
     /* 0x04 */ u8 reverbVol; // @unverified: same offset/use as OoT's NoteSynthesisState.reverbVol
-    /* 0x05 */ u8 unk_05[7];
-    /* 0x0C */ void* synthesisBuffers; // @unverified: same offset/use as OoT's NoteSynthesisState.synthesisBuffers
+    /* 0x05 */ u8 numParts; // @unverified: same offset/use as OoT's NoteSynthesisState.numParts
+    /* 0x06 */ u16 samplePosFrac; // @unverified: same offset/use as OoT's NoteSynthesisState.samplePosFrac
+    /* 0x08 */ s32 samplePosInt; // @unverified: same offset/use as OoT's NoteSynthesisState.samplePosInt
+    /* 0x0C */ struct ZSynthesisBuffers* synthesisBuffers; // @unverified: same offset/use as OoT's NoteSynthesisState.synthesisBuffers
     /* 0x10 */ u16 curVolLeft; // @unverified: same offset/use as OoT's NoteSynthesisState.curVolLeft
     /* 0x12 */ u16 curVolRight; // @unverified: same offset/use as OoT's NoteSynthesisState.curVolRight
     /* 0x14 */ u8 unk_14[0xC];
