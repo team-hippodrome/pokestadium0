@@ -94,6 +94,17 @@ typedef struct TextBox {
     /* 0x34 */ s32 lineCount; // @unverified: TextBox_Init arg3; sets the window height
 } TextBox; // size = 0x38
 
+/* The 8x8 edge textures of a textured frame (Ui_DrawTexturedFrame) or divider (Ui_DrawTexturedDivider,
+ * func_80029864), e.g. D_8007356C. */
+typedef struct FrameTextures {
+    /* 0x00 */ s32 loadArg; // @unverified: last argument of the texture loader
+    /* 0x04 */ s32 format; // @unverified: index of the loader in D_800734F0, D_80073500 or D_80073510
+    /* 0x08 */ u8* top; // @unverified: drawn along the top edge by Ui_DrawTexturedFrame
+    /* 0x0C */ u8* left; // @unverified: along the left edge
+    /* 0x10 */ u8* bottom; // @unverified: along the bottom edge
+    /* 0x14 */ u8* right; // @unverified: along the right edge
+} FrameTextures; // size = 0x18
+
 /* A frame with text that blinks (BlinkingTextBox_Init, BlinkingTextBox_Draw), e.g. the Free Battle entry message. */
 typedef struct BlinkingTextBox {
     /* 0x00 */ WindowFrame frame; // @unverified: centered on the screen around the text (BlinkingTextBox_Init)

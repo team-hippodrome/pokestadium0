@@ -292,7 +292,7 @@ extern GbTexLoadFunc4 D_800734F0[];
  * screen after it, as (445, 78, 116, 112) and (79, 202, 116, 112).
  * @unverified Name guessed from the code; comment kept.
  */
-void Ui_DrawTexturedFrame(s32 x, s32 y, s32 w, s32 h, u8* arg4) {
+void Ui_DrawTexturedFrame(s32 x, s32 y, s32 w, s32 h, FrameTextures* arg4) {
     GbTexLoadFunc4 load;
     s32 x2;
     s32 y2;
@@ -307,19 +307,19 @@ void Ui_DrawTexturedFrame(s32 x, s32 y, s32 w, s32 h, u8* arg4) {
     x2 = x + w;
     y2 = y + h;
     y8 = (y + 8) << 2;
-    load = D_800734F0[M2C_FIELD(arg4, s32*, 4)];
-    load(8, 8, M2C_FIELD(arg4, u8**, 8), M2C_FIELD(arg4, s32*, 0));
+    load = D_800734F0[arg4->format];
+    load(8, 8, arg4->top, arg4->loadArg);
     gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x2 - 8U) << 2, y8, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
-    load(8, 8, M2C_FIELD(arg4, u8**, 0x14), M2C_FIELD(arg4, s32*, 0));
+    load(8, 8, arg4->right, arg4->loadArg);
     gSPTextureRectangle(gDisplayListHead++, (x2 - 8) << 2, y << 2, x2 << 2, (y2 - 8U) << 2, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
-    load(8, 8, M2C_FIELD(arg4, u8**, 0x10), M2C_FIELD(arg4, s32*, 0));
+    load(8, 8, arg4->bottom, arg4->loadArg);
     gSPTextureRectangle(gDisplayListHead++, (x + 8) << 2, (y2 - 8) << 2, x2 << 2, y2 << 2, G_TX_RENDERTILE, (w * -0x20) + 0x200, 0, 0x400, 0x400);
-    load(8, 8, M2C_FIELD(arg4, u8**, 0xC), M2C_FIELD(arg4, s32*, 0));
+    load(8, 8, arg4->left, arg4->loadArg);
     gSPTextureRectangle(gDisplayListHead++, x << 2, y8, (x + 8) << 2, y2 << 2, G_TX_RENDERTILE, 0, (h * -0x20) + 0x200, 0x400, 0x400);
 }
 
 extern Gfx D_80073450[];
-void Ui_DrawTexturedFrame(s32, s32, s32, s32, u8*);
+void Ui_DrawTexturedFrame(s32, s32, s32, s32, FrameTextures*);
 
 /**
  * Appends a call of display list D_80073450 and a gDPSetCombineMode(
@@ -347,7 +347,7 @@ extern Gfx D_80073450[];
  * main menu, as (54, 176, width 532).
  * @unverified Name guessed from the code; comment kept.
  */
-void Ui_DrawTexturedDivider(s32 x, s32 y, s32 w, u8* arg3) {
+void Ui_DrawTexturedDivider(s32 x, s32 y, s32 w, FrameTextures* arg3) {
     GbTexLoadFunc load;
     s32 pad[2]; // FAKE
     s32 x2;
@@ -358,12 +358,12 @@ void Ui_DrawTexturedDivider(s32 x, s32 y, s32 w, u8* arg3) {
     }
     x2 = x + w;
     y8 = (y + 8) << 2;
-    load = D_80073500[M2C_FIELD(arg3, s32*, 4)];
+    load = D_80073500[arg3->format];
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-    load(8, 8, M2C_FIELD(arg3, u8**, 0x10), M2C_FIELD(arg3, s32*, 0));
+    load(8, 8, arg3->bottom, arg3->loadArg);
     gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x2 - 8) << 2, y8, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
-    load(8, 8, M2C_FIELD(arg3, u8**, 0x14), M2C_FIELD(arg3, s32*, 0));
+    load(8, 8, arg3->right, arg3->loadArg);
     gSPTextureRectangle(gDisplayListHead++, (x2 - 8) << 2, y << 2, x2 << 2, y8, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
 }
 
@@ -374,7 +374,7 @@ extern GbTexLoadFunc D_80073510[];
  * at (x, y) from the textures at arg3 + 8 and arg3 + 0xC, loaded through
  * D_80073510[arg3 + 4].
  */
-void func_80029864(s32 x, s32 y, s32 h, u8* arg3) {
+void func_80029864(s32 x, s32 y, s32 h, FrameTextures* arg3) {
     GbTexLoadFunc load;
     s32 pad[2]; // FAKE
     s32 y2;
@@ -385,12 +385,12 @@ void func_80029864(s32 x, s32 y, s32 h, u8* arg3) {
     }
     y2 = y + h;
     x8 = (x + 8) << 2;
-    load = D_80073510[M2C_FIELD(arg3, s32*, 4)];
+    load = D_80073510[arg3->format];
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-    load(8, 8, M2C_FIELD(arg3, u8**, 8), M2C_FIELD(arg3, s32*, 0));
+    load(8, 8, arg3->top, arg3->loadArg);
     gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, x8, (y2 - 8) << 2, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
-    load(8, 8, M2C_FIELD(arg3, u8**, 0xC), M2C_FIELD(arg3, s32*, 0));
+    load(8, 8, arg3->left, arg3->loadArg);
     gSPTextureRectangle(gDisplayListHead++, x << 2, (y2 - 8) << 2, x8, y2 << 2, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
 }
 
@@ -1324,7 +1324,7 @@ void SavePrompt_Init(SavePrompt* arg0, s32 arg1, s32 arg2) {
 }
 
 s32 func_8002AE6C();
-void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
+void Ui_DrawTexturedDivider(s32, s32, s32, FrameTextures*);
 void Menu_DrawItems(s8*, s32, s32, s32, s32);
 extern u8 D_8007356C[];
 extern Color_RGBA8 D_800736B8;
