@@ -27,29 +27,11 @@ void func_8110DCA0(Particle* arg0, s32 arg1) {
     AudioLoad_SyncLoad(arg0, arg1, &sp1C);
 }
 
-typedef struct AudioTableEntry8110DCC0 {
-    /* 0x00 */ s32 romAddr;
-    /* 0x04 */ u32 size;
-    /* 0x08 */ s8 medium;
-    /* 0x09 */ s8 cachePolicy;
-    /* 0x0A */ s16 shortData1;
-    /* 0x0C */ s16 shortData2;
-    /* 0x0E */ s16 shortData3;
-} AudioTableEntry8110DCC0; // size = 0x10
-
-typedef struct AudioTable8110DCC0 {
-    /* 0x00 */ s16 numEntries;
-    /* 0x02 */ s16 unkMediumParam;
-    /* 0x04 */ s32 romAddr;
-    /* 0x08 */ char pad[0x8];
-    /* 0x10 */ AudioTableEntry8110DCC0 entries[1];
-} AudioTable8110DCC0;
-
 extern u8 D_81184654[];
 extern u8 D_81184655[];
 extern u8 D_81184656[];
 s32 AudioLoad_SearchCaches(s32, s32);
-struct Table8110D840* AudioLoad_GetLoadTable(s32);
+AudioTable* AudioLoad_GetLoadTable(s32);
 s32 AudioHeap_AllocPermanent(s32, s32, s32);
 s32 AudioHeap_AllocCached(s32, s32, s32, s32);
 s32 func_8004CFB0(OSMesgQueue*, OSMesg, s32);
@@ -72,7 +54,7 @@ struct Entry8110EABC* func_8110E9A8(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
  */
 s32 AudioLoad_AsyncLoadInner(s32 table_type, s32 id, s32 n_chunks, s32 ret_data, OSMesgQueue* ret_queue) {
     u32 size;
-    AudioTable8110DCC0* table;
+    AudioTable* table;
     s32 ram_addr;
     s32 medium;
     s8 cachePolicy;
@@ -102,7 +84,7 @@ s32 AudioLoad_AsyncLoadInner(s32 table_type, s32 id, s32 n_chunks, s32 ret_data,
         load_status = 2;
         func_8004CFB0(ret_queue, (OSMesg)(ret_data << 0x18), 0);
     } else {
-        table = (AudioTable8110DCC0*)AudioLoad_GetLoadTable(table_type);
+        table = (AudioTable*)AudioLoad_GetLoadTable(table_type);
         size = table->entries[id].size;
         size = ALIGN16(size);
         medium = table->entries[id].medium;
@@ -198,14 +180,14 @@ extern u8 D_811842B0[];
 extern AudioPermanentCache D_81184440;
 extern volatile s8 D_81184657;
 extern s8 D_81184658;
-extern AudioTable8110DCC0* D_8118589C;
-extern AudioTable8110DCC0* D_811858A0;
+extern AudioTable* D_8118589C;
+extern AudioTable* D_811858A0;
 extern u8* D_811858A4;
 extern u8* D_811858A8;
 extern s16 D_811858AC;
-extern AudioTable8110DCC0 D_81152760;
-extern AudioTable8110DCC0 D_81152720;
-extern AudioTable8110DCC0 D_81152740;
+extern AudioTable D_81152760;
+extern AudioTable D_81152720;
+extern AudioTable D_81152740;
 extern u8 D_81152710[];
 extern u8 D_0015AE60[];
 extern u8 D_0015A9B0[];
@@ -215,7 +197,7 @@ void AudioHeap_InitMainPools(s32);
 void* func_81109868(void*, s32);
 void func_811098C0(void*, void*, s32);
 s32 AudioHeap_ResetStep(void);
-void func_8110CB70(AudioTable8110DCC0*, u8*, s32);
+void func_8110CB70(AudioTable*, u8*, s32);
 
 /**
  * Initializes the audio system: clears the heap and the audio globals, sets up
@@ -290,7 +272,7 @@ void AudioLoad_Init(void) {
 
     func_8110CB70(D_8118589C, D_0015AE60, 0);
     func_8110CB70(D_811858A0, D_0015A9B0, 0);
-    func_8110CB70((AudioTable8110DCC0*)D_811858A4, D_0015AA60, 0);
+    func_8110CB70((AudioTable*)D_811858A4, D_0015AA60, 0);
 
     num_fonts = D_811858A0->numEntries;
     D_811858B0 = func_81109868(D_811842B0, num_fonts * sizeof(SoundFont));
@@ -1102,20 +1084,10 @@ void AudioLoad_PreloadSamplesForFont(s32 font_id, s32 async, RelocInfo8110EF7C* 
 }
 
 extern s32 D_8118444C;
-typedef struct Entry8110D840 {
-    /* 0x00 */ char unk00[8];
-    /* 0x08 */ s8 unk_08;
-    /* 0x09 */ char unk09[7];
-} Entry8110D840; // size = 0x10
-typedef struct Table8110D840 {
-    /* 0x00 */ char unk00[0x10];
-    /* 0x10 */ Entry8110D840 entries[1];
-} Table8110D840;
-Table8110D840* AudioLoad_GetLoadTable(s32);
 s32 AudioLoad_GetRealTableIndex(s32, s32);
 void AudioLoad_PreloadSamplesForFont(s32, s32, RelocInfo8110EF7C*);
 void func_8110FAF4(void) {
-    Table8110D840* base = AudioLoad_GetLoadTable(2);
+    AudioTable* base = AudioLoad_GetLoadTable(2);
     s32 i;
     s32 idx;
     s32 buf[8];
@@ -1128,9 +1100,9 @@ void func_8110FAF4(void) {
             buf[0] = AudioLoad_GetRealTableIndex(2, buf[0]);
             buf[1] = D_811858B0[id].sampleBankId2;
             buf[1] = AudioLoad_GetRealTableIndex(2, buf[1]);
-            buf[4] = base->entries[buf[0]].unk_08;
+            buf[4] = base->entries[buf[0]].medium;
             idx = buf[1];
-            buf[5] = base->entries[idx].unk_08;
+            buf[5] = base->entries[idx].medium;
             AudioLoad_PreloadSamplesForFont(id, 0, buf);
         }
     }

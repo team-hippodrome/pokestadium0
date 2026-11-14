@@ -1206,24 +1206,6 @@ s32 func_8110D4E0(s32 arg0) {
     return ret;
 }
 
-typedef struct AudioTableEntry8110D5BC {
-    /* 0x00 */ u32 romAddr;
-    /* 0x04 */ u32 size;
-    /* 0x08 */ s8 medium;
-    /* 0x09 */ s8 cachePolicy;
-    /* 0x0A */ s16 shortData1;
-    /* 0x0C */ s16 shortData2;
-    /* 0x0E */ s16 shortData3;
-} AudioTableEntry8110D5BC; // size = 0x10
-
-typedef struct AudioTable8110D5BC {
-    /* 0x00 */ s16 numEntries;
-    /* 0x02 */ s16 unkMediumParam;
-    /* 0x04 */ u32 romAddr;
-    /* 0x08 */ char pad[0x8];
-    /* 0x10 */ AudioTableEntry8110D5BC entries[1];
-} AudioTable8110D5BC;
-
 s32 AudioHeap_AllocCached(s32, s32, s32, s32);
 
 /**
@@ -1238,7 +1220,7 @@ s32 AudioHeap_AllocCached(s32, s32, s32, s32);
  */
 s32 AudioLoad_SyncLoad(s32 table_type, s32 id, s32* did_allocate) {
     u32 size;
-    AudioTable8110D5BC* table;
+    AudioTable* table;
     s32 ram_addr;
     u32 medium;
     s32 status;
@@ -1251,7 +1233,7 @@ s32 AudioLoad_SyncLoad(s32 table_type, s32 id, s32* did_allocate) {
         *did_allocate = 0;
         status = 2;
     } else {
-        table = (AudioTable8110D5BC*)AudioLoad_GetLoadTable(table_type);
+        table = (AudioTable*)AudioLoad_GetLoadTable(table_type);
         size = table->entries[id].size;
         size = ALIGN16(size);
         medium = table->entries[id].medium;

@@ -531,6 +531,26 @@ typedef struct Sample {
     /* 0xC */ void* book; // @unverified: same offset/use as OoT's Sample.book
 } Sample; // size = 0x10
 
+/* One entry of an audio table (OoT's AudioTableEntry): sequences, sound fonts or sample banks */
+typedef struct AudioTableEntry {
+    /* 0x00 */ u32 romAddr; // @unverified: same offset/use as OoT's AudioTableEntry.romAddr
+    /* 0x04 */ u32 size; // @unverified: same offset/use as OoT's AudioTableEntry.size
+    /* 0x08 */ s8 medium; // @unverified: same offset/use as OoT's AudioTableEntry.medium
+    /* 0x09 */ s8 cachePolicy; // @unverified: same offset/use as OoT's AudioTableEntry.cachePolicy
+    /* 0x0A */ s16 shortData1; // @unverified: same offset/use as OoT's AudioTableEntry.shortData1
+    /* 0x0C */ s16 shortData2; // @unverified: same offset/use as OoT's AudioTableEntry.shortData2
+    /* 0x0E */ s16 shortData3; // @unverified: same offset/use as OoT's AudioTableEntry.shortData3
+} AudioTableEntry; // size = 0x10
+
+/* An audio table header followed by its entries (OoT's AudioTable) */
+typedef struct AudioTable {
+    /* 0x00 */ s16 numEntries; // @unverified: same offset/use as OoT's AudioTable.numEntries
+    /* 0x02 */ s16 unkMediumParam; // @unverified: same offset/use as OoT's AudioTable.unkMediumParam
+    /* 0x04 */ u32 romAddr; // @unverified: same offset/use as OoT's AudioTable.romAddr
+    /* 0x08 */ char pad[0x8];
+    /* 0x10 */ AudioTableEntry entries[1];
+} AudioTable;
+
 /* A slow sample load (OoT's AudioSlowLoad): AudioLoad_ProcessSlowLoads (func_8110E500 starts one,
    func_8110E71C finishes it) */
 typedef struct AudioSlowLoad {
