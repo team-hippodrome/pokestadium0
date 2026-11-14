@@ -3927,7 +3927,7 @@ func_8A202F50,0x8A202F50,src/fragments/party_summary/mon_summary.c,func_8A202F50
 func_8A203070,0x8A203070,src/fragments/party_summary/mon_summary.c,PartyScreen_RunFrame,m2c,m2c,c
 func_8A2030C0,0x8A2030C0,src/fragments/party_summary/mon_summary.c,MonSummary_Init,hand,,c
 func_8E000020,0x8E000020,src/fragments/main_menu_launcher/main_menu_launcher.c,MainMenuLauncher_QueueMainMenu,m2c,m2c,c
-func_8E100020,0x8E100020,src/fragments/launcher_relay_021/launcher_relay_021.c,func_8E100020,m2c,m2c,c
+func_8E100020,0x8E100020,src/fragments/unused_relay_021/unused_relay_021.c,UnusedRelay021_QueueMainMenuLauncher,m2c,m2c,c
 func_8E200020,0x8E200020,src/fragments/launcher_relay_022/launcher_relay_022.c,func_8E200020,m2c,m2c,c
 func_8E300020,0x8E300020,src/fragments/launcher_relay_023/launcher_relay_023.c,func_8E300020,m2c,m2c,c
 func_8E400020,0x8E400020,src/fragments/launcher_relay_024/launcher_relay_024.c,func_8E400020,m2c,m2c,c
