@@ -4,7 +4,7 @@
 #include "m2c_macros.h"
 #include "audio_and_gb_emulator.h"
 
-void func_81111C20(SequenceChannel* arg0, u32 force) {
+void AudioEffects_SequenceChannelProcessSound(SequenceChannel* arg0, u32 force) {
     f32 vol;
     s32 i;
     SequenceLayer* v;
@@ -43,9 +43,9 @@ void func_81111C20(SequenceChannel* arg0, u32 force) {
     M2C_FIELD(arg0, u8*, 1) = 0;
 }
 
-void func_81111C20();
+void AudioEffects_SequenceChannelProcessSound();
 void AudioSeq_SequencePlayerDisable(SequencePlayer *);
-void func_81111DC8(SequencePlayer *arg0) {
+void AudioEffects_SequencePlayerProcessSound(SequencePlayer *arg0) {
     s32 i;
 
     if (arg0->fadeTimer != 0) {
@@ -67,7 +67,7 @@ void func_81111DC8(SequencePlayer *arg0) {
     }
     for (i = 0; i < 16; i++) {
         if (arg0->channels[i]->enabled == 1) {
-            func_81111C20(arg0->channels[i], arg0->recalculateVolume);
+            AudioEffects_SequenceChannelProcessSound(arg0->channels[i], arg0->recalculateVolume);
         }
     }
     arg0->recalculateVolume = 0;
@@ -75,7 +75,7 @@ void func_81111DC8(SequencePlayer *arg0) {
 
 extern f32 D_FLT_81136178[];
 
-f32 func_81111F0C(arg0)
+f32 AudioEffects_UpdatePortamento(arg0)
     s8* arg0;
 {
     u32 idx;
@@ -92,14 +92,14 @@ f32 func_81111F0C(arg0)
 
 
 /*
- * func_81111FE0
+ * AudioEffects_GetVibratoPitchChange
  *
  * Advances the vibrato time by its rate (truncated to an integer) and
  * returns the curve entry selected by time bits 10-15 (a 64-entry table of
  * s16), shifted right by 8 (sign-extended). Same as OoT's
  * AudioEffects_GetVibratoPitchChange.
  */
-s16 func_81111FE0(VibratoState* arg0) {
+s16 AudioEffects_GetVibratoPitchChange(VibratoState* arg0) {
     s32 index;
 
     arg0->time += (s32)arg0->rate;
@@ -114,7 +114,7 @@ s16 func_81111FE0(VibratoState* arg0) {
  * extent. Same structure as get_vibrato_freq_scale in the Super Mario 64 audio
  * library.
  */
-f32 func_81112024(vib)
+f32 AudioEffects_UpdateVibrato(vib)
     VibratoState* vib;
 {
     s32 pitch_change;
@@ -159,22 +159,22 @@ f32 func_81112024(vib)
         return 1.0f;
     }
 
-    pitch_change = func_81111FE0(vib);
+    pitch_change = AudioEffects_GetVibratoPitchChange(vib);
     extent = (f32)vib->extent / 4096.0f;
 
     result = 1.0f + extent * (D_FLT_81136178[pitch_change] - 1.0f);
     return result;
 }
 
-f32 func_81111F0C(); // The caller passes a second argument the callee ignores.
-f32 func_81112024(); // The caller passes a second argument the callee ignores.
+f32 AudioEffects_UpdatePortamento(); // The caller passes a second argument the callee ignores.
+f32 AudioEffects_UpdateVibrato(); // The caller passes a second argument the callee ignores.
 
-void func_8111220C(s8 *arg0) {
+void AudioEffects_UpdatePortamentoAndVibrato(s8 *arg0) {
     if (M2C_FIELD(arg0, u8 *, 0x80) != 0) {
-        M2C_FIELD(arg0, f32 *, 0x38) = func_81111F0C(arg0 + 0x80, arg0);
+        M2C_FIELD(arg0, f32 *, 0x38) = AudioEffects_UpdatePortamento(arg0 + 0x80, arg0);
     }
     if ((M2C_FIELD(arg0, u8 *, 0xA4) != 0) && (M2C_FIELD(arg0, s32 *, 0x44) != -1)) {
-        M2C_FIELD(arg0, f32 *, 0x3C) = func_81112024(arg0 + 0x90, arg0);
+        M2C_FIELD(arg0, f32 *, 0x3C) = AudioEffects_UpdateVibrato(arg0 + 0x90, arg0);
     }
 }
 
@@ -186,7 +186,7 @@ extern s16* D_81135F68;
  * their targets) and copies the layer's portamento into the note. Same
  * structure as note_vibrato_init in the Super Mario 64 audio library.
  */
-void func_81112278(Note* note) {
+void AudioEffects_InitVibrato(Note* note) {
     VibratoState* vib;
     SequenceChannel* seqChannel;
     NotePlaybackState* seq_player_state = &note->playbackState;
@@ -218,7 +218,7 @@ void func_81112278(Note* note) {
     seq_player_state->portamento = seq_player_state->parentLayer->portamento;
 }
 
-void func_8111235C(s8 *arg0, s32 arg1, M2C_UNK arg2) {
+void AudioEffects_InitAdsr(s8 *arg0, s32 arg1, M2C_UNK arg2) {
     M2C_FIELD(arg0, s8 *, 0) = 0;
     M2C_FIELD(arg0, s8 *, 1) = 0;
     M2C_FIELD(arg0, s16 *, 4) = 0;

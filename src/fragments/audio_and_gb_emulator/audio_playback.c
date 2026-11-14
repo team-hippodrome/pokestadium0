@@ -160,7 +160,7 @@ void AudioPlayback_NoteSetResamplingRate(s8* arg0, f32 arg1) {
 }
 
 extern NoteSampleState D_811369C0;
-void func_8111235C(u8*, s32, char*);
+void AudioEffects_InitAdsr(u8*, s32, char*);
 
 /**
  * Starts a note's envelope from its instrument or the layer's own envelope. Zelda 64 audio driver.
@@ -172,9 +172,9 @@ void AudioPlayback_NoteInit(Note* arg0) {
     SequenceLayer* def = arg0->playbackState.parentLayer;
 
     if (def->adsr.decayIndex == 0) {
-        func_8111235C(&arg0->playbackState.adsr.action, def->channel->adsr.envelope, &arg0->playbackState.adsrVolScale);
+        AudioEffects_InitAdsr(&arg0->playbackState.adsr.action, def->channel->adsr.envelope, &arg0->playbackState.adsrVolScale);
     } else {
-        func_8111235C(&arg0->playbackState.adsr.action, def->adsr.envelope, &arg0->playbackState.adsrVolScale);
+        AudioEffects_InitAdsr(&arg0->playbackState.adsr.action, def->adsr.envelope, &arg0->playbackState.adsrVolScale);
     }
     arg0->playbackState.unk_04 = 0;
     arg0->playbackState.adsr.state = 1;
@@ -211,9 +211,9 @@ void AudioPlayback_AudioListPushFront(M2C_UNK* arg0, M2C_UNK* arg1);
 s32 AudioSeq_AudioListPushBack(s8*, struct Note*);
 void AudioPlayback_NoteInitForLayer(s8* arg0, s8* arg1);
 void func_81112B84(SequenceChannel*);
-void func_81112278(Note*);
+void AudioEffects_InitVibrato(Note*);
 f32 AudioEffects_UpdateAdsr(u8*);
-void func_8111220C(Note*);
+void AudioEffects_UpdatePortamentoAndVibrato(Note*);
 
 /**
  * Updates every note once per audio frame: envelopes, releases, pitch, volume and pan. Zelda 64 audio driver.
@@ -298,7 +298,7 @@ void AudioPlayback_ProcessNotes(void)
             if (playbackState->wantedParentLayer->channel != 0)
             {
               AudioPlayback_NoteInitForLayer((s8 *) note, (s8 *) playbackState->wantedParentLayer);
-              func_81112278(note);
+              AudioEffects_InitVibrato(note);
               AudioPlayback_AudioListRemove((s8 *) note);
               AudioSeq_AudioListPushBack(&note->listItem.pool->active, (struct Note *) note);
               playbackState->wantedParentLayer = (SequenceLayer *) (-1);
@@ -342,7 +342,7 @@ void AudioPlayback_ProcessNotes(void)
         attrs = &playbackState->attributes;
 
         scale = AudioEffects_UpdateAdsr((u8 *) (&playbackState->adsr));
-        func_8111220C(note);
+        AudioEffects_UpdatePortamentoAndVibrato(note);
         if ((playbackState->unk_04 == 1) || (playbackState->unk_04 == 2))
         {
           sub_attrs.freqScale = attrs->freqScale;

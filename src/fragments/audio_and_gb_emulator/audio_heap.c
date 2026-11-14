@@ -15,9 +15,9 @@ extern volatile s32 D_811859D4;
 
 #include "m2c_macros.h"
 
-u32 GbApu_AllocZeroed(AudioAllocPool* arg0, s32 arg1);
-s32 GbApu_Alloc(AudioAllocPool* arg0, s32 arg1);
-void GbApu_InitAllocator(AudioAllocPool* arg0, s32 arg1, s32 arg2);
+u32 AudioHeap_AllocZeroed(AudioAllocPool* arg0, s32 arg1);
+s32 AudioHeap_Alloc(AudioAllocPool* arg0, s32 arg1);
+void AudioHeap_InitPool(AudioAllocPool* arg0, s32 arg1, s32 arg2);
 
 extern u8 D_81184654[1];
 extern u8 D_81184655[1];
@@ -137,7 +137,7 @@ void AudioHeap_DiscardSequence(s32 arg0)
  * quitting).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-u32 GbApu_AllocZeroed(AudioAllocPool* arg0, s32 arg1) {
+u32 AudioHeap_AllocZeroed(AudioAllocPool* arg0, s32 arg1) {
   s32 temp_v0;
   u32 temp_a2;
   u32 var_a1;
@@ -157,12 +157,12 @@ u32 GbApu_AllocZeroed(AudioAllocPool* arg0, s32 arg1) {
 }
 
 /**
- * GbApu_AllocZeroed without the clear.
+ * AudioHeap_AllocZeroed without the clear.
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-s32 GbApu_Alloc(AudioAllocPool* arg0, s32 arg1) {
+s32 AudioHeap_Alloc(AudioAllocPool* arg0, s32 arg1) {
   s32 temp_a2;
   u32 temp_v0;
 
@@ -183,7 +183,7 @@ s32 GbApu_Alloc(AudioAllocPool* arg0, s32 arg1) {
  * quitting).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-void GbApu_InitAllocator(AudioAllocPool* arg0, s32 arg1, s32 arg2) {
+void AudioHeap_InitPool(AudioAllocPool* arg0, s32 arg1, s32 arg2) {
   arg0->startRamAddr = ALIGN16(arg1);
   arg0->curRamAddr = ALIGN16(arg1);
   arg0->size = (s32) (arg2 - (arg1 & 0xF));
@@ -196,14 +196,14 @@ void GbApu_InitAllocator(AudioAllocPool* arg0, s32 arg1, s32 arg2) {
  * quitting).
  * @unverified Name and comment guessed from the code.
  */
-void AudioHeap_PersistentCacheClear(s8 *arg0) {
+void AudioHeap_InitPersistentCache(s8 *arg0) {
     M2C_FIELD(arg0, s32 *, 0x10) = 0;
     M2C_FIELD(arg0, s32 *, 0) = 0;
     M2C_FIELD(arg0, s32 *, 8) = (s32) M2C_FIELD(arg0, s32 *, 4);
 }
 
 /**
- * AudioHeap_TemporaryCacheClear
+ * AudioHeap_InitTemporaryCache
  *
  * Resets a small record: the words at +0x00 and +0x10 are cleared, the words
  * at +0x08 and +0x14 are set to the value at +0x04, the word at +0x20 is set
@@ -219,7 +219,7 @@ void AudioHeap_PersistentCacheClear(s8 *arg0) {
  * quitting).
  * @unverified Name guessed from the code; comment kept.
  */
-void AudioHeap_TemporaryCacheClear(s32* arg0) {
+void AudioHeap_InitTemporaryCache(s32* arg0) {
     arg0[4] = 0;
     arg0[0] = 0;
     arg0[8] = arg0[3] + arg0[1];
@@ -314,14 +314,14 @@ extern M2C_UNK D_811843E4;
  * quitting).
  * @unverified Name and comment guessed from the code.
  */
-void AudioHeap_InitPersistentCache(s8 *arg0) {
+void AudioHeap_InitPersistentPoolsAndCaches(s8 *arg0) {
     M2C_FIELD(&D_81184300, s32 *, 4) = (s32) M2C_FIELD(&D_81184300, s32 *, 0);
     func_811098C0(&D_81184324, func_81109868(&D_81184300, M2C_FIELD(arg0, s32 *, 0)), M2C_FIELD(arg0, s32 *, 0));
     func_811098C0(&D_81184384, func_81109868(&D_81184300, M2C_FIELD(arg0, s32 *, 4)), M2C_FIELD(arg0, s32 *, 4));
     func_811098C0(&D_811843E4, func_81109868(&D_81184300, M2C_FIELD(arg0, s32 *, 8)), M2C_FIELD(arg0, s32 *, 8));
-    AudioHeap_PersistentCacheClear(&D_81184320);
-    AudioHeap_PersistentCacheClear(&D_81184380);
-    AudioHeap_PersistentCacheClear(&D_811843E0);
+    AudioHeap_InitPersistentCache(&D_81184320);
+    AudioHeap_InitPersistentCache(&D_81184380);
+    AudioHeap_InitPersistentCache(&D_811843E0);
 }
 
 s32 func_81109868(M2C_UNK *, s32);                  /* extern */
@@ -340,14 +340,14 @@ extern M2C_UNK D_81184404;
  * quitting).
  * @unverified Name and comment guessed from the code.
  */
-void AudioHeap_InitTemporaryCache(s8 *arg0) {
+void AudioHeap_InitTemporaryPoolsAndCaches(s8 *arg0) {
     M2C_FIELD(&D_81184310, s32 *, 4) = (s32) M2C_FIELD(&D_81184310, s32 *, 0);
     func_811098C0(&D_81184344, func_81109868(&D_81184310, M2C_FIELD(arg0, s32 *, 0)), M2C_FIELD(arg0, s32 *, 0));
     func_811098C0(&D_811843A4, func_81109868(&D_81184310, M2C_FIELD(arg0, s32 *, 4)), M2C_FIELD(arg0, s32 *, 4));
     func_811098C0(&D_81184404, func_81109868(&D_81184310, M2C_FIELD(arg0, s32 *, 8)), M2C_FIELD(arg0, s32 *, 8));
-    AudioHeap_TemporaryCacheClear(&D_81184340);
-    AudioHeap_TemporaryCacheClear(&D_811843A0);
-    AudioHeap_TemporaryCacheClear(&D_81184400);
+    AudioHeap_InitTemporaryCache(&D_81184340);
+    AudioHeap_InitTemporaryCache(&D_811843A0);
+    AudioHeap_InitTemporaryCache(&D_81184400);
 }
 
 
@@ -927,14 +927,14 @@ extern s32 D_8118557C;
 // matches that way.
 s32 AudioHeap_InitSampleCaches(s32, s32);
 void AudioLoad_InitSampleDmaBuffers(s32);
-void func_811152A4(s32);
+void AudioSeq_ResetSequencePlayer(s32);
 s32 func_80058100(s32);
 void func_8005C0A0(void);
-void func_8110FAF4(void);
+void AudioLoad_LoadPermanentSamples(void);
 void AudioPlayback_InitNoteFreeList(void);
 void AudioPlayback_NoteInitAll(void);
-void func_8111539C(s32);
-void func_81115480(void);
+void AudioSeq_InitSequencePlayerChannels(s32);
+void AudioSeq_InitSequencePlayers(void);
 
 #define EXTERNAL_POOL_AFF0 (*(AudioAllocPool*)&D_811842A0)
 
@@ -999,22 +999,22 @@ void AudioHeap_Init(void) {
     D_81184638.seqCacheSize = spec->persistentSeqMem;
     D_81184638.fontCacheSize = spec->persistentFontMem;
     D_81184638.sampleBankCacheSize = spec->persistentSampleMem;
-    AudioHeap_InitPersistentCache((s8*)&D_81184638);
+    AudioHeap_InitPersistentPoolsAndCaches((s8*)&D_81184638);
     D_81184648.seqCacheSize = spec->temporarySeqMem;
     D_81184648.fontCacheSize = spec->temporaryFontMem;
     D_81184648.sampleBankCacheSize = spec->temporarySampleMem;
-    AudioHeap_InitTemporaryCache((s8*)&D_81184648);
+    AudioHeap_InitTemporaryPoolsAndCaches((s8*)&D_81184648);
     AudioHeap_InitSampleCaches(spec->persistentSampleCacheSize, spec->temporarySampleCacheSize);
     if (EXTERNAL_POOL_AFF0.startRamAddr != NULL) {
         EXTERNAL_POOL_AFF0.curRamAddr = EXTERNAL_POOL_AFF0.startRamAddr;
     }
     AudioHeap_ResetLoadStatus();
-    D_81184664 = (Note*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, D_811858E8 * 0xCC);
+    D_81184664 = (Note*)AudioHeap_AllocZeroed((AudioAllocPool*)&D_811842C0, D_811858E8 * 0xCC);
     AudioPlayback_NoteInitAll();
     AudioPlayback_InitNoteFreeList();
-    D_81184288 = (void*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, D_811858B8.ticksPerUpdate * D_811858E8 * 0x18);
+    D_81184288 = (void*)AudioHeap_AllocZeroed((AudioAllocPool*)&D_811842C0, D_811858B8.ticksPerUpdate * D_811858E8 * 0x18);
     for (i = 0; i != 2; i++) {
-        D_81185900[i] = (void*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, D_811858E4 * 8);
+        D_81185900[i] = (void*)AudioHeap_AllocZeroed((AudioAllocPool*)&D_811842C0, D_811858E4 * 8);
     }
     for (i = 0; i < 1; i++) {
         reverb = &D_81184110[i];
@@ -1035,8 +1035,8 @@ void AudioHeap_Init(void) {
         reverb->mixReverbIndex = settings->mixReverbIndex;
         reverb->mixReverbStrength = settings->mixReverbStrength;
         reverb->useReverb = 8;
-        reverb->leftRingBuf = (s16*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, reverb->windowSize * 2);
-        reverb->rightRingBuf = (s16*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, reverb->windowSize * 2);
+        reverb->leftRingBuf = (s16*)AudioHeap_AllocZeroed((AudioAllocPool*)&D_811842C0, reverb->windowSize * 2);
+        reverb->rightRingBuf = (s16*)AudioHeap_AllocZeroed((AudioAllocPool*)&D_811842C0, reverb->windowSize * 2);
         reverb->nextRingBufPos = 0;
         reverb->unk_18 = 0;
         reverb->curFrame = 0;
@@ -1055,43 +1055,43 @@ void AudioHeap_Init(void) {
         reverb->loop.end = reverb->windowSize;
         if (reverb->downsampleRate != 1) {
             reverb->resampleRate = 0x8000 / reverb->downsampleRate;
-            reverb->resampleStateLeft = (void*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, 0x20);
-            reverb->resampleStateRight = (void*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, 0x20);
-            reverb->unk_30 = (void*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, 0x20);
-            reverb->unk_34 = (void*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, 0x20);
+            reverb->resampleStateLeft = (void*)AudioHeap_AllocZeroed((AudioAllocPool*)&D_811842C0, 0x20);
+            reverb->resampleStateRight = (void*)AudioHeap_AllocZeroed((AudioAllocPool*)&D_811842C0, 0x20);
+            reverb->unk_30 = (void*)AudioHeap_AllocZeroed((AudioAllocPool*)&D_811842C0, 0x20);
+            reverb->unk_34 = (void*)AudioHeap_AllocZeroed((AudioAllocPool*)&D_811842C0, 0x20);
             for (j = 0; j < D_811858B8.ticksPerUpdate; j++) {
-                s16* mem = (s16*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, 0x340);
+                s16* mem = (s16*)AudioHeap_AllocZeroed((AudioAllocPool*)&D_811842C0, 0x340);
 
                 reverb->items[0][j].toDownsampleLeft = mem;
                 reverb->items[0][j].toDownsampleRight = mem + 0xD0;
-                mem = (s16*)GbApu_AllocZeroed((AudioAllocPool*)&D_811842C0, 0x340);
+                mem = (s16*)AudioHeap_AllocZeroed((AudioAllocPool*)&D_811842C0, 0x340);
                 reverb->items[1][j].toDownsampleLeft = mem;
                 reverb->items[1][j].toDownsampleRight = mem + 0xD0;
             }
         }
         if (settings->lowPassFilterCutoffLeft != 0) {
-            reverb->filterLeftState = (s16*)GbApu_Alloc((AudioAllocPool*)&D_811842C0, 0x20);
-            reverb->filterLeft = (s16*)GbApu_Alloc((AudioAllocPool*)&D_811842C0, 0x10);
+            reverb->filterLeftState = (s16*)AudioHeap_Alloc((AudioAllocPool*)&D_811842C0, 0x20);
+            reverb->filterLeft = (s16*)AudioHeap_Alloc((AudioAllocPool*)&D_811842C0, 0x10);
             AudioHeap_LoadLowPassFilter(reverb->filterLeft, settings->lowPassFilterCutoffLeft);
         } else {
             reverb->filterLeft = NULL;
         }
         if (settings->lowPassFilterCutoffRight != 0) {
-            reverb->filterRightState = (s16*)GbApu_Alloc((AudioAllocPool*)&D_811842C0, 0x20);
-            reverb->filterRight = (s16*)GbApu_Alloc((AudioAllocPool*)&D_811842C0, 0x10);
+            reverb->filterRightState = (s16*)AudioHeap_Alloc((AudioAllocPool*)&D_811842C0, 0x20);
+            reverb->filterRight = (s16*)AudioHeap_Alloc((AudioAllocPool*)&D_811842C0, 0x10);
             AudioHeap_LoadLowPassFilter(reverb->filterRight, settings->lowPassFilterCutoffRight);
         } else {
             reverb->filterRight = NULL;
         }
     }
-    func_81115480();
+    AudioSeq_InitSequencePlayers();
     for (j = 0; j < D_811858B8.numSequencePlayers; j++) {
-        func_8111539C(j);
-        func_811152A4(j);
+        AudioSeq_InitSequencePlayerChannels(j);
+        AudioSeq_ResetSequencePlayer(j);
     }
     AudioLoad_InitSampleDmaBuffers(D_811858E8);
     D_8118557C = 0;
     D_8118427C = 0x1000;
-    func_8110FAF4();
+    AudioLoad_LoadPermanentSamples();
     func_8005C0A0();
 }

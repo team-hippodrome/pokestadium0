@@ -301,7 +301,7 @@ void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1) {
 }
 
 /** Resets all particle slots of a display object. */
-void Particle31_ResetAllSlots(DisplayObject* arg0) {
+void AudioSeq_SequenceChannelDisable(DisplayObject* arg0) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
@@ -511,7 +511,7 @@ u16 AudioSeq_ScriptReadCompressedU16(u8** arg0) {
 
 void AudioSeq_SeqLayerProcessScriptStep1();
 s32 AudioSeq_SeqLayerProcessScriptStep2();
-s32 func_81113A44();
+s32 AudioSeq_SeqLayerProcessScriptStep3();
 s32 AudioSeq_SeqLayerProcessScriptStep4();
 s32 AudioSeq_SeqLayerProcessScriptStep5();
 /**
@@ -533,7 +533,7 @@ void AudioSeq_SeqLayerProcessScript(SequenceLayer* arg0) {
             AudioSeq_SeqLayerProcessScriptStep1(arg0);
             ret = AudioSeq_SeqLayerProcessScriptStep2(arg0);
             if (ret != -1) {
-                ret = func_81113A44(arg0, ret);
+                ret = AudioSeq_SeqLayerProcessScriptStep3(arg0, ret);
                 if (ret != -1) {
                     ret = AudioSeq_SeqLayerProcessScriptStep4(arg0, ret);
                 }
@@ -570,7 +570,7 @@ void AudioSeq_SeqLayerProcessScriptStep1(SequenceLayer* arg0) {
 }
 
 s8* AudioPlayback_AllocNote(s8*);
-void func_81112278(void*);
+void AudioEffects_InitVibrato(void*);
 
 /* SequenceLayer and Sample as AudioSeq_SeqLayerProcessScriptStep5 reads them. The layouts are the same as
  * SequenceLayer/Sample, but the function only matches with the layer flags in a u32 container and the sample
@@ -630,13 +630,13 @@ s32 AudioSeq_SeqLayerProcessScriptStep5(SequenceLayerFlagsU32* layer, u32 same_s
     }
     if (layer->note != NULL && layer->note->playbackState.parentLayer == (SequenceLayer*)layer) {
         note = layer->note;
-        func_81112278(note);
+        AudioEffects_InitVibrato(note);
     }
     return 0;
 }
 
 extern f32 D_81136378[];
-u8 func_81113E84(u8* arg0, u8 arg1, u8** arg2, u8* arg3);
+u8 AudioSeq_GetInstrument(u8* arg0, u8 arg1, u8** arg2, u8* arg3);
 
 /**
  * Runs layer script commands until a note command. Zelda 64 audio driver.
@@ -714,7 +714,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep2(SequenceLayer* layer) {
                     }
                     break;
                 }
-                if ((layer->instOrWave = func_81113E84((u8*)channel, cmd, &layer->instrument, &layer->adsr.decayIndex)) == 0) {
+                if ((layer->instOrWave = AudioSeq_GetInstrument((u8*)channel, cmd, &layer->instrument, &layer->adsr.decayIndex)) == 0) {
                     layer->instOrWave = 0xFF;
                 }
                 break;
