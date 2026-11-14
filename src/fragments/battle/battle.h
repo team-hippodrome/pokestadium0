@@ -184,11 +184,11 @@ typedef struct PokemonAfterimage {
 
 typedef struct ActivePokemonState {
     /* 0x00 */ char unk00[0x4];
-    /* 0x04 */ u32 selectedCommand;
+    /* 0x04 */ u32 selectedCommand; // 1 after A (たたかう, Fight), 2 after B (ポケモン, switch); COM's is 2 when it sends in a replacement
     /* 0x08 */ s32 rosterIndex;
-    /* 0x0C */ s32 selectedMoveIndex;
-    /* 0x10 */ u32 selectedCommandOption;
-    /* 0x14 */ s32 moveIndex;
+    /* 0x0C */ s32 selectedMoveIndex; // move slot picked with the C buttons (1 after C-Right)
+    /* 0x10 */ u32 selectedCommandOption; // 1 move menu open, 2 Pokémon menu open, 3 action committed, 0 back to idle
+    /* 0x14 */ s32 moveIndex; // C button's move slot (Up 0, Right 1, Down 2, Left 3), set before the PP/Disable checks
     /* 0x18 */ u32 actionChosen;
     /* 0x1C */ u8 showingCommandOptions;
     /* 0x1E */ u16 actionDelayTimer;
