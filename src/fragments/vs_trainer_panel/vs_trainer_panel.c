@@ -4,10 +4,13 @@
  * VsScene_LoadGeoLayout builds the panel model from this fragment's geo layout (D_8F504830), and
  * VsScene_PlayBattleTitle shows it after the flaming title: one panel per side with the trainer
  * portrait, the title line, the name, and a row of six Pokémon icons with nicknames. Each node's
- * callbackArg is the side (0 = 1P, left; 1 = the opponent), or (side << 16) | slot for the six
+ * callbackArg is the side (index into D_82203170), or (side << 16) | slot for the six
  * icon and nickname nodes. The panels show the whole team the order screen picks from
- * (rosterInfo[0]), not the picked Pokémon; geo_model_033 draws the picked teams for the other
- * VS layouts.
+ * (rosterInfo[0]), not the picked Pokémon. geo_model_033 is the panel model of the other VS
+ * routines (func_82201F90, func_82202228), which read the picked teams (teamMember).
+ * Seen in play (2026-11-14, Free Battle 1P vs COM): the two panels flip in after the 「VS」
+ * letters, first with portrait, 「トレーナー」 and 1P / ＣＯＭ, then turned over to the six icons
+ * with nicknames. Stub tests below wrote `jr ra; nop` over one callback each.
  *
  * VsPanel_SelectTitleRound is not used by the panel: the title model's geo layout in fragment
  * 035 (0x8EC00000) calls it as its root callback.
@@ -28,10 +31,10 @@ extern u8 sVsPanelNicknameText[];
  * Boot-code check: with interrupts masked and the PI idle, reads the cartridge word at ROM 0xD10
  * (inside the IPL3 boot code, 0x00800400 in the retail ROM) and returns -1 instead of
  * `displayList` when its low half is not 0x0400. A copier or a ROM with other boot code then gets
- * a broken display list pointer. geo_model_033 and geo_model_038 have the same check on other
- * boot-code words.
- * Seen in play (2026-11-14): breakpoint on the panel portrait each frame; returned `displayList`
- * unchanged with the retail ROM.
+ * a broken display list pointer. geo_model_033 and geo_model_038
+ * (CartridgeCheckModels_CheckBootCode) have the same check on other boot-code words.
+ * Seen in play (2026-11-14): called for both portraits every frame of the panels; forcing it to
+ * return -1 turned the whole screen black from the panels on.
  */
 s32 VsPanel_CheckBootCode(s32 displayList) {
     OSIntMask prevMask;
@@ -48,7 +51,9 @@ s32 VsPanel_CheckBootCode(s32 displayList) {
  * Root callback of the flaming battle-title model (geo layout in fragment 035): selects the
  * switch case rootId - 1, the round's title. rootId is the round (roundOrDemoId) that
  * VsScene_PlayBattleTitle passes to Model_InitDisplayObject.
- * @unverified: not hit in play yet.
+ * @unverified: in Free Battle it ran once, with event 0, while the title layout was built (the
+ * title model is only animated in tournaments, D_822036A4->mode != 0), so the round switch was not
+ * seen.
  */
 void VsPanel_SelectTitleRound(s32 event, GeoModelRootNode* node) {
     if (event == 2) {
@@ -102,6 +107,7 @@ void VsPanel_TitleTextCallback(s32 event, DemoGeoNode* node) {
  * the roster's flags: bit 0 sets unk_20 to 0xD2, bit 1 sets unk_22 to -0xF0, otherwise unk_22 is
  * -0x12C.
  * Seen in play (2026-11-14): stubbing it removed the names (1P, ＣＯＭ) from both panels.
+ * @unverified: the offsets; Free Battle rosters have unk_000 = 0, so only the -0x12C case ran.
  */
 void VsPanel_NameTextCallback(s32 event, DemoGeoNode* node) {
     VsSceneSide* teams;
@@ -132,7 +138,8 @@ Gfx* VsPanel_WriteIconGfx(Gfx* gfx, void* iconImage) {
 /**
  * Icon node callback (callbackArg = (side << 16) | slot): draws the slot's Pokémon icon
  * (VsSceneSide.iconImages, from VsScene_LoadTeamIcons), or nothing past the team size.
- * Seen in play (2026-11-14): stubbing it removed the twelve team icons from the panels.
+ * Seen in play (2026-11-14): stubbing it removed the team icons from the panels; the nicknames
+ * stayed.
  */
 void VsPanel_IconCallback(s32 event, DemoGeoNode *node)
 {
@@ -164,7 +171,7 @@ void VsPanel_IconCallback(s32 event, DemoGeoNode *node)
  * Nickname node callback (callbackArg = (side << 16) | slot): copies the slot's nickname into the
  * shared buffer sVsPanelNicknameText behind a 0x09 text control byte and shows it, or nothing past
  * the team size.
- * Seen in play (2026-11-14): stubbing it removed the nicknames under the icons.
+ * Seen in play (2026-11-14): stubbing it removed the nicknames (ピカのすけ ...); the icons stayed.
  */
 void VsPanel_NicknameCallback(s32 event, DemoGeoNode* node) {
     VsSceneSide* teams;
