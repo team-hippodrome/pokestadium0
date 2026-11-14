@@ -4943,3 +4943,5 @@ sKantoMapSeaMaterialDL = 0x8F1549C0; // type:data
 sKantoMapSeaMeshDL = 0x8F154A60; // type:data
 sKantoMapRiversMaterialDL = 0x8F155550; // type:data
 sKantoMapRiversMeshDL = 0x8F1555B8; // type:data
+CartridgeCheckModels_CheckBootCode = 0x8F400020; // type:func
+CartridgeCheckModels_GeoSwitchTerminal = 0x8F400088; // type:func

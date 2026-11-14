@@ -229,7 +229,7 @@
   "src/fragments/geo_model_032/geo_model_032.c",
   "src/fragments/geo_model_033/geo_model_033.c",
   "src/fragments/geo_model_034/geo_model_034.c",
-  "src/fragments/geo_model_038/geo_model_038.c",
+  "src/fragments/cartridge_check_models/cartridge_check_models.c",
   "src/fragments/geo_model_039/geo_model_039.c",
   "src/fragments/geo_model_040/geo_model_040.c",
   "src/fragments/model_data/model_data_106.c",
