@@ -17,14 +17,14 @@ typedef void (*MenuDrawItemFunc)(s32 x, s32 y, u8* item, s32 index, s32 flags, s
 
 typedef struct Menu {
     /* 0x00 */ ByteMatrix* items; // item table: a PointerList of items, or rows drawn in place (*_DrawInlineItems)
-    /* 0x04 */ u16* itemFlags; // one per item slot; bit 0 = disabled (Menu_UpdateCursorSkipDisabled skips it)
-    /* 0x08 */ s32 cursor; // index of the selected item
-    /* 0x0C */ s32 cellWidth;
-    /* 0x10 */ s32 cellHeight;
-    /* 0x14 */ MenuDrawItemFunc drawItem; // called once per item with 0x12 added to the flags of the cursor item
-    /* 0x18 */ Controller* controller; // the Init functions store D_800603C0
+    /* 0x04 */ u16* itemFlags; // @unverified: one per item slot, bit 0 = disabled (Menu_UpdateCursorSkipDisabled skips it)
+    /* 0x08 */ s32 cursor; // index of the selected item: 0-2 in the Free Battle rule window
+    /* 0x0C */ s32 cellWidth; // 396 for the Free Battle rule window rows
+    /* 0x10 */ s32 cellHeight; // row pitch in pixels: 32 in the rule window
+    /* 0x14 */ MenuDrawItemFunc drawItem; // called once per item with 0x12 added to the flags of the cursor item; FreeBattle_DrawMenuRow
+    /* 0x18 */ Controller* controller; // gControllers (D_800603C0)
     /* 0x1C */ s32 unk_1C; // set to 0xC00 by the Init functions
-    /* 0x20 */ s32 options; // 0x10000 = draw the cursor frame, 0x100000 = draw the scroll arrows
+    /* 0x20 */ s32 options; // @unverified: 0x10000 = draw the cursor frame, 0x100000 = draw the scroll arrows (Menu_DrawItems, ScrollList_DrawItems)
 } Menu; // size = 0x24
 
 typedef struct GridMenu {
@@ -37,7 +37,7 @@ typedef struct GridMenu {
     /* 0x18 */ Controller* controller;
     /* 0x1C */ s32 unk_1C;
     /* 0x20 */ s32 options;
-    /* 0x24 */ s32 columns;
+    /* 0x24 */ s32 columns; // @unverified: GridMenu_UpdateCursor and GridMenu_DrawItems lay the items out in this many columns
 } GridMenu; // size = 0x28
 
 typedef struct ScrollMenu {
@@ -50,18 +50,18 @@ typedef struct ScrollMenu {
     /* 0x18 */ Controller* controller;
     /* 0x1C */ s32 unk_1C;
     /* 0x20 */ s32 options;
-    /* 0x24 */ s32 visibleRows;
-    /* 0x28 */ u16 inputDirection; // the direction button (0x800 up, 0x400 down, 0x200 left/page up, 0x100 right/page down) acted on this frame
-    /* 0x2A */ u16 scrollFlags; // the same direction bits while the cursor or the page is still moving
-    /* 0x2C */ s32 scrollY; // pixel offset of the first visible row
-    /* 0x30 */ s32 pageTargetY; // scrollY a page scroll is moving to
-    /* 0x34 */ s32 cursorY; // cursor's pixel position, moved toward cursor * cellHeight
-    /* 0x38 */ s32 cursorStep; // pixels the cursor moves per frame: cellHeight * 4 / 10
-    /* 0x3C */ s32 pageStep; // pixels a page scroll moves per frame: visibleRows * cellHeight * 2 / 10
-    /* 0x40 */ s32 repeatTimer; // frames before a held direction repeats: 8 after a press
-    /* 0x44 */ s32 cursorX; // ScrollGrid: cursor's pixel position across the row
-    /* 0x48 */ s32 columns; // ScrollGrid only
-    /* 0x4C */ s32 cursorStepX; // ScrollGrid: cellWidth * 4 / 10
+    /* 0x24 */ s32 visibleRows; // 3 in the Free Battle entry list (エントリーポケモンのせんたく)
+    /* 0x28 */ u16 inputDirection; // direction pressed this frame (0x800 up, 0x400 down, 0x200 left = page up, 0x100 right = page down); once repeatTimer runs out, the buttons held
+    /* 0x2A */ u16 scrollFlags; // the same direction bits while the cursor or the page is still moving: 0x800 for 2 frames after D-Up
+    /* 0x2C */ s32 scrollY; // pixel offset of the first visible row: 100 with the cursor on the 4th of 100-pixel rows
+    /* 0x30 */ s32 pageTargetY; // @unverified: scrollY a page scroll moves to (ScrollList_UpdateCursor, ScrollList_AnimateScroll)
+    /* 0x34 */ s32 cursorY; // cursor's pixel position, moved toward cursor * cellHeight: 300, 260, 200 after D-Up from row 3
+    /* 0x38 */ s32 cursorStep; // pixels the cursor moves per frame: cellHeight * 4 / 10 (40)
+    /* 0x3C */ s32 pageStep; // pixels a page scroll moves per frame: visibleRows * cellHeight * 2 / 10 (60)
+    /* 0x40 */ s32 repeatTimer; // frames before a held direction repeats: 8 after a press, counts down
+    /* 0x44 */ s32 cursorX; // @unverified: ScrollGrid: cursor's pixel position across the row (ScrollGrid_AnimateScroll)
+    /* 0x48 */ s32 columns; // @unverified: ScrollGrid only (ScrollGrid_Init, ScrollGrid_DrawItems); 0 in a ScrollList
+    /* 0x4C */ s32 cursorStepX; // @unverified: ScrollGrid: cellWidth * 4 / 10 (ScrollGrid_Init)
 } ScrollMenu; // size = 0x50
 
 typedef struct unk_D_88400138 {

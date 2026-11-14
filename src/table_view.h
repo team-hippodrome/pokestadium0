@@ -30,8 +30,8 @@ typedef struct unk_func_88201DA0_034 {
  * have their own typed struct with the same layout. */
 typedef struct PointerList {
     /* 0x00 */ void** items;
-    /* 0x04 */ s32 capacity; // number of slots in items
-    /* 0x08 */ s32 count; // number of slots in use
+    /* 0x04 */ s32 capacity; // number of slots in items: 3 for the Free Battle rule window
+    /* 0x08 */ s32 count; // number of slots in use: 3 for the Free Battle rule window
 } PointerList; // size = 0xC
 
 /* A table of fixed-size rows over a caller-owned buffer (TableView_Initialize, ByteMatrix_AppendRow,
@@ -40,8 +40,8 @@ typedef struct PointerList {
 typedef struct ByteMatrix {
     /* 0x00 */ u8* rows;
     /* 0x04 */ s32 capacity; // number of rows the buffer holds
-    /* 0x08 */ s32 count; // number of rows in use
-    /* 0x0C */ s32 rowSize; // bytes per row
+    /* 0x08 */ s32 count; // number of rows in use: 3 for the Free Battle rule window's items
+    /* 0x0C */ s32 rowSize; // @unverified: bytes per row (ByteMatrix_AppendRow, Menu_DrawInlineItems)
 } ByteMatrix; // size = 0x10
 
 typedef struct unk_func_8830867C_02C_0CC_000_000_000 {
