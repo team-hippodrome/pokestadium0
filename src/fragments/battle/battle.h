@@ -837,9 +837,9 @@ typedef struct OwnerLinkedFourStreamNode {
     /* 0x38 */ Vec3f unk_38;
 } OwnerLinkedFourStreamNode; // size = 0x44
 
-typedef void (*unk_D_8140E728_01C_004_1_04)(struct Particle*, s32, struct ParticleDescriptorChild*);
+typedef void (*unk_D_8140E728_01C_004_1_04)(struct Particle*, s32);
 
-typedef void (*unk_D_8140E728_01C_004_1_08)(struct Particle*, s32, struct ParticleDescriptorChild*);
+typedef void (*unk_D_8140E728_01C_004_1_08)(struct Particle*, CameraNode*);
 
 typedef struct unk_D_8140E728_01C_00C_1 {
     /* 0x00 */ s32 arg;
@@ -851,12 +851,11 @@ typedef union unk_D_8140E728_01C_00C {
 } unk_D_8140E728_01C_00C;
 
 typedef struct ParticleDescriptorChild {
-    /* 0x00 */ u8 unk_00;
-    /* 0x00 */ u8 unk_01;
-    /* 0x00 */ s16 unk_02;
-    /* 0x04 */ unk_D_8140E728_01C_004_1_04 unk_04;
-    /* 0x08 */ unk_D_8140E728_01C_004_1_08 unk_08;
-    /* 0x0C */ unk_D_8140E728_01C_00C unk_0C;
+    /* 0x00 */ s16 drawMode; // @unverified: 2 = call setupCallback(setupArg->arg) before drawCallback (Particle_DispatchDraw)
+    /* 0x02 */ s16 renderSetup; // @unverified: 0/1 picks the setup display list in func_8213A904
+    /* 0x04 */ unk_D_8140E728_01C_004_1_04 setupCallback; // @unverified: called with *setupArg when drawMode is 2
+    /* 0x08 */ unk_D_8140E728_01C_004_1_08 drawCallback; // @unverified: per-particle draw call in Particle_DispatchDraw
+    /* 0x0C */ unk_D_8140E728_01C_00C setupArg; // @unverified: argument read for setupCallback
 } ParticleDescriptorChild; // size = 0x10
 
 typedef void (*ParticleRenderCallback)(struct Particle*, CameraNode*);
@@ -867,7 +866,8 @@ typedef union ParticleDescriptorPayload {
 } ParticleDescriptorPayload;
 
 typedef struct ParticleDescriptor {
-    /* 0x00 */ s32 kind; /* unk_04: 1 = a, 3 = func */
+    /* 0x00 */ s16 kind; // @unverified: 1 = payload.a (child table), 3 = payload.func (Particle_DispatchDraw)
+    /* 0x02 */ s16 chained; // @unverified: nonzero spawns the whole count from the chained pool (BattleAnim_SpawnStandardParticles)
     /* 0x04 */ ParticleDescriptorPayload payload;
 } ParticleDescriptor; // size = 0x08
 
@@ -875,8 +875,8 @@ typedef void (*ParticleUpdateCallback)(struct Particle*);
 
 /*
  * Same record as Stadium 1's Particle, but 4 bytes shorter: from 0x28 on, every
- * field sits 4 bytes lower than in Stadium 1. Field names up to lifecycle follow
- * Stadium 1 unless tagged otherwise. @unverified
+ * field sits 4 bytes lower than in Stadium 1. Field names without a trailing comment
+ * follow Stadium 1 and are @unverified; the commented ones say where they came from.
  */
 typedef struct Particle {
     /* 0x00 */ struct Particle* next;
@@ -886,7 +886,7 @@ typedef struct Particle {
     /* 0x10 */ struct ActivePokemon* pokemon;
     /* 0x14 */ DisplayObject* displayObject;
     /* 0x18 */ u32 flags;
-    /* 0x1C */ f32 scale;
+    /* 0x1C */ f32 scale; // draw scale; poking 1.0 over 5.4 shrank Transform's smoke puffs in play
     /* 0x20 */ f32 scaleTarget;
     /* 0x24 */ f32 scaleStep;
     /* 0x28 */ Vec3f worldPosition;
@@ -894,7 +894,7 @@ typedef struct Particle {
     /* 0x40 */ char unk40[0xC];
     /* 0x4C */ Vec3f motionOffset;
     /* 0x58 */ Vec3f motionTarget;
-    /* 0x64 */ Vec3f origin;
+    /* 0x64 */ Vec3f origin; // anchor position; poking x = -200 moved Transform's smoke off screen in play
     /* 0x70 */ f32 stepMagnitude;
     /* 0x74 */ f32 magnitudeStep;
     /* 0x78 */ Vec3f motionStep;
@@ -914,13 +914,13 @@ typedef struct Particle {
     /* 0xB4 */ s16 phase;
     /* 0xB6 */ s16 phaseTimer;
     /* 0xB8 */ s16 delayTimer;
-    /* 0xBA */ u8 prim_r;
+    /* 0xBA */ u8 prim_r; // primitive color; poking FF0000 into prim_r/g/b turned Transform's smoke red in play
     /* 0xBB */ u8 prim_g;
     /* 0xBC */ u8 prim_b;
-    /* 0xBD */ u8 env_r;
+    /* 0xBD */ u8 env_r; // environment color; poking 0000FF into env_r/g/b tinted Transform's smoke blue in play
     /* 0xBE */ u8 env_g;
     /* 0xBF */ u8 env_b;
-    /* 0xC0 */ u8 prim_a;
+    /* 0xC0 */ u8 prim_a; // primitive alpha; poking 0 hid Transform's smoke in play, it fades 0x78 -> 0x40 on its own
     /* 0xC1 */ char unkC1[0x1];
     /* 0xC2 */ s8 loopsRemaining;
     /* 0xC3 */ s8 textureFrame;
@@ -3308,8 +3308,8 @@ void BattleAnim_InitializeParticleAnchor(Particle* arg0);
 void BattleAnim_UpdateParticleAnchor(Particle* arg0);
 void BattleAnim_UpdateOrDestroyParticle(Particle* arg0);
 void BattleAnim_InitializeParticleFromEffect(Particle* arg0, ActivePokemon* arg1, BattleAnimEffectSlot* arg2, s16 arg3);
-void BattleAnim_SpawnStandardParticles(s8 *arg0);
-void BattleAnim_SpawnBatchedParticles(s8* arg0);
+void BattleAnim_SpawnStandardParticles(BattleAnimEffectSlot* arg0);
+void BattleAnim_SpawnBatchedParticles(BattleAnimEffectSlot* arg0);
 void BattleAnim_SpawnSingleParticle(BattleAnimEffectSlot* arg0);
 void BattleAnim_DispatchParticleEmission(BattleAnimEffectSlot* arg0);
 void BattleAnim_TickEffectSlots(void);
@@ -3357,7 +3357,7 @@ BattleAnimEffectSlot* BattleAnim_SpawnCategory17MarkerSlot(s32 arg0, u8 arg1);
 BattleAnimEffectSlot* BattleAnim_SpawnCategory19MarkerSlot(s32 arg0, u8 arg1);
 void Particle_ResetDefaults(Particle* arg0);
 Particle* Particle_Alloc(void);
-void Particle_Free(s8 *arg0);
+void Particle_Free(Particle* arg0);
 Particle* Particle_New(void);
 Particle* Particle_AllocChain(u8 arg0);
 s32 Particle_CountActive(void);

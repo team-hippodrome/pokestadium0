@@ -69,8 +69,8 @@ void BattleAnim_CloneParticleState(Particle* arg0, Particle* arg1, ParticleUpdat
 Particle* BattleAnim_CreateProceduralParticle(s16 arg0, s16 arg1, s32 arg2, f32 arg3);
 void BattleAnim_DestroyParticle(Particle* arg0);
 void BattleAnim_InitializeParticleFromEffect(Particle* arg0, ActivePokemon* arg1, BattleAnimEffectSlot* arg2, s16 arg3);
-void BattleAnim_SpawnStandardParticles(s8 *arg0);
-void BattleAnim_SpawnBatchedParticles(s8* arg0);
+void BattleAnim_SpawnStandardParticles(BattleAnimEffectSlot* arg0);
+void BattleAnim_SpawnBatchedParticles(BattleAnimEffectSlot* arg0);
 void BattleAnim_CleanupEffectsRetainingCategories47(void);
 void BattleAnim_CleanupEffectsRetainingCategory4(void);
 void BattleAnim_ClearEffectCallbacks(void);
@@ -222,21 +222,16 @@ BattleAnimEffectSlot* BattleAnim_AllocEffectSlot(void) {
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (157 of the moves).
  * @unverified Name from Stadium 1.
  */
-void Particle_Free(s8 *arg0) {
-    s8 **temp_v0;
-    s8 *temp_v0_2;
-
-    temp_v0 = M2C_FIELD(arg0, s8 ***, 4);
-    if (temp_v0 != NULL) {
-        *temp_v0 = M2C_FIELD(arg0, s8 **, 0);
+void Particle_Free(Particle* arg0) {
+    if (arg0->prev != NULL) {
+        arg0->prev->next = arg0->next;
     }
-    temp_v0_2 = M2C_FIELD(arg0, s8 **, 0);
-    if (temp_v0_2 != NULL) {
-        M2C_FIELD(temp_v0_2, s8 ***, 4) = (s8 **) M2C_FIELD(arg0, s8 ***, 4);
+    if (arg0->next != NULL) {
+        arg0->next->prev = arg0->prev;
     }
-    M2C_FIELD(arg0, s8 ***, 4) = NULL;
-    M2C_FIELD(arg0, s8 **, 0) = NULL;
-    M2C_FIELD(arg0, s8 *, 0xCC) = 0;
+    arg0->prev = NULL;
+    arg0->next = NULL;
+    arg0->allocated = 0;
 }
 
 /**
@@ -620,69 +615,69 @@ void func_8213A68C(void) {
     }
 }
 
-void func_8213A904(s8 *);
+void func_8213A904(Particle*);
 M2C_UNK func_8213A9C4(s8 *, s32);                 /* extern */
 s32 func_8213CAFC(s8 *, M2C_UNK);                 /* extern */
 s32 func_8213CB1C(s8 *, M2C_UNK);                 /* extern */
 
 void func_8213A784(s32 arg0) {
     s32 var_s3;
-    s8 *var_s0;
-    s8 *var_s2;
+    Particle* var_s0;
+    Particle* var_s2;
 
     var_s2 = D_8219CA50;
     var_s3 = 0;
     do {
-        if ((M2C_FIELD(var_s2, s8 *, 0xCC) != 0) && (M2C_FIELD(var_s2, s32 *, 4) == 0) && (func_8213CB1C(var_s2, 8) != 0)) {
+        if ((var_s2->allocated != 0) && (var_s2->prev == NULL) && (func_8213CB1C((s8*)var_s2, 8) != 0)) {
             func_8213A904(var_s2);
             var_s0 = var_s2;
             if (var_s2 != NULL) {
                 do {
-                    if ((func_8213CAFC(var_s0, 4) != 0) && (M2C_FIELD(var_s0, s16 *, 0xAE) >= 2)) {
-                        func_8213A9C4(var_s0, arg0);
+                    if ((func_8213CAFC((s8*)var_s0, 4) != 0) && (var_s0->lifecycle >= 2)) {
+                        func_8213A9C4((s8*)var_s0, arg0);
                     }
-                    var_s0 = M2C_FIELD(var_s0, s8 **, 0);
+                    var_s0 = var_s0->next;
                 } while (var_s0 != NULL);
             }
         }
         var_s3 += 1;
-        var_s2 += 0xD0;
+        var_s2++;
     } while (var_s3 != 0x12C);
 }
 
-void func_8213A904(s8 *);
+void func_8213A904(Particle*);
 M2C_UNK func_8213A9C4(s8 *, s32);                 /* extern */
 s32 func_8213CAFC(s8 *, M2C_UNK);                 /* extern */
 
 void func_8213A858(s32 arg0) {
     s32 var_s1;
-    s8 *var_s0;
+    Particle* var_s0;
 
     var_s0 = D_8219CA50;
     var_s1 = 0;
     do {
-        if ((M2C_FIELD(var_s0, s8 *, 0xCC) != 0) && (func_8213CAFC(var_s0, 8) != 0)) {
+        if ((var_s0->allocated != 0) && (func_8213CAFC((s8*)var_s0, 8) != 0)) {
             func_8213A904(var_s0);
-            if ((func_8213CAFC(var_s0, 4) != 0) && (M2C_FIELD(var_s0, s16 *, 0xAE) >= 2)) {
-                func_8213A9C4(var_s0, arg0);
+            if ((func_8213CAFC((s8*)var_s0, 4) != 0) && (var_s0->lifecycle >= 2)) {
+                func_8213A9C4((s8*)var_s0, arg0);
             }
         }
         var_s1 += 1;
-        var_s0 += 0xD0;
+        var_s0++;
     } while (var_s1 != 0x12C);
 }
 
-typedef void (*Fn8213A904)(s8*, s32);
+typedef void (*Fn8213A904)(Particle*, s32);
 /**
  * Draws a particle through its descriptor: picks the render setup display list from the
  * descriptor's mode, then calls the descriptor's draw callback.
  */
-void func_8213A904(s8* arg0) {
-    s8* desc = M2C_FIELD(arg0, s8**, 0xC);
-    s8* sp = M2C_FIELD(desc, s8**, 4);
+void func_8213A904(Particle* arg0) {
+    ParticleDescriptor* desc = arg0->descriptor;
+    ParticleDescriptorChild* sp = desc->payload.a;
 
-    if (M2C_FIELD(desc, s16*, 0) == 1) {
-        switch (M2C_FIELD(sp, s16*, 2)) {
+    if (desc->kind == 1) {
+        switch (sp->renderSetup) {
             case 0:
                 gSPDisplayList(gDisplayListHead++, D_82190548);
                 break;
@@ -690,8 +685,8 @@ void func_8213A904(s8* arg0) {
                 gSPDisplayList(gDisplayListHead++, D_821904C8);
                 break;
         }
-        if (M2C_FIELD(sp, s16*, 0) != 2) {
-            M2C_FIELD(sp, Fn8213A904*, 4)(arg0, *M2C_FIELD(sp, s32**, 0xC));
+        if (sp->drawMode != 2) {
+            ((Fn8213A904)sp->setupCallback)(arg0, sp->setupArg.s->arg);
         }
     }
 }
@@ -704,21 +699,21 @@ typedef void (*ParticleDrawFnCam)(Particle*, CameraNode*);
  * particles.
  */
 void Particle_DispatchDraw(Particle* arg0, CameraNode* arg1) {
-    s8* desc = (s8*)arg0->descriptor;
-    s8* sp18 = M2C_FIELD(desc, s8**, 4);
+    ParticleDescriptor* desc = arg0->descriptor;
+    ParticleDescriptorChild* sp18 = desc->payload.a;
 
-    switch (M2C_FIELD(desc, s16*, 0)) {
+    switch (desc->kind) {
         case 1:
-            if (M2C_FIELD(sp18, s16*, 0) == 2) {
-                M2C_FIELD(sp18, ParticleDrawFn2*, 4)(arg0, M2C_FIELD(M2C_FIELD(sp18, s8**, 0xC), s32*, 0));
-                M2C_FIELD(sp18, ParticleDrawFnCam*, 8)(arg0, arg1);
+            if (sp18->drawMode == 2) {
+                sp18->setupCallback(arg0, sp18->setupArg.s->arg);
+                sp18->drawCallback(arg0, arg1);
             } else {
-                M2C_FIELD(sp18, ParticleDrawFnCam*, 8)(arg0, arg1);
+                sp18->drawCallback(arg0, arg1);
             }
             break;
 
         case 3:
-            M2C_FIELD(desc, ParticleDrawFnCam*, 4)(arg0, arg1);
+            desc->payload.func(arg0, arg1);
             break;
     }
 }
@@ -778,23 +773,23 @@ void BattleAnim_InitializeParticleFromEffect(Particle* arg0, ActivePokemon* arg1
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (145 of the moves).
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_SpawnStandardParticles(s8 *arg0) {
+void BattleAnim_SpawnStandardParticles(BattleAnimEffectSlot* arg0) {
     s16 temp_s2;
     s16 var_s0;
     s32 temp_s3;
 
-    temp_s3 = M2C_FIELD(arg0, s32 *, 8);
-    temp_s2 = M2C_FIELD(arg0, s16 *, 0x12);
-    if (M2C_FIELD(M2C_FIELD(arg0, s8 **, 4), s16 *, 2) == 0) {
+    temp_s3 = (s32)arg0->pokemon;
+    temp_s2 = arg0->param1;
+    if (arg0->descriptor->chained == 0) {
         var_s0 = 0;
         if (temp_s2 > 0) {
             do {
-                BattleAnim_InitializeParticleFromEffect((Particle*)func_82139C38(), (ActivePokemon*)temp_s3, (BattleAnimEffectSlot*)arg0, var_s0);
+                BattleAnim_InitializeParticleFromEffect((Particle*)func_82139C38(), (ActivePokemon*)temp_s3, arg0, var_s0);
                 var_s0 += 1;
             } while (var_s0 < temp_s2);
         }
     } else {
-        BattleAnim_InitializeParticleFromEffect((Particle*)func_82139C58(temp_s2 & 0xFF), (ActivePokemon*)temp_s3, (BattleAnimEffectSlot*)arg0, 0);
+        BattleAnim_InitializeParticleFromEffect((Particle*)func_82139C58(temp_s2 & 0xFF), (ActivePokemon*)temp_s3, arg0, 0);
     }
 }
 
@@ -805,26 +800,26 @@ void BattleAnim_SpawnStandardParticles(s8 *arg0) {
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_SpawnBatchedParticles(s8* arg0) {
+void BattleAnim_SpawnBatchedParticles(BattleAnimEffectSlot* arg0) {
     s16 step;
     s16 count;
     s16 i;
     s32 temp_s4;
     s32 temp_v0;
 
-    temp_s4 = M2C_FIELD(arg0, s32 *, 8);
-    step = M2C_FIELD(arg0, s16 *, 0x12);
-    count = M2C_FIELD(arg0, s16 *, 0x10) / step;
-    if (M2C_FIELD(M2C_FIELD(arg0, s8 **, 4), s16 *, 2) == 0) {
+    temp_s4 = (s32)arg0->pokemon;
+    step = arg0->param1;
+    count = arg0->param0 / step;
+    if (arg0->descriptor->chained == 0) {
         for (i = 0; i < count; i++) {
             temp_v0 = func_82139C38();
-            M2C_FIELD(arg0, s16 *, 0x10) = step;
-            BattleAnim_InitializeParticleFromEffect((Particle*)temp_v0, (ActivePokemon*)temp_s4, (BattleAnimEffectSlot*)arg0, i);
+            arg0->param0 = step;
+            BattleAnim_InitializeParticleFromEffect((Particle*)temp_v0, (ActivePokemon*)temp_s4, arg0, i);
         }
     } else {
         temp_v0 = func_82139C58(count & 0xFF);
-        M2C_FIELD(arg0, s16 *, 0x10) = step;
-        BattleAnim_InitializeParticleFromEffect((Particle*)temp_v0, (ActivePokemon*)temp_s4, (BattleAnimEffectSlot*)arg0, 0);
+        arg0->param0 = step;
+        BattleAnim_InitializeParticleFromEffect((Particle*)temp_v0, (ActivePokemon*)temp_s4, arg0, 0);
     }
 }
 
