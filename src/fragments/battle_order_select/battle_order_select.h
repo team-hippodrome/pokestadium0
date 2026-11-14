@@ -15,17 +15,17 @@ typedef struct OrderSidebarIcons {
 } OrderSidebarIcons; // size = 0x10
 
 typedef struct OrderSelectPanel {
-    /* 0x00 */ s8 panelIndex; // @unverified: index in D_82302B48, set by BattleMenu_AddOrderSelectPanel
-    /* 0x01 */ s8 controllerPort; // @unverified: copied from the roster's controllerPort
+    /* 0x00 */ s8 panelIndex; // index in D_82302B48, set by BattleMenu_AddOrderSelectPanel (0 1P, 1 COM in play)
+    /* 0x01 */ s8 controllerPort; // copied from the roster's controllerPort (0 for 1P, 1 for COM in play)
     /* 0x02 */ s8 partnerPanelIndex; // -1 for none (both panels of a COM Free Battle); a tag partner's panel is reset with this one
-    /* 0x03 */ s8 sidebarTeam; // @unverified: which sidebar column (team 0/1) gets the pick icons
+    /* 0x03 */ s8 sidebarTeam; // which sidebar column (team 0/1) gets the pick icons; with 1P's poked to 1 its first pick put no ball in the 1P column
     /* 0x04 */ char unk04[0x1];
     /* 0x05 */ s8 state; // 0 picking, 1 confirm prompt, 2 level-sum notice, 3 ready (じゅんび かんりょう！, "Ready!", on the COM panel)
     /* 0x06 */ s8 redrawFrames; // @unverified: set to 2 on every change and counted down while the panel redraws
     /* 0x07 */ s8 unk_07;
     /* 0x08 */ s8 readyBlinkTimer; // @unverified: 0..0x3C cycle that fades the ready panel
     /* 0x09 */ s8 showingSummary; // 1 while R (かくにん, "Check") is held
-    /* 0x0A */ s8 confirmCursor; // @unverified: D-pad left/right toggles it at the confirm prompt; 0 accepts, 1 picks again
+    /* 0x0A */ s8 confirmCursor; // at the これで いいですか？ (OK?) prompt: 0 はい (Yes), 1 えらびなおす (pick again); D-Right/D-Left toggled it in play
     /* 0x0B */ s8 pickCount; // Pokémon picked so far (2 after B and C-Left)
     /* 0x0C */ s8 pickedSlots[6]; // party slots in pick order (B 0, C-Left 1, C-Up 2, A 3, C-Down 4, C-Right 5)
     /* 0x12 */ s16 x; // panel position given to BattleMenu_AddOrderSelectPanel (1P's panel 0x50, 0x21)
