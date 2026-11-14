@@ -637,17 +637,17 @@ typedef struct Entry89100140 {
  * LabPCList_DrawPopupMenu): a window, the rectangle it opens next to, then its menu. */
 typedef struct LabPopupMenu {
     /* 0x00 */ Window window;
-    /* 0x2C */ s32 anchorX; // @unverified: LabPCList_PlacePopup puts the popup next to this rectangle
+    /* 0x2C */ s32 anchorX; // the rectangle the popup opens next to: the レベル header cell gave anchor (164, 130, 0, 22) and the popup opened at (164, 152)
     /* 0x30 */ s32 anchorY;
     /* 0x34 */ s32 anchorW;
     /* 0x38 */ s32 anchorH;
     /* 0x3C */ s32 unk_3C;
     /* 0x40 */ Menu menu;
-    /* 0x64 */ PointerList itemList; // @unverified: the item strings: フシギダネをあつめる, おなじタイプをあつめる, いどうする, どうぐをつかう
-    /* 0x70 */ s32 title; // @unverified: text of the title tab when nonzero (LabPCList_InitPopupMenu sets window style 0x800)
-    /* 0x74 */ s32 limitX; // @unverified: LabPCList_PlacePopup keeps the popup left of this
-    /* 0x78 */ s32 limitY; // @unverified: and above this
-} LabPopupMenu; // @unverified: size = 0x7C
+    /* 0x64 */ PointerList itemList; // the item strings: count 4 for the row popup (ピカチュウをあつめる, おなじタイプをあつめる, いどうする, どうぐをつかう), 3 for the sort popup, 8 for the box list
+    /* 0x70 */ s32 title; // text of the title tab when nonzero: set on the どこへ? popup, 0 on the untitled row and sort popups
+    /* 0x74 */ s32 limitX; // right edge the popup stays left of: 596, the right of listFrame
+    /* 0x78 */ s32 limitY; // bottom edge the popup stays above: 432, the bottom of listFrame
+} LabPopupMenu; // size = 0x7C
 
 typedef struct Slot89102930 {
     /* 0x00 */ s32 unk00;
@@ -661,13 +661,13 @@ typedef struct LabLevelInputWindow {
     /* 0x00 */ Window window;
     /* 0x2C */ LabeledButton clearButton; // かいじょ; flags bit 0 (greyed out) when no level filter is active
     /* 0x68 */ LabeledButton gatherButton; // あつめる
-    /* 0xA4 */ DigitSelector minLevel; // @unverified: 3 digits, 1 to 100 (LabPCList_InitLevelInputWindow)
-    /* 0xB8 */ DigitSelector maxLevel; // @unverified: 3 digits, 1 to 100
-    /* 0xCC */ ChoiceCursor cursor; // @unverified: count 2
+    /* 0xA4 */ DigitSelector minLevel; // the left 3-digit number; D-Up on its tens digit turned 001 into 011, and あつめる stored 11 in levelFilterMin
+    /* 0xB8 */ DigitSelector maxLevel; // the right 3-digit number, 100 at open; D-Up on its hundreds digit wrapped it to 1
+    /* 0xCC */ ChoiceCursor cursor; // count 2: 0 = あつめる, 1 = かいじょ (D-Down) when focus is 2
     /* 0xD8 */ s32 unk_D8;
-    /* 0xDC */ s32 column; // @unverified: L/R position: 0-2 the digits of minLevel, 3-5 of maxLevel, 6 the buttons (LabPCList_UpdateLevelInput)
+    /* 0xDC */ s32 column; // D-Left/D-Right position: opens at 2 (ones digit of minLevel), 3-5 the digits of maxLevel (3 = hundreds), 6 the buttons
     /* 0xE0 */ s32 unk_E0;
-    /* 0xE4 */ s32 focus; // @unverified: 0 = minLevel, 1 = maxLevel, 2 = the buttons
+    /* 0xE4 */ s32 focus; // 0 = minLevel, 1 = maxLevel, 2 = the buttons; followed column 2 -> 3 -> 6
 } LabLevelInputWindow; // size = 0xE8
 
 #define LAB_PC_LIST_MAX_ROWS 466
@@ -675,53 +675,53 @@ typedef struct LabLevelInputWindow {
 /* The いちらん (Pokémon list) screen of the Lab PC (LabPCList_InitListWindow). Its functions used to
  * take it through a dozen partial views (Ctx891012A8, Ctx89100294, Big891003A4, ...). */
 typedef struct LabPCListScreen {
-    /* 0x0000 */ Window window; // @unverified: 564x382 (LabPCList_InitListWindow)
-    /* 0x002C */ WindowFrame listFrame; // @unverified: the rows area, 552x302 at (6, 0x3A) in the window
-    /* 0x004C */ WindowFrame headerFrame; // @unverified: the column header strip, 552x30 at (6, 6)
-    /* 0x006C */ PointerList filteredRows; // @unverified: what PointerList_Filter leaves of rows (LabPCList_ApplyFiltersAndSort)
-    /* 0x0078 */ s32 sortKey; // @unverified: index into D_8910D990, the comparator given to PointerList_Sort
-    /* 0x007C */ s32 activeFilters; // @unverified: LabPCList_ApplyFiltersAndSort: 1 level, 2 type, 4 move, 8 and 0x10 (unk_9E58, unk_9E5C), 0x20
+    /* 0x0000 */ Window window; // 564x382 at (38, 72)
+    /* 0x002C */ WindowFrame listFrame; // the column header row and the rows, 552x302 at (6, 0x3A) in the window
+    /* 0x004C */ WindowFrame headerFrame; // the top bar (L タテ/ヨコきりかえ R, ページおくり 1/3), 552x30 at (6, 6) in the window
+    /* 0x006C */ PointerList filteredRows; // what the filters leave of rows: 2 of 3 after the level filter 11-100 dropped ヒトカゲ Lv10
+    /* 0x0078 */ s32 sortKey; // comparator index for PointerList_Sort (D_8910D990): たかいじゅん on レベル set 2 and the rows sorted by level
+    /* 0x007C */ s32 activeFilters; // filter bits: 1 level (set by the level filter), 2 type (タイプであつめる), 0x10 おなじタイプをあつめる (seen 0x13); 4 move, 8, 0x20 from LabPCList_ApplyFiltersAndSort
     /* 0x0080 */ s32 unk_0080;
-    /* 0x0084 */ s32* columnWidths; // @unverified: pixel width of each detail column (LabPCList_GetColumnCursorX)
-    /* 0x0088 */ s32 state; // @unverified: LabPCList_UpdateHeaderCursor sets 2 when it opens the sort menu
-    /* 0x008C */ s32 focus; // @unverified: 0 = the rows, 1 = the header buttons, 2 = the column headers (R moved the focus to ニックネーム, ID, おや, ばしょ)
+    /* 0x0084 */ s32* columnWidths; // pixel width of each detail column: 92, 52, 88, 56, 72, 72 on page 1 (ニックネーム .. タイプ2), 108 the moves, 72 the stats
+    /* 0x0088 */ s32 state; // sub-screen: 0 the list, 1 the source choice, 3 the sort popup, 5 the type filter, 7 the row popup, 8 どこへ?, 9 the box list
+    /* 0x008C */ s32 focus; // 0 = the rows, 1 = the column headers (R moved the focus there, L back)
     /* 0x0090 */ char unk_0090[0x230 - 0x90];
-    /* 0x0230 */ char sourceSelectWindow[0x3B4 - 0x230]; // @unverified: 「どこのポケモンを いちらん するか えらんでください。」 (LabPCList_UpdateSourceSelect)
+    /* 0x0230 */ char sourceSelectWindow[0x3B4 - 0x230]; // 「どこのポケモンを いちらん するか えらんでください。」 with てもち, ゲームボーイのボックス, 64カセットのボックス, OK; shown at state 1
     /* 0x03B4 */ Entry89100140 sources[3]; // @unverified: rows of sourceMatrix: てもち, ゲームボーイのボックス, 64カセットのボックス
     /* 0x0420 */ ByteMatrix sourceMatrix; // @unverified: over sources (func_89100140)
     /* 0x0430 */ char unk_0430[0x87B8 - 0x430];
     /* 0x87B8 */ void* rowBuffer[LAB_PC_LIST_MAX_ROWS]; // @unverified: storage of rows
     /* 0x8F00 */ void* filteredRowBuffer[LAB_PC_LIST_MAX_ROWS]; // @unverified: storage of filteredRows
-    /* 0x9648 */ PointerList rows; // @unverified: the listed Pokémon, built from the chosen sources (func_89109C6C)
-    /* 0x9654 */ LabPopupMenu popup; // @unverified: the A-button popup on a row: フシギダネをあつめる, おなじタイプをあつめる, いどうする, どうぐをつかう
-    /* 0x96D0 */ LabPopupMenu subPopup; // @unverified: drawn over popup (LabPCList_DrawWindows)
-    /* 0x974C */ LabPopupMenu subPopup2; // @unverified: drawn over subPopup
+    /* 0x9648 */ PointerList rows; // the listed Pokémon from the chosen sources: count 2 with てもち, 3 with all three sources
+    /* 0x9654 */ LabPopupMenu popup; // the A-button popup on a row (ピカチュウをあつめる, おなじタイプをあつめる, いどうする, どうぐをつかう) and the header sort popup
+    /* 0x96D0 */ LabPopupMenu subPopup; // drawn over popup: どこへ? (てもちのポケモン, ゲームボーイのボックス, 64カセットのボックス) after いどうする
+    /* 0x974C */ LabPopupMenu subPopup2; // drawn over subPopup: ボックス1 to ボックス8 after ゲームボーイのボックス
     /* 0x97C8 */ u16 popupItemFlags[3][16]; // @unverified: Menu.itemFlags of popups
-    /* 0x9828 */ u8 levelFilterMin; // @unverified: play note on LabPCList_RunLevelFilter: あつめる with 006から100 stored 6 here
-    /* 0x9829 */ u8 levelFilterMax; // @unverified: and 100 here; LabPCList_ResetFilterState sets 1 and 100
+    /* 0x9828 */ u8 levelFilterMin; // lowest level of the level filter: あつめる with 011から100 stored 11; LabPCList_ResetFilterState sets 1
+    /* 0x9829 */ u8 levelFilterMax; // highest level of the level filter: 100 (ResetFilterState sets 100)
     /* 0x982A */ char pad982A[2];
     /* 0x982C */ s32 unk_982C;
     /* 0x9830 */ LabLevelInputWindow levelInputWindow;
-    /* 0x9918 */ s32 unk_9918; // @unverified: LabPCList_CommitTypeFilter writes here; 0 turns the type filter off
+    /* 0x9918 */ s32 unk_9918; // type filter: number of chosen types, 1 after あつめる with でんき (type 0x17 then at 0x991C); 0 turns it off
     /* 0x991C */ s32 unk_991C;
     /* 0x9920 */ char typeFilterWindow[0x9B00 - 0x9920]; // @unverified: LabPCList_DrawTypeFilter
     /* 0x9B00 */ s32 unk_9B00; // @unverified: LabPCList_CommitMoveFilter writes here
     /* 0x9B04 */ s32 unk_9B04;
     /* 0x9B08 */ char moveFilterWindow[0x9E58 - 0x9B08]; // @unverified: LabPCList_DrawMoveFilter
     /* 0x9E58 */ s32 unk_9E58;
-    /* 0x9E5C */ s32 unk_9E5C; // @unverified: number of types in unk_9E60/unk_9E61 for the おなじタイプをあつめる filter (LabPCList_UpdateMonMenu)
+    /* 0x9E5C */ s32 unk_9E5C; // number of types in unk_9E60/unk_9E61 for おなじタイプをあつめる: 1 for ピカチュウ, with unk_9E60 = 0x17 (でんき)
     /* 0x9E60 */ u8 unk_9E60;
     /* 0x9E61 */ u8 unk_9E61;
     /* 0x9E62 */ char pad9E62[2];
     /* 0x9E64 */ char unk_9E64[4];
     /* 0x9E68 */ Slot89102930 unk_9E68[3];
     /* 0x9EBC */ char unk_9EBC[0xB15C - 0x9EBC];
-    /* 0xB15C */ s32 page; // @unverified: detail page 0-2 (ページおくり1/3); C-Right turned 1/3 to 2/3, the move columns
-    /* 0xB160 */ ScrollList list; // @unverified: over rows (or filteredRows), 14 rows of 20 pixels
+    /* 0xB15C */ s32 page; // detail page 0-2 (ページおくり1/3); C-Right turned 1/3 to 2/3 and 3/3
+    /* 0xB160 */ ScrollList list; // over rows (or filteredRows), 14 rows of 20 pixels; D-Down moved list.cursor to 1
     /* 0xB1A4 */ u16 rowFlags[LAB_PC_LIST_MAX_ROWS]; // @unverified: Menu.itemFlags of list
-    /* 0xB548 */ s32* pageColumnStart; // @unverified: first column index of each detail page (LabPCList_GetColumnCursorX)
-    /* 0xB54C */ ChoiceCursor headerCursor; // @unverified: the header buttons; D-Left/D-Right moved it between ニックネーム, ID, おや, ばしょ
-    /* 0xB558 */ s32 hasChanges; // @unverified: set by LabPCList_MoveMonTo and after an item is used; LabPCList_UpdateScreen then asks to save on exit
+    /* 0xB548 */ s32* pageColumnStart; // first column index of each detail page: 0, 6, 10
+    /* 0xB54C */ ChoiceCursor headerCursor; // the column header cursor (count 7, 2 = first detail column): D-Right moved it over the headers, 2 = レベル on page 3, 6 = タイプ1 on page 1
+    /* 0xB558 */ s32 hasChanges; // became 1 when いどうする moved ピカチュウ from てもち to GB box 1; LabPCList_UpdateScreen then asks to save on exit
     /* 0xB55C */ char textBox[0xB594 - 0xB55C]; // @unverified: TextBox_Init, TextBox_Draw
     /* 0xB594 */ void* msg; // @unverified: message box given to LabPCList_MoveMonTo; last argument of LabPCList_InitListWindow
 } LabPCListScreen; // size = 0xB598
