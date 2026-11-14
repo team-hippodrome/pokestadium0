@@ -6,8 +6,8 @@
 
 // Declared here instead of in a header: the callers of these disagree on their types.
 s32 Particle_Field50_SetXZFromField7C_09BB4(s32* arg0);
-s32 Ui_GetSelectionDirection(unk_func_8002EBD8_arg0* arg0);
-s32 Ui_HandleHorizontalSelectionInput(unk_func_8002DD98_arg0* arg0);
+s32 Ui_GetSelectionDirection(Controller* arg0);
+s32 Ui_HandleHorizontalSelectionInput(UiSelection* arg0);
 extern u32 D_8007360C[];
 extern u8 pad_D_80075944[];
 
@@ -15,19 +15,19 @@ extern ParticleDescriptor gDefaultParticleDescriptor;
 
 #include "m2c_macros.h"
 
-void GbSave_BuildPortSummary(unk_func_8002D860* arg0, s32 arg1);
+void GbSave_BuildPortSummary(GbSavePortSummary* arg0, s32 arg1);
 void Particle_SetVelocityXZFromRotationY(Particle* arg0);
-s32 Ui_AdjustVerticalSelection(unk_func_8002DCB8_arg0* arg0, s32 arg1);
+s32 Ui_AdjustVerticalSelection(UiSelection* arg0, s32 arg1);
 s32 Ui_HandleVerticalSelectionInput(s32 arg0);
-s32 Ui_AdjustHorizontalSelection(unk_func_8002DD98_arg0* arg0, s32 arg1);
-s32 Ui_HandleHorizontalSelectionInput(unk_func_8002DD98_arg0* arg0);
-void Ui_AdjustSteppedScrollSelection(unk_func_8002DE78_arg0* arg0);
-s32 Ui_HandleNumericSelectionInput(unk_func_8820E99C_030_030* arg0);
-s32 Ui_AdjustSteppedRangeSelection(unk_func_8002E128_arg0* arg0);
-s32 Ui_GetSelectionDirection(unk_func_8002EBD8_arg0* arg0);
+s32 Ui_AdjustHorizontalSelection(UiSelection* arg0, s32 arg1);
+s32 Ui_HandleHorizontalSelectionInput(UiSelection* arg0);
+void Ui_AdjustSteppedScrollSelection(UiRangeValue* arg0);
+s32 Ui_HandleNumericSelectionInput(UiNumberInput* arg0);
+s32 Ui_AdjustSteppedRangeSelection(UiRangeValue* arg0);
+s32 Ui_GetSelectionDirection(Controller* arg0);
 Color_RGBA8 Color_InterpolateFromGray(Color_RGBA8 arg0, f32 arg1);
 
-s32 Ui_AdjustNumericSelection(unk_func_8830867C_044_038_030* arg0, s32 arg1);
+s32 Ui_AdjustNumericSelection(UiNumberInput* arg0, s32 arg1);
 s32 Particle_Field50_SetXZFromField7C_09BB4(s32* arg0);
 s32 Particle_Field7C_SetXZFromField74AngleY_0B278(void *arg0);
 
@@ -114,15 +114,15 @@ void func_80027F8C(s32 arg0) {
  * Builds the display summary of a port's Game Boy save, or clears it when no
  * save is present.
  */
-void GbSave_BuildPortSummary(unk_func_8002D860* arg0, s32 arg1) {
+void GbSave_BuildPortSummary(GbSavePortSummary* arg0, s32 arg1) {
     if (GbSave_GetSaveState(arg1) != 0) {
-        arg0->unk_00 = 1;
+        arg0->isUnavailable = 1;
     } else {
-        arg0->unk_00 = 0;
-        arg0->unk_08 = GbSave_GetTrainerId(arg1);
+        arg0->isUnavailable = 0;
+        arg0->trainerId = GbSave_GetTrainerId(arg1);
         GbSave_GetPlayerName(arg1, &arg0[1]);
     }
-    arg0->unk_04 = GbSave_GetPortGame(arg1);
+    arg0->gameType = GbSave_GetPortGame(arg1);
 }
 
 typedef struct GbSaveSummary {
@@ -840,25 +840,25 @@ void func_8002B054(s8* arg0, s32 arg1) {
 }
 
 /** Moves a vertical menu selection according to a d-pad direction. */
-s32 Ui_AdjustVerticalSelection(unk_func_8002DCB8_arg0* arg0, s32 arg1) {
+s32 Ui_AdjustVerticalSelection(UiSelection* arg0, s32 arg1) {
     s32 ret = 0;
 
     switch (arg1) {
         case 0x800:
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-            if (arg0->unk_04 == 0) {
-                arg0->unk_04 += arg0->unk_08;
+            if (arg0->index == 0) {
+                arg0->index += arg0->count;
             }
-            arg0->unk_04--;
+            arg0->index--;
             ret = 1;
             break;
 
         case 0x400:
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-            if (arg0->unk_04 >= (arg0->unk_08 - 1)) {
-                arg0->unk_04 -= arg0->unk_08;
+            if (arg0->index >= (arg0->count - 1)) {
+                arg0->index -= arg0->count;
             }
-            arg0->unk_04++;
+            arg0->index++;
             ret = 1;
             break;
     }
@@ -875,25 +875,25 @@ s32 Ui_HandleVerticalSelectionInput(s32 arg0) {
 }
 
 /** Moves a horizontal menu selection according to a d-pad direction. */
-s32 Ui_AdjustHorizontalSelection(unk_func_8002DD98_arg0* arg0, s32 arg1) {
+s32 Ui_AdjustHorizontalSelection(UiSelection* arg0, s32 arg1) {
     s32 ret = 0;
 
     switch (arg1) {
         case 0x200:
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-            if (arg0->unk_04 == 0) {
-                arg0->unk_04 += arg0->unk_08;
+            if (arg0->index == 0) {
+                arg0->index += arg0->count;
             }
-            arg0->unk_04--;
+            arg0->index--;
             ret = 1;
             break;
 
         case 0x100:
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-            if (arg0->unk_04 >= (arg0->unk_08 - 1)) {
-                arg0->unk_04 -= arg0->unk_08;
+            if (arg0->index >= (arg0->count - 1)) {
+                arg0->index -= arg0->count;
             }
-            arg0->unk_04++;
+            arg0->index++;
             ret = 1;
             break;
     }
@@ -902,7 +902,7 @@ s32 Ui_AdjustHorizontalSelection(unk_func_8002DD98_arg0* arg0, s32 arg1) {
 }
 
 /** Reads the repeated d-pad input and moves a horizontal menu selection. */
-s32 Ui_HandleHorizontalSelectionInput(unk_func_8002DD98_arg0* arg0) {
+s32 Ui_HandleHorizontalSelectionInput(UiSelection* arg0) {
     s32 sp1C = Input_GetRepeatedDPad() & 0xFFFF;
 
     Ui_AdjustHorizontalSelection(arg0, sp1C);
@@ -910,74 +910,74 @@ s32 Ui_HandleHorizontalSelectionInput(unk_func_8002DD98_arg0* arg0) {
 }
 
 /** Scrolls a selection in steps according to the repeated d-pad input. */
-void Ui_AdjustSteppedScrollSelection(unk_func_8002DE78_arg0* arg0) {
+void Ui_AdjustSteppedScrollSelection(UiRangeValue* arg0) {
     s32 temp_v0 = Input_GetRepeatedDPad();
-    s32 sp18 = arg0->unk_0C;
+    s32 sp18 = arg0->step;
 
     if (gPlayer1Controller->buttonDown & 0x2000) {
-        sp18 = ((arg0->unk_08 - arg0->unk_04) + 1) / 10;
+        sp18 = ((arg0->max - arg0->min) + 1) / 10;
     }
 
     switch (temp_v0) {
         case 0x800:
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-            if (arg0->unk_00 - sp18 < arg0->unk_04) {
-                arg0->unk_00 = arg0->unk_04;
+            if (arg0->value - sp18 < arg0->min) {
+                arg0->value = arg0->min;
             } else {
-                arg0->unk_00 -= sp18;
+                arg0->value -= sp18;
             }
             break;
 
         case 0x400:
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
-            if (arg0->unk_08 < arg0->unk_00 + sp18) {
-                arg0->unk_00 = arg0->unk_08;
+            if (arg0->max < arg0->value + sp18) {
+                arg0->value = arg0->max;
             } else {
-                arg0->unk_00 += sp18;
+                arg0->value += sp18;
             }
             break;
     }
 }
 
 /** Changes a numeric selection according to a d-pad direction. */
-s32 Ui_AdjustNumericSelection(unk_func_8830867C_044_038_030* arg0, s32 arg1) {
+s32 Ui_AdjustNumericSelection(UiNumberInput* arg0, s32 arg1) {
     s32 var_t1;
     s32 var_a2;
     s32 i;
 
     var_a2 = 1;
 
-    for (i = arg0->unk_10; i > 0; i--) {
+    for (i = arg0->cursorDigit; i > 0; i--) {
         var_a2 *= 10;
     }
 
     switch (arg1) {
         case 0x200:
-            if (arg0->unk_10 + 1 < arg0->unk_0C) {
-                arg0->unk_10 = arg0->unk_10 + 1;
+            if (arg0->cursorDigit + 1 < arg0->digitCount) {
+                arg0->cursorDigit = arg0->cursorDigit + 1;
             }
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
             var_t1 = 1;
             break;
 
         case 0x100:
-            if (arg0->unk_10 > 0) {
-                arg0->unk_10--;
+            if (arg0->cursorDigit > 0) {
+                arg0->cursorDigit--;
             }
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
             var_t1 = 1;
             break;
 
         case 0x800:
-            if (arg0->unk_00 == arg0->unk_08) {
-                arg0->unk_00 = arg0->unk_00 - ((arg0->unk_00 / var_a2) * var_a2);
-                if (arg0->unk_00 < arg0->unk_04) {
-                    arg0->unk_00 = arg0->unk_04;
+            if (arg0->value == arg0->max) {
+                arg0->value = arg0->value - ((arg0->value / var_a2) * var_a2);
+                if (arg0->value < arg0->min) {
+                    arg0->value = arg0->min;
                 }
             } else {
-                arg0->unk_00 += var_a2;
-                if (arg0->unk_08 < arg0->unk_00) {
-                    arg0->unk_00 = arg0->unk_08;
+                arg0->value += var_a2;
+                if (arg0->max < arg0->value) {
+                    arg0->value = arg0->max;
                 }
             }
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
@@ -985,12 +985,12 @@ s32 Ui_AdjustNumericSelection(unk_func_8830867C_044_038_030* arg0, s32 arg1) {
             break;
 
         case 0x400:
-            if (arg0->unk_00 == arg0->unk_04) {
-                arg0->unk_00 = arg0->unk_08;
+            if (arg0->value == arg0->min) {
+                arg0->value = arg0->max;
             } else {
-                arg0->unk_00 -= var_a2;
-                if (arg0->unk_00 < arg0->unk_04) {
-                    arg0->unk_00 = arg0->unk_04;
+                arg0->value -= var_a2;
+                if (arg0->value < arg0->min) {
+                    arg0->value = arg0->min;
                 }
             }
             Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
@@ -1001,7 +1001,7 @@ s32 Ui_AdjustNumericSelection(unk_func_8830867C_044_038_030* arg0, s32 arg1) {
 }
 
 /** Reads the repeated d-pad input and changes a numeric selection. */
-s32 Ui_HandleNumericSelectionInput(unk_func_8820E99C_030_030* arg0) {
+s32 Ui_HandleNumericSelectionInput(UiNumberInput* arg0) {
     s32 sp1C = Input_GetRepeatedDPad() & 0xFFFF;
 
     Ui_AdjustNumericSelection(arg0, sp1C);
@@ -1012,9 +1012,9 @@ s32 Ui_HandleNumericSelectionInput(unk_func_8820E99C_030_030* arg0) {
  * Changes a selection over a stepped range according to the repeated d-pad
  * input.
  */
-s32 Ui_AdjustSteppedRangeSelection(unk_func_8002E128_arg0* arg0) {
+s32 Ui_AdjustSteppedRangeSelection(UiRangeValue* arg0) {
     s32 sp1C = Input_GetRepeatedDPad() & 0xFFFF;
-    s32 sp18 = arg0->unk_0C;
+    s32 sp18 = arg0->step;
 
     if (sp1C != 0) {
         Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
@@ -1024,12 +1024,12 @@ s32 Ui_AdjustSteppedRangeSelection(unk_func_8002E128_arg0* arg0) {
                 sp18 *= 0xA;
 
             case 0x800:
-                if (arg0->unk_00 >= arg0->unk_08) {
-                    arg0->unk_00 = arg0->unk_04;
-                } else if (arg0->unk_08 < (arg0->unk_00 + sp18)) {
-                    arg0->unk_00 = arg0->unk_08;
+                if (arg0->value >= arg0->max) {
+                    arg0->value = arg0->min;
+                } else if (arg0->max < (arg0->value + sp18)) {
+                    arg0->value = arg0->max;
                 } else {
-                    arg0->unk_00 = arg0->unk_00 + sp18;
+                    arg0->value = arg0->value + sp18;
                 }
                 break;
 
@@ -1037,12 +1037,12 @@ s32 Ui_AdjustSteppedRangeSelection(unk_func_8002E128_arg0* arg0) {
                 sp18 *= 0xA;
 
             case 0x400:
-                if (arg0->unk_04 >= arg0->unk_00) {
-                    arg0->unk_00 = arg0->unk_08;
-                } else if ((arg0->unk_00 - sp18) < arg0->unk_04) {
-                    arg0->unk_00 = arg0->unk_04;
+                if (arg0->min >= arg0->value) {
+                    arg0->value = arg0->max;
+                } else if ((arg0->value - sp18) < arg0->min) {
+                    arg0->value = arg0->min;
                 } else {
-                    arg0->unk_00 = arg0->unk_00 - sp18;
+                    arg0->value = arg0->value - sp18;
                 }
                 break;
         }
@@ -1127,13 +1127,13 @@ void Ui_DrawNumberZeroPadded(s32 x, s32 y, s32 value, s32 digits) {
     }
 }
 
-/** Returns the direction chosen by the d-pad bits in a menu state. */
-s32 Ui_GetSelectionDirection(unk_func_8002EBD8_arg0* arg0) {
+/** Returns -1 when B was pressed, 1 when A was pressed, else 0. */
+s32 Ui_GetSelectionDirection(Controller* arg0) {
     s32 var_v1 = 0;
 
-    if (arg0->unk_08 & 0x4000) {
+    if (arg0->buttonPressed & BTN_B) {
         var_v1 = -1;
-    } else if (arg0->unk_08 & 0x8000) {
+    } else if (arg0->buttonPressed & BTN_A) {
         var_v1 = 1;
     }
 

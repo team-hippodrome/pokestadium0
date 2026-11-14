@@ -11,7 +11,7 @@
 #include "save_data.h"
 
 // Declared here instead of in a header: the callers of these disagree on their types.
-s32 Ui_GetSelectionDirection(unk_func_8002EBD8_arg0* arg0);
+s32 Ui_GetSelectionDirection(Controller* arg0);
 extern s32 pad_D_8831A4DC[8];
 typedef struct unk_D_88317298 {
     /* 0x00 */ s32 unk_00;
@@ -1484,7 +1484,7 @@ s32 LabItem_UpdateDeleteDataCursor(unk_func_8820E99C_030* arg0) {
     s32 dir;
 
     if (Menu_UpdateCursor((u8*)arg0 + 0x4C) == 0) {
-        dir = Ui_GetSelectionDirection((unk_func_8002EBD8_arg0*)gPlayer1Controller);
+        dir = Ui_GetSelectionDirection(gPlayer1Controller);
         if (dir == -1) {
             Audio_PlaySoundEffectById(3);
             sp1C = -1;
