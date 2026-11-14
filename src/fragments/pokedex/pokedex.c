@@ -1,4 +1,4 @@
-/* Stadium Zero fragment018_262620. */
+/* Stadium Zero fragment018_262620: ポケモンずかん (the Pokédex), main menu > ずかん. */
 /* C ported from the Stadium 1 decomp: src/fragments/pokedex/pokedex_214920.c. */
 
 #include "pokedex.h"
@@ -11,67 +11,45 @@
 #include "memory_main.h"
 #include "model_renderer.h"
 #include "pokemon_stats.h"
-s32 Pokedex_DrawListScrollArrows(unk_func_888044BC_050*, s32, s32);
-s32 Pokedex_HandleSpeciesListInput(unk_func_888044BC_038*, Controller*);
-void Pokedex_DrawTrainerInfoCard(unk_func_888044BC_03C_02C*, s32, s32);
-s32 Pokedex_DrawSortOrderLabel(unk_func_888044BC_040_030*, s32, s32);
-s32 Pokedex_HandleEntryMenuInput(unk_func_888044BC_040*, Controller*);
-s32 Pokedex_DrawDataPanel(unk_func_888044BC_044_02C*, s32, s32);
-s32 Pokedex_DrawPreview(unk_func_888044BC_04C_02C*, s32, s32);
-extern StageContext* D_8A12FF9C;
-extern StageContext* D_8A12FFA0;
-extern ModelLoadContext* D_8A12FFA4;
-extern s32 D_8A12FFA8;
-extern s32 D_8A12FFAC;
-extern s32 D_8A12FFB0;
-extern u8 pad_D_88826948[0x58];
-extern u32 pad_D_888269A4;
-extern u8 gPokedexAlphabeticalOrder[];
+extern StageContext* sMenuStageContext;
+extern StageContext* sAreaMapStageContext;
+extern ModelLoadContext* sIconFramebuffers;
+extern s32 sAreaMapPool;
+extern s32 sAreaMapLoadBuffer;
+extern s32 sGbPort;
 
 #include "m2c_macros.h"
-
-void Pokedex_LoadIcon(u8* arg0, s32 arg1);
-void Pokedex_ExitAreaMapScreen(void);
-void Pokedex_RunEntryFlow(void);
-s32 Pokedex_GetHighestSeenSpeciesIndex(void);
-void Pokedex_InitFramebuffers(void);
-
-s32 Pokedex_RunIndexScreen(void);
-s32 Pokedex_ShowEntryMenu(void);
-s32 Pokedex_ShowEntry(void);
-s32 Pokedex_PlayCry(void);
-s32 Pokedex_RedrawAreaMapTransition(u8 arg0);
-s32 Pokedex_ShowAreaMapScreen(void);
 
 extern Gfx D_80060290[];
 extern Gfx D_80060398[];
 extern u8 D_04002BA8[];
 extern u8 D_04002ED0[];
-void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 /**
- * Draws the 20x20 caught icon (`arg2` set) or the seen icon at (x, y).
- * Seen in play (2026-11-12): the Poke Ball icon beside 001 フシギダネ, 004 ヒトカゲ and 007 ゼニガメ, the
- * three caught species of the save.
+ * Draws the 20x20 Poké Ball icon of an owned species at (x, y): the red ball (D_04002BA8) when `is_held`
+ * (the species is in the cartridge's party or boxes, もっている), else the grey ball (D_04002ED0).
+ * Seen in play (2026-11-14, crafted Green save): red ball beside 001 フシギダネ (in the party), grey balls
+ * beside 004 ヒトカゲ, 007 ゼニガメ and 016 ポッポ (caught, not held); no icon for seen-only 010 キャタピー.
  */
-void Pokedex_DrawCaughtIcon(s32 arg0, s32 arg1, s32 arg2) {
+void Pokedex_DrawOwnedIcon(s32 x, s32 y, s32 is_held) {
     gSPDisplayList(gDisplayListHead++, D_80060290);
-    func_8001B884(arg0, arg1, 0x14, 0x14, arg2 ? D_04002BA8 : D_04002ED0, 0x14, 0x200000);
+    Gfx_DrawTextureRgba16(x, y, 0x14, 0x14, is_held ? D_04002BA8 : D_04002ED0, 0x14, 0x200000);
     gSPDisplayList(gDisplayListHead++, D_80060398);
 }
 
 s32 func_800209A4();
 
 /**
- * Returns the dex index under the list cursor, mapping through the sort order when sorted by kana.
+ * Returns the 0-based dex index under the list cursor, mapping through the kana order (func_800209A4) when
+ * the list is sorted アイウエオじゅん.
  * Seen in play (2026-11-12): データをみる opened the entry of the row under the cursor (No.001).
  */
-s32 Pokedex_GetCursorDexIndex(PokedexListWindow* arg0) {
+s32 Pokedex_GetCursorDexIndex(PokedexListWindow* list_window) {
     s32 var_v1;
 
-    if (arg0->sortByKana != 0) {
-        var_v1 = func_800209A4(arg0->list.cursor + 1, arg0) - 1;
+    if (list_window->sortByKana != 0) {
+        var_v1 = func_800209A4(list_window->list.cursor + 1, list_window) - 1;
     } else {
-        var_v1 = arg0->list.cursor;
+        var_v1 = list_window->list.cursor;
     }
     return var_v1;
 }
@@ -84,94 +62,76 @@ extern char D_8A12FC30[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void Font_SetColorForFlags(s32);
-s32 func_800231C8(s32, s32);
-void func_8001A944(s32, s32, const char*, ...);
 /**
- * Draws one row of the index list (number, name, seen/caught icon), mapping the row through the kana sort when sorted.
- * Seen in play (2026-11-12): the ずかんもくじ rows: number, name for seen species, caught icon.
+ * ScrollList row callback of the ずかんもくじ list: draws row `row` at (x, y) as its number ("%03d"), and for a
+ * seen species its name, plus the owned icon when caught (progress 2) or held (progress 3). `sort_by_kana`
+ * points at the window's sortByKana; when set the row maps through the kana order.
+ * Seen in play (2026-11-14): rows 001-008, and 023 アーボ, 024, 119, 133 イーブイ first after C-Right.
  */
-void Pokedex_DrawListRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5) {
+void Pokedex_DrawListRow(s32 x, s32 y, char* item, s32 row, s32 flags, s32* sort_by_kana) {
     s32 sorted;
     UNUSED s32 pad[2]; // FAKE: stack padding
     s32 idx;
     s32 progress;
 
-    sorted = *arg5;
+    sorted = *sort_by_kana;
     if (sorted != 0) {
-        idx = func_800209A4(arg3 + 1) - 1;
+        idx = func_800209A4(row + 1) - 1;
     } else {
-        idx = arg3;
+        idx = row;
     }
-    progress = func_800231C8(D_8A12FFB0, idx + 1);
+    progress = GbSave_GetSpeciesProgressLevel(sGbPort, idx + 1);
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(arg0, arg1, 0x104, 1, D_8A1057D8);
-    func_80029028(arg0, arg1 + 0x23, 0x104, 1, D_8A1057D8);
-    func_80029028(arg0, arg1 + 1, 0x104, 0x22, D_8A1057D4);
-    if (arg4 & 0x10) {
-        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0xFE, 0x1E, D_8A1057D4);
+    func_80029028(x, y, 0x104, 1, D_8A1057D8);
+    func_80029028(x, y + 0x23, 0x104, 1, D_8A1057D8);
+    func_80029028(x, y + 1, 0x104, 0x22, D_8A1057D4);
+    if (flags & 0x10) {
+        Ui_FillRectHighlighted(x + 3, y + 3, 0xFE, 0x1E, D_8A1057D4);
     }
     if (progress == 2) {
-        Pokedex_DrawCaughtIcon(arg0 + 0x58, arg1 + 8, 0);
+        Pokedex_DrawOwnedIcon(x + 0x58, y + 8, 0);
     }
     if (progress == 3) {
-        Pokedex_DrawCaughtIcon(arg0 + 0x58, arg1 + 8, 1);
+        Pokedex_DrawOwnedIcon(x + 0x58, y + 8, 1);
     }
-    func_8001AB6C();
-    Font_SetColorForFlags(arg4);
-    func_8001A384(8, 0);
-    func_8001A944(arg0 + 0x10, arg1 + 8, D_8A12FC30, idx + 1);
+    Font_BeginTranslucentTextRendering();
+    Font_SetColorForFlags(flags);
+    Font_SetActive(8, 0);
+    Font_Printf(x + 0x10, y + 8, D_8A12FC30, idx + 1);
     if (progress != 0) {
-        func_8001A384(0x10, 0);
-        func_8001A944(arg0 + 0x7C, arg1 + 6, D_80064C60[idx].unk_00);
+        Font_SetActive(0x10, 0);
+        Font_Printf(x + 0x7C, y + 6, D_80064C60[idx].unk_00);
     }
-    func_8001ABBC();
+    Font_EndTexturedTextRendering();
 }
 
-/*
- * Pokedex_InitListWindow
- *
- * Initializes a record in the same way as Pokedex_InitEntryWindow, PartyScreen_InitList and
- * SavePrompt_Init: Window_SetRect fills the first five words with
- * (arg1, arg2, 0x110, 0x16E, 0), the words at +0x24 and +0x28 are cleared,
- * +0x14 is set to 0x801 and +0x20 to the address of D_8A12FC38.  It then
- * sets up two sub-objects:
- *
- *   - func_80027410 (TableView_Initialize in symbol_addrs.txt) is called on
- *     the area at arg0 + 0x70 with D_80064C5C, 0x1C, 0x97 and 0x97;
- *   - ScrollList_Init is called on the object at arg0 + 0x2C with that area,
- *     arg0 + 0x80, 8, the callback Pokedex_DrawListRow and the constants 0x104
- *     and 0x24.
- *
- * Finally the word at +0x1B0 is cleared and bit 0x10000 is set in the word at
- * +0x4C.  What func_80027410 and ScrollList_Init do is not established yet,
- * so the roles of those arguments are not named.
- */
 M2C_UNK func_80027410(s8 *, M2C_UNK *, M2C_UNK, M2C_UNK, s32); /* extern */
 M2C_UNK ScrollList_Init(s8 *, s8 *, s8 *, M2C_UNK, M2C_UNK *, s32, s32); /* extern */
 extern M2C_UNK D_80064C5C;
 extern M2C_UNK D_8A12FC38;
 
 /**
- * Sets up the index list window (272x366) and its scrolling list.
- * Seen in play (2026-11-12): set up the ずかんもくじ list window.
+ * Sets up the ずかんもくじ (index) list window, 272x366 at (x, y) and titled D_8A12FC38 (ずかんもくじ): a table
+ * over the 151 0x1C-byte species entries of D_80064C5C and a scroll list of 8 visible rows drawn by
+ * Pokedex_DrawListRow, starting in number order.
+ * Seen in play (2026-11-14): called with (54, 85) as the Pokédex opened.
  */
-void Pokedex_InitListWindow(PokedexListWindow* arg0, s32 arg1, s32 arg2) {
-    Window_SetRect((s8 *)arg0, arg1, arg2, 0x110, 0x16E);
-    arg0->window.animTimer = 0;
-    arg0->window.state = 0;
-    arg0->window.frame.style = 0x801;
-    arg0->window.title = (char*)&D_8A12FC38;
-    func_80027410((s8*)&arg0->entries, &D_80064C5C, 0x1C, 0x97, 0x97);
-    ScrollList_Init((s8*)&arg0->list, (s8*)&arg0->entries, (s8*)arg0->itemFlags, 8, &Pokedex_DrawListRow, 0x104, 0x24);
-    arg0->sortByKana = 0;
-    arg0->list.options |= 0x10000;
+void Pokedex_InitListWindow(PokedexListWindow* list_window, s32 x, s32 y) {
+    Window_SetRect((s8 *)list_window, x, y, 0x110, 0x16E);
+    list_window->window.animTimer = 0;
+    list_window->window.state = 0;
+    list_window->window.frame.style = 0x801;
+    list_window->window.title = (char*)&D_8A12FC38;
+    func_80027410((s8*)&list_window->entries, &D_80064C5C, 0x1C, 0x97, 0x97);
+    ScrollList_Init((s8*)&list_window->list, (s8*)&list_window->entries, (s8*)list_window->itemFlags, 8, &Pokedex_DrawListRow, 0x104, 0x24);
+    list_window->sortByKana = 0;
+    list_window->list.options |= 0x10000;
 }
 
 s32 func_8002AE6C();
 s32 Ui_DrawTexturedDivider(s32, s32, s32, void*);
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void ScrollList_DrawInlineItems(void*, s32, s32, s32, s32);
-void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 extern u8 D_8007356C;
 extern u8 D_800734A8[];
 extern Gfx D_80060270[];
@@ -182,24 +142,26 @@ extern Color_RGBA8 D_8A1057DC;
 extern char D_8A12FC48[];
 extern char D_8A12FC5C[];
 /**
- * Draws アイウエオじゅん (kana order) and ばんごうじゅん (number order).
- * Seen in play (2026-11-12): the ばんごうじゅん bar under the list.
+ * Draws the ずかんもくじ list's rows (Pokedex_DrawListRow) and the sort bar under them: アイウエオじゅん
+ * (kana order) or ばんごうじゅん (number order) with the C-Right button icon (D_04005890).
+ * `flags` is ORed into the row flags (2 while the list has focus, 0x10 while the menu has it).
+ * Seen in play (2026-11-14): the bar read ばんごうじゅん, and アイウエオじゅん after C-Right.
  */
-void Pokedex_DrawSortOrderMenu(PokedexListWindow* arg0, u32 arg1) {
+void Pokedex_DrawListWindow(PokedexListWindow* list_window, u32 flags) {
     char* str;
 
     if (func_8002AE6C() == 0) {
-        Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->window.frame.y + 0x145, arg0->window.frame.width, &D_8007356C);
-        ScrollList_DrawInlineItems(&arg0->list, arg0->window.frame.x + 6, arg0->window.frame.y + 0x16, arg1 | 0xFFED, (s32)&arg0->sortByKana);
+        Ui_DrawTexturedDivider(list_window->window.frame.x, list_window->window.frame.y + 0x145, list_window->window.frame.width, &D_8007356C);
+        ScrollList_DrawInlineItems(&list_window->list, list_window->window.frame.x + 6, list_window->window.frame.y + 0x16, flags | 0xFFED, (s32)&list_window->sortByKana);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(arg0->window.frame.x + 6, arg0->window.frame.y + 0x14C, arg0->window.frame.width - 0xC, 0x1C, D_8A1057DC);
+        func_80029028(list_window->window.frame.x + 6, list_window->window.frame.y + 0x14C, list_window->window.frame.width - 0xC, 0x1C, D_8A1057DC);
         Font_BeginTranslucentTextRendering();
         Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         Font_SetActive(8, 0);
-        Font_Printf(arg0->window.frame.x + 0x24, arg0->window.frame.y + 0x150, arg0->sortByKana ? D_8A12FC48 : D_8A12FC5C);
+        Font_Printf(list_window->window.frame.x + 0x24, list_window->window.frame.y + 0x150, list_window->sortByKana ? D_8A12FC48 : D_8A12FC5C);
         Font_EndTexturedTextRendering();
         gSPDisplayList(gDisplayListHead++, D_80060290);
-        func_8001B884(arg0->window.frame.x + 0xD8, arg0->window.frame.y + 0x150, 0x14, 0x14, D_04005890, 0x14, 0x200000);
+        Gfx_DrawTextureRgba16(list_window->window.frame.x + 0xD8, list_window->window.frame.y + 0x150, 0x14, 0x14, D_04005890, 0x14, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80060398);
     }
 }
@@ -208,24 +170,26 @@ extern s32 D_800603C0;
 s32 ScrollList_UpdateCursor(unk_func_8820BE14_02C_038*);
 
 /**
- * Navigate the list, toggle the view mode, or report cancel/confirm input.
- * Seen in play (2026-11-12): moved the list cursor from 001 to 002.
+ * Moves the list cursor. Without a move, C-Right toggles the kana / number order, and B returns -1 and
+ * A returns 1.
+ * Seen in play (2026-11-14): D-Down moved the cursor, C-Right switched ばんごうじゅん to アイウエオじゅん
+ * and back, A on a seen row opened the menu, A on unseen 009 only buzzed.
  */
-s32 Pokedex_UpdateListCursor(PokedexListWindow* state) {
+s32 Pokedex_UpdateListCursor(PokedexListWindow* list_window) {
     s32 result;
     unk_func_8820BE14_02C_038* menu;
     s32 value;
 
-    menu = (unk_func_8820BE14_02C_038*)&state->list;
+    menu = (unk_func_8820BE14_02C_038*)&list_window->list;
     result = ScrollList_UpdateCursor(menu);
     if (result == 0) {
         value = *(u16*)(D_800603C0 + 8);
         if (value & 1) {
             Audio_PlaySoundEffectById(2);
             WidgetTree_SetScrollableGridIndexPreserveScroll(menu, 0);
-            value = state->sortByKana;
+            value = list_window->sortByKana;
             value = value == 0;
-            state->sortByKana = value;
+            list_window->sortByKana = value;
         } else if (value & 0x4000) {
             result = -1;
         } else if (value & 0x8000) {
@@ -243,17 +207,17 @@ extern Rgba8A100620 D_8A1057E0;
 extern Rgba8A100620 D_8A1057E4;
 
 /**
- * Sets up the seen/caught/owned counts window (248x104).
- * Seen in play (2026-11-12): set up the counts window.
+ * Sets up the counts window (みつけたかず / つかまえたかず / もっているかず), 248x104 at (x, y).
+ * Seen in play (2026-11-14): called with (342, 114) as the Pokédex opened.
  */
-void Pokedex_InitCountsWindow(Window* arg0, s32 arg1, s32 arg2) {
-    Window_SetRect((s8*)arg0, arg1, arg2, 0xF8, 0x68);
-    arg0->animTimer = 0;
-    arg0->title = 0;
-    arg0->state = 0;
-    arg0->frame.style = 0x1006;
-    *(Rgba8A100620*)&arg0->frame.color = D_8A1057E0;
-    *(Rgba8A100620*)&arg0->frame.color2 = D_8A1057E4;
+void Pokedex_InitCountsWindow(Window* window, s32 x, s32 y) {
+    Window_SetRect((s8*)window, x, y, 0xF8, 0x68);
+    window->animTimer = 0;
+    window->title = 0;
+    window->state = 0;
+    window->frame.style = 0x1006;
+    *(Rgba8A100620*)&window->frame.color = D_8A1057E0;
+    *(Rgba8A100620*)&window->frame.color2 = D_8A1057E4;
 }
 
 s32 func_8002AE6C();
@@ -268,23 +232,24 @@ extern char D_8A12FC9C[];
 extern char D_8A12FCA0[];
 extern char D_8A12FCA4[];
 /**
- * Draws みつけたかず (seen), つかまえたかず (caught) and もっているかず (owned).
- * Seen in play (2026-11-12): みつけたかず 3, つかまえたかず 3, もっているかず 3 for the three-starter save.
+ * Draws the counts window: みつけたかず (seen), つかまえたかず (caught) and もっているかず (held: in the
+ * cartridge's party or boxes) from GbSave_CountSeenSpecies / CountOwnedSpecies / CountHeldSpecies.
+ * Seen in play (2026-11-14): 20 / 5 / 1 for a save with 20 seen, 5 caught and Bulbasaur in the party.
  */
-void Pokedex_DrawCounts(Window* arg0) {
+void Pokedex_DrawCounts(Window* window) {
     if (func_8002AE6C() == 0) {
         Font_BeginTranslucentTextRendering();
         Font_SetActive(8, 0);
         Gfx_SetEnvColor(0x9C, 0xCC, 0x98, 0xFF);
-        Font_Printf(arg0->frame.x + 0xE, arg0->frame.y + 0xE, D_8A12FC6C);
+        Font_Printf(window->frame.x + 0xE, window->frame.y + 0xE, D_8A12FC6C);
         Gfx_SetEnvColor(0x98, 0xCC, 0xCC, 0xFF);
-        Font_Printf(arg0->frame.x + 0xE, arg0->frame.y + 0x2A, D_8A12FC7C);
+        Font_Printf(window->frame.x + 0xE, window->frame.y + 0x2A, D_8A12FC7C);
         Gfx_SetEnvColor(0xCC, 0x98, 0x98, 0xFF);
-        Font_Printf(arg0->frame.x + 0xE, arg0->frame.y + 0x46, D_8A12FC8C);
+        Font_Printf(window->frame.x + 0xE, window->frame.y + 0x46, D_8A12FC8C);
         Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
-        Font_Printf(arg0->frame.x + 0xAE, arg0->frame.y + 0xE, D_8A12FC9C, GbSave_CountSeenSpecies(D_8A12FFB0));
-        Font_Printf(arg0->frame.x + 0xAE, arg0->frame.y + 0x2A, D_8A12FCA0, GbSave_CountOwnedSpecies(D_8A12FFB0));
-        Font_Printf(arg0->frame.x + 0xAE, arg0->frame.y + 0x46, D_8A12FCA4, GbSave_CountHeldSpecies(D_8A12FFB0));
+        Font_Printf(window->frame.x + 0xAE, window->frame.y + 0xE, D_8A12FC9C, GbSave_CountSeenSpecies(sGbPort));
+        Font_Printf(window->frame.x + 0xAE, window->frame.y + 0x2A, D_8A12FCA0, GbSave_CountOwnedSpecies(sGbPort));
+        Font_Printf(window->frame.x + 0xAE, window->frame.y + 0x46, D_8A12FCA4, GbSave_CountHeldSpecies(sGbPort));
         Font_EndTexturedTextRendering();
     }
 }
@@ -294,50 +259,51 @@ void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void Font_SetColorForFlags(s32);
 
 /**
- * Draws one menu row label with the selection highlight.
- * Seen in play (2026-11-12): one row of データをみる / なきごえ / ぶんぷをみる / やめる.
+ * Menu row callback of the action menu: draws `label` at (x, y), with the highlight when `flags` has 0x10.
+ * Seen in play (2026-11-14): データをみる, なきごえ, ぶんぷをみる and やめる.
  */
-void Pokedex_DrawMenuRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
-    if (arg4 & 0x10) {
-        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0xA2, 0x1E, D_8A1057D4);
+void Pokedex_DrawActionMenuRow(s32 x, s32 y, char* label, s32 row, s32 flags) {
+    if (flags & 0x10) {
+        Ui_FillRectHighlighted(x + 3, y + 3, 0xA2, 0x1E, D_8A1057D4);
     }
     Font_BeginTranslucentTextRendering();
-    Font_SetColorForFlags(arg4);
+    Font_SetColorForFlags(flags);
     Font_SetActive(0x10, 0);
-    Font_Printf(arg0 + 0xC, arg1 + 6, arg2);
+    Font_Printf(x + 0xC, y + 6, label);
     Font_EndTexturedTextRendering();
 }
 
 extern M2C_UNK D_8A1057E8;
 M2C_UNK func_80027804();
 /**
- * Sets up the sort order menu window (180x168).
- * Seen in play (2026-11-12): set up when the index opened.
+ * Sets up the action menu window, 180x168 at (x, y), with the 4 rows of D_8A1057E8 (データをみる "view data",
+ * なきごえ "cry", ぶんぷをみる "view habitat", やめる "quit") drawn by Pokedex_DrawActionMenuRow.
+ * Seen in play (2026-11-14): called with (390, 262) as the Pokédex opened.
  */
-void Pokedex_InitSortMenuWindow(PokedexMenuWindow* arg0, s32 arg1, s32 arg2) {
+void Pokedex_InitActionMenuWindow(PokedexMenuWindow* menu_window, s32 x, s32 y) {
     s32 pad; // FAKE: stack padding
 
-    Window_SetRect((s8*)arg0, arg1, arg2, 0xB4, 0xA8);
-    arg0->window.animTimer = 0;
-    arg0->window.title = 0;
-    arg0->window.state = 0;
-    arg0->window.frame.style = 0x1000;
-    arg0->window.frame.color = D_8A1057D4;
-    func_80027804((s8*)&arg0->items, &D_8A1057E8, 4, 4);
-    Menu_Init((s8*)&arg0->menu, (s8*)&arg0->items, (s8*)arg0->itemFlags, &Pokedex_DrawMenuRow, 0xA8, 0x24);
-    arg0->menu.options |= 0x10000;
+    Window_SetRect((s8*)menu_window, x, y, 0xB4, 0xA8);
+    menu_window->window.animTimer = 0;
+    menu_window->window.title = 0;
+    menu_window->window.state = 0;
+    menu_window->window.frame.style = 0x1000;
+    menu_window->window.frame.color = D_8A1057D4;
+    func_80027804((s8*)&menu_window->items, &D_8A1057E8, 4, 4);
+    Menu_Init((s8*)&menu_window->menu, (s8*)&menu_window->items, (s8*)menu_window->itemFlags, &Pokedex_DrawActionMenuRow, 0xA8, 0x24);
+    menu_window->menu.options |= 0x10000;
 }
 
 s32 func_8002AE6C();                                /* extern */
 M2C_UNK Menu_DrawItems(s8 *, s32, s32, s32, s32);  /* extern */
 
 /**
- * Draws the menu window's items.
- * Seen in play (2026-11-12): データをみる / なきごえ / ぶんぷをみる / やめる.
+ * Draws the action menu's rows; `flags` is ORed into the row flags (2 while it has focus).
+ * Seen in play (2026-11-14): データをみる / なきごえ / ぶんぷをみる / やめる beside the list.
  */
-void Pokedex_DrawMenu(PokedexMenuWindow* arg0, s32 arg1) {
+void Pokedex_DrawActionMenu(PokedexMenuWindow* menu_window, s32 flags) {
     if (func_8002AE6C() == 0) {
-        Menu_DrawItems((s8*)&arg0->menu, arg0->window.frame.x + 6, arg0->window.frame.y + 0xC, arg1 | 0xFFED, 0);
+        Menu_DrawItems((s8*)&menu_window->menu, menu_window->window.frame.x + 6, menu_window->window.frame.y + 0xC, flags | 0xFFED, 0);
     }
 }
 
@@ -345,14 +311,14 @@ s32 func_8002BC14(s32);                             /* extern */
 s32 Menu_UpdateCursor(s32);                             /* extern */
 
 /**
- * Moves the menu cursor; without a move returns the confirm/cancel result.
- * Seen in play (2026-11-12): moved over that menu and returned the pick.
+ * Moves the action menu cursor; without a move returns Ui_GetSelectionDirection's result (1 for A, -1 for B).
+ * Seen in play (2026-11-14): D-Down moved to なきごえ / ぶんぷをみる / やめる and A picked the row.
  */
-s32 Pokedex_UpdateMenuCursor(PokedexMenuWindow* arg0) {
+s32 Pokedex_UpdateActionMenuCursor(PokedexMenuWindow* menu_window) {
     s32 temp_v0;
     s32 var_v1;
 
-    temp_v0 = Menu_UpdateCursor(&arg0->menu);
+    temp_v0 = Menu_UpdateCursor(&menu_window->menu);
     var_v1 = temp_v0;
     if (temp_v0 == 0) {
         var_v1 = func_8002BC14(D_800603C0);
@@ -361,25 +327,24 @@ s32 Pokedex_UpdateMenuCursor(PokedexMenuWindow* arg0) {
 }
 
 /**
- * Pokedex_InitEntryWindow
- *
- * Initializes a record in the same way as PartyScreen_InitList and SavePrompt_Init:
- * Window_SetRect fills the first five words with (arg1, arg2, 0x228, 0x15C, 0)
- * (the last two constants look like a width and a height, not confirmed),
- * the words at +0x20, +0x24 and +0x28 are cleared, and +0x14 is set to
- * 0x1001.
- * Seen in play (2026-11-12): set up the データをみる page.
+ * Sets up the データをみる (entry page) window, 552x348 at (x, y).
+ * Seen in play (2026-11-14): called with (44, 84) when データをみる was picked.
  */
-void Pokedex_InitEntryWindow(Window* arg0, s32 arg1, s32 arg2) {
-    Window_SetRect((s8*)arg0, arg1, arg2, 0x228, 0x15C);
-    arg0->animTimer = 0;
-    arg0->title = 0;
-    arg0->state = 0;
-    arg0->frame.style = 0x1001;
+void Pokedex_InitEntryWindow(Window* window, s32 x, s32 y) {
+    Window_SetRect((s8*)window, x, y, 0x228, 0x15C);
+    window->animTimer = 0;
+    window->title = 0;
+    window->state = 0;
+    window->frame.style = 0x1001;
 }
 
-void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
-void func_8A100A24(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
+/**
+ * Draws the rendered 3D model preview (a 244x210 RGBA16 image with a 256-pixel stride, `pixels`) at (x, y) in
+ * 8-row strips, blended with `alpha`.
+ * Seen in play (2026-11-14): the entry page's フシギダネ model at alpha 255 (caught); seen-only キャタピー
+ * was drawn at alpha 100, see-through over the background.
+ */
+void Pokedex_DrawModelPreviewImage(s32 x, s32 y, s32 alpha, u8* pixels) {
     s32 i;
 
     gDPPipeSync(gDisplayListHead++);
@@ -387,34 +352,28 @@ void func_8A100A24(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     gDPSetCombineLERP(gDisplayListHead++, 0, 0, 0, TEXEL0, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, ENVIRONMENT, 0);
     gDPSetRenderMode(gDisplayListHead++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
     gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
-    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, arg2);
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, alpha);
     for (i = 0; i < 0xD0; i += 8) {
-        func_8001B884(arg0, arg1, 0xF4, 8, arg3, 0x100, 0);
-        arg1 += 8;
-        arg3 += 0x1000;
+        Gfx_DrawTextureRgba16(x, y, 0xF4, 8, pixels, 0x100, 0);
+        y += 8;
+        pixels += 0x1000;
     }
-    func_8001B884(arg0, arg1, 0xF4, 2, arg3, 0x100, 0);
+    Gfx_DrawTextureRgba16(x, y, 0xF4, 2, pixels, 0x100, 0);
     gDPPipeSync(gDisplayListHead++);
     gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);
     gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
 }
 
 extern char D_8A12FCDC[];
-void func_8001A944(s32, s32, const char*, ...);
-void func_8001AA60(s32, s32, s32);
 
 /**
- * Prints the two decimal digits of arg2 at (arg0, arg1). The tens digit is
- * printed by func_8001A944(arg0, arg1, D_8A12FCDC, arg2 / 10), with D_8A12FCDC
- * passed in the format-string position; the units digit is drawn by
- * func_8001AA60(arg0 + 0x54, arg1, arg2 % 10 + '0').
- * What D_8A12FCDC contains and the exact roles of the two callees are not
- * established.
- * Seen in play (2026-11-12): たかさ 0.7m and おもさ 6.9kg for Bulbasaur.
+ * Prints `tenths` / 10 as "%3d." (D_8A12FCDC) at (x, y) and its last digit with Font_DrawCharAt 0x54 to the
+ * right, giving the entry page's height and weight.
+ * Seen in play (2026-11-14): たかさ 0.7m and おもさ 6.9kg for フシギダネ.
  */
-void Pokedex_DrawTenthsValue(s32 arg0, s32 arg1, s32 arg2) {
-    func_8001A944(arg0, arg1, D_8A12FCDC, arg2 / 10);
-    func_8001AA60(arg0 + 0x54, arg1, (arg2 % 10) + 0x30);
+void Pokedex_DrawTenthsValue(s32 x, s32 y, s32 tenths) {
+    Font_Printf(x, y, D_8A12FCDC, tenths / 10);
+    Font_DrawCharAt(x + 0x54, y, (tenths % 10) + 0x30);
 }
 
 extern char D_8A12FCE4[];
@@ -427,116 +386,102 @@ extern char D_8A12FD10[];
 extern char D_8A12FD14[];
 extern char D_8A12FD18[];
 extern u8 D_800735C4[];
-extern s32 D_8A12FFB8;
-s32 func_800231C8(s32, s32);
+extern s32 sSelectedDexIndex;
 void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
 
 /**
- * Draws an entry's category (%sポケモン), No., たかさ (height) and おもさ (weight, kg).
- * Seen in play (2026-11-12): No.001 フシギダネ, たねポケモン, たかさ 0.7m, おもさ 6.9kg.
+ * Draws the right half of the データをみる page at (x, y) for sSelectedDexIndex: No.%03d, the name, the
+ * %sポケモン category, and たかさ (height, m) / おもさ (weight, kg), which read ??? until the species is caught.
+ * Seen in play (2026-11-14): No.001 フシギダネ たねポケモン 0.7m 6.9kg; seen-only No.010 キャタピー
+ * いもむしポケモン with ??? m and ??? kg.
  */
-void Pokedex_DrawEntryInfo(s32 arg0, s32 arg1) {
-    SpeciesInfo* entry = (SpeciesInfo*)((u8*)&D_80064C5C + D_8A12FFB8 * 0x1C);
+void Pokedex_DrawEntryInfo(s32 x, s32 y) {
+    SpeciesInfo* entry = (SpeciesInfo*)((u8*)&D_80064C5C + sSelectedDexIndex * 0x1C);
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(arg0, arg1, 0x122, 0xD2, D_8A1057D4);
-    Ui_DrawTexturedFrameDecal(arg0 + 8, arg1 + 8, 0x112, 0x5A, D_800735C4);
+    func_80029028(x, y, 0x122, 0xD2, D_8A1057D4);
+    Ui_DrawTexturedFrameDecal(x + 8, y + 8, 0x112, 0x5A, D_800735C4);
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
     Font_EnableTwoCycleTexturing();
     Font_SetActive(0x20, 0);
     Gfx_SetPrimColor(0x96, 0x96, 0xFF, 0xFF);
-    Font_Printf(arg0 + 0x70, arg1 + 0x38, entry->name);
+    Font_Printf(x + 0x70, y + 0x38, entry->name);
     Font_SetActive(0x10, 0);
     Gfx_SetPrimColor(0x96, 0xFF, 0x96, 0xFF);
-    Font_Printf(arg0 + 8, arg1 + 0x6A, D_8A12FCE4, entry->category);
+    Font_Printf(x + 8, y + 0x6A, D_8A12FCE4, entry->category);
     Gfx_SetPrimColor(0xFF, 0xFF, 0x96, 0xFF);
-    Font_Printf(arg0 + 0xD, arg1 + 0x8E, D_8A12FCF0);
+    Font_Printf(x + 0xD, y + 0x8E, D_8A12FCF0);
     Gfx_SetPrimColor(0xFF, 0x96, 0x96, 0xFF);
-    Font_Printf(arg0 + 0xD, arg1 + 0xB2, D_8A12FCF8);
+    Font_Printf(x + 0xD, y + 0xB2, D_8A12FCF8);
     Font_DisableTwoCycleTexturing();
     Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
-    Font_Printf(arg0 + 0x12, arg1 + 0x12, D_8A12FD00);
-    Font_Printf(arg0 + 0x4E, arg1 + 0x12, D_8A12FD04, entry->dexNumber);
-    if (func_800231C8(D_8A12FFB0, entry->dexNumber) >= 2) {
-        Pokedex_DrawTenthsValue(arg0 + 0x79, arg1 + 0x8E, entry->heightTenths);
-        Pokedex_DrawTenthsValue(arg0 + 0x79, arg1 + 0xB2, entry->weightTenths);
+    Font_Printf(x + 0x12, y + 0x12, D_8A12FD00);
+    Font_Printf(x + 0x4E, y + 0x12, D_8A12FD04, entry->dexNumber);
+    if (GbSave_GetSpeciesProgressLevel(sGbPort, entry->dexNumber) >= 2) {
+        Pokedex_DrawTenthsValue(x + 0x79, y + 0x8E, entry->heightTenths);
+        Pokedex_DrawTenthsValue(x + 0x79, y + 0xB2, entry->weightTenths);
     } else {
-        Font_Printf(arg0 + 0x79, arg1 + 0x8E, D_8A12FD0C);
-        Font_Printf(arg0 + 0x79, arg1 + 0xB2, D_8A12FD10);
+        Font_Printf(x + 0x79, y + 0x8E, D_8A12FD0C);
+        Font_Printf(x + 0x79, y + 0xB2, D_8A12FD10);
     }
-    Font_Printf(arg0 + 0xE1, arg1 + 0x8E, D_8A12FD14);
-    Font_Printf(arg0 + 0xE1, arg1 + 0xB2, D_8A12FD18);
+    Font_Printf(x + 0xE1, y + 0x8E, D_8A12FD14);
+    Font_Printf(x + 0xE1, y + 0xB2, D_8A12FD18);
     Font_EndTexturedTextRendering();
 }
 
 typedef struct Rgba8A100F20 { u8 r, g, b, a; } Rgba8A100F20;
 void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Rgba8A100F20, Rgba8A100F20);
-void func_8001A944(s32, s32, const char*, ...);
-s32 func_800231C8(s32, s32);
 extern u8 D_8A1057F8[];
 extern u8 D_8A1057FC[];
 extern char D_8A12FD1C[];
-extern s32 D_8A12FFB8;
+extern s32 sSelectedDexIndex;
 /**
- * Draws the entry page name bar for the selected species (name shown once it is caught).
- * Seen in play (2026-11-12): the フシギダネ name bar on the entry page.
+ * Draws the description box of the データをみる page at (x, y): the species' dex text once it is caught,
+ * else ??? (D_8A12FD1C).
+ * Seen in play (2026-11-14): フシギダネ's 「せなかの きゅうこんのような ふくろは...」; ??? for seen-only キャタピー.
  */
-void Pokedex_DrawEntryNameBar(s32 arg0, s32 arg1) {
-    SpeciesInfo* entry = (SpeciesInfo*)((u8*)&D_80064C5C + D_8A12FFB8 * 0x1C);
+void Pokedex_DrawEntryDescription(s32 x, s32 y) {
+    SpeciesInfo* entry = (SpeciesInfo*)((u8*)&D_80064C5C + sSelectedDexIndex * 0x1C);
 
-    Ui_FillRectPrimEnvColor(arg0, arg1, 0x21C, 0x78, *(Rgba8A100F20 *)D_8A1057F8, *(Rgba8A100F20 *)D_8A1057FC);
-    func_8001AB6C();
-    func_8001A384(0x10, 0);
+    Ui_FillRectPrimEnvColor(x, y, 0x21C, 0x78, *(Rgba8A100F20 *)D_8A1057F8, *(Rgba8A100F20 *)D_8A1057FC);
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(0x10, 0);
     Font_SetLineHeight(0x24);
-    if (func_800231C8(D_8A12FFB0, entry->dexNumber) >= 2) {
-        func_8001A944(arg0 + 0x2A, arg1 + 0xC, entry->description);
+    if (GbSave_GetSpeciesProgressLevel(sGbPort, entry->dexNumber) >= 2) {
+        Font_Printf(x + 0x2A, y + 0xC, entry->description);
     } else {
-        func_8001A944(arg0 + 0x2A, arg1 + 0xC, D_8A12FD1C);
+        Font_Printf(x + 0x2A, y + 0xC, D_8A12FD1C);
     }
-    func_8001ABBC();
+    Font_EndTexturedTextRendering();
 }
 
 s32 Ui_DrawTexturedDivider(s32, s32, s32, void*);
 s32 func_80029864(s32, s32, s32, void*);
 s32 Ui_DrawImageInStrips(void*, s32, s32);
 s32 Window_DrawAnimatedFrame();
-void func_8A100A24(s32, s32, s32, u8*);
-void Pokedex_DrawEntryInfo(s32, s32);
-void Pokedex_DrawEntryNameBar(s32, s32);
 extern u8 D_8007356C;
 extern u8 D_8A11FC18;
 
 /**
- * Pokedex_DrawEntryWindow
- *
- * Per-frame draw helper for the screen in this file, called by
- * Pokedex_DrawEntryScreen with D_8A130204, the value returned by func_800196F8, and
- * that function's second argument. `arg0` is a layout record: words at
- * offsets 0 and 4 act as an x/y origin that the draw calls below offset
- * (x + 0xF9, y + 0xD7 and so on), the word at offset 8 is passed to
- * Ui_DrawTexturedDivider, and the word at offset 0x28 is a mode value. When the mode
- * is not 2 and Window_DrawAnimatedFrame() returns 0, it runs Ui_DrawTexturedDivider,
- * func_80029864, Pokedex_DrawEntryInfo and Pokedex_DrawEntryNameBar at those offsets. When the
- * mode is 1 or 2 it also calls Ui_DrawImageInStrips on D_8A11FC18 with (0x32, 0x5A)
- * and then func_8A100A24(0x32, 0x5A, v, arg1), where v is 0xFF if arg2 >= 2
- * and 0x64 otherwise. What the individual calls draw is not established here;
- * the field meanings are inferred from the offsets only.
- * Seen in play (2026-11-12): the entry page with the dex text 「せなかの きゅうこんのような ふくろは...」.
+ * Draws the データをみる page window: its frame, Pokedex_DrawEntryInfo and Pokedex_DrawEntryDescription, and
+ * while the window is open (state 1 or 2) the preview backdrop D_8A11FC18 with the model image `preview`
+ * on top, opaque when `progress` (GbSave_GetSpeciesProgressLevel) is 2 or more (caught), else at alpha 100.
+ * Seen in play (2026-11-14): フシギダネ's page, and キャタピー's see-through model when only seen.
  */
-void Pokedex_DrawEntryWindow(Window* arg0, s32 arg1, s32 arg2) {
+void Pokedex_DrawEntryWindow(Window* window, s32 preview, s32 progress) {
     s32 temp_v0;
 
-    if ((arg0->state != 2) && (Window_DrawAnimatedFrame() == 0)) {
-        Ui_DrawTexturedDivider(arg0->frame.x, arg0->frame.y + 0xD7, arg0->frame.width, &D_8007356C);
-        func_80029864(arg0->frame.x + 0xF9, arg0->frame.y, 0xDE, &D_8007356C);
-        Pokedex_DrawEntryInfo(arg0->frame.x + 0x100, arg0->frame.y + 6);
-        Pokedex_DrawEntryNameBar(arg0->frame.x + 6, arg0->frame.y + 0xDE);
+    if ((window->state != 2) && (Window_DrawAnimatedFrame() == 0)) {
+        Ui_DrawTexturedDivider(window->frame.x, window->frame.y + 0xD7, window->frame.width, &D_8007356C);
+        func_80029864(window->frame.x + 0xF9, window->frame.y, 0xDE, &D_8007356C);
+        Pokedex_DrawEntryInfo(window->frame.x + 0x100, window->frame.y + 6);
+        Pokedex_DrawEntryDescription(window->frame.x + 6, window->frame.y + 0xDE);
     }
-    temp_v0 = arg0->state;
+    temp_v0 = window->state;
     if ((temp_v0 == 1) || (temp_v0 == 2)) {
         Ui_DrawImageInStrips(&D_8A11FC18, 0x32, 0x5A);
-        func_8A100A24(0x32, 0x5A, (arg2 >= 2) ? 0xFF : 0x64, arg1);
+        Pokedex_DrawModelPreviewImage(0x32, 0x5A, (progress >= 2) ? 0xFF : 0x64, preview);
     }
 }
 
@@ -544,82 +489,73 @@ M2C_UNK Ui_DrawTintedScreenBackground(M2C_UNK, M2C_UNK, u8, u8, s32); /* extern 
 extern Color_RGBA8 D_8A1057D0;
 
 /**
- * Draws the tinted Pokedex screen background.
- * Seen in play (2026-11-12): the ポケモンずかん screen background.
+ * Draws the Pokédex's green-tinted screen background (rows 56-480, color D_8A1057D0).
+ * Seen in play (2026-11-14): the background behind ずかんもくじ and the データをみる page.
  */
 void Pokedex_DrawBackground(void) {
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, D_8A1057D0.r, D_8A1057D0.g, (s32)D_8A1057D0.b);
 }
 
-/*
- * Pokedex_InitIndexWindows
- *
- * Makes three calls on the object arg0 points to:
- *   Pokedex_InitListWindow(arg0, 0x36, 0x55)
- *   Pokedex_InitCountsWindow(arg0 + 0x1B4, 0x156, 0x72)
- *   Pokedex_InitSortMenuWindow(arg0 + 0x1E0, 0x186, 0x106)
- * The second and third calls address sub-objects at fixed offsets inside
- * arg0.  The constant pairs look like screen positions, but what the
- * callees do with them has not been established.
- */
-void Pokedex_InitListWindow(PokedexListWindow* arg0, s32 arg1, s32 arg2);
-void Pokedex_InitCountsWindow(Window* arg0, s32 arg1, s32 arg2);
-void Pokedex_InitSortMenuWindow(PokedexMenuWindow* arg0, s32 arg1, s32 arg2);
+void Pokedex_InitListWindow(PokedexListWindow* list_window, s32 x, s32 y);
+void Pokedex_InitCountsWindow(Window* window, s32 x, s32 y);
+void Pokedex_InitActionMenuWindow(PokedexMenuWindow* menu_window, s32 x, s32 y);
 
 /**
- * Sets up the list, counts and sort menu windows of the index screen.
- * Seen in play (2026-11-12): set up the list, counts and menu windows when the index opened.
+ * Sets up the ずかんもくじ screen's windows: the list at (54, 85), the counts at (342, 114) and the action
+ * menu at (390, 262).
+ * Seen in play (2026-11-14): ran once as the Pokédex opened.
  */
-void Pokedex_InitIndexWindows(PokedexIndexScreen* arg0) {
-    Pokedex_InitListWindow(&arg0->listWindow, 0x36, 0x55);
-    Pokedex_InitCountsWindow(&arg0->countsWindow, 0x156, 0x72);
-    Pokedex_InitSortMenuWindow(&arg0->menuWindow, 0x186, 0x106);
+void Pokedex_InitIndexWindows(PokedexIndexScreen* screen) {
+    Pokedex_InitListWindow(&screen->listWindow, 0x36, 0x55);
+    Pokedex_InitCountsWindow(&screen->countsWindow, 0x156, 0x72);
+    Pokedex_InitActionMenuWindow(&screen->menuWindow, 0x186, 0x106);
 }
 
 void BgStage_DrawFrame(void);                            /* extern */
 M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
-void Pokedex_DrawSortOrderMenu(PokedexListWindow*, u32);
+void Pokedex_DrawListWindow(PokedexListWindow*, u32);
 void Pokedex_DrawCounts(Window*);
 extern M2C_UNK D_8A12FD2C;
-extern PokedexIndexScreen D_8A12FFC0;
-extern M2C_UNK D_8A130174;
-extern M2C_UNK D_8A1301A0;
-extern s32 D_8A130230;
-extern M2C_UNK D_8A130238;
+extern PokedexIndexScreen sIndexScreen;
+extern M2C_UNK sCountsWindow;
+extern M2C_UNK sActionMenuWindow;
+extern s32 sSummaryPort;
+extern M2C_UNK sPortSummary;
 
 /**
- * Draws the Pokedex index: sort order menu, seen/caught/owned counts and the list.
- * Seen in play (2026-11-13) drew the ずかんもくじ index: the list, the みつけたかず / つかまえたかず / もっているかず counts
- * (3/3/3), the ばんごうじゅん sort label and the データをみる / なきごえ / ぶんぷをみる / やめる menu.
+ * BgStage_RunUntilCondition callback that draws the ずかんもくじ screen without input: the GB save bar
+ * (ポケモンずかん), the list with its sort bar, the counts and the action menu.
+ * Seen in play (2026-11-14): drew the index while the area map faded in (Pokedex_EnterAreaMapScreen) and
+ * after it closed (Pokedex_ExitAreaMapScreen).
  */
-s32 Pokedex_DrawIndexScreen(s32 arg0) {
+s32 Pokedex_DrawIndexScreen(UNUSED u8 unused) {
     M2C_UNK *var_a1;
 
     BgStage_DrawFrame();
     Pokedex_DrawBackground();
-    if (D_8A130230 == -1) {
+    if (sSummaryPort == -1) {
         var_a1 = NULL;
     } else {
-        var_a1 = &D_8A130238;
+        var_a1 = &sPortSummary;
     }
-    GbSave_DrawSummaryBar(0, var_a1, &D_8A12FD2C, D_8A130230);
-    Pokedex_DrawSortOrderMenu(&D_8A12FFC0.listWindow, 0x10);
-    Pokedex_DrawCounts(&D_8A130174);
-    Pokedex_DrawMenu(&D_8A1301A0, 2);
+    GbSave_DrawSummaryBar(0, var_a1, &D_8A12FD2C, sSummaryPort);
+    Pokedex_DrawListWindow(&sIndexScreen.listWindow, 0x10);
+    Pokedex_DrawCounts(&sCountsWindow);
+    Pokedex_DrawActionMenu(&sActionMenuWindow, 2);
     return 0;
 }
 
-M2C_UNK func_8003F6AC(M2C_UNK);
-void Pokedex_DrawSortOrderMenu(PokedexListWindow*, u32);
+void Pokedex_DrawListWindow(PokedexListWindow*, u32);
+/* Audio_PlaySoundEffectById, called by address with an s32 argument: battle.h's u32 prototype changes the
+ * codegen of these callers (the constant 2 stays in a saved register). */
+s32 func_8003F6AC(s32);
 void Cont_StartReadInputs(void);
 void Cont_ReadInputs(void);
 M2C_UNK func_8000B2F4(s32);
-M2C_UNK func_800158C0();
-void func_8001B5F0(void);
-M2C_UNK func_80006780();
 /**
- * Main loop of the Pokedex index screen.
- * Seen in play (2026-11-12): ran every frame of the ずかんもくじ screen.
+ * Pokédex screen 1, the ずかんもくじ list: runs frames until A on a seen species (returns 2, the action
+ * menu) or B closes the windows (returns 0, quit). A on an unseen row only plays sound 8.
+ * Seen in play (2026-11-14): ran while browsing the list; A on 001 went to the menu, A on 009 buzzed.
  */
 s32 Pokedex_RunIndexScreen(void) {
     s32 temp_s0;
@@ -630,116 +566,104 @@ s32 Pokedex_RunIndexScreen(void) {
     do {
         Cont_StartReadInputs();
         Cont_ReadInputs();
-        func_8001B5F0();
-        if ((D_8A12FFC0.listWindow.window.state == 1) || (D_8A12FFC0.listWindow.window.state == 2U)) {
-            temp_s0 = Pokedex_UpdateListCursor(&D_8A12FFC0.listWindow);
-            D_8A12FFB8 = Pokedex_GetCursorDexIndex(&D_8A12FFC0.listWindow);
+        Input_ResetRepeatState();
+        if ((sIndexScreen.listWindow.window.state == 1) || (sIndexScreen.listWindow.window.state == 2U)) {
+            temp_s0 = Pokedex_UpdateListCursor(&sIndexScreen.listWindow);
+            sSelectedDexIndex = Pokedex_GetCursorDexIndex(&sIndexScreen.listWindow);
             if (temp_s0 == -1) {
                 func_8003F6AC(3);
-                D_8A12FFC0.listWindow.window.animTimer = 7;
-                D_8A12FFC0.countsWindow.animTimer = 7;
-                D_8A12FFC0.menuWindow.window.animTimer = 7;
+                sIndexScreen.listWindow.window.animTimer = 7;
+                sIndexScreen.countsWindow.animTimer = 7;
+                sIndexScreen.menuWindow.window.animTimer = 7;
             } else if (temp_s0 == 1) {
-                if (func_800231C8(D_8A12FFB0, D_8A12FFB8 + 1) == 0) {
+                if (GbSave_GetSpeciesProgressLevel(sGbPort, sSelectedDexIndex + 1) == 0) {
                     func_8003F6AC(8);
                 } else {
                     func_8003F6AC(2);
                     var_s4 = 2;
-                    D_8A12FFC0.menuWindow.menu.cursor = 0;
+                    sIndexScreen.menuWindow.menu.cursor = 0;
                 }
             }
         }
-        func_800158C0();
+        GeoRender_AdvanceFrameCounter();
         BgStage_DrawFrame();
         Pokedex_DrawBackground();
-        Pokedex_DrawSortOrderMenu(&D_8A12FFC0.listWindow, 2);
-        Pokedex_DrawCounts(&D_8A130174);
-        Pokedex_DrawMenu((s8*)&D_8A1301A0, 0);
-        func_80006780();
-        if (D_8A12FFC0.listWindow.window.state == 4) {
+        Pokedex_DrawListWindow(&sIndexScreen.listWindow, 2);
+        Pokedex_DrawCounts(&sCountsWindow);
+        Pokedex_DrawActionMenu((s8*)&sActionMenuWindow, 0);
+        BgStage_AdvanceFrame();
+        if (sIndexScreen.listWindow.window.state == 4) {
             var_s4 = 0;
         }
     } while (var_s4 == 1);
     return var_s4;
 }
 
-M2C_UNK func_8003F6AC(M2C_UNK);
-M2C_UNK func_8003BD3C(s32);
-extern s32 D_8A12FFB8;
-extern u8 D_8A130204[];
-s32 func_8A1013C0(s32 arg0, s32 *arg1) {
+extern s32 sSelectedDexIndex;
+extern u8 sEntryWindow[];
+/**
+ * Acts on the action menu's result `menu_result` (1 = A, -1 = B; other values do nothing) and stores the
+ * next screen of Pokedex_RunScreenLoop in `next_screen`: データをみる plays the cry, opens the entry
+ * window and gives 3; なきごえ gives 4; ぶんぷをみる gives 5; やめる gives 0 (quit); B gives 1 (back to the
+ * list). Returns 1 to switch screens at once, 2 to close the windows first, 0 to stay. A disabled row
+ * (itemFlags bit 0) only plays sound 8.
+ * Seen in play (2026-11-14): D-Down came in as 0x400 and did nothing; A on やめる left to the main menu.
+ */
+s32 Pokedex_HandleActionMenuResult(s32 menu_result, s32 *next_screen) {
     s32 ret = 0;
 
-    if (arg0 == 1) {
-        if (D_8A12FFC0.menuWindow.menu.itemFlags[D_8A12FFC0.menuWindow.menu.cursor] & 1) {
+    if (menu_result == 1) {
+        if (sIndexScreen.menuWindow.menu.itemFlags[sIndexScreen.menuWindow.menu.cursor] & 1) {
             func_8003F6AC(8);
         } else {
-            switch (D_8A12FFC0.menuWindow.menu.cursor) {
+            switch (sIndexScreen.menuWindow.menu.cursor) {
                 case 0:
-                    func_8003BD3C(D_8A12FFB8 + 1);
-                    Pokedex_InitEntryWindow(D_8A130204, 0x2C, 0x54);
+                    Cry_PlayFromPokedex(sSelectedDexIndex + 1);
+                    Pokedex_InitEntryWindow(sEntryWindow, 0x2C, 0x54);
                     ret = 2;
-                    *arg1 = 3;
+                    *next_screen = 3;
                     break;
                 case 1:
                     ret = 1;
-                    *arg1 = 4;
+                    *next_screen = 4;
                     break;
                 case 2:
                     func_8003F6AC(2);
                     ret = 1;
-                    *arg1 = 5;
+                    *next_screen = 5;
                     break;
                 case 3:
                     func_8003F6AC(3);
                     ret = 2;
-                    *arg1 = 0;
+                    *next_screen = 0;
                     break;
             }
         }
-    } else if (arg0 == -1) {
+    } else if (menu_result == -1) {
         func_8003F6AC(3);
         ret = 1;
-        *arg1 = 1;
+        *next_screen = 1;
     }
     return ret;
 }
 
 /*
- * Pokedex_ShowEntryMenu
- *
- * Frame loop of a screen in this file (the meaning of the screen is not
- * established).  Starts with func_8000B2F4(D_800603C0) and a result `var_s3`
- * of 2, then repeats until the result is no longer 2.  Each iteration:
- *
- *   - runs the frame helpers Cont_StartReadInputs, Cont_ReadInputs, func_8001B5F0;
- *   - while the state word at D_8A12FFC0 + 0x208 is 1 or 2, takes
- *     Pokedex_UpdateMenuCursor(&D_8A1301A0); if that is non-zero it is passed to
- *     func_8A1013C0(value, &sp50).  A return of 1 sets the result to the
- *     value func_8A1013C0 stored in sp50; a return of 2 sets the words at
- *     D_8A12FFC0 + 0x24, + 0x1D8 and + 0x204 to 7;
- *   - runs func_800158C0, BgStage_DrawFrame, Pokedex_DrawBackground, Pokedex_DrawSortOrderMenu
- *     (D_8A12FFC0, 0x10), Pokedex_DrawCounts(&D_8A130174), Pokedex_DrawMenu
- *     (&D_8A1301A0, 2) and func_80006780;
- *   - if the word at D_8A12FFC0 + 0x28 is 4, the result becomes sp50.
- *
- * Returns the result.  What the values mean is not established.
- *
  * Note for matching: the unused leading `pad` local moves sp50 down 4 bytes
- * to the ROM's stack offset (0x50); func_8001B5F0 must be declared void.
+ * to the ROM's stack offset (0x50); Input_ResetRepeatState must be declared void.
  */
 void Cont_StartReadInputs(void);
 void Cont_ReadInputs(void);
 M2C_UNK func_8000B2F4(s32);
-M2C_UNK func_800158C0();
-void func_8001B5F0(void);
-M2C_UNK func_80006780();
-s32 func_8A1013C0(s32, s32 *);
+s32 Pokedex_HandleActionMenuResult(s32 menu_result, s32* next_screen);
 
 /**
- * Seen in play (2026-11-12): A on a list row opened the データをみる menu.
+ * Pokédex screen 2, the action menu (データをみる / なきごえ / ぶんぷをみる / やめる) beside the list: runs
+ * frames until Pokedex_HandleActionMenuResult picks the next screen, and returns it.
+ * Note for matching: the unused leading `pad` local moves sp50 down 4 bytes to the ROM's stack offset (0x50);
+ * Input_ResetRepeatState must be declared void.
+ * Seen in play (2026-11-14): A on 001 opened it; each row led to its screen.
  */
-s32 Pokedex_ShowEntryMenu(void) {
+s32 Pokedex_RunActionMenu(void) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 sp50;
     s32 temp_v0;
@@ -752,221 +676,201 @@ s32 Pokedex_ShowEntryMenu(void) {
     do {
         Cont_StartReadInputs();
         Cont_ReadInputs();
-        func_8001B5F0();
-        if ((D_8A12FFC0.menuWindow.window.state == 1) || (D_8A12FFC0.menuWindow.window.state == 2)) {
-            temp_v0 = Pokedex_UpdateMenuCursor((s32) &D_8A1301A0);
+        Input_ResetRepeatState();
+        if ((sIndexScreen.menuWindow.window.state == 1) || (sIndexScreen.menuWindow.window.state == 2)) {
+            temp_v0 = Pokedex_UpdateActionMenuCursor((s32) &sActionMenuWindow);
             if (temp_v0 != 0) {
-                temp_v0_2 = func_8A1013C0(temp_v0, &sp50);
+                temp_v0_2 = Pokedex_HandleActionMenuResult(temp_v0, &sp50);
                 if (temp_v0_2 == 1) {
                     var_s3 = sp50;
                 } else if (temp_v0_2 == 2) {
-                    D_8A12FFC0.listWindow.window.animTimer = 7;
-                    D_8A12FFC0.countsWindow.animTimer = 7;
-                    D_8A12FFC0.menuWindow.window.animTimer = 7;
+                    sIndexScreen.listWindow.window.animTimer = 7;
+                    sIndexScreen.countsWindow.animTimer = 7;
+                    sIndexScreen.menuWindow.window.animTimer = 7;
                 }
             }
         }
-        func_800158C0();
+        GeoRender_AdvanceFrameCounter();
         BgStage_DrawFrame();
         Pokedex_DrawBackground();
-        Pokedex_DrawSortOrderMenu(&D_8A12FFC0.listWindow, 0x10);
-        Pokedex_DrawCounts(&D_8A130174);
-        Pokedex_DrawMenu(&D_8A1301A0, 2);
-        func_80006780();
-        if (D_8A12FFC0.listWindow.window.state == 4) {
+        Pokedex_DrawListWindow(&sIndexScreen.listWindow, 0x10);
+        Pokedex_DrawCounts(&sCountsWindow);
+        Pokedex_DrawActionMenu(&sActionMenuWindow, 2);
+        BgStage_AdvanceFrame();
+        if (sIndexScreen.listWindow.window.state == 4) {
             var_s3 = sp50;
         }
     } while (var_s3 == 2);
     return var_s3;
 }
 
-extern s32 D_8A12FF98;
-extern u8 D_8A130204[];
+extern s32 sModelPreview;
+extern u8 sEntryWindow[];
 s32 func_800196F8(s32);
 s32 Window_UpdateAnimation(Window* arg0);
 void Pokedex_DrawEntryWindow(Window*, s32, s32);
 
 /**
- * Draws one frame of the entry screen with the model preview.
- * Seen in play (2026-11-12): the entry page frame with the 3D model.
+ * Draws one frame of the データをみる page: renders the model preview (PokeIcon_RenderPreview) and draws the
+ * entry window with it. `progress` is the species' GbSave_GetSpeciesProgressLevel.
+ * Seen in play (2026-11-14): every frame of フシギダネ's and キャタピー's pages.
  */
-s32 Pokedex_DrawEntryScreen(s32 arg0, s32 arg1) {
+s32 Pokedex_DrawEntryScreen(s32 unused, s32 progress) {
     UNUSED s32 pad[4]; // FAKE: stack padding
     s32 sp1C;
 
     GeoRender_AdvanceFrameCounter();
-    sp1C = func_800196F8(D_8A12FF98);
+    sp1C = func_800196F8(sModelPreview);
     BgStage_DrawFrame();
-    if (Window_UpdateAnimation(D_8A130204) != 0) {
+    if (Window_UpdateAnimation(sEntryWindow) != 0) {
         Pokedex_DrawBackground();
     }
-    Pokedex_DrawEntryWindow(D_8A130204, sp1C, arg1);
+    Pokedex_DrawEntryWindow(sEntryWindow, sp1C, progress);
     return 0;
 }
 
-/** Loads a Pokemon icon for the Pokedex. */
-void Pokedex_LoadIcon(u8* arg0, s32 arg1) {
+/**
+ * Renders the 80x80 icon of `species` (dex number) and copies it (0x3200 bytes, RGBA16) to `dest`.
+ * Seen in play (2026-11-14): ポッポ's icon for the area map pins, loaded by Pokedex_LoadAreaMap.
+ */
+void Pokedex_LoadIcon(u8* dest, s32 species) {
     PokeIconRenderer* sp1C;
     void* sp18;
 
     main_pool_push_state('ICON');
-    sp1C = PokeIcon_CreateRenderList(D_8A12FFA4, 1, 0x50, 0x50);
+    sp1C = PokeIcon_CreateRenderList(sIconFramebuffers, 1, 0x50, 0x50);
     sp18 = PokeIcon_GetImage(sp1C, 0);
-    func_80018234(sp1C, 0, arg1, 0x9530);
+    func_80018234(sp1C, 0, species, 0x9530);
     PokeIcon_ProcessAllSlots(sp1C, 0);
     StageLoader_RunFrames(2);
     osInvalDCache(sp18, 0x3200);
-    _bcopy(sp18, arg0, 0x3200);
+    _bcopy(sp18, dest, 0x3200);
     main_pool_pop_state('ICON');
 }
 
 extern u8 D_8A105818;
 
 /**
- * Pokedex_CreateModelPreview
- *
- * Pushes the main-pool state with tag 0x50494354 ('PICT'), builds a model
- * preview with PokeIcon_CreateModelPreview(arg0, 0x100, 0xD2, 0, 0, 0xF4,
- * 0xD2, &D_8A105818), stores the result in D_8A12FF98, and passes it to
- * PokeIcon_SetPreviewSpecies together with arg1 and 0x108D. Only called by
- * Pokedex_ShowEntry, which passes D_8A12FFA4 and D_8A12FFB8 + 1; the meaning of
- * arg1 and of D_8A105818 is not established here.
- * Matching note: the call result is stored straight into D_8A12FF98 and
- * D_8A12FF98 is read back for the second call, which the compiler folds into
- * a register move; going through a local gives a different store sequence.
- * Seen in play (2026-11-12): the 3D Bulbasaur model on the entry page.
+ * Pushes the 'PICT' pool state and creates the 244x210 3D model preview of `species` (dex number) in
+ * sModelPreview, using `framebuffers` (sIconFramebuffers).
+ * Matching note: the call result is stored straight into sModelPreview and sModelPreview is read back for
+ * the second call, which the compiler folds into a register move; going through a local gives a different
+ * store sequence.
+ * Seen in play (2026-11-14): species 1 for フシギダネ's page; the model turned in the preview box.
  */
-void Pokedex_CreateModelPreview(s32 arg0, s32 arg1) {
+void Pokedex_CreateModelPreview(s32 framebuffers, s32 species) {
     main_pool_push_state(0x50494354);
-    D_8A12FF98 = (s32)PokeIcon_CreateModelPreview((ModelLoadContext*)arg0, 0x100, 0xD2, 0, 0, 0xF4, 0xD2, &D_8A105818);
-    PokeIcon_SetPreviewSpecies((PokeModelPreview*)D_8A12FF98, arg1, 0x108D);
+    sModelPreview = (s32)PokeIcon_CreateModelPreview((ModelLoadContext*)framebuffers, 0x100, 0xD2, 0, 0, 0xF4, 0xD2, &D_8A105818);
+    PokeIcon_SetPreviewSpecies((PokeModelPreview*)sModelPreview, species, 0x108D);
 }
 
-M2C_UNK func_80002620(M2C_UNK);                     /* extern */
 M2C_UNK func_800199E4(M2C_UNK *);                   /* extern */
 extern M2C_UNK D_8A12FE30;
 
 /**
  * Frees the model preview and pops the 'PICT' pool state.
- * Seen in play (2026-11-12): B on the entry page freed the model and returned to the list.
+ * Seen in play (2026-11-14): ran when B closed フシギダネ's page.
  */
 void Pokedex_FreeModelPreview(void) {
     func_800199E4(&D_8A12FE30);
-    func_80002620(0x50494354);
+    main_pool_pop_state(0x50494354);
 }
 
-/*
- * Pokedex_ShowEntry
- *
- * Frame loop of a screen in this file (the meaning of the screen is not
- * established).  Calls Pokedex_CreateModelPreview(D_8A12FFA4, D_8A12FFB8 + 1) once, then
- * keeps the result of func_800231C8(D_8A12FFB0, D_8A12FFB8 + 1) and runs
- * one frame per iteration (Cont_StartReadInputs, Cont_ReadInputs, func_8001B5F0,
- * Pokedex_DrawEntryScreen(0, that result), func_80006780) until the state word at
- * D_8A12FFC0 + 0x26C becomes 4.
- *
- * While that state is 1 or 2 and bit 0xC000 is set in the halfword at
- * offset 8 of the structure D_800603C0 points to (read here as a controller
- * button field; not confirmed), and func_8003BECC() returns 0, the state
- * at D_8A12FFC0 + 0x268 is set to 7 and func_8003F6AC(3) is called.
- *
- * After the loop, Pokedex_FreeModelPreview() is called and the words at offsets 0x24,
- * 0x1D8 and 0x204 of D_8A12FFC0 are cleared.  Always returns 1.
- */
 void Cont_StartReadInputs(void);
 void Cont_ReadInputs(void);
-void func_8001B5F0(void);
-M2C_UNK func_80006780();
-s32 func_8003BECC();
-M2C_UNK func_8003F6AC(M2C_UNK);
-void Pokedex_CreateModelPreview(s32, s32);
-s32 func_800231C8(s32, s32);
-extern s32 D_8A12FFB8;
+void Pokedex_CreateModelPreview(s32 framebuffers, s32 species);
+extern s32 sSelectedDexIndex;
 
 /**
- * Seen in play (2026-11-12): データをみる showed the entry page.
+ * Pokédex screen 3, the データをみる page of sSelectedDexIndex: creates the model preview, runs frames until
+ * A or B (once the cry has finished) closes the window, frees the preview, and returns 1 (the list).
+ * Seen in play (2026-11-14): フシギダネ's and キャタピー's pages; B went back to the list.
  */
 s32 Pokedex_ShowEntry(void) {
     s32 temp_s1;
 
-    Pokedex_CreateModelPreview((s32)D_8A12FFA4, D_8A12FFB8 + 1);
-    temp_s1 = func_800231C8(D_8A12FFB0, D_8A12FFB8 + 1);
+    Pokedex_CreateModelPreview((s32)sIconFramebuffers, sSelectedDexIndex + 1);
+    temp_s1 = GbSave_GetSpeciesProgressLevel(sGbPort, sSelectedDexIndex + 1);
     do {
         Cont_StartReadInputs();
         Cont_ReadInputs();
-        func_8001B5F0();
-        if (((D_8A12FFC0.entryWindow.state == 1) || (D_8A12FFC0.entryWindow.state == 2)) && (((Controller*)D_800603C0)->buttonPressed & 0xC000) && (func_8003BECC() == 0)) {
-            D_8A12FFC0.entryWindow.animTimer = 7;
+        Input_ResetRepeatState();
+        if (((sIndexScreen.entryWindow.state == 1) || (sIndexScreen.entryWindow.state == 2)) && (((Controller*)D_800603C0)->buttonPressed & 0xC000) && (Cry_IsPlaying() == 0)) {
+            sIndexScreen.entryWindow.animTimer = 7;
             func_8003F6AC(3);
         }
         Pokedex_DrawEntryScreen(0, temp_s1);
-        func_80006780();
-    } while (D_8A12FFC0.entryWindow.state != 4);
+        BgStage_AdvanceFrame();
+    } while (sIndexScreen.entryWindow.state != 4);
     Pokedex_FreeModelPreview();
-    D_8A12FFC0.listWindow.window.animTimer = 0;
-    D_8A12FFC0.countsWindow.animTimer = 0;
-    D_8A12FFC0.menuWindow.window.animTimer = 0;
+    sIndexScreen.listWindow.window.animTimer = 0;
+    sIndexScreen.countsWindow.animTimer = 0;
+    sIndexScreen.menuWindow.window.animTimer = 0;
     return 1;
 }
 
-M2C_UNK func_80006780();                            /* extern */
 void BgStage_DrawFrame(void);                            /* extern */
-M2C_UNK func_8003BD3C(s32);                         /* extern */
-s32 func_8003BECC();                                /* extern */
-extern s32 D_8A12FFB8;
-extern M2C_UNK D_8A1301A0;
+extern s32 sSelectedDexIndex;
+extern M2C_UNK sActionMenuWindow;
 
 /**
- * Seen in play (2026-11-12): なきごえ played the cry.
+ * Pokédex screen 4, なきごえ: plays the cry of sSelectedDexIndex, redraws the menu until it ends, and
+ * returns 2 (the action menu).
+ * Seen in play (2026-11-14): なきごえ on フシギダネ.
  */
 s32 Pokedex_PlayCry(void) {
-    func_8003BD3C(D_8A12FFB8 + 1);
-    if (func_8003BECC() != 0) {
+    Cry_PlayFromPokedex(sSelectedDexIndex + 1);
+    if (Cry_IsPlaying() != 0) {
         do {
             BgStage_DrawFrame();
-            Pokedex_DrawMenu(&D_8A1301A0, 0x10);
-            func_80006780();
-        } while (func_8003BECC() != 0);
+            Pokedex_DrawActionMenu(&sActionMenuWindow, 0x10);
+            BgStage_AdvanceFrame();
+        } while (Cry_IsPlaying() != 0);
     }
     return 2;
 }
 
-M2C_UNK func_80005B98(M2C_UNK);                     /* extern */
-M2C_UNK func_8000661C(s32);                         /* extern */
-M2C_UNK func_800067BC(M2C_UNK);                     /* extern */
-M2C_UNK func_80006828(M2C_UNK, M2C_UNK *);          /* extern */
-M2C_UNK func_8A1053E8(s32, s32, M2C_UNK, s32, s32); /* extern */
-extern s32 D_8A12FFA8;
-extern s32 D_8A12FFAC;
-extern s32 D_8A12FFB8;
-extern M2C_UNK Pokedex_DrawHabitatPage;
+M2C_UNK Pokedex_LoadAreaMap(s32 species, s32 pool, M2C_UNK pool_size, s32 load_buffer, s32 load_buffer_size); /* extern */
+extern s32 sAreaMapPool;
+extern s32 sAreaMapLoadBuffer;
+extern s32 sSelectedDexIndex;
 
 /**
- * Seen in play (2026-11-12): ぶんぷをみる opened the 3D Kanto map 「フシギダネのすみか」.
+ * Fades from the ずかんもくじ screen into the area map: switches to sAreaMapStageContext, loads the map for
+ * sSelectedDexIndex (Pokedex_LoadAreaMap) and fades in with Pokedex_DrawAreaMapScreen.
+ * Seen in play (2026-11-14): ぶんぷをみる on 016 ポッポ faded into 「ポッポのすみか」 over the 3D Kanto map.
  */
 void Pokedex_EnterAreaMapScreen(void) {
-    func_80005B98(8);
-    func_80006828(8, &Pokedex_DrawIndexScreen);
-    func_800067BC(2);
-    func_8000661C(D_8A12FFA0);
-    func_800067BC(2);
-    func_8A1053E8(D_8A12FFB8 + 1, D_8A12FFA8, 0x70800, D_8A12FFAC, 0x4B000);
-    func_80005B98(8);
-    func_80006828(0xA, &Pokedex_DrawHabitatPage);
+    StageFade_Start(8);
+    BgStage_RunUntilCondition(8, &Pokedex_DrawIndexScreen);
+    StageLoader_RunFrames(2);
+    StageContext_SaveAndSwitch(sAreaMapStageContext);
+    StageLoader_RunFrames(2);
+    Pokedex_LoadAreaMap(sSelectedDexIndex + 1, sAreaMapPool, 0x70800, sAreaMapLoadBuffer, 0x4B000);
+    StageFade_Start(8);
+    BgStage_RunUntilCondition(0xA, &Pokedex_DrawAreaMapScreen);
 }
 
-/** Fades out and leaves the Pokedex area map screen. */
+/**
+ * Fades out of the area map, switches back to sMenuStageContext, frees the map ('MAPV' pool state) and
+ * fades the ずかんもくじ screen back in.
+ * Seen in play (2026-11-14): B on the zoomed-out map went back to the list at 016 ポッポ.
+ */
 void Pokedex_ExitAreaMapScreen(void) {
     StageFade_Start(8);
-    BgStage_RunUntilCondition(8, Pokedex_DrawAreaMapFrame);
+    BgStage_RunUntilCondition(8, Pokedex_DrawAreaMapScreen);
     StageLoader_RunFrames(2);
-    StageContext_SaveAndSwitch(D_8A12FF9C);
+    StageContext_SaveAndSwitch(sMenuStageContext);
     Pokedex_ExitAreaMapPool();
     StageFade_Start(8);
-    BgStage_RunUntilCondition(0xA, Pokedex_RedrawAreaMapTransition);
+    BgStage_RunUntilCondition(0xA, Pokedex_DrawIndexScreen);
 }
 
-/** Runs the Pokedex area map screen. */
+/**
+ * Pokédex screen 5, ぶんぷをみる (the area map of sSelectedDexIndex): runs frames until
+ * Pokedex_HandleAreaMapInput reports B on the zoomed-out map, then leaves and returns 1 (the list).
+ * Seen in play (2026-11-14): ポッポ's map; A zoomed in, D-Up / D-Down changed the area, R showed the GB map.
+ */
 s32 Pokedex_ShowAreaMapScreen(void) {
     s32 var_s0 = 3;
 
@@ -976,8 +880,8 @@ s32 Pokedex_ShowAreaMapScreen(void) {
         Cont_StartReadInputs();
         Cont_ReadInputs();
         Input_ResetRepeatState();
-        Pokedex_DrawAreaMapFrame(0);
-        if (Pokedex_CheckAreaMapExit() != 0) {
+        Pokedex_DrawAreaMapScreen(0);
+        if (Pokedex_HandleAreaMapInput() != 0) {
             var_s0 = 1;
         }
         BgStage_AdvanceFrame();
@@ -989,11 +893,11 @@ s32 Pokedex_ShowAreaMapScreen(void) {
 }
 
 typedef struct Col8A101B30 { u8 r, g, b, a; } Col8A101B30;
-extern s32 D_8A105800;
-extern s32 D_8A105804;
+extern s32 sFadeTimer;
+extern s32 sFadingOut;
 /*
- * Second name for D_8A105800. The fade-out store in this function family
- * (also func_8200579C, func_8900429C, LabPCList_UpdateFade, func_8A101B30) does not
+ * Second name for sFadeTimer. The fade-out store in this function family
+ * (also FreeBattle_UpdateFade, func_8900429C, LabPCList_UpdateFade, Pokedex_DrawFadeFrame) does not
  * share the counter's address with the load before it, which only happens
  * when the two accesses name different symbols.
  */
@@ -1001,39 +905,49 @@ extern s32 D_8A105800_2;
 extern M2C_UNK D_8A12FD3C;
 M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void func_8002C8D8(Col8A101B30*, Col8A101B30, f32);
-s32 func_8A101B30(u8 arg0) {
+/**
+ * BgStage_RunUntilCondition callback that fades the Pokédex background from grey to its green tint over 8
+ * frames (sFadeTimer counting up), and on the next run back to grey (counting down, sFadingOut), with the
+ * GB save bar on top.
+ * Seen in play (2026-11-14): ran as the Pokédex opened, before ずかんもくじ appeared.
+ */
+s32 Pokedex_DrawFadeFrame(UNUSED u8 unused) {
     Col8A101B30 sp2C;
     M2C_UNK *var_a1;
     s32 n;
 
-    n = D_8A105800;
+    n = sFadeTimer;
     if (n >= 8) {
-        D_8A105804 = 1;
+        sFadingOut = 1;
     }
-    if (D_8A105804 != 0) {
+    if (sFadingOut != 0) {
         n--;
         D_8A105800_2 = n;
     }
     BgStage_DrawFrame();
-    if (D_8A130230 == -1) {
+    if (sSummaryPort == -1) {
         var_a1 = NULL;
     } else {
-        var_a1 = &D_8A130238;
+        var_a1 = &sPortSummary;
     }
-    GbSave_DrawSummaryBar(0, var_a1, &D_8A12FD3C, D_8A130230);
-    n = D_8A105800;
+    GbSave_DrawSummaryBar(0, var_a1, &D_8A12FD3C, sSummaryPort);
+    n = sFadeTimer;
     func_8002C8D8(&sp2C, *(Col8A101B30*)&D_8A1057D0, n / (f64)8.0f);
     Ui_DrawTintedScreenBackground(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
-    if (D_8A105804 == 0) {
-        n = D_8A105800;
+    if (sFadingOut == 0) {
+        n = sFadeTimer;
         n++;
-        D_8A105800 = n;
+        sFadeTimer = n;
     }
     return 0;
 }
 
-/** Runs the Pokedex entry flow. */
-void Pokedex_RunEntryFlow(void) {
+/**
+ * Runs the Pokédex's screens until one returns 0 (quit): 1 the ずかんもくじ list, 2 the action menu, 3 the
+ * データをみる page, 4 なきごえ, 5 the ぶんぷをみる area map.
+ * Seen in play (2026-11-14): went through all five screens, and やめる left to the main menu.
+ */
+void Pokedex_RunScreenLoop(void) {
     s32 var_v0 = 1;
 
     while (var_v0 != 0) {
@@ -1043,7 +957,7 @@ void Pokedex_RunEntryFlow(void) {
                 break;
 
             case 2:
-                var_v0 = Pokedex_ShowEntryMenu();
+                var_v0 = Pokedex_RunActionMenu();
                 break;
 
             case 3:
@@ -1061,12 +975,15 @@ void Pokedex_RunEntryFlow(void) {
     }
 }
 
-/** Returns the highest species index that has been seen. */
+/**
+ * Returns the highest dex number (1-151) the active GB save has seen, or 0 if none.
+ * Seen in play (2026-11-14): ran as the Pokédex opened.
+ */
 s32 Pokedex_GetHighestSeenSpeciesIndex(void) {
     s32 i;
 
     for (i = 151; i > 0; i--) {
-        if (GbSave_GetSpeciesProgressLevel(D_8A12FFB0, i) != 0) {
+        if (GbSave_GetSpeciesProgressLevel(sGbPort, i) != 0) {
             break;
         }
     }
@@ -1074,7 +991,11 @@ s32 Pokedex_GetHighestSeenSpeciesIndex(void) {
     return i;
 }
 
-/** Allocates and initializes the framebuffers for the Pokedex. */
+/**
+ * Points sAreaMapStageContext's two 320x240 render targets at the menu stage's framebuffers, with a shared
+ * depth buffer behind the second, and carves sAreaMapPool and sAreaMapLoadBuffer out of the space after them.
+ * Seen in play (2026-11-14): ran as the Pokédex opened; the area map later rendered into these.
+ */
 void Pokedex_InitFramebuffers(void) {
     u32 sp34;
     u32 sp30;
@@ -1083,40 +1004,40 @@ void Pokedex_InitFramebuffers(void) {
 
     sp28 = main_pool_alloc(sizeof(GfxImage), 0);
 
-    sp34 = D_8A12FF9C->renderTargets[0]->img_p;
-    D_8A12FFA8 = D_8A12FF9C->renderTargets[0]->img_p + 0x25800;
-    sp30 = D_8A12FF9C->renderTargets[1]->img_p;
-    D_8A12FFAC = D_8A12FF9C->renderTargets[1]->img_p + 0x25800;
-    sp2C = D_8A12FF9C->renderTargets[1]->img_p + 0x70800;
+    sp34 = sMenuStageContext->renderTargets[0]->img_p;
+    sAreaMapPool = sMenuStageContext->renderTargets[0]->img_p + 0x25800;
+    sp30 = sMenuStageContext->renderTargets[1]->img_p;
+    sAreaMapLoadBuffer = sMenuStageContext->renderTargets[1]->img_p + 0x25800;
+    sp2C = sMenuStageContext->renderTargets[1]->img_p + 0x70800;
 
-    D_8A12FFA0->renderTargets[0] = main_pool_alloc(sizeof(GfxImage), 0);
-    D_8A12FFA0->renderTargets[1] = main_pool_alloc(sizeof(GfxImage), 0);
+    sAreaMapStageContext->renderTargets[0] = main_pool_alloc(sizeof(GfxImage), 0);
+    sAreaMapStageContext->renderTargets[1] = main_pool_alloc(sizeof(GfxImage), 0);
 
-    GfxImage_Initialize(D_8A12FFA0->renderTargets[0], 0, 2, 0x140, 0xF0, sp34);
-    GfxImage_Initialize(D_8A12FFA0->renderTargets[1], 0, 2, 0x140, 0xF0, sp30);
+    GfxImage_Initialize(sAreaMapStageContext->renderTargets[0], 0, 2, 0x140, 0xF0, sp34);
+    GfxImage_Initialize(sAreaMapStageContext->renderTargets[1], 0, 2, 0x140, 0xF0, sp30);
     GfxImage_Initialize(sp28, 0, 2, 0x140, 0xF0, sp2C);
-    GfxImage_AttachDepthBuffer(D_8A12FFA0->renderTargets[0], sp28);
-    GfxImage_AttachDepthBuffer(D_8A12FFA0->renderTargets[1], sp28);
+    GfxImage_AttachDepthBuffer(sAreaMapStageContext->renderTargets[0], sp28);
+    GfxImage_AttachDepthBuffer(sAreaMapStageContext->renderTargets[1], sp28);
 }
 
 void func_80027FF8(void*, s32);
 void Pokedex_InitIndexWindows(PokedexIndexScreen*);
 
 /**
- * Loads the GB save summary and sets up the index windows.
- * Seen in play (2026-11-12): loaded the save summary and opened ずかんもくじ.
+ * Builds the GB save bar's summary for the active port and sets up the ずかんもくじ windows.
+ * Seen in play (2026-11-14): ran as the Pokédex opened; the bar read 1P ヒシト IDNo/04660.
  */
 void Pokedex_InitIndexScreen(void) {
-    D_8A130230 = func_80025BD8();
-    if (D_8A130230 != -1) {
-        func_80027FF8(&D_8A130238, D_8A130230);
+    sSummaryPort = GbSave_GetActivePort();
+    if (sSummaryPort != -1) {
+        func_80027FF8(&sPortSummary, sSummaryPort);
     }
-    Pokedex_InitIndexWindows(&D_8A12FFC0);
+    Pokedex_InitIndexWindows(&sIndexScreen);
 }
 
 extern u32 D_86806CD0[];
-extern s32 D_8A12FFB4;
-extern s32 D_8A12FFB8;
+extern s32 sHighestSeenIndex;
+extern s32 sSelectedDexIndex;
 extern u8 D_81000000[];
 extern u8 D_0015B1A0[];
 extern u8 D_0015E220[];
@@ -1130,27 +1051,29 @@ extern u8 D_88000000[];
 extern u8 D_00235D70[];
 extern u8 D_00238BD0[];
 void Pokedex_InitIndexScreen(void);
-s32 func_8A101B30(u8);
+s32 Pokedex_DrawFadeFrame(u8 unused);
 
 /**
- * Entry point of the Pokedex: reads the GB save, allocates the stage and framebuffers, and rebuilds the seen bitfield.
- * Seen in play (2026-11-13) ran when ずかん > ぶんぷをみる was opened for a second species in the same
- * visit, as the habitat map loaded.
- * @unverified Name and comment guessed from the code.
+ * Entry point of the Pokédex fragment (main menu > ずかん): picks the active GB save, pushes the 'BOOK' pool
+ * state, sets up the area map stage and framebuffers, rebuilds the held-species bits, loads the font and
+ * graphics, fades in (Pokedex_DrawFadeFrame), runs the screens, fades out, and queues the main menu
+ * fragment (0x88000000). Both arguments are unused.
+ * Seen in play (2026-11-14): its first call, GbSave_GetActivePort, returned into it as ずかん was entered,
+ * and やめる came back to the main menu.
  */
-s32 Pokedex_Init(s32 arg0, s32 arg1) {
-    D_8A12FFB0 = GbSave_GetActivePort();
-    D_8A12FFB4 = Pokedex_GetHighestSeenSpeciesIndex() - 1;
-    D_8A12FFB8 = 0;
+s32 Pokedex_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
+    sGbPort = GbSave_GetActivePort();
+    sHighestSeenIndex = Pokedex_GetHighestSeenSpeciesIndex() - 1;
+    sSelectedDexIndex = 0;
 
     main_pool_push_state('BOOK');
 
-    D_8A12FF9C = StageContext_GetCurrent();
-    D_8A12FFA0 = StageContext_Allocate(0, 1, 2, 1, 2, 0);
+    sMenuStageContext = StageContext_GetCurrent();
+    sAreaMapStageContext = StageContext_Allocate(0, 1, 2, 1, 2, 0);
     Pokedex_InitFramebuffers();
-    GbSave_RebuildHeldSpecies(D_8A12FFB0);
+    GbSave_RebuildHeldSpecies(sGbPort);
     Font_Init(0x3D, 0);
-    D_8A12FFA4 = PokeIcon_AllocFramebuffers(1);
+    sIconFramebuffers = PokeIcon_AllocFramebuffers(1);
     PokeIcon_OpenModelArchives();
 
     Fragment_Load(((((u32)D_81000000) & 0x0FF00000) >> 0x14) - 0x10, D_0015B1A0, D_0015E220);
@@ -1160,9 +1083,9 @@ s32 Pokedex_Init(s32 arg0, s32 arg1) {
     StageLoader_UpdateSegments();
     ModelRenderer_InitDisplayRoots();
     Pokedex_InitIndexScreen();
-    BgStage_RunUntilCondition(8, func_8A101B30);
-    Pokedex_RunEntryFlow();
-    BgStage_RunUntilCondition(8, func_8A101B30);
+    BgStage_RunUntilCondition(8, Pokedex_DrawFadeFrame);
+    Pokedex_RunScreenLoop();
+    BgStage_RunUntilCondition(8, Pokedex_DrawFadeFrame);
     StageLoader_WaitForRetrace();
     Font_Free();
 

@@ -2,12 +2,12 @@
  * Stadium Zero fragment032_35C390 (loaded at 0x8F500000): the VS screen's trainer panels.
  *
  * VsScene_LoadGeoLayout builds the panel model from this fragment's geo layout (D_8F504830), and
- * VsScene_PlayBattleTitle shows it after the flaming title: one panel per side with the trainer
+ * VsScene_PlayTitleAndRevealTeams shows it after the flaming title: one panel per side with the trainer
  * portrait, the title line, the name, and a row of six Pokémon icons with nicknames. Each node's
  * callbackArg is the side (index into D_82203170), or (side << 16) | slot for the six
  * icon and nickname nodes. The panels show the whole team the order screen picks from
  * (rosterInfo[0]), not the picked Pokémon. geo_model_033 is the panel model of the other VS
- * routines (func_82201F90, func_82202228), which read the picked teams (teamMember).
+ * routines (VsScene_PlayFreeBattleResults, VsScene_PlayTournamentResults), which read the picked teams (teamMember).
  * Seen in play (2026-11-14, Free Battle 1P vs COM): the two panels flip in after the 「VS」
  * letters, first with portrait, 「トレーナー」 and 1P / ＣＯＭ, then turned over to the six icons
  * with nicknames. Stub tests below wrote `jr ra; nop` over one callback each.
@@ -50,7 +50,7 @@ s32 VsPanel_CheckBootCode(s32 displayList) {
 /**
  * Root callback of the flaming battle-title model (geo layout in fragment 035): selects the
  * switch case rootId - 1, the round's title. rootId is the round (roundOrDemoId) that
- * VsScene_PlayBattleTitle passes to Model_InitDisplayObject.
+ * VsScene_PlayTitleAndRevealTeams passes to Model_InitDisplayObject.
  * @unverified: in Free Battle it ran once, with event 0, while the title layout was built (the
  * title model is only animated in tournaments, D_822036A4->mode != 0), so the round switch was not
  * seen.

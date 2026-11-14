@@ -713,7 +713,7 @@ extern s32 D_8910A908;
 extern s32 D_8910A90C;
 /*
  * Second name for D_8910A908. The fade-out store in this function family
- * (also func_8200579C, func_8900429C, LabPCList_UpdateFade, func_8A101B30) does not
+ * (also FreeBattle_UpdateFade, func_8900429C, LabPCList_UpdateFade, Pokedex_DrawFadeFrame) does not
  * share the counter's address with the load before it, which only happens
  * when the two accesses name different symbols.
  */
@@ -786,7 +786,7 @@ s32 LabPCList_UpdateFade(s32);
  * LabPCList_Init
  *
  * Fragment entry point.  It has the same steps as LabTerminal_Init (and the Pokedex
- * entry function Pokedex_Init), differing only in the functions it calls in
+ * entry function Pokedex_Main), differing only in the functions it calls in
  * steps 4 and 5.  Neither argument is used.  The steps are:
  *
  *   1. main_pool_push_state('TERM') saves the main pool state under that tag;

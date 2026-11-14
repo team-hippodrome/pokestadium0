@@ -41,7 +41,7 @@ Where the code lives, after the reorganization. File names are broadly correct g
 | 024 | `src/fragments/unused_relay_024/` | 1 | 1 | unused relay back to the main menu (via 020) |
 | 025 | `src/fragments/fatal_error_screen/` | 1 | 6 | fatal error screen |
 | 030 | `src/fragments/pokedex_kanto_map/` | 1 | 4 | 3D Kanto map model for the Pokédex habitat screen |
-| 031 | `src/fragments/particle_data/` | 2 | 8 | particle data |
+| 031 | `src/fragments/particle_data/` | 2 | 8 | fire effects for the VS scene (backdrop, panel and title overlays) |
 | 032 | `src/fragments/vs_trainer_panel/` | 1 | 9 | VS screen trainer panels (portrait, title, name, team icons, nicknames) and the battle-title round switch |
 | 033 | `src/fragments/geo_model_033/` | 1 | 13 | geo layout callbacks for models |
 | 034 | `src/fragments/tournament_badge_cap/` | 1 | 8 | trainer cap with the eight tournament badges, shown after a tournament win |

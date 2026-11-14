@@ -28,7 +28,7 @@ typedef struct unk_D_800AE520 {
 
 typedef struct BattleMonSpecies {
     /* 0x00 */ u8 id;
-    /* 0x01 */ u8 isRental; // 1 for a rental picked in the tournament entry screen (seen: a rented Pikachu); 0 for GB Pokemon (Pokemon_FromGbRecord). Free Battle rentals had 0. func_82200E2C skips its Pikachu-without-Surf check (likely the Surf Pikachu reward) when any team member has it
+    /* 0x01 */ u8 isRental; // 1 for a rental picked in the tournament entry screen (seen: a rented Pikachu); 0 for GB Pokemon (Pokemon_FromGbRecord). Free Battle rentals had 0. Tournament_CheckSurfPikachuReward skips its Pikachu-without-Surf check (likely the Surf Pikachu reward) when any team member has it
 } BattleMonSpecies; // size = 0x2
 
 typedef struct BattleMon {
@@ -126,7 +126,7 @@ typedef struct BattleMonRuntime {
 typedef struct ExtendedRosterInfo {
     /* 0x000 */ u16 unk_000;
     /* 0x002 */ u8 numberOfPokemonCanBePicked; // size of the team the order screen picks from (battleMon[0..n-1]); 6 for a tournament template team
-    /* 0x003 */ u8 trainerIndex; // @unverified: index of the trainer's BinArchive file the VS screen loads (vs_scene), 23 for 1P and 15 for the round-1 bug catcher in play; nintendo_cup_teams sets the template index or round + 0x16; func_82008C40 (GB-cart teams) stores the 0-based controller/GB port, so ports 0-3 pick the players' pictures
+    /* 0x003 */ u8 trainerIndex; // @unverified: index of the trainer's BinArchive file the VS screen loads (vs_scene), 23 for 1P and 15 for the round-1 bug catcher in play; nintendo_cup_teams sets the template index or round + 0x16; FreeBattle_LoadGbCartTrainer (GB-cart teams) stores the 0-based controller/GB port, so ports 0-3 pick the players' pictures
     /* 0x004 */ char title[0x10]; // the small line over the name on the VS screen: poking the bug catcher's to ＡＢ showed ＡＢ there; 「トレーナー」 (Trainer) for both sides in Free Battle and the round-1 tournament; copied from the trainer template's title, e.g. 「ほっかいどう」 (Hokkaido) or 「トレーナー」 (Trainer)
     /* 0x014 */ char fullName[0x14]; // the name on the VS screen (「むしとり\nしょうねん」 in round 1); the trainerName (1P, ＣＯＭ) in Free Battle; copied from the template's two-line name, e.g. 「むしとり\nしょうねん」 (Bug Catcher)
     /* 0x028 */ BattleMon battleMon[6];
