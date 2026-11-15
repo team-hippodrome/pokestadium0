@@ -106,14 +106,14 @@ void Memmap_RelocateFragment(u32 id, struct Fragment* fragment) {
     u32* reloc_data_p;
     u32 reloc_size;
     struct RelocTable* reloc_info;
-    UNUSED u32 relocOffset;
+    UNUSED u32 reloc_offset;
     u32 reloc;
     u32 temp_v0_5;
     u32 i;
     u32* reg_val_p;
     UNUSED s32 pad; // FAKE: stack padding
 
-    relocOffset = fragment->relocOffset;
+    reloc_offset = fragment->relocOffset;
     reloc_size = fragment->sizeInRam - fragment->relocOffset;
     reloc_info = (struct RelocTable*)((uintptr_t)fragment->relocOffset + (uintptr_t)fragment);
 

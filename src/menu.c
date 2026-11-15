@@ -666,26 +666,26 @@ void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
  * Seen in play (2026-11-12) in いちらん: ran each frame for the main list and drew the up and down
  * arrows above and below it.
  */
-void ScrollList_DrawScrollArrows(ScrollList* menu, s32 x, s32 topY, s32 bottomY, s32 width) {
+void ScrollList_DrawScrollArrows(ScrollList* menu, s32 x, s32 top_y, s32 bottom_y, s32 width) {
     s32 height = menu->cellHeight * menu->visibleRows;
-    s32 arrowX;
+    s32 arrow_x;
     s32 more;
 
-    arrowX = menu->cellWidth / 2 + x - 9;
+    arrow_x = menu->cellWidth / 2 + x - 9;
     gDPPipeSync(gDisplayListHead++);
     gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
     gDPSetRenderMode(gDisplayListHead++, 0x0F0A4000, 0);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
     gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
     gDPSetTextureFilter(gDisplayListHead++, G_TF_POINT);
-    func_8001C22C(x, topY, width, 0x10, D_04003A50, 8, 0);
-    func_8001C22C(x, bottomY, width, 0x10, D_04003A50, 8, 0);
+    func_8001C22C(x, top_y, width, 0x10, D_04003A50, 8, 0);
+    func_8001C22C(x, bottom_y, width, 0x10, D_04003A50, 8, 0);
     gSPDisplayList(gDisplayListHead++, D_80073408);
-    func_8001B884(arrowX, topY, 0x12, 0x10, (menu->scrollY > 0) ? D_04003AD8 : D_040044F8, 0x14, 0x200000);
-    func_8001B884(arrowX - 0x1C, topY, 0x14, 0x10, (menu->scrollY > 0) ? D_04003FE8 : D_04004A08, 0x14, 0x200000);
+    func_8001B884(arrow_x, top_y, 0x12, 0x10, (menu->scrollY > 0) ? D_04003AD8 : D_040044F8, 0x14, 0x200000);
+    func_8001B884(arrow_x - 0x1C, top_y, 0x14, 0x10, (menu->scrollY > 0) ? D_04003FE8 : D_04004A08, 0x14, 0x200000);
     more = menu->scrollY + height < menu->cellHeight * menu->items->count;
-    func_8001B884(arrowX, bottomY, 0x12, 0x10, more ? D_04003D60 : D_04004780, 0x14, 0x200000);
-    func_8001B884(arrowX + 0x1A, bottomY, 0x14, 0x10, more ? D_04004270 : D_04004C90, 0x14, 0x200000);
+    func_8001B884(arrow_x, bottom_y, 0x12, 0x10, more ? D_04003D60 : D_04004780, 0x14, 0x200000);
+    func_8001B884(arrow_x + 0x1A, bottom_y, 0x14, 0x10, more ? D_04004270 : D_04004C90, 0x14, 0x200000);
     gSPDisplayList(gDisplayListHead++, D_80073438);
 }
 
@@ -723,7 +723,7 @@ void ScrollList_DrawCursor(ScrollList* arg0, s32 arg1, s32 arg2) {
 void ScrollList_DrawItems(ScrollList* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     s32 height = menu->cellHeight * menu->visibleRows;
     s32 i;
-    s32 rowY;
+    s32 row_y;
     s32 end;
     s32 item;
     s32 f;
@@ -732,7 +732,7 @@ void ScrollList_DrawItems(ScrollList* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     gDPPipeSync(gDisplayListHead++);
     gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, x, y, menu->cellWidth + x, y + height);
     ScrollList_AnimateScroll(menu);
-    rowY = y - menu->scrollY % menu->cellHeight;
+    row_y = y - menu->scrollY % menu->cellHeight;
     i = menu->scrollY / menu->cellHeight;
     end = (menu->scrollY + height - 1) / menu->cellHeight + 1;
     for (; i < end; i++) {
@@ -745,8 +745,8 @@ void ScrollList_DrawItems(ScrollList* menu, s32 x, s32 y, s32 mask, s32 arg4) {
                 f |= 0x12;
             }
         }
-        menu->drawItem(x, rowY, (u8*)item, i, f & mask, arg4);
-        rowY += menu->cellHeight;
+        menu->drawItem(x, row_y, (u8*)item, i, f & mask, arg4);
+        row_y += menu->cellHeight;
     }
     gDPPipeSync(gDisplayListHead++);
     gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, 640, 480);
@@ -768,7 +768,7 @@ void ScrollList_DrawInlineItems(ScrollList* menu, s32 x, s32 y, s32 mask, s32 ar
     u8* items = def->rows;
     s32 height = menu->cellHeight * menu->visibleRows;
     s32 i;
-    s32 rowY;
+    s32 row_y;
     s32 end;
     u8* item;
     s32 f;
@@ -776,7 +776,7 @@ void ScrollList_DrawInlineItems(ScrollList* menu, s32 x, s32 y, s32 mask, s32 ar
     gDPPipeSync(gDisplayListHead++);
     gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, x, y, menu->cellWidth + x, y + height);
     ScrollList_AnimateScroll(menu);
-    rowY = y - menu->scrollY % menu->cellHeight;
+    row_y = y - menu->scrollY % menu->cellHeight;
     i = menu->scrollY / menu->cellHeight;
     end = (menu->scrollY + height - 1) / menu->cellHeight + 1;
     for (; i < end; i++) {
@@ -789,8 +789,8 @@ void ScrollList_DrawInlineItems(ScrollList* menu, s32 x, s32 y, s32 mask, s32 ar
                 f |= 0x12;
             }
         }
-        menu->drawItem(x, rowY, item, i, f & mask, arg4);
-        rowY += menu->cellHeight;
+        menu->drawItem(x, row_y, item, i, f & mask, arg4);
+        row_y += menu->cellHeight;
     }
     gDPPipeSync(gDisplayListHead++);
     gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, 640, 480);
@@ -813,7 +813,7 @@ void ScrollList_DrawSmoothScroll(ScrollList* menu, s32 x, s32 y, s32 mask, s32 a
     s32 pad[2]; // FAKE: stack padding
     s32 height = menu->cellHeight * menu->visibleRows;
     s32 i;
-    s32 rowY;
+    s32 row_y;
     s32 end;
     u8* item;
     s32 f;
@@ -822,9 +822,9 @@ void ScrollList_DrawSmoothScroll(ScrollList* menu, s32 x, s32 y, s32 mask, s32 a
     gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, x, y, menu->cellWidth + x, y + height);
     ScrollList_AnimateScroll(menu);
     i = menu->scrollY / menu->cellHeight;
-    rowY = y - menu->scrollY % menu->cellHeight + (menu->cursor - i) * menu->cellHeight;
-    menu->drawItem(x, rowY, NULL, i, 0, arg4);
-    rowY = y - menu->scrollY % menu->cellHeight;
+    row_y = y - menu->scrollY % menu->cellHeight + (menu->cursor - i) * menu->cellHeight;
+    menu->drawItem(x, row_y, NULL, i, 0, arg4);
+    row_y = y - menu->scrollY % menu->cellHeight;
     end = (menu->scrollY + height - 1) / menu->cellHeight;
     for (; i < end; i++) {
         item = NULL;
@@ -836,8 +836,8 @@ void ScrollList_DrawSmoothScroll(ScrollList* menu, s32 x, s32 y, s32 mask, s32 a
                 f |= 0x12;
             }
         }
-        menu->drawItem(x, ((i >= menu->cursor) ? menu->cellHeight : 0) + rowY, item, i, f & mask, arg4);
-        rowY += menu->cellHeight;
+        menu->drawItem(x, ((i >= menu->cursor) ? menu->cellHeight : 0) + row_y, item, i, f & mask, arg4);
+        row_y += menu->cellHeight;
     }
     gDPPipeSync(gDisplayListHead++);
     gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, 640, 480);
@@ -1269,29 +1269,29 @@ void ScrollGrid_AnimateScroll(ScrollGrid* menu) {
  */
 void ScrollGrid_DrawScrollArrows(ScrollGrid* menu, s32 x, s32 y) {
     s32 height = menu->cellHeight * menu->visibleRows;
-    s32 arrowX;
-    s32 topY;
-    s32 bottomY;
+    s32 arrow_x;
+    s32 top_y;
+    s32 bottom_y;
     s32 more;
     s32 width = menu->cellWidth * menu->columns;
     u8* tex;
 
-    arrowX = (menu->cellWidth * menu->columns) / 2 + x - 9;
-    topY = y - 0x10;
-    bottomY = y + height;
+    arrow_x = (menu->cellWidth * menu->columns) / 2 + x - 9;
+    top_y = y - 0x10;
+    bottom_y = y + height;
     gDPPipeSync(gDisplayListHead++);
     gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
     gDPSetRenderMode(gDisplayListHead++, 0x0F0A4000, 0);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
     gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
     gDPSetTextureFilter(gDisplayListHead++, G_TF_POINT);
-    func_8001C22C(x, topY, width, 0x10, D_04003A50, 8, 0);
-    func_8001C22C(x, bottomY, width, 0x10, D_04003A50, 8, 0);
+    func_8001C22C(x, top_y, width, 0x10, D_04003A50, 8, 0);
+    func_8001C22C(x, bottom_y, width, 0x10, D_04003A50, 8, 0);
     gSPDisplayList(gDisplayListHead++, D_80073408);
     tex = (menu->scrollY > 0) ? D_04003AD8 : D_040044F8;
-    func_8001B884(arrowX, topY, 0x12, 0x10, tex, 0x14, 0x200000);
+    func_8001B884(arrow_x, top_y, 0x12, 0x10, tex, 0x14, 0x200000);
     more = menu->scrollY + height < ((menu->items->count + menu->columns - 1) / menu->columns) * menu->cellHeight;
-    func_8001B884(arrowX, bottomY, 0x12, 0x10, more ? D_04003D60 : D_04004780, 0x14, 0x200000);
+    func_8001B884(arrow_x, bottom_y, 0x12, 0x10, more ? D_04003D60 : D_04004780, 0x14, 0x200000);
     gSPDisplayList(gDisplayListHead++, D_80073438);
 }
 
@@ -1335,14 +1335,14 @@ void ScrollGrid_DrawItems(ScrollGrid* menu, s32 x, s32 y, s32 mask, s32 arg4) {
     s32 height = menu->cellHeight * menu->visibleRows;
     s32 i;
     s32 end;
-    s32 baseY;
+    s32 base_y;
     u8* item;
     s32 f;
 
     gDPPipeSync(gDisplayListHead++);
     gDPSetScissorFrac(gDisplayListHead++, G_SC_NON_INTERLACE, x * 4.0f, y * 4.0f, (x + width) * 4.0f, (y + height) * 4.0f);
     ScrollGrid_AnimateScroll(menu);
-    baseY = y - menu->scrollY;
+    base_y = y - menu->scrollY;
     i = (menu->scrollY / menu->cellHeight) * menu->columns;
     end = ((menu->scrollY + height - 1) / menu->cellHeight + 1) * menu->columns;
     for (; i < end; i++) {
@@ -1355,7 +1355,7 @@ void ScrollGrid_DrawItems(ScrollGrid* menu, s32 x, s32 y, s32 mask, s32 arg4) {
                 f |= 0x12;
             }
         }
-        menu->drawItem((i % menu->columns) * menu->cellWidth + x, (i / menu->columns) * menu->cellHeight + baseY, item, i, f & mask, arg4);
+        menu->drawItem((i % menu->columns) * menu->cellWidth + x, (i / menu->columns) * menu->cellHeight + base_y, item, i, f & mask, arg4);
     }
     gDPPipeSync(gDisplayListHead++);
     gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, 640, 480);

@@ -114,29 +114,29 @@ void Util_DrawMemoryProfiler(Gfx** dlist) {
     s32 available = MainPool_GetAvailable();
 
     if (available >= 0) {
-        s32 baseX = 30;
-        s32 startX = ((u32)(K0_TO_PHYS(pool->start)) >> 15) + baseX;
-        s32 headLX = ((u32)(K0_TO_PHYS(pool->listHeadL)) >> 15) + baseX;
-        s32 headRX = ((u32)(K0_TO_PHYS(pool->listHeadR)) >> 15) + baseX;
-        s32 endX = ((u32)(K0_TO_PHYS(pool->end)) >> 15) + baseX;
+        s32 base_x = 30;
+        s32 start_x = ((u32)(K0_TO_PHYS(pool->start)) >> 15) + base_x;
+        s32 head_l_x = ((u32)(K0_TO_PHYS(pool->listHeadL)) >> 15) + base_x;
+        s32 head_r_x = ((u32)(K0_TO_PHYS(pool->listHeadR)) >> 15) + base_x;
+        s32 end_x = ((u32)(K0_TO_PHYS(pool->end)) >> 15) + base_x;
 
-        Util_DrawRect(dlist, baseX, startX, GPACK_RGBA5551(248, 120, 40, 1)); // #F87828
-        Util_DrawRect(dlist, startX, headLX, GPACK_RGBA5551(248, 248, 40, 1)); // #F8F828
-        Util_DrawRect(dlist, headLX, headRX, GPACK_RGBA5551(40, 80, 248, 1)); // #2850F8
-        Util_DrawRect(dlist, headRX, endX, GPACK_RGBA5551(248, 248, 40, 1)); // #F8F828
-        HAL_Printf(baseX, 20, "MEM: +%XH (+%dK)", available, available / 1024);
+        Util_DrawRect(dlist, base_x, start_x, GPACK_RGBA5551(248, 120, 40, 1)); // #F87828
+        Util_DrawRect(dlist, start_x, head_l_x, GPACK_RGBA5551(248, 248, 40, 1)); // #F8F828
+        Util_DrawRect(dlist, head_l_x, head_r_x, GPACK_RGBA5551(40, 80, 248, 1)); // #2850F8
+        Util_DrawRect(dlist, head_r_x, end_x, GPACK_RGBA5551(248, 248, 40, 1)); // #F8F828
+        HAL_Printf(base_x, 20, "MEM: +%XH (+%dK)", available, available / 1024);
     } else {
-        s32 baseX = 30;
-        s32 startX = ((u32)(K0_TO_PHYS(pool->start)) >> 15) + baseX;
-        s32 headLX = ((u32)(K0_TO_PHYS(pool->listHeadL)) >> 15) + baseX;
-        s32 headRX = ((u32)(K0_TO_PHYS(pool->listHeadR)) >> 15) + baseX;
-        s32 endX = ((u32)(K0_TO_PHYS(pool->end)) >> 15) + baseX;
+        s32 base_x = 30;
+        s32 start_x = ((u32)(K0_TO_PHYS(pool->start)) >> 15) + base_x;
+        s32 head_l_x = ((u32)(K0_TO_PHYS(pool->listHeadL)) >> 15) + base_x;
+        s32 head_r_x = ((u32)(K0_TO_PHYS(pool->listHeadR)) >> 15) + base_x;
+        s32 end_x = ((u32)(K0_TO_PHYS(pool->end)) >> 15) + base_x;
 
-        Util_DrawRect(dlist, baseX, startX, GPACK_RGBA5551(248, 120, 40, 1)); // #F87828
-        Util_DrawRect(dlist, startX, headRX, GPACK_RGBA5551(248, 248, 40, 1)); // #F8F828
-        Util_DrawRect(dlist, headRX, headLX, GPACK_RGBA5551(248, 40, 40, 1)); // #F82828
-        Util_DrawRect(dlist, headLX, endX, GPACK_RGBA5551(248, 248, 40, 1)); // #F8F828
-        HAL_Printf(baseX, 20, "MEM: -%XH (-%dK)", -available, -available / 1024);
+        Util_DrawRect(dlist, base_x, start_x, GPACK_RGBA5551(248, 120, 40, 1)); // #F87828
+        Util_DrawRect(dlist, start_x, head_r_x, GPACK_RGBA5551(248, 248, 40, 1)); // #F8F828
+        Util_DrawRect(dlist, head_r_x, head_l_x, GPACK_RGBA5551(248, 40, 40, 1)); // #F82828
+        Util_DrawRect(dlist, head_l_x, end_x, GPACK_RGBA5551(248, 248, 40, 1)); // #F8F828
+        HAL_Printf(base_x, 20, "MEM: -%XH (-%dK)", -available, -available / 1024);
     }
 }
 

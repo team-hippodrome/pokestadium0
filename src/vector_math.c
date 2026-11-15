@@ -156,7 +156,7 @@ void Math_ProjectPointOntoLine(
     f32 px, f32 py, f32 pz,
     f32 ax, f32 ay, f32 az,
     f32 bx, f32 by, f32 bz,
-    f32* outX, f32* outY, f32* outZ
+    f32* out_x, f32* out_y, f32* out_z
 ) {
     f32 dx;
     f32 dy;
@@ -168,9 +168,9 @@ void Math_ProjectPointOntoLine(
     f32 dz2;
 
     if (len_sq == 0.0) {
-        *outX = ax;
-        *outY = ay;
-        *outZ = az;
+        *out_x = ax;
+        *out_y = ay;
+        *out_z = az;
         return;
     }
 
@@ -184,9 +184,9 @@ void Math_ProjectPointOntoLine(
 
     t = ((dx * dx2) + (dy * dy2) + (dz * dz2)) / len_sq;
 
-    *outX = ax + (t * dx);
-    *outY = ay + (t * dy);
-    *outZ = az + (t * dz);
+    *out_x = ax + (t * dx);
+    *out_y = ay + (t * dy);
+    *out_z = az + (t * dz);
 }
 
 /** Extracts the per-axis scale of a matrix into a vector. */

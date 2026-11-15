@@ -224,16 +224,16 @@ s32 MainPool_GetAvailable(void) {
  */
 u32 MainPool_PushState(u32 arg) {
     MainPoolState* state;
-    MainPoolBlock* listHeadL;
-    MainPoolBlock* listHeadR;
+    MainPoolBlock* list_head_l;
+    MainPoolBlock* list_head_r;
     uintptr_t available;
 
     osRecvMesg(&sMemPool.queue, NULL, OS_MESG_BLOCK);
 
     // retrieve the space and head pointers.
     available = sMemPool.available;
-    listHeadL = sMemPool.listHeadL;
-    listHeadR = sMemPool.listHeadR;
+    list_head_l = sMemPool.listHeadL;
+    list_head_r = sMemPool.listHeadR;
 
     /**
      * We are essentially allocating a block that looks like this:
@@ -257,8 +257,8 @@ u32 MainPool_PushState(u32 arg) {
         // fields.
         state->prev = sMemPool.mainState;
         state->freeSpace = available;
-        state->listHeadL = listHeadL;
-        state->listHeadR = listHeadR;
+        state->listHeadL = list_head_l;
+        state->listHeadR = list_head_r;
 
         // add the newly allocated state.
         sMemPool.mainState = state;
@@ -328,12 +328,12 @@ void* MainPool_Search(uintptr_t addr, s32* arg_ptr) {
 
     node = sMemPool.listHeadL->prev;
     while (node != NULL) {
-        int isAddrLater = (addr >= ((uintptr_t)((u8*)node + sizeof(MainPoolBlock))));
+        int is_addr_later = (addr >= ((uintptr_t)((u8*)node + sizeof(MainPoolBlock))));
         other_node = node->next;
         // seems to be checking for an addr within a block region? Since this function
         // is unused, we wont be able to check for the intended context of what could
         // call this function.
-        if (isAddrLater && addr < ((uintptr_t)other_node & 0xFFFFFFFF)) {
+        if (is_addr_later && addr < ((uintptr_t)other_node & 0xFFFFFFFF)) {
             if (arg_ptr != NULL) {
                 *arg_ptr = node->arg;
             }
@@ -347,10 +347,10 @@ void* MainPool_Search(uintptr_t addr, s32* arg_ptr) {
     node = sMemPool.listHeadR;
     other_node = node->next;
     while (other_node != NULL) {
-        int isAddrLater = (addr >= ((uintptr_t)((u8*)node + sizeof(MainPoolBlock))));
+        int is_addr_later = (addr >= ((uintptr_t)((u8*)node + sizeof(MainPoolBlock))));
         MainPoolBlock* new_var = other_node; // bit of a fakematch to force the move reload.
         // same as above.
-        if (isAddrLater && (addr < ((uintptr_t)new_var & 0xFFFFFFFF))) {
+        if (is_addr_later && (addr < ((uintptr_t)new_var & 0xFFFFFFFF))) {
             if (arg_ptr != NULL) {
                 *arg_ptr = node->arg;
             }

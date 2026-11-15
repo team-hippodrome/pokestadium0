@@ -67,10 +67,10 @@ void CrashScreen_DrawGlyph(s32 x, s32 y, s32 glyph) {
 
         for (i = 0; i < 7; i++) {
             u32 bit = 0x80000000U >> shift;
-            u32 rowMask = *data++;
+            u32 row_mask = *data++;
 
             for (j = 0; j < 6; j++) {
-                *ptr++ = (bit & rowMask) ? 0xFFFF : 1;
+                *ptr++ = (bit & row_mask) ? 0xFFFF : 1;
                 bit >>= 1;
             }
 
@@ -81,10 +81,10 @@ void CrashScreen_DrawGlyph(s32 x, s32 y, s32 glyph) {
 
         for (i = 0; i < 7; i++) {
             u32 bit = 0x80000000U >> shift;
-            u32 rowMask = *data++;
+            u32 row_mask = *data++;
 
             for (j = 0; j < 6; j++) {
-                u16 temp = (bit & rowMask) ? 0xFFFF : 1;
+                u16 temp = (bit & row_mask) ? 0xFFFF : 1;
 
                 ptr[0] = temp;
                 ptr[1] = temp;
