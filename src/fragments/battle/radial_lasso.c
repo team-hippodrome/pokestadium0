@@ -49,7 +49,7 @@ void LassoHit_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 
     ptr1->frame = 0;
     ptr1->loopCount = 0;
     ptr1->unk_04 = 0;
-    ptr1->duration = 0x46;
+    ptr1->duration = 70;
     ptr1->startPos.x = arg0;
     ptr1->startPos.y = arg1;
     ptr1->startPos.z = arg2;
@@ -89,7 +89,7 @@ f32 Strip400_GetTailFadeRatio(void) {
     f32 tmp;
     s32 tmp2 = ptr->frame;
 
-    if (tmp2 < (ptr->duration - 0x34)) {
+    if (tmp2 < (ptr->duration - 52)) {
         return 1.0f;
     }
 
@@ -129,13 +129,13 @@ s32 LassoHit_Update(void) {
         return -1;
     }
 
-    if ((ptr->duration - 0x28) < ptr->frame) {
-        ptr->frame = ptr->duration - 0x34;
+    if ((ptr->duration - 40) < ptr->frame) {
+        ptr->frame = ptr->duration - 52;
         ptr->loopCount++;
-        if (ptr->loopCount >= 0x15) {
+        if (ptr->loopCount >= 21) {
             return -1;
         }
-    } else if (ptr->frame < 0x1E) {
+    } else if (ptr->frame < 30) {
         ptr->alpha += 10;
         if (ptr->alpha > 0xC8) {
             ptr->alpha = 0xC8;
@@ -148,11 +148,11 @@ s32 LassoHit_Update(void) {
     sp90 = sp7C.z;
 
     ptr->pointCount += 6;
-    if (ptr->pointCount > 0xC8) {
-        ptr->pointCount = 0xC8;
+    if (ptr->pointCount > 200) {
+        ptr->pointCount = 200;
     }
 
-    if (((ptr->duration - 0x34) < ptr->frame) && (ptr->frame < (ptr->duration - 0x28))) {
+    if (((ptr->duration - 52) < ptr->frame) && (ptr->frame < (ptr->duration - 40))) {
         ptr->fadeScale -= 0.1;
         if (ptr->fadeScale < 0.25) {
             ptr->fadeScale = 0.25f;
@@ -164,16 +164,16 @@ s32 LassoHit_Update(void) {
     for (i = 0; i < ptr->pointCount; i++) {
         tmp00 = ptr->frame;
 
-        if ((ptr->duration - 0x28) < tmp00) {
+        if ((ptr->duration - 40) < tmp00) {
             var_s0->radius -= 6.0;
             if (var_s0->radius < ptr->minRadius) {
                 var_s0->radius = ptr->minRadius;
             }
             var_fs1 = __sinf((((ptr->frame + i) % 200) * 251.327419281005859) / 200.0) * 0.1;
-        } else if ((ptr->duration - 0x2D) < tmp00) {
+        } else if ((ptr->duration - 45) < tmp00) {
             var_fs1 = __sinf((((ptr->frame + i) % 200) * 251.327419281005859) / 200.0) + 2.0;
             var_s0->radius += var_fs1;
-        } else if ((ptr->duration - 0x34) < tmp00) {
+        } else if ((ptr->duration - 52) < tmp00) {
             var_s0->radius -= 8.0;
             if (var_s0->radius < ptr->minRadius) {
                 var_s0->radius = ptr->minRadius;
@@ -362,7 +362,7 @@ void TriAttackRadial_EmitVariantA(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 ar
                 if (j == 0) {
                     var_a1_2->alpha = 0xFF;
                 } else {
-                    var_a1_2->alpha = (argA * (0x13 - j)) / 20;
+                    var_a1_2->alpha = (argA * (19 - j)) / 20;
                 }
                 var_a1_2->halfWidth = argC;
                 var_a1_2->angle = 0.0f;
@@ -486,7 +486,7 @@ void Radial20_VariantC(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg
                 var_s0->velocity = spB0;
 
                 var_s0->velocity.y += 2.0 * __sinf(((temp_s3 % temp_fp) * TWO_PI) / temp_fp) *
-                                    __sinf(((temp_s2 % (temp_s4 + 0x14)) * TWO_PI) / (temp_s4 + 0x14));
+                                    __sinf(((temp_s2 % (temp_s4 + 20)) * TWO_PI) / (temp_s4 + 20));
                 var_s0->velocity.z += 0.5 * __sinf(((temp_s2 % temp_s4) * TWO_PI) / temp_s4);
                 tmp = j * 0.5;
                 var_s0->position.x += var_s0->velocity.x * ((j * 0.5) - tmp);
@@ -559,7 +559,7 @@ void Radial20_VariantD(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg
                 var_s0->velocity = spB0;
 
                 var_s0->velocity.z += 2.5 * __sinf(((temp_s3 % temp_fp) * TWO_PI) / temp_fp) *
-                                    __sinf(((temp_s2 % (temp_s4 + 0x14)) * TWO_PI) / (temp_s4 + 0x14));
+                                    __sinf(((temp_s2 % (temp_s4 + 20)) * TWO_PI) / (temp_s4 + 20));
                 var_s0->velocity.y += 0.5 * __sinf(((temp_s2 % temp_s4) * TWO_PI) / temp_s4);
                 tmp = j * 0.5;
                 var_s0->position.x += var_s0->velocity.x * ((j * 0.5) - tmp);
@@ -1049,7 +1049,7 @@ Gfx* Radial20_Draw(Gfx* arg0) {
                                 vtx->v.ob[2] = z1;
 
                                 if ((y == 0) && ((guRandom() % 100) == 0)) {
-                                    AuxiliaryEffect_Spawn(sp1B4->auxEffectId, x1, y1, z1, 0xA, 0.75f);
+                                    AuxiliaryEffect_Spawn(sp1B4->auxEffectId, x1, y1, z1, 10, 0.75f);
                                 }
 
                                 vtx->v.cn[0] = ((D_82192B50[x] * (0xFF - var_s2->alpha)) + (var_s2->alpha * 0xFF)) / 255;

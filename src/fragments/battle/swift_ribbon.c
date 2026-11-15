@@ -152,7 +152,7 @@ void SwiftRibbonSheet_UpdateRecord(TexturedRibbonSheet* arg0) {
     switch (arg0->phase) {
         case 0:
             var_v1->position.y += var_v1->riseVelocity.y;
-            if (arg0->frame >= 0xB) {
+            if (arg0->frame >= 11) {
                 arg0->phase = 1;
             }
             var_v1->angle += 2.0 * arg0->angleStep;
@@ -193,7 +193,7 @@ s32 SwiftRibbonSheet_IsComplete(void) {
     for (i = 0; i < 40; i++, var_s0++) {
         if (var_s0->active == 1) {
             var_s0->frame += 1;
-            if ((var_s0->duration + 0xA) < var_s0->frame) {
+            if ((var_s0->duration + 10) < var_s0->frame) {
                 var_s0->active = 0;
             } else {
                 SwiftRibbonSheet_UpdateRecord(var_s0);

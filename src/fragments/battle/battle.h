@@ -2756,7 +2756,7 @@ void Particle_AddPositionOffsetAlongRotationYMinus90(Particle* arg0, f32 arg1);
 void Particle_AddVelocityFromDirVector(Particle* arg0, f32 arg1);
 void Particle_AddPositionFromRotationTemplate1(Particle* arg0, f32 arg1);
 void Particle_AddPositionFromRotationTemplate2(Particle* arg0, f32 arg1);
-void Particle_AddPositionRotatedVectorByRotationY(Particle* arg0, Vec3f arg1);
+void Particle_AddPositionRotatedByRotationY(Particle* arg0, Vec3f arg1);
 void Particle_SetRandomVelocityXYZ(Particle* arg0, s32 arg1, s32 arg2, s32 arg3);
 void Particle_SetRandomRotatedVelocityXY(Particle* arg0, s32 arg1, s32 arg2);
 void Particle_SetOrigin(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);

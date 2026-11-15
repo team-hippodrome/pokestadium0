@@ -86,7 +86,7 @@ void OwnerAnchoredFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 a
 
             var_s0 = &var_v1->nodes[0];
             for (j = 0; j < 15; j++, var_s0++) {
-                var_s0->alpha = (arg9 * (0xE - j)) / 15;
+                var_s0->alpha = (arg9 * (14 - j)) / 15;
                 var_s0->halfWidth = argB;
                 var_s0->angle = (RAND(120) * 6.2831855f) / 120.0;
                 var_s0->position = sp64;
@@ -241,7 +241,7 @@ Gfx* OwnerAnchoredFourStream_Draw(Gfx* arg0) {
                 temp_v0 = Gfx_AllocDisplayList(sizeof(Mtx) * 1);
                 guTranslate(temp_v0, temp_s0->position.x, temp_s0->position.y, temp_s0->position.z);
                 guRotateRPY(&sp100, (temp_s0->angle * -360.0f * var_s5->direction) / 6.2831854820251465,
-                            0x5A - (var_s5->direction * 0x5A), 0.0f);
+                            90 - (var_s5->direction * 90), 0.0f);
                 guMtxCatL(&sp100, temp_v0, temp_v0);
                 guScale(&spC0, 0.16f, 0.16f, 0.16f);
                 guMtxCatL(&spC0, temp_v0, temp_v0);

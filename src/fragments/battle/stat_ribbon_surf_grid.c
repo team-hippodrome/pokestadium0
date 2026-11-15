@@ -14,7 +14,7 @@ void StatRibbon_UpdateEnvAlpha(RibbonMesh* arg0) {
     s32 var_v0;
 
     if (arg0->direction >= 0) {
-        if ((arg0->duration - 0x1E) < arg0->frame) {
+        if ((arg0->duration - 30) < arg0->frame) {
             var_v0 = arg0->envA - 0xA;
             if (var_v0 < 0) {
                 var_v0 = 0;
@@ -83,7 +83,7 @@ s32 StatRibbon_Update(RibbonMesh* arg0) {
         temp_s0 = ptr++;
         temp_s1 = ptr++;
 
-        if (i == 0x1E) {
+        if (i == 30) {
             sp94 = 0.0f;
             sp90 = 0.0f;
             sp8C = 0.0f;
@@ -178,7 +178,7 @@ s32 StatRibbon_Update(RibbonMesh* arg0) {
         tmp1 = __cosf(temp_fa0) * sp9C;
         tmp2 = __sinf(temp_fa0) * sp9C;
 
-        AuxiliaryEffect_Spawn(arg0->auxEffectId, sp80 + tmp1, sp7C + sp84, sp78 + tmp2, 0xA, 0.75f);
+        AuxiliaryEffect_Spawn(arg0->auxEffectId, sp80 + tmp1, sp7C + sp84, sp78 + tmp2, 10, 0.75f);
         AuxiliaryEffect_Update(arg0->auxEffectId);
     }
 
@@ -589,7 +589,7 @@ s32 SurfTerrainGrid_UpdateWaves(void) {
         return -1;
     }
 
-    if (sWaterHeightMap.frame < 0x3C) {
+    if (sWaterHeightMap.frame < 60) {
         ptr = &sWaterHeightMap.grid[0][0];
         for (j = 0; j < 16; j++) {
             ptr->position.y += (30.0 * __sinf((((sWaterHeightMap.frame + j) % 15) * TWO_PI_F) / 15.0f)) + 10.0;
@@ -597,7 +597,7 @@ s32 SurfTerrainGrid_UpdateWaves(void) {
         }
         sWaterHeightMap.waveSpread += D_DBL_82197A28;
     } else {
-        if (((sWaterHeightMap.frame - 0x3C) % 90) < 0x46) {
+        if (((sWaterHeightMap.frame - 60) % 90) < 70) {
             ptr = &sWaterHeightMap.grid[0][2];
             for (j = 0; j < 13; j++) {
                 if (0) {}  // karodo

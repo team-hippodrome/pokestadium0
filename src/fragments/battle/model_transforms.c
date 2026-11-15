@@ -209,7 +209,7 @@ void BattleScene_ShowSecondaryModelsAtMainPose(ActivePokemon* active_pokemon) {
  * Steps the two afterimages: each follows the Pokemon's position and shrinks toward 0.65 at
  * its own speed. Returns 1 once both are done.
  * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
- * Minimize: ran from sample 264 as Onix's two shrinking afterimages showed (「かいひりつが あがった！」).
+ * Minimize: ran from sample 264 as Onix's two shrinking afterimages showed (「かいひりつが あがった！」 "Evasiveness rose!").
  */
 s32 BattleAnim_StepMinimizeAfterimages(ActivePokemon* active_pokemon) {
     s32 i;

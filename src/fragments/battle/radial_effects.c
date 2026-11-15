@@ -98,7 +98,7 @@ void BattleAnim_StartEffect19Radial20_EmitVariantD(void) {
     sp54 += 6.0f;
     r1 = guRandom();
     r2 = guRandom();
-    Radial20_VariantD(sp64, sp60, sp5C, sp58, ((r1 % 4) * 0.01) + sp54 - 0.02, sp50 - ((r2 % 5) * 0.3) + 0.6, 3, 0x80, 0xC0, 0xFF, 0xC8, 0.1f, 2.0f, 5.0f, 0x3C);
+    Radial20_VariantD(sp64, sp60, sp5C, sp58, ((r1 % 4) * 0.01) + sp54 - 0.02, sp50 - ((r2 % 5) * 0.3) + 0.6, 3, 0x80, 0xC0, 0xFF, 0xC8, 0.1f, 2.0f, 5.0f, 60);
 }
 
 /**
@@ -122,11 +122,11 @@ void BattleAnim_StartTrappingLassoMove_Init(void) {
  */
 s32 BattleAnim_StartTrappingLassoMove_Update(void) {
     D_8219CB0E++;
-    if (D_8219CB0E >= 0xB5) {
+    if (D_8219CB0E >= 181) {
         return -1;
     }
 
-    if ((D_8219CB0E < 0x78) && ((D_8219CB0E % 7) == 0)) {
+    if ((D_8219CB0E < 120) && ((D_8219CB0E % 7) == 0)) {
         BattleAnim_StartEffect19Radial20_EmitVariantD();
     }
     return Radial20_IsComplete();
@@ -237,11 +237,11 @@ void BattleAnim_SetupSwiftUseRibbonSheet(void) {
  */
 s32 BattleAnim_RunSwiftUseRibbonSheet(void) {
     D_8219CB10++;
-    if (D_8219CB10 >= 0x709) {
+    if (D_8219CB10 >= 1801) {
         return -1;
     }
 
-    if ((D_8219CB10 < 0x6EA) && ((D_8219CB10 % 3) == 0)) {
+    if ((D_8219CB10 < 1770) && ((D_8219CB10 % 3) == 0)) {
         BattleAnim_StartEffect7TexturedRibbonSheet_Emit();
     }
 
@@ -281,7 +281,7 @@ void BattleAnim_StartEffect33Radial20_EmitVariantC(void) {
     sp60 = 0.0f;
     sp64 += 6.0f;
     Radial20_VariantC(sp74, sp70, sp6C, sp68, (((guRandom() % 5) * 0.1) + sp64) - 0.2,
-                      (sp60 - ((guRandom() % 5) * 0.3)) + 0.6, 3, 0xFF, 0xFF, 0xFF, 0x64, 0.1f, 1.0f, 3.0f, 0x3C);
+                      (sp60 - ((guRandom() % 5) * 0.3)) + 0.6, 3, 0xFF, 0xFF, 0xFF, 0x64, 0.1f, 1.0f, 3.0f, 60);
 }
 
 /**
@@ -305,11 +305,11 @@ void BattleAnim_SetupStringShotUseRadial(void) {
  */
 s32 BattleAnim_RunStringShotUseRadial(void) {
     D_8219CB12++;
-    if (D_8219CB12 >= 0xB5) {
+    if (D_8219CB12 >= 181) {
         return -1;
     }
 
-    if ((D_8219CB12 < 0x78) && ((D_8219CB12 % 7) == 0)) {
+    if ((D_8219CB12 < 120) && ((D_8219CB12 % 7) == 0)) {
         BattleAnim_StartEffect33Radial20_EmitVariantC();
     }
 
@@ -366,7 +366,7 @@ void BattleAnim_DrawStringShotHitRadial(void) {
  * Starts the lasso rings at the secondary owner's bone position, sized by the tertiary owner's
  * model scale, colored #FFFF40.
  * Seen in play (2026-11-13) (COM-side move sweep, COM's Metronome pinned to Disable): ran when the
- * yellow rings closed around Onix, with 「イワイワの ゆびをふるを ふうじこめた！」 on screen. Disable reuses String
+ * yellow rings closed around Onix, with 「イワイワの ゆびをふるを ふうじこめた！」 "Iwaiwa's Metronome was disabled!" on screen. Disable reuses String
  * Shot's hit rings when it targets 1P.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
  * breakpoint): ran only for Disable.
@@ -407,7 +407,7 @@ void BattleAnim_DrawDisableHitRadial(void) {
 /**
  * Same as BattleAnim_StartEffect19Radial20_EmitVariantD but colored #FFFF40.
  * Seen in play (2026-11-13) (COM-side move sweep: 1P Splash, then COM's Metronome pinned to
- * Disable): ran as the yellow strand left Pinsir toward Onix, before 「イワイワの ゆびをふるを ふうじこめた！」. In the
+ * Disable): ran as the yellow strand left Pinsir toward Onix, before 「イワイワの ゆびをふるを ふうじこめた！」 "Iwaiwa's Metronome was disabled!". In the
  * 1P-side sweep Disable never ran it, so it is the COM-side (target 1P) variant.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
  * breakpoint): ran only for Disable.
@@ -430,5 +430,5 @@ void BattleAnim_StartEffect98Radial20_EmitVariantD(void) {
     sp54 += 6.0f;
     r1 = guRandom();
     r2 = guRandom();
-    Radial20_VariantD(sp64, sp60, sp5C, sp58, ((r1 % 4) * 0.01) + sp54 - 0.02, sp50 - ((r2 % 5) * 0.3) + 0.6, 3, 0xFF, 0xFF, 0x40, 0xC8, 0.1f, 2.0f, 5.0f, 0x3C);
+    Radial20_VariantD(sp64, sp60, sp5C, sp58, ((r1 % 4) * 0.01) + sp54 - 0.02, sp50 - ((r2 % 5) * 0.3) + 0.6, 3, 0xFF, 0xFF, 0x40, 0xC8, 0.1f, 2.0f, 5.0f, 60);
 }

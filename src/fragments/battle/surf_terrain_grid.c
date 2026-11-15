@@ -83,10 +83,10 @@ Gfx* SurfTerrainGrid_Draw(Gfx* arg0) {
     gSPDisplayList(arg0++, D_84388F80);
     gDPPipeSync(arg0++);
 
-    if (sWaterHeightMap.frame < 0xA) {
+    if (sWaterHeightMap.frame < 10) {
         var_a2 = 0;
         var_t0 = (sWaterHeightMap.frame * 0xFF) / 10;
-    } else if (sWaterHeightMap.frame < 0x14) {
+    } else if (sWaterHeightMap.frame < 20) {
         var_a2 = ((sWaterHeightMap.frame * 0xFF) - 0x9F6) / 10;
         var_t0 = 0xFF;
     } else {
