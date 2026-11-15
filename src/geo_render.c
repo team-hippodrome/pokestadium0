@@ -1787,7 +1787,7 @@ void Geo_NodeShadow(GraphNode* arg0) {
         } else {
             gSPBranchList(&temp_s1[1], Util_ConvertAddrToVirtAddr(D_01002500));
         }
-        gDPSetEnvColor(&temp_s1[0], 0, 0, 0, (s32)(150.0f * sp80));
+        gDPSetEnvColor(&temp_s1[0], 0, 0, 0, (s32)(150.0f * sp80)); // #000000
 
         if (D_8006049C->node.renderFlags & 2) {
             GeoRender_SubmitLayerDisplayList(6, (u32)temp_s1 & 0x1FFFFFFF, 0, 1);

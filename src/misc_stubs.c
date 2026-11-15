@@ -108,10 +108,16 @@ void Misc_UnusedStub(void) {
 
 }
 
+/**
+ * Empty; no callers.
+ */
 void func_80035208_empty() {
 
 }
 
+/**
+ * Empty; no callers.
+ */
 void func_800420F0_empty() {
     
 }

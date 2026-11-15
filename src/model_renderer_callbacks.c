@@ -168,7 +168,7 @@ Gfx* ModelRenderer_SetSlotModelColor(Gfx* gfx) {
     switch (D_8006049C->objectType) {
         default:
             gSPDisplayList(gfx++, D_800744D8);
-            gDPSetEnvColor(gfx++, 0xB4 - (D_80060484 % 8) * 10, 0x20, 0x00, 0x00);
+            gDPSetEnvColor(gfx++, 0xB4 - (D_80060484 % 8) * 10, 0x20, 0x00, 0x00); // #B42000 (red pulses 180 down to 110 over 8 frames)
             break;
         case 0x92:
             gSPDisplayList(gfx++, D_80074540);

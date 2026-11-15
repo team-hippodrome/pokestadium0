@@ -380,7 +380,7 @@ void Save_DrawGbReportErrorScreen(s32 arg0) {
     Font_Printf(0xB0, 0xD0, D_8007B7E0);
     Font_Printf(0xB0, 0xEC, D_8007B804);
     Font_Printf(0xB0, 0x108, D_8007B824);
-    Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF); // #FFFF00
     Font_Printf(0x12E, 0xB4, D_8007B844);
     if (arg0 == 2) {
         Font_SetActive(0x10, -2);

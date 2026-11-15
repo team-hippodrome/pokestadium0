@@ -564,6 +564,11 @@ void MtxF_SetRotationAndScaledTranslation(MtxF* dest, Vec3f* translate, Vec3s* r
     dest->mf[3][3] = 1.0f;
 }
 
+/**
+ * Builds a billboard matrix in dest: the rotation is the transpose of `basis` (the camera rotation),
+ * scaled per axis by the lengths of `transform`'s rows, and the translation is `local_position`
+ * transformed by `transform`.
+ */
 void MtxF_SetBillboard(MtxF* dest, MtxF* basis, MtxF* transform, Vec3f* local_position) {
     f32 x_norm;
     f32 y_norm;

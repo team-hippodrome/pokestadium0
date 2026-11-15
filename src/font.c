@@ -159,9 +159,9 @@ s32 Font_GetGlyphIndex(u16);
 /**
  * Draws character `chr` of the active font set at (x, y) as a texture rectangle, loading the glyph
  * into TMEM first when it changed. Returns the x position of the next character.
- * Verified in play (2026-11-14): stubbed on the main menu, every item label (せいとん, バトル, ...) vanished.
+ * Verified in play (2026-11-14): stubbed on the main menu, every item label (せいとん (Organize), バトル (Battle), ...) vanished.
+ * Matching: the gDP* macros are expanded by hand and several share one line; IDO schedules by source line, so only this layout matches.
  */
-// The gDP* macros are expanded by hand and several share one line; IDO schedules by source line, so only this layout matches.
 s32 Font_DrawChar(s16 x, s16 y, s16 chr)
 {
   FontGlyphSet8001A3E4 *set = &((FontGlyphSet8001A3E4 *) font_context)[font_context->unk_50];

@@ -11,8 +11,8 @@ char* func_8002E160_jp(s32 item_id, char* dest);
 s32 LabItem_IsQuantitylessItem(s32 arg0);
 s32 LabItem_IsQuantitylessItemForOperation(s32 arg0);
 
-// Copies the Japanese description of Generation I item `item_id` into `dest`, or an empty string
-// when the id is outside 0-255 or has no description. Returns `dest`.
+/** Copies the Japanese description of Generation I item `item_id` into `dest`, or an empty string
+ * when the id is outside 0-255 or has no description. Returns `dest`. */
 char* func_8002E160_jp(s32 item_id, char* dest) {
     // Indexed by item id (1 = Master Ball, 196-200 = HM01-05, 201-250 = TM01-50). Ids without an
     // item are NULL; 7 (Surfboard) and 9 (Pokedex) point to empty descriptions.
