@@ -43,8 +43,8 @@ void CartridgeCheck_UnusedNoop1(void) {
 /**
  * Geo light callback of this fragment's scene layout (D_88402EB0 holds its address twice).
  * On event 2 it points the light along the camera's eye-to-target direction
- * (Vec3f_CalculateDistanceAngles) and stores both angles plus 0x2000 in the light's pitch
- * and yaw. Always returns 0.
+ * (Vec3f_CalculateDistanceAngles) and stores both angles plus 0x2000 in the light's rotationX
+ * and rotationY. Always returns 0.
  * Seen in play (2026-11-14): called with event 2 every frame of the cartridge check scene.
  * Same shape as Intro_LightAngleCallbackA in the Stadium 1 decomp, which subtracts 0x2000
  * from the second angle where Zero adds it.
