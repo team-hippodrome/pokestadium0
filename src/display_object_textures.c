@@ -18,14 +18,15 @@ void* MainPool_AllocAligned(struct MainPoolState* state, s32 arg1, s32 arg2);
 void* MainPool_InitState(struct MainPoolState* block, s32 size);
 #include <PR/os_internal_reg.h>
 #include <PR/leo.h>
-typedef struct ret_func_unk_D_800ABE10 {
+// Header returned by a fragment's entry function when called with (0, 0): geo layout count at 0x03, layout list at 0x08.
+typedef struct unk_func_80017428 {
     /* 0x00 */ char unk00[0x3];
     /* 0x03 */ u8 unk_03;
     /* 0x04 */ char unk04[0x4];
     /* 0x08 */ GeoTextureBankNode** unk_08;
     /* 0x0C */ char unk0C[0x8];
     /* 0x14 */ func_unk_D_800ABE10 unk_14;
-} ret_func_unk_D_800ABE10;
+} unk_func_80017428;
 extern ModelLoaderThread D_800AC7A0;
 
 #include "m2c_macros.h"
@@ -227,8 +228,8 @@ Fragment* BinArchive_LoadFileToPool(MainPoolState* arg0, BinArchive* arg1, s32 a
 s32 Fragment_ProcessGeoLayout(MemoryBlock* arg0, Fragment* arg1, arg1_func_80010CA8 arg2) {
     s32 i;
     GeoTextureBankNode* temp_v0_2;
-    ret_func_unk_D_800ABE10* temp_v0;
-    ret_func_unk_D_800ABE10* (*func)(s32, s32) = arg1;
+    unk_func_80017428* temp_v0;
+    unk_func_80017428* (*func)(s32, s32) = arg1;
 
     temp_v0 = func(0, 0);
     temp_v0->unk_14 = arg1;
