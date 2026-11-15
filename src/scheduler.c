@@ -265,9 +265,9 @@ void Sched_HandleRetrace(void) {
     D_800A9710.time = osGetTime();
     D_800A9710.retraceCount++;
 
-    if ((D_800A9710.preNmiFrames > 0) && (D_800A9710.preNmiFrames < 0x1E)) {
+    if ((D_800A9710.preNmiFrames > 0) && (D_800A9710.preNmiFrames < 30)) {
         D_800A9710.preNmiFrames++;
-        if (D_800A9710.preNmiFrames == 0x1A) {
+        if (D_800A9710.preNmiFrames == 26) {
             osAfterPreNMI();
         }
     }

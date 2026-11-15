@@ -332,10 +332,10 @@ extern u8 D_1003880[];
 void Ui_DrawTextureMarker(s32 x, s32 y) {
     if (StageContext_IsHighResolution() != 0) {
         gSPDisplayList(gDisplayListHead++, D_80060290);
-        Gfx_DrawTextureRgba16(x, y, 0x20, 0x16, D_10031C0, 0x20, 0x200000);
+        Gfx_DrawTextureRgba16(x, y, 0x20, 22, D_10031C0, 0x20, 0x200000);
     } else {
         gSPDisplayList(gDisplayListHead++, D_80060308);
-        Gfx_DrawTextureRgba16Ia8(x, y, 0xC, 0xA, D_1003740, D_1003880, 0x10, 0x100000);
+        Gfx_DrawTextureRgba16Ia8(x, y, 12, 10, D_1003740, D_1003880, 0x10, 0x100000);
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);

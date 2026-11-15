@@ -373,21 +373,21 @@ void Save_DrawGbReportErrorScreen(s32 arg0) {
 
     BgStage_DrawFrame();
     GfxImage_FillCurrent(&gDisplayListHead, 1);
-    Ui_DrawGradientPanel(0x90, 0x64, 0x160, 0xC8, &sp2C, &sp28);
+    Ui_DrawGradientPanel(144, 100, 352, 200, &sp2C, &sp28);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, -2);
-    Font_Printf(0xB0, 0xB4, D_8007B7D0);
-    Font_Printf(0xB0, 0xD0, D_8007B7E0);
-    Font_Printf(0xB0, 0xEC, D_8007B804);
-    Font_Printf(0xB0, 0x108, D_8007B824);
+    Font_Printf(176, 180, D_8007B7D0);
+    Font_Printf(176, 208, D_8007B7E0);
+    Font_Printf(176, 236, D_8007B804);
+    Font_Printf(176, 264, D_8007B824);
     Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF); // #FFFF00
-    Font_Printf(0x12E, 0xB4, D_8007B844);
+    Font_Printf(302, 180, D_8007B844);
     if (arg0 == 2) {
         Font_SetActive(0x10, -2);
-        Font_Printf(0xBC, 0x84, D_8007B858);
+        Font_Printf(188, 132, D_8007B858);
     } else if (arg0 == 3) {
-        Font_Printf(0xB0, 0x74, D_8007B874);
-        Font_Printf(0xB0, 0x90, D_8007B894);
+        Font_Printf(176, 116, D_8007B874);
+        Font_Printf(176, 144, D_8007B894);
     }
     Font_EndTexturedTextRendering();
     BgStage_AdvanceFrame();
@@ -411,10 +411,10 @@ void Save_DrawReportingScreen(void) {
 
     BgStage_DrawFrame();
     GfxImage_FillCurrent(&gDisplayListHead, 1);
-    Ui_DrawGradientPanel(0x90, 0x96, 0x160, 0x38, &sp2C, &sp28);
+    Ui_DrawGradientPanel(144, 150, 352, 56, &sp2C, &sp28);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(0x10, -2);
-    Font_Printf(0xDD, 0xA6, D_8007B8B4);
+    Font_Printf(221, 166, D_8007B8B4);
     Font_EndTexturedTextRendering();
     BgStage_AdvanceFrame();
 }

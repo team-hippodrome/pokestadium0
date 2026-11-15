@@ -1680,7 +1680,7 @@ void GeoRender_RecordAnchorPosition(s32 arg0) {
     ModelAnchor* ptr;
 
     if (D_8006049C != NULL) {
-        if (D_8006049C->anchorCount < 0xC) {
+        if (D_8006049C->anchorCount < 12) {
             ptr = &D_8006049C->anchors[D_8006049C->anchorCount++];
             temp_a1 = &D_800AB460.unk_0000[D_800AB460.unk_10A0];
 

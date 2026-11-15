@@ -296,9 +296,9 @@ StageContext* StageContext_Allocate(s8 zoom, s8 arg1, s8 render_target_count, s8
 
     if (temp_v0 != NULL) {
         if (zoom == 1) {
-            temp_v0->width = 0x280, temp_v0->height = 0x1E0;
+            temp_v0->width = 640, temp_v0->height = 480;
         } else {
-            temp_v0->width = 0x140, temp_v0->height = 0xF0;
+            temp_v0->width = 320, temp_v0->height = 240;
         }
 
         temp_v0->fadeMode = 1;

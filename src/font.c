@@ -315,7 +315,7 @@ void Font_EnableNewlines(void) {
 /** Begins rendering text with translucency. */
 void Font_BeginTranslucentTextRendering(void) {
     font_context->line_break_flag = 0;
-    font_context->line_height = 0x28;
+    font_context->line_height = 40;
     font_context->unk_4C = 0;
 
     gSPDisplayList(gDisplayListHead++, D_80060950);
