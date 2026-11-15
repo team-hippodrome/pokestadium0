@@ -1,3 +1,4 @@
+/* Declarations for src/jpeg_decoder.c. */
 #ifndef JPEG_DECODER_H
 #define JPEG_DECODER_H
 
@@ -23,8 +24,8 @@ typedef struct JpegWork {
     /* 0x220 */ JpegQuantizationTable qTableY;
     /* 0x2A0 */ JpegQuantizationTable qTableU;
     /* 0x320 */ JpegQuantizationTable qTableV;
-    /* 0x3A0 */ u8 codesLengths[0x110];
-    /* 0x4B0 */ u16 codes[0x108];
+    /* 0x3A0 */ u8 codesLengths[272];
+    /* 0x4B0 */ u16 codes[264];
     /* 0x6C0 */ u16 data[4][0x180];
 } JpegWork; // size = 0x12C0
 
@@ -33,7 +34,7 @@ typedef struct JpegDecoder {
     /* 0x04 */ u8 mode;
     /* 0x05 */ u8 unk_05;
     /* 0x08 */ JpegHuffmanTable* hTablePtrs[4];
-    /* 0x18 */ u8 unk_18;
+    /* 0x18 */ u8 hasRestartMarkers; // @unverified: JpegStreamInfo.hasRestartMarkers (Jpeg_BuildDspInput); not read in Zero
 } JpegDecoder; // size = 0x1C
 
 typedef struct JpegContext {
@@ -54,11 +55,12 @@ typedef struct JpegDecoderState {
     /* 0x04 */ u8 bitIdx;
     /* 0x05 */ u8 dontSkip;
     /* 0x08 */ u32 curWord;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
-    /* 0x10 */ s16 unk_10;
+    /* 0x0C */ s16 dcPredY; // @unverified: previous DC coefficient of Y, passed to Jpeg_DecodeBlock (Jpeg_DecodeMcus)
+    /* 0x0E */ s16 dcPredU; // @unverified: previous DC coefficient of U (Jpeg_DecodeMcus)
+    /* 0x10 */ s16 dcPredV; // @unverified: previous DC coefficient of V (Jpeg_DecodeMcus)
 } JpegDecoderState; // size = 0x14
 
+// jpeg_decoder.c
 s32 Jpeg_DecodeMcus(JpegDecoder*, u16*, s32, u8, JpegDecoderState*);
 s32 Jpeg_DecodeBlock(JpegHuffmanTable*, JpegHuffmanTable*, u16*, s16*);
 s32 Jpeg_DecodeHuffmanSymbol(JpegHuffmanTable*, s16*, s8*);

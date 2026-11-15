@@ -1,39 +1,40 @@
-#ifndef _FRAGMENT64_H_
-#define _FRAGMENT64_H_
+/* Declarations for the battle_order_select fragment (src/fragments/battle_order_select/). */
+#ifndef FRAGMENT_BATTLE_ORDER_SELECT_H
+#define FRAGMENT_BATTLE_ORDER_SELECT_H
 
 #include "global.h"
-#include "src/game_state.h"
+#include "game_state.h"
 
-typedef struct unk_D_84803760 {
-    /* 0x00 */ s8 unk_00;
-    /* 0x01 */ s8 unk_01;
-    /* 0x02 */ s8 unk_02[6];
-    /* 0x08 */ s8 unk_08[6];
-    /* 0x0E */ s8 unk_0E;
-    /* 0x0F */ s8 unk_0F;
-} unk_D_84803760; // size = 0x10
+typedef struct OrderSidebarIcons {
+    /* 0x00 */ s8 iconCount; // pick balls so far; BattleMenu_AddSidebarPickBall appends at this index (0 after L in play)
+    /* 0x01 */ s8 isCom; // the single trainer's isHuman has bit 1 set (2 = COM); selects the COM badge, seen on side 1
+    /* 0x02 */ s8 slotIcons[6]; // per pick slot: high nibble picking port + 1, low nibble grow frame 0-3 (0x13 after 1P's pick); -1 marks slots 3-5 unused under tournament rules
+    /* 0x08 */ s8 slotIconGrowth[6]; // 1 grow, -1 shrink (all -1 after L in play), passed to BattleMenu_DrawSidebarPickBall
+    /* 0x0E */ s8 firstPort; // lower controller port of the side's trainers (0 for 1P in play)
+    /* 0x0F */ s8 secondPort; // the other tag partner's port, -1 without one (-1 in play)
+} OrderSidebarIcons; // size = 0x10
 
-typedef struct unk_D_848037A0 {
-    /* 0x0000 */ s8 unk_0000;
-    /* 0x0001 */ s8 unk_0001;
-    /* 0x0002 */ s8 unk_0002;
-    /* 0x0003 */ s8 unk_0003;
-    /* 0x0004 */ char unk0004[1];
-    /* 0x0005 */ s8 unk_0005;
-    /* 0x0006 */ s8 unk_0006;
-    /* 0x0007 */ s8 unk_0007;
-    /* 0x0008 */ s8 unk_0008;
-    /* 0x0009 */ s8 unk_0009;
-    /* 0x000A */ s8 unk_000A;
-    /* 0x000B */ s8 unk_000B;
-    /* 0x000C */ s8 unk_000C[6];
-    /* 0x0012 */ s16 unk_0012;
-    /* 0x0014 */ s16 unk_0014;
-    /* 0x0016 */ s8 unk_0016;
-    /* 0x0017 */ s8 unk_0017;
-    /* 0x0018 */ BattleMon* unk_0018;
-    /* 0x001C */ TeamRoster* unk_001C;
-} unk_D_848037A0; // size = 0x20
+typedef struct OrderSelectPanel {
+    /* 0x00 */ s8 panelIndex; // index in D_82302B48, set by BattleMenu_AddOrderSelectPanel (0 1P, 1 COM in play)
+    /* 0x01 */ s8 controllerPort; // copied from the roster's controllerPort (0 for 1P, 1 for COM in play)
+    /* 0x02 */ s8 partnerPanelIndex; // -1 for none (both panels of a COM Free Battle); a tag partner's panel is reset with this one
+    /* 0x03 */ s8 sidebarTeam; // which sidebar column (team 0/1) gets the pick icons; with 1P's poked to 1 its first pick put no ball in the 1P column
+    /* 0x04 */ char unk04[0x1];
+    /* 0x05 */ s8 state; // 0 picking, 1 confirm prompt, 2 level-sum notice, 3 ready (じゅんび かんりょう！, "Ready!", on the COM panel)
+    /* 0x06 */ s8 redrawFrames; // set to 2 on every change and counted down while BattleMenu_DrawOrderSelectPanel redraws the panel
+    /* 0x07 */ s8 popupEraseFrames; // frames left repainting the prompt box with the background (set to 2 while a prompt shows); erased the closed level-sum notice in play
+    /* 0x08 */ s8 readyBlinkTimer; // @unverified: 0..0x3C cycle that pulses a tag-team panel's ready text (tag teams not seen in play)
+    /* 0x09 */ s8 highlightPicks; // 1 while R (かくにん, "Check") is held: picked names turn yellow
+    /* 0x0A */ s8 confirmCursor; // at the これで いいですか？ (OK?) prompt: 0 はい (Yes), 1 えらびなおす (pick again); D-Right/D-Left toggled it in play
+    /* 0x0B */ s8 pickCount; // Pokémon picked so far (2 after B and C-Left)
+    /* 0x0C */ s8 pickedSlots[6]; // party slots in pick order (B 0, C-Left 1, C-Up 2, A 3, C-Down 4, C-Right 5)
+    /* 0x12 */ s16 x; // panel position given to BattleMenu_AddOrderSelectPanel (1P's panel 0x50, 0x21)
+    /* 0x14 */ s16 y;
+    /* 0x16 */ s8 candidateCount; // rosterInfo->numberOfPokemonCanBePicked (6)
+    /* 0x17 */ char unk17[0x1];
+    /* 0x18 */ BattleMon* candidates; // rosterInfo->battleMon
+    /* 0x1C */ TeamRoster* roster;
+} OrderSelectPanel; // size = 0x20
 
 typedef struct unk_D_848035FC {
     /* 0x00 */ Color_RGB8 unk_00;
@@ -45,41 +46,53 @@ typedef struct unk_D_84803548 {
     /* 0x02 */ u16 unk_02;
 } unk_D_84803548; // size = 0x4
 
+#define BTN_L           0x0020
+
+#define BTN_R           0x0010
+
+#define BTN_CUP         0x0008
+
+#define BTN_CDOWN       0x0004
+
+#define BTN_CLEFT       0x0002
+
+#define BTN_CRIGHT      0x0001
+
+#include "controller.h"
+
+// battle_order_select.c
 void BattleMenu_DrawBottomActionButtons(void);
-void BattleMenu_DrawScrollingRulesText(void);
-void BattleMenu_InitTeamOrderState(unk_D_84803760* arg0, BattleSessionTeams* arg1, s32 arg2);
-void BattleMenu_DrawSidebarLeadIcon(s32 arg0, s32 arg1, unk_D_84803760* arg2);
-s32 BattleMenu_DrawSidebarRowTypeIcon(s32 arg0, s32 arg1, s8 arg2, s8 arg3);
+void BattleMenu_DrawScrollingInstructionPanel(void);
+void BattleMenu_InitOrderSidebar(OrderSidebarIcons* sidebar, BattleSide* side, s32 rule_category);
+void BattleMenu_DrawSidebarTrainerBadge(s32 x, s32 y, OrderSidebarIcons* sidebar);
+s32 BattleMenu_DrawSidebarPickBall(s32 x, s32 y, s8 icon, s8 growth);
 void BattleMenu_DrawTeamOrderSidebarTeam0(void);
 void BattleMenu_DrawTeamOrderSidebarTeam1(void);
-void BattleMenu_AppendOrderSlotIcon(s32 arg0, s32 arg1);
-void BattleMenu_ResetOrderSlotIcons(s32 arg0);
-void BattleMenu_DrawBorderedPanel(s16 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
-void BattleMenu_DrawOrderSelectPanel_PartyGrid(unk_D_848037A0* arg0);
-void BattleMenu_DrawCursorArrow(s16 arg0, s16 arg1, s16 arg2);
-void BattleMenu_DrawOrderSelectPanel_ConfirmPrompt(unk_D_848037A0* arg0);
-void BattleMenu_DrawOrderSelectPanel_LevelCapNotice(unk_D_848037A0* arg0);
-void BattleMenu_DrawOrderSelectPanel_Ready(unk_D_848037A0* arg0);
-void BattleMenu_DrawOrderSelectPanel_MonDetail(unk_D_848037A0* arg0);
-void BattleMenu_DrawConfirmButtonLabel(unk_D_848037A0* arg0);
-void BattleMenu_DrawOrderSelectPanel(unk_D_848037A0* arg0);
-void BattleMenu_UpdateComPanelAutoInput(void);
-s32 BattleMenu_IsSlotAlreadySelected(unk_D_848037A0* arg0, s8 arg1);
-s32 BattleMenu_PicksExceedLevelCap(unk_D_848037A0* arg0);
-s32 BattleMenu_IsOrderSelectionComplete(unk_D_848037A0* arg0);
-void BattleMenu_SelectOrderSlot(unk_D_848037A0* arg0, s8 arg1, s32 arg2);
-void BattleMenu_UndoLastOrderSelection(unk_D_848037A0* arg0);
-void BattleMenu_HandleOrderSelectPanel_PartyInput(Controller* arg0, unk_D_848037A0* arg1);
-void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* arg0, unk_D_848037A0* arg1);
-void BattleMenu_HandleOrderSelectPanel_LevelCapNoticeInput(Controller* arg0, unk_D_848037A0* arg1);
-void BattleMenu_HandleOrderSelectPanel_MonDetailInput(Controller* arg0, unk_D_848037A0* arg1);
-s32 BattleMenu_UpdateOrderSelectPanel(s32 arg0, unk_D_848037A0* arg1);
-s32 BattleMenu_UpdateOrderSelect(s32 arg0);
-void BattleMenu_RearrangeLeadPokemon(BattleSessionTeams* arg0, unk_D_84803760* arg1);
-void BattleMenu_FillDefaultOrder(s8* arg0, s32 arg1);
+void BattleMenu_AddSidebarPickBall(s32 sidebar_team, s32 controller_port);
+void BattleMenu_ShrinkSidebarPickBalls(s32 sidebar_team);
+void BattleMenu_DrawPanelBorder(s16 x, s16 y, s16 width, s16 height, s16 controller_port);
+void BattleMenu_DrawOrderSelectPartyGrid(OrderSelectPanel* panel);
+void BattleMenu_DrawOrderSelectConfirmPrompt(OrderSelectPanel* panel);
+void BattleMenu_DrawLevelSumOverNotice(OrderSelectPanel* panel);
+void BattleMenu_DrawOrderSelectPanel_Ready(OrderSelectPanel* panel);
+void BattleMenu_DrawTrainerNameLabel(OrderSelectPanel* panel);
+void BattleMenu_DrawOrderSelectPanel(OrderSelectPanel* panel);
+void BattleMenu_FeedScriptedComOrderInput(void);
+s32 BattleMenu_IsSlotAlreadySelected(OrderSelectPanel* panel, s8 slot);
+s32 BattleMenu_OrderExceedsLevelSumLimit(OrderSelectPanel* panel);
+s32 BattleMenu_IsOrderComplete(OrderSelectPanel* panel);
+void BattleMenu_PickOrderSlot(OrderSelectPanel* panel, s8 slot);
+void BattleMenu_UndoSelections(OrderSelectPanel* panel);
+void BattleMenu_HandleOrderSelectPanel_PartyInput(Controller* cont, OrderSelectPanel* panel);
+void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* cont, OrderSelectPanel* panel);
+void BattleMenu_HandleLevelSumNoticeInput(Controller* cont, OrderSelectPanel* panel);
+s32 BattleMenu_UpdateOrderSelectPanel(s32 fade_mode, OrderSelectPanel* panel);
+s32 BattleMenu_UpdateOrderSelect(s32 fade_mode);
+void BattleMenu_SetLeadTagTeamMember(BattleSide* side, OrderSidebarIcons* sidebar);
+void BattleMenu_AppendUnpickedSlots(s8* order, s32 count);
 void BattleMenu_CommitOrderSelection(void);
-void BattleMenu_AddOrderSelectPanel(s16 arg0, s16 arg1, TeamRoster* arg2, s32 arg3, s32 arg4);
-void BattleMenu_InitOrderSelectPanels(SessionContext* arg0);
-s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 arg1);
+void BattleMenu_AddOrderSelectPanel(s16 x, s16 y, TeamRoster* roster, s32 sidebar_team, s32 partner_panel_index);
+void BattleMenu_InitOrderSelectPanels(SessionContext* session);
+s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 session);
 
-#endif // _FRAGMENT64_H_
+#endif // FRAGMENT_BATTLE_ORDER_SELECT_H

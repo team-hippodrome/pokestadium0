@@ -2,30 +2,22 @@
 /* C ported from the Stadium 1 decomp: src/dp_intro.c, src/game_state.c. */
 
 #include "game_state.h"
-#include "functions.h"
-#include "input.h"
-#include "save_data.h"
-#include "audio_commands.h"
-#include "gallery.h"
-#include "gb_data.h"
-#include "jpeg_stream.h"
+#include "asset_archive.h"
+#include "audio_music.h"
+#include "font.h"
+#include "gb_player.h"
+#include "gb_player_launch.h"
 #include "gfx_buffer.h"
-#include "DDC0.h"
-#include "session.h"
-#include "save_data.h"
-#include "minigame_dispatch.h"
-#include "gb_save.h"
-#include "gb_tower_audio.h"
-#include "leo.h"
-#include "display_object_textures.h"
-#include "pokemon_stats.h"
-#include "controller.h"
-#include "dp_intro.h"
-#include "gb_tower.h"
-#include "memory.h"
-#include "rsp.h"
-#include "stage_loader.h"
 #include "graphics_textures.h"
+#include "leo.h"
+#include "matrix.h"
+#include "memory_main.h"
+#include "menu.h"
+#include "pokemon_stats.h"
+#include "rsp.h"
+#include "save_data.h"
+#include "stage_loader.h"
+#include "functions.h"
 #include "lib/ultralib/include/PR/os_internal_reg.h"
 extern u16 D_8006BBB0[16][256];
 extern s32 pad_D_80075660;
@@ -33,42 +25,22 @@ extern s32 pad_D_80075664;
 extern s32 gCurrentGameState;
 extern s32 gLastGameState;
 extern s32 pad_D_80075670;
-extern s16 D_800733D4;
-extern s16 D_800733D8;
+extern s16 gActiveGbPort;
+extern s16 gActiveGbPortChanged;
 extern unk_D_800AE520 D_800AF990;
 extern s32 pad_D_800AE534[2];
-extern SessionContext gSessionContext;
-typedef struct SessionBlock {
-    /* 0x0000 */ s8 unk_0000;
-    /* 0x0001 */ s8 unk_0001;
-    /* 0x0002 */ s8 unk_0002;
-    /* 0x0003 */ s8 unk_0003;
-    /* 0x0004 */ u8 unk_0004[0x1038];
-    /* 0x103C */ TeamRoster* unk_103C;
-    /* 0x1040 */ u8 unk_1040[0x54];
-    /* 0x1094 */ u8 unk_1094;
-    /* 0x1095 */ u8 unk_1095;
-    /* 0x1096 */ u16 unk_1096;
-} SessionBlock; // size = 0x1098
-SessionBlock D_800AE8F0;
+SessionContext gSessionContext;
 
 #include "global.h"
 #include <PR/os_internal_reg.h>
-#include "dp_intro.h"
-#include "scheduler.h"
-#include "gfx_rect.h"
-#include "crash_screen.h"
-#include "profiler.h"
-#include "memory.h"
 extern u64 F3DEX2_data_bin[];
-extern s32 D_800733F0;
-extern UnkStruct80083CA0_2 D_800870A0;
+extern s32 sImageGridDisplayList;
 extern u64 D_80087B88[0x100 / sizeof(u64)];
 extern u64 D_80087C88[0x408 / sizeof(u64)];
 extern u64 D_80088090[0xC08 / sizeof(u64)];
 extern u64 D_80088C98[0x20000 / sizeof(u64)];
 void Display_ClearFramebufferLine(u16 color);
-void Display_SetBufferConfig(struct UnkArray4* arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, s32 arg5, s32 arg6, s32 arg7);
+void Display_SetBufferConfig(DisplayFrame* arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, s32 arg5, s32 arg6, s32 arg7);
 
 #include "m2c_macros.h"
 
@@ -78,10 +50,10 @@ TeamRoster* Trainer_GetSlots(void);
 s32 GbSave_GetActivePort(void);
 void GbSave_SetActivePort(s32 arg0);
 void State_N64ddBootUnused(void);
-void func_800268DC(void);
+void Game_UnusedStub(void);
 void Game_ShutdownAndLoadFragment(s32 arg0, s32 arg1);
 void Game_ResetStorageDevice(void);
-void Display_DisableBlackout(void);
+void ImageGrid_Clear(void);
 
 void Display_ClearFramebufferLine(u16 color);
 void Display_WaitForFrames(s32 arg0);
@@ -94,258 +66,261 @@ s32 func_8002057C(s32, s32, s32);                 /* extern */
 extern M2C_UNK D_80065D00;
 extern M2C_UNK D_8007B7B0;
 
-void func_80025540(s8 *arg0, s32 arg1) {
+/**
+ * Fills `mon` with a default level 50 Pokémon of species `species`: Pound only, vitamin-cap stat
+ * experience and DVs, its species name and the default OT name.
+ * Seen in play (2026-11-14): at boot, Session_InitHumanTrainer builds both trainers' demo Pokémon with it
+ * (species 3 for both sides).
+ */
+void Pokemon_CreateDefault(BattleMon *mon, s32 species) {
     u8 *temp_v1;
 
-    M2C_FIELD(arg0, s8 *, 0) = arg1;
-    M2C_FIELD(arg0, s8 *, 4) = 0;
-    M2C_FIELD(arg0, s8 *, 5) = 0;
-    M2C_FIELD(arg0, u8 *, 6) = ((u8 *)&D_80065D00)[arg1 * 0x17 - 0x11];
-    M2C_FIELD(arg0, u8 *, 7) = ((u8 *)&D_80065D00)[arg1 * 0x17 - 0x10];
-    M2C_FIELD(arg0, s8 *, 8) = 0;
-    M2C_FIELD(arg0, s8 *, 9) = 1;
-    M2C_FIELD(arg0, s8 *, 0xA) = 0;
-    M2C_FIELD(arg0, s8 *, 0xB) = 0;
-    M2C_FIELD(arg0, s8 *, 0xC) = 0;
-    M2C_FIELD(arg0, s16 *, 0xE) = 0;
-    M2C_FIELD(arg0, s16 *, 0x14) = 0x6400;
-    M2C_FIELD(arg0, s16 *, 0x16) = 0x6400;
-    M2C_FIELD(arg0, s16 *, 0x18) = 0x6400;
-    M2C_FIELD(arg0, s16 *, 0x1A) = 0x6400;
-    M2C_FIELD(arg0, s16 *, 0x1C) = 0x6400;
-    M2C_FIELD(arg0, u16 *, 0x1E) = 0xFFFF;
-    M2C_FIELD(arg0, s8 *, 0x20) = 0x23;
-    M2C_FIELD(arg0, s8 *, 0x21) = 0;
-    M2C_FIELD(arg0, s8 *, 0x22) = 0;
-    M2C_FIELD(arg0, s8 *, 0x23) = 0;
-    M2C_FIELD(arg0, s32 *, 0x10) = func_8002057C(arg1, 0x32, arg1);
-    func_800203FC(arg0);
-    M2C_FIELD(arg0, u16 *, 2) = M2C_FIELD(arg0, u16 *, 0x26);
-    func_8001FD8C(arg0 + 0x30, arg1);
-    *(Unk5Bytes *)(arg0 + 0x40) = *(Unk5Bytes *)&D_8007B7B0;
+    mon->species.id = species;
+    mon->boxLevel = 0;
+    mon->statusCondition = 0;
+    mon->type1 = ((u8 *)&D_80065D00)[species * 0x17 - 0x11];
+    mon->type2 = ((u8 *)&D_80065D00)[species * 0x17 - 0x10];
+    mon->catchRate = 0;
+    mon->moves[0] = 1;
+    mon->moves[1] = 0;
+    mon->moves[2] = 0;
+    mon->moves[3] = 0;
+    mon->otId = 0;
+    mon->statExp[0] = 25600;
+    mon->statExp[1] = 25600;
+    mon->statExp[2] = 25600;
+    mon->statExp[3] = 25600;
+    mon->statExp[4] = 25600;
+    mon->dvs = 0xFFFF;
+    mon->pp[0] = 35;
+    mon->pp[1] = 0;
+    mon->pp[2] = 0;
+    mon->pp[3] = 0;
+    mon->exp = func_8002057C(species, 50, species);
+    func_800203FC(mon);
+    mon->hp = mon->maxHp;
+    func_8001FD8C(mon->nickname, species);
+    *(Unk5Bytes *)mon->otName = *(Unk5Bytes *)&D_8007B7B0;
 }
 
-typedef struct { s32 w[0x14]; } Unk50Bytes;
+typedef struct { s32 w[20]; } Unk50Bytes;
 extern u8 D_800AAF50[];
 extern M2C_UNK D_8007B7B8;
 
-M2C_UNK func_80025640(M2C_UNK arg0, M2C_UNK *arg1, M2C_UNK *arg2, s32 arg3) {
+/**
+ * Sets up trainer slot `arg1` as a human player on controller port `arg0` with roster info `arg2`.
+ * Seen in play (2026-11-13) ran during boot, before the opening (console reset, then N64 logo,
+ * opening, title and main menu).
+ * @unverified Name and comment guessed from the code.
+ */
+M2C_UNK Session_InitHumanTrainer(M2C_UNK port, TeamRoster *trainer, ExtendedRosterInfo *roster_info, s32 species) {
 
-    M2C_FIELD(arg1, s8 *, 0) = 1;
-    M2C_FIELD(arg1, s8 *, 1) = arg0;
-    M2C_FIELD(arg1, u8 **, 4) = D_800AAF50 + arg0 * 0x24;
-    M2C_FIELD(arg1, s32 *, 0x18) = 0;
-    M2C_FIELD(arg1, s8 **, 0x1FC) = (s8 *)arg2;
-    M2C_FIELD(arg1, s8 *, 2) = 1;
-    *(Unk5Bytes *)((s8 *)arg1 + 8) = *(Unk5Bytes *)&D_8007B7B8;
-    func_80025540((s8 *)arg1 + 0x1C, arg3);
-    M2C_FIELD(arg2, s16 *, 0) = 0;
-    M2C_FIELD(arg2, s8 *, 2) = 1;
-    M2C_FIELD(arg2, s8 *, 3) = 0;
-    M2C_FIELD(arg2, s8 *, 4) = 0;
-    M2C_FIELD(arg2, s8 *, 0x14) = 0;
-    *(Unk50Bytes *)((s8 *)arg2 + 0x28) = *(Unk50Bytes *)((s8 *)arg1 + 0x1C);
+    trainer->isHuman = 1;
+    trainer->controllerPort = port;
+    trainer->controller = (Controller *)(D_800AAF50 + port * 0x24);
+    trainer->trainerId = 0;
+    trainer->rosterInfo = roster_info;
+    trainer->numberOfPokemonBrought = 1;
+    *(Unk5Bytes *)trainer->trainerName = *(Unk5Bytes *)&D_8007B7B8;
+    Pokemon_CreateDefault(&trainer->pokemonPicked[0], species);
+    roster_info->unk_000 = 0;
+    roster_info->numberOfPokemonCanBePicked = 1;
+    roster_info->trainerIndex = 0;
+    roster_info->title[0] = 0;
+    roster_info->fullName[0] = 0;
+    roster_info->battleMon[0] = trainer->pokemonPicked[0];
 }
 
-void func_8002572C(s8 *arg0, s32 arg1) {
-    M2C_FIELD(arg0, s8 *, 0) = 0;
-    M2C_FIELD(arg0, s8 *, 1) = 1;
-    M2C_FIELD(arg0, s16 *, 2) = 0;
-    M2C_FIELD(arg0, s32 *, 4) = 0;
-    M2C_FIELD(arg0, s32 *, 0x14) = 0;
-    M2C_FIELD(arg0, s32 *, 8) = arg1;
-    M2C_FIELD(arg0, s32 *, 0xC) = 0;
-    M2C_FIELD(arg0, s8 *, 0x1D) = 0;
-    M2C_FIELD(arg0, s32 *, 0x20) = 0;
+/**
+ * Resets battle side `side` to one trainer, `trainer`, with no model loaded and no tag team.
+ * Seen in play (2026-11-14): at boot, Session_InitTwoTrainers sets up both sides with it.
+ */
+void BattleSide_InitSingleTrainer(BattleSide *side, TeamRoster *trainer) {
+    side->modelFlags = 0;
+    side->tagTeamSize = 1;
+    side->displayModel = 0;
+    side->displayMon = NULL;
+    side->loadedModel = NULL;
+    side->teamMember[0] = trainer;
+    side->teamMember[1] = NULL;
+    side->backgroundLoadFlags = 0;
+    side->backgroundFileList = 0;
 }
 
-M2C_UNK func_80025640(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
-extern M2C_UNK D_800AE8F4;
-extern M2C_UNK D_800AEAF8;
-typedef struct { s16 unk_00; u8 unk_02; u8 unk_03; } Unk800AF104;
-extern Unk800AF104 D_800AF104;
-extern M2C_UNK D_800AF30C;
-extern M2C_UNK D_800AF924;
-extern M2C_UNK D_800AF94C;
+M2C_UNK Session_InitHumanTrainer(M2C_UNK, TeamRoster *, ExtendedRosterInfo *, s32);
 
-M2C_UNK func_80025758(M2C_UNK arg0, M2C_UNK arg1, M2C_UNK arg2) {
-    M2C_FIELD(&D_800AE8F0, s8 *, 0) = arg0;
-    M2C_FIELD(&D_800AE8F0, s8 *, 1) = 1;
-    M2C_FIELD(&D_800AE8F0, s8 *, 3) = 1;
-    func_80025640(0, &D_800AE8F4, (M2C_UNK *)&D_800AF104, arg1);
-    func_80025640(1, &D_800AEAF8, &D_800AF30C, arg2);
-    func_8002572C((s8 *)&D_800AF924, (s32)&D_800AE8F4);
-    func_8002572C((s8 *)&D_800AF94C, (s32)&D_800AEAF8);
+/**
+ * Sets the session mode to `arg0` and sets up both trainer slots and battle sides.
+ * Seen in play (2026-11-13) ran during boot, before the opening (console reset, then N64 logo,
+ * opening, title and main menu).
+ * @unverified Name and comment guessed from the code.
+ */
+M2C_UNK Session_InitTwoTrainers(M2C_UNK mode, M2C_UNK species1, M2C_UNK species2) {
+    gSessionContext.mode = mode;
+    gSessionContext.ruleCategory = 1;
+    gSessionContext.roundOrDemoId = 1;
+    Session_InitHumanTrainer(0, &gSessionContext.trainerSlots[0], &gSessionContext.rosterInfo[0], species1);
+    Session_InitHumanTrainer(1, &gSessionContext.trainerSlots[1], &gSessionContext.rosterInfo[1], species2);
+    BattleSide_InitSingleTrainer(&gSessionContext.battleSides[0], &gSessionContext.trainerSlots[0]);
+    BattleSide_InitSingleTrainer(&gSessionContext.battleSides[1], &gSessionContext.trainerSlots[1]);
 }
 
 /*
- * func_800257F0
+ * Session_LoadPortSnapshot
  *
  * If arg0 is a valid controller-port index (0 to 3), copies that port's
- * save snapshot into the buffer at D_800AF9A8 with GbSave_CopyPortSnapshot
+ * save snapshot into the buffer at gSessionGbSnapshot with GbSave_CopyPortSnapshot
  * (its return value is ignored).  Otherwise the first byte of the buffer is
- * cleared.  The buffer is the destination that func_80025830 later passes on
- * as its second argument to func_80025260.
+ * cleared.  The buffer is the destination that Tournament_SaveContinueData later passes on
+ * as its second argument to Save_WriteContinueData.
  */
-extern GbSavePortSnapshot D_800AF9A8;
+extern GbSavePortSnapshot gSessionGbSnapshot;
 
-void func_800257F0(s32 arg0) {
-    if ((arg0 >= 0) && (arg0 < 4)) {
-        GbSave_CopyPortSnapshot(arg0, &D_800AF9A8);
+/**
+ * Copies the GB save snapshot of port `arg0` into the session; clears it for an invalid port.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name and comment guessed from the code.
+ */
+void Session_LoadPortSnapshot(s32 port) {
+    if ((port >= 0) && (port < 4)) {
+        GbSave_CopyPortSnapshot(port, &gSessionGbSnapshot);
         return;
     }
-    D_800AF9A8.unk_000 = 0;
+    gSessionGbSnapshot.gameType = 0;
 }
 
-typedef struct ContinueDataZ {
-    /* 0x00 */ u8 mode;
-    /* 0x01 */ u8 modeSelection;
-    /* 0x02 */ u8 round;
-    /* 0x03 */ u8 pad03;
-    /* 0x04 */ u8 opponentHistory[8];
-} ContinueDataZ; // size = 0xC
-extern M2C_UNK D_800AF974;
-void func_80025260(ContinueDataZ* arg0, void* arg1, BattleMon* arg2, s32 arg3);
 
-void func_80025830(void) {
-    ContinueDataZ sp1C;
-    ExtendedRosterInfo* info = (*(TeamRoster**)((u8*)&gSessionContext + 0x103C))->rosterInfo;
+/**
+ * Saves the current tournament (mode, cup, next round, opponents, team, GB snapshot) to the continue
+ * record and commits it.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): ran on ちゅうだんする (Suspend) at トーナメントをつづけますか？ ("Continue the tournament?")
+ */
+void Tournament_SaveContinueData(void) {
+    SaveContinueSession sp1C;
+    ExtendedRosterInfo* info = gSessionContext.battleSides[0].teamMember[0]->rosterInfo;
 
     sp1C.mode = gSessionContext.mode;
     sp1C.modeSelection = gSessionContext.modeSelection;
     sp1C.round = gSessionContext.roundOrDemoId + 1;
-    _bcopy(&D_800AF974, sp1C.opponentHistory, 8);
-    func_80025260(&sp1C, &D_800AF9A8, info->unk_028, info->numberOfPokemonCanBePicked);
+    _bcopy(gSessionContext.opponentHistory, sp1C.opponentHistory, 8);
+    Save_WriteContinueData(&sp1C, &gSessionGbSnapshot, info->battleMon, info->numberOfPokemonCanBePicked);
     Save_CommitTypedRecord(0x15, 0);
 }
 
 M2C_UNK func_80058410();
-extern M2C_UNK D_800AF974;
-extern M2C_UNK D_800AFB10;
-extern M2C_UNK D_800AFB14;
+extern SaveContinueSession gContinueSession;
 
-void func_800258B4(void) {
-    M2C_FIELD(&D_800AE8F0, u8 *, 0) = (u8) M2C_FIELD(&D_800AFB10, u8 *, 0);
-    M2C_FIELD(&D_800AE8F0, u8 *, 1) = (u8) M2C_FIELD(&D_800AFB10, u8 *, 0);
-    M2C_FIELD(&D_800AE8F0, u8 *, 2) = (u8) M2C_FIELD(&D_800AFB10, u8 *, 1);
-    M2C_FIELD(&D_800AE8F0, u8 *, 3) = (u8) M2C_FIELD(&D_800AFB10, u8 *, 2);
-    func_80058410(&D_800AFB14, &D_800AF974, 8, &D_800AFB10);
+/**
+ * Copies the mode, cup, round and opponent history of a saved tournament (gContinueSession, read by
+ * Tournament_LoadContinueData) back into gSessionContext.
+ * State_Battle calls it when the session is flagged as resumed.
+ * @unverified Name and comment read from the code; not reached in play.
+ */
+void Session_RestoreContinueSession(void) {
+    gSessionContext.mode = (u8) gContinueSession.mode;
+    gSessionContext.ruleCategory = (u8) gContinueSession.mode;
+    gSessionContext.modeSelection = (u8) gContinueSession.modeSelection;
+    gSessionContext.roundOrDemoId = (u8) gContinueSession.round;
+    func_80058410(gContinueSession.opponentHistory, gSessionContext.opponentHistory, 8, &gContinueSession);
 }
 
 typedef struct { u8 b[3]; } Unk3Bytes;
 typedef struct { u8 b[11]; } Unk11Bytes;
 M2C_UNK func_8000A460(M2C_UNK *, M2C_UNK *);
-s32 func_80022C70(s16);
-M2C_UNK func_80022D84(s16, M2C_UNK *);
-extern s32 D_800603C0;
-extern s16 D_800733D4;
+s32 GbSave_GetTrainerId(s32 arg0);
+extern s16 gActiveGbPort;
 extern M2C_UNK D_8007B7C0;
 extern M2C_UNK D_8007B7C4;
 
-extern s32 D_800AE90C;
-extern M2C_UNK D_800AE910;
-extern M2C_UNK D_800AF108;
-extern M2C_UNK D_800AF118;
-extern M2C_UNK D_800AF12C;
-extern s8 D_800AE8F6;
 
-void func_80025910(s32 arg0)
+/**
+ * Sets up trainer slot 0 for a resumed tournament: human on port 0, its saved team copied into the
+ * roster. `isGbTeam` is the first byte of the saved GB snapshot: when it is set and the GB pak is on
+ * port 0, the trainer ID and name come from the cartridge, otherwise the default name is used.
+ * @unverified Name and comment read from the code; not reached in play.
+ */
+void Session_InitContinueTrainer(s32 is_gb_team)
 {
-  s8 *st = (s8 *) (&D_800AE8F0);
-  *((s8 *) (st + 4)) = 1;
-  *((s8 *) (st + 5)) = 0;
-  *((s32 *) (st + 8)) = D_800603C0;
-  *((s8 **) (st + 0x200)) = st + 0x814;
-  if ((arg0 != 0) && (D_800733D4 == 0))
+  SessionContext *st = &gSessionContext;
+  st->trainerSlots[0].isHuman = 1;
+  st->trainerSlots[0].controllerPort = 0;
+  st->trainerSlots[0].controller = gPlayer1Controller;
+  st->trainerSlots[0].rosterInfo = &st->rosterInfo[0];
+  if ((is_gb_team != 0) && (gActiveGbPort == 0))
   {
-    (*((s32 *) (st + 0x1C))) = func_80022C70(D_800733D4);
-    func_80022D84(D_800733D4, (st + 0xC));
+    st->trainerSlots[0].trainerId = GbSave_GetTrainerId(gActiveGbPort);
+    GbSave_GetPlayerName(gActiveGbPort, (M2C_UNK *) st->trainerSlots[0].trainerName);
   }
   else
   {
-    (*((s32 *) (st + 0x1C))) = 0;
-    *((Unk3Bytes *) ((st + 0xC))) = *((Unk3Bytes *) (&D_8007B7C0));
+    st->trainerSlots[0].trainerId = 0;
+    *((Unk3Bytes *) st->trainerSlots[0].trainerName) = *((Unk3Bytes *) (&D_8007B7C0));
   }
-  *((s16 *) (st + 0x814)) = 0;
-  *((u8 *) (st + 0x816)) = *((u8 *) ((st + 6)));
-  *((u8 *) (st + 0x817)) = 0;
-  func_80058410((st + 0x20), (st + 0x83C), 0x1E0);
-  *((Unk11Bytes *) ((st + 0x818))) = *((Unk11Bytes *) (&D_8007B7C4));
-  func_8000A460((st + 0x828), (st + 0xC));
-  func_8002572C((s8 *) ((st + 0x1034)), (s32) ((st + 4)));
+  st->rosterInfo[0].unk_000 = 0;
+  st->rosterInfo[0].numberOfPokemonCanBePicked = st->trainerSlots[0].numberOfPokemonBrought;
+  st->rosterInfo[0].trainerIndex = 0;
+  func_80058410(st->trainerSlots[0].pokemonPicked, st->rosterInfo[0].battleMon, 0x1E0);
+  *((Unk11Bytes *) st->rosterInfo[0].title) = *((Unk11Bytes *) (&D_8007B7C4));
+  func_8000A460(st->rosterInfo[0].fullName, st->trainerSlots[0].trainerName);
+  BattleSide_InitSingleTrainer(&st->battleSides[0], &st->trainerSlots[0]);
 }
 
-s8 func_800253BC(M2C_UNK *, s8 *, M2C_UNK *);       /* extern */
-void func_80025910(s32);                          /* extern */
+s8 Save_ReadContinueData(M2C_UNK *, s8 *, M2C_UNK *);       /* extern */
+void Session_InitContinueTrainer(s32);                          /* extern */
 s32 func_80057910(s8 *, M2C_UNK *, M2C_UNK);        /* extern */
-extern s8 D_800AE8F6;
-extern M2C_UNK D_800AE910;
 
-/*
- * func_80025A64
- *
- * Clears the byte at D_800AE8F0 + 0x1095, then calls
- * func_800253BC(&D_800AFB10, buf, &D_800AE910) with a 0x162-byte local
- * buffer. If it returns -1 the function returns 0. Otherwise the result is
- * stored to the byte D_800AE8F6 and:
- *  - if buf[0] == 0: calls func_80025910(buf[0]), sets bit 0 of the byte at
- *    D_800AE8F0 + 0x1095, sets the byte at + 0x1094 to 0xFF, calls
- *    func_800257F0(-1) and returns 1;
- *  - otherwise, if D_800733D4 is in 0..3, GbSave_CopyPortSnapshot(D_800733D4,
- *    &D_800AF9A8) is non-zero and func_80057910(buf, &D_800AF9A8, 0x162)
- *    returns 0 (func_80057910 is libultra bcmp, so: the 0x162 bytes of buf
- *    equal the snapshot just copied): calls func_80025910(buf[0]), sets
- *    bit 0 of + 0x1095, stores D_800733D4 at + 0x1094, calls
- *    func_800257F0(D_800733D4) and returns 1;
- *  - in every other case returns 0.
- *
- * What the buffer, D_800AE8F0's fields and the two helpers do is not
- * established. Matching notes: the unused `pad` local sits between the
- * buffer and `ret` as in the ROM's frame (buffer at sp+0x34, ret at sp+0x2C),
- * and the bit-0 update is written before the store of 0xFF to match the
- * ROM's register order.
+/**
+ * Loads the continue record. A rental team is always accepted; a GB team only if the cartridge's
+ * 0x162-byte snapshot is unchanged. Returns 1 and flags the session when the tournament can be resumed.
+ * Matching: the unused pad local sits between the buffer and ret as in the ROM's frame, and the bit-0
+ * update comes before the 0xFF store to match the register order.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): the main menu asked
+ * トーナメントのつづきをする？ ("Continue the tournament?") after a saved round.
  */
-s32 func_80025A64(void) {
-    s8 buf[0x162];
-    UNUSED s32 pad;
+s32 Tournament_LoadContinueData(void) {
+    s8 buf[354];
+    UNUSED s32 pad; // FAKE: stack padding
     s32 ret;
     s8 temp_v0;
 
     ret = 0;
-    M2C_FIELD(&D_800AE8F0, u8 *, 0x1095) = 0U;
-    temp_v0 = func_800253BC(&D_800AFB10, buf, &D_800AE910);
+    gSessionContext.sessionFlags = 0U;
+    temp_v0 = Save_ReadContinueData(&gContinueSession, buf, gSessionContext.trainerSlots[0].pokemonPicked);
     if (temp_v0 != -1) {
-        D_800AE8F6 = temp_v0;
+        gSessionContext.trainerSlots[0].numberOfPokemonBrought = temp_v0;
         if (buf[0] == 0) {
-            func_80025910(buf[0]);
-            M2C_FIELD(&D_800AE8F0, u8 *, 0x1095) = (u8) (M2C_FIELD(&D_800AE8F0, u8 *, 0x1095) | 1);
-            M2C_FIELD(&D_800AE8F0, u8 *, 0x1094) = 0xFF;
-            func_800257F0(-1);
+            Session_InitContinueTrainer(buf[0]);
+            gSessionContext.sessionFlags = (u8) (gSessionContext.sessionFlags | 1);
+            gSessionContext.teamGbPort = 0xFF;
+            Session_LoadPortSnapshot(-1);
             ret = 1;
-        } else if ((D_800733D4 >= 0) && (D_800733D4 < 4) && (GbSave_CopyPortSnapshot(D_800733D4, &D_800AF9A8) != 0) && (func_80057910(buf, &D_800AF9A8, 0x162) == 0)) {
-            func_80025910(buf[0]);
-            M2C_FIELD(&D_800AE8F0, u8 *, 0x1095) = (u8) (M2C_FIELD(&D_800AE8F0, u8 *, 0x1095) | 1);
-            M2C_FIELD(&D_800AE8F0, s8 *, 0x1094) = (s8) D_800733D4;
-            func_800257F0((s32) D_800733D4);
+        } else if ((gActiveGbPort >= 0) && (gActiveGbPort < 4) && (GbSave_CopyPortSnapshot(gActiveGbPort, &gSessionGbSnapshot) != 0) && (func_80057910(buf, &gSessionGbSnapshot, 0x162) == 0)) {
+            Session_InitContinueTrainer(buf[0]);
+            gSessionContext.sessionFlags = (u8) (gSessionContext.sessionFlags | 1);
+            gSessionContext.teamGbPort = (s8) gActiveGbPort;
+            Session_LoadPortSnapshot((s32) gActiveGbPort);
             ret = 1;
         }
     }
     return ret;
 }
 
-s32 Fragment_LoadAndCall(s32 arg0, u8* romStart, u8* romEnd, u32 arg3, u32 arg4) {
+/** Loads a fragment from a ROM range and calls its entry point. */
+s32 Fragment_LoadAndCall(s32 arg0, u8* rom_start, u8* rom_end, u32 arg3, u32 arg4) {
     s32 result;
     FragmentEntry func;
 
-    func = Fragment_Load(arg0, romStart, romEnd);
+    func = Fragment_Load(arg0, rom_start, rom_end);
 
     result = func(arg3, arg4);
 
-    main_pool_try_free(func);
+    MainPool_TryFree(func);
 
     return result;
 }
 
+/** Queues a fragment to be loaded and called by the game state loop. */
 void Fragment_QueueCall(s32 arg0, u8* arg1, u8* arg2, s32 arg3, s32 arg4) {
     D_800AF990.unk_00 = 1;
     D_800AF990.fragment_id = arg0;
@@ -355,18 +330,21 @@ void Fragment_QueueCall(s32 arg0, u8* arg1, u8* arg2, s32 arg3, s32 arg4) {
     D_800AF990.arg1 = arg4;
 }
 
+/** Returns the trainer slots of the session context. */
 TeamRoster* Trainer_GetSlots(void) {
     return gSessionContext.trainerSlots;
 }
 
+/** Returns the controller port of the active Game Boy save. */
 s32 GbSave_GetActivePort(void) {
-    return D_800733D4;
+    return gActiveGbPort;
 }
 
+/** Sets the active Game Boy save port when it is in range. */
 void GbSave_SetActivePort(s32 arg0) {
     if ((arg0 >= 0) && (arg0 < 4)) {
-        D_800733D4 = arg0;
-        D_800733D8 = 1;
+        gActiveGbPort = arg0;
+        gActiveGbPortChanged = 1;
     }
 }
 
@@ -382,28 +360,34 @@ extern char D_8007B858[];
 extern char D_8007B874[];
 extern char D_8007B894[];
 
-void func_80025C0C(s32 arg0) {
+/**
+ * Full-screen Game Boy save error: remove the cartridge, clean the connector and insert it again without turning the power off; "could not save (report)"; "wrong cartridge or the data changed". `arg0` picks the message.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name and comment guessed from the code.
+ */
+void Save_DrawGbReportErrorScreen(s32 arg0) {
     Color_RGB8 sp2C = D_800733DC;
     Color_RGB8 sp28 = D_800733E0;
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
 
     BgStage_DrawFrame();
     GfxImage_FillCurrent(&gDisplayListHead, 1);
-    Ui_DrawGradientPanel(0x90, 0x64, 0x160, 0xC8, &sp2C, &sp28);
+    Ui_DrawGradientPanel(144, 100, 352, 200, &sp2C, &sp28);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, -2);
-    Font_Printf(0xB0, 0xB4, D_8007B7D0);
-    Font_Printf(0xB0, 0xD0, D_8007B7E0);
-    Font_Printf(0xB0, 0xEC, D_8007B804);
-    Font_Printf(0xB0, 0x108, D_8007B824);
-    Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF);
-    Font_Printf(0x12E, 0xB4, D_8007B844);
+    Font_Printf(176, 180, D_8007B7D0);
+    Font_Printf(176, 208, D_8007B7E0);
+    Font_Printf(176, 236, D_8007B804);
+    Font_Printf(176, 264, D_8007B824);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF); // #FFFF00
+    Font_Printf(302, 180, D_8007B844);
     if (arg0 == 2) {
         Font_SetActive(0x10, -2);
-        Font_Printf(0xBC, 0x84, D_8007B858);
+        Font_Printf(188, 132, D_8007B858);
     } else if (arg0 == 3) {
-        Font_Printf(0xB0, 0x74, D_8007B874);
-        Font_Printf(0xB0, 0x90, D_8007B894);
+        Font_Printf(176, 116, D_8007B874);
+        Font_Printf(176, 144, D_8007B894);
     }
     Font_EndTexturedTextRendering();
     BgStage_AdvanceFrame();
@@ -414,17 +398,23 @@ extern Color_RGB8 D_800733E4;
 extern Color_RGB8 D_800733E8;
 extern char D_8007B8B4[];
 
-void func_80025D8C(void) {
+/**
+ * Full-screen レポートちゅうです (Saving...) message.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name and comment guessed from the code.
+ */
+void Save_DrawReportingScreen(void) {
     Color_RGB8 sp2C = D_800733E4;
     Color_RGB8 sp28 = D_800733E8;
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
 
     BgStage_DrawFrame();
     GfxImage_FillCurrent(&gDisplayListHead, 1);
-    Ui_DrawGradientPanel(0x90, 0x96, 0x160, 0x38, &sp2C, &sp28);
+    Ui_DrawGradientPanel(144, 150, 352, 56, &sp2C, &sp28);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(0x10, -2);
-    Font_Printf(0xDD, 0xA6, D_8007B8B4);
+    Font_Printf(221, 166, D_8007B8B4);
     Font_EndTexturedTextRendering();
     BgStage_AdvanceFrame();
 }
@@ -434,77 +424,94 @@ M2C_UNK func_80002620(M2C_UNK);                     /* extern */
 M2C_UNK func_80003EB8(u32, M2C_UNK *, M2C_UNK *, M2C_UNK); /* extern */
 M2C_UNK func_80006724();                            /* extern */
 M2C_UNK func_8000675C();                            /* extern */
-M2C_UNK func_8001A194(M2C_UNK, M2C_UNK);            /* extern */
+s32 Font_Init(s32 load_size, s32 side);            /* extern */
 M2C_UNK func_8001A360();                            /* extern */
-s32 func_80021B30(s32);                             /* extern */
-void func_80025C0C(s32);
-void func_80025D8C(void);
+s32 GbSave_PollCartRemoval(s32);                             /* extern */
+void Save_DrawGbReportErrorScreen(s32);
+void Save_DrawReportingScreen(void);
 extern M2C_UNK D_002E0BE0;
 extern M2C_UNK D_002E2B90;
 extern M2C_UNK D_01000000;
 
-void func_80025E3C(s32 arg0) {
+/**
+ * Pushes the 'GBER' pool state and shows the GB report error screen until the cartridge check passes.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name and comment guessed from the code.
+ */
+void Save_RunGbReportErrorScreen(s32 arg0) {
     M2C_UNK var_s0;
     s32 temp_v0;
 
     var_s0 = 2;
     func_8000256C(0x47424552);
-    func_8001A194(0x18, 0);
+    Font_Init(0x18, 0);
     func_80003EB8((u32) ((s32) &D_01000000 & 0x0F000000) >> 0x18, &D_002E0BE0, &D_002E2B90, 0);
     func_8000675C();
     do {
-        temp_v0 = func_80021B30(arg0);
+        temp_v0 = GbSave_PollCartRemoval(arg0);
         if (temp_v0 == 1) {
             var_s0 = 1;
         }
         if (temp_v0 == 3) {
             var_s0 = 3;
         }
-        func_80025C0C(var_s0);
+        Save_DrawGbReportErrorScreen(var_s0);
     } while (temp_v0 != 2);
-    func_80025D8C();
-    func_80025D8C();
+    Save_DrawReportingScreen();
+    Save_DrawReportingScreen();
     func_80006724();
     func_8001A360();
     func_80002620(0x47424552);
 }
 
-M2C_UNK func_80025758(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
+M2C_UNK Session_InitTwoTrainers(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 M2C_UNK func_80025B60(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, s32); /* extern */
 extern M2C_UNK D_0015F390;
 extern M2C_UNK D_0015F8F0;
 extern M2C_UNK D_0017ED00;
 extern M2C_UNK D_00232510;
-extern s32 D_800733C8;
+extern s32 gNextGameState;
 extern M2C_UNK D_81500000;
 extern M2C_UNK D_82100000;
 
-void func_80025F3C(void) {
+/**
+ * Game state 0x8001: runs the N64 logo fragment, then the opening demo battle (mode 5) in the battle
+ * fragment, and moves on to the title screen (0x8010).
+ * Seen in play (2026-11-14): the first state after reset; it loaded fragment slot 5 (N64 logo) and then
+ * slot 0x11 (battle) with the opening battle on screen.
+ */
+void State_Boot(void) {
     func_80025B60(((u32) ((s32) &D_81500000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015F390, &D_0015F8F0, 0, 0);
-    func_80025758(5, 3, 3);
-    func_80025B60(((u32) ((s32) &D_82100000 & 0x0FF00000) >> 0x14) - 0x10, &D_0017ED00, &D_00232510, 0, (s32) &D_800AE8F0);
-    D_800733C8 = 0x8010;
+    Session_InitTwoTrainers(5, 3, 3);
+    func_80025B60(((u32) ((s32) &D_82100000 & 0x0FF00000) >> 0x14) - 0x10, &D_0017ED00, &D_00232510, 0, (s32) &gSessionContext);
+    gNextGameState = 0x8010;
 }
 
 extern M2C_UNK D_81200000;
 extern M2C_UNK D_0015E220;
 extern s32 D_800AF988;
 
-void State_FastN64Logo(void) {
-    D_800733C8 = func_80025B60(((u32) ((s32) &D_81200000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015E220, &D_0015F390, 0, 0);
-    M2C_FIELD(&D_800AE8F0, u8*, 2) = 0;
-    M2C_FIELD(&D_800AE8F0, s16*, 0x1096) = 0;
-    switch (D_800733C8) {
+/**
+ * Game state 0x8010: runs the title screen fragment (slot 2). It returns 0x8010 to play the attract demo
+ * battle, 0x8020 for Start (to the main menu, 0x8040) or 0xF000 for the 64DD boot.
+ * Seen in play (2026-11-14): runs while ポケモンスタジアム (Pokémon Stadium) / PUSH START is on screen, after the opening.
+ */
+void State_TitleScreen(void) {
+    gNextGameState = func_80025B60(((u32) ((s32) &D_81200000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015E220, &D_0015F390, 0, 0);
+    gSessionContext.modeSelection = 0;
+    gSessionContext.transitionFlags = 0;
+    switch (gNextGameState) {
         case 0x8010:
-            func_80025B60(((u32) ((s32) &D_82100000 & 0x0FF00000) >> 0x14) - 0x10, &D_0017ED00, &D_00232510, 0, (s32) &D_800AE8F0);
+            func_80025B60(((u32) ((s32) &D_82100000 & 0x0FF00000) >> 0x14) - 0x10, &D_0017ED00, &D_00232510, 0, (s32) &gSessionContext);
             break;
         case 0x8020:
-            D_800733D4 = -1;
+            gActiveGbPort = -1;
             D_800AF988 = 0;
-            D_800733C8 = 0x8040;
+            gNextGameState = 0x8040;
             break;
         default:
-            D_800733D4 = 0;
+            gActiveGbPort = 0;
             D_800AF988 = 1;
             break;
     }
@@ -516,86 +523,81 @@ extern u8 D_00162BE0[];
 extern u8 D_00166580[];
 extern u8 D_00235D70[];
 extern u8 D_00238BD0[];
-extern s16 D_800AF986;
 extern StageContext *D_800AF9A4;
-void func_80021A8C(s32);
-s32 func_80021E64(s32);
+s32 GbSave_LoadPort(s32 arg0);
+s32 GbSave_InitializeBoxesAndWrite(s32);
 void GbSave_ValidateBeforeWrite(s32);
 void GbSave_RequirePakPresent(s32);
-s32 func_80022B4C(s32);
+u8 GbSave_GetSaveState(s32 arg0);
 s32 GbSave_GetBoxCount(s32);
-void func_80023C30(void);
-void func_80025E3C(s32);
-//@unverified
+void Save_LoadSram(void);
+void Save_RunGbReportErrorScreen(s32);
 /**
- * Pushes an 'OVLY' pool state, sets up the display lists and a stage context,
- * then queues the fragment at 0x88000000 (if D_800AF988 or session flag 0x100
- * is set; flag 0x100 is set first when flag 1 is on and flag 2 is off) or the
- * one at 0x88400000. It then runs queued fragment calls while D_800733C8 is
- * 0x8040. When D_800733D8 is set and func_80022B4C(port) returns 0, it calls
- * func_80021A8C(port) inside a fresh 'BUDT' pool state (and, if the port has
- * no boxes, validates it and retries func_80021E64 until it succeeds).
+ * Game state 0x8040: loads the save, then runs the queued menu fragments (cartridge check, main menu and
+ * the modes it opens) until one returns a state other than 0x8040. Reloads the GB save when the
+ * active port changes.
+ * Seen in play (2026-11-14): every main menu mode (Pokédex, party, organize, list, registration) and
+ * the GB cartridge select screen ran with the game state at 0x8040.
  */
-void func_800260C4(void)
+void State_MainMenu(void)
 {
   s32 pushed = 0;
-  main_pool_push_state('OVLY');
-  func_80023C30();
+  MainPool_PushState('OVLY');
+  Save_LoadSram();
   Gfx_InitDisplayListBuffers(0x10000, 0);
   D_800AF9A4 = StageContext_Allocate(1, 1, 2, 0, 2, 1);
   StageContext_Activate(D_800AF9A4);
-  if ((D_800AE8F0.unk_1096 & 1) && (!(D_800AE8F0.unk_1096 & 2)))
+  if ((gSessionContext.transitionFlags & 1) && (!(gSessionContext.transitionFlags & 2)))
   {
-    D_800AE8F0.unk_1096 |= 0x100;
+    gSessionContext.transitionFlags |= 0x100;
   }
-  D_800733D8 = 0;
-  if ((D_800AF988 != 0) || (D_800AE8F0.unk_1096 & 0x100))
+  gActiveGbPortChanged = 0;
+  if ((D_800AF988 != 0) || (gSessionContext.transitionFlags & 0x100))
   {
     D_800AF988 = 0;
-    GbSave_SetActivePort(D_800733D4);
-    Fragment_QueueCall((((u32) (((s32) (&D_88000000)) & 0x0FF00000)) >> 0x14) - 0x10, D_00235D70, D_00238BD0, 0, (s32) (&D_800AE8F0));
+    GbSave_SetActivePort(gActiveGbPort);
+    Fragment_QueueCall((((u32) (((s32) (&D_88000000)) & 0x0FF00000)) >> 0x14) - 0x10, D_00235D70, D_00238BD0, 0, (s32) (&gSessionContext));
   }
   else
   {
-    Fragment_QueueCall((((u32) (((s32) (&D_88400000)) & 0x0FF00000)) >> 0x14) - 0x10, D_00162BE0, D_00166580, 0, (s32) (&D_800AE8F0));
+    Fragment_QueueCall((((u32) (((s32) (&D_88400000)) & 0x0FF00000)) >> 0x14) - 0x10, D_00162BE0, D_00166580, 0, (s32) (&gSessionContext));
   }
-  func_80025A64();
-  while ((D_800733C8 == 0x8040) && (D_800AF990.unk_00 != 0))
+  Tournament_LoadContinueData();
+  while ((gNextGameState == 0x8040) && (D_800AF990.unk_00 != 0))
   {
-    if (D_800733D8 != 0)
+    if (gActiveGbPortChanged != 0)
     {
-      D_800733D8 = 0;
-      if (func_80022B4C(D_800733D4) == 0)
+      gActiveGbPortChanged = 0;
+      if (GbSave_GetSaveState(gActiveGbPort) == 0)
       {
         if (pushed)
         {
-          main_pool_pop_state('BUDT');
+          MainPool_PopState('BUDT');
         }
         pushed = 1;
-        main_pool_push_state('BUDT');
-        func_80021A8C(D_800733D4);
-        if (GbSave_GetBoxCount(D_800733D4) == 0)
+        MainPool_PushState('BUDT');
+        GbSave_LoadPort(gActiveGbPort);
+        if (GbSave_GetBoxCount(gActiveGbPort) == 0)
         {
-          GbSave_ValidateBeforeWrite(D_800733D4);
-          while (func_80021E64(D_800733D4) == 0)
+          GbSave_ValidateBeforeWrite(gActiveGbPort);
+          while (GbSave_InitializeBoxesAndWrite(gActiveGbPort) == 0)
           {
-            func_80025E3C(D_800733D4);
+            Save_RunGbReportErrorScreen(gActiveGbPort);
           }
 
-          GbSave_RequirePakPresent(D_800733D4);
+          GbSave_RequirePakPresent(gActiveGbPort);
         }
-        func_80025A64();
+        Tournament_LoadContinueData();
       }
     }
     D_800AF990.unk_00 = 0;
-    D_800733C8 = Fragment_LoadAndCall(D_800AF990.fragment_id, D_800AF990.rom_start, D_800AF990.rom_end, D_800AF990.arg0, D_800AF990.arg1);
+    gNextGameState = Fragment_LoadAndCall(D_800AF990.fragment_id, D_800AF990.rom_start, D_800AF990.rom_end, D_800AF990.arg0, D_800AF990.arg1);
   }
 
-  if (!(D_800AE8F0.unk_1096 & 2)) {} // karodo
-  D_800AF986 = 0;
+  gSessionContext.transitionFlags = (!(gSessionContext.transitionFlags & 2)) * 0;
   StageContext_Deactivate();
   Gfx_FreeDisplayListBuffers();
-  main_pool_pop_state('OVLY');
+  MainPool_PopState('OVLY');
 }
 
 extern M2C_UNK D_00232510_2;
@@ -610,155 +612,174 @@ extern M2C_UNK D_0015FCE0;
 void func_80001948(s32);
 void _bcopy(void* src, void* dst, s32);
 
-void func_80026368(void)
+/**
+ * Game state 0x8050: runs a battle session. Loads the cup/rule select and order select fragments and
+ * the battle fragment in a loop until the session ends, then the Pikachu reward and award screens when
+ * the session flags ask for them, and returns to the main menu (0x8040).
+ * Seen in play (2026-11-14): a Free Battle COM match ran with the game state at 0x8050.
+ * @unverified The tournament and reward branches were not reached in play.
+ */
+void State_Battle(void)
 {
   s32 prev;
   TeamRoster *roster;
   ExtendedRosterInfo *info;
   func_80001948(0xFFFF);
-  if (D_800AE8F0.unk_1095 & 2)
+  if (gSessionContext.sessionFlags & 2)
   {
-    func_800258B4();
+    Session_RestoreContinueSession();
   }
   else
   {
-    D_800AE8F0.unk_0003 = 1;
+    gSessionContext.roundOrDemoId = 1;
   }
-  if (D_800AE8F0.unk_0000 == 0)
+  if (gSessionContext.mode == 0)
   {
-    D_800AE8F0.unk_0003 = 1;
-    func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 0, (s32) &D_800AE8F0);
-    func_80025B60((((u32) (((s32) (&D_82300000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0015FCE0, &D_00162BE0, 0, (s32) &D_800AE8F0);
-    func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &D_800AE8F0);
-    func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 1, (s32) &D_800AE8F0);
+    gSessionContext.roundOrDemoId = 1;
+    func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 0, (s32) &gSessionContext);
+    func_80025B60((((u32) (((s32) (&D_82300000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0015FCE0, &D_00162BE0, 0, (s32) &gSessionContext);
+    func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &gSessionContext);
+    func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 1, (s32) &gSessionContext);
   }
   else
   {
-    prev = D_800AE8F0.unk_0000;
-    func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 0, (s32) &D_800AE8F0);
-    while (!(D_800AE8F0.unk_1096 & 1))
+    prev = gSessionContext.mode;
+    func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 0, (s32) &gSessionContext);
+    while (!(gSessionContext.transitionFlags & 1))
     {
-      func_80025B60((((u32) (((s32) (&D_82300000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0015FCE0, &D_00162BE0, 0, (s32) &D_800AE8F0);
-      func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &D_800AE8F0);
-      func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 2, (s32) &D_800AE8F0);
+      func_80025B60((((u32) (((s32) (&D_82300000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0015FCE0, &D_00162BE0, 0, (s32) &gSessionContext);
+      func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &gSessionContext);
+      func_80025B60((((u32) (((s32) (&D_82200000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_00232510, &D_00235D70, 2, (s32) &gSessionContext);
     }
 
-    if (D_800AE8F0.unk_1096 & 0x40)
+    if (gSessionContext.transitionFlags & 0x40)
     {
-      D_800733C8 = 0x8010;
+      gNextGameState = 0x8010;
       return;
     }
     else
     {
-      if (D_800AE8F0.unk_1096 & 2)
+      if (gSessionContext.transitionFlags & 2)
       {
-        roster = D_800AE8F0.unk_103C;
-        D_800AE8F0.unk_0000 = 4;
+        roster = gSessionContext.battleSides[0].teamMember[0];
+        gSessionContext.mode = 4;
         info = roster->rosterInfo;
         roster->numberOfPokemonBrought = info->numberOfPokemonCanBePicked;
-        _bcopy(info->unk_028, roster->pokemonPicked, 0x1E0);
-        func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &D_800AE8F0);
+        _bcopy(info->battleMon, roster->pokemonPicked, 0x1E0);
+        func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &gSessionContext);
         if (prev == 1)
         {
           func_80025B60((((u32) (((s32) (&D_81800000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017E340, &D_0017ED00_2, 0, 4);
         }
         else
         {
-          func_80025B60((((u32) (((s32) (&D_81800000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017E340, &D_0017ED00_2, 0, (s32) D_800AE8F0.unk_0002);
+          func_80025B60((((u32) (((s32) (&D_81800000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017E340, &D_0017ED00_2, 0, (s32) gSessionContext.modeSelection);
         }
       }
-      if (D_800AE8F0.unk_1096 & 4)
+      if (gSessionContext.transitionFlags & 4)
       {
-        func_80025758(6, 0xA, 0xD);
-        D_800AE8F0.unk_0003 = 8;
-        func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &D_800AE8F0);
+        Session_InitTwoTrainers(6, 0xA, 0xD);
+        gSessionContext.roundOrDemoId = 8;
+        func_80025B60((((u32) (((s32) (&D_82100000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017ED00, &D_00232510_2, 0, (s32) &gSessionContext);
       }
-      if (D_800AE8F0.unk_1096 & 0x20)
+      if (gSessionContext.transitionFlags & 0x20)
       {
-        func_80025B60((((u32) (((s32) (&D_81700000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017BE70, &D_0017E340, 0, (s32) &D_800AE8F0);
+        func_80025B60((((u32) (((s32) (&D_81700000)) & 0x0FF00000)) >> 0x14) - 0x10, &D_0017BE70, &D_0017E340, 0, (s32) &gSessionContext);
       }
       }
   }
-  D_800733C8 = 0x8040;
+  gNextGameState = 0x8040;
 }
 
 extern M2C_UNK D_81300000;
 extern M2C_UNK D_0015FCE0;
-extern s32 D_800733CC;
+extern s32 gPrevGameState;
 void func_8000A838(s32);
 void func_8000A8DC(void);
 void func_8000A904(void);
-void func_8000AC78(UnkInputStruct8000D738*);
-s32 func_8000ADE8(void);
-void func_8000AE1C(UnkInputStruct8000D738*);
+void GbPlayer_Start(GbPlayerLaunchParams*);
+s32 GbPlayer_WaitForExit(void);
+void func_8000AE1C(GbPlayerLaunchParams*);
 void func_800268E4(s32, s32);
-void func_80021C6C(s32);
-void func_80023C30(void);
-void func_80025130(s32);
-void func_8002404C(s32, s32);
+void GbSave_ForceReloadPort(s32);
+void Save_LoadSram(void);
+void Save_SetGbPlayerButtonConfig(s32);
+void Save_CommitTypedRecord(s32, s32);
 
-void State_GbTower(void) {
+/** Game state: runs Game Boy Tower. */
+void State_GbPlayer(void) {
     s32 sp2C;
-    UnkInputStruct8000D738 sp24;
+    GbPlayerLaunchParams sp24;
 
-    main_pool_push_state('EMU0');
+    MainPool_PushState('EMU0');
     func_8000A838(1);
     Display_WaitForFrames(2);
     func_8000A8DC();
 
-    sp24.unk_04 = main_pool_alloc(sizeof(*sp24.unk_04), 0);
+    sp24.partyIcons = MainPool_Alloc(sizeof(*sp24.partyIcons), 0);
 
-    func_80025B60(((u32) ((s32) &D_81300000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015F8F0, &D_0015FCE0, D_800733D4, (s32) &sp24);
-    func_8000AC78(&sp24);
+    func_80025B60(((u32) ((s32) &D_81300000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015F8F0, &D_0015FCE0, gActiveGbPort, (s32) &sp24);
+    GbPlayer_Start(&sp24);
 
-    sp2C = func_8000ADE8();
+    sp2C = GbPlayer_WaitForExit();
 
     func_8000AE1C(&sp24);
     Display_WaitForFrames(2);
     func_8000A904();
 
     if (sp2C != 0) {
-        func_800268E4(D_800733D4, sp2C);
+        func_800268E4(gActiveGbPort, sp2C);
     }
 
-    func_80021C6C(D_800733D4);
-    func_80023C30();
-    func_80025130(sp24.unk_00);
-    func_8002404C(0x14, 0);
-    D_800733C8 = D_800733CC;
+    GbSave_ForceReloadPort(gActiveGbPort);
+    Save_LoadSram();
+    Save_SetGbPlayerButtonConfig(sp24.buttonConfig);
+    Save_CommitTypedRecord(0x14, 0);
+    gNextGameState = gPrevGameState;
     D_800AF988 = 1;
-    main_pool_pop_state('EMU0');
+    MainPool_PopState('EMU0');
 }
 
-extern s32 D_800733C8;
+extern s32 gNextGameState;
 
-void func_80026898(void) {
-    D_800733C8 = 0x8010;
+/**
+ * Game state 0x8080: goes back to the title screen state (0x8010).
+ * @unverified Not reached in play: OFF on the main menu went back to the cartridge select screen
+ * without leaving state 0x8040.
+ */
+void State_ReturnToTitle(void) {
+    gNextGameState = 0x8010;
 }
 
+/** Game state: unused 64DD boot sequence. */
 void State_N64ddBootUnused(void) {
     Audio_WaitForIdle(1);
     Display_WaitForFrames(2);
-    LeoBootGame(D_800AB200.unk_08);
+    LeoBootGame(D_800AB200.loadAddr);
 }
 
-void func_800268DC(void) {
+/**
+ * Empty function with no callers.
+ */
+void Game_UnusedStub(void) {
 }
 
+/** Powers off the paks, blanks the screen and loads a fragment. */
 void Game_ShutdownAndLoadFragment(s32 arg0, s32 arg1) {
     osViBlack(1);
-    GbTower_PowerOffAllPaks();
+    GbPlayer_PowerOffAllPaks();
     Audio_FadeOutForShutdown();
     Game_ResetStorageDevice();
     Display_ClearFramebufferLine(1);
     Display_ApplyPendingVideoMode();
-    Display_WaitForFrames(0xA);
+    Display_WaitForFrames(10);
 
-    main_pool_pop_state('GAME');
+    MainPool_PopState('GAME');
 
     FRAGMENT_LOAD_AND_CALL(FRAGMENT_FATAL_ERROR_SCREEN, arg0, arg1);
 }
 
+/** Resets the storage device. */
 void Game_ResetStorageDevice(void) {
     Storage_ResetDisk();
 }
@@ -768,11 +789,17 @@ void func_8000B170(s32);
 void func_8000D20C(void);
 void func_800177DC(void);
 void func_80025FDC(void);
-void func_80026368(void);
+void State_Battle(void);
 void func_8002677C(void);
 void func_800268A8(void);
 
-void func_800269A0(s32 arg0) {
+/**
+ * Pushes the 'GAME' pool state and runs the top-level state machine (0x8001, 0x8010, 0x8040, 0x8050, 0x8060, 0x8080, 0xF000) forever.
+ * Seen in play (2026-11-13) ran at boot (console reset, then N64 logo, opening, title and main
+ * menu).
+ * @unverified Name and comment guessed from the code.
+ */
+void Game_RunStateLoop(s32 arg0) {
     s32 state;
 
     func_800594D0(0x01000F00);
@@ -780,47 +807,47 @@ void func_800269A0(s32 arg0) {
     func_8000D20C();
     func_800177DC();
     func_8000256C(0x47414D45);
-    M2C_FIELD(&D_800AE8F0, s8*, 0) = 1;
+    gSessionContext.mode = 1;
     while (1) {
-        state = D_800733C8;
+        state = gNextGameState;
         switch (state) {
             case 0x8001:
-                func_80025F3C();
+                State_Boot();
                 break;
             case 0x8010:
                 func_80025FDC();
                 break;
             case 0x8040:
-                func_800260C4();
+                State_MainMenu();
                 break;
             case 0x8050:
-                func_80026368();
+                State_Battle();
                 break;
             case 0x8060:
                 func_8002677C();
                 break;
             case 0x8080:
-                func_80026898();
+                State_ReturnToTitle();
                 break;
             case 0xF000:
                 func_800268A8();
                 break;
         }
-        D_800733CC = state;
+        gPrevGameState = state;
     }
 }
 
 /*
- * func_80026B50
+ * ImageGrid_BuildDisplayList
  *
  * Builds a display list that draws a 320x240 RGBA16 image `tex` as a grid of
- * 10 columns by 4 rows of 32x60 texel tiles, centred on (x, y) and scaled to
+ * 10 columns by 4 rows of 32x60 texel tiles, centered on (x, y) and scaled to
  * width x height. For each column it loads 32 vertices into the RSP, then for
  * each row it loads that tile into TMEM, writes the tile's four corner
  * vertices into `vtx` (shade 0x00007F, alpha 0xFF) and draws it as two
  * triangles. Returns the display list pointer after gSPEndDisplayList.
  *
- * `vtx` needs room for 10 * 4 * 4 vertices (0xA00 bytes, as func_800270B4
+ * `vtx` needs room for 10 * 4 * 4 vertices (0xA00 bytes, as ImageGrid_Create
  * allocates).
  *
  * Matching notes: y0/y1 and then ult must be assigned at the top of the row
@@ -828,7 +855,7 @@ void func_800269A0(s32 arg0) {
  * right/bottom edges are written out inline. That fixes the order uopt numbers
  * its expression temps in, and so the stack temp slots and s-registers.
  */
-Gfx* func_80026B50(s16 x, s16 y, s16 z, Vtx* vtx, Gfx* gfx, void* tex, s16 width, s16 height) {
+Gfx* ImageGrid_BuildDisplayList(s16 x, s16 y, s16 z, Vtx* vtx, Gfx* gfx, void* tex, s16 width, s16 height) {
     s32 i;
     s32 j;
     s32 uls;
@@ -870,45 +897,48 @@ Gfx* func_80026B50(s16 x, s16 y, s16 z, Vtx* vtx, Gfx* gfx, void* tex, s16 width
 }
 
 s32 func_800023C4(M2C_UNK, M2C_UNK);                /* extern */
-extern s32 D_800733F0;
+extern s32 sImageGridDisplayList;
 
-/*
- * func_800270B4
- *
- * Calls func_800023C4(0xA00, 0) and func_800023C4(0xA70, 0) (they look like
- * allocations, but that is not established here), then calls func_80026B50
- * to build the tiled image display list for texture arg3, with the first
- * result as its vertex buffer and the second as the display list. Stores the
- * second result in D_800733F0 (the word that Display_DisableBlackout clears)
- * and returns it.
- *
- * Matching note: the unused leading `pad1` local only makes the stack frame
- * and slots match the ROM (0x38 bytes, blocks at sp+0x30 and sp+0x2C).
+/**
+ * Allocates a vertex buffer and a display list, builds the tiled 320x240 image `tex` into them with
+ * ImageGrid_BuildDisplayList and keeps the display list in sImageGridDisplayList for
+ * ImageGrid_GeoCallback to draw. Returns the display list.
+ * Called by the VS scene for its trainer name images.
+ * @unverified Name read from the code; not hit in the battle tour.
  */
-s32 func_800270B4(s16 arg0, s16 arg1, s16 arg2, s32 arg3, s16 arg4, s16 arg5) {
-    s32 pad;
+s32 ImageGrid_Create(s16 x, s16 y, s16 z, s32 tex, s16 width, s16 height) {
+    s32 pad; // FAKE: stack padding
     s32 sp30;
     s32 sp2C;
 
     sp30 = func_800023C4(0xA00, 0);
     sp2C = func_800023C4(0xA70, 0);
-    func_80026B50(arg0, arg1, arg2, (Vtx*)sp30, (Gfx*)sp2C, (void*)arg3, arg4, arg5);
-    D_800733F0 = sp2C;
+    ImageGrid_BuildDisplayList(x, y, z, (Vtx*)sp30, (Gfx*)sp2C, (void*)tex, width, height);
+    sImageGridDisplayList = sp2C;
     return sp2C;
 }
 
-void Display_DisableBlackout(void) {
-    D_800733F0 = 0;
+/**
+ * Forgets the display list made by ImageGrid_Create.
+ * @unverified Name read from the code.
+ */
+void ImageGrid_Clear(void) {
+    sImageGridDisplayList = 0;
 }
 
-extern s32 D_800733F0;
-volatile long long func_80027140(s32 arg0, s8 *arg1)
+extern s32 sImageGridDisplayList;
+/**
+ * Geo layout callback: on the draw pass (`stage` 2), points the node's display list at the one built
+ * by ImageGrid_Create.
+ * Seen in play (2026-11-14): called from Geo_ProcessNodeChildren with stage 2 during a COM battle.
+ */
+volatile long long ImageGrid_GeoCallback(s32 stage, s8 *node) // FAKE: volatile long long return type on a void callback
 {
-  s32 new_var;
-  new_var = arg0;
-  if ((new_var == 2) && (D_800733F0 != 0))
+  s32 new_var; // FAKE: permuter temp
+  new_var = stage; // FAKE: permuter temp
+  if ((new_var == 2) && (sImageGridDisplayList != 0)) // FAKE: permuter temp
   {
-    *((s32 *) (((s8 *) arg1) + 0x18)) = (s32) D_800733F0;
+    *((s32 *) (((s8 *) node) + 0x18)) = (s32) sImageGridDisplayList; // FAKE: cast chain, node + 0x18 is the display list field
   }
 }
 
@@ -931,27 +961,39 @@ Vec3f* Vec3f_FromVec3s(Vec3f* float_vector, Vec3s* int_vector);
 Vec3s* Vec3s_Add(Vec3s* dest, Vec3s* a, Vec3s* b);
 Vec3s* Vec3s_Subtract(Vec3s* dest, Vec3s* a, Vec3s* subtrahend);
 
-M2C_UNK func_80027168(arg0)
-    Obj80027168* arg0;
+/**
+ * Loads the next segment of a Bezier path. Each key holds a frame count, a point and a tangent; the
+ * segment runs from key.point through key.point + key.tangent and next.point - next.tangent to
+ * next.point. Returns 0 when the key list ends (frame count 0).
+ * @unverified Name read from the code.
+ */
+M2C_UNK BezierPath_LoadNextSegment(path)
+    Obj80027168* path;
 {
     Vec3s sp30;
     Vec3s sp28;
 
-    if ((arg0->unk_3A = arg0->keys->n) == 0) {
+    if ((path->unk_3A = path->keys->n) == 0) {
         return 0;
     }
-    arg0->unk_38 = 0;
-    Vec3s_Add(&sp30, &arg0->keys->a, &arg0->keys->b);
-    Vec3s_Subtract(&sp28, &arg0->keys[1].a, &arg0->keys[1].b);
-    Vec3f_FromVec3s(&arg0->unk_08, &arg0->keys->a);
-    Vec3f_FromVec3s(&arg0->unk_14, &sp30);
-    Vec3f_FromVec3s(&arg0->unk_20, &sp28);
-    Vec3f_FromVec3s(&arg0->unk_2C, &arg0->keys[1].a);
-    arg0->keys++;
+    path->unk_38 = 0;
+    Vec3s_Add(&sp30, &path->keys->a, &path->keys->b);
+    Vec3s_Subtract(&sp28, &path->keys[1].a, &path->keys[1].b);
+    Vec3f_FromVec3s(&path->unk_08, &path->keys->a);
+    Vec3f_FromVec3s(&path->unk_14, &sp30);
+    Vec3f_FromVec3s(&path->unk_20, &sp28);
+    Vec3f_FromVec3s(&path->unk_2C, &path->keys[1].a);
+    path->keys++;
     return 1;
 }
 
-s32 func_80027214(Obj80027168* arg0, Vec3f* arg1) {
+/**
+ * Advances a Bezier path by one frame and writes the position to `out`. With bit 0 of the flags
+ * the time is eased (smoothstep). Returns 0 once the last segment is done.
+ * Used by the cartridge check and VS scene camera moves.
+ * @unverified Name read from the code.
+ */
+s32 BezierPath_Step(Obj80027168* path, Vec3f* out) {
     f32 t;
     f32 u;
     f32 b0;
@@ -959,13 +1001,13 @@ s32 func_80027214(Obj80027168* arg0, Vec3f* arg1) {
     f32 b2;
     f32 b3;
 
-    if (arg0->unk_3A > 0) {
-        if ((arg0->unk_38 >= arg0->unk_3A) && (func_80027168(arg0) == 0)) {
+    if (path->unk_3A > 0) {
+        if ((path->unk_38 >= path->unk_3A) && (BezierPath_LoadNextSegment(path) == 0)) {
             return 0;
         }
-        arg0->unk_38++;
-        t = (f32)arg0->unk_38 / (f32)arg0->unk_3A;
-        if (arg0->unk_00 & 1) {
+        path->unk_38++;
+        t = (f32)path->unk_38 / (f32)path->unk_3A;
+        if (path->unk_00 & 1) {
             t = (-2.0f * t * t * t) + (3.0f * t * t);
         }
         u = 1.0f - t;
@@ -973,25 +1015,29 @@ s32 func_80027214(Obj80027168* arg0, Vec3f* arg1) {
         b1 = 3.0f * t * u * u;
         b2 = 3.0f * t * t * u;
         b3 = t * t * t;
-        arg1->x = (arg0->unk_2C.x * b3) + ((b0 * arg0->unk_08.x) + (b1 * arg0->unk_14.x) + (b2 * arg0->unk_20.x));
-        arg1->y = (arg0->unk_2C.y * b3) + ((b0 * arg0->unk_08.y) + (b1 * arg0->unk_14.y) + (b2 * arg0->unk_20.y));
-        arg1->z = (arg0->unk_2C.z * b3) + ((b0 * arg0->unk_08.z) + (b1 * arg0->unk_14.z) + (b2 * arg0->unk_20.z));
+        out->x = (path->unk_2C.x * b3) + ((b0 * path->unk_08.x) + (b1 * path->unk_14.x) + (b2 * path->unk_20.x));
+        out->y = (path->unk_2C.y * b3) + ((b0 * path->unk_08.y) + (b1 * path->unk_14.y) + (b2 * path->unk_20.y));
+        out->z = (path->unk_2C.z * b3) + ((b0 * path->unk_08.z) + (b1 * path->unk_14.z) + (b2 * path->unk_20.z));
     }
     return 1;
 }
 
-M2C_UNK func_80027168();                            /* extern */
-
-void func_800273C4(s8 *arg0, s32 arg1) {
-    M2C_FIELD(arg0, s32 *, 4) = arg1;
-    M2C_FIELD(arg0, s32 *, 0) = 0;
-    func_80027168();
+M2C_UNK BezierPath_LoadNextSegment();                            /**
+ * Starts a Bezier path over the keys at `keys` with linear time.
+ * @unverified Name read from the code.
+ */
+void BezierPath_InitLinear(s8 *path, s32 keys) {
+    M2C_FIELD(path, s32 *, 4) = keys;
+    M2C_FIELD(path, s32 *, 0) = 0;
+    BezierPath_LoadNextSegment();
 }
 
-M2C_UNK func_80027168();                            /* extern */
-
-void func_800273E8(s8 *arg0, s32 arg1) {
-    M2C_FIELD(arg0, s32 *, 4) = arg1;
-    M2C_FIELD(arg0, s32 *, 0) = 1;
-    func_80027168();
+M2C_UNK BezierPath_LoadNextSegment();                            /**
+ * Starts a Bezier path over the keys at `keys` with eased (smoothstep) time.
+ * @unverified Name read from the code.
+ */
+void BezierPath_InitEased(s8 *path, s32 keys) {
+    M2C_FIELD(path, s32 *, 4) = keys;
+    M2C_FIELD(path, s32 *, 0) = 1;
+    BezierPath_LoadNextSegment();
 }

@@ -245,7 +245,7 @@ s32 leoRecv_event_mesg(s32 control) {
 
 extern s8 D_80100E94;
 extern s32 D_80100EF4;
-s32 func_8004A404(u32 arg0) {
+s32 leoChk_err_retry(u32 arg0) {
     switch (arg0) {                                 /* irregular */
     case 43:
         D_80100EF4 |= 2;

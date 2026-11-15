@@ -52,13 +52,16 @@
 #define SFX_TRADE_BALL_READY  0x01200006
 #define SFX_EVOLUTION_START  0x01200007
 
-// game states
+// Stadium 1 (international) game states, carried over from that decomp. Nothing in Zero uses this enum
+// and Zero has none of these modes (no Kids Club, Gym Leader Castle, Gallery or Victory Palace). Zero's
+// states are 0x8001 State_Boot, 0x8010 State_TitleScreen, 0x8040 State_MainMenu, 0x8050 State_Battle,
+// 0x8060 State_GbPlayer and 0x8080 State_ReturnToTitle (//@src/game_state.c).
 typedef enum {
     STATE_N64_LOGO_INTRO      = 0x01, // N64 Logo + Intro
     STATE_TITLE_SCREEN        = 0x02, // Title screen
     STATE_N64DD_BOOT_UNUSED   = 0x03, // seems to be unused, but boots an N64DD disk. Leftover from JP.
     STATE_MENU_SELECT         = 0x04, // Menu Select (select Battle Now!, POKeMON Stadium, etc)
-    STATE_AREA_SELECT         = 0x10, // Area Select (select Stadium, GB Tower, Gym Leader Castle, etc)
+    STATE_AREA_SELECT         = 0x10, // Area Select (select Stadium, GB Player, Gym Leader Castle, etc)
     STATE_GALLERY             = 0x11, // Gallery
     STATE_EVENT_BATTLE        = 0x12, // Event Battle
     STATE_OPTIONS             = 0x13, // Options
@@ -69,13 +72,13 @@ typedef enum {
     STATE_KIDS_CLUB           = 0x23, // Kids Club
     STATE_VICTORY_PALACE      = 0x24, // Victory Palace
     STATE_POKEMON_LAB         = 0x25, // POKeMON Lab
-    STATE_GB_TOWER            = 0x26, // GB Tower
+    STATE_GB_PLAYER            = 0x26, // GB Player
     STATE_GYM_LEADER_CASTLE   = 0x27, // Gym Leader Castle
     STATE_BATTLE_NOW_1P       = 0x28, // Battle Now! (1P)
     STATE_BATTLE_NOW_2P       = 0x29, // Battle Now! (2P)
     STATE_BATTLE_FROM_EVENT   = 0x2A, // Battle menu from Event Battle
     STATE_STUBBED_DEBUG       = 0x80, // stubbed/removed debug menu. This could have been the Early Pokedex Menu seen in the JP version.
-    STATE_FAST_BATTLE         = 0x81, // most likely the P97/P98 mode(s) and uses GB Pak 1 and 2 for the teams for an immediate battle; skips even the VS screen and Battle Rule screen. However, the music/stadium used is probably set by some other menu, because it seems to use the outdoor Free Battle area + Poke Cup 1-3, which isnt correct.
+    STATE_FAST_BATTLE         = 0x81, // most likely the P97/P98 mode(s) and uses GB Pak 1 and 2 for the teams for an immediate battle; skips even the VS screen and Battle Rule screen. However, the music/stadium used is probably set by some other menu, because it seems to use the outdoor Free Battle area + Nintendo Cup, which is not correct.
     STATE_KIDS_CLUB_TITLE     = 0x82, // Kids Club, but it returns to the title screen. Possibly for a Kiosk/demo version.
 } GameState;
 
@@ -91,7 +94,7 @@ extern u64 _binary_assets_us_F3DEX2_bin_start[];
 
 extern f32 gSineTable[];
 extern f32 gCosineTable[0x1000];
-extern s16 gArctanTable[0x401];
+extern s16 gArctanTable[1025];
 
 
 
@@ -898,27 +901,28 @@ typedef struct Rectangle {
 extern struct DisplayNodeHeader D_800AD1D0;
 extern struct DisplayNodeHeader D_800AD1E8;
 
-typedef struct unk_D_8006FF00 {
-	/* 0x00 */ u8 unk_00;
+/* One species of the 0x1C-byte table D_80064C5C (index = species - 1): Pokedex data, model scale and nickname colors. */
+typedef struct SpeciesInfo {
+	/* 0x00 */ u8 dexNumber; // @unverified: Pokédex number, printed %03d (Pokedex entry page)
 	/* 0x01 */ u8 unk_01;
-	/* 0x02 */ s16 unk_02;
+	/* 0x02 */ s16 modelScale; // @unverified: model scale in percent (poke_icon_2.c divides it by 100.0f)
 	/* 0x04 */ char* name;
-	/* 0x08 */ s32 unk_08;
-	/* 0x0C */ u8 unk_0C;
-	/* 0x0D */ u8 unk_0D;
-	/* 0x0E */ s16 unk_0E;
-	/* 0x10 */ s16 unk_10;
-	/* 0x12 */ s16 unk_12;
+	/* 0x08 */ char* category; // @unverified: printed as 「%sポケモン」 (... Pokémon) on the Pokedex entry page
+	/* 0x0C */ u8 cupEligibilityFlags; // @unverified: Free Battle species flags: bit 0 battle-usable, bit 1 L1-30 eligible (docs/stadium-zero-battle-roster.md)
+	/* 0x0D */ u8 heightTenths; // @unverified: height in tenths of a meter (Pokedex_DrawTenthsValue)
+	/* 0x0E */ s16 weightTenths; // @unverified: weight in tenths of a kilogram (Pokedex_DrawTenthsValue)
+	/* 0x10 */ s16 nicknameHueMin; // @unverified: low end of the nickname color variant hue (Model_ComputeNicknameColorVariant)
+	/* 0x12 */ s16 nicknameHueMax; // @unverified: high end of that hue range
 	/* 0x14 */ u32 unk_14;
-	/* 0x18 */ u32 unk_18;
-} unk_D_8006FF00; // size = 0x1C
+	/* 0x18 */ char* description; // @unverified: the Pokédex entry text, drawn when func_800231C8 returns 2 or more (Pokédex entry page)
+} SpeciesInfo; // size = 0x1C
 
 
 typedef struct FontSet {
-	/* 0x00 */ s16 unk_00;
-	/* 0x02 */ s16 unk_02;
-	/* 0x04 */ u8* unk_04;
-	/* 0x08 */ u8* unk_08;
+	/* 0x00 */ s16 width;
+	/* 0x02 */ s16 height;
+	/* 0x04 */ u8* glyphWidths;
+	/* 0x08 */ u8* texture;
 } FontSet; // size = 0xC
 
 // Zero has four font sets where Stadium 1 has six.
@@ -982,18 +986,18 @@ typedef struct unk_D_70B10 {
  // start of some rom area
 
 typedef struct MoveData {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
+    /* 0x00 */ u8 moveId;
+    /* 0x01 */ u8 effect;
+    /* 0x02 */ u8 power;
+    /* 0x03 */ u8 type;
+    /* 0x04 */ u8 accuracy;
+    /* 0x05 */ u8 pp;
 } MoveData; // size = 0x6
 extern MoveData gMoveData[];
 
 typedef struct unk_D_80072338 {
     /* 0x00 */ char unk00[0x1];
-    /* 0x01 */ u8 unk_01;
+    /* 0x01 */ u8 type;
     /* 0x02 */ char unk02[0x2];
     /* 0x04 */ char* unk_04;
     /* 0x08 */ char* comment;

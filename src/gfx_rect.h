@@ -1,7 +1,11 @@
-#ifndef _6BC0_H_
-#define _6BC0_H_
+/* Declarations for src/gfx_rect.c. */
+#ifndef GFX_RECT_H
+#define GFX_RECT_H
 
 #include "global.h"
+#include "stdarg.h"
+#include "moves.h"
+#include "m2c_macros.h"
 
 // image size in bits
 typedef enum IMAGE_SIZE_BITS {
@@ -19,28 +23,28 @@ typedef enum IMAGE_FMT {
 	IMAGE_FMT_I    = 4,
 } IMAGE_FMT;
 
-typedef struct unk_D_80068BB0 {
+typedef struct GfxImage {
 	/* 0x00 */ u16 fmt;
 	/* 0x02 */ u16 size;
 	/* 0x04 */ u16 width;
 	/* 0x06 */ u16 height;
 	/* 0x08 */ u8* img_p;
-	/* 0x0C */ struct unk_D_80068BB0* depth_p;
-} DepthBuffer; // size = 0x10
+	/* 0x0C */ struct GfxImage* depth_p;
+} GfxImage; // size = 0x10; a color or depth image header followed by its pixels (GfxImage_Allocate)
 
-unk_D_800A7440* GfxRect_SetBounds(unk_D_800A7440* arg0, s16 x1, s16 y1, s16 x2, s16 y2);
-s32 GfxRect_ClipToScissor(unk_D_800A7440* rectangle);
-void Gfx_SetScissorRect(Gfx** gfx_p, s16 x, s16 y, s16 width, s16 height);
+// gfx_rect.c
 void Gfx_ApplyScissorRect(Gfx** gfx_p);
-void GfxImage_Initialize(DepthBuffer* arg0, s32 fmt, s32 size, s32 width, s32 height, u32 img_p);
-DepthBuffer* GfxImage_Allocate(s32 fmt, s32 size, s32 width, s32 height, s32 side);
-void GfxImage_AttachDepthBuffer(DepthBuffer* img, DepthBuffer* depth);
+void GfxImage_Initialize(GfxImage* arg0, s32 fmt, s32 size, s32 width, s32 height, u32 img_p);
+GfxImage* GfxImage_Allocate(s32 fmt, s32 size, s32 width, s32 height, s32 side);
+void GfxImage_AttachDepthBuffer(GfxImage* img, GfxImage* depth);
 void GfxImage_ResetCurrent(void);
-DepthBuffer* GfxImage_GetCurrent(void);
-void GfxImage_SetRenderTarget(Gfx** gfx_p, DepthBuffer* arg1);
+GfxImage* GfxImage_GetCurrent(void);
+void GfxImage_SetRenderTarget(Gfx** gfx_p, GfxImage* arg1);
 void GfxImage_FillRectangle(Gfx** gfx_p, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u16 fill_color);
 void GfxImage_ClearDepthRectangle(Gfx** gfx_p, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 void GfxImage_FillCurrent(Gfx** gfx_p, u16 fill_color);
+M2C_UNK func_80005770(M2C_UNK *, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
+M2C_UNK func_800051C0(s32, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
+M2C_UNK func_800052E8(s32, s32);                    /* extern */
 
-
-#endif // _6BC0_H_
+#endif // GFX_RECT_H

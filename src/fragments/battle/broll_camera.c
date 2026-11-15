@@ -1,0 +1,762 @@
+/* Stadium Zero fragment012_17ED00. */
+/* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_304060.c, src/fragments/battle_engine/battle_engine_32B680.c. */
+
+#include "battle.h"
+
+typedef struct unk_D_843859E0 {
+    /* 0x00 */ u8 unk_00;
+    /* 0x04 */ f32 unk_04;
+    /* 0x08 */ s16 unk_08;
+    /* 0x0A */ s16 unk_0A;
+    /* 0x0C */ f32 unk_0C;
+} unk_D_843859E0;
+
+#include "m2c_macros.h"
+
+void BattleScene_BRollStepNop(void);
+void BattleScene_BRollCameraUpdateRotatingArenaOverview(CameraNode* arg0);
+
+void BattleScene_SelectNextBRollCameraShot(CameraNode* arg0);
+
+/**
+ * Empty B-roll camera step.
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollStepNop(void) {
+}
+
+extern f32 D_FLT_8218935C[][4];
+/**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and running from battle.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 BattleScene_AreBothParticipantModelsCompact(void) {
+    if ((D_FLT_8218935C[sActivePokemon[0]->displayObject.objectType - 1][1] + D_FLT_8218935C[sActivePokemon[1]->displayObject.objectType - 1][1] <= 85.0f) &&
+        (D_FLT_8218935C[sActivePokemon[0]->displayObject.objectType - 1][2] == 0.0f) &&
+        (D_FLT_8218935C[sActivePokemon[1]->displayObject.objectType - 1][2] == 0.0f) &&
+        (sActivePokemon[0]->displayObject.position.y == 0.0f) &&
+        (sActivePokemon[1]->displayObject.position.y == 0.0f)) {
+        return 1;
+    }
+    return 0;
+}
+
+/**
+ * Skips the current B-roll camera shot when the acting Pokemon can't be filmed (state unk_2D
+ * is 16 or flag 0x4000 is set): selects the next shot and returns 1. Otherwise returns 0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
+ * @unverified Name guessed from the code.
+ */
+s32 BattleScene_SkipUnavailableBRollShot(UNUSED ActivePokemon* arg0, CameraNode* arg1) {
+    ActivePokemonState* ptr = &sActivePokemon[sBattleScene.scene->actingSide]->state;
+
+    if ((ptr->faintState == 0x10) || ((ptr->flags & 0x4000) != 0)) {
+        BattleScene_SelectNextBRollCameraShot(arg1);
+        return 1;
+    }
+    return 0;
+}
+
+extern Vec3f D_8218B630;
+extern Vec3f D_8218B63C;
+/**
+ * Sets up the arena-orbit B-roll shot: aims at the arena center (a closer point when both
+ * models are compact), eye 750 away at a low angle, squeezed in depth, then advances the
+ * phase step.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep.
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollCameraSetupArenaOrbit(CameraNode* arg0) {
+    BattleScene_SetCameraClipPlanes(arg0, 20.0f, 4000.0f);
+    BattleScene_ResetCameraFrameCounter();
+    if (BattleScene_AreBothParticipantModelsCompact() != 0) {
+        BattleScene_SetCameraAtFromPosition(arg0, D_8218B63C, 0, 0, 0.0f, 0.0f);
+        BattleScene_SetCameraEyeAndStoreAngles(arg0, D_8218B63C, 0x5B0, 0, 750.0f, 0.0f);
+    } else {
+        BattleScene_SetCameraAtFromPosition(arg0, D_8218B630, 0, 0, 0.0f, 0.0f);
+        BattleScene_SetCameraEyeAndStoreAngles(arg0, D_8218B630, 0x5B0, 0, 750.0f, 0.0f);
+    }
+    arg0->view.eyePosition.z *= 0.6;
+    sBattleScene.scene->phaseStep++;
+}
+
+/**
+ * Sets up the rotating arena-overview B-roll shot: aims at the arena center from 1000 away
+ * at a higher angle, then advances the phase step.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (7 of the moves).
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollCameraSetupRotatingArenaOverview(CameraNode* arg0) {
+    BattleScene_SetCameraClipPlanes(arg0, 20.0f, 4000.0f);
+    BattleScene_ResetCameraFrameCounter();
+    if (BattleScene_AreBothParticipantModelsCompact() != 0) {
+        BattleScene_SetCameraAtFromPosition(arg0, D_8218B63C, 0, 0, 0.0f, 0.0f);
+        BattleScene_SetCameraEyeAndStoreAngles(arg0, D_8218B63C, 0x1A4E, 0, 1000.0f, 0.0f);
+    } else {
+        BattleScene_SetCameraAtFromPosition(arg0, D_8218B630, 0, 0, 0.0f, 0.0f);
+        BattleScene_SetCameraEyeAndStoreAngles(arg0, D_8218B630, 0x1A4E, 0, 1000.0f, 0.0f);
+    }
+    sBattleScene.scene->phaseStep++;
+}
+
+void func_821224F4(CameraNode*);
+void func_82121D78(CameraNode*, f32, f32);
+void func_8212187C(s32);
+void BattleCamera_StartSpeciesPath(CameraNode*, ActivePokemon*);
+/**
+ * Sets up the battle camera and presentation on the acting Pokémon.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
+void BattleScene_InitializeBattlePresentation(CameraNode* arg0) {
+    func_821224F4(arg0);
+    func_82121D78(arg0, 20.0f, 4000.0f);
+    func_8212187C(0);
+    BattleCamera_StartSpeciesPath(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
+    sBattleScene.scene->phaseStep++;
+}
+
+s32 func_8211F644(ActivePokemon*, CameraNode*);
+void func_82104C68(ActivePokemon*, s32);
+/**
+ * B-roll shot setup: clip planes 20-4000, message mode 0; once the acting Pokemon can be
+ * filmed, aims the camera at it (BattleCamera_StartSpeciesPath), starts its model reaction 0x10 and advances
+ * the phase step.
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollShotAimPokemon0(CameraNode* camera) {
+    ActivePokemon* pokemon;
+
+    func_821224F4(camera);
+    func_82121D78(camera, 20.0f, 4000.0f);
+    func_8212187C(0);
+    pokemon = sActivePokemon[sBattleScene.scene->actingSide];
+    if (func_8211F644(pokemon, camera) == 0) {
+        BattleCamera_StartSpeciesPath(camera, pokemon);
+        func_82104C68(pokemon, 0x10);
+        sBattleScene.scene->phaseStep++;
+    }
+}
+
+/**
+ * Same as BattleScene_BRollShotAimPokemon0 with message mode 1.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Bide, Mirror Move, Rest, Softboiled.
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollShotAimPokemon1(CameraNode* camera) {
+    ActivePokemon* pokemon;
+
+    func_821224F4(camera);
+    func_82121D78(camera, 20.0f, 4000.0f);
+    func_8212187C(1);
+    pokemon = sActivePokemon[sBattleScene.scene->actingSide];
+    if (func_8211F644(pokemon, camera) == 0) {
+        BattleCamera_StartSpeciesPath(camera, pokemon);
+        func_82104C68(pokemon, 0x10);
+        sBattleScene.scene->phaseStep++;
+    }
+}
+
+f32 BattleScene_GetParticipantHeight(ActivePokemon*);
+void BattleCamera_CaptureModelOrbit(ActivePokemon*, CameraNode*);
+/**
+ * B-roll shot setup: frames the acting Pokemon from the front, aimed 1.5 heights above its
+ * anchor at a size-scaled distance, starts its model reaction 0x10, captures the orbit and
+ * advances the phase step.
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollShotFrontHigh(CameraNode* camera) {
+    UNUSED s32 pad; // FAKE: stack padding
+    f32 dist;
+    UNUSED s32 pad2; // FAKE: stack padding
+    s16 angle;
+    ActivePokemon* pokemon;
+
+    func_821224F4(camera);
+    func_82121D78(camera, 20.0f, 4000.0f);
+    func_8212187C(0);
+    pokemon = sActivePokemon[sBattleScene.scene->actingSide];
+    if (func_8211F644(pokemon, camera) == 0) {
+        func_82104C68(pokemon, 0x10);
+        BattleAnim_GetOwnerDefaultAnchorPosition(pokemon, &sBattleScene.scene->anchorPosition);
+        dist = BattleScene_ScaleCameraDistance(pokemon, 3.5f, 300.0f);
+        angle = BattleScene_GetParticipantFacingAngle(pokemon);
+        BattleScene_SetCameraAtFromPosition(camera, sBattleScene.scene->anchorPosition, 0, angle, 0.0f, BattleScene_GetParticipantHeight(pokemon) * 1.5f);
+        BattleScene_SetCameraEyeFromPosition(camera, sBattleScene.scene->anchorPosition, 0, BattleScene_GetParticipantFacingAngle(pokemon), dist, 0.0f);
+        BattleCamera_CaptureModelOrbit(pokemon, camera);
+        sBattleScene.scene->phaseStep++;
+    }
+}
+
+/**
+ * B-roll shot setup with random framing: distance from the model radius scaled by a random
+ * factor (at most 500), a random height and a random angle up to about 180 degrees around
+ * the front; starts model reaction 1 and captures the orbit. Message mode 0.
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollShotRandomPokemon0(CameraNode* camera) {
+    UNUSED s32 pad[2]; // FAKE: stack padding
+    f32 sp4C;
+    UNUSED CameraNode** pad2 = &camera; // FAKE: stack padding
+    u16 sp46;
+    f32 dist;
+    ActivePokemon* pokemon;
+    func_821224F4(camera); func_8212187C(0); func_82121D78(camera, 20.0f, 4000.0f);
+    pokemon = sActivePokemon[sBattleScene.scene->actingSide];
+    if (func_8211F644(pokemon, camera) == 0) {
+        func_82104C68(pokemon, 1);
+        BattleAnim_GetOwnerDefaultAnchorPosition(pokemon, &sBattleScene.scene->anchorPosition);
+        dist = BattleScene_GetParticipantModelRadiusScaled(pokemon) * 3.5f;
+        sp46 = BattleAnim_RandomRange(3);
+        dist *= BattleAnim_GetSpeciesBaseScale(pokemon) * 0.5 * sp46 + 1.0;
+        if (dist > 500.0f) dist = 500.0f;
+        sp46 = BattleAnim_RandomRange(4);
+        sp4C = BattleScene_GetParticipantHeight(pokemon) * sp46;
+        BattleScene_SetCameraAtFromAnchor(pokemon, camera, sBattleScene.scene->anchorPosition, 0, 0, 0.0f, 0);
+        BattleScene_SetCameraEyeFromPosition(camera, sBattleScene.scene->anchorPosition, 0, 0x4000 - BattleAnim_RandomRange(0xB4) * 0xB6, dist, sp4C);
+        BattleCamera_CaptureModelOrbit(pokemon, camera); sBattleScene.scene->phaseStep++;
+    }
+}
+
+/**
+ * Same as BattleScene_BRollShotRandomPokemon0 with message mode 1.
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollShotRandomPokemon1(CameraNode* camera) {
+    UNUSED s32 pad[2]; // FAKE: stack padding
+    f32 sp4C;
+    UNUSED CameraNode** pad2 = &camera; // FAKE: stack padding
+    u16 sp46;
+    f32 dist;
+    ActivePokemon* pokemon;
+    func_821224F4(camera); func_8212187C(1); func_82121D78(camera, 20.0f, 4000.0f);
+    pokemon = sActivePokemon[sBattleScene.scene->actingSide];
+    if (func_8211F644(pokemon, camera) == 0) {
+        func_82104C68(pokemon, 1);
+        BattleAnim_GetOwnerDefaultAnchorPosition(pokemon, &sBattleScene.scene->anchorPosition);
+        dist = BattleScene_GetParticipantModelRadiusScaled(pokemon) * 3.5f;
+        sp46 = BattleAnim_RandomRange(3);
+        dist *= BattleAnim_GetSpeciesBaseScale(pokemon) * 0.5f * sp46 + 1.0f;
+        if (dist > 500.0f) dist = 500.0f;
+        sp46 = BattleAnim_RandomRange(4);
+        sp4C = BattleScene_GetParticipantHeight(pokemon) * sp46;
+        BattleScene_SetCameraAtFromAnchor(pokemon, camera, sBattleScene.scene->anchorPosition, 0, 0, 0.0f, 0);
+        BattleScene_SetCameraEyeFromPosition(camera, sBattleScene.scene->anchorPosition, 0, 0x4000 - BattleAnim_RandomRange(0xB4) * 0xB6, dist, sp4C);
+        BattleCamera_CaptureModelOrbit(pokemon, camera); sBattleScene.scene->phaseStep++;
+    }
+}
+
+extern f32 D_FLT_82196040;
+
+/**
+ * Intro camera shot (compare BattleScene_BRollShotFrontClose and BattleScene_BRollShotWideFovRotatedX). Clears the camera offset
+ * vectors, calls func_8212187C(1), and takes the active Pokemon selected by scene->unk_2C.
+ * Unless BattleScene_SkipUnavailableBRollShot handles it, it enters state row 0x10, stores the
+ * Pokemon's default anchor position in scene->unk_D0, derives a camera distance (factor
+ * 3.5f, base 300.0f), aims the camera at the anchor using the Pokemon's facing angle and
+ * a height offset of -BattleScene_GetParticipantHeight(ap), puts the eye at the same anchor with
+ * -BattleScene_GetParticipantHeight(ap) * 0.2f, calls BattleCamera_CaptureModelOrbit(ap, camera) and advances
+ * scene->unk_20.
+ * `pad` only reserves the stack slot the retail frame has between `dist` and `angle`.
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollShotFrontLow(CameraNode* camera) {
+    ActivePokemon* ap;
+    f32 dist;
+    UNUSED s32 pad; // FAKE: stack padding
+    s16 angle;
+
+    BattleScene_ClearCameraOffsetVectors();
+    func_8212187C(1);
+    ap = sActivePokemon[sBattleScene.scene->actingSide];
+    if (BattleScene_SkipUnavailableBRollShot(ap, camera) == 0) {
+        BattleScene_EnterStateRow(ap, 0x10);
+        BattleAnim_GetOwnerDefaultAnchorPosition(ap, &sBattleScene.scene->anchorPosition);
+        dist = BattleScene_ScaleCameraDistance(ap, 3.5f, 300.0f);
+        angle = BattleScene_GetParticipantFacingAngle(ap);
+        BattleScene_SetCameraAtFromAnchor(ap, camera, sBattleScene.scene->anchorPosition, 0, angle, 0.0f, -BattleScene_GetParticipantHeight(ap));
+        angle = BattleScene_GetParticipantFacingAngle(ap);
+        BattleScene_SetCameraEyeFromPosition(camera, sBattleScene.scene->anchorPosition, 0, angle, dist, -BattleScene_GetParticipantHeight(ap) * 0.2f);
+        BattleCamera_CaptureModelOrbit(ap, camera);
+        sBattleScene.scene->phaseStep += 1;
+    }
+}
+
+/**
+ * Intro camera shot, a variant of BattleScene_BRollShotFrontWide (and BattleScene_BRollShotFrontClose). After clearing the
+ * camera offset vectors it takes the active Pokemon selected by scene->unk_2C and, unless
+ * BattleScene_SkipUnavailableBRollShot handles it, saves the camera's vertical field of view in
+ * scene->unk_60 and widens it to 100.0f; enters state row 0x10; stores the Pokemon's default
+ * anchor position in scene->unk_D0 and the camera distance (factor 4.0f, base 300.0f) in
+ * scene->unk_74; aims the camera at the anchor with its facing angle and puts the eye at
+ * the same anchor, again using the facing angle, with the s16 at scene offset 0x6E set to
+ * -0x1554 (that store is made inside the argument list, as in the retail code); and
+ * finally advances scene->unk_20. The meaning of the s16 at 0x6E is not established
+ * (it lies inside the unk_6C field of the BattleScene header).
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollShotWideFovRotatedX(CameraNode* camera) {
+    ActivePokemon* ap;
+
+    BattleScene_ClearCameraOffsetVectors();
+    ap = sActivePokemon[sBattleScene.scene->actingSide];
+    if (BattleScene_SkipUnavailableBRollShot(ap, camera) == 0) {
+        sBattleScene.scene->verticalFieldOfView = camera->perspective.verticalFieldOfView;
+        camera->perspective.verticalFieldOfView = 100.0f;
+        BattleScene_EnterStateRow(ap, 0x10);
+        BattleAnim_GetOwnerDefaultAnchorPosition(ap, &sBattleScene.scene->anchorPosition);
+        sBattleScene.scene->orbitDistance = BattleScene_ScaleCameraDistance(ap, 4.0f, 300.0f);
+        BattleScene_SetCameraAtFromAnchor(ap, camera, sBattleScene.scene->anchorPosition, 0, BattleScene_GetParticipantFacingAngle(ap), 0.0f, 0);
+        BattleScene_SetCameraEyeFromPosition(camera, sBattleScene.scene->anchorPosition, (sBattleScene.scene->orbitRotationX = -0x1554), BattleScene_GetParticipantFacingAngle(ap), sBattleScene.scene->orbitDistance, 0.0f);
+        sBattleScene.scene->phaseStep += 1;
+    }
+}
+
+/**
+ * B-roll shot setup: puts the acting Pokemon in state row 0x10 and frames it from the front
+ * at a wide distance (8 times its size, at least 300), then advances the phase step.
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollShotFrontWide(CameraNode* camera) {
+    ActivePokemon* ap;
+
+    BattleScene_ClearCameraOffsetVectors();
+    ap = sActivePokemon[sBattleScene.scene->actingSide];
+    if (BattleScene_SkipUnavailableBRollShot(ap, camera) == 0) {
+        BattleScene_EnterStateRow(ap, 0x10);
+        BattleAnim_GetOwnerDefaultAnchorPosition(ap, &sBattleScene.scene->anchorPosition);
+        sBattleScene.scene->orbitDistance = BattleScene_ScaleCameraDistance(ap, 8.0f, 300.0f);
+        BattleScene_SetCameraAtFromAnchor(ap, camera, sBattleScene.scene->anchorPosition, 0, BattleScene_GetParticipantFacingAngle(ap), 0.0f, 0);
+        BattleScene_SetCameraEyeFromPosition(camera, sBattleScene.scene->anchorPosition, 0, BattleScene_GetParticipantFacingAngle(ap), sBattleScene.scene->orbitDistance, 0.0f);
+        sBattleScene.scene->phaseStep += 1;
+    }
+}
+
+void BattleCamera_CaptureModelOrbit(ActivePokemon*, CameraNode*);
+/**
+ * Same as BattleScene_BRollShotFrontWide at a closer distance (3.5 times its size) and captures the model
+ * orbit.
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollShotFrontClose(CameraNode* camera) {
+    ActivePokemon* ap;
+
+    BattleScene_ClearCameraOffsetVectors();
+    ap = sActivePokemon[sBattleScene.scene->actingSide];
+    if (BattleScene_SkipUnavailableBRollShot(ap, camera) == 0) {
+        BattleScene_EnterStateRow(ap, 0x10);
+        BattleAnim_GetOwnerDefaultAnchorPosition(ap, &sBattleScene.scene->anchorPosition);
+        sBattleScene.scene->orbitDistance = BattleScene_ScaleCameraDistance(ap, 3.5f, 300.0f);
+        BattleScene_SetCameraAtFromAnchor(ap, camera, sBattleScene.scene->anchorPosition, 0, BattleScene_GetParticipantFacingAngle(ap), 0.0f, 0);
+        BattleScene_SetCameraEyeFromPosition(camera, sBattleScene.scene->anchorPosition, 0, BattleScene_GetParticipantFacingAngle(ap), sBattleScene.scene->orbitDistance, 0.0f);
+        BattleCamera_CaptureModelOrbit(ap, camera);
+        sBattleScene.scene->phaseStep += 1;
+    }
+}
+
+void BattleScene_BRollShotFrontClose(CameraNode*);
+/**
+ * When the acting Pokemon's model type is 0x71 or 0x79, jumps the phase step to 22 and runs
+ * the close shot BattleScene_BRollShotFrontClose, returning 1. Otherwise returns 0.
+ * @unverified Name guessed from the code.
+ */
+s32 BattleScene_BRollCloseShotForChanseyStarmie(UNUSED s32 unused, CameraNode* camera) {
+    ActivePokemon* p = sActivePokemon[sBattleScene.scene->actingSide];
+
+    if ((p->displayObject.objectType == 0x71) || (p->displayObject.objectType == 0x79)) {
+        sBattleScene.scene->phaseStep = 22;
+        BattleScene_BRollShotFrontClose(camera);
+        return 1;
+    }
+    return 0;
+}
+
+typedef struct BRollShotSequence {
+    s32 shots[12];
+} BRollShotSequence;
+extern BRollShotSequence D_8218B240;
+extern f32 D_FLT_82189350[][4];
+void BattleCamera_StartNextBRollShot(CameraNode*);
+void func_8212188C(void);
+void BattleScene_UpdateParticipantsInView(CameraNode*);
+void func_82108C0C(ActivePokemon*);
+s32 func_8210C020(s32);
+void func_8211F6B8(CameraNode*);
+void func_8211F84C(CameraNode*);
+void BattleScene_BRollShotFrontHigh(CameraNode*);
+void BattleScene_BRollShotRandomPokemon0(CameraNode*);
+void BattleScene_BRollShotRandomPokemon1(CameraNode*);
+void BattleScene_BRollShotFrontLow(CameraNode*);
+void BattleScene_BRollShotAimPokemon0(CameraNode*);
+void BattleScene_BRollShotAimPokemon1(CameraNode*);
+void BattleScene_BRollShotWideFovRotatedX(CameraNode*);
+void BattleScene_BRollShotFrontWide(CameraNode*);
+
+/**
+ * Seen in play (2026-11-13) while the command menu waits for input (scene mode 1, phase 0) it
+ * cycles the idle B-roll shots: bRollShotIndex went 9, 10, 11, then wrapped to 1, and phaseStep
+ * went 7, 9, 3, 7. Stadium 1 names the same function BattleScene_SelectNextBRollCameraShot.
+ */
+void BattleScene_SelectNextBRollCameraShot(CameraNode* arg0) {
+    ActivePokemon* p;
+    ActivePokemonState* st;
+    BRollShotSequence seq = D_8218B240;
+
+    if (sBattleScene.scene->mode == 9) {
+        BattleCamera_StartNextBRollShot(arg0);
+        return;
+    }
+    if (seq.shots[sBattleScene.scene->bRollShotIndex] == 0xFF) {
+        sBattleScene.scene->bRollShotIndex = 0;
+    }
+    sBattleScene.scene->phaseStep = seq.shots[sBattleScene.scene->bRollShotIndex];
+    sBattleScene.scene->bRollShotIndex++;
+    func_82108C0C(sActivePokemon[0]);
+    func_82108C0C(sActivePokemon[1]);
+    func_8212188C();
+    switch (sBattleScene.scene->phaseStep) {
+        case 0:
+            func_8211F6B8(arg0);
+            break;
+        case 2:
+            func_8211F84C(arg0);
+            break;
+        case 4:
+            BattleScene_BRollShotFrontHigh(arg0);
+            break;
+        case 6:
+            BattleScene_BRollShotRandomPokemon0(arg0);
+            break;
+        case 8:
+            BattleScene_BRollShotRandomPokemon1(arg0);
+            break;
+        case 10:
+            BattleScene_BRollShotFrontLow(arg0);
+            break;
+        case 12:
+            BattleScene_BRollShotAimPokemon0(arg0);
+            break;
+        case 14:
+            BattleScene_BRollShotAimPokemon1(arg0);
+            break;
+        case 16:
+            BattleScene_BRollShotWideFovRotatedX(arg0);
+            break;
+        case 18:
+            BattleScene_BRollShotWideFovRotatedX(arg0);
+            break;
+        case 20:
+            BattleScene_BRollShotFrontWide(arg0);
+            break;
+        case 22:
+            BattleScene_BRollShotFrontClose(arg0);
+            break;
+    }
+    if ((sBattleScene.scene->phaseStep == 5) || (sBattleScene.scene->phaseStep == 11)) {
+        p = sActivePokemon[sBattleScene.scene->actingSide];
+        st = &p->state;
+        if (st) {}  // karodo
+        if ((st->flags & 0x200) || (p->displayObject.objectType == 0x8E)) {
+            if (func_8210C020(0x64) & 1) {
+                sBattleScene.scene->phaseStep = 0x10;
+                BattleScene_BRollShotWideFovRotatedX(arg0);
+            } else {
+                sBattleScene.scene->phaseStep = 18;
+                BattleScene_BRollShotWideFovRotatedX(arg0);
+            }
+        } else if ((BattleScene_BRollCloseShotForChanseyStarmie(p, arg0) == 0) &&
+                   (D_FLT_82189350[sActivePokemon[sBattleScene.scene->actingSide]->displayObject.objectType][0] <= 27.0f)) {
+            sBattleScene.scene->phaseStep = 20;
+            BattleScene_BRollShotFrontWide(arg0);
+        }
+    }
+    BattleScene_UpdateParticipantsInView(arg0);
+}
+
+extern const f64 D_DBL_821960A0;
+/**
+ * Turns the arena-orbit shot by 0xB6 a frame until rotationY reaches 0x78DC, then selects
+ * the next B-roll shot. Keeps the eye squeezed in depth while turning.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep.
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollCameraUpdateArenaOrbit(CameraNode* arg0) {
+    if (BattleScene_ApproachCameraRotationY(arg0, 0xB6, 0x78DC) != 0) {
+        BattleScene_SelectNextBRollCameraShot(arg0);
+    } else {
+        arg0->view.eyePosition.z *= 0.6;
+    }
+}
+
+/**
+ * Seen in play (2026-11-13) B-roll step 3 at the command menu: each frame rotationY (scene+0x5A)
+ * fell by 0xB6 while rotationX stayed 0x1A4E and the distance 1000, so the eye circled the look-at
+ * point (0, 100, 0) at a fixed height (eye x 0 to -776, z 800 to 193 over 80 frames).
+ */
+void BattleScene_BRollCameraUpdateRotatingArenaOverview(CameraNode* arg0) {
+    if (BattleScene_ApproachCameraRotationY(arg0, 0xB6, 0x78DC) != 0) {
+        BattleScene_SelectNextBRollCameraShot(arg0);
+    }
+}
+
+extern f32 D_FLT_82189358[][4];
+void BattleScene_SelectNextBRollCameraShot(CameraNode*);
+/**
+ * Eases the scene float at +0x8C towards 0.1 (speed 0.02) and then eases the
+ * camera node's float at +0xB8 towards a goal made of two parts: a per-object
+ * table value, D_FLT_82189358[objectType][0] for the active Pokemon at index
+ * sBattleScene.scene->unk_2C (D_FLT_82189358 is the table at 0x82189350 shifted
+ * by 8, i.e. column 2 of D_FLT_82189350, the table BattleCamera_EaseTargetToOrbitIfFar in
+ * battle_engine_343BA0_4.c reads column 0 of), plus the scene float at +0xC4.  The speed is the scene float at
+ * +0x8C.  When the camera float is still below that goal plus 0.5 it calls
+ * BattleScene_SelectNextBRollCameraShot(camera).  What the floats mean is not established here.
+ * Note: the sums are written with the scene float first, which is what
+ * reproduces the retail FPU register allocation.
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollTiltUpToHead(CameraNode* camera) {
+    BattleAnim_ApproachF(&sBattleScene.scene->easeRates.z, 0.1f, 0.02f);
+    BattleAnim_ApproachF(&camera->view.targetPosition.y,
+                         sBattleScene.scene->anchorPosition.y + D_FLT_82189358[sActivePokemon[sBattleScene.scene->actingSide]->displayObject.objectType][0],
+                         sBattleScene.scene->easeRates.z);
+    if (camera->view.targetPosition.y < (sBattleScene.scene->anchorPosition.y + D_FLT_82189358[sActivePokemon[sBattleScene.scene->actingSide]->displayObject.objectType][0] + 0.5f)) {
+        BattleScene_SelectNextBRollCameraShot(camera);
+    }
+}
+
+void BattleScene_SelectNextBRollCameraShot(CameraNode*);
+void BattleScene_EaseCameraTargetFromSavedEye(CameraNode*, ActivePokemon*);
+s32 func_821217DC(M2C_UNK);
+/**
+ * Same logic as BattleScene_BRollCameraUpdatePresetHold, but the Pokemon is fetched into a local only
+ * after the early-out test.  It reads the state of the active Pokemon at index
+ * sBattleScene.scene->unk_2C.  If its state byte unk_2D is 0x10 or bit 0x4000
+ * is set in its state flags, it calls BattleScene_SelectNextBRollCameraShot(camera).  Otherwise it calls
+ * BattleScene_EaseCameraTargetFromSavedEye(camera, that Pokemon) and, when func_821217DC(0x3C) returns
+ * non-zero, BattleScene_SelectNextBRollCameraShot(camera).  What the state byte and the flags mean is
+ * not established here.
+ * Note: m2c passed the Pokemon pointer to the first call; the ROM leaves a0
+ * untouched at the BattleScene_SelectNextBRollCameraShot calls, so camera is passed there.  Declaring
+ * the Pokemon local after the state pointer, and assigning it only after the
+ * early return, is what reproduces the register allocation (found with the
+ * decomp-permuter).
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollHoldFollow60Frames(CameraNode* camera) {
+    ActivePokemon* pokemon;
+    ActivePokemonState* st = &sActivePokemon[sBattleScene.scene->actingSide]->state;
+
+    if ((st->faintState == 0x10) || (st->flags & 0x4000)) {
+        BattleScene_SelectNextBRollCameraShot(camera);
+        return;
+    }
+    pokemon = sActivePokemon[sBattleScene.scene->actingSide];
+    BattleScene_EaseCameraTargetFromSavedEye(camera, pokemon);
+    if (func_821217DC(60) != 0) {
+        BattleScene_SelectNextBRollCameraShot(camera);
+    }
+}
+
+extern f32 D_FLT_82189358[][4];
+void BattleScene_SelectNextBRollCameraShot(CameraNode*);
+/**
+ * Variant of BattleScene_BRollTiltUpToHead (see there for the floats involved) with a goal of
+ * D_FLT_82189358[objectType][0] + 1.5 * (scene float +0xC4).  Same early-out as
+ * BattleScene_BRollHoldFollow60Frames/BattleScene_BRollCameraUpdatePresetHold: when the active Pokemon at index
+ * sBattleScene.scene->unk_2C has state byte unk_2D == 0x10 or state flag bit
+ * 0x4000 it just calls BattleScene_SelectNextBRollCameraShot(camera).  Otherwise it eases the scene float
+ * at +0x8C towards 0.1 (speed 0.02), eases the camera node's float at +0xB8
+ * towards the goal with the scene float +0x8C as the speed, and calls
+ * BattleScene_SelectNextBRollCameraShot(camera) once the goal minus 0.5 is below the camera float.
+ * Note: operand order of the first sum matches the ROM's FPU register use.
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollTiltUpHigh(CameraNode* camera) {
+    ActivePokemonState* st = &sActivePokemon[sBattleScene.scene->actingSide]->state;
+
+    if ((st->faintState == 0x10) || (st->flags & 0x4000)) {
+        BattleScene_SelectNextBRollCameraShot(camera);
+        return;
+    }
+    BattleAnim_ApproachF(&sBattleScene.scene->easeRates.z, 0.1f, 0.02f);
+    BattleAnim_ApproachF(&camera->view.targetPosition.y,
+                         sBattleScene.scene->anchorPosition.y * 1.5f + D_FLT_82189358[sActivePokemon[sBattleScene.scene->actingSide]->displayObject.objectType][0],
+                         sBattleScene.scene->easeRates.z);
+    if (((D_FLT_82189358[sActivePokemon[sBattleScene.scene->actingSide]->displayObject.objectType][0] + sBattleScene.scene->anchorPosition.y * 1.5f) - 0.5f) < M2C_FIELD(camera, f32*, 0xB8)) {
+        BattleScene_SelectNextBRollCameraShot(camera);
+    }
+}
+
+void BattleScene_SelectNextBRollCameraShot(CameraNode*);
+s32 BattleCamera_StepPath(CameraNode*, ActivePokemon*);
+s32 func_821217DC(M2C_UNK);
+/**
+ * B-roll hold step: moves to the next shot when the acting Pokemon can't be filmed, when its
+ * orbit finishes (BattleCamera_StepPath), or after 90 frames outside scene mode 9.
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollHoldOrbit(CameraNode* camera) {
+    ActivePokemonState* st = &sActivePokemon[sBattleScene.scene->actingSide]->state;
+
+    if ((st->faintState == 0x10) || (st->flags & 0x4000)) {
+        BattleScene_SelectNextBRollCameraShot(camera);
+    } else if (sBattleScene.scene->mode == 9) {
+        if (BattleCamera_StepPath(camera, sActivePokemon[sBattleScene.scene->actingSide]) != 0) {
+            BattleScene_SelectNextBRollCameraShot(camera);
+        }
+    } else if ((func_821217DC(90) != 0) || (BattleCamera_StepPath(camera, sActivePokemon[sBattleScene.scene->actingSide]) != 0)) {
+        BattleScene_SelectNextBRollCameraShot(camera);
+    }
+}
+
+void func_82122628(s32, Vec3f, s32, s32, f32, f32);
+/**
+ * Same early-out as BattleScene_BRollHoldFollow60Frames: when the active Pokemon at index
+ * sBattleScene.scene->unk_2C has state byte unk_2D == 0x10 or state flag bit
+ * 0x4000 it just calls BattleScene_SelectNextBRollCameraShot(camera).  Otherwise it steps the scene
+ * halfword at +0x6E towards 0x149E (step 0x2D) with BattleAnim_StepToS16,
+ * calls func_82122628 with camera, the scene's Vec3f at +0xC0, that halfword,
+ * the Pokemon's facing angle (BattleScene_GetParticipantFacingAngle), the scene
+ * float unk_74 and 0.0, and eases the camera node's float at +0x2C towards the
+ * scene float unk_60 (speed 0.08).  When the camera float is below unk_60 + 1.0
+ * it snaps the float to unk_60 and calls BattleScene_SelectNextBRollCameraShot(camera).  What the fields
+ * mean is not established here.
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollRaiseRotationXRestoreFov(CameraNode* camera) {
+    ActivePokemonState* st = &sActivePokemon[sBattleScene.scene->actingSide]->state;
+    f32 temp_f0;
+
+    if ((st->faintState == 0x10) || (st->flags & 0x4000)) {
+        BattleScene_SelectNextBRollCameraShot(camera);
+        return;
+    }
+    BattleAnim_StepToS16(&sBattleScene.scene->orbitRotationX, 0x149E, 0x2D);
+    func_82122628((s32)camera, sBattleScene.scene->anchorPosition, sBattleScene.scene->orbitRotationX,
+                  BattleScene_GetParticipantFacingAngle(sActivePokemon[sBattleScene.scene->actingSide]), sBattleScene.scene->orbitDistance, 0.0f);
+    BattleAnim_ApproachF(&M2C_FIELD(camera, f32*, 0x2C), sBattleScene.scene->verticalFieldOfView, 0.08f);
+    temp_f0 = sBattleScene.scene->verticalFieldOfView;
+    if (camera->perspective.verticalFieldOfView < (temp_f0 + 1.0f)) {
+        camera->perspective.verticalFieldOfView = temp_f0;
+        BattleScene_SelectNextBRollCameraShot(camera);
+    }
+}
+
+extern f32 D_FLT_821960A8;
+f32 func_82121750(ActivePokemon*, f32, f32);
+/**
+ * Sibling of BattleScene_BRollRaiseRotationXRestoreFov, with the same early-out: when the active Pokemon
+ * at index sBattleScene.scene->unk_2C has state byte unk_2D == 0x10 or state
+ * flag bit 0x4000 it just calls BattleScene_SelectNextBRollCameraShot(camera).  Otherwise it asks
+ * func_82121750(Pokemon, 2.5, 300.0) for a float, eases the scene float unk_74
+ * towards it (speed 0.08), calls func_82122628 with camera, the scene's Vec3f at
+ * +0xC0, 0, the Pokemon's facing angle, unk_74 and 0.0, and calls
+ * BattleScene_SelectNextBRollCameraShot(camera) while unk_74 is still below that float plus
+ * 0.2f.  What the fields and func_82121750 mean is not established
+ * here.
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollDollyIn(CameraNode* camera) {
+    ActivePokemonState* st = &sActivePokemon[sBattleScene.scene->actingSide]->state;
+    f32 temp_f0;
+
+    if ((st->faintState == 0x10) || (st->flags & 0x4000)) {
+        BattleScene_SelectNextBRollCameraShot(camera);
+        return;
+    }
+    temp_f0 = func_82121750(sActivePokemon[sBattleScene.scene->actingSide], 2.5f, 300.0f);
+    BattleAnim_ApproachF(&sBattleScene.scene->orbitDistance, temp_f0, 0.08f);
+    func_82122628((s32)camera, sBattleScene.scene->anchorPosition, 0,
+                  BattleScene_GetParticipantFacingAngle(sActivePokemon[sBattleScene.scene->actingSide]), sBattleScene.scene->orbitDistance, 0.0f);
+    if (sBattleScene.scene->orbitDistance < (temp_f0 + 0.2f)) {
+        BattleScene_SelectNextBRollCameraShot(camera);
+    }
+}
+
+void BattleScene_EaseCameraTargetToParticipant(CameraNode*, ActivePokemon*);
+
+/**
+ * BattleScene_BRollCameraUpdatePresetHold
+ *
+ * Reads the state of the active Pokemon at index sBattleScene.scene->unk_2C,
+ * the same entry BattleScene_BRollHoldOrbit and BattleScene_BRollStepOrbitUntilEnd use. If its state byte
+ * unk_2D is 0x10 or bit 0x4000 is set in its state flags, it calls
+ * BattleScene_SelectNextBRollCameraShot(arg0). Otherwise it calls BattleScene_EaseCameraTargetToParticipant(arg0, that Pokemon)
+ * and, when func_821217DC(0x3C) returns non-zero, BattleScene_SelectNextBRollCameraShot(arg0). What
+ * the state byte and the flags mean is not established here.
+ * Note: m2c passed the Pokemon pointer to the first two calls. The ROM leaves
+ * a0 untouched at the BattleScene_SelectNextBRollCameraShot call, so arg0 is passed there; at the
+ * BattleScene_EaseCameraTargetToParticipant call the Pokemon is the second argument (the form that
+ * matches, with the Pokemon re-read exactly as BattleScene_BRollHoldOrbit does).
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleScene_BRollCameraUpdatePresetHold(CameraNode* arg0) {
+    ActivePokemonState* st = &sActivePokemon[sBattleScene.scene->actingSide]->state;
+
+    if ((st->faintState == 0x10) || (st->flags & 0x4000)) {
+        BattleScene_SelectNextBRollCameraShot(arg0);
+        return;
+    }
+    BattleScene_EaseCameraTargetToParticipant(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
+    if (func_821217DC(60) != 0) {
+        BattleScene_SelectNextBRollCameraShot(arg0);
+    }
+}
+
+s32 BattleCamera_StepPath(CameraNode*, ActivePokemon*);
+void func_8212188C(void);
+/**
+ * Steps the orbit of the acting Pokemon; when scene byte 1 is 16, clears the message state
+ * and jumps the phase step to 27.
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollStepOrbitUntilEnd(CameraNode* camera) {
+    BattleCamera_StepPath(camera, sActivePokemon[sBattleScene.scene->actingSide]);
+    if (sBattleScene.scene->splineSegment == 0x10) {
+        func_8212188C();
+        sBattleScene.scene->phaseStep = 27;
+    }
+}
+
+s32 func_821217DC(M2C_UNK);                         /* extern */
+
+/**
+ * After 440 frames, sets the phase step to 29.
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollWait440Frames(s32 camera) {
+    if (func_821217DC(440) != 0) {
+        sBattleScene.scene->phaseStep = 29;
+    }
+}
+
+/*
+ * BattleScene_BRollWaitForButtonToExit
+ *
+ * Sets the camera's clip planes to 20.0f (near) and 4000.0f (far), the same
+ * call that BattleScene_InitializeBattlePresentation makes.  Then, if any of
+ * the bits in 0xE03F is set in the halfword at offset 8 of the structure that
+ * D_800603C0 points to, calls Audio_FadeCategoriesAndStreams(1) and stores 3 in
+ * sBattleScene.scene->winner.  What those two structures are is
+ * not established from this function alone.
+ */
+extern u8* D_800603C0;
+void Audio_FadeCategoriesAndStreams(s32 arg0);
+
+/**
+ * Waits for a button press (A, B, Z, L, R or C) on controller 1; then fades audio category 1
+ * and sets scene+0x40 to 3. Keeps clip planes 20-4000.
+ * @unverified Name guessed from the code.
+ */
+void BattleScene_BRollWaitForButtonToExit(CameraNode* camera) {
+    func_82121D78(camera, 20.0f, 4000.0f);
+    if (*(u16*)(D_800603C0 + 8) & 0xE03F) {
+        Audio_FadeCategoriesAndStreams(1);
+        sBattleScene.scene->winner = 3;
+    }
+}

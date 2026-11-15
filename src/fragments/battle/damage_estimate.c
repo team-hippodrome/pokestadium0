@@ -1,0 +1,472 @@
+/* Stadium Zero fragment012_17ED00. */
+/* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_313250.c, src/fragments/battle_engine/battle_engine_361050.c, src/fragments/battle_engine/battle_engine_move_animation.c. */
+
+#include "battle.h"
+#include "gb_data.h"
+#include "matrix.h"
+#include "math.h"
+extern s32 pad_D_843C60A0;
+extern u16 D_82199F50;
+extern u16 D_82199F52;
+extern u16 D_82199F54;
+extern u16 D_82199F56;
+extern u16 D_82199F58;
+extern u8 D_82199F32;
+extern MoveData D_8219A494;
+
+#include "moves.h"
+#include "pokemon_types.h"
+#include "pokemon.h"
+#include "status.h"
+extern PokemonBattleCues sSide1BattleCues;
+extern PokemonBattleCues sSide2BattleCues;
+extern SpeciesModelTransform sSide1PresentationTransform;
+extern SpeciesModelTransform sSide2PresentationTransform;
+extern ActivePokemon* sActivePokemon[2];
+extern ActivePokemon* sSide1ActivePokemon;
+extern ActivePokemon* sSide2ActivePokemon;
+extern MovePresentationCue* sCurrentAnimation;
+extern ModelDimensions sPokemonModelDimensions[2];
+extern BattleSceneStateTickSlot sBattleSceneStateTickSlots[7];
+extern s32 sBattleSceneStateTickSlotIndex;
+extern PokemonBattleCues* sSideBattleCues[];
+extern SpeciesModelTransform* sSidePresentationTransform[];
+extern u8 sPokemonWithAlternateSleepIdle[];
+extern u8 sPokemonWithAlternateSleepHitReactions[];
+extern u8 sPokemonWithNewHmInYellow[];
+extern u8 sCharizardLearnsFlyInYellow[];
+extern u8 sButterfreeLearnsFlashInYellow[];
+extern u8 sVenonatLearnsFlashInYellow[];
+extern u8 sVenomothLearnsFlashInYellow[];
+extern u8 sDiglettLearnsCutInYellow[];
+extern u8 sDugtrioLearnsCutInYellow[];
+extern u8 sKabutopsLearnsCutInYellow[];
+extern u8 sMewtwoLearnsNothingNewInYellow[];
+extern u8 sMewLearnsNothingNewInYellow[];
+extern u8* sPokemonYellowHmAdditions[];
+extern u8 sAerodactyl;
+extern u8 sFearow;
+extern u8 sFarfetchD;
+extern u8 sDoduoEvoLine[];
+extern char** sBattleMessagesTable;
+extern char** sPokemonNameTable;
+extern char** sMoveNameTable;
+extern char** sStatusConditionNameTable;
+extern char** sBattleControllerDisconnectedMessage;
+#define PARTNER_PIKACHU_CUE_BANK 152
+#define DIGLETT_OB1 (DIGLETT - 1)
+#define DUGTRIO_OB1 (DUGTRIO - 1)
+#define ELECTRODE_OB1 (ELECTRODE - 1)
+#define SQUIRTLE_OB1 (SQUIRTLE - 1)
+#define WARTORTLE_OB1 (WARTORTLE - 1)
+#define BLASTOISE_OB1 (BLASTOISE - 1)
+#define CLOYSTER_OB1  (CLOYSTER - 1)
+
+#include "m2c_macros.h"
+
+u16 BattleAi_ApplyMoveEffectDamageOverride(BattleMonRuntime* arg0, BattleMonRuntime* arg1);
+void BattleAi_ClampDamageRatio(void);
+void BattleAi_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u8 arg2);
+s32 BattleScene_FindU16InByteArray(u16 lookup_value, u8* array, s32 array_length);
+void BattleScene_IntroInitNop(void);
+
+/**
+ * COM AI damage estimate for fixed-damage moves: Super Fang (effect 40) takes half the
+ * HP; Seismic Toss and Night Shade deal the level, SonicBoom 20, Dragon Rage 40, and
+ * Psywave is estimated at 3/4 of the level. Returns the estimate.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (11 of the moves).
+ * @unverified Name guessed from the code.
+ */
+u16 BattleAi_ApplyMoveEffectDamageOverride(BattleMonRuntime* arg0, BattleMonRuntime* arg1) {
+    s32 var_v0;
+
+    switch (D_8219A494.effect) {
+        case 38:
+            break;
+
+        case 40:
+            D_82199F50 = arg0->hp / 2;
+            if (D_82199F50 == 0) {
+                D_82199F50 = 1;
+            }
+            break;
+
+        case 41:
+            switch (D_8219A494.moveId) {
+                case SEISMIC_TOSS:
+                case NIGHT_SHADE:
+                    var_v0 = arg0->level;
+                    break;
+
+                case SONICBOOM:
+                    var_v0 = 20;
+                    break;
+
+                case DRAGON_RAGE:
+                    var_v0 = 40;
+                    break;
+
+                default:
+                    var_v0 = arg0->level;
+                    var_v0 = (var_v0 >> 1) + (var_v0 >> 2);
+            }
+
+            D_82199F50 = var_v0;
+            break;
+
+        default:
+            if (D_8219A494.power == 0) {
+                return D_82199F50;
+            }
+            break;
+    }
+
+    return D_82199F50;
+}
+
+/**
+ * Scales the damage estimate by 255/255, which leaves it unchanged.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (11 of the moves).
+ * @unverified Name guessed from the code.
+ */
+void BattleAi_ClampDamageRatio(void) {
+    if (D_82199F50 >= 2) {
+        D_82199F50 = (D_82199F50 * 0xFF) / 255;
+    }
+}
+
+extern u8 D_8219A497;
+typedef struct TypeMatchupZ {
+    /* 0x00 */ u8 attackType;
+    /* 0x01 */ u8 defendType;
+    /* 0x02 */ u8 multiplier;
+} TypeMatchupZ; // size = 0x3
+extern TypeMatchupZ D_8218AC50[];
+
+/**
+ * Damage-estimate version of Battle_ApplyTypeEffectAndSTAB for any attacker and
+ * defender (battle Pokemon records), working on D_82199F50.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleCalc_ApplyTypeEffectAndStab(u8* attacker, u8* defender) {
+    TypeMatchupZ* entry;
+    u8 att_type1 = attacker[0x1C];
+    u8 att_type2 = attacker[0x1D];
+    u8 def_type1 = defender[0x1C];
+    u8 def_type2 = defender[0x1D];
+    u8 move_type = D_8219A497;
+
+    if ((move_type == att_type1) || (move_type == att_type2)) {
+        D_82199F50 += D_82199F50 >> 1;
+    }
+    for (entry = D_8218AC50; entry->attackType != 0xFF; entry++) {
+        if ((entry->attackType == move_type) && ((entry->defendType == def_type1) || (entry->defendType == def_type2))) {
+            D_82199F50 = (D_82199F50 * entry->multiplier) / 10;
+        }
+    }
+}
+
+/**
+ * COM AI damage setup for move arg2: loads the move's data and picks the attack and
+ * defense stats (physical or special by type, doubled by Reflect or Light Screen, unmodified
+ * on a critical hit), scaling both down if both are over 255, and the level (doubled on a
+ * critical hit).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (11 of the moves).
+ * @unverified Name guessed from the code.
+ */
+void BattleAi_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* arg1, u8 arg2) {
+    MoveData* temp_v0 = &gMoveData[arg2 - 1];
+
+    D_8219A494.moveId = temp_v0->moveId;
+    D_8219A494.effect = temp_v0->effect;
+    D_8219A494.power = temp_v0->power;
+    D_8219A494.type = temp_v0->type;
+    D_8219A494.accuracy = temp_v0->accuracy;
+    D_8219A494.pp = temp_v0->pp;
+
+    D_82199F50 = 0;
+    D_82199F52 = D_8219A494.power;
+    if (D_82199F52) {
+        if (D_8219A494.type < TYPE_FIRE) { // physical types come before Fire
+            D_82199F56 = arg1->modifiedDefense;
+            if (arg1->uniqueStatusFlags & 4) {
+                D_82199F56 *= 2;
+            }
+
+            if (D_82199F32 != 0) {
+                D_82199F56 = arg1->unmodifiedDefense;
+                D_82199F54 = arg0->unmodifiedAttack;
+            } else {
+                D_82199F54 = arg0->modifiedAttack;
+            }
+        } else {
+            D_82199F56 = arg1->modifiedSpecial;
+            if (arg1->uniqueStatusFlags & 2) {
+                D_82199F56 *= 2;
+            }
+
+            if (D_82199F32 != 0) {
+                D_82199F56 = arg1->unmodifiedSpecial;
+                D_82199F54 = arg0->unmodifiedSpecial;
+            } else {
+                D_82199F54 = arg0->modifiedSpecial;
+            }
+        }
+
+        if (D_82199F54 & 0xFF00) {
+            if (D_82199F56 & 0xFF00) {
+                D_82199F54 >>= 2;
+                D_82199F56 >>= 2;
+                if (D_82199F54 == 0) {
+                    D_82199F54 = 1;
+                }
+            }
+        }
+
+        D_82199F58 = arg0->level;
+        if (D_82199F32 != 0) {
+            D_82199F58 *= 2;
+        }
+    }
+}
+
+/**
+ * Gen 1 base damage ((level * 2 / 5 + 2) * power * attack / defense) / 50 + 2,
+ * capped at 997, added to D_82199F50.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleCalc_AddBaseDamage(UNUSED u8* arg0, UNUSED u8* arg1) {
+    u8 tmp = D_8219A494.effect;
+
+    if (tmp == 7) {
+        D_82199F56 >>= 1;
+        if (D_82199F56 == 0) {
+            D_82199F56 = 1;
+        }
+    }
+
+    if (D_82199F56 == 0) {
+        D_82199F56 = 1;
+    }
+
+    D_82199F50 += (((((D_82199F58 * 2) / 5) + 2) * D_82199F52 * D_82199F54) / D_82199F56) / 50;
+
+    if (D_82199F50 >= 0x3E5) {
+        D_82199F50 = 0x3E4;
+    }
+
+    D_82199F50 += 2;
+}
+
+extern u8 D_82199F32;
+extern u8 D_82199F33;
+void func_8210E9C0(u8*, u8*);
+void func_8210EAC4();
+void func_8210EC0C(u8*, u8*, u8);
+void BattleCalc_AddBaseDamage(u8*, u8*);
+
+/**
+ * Runs the sequence func_8210EC0C, BattleCalc_AddBaseDamage, BattleCalc_ApplyTypeEffectAndStab,
+ * func_8210EAC4 and func_8210E9C0 for the attacker/defender pair
+ * (arg0, arg1). The flag D_82199F32 is saved into D_82199F33 and cleared
+ * for the first four steps, and restored before the last one. arg2 is only
+ * handed on to func_8210EC0C.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
+ * @unverified Name guessed from the code; comment kept.
+ */
+void BattleCalc_EstimateDamage(u8* arg0, u8* arg1, u8 arg2) {
+    D_82199F33 = D_82199F32;
+    D_82199F32 = 0;
+    func_8210EC0C(arg0, arg1, arg2);
+    BattleCalc_AddBaseDamage(arg0, arg1);
+    BattleCalc_ApplyTypeEffectAndStab(arg0, arg1);
+    func_8210EAC4();
+    D_82199F32 = D_82199F33;
+    func_8210E9C0(arg0, arg1);
+}
+
+/**
+ * Returns the index of `lookup_value` in `array`, or -1 if absent.
+ */
+s32 BattleScene_FindU16InByteArray(u16 lookup_value, u8* array, s32 array_length) {
+    s32 lookup_result = 0;
+
+    while (array_length--) {
+        if (lookup_value == *array) {
+            return lookup_result;
+        }
+        array++;
+        lookup_result++;
+    }
+
+    return -1;
+}
+
+typedef struct S0Learnset {
+    /* 0x00 */ u8 levels[10]; // @unverified: learned when the Pokémon's level is at least this; 0 = empty
+    /* 0x0A */ u8 moves[10]; // @unverified: move learned at levels[i]
+} S0Learnset; // size = 0x14
+extern S0Learnset D_8218CA60[];
+extern S0Learnset D_8218D62C[];
+extern u8 D_8218AD9C[];
+extern u8* D_8218ADC8[];
+u8 Move_GetIdFromTableIndex(s32);
+/**
+ * Clears a move slot's illegal flag when the species can have that move (start
+ * moves, level-up moves or TM/HM).
+ * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran when
+ * C-Left picked the Pokémon to switch in.
+ * Seen in play (2026-11-13) it also ran when COM sent out its next Pokémon (ゆけっ！ゲンのすけ) after its
+ * first one fainted.
+ * @unverified Name and comment guessed from the code.
+ */
+void Battle_MarkLegalMovesForSpecies(ActivePokemon* pokemon, u16 pokemon_id) {
+    s32 move_index;
+    s32 i;
+    s32 lookup;
+    s32 tm_index;
+    u8 tm_hm_flag;
+    SpeciesData* species_data;
+    BattleMonRuntime* pokemon_runtime;
+
+    pokemon_runtime = &pokemon->state.runtime;
+
+    for (move_index = 0; move_index < 4; move_index++) {
+        if (pokemon_runtime->moves[move_index] != 0) {
+            species_data = &gSpeciesData[pokemon_id];
+
+            for (i = 0; i < ARRAY_COUNT(species_data->startingMoves); i++) {
+                if ((species_data->startingMoves[i] != 0) && (species_data->startingMoves[i] == pokemon_runtime->moves[move_index])) {
+                    pokemon->state.moveSlotIllegality[move_index] = 0;
+                }
+            }
+
+            for (i = 0; i < 10; i++) {
+                if ((D_8218CA60[pokemon_id].levels[i] != 0) && (pokemon_runtime->level >= D_8218CA60[pokemon_id].levels[i]) &&
+                    (D_8218CA60[pokemon_id].moves[i] == pokemon_runtime->moves[move_index])) {
+                    pokemon->state.moveSlotIllegality[move_index] = 0;
+                }
+            }
+
+            for (i = 0; i < 10; i++) {
+                if ((D_8218D62C[pokemon_id].levels[i] != 0) && (pokemon_runtime->level >= D_8218D62C[pokemon_id].levels[i]) &&
+                    (D_8218D62C[pokemon_id].moves[i] == pokemon_runtime->moves[move_index])) {
+                    pokemon->state.moveSlotIllegality[move_index] = 0;
+                }
+            }
+
+            for (i = 0; i < 64; i++) {
+                lookup = BattleScene_FindU16InByteArray(pokemon_id + 1, D_8218AD9C, 8);
+                if (lookup >= 0) {
+                    tm_index = i / 8;
+                    if (tm_index == D_8218ADC8[lookup][0]) {
+                        tm_hm_flag = species_data->tmHmLearnset[tm_index] | D_8218ADC8[lookup][1];
+                    } else {
+                        tm_hm_flag = species_data->tmHmLearnset[tm_index];
+                    }
+                } else {
+                    tm_hm_flag = species_data->tmHmLearnset[i / 8];
+                }
+
+                if (((tm_hm_flag >> (i % 8)) & 1) && (Move_GetIdFromTableIndex(i) == pokemon_runtime->moves[move_index])) {
+                    pokemon->state.moveSlotIllegality[move_index] = 0;
+                }
+            }
+        } else {
+            pokemon->state.moveSlotIllegality[move_index] = 0;
+        }
+    }
+}
+
+extern u8 D_8218C930[][2];
+
+/**
+ * Marks all four moves illegal, then clears the flags for moves the species or
+ * its pre-evolutions (D_8218C930) can learn.
+ * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran when
+ * C-Left picked the Pokémon to switch in.
+ * Seen in play (2026-11-13) it also ran when COM sent out its next Pokémon (ゆけっ！ゲンのすけ) after its
+ * first one fainted.
+ * @unverified Name and comment guessed from the code.
+ */
+void Battle_CheckMovesetLegality(ActivePokemon* arg0) {
+    s32 pad; // FAKE: stack padding
+    BattleMonRuntime* state = &arg0->state.runtime;
+
+    arg0->state.moveSlotIllegality[0] = 1;
+    arg0->state.moveSlotIllegality[1] = 1;
+    arg0->state.moveSlotIllegality[2] = 1;
+    arg0->state.moveSlotIllegality[3] = 1;
+    Battle_MarkLegalMovesForSpecies(arg0, state->species - 1);
+    if (D_8218C930[state->species - 1][0] != 0) {
+        Battle_MarkLegalMovesForSpecies(arg0, D_8218C930[state->species - 1][0] - 1);
+    }
+    if (D_8218C930[state->species - 1][1] != 0) {
+        Battle_MarkLegalMovesForSpecies(arg0, D_8218C930[state->species - 1][1] - 1);
+    }
+}
+
+/**
+ * Copies the Pokemon's battle HP (0x7D2) into its team roster entry (state.rosterIndex).
+ * @unverified Name guessed from the code.
+ */
+void Battle_SyncHpToRoster(ActivePokemon* arg0) {
+    BattleMon* mon = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
+
+    mon->hp = arg0->state.runtime.hp;
+}
+
+void Announcer_CommentOnHpChange(s32);
+
+/**
+ * Steps the party Pokemon's HP one point toward the battle display HP. Returns 1
+ * once they are equal.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
+ * turn.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Battle_StepPartyHpToDisplay(ActivePokemon* arg0) {
+    BattleMonRuntime* rt = &arg0->state.runtime;
+    BattleMon* mon = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
+
+    if (mon->hp == rt->hp) {
+        return 1;
+    }
+    mon->hp = Math_StepToS32(mon->hp, rt->hp, 1, 1);
+    if (mon->hp == rt->hp) {
+        if (arg0->displayObject.objectType == 0x98) {
+            return 1;
+        }
+        Announcer_CommentOnHpChange(BattleScene_GetParticipantSideIndex(sOtherPokemon));
+        return 1;
+    }
+    return 0;
+}
+
+/**
+ * Intro init hook that does nothing.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
+void BattleScene_IntroInitNop(void) {
+}
+
+extern u8 D_82199F7C;
+extern f64 D_DBL_82195770;
+extern f64 D_DBL_82195778;
+u32 func_80053A80(void);
+//@unverified
+/**
+ * Battle random byte: adds a scaled value from func_80053A80 to D_82199F7C and
+ * returns the new value.
+ */
+u8 Battle_Random(void)
+{
+  return (D_82199F7C += (u8) ((u32) ((((f32) ((s32) ((u16) (func_80053A80() / 5577)))) / D_DBL_82195770) * D_DBL_82195778))) ^ 0; // FAKE: ^ 0 keeps the sum in v0
+}

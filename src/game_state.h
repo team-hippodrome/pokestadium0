@@ -1,10 +1,15 @@
-#ifndef _29BA0_H_
-#define _29BA0_H_
+/* Declarations for src/game_state.c. */
+#ifndef GAME_STATE_H
+#define GAME_STATE_H
 
 #include "global.h"
-#include "jpeg_stream.h"
-#include "src/controller.h"
 #include "PR/leo.h"
+#include "stdarg.h"
+#include "moves.h"
+#include "m2c_macros.h"
+#include "controller.h"
+#include "dp_intro.h"
+#include "scheduler.h"
 
 typedef struct arg1_func_80019420 {
     /* 0x00 */ s8 unk_00;
@@ -22,181 +27,237 @@ typedef struct unk_D_800AE520 {
 } unk_D_800AE520; // size >= 0x14
 
 typedef struct BattleMonSpecies {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
+    /* 0x00 */ u8 id;
+    /* 0x01 */ u8 isRental; // 1 for a rental picked in the tournament entry screen (seen: a rented Pikachu); 0 for GB Pokemon (Pokemon_FromGbRecord). Free Battle rentals had 0. Tournament_CheckSurfPikachuReward skips its Pikachu-without-Surf check (likely the Surf Pikachu reward) when any team member has it
 } BattleMonSpecies; // size = 0x2
 
 typedef struct BattleMon {
-    /* 0x00 */ BattleMonSpecies unk_00;
+    /* 0x00 */ BattleMonSpecies species;
     /* 0x02 */ u16 hp;
-    /* 0x04 */ u8 unk_04;
+    /* 0x04 */ u8 boxLevel; // the Game Boy box record's level byte; set from level before a box save
     /* 0x05 */ u8 statusCondition;
-    /* 0x06 */ u8 unk_06;
-    /* 0x07 */ u8 unk_07;
-    /* 0x08 */ u8 unk_08;
-    /* 0x09 */ u8 unk_09[4];
+    /* 0x06 */ u8 type1;
+    /* 0x07 */ u8 type2;
+    /* 0x08 */ u8 catchRate; // the Game Boy record's catch rate byte; 0xFF in rental Pokémon
+    /* 0x09 */ u8 moves[4];
     /* 0x0D */ u8 pad0D;
-    /* 0x0E */ u16 unk_0E;
-    /* 0x10 */ u32 unk_10;
-    /* 0x14 */ u16 unk_14;
-    /* 0x16 */ u16 unk_16;
-    /* 0x18 */ u16 unk_18;
-    /* 0x1A */ u16 unk_1A;
-    /* 0x1C */ u16 unk_1C;
-    /* 0x1E */ u16 unk_1E;
-    /* 0x20 */ u8 unk_20[4];
-    /* 0x24 */ u8 unk_24;
-    /* 0x25 */ u8 unk_25;
-    /* 0x26 */ u16 unk_26;
-    /* 0x28 */ u16 unk_28;
-    /* 0x2A */ u16 unk_2A;
-    /* 0x2C */ u16 unk_2C;
-    /* 0x2E */ u16 unk_2E;
-    /* 0x30 */ u8 unk_30[11];
-    /* 0x3B */ u8 unk_3B[11];
-    /* 0x46 */ u8 unk_46[7];
-    /* 0x4D */ u8 pad4D;
-    /* 0x4E */ u8 unk_4E;
-    /* 0x4F */ u8 unk_4F;
+    /* 0x0E */ u16 otId; // Original Trainer ID No.
+    /* 0x10 */ u32 exp; // experience points: 8000 for a level 20 Onix, 15625 for a level 25 Ditto
+    /* 0x14 */ u16 statExp[5]; // Gen 1 stat experience (EVs): HP, Attack, Defense, Speed, Special; vitamins add 2560
+    /* 0x1E */ u16 dvs; // Gen 1 DVs (IVs), 4 bits per stat
+    /* 0x20 */ u8 pp[4];
+    /* 0x24 */ u8 level;
+    /* 0x25 */ u8 faintBatch; // 0 while not fainted, else the sNextFaintBatch it fainted in
+    /* 0x26 */ u16 maxHp;
+    /* 0x28 */ u16 attack;
+    /* 0x2A */ u16 defense;
+    /* 0x2C */ u16 speed;
+    /* 0x2E */ u16 special;
+    /* 0x30 */ u8 nickname[13]; // EUC-JP, e.g. イワイワ
+    /* 0x3D */ u8 gbOtNameHead[3]; // first 3 bytes of the Game Boy save's OT name, kept to write back unchanged
+    /* 0x40 */ u8 otName[13]; // Original Trainer name, EUC-JP, e.g. ガール
+    /* 0x4D */ u8 gbOtNameTail[3]; // last 3 bytes of the Game Boy save's OT name
 } BattleMon; // size = 0x50
+
+typedef struct CachedMoveData {
+    /* 0x00 */ u8 lastMove;
+    /* 0x01 */ u8 effect;
+    /* 0x02 */ u8 power;
+    /* 0x03 */ u8 type;
+    /* 0x04 */ u8 accuracy;
+    /* 0x05 */ u8 pp;
+} CachedMoveData; // size = 0x6
+
+typedef struct BattleMonRuntime {
+    /* 0x00 */ u8 unk_00;
+    /* 0x01 */ u8 unk_01;
+    /* 0x02 */ char unk02[0x2];
+    /* 0x04 */ u8 unk_04;
+    /* 0x05 */ u8 unk_05;
+    /* 0x06 */ char unk06[0x5];
+    /* 0x0B */ u8 species; // national Pokédex number; Transform copies the target's
+    /* 0x0C */ u16 hp; // the HP the HUD, the COM AI and fainting follow
+    /* 0x0E */ u16 hpAfterPoisonBurn; // HP once this turn's poison or burn damage is taken
+    /* 0x10 */ u16 hpAfterLeechSeed; // the user's HP after the drain, the target's after the heal; 900 when none is pending
+    /* 0x12 */ u16 pendingHp; // HP while damage is worked out; 0xFFFF between turns
+    /* 0x14 */ u8 rosterIndex; // copy of ActivePokemonState.rosterIndex
+    /* 0x15 */ u8 statusCondition; // the active Pokémon's Gen 1 status (sleep turns in bits 0-2, 0x08 poison, 0x10 burn, 0x20 freeze, 0x40 paralysis), copied from and back to BattleMon.statusCondition; poking 0x08 made the HUD show どく (poison)
+    /* 0x16 */ u8 restSleepTurns[6]; // per brought Pokémon (rosterIndex + teamMemberIndex * 3): sleep turns left from Rest, which sets 2
+    /* 0x1C */ u8 type1;
+    /* 0x1D */ u8 type2;
+    /* 0x1E */ u8 catchRate; // copied from BattleMon.catchRate
+    /* 0x1F */ u8 moves[4];
+    /* 0x23 */ char unk23[0x1];
+    /* 0x24 */ u16 dvs; // Gen 1 DVs (IVs), copied from BattleMon.dvs; Transform copies the target's
+    /* 0x26 */ u8 level;
+    /* 0x28 */ u16 maxHp;
+    /* 0x2A */ u16 modifiedAttack;
+    /* 0x2C */ u16 modifiedDefense;
+    /* 0x2E */ u16 speed;
+    /* 0x30 */ u16 modifiedSpecial;
+    /* 0x32 */ u8 pp[4];
+    /* 0x36 */ u16 baseHp; // gBaseStats[species].baseHP
+    /* 0x38 */ u16 unmodifiedAttack;
+    /* 0x3A */ u16 unmodifiedDefense;
+    /* 0x3C */ u16 unmodifiedSpeed;
+    /* 0x3E */ u16 unmodifiedSpecial;
+    /* 0x40 */ char unk40[0x4];
+    /* 0x44 */ CachedMoveData moveCache;
+    /* 0x4A */ u8 unk_4A;
+    /* 0x4B */ u8 unk_4B;
+    /* 0x4C */ u8 immobilizedReason;
+    /* 0x4D */ u8 volatileStatusFlags;
+    /* 0x4E */ u8 uniqueStatusFlags;
+    /* 0x4F */ u8 effectTurnsLeft;
+    /* 0x50 */ u8 confusionTurnsLeft;
+    /* 0x51 */ u8 toxicCounter;
+    /* 0x52 */ u8 disabledMoveState;
+    /* 0x53 */ u8 unk_53;
+    /* 0x54 */ u16 effectCounter;
+    /* 0x56 */ u8 scaleResize;
+    /* 0x57 */ u8 disabledMove;
+    /* 0x58 */ u8 lastMove;
+    /* 0x59 */ u8 substituteHp;
+    /* 0x5A */ u8 usedMove;
+    /* 0x5B */ u8 receivedCritFlag; // the last hit taken: 1 critical hit, 2 one-hit KO
+    /* 0x5C */ u8 statStages[8]; // 1-13, 7 is neutral: Attack, Defense, Speed, Special, accuracy, evasion; the last 2 are never used
+} BattleMonRuntime; // size = 0x64
 
 typedef struct ExtendedRosterInfo {
     /* 0x000 */ u16 unk_000;
-    /* 0x002 */ u8 numberOfPokemonCanBePicked; // Only changes for Free Battle and VS Mewtwo, see @src/fragments/battle_engine/battle_engine_main.c
-    /* 0x003 */ u8 unk_003;
-    /* 0x004 */ char unk004[0x10];
-    /* 0x014 */ char unk_014[4];
-    /* 0x018 */ char unk018[0x10];
-    /* 0x028 */ BattleMon unk_028[1];
-    /* 0x078 */ char unk078[0x190];
+    /* 0x002 */ u8 numberOfPokemonCanBePicked; // size of the team the order screen picks from (battleMon[0..n-1]); 6 for a tournament template team
+    /* 0x003 */ u8 trainerIndex; // @unverified: index of the trainer's BinArchive file the VS screen loads (vs_scene), 23 for 1P and 15 for the round-1 bug catcher in play; nintendo_cup_teams sets the template index or round + 0x16; FreeBattle_LoadGbCartTrainer (GB-cart teams) stores the 0-based controller/GB port, so ports 0-3 pick the players' pictures
+    /* 0x004 */ char title[0x10]; // the small line over the name on the VS screen: poking the bug catcher's to ＡＢ showed ＡＢ there; 「トレーナー」 (Trainer) for both sides in Free Battle and the round-1 tournament; copied from the trainer template's title, e.g. 「ほっかいどう」 (Hokkaido) or 「トレーナー」 (Trainer)
+    /* 0x014 */ char fullName[20]; // the name on the VS screen (「むしとり\nしょうねん」 in round 1); the trainerName (1P, ＣＯＭ) in Free Battle; copied from the template's two-line name, e.g. 「むしとり\nしょうねん」 (Bug Catcher)
+    /* 0x028 */ BattleMon battleMon[6];
 } ExtendedRosterInfo; // size = 0x208 (Stadium 1: 0x248)
 
 typedef struct TeamRoster {
-    /* 0x000 */ u8 unk_000;
+    /* 0x000 */ u8 isHuman;
     /* 0x001 */ u8 controllerPort;
     /* 0x002 */ u8 numberOfPokemonBrought;
     /* 0x004 */ Controller* controller;
-    /* 0x008 */ char unk_008[4];
-    /* 0x00C */ char unk00C[0xC];
-    /* 0x018 */ s32 unk_018;
+    /* 0x008 */ char trainerName[0x10]; // NUL-terminated; "1P" (Session_InitHumanTrainer copies 5 bytes) and full-width ＣＯ... for the COM side (EUC-JP A3 C3 A3 CF, FreeBattle_CopyTeamToRoster copies 7 bytes) seen in battle
+    /* 0x018 */ s32 trainerId; // @unverified: id word BattleAi_AddTrainerPickScore switches the COM picks on; tournament templates set it (0x755B Hokkaido, ...)
     /* 0x01C */ BattleMon pokemonPicked[6];
     /* 0x1FC */ ExtendedRosterInfo* rosterInfo;
     /* 0x200 */ char unk200[0x4];
 } TeamRoster; // size = 0x204 (Stadium 1: 0x21C)
 
-typedef struct BattleSessionTeams {
-    /* 0x00 */ u8 uniqueStatusFlags;
+// One side of a battle: its trainer(s) (two in a tag battle), the Pokémon model it shows and model load state.
+typedef struct BattleSide {
+    /* 0x00 */ u8 modelFlags; // 0x80 asks for the side's model to be reloaded, 0x40 while it is requested, 0x10 once loaded; a switch in play wrote 0x80 (BattleScene_PhaseWithdraw), 0xC0 (BattleSide_RequestModelLoad), 0x10 (PokeIcon_WaitFrameLoadForObject), then 0
     /* 0x01 */ u8 tagTeamSize;
     /* 0x02 */ s16 displayModel;
-    /* 0x04 */ TeamRoster* unk_04;
+    /* 0x04 */ BattleMon* displayMon; // party BattleMon whose model the side shows; moved from pokemonPicked[0] to [3] with displayModel 95 to 31 when 1P switched Onix for Nidoqueen
     /* 0x08 */ TeamRoster* teamMember[2];
-    /* 0x10 */ ModelLoadContext* unk_10;
-    /* 0x14 */ ModelNodeView* loadedModel;
+    /* 0x10 */ ModelLoadContext* modelLoadContext; // @unverified: loader BattleSide_RequestModelLoad and the PokeIcon_*ForObject functions use
+    /* 0x14 */ ModelNodeView* loadedModel; // @unverified: modelLoadContext->loadedModel once the model load finishes
     /* 0x18 */ ModelNodeView* unk_18;
     /* 0x1C */ u8 unk_1C;
-    /* 0x1D */ u8 assetIsBusy;
+    /* 0x1D */ u8 backgroundLoadFlags; // @unverified: as modelFlags, for the background load (PokeIcon_RequestBackgroundForObject)
     /* 0x1E */ u8 unk_1E;
-    /* 0x20 */ s32 unk_20;
-    /* 0x24 */ arg1_func_80019420* unk_24;
-} BattleSessionTeams; // size = 0x28
+    /* 0x20 */ s32 backgroundFileList; // @unverified: file list passed to PokeIcon_RequestBackgroundLoad
+    /* 0x24 */ arg1_func_80019420* background; // @unverified: buffer passed to PokeIcon_RequestBackgroundLoad, then modelLoadContext->loadedBackground
+} BattleSide; // size = 0x28
 
-// Offsets are for US 1.0. In VERSION_JP, TeamRoster and ExtendedRosterInfo are 0x18 bytes shorter,
-// so rosterInfo starts at 0x0814, battleSides at 0x10D4, and the struct is 0x1138 bytes.
+// Zero's layout (offsets checked against Session_InitContinueTrainer, BattleSide_InitSingleTrainer and Tournament_SaveContinueData, which
+// reach these fields by raw offset). gSessionContext at 0x800AE8F0 is defined in game_state.c.
 typedef struct SessionContext {
     /* 0x0000 */ s8 mode;
     /* 0x0001 */ s8 ruleCategory;
     /* 0x0002 */ s8 modeSelection; // Cup division or castle location, depending on mode.
     /* 0x0003 */ s8 roundOrDemoId; // One-based battle round; scene ID in non-battle attract demos.
     /* 0x0004 */ TeamRoster trainerSlots[4];
-    /* 0x0874 */ ExtendedRosterInfo rosterInfo[4];
-    /* 0x1194 */ BattleSessionTeams battleSides[2];
-    /* 0x11E4 */ u8 opponentHistory[2][4]; // Eight contiguous entries; the first subscript is not a battle side.
-    /* 0x11EC */ u8 aiDifficulty; // Free Battle: 0 = Hard, 1 = Normal, 2 = Easy.
-    /* 0x11ED */ u8 timeLimitsEnabled;
-    /* 0x11EE */ u8 battleLimitMinutes;
-    /* 0x11EF */ u8 moveLimitSeconds;
-    /* 0x11F0 */ u8 gbStarterChoice;
-    /* 0x11F1 */ char unk11F1[0x1];
-    /* 0x11F2 */ u8 inRound2;
-    /* 0x11F3 */ u8 continueCount;
-    /* 0x11F4 */ u8 unk_11F4;
-    /* 0x11F5 */ u8 sessionFlags;
-    /* 0x11F6 */ u16 transitionFlags;
-} SessionContext; // size = 0x11F8 (JP: 0x1138)
+    /* 0x0814 */ ExtendedRosterInfo rosterInfo[4];
+    /* 0x1034 */ BattleSide battleSides[2];
+    /* 0x1084 */ u8 opponentHistory[2][4]; // Eight contiguous entries; the first subscript is not a battle side.
+    /* 0x108C */ u8 aiDifficulty; // Free Battle: 0 = Hard, 1 = Normal, 2 = Easy.
+    /* 0x108D */ u8 timeLimitsEnabled;
+    /* 0x108E */ u8 battleLimitMinutes;
+    /* 0x108F */ u8 moveLimitSeconds;
+    /* 0x1090 */ u8 gbStarterChoice;
+    /* 0x1091 */ char unk1091[0x1];
+    /* 0x1092 */ u8 inRound2;
+    /* 0x1093 */ u8 continueCount;
+    /* 0x1094 */ u8 teamGbPort; // @unverified: GB port of the continued team, 0xFF for rentals (Tournament_LoadContinueData); passed to Session_LoadPortSnapshot
+    /* 0x1095 */ u8 sessionFlags;
+    /* 0x1096 */ u16 transitionFlags;
+} SessionContext; // size = 0x1098
+
 #define RULE_CATEGORY_ANYTHING_GOES 0
+
 #define RULE_CATEGORY_NINTENDO_CUP_97 1
+
 #define RULE_CATEGORY_NINTENDO_CUP_98 2
+
 #define RULE_CATEGORY_NINTENDO_CUP_99 3
+
 #define RULE_CATEGORY_PETIT_CUP 4
+
 #define RULE_CATEGORY_PIKA_CUP 5
+
 #define RULE_CATEGORY_PRIME_CUP 6
+
 #define RULE_CATEGORY_GYM_LEADER_CASTLE 7
+
 #define RULE_CATEGORY_VS_MEWTWO 8
+
 #define SESSION_MODE_ANYTHING_GOES 0
+
 #define SESSION_MODE_NINTENDO_CUP_97 1
+
 #define SESSION_MODE_NINTENDO_CUP_98 2
+
 #define SESSION_MODE_NINTENDO_CUP_99 3
+
 #define SESSION_MODE_PETIT_CUP 4
+
 #define SESSION_MODE_PIKA_CUP 5
+
 #define SESSION_MODE_PRIME_CUP 6
+
 #define SESSION_MODE_GYM_LEADER_CASTLE 7
+
 #define SESSION_MODE_VS_MEWTWO 8
+
 #define SESSION_MODE_BATTLE_NOW 9
+
 #define SESSION_MODE_EVENT_BATTLE 10
+
 // 11-15 Unknown
 #define SESSION_MODE_ATTRACT_DEMO_BATTLE 16
+
 // 17, 18: Cutscenes
 // 19, 20: Unknown
 // 21-24: Cutscenes
 #define SESSION_MODE_ATTRACT_DEMO_MINIGAME 25
+
 // 26: Cutscene
 #define SESSION_FLAG_REVEAL_MEWTWO 0x04
 
-
-
 extern u16 D_8006BBB0[16][256];
+
 extern s32 gCurrentGameState;
+
 extern unk_D_800AE520 D_800AF990;
+
 extern SessionContext gSessionContext;
 
-
-s32 Game_DoCopyProtection(s32 state);
+// game_state.c
 s32 Fragment_LoadAndCall(s32 arg0, u8* romStart, u8* romEnd, u32 arg3, u32 arg4);
 void Fragment_QueueCall(s32 arg0, u8* arg1, u8* arg2, s32 arg3, s32 arg4);
 TeamRoster* Trainer_GetSlots(void);
 s32 GbSave_GetActivePort(void);
 void GbSave_SetActivePort(s32 arg0);
-void Controller_PollInputs(void);
-s32 Stage_RunDemoScene(s16 arg0);
-void State_RunCredits(void);
-void State_N64LogoIntro(void);
-void State_TitleScreen(void);
 void State_N64ddBootUnused(void);
-void State_StubbedDebug(void);
-void State_AreaSelect(void);
-void State_EventBattle(void);
-void State_Options(void);
-void State_MenuSelect(void);
-s16 RuleWizard_StadiumMenu(s16 arg0);
-void State_StadiumMenu(void);
-s32 RuleWizard_FreeBattle(s16 arg0);
-void State_FreeBattle(void);
-s16 RuleWizard_VsMewtwo(s16 arg0);
-void State_VsMewtwo(void);
-void State_KidsClub(void);
-void State_Gallery(void);
-void State_VictoryPalace(void);
-void State_GbTower(void);
-s16 RuleWizard_GymLeaderCastle(s16 arg0, s16 arg1);
-void State_GymLeaderCastle(void);
-void State_BattleNow(s32 arg0);
-void State_BattleFromEvent(void);
-void State_FastN64Logo(void);
-void State_FastBattle(void);
-void func_800268DC(void);
-void State_KidsClubTitle(void);
+void State_GbPlayer(void);
+void State_TitleScreen(void);
+void Game_UnusedStub(void);
 void Game_ShutdownAndLoadFragment(s32 arg0, s32 arg1);
 void Game_ResetStorageDevice(void);
-void Game_Thread(UNUSED LEODiskID* arg);
+void ImageGrid_Clear(void);
+void BezierPath_InitEased(s8* arg0, s32 arg1);
+M2C_UNK func_80025BE4(s32);                         /* extern */
 
-#endif // _29BA0_H_
+#endif // GAME_STATE_H

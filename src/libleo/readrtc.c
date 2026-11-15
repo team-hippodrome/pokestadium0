@@ -6,18 +6,18 @@
 
 s32 LeoReadRTC(LEOCmd* cmdBlock, OSMesgQueue* mq);
 
-s32 LeoReadRTC(LEOCmd* cmdBlock, OSMesgQueue* mq) {
+s32 LeoReadRTC(LEOCmd* cmd_block, OSMesgQueue* mq) {
     if (!__leoActive) {
         return -1;
     }
-    cmdBlock->header.command = LEO_COMMAND_READ_TIMER;
-    cmdBlock->header.reserve1 = 0;
-    cmdBlock->header.control = 0;
-    cmdBlock->header.reserve3 = 0;
+    cmd_block->header.command = LEO_COMMAND_READ_TIMER;
+    cmd_block->header.reserve1 = 0;
+    cmd_block->header.control = 0;
+    cmd_block->header.reserve3 = 0;
     if (mq != NULL) {
-        cmdBlock->header.control |= LEO_CONTROL_POST;
-        cmdBlock->header.post = mq;
+        cmd_block->header.control |= LEO_CONTROL_POST;
+        cmd_block->header.post = mq;
     }
-    leoCommand(cmdBlock);
+    leoCommand(cmd_block);
     return 0;
 }

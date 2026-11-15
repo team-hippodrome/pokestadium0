@@ -2,7 +2,6 @@
 /* C ported from the Stadium 1 decomp: src/libleo/leocmdex.c. */
 
 #include "global.h"
-#include "leo.h"
 #include "libleo/internal.h"
 #include "PR/leo.h"
 extern void (*D_80077B50[16])(void);

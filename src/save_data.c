@@ -2,33 +2,11 @@
 /* C ported from the Stadium 1 decomp: src/DDC0.c, src/audio_sound_state.c, src/save_data.c. */
 
 #include "save_data.h"
-#include "save_data.h"
-#include "gb_data.h"
-#include "jpeg_stream.h"
-#include "memory.h"
 
-#include "audio_sound_state.h"
 #include "libnumus/player.h"
-#include "audio_stream.h"
-#include "3D140.h"
-#include "audio_commands.h"
 
 #include <PR/os_internal_reg.h>
 #include "global.h"
-#include "dp_intro.h"
-#include "profiler.h"
-#include "audio_loop_point.h"
-#include "scheduler.h"
-#include "gb_tower_audio.h"
-#include "audio_commands.h"
-#include "audio_category_fade.h"
-#include "audio_sound_state.h"
-#include "audio_channel.h"
-#include "audio_loop_point.h"
-typedef struct unk_D_800A8480 {
-  /* 0x0000 */ OSThread thread;
-  /* 0x01B0 */ char unk01B0[0x2030];
-} unk_D_800A8480;
 extern s32 D_800AAE30;
 extern s32 D_800AAF3C;
 
@@ -37,8 +15,8 @@ extern s32 D_800AAF3C;
 u16 Save_Checksum(u8* arg0, s32 arg1);
 s32 Save_RecordIsValid(u8* arg0, s32 arg1);
 void Save_WriteFooter(u8* arg0, s32 arg1, s32 arg2);
-s32 Audio_GetFreeVoiceCount(void);
-void func_80024044(void);
+s32 Save_GetBuffer(void);
+void Save_UnusedStub(void);
 void Save_ResetAndCommitTypedRecord(s32 arg0, s32 arg1);
 s32 Deck_IsSaveEntryPresent(s32 arg0, s32 arg1);
 
@@ -46,6 +24,10 @@ s32 Save_IsTypedRecordFlagSet(s32 arg0, s32 arg1, s16 arg2);
 void Save_CommitTypedRecord(s32 arg0, s32 arg1);
 void Save_ClearTypedRecord(s32 arg0, s32 arg1);
 
+/**
+ * 16-bit sum of every byte of a save record except its last two (the stored sum).
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): every record in a fresh and a played save checks out with it.
+ */
 u16 Save_Checksum(u8* arg0, s32 arg1) {
     u16 var_v1 = 0;
 
@@ -55,6 +37,10 @@ u16 Save_Checksum(u8* arg0, s32 arg1) {
     return var_v1;
 }
 
+/**
+ * Returns 1 if a save record ends in 'PO' 'KE' followed by Save_Checksum of the record.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): a record with one corrupted byte fails and is repaired from the other copy at boot.
+ */
 s32 Save_RecordIsValid(u8* arg0, s32 arg1) {
     u16* temp_v1 = arg1 + arg0;
 
@@ -75,6 +61,10 @@ s32 Save_RecordIsValid(u8* arg0, s32 arg1) {
     return 1;
 }
 
+/**
+ * Writes a record's 6-byte footer: 'POKE' + checksum when arg2 is set, else 'XXXX' + (checksum ^ 0xFF), which marks it invalid.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): both footers were caught being written to SRAM.
+ */
 void Save_WriteFooter(u8* arg0, s32 arg1, s32 arg2) {
     u16* temp_v1;
 
@@ -97,42 +87,36 @@ void Save_WriteFooter(u8* arg0, s32 arg1, s32 arg2) {
 
 M2C_UNK func_80058410(s32, s32, s32);
 M2C_UNK func_80003774(s32, M2C_UNK, M2C_UNK, M2C_UNK);
-extern s32 D_800AE8E0;
-void func_80023890(s32 arg0, s32 arg1, s32 arg2) {
-    s32 sp1C = arg1 - D_800AE8E0;
+extern s32 gSaveBuffer;
+#define gSaveSram (*(SaveSram**)&gSaveBuffer)
+/**
+ * Repairs one copy of a save record: copies arg2 bytes from arg0 to arg1 and writes arg1 to its SRAM offset.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): after a corrupted primary team record, the boot rewrote it from its backup.
+ */
+void Save_CopyRecordAndWrite(s32 arg0, s32 arg1, s32 arg2) {
+    s32 sp1C = arg1 - gSaveBuffer;
 
     func_80058410(arg0, arg1, arg2);
     func_80003774(arg1, sp1C, arg2, 1);
 }
 
-/*
- * func_800238D8: flushes one save record whose "dirty" flag is set.
- *
- * `arg0` is the address of the record inside the buffer at D_800AE8E0 and
- * `arg1` its size in bytes (halfword flag at the start of the record).  If
- * bit 1 of that halfword is set: the bit is cleared, the footer is rewritten
- * with Save_WriteFooter(record, size, 1) (the valid 'PO' 'KE' form), the
- * record is copied to record + size via func_80058410(src, dst, size) -- a
- * second copy directly behind it -- and func_80003774 is called with the
- * record address, its offset from the start of the buffer, twice the size and
- * 1.  What func_80003774 does with them (the offset and doubled size suggest
- * a write of both copies out to the save medium) is not established here.
- *
- * Callers such as func_8002404C pass a third argument that this function
- * ignores, so the prototype is left unspecified at the call sites and the
- * definition is written in K&R style.  The unused pad[2] only reproduces the
- * retail stack frame.
+/**
+ * Commits a dirty save record (flag bit 1): clears the bit, writes the 'POKE' footer, copies the record over its
+ * backup right behind it and writes both copies (2 * arg1 bytes) to SRAM in one transfer.
+ * Callers such as Save_CommitTypedRecord pass a third argument that this function ignores, so the prototype is
+ * left unspecified and the definition is K&R. The unused pad[2] only reproduces the retail stack frame.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): registering a team wrote 0x250 bytes at SRAM 0x0000, a 64 box 0xAC0 bytes at 0x2500.
  */
-void func_800238D8(arg0, arg1)
+void Save_CommitRecord(arg0, arg1)
     s32 arg0;
     s32 arg1;
 {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s32 offset;
     s16 flags = *(s16*)arg0;
 
     if (flags & 2) {
-        offset = arg0 - D_800AE8E0;
+        offset = arg0 - gSaveBuffer;
         *(s16*)arg0 = flags & 0xFFFD;
         Save_WriteFooter((u8*)arg0, arg1, 1);
         func_80058410(arg0, arg0 + arg1, arg1);
@@ -140,57 +124,46 @@ void func_800238D8(arg0, arg1)
     }
 }
 
-/*
- * func_80023954: same as func_800238D8, but for invalidating a dirty record.
- *
- * If bit 1 of the record's leading halfword is set, the footer is written with
- * Save_WriteFooter(record, size, 0) (the 'XX' 'XX' form with the inverted
- * checksum), the record is copied to record + size via func_80058410 and
- * func_80003774 is called with the record address, its offset from the start
- * of the buffer at D_800AE8E0, twice the size and 1.  Unlike func_800238D8
- * the flag bit is left set.  `arg0` is the record address and `arg1` its size.
- * A third argument passed by func_80024170 is ignored; the definition is K&R
- * style for that reason, and the unused pad[2] reproduces the retail stack
- * frame.
+/**
+ * Writes a dirty save record and its backup to SRAM with the 'XXXX' footer, so both copies read as invalid.
+ * Used while a Pokémon or item transfer to or from the Game Boy cartridge is in progress: if the power goes off
+ * before Save_CommitRecord runs, the next boot resets the record instead of keeping a duplicate. The dirty bit stays set.
+ * A third argument passed by Save_InvalidateTypedRecord is ignored (K&R definition); pad[2] reproduces the frame.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): moving a Pokémon into 64のボックス1 (N64 Box 1) wrote 'XXXX' first, then 'POKE' once the GB save was written.
  */
-void func_80023954(arg0, arg1)
+void Save_InvalidateRecord(arg0, arg1)
     s32 arg0;
     s32 arg1;
 {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s32 offset;
 
     if (*(s16*)arg0 & 2) {
-        offset = arg0 - D_800AE8E0;
+        offset = arg0 - gSaveBuffer;
         Save_WriteFooter((u8*)arg0, arg1, 0);
         func_80058410(arg0, arg0 + arg1, arg1);
         func_80003774(arg0, offset, arg1 * 2, 1);
     }
 }
 
-M2C_UNK func_80058410(s32, s32, s32);               /* extern */
-
-void func_800239C4(s32 arg0, s32 arg1) {
+M2C_UNK func_80058410(s32, s32, s32);               /**
+ * Copies a save record's backup copy (at arg0 + arg1) back over the primary copy, undoing unsaved edits.
+ * @unverified Read from the code.
+ */
+void Save_RevertRecordFromBackup(s32 arg0, s32 arg1) {
     func_80058410(arg0 + arg1, arg0, arg1);
 }
 
-typedef struct SaveRecA80023F38 { s16 flags; char pad[0x24E]; } SaveRecA80023F38;
-typedef struct SaveRecB80023F38 { s16 flags; char pad[0xABE]; } SaveRecB80023F38;
-typedef struct SaveRecC80023F38 { s16 flags; char pad[0x1BE]; } SaveRecC80023F38;
-typedef struct Save80023F38 {
-    SaveRecA80023F38 a[16];
-    SaveRecB80023F38 b[4];
-    SaveRecC80023F38 c[4];
-    s16 d; char padD[0x7A40 - 0x5702];
-    s16 e; char padE[0x7A60 - 0x7A42];
-    s16 f;
-} Save80023F38;
 
-M2C_UNK func_8004FD20();                            /* extern */
-void func_800239F0(arg0)
+M2C_UNK func_8004FD20();                            /**
+ * Zeroes a save record (bzero with the caller's a0/a1 still in place) and marks it dirty.
+ * The size argument passed by Save_ClearTypedRecord is used only through that register.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): つづきのデータをけす (Erase continue data) wrote the continue record back as zeroes with a valid footer.
+ */
+void Save_ClearRecord(arg0)
     s16* arg0;
 {
-  if (1)
+  if (1) // FAKE: if (1) wrapper
   {
     func_8004FD20();
     *arg0 |= 2;
@@ -199,46 +172,47 @@ void func_800239F0(arg0)
 
 s32 func_800237AC(s32, s32);
 void func_800245E0(s32, s32);
-void func_80023A20(s32 arg0, s32 arg1) {
-    UNUSED s32 pad;
+/**
+ * Validates both copies of save record (arg0 kind, arg1 slot) after the SRAM read. Both bad: the record is reset
+ * and committed. Only one good: it is copied over the bad one and written back. Both good: nothing is done.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): a corrupted primary team record came back from its backup, a box with both copies corrupted came back empty.
+ */
+void Save_LoadTypedRecordWithRepair(s32 arg0, s32 arg1) {
+    UNUSED s32 pad; // FAKE: stack padding
     s32 size;
     s32 primary;
     s32 backup;
     s32 status;
-    s32 base;
 
     switch (arg0) {
         case 16:
-            base = (s32)(*(SaveRecA80023F38**)&D_800AE8E0 + arg1);
-            primary = base;
-            backup = base + 0x128;
+            primary = (s32)&gSaveSram->teams[arg1][0];
+            backup = (s32)&gSaveSram->teams[arg1][1];
             size = 0x128;
             break;
         case 17:
-            base = (s32)(*(SaveRecB80023F38**)&D_800AE8E0 + arg1);
-            primary = base + 0x2500;
-            backup = base + 0x2A60;
+            primary = (s32)&gSaveSram->boxes[arg1][0];
+            backup = (s32)&gSaveSram->boxes[arg1][1];
             size = 0x560;
             break;
         case 18:
-            base = (s32)(*(SaveRecC80023F38**)&D_800AE8E0 + arg1);
-            primary = base + 0x5000;
-            backup = base + 0x50E0;
+            primary = (s32)&gSaveSram->items[arg1][0];
+            backup = (s32)&gSaveSram->items[arg1][1];
             size = 0xE0;
             break;
         case 19:
-            primary = D_800AE8E0 + 0x5700;
-            backup = D_800AE8E0 + 0x68A0;
+            primary = (s32)&gSaveSram->list[0];
+            backup = (s32)&gSaveSram->list[1];
             size = 0x11A0;
             break;
         case 20:
-            primary = D_800AE8E0 + 0x7A40;
-            backup = D_800AE8E0 + 0x7A50;
+            primary = (s32)&gSaveSram->options[0];
+            backup = (s32)&gSaveSram->options[1];
             size = 0x10;
             break;
         case 21:
-            primary = D_800AE8E0 + 0x7A60;
-            backup = D_800AE8E0 + 0x7CE8;
+            primary = (s32)&gSaveSram->continueData[0];
+            backup = (s32)&gSaveSram->continueData[1];
             size = 0x288;
             break;
     }
@@ -249,95 +223,112 @@ void func_80023A20(s32 arg0, s32 arg1) {
             func_800245E0(arg0, arg1);
             break;
         case 1:
-            func_80023890(primary, backup, size);
+            Save_CopyRecordAndWrite(primary, backup, size);
             break;
         case 2:
-            func_80023890(backup, primary, size);
+            Save_CopyRecordAndWrite(backup, primary, size);
             break;
     }
 }
 
-extern s32 D_8006BBA0;
-extern s32 D_800AE8E0;
+extern s32 gSaveBufferLoaded;
+extern s32 gSaveBuffer;
 
-void func_80023C08(s32 arg0, s32 arg1) {
+/**
+ * Free callback of the 'BU64' block that holds the SRAM image: clears gSaveBuffer and gSaveBufferLoaded.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): gSaveBuffer is 0 on the title screen and filled again on the next load.
+ */
+void Save_OnBufferFreed(s32 arg0, s32 arg1) {
     if (arg1 == 0x42553634) {
-        D_8006BBA0 = 0;
-        D_800AE8E0 = 0;
+        gSaveBufferLoaded = 0;
+        gSaveBuffer = 0;
     }
 }
 
 s32 func_8000234C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *); /* extern */
 M2C_UNK func_80003774(s32, M2C_UNK, M2C_UNK, M2C_UNK); /* extern */
-void func_80023A20(s32, s32);
-M2C_UNK func_8004FD20(s32, M2C_UNK);                /* extern */
-//@unverified
-/**
- * Allocates the 0x8000-byte 'BU64' save buffer once (D_8006BBA0 marks it
- * done), passes it to func_8004FD20 and func_80003774, and sets up its entries
- * with func_80023A20. Returns D_8006BBA0.
+void Save_LoadTypedRecordWithRepair(s32, s32);
+M2C_UNK func_8004FD20(s32, M2C_UNK);                /**
+ * Loads the 32 KiB SRAM image into a new 'BU64' block once (gSaveBufferLoaded) and validates or repairs every record.
+ * Returns whether the image is loaded.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): the image sits at gSaveBuffer while menus are open; a blank SRAM is formatted on first boot.
  */
-s32 func_80023C30(void)
+s32 Save_LoadSram(void)
 {
   s32 temp_v0;
   s32 i;
-  if (D_8006BBA0 == 0)
+  if (gSaveBufferLoaded == 0)
   {
-    temp_v0 = func_8000234C(0x8000, 0, 0x42553634, func_80023C08); D_800AE8E0 = temp_v0; // IDO: both statements must share one source line
+    temp_v0 = func_8000234C(0x8000, 0, 0x42553634, Save_OnBufferFreed); gSaveBuffer = temp_v0; // IDO: both statements must share one source line
     if (temp_v0 != 0)
     {
-      D_8006BBA0 = 1;
+      gSaveBufferLoaded = 1;
       func_8004FD20(temp_v0, 0x8000);
-      func_80003774(D_800AE8E0, 0, 0x8000, 0);
+      func_80003774(gSaveBuffer, 0, 0x8000, 0);
       for (i = 0; i < 16; i++)
       {
-        func_80023A20(0x10, i);
+        Save_LoadTypedRecordWithRepair(0x10, i);
       }
       for (i = 0; i < 4; i++)
       {
-        func_80023A20(0x11, i);
-        func_80023A20(0x12, i);
+        Save_LoadTypedRecordWithRepair(0x11, i);
+        Save_LoadTypedRecordWithRepair(0x12, i);
       }
-      func_80023A20(0x13, 0);
-      func_80023A20(0x14, 0);
-      func_80023A20(0x15, 0);
+      Save_LoadTypedRecordWithRepair(0x13, 0);
+      Save_LoadTypedRecordWithRepair(0x14, 0);
+      Save_LoadTypedRecordWithRepair(0x15, 0);
     }
   }
-  return D_8006BBA0;
+  return gSaveBufferLoaded;
 }
 
-s32 Audio_GetFreeVoiceCount(void) {
-    return mus_free_voices_count;
+/**
+ * Returns the address of the SRAM image (gSaveBuffer).
+ * @unverified Read from the code; no caller was found.
+ */
+s32 Save_GetBuffer(void) {
+    return gSaveBuffer;
 }
 
 M2C_UNK func_8001FB10(s32, s32);                    /* extern */
-M2C_UNK func_8001FE84();                            /* extern */
 M2C_UNK func_800203FC(s32);                         /* extern */
 M2C_UNK func_80058410(s32, s32, M2C_UNK);           /* extern */
 
-void func_80023D3C(s32 arg0, s32 arg1) {
+/**
+ * Unpacks a 0x2D-byte Game Boy save record (box struct, nickname at +0x21, OT name at +0x27) into the BattleMon at arg0.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): registered and boxed Pokémon came back with their names and stats.
+ */
+void BattleMon_FromGbSaveRecord(s32 arg0, s32 arg1) {
     s32 sp24;
     s32 temp_a0;
 
-    func_8001FE84();
+    Pokemon_FromGbRecord((BattleMon*)arg0, (GbPokemonRecord*)arg1);
     func_800203FC(arg0);
-    temp_a0 = arg1 + 0x27;
+    temp_a0 = (s32)((SaveMonRecord*)arg1)->otName;
     sp24 = temp_a0;
-    func_80058410(temp_a0, arg0 + 0x3D, 3);
-    func_80058410(arg1 + 0x2A, arg0 + 0x4D, 3);
-    func_8001FB10(arg0 + 0x30, arg1 + 0x21);
-    func_8001FB10(arg0 + 0x40, sp24);
+    func_80058410(temp_a0, (s32)((BattleMon*)arg0)->gbOtNameHead, 3);
+    func_80058410((s32)&((SaveMonRecord*)arg1)->otName[3], (s32)((BattleMon*)arg0)->gbOtNameTail, 3);
+    func_8001FB10((s32)((BattleMon*)arg0)->nickname, (s32)((SaveMonRecord*)arg1)->nickname);
+    func_8001FB10((s32)((BattleMon*)arg0)->otName, sp24);
 }
 
-void func_80023DB8(s32 arg0, s32 arg1) {
-    M2C_FIELD(arg0, u8*, 4) = M2C_FIELD(arg0, u8*, 0x24);
-    Pokemon_ToGbRecord((BattleMon*)arg0, (GbPokemonRecord*)arg1);
-    Text_TranscodeName((char*)(arg1 + 0x21), (char*)(arg0 + 0x30));
-    func_80058410(arg0 + 0x3D, arg1 + 0x27, 3);
-    func_80058410(arg0 + 0x4D, arg1 + 0x2A, 3);
+/**
+ * Packs a BattleMon into a GB-format save record with its transcoded name and trainer data.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMon_ToGbSaveRecord(BattleMon* arg0, SaveMonRecord* arg1) {
+    arg0->boxLevel = arg0->level;
+    Pokemon_ToGbRecord(arg0, &arg1->mon);
+    Text_TranscodeName((char*)arg1->nickname, (char*)arg0->nickname);
+    func_80058410((s32)arg0->gbOtNameHead, (s32)arg1->otName, 3);
+    func_80058410((s32)arg0->gbOtNameTail, (s32)&arg1->otName[3], 3);
 }
 
-s32 func_80023E28(arg0, arg1, arg2)
+/**
+ * Returns whether any of the flag bits arg2 are set on save record (arg0 kind, arg1 slot).
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): the registration list showed exactly the slots with bit 0 set.
+ */
+s32 Save_IsTypedRecordFlagSet(arg0, arg1, arg2)
     s32 arg0;
     s32 arg1;
     s16 arg2;
@@ -345,193 +336,229 @@ s32 func_80023E28(arg0, arg1, arg2)
     s32 ret = 0;
     switch (arg0) {
     case 16:
-        ret = ((*(Save80023F38**)&D_800AE8E0)->a[arg1].flags & arg2) != 0;
+        ret = (gSaveSram->teams[arg1][0].flags & arg2) != 0;
         break;
     case 17:
-        ret = ((*(Save80023F38**)&D_800AE8E0)->b[arg1].flags & arg2) != 0;
+        ret = (gSaveSram->boxes[arg1][0].flags & arg2) != 0;
         break;
     case 18:
-        ret = ((*(Save80023F38**)&D_800AE8E0)->c[arg1].flags & arg2) != 0;
+        ret = (gSaveSram->items[arg1][0].flags & arg2) != 0;
         break;
     case 19:
-        ret = ((*(Save80023F38**)&D_800AE8E0)->d & arg2) != 0;
+        ret = (gSaveSram->list[0].flags & arg2) != 0;
         break;
     case 20:
-        ret = ((*(Save80023F38**)&D_800AE8E0)->e & arg2) != 0;
+        ret = (gSaveSram->options[0].flags & arg2) != 0;
         break;
     case 21:
-        ret = ((*(Save80023F38**)&D_800AE8E0)->f & arg2) != 0;
+        ret = (gSaveSram->continueData[0].flags & arg2) != 0;
         break;
     }
     return ret;
 }
 
-M2C_UNK func_80023F38(arg0, arg1, arg2)
+/**
+ * ORs arg2 into the flag halfword of save record (arg0 kind, arg1 slot). Bit 0 = present, bit 1 = dirty.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): the items record went from flags 0 to 3 before its commit and was stored as 1.
+ */
+M2C_UNK Save_SetTypedRecordFlags(arg0, arg1, arg2)
     s32 arg0;
     s32 arg1;
     s16 arg2;
 {
     switch (arg0) {
     case 16:
-        (*(Save80023F38**)&D_800AE8E0)->a[arg1].flags |= arg2;
+        gSaveSram->teams[arg1][0].flags |= arg2;
         break;
     case 17:
-        (*(Save80023F38**)&D_800AE8E0)->b[arg1].flags |= arg2;
+        gSaveSram->boxes[arg1][0].flags |= arg2;
         break;
     case 18:
-        (*(Save80023F38**)&D_800AE8E0)->c[arg1].flags |= arg2;
+        gSaveSram->items[arg1][0].flags |= arg2;
         break;
     case 19:
-        (*(Save80023F38**)&D_800AE8E0)->d |= arg2;
+        gSaveSram->list[0].flags |= arg2;
         break;
     case 20:
-        (*(Save80023F38**)&D_800AE8E0)->e |= arg2;
+        gSaveSram->options[0].flags |= arg2;
         break;
     case 21:
-        (*(Save80023F38**)&D_800AE8E0)->f |= arg2;
+        gSaveSram->continueData[0].flags |= arg2;
         break;
     }
 }
 
-void func_80024044(void) {
+/**
+ * Empty; no callers.
+ */
+void Save_UnusedStub(void) {
 }
 
-void func_800238D8(); // Called with two or three arguments.
-void func_8002404C(s32 arg0, s32 arg1) {
+void Save_CommitRecord(); // Called with two or three arguments.
+/**
+ * Commits save record (arg0 kind 16-21, arg1 slot) to SRAM if it is dirty (Save_CommitRecord).
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): options, team, box, item and continue records were each written through it.
+ */
+void Save_CommitTypedRecord(s32 arg0, s32 arg1) {
     switch (arg0) {
     case 16:
-        func_800238D8((*(s32 *)&D_800AE8E0) + (arg1 * 0x250), 0x128, arg1);
+        Save_CommitRecord((s32)gSaveSram->teams[arg1], 0x128, arg1);
         return;
     case 17:
-        func_800238D8((*(s32 *)&D_800AE8E0) + (arg1 * 0xAC0) + 0x2500, 0x560, arg1);
+        Save_CommitRecord((s32)gSaveSram->boxes[arg1], 0x560, arg1);
         return;
     case 18:
-        func_800238D8((*(s32 *)&D_800AE8E0) + (arg1 * 0x1C0) + 0x5000, 0xE0, arg1);
+        Save_CommitRecord((s32)gSaveSram->items[arg1], 0xE0, arg1);
         return;
     case 19:
-        func_800238D8((*(s32 *)&D_800AE8E0) + 0x5700, 0x11A0, arg1);
+        Save_CommitRecord((s32)gSaveSram->list, 0x11A0, arg1);
         return;
     case 20:
-        func_800238D8((*(s32 *)&D_800AE8E0) + 0x7A40, 0x10, arg1);
+        Save_CommitRecord((s32)gSaveSram->options, 0x10, arg1);
         return;
     case 21:
-        func_800238D8((*(s32 *)&D_800AE8E0) + 0x7A60, 0x288, arg1);
+        Save_CommitRecord((s32)gSaveSram->continueData, 0x288, arg1);
         /* fallthrough */
     default:
         return;
     }
 }
 
-void func_80023954(); // Called with three arguments; the third is ignored.
-void func_80024170(s32 arg0, s32 arg1) {
+void Save_InvalidateRecord(); // Called with three arguments; the third is ignored.
+/**
+ * Writes save record (arg0 kind, arg1 slot) to SRAM marked invalid while a Game Boy transfer is open (Save_InvalidateRecord).
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): the 'XXXX' write before a 64 box and an item record were committed.
+ */
+void Save_InvalidateTypedRecord(s32 arg0, s32 arg1) {
     switch (arg0) {
     case 16:
-        func_80023954((*(s32 *)&D_800AE8E0) + (arg1 * 0x250), 0x128, arg1);
+        Save_InvalidateRecord((s32)gSaveSram->teams[arg1], 0x128, arg1);
         return;
     case 17:
-        func_80023954((*(s32 *)&D_800AE8E0) + (arg1 * 0xAC0) + 0x2500, 0x560, arg1);
+        Save_InvalidateRecord((s32)gSaveSram->boxes[arg1], 0x560, arg1);
         return;
     case 18:
-        func_80023954((*(s32 *)&D_800AE8E0) + (arg1 * 0x1C0) + 0x5000, 0xE0, arg1);
+        Save_InvalidateRecord((s32)gSaveSram->items[arg1], 0xE0, arg1);
         return;
     case 19:
-        func_80023954((*(s32 *)&D_800AE8E0) + 0x5700, 0x11A0, arg1);
+        Save_InvalidateRecord((s32)gSaveSram->list, 0x11A0, arg1);
         return;
     case 20:
-        func_80023954((*(s32 *)&D_800AE8E0) + 0x7A40, 0x10, arg1);
+        Save_InvalidateRecord((s32)gSaveSram->options, 0x10, arg1);
         return;
     case 21:
-        func_80023954((*(s32 *)&D_800AE8E0) + 0x7A60, 0x288, arg1);
+        Save_InvalidateRecord((s32)gSaveSram->continueData, 0x288, arg1);
         /* fallthrough */
     default:
         return;
     }
 }
 
-void func_80024294(s32 arg0, s32 arg1) {
+/**
+ * Restores save record (arg0 kind, arg1 slot) from its backup copy, dropping unsaved edits.
+ * @unverified Read from the code.
+ */
+void Save_RevertTypedRecord(s32 arg0, s32 arg1) {
     switch (arg0) {
     case 16:
-        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->a[arg1], 0x128);
+        Save_RevertRecordFromBackup((s32)gSaveSram->teams[arg1], 0x128);
         break;
     case 17:
-        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->b[arg1], 0x560);
+        Save_RevertRecordFromBackup((s32)gSaveSram->boxes[arg1], 0x560);
         break;
     case 18:
-        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->c[arg1], 0xE0);
+        Save_RevertRecordFromBackup((s32)gSaveSram->items[arg1], 0xE0);
         break;
     case 19:
-        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->d, 0x11A0);
+        Save_RevertRecordFromBackup((s32)gSaveSram->list, 0x11A0);
         break;
     case 20:
-        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->e, 0x10);
+        Save_RevertRecordFromBackup((s32)gSaveSram->options, 0x10);
         break;
     case 21:
-        func_800239C4((s32)&(*(Save80023F38**)&D_800AE8E0)->f, 0x288);
+        Save_RevertRecordFromBackup((s32)gSaveSram->continueData, 0x288);
         break;
     }
 }
 
-void func_800243B8(void) {
+/**
+ * Commits every dirty team, 64 box and item record and the 100-Pokémon list (kinds 16 to 19).
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): it ran after the GB save was written when leaving せいとん (Organize) with レポートしてやめる (Save and quit).
+ */
+void Save_CommitPokemonRecords(void) {
     s32 i;
 
     for (i = 0; i < 0x2500; i += 0x250) {
-        func_800238D8(*(s32*)&D_800AE8E0 + i, 0x128);
+        Save_CommitRecord(*(s32*)&gSaveBuffer + i, 0x128);
     }
     for (i = 0; i < 0x2B00; i += 0xAC0) {
-        func_800238D8(*(s32*)&D_800AE8E0 + i + 0x2500, 0x560);
+        Save_CommitRecord(*(s32*)&gSaveBuffer + i + 0x2500, 0x560);
     }
     for (i = 0; i < 0x700; i += 0x1C0) {
-        func_800238D8(*(s32*)&D_800AE8E0 + i + 0x5000, 0xE0);
+        Save_CommitRecord(*(s32*)&gSaveBuffer + i + 0x5000, 0xE0);
     }
-    func_800238D8(*(s32*)&D_800AE8E0 + 0x5700, 0x11A0);
+    Save_CommitRecord(*(s32*)&gSaveBuffer + 0x5700, 0x11A0);
 }
 
-void func_80024470(s32 arg0, s32 arg1) {
+/**
+ * Zeroes save record (arg0 kind, arg1 slot) and marks it dirty; names are set to the 0x50 terminator and kinds 19
+ * and 20 are marked present.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): a blank SRAM comes up with exactly these contents in every record.
+ */
+void Save_ClearTypedRecord(s32 arg0, s32 arg1) {
     switch (arg0) {
     case 16: {
-        SaveRecA80023F38* rec = &(*(Save80023F38**)&D_800AE8E0)->a[arg1];
-        func_800239F0(rec, 0x128);
-        ((s8*)rec)[2] = 0x50;
-        ((s8*)rec)[0xA] = 0x50;
+        SaveTeamRecord* rec = &gSaveSram->teams[arg1][0];
+        Save_ClearRecord(&rec->flags, 0x128);
+        rec->trainerName[0] = 0x50;
+        rec->secondName[0] = 0x50;
         break;
     }
     case 17: {
-        SaveRecB80023F38* rec = &(*(Save80023F38**)&D_800AE8E0)->b[arg1];
-        func_800239F0(rec, 0x560);
-        ((s8*)rec)[2] = 0x50;
-        ((s8*)rec)[0xA] = 0x50;
+        SaveBoxRecord* rec = &gSaveSram->boxes[arg1][0];
+        Save_ClearRecord(&rec->flags, 0x560);
+        rec->trainerName[0] = 0x50;
+        rec->secondName[0] = 0x50;
         break;
     }
     case 18: {
-        SaveRecC80023F38* rec = &(*(Save80023F38**)&D_800AE8E0)->c[arg1];
-        func_800239F0(rec, 0xE0);
-        ((s8*)rec)[2] = 0x50;
+        SaveItemRecord* rec = &gSaveSram->items[arg1][0];
+        Save_ClearRecord(&rec->flags, 0xE0);
+        rec->trainerName[0] = 0x50;
         break;
     }
     case 19: {
-        s16* rec = &(*(Save80023F38**)&D_800AE8E0)->d;
-        func_800239F0(rec, 0x11A0);
+        s16* rec = &gSaveSram->list[0].flags;
+        Save_ClearRecord(rec, 0x11A0);
         *rec |= 1;
         break;
     }
     case 20: {
-        s16* rec = &(*(Save80023F38**)&D_800AE8E0)->e;
-        func_800239F0(rec, 0x10);
+        s16* rec = &gSaveSram->options[0].flags;
+        Save_ClearRecord(rec, 0x10);
         *rec |= 1;
         break;
     }
     case 21:
-        func_800239F0(&(*(Save80023F38**)&D_800AE8E0)->f, 0x288);
+        Save_ClearRecord(&gSaveSram->continueData[0].flags, 0x288);
         break;
     }
 }
 
+/**
+ * Clears save record (arg0 kind, arg1 slot) and commits it.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): つづきのデータをけす (Erase continue data) reset the continue record this way.
+ */
 void Save_ResetAndCommitTypedRecord(s32 arg0, s32 arg1) {
     Save_ClearTypedRecord(arg0, arg1);
     Save_CommitTypedRecord(arg0, arg1);
 }
 
-s32 func_80024610(s32 arg0) {
+/**
+ * Entries per save record kind: 6 Pokémon per team, 30 per 64 box, 100 items per item record, 100 in the kind 19 list.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): 64のボックス (N64 Box) shows 00/30 and 64の カセット items 000/100.
+ */
+s32 Deck_GetSaveRecordCapacity(s32 arg0) {
     s32 ret = 0;
 
     switch (arg0) {
@@ -555,7 +582,11 @@ s32 func_80024610(s32 arg0) {
     return ret;
 }
 
-s32 func_8002465C(s32 arg0) {
+/**
+ * Size of one entry as the deck code copies it: 80 bytes for a BattleMon (kinds 16, 17, 19), 2 for an item (kind 18).
+ * @unverified Read from the code.
+ */
+s32 Deck_GetSaveRecordSize(s32 arg0) {
     s32 ret = 0;
 
     switch (arg0) {
@@ -575,24 +606,32 @@ s32 func_8002465C(s32 arg0) {
     return ret;
 }
 
+/**
+ * Returns whether save record (arg0 kind, arg1 slot) is marked present (flag bit 0).
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): registered team slots and the item record of the current trainer.
+ */
 s32 Deck_IsSaveEntryPresent(s32 arg0, s32 arg1) {
     return Save_IsTypedRecordFlagSet(arg0, arg1, 1);
 }
 
 s32 func_800246A8(s32, s32);
-s32 func_800246C8(s32 arg0, s32 arg1) {
+/**
+ * Trainer ID stored at +0x08 of a team, box or item record, or -1 when the record is not present.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): IDNo/04660 under a registered team.
+ */
+s32 Deck_GetSaveEntryTrainerId(s32 arg0, s32 arg1) {
     s32 ret = -1;
 
     if (func_800246A8(arg0, arg1) != 0) {
         switch (arg0) {
             case 16:
-                ret = *(u16*)((*(s32*)&D_800AE8E0) + (arg1 * 0x250) + 8);
+                ret = gSaveSram->teams[arg1][0].trainerId;
                 break;
             case 17:
-                ret = *(u16*)((*(s32*)&D_800AE8E0) + (arg1 * 0xAC0) + 0x2508);
+                ret = gSaveSram->boxes[arg1][0].trainerId;
                 break;
             case 18:
-                ret = *(u16*)((*(s32*)&D_800AE8E0) + (arg1 * 0x1C0) + 0x5008);
+                ret = gSaveSram->items[arg1][0].trainerId;
                 break;
         }
     }
@@ -600,7 +639,11 @@ s32 func_800246C8(s32 arg0, s32 arg1) {
 }
 
 s32 func_800246A8(s32, s32);
-s32 func_8002479C(s32 arg0, s32 arg1, u8* arg2) {
+/**
+ * Copies the trainer name at +0x02 of a team, box or item record into arg2; returns its length.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): なまえ サトシ under a registered team.
+ */
+s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2) {
     s32 ret = 0;
     s32 src;
 
@@ -609,13 +652,13 @@ s32 func_8002479C(s32 arg0, s32 arg1, u8* arg2) {
         src = 0;
         switch (arg0) {
             case 16:
-                src = (*(s32*)&D_800AE8E0) + (arg1 * 0x250) + 2;
+                src = (s32)gSaveSram->teams[arg1][0].trainerName;
                 break;
             case 17:
-                src = (*(s32*)&D_800AE8E0) + (arg1 * 0xAC0) + 0x2502;
+                src = (s32)gSaveSram->boxes[arg1][0].trainerName;
                 break;
             case 18:
-                src = (*(s32*)&D_800AE8E0) + (arg1 * 0x1C0) + 0x5002;
+                src = (s32)gSaveSram->items[arg1][0].trainerName;
                 break;
         }
         if (src != 0) {
@@ -626,7 +669,11 @@ s32 func_8002479C(s32 arg0, s32 arg1, u8* arg2) {
 }
 
 s32 func_800246A8(s32, s32);
-s32 func_8002488C(s32 arg0, s32 arg1, u8* arg2) {
+/**
+ * Copies the second name field at +0x0A of a team or box record into arg2. It was empty in every record written in play.
+ * @unverified Read from the code.
+ */
+s32 Deck_GetSaveEntrySecondName(s32 arg0, s32 arg1, u8* arg2) {
     s32 ret = 0;
     s32 src;
 
@@ -635,10 +682,10 @@ s32 func_8002488C(s32 arg0, s32 arg1, u8* arg2) {
         src = 0;
         switch (arg0) {
             case 16:
-                src = (*(s32*)&D_800AE8E0) + (arg1 * 0x250) + 0xA;
+                src = (s32)gSaveSram->teams[arg1][0].secondName;
                 break;
             case 17:
-                src = (*(s32*)&D_800AE8E0) + (arg1 * 0xAC0) + 0x250A;
+                src = (s32)gSaveSram->boxes[arg1][0].secondName;
                 break;
         }
         if (src != 0) {
@@ -648,138 +695,153 @@ s32 func_8002488C(s32 arg0, s32 arg1, u8* arg2) {
     return ret;
 }
 
-void func_80024954(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
+/**
+ * Sets the trainer ID (+0x08, when arg4 is not negative), name (+0x02 from arg3) and second name (+0x0A from arg2) of a
+ * team, box or item record, then marks it present and dirty.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): the item record got サトシ and ID 0x1234 when the first item was moved in.
+ */
+void Deck_SetSaveEntryTrainerIdAndName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
     switch (arg0) {
         case 16: {
-            s8* rec = (s8*)&(*(Save80023F38**)&D_800AE8E0)->a[arg1];
+            SaveTeamRecord* rec = &gSaveSram->teams[arg1][0];
             if ((s32)arg4 >= 0) {
-                *(u16*)(rec + 8) = arg4;
+                rec->trainerId = arg4;
             }
             if (arg3 != 0) {
-                func_8001FBE4(rec + 2, arg3);
+                Text_TranscodeName((char*)rec->trainerName, (char*)arg3);
             }
             if (arg2 != 0) {
-                func_8001FBE4(rec + 0xA, arg2);
+                Text_TranscodeName((char*)rec->secondName, (char*)arg2);
             }
-            func_80023F38(arg0, arg1, 3);
+            Save_SetTypedRecordFlags(arg0, arg1, 3);
             break;
         }
         case 17: {
-            s8* rec = (s8*)&(*(Save80023F38**)&D_800AE8E0)->b[arg1];
+            SaveBoxRecord* rec = &gSaveSram->boxes[arg1][0];
             if ((s32)arg4 >= 0) {
-                *(u16*)(rec + 8) = arg4;
+                rec->trainerId = arg4;
             }
             if (arg3 != 0) {
-                func_8001FBE4(rec + 2, arg3);
+                Text_TranscodeName((char*)rec->trainerName, (char*)arg3);
             }
             if (arg2 != 0) {
-                func_8001FBE4(rec + 0xA, arg2);
+                Text_TranscodeName((char*)rec->secondName, (char*)arg2);
             }
-            func_80023F38(arg0, arg1, 3);
+            Save_SetTypedRecordFlags(arg0, arg1, 3);
             break;
         }
         case 18: {
-            s8* rec = (s8*)&(*(Save80023F38**)&D_800AE8E0)->c[arg1];
+            SaveItemRecord* rec = &gSaveSram->items[arg1][0];
             if ((s32)arg4 >= 0) {
-                *(u16*)(rec + 8) = arg4;
+                rec->trainerId = arg4;
             }
             if (arg3 != 0) {
-                func_8001FBE4(rec + 2, arg3);
+                Text_TranscodeName((char*)rec->trainerName, (char*)arg3);
             }
-            func_80023F38(arg0, arg1, 3);
+            Save_SetTypedRecordFlags(arg0, arg1, 3);
             break;
         }
     }
 }
 
 /* Old-style definition: callers pass their own args through (see below). */
-s32 func_80024ADC(arg0, arg1) s32 arg0; s32 arg1; {
+s32 Deck_GetSaveEntryCount(arg0, arg1) s32 arg0; s32 arg1; {
     s32 ret = 0;
 
     switch (arg0) {
         case 16:
-            ret = *(s16 *)((u8 *)&(*(Save80023F38 **)&D_800AE8E0)->a[arg1] + 0x12);
+            ret = gSaveSram->teams[arg1][0].count;
             break;
         case 17:
-            ret = *(s16 *)((u8 *)&(*(Save80023F38 **)&D_800AE8E0)->b[arg1] + 0x12);
+            ret = gSaveSram->boxes[arg1][0].count;
             break;
         case 18:
-            ret = *(s16 *)((u8 *)&(*(Save80023F38 **)&D_800AE8E0)->c[arg1] + 0xA);
+            ret = gSaveSram->items[arg1][0].count;
             break;
         case 19:
-            ret = *(s16 *)((u8 *)&(*(Save80023F38 **)&D_800AE8E0)->d + 2);
+            ret = gSaveSram->list[0].count;
             break;
     }
     return ret;
 }
 
-M2C_UNK func_80023F38(s32, s32, M2C_UNK);           /* extern */
-s32 func_80024ADC();                                /* extern */
+M2C_UNK Save_SetTypedRecordFlags(s32, s32, M2C_UNK);           /* extern */
+s32 Deck_GetSaveEntryCount();                                /* extern */
 
-void func_80024B90(s32 arg0, s32 arg1, s32 arg2) {
-    if (arg2 < func_80024ADC()) {
+/**
+ * Sets the entry count of a save record when arg2 is below the current count, and marks it dirty.
+ * @unverified Read from the code.
+ */
+void Deck_SetSaveEntryCount(s32 arg0, s32 arg1, s32 arg2) {
+    if (arg2 < Deck_GetSaveEntryCount()) {
         switch (arg0) {                             /* irregular */
         case 16:
-            M2C_FIELD((D_800AE8E0 + (arg1 * 0x250)), s16 *, 0x12) = (s16) arg2;
+            gSaveSram->teams[arg1][0].count = (s16) arg2;
             break;
         case 17:
-            M2C_FIELD((D_800AE8E0 + (arg1 * 0xAC0)), s16 *, 0x2512) = (s16) arg2;
+            gSaveSram->boxes[arg1][0].count = (s16) arg2;
             break;
         case 18:
-            M2C_FIELD((D_800AE8E0 + (arg1 * 0x1C0)), s16 *, 0x500A) = (s16) arg2;
+            gSaveSram->items[arg1][0].count = (s16) arg2;
             break;
         case 19:
-            M2C_FIELD(D_800AE8E0, s16 *, 0x5702) = (s16) arg2;
+            gSaveSram->list[0].count = (s16) arg2;
             break;
         }
-        func_80023F38(arg0, arg1, 2);
+        Save_SetTypedRecordFlags(arg0, arg1, 2);
     }
 }
 
-M2C_UNK func_80023F38(s32, s32, M2C_UNK);           /* extern */
-s32 func_80024610(s32);                             /* extern */
-s32 func_80024ADC();                                /* extern */
-
-void func_80024C80(s32 arg0, s32 arg1) {
+M2C_UNK Save_SetTypedRecordFlags(s32, s32, M2C_UNK);           /* extern */
+s32 Deck_GetSaveRecordCapacity(s32);                             /* extern */
+s32 Deck_GetSaveEntryCount();                                /**
+ * Adds one to a save record's entry count when it is below the kind's capacity, and marks it dirty.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): the 64 box count went from 0 to 1 when ハナ was moved in.
+ */
+void Deck_IncrementSaveEntryCount(s32 arg0, s32 arg1) {
     s32 sp1C;
 
-    sp1C = func_80024ADC();
-    if (sp1C < func_80024610(arg0)) {
+    sp1C = Deck_GetSaveEntryCount();
+    if (sp1C < Deck_GetSaveRecordCapacity(arg0)) {
         switch (arg0) {                             /* irregular */
         case 16:
-            M2C_FIELD((D_800AE8E0 + (arg1 * 0x250)), s16 *, 0x12) = (s16) (sp1C + 1);
+            gSaveSram->teams[arg1][0].count = (s16) (sp1C + 1);
             break;
         case 17:
-            M2C_FIELD((D_800AE8E0 + (arg1 * 0xAC0)), s16 *, 0x2512) = (s16) (sp1C + 1);
+            gSaveSram->boxes[arg1][0].count = (s16) (sp1C + 1);
             break;
         case 18:
-            M2C_FIELD((D_800AE8E0 + (arg1 * 0x1C0)), s16 *, 0x500A) = (s16) (sp1C + 1);
+            gSaveSram->items[arg1][0].count = (s16) (sp1C + 1);
             break;
         case 19:
-            M2C_FIELD(D_800AE8E0, s16 *, 0x5702) = (s16) (sp1C + 1);
+            gSaveSram->list[0].count = (s16) (sp1C + 1);
             break;
         }
-        func_80023F38(arg0, arg1, 2);
+        Save_SetTypedRecordFlags(arg0, arg1, 2);
     }
 }
 
-typedef struct { u8 a; u8 b; } Pair80024D88;
-s32 func_80024D88(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
+/**
+ * Reads entry arg2 of save record (arg0 kind, arg1 slot) into arg3: a 0x2D-byte Game Boy record unpacked to a BattleMon,
+ * or the 2-byte item pair. Returns 0 when arg2 is past the count.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): registered and boxed Pokémon came back with their nicknames and stats.
+ */
+s32 Deck_ReadSaveEntry(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     s32 ret = 0;
 
-    if (arg2 < func_80024ADC()) {
+    if (arg2 < Deck_GetSaveEntryCount()) {
         switch (arg0) {
             case 16:
-                func_80023D3C((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->a[arg1] + arg2 * 0x2D + 0x14));
+                BattleMon_FromGbSaveRecord((s32)arg3, (s32)&gSaveSram->teams[arg1][0].mons[arg2]);
                 break;
             case 17:
-                func_80023D3C((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->b[arg1] + arg2 * 0x2D + 0x14));
+                BattleMon_FromGbSaveRecord((s32)arg3, (s32)&gSaveSram->boxes[arg1][0].mons[arg2]);
                 break;
             case 19:
-                func_80023D3C((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->d + arg2 * 0x2D + 4));
+                BattleMon_FromGbSaveRecord((s32)arg3, (s32)&gSaveSram->list[0].mons[arg2]);
                 break;
             case 18:
-                *(Pair80024D88*)arg3 = ((Pair80024D88*)((u8*)&(*(Save80023F38**)&D_800AE8E0)->c[arg1] + 0xC))[arg2];
+                *(SaveItemSlot*)arg3 = gSaveSram->items[arg1][0].items[arg2];
                 break;
         }
         ret = 1;
@@ -787,147 +849,161 @@ s32 func_80024D88(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     return ret;
 }
 
-s32 func_80024F14(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
+/**
+ * Writes entry arg2 of save record (arg0 kind, arg1 slot) from arg3, appending when arg2 equals the count.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): the bytes of a registered team match the GB party it came from.
+ */
+s32 Save_WriteTypedRecord(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     s32 ret = 0;
-    s32 max = func_80024610(arg0);
-    s32 count = func_80024ADC(arg0, arg1);
+    s32 max = Deck_GetSaveRecordCapacity(arg0);
+    s32 count = Deck_GetSaveEntryCount(arg0, arg1);
 
     if ((arg2 < count) || ((arg2 == count) && (arg2 < max))) {
         switch (arg0) {
             case 16:
-                func_80023DB8((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->a[arg1] + arg2 * 0x2D + 0x14));
+                BattleMon_ToGbSaveRecord((BattleMon*)arg3, &gSaveSram->teams[arg1][0].mons[arg2]);
                 break;
             case 17:
-                func_80023DB8((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->b[arg1] + arg2 * 0x2D + 0x14));
+                BattleMon_ToGbSaveRecord((BattleMon*)arg3, &gSaveSram->boxes[arg1][0].mons[arg2]);
                 break;
             case 19:
-                func_80023DB8((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->d + arg2 * 0x2D + 4));
+                BattleMon_ToGbSaveRecord((BattleMon*)arg3, &gSaveSram->list[0].mons[arg2]);
                 break;
             case 18:
-                ((Pair80024D88*)((u8*)&(*(Save80023F38**)&D_800AE8E0)->c[arg1] + 0xC))[arg2] = *(Pair80024D88*)arg3;
+                gSaveSram->items[arg1][0].items[arg2] = *(SaveItemSlot*)arg3;
                 break;
         }
         if (arg2 == count) {
-            func_80024C80(arg0, arg1);
+            Deck_IncrementSaveEntryCount(arg0, arg1);
         } else {
-            func_80023F38(arg0, arg1, 2);
+            Save_SetTypedRecordFlags(arg0, arg1, 2);
         }
         ret = 1;
     }
     return ret;
 }
 
-s32 func_80025100(s8 *arg0, s32 *arg1) {
+/**
+ * Reads the GB Player settings from the options record: picture frames unlocked (+0x02, s8) and button config (+0x04, s32).
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): the button config set in the GB Player menu came back the next time the GB Player started.
+ */
+s32 Save_GetGbPlayerSettings(s8 *arg0, s32 *arg1) {
     if (arg0 != NULL) {
-        *arg0 = M2C_FIELD(D_800AE8E0, s8 *, 0x7A42);
+        *arg0 = gSaveSram->options[0].gbPlayerFrames;
     }
     if (arg1 != NULL) {
-        *arg1 = M2C_FIELD(D_800AE8E0, s32 *, 0x7A44);
+        *arg1 = gSaveSram->options[0].gbPlayerButtons;
     }
     return 1;
 }
 
-M2C_UNK func_80023F38(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
-
-s32 func_80025130(s32 arg0) {
-    M2C_FIELD(D_800AE8E0, s32 *, 0x7A44) = arg0;
-    func_80023F38(0x14, 0, 2);
-    return 1;
-}
-
-M2C_UNK func_80023F38(s32, s32, M2C_UNK);
-M2C_UNK func_80023F38(M2C_UNK, M2C_UNK, M2C_UNK);
-s32 func_80025168(s8 arg0) {
-    M2C_FIELD(D_800AE8E0, s8 *, 0x7A42) = arg0;
-    func_80023F38(0x14, 0, 2);
-    return 1;
-}
-
-//@unverified
-/**
- * Returns the big-endian 16-bit value at +0x7A48 of the save buffer (the
- * value func_800251C8 stores).
+M2C_UNK Save_SetTypedRecordFlags(M2C_UNK, M2C_UNK, M2C_UNK);   /**
+ * Stores the GB Player button config at +0x04 of the options record: high byte = START choice, low byte = SELECT choice - 1
+ * (choices 0 START, 1 L, 2 R, 3 C-Left, 4 C-Down).
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): START → R in コンフィグ (Config) stored 0x0200.
  */
-s32 func_800251A8(void) {
-    return ((M2C_FIELD(D_800AE8E0, u8*, 0x7A48) << 8) | M2C_FIELD(D_800AE8E0, u8*, 0x7A49)) & 0xFFFF;
+s32 Save_SetGbPlayerButtonConfig(s32 arg0) {
+    gSaveSram->options[0].gbPlayerButtons = arg0;
+    Save_SetTypedRecordFlags(0x14, 0, 2);
+    return 1;
 }
 
-void func_800251C8(u16 arg0) {
-    M2C_FIELD(D_800AE8E0, u8 *, 0x7A48) = (arg0 >> 8) & 0xFF;
-    M2C_FIELD(D_800AE8E0, u8 *, 0x7A49) = arg0 & 0xFF;
-    func_80023F38(0x14, 0, 2);
+M2C_UNK Save_SetTypedRecordFlags(s32, s32, M2C_UNK);
+M2C_UNK Save_SetTypedRecordFlags(M2C_UNK, M2C_UNK, M2C_UNK);
+/**
+ * Stores how many extra GB Player picture frames are unlocked (+0x02 of the options record, 0 to 2). Z cycles the frame around the
+ * Game Boy screen in the GB Player: 1 adds the Doduo frame, 2 the Dodrio frame.
+ * Seen in play (2026-11-13, docs/annotation/n64-save-format.md): clearing マスターボールカップ (Master Ball Cup) raised it from 0 to 1; with 2 set, Z cycled
+ * green, Doduo and Dodrio frames.
+ */
+s32 Save_SetGbPlayerFrameTier(s8 arg0) {
+    gSaveSram->options[0].gbPlayerFrames = arg0;
+    Save_SetTypedRecordFlags(0x14, 0, 2);
+    return 1;
 }
 
-u8 func_80025214(void) {
-    return M2C_FIELD(D_800AE8E0, u8 *, 0x7A43);
+/**
+ * Returns the tournament progress halfword (options record +0x08, big-endian). Low byte: L1～30 cups cleared (0-4).
+ * High byte: bit 0 L50～55 tournament won, bit 1 マスターボールカップ (Master Ball Cup) won.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): setting the low byte to 2 opened ハイパーボールカップ (Ultra Ball Cup) with ball marks on the first two cups.
+ */
+s32 Save_GetProgressFlags(void) {
+    return ((gSaveSram->options[0].progress[0] << 8) | gSaveSram->options[0].progress[1]) & 0xFFFF;
 }
 
-M2C_UNK func_80023F38(s32, s32, M2C_UNK);
-M2C_UNK func_80023F38(M2C_UNK, M2C_UNK, M2C_UNK);
-void func_80025224(s8 arg0) {
-    M2C_FIELD(D_800AE8E0, s8 *, 0x7A43) = arg0;
-    func_80023F38(0x14, 0, 2);
+/**
+ * Stores the tournament progress halfword and marks the options record dirty.
+ * @unverified Read from the code; no cup was cleared in play.
+ */
+void Save_SetProgressFlags(u16 arg0) {
+    gSaveSram->options[0].progress[0] = (arg0 >> 8) & 0xFF;
+    gSaveSram->options[0].progress[1] = arg0 & 0xFF;
+    Save_SetTypedRecordFlags(0x14, 0, 2);
 }
 
-typedef struct { u8 b[0xC]; } SaveName80025260;
-typedef struct { s16 h[0xB1]; } SaveBlob80025260;
-typedef struct { u8 unk0; u8 unk1; u8 pad[0x4E]; } SaveMon80025260;
-typedef struct SaveF80025260 {
-    /* 0x000 */ s16 flags;
-    /* 0x002 */ SaveName80025260 name;
-    /* 0x00E */ s16 count;
-    /* 0x010 */ u8 records[6][0x2D];
-    /* 0x11E */ SaveBlob80025260 blob;
-    /* 0x280 */ u8 mask;
-} SaveF80025260;
-void func_80025260(SaveName80025260* arg0, SaveBlob80025260* arg1, SaveMon80025260* arg2, s32 arg3) {
-    SaveF80025260* f;
+/**
+ * Returns the option flags at +0x03 of the options record: bit 0 サウンド モノラル (Sound: Mono), bit 1 じっきょう なし (Commentary: Off).
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): モノラル (Mono) and なし (Off) stored 0x03.
+ */
+u8 Save_GetOptionFlags(void) {
+    return gSaveSram->options[0].soundFlags;
+}
+
+M2C_UNK Save_SetTypedRecordFlags(s32, s32, M2C_UNK);
+M2C_UNK Save_SetTypedRecordFlags(M2C_UNK, M2C_UNK, M2C_UNK);
+/**
+ * Stores the option flags at +0x03 of the options record and marks it dirty.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): leaving オプション with おわり (Done) wrote the 0x20-byte options record pair.
+ */
+void Save_SetOptionFlags(s8 arg0) {
+    gSaveSram->options[0].soundFlags = arg0;
+    Save_SetTypedRecordFlags(0x14, 0, 2);
+}
+
+/**
+ * Fills the tournament continue record: mode, cup, next round and opponents (+0x02), Pokémon count (+0x0E), the six
+ * Pokémon as Game Boy records (+0x10), the GB save snapshot (+0x11E) and a mask of Pokémon flagged in unk_01 (+0x280).
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): ちゅうだんする (Suspend) after round 2 of モンスターボールカップ (Poké Ball Cup) stored mode 2, cup 0, round 3.
+ */
+void Save_WriteContinueData(SaveContinueSession* arg0, GbSavePortSnapshot* arg1, BattleMon* arg2, s32 arg3) {
+    SaveContinueRecord* f;
     s32 i;
 
-    if (D_800AE8E0 != 0) {
-        f = (SaveF80025260*)(D_800AE8E0 + 0x7A60);
+    if (gSaveSram != NULL) {
+        f = &gSaveSram->continueData[0];
         f->flags |= 3;
-        f->name = *arg0;
-        f->blob = *arg1;
+        f->session = *arg0;
+        f->gbSnapshot = *arg1;
         f->count = arg3;
-        f->mask = 0;
+        f->rentalMask = 0;
         for (i = 0; i < arg3; i++) {
-            func_80023DB8((s32)&arg2[i], (s32)f->records[i]);
-            if (arg2[i].unk1 == 1) {
-                f->mask |= 1 << i;
+            BattleMon_ToGbSaveRecord(&arg2[i], &f->team[i]);
+            if (arg2[i].species.isRental == 1) {
+                f->rentalMask |= 1 << i;
             }
         }
     }
 }
 
-typedef struct { s16 h[6]; } Unk12Bytes;
-typedef struct { s16 h[0xB1]; } Unk162Bytes;
-typedef struct { u8 b[0x2D]; } Unk2DBytes;
-typedef struct {
-    /* 0x000 */ s16 flags;
-    /* 0x002 */ Unk12Bytes header;
-    /* 0x00E */ s16 count;
-    /* 0x010 */ Unk2DBytes records[6];
-    /* 0x11E */ Unk162Bytes extra;
-    /* 0x280 */ u8 mask;
-} ContinueBlock7A60;
-typedef struct { u8 unk_00; u8 unk_01; u8 pad[0x4E]; } Mon50;
-
-s16 func_800253BC(Unk12Bytes* arg0, Unk162Bytes* arg1, Mon50* arg2) {
+/**
+ * Reads the tournament continue record back; returns the Pokémon count, or -1 when the record is not present.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): つづきをする (Continue) resumed at バトル-3 (Battle 3) with the saved team.
+ */
+s16 Save_ReadContinueData(SaveContinueSession* arg0, GbSavePortSnapshot* arg1, BattleMon* arg2) {
     s16 count = -1;
-    ContinueBlock7A60* blk;
+    SaveContinueRecord* blk;
     s32 i;
 
-    if (D_800AE8E0 != NULL) {
-        blk = (ContinueBlock7A60*)((s8*)D_800AE8E0 + 0x7A60);
+    if (gSaveSram != NULL) {
+        blk = &gSaveSram->continueData[0];
         if (blk->flags & 1) {
-            *arg0 = blk->header;
-            *arg1 = blk->extra;
+            *arg0 = blk->session;
+            *arg1 = blk->gbSnapshot;
             count = blk->count;
             for (i = 0; i < count; i++) {
-                func_80023D3C((s32)&arg2[i], (s32)&blk->records[i]);
-                if (blk->mask & (1 << i)) {
-                    arg2[i].unk_01 = 1;
+                BattleMon_FromGbSaveRecord((s32)&arg2[i], (s32)&blk->team[i]);
+                if (blk->rentalMask & (1 << i)) {
+                    arg2[i].species.isRental = 1;
                 }
             }
         }

@@ -29,24 +29,87 @@ def digest(data):
     return hashlib.sha256(data).hexdigest()
 
 
-def make_section(data, start, end, base, name, ram_end=None, entries=()):
+def make_section(data, start, end, base, name, ram_end=None, entries=(), forced_entries=()):
     context = spimdisasm.common.Context()
     context.changeGlobalSegmentRanges(0, len(data), base,
                                       ram_end or base + len(data))
     for entry in sorted(set(entries)):
         if start <= entry < end:
             context.globalSegment.addFunction(base + entry, vromAddress=entry)
+    # Declared entry points (see FORCED_BOUNDARIES) end the function before them.
+    for entry in sorted(set(forced_entries)):
+        if start <= entry < end:
+            symbol = context.globalSegment.addFunction(base + entry, vromAddress=entry)
+            symbol.isUserDeclared = True
     section = spimdisasm.mips.sections.SectionText(
         context, start, end, base + start, name, data, 0, None)
     section.analyze()
     return section
 
 
-def merge_owners(section, data, base, transfers):
+# Owner boundaries the call graph cannot recover, declared per image (image index ->
+# image offsets) and checked against the bytes: a declaration that does not fit
+# the code is an error, never a silent fallback. Nothing is inferred from byte
+# patterns, so an undeclared run of `j target; nop` (a tail jump, or adjacent
+# wrappers) keeps the ordinary owner rules.
+#   stub_table: [start, end) of a `j target; nop` table; it stays one owner, and
+#               its local targets start owners.
+#   entries:    function starts reached only through computed addresses.
+FORCED_BOUNDARIES = {
+    # Fragment 001, the model callback library. Model data calls its callbacks
+    # through 41 table slots at the entry. Resident code calls 0x60C and 0x65C through
+    # Util_ConvertAddrToVirtAddr (D_8100060C in func_800325B0 and D_8100065C in
+    # ModelAnim_UpdateDisplayObjectAnimation, src/battle_hud.c); both were hit in play.
+    1: {"stub_table": (0x20, 0x168), "entries": (0x60C, 0x65C)},
+}
+
+
+def stub_table_targets(data, start, end, text_start, text_end):
+    """Return the jump targets of a declared `j target; nop` table at [start, end).
+
+    Only the declared range is read, and it must lie inside the image's .text
+    envelope [text_start, text_end). Every 8-byte slot must be a `j` with a nop
+    delay slot.
+    """
+    if not text_start <= start < end <= text_end or (end - start) % 8:
+        raise ValueError(f"stub table {start:#x}-{end:#x} is not whole slots inside "
+                         f".text {text_start:#x}-{text_end:#x}")
+    targets = []
+    for position in range(start, end, 8):
+        word, delay = struct.unpack_from(">II", data, position)
+        if word >> 26 != 2 or delay != 0:
+            raise ValueError(f"stub table slot at {position:#x} is not `j target; nop`")
+        targets.append((word & 0x3FFFFFF) << 2)
+    return targets
+
+
+def forced_boundaries(declaration, data, base, text_start, text_end):
+    """Return (stub table range or None, forced entry offsets) for one image."""
+    if not declaration:
+        return None, []
+    entries = []
+    table = declaration.get("stub_table")
+    if table is not None:
+        for target in stub_table_targets(data, *table, text_start, text_end):
+            offset = target - (base & 0x0FFFFFFF)
+            # Slots that leave the image (into another fragment) start nothing here.
+            if text_start <= offset < text_end:
+                entries.append(offset)
+    for offset in declaration.get("entries", ()):
+        if not text_start <= offset < text_end or offset % 4:
+            raise ValueError(f"forced entry {offset:#x} is outside .text "
+                             f"{text_start:#x}-{text_end:#x}")
+        entries.append(offset)
+    return table, sorted(set(entries))
+
+
+def merge_owners(section, data, base, transfers, stub_table=None):
     """Do not split ordinary branch destinations or switch cases into functions.
 
     Call targets remain separate. Tail jumps to known local call targets also
     remain separate; other non-call edges conservatively share one asm owner.
+    A declared stub table (see FORCED_BOUNDARIES) is one owner, and its slots
+    never merge it with their targets.
     """
     functions = section.symbolList
     starts = [function.vromStart for function in functions]
@@ -62,6 +125,8 @@ def merge_owners(section, data, base, transfers):
             edges.append((position, instruction.getBranchVramGeneric() - base,
                           instruction.isUnconditionalBranch()))
         elif instruction.isJumpWithAddress() and not instruction.doesLink():
+            if stub_table is not None and stub_table[0] <= position < stub_table[1]:
+                continue
             edges.append((position, instruction.getInstrIndexAsVram() - base, True))
     for transfer in transfers:
         if transfer["transfer"] == "jump" and transfer["status"].startswith("resolved_"):
@@ -86,6 +151,12 @@ def merge_owners(section, data, base, transfers):
             continue
         for index in range(left, right):
             links[find(index + 1)] = find(index)
+    if stub_table is not None:
+        # The stub table itself stays one owner.
+        table = [index for index, start in enumerate(starts)
+                 if stub_table[0] <= start < stub_table[1]]
+        for index in table[1:]:
+            links[find(index)] = find(table[0])
     grouped = []
     for index, function in enumerate(functions):
         root = find(index)
@@ -146,6 +217,8 @@ def generate(rom, mapping, sections, flow):
         base = int(metadata["link_base"], 0)
         owner = f"fragments/fragment{index:03d}_{int(metadata['rom_start'], 0):X}"
         entries = [int(metadata["entry_offset"], 0)]
+        stub_table, forced_entries = forced_boundaries(
+            FORCED_BOUNDARIES.get(index), data, base, start, stop)
         for transfer in detail["transfers"]:
             if transfer["status"] == "known_initializer_candidates_runtime_unresolved":
                 entries.extend(int(target, 0) for target in transfer.get("targets", []))
@@ -156,19 +229,22 @@ def generate(rom, mapping, sections, flow):
                       "data": data, "start": start, "end": stop, "base": base,
                       "ram_end": base + max(len(data), int(metadata["ram_size"], 0)),
                       "image_index": index, "entries": entries,
+                      "stub_table": stub_table, "forced_entries": forced_entries,
                       "transfers": detail["transfers"], "metadata": metadata,
                       "reused_slot": slot_counts[metadata["link_base"]] > 1})
     source_blocks = {}
     owners = []
     for spec in specs:
         section = make_section(spec["data"], spec["start"], spec["end"], spec["base"],
-                               spec["owner"], spec["ram_end"], spec["entries"])
+                               spec["owner"], spec["ram_end"], spec["entries"],
+                               spec.get("forced_entries", ()))
         for function in section.symbolList:
             name = f"func_{function.vram:08X}"
             if spec.get("reused_slot"):
                 name += f"_{spec['image_index']:03d}"
             function.contextSym.name = name
-        for members in merge_owners(section, spec["data"], spec["base"], spec["transfers"]):
+        for members in merge_owners(section, spec["data"], spec["base"], spec["transfers"],
+                                    spec.get("stub_table")):
             start, stop = members[0].vromStart, members[-1].vromEnd
             symbol = members[0].getName()
             if any(function.hasUnimplementedIntrs for function in members):

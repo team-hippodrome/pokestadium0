@@ -2,7 +2,7 @@
 
 The complete, unmodified `lib/ultralib/src/os/exceptasm.s` now supplies five
 conservative inventory owners (2,320 text bytes), replacing their extracted
-listings in `src/4E980.c`. These owners count as original SDK assembly, not C.
+listings in `src/libultra/os/exceptasm.c`. These owners count as original SDK assembly, not C.
 The SDK's `Makefile.ido` specifies IDO 5.3 `-O1 -mips3 -32` for this file.
 
 | Inventory owner | SDK function entries | Bytes |

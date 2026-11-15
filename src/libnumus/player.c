@@ -2,7 +2,7 @@
 /* C ported from the Stadium 1 decomp: src/libnumus/player.c. */
 
 #include "libnumus/player.h"
-#include "3D140.h"
+#include "audio_manager.h"
 #include "libnaudio/n_synsetpriority.h"
 typedef u8* (*command_func_t)(channel_t*, u8*);
 typedef u8* (*api_func_t)(u8*);
@@ -33,7 +33,6 @@ extern audio_voice_t* mus_releasing_voice_3;
 extern audio_voice_t* mus_releasing_voice_4;
 extern ALHeap* audio_heap;
 extern u32 mus_num_vvoices;
-extern s32 mus_free_voices_count;
 extern s32 mus_releasing_voices_count;
 
 #include "m2c_macros.h"
@@ -84,7 +83,13 @@ s32 func_800366BC(s8 *arg0, s32 arg1) {
     return arg1;
 }
 
-u8* func_800366C8(channel_t* cp, u8* ptr) {
+/**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the main menu, the Pokédex,
+ * the party screen, the Lab list, Lab sort, registration, the Lab PC, Free Battle setup, the battle
+ * opening, a switch in battle, running from battle and a Pound turn.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+u8* Audio_SetVoiceVolumeEnvelope(channel_t* cp, u8* ptr) {
     u8 value;
 
     value = *ptr++;
@@ -289,12 +294,12 @@ u8* Audio_PushVoiceLoopState(channel_t* cp, u8* ptr) {
 }
 
 u8* Audio_PopVoiceLoopState(channel_t* cp, u8* ptr) {
-    s32 index = M2C_FIELD(cp, u8*, 0xEE) - 1;
+    s32 index = cp->trigger_off - 1;
 
     if (((u8*)((u8*)cp + 0x130))[index] != 0xFF) {
         ((u8*)((u8*)cp + 0x130))[index]--;
         if (!((u8*)((u8*)cp + 0x130))[index]) {
-            M2C_FIELD(cp, u8*, 0xEE) = index;
+            cp->trigger_off = index;
             index = -1;
         }
     }
@@ -339,8 +344,8 @@ u8* Audio_DisableVoicePeriodicPitchModulation(channel_t* cp, u8* ptr) {
 }
 
 u8* Audio_SetVoiceDefaultVelocity(channel_t* cp, u8* ptr) {
-    M2C_FIELD(cp, u8*, 0xE6) = *ptr++;
-    M2C_FIELD(cp, u8*, 0xE5) = 0;
+    cp->wobble_off_speed = *ptr++;
+    cp->wobble_on_speed = 0;
     return ptr;
 }
 
@@ -417,8 +422,8 @@ u8* Audio_SetRandomVoiceVolume(channel_t* cp, u8* ptr) {
 }
 
 u8* func_80036EE0(channel_t* cp, u8* ptr) {
-    M2C_FIELD(cp, u8*, 0xCB) = Audio_RandomScale(*ptr++);
-    M2C_FIELD(cp, u8*, 0xCB) += *ptr++;
+    cp->pan = Audio_RandomScale(*ptr++);
+    cp->pan += *ptr++;
     return ptr;
 }
 
@@ -464,8 +469,8 @@ u8* Audio_SetVoiceVolumeScale(channel_t* cp, u8* ptr) {
 }
 
 u8* Audio_SetVoicePanModulation(channel_t* cp, u8* ptr) {
-    M2C_FIELD(cp, u8*, 0xE7) = *ptr++;
-    if (!M2C_FIELD(cp, u8*, 0xE7)) {
+    cp->wobble_counter = *ptr++;
+    if (!cp->wobble_counter) {
         M2C_FIELD(cp, u16*, 0xBC) = 0x80;
     }
     return ptr;
@@ -516,7 +521,7 @@ typedef struct PlayerChannelZero_1E {
     /* 0x1F */ char unk1F[0x5];
 } PlayerChannelZero_1E; // size = 0x24
 
-/* Block passed as the first argument of func_8003B2E0 (synthesizer set-up).
+/* Block passed as the first argument of amCreateAudioMgr (synthesizer set-up).
  * Field meanings beyond what func_800371A4 writes are not established. */
 typedef struct SynInitCfgZero {
     /* 0x00 */ s32 f00;
@@ -529,7 +534,7 @@ typedef struct SynInitCfgZero {
     /* 0x1C */ s8 f1C;
 } SynInitCfgZero;
 
-/* Block passed as the second argument of func_8003B2E0; filled from the init
+/* Block passed as the second argument of amCreateAudioMgr; filled from the init
  * configuration at offsets 0x18, 0x20 and 0x1C. */
 typedef struct SynInitRateZero {
     /* 0x00 */ s32 f00;
@@ -557,7 +562,7 @@ extern ALPlayer D_800B3610;
 extern ALHeap D_800B3628;
 extern void* D_800B363C;
 void func_8003A564(void*, s32, s32);
-s32 func_8003B2E0(SynInitCfgZero*, SynInitRateZero*, s32, s32, s32);
+void amCreateAudioMgr(ALSynConfig* c, amConfig* amc, u32 num_dma_buffers, s32 arg3, s32 arg4);
 void func_800468F0(ALPlayer*);
 void* func_8005C0D0(s32, s32, void*, s32, s32);
 s32 func_800388BC(void*);
@@ -568,11 +573,11 @@ s32 func_800388BC(void*);
  *   0x00 channel count (D_800B3638)        0x04 ALHeap* used for all allocation
  *   0x08 pointer stored in D_800B3664 and D_800B3668
  *   0x0C -> D_800B3644, 0x10 -> D_800B3648 (the song table that func_80037828 indexes)
- *   0x14, 0x18, 0x1C, 0x20, 0x24, 0x28: values forwarded to func_8003B2E0.
+ *   0x14, 0x18, 0x1C, 0x20, 0x24, 0x28: values forwarded to amCreateAudioMgr.
  * Steps: set D_800B364C to 50 if the word at 0x80000300 is 0 (osTvType == PAL), else 60,
  * and D_800B3650 to 1000000 / D_800B364C; allocate and zero the 0x1C-byte-per-channel
  * table D_800B363C and the 0x148-byte-per-channel array D_800B3640; build the two
- * parameter blocks and call func_8003B2E0; call func_800374E0(7, 0x7FFF); reset the
+ * parameter blocks and call amCreateAudioMgr; call func_800374E0(7, 0x7FFF); reset the
  * handle counter D_800B365C to 1 and D_800B3660 to 0x12345678, and clear D_800B3CC4,
  * D_800B3CC8, D_800B3CCC, D_80075C34 and D_800B3CD0;
  * register the player at D_800B3610 (handler func_800388BC, clientData = itself) with
@@ -613,7 +618,7 @@ s32 func_800371A4(s8* arg0) {
     rate.f00 = M2C_FIELD(arg0, s32*, 0x18);
     rate.f04 = M2C_FIELD(arg0, s32*, 0x20);
     rate.f08 = M2C_FIELD(arg0, s32*, 0x1C);
-    func_8003B2E0(&cfg, &rate, M2C_FIELD(arg0, s32*, 0x24), M2C_FIELD(arg0, s32*, 0x28), D_800B364C);
+    amCreateAudioMgr(&cfg, &rate, M2C_FIELD(arg0, s32*, 0x24), M2C_FIELD(arg0, s32*, 0x28), D_800B364C);
     func_800374E0(7, 0x7FFF);
     D_800B365C = 1;
     D_800B3660 = 0x12345678;
@@ -657,7 +662,7 @@ void func_8003A598(void*, void*, s32);
 void func_8003A2B8(s8*);
 u32 func_8003A4A8();
 s32 func_80037508(s32* song) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 handle;
     s32 mask;
     s32 count;
@@ -820,7 +825,7 @@ void func_8003798C(s32 flags, s32 duration) {
     mask = osSetIntMask(1);
 
     for (i = 0, cp = mus_channels; i < (s32)max_channels; i++, cp++) {
-        if (((M2C_FIELD(cp, u16 *, 0xB2) != 0) && (flags & MUSFLAG_EFFECTS)) || ((M2C_FIELD(cp, u16 *, 0xB2) == 0) && (flags & MUSFLAG_SONGS))) {
+        if (((cp->IsFX != 0) && (flags & MUSFLAG_EFFECTS)) || ((cp->IsFX == 0) && (flags & MUSFLAG_SONGS))) {
             cp->duration = duration;
             cp->duration_scale = scale;
         }
@@ -835,15 +840,18 @@ void func_8003798C(s32 flags, s32 duration) {
  * offset 0xB2 is nonzero, MUSFLAG_SONGS those where it is 0). Does not mask interrupts.
  * Written with the offset-0xB2 field read through M2C_FIELD: player.h places the
  * equivalent `IsFX` at 0xBA, which does not match this build's data.
+ * Seen in play (2026-11-13) ran when Start was pressed at the title screen (console reset, then N64
+ * logo, opening, title and main menu).
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-s32 func_80037A48(s32 flags) {
+s32 Audio_IsSoundPlaying(s32 flags) {
     channel_t* cp;
     s32 i;
     s32 count;
 
     for (i = 0, cp = mus_channels, count = 0; i < (s32)max_channels; i++, cp++) {
         if ((cp->pdata != NULL) && (cp->pdata != (u8*)-1)) {
-            if (((M2C_FIELD(cp, u16 *, 0xB2) != 0) && (flags & MUSFLAG_EFFECTS)) || ((M2C_FIELD(cp, u16 *, 0xB2) == 0) && (flags & MUSFLAG_SONGS))) {
+            if (((cp->IsFX != 0) && (flags & MUSFLAG_EFFECTS)) || ((cp->IsFX == 0) && (flags & MUSFLAG_SONGS))) {
                 count++;
             }
         }
@@ -886,7 +894,7 @@ s32 func_80037AC4(s32 handle, s32 duration) {
     return count;
 }
 
-s32 func_80037B7C(s32 handle) {
+s32 Audio_QueueSetMonoOutputCommand(s32 handle) {
     channel_t* cp;
     s32 i;
     s32 count;
@@ -1000,7 +1008,7 @@ s32 func_80037D4C(s32 handle, f32 offset) {
  * clamped to 1..0x100 (values <= 0 become 1, values above 0x100 become 0x100). For each
  * matching channel it stores the clamped value in `temscale` (offset 0xA4) and sets
  * `channel_tempo` (offset 0xA8) to (u16 at offset 0xB4 * tempo) >> 7. Returns the
- * number of channels changed; returns 0 for handle 0. Unlike its neighbours it does
+ * number of channels changed; returns 0 for handle 0. Unlike its neighbors it does
  * not mask interrupts. The field at 0xB4 is unnamed in player.h.
  */
 s32 func_80037DF4(s32 handle, s32 tempo) {
@@ -1022,7 +1030,7 @@ s32 func_80037DF4(s32 handle, s32 tempo) {
         if (handle == cp->handle) {
             cp->temscale = tempo;
             count++;
-            cp->channel_tempo = (M2C_FIELD(cp, u16 *, 0xB4) * tempo) >> 7;
+            cp->channel_tempo = (cp->channel_tempo_save * tempo) >> 7;
         }
     }
 
@@ -1147,9 +1155,9 @@ s32 func_800380D0(void) {
 }
 
 /**
- * Initialises channel `cp` as a new sound: calls func_8003A2B8(cp) to reset it, then
+ * Initializes channel `cp` as a new sound: calls func_8003A2B8(cp) to reset it, then
  * stores arg0 at offsets 0x88 and 0x140, arg1 at 0x13C, arg3 + 0x100 at 0xB2 (the
- * type word that func_80037A48 and func_8003798C test), arg4 at 0xAA, arg5 at 0xBC and
+ * type word that Audio_IsSoundPlaying and func_8003798C test), arg4 at 0xAA, arg5 at 0xBC and
  * arg6 at 0x60 (`priority`). With interrupts masked (func_8004D300(1) is osSetIntMask),
  * it assigns the next handle D_800B365C++ to offset 0x5C and loads
  * ((s32*)arg1[+0xC])[arg3] into offsets 0x8C and 0x30 (`pbase` / `pdata`).
@@ -1179,7 +1187,7 @@ s32 func_8003815C(s32 arg0, s32 arg1, s8* cp, s32 arg3, s32 arg4, s32 arg5, s32 
     return M2C_FIELD(cp, s32*, 0x5C);
 }
 
-void func_8003A710(void *);
+void Block_RelocateSelf(void *);
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s32 func_8003821C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6)
 {
@@ -1192,7 +1200,7 @@ s32 func_8003821C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s3
   found = 0;
   if (!((*((s32 *) (((s8 *) arg1) - (-(four = 4))))) & 1))
   {
-    func_8003A710((void *) arg1);
+    Block_RelocateSelf((void *) arg1);
   }
   if (((u32) arg6) == 0xFFFFFFFFU)
   {
@@ -1244,13 +1252,13 @@ s32 func_8003834C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s3
     return ret;
 }
 
-void func_8003A710(void*);
+void Block_RelocateSelf(void*);
 
 /**
  * Starts a sound on the first free channel without masking interrupts (compare
  * func_8003821C, which does the same with osSetIntMask(1) around each claim). Returns -1
  * at once if D_800B3CCC or D_800B3CC8 is non-zero. Otherwise, if bit 0 of the word at
- * arg1+4 is clear it calls func_8003A710(arg1); if arg6 is -1 it is replaced by
+ * arg1+4 is clear it calls Block_RelocateSelf(arg1); if arg6 is -1 it is replaced by
  * ((s32*)arg1[+8])[arg2]. It then scans the D_800B3640 channel array (0x148 bytes each,
  * D_800B3638 entries) for one whose word at offset 0x30 is 0, marks it in use by storing
  * -1 there, and returns func_8003815C(arg0, arg1, channel, arg2, arg3, arg4, arg6). If
@@ -1268,7 +1276,7 @@ s32 func_800383DC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, UNUSED s32 a
         return -1;
     }
     if (!(M2C_FIELD(arg1, s32*, 4) & 1)) {
-        func_8003A710((void*)arg1);
+        Block_RelocateSelf((void*)arg1);
     }
     if ((u32)arg6 == 0xFFFFFFFFU) {
         tbl = (s32*)M2C_FIELD(arg1, s32*, 8);
@@ -1285,9 +1293,9 @@ s32 func_800383DC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, UNUSED s32 a
 }
 
 /*
- * func_800384D8
+ * Audio_GetActivityScore
  *
- * Returns 1 if func_80037A48(3) is non-zero. Otherwise scans the byte at
+ * Returns 1 if Audio_IsSoundPlaying(3) is non-zero. Otherwise scans the byte at
  * offset 0x1E of each of the 45 entries of the 0x24-byte table at
  * D_800B3670 (the same table func_800380D0 scans, which starts one entry
  * later at D_800B3694 and reads the first entry's byte as D_800B368E) and
@@ -1299,12 +1307,16 @@ s32 func_800383DC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, UNUSED s32 a
  * D_800B3670; reading the first byte separately as D_800B368E followed by a
  * loop over D_800B3694 gives different register allocation.
  */
-s32 func_80037A48(M2C_UNK);                         /* extern */
+s32 Audio_IsSoundPlaying(M2C_UNK);                         /* extern */
 extern PlayerChannelZero_1E D_800B3670[45];
-s32 func_800384D8(void) {
+/**
+ * Seen in play (2026-11-13) ran when Start was pressed at the title screen (console reset, then N64
+ * logo, opening, title and main menu).
+ */
+s32 Audio_GetActivityScore(void) {
     s32 i;
 
-    if (func_80037A48(3) != 0) {
+    if (Audio_IsSoundPlaying(3) != 0) {
         return 1;
     }
     for (i = 0; i < 45; i++) {
@@ -1317,13 +1329,14 @@ s32 func_800384D8(void) {
 
 /* osSetIntMask, declared with an int mask: the constant 1 is then shared with the int stores below. */
 s32 func_8004D300(s32);
-/*
- * Stadium 1's Audio_StopAllSoundEffects with the D_800B3CC8 busy flag set
- * around it (each write under its own interrupt mask) and without the
- * voice re-queue call.
+/**
+ * Stop all active songs (not FX), fade them out
+ * Seen in play (2026-11-13) ran when つづける was picked at トーナメントをつづけますか？ after winning tournament
+ * round 1.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
-void func_80038588(void) {
-    UNUSED s32 pad[4];
+void Audio_StopAllSoundEffects(void) {
+    UNUSED s32 pad[4]; // FAKE: stack padding
     s32 mask;
     u32 i;
     s8* p;
@@ -1418,8 +1431,10 @@ s32 func_8004D300(s32);
  * established.
  * Matching note: the value is kept in `arg0` itself; a separate local makes the frame
  * 8 bytes larger.
+ * Seen in play (2026-11-13) ran when Start was pressed at the title screen (console reset, then N64
+ * logo, opening, title and main menu).
  */
-void func_800387BC(s32 arg0) {
+void Audio_FadeCategoriesAndStreams(s32 arg0) {
     s32 mask;
     s32 hi;
     s32 i;
@@ -1451,7 +1466,12 @@ s32 func_8004D300(s32);                             /* extern */
 extern s8 D_8007754C;
 extern s32 D_800B3CD0;
 
-void func_80038880(void) {
+/**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Audio_FadeCategoriesAndStreamsDefault(void) {
     s32 temp_v0;
 
     temp_v0 = func_8004D300(1);
@@ -1725,7 +1745,7 @@ void func_80039010(channel_t* arg0) {
             if (M2C_FIELD(arg0, u8**, 0x90) != NULL) {
                 M2C_FIELD(arg0, u16*, 0xBA) = M2C_FIELD(arg0, u8**, 0x90)[tmp * 4];
                 M2C_FIELD(arg0, u8*, 0xCB) = M2C_FIELD(arg0, u8**, 0x90)[tmp * 4 + 2] / 2;
-                func_800366C8(arg0, (u8*)&M2C_FIELD(arg0, song_t**, 0x84)->env_table[M2C_FIELD(arg0, u8**, 0x90)[tmp * 4 + 1]]);
+                Audio_SetVoiceVolumeEnvelope(arg0, (u8*)&M2C_FIELD(arg0, song_t**, 0x84)->env_table[M2C_FIELD(arg0, u8**, 0x90)[tmp * 4 + 1]]);
                 tmp = M2C_FIELD(arg0, u8**, 0x90)[tmp * 4 + 3];
             }
             Audio_UpdateVoicePlaybackEnd(arg0);
@@ -1819,19 +1839,19 @@ f32 Audio_AdvanceVoicePitch(channel_t* arg0, f32 offset) {
 }
 
 void Audio_UpdateVoicePlaybackEnd(channel_t* arg0) {
-    if (M2C_FIELD(arg0, u16*, 0xA6) != 0x7FFF) {
-        if (M2C_FIELD(arg0, u16*, 0xBE) != 0) {
-            M2C_FIELD(arg0, s64*, 0x28) = (s32)(M2C_FIELD(arg0, u16*, 0xBE) << 8) + M2C_FIELD(arg0, s64*, 0x20);
+    if (arg0->note_duration != 0x7FFF) {
+        if (arg0->cutoff != 0) {
+            M2C_FIELD(arg0, s64*, 0x28) = (s32)(arg0->cutoff << 8) + M2C_FIELD(arg0, s64*, 0x20);
         } else {
-            M2C_FIELD(arg0, s64*, 0x28) = M2C_FIELD(arg0, s64*, 0x18) - (s32)(M2C_FIELD(arg0, u16*, 0xC0) << 8);
+            M2C_FIELD(arg0, s64*, 0x28) = M2C_FIELD(arg0, s64*, 0x18) - (s32)(arg0->endit << 8);
         }
     } else {
         M2C_FIELD(arg0, s64*, 0x28) = 0x7FFFFFFF;
     }
 
-    M2C_FIELD(arg0, u8*, 0xD2) = M2C_FIELD(arg0, u8*, 0xCE);
-    M2C_FIELD(arg0, u8*, 0xD3) = M2C_FIELD(arg0, u8*, 0xCD);
-    M2C_FIELD(arg0, u8*, 0xD1) = 1;
+    arg0->env_current_vol = arg0->env_init_vol;
+    arg0->env_decay_begin = arg0->env_speed;
+    arg0->env_state = 1;
 }
 
 void func_8003A800(void*, s32);
@@ -1904,9 +1924,9 @@ void func_800395D0(channel_t* arg0) {
 }
 
 void func_80039A44(channel_t* cp) {
-    M2C_FIELD(cp, u32*, 0xA0) = M2C_FIELD(cp, u64*, 0x20);
+    cp->sweep_frame = cp->note_end_frame;
     M2C_FIELD(cp, u8*, 0xEC) = 0;
-    M2C_FIELD(cp, u8*, 0xED) = M2C_FIELD(cp, s16*, 0xBC) & 0x80;
+    cp->env_trigger_off = cp->sweep_amount & 0x80;
 }
 
 void Audio_AdvancePanModulation(channel_t* arg0) {
@@ -1916,7 +1936,7 @@ void Audio_AdvancePanModulation(channel_t* arg0) {
     do {
         arg0->sweep_frame += 0x100;
 
-        temp_v1 = (M2C_FIELD(arg0, u8*, 0xE7) * 2) + M2C_FIELD(arg0, u8*, 0xEC);
+        temp_v1 = (arg0->wobble_counter * 2) + M2C_FIELD(arg0, u8*, 0xEC);
         if (temp_v1 < 0x80) {
             M2C_FIELD(arg0, u8*, 0xEC) = temp_v1;
             continue;
@@ -1924,12 +1944,12 @@ void Audio_AdvancePanModulation(channel_t* arg0) {
 
         M2C_FIELD(arg0, u8*, 0xEC) = temp_v1 & 0x7F;
         temp_v1 >>= 7;
-        if (M2C_FIELD(arg0, u8*, 0xED) == 0) {
+        if (arg0->env_trigger_off == 0) {
             var_v0 = arg0->sweep_amount;
             var_v0 += temp_v1;
             if (var_v0 >= 0xFF) {
                 var_v0 = 0xFE;
-                M2C_FIELD(arg0, u8*, 0xED) = 1;
+                arg0->env_trigger_off = 1;
             }
             arg0->sweep_amount = var_v0;
         } else {
@@ -1937,7 +1957,7 @@ void Audio_AdvancePanModulation(channel_t* arg0) {
             var_v0 -= temp_v1;
             if ((var_v0 >= 0xFF) || (var_v0 == 0)) {
                 var_v0 = 1;
-                M2C_FIELD(arg0, u8*, 0xED) = 0;
+                arg0->env_trigger_off = 0;
             }
             arg0->sweep_amount = var_v0;
         }
@@ -1968,21 +1988,21 @@ f32 Audio_AdvancePeriodicPitchModulation(channel_t* arg0) {
 #undef CH_S8
 
 f32 Audio_ComputeSinePitchModulation(channel_t* arg0) {
-    s32 temp_v0 = M2C_FIELD(arg0, u16*, 0xB6) - M2C_FIELD(arg0, u8*, 0xC4);
+    s32 temp_v0 = arg0->wobble_frame - arg0->vib_delay;
     f32 tmp;
 
     if (temp_v0 > 0) {
-        tmp = M2C_FIELD(arg0, f32*, 0x40) * __sinf(((temp_v0 / (f32)(u32)M2C_FIELD(arg0, u8*, 0xE8)) * 2) * 3.14159260000000007);
-        M2C_FIELD(arg0, f32*, 0x78) = tmp;
+        tmp = arg0->vib_amount * __sinf(((temp_v0 / (f32)(u32)arg0->vib_speed) * 2) * 3.14159260000000007);
+        arg0->vibrato = tmp;
     }
-    return M2C_FIELD(arg0, f32*, 0x78);
+    return arg0->vibrato;
 }
 
 void Audio_AdvancePitchEnvelope(channel_t* arg0) {
     s32 tmp;
 
     do {
-        M2C_FIELD(arg0, u64*, 0x8) += 0x100;
+        arg0->channel_frame += 0x100;
 
         arg0->cont_vol_repeat_count--;
         if (arg0->cont_vol_repeat_count) {
@@ -2004,14 +2024,14 @@ void Audio_AdvancePitchEnvelope(channel_t* arg0) {
             arg0->volume = tmp;
             arg0->cont_vol_repeat_count = 1;
         }
-    } while (M2C_FIELD(arg0, u64*, 0x8) < M2C_FIELD(arg0, u64*, 0x0));
+    } while (arg0->channel_frame < M2C_FIELD(arg0, u64*, 0x0));
 }
 
 void Audio_AdvanceVolumeEnvelope(channel_t* arg0) {
     u8 tmp;
 
     do {
-        M2C_FIELD(arg0, u64*, 0x10) += 0x100;
+        arg0->volume_frame += 0x100;
 
         arg0->cont_pb_repeat_count--;
         if (arg0->cont_pb_repeat_count) {
@@ -2034,7 +2054,7 @@ void Audio_AdvanceVolumeEnvelope(channel_t* arg0) {
             arg0->pitchbend_calc = arg0->pitchbend * arg0->bendrange;
             arg0->cont_pb_repeat_count = 1;
         }
-    } while (M2C_FIELD(arg0, u64*, 0x10) < M2C_FIELD(arg0, u64*, 0x0));
+    } while (arg0->volume_frame < M2C_FIELD(arg0, u64*, 0x0));
 }
 
 f32 Audio_ExpApproximation(f32 arg0) {
@@ -2062,7 +2082,7 @@ f32 Audio_ExpApproximation(f32 arg0) {
 }
 
 void Audio_RelocateSoundBank(u8* arg0, s32 arg1) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     u32 i;
     f32 var_fv0;
     SoundBank* soundbank = arg0;
@@ -2255,7 +2275,7 @@ void Audio_RelocatePointerArray(u8* arg0, u32 arg1, u32 arg2) {
 }
 
 /**
- * Initialises channel `cp` as a new sound (a sibling of func_8003815C): calls
+ * Initializes channel `cp` as a new sound (a sibling of func_8003815C): calls
  * func_8003A2B8(cp) to reset it, then stores D_800B3668 at offset 0x88, arg1 at the
  * s16 at 0xB2 (the type word), arg2 at 0xAA, arg3 at 0xBC and arg4 at 0x60 (`priority`).
  * It then raises the interrupt mask with func_8004D300, takes the next handle
@@ -2273,15 +2293,15 @@ s32 func_8003A638(channel_t* cp, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     func_8003A2B8((s8*)cp);
     M2C_FIELD(cp, s32*, 0x88) = (s32)D_800B3668;
     M2C_FIELD(cp, s16*, 0xB2) = arg1;
-    M2C_FIELD(cp, s16*, 0xAA) = arg2;
-    M2C_FIELD(cp, s16*, 0xBC) = arg3;
-    M2C_FIELD(cp, s32*, 0x60) = arg4;
+    cp->volume_scale = arg2;
+    cp->sweep_amount = arg3;
+    cp->priority = arg4;
     mask = func_8004D300(uninit);
-    M2C_FIELD(cp, s32*, 0x5C) = D_800B365C;
+    cp->handle = D_800B365C;
     D_800B365C++;
     val = ((s32*)D_800B3644)[arg1];
     M2C_FIELD(cp, s32*, 0x8C) = val;
     M2C_FIELD(cp, s32*, 0x30) = val;
     func_8004D300(mask);
-    return M2C_FIELD(cp, s32*, 0x5C);
+    return cp->handle;
 }

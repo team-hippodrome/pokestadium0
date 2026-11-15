@@ -9,7 +9,7 @@ source files retain their TODO slots; the registry selects C directly from
 
 ## Source layout and conditional pattern
 
-`src/1060.c` owns the scoped resident CPU text after the boot entry. `src/fragments/fragmentNNN_ROMOFFSET.c` contains one source unit per executable fragment image, including independently named images that reuse the `0x8FF00000` link slot. There are 187 fragment source units and one resident source unit.
+`src/main.c` owns the scoped resident CPU text after the boot entry. `src/fragments/fragmentNNN_ROMOFFSET.c` contains one source unit per executable fragment image, including independently named images that reuse the `0x8FF00000` link slot. There are 187 fragment source units and one resident source unit.
 
 Each block has this layout:
 
@@ -21,7 +21,7 @@ Each block has this layout:
 #endif
 ```
 
-The conditional direction follows the inspected [Stadium 1 example](https://github.com/michiiik/pokestadium/blob/61ab5896988e55a1355dcaae7c4302785ea97f21/src/33FE0.c). Region-specific `asm/.../nonmatchings/...` pragma paths also appear in the inspected [Stadium 2 source](https://github.com/michiiik/pokestadiumgs/blob/7c7d7fe15dc948bafcb35ddfd05541a3c3f852a8/src/10BB0.c).
+The conditional direction follows the inspected [Stadium 1 example](https://github.com/michiiik/pokestadium/blob/61ab5896988e55a1355dcaae7c4302785ea97f21/src/misc_stubs.c). Region-specific `asm/.../nonmatchings/...` pragma paths also appear in the inspected [Stadium 2 source](https://github.com/michiiik/pokestadiumgs/blob/7c7d7fe15dc948bafcb35ddfd05541a3c3f852a8/src/10BB0.c).
 
 The `NON_MATCHING` branch is deliberately a TODO slot, not a fabricated `void` function or guessed ABI. Defining that flag removes the pragma until a real C candidate is added; this is not a functioning nonmatching game build.
 

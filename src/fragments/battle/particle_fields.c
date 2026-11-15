@@ -1,0 +1,257 @@
+/* Stadium Zero fragment012_17ED00. */
+/* C ported from the Stadium 1 decomp: src/fragments/demo_scenes/demo_scenes_16A0E0.c, src/fragments/particle_math/particle_math_269820.c. */
+
+#include "battle.h"
+extern ParticleDescriptor gDefaultParticleDescriptor;
+
+extern unk_D_86B10BE0 D_8219A82C;
+
+#include "m2c_macros.h"
+
+void Particle_SetFieldOffsetACIfNotSentinel(Particle* arg0, s16 arg1);
+void Particle_SetFieldOffsetCFIfNotSentinel(Particle* arg0, u8 arg1);
+void Particle_SetFieldOffsetA6IfNotSentinel(Particle* arg0, s16 arg1);
+void Particle_SetFieldOffsetA8IfNotSentinel(Particle* arg0, s16 arg1);
+void Particle_SetPrimAlphaIfNotSentinel(Particle* arg0, u8 arg1);
+void Particle_SetFieldOffsetAAIfNotSentinel(Particle* arg0, s16 arg1);
+s16 Particle_ScratchA_GetS16_0C068(Particle* arg0);
+s16 Particle_GetParam1(Particle* arg0);
+void BattleAnim_ClearEffectState(void);
+
+void Particle_SetPrimAlpha(s8 *arg0, char arg1);
+void Particle_Param0_SetS16_0BCA8(Particle* arg0, s16 arg1);
+void Particle_Countdown_SetS16_0BE14(Particle* arg0, s16 arg1);
+void Particle_SpawnIndex_SetS16_0BED8(Particle* arg0, s16 arg1);
+
+/**
+ * Store the parameter only when it differs from the field-specific sentinel.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
+void Particle_SetFieldOffsetACIfNotSentinel(Particle* arg0, s16 arg1) {
+    if ((u32)arg0 != -1) {
+        Particle_SpawnIndex_SetS16_0BED8(arg0, arg1);
+    }
+}
+
+/**
+ * Store the parameter only when it differs from the field-specific sentinel.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
+void Particle_SetFieldOffsetCFIfNotSentinel(Particle* arg0, u8 arg1) {
+    if ((u32)arg0 != -1) {
+        Particle_SetByteParam1(arg0, arg1);
+    }
+}
+
+/**
+ * Store the parameter only when it differs from the field-specific sentinel.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
+void Particle_SetFieldOffsetA6IfNotSentinel(Particle* arg0, s16 arg1) {
+    if ((u32)arg0 != -1) {
+        Particle_Param0_SetS16_0BCA8(arg0, arg1);
+    }
+}
+
+/**
+ * Store the parameter only when it differs from the field-specific sentinel.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
+void Particle_SetFieldOffsetA8IfNotSentinel(Particle* arg0, s16 arg1) {
+    if ((u32)arg0 != -1) {
+        Particle_Countdown_SetS16_0BE14(arg0, arg1);
+    }
+}
+
+/**
+ * Store the parameter only when it differs from the field-specific sentinel.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
+void Particle_SetFieldOffsetCEIfNotSentinel(Particle* arg0, u8 arg1) {
+    if ((u32)arg0 != -1) {
+        arg0->byteParam2 = arg1;
+    }
+}
+
+/**
+ * Sets byteParam0 (0xC9) to arg1, unless the particle pointer is -1.
+ * @unverified Name guessed from the code.
+ */
+void Particle_SetByteParam0Checked(s8 *particle, unsigned char value)
+{
+  int new_var; // FAKE: permuter temp
+  new_var = particle != ((s8 *) (-1)); // FAKE
+  if (new_var) // FAKE
+  {
+    *((s8 *) (((s8 *) particle) + 0xC9)) = (s8) (value & 0xFF); // FAKE
+  }
+}
+
+/**
+ * Sets field A6 of the particle to arg1, unless the particle pointer is -1.
+ * @unverified Name guessed from the code.
+ */
+void Particle_SetParam1Checked(s8 *particle, s16 value) {
+    if (particle != (s8 *)-1) {
+        M2C_FIELD(particle, s16 *, 0xA6) = value;
+    }
+}
+
+/**
+ * Store the parameter only when it differs from the field-specific sentinel.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
+void Particle_SetPrimAlphaIfNotSentinel(Particle* arg0, u8 arg1) {
+    if ((u32)arg0 != -1) {
+        Particle_SetPrimAlpha(arg0, arg1);
+    }
+}
+
+/**
+ * Store the parameter only when it differs from the field-specific sentinel.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
+void Particle_SetFieldOffsetAAIfNotSentinel(Particle* arg0, s16 arg1) {
+    if ((u32)arg0 != -1) {
+        arg0->scratchA = arg1;
+    }
+}
+
+/**
+ * Sets field AC of the particle to arg1, unless the particle pointer is -1.
+ * @unverified Name guessed from the code.
+ */
+void Particle_SetScratchBChecked(s8 *particle, s16 value) {
+    if (particle != (s8 *)-1) {
+        M2C_FIELD(particle, s16 *, 0xAC) = value;
+    }
+}
+
+/**
+ * Returns the particle's byteParam2.
+ * Seen in play (2026-11-13) in the 165-move sweep (Pay Day, Vice Grip): it returned 7 and 2, the
+ * byte at 0xCA each time.
+ */
+u8 Particle_GetByteParam2(s8 *arg0) {
+    return M2C_FIELD(arg0, u8 *, 0xCA);
+}
+
+/**
+ * Returns the particle's byteParam0.
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
+ * @unverified Name and comment guessed from the code.
+ */
+u8 Particle_GetByteParam0(s8 *arg0) {
+    return M2C_FIELD(arg0, u8 *, 0xC9);
+}
+
+/**
+ * Return the particle's scratchA field.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
+s16 Particle_ScratchA_GetS16_0C068(Particle* arg0) {
+    return arg0->scratchA;
+}
+
+/**
+ * Returns the particle's spawnIndex.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle and a Pound turn.
+ * @unverified Name and comment guessed from the code.
+ */
+s16 Particle_GetSpawnIndex(s8 *arg0) {
+    return M2C_FIELD(arg0, s16 *, 0xA8);
+}
+
+/**
+ * Returns the particle's byteParam1 (+0xCB) as an s16. Most callers pass the particle through a0.
+ * @unverified Name guessed from the code.
+ */
+s16 Particle_GetByteParam1(Particle* arg0) {
+    u8 value = arg0->byteParam1;
+
+    return value;
+}
+
+/**
+ * Returns the particle's param1 (offset 0xA6). Renamed from Particle_FieldA6_GetS16_0BCBC, which
+ * used the Stadium 1 offset.
+ *  * Seen in play (2026-11-13) in the 165-move sweep (Guillotine): it returned 32, the halfword at
+ * 0xA6.
+ */
+s16 Particle_GetParam1(Particle* arg0) {
+    return arg0->param1;
+}
+
+/**
+ * Returns the particle's param0.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
+ * @unverified Name and comment guessed from the code.
+ */
+s16 Particle_GetParam0(s8 *arg0) {
+    return M2C_FIELD(arg0, s16 *, 0xA2);
+}
+
+/**
+ * Returns the particle's countdown.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
+ * @unverified Name and comment guessed from the code.
+ */
+s16 Particle_GetCountdown(s8 *arg0) {
+    return M2C_FIELD(arg0, s16 *, 0xA4);
+}
+
+/**
+ * Sets the battle animation effect state word D_8219A82C. BattleAnim_ClearEffectState and
+ * BattleAnim_GetEffectState clear and read it.
+ * Seen in play (2026-11-13) (title-screen demo battle, left idle after boot): ran once, with state
+ * 1, called from BattleAnim_DispatchParticleEmission.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Amnesia, Sing.
+ * @unverified Named from the code.
+ */
+void BattleAnim_SetEffectState(s32 arg0) {
+    (*(s32 *)&D_8219A82C) = arg0;
+}
+
+/**
+ * Clears D_8219A82C.unk_00, the battle animation effect state. Was misnamed
+ * FirstClearBonus_HideDialogBox.
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Fly.
+ * @unverified Named from the code.
+ */
+void BattleAnim_ClearEffectState(void) {
+    D_8219A82C.unk_00 = 0;
+}
+
+/**
+ * Returns the battle animation effect state word D_8219A82C.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name guessed from the code.
+ */
+s32 BattleAnim_GetEffectState(void) {
+    return (*(s32 *)&D_8219A82C);
+}

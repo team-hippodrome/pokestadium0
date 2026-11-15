@@ -1,6 +1,6 @@
 # Stadium Zero per-fragment executable sections
 
-This is an evidence-labelled section map for all 259 restored fragment images in the Japanese-only original Pokémon Stadium. It distinguishes CPU instructions supported by relocation/control-flow evidence, inferred contiguous text envelopes, and unclassified payload; it is not a completed function inventory or a matching-ROM build.
+This is an evidence-labeled section map for all 259 restored fragment images in the Japanese-only original Pokémon Stadium. It distinguishes CPU instructions supported by relocation/control-flow evidence, inferred contiguous text envelopes, and unclassified payload; it is not a completed function inventory or a matching-ROM build.
 
 ## Input and baseline
 
@@ -65,7 +65,7 @@ These are end-exclusive, restored-image offsets. All start at `0x20`; full instr
 | 40 | 0x003CE090 | 0x8E900000 | 0x134 |
 | 106–258 | See CSV per image | 0x8FF00000 | 0x3C |
 
-For image 0, the resulting link-time instruction envelope ends at `0x8111C4E8`, corresponding to raw ROM offset `0x0009D0E8`. Two zero words follow, then non-instruction payload begins at image offset `0x1C4F0`. The zero words are labelled separately, not counted as executable instructions.
+For image 0, the resulting link-time instruction envelope ends at `0x8111C4E8`, corresponding to raw ROM offset `0x0009D0E8`. Two zero words follow, then non-instruction payload begins at image offset `0x1C4F0`. The zero words are labeled separately, not counted as executable instructions.
 
 ## Rules and inspected corrections
 
