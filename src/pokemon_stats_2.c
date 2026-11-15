@@ -341,7 +341,7 @@ s32 GbSave_OpenMainData(s32 arg0) {
         return 1;
     }
 
-    sGbSavePorts[arg0].mainData = main_pool_alloc_with_func(0x1020, 0, arg0 + 'DAT0', GbSave_ReleasePortBuffers);
+    sGbSavePorts[arg0].mainData = MainPool_AllocWithFunc(0x1020, 0, arg0 + 'DAT0', GbSave_ReleasePortBuffers);
     sGbSavePorts[arg0].flags &= ~0x4000;
 
     if (sGbSavePorts[arg0].mainData != NULL) {
@@ -358,7 +358,7 @@ s32 GbSave_OpenMainData(s32 arg0) {
         if (sp28 != 0) {
             GbSave_CheckSavedAtPokemonCenter(arg0);
         } else {
-            main_pool_try_free(sGbSavePorts[arg0].mainData);
+            MainPool_TryFree(sGbSavePorts[arg0].mainData);
         }
     }
 
@@ -397,7 +397,7 @@ s32 GbSave_OpenBoxData(s32 arg0) {
         return 1;
     }
 
-    sGbSavePorts[arg0].boxData = main_pool_alloc_with_func(0x2B40, 0, arg0 + 'BOX0', GbSave_ReleasePortBuffers);
+    sGbSavePorts[arg0].boxData = MainPool_AllocWithFunc(0x2B40, 0, arg0 + 'BOX0', GbSave_ReleasePortBuffers);
 
     if (sGbSavePorts[arg0].boxData != NULL) {
         sGbSavePorts[arg0].flags |= 2;
@@ -415,7 +415,7 @@ s32 GbSave_OpenBoxData(s32 arg0) {
             }
 
             if (sp2C == 0) {
-                main_pool_try_free(sGbSavePorts[arg0].boxData);
+                MainPool_TryFree(sGbSavePorts[arg0].boxData);
             }
         } else {
             HAL_Memset(sGbSavePorts[arg0].boxData, 0xFF, 0x2B40);

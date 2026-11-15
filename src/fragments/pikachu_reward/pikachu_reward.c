@@ -829,9 +829,9 @@ void PikachuReward_SetupScene(void) {
     MemoryBlock* block;
     s32 i;
 
-    block = MainPool_AllocState(main_pool_get_available(), 0);
-    sSceneRootNode = process_geo_layout(block, sSceneGeoLayout);
-    sQuestionMarkGeo = process_geo_layout(block, D_8FC01070);
+    block = MainPool_AllocState(MainPool_GetAvailable(), 0);
+    sSceneRootNode = GeoLayout_Process(block, sSceneGeoLayout);
+    sQuestionMarkGeo = GeoLayout_Process(block, D_8FC01070);
 
     MainPool_FinalizeAllocation(block);
     ModelRenderer_InitDisplayRoots();
@@ -875,7 +875,7 @@ s32 Stadium_BonusPikachuReward(UNUSED s32 arg0, s32 session) {
     StageContext* stage;
 
     sSessionContext = (SessionContext*)session;
-    main_pool_push_state('PIKA');
+    MainPool_PushState('PIKA');
 
     if ((sSessionContext->transitionFlags & 0x20) && (PikachuReward_FindPikachuInCartParty(sSessionContext->teamGbPort) != 0)) {
         Gfx_InitDisplayListBuffers(0x10000, 0);
@@ -896,6 +896,6 @@ s32 Stadium_BonusPikachuReward(UNUSED s32 arg0, s32 session) {
         Gfx_FreeDisplayListBuffers();
     }
 
-    main_pool_pop_state('PIKA');
+    MainPool_PopState('PIKA');
     return 0;
 }

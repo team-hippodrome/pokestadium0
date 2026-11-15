@@ -248,10 +248,10 @@ void CupClear_InitScene(void) {
     UNUSED s32 pad; // FAKE: stack padding
     MemoryBlock* block;
 
-    block = MainPool_AllocState(main_pool_get_available(), 0);
+    block = MainPool_AllocState(MainPool_GetAvailable(), 0);
 
-    sCupClearStageRoot = (GraphNode*)process_geo_layout(block, sCupClearStageGeoLayout);
-    sCupClearTrophyModel = (ModelNodeView*)process_geo_layout(block, D_8EA1B414);
+    sCupClearStageRoot = (GraphNode*)GeoLayout_Process(block, sCupClearStageGeoLayout);
+    sCupClearTrophyModel = (ModelNodeView*)GeoLayout_Process(block, D_8EA1B414);
     MainPool_FinalizeAllocation(block);
     ModelRenderer_InitDisplayRoots();
     ModelRenderer_AttachDisplayObject(&sCupClearTrophy);
@@ -259,8 +259,8 @@ void CupClear_InitScene(void) {
     sCupClearTrophy.rotation.y = 0x4000;
 }
 
-u32 main_pool_push_state(u32 arg);
-u32 main_pool_pop_state(u32 arg);
+u32 MainPool_PushState(u32 arg);
+u32 MainPool_PopState(u32 arg);
 u8* Asset_LoadToSegment(s32 id, u8* rom_start, u8* rom_end, s32 arg3);
 void Gfx_InitDisplayListBuffers(u32 buffer_size, s32 pool_side);
 void Gfx_FreeDisplayListBuffers(void);
@@ -297,7 +297,7 @@ s32 CupClear_Main(UNUSED s32 arg0, s32 cup) {
     if (sCupClearTrophyIndex == 4) {
         sCupClearTrophyIndex = 3;
     }
-    main_pool_push_state('TCUP');
+    MainPool_PushState('TCUP');
     Gfx_InitDisplayListBuffers(0x10000, 0);
     stage = StageContext_Allocate(1, 1, 2, 1, 2, 1);
     Font_Init(0x10, 0);
@@ -309,6 +309,6 @@ s32 CupClear_Main(UNUSED s32 arg0, s32 cup) {
     StageContext_Deactivate();
     Font_Free();
     Gfx_FreeDisplayListBuffers();
-    main_pool_pop_state('TCUP');
+    MainPool_PopState('TCUP');
     return 0;
 }

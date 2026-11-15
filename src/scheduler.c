@@ -54,11 +54,11 @@ s32 Sched_StartTask(SchedTask* arg0) {
     } else if (arg0->state == 0) {
         switch (arg0->task.t.type) {
             case M_AUDTASK:
-                profiler_log_vblank_time();
+                Profiler_LogVblankTime();
                 break;
 
             case M_GFXTASK:
-                profiler_log_gfx_time(TASKS_QUEUED);
+                Profiler_LogGfxTime(TASKS_QUEUED);
                 arg0->rdpState = 1;
                 osDpSetStatus(0x3C0);
                 break;
@@ -104,7 +104,7 @@ s32 Sched_HandleRspCompletion(SchedTask* arg0) {
             arg0->state = 3;
             switch (arg0->task.t.type) {
                 case M_GFXTASK:
-                    profiler_log_gfx_time(RSP_COMPLETE);
+                    Profiler_LogGfxTime(RSP_COMPLETE);
                     if (arg0->rdpState == 2) {
                         osSendMesg(&arg0->queue, 'DONE', 0);
                     }
@@ -120,13 +120,13 @@ s32 Sched_HandleRspCompletion(SchedTask* arg0) {
         switch (arg0->task.t.type) {
             case M_AUDTASK:
                 if (arg0->state == 1) {
-                    profiler_log_vblank_time();
+                    Profiler_LogVblankTime();
                     osSendMesg(&arg0->queue, 'DONE', 0);
                 }
                 break;
 
             case M_GFXTASK:
-                profiler_log_gfx_time(RSP_COMPLETE);
+                Profiler_LogGfxTime(RSP_COMPLETE);
                 if (arg0->rdpState == 2) {
                     osSendMesg(&arg0->queue, 'DONE', 0);
                 }
@@ -143,7 +143,7 @@ s32 Sched_HandleRspCompletion(SchedTask* arg0) {
 
 /** Handles an RDP completion event for a task. */
 void Sched_HandleRdpCompletion(SchedTask* arg0) {
-    profiler_log_gfx_time(RDP_COMPLETE);
+    Profiler_LogGfxTime(RDP_COMPLETE);
     if (arg0->state == 3) {
         osSendMesg(&arg0->queue, 'DONE', 0);
     }

@@ -739,7 +739,7 @@ void PartyScreen_RunFrame(s32 unused) {
 s32 PartyScreen_Init(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
     s32 i;
 
-    main_pool_push_state('VIEW');
+    MainPool_PushState('VIEW');
     Font_Init(0x1C, 0);
     sMoveBackdropArchive = BinArchive_Open(D_003DCB60, D_003F53C0, 1, 1);
     D_8A21DA48 = (ModelLoadContext*)PokeIcon_AllocFramebuffers(1);
@@ -751,9 +751,9 @@ s32 PartyScreen_Init(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
     Asset_LoadToSegment(((u32)D_01000000 & 0x0F000000) >> 0x18, D_002E0BE0, D_002E2B90, 0);
     Asset_LoadToSegment(((u32)D_04000000 & 0x0F000000) >> 0x18, D_00400F70, D_004076E0, 0);
 
-    D_8A21DA58 = main_pool_alloc(0x3000, 0);
+    D_8A21DA58 = MainPool_Alloc(0x3000, 0);
     for (i = 0; i < 4; i++) {
-        sMoveBackdropPools[i] = main_pool_alloc(0x14800, 0);
+        sMoveBackdropPools[i] = MainPool_Alloc(0x14800, 0);
     }
 
     PartyScreen_Load();
@@ -763,7 +763,7 @@ s32 PartyScreen_Init(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
     BgStage_RunUntilCondition(8, PartyScreen_FadeFrame);
     StageLoader_WaitForRetrace();
     Font_Free();
-    main_pool_pop_state('VIEW');
+    MainPool_PopState('VIEW');
     Fragment_QueueCall(((((u32)D_88000000) & 0x0FF00000) >> 0x14) - 0x10, D_00235D70, D_00238BD0, 0, 0);
     return 0x8040;
 }

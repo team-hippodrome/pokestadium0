@@ -49,8 +49,8 @@ void PokeIcon_InitPreviewScene(PokeModelPreview* arg0, s16 arg1, s16 arg2, s16 a
     MemoryBlock* sp24;
     MemoryBlock* temp_v0;
 
-    sp24 = MainPool_AllocState(main_pool_get_available(), 0);
-    arg0->rootNode = process_geo_layout(sp24, D_8006F3E0);
+    sp24 = MainPool_AllocState(MainPool_GetAvailable(), 0);
+    arg0->rootNode = GeoLayout_Process(sp24, D_8006F3E0);
     arg0->displayObject = D_800AD1C0;
     MainPool_FinalizeAllocation(sp24);
     GeoCamera_SetViewport(arg0->rootNode->children, arg1, arg2, arg3, arg4);
@@ -63,7 +63,7 @@ void PokeIcon_InitPreviewScene(PokeModelPreview* arg0, s16 arg1, s16 arg2, s16 a
  */
 PokeModelPreview* PokeIcon_CreateModelPreview(ModelLoadContext* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5,
                                  s16 arg6, u8* arg7) {
-    PokeModelPreview* temp_v0 = main_pool_alloc(sizeof(PokeModelPreview), 0);
+    PokeModelPreview* temp_v0 = MainPool_Alloc(sizeof(PokeModelPreview), 0);
 
     if (temp_v0 != NULL) {
         temp_v0->flags = 6;

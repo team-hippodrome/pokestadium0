@@ -234,7 +234,7 @@ s32 Fragment_ProcessGeoLayout(MemoryBlock* arg0, Fragment* arg1, arg1_func_80010
     temp_v0->unk_14 = arg1;
 
     for (i = 0; i < temp_v0->unk_03; i++) {
-        temp_v0_2 = process_geo_layout(arg0, temp_v0->unk_08[i]);
+        temp_v0_2 = GeoLayout_Process(arg0, temp_v0->unk_08[i]);
 
         if (temp_v0_2->node.type == 0xE) {
             temp_v0_2->unk_28 = arg1;
@@ -252,7 +252,7 @@ s32 Fragment_ProcessGeoLayout(MemoryBlock* arg0, Fragment* arg1, arg1_func_80010
 void Fragment_ProcessGeoLayoutList(MemoryBlock* arg0, arg1_func_80019420* arg1) {
     while (arg1->unk_00) {
         if (arg1->unk_00 == 3) {
-            arg1->unk_04 = process_geo_layout(arg0, arg1->unk_04);
+            arg1->unk_04 = GeoLayout_Process(arg0, arg1->unk_04);
         }
 
         arg1++;
@@ -538,7 +538,7 @@ unk_D_86002F30* Model_LoadByArchiveIndex(s32 arg0) {
 
     sp2C = BinArchive_GetFile(D_800AC7A0.archives.modelArchive, arg0 - 1);
     if (sp2C != NULL) {
-        sp20 = MainPool_AllocState(main_pool_get_available(), 0);
+        sp20 = MainPool_AllocState(MainPool_GetAvailable(), 0);
         sp28.raw = 0;
         sp24 = Fragment_ProcessGeoLayout(sp20, sp2C, sp28);
         MainPool_FinalizeAllocation(sp20);
@@ -556,7 +556,7 @@ unk_D_86002F30* Model_LoadForPokemon(BattleMon* arg0) {
 
     sp2C = BinArchive_GetFile(D_800AC7A0.archives.modelArchive, arg0->species.id - 1);
     if (sp2C != NULL) {
-        sp20 = MainPool_AllocState(main_pool_get_available(), 0);
+        sp20 = MainPool_AllocState(MainPool_GetAvailable(), 0);
         Model_ComputeSizeVariant(&sp28, arg0);
         sp24 = Fragment_ProcessGeoLayout(sp20, sp2C, sp28);
         MainPool_FinalizeAllocation(sp20);
@@ -573,7 +573,7 @@ arg1_func_80019420* BattleAnim_LoadResourceTable(s32 arg0) {
     sp20 = NULL;
     sp24 = BinArchive_GetFile(D_800AC7A0.archives.resourceArchive, arg0);
     if (sp24 != NULL) {
-        sp1C = MainPool_AllocState(main_pool_get_available(), 0);
+        sp1C = MainPool_AllocState(MainPool_GetAvailable(), 0);
         sp20 = sp24->data;
         Fragment_ProcessGeoLayoutList(sp1C, sp20);
         MainPool_FinalizeAllocation(sp1C);

@@ -48,19 +48,19 @@ enum SetGetTimeDiff {
 };
 
 // profiler.c
-void profiler_log_thread5_time(enum ProfilerGameEvent eventID);
-void profiler_log_thread4_time(void);
-void profiler_log_gfx_time(enum ProfilerGfxEvent eventID);
-void profiler_log_vblank_time(void);
-void draw_profiler_rect(s32 ulx, s32 lrx, s32 uly_in, u16 color);
-void draw_profiler_bar_cpu(OSTime clockBase, OSTime clockStart, OSTime clockEnd, s16 posY, u16 color);
-void draw_profiler_bar_cpu_keep_max(OSTime start, OSTime end, s16 posY, s16* last_max, s16* reset_ctr);
-void draw_reference_profiler_bars(void);
-void draw_profiler_mode_1(void);
-void draw_profiler_mode_0(void);
-void draw_profiler(s32 profiler_mode);
-void print_profiler_metrics(void);
-void clear_profiler_data(void);
-u32 set_get_time_diff(enum SetGetTimeDiff state);
+void Profiler_LogThread5Time(enum ProfilerGameEvent eventID);
+void Profiler_LogThread4Time(void);
+void Profiler_LogGfxTime(enum ProfilerGfxEvent eventID);
+void Profiler_LogVblankTime(void);
+void Profiler_DrawRect(s32 ulx, s32 lrx, s32 uly_in, u16 color);
+void Profiler_DrawBarCpu(OSTime clockBase, OSTime clockStart, OSTime clockEnd, s16 posY, u16 color);
+void Profiler_DrawBarCpuKeepMax(OSTime start, OSTime end, s16 posY, s16* last_max, s16* reset_ctr);
+void Profiler_DrawReferenceBars(void);
+void Profiler_DrawMode1(void);
+void Profiler_DrawMode0(void);
+void Profiler_Draw(s32 profiler_mode);
+void Profiler_PrintMetrics(void);
+void Profiler_ClearData(void);
+u32 Profiler_SetGetTimeDiff(enum SetGetTimeDiff state);
 
 #endif // PROFILER_H

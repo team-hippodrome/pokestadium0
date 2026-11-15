@@ -366,9 +366,9 @@ s32 TitleScreen_Update(s32 fade_mode) {
     return result;
 }
 
-s32 main_pool_alloc(u32 size, s32 side);
-u32 main_pool_push_state(u32 arg);
-u32 main_pool_pop_state(u32 arg);
+s32 MainPool_Alloc(u32 size, s32 side);
+u32 MainPool_PushState(u32 arg);
+u32 MainPool_PopState(u32 arg);
 void Gfx_InitDisplayListBuffers(u32 buffer_size, s32 pool_side);
 void Gfx_FreeDisplayListBuffers(void);
 s32 StageContext_Allocate(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32);
@@ -402,14 +402,14 @@ s32 TitleScreen_Main(UNUSED s32 arg0, UNUSED M2C_UNK arg1) {
     s32 result;
     s32 stage;
 
-    main_pool_push_state(0x5449544C); // 'TITL'
+    MainPool_PushState(0x5449544C); // 'TITL'
     Gfx_InitDisplayListBuffers(0x10000, 0);
     stage = StageContext_Allocate(0, 1, 2, 0, 2, 1);
     Font_Init(6, 0);
     Asset_LoadToSegment((u32) ((s32) &D_01000000 & 0x0F000000) >> 0x18, (u8*)&D_002E0BE0, (u8*)&D_002E2B90, 0);
     Asset_LoadToSegment((u32) ((s32) &D_02000000 & 0x0F000000) >> 0x18, (u8*)&D_002EBCB0, (u8*)&D_002F0A50, 0);
-    sDiskBootBlock = (LeoBootDescriptor*)main_pool_alloc(0x4510, 0);
-    sTitleAudioHeap = main_pool_alloc(0x100000, 0);
+    sDiskBootBlock = (LeoBootDescriptor*)MainPool_Alloc(0x4510, 0);
+    sTitleAudioHeap = MainPool_Alloc(0x100000, 0);
     sTitleBackgroundImage = (s32)Asset_LoadToSegment(0U, (u8*)&D_002E2B90, (u8*)&D_002EBCB0, 0);
     sTitleFrameCounter = 0;
     sPushStartBlinkTimer = 0;
@@ -424,6 +424,6 @@ s32 TitleScreen_Main(UNUSED s32 arg0, UNUSED M2C_UNK arg1) {
         Audio_PlayCommand(0x3C, 0xA, 0);
     }
     Gfx_FreeDisplayListBuffers();
-    main_pool_pop_state(0x5449544C); // 'TITL'
+    MainPool_PopState(0x5449544C); // 'TITL'
     return result;
 }

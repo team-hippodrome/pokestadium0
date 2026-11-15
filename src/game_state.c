@@ -315,7 +315,7 @@ s32 Fragment_LoadAndCall(s32 arg0, u8* romStart, u8* romEnd, u32 arg3, u32 arg4)
 
     result = func(arg3, arg4);
 
-    main_pool_try_free(func);
+    MainPool_TryFree(func);
 
     return result;
 }
@@ -542,7 +542,7 @@ void Save_RunGbReportErrorScreen(s32);
 void State_MainMenu(void)
 {
   s32 pushed = 0;
-  main_pool_push_state('OVLY');
+  MainPool_PushState('OVLY');
   Save_LoadSram();
   Gfx_InitDisplayListBuffers(0x10000, 0);
   D_800AF9A4 = StageContext_Allocate(1, 1, 2, 0, 2, 1);
@@ -572,10 +572,10 @@ void State_MainMenu(void)
       {
         if (pushed)
         {
-          main_pool_pop_state('BUDT');
+          MainPool_PopState('BUDT');
         }
         pushed = 1;
-        main_pool_push_state('BUDT');
+        MainPool_PushState('BUDT');
         GbSave_LoadPort(gActiveGbPort);
         if (GbSave_GetBoxCount(gActiveGbPort) == 0)
         {
@@ -597,7 +597,7 @@ void State_MainMenu(void)
   gSessionContext.transitionFlags = (!(gSessionContext.transitionFlags & 2)) * 0;
   StageContext_Deactivate();
   Gfx_FreeDisplayListBuffers();
-  main_pool_pop_state('OVLY');
+  MainPool_PopState('OVLY');
 }
 
 extern M2C_UNK D_00232510_2;
@@ -711,12 +711,12 @@ void State_GbPlayer(void) {
     s32 sp2C;
     GbPlayerLaunchParams sp24;
 
-    main_pool_push_state('EMU0');
+    MainPool_PushState('EMU0');
     func_8000A838(1);
     Display_WaitForFrames(2);
     func_8000A8DC();
 
-    sp24.partyIcons = main_pool_alloc(sizeof(*sp24.partyIcons), 0);
+    sp24.partyIcons = MainPool_Alloc(sizeof(*sp24.partyIcons), 0);
 
     func_80025B60(((u32) ((s32) &D_81300000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015F8F0, &D_0015FCE0, gActiveGbPort, (s32) &sp24);
     GbPlayer_Start(&sp24);
@@ -737,7 +737,7 @@ void State_GbPlayer(void) {
     Save_CommitTypedRecord(0x14, 0);
     gNextGameState = gPrevGameState;
     D_800AF988 = 1;
-    main_pool_pop_state('EMU0');
+    MainPool_PopState('EMU0');
 }
 
 extern s32 gNextGameState;
@@ -774,7 +774,7 @@ void Game_ShutdownAndLoadFragment(s32 arg0, s32 arg1) {
     Display_ApplyPendingVideoMode();
     Display_WaitForFrames(0xA);
 
-    main_pool_pop_state('GAME');
+    MainPool_PopState('GAME');
 
     FRAGMENT_LOAD_AND_CALL(FRAGMENT_FATAL_ERROR_SCREEN, arg0, arg1);
 }

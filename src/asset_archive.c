@@ -130,46 +130,46 @@ void Dma_WriteChunks(u32 write_start, u32 buffer_start, u32 buffer_end, s32 arg3
 
 /** Allocates memory for and decodes a JPEG image. */
 void* Jpeg_LoadDecodedImage(u8* addr, PRESJPEG* arg1, s32 side) {
-    s32 new_addr = main_pool_alloc(arg1->decodedSize + 0x100, side);
+    s32 new_addr = MainPool_Alloc(arg1->decodedSize + 0x100, side);
 
     if (new_addr != NULL) {
         s32 size = Jpeg_DecodeImage(new_addr, arg1->decodedSize + 0x100, (u32)arg1 + arg1->dataOffset);
 
         if (size == 0) {
-            main_pool_try_free(new_addr);
+            MainPool_TryFree(new_addr);
             new_addr = NULL;
         } else if (side == 0) {
-            main_pool_realloc(new_addr, size);
+            MainPool_Realloc(new_addr, size);
         }
     }
 
-    main_pool_try_free(addr);
+    MainPool_TryFree(addr);
 
     return new_addr;
 }
 
 /** Allocates memory for and decompresses a Yay0 asset. */
 s32 Yay0_LoadDecompressedAsset(s32 arg0, PERSSZP* arg1, s32 side) {
-    s32 vaddr = main_pool_alloc(arg1->decompressed_size2, side);
+    s32 vaddr = MainPool_Alloc(arg1->decompressed_size2, side);
 
     if (vaddr != NULL) {
         Yay0_DecompressAndRelocate(arg1, vaddr);
     }
 
-    main_pool_try_free(arg0);
+    MainPool_TryFree(arg0);
 
     return vaddr;
 }
 
 /** Allocates memory and copies an uncompressed asset from the cartridge. */
 u32* Asset_CopyUncompressed(u8* arg0, s32 arg1, u32 arg2, s32 arg3) {
-    u32* sp1C = main_pool_alloc(arg2, arg3);
+    u32* sp1C = MainPool_Alloc(arg2, arg3);
 
     if (sp1C != NULL) {
         Util_Memcpy(sp1C, arg0 + arg1, arg2 >> 2);
     }
 
-    main_pool_try_free(arg0);
+    MainPool_TryFree(arg0);
 
     return sp1C;
 }
@@ -183,30 +183,30 @@ void* Asset_LoadCompressed(u8* romStart, u8* romEnd, s32 arg2, s32 arg3) {
     int side;
 
     side = (arg2 == 0) ? MEMORY_POOL_RIGHT : MEMORY_POOL_LEFT;
-    addr = main_pool_alloc(0x18, side);
+    addr = MainPool_Alloc(0x18, side);
 
     if (addr != NULL) {
         Dma_WriteChunks(addr, romStart, romStart + 0x18, arg3);
         if ((addr[0] == 'PERS') && (addr[1] == '-SZP')) {
-            newaddr = main_pool_alloc(ALIGN16(romEnd - romStart), side);
+            newaddr = MainPool_Alloc(ALIGN16(romEnd - romStart), side);
             if (newaddr != NULL) {
                 Dma_WriteChunks(newaddr, romStart, romEnd, arg3);
                 ret = Yay0_LoadDecompressedAsset(newaddr, newaddr, arg2);
             }
         } else if ((addr[0] == 'PRES') && (addr[1] == 'JPEG')) {
-            newaddr = main_pool_alloc(ALIGN16(romEnd - romStart), side);
+            newaddr = MainPool_Alloc(ALIGN16(romEnd - romStart), side);
             if (newaddr != NULL) {
                 Dma_WriteChunks(newaddr, romStart, romEnd, arg3);
                 ret = Jpeg_LoadDecodedImage(newaddr, newaddr, arg2);
             }
         } else {
-            newaddr = main_pool_alloc(ALIGN16(romEnd - romStart), arg2);
+            newaddr = MainPool_Alloc(ALIGN16(romEnd - romStart), arg2);
             ret = newaddr;
             if (newaddr != NULL) {
                 Dma_WriteChunks(ret, romStart, romEnd, arg3);
             }
         }
-        main_pool_try_free(addr);
+        MainPool_TryFree(addr);
     }
 
     return ret;
@@ -229,7 +229,7 @@ void* Storage_LoadAssetByLbaRange(StorageLbaRange* arg0, s32 arg1) {
     LeoLBAToByte(arg0->startLba, arg0->lbaCount, &sp44);
     sp44 = ALIGN16(sp44);
 
-    temp_v0 = main_pool_alloc(sp44, var_s0);
+    temp_v0 = MainPool_Alloc(sp44, var_s0);
 
     if (temp_v0 != NULL) {
         temp_s0 = arg0->dataOffset + temp_v0;
@@ -308,8 +308,8 @@ u8* Asset_LoadToSegment(s32 id, u8* rom_start, u8* rom_end, s32 arg3) {
     u8* vaddr = Asset_LoadCompressed(rom_start, rom_end, arg3, 0);
 
     if ((vaddr != NULL) && (id > 0)) {
-        Memmap_SetSegmentMap(id, vaddr, main_pool_get_block_dist(vaddr));
-        main_pool_set_func(vaddr, id + 0x82000000, &Memmap_ClearSegmentOnBlockFree);
+        Memmap_SetSegmentMap(id, vaddr, MainPool_GetBlockDist(vaddr));
+        MainPool_SetFunc(vaddr, id + 0x82000000, &Memmap_ClearSegmentOnBlockFree);
     }
     return vaddr;
 }
@@ -321,8 +321,8 @@ MainPoolBlock* Asset_LoadToSegmentByLbaRange(s32 arg0, s32 arg1, s32 arg2, s32 a
     MainPoolBlock* temp_v0 = Storage_LoadAssetByLbaRange(Storage_SetLbaRange(&sp28, arg1, arg2), arg3);
 
     if ((temp_v0 != NULL) && (arg0 > 0)) {
-        Memmap_SetSegmentMap(arg0, temp_v0, main_pool_get_block_dist(temp_v0));
-        main_pool_set_func(temp_v0, arg0 + 0x82000000, Memmap_ClearSegmentOnBlockFree);
+        Memmap_SetSegmentMap(arg0, temp_v0, MainPool_GetBlockDist(temp_v0));
+        MainPool_SetFunc(temp_v0, arg0 + 0x82000000, Memmap_ClearSegmentOnBlockFree);
     }
 
     return temp_v0;
@@ -344,16 +344,16 @@ void Fragment_FreeCallback(u32 base_addr, u32 addr) {
 /** Registers a loaded fragment so it is freed with its block. */
 void Fragment_Register(s32 arg0, Fragment* addr) {
     UNUSED s32 pad; // FAKE: stack padding
-    u32 sp20 = main_pool_get_block_dist(addr);
+    u32 sp20 = MainPool_GetBlockDist(addr);
 
-    main_pool_set_func(addr, arg0 + 0x81000000, &Fragment_FreeCallback);
+    MainPool_SetFunc(addr, arg0 + 0x81000000, &Fragment_FreeCallback);
 
     if (sp20 < addr->sizeInRam) {
-        main_pool_realloc(addr, addr->sizeInRam);
+        MainPool_Realloc(addr, addr->sizeInRam);
         Memmap_RelocateFragment(arg0, addr);
     } else {
         Memmap_RelocateFragment(arg0, addr);
-        main_pool_realloc(addr, addr->sizeInRam);
+        MainPool_Realloc(addr, addr->sizeInRam);
     }
 }
 
@@ -400,7 +400,7 @@ BinArchive* BinArchive_Open(u8* romStart, u8* romEnd, s32 arg2, s32 arg3) {
             ret = newaddr;
             if (newaddr != NULL) {
                 sp28 = (ret->num_files * 0x10) + 0x10;
-                main_pool_try_free(ret);
+                MainPool_TryFree(ret);
                 newaddr = Asset_LoadCompressed(romStart, romStart + sp28, 0, 0);
                 ret = newaddr;
                 if (newaddr != NULL) {
@@ -417,7 +417,7 @@ BinArchive* BinArchive_Open(u8* romStart, u8* romEnd, s32 arg2, s32 arg3) {
             ret = newaddr;
             if (newaddr != NULL) {
                 sp28_2 = (ret->num_files * 0x10) + 0x10;
-                main_pool_try_free(ret);
+                MainPool_TryFree(ret);
                 newaddr = Asset_LoadCompressed(romStart, romStart + sp28_2, 1, 0);
                 ret = newaddr;
                 if ((newaddr != NULL) && (arg3 == 1)) {
@@ -447,7 +447,7 @@ void* BinArchive_LoadByLbaRange(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
             Storage_SetLbaRange(&sp20, arg0, arg1);
             var_a0 = Storage_LoadAssetByLbaRange(&sp20, 0);
             if (var_a0 != NULL) {
-                main_pool_realloc(var_a0, var_a0->total_size);
+                MainPool_Realloc(var_a0, var_a0->total_size);
                 var_a0->flags |= 1;
             }
             break;
@@ -456,7 +456,7 @@ void* BinArchive_LoadByLbaRange(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
             Storage_SetLbaRange(&sp20, arg0, arg0 + 1);
             var_a0 = Storage_LoadAssetByLbaRange(&sp20, 0);
             if (var_a0 != NULL) {
-                main_pool_realloc(var_a0, (var_a0->num_files * sizeof(BinArchiveFile)) + sizeof(BinArchive));
+                MainPool_Realloc(var_a0, (var_a0->num_files * sizeof(BinArchiveFile)) + sizeof(BinArchive));
                 var_a0->flags |= 2;
                 if (arg3 == 1) {
                     var_a0->flags |= 4;
@@ -483,7 +483,7 @@ void* BinArchive_LoadByLbaRange(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 
 /** Frees a bin archive. */
 void BinArchive_Free(void* arg0) {
-    main_pool_try_free(arg0);
+    MainPool_TryFree(arg0);
 }
 
 /** Loads one archive file directly from the ROM. */

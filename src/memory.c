@@ -5,36 +5,36 @@
 #include "memory.h"
 #include "memory_main.h"
 
-MemoryPool* mem_pool_try_init(u32 size, s32 side);
-MainPool* mem_pool_init(MainPool* pool, s32 size);
-void* mem_pool_alloc(MemoryPool* node, s32 size);
+MemoryPool* MemPool_TryInit(u32 size, s32 side);
+MainPool* MemPool_Init(MainPool* pool, s32 size);
+void* MemPool_Alloc(MemoryPool* node, s32 size);
 
 /**
  * Allocate a memory pool from the main pool. This pool supports arbitrary
  * order for allocation/freeing.
  * Return NULL if there is not enough space in the main pool.
  */
-MemoryPool* mem_pool_try_init(u32 size, s32 side) {
+MemoryPool* MemPool_TryInit(u32 size, s32 side) {
     MainPoolBlock* block;
     MemoryPool* ret;
 
     size = ALIGN4(size);
-    block = main_pool_alloc(size, side);
+    block = MainPool_Alloc(size, side);
     if (block != NULL) {
-        ret = mem_pool_init(block, size);
+        ret = MemPool_Init(block, size);
     }
     return ret; //! UB: Uninitialized return if the earlier call is not done.
 }
 
 /**
  * Perform the actual mem pool init. This is called by the earlier function.
- * In earlier EAD titles, this was part of mem_pool_try_init.
+ * In earlier EAD titles, this was part of MemPool_TryInit.
  */
 // TODO: This function is strange, it cant be using MemoryPool, as it allocates
 // more variables than the MemoryPool struct, and it doesnt line up. Whats going
 // on with these structs?
 /** Initializes a memory pool of the given size. */
-MainPool* mem_pool_init(MainPool* pool, s32 size) {
+MainPool* MemPool_Init(MainPool* pool, s32 size) {
     s32 aligned_size =
         ALIGN4(size - 3) - 0x28; // whats the deal with 0x28? this size doesnt match any known pool struct.
     void* listHeadL = &pool->listHeadL;
@@ -52,7 +52,7 @@ MainPool* mem_pool_init(MainPool* pool, s32 size) {
 /**
  * Allocate from a memory pool. Return NULL if there is not enough space.
  */
-void* mem_pool_alloc(MemoryPool* node, s32 size) {
+void* MemPool_Alloc(MemoryPool* node, s32 size) {
     struct MemoryBlock* free_block;
     void* addr;
 
@@ -83,13 +83,13 @@ void* mem_pool_alloc(MemoryPool* node, s32 size) {
 }
 
 /**
- * Free a block that was allocated using mem_pool_alloc.
+ * Free a block that was allocated using MemPool_Alloc.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
  * the Lab list, Lab sort, registration, the Lab PC, Free Battle setup, the battle opening, a switch
  * in battle and a Pound turn.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-void mem_pool_free(MemoryPool* pool, void* addr) {
+void MemPool_Free(MemoryPool* pool, void* addr) {
     struct MemoryBlock* block;
     struct MemoryBlock* freeList;
 

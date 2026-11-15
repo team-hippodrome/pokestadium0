@@ -50,7 +50,7 @@ GfxImage* GfxImage_Allocate(s32 fmt, s32 size, s32 width, s32 height, s32 side) 
     }
 
     // header + image size + rounding up to 64
-    sp34 = main_pool_alloc(sizeof(GfxImage) + size_bytes + 64, side);
+    sp34 = MainPool_Alloc(sizeof(GfxImage) + size_bytes + 64, side);
     // image data follows the header struct
     GfxImage_Initialize(sp34, fmt, size, width, height, (u8*)sp34 + sizeof(GfxImage));
 

@@ -189,8 +189,8 @@ Each row is one function address that the source still reaches under more than o
 | `leoChk_err_retry` | `func_8004A404` |
 | `leoInitialize` | `func_800483E0` |
 | `leoWait_mecha_cmd_done` | `func_8004A210` |
-| `main_pool_get_available` | `func_8000255C` |
-| `main_pool_try_free` | `func_80002420` |
+| `MainPool_GetAvailable` | `func_8000255C` |
+| `MainPool_TryFree` | `func_80002420` |
 | `osAiGetLength` | `func_800594E0` |
 | `osAiGetStatus` | `func_80058360` |
 | `osDpSetStatus` | `func_80058380` |

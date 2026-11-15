@@ -933,7 +933,7 @@ extern s32 D_89019108;
 void PcSort_Init(PcSortScreen* screen, s32 title) {
     s32 i;
 
-    main_pool_push_state('OTPC');
+    MainPool_PushState('OTPC');
     screen->iconFramebuffers = PokeIcon_AllocFramebuffers(1);
     screen->monRenderer = (u16*)func_80018F2C(screen->iconFramebuffers, 0x80, 0x78, 0, 0, 0x78, 0x78, 0);
     PokeIcon_OpenModelArchives();

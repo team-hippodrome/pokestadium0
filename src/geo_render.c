@@ -1104,9 +1104,9 @@ extern s32 D_800AB450;
 extern s32 D_800AB454;
 extern s32 D_800AB458;
 extern s32 D_800AB45C;
-s32 main_pool_get_available(void);
+s32 MainPool_GetAvailable(void);
 s32 func_80002B10(s32, s32);
-void main_pool_try_free(s32 arg0);
+void MainPool_TryFree(s32 arg0);
 void GeoRender_DrawModelLayers(Root80013DC8*);
 s32 func_8001380C();
 /**
@@ -1129,12 +1129,12 @@ void Geo_NodeModelPartRoot(Root80013DC8* arg0) {
         D_800AB454 = 0;
         D_800AB458 = 0;
         D_800AB45C = 0;
-        D_800AB240 = func_80002B10(main_pool_get_available(), 0);
+        D_800AB240 = func_80002B10(MainPool_GetAvailable(), 0);
         D_80060494 = (CameraNode*)arg0;
         func_8001380C(arg0);
         GeoRender_DrawModelLayers(arg0);
         D_80060494 = NULL;
-        main_pool_try_free(D_800AB240);
+        MainPool_TryFree(D_800AB240);
     }
 }
 

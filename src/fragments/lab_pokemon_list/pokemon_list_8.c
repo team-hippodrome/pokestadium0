@@ -786,8 +786,8 @@ s32 LabPCList_UpdateFade(s32);
  * entry function Pokedex_Main), differing only in the functions it calls in
  * steps 4 and 5.  Neither argument is used.  The steps are:
  *
- *   1. main_pool_push_state('TERM') saves the main pool state under that tag;
- *      the matching main_pool_pop_state('TERM') is near the end.
+ *   1. MainPool_PushState('TERM') saves the main pool state under that tag;
+ *      the matching MainPool_PopState('TERM') is near the end.
  *   2. Font_Init(0x3C, 0) is called (Font_Init in symbol_addrs.txt).
  *   3. Two assets are loaded with Asset_LoadToSegment: the ROM range
  *      D_002E0BE0..D_002E2B90 into segment 1 and D_00400F70..D_004076E0 into
@@ -797,7 +797,7 @@ s32 LabPCList_UpdateFade(s32);
  *   5. BgStage_RunUntilCondition is run three times, with timer values 8, 0
  *      and 8: the first and third with callback LabPCList_UpdateFade, the second
  *      with LabPCList_RunFrame: fade in, run the list until it exits, fade out.
- *   6. StageLoader_WaitForRetrace() and main_pool_pop_state('TERM').
+ *   6. StageLoader_WaitForRetrace() and MainPool_PopState('TERM').
  *   7. Fragment_QueueCall queues a call to the fragment whose id comes from
  *      the address D_88000000 (bits 20-27, minus 0x10), with the ROM range
  *      D_00235D70..D_00238BD0.
@@ -807,7 +807,7 @@ s32 LabPCList_UpdateFade(s32);
  * from the main menu, before LabPCList_InitScreen.
  */
 s32 LabPCList_Init(UNUSED s32 unused0, UNUSED s32 unused1) {
-    main_pool_push_state('TERM');
+    MainPool_PushState('TERM');
     Font_Init(0x3C, 0);
     Asset_LoadToSegment(((u32)D_01000000 & 0x0F000000) >> 0x18, D_002E0BE0, D_002E2B90, 0);
     Asset_LoadToSegment(((u32)D_04000000 & 0x0F000000) >> 0x18, D_00400F70, D_004076E0, 0);
@@ -817,7 +817,7 @@ s32 LabPCList_Init(UNUSED s32 unused0, UNUSED s32 unused1) {
     BgStage_RunUntilCondition(0, LabPCList_RunFrame);
     BgStage_RunUntilCondition(8, LabPCList_UpdateFade);
     StageLoader_WaitForRetrace();
-    main_pool_pop_state('TERM');
+    MainPool_PopState('TERM');
     Fragment_QueueCall(((((u32)D_88000000) & 0x0FF00000) >> 0x14) - 0x10, D_00235D70, D_00238BD0, 0, 0);
     return 0x8040;
 }

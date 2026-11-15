@@ -327,7 +327,7 @@ void Cont_BusyWaitMs(s32 ms) {
 extern u16 gCrashScreenUnlockInputs[];
 void Cont_BusyWaitMs(s32 ms);
 /** Waits for the button combination that continues from the crash screen. */
-void crash_screen_wait_for_button_combo(void) {
+void CrashScreen_WaitForButtonCombo(void) {
     s32 breakloop = FALSE;
     s32 i = 0;
 

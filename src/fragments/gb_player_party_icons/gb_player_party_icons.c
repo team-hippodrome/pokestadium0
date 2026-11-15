@@ -88,7 +88,7 @@ extern ModelLoadContext* sGbPlayerIconFramebuffers;
 s32 GbPlayer_PreparePartyIcons(s32 port, GbPlayerLaunchParams* params) {
     StageContext* stage_ctx;
 
-    main_pool_push_state('PREP');
+    MainPool_PushState('PREP');
 
     Gfx_InitDisplayListBuffers(0x10000, 0);
     stage_ctx = StageContext_Allocate(0, 1, 2, 0, 1, 1);
@@ -107,7 +107,7 @@ s32 GbPlayer_PreparePartyIcons(s32 port, GbPlayerLaunchParams* params) {
     GbPlayer_FillLaunchParams(params);
     Gfx_FreeDisplayListBuffers();
 
-    main_pool_pop_state('PREP');
+    MainPool_PopState('PREP');
 
     return sGbPlayerPartyCount;
 }

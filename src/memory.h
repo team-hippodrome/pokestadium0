@@ -52,9 +52,9 @@ typedef struct MemoryPool {
 
 // memory.c
 // memory.c
-MemoryPool *mem_pool_try_init(u32 size, s32 side);
-MainPool* mem_pool_init(MainPool* pool, s32 size);
-void *mem_pool_alloc(MemoryPool* node, s32 size);
-void mem_pool_free(MemoryPool* pool, void* addr);
+MemoryPool *MemPool_TryInit(u32 size, s32 side);
+MainPool* MemPool_Init(MainPool* pool, s32 size);
+void *MemPool_Alloc(MemoryPool* node, s32 size);
+void MemPool_Free(MemoryPool* pool, void* addr);
 
 #endif // MEMORY_H
