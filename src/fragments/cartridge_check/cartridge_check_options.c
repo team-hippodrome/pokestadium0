@@ -54,14 +54,14 @@ void CartridgeCheck_OpenMessageWindow(void) {
     s32 var_s2;
 
     var_s0 = 0x20;
-    var_s1 = 0x14;
+    var_s1 = 20;
     var_s2 = 0;
     do {
         CartridgeCheck_DrawFrame(0);
-        CartridgeCheck_DrawMessageWindow((s16) (0xA0 - (var_s0 / 2)), (s16) (0x3C - (var_s1 / 2)), var_s0, var_s1);
+        CartridgeCheck_DrawMessageWindow((s16) (160 - (var_s0 / 2)), (s16) (60 - (var_s1 / 2)), var_s0, var_s1);
         func_80006780();
         var_s2 += 1;
-        var_s0 += 0x14;
+        var_s0 += 20;
         var_s1 += 4;
     } while (var_s2 != 8);
 }
@@ -75,15 +75,15 @@ void CartridgeCheck_CloseMessageWindow(void) {
     s16 var_s1;
     s32 var_s2;
 
-    var_s0 = 0xC4;
-    var_s1 = 0x34;
+    var_s0 = 196;
+    var_s1 = 52;
     var_s2 = 0;
     do {
         CartridgeCheck_DrawFrame(0);
-        CartridgeCheck_DrawMessageWindow((s16) (0xA0 - (var_s0 / 2)), (s16) (0x3C - (var_s1 / 2)), var_s0, var_s1);
+        CartridgeCheck_DrawMessageWindow((s16) (160 - (var_s0 / 2)), (s16) (60 - (var_s1 / 2)), var_s0, var_s1);
         func_80006780();
         var_s2 += 1;
-        var_s0 -= 0x14;
+        var_s0 -= 20;
         var_s1 -= 4;
     } while (var_s2 != 8);
 }
@@ -97,16 +97,16 @@ void CartridgeCheck_DrawNextArrow(s16 x, s16 y) {
 
     if (D_88403364 < 0x10) {
         var_a3 = D_88403364 * 0x10;
-    } else if (D_88403364 < 0x23) {
+    } else if (D_88403364 < 35) {
         var_a3 = 0xFF;
-    } else if (D_88403364 < 0x32) {
+    } else if (D_88403364 < 50) {
         var_a3 = (-D_88403364 * 0x10) + 0x320;
     } else {
         var_a3 = 0;
     }
 
     D_88403364++;
-    if (D_88403364 >= 0x3D) {
+    if (D_88403364 >= 61) {
         D_88403364 = 0;
     }
 
@@ -123,12 +123,12 @@ void CartridgeCheck_ShowMessageUntilA(s32 text) {
     D_88403364 = 0x10;
     do {
         CartridgeCheck_DrawFrame(0);
-        CartridgeCheck_DrawMessageWindow(0x1E, 0x20, 0x104, 0x34);
+        CartridgeCheck_DrawMessageWindow(30, 0x20, 260, 52);
         func_8001AB6C();
         func_8001A384(4, -1);
         Font_SetLineHeight(20);
         Font_Printf(46, 40, text);
-        CartridgeCheck_DrawNextArrow(0x104, 0x3C);
+        CartridgeCheck_DrawNextArrow(260, 60);
         func_8001ABBC();
         func_80006780();
     } while (!(gPlayer1Controller->buttonPressed & 0x8000));
@@ -144,14 +144,14 @@ void CartridgeCheck_ShowMessageUntilA(s32 text) {
  */
 void CartridgeCheck_ScrollToNextMessage(s8* text) {
     s32 i;
-    s32 x1 = 0x1E;
-    s32 x2 = 0x122;
-    s32 y1 = 0x28;
-    s32 y2 = 0x48;
+    s32 x1 = 30;
+    s32 x2 = 290;
+    s32 y1 = 40;
+    s32 y2 = 72;
 
     for (i = 1; i < 9; i++) {
         CartridgeCheck_DrawFrame(0);
-        CartridgeCheck_DrawMessageWindow(0x1E, 0x20, 0x104, 0x34);
+        CartridgeCheck_DrawMessageWindow(30, 0x20, 260, 52);
 
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, x1, y1, x2, y2);
 
@@ -180,7 +180,7 @@ void CartridgeCheck_ScrollToNextMessage(s8* text) {
 void CartridgeCheck_RunGameBoyGiftEvent(void) {
     func_8000A7B0(0xC);
     M2C_FIELD(&D_884034E0, u8 *, 1) = (u8) (M2C_FIELD(&D_884034E0, u8 *, 1) | 1);
-    func_80006828(0x73, &CartridgeCheck_DrawFrame);
+    func_80006828(115, &CartridgeCheck_DrawFrame);
     M2C_FIELD(&D_884034E0, u8 *, 2) = (u8) (M2C_FIELD(&D_884034E0, u8 *, 2) & 0xFFDF);
     CartridgeCheck_OpenMessageWindow();
     Audio_PlayCommand(0x51, 0, 0);
@@ -195,7 +195,7 @@ void CartridgeCheck_RunGameBoyGiftEvent(void) {
     }
     CartridgeCheck_CloseMessageWindow();
     M2C_FIELD(&D_884034E0, u8 *, 2) = (u8) (M2C_FIELD(&D_884034E0, u8 *, 2) | 0x20);
-    func_80006828(0x2D, &CartridgeCheck_DrawFrame);
+    func_80006828(45, &CartridgeCheck_DrawFrame);
 }
 
 void BezierPath_InitEased(s8* arg0, s32 arg1);
@@ -221,7 +221,7 @@ void CartridgeCheck_PlayBootIntro(void) {
     BezierPath_InitEased(sp50, (s32) &D_88402D98);
     if (BezierPath_Step(sp8C, rec + 0xA8) != 0) {
         do {
-            if (i++ == 0x2A) {
+            if (i++ == 42) {
                 M2C_FIELD(&D_88403648, s32 *, 0x14) = 1;
                 Audio_PlaySystemSound(0x10);
                 M2C_FIELD(&D_88403648, u8 *, 2) |= 0x20;
@@ -231,7 +231,7 @@ void CartridgeCheck_PlayBootIntro(void) {
             func_80006780();
         } while (BezierPath_Step(sp8C, rec + 0xA8) != 0);
     }
-    func_80006828(0x19, &CartridgeCheck_DrawFrame);
+    func_80006828(25, &CartridgeCheck_DrawFrame);
 }
 
 void BezierPath_InitEased(s8* arg0, s32 arg1);
@@ -265,7 +265,7 @@ void CartridgeCheck_PlayCupWinIntro(void) {
     BezierPath_InitEased(sp50, (s32) &D_88402DD0);
     if (BezierPath_Step(sp8C, rec + 0xA8) != 0) {
         do {
-            if (i++ == 0xA) {
+            if (i++ == 10) {
                 M2C_FIELD(&D_88403648, s32 *, 0x14) = 1;
                 M2C_FIELD(&D_88403648, u8 *, 2) |= 0x20;
                 Audio_PlaySystemSound(0x10);
@@ -275,7 +275,7 @@ void CartridgeCheck_PlayCupWinIntro(void) {
             func_80006780();
         } while (BezierPath_Step(sp8C, rec + 0xA8) != 0);
     }
-    func_80006828(0x19, &CartridgeCheck_DrawFrame);
+    func_80006828(25, &CartridgeCheck_DrawFrame);
 }
 
 extern Color_RGB8 D_88402F94;
@@ -308,10 +308,10 @@ void CartridgeCheck_DrawScreen(void) {
         Font_SetLineHeight(0x10);
         Font_Printf(35, 36, D_88402D80);
         Font_EndTexturedTextRendering();
-        CartridgeCheck_DrawPortPanel(0, 0x1E, 0x38);
-        CartridgeCheck_DrawPortPanel(1, 0xA2, 0x38);
-        CartridgeCheck_DrawPortPanel(2, 0x1E, 0x80);
-        CartridgeCheck_DrawPortPanel(3, 0xA2, 0x80);
+        CartridgeCheck_DrawPortPanel(0, 30, 56);
+        CartridgeCheck_DrawPortPanel(1, 162, 56);
+        CartridgeCheck_DrawPortPanel(2, 30, 0x80);
+        CartridgeCheck_DrawPortPanel(3, 162, 0x80);
     } else {
         Ui_DrawGradientPanel(30, 30, 260, 74, &top, &bottom);
         Font_BeginTranslucentTextRendering();
@@ -322,7 +322,7 @@ void CartridgeCheck_DrawScreen(void) {
     }
     Ui_DrawGradientPanel(190, 202, 100, 24, &top, &bottom);
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
-    Gfx_DrawTextureRgba32(0xC8, 0xCF, 0x10, 0xE, (u8*)Util_ConvertAddrToVirtAddr((uintptr_t)D_8F4B2B30), 0x10, 0);
+    Gfx_DrawTextureRgba32(200, 207, 0x10, 14, (u8*)Util_ConvertAddrToVirtAddr((uintptr_t)D_8F4B2B30), 0x10, 0);
     gSPDisplayList(gDisplayListHead++, D_80060398);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, -1);
@@ -388,11 +388,11 @@ void Options_DrawClearSavePrompt(s32 second_ask, s32 choice) {
     s32 temp;
 
     if (choice == 0) {
-        temp = 0x28;
+        temp = 40;
     } else {
-        temp = 0x6E;
+        temp = 110;
     }
-    pos[1] = temp + 0x28;
+    pos[1] = temp + 40;
     Ui_DrawGradientPanel(40, 130, 240, 90, &sp4C, &sp48);
     gSPDisplayList(gDisplayListHead++, D_80060290);
     Gfx_DrawTextureRgba16(pos[1], 197, 24, 14, (u8*)Util_ConvertAddrToVirtAddr((uintptr_t)D_8F4B2EB0), 24, 0x200000);
@@ -625,8 +625,8 @@ void CartridgeCheck_PlayExitToTitle(void) {
     func_80010F9C(&D_88403648, 0x2E);
     M2C_FIELD(&D_88403648, u8 *, 2) |= 0x20;
     func_80006998(0xFFFF);
-    StageFade_Start(0x1E);
-    func_8000A7FC(0x3C);
+    StageFade_Start(30);
+    func_8000A7FC(60);
     Audio_StopSoundByCategory(0x46, 0x3C);
     Audio_PlaySystemSound(0x23);
     while (BezierPath_Step(sp74, sp34 + 0xA8)) {
@@ -657,7 +657,7 @@ void CartridgeCheck_PlaySetCartridgeAnimation(void) {
         func_80010F9C(&D_88403378, 0x2E);
     }
     Audio_PlaySystemSound(0xB);
-    func_80006828(0x14, (s32 *) CartridgeCheck_DrawFrame);
+    func_80006828(20, (s32 *) CartridgeCheck_DrawFrame);
 }
 
 /**
@@ -668,7 +668,7 @@ void CartridgeCheck_PlaySetCartridgeAnimation(void) {
  */
 void CartridgeCheck_PlayLowerMonitor(void) {
     func_80006998(0xFFFF);
-    func_80006828(0x13, &CartridgeCheck_DrawFrame);
+    func_80006828(19, &CartridgeCheck_DrawFrame);
     M2C_FIELD(&D_88403648, u8 *, 2) = (u8) (M2C_FIELD(&D_88403648, u8 *, 2) & 0xFFDF);
     if (D_88403358 >= 0) {
         func_800199E4(&D_88403378);
@@ -686,13 +686,13 @@ void CartridgeCheck_PlayZoomIntoMonitor(void) {
     s32 temp_s0;
 
     temp_s0 = M2C_FIELD(D_88403370, s32 *, 0xC);
-    func_8000A7FC(0x32);
+    func_8000A7FC(50);
     BezierPath_InitEased(sp7C, (s32) &D_88402E5C);
     BezierPath_InitEased(sp40, (s32) &D_88402E40);
     if (BezierPath_Step(sp7C, temp_s0 + 0xA8) != 0) {
         do {
             BezierPath_Step(sp40, temp_s0 + 0xB4);
-            if (D_88403360 < 0x19) {
+            if (D_88403360 < 25) {
                 D_88403360 += 1;
             }
             CartridgeCheck_DrawFrame(0);
@@ -753,7 +753,7 @@ void CartridgeCheck_TransitionToMainMenu(void) {
     func_80006828(2, &CartridgeCheck_DrawFrame);
     Audio_StopSoundByCategory(0x46, 0x1E);
     if (D_88403358 < 0 || D_88403310[D_88403358].saveState != 0) {
-        func_80006828(0x14, &CartridgeCheck_DrawFrame);
+        func_80006828(20, &CartridgeCheck_DrawFrame);
     }
 }
 
@@ -773,7 +773,7 @@ s32 CartridgeCheck_EnterFromBoot(void) {
     CartridgeCheck_ReadInputs();
     func_800067BC(1);
     func_8000A7B0(0xA);
-    StageFade_Start(0x1E);
+    StageFade_Start(30);
     func_8000D520(sp18 + 0xB4, &D_88402D98 + 2);
     func_8000D520(sp18 + 0xA8, &D_88402DB4 + 2);
     func_80006828(5, &CartridgeCheck_DrawFrame);
@@ -805,7 +805,7 @@ s32 CartridgeCheck_EnterAfterCupWin(void) {
     D_88403360 = 0;
     CartridgeCheck_ReadInputs();
     func_800067BC(1);
-    StageFade_Start(0x1E);
+    StageFade_Start(30);
     func_8000D520(sp1C + 0xB4, &D_88402DD0 + 2);
     func_8000D520(sp1C + 0xA8, &D_88402DEC + 2);
     func_80006828(5, &CartridgeCheck_DrawFrame);
@@ -827,7 +827,7 @@ s32 CartridgeCheck_EnterFromMainMenu(void) {
     sp18 = M2C_FIELD(D_88403370, s32 *, 0xC);
     D_88403360 = 0;
     CartridgeCheck_ReadInputs();
-    func_8000A7FC(0x3C);
+    func_8000A7FC(60);
     func_800067BC(1);
     func_8000D520(sp18 + 0xB4, &D_88402E78 + 2);
     func_8000D520(sp18 + 0xA8, &D_88402E94 + 2);
@@ -959,7 +959,7 @@ void CartridgeCheck_InitModels(s32 from_main_menu) {
 void CartridgeCheck_InitRenderTargets(void) {
     s32 sp2C;
 
-    sp2C = func_800051F0(0, 2, 0x140, 0xF0, 0);
+    sp2C = func_800051F0(0, 2, 320, 240, 0);
     M2C_FIELD(D_8840336C, s32 *, 0x18) = func_800023C4(0x10, 0);
     M2C_FIELD(D_8840336C, s32 *, 0x1C) = func_800023C4(0x10, 0);
     func_800051C0(M2C_FIELD(D_8840336C, s32 *, 0x18), 0, 2, 0x140, 0xF0, M2C_FIELD(M2C_FIELD(D_88403368, s8 **, 0x18), s32 *, 8));

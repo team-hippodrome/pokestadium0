@@ -68,13 +68,13 @@ void FreeBattle_SetScreenState(FreeBattleScreen* screen, s32 state, s32 flags) {
             break;
         case 2:
             if (!(flags & 2)) {
-                FreeBattle_InitMenuWindow((s8*)&screen->menuWindow, 0x40, 0x74, 0x198, 0xCE, (s32)D_82008FCC, 3, (s32)D_82008FD8, 3, (s32)D_82009D4C);
+                FreeBattle_InitMenuWindow((s8*)&screen->menuWindow, 0x40, 116, 408, 206, (s32)D_82008FCC, 3, (s32)D_82008FD8, 3, (s32)D_82009D4C);
             }
             view = (s8*)&screen->menuWindow;
             break;
         case 3:
             if (!(flags & 2)) {
-                FreeBattle_InitMenuWindow((s8*)&screen->menuWindow, 0x40, 0x74, 0x1C0, 0x11E, (s32)D_82008F9C, 2, (s32)D_82008FA4, 7, (s32)D_82009D64);
+                FreeBattle_InitMenuWindow((s8*)&screen->menuWindow, 0x40, 116, 448, 286, (s32)D_82008F9C, 2, (s32)D_82008FA4, 7, (s32)D_82009D64);
             }
             view = (s8*)&screen->menuWindow;
             break;
@@ -91,7 +91,7 @@ void FreeBattle_SetScreenState(FreeBattleScreen* screen, s32 state, s32 flags) {
                 screen->unk_4330 = 0;
                 screen->unk_4370 = 1;
                 screen->unk_4374 = 1;
-                FreeBattle_InitMenuWindow((s8*)&screen->ruleMenuWindow, 0x50, 0x8C, 0x1C0, 0xAE, (s32)D_82008FBC, 2, (s32)D_82008FC4, 3, (s32)D_82009D7C);
+                FreeBattle_InitMenuWindow((s8*)&screen->ruleMenuWindow, 80, 140, 448, 174, (s32)D_82008FBC, 2, (s32)D_82008FC4, 3, (s32)D_82009D7C);
             }
             view = (s8*)&screen->ruleMenuWindow;
             break;
@@ -108,7 +108,7 @@ void FreeBattle_SetScreenState(FreeBattleScreen* screen, s32 state, s32 flags) {
                 screen->unk_4330 = 0;
                 screen->unk_4370 = 2;
                 screen->unk_4374 = 2;
-                FreeBattle_InitMenuWindow((s8*)&screen->ruleMenuWindow, 0x50, 0x8C, 0x1C0, 0xAE, (s32)D_82008FAC, 2, (s32)D_82008FB4, 3, (s32)D_82009D9C);
+                FreeBattle_InitMenuWindow((s8*)&screen->ruleMenuWindow, 80, 140, 448, 174, (s32)D_82008FAC, 2, (s32)D_82008FB4, 3, (s32)D_82009D9C);
             }
             view = (s8*)&screen->ruleMenuWindow;
             break;
@@ -123,13 +123,13 @@ void FreeBattle_SetScreenState(FreeBattleScreen* screen, s32 state, s32 flags) {
                 screen->unk_4370 = 0;
                 switch (screen->unk_4374) {
                     case 0:
-                        FreeBattle_InitMenuWindow((s8*)&screen->ruleMenuWindow, 0x50, 0x8C, 0x1AC, 0x92, (s32)D_82008FE4, 2, (s32)D_82008FEC, 2, (s32)D_82009DBC);
+                        FreeBattle_InitMenuWindow((s8*)&screen->ruleMenuWindow, 80, 140, 428, 146, (s32)D_82008FE4, 2, (s32)D_82008FEC, 2, (s32)D_82009DBC);
                         break;
                     case 1:
-                        FreeBattle_InitMenuWindow((s8*)&screen->ruleMenuWindow, 0x50, 0x8C, 0x1AC, 0x92, (s32)D_82008FE4, 2, (s32)D_82008FFC, 2, (s32)D_82009DCC);
+                        FreeBattle_InitMenuWindow((s8*)&screen->ruleMenuWindow, 80, 140, 428, 146, (s32)D_82008FE4, 2, (s32)D_82008FFC, 2, (s32)D_82009DCC);
                         break;
                     case 2:
-                        FreeBattle_InitMenuWindow((s8*)&screen->ruleMenuWindow, 0x50, 0x8C, 0x1AC, 0x92, (s32)D_82008FE4, 2, (s32)D_82008FF4, 2, (s32)D_82009DE4);
+                        FreeBattle_InitMenuWindow((s8*)&screen->ruleMenuWindow, 80, 140, 428, 146, (s32)D_82008FE4, 2, (s32)D_82008FF4, 2, (s32)D_82009DE4);
                         break;
                 }
             }
@@ -835,7 +835,7 @@ M2C_UNK FreeBattle_RunSetupScreen(void) {
         gSessionContext.transitionFlags &= ~0x100;
         FreeBattle_RestoreMenuState(D_8200AD28);
         StageFade_Start(0xF);
-        func_80006828(0x11, FreeBattle_DrawScreenWithSummary);
+        func_80006828(17, FreeBattle_DrawScreenWithSummary);
         func_8000A7B0(9);
     } else {
         func_80006828(8, FreeBattle_UpdateFade);
@@ -845,7 +845,7 @@ M2C_UNK FreeBattle_RunSetupScreen(void) {
     if (D_82008F84 == 0x8050) {
         func_80006998(0xFFFF);
         StageFade_Start(0xF);
-        func_80006828(0x11, FreeBattle_DrawScreenWithSummary);
+        func_80006828(17, FreeBattle_DrawScreenWithSummary);
         func_8000A7FC(0xF);
     } else {
         func_80006828(8, FreeBattle_UpdateFade);

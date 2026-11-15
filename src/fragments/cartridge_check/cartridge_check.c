@@ -87,7 +87,7 @@ s32 CartridgeCheck_DrawFrame(s32 arg0) {
     CartridgeCheck_ReadInputs();
     func_800158C0();
     BgStage_DrawFrame();
-    func_80005770(&D_800AA150, 0, 0, 0x140, 0xF0);
+    func_80005770(&D_800AA150, 0, 0, 320, 240);
     func_8001560C(D_88403370);
     return 0;
 }
@@ -131,12 +131,12 @@ void CartridgeCheck_DrawGameBoyIcon(s32 x, s32 y, s32 port, s32 game) {
                 gDPSetPrimColor(gDisplayListHead++, 0, 0, 0xFF, 0xFF, 0x00, 0xFF); // #FFFF00FF
                 break;
         }
-        Gfx_DrawTextureIa8(x + 6, y + 0x10, 0x26, 0x22, D_04008F20, 0x28, 0);
+        Gfx_DrawTextureIa8(x + 6, y + 0x10, 38, 34, D_04008F20, 40, 0);
         gDPSetPrimColor(gDisplayListHead++, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFFFF
-        Gfx_DrawTextureIa8(x + 9, y + 0x17, 0x20, 0x14, icons[port], 0x20, 0);
+        Gfx_DrawTextureIa8(x + 9, y + 23, 0x20, 20, icons[port], 0x20, 0);
     } else {
         gDPSetPrimColor(gDisplayListHead++, 0, 0, 0x80, 0x80, 0x80, 0x64); // #80808064
-        Gfx_DrawTextureIa8(x + 9, y + 0x17, 0x20, 0x14, icons[port], 0x20, 0);
+        Gfx_DrawTextureIa8(x + 9, y + 23, 0x20, 20, icons[port], 0x20, 0);
     }
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
