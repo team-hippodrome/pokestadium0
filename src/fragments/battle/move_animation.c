@@ -409,18 +409,13 @@ extern s8* D_82189188[];
 extern u8 D_0004EDA8[][0x20];
 extern u8 D_00050228[][0x10];
 extern f32 D_82199DF0[][4];
-/*
- * ActivePokemon_LoadSpeciesModelAssets
- *
- * Copies the participant's per-species records out of ROM with
- * func_80003824 (dest, rom start, rom end, 0). The ROM offsets are masked to
- * 24 bits and added to the D_00434C00 base. Side 1 also reloads its 0x20-byte
- * record from the entry named by the record's halfword at 0x10, and keeps
- * that halfword across the copy.
- */
 /**
  * Loads the species' model, animation and texture data for the Pokemon's side into its slots. Ran
  * in play when 1P switched and when 1P used Substitute (the doll model).
+ * Copies the participant's per-species records out of ROM with func_80003824 (dest, rom start,
+ * rom end, 0). The ROM offsets are masked to 24 bits and added to the D_00434C00 base. Side 1 also
+ * reloads its 0x20-byte record from the entry named by the record's halfword at 0x10, and keeps
+ * that halfword across the copy.
  * Seen in play (2026-11-12): ran when 1P switched Nidoqueen for Onix, and in the per-move sweep
  * only for Substitute (the doll model) and Transform (the target's model).
  */
@@ -805,7 +800,7 @@ void ActivePokemon_SetModelTransform(ActivePokemon*, s32, s32);
 extern s32 D_82199F78;
 /**
  * Enter callback of row 4, entered on the user: plays the target's hurt animation (cue 0xA5, 0xAF
- * for a sleeping Snorlax or Exeggutor, 0xB0 while flying), or its dodge track for a weak or
+ * for a sleeping Primeape or Exeggutor, 0xB0 while flying), or its dodge track for a weak or
  * failed hit. Stomp and Body Slam squash the target (transform 15). In play row 4 followed row 3
  * for every damaging move that hit.
  */
@@ -1177,7 +1172,7 @@ void BattleScene_TickRow8PlayMoveEffectScriptB(ActivePokemon* active_pokemon) {
 }
 
 /**
- * Enter callback of row 9: plays the hurt cue (0xA5, or the sleep cue 0xAF for Snorlax and
+ * Enter callback of row 9: plays the hurt cue (0xA5, or the sleep cue 0xAF for Primeape and
  * Exeggutor) on a Pokemon that can't act. In play row 9 ran on COM's Pinsir while Bind held it
  * (phase 17).
  */
@@ -1273,23 +1268,11 @@ extern u8* D_82189180[];
 extern f32 D_FLT_82189354[];
 void ActivePokemon_PlayLandingSoundBySize(ActivePokemon*);
 
-/*
- * BattleScene_TickFaintRowPlayLandingSound: per-tick check that is a sibling of BattleScene_TickRow7PlayRowSound and BattleScene_TickRow20PlayCueEffectScript
- * (same id table and the same cue-record test, no state-tick change).
- *
- * Reads the Pokemon's move/animation id (u16 at +0x1A).  For an id whose D_FLT_82189354
- * row has a non-zero first float -- except ids 0x16, 0x52 and 0x8E -- it only stores
- * sBattleSceneStateTickSentinel into the current tick slot's callback and returns.
- * Otherwise, when byte 4 of the side's cue record (sSideBattleCues[side] + 0x72D,
- * `side` from BattleScene_GetParticipantSideIndex) plus one equals the animation timer
- * at +0x620 and BattleAnim_IsAssetLoadBusy reports nothing pending, it calls ActivePokemon_PlayLandingSoundBySize and then
- * performs the same store (this ends the tick slot).
- */
 /**
  * Faint row (row 0) tick: when the fainting animation reaches its last frame, plays the landing
- * thud via ActivePokemon_PlayLandingSoundBySize. Species with a hover height skip it, except
- * 0x16, 0x52 and 0x8E.
- * Player sweep: reached only by Self-Destruct and Explosion, the two moves that make the user
+ * thud via ActivePokemon_PlayLandingSoundBySize. Species with a hover height (a nonzero first
+ * float in D_FLT_82189354) skip it, except Fearow, Magneton and Aerodactyl.
+ * Player sweep: reached only by the boom moves (Selfdestruct and Explosion), which make the user
  * faint (row 0).
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Self-Destruct, Explosion.
@@ -1343,7 +1326,7 @@ extern f32 D_FLT_82189354[];
 /**
  * Tick of the faint rows 0 and 7: at the cue's effect frame, queues effect list 2 or 12 (by
  * cue[9]) on the fainting Pokemon and plays audio command 3.
- * Player sweep: reached only by Self-Destruct and Explosion (row 0).
+ * Player sweep: reached only by the boom moves, Selfdestruct and Explosion (row 0).
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Self-Destruct, Explosion.
  */
@@ -1652,13 +1635,6 @@ void BattleScene_TickStateCallbacks(void) {
     }
 }
 
-/*
- * BattleScene_TickRow7PlayLandingSound
- *
- * If the word at offset 0x620 of the object `arg0` equals D_8219A754 and
- * BattleAnim_IsAssetLoadBusy(arg0) returns 0: calls ActivePokemon_PlayLandingSoundBySize(arg0) and stores
- * sBattleSceneStateTickSentinel into the current tick slot's callback, which ends the slot.
- */
 extern s32 D_8219A754;
 
 /**
@@ -2931,11 +2907,11 @@ s32 BattleScene_DispatchLifecycle(s32 lifecycle_stage, BattleSide* session_teams
 /**
  * Cause the Pokemon's idle animation to play in the thumbnail.
  * The thumbnails in battles are not loaded icons, they are a frozen model of the Pokemon's idle animation
- * You can see this by disabling the check in Battle_RenderActivePokemonThumbnail in
- * @src/fragments/battle_engine/battle_engine_main.c
+ * You can see this by disabling the check in Battle_RenderActivePokemonThumbnail.
+ * //@src/fragments/battle/stage.c
  *
- * Speculation: Some models changed between Stadium 0 and Stadium 1 (most apparent with Nidoking)
- * They could have choosen to render the thumbnails this way in case models changed mid-development.
+ * Speculation: Some models changed between Stadium Zero and Stadium 1 (most apparent with Nidoking).
+ * They could have chosen to render the thumbnails this way in case models changed mid-development.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
  * switch in battle.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
@@ -2947,7 +2923,7 @@ void BattleThumbnail_TriggerOwnerModelAnimation(ActivePokemon* active_pokemon) {
 }
 
 /**
- * Clears the Pokemon's field +0x9D8.
+ * Clears thumbnail.showing (+0x9D8).
  * @unverified Name guessed from the code.
  */
 void ActivePokemon_HideThumbnail(ActivePokemon* active_pokemon) {
@@ -2955,7 +2931,7 @@ void ActivePokemon_HideThumbnail(ActivePokemon* active_pokemon) {
 }
 
 /**
- * Sets the Pokemon's field +0x9D8 to 1.
+ * Sets thumbnail.showing (+0x9D8) to 1.
  * @unverified Name guessed from the code.
  */
 void ActivePokemon_ShowThumbnail(ActivePokemon* active_pokemon) {
@@ -2964,7 +2940,7 @@ void ActivePokemon_ShowThumbnail(ActivePokemon* active_pokemon) {
 
 
 /**
- * Updates upon the entering the move phase for both pokemon
+ * Shows both Pokémon's thumbnails (thumbnail.showing = 1) as the move phase begins.
  * Seen in play (2026-11-13) in the 165-move sweep: it ran as the move phase began (Comet Punch,
  * Mega Punch, Pay Day).
  */
@@ -2984,10 +2960,11 @@ void BattleThumbnail_SetBothOwnerIdleFlags(void) {
     sActivePokemon[1]->thumbnail.showing = 1;
 }
 
-/*
-    Sets flag to update the thumbnail.
-    Battle_RenderActivePokemonThumbnail in @src/fragments/battle_engine/battle_engine_main.c
-*/
+/**
+ * Sets node flag 0x10 on the thumbnail camera so Battle_RenderActivePokemonThumbnail redraws the
+ * thumbnail.
+ * //@src/fragments/battle/stage.c
+ */
 void BattleThumbnail_SetFlagToUpdatePokemonThumbnail(CameraNode* camera) {
     camera->node.flags |= 0x10;
 }
