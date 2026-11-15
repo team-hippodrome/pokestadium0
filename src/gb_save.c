@@ -41,6 +41,9 @@ void Font_SetLineHeight(s32 arg0);
 void func_8001ABE8(void);
 void func_8001AAE4(u8, u8, u8, u8);
 void func_8001AC3C(void);
+extern Color_RGBA8 D_800734A8[2];
+extern Color_RGBA8 D_800734B0[2];
+extern Color_RGBA8 D_800734B8[2];
 /**
  * Sets the text color from the row flags: 0x18 selected, 0x1 alternate, otherwise
  * normal. Each is a pair of colors; without flag 0x2 the second one is used.
@@ -49,9 +52,6 @@ void func_8001AC3C(void);
  * returned pointers into the color table at 0x800734A8.
  * @unverified Name and comment guessed from the code.
  */
-extern Color_RGBA8 D_800734A8[2];
-extern Color_RGBA8 D_800734B0[2];
-extern Color_RGBA8 D_800734B8[2];
 void Font_SetColorForFlags(s32 arg0) {
     Color_RGBA8* color;
 
@@ -68,26 +68,11 @@ void Font_SetColorForFlags(s32 arg0) {
     func_8001AA9C(color->r, color->g, color->b, color->a);
 }
 
-/*
- * Ui_SetTextColorForFlags
- *
- * Picks one 4-byte entry and passes its four bytes to func_8001AA9C as four
- * byte-sized arguments.  The entry comes from one of three tables chosen by
- * the flags in arg0:
- *   - if any of bits 0x18 is set, from D_800734B8;
- *   - otherwise, if bit 0x01 is set, from D_800734C0;
- *   - otherwise from D_800734A8.
- * If bit 0x02 is clear the entry that follows (4 bytes further on) is used
- * instead.
- *
- * This is the same selection as Font_SetColorForFlags just above, except that bit
- * 0x01 selects D_800734C0 here and D_800734B0 there.  What the four bytes
- * mean is not established from the code (they look like color components).
- */
 extern s8 D_800734C0;
 /**
  * Sets the text (environment) color for a menu item from its `flags`: disabled (0x18), highlighted
- * (1) or normal, each in a bright and a dim variant (bit 1).
+ * (1) or normal, each in a bright and a dim variant (bit 1). Same as Font_SetColorForFlags except that
+ * flag 1 picks D_800734C0 here and D_800734B0 there.
  * @unverified Name read from the code; Free Battle setup uses it for its cup rows.
  */
 void Ui_SetTextColorForFlags(s32 flags) {
@@ -155,10 +140,10 @@ u32 func_800566BC(s32);
 void GbSave_DrawSummaryBar(s32 y, GbSaveSummary* summary, char* label, s32 arg3) {
     if (summary != NULL) {
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        Ui_FillRectRgba5551(0, y, 0x188, 0x36, D_800734C8[GbSave_GameToCategoryIndex(summary->game)]);
+        Ui_FillRectRgba5551(0, y, 392, 54, D_800734C8[GbSave_GameToCategoryIndex(summary->game)]);
     } else {
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        Ui_FillRectRgba5551(0, y, 0x188, 0x36, D_800734D8);
+        Ui_FillRectRgba5551(0, y, 392, 54, D_800734D8);
     }
 
     gDPPipeSync(gDisplayListHead++);
@@ -183,15 +168,15 @@ void GbSave_DrawSummaryBar(s32 y, GbSaveSummary* summary, char* label, s32 arg3)
     gSPScisTextureRectangle(gDisplayListHead++, 315 << 2, (y + 51) << 2, 391 << 2, (y + 54) << 2, G_TX_RENDERTILE, 0, 0,
                             1 << 10, 1 << 10);
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    Ui_FillRectRgba5551(0, y + 54, 0x280, 2, D_800734DC);
+    Ui_FillRectRgba5551(0, y + 54, 640, 2, D_800734DC);
 
     if (summary != NULL) {
         func_8001AB6C();
         func_8001A384(8, 0);
         func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
-        Font_DrawCharAt(0x4A, (y + 32), arg3 + 0x31);
-        Font_DrawCharAt(0x5E, (y + 32), 0x50);
-        Font_Printf(0x86, (y + 32), (s32)((summary->state == 0) ? summary->name : D_8007B8E0));
+        Font_DrawCharAt(74, (y + 32), arg3 + 0x31); // '1' + player
+        Font_DrawCharAt(94, (y + 32), 0x50); // 'P'
+        Font_Printf(134, (y + 32), (s32)((summary->state == 0) ? summary->name : D_8007B8E0));
         func_8001ABBC();
 
         gSPDisplayList(gDisplayListHead++, D_80073450);
@@ -200,7 +185,7 @@ void GbSave_DrawSummaryBar(s32 y, GbSaveSummary* summary, char* label, s32 arg3)
         gSPScisTextureRectangle(gDisplayListHead++, 255 << 2, (y + 41) << 2, 295 << 2, (y + 51) << 2, G_TX_RENDERTILE, 0,
                                 0, 1 << 10, 1 << 10);
         if (summary->state == 0) {
-            Ui_DrawNumberZeroPadded(0x12A, y + 39, summary->trainerId, 5);
+            Ui_DrawNumberZeroPadded(298, y + 39, summary->trainerId, 5);
         }
         gSPDisplayList(gDisplayListHead++, D_80073408);
         gDPLoadTextureBlock(gDisplayListHead++, D_800734E0[GbSave_GameToCategoryIndex(summary->game)], G_IM_FMT_RGBA,
@@ -214,7 +199,7 @@ void GbSave_DrawSummaryBar(s32 y, GbSaveSummary* summary, char* label, s32 arg3)
     func_8001AB6C();
     func_8001A384(8, 0);
     func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
-    Font_Printf(0x254 - ((func_800566BC((s32)label) * 20) >> 1), (y + 32), (s32)label);
+    Font_Printf(596 - ((func_800566BC((s32)label) * 20) >> 1), (y + 32), (s32)label);
     func_8001ABBC();
 }
 
@@ -304,9 +289,9 @@ void Ui_DrawTexturedFrame(s32 x, s32 y, s32 w, s32 h, FrameTextures* arg4) {
     y8 = (y + 8) << 2;
     load = D_800734F0[arg4->format];
     load(8, 8, arg4->top, arg4->loadArg);
-    gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x2 - 8U) << 2, y8, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
+    gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x2 - 8U) << 2, y8, G_TX_RENDERTILE, 0, 0, 0x400, 0x400); // FAKE: 8U
     load(8, 8, arg4->right, arg4->loadArg);
-    gSPTextureRectangle(gDisplayListHead++, (x2 - 8) << 2, y << 2, x2 << 2, (y2 - 8U) << 2, G_TX_RENDERTILE, 0, 0, 0x400, 0x400);
+    gSPTextureRectangle(gDisplayListHead++, (x2 - 8) << 2, y << 2, x2 << 2, (y2 - 8U) << 2, G_TX_RENDERTILE, 0, 0, 0x400, 0x400); // FAKE: 8U
     load(8, 8, arg4->bottom, arg4->loadArg);
     gSPTextureRectangle(gDisplayListHead++, (x + 8) << 2, (y2 - 8) << 2, x2 << 2, y2 << 2, G_TX_RENDERTILE, (w * -0x20) + 0x200, 0, 0x400, 0x400);
     load(8, 8, arg4->left, arg4->loadArg);
@@ -401,8 +386,8 @@ extern u8 D_04009F70[];
  * y8 is taken before the clamps and x2/y2 after them: that keeps the first basic
  * block at the size the target has. The right and bottom edges are written out as
  * x + w and y + h where the target evaluates them again.
- * Seen in play (2026-11-12) in いちらん: drew the yellow row cursor at (0x52, 0x98), size 0x50 x
- * 0x14, for LabPCList_DrawRowCursor.
+ * Seen in play (2026-11-12) in いちらん: drew the yellow row cursor at (82, 152), size 80 x
+ * 20, for LabPCList_DrawRowCursor.
  */
 void Ui_DrawRoundedFrame(s32 x, s32 y, s32 w, s32 h, Color_RGBA8 color) {
     s32 x2;
@@ -453,19 +438,10 @@ void Ui_FillRectHighlighted(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 
     func_80029028(arg0, arg1, arg2, arg3, *(Color8002A354*)&light);
 }
 
-/*
- * Ui_DrawLabelFrame
- *
- * Forwards its four arguments unchanged to Ui_DrawTexturedFrameDecal and adds a fifth
- * argument: the address of the data at D_80073524 (typed as a byte array).
- * Ui_DrawFilledFrame calls Ui_DrawTexturedFrameDecal the same way with D_8007353C as the
- * fifth argument.  What this data is, and what Ui_DrawTexturedFrameDecal does with it,
- * has not been determined, so the names are left as addresses.
- */
 extern u8 D_80073524[];
 void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, u8*);
 /**
- * Draws the textured border of a label box at (x, y), size (w, h).
+ * Draws the textured border of a label box at (x, y), size (w, h), with the frame textures D_80073524.
  * Seen in play (2026-11-14): Window_DrawLabeled draws the main menu's small label boxes with it.
  */
 void Ui_DrawLabelFrame(s32 x, s32 y, s32 w, s32 h) {
@@ -505,24 +481,24 @@ void Ui_DrawImageInStrips(Img8002A3F8 *arg0, s32 x, s32 y) {
     s32 max_rows;
     u8 *pixels;
     s32 n;
-    s32 curY;
+    s32 cur_y;
 
     gSPDisplayList(gDisplayListHead++, D_80073408);
     stride = arg0->stride;
     max_rows = 0x1000 / (stride * 2);
     rows = arg0->height;
     pixels = arg0->pixels;
-    curY = y;
+    cur_y = y;
     while (rows > 0) {
         if (max_rows < rows) {
             n = max_rows;
         } else {
             n = rows;
         }
-        func_8001B884(x, curY, arg0->width, n, pixels, stride, 0x200000);
+        func_8001B884(x, cur_y, arg0->width, n, pixels, stride, 0x200000);
         stride = arg0->stride;
         rows -= n;
-        curY += n;
+        cur_y += n;
         pixels += n * stride * 2;
     }
     gSPDisplayList(gDisplayListHead++, D_80073438);
@@ -643,7 +619,7 @@ s32 Window_UpdateAnimation(Window* arg0) {
 
     var_v0 = arg0->animTimer;
     var_v1 = 1;
-    if (var_v0 >= 0xB) {
+    if (var_v0 >= 11) {
         arg0->state = 4;
         return 1;
     }
@@ -690,12 +666,12 @@ s32 Window_DrawAnimatedFrame(Window* arg0) {
     s32 w;
     s32 h;
     s32 ret;
-    s32 maxW;
-    s32 maxH;
+    s32 max_w;
+    s32 max_h;
     s32 t;
 
-    maxW = (arg0->frame.width < 0x10) ? 0x10 : arg0->frame.width;
-    maxH = (arg0->frame.height < 0x10) ? 0x10 : arg0->frame.height;
+    max_w = (arg0->frame.width < 0x10) ? 0x10 : arg0->frame.width;
+    max_h = (arg0->frame.height < 0x10) ? 0x10 : arg0->frame.height;
     ret = 1;
     switch ((u32)arg0->state) {
         case 4:
@@ -703,24 +679,24 @@ s32 Window_DrawAnimatedFrame(Window* arg0) {
         case 3:
             x = arg0->frame.x;
             y = arg0->frame.y;
-            t = 0xB - arg0->animTimer;
-            w = ((maxW - 0x10) * t) / 4 + 0x10;
-            h = ((maxH - 0x10) * t) / 4 + 0x10;
+            t = 11 - arg0->animTimer;
+            w = ((max_w - 0x10) * t) / 4 + 0x10;
+            h = ((max_h - 0x10) * t) / 4 + 0x10;
             break;
         case 0:
             t = arg0->animTimer - 1;
             x = arg0->frame.x;
             y = arg0->frame.y;
-            w = ((maxW - 0x10) * t) / 4 + 0x10;
-            h = ((maxH - 0x10) * t) / 4 + 0x10;
+            w = ((max_w - 0x10) * t) / 4 + 0x10;
+            h = ((max_h - 0x10) * t) / 4 + 0x10;
             break;
         case 1:
         case 2:
             ret = 0;
             x = arg0->frame.x;
             y = arg0->frame.y;
-            h = maxH;
-            w = maxW;
+            h = max_h;
+            w = max_w;
             break;
     }
     if (ret == 0) {
@@ -738,10 +714,10 @@ s32 Window_DrawAnimatedFrame(Window* arg0) {
     }
     Ui_DrawTexturedFrameDecal(x, y, w, h, D_80073554);
     if (arg0->frame.style & 0x800) {
-        Window_DrawTitleTab(x, y - 0x16, (s32)arg0->title, arg0->frame.style);
+        Window_DrawTitleTab(x, y - 22, (s32)arg0->title, arg0->frame.style);
     }
     if (arg0->frame.style & 0x1000) {
-        Window_DrawHeaderStripe(x, y - 0xA, 0x50, arg0->frame.style);
+        Window_DrawHeaderStripe(x, y - 10, 80, arg0->frame.style);
     }
     return ret;
 }
@@ -758,11 +734,9 @@ void Window_UpdateAndDrawFrame(Window* window) {
 }
 
 /**
- * Initializes a text-box style object at arg0: stores the constants 0x14,
- * 8, 6, 2 and 0 at offsets 0x24..0x34, runs Window_SetRect(arg0, arg1, arg2,
- * arg3, 0x18), then sets offset 0x14 to 1, offset 0x20 to the color arg4
- * (a 4-byte struct passed by value, stored with unaligned stores) and offset
- * 0x38 to the string pointer arg5. What the fields mean is not established.
+ * Sets up a labeled button: rect (arg1, arg2), width arg3 and height 24, style 1, color `arg4` and label
+ * `arg5`, drawn in font size 8 at offset (6, 2) inside the box. The meaning of unk_24 (set to 0x14) is
+ * not known.
  * Seen in play (2026-11-13) (menu tour from the main menu): called on every menu screen past the
  * main menu, for windows at (411, 189, 72) and (496, 189, 72).
  * @unverified Name guessed from the code; comment kept.
@@ -773,7 +747,7 @@ void Window_InitLabeled(LabeledButton* arg0, s32 arg1, s32 arg2, s32 arg3, Color
     arg0->labelX = 6;
     arg0->labelY = 2;
     arg0->unk_34 = 0;
-    Window_SetRect((s8*)arg0, arg1, arg2, arg3, 0x18);
+    Window_SetRect((s8*)arg0, arg1, arg2, arg3, 24);
     arg0->style = 1;
     arg0->color = arg4;
     arg0->label = arg5;
@@ -806,10 +780,10 @@ void Window_DrawLabeled(LabeledButton* arg0, s32 arg1) {
  * Sets an image button's rectangle and its IA16 image and image width.
  * Seen in play (2026-11-14): せいとん's organize window sets up its two image buttons with it.
  */
-void ImageButton_Init(ImageButton* button, s32 x, s32 y, s32 w, s32 h, s32 imageWidth, s32 image) {
+void ImageButton_Init(ImageButton* button, s32 x, s32 y, s32 w, s32 h, s32 image_width, s32 image) {
     Window_SetRect((s8*)button, x, y, w, h);
     button->image = (u8*)image;
-    button->imageWidth = imageWidth;
+    button->imageWidth = image_width;
 }
 
 /**
@@ -1021,7 +995,7 @@ s32 Ui_AdjustSteppedRangeSelection(UiRangeValue* arg0) {
 
         switch (sp1C) {
             case 0x200:
-                sp18 *= 0xA;
+                sp18 *= 10;
 
             case 0x800:
                 if (arg0->value >= arg0->max) {
@@ -1034,7 +1008,7 @@ s32 Ui_AdjustSteppedRangeSelection(UiRangeValue* arg0) {
                 break;
 
             case 0x100:
-                sp18 *= 0xA;
+                sp18 *= 10;
 
             case 0x400:
                 if (arg0->min >= arg0->value) {
@@ -1075,7 +1049,7 @@ void Ui_DrawNumberUnpadded(s32 arg0, s32 arg1, s32 arg2) {
         temp_lo = arg2 / var_s0;
         i--;
         if ((temp_lo != 0) || (var_s4 != 0) || (i == 0)) {
-                        func_8001BCB4(arg0, arg1, 8, 0xC, D_80073584[temp_lo], 8, 0);
+                        func_8001BCB4(arg0, arg1, 8, 12, D_80073584[temp_lo], 8, 0);
             arg0 += 9;
             var_s4 = 1;
         }
@@ -1102,7 +1076,7 @@ void Ui_DrawNumber(s32 x, s32 y, s32 value, s32 digits) {
     while (digits > 0) {
         digits--;
         if (value > 0 || first) {
-            func_8001BCB4(x + digits * 9, y, 8, 0xC, D_80073584[value % 10], 8, 0);
+            func_8001BCB4(x + digits * 9, y, 8, 12, D_80073584[value % 10], 8, 0);
         }
         value /= 10;
         first = 0;
@@ -1113,8 +1087,8 @@ extern Gfx D_80073450[];
 extern u8 *D_80073584[];
 /**
  * Draws `value` in `digits` digit images, with leading zeros.
- * Seen in play (2026-11-12) in いちらん: called with (0x2D, 0x9C, 1, 4) for the 0001 number of the
- * first row and (0x104, 0x9C, 12345, 5) for its ID 12345, both drawn with leading zeros as shown.
+ * Seen in play (2026-11-12) in いちらん: called with (45, 156, 1, 4) for the 0001 number of the
+ * first row and (260, 156, 12345, 5) for its ID 12345, both drawn with leading zeros as shown.
  */
 void Ui_DrawNumberZeroPadded(s32 x, s32 y, s32 value, s32 digits) {
 
@@ -1122,7 +1096,7 @@ void Ui_DrawNumberZeroPadded(s32 x, s32 y, s32 value, s32 digits) {
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
     while (digits > 0) {
         digits--;
-        func_8001BCB4(x + digits * 9, y, 8, 0xC, D_80073584[value % 10], 8, 0);
+        func_8001BCB4(x + digits * 9, y, 8, 12, D_80073584[value % 10], 8, 0);
         value /= 10;
     }
 }
@@ -1140,18 +1114,13 @@ s32 Ui_GetSelectionDirection(Controller* arg0) {
     return var_v1;
 }
 
-/*
- * GbSave_GameToCategoryIndex  (owner func_8002BC44)
- *
- * Returns entry arg0 of a 12-word lookup table at D_80073644.  The retail
- * ROM holds { 0, 0, 1, 2, 0, 0, 0, 3, 0, 0, 0, 0 } there (checked against the
- * ROM bytes), the same table the Stadium 1 version of this function keeps as
- * a file-static array.  The table is referenced by its ROM address instead of
- * being defined here because this file's .data cannot be placed yet.
- * arg0 is not range-checked.
- */
 extern s32 D_80073644[];
-/** Maps a Game Boy game id to its category index. */
+/**
+ * Maps a Game Boy game id to its category index through the 12-word table D_80073644, which holds
+ * { 0, 0, 1, 2, 0, 0, 0, 3, 0, 0, 0, 0 } in the retail ROM (Stadium 1 keeps it as a file-static
+ * array; here it stays extern because this file's .data cannot be placed yet). `arg0` is not
+ * range-checked.
+ */
 s32 GbSave_GameToCategoryIndex(s32 arg0) {
     return D_80073644[arg0];
 }
@@ -1175,9 +1144,9 @@ void GbSave_DrawCartridgeIcon(s32 x, s32 y, s32 label, s32 game) {
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEIDECALA_PRIM, G_CC_MODULATEIDECALA_PRIM);
     gDPSetPrimColor(gDisplayListHead++, 0, 0, color->r, color->g, color->b, color->a);
-    Gfx_DrawTextureIa8(x + 6, y + 0x10, 0x28, 0x22, D_04008F20, 0x28, 0);
+    Gfx_DrawTextureIa8(x + 6, y + 16, 40, 34, D_04008F20, 40, 0);
     gDPSetPrimColor(gDisplayListHead++, 0, 0, ((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
-    Gfx_DrawTextureIa8(x + 9, y + 0x17, 0x20, 0x14, D_80073694[label], 0x20, 0);
+    Gfx_DrawTextureIa8(x + 9, y + 23, 0x20, 20, D_80073694[label], 0x20, 0);
 }
 
 extern u8 D_04009FB0[];
@@ -1235,27 +1204,27 @@ u32 func_800566BC(s32);
  */
 void Window_DrawTitleTab(s32 x, s32 y, s32 str, s32 flags) {
     s32 width;
-    s32 textX;
+    s32 text_x;
 
-    width = (func_800566BC(str) >> 1) * 0x14;
-    textX = x + 8;
+    width = (func_800566BC(str) >> 1) * 20;
+    text_x = x + 8;
     if (flags & 0x2000) {
-        textX += 0x28;
-        width += 0x28;
+        text_x += 40;
+        width += 40;
     }
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
     gDPLoadTextureBlock(gDisplayListHead++, D_04010E10, G_IM_FMT_RGBA, G_IM_SIZ_16b, 8, 28, 0, G_TX_CLAMP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x + width + 8) << 2, (y + 0x1C) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+    gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x + width + 8) << 2, (y + 28) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
     gDPLoadTextureBlock(gDisplayListHead++, D_04010FD8, G_IM_FMT_RGBA, G_IM_SIZ_16b, 48, 28, 0, G_TX_CLAMP, G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    gSPTextureRectangle(gDisplayListHead++, (x + width + 8) << 2, y << 2, (x + width + 0x38) << 2, (y + 0x1C) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
+    gSPTextureRectangle(gDisplayListHead++, (x + width + 8) << 2, y << 2, (x + width + 56) << 2, (y + 28) << 2, G_TX_RENDERTILE, 0, 0, 1 << 10, 1 << 10);
     if (flags & 0x2000) {
         Ui_DrawImageInStrips(&D_800735F4, x + 8, y + 4);
     }
     func_8001AB6C();
     func_8001A384(8, 0);
     func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
-    Font_Printf(textX, y + 4, str);
+    Font_Printf(text_x, y + 4, str);
     func_8001ABBC();
 }
 
@@ -1296,7 +1265,7 @@ void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 /** Draws a label in a battle info widget. */
 void BattleInfoWidget_DrawLabel(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4) {
     if (arg4 & 0x18) {
-        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0xE6, 0x16, D_800736A8);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 230, 22, D_800736A8);
     }
 
     Font_BeginTranslucentTextRendering();
@@ -1306,26 +1275,14 @@ void BattleInfoWidget_DrawLabel(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 ar
     Font_EndTexturedTextRendering();
 }
 
-/*
- * SavePrompt_Init
- *
- * Initializes a record like Pokedex_InitEntryWindow does, with the first five words
- * set by Window_SetRect to (arg1, arg2, 0xF8, 0xAE, 0), the words at +0x20,
- * +0x24 and +0x28 cleared and +0x14 set to 0x1001.  It then sets up two
- * sub-objects: func_80027804 is called on the area at arg0 + 0x50 with
- * D_800736AC, 3 and 3, and Menu_Init on the object at arg0 + 0x2C with
- * that area, arg0 + 0x5C, the callback func_8002C998 and the constants 0xEC
- * and 0x1C.  Finally bit 0x10000 is set in the word at +0x4C.
- * What func_80027804 and Menu_Init do is not established yet, so the
- * roles of those arguments are not named.
- */
 M2C_UNK func_80027804(s8 *, M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK Menu_Init(s8 *, s8 *, s8 *, M2C_UNK *, s32, s32); /* extern */
 extern M2C_UNK D_800736AC;
 extern M2C_UNK func_8002C998;
 
 /**
- * Sets up the save-before-leaving window (248x174) with its menu.
+ * Sets up the save-before-leaving window (248x174, style 0x1001) at (arg1, arg2) with its three-item menu
+ * (items D_800736AC, callback func_8002C998, 236 wide, 28-pixel rows).
  * Seen in play (2026-11-12) in いちらん: B after using an item opened 「ないようが へんこうされています」 with
  * レポートしてやめる, レポートしないでやめる and キャンセル.
  */
@@ -1333,7 +1290,7 @@ void SavePrompt_Init(SavePrompt* arg0, s32 arg1, s32 arg2) {
     s8 *sp2C;
     s8 *temp_a0;
 
-    Window_SetRect((s8*)arg0, arg1, arg2, 0xF8, 0xAE);
+    Window_SetRect((s8*)arg0, arg1, arg2, 248, 174);
     arg0->window.animTimer = 0;
     arg0->window.title = NULL;
     arg0->window.state = 0;
@@ -1341,7 +1298,7 @@ void SavePrompt_Init(SavePrompt* arg0, s32 arg1, s32 arg2) {
     temp_a0 = (s8*)&arg0->items;
     sp2C = temp_a0;
     func_80027804(temp_a0, &D_800736AC, 3, 3);
-    Menu_Init((s8*)&arg0->menu, sp2C, (s8*)arg0->itemFlags, &func_8002C998, 0xEC, 0x1C);
+    Menu_Init((s8*)&arg0->menu, sp2C, (s8*)arg0->itemFlags, &func_8002C998, 236, 28);
     arg0->menu.options |= 0x10000;
 }
 
@@ -1362,16 +1319,16 @@ void SavePrompt_Draw(SavePrompt* arg0) {
     if (func_8002AE6C() != 0) {
         return;
     }
-    Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->window.frame.y + 0x45, arg0->window.frame.width, D_8007356C);
-    Ui_FillRectPrimEnvColor(arg0->window.frame.x + 6, arg0->window.frame.y + 6, arg0->window.frame.width - 0xC, 0x40, D_800736B8, D_800736BC);
+    Ui_DrawTexturedDivider(arg0->window.frame.x, arg0->window.frame.y + 69, arg0->window.frame.width, D_8007356C);
+    Ui_FillRectPrimEnvColor(arg0->window.frame.x + 6, arg0->window.frame.y + 6, arg0->window.frame.width - 12, 0x40, D_800736B8, D_800736BC);
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(arg0->window.frame.x + 6, arg0->window.frame.y + 0x4C, arg0->window.frame.width - 0xC, 0x5C, D_800736C0);
-    Menu_DrawItems((s8*)&arg0->menu, arg0->window.frame.x + 6, arg0->window.frame.y + 0x50, 0xFFEF, 0);
+    func_80029028(arg0->window.frame.x + 6, arg0->window.frame.y + 76, arg0->window.frame.width - 12, 92, D_800736C0);
+    Menu_DrawItems((s8*)&arg0->menu, arg0->window.frame.x + 6, arg0->window.frame.y + 80, 0xFFEF, 0);
     func_8001AB6C();
     func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
     func_8001A384(8, 0);
-    Font_SetLineHeight(0x1C);
-    Font_Printf(arg0->window.frame.x + 0xE, arg0->window.frame.y + 0xA, (s32)D_8007B920);
+    Font_SetLineHeight(28);
+    Font_Printf(arg0->window.frame.x + 14, arg0->window.frame.y + 10, (s32)D_8007B920);
     func_8001ABBC();
 }
 
@@ -1389,13 +1346,13 @@ void Save_DrawReportingWindow(SavePrompt* arg0) {
     BgStage_AdvanceFrame();
     while (i-- > 0) {
         BgStage_DrawFrame();
-        Ui_FillRectPrimEnvColor(arg0->window.frame.x + 6, arg0->window.frame.y + 6, arg0->window.frame.width - 0xC, 0x40, D_800736C4, D_800736C8);
+        Ui_FillRectPrimEnvColor(arg0->window.frame.x + 6, arg0->window.frame.y + 6, arg0->window.frame.width - 12, 0x40, D_800736C4, D_800736C8);
         func_8001AB6C();
-        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
         func_8001A384(0x10, 0);
         func_8001ABE8();
-        func_8001AAE4(0xFF, 0xB2, 0xB2, 0xFF);
-        Font_Printf(arg0->window.frame.x + 0x20, arg0->window.frame.y + 0x16, (s32)str);
+        func_8001AAE4(0xFF, 0xB2, 0xB2, 0xFF); // #FFB2B2
+        Font_Printf(arg0->window.frame.x + 0x20, arg0->window.frame.y + 22, (s32)str);
         func_8001AC3C();
         func_8001ABBC();
         BgStage_AdvanceFrame();
@@ -1428,11 +1385,11 @@ s32 SavePrompt_Update(SavePrompt* arg0) {
             switch (arg0->menu.cursor) {
                 case 0:
                     ret = 1;
-                    Audio_PlaySystemSound(0x1D);
+                    Audio_PlaySystemSound(29);
                     break;
                 case 1:
                     ret = 2;
-                    Audio_PlaySystemSound(0x21);
+                    Audio_PlaySystemSound(33);
                     break;
                 case 2:
                     ret = -1;
@@ -1497,7 +1454,7 @@ void TextBox_Init(TextBox* arg0, s32 arg1, s32 arg2, s32 arg3, u32 arg4) {
     ch = D_800736D0[arg2].h;
     w = ch * 2 + len * cw;
     h = ch + (u32)(cw + ch) * arg3;
-    Window_SetRect((s8*)arg0, (0x274 - w) / 2, (0x19C - h) / 2 + 0x38, w + 0xC, h + 0xC);
+    Window_SetRect((s8*)arg0, (628 - w) / 2, (412 - h) / 2 + 56, w + 12, h + 12);
     arg0->window.animTimer = 0;
     arg0->window.title = NULL;
     arg0->window.state = 0;
@@ -1572,7 +1529,7 @@ void BlinkingTextBox_Init(BlinkingTextBox* arg0, s32 arg1, s32 arg2, s32 arg3, u
     ch = D_800736D0[arg2].h;
     w = ch * 2 + len * cw;
     h = ch + (u32)(cw + ch) * arg3;
-    Window_SetRect((s8*)arg0, (0x274 - w) / 2, (0x19C - h) / 2 + 0x38, w + 0xC, h + 0xC);
+    Window_SetRect((s8*)arg0, (628 - w) / 2, (412 - h) / 2 + 56, w + 12, h + 12);
     arg0->blinkTimer = 0;
     arg0->noBlink = 0;
     arg0->frame.style = 6;
@@ -1622,8 +1579,8 @@ s32 BattleMon_CountMoves(u8* arg0) {
 /**
  * Returns the zero-based move id in move slot `arg1` of BattleMon `arg0` (moves start at 0x09):
  * -1 for an empty slot, -2 for an id past the 165 Gen 1 moves.
- * Seen in play (2026-11-12) in いちらん page 2/3: フシギダネ's たいあたり (0x21) gave 0x20 and なきごえ (0x2D)
- * 0x2C; ヒトカゲ's ひっかく (0x0A) gave 9.
+ * Seen in play (2026-11-12) in いちらん page 2/3: フシギダネ's たいあたり (33) gave 32 and なきごえ (45)
+ * 44; ヒトカゲ's ひっかく (10) gave 9.
  */
 s32 BattleMon_GetMoveIndex(s32 arg0, s32 arg1) {
     u8* p = (u8*)(arg0 + arg1);
@@ -1657,8 +1614,8 @@ s32 Type_ToTableIndex(s32);
 
 /**
  * Returns the display index of the species' type 1 (`arg1` 0) or type 2 (`arg1` 1); -1 for type 2 of a single-type species.
- * Seen in play (2026-11-12) in いちらん: it drives the タイプ1/タイプ2 columns. フシギダネ gave 0xB and 3 (くさ,
- * どく), ヒトカゲ 9 and -1, and ゼニガメ 0xA and -1. どく = 3 matches its 4th place in タイプであつめる.
+ * Seen in play (2026-11-12) in いちらん: it drives the タイプ1/タイプ2 columns. フシギダネ gave 11 and 3 (くさ,
+ * どく), ヒトカゲ 9 and -1, and ゼニガメ 10 and -1. どく = 3 matches its 4th place in タイプであつめる.
  */
 s32 Pokemon_GetTypeIndex(BattleMon* arg0, s32 arg1) {
     s32 idx = arg0->species.id - 1;
@@ -1693,79 +1650,53 @@ extern u8 D_8007B9D0[];
  */
 void Save_DrawReportResultWindow(s32 arg0) {
     BgStage_DrawFrame();
-    Ui_DrawTexturedFrameDecal(0x6E, 0x72, 0x1A4, 0x114, D_80073554);
+    Ui_DrawTexturedFrameDecal(110, 114, 420, 276, D_80073554);
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(0x74, 0x78, 0x198, 0x108, D_80073708);
+    func_80029028(116, 120, 408, 264, D_80073708);
     if (arg0 == 0) {
         func_8001AB6C();
         func_8001A384(0x10, 0);
-        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
         func_8001ABE8();
-        func_8001AAE4(0xFF, 0xF1, 0x78, 0xFF);
-        Font_Printf(0xEC, 0xA8, (s32)D_8007B950);
+        func_8001AAE4(0xFF, 0xF1, 0x78, 0xFF); // #FFF178
+        Font_Printf(236, 168, (s32)D_8007B950);
         func_8001AC3C();
         func_8001ABBC();
     } else if (arg0 == 2) {
         func_8001AB6C();
         func_8001A384(0x10, 0);
-        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
         func_8001ABE8();
-        func_8001AAE4(0xFF, 0xF1, 0x78, 0xFF);
-        Font_Printf(0xB0, 0xA8, (s32)D_8007B960);
+        func_8001AAE4(0xFF, 0xF1, 0x78, 0xFF); // #FFF178
+        Font_Printf(176, 168, (s32)D_8007B960);
         func_8001AC3C();
         func_8001ABBC();
     } else if (arg0 == 3) {
         func_8001AB6C();
         func_8001A384(0x10, 0);
-        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
         func_8001ABE8();
-        func_8001AAE4(0xFF, 0xF1, 0x78, 0xFF);
-        Font_Printf(0x80, 0x84, (s32)D_8007B97C);
+        func_8001AAE4(0xFF, 0xF1, 0x78, 0xFF); // #FFF178
+        Font_Printf(0x80, 132, (s32)D_8007B97C);
         func_8001AC3C();
         func_8001ABBC();
     }
     if (arg0 != 0) {
         func_8001AB6C();
         func_8001A384(0x10, 0);
-        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
         func_8001ABE8();
-        func_8001AAE4(0xFF, 0xF1, 0x78, 0xFF);
-        Font_Printf(0x128, 0xF0, (s32)D_8007B9BC);
+        func_8001AAE4(0xFF, 0xF1, 0x78, 0xFF); // #FFF178
+        Font_Printf(296, 240, (s32)D_8007B9BC);
         func_8001AC3C();
         func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
-        Font_SetLineHeight(0x24);
-        Font_Printf(0x80, 0xF0, (s32)D_8007B9D0);
+        Font_SetLineHeight(36);
+        Font_Printf(0x80, 240, (s32)D_8007B9D0);
         func_8001ABBC();
     }
     func_80006780();
 }
 
-/*
- * GbSave_RunReportErrorLoop
- *
- * Polling loop on arg0.  First func_80006780 (BgStage_AdvanceFrame, per
- * symbol_addrs.txt) is called once.  Then, repeatedly:
- *
- *   - state starts at 2.  Save_DrawReportResultWindow(state) is called and
- *     GbSave_PollCartRemoval(arg0) (GbSave_PollCartRemoval, per symbol_addrs.txt) is
- *     polled; if the poll returns 1 or 3, state becomes 1 or 3 for the next
- *     round.  This repeats until the poll returns 2.
- *   - Save_DrawReportResultWindow(0) is called twice.
- *   - The whole sequence is repeated while func_8002207C(arg0)
- *     (GbSave_RebuildAndWriteSave) returns 0.
- *
- * What Save_DrawReportResultWindow does with its argument is not established, so the
- * values 1, 2 and 3 are not given names in the code.
- *
- * Context from the Stadium 1 decomp (not proof for this ROM): the same
- * loop exists there as LabUI_ShowSavingPrompt, where the polled function
- * GbSave_PollCartRemoval returns 0 when it has nothing to report yet, 1
- * while it waits for the cart to be put back, 2 once the pak is verified as
- * the same one, and 3 if a pak was reinitialised but is not the expected one; the loop
- * shows a saving-status message for the latest value.  Zero's loop differs in
- * detail (it never maps 2 to 0, and it calls Save_DrawReportResultWindow(0) twice after the
- * inner loop instead of sending two null messages inside it).
- */
 M2C_UNK func_80006780();                            /* extern */
 s32 GbSave_PollCartRemoval(s32);                             /* extern */
 s32 func_8002207C(s32);                             /* extern */
@@ -1773,7 +1704,10 @@ void Save_DrawReportResultWindow(s32);
 
 /**
  * Shows the report (save) error window until the cartridge has been taken out and put back, and
- * repeats until the save to port `port` succeeds.
+ * repeats until the save to port `port` succeeds (func_8002207C, GbSave_RebuildAndWriteSave). The
+ * window state starts at 2 and follows GbSave_PollCartRemoval's result 1 or 3 until it returns 2. In
+ * Stadium 1 the same loop (LabUI_ShowSavingPrompt) reads the poll as 0 nothing yet, 1 waiting for the
+ * cart, 2 same pak verified and 3 a different pak reinitialized.
  * @unverified Name read from the code; the Lab PC calls it when writing to the GB cartridge fails.
  */
 void GbSave_RunReportErrorLoop(s32 port) {

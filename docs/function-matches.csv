@@ -4266,10 +4266,10 @@ func_8001FE84,0x8001FE84,src/gb_data.c,Pokemon_FromGbRecord,m2c,m2c,c
 func_8001FF74,0x8001FF74,src/gb_data.c,Pokemon_FromGbRecordExt,s1,stadium1:src/gb_data.c (VERSION_JP),c
 func_8001FFE8,0x8001FFE8,src/gb_data.c,Pokemon_ToGbRecord,m2c,m2c,c
 func_800200D4,0x800200D4,src/gb_data.c,Pokemon_ToGbRecordExt,s1,stadium1:src/gb_data.c (VERSION_JP),c
-func_80020148,0x80020148,src/gb_data.c,StatExpSqrt,s1,stadium1:src/gb_data.c (VERSION_JP),c
+func_80020148,0x80020148,src/gb_data.c,Pokemon_StatExpSqrt,s1,stadium1:src/gb_data.c (VERSION_JP),c
 func_80020188,0x80020188,src/gb_data.c,GbData_UnusedStub,s1,stadium1:src/gb_data.c (VERSION_JP),c
-func_80020190,0x80020190,src/gb_data.c,GetPokemonDV,s1,stadium1:src/gb_data.c,c
-func_80020234,0x80020234,src/gb_data.c,CalculateStatValue,s1,stadium1:src/gb_data.c,c
+func_80020190,0x80020190,src/gb_data.c,Pokemon_GetDv,s1,stadium1:src/gb_data.c,c
+func_80020234,0x80020234,src/gb_data.c,Pokemon_CalcStat,s1,stadium1:src/gb_data.c,c
 func_800203FC,0x800203FC,src/gb_data.c,Pokemon_RecalcStats,s1,stadium1:src/gb_data.c,c
 func_800204D0,0x800204D0,src/gb_data.c,Pokemon_StatExpForTarget,s1,stadium1:src/gb_data.c,c
 func_8002057C,0x8002057C,src/gb_data.c,Pokemon_ExpForLevel,s1,stadium1:src/gb_data.c,c
