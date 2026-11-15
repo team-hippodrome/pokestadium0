@@ -1,3 +1,6 @@
+/* Audio driver, matching OoT src/audio/internal/seqplayer.c (continued) in function order. The
+ * driver is Nintendo's "Nas" library (original names Nas_*); this revision sits between SM64
+ * Shindou and OoT. See docs/annotation/audio-driver.md for the per-function mapping. */
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "audio_and_gb_emulator.h"
 
@@ -7,7 +10,12 @@ void AudioPlayback_NotePoolClear(s8*);
 
 extern u32 D_811859CC;
 
-s32 func_81113A44(SequenceLayer* layer, s32 cmd) {
+/**
+ * Sets the layer's pitch, delay and velocity for a note command, handling portamento.
+ * Corresponds to OoT AudioSeq_SeqLayerProcessScriptStep3 (original name __SetNote).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+s32 AudioSeq_SeqLayerProcessScriptStep3(SequenceLayer* layer, s32 cmd) {
     SeqScriptState* state = &layer->scriptState;
     u16 delay;
     s32 velocity;
@@ -111,8 +119,9 @@ s32 func_81113A44(SequenceLayer* layer, s32 cmd) {
  * the low nibble at offset 5 and the high nibble at offset 6. A zero nibble
  * leaves the corresponding byte unchanged. (arg1 itself is reused for the
  * high nibble, which is what the retail register use needs.)
+ * Corresponds to OoT AudioSeq_SetChannelPriorities (original name Nas_PriorityChanger).
  */
-void func_81113E54(u8* arg0, u8 arg1) {
+void AudioSeq_SetChannelPriorities(u8* arg0, u8 arg1) {
     s32 low;
 
     low = arg1 & 0xF;
@@ -125,7 +134,13 @@ void func_81113E54(u8* arg0, u8 arg1) {
     }
 }
 
-u8 func_81113E84(u8* arg0, u8 arg1, u8** arg2, u8* arg3) {
+/**
+ * Returns the channel's instrument `arg1` and copies its ADSR into `arg3`; returns 0 when it does
+ * not exist.
+ * Corresponds to OoT AudioSeq_GetInstrument (original name Nas_ProgramChanger).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+u8 AudioSeq_GetInstrument(u8* arg0, u8 arg1, u8** arg2, u8* arg3) {
     u8* p = AudioPlayback_GetInstrumentInner(arg0[7], arg1);
 
     if (p == NULL) {
@@ -139,7 +154,12 @@ u8 func_81113E84(u8* arg0, u8 arg1, u8** arg2, u8* arg3) {
     return arg1;
 }
 
-void func_81113EF4(u8* arg0, u8 arg1) {
+/**
+ * Sets the channel's instrument: 0x80 and up are raw instrument ids, 0x7F selects drums.
+ * Corresponds to OoT AudioSeq_SetInstrument (original name Nas_SubVoiceSet).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioSeq_SetInstrument(u8* arg0, u8 arg1) {
     s16 ret;
 
     if (arg1 >= 0x80) {
@@ -149,7 +169,7 @@ void func_81113EF4(u8* arg0, u8 arg1) {
         M2C_FIELD(arg0, s16*, 0x22) = 0;
         M2C_FIELD(arg0, s32*, 0x48) = 1;
     } else {
-        ret = M2C_FIELD(arg0, s16*, 0x22) = func_81113E84(arg0, arg1, (u8**)(arg0 + 0x48), arg0 + 0x7C);
+        ret = M2C_FIELD(arg0, s16*, 0x22) = AudioSeq_GetInstrument(arg0, arg1, (u8**)(arg0 + 0x48), arg0 + 0x7C);
         if (ret == 0) {
             ((SequenceChannel*)arg0)->hasInstrument = 0;
             return;
@@ -158,7 +178,12 @@ void func_81113EF4(u8* arg0, u8 arg1) {
     ((SequenceChannel*)arg0)->hasInstrument = 1;
 }
 
-void func_81113F84(u8* arg0, u8 arg1) {
+/**
+ * Sets the channel's volume from 0-127.
+ * Corresponds to OoT AudioSeq_SequenceChannelSetVolume (original name Nas_SubVolumeSet).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioSeq_SequenceChannelSetVolume(u8* arg0, u8 arg1) {
     *(f32*)(arg0 + 0x2C) = (f32)(s32)arg1 / 127.0f;
 }
 
@@ -169,23 +194,20 @@ extern f32 D_81135F78[];
 extern f32 D_81136378[];
 s32 AudioHeap_SearchCaches(s32, s32, s32);
 void AudioHeap_LoadFilter(s16*, s32, s32);
-s32 func_8110E500(s32, u8, s8*);
+s32 AudioLoad_SlowLoadSample(s32, u8, s8*);
 void AudioPlayback_NotePoolFill(void*, s32);
 void func_81112B84(void*);
 s32 AudioSeq_SeqChannelSetLayer(void*, s32);
 void AudioSeq_SeqLayerProcessScript(void*);
 s32 AudioSeq_HandleScriptFlowControl(void*, void*, s32, s32);
 
-//@unverified
 /**
- * Runs one tick of a sequence channel's script. It returns early if the
- * channel is stopped, if its player is muted and mute behavior bit 0x80 is set,
- * or if a delay is still counting down. Otherwise it reads commands with
- * func_81112FB0; commands 0xB0 and up take arguments described by the byte in
- * D_81138690. Follows the SequenceChannelProcessScript code in the Zelda 64
- * audio decomps.
+ * Runs one tick of a channel's script, then its layers' scripts.
+ * Corresponds to OoT AudioSeq_SequenceChannelProcessScript (original name Nas_SubSeq). OoT adds
+ * random numbers (AudioThread_NextRandom).
+ * @unverified Name follows the counterpart; not checked in play.
  */
-void func_81113FA8(SequenceChannel* channel) {
+void AudioSeq_SequenceChannelProcessScript(SequenceChannel* channel) {
     s32 i;
     u8* data;
     s8 signed_param;
@@ -271,7 +293,7 @@ void func_81113FA8(SequenceChannel* channel) {
                         parameters[0] = parameters[1];
                     case 0xC1:
                         command = (u8)parameters[0];
-                        func_81113EF4((u8*)channel, command);
+                        AudioSeq_SetInstrument((u8*)channel, command);
                         break;
                     case 0xC3:
                         channel->largeNotes = 0;
@@ -281,7 +303,7 @@ void func_81113FA8(SequenceChannel* channel) {
                         break;
                     case 0xDF:
                         command = (u8)parameters[0];
-                        func_81113F84((u8*)channel, command);
+                        AudioSeq_SequenceChannelSetVolume((u8*)channel, command);
                         channel->changes.s.volume = 1;
                         break;
                     case 0xE0:
@@ -450,7 +472,7 @@ void func_81113FA8(SequenceChannel* channel) {
                         channel->muteBehavior = data[0];
                         data += 3;
                         channel->noteAllocPolicy = data[-2];
-                        func_81113E54((u8*)channel, data[-1]);
+                        AudioSeq_SetChannelPriorities((u8*)channel, data[-1]);
                         channel->transposition = (s8)data[0];
                         data += 4;
                         channel->newPan = data[-3];
@@ -463,7 +485,7 @@ void func_81113FA8(SequenceChannel* channel) {
                         channel->muteBehavior = parameters[0];
                         channel->noteAllocPolicy = parameters[1];
                         command = (u8)parameters[2];
-                        func_81113E54((u8*)channel, command);
+                        AudioSeq_SetChannelPriorities((u8*)channel, command);
                         channel->transposition = (s8)AudioSeq_ScriptReadU8(&scriptState->pc);
                         channel->newPan = AudioSeq_ScriptReadU8(&scriptState->pc);
                         channel->panChannelWeight = AudioSeq_ScriptReadU8(&scriptState->pc);
@@ -489,7 +511,7 @@ void func_81113FA8(SequenceChannel* channel) {
                         channel->freqScale = 1.0f;
                         break;
                     case 0xE9:
-                        func_81113E54((u8*)channel, (u8)parameters[0]);
+                        AudioSeq_SetChannelPriorities((u8*)channel, (u8)parameters[0]);
                         break;
                     case 0xED:
                         command = (u8)parameters[0];
@@ -577,7 +599,7 @@ void func_81113FA8(SequenceChannel* channel) {
                     goto exit_loop;
                 case 0x10:
                     channel->soundScriptIO[low_bits] = -1;
-                    if (func_8110E500(channel->fontId, scriptState->value, &channel->soundScriptIO[low_bits]) == -1) {} // karodo
+                    if (AudioLoad_SlowLoadSample(channel->fontId, scriptState->value, &channel->soundScriptIO[low_bits]) == -1) {} // karodo
                     break;
                 case 0x70:
                     channel->soundScriptIO[low_bits] = scriptState->value;

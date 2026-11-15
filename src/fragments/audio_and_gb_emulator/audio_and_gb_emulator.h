@@ -198,8 +198,8 @@ typedef struct AudioTable {
     /* 0x10 */ AudioTableEntry entries[1];
 } AudioTable;
 
-/* A slow sample load (OoT's AudioSlowLoad): AudioLoad_ProcessSlowLoads (func_8110E500 starts one,
-   func_8110E71C finishes it) */
+/* A slow sample load (OoT's AudioSlowLoad): AudioLoad_ProcessSlowLoads (AudioLoad_SlowLoadSample starts one,
+   AudioLoad_FinishSlowLoad finishes it) */
 typedef struct AudioSlowLoad {
     /* 0x00 */ u8 medium; // @unverified: same offset/use as OoT's AudioSlowLoad.medium
     /* 0x01 */ u8 seqOrFontId; // @unverified: same offset/use as OoT's AudioSlowLoad.seqOrFontId
@@ -211,7 +211,7 @@ typedef struct AudioSlowLoad {
     /* 0x14 */ s32 bytesRemaining; // @unverified: same offset/use as OoT's AudioSlowLoad.bytesRemaining
     /* 0x18 */ s8* status; // @unverified: same offset/use as OoT's AudioSlowLoad.status
     /* 0x1C */ Sample sample; // @unverified: same offset/use as OoT's AudioSlowLoad.sample (copy of the font's sample header)
-    /* 0x2C */ OSMesgQueue msgQueue; // @unverified: same offset/use as OoT's AudioSlowLoad.msgQueue (func_8110E910)
+    /* 0x2C */ OSMesgQueue msgQueue; // @unverified: same offset/use as OoT's AudioSlowLoad.msgQueue (AudioLoad_DmaSlowCopy)
     /* 0x44 */ OSMesg msg; // @unverified: same offset/use as OoT's AudioSlowLoad.msg
     /* 0x48 */ OSIoMesg ioMesg; // @unverified: same offset/use as OoT's AudioSlowLoad.ioMesg
 } AudioSlowLoad; // size = 0x60
@@ -957,20 +957,21 @@ extern s16 D_811858CC;
 // audio_load_2.c
 void func_8110DC90(void);
 void func_8110DC98(void);
-void func_8110E714(void);
-s32 BattleScene_EndStatusAnimationsAndCommit(ActivePokemon* active_pokemon);
-s32 BattleAnim_EndSleepStatusAnimation(s32 arg0);
-void Battle_ApplyAnimStateEffects(s32 arg0);
+void AudioLoad_Unused2(void);
+void AudioLoad_ProcessLoads(s32 reset_status);
+void AudioLoad_ProcessSlowLoads(s32 reset_status);
+s32 AudioLoad_ProcessSamplePreloads(s32 arg0);
+void AudioLoad_ProcessAsyncLoads(s32 arg0);
 
 // audio_thread.c
-s32 Audio_CountCategorySounds(s32 arg0);
-void func_8110FD6C(s32 cmd, s32 arg1);
+s32 AudioThread_GetFontsForSequence(s32 arg0);
+void AudioThread_QueueCmdS32(s32 cmd, s32 arg1);
 void func_8110FC30(void);
 void func_8110FE90(void);
-void BattleAnim_DisableEffectSpawning(void);
-void BattleAnim_DisableEffectSpawningAlias(void);
-void BattleAnim_EffectStartNop(void);
-void BattleAnim_ClearEffectStateFlag(void);
+void AudioThread_InitMesgQueuesImpl(void);
+void AudioThread_InitMesgQueues(void);
+void func_81110164(void);
+void AudioThread_ResetExternalPool(void);
 
 // audio_playback.c
 void AudioPlayback_ProcessNotes(void);
@@ -978,7 +979,7 @@ void AudioPlayback_ProcessNotes(void);
 // audio_seqplayer.c
 void AudioSeq_SeqLayerDisable(SequenceLayer* arg0);
 void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1);
-void Particle31_ResetAllSlots(DisplayObject* arg0);
+void AudioSeq_SequenceChannelDisable(DisplayObject* arg0);
 void AudioSeq_SequenceChannelEnable(SequencePlayer* seqPlayer, u8 channelIndex, void* script);
 s32 AudioSeq_AudioListPopBack(AudioListItem* list);
 void AudioSeq_InitLayerFreelist(void);
@@ -988,7 +989,7 @@ void AudioSeq_SeqLayerProcessScriptStep1(SequenceLayer* arg0);
 
 // audio_seqplayer_2.c
 /*
- * func_81113F84
+ * AudioSeq_SequenceChannelSetVolume
  *
  * Stores (float)arg1 / 127.0f into the float at offset 0x2C of the object
  * arg0 points to.  arg1 is an unsigned byte (the generated code masks it
@@ -996,23 +997,23 @@ void AudioSeq_SeqLayerProcessScriptStep1(SequenceLayer* arg0);
  * the stored value is 1.0 when arg1 is 127.  What the field at +0x2C
  * represents is not known.
  */
-void func_81113F84(u8* arg0, u8 arg1);
+void AudioSeq_SequenceChannelSetVolume(u8* arg0, u8 arg1);
 
 // audio_seqplayer_3.c
 void func_811155A0(void);
-void GbApu_SetActiveFlag(void);
-void GbApu_ClearActiveFlag(void);
+void Audio_QueueGlobalMute(void);
+void Audio_QueueGlobalUnmute(void);
 void func_81215C14_jp(s32 arg0, s32 arg1, u8 arg2);
 void func_81215C9C_jp(s32 arg0, s32 arg1);
 void func_81115704(void);
-void func_81215D0C_jp(s32 arg0, s32 arg1, s32 arg2);
+void Audio_QueueChannelMute(s32 arg0, s32 arg1, s32 arg2);
 void func_81215D50_jp(void);
 void func_81215D8C_jp(s32 arg0, s32 arg1, s32 arg2);
 void func_81215DDC_jp(void);
 void GbApu_SetNoiseLoopBounds(s32 arg0, s32 arg1);
-void func_81114B54(struct SequencePlayer*);
-void func_811151C8(s32 arg0);
-void func_81115254(s8 *arg0);
+void AudioSeq_SequencePlayerProcessSequence(struct SequencePlayer*);
+void AudioSeq_ProcessSequences(s32 arg0);
+void AudioSeq_SkipForwardSequence(s8 *arg0);
 
 // gb_apu.c
 u32 GbApu_FreqToStep(u16 arg0);
@@ -1039,8 +1040,5 @@ void GbAudio_PlayMenuSound(s32 arg0);
 void func_811177E8(s32 numSamples, s16* out);
 void func_81117AFC(UNUSED s32 arg0);
 void func_81218104_jp(UNUSED s32 arg0);
-
-// functions defined in assembly
-void BattleAnim_ClearFreezeStatusAnimation(ActivePokemon* active_pokemon);
 
 #endif // FRAGMENT_AUDIO_AND_GB_EMULATOR_H
