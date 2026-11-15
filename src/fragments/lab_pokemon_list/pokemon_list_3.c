@@ -66,13 +66,13 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
   gSPDisplayList(gDisplayListHead++, D_80060270);
   colors = D_8910A85C[row & 1];
   loop_colors = D_8910A86C[row & 1];
-  func_80029028(x, y, 0x26, 0x14, colors[0]);
-  func_80029028(x + 0x26, y, 0x50, 0x14, colors[1]);
+  func_80029028(x, y, 38, 20, colors[0]);
+  func_80029028(x + 38, y, 80, 20, colors[1]);
   col = c->pageColumnStart[c->page];
   cx = x + 0x78;
   for (; cx < c->listFrame.width; col++)
   {
-    func_80029028(cx, y, c->columnWidths[col], 0x14, loop_colors[col & 1]);
+    func_80029028(cx, y, c->columnWidths[col], 20, loop_colors[col & 1]);
     cx += c->columnWidths[col];
   }
 
@@ -80,7 +80,7 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
   {
     if (flags & 0x10)
     {
-      Ui_FillRectHighlighted(x + 0x27, y + 1, 0x4E, 0x12, D_8910A860);
+      Ui_FillRectHighlighted(x + 39, y + 1, 78, 18, D_8910A860);
     }
     Ui_DrawNumberZeroPadded(x + 1, y + 4, row + 1, 4);
     if ((entry->species <= 0) || (entry->species >= 0x98))
@@ -88,7 +88,7 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
       func_8001AB6C();
       Font_SetColorForFlags(flags);
       func_8001A384(4, -1);
-      Font_Printf(x + 0x28, y + 2, (M2C_UNK *) D_8910DBCC);
+      Font_Printf(x + 40, y + 2, (M2C_UNK *) D_8910DBCC);
       func_8001ABBC();
     }
     else
@@ -96,14 +96,14 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
       func_8001AB6C();
       if (1 & D_80064C5C[entry->species - 1].cupEligibilityFlags)
       {
-        func_8001AA9C(0xFF, 0xC8, 0xA0, 0xFF);
+        func_8001AA9C(0xFF, 0xC8, 0xA0, 0xFF); // #FFC8A0FF
       }
       else
       {
         Font_SetColorForFlags(flags);
       }
       func_8001A384(4, -1);
-      Font_Printf(x + 0x28, y + 2, (M2C_UNK *) D_80064C5C[entry->species - 1].name);
+      Font_Printf(x + 40, y + 2, (M2C_UNK *) D_80064C5C[entry->species - 1].name);
       func_8001ABBC();
     }
     cx = x + 0x78;
@@ -144,27 +144,27 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
           break;
 
         case 10:
-          LabPCList_DrawPlainText(cx + 0xC, y + 2, D_8910DBD8, entry->unk2C, 0);
+          LabPCList_DrawPlainText(cx + 12, y + 2, D_8910DBD8, entry->unk2C, 0);
           break;
 
         case 11:
-          LabPCList_DrawPlainText(cx + 0xC, y + 2, D_8910DBDC, entry->stats[0], 0);
+          LabPCList_DrawPlainText(cx + 12, y + 2, D_8910DBDC, entry->stats[0], 0);
           break;
 
         case 12:
-          LabPCList_DrawPlainText(cx + 0xC, y + 2, D_8910DBE0, entry->stats[1], 0);
+          LabPCList_DrawPlainText(cx + 12, y + 2, D_8910DBE0, entry->stats[1], 0);
           break;
 
         case 13:
-          LabPCList_DrawPlainText(cx + 0xC, y + 2, D_8910DBE4, entry->stats[2], 0);
+          LabPCList_DrawPlainText(cx + 12, y + 2, D_8910DBE4, entry->stats[2], 0);
           break;
 
         case 14:
-          LabPCList_DrawPlainText(cx + 0xC, y + 2, D_8910DBE8, entry->stats[3], 0);
+          LabPCList_DrawPlainText(cx + 12, y + 2, D_8910DBE8, entry->stats[3], 0);
           break;
 
         case 15:
-          LabPCList_DrawPlainText(cx + 0xC, y + 2, D_8910DBEC, entry->stats[4], 0);
+          LabPCList_DrawPlainText(cx + 12, y + 2, D_8910DBEC, entry->stats[4], 0);
           break;
 
       }
@@ -203,7 +203,7 @@ void LabPCList_DrawRowCursor(ListMenu8910179C* list, s32 left, s32 top) {
     if (list->flags & 0x400) {
         y = y - list->cellHeight + 1;
     }
-    Ui_DrawRoundedFrame(left + 0x26, y, 0x50, 0x14, *(Color_RGBA8*)D_80073520);
+    Ui_DrawRoundedFrame(left + 38, y, 80, 20, *(Color_RGBA8*)D_80073520);
 }
 
 extern u8 D_04006170[];
@@ -225,15 +225,15 @@ void LabPCList_DrawPageHint(LabPCListScreen* screen) {
     func_8001AB6C();
     func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
     func_8001A384(8, 0);
-    Font_Printf(screen->headerFrame.x + 0x22, screen->headerFrame.y + 5, (M2C_UNK*)D_8910DBF0);
-    Font_Printf(screen->headerFrame.x + 0x152, screen->headerFrame.y + 5, (M2C_UNK*)D_8910DC04,
+    Font_Printf(screen->headerFrame.x + 34, screen->headerFrame.y + 5, (M2C_UNK*)D_8910DBF0);
+    Font_Printf(screen->headerFrame.x + 338, screen->headerFrame.y + 5, (M2C_UNK*)D_8910DC04,
                   screen->page + 1);
     func_8001ABBC();
     gSPDisplayList(gDisplayListHead++, D_80060290);
-    Gfx_DrawTextureRgba16(screen->headerFrame.x + 4, screen->headerFrame.y + 3, 0x1A, 0x18, D_8910C370, 0x20, 0x200000);
-    Gfx_DrawTextureRgba16(screen->headerFrame.x + 0xDA, screen->headerFrame.y + 3, 0x1A, 0x18, D_8910C978, 0x20, 0x200000);
-    Gfx_DrawTextureRgba16(screen->headerFrame.x + 0x134, screen->headerFrame.y + 2, 0x1A, 0x1A, D_04006170, 0x1C, 0x200000);
-    Gfx_DrawTextureRgba16(screen->headerFrame.x + 0x20A, screen->headerFrame.y + 2, 0x1A, 0x1A, D_04006CE0, 0x1C, 0x200000);
+    Gfx_DrawTextureRgba16(screen->headerFrame.x + 4, screen->headerFrame.y + 3, 26, 24, D_8910C370, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(screen->headerFrame.x + 218, screen->headerFrame.y + 3, 26, 24, D_8910C978, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(screen->headerFrame.x + 308, screen->headerFrame.y + 2, 26, 26, D_04006170, 0x1C, 0x200000);
+    Gfx_DrawTextureRgba16(screen->headerFrame.x + 522, screen->headerFrame.y + 2, 26, 26, D_04006CE0, 0x1C, 0x200000);
     gSPDisplayList(gDisplayListHead++, D_80060398);
 }
 

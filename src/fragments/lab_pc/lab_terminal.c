@@ -272,7 +272,7 @@ s32 LabItem_UpdateScreen(LabItemScreen* screen) {
             if (res == -1) {
                 if (LabItem_HasUnsavedChanges(screen) != 0) {
                     screen->state = 2;
-                    SavePrompt_Init(&screen->savePrompt, 0xCA, 0xAD);
+                    SavePrompt_Init(&screen->savePrompt, 202, 173);
                 } else {
                     ret = 1;
                 }
@@ -280,7 +280,7 @@ s32 LabItem_UpdateScreen(LabItemScreen* screen) {
                 switch (res) {
                     case 1:
                         screen->state = 3;
-                        LabItem_InitConfirmWindow(&screen->confirmWindow, 0xBA, 0xAE, D_8901871C, D_89018728);
+                        LabItem_InitConfirmWindow(&screen->confirmWindow, 186, 174, D_8901871C, D_89018728);
                         screen->confirmWindow.choice.cursor = 1;
                         break;
                 }
@@ -307,7 +307,7 @@ s32 LabItem_UpdateScreen(LabItemScreen* screen) {
             if (res == -1) {
                 screen->state = 1;
             } else if (res == 1) {
-                LabItem_InitDeleteDataWindow(&screen->deleteDataWindow, 0x2B, 0x5C, screen->saveSlots);
+                LabItem_InitDeleteDataWindow(&screen->deleteDataWindow, 43, 92, screen->saveSlots);
                 screen->state = 4;
             }
             break;
@@ -318,7 +318,7 @@ s32 LabItem_UpdateScreen(LabItemScreen* screen) {
                 screen->itemTables[2].count = 0;
             } else if (res == 1) {
                 LabItem_ReadDeckEntries(0x12, 0, screen->deleteDataWindow.menu.cursor, &screen->itemTables[2]);
-                LabItem_InitSaveDataWindow(&screen->saveDataWindow, 0xD6, 0x45, &screen->saveSlots[screen->deleteDataWindow.menu.cursor], &screen->itemTables[2]);
+                LabItem_InitSaveDataWindow(&screen->saveDataWindow, 214, 69, &screen->saveSlots[screen->deleteDataWindow.menu.cursor], &screen->itemTables[2]);
                 screen->state = 5;
             }
             break;
@@ -328,7 +328,7 @@ s32 LabItem_UpdateScreen(LabItemScreen* screen) {
                 screen->state = 4;
             } else if (res == 1) {
                 screen->state = 6;
-                LabItem_InitConfirmWindow(&screen->confirmWindow, 0xBA, 0xAE, D_89018760, D_8901876C);
+                LabItem_InitConfirmWindow(&screen->confirmWindow, 186, 174, D_89018760, D_8901876C);
                 screen->confirmWindow.choice.cursor = 1;
             }
             break;
@@ -361,9 +361,9 @@ void LabTerminal_DrawMenuRow(s32 x, s32 y, char* text, s32 index, s32 flags, s32
     s32 temp_v0 = *width;
 
     if (flags & 8) {
-        Ui_DrawFilledFrame(x + 3, y + 3, temp_v0 - 6, 0x1A, D_8900A6E8);
+        Ui_DrawFilledFrame(x + 3, y + 3, temp_v0 - 6, 26, D_8900A6E8);
     } else if (flags & 2) {
-        Ui_DrawRoundedFrame(x + 2, y + 2, temp_v0 - 4, 0x1C, D_80073520);
+        Ui_DrawRoundedFrame(x + 2, y + 2, temp_v0 - 4, 28, D_80073520);
     }
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(flags);
@@ -377,7 +377,7 @@ M2C_UNK func_80027804();
  * Sets up a terminal menu window with its rows and title.
  * Seen in play (2026-11-12) in せいとん: ran on entry as the せいとん menu window appeared.
  */
-void LabTerminal_InitMenuWindow(LabTerminalMenuWindow* win, s32 x, s32 y, s32 width, s32 height, char* names, s32 count, char* descriptions, s32 descriptionLines, char* title) {
+void LabTerminal_InitMenuWindow(LabTerminalMenuWindow* win, s32 x, s32 y, s32 width, s32 height, char* names, s32 count, char* descriptions, s32 description_lines, char* title) {
 
     Window_SetRect((s8*)&win->window, x, y, width, height);
     win->window.state = 0;
@@ -385,9 +385,9 @@ void LabTerminal_InitMenuWindow(LabTerminalMenuWindow* win, s32 x, s32 y, s32 wi
     win->window.frame.style = 0x801;
     win->window.title = title;
     func_80027804(&win->items, names, count, count);
-    Menu_Init((s8*)&win->menu, (s32)&win->items, (s32)win->itemFlags, (s32)LabTerminal_DrawMenuRow, width - 0xC, 0x20);
+    Menu_Init((s8*)&win->menu, (s32)&win->items, (s32)win->itemFlags, (s32)LabTerminal_DrawMenuRow, width - 12, 0x20);
     win->descriptions = (char**)descriptions;
-    win->descriptionLines = descriptionLines;
+    win->descriptionLines = description_lines;
 }
 
 extern Color_RGBA8 D_8900A6FC;
@@ -405,15 +405,15 @@ void LabTerminal_DrawMenuWindow(LabTerminalMenuWindow* win) {
         h = (win->menu.items->count << 5) + 8;
         Ui_DrawTexturedDivider(win->window.frame.x, win->window.frame.y + h + 5, win->window.frame.width, D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(win->window.frame.x + 6, win->window.frame.y + 6, win->window.frame.width - 0xC, h, *(Color_RGBA8*)&D_8900A5BC);
-        Ui_FillRectPrimEnvColor(win->window.frame.x + 6, win->window.frame.y + h + 0xC, win->window.frame.width - 0xC, win->descriptionLines * 0x1C, D_8900A6FC, D_8900A700);
+        func_80029028(win->window.frame.x + 6, win->window.frame.y + 6, win->window.frame.width - 12, h, *(Color_RGBA8*)&D_8900A5BC);
+        Ui_FillRectPrimEnvColor(win->window.frame.x + 6, win->window.frame.y + h + 12, win->window.frame.width - 12, win->descriptionLines * 28, D_8900A6FC, D_8900A700);
         sp38 = win->window.frame.width - 0xC;
-        Menu_DrawItems(&win->menu, win->window.frame.x + 6, win->window.frame.y + 0xA, 0xFFEF, (s32)&sp38);
+        Menu_DrawItems(&win->menu, win->window.frame.x + 6, win->window.frame.y + 10, 0xFFEF, (s32)&sp38);
         Font_BeginTranslucentTextRendering();
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         Font_SetActive(8, 0);
-        Font_SetLineHeight(0x1C);
-        Font_Printf(win->window.frame.x + 0xE, win->window.frame.y + h + 0x10, win->descriptions[win->menu.cursor]);
+        Font_SetLineHeight(28);
+        Font_Printf(win->window.frame.x + 14, win->window.frame.y + h + 0x10, win->descriptions[win->menu.cursor]);
         Font_EndTexturedTextRendering();
     }
 }
@@ -455,7 +455,7 @@ void LabTerminal_InitMenuWindow(LabTerminalMenuWindow*, s32, s32, s32, s32, char
  * Seen in play (2026-11-14) in せいとん.
  */
 void LabTerminal_InitMainMenu(LabTerminalMenuWindow* win) {
-    LabTerminal_InitMenuWindow(win, 0x30, 0x5C, 0x170, 0xCE, D_8900A704, 3, D_8900A710, 3, D_890188F4);
+    LabTerminal_InitMenuWindow(win, 48, 92, 368, 206, D_8900A704, 3, D_8900A710, 3, D_890188F4);
 }
 
 void BgStage_DrawFrame(void);                            /* extern */
@@ -564,7 +564,7 @@ s32 LabTerminal_UpdateFade(s32 unused) {
     GbSave_DrawSummaryBar(0, var_a1, &D_8901890C, D_89019108);
     n = D_8900A71C;
     func_8002C8D8(&sp2C, *(Col8900429C*)&D_8900A5B8, n / (f64)8.0f);
-    Ui_DrawTintedScreenBackground(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
+    Ui_DrawTintedScreenBackground(56, 480, sp2C.r, sp2C.g, sp2C.b);
     if (D_8900A720 == 0) {
         n = D_8900A71C;
         n++;

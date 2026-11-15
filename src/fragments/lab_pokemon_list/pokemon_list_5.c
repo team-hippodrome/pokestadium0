@@ -146,7 +146,7 @@ s32 LabPCList_UpdateSortMenu(LabPCListScreen* screen) {
                     break;
                 case 4:
                     screen->state = 1;
-                    LabSourceSelect_Init(&screen->sourceSelectWindow, 0x78, 0x67, (s8*)&screen->sourceMatrix, D_8910A7F4);
+                    LabSourceSelect_Init(&screen->sourceSelectWindow, 120, 103, (s8*)&screen->sourceMatrix, D_8910A7F4);
                     return 0;
             }
         } else {

@@ -26,13 +26,13 @@
 M2C_UNK Gfx_DrawPatternRows(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 void Audio_PlaySystemSound(s32); // Audio_PlaySoundEffectById
 extern s32 sPokedexMenuSelection; // the selected item, 0-5
-extern char sPokedexMenuTitleText[]; // "ポケモンずかん"
-extern char sPokedexMenuPokedexText[]; // "ずかん"
-extern char sPokedexMenuPokemonText[]; // "ポケモン"
-extern char sPokedexMenuItemsText[]; // "どうぐ"
-extern char sPokedexMenuNameText[]; // "なまえ"
-extern char sPokedexMenuSettingsText[]; // "せってい"
-extern char sPokedexMenuCloseText[]; // "とじる"
+extern char sPokedexMenuTitleText[]; // "ポケモンずかん" (Pokédex)
+extern char sPokedexMenuPokedexText[]; // "ずかん" (Pokédex)
+extern char sPokedexMenuPokemonText[]; // "ポケモン" (Pokémon)
+extern char sPokedexMenuItemsText[]; // "どうぐ" (Items)
+extern char sPokedexMenuNameText[]; // "なまえ" (Name)
+extern char sPokedexMenuSettingsText[]; // "せってい" (Settings)
+extern char sPokedexMenuCloseText[]; // "とじる" (Close)
 
 /**
  * Prints one item's text at (x, y), in yellow when `index` is the selected item.
@@ -41,11 +41,11 @@ extern char sPokedexMenuCloseText[]; // "とじる"
  */
 void PokedexMenu_DrawItem(s32 index, s32 x, s32 y, char* text) {
     if (index == sPokedexMenuSelection) {
-        Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF); // #FFFF00FF
     }
     Font_Printf(x, y, text);
     if (index == sPokedexMenuSelection) {
-        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFFFF
     }
 }
 
@@ -56,21 +56,21 @@ void PokedexMenu_DrawItem(s32 index, s32 x, s32 y, char* text) {
  */
 s32 PokedexMenu_Draw(s32 fade_mode) {
     BgStage_DrawFrame();
-    Gfx_DrawPatternRows(0, 0x1E0, 0x32, 0x64, 0xA2);
-    Ui_DrawTextureMarker(0xA0, (sPokedexMenuSelection * 0x1E) + 0xC8);
+    Gfx_DrawPatternRows(0, 480, 0x32, 0x64, 0xA2);
+    Ui_DrawTextureMarker(160, (sPokedexMenuSelection * 30) + 200);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(0x20, 0);
     Font_EnableTwoCycleTexturing();
-    Gfx_SetPrimColor(0xFF, 0x6B, 0x5A, 0xFF);
-    Font_Printf(0xB4, 0x28, sPokedexMenuTitleText);
+    Gfx_SetPrimColor(0xFF, 0x6B, 0x5A, 0xFF); // #FF6B5AFF
+    Font_Printf(180, 40, sPokedexMenuTitleText);
     Font_DisableTwoCycleTexturing();
     Font_SetActive(0x10, 0);
-    PokedexMenu_DrawItem(0, 0xC8, 0xC8, sPokedexMenuPokedexText);
-    PokedexMenu_DrawItem(1, 0xC8, 0xE6, sPokedexMenuPokemonText);
-    PokedexMenu_DrawItem(2, 0xC8, 0x104, sPokedexMenuItemsText);
-    PokedexMenu_DrawItem(3, 0xC8, 0x122, sPokedexMenuNameText);
-    PokedexMenu_DrawItem(4, 0xC8, 0x140, sPokedexMenuSettingsText);
-    PokedexMenu_DrawItem(5, 0xC8, 0x15E, sPokedexMenuCloseText);
+    PokedexMenu_DrawItem(0, 200, 200, sPokedexMenuPokedexText);
+    PokedexMenu_DrawItem(1, 200, 230, sPokedexMenuPokemonText);
+    PokedexMenu_DrawItem(2, 200, 260, sPokedexMenuItemsText);
+    PokedexMenu_DrawItem(3, 200, 290, sPokedexMenuNameText);
+    PokedexMenu_DrawItem(4, 200, 320, sPokedexMenuSettingsText);
+    PokedexMenu_DrawItem(5, 200, 350, sPokedexMenuCloseText);
     Font_EndTexturedTextRendering();
     return 0;
 }
@@ -87,7 +87,7 @@ s32 PokedexMenu_Draw(s32 fade_mode) {
 void PokedexMenu_UpdateCursor(void) {
     s32 dpad;
 
-    if (!sPokedexMenuSelection) {  // karodo
+    if (!sPokedexMenuSelection) {  // FAKE: permuter-found empty if
     }
     dpad = Input_GetRepeatedDPad();
     if (dpad != D_JPAD) {

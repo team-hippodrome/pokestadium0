@@ -243,6 +243,12 @@ s32 Deck_GetSaveEntryTrainerId(s32, s32);
 s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2);
 s32 Deck_GetSaveEntryCount(s32, s32);
 s32 func_8000A4E8(char*, char*);
+/**
+ * Sets up the three item lists: the bag (deck 0x23, up to 20 rows), the GB cartridge's PC (deck 0x22,
+ * up to 50 rows) and the Game Pak item box in the 64 cartridge (deck 0x12, up to 100 rows). The item box
+ * is the one of the four 0x12 slots whose trainer ID and name match the GB save; with no match the third
+ * list is marked absent (unk_04 = 0).
+ */
 void LabPCList_InitDeckCategories(unk_func_8830867C_02C_154* decks, void* bag_buffer, void* pc_buffer, void* cart_buffer) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 temp_s1;
@@ -307,15 +313,15 @@ void LabPCList_WriteDeckCategory(unk_func_8830867C_02C_154* deck) {
 }
 
 /**
- * Returns whether an item id is a TM or HM and turns it into its usable-item code: TMs (0xC9-0xFA) 100-149, HMs (0xC4-0xC8) 200-204.
+ * Returns whether an item id is a TM or HM and turns it into its usable-item code: TMs (201-250) 100-149, HMs (196-200) 200-204.
  * Seen in play (2026-11-14) in いちらん: わざマシン06 was listed among the usable items.
  */
 s32 LabPCList_IsTmHmItemId(s32* item_id) {
-    if ((*item_id >= 0xC9) && (*item_id < 0xFB)) {
-        *item_id -= 0x65;
+    if ((*item_id >= 201) && (*item_id < 251)) {
+        *item_id -= 101;
         return 1;
     }
-    if ((*item_id >= 0xC4) && (*item_id < 0xC9)) {
+    if ((*item_id >= 196) && (*item_id < 201)) {
         *item_id += 4;
         return 1;
     }
@@ -323,11 +329,11 @@ s32 LabPCList_IsTmHmItemId(s32* item_id) {
 }
 
 /**
- * Returns whether an item id is HP Up, Protein, Iron, Carbos, Calcium or Rare Candy (0x23-0x28) and turns it into 0-5.
+ * Returns whether an item id is HP Up, Protein, Iron, Carbos, Calcium or Rare Candy (35-40) and turns it into 0-5.
  * Seen in play (2026-11-14) in いちらん: マックスアップ, タウリン, ブロムヘキシン, インドメタシン, リゾチウム and ふしぎなアメ were listed.
  */
 s32 LabPCList_IsVitaminItemId(s32* item_id) {
-    static u8 D_8831A250[] = { 0x23, 0x24, 0x25, 0x26, 0x27, 0x28 };
+    static u8 D_8831A250[] = { 35, 36, 37, 38, 39, 40 };
 
     s32 i;
 
@@ -490,10 +496,10 @@ void LabPCList_UpdateItemUsability(s8* items, u8* mon) {
         M2C_FIELD(base[i], s32*, 0x10) = 0;
         e = base[i];
         if (M2C_FIELD(e, s32*, 8) >= 100) {
-            if (**(u8**)e >= 0xC9) {
-                move = **(u8**)e - 0xC9;
+            if (**(u8**)e >= 201) {
+                move = **(u8**)e - 201;
             } else {
-                move = **(u8**)e - 0x92;
+                move = **(u8**)e - 146;
             }
             n = BattleMon_CountMoves(mon);
             for (j = 0; j < n; j++) {
@@ -520,27 +526,27 @@ void LabPCList_UpdateItemUsability(s8* items, u8* mon) {
         } else {
             switch (**(u8**)e) {
                 case 35:
-                    if (M2C_FIELD(mon, u16*, 0x14) >= 0x6400) {
+                    if (M2C_FIELD(mon, u16*, 0x14) >= 25600) {
                         M2C_FIELD(e, s32*, 0x10) |= 1;
                     }
                     break;
                 case 36:
-                    if (M2C_FIELD(mon, u16*, 0x16) >= 0x6400) {
+                    if (M2C_FIELD(mon, u16*, 0x16) >= 25600) {
                         M2C_FIELD(e, s32*, 0x10) |= 1;
                     }
                     break;
                 case 37:
-                    if (M2C_FIELD(mon, u16*, 0x18) >= 0x6400) {
+                    if (M2C_FIELD(mon, u16*, 0x18) >= 25600) {
                         M2C_FIELD(e, s32*, 0x10) |= 1;
                     }
                     break;
                 case 38:
-                    if (M2C_FIELD(mon, u16*, 0x1A) >= 0x6400) {
+                    if (M2C_FIELD(mon, u16*, 0x1A) >= 25600) {
                         M2C_FIELD(e, s32*, 0x10) |= 1;
                     }
                     break;
                 case 39:
-                    if (M2C_FIELD(mon, u16*, 0x1C) >= 0x6400) {
+                    if (M2C_FIELD(mon, u16*, 0x1C) >= 25600) {
                         M2C_FIELD(e, s32*, 0x10) |= 1;
                     }
                     break;

@@ -81,9 +81,9 @@ void LabPCList_DrawListScreen(LabPCListScreen* screen) {
     if (Window_DrawAnimatedFrame() != 0) {
         return;
     }
-    Window_DrawHeaderStripe(screen->window.frame.x, screen->window.frame.y - 0xA, 0x1F4);
+    Window_DrawHeaderStripe(screen->window.frame.x, screen->window.frame.y - 10, 500);
     Window_DrawFrame((s8*)&screen->headerFrame);
-    Ui_DrawTexturedDivider(screen->window.frame.x, screen->window.frame.y + 0x23, screen->window.frame.width, D_8007356C);
+    Ui_DrawTexturedDivider(screen->window.frame.x, screen->window.frame.y + 35, screen->window.frame.width, D_8007356C);
     LabPCList_DrawPageHint(screen);
     ScrollList_DrawScrollArrows((s8*)&screen->list, screen->listFrame.x, screen->listFrame.y - 0x10,
                   screen->listFrame.y + screen->listFrame.height, screen->listFrame.width);
@@ -97,8 +97,8 @@ void LabPCList_DrawListScreen(LabPCListScreen* screen) {
     sel = (screen->focus == 1) ? (((screen->state != 0) ? 0x10 : 0) | 2) : 0;
     LabPCList_DrawDetailColumns(screen, screen->listFrame.x, screen->listFrame.y, sel);
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(screen->listFrame.x, screen->listFrame.y + 0x14, screen->listFrame.width, 2, D_8910A88C);
-    func_80029028(screen->listFrame.x + 0x76, screen->listFrame.y, 2, screen->listFrame.height, D_8910A88C);
+    func_80029028(screen->listFrame.x, screen->listFrame.y + 20, screen->listFrame.width, 2, D_8910A88C);
+    func_80029028(screen->listFrame.x + 118, screen->listFrame.y, 2, screen->listFrame.height, D_8910A88C);
     if (screen->state == 0) {
         switch (screen->focus) {
             case 0:
@@ -190,19 +190,19 @@ void LabPCList_ClearFilterFlags(LabPCListScreen* screen) {
     screen->activeFilters = 0;
 }
 
-/**
- * Toggles filter flags `flag` and returns whether they are now on.
- * Seen in play (2026-11-12) in いちらん: バトルようのポケモンをあつめる called this with 0x20; the flag word went 0
- * -> 0x20 and it returned 0x20 (on). The menu entry then read バトルようのポケモンをかいじょする.
- */
 typedef struct unk_func_89101D80 {
     /* 0x00 */ char unk00[0x7C];
     /* 0x7C */ s32 flags;
 } unk_func_89101D80;
 
-s32 LabPCList_ToggleFilterFlag(unk_func_89101D80* arg0, s32 arg1) {
-    arg0->flags ^= arg1;
-    return arg0->flags & arg1;
+/**
+ * Toggles filter flags `flag` and returns whether they are now on.
+ * Seen in play (2026-11-12) in いちらん: バトルようのポケモンをあつめる called this with 0x20; the flag word went 0
+ * -> 0x20 and it returned 0x20 (on). The menu entry then read バトルようのポケモンをかいじょする.
+ */
+s32 LabPCList_ToggleFilterFlag(unk_func_89101D80* arg0, s32 flag) {
+    arg0->flags ^= flag;
+    return arg0->flags & flag;
 }
 
 extern s32 D_8910D990[];
@@ -277,7 +277,7 @@ void LabPCList_OpenColumnMenu(LabPCListScreen* screen) {
         case 15:
             screen->state = 3;
             LabPCList_InitPopupMenu(&screen->popup, D_8910D910[sel].a, (s8*)&screen->popupItemFlags, D_8910D910[sel].b, 0);
-            Window_SetRect((s8*)&screen->popup.anchorX, LabPCList_GetColumnCursorX(screen), screen->listFrame.y, 0, 0x16);
+            Window_SetRect((s8*)&screen->popup.anchorX, LabPCList_GetColumnCursorX(screen), screen->listFrame.y, 0, 22);
             screen->popup.limitX = screen->listFrame.x + screen->listFrame.width;
             screen->popup.limitY = screen->listFrame.y + screen->listFrame.height;
             LabPCList_PlacePopup(&screen->popup);
@@ -285,14 +285,14 @@ void LabPCList_OpenColumnMenu(LabPCListScreen* screen) {
             break;
         case 4:
         case 5:
-            LabPCList_InitTypeFilter(&screen->typeFilterWindow, 0x81, 0x94, &screen->typeFilterCount);
+            LabPCList_InitTypeFilter(&screen->typeFilterWindow, 129, 148, &screen->typeFilterCount);
             screen->state = 5;
             break;
         case 6:
         case 7:
         case 8:
         case 9:
-            LabPCList_InitMoveFilter(&screen->moveFilterWindow, 0x81, 0x94, screen->moveFilterMoves);
+            LabPCList_InitMoveFilter(&screen->moveFilterWindow, 129, 148, screen->moveFilterMoves);
             screen->state = 6;
             break;
     }
@@ -321,8 +321,8 @@ void LabPCList_FormatGatherPrompt(LabPCListScreen* screen) {
     *(Str891020F8*)D_8910E312 = *(Str891020F8*)D_8910DC50;
     func_8000A460(D_8910E2D0 + (func_800566BC(D_8910E312) + 0x42), D_8910A890[(screen->activeFilters & 0x10) ? 1 : 0]);
     LabPCList_InitPopupMenu(&screen->popup, D_8910A898, (s8*)screen->popupItemFlags, 4, 0);
-    Window_SetRect((s8*)&screen->popup.anchorX, screen->listFrame.x + 0x26,
-                  screen->listFrame.y + screen->list.cursorY - screen->list.scrollY + 0x16, 0, 0x14);
+    Window_SetRect((s8*)&screen->popup.anchorX, screen->listFrame.x + 38,
+                  screen->listFrame.y + screen->list.cursorY - screen->list.scrollY + 22, 0, 20);
     screen->popup.limitX = screen->listFrame.x + screen->listFrame.width;
     screen->popup.limitY = screen->listFrame.y + screen->listFrame.height;
     LabPCList_PlacePopup(&screen->popup);
@@ -393,7 +393,7 @@ void LabPCList_InitSortMenu(LabPCListScreen *screen) {
     func_8000A460(D_8910E358, D_8910A8B0);
     func_8000A460(D_8910E358 + func_800566BC(D_8910E358), D_8910A8A8[(screen->activeFilters & 0x20) ? 1 : 0]);
     LabPCList_InitPopupMenu(&screen->popup, D_8910A8C8, (s8*)&screen->popupItemFlags, 5, 0);
-    Window_SetRect((s8*)&screen->popup.anchorX, screen->listFrame.x + 0x26, screen->listFrame.y, 0, 0x16);
+    Window_SetRect((s8*)&screen->popup.anchorX, screen->listFrame.x + 38, screen->listFrame.y, 0, 22);
     screen->popup.limitX = screen->listFrame.x + screen->listFrame.width;
     screen->popup.limitY = screen->listFrame.y + screen->listFrame.height;
     LabPCList_PlacePopup(&screen->popup);
@@ -509,19 +509,19 @@ s32 LabPCList_UpdateSourceSelect(LabPCListScreen* screen)
   s32 temp_v0;
   s8 *new_var; // FAKE: permuter temp
   temp_v0 = LabSourceSelect_Update(&screen->sourceSelectWindow);
-  new_var2 = (s8*)&screen->rows;
+  new_var2 = (s8*)&screen->rows; // FAKE: permuter temp
   if (temp_v0 == (-1))
   {
-    goto block_4;
+    goto block_4; // FAKE: decomp goto
   }
   if (temp_v0 == 1)
   {
-    new_var = (s8*)&screen->sourceMatrix;
-    LabPCList_FlattenEntries((PointerList*)new_var2, (unk_func_8830867C_02C_144*)new_var);
+    new_var = (s8*)&screen->sourceMatrix; // FAKE: permuter temp
+    LabPCList_FlattenEntries((PointerList*)new_var2, (unk_func_8830867C_02C_144*)new_var); // FAKE: permuter temp
     LabPCList_ApplyFiltersAndSort(screen);
-    *((s32 *) (((s8 *) screen) + 0x88)) = 0;
+    *((s32 *) (((s8 *) screen) + 0x88)) = 0; // FAKE: decomp slop, raw pointer casts stand in for struct fields
     block_4:
-    *((s32 *) (((s8 *) screen) + 0x88)) = 0;
+    *((s32 *) (((s8 *) screen) + 0x88)) = 0; // FAKE: decomp slop, raw pointer casts stand in for struct fields
 
   }
   return 0;
