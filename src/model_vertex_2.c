@@ -9,15 +9,15 @@ extern s32 D_800AAE30;
 extern s32 D_800AAF3C;
 
 #include "global.h"
-extern s16 D_80074670[0x102];
-extern s16 D_80074874[0x102];
-extern s16 D_80074A78[0x102];
-extern s16 D_80074C7C[0x102];
-extern s16 D_80074E80[0x102];
-extern s16 D_80075084[0x102];
-extern s16 D_80075288[0x102];
-extern s16 D_8007548C[0x102];
-extern s16 D_80075690[0x102];
+extern s16 D_80074670[258];
+extern s16 D_80074874[258];
+extern s16 D_80074A78[258];
+extern s16 D_80074C7C[258];
+extern s16 D_80074E80[258];
+extern s16 D_80075084[258];
+extern s16 D_80075288[258];
+extern s16 D_8007548C[258];
+extern s16 D_80075690[258];
 extern f32 D_80075894[16];
 extern Vec3fCounter* D_800B32C0;
 extern PosBlend D_800B32C8[0x10];

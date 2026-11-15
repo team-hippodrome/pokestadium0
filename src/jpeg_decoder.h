@@ -24,8 +24,8 @@ typedef struct JpegWork {
     /* 0x220 */ JpegQuantizationTable qTableY;
     /* 0x2A0 */ JpegQuantizationTable qTableU;
     /* 0x320 */ JpegQuantizationTable qTableV;
-    /* 0x3A0 */ u8 codesLengths[0x110];
-    /* 0x4B0 */ u16 codes[0x108];
+    /* 0x3A0 */ u8 codesLengths[272];
+    /* 0x4B0 */ u16 codes[264];
     /* 0x6C0 */ u16 data[4][0x180];
 } JpegWork; // size = 0x12C0
 

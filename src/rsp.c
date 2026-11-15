@@ -11,7 +11,7 @@
 #define SRAM_pageSize 0xd
 #define SRAM_relDuration 0x2
 extern OSThread gRspThread;
-extern u8 gRspThreadStack[0x9C];
+extern u8 gRspThreadStack[156];
 extern OSMesg D_80086F7C;
 extern StorageQueues D_80087000;
 extern s16 D_8008704C;

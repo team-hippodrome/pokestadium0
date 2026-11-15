@@ -5,15 +5,15 @@
 #include "misc_stubs.h"
 #include "audio_manager.h"
 #include "model_vertex_draw.h"
-extern s16 D_80074670[0x102];
-extern s16 D_80074874[0x102];
-extern s16 D_80074A78[0x102];
-extern s16 D_80074C7C[0x102];
-extern s16 D_80074E80[0x102];
-extern s16 D_80075084[0x102];
-extern s16 D_80075288[0x102];
-extern s16 D_8007548C[0x102];
-extern s16 D_80075690[0x102];
+extern s16 D_80074670[258];
+extern s16 D_80074874[258];
+extern s16 D_80074A78[258];
+extern s16 D_80074C7C[258];
+extern s16 D_80074E80[258];
+extern s16 D_80075084[258];
+extern s16 D_80075288[258];
+extern s16 D_8007548C[258];
+extern s16 D_80075690[258];
 extern f32 D_80075894[16];
 extern Vec3fCounter* D_800B32C0;
 extern PosBlend D_800B32C8[0x10];
@@ -89,7 +89,7 @@ void Audio_QueueSoundWithFallbackList(u16, u16*, u8*);
 u32 Battle_EstimateMoveDamage(u32, struct BattleMonRuntime*, struct BattleMonRuntime*);
 s32 Battle_MapCategoryIdToCompactIndex(u8);
 ALDMAproc __amDmaNew(AMDMAState** state);
-extern u8 sMusicSeqTables[0x134];
+extern u8 sMusicSeqTables[308];
 
 #include <PR/os_internal_reg.h>
 #include "global.h"

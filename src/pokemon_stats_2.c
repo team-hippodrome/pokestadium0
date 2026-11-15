@@ -105,7 +105,7 @@ s8 GbCart_IdentifyGame(s32 arg0) {
     // Only part of the rom header,
     // osGbpakReadId reads from 0x100 but this reads from 0x120
     typedef struct RomHeader {
-        /* 0x00 */ char nintendo_chr[0x14];
+        /* 0x00 */ char nintendo_chr[20];
         /* 0x14 */ char game_title[16];
         /* 0x24 */ u16 company_code;
         /* 0x26 */ u8 body_code;
