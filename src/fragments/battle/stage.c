@@ -68,7 +68,7 @@ void Battle_DrawStageBackdrop(void);
 void Battle_DrawClippedTextureRect(s32 x1, s32 y1, s32 x2, s32 y2);
 void Battle_UpdateFaintBatches(void);
 
-// called every frame: bug boy in GLC
+// called every frame: bug boy in GLC (Stadium 1 note; Zero has no Gym Leader Castle)
 // Geo_ProcessNodeChildren invokes render callbacks with event 2.
 /**
  * Stage graph node callback: on event 2, runs the stage camera's battle animation
@@ -83,7 +83,7 @@ s32 Battle_StageGeoDispatchCallback(s32 event, GraphNode* node) {
     return 0;
 }
 
-// called every frame: bug boy in GLC
+// called every frame: bug boy in GLC (Stadium 1 note; Zero has no Gym Leader Castle)
 // Orient the first stage light relative to the current camera's viewing axis.
 /**
  * Stage light callback: on event 2, points the light 45 degrees off the camera's view
@@ -105,7 +105,7 @@ s32 Battle_StageLightAngleCallbackA(s32 event, GeoLightNode* light) {
     return 0;
 }
 
-// called every frame: bug boy in GLC
+// called every frame: bug boy in GLC (Stadium 1 note; Zero has no Gym Leader Castle)
 // Apply presentation effects to each of the three stage-layout containers.
 /**
  * Stage model callback: on event 2, applies the stage scale and tint color.
@@ -154,7 +154,7 @@ extern u8 D_8FB08900[];
 extern Gfx D_80060398[];
 
 /**
- * called every frame: bug boy in GLC
+ * called every frame: bug boy in GLC (Stadium 1 note; Zero has no Gym Leader Castle)
  * Archive entry 2 returns a tagged backdrop value: NULL clears depth, -1 fills
  * black, a value below 0x10000 is RGBA5551, and larger values address a texture.
  * The 4 x 64 RGBA32 texture stretches over the upper half; its last row fills below.
@@ -240,7 +240,7 @@ void Battle_RenderActivePokemonThumbnail(GraphNode* thumbnail_root, GfxImage* th
 
 s32 Stage_ClipRectToClearArea(s32 *, s32 *, s32 *, s32 *);
 /**
- * called every frame: bug boy in GLC
+ * called every frame: bug boy in GLC (Stadium 1 note; Zero has no Gym Leader Castle)
  * Use clipped destination offsets as 10.5 texture coordinates with a half-texel bias.
  * @src/gfx_rect.c
  * Seen in play (2026-11-13) in the 165-move sweep: for (0x17, 0x48, 0x3B, 0x51) it emitted
@@ -259,7 +259,7 @@ void Battle_DrawClippedTextureRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     }
 }
 
-// called every frame: bug boy in GLC
+// called every frame: bug boy in GLC (Stadium 1 note; Zero has no Gym Leader Castle)
 // Load full-width source rows and draw at half size using the clipped rectangle helper.
 /**
  * Loads a band of an RGBA16 texture and draws it as a clipped rectangle at (x1, y1).
@@ -344,7 +344,7 @@ void Battle_ResetFaintBatches(void) {
 }
 
 /**
- * called every frame: bug boy in GLC
+ * called every frame: bug boy in GLC (Stadium 1 note; Zero has no Gym Leader Castle)
  * Stamp newly observed zero-HP Pokemon with the same batch number this frame.
  * Increment once per nonempty batch, so simultaneous faints share a stamp.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
@@ -392,7 +392,7 @@ void BattleStage_UnusedNopA(void) {
 void BattleStage_UnusedNopB(void) {
 }
 
-// called every frame: bug boy in GLC
+// called every frame: bug boy in GLC (Stadium 1 note; Zero has no Gym Leader Castle)
 // Advance simulation/presentation, capture dirty thumbnails, then draw the scene and UI.
 /**
  * Runs one battle frame: advances animations, updates both sides, the thumbnails and the
@@ -473,7 +473,7 @@ s32 func_800010B8(void);
 s32 func_8003BF40(u8*);
 void func_8000D304(void);
 /**
- * triggers every frame: bug boy in GLC
+ * triggers every frame: bug boy in GLC (Stadium 1 note; Zero has no Gym Leader Castle)
  * Count the initial two callbacks toward zero; once the gate is zero, the attract
  * demo battle (mode 16) can request exit on a button press. The normal path waits for the scene result.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
@@ -510,7 +510,7 @@ extern SessionContext* D_82198D10;
 void func_8000A7FC(s32);
 
 /**
- * triggers every frame: bug boy in GLC
+ * triggers every frame: bug boy in GLC (Stadium 1 note; Zero has no Gym Leader Castle)
  * BgStage_WaitForCondition passes the current fade mode and starts the exit fade
  * after a nonzero return. Latch 2 prevents repeating the audio shutdown request.
  * @src/stage_loader.c
@@ -558,7 +558,7 @@ s32 Battle_FrameCallback(s32 fade_mode) {
     return 0;
 }
 
-// triggers on battle start: bug boy in glc
+// triggers on battle start: bug boy in glc (Stadium 1 note; Zero has no Gym Leader Castle)
 // Preserve the picked prefix and append missing roster indices 0..5 in order.
 // This completes the copy order; it does not choose additional battle participants.
 /**
@@ -589,7 +589,7 @@ extern u8 D_82189174[];
 void BattleAi_SelectTeam(TeamRoster*, TeamRoster*, s32, u8*, s32);
 
 /**
- * triggers on battle start: bug boy in glc
+ * triggers on battle start: bug boy in glc (Stadium 1 note; Zero has no Gym Leader Castle)
  * Ask the COM selection routine for the picked prefix, then copy the brought
  * roster in that order. numberOfPokemonChosen keeps only the prefix length.
  * @src/fragments/battle_engine/battle_engine_com_decision_logic.c
@@ -636,7 +636,7 @@ void Battle_SelectComRoster(void) {
     }
 }
 
-// triggers at the start of battle: bug boy in glc
+// triggers at the start of battle: bug boy in glc (Stadium 1 note; Zero has no Gym Leader Castle)
 // Seed icon/presentation state from the side's first trainer and first picked Pokemon.
 /**
  * Sets up a side's model and display state from its first trainer's lead Pokémon and
@@ -722,7 +722,7 @@ s32 BattleScene_Init(s32* arg0) { // FAKE: s32 return (value unused) fixes calle
     MemoryBlock* block;
     unk_D_86002F30* model;
 
-    Battle_SetStageTintColor(0xFF, 0xFF, 0xFF);
+    Battle_SetStageTintColor(0xFF, 0xFF, 0xFF); // #FFFFFF
     Battle_SetStageScale(1.0f);
     if (D_82198D10->mode == 4) {
         Font_Init(4, 0);

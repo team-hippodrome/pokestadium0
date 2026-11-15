@@ -51,7 +51,7 @@ void func_82108C0C(ActivePokemon*);
  */
 void BattleCamera_StartNextBRollShot(CameraNode* camera) {
     if (D_8219A4F4 == 5) {
-        sBattleScene.scene->phaseStep = 0x18;
+        sBattleScene.scene->phaseStep = 24;
         func_8211F9C4(camera);
         return;
     }
@@ -89,10 +89,10 @@ void BattleCamera_StartNextBRollShot(CameraNode* camera) {
             BattleScene_BRollShotAimPokemon1(camera);
             break;
         case 16:
-            BattleScene_BRollShotWideFovPitched(camera);
+            BattleScene_BRollShotWideFovRotatedX(camera);
             break;
         case 18:
-            BattleScene_BRollShotWideFovPitched(camera);
+            BattleScene_BRollShotWideFovRotatedX(camera);
             break;
         case 20:
             BattleScene_BRollShotFrontWide(camera);

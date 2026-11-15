@@ -467,7 +467,7 @@ void func_8212254C(s32, s32, Vec3f, s32, s32, f32, f32);
 extern f32 D_FLT_8219A718;
 
 /**
- * Starts camera path 0x19 on Pokemon arg1: loads its path points into D_FLT_8219A5B0
+ * Starts camera path 0x19 on Pokemon active_pokemon: loads its path points into D_FLT_8219A5B0
  * (BattleCamera_LoadSpeciesPathPoints), mirrors them to its side, places the eye on the first point around its
  * aim point and captures the model orbit.
  * @unverified Name guessed from the code.
@@ -480,7 +480,7 @@ void BattleCamera_StartSpeciesPath(CameraNode* camera, ActivePokemon* active_pok
     s16 sp3E;
     s16 sp3C;
 
-    D_8219A5A0->splineSegmentFrames = 0x19;
+    D_8219A5A0->splineSegmentFrames = 25;
     D_8219A5A0->splineSegment = 1;
     D_8219A5A0->splineT = 0.0f;
     D_8219A5A0->splineKeyframeCount = 0;
@@ -492,14 +492,14 @@ loop:
         count++;
         p++;
         p[-1].y = M2C_FIELD(active_pokemon, f32*, 0x28) + p[-1].y;
-        goto loop;
+        goto loop; // FAKE
     }
     D_8219A5A0->splineKeyframeCount = count;
     BattleScene_GetParticipantAimPoint(active_pokemon, &D_FLT_8219A718);
     func_8212254C((s32)active_pokemon, (s32)camera, *(Vec3f*)&D_FLT_8219A718, 0, 0, 0.0f, (f32)0.0);
     D_FLT_8219A718 *= active_pokemon->facingDirection;
     func_8210BCF0(&D_FLT_8219A718, (Vec3f*)&D_FLT_8219A5B0, &sp40, &sp3E, &sp3C);
-    func_8000EEBC((u8*)camera + 0xB4, (Vec3f*)((u8*)camera + 0xA8), sp40, sp3E, M2C_FIELD(active_pokemon, u32*, 0x60C) * *(sp3Cp = &sp3C));
+    func_8000EEBC((u8*)camera + 0xB4, (Vec3f*)((u8*)camera + 0xA8), sp40, sp3E, M2C_FIELD(active_pokemon, u32*, 0x60C) * *(sp3Cp = &sp3C)); // FAKE
     BattleCamera_CaptureModelOrbit(active_pokemon, camera);
 }
 
@@ -508,8 +508,8 @@ void func_8210BCF0(f32*, Vec3f*, f32*, s16*, s16*);
 void func_8000EEBC(void*, Vec3f*, f32, s16, s32);
 extern f32 D_FLT_8219A718;
 /**
- * Places the camera eye on path point arg4 + arg5 around Pokemon arg0's aim point, mirrored
- * to its side, writing the result to arg3[arg5].
+ * Places the camera eye on path point base_index + index around Pokemon active_pokemon's aim point, mirrored
+ * to its side, writing the result to out_points[index].
  * @unverified Name guessed from the code.
  */
 void BattleCamera_PlacePathPointAroundParticipant(ActivePokemon* active_pokemon, CameraNode* camera, Vec3f* points, Vec3f* out_points, s32 base_index, s32 index) {
@@ -521,7 +521,7 @@ void BattleCamera_PlacePathPointAroundParticipant(ActivePokemon* active_pokemon,
     BattleScene_GetParticipantAimPoint(active_pokemon, &D_FLT_8219A718);
     D_FLT_8219A718 *= active_pokemon->facingDirection;
     func_8210BCF0(&D_FLT_8219A718, &points[base_index + index], &sp2C, &sp28, &sp26);
-    func_8000EEBC((u8*)camera + 0xB4, &out_points[index], sp2C, sp28, M2C_FIELD(active_pokemon, u32*, 0x60C) * *(sp26p = &sp26));
+    func_8000EEBC((u8*)camera + 0xB4, &out_points[index], sp2C, sp28, M2C_FIELD(active_pokemon, u32*, 0x60C) * *(sp26p = &sp26)); // FAKE
 }
 
 extern f32 D_FLT_82189350[][4];
@@ -565,10 +565,10 @@ void BattleCamera_PlacePathPointAroundParticipant(ActivePokemon*, CameraNode*, V
 
 /**
  * Evaluates one step of the spline camera path. BattleCamera_PlacePathPointAroundParticipant is called four
- * times to turn the keyframes arg4[arg5 + 0..3] into points relative to the
- * participant and camera (stored in a local array of four vectors); arg2 then
+ * times to turn the keyframes points[base_index + 0..3] into points relative to the
+ * participant and camera (stored in a local array of four vectors); out then
  * receives the weighted sum of those four points using the four weights in
- * arg3 (the weights come from func_8210C274 / func_8210C330 / func_8210C40C,
+ * weights (the weights come from func_8210C274 / func_8210C330 / func_8210C40C,
  * the Stadium 1 Battle_ComputeSplineWeights variants). Finally the scene's path
  * parameter (+0x04, f32) advances by 1 / (s8 at +0x00).
  *
@@ -738,14 +738,14 @@ loop:
         count++;
         p++;
         p[-1].y = M2C_FIELD(active_pokemon, f32*, 0x28) + p[-1].y;
-        goto loop;
+        goto loop; // FAKE
     }
     D_8219A5A0->splineKeyframeCount = count;
     BattleScene_GetParticipantAimPoint(active_pokemon, &D_FLT_8219A718);
     func_8212254C((s32)active_pokemon, (s32)camera, *(Vec3f*)&D_FLT_8219A718, 0, 0, 0.0f, (f32)0.0);
     D_FLT_8219A718 *= active_pokemon->facingDirection;
     func_8210BCF0(&D_FLT_8219A718, (Vec3f*)&D_FLT_8219A5B0, &sp40, &sp3E, &sp3C);
-    func_8000EEBC((u8*)camera + 0xB4, (Vec3f*)((u8*)camera + 0xA8), sp40, sp3E, M2C_FIELD(active_pokemon, u32*, 0x60C) * *(sp3Cp = &sp3C));
+    func_8000EEBC((u8*)camera + 0xB4, (Vec3f*)((u8*)camera + 0xA8), sp40, sp3E, M2C_FIELD(active_pokemon, u32*, 0x60C) * *(sp3Cp = &sp3C)); // FAKE
     BattleCamera_CaptureModelOrbit(active_pokemon, camera);
 }
 

@@ -12,7 +12,7 @@ extern f32 D_FLT_82199EB0;
 /**
  * Counts the command phase's frame timer (D_FLT_82199EB0) up to 150; returns 1
  * once it is there. Runs every frame while the sides pick their actions. The
- * COM's choice is timed off it: the AI runs at frame 1 (60 for a replacement
+ * COM's choice is timed off it: the COM runs at frame 1 (60 for a replacement
  * after a faint), the COM box shows its pick from frame 30, and the pick is
  * final at frame 90 (or 10 once the player has picked). Nothing times out.
  */
@@ -153,12 +153,12 @@ s32 BattleMenu_HandleNoUsableMoves(arg0) ActivePokemon *arg0;
   }
   else
   {
- do { for (i = 0; i < 4; i++) { var_v1 |= temp_a0->pp[i] & 0x3F; } } while (0);
+ do { for (i = 0; i < 4; i++) { var_v1 |= temp_a0->pp[i] & 0x3F; } } while (0); // FAKE
   }
   if (var_v1 == 0)
   {
     temp_v0 = &arg0->state;
-    if ((*((s32 *) (((s8 *) arg0) + 0xA04))) == 0)
+    if ((*((s32 *) (((s8 *) arg0) + 0xA04))) == 0) // FAKE
     {
       if (temp_v0->selectedCommandOption == 0)
       {
@@ -332,12 +332,12 @@ void BattleMenu_UpdateMoveMenu(ActivePokemon* arg0) {
  */
 s32 BattleScene_HandlePlayerMoveSelectionLocked(s8 *active_pokemon, M2C_UNK unused)
 {
-  *((s8 *) (((s8 *) active_pokemon) + 0x7B6)) = 1;
-  if (1)
+  *((s8 *) (((s8 *) active_pokemon) + 0x7B6)) = 1; // FAKE
+  if (1) // FAKE
   {
-    *((s8 *) (((s8 *) active_pokemon) + 0x7B6)) = 1;
+    *((s8 *) (((s8 *) active_pokemon) + 0x7B6)) = 1; // FAKE
     BattleMenu_UpdateMoveMenu(active_pokemon);
-    *((s8 *) (((s8 *) active_pokemon) + 0x7B6)) = 1;
+    *((s8 *) (((s8 *) active_pokemon) + 0x7B6)) = 1; // FAKE
   }
   return 0;
 }
@@ -853,9 +853,9 @@ s32 BattleMenu_MustStruggle(ActivePokemon* arg0) {
 }
 
 /**
- * When the COM's Pokemon has fainted, asks the AI for a replacement at frame 60
+ * When the COM's Pokemon has fainted, asks the COM for a replacement at frame 60
  * of the command timer (BattleAi_ChooseTurnAction returns 4 + party slot) and
- * returns 1; returns 0 otherwise. Seen in game: after Pinsir fainted the AI
+ * returns 1; returns 0 otherwise. Seen in game: after Pinsir fainted the COM
  * returned 9 and Gengar (party slot 5) came out.
  */
 s32 BattleScene_HandleCpuFaintedSwitch(ActivePokemon* arg0, ActivePokemon* arg1) {
@@ -1124,13 +1124,13 @@ void BattleDebug_SetThumbnailFlagBothSides(void)
   s8 *temp_v1;
   s8 **new_var; // FAKE: permuter temp
   s8 *temp_a1;
-  int pad;
+  int pad; // FAKE: stack padding
   temp_a1 = (s8 *) (*((s8 **) (((s8 *) (*((s8 **) (((s8 *) (&D_82199DE0)) + 0)))) + 0x9CC))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   temp_v1 = *((s8 **) (((s8 *) (*((s8 **) (((s8 *) (&D_82199DE0)) + 0)))) + 0x9CC)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   *((u8 *) (temp_a1 + 1)) = (u8) ((*((u8 *) (((s8 *) temp_v1) + 1))) | 1); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   *((u8 *) (((s8 *) (*((s8 **) (((s8 *) (&D_82199DE0)) + 0)))) + 0x865)) = (u8) ((*((u8 *) (((s8 *) (*((s8 **) (((s8 *) (&D_82199DE0)) + 0)))) + 0x865))) | 1); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  new_var = (s8 **) (((s8 *) (&D_82199DE0)) + 4);
-  ;
+  new_var = (s8 **) (((s8 *) (&D_82199DE0)) + 4); // FAKE
+  ; // FAKE: empty statement
   *((u8 *) (((s8 *) (*((s8 **) (((s8 *) (*((s8 **) (((s8 *) (&D_82199DE0)) + 4)))) + 0x9CC)))) + 1)) = (u8) ((*((u8 *) (((s8 *) (*((s8 **) (((s8 *) (*((s8 **) (((s8 *) (&D_82199DE0)) + 4)))) + 0x9CC)))) + 1))) | 1); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   *((u8 *) (((s8 *) (*new_var)) + 0x865)) = (u8) ((*((u8 *) (((s8 *) (*new_var)) + 0x865))) | 1); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }

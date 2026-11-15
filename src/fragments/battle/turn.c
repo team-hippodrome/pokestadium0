@@ -81,7 +81,7 @@ s32 Battle_TryLoadFollowupMoveFromTarget(void) {
 
 // FAKE: decomp slop. Raw offset casts stand in for battle mon fields.
 /**
- * Self-Destruct and Explosion check of the target's Substitute and state; the body does nothing
+ * Boom move (Self-Destruct, Explosion) check of the target's Substitute and state; the body does nothing
  * in Zero. Runs after every move.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a Pound turn.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
@@ -89,15 +89,15 @@ s32 Battle_TryLoadFollowupMoveFromTarget(void) {
  * Beam, Thrash.
  * @unverified Name and comment from the code.
  */
-void Battle_CheckExplosionVsSubstitute(void)
+void Battle_CheckBoomVsSubstitute(void)
 {
   if (((*((u8 *) (((s8 *) D_8219A3C0) + 0x44))) == 0x78) || ((*((u8 *) (((s8 *) D_8219A3C0) + 0x44))) == 0x99)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
   {
-    if ((*((u8 *) (((s8 *) D_8219A3C4) + 0x4C))) & 0x40)
+    if ((*((u8 *) (((s8 *) D_8219A3C4) + 0x4C))) & 0x40) // FAKE
     {
       return;
     }
-    if (*((u8 *) (((s8 *) D_8219A3C4) + 0x1C)) == 8)
+    if (*((u8 *) (((s8 *) D_8219A3C4) + 0x1C)) == 8) // FAKE
     {
       return;
     }
@@ -365,7 +365,7 @@ s32 Battle_CheckMonCanAct(void) {
                 sBattleCritFlag = 0;
                 sBattleUser->moveCache.power = 0x28;
                 sBattleUser->moveCache.type = 0;
-                InitBattleParameters();
+                Battle_InitParameters();
                 Battle_CalcDamage();
                 sBattleUser->moveCache.effect = sp2D;
                 sBattleTarget->modifiedDefense = sp2E;
@@ -376,7 +376,7 @@ s32 Battle_CheckMonCanAct(void) {
                 Battle_ApplyDamage();
                 sBattleTarget = sBattleUser;
                 sBattleUser = sp34;
-                goto label1;
+                goto label1; // FAKE
             }
         }
     }
@@ -467,7 +467,7 @@ void Battle_RandomizeDamage(void);
  * Battle_CheckCriticalHit, Battle_CalcDamage, Battle_ApplyTypeEffectAndSTAB and the effect
  * dispatch all ran inside it.
  */
-void ProcessBattleTurn(void) {
+void Battle_ProcessTurn(void) {
     s8 sp2C[12];
     u8 effect;
     BattleMonRuntime* user;
@@ -487,12 +487,12 @@ void ProcessBattleTurn(void) {
                 } else {
                     if (Battle_CheckForDisobedience() == 0) {
                         user = sBattleUser;
-                        goto block_29a;
+                        goto block_29a; // FAKE
                     }
                 block_5:
                     switch (sBattleUser->moveCache.effect) {
-                        case 0x27:
-                        case 0x2B:
+                        case 39:
+                        case 43:
                             BattleEffect_ExecuteMoveEffect();
                             return;
                     }
@@ -500,26 +500,26 @@ void ProcessBattleTurn(void) {
             case 3:
                 BattleMessage_PrintUsedMove();
                 Battle_DecrementPP(sBattleScene.scene->actingSide);
-                if (IsByteInArray(sBattleUser->moveCache.effect, D_8218AD4C, 0x10) != 0) {
+                if (Battle_IsByteInArray(sBattleUser->moveCache.effect, D_8218AD4C, 0x10) != 0) {
                     BattleEffect_ExecuteMoveEffect();
                     return;
                 }
-                if (IsByteInArray(sBattleUser->moveCache.effect, D_8218AD5C, 2) != 0) {
+                if (Battle_IsByteInArray(sBattleUser->moveCache.effect, D_8218AD5C, 2) != 0) {
                     BattleEffect_ExecuteMoveEffect();
                 }
             case 4:
-                if (IsByteInArray(sBattleUser->moveCache.effect, D_8218AD60, 2) == 0) {
+                if (Battle_IsByteInArray(sBattleUser->moveCache.effect, D_8218AD60, 2) == 0) {
                     Battle_CheckCriticalHit();
                     if (Battle_Effect_Counter() != 0) {
-                        InitBattleParameters();
+                        Battle_InitParameters();
                         if (Battle_CalcDamage() == 0) {
                             effect = sBattleUser->moveCache.effect;
-                            goto block_29;
+                            goto block_29; // FAKE
                         }
                         Battle_ApplyTypeEffectAndSTAB();
                         Battle_RandomizeDamage();
                     } else {
-                        goto block_24;
+                        goto block_24; // FAKE
                     }
                 }
                 Battle_MoveHitTest();
@@ -530,9 +530,9 @@ void ProcessBattleTurn(void) {
                     effect = user->moveCache.effect;
                     switch (effect) {
                         case 7: // Explosion / Self-Destruct
-                            goto block_28;
+                            goto block_28; // FAKE
                         default:
-                            goto block_29;
+                            goto block_29; // FAKE
                     }
                 }
             case 6:
@@ -541,7 +541,7 @@ void ProcessBattleTurn(void) {
                 user = sBattleUser;
                 user = user; // FAKE: self-assignment
             block_28:
-                Battle_CheckExplosionVsSubstitute();
+                Battle_CheckBoomVsSubstitute();
                 user = sBattleUser;
             block_29a:
                 effect = user->moveCache.effect;
@@ -552,12 +552,12 @@ void ProcessBattleTurn(void) {
                             break;
                         }
                         D_82199F41 = 0;
-                        goto block_5;
-                    case 0x53: // Metronome
+                        goto block_5; // FAKE
+                    case 83: // Metronome
                         Battle_Effect_Metronome();
-                        goto block_5;
+                        goto block_5; // FAKE
                     default:
-                        if (IsByteInArray(effect, D_8218AD64, 0x1B) != 0) {
+                        if (Battle_IsByteInArray(effect, D_8218AD64, 0x1B) != 0) {
                             BattleEffect_ExecuteMoveEffect();
                             return;
                         }
@@ -572,7 +572,7 @@ void ProcessBattleTurn(void) {
                             Battle_DisplayEffectiveness();
                             D_82199F36 = 1;
                         }
-                        if (IsByteInArray(sBattleUser->moveCache.effect, D_8218AD80, 0xA) != 0) {
+                        if (Battle_IsByteInArray(sBattleUser->moveCache.effect, D_8218AD80, 0xA) != 0) {
                             BattleEffect_ExecuteMoveEffect();
                         }
                         if (sBattleTarget->hp == 0) {
@@ -582,7 +582,7 @@ void ProcessBattleTurn(void) {
                         if (sBattleUser->immobilizedReason & 4) {
                             sBattleUser->effectTurnsLeft--;
                             if (sBattleUser->effectTurnsLeft != 0) {
-                                goto block_28;
+                                goto block_28; // FAKE
                             }
                             sBattleUser->immobilizedReason &= ~4;
                             sprintf(sp2C, D_8219574C, sBattleUser->effectCounter);
@@ -593,7 +593,7 @@ void ProcessBattleTurn(void) {
                         if (sBattleUser->moveCache.effect == 0) {
                             break;
                         }
-                        if (IsByteInArray(sBattleUser->moveCache.effect, D_8218AD8C, 0x10) != 0) {
+                        if (Battle_IsByteInArray(sBattleUser->moveCache.effect, D_8218AD8C, 0x10) != 0) {
                             break;
                         }
                         BattleEffect_ExecuteMoveEffect();
@@ -872,10 +872,10 @@ s32 Battle_CheckFaintAfterMove(void) {
 
 void ActivePokemon_CommitPendingStatus(ActivePokemon*);
 void Battle_SyncHpToRoster(ActivePokemon*);
-void ProcessBattleTurn(void);
+void Battle_ProcessTurn(void);
 /**
  * Initialize one action's shared state, resolve its turn and residuals, then check defeat.
- * Seen in play (2026-11-12): at commit of a Poison Sting turn it called ProcessBattleTurn,
+ * Seen in play (2026-11-12): at commit of a Poison Sting turn it called Battle_ProcessTurn,
  * Battle_ApplyResidualEffects and Battle_CheckFaintAfterMove in that order (return addresses
  * 0x80128868, 0x80128870, 0x801288A8 in its body).
  */
@@ -905,7 +905,7 @@ void Battle_ResolveMonAction(void)
     sBattleTarget->hp = 900;
     Battle_SyncHpToRoster(sActivePokemon[0]);
     Battle_SyncHpToRoster(sActivePokemon[1]);
-    ProcessBattleTurn();
+    Battle_ProcessTurn();
     sBattleUser->hp = 900;
     sBattleTarget->hp = 900;
     sBattleUser->hpAfterPoisonBurn = 900;
@@ -933,7 +933,7 @@ void Battle_ResolveMonAction(void)
     Battle_SyncHpToRoster(sActivePokemon[1]);
     return;
   }
-  ProcessBattleTurn();
+  Battle_ProcessTurn();
   Battle_ApplyResidualEffects();
   if (sp1C->effectTurnsLeft == 0)
   {
@@ -951,7 +951,7 @@ void Battle_ResolveMonAction(void)
  * Seen in play (2026-11-12): ran when 1P switched Nidoqueen (ニドニド) out for Onix (イワワ), which
  * entered with full HP 49/ 49.
  */
-void BeginBattleForEntity(ActivePokemon* arg0) {
+void ActivePokemon_BeginBattle(ActivePokemon* arg0) {
     ActivePokemonState* sp24;
     ActivePokemonState* sp20;
     BattleMonRuntime* ptr1;

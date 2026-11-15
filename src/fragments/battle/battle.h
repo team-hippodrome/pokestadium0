@@ -82,13 +82,13 @@ typedef struct unk_D_84392040 {
 
 typedef struct SurfWaterGridPoint {
     /* 0x00 */ Vec3f position; // @unverified: grid point; y is the water height
-    /* 0x0C */ f32 nextHeight; // @unverified: next frame's height from the neighbour diffusion
+    /* 0x0C */ f32 nextHeight; // @unverified: next frame's height from the neighbor diffusion
     /* 0x10 */ s16 alpha; // @unverified: vertex alpha, 0xFF in the middle and 0 on the edge rows
 } SurfWaterGridPoint;
 
 typedef struct SurfWaterGrid {
     /* 0x0000 */ s16 frame; // @unverified: counts up each frame until duration
-    /* 0x0004 */ f32 waveSpread; // @unverified: neighbour-height diffusion factor
+    /* 0x0004 */ f32 waveSpread; // @unverified: neighbor-height diffusion factor
     /* 0x0008 */ s16 unk_0008;
     /* 0x000A */ s16 duration; // @unverified: frames the surface runs
     /* 0x000C */ Vtx* vtx; // @unverified: 16x16 vertices allocated each frame
@@ -118,7 +118,7 @@ typedef struct unk_D_86B10BE0 {
 
 struct ComSide;
 
-// One Pokémon in the COM AI's own model of a side (ComSide.battlers); see docs/annotation/com-ai.md.
+// One Pokémon in the COM's own model of a side (ComSide.battlers); see docs/annotation/com-ai.md.
 typedef struct ComBattler {
     /* 0x00 */ struct ComSide* side; // set by BattleAi_InitSide
     /* 0x04 */ s32 pickScore; // @unverified: summed by the BattleAi_Add*PickScore helpers in team selection
@@ -138,7 +138,7 @@ typedef struct ComBattler {
     /* 0x7F */ char unk7F[0x11];
 } ComBattler; // size = 0x90
 
-// The COM AI's model of one side (D_821CF618 for the COM, D_821CF998 for its opponent).
+// The COM's model of one side (D_821CF618 for the COM, D_821CF998 for its opponent).
 typedef struct ComSide {
     /* 0x000 */ TeamRoster* roster;
     /* 0x004 */ ComBattler battlers[6];
@@ -191,7 +191,7 @@ typedef struct ActivePokemonState {
     /* 0x1C */ u8 showingCommandOptions;
     /* 0x1E */ u16 actionDelayTimer;
     /* 0x20 */ char unk20[0x8];
-    /* 0x28 */ u16 foeHpBeforeMove; // the opponent's HP when ShowDamageMessage ran, for the damage-dealt comment
+    /* 0x28 */ u16 foeHpBeforeMove; // the opponent's HP when BattleMessage_ShowDamage ran, for the damage-dealt comment
     /* 0x2A */ u8 moveSelectionLocked;
     /* 0x2B */ u8 teamMemberIndex;
     /* 0x2C */ u8 prevMenuTeamMemberIndex; // @unverified: menuTeamMemberIndex before a tag-team partner took the menu (BattleMenu_TakeControlOn*)
@@ -365,14 +365,14 @@ typedef struct BattleScene {
     /* 0x4C */ s32 rageFollowupPhase;
     /* 0x50 */ s32 cameraPresetId;
     /* 0x54 */ s32 easeFovAfterUserShot; // @unverified: BattleCamera_PlayMoveUserShot sets 1 for move camera shot 4; the effect phases then ease the camera's 0x2C toward 60
-    /* 0x58 */ s16 rotationX; // camera pitch about the look-at point
-    /* 0x5A */ s16 rotationY; // camera yaw about the look-at point (the B-roll orbit sweeps it)
+    /* 0x58 */ s16 rotationX; // camera rotationX about the look-at point
+    /* 0x5A */ s16 rotationY; // camera rotationY about the look-at point (the B-roll orbit sweeps it)
     /* 0x5C */ f32 distance;
     /* 0x60 */ f32 verticalFieldOfView;
     /* 0x64 */ f32 stageScale; // @unverified: eased toward 1.0 and passed to Battle_SetStageScale in phases_2.c
     /* 0x68 */ f32 shakeAmplitude;
     /* 0x6C */ s16 shakeAngle; // camera shake phase: BattleScene_ApplyCameraShake adds 0x4000 a frame; with shakeAmplitude poked to 40 the look-at bobbed with its cosine
-    /* 0x6E */ s16 orbitPitch; // @unverified: pitch passed to BattleScene_SetCameraEyeFromPosition, eased to 0x149E
+    /* 0x6E */ s16 orbitRotationX; // @unverified: rotationX passed to BattleScene_SetCameraEyeFromPosition, eased to 0x149E
     /* 0x70 */ char unk70[0x4];
     /* 0x74 */ f32 orbitDistance; // @unverified: eye-to-look-at distance that func_8210BCF0 measures next to rotationX/rotationY
     /* 0x78 */ char unk78[0xC];
@@ -507,7 +507,7 @@ typedef struct Radial20Node {
     /* 0x00 */ f32 startDelay; // @unverified: frames before the node starts moving (Radial20_UpdateNode)
     /* 0x04 */ u8 alpha; // vertex alpha in Radial20_Draw; poking 0 on all nodes hid Bind's streak in play
     /* 0x08 */ f32 halfWidth; // grows by 1 a frame up to Radial20.maxHalfWidth; vertex offset length; poking 30 on all nodes made Bind's streak a wide band in play
-    /* 0x0C */ f32 angle; // roll angle in radians, advanced by angleStep; poking 1.57 on all nodes flattened the streak in play
+    /* 0x0C */ f32 angle; // rotationZ angle in radians, advanced by angleStep; poking 1.57 on all nodes flattened the streak in play
     /* 0x10 */ Vec3f position; // @unverified: node center, moves by velocity
     /* 0x1C */ Vec3f velocity; // @unverified: added to position every frame
     /* 0x28 */ char unk28[0x20];
@@ -566,7 +566,7 @@ typedef struct Trail40Variant {
 typedef struct TexturedRibbonSheetNode {
     /* 0x00 */ f32 startDelay; // @unverified: node index at start; vertices are only recomputed once it is <= 0
     /* 0x08 */ u8 alpha; // @unverified: vertex alpha, fades along the ribbon
-    /* 0x08 */ f32 angle; // @unverified: roll angle in radians
+    /* 0x08 */ f32 angle; // @unverified: rotationZ angle in radians
     /* 0x0C */ Vec3f position; // @unverified: node center
     /* 0x18 */ Vec3f velocity; // @unverified: phase 1 motion
     /* 0x24 */ Vec3f riseVelocity; // @unverified: phase 0 motion (only y is used)
@@ -590,7 +590,7 @@ typedef struct TexturedRibbonSheet {
 typedef struct FourStreamTrailNode {
     /* 0x00 */ u8 alpha; // @unverified: vertex alpha, fades along the stream
     /* 0x04 */ f32 halfWidth; // @unverified: grows by 2 a frame up to maxHalfWidth
-    /* 0x08 */ f32 angle; // @unverified: roll angle in radians
+    /* 0x08 */ f32 angle; // @unverified: rotationZ angle in radians
     /* 0x0C */ Vec3f position; // @unverified: node center
     /* 0x18 */ Vec3f velocity; // @unverified: added to position each frame (head node)
     /* 0x24 */ f32 prevHalfWidth; // @unverified: halfWidth before this frame, copied to the next node
@@ -721,7 +721,7 @@ typedef struct OwnerLinkedFourStream {
     /* 0x008 */ Color_RGB8 color; // @unverified: vertex color
     /* 0x00C */ f32 maxHalfWidth; // @unverified: cap for the nodes' halfWidth
     /* 0x010 */ f32 angleStep; // @unverified: added to the head node's angle per frame
-    /* 0x014 */ f32 heading; // @unverified: atan2 of the head velocity in degrees, used as the head model's roll
+    /* 0x014 */ f32 heading; // @unverified: atan2 of the head velocity in degrees, used as the head model's rotationZ
     /* 0x018 */ Vtx* vtx; // @unverified: vertices allocated each frame
     /* 0x01C */ Vec3f targetPos; // @unverified: the head node is pulled toward its y
     /* 0x028 */ char unk028[0xC];
@@ -746,7 +746,7 @@ typedef struct OwnerAnchoredFourStream {
 typedef struct Trail50EffectNode {
     /* 0x00 */ u8 alpha; // @unverified: vertex alpha, fades along the trail
     /* 0x04 */ f32 halfWidth; // grows by 2 a frame up to maxHalfWidth; poking 30 on all nodes made wide fans in play
-    /* 0x08 */ f32 angle; // @unverified: roll angle in radians
+    /* 0x08 */ f32 angle; // @unverified: rotationZ angle in radians
     /* 0x0C */ Vec3f position; // @unverified: node center
     /* 0x18 */ Vec3f velocity; // @unverified: phase 1 motion
     /* 0x24 */ Vec3f swirlVelocity; // @unverified: phase 0 motion, swirls by sin/cos(angle) x scale
@@ -777,7 +777,7 @@ typedef struct DoubleTextureTrailSegment {
     /* 0x00 */ s32 index; // @unverified: segment index, only written
     /* 0x04 */ u8 alpha; // @unverified: 0xFF at spawn, only written
     /* 0x08 */ f32 radius; // @unverified: tube radius; head stays 1.0, the rest grow by radiusStep to a share of maxRadius
-    /* 0x0C */ f32 angle; // @unverified: roll angle in radians, advanced by angleStep
+    /* 0x0C */ f32 angle; // @unverified: rotationZ angle in radians, advanced by angleStep
     /* 0x10 */ Vec3f position; // @unverified: lerped between the owner anchor and the target's bone 9
     /* 0x1C */ Vec3f velocity; // @unverified: start direction x speed, only written
 } DoubleTextureTrailSegment; // size = 0x28
@@ -850,7 +850,7 @@ typedef struct AuxiliaryEffect {
 typedef struct BeamTrailSegment {
     /* 0x00 */ f32 startDelay; // @unverified: frames the segment waits at the owner (2 x index)
     /* 0x04 */ f32 halfWidth; // grows by 3 a frame up to maxHalfWidth; poking 40 widened Ice Beam's ribbons in play
-    /* 0x08 */ f32 angle; // roll angle in radians, advanced by angleStep; poking 1.57 flattened the ribbons in play
+    /* 0x08 */ f32 angle; // rotationZ angle in radians, advanced by angleStep; poking 1.57 flattened the ribbons in play
     /* 0x0C */ Vec3f position; // segment center; adding 3 to y each frame lifted Ice Beam in play
     /* 0x18 */ Vec3f velocity; // @unverified: added to position once moving; also the beam direction
 } BeamTrailSegment; // size = 0x24
@@ -1301,7 +1301,7 @@ extern M2C_UNK func_8215EFF8;
 /*
  * BattleAnim_AcidArmorParticleUpdateB
  *
- * Particle initializer: sets the particle's scale to 0.2, recolours its
+ * Particle initializer: sets the particle's scale to 0.2, recolors its
  * primitive/environment colors from its descriptor's palette pair, sets
  * the primitive alpha to 0xC8, stores 0x18 with Particle_Param0_SetS16_0BCA8,
  * sets the float at offset 0x70 (the donor calls it stepMagnitude; the
@@ -2017,25 +2017,25 @@ void BattleAi_PrepareDamageCalcState(BattleMonRuntime* arg0, BattleMonRuntime* a
 // turn_order.c
 void TurnOrder_UnusedNopA(void);
 void TurnOrder_UnusedNopB(void);
-void ShowDamageMessage(s32 arg0, s32 arg1);
+void BattleMessage_ShowDamage(s32 arg0, s32 arg1);
 void Battle_ResetTransientRuntimeState(s32 arg0, s32 arg1);
 void Battle_FormatDamageComment(ActivePokemon* active_pokemon);
 u16 Battle_DetermineMoveOrder(ActivePokemon* arg0, ActivePokemon* arg1);
-s32 IsByteInArray(u8 arg0, u8* arg1, s32 arg2);
+s32 Battle_IsByteInArray(u8 arg0, u8* arg1, s32 arg2);
 void Battle_SetActiveMoveFromSlotIndex(void);
 s32 Battle_CheckMoveSuccess(void);
-void ComputePokemonStat(s32 arg0, BattleMon* arg1);
+void Battle_ComputePokemonStat(s32 arg0, BattleMon* arg1);
 
 // damage.c
 void ActivePokemon_CommitPendingStatus(ActivePokemon*);
-void ComputeAllPokemonStats(BattleMon* arg0);
-void InitBattleParameters(void);
+void Battle_ComputeAllPokemonStats(BattleMon* arg0);
+void Battle_InitParameters(void);
 s32 Battle_CalcDamage(void);
 void Battle_ApplyDamage(void);
 void Battle_DecrementPP(s32 arg0);
 void Battle_MoveHitTest(void);
-void ApplyParalysisSpeedCut(ActivePokemon* active_pokemon);
-void ApplyBurnAttackCut(ActivePokemon* active_pokemon);
+void Battle_ApplyParalysisSpeedCut(ActivePokemon* active_pokemon);
+void Battle_ApplyBurnAttackCut(ActivePokemon* active_pokemon);
 void Battle_InitPokemonRuntimeState(ActivePokemon* active_pokemon);
 void Damage_UnusedNopA(void);
 void Damage_UnusedNopB(void);
@@ -2059,7 +2059,7 @@ void Battle_ApplyTypeEffectAndSTAB(void);
 s32 Battle_Effect_Counter(void);
 s32 Battle_CheckCriticalHit(void);
 s32 Battle_CheckMonCanAct(void);
-void ProcessBattleTurn(void);
+void Battle_ProcessTurn(void);
 void Battle_HandleFaint(ActivePokemon* active_pokemon);
 void Battle_CheckAllBroughtFainted_PoisonBurn(ActivePokemon* active_pokemon);
 void Battle_CheckAllBroughtFainted_LeechSeed(ActivePokemon* active_pokemon);
@@ -2068,7 +2068,7 @@ void Battle_CheckAllBroughtFainted_Hp(ActivePokemon* active_pokemon);
 s32 Battle_CheckSideDefeatAfterResidualStatus(ActivePokemon* active_pokemon);
 s32 Battle_CheckFaintAfterMove(void);
 void Battle_ResolveMonAction(void);
-void BeginBattleForEntity(ActivePokemon* active_pokemon);
+void ActivePokemon_BeginBattle(ActivePokemon* active_pokemon);
 
 // move_effects_status.c
 void MoveEffect_UnusedNop(void);
@@ -2756,7 +2756,7 @@ void Particle_AddPositionOffsetAlongRotationYMinus90(Particle* arg0, f32 arg1);
 void Particle_AddVelocityFromDirVector(Particle* arg0, f32 arg1);
 void Particle_AddPositionFromRotationTemplate1(Particle* arg0, f32 arg1);
 void Particle_AddPositionFromRotationTemplate2(Particle* arg0, f32 arg1);
-void Particle_AddPositionRotatedVectorByYaw(Particle* arg0, Vec3f arg1);
+void Particle_AddPositionRotatedVectorByRotationY(Particle* arg0, Vec3f arg1);
 void Particle_SetRandomVelocityXYZ(Particle* arg0, s32 arg1, s32 arg2, s32 arg3);
 void Particle_SetRandomRotatedVelocityXY(Particle* arg0, s32 arg1, s32 arg2);
 void Particle_SetOrigin(Particle* arg0, f32 arg1, f32 arg2, f32 arg3);

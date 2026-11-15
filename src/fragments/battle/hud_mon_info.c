@@ -121,11 +121,11 @@ void BattleHud_DrawTrainerNameLabel(s16 arg0, s16 arg1, s32 arg2, s32 arg3, s32 
     func_82116CF4(arg0, arg1, 0x46, 0x11, temp_v0 + &D_8218B008, temp_v0 + &D_8218B014);
     func_8001AB6C();
     if (arg4 != 0) {
-        func_8001AA9C(0xFF, 0x64, 0xFF, 0xFF);
+        func_8001AA9C(0xFF, 0x64, 0xFF, 0xFF); // #FF64FF
     }
     sp24 = func_800566BC(arg3) >> 1;
     func_8001A384(2, 0);
-    Font_Printf((arg0 - (sp24 * 5)) + 0x1E, arg1 + 2, arg3);
+    Font_Printf((arg0 - (sp24 * 5)) + 30, arg1 + 2, arg3);
     func_8001ABBC();
 }
 
@@ -151,15 +151,15 @@ void BattleHud_DrawTrainerNameLabelBlink(s16 arg0, s16 arg1, s32 arg2, s32 arg3,
     func_8001AB6C();
     func_8001A384(2, 0);
     if (arg5 != 0) {
-        func_8001AA9C(0xFF, 0x64, 0xFF, (s8)alpha);
+        func_8001AA9C(0xFF, 0x64, 0xFF, (s8)alpha); // #FF64FF
     } else {
-        func_8001AA9C(0xFF, 0xFF, 0xFF, (s8)alpha);
+        func_8001AA9C(0xFF, 0xFF, 0xFF, (s8)alpha); // #FFFFFF
     }
     half = func_800566BC(arg3) >> 1;
     if (wave > 0) {
-        Font_Printf(arg0 + 0xE, arg1 + 2, (s32)&D_8219597C);
+        Font_Printf(arg0 + 14, arg1 + 2, (s32)&D_8219597C);
     } else {
-        Font_Printf((arg0 - (half * 5)) + 0x1E, arg1 + 2, arg3);
+        Font_Printf((arg0 - (half * 5)) + 30, arg1 + 2, arg3);
     }
     func_8001ABBC();
 }
@@ -209,15 +209,15 @@ void BattleHud_DrawMonInfoBox(ActivePokemon* arg0, BattleMon* arg1, StatusLabel*
         Ui_DrawPrimColorRect(arg3, arg4, arg5, arg6, arg7, arg8, arg9, argA);
     }
     BattleHud_DrawLevelNumber(arg3 + 3, arg4 + 0x10, arg1->level);
-    Widget_DrawMeterBar(arg3 + 2, arg4 + 0x19, arg1->hp, arg1->maxHp);
+    Widget_DrawMeterBar(arg3 + 2, arg4 + 25, arg1->hp, arg1->maxHp);
     BattleHud_DrawHpFractionText(arg3 + 0xC, arg4 + 0x1F, arg1->hp, arg1->maxHp);
     func_8001AB6C();
     func_8001A384(2, 0);
     half = func_800566BC((s32)arg1->nickname) >> 1;
-    Font_Printf((arg3 - (half * 5)) + 0x1D, arg4 + 2, arg1->nickname);
+    Font_Printf((arg3 - (half * 5)) + 29, arg4 + 2, arg1->nickname);
     func_8001A384(1, 0);
     func_8001AA9C(arg2->color.r, arg2->color.g, arg2->color.b, 0xFF);
-    Font_Printf(arg3 + 0x1F, arg4 + 0xE, arg2->text);
+    Font_Printf(arg3 + 31, arg4 + 14, arg2->text);
     func_8001ABBC();
 }
 

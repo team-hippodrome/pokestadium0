@@ -34,7 +34,7 @@ s32 ActivePokemon_GetNickname(ActivePokemon*);
 
 void BattleMessage_Format(s32, s32, s32, ...);
 
-void ComputeAllPokemonStats(BattleMon* arg0);
+void Battle_ComputeAllPokemonStats(BattleMon* arg0);
 void Damage_UnusedNopA(void);
 void Damage_UnusedNopB(void);
 void Battle_LoadMoveCache(void);
@@ -43,21 +43,21 @@ void Battle_ApplyPoisonOrBurnDamage(void);
 void Battle_ResidualEffectsNop(void);
 
 u8 Battle_Random(void);
-void ComputePokemonStat(s32 arg0, BattleMon* arg1);
+void Battle_ComputePokemonStat(s32 arg0, BattleMon* arg1);
 void Battle_RefundSelectedMovePp(void);
 
 /**
  * Invoke the stored-stat calculator for selectors 0 through 4, preserving its original range.
  * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * @unverified Name from Stadium 1 (ComputeAllPokemonStats). Comment from Stadium 1.
  */
-void ComputeAllPokemonStats(BattleMon* arg0) {
-    ComputePokemonStat(0, arg0);
-    ComputePokemonStat(1, arg0);
-    ComputePokemonStat(2, arg0);
-    ComputePokemonStat(3, arg0);
-    ComputePokemonStat(4, arg0);
+void Battle_ComputeAllPokemonStats(BattleMon* arg0) {
+    Battle_ComputePokemonStat(0, arg0);
+    Battle_ComputePokemonStat(1, arg0);
+    Battle_ComputePokemonStat(2, arg0);
+    Battle_ComputePokemonStat(3, arg0);
+    Battle_ComputePokemonStat(4, arg0);
 }
 
 extern u16 D_82199F54;
@@ -72,9 +72,9 @@ extern u16 D_843C4DCC;
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
  * breakpoint): ran only for Dig, Fly, Petal Dance, Rage, Razor Wind, Skull Bash, Sky Attack, Solar
  * Beam, Supersonic, Thrash.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * @unverified Name from Stadium 1 (InitBattleParameters). Comment from Stadium 1.
  */
-void InitBattleParameters(void) {
+void Battle_InitParameters(void) {
     sBattleDamage = 0;
     D_82199F52 = sBattleUser->moveCache.power;
     if (D_82199F52) {
@@ -153,8 +153,8 @@ s32 Battle_CalcDamage(void) {
     }
 
     sBattleDamage += (((((D_82199F58 * 2) / 5) + 2) * D_82199F52 * D_82199F54) / D_82199F56) / 50;
-    if (sBattleDamage > 0x3E4) {
-        sBattleDamage = 0x3E4;
+    if (sBattleDamage > 996) {
+        sBattleDamage = 996;
     }
     sBattleDamage += 2;
 
@@ -417,7 +417,7 @@ void ActivePokemon_CommitPendingStatus(ActivePokemon* arg0) {
  * Seen in play (2026-11-12): after 1P's Thunder Wave paralysed COM's Pinsir (status byte 0x40),
  * it cut Pinsir's modified Speed from 50 to 12; an earlier call with status 0 left it at 50.
  */
-void ApplyParalysisSpeedCut(ActivePokemon* arg0) {
+void Battle_ApplyParalysisSpeedCut(ActivePokemon* arg0) {
     BattleMonRuntime* temp_v0 = &arg0->state.runtime;
 
     if (arg0->state.runtime.statusCondition & 0x40) {
@@ -433,7 +433,7 @@ void ApplyParalysisSpeedCut(ActivePokemon* arg0) {
  * Seen in play (2026-11-12): with COM's Pinsir burned (status byte 0x10) it cut Pinsir's modified
  * Attack from 71 to 35.
  */
-void ApplyBurnAttackCut(ActivePokemon* arg0) {
+void Battle_ApplyBurnAttackCut(ActivePokemon* arg0) {
     BattleMonRuntime* temp_v0 = &arg0->state.runtime;
 
     if (arg0->state.runtime.statusCondition & 0x10) {
@@ -515,8 +515,8 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     sp24->speed = sp34->speed;
     sp24->modifiedSpecial = sp34->special;
 
-    ApplyParalysisSpeedCut(arg0);
-    ApplyBurnAttackCut(arg0);
+    Battle_ApplyParalysisSpeedCut(arg0);
+    Battle_ApplyBurnAttackCut(arg0);
 
     sp24->baseHp = gBaseStats[sp24->species].baseHp;
     sp24->unmodifiedAttack = sp34->attack;
@@ -693,25 +693,25 @@ void Battle_ApplyAttackToTarget(void) {
     s32 n;
 
     switch (sBattleUser->moveCache.effect) {
-        case 0x26:
+        case 38:
             break;
-        case 0x28:
+        case 40:
             D_82199F50 = sBattleTarget->hp / 2;
             if ((u16)D_82199F50 == 0) {
                 D_82199F50 = 1;
             }
             break;
-        case 0x29:
+        case 41:
             switch (sBattleUser->moveCache.lastMove) {
-                case 0x45:
-                case 0x65:
+                case SEISMIC_TOSS:
+                case NIGHT_SHADE:
                     n = sBattleUser->level;
                     break;
-                case 0x31:
-                    n = 0x14;
+                case SONICBOOM:
+                    n = 20;
                     break;
-                case 0x52:
-                    n = 0x28;
+                case DRAGON_RAGE:
+                    n = 40;
                     break;
                 default:
                     {

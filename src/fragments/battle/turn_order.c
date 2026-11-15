@@ -35,11 +35,11 @@ extern u8 sHighCritMoves[];
 #include "m2c_macros.h"
 
 void TurnOrder_UnusedNopA(void);
-s32 IsByteInArray(u8 lookup, u8* array, s32 array_length);
+s32 Battle_IsByteInArray(u8 lookup, u8* array, s32 array_length);
 void TurnOrder_UnusedNopB(void);
 void Battle_SetActiveMoveFromSlotIndex(void);
 s32 Battle_CheckMoveSuccess(void);
-void ComputePokemonStat(s32 arg0, BattleMon* arg1);
+void Battle_ComputePokemonStat(s32 arg0, BattleMon* arg1);
 
 /**
  * Empty.
@@ -62,7 +62,7 @@ extern s32 D_8218C794;
  * first one fainted.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
-void ShowDamageMessage(s32 attacker, s32 defender) {
+void BattleMessage_ShowDamage(s32 attacker, s32 defender) {
     ActivePokemon** atk = &sActivePokemon[attacker];
     ActivePokemonState* state = &(*atk)->state;
     BattleMonRuntime* runtime = &sActivePokemon[defender]->state.runtime;
@@ -95,7 +95,7 @@ void Battle_ResetTransientRuntimeState(s32 arg0, s32 arg1) {
     BattleMonRuntime* sp1C = &sActivePokemon[arg0]->state.runtime;
     BattleMonRuntime* sp18 = &sActivePokemon[arg1]->state.runtime;
 
-    ShowDamageMessage(arg0, arg1);
+    BattleMessage_ShowDamage(arg0, arg1);
     D_82199F4E = 0;
     D_82199F3F = 0;
     sp1C->moveCache.lastMove = 0;
@@ -217,7 +217,7 @@ u16 Battle_DetermineMoveOrder(ActivePokemon* pokemon, ActivePokemon* other_pokem
  * Seen in play (2026-11-12): returned 0 for 0x28 (Poison Sting) in the two-byte list 0E 4A and in
  * the five-byte list 60 69 75 78 85.
  */
-s32 IsByteInArray(u8 lookup, u8* array, s32 array_length) {
+s32 Battle_IsByteInArray(u8 lookup, u8* array, s32 array_length) {
     while (array_length--) {
         if (lookup == *array) {
             return 1;
@@ -261,11 +261,11 @@ s32 Battle_CheckMoveSuccess(void) {
 
 /**
  * Calculate the requested stored stat from the selected base-stat/experience entries and DVs.
- * No caller in play (2026-11-13): it is only called from ComputeAllPokemonStats, which has no
+ * No caller in play (2026-11-13): it is only called from Battle_ComputeAllPokemonStats, which has no
  * caller in the ROM itself.
- * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ * @unverified Name from Stadium 1 (ComputePokemonStat). Comment from Stadium 1.
  */
-void ComputePokemonStat(s32 arg0, BattleMon* arg1) {
+void Battle_ComputePokemonStat(s32 arg0, BattleMon* arg1) {
     u16 i;
     u16 spC;
     u16 spA;

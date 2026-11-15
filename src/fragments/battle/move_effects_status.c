@@ -7,8 +7,8 @@
 
 s32 BattleMessage_Format(s32, s32, s32, ...);
 s32 ActivePokemon_GetNickname(ActivePokemon*);
-typedef void (*func_D_8438AE50)(void);
-extern func_D_8438AE50 sMoveEffectHandlers[];
+typedef void (*MoveEffectHandler)(void);
+extern MoveEffectHandler sMoveEffectHandlers[];
 
 void MoveEffect_UnusedNop(void);
 void BattleEffect_Explosion(void);
@@ -46,7 +46,7 @@ void Battle_Effect_Sleep(void) {
         if (sBattleTarget->statusCondition == 0) {
             Battle_MoveHitTest();
             if ((sBattleMoveFailed == 0) && (Battle_SleepClauseInEffect(sActivePokemon[!sBattleScene.scene->actingSide]) == 0)) {
-                goto block_9;
+                goto block_9; // FAKE
             }
         }
         sConfused = 0;
@@ -96,7 +96,7 @@ void Battle_Effect_Poison(void) {
                     sp1C = (s32)gBattleMessageQueues->messageBuffers[10];
                 }
 
-                if (Battle_Random() >= 0x34) {
+                if (Battle_Random() >= 52) {
                     return;
                 }
                 break;
@@ -104,7 +104,7 @@ void Battle_Effect_Poison(void) {
             case 33:
                 sBattleScene.scene->moveEffectKind = 0;
                 sp1C = (s32)gBattleMessageQueues->messageBuffers[6];
-                if (Battle_Random() >= 0x67) {
+                if (Battle_Random() >= 103) {
                     return;
                 }
                 break;
@@ -168,7 +168,7 @@ void Battle_Effect_DrainHP(void) {
 }
 
 /**
- * Faint the user of Explosion/Self-Destruct and clear its major status and Leech Seed.
+ * Faint the user of a boom move (Self-Destruct, Explosion) and clear its major status and Leech Seed.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Self-Destruct, Explosion.
  */
@@ -204,10 +204,10 @@ void Battle_Effect_FreezeBurnParalyze(void) {
     if ((sBattleTarget->type1 != (*sBattleUser).moveCache.type) &&
         (sBattleTarget->type2 != (*sBattleUser).moveCache.type)) {
         if ((sBattleUser->moveCache.effect < 7) || (sBattleUser->moveCache.lastMove == BLIZZARD)) {
-            if (Battle_Random() >= 0x1A) {
+            if (Battle_Random() >= 26) {
                 return;
             }
-        } else if (Battle_Random() >= 0x4D) {
+        } else if (Battle_Random() >= 77) {
             return;
         }
 
@@ -215,7 +215,7 @@ void Battle_Effect_FreezeBurnParalyze(void) {
             case 4:
             case 34:
                 sBattleTarget->statusCondition = 0x10;
-                ApplyBurnAttackCut(sActivePokemon[!sBattleScene.scene->actingSide]);
+                Battle_ApplyBurnAttackCut(sActivePokemon[!sBattleScene.scene->actingSide]);
                 BattleMessage_Format((s32)gBattleMessageQueues->messageBuffers[6], -0x76, D_8218C7E4, ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
                 break;
 
@@ -231,7 +231,7 @@ void Battle_Effect_FreezeBurnParalyze(void) {
             case 6:
             case 36:
                 sBattleTarget->statusCondition = 0x40;
-                ApplyParalysisSpeedCut(sActivePokemon[!sBattleScene.scene->actingSide]);
+                Battle_ApplyParalysisSpeedCut(sActivePokemon[!sBattleScene.scene->actingSide]);
                 BattleMessage_Format((s32)gBattleMessageQueues->messageBuffers[6], -0x74, D_8218C7EC, ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
                 break;
         }
@@ -300,7 +300,7 @@ void BattleEffect_ApplyStatBoost(void) {
                     *sp1C = 0x3E7;
                 }
             } else {
-                goto block_29;
+                goto block_29; // FAKE
             }
         }
 
@@ -314,8 +314,8 @@ void BattleEffect_ApplyStatBoost(void) {
             BattleMessage_Format((s32)gBattleMessageQueues->messageBuffers[9], (s8)(sp24 + 0x93), (&D_8218C808)[sp24], ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
         }
 
-        ApplyParalysisSpeedCut(sActivePokemon[!sBattleScene.scene->actingSide]);
-        ApplyBurnAttackCut(sActivePokemon[!sBattleScene.scene->actingSide]);
+        Battle_ApplyParalysisSpeedCut(sActivePokemon[!sBattleScene.scene->actingSide]);
+        Battle_ApplyBurnAttackCut(sActivePokemon[!sBattleScene.scene->actingSide]);
     } else {
     block_29:
         BattleMessage_Format((s32)gBattleMessageQueues->messageBuffers[9], -0x67, D_8218C820);
@@ -380,7 +380,7 @@ void Battle_Effect_StatUp(void) {
                     *sp1C = 0x3E7;
                 }
             } else {
-                goto block_29;
+                goto block_29; // FAKE
             }
         }
 
@@ -394,8 +394,8 @@ void Battle_Effect_StatUp(void) {
             BattleMessage_Format((s32)gBattleMessageQueues->messageBuffers[0], (s8)(sp24 + 0x93), (&D_8218C808)[sp24], ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
         }
 
-        ApplyParalysisSpeedCut(sActivePokemon[sBattleScene.scene->actingSide]);
-        ApplyBurnAttackCut(sActivePokemon[sBattleScene.scene->actingSide]);
+        Battle_ApplyParalysisSpeedCut(sActivePokemon[sBattleScene.scene->actingSide]);
+        Battle_ApplyBurnAttackCut(sActivePokemon[sBattleScene.scene->actingSide]);
     } else {
     block_29:
         sStatCanBeChangedFurther = 0;
@@ -433,26 +433,26 @@ void Battle_Effect_LowerStat(void) {
     }
 
     if (sBattleTarget->volatileStatusFlags & 0x10) {
-        goto end;
+        goto end; // FAKE
     }
 
     sp24 = sBattleUser->moveCache.effect;
     sp20 = 1;
 
     if (sp24 >= 0x44) {
-        if (Battle_Random() < 0x55) {
+        if (Battle_Random() < 85) {
             sp24 -= 0x44;
-            goto block_14;
+            goto block_14; // FAKE
         }
     } else {
         Battle_MoveHitTest();
 
         if (sBattleMoveFailed != 0) {
-            goto end;
+            goto end; // FAKE
         }
 
         if (sBattleTarget->immobilizedReason & 0x40) {
-            goto end;
+            goto end; // FAKE
         }
 
         sp24 -= 0x12;
@@ -498,7 +498,7 @@ void Battle_Effect_LowerStat(void) {
                         *sp1C = 1;
                     }
                 } else {
-                    goto block_39;
+                    goto block_39; // FAKE
                 }
             }
 
@@ -508,9 +508,9 @@ void Battle_Effect_LowerStat(void) {
                 BattleMessage_Format((s32)gBattleMessageQueues->messageBuffers[6], (s8)(sp24 + 0xA0), (&D_8218C83C)[sp24], ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
             }
 
-            ApplyParalysisSpeedCut(sActivePokemon[!sBattleScene.scene->actingSide]);
+            Battle_ApplyParalysisSpeedCut(sActivePokemon[!sBattleScene.scene->actingSide]);
 
-            ApplyBurnAttackCut(sActivePokemon[!sBattleScene.scene->actingSide]);
+            Battle_ApplyBurnAttackCut(sActivePokemon[!sBattleScene.scene->actingSide]);
             return;
         }
     }
