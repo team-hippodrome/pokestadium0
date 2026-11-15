@@ -44,3 +44,14 @@ undefined_syms_auto.txt
 
 # IDO recompilations fetched by tools/get_ido.sh
 tools/ido/
+
+*.iso
+*.gb
+*.gbc
+*.gba
+*.nds
+
+# compressed folders
+*.rar
+*.7z
+*.zip
