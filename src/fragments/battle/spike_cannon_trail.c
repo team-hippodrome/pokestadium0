@@ -20,6 +20,8 @@ s32 SpikeCannonFourStream_IsComplete(void);
 Gfx* SpikeCannonFourStream_Draw(Gfx* arg0);
 
 /**
+ * Clears all 4 Spike Cannon streams and their 15 nodes each (inactive, alpha 0, half width 1, zero
+ * position and velocity).
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Spike Cannon.
  */
@@ -102,6 +104,8 @@ void SpikeCannonFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg
 }
 
 /**
+ * Rotates the point (0, 0, arg2) about the X axis by arg0 radians and writes it to arg1. The name
+ * does not fit what the code does.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Spike Cannon.
  */
@@ -115,6 +119,11 @@ void SpikeCannonFourStream_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
 }
 
 /**
+ * Steps one Spike Cannon stream. The head node moves by its velocity, drifts sideways in the
+ * stream's direction, is pulled toward the target height (gently for the first 10 frames), sets
+ * the heading and moves the linked particle there, spawns a particle at the start and widens up to
+ * the maximum half width. Each later node takes the previous frame's state of the node ahead of
+ * it.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Spike Cannon.
  */
@@ -186,6 +195,8 @@ void SpikeCannonFourStream_UpdateNodeChain(OwnerLinkedFourStream* arg0) {
 }
 
 /**
+ * Advances every active Spike Cannon stream by one frame, deactivating it and its linked particle
+ * past its duration. Always returns 0.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Spike Cannon.
  */
@@ -208,6 +219,7 @@ s32 SpikeCannonFourStream_IsComplete(void) {
 }
 
 /**
+ * Draws every active Spike Cannon stream: a model at the head node, then the ribbon of its nodes.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Spike Cannon.
  */

@@ -20,6 +20,8 @@ s32 RazorLeafTrail_IsComplete(void);
 Gfx* RazorLeafTrail_Draw(Gfx* arg0);
 
 /**
+ * Clears all 50 leaf trail slots and their 10 nodes each (inactive, alpha 0, half width 1, zero
+ * position and velocity).
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Razor Leaf.
  */
@@ -119,6 +121,8 @@ void RazorLeafTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 
 }
 
 /**
+ * Rotates the point (0, 0, arg2) by 90 degrees about X and arg0 radians about Y and Z, and writes
+ * it to arg1. The name does not fit what the code does.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Razor Leaf.
  */
@@ -131,6 +135,10 @@ void RazorLeafTrail_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
 }
 
 /**
+ * Steps one leaf trail. The head node swirls (phase 0, switching to phase 1 after 21 frames) and
+ * then drifts sideways, speeding up by 2 per frame to at most 20 in the trail's direction,
+ * widening by 2 per frame up to the maximum half width. Each later node takes the previous frame's
+ * state of the node ahead of it.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Razor Leaf.
  */
@@ -199,6 +207,8 @@ void RazorLeafTrail_AdvanceNodes(Trail50Effect* arg0) {
 }
 
 /**
+ * Advances every active leaf trail by one frame and deactivates those in phase 1 past their
+ * duration. Always returns 0.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Razor Leaf.
  */
@@ -220,6 +230,8 @@ s32 RazorLeafTrail_IsComplete(void) {
 }
 
 /**
+ * Draws every active leaf trail that is above the ground: a textured quad at the head node, then
+ * the ribbon of its nodes.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Razor Leaf.
  */

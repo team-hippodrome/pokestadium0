@@ -209,6 +209,8 @@ s32 LassoHit_Update(void) {
 
 extern Gfx D_82192AB0[];
 /**
+ * Draws the lasso strip when it has at least 2 points: each point pair becomes an inner vertex
+ * (inner color, full alpha) and an outer vertex (outer color, half alpha), clamped to y >= 0.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
@@ -657,6 +659,8 @@ void Radial20_RotateVertexOffset(f32 arg0, UNUSED Vec3f* arg1, Vec3f* arg2, f32 
 }
 
 /**
+ * Steps the 20 nodes of one radial strand according to its variant: nodes wait out their start
+ * delay, then move by their velocity relative to the secondary owner's anchor.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
@@ -850,6 +854,8 @@ extern u8 D_82192B54[];
 extern u8 D_82192B58[];
 extern f32 D_82192B5C[];
 /**
+ * Builds vertices for each of the 10 active radial strands from their nodes and appends the
+ * display lists that draw them.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec

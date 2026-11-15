@@ -3,6 +3,7 @@
 #include "gfx_buffer.h"
 
 /**
+ * Draws the Surf height map as a textured grid, then the camera-facing backdrop quad.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Surf.
  */

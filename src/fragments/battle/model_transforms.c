@@ -128,6 +128,8 @@ void BattleScene_HideParticipantSecondaryModels(ActivePokemon* active_pokemon) {
 
 
 /**
+ * Resets the Pokémon's 3 afterimages: orbit speed 0, orbit angles 0, 0xE38 and 0xF1C8, alpha 0,
+ * and copies the main model's position, rotation and scale onto each.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec

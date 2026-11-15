@@ -264,6 +264,8 @@ s32 DoubleTextureTrail_UpdateAll(void) {
 }
 
 /**
+ * Draws one pass of a double-texture trail. On pass 0 it first fades prim/env alpha by 0.1 per
+ * frame after the fade start frame.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
