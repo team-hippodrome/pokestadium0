@@ -40,8 +40,8 @@ extern u8 D_80065D00[];
  * Seen in play (2026-11-13) ran once as the entry screen opened, which then listed the GB party
  * (フシ, ヒト, カメ at L10).
  */
-s32 FreeBattle_ReadTeam(s32 deckKind, s32 port, s32 deckIndex, TeamMonSlot* entry) {
-    s32 handle = func_80020AFC(deckKind, port, deckIndex, 0);
+s32 FreeBattle_ReadTeam(s32 deck_kind, s32 port, s32 deck_index, TeamMonSlot* entry) {
+    s32 handle = func_80020AFC(deck_kind, port, deck_index, 0);
     s32 i;
     u8* row;
     s32 idx;
@@ -96,7 +96,7 @@ void FreeBattle_MarkEmptySlots(TeamMonSlot* slots, s32 start) {
  * Seen in play: runs when A picks a team on 「エントリーポケモンのせんたく」.
  * @unverified Name from the code.
  */
-TeamMonSlot* FreeBattle_FindFlaggedSlot(TeamMonSlot* slots, s32* outCount) {
+TeamMonSlot* FreeBattle_FindFlaggedSlot(TeamMonSlot* slots, s32* out_count) {
     TeamMonSlot* found = NULL;
     s32 count = 0;
 
@@ -131,7 +131,7 @@ TeamMonSlot* FreeBattle_FindFlaggedSlot(TeamMonSlot* slots, s32* outCount) {
         found = slots;
         count++;
     }
-    *outCount = count;
+    *out_count = count;
     return found;
 }
 
@@ -347,7 +347,7 @@ extern s32 D_82008F84;
  * overwritten); finally stores slotCount = 6.
  * Seen in play: A on the rental row starts a new team named 「なまえ 1P」 and runs this.
  */
-void FreeBattle_InitNamedTeam(SlotList* team, s32 nameIndex) {
+void FreeBattle_InitNamedTeam(SlotList* team, s32 name_index) {
     s32 i;
 
     team->unk_00 = 1;
@@ -355,7 +355,7 @@ void FreeBattle_InitNamedTeam(SlotList* team, s32 nameIndex) {
     team->unk_02 = 0;
     team->unk_03 = 0;
     team->unk_04 = 0;
-    HAL_Strcpy(team->unk08, ((char**)&D_82008F84)[nameIndex]);
+    HAL_Strcpy(team->unk08, ((char**)&D_82008F84)[name_index]);
     for (i = 0; i < 6; i++) {
         team->slots[i].flags = 0;
     }
@@ -464,9 +464,9 @@ void FreeBattle_DrawMoveName(s32 x, s32 y, s32 move, s32 centered) {
  * Draws the colored type icon for type slot `typeSlot` of Pokemon `mon`.
  * Seen in play: draws タイプ1/タイプ2 (くさ, どく) in the rental status window.
  */
-void FreeBattle_DrawTypeName(s32 x, s32 y, s32 mon, s32 typeSlot) {
+void FreeBattle_DrawTypeName(s32 x, s32 y, s32 mon, s32 type_slot) {
     Color82000BC4 c;
-    s32 idx = Pokemon_GetTypeIndex(mon, typeSlot);
+    s32 idx = Pokemon_GetTypeIndex(mon, type_slot);
 
     if (idx != -1) {
         c = D_80066AD8[idx].color;
@@ -694,7 +694,7 @@ void Menu_ClearItemFlags(FlagOwner*);
  * Seen in play (2026-11-14): rentals already in the team are drawn with blue names in the
  * 「レンタルポケモン」 grid (スピアー after it was rented).
  */
-void FreeBattle_MarkPickedRentals(FlagOwner* grid, TeamMonSlot* slots, s32 exceptSpecies) {
+void FreeBattle_MarkPickedRentals(FlagOwner* grid, TeamMonSlot* slots, s32 except_species) {
     Record50* records;
     Record50* rec;
     s32 i;
@@ -707,7 +707,7 @@ void FreeBattle_MarkPickedRentals(FlagOwner* grid, TeamMonSlot* slots, s32 excep
     slot = 0;
     p = slots;
     for (; slot != 0x1F8; slot += 0x54, p++) {
-        if ((p->flags == 0) && (exceptSpecies != M2C_FIELD(p, u8*, 4))) {
+        if ((p->flags == 0) && (except_species != M2C_FIELD(p, u8*, 4))) {
             i = 0;
             rec = records;
             count = grid->table->count;
@@ -755,7 +755,7 @@ extern Species8200140C D_80064C5C[];
  * Seen in play: runs when the entry screen opens after picking フリーバトル (「つかえるポケモンは 40しゅるい」).
  * @unverified Rule details from the code.
  */
-void FreeBattle_MarkIneligibleMons(TeamList8200140C *list, s32 ruleCategory) {
+void FreeBattle_MarkIneligibleMons(TeamList8200140C *list, s32 rule_category) {
     s32 i;
     s32 j;
     Team8200140C* team = list->teams;
@@ -768,11 +768,11 @@ void FreeBattle_MarkIneligibleMons(TeamList8200140C *list, s32 ruleCategory) {
             }
             if ((mon->species <= 0) || (mon->species >= 0x98)) {
                 mon->flags |= 0x20;
-            } else if (ruleCategory == 1) {
+            } else if (rule_category == 1) {
                 if (!(D_80064C5C[mon->species - 1].flags & 1) || (mon->level < 50) || (mon->level >= 56)) {
                     mon->flags |= 2;
                 }
-            } else if (ruleCategory == 2) {
+            } else if (rule_category == 2) {
                 if (!(D_80064C5C[mon->species - 1].flags & 2) || (mon->level <= 0) || (mon->level >= 31)) {
                     mon->flags |= 4;
                 }
@@ -795,8 +795,8 @@ typedef struct Slot82001558 {
  * rules, six L30 rentals vs COM).
  * Seen in play (2026-11-14): two スピアー in a rental team gave 「おなじポケモンが ２たいいます」.
  */
-s32 FreeBattle_CountDuplicateSpecies(void* slotArray, s32* index) {
-    Slot82001558* slots = slotArray;
+s32 FreeBattle_CountDuplicateSpecies(void* slot_array, s32* index) {
+    Slot82001558* slots = slot_array;
     s32 count = 0;
     s32 i;
     s32 j;
@@ -874,8 +874,8 @@ void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
  * Draws one Pokemon cell of a team row: nickname, level and icon.
  * Seen in play: draws each Pokemon cell of a team row (icon, nickname, L20).
  */
-void FreeBattle_DrawMonCell(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 iconCache) {
-    IconCache82001810* cache = (IconCache82001810*)iconCache;
+void FreeBattle_DrawMonCell(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 icon_cache) {
+    IconCache82001810* cache = (IconCache82001810*)icon_cache;
     s32 pad[2]; // FAKE
     s32 key;
     s32 idx;
@@ -924,8 +924,8 @@ void FreeBattle_DrawMonCell(s32, s32, s32*, s32, s32, s32);
  * Draws a team slot's Pokemon cell, or an empty cell when the slot is empty.
  * Seen in play: draws each Pokemon cell of the picked team's window.
  */
-void FreeBattle_DrawSlotCell(s32 x, s32 y, s32* slot, s32 index, s32 flags, s32 iconCache) {
-    FreeBattle_DrawMonCell(x, y, (*slot & 1) ? NULL : slot + 1, index, flags, iconCache);
+void FreeBattle_DrawSlotCell(s32 x, s32 y, s32* slot, s32 index, s32 flags, s32 icon_cache) {
+    FreeBattle_DrawMonCell(x, y, (*slot & 1) ? NULL : slot + 1, index, flags, icon_cache);
 }
 
 /**
@@ -1088,7 +1088,7 @@ void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
  * Draws a full team row: trainer panel and six Pokemon cells.
  * Seen in play: draws each team row on 「エントリーポケモンのせんたく」.
  */
-void FreeBattle_DrawTeamRow(s32 x, s32 y, SlotList *team, s32 row, s32 flags, SlotList **iconCache)
+void FreeBattle_DrawTeamRow(s32 x, s32 y, SlotList *team, s32 row, s32 flags, SlotList **icon_cache)
 {
   SlotList **new_var; // FAKE: permuter temp
   s32 hl;
@@ -1100,7 +1100,7 @@ void FreeBattle_DrawTeamRow(s32 x, s32 y, SlotList *team, s32 row, s32 flags, Sl
   if (team != 0)
   {
     FreeBattle_DrawRentalNameList(x, y, flags, (Slot82001E20 *) team);
-    new_var = iconCache;
+    new_var = icon_cache;
     if (team->unk_00 & 2)
     {
       FreeBattle_DrawRentalPrompt(x, y, flags);
@@ -1253,7 +1253,7 @@ void GridMenu_DrawInlineItems(void*, s32, s32, s32, MenuDef8200288C*);
  * Seen in play: draws the picked team's window (trainer panel and six Pokemon) under the confirm
  * prompt.
  */
-void FreeBattle_DrawRentalListWindow(s8 *entry, s32 cursorStyle)
+void FreeBattle_DrawRentalListWindow(s8 *entry, s32 cursor_style)
 {
   s32 x;
   s32 y;
@@ -1267,7 +1267,7 @@ void FreeBattle_DrawRentalListWindow(s8 *entry, s32 cursorStyle)
   def.count = 0;
   def.itemCount = 0x18;
   def.itemSize = (*((s32 *) (((s8 *) entry) + 0x48))) * 6;
-  switch (cursorStyle)
+  switch (cursor_style)
   {
     case 1:
       mode = 0xFFEF;

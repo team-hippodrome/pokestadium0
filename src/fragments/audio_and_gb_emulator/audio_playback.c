@@ -236,7 +236,7 @@ void AudioPlayback_ProcessNotes(void)
 {
   Note *note;
   NotePlaybackState *playbackState;
-  NoteSampleState *noteSubEu;
+  NoteSampleState *note_sub_eu;
   NoteAttributes *attrs;
   s32 pad[2]; // FAKE
   NoteSubAttributes sub_attrs;
@@ -297,11 +297,11 @@ void AudioPlayback_ProcessNotes(void)
     {
       if (1)
       {
-        noteSubEu = &note->sampleState;
+        note_sub_eu = &note->sampleState;
       }
-      if ((playbackState->unk_04 >= 1) || noteSubEu->finished)
+      if ((playbackState->unk_04 >= 1) || note_sub_eu->finished)
       {
-        if ((playbackState->adsr.state == 0) || noteSubEu->finished)
+        if ((playbackState->adsr.state == 0) || note_sub_eu->finished)
         {
           if (playbackState->wantedParentLayer != ((SequenceLayer *) (-1)))
           {
@@ -363,7 +363,7 @@ void AudioPlayback_ProcessNotes(void)
           sub_attrs.reverbBits = attrs->stereo;
           sub_attrs.gain = attrs->gain;
           sub_attrs.filter = attrs->filter;
-          bookOffset = noteSubEu->bookOffset;
+          bookOffset = note_sub_eu->bookOffset;
         }
         else
         {
@@ -387,7 +387,7 @@ void AudioPlayback_ProcessNotes(void)
         sub_attrs.freqScale *= D_811858D0;
         sub_attrs.velocity *= scale;
         AudioPlayback_InitSampleState((s8 *) note, &sub_attrs);
-        noteSubEu->bookOffset = bookOffset;
+        note_sub_eu->bookOffset = bookOffset;
       }
     }
 

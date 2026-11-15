@@ -18,11 +18,11 @@ extern Gfx D_8E824BB0[]; // Screen glare quad over the Game Boy Pocket's screen.
  * both counters advanced every frame (one up, one down), and stubbing the function with `jr ra`
  * froze them and removed the moving glare from the screen.
  */
-void DoduoGameBoy_ScrollScreenGlare(s32 callContext, GeoDisplayListNode* node) {
+void DoduoGameBoy_ScrollScreenGlare(s32 call_context, GeoDisplayListNode* node) {
     static s32 sGlareScrollA;
     static s32 sGlareScrollB;
 
-    if (callContext == 2) {
+    if (call_context == 2) {
         node->displayList = Gfx_AllocDisplayList(0x20);
         sGlareScrollA++;
         if (sGlareScrollA >= 0x80) {

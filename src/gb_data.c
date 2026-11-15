@@ -505,10 +505,10 @@ u8 Move_GetIdFromTableIndex(s32 tm_hm_index) {
  * Converts a dex number to the Game Boy internal species index (table D_8006B8FB: 1 → 0x99
  * Bulbasaur, 2 → 0x09 Ivysaur, ...). Inverse of Species_FromInternalIndex. Checked against the ROM table.
  */
-u8 Species_ToInternalIndex(s32 dexNo) {
+u8 Species_ToInternalIndex(s32 dex_no) {
     extern u8 D_8006B8FB[];
 
-    return D_8006B8FB[dexNo];
+    return D_8006B8FB[dex_no];
 }
 
 /** Converts a Game Boy internal species index to the species id. */

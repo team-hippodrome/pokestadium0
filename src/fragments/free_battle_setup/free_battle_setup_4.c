@@ -218,7 +218,7 @@ void FreeBattle_InitEntryListCursor(s8*);
  * The meaning of x..ruleCategory beyond what is stored above is not established.
  * Seen in play: runs as 「エントリーポケモンのせんたく 1Pせんたくちゅう」 opens.
  */
-void FreeBattle_InitEntrySelect(s8* entry, s32 x, s32 y, s32 teams, s32 picks, s32 ruleCategory) {
+void FreeBattle_InitEntrySelect(s8* entry, s32 x, s32 y, s32 teams, s32 picks, s32 rule_category) {
     s8* var_s1;
 
     Window_SetRect(entry + 0x14, x, y, 0x220, 0x158);
@@ -233,10 +233,10 @@ void FreeBattle_InitEntrySelect(s8* entry, s32 x, s32 y, s32 teams, s32 picks, s
     FreeBattle_ClearIndices(D_8200AC58, 0, 0x28);
     M2C_FIELD(entry, s32*, 0x738) = 1;
     M2C_FIELD(entry, s32*, 0x73C) = picks;
-    M2C_FIELD(entry, s32*, 0x740) = ruleCategory;
+    M2C_FIELD(entry, s32*, 0x740) = rule_category;
     FreeBattle_InitEntryListCursor(entry);
-    if (ruleCategory != 0) {
-        if (ruleCategory == 1) {
+    if (rule_category != 0) {
+        if (rule_category == 1) {
             var_s1 = entry + 0x684;
             func_80027410(var_s1, D_8200ACFC, 0x50, 0x28, 0x28);
         } else {
@@ -326,7 +326,7 @@ void ScrollGrid_DrawItems(void*, s32, s32, s32, TableArgs*);
  * What the mode word's bits mean is not yet established.
  * Seen in play: draws the 「レンタルポケモン」 window holding the L50 rental grid (フシギバナ, リザードン, カメックス, …).
  */
-void FreeBattle_DrawRentalTitleWindow(s8* entry, s32 cursorStyle) {
+void FreeBattle_DrawRentalTitleWindow(s8* entry, s32 cursor_style) {
     s32 sp44;
     TableArgs sp34;
 
@@ -338,7 +338,7 @@ void FreeBattle_DrawRentalTitleWindow(s8* entry, s32 cursorStyle) {
     sp34.unk_04 = 0x18;
     sp34.unk_08 = 0x10;
     sp34.unk_0C = 0;
-    switch (cursorStyle) {
+    switch (cursor_style) {
         case 1:
             sp44 = 0xFEF;
             break;
@@ -961,7 +961,7 @@ void Session_LoadPortSnapshot(u8);
  * Seen in play (2026-11-13) ran once after both Free Battle teams were confirmed, just before the
  * VS screen, and called FreeBattle_CopyTeamToRoster for each side.
  */
-void FreeBattle_BuildBattleRosters(s32* side0Players, s32* side1Players, Src82004020** teams, s32 mode, s32 ruleCategory, s32 modeSelection) {
+void FreeBattle_BuildBattleRosters(s32* side0_players, s32* side1_players, Src82004020** teams, s32 mode, s32 ruleCategory, s32 modeSelection) {
     Src82004020* src;
 
     D_8200ACF8->mode = mode;
@@ -970,8 +970,8 @@ void FreeBattle_BuildBattleRosters(s32* side0Players, s32* side1Players, Src8200
         D_8200ACF8->modeSelection = modeSelection;
     }
     if ((D_8200ACF8->mode == 1) || (D_8200ACF8->mode == 2)) {
-        if (side0Players[0] > 0) {
-            src = teams[side0Players[0] - 1];
+        if (side0_players[0] > 0) {
+            src = teams[side0_players[0] - 1];
             if (src->unk_01 == 0x20) {
                 D_8200ACF8->teamGbPort = src->unk_02;
             } else {
@@ -989,23 +989,23 @@ void FreeBattle_BuildBattleRosters(s32* side0Players, s32* side1Players, Src8200
     D_8200ACF8->trainerSlots[1].isHuman = 0;
     D_8200ACF8->trainerSlots[2].isHuman = 0;
     D_8200ACF8->trainerSlots[3].isHuman = 0;
-    if (side0Players[0] > 0) {
-        FreeBattle_CopyTeamToRoster(&D_8200ACF8->trainerSlots[0], &D_8200ACF8->rosterInfo[0], side0Players[0], teams[side0Players[0] - 1]);
+    if (side0_players[0] > 0) {
+        FreeBattle_CopyTeamToRoster(&D_8200ACF8->trainerSlots[0], &D_8200ACF8->rosterInfo[0], side0_players[0], teams[side0_players[0] - 1]);
         D_8200ACF8->battleSides[0].teamMember[D_8200ACF8->battleSides[0].tagTeamSize] = &D_8200ACF8->trainerSlots[0];
         D_8200ACF8->battleSides[0].tagTeamSize++;
     }
-    if (side0Players[1] > 0) {
-        FreeBattle_CopyTeamToRoster(&D_8200ACF8->trainerSlots[1], &D_8200ACF8->rosterInfo[1], side0Players[1], teams[side0Players[1] - 1]);
+    if (side0_players[1] > 0) {
+        FreeBattle_CopyTeamToRoster(&D_8200ACF8->trainerSlots[1], &D_8200ACF8->rosterInfo[1], side0_players[1], teams[side0_players[1] - 1]);
         D_8200ACF8->battleSides[0].teamMember[D_8200ACF8->battleSides[0].tagTeamSize] = &D_8200ACF8->trainerSlots[1];
         D_8200ACF8->battleSides[0].tagTeamSize++;
     }
-    if (side1Players[0] > 0) {
-        FreeBattle_CopyTeamToRoster(&D_8200ACF8->trainerSlots[2], &D_8200ACF8->rosterInfo[2], side1Players[0], teams[side1Players[0] - 1]);
+    if (side1_players[0] > 0) {
+        FreeBattle_CopyTeamToRoster(&D_8200ACF8->trainerSlots[2], &D_8200ACF8->rosterInfo[2], side1_players[0], teams[side1_players[0] - 1]);
         D_8200ACF8->battleSides[1].teamMember[D_8200ACF8->battleSides[1].tagTeamSize] = &D_8200ACF8->trainerSlots[2];
         D_8200ACF8->battleSides[1].tagTeamSize++;
     }
-    if (side1Players[1] > 0) {
-        FreeBattle_CopyTeamToRoster(&D_8200ACF8->trainerSlots[3], &D_8200ACF8->rosterInfo[3], side1Players[1], teams[side1Players[1] - 1]);
+    if (side1_players[1] > 0) {
+        FreeBattle_CopyTeamToRoster(&D_8200ACF8->trainerSlots[3], &D_8200ACF8->rosterInfo[3], side1_players[1], teams[side1_players[1] - 1]);
         D_8200ACF8->battleSides[1].teamMember[D_8200ACF8->battleSides[1].tagTeamSize] = &D_8200ACF8->trainerSlots[3];
         D_8200ACF8->battleSides[1].tagTeamSize++;
     }

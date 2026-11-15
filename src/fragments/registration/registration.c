@@ -194,7 +194,7 @@ extern s32 D_88103078;
  * Sets up the registration menu: ポケモンをとうろくする (register), とうろくしたポケモンをみる (view), とうろくしたポケモンをけす (delete).
  * Seen in play (2026-11-12): ポケモンを とうろくする / とうろくした ポケモンをみる / とうろくした ポケモンをけす.
  */
-void Registration_InitMainMenu(MenuWindow* menu, s32 x, s32 y, s32 width, s32 height, M2C_UNK* labels, s32 labelCount, M2C_UNK* descriptions, s32 descriptionLines, M2C_UNK* title) {
+void Registration_InitMainMenu(MenuWindow* menu, s32 x, s32 y, s32 width, s32 height, M2C_UNK* labels, s32 label_count, M2C_UNK* descriptions, s32 descriptionLines, M2C_UNK* title) {
     s32 sp2C;
 
     Window_SetRect(menu, x, y, width, height);
@@ -202,7 +202,7 @@ void Registration_InitMainMenu(MenuWindow* menu, s32 x, s32 y, s32 width, s32 he
     menu->window.animTimer = 0;
     menu->window.frame.style = 0x801;
     menu->window.title = (s32)title;
-    func_80027804(&menu->itemList, (s8*)labels, labelCount, labelCount);
+    func_80027804(&menu->itemList, (s8*)labels, label_count, label_count);
     Menu_Init(&menu->menu, &menu->itemList, &menu->itemFlags, (M2C_UNK*)Registration_DrawMenuRow, width - 0xC, 0x20);
     menu->menu.options = (s32) (menu->menu.options | 0x10000);
     menu->descriptions = (s32)descriptions;
@@ -479,7 +479,7 @@ void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
  * Draws the team source (GB cartridge port or registered slot number), なまえ (name) and trainer id.
  * Seen in play (2026-11-12): the 1P cartridge or 01 slot icon, なまえ サトシ and IDNo/12345.
  */
-void Registration_DrawTrainerPanel(s32 x, s32 y, s32 textFlags, RegisteredTeam* team) {
+void Registration_DrawTrainerPanel(s32 x, s32 y, s32 text_flags, RegisteredTeam* team) {
     UNUSED s32 pad[3]; // FAKE: stack padding
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -490,7 +490,7 @@ void Registration_DrawTrainerPanel(s32 x, s32 y, s32 textFlags, RegisteredTeam* 
         } else if (team->source == 0x10) {
             Ui_DrawImageInStrips(D_88102DB8, x + 4, y + 4);
             Font_BeginTranslucentTextRendering();
-            Font_SetColorForFlags(textFlags);
+            Font_SetColorForFlags(text_flags);
             Font_SetActive(8, 0);
             Font_Printf(x + 0x1B, y + 0x1A, D_88102F24, team->slot + 1);
             Font_EndTexturedTextRendering();
@@ -500,7 +500,7 @@ void Registration_DrawTrainerPanel(s32 x, s32 y, s32 textFlags, RegisteredTeam* 
     Gfx_SetEnvColor(0xFF, 0xC8, 0xC8, 0xFF);
     Font_SetActive(4, -1);
     Font_Printf(x + 4, y + 0x41, D_88102F2C);
-    Font_SetColorForFlags(textFlags);
+    Font_SetColorForFlags(text_flags);
     Font_SetActive(4, 0);
     Font_Printf(x + 0x38, y + 0x41, (char*)team->name);
     Font_EndTexturedTextRendering();
@@ -535,7 +535,7 @@ void Ui_DrawNumber(s32, s32, s32, s32);
  * Draws one Pokemon cell of a team row: nickname, level and icon.
  * Seen in play (2026-11-12): ハナ L5, ヒノコ L5, カメ L5 with their icons.
  */
-void Registration_DrawMonCell(s32 x, s32 y, u8* mon, s32 iconId, s32 textFlags, RegistrationIconCache* cache) {
+void Registration_DrawMonCell(s32 x, s32 y, u8* mon, s32 icon_id, s32 text_flags, RegistrationIconCache* cache) {
     UNUSED s32 pad[4]; // FAKE
     s32 slot;
     s32* p;
@@ -544,17 +544,17 @@ void Registration_DrawMonCell(s32 x, s32 y, u8* mon, s32 iconId, s32 textFlags, 
     func_80029028(x, y, 132, 50, D_88102D78[0]);
     if (mon != NULL) {
         Font_BeginTranslucentTextRendering();
-        Font_SetColorForFlags(textFlags);
+        Font_SetColorForFlags(text_flags);
         Font_SetActive(4, 0);
         Font_Printf(x + 4, y + 4, mon + 0x30);
         Font_EndTexturedTextRendering();
         gSPDisplayList(gDisplayListHead++, D_80073450);
         func_8001BCB4(x + 44, y + 25, 8, 10, D_04011A60, 8, 0);
         Ui_DrawNumber(x + 56, y + 23, mon[0x24], 3);
-        slot = cache->base + iconId % cache->count;
+        slot = cache->base + icon_id % cache->count;
         p = &cache->slots[slot];
-        if (iconId != *p) {
-            *p = iconId;
+        if (icon_id != *p) {
+            *p = icon_id;
             PokeIcon_SetMonSlot(D_88103074, slot, mon, ((D_88102D78[0].c[1] << 3) & 0x7C0) | ((D_88102D78[0].c[2] >> 2) & 0x3E) | ((D_88102D78[0].c[0] << 8) & 0xF800) | 1);
         }
         if (cache) {} // karodo
@@ -592,21 +592,21 @@ void Ui_DrawNumber(s32, s32, s32, s32);
  * `cache` (unlike Registration_DrawMonCell it does not render the icon again).
  * Seen in play (2026-11-14): drew ハナ L5, ヒノコ L5, カメ L5 in the 01 row as each Ditto transformed.
  */
-void Registration_DrawRevealedMonCell(s32 x, s32 y, u8* mon, s32 iconId, s32 textFlags, s32* cache) {
+void Registration_DrawRevealedMonCell(s32 x, s32 y, u8* mon, s32 icon_id, s32 text_flags, s32* cache) {
     s32 idx;
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(x, y, 0x84, 0x32, D_88102D78[0]);
     if (mon != NULL) {
         Font_BeginTranslucentTextRendering();
-        Font_SetColorForFlags(textFlags);
+        Font_SetColorForFlags(text_flags);
         Font_SetActive(4, 0);
         Font_Printf(x + 4, y + 4, mon + 0x30);
         Font_EndTexturedTextRendering();
         gSPDisplayList(gDisplayListHead++, D_80073450);
         func_8001BCB4(x + 0x2C, y + 0x19, 8, 0xA, D_04011A60, 8, 0);
         Ui_DrawNumber(x + 0x38, y + 0x17, mon[0x24], 3);
-        idx = iconId % cache[2] + cache[1];
+        idx = icon_id % cache[2] + cache[1];
         gSPDisplayList(gDisplayListHead++, D_80073408);
         func_8001B884(x + 0x56, y + 6, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_88103074, idx), 0x28, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);
@@ -739,7 +739,7 @@ void Registration_DrawTeamRow(s32 x, s32 y, s32 item, s32 row, s32 flags, s32 un
  * the rest of the team shows as Ditto (Registration_DrawDittoCell).
  * Seen in play (2026-11-14): the lower row (slot 01) during register, and the cursor row during delete.
  */
-void Registration_DrawDittoTransformRow(s32 x, s32 y, RegisteredTeam* team, s32 row, s32 revealTimer) {
+void Registration_DrawDittoTransformRow(s32 x, s32 y, RegisteredTeam* team, s32 row, s32 reveal_timer) {
     s32 pad[2]; // FAKE
     RegistrationIconCache cache;
     s32 i;
@@ -752,12 +752,12 @@ void Registration_DrawDittoTransformRow(s32 x, s32 y, RegisteredTeam* team, s32 
     cache.base = 0;
     cache.count = 24;
     cache.start = row * 6;
-    if (revealTimer == 0) {
+    if (reveal_timer == 0) {
         n = 0;
-    } else if (revealTimer == 1) {
+    } else if (reveal_timer == 1) {
         n = team->mons.count;
     } else {
-        n = (revealTimer - 2) / 15;
+        n = (reveal_timer - 2) / 15;
         if (n >= team->mons.count) {
             n = team->mons.count;
         }
@@ -1202,7 +1202,7 @@ void func_8002C8D8(Col88102A2C*, Col88102A2C, f32);
  * Seen in play (2026-11-13) ran on the frames the registration screen faded in from the main menu.
  * Seen in play (2026-11-14): also ran when B left for the main menu.
  */
-s32 Registration_UpdateFade(s32 fadeMode) {
+s32 Registration_UpdateFade(s32 fade_mode) {
     Col88102A2C sp2C;
     M2C_UNK *var_a1;
     s32 n;
@@ -1244,7 +1244,7 @@ extern RegistrationScreen* D_881030F8;
  * leaves the menu.
  * Seen in play (2026-11-12): ran every frame of the とうろく screen.
  */
-void Registration_RunFrame(s32 fadeMode) {
+void Registration_RunFrame(s32 fade_mode) {
     Cont_StartReadInputs();
     Cont_ReadInputs();
     Registration_DrawScreen(D_881030F8);

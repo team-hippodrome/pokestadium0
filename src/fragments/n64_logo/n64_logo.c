@@ -49,7 +49,7 @@ void N64Logo_DrawLogoTexture(void) {
  * Verified in play (2026-11-14): at boot it ran 3 times for the fade-in (first call with
  * fadeMode 2) and 16 times for the fade-out, each time calling N64Logo_DrawLogoTexture.
  */
-s32 N64Logo_DrawFrame(UNUSED u8 fadeMode) {
+s32 N64Logo_DrawFrame(UNUSED u8 fade_mode) {
     BgStage_DrawFrame();
     GfxImage_FillCurrent(&gDisplayListHead, 1);
     N64Logo_DrawLogoTexture();
@@ -65,11 +65,11 @@ s32 N64Logo_DrawFrame(UNUSED u8 fadeMode) {
  * startTime taken just after SFX_N64_LOGO; it returned 59 frames later (about 1 second).
  * Renamed from Stadium 1's N64Logo_WaitForElapsed: the wait is always one second.
  */
-void N64Logo_HoldForOneSecond(u64 startTime) {
-    u32 elapsedUsec = 0xF;
+void N64Logo_HoldForOneSecond(u64 start_time) {
+    u32 elapsed_usec = 0xF;
 
-    while (elapsedUsec < 0xF4240) {
-        elapsedUsec = __ull_div(__ll_mul(osGetTime() - startTime, 0x40), 0xBB8);
+    while (elapsed_usec < 0xF4240) {
+        elapsed_usec = __ull_div(__ll_mul(osGetTime() - start_time, 0x40), 0xBB8);
     }
 }
 
@@ -114,41 +114,41 @@ void Announcer_SetEnabled(s32);
  * Verified in play (2026-11-14): pushes the 'LOGO' pool state at boot (frame ~310 after a power
  * cycle), Audio_PlaySoundEffectById got 0x0A (SFX_N64_LOGO), and it returned 0x8010.
  */
-s32 N64Logo_Main(UNUSED s32 loaderArg0, UNUSED s32 loaderArg1) {
-    u8 soundOptions;
-    u64 logoStartTime;
-    StageContext* stageContext;
+s32 N64Logo_Main(UNUSED s32 loader_arg0, UNUSED s32 loader_arg1) {
+    u8 sound_options;
+    u64 logo_start_time;
+    StageContext* stage_context;
 
     main_pool_push_state('LOGO');
 
     Gfx_InitDisplayListBuffers(0x10000, 0);
-    stageContext = StageContext_Allocate(0, 1, 2, 0, 2, 1);
+    stage_context = StageContext_Allocate(0, 1, 2, 0, 2, 1);
 
     ASSET_LOAD(D_1000000, common_menu1_ui, 0);
     ASSET_LOAD(D_2000000, n64_logo_texture, 0);
 
     Save_LoadSram();
-    StageContext_Activate(stageContext);
+    StageContext_Activate(stage_context);
     StageFade_Start(1);
     BgStage_RunUntilCondition(3, N64Logo_DrawFrame);
-    soundOptions = Save_GetOptionFlags();
+    sound_options = Save_GetOptionFlags();
 
-    if (soundOptions & 1) {
+    if (sound_options & 1) {
         Audio_SetOutputMode(0);
     } else {
         Audio_SetOutputMode(1);
     }
 
-    if (soundOptions & 2) {
+    if (sound_options & 2) {
         Announcer_SetEnabled(0);
     } else {
         Announcer_SetEnabled(1);
     }
 
     Audio_PlaySoundEffectById(SFX_N64_LOGO);
-    logoStartTime = osGetTime();
+    logo_start_time = osGetTime();
     N64Logo_ScanTransferPaks();
-    N64Logo_HoldForOneSecond(logoStartTime);
+    N64Logo_HoldForOneSecond(logo_start_time);
     StageFade_Start(0x10);
     BgStage_RunUntilCondition(0x10, N64Logo_DrawFrame);
     StageContext_Deactivate();

@@ -654,14 +654,14 @@ extern u8 D_800FD68C;
  * Plays system sound `soundId` (menus pass 1 for the cursor), once per id until the list is cleared; ids 0xF
  * and 0x17 bypass the list. @unverified: sound not heard in the headless emulator.
  */
-s32 Audio_PlaySystemSound(s32 soundId) {
+s32 Audio_PlaySystemSound(s32 sound_id) {
     s32 ret;
     s32 pad[2]; // FAKE
     u32 i;
     volatile s32 id; // FAKE: keeps the copy in its stack slot
     s32* p;
 
-    if (soundId == 0xF) {
+    if (sound_id == 0xF) {
         if (!(D_80075C30 & 0x80000000)) {
             return 0;
         }
@@ -669,7 +669,7 @@ s32 Audio_PlaySystemSound(s32 soundId) {
         func_80037AC4(D_800FD608, 0x28);
         return ret;
     }
-    if (soundId == 0x17) {
+    if (sound_id == 0x17) {
         return func_8003834C(D_800B4188, D_800B41A0, 0x17, 0x80, 0x80, 0, -1);
     }
     i = 0;
@@ -677,7 +677,7 @@ s32 Audio_PlaySystemSound(s32 soundId) {
         p = D_800FD628;
     loop:
         i++;
-        if (soundId == *p) {
+        if (sound_id == *p) {
             return 0;
         }
         p++;
@@ -685,10 +685,10 @@ s32 Audio_PlaySystemSound(s32 soundId) {
             goto loop;
         }
     }
-    D_800FD628[D_800FD68C] = soundId;
+    D_800FD628[D_800FD68C] = sound_id;
     D_800FD68C++;
-    id = soundId;
-    switch (soundId) {
+    id = sound_id;
+    switch (sound_id) {
         case 36:
             func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
             break;
@@ -708,7 +708,7 @@ s32 Audio_PlaySystemSound(s32 soundId) {
         default:
             return 0;
     }
-    if (soundId == 0xA) {
+    if (sound_id == 0xA) {
         D_80077524 = 1;
     }
     switch (id) {
@@ -721,12 +721,12 @@ s32 Audio_PlaySystemSound(s32 soundId) {
             if (D_800FD610[D_800FD620] != 0) {
                 func_80037AC4(D_800FD610[D_800FD620], 1);
             }
-            ret = func_800376E8(soundId);
+            ret = func_800376E8(sound_id);
             D_800FD610[D_800FD620++] = ret;
             D_800FD620 %= 4;
             break;
         default:
-            ret = func_800376E8(soundId);
+            ret = func_800376E8(sound_id);
             break;
     }
     if (id == 0xA) {

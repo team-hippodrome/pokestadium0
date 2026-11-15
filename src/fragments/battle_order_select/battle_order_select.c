@@ -109,7 +109,7 @@ void BattleMenu_DrawScrollingInstructionPanel(void) {
  * Seen in play (2026-11-14, L50-55 tournament, rental team vs マサハル): ran at screen start with ruleCategory 1; afterwards sidebar 0 held slotIcons
  * {0, 0, 0, -1, -1, -1}, firstPort 0, secondPort -1, and the 1P column showed three empty holes.
  */
-void BattleMenu_InitOrderSidebar(OrderSidebarIcons* sidebar, BattleSide* side, s32 ruleCategory) {
+void BattleMenu_InitOrderSidebar(OrderSidebarIcons* sidebar, BattleSide* side, s32 rule_category) {
     s32 i;
 
     sidebar->iconCount = 0;
@@ -118,7 +118,7 @@ void BattleMenu_InitOrderSidebar(OrderSidebarIcons* sidebar, BattleSide* side, s
         sidebar->slotIcons[i] = 0;
         sidebar->slotIconGrowth[i] = 1;
     }
-    if (ruleCategory != 0) {
+    if (rule_category != 0) {
         i = 3;
         do {
             sidebar->slotIcons[i] = -1;
@@ -300,10 +300,10 @@ void BattleMenu_DrawTeamOrderSidebarTeam1(void) {
  * Adds a growing pick ball, owned by the given controller port, to the next slot of a sidebar.
  * Seen in play (2026-11-14, L50-55 tournament, rental team vs マサハル): ran on each pick; slot 0 of sidebar 0 became 0x13 (port 0 + 1, frame 3).
  */
-void BattleMenu_AddSidebarPickBall(s32 sidebarTeam, s32 controllerPort) {
-    OrderSidebarIcons* temp_v0 = &D_82302B20[sidebarTeam];
+void BattleMenu_AddSidebarPickBall(s32 sidebar_team, s32 controller_port) {
+    OrderSidebarIcons* temp_v0 = &D_82302B20[sidebar_team];
 
-    temp_v0->slotIcons[temp_v0->iconCount] = ((controllerPort + 1) << 4) | (temp_v0->slotIcons[temp_v0->iconCount] & 0xF);
+    temp_v0->slotIcons[temp_v0->iconCount] = ((controller_port + 1) << 4) | (temp_v0->slotIcons[temp_v0->iconCount] & 0xF);
     temp_v0->slotIconGrowth[temp_v0->iconCount] = 1;
     temp_v0->iconCount++;
 }
@@ -313,8 +313,8 @@ void BattleMenu_AddSidebarPickBall(s32 sidebarTeam, s32 controllerPort) {
  * Seen in play (2026-11-14, L50-55 tournament, rental team vs マサハル): ran on L (undo), on えらびなおす and when the level-sum notice was dismissed;
  * the balls disappeared and iconCount became 0.
  */
-void BattleMenu_ShrinkSidebarPickBalls(s32 sidebarTeam) {
-    OrderSidebarIcons* ptr = &D_82302B20[sidebarTeam];
+void BattleMenu_ShrinkSidebarPickBalls(s32 sidebar_team) {
+    OrderSidebarIcons* ptr = &D_82302B20[sidebar_team];
     s32 i;
 
     for (i = 0; i < 6; i++) {
@@ -327,8 +327,8 @@ void BattleMenu_ShrinkSidebarPickBalls(s32 sidebarTeam) {
  * Draws a bordered panel in the colour assigned to the controller port (1P blue, COM green).
  * Seen in play (2026-11-13/14): ran every frame for the party grids, prompts and name labels.
  */
-void BattleMenu_DrawPanelBorder(s16 x, s16 y, s16 width, s16 height, s16 controllerPort) {
-    Ui_DrawBorderedPanelStyleB(x, y, width, height, D_82302800[controllerPort]);
+void BattleMenu_DrawPanelBorder(s16 x, s16 y, s16 width, s16 height, s16 controller_port) {
+    Ui_DrawBorderedPanelStyleB(x, y, width, height, D_82302800[controller_port]);
 }
 
 extern u8 D_03000000[];
@@ -921,7 +921,7 @@ extern Controller D_82302BD8;
  * ready. A COM panel reads the scripted controller instead of a real port.
  * Seen in play (2026-11-14, L50-55 tournament, rental team vs マサハル): returned 1 for the COM panel throughout and for 1P's after はい.
  */
-s32 BattleMenu_UpdateOrderSelectPanel(s32 fadeMode, OrderSelectPanel* panel) {
+s32 BattleMenu_UpdateOrderSelectPanel(s32 fade_mode, OrderSelectPanel* panel) {
     Controller* var_a0;
     s32 sp18 = 0;
 
@@ -931,7 +931,7 @@ s32 BattleMenu_UpdateOrderSelectPanel(s32 fadeMode, OrderSelectPanel* panel) {
         var_a0 = &gControllers[panel->controllerPort];
     }
 
-    if (fadeMode == 0) {
+    if (fade_mode == 0) {
         switch (panel->state) {
             case 0:
                 BattleMenu_HandleOrderSelectPanel_PartyInput(var_a0, panel);
@@ -965,7 +965,7 @@ extern s32 D_82302B44;
  * panels are ready, which stops the music and starts the fade out.
  * Seen in play (2026-11-14, L50-55 tournament, rental team vs マサハル): ran every frame; the screen faded out after both panels were ready.
  */
-s32 BattleMenu_UpdateOrderSelect(s32 fadeMode) {
+s32 BattleMenu_UpdateOrderSelect(s32 fade_mode) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 i;
     s32 var_s2;
@@ -990,7 +990,7 @@ s32 BattleMenu_UpdateOrderSelect(s32 fadeMode) {
     }
 
     for (i = 0; i < D_82302B44; i++) {
-        var_s2 += BattleMenu_UpdateOrderSelectPanel(fadeMode, &(D_82302B48)[i]);
+        var_s2 += BattleMenu_UpdateOrderSelectPanel(fade_mode, &(D_82302B48)[i]);
         BattleMenu_DrawOrderSelectPanel(&(D_82302B48)[i]);
     }
 
@@ -998,7 +998,7 @@ s32 BattleMenu_UpdateOrderSelect(s32 fadeMode) {
     BattleMenu_DrawTeamOrderSidebarTeam1();
     BattleMenu_DrawScrollingInstructionPanel();
 
-    if (fadeMode == 0) {
+    if (fade_mode == 0) {
         if (var_s2 == D_82302B44) {
             sp30 = 1;
             Audio_StopMusic(0x1E);

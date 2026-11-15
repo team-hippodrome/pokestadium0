@@ -21,12 +21,12 @@ void PcSort_Unused2(void);
  * Seen in play (2026-11-12) in せいとん: during PcSort_SaveChanges it ran for deck 0x20 (the party)
  * and 0x21 (GB box 1), the two lists the move changed.
  */
-void PcSort_WriteDeck(s32 deckType, s32 port, s32 index, ByteMatrix* table) {
-    DeckHandle* sp1C = Deck_Open(deckType, port, index, 1);
+void PcSort_WriteDeck(s32 deck_type, s32 port, s32 index, ByteMatrix* table) {
+    DeckHandle* sp1C = Deck_Open(deck_type, port, index, 1);
 
     Deck_WriteEntries(table->rows, table->count, sp1C);
 
-    if ((deckType == 0x10) || (deckType == 0x11) || (deckType == 0x12) || (deckType == 0x13)) {
+    if ((deck_type == 0x10) || (deck_type == 0x11) || (deck_type == 0x12) || (deck_type == 0x13)) {
         Deck_CloseAndFlushBox(sp1C);
     } else {
         Deck_CloseAndFlush(sp1C);

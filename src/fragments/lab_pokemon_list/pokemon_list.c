@@ -142,7 +142,7 @@ extern u8 D_8910A84C[];
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): ran on entry as the list
  * window appeared.
  */
-void LabPCList_InitListWindow(LabPCListScreen* screen, s32 x, s32 y, s32 msgBox) {
+void LabPCList_InitListWindow(LabPCListScreen* screen, s32 x, s32 y, s32 msg_box) {
     UNUSED s32 pad[1]; // FAKE: stack padding
 
     LabPCList_InitSources(screen);
@@ -174,7 +174,7 @@ void LabPCList_InitListWindow(LabPCListScreen* screen, s32 x, s32 y, s32 msgBox)
     screen->pageColumnStart = D_8910A84C;
     LabPCList_ResetHeaderCursor(screen);
     screen->hasChanges = 0;
-    screen->msg = msgBox;
+    screen->msg = msg_box;
     LabPCList_ResetFilterState(screen);
     screen->state = 1;
     LabSourceSelect_Init(&screen->sourceSelectWindow, 120, 103, (s8*)&screen->sourceMatrix, D_8910A7F4);

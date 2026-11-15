@@ -194,8 +194,8 @@ void Font_SetColorForFlags(s32);
  * Draws one menu row label with the selection highlight.
  * Seen in play: draws each row of the 「たいせんルールせんたく」 list.
  */
-void FreeBattle_DrawMenuRow(s32 x, s32 y, char* text, s32 index, s32 flags, s32* rowWidth) {
-    s32 temp_v0 = *rowWidth;
+void FreeBattle_DrawMenuRow(s32 x, s32 y, char* text, s32 index, s32 flags, s32* row_width) {
+    s32 temp_v0 = *row_width;
 
     if (flags & 0x10) {
         Ui_FillRectHighlighted(x + 3, y + 3, temp_v0 - 6, 0x1A, D_82009100);
@@ -225,13 +225,13 @@ M2C_UNK Menu_Init(void*, void*, void*, void (*)(s32, s32, char *, s32, s32, s32 
  * Sets up a titled menu window with item and description tables.
  * Seen in play: A on フリーバトル opens 「たいせんルールせんたく」 (フリーバトル, L 1～30 バトル, L50～55 バトル) and runs this.
  */
-void FreeBattle_InitMenuWindow(MenuWindow* window, s32 x, s32 y, s32 width, s32 height, s32 items, s32 itemCount, char** descriptions, s32 descriptionLines, char* title) {
+void FreeBattle_InitMenuWindow(MenuWindow* window, s32 x, s32 y, s32 width, s32 height, s32 items, s32 item_count, char** descriptions, s32 descriptionLines, char* title) {
     Window_SetRect(&window->window, x, y, width, height);
     window->window.state = 0;
     window->window.animTimer = 0;
     window->window.frame.style = 0x801;
     window->window.title = title;
-    func_80027804(&window->itemList, items, itemCount, itemCount);
+    func_80027804(&window->itemList, items, item_count, item_count);
     Menu_Init(&window->menu, &window->itemList, window->itemFlags, FreeBattle_DrawMenuRow, width - 0xC, 0x20);
     window->menu.options = (s32) (window->menu.options | 0x10000);
     window->descriptions = descriptions;
@@ -331,7 +331,7 @@ typedef struct List820061F0 {
  * Seen in play: ルールをみる opens the rules list (「1) 6ぴきの ポケモンを エントリー」 … 「5) エントリーできるポケモン 33しゅるい」) as
  * this popup.
  */
-void FreeBattle_InitPopupMenu(MenuWindow* window, s32 x, s32 y, List820061F0 *items, s8 *itemFlags, Color_RGBA8 color) {
+void FreeBattle_InitPopupMenu(MenuWindow* window, s32 x, s32 y, List820061F0 *items, s8 *item_flags, Color_RGBA8 color) {
     s32 i;
     s32 w;
     s32 max = 0;
@@ -345,7 +345,7 @@ void FreeBattle_InitPopupMenu(MenuWindow* window, s32 x, s32 y, List820061F0 *it
     }
     func_80027804(&window->itemList, (s32)items->items, items->count, items->count);
     h = max * 0x18 + 0x18;
-    Menu_Init(&window->menu, &window->itemList, itemFlags, (void (*)(s32, s32, char *, s32, s32, s32 *))FreeBattle_DrawPopupRow, h, 0x24);
+    Menu_Init(&window->menu, &window->itemList, item_flags, (void (*)(s32, s32, char *, s32, s32, s32 *))FreeBattle_DrawPopupRow, h, 0x24);
     window->menu.options |= 0x10000;
     Window_SetRect(&window->window, x, y, h + 0xC, items->count * 0x24 + 0x18);
     window->window.animTimer = 0;
@@ -487,7 +487,7 @@ extern M2C_UNK D_82009F70;
  * sp+0x28.
  * Seen in play: たいせんする opens 「あいてをせんたく」 (1P VS, 2P 3P 4P COM) and runs this.
  */
-void FreeBattle_InitOpponentSelect(FreeBattleOpponentWindow* window, s32 x, s32 y, s32 controllerMask, s32 controllerCount, s32 gbSaveReadyMask) {
+void FreeBattle_InitOpponentSelect(FreeBattleOpponentWindow* window, s32 x, s32 y, s32 controllerMask, s32 controller_count, s32 gb_save_ready_mask) {
     s32 pad; // FAKE: stack padding
     s8 *sp2C;
     s8 *sp28;
@@ -505,7 +505,7 @@ void FreeBattle_InitOpponentSelect(FreeBattleOpponentWindow* window, s32 x, s32 
     window->menu.options = (s32) (window->menu.options | 0x10000);
     window->controllerMask = controllerMask;
     var_v1 = ~controllerMask;
-    if (controllerCount == 1) {
+    if (controller_count == 1) {
         var_v1 |= 0xE;
     }
     if (var_v1 & 2) {
@@ -517,7 +517,7 @@ void FreeBattle_InitOpponentSelect(FreeBattleOpponentWindow* window, s32 x, s32 
     if (var_v1 & 8) {
         window->menu.itemFlags[2] |= 1;
     }
-    window->unk_70 = gbSaveReadyMask;
+    window->unk_70 = gb_save_ready_mask;
     Menu_SkipDisabledForward(sp28, controllerMask);
 }
 
@@ -686,7 +686,7 @@ extern M2C_UNK D_82009FCC;
  * Free Battle only offers 1P against one opponent.
  * @unverified Name from the code.
  */
-void FreeBattle_InitTagOpponentSelect(FreeBattleTeamOpponentWindow* window, s32 x, s32 y, s32 controllerMask, s32 controllerCount, s32 gbSaveReadyMask) {
+void FreeBattle_InitTagOpponentSelect(FreeBattleTeamOpponentWindow* window, s32 x, s32 y, s32 controllerMask, s32 controller_count, s32 gb_save_ready_mask) {
     s32 pad; // FAKE: stack padding
     void *sp2C;
     void *sp28;
@@ -708,7 +708,7 @@ void FreeBattle_InitTagOpponentSelect(FreeBattleTeamOpponentWindow* window, s32 
     window->opponentMenu.options = (s32) (window->opponentMenu.options | 0x10000);
     window->controllerMask = controllerMask;
     var_v1 = ~controllerMask;
-    if (controllerCount == 2) {
+    if (controller_count == 2) {
         var_v1 |= 0xE;
     }
     if (var_v1 & 2) {
@@ -721,7 +721,7 @@ void FreeBattle_InitTagOpponentSelect(FreeBattleTeamOpponentWindow* window, s32 
         window->sideMenu.itemFlags[3] |= 1;
     }
     FreeBattle_DisableAbsentTagOpponents(window);
-    window->unk_C4 = gbSaveReadyMask;
+    window->unk_C4 = gb_save_ready_mask;
     window->focus = 1;
 }
 
@@ -1080,15 +1080,15 @@ extern u8 D_820091C4[];
  * Seen in play: トーナメントにでる opens 「カップせんたく」 (モンスターボールカップ, スーパーボールカップ, ハイパーボールカップ, マスターボールカップ) and
  * runs this.
  */
-void FreeBattle_InitCupSelect(FreeBattleCupWindow* window, s32 x, s32 y, s32 cupsCleared) {
+void FreeBattle_InitCupSelect(FreeBattleCupWindow* window, s32 x, s32 y, s32 cups_cleared) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s32 n;
     s32 i;
 
-    if (cupsCleared >= 4) {
+    if (cups_cleared >= 4) {
         n = 4;
     } else {
-        n = cupsCleared + 1;
+        n = cups_cleared + 1;
     }
     Window_SetRect(window, x, y, 0x15C, 0xA8);
     window->window.animTimer = 0;
@@ -1101,7 +1101,7 @@ void FreeBattle_InitCupSelect(FreeBattleCupWindow* window, s32 x, s32 y, s32 cup
     Menu_Init(&window->menu, &window->items, &window->itemFlags, (void (*)(s32, s32, char*, s32, s32, s32*))FreeBattle_DrawCupRow, 0x150, 0x24);
     window->menu.options |= 0x10000;
     window->menu.cursor = n - 1;
-    for (i = 0; i < cupsCleared; i++) {
+    for (i = 0; i < cups_cleared; i++) {
         window->menu.itemFlags[i] |= 0x100;
     }
     for (i = n; i < 4; i++) {
@@ -1168,7 +1168,7 @@ extern FreeBattleMonGridConfig D_820091EC[2];
  * Seen in play (2026-11-14): ran with ruleCategory 0 when 4) エントリーできるポケモン ４０しゅるい was
  * picked on the フリーバトル rules (40 Pokémon shown) and with 2 on the L1-30 rules (33 shown).
  */
-void FreeBattle_InitUsableMonGrid(FreeBattleMonGridWindow* window, s32 x, s32 y, s32 ruleCategory, s32 allMons, s32 l130Mons, s8* icons) {
+void FreeBattle_InitUsableMonGrid(FreeBattleMonGridWindow* window, s32 x, s32 y, s32 rule_category, s32 all_mons, s32 l130_mons, s8* icons) {
     FreeBattleMonGridConfig* cfg;
     u8* entry;
     s32 sel;
@@ -1176,13 +1176,13 @@ void FreeBattle_InitUsableMonGrid(FreeBattleMonGridWindow* window, s32 x, s32 y,
     s32 size;
     Color_RGBA8 color;
 
-    if (ruleCategory == 2) {
+    if (rule_category == 2) {
         sel = 1;
     } else {
         sel = 0;
     }
-    D_820091EC[0].mons = allMons;
-    D_820091EC[1].mons = l130Mons;
+    D_820091EC[0].mons = all_mons;
+    D_820091EC[1].mons = l130_mons;
     Window_SetRect(window, x, y, 0x235, 0x174);
     window->window.animTimer = 0;
     window->window.title = 0;

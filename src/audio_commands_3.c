@@ -219,7 +219,7 @@ extern u8 D_80077560;
  * faint: the remaining count drops and a faint comment is armed for Announcer_CommentOnMove.
  * Seen in play (2026-11-14, COM battle, breakpoint): called after damage with side 1, hp 73, maxHp 73.
  */
-void Announcer_SetHp(u32 side, s32 hp, s32 maxHp) {
+void Announcer_SetHp(u32 side, s32 hp, s32 max_hp) {
     s32* cur;
     s32* prev;
     s32* next;
@@ -230,7 +230,7 @@ void Announcer_SetHp(u32 side, s32 hp, s32 maxHp) {
         next = &D_800FD6A8[side];
         *prev = *cur;
         *cur = hp;
-        *next = maxHp;
+        *next = max_hp;
         if (hp == 0) {
             if (*prev == *next) {
                 D_80077560 = 1;

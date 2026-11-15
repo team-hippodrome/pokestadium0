@@ -43,15 +43,15 @@ extern u8 sVsResultsNicknameText[];
  * returned `displayList` unchanged.
  * @unverified: the -1 path; the emulator runs the retail boot code, so it was not taken.
  */
-s32 VsResults_CheckBootCode(s32 displayList) {
-    OSIntMask prevMask;
+s32 VsResults_CheckBootCode(s32 display_list) {
+    OSIntMask prev_mask;
 
-    prevMask = osSetIntMask(OS_IM_NONE);
+    prev_mask = osSetIntMask(OS_IM_NONE);
     if (!((*(volatile s32 *)0xA4600010) & 3) && (((*(volatile s32 *)0xB0000800) & 0xFFFF) != 1)) {
-        displayList = -1;
+        display_list = -1;
     }
-    osSetIntMask(prevMask);
-    return displayList;
+    osSetIntMask(prev_mask);
+    return display_list;
 }
 
 /**

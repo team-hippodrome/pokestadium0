@@ -20,11 +20,11 @@ extern Gfx D_8E923340[]; // Screen glare quad over the Game Boy Pocket's screen.
  * alpha in D_8E923290 from 0x5A to 0xFF turned the moving diagonal stripes on the screen bright,
  * and stubbing the function with `jr ra` removed them.
  */
-void DodrioGameBoy_ScrollScreenGlare(s32 callContext, GeoDisplayListNode* node) {
+void DodrioGameBoy_ScrollScreenGlare(s32 call_context, GeoDisplayListNode* node) {
     static s32 sGlareScrollA;
     static s32 sGlareScrollB;
 
-    if (callContext == 2) {
+    if (call_context == 2) {
         node->displayList = Gfx_AllocDisplayList(0x20);
         sGlareScrollA++;
         if (sGlareScrollA >= 0x80) {

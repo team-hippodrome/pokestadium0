@@ -155,7 +155,7 @@ void Model_BuildVertexRuntimeData(StadiumModel* model, MtxF* mtx) {
  * Seen in play (2026-11-14): ModelRenderer_UpdateSlotModel calls it at boot.
  * @unverified Name read from the code.
  */
-void Model_InitSkinned(StadiumModel* model, void* normalBuf,  void* mtxSeg, void* segmentSrc) {
+void Model_InitSkinned(StadiumModel* model, void* normal_buf,  void* mtx_seg, void* segment_src) {
     f32 sp4C;
     f32 sp48;
     f32 sp44;
@@ -173,11 +173,11 @@ void Model_InitSkinned(StadiumModel* model, void* normalBuf,  void* mtxSeg, void
     ModelSegment* temp_v0;
 
     model = Memmap_GetSegmentVaddr(model);
-    normalBuf = Memmap_GetSegmentVaddr(normalBuf);
-    temp_s0 = Memmap_GetSegmentVaddr(mtxSeg);
-    temp_v0 = Memmap_GetSegmentVaddr(segmentSrc);
+    normal_buf = Memmap_GetSegmentVaddr(normal_buf);
+    temp_s0 = Memmap_GetSegmentVaddr(mtx_seg);
+    temp_v0 = Memmap_GetSegmentVaddr(segment_src);
     segment = &model->segment;
-    D_800B32C0 = normalBuf;
+    D_800B32C0 = normal_buf;
     *segment = *temp_v0;
     model->isActive = 1;
     model->transformCount = 0;

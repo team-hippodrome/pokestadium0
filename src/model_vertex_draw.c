@@ -48,7 +48,7 @@ void Model_ExtrapolateVertexPosition(Vec3f* from, Vec3f* to, f32 currentTime, f3
  * `dist` approaches `restLength`, scaled by `stiffness` (halved when compressed).
  * @unverified Name read from the code.
  */
-void Model_PullVertexToward(PosBlend* src, PosBlend* dst, f32 restLength, f32 dist, f32 stiffness) {
+void Model_PullVertexToward(PosBlend* src, PosBlend* dst, f32 rest_length, f32 dist, f32 stiffness) {
     f32 sp3C;
     f32 sp38;
     f32 sp34;
@@ -67,8 +67,8 @@ void Model_PullVertexToward(PosBlend* src, PosBlend* dst, f32 restLength, f32 di
         sp3C = dst->base.x - src->base.x;
         sp38 = dst->base.y - src->base.y;
         sp34 = dst->base.z - src->base.z;
-        stiffness *= ((restLength - dist) / dist);
-        if (dist < restLength) {
+        stiffness *= ((rest_length - dist) / dist);
+        if (dist < rest_length) {
             stiffness /= 2.0f;
         }
         dst->base.x += sp3C * stiffness;

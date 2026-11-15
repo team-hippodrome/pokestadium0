@@ -18,14 +18,14 @@
  * Stadium 1's counterpart is Pak_CheckPiIntegrity.
  */
 s32 CartridgeCheckModels_CheckBootCode(s32 value) {
-    OSIntMask prevMask;
+    OSIntMask prev_mask;
 
-    prevMask = osSetIntMask(OS_IM_NONE);
+    prev_mask = osSetIntMask(OS_IM_NONE);
     if (!(IO_READ(PI_STATUS_REG) & (PI_STATUS_DMA_BUSY | PI_STATUS_IO_BUSY)) &&
         ((IO_READ(PHYS_TO_K1(PI_DOM1_ADDR2) + 0x504) & 0xFFFF) != 0xA460)) {
         value = -1;
     }
-    osSetIntMask(prevMask);
+    osSetIntMask(prev_mask);
     return value;
 }
 

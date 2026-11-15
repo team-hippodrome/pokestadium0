@@ -390,9 +390,9 @@ void VsScene_UnusedStubB(void) {
  * Seen in play (2026-11-14): these are the six icons the panels show after they flip over
  * (イワイワ, パルパル, ... for the girl's Free Battle team).
  */
-void VsScene_LoadTeamIcons(VsSceneSide* side, s32 sideIndex) {
+void VsScene_LoadTeamIcons(VsSceneSide* side, s32 side_index) {
     s32 i;
-    s32 slot = sideIndex * 6;
+    s32 slot = side_index * 6;
 
     for (i = 0; i < 6; i++) {
         if (i < side->rosterInfo[0]->numberOfPokemonCanBePicked) {
@@ -723,10 +723,10 @@ void func_8001C058(s32, s32, s32, s32, u8*, s32, s32);
  * results board.
  * Seen in play (2026-11-14): crosses appeared on the three fainted COM Pokémon after a tournament win.
  */
-void VsScene_DrawFaintCross(GfxImage* iconImage) {
+void VsScene_DrawFaintCross(GfxImage* icon_image) {
     u8* sp34 = (u8*)Util_ConvertAddrToVirtAddr((uintptr_t)D_8F625700);
 
-    GfxImage_SetRenderTarget(&gDisplayListHead, iconImage);
+    GfxImage_SetRenderTarget(&gDisplayListHead, icon_image);
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     gDPSetEnvColor(gDisplayListHead++, 255, 50, 20, 255); // #FF3214FF
     func_8001C058(0, 0, 0x40, 0x20, sp34, 0x40, 0);
@@ -741,8 +741,8 @@ void VsScene_DrawFaintCross(GfxImage* iconImage) {
  * Seen in play (2026-11-14) at the start of the Free Battle and tournament results boards (the
  * three brought Pokémon per side in a tournament, six in Free Battle).
  */
-void VsScene_LoadBroughtIcons(VsSceneSide* side, s32 sideIndex) {
-    s32 slot = sideIndex * 6;
+void VsScene_LoadBroughtIcons(VsSceneSide* side, s32 side_index) {
+    s32 slot = side_index * 6;
     s32 i;
     s32 j;
 

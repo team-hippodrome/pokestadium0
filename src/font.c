@@ -362,15 +362,15 @@ void Ui_DrawPrimColorRect(s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b, s32 a
  * the glyph size at `glyphSet` (width byte, height byte).
  * @unverified Name read from the code.
  */
-Vtx* Font_AllocGlyphQuad(s16 x, s16 y, s16 scaleX, s16 scaleY, u8* glyphSet) {
-    s16 w = (glyphSet[0] * scaleX) / 100;
-    s16 h = (glyphSet[1] * scaleY) / 100;
+Vtx* Font_AllocGlyphQuad(s16 x, s16 y, s16 scaleX, s16 scaleY, u8* glyph_set) {
+    s16 w = (glyph_set[0] * scaleX) / 100;
+    s16 h = (glyph_set[1] * scaleY) / 100;
     Vtx* vtx = Gfx_AllocDisplayList(sizeof(Vtx) * 4);
 
     Gfx_SetVertexAttributes(&vtx[0], x, y, 0, 0, 0, 0, 0, 0x7F, 0xFF);
-    Gfx_SetVertexAttributes(&vtx[1], x, y - h, 0, 0, (glyphSet[1] << 5) - 1, 0, 0, 0x7F, 0xFF);
-    Gfx_SetVertexAttributes(&vtx[2], x + w, y - h, 0, (glyphSet[0] << 5) - 1, (glyphSet[1] << 5) - 1, 0, 0, 0x7F, 0xFF);
-    Gfx_SetVertexAttributes(&vtx[3], x + w, y, 0, (glyphSet[0] << 5) - 1, 0, 0, 0, 0x7F, 0xFF);
+    Gfx_SetVertexAttributes(&vtx[1], x, y - h, 0, 0, (glyph_set[1] << 5) - 1, 0, 0, 0x7F, 0xFF);
+    Gfx_SetVertexAttributes(&vtx[2], x + w, y - h, 0, (glyph_set[0] << 5) - 1, (glyph_set[1] << 5) - 1, 0, 0, 0x7F, 0xFF);
+    Gfx_SetVertexAttributes(&vtx[3], x + w, y, 0, (glyph_set[0] << 5) - 1, 0, 0, 0, 0x7F, 0xFF);
     return vtx;
 }
 

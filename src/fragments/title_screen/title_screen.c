@@ -115,8 +115,8 @@ void Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
  * LeoBootState.errorKind/leoError (D_800AB210 +2/+4) to 1-5 showed each box; kind 2 with
  * leoError 23 showed エラー：23 and the access-lamp warning.
  */
-void TitleScreen_DrawDiskError(s32 bootError) {
-    s32 kind = (bootError >> 8) & 0xFF;
+void TitleScreen_DrawDiskError(s32 boot_error) {
+    s32 kind = (boot_error >> 8) & 0xFF;
     s32 pad[1]; // FAKE: stack padding
 
     if (kind != 0) {
@@ -125,23 +125,23 @@ void TitleScreen_DrawDiskError(s32 bootError) {
         Font_SetActive(2, -2);
         switch (kind) {
             case 1:
-                Font_Printf(0x32, 0x64, sDiskErrorCodeText1, bootError & 0xFF);
+                Font_Printf(0x32, 0x64, sDiskErrorCodeText1, boot_error & 0xFF);
                 Font_Printf(0x3C, 0x87, sDiskErrorReadManualText);
                 break;
             case 2:
-                Font_Printf(0x32, 0x64, sDiskErrorCodeText2, bootError & 0xFF);
+                Font_Printf(0x32, 0x64, sDiskErrorCodeText2, boot_error & 0xFF);
                 Font_Printf(0x3C, 0x7D, sDiskErrorAccessLampText1);
                 Font_Printf(0x6E, 0x8C, sDiskErrorAccessLampText2);
                 Font_Printf(0x41, 0xA5, sDiskErrorReinsertText);
                 break;
             case 3:
-                Font_Printf(0x32, 0x64, sDiskErrorCodeText3, bootError & 0xFF);
+                Font_Printf(0x32, 0x64, sDiskErrorCodeText3, boot_error & 0xFF);
                 Font_Printf(0x2D, 0x7D, sDiskErrorEjectButtonText);
                 Font_Printf(0x69, 0x96, sDiskErrorRemoveDiskText);
                 Font_Printf(0x5A, 0xA5, sDiskErrorInsertFirmlyText);
                 break;
             case 4:
-                Font_Printf(0x32, 0x64, sDiskErrorCodeText4, bootError & 0xFF);
+                Font_Printf(0x32, 0x64, sDiskErrorCodeText4, boot_error & 0xFF);
                 Font_Printf(0x5F, 0x73, sDiskErrorExpansionPakText1);
                 Font_Printf(0x50, 0x82, sDiskErrorExpansionPakText2);
                 Font_Printf(0x41, 0x9B, sDiskErrorSeeManualText1);
@@ -246,19 +246,19 @@ extern s32 sTitleFrameCounter;
  * Seen in play (2026-11-14): with LeoBootState.state poked to 0, Start (and A) left the title;
  * poked to 8, Start did nothing.
  */
-s32 TitleScreen_CanAcceptInput(s32 bootState)
+s32 TitleScreen_CanAcceptInput(s32 boot_state)
 {
   s32 var_v1_2;
-  var_v1_2 = bootState == 5;
+  var_v1_2 = boot_state == 5;
   if (var_v1_2 == 0)
   {
-    var_v1_2 = bootState == 0;
+    var_v1_2 = boot_state == 0;
     if (var_v1_2 == 0)
     {
-      var_v1_2 = bootState == 1;
+      var_v1_2 = boot_state == 1;
       if (var_v1_2 == 0)
       {
-        var_v1_2 = bootState == 3;
+        var_v1_2 = boot_state == 3;
       }
     }
   }
@@ -279,10 +279,10 @@ s32 Audio_GetActivityScore(void);
  * Seen in play (2026-11-14): left idle, the counter passed 601 at about frame 601 but the demo
  * started only at frame 1102, once the music was silent.
  */
-s32 TitleScreen_ShouldStartDemo(s32 bootState) {
+s32 TitleScreen_ShouldStartDemo(s32 boot_state) {
     s32 var_v1 = 0;
 
-    if ((sTitleFrameCounter >= 0x259) && (Audio_GetActivityScore() == 0) && (TitleScreen_CanAcceptInput(bootState) != 0)) {
+    if ((sTitleFrameCounter >= 0x259) && (Audio_GetActivityScore() == 0) && (TitleScreen_CanAcceptInput(boot_state) != 0)) {
         var_v1 = 1;
     }
     return var_v1;
@@ -321,30 +321,30 @@ extern LeoBootDescriptor* sDiskBootBlock;
  * lobby (clear color 0xFFFF); boot state poked to 10 faded to black (clear color 1); left idle,
  * the demo battle started.
  */
-s32 TitleScreen_Update(s32 fadeMode) {
+s32 TitleScreen_Update(s32 fade_mode) {
     s32 result;
-    s32 bootStatus;
+    s32 boot_status;
     s32 temp_v0;
 
     result = 0;
-    bootStatus = 0;
+    boot_status = 0;
     Cont_StartReadInputs();
     Cont_ReadInputs();
     if (!result) {  // karodo
     }
     sTitleFrameCounter += 1;
-    if (fadeMode == 0) {
+    if (fade_mode == 0) {
         temp_v0 = Leo_RunBootStateMachine(sDiskBootBlock);
-        bootStatus = temp_v0;
+        boot_status = temp_v0;
         if (((temp_v0 >> 0x10) & 0xFFFF) == 0xA) {
             Audio_FadeCategoriesAndStreams(0x10);
             result = TITLE_EXIT_DISK_BOOT;
         } else if (M2C_FIELD(D_800603C0, u16 *, 8) & 0x9000) {
-            if (TitleScreen_CanAcceptInput((bootStatus >> 0x10) & 0xFFFF) != 0) {
+            if (TitleScreen_CanAcceptInput((boot_status >> 0x10) & 0xFFFF) != 0) {
                 Audio_PlaySystemSound(0xF);
                 result = TITLE_EXIT_MAIN_MENU;
             }
-        } else if (TitleScreen_ShouldStartDemo((bootStatus >> 0x10) & 0xFFFF) != 0) {
+        } else if (TitleScreen_ShouldStartDemo((boot_status >> 0x10) & 0xFFFF) != 0) {
             TitleScreen_SetupDemoBattle();
             result = TITLE_EXIT_DEMO;
         }
@@ -355,7 +355,7 @@ s32 TitleScreen_Update(s32 fadeMode) {
         TitleScreen_DrawPushStart(0x74, 0xC0);
     }
     TitleScreen_DrawNoControllerTicker();
-    TitleScreen_DrawDiskError(bootStatus & 0xFFFF);
+    TitleScreen_DrawDiskError(boot_status & 0xFFFF);
     if (result != 0) {
         if (result == TITLE_EXIT_MAIN_MENU) {
             StageContext_SetClearColor(0xFFFF);

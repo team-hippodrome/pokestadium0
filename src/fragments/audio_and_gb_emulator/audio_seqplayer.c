@@ -380,8 +380,8 @@ void AudioSeq_SequencePlayerDisableChannels(u8* seqPlayer, s32 channel_bits) {
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-void AudioSeq_SequenceChannelEnable(SequencePlayer* seqPlayer, u8 channelIndex, void* script) {
-    SequenceChannel* p = seqPlayer->channels[channelIndex];
+void AudioSeq_SequenceChannelEnable(SequencePlayer* seqPlayer, u8 channel_index, void* script) {
+    SequenceChannel* p = seqPlayer->channels[channel_index];
     s32 i;
 
     p->scriptState.depth = 0;

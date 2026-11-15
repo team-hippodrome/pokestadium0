@@ -142,7 +142,7 @@ extern char D_8910E010[];
  * Draws one move of the move list; the forgotten move fades out and the new one fades in during the learn animation.
  * Seen in play (2026-11-14) in いちらん: drew たいあたり, なきごえ and the dashes for empty slots in the PP Up and TM move lists.
  */
-void LabMoveSelect_DrawMoveRow(s32 x, s32 y, s32* move, s32 index, s32 flags, s32* alphaPtr) {
+void LabMoveSelect_DrawMoveRow(s32 x, s32 y, s32* move, s32 index, s32 flags, s32* alpha_ptr) {
     UNUSED s32 padA[4]; // FAKE: stack padding
     const char* name;
     s32 temp;
@@ -162,9 +162,9 @@ void LabMoveSelect_DrawMoveRow(s32 x, s32 y, s32* move, s32 index, s32 flags, s3
     }
     Font_BeginTranslucentTextRendering();
     if (flags & 0x100) {
-        Gfx_SetEnvColor(D_800734A8[0].r, D_800734A8[0].g, D_800734A8[0].b, *alphaPtr);
+        Gfx_SetEnvColor(D_800734A8[0].r, D_800734A8[0].g, D_800734A8[0].b, *alpha_ptr);
     } else if (flags & 0x200) {
-        alpha = *alphaPtr;
+        alpha = *alpha_ptr;
         Gfx_SetEnvColor(0xFF, 0xC8, 0xC8, alpha);
     } else {
         Font_SetColorForFlags(flags);
@@ -325,14 +325,14 @@ void LabPCList_UnusedStub1(void) {
 }
 
 /** Updates the flags of every entry in the info widget. */
-void LabBoxList_UpdateItemFlags(LabBoxListWindow* boxList) {
+void LabBoxList_UpdateItemFlags(LabBoxListWindow* box_list) {
     s32 i;
-    ByteMatrix** sub = &boxList->menu.items;
+    ByteMatrix** sub = &box_list->menu.items;
     s8* var_s2 = (*sub)->rows;
 
     for (i = 0; i < (*sub)->count; i++, var_s2 += 0x20) {
-        boxList->menu.itemFlags[i] = 0;
-        boxList->menu.itemFlags[i] |= LabBoxList_GetBoxFlags(var_s2);
+        box_list->menu.itemFlags[i] = 0;
+        box_list->menu.itemFlags[i] |= LabBoxList_GetBoxFlags(var_s2);
     }
 }
 
@@ -366,12 +366,12 @@ void LabBoxList_SetAllChecked(u8* widget, s32 enabled) {
  * Copies each box row's check into the box, so only checked boxes are listed.
  * Seen in play (2026-11-14) in いちらん: ran on OK; the list then held the Pokémon of GB 1 and GB 2.
  */
-void LabBoxList_ApplyChecks(LabBoxListWindow* boxList) {
+void LabBoxList_ApplyChecks(LabBoxListWindow* box_list) {
     s32 i;
-    s32* entry = (s32*)boxList->menu.items->rows;
+    s32* entry = (s32*)box_list->menu.items->rows;
 
-    for (i = 0; i < boxList->menu.items->count; i++) {
-        entry[3] = (boxList->menu.itemFlags[i] & 8) != 0;
+    for (i = 0; i < box_list->menu.items->count; i++) {
+        entry[3] = (box_list->menu.itemFlags[i] & 8) != 0;
         entry += 8;
     }
 }
@@ -428,12 +428,12 @@ void LabBoxList_DrawBoxName();
  * Sets up a box list window (156 wide, 28 per row) beside the source window.
  * Seen in play (2026-11-14) in いちらん: set up ボックス1-8 and ボックス1-4.
  */
-void LabBoxList_Init(LabBoxListWindow* boxList, s32 x, s32 y, ByteMatrix* boxes, s32 itemFlags, Color_RGBA8 color) {
-    Window_SetRect(&boxList->frame, x, y, 0x9C, boxes->count * 0x1C + 8);
-    boxList->frame.style = 0;
-    boxList->frame.color = color;
-    Menu_Init(&boxList->menu, boxes, itemFlags, LabBoxList_DrawBoxName, 0x9C, 0x1C);
-    LabBoxList_UpdateItemFlags(boxList);
+void LabBoxList_Init(LabBoxListWindow* box_list, s32 x, s32 y, ByteMatrix* boxes, s32 item_flags, Color_RGBA8 color) {
+    Window_SetRect(&box_list->frame, x, y, 0x9C, boxes->count * 0x1C + 8);
+    box_list->frame.style = 0;
+    box_list->frame.color = color;
+    Menu_Init(&box_list->menu, boxes, item_flags, LabBoxList_DrawBoxName, 0x9C, 0x1C);
+    LabBoxList_UpdateItemFlags(box_list);
 }
 
 M2C_UNK Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, M2C_UNK *); /* extern */
@@ -445,10 +445,10 @@ extern M2C_UNK D_80073554;
  * Draws a box list window.
  * Seen in play (2026-11-14) in いちらん: drew ボックス1-8 next to ゲームボーイのボックス.
  */
-void LabBoxList_Draw(LabBoxListWindow* boxList, s32 flags) {
-    Ui_DrawTexturedFrameDecal(boxList->frame.x - 6, boxList->frame.y - 6, boxList->frame.width + 0xC, boxList->frame.height + 0xC, &D_80073554);
-    Window_DrawFrame(&boxList->frame);
-    Menu_DrawInlineItems(&boxList->menu, boxList->frame.x, boxList->frame.y + 4, flags | 0xFFED, boxList);
+void LabBoxList_Draw(LabBoxListWindow* box_list, s32 flags) {
+    Ui_DrawTexturedFrameDecal(box_list->frame.x - 6, box_list->frame.y - 6, box_list->frame.width + 0xC, box_list->frame.height + 0xC, &D_80073554);
+    Window_DrawFrame(&box_list->frame);
+    Menu_DrawInlineItems(&box_list->menu, box_list->frame.x, box_list->frame.y + 4, flags | 0xFFED, box_list);
 }
 
 M2C_UNK Audio_PlaySystemSound(M2C_UNK);
@@ -458,13 +458,13 @@ extern s32 D_800603C0;
  * Handles a box list: A toggles the box (returns 1), B returns -1, D-Left goes back to the sources (returns 2).
  * Seen in play (2026-11-14) in いちらん: D-Right then A toggled ボックス2 off.
  */
-s32 LabBoxList_Update(LabBoxListWindow* boxList) {
+s32 LabBoxList_Update(LabBoxListWindow* box_list) {
     s32 ret = 0;
     s32 res;
     s32 buttons;
     u16* entry;
 
-    res = Menu_UpdateCursor(&boxList->menu);
+    res = Menu_UpdateCursor(&box_list->menu);
     if (res == 0x200) {
         Audio_PlaySystemSound(1);
         ret = 2;
@@ -473,7 +473,7 @@ s32 LabBoxList_Update(LabBoxListWindow* boxList) {
         if (buttons & 0x8000) {
             Audio_PlaySystemSound(2);
             ret = 1;
-            boxList->menu.itemFlags[boxList->menu.cursor] ^= 8;
+            box_list->menu.itemFlags[box_list->menu.cursor] ^= 8;
         } else if (buttons & 0x4000) {
             Audio_PlaySystemSound(3);
             ret = -1;
@@ -507,15 +507,15 @@ s32 LabSourceSelect_GetSourceFlags(List89105924* source) {
  * Checks a source when any of its boxes is checked, and unchecks it otherwise.
  * Seen in play (2026-11-14) in いちらん: ran after toggling ボックス2.
  */
-void LabSourceSelect_SyncSourceCheck(LabSourceSelectWindow* window, LabBoxListWindow* boxList) {
+void LabSourceSelect_SyncSourceCheck(LabSourceSelectWindow* window, LabBoxListWindow* box_list) {
     s32 flag = 0;
     s32 i = 0;
-    s32 count = boxList->menu.items->count;
+    s32 count = box_list->menu.items->count;
     u16* items;
 
     if (count > 0) {
         if (!window) {} // karodo
-        items = boxList->menu.itemFlags;
+        items = box_list->menu.itemFlags;
         do {
             i++;
             if (*items & 8) {
@@ -806,7 +806,7 @@ void LabPCList_DrawPopupRow(s32 x, s32 y, char* text, s32 index, s32 flags, s8* 
  * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): A on フシギダネ set up the popup
  * (フシギダネをあつめる, おなじタイプをあつめる, いどうする, どうぐをつかう).
  */
-void LabPCList_InitPopupMenu(LabPopupMenu* popup, s32 *labels, s32 itemFlags, s32 count, s32 message) {
+void LabPCList_InitPopupMenu(LabPopupMenu* popup, s32 *labels, s32 item_flags, s32 count, s32 message) {
     s32 i;
     s32 w;
     s32 max = 0;
@@ -821,7 +821,7 @@ void LabPCList_InitPopupMenu(LabPopupMenu* popup, s32 *labels, s32 itemFlags, s3
     }
     func_80027804((s8*)&popup->itemList, labels, count, count);
     h = max * 0x14 + 0x10;
-    Menu_Init((s8*)&popup->menu, (s8*)&popup->itemList, itemFlags, LabPCList_DrawPopupRow, h, 0x1C);
+    Menu_Init((s8*)&popup->menu, (s8*)&popup->itemList, item_flags, LabPCList_DrawPopupRow, h, 0x1C);
     popup->menu.options |= 0x10000;
     Window_SetRect(popup, 0, 0, h + 0xC, popup->itemList.count * 0x1C + 0x14);
     popup->window.animTimer = 0;
@@ -921,7 +921,7 @@ extern char D_8910E088[];
  * Seen in play (2026-11-12) in いちらん: レベルをきめてあつめる (page 3/3, A on the レベル header) ran this once
  * and opened 「001 から 100」; かいじょ is greyed out when no level filter is active.
  */
-void LabPCList_InitLevelInputWindow(LabLevelInputWindow* window, s32 x, s32 y, Color_RGBA8 color, s32 minLevel, s32 maxLevel, s32 filterOn) {
+void LabPCList_InitLevelInputWindow(LabLevelInputWindow* window, s32 x, s32 y, Color_RGBA8 color, s32 minLevel, s32 maxLevel, s32 filter_on) {
     Window_SetRect(window, x, y, 316, 80);
     window->window.animTimer = 0;
     window->window.state = 0;
@@ -939,7 +939,7 @@ void LabPCList_InitLevelInputWindow(LabLevelInputWindow* window, s32 x, s32 y, C
     window->maxLevel.min = 1;
     Window_InitLabeled((s8*)&window->gatherButton, window->window.frame.x + 210, window->window.frame.y + 14, 92, D_8910A94C, D_8910E07C);
     Window_InitLabeled((s8*)&window->clearButton, window->window.frame.x + 210, window->window.frame.y + 42, 92, D_8910A94C, D_8910E088);
-    if (filterOn == 0) {
+    if (filter_on == 0) {
         window->clearButton.flags |= 1;
     }
     window->cursor.cursor = 0;
@@ -1698,7 +1698,7 @@ void LabPCList_DrawItemRow();
  * Seen in play (2026-11-12) in いちらん: どうぐをつかう on フシギダネ opened 「フシギダネがつかえるどうぐ」, listing the bag
  * items from the Game Boy save (マックスアップ ×5, タウリン ×5, ふしぎなアメ ×5, ポイントアップ ×3, わざマシン06, ひでんマシン01).
  */
-void LabPCList_InitItemWindow(LabItemWindow* window, s32 x, s32 y, s32 items, s32 itemFlags, u8* mon) {
+void LabPCList_InitItemWindow(LabItemWindow* window, s32 x, s32 y, s32 items, s32 item_flags, u8* mon) {
     Window_SetRect(&window->window, x, y, 0x184, 0x16E);
     window->window.animTimer = 0;
     window->window.title = 0;
@@ -1711,7 +1711,7 @@ void LabPCList_InitItemWindow(LabItemWindow* window, s32 x, s32 y, s32 items, s3
     window->textFrame.style = 6;
     *(Rgba891084B4*)&window->textFrame.color = *(Rgba891084B4*)D_8910AAE0;
     *(Rgba891084B4*)&window->textFrame.color2 = *(Rgba891084B4*)D_8910AAE4;
-    ScrollList_Init(&window->list, items, itemFlags, 8, LabPCList_DrawItemRow, 0x178, 0x1C);
+    ScrollList_Init(&window->list, items, item_flags, 8, LabPCList_DrawItemRow, 0x178, 0x1C);
     window->list.options |= 0x10000;
     LabPCList_DisableUnusableItems((FlagScanOwner*)window);
     window->mon = mon;

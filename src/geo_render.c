@@ -811,9 +811,9 @@ void GeoRender_EnableTextureGeneration(GeoLayerRenderState* state, s32 entry) {
  * fragment).
  * @unverified Name read from the code.
  */
-void GeoRender_DrawEntryDisplayList(s32* lastMatrix, void* entry) {
-    if (*lastMatrix != M2C_FIELD(entry, s32*, 0xC)) {
-        *lastMatrix = M2C_FIELD(entry, s32*, 0xC);
+void GeoRender_DrawEntryDisplayList(s32* last_matrix, void* entry) {
+    if (*last_matrix != M2C_FIELD(entry, s32*, 0xC)) {
+        *last_matrix = M2C_FIELD(entry, s32*, 0xC);
         gSPMatrix(gDisplayListHead++, M2C_FIELD(entry, u32*, 0xC) & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     }
     if ((M2C_FIELD(entry, u32*, 8) >= 0x81000000U) && (M2C_FIELD(entry, u32*, 8) < 0x90000000U)) {

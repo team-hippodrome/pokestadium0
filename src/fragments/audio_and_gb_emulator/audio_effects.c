@@ -145,7 +145,7 @@ f32 AudioEffects_UpdateVibrato(vib)
     s32 pitch_change;
     f32 extent;
     f32 result;
-    SequenceChannel* seqChannel = vib->channel;
+    SequenceChannel* seq_channel = vib->channel;
 
     if (vib->delay != 0) {
         vib->delay--;
@@ -154,29 +154,29 @@ f32 AudioEffects_UpdateVibrato(vib)
 
     if (vib->extentChangeTimer) {
         if (vib->extentChangeTimer == 1) {
-            vib->extent = (s32)seqChannel->vibratoExtentTarget;
+            vib->extent = (s32)seq_channel->vibratoExtentTarget;
         } else {
-            vib->extent += ((s32)seqChannel->vibratoExtentTarget - vib->extent) / (s32)vib->extentChangeTimer;
+            vib->extent += ((s32)seq_channel->vibratoExtentTarget - vib->extent) / (s32)vib->extentChangeTimer;
         }
 
         vib->extentChangeTimer--;
-    } else if (seqChannel->vibratoExtentTarget != (s32)vib->extent) {
-        if ((vib->extentChangeTimer = seqChannel->vibratoExtentChangeDelay) == 0) {
-            vib->extent = (s32)seqChannel->vibratoExtentTarget;
+    } else if (seq_channel->vibratoExtentTarget != (s32)vib->extent) {
+        if ((vib->extentChangeTimer = seq_channel->vibratoExtentChangeDelay) == 0) {
+            vib->extent = (s32)seq_channel->vibratoExtentTarget;
         }
     }
 
     if (vib->rateChangeTimer) {
         if (vib->rateChangeTimer == 1) {
-            vib->rate = (s32)seqChannel->vibratoRateTarget;
+            vib->rate = (s32)seq_channel->vibratoRateTarget;
         } else {
-            vib->rate += ((s32)seqChannel->vibratoRateTarget - vib->rate) / (s32)vib->rateChangeTimer;
+            vib->rate += ((s32)seq_channel->vibratoRateTarget - vib->rate) / (s32)vib->rateChangeTimer;
         }
 
         vib->rateChangeTimer--;
-    } else if (seqChannel->vibratoRateTarget != (s32)vib->rate) {
-        if ((vib->rateChangeTimer = seqChannel->vibratoRateChangeDelay) == 0) {
-            vib->rate = (s32)seqChannel->vibratoRateTarget;
+    } else if (seq_channel->vibratoRateTarget != (s32)vib->rate) {
+        if ((vib->rateChangeTimer = seq_channel->vibratoRateChangeDelay) == 0) {
+            vib->rate = (s32)seq_channel->vibratoRateTarget;
         }
     }
 
@@ -222,7 +222,7 @@ extern s16* D_81135F68;
  */
 void AudioEffects_InitVibrato(Note* note) {
     VibratoState* vib;
-    SequenceChannel* seqChannel;
+    SequenceChannel* seq_channel;
     NotePlaybackState* seq_player_state = &note->playbackState;
 
     note->playbackState.vibratoFreqScale = 1.0f;
@@ -234,20 +234,20 @@ void AudioEffects_InitVibrato(Note* note) {
 
     vib->curve = D_81135F68;
     vib->channel = note->playbackState.parentLayer->channel;
-    seqChannel = vib->channel;
+    seq_channel = vib->channel;
 
-    if ((vib->extentChangeTimer = seqChannel->vibratoExtentChangeDelay) == 0) {
-        vib->extent = (s32)seqChannel->vibratoExtentTarget;
+    if ((vib->extentChangeTimer = seq_channel->vibratoExtentChangeDelay) == 0) {
+        vib->extent = (s32)seq_channel->vibratoExtentTarget;
     } else {
-        vib->extent = (s32)seqChannel->vibratoExtentStart;
+        vib->extent = (s32)seq_channel->vibratoExtentStart;
     }
 
-    if ((vib->rateChangeTimer = seqChannel->vibratoRateChangeDelay) == 0) {
-        vib->rate = (s32)seqChannel->vibratoRateTarget;
+    if ((vib->rateChangeTimer = seq_channel->vibratoRateChangeDelay) == 0) {
+        vib->rate = (s32)seq_channel->vibratoRateTarget;
     } else {
-        vib->rate = (s32)seqChannel->vibratoRateStart;
+        vib->rate = (s32)seq_channel->vibratoRateStart;
     }
-    vib->delay = seqChannel->vibratoDelay;
+    vib->delay = seq_channel->vibratoDelay;
 
     seq_player_state->portamento = seq_player_state->parentLayer->portamento;
 }

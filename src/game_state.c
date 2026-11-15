@@ -240,14 +240,14 @@ extern M2C_UNK D_8007B7C4;
  * port 0, the trainer ID and name come from the cartridge, otherwise the default name is used.
  * @unverified Name and comment read from the code; not reached in play.
  */
-void Session_InitContinueTrainer(s32 isGbTeam)
+void Session_InitContinueTrainer(s32 is_gb_team)
 {
   SessionContext *st = &gSessionContext;
   st->trainerSlots[0].isHuman = 1;
   st->trainerSlots[0].controllerPort = 0;
   st->trainerSlots[0].controller = gPlayer1Controller;
   st->trainerSlots[0].rosterInfo = &st->rosterInfo[0];
-  if ((isGbTeam != 0) && (gActiveGbPort == 0))
+  if ((is_gb_team != 0) && (gActiveGbPort == 0))
   {
     st->trainerSlots[0].trainerId = GbSave_GetTrainerId(gActiveGbPort);
     GbSave_GetPlayerName(gActiveGbPort, (M2C_UNK *) st->trainerSlots[0].trainerName);

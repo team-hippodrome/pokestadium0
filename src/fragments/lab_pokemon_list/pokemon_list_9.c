@@ -296,18 +296,18 @@ s32 LabPCList_CompareBySpeciesNumber(LabMonEntry* a, LabMonEntry* b) {
 }
 
 /** List filter: keeps entries whose level is in a range. */
-int LabPCList_FilterByLevelRange(LabMonEntry* entryArg, u8* range) {
-    LabMonEntry* entry = entryArg;
+int LabPCList_FilterByLevelRange(LabMonEntry* entry_arg, u8* range) {
+    LabMonEntry* entry = entry_arg;
     return (entry->mon.level >= range[0]) && (range[1] >= entry->mon.level);
 }
 
 /** List filter: keeps entries with any of the given types. */
-s32 LabPCList_FilterByAnyType(LabMonEntry* entry, unk_func_8830867C_02C_C54_01C* filterArg) {
+s32 LabPCList_FilterByAnyType(LabMonEntry* entry, unk_func_8830867C_02C_C54_01C* filter_arg) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 i;
     s32 j;
     s32 var_v1;
-    unk_func_8830867C_02C_C54_01C* filter = filterArg;
+    unk_func_8830867C_02C_C54_01C* filter = filter_arg;
     s32 idx = entry->mon.species.id - 1;
     u8 spC[2];
 
@@ -336,9 +336,9 @@ s32 LabPCList_FilterByAnyType(LabMonEntry* entry, unk_func_8830867C_02C_C54_01C*
 }
 
 /** List filter: keeps entries that know any of the given moves. */
-s32 LabPCList_FilterByAnyMove(LabMonEntry* entryArg, unk_func_8830867C_02C_C54_024* filterArg) {
-    LabMonEntry* entry = entryArg;
-    unk_func_8830867C_02C_C54_024* filter = filterArg;
+s32 LabPCList_FilterByAnyMove(LabMonEntry* entry_arg, unk_func_8830867C_02C_C54_024* filter_arg) {
+    LabMonEntry* entry = entry_arg;
+    unk_func_8830867C_02C_C54_024* filter = filter_arg;
     s32 i;
     s32 j;
     s32 temp_v0 = BattleMon_CountMoves(&entry->mon);
@@ -364,12 +364,12 @@ s32 LabPCList_FilterBySpeciesId(LabMonEntry* entry, s32* species) {
 }
 
 /** List filter: keeps entries with exactly the given pair of types. */
-s32 LabPCList_FilterByExactTypePair(LabMonEntry* entry, unk_func_8830867C_02C_C54_014* filterArg) {
+s32 LabPCList_FilterByExactTypePair(LabMonEntry* entry, unk_func_8830867C_02C_C54_014* filter_arg) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 i;
     s32 j;
     s32 var_v1;
-    unk_func_8830867C_02C_C54_014* filter = filterArg;
+    unk_func_8830867C_02C_C54_014* filter = filter_arg;
     s32 idx = entry->mon.species.id - 1;
     s32 sp8[2];
 

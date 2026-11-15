@@ -36,15 +36,15 @@ extern u8 sVsPanelNicknameText[];
  * Seen in play (2026-11-14): called for both portraits every frame of the panels; forcing it to
  * return -1 turned the whole screen black from the panels on.
  */
-s32 VsPanel_CheckBootCode(s32 displayList) {
-    OSIntMask prevMask;
+s32 VsPanel_CheckBootCode(s32 display_list) {
+    OSIntMask prev_mask;
 
-    prevMask = osSetIntMask(OS_IM_NONE);
+    prev_mask = osSetIntMask(OS_IM_NONE);
     if (!((*(volatile s32 *)0xA4600010) & 3) && (((*(volatile s32 *)0xB0000D10) & 0xFFFF) != 0x400)) {
-        displayList = -1;
+        display_list = -1;
     }
-    osSetIntMask(prevMask);
-    return displayList;
+    osSetIntMask(prev_mask);
+    return display_list;
 }
 
 /**

@@ -358,16 +358,16 @@ void PartyScreen_ReadParty(ByteMatrix* table) {
  * Seen in play (2026-11-14): after swapping ハナ and カコ, the pak .sav's species list changed from
  * 99 B0 54 to B0 99 54.
  */
-void PartyScreen_WriteParty(s32* monList, s32 screen) {
+void PartyScreen_WriteParty(s32* mon_list, s32 screen) {
     s32* sp2C;
     s32 i;
     s32 temp_s3;
 
-    sp2C = (s32*)monList[0];
+    sp2C = (s32*)mon_list[0];
     func_80022118(sPartyGbPort);
     temp_s3 = func_80020AFC(0x20, sPartyGbPort, 0, 1);
 
-    for (i = 0; i < monList[2]; i++) {
+    for (i = 0; i < mon_list[2]; i++) {
         func_80020DF0(sp2C[i], 1, temp_s3);
     }
 

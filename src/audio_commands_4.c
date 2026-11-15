@@ -746,7 +746,7 @@ extern u8 D_8007753C;
  * Resets the announcer for a new battle: HP to 100/100, counts to 6 (mode > 0, or team size 1..5) or 12,
  * clears the queue and flags.
  */
-void Announcer_Reset(s32 mode, u32 teamSize) {
+void Announcer_Reset(s32 mode, u32 team_size) {
     Announcer_SetActive(0);
     D_80077590 = 0;
     D_800FD738 = 0;
@@ -765,7 +765,7 @@ void Announcer_Reset(s32 mode, u32 teamSize) {
     if (D_80077540 > 0) {
         D_800FD6B4[0] = 6;
         D_800FD6B4[1] = 6;
-    } else if ((teamSize != 0) && (teamSize < 6)) {
+    } else if ((team_size != 0) && (team_size < 6)) {
         D_800FD6B4[0] = D_800FD6B2[0] = 6;
         D_800FD6B4[1] = D_800FD6B2[1] = 6;
     } else {
@@ -815,7 +815,7 @@ s32 func_8004D300(s32);
  * Queues announcer line `lineId` with `delay` and volume `volume` + 0x70 (clamped to 255) in a ring of 10, at
  * most 2 pending. Does nothing while the announcer is off. Seen in play (2026-11-14, COM battle, breakpoint): called with line 0x41, 0.0, 0x80.
  */
-void Announcer_QueueLine(s32 lineId, f32 delay, s32 volume) {
+void Announcer_QueueLine(s32 line_id, f32 delay, s32 volume) {
     s32 prev_mask;
     QueuedEntry80043CE8* entry;
     u32 level;
@@ -830,7 +830,7 @@ void Announcer_QueueLine(s32 lineId, f32 delay, s32 volume) {
             entry = &D_800FD6C0[idx];
             level = volume + 0x70;
             entry->level = level;
-            entry->id = lineId;
+            entry->id = line_id;
             entry->value = delay;
             if (level >= 0x100) {
                 entry->level = 0xFF;

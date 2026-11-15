@@ -599,10 +599,10 @@ s32 GbSave_ScanAllPorts(void) {
  * Session_RestoreContinueSession when the cartridge has never had its boxes initialized.
  * @unverified: named from the code, not reached in play (our saves already had initialized boxes).
  */
-s32 GbSave_InitializeBoxesAndWrite(s32 portId) {
+s32 GbSave_InitializeBoxesAndWrite(s32 port_id) {
     s32 ret;
     u8 sp33;
-    GbSavePort* port = &sGbSavePorts[portId];
+    GbSavePort* port = &sGbSavePorts[port_id];
 
     GbData_WriteU16BE(port->mainData->currentBox, GbData_ReadU16BE(port->mainData->currentBox) | 0x8000);
     HAL_Memset(port->boxData, 0xFF, 0x2B40);
@@ -614,11 +614,11 @@ s32 GbSave_InitializeBoxesAndWrite(s32 portId) {
     port->boxData[0x15A0 + 0x566 * 2] = 0;
     port->boxData[0x566 * 3] = 0;
     port->boxData[0x15A0 + 0x566 * 3] = 0;
-    if (GbPlayer_ProbePak(portId, &sp33, port->pakId) == 0) {
-        Game_ShutdownAndLoadFragment(portId, 2);
+    if (GbPlayer_ProbePak(port_id, &sp33, port->pakId) == 0) {
+        Game_ShutdownAndLoadFragment(port_id, 2);
     }
-    ret = GbSave_RebuildAndWriteSave(portId);
-    ret &= GbPlayer_IsPakInserted(portId, sp33);
+    ret = GbSave_RebuildAndWriteSave(port_id);
+    ret &= GbPlayer_IsPakInserted(port_id, sp33);
     return ret;
 }
 

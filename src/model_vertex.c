@@ -44,22 +44,22 @@ s16 Model_GetVertexMatrixClass(s16* arg0, s32 arg1);
  * Returns the size of a skinned model with `vertexCount` vertices (0x170 + 0x94 each).
  * @unverified Name read from the code; no callers.
  */
-s32 Model_GetSkinnedModelSize(s32 vertexCount) {
+s32 Model_GetSkinnedModelSize(s32 vertex_count) {
     u8 stack[4];
     u8* ptr = stack;
 
-    return ((u8*)((s32)ptr + (vertexCount * 0x94)) - ptr) + 0x170;
+    return ((u8*)((s32)ptr + (vertex_count * 0x94)) - ptr) + 0x170;
 }
 
 /**
  * Returns the size of a normal accumulation buffer for `vertexCount` vertices (0x10 each).
  * @unverified Name read from the code; no callers.
  */
-s32 Model_GetNormalBufferSize(s32 vertexCount) {
+s32 Model_GetNormalBufferSize(s32 vertex_count) {
     u8 stack[4];
     u8* ptr = stack;
 
-    return ((u8*)(s32)ptr + (vertexCount * 0x10)) - ptr;
+    return ((u8*)(s32)ptr + (vertex_count * 0x10)) - ptr;
 }
 
 /** Returns the absolute value of a float. */

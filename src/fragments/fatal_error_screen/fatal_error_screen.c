@@ -138,7 +138,7 @@ void FatalError_DrawPortDiagram(s32 port) {
  * fades out.
  * Seen in play (2026-11-14): breakpoint hit every frame on the error screen.
  */
-s32 FatalError_DrawFrame(u8 fadeMode) {
+s32 FatalError_DrawFrame(u8 fade_mode) {
     BgStage_DrawFrame();
     FatalError_DrawBackground(0x55, 0x70, 0x88);
     FatalError_DrawMessagePanel(sFatalErrorMessageId);

@@ -344,14 +344,14 @@ extern u8 D_8F4B2EB0[];
  * Draws the options: ステレオ/モノラル (Stereo/Mono), あり/なし (On/Off), バックアップ (Backup), おわり (End).
  * Seen in play: draws 「オプション」 with サウンド/じっきょう/バックアップ/おわり; the cursor moves with D-Down.
  */
-void Options_DrawMenu(s32 selRow, u8 flags) {
+void Options_DrawMenu(s32 sel_row, u8 flags) {
     Color_RGB8 sp44 = {0x00, 0x00, 0x32}; // #000032
     Color_RGB8 sp40 = {0x00, 0x00, 0xC8}; // #0000C8
     static char *D_88402FA4[] = {D_88403234, D_88403240};
     static char *D_88402FAC[] = {D_8840324C, D_88403254};
     s32 row;
 
-    row = selRow;
+    row = sel_row;
     Ui_DrawGradientPanel(0x32, 0x3C, 0xDC, 0x7D, &sp44, &sp40);
     gSPDisplayList(gDisplayListHead++, D_80060290);
     Gfx_DrawTextureRgba16(0x3A, (row * 20) + 0x63, 0x18, 0xE, (u8 *) Util_ConvertAddrToVirtAddr((uintptr_t) D_8F4B2EB0), 0x18, 0x200000);
@@ -380,7 +380,7 @@ void Options_DrawMenu(s32 selRow, u8 flags) {
  * Seen in play: draws 「64のセーブデータをクリアします よろしいですか？」 with はい / いいえ, and
  * (2026-11-14) 「ほんとうにいいんですね？」 after はい.
  */
-void Options_DrawClearSavePrompt(s32 secondAsk, s32 choice) {
+void Options_DrawClearSavePrompt(s32 second_ask, s32 choice) {
     Color_RGB8 sp4C = { 0x00, 0x00, 0x32 }; // #000032
     Color_RGB8 sp48 = { 0x00, 0x00, 0xC8 }; // #0000C8
     UNUSED s32 pad; // FAKE: stack padding
@@ -406,7 +406,7 @@ void Options_DrawClearSavePrompt(s32 secondAsk, s32 choice) {
     Font_DisableTwoCycleTexturing();
     Font_SetActive(8, -2);
     Gfx_SetEnvColor(255, 255, 100, 255);
-    if (secondAsk == 0) {
+    if (second_ask == 0) {
         Font_Printf(0x5A, 0xA2, D_884032CC);
     } else {
         Font_Printf(0x32, 0xA2, D_884032E0);
@@ -433,7 +433,7 @@ void Options_DrawClearSavePrompt(s32 secondAsk, s32 choice) {
  * Loop for the clear-save prompt: Left/Right toggles the choice, A confirms, B cancels (returns No).
  * Seen in play: A on バックアップ enters it (「64のセーブデータをクリアします よろしいですか？ はい いいえ」); B backs out.
  */
-s32 Options_RunClearSavePrompt(s32 secondAsk, s32 row, u8 flags) {
+s32 Options_RunClearSavePrompt(s32 second_ask, s32 row, u8 flags) {
     s32 loop = 1;
     s32 sel = 1;
     s32 buttons;
@@ -451,13 +451,13 @@ s32 Options_RunClearSavePrompt(s32 secondAsk, s32 row, u8 flags) {
             sel = 1;
             loop = 0;
         }
-        Options_DrawClearSavePrompt(secondAsk, sel);
+        Options_DrawClearSavePrompt(second_ask, sel);
         func_80006780();
     } while (loop);
 
     loop = sel == 0;
     if (loop) {
-        if (secondAsk == 0) {
+        if (second_ask == 0) {
             Audio_PlaySystemSound(2);
         } else {
             Audio_PlaySystemSound(0x1F);
@@ -901,7 +901,7 @@ extern s32 D_8840365C;
  * it starts the console in its raised-monitor pose, with the Game Boy for a selected port.
  * Seen in play (2026-11-14): ran on every entry (boot, OFF, the poked present event).
  */
-void CartridgeCheck_InitModels(s32 fromMainMenu) {
+void CartridgeCheck_InitModels(s32 from_main_menu) {
     s8 sp27;
     MemoryBlock* sp20;
 
@@ -931,7 +931,7 @@ void CartridgeCheck_InitModels(s32 fromMainMenu) {
         Vec3f_SetComponentsDuplicate(&D_88403510, 3.0f, 3.0f, 3.0f);
     }
     MainPool_FinalizeAllocation(sp20);
-    if (fromMainMenu == 0) {
+    if (from_main_menu == 0) {
         func_80010F14(&D_88403648, 1, &D_8F4014B0, 0x10000);
         M2C_FIELD(&D_88403648, s32 *, 0x14) = 0;
         M2C_FIELD(&D_88403648, u8 *, 2) &= ~0x20;
@@ -978,7 +978,7 @@ void CartridgeCheck_InitRenderTargets(void) {
  * Seen in play (2026-11-14): entered after Start on the title (fromMainMenu 0) and from OFF on
  * the main menu (fromMainMenu 1).
  */
-s32 CartridgeCheck_Main(s32 fromMainMenu, s32 arg1) {
+s32 CartridgeCheck_Main(s32 from_main_menu, s32 arg1) {
     s32 result;
     s32 ret;
 
@@ -1001,12 +1001,12 @@ s32 CartridgeCheck_Main(s32 fromMainMenu, s32 arg1) {
     Font_Init(0xF, 0);
     CartridgeCheck_ReadPortSummaries();
     CartridgeCheck_InitCursor();
-    CartridgeCheck_InitModels(fromMainMenu);
+    CartridgeCheck_InitModels(from_main_menu);
     StageLoader_UpdateSegments();
     StageContext_SaveAndSwitch((StageContext*)D_8840336C);
     Audio_PlayCommand(0x46, 3, 0);
 
-    if (fromMainMenu == 0) {
+    if (from_main_menu == 0) {
         if (gSessionContext.transitionFlags == 0) {
             result = CartridgeCheck_EnterFromBoot();
         } else {

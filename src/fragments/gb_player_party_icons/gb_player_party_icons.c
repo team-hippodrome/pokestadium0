@@ -40,7 +40,7 @@ void GbPlayer_LoadPartyFromDeck(s32 port) {
  * and draws a blank frame. Returns 0, so it runs for the full 8 frames.
  * Seen in play (2026-11-14): 8 calls on a black screen with fadeMode 1, before the GB screen.
  */
-s32 GbPlayer_PartyIconsFrameCallback(u8 fadeMode) {
+s32 GbPlayer_PartyIconsFrameCallback(u8 fade_mode) {
     Cont_StartReadInputs();
     Cont_ReadInputs();
     PokeIcon_ProcessAllSlots(sGbPlayerIconRenderer, 0);
@@ -86,12 +86,12 @@ extern ModelLoadContext* sGbPlayerIconFramebuffers;
  * Seen in play (2026-11-14): runs between confirming GB and the GB boot screen, screen black.
  */
 s32 GbPlayer_PreparePartyIcons(s32 port, GbPlayerLaunchParams* params) {
-    StageContext* stageCtx;
+    StageContext* stage_ctx;
 
     main_pool_push_state('PREP');
 
     Gfx_InitDisplayListBuffers(0x10000, 0);
-    stageCtx = StageContext_Allocate(0, 1, 2, 0, 1, 1);
+    stage_ctx = StageContext_Allocate(0, 1, 2, 0, 1, 1);
 
     ASSET_LOAD(D_1000000, common_menu1_ui, 0);
     FRAGMENT_LOAD(FRAGMENT_PARTICLE_DATA_LIBRARY);
@@ -101,7 +101,7 @@ s32 GbPlayer_PreparePartyIcons(s32 port, GbPlayerLaunchParams* params) {
     PokeIcon_OpenModelArchives();
     GbPlayer_LoadPartyFromDeck(port);
     Save_LoadSram();
-    StageContext_Activate(stageCtx);
+    StageContext_Activate(stage_ctx);
     BgStage_RunUntilCondition(8, GbPlayer_PartyIconsFrameCallback);
     StageContext_Deactivate();
     GbPlayer_FillLaunchParams(params);

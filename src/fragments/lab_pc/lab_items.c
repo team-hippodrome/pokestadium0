@@ -105,7 +105,7 @@ void ScrollList_SetCursorKeepOffset(s32*, s32);
  * Seen in play (2026-11-14) in どうぐをいどうする: moving 2 of キズぐすり ×03 into サトシのパソコン put a
  * キズぐすり ×02 row at the picked position.
  */
-void LabItem_InsertItemStacks(s32* list, s32 itemId, s32 quantity) {
+void LabItem_InsertItemStacks(s32* list, s32 item_id, s32 quantity) {
     s32 i;
     s32 var_s3;
     s32 var_v0;
@@ -121,7 +121,7 @@ void LabItem_InsertItemStacks(s32* list, s32 itemId, s32 quantity) {
     if (temp_s4[2] > 0) {
         var_s2 = temp_v1;
         do {
-            if (itemId == var_s2[0]) {
+            if (item_id == var_s2[0]) {
                 quantity += var_s2[1];
                 func_800275E4(list[0], i);
                 if (i < list[2]) {
@@ -134,7 +134,7 @@ void LabItem_InsertItemStacks(s32* list, s32 itemId, s32 quantity) {
         } while (i < temp_s4[2]);
     }
 
-    sp3C[0] = itemId;
+    sp3C[0] = item_id;
     var_s3 = list[2];
 
     while (quantity > 0) {
@@ -180,13 +180,13 @@ void LabItem_Unused(void) {
  * ふしぎなアメ ×05 in サトシのパソコン to move into the bag returned 4, and the count
  * selector's limit was 4.
  */
-s32 LabItem_ComputeRemainingCapacity(s32 itemId, ByteMatrix* table) {
+s32 LabItem_ComputeRemainingCapacity(s32 item_id, ByteMatrix* table) {
     s32 i;
     s32 var_v1 = 0;
     u8* var_v0 = table->rows;
 
     for (i = 0; i < table->count; i++, var_v0 += 2) {
-        if (itemId == var_v0[0]) {
+        if (item_id == var_v0[0]) {
             var_v1 = (var_v1 - var_v0[1]) + 0x63;
         }
     }
@@ -195,10 +195,10 @@ s32 LabItem_ComputeRemainingCapacity(s32 itemId, ByteMatrix* table) {
 }
 
 /** Returns the largest quantity of an item that can be transferred. */
-s32 LabItem_ComputeMaxTransferQuantity(s32 itemId, ByteMatrix* table) {
+s32 LabItem_ComputeMaxTransferQuantity(s32 item_id, ByteMatrix* table) {
     s32 var_v1;
 
-    if (LabItem_IsQuantitylessItemForOperation(itemId) != 0) {
+    if (LabItem_IsQuantitylessItemForOperation(item_id) != 0) {
         if (table->count < table->capacity) {
             var_v1 = 1;
         } else {
@@ -207,7 +207,7 @@ s32 LabItem_ComputeMaxTransferQuantity(s32 itemId, ByteMatrix* table) {
     } else if (table->count < table->capacity) {
         var_v1 = 0x63;
     } else {
-        var_v1 = LabItem_ComputeRemainingCapacity(itemId, table);
+        var_v1 = LabItem_ComputeRemainingCapacity(item_id, table);
     }
     return var_v1;
 }
@@ -245,27 +245,27 @@ void LabItem_LoadGamePakBoxSlots(LabItemSaveSlot* slots) {
 }
 
 /** Reads item entries from a deck. */
-void LabItem_ReadDeckEntries(s32 deckType, s32 port, s32 index, ByteMatrix* table) {
-    DeckHandle* sp1C = Deck_Open(deckType, port, index, 0);
+void LabItem_ReadDeckEntries(s32 deck_type, s32 port, s32 index, ByteMatrix* table) {
+    DeckHandle* sp1C = Deck_Open(deck_type, port, index, 0);
 
     table->count = Deck_ReadEntries(table->rows, table->capacity, sp1C);
     Deck_CloseAndFlush(sp1C);
 }
 
 /** Writes item entries back to a deck. */
-void LabItem_WriteDeckBack(s32 deckType, s32 port, s32 index, ByteMatrix* table, s32 unused, char* trainerName, s32 trainerId) {
+void LabItem_WriteDeckBack(s32 deck_type, s32 port, s32 index, ByteMatrix* table, s32 unused, char* trainer_name, s32 trainer_id) {
     DeckHandle* sp2C;
 
-    if (trainerId != -1) {
+    if (trainer_id != -1) {
         if (1) {}  // karodo
-        sp2C = Deck_OpenAndSetName(deckType, port, index, unused, trainerName, trainerId);
+        sp2C = Deck_OpenAndSetName(deck_type, port, index, unused, trainer_name, trainer_id);
     } else {
-        sp2C = Deck_Open(deckType, port, index, 1);
+        sp2C = Deck_Open(deck_type, port, index, 1);
     }
 
     Deck_WriteEntries(table->rows, table->count, sp2C);
 
-    if ((deckType == 0x10) || (deckType == 0x11) || (deckType == 0x12) || (deckType == 0x13)) {
+    if ((deck_type == 0x10) || (deck_type == 0x11) || (deck_type == 0x12) || (deck_type == 0x13)) {
         Deck_CloseAndFlushBox(sp2C);
     } else {
         Deck_CloseAndFlush(sp2C);

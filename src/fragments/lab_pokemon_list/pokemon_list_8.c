@@ -130,15 +130,15 @@ void func_80027814(s8*, Ref89103740*, s32);
  * Seen in play (2026-11-12) in いちらん: ran with kind 1 (GB) or 2 (64 cartridge) and box 0, showed
  * the いどう message and left two Pokémon in the party.
  */
-void LabPCList_MoveMonTo(LabPCListScreen* screen, Ref89103740* entry, s32 sourceIndex, s32 box, Msg89103740* msg) {
+void LabPCList_MoveMonTo(LabPCListScreen* screen, Ref89103740* entry, s32 source_index, s32 box, Msg89103740* msg) {
     Item89103740* items = M2C_FIELD(screen, Item89103740**, 0x420);
-    Sub89103740* sub = &items[sourceIndex].subs[box];
+    Sub89103740* sub = &items[source_index].subs[box];
     Sub89103740* old = entry->sub;
     msg->unk00 = D_8910DD94;
     msg->unk04 = 1;
     LabPCList_FormatLocationName(D_8910E398, entry->sub->head->unkC, entry->sub->unk04);
     msg->unk08 = D_8910E398;
-    LabPCList_FormatLocationName(D_8910E3A8, sourceIndex, box);
+    LabPCList_FormatLocationName(D_8910E3A8, source_index, box);
     msg->unk0C = D_8910E3A8;
     func_80027868(old->unk14, entry->unk04);
     LabPCList_ReindexBoxSlots((u8*)old);

@@ -120,8 +120,8 @@ u32 func_800566BC(s8*);
  * Seen in play (2026-11-12) in いちらん: kind 0 gave てもち, kind 1 box 0 gave GB 1, and kind 2 box 0
  * gave 64 1, all in the いどう message.
  */
-void LabPCList_FormatLocationName(s8* buf, s32 sourceKind, s32 box) {
-    switch (sourceKind) {
+void LabPCList_FormatLocationName(s8* buf, s32 source_kind, s32 box) {
+    switch (source_kind) {
         case 0:
             *(Str7_89103620*)buf = *(Str7_89103620*)"てもち"; // "Party"
             break;

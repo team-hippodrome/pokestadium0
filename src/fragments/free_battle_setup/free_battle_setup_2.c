@@ -25,22 +25,22 @@ void func_8000A460(void*, void*);
  * Not reached in play: only FreeBattle_BuildGbCartSides calls it (see FreeBattle_SetupGbCartVersus).
  * @unverified Name from the code.
  */
-void FreeBattle_LoadGbCartTrainer(TeamRoster* slot, ExtendedRosterInfo* info, s32 controllerPort, s32 gbPort) {
+void FreeBattle_LoadGbCartTrainer(TeamRoster* slot, ExtendedRosterInfo* info, s32 controllerPort, s32 gb_port) {
     s32 sp2C;
 
     slot->isHuman = 1;
     slot->controllerPort = controllerPort;
     slot->controller = &gControllers[controllerPort];
-    slot->trainerId = GbSave_GetTrainerId(gbPort);
+    slot->trainerId = GbSave_GetTrainerId(gb_port);
     slot->numberOfPokemonBrought = 0;
     slot->rosterInfo = info;
-    sp2C = func_80020AFC(0x20, gbPort, 0, 0);
+    sp2C = func_80020AFC(0x20, gb_port, 0, 0);
     slot->numberOfPokemonBrought = func_80020CE4(slot->pokemonPicked, 6, sp2C);
     func_80020C60(sp2C);
-    GbSave_GetPlayerName(gbPort, slot->trainerName);
+    GbSave_GetPlayerName(gb_port, slot->trainerName);
     info->unk_000 = 0;
     info->numberOfPokemonCanBePicked = slot->numberOfPokemonBrought;
-    info->trainerIndex = gbPort;
+    info->trainerIndex = gb_port;
     func_80058410(slot->pokemonPicked, info->battleMon, 0x1E0);
     *(Bytes9*)info->title = *(Bytes9*)D_8200AC30;
     func_8000A460(info->fullName, slot->trainerName);
@@ -71,7 +71,7 @@ void FreeBattle_ClearBattleSide(BattleSide* side) {
  * Not reached in play: only FreeBattle_SetupGbCartVersus calls it.
  * @unverified Name from the code.
  */
-void FreeBattle_BuildGbCartSides(s32 slot0Port, s32 slot1Port, s32 slot2Port, s32 slot3Port) {
+void FreeBattle_BuildGbCartSides(s32 slot0_port, s32 slot1_port, s32 slot2_port, s32 slot3_port) {
     s32 temp;
 
     FreeBattle_ClearBattleSide(&gSessionContext.battleSides[0]);
@@ -80,26 +80,26 @@ void FreeBattle_BuildGbCartSides(s32 slot0Port, s32 slot1Port, s32 slot2Port, s3
     gSessionContext.trainerSlots[1].isHuman = 0;
     gSessionContext.trainerSlots[2].isHuman = 0;
     gSessionContext.trainerSlots[3].isHuman = 0;
-    if (slot0Port > 0) {
-        temp = slot0Port - 1;
+    if (slot0_port > 0) {
+        temp = slot0_port - 1;
         FreeBattle_LoadGbCartTrainer(&gSessionContext.trainerSlots[0], &gSessionContext.rosterInfo[0], temp, temp);
         gSessionContext.battleSides[0].teamMember[gSessionContext.battleSides[0].tagTeamSize] = &gSessionContext.trainerSlots[0];
         gSessionContext.battleSides[0].tagTeamSize = gSessionContext.battleSides[0].tagTeamSize + 1;
     }
-    if (slot1Port > 0) {
-        temp = slot1Port - 1;
+    if (slot1_port > 0) {
+        temp = slot1_port - 1;
         FreeBattle_LoadGbCartTrainer(&gSessionContext.trainerSlots[1], &gSessionContext.rosterInfo[1], temp, temp);
         gSessionContext.battleSides[0].teamMember[gSessionContext.battleSides[0].tagTeamSize] = &gSessionContext.trainerSlots[1];
         gSessionContext.battleSides[0].tagTeamSize = gSessionContext.battleSides[0].tagTeamSize + 1;
     }
-    if (slot2Port > 0) {
-        temp = slot2Port - 1;
+    if (slot2_port > 0) {
+        temp = slot2_port - 1;
         FreeBattle_LoadGbCartTrainer(&gSessionContext.trainerSlots[2], &gSessionContext.rosterInfo[2], temp, temp);
         gSessionContext.battleSides[1].teamMember[gSessionContext.battleSides[1].tagTeamSize] = &gSessionContext.trainerSlots[2];
         gSessionContext.battleSides[1].tagTeamSize = gSessionContext.battleSides[1].tagTeamSize + 1;
     }
-    if (slot3Port > 0) {
-        temp = slot3Port - 1;
+    if (slot3_port > 0) {
+        temp = slot3_port - 1;
         FreeBattle_LoadGbCartTrainer(&gSessionContext.trainerSlots[3], &gSessionContext.rosterInfo[3], temp, temp);
         gSessionContext.battleSides[1].teamMember[gSessionContext.battleSides[1].tagTeamSize] = &gSessionContext.trainerSlots[3];
         gSessionContext.battleSides[1].tagTeamSize = gSessionContext.battleSides[1].tagTeamSize + 1;

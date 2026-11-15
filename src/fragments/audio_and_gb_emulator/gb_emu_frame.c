@@ -719,7 +719,7 @@ M2C_UNK func_8005C0A0();
  * menu, button config, speed-up, recovery, quit).
  * @unverified Name from the code and Stadium 1.
  */
-void GbEmu_DrawLoadingScreen(u16* dst, u8 (*partyIcons)[0xC80], s32 port, s32 version) {
+void GbEmu_DrawLoadingScreen(u16* dst, u8 (*party_icons)[0xC80], s32 port, s32 version) {
     s32 y;
     s32 x;
     u16* row;
@@ -745,8 +745,8 @@ void GbEmu_DrawLoadingScreen(u16* dst, u8 (*partyIcons)[0xC80], s32 port, s32 ve
 
     for (i = 0; i < 6; i++) {
         GbEmu_DrawFramedPanel(dst + 0xB916 + i * 46);
-        osInvalDCache(partyIcons[i], sizeof(partyIcons[i]));
-        GbEmu_BlitWithPixelOp(dst + 0xBCD9 + i * 46, (u16*)partyIcons[i], 0, 40, 40);
+        osInvalDCache(party_icons[i], sizeof(party_icons[i]));
+        GbEmu_BlitWithPixelOp(dst + 0xBCD9 + i * 46, (u16*)party_icons[i], 0, 40, 40);
     }
 
     for (j = 0; j < 6; j++) {

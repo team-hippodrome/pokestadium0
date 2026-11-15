@@ -57,14 +57,14 @@ void func_80027804(void*, u8**, s32, s32);
  * Sets up the box slots of one source and points each slot at its 0x58-byte entries.
  * Seen in play (2026-11-14) in いちらん: ran three times on entry, for てもち, the GB boxes and the 64 boxes.
  */
-void LabPCList_InitSourceBoxes(unk_func_89109990* srcBoxes, u8** slotPtrs, u8* entryBuffer, s32 slotCapacity) {
+void LabPCList_InitSourceBoxes(unk_func_89109990* src_boxes, u8** slot_ptrs, u8* entry_buffer, s32 slot_capacity) {
     UNUSED s32 pad[2]; // FAKE: stack padding
-    unk_func_89109990_010* var_s1 = srcBoxes->unk_10;
+    unk_func_89109990_010* var_s1 = src_boxes->unk_10;
     s32 var_t0 = 0;
     s32 i;
     s32 j;
 
-    switch (srcBoxes->unk_04) {
+    switch (src_boxes->unk_04) {
         case 0x11:
         case 0x13:
             break;
@@ -75,18 +75,18 @@ void LabPCList_InitSourceBoxes(unk_func_89109990* srcBoxes, u8** slotPtrs, u8* e
             break;
     }
 
-    srcBoxes->unk_18 = srcBoxes->unk_14;
-    for (i = 0; i < srcBoxes->unk_18; i++) {
-        var_s1[i].unk_00 = srcBoxes;
+    src_boxes->unk_18 = src_boxes->unk_14;
+    for (i = 0; i < src_boxes->unk_18; i++) {
+        var_s1[i].unk_00 = src_boxes;
         var_s1[i].unk_04 = i;
         var_s1[i].unk_08 = 1;
         var_s1[i].unk_0C = var_t0;
         var_s1[i].unk_10 = 0;
         // The loop has to stay on one line: IDO orders the unrolled stores by source line.
-        for (j = 0; j < slotCapacity; j++) { slotPtrs[j] = &entryBuffer[j * 0x58]; }
-        func_80027804(var_s1[i].unk_14, slotPtrs, slotCapacity, 0);
-        slotPtrs += slotCapacity;
-        entryBuffer += slotCapacity * 0x58;
+        for (j = 0; j < slot_capacity; j++) { slot_ptrs[j] = &entry_buffer[j * 0x58]; }
+        func_80027804(var_s1[i].unk_14, slot_ptrs, slot_capacity, 0);
+        slot_ptrs += slot_capacity;
+        entry_buffer += slot_capacity * 0x58;
     }
 }
 
@@ -243,7 +243,7 @@ s32 Deck_GetSaveEntryTrainerId(s32, s32);
 s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2);
 s32 Deck_GetSaveEntryCount(s32, s32);
 s32 func_8000A4E8(char*, char*);
-void LabPCList_InitDeckCategories(unk_func_8830867C_02C_154* decks, void* bagBuffer, void* pcBuffer, void* cartBuffer) {
+void LabPCList_InitDeckCategories(unk_func_8830867C_02C_154* decks, void* bag_buffer, void* pc_buffer, void* cart_buffer) {
     UNUSED s32 pad; // FAKE: stack padding
     s32 temp_s1;
     char sp54[4];
@@ -255,17 +255,17 @@ void LabPCList_InitDeckCategories(unk_func_8830867C_02C_154* decks, void* bagBuf
     decks->unk_01 = func_80025BD8();
     decks->unk_02 = 0;
     decks->unk_04 = 1;
-    func_80027410(&decks[0].unk_0C, bagBuffer, 2, 0x14, 0);
+    func_80027410(&decks[0].unk_0C, bag_buffer, 2, 0x14, 0);
 
     decks[1].unk_00 = 0x22;
     decks[1].unk_01 = decks->unk_01;
     decks[1].unk_02 = 0;
     decks[1].unk_04 = 1;
-    func_80027410(&decks[1].unk_0C, pcBuffer, 2, 0x32, 0);
+    func_80027410(&decks[1].unk_0C, pc_buffer, 2, 0x32, 0);
 
     decks[2].unk_00 = 0x12;
     decks[2].unk_01 = 0;
-    func_80027410(&decks[2].unk_0C, cartBuffer, 2, 0x64, 0);
+    func_80027410(&decks[2].unk_0C, cart_buffer, 2, 0x64, 0);
 
     func_80027FF8(&sp48, decks->unk_01);
 
@@ -310,13 +310,13 @@ void LabPCList_WriteDeckCategory(unk_func_8830867C_02C_154* deck) {
  * Returns whether an item id is a TM or HM and turns it into its usable-item code: TMs (0xC9-0xFA) 100-149, HMs (0xC4-0xC8) 200-204.
  * Seen in play (2026-11-14) in いちらん: わざマシン06 was listed among the usable items.
  */
-s32 LabPCList_IsTmHmItemId(s32* itemId) {
-    if ((*itemId >= 0xC9) && (*itemId < 0xFB)) {
-        *itemId -= 0x65;
+s32 LabPCList_IsTmHmItemId(s32* item_id) {
+    if ((*item_id >= 0xC9) && (*item_id < 0xFB)) {
+        *item_id -= 0x65;
         return 1;
     }
-    if ((*itemId >= 0xC4) && (*itemId < 0xC9)) {
-        *itemId += 4;
+    if ((*item_id >= 0xC4) && (*item_id < 0xC9)) {
+        *item_id += 4;
         return 1;
     }
     return 0;
@@ -326,14 +326,14 @@ s32 LabPCList_IsTmHmItemId(s32* itemId) {
  * Returns whether an item id is HP Up, Protein, Iron, Carbos, Calcium or Rare Candy (0x23-0x28) and turns it into 0-5.
  * Seen in play (2026-11-14) in いちらん: マックスアップ, タウリン, ブロムヘキシン, インドメタシン, リゾチウム and ふしぎなアメ were listed.
  */
-s32 LabPCList_IsVitaminItemId(s32* itemId) {
+s32 LabPCList_IsVitaminItemId(s32* item_id) {
     static u8 D_8831A250[] = { 0x23, 0x24, 0x25, 0x26, 0x27, 0x28 };
 
     s32 i;
 
     for (i = 0; i < 6; i++) {
-        if (*itemId == D_8831A250[i]) {
-            *itemId = i;
+        if (*item_id == D_8831A250[i]) {
+            *item_id = i;
             return 1;
         }
     }
@@ -345,14 +345,14 @@ s32 LabPCList_IsVitaminItemId(s32* itemId) {
  * Returns whether an item id is PP Up (0x4F) and turns it into the usable-item code 50.
  * Seen in play (2026-11-14) in いちらん: ポイントアップ was listed.
  */
-s32 LabPCList_IsPpUpItemId(s32* itemId) {
+s32 LabPCList_IsPpUpItemId(s32* item_id) {
     static u8 D_8831A258[] = { 0x4F };
 
     s32 i;
 
     for (i = 0; i < 1; i++) {
-        if (*itemId == D_8831A258[i]) {
-            *itemId = i + 0x32;
+        if (*item_id == D_8831A258[i]) {
+            *item_id = i + 0x32;
             return 1;
         }
     }
@@ -379,7 +379,7 @@ typedef struct TmEntry8910A21C {
  * Collects the usable items (vitamins, PP Up, TMs, HMs) of every item deck into one sorted list.
  * Seen in play (2026-11-14) in いちらん: built the list of 「フシギダネがつかえるどうぐ」.
  */
-void LabPCList_BuildUsableItemList(PointerList* list, TmEntry8910A21C* entries, unk_func_8830867C_02C_154* decks, s32 deckCount) {
+void LabPCList_BuildUsableItemList(PointerList* list, TmEntry8910A21C* entries, unk_func_8830867C_02C_154* decks, s32 deck_count) {
     void** var_s6;
     unk_func_8830867C_02C_154* var_s4;
     s32 i;
@@ -394,7 +394,7 @@ void LabPCList_BuildUsableItemList(PointerList* list, TmEntry8910A21C* entries, 
     var_s4 = decks;
     var_s1 = entries;
 
-    for (i = 0; i < deckCount; i++, var_s4++) {
+    for (i = 0; i < deck_count; i++, var_s4++) {
         if (var_s4->unk_04 != 0) {
             var_s2 = var_s4->unk_0C;
 
@@ -438,7 +438,7 @@ void LabPCList_BuildUsableItemList(PointerList* list, TmEntry8910A21C* entries, 
 }
 
 /** Returns whether a species learns a move by level up. */
-s32 LabPCList_CanLearnMoveByLevelUp(s32 species, s32 tmIndex) {
+s32 LabPCList_CanLearnMoveByLevelUp(s32 species, s32 tm_index) {
     static SpeciesData D_8831757C[] = {
         { 0x06, 0x4E, 0x54, 0x4E, 0x64, 0x55, 0x14, 0x02, 0x2D, 0xD1, {0x0A, 0x2D, 0x34, 0x2B}, 0x03, {0xB5, 0x43, 0x4F, 0xCE, 0xE3, 0x08, 0x2E}, 0x00 },
         { 0x0C, 0x3C, 0x2D, 0x32, 0x46, 0x50, 0x07, 0x02, 0x2D, 0xA0, {0x5D, 0x00, 0x00, 0x00}, 0x00, {0x2A, 0x43, 0x38, 0xF0, 0x43, 0x28, 0x42}, 0x00 },
@@ -463,7 +463,7 @@ s32 LabPCList_CanLearnMoveByLevelUp(s32 species, s32 tmIndex) {
             }
         }
     }
-    return ((var_v1->tmHmLearnset[tmIndex / 8] >> (tmIndex % 8)) & 1) != 0;
+    return ((var_v1->tmHmLearnset[tm_index / 8] >> (tm_index % 8)) & 1) != 0;
 }
 
 s32 func_80020974(s32);

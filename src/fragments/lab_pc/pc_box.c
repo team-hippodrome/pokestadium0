@@ -31,12 +31,12 @@ void PcBox_MarkBoxInPokedex(PcBoxStorage* box) {
 }
 
 /** Writes entries to a box of the Lab PC through a deck handle. */
-void LabPC_WriteBoxEntries(s32 deckType, s32 port, s32 index, PcBoxStorage* box) {
-    DeckHandle* sp1C = Deck_Open(deckType, port, index, 1);
+void LabPC_WriteBoxEntries(s32 deck_type, s32 port, s32 index, PcBoxStorage* box) {
+    DeckHandle* sp1C = Deck_Open(deck_type, port, index, 1);
 
     Deck_WriteEntries((u8*)box, box->count, sp1C);
 
-    if ((deckType == 0x10) || (deckType == 0x11) || (deckType == 0x12) || (deckType == 0x13)) {
+    if ((deck_type == 0x10) || (deck_type == 0x11) || (deck_type == 0x12) || (deck_type == 0x13)) {
         Deck_CloseAndFlushBox(sp1C);
     } else {
         Deck_CloseAndFlush(sp1C);
@@ -103,11 +103,11 @@ void PcBox_SaveChanges(PcBoxScreen* screen) {
  * Opens deck (`arg0`, `arg1`, `arg2`), reads `arg4` entries into `arg3`, closes it and returns the read count.
  * Seen in play (2026-11-12): read the GB and 64 boxes for ボックスのそうさ.
  */
-s32 PcBox_ReadDeck(s32 deckType, s32 port, s32 index, s8* out, s32 max) {
+s32 PcBox_ReadDeck(s32 deck_type, s32 port, s32 index, s8* out, s32 max) {
     s32 sp1C;
     DeckHandle* sp18;
 
-    sp18 = Deck_Open(deckType, port, index, 0);
+    sp18 = Deck_Open(deck_type, port, index, 0);
     sp1C = Deck_ReadEntries((u8*)out, max, sp18);
     Deck_CloseAndFlush(sp18);
     return sp1C;
@@ -119,7 +119,7 @@ s32 PcBox_ReadDeck(M2C_UNK, M2C_UNK, s32, s8 *, s32); /* extern */
  * (30 Pokémon each, the read count stored after them).
  * Seen in play (2026-11-14): ボックスを いどうする read the 8 GB boxes (deck 0x21) and the 4 64 boxes (0x11).
  */
-void PcBox_ReadBoxes(s8 *boxes, M2C_UNK deckType, M2C_UNK port, s32 count)
+void PcBox_ReadBoxes(s8 *boxes, M2C_UNK deck_type, M2C_UNK port, s32 count)
 {
   s32 temp_v0;
   s32 *new_var2; // FAKE: permuter temp
@@ -133,7 +133,7 @@ void PcBox_ReadBoxes(s8 *boxes, M2C_UNK deckType, M2C_UNK port, s32 count)
   {
     do
     {
-      temp_v0 = PcBox_ReadDeck(deckType, port, var_s0, boxes, 0x1E);
+      temp_v0 = PcBox_ReadDeck(deck_type, port, var_s0, boxes, 0x1E);
       var_s0 += 1;
       boxes += 0x964;
       new_var2 = (s32 *) (((s8 *) boxes) + (-4));
@@ -277,9 +277,9 @@ void PcBox_DrawMoveName(s32 x, s32 y, s32 move, s32 centered) {
  * Seen in play (2026-11-13) in the せいとん > ポケモンをにがす confirm it drew くさ and どく for フシギダネ, and ほのお
  * with no type 2 for ヒトカゲ.
  */
-void PcBox_DrawTypeName(s32 x, s32 y, s32 mon, s32 typeSlot) {
+void PcBox_DrawTypeName(s32 x, s32 y, s32 mon, s32 type_slot) {
     Color890075E0 c;
-    s32 idx = Pokemon_GetTypeIndex(mon, typeSlot);
+    s32 idx = Pokemon_GetTypeIndex(mon, type_slot);
 
     if (idx != -1) {
         c = D_80066AD8[idx].color;
@@ -515,14 +515,14 @@ void PcBox_DrawListCell();
  * prefix, `boxIndex` the digit) with a 6 x 5 icon grid of the box's Pokémon.
  * Seen in play (2026-11-14): ボックスのなかをみる opened 「64のボックス1」 and 「GBのボックス2」.
  */
-void PcBox_InitListWindow(PcBoxListWindow* win, s32 x, s32 y, PcBoxStorage* box, s32 renderer, s32 isStadium, s32 boxIndex) {
+void PcBox_InitListWindow(PcBoxListWindow* win, s32 x, s32 y, PcBoxStorage* box, s32 renderer, s32 is_stadium, s32 box_index) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s32 i;
     u8* p;
 
-    func_8000A460((char*)D_890289E0, (isStadium == 0) ? D_89018EE8 : D_89018EF0);
+    func_8000A460((char*)D_890289E0, (is_stadium == 0) ? D_89018EE8 : D_89018EF0);
     *(Str8900806C*)(func_800566BC((char*)D_890289E0) + D_890289E0) = *(Str8900806C*)D_89018EF8;
-    D_890289E0[func_800566BC((char*)D_890289E0) - 1] += boxIndex + 1;
+    D_890289E0[func_800566BC((char*)D_890289E0) - 1] += box_index + 1;
     Window_SetRect((s8*)&win->window, x, y, 0x228, 0x156);
     win->window.animTimer = 0;
     win->window.state = 0;
@@ -749,7 +749,7 @@ extern char D_89018F4C[];
  * Sets up the ボックスのそうさ (box operation) window and its parts.
  * Seen in play (2026-11-12): opened ボックスのそうさ.
  */
-void PcBox_InitOperationWindow(PcBoxOperationWindow* win, s32 x, s32 y, ByteMatrix* gbBoxTable) {
+void PcBox_InitOperationWindow(PcBoxOperationWindow* win, s32 x, s32 y, ByteMatrix* gb_box_table) {
     Window_SetRect(&win->window, x, y, 0x234, 0x172);
     win->window.animTimer = 0;
     win->window.state = 0;
@@ -787,9 +787,9 @@ void PcBox_InitOperationWindow(PcBoxOperationWindow* win, s32 x, s32 y, ByteMatr
     win->operationCursor.cursor = 0;
     win->operationCursor.controller = (Controller*)D_800603C0;
     func_8000B2F4(D_800603C0);
-    Menu_Init(&win->gbBoxMenu, (s32)gbBoxTable, (s32)win->gbBoxFlags, (s32)PcBox_DrawGbBoxRow, 0xCE, 0x1C);
+    Menu_Init(&win->gbBoxMenu, (s32)gb_box_table, (s32)win->gbBoxFlags, (s32)PcBox_DrawGbBoxRow, 0xCE, 0x1C);
     win->gbBoxMenu.options |= 0x10000;
-    Menu_Init(&win->stadiumBoxMenu, (s32)(gbBoxTable + 1), (s32)win->stadiumBoxFlags, (s32)PcBox_DrawStadiumBoxRow, 0x104, 0x38);
+    Menu_Init(&win->stadiumBoxMenu, (s32)(gb_box_table + 1), (s32)win->stadiumBoxFlags, (s32)PcBox_DrawStadiumBoxRow, 0x104, 0x38);
     win->stadiumBoxMenu.options |= 0x10000;
     win->state = 1;
 }

@@ -162,11 +162,11 @@ M2C_UNK func_8001ABBC();
  * Draws the colored type icon for type slot `typeSlot` of Pokemon `mon`.
  * Seen in play (2026-11-12): くさ, どく, ほのお and みず in their type colors.
  */
-void LabPCList_DrawTypeIcon(s32 x, s32 y, u8* mon, s32 typeSlot) {
+void LabPCList_DrawTypeIcon(s32 x, s32 y, u8* mon, s32 type_slot) {
     Color82000BC4 c;
     s32 idx;
 
-    if ((*mon > 0) && (*mon < 0x98) && ((idx = Pokemon_GetTypeIndex(mon, typeSlot)) != -1)) {
+    if ((*mon > 0) && (*mon < 0x98) && ((idx = Pokemon_GetTypeIndex(mon, type_slot)) != -1)) {
         c = D_80066AD8[idx].color;
         func_8001AB6C();
         func_8001A384(4, 0);
@@ -259,10 +259,10 @@ void LabPCList_DrawLocation(s32 x, s32 y, s8 ***entry) {
 }
 
 /** Draws a line of plain text in a Lab PC list. */
-void LabPCList_DrawPlainText(s32 x, s32 y, s8* fmt, s32 value, s32 fontFlags) {
+void LabPCList_DrawPlainText(s32 x, s32 y, s8* fmt, s32 value, s32 font_flags) {
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
-    Font_SetActive(4, fontFlags);
+    Font_SetActive(4, font_flags);
     Font_Printf(x, y, fmt, value);
     Font_EndTexturedTextRendering();
 }

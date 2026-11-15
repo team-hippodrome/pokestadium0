@@ -153,11 +153,11 @@ u8 GbAudio_GetRegisterValue(u16 arg0) {
  * the write queue and silences all channels. Called by Cry_SetEnabled and Cry_PlayFromPokedex before a
  * Gen 1 cry is played through the emulated APU.
  */
-void GbAudio_Reset(u32 sampleRate, u8 arg1, u32 arg2) {
+void GbAudio_Reset(u32 sample_rate, u8 arg1, u32 arg2) {
     u32 temp_t3;
     u8* p;
     s32 i;
-    D_800FD7E4 = sampleRate >> 1;
+    D_800FD7E4 = sample_rate >> 1;
     D_800FDEC4 = 1048576.0f / (f32) D_800FD7E4;
 
     p = (u8*) &D_800FD7E8;

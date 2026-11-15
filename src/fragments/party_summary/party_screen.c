@@ -103,9 +103,9 @@ M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
  * cursor frame. `*modePtr` is PartyScreen_DrawList's mode; mode 2 (reordering) frames the cursor in
  * another color. Seen in play (2026-11-14): one call per party Pokémon.
  */
-void PartyScreen_DrawListRow(s32 x, s32 y, BattleMon *mon, s32 index, s32 flags, s32 *modePtr) {
+void PartyScreen_DrawListRow(s32 x, s32 y, BattleMon *mon, s32 index, s32 flags, s32 *mode_ptr) {
     s32 pad[3]; // FAKE: stack padding
-    s32 kind = *modePtr;
+    s32 kind = *mode_ptr;
     Color_RGBA8 *color;
 
     if (flags & 0x18) {
@@ -126,13 +126,13 @@ void PartyScreen_DrawListRow(s32 x, s32 y, BattleMon *mon, s32 index, s32 flags,
  * Sets up the てもち list window (545x360) and its menu of PartyScreen_DrawListRow rows over `monList`.
  * Seen in play (2026-11-14): ran once from PartyScreen_SetupList when the てもち screen opened.
  */
-void PartyScreen_InitList(PartyListWindow* window, s32 x, s32 y, s32 monList) {
+void PartyScreen_InitList(PartyListWindow* window, s32 x, s32 y, s32 mon_list) {
     Window_SetRect((s8*)window, x, y, 0x221, 0x168);
     window->window.animTimer = 0;
     window->window.title = NULL;
     window->window.state = 0;
     window->window.frame.style = 0x1001;
-    Menu_Init((s8*)&window->menu, monList, (s8*)window->itemFlags, (M2C_UNK *)PartyScreen_DrawListRow, 0x215, 0x33);
+    Menu_Init((s8*)&window->menu, mon_list, (s8*)window->itemFlags, (M2C_UNK *)PartyScreen_DrawListRow, 0x215, 0x33);
 }
 
 extern s8 D_8007356C;
@@ -360,14 +360,14 @@ void MonSummary_DrawHeader(s32 x, s32 y, BattleMon* mon) {
  * Draws the name of the species' type 1 or 2 (`typeSlot`) in its type color at `fontSize`;
  * nothing for a missing type 2. Seen in play (2026-11-14): でんき for Pikachu on both pages.
  */
-void MonSummary_DrawTypeName(s32 x, s32 y, s32 fontSize, s32 mon, s32 typeSlot) {
+void MonSummary_DrawTypeName(s32 x, s32 y, s32 font_size, s32 mon, s32 type_slot) {
     Color82000BC4 c;
-    s32 idx = Pokemon_GetTypeIndex(mon, typeSlot);
+    s32 idx = Pokemon_GetTypeIndex(mon, type_slot);
 
     if (idx != -1) {
         c = D_80066AD8[idx].color;
         func_8001AB6C();
-        func_8001A384(fontSize, 0);
+        func_8001A384(font_size, 0);
         func_8001AA9C(c.r, c.g, c.b, c.a);
         Font_Printf(x, y, D_80066AD8[idx].str);
         func_8001ABBC();
@@ -469,7 +469,7 @@ u32 func_800566BC(const char*);
  * Seen in play (2026-11-14): でんきショック 30/48 (3 PP Ups), なきごえ 40/47 (1 PP Up),
  * でんこうせっか 30/30, でんじは 20/20; C-Right moved the frame to なきごえ.
  */
-void MonSummary_DrawMoveList(s32 baseX, s32 baseY, s32 mon, s32 selectedSlot) {
+void MonSummary_DrawMoveList(s32 baseX, s32 baseY, s32 mon, s32 selected_slot) {
     s32 pad; // FAKE
     s32 count;
     s32 pad2; // FAKE
@@ -487,7 +487,7 @@ void MonSummary_DrawMoveList(s32 baseX, s32 baseY, s32 mon, s32 selectedSlot) {
     count = BattleMon_CountMoves((u8*)mon);
     for (i = 0; i < count; i++) {
         hl = 0;
-        if (selectedSlot == i) {
+        if (selected_slot == i) {
             Ui_DrawRoundedFrame(D_8A203384[i].boxX + baseX, D_8A203384[i].boxY + baseY, 0xD0, 0x30, D_80073520);
             hl = 2;
         }

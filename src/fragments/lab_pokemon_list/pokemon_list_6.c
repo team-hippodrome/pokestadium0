@@ -208,9 +208,9 @@ s32 LabPCList_UpdateColumnMenu(LabPCListScreen* screen) {
  */
 s32 LabPCList_UpdateLevelInput(void*);
 M2C_UNK LabPCList_ApplyFiltersAndSort();
-s32 LabPCList_RunLevelFilter(s8 *screenArg)
+s32 LabPCList_RunLevelFilter(s8 *screen_arg)
 {
-  LabPCListScreen *screen = (LabPCListScreen *) screenArg;
+  LabPCListScreen *screen = (LabPCListScreen *) screen_arg;
   s32 ret;
   ret = func_89106C98(&screen->levelInputWindow);
   if (ret == (-1))
@@ -358,7 +358,7 @@ void LabPCList_DisableUnavailableBoxes(Flags89103144* menu, Item89103144** entry
  * Greys out each destination source with no box that could take the Pokémon.
  * Seen in play (2026-11-14) in いちらん: ran when いどうする opened 「どこへ？」.
  */
-void LabPCList_DisableUnavailableSources(s8* menu, s8** movingEntry, s8* sources) {
+void LabPCList_DisableUnavailableSources(s8* menu, s8** moving_entry, s8* sources) {
     s32 i;
     s32 j;
     s8* box;
@@ -367,7 +367,7 @@ void LabPCList_DisableUnavailableSources(s8* menu, s8** movingEntry, s8* sources
     for (box = M2C_FIELD(sources, s8**, 0), i = 0; i < M2C_FIELD(sources, s32*, 8); i++, box += 0x24) {
         for (entry = M2C_FIELD(box, s8**, 0x10), j = 0; j < M2C_FIELD(box, s32*, 0x18); j++, entry += 0x20) {
             if ((M2C_FIELD(entry, s32*, 8) != 0) && (M2C_FIELD(entry, s32*, 0x1C) < M2C_FIELD(box, s32*, 0x20)) &&
-                (entry != *movingEntry)) {
+                (entry != *moving_entry)) {
                 break;
             }
         }
