@@ -12,7 +12,7 @@
 #include "memmap.h"
 #include "util.h"
 #include "variables.h"
-typedef void (*func_D_8006F0A4)(GraphNode* arg0);
+typedef void (*GeoNodeRenderFunc)(GraphNode* arg0);
 typedef struct unk_D_800AA8C8 {
     /* 0x0000 */ MtxF unk_0000[64];
     /* 0x1000 */ MtxF* unk_1000[32];
@@ -27,7 +27,7 @@ extern GeoModelRootNode* D_80060490;
 extern CameraNode* D_80060494;
 extern GeoModelRootNode* D_80060498;
 extern DisplayObject* D_8006049C;
-extern func_D_8006F0A4 D_8006062C[];
+extern GeoNodeRenderFunc D_8006062C[];
 extern s32 D_800AB244;
 extern u8 pad_D_800AA6E8[0x1E0];
 extern unk_D_800AA8C8 D_800AB460;
