@@ -26,6 +26,9 @@ s32 func_82140690(s8 *);
 void BattleAnim_PowderCloudScaleMotion(Particle* arg0);
 
 /**
+ * Inits a slash streak particle: turns it by one of five fixed orientations (by its variant),
+ * raises it 10 units, spaces it along the way it faces by spawn index, scale 1.0, recolored from
+ * its palette pair.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Scratch, Cut, Vine Whip, Fury Swipes, Slash.
  */
@@ -95,7 +98,7 @@ void BattleAnim_CallbackSharedDescriptor29ScaleAnimFade(Particle* particle) {
         Particle_MarkInactive(particle);
         break;
     }
-    func_82140228(particle, 0x40600000, 0x3E800000);
+    func_82140228(particle, 0x40600000, 0x3E800000); // 3.5f, 0.25f
 }
 
 /**
@@ -188,6 +191,8 @@ void BattleAnim_RunRazorWindHitEffect(Particle* arg0) {
 }
 
 /**
+ * Inits a Razor Leaf or Petal Dance hit particle: turns it by a fixed orientation picked by spawn
+ * index, recolors it, scale 1.0, and hides it for a start delay of twice its spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Razor Leaf, Petal Dance.
  */
@@ -233,16 +238,16 @@ void BattleAnim_SetupPetalDanceRazorLeafHitEffect(Particle* arg0) {
 
     switch (sp24) {
         case 0:
-            Particle_SetRandomVelocityXSymmetric(arg0, 0xA, 3);
-            Particle_SetRandomVelocityYOffset(arg0, 0xF, 0xA);
+            Particle_SetRandomVelocityXSymmetric(arg0, 10, 3);
+            Particle_SetRandomVelocityYOffset(arg0, 15, 10);
             Particle_SetRandomVelocityZSymmetric(arg0, 0xF, 3);
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0xD);
             break;
 
         case 1:
-            Particle_SetRandomVelocityXSymmetric(arg0, 0xA, 5);
-            Particle_SetRandomVelocityYOffset(arg0, 0x14, 5);
-            Particle_SetRandomVelocityZSymmetric(arg0, 0xA, 5);
+            Particle_SetRandomVelocityXSymmetric(arg0, 10, 5);
+            Particle_SetRandomVelocityYOffset(arg0, 20, 5);
+            Particle_SetRandomVelocityZSymmetric(arg0, 10, 5);
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0xE);
             break;
     }
@@ -254,6 +259,8 @@ void BattleAnim_SetupPetalDanceRazorLeafHitEffect(Particle* arg0) {
 }
 
 /**
+ * Particle callback for the Razor Leaf and Petal Dance hit: waits out the start delay, shows the
+ * particle, plays frames 0 to 7 once, then marks it inactive.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Razor Leaf, Petal Dance.
  */
@@ -292,6 +299,8 @@ void BattleAnim_SetupSlashingMoveFullScreenFlash(Particle* arg0) {
 }
 
 /**
+ * Particle callback for the slashing moves' flash: inits it, holds 20 frames, then detaches. Every
+ * frame it grows toward scale 6.2; variant 0 also drains green and blue so the flash turns red.
  * Moves: Cut (use), Fury Swipes (use), Scratch (use), Slash (use), Vine Whip (use)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -308,13 +317,13 @@ void BattleAnim_RunSlashingMoveFullScreenFlash(Particle* arg0) {
         BattleAnim_SetupSlashingMoveFullScreenFlash(arg0);
         break;
     case 2:
-        func_8213CA80(arg0, 0x14);
+        func_8213CA80(arg0, 20);
         break;
     case 3:
         Particle_DisableAndDetach(arg0);
         break;
     }
-    func_82140228(arg0, 0x40C66666, 0x3F800000);
+    func_82140228(arg0, 0x40C66666, 0x3F800000); // 6.2f, 1.0f
     if (sp26 == 0) {
         Particle_ApproachPrimGreen(arg0, 0, 0x18);
         Particle_ApproachPrimBlue(arg0, 0, 0x18);
@@ -337,8 +346,10 @@ void BattleAnim_SetupSlashMoveWhiteFlashOverlay(Particle* arg0) {
 }
 
 /**
- * Moves: Crabhammer (hit), Cut (hit), Fury Swipes (hit), Scratch (hit), Slash (hit), Vine Whip (hit)
- * TODO: Human contributor add screenshot
+ * Particle callback for the slash flash overlay: like the full-screen flash (scale toward 6.0,
+ * variant 0 turns red) but also fades out and is marked inactive instead of detached.
+ * Moves: Crabhammer (hit), Cut (hit), Fury Swipes (hit), Scratch (hit), Slash (hit), Vine Whip
+ * (hit) TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Scratch, Cut, Vine Whip, Crabhammer, Fury Swipes, Slash.
  */
@@ -353,13 +364,13 @@ void BattleAnim_RunSlashMoveWhiteFlashOverlay(Particle* arg0) {
         BattleAnim_SetupSlashMoveWhiteFlashOverlay(arg0);
         break;
     case 2:
-        func_8213CA80(arg0, 0x14);
+        func_8213CA80(arg0, 20);
         break;
     case 3:
         Particle_MarkInactive(arg0);
         break;
     }
-    func_82140228(arg0, 0x40C00000, 0x3F800000);
+    func_82140228(arg0, 0x40C00000, 0x3F800000); // 6.0f, 1.0f
     if (sp26 == 0) {
         Particle_ApproachPrimGreen(arg0, 0, 0x18);
         Particle_ApproachPrimBlue(arg0, 0, 0x18);
@@ -370,6 +381,8 @@ void BattleAnim_RunSlashMoveWhiteFlashOverlay(Particle* arg0) {
 }
 
 /**
+ * Inits a slash grow-fade particle: scale 1.0, a fixed rotationX and turn, moved 10 units down
+ * (variant 0) or up (variant 2), recolored from its palette pair.
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Scratch, Cut, Vine Whip, Crabhammer, Fury Swipes and Slash.
  */
@@ -421,10 +434,12 @@ void BattleAnim_SlashGrowFade(Particle* particle) {
         break;
     }
     Particle_AnimateFramesForwardLooped(particle, 0, 7, 1, 2, 0);
-    func_82140228(particle, 0x40A00000, 0x3ECCCCCD);
+    func_82140228(particle, 0x40A00000, 0x3ECCCCCD); // 5.0f, 0.4f
 }
 
 /**
+ * Inits a heavy-hit burst child: scale 1.0, speed 0.4, recolored from its palette pair, alpha
+ * 0x64, hidden for a start delay of 4 frames per spawn index.
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for ViceGrip, Razor Wind, Slam, Stomp, Body Slam, Thrash, Double-Edge, Bite, Submission,
  * Counter, Seismic Toss, SolarBeam, Clamp, Skull Bash, Sky Attack, Crabhammer, Hyper Fang and Super
@@ -484,7 +499,7 @@ void BattleAnim_SetupSmallSand(s8 *arg0) {
 
     sp26 = Particle_GetSpawnIndex();
     sp24 = Particle_GetByteParam1(arg0);
-    func_821401D4(arg0, 0x3E800000);
+    func_821401D4(arg0, 0x3E800000); // 0.25f
     M2C_FIELD(arg0, f32 *, 0x5C) = (f32) ((func_8000F150() * 0.5f) + 0.25f);
     Particle_AddRotationY(arg0, (s16) (0x1800 - ((0x3000 / func_8213C494(arg0)) * sp26)));
     Particle_SetStepMagnitudeScaled(arg0, (2.0f * func_8000F150()) + 3.0f);
@@ -494,6 +509,8 @@ void BattleAnim_SetupSmallSand(s8 *arg0) {
 }
 
 /**
+ * Particle callback for a small sand grain: animates frames 0 to 7, grows toward scale 0.75, slows
+ * to speed 0.5 and moves the way it faces, then fades out and is marked inactive.
  * Moves: Sand Attack (use)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -509,7 +526,7 @@ void BattleAnim_RunSmallSand(Particle* arg0) {
         return;
     case 2:
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
-        func_82140228(arg0, 0x3F400000, 0x3CCCCCCD);
+        func_82140228(arg0, 0x3F400000, 0x3CCCCCCD); // 0.75f, 0.025f
         Particle_ApproachStepMagnitude(arg0, 0.5f, 0.25f);
         func_8213E1FC(arg0, M2C_FIELD(arg0, s32 *, 0x5C));
         Particle_MoveXZAlongRotationY(arg0);
@@ -534,7 +551,7 @@ void BattleAnim_SetupLargeSand(s8 *arg0) {
 
     sp26 = Particle_GetSpawnIndex();
     sp24 = Particle_GetByteParam1(arg0);
-    func_821401D4(arg0, 0x3F000000);
+    func_821401D4(arg0, 0x3F000000); // 0.5f
     M2C_FIELD(arg0, f32 *, 0x5C) = (f32) ((func_8000F150() * 0.5f) + 0.25f);
     Particle_AddRotationY(arg0, (s16) (0x1800 - ((0x3000 / func_8213C494(arg0)) * sp26)));
     Particle_SetStepMagnitudeScaled(arg0, (func_8000F150() * 2.5f) + 3.0f);
@@ -544,6 +561,8 @@ void BattleAnim_SetupLargeSand(s8 *arg0) {
 }
 
 /**
+ * Particle callback for a large sand grain: like the small grain but grows toward scale 1.0, and
+ * moves the way it faces every frame.
  * Moves: Sand Attack (use)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -559,7 +578,7 @@ void BattleAnim_RunLargeSand(Particle* arg0) {
         break;
     case 2:
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 3, 0);
-        func_82140228(arg0, 0x3F800000, 0x3D4CCCCD);
+        func_82140228(arg0, 0x3F800000, 0x3D4CCCCD); // 1.0f, 0.05f
         Particle_ApproachStepMagnitude(arg0, 0.5f, 0.25f);
         func_8213E1FC(arg0, M2C_FIELD(arg0, s32 *, 0x5C));
         break;
@@ -576,6 +595,8 @@ void BattleAnim_RunLargeSand(Particle* arg0) {
 }
 
 /**
+ * Inits a thrown Sand-Attack grain: scale 0.25, a random rise of 0.4 to 0.9, fanned out by spawn
+ * index, speed 5 to 7, palette pair 0x32, full alpha.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Sand Attack.
  */
@@ -607,7 +628,7 @@ void BattleAnim_SandAttackParticleUpdate(Particle* arg0) {
     case 2:
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
         Particle_ApproachPrimAlpha(arg0, 0x64, 9);
-        func_82140228(arg0, 0x3ECCCCCD, 0x3CCCCCCD);
+        func_82140228(arg0, 0x3ECCCCCD, 0x3CCCCCCD); // 0.4f, 0.025f
         func_8213E1FC(arg0, M2C_FIELD(arg0, s32 *, 0x5C));
         Particle_MoveXZAlongRotationY(arg0);
         return;
@@ -626,7 +647,7 @@ void BattleAnim_InitSpreadingParticle(s8 *arg0) {
     s16 sp26;
 
     sp26 = Particle_GetSpawnIndex();
-    func_821401D4(arg0, 0x3ECCCCCD);
+    func_821401D4(arg0, 0x3ECCCCCD); // 0.4f
     func_8213DDB8(arg0, 0, 0, 0xA);
     M2C_FIELD(arg0, f32 *, 0x5C) = (f32) ((func_8000F150() * 0.5f) + 0.25f);
     Particle_AddRotationY(arg0, (s16) (0x2000 - ((0x4000 / func_8213C494(arg0)) * sp26)));
@@ -637,8 +658,9 @@ void BattleAnim_InitSpreadingParticle(s8 *arg0) {
 }
 
 /**
- * Particle callback for the spreading particle of BattleAnim_InitSpreadingParticle: loops frames 0-7 while it
- * shrinks toward 0.75, slows its step to 0.5 and rises, then fades and is marked inactive.
+ * Particle callback for the spreading particle of BattleAnim_InitSpreadingParticle: loops frames
+ * 0-7 while it shrinks toward 0.75, slows its step to 0.5 and rises, then fades and is marked
+ * inactive.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackSpreadingParticle(Particle* particle) {
@@ -651,7 +673,7 @@ void BattleAnim_CallbackSpreadingParticle(Particle* particle) {
         return;
     case 2:
         Particle_AnimateFramesForwardLoopedThenAdvance(particle, 0, 7, 1, 2, 0);
-        func_82140228(particle, 0x3F400000, 0x3CCCCCCD);
+        func_82140228(particle, 0x3F400000, 0x3CCCCCCD); // 0.75f, 0.025f
         Particle_ApproachStepMagnitude(particle, 0.5f, 0.2f);
         func_8213E1FC(particle, M2C_FIELD(particle, s32 *, 0x5C));
         Particle_MoveXZAlongRotationY(particle);
@@ -669,6 +691,8 @@ void BattleAnim_CallbackSpreadingParticle(Particle* particle) {
 }
 
 /**
+ * Inits a Sand-Attack hit grain: scale 0.3, random velocity, raised 15 units, speed 1.5 to 2.4,
+ * palette pair 0x32, full alpha, hidden for a start delay of twice its spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Sand Attack.
  */
@@ -676,9 +700,9 @@ void BattleAnim_SetupSandAttackHitEffect(Particle* arg0) {
     s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
 
     Particle_SetScaleScaled(arg0, 0.3f);
-    Particle_SetRandomVelocityXYZ(arg0, 0xA, 5, 0xA);
+    Particle_SetRandomVelocityXYZ(arg0, 10, 5, 10);
     Particle_PositionOffset_AddYScaled_08E90(arg0, 15.0f);
-    Particle_StepMagnitude_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0xA) * 0.1f) + 1.5f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(10) * 0.1f) + 1.5f);
     Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x32);
     Particle_SetPrimAlpha(arg0, 0xFF);
@@ -687,6 +711,8 @@ void BattleAnim_SetupSandAttackHitEffect(Particle* arg0) {
 }
 
 /**
+ * Particle callback for a Sand-Attack hit grain: waits out the start delay, then grows toward
+ * scale 0.5, animates frames 0 to 7 and fades toward alpha 0x64 until its motion ends.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Sand Attack.
  */
@@ -705,7 +731,7 @@ void BattleAnim_RunSandAttackHitEffect(Particle* arg0) {
         }
         return;
     case 3:
-        func_82140228(arg0, 0x3F000000, 0x3CA3D70A);
+        func_82140228(arg0, 0x3F000000, 0x3CA3D70A); // 0.5f, 0.02f
         Particle_AnimateFramesForwardLooped(arg0, 0, 7, 1, 2, 0);
         Particle_ApproachPrimAlpha(arg0, 0x64, 6);
         if (func_8213E7A0(arg0) != 0) {
@@ -720,6 +746,9 @@ void BattleAnim_RunSandAttackHitEffect(Particle* arg0) {
 }
 
 /**
+ * Inits a heavy-hit rising particle: scale 0.25, rotationY set by spawn index (a sixteenth of a
+ * turn apart), speed 6 to 8, a random rise of 1 to 4, palette pair 0x0A, alpha 0x64, a 7-frame
+ * timer.
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Razor Wind, Fly, Slam, Stomp, Body Slam, Take Down, Thrash, Double-Edge, Submission,
  * Counter, Seismic Toss, Strength, SolarBeam, String Shot, Rock Throw, Dig, Selfdestruct, Skull
@@ -739,6 +768,9 @@ void BattleAnim_HeavyHitAnimatedRiseFade_InitParticle(Particle* arg0) {
 }
 
 /**
+ * Particle callback for a heavy-hit rising particle: animates frames 0 to 7, grows toward scale
+ * 0.8 and slows down; after 7 frames it starts rising, then fades out and is marked inactive.
+ * Moves the way it faces while running.
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Razor Wind, Fly, Slam, Stomp, Body Slam, Take Down, Thrash, Double-Edge, Submission,
  * Counter, Seismic Toss, Strength, SolarBeam, String Shot, Rock Throw, Dig, Selfdestruct, Skull
@@ -777,6 +809,9 @@ void BattleAnim_HeavyHitAnimatedRiseFade(Particle* arg0) {
 }
 
 /**
+ * Inits an Ice Beam or Ice Punch ice particle: variant 0 is larger, faster and raised 15 units,
+ * variant 1 smaller and slower. Palette pair 0x13, alpha 0xC8, hidden for a start delay of 4
+ * frames per spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Punch, Ice Beam.
  */
@@ -812,7 +847,7 @@ void BattleAnim_SetupIceBeamIcePunchEffect(Particle* arg0) {
  * breakpoint): ran only for Ice Beam, Ice Punch.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackEndEffect67Descriptor3DAnimatedGravityFade(Particle* particle) {
+void BattleAnim_CallbackEnd67Desc3DAnimatedGravityFade(Particle* particle) {
     s16 temp_v0;
 
     temp_v0 = particle->lifecycle;
@@ -844,14 +879,14 @@ void BattleAnim_CallbackEndEffect67Descriptor3DAnimatedGravityFade(Particle* par
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_CallbackOrphanDescriptor34ColorFadeDetach_InitParticle(Particle* arg0) {
+void BattleAnim_CallbackOrphanDesc34Fade_InitParticle(Particle* arg0) {
     s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
 
     Particle_SetRandomRotatedVelocityXY(arg0, 0xF, 0xF);
     Particle_SetScaleScaled(arg0, 1.0f);
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.2f);
-    Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
-    Particle_SetEnvColor(arg0, 0xFF, 0x64, 0);
+    Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF); // #FFFFFF
+    Particle_SetEnvColor(arg0, 0xFF, 0x64, 0); // #FF6400
     Particle_SetPrimAlpha(arg0, 0xFF);
     Particle_Param0_SetS16_0BCA8(arg0, sp26 * 4);
     Particle_DisableRendering(arg0);
@@ -862,7 +897,7 @@ void BattleAnim_CallbackOrphanDescriptor34ColorFadeDetach_InitParticle(Particle*
  * Particle callback: init, wait the delay in field A2, run the effect stages, then detach.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackOrphanDescriptor34ColorFadeDetach(Particle* particle) {
+void BattleAnim_CallbackOrphanDesc34ColorFadeDetach(Particle* particle) {
     s16 temp_v0;
 
     temp_v0 = particle->lifecycle;
@@ -894,6 +929,7 @@ void BattleAnim_CallbackOrphanDescriptor34ColorFadeDetach(Particle* particle) {
 }
 
 /**
+ * Inits a grounded ring hit spark: scale 0.1, palette pair 0x14, full alpha.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a Pound turn.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
  * breakpoint): ran only for Body Slam, Crabhammer, Double Edge, Fly, Seismic Toss, Slam, Stomp,
@@ -908,9 +944,10 @@ void BattleAnim_SetupGroundedCircularHitSpark(Particle* arg0) {
 }
 
 /**
- * Moves: Body Slam (hit), Crabhammer (hit), Double-Edge (hit), Fly (hit), Seismic Toss (hit), Slam (hit),
- * Stomp (hit), Submission (hit), Thrash (hit)
- * TODO: Human contributor add screenshot
+ * Particle callback for a grounded ring hit spark: grows toward scale 0.75 while fading out, then
+ * detaches.
+ * Moves: Body Slam (hit), Crabhammer (hit), Double-Edge (hit), Fly (hit), Seismic Toss (hit), Slam
+ * (hit), Stomp (hit), Submission (hit), Thrash (hit) TODO: Human contributor add screenshot
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a Pound turn.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
  * breakpoint): ran only for Body Slam, Crabhammer, Double Edge, Fly, Seismic Toss, Slam, Stomp,
@@ -986,6 +1023,8 @@ void BattleAnim_CallbackAccelerateFadeParticle(Particle* particle) {
 }
 
 /**
+ * Inits a pointy-move spark child: a random rotationX and rotationY, scale 0.2, palette pair 0x15
+ * (variant 0) or 0x1B (variant 1), full alpha, an 8 to 12 frame timer, speed 6.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Horn Attack, Poison Sting, Twineedle, Pin Missile, Peck, Spike Cannon.
  */
@@ -1019,9 +1058,10 @@ void BattleAnim_SetupPointyMoveHitSparkChild(Particle* arg0) {
 }
 
 /**
- * Moves: Horn Attack (hit), Horn Drill (hit), Peck (hit), Pin Missile (hit), Poison Sting (hit), Spike Cannon
- * (hit), Twineedle (hit)
- * TODO: Human contributor add screenshot
+ * Particle callback for a pointy-move spark child: shrinks toward 0.1 and slows toward speed 3;
+ * when its timer ends it fades out and is marked inactive. Moves the way it faces while running.
+ * Moves: Horn Attack (hit), Horn Drill (hit), Peck (hit), Pin Missile (hit), Poison Sting (hit),
+ * Spike Cannon (hit), Twineedle (hit) TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Horn Attack, Poison Sting, Twineedle, Pin Missile, Peck, Spike Cannon.
  */
@@ -1034,7 +1074,7 @@ void BattleAnim_RunPointyMoveHitSparkChild(Particle* arg0) {
         func_8216177C(arg0);
         break;
     case 2:
-        func_82140228(arg0, 0x3DCCCCCD, 0x3C23D70A);
+        func_82140228(arg0, 0x3DCCCCCD, 0x3C23D70A); // 0.1f, 0.01f
         Particle_ApproachStepMagnitude(arg0, 3.0f, 0.75f);
         if ((func_82140690(arg0) != 0) && (Particle_ApproachPrimAlpha(arg0, 0, 0x40) != 0)) {
             func_8213C9D0(arg0);
@@ -1050,6 +1090,8 @@ void BattleAnim_RunPointyMoveHitSparkChild(Particle* arg0) {
 }
 
 /**
+ * Inits a physical-hit smoke puff: scale 1.0, palette pair 8, alpha 0x64, speed 5 and a random
+ * rotationX and rotationY, with per-variant height offsets.
  * Seen in play (2026-11-13) for Pound the hit showed a yellow burst
  * (BattleAnim_SetupDefaultHitSpark) and then a magenta smoke cloud drifting off the target; with
  * this function patched to return at once the burst stayed and the magenta smoke was gone.
@@ -1119,11 +1161,15 @@ void BattleAnim_SetupPhysicalHitPurpleSmoke(Particle* arg0) {
 }
 
 /**
- * Moves: Barrage (hit), Bide (hit), Bone Club (hit), Bonemerang (hit), Comet Punch (hit), Counter (hit), Dizzy
- * Punch (hit), Double Kick (hit), Double Slap (hit), Drill Peck (hit), Headbutt (hit), Hi Jump Kick (hit),
- * Jump Kick (hit), Karate Chop (hit), Low Kick (hit), Mega Kick (hit), Mega Punch (hit), Night Shade (hit),
- * Pay Day (hit), Pound (hit), Quick Attack (hit), Rage (hit), Rolling Kick (hit), Skull Bash (hit), Sonic Boom
- * (hit), Struggle (hit), Tackle (hit), Take Down (hit), Wing Attack (hit)
+ * Particle callback for a physical-hit smoke puff: animates frames 0 to 7 once while slowing down;
+ * variant 3 also drains red, variant 4 drifts up, and both fade to alpha 0x32; other variants
+ * move green toward 0x64.
+ * Moves: Barrage (hit), Bide (hit), Bone Club (hit), Bonemerang (hit), Comet Punch (hit), Counter
+ * (hit), Dizzy Punch (hit), Double Kick (hit), Double Slap (hit), Drill Peck (hit), Headbutt (hit),
+ * Hi Jump Kick (hit), Jump Kick (hit), Karate Chop (hit), Low Kick (hit), Mega Kick (hit), Mega
+ * Punch (hit), Night Shade (hit), Pay Day (hit), Pound (hit), Quick Attack (hit), Rage (hit),
+ * Rolling Kick (hit), Skull Bash (hit), Sonic Boom (hit), Struggle (hit), Tackle (hit), Take Down
+ * (hit), Wing Attack (hit)
  * Seen in play (2026-11-13) runs the particle that BattleAnim_SetupPhysicalHitPurpleSmoke sets up:
  * the magenta smoke cloud after a Pound hit.
  */
@@ -1192,6 +1238,9 @@ void BattleAnim_SwiftBurstChild_InitParticle(Particle* arg0) {
 }
 
 /**
+ * Particle callback for a Swift star: waits out its start delay, grows toward 0.3 while speeding
+ * up, holds 2 frames, shrinks away, then is marked inactive. While visible it spins and moves
+ * along its rotation.
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Swift.
  */
@@ -1233,6 +1282,7 @@ void BattleAnim_SwiftBurstChild(Particle* arg0) {
 }
 
 /**
+ * Emits 12 Swift star children (descriptor 0x42) from this particle.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Swift.
  */
@@ -1242,6 +1292,8 @@ void BattleAnim_SetupSwiftHitEffect2(Particle* arg0) {
 }
 
 /**
+ * Particle callback for Swift's hit burst: emits the stars on the first frame, then is marked
+ * inactive.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Swift.
  */
@@ -1284,12 +1336,12 @@ void BattleAnim_SetupSharedScalePulseFallSetup(Particle* arg0) {
 
     switch (sp2C) {
         case 0:
-            Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(0x1E, 0xA));
+            Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(30, 10));
             Particle_SetScaleTarget(arg0, 0.2f);
             break;
 
         case 1:
-            Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(0x28, 0xA));
+            Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(40, 10));
             Particle_SetScaleTarget(arg0, 0.3f);
             Particle_SetScaleStep(arg0, 0.04f);
             break;
@@ -1297,19 +1349,19 @@ void BattleAnim_SetupSharedScalePulseFallSetup(Particle* arg0) {
         case 2:
             Particle_SetScaleTarget(arg0, 0.1f);
             Particle_SetScaleStep(arg0, 0.03f);
-            Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(0xC, 5));
+            Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(12, 5));
             Particle_Param0_SetS16_0BCA8(arg0, sp2E * 1);  // FAKE
             break;
 
         case 3:
             Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.2f);
             Particle_SetScaleScaled(arg0, 0.1f);
-            Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(0x14, 0x1E));
+            Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(20, 30));
             Particle_Param0_SetS16_0BCA8(arg0, sp2E * 4);
             break;
 
         case 5:
-            Particle_SetRandomVelocityXYZ(arg0, 0, 0xF, 0x19);
+            Particle_SetRandomVelocityXYZ(arg0, 0, 15, 25);
             Particle_PositionOffset_AddYScaled_08E90(arg0, 15.0f);
             Particle_SetScaleTarget(arg0, 0.15f);
             Particle_SetScaleStep(arg0, 0.02f);
@@ -1317,7 +1369,7 @@ void BattleAnim_SetupSharedScalePulseFallSetup(Particle* arg0) {
             break;
 
         case 6:
-            Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(0x1E, 0x14));
+            Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(30, 20));
             Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.3f);
             break;
 
@@ -1330,14 +1382,14 @@ void BattleAnim_SetupSharedScalePulseFallSetup(Particle* arg0) {
             break;
 
         case 7:
-            Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(0xA, 2));
+            Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(10, 2));
             Particle_SetScaleTarget(arg0, 0.2f);
             Particle_SetScaleStep(arg0, 0.025f);
             Particle_StepMagnitude_SetScaled_0AD8C(arg0, 1.0f);
             break;
 
         case 9:
-            Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(0x1E, 0x14));
+            Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(30, 20));
             Particle_SetScaleTarget(arg0, 0.3f);
             Particle_SetScaleStep(arg0, 0.025f);
             Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.0f);
@@ -1345,7 +1397,7 @@ void BattleAnim_SetupSharedScalePulseFallSetup(Particle* arg0) {
             break;
 
         case 10:
-            Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(0x19, 5));
+            Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRangeOffset(25, 5));
             Particle_PositionOffset_AddYScaled_08E90(arg0, 10.0f);
             Particle_SetScaleTarget(arg0, 0.2f);
             break;
@@ -1360,9 +1412,12 @@ void BattleAnim_SetupSharedScalePulseFallSetup(Particle* arg0) {
 }
 
 /**
- * Moves: Barrier (use), Harden (use), Ice Punch (use/hit), Kinesis (use), Leech Seed (use/hit), Light Screen
- * (use), Pay Day (hit), Recover (use), Reflect (use), Soft-Boiled (use), Swift (hit), Swords Dance (use)
- * TODO: Human contributor add screenshot
+ * Particle callback for a sparkle: waits out its start delay, grows to its target scale, shrinks
+ * back to 0, then is marked inactive. While visible it falls, and it is removed early if it drops
+ * below the ground.
+ * Moves: Barrier (use), Harden (use), Ice Punch (use/hit), Kinesis (use), Leech Seed (use/hit),
+ * Light Screen (use), Pay Day (hit), Recover (use), Reflect (use), Soft-Boiled (use), Swift (hit),
+ * Swords Dance (use) TODO: Human contributor add screenshot
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
  * switch in battle.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
@@ -1406,6 +1461,9 @@ void BattleAnim_RunSparkleHit(Particle* arg0) {
 }
 
 /**
+ * Inits a Blizzard hit snowflake: grows from 0 toward 0.3, random velocity, pushed 15 forward and
+ * 7 up, speed 8 to 12, recolored from its palette pair, hidden for a start delay of twice its
+ * spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Blizzard.
  */
@@ -1416,7 +1474,7 @@ void BattleAnim_SetupBlizzardHitEffect(Particle* arg0) {
     Particle_SetScaleScaled(arg0, 0.0f);
     Particle_SetScaleTarget(arg0, 0.3f);
     Particle_SetScaleStep(arg0, 0.05f);
-    Particle_SetRandomVelocityXYZ(arg0, 0xA, 0x14, 0x14);
+    Particle_SetRandomVelocityXYZ(arg0, 10, 20, 20);
     Particle_AddPositionOffsetAlongRotationY(arg0, 15.0f);
     Particle_PositionOffset_AddYScaled_08E90(arg0, 7.0f);
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, ParticleMath_RandomRange(5) + 8.0f);
@@ -1427,6 +1485,8 @@ void BattleAnim_SetupBlizzardHitEffect(Particle* arg0) {
 }
 
 /**
+ * Particle callback for a Blizzard hit snowflake: waits out its start delay, grows to its target
+ * scale, shrinks back to 0, then is marked inactive. Moves the way it faces while visible.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Blizzard.
  */
@@ -1502,6 +1562,8 @@ void BattleAnim_IceBeamParticleUpdateB(Particle* arg0) {
 }
 
 /**
+ * Inits a Thunder Punch hit spark: scale 0.7, 10 units up, palette pair 0x19, full alpha, hidden
+ * for a start delay of 4 frames per spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Thunder Punch.
  */
@@ -1518,6 +1580,8 @@ void BattleAnim_SetupThunderPunchHitEffect(Particle* arg0) {
 }
 
 /**
+ * Particle callback for a Thunder Punch hit spark: waits out its start delay, shows it, plays
+ * frames 0 to 5, then marks it inactive.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Thunder Punch.
  */
@@ -1544,6 +1608,9 @@ void BattleAnim_RunThunderPunchHitEffect(Particle* arg0) {
 }
 
 /**
+ * Inits the default hit spark: recolored from its palette pair, then speed, scale, height and
+ * random velocity picked by its emission variant; full alpha, hidden for a start delay of 4 frames
+ * per spawn index.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
  * @unverified Name from Stadium 1.
@@ -1589,29 +1656,29 @@ void BattleAnim_SetupDefaultHitSpark(Particle* arg0) {
         case 12:
             Particle_SetScaleScaled(arg0, 0.75f);
             Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.4f);
-            Particle_SetRandomVelocityXYZ(arg0, 8, 0xA, 8);
+            Particle_SetRandomVelocityXYZ(arg0, 8, 10, 8);
             break;
 
         case 13:
             Particle_SetScaleScaled(arg0, 1.0f);
             Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.0f);
-            Particle_SetRandomVelocityX(arg0, 0x1E);
-            Particle_SetRandomVelocityYOffset(arg0, 0x14, 0xA);
-            Particle_SetRandomVelocityZ(arg0, 0x1E);
+            Particle_SetRandomVelocityX(arg0, 30);
+            Particle_SetRandomVelocityYOffset(arg0, 20, 10);
+            Particle_SetRandomVelocityZ(arg0, 30);
             break;
 
         case 14:
             Particle_SetScaleScaled(arg0, 1.0f);
             Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.0f);
-            Particle_SetRandomVelocityX(arg0, 0x14);
-            Particle_SetRandomVelocityYOffset(arg0, 0x14, 0xA);
+            Particle_SetRandomVelocityX(arg0, 20);
+            Particle_SetRandomVelocityYOffset(arg0, 20, 10);
             Particle_SetRandomVelocityZ(arg0, 0xF);
             break;
 
         case 15:
             Particle_SetScaleScaled(arg0, 1.5f);
             Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.3f);
-            Particle_SetRandomVelocityXYZ(arg0, 0xA, 0xA, 0xA);
+            Particle_SetRandomVelocityXYZ(arg0, 10, 10, 10);
             break;
     }
 
@@ -1622,14 +1689,16 @@ void BattleAnim_SetupDefaultHitSpark(Particle* arg0) {
 }
 
 /**
- * Moves: Barrage (hit), Bide (hit), Bone Club (hit), Bonemerang (hit), Bubble (hit), Comet Punch (hit),
- * Confuse Ray (use/hit), Confusion (hit), Counter (hit), Dig (hit), Dizzy Punch (hit), Double Kick (hit),
- * Double Slap (hit), Drill Peck (hit), Earthquake (hit), Fissure (hit), Flash (use), Fury Attack (hit), Gust
- * (hit), Headbutt (hit), Hi Jump Kick (hit), Ice Punch (hit), Jump Kick (hit), Karate Chop (hit), Low Kick
- * (hit), Mega Kick (hit), Mega Punch (hit), Night Shade (hit), Pay Day (hit), Pound (hit), Psychic (hit),
- * Psywave (hit), Quick Attack (hit), Rage (hit), Rolling Kick (hit), Skull Bash (hit), Sonic Boom (hit),
- * Struggle (hit), Tackle (hit), Take Down (hit), Thunder Punch (hit), Wing Attack (hit)
- * TODO: Human contributor add screenshot
+ * Particle callback for the default hit spark: waits out its start delay, shows it, plays frames 0
+ * to 3 while moving outward, then marks it inactive.
+ * Moves: Barrage (hit), Bide (hit), Bone Club (hit), Bonemerang (hit), Bubble (hit), Comet Punch
+ * (hit), Confuse Ray (use/hit), Confusion (hit), Counter (hit), Dig (hit), Dizzy Punch (hit),
+ * Double Kick (hit), Double Slap (hit), Drill Peck (hit), Earthquake (hit), Fissure (hit), Flash
+ * (use), Fury Attack (hit), Gust (hit), Headbutt (hit), Hi Jump Kick (hit), Ice Punch (hit), Jump
+ * Kick (hit), Karate Chop (hit), Low Kick (hit), Mega Kick (hit), Mega Punch (hit), Night Shade
+ * (hit), Pay Day (hit), Pound (hit), Psychic (hit), Psywave (hit), Quick Attack (hit), Rage (hit),
+ * Rolling Kick (hit), Skull Bash (hit), Sonic Boom (hit), Struggle (hit), Tackle (hit), Take Down
+ * (hit), Thunder Punch (hit), Wing Attack (hit) TODO: Human contributor add screenshot
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
  * @unverified Name and comment from Stadium 1.
@@ -1658,6 +1727,8 @@ void BattleAnim_RunDefaultHitSpark(Particle* arg0) {
 }
 
 /**
+ * Inits a heavy-hit spark or smoke particle: palette pair, scale, speed and height picked by its
+ * variant; hidden for a start delay of twice its spawn index.
  * Seen in play (2026-11-13) for Body Slam the hit showed red-and-yellow sparks on the target and at
  * the ground, then a magenta haze; with this function patched to return at once both the sparks and
  * the magenta haze were gone (the dust ring and ground dust stayed). Was
@@ -1733,7 +1804,7 @@ void BattleAnim_SetupHeavyHitSparksAndSmoke(Particle* arg0) {
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0);
             Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.2f);
             Particle_SetScaleScaled(arg0, 1.0f);
-            Particle_SetRandomVelocityXYZ(arg0, 0x14, 0, 0x14);
+            Particle_SetRandomVelocityXYZ(arg0, 20, 0, 20);
             Particle_PositionOffset_SetYScaled_08CA0(arg0, 0.0f);
             Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
             break;
@@ -1742,7 +1813,7 @@ void BattleAnim_SetupHeavyHitSparksAndSmoke(Particle* arg0) {
             ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0);
             Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.2f);
             Particle_SetScaleScaled(arg0, 1.0f);
-            Particle_SetRandomVelocityXYZ(arg0, 0xA, 0, 0xA);
+            Particle_SetRandomVelocityXYZ(arg0, 10, 0, 10);
             Particle_PositionOffset_SetYScaled_08CA0(arg0, 30.0f - (sp26 * 5.0f));
             Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
             break;
@@ -1754,9 +1825,12 @@ void BattleAnim_SetupHeavyHitSparksAndSmoke(Particle* arg0) {
 }
 
 /**
- * Moves: Bite (hit), Body Slam (hit), Clamp (hit), Crabhammer (hit), Double-Edge (hit), Fly (hit), Guillotine
- * (hit), Hyper Fang (hit), Seismic Toss (hit), Slam (hit), Stomp (hit), Submission (hit), Super Fang (hit),
- * Thrash (hit), Vice Grip (hit)
+ * Particle callback for a heavy-hit spark: waits out its start delay, shows it, plays frames 0 to
+ * 3 while moving outward, then marks it inactive. On its first visible frame it emits one burst
+ * child (descriptor 0x3D).
+ * Moves: Bite (hit), Body Slam (hit), Clamp (hit), Crabhammer (hit), Double-Edge (hit), Fly (hit),
+ * Guillotine (hit), Hyper Fang (hit), Seismic Toss (hit), Slam (hit), Stomp (hit), Submission
+ * (hit), Super Fang (hit), Thrash (hit), Vice Grip (hit)
  * Seen in play (2026-11-13) runs the particles BattleAnim_SetupHeavyHitSparksAndSmoke sets up: the
  * red-and-yellow sparks and magenta haze of a Body Slam hit. Was
  * BattleAnim_RunStrongPurpleHitSmoke.
@@ -1777,7 +1851,7 @@ void BattleAnim_RunHeavyHitSparksAndSmoke(Particle* arg0) {
         case 3:
             Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 3, 1, 1, 0);
             Particle_AddVelocityXZFromRotationYPlusHalfTurn(arg0);
-            if ((Particle_DecrementParam0ToZero != 0) && (arg0->phase == 0)) {
+            if ((Particle_DecrementParam0ToZero != 0) && (arg0->phase == 0)) { //!bug: compares the function pointer instead of calling it
                 Particle_AdvancePhase(arg0);
             }
             break;
@@ -1794,6 +1868,9 @@ void BattleAnim_RunHeavyHitSparksAndSmoke(Particle* arg0) {
 }
 
 /**
+ * Inits a pointy-move hit spark: variant 3 uses palette pair 1 and variant 4 palette pair 2 (both
+ * scale 1.5, speed 0.4), then stores 0 or 1 as the child variant. Full alpha, hidden for a start
+ * delay of twice its spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Horn Attack, Poison Sting, Twineedle, Pin Missile, Peck, Spike Cannon.
  */
@@ -1824,9 +1901,11 @@ void BattleAnim_SetupPointyMoveHitSpark(Particle* arg0) {
 }
 
 /**
- * Moves: Horn Attack (hit), Horn Drill (hit), Peck (hit), Pin Missile (hit), Poison Sting (hit), Spike Cannon
- * (hit), Twineedle (hit)
- * TODO: Human contributor add screenshot
+ * Particle callback for a pointy-move hit spark: waits out its start delay, plays frames 0 to 3
+ * while moving outward, then marks it inactive. On its first visible frame it emits 8 spark
+ * children (descriptor 0x38), and a second burst one frame later.
+ * Moves: Horn Attack (hit), Horn Drill (hit), Peck (hit), Pin Missile (hit), Poison Sting (hit),
+ * Spike Cannon (hit), Twineedle (hit) TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Horn Attack, Poison Sting, Twineedle, Pin Missile, Peck, Spike Cannon.
  */
@@ -1879,6 +1958,7 @@ s32 BattleAnim_RunPointyMoveHitSpark(Particle* arg0) {
 }
 
 /**
+ * Inits Fire Punch's fist flame: scale 0.05, palette pair 7, full alpha, a 50-frame timer.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Fire Punch.
  */
@@ -1892,6 +1972,8 @@ void BattleAnim_SetupFirePunchUseEffect1(Particle* arg0) {
 }
 
 /**
+ * Particle callback for Fire Punch's fist flame: loops frames 0 to 5 and grows toward scale 0.3
+ * for 50 frames, then is marked inactive.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Fire Punch.
  */
@@ -1914,6 +1996,9 @@ void BattleAnim_RunFirePunchUseEffect1(Particle* arg0) {
 }
 
 /**
+ * Inits a Fire Punch flame particle: scale 0.4, speed 1, a random rotation, placed at one of three
+ * points around the fist (by spawn index), palette pair 0x17, hidden for a start delay of 4 frames
+ * per spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Fire Punch.
  */
@@ -1973,7 +2058,7 @@ void BattleAnim_FirePunchParticleUpdate(Particle* arg0) {
     case 3:
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 1, 0);
         Particle_ApproachStepMagnitude(arg0, 0.2f, 0.25f);
-        func_82140228(arg0, 0x3F000000, 0x3CA3D70A);
+        func_82140228(arg0, 0x3F000000, 0x3CA3D70A); // 0.5f, 0.02f
         Particle_ApproachPrimBlue(arg0, 0, 0x20);
         Particle_ApproachEnvGreen(arg0, 0, 0x20);
         if (arg0->textureFrame >= 6) {
@@ -1989,6 +2074,8 @@ void BattleAnim_FirePunchParticleUpdate(Particle* arg0) {
 }
 
 /**
+ * Inits a Thunder Punch spark particle: same as the Fire Punch flame (scale 0.4, random rotation,
+ * one of three points, palette pair 0x17, staggered start).
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Thunder Punch.
  */
@@ -2032,7 +2119,7 @@ void BattleAnim_SetupThunderPunchUseEffect(Particle* arg0) {
  * breakpoint): ran only for Thunder Punch.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackStartEffect73Descriptor15AnimatedColorImpulseFade(Particle* particle) {
+void BattleAnim_CallbackStart73Desc15ColorImpulseFade(Particle* particle) {
     s16 temp_v0;
 
     temp_v0 = particle->lifecycle;
@@ -2049,7 +2136,7 @@ void BattleAnim_CallbackStartEffect73Descriptor15AnimatedColorImpulseFade(Partic
     case 3:
         Particle_AnimateFramesForwardLoopedThenAdvance(particle, 0, 7, 1, 1, 0);
         Particle_ApproachStepMagnitude(particle, 0.2f, 0.25f);
-        func_82140228(particle, 0x3F000000, 0x3CA3D70A);
+        func_82140228(particle, 0x3F000000, 0x3CA3D70A); // 0.5f, 0.02f
         Particle_ApproachPrimBlue(particle, 0, 0x20);
         Particle_ApproachEnvGreen(particle, 0, 0x20);
         if (particle->textureFrame >= 6) {
@@ -2111,6 +2198,9 @@ void BattleAnim_RecolorParticleByQueuedMoveId(Particle* arg0) {
 }
 
 /**
+ * Inits a powder cloud particle: scale 1.0, a random rotation, random velocity and a start delay
+ * of twice its spawn index (variant 0 moves, variant 1 stays put), recolored by the queued move,
+ * alpha 0xC8, hidden at first.
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Sand Attack, Mist, PoisonPowder, Stun Spore, Sleep Powder, SmokeScreen, Haze, Smog,
  * Poison Gas and Spore.
@@ -2135,7 +2225,7 @@ void BattleAnim_PowderCloudScaleMotion_InitParticle(Particle* arg0) {
             break;
 
         case 1:
-            Particle_SetRandomVelocityXYZ(arg0, 0xA, 0xA, 0xA);
+            Particle_SetRandomVelocityXYZ(arg0, 10, 10, 10);
             Particle_PositionOffset_AddYScaled_08E90(arg0, 10.0f);
             Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.0f);
             Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
@@ -2173,7 +2263,7 @@ void BattleAnim_PowderCloudScaleMotion(Particle* particle) {
     case 3:
         Particle_AnimateFramesForwardLoopedThenAdvance(particle, 0, 7, 1, 2, 0);
         Particle_ApproachPrimAlpha(particle, 0x64, 6);
-        func_82140228(particle, 0x40000000, 0x3D99999A);
+        func_82140228(particle, 0x40000000, 0x3D99999A); // 2.0f, 0.075f
         Particle_AddVelocityFromRotationTemplate1(particle);
         return;
     case 4:
@@ -2208,13 +2298,13 @@ void BattleAnim_AcidArmorParticleUpdateA(s8 *arg0) {
         BattleAnim_AcidArmorParticleUpdateB(arg0);
         return;
     case 2:
-        func_82140228(arg0, 0x40000000, 0x3CA3D70A);
+        func_82140228(arg0, 0x40000000, 0x3CA3D70A); // 2.0f, 0.02f
         Particle_ApproachEnvGreen(arg0, 0xC8, 2);
         func_821406B4(arg0);
         return;
     case 3:
-        func_82137AB4(arg0 + 0x70, 0x3C03126F, 0x3A83126F);
-        func_82140228(arg0, 0x40000000, M2C_FIELD(arg0, s32 *, 0x70));
+        func_82137AB4(arg0 + 0x70, 0x3C03126F, 0x3A83126F); // 0.008f, 0.001f
+        func_82140228(arg0, 0x40000000, M2C_FIELD(arg0, s32 *, 0x70)); // 2.0f
         Particle_ApproachEnvGreen(arg0, 0xC8, 2);
         func_82140548(arg0, 0, 0xC);
         return;
@@ -2225,6 +2315,8 @@ void BattleAnim_AcidArmorParticleUpdateA(s8 *arg0) {
 }
 
 /**
+ * Inits an Acid Armor bubble: scale 1.0, random velocity, speed 0.5 to 1.5, recolored from its
+ * palette pair, alpha 0x64, hidden for a start delay of 4 frames per spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Acid Armor.
  */
@@ -2233,7 +2325,7 @@ void BattleAnim_SetupAcidArmorUseEffect2(Particle* arg0) {
 
     Particle_SetScaleScaled(arg0, 1.0f);
     Particle_SetRandomVelocityXYZ(arg0, 0xF, 0xF, 0xF);
-    Particle_StepMagnitude_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0x32) * D_FLT_82197734) + 0.5f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(50) * D_FLT_82197734) + 0.5f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_SetPrimAlpha(arg0, 0x64);
     Particle_Param0_SetS16_0BCA8(arg0, sp26 * 4);

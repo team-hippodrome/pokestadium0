@@ -81,8 +81,8 @@ s32 func_82107CF0(void*);
 void func_8213B5D8(s32, s32, s32, void (*)(Particle*), u8*, s32, s32, s32, s32, s32, s32);
 
 /**
- * Spawns the BattleAnim_CallbackBoneDriftEmber effect for side arg0 when gNextGameState is 0x8080 and that
- * Pokemon's species is 6 (Charizard).
+ * Spawns the BattleAnim_CallbackBoneDriftEmber effect for side arg0 when gNextGameState is 0x8080
+ * and that Pokemon's species is 6 (Charizard).
  * @unverified Name guessed from the code.
  */
 void BattleAnim_SpawnCharizardBoneDriftEmbers(s32 side) {

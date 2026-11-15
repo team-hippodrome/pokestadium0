@@ -186,8 +186,9 @@ s32 BattleAnim_RunStatRaiseRibbon(void) {
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, Acid Armor, 1P Onix): ran at sample 234 while a
- * purple and yellow ribbon wall rose around Onix, before 「ぼうぎょりょくが ぐーんと あがった！」. With the function
- * stubbed (jr ra) the ribbon was gone and the rest of the animation still played.
+ * purple and yellow ribbon wall rose around Onix, before 「ぼうぎょりょくが ぐーんと あがった！」 ("Defense rose
+ * sharply!"). With the function stubbed (jr ra) the ribbon was gone and the rest of the animation
+ * still played.
  */
 void BattleAnim_DrawStatRaiseRibbon(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -217,7 +218,8 @@ void BattleAnim_SetupStatLowerRibbon(void) {
  * Updates the stat-change ribbon pool; returns its result.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (8 of the moves).
  * Seen in play (2026-11-14) (Metronome bench, Acid hit on Pinsir): ran with
- * BattleAnim_DrawStatLowerRibbon while the red ribbon sank and 「ぼうぎょりょくが さがった！」 showed.
+ * BattleAnim_DrawStatLowerRibbon while the red ribbon sank and 「ぼうぎょりょくが さがった！」 ("Defense fell!")
+ * showed.
  */
 s32 BattleAnim_RunStatLowerRibbon(void) {
     return StatRibbon_UpdatePool();
@@ -277,6 +279,8 @@ void BattleAnim_EndEffect19RibbonMesh_Draw(void) {
 }
 
 /**
+ * Init hook for Haze's use animation: resets the shared matrix and the stat ribbon pool, then
+ * spawns two ribbons (radius 40 and 38) at the secondary owner's bone, sized by its model scale.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Haze.
  */
@@ -293,6 +297,8 @@ void BattleAnim_SetupHazeUseRibbonMesh(void) {
 }
 
 /**
+ * Update hook for Haze's use animation: advances the ribbons and returns whether they have
+ * finished.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Haze.
  */
@@ -301,6 +307,7 @@ s32 BattleAnim_RunHazeUseRibbonMesh(void) {
 }
 
 /**
+ * Draw hook for Haze's use animation: loads the shared effect matrix and draws the ribbons.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Haze.
  */
@@ -311,6 +318,8 @@ void BattleAnim_DrawHazeUseRibbonMesh(void) {
 }
 
 /**
+ * Init hook for Surf's use animation: resets the shared matrix and starts the wave grid with
+ * direction +1 when the attacker is on the negative X side, -1 otherwise.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Surf.
  */
@@ -328,6 +337,8 @@ void BattleAnim_SetupSurfUseTerrainGrid(void) {
 }
 
 /**
+ * Update hook for Surf's use animation: advances the wave grid and returns whether it has
+ * finished.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Surf.
  */
@@ -336,6 +347,7 @@ s32 BattleAnim_RunSurfUseTerrainGrid(void) {
 }
 
 /**
+ * Draw hook for Surf's use animation: loads the shared effect matrix and draws the wave grid.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Surf.
  */

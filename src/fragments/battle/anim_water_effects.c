@@ -46,6 +46,9 @@ void BattleAnim_RunMegaKickAndPunchProjectile(Particle* arg0);
 void BattleAnim_CallbackEndEffect86Descriptor19ModePositionedAnimFade(Particle* arg0);
 
 /**
+ * Inits a Surf spray droplet: random scale 0.05 to 0.14, a random rise of 1 to 4, a random spin
+ * speed, speed 5 plus a random 5 to 19 extra, a random wobble timer, recolored from its palette
+ * pair, hidden for a start delay equal to its spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Surf.
  */
@@ -53,8 +56,8 @@ void BattleAnim_SetupSurfHitSpark(Particle* arg0) {
     s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
     s16 sp24 = Particle_GetByteParam1(arg0);
 
-    Particle_SetScaleScaled(arg0, (ParticleMath_RandomRange(0xA) * 0.01f) + 0.05f);
-    Particle_MotionStep_SetYScaled_0AF24(arg0, (ParticleMath_RandomRange(0x1E) * 0.1f) + 1.0f);
+    Particle_SetScaleScaled(arg0, (ParticleMath_RandomRange(10) * 0.01f) + 0.05f);
+    Particle_MotionStep_SetYScaled_0AF24(arg0, (ParticleMath_RandomRange(30) * 0.1f) + 1.0f);
     Particle_RotationStep_SetY_0A3D8(arg0, ParticleMath_RandomRange(0x10000));
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, 5.0f);
     Particle_MagnitudeStep_SetScaled_0ADA4(arg0, ParticleMath_RandomRange(0xF) + 5.0f);
@@ -113,6 +116,8 @@ void BattleAnim_RunSurfHitSpark(Particle* arg0) {
 }
 
 /**
+ * Inits a Bubble bubble: effect list 7, scale 0.1, a random rotationX and rotationY, a random env
+ * color, speed 4 to 6.5, hidden for a start delay of twice its spawn index. arg1 is unused.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Bubble.
  */
@@ -164,6 +169,9 @@ void BattleAnim_RunBubbleBubbles(Particle* arg0) {
 }
 
 /**
+ * Inits a slow Bubble Beam bubble: scale 0.05, random velocity, a random upward rotationX that
+ * later curls down at a random rate, a random rotationY, speed 1 to 2.4, a random env color, hidden
+ * for a start delay of twice its spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Bubble Beam.
  */
@@ -187,6 +195,8 @@ void BattleAnim_SetupBubbleBeamBubblesSlow(Particle* arg0) {
 
 s32 Particle_DecreaseRotationXTo(Particle* arg0, s32 arg1, s32 arg2);
 /**
+ * Phase step for a slow Bubble Beam bubble: curls its rotationX toward its stored target and moves
+ * along its rotation.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Bubble Beam.
  */
@@ -230,7 +240,7 @@ void BattleAnim_RunBubbleBeamBubblesSlow(Particle* arg0) {
         }
         break;
     case 3:
-        func_82140228(arg0, 0x3E19999A, 0x3CA3D70A);
+        func_82140228(arg0, 0x3E19999A, 0x3CA3D70A); // 0.15f, 0.02f
         if (func_82140690(arg0) != 0) {
             Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 3, 1, 1, 0);
         }
@@ -245,6 +255,9 @@ void BattleAnim_RunBubbleBeamBubblesSlow(Particle* arg0) {
 }
 
 /**
+ * Inits a fast Bubble Beam bubble: effect list 7, growing from 0.1 to 0.2, aimed from the
+ * attacker's anchor at the target's bone 9 with a little random spread, random velocity, a random
+ * env color, speed 5 to 7.5, hidden for a start delay of twice its spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Bubble Beam.
  */
@@ -517,6 +530,8 @@ void BattleAnim_CallbackUnusedAimedSparkVariant(Particle* arg0) {
 }
 
 /**
+ * Inits the Water Gun or Hydro Pump muzzle splash: variant 0 grows from 0.5 to 1.2, variant 1 from
+ * 0.3 to 0.8. Palette pair 0x26.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Water Gun, Hydro Pump.
  */
@@ -563,6 +578,7 @@ void BattleAnim_RunWaterGunAndHydroPumpEmitterFade(Particle* arg0) {
 }
 
 /**
+ * Inits a Hydro Pump spray child: scale 0.5, a random direction, speed 1, palette pair 0x27.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Hydro Pump.
  */
@@ -593,7 +609,7 @@ M2C_UNK func_8214A634(s8 *);                      /* extern */
  * breakpoint): ran only for Hydro Pump.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackStartEffect58Descriptor0ABurstChild(Particle* particle) {
+void BattleAnim_CallbackStart58Desc0ABurstChild(Particle* particle) {
     s16 temp_v0;
 
     temp_v0 = particle->lifecycle;
@@ -602,11 +618,11 @@ void BattleAnim_CallbackStartEffect58Descriptor0ABurstChild(Particle* particle) 
         func_8214A634(particle);
         return;
     case 2:
-        func_82140228(particle, 0x3E99999A, 0x3D4CCCCD);
+        func_82140228(particle, 0x3E99999A, 0x3D4CCCCD); // 0.3f, 0.05f
         Particle_ApproachPrimAlpha(particle, 0x20, 0x10);
         Particle_ApproachStepMagnitude(particle, 0.5f, 0.05f);
         Particle_AddVelocityFromRotationTemplate1(particle);
-        Particle_AddPosOffsetYScaled(particle, 0xBF800000);
+        Particle_AddPosOffsetYScaled(particle, 0xBF800000); // -1.0f
         func_8213CA80(particle, 0x10);
         return;
     case 3:
@@ -616,6 +632,8 @@ void BattleAnim_CallbackStartEffect58Descriptor0ABurstChild(Particle* particle) 
 }
 
 /**
+ * Inits a Hydro Pump trail blob: scale 0.6, set 6 units back for variant 1, palette pair 0x28,
+ * alpha 0xC8.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Hydro Pump.
  */
@@ -646,7 +664,7 @@ M2C_UNK func_8214A77C(s8 *);                      /* extern */
  * breakpoint): ran only for Hydro Pump.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackStartEffect58Descriptor08MetadataBurstChild(Particle* particle) {
+void BattleAnim_CallbackStart58Desc08MetadataBurstChild(Particle* particle) {
     s16 temp_v0;
 
     temp_v0 = particle->lifecycle;
@@ -663,10 +681,12 @@ void BattleAnim_CallbackStartEffect58Descriptor08MetadataBurstChild(Particle* pa
         Particle_DisableAndDetach(particle);
         break;
     }
-    func_82140228(particle, 0x3EB33333, 0x3D4CCCCD);
+    func_82140228(particle, 0x3EB33333, 0x3D4CCCCD); // 0.35f, 0.05f
 }
 
 /**
+ * Inits the Hydro Pump water ball that emits the spray: scale 0.7, speed 12, palette pair 0x28,
+ * full alpha.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Hydro Pump.
  */
@@ -690,9 +710,9 @@ void BattleAnim_RunHydroPumpBurstEmitter(Particle* arg0) {
             break;
 
         case 2:
-            BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_CallbackStartEffect58Descriptor08MetadataBurstChild, &gBattleAnimParticleDescriptors[8], 1, 0, 0);
-            BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_CallbackStartEffect58Descriptor08MetadataBurstChild, &gBattleAnimParticleDescriptors[8], 1, 0, 1);
-            BattleAnim_EmitParticleBurst(arg0, BattleAnim_CallbackStartEffect58Descriptor0ABurstChild, &gBattleAnimParticleDescriptors[0xA], 4);
+            BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_CallbackStart58Desc08MetadataBurstChild, &gBattleAnimParticleDescriptors[8], 1, 0, 0);
+            BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_CallbackStart58Desc08MetadataBurstChild, &gBattleAnimParticleDescriptors[8], 1, 0, 1);
+            BattleAnim_EmitParticleBurst(arg0, BattleAnim_CallbackStart58Desc0ABurstChild, &gBattleAnimParticleDescriptors[0xA], 4);
             Particle_TickDelayAndAdvanceLifecycle(arg0, 20);
             break;
 
@@ -705,6 +725,7 @@ void BattleAnim_RunHydroPumpBurstEmitter(Particle* arg0) {
 }
 
 /**
+ * Inits a Water Gun spray child: scale 0.2, a random direction, speed 0.5, palette pair 0x27.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Water Gun.
  */
@@ -734,7 +755,7 @@ M2C_UNK func_8214A9DC(s8 *);                      /* extern */
  * breakpoint): ran only for Water Gun.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackStartEffect6Descriptor0ABurstChild(Particle* particle) {
+void BattleAnim_CallbackStart6Desc0ABurstChild(Particle* particle) {
     s16 temp_v0;
 
     temp_v0 = particle->lifecycle;
@@ -743,10 +764,10 @@ void BattleAnim_CallbackStartEffect6Descriptor0ABurstChild(Particle* particle) {
         func_8214A9DC(particle);
         return;
     case 2:
-        func_82140228(particle, 0x3DCCCCCD, 0x3CA3D70A);
+        func_82140228(particle, 0x3DCCCCCD, 0x3CA3D70A); // 0.1f, 0.02f
         Particle_ApproachPrimAlpha(particle, 0x20, 0xC);
         Particle_AddVelocityFromRotationTemplate1(particle);
-        Particle_AddPosOffsetYScaled(particle, 0xBF000000);
+        Particle_AddPosOffsetYScaled(particle, 0xBF000000); // -0.5f
         func_8213CA80(particle, 0x10);
         return;
     case 3:
@@ -756,6 +777,8 @@ void BattleAnim_CallbackStartEffect6Descriptor0ABurstChild(Particle* particle) {
 }
 
 /**
+ * Inits a Water Gun trail blob: scale 0.2, set 3 (variant 1) or 6 (variant 2) units back, palette
+ * pair 0x28, alpha 0xC8.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Water Gun.
  */
@@ -792,7 +815,7 @@ M2C_UNK func_8214AB14(s8 *);                      /* extern */
  * breakpoint): ran only for Water Gun.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackStartEffect6Descriptor08MetadataBurstChild(Particle* particle) {
+void BattleAnim_CallbackStart6Desc08MetadataBurstChild(Particle* particle) {
     s16 temp_v0;
 
     temp_v0 = particle->lifecycle;
@@ -809,10 +832,11 @@ void BattleAnim_CallbackStartEffect6Descriptor08MetadataBurstChild(Particle* par
         Particle_DisableAndDetach(particle);
         break;
     }
-    func_82140228(particle, 0x3DCCCCCD, 0x3CA3D70A);
+    func_82140228(particle, 0x3DCCCCCD, 0x3CA3D70A); // 0.1f, 0.02f
 }
 
 /**
+ * Inits the Water Gun water ball: scale 0.2, speed 10, palette pair 0x28, full alpha.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Water Gun.
  */
@@ -836,10 +860,10 @@ void BattleAnim_RunWaterGunProjectile(Particle* arg0) {
             break;
 
         case 2:
-            BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_CallbackStartEffect6Descriptor08MetadataBurstChild, &gBattleAnimParticleDescriptors[8], 1, 0, 0);
-            BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_CallbackStartEffect6Descriptor08MetadataBurstChild, &gBattleAnimParticleDescriptors[8], 1, 0, 1);
-            BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_CallbackStartEffect6Descriptor08MetadataBurstChild, &gBattleAnimParticleDescriptors[8], 1, 0, 2);
-            BattleAnim_EmitParticleBurst(arg0, BattleAnim_CallbackStartEffect6Descriptor0ABurstChild, &gBattleAnimParticleDescriptors[0xA], 4);
+            BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_CallbackStart6Desc08MetadataBurstChild, &gBattleAnimParticleDescriptors[8], 1, 0, 0);
+            BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_CallbackStart6Desc08MetadataBurstChild, &gBattleAnimParticleDescriptors[8], 1, 0, 1);
+            BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_CallbackStart6Desc08MetadataBurstChild, &gBattleAnimParticleDescriptors[8], 1, 0, 2);
+            BattleAnim_EmitParticleBurst(arg0, BattleAnim_CallbackStart6Desc0ABurstChild, &gBattleAnimParticleDescriptors[0xA], 4);
             Particle_TickDelayAndAdvanceLifecycle(arg0, 0x20);
             break;
 
@@ -851,6 +875,9 @@ void BattleAnim_RunWaterGunProjectile(Particle* arg0) {
 }
 
 /**
+ * Inits an Ice Beam cold-breath puff: scale 0.25, random velocity, a random downward rotationX that
+ * later turns up at a random rate, a random rotationY, speed 1 to 5, recolored from its palette
+ * pair, alpha 0xC8, hidden for a start delay of twice its spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam.
  */
@@ -865,7 +892,7 @@ void BattleAnim_SetupIceBeamColdBreath(Particle* arg0) {
     Particle_RotationStep_SetX_0A3C4(arg0, ParticleMath_RandomRange(0x400) + 0x100);
     Particle_ScratchB_SetS16_0BFEC(arg0, ParticleMath_RandomRange(0x1000) + 0x1000);
     Particle_Rotation_AddY_0A594(arg0, ParticleMath_RandomSigned(0x1800));
-    Particle_StepMagnitude_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0x28) * 0.1f) + 1.0f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(40) * 0.1f) + 1.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp20);
     Particle_SetPrimAlpha(arg0, 0xC8);
     Particle_Param0_SetS16_0BCA8(arg0, sp22 * 2);
@@ -874,6 +901,8 @@ void BattleAnim_SetupIceBeamColdBreath(Particle* arg0) {
 }
 
 /**
+ * Phase step for an Ice Beam cold-breath puff: turns its rotationX toward its stored target, moves
+ * along its rotation and sinks 0.2 per frame.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam.
  */
@@ -914,7 +943,7 @@ void BattleAnim_IceBeamParticleUpdateA(Particle* arg0) {
         }
         break;
     case 3:
-        func_82140228(arg0, 0x3F333333, 0x3DCCCCCD);
+        func_82140228(arg0, 0x3F333333, 0x3DCCCCCD); // 0.7f, 0.1f
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
         break;
     case 4:
@@ -927,6 +956,9 @@ void BattleAnim_IceBeamParticleUpdateA(Particle* arg0) {
 }
 
 /**
+ * Inits a Mega Punch or Mega Kick afterimage: each later spawn is smaller (0.75 minus 0.1 per
+ * index) and fainter (alpha 0xFF minus 32 per index), speed 10, palette pair 0x28, hidden for a
+ * start delay of its spawn index plus 1.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Mega Punch, Mega Kick.
  */
@@ -971,6 +1003,8 @@ void BattleAnim_RunMegaKickAndPunchProjectile(Particle* arg0) {
 }
 
 /**
+ * Inits a beam's starting glow: grows from 1.0 to 2.0 in steps of 0.75, recolored from its palette
+ * pair.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam, Psybeam, Aurora Beam, Hyper Beam, Tri Attack.
  */
@@ -983,8 +1017,8 @@ void BattleAnim_SetupInitialBeamEmanator(Particle* arg0) {
 }
 
 /**
- * Runs the first emanator that shows up in Ice Beam, Psybeam, Aurora Beam, Hyper Beam, Solar Beam, and Tri Attack.
- * Most Beam mosts switch to the Pulsing emanator after a few frames
+ * Runs the first emanator that shows up in Ice Beam, Psybeam, Aurora Beam, Hyper Beam, Solar Beam,
+ * and Tri Attack. Most Beam mosts switch to the Pulsing emanator after a few frames
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam, Psybeam, Aurora Beam, Hyper Beam, Tri Attack.
  */
@@ -1006,6 +1040,8 @@ void BattleAnim_RunInitialBeamEmanator(Particle* arg0) {
 }
 
 /**
+ * Inits a beam's pulsing glow: grows from 0.4 to 0.7, recolored from its palette pair, texture
+ * frame 1, a random Z rotation.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam, Psybeam, Aurora Beam, Hyper Beam.
  */
@@ -1041,15 +1077,15 @@ void BattleAnim_RunPulsingBeamEmanator(Particle* arg0) {
         break;
     case 2:
         if (func_821402E4(arg0) != 0) {
-            func_821401F8(arg0, 0x3E4CCCCD);
+            func_821401F8(arg0, 0x3E4CCCCD); // 0.2f
         }
         break;
     case 3:
         func_821402E4(arg0);
         break;
     case 4:
-        func_821401F8(arg0, 0x3F333333);
-        func_82140210(arg0, 0x3DCCCCCD);
+        func_821401F8(arg0, 0x3F333333); // 0.7f
+        func_82140210(arg0, 0x3DCCCCCD); // 0.1f
         arg0->lifecycle = 2;
         break;
     }
@@ -1059,6 +1095,8 @@ void BattleAnim_RunPulsingBeamEmanator(Particle* arg0) {
 }
 
 /**
+ * Inits a strong beam hit flash: scale 2.0, 10 units back, recolored from its palette pair, full
+ * alpha, texture frame 1, a random Z rotation.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam, Hyper Beam.
  */
@@ -1099,6 +1137,8 @@ void BattleAnim_RunStrongBeamHitEffect(Particle* arg0) {
 }
 
 /**
+ * Inits a Psybeam hit flash: scale 2.0, 10 units back, random prim and env colors from palette set
+ * B, texture frame 1, a random Z rotation.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Psybeam.
  */
@@ -1147,6 +1187,9 @@ void BattleAnim_RunPsybeamHitSparkFlicker(Particle* arg0) {
 }
 
 /**
+ * Inits an Aurora Beam hit flash: scale 2.0, 10 units back, prim palette 8 and an env color from
+ * palette set A cycling with spawn index, texture frame 1, rotated a tenth of a turn per spawn
+ * index and spinning at a random rate, hidden for a start delay of twice its spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Aurora Beam.
  */
@@ -1206,6 +1249,8 @@ void BattleAnim_RunAuroraBeamHitSpark(Particle* arg0) {
 }
 
 /**
+ * Inits a large outward hit spark: recolored from its palette pair, scale 1.35, 5 units forward,
+ * speed 5.5, a random direction.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Hydro Pump, Hyper Beam, Ice Beam and Waterfall.
  */
@@ -1228,7 +1273,8 @@ M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214B84C(s8 *);                      /* extern */
 
 /**
- * Handles hit effect shared by Hydro Pump, Ice Beam, Hyper Beam, Solar Beam, Waterfall, and Sky Attack
+ * Handles hit effect shared by Hydro Pump, Ice Beam, Hyper Beam, Solar Beam, Waterfall, and Sky
+ * Attack
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Hydro Pump, Hyper Beam, Ice Beam and Waterfall (the sweep used only the charge turn of
  * Solar Beam and Sky Attack).
@@ -1256,6 +1302,8 @@ void BattleAnim_RunStrongOutwardMovingLargeHitSpark(Particle* arg0) {
 }
 
 /**
+ * Inits a Blizzard hit cold-air puff: recolored from its palette pair, scale 1.0, 5 units forward,
+ * speed 4, a random direction.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Blizzard.
  */
@@ -1305,6 +1353,8 @@ void BattleAnim_RunBlizzardHitUpwardColdAir(Particle* arg0) {
 }
 
 /**
+ * Inits a Water Gun hit splash: recolored from its palette pair, scale 0.6, 5 units forward, speed
+ * 3, a random direction.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Water Gun.
  */
@@ -1327,6 +1377,9 @@ M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214BAFC(s8 *);                      /* extern */
 
 /**
+ * Particle callback for a Water Gun hit splash: fades toward alpha 0x20 while playing frames 0 to
+ * 7 once, then is marked inactive. While running it slows toward speed 1.5 and moves along its
+ * rotation.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Water Gun.
  */
@@ -1353,6 +1406,9 @@ void BattleAnim_RunWaterGunHitEffect(Particle* arg0) {
 }
 
 /**
+ * Inits a weak beam hit spark: random colors by variant (0: prim palette 8 and an env from set A;
+ * 1: prim and env from set B; 2: a pair from set B), scale 0.8, 5 units forward, speed 3, a random
+ * direction.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Psybeam, Bubble Beam, Aurora Beam.
  */
@@ -1441,6 +1497,9 @@ void BattleAnim_RunWeakBeamHitEffect(Particle* arg0) {
 }
 
 /**
+ * Inits a Tri Attack hit spark: recolored from its palette pair, growing from 0.6 to 1.2, placed
+ * at one corner of a triangle (by variant), 5 units forward, speed 1, a random direction, hidden
+ * for a start delay equal to its spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Tri Attack.
  */
@@ -1525,7 +1584,8 @@ void BattleAnim_RunTriAttackHitSpark(Particle* arg0) {
 }
 
 /**
- * Handles hit effect shared by Hydro Pump, Ice Beam, Hyper Beam, Solar Beam, Waterfall, and Sky Attack
+ * Handles hit effect shared by Hydro Pump, Ice Beam, Hyper Beam, Solar Beam, Waterfall, and Sky
+ * Attack
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
@@ -1536,7 +1596,7 @@ void BattleAnim_SetupStrongOutwardMovingSmallHitSpark(Particle* arg0) {
     s16 sp2E = Particle_SpawnIndex_GetS16_0C038(arg0);
     s16 sp2C = Particle_GetByteParam1(arg0);
 
-    Particle_SetRandomVelocityXYZ(arg0, 0, 0xF, 0x14);
+    Particle_SetRandomVelocityXYZ(arg0, 0, 15, 20);
     Particle_PositionOffset_AddYScaled_08E90(arg0, 5.0f);
     Particle_SetScaleScaled(arg0, 0.2f);
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, 2.5f);
@@ -1564,7 +1624,7 @@ M2C_UNK func_8214C134(s8 *);                      /* extern */
  * breakpoint): ran only for Aurora Beam, Hydro Pump, Ice Beam, Sky Attack, Solar Beam, Waterfall.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade(Particle* particle) {
+void BattleAnim_CallbackSharedDesc19DelayedAnimGrowFade(Particle* particle) {
     s16 temp_v0;
 
     temp_v0 = particle->lifecycle;
@@ -1581,7 +1641,7 @@ void BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade(Particle* part
         return;
     case 3:
         Particle_AnimateFramesForwardLoopedThenAdvance(particle, 0, 7, 1, 1, 0);
-        func_82140228(particle, 0x3F000000, 0x3DCCCCCD);
+        func_82140228(particle, 0x3F000000, 0x3DCCCCCD); // 0.5f, 0.1f
         Particle_AddVelocityFromRotationTemplate1(particle);
         if (func_82140690(particle) != 0) {
             Particle_ApproachPrimAlpha(particle, 0, 0x20);
@@ -1605,7 +1665,7 @@ void BattleAnim_SetupUnusedIndexedFadeVariantA(Particle* arg0) {
     s16 sp2E = Particle_SpawnIndex_GetS16_0C038(arg0);
 
     Particle_GetByteParam1(arg0);
-    Particle_SetRandomVelocityXYZ(arg0, 0xA, 0x14, 0x14);
+    Particle_SetRandomVelocityXYZ(arg0, 10, 20, 20);
     Particle_SetScaleScaled(arg0, 0.25f);
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, 2.5f);
     Particle_Rotation_AddVec_0A52C(arg0, ParticleMath_RandomSigned(0x2000), ParticleMath_RandomSigned(0x2000), 0);
@@ -1648,7 +1708,7 @@ void BattleAnim_CallbackUnusedIndexedFadeA(Particle* particle) {
         return;
     case 3:
         Particle_AnimateFramesForwardLoopedThenAdvance(particle, 0, 7, 1, 1, 0);
-        func_82140228(particle, 0x3ECCCCCD, 0x3DCCCCCD);
+        func_82140228(particle, 0x3ECCCCCD, 0x3DCCCCCD); // 0.4f, 0.1f
         Particle_AddVelocityFromRotationTemplate1(particle);
         if (func_82140690(particle) != 0) {
             Particle_ApproachPrimAlpha(particle, 0, 0x20);
@@ -1672,11 +1732,11 @@ void BattleAnim_SetupUnusedIndexedFadeVariantB(Particle* arg0) {
     s16 sp2E = Particle_SpawnIndex_GetS16_0C038(arg0);
 
     Particle_GetByteParam1(arg0);
-    Particle_SetRandomVelocityXYZ(arg0, 0xA, 0x14, 0x14);
+    Particle_SetRandomVelocityXYZ(arg0, 10, 20, 20);
     Particle_SetScaleScaled(arg0, 0.4f);
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, 2.5f);
     Particle_Rotation_AddVec_0A52C(arg0, ParticleMath_RandomSigned(0x2000), ParticleMath_RandomSigned(0x2000), 0);
-    Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
+    Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF); // #FFFFFF
     ParticleGfx_RecolorEnvRandomPalette(arg0);
     Particle_Param0_SetS16_0BCA8(arg0, sp2E * 4);
     Particle_DisableRendering(arg0);
@@ -1711,7 +1771,7 @@ void BattleAnim_CallbackUnusedIndexedFadeB(Particle* particle) {
         }
         return;
     case 3:
-        func_82140228(particle, 0x3F000000, 0x3CCCCCCD);
+        func_82140228(particle, 0x3F000000, 0x3CCCCCCD); // 0.5f, 0.025f
         Particle_AnimateFramesForwardLoopedThenAdvance(particle, 2, 7, 1, 1, 0);
         Particle_AddVelocityFromRotationTemplate1(particle);
         return;
@@ -1722,6 +1782,9 @@ void BattleAnim_CallbackUnusedIndexedFadeB(Particle* particle) {
 }
 
 /**
+ * Inits a Bubble or Bubble Beam bubble around the target: scale 0.05, turning back around toward
+ * the attacker, rotated about X by spawn index (a sixteenth of a turn apart) with a random
+ * rotationY, a random env color, an 8 to 23 frame timer, speed 4.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Bubble Beam, Bubble.
  */
@@ -1753,7 +1816,7 @@ void BattleAnim_SetupBubbleBubbleBeamSharedEffect(Particle* arg0) {
  * breakpoint): ran only for Bubble, BubbleBeam.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade(Particle* arg0) {
+void BattleAnim_CallbackEnd34And53Desc45SpinBounceFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupBubbleBubbleBeamSharedEffect(arg0);
@@ -1764,7 +1827,7 @@ void BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade(Particle
             Particle_ApproachStepMagnitude(arg0, 1.0f, 0.7f);
             Particle_ApproachRotationTargetY(arg0);
             if (Particle_DecrementParam0ToZeroThenAdvance(arg0) != 0) {
-                Particle_Param0_SetS16_0BCA8(arg0, ParticleMath_RandomRangeOffset(0xC, 0x20));
+                Particle_Param0_SetS16_0BCA8(arg0, ParticleMath_RandomRangeOffset(12, 32));
                 if (arg0->rotation.y >= arg0->rotationTarget.y) {
                     Particle_RotationTarget_SetX_0A400(arg0, -0x4000);
                 } else {
@@ -1795,6 +1858,8 @@ void BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade(Particle
 }
 
 /**
+ * Inits a Hydro Pump splash: scale 0.2, recolored from its palette pair, alpha 0xC8, a 24-frame
+ * timer, speed 0.02.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Hydro Pump.
  */
@@ -1834,13 +1899,13 @@ void BattleAnim_RunHydroPumpColorShiftFade(s8 *arg0) {
         func_8214C8E0(arg0);
         return;
     case 2:
-        func_82140228(arg0, 0x40000000, 0x3CA3D70A);
+        func_82140228(arg0, 0x40000000, 0x3CA3D70A); // 2.0f, 0.02f
         Particle_ApproachEnvGreen(arg0, 0xC8, 2);
         func_821406B4(arg0);
         return;
     case 3:
-        func_82137AB4(arg0 + 0x70, 0x3C03126F, 0x3A83126F);
-        func_82140228(arg0, 0x40000000, M2C_FIELD(arg0, s32 *, 0x70));
+        func_82137AB4(arg0 + 0x70, 0x3C03126F, 0x3A83126F); // 0.008f, 0.001f
+        func_82140228(arg0, 0x40000000, M2C_FIELD(arg0, s32 *, 0x70)); // 2.0f
         Particle_ApproachPrimRed(arg0, 0x78, 8);
         Particle_ApproachPrimBlue(arg0, 0x96, 8);
         Particle_ApproachPrimGreen(arg0, 0x96, 8);
@@ -1856,6 +1921,9 @@ void BattleAnim_RunHydroPumpColorShiftFade(s8 *arg0) {
 }
 
 /**
+ * Inits a Water Gun splash: growing from 0.05 to 0.3, turned to one of three rotationY values about
+ * a third of a turn apart (by variant), pushed 10 units along it, recolored from its palette pair,
+ * alpha 0xC8, a 24-frame timer.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Water Gun.
  */
@@ -1933,6 +2001,8 @@ void BattleAnim_RunWaterGunEmitterColoration(Particle* arg0) {
 }
 
 /**
+ * Inits a Hydro Pump or Water Gun hit droplet: scale 0.5, a random direction, 5 units forward,
+ * speed 1, recolored from its palette pair.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Water Gun, Hydro Pump.
  */
@@ -1972,10 +2042,10 @@ void BattleAnim_RunHydroPumpWaterGunProjectileHit(Particle* arg0) {
         func_8214CC90(arg0);
         break;
     case 2:
-        func_82140228(arg0, 0x3E99999A, 0x3CA3D70A);
+        func_82140228(arg0, 0x3E99999A, 0x3CA3D70A); // 0.3f, 0.02f
         Particle_ApproachPrimAlpha(arg0, 0x20, 0xC);
         Particle_AddVelocityFromRotationTemplate1(arg0);
-        Particle_AddPosOffsetYScaled(arg0, 0xBF800000);
+        Particle_AddPosOffsetYScaled(arg0, 0xBF800000); // -1.0f
         func_8213CA80(arg0, 0x10);
         break;
     case 3:
@@ -2023,7 +2093,7 @@ extern M2C_UNK func_821499D4;
  * it ran for exactly Bubble.
  */
 void BattleAnim_InitializeBubbleUse(void) {
-    func_8213B5D8(0, 1, 0x3C, &func_821499D4, &D_8218E7A8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
+    func_8213B5D8(0, 1, 60, &func_821499D4, &D_8218E7A8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
 }
 
 extern ParticleDescriptor D_8218E580[86];
@@ -2035,8 +2105,8 @@ extern M2C_UNK D_8218E728;
  */
 void BattleAnim_InitializeBubbleHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunDefaultHitSpark, &D_8218E728, 0, 1, 0x11, 9, 3, 5);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade, &D_8218E7A8, 0, 0x10, 0x11, 9, 0, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade, &D_8218E7A8, 0, 0x10, 0x11, 9, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEnd34And53Desc45SpinBounceFade, &D_8218E7A8, 0, 0x10, 0x11, 9, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackEnd34And53Desc45SpinBounceFade, &D_8218E7A8, 0, 0x10, 0x11, 9, 0, 0);
 }
 
 /**
@@ -2097,8 +2167,8 @@ void BattleAnim_InitializeHydroPumpHit(void) {
     func_8213BD78(4, 8, 0x33, 0x10, 0xFF);
     func_8213B560(0, &func_82145998, &D_8218E5A8, 0, 1, 0x10, (s32) D_8219A80A, 0x33, 0);
     func_8213B5D8(0, 5, 3, &BattleAnim_RunStrongOutwardMovingLargeHitSpark, &D_8218E650, 0, 8, 0x10, (s32) D_8219A80A, 0x26, 0);
-    func_8213B5D8(0xA, 1, 8, &BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade, &D_8218E650, 0, 3, 0x11, (s32) D_8219A80A, 0x26, 0);
-    func_8213B560(0xC, &BattleAnim_RunHydroPumpColorShiftFade, &D_8218E7D8, 0, 1, 0xA, 0, 0x4C, 0);
+    func_8213B5D8(10, 1, 8, &BattleAnim_CallbackSharedDesc19DelayedAnimGrowFade, &D_8218E650, 0, 3, 0x11, (s32) D_8219A80A, 0x26, 0);
+    func_8213B560(12, &BattleAnim_RunHydroPumpColorShiftFade, &D_8218E7D8, 0, 1, 0xA, 0, 0x4C, 0);
     func_8213B5D8(2, 1, 0x10, &BattleAnim_RunHydroPumpWaterGunProjectileHit, &D_8218E5D8, 0, 4, 0x11, (s32) D_8219A80A, 0x4C, 0);
 }
 
@@ -2121,7 +2191,7 @@ void BattleAnim_InitializeIceBeamUse(void) {
     func_8213B644(0, 8, 0x33);
     func_8213B560(0, &func_8214B1F8, &D_8218E818, 0, 1, 0x10, (s32) D_8219A80A, 0x40, 0);
     func_8213B560(6, &BattleAnim_RunPulsingBeamEmanator, &D_8218E818, 0x6E, 1, 0x10, (s32) D_8219A80A, 0x40, 1);
-    func_8213B5D8(0, 3, 0x1E, &BattleAnim_IceBeamParticleUpdateA, &D_8218E7D0, 0, 1, 0x11, (s32) D_8219A80A, 0x13, 0);
+    func_8213B5D8(0, 3, 30, &BattleAnim_IceBeamParticleUpdateA, &D_8218E7D0, 0, 1, 0x11, (s32) D_8219A80A, 0x13, 0);
 }
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
@@ -2157,8 +2227,8 @@ extern s16 D_8219A80A;
  */
 void BattleAnim_InitializeBubbleBeamUse(void) {
     func_8213B644(0, 8, 6);
-    func_8213B5D8(0, 1, 0x3C, &BattleAnim_RunBubbleBeamBubblesFast, &D_8218E7A8, 0, 4, 0x11, (s32) D_8219A80A, 0, 0);
-    func_8213B5D8(0, 1, 0x3C, &BattleAnim_RunBubbleBeamBubblesSlow, &D_8218E7A8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
+    func_8213B5D8(0, 1, 60, &BattleAnim_RunBubbleBeamBubblesFast, &D_8218E7A8, 0, 4, 0x11, (s32) D_8219A80A, 0, 0);
+    func_8213B5D8(0, 1, 60, &BattleAnim_RunBubbleBeamBubblesSlow, &D_8218E7A8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
 }
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
@@ -2261,7 +2331,7 @@ void BattleAnim_InitializeWaterfallUseB(void) {
     func_8213BD78(4, 8, 0x33, 0xC, 0xFF);
     func_8213B560(0, &func_82145998, &D_8218E5A8, 0, 1, 0x10, (s32) D_8219A80A, 0x33, 0);
     func_8213B5D8(0, 5, 3, &BattleAnim_RunStrongOutwardMovingLargeHitSpark, &D_8218E650, 0, 8, 0x10, (s32) D_8219A80A, 0x26, 0);
-    func_8213B5D8(0xA, 1, 3, &BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade, &D_8218E650, 0, 8, 0x11, (s32) D_8219A80A, 0x26, 0);
+    func_8213B5D8(10, 1, 3, &BattleAnim_CallbackSharedDesc19DelayedAnimGrowFade, &D_8218E650, 0, 8, 0x11, (s32) D_8219A80A, 0x26, 0);
 }
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
@@ -2288,10 +2358,10 @@ void BattleAnim_InitializeIceBeamHit(void) {
     func_8213B560(3, &func_82145998, &D_8218E5A8, 0, 1, 0x10, (s32) D_8219A80A, 0x33, 0);
     func_8213B5D8(0, 5, 3, &BattleAnim_RunStrongOutwardMovingLargeHitSpark, &D_8218E650, 0, 8, 0x10, (s32) D_8219A80A, 0x26, 0);
     func_8213B5D8(4, 4, 2, &func_8214B468, &D_8218E820, 0, 1, 0x10, (s32) D_8219A80A, 0x33, 0);
-    func_8213B5D8(0xC, 1, 3, &BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade, &D_8218E650, 0, 8, 0x11, (s32) D_8219A80A, 0x26, 0);
-    func_8213B5D8(0xE, 4, 2, &BattleAnim_CallbackEndEffect67Descriptor3DAnimatedGravityFade, &D_8218E770, 0, 6, 0x10, 0x64, 0, 0);
+    func_8213B5D8(12, 1, 3, &BattleAnim_CallbackSharedDesc19DelayedAnimGrowFade, &D_8218E650, 0, 8, 0x11, (s32) D_8219A80A, 0x26, 0);
+    func_8213B5D8(14, 4, 2, &BattleAnim_CallbackEnd67Desc3DAnimatedGravityFade, &D_8218E770, 0, 6, 0x10, 0x64, 0, 0);
     func_8213B5D8(0, 2, 6, &BattleAnim_IceBeamParticleUpdateB, &D_8218E798, 0, 8, 0x11, 9, 0x18, 0xB);
-    func_8213B644(0x30, 0x20, 8);
+    func_8213B644(48, 0x20, 8);
 }
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
@@ -2315,7 +2385,7 @@ void BattleAnim_InitializePsybeamHit(void) {
     func_8213B5D8(4, 4, 3, &func_8214B5A0, &D_8218E820, 0, 1, 0x10, (s32) D_8219A80A, 0, 0);
     func_8213B560(3, &func_82145A58, &D_8218E660, 0, 1, 0x10, (s32) D_8219A80A, 0x21, 0);
     func_8213B5D8(3, 5, 3, &BattleAnim_RunWeakBeamHitEffect, &D_8218E650, 0, 8, 0x10, (s32) D_8219A80A, 1, 0);
-    func_8213B644(0x30, 0x20, 8);
+    func_8213B644(48, 0x20, 8);
 }
 
 extern ParticleDescriptor D_8218E588[86];
@@ -2328,9 +2398,9 @@ void BattleAnim_InitializeBubbleBeamHit(void) {
     BattleAnim_SpawnBeamBoomWaterfallHueChange(4, 0x8, 0x21, 0x10, 0xFF);
     BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_RunExpandingHitSpark, &D_8218E5A8, 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x33, 0);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(3, 5, 3, BattleAnim_CallbackSharedDescriptor19RecolorAnimatedFade, &D_8218E650, 0, 8, 0x10, gBattleAnimCurrentAnchor, 0, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade, &D_8218E7A8, 0, 0x10, 0x11, 9, 0, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade, &D_8218E7A8, 0, 0x10, 0x11, 9, 0, 0);
-    BattleAnim_SpawnGlobalTintColorFadeDetach(0x30, 0x20, 0x8);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEnd34And53Desc45SpinBounceFade, &D_8218E7A8, 0, 0x10, 0x11, 9, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackEnd34And53Desc45SpinBounceFade, &D_8218E7A8, 0, 0x10, 0x11, 9, 0, 0);
+    BattleAnim_SpawnGlobalTintColorFadeDetach(48, 0x20, 0x8);
 }
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
@@ -2351,8 +2421,8 @@ void BattleAnim_InitializeAuroraBeamHit(void) {
     func_8213C060(4, 0x32, 0x20, 0xA0);
     func_8213B560(4, &func_8214B77C, &D_8218E820, 0, 9, 0x10, (s32) D_8219A80A, 0, 0);
     func_8213B5D8(3, 5, 3, &BattleAnim_RunWeakBeamHitEffect, &D_8218E650, 0, 8, 0x10, (s32) D_8219A80A, 0, 0);
-    func_8213B5D8(0xC, 1, 3, &BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade, &D_8218E650, 0, 8, 0x11, (s32) D_8219A80A, 0x39, 0);
-    func_8213B644(0x16, 0x20, 8);
+    func_8213B5D8(12, 1, 3, &BattleAnim_CallbackSharedDesc19DelayedAnimGrowFade, &D_8218E650, 0, 8, 0x11, (s32) D_8219A80A, 0x39, 0);
+    func_8213B644(22, 0x20, 8);
 }
 
 extern ParticleDescriptor D_8218E588[86];
@@ -2384,7 +2454,7 @@ extern ParticleDescriptor D_8218E588[86];
  * breakpoint): ran only for Sky Attack, Solar Beam.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_EndEffect71PaletteApproachWithExpandingScaleFades(void) {
+void BattleAnim_End71PaletteApproachExpandingScaleFades(void) {
     UNUSED s32 pad; // FAKE: stack padding
 
     BattleAnim_SpawnBeamBoomWaterfallHueChange(4, 0x8, 0x17, 0x10, 0xFF);
@@ -2392,8 +2462,8 @@ void BattleAnim_EndEffect71PaletteApproachWithExpandingScaleFades(void) {
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(4, 4, 1, BattleAnim_RunStrongBeamHitEffect, &D_8218E820, 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x17, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_RunExpandingHitSpark, &D_8218E5A8, 0, 1, 0x10, gBattleAnimCurrentAnchor, 0x18, 0);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(3, 5, 3, BattleAnim_CallbackSharedDescriptor19AnimatedFadeMotion, &D_8218E650, 0, 8, 0x10, gBattleAnimCurrentAnchor, 0x17, 0);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(12, 1, 3, BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade, &D_8218E650, 0, 8, 0x11, gBattleAnimCurrentAnchor, 0x17, 0);
-    BattleAnim_SpawnGlobalTintColorFadeDetach(0x16, 0x20, 0x8);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(12, 1, 3, BattleAnim_CallbackSharedDesc19DelayedAnimGrowFade, &D_8218E650, 0, 8, 0x11, gBattleAnimCurrentAnchor, 0x17, 0);
+    BattleAnim_SpawnGlobalTintColorFadeDetach(22, 0x20, 0x8);
 }
 
 /**

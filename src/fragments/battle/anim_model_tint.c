@@ -36,6 +36,11 @@ s32 Particle_ApproachScratchA(s8 *, s16, u8);                 /* extern */
 s32 func_821436A0(s8 *, u8, u8);                  /* extern */
 M2C_UNK func_82144130(s8 *);                      /* extern */
 
+/**
+ * Particle callback for an owner model tint: inits the drain or flame hue change, ramps the tint
+ * strength toward param0, then shifts toward its palette pair and is marked inactive. While
+ * running it writes its color and strength to the owner model's material.
+ */
 void BattleAnim_CallbackOwnerTintPaletteFade(Particle* arg0) {
     s16 temp_v0;
 
@@ -108,7 +113,8 @@ void BattleAnim_CallbackOwnerTintRandomPaletteCycle(Particle* arg0) {
 }
 
 /**
- * Sets up the rainbow hue shift triggered by the user's Recover or by an incoming Psybeam or Aurora Beam.
+ * Sets up the rainbow hue shift triggered by the user's Recover or by an incoming Psybeam or Aurora
+ * Beam.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Psybeam, Aurora Beam.
  */
@@ -127,7 +133,8 @@ void BattleAnim_SetupRainbowHueChange(Particle* arg0) {
 }
 
 /**
- * Runs the rainbow hue shift triggered by the user's Recover or by an incoming Psybeam or Aurora Beam.
+ * Runs the rainbow hue shift triggered by the user's Recover or by an incoming Psybeam or Aurora
+ * Beam.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Psybeam, Aurora Beam.
  */
@@ -162,9 +169,9 @@ void BattleAnim_RunRainbowHueChange(Particle* arg0) {
 }
 
 /**
- * Set up Fading the user's model to invisible for Teleport, defense curl, sky attack, acid armor and sharpen.
- * These moves do not replace the user's model like transform or substitute and do not have unique animation varients
- * like withdrawal; which are not covered by this function.
+ * Set up Fading the user's model to invisible for Teleport, defense curl, sky attack, acid armor
+ * and sharpen. These moves do not replace the user's model like transform or substitute and do not
+ * have unique animation varients like withdrawal; which are not covered by this function.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Acid Armor, Defense Curl, Explosion, Selfdestruct, Sharpen and Teleport. Sky Attack's
  * charge turn did not use it, and Explosion and Selfdestruct did.
@@ -181,6 +188,11 @@ M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 s32 Particle_ApproachPrimAlpha(s8 *, u8, u8);                  /* extern */
 M2C_UNK func_82144644(s8 *);                      /* extern */
 
+/**
+ * Particle callback for an owner model alpha fade (used to turn the Pokémon invisible): inits it,
+ * fades its alpha toward the target, then is marked inactive. While running it writes the alpha to
+ * the owner model's material.
+ */
 void BattleAnim_CallbackOwnerModelAlphaFade(Particle* arg0) {
     s16 temp_v0;
 
@@ -245,10 +257,10 @@ void BattleAnim_CallbackModelBurstAlphaFade(Particle* particle) {
 }
 
 /**
- * Sets up coloration changes to pure white for using Blizzard, Confuse Ray, Self-destruct, Flash, or Explosion.
- * Blizzard's effect is more subtle and doesn't change the user completely white like the other listed moves.
- * It is used in blizzard to make the user's hue match that of the arena.
- * Also used for the poke ball's hue change.
+ * Sets up coloration changes to pure white for using Blizzard, Confuse Ray, Self-destruct, Flash,
+ * or Explosion. Blizzard's effect is more subtle and doesn't change the user completely white like
+ * the other listed moves. It is used in blizzard to make the user's hue match that of the arena.
+ * Also used for the Poké Ball's hue change.
  * Seen in play (2026-11-13) in the 165-move sweep (Ice Beam, Psybeam, Aurora Beam, Hyper Beam,
  * Confusion, Psychic, Light Screen, Reflect): it kept prim white (FFFFFF), set prim alpha to 0 and
  * advanced the lifecycle.
@@ -260,10 +272,10 @@ void BattleAnim_SetupWhiteHueChange(Particle* arg0) {
 }
 
 /**
- * Runs coloration changes to pure white for using Blizzard, Confuse Ray, Self-destruct, Flash, or Explosion.
- * Blizzard's effect is more subtle and doesn't change the user completely white like the other listed moves.
- * It is used in blizzard to make the user's hue match that of the arena.
- * Also used for the poke ball's hue change.
+ * Runs coloration changes to pure white for using Blizzard, Confuse Ray, Self-destruct, Flash, or
+ * Explosion. Blizzard's effect is more subtle and doesn't change the user completely white like the
+ * other listed moves. It is used in blizzard to make the user's hue match that of the arena. Also
+ * used for the Poké Ball's hue change.
  * Seen in play (2026-11-13) in the 165-move sweep (Ice Beam, Psybeam, Aurora Beam, Hyper Beam,
  * Confusion, Psychic, Light Screen, Reflect): after setup the white overlay's prim alpha rose by
  * 0x20 per frame (0, 0x20, 0x40, ...).
@@ -307,8 +319,8 @@ void BattleAnim_SetupDescriptor25AlphaHoldFadeOut(Particle* arg0) {
  * - Slash -> red
  * - Fire punch -> white
  *
- * BattleAnim_DrawFadingFullScreenColorOverlay in @battle_engine_particle_renderers.c is the equivalent for moves
- * that change both the full screen hue and the pokemon hue at the same time
+ * BattleAnim_DrawFadingFullScreenColorOverlay in @battle_engine_particle_renderers.c is the
+ * equivalent for moves that change both the full screen hue and the pokemon hue at the same time
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
  * switch in battle.
  * @unverified Name and comment from Stadium 1.
@@ -346,7 +358,8 @@ void BattleAnim_SetupDescriptor25AlphaFadeInHold(Particle* arg0) {
 }
 
 /**
- * Used to change the Pokemon and screen hue at the same time for Blizzard, Boom, Confuse Ray, and Flash
+ * Used to change the Pokemon and screen hue at the same time for Blizzard, Boom, Confuse Ray, and
+ * Flash
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Blizzard, Confuse Ray, Explosion, Flash and Selfdestruct.
  */
@@ -381,6 +394,10 @@ void BattleAnim_SetupDescriptor25AlphaHold(Particle* particle) {
 void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
 s32 func_82140690();                                /* extern */
 
+/**
+ * Particle callback for a full-screen color hold: inits it with its color and alpha, then detaches
+ * once its timer ends.
+ */
 void BattleAnim_CallbackDescriptor25AlphaHoldDetach(Particle* arg0) {
     s16 temp_v0;
 

@@ -84,7 +84,7 @@ typedef struct unk_D_83403C60_raw {
 
 #include "m2c_macros.h"
 
-void BattleAnim_InitStartEffect139Descriptor42FallingScale(Particle* arg0);
+void BattleAnim_InitStart139Desc42FallingScale(Particle* arg0);
 void BattleAnim_InitStartEffect139Descriptor22SpinFade(Particle* arg0);
 void BattleAnim_InitExplosionOrbit(Particle* arg0);
 void BattleAnim_InitExplosionBurst(Particle* arg0);
@@ -102,7 +102,7 @@ void BattleAnim_StartEffect137RiseFadePair(void);
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_InitStartEffect135Descriptor1CRisingScale(Particle* arg0) {
+void BattleAnim_InitStart135Desc1CRisingScale(Particle* arg0) {
     Vec3s sp28;
     s16 sp26 = Particle_GetByteParam1(arg0);
     s16 sp24 = Particle_SpawnIndex_GetS16_0C038(arg0);
@@ -126,10 +126,10 @@ void BattleAnim_InitStartEffect135Descriptor1CRisingScale(Particle* arg0) {
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_CallbackStartEffect135Descriptor1CRisingScaleFade(Particle* arg0) {
+void BattleAnim_CallbackStart135Desc1CRisingScaleFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_InitStartEffect135Descriptor1CRisingScale(arg0);
+            BattleAnim_InitStart135Desc1CRisingScale(arg0);
             break;
 
         case 2:
@@ -164,7 +164,7 @@ void BattleAnim_InitStartEffect135ExpandingFlash(s32 arg0)
 {
   u16 sp26;
   sp26 = func_8213C484();
-  func_821401D4(arg0, 0x3F286BCA);
+  func_821401D4(arg0, 0x3F286BCA); // 0.657895f
   func_82143478(arg0, sp26);
   if (!arg0)
   {
@@ -180,7 +180,7 @@ void BattleAnim_InitStartEffect135ExpandingFlash(s32 arg0)
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_CallbackStartEffect135ExpandingFlashFade(Particle* arg0) {
+void BattleAnim_CallbackStart135ExpandingFlashFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
             BattleAnim_InitStartEffect135ExpandingFlash(arg0);
@@ -212,7 +212,7 @@ void BattleAnim_CallbackStartEffect135ExpandingFlashFade(Particle* arg0) {
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_InitStartEffect139Descriptor42FallingScale(Particle* arg0) {
+void BattleAnim_InitStart139Desc42FallingScale(Particle* arg0) {
     s16 sp2E = Particle_GetByteParam1(arg0);
     s16 sp2C = Particle_SpawnIndex_GetS16_0C038(arg0);
 
@@ -233,10 +233,10 @@ s32 Particle_ApproachStepMagnitude(Particle* arg0, f32 arg1, f32 arg2);
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_CallbackStartEffect139Descriptor42FallingScaleFade(Particle* arg0) {
+void BattleAnim_CallbackStart139Desc42FallingScaleFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_InitStartEffect139Descriptor42FallingScale(arg0);
+            BattleAnim_InitStart139Desc42FallingScale(arg0);
             break;
 
         case 2:
@@ -308,7 +308,7 @@ void BattleAnim_CallbackStartEffect137RiseFade(Particle* particle) {
         func_82150474(particle);
         return;
     case 2:
-        func_82140228(particle, 0x3DCCCCCD, 0x3C23D70A);
+        func_82140228(particle, 0x3DCCCCCD, 0x3C23D70A); // 0.1f, 0.01f
         Particle_ApproachPrimAlpha(particle, 0, 8);
         Particle_AddVelocityFromRotationTemplate1(particle);
         func_821406B4(particle);
@@ -341,7 +341,7 @@ void BattleAnim_InitStartEffect141Descriptor1CGridRise(Particle* arg0) {
     sp24.y = (sp2C << 0xC) + 0xB000;
     sp24.z = 0;
     Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp24);
-    Particle_SetPrimColor(arg0, 0xC8, 0xFF, 0xFF);
+    Particle_SetPrimColor(arg0, 0xC8, 0xFF, 0xFF); // #C8FFFF
     Particle_SetPrimAlpha(arg0, 0xC8);
     Particle_Param0_SetS16_0BCA8(arg0, sp2E);
     Particle_DisableRendering(arg0);
@@ -355,7 +355,7 @@ void BattleAnim_InitStartEffect141Descriptor1CGridRise(Particle* arg0) {
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_CallbackStartEffect141Descriptor1CGridRiseFade(Particle* arg0) {
+void BattleAnim_CallbackStart141Desc1CGridRiseFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
             BattleAnim_InitStartEffect141Descriptor1CGridRise(arg0);
@@ -404,7 +404,7 @@ void BattleAnim_InitExplosionOrbit(Particle* arg0) {
 
     switch (sp2E) {
         case 0:
-            Particle_ScratchA_SetS16_0BF4C(arg0, ParticleMath_RandomRangeOffset(0x14, 0x14));
+            Particle_ScratchA_SetS16_0BF4C(arg0, ParticleMath_RandomRangeOffset(20, 20));
             Particle_ScratchB_SetS16_0BFEC(arg0, 0);
             sp36 = ParticleMath_RandomSignedOffsetBySign(0x200, 0x200);
             sp34 = ParticleMath_RandomSignedOffsetBySign(0x200, 0x200);
@@ -412,7 +412,7 @@ void BattleAnim_InitExplosionOrbit(Particle* arg0) {
             break;
 
         case 1:
-            Particle_ScratchA_SetS16_0BF4C(arg0, ParticleMath_RandomRangeOffset(0x28, 0x14));
+            Particle_ScratchA_SetS16_0BF4C(arg0, ParticleMath_RandomRangeOffset(40, 20));
             Particle_ScratchB_SetS16_0BFEC(arg0, 1);
             sp36 = ParticleMath_RandomSignedOffsetBySign(0x200, 0x200);
             sp34 = ParticleMath_RandomSignedOffsetBySign(0x200, 0x200);
@@ -420,7 +420,7 @@ void BattleAnim_InitExplosionOrbit(Particle* arg0) {
             break;
 
         case 2:
-            Particle_ScratchA_SetS16_0BF4C(arg0, ParticleMath_RandomRangeOffset(0x1E, 0x14));
+            Particle_ScratchA_SetS16_0BF4C(arg0, ParticleMath_RandomRangeOffset(30, 20));
             Particle_ScratchB_SetS16_0BFEC(arg0, 2);
             sp36 = ParticleMath_RandomSignedOffsetBySign(0x200, 0x200);
             sp34 = ParticleMath_RandomSignedOffsetBySign(0x200, 0x200);
@@ -564,12 +564,13 @@ extern M2C_UNK D_8218E798;
 extern M2C_UNK func_8215036C;
 
 /**
- * Queues BattleAnim_CallbackStartEffect137RiseFade and func_8215036C on the current owner, 30 repeats each.
+ * Queues BattleAnim_CallbackStartEffect137RiseFade and func_8215036C on the current owner, 30
+ * repeats each.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_StartEffect137RiseFadePair(void) {
-    func_8213B5D8(0, 1, 0x1E, &BattleAnim_CallbackStartEffect137RiseFade, &D_8218E698, 0x10, 1, 0x1E, 0, 0x3B, 0);
-    func_8213B5D8(0, 1, 0x1E, &func_8215036C, &D_8218E798, 0x10, 2, 0x1E, 0, 0x3B, 0);
+    func_8213B5D8(0, 1, 30, &BattleAnim_CallbackStartEffect137RiseFade, &D_8218E698, 0x10, 1, 0x1E, 0, 0x3B, 0);
+    func_8213B5D8(0, 1, 30, &func_8215036C, &D_8218E798, 0x10, 2, 0x1E, 0, 0x3B, 0);
 }
 
 /**
@@ -589,7 +590,7 @@ extern M2C_UNK D_8218E668;
 void BattleAnim_StartEffect139SparkleGridRise(void) {
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(11, 1, 5, BattleAnim_RunSparkleHit, (ParticleDescriptor*)&D_8218E798, 0, 5, 0x1E, 0, 0x3B, 8);
     BattleAnim_SetSpawnDelay(0x10);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffect141Descriptor1CGridRiseFade, (ParticleDescriptor*)&D_8218E668, 0, 0x40, 0x1E, 0, 8, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStart141Desc1CGridRiseFade, (ParticleDescriptor*)&D_8218E668, 0, 0x40, 0x1E, 0, 8, 0);
     BattleAnim_SpawnDesc25AlphaFadeInHold(0, 2, 0x2C, 8, 0xFF);
 }
 
@@ -608,24 +609,27 @@ void BattleAnim_StartEffect140(void) {
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_StartEffect135ExpandingFlashAndRisingScaleFade(void) {
+void BattleAnim_Start135ExpandingFlashAndRisingScale(void) {
     UNUSED s32 pad; // FAKE: stack padding
 
     BattleAnim_SpawnDesc25AlphaHoldFadeOutFullAlpha(0, 0, 0x10, 8);
     BattleAnim_SpawnOwnerTintRampDetach(0, 0x8, 0xFF, 0xFF, 0xFF);
     BattleAnim_SpawnInvisibility(0, 0xFF, 0xFF, 0xFF);
-    BattleAnim_SpawnOwnerTintRampDetach(0x14, 0x8, 0xFF, 0, 8);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffect135ExpandingFlashFade, &gBattleAnimParticleDescriptors[0x21], 8, 1, 2, 0, 0x3C, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffect135ExpandingFlashFade, &gBattleAnimParticleDescriptors[0x23], 8, 1, 2, 0, 0x3C, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffect135ExpandingFlashFade, &gBattleAnimParticleDescriptors[0x17], 8, 1, 2, 0, 0x3C, 0);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 1, 4, BattleAnim_CallbackStartEffect135Descriptor1CRisingScaleFade, &gBattleAnimParticleDescriptors[0x1C], 5, 0x10, 7, 0, 0x36, 0);
-    BattleAnim_SpawnGlobalTintColorFadeDetach(0x32, 0x10, 0x8);
+    BattleAnim_SpawnOwnerTintRampDetach(20, 0x8, 0xFF, 0, 8);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStart135ExpandingFlashFade, &gBattleAnimParticleDescriptors[0x21], 8, 1, 2, 0, 0x3C, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStart135ExpandingFlashFade, &gBattleAnimParticleDescriptors[0x23], 8, 1, 2, 0, 0x3C, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStart135ExpandingFlashFade, &gBattleAnimParticleDescriptors[0x17], 8, 1, 2, 0, 0x3C, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 1, 4, BattleAnim_CallbackStart135Desc1CRisingScaleFade, &gBattleAnimParticleDescriptors[0x1C], 5, 0x10, 7, 0, 0x36, 0);
+    BattleAnim_SpawnGlobalTintColorFadeDetach(50, 0x10, 0x8);
 }
 
 extern ParticleDescriptor D_8218E588[86];
 extern M2C_UNK D_8218E7A0;
 extern M2C_UNK D_8218E748;
 /**
+ * Start effect 134: a global tint fade, swirls of orbiting particles from frames 0 to 30, an owner
+ * tint ramp at frame 38, a burst emitter at frame 45, the owner turning invisible at frame 72 and
+ * a last tint fade at frame 85.
  * Effect start init 132 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Explosion, Self Destruct.
  */
@@ -636,10 +640,10 @@ void BattleAnim_StartEffect134ModeOrbitAndMetadataBurst(void) {
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(24, 1, 4, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 2);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(30, 1, 8, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 3);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(30, 1, 8, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 3);
-    BattleAnim_SpawnOwnerTintRampDetach(0x26, 0x8, 0, 0xFF, 4);
+    BattleAnim_SpawnOwnerTintRampDetach(38, 0x8, 0, 0xFF, 4);
     BattleAnim_CreateEffectSlotForCurrentOwner(45, BattleAnim_ExplosionBurstEmitter, &D_8218E748, 0x1A, 1, 2, 0, 0x3C, 0);
-    BattleAnim_SpawnInvisibility(0x48, 0x40, 0, 0xFF);
-    BattleAnim_SpawnGlobalTintColorFadeDetach(0x55, 6, 0x8);
+    BattleAnim_SpawnInvisibility(72, 0x40, 0, 0xFF);
+    BattleAnim_SpawnGlobalTintColorFadeDetach(85, 6, 0x8);
 }
 
 extern ParticleDescriptor D_8218E588[86];
@@ -659,10 +663,10 @@ void BattleAnim_StartEffect143ModeOrbitAndMetadataBurst(void) {
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 1, 4, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 2);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(6, 1, 8, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 3);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(6, 1, 8, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 3);
-    BattleAnim_SpawnOwnerTintRampDetach(0xE, 0x8, 0, 0xFF, 4);
+    BattleAnim_SpawnOwnerTintRampDetach(14, 0x8, 0, 0xFF, 4);
     BattleAnim_CreateEffectSlotForCurrentOwner(20, BattleAnim_ExplosionBurstEmitter, &D_8218E748, 0x1A, 1, 2, 0, 0x3C, 0);
-    BattleAnim_SpawnInvisibility(0x2D, 0x40, 0, 0xFF);
-    BattleAnim_SpawnGlobalTintColorFadeDetach(0x32, 6, 0x8);
+    BattleAnim_SpawnInvisibility(45, 0x40, 0, 0xFF);
+    BattleAnim_SpawnGlobalTintColorFadeDetach(50, 6, 0x8);
 }
 
 extern ParticleDescriptor D_8218E588[86];
@@ -673,19 +677,19 @@ extern ParticleDescriptor D_8218E588[86];
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_StartEffect133ModeOrbitBurstAndEffect135Followup(void) {
+void BattleAnim_Start133OrbitBurstThenStart135(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 8, 6);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 4, 9, 0, 0x3C, 1);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 4, 9, 0, 0x3C, 1);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(24, 1, 4, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 2);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(30, 1, 8, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 3);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(30, 1, 8, BattleAnim_ExplosionOrbitSwirl, &D_8218E7A0, 0, 8, 9, 0, 0x3C, 3);
-    BattleAnim_SpawnOwnerTintRampDetach(0x26, 0x8, 0, 0xFF, 8);
+    BattleAnim_SpawnOwnerTintRampDetach(38, 0x8, 0, 0xFF, 8);
     BattleAnim_CreateEffectSlotForCurrentOwner(40, BattleAnim_ExplosionBurstEmitter, &D_8218E748, 0x18, 1, 2, 0, 0x3C, 0);
-    BattleAnim_SpawnWhiteHueChange(0x3C, 0, 0x40, 0x8, 0xFF);
+    BattleAnim_SpawnWhiteHueChange(60, 0, 0x40, 0x8, 0xFF);
     BattleAnim_SpawnInvisibility(0x40, 0xFF, 0, 0xFF);
     BattleAnim_SetSpawnDelay(80);
-    BattleAnim_StartEffect135ExpandingFlashAndRisingScaleFade();
+    BattleAnim_Start135ExpandingFlashAndRisingScale();
 }
 
 /**
@@ -696,5 +700,5 @@ void BattleAnim_StartEffect133ModeOrbitBurstAndEffect135Followup(void) {
  */
 void BattleAnim_StartEffect122GlobalAndOwnerTintFade(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0xFF, 0);
-    BattleAnim_SpawnOwnerTintRampDetach(0x14, 0, 0, 0xFF, 0x10);
+    BattleAnim_SpawnOwnerTintRampDetach(20, 0, 0, 0xFF, 0x10);
 }

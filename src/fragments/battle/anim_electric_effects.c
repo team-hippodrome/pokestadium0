@@ -15,19 +15,21 @@ void BattleAnim_SetupDelayedRisingColumnRandomScale(Particle* arg0);
 void BattleAnim_SetupSharedDirectionalSprayFade(Particle* arg0);
 void BattleAnim_SetupDirectionalSprayScaledFade(Particle* arg0);
 void BattleAnim_SetupThunderShockOuterJolts(Particle* arg0);
-void BattleAnim_SetupUnregisteredStraightDirectionalStreamFade(Particle* arg0);
-void BattleAnim_SetupEndEffect28Descriptor10UpwardBurstFade(Particle* arg0);
-void BattleAnim_SetupEndEffect28Descriptor10WideScatterBurstFade(Particle* arg0);
+void BattleAnim_SetupUnregisteredStraightDirStreamFade(Particle* arg0);
+void BattleAnim_SetupEnd28Desc10UpwardBurstFade(Particle* arg0);
+void BattleAnim_SetupEnd28Desc10WideScatterBurstFade(Particle* arg0);
 void BattleAnim_InitializeThunderPunchUse(void);
 void BattleAnim_InitializeHyperBeamHitSequence(void);
 
-void BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade(Particle* arg0);
+void BattleAnim_CallbackStart18And73Desc11ScatterRise(Particle* arg0);
 void BattleAnim_RunDeterministicRotatingBoltOfLightning(Particle* arg0);
 void BattleAnim_RunRandomRotatingBoltOfLightning(Particle* arg0);
 void BattleAnim_CallbackSharedDirectionalSprayFade(Particle* arg0);
-void BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade(Particle* arg0);
+void BattleAnim_CallbackSharedDesc13DirSprayScaledFade(Particle* arg0);
 
 /**
+ * Inits a strong electric spark: scale 0.05, a random rotationX, rotationY and rotationZ, pushed
+ * out up to 9 units along it, then rotated a quarter turn about X, recolored from its palette pair.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Thunder Punch, Thunderbolt, Thunder.
  */
@@ -41,7 +43,7 @@ void BattleAnim_SetupStrongElectricSpark(Particle* arg0) {
     sp2C.y = ParticleMath_RandomRange(0x10000);
     sp2C.z = ParticleMath_RandomRange(0x800) - 0x400;
     Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp2C);
-    Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRange(0xA));
+    Particle_AddPositionFromRotationTemplate1(arg0, ParticleMath_RandomRange(10));
     Particle_Rotation_AddX_0A578(arg0, 0x4000);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_AdvanceLifecycle(arg0);
@@ -60,7 +62,7 @@ M2C_UNK func_8214E590(s8 *);                      /* extern */
  * breakpoint): ran only for Thunder, Thunderbolt, Thunder Punch.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade(Particle* particle) {
+void BattleAnim_CallbackStart18And73Desc11ScatterRise(Particle* particle) {
     s16 temp_v0;
 
     temp_v0 = particle->lifecycle;
@@ -78,11 +80,13 @@ void BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade(Particle*
         Particle_DisableAndDetach(particle);
         break;
     }
-    func_82140228(particle, 0x3F800000, 0x3D4CCCCD);
+    func_82140228(particle, 0x3F800000, 0x3D4CCCCD); // 1.0f, 0.05f
     Particle_MoveAlongRotationXYZAlt(particle);
 }
 
 /**
+ * Raises the particle by a species-dependent height so the bolt reaches tall Pokémon (15 for
+ * Charizard and Kangaskhan, 10 for several others, 0 by default).
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Thunderbolt, Thunder.
  */
@@ -124,6 +128,8 @@ void BattleAnim_ApplyThunderThunderboltUseRadialOffset(Particle* arg0) {
 }
 
 /**
+ * Inits the Thunder or Thunderbolt use flash: scale 0.1, no speed, raised for the owner's species,
+ * palette pair 0x17.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Thunderbolt, Thunder.
  */
@@ -136,6 +142,8 @@ void BattleAnim_SetupThunderThunderboltUseEffect(Particle* arg0) {
 }
 
 /**
+ * Particle callback for the Thunder or Thunderbolt use flash: grows toward scale 4 until its timer
+ * ends, then shrinks while fading out, then detaches.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Thunderbolt, Thunder.
  */
@@ -162,6 +170,8 @@ void BattleAnim_RunThunderThunderboltUseEffect(Particle* arg0) {
 }
 
 /**
+ * Inits a lightning bolt of the rotating ring: 15 units up, scale 0.1, a random rotationX,
+ * rotationY an eighth of a turn per spawn index, recolored from its palette pair, hidden at first.
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Hyper Beam, ThunderShock, Thunderbolt and Thunder.
  */
@@ -182,6 +192,9 @@ void BattleAnim_SetupDelayedRisingColumnFade(Particle* arg0) {
 }
 
 /**
+ * Particle callback for a bolt of the rotating ring: waits as many frames as its spawn index,
+ * shows it, grows toward scale 3 until its timer ends, fades out, then detaches. Every frame it
+ * turns and moves along its rotation.
  * Moves: Hyper Beam (hit), Thunder (use/hit), Thunder Shock (use/hit), Thunderbolt (use/hit)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -218,6 +231,8 @@ void BattleAnim_RunDeterministicRotatingBoltOfLightning(Particle* arg0) {
 }
 
 /**
+ * Inits a bolt of the random rotating ring: like the fixed ring but with a narrower random
+ * rotationX and a random speed below 1.
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Hyper Beam, ThunderShock, Thunderbolt and Thunder.
  */
@@ -238,6 +253,8 @@ void BattleAnim_SetupDelayedRisingColumnRandomScale(Particle* arg0) {
 }
 
 /**
+ * Particle callback for a bolt of the random rotating ring: like the fixed ring but grows toward
+ * scale 3.5.
  * Moves: Hyper Beam (hit), Thunder (use/hit), Thunder Shock (use/hit), Thunderbolt (use/hit)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -317,7 +334,7 @@ void BattleAnim_CallbackSharedDirectionalSprayFade(Particle* particle) {
         func_8214EC88(particle);
         break;
     case 2:
-        func_82140228(particle, 0x40000000, 0x3E4CCCCD);
+        func_82140228(particle, 0x40000000, 0x3E4CCCCD); // 2.0f, 0.2f
         func_821406B4(particle);
         break;
     case 3:
@@ -331,6 +348,9 @@ void BattleAnim_CallbackSharedDirectionalSprayFade(Particle* particle) {
 }
 
 /**
+ * Inits a directional spray particle: grows from 0.5 toward a random 1 to 6, a random speed below
+ * 4, pointed straight up with a random rotationZ in sixteenths of half a turn, recolored from its
+ * palette pair.
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Hyper Beam, ThunderShock, Thunderbolt and Thunder.
  */
@@ -364,7 +384,7 @@ M2C_UNK func_8214EDE0(s8 *);                      /* extern */
  * breakpoint): ran only for Hyper Beam, Thunder, Thunderbolt, Thundershock.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade(Particle* particle) {
+void BattleAnim_CallbackSharedDesc13DirSprayScaledFade(Particle* particle) {
     s16 temp_v0;
 
     temp_v0 = particle->lifecycle;
@@ -387,6 +407,9 @@ void BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade(Particle* p
 }
 
 /**
+ * Inits a Thunder Shock outer jolt: grows from 0.1 to 1.4, no speed, pointed up with a random
+ * rotationZ and pushed 150 units out along it, then given a constant Z spin, recolored from its
+ * palette pair.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Thunder Shock.
  */
@@ -424,7 +447,7 @@ M2C_UNK func_8214EF84(s8 *);                      /* extern */
  * breakpoint): ran only for Thundershock.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade(Particle* particle) {
+void BattleAnim_CallbackStart59End28DirStreamFade(Particle* particle) {
     s16 temp_v0;
 
     temp_v0 = particle->lifecycle;
@@ -453,7 +476,7 @@ void BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade(Particle* 
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_SetupUnregisteredStraightDirectionalStreamFade(Particle* arg0) {
+void BattleAnim_SetupUnregisteredStraightDirStreamFade(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     Vec3s sp2C;
     UNUSED s32 pad2[2]; // FAKE: stack padding
@@ -482,7 +505,7 @@ M2C_UNK func_8214F110(s8 *);                      /* extern */
 
 /**
  * Particle callback (no reference found) for
- * BattleAnim_SetupUnregisteredStraightDirectionalStreamFade: steps, fades out by 16, then detaches.
+ * BattleAnim_SetupUnregisteredStraightDirStreamFade: steps, fades out by 16, then detaches.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackUnregisteredStraightStreamFade(Particle* particle) {
@@ -514,7 +537,7 @@ void BattleAnim_CallbackUnregisteredStraightStreamFade(Particle* particle) {
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_SetupEndEffect28Descriptor10UpwardBurstFade(Particle* arg0) {
+void BattleAnim_SetupEnd28Desc10UpwardBurstFade(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
     Vec3f sp30;
     Vec3s sp28;
@@ -527,9 +550,9 @@ void BattleAnim_SetupEndEffect28Descriptor10UpwardBurstFade(Particle* arg0) {
     sp28.y = 0;
     sp28.z = -0x8000;
     Particle_Rotation_AddVecFromVec3s_0A4F0(arg0, sp28);
-    sp30.x = ParticleMath_RandomRange(0x64) + -50.0f;
+    sp30.x = ParticleMath_RandomRange(100) + -50.0f;
     sp30.y = 200.0f;
-    sp30.z = ParticleMath_RandomRange(0x64) + -50.0f;
+    sp30.z = ParticleMath_RandomRange(100) + -50.0f;
     Particle_PositionOffset_AddVecScaled(arg0, sp30);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_AdvanceLifecycle(arg0);
@@ -574,7 +597,7 @@ void BattleAnim_CallbackEndEffect28StreamA(Particle* particle) {
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_SetupEndEffect28Descriptor10WideScatterBurstFade(Particle* arg0) {
+void BattleAnim_SetupEnd28Desc10WideScatterBurstFade(Particle* arg0) {
     UNUSED s32 pad[4]; // FAKE: stack padding
     Vec3s sp28;
 
@@ -630,16 +653,16 @@ void BattleAnim_CallbackEndEffect28StreamB(Particle* particle) {
  * it ran for exactly Thunder, Thunderbolt.
  */
 void BattleAnim_InitializeThunderThunderboltUse(void) {
-    BattleAnim_SpawnCategory17MarkerSlot(0x64, 1);
+    BattleAnim_SpawnCategory17MarkerSlot(100, 1);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x20, 3);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 3, 8, BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade, &gBattleAnimParticleDescriptors[0x11], 8, 4, 2, 0, 0x25, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 3, 8, BattleAnim_CallbackStart18And73Desc11ScatterRise, &gBattleAnimParticleDescriptors[0x11], 8, 4, 2, 0, 0x25, 0);
     BattleAnim_AddSpawnDelay(25);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunThunderThunderboltUseEffect, &gBattleAnimParticleDescriptors[0x15], 0xE, 1, 2, 0, 0x25, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunThunderThunderboltUseEffect, &gBattleAnimParticleDescriptors[0x16], 0xE, 1, 2, 0, 0x25, 0);
     BattleAnim_SpawnDesc25AlphaHoldFadeOut(8, 2, 8, 0x8, 0xFF);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_RunDeterministicRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 7, 0, 0x25, 0);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_RunRandomRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 7, 0, 0x25, 0);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x25, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDesc13DirSprayScaledFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x25, 0);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDirectionalSprayFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x25, 0);
 }
 
@@ -658,7 +681,7 @@ extern M2C_UNK func_8214EBA4;
  */
 void BattleAnim_InitializeThunderShockThunderboltHit(void) {
     func_8213B794(0x2C, 4, 0x10, 8, 0xFF);
-    func_8213B644(0x30, 0x20, 8);
+    func_8213B644(48, 0x20, 8);
     func_8213B5D8(0, 8, 5, &BattleAnim_CallbackSharedDirectionalSprayFade, &D_8218E618, 8, 3, 3, 0, 0x25, 0);
     func_8213B5D8(0, 4, 2, &func_8214E9F0, &D_8218E600, 0x14, 4, 3, 0, 0x25, 0);
     func_8213B5D8(0, 4, 2, &func_8214EBA4, &D_8218E600, 0x14, 4, 3, 0, 0x25, 0);
@@ -680,7 +703,7 @@ extern M2C_UNK func_8214EBA4;
  */
 void BattleAnim_InitializeThunderHit(void) {
     func_8213B794(0, 4, 8, 8, 0xC8);
-    func_8213B644(0x30, 0x20, 8);
+    func_8213B644(48, 0x20, 8);
     func_8213B5D8(0, 8, 5, &BattleAnim_CallbackSharedDirectionalSprayFade, &D_8218E618, 8, 3, 3, 0, 0x25, 0);
     func_8213B5D8(0, 4, 2, &func_8214E9F0, &D_8218E600, 0x14, 4, 3, 0, 0x25, 0);
     func_8213B5D8(0, 4, 2, &func_8214EBA4, &D_8218E600, 0x14, 4, 3, 0, 0x25, 0);
@@ -693,13 +716,13 @@ void BattleAnim_InitializeThunderHit(void) {
  * it ran for exactly Thunder Shock.
  */
 void BattleAnim_InitializeThunderShockUse(void) {
-    BattleAnim_SpawnCategory17MarkerSlot(0x64, 1);
+    BattleAnim_SpawnCategory17MarkerSlot(100, 1);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 3);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 8, 3, BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade, &gBattleAnimParticleDescriptors[0x14], 2, 1, 2, 0, 0x25, 0);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 5, 5, BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade, &gBattleAnimParticleDescriptors[0x13], 2, 1, 2, 0, 0x25, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 8, 3, BattleAnim_CallbackStart59End28DirStreamFade, &gBattleAnimParticleDescriptors[0x14], 2, 1, 2, 0, 0x25, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 5, 5, BattleAnim_CallbackStart59End28DirStreamFade, &gBattleAnimParticleDescriptors[0x13], 2, 1, 2, 0, 0x25, 0);
     BattleAnim_AddSpawnDelay(35);
     BattleAnim_SpawnDesc25AlphaHoldFadeOutFullAlpha(8, 4, 8, 0x8);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 2, 0, 0x25, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_CallbackSharedDesc13DirSprayScaledFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 2, 0, 0x25, 0);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 5, 2, BattleAnim_CallbackSharedDirectionalSprayFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 2, 0, 0x25, 0);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 6, 2, BattleAnim_RunDeterministicRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 2, 1, 0, 0x25, 0);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_RunRandomRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 2, 1, 0, 0x25, 0);
@@ -712,17 +735,18 @@ extern M2C_UNK D_8218E608;
 extern M2C_UNK D_8218E620;
 
 /**
- * Starts a three-part effect: sets the tint and spawn timing, then queues BattleAnim_CallbackEndEffect28StreamA,
- * BattleAnim_CallbackEndEffect28StreamB and BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade on the current owner.
+ * Starts a three-part effect: sets the tint and spawn timing, then queues
+ * BattleAnim_CallbackEndEffect28StreamA, BattleAnim_CallbackEndEffect28StreamB and
+ * BattleAnim_CallbackStart59End28DirStreamFade on the current owner.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_EndEffect28ThreePartStream(void) {
-    func_8213B720(0x22, 4, 0x10, 8);
+    func_8213B720(34, 4, 0x10, 8);
     func_8213B644(0, 0x20, 3);
-    func_8213B644(0x30, 0x20, 8);
-    func_8213B5D8(0, 0xA, 2, &BattleAnim_CallbackEndEffect28StreamA, &D_8218E608, 0xC, 1, 3, 0, 0x25, 0);
+    func_8213B644(48, 0x20, 8);
+    func_8213B5D8(0, 10, 2, &BattleAnim_CallbackEndEffect28StreamA, &D_8218E608, 0xC, 1, 3, 0, 0x25, 0);
     func_8213B5D8(0, 5, 3, &BattleAnim_CallbackEndEffect28StreamB, &D_8218E608, 0xC, 2, 3, 0, 0x25, 0);
-    func_8213B5D8(0, 8, 2, &BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade, &D_8218E620, 0xC, 3, 3, 0, 0x25, 0);
+    func_8213B5D8(0, 8, 2, &BattleAnim_CallbackStart59End28DirStreamFade, &D_8218E620, 0xC, 3, 3, 0, 0x25, 0);
 }
 
 /**
@@ -731,8 +755,8 @@ void BattleAnim_EndEffect28ThreePartStream(void) {
  * it ran for exactly Thunder Punch.
  */
 void BattleAnim_InitializeThunderPunchUse(void) {
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade, &gBattleAnimParticleDescriptors[0x11], 8, 4, 0x10, gBattleAnimCurrentAnchor, 0x25, 0);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 1, 0x24, BattleAnim_CallbackStartEffect73Descriptor15AnimatedColorImpulseFade, &gBattleAnimParticleDescriptors[0x15], 0, 1, 0x11, gBattleAnimCurrentAnchor, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_CallbackStart18And73Desc11ScatterRise, &gBattleAnimParticleDescriptors[0x11], 8, 4, 0x10, gBattleAnimCurrentAnchor, 0x25, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 1, 36, BattleAnim_CallbackStart73Desc15ColorImpulseFade, &gBattleAnimParticleDescriptors[0x15], 0, 1, 0x11, gBattleAnimCurrentAnchor, 0, 0);
 }
 
 /**
@@ -741,7 +765,7 @@ void BattleAnim_InitializeThunderPunchUse(void) {
  * for Hyper Beam.
  */
 void BattleAnim_InitializeHyperBeamHitSequence(void) {
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x2C, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDesc13DirSprayScaledFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x2C, 0);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDirectionalSprayFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 3, 7, 0, 0xF, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_RunDeterministicRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 1, 7, 0, 0x2C, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_RunRandomRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 1, 7, 0, 0xF, 0);

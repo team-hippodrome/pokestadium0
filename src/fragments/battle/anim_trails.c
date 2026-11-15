@@ -3,6 +3,8 @@
 #include "vector_math.h"
 
 /**
+ * Init hook for Disable's use animation: clears the frame counter, resets the shared matrix and
+ * the 20-slot radial pool, and emits the first radial burst (variant D).
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Disable.
  */
@@ -14,16 +16,19 @@ void BattleAnim_SetupDisableUseRadial(void) {
 }
 
 /**
+ * Update hook for Disable's use animation: emits another radial burst every 7 frames for the first
+ * 120 frames and returns -1 (done) at frame 181; otherwise returns whether the radial pool has
+ * finished.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Disable.
  */
 s32 BattleAnim_RunDisableUseRadial(void) {
     D_8219CB16++;
-    if (D_8219CB16 >= 0xB5) {
+    if (D_8219CB16 >= 181) {
         return -1;
     }
 
-    if ((D_8219CB16 < 0x78) && ((D_8219CB16 % 7) == 0)) {
+    if ((D_8219CB16 < 120) && ((D_8219CB16 % 7) == 0)) {
         BattleAnim_StartEffect98Radial20_EmitVariantD();
     }
 
@@ -31,6 +36,7 @@ s32 BattleAnim_RunDisableUseRadial(void) {
 }
 
 /**
+ * Draw hook for Disable's use animation: loads the shared effect matrix and draws the radial pool.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Disable.
  */
@@ -41,6 +47,8 @@ void BattleAnim_DrawDisableUseRadial(void) {
 }
 
 /**
+ * Init hook for Razor Leaf's use animation: clears the frame counter, resets the shared matrix and
+ * initializes the leaf trail pool.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Razor Leaf.
  */
@@ -51,6 +59,9 @@ void BattleAnim_SetupRazorLeafUseTrail(void) {
 }
 
 /**
+ * Update hook for Razor Leaf's use animation: every second frame starts a white leaf trail at a
+ * random point around the secondary owner (scaled by its model size), moving sideways toward the
+ * center, then advances the trails. Always returns 0.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Razor Leaf.
  */
@@ -75,13 +86,15 @@ s32 BattleAnim_RunRazorLeafUseTrail(void) {
         if (sp5C > 0.0) {
             var_fv0 = -var_fv0;
         }
-        RazorLeafTrail_Start(sp5C, sp58, sp54, var_fv0, 0.0f, 0.0f, 0xFF, 0xFF, 0xFF, 0x64, 0.3f, 1.0f, 4.0f, 0x1E);
+        RazorLeafTrail_Start(sp5C, sp58, sp54, var_fv0, 0.0f, 0.0f, 0xFF, 0xFF, 0xFF, 0x64, 0.3f, 1.0f, 4.0f, 0x1E); // #FFFFFF
     }
     RazorLeafTrail_IsComplete();
     return 0;
 }
 
 /**
+ * Draw hook for Razor Leaf's use animation: loads the shared effect matrix and draws the leaf
+ * trails.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Razor Leaf.
  */
@@ -92,6 +105,8 @@ void BattleAnim_DrawRazorLeafUseTrail(void) {
 }
 
 /**
+ * Init hook for Petal Dance's use animation: clears the frame counter, resets the shared matrix
+ * and initializes the petal trail pool.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Petal Dance.
  */
@@ -102,6 +117,9 @@ void BattleAnim_SetupPetalDanceUseTrail(void) {
 }
 
 /**
+ * Update hook for Petal Dance's use animation: every second frame starts a white petal trail at a
+ * random point around the secondary owner (scaled by its model size), moving sideways toward the
+ * center, then advances the trails. Always returns 0.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Petal Dance.
  */
@@ -126,13 +144,15 @@ s32 BattleAnim_RunPetalDanceUseTrail(void) {
         if (sp5C > 0.0) {
             var_fv0 = -var_fv0;
         }
-        PetalDanceTrail_Start(sp5C, sp58, sp54, var_fv0, 0.0f, 0.0f, 0xFF, 0xFF, 0xFF, 0x64, 0.3f, 1.0f, 4.0f, 0x1E);
+        PetalDanceTrail_Start(sp5C, sp58, sp54, var_fv0, 0.0f, 0.0f, 0xFF, 0xFF, 0xFF, 0x64, 0.3f, 1.0f, 4.0f, 0x1E); // #FFFFFF
     }
     PetalDanceTrail_IsComplete();
     return 0;
 }
 
 /**
+ * Draw hook for Petal Dance's use animation: loads the shared effect matrix and draws the petal
+ * trails.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Petal Dance.
  */
@@ -143,6 +163,8 @@ void BattleAnim_DrawPetalDanceUseTrail(void) {
 }
 
 /**
+ * Init hook for the Hypnosis and Screech use animation: resets the shared matrix and starts the
+ * wave grid with a duration of 1800 frames. The secondary owner's anchor is read but not used.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Hypnosis, Screech.
  */
@@ -151,10 +173,12 @@ void BattleAnim_SetupHypnosisScreechUseTrail(void) {
 
     BattleAnim_ResetSharedEffectMatrix();
     BattleAnim_EffectSecondaryOwnerAnchorPosition(&sp1C);
-    HypnosisScreechTrail_Init(0x708);
+    HypnosisScreechTrail_Init(1800);
 }
 
 /**
+ * Update hook for the Hypnosis and Screech use animation: returns whether the wave grid has
+ * finished.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Hypnosis, Screech.
  */
@@ -163,6 +187,8 @@ s32 BattleAnim_RunHypnosisScreechUseTrail(void) {
 }
 
 /**
+ * Draw hook for the Hypnosis and Screech use animation: loads the shared effect matrix and draws
+ * the wave grid.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Hypnosis, Screech.
  */
@@ -173,6 +199,8 @@ void BattleAnim_DrawHypnosisScreechUseTrail(void) {
 }
 
 /**
+ * Init hook for Sing's use animation: resets the shared matrix and starts the wave grid with a
+ * duration of 1800 frames. The secondary owner's anchor is read but not used.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Sing.
  */
@@ -181,10 +209,12 @@ void BattleAnim_SetupSingUseTrail(void) {
 
     BattleAnim_ResetSharedEffectMatrix();
     BattleAnim_EffectSecondaryOwnerAnchorPosition(&sp1C);
-    SingTrail_InitPool(0x708);
+    SingTrail_InitPool(1800);
 }
 
 /**
+ * Update hook for Sing's use animation: advances the wave grid and returns whether it has
+ * finished.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Sing.
  */
@@ -193,6 +223,7 @@ s32 BattleAnim_RunSingUseTrail(void) {
 }
 
 /**
+ * Draw hook for Sing's use animation: loads the shared effect matrix and draws the wave grid.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Sing.
  */
@@ -203,6 +234,9 @@ void BattleAnim_DrawSingUseTrail(void) {
 }
 
 /**
+ * Init hook for the Kinesis and Supersonic use animation: resets the shared matrix and starts the
+ * 40-cell grid trail with a duration of 1800 frames. The secondary owner's anchor is read but not
+ * used.
  * Moves: Kinesis (use), Supersonic (use)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -213,10 +247,12 @@ void BattleAnim_SetupKinesisSupersonicUseTrail(void) {
 
     BattleAnim_ResetSharedEffectMatrix();
     BattleAnim_EffectSecondaryOwnerAnchorPosition(&sp1C);
-    Trail40GridAlt_Init(0x708);
+    Trail40GridAlt_Init(1800);
 }
 
 /**
+ * Update hook for the Kinesis and Supersonic use animation: returns whether the grid trail has
+ * finished.
  * Moves: Kinesis (use), Supersonic (use)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -227,6 +263,8 @@ s32 BattleAnim_RunKinesisSupersonicUseTrail(void) {
 }
 
 /**
+ * Draw hook for the Kinesis and Supersonic use animation: loads the shared effect matrix and draws
+ * the grid trail.
  * Moves: Kinesis (use), Supersonic (use)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -239,6 +277,8 @@ void BattleAnim_DrawKinesisSupersonicUseTrail(void) {
 }
 
 /**
+ * Init hook for Sonic Boom's use animation: clears the frame counter, resets the shared matrix and
+ * initializes the four-stream trail pool.
  * Moves: Sonic Boom (use)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -251,6 +291,10 @@ void BattleAnim_SetupSonicBoomUseFourStream(void) {
 }
 
 /**
+ * Update hook for Sonic Boom's use animation: on each of the first 4 frames starts a pale cyan
+ * stream at the secondary owner's bone, fanned out at one of three angles and spinning in a random
+ * direction. Returns -1 (done) at frame 50, otherwise whether the streams have finished (0 for the
+ * first two frames).
  * Moves: Sonic Boom (use)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -268,7 +312,7 @@ s32 BattleAnim_RunSonicBoomUseFourStream(void) {
     f32 sp4C;
 
     D_8219CAC0++;
-    if (D_8219CAC0 >= 0x32) {
+    if (D_8219CAC0 >= 50) {
         return -1;
     }
 
@@ -288,7 +332,7 @@ s32 BattleAnim_RunSonicBoomUseFourStream(void) {
         if (sp64 < 0.0) {
             sp58 = -sp58;
         }
-        FourStreamTrail_Start(sp64, sp60, sp5C, sp58, sp54, sp50, 0xC0, 0xFF, 0xFF, 0x80, (((guRandom() % 2) * 2) - 1) * D_DBL_82197940,
+        FourStreamTrail_Start(sp64, sp60, sp5C, sp58, sp54, sp50, 0xC0, 0xFF, 0xFF, 0x80, (((guRandom() % 2) * 2) - 1) * D_DBL_82197940, // #C0FFFF
                               2.0f, 13.0f, 0x28);
     }
 
@@ -301,6 +345,8 @@ s32 BattleAnim_RunSonicBoomUseFourStream(void) {
 }
 
 /**
+ * Draw hook for Sonic Boom's use animation: from frame 2 on, loads the shared effect matrix and
+ * draws the streams.
  * Moves: Sonic Boom (use)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -315,6 +361,8 @@ void BattleAnim_DrawSonicBoomUseFourStream(void) {
 }
 
 /**
+ * Init hook for Spike Cannon's use animation: clears the frame counter, resets the shared matrix
+ * and initializes the four-stream trail pool.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Spike Cannon.
  */
@@ -325,6 +373,9 @@ void BattleAnim_SetupSpikeCannonUseFourStream(void) {
 }
 
 /**
+ * Update hook for Spike Cannon's use animation: every 4 frames, 4 times, starts a pale cyan stream
+ * from the attacker toward the target, bent to one of three angles. Returns whether the streams
+ * have finished (0 for the first two frames).
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Spike Cannon.
  */
@@ -345,7 +396,7 @@ s32 BattleAnim_RunSpikeCannonUseFourStream(void) {
         sp54 *= 7.0f * __cosf(sp48);
         sp50 = __sinf(sp48) * 10.0f;
         sp4C = 0.0f;
-        SpikeCannonFourStream_Start(sp60, sp5C, sp58, sp54, sp50, 0.0f, 0xD0, 0xFF, 0xFF, 0x80, D_FLT_82197950, 2.0f, 4.0f, 0x28);
+        SpikeCannonFourStream_Start(sp60, sp5C, sp58, sp54, sp50, 0.0f, 0xD0, 0xFF, 0xFF, 0x80, D_FLT_82197950, 2.0f, 4.0f, 0x28); // #D0FFFF
     }
 
     if (D_8219CAC2 >= 2) {
@@ -357,6 +408,8 @@ s32 BattleAnim_RunSpikeCannonUseFourStream(void) {
 }
 
 /**
+ * Draw hook for Spike Cannon's use animation: from frame 2 on, loads the shared effect matrix and
+ * draws the streams.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Spike Cannon.
  */
@@ -369,6 +422,9 @@ void BattleAnim_DrawSpikeCannonUseFourStream(void) {
 }
 
 /**
+ * Init hook for the stinger moves (Poison Sting, Twineedle, Pin Missile, Spike Cannon): resets the
+ * shared matrix, starts one pale cyan stream from the attacker toward the target, and spawns the
+ * needle particle (kind 1) at the start point.
  * Moves: Pin Missile (use), Poison Sting (use), Twineedle (use)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -390,7 +446,7 @@ void BattleAnim_StingerMoves_Init(void) {
     sp4C *= 5.0;
     sp48 *= 5.0;
     sp44 *= 5.0;
-    OwnerAnchoredFourStream_Start(sp58, sp54, sp50, sp4C, sp48, sp44, 0xC0, 0xFF, 0xFF, 0xA0, D_FLT_82197954, 2.0f, 4.0f, 0x28);
+    OwnerAnchoredFourStream_Start(sp58, sp54, sp50, sp4C, sp48, sp44, 0xC0, 0xFF, 0xFF, 0xA0, D_FLT_82197954, 2.0f, 4.0f, 0x28); // #C0FFFF
     sp5C.x = sp58;
     sp5C.y = sp54;
     sp5C.z = sp50;
@@ -398,6 +454,8 @@ void BattleAnim_StingerMoves_Init(void) {
 }
 
 /**
+ * Update hook for the stinger moves: returns -1 (done) at frame 50, otherwise whether the stream
+ * has finished.
  * Moves: Pin Missile (use), Poison Sting (use), Twineedle (use)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -405,7 +463,7 @@ void BattleAnim_StingerMoves_Init(void) {
  */
 s32 BattleAnim_StingerMoves_Update(void) {
     D_8219CB08++;
-    if (D_8219CB08 >= 0x32) {
+    if (D_8219CB08 >= 50) {
         return -1;
     }
 
@@ -413,6 +471,7 @@ s32 BattleAnim_StingerMoves_Update(void) {
 }
 
 /**
+ * Draw hook for the stinger moves: loads the shared effect matrix and draws the stream.
  * Moves: Pin Missile (use), Poison Sting (use), Twineedle (use)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -425,6 +484,7 @@ void BattleAnim_StingerMoves_Draw(void) {
 }
 
 /**
+ * Emits Tri Attack's radial burst (variant A, 9 rays, white) from the attacker toward the target.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Tri Attack.
  */
@@ -440,10 +500,12 @@ void BattleAnim_EmitTriAttackUseRadial(void) {
     sp50 *= 6.0f;
     sp4C *= 6.0f;
     sp48 *= 6.0f;
-    TriAttackRadial_EmitVariantA(sp5C, sp58, sp54, sp50, sp4C, sp48, 9, 0xFF, 0xFF, 0xFF, 0xB4, D_FLT_82197958, 2.0f, 20.0f, 0x3C);
+    TriAttackRadial_EmitVariantA(sp5C, sp58, sp54, sp50, sp4C, sp48, 9, 0xFF, 0xFF, 0xFF, 0xB4, D_FLT_82197958, 2.0f, 20.0f, 0x3C); // #FFFFFF
 }
 
 /**
+ * Init hook for Tri Attack's use animation: clears the frame counter, resets the shared matrix and
+ * the radial pool, and emits the burst.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Tri Attack.
  */
@@ -455,18 +517,22 @@ void BattleAnim_SetupTriAttackUseRadial(void) {
 }
 
 /**
+ * Update hook for Tri Attack's use animation: returns -1 (done) at frame 181, otherwise whether
+ * the radial pool has finished.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Tri Attack.
  */
 s32 BattleAnim_RunTriAttackUseRadial(void) {
     D_8219CB0A++;
-    if (D_8219CB0A >= 0xB5) {
+    if (D_8219CB0A >= 181) {
         return -1;
     }
     return Radial20_IsComplete();
 }
 
 /**
+ * Draw hook for Tri Attack's use animation: loads the shared effect matrix and draws the radial
+ * pool.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Tri Attack.
  */
@@ -477,6 +543,8 @@ void BattleAnim_DrawTriAttackUseRadial(void) {
 }
 
 /**
+ * Starts Aurora Beam's two double-texture beam trails from the attacker toward the target, each
+ * with its own textures, scroll speeds, combiner and colors.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Aurora Beam.
  */
@@ -505,6 +573,8 @@ void BattleAnim_SeedAuroraBeamUseDoubleTextureTrail(void) {
 }
 
 /**
+ * Init hook for Aurora Beam's use animation: resets the shared matrix and the trail pool, then
+ * starts the beams.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Aurora Beam.
  */
@@ -515,6 +585,8 @@ void BattleAnim_SetupAuroraBeamUseDoubleTextureTrail(void) {
 }
 
 /**
+ * Update hook for Aurora Beam's use animation: advances the beam trails and returns whether they
+ * have finished.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Aurora Beam.
  */
@@ -523,6 +595,8 @@ s32 BattleAnim_RunAuroraBeamUseDoubleTextureTrail(void) {
 }
 
 /**
+ * Draw hook for Aurora Beam's use animation: loads the shared effect matrix and draws the beam
+ * trails.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Aurora Beam.
  */
@@ -533,6 +607,8 @@ void BattleAnim_DrawAuroraBeamUseDoubleTextureTrail(void) {
 }
 
 /**
+ * Starts one Ice Beam trail from the attacker toward the target, with the direction jittered at
+ * random.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam.
  */
@@ -560,6 +636,8 @@ void BattleAnim_SeedIceBeamUseSixSlotTrail(void) {
 }
 
 /**
+ * Init hook for Ice Beam's use animation: clears the frame counter, resets the shared matrix and
+ * the six-slot trail pool, and starts the first trail.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam.
  */
@@ -571,6 +649,8 @@ void BattleAnim_SetupIceBeamUseSixSlotTrail(void) {
 }
 
 /**
+ * Update hook for Ice Beam's use animation: starts another trail every 10 frames, advances them,
+ * and returns whether they have finished.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam.
  */
@@ -583,6 +663,7 @@ s32 BattleAnim_RunIceBeamUseSixSlotTrail(void) {
 }
 
 /**
+ * Draw hook for Ice Beam's use animation: loads the shared effect matrix and draws the trails.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam.
  */
@@ -593,6 +674,8 @@ void BattleAnim_DrawIceBeamUseSixSlotTrail(void) {
 }
 
 /**
+ * Starts Psybeam's two double-texture beam trails from the attacker toward the target, each with
+ * its own textures, scroll speeds, combiner and colors.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Psybeam.
  */
@@ -622,6 +705,8 @@ void BattleAnim_SeedPsybeamUseDoubleTextureTrail(void) {
 }
 
 /**
+ * Init hook for Psybeam's use animation: resets the shared matrix and the trail pool, then starts
+ * the beams.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Psybeam.
  */
@@ -632,6 +717,8 @@ void BattleAnim_SetupPsybeamUseDoubleTextureTrail(void) {
 }
 
 /**
+ * Update hook for Psybeam's use animation: advances the beam trails and returns whether they have
+ * finished.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Psybeam.
  */
@@ -640,6 +727,7 @@ s32 BattleAnim_RunPsybeamUseDoubleTextureTrail(void) {
 }
 
 /**
+ * Draw hook for Psybeam's use animation: loads the shared effect matrix and draws the beam trails.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Psybeam.
  */
@@ -717,6 +805,7 @@ void BattleAnim_StartEffect77DoubleTextureTrail_Draw(void) {
 }
 
 /**
+ * Starts Solar Beam's double-texture beam trail from the attacker toward the target.
  * Seen in play (2026-11-13) ran on SolarBeam's second turn, when the charged beam fired (the sweep
  * only saw the charging turn).
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
@@ -744,6 +833,8 @@ void BattleAnim_SeedSolarBeamUseDoubleTextureTrail(void) {
 }
 
 /**
+ * Init hook for Solar Beam's firing animation: resets the shared matrix and the trail pool, then
+ * starts the beam.
  * Seen in play (2026-11-13) ran on SolarBeam's second turn, when the charged beam fired.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
  * breakpoint): ran only for Solar Beam.
@@ -756,6 +847,8 @@ void BattleAnim_SetupSolarBeamUseDoubleTextureTrail(void) {
 }
 
 /**
+ * Update hook for Solar Beam's firing animation: advances the beam trail and returns whether it
+ * has finished.
  * Seen in play (2026-11-13) ran on SolarBeam's second turn, while the charged beam fired.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
  * breakpoint): ran only for Solar Beam.
@@ -766,6 +859,8 @@ s32 BattleAnim_RunSolarBeamUseDoubleTextureTrail(void) {
 }
 
 /**
+ * Draw hook for Solar Beam's firing animation: loads the shared effect matrix and draws the beam
+ * trail.
  * Seen in play (2026-11-13) ran on SolarBeam's second turn, while the charged beam fired.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
  * breakpoint): ran only for Solar Beam.
@@ -778,6 +873,8 @@ void BattleAnim_DrawSolarBeamUseDoubleTextureTrail(void) {
 }
 
 /**
+ * Starts Hyper Beam's two double-texture beam trails from the attacker toward the target, each
+ * with its own textures, scroll speeds, combiner and colors.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Hyper Beam.
  */

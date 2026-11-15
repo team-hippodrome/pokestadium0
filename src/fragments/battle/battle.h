@@ -2956,9 +2956,9 @@ void BattleAnim_CallbackDescriptor25PaletteFadeIn(Particle* arg0);
 void BattleAnim_SetupFireBreathFlameFading(Particle* arg0, s16 arg1);
 void BattleAnim_ContinueFireBreathFlameFading(Particle* arg0);
 void BattleAnim_RunFireBreathFlameFading(Particle* arg0);
-void BattleAnim_SetupUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0);
-void BattleAnim_MotionUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0);
-void BattleAnim_CallbackUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0);
+void BattleAnim_SetupUnusedDesc4FColorCycleScaleFade(Particle* arg0);
+void BattleAnim_MotionUnusedDesc4FColorCycleScaleFade(Particle* arg0);
+void BattleAnim_CallbackUnusedDesc4FColorCycleScaleFade(Particle* arg0);
 void BattleAnim_SetupFireBreathFlameGeometry(Particle* arg0);
 void BattleAnim_ContinueFireBreathFlameGeometry(Particle* arg0);
 void BattleAnim_SetupFireBreathFlameColoration(Particle* arg0, s16 arg1);
@@ -2983,10 +2983,10 @@ void BattleAnim_SetupBackgroundBombExplosion(Particle* arg0);
 void BattleAnim_RunBackgroundBombExplosion(Particle* arg0);
 void BattleAnim_SetupBoomSmallExplosion(Particle* arg0);
 void BattleAnim_SetupEggBombHitEffect(Particle* arg0);
-void BattleAnim_CallbackEndEffect40Descriptor48SpreadScaleAlphaFade(Particle* arg0);
+void BattleAnim_CallbackEnd40Desc48SpreadScaleAlphaFade(Particle* arg0);
 void BattleAnim_SetupSecondaryBombExplosion(Particle* arg0);
 void BattleAnim_SetupEmberHitFireball(Particle* arg0);
-void BattleAnim_CallbackEndEffect56Descriptor46RisingScaleAlphaFade(Particle* arg0);
+void BattleAnim_CallbackEnd56Desc46RisingScaleAlphaFade(Particle* arg0);
 void BattleAnim_SetupEmberHitSmoke(Particle* arg0);
 void BattleAnim_EmberSpreadScaleAlphaRise(Particle* arg0);
 void BattleAnim_SetupFirePunchLingeringHitSpark(Particle* arg0);
@@ -3055,7 +3055,7 @@ void BattleAnim_SetupStrongOutwardMovingSmallHitSpark(Particle* arg0);
 void BattleAnim_SetupUnusedIndexedFadeVariantA(Particle* arg0);
 void BattleAnim_SetupUnusedIndexedFadeVariantB(Particle* arg0);
 void BattleAnim_SetupBubbleBubbleBeamSharedEffect(Particle* arg0);
-void BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade(Particle* arg0);
+void BattleAnim_CallbackEnd34And53Desc45SpinBounceFade(Particle* arg0);
 void BattleAnim_SetupHydroPumpColorShiftFade(Particle* arg0);
 void BattleAnim_SetupWaterGunEmitterColoration(Particle* arg0);
 void BattleAnim_SetupHydroPumpWaterGunProjectileHit(Particle* arg0);
@@ -3066,7 +3066,7 @@ void BattleAnim_InitializeWaterGunHit(void);
 void BattleAnim_InitializeHydroPumpUse(void);
 void BattleAnim_InitializeBubbleBeamHit(void);
 void BattleAnim_InitializeHyperBeamHit(void);
-void BattleAnim_EndEffect71PaletteApproachWithExpandingScaleFades(void);
+void BattleAnim_End71PaletteApproachExpandingScaleFades(void);
 void BattleAnim_InitializeTriAttackHit(void);
 
 // anim_electric_effects.c
@@ -3081,9 +3081,9 @@ void BattleAnim_RunRandomRotatingBoltOfLightning(Particle* arg0);
 void BattleAnim_SetupSharedDirectionalSprayFade(Particle* arg0);
 void BattleAnim_SetupDirectionalSprayScaledFade(Particle* arg0);
 void BattleAnim_SetupThunderShockOuterJolts(Particle* arg0);
-void BattleAnim_SetupUnregisteredStraightDirectionalStreamFade(Particle* arg0);
-void BattleAnim_SetupEndEffect28Descriptor10UpwardBurstFade(Particle* arg0);
-void BattleAnim_SetupEndEffect28Descriptor10WideScatterBurstFade(Particle* arg0);
+void BattleAnim_SetupUnregisteredStraightDirStreamFade(Particle* arg0);
+void BattleAnim_SetupEnd28Desc10UpwardBurstFade(Particle* arg0);
+void BattleAnim_SetupEnd28Desc10WideScatterBurstFade(Particle* arg0);
 void BattleAnim_InitializeThunderThunderboltUse(void);
 void BattleAnim_InitializeThunderShockUse(void);
 void BattleAnim_InitializeThunderPunchUse(void);
@@ -3091,22 +3091,22 @@ void BattleAnim_InitializeHyperBeamHitSequence(void);
 
 // anim_start_effects.c
 void BattleAnim_StartEffect139SparkleGridRise(void);
-void BattleAnim_InitStartEffect135Descriptor1CRisingScale(Particle* arg0);
-void BattleAnim_CallbackStartEffect135Descriptor1CRisingScaleFade(Particle* arg0);
-void BattleAnim_CallbackStartEffect135ExpandingFlashFade(Particle* arg0);
-void BattleAnim_InitStartEffect139Descriptor42FallingScale(Particle* arg0);
-void BattleAnim_CallbackStartEffect139Descriptor42FallingScaleFade(Particle* arg0);
+void BattleAnim_InitStart135Desc1CRisingScale(Particle* arg0);
+void BattleAnim_CallbackStart135Desc1CRisingScaleFade(Particle* arg0);
+void BattleAnim_CallbackStart135ExpandingFlashFade(Particle* arg0);
+void BattleAnim_InitStart139Desc42FallingScale(Particle* arg0);
+void BattleAnim_CallbackStart139Desc42FallingScaleFade(Particle* arg0);
 void BattleAnim_InitStartEffect139Descriptor22SpinFade(Particle* arg0);
 void BattleAnim_InitStartEffect141Descriptor1CGridRise(Particle* arg0);
-void BattleAnim_CallbackStartEffect141Descriptor1CGridRiseFade(Particle* arg0);
+void BattleAnim_CallbackStart141Desc1CGridRiseFade(Particle* arg0);
 void BattleAnim_InitExplosionOrbit(Particle* arg0);
 void BattleAnim_ExplosionOrbitSwirl(Particle* arg0);
 void BattleAnim_InitExplosionBurst(Particle* arg0);
 void BattleAnim_ExplosionBurstEmitter(Particle* arg0);
-void BattleAnim_StartEffect135ExpandingFlashAndRisingScaleFade(void);
+void BattleAnim_Start135ExpandingFlashAndRisingScale(void);
 void BattleAnim_StartEffect134ModeOrbitAndMetadataBurst(void);
 void BattleAnim_StartEffect143ModeOrbitAndMetadataBurst(void);
-void BattleAnim_StartEffect133ModeOrbitBurstAndEffect135Followup(void);
+void BattleAnim_Start133OrbitBurstThenStart135(void);
 void BattleAnim_StartEffect122GlobalAndOwnerTintFade(void);
 void BattleAnim_StartEffect138(void);
 void BattleAnim_StartEffect137RiseFadePair(void);
@@ -3272,18 +3272,18 @@ void BattleAnim_InitializeDrillPeckUse(void);
 void BattleAnim_InitializeDrillPeckHit(void);
 void BattleAnim_InitializeHornDrillUse(void);
 void BattleAnim_InitializeVerticalLandingHitSpark(void);
-void BattleAnim_CallbackStartEffects127And128Descriptor39ScaleFade_InitParticle(Particle* arg0);
+void BattleAnim_CallbackStart127And128Desc39_Init(Particle* arg0);
 void BattleAnim_StartEffect127Descriptor39ScaleFade(void);
 void BattleAnim_StartEffect128Descriptor39ScaleFade(void);
 void ParticleEffect_CreateTypeX(void);
 void ParticleEffect_CreateSmoke(void);
 void ParticleEffect_CreateSmokeHighPriority(void);
-void BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade_InitParticle(Particle* arg0);
+void BattleAnim_CallbackStart132Desc39Rise_InitParticle(Particle* arg0);
 void ParticleEffect_CreateDual(void);
 void BattleAnim_ConfuseRayAmnesiaModelAnimWait(Particle* arg0);
 void ParticleEffect_DrawNode(Gfx* arg0, s32 arg1, u16 arg2);
 void BattleAnim_RunDizzyPunchHitEffect(Particle* arg0);
-void BattleAnim_CallbackEndEffect49Model33Anim34WaitCleanup(Particle* arg0);
+void BattleAnim_CallbackEnd49Model33Anim34WaitCleanup(Particle* arg0);
 void BattleAnim_BuildEffect49DisplayList(Gfx* arg0, UNUSED s32 arg1, UNUSED u16 arg2);
 void BattleAnim_RunFlyUpwardMovementEffect(Particle* arg0);
 void BattleAnim_BuildEffect63DisplayList(Gfx* arg0, s32 arg1, u16 arg2);
@@ -3308,7 +3308,7 @@ void BattleAnim_CallbackStartEffect101ModelBurstEmitter(Particle* arg0);
 void BattleAnim_RunPsywaveEffect(Particle* arg0);
 void Gfx_SimpleNodeDL(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg2);
 void ParticleEffect_DrawQuad(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg2);
-void BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade(Particle* arg0);
+void BattleAnim_CallbackStart132Desc39DelayedRiseFade(Particle* arg0);
 void BattleAnim_InitializeScreenMove(void);
 void BattleAnim_ApplyEffect125ModelScaleOffset(Particle* arg0);
 void BattleAnim_InitEffect125Model(Particle* arg0, UNUSED s16 arg1);
@@ -3340,7 +3340,7 @@ void BattleAnim_LeechSeedParticleUpdate(Particle* arg0);
 void BattleAnim_CallbackStartEffect8ModelBurstEmitter(Particle* arg0);
 void BattleAnim_InitEffect31Model(Particle* arg0);
 M2C_UNK func_82155878(s8 *);                      /* extern */
-void BattleAnim_CallbackMove73EndEffect31SpawnDescriptor42(Particle* arg0);
+void BattleAnim_CallbackMove73End31SpawnDesc42(Particle* arg0);
 void BattleAnim_InitializeLeechSeedUse(void);
 M2C_UNK func_82155CC0(s8 *);                      /* extern */
 void BattleAnim_BlizzardParticleUpdate(s8 *arg0);
@@ -3361,14 +3361,14 @@ void BattleAnim_InitializeSoftBoiledUse(void);
 M2C_UNK func_82157DA0(s8 *);                      /* extern */
 void BattleAnim_CallbackStartEffect10Model60AlphaFadeIn(s8 *arg0);
 void BattleAnim_RunBoomUseEffect1(Particle* arg0);
-void BattleAnim_CallbackStartEffects50And82ScalePulse_InitParticle(Particle* arg0);
+void BattleAnim_CallbackStart50And82Pulse_InitParticle(Particle* arg0);
 void BattleAnim_RunBoomUseEffect2(Particle* arg0);
 void BattleAnim_SetupBoomUseEffect3(Particle* arg0);
 M2C_UNK func_82158344(s8 *);                      /* extern */
 void BattleAnim_RunBoomUseEffect3(Particle* arg0);
 M2C_UNK func_8215856C(s8 *);                      /* extern */
 void BattleAnim_RunBoomUseEffect4(Particle* arg0);
-void BattleAnim_CallbackStartEffects50And82CenterModelScalePaletteFade(Particle* arg0);
+void BattleAnim_CallbackStart50And82ModelScalePalFade(Particle* arg0);
 void BattleAnim_RunBoomUseEffect6(Particle* arg0);
 void BattleAnim_RunBoomHitEffect1(Particle* arg0);
 void BattleAnim_SetupBoomHitEffect2(Particle* arg0);
@@ -3379,7 +3379,7 @@ void BattleAnim_RunBoomHitEffect3(Particle* arg0);
 void BattleAnim_InitializeBoomUse(void);
 void BattleAnim_InitializeBoomHit(void);
 M2C_UNK func_821597D0(s8 *);                      /* extern */
-void BattleAnim_CallbackStartEffects71And74And111SpecialModelColorCycle(s8 *arg0);
+void BattleAnim_CallbackStart71And74And111ColorCycle(s8 *arg0);
 void BattleAnim_InitializeGuillotineHit(void);
 void BattleAnim_CallbackStartEffect69ModelPhaseWait(Particle* arg0);
 void BattleAnim_InitializeDigBurrowUse(void);
@@ -3394,13 +3394,13 @@ void BattleAnim_InitializeLickUse(void);
 f32 BattleAnim_OffsetAndScaleParticleForLargeSpecies(Particle* arg0);
 void BattleAnim_InitializeLovelyKissUse(void);
 void BattleAnim_InitializeLovelyKissHit(void);
-void BattleAnim_CallbackStartEffects95To97EndEffects62And63ModelFadeIn_InitParticle(s8 *arg0);
+void BattleAnim_CallbackStart95To97End62And63Fade_Init(s8 *arg0);
 void BattleAnim_InitializeDreamEaterUse(void);
 void BattleAnim_CreateDrainingMoveOverlay(void);
 void BattleAnim_InitializeNightShadeUse(void);
 void BattleAnim_InitializeNightShadeHit(void);
 M2C_UNK func_8215C8FC(s8 *);                      /* extern */
-void BattleAnim_CallbackStartEffects21And93ModelAlphaAnchorFollow(Particle* arg0);
+void BattleAnim_CallbackStart21And93ModelAlphaAnchor(Particle* arg0);
 M2C_UNK func_8215CA14();                            /* extern */
 void BattleAnim_ConfuseRayParticleUpdate(Particle* arg0);
 void BattleAnim_EndEffect51GlobalTintFade(void);
@@ -3412,9 +3412,9 @@ void BattleAnim_InitializeSurfUseSpray(void);
 void BattleAnim_InitializeSurfHit(void);
 void BattleAnim_InitializeCrabhammerUse(void);
 M2C_UNK func_8215D724(s8 *);                      /* extern */
-void BattleAnim_CallbackStartEffect101EndEffect65Descriptor4ABurstChild(Particle* arg0);
+void BattleAnim_CallbackStart101End65Desc4ABurstChild(Particle* arg0);
 M2C_UNK func_8215DA5C(s8 *);                      /* extern */
-void BattleAnim_CallbackMove140EndEffect65EmitDescriptor4A(Particle* arg0);
+void BattleAnim_CallbackMove140End65EmitDesc4A(Particle* arg0);
 void BattleAnim_InitializePsywaveHit(void);
 void BattleAnim_RunConfusionPsychicHitEffect(Particle* arg0);
 void BattleAnim_InitializePsychicUse(void);
@@ -3431,10 +3431,10 @@ void BattleAnim_InitializeHornDrillHit(void);
 void BattleAnim_RunWeakSpear(Particle* arg0);
 void BattleAnim_InitializeFuryAttackPeckUse(void);
 void BattleAnim_InitializeHornAttackUse(void);
-void BattleAnim_CallbackEndEffect79DefaultDescriptorPaletteFade(Particle* arg0);
+void BattleAnim_CallbackEnd79DefaultDescPaletteFade(Particle* arg0);
 void BattleAnim_InitializeSonicBoomUse(void);
 M2C_UNK func_8215F2B8(s8 *);                      /* extern */
-void BattleAnim_CallbackStartEffects127And128Descriptor39ScaleFade(Particle* arg0);
+void BattleAnim_CallbackStart127And128Desc39ScaleFade(Particle* arg0);
 M2C_UNK func_8215E510();                            /* extern */
 
 // anim_contact_effects.c
@@ -3445,7 +3445,7 @@ void BattleAnim_HeavyHitBurstChild_InitParticle(Particle* arg0);
 void BattleAnim_SetupSandAttackHitEffect(Particle* arg0);
 void BattleAnim_HeavyHitAnimatedRiseFade_InitParticle(Particle* arg0);
 void BattleAnim_SetupIceBeamIcePunchEffect(Particle* arg0);
-void BattleAnim_CallbackOrphanDescriptor34ColorFadeDetach_InitParticle(Particle* arg0);
+void BattleAnim_CallbackOrphanDesc34Fade_InitParticle(Particle* arg0);
 void BattleAnim_SetupGroundedCircularHitSpark(Particle* arg0);
 void BattleAnim_SetupUnusedGlitterVariant(Particle* arg0);
 void BattleAnim_SetupPointyMoveHitSparkChild(Particle* arg0);
@@ -3497,7 +3497,7 @@ M2C_UNK func_82160DC4(s8 *);                      /* extern */
 void BattleAnim_RunSandAttackHitEffect(Particle* arg0);
 M2C_UNK func_82161190(s8 *);                      /* extern */
 M2C_UNK func_82161358(s8 *);                      /* extern */
-void BattleAnim_CallbackOrphanDescriptor34ColorFadeDetach(Particle* arg0);
+void BattleAnim_CallbackOrphanDesc34ColorFadeDetach(Particle* arg0);
 M2C_UNK func_821615F8(s8 *);                      /* extern */
 void BattleAnim_CallbackAccelerateFadeParticle(Particle* arg0);
 M2C_UNK func_8216177C(s8 *);                      /* extern */
@@ -3510,7 +3510,7 @@ void BattleAnim_RunFirePunchUseEffect1(Particle* arg0);
 M2C_UNK func_821635E4(s8 *);                      /* extern */
 void BattleAnim_FirePunchParticleUpdate(Particle* arg0);
 M2C_UNK func_82163884(s8 *);                      /* extern */
-void BattleAnim_CallbackStartEffect73Descriptor15AnimatedColorImpulseFade(Particle* arg0);
+void BattleAnim_CallbackStart73Desc15ColorImpulseFade(Particle* arg0);
 M2C_UNK func_82163C28(s8 *);                      /* extern */
 void BattleAnim_AcidArmorParticleUpdateB(Particle* arg0);
 void BattleAnim_AcidArmorParticleUpdateA(s8 *arg0);
@@ -3518,7 +3518,7 @@ void BattleAnim_AcidArmorParticleUpdateA(s8 *arg0);
 // anim_contact_effects_2.c
 void BattleAnim_ApplySpeciesKeyedSpawnOffset(Particle* arg0);
 void BattleAnim_SetupBarrageUseEffect2(Particle* arg0);
-void BattleAnim_CallbackDescriptor50BurstChild_InitParticle(Particle* arg0);
+void BattleAnim_CallbackDesc50BurstChild_InitParticle(Particle* arg0);
 void BattleAnim_EndEffect16_NoOpInit(void);
 void BattleAnim_SetupSolarBeamUseEffect(Particle* arg0);
 void BattleAnim_SetupQiChargeChild(Particle* arg0);
@@ -3530,18 +3530,18 @@ void BattleAnim_RunSplashOfWater(Particle* arg0);
 void BattleAnim_RunBarrageUseEffect2(Particle* arg0);
 M2C_UNK func_82165100(s8 *);                      /* extern */
 void BattleAnim_CallbackDescriptor50BurstChild(Particle* arg0);
-void BattleAnim_CallbackDescriptor50BurstEmitter_InitParticle(Particle* arg0);
+void BattleAnim_CallbackDesc50BurstEmitter_InitParticle(Particle* arg0);
 void BattleAnim_CallbackDescriptor50BurstEmitter(Particle* arg0);
 void BattleAnim_CallbackVerticalFadeBurstChild(Particle* arg0);
 void BattleAnim_RunSolarBeamUseEffect(Particle* arg0);
 void BattleAnim_RunQiChargeChild(Particle* arg0);
 void BattleAnim_SetupQiCharge(Particle* arg0);
 void func_82165854(Particle* arg0);
-void BattleAnim_CallbackDescriptor26BurstChild_InitParticle(Particle* arg0);
+void BattleAnim_CallbackDesc26BurstChild_InitParticle(Particle* arg0);
 
 // anim_contact_effects_3.c
 void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0);
-void BattleAnim_CallbackDescriptor26BurstEmitter_InitParticle(s32 arg0);
+void BattleAnim_CallbackDesc26BurstEmitter_InitParticle(s32 arg0);
 void BattleAnim_CallbackDescriptor26BurstEmitter(Particle* arg0);
 void BattleAnim_SetupUnusedGrowingSparkVariant(Particle* arg0);
 
@@ -3999,14 +3999,14 @@ s32 Diorama_ScaleRotateCallbackA(s32, GraphNode*);
 s32 Diorama_ScaleRotateCallbackB(s32, GraphNode*);
 s32 Diorama_GroupStateCallback(s32, GraphNode*);
 void BattleAnim_CallbackMove86StartDescriptor24(Particle* arg0);
-void BattleAnim_CallbackMove73EndEffect31SpawnDescriptor42(Particle* arg0);
+void BattleAnim_CallbackMove73End31SpawnDesc42(Particle* arg0);
 void BattleAnim_CallbackEndEffects10And50ModelAnimColorFade(Particle* arg0);
-void BattleAnim_CallbackStartEffects21And93ModelAlphaAnchorFollow(Particle* arg0);
-void BattleAnim_CallbackMove140EndEffect65EmitDescriptor4A(Particle* arg0);
-void BattleAnim_CallbackEndEffect79DefaultDescriptorPaletteFade(Particle* arg0);
-void BattleAnim_CallbackStartEffects127And128Descriptor39ScaleFade(Particle* arg0);
+void BattleAnim_CallbackStart21And93ModelAlphaAnchor(Particle* arg0);
+void BattleAnim_CallbackMove140End65EmitDesc4A(Particle* arg0);
+void BattleAnim_CallbackEnd79DefaultDescPaletteFade(Particle* arg0);
+void BattleAnim_CallbackStart127And128Desc39ScaleFade(Particle* arg0);
 M2C_UNK BattleAnim_InitializeQuickAttackHiJumpKickUse();                            /* extern */
-void BattleAnim_CallbackOrphanDescriptor34ColorFadeDetach(Particle* arg0);
+void BattleAnim_CallbackOrphanDesc34ColorFadeDetach(Particle* arg0);
 void BattleAnim_CallbackSharedAnimatedVerticalFade(Particle* arg0);
 void BattleAnim_InitializeCutUse(void);
 s32 BattleScene_Init(s32* arg0);
@@ -4043,42 +4043,42 @@ void BattleAnim_CallbackEndEffects81And82Descriptor46AnimatedFade(Particle* arg0
 void BattleAnim_CallbackEndEffect40Descriptor3DSpreadRisingColorFade(Particle* arg0);
 void BattleAnim_CallbackEndEffects54And56Descriptor3DRisingColorScaleFade(Particle* arg0);
 void BattleAnim_CallbackEndEffects40And54Descriptor46SpreadScaleFade(Particle* arg0);
-void BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade(Particle* arg0);
+void BattleAnim_CallbackEnd15And22And59Desc3DSpinFade(Particle* arg0);
 void BattleAnim_CallbackEndEffect59Descriptor4FColorScaleFade(Particle* arg0);
 void BattleAnim_CallbackEndEffect16Descriptor45DelayedRotatingMotion(Particle* arg0);
-void BattleAnim_CallbackStartEffect58Descriptor0ABurstChild(Particle* arg0);
-void BattleAnim_CallbackStartEffect58Descriptor08MetadataBurstChild(Particle* arg0);
-void BattleAnim_CallbackStartEffect6Descriptor0ABurstChild(Particle* arg0);
-void BattleAnim_CallbackStartEffect6Descriptor08MetadataBurstChild(Particle* arg0);
+void BattleAnim_CallbackStart58Desc0ABurstChild(Particle* arg0);
+void BattleAnim_CallbackStart58Desc08MetadataBurstChild(Particle* arg0);
+void BattleAnim_CallbackStart6Desc0ABurstChild(Particle* arg0);
+void BattleAnim_CallbackStart6Desc08MetadataBurstChild(Particle* arg0);
 void BattleAnim_CallbackSharedDescriptor19AnimatedFadeMotion(Particle* arg0);
 void BattleAnim_CallbackEndEffect2Descriptor19AnimatedAlphaFade(Particle* arg0);
 void BattleAnim_CallbackSharedDescriptor19RecolorAnimatedFade(Particle* arg0);
 void BattleAnim_CallbackEndEffect86Descriptor19ModePositionedAnimFade(Particle* arg0);
-void BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade(Particle* arg0);
+void BattleAnim_CallbackSharedDesc19DelayedAnimGrowFade(Particle* arg0);
 void BattleAnim_CallbackEndEffect2Descriptor4BModeColorShiftFade(Particle* arg0);
 void BattleAnim_CallbackEndEffects2And27Descriptor0AFallingSparkFade(Particle* arg0);
-void BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade(Particle* arg0);
+void BattleAnim_CallbackStart18And73Desc11ScatterRise(Particle* arg0);
 void BattleAnim_CallbackSharedDirectionalSprayFade(Particle* arg0);
-void BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade(Particle* arg0);
-void BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade(Particle* arg0);
+void BattleAnim_CallbackSharedDesc13DirSprayScaledFade(Particle* arg0);
+void BattleAnim_CallbackStart59End28DirStreamFade(Particle* arg0);
 void BattleAnim_InitStartEffect135ExpandingFlash(s32 arg0);
 void BattleAnim_CallbackOrphanDescriptor2EScatterFade(Particle* arg0);
 void BattleAnim_CallbackStartEffects50And82Descriptor48AnimatedScaleFade(Particle* arg0);
 void BattleAnim_CallbackStartEffects50And82Descriptor4AAnimatedVerticalFade(Particle* arg0);
-void BattleAnim_CallbackStartEffects50And82CenterModelScalePaletteFade(Particle* arg0);
+void BattleAnim_CallbackStart50And82ModelScalePalFade(Particle* arg0);
 void BattleAnim_CallbackEndEffects81And82ModelScalePaletteFade(Particle* arg0);
 void BattleAnim_CallbackEndEffects81And82Descriptor4AAnimatedColorFade(Particle* arg0);
 void BattleAnim_CallbackEndEffects81And82Descriptor4FAnimatedPaletteFade(Particle* arg0);
-void BattleAnim_CallbackStartEffect101EndEffect65Descriptor4ABurstChild(Particle* arg0);
+void BattleAnim_CallbackStart101End65Desc4ABurstChild(Particle* arg0);
 void BattleAnim_CallbackSharedDescriptor29ScaleAnimFade(Particle* arg0);
 void BattleAnim_CallbackSharedOwnerKeyedGrowColorFade(Particle* arg0);
 void BattleAnim_CallbackSharedOwnerKeyedGrowColorAlphaFade(Particle* arg0);
 void BattleAnim_SlashGrowFade(Particle* arg0);
 void BattleAnim_HeavyHitBurstChild(Particle* arg0);
 void BattleAnim_CallbackEndEffect55Descriptor49RiseGravityFade(Particle* arg0);
-void BattleAnim_CallbackEndEffect67Descriptor3DAnimatedGravityFade(Particle* arg0);
+void BattleAnim_CallbackEnd67Desc3DAnimatedGravityFade(Particle* arg0);
 void BattleAnim_CallbackEndEffects37And38Descriptor38BurstChild(Particle* arg0);
-void BattleAnim_CallbackStartEffect73Descriptor15AnimatedColorImpulseFade(Particle* arg0);
+void BattleAnim_CallbackStart73Desc15ColorImpulseFade(Particle* arg0);
 void BattleAnim_PowderCloudScaleMotion(Particle* arg0);
 void BattleAnim_CallbackEndEffect16MultiDescriptorAnimatedFallFade(Particle* arg0);
 void BattleAnim_CallbackDescriptor50BurstChild(Particle* arg0);

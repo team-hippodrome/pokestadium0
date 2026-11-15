@@ -44,7 +44,7 @@ void BattleAnim_RunSlowFallingHitEffect(Particle* arg0);
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_UnusedResetAppearanceAndAdvance(Particle* arg0) {
-    Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
+    Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF); // #FFFFFF
     Particle_SetPrimAlpha(arg0, 0xFF);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -209,7 +209,7 @@ void BattleAnim_CallbackOrphanDescriptor2EScatterFade(Particle* particle) {
         }
         break;
     case 3:
-        func_8213CA80(particle, 0x46);
+        func_8213CA80(particle, 70);
         break;
     case 4:
         Particle_DisableAndDetach(particle);
@@ -222,6 +222,9 @@ void BattleAnim_CallbackOrphanDescriptor2EScatterFade(Particle* particle) {
 }
 
 /**
+ * Inits a lingering Petal Dance petal: scale 0.12, a random slow fall, random rotationX, rotationZ
+ * and spin rates, speed 5, raised up to 29 units, hidden for a start delay of twice its spawn
+ * index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Petal Dance.
  */
@@ -229,7 +232,7 @@ void BattleAnim_SetupPetalDanceLingeringHitEffect(Particle* arg0) {
     s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
 
     Particle_SetScaleScaled(arg0, 0.12f);
-    Particle_MotionStep_SetYScaled_0AF24(arg0, (ParticleMath_RandomRange(0x14) * 0.02f) + 0.25f);
+    Particle_MotionStep_SetYScaled_0AF24(arg0, (ParticleMath_RandomRange(20) * 0.02f) + 0.25f);
     Particle_Rotation_SetX_0A2A4(arg0, ParticleMath_RandomRange(0x10000));
     Particle_Rotation_SetZ_0A2CC(arg0, ParticleMath_RandomRange(0x10000));
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, 5.0f);
@@ -238,7 +241,7 @@ void BattleAnim_SetupPetalDanceLingeringHitEffect(Particle* arg0) {
     Particle_ScratchB_SetS16_0BFEC(arg0, ParticleMath_RandomSignedOffsetBySign(0x800, 0x300));
     Particle_RotationStep_SetY_0A3D8(arg0, ParticleMath_RandomRange(0x10000));
     Particle_RotationStep_SetZ_0A3EC(arg0, ParticleMath_RandomSignedOffsetBySign(0x800, 0x300));
-    Particle_PositionOffset_AddYScaled_08E90(arg0, ParticleMath_RandomRange(0x1E));
+    Particle_PositionOffset_AddYScaled_08E90(arg0, ParticleMath_RandomRange(30));
     Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
     Particle_DisableRendering(arg0);
     Particle_AdvanceLifecycle(arg0);
@@ -326,6 +329,9 @@ void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
 }
 
 /**
+ * Inits a slowly falling hit petal: per-variant scale, fall speed, height and sideways velocity,
+ * then random rotation and spin rates, speed 15 to 34, hidden for a start delay of twice its spawn
+ * index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Vine Whip and Wing Attack.
  */
@@ -338,24 +344,24 @@ void BattleAnim_SetupSlowFallingHitEffect(Particle* arg0) {
     switch (sp24) {
         case 0:
             Particle_SetScaleScaled(arg0, 0.12f);
-            arg0->motionTarget.y = -((ParticleMath_RandomRange(0xA) * 0.1f) + 0.5f);
-            Particle_PositionOffset_AddYScaled_08E90(arg0, ParticleMath_RandomRange(0x28) + 0x1E);
-            Particle_SetRandomVelocityXSymmetric(arg0, 0x1E, 0);
-            Particle_SetRandomVelocityZSymmetric(arg0, 0x1E, 0);
+            arg0->motionTarget.y = -((ParticleMath_RandomRange(10) * 0.1f) + 0.5f);
+            Particle_PositionOffset_AddYScaled_08E90(arg0, ParticleMath_RandomRange(40) + 30);
+            Particle_SetRandomVelocityXSymmetric(arg0, 30, 0);
+            Particle_SetRandomVelocityZSymmetric(arg0, 30, 0);
             break;
 
         case 1:
             Particle_SetScaleScaled(arg0, 0.2f);
             arg0->motionTarget.y = -((ParticleMath_RandomRange(4) * 0.1f) + 0.2f);
-            Particle_PositionOffset_AddYScaled_08E90(arg0, ParticleMath_RandomSigned(0x14) + 0x1E);
+            Particle_PositionOffset_AddYScaled_08E90(arg0, ParticleMath_RandomSigned(20) + 30);
             Particle_SetRandomVelocityXSymmetric(arg0, 0xF, 5);
-            Particle_SetRandomVelocityZSymmetric(arg0, 0x14, 5);
+            Particle_SetRandomVelocityZSymmetric(arg0, 20, 5);
             break;
     }
 
     Particle_Rotation_SetX_0A2A4(arg0, ParticleMath_RandomRange(0x10000));
     Particle_Rotation_SetZ_0A2CC(arg0, ParticleMath_RandomRange(0x10000));
-    Particle_StepMagnitude_SetScaled_0AD8C(arg0, ParticleMath_RandomRange(0x14) + 15.0f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, ParticleMath_RandomRange(20) + 15.0f);
     Particle_ScratchA_SetS16_0BF4C(arg0, ParticleMath_RandomRange(0x300) + 0x400);
     Particle_RotationStep_SetY_0A3D8(arg0, ParticleMath_RandomRange(0x10000));
     Particle_RotationStep_SetX_0A3C4(arg0, ParticleMath_RandomSignedOffsetBySign(0x800, 0x400));
@@ -368,7 +374,8 @@ void BattleAnim_SetupSlowFallingHitEffect(Particle* arg0) {
 void func_8213E1FC(Particle* arg0, f32 arg1);
 void Particle_ApplyRotationStepX(Particle* arg0);
 /**
- * Handles the leaves that spawn when being hit by vine whip and the feathers that spawn when being hit by wing attack
+ * Handles the leaves that spawn when being hit by vine whip and the feathers that spawn when being
+ * hit by wing attack
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Vine Whip and Wing Attack.
  */
@@ -455,7 +462,7 @@ void BattleAnim_OrphanDescriptor2BAnd2EEmitterSequence(void) {
  * ran for exactly Petal Dance.
  */
 void BattleAnim_InitializePetalDanceHit(void) {
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 2, 0x14, BattleAnim_RunPetalDanceLingeringHitEffect, &gBattleAnimParticleDescriptors[0x2C], 0, 4, 0xE, 0, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 2, 20, BattleAnim_RunPetalDanceLingeringHitEffect, &gBattleAnimParticleDescriptors[0x2C], 0, 4, 0xE, 0, 0, 0);
     BattleAnim_InitializePetalDanceHitSequence();
 }
 

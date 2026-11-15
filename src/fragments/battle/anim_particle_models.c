@@ -77,8 +77,8 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
         case 4:
             sp2A = 0x78;
             sp28 = 0x79;
-            Particle_SetPrimColor(arg0, 0x50, 0x46, 0x3C);
-            Particle_SetEnvColor(arg0, 0xFF, 0, 0);
+            Particle_SetPrimColor(arg0, 0x50, 0x46, 0x3C); // #50463C
+            Particle_SetEnvColor(arg0, 0xFF, 0, 0); // #FF0000
             break;
 
         case 5:
@@ -228,8 +228,8 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
         case 25:
             sp2A = 0xAF;
             sp28 = 0xB0;
-            Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0);
-            Particle_SetEnvColor(arg0, 0xFF, 0, 0);
+            Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0); // #FFFF00
+            Particle_SetEnvColor(arg0, 0xFF, 0, 0); // #FF0000
             Particle_PositionOffset_SetYScaled_08CA0(arg0, 10.0f);
             break;
 
@@ -242,8 +242,8 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
             sp2A = 0xB3;
             sp28 = 0xB4;
             Particle_SetPrimAlpha(arg0, 0x64);
-            Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0);
-            Particle_SetEnvColor(arg0, 0xFF, 0, 0);
+            Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0); // #FFFF00
+            Particle_SetEnvColor(arg0, 0xFF, 0, 0); // #FF0000
             sp2C = 0.8f;
             break;
 
@@ -251,8 +251,8 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
             sp2A = 0xB3;
             sp28 = 0xB5;
             Particle_SetPrimAlpha(arg0, 0x64);
-            Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0);
-            Particle_SetEnvColor(arg0, 0xFF, 0, 0);
+            Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0); // #FFFF00
+            Particle_SetEnvColor(arg0, 0xFF, 0, 0); // #FF0000
             sp2C = 0.8f;
             break;
 
@@ -325,8 +325,8 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
         case 39:
             sp2A = 0x4D;
             sp28 = 0x4E;
-            Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
-            Particle_SetEnvColor(arg0, 0x37, 0xFF, 0xFF);
+            Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF); // #FFFFFF
+            Particle_SetEnvColor(arg0, 0x37, 0xFF, 0xFF); // #37FFFF
             break;
 
         case 40:
@@ -386,9 +386,10 @@ void BattleAnim_CallbackInitModelAnimWait(Particle* arg0) {
 }
 
 /**
- * Moves: Barrier (use), Defense Curl (use), Dig (use/hit), Earthquake (hit), Fissure (hit), Light Screen
- * (use), Pay Day (hit), Reflect (use), Sharpen (use), Withdraw (use)
- * TODO: Human contributor add screenshot
+ * Particle callback that only picks model frame set 0 on its first frame.
+ * Moves: Barrier (use), Defense Curl (use), Dig (use/hit), Earthquake (hit), Fissure (hit), Light
+ * Screen (use), Pay Day (hit), Reflect (use), Sharpen (use), Withdraw (use) TODO: Human contributor
+ * add screenshot
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
@@ -421,6 +422,8 @@ void BattleAnim_RunScaryEyes(Particle* arg0) {
 }
 
 /**
+ * Particle callback for Dream Eater's use model: picks model frame set 1, waits for its animation
+ * to finish, then detaches.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Dream Eater.
  */
@@ -455,9 +458,11 @@ void BattleAnim_CallbackInitModelAnimMode2(Particle* arg0) {
 }
 
 /**
- * Moves: Absorb (use), Bide (use), Confusion (use), Focus Energy (use), Leech Life (use), Mega Drain (use),
- * Psychic (use), Rage (use), Solar Beam (use), Waterfall (use/hit)
- * TODO: Human contributor add screenshot
+ * Particle callback for a full-screen color overlay: picks model frame set 2, then fades its alpha
+ * toward param0 at the rate in its variant field.
+ * Moves: Absorb (use), Bide (use), Confusion (use), Focus Energy (use), Leech Life (use), Mega
+ * Drain (use), Psychic (use), Rage (use), Solar Beam (use), Waterfall (use/hit) TODO: Human
+ * contributor add screenshot
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
@@ -662,6 +667,8 @@ void BattleAnim_SetupMove86EndDescriptor24(Particle* arg0) {
 }
 
 /**
+ * Particle callback for Thunder Wave's hit: inits it as the move 86 end particle, waits out its
+ * timer, fades out, then detaches. Every frame it shrinks toward 0 and moves the way it faces.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Thunder Wave.
  */
@@ -756,19 +763,21 @@ void BattleAnim_CallbackMove86StartDescriptor24(Particle* particle) {
         Particle_DisableAndDetach(particle);
         break;
     }
-    func_82140228(particle, 0x41200000, 0x3D4CCCCD);
+    func_82140228(particle, 0x41200000, 0x3D4CCCCD); // 10.0f, 0.05f
     Particle_MoveXZAlongRotationY(particle);
 }
 
 /**
+ * Effect script for Thunder Wave's use: a marker at frame 85 and three rings of 12 sparks, one
+ * every 8 frames.
  * Effect start init 38 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Thunder Wave.
  */
 void BattleAnim_InitializeThunderWaveUse(void) {
-    BattleAnim_SpawnCategory17MarkerSlot(0x55, 1);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 8, 0xC, BattleAnim_CallbackMove86StartDescriptor24, &gBattleAnimParticleDescriptors[0x24], 0xA, 1, 4, 0, 0, 0);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 8, 0xC, BattleAnim_CallbackMove86StartDescriptor24, &gBattleAnimParticleDescriptors[0x24], 0xA, 1, 4, 1, 0, 0);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 8, 0xC, BattleAnim_CallbackMove86StartDescriptor24, &gBattleAnimParticleDescriptors[0x24], 0xA, 1, 4, 2, 0, 0);
+    BattleAnim_SpawnCategory17MarkerSlot(85, 1);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 8, 12, BattleAnim_CallbackMove86StartDescriptor24, &gBattleAnimParticleDescriptors[0x24], 0xA, 1, 4, 0, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 8, 12, BattleAnim_CallbackMove86StartDescriptor24, &gBattleAnimParticleDescriptors[0x24], 0xA, 1, 4, 1, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 8, 12, BattleAnim_CallbackMove86StartDescriptor24, &gBattleAnimParticleDescriptors[0x24], 0xA, 1, 4, 2, 0, 0);
 }
 
 /**
@@ -777,12 +786,14 @@ void BattleAnim_InitializeThunderWaveUse(void) {
  * ran for exactly Thunder Wave.
  */
 void BattleAnim_InitializeThunderWaveHit(void) {
-    func_8213B644(0x30, 0x20, 8);
-    func_8213B5D8(0, 0xC, 0xA, &func_82153C50, &D_8218E6A8, 0x14, 1, 4, (s32) D_8219A80A, 0, 0);
+    func_8213B644(48, 0x20, 8);
+    func_8213B5D8(0, 12, 10, &func_82153C50, &D_8218E6A8, 0x14, 1, 4, (s32) D_8219A80A, 0, 0);
 }
 
 
 /**
+ * Pushes the particle forward by 5 plus a species-dependent distance (0 by default) and sets its
+ * scale (0.12 by default).
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
@@ -860,6 +871,7 @@ void BattleAnim_ApplyEffect1SpeciesMotion(Particle* arg0) {
 
 
 /**
+ * Inits a sleep-move Z mark: places it for the owner's species.
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Sing, Sleep Powder, Hypnosis, Lovely Kiss and Spore.
  */
@@ -869,6 +881,8 @@ void BattleAnim_SetupSleepMovePhaseFadeOut(Particle* arg0) {
 }
 
 /**
+ * Particle callback for a sleep-move Z mark: inits it, idles in state 2 until something else
+ * advances it, then fades out and detaches.
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Sing, Sleep Powder, Hypnosis, Lovely Kiss and Spore.
  */
@@ -891,10 +905,11 @@ void BattleAnim_SleepMovePhaseFadeOut(Particle* arg0) {
 }
 
 /**
+ * Start effect 1: spawns the sleep-move Z mark particle.
  * Effect start init 1 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Hypnosis, Lovely Kiss, Sing, Sleep Powder, Spore.
  * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
- * Hypnosis and Lovely Kiss: ran as Pinsir fell asleep (Z marks, 「ねむってしまった！」).
+ * Hypnosis and Lovely Kiss: ran as Pinsir fell asleep (Z marks, 「ねむってしまった！」, "fell asleep!").
  */
 void BattleAnim_StartEffect1Sleep(void) {
     func_8213B560(0, &func_82154248, &D_8218E700, 0, 1, 0x10, 7, 0, 0);

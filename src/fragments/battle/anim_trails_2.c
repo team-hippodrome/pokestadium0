@@ -2,6 +2,8 @@
 #include "battle.h"
 
 /**
+ * Starts one Hyper Beam trail from the attacker toward the target, with the direction jittered at
+ * random.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Hyper Beam.
  */
@@ -35,6 +37,8 @@ void BattleAnim_SeedHyperBeamUseSixSlotTrail(void) {
 
 
 /**
+ * Init hook for Hyper Beam's use animation: resets the shared matrix and both trail pools, then
+ * starts the double-texture beams and the first six-slot trail.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Hyper Beam.
  */
@@ -47,6 +51,8 @@ void BattleAnim_SetupHyperBeamUseCombinedTrail(void) {
 }
 
 /**
+ * Update hook for Hyper Beam's use animation: starts another six-slot trail every 10 frames,
+ * advances both pools, and returns whether the double-texture beams have finished.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Hyper Beam.
  */
@@ -60,6 +66,8 @@ s32 BattleAnim_RunHyperBeamUseCombinedTrail(void) {
 }
 
 /**
+ * Draw hook for Hyper Beam's use animation: loads the shared effect matrix and draws both trail
+ * pools.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Hyper Beam.
  */
