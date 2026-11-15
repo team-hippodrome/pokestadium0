@@ -214,7 +214,7 @@ void LabPCList_DrawColumnCursor(LabPCListScreen* screen) {
             } else {
                 w = screen->columnWidths[i];
             }
-            Ui_DrawRoundedFrame(LabPCList_GetColumnCursorX(screen), screen->listFrame.y, w, 0x14, *(Color_RGBA8*)D_80073520);
+            Ui_DrawRoundedFrame(LabPCList_GetColumnCursorX(screen), screen->listFrame.y, w, 20, *(Color_RGBA8*)D_80073520);
             break;
         case 1:
             w = 0;
@@ -224,10 +224,10 @@ void LabPCList_DrawColumnCursor(LabPCListScreen* screen) {
             for (; i < end; i++) {
                 w += screen->columnWidths[i];
             }
-            Ui_DrawRoundedFrame(LabPCList_GetColumnCursorX(screen), screen->listFrame.y, w, 0x14, *(Color_RGBA8*)D_80073520);
+            Ui_DrawRoundedFrame(LabPCList_GetColumnCursorX(screen), screen->listFrame.y, w, 20, *(Color_RGBA8*)D_80073520);
             break;
         case 2:
-            Ui_DrawRoundedFrame(LabPCList_GetColumnCursorX(screen), screen->listFrame.y, screen->columnWidths[screen->pageColumnStart[screen->page] + screen->headerCursor.cursor - 2], 0x14, *(Color_RGBA8*)D_80073520);
+            Ui_DrawRoundedFrame(LabPCList_GetColumnCursorX(screen), screen->listFrame.y, screen->columnWidths[screen->pageColumnStart[screen->page] + screen->headerCursor.cursor - 2], 20, *(Color_RGBA8*)D_80073520);
             break;
     }
 }
@@ -240,10 +240,10 @@ void LabPCList_DrawColumnCursor(LabPCListScreen* screen) {
 void LabPCList_DrawHeaderCursor(LabPCListScreen* screen) {
     switch (screen->headerCursor.cursor) {
         case 0:
-            Ui_DrawRoundedFrame(screen->listFrame.x, screen->listFrame.y, 0x26, 0x14, *(Color_RGBA8*)D_80073520);
+            Ui_DrawRoundedFrame(screen->listFrame.x, screen->listFrame.y, 38, 20, *(Color_RGBA8*)D_80073520);
             return;
         case 1:
-            Ui_DrawRoundedFrame(screen->listFrame.x + 0x26, screen->listFrame.y, 0x50, 0x14, *(Color_RGBA8*)D_80073520);
+            Ui_DrawRoundedFrame(screen->listFrame.x + 38, screen->listFrame.y, 80, 20, *(Color_RGBA8*)D_80073520);
             return;
     }
 }

@@ -487,18 +487,18 @@ void Pokedex_BuildLabelFramesDisplayList(void) {
 
     gSPDisplayList(temp_v0++, D_8A12EBB8);
 
-    temp_v0 = Pokedex_DrawLabelFrame(temp_v0, 0x1E, 0x14, 0x64, 0x10, 0, 1);
+    temp_v0 = Pokedex_DrawLabelFrame(temp_v0, 30, 20, 100, 0x10, 0, 1);
 
     if (sHabitatUnknown == 1) {
         if (sLabelWidth > 0) {
             sp46 = 0xA0 - (sLabelWidth / 2);
             sp44 = sLabelWidth;
-            temp_v0 = Pokedex_DrawLabelFrame(temp_v0, sp46, 0x78, sLabelWidth, 0x14, 0, 1);
+            temp_v0 = Pokedex_DrawLabelFrame(temp_v0, sp46, 120, sLabelWidth, 20, 0, 1);
         }
     } else {
         if (sGbMapShown == 0) {
             sp2C = sSlotToArea[sSelectedSlot] - 1;
-            temp_v0 = Pokedex_DrawLabelFrame(temp_v0, 0xB9, 0xD2, 0x73, 0x10, 0, 1);
+            temp_v0 = Pokedex_DrawLabelFrame(temp_v0, 185, 210, 115, 0x10, 0, 1);
             if ((sAreaMapZoomed == 1) && (sp2C >= 0) && (sCameraMoving == 0) && (sLabelWidth > 0) && (sCameraSettledFrames != 0)) {
                 temp_v0_2 = (sMapAreas[sp2C].count * 0xA) - 0xA;
                 sp42 = 0x8C - (sLabelWidth / 2);
@@ -508,18 +508,18 @@ void Pokedex_BuildLabelFramesDisplayList(void) {
                 temp_v0 = Pokedex_DrawLabelFrame(temp_v0, sp42, sp40, sp3E, sp3C, 2, 1);
             }
         } else {
-            temp_v0 = Pokedex_DrawLabelFrame(Pokedex_DrawLabelFrame(temp_v0, 0x4F, 0x2F, 0x97, 0x86, 0, 0), 0x4F, 0xB5, 0x97, 0x10, 2, 1);
+            temp_v0 = Pokedex_DrawLabelFrame(Pokedex_DrawLabelFrame(temp_v0, 0x4F, 0x2F, 0x97, 0x86, 0, 0), 79, 181, 151, 0x10, 2, 1);
         }
-        temp_v0 = Pokedex_DrawLabelFrame(temp_v0, 0x1E, 0xD2, 0x78, 0x10, 0, 1);
+        temp_v0 = Pokedex_DrawLabelFrame(temp_v0, 30, 210, 120, 0x10, 0, 1);
     }
 
     gSPDisplayList(temp_v0++, D_8A12EBF0);
 
     if ((sHabitatUnknown == 0) && (sGbMapShown == 0)) {
-        temp_v0 = Pokedex_DrawRButtonIcon(temp_v0, 0xBC, 0xD5);
+        temp_v0 = Pokedex_DrawRButtonIcon(temp_v0, 188, 213);
     }
     if (sGbMapShown == 1) {
-        temp_v0 = Pokedex_DrawRButtonIcon(temp_v0, 0x56, 0xB7);
+        temp_v0 = Pokedex_DrawRButtonIcon(temp_v0, 86, 183);
     }
 
     gSPDisplayList(temp_v0++, D_8A12F128);
@@ -749,14 +749,14 @@ s32 Pokedex_DrawAreaMapScreen(UNUSED u8 unused)
   Geo_RenderRootNode(sAreaMapRoot);
   Font_BeginTranslucentTextRendering();
   Font_SetActive(1, 0);
-  Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-  Font_Printf(0x23, 0x17, D_8A12FD60, sAreaMapSpeciesName, D_8A12F190);
+  Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFFFF
+  Font_Printf(35, 23, D_8A12FD60, sAreaMapSpeciesName, D_8A12F190);
   sLabelWidth = 0;
   if (sHabitatUnknown == 1)
   {
     sprintf(sAreaLabels[0].text, D_8A12FD68, D_8A12F1C8);
     sLabelWidth = ((strlen(sAreaLabels[0].text) * 5) + 0x1E) & 0xFFF8;
-    Font_Printf(0xAF - (sLabelWidth / 2), 0x7D, D_8A12FD6C, sAreaLabels[0].text);
+    Font_Printf(175 - (sLabelWidth / 2), 125, D_8A12FD6C, sAreaLabels[0].text);
   }
   else
   {
@@ -764,7 +764,7 @@ s32 Pokedex_DrawAreaMapScreen(UNUSED u8 unused)
     {
       temp_s0 = sSlotToArea[sSelectedSlot];
       temp_s0--;
-      Font_Printf(0xCB, 0xD5, D_8A12FD70, D_8A12F19C);
+      Font_Printf(203, 213, D_8A12FD70, D_8A12F19C);
       if (sAreaMapZoomed == 1)
       {
         PokedexMapArea *ptr = &sMapAreas[temp_s0];
@@ -855,7 +855,7 @@ s32 Pokedex_DrawAreaMapScreen(UNUSED u8 unused)
                 sel = sAreaLabelOrder[i];
                 if (sAreaLabels[sel].width > 0)
                 {
-                  Font_Printf(0xA0 - (sLabelWidth / 2), ((i * 0xA) - (tmp * 0xA)) + 0xC3, D_8A12FE14, sAreaLabels[sel].text);
+                  Font_Printf(160 - (sLabelWidth / 2), ((i * 10) - (tmp * 10)) + 195, D_8A12FE14, sAreaLabels[sel].text);
                 }
               }
 
@@ -866,11 +866,11 @@ s32 Pokedex_DrawAreaMapScreen(UNUSED u8 unused)
     }
     else
     {
-      Font_Printf(0x65, 0xB8, D_8A12FE18, D_8A12F1B0);
+      Font_Printf(101, 184, D_8A12FE18, D_8A12F1B0);
     }
     if ((sCameraMoving == 0) || (sSelectedSlot == sPrevSelectedSlot))
     {
-      Font_Printf(0x54 - (strlen(name) * 2), 0xD5, D_8A12FE1C, name);
+      Font_Printf(84 - (strlen(name) * 2), 213, D_8A12FE1C, name);
     }
   }
   sLastLabelWidth = sLabelWidth;

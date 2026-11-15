@@ -40,7 +40,7 @@ void LabTextMenu_DrawRow(s32 x, s32 y, char* text, s32 index, s32 flags, s32* wi
     s32 temp_v0 = *width;
 
     if (flags & 8) {
-        Ui_FillRectHighlighted(x + 3, y + 3, temp_v0 - 6, 0x16, D_8910A910);
+        Ui_FillRectHighlighted(x + 3, y + 3, temp_v0 - 6, 22, D_8910A910);
     }
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(flags);
@@ -75,9 +75,9 @@ void LabTextMenu_Init(s8 *menu, s32 x, s32 y, s32 *texts, s32 flags, s32 count) 
     }
     func_80027804(menu + 0x50, texts, count, count);
     h = max * 0x14 + 0x10;
-    Menu_Init(menu + 0x2C, menu + 0x50, flags, LabTextMenu_DrawRow, h, 0x1C);
+    Menu_Init(menu + 0x2C, menu + 0x50, flags, LabTextMenu_DrawRow, h, 28);
     M2C_FIELD(menu, s32 *, 0x4C) |= 0x10000;
-    Window_SetRect(menu, x, y, h + 0xC, 0x84);
+    Window_SetRect(menu, x, y, h + 12, 132);
     M2C_FIELD(menu, s32 *, 0x24) = 0;
     M2C_FIELD(menu, s32 *, 0x20) = 0;
     M2C_FIELD(menu, s32 *, 0x28) = 0;
@@ -109,7 +109,7 @@ void LabTextMenu_Draw(Box89104E38* menu) {
 
         sp2C[0] = menu->w - 0xC;
         label = (s32)menu->label;
-        Menu_DrawItems(label, menu->x + 6, menu->y + 0xA, 0xFFEF, (s8*)sp2C);
+        Menu_DrawItems(label, menu->x + 6, menu->y + 10, 0xFFEF, (s8*)sp2C);
     }
     /* Empty test kept from the permuter: it keeps menu in $s0 as in the ROM. */
     if (menu) {  // karodo
@@ -165,7 +165,7 @@ void LabMoveSelect_DrawMoveRow(s32 x, s32 y, s32* move, s32 index, s32 flags, s3
         Gfx_SetEnvColor(D_800734A8[0].r, D_800734A8[0].g, D_800734A8[0].b, *alpha_ptr);
     } else if (flags & 0x200) {
         alpha = *alpha_ptr;
-        Gfx_SetEnvColor(0xFF, 0xC8, 0xC8, alpha);
+        Gfx_SetEnvColor(0xFF, 0xC8, 0xC8, alpha); // #FFC8C8
     } else {
         Font_SetColorForFlags(flags);
     }
@@ -196,9 +196,9 @@ void LabMoveSelect_Init(LabMoveSelectWindow* window, s32 x, s32 y, u8* mon) {
         window->moves[i] = -1;
     }
     func_80027410(&window->moveMatrix, window->moves, 4, 4, 4);
-    Menu_Init(&window->menu, &window->moveMatrix, (s32)window->itemFlags, LabMoveSelect_DrawMoveRow, 0x9C, 0x1C);
+    Menu_Init(&window->menu, &window->moveMatrix, (s32)window->itemFlags, LabMoveSelect_DrawMoveRow, 156, 28);
     window->menu.options |= 0x10000;
-    Window_SetRect(&window->window, x, y, 0xA8, 0x84);
+    Window_SetRect(&window->window, x, y, 168, 132);
     window->window.animTimer = 0;
     window->window.title = 0;
     window->window.state = 0;
@@ -236,7 +236,7 @@ void LabMoveSelect_Draw(LabMoveSelectWindow* window) {
 
         sp2C[0] = window->window.frame.width - 0xC;
         label = &window->menu;
-        Menu_DrawInlineItems(label, window->window.frame.x + 6, window->window.frame.y + 0xA, 0xFFEF, (s8*)sp2C);
+        Menu_DrawInlineItems(label, window->window.frame.x + 6, window->window.frame.y + 10, 0xFFEF, (s8*)sp2C);
     }
     /* Empty test kept from the permuter: it keeps window in $s0 as in the ROM. */
     if (window) {  // karodo
@@ -250,7 +250,7 @@ M2C_UNK Audio_PlaySystemSound(M2C_UNK);
  * Seen in play (2026-11-14) in いちらん: たいあたり faded into どくどく when ゼニガメ learned TM06.
  */
 s32 LabMoveSelect_DrawLearnAnimation(LabMoveSelectWindow* window) {
-    s32 color;
+    s32 color; // not a color: the item draw-flags mask for Menu_DrawInlineItems
     s32 params[4]; // only params[0] (alpha) is set here, as in LabMoveSelect_Draw
 
     if (func_8002AE6C() != 0) {
@@ -265,12 +265,12 @@ s32 LabMoveSelect_DrawLearnAnimation(LabMoveSelectWindow* window) {
     } else {
         if (window->learnTimer == 29) {
             window->moves[window->learnSlot] = window->learnMove;
-            Audio_PlaySystemSound(0x22);
+            Audio_PlaySystemSound(34);
         }
         color = 0xFEED;
         params[0] = ((30 - window->learnTimer) * 0xFF) / 30;
     }
-    Menu_DrawInlineItems(&window->menu, window->window.frame.x + 6, window->window.frame.y + 0xA, color, (s8*)params);
+    Menu_DrawInlineItems(&window->menu, window->window.frame.x + 6, window->window.frame.y + 10, color, (s8*)params);
     return window->learnTimer == 0;
 }
 
@@ -278,15 +278,15 @@ s32 LabMoveSelect_DrawLearnAnimation(LabMoveSelectWindow* window) {
  * Starts the learn animation of move `move` into slot `slot`.
  * Seen in play (2026-11-14) in いちらん: ran for ゼニガメ slot 0 (たいあたり -> どくどく) and フシギダネ slot 2.
  */
-void LabMoveSelect_StartLearnAnimation(LabMoveSelectWindow* arg0, s32 arg1, s32 arg2) {
-    arg0->learnSlot = arg1;
-    arg0->learnMove = arg2 - 1;
-    if (arg0->moves[arg1] == -1) {
-        arg0->learnTimer = 60;
+void LabMoveSelect_StartLearnAnimation(LabMoveSelectWindow* window, s32 slot, s32 move) {
+    window->learnSlot = slot;
+    window->learnMove = move - 1;
+    if (window->moves[slot] == -1) {
+        window->learnTimer = 60;
     } else {
-        arg0->learnTimer = 60;
+        window->learnTimer = 60;
     }
-    arg0->menu.itemFlags[arg1] |= 0x300;
+    window->menu.itemFlags[slot] |= 0x300;
 }
 
 M2C_UNK Menu_UpdateCursor(s32);                         /* extern */
@@ -338,7 +338,7 @@ void LabBoxList_UpdateItemFlags(LabBoxListWindow* box_list) {
 
 /**
  * Checks or unchecks every box of a box list.
- * Seen in play (2026-11-14) in いちらん: A on ゲームボーイのボックス turned all eight box balls red or grey at once.
+ * Seen in play (2026-11-14) in いちらん: A on ゲームボーイのボックス turned all eight box balls red or gray at once.
  */
 void LabBoxList_SetAllChecked(u8* widget, s32 enabled) {
     s32 value = enabled ? 8 : 0;
@@ -404,9 +404,9 @@ void LabBoxList_DrawBoxName(s32 x, s32 y, s32 box, s32 index, s32 flags) {
     }
     sel = flags & 2;
     if (sel) {
-        Ui_DrawRoundedFrame(x + 0x2A, y + 2, 0x70, 0x18, D_80073520);
+        Ui_DrawRoundedFrame(x + 42, y + 2, 112, 24, D_80073520);
         gSPDisplayList(gDisplayListHead++, D_80060290);
-        func_8001B884(x + 0x1D, y + 5, 0xB, 0x12, D_8910CF80, 0xC, 0x200000);
+        func_8001B884(x + 29, y + 5, 11, 18, D_8910CF80, 0xC, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80060398);
     }
     if (flags & 0x100) {
@@ -417,7 +417,7 @@ void LabBoxList_DrawBoxName(s32 x, s32 y, s32 box, s32 index, s32 flags) {
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(color.r, color.g, color.b, color.a);
     Font_SetActive(8, 0);
-    Font_Printf(x + 0x30, y + 4, D_8910E018, index + 1);
+    Font_Printf(x + 48, y + 4, D_8910E018, index + 1);
     Font_EndTexturedTextRendering();
 }
 
@@ -429,10 +429,10 @@ void LabBoxList_DrawBoxName();
  * Seen in play (2026-11-14) in いちらん: set up ボックス1-8 and ボックス1-4.
  */
 void LabBoxList_Init(LabBoxListWindow* box_list, s32 x, s32 y, ByteMatrix* boxes, s32 item_flags, Color_RGBA8 color) {
-    Window_SetRect(&box_list->frame, x, y, 0x9C, boxes->count * 0x1C + 8);
+    Window_SetRect(&box_list->frame, x, y, 156, boxes->count * 28 + 8);
     box_list->frame.style = 0;
     box_list->frame.color = color;
-    Menu_Init(&box_list->menu, boxes, item_flags, LabBoxList_DrawBoxName, 0x9C, 0x1C);
+    Menu_Init(&box_list->menu, boxes, item_flags, LabBoxList_DrawBoxName, 156, 28);
     LabBoxList_UpdateItemFlags(box_list);
 }
 
@@ -446,7 +446,7 @@ extern M2C_UNK D_80073554;
  * Seen in play (2026-11-14) in いちらん: drew ボックス1-8 next to ゲームボーイのボックス.
  */
 void LabBoxList_Draw(LabBoxListWindow* box_list, s32 flags) {
-    Ui_DrawTexturedFrameDecal(box_list->frame.x - 6, box_list->frame.y - 6, box_list->frame.width + 0xC, box_list->frame.height + 0xC, &D_80073554);
+    Ui_DrawTexturedFrameDecal(box_list->frame.x - 6, box_list->frame.y - 6, box_list->frame.width + 12, box_list->frame.height + 12, &D_80073554);
     Window_DrawFrame(&box_list->frame);
     Menu_DrawInlineItems(&box_list->menu, box_list->frame.x, box_list->frame.y + 4, flags | 0xFFED, box_list);
 }
@@ -586,7 +586,7 @@ void LabSourceSelect_DrawRow(s32 x, s32 y, char** label, s32 index, s32 flags) {
     }
     sel = flags & 2;
     if (sel) {
-        Ui_DrawRoundedFrame(x + 0x2A, y + 2, 0xE8, 0x18, D_80073520);
+        Ui_DrawRoundedFrame(x + 42, y + 2, 232, 24, D_80073520);
     }
     if (flags & 0x100) {
         color = D_8910A934[sel ? 0 : 1];
@@ -596,7 +596,7 @@ void LabSourceSelect_DrawRow(s32 x, s32 y, char** label, s32 index, s32 flags) {
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(color.r, color.g, color.b, color.a);
     Font_SetActive(8, 0);
-    Font_Printf(x + 0x30, y + 4, *label);
+    Font_Printf(x + 48, y + 4, *label);
     Font_EndTexturedTextRendering();
 }
 
@@ -616,26 +616,26 @@ void LabSourceSelect_Init(LabSourceSelectWindow* window, s32 x, s32 y, s8* sourc
     s32 pad[5]; // FAKE: stack padding
     s32 list;
 
-    Window_SetRect(&window->window, x, y, 0x134, 0xCE);
+    Window_SetRect(&window->window, x, y, 308, 206);
     window->window.animTimer = 0;
     window->window.title = 0;
     window->window.state = 0;
     window->window.frame.style = 1;
     window->window.frame.color = color;
-    Window_SetRect(&window->textFrame, window->window.frame.x + 6, window->window.frame.y + 6, window->window.frame.width - 0xC, 0x40);
+    Window_SetRect(&window->textFrame, window->window.frame.x + 6, window->window.frame.y + 6, window->window.frame.width - 12, 0x40);
     window->textFrame.style = 6;
     window->textFrame.color = D_8910A93C;
     window->textFrame.color2 = D_8910A940;
-    Window_SetRect(&window->listFrame, window->window.frame.x + 6, window->window.frame.y + 0x4C, window->window.frame.width - 0xC, 0x7C);
+    Window_SetRect(&window->listFrame, window->window.frame.x + 6, window->window.frame.y + 76, window->window.frame.width - 12, 124);
     window->listFrame.style = 0;
     window->listFrame.color = color;
-    Window_InitLabeled(&window->okButton, window->listFrame.x + 0x70, window->listFrame.y + 0x5C, 0x48, color, D_8910E024);
+    Window_InitLabeled(&window->okButton, window->listFrame.x + 112, window->listFrame.y + 92, 72, color, D_8910E024);
     window->okButton.labelX = 0xA;
     window->okButton.unk_34 = 0xC;
     list = *(s32*)sources;
-    LabBoxList_Init(&window->gbBoxes, window->window.frame.x + window->window.frame.width, window->listFrame.y + 0x1C, (ByteMatrix*)(list + 0x34), (s32)(&window->gbBoxFlags), color);
-    LabBoxList_Init(&window->cartBoxes, window->window.frame.x + window->window.frame.width, window->listFrame.y + 0x38, (ByteMatrix*)(list + 0x58), (s32)(&window->cartBoxFlags), color);
-    Menu_Init(&window->menu, sources, (s32)(&window->itemFlags), LabSourceSelect_DrawRow, 0x128, 0x1C);
+    LabBoxList_Init(&window->gbBoxes, window->window.frame.x + window->window.frame.width, window->listFrame.y + 28, (ByteMatrix*)(list + 0x34), (s32)(&window->gbBoxFlags), color);
+    LabBoxList_Init(&window->cartBoxes, window->window.frame.x + window->window.frame.width, window->listFrame.y + 56, (ByteMatrix*)(list + 0x58), (s32)(&window->cartBoxFlags), color);
+    Menu_Init(&window->menu, sources, (s32)(&window->itemFlags), LabSourceSelect_DrawRow, 296, 28);
     LabSourceSelect_UpdateItemFlags((u8*)window);
     window->cursor.count = 4;
     window->cursor.cursor = 0;
@@ -666,11 +666,11 @@ void LabSourceSelect_Draw(LabSourceSelectWindow* window, s32 flags) {
     if (func_8002AE6C(&window->window) == 0) {
         Window_DrawFrame(&window->textFrame);
         Window_DrawFrame(&window->listFrame);
-        Ui_DrawTexturedDivider(window->window.frame.x, window->window.frame.y + 0x45, window->window.frame.width, D_8007356C);
+        Ui_DrawTexturedDivider(window->window.frame.x, window->window.frame.y + 69, window->window.frame.width, D_8007356C);
         Font_BeginTranslucentTextRendering();
         Gfx_SetEnvColor(D_800734A8[0].r, D_800734A8[0].g, D_800734A8[0].b, D_800734A8[0].a);
         Font_SetActive(8, 0);
-        Font_SetLineHeight(0x1C);
+        Font_SetLineHeight(28);
         Font_Printf(window->textFrame.x + 8, window->textFrame.y + 8, D_8910E02C);
         Font_EndTexturedTextRendering();
         if ((flags & 2) && (window->openBoxList == 0)) {
@@ -680,7 +680,7 @@ void LabSourceSelect_Draw(LabSourceSelectWindow* window, s32 flags) {
                 sp38 = 0xFFEF;
                 if ((window->cursor.cursor == 1) || (window->cursor.cursor == 2)) {
                     gSPDisplayList(gDisplayListHead++, D_80060290);
-                    func_8001B884((window->listFrame.x + window->listFrame.width) - 0x11, window->listFrame.y + (window->cursor.cursor * 0x1C) + 9, 0xB, 0x12, D_8910D138, 0xC, 0x200000);
+                    func_8001B884((window->listFrame.x + window->listFrame.width) - 17, window->listFrame.y + (window->cursor.cursor * 28) + 9, 11, 18, D_8910D138, 0xC, 0x200000);
                     gSPDisplayList(gDisplayListHead++, D_80060398);
                 }
             }
@@ -792,7 +792,7 @@ void LabPCList_DrawPopupRow(s32 x, s32 y, char* text, s32 index, s32 flags, s8* 
     s32 temp_v0 = M2C_FIELD(popup, s32*, 8) - 0xC;
 
     if (flags & 0x10) {
-        Ui_FillRectHighlighted(x + 3, y + 3, temp_v0 - 6, 0x16, M2C_FIELD(popup, Color_RGBA8*, 0x18));
+        Ui_FillRectHighlighted(x + 3, y + 3, temp_v0 - 6, 22, M2C_FIELD(popup, Color_RGBA8*, 0x18));
     }
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(flags);
@@ -821,9 +821,9 @@ void LabPCList_InitPopupMenu(LabPopupMenu* popup, s32 *labels, s32 item_flags, s
     }
     func_80027804((s8*)&popup->itemList, labels, count, count);
     h = max * 0x14 + 0x10;
-    Menu_Init((s8*)&popup->menu, (s8*)&popup->itemList, item_flags, LabPCList_DrawPopupRow, h, 0x1C);
+    Menu_Init((s8*)&popup->menu, (s8*)&popup->itemList, item_flags, LabPCList_DrawPopupRow, h, 28);
     popup->menu.options |= 0x10000;
-    Window_SetRect(popup, 0, 0, h + 0xC, popup->itemList.count * 0x1C + 0x14);
+    Window_SetRect(popup, 0, 0, h + 12, popup->itemList.count * 28 + 20);
     popup->window.animTimer = 0;
     M2C_FIELD(popup, s32 *, 0x20) = 0;
     popup->window.state = 0;
@@ -890,12 +890,12 @@ void LabPCList_DrawPopupMenu(LabPopupMenu* popup, s32 flags)
   s8 *new_var; // FAKE: permuter temp
   if (func_8002AE6C() == 0)
   {
-    new_var = (s8 *) popup;
-    if ((popup && popup) && popup)
+    new_var = (s8 *) popup; // FAKE: permuter temp
+    if ((popup && popup) && popup) // FAKE: empty if on a repeated test
     {
     }
-    Menu_DrawItems((s8*)&popup->menu, (*((s32 *) (((s8 *) popup) + 0))) + 6, (*((s32 *) (new_var + 4))) + 0xA, flags | 0xFFED, popup); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-    if (flags)
+    Menu_DrawItems((s8*)&popup->menu, (*((s32 *) (((s8 *) popup) + 0))) + 6, (*((s32 *) (new_var + 4))) + 10, flags | 0xFFED, popup); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+    if (flags) // karodo
     {
     }
   }
@@ -919,9 +919,9 @@ extern char D_8910E088[];
 /**
  * Sets up the レベルのにゅうりょく (level input) window.
  * Seen in play (2026-11-12) in いちらん: レベルをきめてあつめる (page 3/3, A on the レベル header) ran this once
- * and opened 「001 から 100」; かいじょ is greyed out when no level filter is active.
+ * and opened 「001 から 100」; かいじょ is grayed out when no level filter is active.
  */
-void LabPCList_InitLevelInputWindow(LabLevelInputWindow* window, s32 x, s32 y, Color_RGBA8 color, s32 minLevel, s32 maxLevel, s32 filter_on) {
+void LabPCList_InitLevelInputWindow(LabLevelInputWindow* window, s32 x, s32 y, Color_RGBA8 color, s32 min_level, s32 max_level, s32 filter_on) {
     Window_SetRect(window, x, y, 316, 80);
     window->window.animTimer = 0;
     window->window.state = 0;
@@ -929,11 +929,11 @@ void LabPCList_InitLevelInputWindow(LabLevelInputWindow* window, s32 x, s32 y, C
     window->window.title = D_8910E064;
     window->window.frame.color = color;
     window->minLevel.digitCount = 3;
-    window->minLevel.value = minLevel;
+    window->minLevel.value = min_level;
     window->minLevel.min = 1; window->minLevel.max = 100; // IDO: same line
     window->minLevel.digit = 0;
     window->maxLevel.digitCount = 3;
-    window->maxLevel.value = maxLevel;
+    window->maxLevel.value = max_level;
     window->maxLevel.digit = 0;
     window->maxLevel.max = 100;
     window->maxLevel.min = 1;
@@ -980,15 +980,15 @@ void LabPCList_DrawLevelInput(s8* input, s32 x, s32 y, s32 flags) {
         } else {
             v = (s32)D_04002130;
         }
-        func_8001B884(bx + 3, y - 0xA, 0xE, 8, (u8*)v, 0x10, 0x200000);
+        func_8001B884(bx + 3, y - 10, 14, 8, (u8*)v, 0x10, 0x200000);
         if (((u16*)D_800603C0)[3] & 0x400) {
             v = (s32)D_04002448;
         } else {
             v = (s32)D_04002238;
         }
-        func_8001B884(bx + 3, y + 0x16, 0xE, 8, (u8*)v, 0x10, 0x200000);
+        func_8001B884(bx + 3, y + 22, 14, 8, (u8*)v, 0x10, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);
-        Ui_DrawRoundedFrame(bx - 3, y - 3, 0x1A, 0x1A, D_80073520);
+        Ui_DrawRoundedFrame(bx - 3, y - 3, 26, 26, D_80073520);
     }
     func_8001AB6C();
     func_8001A384(8, 2);
@@ -997,10 +997,10 @@ void LabPCList_DrawLevelInput(s8* input, s32 x, s32 y, s32 flags) {
     Font_DrawCharAt(x, y, M2C_FIELD(input, s32*, 0) / 100 + '0');
     v = (M2C_FIELD(input, s32*, 0x10) == 1) ? hl : 0;
     Font_SetColorForFlags(v);
-    Font_DrawCharAt(x + 0x16, y, M2C_FIELD(input, s32*, 0) / 10 % 10 + '0');
+    Font_DrawCharAt(x + 22, y, M2C_FIELD(input, s32*, 0) / 10 % 10 + '0');
     v = (M2C_FIELD(input, s32*, 0x10) == 0) ? hl : 0;
     Font_SetColorForFlags(v);
-    Font_DrawCharAt(x + 0x2C, y, M2C_FIELD(input, s32*, 0) % 10 + '0');
+    Font_DrawCharAt(x + 44, y, M2C_FIELD(input, s32*, 0) % 10 + '0');
     func_8001ABBC();
 }
 
@@ -1017,11 +1017,11 @@ void LabPCList_DrawLevelInputWindow(LabLevelInputWindow* window) {
     if (func_8002AE6C() == 0) {
         func_8001AB6C();
         func_8001A384(4, 0);
-        func_8001AA9C(0xC8, 0xC8, 0xFF, 0xFF);
-        Font_Printf(window->window.frame.x + 0x54, window->window.frame.y + 0x13, D_8910E094);
+        func_8001AA9C(0xC8, 0xC8, 0xFF, 0xFF); // #C8C8FFFF
+        Font_Printf(window->window.frame.x + 84, window->window.frame.y + 19, D_8910E094);
         func_8001ABBC();
-        LabPCList_DrawLevelInput((s8*)&window->minLevel, window->window.frame.x + 0xE, window->window.frame.y + 0x10, (window->focus == 0) ? 2 : 0);
-        LabPCList_DrawLevelInput((s8*)&window->maxLevel, window->window.frame.x + 0x7A, window->window.frame.y + 0x10, (window->focus == 1) ? 2 : 0);
+        LabPCList_DrawLevelInput((s8*)&window->minLevel, window->window.frame.x + 14, window->window.frame.y + 0x10, (window->focus == 0) ? 2 : 0);
+        LabPCList_DrawLevelInput((s8*)&window->maxLevel, window->window.frame.x + 122, window->window.frame.y + 0x10, (window->focus == 1) ? 2 : 0);
         Window_DrawLabeled((s8*)&window->gatherButton, (window->focus == 2 && window->cursor.cursor == 0) ? 2 : 0);
         Window_DrawLabeled((s8*)&window->clearButton, (window->focus == 2 && window->cursor.cursor == 1) ? 2 : 0);
     }
@@ -1138,16 +1138,16 @@ void LabToggle_Draw(Win89106E64* toggle) {
     gSPDisplayList(gDisplayListHead++, D_80073438);
 }
 
-/**
- * D-Left sets a toggle's flag 8 and D-Right clears it.
- * No callers: no jal, j, address word or lui/addiu pair in any built fragment or the resident code reaches it (2026-11-14 scan), so it never runs.
- * @unverified Name guessed from the code.
- */
 typedef struct unk_func_89106F74 {
     /* 0x00 */ char unk00[0x10];
     /* 0x10 */ s32 flags;
 } unk_func_89106F74;
 
+/**
+ * D-Left sets a toggle's flag 8 and D-Right clears it.
+ * No callers: no jal, j, address word or lui/addiu pair in any built fragment or the resident code reaches it (2026-11-14 scan), so it never runs.
+ * @unverified Name guessed from the code.
+ */
 s32 LabToggle_Update(unk_func_89106F74* arg0) {
     s32 flags = arg0->flags;
     s32 ret = 0;
@@ -1177,17 +1177,17 @@ void Ui_DrawNumber(s32, s32, s32, s32);
  */
 void LabPCList_DrawTypeFilterRow(s32 x, s32 y, char **name, s32 index, s32 flags) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x, y + 1, 0xAE, 0x1A, *(Color_RGBA8 *)D_8910A968);
-    func_80029028(x, y, 0xAE, 1, *(Color_RGBA8 *)D_8910A970);
-    func_80029028(x, y + 0x1B, 0xAE, 1, *(Color_RGBA8 *)D_8910A970);
+    func_80029028(x, y + 1, 174, 26, *(Color_RGBA8 *)D_8910A968);
+    func_80029028(x, y, 174, 1, *(Color_RGBA8 *)D_8910A970);
+    func_80029028(x, y + 27, 174, 1, *(Color_RGBA8 *)D_8910A970);
     if (flags & 8) {
-        Ui_FillRectHighlighted(x + 3, y + 3, 0xA8, 0x16, *(Color_RGBA8 *)D_8910A968);
+        Ui_FillRectHighlighted(x + 3, y + 3, 168, 22, *(Color_RGBA8 *)D_8910A968);
     }
     Ui_DrawNumber(x + 9, y + 8, index + 1, 2);
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(flags);
     Font_SetActive(8, 0);
-    Font_Printf(x + 0x42, y + 4, *name);
+    Font_Printf(x + 66, y + 4, *name);
     Font_EndTexturedTextRendering();
 }
 
@@ -1231,7 +1231,7 @@ extern char D_8910E0C4[];
 void LabPCList_InitTypeFilter(LabTypeFilterWindow* window, s32 x, s32 y, s32* filter) {
     s32 i;
 
-    Window_SetRect((s8*)window, x, y, 0x156, 0x120);
+    Window_SetRect((s8*)window, x, y, 342, 288);
     window->window.animTimer = 0;
     window->window.title = NULL;
     window->window.state = 0;
@@ -1242,7 +1242,7 @@ void LabPCList_InitTypeFilter(LabTypeFilterWindow* window, s32 x, s32 y, s32* fi
     for (i = 0; i < 0xF; i++) {
         window->names[i] = (s8*)&D_80066AD8[i + ((i < 6) ? 0 : 1)];
     }
-    ScrollList_Init(&window->list, (s32)&window->typeList, (s32)window->typeFlags, 8, LabPCList_DrawTypeFilterRow, 0xAE, 0x1C);
+    ScrollList_Init(&window->list, (s32)&window->typeList, (s32)window->typeFlags, 8, LabPCList_DrawTypeFilterRow, 174, 28);
     window->list.options |= 0x10000;
     for (i = 0; i < *filter; i++) {
         window->slots[i].index = LabPCList_TypeIdToListIndex(((u8*)filter)[4 + i]);
@@ -1252,14 +1252,14 @@ void LabPCList_InitTypeFilter(LabTypeFilterWindow* window, s32 x, s32 y, s32* fi
     }
     for (i = 0; i < 2; i++) {
         if (window->slots[i].index == -1) {
-            Window_InitLabeled(&window->slots[i].button, window->window.frame.x + 0x20, window->window.frame.y + i * 0x1C + 0x22, 0x5C, D_8910A974, D_8910E0B0);
+            Window_InitLabeled(&window->slots[i].button, window->window.frame.x + 0x20, window->window.frame.y + i * 28 + 34, 92, D_8910A974, D_8910E0B0);
         } else {
-            Window_InitLabeled(&window->slots[i].button, window->window.frame.x + 0x20, window->window.frame.y + i * 0x1C + 0x22, 0x5C, D_8910A974, *(char**)window->names[window->slots[i].index]);
+            Window_InitLabeled(&window->slots[i].button, window->window.frame.x + 0x20, window->window.frame.y + i * 28 + 34, 92, D_8910A974, *(char**)window->names[window->slots[i].index]);
             window->list.itemFlags[window->slots[i].index] |= 8;
         }
     }
-    Window_InitLabeled(&window->gatherButton, window->window.frame.x + 0x20, window->window.frame.y + 0xCA, 0x5C, D_8910A974, D_8910E0B8);
-    Window_InitLabeled(&window->clearButton, window->window.frame.x + 0x20, window->window.frame.y + 0xE6, 0x5C, D_8910A974, D_8910E0C4);
+    Window_InitLabeled(&window->gatherButton, window->window.frame.x + 0x20, window->window.frame.y + 202, 92, D_8910A974, D_8910E0B8);
+    Window_InitLabeled(&window->clearButton, window->window.frame.x + 0x20, window->window.frame.y + 230, 92, D_8910A974, D_8910E0C4);
     if (*filter == 0) {
         window->clearButton.flags |= 1;
     }
@@ -1290,12 +1290,12 @@ void LabPCList_DrawTypeFilter(LabTypeFilterWindow* window) {
         hl = (window->mode == 0) ? 2 : 0;
         Window_DrawLabeled(&window->gatherButton, (window->cursor.cursor == 2) ? hl : 0);
         Window_DrawLabeled(&window->clearButton, (window->cursor.cursor == 3) ? hl : 0);
-        Ui_DrawTexturedFrameDecal(window->window.frame.x + 0x96, window->window.frame.y + 0xE, 0xB2, 0x104, D_800735C4);
+        Ui_DrawTexturedFrameDecal(window->window.frame.x + 150, window->window.frame.y + 14, 178, 260, D_800735C4);
         mask = 0xFFED;
         if (window->mode == 1) {
             mask = 0xFFEF;
         }
-        ScrollList_DrawItems(&window->list, window->window.frame.x + 0x98, window->window.frame.y + 0x20, mask, 0);
+        ScrollList_DrawItems(&window->list, window->window.frame.x + 152, window->window.frame.y + 0x20, mask, 0);
     }
 }
 
@@ -1402,17 +1402,17 @@ void LabPCList_DrawMoveFilterRow(s32 x, s32 y, u8* move, s32 index, s32 flags) {
 
     idx = *move;
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x, y + 1, 0xD4, 0x1A, *(Color_RGBA8 *)D_8910AAC0);
-    func_80029028(x, y, 0xD4, 1, *(Color_RGBA8 *)D_8910AAC8);
-    func_80029028(x, y + 0x1B, 0xD4, 1, *(Color_RGBA8 *)D_8910AAC8);
+    func_80029028(x, y + 1, 212, 26, *(Color_RGBA8 *)D_8910AAC0);
+    func_80029028(x, y, 212, 1, *(Color_RGBA8 *)D_8910AAC8);
+    func_80029028(x, y + 27, 212, 1, *(Color_RGBA8 *)D_8910AAC8);
     if (flags & 8) {
-        Ui_FillRectHighlighted(x + 3, y + 3, 0xCE, 0x16, *(Color_RGBA8 *)D_8910AAC0);
+        Ui_FillRectHighlighted(x + 3, y + 3, 206, 22, *(Color_RGBA8 *)D_8910AAC0);
     }
     Ui_DrawNumber(x + 9, y + 8, index + 1, 3);
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(flags);
     Font_SetActive(8, 0);
-    Font_Printf(x + 0x37, y + 4, D_8006A9D4[idx].name);
+    Font_Printf(x + 55, y + 4, D_8006A9D4[idx].name);
     Font_EndTexturedTextRendering();
 }
 
@@ -1436,7 +1436,7 @@ extern char D_8910E0F4[];
 void LabPCList_InitMoveFilter(LabMoveFilterWindow* window, s32 x, s32 y, u8* filter) {
     s32 i;
 
-    Window_SetRect((s8*)window, x, y, 0x194, 0x120);
+    Window_SetRect((s8*)window, x, y, 404, 288);
     window->window.animTimer = 0;
     window->window.title = NULL;
     window->window.state = 0;
@@ -1444,7 +1444,7 @@ void LabPCList_InitMoveFilter(LabMoveFilterWindow* window, s32 x, s32 y, u8* fil
     window->window.frame.color = D_8910AACC;
     window->window.title = D_8910E0D0;
     func_80027410(&window->moveMatrix, D_8910A978, 1, 0xA4, 0xA4);
-    ScrollList_Init(&window->list, (s32)&window->moveMatrix, (s32)window->moveFlags, 8, LabPCList_DrawMoveFilterRow, 0xD4, 0x1C);
+    ScrollList_Init(&window->list, (s32)&window->moveMatrix, (s32)window->moveFlags, 8, LabPCList_DrawMoveFilterRow, 212, 28);
     window->list.options |= 0x10000;
     for (i = 0; i < M2C_FIELD(filter, s32*, 4); i++) {
         window->slots[i].index = D_8910AA1C[filter[i] - 1];
@@ -1454,14 +1454,14 @@ void LabPCList_InitMoveFilter(LabMoveFilterWindow* window, s32 x, s32 y, u8* fil
     }
     for (i = 0; i < 4; i++) {
         if (window->slots[i].index == -1) {
-            Window_InitLabeled(&window->slots[i].button, window->window.frame.x + 0xE, window->window.frame.y + i * 0x1C + 0x22, 0x98, D_8910AACC, D_8910E0E0);
+            Window_InitLabeled(&window->slots[i].button, window->window.frame.x + 14, window->window.frame.y + i * 28 + 34, 152, D_8910AACC, D_8910E0E0);
         } else {
-            Window_InitLabeled(&window->slots[i].button, window->window.frame.x + 0xE, window->window.frame.y + i * 0x1C + 0x22, 0x98, D_8910AACC, (char*)D_8006A9D4[D_8910A978[window->slots[i].index]].name);
+            Window_InitLabeled(&window->slots[i].button, window->window.frame.x + 14, window->window.frame.y + i * 28 + 34, 152, D_8910AACC, (char*)D_8006A9D4[D_8910A978[window->slots[i].index]].name);
             window->list.itemFlags[window->slots[i].index] |= 8;
         }
     }
-    Window_InitLabeled(&window->gatherButton, window->window.frame.x + 0x4A, window->window.frame.y + 0xCA, 0x5C, D_8910AACC, D_8910E0E8);
-    Window_InitLabeled(&window->clearButton, window->window.frame.x + 0x4A, window->window.frame.y + 0xE6, 0x5C, D_8910AACC, D_8910E0F4);
+    Window_InitLabeled(&window->gatherButton, window->window.frame.x + 74, window->window.frame.y + 202, 92, D_8910AACC, D_8910E0E8);
+    Window_InitLabeled(&window->clearButton, window->window.frame.x + 74, window->window.frame.y + 230, 92, D_8910AACC, D_8910E0F4);
     if (M2C_FIELD(filter, s32*, 4) == 0) {
         window->clearButton.flags |= 1;
     }
@@ -1491,12 +1491,12 @@ void LabPCList_DrawMoveFilter(LabMoveFilterWindow* window) {
         hl = (window->mode == 0) ? 2 : 0;
         Window_DrawLabeled(&window->gatherButton, (window->cursor.cursor == 4) ? hl : 0);
         Window_DrawLabeled(&window->clearButton, (window->cursor.cursor == 5) ? hl : 0);
-        Ui_DrawTexturedFrameDecal(window->window.frame.x + 0xAE, window->window.frame.y + 0xE, 0xD8, 0x104, D_800735C4);
+        Ui_DrawTexturedFrameDecal(window->window.frame.x + 174, window->window.frame.y + 14, 216, 260, D_800735C4);
         mask = 0xFFED;
         if (window->mode == 1) {
             mask = 0xFFEF;
         }
-        ScrollList_DrawInlineItems(&window->list, window->window.frame.x + 0xB0, window->window.frame.y + 0x20, mask, 0);
+        ScrollList_DrawInlineItems(&window->list, window->window.frame.x + 176, window->window.frame.y + 0x20, mask, 0);
     }
 }
 
@@ -1611,14 +1611,14 @@ void LabPCList_DrawItemRow(s32 x, s32 y, u8** item, UNUSED s32 index, s32 flags)
     char buf[0x38];
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x, y + 1, 0x10C, 0x1A, D_8910AAD0);
-    func_80029028(x + 0x10C, y + 1, 0x6C, 0x1A, D_8910AAD4);
-    func_80029028(x, y, 0x178, 1, D_8910AAD8);
-    func_80029028(x, y + 0x1B, 0x178, 1, D_8910AAD8);
+    func_80029028(x, y + 1, 268, 26, D_8910AAD0);
+    func_80029028(x + 268, y + 1, 108, 26, D_8910AAD4);
+    func_80029028(x, y, 376, 1, D_8910AAD8);
+    func_80029028(x, y + 27, 376, 1, D_8910AAD8);
     if (item != NULL) {
         if (flags & 0x10) {
-            Ui_FillRectHighlighted(x + 3, y + 3, 0x109, 0x16, D_8910AAD0);
-            Ui_FillRectHighlighted(x + 0x10C, y + 3, 0x69, 0x16, D_8910AAD4);
+            Ui_FillRectHighlighted(x + 3, y + 3, 265, 22, D_8910AAD0);
+            Ui_FillRectHighlighted(x + 268, y + 3, 105, 22, D_8910AAD4);
         }
         func_8001AB6C();
         Font_SetColorForFlags(flags);
@@ -1626,17 +1626,17 @@ void LabPCList_DrawItemRow(s32 x, s32 y, u8** item, UNUSED s32 index, s32 flags)
         Font_Printf(x + 8, y + 4, func_8001FDC8(item[0][0], buf));
         if (item[1][0] == 0x12) {
             func_8001A384(8, 0);
-            Font_Printf(x + 0x120, y + 4, D_8910E100);
+            Font_Printf(x + 288, y + 4, D_8910E100);
         } else if (item[1][0] == 0x22) {
             func_8001A384(8, 0);
-            Font_Printf(x + 0x120, y + 4, D_8910E104);
+            Font_Printf(x + 288, y + 4, D_8910E104);
         } else {
             func_8001A384(8, 0);
-            Font_Printf(x + 0x120, y + 4, D_8910E110);
+            Font_Printf(x + 288, y + 4, D_8910E110);
         }
         if (func_80031CC8(item[0][0]) == 0) {
             func_8001A384(8, 0);
-            Font_Printf(x + 0xBC, y + 4, D_8910E118, item[0][1]);
+            Font_Printf(x + 188, y + 4, D_8910E118, item[0][1]);
         }
         func_8001ABBC();
     }
@@ -1663,7 +1663,7 @@ typedef struct {
 } FlagScanOwner;
 
 /**
- * Greys out the items whose usability flags (LabPCList_UpdateItemUsability) say they can't be used on the Pokémon.
+ * Grays out the items whose usability flags (LabPCList_UpdateItemUsability) say they can't be used on the Pokémon.
  * Seen in play (2026-11-14) in いちらん: ran when どうぐをつかう opened 「フシギダネがつかえるどうぐ」.
  * Matching note: the entries pointer is held in a local and indexed; advancing a pointer through
  * window->table->entries directly gives a different register assignment.
@@ -1699,7 +1699,7 @@ void LabPCList_DrawItemRow();
  * items from the Game Boy save (マックスアップ ×5, タウリン ×5, ふしぎなアメ ×5, ポイントアップ ×3, わざマシン06, ひでんマシン01).
  */
 void LabPCList_InitItemWindow(LabItemWindow* window, s32 x, s32 y, s32 items, s32 item_flags, u8* mon) {
-    Window_SetRect(&window->window, x, y, 0x184, 0x16E);
+    Window_SetRect(&window->window, x, y, 388, 366);
     window->window.animTimer = 0;
     window->window.title = 0;
     window->window.state = 0;
@@ -1707,11 +1707,11 @@ void LabPCList_InitItemWindow(LabItemWindow* window, s32 x, s32 y, s32 items, s3
     func_8000A460(D_89119BD0, *(s8**)D_80064C44[mon[8]]);
     *(Str891084B4*)(func_800566BC((s32)D_89119BD0) + D_89119BD0) = *(Str891084B4*)D_8910E120;
     window->window.title = (char*)D_89119BD0;
-    Window_SetRect(&window->textFrame, x + 6, y + 0x10C, 0x178, 0x5C);
+    Window_SetRect(&window->textFrame, x + 6, y + 268, 376, 92);
     window->textFrame.style = 6;
     *(Rgba891084B4*)&window->textFrame.color = *(Rgba891084B4*)D_8910AAE0;
     *(Rgba891084B4*)&window->textFrame.color2 = *(Rgba891084B4*)D_8910AAE4;
-    ScrollList_Init(&window->list, items, item_flags, 8, LabPCList_DrawItemRow, 0x178, 0x1C);
+    ScrollList_Init(&window->list, items, item_flags, 8, LabPCList_DrawItemRow, 376, 28);
     window->list.options |= 0x10000;
     LabPCList_DisableUnusableItems((FlagScanOwner*)window);
     window->mon = mon;
@@ -1738,35 +1738,35 @@ void LabPCList_DrawItemWindow(LabItemWindow* window) {
         Ui_DrawTexturedDivider(window->window.frame.x, window->textFrame.y - 7, window->window.frame.width, D_8007356C);
         flags = 0xFFED;
         flags |= (window->mode == 0) ? 2 : 0x10;
-        ScrollList_DrawItems(&window->list, window->window.frame.x + 6, window->window.frame.y + 0x16, flags, 0);
+        ScrollList_DrawItems(&window->list, window->window.frame.x + 6, window->window.frame.y + 22, flags, 0);
         if (window->list.items->count > 0) {
             Font_BeginTranslucentTextRendering();
             Font_SetActive(8, 0);
-            Font_SetLineHeight(0x1C);
+            Font_SetLineHeight(28);
             x = window->textFrame.x + 8;
             y = window->textFrame.y + 8;
             switch (window->mode) {
                 case 0:
                     Gfx_SetEnvColor(D_800734A8[0].r, D_800734A8[0].g, D_800734A8[0].b, D_800734A8[0].a);
-                    Font_Printf(x, y + 0x1C, func_80031BC0(**((u8***)window->list.items->rows)[window->list.cursor], buf));
+                    Font_Printf(x, y + 28, func_80031BC0(**((u8***)window->list.items->rows)[window->list.cursor], buf));
                     break;
                 case 1:
                     Gfx_SetEnvColor(D_800734B8[0].r, D_800734B8[0].g, D_800734B8[0].b, D_800734B8[0].a);
                     Font_Printf(x, y, D_8910E134);
                     Gfx_SetEnvColor(D_800734A8[0].r, D_800734A8[0].g, D_800734A8[0].b, D_800734A8[0].a);
-                    Font_Printf(x, y + 0x1C, func_80031BC0(**((u8***)window->list.items->rows)[window->list.cursor], buf));
+                    Font_Printf(x, y + 28, func_80031BC0(**((u8***)window->list.items->rows)[window->list.cursor], buf));
                     break;
                 case 2:
                     Gfx_SetEnvColor(D_800734B8[0].r, D_800734B8[0].g, D_800734B8[0].b, D_800734B8[0].a);
                     Font_Printf(x, y, D_8910E150);
                     Gfx_SetEnvColor(D_800734A8[0].r, D_800734A8[0].g, D_800734A8[0].b, D_800734A8[0].a);
-                    Font_Printf(x, y + 0x1C, func_80031BC0(**((u8***)window->list.items->rows)[window->list.cursor], buf));
+                    Font_Printf(x, y + 28, func_80031BC0(**((u8***)window->list.items->rows)[window->list.cursor], buf));
                     break;
                 case 3:
                     Gfx_SetEnvColor(D_800734B8[0].r, D_800734B8[0].g, D_800734B8[0].b, D_800734B8[0].a);
                     Font_Printf(x, y, D_8910E16C);
                     Gfx_SetEnvColor(D_800734A8[0].r, D_800734A8[0].g, D_800734A8[0].b, D_800734A8[0].a);
-                    Font_Printf(x, y + 0x1C, func_80031BC0(**((u8***)window->list.items->rows)[window->list.cursor], buf));
+                    Font_Printf(x, y + 28, func_80031BC0(**((u8***)window->list.items->rows)[window->list.cursor], buf));
                     break;
             }
             Font_EndTexturedTextRendering();
@@ -1802,7 +1802,7 @@ s32 LabPCList_UpdateItemWindow(s8 *window)
   s32 n;
   s32 species;
   unsigned int i;
-  switch (*((u32 *) (((s8 *) self) + 0x1B0)))
+  switch (*((u32 *) (((s8 *) self) + 0x1B0))) // FAKE: decomp slop, raw pointer casts stand in for struct fields
   {
     case 0:
       if (ScrollList_UpdateCursor(self + 0x4C) == 0)
@@ -1819,12 +1819,12 @@ s32 LabPCList_UpdateItemWindow(s8 *window)
         {
           Audio_PlaySystemSound(2);
           LabPCList_InitPopupMenu((LabPopupMenu *) (self + 0x94), (s32 *) D_8910AAE8, (s32) (self + 0x90), 1, 0);
-          Window_SetRect(self + 0xC0, (*((s32 *) (((s8 *) self) + 0))) + 6, (((*((s32 *) (((s8 *) self) + 4))) + (*((s32 *) (((s8 *) self) + 0x80)))) - (*((s32 *) (((s8 *) self) + 0x78)))) + 0x16, (*((s32 *) (((s8 *) self) + 8))) - 0xC, 0x1C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+          Window_SetRect(self + 0xC0, (*((s32 *) (((s8 *) self) + 0))) + 6, (((*((s32 *) (((s8 *) self) + 4))) + (*((s32 *) (((s8 *) self) + 0x80)))) - (*((s32 *) (((s8 *) self) + 0x78)))) + 0x16, (*((s32 *) (((s8 *) self) + 8))) - 0xC, 28); // FAKE: decomp slop, raw pointer casts stand in for struct fields
           *((s32 *) (((s8 *) self) + 0x108)) = ((*((s32 *) (((s8 *) self) + 8))) + (*((s32 *) (((s8 *) self) + 0)))) - 6; // FAKE: decomp slop, raw pointer casts stand in for struct fields
           *((s32 *) (((s8 *) self) + 0x10C)) = (*((s32 *) (((s8 *) self) + 4))) + 0xF6; // FAKE: decomp slop, raw pointer casts stand in for struct fields
           LabPCList_PlacePopup((LabPopupMenu *) (self + 0x94));
-          *((Rgba891084B4 *) (((s8 *) self) + 0xAC)) = D_8910AAEC;
-          *((u32 *) (((s8 *) self) + 0x1B0)) = 1;
+          *((Rgba891084B4 *) (((s8 *) self) + 0xAC)) = D_8910AAEC; // FAKE: decomp slop, raw pointer casts stand in for struct fields
+          *((u32 *) (((s8 *) self) + 0x1B0)) = 1; // FAKE: decomp slop, raw pointer casts stand in for struct fields
         }
         else
         {
@@ -1840,21 +1840,21 @@ s32 LabPCList_UpdateItemWindow(s8 *window)
       if (((u16 *) D_800603C0)[4] & 0x4000)
       {
         Audio_PlaySystemSound(3);
-        *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
+        *((u32 *) (((s8 *) self) + 0x1B0)) = 0; // FAKE: decomp slop, raw pointer casts stand in for struct fields
       }
       else
         if (((u16 *) D_800603C0)[4] & 0x8000)
       {
-        if ((*((s32 *) (((s8 *) self) + 0xDC))) == 0)
+        if ((*((s32 *) (((s8 *) self) + 0xDC))) == 0) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
           entry = (*(*((u8 *****) (((s8 *) self) + 0x4C))))[*((s32 *) (((s8 *) self) + 0x54))]; // FAKE: decomp slop, raw pointer casts stand in for struct fields
-          if ((*((s32 *) (((s8 *) entry) + 8))) >= 100)
+          if ((*((s32 *) (((s8 *) entry) + 8))) >= 100) // FAKE: decomp slop, raw pointer casts stand in for struct fields
           {
-            n = BattleMon_CountMoves((*((u8 **) (((s8 *) self) + 0x1AC))) + 8);
+            n = BattleMon_CountMoves((*((u8 **) (((s8 *) self) + 0x1AC))) + 8); // FAKE: decomp slop, raw pointer casts stand in for struct fields
             Audio_PlaySystemSound(2);
             if (n < 4)
             {
-              *((u32 *) (((s8 *) self) + 0x1B0)) = 4;
+              *((u32 *) (((s8 *) self) + 0x1B0)) = 4; // FAKE: decomp slop, raw pointer casts stand in for struct fields
               if ((*entry[0]) >= 201)
               {
                 species = (*entry[0]) - 201;
@@ -1864,18 +1864,18 @@ s32 LabPCList_UpdateItemWindow(s8 *window)
                 species = (*entry[0]) - 146;
               }
               LabMoveSelect_Init(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-              *((s32 *) (((s8 *) self) + 0x144)) = n;
-              LabMoveSelect_StartLearnAnimation(self + 0x110, *((s32 *) (((s8 *) self) + 0x144)), func_80020974(species));
+              *((s32 *) (((s8 *) self) + 0x144)) = n; // FAKE: decomp slop, raw pointer casts stand in for struct fields
+              LabMoveSelect_StartLearnAnimation(self + 0x110, *((s32 *) (((s8 *) self) + 0x144)), func_80020974(species)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
             }
             else
             {
               LabMoveSelect_Init(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8); // FAKE: decomp slop, raw pointer casts stand in for struct fields
               LabMoveSelect_DisableHmMoves((LabMoveSelectWindow*)(self + 0x110));
-              *((u32 *) (((s8 *) self) + 0x1B0)) = 3;
+              *((u32 *) (((s8 *) self) + 0x1B0)) = 3; // FAKE: decomp slop, raw pointer casts stand in for struct fields
             }
           }
           else
-            if ((*((s32 *) (((s8 *) entry) + 8))) >= 50)
+            if ((*((s32 *) (((s8 *) entry) + 8))) >= 50) // FAKE: decomp slop, raw pointer casts stand in for struct fields
           {
             Audio_PlaySystemSound(2);
             LabMoveSelect_Init(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8); // FAKE: decomp slop, raw pointer casts stand in for struct fields
@@ -1883,23 +1883,23 @@ s32 LabPCList_UpdateItemWindow(s8 *window)
             {
               if ((((*((s32 *) (((s8 *) self) + (0x170 + (i * 4))))) == (-1)) || ((*((s32 *) (((s8 *) self) + (0x170 + (i * 4))))) == (-2))) || ((*((u8 **) (((s8 *) self) + 0x1AC)))[0x28 + i] >= 0xC0)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
               {
-                (*((u16 **) (((s8 *) self) + 0x140)))[i] |= 1;
+                (*((u16 **) (((s8 *) self) + 0x140)))[i] |= 1; // FAKE: decomp slop, raw pointer casts stand in for struct fields
               }
             }
 
-            *((u32 *) (((s8 *) self) + 0x1B0)) = 2;
+            *((u32 *) (((s8 *) self) + 0x1B0)) = 2; // FAKE: decomp slop, raw pointer casts stand in for struct fields
           }
           else
           {
-            Audio_PlaySystemSound(0x22);
-            *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
+            Audio_PlaySystemSound(34);
+            *((u32 *) (((s8 *) self) + 0x1B0)) = 0; // FAKE: decomp slop, raw pointer casts stand in for struct fields
             ret = 1;
           }
         }
         else
         {
           Audio_PlaySystemSound(3);
-          *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
+          *((u32 *) (((s8 *) self) + 0x1B0)) = 0; // FAKE: decomp slop, raw pointer casts stand in for struct fields
         }
       }
     }
@@ -1911,15 +1911,15 @@ s32 LabPCList_UpdateItemWindow(s8 *window)
       if (((u16 *) D_800603C0)[4] & 0x4000)
       {
         Audio_PlaySystemSound(3);
-        *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
+        *((u32 *) (((s8 *) self) + 0x1B0)) = 0; // FAKE: decomp slop, raw pointer casts stand in for struct fields
       }
       else
         if (((u16 *) D_800603C0)[4] & 0x8000)
       {
         if (!((*((u16 **) (((s8 *) self) + 0x140)))[*((s32 *) (((s8 *) self) + 0x144))] & 1)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
-          Audio_PlaySystemSound(0x22);
-          *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
+          Audio_PlaySystemSound(34);
+          *((u32 *) (((s8 *) self) + 0x1B0)) = 0; // FAKE: decomp slop, raw pointer casts stand in for struct fields
           ret = 2;
         }
         else
@@ -1936,7 +1936,7 @@ s32 LabPCList_UpdateItemWindow(s8 *window)
       if (((u16 *) D_800603C0)[4] & 0x4000)
       {
         Audio_PlaySystemSound(3);
-        *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
+        *((u32 *) (((s8 *) self) + 0x1B0)) = 0; // FAKE: decomp slop, raw pointer casts stand in for struct fields
       }
       else
         if (((u16 *) D_800603C0)[4] & 0x8000)
@@ -1955,8 +1955,8 @@ s32 LabPCList_UpdateItemWindow(s8 *window)
             sp38 = (*entry2[0]) - 146;
           }
           Audio_PlaySystemSound(2);
-          LabMoveSelect_StartLearnAnimation(self + 0x110, *((s32 *) (((s8 *) self) + 0x144)), func_80020974(sp38));
-          *((u32 *) (((s8 *) self) + 0x1B0)) = 4;
+          LabMoveSelect_StartLearnAnimation(self + 0x110, *((s32 *) (((s8 *) self) + 0x144)), func_80020974(sp38)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+          *((u32 *) (((s8 *) self) + 0x1B0)) = 4; // FAKE: decomp slop, raw pointer casts stand in for struct fields
         }
         else
         {
@@ -1970,7 +1970,7 @@ s32 LabPCList_UpdateItemWindow(s8 *window)
       if (((*((s32 *) (((s8 *) self) + 0x188))) == 0) && (((u16 *) D_800603C0)[4] & 0xC000)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
     {
       Audio_PlaySystemSound(3);
-      *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
+      *((u32 *) (((s8 *) self) + 0x1B0)) = 0; // FAKE: decomp slop, raw pointer casts stand in for struct fields
       ret = 3;
     }
       break;
@@ -2001,7 +2001,7 @@ extern u8 D_8910AAF8[];
  * 20」).
  */
 void LabPCList_InitMessageWindow(LabMessageWindow* window, s32 x, s32 y, LabItemResult* message) {
-    Window_SetRect(&window->window, x, y, 0x114, 0x60);
+    Window_SetRect(&window->window, x, y, 276, 96);
     window->window.animTimer = 0;
     window->window.title = 0;
     window->window.state = 0;
@@ -2024,24 +2024,24 @@ void LabPCList_DrawMessageWindow(LabMessageWindow* window) {
 
     if (func_8002AE6C() == 0) {
         Font_BeginTranslucentTextRendering();
-        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFFFF
         Font_SetActive(0x10, 0);
         Font_EnableTwoCycleTexturing();
-        Gfx_SetPrimColor(0xFF, 0xAC, 0xAC, 0xFF);
-        Font_Printf(window->window.frame.x + 0x12, window->window.frame.y + 0x12, window->message->title);
+        Gfx_SetPrimColor(0xFF, 0xAC, 0xAC, 0xFF); // #FFACACFF
+        Font_Printf(window->window.frame.x + 18, window->window.frame.y + 18, window->message->title);
         Font_DisableTwoCycleTexturing();
         Gfx_SetEnvColor(D_800734A8[0].r, D_800734A8[0].g, D_800734A8[0].b, D_800734A8[0].a);
         entry = window->message;
         if (entry->kind == 0) {
-            Font_Printf(window->window.frame.x + 0x12, window->window.frame.y + 0x36, D_8910E1AC, entry->left);
-            Font_Printf(window->window.frame.x + 0xA2, window->window.frame.y + 0x36, D_8910E1B0, window->message->right);
+            Font_Printf(window->window.frame.x + 18, window->window.frame.y + 54, D_8910E1AC, entry->left);
+            Font_Printf(window->window.frame.x + 162, window->window.frame.y + 54, D_8910E1B0, window->message->right);
         } else if (entry->kind == 1) {
-            Font_Printf(window->window.frame.x + 0x12, window->window.frame.y + 0x36, entry->left);
-            Font_Printf(window->window.frame.x + 0xA2, window->window.frame.y + 0x36, window->message->right);
+            Font_Printf(window->window.frame.x + 18, window->window.frame.y + 54, entry->left);
+            Font_Printf(window->window.frame.x + 162, window->window.frame.y + 54, window->message->right);
         }
         Font_EndTexturedTextRendering();
         gSPDisplayList(gDisplayListHead++, D_80073408);
-        func_8001B884(window->window.frame.x + 0x7A, window->window.frame.y + 0x36, 0x20, 0x18, D_8910D2F0, 0x20, 0x200000);
+        func_8001B884(window->window.frame.x + 122, window->window.frame.y + 54, 0x20, 24, D_8910D2F0, 0x20, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);
     }
 }

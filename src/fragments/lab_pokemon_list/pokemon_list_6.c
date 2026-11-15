@@ -194,20 +194,20 @@ s32 LabPCList_UpdateColumnMenu(LabPCListScreen* screen) {
                     b = screen->levelFilterMax;
                 }
                 screen->state = 4;
-                LabPCList_InitLevelInputWindow(&screen->levelInputWindow, 0x110, 0xF5, D_8910A7F4, a, b, LabPCList_HasFilterFlag(screen, 1));
+                LabPCList_InitLevelInputWindow(&screen->levelInputWindow, 272, 245, D_8910A7F4, a, b, LabPCList_HasFilterFlag(screen, 1));
                 break;
         }
     }
     return 0;
 }
 
+s32 LabPCList_UpdateLevelInput(void*);
+M2C_UNK LabPCList_ApplyFiltersAndSort();
 /**
  * Runs the レベルのにゅうりょく (level input) window and applies the level range filter.
  * Seen in play (2026-11-12) in いちらん: あつめる with 006から100 stored 6 and 100 at +0x9828/+0x9829, set
  * flag 1, and the Lv 5 party disappeared; かいじょ reset the range to 1-100 and cleared flag 1.
  */
-s32 LabPCList_UpdateLevelInput(void*);
-M2C_UNK LabPCList_ApplyFiltersAndSort();
 s32 LabPCList_RunLevelFilter(s8 *screen_arg)
 {
   LabPCListScreen *screen = (LabPCListScreen *) screen_arg;
@@ -334,7 +334,7 @@ typedef struct Flags89103144 {
 } Flags89103144;
 
 /**
- * Greys out the boxes of a source that are not listed, full, or the Pokémon's own box.
+ * Grays out the boxes of a source that are not listed, full, or the Pokémon's own box.
  * Seen in play (2026-11-14) in いちらん: ran when いどうする > ゲームボーイのボックス / 64カセットのボックス opened the box list.
  */
 void LabPCList_DisableUnavailableBoxes(Flags89103144* menu, Item89103144** entry, List89103144* source) {
@@ -355,7 +355,7 @@ void LabPCList_DisableUnavailableBoxes(Flags89103144* menu, Item89103144** entry
 }
 
 /**
- * Greys out each destination source with no box that could take the Pokémon.
+ * Grays out each destination source with no box that could take the Pokémon.
  * Seen in play (2026-11-14) in いちらん: ran when いどうする opened 「どこへ？」.
  */
 void LabPCList_DisableUnavailableSources(s8* menu, s8** moving_entry, s8* sources) {
@@ -385,7 +385,7 @@ extern s32 D_8910DD34[];
  */
 void LabPCList_OpenDestinationMenu(LabPCListScreen* screen, s8** entry) {
     LabPCList_InitPopupMenu(&screen->subPopup, D_8910A8DC, (s8*)&screen->popupItemFlags[1], 3, (s32)D_8910DD34);
-    Window_SetRect((s8*)&screen->subPopup.anchorX, screen->popup.window.frame.x + 0xE, screen->popup.window.frame.y + 0x38, 0x6C, 0x1C);
+    Window_SetRect((s8*)&screen->subPopup.anchorX, screen->popup.window.frame.x + 14, screen->popup.window.frame.y + 56, 108, 28);
     screen->subPopup.window.frame.style |= 0x1000000;
     screen->subPopup.limitX = screen->listFrame.x + screen->listFrame.width;
     screen->subPopup.limitY = screen->listFrame.y + screen->listFrame.height;
@@ -459,7 +459,7 @@ s32 LabPCList_UpdateMonMenu(LabPCListScreen* screen) {
                 if (LabPCList_IsLastPartyMon((s8**)entry) != 0) {
                     Audio_PlaySystemSound(8);
                     TextBox_Init((s8*)screen->textBox, (s32)D_8910DD40, 0, 1, 0);
-                    screen->state = 0xB;
+                    screen->state = 11;
                 } else {
                     Audio_PlaySystemSound(2);
                     LabPCList_OpenDestinationMenu(screen, (s8**)entry);
@@ -474,7 +474,7 @@ s32 LabPCList_UpdateMonMenu(LabPCListScreen* screen) {
                 } else {
                     Audio_PlaySystemSound(8);
                     TextBox_Init((s8*)screen->textBox, (s32)D_8910DD58, 0, 1, 0);
-                    screen->state = 0xC;
+                    screen->state = 12;
                 }
                 break;
         }

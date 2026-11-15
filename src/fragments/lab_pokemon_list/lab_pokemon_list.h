@@ -231,7 +231,7 @@ typedef struct Slot89102930 {
  * (LabPCList_InitLevelInputWindow). */
 typedef struct LabLevelInputWindow {
     /* 0x00 */ Window window;
-    /* 0x2C */ LabeledButton clearButton; // かいじょ; flags bit 0 (greyed out) when no level filter is active
+    /* 0x2C */ LabeledButton clearButton; // かいじょ; flags bit 0 (grayed out) when no level filter is active
     /* 0x68 */ LabeledButton gatherButton; // あつめる
     /* 0xA4 */ DigitSelector minLevel; // the left 3-digit number; D-Up on its tens digit turned 001 into 011, and あつめる stored 11 in levelFilterMin
     /* 0xB8 */ DigitSelector maxLevel; // the right 3-digit number, 100 at open; D-Up on its hundreds digit wrapped it to 1

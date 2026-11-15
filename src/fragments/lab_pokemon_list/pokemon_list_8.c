@@ -126,7 +126,7 @@ extern char D_8910E3A8[];
 void func_80027868(s8*, s32);
 void func_80027814(s8*, Ref89103740*, s32);
 /**
- * Moves the selected Pokemon to source `sourceIndex`, box `box`, and shows the いどう (moved) message.
+ * Moves the selected Pokemon to source `source_index`, box `box`, and shows the いどう (moved) message.
  * Seen in play (2026-11-12) in いちらん: ran with kind 1 (GB) or 2 (64 cartridge) and box 0, showed
  * the いどう message and left two Pokémon in the party.
  */
@@ -176,7 +176,7 @@ s32 LabPCList_UpdateDestinationMenu(LabPCListScreen* screen) {
         if (!(screen->subPopup.menu.itemFlags[screen->subPopup.menu.cursor] & 1)) {
             switch (screen->subPopup.menu.cursor) {
                 case 0:
-                    Audio_PlaySystemSound(0x18);
+                    Audio_PlaySystemSound(24);
                     cursor = screen->list.cursor;
                     top = screen->list.cursor - screen->list.scrollY / screen->list.cellHeight;
                     LabPCList_MoveMonTo((LabPCListScreen*)screen, ((List89103C54*)screen->list.items)->items[screen->list.cursor], 0, 0, screen->msg);
@@ -187,7 +187,7 @@ s32 LabPCList_UpdateDestinationMenu(LabPCListScreen* screen) {
                     ret = 3;
                     break;
                 case 3:
-                    Audio_PlaySystemSound(0x18);
+                    Audio_PlaySystemSound(24);
                     cursor = screen->list.cursor;
                     top = screen->list.cursor - screen->list.scrollY / screen->list.cellHeight;
                     LabPCList_MoveMonTo((LabPCListScreen*)screen, ((List89103C54*)screen->list.items)->items[screen->list.cursor], 3, 0, screen->msg);
@@ -200,7 +200,7 @@ s32 LabPCList_UpdateDestinationMenu(LabPCListScreen* screen) {
                 case 1:
                     Audio_PlaySystemSound(2);
                     LabPCList_InitPopupMenu(&screen->subPopup2, D_8910A8E8, (s8*)&screen->popupItemFlags[2], 8, 0);
-                    Window_SetRect((s8*)&screen->subPopup2.anchorX, screen->subPopup.window.frame.x + 0xE, screen->subPopup.window.frame.y + 0x1C, 0xE4, 0x1C);
+                    Window_SetRect((s8*)&screen->subPopup2.anchorX, screen->subPopup.window.frame.x + 14, screen->subPopup.window.frame.y + 28, 228, 28);
                     screen->subPopup2.window.frame.style |= 0x01000000;
                     screen->subPopup2.limitX = screen->listFrame.x + screen->listFrame.width;
                     screen->subPopup2.limitY = screen->listFrame.y + screen->listFrame.height;
@@ -212,14 +212,14 @@ s32 LabPCList_UpdateDestinationMenu(LabPCListScreen* screen) {
                 case 2:
                     Audio_PlaySystemSound(2);
                     LabPCList_InitPopupMenu(&screen->subPopup2, D_8910A8E8, (s8*)&screen->popupItemFlags[2], 4, 0);
-                    Window_SetRect((s8*)&screen->subPopup2.anchorX, screen->subPopup.window.frame.x + 0xE, screen->subPopup.window.frame.y + 0x38, 0xE4, 0x1C);
+                    Window_SetRect((s8*)&screen->subPopup2.anchorX, screen->subPopup.window.frame.x + 14, screen->subPopup.window.frame.y + 56, 228, 28);
                     screen->subPopup2.window.frame.style |= 0x01000000;
                     screen->subPopup2.limitX = screen->listFrame.x + screen->listFrame.width;
                     screen->subPopup2.limitY = screen->listFrame.y + screen->listFrame.height;
                     LabPCList_PlacePopup(&screen->subPopup2);
                     screen->subPopup2.window.frame.color = D_8910A7F4;
                     LabPCList_DisableUnavailableBoxes((s8*)&screen->subPopup2.menu, ((List89103C54*)screen->list.items)->items[screen->list.cursor], screen->sourceMatrix.rows + 0x48);
-                    screen->state = 0xA;
+                    screen->state = 10;
                     break;
             }
         } else {
@@ -248,7 +248,7 @@ s32 LabPCList_UpdateGbBoxMenu(LabPCListScreen* screen) {
         if (!(screen->subPopup2.menu.itemFlags[screen->subPopup2.menu.cursor] & 1)) {
             cursor = screen->list.cursor;
             top = screen->list.cursor - screen->list.scrollY / screen->list.cellHeight;
-            Audio_PlaySystemSound(0x18);
+            Audio_PlaySystemSound(24);
             LabPCList_MoveMonTo((LabPCListScreen*)screen, ((List89103C54*)screen->list.items)->items[screen->list.cursor], 1, screen->subPopup2.menu.cursor, screen->msg);
             LabPCList_FlattenEntries(&screen->rows, (unk_func_8830867C_02C_144*)&screen->sourceMatrix);
             LabPCList_ApplyFiltersAndSort(screen);
@@ -280,7 +280,7 @@ s32 LabPCList_UpdateStadiumBoxMenu(LabPCListScreen* screen) {
         if (!(screen->subPopup2.menu.itemFlags[screen->subPopup2.menu.cursor] & 1)) {
             cursor = screen->list.cursor;
             top = screen->list.cursor - screen->list.scrollY / screen->list.cellHeight;
-            Audio_PlaySystemSound(0x18);
+            Audio_PlaySystemSound(24);
             LabPCList_MoveMonTo((LabPCListScreen*)screen, ((List89103C54*)screen->list.items)->items[screen->list.cursor], 2, screen->subPopup2.menu.cursor, screen->msg);
             LabPCList_FlattenEntries(&screen->rows, (unk_func_8830867C_02C_144*)&screen->sourceMatrix);
             LabPCList_ApplyFiltersAndSort(screen);
@@ -311,11 +311,11 @@ s32 func_8002057C(u8, u16);
 void func_800203FC(BattleMon*);
 void LabPCList_ConsumeUsedItem();
 /**
- * Uses a vitamin (HP Up, Protein, Iron, Carbos, Calcium; 0x23-0x27) or a Rare Candy (0x28) on the
+ * Uses a vitamin (HP Up, Protein, Iron, Carbos, Calcium; 35-39) or a Rare Candy (40) on the
  * Pokemon and fills in the old and new values for the result message.
  * Seen in play (2026-11-12) in いちらん: マックスアップ (HP Up) on フシギダネ showed HP 19 -> 20, and
  * ふしぎなアメ showed レベル 5 -> 6 with the stats recomputed. After レポートしてやめる the Game Boy save
- * had HP stat exp +0xA00, max HP 20 and one HP Up fewer.
+ * had HP stat exp +2560, max HP 20 and one HP Up fewer.
  */
 void LabPCList_ApplyVitaminItem(u8** entry, u8** item, Msg89103F04* msg) {
     BattleMon* mon;
@@ -324,57 +324,57 @@ void LabPCList_ApplyVitaminItem(u8** entry, u8** item, Msg89103F04* msg) {
     msg->unk04 = 0;
     mon = (BattleMon*)((u8*)entry + 8);
     switch (**item) {
-        case 0x23:
+        case 35:
             msg->text = D_8910DDFC;
             msg->oldValue = mon->maxHp;
-            mon->statExp[0] += 0xA00;
-            if (mon->statExp[0] > 0x6400) {
-                mon->statExp[0] = 0x6400;
+            mon->statExp[0] += 2560;
+            if (mon->statExp[0] > 25600) {
+                mon->statExp[0] = 25600;
             }
             mon->maxHp = func_80020234(1, mon->species.id, mon->statExp[0], mon->level, mon->dvs);
             msg->newValue = mon->maxHp;
             break;
-        case 0x24:
+        case 36:
             msg->text = D_8910DE04;
             msg->oldValue = mon->attack;
-            mon->statExp[1] += 0xA00;
-            if (mon->statExp[1] > 0x6400) {
-                mon->statExp[1] = 0x6400;
+            mon->statExp[1] += 2560;
+            if (mon->statExp[1] > 25600) {
+                mon->statExp[1] = 25600;
             }
             mon->attack = func_80020234(2, mon->species.id, mon->statExp[1], mon->level, mon->dvs);
             msg->newValue = mon->attack;
             break;
-        case 0x25:
+        case 37:
             msg->text = D_8910DE10;
             msg->oldValue = mon->defense;
-            mon->statExp[2] += 0xA00;
-            if (mon->statExp[2] > 0x6400) {
-                mon->statExp[2] = 0x6400;
+            mon->statExp[2] += 2560;
+            if (mon->statExp[2] > 25600) {
+                mon->statExp[2] = 25600;
             }
             mon->defense = func_80020234(3, mon->species.id, mon->statExp[2], mon->level, mon->dvs);
             msg->newValue = mon->defense;
             break;
-        case 0x26:
+        case 38:
             msg->text = D_8910DE1C;
             msg->oldValue = mon->speed;
-            mon->statExp[3] += 0xA00;
-            if (mon->statExp[3] > 0x6400) {
-                mon->statExp[3] = 0x6400;
+            mon->statExp[3] += 2560;
+            if (mon->statExp[3] > 25600) {
+                mon->statExp[3] = 25600;
             }
             mon->speed = func_80020234(4, mon->species.id, mon->statExp[3], mon->level, mon->dvs);
             msg->newValue = mon->speed;
             break;
-        case 0x27:
+        case 39:
             msg->text = D_8910DE28;
             msg->oldValue = mon->special;
-            mon->statExp[4] += 0xA00;
-            if (mon->statExp[4] > 0x6400) {
-                mon->statExp[4] = 0x6400;
+            mon->statExp[4] += 2560;
+            if (mon->statExp[4] > 25600) {
+                mon->statExp[4] = 25600;
             }
             mon->special = func_80020234(5, mon->species.id, mon->statExp[4], mon->level, mon->dvs);
             msg->newValue = mon->special;
             break;
-        case 0x28:
+        case 40:
             msg->text = D_8910DE34;
             msg->oldValue = mon->level;
             old_max_hp = mon->maxHp;
@@ -437,7 +437,7 @@ void LabPCList_ApplyPpUpItem(u8** entry, s32 item, s32 slot, Msg891041D8* msg) {
 u8 Move_GetIdFromTableIndex(s32 arg0);
 
 /**
- * Teaches the TM or HM move of `item` in move slot `slot` (item ids from 0xC9 are TMs, below are HMs).
+ * Teaches the TM or HM move of `item` in move slot `slot` (item ids from 201 are TMs, below are HMs).
  * Seen in play (2026-11-12) in いちらん: わざマシン06 on フシギダネ ran this with slot 2, and どくどく (Toxic) then
  * appeared as わざ3.
  */
@@ -445,17 +445,17 @@ void LabPCList_TeachTmHmMove(u8** entry, u8** item, s32 slot) {
     u8* ptr;
     s32 var_a0;
 
-    if (*item[0] >= 0xC9) {
-        var_a0 = *item[0] - 0xC9;
+    if (*item[0] >= 201) {
+        var_a0 = *item[0] - 201;
     } else {
-        var_a0 = *item[0] - 0x92;
+        var_a0 = *item[0] - 146;
     }
 
     ptr = (u8*)entry + slot + 8;
     ptr[9] = Move_GetIdFromTableIndex(var_a0);
     ptr[0x20] = gMoveData[ptr[9] - 1].pp;
 
-    if (*item[0] >= 0xC9) {
+    if (*item[0] >= 201) {
         LabPCList_ConsumeUsedItem(item);
     }
     *(s32*)(entry[0] + 0x10) = 1;
@@ -530,7 +530,7 @@ s32 LabPCList_UpdateList(LabPCListScreen* screen) {
  */
 void LabPCList_InitScreen(LabPCList* lab) {
     lab->state = 0;
-    LabPCList_InitListWindow(&lab->listScreen, 0x26, 0x48, (s32)&lab->message);
+    LabPCList_InitListWindow(&lab->listScreen, 38, 72, (s32)&lab->message);
 }
 
 void SavePrompt_Init(SavePrompt*, s32, s32);
@@ -558,18 +558,18 @@ s32 LabPCList_UpdateScreen(LabPCList* lab) {
             r = LabPCList_UpdateList(sub);
             if (r == 1) {
                 if (lab->listScreen.hasChanges != 0) {
-                    SavePrompt_Init(&lab->savePrompt, 0xCA, 0xAD);
+                    SavePrompt_Init(&lab->savePrompt, 202, 173);
                     lab->state = 1;
                 } else {
                     ret = 1;
                 }
             } else if (r == 2) {
                 LabPCList_UpdateItemUsability((s8*)&lab->listScreen + 0xAFFC, ((s32*)lab->listScreen.list.items->rows)[lab->listScreen.list.cursor] + 8);
-                LabPCList_InitItemWindow(&lab->itemWindow, ((LabPCListScreen*)sub)->window.frame.x + 0xAB, ((LabPCListScreen*)sub)->window.frame.y + 0xD, sub + 0xAFFC,
+                LabPCList_InitItemWindow(&lab->itemWindow, ((LabPCListScreen*)sub)->window.frame.x + 171, ((LabPCListScreen*)sub)->window.frame.y + 13, sub + 0xAFFC,
                               sub + 0xB008, ((s32**)((LabPCListScreen*)sub)->list.items->rows)[((LabPCListScreen*)sub)->list.cursor]);
                 lab->state = 2;
             } else if (r == 3) {
-                LabPCList_InitMessageWindow(&lab->messageWindow, 0xB6, 0xEA, &lab->message);
+                LabPCList_InitMessageWindow(&lab->messageWindow, 182, 234, &lab->message);
                 lab->state = 3;
             }
             break;
@@ -617,7 +617,7 @@ s32 LabPCList_UpdateScreen(LabPCList* lab) {
                     if (r == 3) {
                         lab->state = 0;
                     } else {
-                        LabPCList_InitMessageWindow(&lab->messageWindow, 0xB6, 0xEA, &lab->message);
+                        LabPCList_InitMessageWindow(&lab->messageWindow, 182, 234, &lab->message);
                         lab->state = 3;
                     }
                 }
@@ -640,7 +640,7 @@ extern M2C_UNK D_8910A7F0;
  * Seen in play (2026-11-12): the いちらん background.
  */
 void LabPCList_DrawBackground(void) {
-    Ui_DrawTintedScreenBackground(0x38, 0x1E0, M2C_FIELD(&D_8910A7F0, u8 *, 0), M2C_FIELD(&D_8910A7F0, u8 *, 1), (s32) M2C_FIELD(&D_8910A7F0, u8 *, 2));
+    Ui_DrawTintedScreenBackground(56, 480, M2C_FIELD(&D_8910A7F0, u8 *, 0), M2C_FIELD(&D_8910A7F0, u8 *, 1), (s32) M2C_FIELD(&D_8910A7F0, u8 *, 2));
 }
 
 void BgStage_DrawFrame(void);
@@ -744,7 +744,7 @@ s32 LabPCList_UpdateFade(UNUSED s32 unused) {
     GbSave_DrawSummaryBar(0, var_a1, &D_8910DE44, D_8910E37C);
     n = D_8910A908;
     func_8002C8D8(&sp2C, *(Col891049E8*)&D_8910A7F0, n / (f64)8.0f);
-    Ui_DrawTintedScreenBackground(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
+    Ui_DrawTintedScreenBackground(56, 480, sp2C.r, sp2C.g, sp2C.b);
     if (D_8910A90C == 0) {
         n = D_8910A908;
         n++;

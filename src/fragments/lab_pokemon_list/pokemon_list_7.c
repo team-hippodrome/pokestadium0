@@ -112,8 +112,8 @@ extern Info891033A0 D_80065D00[];
 extern s8 D_8910DD40[];
 extern s8 D_8910DD58[];
 
-typedef struct Str7_89103620 { char s[7]; } Str7_89103620;
-typedef struct Str9_89103620 { char s[9]; } Str9_89103620;
+typedef struct LocationText7 { char s[7]; } LocationText7;
+typedef struct LocationText9 { char s[9]; } LocationText9;
 u32 func_800566BC(s8*);
 /**
  * Writes the name of a location: てもち (party), ＧＢ N (GB box N) and so on.
@@ -123,14 +123,14 @@ u32 func_800566BC(s8*);
 void LabPCList_FormatLocationName(s8* buf, s32 source_kind, s32 box) {
     switch (source_kind) {
         case 0:
-            *(Str7_89103620*)buf = *(Str7_89103620*)"てもち"; // "Party"
+            *(LocationText7*)buf = *(LocationText7*)"てもち"; // "Party"
             break;
         case 1:
-            *(Str9_89103620*)buf = *(Str9_89103620*)"ＧＢ　０"; // "GB 0"
+            *(LocationText9*)buf = *(LocationText9*)"ＧＢ　０"; // "GB 0"
             buf[func_800566BC(buf) - 1] += box + 1;
             break;
         case 2:
-            *(Str9_89103620*)buf = *(Str9_89103620*)"６４　０"; // "64 0"
+            *(LocationText9*)buf = *(LocationText9*)"６４　０"; // "64 0"
             buf[func_800566BC(buf) - 1] += box + 1;
             break;
     }

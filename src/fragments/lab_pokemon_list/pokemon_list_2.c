@@ -50,23 +50,23 @@ void LabPCList_DrawDetailColumns(LabPCListScreen* screen, s32 left, s32 top, s32
     s32 hl;
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(left, screen->listFrame.y, 0x26, 0x14, *(Color_RGBA8*)D_8910A85C);
-    func_80029028(left + 0x26, screen->listFrame.y, 0x50, 0x14, *(Color_RGBA8*)D_8910A860);
+    func_80029028(left, screen->listFrame.y, 38, 20, *(Color_RGBA8*)D_8910A85C);
+    func_80029028(left + 38, screen->listFrame.y, 80, 20, *(Color_RGBA8*)D_8910A860);
     i = screen->pageColumnStart[screen->page];
     for (x = left + 0x78; x < screen->listFrame.width; i++) {
-        func_80029028(x, top, screen->columnWidths[i], 0x14, *(Color_RGBA8*)&D_8910A85C[(i & 1) * 4]);
+        func_80029028(x, top, screen->columnWidths[i], 20, *(Color_RGBA8*)&D_8910A85C[(i & 1) * 4]);
         x += screen->columnWidths[i];
     }
     if (flags & 0x10) {
-        Ui_FillRectHighlighted(LabPCList_GetColumnCursorX(screen) + 1, top + 1, screen->columnWidths[screen->pageColumnStart[screen->page] + screen->headerCursor.cursor - 2] - 2, 0x12, *(Color_RGBA8*)D_8910A860);
+        Ui_FillRectHighlighted(LabPCList_GetColumnCursorX(screen) + 1, top + 1, screen->columnWidths[screen->pageColumnStart[screen->page] + screen->headerCursor.cursor - 2] - 2, 18, *(Color_RGBA8*)D_8910A860);
     }
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-    Gfx_DrawTextureIa8(left + 4, top + 1, 0x1E, 0x12, D_8910AB08, 0x20, 0);
+    Gfx_DrawTextureIa8(left + 4, top + 1, 30, 18, D_8910AB08, 0x20, 0);
     Font_BeginTranslucentTextRendering();
     Gfx_SetEnvColor(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
     Font_SetActive(4, 0);
-    Font_Printf(left + 0x2E, top + 2, D_8910DAF8);
+    Font_Printf(left + 46, top + 2, D_8910DAF8);
     Font_EndTexturedTextRendering();
     Font_BeginTranslucentTextRendering();
     for (x = left + 0x78, i = screen->pageColumnStart[screen->page]; x < screen->listFrame.width; i++) {
@@ -79,11 +79,11 @@ void LabPCList_DrawDetailColumns(LabPCListScreen* screen, s32 left, s32 top, s32
                 break;
             case 1:
                 Font_SetActive(4, 0);
-                Font_Printf(x + 0xA, top + 2, D_8910DB14);
+                Font_Printf(x + 10, top + 2, D_8910DB14);
                 break;
             case 2:
                 Font_SetActive(4, 0xC);
-                Font_Printf(x + 0x16, top + 2, D_8910DB18);
+                Font_Printf(x + 22, top + 2, D_8910DB18);
                 break;
             case 3:
                 Font_SetActive(4, 0);
@@ -99,27 +99,27 @@ void LabPCList_DrawDetailColumns(LabPCListScreen* screen, s32 left, s32 top, s32
                 break;
             case 6:
                 Font_SetActive(4, 0);
-                Font_Printf(x + 0x16, top + 2, D_8910DB40);
+                Font_Printf(x + 22, top + 2, D_8910DB40);
                 break;
             case 7:
                 Font_SetActive(4, 0);
-                Font_Printf(x + 0x16, top + 2, D_8910DB4C);
+                Font_Printf(x + 22, top + 2, D_8910DB4C);
                 break;
             case 8:
                 Font_SetActive(4, 0);
-                Font_Printf(x + 0x16, top + 2, D_8910DB58);
+                Font_Printf(x + 22, top + 2, D_8910DB58);
                 break;
             case 9:
                 Font_SetActive(4, 0);
-                Font_Printf(x + 0x16, top + 2, D_8910DB64);
+                Font_Printf(x + 22, top + 2, D_8910DB64);
                 break;
             case 10:
                 Font_SetActive(4, 0);
-                Font_Printf(x + 0xC, top + 2, D_8910DB70);
+                Font_Printf(x + 12, top + 2, D_8910DB70);
                 break;
             case 11:
                 Font_SetActive(4, 0xC);
-                Font_Printf(x + 0xE, top + 2, D_8910DB78);
+                Font_Printf(x + 14, top + 2, D_8910DB78);
                 break;
             case 12:
                 Font_SetActive(4, 0);
@@ -159,7 +159,7 @@ M2C_UNK func_8001AB6C();
 M2C_UNK func_8001ABBC();
 
 /**
- * Draws the colored type icon for type slot `typeSlot` of Pokemon `mon`.
+ * Draws the colored type icon for type slot `type_slot` of Pokemon `mon`.
  * Seen in play (2026-11-12): くさ, どく, ほのお and みず in their type colors.
  */
 void LabPCList_DrawTypeIcon(s32 x, s32 y, u8* mon, s32 type_slot) {
@@ -240,14 +240,14 @@ void LabPCList_DrawLocation(s32 x, s32 y, s8 ***entry) {
         break;
     case 33:
         func_8001A384(4, -1);
-        Font_DrawCharAt(x + 0x22, y, M2C_FIELD(*entry, s32 *, 4) + 0x31);
-        func_8001AA9C(0xFFU, 0xC8U, 0xFFU, 0xFFU);
+        Font_DrawCharAt(x + 34, y, M2C_FIELD(*entry, s32 *, 4) + 0x31);
+        func_8001AA9C(0xFFU, 0xC8U, 0xFFU, 0xFFU); // #FFC8FFFF
         Font_Printf(x - 2, y, &D_8910DBBC);
         break;
     case 17:
         func_8001A384(4, -1);
-        Font_DrawCharAt(x + 0x22, y, M2C_FIELD(*entry, s32 *, 4) + 0x31);
-        func_8001AA9C(0x96U, 0xDCU, 0xD2U, 0xFFU);
+        Font_DrawCharAt(x + 34, y, M2C_FIELD(*entry, s32 *, 4) + 0x31);
+        func_8001AA9C(0x96U, 0xDCU, 0xD2U, 0xFFU); // #96DCD2FF
         Font_Printf(x - 2, y, &D_8910DBC0);
         break;
     case 19:

@@ -62,8 +62,8 @@ void ScrollList_SetCursorKeepOffset(s32*, s32);
 /**
  * LabList_RemoveSelectedEntry
  *
- * Removes one row from the grid referenced by the cursor arg0 and fixes up
- * the cursor.  arg0->items is the table and arg0->cursor the current index.
+ * Removes one row from the grid referenced by the cursor list and fixes up
+ * the cursor.  list->items is the table and list->cursor the current index.
  *
  *   1. func_800275E4(grid, index) is called.  This is ByteMatrix_RemoveRow
  *      (name from symbol_addrs.txt; its code was read and agrees): it
@@ -73,7 +73,7 @@ void ScrollList_SetCursorKeepOffset(s32*, s32);
  *      value is not used here.
  *   2. If the index is now at or past the (already decremented) count, i.e.
  *      the removed row was the last one, it is decremented.
- *   3. ScrollList_SetCursorKeepOffset(arg0, index) is called
+ *   3. ScrollList_SetCursorKeepOffset(list, index) is called
  *      (WidgetTree_SetScrollableGridIndexPreserveScroll in symbol_addrs.txt).
  *
  * symbol_addrs.txt names this function LabList_RemoveSelectedEntry,
@@ -99,7 +99,7 @@ int func_800274E0();
 void ScrollList_SetCursorKeepOffset(s32*, s32);
 
 /**
- * Adds `quantity` of `itemId` to the item list at its cursor. Rows that already hold
+ * Adds `quantity` of `item_id` to the item list at its cursor. Rows that already hold
  * the item are removed first (their counts are added in, and the cursor moves up past
  * each one removed), then the total is inserted as stacks of at most 99.
  * Seen in play (2026-11-14) in どうぐをいどうする: moving 2 of キズぐすり ×03 into サトシのパソコン put a
@@ -152,7 +152,7 @@ void LabItem_InsertItemStacks(s32* list, s32 item_id, s32 quantity) {
 }
 
 /**
- * Takes `arg1` from the selected item's count, removing the entry when nothing is left.
+ * Takes `count` from the selected item's count, removing the entry when nothing is left.
  * Seen in play (2026-11-13) in せいとん > どうぐをいどうする, moving all five ほのおのいし to サトシのパソコン removed the bag
  * row (006/020 to 005/020, PC 000/050 to 001/050).
  */
@@ -174,7 +174,7 @@ void LabItem_Unused(void) {
 }
 
 /**
- * Returns how many more of `itemId` a full table can take: 99 minus the count of
+ * Returns how many more of `item_id` a full table can take: 99 minus the count of
  * every row that already holds it, summed.
  * Seen in play (2026-11-14): with the bag poked to 20/20 rows and ふしぎなアメ ×95 in row 0, picking
  * ふしぎなアメ ×05 in サトシのパソコン to move into the bag returned 4, and the count
@@ -213,11 +213,11 @@ s32 LabItem_ComputeMaxTransferQuantity(s32 item_id, ByteMatrix* table) {
 }
 
 /** Finds the item box slot for a Game Pak box, allocating one if needed. */
-s32 LabItem_FindOrAllocateGamePakBoxSlot(LabItemSaveSlot* slots, s32 trainerId, char* trainerName) {
+s32 LabItem_FindOrAllocateGamePakBoxSlot(LabItemSaveSlot* slots, s32 trainer_id, char* trainer_name) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        if ((slots[i].present != 0) && (trainerId == slots[i].trainerId) && (HAL_Strcmp(slots[i].trainerName, trainerName) == 0)) {
+        if ((slots[i].present != 0) && (trainer_id == slots[i].trainerId) && (HAL_Strcmp(slots[i].trainerName, trainer_name) == 0)) {
             return i;
         }
     }
@@ -280,7 +280,7 @@ extern Color_RGBA8 D_8900A5B8;
  * Seen in play (2026-11-12): the せいとん background.
  */
 void LabItem_DrawBackground(void) {
-    Ui_DrawTintedScreenBackground(0x38, 0x1E0, D_8900A5B8.r, D_8900A5B8.g, (s32)D_8900A5B8.b);
+    Ui_DrawTintedScreenBackground(56, 480, D_8900A5B8.r, D_8900A5B8.g, (s32)D_8900A5B8.b);
 }
 
 void Window_SetRect(s8*, s32, s32, s32, s32);
@@ -296,15 +296,15 @@ extern s32 D_800603C0;
  * 64 cassette had no free save, and 「このデータをすてますか？」.
  */
 void LabItem_InitConfirmWindow(LabItemConfirmWindow* win, s32 x, s32 y, char *title, s32 text) {
-    Window_SetRect(win, x, y, 0x10C, 0x92);
+    Window_SetRect(win, x, y, 268, 146);
     win->window.animTimer = 0;
     win->window.state = 0;
     win->window.frame.style = 0x2801;
     win->window.title = title;
-    Window_InitLabeled(&win->yesButton, win->window.frame.x + 0x2E, win->window.frame.y + 0x6E, 0x48, D_8900A5C0, D_89018460);
+    Window_InitLabeled(&win->yesButton, win->window.frame.x + 46, win->window.frame.y + 110, 72, D_8900A5C0, D_89018460);
     win->yesButton.labelX = 0xA;
     win->yesButton.unk_34 = 0xC;
-    Window_InitLabeled(&win->noButton, win->window.frame.x + 0x96, win->window.frame.y + 0x6E, 0x48, D_8900A5C0, D_89018468);
+    Window_InitLabeled(&win->noButton, win->window.frame.x + 150, win->window.frame.y + 110, 72, D_8900A5C0, D_89018468);
     win->choice.count = 2;
     win->choice.cursor = 0;
     win->choice.controller = (Controller*)D_800603C0;
@@ -345,7 +345,7 @@ void LabItem_DrawConfirmWindow(LabItemConfirmWindow* win) {
         }
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
-        Font_SetLineHeight(0x1C);
+        Font_SetLineHeight(28);
         Font_Printf(win->window.frame.x + 14, win->window.frame.y + 10, win->text);
         func_8001ABBC();
         Window_DrawLabeled(&win->yesButton, (win->choice.cursor == 0) ? 2 : 0);
@@ -395,7 +395,7 @@ extern Color_RGBA8 D_8900A5BC;
  * picked to move from てもちのどうぐ to サトシのパソコン.
  */
 void LabItem_InitCountSelector(LabItemCountSelector* sel, s32 x, s32 y, s32 max, s32 limit) {
-    Window_SetRect(&sel->window, x, y, 0x54, 0x34);
+    Window_SetRect(&sel->window, x, y, 84, 52);
     sel->window.animTimer = 0;
     sel->window.title = 0;
     sel->window.state = 0;
@@ -443,20 +443,20 @@ void LabItem_DrawCountSelector(LabItemCountSelector* sel) {
         } else {
             v = (s32)D_04002130;
         }
-        func_8001B884(x + 3, sel->window.frame.y + 6, 0xE, 8, (u8*)v, 0x10, 0x200000);
+        func_8001B884(x + 3, sel->window.frame.y + 6, 14, 8, (u8*)v, 0x10, 0x200000);
         if (((u16*)D_800603C0)[3] & 0x400) {
             v = (s32)D_04002448;
         } else {
             v = (s32)D_04002238;
         }
-        func_8001B884(x + 3, sel->window.frame.y + 0x26, 0xE, 8, (u8*)v, 0x10, 0x200000);
+        func_8001B884(x + 3, sel->window.frame.y + 38, 14, 8, (u8*)v, 0x10, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);
-        Ui_DrawRoundedFrame(x - 3, sel->window.frame.y + 0xD, 0x1A, 0x1A, D_80073520);
+        Ui_DrawRoundedFrame(x - 3, sel->window.frame.y + 13, 26, 26, D_80073520);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(8, 0);
         Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2],
                       D_800734A8[3]);
-        Font_Printf(sel->window.frame.x + 0xA, sel->window.frame.y + 0x10, D_89018470);
+        Font_Printf(sel->window.frame.x + 10, sel->window.frame.y + 0x10, D_89018470);
         if (sel->count.digit == 1) {
             v = 2;
         } else {
@@ -470,7 +470,7 @@ void LabItem_DrawCountSelector(LabItemCountSelector* sel) {
             v = 0;
         }
         Font_SetColorForFlags(v);
-        Font_DrawCharAt(sel->window.frame.x + 0x36, sel->window.frame.y + 0x10, sel->count.value % 10 + '0');
+        Font_DrawCharAt(sel->window.frame.x + 54, sel->window.frame.y + 0x10, sel->count.value % 10 + '0');
         Font_EndTexturedTextRendering();
         if (sel->state == 1) {
             TextBox_Draw(&sel->textBox);
@@ -539,11 +539,11 @@ void LabItem_DisableEmptyLists(LabItemMenuWindow* win, ByteMatrix* tables) {
     u16** new_var; // FAKE: permuter temp
 
     var_v0 = 0;
-    new_var = &win->menu.itemFlags;
+    new_var = &win->menu.itemFlags; // FAKE: permuter temp
     var_v1 = tables;
     do {
         if (var_v1->count == 0) {
-            temp_a1 = *new_var + var_v0;
+            temp_a1 = *new_var + var_v0; // FAKE: permuter temp
             *temp_a1 |= 0x100;
         }
         var_v0 += 1;
@@ -552,9 +552,9 @@ void LabItem_DisableEmptyLists(LabItemMenuWindow* win, ByteMatrix* tables) {
 }
 
 /**
- * Sets the disabled flag (1) on menu row `arg1`.
+ * Sets the disabled flag (1) on menu row `row`.
  * Seen in play (2026-11-13) ran when the てもちのどうぐ / サトシのパソコン / 64のカセット list menu opened in せいとん >
- * どうぐをいどうする; the list already chosen as the source was greyed out as a destination.
+ * どうぐをいどうする; the list already chosen as the source was grayed out as a destination.
  */
 void LabItem_DisableRow(LabItemMenuWindow* win, s32 row) {
     u16 *temp_v0;
@@ -589,7 +589,7 @@ void LabItem_DrawMenuRow(s32 x, s32 y, char* str, UNUSED s32 index, s32 flags) {
     UNUSED s32 pad[4]; // FAKE: stack padding
 
     if (flags & 0x10) {
-        Ui_FillRectHighlighted(x + 3, y + 3, 0xD2, 0x16, D_8900A5BC);
+        Ui_FillRectHighlighted(x + 3, y + 3, 210, 22, D_8900A5BC);
     }
     Font_BeginTranslucentTextRendering();
     if (flags & 1) {
@@ -610,21 +610,21 @@ void Window_SetRect(s8*, s32, s32, s32, s32);
 void Menu_Init(s8*, s32, s32, s32, s32, s32);
 M2C_UNK func_80027804();
 /**
- * Sets up a menu window whose height fits `arg4` rows.
+ * Sets up a menu window whose height fits `count` rows.
  * Seen in play (2026-11-13) in せいとん > どうぐを いどうする, A opened the three-row source window (てもちの どうぐ,
  * サトシの パソコン, 64の カセット) and this ran once as it appeared.
  */
 void LabItem_InitMenuWindow(LabItemMenuWindow* win, s32 x, s32 y, s32 names, s32 count, s32 cursor) {
     s32 pad[2]; // FAKE: stack padding
 
-    Window_SetRect((s8*)&win->window, x, y, 0xE4, (count * 0x1C) + 0x14);
+    Window_SetRect((s8*)&win->window, x, y, 228, (count * 28) + 20);
     win->window.state = 0;
     win->window.title = NULL;
     win->window.animTimer = 0;
     win->window.frame.style = 0;
     *(Color_RGBA8*)&win->window.frame.color = D_8900A5BC;
     func_80027804((s8*)&win->items, names, count, count);
-    Menu_Init((s8*)&win->menu, (s32)&win->items, (s32)win->itemFlags, (s32)LabItem_DrawMenuRow, 0xD8, 0x1C);
+    Menu_Init((s8*)&win->menu, (s32)&win->items, (s32)win->itemFlags, (s32)LabItem_DrawMenuRow, 216, 28);
     win->menu.cursor = cursor;
     win->menu.options |= 0x10000;
 }
@@ -639,7 +639,7 @@ M2C_UNK Menu_DrawItems(s8 *, s32, s32, M2C_UNK, s32); /* extern */
  */
 void LabItem_DrawMenu(LabItemMenuWindow* win) {
     if (func_8002AE6C() == 0) {
-        Menu_DrawItems((s8*)&win->menu, win->window.frame.x + 6, win->window.frame.y + 0xA, 0xFFEF, 0);
+        Menu_DrawItems((s8*)&win->menu, win->window.frame.x + 6, win->window.frame.y + 10, 0xFFEF, 0);
     }
 }
 
@@ -682,11 +682,11 @@ void LabItem_DrawItemCountRow(s32 x, s32 y, u8* row, s32 index, s32 flags) {
     char buf[0x30];
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x, y + 1, 0xEC, 0x1A, *(Color_RGBA8*)&D_8900A5E0);
-    func_80029028(x, y, 0xEC, 1, *(Color_RGBA8*)&D_8900A5E8);
-    func_80029028(x, y + 0x1B, 0xEC, 1, *(Color_RGBA8*)&D_8900A5E8);
+    func_80029028(x, y + 1, 236, 26, *(Color_RGBA8*)&D_8900A5E0);
+    func_80029028(x, y, 236, 1, *(Color_RGBA8*)&D_8900A5E8);
+    func_80029028(x, y + 27, 236, 1, *(Color_RGBA8*)&D_8900A5E8);
     if (flags & 0x18) {
-        Ui_FillRectHighlighted(x + 3, y + 3, 0xE6, 0x16, D_8900A5BC);
+        Ui_FillRectHighlighted(x + 3, y + 3, 230, 22, D_8900A5BC);
     }
     if (row != NULL) {
         func_8001AB6C();
@@ -702,7 +702,7 @@ void LabItem_DrawItemCountRow(s32 x, s32 y, u8* row, s32 index, s32 flags) {
         Font_Printf(x + 8, y + 4, func_8001FDC8(row[0], buf));
         if (func_80031CC8(row[0]) == 0) {
             func_8001A384(4, 0);
-            Font_Printf(x + 0xB4, y + 8, D_8901848C, row[1]);
+            Font_Printf(x + 180, y + 8, D_8901848C, row[1]);
         }
         func_8001ABBC();
     }
@@ -721,13 +721,13 @@ void ScrollList_Init(s8*, s32, s8*, s32, void*, s32, s32);
 void LabItem_DrawItemCountRow();
 
 /**
- * Sets up the scrolling item list at (`arg1`, `arg2`) with LabItem_DrawItemCountRow rows.
+ * Sets up the scrolling item list at (`x`, `y`) with LabItem_DrawItemCountRow rows.
  * Seen in play (2026-11-12): set up the てもちの どうぐ and サトシのパソコン lists.
  */
 void LabItem_InitItemList(LabItemList* list, s32 x, s32 y, s32 table) {
     list->x = x;
     list->y = y;
-    ScrollList_Init((s8*)&list->list, table, (s8*)list->itemFlags, 8, LabItem_DrawItemCountRow, 0xEC, 0x1C);
+    ScrollList_Init((s8*)&list->list, table, (s8*)list->itemFlags, 8, LabItem_DrawItemCountRow, 236, 28);
     list->list.options |= 0x10000;
 }
 
@@ -747,8 +747,8 @@ void LabItem_DrawItemList(LabItemList* list, s32 flags) {
     } else {
         ScrollList_DrawInlineItems(&list->list, list->x, list->y + 0x10, flags | 0xFFED, 0);
     }
-    Ui_DrawNumberZeroPadded(list->x + 0xA8, list->y + 0xF2, list->list.items->count, 3);
-    Ui_DrawNumberZeroPadded(list->x + 0xCE, list->y + 0xF2, list->list.items->capacity, 3);
+    Ui_DrawNumberZeroPadded(list->x + 168, list->y + 242, list->list.items->count, 3);
+    Ui_DrawNumberZeroPadded(list->x + 206, list->y + 242, list->list.items->capacity, 3);
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
     func_8001BCB4(list->x + 0xC4, list->y + 0xF4, 8, 0xA, D_04011AB8, 8, 0);
@@ -802,29 +802,29 @@ extern char* D_8900A5F4[];
  * Sets up the どうぐのせいり (organize items) window for %sのパソコン (%s's PC).
  * Seen in play (2026-11-12): opened どうぐのせいり with サトシのパソコン.
  */
-void LabItem_InitOrganizeWindow(LabItemOrganizeWindow* win, s32 x, s32 y, ByteMatrix* tables, s32* dirty, s32* gamePakSlot) {
-    Window_SetRect(&win->window, x, y, 0x234, 0x174);
+void LabItem_InitOrganizeWindow(LabItemOrganizeWindow* win, s32 x, s32 y, ByteMatrix* tables, s32* dirty, s32* game_pak_slot) {
+    Window_SetRect(&win->window, x, y, 564, 372);
     win->window.animTimer = 0;
     win->window.state = 0;
     win->window.frame.style = 0x801;
     win->window.title = D_890184BC;
-    Window_SetRect(&win->footerFrame, win->window.frame.x + 6, win->window.frame.y + 0x136, win->window.frame.width - 0xC, 0x38);
+    Window_SetRect(&win->footerFrame, win->window.frame.x + 6, win->window.frame.y + 310, win->window.frame.width - 12, 56);
     win->footerFrame.style = 6;
     win->footerFrame.color = D_8900A600;
     win->footerFrame.color2 = D_8900A604;
-    ImageButton_Init(&win->backButton, x + 0xFF, y + 0x3A, 0x36, 0x2A, 0x30, (s32)D_8900BFC0);
+    ImageButton_Init(&win->backButton, x + 0xFF, y + 58, 54, 42, 0x30, (s32)D_8900BFC0);
     win->backButton.selectedColor = ((Color_RGBA8*)D_8900A580)[0];
     win->backButton.color = ((Color_RGBA8*)D_8900A580)[1];
     win->backButton.highlightColor = D_8900A5BC;
-    ImageButton_Init(&win->moveButton, x + 0xFF, y + 0x74, 0x36, 0x2A, 0x30, (s32)D_8900DAD0);
+    ImageButton_Init(&win->moveButton, x + 0xFF, y + 116, 54, 42, 0x30, (s32)D_8900DAD0);
     win->moveButton.selectedColor = ((Color_RGBA8*)D_8900A580)[2];
     win->moveButton.color = ((Color_RGBA8*)D_8900A580)[3];
     win->moveButton.highlightColor = D_8900A5BC;
-    ImageButton_Init(&win->reorderButton, x + 0xFF, y + 0xAE, 0x36, 0x2A, 0x30, (s32)D_8900E858);
+    ImageButton_Init(&win->reorderButton, x + 0xFF, y + 174, 54, 42, 0x30, (s32)D_8900E858);
     win->reorderButton.selectedColor = ((Color_RGBA8*)D_8900A580)[4];
     win->reorderButton.color = ((Color_RGBA8*)D_8900A580)[5];
     win->reorderButton.highlightColor = D_8900A5BC;
-    ImageButton_Init(&win->exchangeButton, x + 0xFF, y + 0xE8, 0x36, 0x2A, 0x30, (s32)D_8900F5E0);
+    ImageButton_Init(&win->exchangeButton, x + 0xFF, y + 232, 54, 42, 0x30, (s32)D_8900F5E0);
     win->exchangeButton.selectedColor = ((Color_RGBA8*)D_8900A580)[6];
     win->exchangeButton.color = ((Color_RGBA8*)D_8900A580)[7];
     win->exchangeButton.highlightColor = D_8900A5BC;
@@ -840,9 +840,9 @@ void LabItem_InitOrganizeWindow(LabItemOrganizeWindow* win, s32 x, s32 y, ByteMa
     win->state = 1;
     win->tables = tables;
     win->dirty = dirty;
-    win->gamePakSlot = gamePakSlot;
-    LabItem_InitItemList(&win->leftList, win->window.frame.x + 0xC, win->window.frame.y + 0x2A, (s32)&tables[win->leftBox]);
-    LabItem_InitItemList(&win->rightList, win->window.frame.x + 0x13C, win->window.frame.y + 0x2A, (s32)&tables[win->rightBox]);
+    win->gamePakSlot = game_pak_slot;
+    LabItem_InitItemList(&win->leftList, win->window.frame.x + 12, win->window.frame.y + 42, (s32)&tables[win->leftBox]);
+    LabItem_InitItemList(&win->rightList, win->window.frame.x + 316, win->window.frame.y + 42, (s32)&tables[win->rightBox]);
     func_80027410((s8*)&win->reorderView, (s8*)win->tables->rows, 2, win->tables->capacity, 0);
 }
 
@@ -871,23 +871,23 @@ void LabItem_DrawListTab(LabItemOrganizeWindow* win, s32 x, s32 y, s32 flags, s3
     } else {
         colors = &D_8900A610;
     }
-    Ui_FillRectPrimEnvColor(x, y, 0xEC, 0x1E, colors->prim, colors->env);
+    Ui_FillRectPrimEnvColor(x, y, 236, 30, colors->prim, colors->env);
     if (icon != -1) {
         gSPDisplayList(gDisplayListHead++, D_80073408);
         switch (icon) {
             case 0:
             case 1:
-                Gfx_DrawTextureRgba16(x + 5, y + 2, 0x18, 0x1A, D_89017A80[func_8002BC44(D_89019114)], 0x18, 0x200000);
+                Gfx_DrawTextureRgba16(x + 5, y + 2, 24, 26, D_89017A80[func_8002BC44(D_89019114)], 0x18, 0x200000);
                 break;
             case 2:
-                Gfx_DrawTextureRgba16(x + 5, y + 2, 0x2E, 0x1A, D_89017A98, 0x30, 0x200000);
+                Gfx_DrawTextureRgba16(x + 5, y + 2, 46, 26, D_89017A98, 0x30, 0x200000);
                 break;
         }
         gSPDisplayList(gDisplayListHead++, D_80073438);
         func_8001AB6C();
         Font_SetColorForFlags(flags);
         func_8001A384(8, 0);
-        Font_Printf(x + 0x21, y + 4, win->boxNames[icon]);
+        Font_Printf(x + 33, y + 4, win->boxNames[icon]);
         func_8001ABBC();
     }
 }
@@ -903,7 +903,7 @@ M2C_UNK func_8001AC3C();                            /* extern */
 u32 func_800566BC(s32);                             /* extern */
 
 /**
- * Draws title text with the two-color (prim/env) font style from `arg3`.
+ * Draws title text with the two-color (prim/env) font style from `colors`.
  * Seen in play (2026-11-12): the ポケモンのせいり / どうぐのせいり titles.
  */
 void LabItem_DrawTitleText(s32 x, s32 y, s32 text, PrimEnvColor* colors) {
@@ -912,7 +912,7 @@ void LabItem_DrawTitleText(s32 x, s32 y, s32 text, PrimEnvColor* colors) {
     func_8001AA9C(colors->prim.r, colors->prim.g, colors->prim.b, colors->prim.a);
     func_8001ABE8();
     func_8001AAE4(colors->env.r, colors->env.g, colors->env.b, colors->env.a);
-    Font_Printf(((u32) (0x178 - ((func_800566BC(text) >> 1) << 5)) >> 1) + x, y + 0xC, text);
+    Font_Printf(((u32) (376 - ((func_800566BC(text) >> 1) << 5)) >> 1) + x, y + 12, text);
     func_8001AC3C();
     func_8001ABBC();
 }
@@ -920,7 +920,7 @@ void LabItem_DrawTitleText(s32 x, s32 y, s32 text, PrimEnvColor* colors) {
 extern u8 D_800734A8[];
 
 /**
- * Draws `arg2` centered in the 376-pixel help area.
+ * Draws `text` centered in the 376-pixel help area.
  * Seen in play (2026-11-13) ran when the item sort screen's help line changed to 「どこから いどうする?」,
  * which sits centered in the bottom help area.
  */
@@ -928,7 +928,7 @@ void LabItem_DrawCenteredText(s32 x, s32 y, char* text) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(0x10, 0);
     Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
-    Font_Printf(((0x178 - (strlen(text) / 2) * 0x18) / 2) + x, y + 0x10, text);
+    Font_Printf(((376 - (strlen(text) / 2) * 24) / 2) + x, y + 0x10, text);
     Font_EndTexturedTextRendering();
 }
 
@@ -948,7 +948,7 @@ void LabItem_DrawSmallText(s32 x, s32 y, s32 text) {
     func_8001AB6C();
     func_8001A384(8, 0);
     func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
-    Font_SetLineHeight(0x1C);
+    Font_SetLineHeight(28);
     Font_Printf(x + 8, y + 4, text);
     func_8001ABBC();
 }
@@ -968,13 +968,13 @@ void LabItem_DrawHelpText(LabItemOrganizeWindow* win) {
 
     switch (win->state) {
         case 1:
-            LabItem_DrawTitleText(win->footerFrame.x + 0x58, win->footerFrame.y, D_8900A650[win->operationCursor.cursor], D_8900A678[win->operationCursor.cursor]);
+            LabItem_DrawTitleText(win->footerFrame.x + 88, win->footerFrame.y, D_8900A650[win->operationCursor.cursor], D_8900A678[win->operationCursor.cursor]);
             break;
         case 2:
-            LabItem_DrawCenteredText(win->footerFrame.x + 0x58, win->footerFrame.y, D_8900A660[win->operationCursor.cursor]);
+            LabItem_DrawCenteredText(win->footerFrame.x + 88, win->footerFrame.y, D_8900A660[win->operationCursor.cursor]);
             break;
         case 3:
-            LabItem_DrawCenteredText(win->footerFrame.x + 0x58, win->footerFrame.y, D_8900A66C[win->operationCursor.cursor]);
+            LabItem_DrawCenteredText(win->footerFrame.x + 88, win->footerFrame.y, D_8900A66C[win->operationCursor.cursor]);
             break;
         case 4:
         case 6:
@@ -984,7 +984,7 @@ void LabItem_DrawHelpText(LabItemOrganizeWindow* win) {
             } else {
                 list = &win->leftList.list;
             }
-            LabItem_DrawSmallText(win->footerFrame.x + 0x58, win->footerFrame.y, func_80031BC0(list->items->rows[list->cursor * 2], sp2C));
+            LabItem_DrawSmallText(win->footerFrame.x + 88, win->footerFrame.y, func_80031BC0(list->items->rows[list->cursor * 2], sp2C));
             break;
     }
 }
@@ -1004,21 +1004,21 @@ void LabItem_DrawOrganizeWindow(LabItemOrganizeWindow* win) {
     if (func_8002AE6C(&win->window) == 0) {
         Window_DrawFrame(&win->footerFrame);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(win->window.frame.x + 6, win->window.frame.y + 6, win->window.frame.width - 0xC, 6, D_8900A5BC);
-        func_80029028(win->window.frame.x + 6, win->window.frame.y + 0x12A, win->window.frame.width - 0xC, 6, D_8900A5BC);
-        func_80029028(win->window.frame.x + 6, win->window.frame.y + 0xC, 6, 0x11E, D_8900A5BC);
-        func_80029028(win->window.frame.x + win->window.frame.width - 0xC, win->window.frame.y + 0xC, 6, 0x11E, D_8900A5BC);
-        func_80029028(win->window.frame.x + 0xF8, win->window.frame.y + 0xC, 0x44, 0x11E, D_8900A5BC);
-        Ui_DrawTexturedDivider(win->window.frame.x, win->window.frame.y + 0x12F, win->window.frame.width, D_8007356C);
-        Ui_DrawTexturedFrameDecal(win->window.frame.x + 0xA, win->window.frame.y + 0xA, 0xF0, 0x122, D_800735C4);
-        Ui_DrawTexturedFrameDecal(win->window.frame.x + 0x13A, win->window.frame.y + 0xA, 0xF0, 0x122, D_800735C4);
+        func_80029028(win->window.frame.x + 6, win->window.frame.y + 6, win->window.frame.width - 12, 6, D_8900A5BC);
+        func_80029028(win->window.frame.x + 6, win->window.frame.y + 298, win->window.frame.width - 12, 6, D_8900A5BC);
+        func_80029028(win->window.frame.x + 6, win->window.frame.y + 12, 6, 286, D_8900A5BC);
+        func_80029028(win->window.frame.x + win->window.frame.width - 12, win->window.frame.y + 12, 6, 286, D_8900A5BC);
+        func_80029028(win->window.frame.x + 248, win->window.frame.y + 12, 68, 286, D_8900A5BC);
+        Ui_DrawTexturedDivider(win->window.frame.x, win->window.frame.y + 303, win->window.frame.width, D_8007356C);
+        Ui_DrawTexturedFrameDecal(win->window.frame.x + 10, win->window.frame.y + 10, 240, 290, D_800735C4);
+        Ui_DrawTexturedFrameDecal(win->window.frame.x + 314, win->window.frame.y + 10, 240, 290, D_800735C4);
         v = (win->state == 1) ? 2 : 0x10;
         ImageButton_Draw(&win->backButton, (win->operationCursor.cursor == 3) ? v : 0);
         ImageButton_Draw(&win->moveButton, (win->operationCursor.cursor == 0) ? v : 0);
         ImageButton_Draw(&win->reorderButton, (win->operationCursor.cursor == 1) ? v : 0);
         ImageButton_Draw(&win->exchangeButton, (win->operationCursor.cursor == 2) ? v : 0);
-        LabItem_DrawListTab(win, win->window.frame.x + 0xC, win->window.frame.y + 0xC, 0, win->leftBox);
-        LabItem_DrawListTab(win, win->window.frame.x + 0x13C, win->window.frame.y + 0xC, 0, win->rightBox);
+        LabItem_DrawListTab(win, win->window.frame.x + 12, win->window.frame.y + 12, 0, win->leftBox);
+        LabItem_DrawListTab(win, win->window.frame.x + 316, win->window.frame.y + 12, 0, win->rightBox);
         LabItem_DrawItemList(&win->leftList, ((win->state == 4) || (win->state == 7)) ? 2 : ((win->state == 5) || (win->state == 6)) ? 0x10 : 0);
         flags = ((win->state == 5) || (win->state == 6)) ? 2 : 0;
         flags |= (win->state == 5) ? 0x200 : 0;
@@ -1026,11 +1026,11 @@ void LabItem_DrawOrganizeWindow(LabItemOrganizeWindow* win) {
         if ((win->state == 2) || (win->state == 9)) {
             LabItem_DrawMenu(&win->sourceBoxWindow);
         }
-        if ((win->state == 3) || (win->state == 0xA)) {
+        if ((win->state == 3) || (win->state == 10)) {
             LabItem_DrawMenu(&win->targetBoxWindow);
         }
         LabItem_DrawHelpText(win);
-        if ((win->state == 9) || (win->state == 0xA) || (win->state == 0xB) || (win->state == 0xC)) {
+        if ((win->state == 9) || (win->state == 10) || (win->state == 11) || (win->state == 12)) {
             TextBox_Draw(&win->textBox);
         }
         if (win->state == 8) {
@@ -1240,8 +1240,8 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* win) {
                 }
                 Audio_PlaySystemSound(2);
                 if (func_80031CC8(*ptr) == 0) {
-                    LabItem_InitCountSelector(&win->countSelector, win->leftList.x + 0x98,
-                                  win->leftList.y + win->leftList.list.cursorY - win->leftList.list.scrollY + 0x2C,
+                    LabItem_InitCountSelector(&win->countSelector, win->leftList.x + 152,
+                                  win->leftList.y + win->leftList.list.cursorY - win->leftList.list.scrollY + 44,
                                   ptr[1], v);
                     win->state = 8;
                 } else {
@@ -1286,7 +1286,7 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* win) {
             if (v != 1) {
                 break;
             }
-            Audio_PlaySystemSound(0x18);
+            Audio_PlaySystemSound(24);
             LabItem_MoveSelectedItem(win);
             if (win->leftList.list.items->count == 0) {
                 win->state = 1;
@@ -1305,7 +1305,7 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* win) {
             if (v != 1) {
                 break;
             }
-            Audio_PlaySystemSound(0x18);
+            Audio_PlaySystemSound(24);
             LabItem_SwapWithinList(win);
             Menu_ClearItemFlags((Menu*)&win->leftList.list);
             win->state = 4;
@@ -1328,7 +1328,7 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* win) {
                 win->state = 12;
                 break;
             }
-            Audio_PlaySystemSound(0x18);
+            Audio_PlaySystemSound(24);
             LabItem_SwapBetweenLists(win);
             win->state = 4;
             break;
@@ -1358,12 +1358,12 @@ s32 LabItem_UpdateOrganizeWindow(LabItemOrganizeWindow* win) {
     if (next > 0) {
         switch (next) {
             case 2:
-                LabItem_InitMenuWindow(&win->sourceBoxWindow, win->window.frame.x + 0x1F, win->window.frame.y + 0x29, (s32)win->boxNames,
+                LabItem_InitMenuWindow(&win->sourceBoxWindow, win->window.frame.x + 0x1F, win->window.frame.y + 41, (s32)win->boxNames,
                               win->boxCount, win->leftBox);
                 LabItem_DisableEmptyLists(&win->sourceBoxWindow, win->tables);
                 break;
             case 3:
-                LabItem_InitMenuWindow(&win->targetBoxWindow, win->window.frame.x + 0x14F, win->window.frame.y + 0x29, (s32)win->boxNames,
+                LabItem_InitMenuWindow(&win->targetBoxWindow, win->window.frame.x + 335, win->window.frame.y + 41, (s32)win->boxNames,
                               win->boxCount, win->rightBox);
                 if (win->operationCursor.cursor == 2) {
                     LabItem_DisableEmptyLists(&win->targetBoxWindow, win->tables);
@@ -1390,19 +1390,19 @@ void Font_SetColorForFlags(s32);
  */
 void LabItem_DrawTrainerInfo(s32 x, s32 y, LabItemSaveSlot* slot, s32 index, s32 flags) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x, y + 1, 0x13C, 0x3C, *(Color_RGBA8*)&D_8900A5BC);
-    func_80029028(x, y, 0x13C, 1, D_8900A698);
-    func_80029028(x, y + 0x3D, 0x13C, 1, D_8900A698);
+    func_80029028(x, y + 1, 316, 60, *(Color_RGBA8*)&D_8900A5BC);
+    func_80029028(x, y, 316, 1, D_8900A698);
+    func_80029028(x, y + 61, 316, 1, D_8900A698);
     if (flags & 0x10) {
-        Ui_FillRectHighlighted(x + 3, y + 3, 0x136, 0x38, D_8900A5BC);
+        Ui_FillRectHighlighted(x + 3, y + 3, 310, 56, D_8900A5BC);
     }
-    Ui_DrawImageInStrips(D_8900A69C, x + 0xB, y + 0xB);
+    Ui_DrawImageInStrips(D_8900A69C, x + 11, y + 11);
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(flags);
     Font_SetActive(0x10, 0);
-    Font_Printf(x + 0x53, y + 6, D_89018660, slot->trainerName);
+    Font_Printf(x + 83, y + 6, D_89018660, slot->trainerName);
     Font_SetActive(8, 0);
-    Font_Printf(x + 0x58, y + 0x24, D_8901866C, slot->trainerId);
+    Font_Printf(x + 88, y + 36, D_8901866C, slot->trainerId);
     Font_EndTexturedTextRendering();
 }
 
@@ -1420,17 +1420,17 @@ void func_80027410(s8*, s8*, s32, s32, s32);
  */
 void LabItem_InitDeleteDataWindow(LabItemDeleteDataWindow* win, s32 x, s32 y, LabItemSaveSlot* slots) {
     s32 pad[2]; // FAKE: stack padding
-    Window_SetRect((s8*)&win->window, x, y, 0x148, 0x14A);
+    Window_SetRect((s8*)&win->window, x, y, 328, 330);
     win->window.animTimer = 0;
     win->window.state = 0;
     win->window.frame.style = 0x801;
     win->window.title = D_89018678;
-    Window_SetRect((s8*)&win->footerFrame, win->window.frame.x + 6, win->window.frame.y + 0x104, win->window.frame.width - 0xC, 0x40);
+    Window_SetRect((s8*)&win->footerFrame, win->window.frame.x + 6, win->window.frame.y + 260, win->window.frame.width - 12, 0x40);
     win->footerFrame.style = 6;
     win->footerFrame.color = D_8900A6AC;
     win->footerFrame.color2 = D_8900A6B0;
     func_80027410((s8*)&win->slotTable, (s8*)slots, 0x14, 4, 4);
-    Menu_Init((s8*)&win->menu, (s32)&win->slotTable, (s32)win->itemFlags, (s32)LabItem_DrawTrainerInfo, 0x13C, 0x3E);
+    Menu_Init((s8*)&win->menu, (s32)&win->slotTable, (s32)win->itemFlags, (s32)LabItem_DrawTrainerInfo, 316, 62);
     win->menu.options |= 0x10000;
 }
 
@@ -1452,7 +1452,7 @@ void LabItem_DrawDeleteDataWindow(LabItemDeleteDataWindow* win, s32 flags) {
         if (!win) { // karodo
         }
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
-        Font_SetLineHeight(0x1C);
+        Font_SetLineHeight(28);
         Font_Printf(win->footerFrame.x + 8, win->footerFrame.y + 8, D_89018688);
         func_8001ABBC();
     }
@@ -1501,25 +1501,25 @@ extern u8 D_890110F0[];
  * 04000), picking カスミ opened it with her (empty) item list, 000/100.
  */
 void LabItem_InitSaveDataWindow(LabItemSaveDataWindow* win, s32 x, s32 y, LabItemSaveSlot* slot, ByteMatrix* items) {
-    Window_SetRect(&win->window, x, y, 0x184, 0x180);
+    Window_SetRect(&win->window, x, y, 388, 384);
     win->window.animTimer = 0;
     win->window.title = NULL;
     win->window.state = 0;
     win->window.frame.style = 0x1001;
-    Window_SetRect(&win->footerFrame, win->window.frame.x + 6, win->window.frame.y + 0x142,
-                  win->window.frame.width - 0xC, 0x38);
+    Window_SetRect(&win->footerFrame, win->window.frame.x + 6, win->window.frame.y + 322,
+                  win->window.frame.width - 12, 56);
     win->footerFrame.style = 6;
     win->footerFrame.color = D_8900A6B4;
     win->footerFrame.color2 = D_8900A6B8;
-    ImageButton_Init(&win->backButton, x + 0x2B, y + 0x47, 0x36, 0x2A, 0x30, (s32)D_8900BFC0);
+    ImageButton_Init(&win->backButton, x + 43, y + 71, 54, 42, 0x30, (s32)D_8900BFC0);
     win->backButton.selectedColor = *(Color_RGBA8*)D_8900A580;
     win->backButton.color = *(Color_RGBA8*)D_8900A584;
     win->backButton.highlightColor = D_8900A5BC;
-    ImageButton_Init(&win->discardButton, x + 0x2B, y + 0x9F, 0x36, 0x2A, 0x30, (s32)D_890110F0);
+    ImageButton_Init(&win->discardButton, x + 43, y + 159, 54, 42, 0x30, (s32)D_890110F0);
     win->discardButton.selectedColor = *(Color_RGBA8*)D_8900A5A8;
     win->discardButton.color = *(Color_RGBA8*)D_8900A5AC;
     win->discardButton.highlightColor = D_8900A5BC;
-    ImageButton_Init(&win->viewItemsButton, x + 0x2B, y + 0xF7, 0x36, 0x2A, 0x30, (s32)D_89010368);
+    ImageButton_Init(&win->viewItemsButton, x + 43, y + 247, 54, 42, 0x30, (s32)D_89010368);
     win->viewItemsButton.selectedColor = *(Color_RGBA8*)D_8900A5A0;
     win->viewItemsButton.color = *(Color_RGBA8*)D_8900A5A4;
     win->viewItemsButton.highlightColor = D_8900A5BC;
@@ -1527,7 +1527,7 @@ void LabItem_InitSaveDataWindow(LabItemSaveDataWindow* win, s32 x, s32 y, LabIte
     win->operationCursor.cursor = 0;
     win->operationCursor.controller = D_800603C0;
     func_8000B2F4(D_800603C0);
-    LabItem_InitItemList(&win->itemList, win->window.frame.x + 0x88, win->window.frame.y + 0x36, (s32)items);
+    LabItem_InitItemList(&win->itemList, win->window.frame.x + 136, win->window.frame.y + 54, (s32)items);
     win->slot = slot;
     win->state = 1;
 }
@@ -1553,16 +1553,16 @@ void LabItem_DrawSaveDataOwner(s32 x, s32 y, LabItemSaveSlot* slot, s32 flags) {
     } else {
         color = &D_8900A6C4;
     }
-    Ui_FillRectPrimEnvColor(x, y, 0xEC, 0x2A, color->prim, color->env);
+    Ui_FillRectPrimEnvColor(x, y, 236, 42, color->prim, color->env);
     gSPDisplayList(gDisplayListHead++, D_80073408);
-    Gfx_DrawTextureRgba16(x + 6, y + 8, 0x2E, 0x1A, D_89017A98, 0x30, 0x200000);
+    Gfx_DrawTextureRgba16(x + 6, y + 8, 46, 26, D_89017A98, 0x30, 0x200000);
     gSPDisplayList(gDisplayListHead++, D_80073438);
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(flags);
     Font_SetActive(8, 0);
-    Font_Printf(x + 0x34, y + 2, D_890186C0, slot->trainerName);
+    Font_Printf(x + 52, y + 2, D_890186C0, slot->trainerName);
     Font_SetActive(4, 0);
-    Font_Printf(x + 0x38, y + 0x18, D_890186CC, slot->trainerId);
+    Font_Printf(x + 56, y + 24, D_890186CC, slot->trainerId);
     Font_EndTexturedTextRendering();
 }
 
@@ -1602,16 +1602,16 @@ void LabItem_DrawSaveDataWindow(LabItemSaveDataWindow* win) {
         Window_DrawFrame(&win->footerFrame);
         Ui_DrawTexturedDivider(win->window.frame.x, win->footerFrame.y - 7, win->window.frame.width, D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(win->window.frame.x + 6, win->window.frame.y + 6, 0x82, 0x136, *(Color_RGBA8*)&D_8900A5BC);
-        func_80029028(win->window.frame.x + 0x88, win->window.frame.y + 6, 0xEC, 6, *(Color_RGBA8*)&D_8900A5BC);
-        func_80029028(win->window.frame.x + 0x88, win->window.frame.y + 0x136, 0xEC, 6, *(Color_RGBA8*)&D_8900A5BC);
-        func_80029028(win->window.frame.x + 0x174, win->window.frame.y + 6, 0xA, 0x136, *(Color_RGBA8*)&D_8900A5BC);
-        Ui_DrawTexturedFrameDecal(win->window.frame.x + 0x86, win->window.frame.y + 0xA, 0xF0, 0x12E, D_800735C4);
+        func_80029028(win->window.frame.x + 6, win->window.frame.y + 6, 130, 310, *(Color_RGBA8*)&D_8900A5BC);
+        func_80029028(win->window.frame.x + 136, win->window.frame.y + 6, 236, 6, *(Color_RGBA8*)&D_8900A5BC);
+        func_80029028(win->window.frame.x + 136, win->window.frame.y + 310, 236, 6, *(Color_RGBA8*)&D_8900A5BC);
+        func_80029028(win->window.frame.x + 372, win->window.frame.y + 6, 10, 310, *(Color_RGBA8*)&D_8900A5BC);
+        Ui_DrawTexturedFrameDecal(win->window.frame.x + 134, win->window.frame.y + 10, 240, 302, D_800735C4);
         v = (win->state == 1) ? 2 : 0x10;
         ImageButton_Draw(&win->backButton, (win->operationCursor.cursor == 2) ? v : 0);
         ImageButton_Draw(&win->discardButton, (win->operationCursor.cursor == 0) ? v : 0);
         ImageButton_Draw(&win->viewItemsButton, (win->operationCursor.cursor == 1) ? v : 0);
-        LabItem_DrawSaveDataOwner(win->window.frame.x + 0x88, win->window.frame.y + 0xC, win->slot, 0);
+        LabItem_DrawSaveDataOwner(win->window.frame.x + 136, win->window.frame.y + 12, win->slot, 0);
         LabItem_DrawItemList(&win->itemList, (win->state == 2) ? 2 : 0);
         LabItem_DrawSaveDataHelpText(win);
     }
@@ -1690,6 +1690,6 @@ void LabItem_Init(LabItemScreen* screen) {
         screen->dirty[i] = 0;
         i++;
     } while (i != 3);
-    LabItem_InitOrganizeWindow(&screen->organizeWindow, 0x26, 0x51, screen->itemTables, screen->dirty, &screen->gamePakSlot);
+    LabItem_InitOrganizeWindow(&screen->organizeWindow, 38, 81, screen->itemTables, screen->dirty, &screen->gamePakSlot);
     screen->state = 1;
 }

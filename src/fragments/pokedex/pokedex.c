@@ -26,13 +26,13 @@ extern u8 D_04002BA8[];
 extern u8 D_04002ED0[];
 /**
  * Draws the 20x20 Poké Ball icon of an owned species at (x, y): the red ball (D_04002BA8) when `is_held`
- * (the species is in the cartridge's party or boxes, もっている), else the grey ball (D_04002ED0).
- * Seen in play (2026-11-14, crafted Green save): red ball beside 001 フシギダネ (in the party), grey balls
+ * (the species is in the cartridge's party or boxes, もっている), else the gray ball (D_04002ED0).
+ * Seen in play (2026-11-14, crafted Green save): red ball beside 001 フシギダネ (in the party), gray balls
  * beside 004 ヒトカゲ, 007 ゼニガメ and 016 ポッポ (caught, not held); no icon for seen-only 010 キャタピー.
  */
 void Pokedex_DrawOwnedIcon(s32 x, s32 y, s32 is_held) {
     gSPDisplayList(gDisplayListHead++, D_80060290);
-    Gfx_DrawTextureRgba16(x, y, 0x14, 0x14, is_held ? D_04002BA8 : D_04002ED0, 0x14, 0x200000);
+    Gfx_DrawTextureRgba16(x, y, 20, 20, is_held ? D_04002BA8 : D_04002ED0, 0x14, 0x200000);
     gSPDisplayList(gDisplayListHead++, D_80060398);
 }
 
@@ -82,17 +82,17 @@ void Pokedex_DrawListRow(s32 x, s32 y, char* item, s32 row, s32 flags, s32* sort
     }
     progress = GbSave_GetSpeciesProgressLevel(sGbPort, idx + 1);
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x, y, 0x104, 1, D_8A1057D8);
-    func_80029028(x, y + 0x23, 0x104, 1, D_8A1057D8);
-    func_80029028(x, y + 1, 0x104, 0x22, D_8A1057D4);
+    func_80029028(x, y, 260, 1, D_8A1057D8);
+    func_80029028(x, y + 35, 260, 1, D_8A1057D8);
+    func_80029028(x, y + 1, 260, 34, D_8A1057D4);
     if (flags & 0x10) {
-        Ui_FillRectHighlighted(x + 3, y + 3, 0xFE, 0x1E, D_8A1057D4);
+        Ui_FillRectHighlighted(x + 3, y + 3, 254, 30, D_8A1057D4);
     }
     if (progress == 2) {
-        Pokedex_DrawOwnedIcon(x + 0x58, y + 8, 0);
+        Pokedex_DrawOwnedIcon(x + 88, y + 8, 0);
     }
     if (progress == 3) {
-        Pokedex_DrawOwnedIcon(x + 0x58, y + 8, 1);
+        Pokedex_DrawOwnedIcon(x + 88, y + 8, 1);
     }
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(flags);
@@ -100,7 +100,7 @@ void Pokedex_DrawListRow(s32 x, s32 y, char* item, s32 row, s32 flags, s32* sort
     Font_Printf(x + 0x10, y + 8, D_8A12FC30, idx + 1);
     if (progress != 0) {
         Font_SetActive(0x10, 0);
-        Font_Printf(x + 0x7C, y + 6, D_80064C60[idx].unk_00);
+        Font_Printf(x + 124, y + 6, D_80064C60[idx].unk_00);
     }
     Font_EndTexturedTextRendering();
 }
@@ -117,13 +117,13 @@ extern M2C_UNK D_8A12FC38;
  * Seen in play (2026-11-14): called with (54, 85) as the Pokédex opened.
  */
 void Pokedex_InitListWindow(PokedexListWindow* list_window, s32 x, s32 y) {
-    Window_SetRect((s8 *)list_window, x, y, 0x110, 0x16E);
+    Window_SetRect((s8 *)list_window, x, y, 272, 366);
     list_window->window.animTimer = 0;
     list_window->window.state = 0;
     list_window->window.frame.style = 0x801;
     list_window->window.title = (char*)&D_8A12FC38;
     func_80027410((s8*)&list_window->entries, &D_80064C5C, 0x1C, 0x97, 0x97);
-    ScrollList_Init((s8*)&list_window->list, (s8*)&list_window->entries, (s8*)list_window->itemFlags, 8, &Pokedex_DrawListRow, 0x104, 0x24);
+    ScrollList_Init((s8*)&list_window->list, (s8*)&list_window->entries, (s8*)list_window->itemFlags, 8, &Pokedex_DrawListRow, 260, 36);
     list_window->sortByKana = 0;
     list_window->list.options |= 0x10000;
 }
@@ -151,17 +151,17 @@ void Pokedex_DrawListWindow(PokedexListWindow* list_window, u32 flags) {
     char* str;
 
     if (func_8002AE6C() == 0) {
-        Ui_DrawTexturedDivider(list_window->window.frame.x, list_window->window.frame.y + 0x145, list_window->window.frame.width, &D_8007356C);
-        ScrollList_DrawInlineItems(&list_window->list, list_window->window.frame.x + 6, list_window->window.frame.y + 0x16, flags | 0xFFED, (s32)&list_window->sortByKana);
+        Ui_DrawTexturedDivider(list_window->window.frame.x, list_window->window.frame.y + 325, list_window->window.frame.width, &D_8007356C);
+        ScrollList_DrawInlineItems(&list_window->list, list_window->window.frame.x + 6, list_window->window.frame.y + 22, flags | 0xFFED, (s32)&list_window->sortByKana);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(list_window->window.frame.x + 6, list_window->window.frame.y + 0x14C, list_window->window.frame.width - 0xC, 0x1C, D_8A1057DC);
+        func_80029028(list_window->window.frame.x + 6, list_window->window.frame.y + 332, list_window->window.frame.width - 12, 28, D_8A1057DC);
         Font_BeginTranslucentTextRendering();
         Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         Font_SetActive(8, 0);
-        Font_Printf(list_window->window.frame.x + 0x24, list_window->window.frame.y + 0x150, list_window->sortByKana ? D_8A12FC48 : D_8A12FC5C);
+        Font_Printf(list_window->window.frame.x + 36, list_window->window.frame.y + 336, list_window->sortByKana ? D_8A12FC48 : D_8A12FC5C);
         Font_EndTexturedTextRendering();
         gSPDisplayList(gDisplayListHead++, D_80060290);
-        Gfx_DrawTextureRgba16(list_window->window.frame.x + 0xD8, list_window->window.frame.y + 0x150, 0x14, 0x14, D_04005890, 0x14, 0x200000);
+        Gfx_DrawTextureRgba16(list_window->window.frame.x + 216, list_window->window.frame.y + 336, 20, 20, D_04005890, 0x14, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80060398);
     }
 }
@@ -211,7 +211,7 @@ extern Rgba8A100620 D_8A1057E4;
  * Seen in play (2026-11-14): called with (342, 114) as the Pokédex opened.
  */
 void Pokedex_InitCountsWindow(Window* window, s32 x, s32 y) {
-    Window_SetRect((s8*)window, x, y, 0xF8, 0x68);
+    Window_SetRect((s8*)window, x, y, 248, 104);
     window->animTimer = 0;
     window->title = 0;
     window->state = 0;
@@ -240,16 +240,16 @@ void Pokedex_DrawCounts(Window* window) {
     if (func_8002AE6C() == 0) {
         Font_BeginTranslucentTextRendering();
         Font_SetActive(8, 0);
-        Gfx_SetEnvColor(0x9C, 0xCC, 0x98, 0xFF);
-        Font_Printf(window->frame.x + 0xE, window->frame.y + 0xE, D_8A12FC6C);
-        Gfx_SetEnvColor(0x98, 0xCC, 0xCC, 0xFF);
-        Font_Printf(window->frame.x + 0xE, window->frame.y + 0x2A, D_8A12FC7C);
-        Gfx_SetEnvColor(0xCC, 0x98, 0x98, 0xFF);
-        Font_Printf(window->frame.x + 0xE, window->frame.y + 0x46, D_8A12FC8C);
+        Gfx_SetEnvColor(0x9C, 0xCC, 0x98, 0xFF); // #9CCC98FF
+        Font_Printf(window->frame.x + 14, window->frame.y + 14, D_8A12FC6C);
+        Gfx_SetEnvColor(0x98, 0xCC, 0xCC, 0xFF); // #98CCCCFF
+        Font_Printf(window->frame.x + 14, window->frame.y + 42, D_8A12FC7C);
+        Gfx_SetEnvColor(0xCC, 0x98, 0x98, 0xFF); // #CC9898FF
+        Font_Printf(window->frame.x + 14, window->frame.y + 70, D_8A12FC8C);
         Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
-        Font_Printf(window->frame.x + 0xAE, window->frame.y + 0xE, D_8A12FC9C, GbSave_CountSeenSpecies(sGbPort));
-        Font_Printf(window->frame.x + 0xAE, window->frame.y + 0x2A, D_8A12FCA0, GbSave_CountOwnedSpecies(sGbPort));
-        Font_Printf(window->frame.x + 0xAE, window->frame.y + 0x46, D_8A12FCA4, GbSave_CountHeldSpecies(sGbPort));
+        Font_Printf(window->frame.x + 174, window->frame.y + 14, D_8A12FC9C, GbSave_CountSeenSpecies(sGbPort));
+        Font_Printf(window->frame.x + 174, window->frame.y + 42, D_8A12FCA0, GbSave_CountOwnedSpecies(sGbPort));
+        Font_Printf(window->frame.x + 174, window->frame.y + 70, D_8A12FCA4, GbSave_CountHeldSpecies(sGbPort));
         Font_EndTexturedTextRendering();
     }
 }
@@ -264,12 +264,12 @@ void Font_SetColorForFlags(s32);
  */
 void Pokedex_DrawActionMenuRow(s32 x, s32 y, char* label, s32 row, s32 flags) {
     if (flags & 0x10) {
-        Ui_FillRectHighlighted(x + 3, y + 3, 0xA2, 0x1E, D_8A1057D4);
+        Ui_FillRectHighlighted(x + 3, y + 3, 162, 30, D_8A1057D4);
     }
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(flags);
     Font_SetActive(0x10, 0);
-    Font_Printf(x + 0xC, y + 6, label);
+    Font_Printf(x + 12, y + 6, label);
     Font_EndTexturedTextRendering();
 }
 
@@ -283,14 +283,14 @@ M2C_UNK func_80027804();
 void Pokedex_InitActionMenuWindow(PokedexMenuWindow* menu_window, s32 x, s32 y) {
     s32 pad; // FAKE: stack padding
 
-    Window_SetRect((s8*)menu_window, x, y, 0xB4, 0xA8);
+    Window_SetRect((s8*)menu_window, x, y, 180, 168);
     menu_window->window.animTimer = 0;
     menu_window->window.title = 0;
     menu_window->window.state = 0;
     menu_window->window.frame.style = 0x1000;
     menu_window->window.frame.color = D_8A1057D4;
     func_80027804((s8*)&menu_window->items, &D_8A1057E8, 4, 4);
-    Menu_Init((s8*)&menu_window->menu, (s8*)&menu_window->items, (s8*)menu_window->itemFlags, &Pokedex_DrawActionMenuRow, 0xA8, 0x24);
+    Menu_Init((s8*)&menu_window->menu, (s8*)&menu_window->items, (s8*)menu_window->itemFlags, &Pokedex_DrawActionMenuRow, 168, 36);
     menu_window->menu.options |= 0x10000;
 }
 
@@ -303,7 +303,7 @@ M2C_UNK Menu_DrawItems(s8 *, s32, s32, s32, s32);  /* extern */
  */
 void Pokedex_DrawActionMenu(PokedexMenuWindow* menu_window, s32 flags) {
     if (func_8002AE6C() == 0) {
-        Menu_DrawItems((s8*)&menu_window->menu, menu_window->window.frame.x + 6, menu_window->window.frame.y + 0xC, flags | 0xFFED, 0);
+        Menu_DrawItems((s8*)&menu_window->menu, menu_window->window.frame.x + 6, menu_window->window.frame.y + 12, flags | 0xFFED, 0);
     }
 }
 
@@ -331,7 +331,7 @@ s32 Pokedex_UpdateActionMenuCursor(PokedexMenuWindow* menu_window) {
  * Seen in play (2026-11-14): called with (44, 84) when データをみる was picked.
  */
 void Pokedex_InitEntryWindow(Window* window, s32 x, s32 y) {
-    Window_SetRect((s8*)window, x, y, 0x228, 0x15C);
+    Window_SetRect((s8*)window, x, y, 552, 348);
     window->animTimer = 0;
     window->title = 0;
     window->state = 0;
@@ -352,13 +352,13 @@ void Pokedex_DrawModelPreviewImage(s32 x, s32 y, s32 alpha, u8* pixels) {
     gDPSetCombineLERP(gDisplayListHead++, 0, 0, 0, TEXEL0, TEXEL0, 0, ENVIRONMENT, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, ENVIRONMENT, 0);
     gDPSetRenderMode(gDisplayListHead++, G_RM_XLU_SURF, G_RM_XLU_SURF2);
     gDPSetTexturePersp(gDisplayListHead++, G_TP_NONE);
-    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, alpha);
-    for (i = 0; i < 0xD0; i += 8) {
-        Gfx_DrawTextureRgba16(x, y, 0xF4, 8, pixels, 0x100, 0);
+    gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, alpha); // #FFFFFF
+    for (i = 0; i < 208; i += 8) {
+        Gfx_DrawTextureRgba16(x, y, 244, 8, pixels, 0x100, 0);
         y += 8;
         pixels += 0x1000;
     }
-    Gfx_DrawTextureRgba16(x, y, 0xF4, 2, pixels, 0x100, 0);
+    Gfx_DrawTextureRgba16(x, y, 244, 2, pixels, 0x100, 0);
     gDPPipeSync(gDisplayListHead++);
     gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);
     gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
@@ -373,7 +373,7 @@ extern char D_8A12FCDC[];
  */
 void Pokedex_DrawTenthsValue(s32 x, s32 y, s32 tenths) {
     Font_Printf(x, y, D_8A12FCDC, tenths / 10);
-    Font_DrawCharAt(x + 0x54, y, (tenths % 10) + 0x30);
+    Font_DrawCharAt(x + 84, y, (tenths % 10) + 0x30);
 }
 
 extern char D_8A12FCE4[];
@@ -399,34 +399,34 @@ void Pokedex_DrawEntryInfo(s32 x, s32 y) {
     SpeciesInfo* entry = (SpeciesInfo*)((u8*)&D_80064C5C + sSelectedDexIndex * 0x1C);
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x, y, 0x122, 0xD2, D_8A1057D4);
-    Ui_DrawTexturedFrameDecal(x + 8, y + 8, 0x112, 0x5A, D_800735C4);
+    func_80029028(x, y, 290, 210, D_8A1057D4);
+    Ui_DrawTexturedFrameDecal(x + 8, y + 8, 274, 90, D_800735C4);
     Font_BeginTranslucentTextRendering();
-    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFFFF
     Font_EnableTwoCycleTexturing();
     Font_SetActive(0x20, 0);
-    Gfx_SetPrimColor(0x96, 0x96, 0xFF, 0xFF);
-    Font_Printf(x + 0x70, y + 0x38, entry->name);
+    Gfx_SetPrimColor(0x96, 0x96, 0xFF, 0xFF); // #9696FFFF
+    Font_Printf(x + 112, y + 56, entry->name);
     Font_SetActive(0x10, 0);
-    Gfx_SetPrimColor(0x96, 0xFF, 0x96, 0xFF);
-    Font_Printf(x + 8, y + 0x6A, D_8A12FCE4, entry->category);
-    Gfx_SetPrimColor(0xFF, 0xFF, 0x96, 0xFF);
-    Font_Printf(x + 0xD, y + 0x8E, D_8A12FCF0);
-    Gfx_SetPrimColor(0xFF, 0x96, 0x96, 0xFF);
-    Font_Printf(x + 0xD, y + 0xB2, D_8A12FCF8);
+    Gfx_SetPrimColor(0x96, 0xFF, 0x96, 0xFF); // #96FF96FF
+    Font_Printf(x + 8, y + 106, D_8A12FCE4, entry->category);
+    Gfx_SetPrimColor(0xFF, 0xFF, 0x96, 0xFF); // #FFFF96FF
+    Font_Printf(x + 13, y + 142, D_8A12FCF0);
+    Gfx_SetPrimColor(0xFF, 0x96, 0x96, 0xFF); // #FF9696FF
+    Font_Printf(x + 13, y + 178, D_8A12FCF8);
     Font_DisableTwoCycleTexturing();
     Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
-    Font_Printf(x + 0x12, y + 0x12, D_8A12FD00);
-    Font_Printf(x + 0x4E, y + 0x12, D_8A12FD04, entry->dexNumber);
+    Font_Printf(x + 18, y + 18, D_8A12FD00);
+    Font_Printf(x + 78, y + 18, D_8A12FD04, entry->dexNumber);
     if (GbSave_GetSpeciesProgressLevel(sGbPort, entry->dexNumber) >= 2) {
-        Pokedex_DrawTenthsValue(x + 0x79, y + 0x8E, entry->heightTenths);
-        Pokedex_DrawTenthsValue(x + 0x79, y + 0xB2, entry->weightTenths);
+        Pokedex_DrawTenthsValue(x + 121, y + 142, entry->heightTenths);
+        Pokedex_DrawTenthsValue(x + 121, y + 178, entry->weightTenths);
     } else {
-        Font_Printf(x + 0x79, y + 0x8E, D_8A12FD0C);
-        Font_Printf(x + 0x79, y + 0xB2, D_8A12FD10);
+        Font_Printf(x + 121, y + 142, D_8A12FD0C);
+        Font_Printf(x + 121, y + 178, D_8A12FD10);
     }
-    Font_Printf(x + 0xE1, y + 0x8E, D_8A12FD14);
-    Font_Printf(x + 0xE1, y + 0xB2, D_8A12FD18);
+    Font_Printf(x + 225, y + 142, D_8A12FD14);
+    Font_Printf(x + 225, y + 178, D_8A12FD18);
     Font_EndTexturedTextRendering();
 }
 
@@ -444,14 +444,14 @@ extern s32 sSelectedDexIndex;
 void Pokedex_DrawEntryDescription(s32 x, s32 y) {
     SpeciesInfo* entry = (SpeciesInfo*)((u8*)&D_80064C5C + sSelectedDexIndex * 0x1C);
 
-    Ui_FillRectPrimEnvColor(x, y, 0x21C, 0x78, *(Rgba8A100F20 *)D_8A1057F8, *(Rgba8A100F20 *)D_8A1057FC);
+    Ui_FillRectPrimEnvColor(x, y, 540, 120, *(Rgba8A100F20 *)D_8A1057F8, *(Rgba8A100F20 *)D_8A1057FC);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(0x10, 0);
-    Font_SetLineHeight(0x24);
+    Font_SetLineHeight(36);
     if (GbSave_GetSpeciesProgressLevel(sGbPort, entry->dexNumber) >= 2) {
-        Font_Printf(x + 0x2A, y + 0xC, entry->description);
+        Font_Printf(x + 42, y + 12, entry->description);
     } else {
-        Font_Printf(x + 0x2A, y + 0xC, D_8A12FD1C);
+        Font_Printf(x + 42, y + 12, D_8A12FD1C);
     }
     Font_EndTexturedTextRendering();
 }
@@ -473,15 +473,15 @@ void Pokedex_DrawEntryWindow(Window* window, s32 preview, s32 progress) {
     s32 temp_v0;
 
     if ((window->state != 2) && (Window_DrawAnimatedFrame() == 0)) {
-        Ui_DrawTexturedDivider(window->frame.x, window->frame.y + 0xD7, window->frame.width, &D_8007356C);
-        Ui_DrawFrameLeftCorners(window->frame.x + 0xF9, window->frame.y, 0xDE, &D_8007356C);
+        Ui_DrawTexturedDivider(window->frame.x, window->frame.y + 215, window->frame.width, &D_8007356C);
+        Ui_DrawFrameLeftCorners(window->frame.x + 249, window->frame.y, 222, &D_8007356C);
         Pokedex_DrawEntryInfo(window->frame.x + 0x100, window->frame.y + 6);
-        Pokedex_DrawEntryDescription(window->frame.x + 6, window->frame.y + 0xDE);
+        Pokedex_DrawEntryDescription(window->frame.x + 6, window->frame.y + 222);
     }
     temp_v0 = window->state;
     if ((temp_v0 == 1) || (temp_v0 == 2)) {
-        Ui_DrawImageInStrips(&D_8A11FC18, 0x32, 0x5A);
-        Pokedex_DrawModelPreviewImage(0x32, 0x5A, (progress >= 2) ? 0xFF : 0x64, preview);
+        Ui_DrawImageInStrips(&D_8A11FC18, 50, 90);
+        Pokedex_DrawModelPreviewImage(50, 90, (progress >= 2) ? 0xFF : 0x64, preview);
     }
 }
 
@@ -493,7 +493,7 @@ extern Color_RGBA8 D_8A1057D0;
  * Seen in play (2026-11-14): the background behind ずかんもくじ and the データをみる page.
  */
 void Pokedex_DrawBackground(void) {
-    Ui_DrawTintedScreenBackground(0x38, 0x1E0, D_8A1057D0.r, D_8A1057D0.g, (s32)D_8A1057D0.b);
+    Ui_DrawTintedScreenBackground(56, 480, D_8A1057D0.r, D_8A1057D0.g, (s32)D_8A1057D0.b);
 }
 
 void Pokedex_InitListWindow(PokedexListWindow* list_window, s32 x, s32 y);
@@ -506,9 +506,9 @@ void Pokedex_InitActionMenuWindow(PokedexMenuWindow* menu_window, s32 x, s32 y);
  * Seen in play (2026-11-14): ran once as the Pokédex opened.
  */
 void Pokedex_InitIndexWindows(PokedexIndexScreen* screen) {
-    Pokedex_InitListWindow(&screen->listWindow, 0x36, 0x55);
-    Pokedex_InitCountsWindow(&screen->countsWindow, 0x156, 0x72);
-    Pokedex_InitActionMenuWindow(&screen->menuWindow, 0x186, 0x106);
+    Pokedex_InitListWindow(&screen->listWindow, 54, 85);
+    Pokedex_InitCountsWindow(&screen->countsWindow, 342, 114);
+    Pokedex_InitActionMenuWindow(&screen->menuWindow, 390, 262);
 }
 
 void BgStage_DrawFrame(void);                            /* extern */
@@ -619,7 +619,7 @@ s32 Pokedex_HandleActionMenuResult(s32 menu_result, s32 *next_screen) {
             switch (sIndexScreen.menuWindow.menu.cursor) {
                 case 0:
                     Cry_PlayFromPokedex(sSelectedDexIndex + 1);
-                    Pokedex_InitEntryWindow(sEntryWindow, 0x2C, 0x54);
+                    Pokedex_InitEntryWindow(sEntryWindow, 44, 84);
                     ret = 2;
                     *next_screen = 3;
                     break;
@@ -906,8 +906,8 @@ extern M2C_UNK D_8A12FD3C;
 M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32);
 void func_8002C8D8(Col8A101B30*, Col8A101B30, f32);
 /**
- * BgStage_RunUntilCondition callback that fades the Pokédex background from grey to its green tint over 8
- * frames (sFadeTimer counting up), and on the next run back to grey (counting down, sFadingOut), with the
+ * BgStage_RunUntilCondition callback that fades the Pokédex background from gray to its green tint over 8
+ * frames (sFadeTimer counting up), and on the next run back to gray (counting down, sFadingOut), with the
  * GB save bar on top.
  * Seen in play (2026-11-14): ran as the Pokédex opened, before ずかんもくじ appeared.
  */
@@ -933,7 +933,7 @@ s32 Pokedex_DrawFadeFrame(UNUSED u8 unused) {
     GbSave_DrawSummaryBar(0, var_a1, &D_8A12FD3C, sSummaryPort);
     n = sFadeTimer;
     func_8002C8D8(&sp2C, *(Col8A101B30*)&D_8A1057D0, n / (f64)8.0f);
-    Ui_DrawTintedScreenBackground(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
+    Ui_DrawTintedScreenBackground(56, 480, sp2C.r, sp2C.g, sp2C.b);
     if (sFadingOut == 0) {
         n = sFadeTimer;
         n++;
@@ -1013,9 +1013,9 @@ void Pokedex_InitFramebuffers(void) {
     sAreaMapStageContext->renderTargets[0] = main_pool_alloc(sizeof(GfxImage), 0);
     sAreaMapStageContext->renderTargets[1] = main_pool_alloc(sizeof(GfxImage), 0);
 
-    GfxImage_Initialize(sAreaMapStageContext->renderTargets[0], 0, 2, 0x140, 0xF0, sp34);
-    GfxImage_Initialize(sAreaMapStageContext->renderTargets[1], 0, 2, 0x140, 0xF0, sp30);
-    GfxImage_Initialize(sp28, 0, 2, 0x140, 0xF0, sp2C);
+    GfxImage_Initialize(sAreaMapStageContext->renderTargets[0], 0, 2, 320, 240, sp34);
+    GfxImage_Initialize(sAreaMapStageContext->renderTargets[1], 0, 2, 320, 240, sp30);
+    GfxImage_Initialize(sp28, 0, 2, 320, 240, sp2C);
     GfxImage_AttachDepthBuffer(sAreaMapStageContext->renderTargets[0], sp28);
     GfxImage_AttachDepthBuffer(sAreaMapStageContext->renderTargets[1], sp28);
 }

@@ -54,7 +54,7 @@ extern s32 sMoveBackdrops[];
 /**
  * Draws a 282x130 YUV image at (x, y) as 16x16 tiles (the last column and row are cut
  * to 10 and 2 pixels): the move-type picture behind the move description.
- * Seen in play (2026-11-14): a yellow lightning picture behind でんきショック's text and a grey one
+ * Seen in play (2026-11-14): a yellow lightning picture behind でんきショック's text and a gray one
  * behind なきごえ's. Stubbed, C-Right left the old picture under the new text.
  */
 void MonSummary_DrawMoveBackdrop(s32 x, s32 y, u8* image) {
@@ -76,13 +76,13 @@ void MonSummary_DrawMoveBackdrop(s32 x, s32 y, u8* image) {
     gDPSetConvert(gDisplayListHead++, G_CV_K0, G_CV_K1, G_CV_K2, G_CV_K3, G_CV_K4, G_CV_K5);
     gDPPipeSync(gDisplayListHead++);
 
-    for (i = 0; i < 0x90; i += 0x10) {
-        h = 0x82 - i;
+    for (i = 0; i < 144; i += 0x10) {
+        h = 130 - i;
         if (h > 0x10) {
             h = 0x10;
         }
-        for (j = 0; j < 0x120; j += 0x10) {
-            w = 0x11A - j;
+        for (j = 0; j < 288; j += 0x10) {
+            w = 282 - j;
             if (w > 0x10) {
                 w = 0x10;
             }
@@ -125,9 +125,9 @@ s32 MonSummary_DrawMoveInfo(s32 x, s32 y, s32 mon, s32 slot)
     s32 move;
     MonSummary_DrawMoveBackdrop(x + 4, y + 2, (u8*)sMoveBackdrops[slot]);
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x, y, 0x122, 2, D_8A203424);
-    func_80029028(x, y + 2, 4, 0x82, D_8A203424);
-    func_80029028(x + 0x11E, y + 2, 4, 0x82, D_8A203424);
+    func_80029028(x, y, 290, 2, D_8A203424);
+    func_80029028(x, y + 2, 4, 130, D_8A203424);
+    func_80029028(x + 286, y + 2, 4, 130, D_8A203424);
     move = BattleMon_GetMoveIndexChecked(mon, slot);
     if (move != (-2)) {
         s32 type_id;
@@ -138,26 +138,26 @@ s32 MonSummary_DrawMoveInfo(s32 x, s32 y, s32 mon, s32 slot)
         pp = ((((D_8006B190[move].unk04 * 100) / 255) + 2) / 5) * 5;
         func_8001AB6C();
         func_8001A384(4, 0);
-        func_8001AA9C(0xFF, 0xC8, 0xC8, 0xFF);
+        func_8001AA9C(0xFF, 0xC8, 0xC8, 0xFF); // #FFC8C8FF
         Font_Printf(x + 9, y + 4, D_8A21D9B4);
-        Font_Printf(x + 0x99, y + 4, D_8A21D9BC);
-        Font_Printf(x + 9, y + 0x17, D_8A21D9C8);
+        Font_Printf(x + 153, y + 4, D_8A21D9BC);
+        Font_Printf(x + 9, y + 23, D_8A21D9C8);
         func_8001AA9C(type->color.r, type->color.g, type->color.b, type->color.a);
-        Font_Printf(x + 0x49, y + 4, type->str);
-        func_8001AA9C(*((u8 *) (((s8 *) (&D_800734A8)) + 0)), *((u8 *) (((s8 *) (&D_800734A8)) + 1)), *((u8 *) (((s8 *) (&D_800734A8)) + 2)), *((u8 *) (((s8 *) (&D_800734A8)) + 3)));
-        Font_SetLineHeight(0x14);
+        Font_Printf(x + 73, y + 4, type->str);
+        func_8001AA9C(*((u8 *) (((s8 *) (&D_800734A8)) + 0)), *((u8 *) (((s8 *) (&D_800734A8)) + 1)), *((u8 *) (((s8 *) (&D_800734A8)) + 2)), *((u8 *) (((s8 *) (&D_800734A8)) + 3))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+        Font_SetLineHeight(20);
         if (D_8006B190[move].power >= 2)
         {
-            Font_Printf(x + 0xE9, y + 4, D_8A21D9D4, D_8006B190[move].power);
+            Font_Printf(x + 233, y + 4, D_8A21D9D4, D_8006B190[move].power);
         }
         else
         {
-            Font_Printf(x + 0xE9, y + 4, D_8A21D9D8, D_8006B190[move].power);
+            Font_Printf(x + 233, y + 4, D_8A21D9D8, D_8006B190[move].power);
         }
-        Font_Printf(x + 0x69, y + 0x17, D_8A21D9DC, pp);
+        Font_Printf(x + 105, y + 23, D_8A21D9DC, pp);
         func_8001A384(4, -1);
-        Font_SetLineHeight(0x18);
-        Font_Printf(x + 9, y + 0x3A, D_8006A9DC[move].str);
+        Font_SetLineHeight(24);
+        Font_Printf(x + 9, y + 58, D_8006A9DC[move].str);
         func_8001ABBC();
     }
 }
@@ -175,13 +175,13 @@ void MonSummary_DrawModelPreview(s32 x, s32 y, s32 mon) {
     BgStage_DrawFrame();
     gSPDisplayList(gDisplayListHead++, D_80060290);
     gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
-    for (i = 0; i < 0xD2; i += n) {
-        if ((0xD2 - i) < 8) {
-            n = 0xD2 - i;
+    for (i = 0; i < 210; i += n) {
+        if ((210 - i) < 8) {
+            n = 210 - i;
         } else {
             n = 8;
         }
-        func_8001B884(x, y + i, 0xF4, n, tex, 0x100, 0x200000);
+        func_8001B884(x, y + i, 244, n, tex, 0x100, 0x200000);
         tex += n << 9;
     }
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -199,7 +199,7 @@ void MonSummary_InitPageWindow(MonSummaryWindow* window, s32 x, s32 y, s32 mon) 
     s32 handle;
     s32 move;
 
-    Window_SetRect((s8*)window, x, y, 0x228, 0x16A);
+    Window_SetRect((s8*)window, x, y, 552, 362);
     window->window.state = 0;
     window->window.title = 0;
     window->window.animTimer = 0;
@@ -228,20 +228,20 @@ void MonSummary_DrawPage(MonSummaryWindow* window, s32 page)
   {
     if (page == 0)
     {
-      Ui_DrawFrameLeftCorners((window->window.frame.x) + 0xF9, window->window.frame.y, window->window.frame.height, &D_8007356C);
-      Ui_DrawTexturedDivider(window->window.frame.x, (window->window.frame.y) + 0xD7, 0x100, &D_8007356C);
-      Ui_DrawTexturedDivider((window->window.frame.x) + 0xFA, (window->window.frame.y) + 0x95, 0x12E, &D_8007356C);
-      MonSummary_DrawStats((window->window.frame.x) + 6, (window->window.frame.y) + 0xDE, window->mon);
+      Ui_DrawFrameLeftCorners((window->window.frame.x) + 249, window->window.frame.y, window->window.frame.height, &D_8007356C);
+      Ui_DrawTexturedDivider(window->window.frame.x, (window->window.frame.y) + 215, 0x100, &D_8007356C);
+      Ui_DrawTexturedDivider((window->window.frame.x) + 250, (window->window.frame.y) + 149, 302, &D_8007356C);
+      MonSummary_DrawStats((window->window.frame.x) + 6, (window->window.frame.y) + 222, window->mon);
       MonSummary_DrawHeader((window->window.frame.x) + 0x100, (window->window.frame.y) + 6, window->mon);
-      MonSummary_DrawTrainerInfo((window->window.frame.x) + 0x100, (window->window.frame.y) + 0x9C, window->mon);
+      MonSummary_DrawTrainerInfo((window->window.frame.x) + 0x100, (window->window.frame.y) + 156, window->mon);
     }
     else
     {
-      Ui_DrawTexturedDivider(window->window.frame.x, (window->window.frame.y) + 0xD7, window->window.frame.width, &D_8007356C);
-      Ui_DrawFrameLeftCorners((window->window.frame.x) + 0xF9, window->window.frame.y, 0xDE, &D_8007356C);
+      Ui_DrawTexturedDivider(window->window.frame.x, (window->window.frame.y) + 215, window->window.frame.width, &D_8007356C);
+      Ui_DrawFrameLeftCorners((window->window.frame.x) + 249, window->window.frame.y, 222, &D_8007356C);
       MonSummary_DrawMovesHeader((window->window.frame.x) + 0x100, (window->window.frame.y) + 6, window->mon);
-      MonSummary_DrawMoveList((window->window.frame.x) + 6, (window->window.frame.y) + 0xDE, window->mon, window->moveSlot);
-      MonSummary_DrawMoveInfo((window->window.frame.x) + 0x100, (window->window.frame.y) + 0x54, window->mon, window->moveSlot);
+      MonSummary_DrawMoveList((window->window.frame.x) + 6, (window->window.frame.y) + 222, window->mon, window->moveSlot);
+      MonSummary_DrawMoveInfo((window->window.frame.x) + 0x100, (window->window.frame.y) + 84, window->mon, window->moveSlot);
     }
   }
   temp_v0 = window->window.state;
@@ -252,7 +252,7 @@ void MonSummary_DrawPage(MonSummaryWindow* window, s32 page)
       window->modelLoaded = 1;
       func_80019008(sPartyModelPreview, window->mon, 0x108D);
     }
-    MonSummary_DrawModelPreview(0x32, 0x5A, window->mon);
+    MonSummary_DrawModelPreview(50, 90, window->mon);
   }
 }
 
@@ -299,7 +299,7 @@ s32 MonSummary_UpdateMoveCursor(MonSummaryWindow* window) {
  * Seen in play (2026-11-14): the てもち screen background.
  */
 void PartyScreen_DrawBackground(void) {
-    Ui_DrawTintedScreenBackground(0x38, 0x1E0, D_8A203300.r, D_8A203300.g, (s32)D_8A203300.b);
+    Ui_DrawTintedScreenBackground(56, 480, D_8A203300.r, D_8A203300.g, (s32)D_8A203300.b);
 }
 
 /**
@@ -401,7 +401,7 @@ void PartyScreen_SetupList(PartyScreen* screen) {
         PokeIcon_SetMonSlot((PokeIconRenderer*)sPartyIconList, i, (BattleMon*)(screen->monTable.rows + i * 0x50),
                       GPACK_RGBA5551(D_8A203304.r, D_8A203304.g, D_8A203304.b, 1));
     }
-    PartyScreen_InitList(&screen->listWindow, 0x2F, 0x4D, (s32)&screen->monList);
+    PartyScreen_InitList(&screen->listWindow, 47, 77, (s32)&screen->monList);
 }
 
 s32 Window_UpdateAnimation(Window* arg0);
@@ -479,12 +479,12 @@ void PartyScreen_Draw(void* screen) {
 
 /**
  * Starts closing the active window; when it has closed, PartyScreen_Update switches to
- * `nextState` and `nextWindow`. Seen in play (2026-11-14): on つよさをみる, ならびかえ and on leaving.
+ * `next_state` and `next_window`. Seen in play (2026-11-14): on つよさをみる, ならびかえ and on leaving.
  */
-void PartyScreen_CloseWindow(PartyScreen* screen, s32 nextState, s32 nextWindow) {
+void PartyScreen_CloseWindow(PartyScreen* screen, s32 next_state, s32 next_window) {
     screen->activeWindow->animTimer = 7;
-    screen->nextState = nextState;
-    screen->nextWindow = (Window*)nextWindow;
+    screen->nextState = next_state;
+    screen->nextWindow = (Window*)next_window;
 }
 
 s32 Menu_UpdateCursor(s8*);
@@ -529,7 +529,7 @@ M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
                 if (res == -1) {
                     Audio_PlaySystemSound(3);
                     if (arg0->dirty != 0) {
-                        SavePrompt_Init(&arg0->savePrompt, 0xCA, 0xAD);
+                        SavePrompt_Init(&arg0->savePrompt, 202, 173);
                         arg0->state = 6;
                         arg0->activeWindow = &arg0->savePrompt;
                     } else {
@@ -537,7 +537,7 @@ M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
                     }
                 } else if (res == 1) {
                     Audio_PlaySystemSound(2);
-                    PartyScreen_InitActionMenu(&arg0->actionMenu, 0x194, 0x123, (u8*)arg0->monPointers[arg0->listWindow.menu.cursor]);
+                    PartyScreen_InitActionMenu(&arg0->actionMenu, 404, 291, (u8*)arg0->monPointers[arg0->listWindow.menu.cursor]);
                     arg0->state = 2;
                     arg0->activeWindow = &arg0->actionMenu;
                 }
@@ -555,7 +555,7 @@ M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
                         PartyScreen_CloseWindow(arg0, 4, (s32)&arg0->summaryWindow);
                         arg0->summaryWindow.moveSlot = 0;
                         arg0->listWindow.window.animTimer = 7;
-                        MonSummary_InitPageWindow(&arg0->summaryWindow, 0x2C, 0x54, arg0->monPointers[arg0->listWindow.menu.cursor]);
+                        MonSummary_InitPageWindow(&arg0->summaryWindow, 44, 84, arg0->monPointers[arg0->listWindow.menu.cursor]);
                         break;
                     case 2:
                         Audio_PlaySystemSound(2);
@@ -566,7 +566,7 @@ M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
                     case 3:
                         Audio_PlaySystemSound(3);
                         if (arg0->dirty != 0) {
-                            SavePrompt_Init(&arg0->savePrompt, 0xD4, 0xAD);
+                            SavePrompt_Init(&arg0->savePrompt, 212, 173);
                             PartyScreen_CloseWindow(arg0, 6, (s32)&arg0->savePrompt);
                         } else {
                             PartyScreen_CloseWindow(arg0, 7, 0);
@@ -588,7 +588,7 @@ M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
                     arg0->listWindow.window.animTimer = (arg0->listWindow.window.state <= 0) ? arg0->listWindow.window.animTimer : 4;
                     Menu_ClearItemFlags(&arg0->listWindow.menu);
                 } else if (res == 1) {
-                    Audio_PlaySystemSound(0x18);
+                    Audio_PlaySystemSound(24);
                     res = arg0->monPointers[arg0->swapIndex];
                     arg0->monPointers[arg0->swapIndex] = arg0->monPointers[arg0->listWindow.menu.cursor];
                     arg0->monPointers[arg0->listWindow.menu.cursor] = res;
@@ -707,7 +707,7 @@ s32 PartyScreen_FadeFrame(u8 unused) {
     GbSave_DrawSummaryBar(0, var_a1, &D_8A21D9E4, D_8A21DE08);
     n = D_8A203428;
     func_8002C8D8(&sp2C, *(ColF50*)&D_8A203300, n / (f64)8.0f);
-    Ui_DrawTintedScreenBackground(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
+    Ui_DrawTintedScreenBackground(56, 480, sp2C.r, sp2C.g, sp2C.b);
     if (D_8A20342C == 0) {
         n = D_8A203428;
         n++;

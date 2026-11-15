@@ -70,14 +70,14 @@ void PartyScreen_DrawRowText(s32 x, s32 y, BattleMon* mon, s32 flags) {
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(flags);
     Font_SetActive(0x10, 0);
-    Font_Printf(x + 0x4C, y + 0xD, mon->nickname);
+    Font_Printf(x + 76, y + 13, mon->nickname);
     Gfx_SetEnvColor(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
     Font_SetActive(4, 0);
-    Font_Printf(x + 0x13B, y + 6, D_8A21D850);
+    Font_Printf(x + 315, y + 6, D_8A21D850);
     Font_SetActive(8, 0);
-    Font_Printf(x + 0x11B, y + 0x19, D_8A21D854, mon->level);
-    Font_Printf(x + 0x175, y + 0x19, D_8A21D858, mon->hp, mon->maxHp);
-    MonSummary_DrawStatusCondition(x + 0xD4, y + 0x19, mon);
+    Font_Printf(x + 283, y + 25, D_8A21D854, mon->level);
+    Font_Printf(x + 373, y + 25, D_8A21D858, mon->hp, mon->maxHp);
+    MonSummary_DrawStatusCondition(x + 212, y + 25, mon);
     Font_EndTexturedTextRendering();
 }
 
@@ -88,7 +88,7 @@ void PartyScreen_DrawRowText(s32 x, s32 y, BattleMon* mon, s32 flags) {
 void PartyScreen_DrawIcon(s32 x, s32 y, s32 slot) {
     gSPDisplayList(gDisplayListHead++, D_80060290);
 
-    Gfx_DrawTextureRgba16(x, y, 0x28, 0x28, ((PokeIconRenderer*)sPartyIconList)->slots[slot].image->img_p, 0x28, 0x200000);
+    Gfx_DrawTextureRgba16(x, y, 40, 40, ((PokeIconRenderer*)sPartyIconList)->slots[slot].image->img_p, 0x28, 0x200000);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
@@ -109,7 +109,7 @@ void PartyScreen_DrawListRow(s32 x, s32 y, BattleMon *mon, s32 index, s32 flags,
     Color_RGBA8 *color;
 
     if (flags & 0x18) {
-        Ui_FillRectHighlighted(x + 3, y + 3, 0x20F, 0x2D, D_8A203304);
+        Ui_FillRectHighlighted(x + 3, y + 3, 527, 45, D_8A203304);
     }
     PartyScreen_DrawRowText(x, y, mon, flags);
     if (flags & 0x12) {
@@ -118,21 +118,21 @@ void PartyScreen_DrawListRow(s32 x, s32 y, BattleMon *mon, s32 index, s32 flags,
         } else {
             color = &D_80073520;
         }
-        Ui_DrawRoundedFrame(x + 2, y + 2, 0x211, 0x2F, *color);
+        Ui_DrawRoundedFrame(x + 2, y + 2, 529, 47, *color);
     }
 }
 
 /**
- * Sets up the てもち list window (545x360) and its menu of PartyScreen_DrawListRow rows over `monList`.
+ * Sets up the てもち list window (545x360) and its menu of PartyScreen_DrawListRow rows over `mon_list`.
  * Seen in play (2026-11-14): ran once from PartyScreen_SetupList when the てもち screen opened.
  */
 void PartyScreen_InitList(PartyListWindow* window, s32 x, s32 y, s32 mon_list) {
-    Window_SetRect((s8*)window, x, y, 0x221, 0x168);
+    Window_SetRect((s8*)window, x, y, 545, 360);
     window->window.animTimer = 0;
     window->window.title = NULL;
     window->window.state = 0;
     window->window.frame.style = 0x1001;
-    Menu_Init((s8*)&window->menu, mon_list, (s8*)window->itemFlags, (M2C_UNK *)PartyScreen_DrawListRow, 0x215, 0x33);
+    Menu_Init((s8*)&window->menu, mon_list, (s8*)window->itemFlags, (M2C_UNK *)PartyScreen_DrawListRow, 533, 51);
 }
 
 extern s8 D_8007356C;
@@ -157,11 +157,11 @@ void PartyScreen_DrawList(PartyListWindow* window, s32 mode) {
     s32 y;
 
     if ((window->window.state != 2) && (Window_DrawAnimatedFrame() == 0)) {
-        Ui_DrawTexturedDivider(window->window.frame.x, window->window.frame.y + 0x137, window->window.frame.width, &D_8007356C);
-        Ui_FillRectPrimEnvColor(window->window.frame.x + 6, window->window.frame.y + 0x13E, window->window.frame.width - 0xC, 0x24, D_8A203350, D_8A203354);
+        Ui_DrawTexturedDivider(window->window.frame.x, window->window.frame.y + 311, window->window.frame.width, &D_8007356C);
+        Ui_FillRectPrimEnvColor(window->window.frame.x + 6, window->window.frame.y + 318, window->window.frame.width - 12, 36, D_8A203350, D_8A203354);
         func_8001AB6C();
         func_8001A384(0x10, 0);
-        Font_Printf(window->window.frame.x + 0x36, window->window.frame.y + 0x144, (mode == 2) ? D_8A20335C : D_8A203358);
+        Font_Printf(window->window.frame.x + 54, window->window.frame.y + 324, (mode == 2) ? D_8A20335C : D_8A203358);
         func_8001ABBC();
 
         x = window->window.frame.x + 6;
@@ -194,12 +194,12 @@ void PartyScreen_DrawList(PartyListWindow* window, s32 mode) {
         for (i = 0; i < window->menu.items->count; i++) {
             if (((mode == 1) && (i == window->menu.cursor)) ||
                 ((mode == 2) && (window->menu.itemFlags[i] & 8))) {
-                Ui_FillRectHighlighted(x + 0x14, y + 5, 0x28, 0x28, D_8A203304);
+                Ui_FillRectHighlighted(x + 20, y + 5, 40, 40, D_8A203304);
             } else {
                 gSPDisplayList(gDisplayListHead++, D_80060270);
-                func_80029028(x + 0x14, y + 5, 0x28, 0x28, D_8A203304);
+                func_80029028(x + 20, y + 5, 40, 40, D_8A203304);
             }
-            PartyScreen_DrawIcon(x + 0x14, y + 5, i);
+            PartyScreen_DrawIcon(x + 20, y + 5, i);
             y += window->menu.cellHeight;
         }
     }
@@ -211,12 +211,12 @@ void PartyScreen_DrawList(PartyListWindow* window, s32 mode) {
  */
 void PartyScreen_DrawActionMenuRow(s32 x, s32 y, char* label, s32 index, s32 flags) {
     if (flags & 0x10) {
-        Ui_FillRectHighlighted(x + 3, y + 3, 0xA2, 0x1E, D_8A203304);
+        Ui_FillRectHighlighted(x + 3, y + 3, 162, 30, D_8A203304);
     }
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(flags);
     Font_SetActive(0x10, 0);
-    Font_Printf(x + 0xC, y + 6, label);
+    Font_Printf(x + 12, y + 6, label);
     Font_EndTexturedTextRendering();
 }
 
@@ -233,17 +233,17 @@ void PartyScreen_InitActionMenu(PartyActionMenuWindow* window, s32 x, s32 y, u8*
 {
   s32* new_var; // FAKE: permuter temp
   s8 *sp2C;
-  Window_SetRect((s8*)window, x, y, 0xB4, 0x84);
+  Window_SetRect((s8*)window, x, y, 180, 132);
   window->window.animTimer = 0;
-  new_var = &window->window.state;
+  new_var = &window->window.state; // FAKE: permuter temp
   window->window.title = NULL;
-  *new_var = 0;
+  *new_var = 0; // FAKE: permuter temp
   window->window.frame.style = 0;
   window->window.frame.color = D_8A203304;
   sp2C = (s8*)&window->items;
   func_80027804(sp2C, D_8A203364, 3, 3);
-  Menu_Init((s8*)&window->menu, sp2C, (s8*)window->itemFlags, (M2C_UNK *) PartyScreen_DrawActionMenuRow, 0xA8, 0x24);
-  if ((!window) && (!window))
+  Menu_Init((s8*)&window->menu, sp2C, (s8*)window->itemFlags, (M2C_UNK *) PartyScreen_DrawActionMenuRow, 168, 36);
+  if ((!window) && (!window)) // FAKE: empty if on a repeated test
   {
   }
   window->menu.options |= 0x10000;
@@ -260,7 +260,7 @@ void PartyScreen_InitActionMenu(PartyActionMenuWindow* window, s32 x, s32 y, u8*
  */
 void PartyScreen_DrawActionMenu(PartyActionMenuWindow* window) {
     if (Window_DrawAnimatedFrame() == 0) {
-        Menu_DrawItems((s8*)&window->menu, window->window.frame.x + 6, window->window.frame.y + 0xC, 0xFEF, 0);
+        Menu_DrawItems((s8*)&window->menu, window->window.frame.x + 6, window->window.frame.y + 12, 0xFEF, 0);
     }
 }
 
@@ -308,19 +308,19 @@ extern char D_8A21D8F8[];
  */
 void MonSummary_DrawStats(s32 x, s32 y, BattleMon* mon) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x, y, 0xF4, 0x86, D_8A203304);
+    func_80029028(x, y, 244, 134, D_8A203304);
     func_8001AB6C();
     func_8001A384(0x10, 0);
-    func_8001AA9C(0xFF, 0xC8, 0xC8, 0xFF);
-    Font_Printf(x + 0xE, y + 7, D_8A21D8BC);
-    Font_Printf(x + 0xE, y + 0x27, D_8A21D8C8);
-    Font_Printf(x + 0xE, y + 0x47, D_8A21D8D4);
-    Font_Printf(x + 0xE, y + 0x67, D_8A21D8E0);
+    func_8001AA9C(0xFF, 0xC8, 0xC8, 0xFF); // #FFC8C8FF
+    Font_Printf(x + 14, y + 7, D_8A21D8BC);
+    Font_Printf(x + 14, y + 39, D_8A21D8C8);
+    Font_Printf(x + 14, y + 71, D_8A21D8D4);
+    Font_Printf(x + 14, y + 103, D_8A21D8E0);
     func_8001AA9C(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
-    Font_Printf(x + 0x9E, y + 7, D_8A21D8EC, mon->attack);
-    Font_Printf(x + 0x9E, y + 0x27, D_8A21D8F0, mon->defense);
-    Font_Printf(x + 0x9E, y + 0x47, D_8A21D8F4, mon->speed);
-    Font_Printf(x + 0x9E, y + 0x67, D_8A21D8F8, mon->special);
+    Font_Printf(x + 158, y + 7, D_8A21D8EC, mon->attack);
+    Font_Printf(x + 158, y + 39, D_8A21D8F0, mon->defense);
+    Font_Printf(x + 158, y + 71, D_8A21D8F4, mon->speed);
+    Font_Printf(x + 158, y + 103, D_8A21D8F8, mon->special);
     func_8001ABBC();
 }
 
@@ -335,29 +335,29 @@ extern char D_8A21D914[];
  */
 void MonSummary_DrawHeader(s32 x, s32 y, BattleMon* mon) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x, y, 0x122, 0x90, D_8A203304);
+    func_80029028(x, y, 290, 144, D_8A203304);
     func_8001AB6C();
-    func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+    func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFFFF
     Font_EnableTwoCycleTexturing();
     func_8001A384(0x10, 0);
-    Gfx_SetPrimColor(0x5A, 0x6B, 0xFF, 0xFF);
-    Font_Printf(x + 0x25, y + 0x1E, mon->nickname);
+    Gfx_SetPrimColor(0x5A, 0x6B, 0xFF, 0xFF); // #5A6BFFFF
+    Font_Printf(x + 37, y + 30, mon->nickname);
     Font_DisableTwoCycleTexturing();
     func_8001A384(8, 0);
     func_8001AA9C(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
     Font_Printf(x + 9, y + 6, D_8A21D8FC, mon->species.id);
-    Font_Printf(x + 0xC9, y + 0x21, D_8A21D904, mon->level);
-    Font_Printf(x + 0x45, y + 0x44, D_8A21D908);
-    Font_Printf(x + 0x8D, y + 0x58, D_8A21D90C, mon->hp, mon->maxHp);
-    func_8001AA9C(0xFF, 0xC7, 0xC7, 0xFF);
-    Font_Printf(x + 0x23, y + 0x74, D_8A21D914);
-    MonSummary_DrawStatusCondition(x + 0xAF, y + 0x74, mon);
+    Font_Printf(x + 201, y + 33, D_8A21D904, mon->level);
+    Font_Printf(x + 69, y + 68, D_8A21D908);
+    Font_Printf(x + 141, y + 88, D_8A21D90C, mon->hp, mon->maxHp);
+    func_8001AA9C(0xFF, 0xC7, 0xC7, 0xFF); // #FFC7C7FF
+    Font_Printf(x + 35, y + 116, D_8A21D914);
+    MonSummary_DrawStatusCondition(x + 175, y + 116, mon);
     func_8001ABBC();
     BattleHud_DrawHpBarTexture(x + 0x85, y + 0x48, 0x94, mon->hp, mon->maxHp);
 }
 
 /**
- * Draws the name of the species' type 1 or 2 (`typeSlot`) in its type color at `fontSize`;
+ * Draws the name of the species' type 1 or 2 (`type_slot`) in its type color at `font_size`;
  * nothing for a missing type 2. Seen in play (2026-11-14): でんき for Pikachu on both pages.
  */
 void MonSummary_DrawTypeName(s32 x, s32 y, s32 font_size, s32 mon, s32 type_slot) {
@@ -405,33 +405,33 @@ void MonSummary_DrawTrainerInfo(s32 x, s32 y, s32 mon) {
         next_level = ((BattleMon*)mon)->level + 1;
     }
     to_next = MonSummary_GetExpForLevel(((BattleMon*)mon)->species.id, next_level) - ((BattleMon*)mon)->exp;
-    Ui_FillRectPrimEnvColor(x, y, 0x122, 0xC8, D_8A203370, D_8A203374);
+    Ui_FillRectPrimEnvColor(x, y, 290, 200, D_8A203370, D_8A203374);
     func_8001AB6C();
     func_8001A384(8, 0);
-    func_8001AA9C(0xFF, 0xDA, 0xC7, 0xFF);
-    Font_Printf(x + 0x37, y + 0xC, D_8A21D920);
+    func_8001AA9C(0xFF, 0xDA, 0xC7, 0xFF); // #FFDAC7FF
+    Font_Printf(x + 55, y + 12, D_8A21D920);
     if (Pokemon_GetTypeIndex(mon, 1) != -1) {
-        Font_Printf(x + 0x37, y + 0x28, D_8A21D92C);
+        Font_Printf(x + 55, y + 40, D_8A21D92C);
     }
-    func_8001AA9C(0xFF, 0xFF, 0xC7, 0xFF);
-    Font_Printf(x + 0xF, y + 0x4C, D_8A21D938);
-    func_8001AA9C(0xED, 0xFF, 0xC7, 0xFF);
-    Font_Printf(x + 0xF, y + 0x68, D_8A21D940);
-    func_8001AA9C(0xDA, 0xFF, 0xC7, 0xFF);
-    Font_Printf(x + 0xF, y + 0x8C, D_8A21D950);
-    func_8001AA9C(0xC7, 0xFF, 0xDA, 0xFF);
-    Font_Printf(x + 0xF, y + 0xA8, D_8A21D95C);
-    Font_Printf(x + 0xA5, y + 0xA8, D_8A21D964);
-    Font_Printf(x + 0xC3, y + 0xA8, D_8A21D968);
+    func_8001AA9C(0xFF, 0xFF, 0xC7, 0xFF); // #FFFFC7FF
+    Font_Printf(x + 0xF, y + 76, D_8A21D938);
+    func_8001AA9C(0xED, 0xFF, 0xC7, 0xFF); // #EDFFC7FF
+    Font_Printf(x + 0xF, y + 104, D_8A21D940);
+    func_8001AA9C(0xDA, 0xFF, 0xC7, 0xFF); // #DAFFC7FF
+    Font_Printf(x + 0xF, y + 140, D_8A21D950);
+    func_8001AA9C(0xC7, 0xFF, 0xDA, 0xFF); // #C7FFDAFF
+    Font_Printf(x + 0xF, y + 168, D_8A21D95C);
+    Font_Printf(x + 165, y + 168, D_8A21D964);
+    Font_Printf(x + 195, y + 168, D_8A21D968);
     func_8001AA9C(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
-    Font_Printf(x + 0xAF, y + 0x4C, D_8A21D96C, ((BattleMon*)mon)->otId);
-    Font_Printf(x + 0xAF, y + 0x68, (char*)mon + 0x40);
-    Font_Printf(x + 0x87, y + 0x8C, D_8A21D974, ((BattleMon*)mon)->exp);
-    Font_Printf(x + 0x40, y + 0xA8, D_8A21D978, to_next);
-    Font_Printf(x + 0xD7, y + 0xA8, D_8A21D97C, next_level);
+    Font_Printf(x + 175, y + 76, D_8A21D96C, ((BattleMon*)mon)->otId);
+    Font_Printf(x + 175, y + 104, (char*)mon + 0x40);
+    Font_Printf(x + 135, y + 140, D_8A21D974, ((BattleMon*)mon)->exp);
+    Font_Printf(x + 0x40, y + 168, D_8A21D978, to_next);
+    Font_Printf(x + 215, y + 168, D_8A21D97C, next_level);
     func_8001ABBC();
-    MonSummary_DrawTypeName(x + 0xAF, y + 0xC, 8, mon, 0);
-    MonSummary_DrawTypeName(x + 0xAF, y + 0x28, 8, mon, 1);
+    MonSummary_DrawTypeName(x + 175, y + 12, 8, mon, 0);
+    MonSummary_DrawTypeName(x + 175, y + 40, 8, mon, 1);
 }
 
 typedef struct Entry8006A9D4 {
@@ -464,12 +464,12 @@ s32 BattleMon_GetMoveIndex(u8*, s32);
 u32 func_800566BC(const char*);
 /**
  * Draws the moves page's move list: each move name in its type color with PP cur/max,
- * laid out by the C button that picks it, and a frame on `selectedSlot`. Max PP adds
+ * laid out by the C button that picks it, and a frame on `selected_slot`. Max PP adds
  * min(pp / 5, 7) per PP Up (top 2 bits of the PP byte).
  * Seen in play (2026-11-14): でんきショック 30/48 (3 PP Ups), なきごえ 40/47 (1 PP Up),
  * でんこうせっか 30/30, でんじは 20/20; C-Right moved the frame to なきごえ.
  */
-void MonSummary_DrawMoveList(s32 baseX, s32 baseY, s32 mon, s32 selected_slot) {
+void MonSummary_DrawMoveList(s32 base_x, s32 base_y, s32 mon, s32 selected_slot) {
     s32 pad; // FAKE
     s32 count;
     s32 pad2; // FAKE
@@ -483,15 +483,15 @@ void MonSummary_DrawMoveList(s32 baseX, s32 baseY, s32 mon, s32 selected_slot) {
     s32 cur;
     s32 max;
 
-    Ui_FillRectPrimEnvColor(baseX, baseY, 0x21C, 0x86, D_8A203378, D_8A20337C);
+    Ui_FillRectPrimEnvColor(base_x, base_y, 540, 134, D_8A203378, D_8A20337C);
     count = BattleMon_CountMoves((u8*)mon);
     for (i = 0; i < count; i++) {
         hl = 0;
         if (selected_slot == i) {
-            Ui_DrawRoundedFrame(D_8A203384[i].boxX + baseX, D_8A203384[i].boxY + baseY, 0xD0, 0x30, D_80073520);
+            Ui_DrawRoundedFrame(D_8A203384[i].boxX + base_x, D_8A203384[i].boxY + base_y, 208, 48, D_80073520);
             hl = 2;
         }
-        Ui_DrawImageInStrips(D_8A203384[i].icon, D_8A203384[i].iconX + baseX, D_8A203384[i].iconY + baseY);
+        Ui_DrawImageInStrips(D_8A203384[i].icon, D_8A203384[i].iconX + base_x, D_8A203384[i].iconY + base_y);
         move = BattleMon_GetMoveIndex((u8*)mon, i);
         func_8001AB6C();
         if (move == -2) {
@@ -503,11 +503,11 @@ void MonSummary_DrawMoveList(s32 baseX, s32 baseY, s32 mon, s32 selected_slot) {
             str = D_8006A9D4[move].name;
         }
         func_8001A384(8, 0);
-        x = D_8A203384[i].nameX + baseX;
+        x = D_8A203384[i].nameX + base_x;
         if (D_8A203384[i].center) {
             x = x - (func_800566BC(str) >> 1) * 0x14 + 0x8C;
         }
-        Font_Printf(x, D_8A203384[i].nameY + baseY, str);
+        Font_Printf(x, D_8A203384[i].nameY + base_y, str);
         func_8001ABBC();
         if (move != -2) {
             cur = ((u8*)mon)[i + 0x20];
@@ -519,7 +519,7 @@ void MonSummary_DrawMoveList(s32 baseX, s32 baseY, s32 mon, s32 selected_slot) {
             func_8001AB6C();
             func_8001A384(4, 0);
             Font_SetColorForFlags(hl);
-            Font_Printf(D_8A203384[i].ppX + baseX, D_8A203384[i].ppY + baseY, D_8A21D990, cur & 0x3F, max);
+            Font_Printf(D_8A203384[i].ppX + base_x, D_8A203384[i].ppY + base_y, D_8A21D990, cur & 0x3F, max);
             func_8001ABBC();
         }
     }
@@ -532,25 +532,25 @@ void MonSummary_DrawMoveList(s32 baseX, s32 baseY, s32 mon, s32 selected_slot) {
  */
 void MonSummary_DrawMovesHeader(s32 x, s32 y, BattleMon* mon) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x, y, 0x122, 0x4E, D_8A203304);
+    func_80029028(x, y, 290, 78, D_8A203304);
     func_8001AB6C();
-    func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+    func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFFFF
     func_8001ABE8();
     func_8001A384(0x10, 0);
     func_8001AAE4(0x5A, 0x6B, 0xFF, 0xFF);
-    Font_Printf(x + 0x25, y + 0x1E, *(char**)D_80064C44[mon->species.id]);
+    Font_Printf(x + 37, y + 30, *(char**)D_80064C44[mon->species.id]);
     func_8001AC3C();
     func_8001A384(8, 0);
     func_8001AA9C(((Color_RGBA8*)&D_800734A8)->r, ((Color_RGBA8*)&D_800734A8)->g, ((Color_RGBA8*)&D_800734A8)->b, ((Color_RGBA8*)&D_800734A8)->a);
     Font_Printf(x + 9, y + 6, "No.%03d", mon->species.id);
-    Font_Printf(x + 0xC9, y + 0x21, "L%d", mon->level);
+    Font_Printf(x + 201, y + 33, "L%d", mon->level);
     func_8001A384(4, 0);
-    Font_Printf(x + 9, y + 0x3C, "タイプ"); // "Type"
-    Font_Printf(x + 0x4F, y + 0x3C, "1/");
+    Font_Printf(x + 9, y + 60, "タイプ"); // "Type"
+    Font_Printf(x + 79, y + 60, "1/");
     if (Pokemon_GetTypeIndex((s32)mon, 1) != -1) {
-        Font_Printf(x + 0xB9, y + 0x3C, "2/");
+        Font_Printf(x + 185, y + 60, "2/");
     }
-    MonSummary_DrawTypeName(x + 0x6F, y + 0x3C, 4, (s32)mon, 0);
-    MonSummary_DrawTypeName(x + 0xD9, y + 0x3C, 4, (s32)mon, 1);
+    MonSummary_DrawTypeName(x + 111, y + 60, 4, (s32)mon, 0);
+    MonSummary_DrawTypeName(x + 217, y + 60, 4, (s32)mon, 1);
     func_8001ABBC();
 }
