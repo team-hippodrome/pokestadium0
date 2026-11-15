@@ -194,7 +194,7 @@ void Session_LoadPortSnapshot(s32 port) {
 /**
  * Saves the current tournament (mode, cup, next round, opponents, team, GB snapshot) to the continue
  * record and commits it.
- * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): ran on ちゅうだんする at トーナメントをつづけますか？
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): ran on ちゅうだんする (Suspend) at トーナメントをつづけますか？ ("Continue the tournament?")
  */
 void Tournament_SaveContinueData(void) {
     SaveContinueSession sp1C;
@@ -276,7 +276,7 @@ s32 func_80057910(s8 *, M2C_UNK *, M2C_UNK);        /* extern */
  * Matching: the unused pad local sits between the buffer and ret as in the ROM's frame, and the bit-0
  * update comes before the 0xFF store to match the register order.
  * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): the main menu asked
- * トーナメントのつづきをする？ after a saved round.
+ * トーナメントのつづきをする？ ("Continue the tournament?") after a saved round.
  */
 s32 Tournament_LoadContinueData(void) {
     s8 buf[0x162];
@@ -495,7 +495,7 @@ extern s32 D_800AF988;
 /**
  * Game state 0x8010: runs the title screen fragment (slot 2). It returns 0x8010 to play the attract demo
  * battle, 0x8020 for Start (to the main menu, 0x8040) or 0xF000 for the 64DD boot.
- * Seen in play (2026-11-14): runs while ポケモンスタジアム / PUSH START is on screen, after the opening.
+ * Seen in play (2026-11-14): runs while ポケモンスタジアム (Pokémon Stadium) / PUSH START is on screen, after the opening.
  */
 void State_TitleScreen(void) {
     gNextGameState = func_80025B60(((u32) ((s32) &D_81200000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015E220, &D_0015F390, 0, 0);

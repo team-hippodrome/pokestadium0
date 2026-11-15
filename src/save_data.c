@@ -129,7 +129,7 @@ void Save_CommitRecord(arg0, arg1)
  * Used while a Pokémon or item transfer to or from the Game Boy cartridge is in progress: if the power goes off
  * before Save_CommitRecord runs, the next boot resets the record instead of keeping a duplicate. The dirty bit stays set.
  * A third argument passed by Save_InvalidateTypedRecord is ignored (K&R definition); pad[2] reproduces the frame.
- * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): moving a Pokémon into 64のボックス1 wrote 'XXXX' first, then 'POKE' once the GB save was written.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): moving a Pokémon into 64のボックス1 (N64 Box 1) wrote 'XXXX' first, then 'POKE' once the GB save was written.
  */
 void Save_InvalidateRecord(arg0, arg1)
     s32 arg0;
@@ -158,7 +158,7 @@ void Save_RevertRecordFromBackup(s32 arg0, s32 arg1) {
 M2C_UNK func_8004FD20();                            /**
  * Zeroes a save record (bzero with the caller's a0/a1 still in place) and marks it dirty.
  * The size argument passed by Save_ClearTypedRecord is used only through that register.
- * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): つづきのデータをけす wrote the continue record back as zeroes with a valid footer.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): つづきのデータをけす (Erase continue data) wrote the continue record back as zeroes with a valid footer.
  */
 void Save_ClearRecord(arg0)
     s16* arg0;
@@ -483,7 +483,7 @@ void Save_RevertTypedRecord(s32 arg0, s32 arg1) {
 
 /**
  * Commits every dirty team, 64 box and item record and the 100-Pokémon list (kinds 16 to 19).
- * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): it ran after the GB save was written when leaving せいとん with レポートしてやめる.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): it ran after the GB save was written when leaving せいとん (Organize) with レポートしてやめる (Save and quit).
  */
 void Save_CommitPokemonRecords(void) {
     s32 i;
@@ -547,7 +547,7 @@ void Save_ClearTypedRecord(s32 arg0, s32 arg1) {
 
 /**
  * Clears save record (arg0 kind, arg1 slot) and commits it.
- * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): つづきのデータをけす reset the continue record this way.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): つづきのデータをけす (Erase continue data) reset the continue record this way.
  */
 void Save_ResetAndCommitTypedRecord(s32 arg0, s32 arg1) {
     Save_ClearTypedRecord(arg0, arg1);
@@ -556,7 +556,7 @@ void Save_ResetAndCommitTypedRecord(s32 arg0, s32 arg1) {
 
 /**
  * Entries per save record kind: 6 Pokémon per team, 30 per 64 box, 100 items per item record, 100 in the kind 19 list.
- * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): 64のボックス shows 00/30 and 64の カセット items 000/100.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): 64のボックス (N64 Box) shows 00/30 and 64の カセット items 000/100.
  */
 s32 Deck_GetSaveRecordCapacity(s32 arg0) {
     s32 ret = 0;
@@ -900,7 +900,7 @@ s32 Save_GetGbPlayerSettings(s8 *arg0, s32 *arg1) {
 M2C_UNK Save_SetTypedRecordFlags(M2C_UNK, M2C_UNK, M2C_UNK);   /**
  * Stores the GB Player button config at +0x04 of the options record: high byte = START choice, low byte = SELECT choice - 1
  * (choices 0 START, 1 L, 2 R, 3 C-Left, 4 C-Down).
- * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): START → R in コンフィグ stored 0x0200.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): START → R in コンフィグ (Config) stored 0x0200.
  */
 s32 Save_SetGbPlayerButtonConfig(s32 arg0) {
     gSaveSram->options[0].gbPlayerButtons = arg0;
@@ -913,7 +913,7 @@ M2C_UNK Save_SetTypedRecordFlags(M2C_UNK, M2C_UNK, M2C_UNK);
 /**
  * Stores how many extra GB Player picture frames are unlocked (+0x02 of the options record, 0 to 2). Z cycles the frame around the
  * Game Boy screen in the GB Player: 1 adds the Doduo frame, 2 the Dodrio frame.
- * Seen in play (2026-11-13, docs/annotation/n64-save-format.md): clearing マスターボールカップ raised it from 0 to 1; with 2 set, Z cycled
+ * Seen in play (2026-11-13, docs/annotation/n64-save-format.md): clearing マスターボールカップ (Master Ball Cup) raised it from 0 to 1; with 2 set, Z cycled
  * green, Doduo and Dodrio frames.
  */
 s32 Save_SetGbPlayerFrameTier(s8 arg0) {
@@ -924,8 +924,8 @@ s32 Save_SetGbPlayerFrameTier(s8 arg0) {
 
 /**
  * Returns the tournament progress halfword (options record +0x08, big-endian). Low byte: L1～30 cups cleared (0-4).
- * High byte: bit 0 L50～55 tournament won, bit 1 マスターボールカップ won.
- * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): setting the low byte to 2 opened ハイパーボールカップ with ball marks on the first two cups.
+ * High byte: bit 0 L50～55 tournament won, bit 1 マスターボールカップ (Master Ball Cup) won.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): setting the low byte to 2 opened ハイパーボールカップ (Ultra Ball Cup) with ball marks on the first two cups.
  */
 s32 Save_GetProgressFlags(void) {
     return ((gSaveSram->options[0].progress[0] << 8) | gSaveSram->options[0].progress[1]) & 0xFFFF;
@@ -942,8 +942,8 @@ void Save_SetProgressFlags(u16 arg0) {
 }
 
 /**
- * Returns the option flags at +0x03 of the options record: bit 0 サウンド モノラル, bit 1 じっきょう なし.
- * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): モノラル and なし stored 0x03.
+ * Returns the option flags at +0x03 of the options record: bit 0 サウンド モノラル (Sound: Mono), bit 1 じっきょう なし (Commentary: Off).
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): モノラル (Mono) and なし (Off) stored 0x03.
  */
 u8 Save_GetOptionFlags(void) {
     return gSaveSram->options[0].soundFlags;
@@ -953,7 +953,7 @@ M2C_UNK Save_SetTypedRecordFlags(s32, s32, M2C_UNK);
 M2C_UNK Save_SetTypedRecordFlags(M2C_UNK, M2C_UNK, M2C_UNK);
 /**
  * Stores the option flags at +0x03 of the options record and marks it dirty.
- * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): leaving オプション with おわり wrote the 0x20-byte options record pair.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): leaving オプション with おわり (Done) wrote the 0x20-byte options record pair.
  */
 void Save_SetOptionFlags(s8 arg0) {
     gSaveSram->options[0].soundFlags = arg0;
@@ -963,7 +963,7 @@ void Save_SetOptionFlags(s8 arg0) {
 /**
  * Fills the tournament continue record: mode, cup, next round and opponents (+0x02), Pokémon count (+0x0E), the six
  * Pokémon as Game Boy records (+0x10), the GB save snapshot (+0x11E) and a mask of Pokémon flagged in unk_01 (+0x280).
- * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): ちゅうだんする after round 2 of モンスターボールカップ stored mode 2, cup 0, round 3.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): ちゅうだんする (Suspend) after round 2 of モンスターボールカップ (Poké Ball Cup) stored mode 2, cup 0, round 3.
  */
 void Save_WriteContinueData(SaveContinueSession* arg0, GbSavePortSnapshot* arg1, BattleMon* arg2, s32 arg3) {
     SaveContinueRecord* f;
@@ -987,7 +987,7 @@ void Save_WriteContinueData(SaveContinueSession* arg0, GbSavePortSnapshot* arg1,
 
 /**
  * Reads the tournament continue record back; returns the Pokémon count, or -1 when the record is not present.
- * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): つづきをする resumed at バトル-3 with the saved team.
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): つづきをする (Continue) resumed at バトル-3 (Battle 3) with the saved team.
  */
 s16 Save_ReadContinueData(SaveContinueSession* arg0, GbSavePortSnapshot* arg1, BattleMon* arg2) {
     s16 count = -1;
