@@ -219,12 +219,12 @@ s32 Trail40GridAlt_IsComplete(void) {
     if (D_821AAB90.duration < D_821AAB90.frame) {
         return -1;
     }
-    if (D_821AAB90.frame < 0x1E) {
+    if (D_821AAB90.frame < 30) {
         D_821AAB90.alpha += 0xA;
         if (D_821AAB90.alpha > 0x50) {
             D_821AAB90.alpha = 0x50;
         }
-    } else if ((D_821AAB90.duration - 0x1E) < D_821AAB90.frame) {
+    } else if ((D_821AAB90.duration - 30) < D_821AAB90.frame) {
         D_821AAB90.alpha -= 0xA;
         if (D_821AAB90.alpha < 0) {
             D_821AAB90.alpha = 0;

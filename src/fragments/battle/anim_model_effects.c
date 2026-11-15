@@ -38,7 +38,7 @@ extern M2C_UNK D_8218E7B8;
 extern M2C_UNK BattleAnim_CallbackModelBurstAlphaFade;
 s16 Particle_GetUnkCD();
 s16 Particle_GetByteParam1();
-s32 ParticleMath_ComputeViewYawUnused();
+s32 ParticleMath_ComputeViewRotationY();
 s32 func_82140690(s8 *);
 void Particle_AddPosOffsetYScaled(s8*, f32);
 void func_8213E1FC(Particle* arg0, f32 arg1);
@@ -3927,7 +3927,7 @@ void BattleAnim_CallbackStartEffects21And93ModelAlphaAnchorFollow(Particle* part
         Particle_ApproachScratchA(particle, 0xC8, 6);
         break;
     }
-    Particle_SetRotationY(particle, (s16) (ParticleMath_ComputeViewYawUnused() + 0x8000));
+    Particle_SetRotationY(particle, (s16) (ParticleMath_ComputeViewRotationY() + 0x8000));
 }
 
 /**
@@ -3956,7 +3956,7 @@ void BattleAnim_ConfuseRayParticleUpdate(Particle* arg0) {
     if (arg0->lifecycle == 1) {
         func_8215CA14();
     }
-    Particle_SetRotationY(arg0, (s16) (ParticleMath_ComputeViewYawUnused() + 0x8000));
+    Particle_SetRotationY(arg0, (s16) (ParticleMath_ComputeViewRotationY() + 0x8000));
 }
 
 /**

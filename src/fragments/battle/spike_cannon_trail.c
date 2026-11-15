@@ -92,7 +92,7 @@ void SpikeCannonFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg
 
             var_s0 = &var_v1->nodes[0];
             for (j = 0; j < 15; j++, var_s0++) {
-                var_s0->alpha = (arg9 * (0xE - j)) / 15;
+                var_s0->alpha = (arg9 * (14 - j)) / 15;
                 var_s0->halfWidth = argB;
                 var_s0->angle = (RAND(120) * 6.2831855f) / 120.0;
                 var_s0->position = sp64;
@@ -156,8 +156,8 @@ void SpikeCannonFourStream_UpdateNodeChain(OwnerLinkedFourStream* arg0) {
                 }
             }
 
-            if (arg0->frame < 0xA) {
-                f32 tmp1 = (((0xA - arg0->frame) * 0.01) / 10.0);
+            if (arg0->frame < 10) {
+                f32 tmp1 = (((10 - arg0->frame) * 0.01) / 10.0);
                 f32 tmp2 = ((arg0->frame * 0.07) / 10.0);
 
                 var_s0->velocity.y += (arg0->targetPos.y - var_s0->position.y) * tmp1;

@@ -213,12 +213,12 @@ s32 HypnosisScreechTrail_IsComplete(void) {
     if (sWaterSurface.duration < sWaterSurface.frame) {
         return -1;
     }
-    if (sWaterSurface.frame < 0x1E) {
+    if (sWaterSurface.frame < 30) {
         sWaterSurface.alpha += 0xA;
         if (sWaterSurface.alpha >= 0x81) {
             sWaterSurface.alpha = 0x80;
         }
-    } else if ((sWaterSurface.duration - 0x1E) < sWaterSurface.frame) {
+    } else if ((sWaterSurface.duration - 30) < sWaterSurface.frame) {
         sWaterSurface.alpha -= 0xA;
         if (sWaterSurface.alpha < 0) {
             sWaterSurface.alpha = 0;

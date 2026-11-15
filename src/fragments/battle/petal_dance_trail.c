@@ -162,7 +162,7 @@ void PetalDanceTrail_AdvanceNodes(Trail50Effect* arg0) {
                     var_s0->angle += arg0->angleStep;
                     var_s0->swirlVelocity.x += __sinf(var_s0->angle) * temp_fs3;
                     var_s0->swirlVelocity.z += __cosf(var_s0->angle) * temp_fs3;
-                    if (arg0->frame >= 0x15) {
+                    if (arg0->frame >= 21) {
                         arg0->phase = 1;
                         arg0->frame = 0;
                     }

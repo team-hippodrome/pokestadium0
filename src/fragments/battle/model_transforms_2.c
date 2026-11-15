@@ -51,7 +51,7 @@ void BattleScene_ResetParticipantModelFlags(ActivePokemon* active_pokemon) {
 
 /**
  * Places the Poke Ball above the field on this Pokemon's side and starts its sway.
- * Seen in play (2026-11-13) in a Pokémon Cup (L1～30, モンスターボールカップ) battle it ran once per side as
+ * Seen in play (2026-11-13) in a Poké Ball Cup (L1～30, モンスターボールカップ) battle it ran once per side as
  * the opening send-out threw its Poké Ball.
  * @unverified Name and comment guessed from the code.
  */
@@ -70,7 +70,7 @@ void BattleAnim_PokeBallThrowStart(UNUSED ActivePokemon* owner, ActivePokemon* a
 
 /**
  * Spins the Poke Ball and lets it fall; hides it once it drops below the floor.
- * Seen in play (2026-11-13) in a Pokémon Cup (L1～30, モンスターボールカップ) battle it ran on the frames the
+ * Seen in play (2026-11-13) in a Poké Ball Cup (L1～30, モンスターボールカップ) battle it ran on the frames the
  * opening send-out's Poké Ball spun and fell.
  * @unverified Name and comment guessed from the code.
  */
@@ -94,8 +94,8 @@ void BattleAnim_PokeBallThrowContinue(ActivePokemon* owner, ActivePokemon* anima
 
 /**
  * Poke Ball throw model transform (case 1): start, then continue.
- * Seen in play (2026-11-13) in a Pokémon Cup (L1～30, モンスターボールカップ) battle it ran as the opening
- * send-out threw the Poké Balls, before 「ゆけっ！ ゲンガー」.
+ * Seen in play (2026-11-13) in a Poké Ball Cup (L1～30, モンスターボールカップ) battle it ran as the opening
+ * send-out threw the Poké Balls, before 「ゆけっ！ ゲンガー」 "Go! Gengar!".
  * @unverified Name and comment guessed from the code.
  */
 void BattleAnim_PokeBallThrow(s32 arg0, ActivePokemon* arg1) {
@@ -157,11 +157,11 @@ void BattleAnim_PokeBallLandContinue(ActivePokemon* owner, ActivePokemon* animat
 
 /**
  * Poke Ball landing model transform (case 2). In game it ran on the player's
- * side for 12 frames during a recall (「もういい！ もどれ！」), not when the
+ * side for 12 frames during a recall (「もういい！ もどれ！」 "That's enough! Come back!"), not when the
  * next Pokemon was sent out; what it shows there is not established.
  * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran when
  * A confirmed the switch, during the recall.
- * Seen in play (2026-11-13) it also ran when COM sent out its next Pokémon (ゆけっ！ゲンのすけ) after its
+ * Seen in play (2026-11-13) it also ran when COM sent out its next Pokémon (ゆけっ！ゲンのすけ, "Go! Gennosuke!") after its
  * first one fainted.
  * @unverified Name and comment guessed from the code.
  */
@@ -576,7 +576,7 @@ void BattleAnim_DoubleTeamStart(s32 arg0, ActivePokemon* arg1) {
  * transform and hides them.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
- * Double Team: ran from sample 264 with 「かげぶんしんした！」 and the afterimages on screen.
+ * Double Team: ran from sample 264 with 「かげぶんしんした！」 "(It) used Double Team!" and the afterimages on screen.
  */
 void BattleAnim_DoubleTeamContinue(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     BattleScene_UpdateSecondaryModelOrbit(animated_pokemon);
@@ -791,7 +791,7 @@ void BattleAnim_MeditateStart(UNUSED ActivePokemon* owner, ActivePokemon* animat
  * turn, then moves on.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
- * Meditate: ran from sample 254 with 「ヨガのポーズを した！」 on screen.
+ * Meditate: ran from sample 254 with 「ヨガのポーズを した！」 "(It) struck a yoga pose!" on screen.
  */
 void BattleAnim_MeditateContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     f32 scale_resize;
@@ -875,7 +875,7 @@ void BattleAnim_Meditate(ActivePokemon* owner, ActivePokemon* animated_pokemon) 
  * oscillation.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
  * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
- * Body Slam: ran at sample 333 as Pinsir is flattened by the hit (paralysed, まひ).
+ * Body Slam: ran at sample 333 as Pinsir is flattened by the hit (paralyzed, まひ).
  */
 void BattleAnim_SquishHitReactionStart(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     animated_pokemon->oscillationAngularVelocity = 1820;
