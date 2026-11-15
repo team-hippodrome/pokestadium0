@@ -18,6 +18,8 @@ void StatRibbon_Init(void) {
 }
 
 /**
+ * Sets a ribbon mesh's prim color (arg1, arg2, arg3), env color (arg4, arg5, arg6), prim LOD
+ * fraction arg7, prim alpha arg8 and env alpha arg9.
  * @unverified Named after the ribbon seen in play; this function itself was not traced.
  */
 void StatRibbon_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8,

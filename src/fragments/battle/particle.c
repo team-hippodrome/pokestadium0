@@ -2486,8 +2486,7 @@ s32 Particle_ApproachMotionStepY(Particle* arg0, f32 arg1, f32 arg2) {
 }
 
 /**
- * Sets the f32 at offset 0x7C to the step magnitude times the cosine of the angle at
- * offset 0x90.
+ * Sets motionStep.y (+0x7C) to the step magnitude times cos(rotation.x) (+0x90).
  * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
@@ -2505,8 +2504,7 @@ void Particle_SetMotionStepXFromRotationY(Particle* particle) {
 }
 
 /**
- * Sets the f32 at offset 0x80 to the step magnitude times the cosine of the angle at
- * offset 0x92.
+ * Sets motionStep.z (+0x80) to the step magnitude times cos(rotation.y) (+0x92).
  * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
