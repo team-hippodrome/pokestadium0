@@ -979,14 +979,14 @@ void BattleScene_TickRow1PlayOwnerCry(ActivePokemon* active_pokemon) {
     }
 }
 
-/**
- * Tick callback of presentation row 16: unless the Pokémon is frozen, underground or has a
- * sleep/poison status, plays its cry once the model's assets are loaded on the first timer frame,
- * then ends the tick slot.
- * @unverified Name guessed from the code.
- */
 s32 Audio_PlayCry(u32 arg0, u32 arg1); //@src/audio_commands.c
 
+/**
+ * Tick callback of presentation row 16: unless the Pokémon is frozen, underground or asleep
+ * (status & STATUS_SLEEP_MASK), plays its cry once the model's assets are loaded on the first timer
+ * frame, has the announcer call it (line 0x1B while airborne, else 0xB), then ends the tick slot.
+ * @unverified Name guessed from the code.
+ */
 void BattleScene_TickRow16PlayCry(ActivePokemon* active_pokemon) {
     s16 species;
     ActivePokemonState* state = &active_pokemon->state;
@@ -1846,7 +1846,7 @@ void BattleScene_TickRow5QueueEffectList6(ActivePokemon* active_pokemon) {
     // The do-while (0) wrapper is needed for the match.
     do {  // FAKE
         BattleScene_GetParticipantSideIndex(active_pokemon);
-    } while (0);
+    } while (0); // FAKE
     if (D_8219A750 == 0) {
         sBattleSceneStateTickSlots[sBattleSceneStateTickSlotIndex].callback = sBattleSceneStateTickSentinel;
         return;
@@ -2262,10 +2262,13 @@ void BattleScene_TryQueueIdleCueEffect(s8* active_pokemon) {
 s32 ActivePokemon_SetStateFlags(s8 *arg0, unsigned short arg1)
 {
   s8 *new_var; // FAKE: permuter temp
-  new_var = (s8 *) arg0;
-  *((u16 *) (new_var + 0x7C2)) = (u16) ((*((u16 *) (new_var + 0x7C2))) | arg1);
+  new_var = (s8 *) arg0; // FAKE
+  *((u16 *) (new_var + 0x7C2)) = (u16) ((*((u16 *) (new_var + 0x7C2))) | arg1); // FAKE
 }
 
+/**
+ * Clears the bits of arg1 in state.flags (+0x7C2). The counterpart of ActivePokemon_SetStateFlags.
+ */
 s32 Battle_ClearRuntimeFlags(s8 *arg0, unsigned short arg1)
 {
   *((u16 *) (((s8 *) arg0) + 0x7C2)) = (u16) ((*((u16 *) (((s8 *) arg0) + 0x7C2))) & (~arg1)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
@@ -2745,6 +2748,7 @@ void BattleScene_AllocateParticipantRecord(BattleSide* session_teams, s32 side_i
 M2C_UNK Battle_AllocMessageQueues();                            /* extern */
 
 /**
+ * Allocates the battle message queues (wrapper around Battle_AllocMessageQueues).
  * Seen in play (2026-11-13) (Free Battle, as the battle scene starts): called once from
  * BattleScene_AllocateParticipants, right after both participant records were allocated.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.

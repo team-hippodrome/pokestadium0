@@ -261,6 +261,9 @@ void func_80031F14(f32*, f32*, f32*);
 void func_800320A8(s32, f32, f32, f32, f32, f32, f32);
 extern s32 D_821AABA0;
 /**
+ * Allocates the grid's 64-byte matrix (D_821AABA0) and fills it from the camera context: the point
+ * at +0xA8 is moved 140 units toward the point at +0xB4 (times 30 over the field of view at
+ * +0x2C), and both points are passed to func_800320A8.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec

@@ -13,6 +13,8 @@ void OwnerAnchoredFourStream_UpdateNodeChain(OwnerAnchoredFourStream* arg0);
 extern OwnerAnchoredFourStream D_821B6F00[4];
 
 /**
+ * Clears all 4 owner-anchored streams and their 15 nodes each (inactive, alpha 0, half width 1,
+ * zero position and velocity).
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
@@ -182,26 +184,26 @@ s32 OwnerAnchoredFourStream_IsComplete(void)
 {
   s8 *new_var; // FAKE: permuter temp
   s32 var_s1;
-  new_var = (s8*)D_821B6F00;
+  new_var = (s8*)D_821B6F00; // FAKE
   var_s1 = 0;
   do
   {
     new_var = (s8 *) ((0, new_var)); // FAKE: comma expression
-    if ((*((s16 *) (new_var + 0))) == 1)
+    if ((*((s16 *) (new_var + 0))) == 1) // FAKE
     {
       new_var = new_var; // FAKE: self-assignment
-      *((s16 *) (new_var + 2)) = (s16) ((*((s16 *) (new_var + 2))) + 1);
-      if ((*((s16 *) (new_var + 4))) < (*((s16 *) (new_var + 2))))
+      *((s16 *) (new_var + 2)) = (s16) ((*((s16 *) (new_var + 2))) + 1); // FAKE
+      if ((*((s16 *) (new_var + 4))) < (*((s16 *) (new_var + 2)))) // FAKE
       {
-        *((s16 *) (new_var + 0)) = 0;
+        *((s16 *) (new_var + 0)) = 0; // FAKE
       }
       else
       {
-        func_8217E0C0(new_var);
+        func_8217E0C0(new_var); // FAKE
       }
     }
     var_s1 += 1;
-    new_var += 0x418;
+    new_var += 0x418; // FAKE
   }
   while (var_s1 != 4);
   return 0;
@@ -209,6 +211,8 @@ s32 OwnerAnchoredFourStream_IsComplete(void)
 
 extern Gfx D_82193270[];
 /**
+ * Draws every active owner-anchored stream: a scaled model at the head node (translated, rotated
+ * by its angle and the stream's direction, scaled by 0.16), then the trail of nodes behind it.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec

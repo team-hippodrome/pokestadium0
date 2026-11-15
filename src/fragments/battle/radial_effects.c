@@ -73,6 +73,8 @@ void Radial_UnusedNop(void) {
 
 void BattleAnim_CalcVectorAtToDm(f32* arg0, f32* arg1, f32* arg2, f32* arg3, f32* arg4, f32* arg5);
 /**
+ * Emits one variant-D radial strand from the attacker toward the defender with a small random
+ * spread, colored #80C0FF.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
@@ -215,6 +217,8 @@ void BattleAnim_StartEffect7TexturedRibbonSheet_Emit(void) {
 }
 
 /**
+ * Resets the Swift ribbon timer and shared effect matrix, clears the ribbon sheet pool and emits
+ * the first ribbon.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Swift.
  */
@@ -226,6 +230,8 @@ void BattleAnim_SetupSwiftUseRibbonSheet(void) {
 }
 
 /**
+ * Advances the Swift ribbon timer, emitting a ribbon every 3 frames before frame 1770. Returns -1
+ * at frame 1801, otherwise the ribbon sheet's completion status.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Swift.
  */
@@ -243,6 +249,7 @@ s32 BattleAnim_RunSwiftUseRibbonSheet(void) {
 }
 
 /**
+ * Loads the shared effect matrix and draws the Swift ribbon sheet.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Swift.
  */
@@ -278,6 +285,8 @@ void BattleAnim_StartEffect33Radial20_EmitVariantC(void) {
 }
 
 /**
+ * Resets the String Shot timer and shared effect matrix, clears the radial strand pool and emits
+ * the first strand.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for String Shot.
  */
@@ -289,6 +298,8 @@ void BattleAnim_SetupStringShotUseRadial(void) {
 }
 
 /**
+ * Advances the String Shot timer, emitting a strand every 7 frames before frame 120. Returns -1 at
+ * frame 181, otherwise the strand pool's completion status.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for String Shot.
  */
@@ -306,6 +317,7 @@ s32 BattleAnim_RunStringShotUseRadial(void) {
 }
 
 /**
+ * Loads the shared effect matrix and draws the radial strands.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for String Shot.
  */
@@ -331,6 +343,7 @@ void BattleAnim_InitializeStringShotUse(void) {
 }
 
 /**
+ * Steps the lasso rings that close around the target.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for String Shot.
  */
@@ -339,6 +352,7 @@ s32 BattleAnim_RunStringShotHitRadial(void) {
 }
 
 /**
+ * Loads the shared effect matrix and draws the lasso rings.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for String Shot.
  */
@@ -349,6 +363,8 @@ void BattleAnim_DrawStringShotHitRadial(void) {
 }
 
 /**
+ * Starts the lasso rings at the secondary owner's bone position, sized by the tertiary owner's
+ * model scale, colored #FFFF40.
  * Seen in play (2026-11-13) (COM-side move sweep, COM's Metronome pinned to Disable): ran when the
  * yellow rings closed around Onix, with 「イワイワの ゆびをふるを ふうじこめた！」 on screen. Disable reuses String
  * Shot's hit rings when it targets 1P.
@@ -368,6 +384,7 @@ void BattleAnim_SetupStringShotHitRadial(void) {
 }
 
 /**
+ * Steps the lasso rings (same as BattleAnim_RunStringShotHitRadial).
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Disable.
  */
@@ -376,6 +393,8 @@ s32 BattleAnim_RunDisableHitRadial(void) {
 }
 
 /**
+ * Loads the shared effect matrix and draws the lasso rings (same as
+ * BattleAnim_DrawStringShotHitRadial).
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Disable.
  */
@@ -386,6 +405,7 @@ void BattleAnim_DrawDisableHitRadial(void) {
 }
 
 /**
+ * Same as BattleAnim_StartEffect19Radial20_EmitVariantD but colored #FFFF40.
  * Seen in play (2026-11-13) (COM-side move sweep: 1P Splash, then COM's Metronome pinned to
  * Disable): ran as the yellow strand left Pinsir toward Onix, before 「イワイワの ゆびをふるを ふうじこめた！」. In the
  * 1P-side sweep Disable never ran it, so it is the COM-side (target 1P) variant.

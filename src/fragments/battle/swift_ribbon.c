@@ -20,6 +20,7 @@ s32 SwiftRibbonSheet_IsComplete(void);
 Gfx* SwiftRibbonSheet_Draw(Gfx* arg0);
 
 /**
+ * Clears all 40 ribbon sheets and their 10 nodes each.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Swift.
  */
@@ -112,6 +113,8 @@ void SwiftRibbonSheet_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f3
 }
 
 /**
+ * Rotates the point (0, 0, arg2) by 90 degrees about X and arg0 radians about Y and Z, and writes
+ * it to arg1. The name does not fit what the code does.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Swift.
  */
@@ -123,6 +126,8 @@ void SwiftRibbonSheet_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
 }
 
 /**
+ * Steps one ribbon sheet: shifts each node's two vertices one node back, then moves the head node
+ * (rising for the first 11 frames, then drifting sideways in the sheet's direction).
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Swift.
  */
@@ -175,6 +180,8 @@ void SwiftRibbonSheet_UpdateRecord(TexturedRibbonSheet* arg0) {
 }
 
 /**
+ * Advances every active ribbon sheet by one frame and deactivates it 10 frames after its duration.
+ * Returns 0 while any sheet is running, -1 when none are.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Swift.
  */
@@ -202,6 +209,8 @@ s32 SwiftRibbonSheet_IsComplete(void) {
 }
 
 /**
+ * Draws every active ribbon sheet with a 32x32 I4 texture: a quad at the head node, then the strip
+ * of its nodes.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Swift.
  */

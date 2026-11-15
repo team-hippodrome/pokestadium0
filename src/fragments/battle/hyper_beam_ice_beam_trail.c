@@ -32,6 +32,8 @@ Gfx* HyperBeamIceBeamTrail_LoadTextures(Gfx* arg0, BeamTrail* arg1);
 Gfx* HyperBeamIceBeamTrail_DrawAll(Gfx* arg0);
 
 /**
+ * Resets the frame counter D_821CD9E0 and clears all 6 beam trail slots and their 20 segments each
+ * (inactive, zero colors, half width 1).
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam, Hyper Beam.
  */
@@ -191,6 +193,8 @@ void HyperBeamIceBeamTrail_ComputeCameraRelativeOffset(s32 arg0, Vec3f* arg1, Ve
 }
 
 /**
+ * Rotates the point (0, 0, arg3) about the X axis by arg0 radians and writes it to arg2. arg1 and
+ * arg4 to arg6 are unused.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam, Hyper Beam.
  */
@@ -204,6 +208,10 @@ void HyperBeamIceBeamTrail_ComputeRotatedOffset(f32 arg0, Vec3f* arg1, Vec3f* ar
 }
 
 /**
+ * Steps the 20 segments of one beam trail. A segment still waiting out its start delay sits at the
+ * secondary owner's anchor with a random sine wobble in Y and Z; once released it moves by its
+ * velocity, turns by the slot's angle step and widens by 3 per frame up to the slot's maximum half
+ * width.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam, Hyper Beam.
  */
@@ -252,6 +260,9 @@ void HyperBeamIceBeamTrail_UpdateSlot(BeamTrail* arg0) {
 }
 
 /**
+ * Advances every active beam trail slot by one frame, deactivating slots past their duration and
+ * fading prim/env alpha by 0.02 per frame after the fade start frame. Returns 0 while any slot is
+ * still running, -1 when none are.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam, Hyper Beam.
  */
@@ -300,6 +311,7 @@ s32 HyperBeamIceBeamTrail_UpdateAll(void) {
 }
 
 /**
+ * Draws the beam as a strip of 19 quads (two triangles each) from the slot's 40 vertices.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam, Hyper Beam.
  */
@@ -317,6 +329,8 @@ Gfx* HyperBeamIceBeamTrail_DrawSegments(Gfx* arg0, BeamTrail* arg1) {
 }
 
 /**
+ * Loads the slot's two scrolling 32x32 I4 textures into tiles 0 and 1 with their current S/T
+ * scroll.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam, Hyper Beam.
  */
@@ -338,6 +352,8 @@ Gfx* HyperBeamIceBeamTrail_LoadTextures(Gfx* arg0, BeamTrail* arg1) {
 }
 
 /**
+ * Builds the vertices of every active beam trail slot from its segments and appends the display
+ * lists that draw them.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam, Hyper Beam.
  */

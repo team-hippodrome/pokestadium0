@@ -17,6 +17,8 @@ Gfx* HypnosisScreechTrail_Draw(Gfx* arg0);
 void Trail40_Reset(void);
 
 /**
+ * Lays out the 16x16 wave grid flat at y = 1 (9 units apart in X, 7 in Z, centered on the origin)
+ * with texture coordinates, and starts it with duration arg0, alpha 0 and wave amplitude 0.01.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Hypnosis, Screech.
  */
@@ -52,6 +54,8 @@ void HypnosisScreechTrail_Init(s16 arg0) {
 }
 
 /**
+ * Computes the normal of grid node (arg0, arg1) by averaging the face normals of its neighboring
+ * quads, and stores it in the node. The name does not fit what the code does.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Hypnosis, Screech.
  */
@@ -163,6 +167,8 @@ void HypnosisScreechTrail_Start(s32 arg0, s32 arg1) {
 }
 
 /**
+ * Writes a grid node's position, texture coordinates and normal (scaled by 120) to a vertex, with
+ * the grid's alpha.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Hypnosis, Screech.
  */
@@ -189,6 +195,10 @@ void HypnosisScreechTrailNode_FillVertex(Trail40Node* arg0, Vtx* arg1) {
 }
 
 /**
+ * Advances the wave grid by one frame: fades alpha in by 10 per frame for the first 30 frames (up
+ * to 128) and out over the last 30, grows the wave amplitude, sets each node's height from a
+ * radial sine wave and recomputes the normals. Returns -1 once the duration has passed, otherwise
+ * 0.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Hypnosis, Screech.
  */
@@ -245,6 +255,9 @@ void func_80031F14(f32*, f32*, f32*);
 void func_800320A8(s32, f32, f32, f32, f32, f32, f32);
 extern s32 D_821A6F60;
 /**
+ * Allocates the grid's 64-byte matrix (D_821A6F60) and fills it from the camera context: the point
+ * at +0xA8 is moved 140 units toward the point at +0xB4 (times 30 over the field of view at +0x2C),
+ * and both points are passed to func_800320A8.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
@@ -290,6 +303,8 @@ void Trail40_Reset(void) {
 }
 
 /**
+ * Converts the 16x16 grid to vertices and draws it as 15x15 quads with an RGBA16 32x32 texture,
+ * alternating the triangle split per quad.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Hypnosis, Screech.
  */
