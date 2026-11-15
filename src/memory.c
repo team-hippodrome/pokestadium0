@@ -37,11 +37,11 @@ MemoryPool* MemPool_TryInit(u32 size, s32 side) {
 MainPool* MemPool_Init(MainPool* pool, s32 size) {
     s32 aligned_size =
         ALIGN4(size - 3) - 0x28; // whats the deal with 0x28? this size doesnt match any known pool struct.
-    void* listHeadL = &pool->listHeadL;
+    void* list_head_l = &pool->listHeadL;
 
     pool->available = aligned_size;
-    pool->start = listHeadL;
-    pool->end = listHeadL;
+    pool->start = list_head_l;
+    pool->end = list_head_l;
     pool->listHeadL = NULL;
     pool->listHeadR = aligned_size;
     osCreateMesgQueue(&pool->queue, &pool->msgs[0], 1);
@@ -91,36 +91,36 @@ void* MemPool_Alloc(MemoryPool* node, s32 size) {
  */
 void MemPool_Free(MemoryPool* pool, void* addr) {
     struct MemoryBlock* block;
-    struct MemoryBlock* freeList;
+    struct MemoryBlock* free_list;
 
     osRecvMesg(&pool->queue, NULL, 1);
     block = (struct MemoryBlock*)((u8*)addr - sizeof(struct MemoryBlock));
-    freeList = pool->freeList.next;
+    free_list = pool->freeList.next;
     if (pool->freeList.next == NULL) {
         pool->freeList.next = block;
         block->next = NULL;
     } else if (block < pool->freeList.next) {
         if ((u32)pool->freeList.next == ((u32)block + (u32)block->size)) {
-            block->size += ((u32)freeList->size);
-            block->next = freeList->next;
+            block->size += ((u32)free_list->size);
+            block->next = free_list->next;
             pool->freeList.next = block;
         } else {
             block->next = pool->freeList.next;
             pool->freeList.next = block;
         }
     } else {
-        while (freeList->next != NULL) {
-            if (freeList < block && block < freeList->next) {
+        while (free_list->next != NULL) {
+            if (free_list < block && block < free_list->next) {
                 break;
             }
-            freeList = freeList->next;
+            free_list = free_list->next;
         }
-        if (((u32)freeList + (u32)freeList->size) == (u32)block) {
-            freeList->size += block->size;
-            block = freeList;
+        if (((u32)free_list + (u32)free_list->size) == (u32)block) {
+            free_list->size += block->size;
+            block = free_list;
         } else {
-            block->next = freeList->next;
-            freeList->next = block;
+            block->next = free_list->next;
+            free_list->next = block;
         }
         if (block->next != NULL && (u32)block->next == ((u32)block + (u32)block->size)) {
             block->size = (u32)block->size + (u32)block->next->size;

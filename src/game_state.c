@@ -113,22 +113,22 @@ extern M2C_UNK D_8007B7B8;
  * opening, title and main menu).
  * @unverified Name and comment guessed from the code.
  */
-M2C_UNK Session_InitHumanTrainer(M2C_UNK port, TeamRoster *trainer, ExtendedRosterInfo *rosterInfo, s32 species) {
+M2C_UNK Session_InitHumanTrainer(M2C_UNK port, TeamRoster *trainer, ExtendedRosterInfo *roster_info, s32 species) {
 
     trainer->isHuman = 1;
     trainer->controllerPort = port;
     trainer->controller = (Controller *)(D_800AAF50 + port * 0x24);
     trainer->trainerId = 0;
-    trainer->rosterInfo = rosterInfo;
+    trainer->rosterInfo = roster_info;
     trainer->numberOfPokemonBrought = 1;
     *(Unk5Bytes *)trainer->trainerName = *(Unk5Bytes *)&D_8007B7B8;
     Pokemon_CreateDefault(&trainer->pokemonPicked[0], species);
-    rosterInfo->unk_000 = 0;
-    rosterInfo->numberOfPokemonCanBePicked = 1;
-    rosterInfo->trainerIndex = 0;
-    rosterInfo->title[0] = 0;
-    rosterInfo->fullName[0] = 0;
-    rosterInfo->battleMon[0] = trainer->pokemonPicked[0];
+    roster_info->unk_000 = 0;
+    roster_info->numberOfPokemonCanBePicked = 1;
+    roster_info->trainerIndex = 0;
+    roster_info->title[0] = 0;
+    roster_info->fullName[0] = 0;
+    roster_info->battleMon[0] = trainer->pokemonPicked[0];
 }
 
 /**
@@ -307,11 +307,11 @@ s32 Tournament_LoadContinueData(void) {
 }
 
 /** Loads a fragment from a ROM range and calls its entry point. */
-s32 Fragment_LoadAndCall(s32 arg0, u8* romStart, u8* romEnd, u32 arg3, u32 arg4) {
+s32 Fragment_LoadAndCall(s32 arg0, u8* rom_start, u8* rom_end, u32 arg3, u32 arg4) {
     s32 result;
     FragmentEntry func;
 
-    func = Fragment_Load(arg0, romStart, romEnd);
+    func = Fragment_Load(arg0, rom_start, rom_end);
 
     result = func(arg3, arg4);
 

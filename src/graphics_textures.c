@@ -44,7 +44,7 @@ s32 Stage_ClipRectToClearArea(s32*, s32*, s32*, s32*);
  * in battle, running from battle and a Pound turn.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-void Gfx_DrawTexturedRect(s32 x1, s32 y1, s32 x2, s32 y2, s32 stepX, s32 stepY, s32 mode) {
+void Gfx_DrawTexturedRect(s32 x1, s32 y1, s32 x2, s32 y2, s32 step_x, s32 step_y, s32 mode) {
     s32 s = x1;
     s32 t = y1;
 
@@ -52,16 +52,16 @@ void Gfx_DrawTexturedRect(s32 x1, s32 y1, s32 x2, s32 y2, s32 stepX, s32 stepY, 
         if (mode != 0x200000) {
             x2 += 1; y2 += 1; // IDO: both increments must share one source line
         }
-        if (stepX != 0) {
+        if (step_x != 0) {
             s = x1 - s;
         } else {
             s = 0;
         }
-        if (stepY != 0) {
+        if (step_y != 0) {
             t = y1 - t;
         } else {
             t = 0;
         }
-        gSPTextureRectangle(gDisplayListHead++, x1 << 2, y1 << 2, x2 << 2, y2 << 2, G_TX_RENDERTILE, s << 5, t << 5, stepX, stepY);
+        gSPTextureRectangle(gDisplayListHead++, x1 << 2, y1 << 2, x2 << 2, y2 << 2, G_TX_RENDERTILE, s << 5, t << 5, step_x, step_y);
     }
 }

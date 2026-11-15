@@ -110,7 +110,7 @@ f32 Math_DistancePointToSegment(
     f32 px, f32 py, f32 pz,
     f32 ax, f32 ay, f32 az,
     f32 bx, f32 by, f32 bz,
-    f32* outX, f32* outY, f32* outZ
+    f32* out_x, f32* out_y, f32* out_z
 ) {
     f32 dx;
     f32 dy;
@@ -137,9 +137,9 @@ f32 Math_DistancePointToSegment(
     if (t < -0.5f || t > 1.5f) {
         return -2.0f;
     }
-    *outX = ex = ax + (sp68 * dx);
-    *outY = ey = ay + (sp68 * dy);
-    *outZ = ez = az + (sp68 * dz);
+    *out_x = ex = ax + (sp68 * dx);
+    *out_y = ey = ay + (sp68 * dy);
+    *out_z = ez = az + (sp68 * dz);
 
     return sqrtf(SQ(ex - px) + SQ(ey - py) + SQ(ez - pz));
 }

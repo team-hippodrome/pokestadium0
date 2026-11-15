@@ -117,7 +117,7 @@ void PokeIcon_ResetSlots(PokeIconRenderer* arg0) {
  * Clears slot `slot` and queues a render of `species` (dex number; out of range uses 152, the
  * placeholder) on background `fillColor`, scaled by the species' model size.
  */
-void PokeIcon_SetSpeciesSlot(PokeIconRenderer* renderer, s32 slot, s32 species, u16 fillColor) {
+void PokeIcon_SetSpeciesSlot(PokeIconRenderer* renderer, s32 slot, s32 species, u16 fill_color) {
     GfxImage* buf;
     UNUSED s32 pad; // FAKE: stack padding
 
@@ -128,7 +128,7 @@ void PokeIcon_SetSpeciesSlot(PokeIconRenderer* renderer, s32 slot, s32 species, 
             species = 0x98;
         }
         renderer->slots[slot].flags = 1;
-        renderer->slots[slot].fillColor = fillColor & 0xFFFE;
+        renderer->slots[slot].fillColor = fill_color & 0xFFFE;
         renderer->slots[slot].source.raw = species;
         renderer->slots[slot].scale = *(s16*)&gSpeciesDataById[species - 1][0x1A] / 100.0f;
         renderer->slots[slot].colorVariant.raw = 0;
@@ -141,7 +141,7 @@ void Model_ComputeNicknameColorVariant(arg1_func_80010CA8*);
  * variant) on background `fillColor`; an invalid species falls back to the placeholder. Used for the
  * portraits in Free Battle setup, registration and the GB Player party icons.
  */
-void PokeIcon_SetMonSlot(PokeIconRenderer* renderer, s32 slot, BattleMon* mon, u16 fillColor) {
+void PokeIcon_SetMonSlot(PokeIconRenderer* renderer, s32 slot, BattleMon* mon, u16 fill_color) {
     GfxImage* buf;
     UNUSED s32 pad; // FAKE: stack padding
 
@@ -151,12 +151,12 @@ void PokeIcon_SetMonSlot(PokeIconRenderer* renderer, s32 slot, BattleMon* mon, u
         if ((mon->species.id > 0) && (mon->species.id < 0x98)) {
             renderer->slots[slot].flags = 3;
             renderer->slots[slot].source.ptr = (u8*)mon;
-            renderer->slots[slot].fillColor = fillColor & 0xFFFE;
+            renderer->slots[slot].fillColor = fill_color & 0xFFFE;
             renderer->slots[slot].scale = *(s16*)&gSpeciesDataById[mon->species.id - 1][0x1A] / 100.0f;
             Model_ComputeNicknameColorVariant(&renderer->slots[slot].colorVariant);
         } else {
             renderer->slots[slot].flags = 1;
-            renderer->slots[slot].fillColor = fillColor & 0xFFFE;
+            renderer->slots[slot].fillColor = fill_color & 0xFFFE;
             renderer->slots[slot].source.raw = 0x98;
             renderer->slots[slot].scale = *(s16*)&gSpeciesDataById[0x97][0x1A] / 100.0f;
             renderer->slots[slot].colorVariant.raw = 0;

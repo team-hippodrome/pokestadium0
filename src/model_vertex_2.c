@@ -238,7 +238,7 @@ void Model_AddSkinBone(StadiumModel* model, s16 id, f32 radius, f32 ax, f32 ay, 
     f32 nx, ny, nz;
     f32 dir[3];
     ModelVertex* mvtx;
-    f32 upX, upY, upZ;
+    f32 up_x, up_y, up_z;
     f32 px, py, pz;
     f32 dist;
     f32 len;
@@ -254,22 +254,22 @@ void Model_AddSkinBone(StadiumModel* model, s16 id, f32 radius, f32 ax, f32 ay, 
     vx = bx - ax;
     len = sqrtf((vx * vx) + ((by - ay) * (by - ay)) + ((bz - az) * (bz - az)));
     if (len != 0.0f) {
-        upZ = upY = 0;
-        upX = -1.0f;
+        up_z = up_y = 0;
+        up_x = -1.0f;
         dir[2] = vx / len;
         dir[0] = (bz - az) / len;
         x = (by - ay) / len;
-        dist = Math_FAbs((dir[0] * upZ) + ((x * upY) + (dir[2] * upX)));
+        dist = Math_FAbs((dir[0] * up_z) + ((x * up_y) + (dir[2] * up_x)));
         if (0.9f < dist) {
-            upY = 1.0f;
-            upX = 0.0f;
-            upZ = 0.0f;
+            up_y = 1.0f;
+            up_x = 0.0f;
+            up_z = 0.0f;
             if (0.9f < Math_FAbs(x)) {
-                upZ = 1.0f;
-                upY = 0.0f;
+                up_z = 1.0f;
+                up_y = 0.0f;
             }
         }
-        Math_CrossProduct(dir[2], x, dir[0], upX, upY, upZ, &px, &py, &pz);
+        Math_CrossProduct(dir[2], x, dir[0], up_x, up_y, up_z, &px, &py, &pz);
         cx = ax + px;
         cy = ay + py;
         cz = az + pz;
@@ -378,8 +378,8 @@ void Model_ComputeVertexNormals(ModelSegment* segment, ModelVertex* vertices) {
     s16 i0, i1, i2;
     f32 scale;
     s16* indices;
-    s16 triangleCount;
-    s16 vertexCount;
+    s16 triangle_count;
+    s16 vertex_count;
     ModelVertex* v0;
     ModelVertex* v1;
     ModelVertex* v2;
@@ -389,19 +389,19 @@ void Model_ComputeVertexNormals(ModelSegment* segment, ModelVertex* vertices) {
     s16* remap;
     UNUSED s32 pad2[4]; // FAKE: stack padding
 
-    triangleCount = segment->triangleCount;
-    vertexCount = segment->vertexCount;
+    triangle_count = segment->triangleCount;
+    vertex_count = segment->vertexCount;
     indices = Memmap_GetSegmentVaddr(segment->indexSegment);
     remap = Memmap_GetSegmentVaddr(segment->remapSegment);
     counter = D_800B32C0;
-    for (i = 0; i < vertexCount; i++) {
+    for (i = 0; i < vertex_count; i++) {
         counter->x = 0.0f;
         counter->y = 0.0f;
         counter->z = 0.0f;
         counter->count = 0;
         counter++;
     }
-    for (i = 0; i < triangleCount; i++) {
+    for (i = 0; i < triangle_count; i++) {
         i0 = remap[indices[0]];
         v0 = &vertices[i0];
         x0 = v0->position.base.x;
@@ -445,7 +445,7 @@ void Model_ComputeVertexNormals(ModelSegment* segment, ModelVertex* vertices) {
     }
     counter = D_800B32C0;
     vtx = vertices;
-    for (i = 0; i < vertexCount; i++) {
+    for (i = 0; i < vertex_count; i++) {
         if (counter->count > 0) {
             len = counter->count;
             vtx->position.color.r = counter->x / len;

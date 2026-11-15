@@ -278,7 +278,7 @@ void Model_OffsetVertexHeights(ModelSegment* segment, ModelVertex* vertices, f32
  * Raises the y of a model's top-class vertices by `yOffset` (class 1) or a quarter of it (class 2).
  * @unverified Name read from the code.
  */
-void Model_RaiseTopVertices(ModelSegment* segment, ModelVertex* vertices, f32 yOffset) {
+void Model_RaiseTopVertices(ModelSegment* segment, ModelVertex* vertices, f32 y_offset) {
     s16* index_table;
     s16* var_s2;
     s32 temp_v0;
@@ -295,10 +295,10 @@ void Model_RaiseTopVertices(ModelSegment* segment, ModelVertex* vertices, f32 yO
             temp_v0_2 = &tmp->position;
             switch (temp_v0) {
             case 1:
-                temp_v0_2->base.y += yOffset;
+                temp_v0_2->base.y += y_offset;
                 break;
             case 2:
-                temp_v0_2->base.y += yOffset * 0.25f;
+                temp_v0_2->base.y += y_offset * 0.25f;
                 break;
             }
         }
@@ -311,7 +311,7 @@ void Model_RaiseTopVertices(ModelSegment* segment, ModelVertex* vertices, f32 yO
  * Same as Model_RaiseTopVertices with a fixed offset; the model argument is unused.
  * @unverified Name read from the code.
  */
-void Model_RaiseTopVerticesFixed(ModelSegment* segment, ModelVertex* vertices, f32 yOffset, StadiumModel* model) {
+void Model_RaiseTopVerticesFixed(ModelSegment* segment, ModelVertex* vertices, f32 y_offset, StadiumModel* model) {
     s16* index_table;
     s16* remap;
     s32 type;
@@ -332,12 +332,12 @@ void Model_RaiseTopVerticesFixed(ModelSegment* segment, ModelVertex* vertices, f
             switch (type) {
             case 1:
                 position->base.x += zero;
-                position->base.y += yOffset * one;
+                position->base.y += y_offset * one;
                 position->base.z += zero;
                 break;
             case 2:
                 position->base.x = position->base.x + zero;
-                position->base.y = position->base.y + (quarter * yOffset * one);
+                position->base.y = position->base.y + (quarter * y_offset * one);
                 position->base.z = position->base.z + zero;
                 break;
             }
@@ -353,7 +353,7 @@ void Model_RaiseTopVerticesFixed(ModelSegment* segment, ModelVertex* vertices, f
  * @unverified Name read from the code.
  */
 void Model_ApplyVertexOffsets(ModelSegment* segment, ModelVertex* vertices) {
-    f32 drawGroup;
+    f32 draw_group;
     s16* index_table;
     s16* remap;
     s32 i;
@@ -376,10 +376,10 @@ void Model_ApplyVertexOffsets(ModelSegment* segment, ModelVertex* vertices) {
                 position->offset.z = 0.0f;
             }
             if ((s32)position->drawGroup > 0) {
-                drawGroup = (f32)position->drawGroup;
-                position->base.x = position->base.x + (position->offset.x / drawGroup);
-                position->base.y = position->base.y + (position->offset.y / drawGroup);
-                position->base.z = position->base.z + (position->offset.z / drawGroup);
+                draw_group = (f32)position->drawGroup;
+                position->base.x = position->base.x + (position->offset.x / draw_group);
+                position->base.y = position->base.y + (position->offset.y / draw_group);
+                position->base.z = position->base.z + (position->offset.z / draw_group);
                 position->offset.x = position->offset.x - (0.3f * position->offset.x);
                 position->offset.y = position->offset.y - (0.3f * position->offset.y);
                 position->offset.z = position->offset.z - (0.3f * position->offset.z);
@@ -516,15 +516,15 @@ void Model_WriteVtxBuffer(StadiumModel* model, Vtx* vtx_buf) {
  * Draws a model's segments using a vertex buffer and returns the advanced
  * display list pointer.
  */
-Gfx* Model_Draw(Gfx* gfx, StadiumModel* model, Vtx* vtxBuf) {
+Gfx* Model_Draw(Gfx* gfx, StadiumModel* model, Vtx* vtx_buf) {
     ModelSegment* segment;
 
     segment = Memmap_GetSegmentVaddr(model->modelSegment);
     if ((s32) segment->type >= 0xC) {
         return gfx;
     }
-    Model_WriteVtxBuffer(model, vtxBuf);
-    gSPSegment(gfx++, 0x0E, vtxBuf);
+    Model_WriteVtxBuffer(model, vtx_buf);
+    gSPSegment(gfx++, 0x0E, vtx_buf);
     gSPMatrix(gfx++, &D_800B35C8, G_MTX_MODELVIEW | G_MTX_MUL | G_MTX_PUSH);
     gSPDisplayList(gfx++, segment->displayList);
     gSPPopMatrixN(gfx++, G_MTX_MODELVIEW, 1);

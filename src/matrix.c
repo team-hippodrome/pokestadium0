@@ -636,43 +636,43 @@ void MtxF_SetOrthonormalBasis(MtxF* dest, Vec3f* up_direction, Vec3f* pos, s16 y
     dest->mf[3][3] = 1.0f;
 }
 
-/** Stores the matrix product A * B in dest. */
-void MtxF_Multiply(MtxF* dest, MtxF* A, MtxF* B) {
+/** Stores the matrix product a * b in dest. */
+void MtxF_Multiply(MtxF* dest, MtxF* a, MtxF* b) {
     f32 entry0;
     f32 entry1;
     f32 entry2;
 
-    entry0 = A->mf[0][0];
-    entry1 = A->mf[0][1];
-    entry2 = A->mf[0][2];
+    entry0 = a->mf[0][0];
+    entry1 = a->mf[0][1];
+    entry2 = a->mf[0][2];
 
-    dest->mf[0][0] = (entry0 * B->mf[0][0]) + (entry1 * B->mf[1][0]) + (entry2 * B->mf[2][0]);
-    dest->mf[0][1] = (entry0 * B->mf[0][1]) + (entry1 * B->mf[1][1]) + (entry2 * B->mf[2][1]);
-    dest->mf[0][2] = (entry0 * B->mf[0][2]) + (entry1 * B->mf[1][2]) + (entry2 * B->mf[2][2]);
+    dest->mf[0][0] = (entry0 * b->mf[0][0]) + (entry1 * b->mf[1][0]) + (entry2 * b->mf[2][0]);
+    dest->mf[0][1] = (entry0 * b->mf[0][1]) + (entry1 * b->mf[1][1]) + (entry2 * b->mf[2][1]);
+    dest->mf[0][2] = (entry0 * b->mf[0][2]) + (entry1 * b->mf[1][2]) + (entry2 * b->mf[2][2]);
 
-    entry0 = A->mf[1][0];
-    entry1 = A->mf[1][1];
-    entry2 = A->mf[1][2];
+    entry0 = a->mf[1][0];
+    entry1 = a->mf[1][1];
+    entry2 = a->mf[1][2];
 
-    dest->mf[1][0] = (entry0 * B->mf[0][0]) + (entry1 * B->mf[1][0]) + (entry2 * B->mf[2][0]);
-    dest->mf[1][1] = (entry0 * B->mf[0][1]) + (entry1 * B->mf[1][1]) + (entry2 * B->mf[2][1]);
-    dest->mf[1][2] = (entry0 * B->mf[0][2]) + (entry1 * B->mf[1][2]) + (entry2 * B->mf[2][2]);
+    dest->mf[1][0] = (entry0 * b->mf[0][0]) + (entry1 * b->mf[1][0]) + (entry2 * b->mf[2][0]);
+    dest->mf[1][1] = (entry0 * b->mf[0][1]) + (entry1 * b->mf[1][1]) + (entry2 * b->mf[2][1]);
+    dest->mf[1][2] = (entry0 * b->mf[0][2]) + (entry1 * b->mf[1][2]) + (entry2 * b->mf[2][2]);
 
-    entry0 = A->mf[2][0];
-    entry1 = A->mf[2][1];
-    entry2 = A->mf[2][2];
+    entry0 = a->mf[2][0];
+    entry1 = a->mf[2][1];
+    entry2 = a->mf[2][2];
 
-    dest->mf[2][0] = (entry0 * B->mf[0][0]) + (entry1 * B->mf[1][0]) + (entry2 * B->mf[2][0]);
-    dest->mf[2][1] = (entry0 * B->mf[0][1]) + (entry1 * B->mf[1][1]) + (entry2 * B->mf[2][1]);
-    dest->mf[2][2] = (entry0 * B->mf[0][2]) + (entry1 * B->mf[1][2]) + (entry2 * B->mf[2][2]);
+    dest->mf[2][0] = (entry0 * b->mf[0][0]) + (entry1 * b->mf[1][0]) + (entry2 * b->mf[2][0]);
+    dest->mf[2][1] = (entry0 * b->mf[0][1]) + (entry1 * b->mf[1][1]) + (entry2 * b->mf[2][1]);
+    dest->mf[2][2] = (entry0 * b->mf[0][2]) + (entry1 * b->mf[1][2]) + (entry2 * b->mf[2][2]);
 
-    entry0 = A->mf[3][0];
-    entry1 = A->mf[3][1];
-    entry2 = A->mf[3][2];
+    entry0 = a->mf[3][0];
+    entry1 = a->mf[3][1];
+    entry2 = a->mf[3][2];
 
-    dest->mf[3][0] = (entry0 * B->mf[0][0]) + (entry1 * B->mf[1][0]) + (entry2 * B->mf[2][0]) + B->mf[3][0];
-    dest->mf[3][1] = (entry0 * B->mf[0][1]) + (entry1 * B->mf[1][1]) + (entry2 * B->mf[2][1]) + B->mf[3][1];
-    dest->mf[3][2] = (entry0 * B->mf[0][2]) + (entry1 * B->mf[1][2]) + (entry2 * B->mf[2][2]) + B->mf[3][2];
+    dest->mf[3][0] = (entry0 * b->mf[0][0]) + (entry1 * b->mf[1][0]) + (entry2 * b->mf[2][0]) + b->mf[3][0];
+    dest->mf[3][1] = (entry0 * b->mf[0][1]) + (entry1 * b->mf[1][1]) + (entry2 * b->mf[2][1]) + b->mf[3][1];
+    dest->mf[3][2] = (entry0 * b->mf[0][2]) + (entry1 * b->mf[1][2]) + (entry2 * b->mf[2][2]) + b->mf[3][2];
 
     dest->mf[0][3] = dest->mf[1][3] = dest->mf[2][3] = 0.0f;
     dest->mf[3][3] = 1.0f;
@@ -713,16 +713,16 @@ void MtxF_TransformVec3s(MtxF* matrix, Vec3s* dest) {
  * then fractions).
  */
 void MtxF_ToFixed(MtxF* dest, MtxF* src) {
-    s32 asFixedPoint;
+    s32 as_fixed_point;
     s32 i;
     s16* a3 = (s16*)dest;      // all integer parts stored in first 16 bytes
     s16* t0 = (s16*)dest + 16; // all fraction parts stored in last 16 bytes
     f32* t1 = (f32*)src;
 
     for (i = 0; i < 16; i++) {
-        asFixedPoint = *t1++ * (1 << 16);         //! float-to-integer conversion responsible for PU crashes
-        *a3++ = GET_HIGH_S16_OF_32(asFixedPoint); // integer part
-        *t0++ = GET_LOW_S16_OF_32(asFixedPoint);  // fraction part
+        as_fixed_point = *t1++ * (1 << 16);         //! float-to-integer conversion responsible for PU crashes
+        *a3++ = GET_HIGH_S16_OF_32(as_fixed_point); // integer part
+        *t0++ = GET_LOW_S16_OF_32(as_fixed_point);  // fraction part
     }
 }
 

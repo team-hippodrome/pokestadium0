@@ -175,7 +175,7 @@ u32* Asset_CopyUncompressed(u8* arg0, s32 arg1, u32 arg2, s32 arg3) {
 }
 
 /** Loads an asset from a ROM range, decompressing it when it is compressed. */
-void* Asset_LoadCompressed(u8* romStart, u8* romEnd, s32 arg2, s32 arg3) {
+void* Asset_LoadCompressed(u8* rom_start, u8* rom_end, s32 arg2, s32 arg3) {
     u32* addr;
     u32* newaddr;
     u32* ret;
@@ -186,24 +186,24 @@ void* Asset_LoadCompressed(u8* romStart, u8* romEnd, s32 arg2, s32 arg3) {
     addr = MainPool_Alloc(0x18, side);
 
     if (addr != NULL) {
-        Dma_WriteChunks(addr, romStart, romStart + 0x18, arg3);
+        Dma_WriteChunks(addr, rom_start, rom_start + 0x18, arg3);
         if ((addr[0] == 'PERS') && (addr[1] == '-SZP')) {
-            newaddr = MainPool_Alloc(ALIGN16(romEnd - romStart), side);
+            newaddr = MainPool_Alloc(ALIGN16(rom_end - rom_start), side);
             if (newaddr != NULL) {
-                Dma_WriteChunks(newaddr, romStart, romEnd, arg3);
+                Dma_WriteChunks(newaddr, rom_start, rom_end, arg3);
                 ret = Yay0_LoadDecompressedAsset(newaddr, newaddr, arg2);
             }
         } else if ((addr[0] == 'PRES') && (addr[1] == 'JPEG')) {
-            newaddr = MainPool_Alloc(ALIGN16(romEnd - romStart), side);
+            newaddr = MainPool_Alloc(ALIGN16(rom_end - rom_start), side);
             if (newaddr != NULL) {
-                Dma_WriteChunks(newaddr, romStart, romEnd, arg3);
+                Dma_WriteChunks(newaddr, rom_start, rom_end, arg3);
                 ret = Jpeg_LoadDecodedImage(newaddr, newaddr, arg2);
             }
         } else {
-            newaddr = MainPool_Alloc(ALIGN16(romEnd - romStart), arg2);
+            newaddr = MainPool_Alloc(ALIGN16(rom_end - rom_start), arg2);
             ret = newaddr;
             if (newaddr != NULL) {
-                Dma_WriteChunks(ret, romStart, romEnd, arg3);
+                Dma_WriteChunks(ret, rom_start, rom_end, arg3);
             }
         }
         MainPool_TryFree(addr);
@@ -358,8 +358,8 @@ void Fragment_Register(s32 arg0, Fragment* addr) {
 }
 
 /** Loads a fragment from a ROM range and registers it. */
-ret_func_80004454 Fragment_Load(s32 arg0, u8* romStart, u8* romEnd) {
-    void* addr = Asset_LoadCompressed(romStart, romEnd, 0, 0);
+ret_func_80004454 Fragment_Load(s32 arg0, u8* rom_start, u8* rom_end) {
+    void* addr = Asset_LoadCompressed(rom_start, rom_end, 0, 0);
 
     if (addr != NULL) {
         Fragment_Register(arg0, (Fragment*)addr);
@@ -380,7 +380,7 @@ void* Fragment_LoadByLbaRange(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 /** Loads a bin archive's header from a ROM range. */
-BinArchive* BinArchive_Open(u8* romStart, u8* romEnd, s32 arg2, s32 arg3) {
+BinArchive* BinArchive_Open(u8* rom_start, u8* rom_end, s32 arg2, s32 arg3) {
     BinArchive* ret = NULL;
     u32 sp28;
     u32 sp28_2;
@@ -388,7 +388,7 @@ BinArchive* BinArchive_Open(u8* romStart, u8* romEnd, s32 arg2, s32 arg3) {
 
     switch (arg2) {
         case 0:
-            newaddr = Asset_LoadCompressed(romStart, romEnd, 0, 0);
+            newaddr = Asset_LoadCompressed(rom_start, rom_end, 0, 0);
             ret = newaddr;
             if (newaddr != NULL) {
                 newaddr[0] |= 1;
@@ -396,12 +396,12 @@ BinArchive* BinArchive_Open(u8* romStart, u8* romEnd, s32 arg2, s32 arg3) {
             break;
 
         case 1:
-            newaddr = Asset_LoadCompressed(romStart, romStart + 0x20, 0, 0);
+            newaddr = Asset_LoadCompressed(rom_start, rom_start + 0x20, 0, 0);
             ret = newaddr;
             if (newaddr != NULL) {
                 sp28 = (ret->num_files * 0x10) + 0x10;
                 MainPool_TryFree(ret);
-                newaddr = Asset_LoadCompressed(romStart, romStart + sp28, 0, 0);
+                newaddr = Asset_LoadCompressed(rom_start, rom_start + sp28, 0, 0);
                 ret = newaddr;
                 if (newaddr != NULL) {
                     *newaddr |= 2;
@@ -413,12 +413,12 @@ BinArchive* BinArchive_Open(u8* romStart, u8* romEnd, s32 arg2, s32 arg3) {
             break;
 
         case 2:
-            newaddr = Asset_LoadCompressed(romStart, romStart + 0x20, 1, 0);
+            newaddr = Asset_LoadCompressed(rom_start, rom_start + 0x20, 1, 0);
             ret = newaddr;
             if (newaddr != NULL) {
                 sp28_2 = (ret->num_files * 0x10) + 0x10;
                 MainPool_TryFree(ret);
-                newaddr = Asset_LoadCompressed(romStart, romStart + sp28_2, 1, 0);
+                newaddr = Asset_LoadCompressed(rom_start, rom_start + sp28_2, 1, 0);
                 ret = newaddr;
                 if ((newaddr != NULL) && (arg3 == 1)) {
                     *newaddr |= 4;
@@ -428,7 +428,7 @@ BinArchive* BinArchive_Open(u8* romStart, u8* romEnd, s32 arg2, s32 arg3) {
     }
 
     if (ret != NULL) {
-        ret->source = romStart;
+        ret->source = rom_start;
     }
 
     return ret;

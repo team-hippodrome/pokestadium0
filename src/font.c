@@ -229,7 +229,7 @@ s32 Font_DrawChar(s16, s16, s16);
 void Font_Printf(s32 x, s32 y, const char* fmt, ...) {
     u8 buf[0x100];
     UNUSED s32 pad; // FAKE: stack padding
-    s32 startX;
+    s32 start_x;
     s32 len;
     u8* p;
     s32 chr;
@@ -237,7 +237,7 @@ void Font_Printf(s32 x, s32 y, const char* fmt, ...) {
     va_list args;
 
     va_start(args, fmt);
-    startX = x;
+    start_x = x;
     len = _Printf(String_CopyBytesAndAdvance, (char*)buf, fmt, args);
     if (len > 0) {
         buf[len] = 0;
@@ -246,7 +246,7 @@ void Font_Printf(s32 x, s32 y, const char* fmt, ...) {
         while (chr != 0) {
             draw = 1;
             if (!(font_context->line_break_flag & 4) && (chr == 0xA)) {
-                x = startX;
+                x = start_x;
                 draw = 0;
                 y += font_context->line_height;
             }
@@ -362,9 +362,9 @@ void Ui_DrawPrimColorRect(s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b, s32 a
  * the glyph size at `glyphSet` (width byte, height byte).
  * @unverified Name read from the code.
  */
-Vtx* Font_AllocGlyphQuad(s16 x, s16 y, s16 scaleX, s16 scaleY, u8* glyph_set) {
-    s16 w = (glyph_set[0] * scaleX) / 100;
-    s16 h = (glyph_set[1] * scaleY) / 100;
+Vtx* Font_AllocGlyphQuad(s16 x, s16 y, s16 scale_x, s16 scale_y, u8* glyph_set) {
+    s16 w = (glyph_set[0] * scale_x) / 100;
+    s16 h = (glyph_set[1] * scale_y) / 100;
     Vtx* vtx = Gfx_AllocDisplayList(sizeof(Vtx) * 4);
 
     Gfx_SetVertexAttributes(&vtx[0], x, y, 0, 0, 0, 0, 0, 0x7F, 0xFF);
@@ -386,10 +386,10 @@ s32 Font_GetGlyphIndex(u16);
  * *`list`. Returns the scaled advance.
  * @unverified Name read from the code.
  */
-s32 Font_AddGlyphDisplayList(Gfx** list, s16 x, s16 y, s16 scaleX, s16 scaleY, u16 chr) {
+s32 Font_AddGlyphDisplayList(Gfx** list, s16 x, s16 y, s16 scale_x, s16 scale_y, u16 chr) {
     Glyph8001AFB0* font = &((Glyph8001AFB0*)font_context)[font_context->unk_50];
     s32 offset = Font_GetGlyphIndex(chr) * font->width * font->height;
-    Vtx* vtx = Font_AllocGlyphQuad(x, y, scaleX, scaleY, (u8*)font);
+    Vtx* vtx = Font_AllocGlyphQuad(x, y, scale_x, scale_y, (u8*)font);
     Gfx* dl = Gfx_AllocDisplayList(0xA0);
     Gfx* gfx = dl;
 
@@ -403,7 +403,7 @@ s32 Font_AddGlyphDisplayList(Gfx** list, s16 x, s16 y, s16 scaleX, s16 scaleY, u
         gSPBranchList(gfx++, *list);
     }
     *list = dl;
-    return ((font->advance + font_context->unk_51) * scaleX) / 100;
+    return ((font->advance + font_context->unk_51) * scale_x) / 100;
 }
 
 /**
@@ -461,10 +461,10 @@ s32 Font_GetCenteredStartX(s32 x, s32 scale, const char* str) {
  * rest of the line on x.
  * @unverified Name read from the code; called by the geo text nodes.
  */
-Gfx* Font_PrintfToDisplayList(s16 x, s16 y, s16 scaleX, s16 scaleY, Color_RGBA8_u32 color, const char* fmt, ...) {
+Gfx* Font_PrintfToDisplayList(s16 x, s16 y, s16 scale_x, s16 scale_y, Color_RGBA8_u32 color, const char* fmt, ...) {
     u8 buf[0x100];
     UNUSED s32 pad[2]; // FAKE: stack padding
-    s32 startX;
+    s32 start_x;
     Gfx* dl;
     s32 len;
     u8* p;
@@ -472,7 +472,7 @@ Gfx* Font_PrintfToDisplayList(s16 x, s16 y, s16 scaleX, s16 scaleY, Color_RGBA8_
     va_list args;
 
     va_start(args, fmt);
-    startX = x;
+    start_x = x;
     dl = NULL;
     len = _Printf(String_CopyBytesAndAdvance, (char*)buf, fmt, args);
     if (len > 0) {
@@ -481,10 +481,10 @@ Gfx* Font_PrintfToDisplayList(s16 x, s16 y, s16 scaleX, s16 scaleY, Color_RGBA8_
         p = &buf[1];
         while (chr != 0) {
             if (chr == 0xA) {
-                x = startX;
-                y -= ((u8)((FontEntry8001A118*)D_800AD200)[M2C_FIELD(D_800AD200, u8*, 0x38)].size_b * ((scaleY * 0xB) / 10)) / 100;
+                x = start_x;
+                y -= ((u8)((FontEntry8001A118*)D_800AD200)[M2C_FIELD(D_800AD200, u8*, 0x38)].size_b * ((scale_y * 0xB) / 10)) / 100;
             } else if (chr == 9) {
-                x = Font_GetCenteredStartX(x, scaleX, (const char*)p);
+                x = Font_GetCenteredStartX(x, scale_x, (const char*)p);
             } else {
                 if (chr >= 0x80) {
                     if (*p != 0) {
@@ -492,7 +492,7 @@ Gfx* Font_PrintfToDisplayList(s16 x, s16 y, s16 scaleX, s16 scaleY, Color_RGBA8_
                         p++;
                     }
                 }
-                x += Font_AddGlyphDisplayList(&dl, x, y, scaleX, scaleY, chr & 0x7F7F);
+                x += Font_AddGlyphDisplayList(&dl, x, y, scale_x, scale_y, chr & 0x7F7F);
             }
             chr = *p;
             p++;
