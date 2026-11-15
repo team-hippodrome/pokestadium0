@@ -772,7 +772,7 @@ void Game_ShutdownAndLoadFragment(s32 arg0, s32 arg1) {
     Game_ResetStorageDevice();
     Display_ClearFramebufferLine(1);
     Display_ApplyPendingVideoMode();
-    Display_WaitForFrames(0xA);
+    Display_WaitForFrames(10);
 
     MainPool_PopState('GAME');
 
