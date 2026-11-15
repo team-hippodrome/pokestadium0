@@ -348,9 +348,9 @@ void* MainPool_Search(uintptr_t addr, s32* arg_ptr) {
     other_node = node->next;
     while (other_node != NULL) {
         int is_addr_later = (addr >= ((uintptr_t)((u8*)node + sizeof(MainPoolBlock))));
-        MainPoolBlock* new_var = other_node; // bit of a fakematch to force the move reload.
+        MainPoolBlock* new_var = other_node; // FAKE: bit of a fakematch to force the move reload.
         // same as above.
-        if (is_addr_later && (addr < ((uintptr_t)new_var & 0xFFFFFFFF))) {
+        if (is_addr_later && (addr < ((uintptr_t)new_var & 0xFFFFFFFF))) { // FAKE: permuter temp and & 0xFFFFFFFF
             if (arg_ptr != NULL) {
                 *arg_ptr = node->arg;
             }

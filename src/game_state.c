@@ -932,13 +932,13 @@ extern s32 sImageGridDisplayList;
  * by ImageGrid_Create.
  * Seen in play (2026-11-14): called from Geo_ProcessNodeChildren with stage 2 during a COM battle.
  */
-volatile long long ImageGrid_GeoCallback(s32 stage, s8 *node)
+volatile long long ImageGrid_GeoCallback(s32 stage, s8 *node) // FAKE: volatile long long return type on a void callback
 {
   s32 new_var; // FAKE: permuter temp
-  new_var = stage;
-  if ((new_var == 2) && (sImageGridDisplayList != 0))
+  new_var = stage; // FAKE: permuter temp
+  if ((new_var == 2) && (sImageGridDisplayList != 0)) // FAKE: permuter temp
   {
-    *((s32 *) (((s8 *) node) + 0x18)) = (s32) sImageGridDisplayList;
+    *((s32 *) (((s8 *) node) + 0x18)) = (s32) sImageGridDisplayList; // FAKE: cast chain, node + 0x18 is the display list field
   }
 }
 

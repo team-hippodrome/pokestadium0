@@ -111,7 +111,7 @@ void Save_CommitRecord(arg0, arg1)
     s32 arg0;
     s32 arg1;
 {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s32 offset;
     s16 flags = *(s16*)arg0;
 
@@ -135,7 +135,7 @@ void Save_InvalidateRecord(arg0, arg1)
     s32 arg0;
     s32 arg1;
 {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s32 offset;
 
     if (*(s16*)arg0 & 2) {
@@ -163,7 +163,7 @@ M2C_UNK func_8004FD20();                            /**
 void Save_ClearRecord(arg0)
     s16* arg0;
 {
-  if (1)
+  if (1) // FAKE: if (1) wrapper
   {
     func_8004FD20();
     *arg0 |= 2;

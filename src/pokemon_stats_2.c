@@ -208,7 +208,7 @@ loop_1:
     if (var_s0 == 4) {
         return 0;
     }
-    goto loop_1;
+    goto loop_1; // FAKE: m2c goto loop, retries the write up to 4 times
 }
 
 /**

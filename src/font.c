@@ -199,9 +199,9 @@ s32 Font_DrawChar(s16 x, s16 y, s16 chr)
   }
   {
     Gfx *_g = (Gfx *) (gDisplayListHead++);
-    _g->words.w0 = (((unsigned int) ((((unsigned int) 0xe4) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) lrx) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) lry) & ((0x01 << 12) - 1)) << 0));
-    _g->words.w1 = (((unsigned int) ((((unsigned int) 0) & ((0x01 << 3) - 1)) << 24)) | ((unsigned int) ((((unsigned int) ulx) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) uly) & ((0x01 << 12) - 1)) << 0));
-    { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (unsigned int) ((((unsigned int) 0xe1) & ((0x01 << 8) - 1)) << 24); _g->words.w1 = (unsigned int) (((unsigned int) ((((unsigned int) 0) & ((0x01 << 16) - 1)) << 16)) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 16) - 1)) << 0))); }
+    _g->words.w0 = (((unsigned int) ((((unsigned int) 0xe4) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) lrx) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) lry) & ((0x01 << 12) - 1)) << 0)); // FAKE: hand-expanded gDPFillRectangle
+    _g->words.w1 = (((unsigned int) ((((unsigned int) 0) & ((0x01 << 3) - 1)) << 24)) | ((unsigned int) ((((unsigned int) ulx) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) uly) & ((0x01 << 12) - 1)) << 0)); // FAKE: hand-expanded gDPFillRectangle
+    { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (unsigned int) ((((unsigned int) 0xe1) & ((0x01 << 8) - 1)) << 24); _g->words.w1 = (unsigned int) (((unsigned int) ((((unsigned int) 0) & ((0x01 << 16) - 1)) << 16)) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 16) - 1)) << 0))); } // FAKE: hand-expanded gDPPipeSync
     ;
     {
       Gfx *_g = (Gfx *) (gDisplayListHead++);
