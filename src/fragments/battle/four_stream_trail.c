@@ -96,7 +96,7 @@ void FourStreamTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32
 
             var_s0 = &var_v1->nodes[0];
             for (j = 0; j < 15; j++, var_s0++) {
-                var_s0->alpha = (arg9 * (0xE - j)) / 15;
+                var_s0->alpha = (arg9 * (14 - j)) / 15;
                 var_s0->halfWidth = argB;
                 var_s0->angle = (RAND(120) * 6.2831855f) / 120.0;
                 var_s0->position = sp64;
@@ -256,7 +256,7 @@ Gfx* FourStreamTrail_Draw(Gfx* arg0) {
                 temp_v0 = Gfx_AllocDisplayList(sizeof(Mtx) * 1);
                 guTranslate(temp_v0, temp_s0->position.x, temp_s0->position.y, temp_s0->position.z);
                 guRotateRPY(&spF0, (temp_s0->angle * -360.0f * var_s4->direction) / 6.2831854820251465,
-                            (var_s4->direction * 0x5A) + 0x5A, 0.0f);
+                            (var_s4->direction * 90) + 90, 0.0f);
                 guMtxCatL(&spF0, temp_v0, temp_v0);
                 guMtxCatL(&spB0, temp_v0, temp_v0);
 

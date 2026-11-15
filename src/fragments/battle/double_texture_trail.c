@@ -134,7 +134,7 @@ void DoubleTextureTrail_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, 
 
             var_v0->primAlphaScale = 1.0f;
             var_v0->envAlphaScale = 1.0f;
-            var_v0->fadeStartFrame = 0x46;
+            var_v0->fadeStartFrame = 70;
 
             var_a0 = &var_v0->segments[0];
             for (j = 0; j < 10; j++, var_a0++) {

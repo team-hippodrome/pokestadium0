@@ -1093,13 +1093,14 @@ void func_821381E4(Vec3f*, Vec3f, Vec3f);
  * Takes the scene camera (BattleAnim_GetCameraContext returns a CameraNode*), asks
  * func_821381E4 for the direction from its eye to its target position (the
  * Vec3f arguments are passed by value, in $a1-$a3 and on the stack), and
- * passes the result's z and x components to MathUtil_Atan2s (the angle itself
- * is discarded).
+ * passes the result's z and x components to MathUtil_Atan2s. Declared void here, but the
+ * angle stays in $v0 and the callers in anim_model_effects.c use it as the camera's
+ * rotationY (adding 0x8000 to face the camera).
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
  * breakpoint): ran only for Confuse Ray.
  * @unverified Name guessed from the code.
  */
-void ParticleMath_ComputeViewYawUnused(void) {
+void ParticleMath_ComputeViewRotationY(void) {
     UNUSED s32 pad; // FAKE: stack padding
     Vec3f sp30;
     CameraNode* camera;
@@ -1191,7 +1192,7 @@ void ParticleGfx_NoopStub1(void) {
  * by 0x40 per call.
  */
 void ParticleGfx_PushMatrix(MtxF* arg0) {
-    if (gParticleMatrixPoolIndex < 0x16C) {
+    if (gParticleMatrixPoolIndex < 364) {
         MtxF_ToFixed(&gParticleMatrixPool->matrices[gParticleMatrixPoolIndex], arg0);
 
         gSPMatrix(gDisplayListHead++, (u32)&gParticleMatrixPool->matrices[gParticleMatrixPoolIndex] & 0x1FFFFFFF,

@@ -3042,7 +3042,7 @@ func_821383C8,0x821383C8,src/fragments/battle/particle_math.c,ParticleMath_Dista
 func_82138444,0x82138444,src/fragments/battle/particle_math.c,ParticleMath_ScaleDirectionToLength,s1,stadium1:src/fragments/particle_math/particle_math_261F90.c,c
 func_821384FC,0x821384FC,src/fragments/battle/particle_math.c,ParticleMath_RandomDirection,s1,stadium1:src/fragments/particle_math/particle_math_261F90.c,c
 func_8213858C,0x8213858C,src/fragments/battle/particle_math.c,ParticleMath_ScaleVec3f,s1,stadium1:src/fragments/particle_math/particle_math_261F90.c,c
-func_821385C0,0x821385C0,src/fragments/battle/particle_math.c,ParticleMath_ComputeViewYawUnused,hand,,c
+func_821385C0,0x821385C0,src/fragments/battle/particle_math.c,ParticleMath_ComputeViewRotationY,hand,,c
 func_82138628,0x82138628,src/fragments/battle/particle_math.c,ParticleMath_AngleXBetweenPoints,s1,stadium1:src/fragments/particle_math/particle_math_261F90.c,c
 func_8213866C,0x8213866C,src/fragments/battle/particle_math.c,ParticleMath_AngleYBetweenPoints,s1,stadium1:src/fragments/particle_math/particle_math_261F90.c,c
 func_821386B0,0x821386B0,src/fragments/battle/particle_math.c,ParticleMath_AngleZBetweenPoints,s1,stadium1:src/fragments/particle_math/particle_math_261F90.c,c
@@ -3232,7 +3232,7 @@ func_8213D880,0x8213D880,src/fragments/battle/particle.c,Particle_SetPositionFro
 func_8213D8D4,0x8213D8D4,src/fragments/battle/particle.c,Particle_SetPositionFromRotationTemplate2,s1,stadium1:src/fragments/particle_math/particle_math_269820.c,c
 func_8213D928,0x8213D928,src/fragments/battle/particle.c,Particle_AddPositionFromRotationTemplate1,s1,stadium1:src/fragments/particle_math/particle_math_269820.c,c
 func_8213D97C,0x8213D97C,src/fragments/battle/particle.c,Particle_AddPositionFromRotationTemplate2,s1,stadium1:src/fragments/particle_math/particle_math_269820.c,c
-func_8213D9D0,0x8213D9D0,src/fragments/battle/particle.c,Particle_AddPositionRotatedVectorByYaw,s1,stadium1:src/fragments/particle_math/particle_math_269820.c,c
+func_8213D9D0,0x8213D9D0,src/fragments/battle/particle.c,Particle_AddPositionRotatedByRotationY,s1,stadium1:src/fragments/particle_math/particle_math_269820.c,c
 func_8213DA64,0x8213DA64,src/fragments/battle/particle.c,Particle_SetPosOffsetXRandomScaled,m2c,m2c,c
 func_8213DAA4,0x8213DAA4,src/fragments/battle/particle.c,Particle_SetPosOffsetYRandomScaled,m2c,m2c,c
 func_8213DAE4,0x8213DAE4,src/fragments/battle/particle.c,Particle_SetPosOffsetZRandomScaled,m2c,m2c,c

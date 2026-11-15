@@ -120,7 +120,7 @@ void HyperBeamIceBeamTrail_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg
             var_v0->scrollB.shiftT = arg1D;
             var_v0->combineCycle0 = *arg1E;
             var_v0->combineCycle1 = *arg1F;
-            var_v0->fadeStartFrame = 0x46;
+            var_v0->fadeStartFrame = 70;
             var_v0->primAlphaScale = 1.0f;
             var_v0->envAlphaScale = 1.0f;
             var_v0->primColor.color.r = arg7;

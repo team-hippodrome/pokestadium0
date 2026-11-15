@@ -259,12 +259,12 @@ s32 SingTrail_AdvanceTimer(void) {
     if (D_821A8B70.duration < D_821A8B70.frame) {
         return -1;
     }
-    if (D_821A8B70.frame < 0x1E) {
+    if (D_821A8B70.frame < 30) {
         D_821A8B70.alpha += 0xA;
         if (D_821A8B70.alpha >= 0x81) {
             D_821A8B70.alpha = 0x80;
         }
-    } else if ((D_821A8B70.duration - 0x1E) < D_821A8B70.frame) {
+    } else if ((D_821A8B70.duration - 30) < D_821A8B70.frame) {
         D_821A8B70.alpha -= 0xA;
         if (D_821A8B70.alpha < 0) {
             D_821A8B70.alpha = 0;
