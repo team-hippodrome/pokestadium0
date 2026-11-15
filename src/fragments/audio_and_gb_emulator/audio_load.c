@@ -27,7 +27,7 @@ extern u8 D_81184654[1];
 extern u8 D_81184655[1];
 extern u8 D_81184656[1];
 
-/* Declarations copied from gb_tower_emulator_86920.c. */
+/* Declarations copied from audio_heap.c (Stadium 1: gb_tower_emulator_86920.c). */
 s32 AudioHeap_SearchCaches(s32, M2C_UNK, s32);
 s32 AudioPlayback_NoteDisable(Note*);
 s32 AudioPlayback_AudioListRemove(Note*);
@@ -118,7 +118,7 @@ extern AudioPermanentCache D_81184440;
 /**
  * Returns the permanent cache entry for table `arg0`, id `arg1`, or 0.
  * Corresponds to OoT AudioHeap_SearchPermanentCache (original name EmemOnCheck).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -161,7 +161,7 @@ struct SampleCacheEntry8110BA8C* AudioHeap_AllocTemporarySampleCacheEntry(u32);
  * Corresponds to OoT AudioHeap_AllocSampleCache (original name Nas_Alloc_Single). OoT merges this
  * and AudioHeap_AllocPersistentSampleCache into one AudioHeap_AllocSampleCache with a cache
  * argument. SM64 Shindou keeps two functions, like Zero (func_sh_802f1d40, func_sh_802f1d90).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -182,7 +182,7 @@ s8* AudioHeap_AllocPersistentSampleCacheEntry(s32 arg0);
  * Allocates a persistent sample cache entry of `arg0` bytes for font `arg1`.
  * Corresponds to OoT AudioHeap_AllocSampleCache (original name Nas_Alloc_Single). See
  * AudioHeap_AllocTemporarySampleCache: OoT merges the two.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -232,9 +232,9 @@ extern s32 D_8118461C;
  * Sets up the persistent and temporary sample caches from the misc pool.
  * Corresponds to OoT AudioHeap_InitSampleCaches (original name Nas_Init_Single). Zero allocates
  * with AudioHeap_Alloc; OoT tries the external pool first.
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioHeap_InitSampleCaches(s32 arg0, s32 arg1) {
@@ -265,7 +265,7 @@ void AudioHeap_DiscardSampleCacheEntry(SampleCacheEntry8110BA8C*);
  * Takes `size` bytes from the temporary sample cache, discarding the entries it overwrites.
  * Corresponds to OoT AudioHeap_AllocTemporarySampleCacheEntry (original name
  * __Nas_Alloc_Single_Auto_Inner).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -278,7 +278,7 @@ SampleCacheEntry8110BA8C* AudioHeap_AllocTemporarySampleCacheEntry(u32 size) {
     SampleCacheEntry8110BA8C* entry;
     AudioPreloadReq* preload;
     SampleCache8110BA8C* cache;
-    u8* startRamAddr;
+    u8* start_ram_addr;
     u8* end_ram_addr;
 
     cache = &D_811845F8;
@@ -302,13 +302,13 @@ SampleCacheEntry8110BA8C* AudioHeap_AllocTemporarySampleCacheEntry(u32 size) {
     for (i = 0; i < D_8118557C; i++) {
         preload = &D_81184B78[i];
         if (preload->isFree == 0) {
-            startRamAddr = preload->ramAddr;
+            start_ram_addr = preload->ramAddr;
             end_ram_addr = preload->ramAddr + preload->sample->size - 1;
 
-            if (end_ram_addr < alloc_before && startRamAddr < alloc_before) {
+            if (end_ram_addr < alloc_before && start_ram_addr < alloc_before) {
                 continue;
             }
-            if (end_ram_addr >= alloc_after && startRamAddr >= alloc_after) {
+            if (end_ram_addr >= alloc_after && start_ram_addr >= alloc_after) {
                 continue;
             }
 
@@ -321,13 +321,13 @@ SampleCacheEntry8110BA8C* AudioHeap_AllocTemporarySampleCacheEntry(u32 size) {
             continue;
         }
 
-        startRamAddr = cache->entries[i].allocatedAddr;
-        end_ram_addr = startRamAddr + cache->entries[i].size - 1;
+        start_ram_addr = cache->entries[i].allocatedAddr;
+        end_ram_addr = start_ram_addr + cache->entries[i].size - 1;
 
-        if (end_ram_addr < alloc_before && startRamAddr < alloc_before) {
+        if (end_ram_addr < alloc_before && start_ram_addr < alloc_before) {
             continue;
         }
-        if (end_ram_addr >= alloc_after && startRamAddr >= alloc_after) {
+        if (end_ram_addr >= alloc_after && start_ram_addr >= alloc_after) {
             continue;
         }
 
@@ -368,7 +368,7 @@ void AudioHeap_UnapplySampleCache(u8* arg0, SampleMedium8110D4E0* arg1);
  * Points every font that used a cached sample back at the original sample.
  * Corresponds to OoT AudioHeap_DiscardSampleCacheEntry (original name __KillSwMember). OoT moves
  * the per-font loop into AudioHeap_UnapplySampleCacheForFont (__SearchBank).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -397,7 +397,7 @@ void AudioHeap_DiscardSampleCacheEntry(SampleCacheEntry8110BA8C* entry) {
                                 AudioHeap_UnapplySampleCache((u8*)entry, M2C_FIELD(inst, SampleMedium8110D4E0**, 8));
                             }
                             if (inst[2] != 0x7F) {
-                                if (1) {
+                                if (1) { // FAKE
                                     AudioHeap_UnapplySampleCache((u8*)entry, M2C_FIELD(inst, SampleMedium8110D4E0**, 0x18));
                                 }
                             }
@@ -417,14 +417,12 @@ void AudioHeap_DiscardSampleCacheEntry(SampleCacheEntry8110BA8C* entry) {
 }
 
 /**
- * AudioHeap_UnapplySampleCache
- *
- * If arg1 is non-NULL and the word at arg0 + 0x08 equals the word at
- * arg1 + 0x04, copies the word at arg0 + 0x0C into arg1 + 0x04 and stores the
- * low two bits of the signed byte at arg0 + 0x01 into bits 2-3 of the byte at
- * arg1 + 0x00 (a bit-field write: the retail code masks with 0xFFF3 / 0x0C).
+ * If sample arg1 still points at the cached copy in sample cache entry arg0 (entry +0x08 equals
+ * sample->sampleAddr at +0x04), points it back at the original address (entry +0x0C) and restores
+ * the original medium (entry +0x01) into bits 2-3 of the sample's first byte (a bit-field write:
+ * the retail code masks with 0xFFF3 / 0x0C).
  * Corresponds to OoT AudioHeap_UnapplySampleCache (original name __RomAddrSet).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name guessed from the code; comment kept.
  */
@@ -440,7 +438,7 @@ s32 func_81109868(M2C_UNK *, s32);                  /* extern */
  * Takes `arg0` bytes from the persistent sample cache.
  * Corresponds to OoT AudioHeap_AllocPersistentSampleCacheEntry (original name
  * __Nas_Alloc_Single_Stay_Inner).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -449,17 +447,17 @@ s8 *AudioHeap_AllocPersistentSampleCacheEntry(s32 arg0)
   s32 temp_v0_2;
   s8 *temp_v0;
   s32 *new_var; // FAKE: permuter temp
-  new_var = (s32 *) (&D_811845F4);
-  temp_v0_2 = func_81109868(&(*((s8 *) (&D_811845D0))), arg0);
+  new_var = (s32 *) (&D_811845F4); // FAKE: permuter temp
+  temp_v0_2 = func_81109868(&(*((s8 *) (&D_811845D0))), arg0); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   if (temp_v0_2 == 0)
   {
     return 0;
   }
-  temp_v0 = (((*new_var) * 0x14) + 0x10) + (&(*((s8 *) (&D_811845D0))));
-  *((s8 *) (((s8 *) temp_v0) + 0)) = 1;
-  *((s32 *) (((s8 *) temp_v0) + 8)) = temp_v0_2;
-  *((s32 *) (((s8 *) temp_v0) + 0x10)) = arg0;
-  *new_var += 1;
+  temp_v0 = (((*new_var) * 0x14) + 0x10) + (&(*((s8 *) (&D_811845D0)))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *((s8 *) (((s8 *) temp_v0) + 0)) = 1; // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *((s32 *) (((s8 *) temp_v0) + 8)) = temp_v0_2; // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *((s32 *) (((s8 *) temp_v0) + 0x10)) = arg0; // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  *new_var += 1; // FAKE: permuter temp
   return temp_v0;
 }
 
@@ -467,7 +465,7 @@ s8 *AudioHeap_AllocPersistentSampleCacheEntry(s32 arg0)
  * Discards the sample cache entries of fonts that are no longer loaded.
  * Corresponds to OoT AudioHeap_DiscardSampleCaches (original name Emem_KillSwMember). OoT moves the
  * per-font loop into AudioHeap_DiscardSampleCacheForFont.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -490,14 +488,14 @@ void AudioHeap_DiscardSampleCaches(void) {
         a = D_811858B0[i].sampleBankId1;
         b = D_811858B0[i].sampleBankId2;
         if ((a != 0xFF) || (b != 0xFFU)) {
-            off = 0x12;
+            off = 0x12; // FAKE: the same offset through a local, only for register allocation
             if ((AudioHeap_SearchCaches(1, 3, i) != 0) && (AudioLoad_IsFontLoadComplete(i) != 0)) {
                 slot = (s8*)&D_811845D0;
                 for (j = 0; j < D_811845F4; j++, slot += 0x14) {
                     if ((a != slot[off]) && (b != slot[0x12]) && (slot[0x12] != 0)) {
                         break;
                     }
-                    {
+                    { // FAKE: bare block, only for register allocation
                         for (k = 0; k < D_811858B0[i].numInstruments; k++) {
                             p = AudioPlayback_GetInstrumentInner(i, k);
                             if (p != NULL) {
@@ -580,13 +578,13 @@ extern s8 D_81137ACC[];
 s32 AudioLoad_Dma();
 
 /**
- * Returns RAM holding the sample bytes at `devAddr`, reusing a cached DMA buffer or starting a new DMA.
+ * Returns RAM holding the sample bytes at `dev_addr`, reusing a cached DMA buffer or starting a new DMA.
  * Corresponds to OoT AudioLoad_DmaSampleData (original name Nas_WaveDmaCallBack).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-void* AudioLoad_DmaSampleData(u32 devAddr, u32 size, s32 arg2, u8* dma_index_ref, s32 medium) {
+void* AudioLoad_DmaSampleData(u32 dev_addr, u32 size, s32 arg2, u8* dma_index_ref, s32 medium) {
     UNUSED s32 pad1; // FAKE: stack padding
     SampleDma8110C1C0* dma;
     s32 has_dma = FALSE;
@@ -600,7 +598,7 @@ void* AudioLoad_DmaSampleData(u32 devAddr, u32 size, s32 arg2, u8* dma_index_ref
     if (arg2 != 0 || *dma_index_ref >= D_81185690) {
         for (i = D_81185690; i < D_8118568C; i++) {
             dma = &D_81185688[i];
-            buffer_pos = devAddr - dma->devAddr;
+            buffer_pos = dev_addr - dma->devAddr;
             if (0 <= buffer_pos && (u32)buffer_pos <= (dma->size - size)) {
                 if (dma->ttl == 0 && D_81185899 != D_8118589B) {
                     if (dma->reuseIndex != D_81185899) {
@@ -611,7 +609,7 @@ void* AudioLoad_DmaSampleData(u32 devAddr, u32 size, s32 arg2, u8* dma_index_ref
                 }
                 dma->ttl = 32;
                 *dma_index_ref = (u8)i;
-                return (dma->ramAddr + devAddr) - dma->devAddr;
+                return (dma->ramAddr + dev_addr) - dma->devAddr;
             }
         }
 
@@ -623,7 +621,7 @@ void* AudioLoad_DmaSampleData(u32 devAddr, u32 size, s32 arg2, u8* dma_index_ref
         }
     } else {
         dma = D_81185688 + *dma_index_ref;
-        buffer_pos = devAddr - dma->devAddr;
+        buffer_pos = dev_addr - dma->devAddr;
         if (0 <= buffer_pos && (u32)buffer_pos <= dma->size - size) {
             if (dma->ttl == 0) {
                 if (dma->reuseIndex != D_81185898) {
@@ -633,7 +631,7 @@ void* AudioLoad_DmaSampleData(u32 devAddr, u32 size, s32 arg2, u8* dma_index_ref
                 D_81185898++;
             }
             dma->ttl = 2;
-            return (dma->ramAddr + devAddr) - dma->devAddr;
+            return (dma->ramAddr + dev_addr) - dma->devAddr;
         }
     }
 
@@ -647,13 +645,13 @@ void* AudioLoad_DmaSampleData(u32 devAddr, u32 size, s32 arg2, u8* dma_index_ref
     }
 
     transfer = dma->size;
-    dma_dev_addr = devAddr & ~0xF;
+    dma_dev_addr = dev_addr & ~0xF;
     dma->ttl = 3;
     dma->devAddr = dma_dev_addr;
     dma->sizeUnused = transfer;
     AudioLoad_Dma(&D_81185638[D_811858F4++ * 0x18], 0, 0, dma_dev_addr, dma->ramAddr, transfer, D_81185618, medium, D_81137ACC);
     *dma_index_ref = dma_index;
-    return (devAddr - dma_dev_addr) + dma->ramAddr;
+    return (dev_addr - dma_dev_addr) + dma->ramAddr;
 }
 
 extern s32 D_811858E0;
@@ -664,9 +662,9 @@ extern s32 D_811858E0;
  * second, trying D_811842A0 when D_811842C0 is full. Each list's reuse queue
  * is filled with the buffer indices and the rest of the queue cleared.
  * Corresponds to OoT AudioLoad_InitSampleDmaBuffers (original name Nas_WaveDmaNew).
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioLoad_InitSampleDmaBuffers(s32 num_notes) {
@@ -740,9 +738,9 @@ extern u8 D_81184655[1];
 /**
  * Returns 1 when font `arg0` is loaded (status 2 or above) or is 0xFF.
  * Corresponds to OoT AudioLoad_IsFontLoadComplete (original name Nas_CheckIDbank).
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioSeq_SequencePlayerDisable.
  */
 s32 AudioLoad_IsFontLoadComplete(s32 arg0) {
@@ -760,9 +758,9 @@ extern u8 D_81184656[1];
 /**
  * Returns 1 when sequence `arg0` is loaded (status 2 or above) or is 0xFF.
  * Corresponds to OoT AudioLoad_IsSeqLoadComplete (original name Nas_CheckIDseq).
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioSeq_SequencePlayerDisable.
  */
 s32 AudioLoad_IsSeqLoadComplete(s32 arg0) {
@@ -798,7 +796,7 @@ extern u8 D_81184655[1];
 /**
  * Sets font `arg0`'s load status unless it is permanent (5).
  * Corresponds to OoT AudioLoad_SetFontLoadStatus (original name Nas_WriteIDbank).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -817,7 +815,7 @@ extern u8 D_81184656[1];
 /**
  * Sets sequence `arg0`'s load status unless it is permanent (5).
  * Corresponds to OoT AudioLoad_SetSeqLoadStatus (original name Nas_WriteIDseq).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -852,20 +850,20 @@ void AudioLoad_SetSampleLoadStatus(s32 arg0, s32 arg1) {
 }
 
 /**
- * Stores `table`'s ROM base `romAddr` and medium parameter `unkMediumParam`, and adds the base to every
+ * Stores `table`'s ROM base `rom_addr` and medium parameter `unk_medium_param`, and adds the base to every
  * cartridge entry (medium 2) that has a size.
  * Corresponds to OoT AudioLoad_InitTable (original name Nas_BankHeaderInit).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioLoad_Init.
  */
-void AudioLoad_InitTable(AudioTable* table, u32 romAddr, u16 unkMediumParam) {
+void AudioLoad_InitTable(AudioTable* table, u32 rom_addr, u16 unk_medium_param) {
     s32 i;
 
-    table->unkMediumParam = unkMediumParam;
-    table->romAddr = romAddr;
+    table->unkMediumParam = unk_medium_param;
+    table->romAddr = rom_addr;
     for (i = 0; i < table->numEntries; i++) {
         if ((table->entries[i].size != 0) && (table->entries[i].medium == 2)) {
-            table->entries[i].romAddr += romAddr;
+            table->entries[i].romAddr += rom_addr;
         }
     }
 }
@@ -1112,11 +1110,12 @@ extern SequencePlayerFromSkipTicks D_81184740[];
 s32 AudioLoad_SyncInitSeqPlayerInternal(s32, s32, s32);
 
 /**
- * Clears the first word of slot arg0 in the D_81184740 array (stride 0x15C) and
- * returns AudioLoad_SyncInitSeqPlayerInternal(arg0, arg1, arg2); returns 0 without touching anything if
- * D_811859D4 is nonzero. arg1 and arg2 are passed through unchanged. Sibling of
- * AudioLoad_SyncInitSeqPlayerSkipTicks, which stores its arg2 instead of 0 and passes 0 as the last argument.
- * What the slot and the flag mean is not established.
+ * Plays sequence arg1 on sequence player arg0 from the start: clears the player's skipTicks
+ * (D_81184740 is a view of the players starting at SequencePlayer.skipTicks, stride 0x15C) and
+ * returns AudioLoad_SyncInitSeqPlayerInternal(arg0, arg1, arg2). Returns 0 and does nothing while
+ * the audio reset timer D_811859D4 runs (OoT's resetTimer). Sibling of
+ * AudioLoad_SyncInitSeqPlayerSkipTicks, which stores its arg2 instead of 0 and passes 0 as the last
+ * argument.
  * Corresponds to OoT AudioLoad_SyncInitSeqPlayer (original name Nas_StartMySeq).
  * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
@@ -1175,7 +1174,7 @@ s32 AudioLoad_SyncInitSeqPlayerInternal(s32 arg0, s32 arg1, s32 arg2) {
         off = ((u16*)D_811858A8)[arg1];
         count = *(off + D_811858A8);
         off++;
-    } while (0);
+    } while (0); // FAKE
     while (count > 0) {
         id = D_811858A8[off++];
         AudioLoad_SyncLoadFont(id);
@@ -1192,7 +1191,7 @@ s32 AudioLoad_SyncInitSeqPlayerInternal(s32 arg0, s32 arg1, s32 arg2) {
     M2C_FIELD(slot, s16*, 0x10) = 0;
     ((SequencePlayer*)slot)->finished = 0;
     AudioSeq_SkipForwardSequence(slot);
-    for (i = 0; i < 16; i++) {
+    for (i = 0; i < 16; i++) { // karodo: empty loop over the 16 channels
     }
 }
 
@@ -1308,8 +1307,8 @@ s32 AudioLoad_SyncLoad(s32 table_type, s32 id, s32* did_allocate) {
     s32 ram_addr;
     u32 medium;
     s32 status;
-    u32 romAddr;
-    s32 cachePolicy;
+    u32 rom_addr;
+    s32 cache_policy;
     UNUSED s32 pad; // FAKE: stack padding
 
     ram_addr = AudioLoad_SearchCaches(table_type, id);
@@ -1321,9 +1320,9 @@ s32 AudioLoad_SyncLoad(s32 table_type, s32 id, s32* did_allocate) {
         size = table->entries[id].size;
         size = ALIGN16(size);
         medium = table->entries[id].medium;
-        cachePolicy = table->entries[id].cachePolicy;
-        romAddr = table->entries[id].romAddr;
-        switch (cachePolicy) {
+        cache_policy = table->entries[id].cachePolicy;
+        rom_addr = table->entries[id].romAddr;
+        switch (cache_policy) {
             case 0:
                 ram_addr = AudioHeap_AllocPermanent(table_type, id, size);
                 if (ram_addr == 0) {
@@ -1353,12 +1352,12 @@ s32 AudioLoad_SyncLoad(s32 table_type, s32 id, s32* did_allocate) {
 
         *did_allocate = 1;
         if (medium == 1) {
-            AudioLoad_SyncDmaUnkMedium(romAddr, ram_addr, size, table->unkMediumParam);
+            AudioLoad_SyncDmaUnkMedium(rom_addr, ram_addr, size, table->unkMediumParam);
         } else {
-            AudioLoad_SyncDma(romAddr, ram_addr, size, medium);
+            AudioLoad_SyncDma(rom_addr, ram_addr, size, medium);
         }
 
-        status = cachePolicy == 0 ? 5 : 2;
+        status = cache_policy == 0 ? 5 : 2;
     }
 
     switch (table_type) {
@@ -1380,7 +1379,7 @@ u8* AudioLoad_GetLoadTable(s32);
 /**
  * Returns the real index of entry `arg1` in load table `arg0`: an entry with size 0 is an alias whose ROM address field holds the real index.
  * Corresponds to OoT AudioLoad_GetRealTableIndex (original name __Link_BankNum).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -1422,18 +1421,15 @@ extern u8* D_811858A0;
 extern u8* D_811858A4;
 
 /**
- * AudioLoad_GetLoadTable
- *
- * Returns the pointer stored in D_8118589C, D_811858A0 or D_811858A4 for
- * arg0 = 0, 1 or 2, and NULL for any other value (the caller treats the result
- * as a byte pointer to a table indexed in 16-byte steps). What the three
- * tables are is not established.
+ * Returns the audio table for table type arg0: the sequence table D_8118589C (0), the sound font
+ * table D_811858A0 (1) or the sample bank table D_811858A4 (2), and NULL for any other value. The
+ * tables are AudioTable (16-byte header, then 16-byte entries).
  * Matching note: the result is built in a local and returned once; separate
  * `return` statements in each case give a different register choice.
  * Corresponds to OoT AudioLoad_GetLoadTable.
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioLoad_LoadPermanentSamples.
  */
 u8* AudioLoad_GetLoadTable(s32 arg0) {
@@ -1453,7 +1449,7 @@ u8* AudioLoad_GetLoadTable(s32 arg0) {
     return ret;
 }
 
-void AudioLoad_RelocateSample(void* sampleP, u32 fontDataAddr, void* relocInfo);
+void AudioLoad_RelocateSample(void* sample_p, u32 font_data_addr, void* reloc_info);
 
 /**
  * Relocates a sound font loaded at fontData: the drum and instrument pointer
@@ -1530,7 +1526,7 @@ s32 AudioLoad_Dma();
 /**
  * Copies `arg2` bytes (rounded up to 16) from ROM `arg0` to RAM `arg1` in 1 KB DMA chunks and waits for each.
  * Corresponds to OoT AudioLoad_SyncDma (original name Nas_FastCopy).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -1576,13 +1572,14 @@ s32 func_800593D0(void);
 s32 func_80051E60(void);
 void func_80056530(s32, IoMesg8110DBA0*, s32);
 /**
- * Starts a PI DMA for audio data through the message queue `mq`; refuses when more than 16 are pending.
+ * Starts a PI DMA for audio data that replies to the message queue `mq`; refuses (-1) while the audio
+ * reset timer D_811859D4 is above 16 (OoT's resetTimer).
  * Corresponds to OoT AudioLoad_Dma (original name Nas_StartDma).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
-s32 AudioLoad_Dma(IoMesg8110DBA0* mb, s32 pri, s32 direction, u32 devAddr, void* dramAddr, u32 size, void* mq, s32 kind) {
+s32 AudioLoad_Dma(IoMesg8110DBA0* mb, s32 pri, s32 direction, u32 dev_addr, void* dram_addr, u32 size, void* mq, s32 kind) {
     s32 handle;
 
     if ((u32)D_811859D4 > 16) {
@@ -1603,8 +1600,8 @@ s32 AudioLoad_Dma(IoMesg8110DBA0* mb, s32 pri, s32 direction, u32 devAddr, void*
     }
     mb->pri = pri;
     mb->retQueue = mq;
-    mb->dramAddr = dramAddr;
-    mb->devAddr = devAddr;
+    mb->dramAddr = dram_addr;
+    mb->devAddr = dev_addr;
     mb->size = size;
     M2C_FIELD(handle, s32*, 0x14) = 2;
     func_80056530(handle, mb, direction);

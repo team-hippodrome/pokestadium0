@@ -18,7 +18,7 @@ void AudioLoad_SetFontLoadStatus(s32, s32);
 void AudioLoad_SetSeqLoadStatus(s32, s32);
 u16 AudioSeq_GetScriptControlFlowArgument(u8** stream, u8 kind);
 s32 AudioSeq_HandleScriptFlowControl(void*, void*, s32, s32);
-void AudioSeq_SequencePlayerSetupChannels(SequencePlayer* seqPlayer, u16 mask);
+void AudioSeq_SequencePlayerSetupChannels(SequencePlayer* seq_player, u16 mask);
 void AudioSeq_SequencePlayerDisable(u8* arg0);
 void func_81112B84(SequenceChannel*);
 
@@ -283,7 +283,7 @@ void AudioSeq_InitSequenceChannel(void*);
 /**
  * Stops sequence player `arg0` and restores its tempo, volumes and channels to their defaults.
  * Corresponds to OoT AudioSeq_ResetSequencePlayer (original name Nas_InitMySeq).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioSeq_InitSequencePlayers.
  */
 void AudioSeq_ResetSequencePlayer(s32 arg0) {
@@ -297,7 +297,7 @@ void AudioSeq_ResetSequencePlayer(s32 arg0) {
     chan->fadeTimer = 0;
     chan->storedFadeTimer = 0;
     chan->tempoAcc = 0;
-    chan->tempo = 0x1680;
+    chan->tempo = 5760;
     chan->tempoChange = 0;
     chan->transposition = 0;
     chan->noteAllocPolicy = 0;
@@ -320,7 +320,7 @@ void* func_811097E8(void*, s32);
 /**
  * Allocates sequence player `arg0`'s 16 channels, falling back to the shared dummy channel.
  * Corresponds to OoT AudioSeq_InitSequencePlayerChannels (original name Nas_AssignSubTrack).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioSeq_InitSequencePlayerChannels(s32 arg0) {
@@ -349,7 +349,7 @@ void AudioPlayback_InitNoteLists(void*);
  * Sets up the layer free list, the sequence layers and the one sequence player.
  * Corresponds to OoT AudioSeq_InitSequencePlayers (original name Nas_InitPlayer). Zero has OoT's
  * AudioSeq_InitSequencePlayer (__InitGroup) inlined for its single player.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioSeq_InitSequencePlayers(void) {
@@ -509,7 +509,8 @@ void Audio_ClearSfxSeqPlayerIo4(void) {
 }
 
 /**
- * No callers.
+ * Stores arg0 and arg1 in D_81138AD0 and D_81138AD4, the noise channel's waveform loop start and
+ * end (GbApu_UpdateNoiseChannel wraps the phase index back to D_81138AD0 at D_81138AD4).
  * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name and comment from Stadium 1.

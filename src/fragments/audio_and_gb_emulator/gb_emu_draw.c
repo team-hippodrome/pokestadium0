@@ -147,7 +147,7 @@ s32 GbPak_WriteBackDirtySramBlock(s32 arg0);
 /**
  * Reads each clean 0x100-byte block of cartridge RAM back and compares it with the cached copy; a
  * mismatch rewrites the block and restarts the pass, up to 20 times. Returns -1 on failure.
- * Seen in play (2026-11-14) ran in the 「レポートできませんでした」 recovery flow (state forced to 20, cartridge
+ * Seen in play (2026-11-14) ran in the 「レポートできませんでした」 ("Couldn't save") recovery flow (state forced to 20, cartridge
  * removal faked by stubbing GbPak_IsCartridgeInserted); called from GbEmu_RunFrame.
  */
 s32 GbPak_VerifyRamBlocks(s32 arg0) {
@@ -226,8 +226,8 @@ M2C_UNK func_8005C0A0();
  * Fills the 32-byte probe block (probePattern and unk_5D90) for the writable-RAM
  * probe: mode 3 all zeros, mode 2 all ones, mode 1 DP counters and osGetCount values
  * so the pattern differs each run.
- * Seen in play (2026-11-13) ran on the GB player loading screen (ロードちゅう).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-13) ran on the GB Player loading screen (ロードちゅう, "Loading").
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbPak_WriteVerifiedSramBlock.
  */
 void GbPak_PrepareProbeBlock(u32* arg0, s32 arg1) {
@@ -261,7 +261,7 @@ void func_81102EB0(u8*, s32);
  * reads it back until three writes in a row compare equal.
  * Seen in play (2026-11-12): wrote and read back 0x55, 0xAA and 0xAC blocks at GB 0xA000 when the
  * GB item started.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_LoadCartridge.
  */
 s32 GbPak_WriteVerifiedSramBlock(s32 arg0, s32 arg1, s32 arg2) {
@@ -310,7 +310,7 @@ s32 GbPak_CheckGen1SaveChecksum(s8*);
  * Seen in play (2026-11-12): serviced requests 6 (bank load with checksum check), 8 (status) and
  * 4 (power off) while Green loaded. A bank whose 0x2000-byte sums differ from the table sets
  * error 1.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak.
  */
 void GbPak_IoThreadMain(s32 arg0) {
@@ -482,7 +482,7 @@ void GbPak_IoThreadMain();
  * Clears the four Transfer Pak channel records, gives each its OSPfs and starts the Game Boy Pak
  * I/O thread (GbPak_IoThreadMain) on the given message queue.
  * Seen in play (2026-11-12): runs when the GB item is entered, before the cartridge loads.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_Init.
  */
 void GbPak_StartIoThread(s32 arg0, s32 arg1, s32 arg2) {
@@ -523,7 +523,7 @@ s32 func_8004CFB0(OSMesgQueue *, s32, s32);
  * Seen in play (2026-11-13) with a JP Green cart in the Transfer Pak, it ran once when the GB
  * session ended (Continue was picked on a save the game refused, and Stadium showed its "report is
  * not correct" panel); it did not run while the game played.
- * Seen in play (2026-11-14) ran when はい on the ゲームをやめる prompt left the GB Player; called from
+ * Seen in play (2026-11-14) ran when はい ("Yes") on the ゲームをやめる ("Quit game") prompt left the GB Player; called from
  * GbEmu_RunFrame.
  */
 void GbPak_StopIoThread(s32 arg0) {
@@ -569,8 +569,8 @@ extern u16 D_811223C0[];
  * then ASCII characters mapped through sFont1GlyphTable/sFont2GlyphTable.
  * A zero byte ends the list.
  * Seen in play (2026-11-12): opening the GB Player menu (C-Up) passed the list 80 38 07 0C 0B 04 +
- * 4 glyphs (メニュー), 80 20 1B 0C 0A 08 + 8 glyphs (ゲームをつづける), C0 03 59 0C 09 0A + 10 glyphs
- * (このメニューをぬけて), matching flags, x, y, font height, palette, length and characters; the same glyph
+ * 4 glyphs (メニュー, "Menu"), 80 20 1B 0C 0A 08 + 8 glyphs (ゲームをつづける, "Continue game"), C0 03 59 0C 09 0A + 10 glyphs
+ * (このメニューをぬけて, "leave this menu and"), matching flags, x, y, font height, palette, length and characters; the same glyph
  * bytes repeat for the same kana (71 65 4C 3B = メニュー).
  * Seen in play (2026-11-14) ran when C-Up opened the GB Player menu; called from GbEmu_DrawPauseMenu.
  */
@@ -684,9 +684,9 @@ void GbEmu_DrawTextCommands(u16* fb, u8* cmd) {
 
 /**
  * Pixel op: keeps the destination when the source alpha bit is clear, else the source.
- * Seen in play (2026-11-13) ran on the GB player screen while Pocket Monsters Green booted; also
- * when the GB player C-Up menu opened.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-13) ran on the GB Player screen while Pocket Monsters Green booted; also
+ * when the GB Player C-Up menu opened.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_BlitWithPixelOp.
  */
 s32 GbEmu_PixelOpDitherA(s32 arg0, s32 arg1) {
@@ -695,7 +695,7 @@ s32 GbEmu_PixelOpDitherA(s32 arg0, s32 arg1) {
 
 /**
  * Pixel op: alternate keyed source/destination selection.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
@@ -705,7 +705,7 @@ s32 GbEmu_PixelOpDitherB(s32 arg0, s32 arg1) {
 
 /**
  * Pixel op: averages source and destination per RGBA5551 channel.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
@@ -715,7 +715,7 @@ s32 GbEmu_PixelOpAverage555(s32 arg0, s32 arg1) {
 
 /**
  * Pixel op: replaces the destination with the source.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
@@ -726,9 +726,9 @@ s32 GbEmu_PixelOpReplace(UNUSED s32 arg0, s32 arg1) {
 /**
  * Copies a width x height RGBA5551 image into a 320-wide destination, combining
  * each pixel with the selected pixel op.
- * Seen in play (2026-11-13) ran on the GB player screen while Pocket Monsters Green booted; also
- * when the GB player C-Up menu opened.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-13) ran on the GB Player screen while Pocket Monsters Green booted; also
+ * when the GB Player C-Up menu opened.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_DrawAccessOverlay.
  */
 void GbEmu_BlitWithPixelOp(u16* dst, u16* src, s32 mode, s32 width, s32 height) {
@@ -759,7 +759,7 @@ extern s32 D_8115658C;
 
 /**
  * Clears the 0x2800-byte status bar image below the GB screen and writes back the data cache.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_LoadCartridge.
  */
 void GbEmu_ClearStatusBar(void) {
@@ -769,9 +769,9 @@ void GbEmu_ClearStatusBar(void) {
 
 /**
  * Copies an image using its blue channel as intensity to scale the given color.
- * Seen in play (2026-11-13) ran on the GB player screen while Pocket Monsters Green booted; also
- * when the GB player C-Up menu closed (B); also on the GB player loading screen (ロードちゅう).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-13) ran on the GB Player screen while Pocket Monsters Green booted; also
+ * when the GB Player C-Up menu closed (B); also on the GB Player loading screen (ロードちゅう, "Loading").
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_DrawTintedBar.
  */
 void GbEmu_BlitTinted(u16* dst, u16* src, s32 color, s32 width, s32 height) {
@@ -791,9 +791,9 @@ void GbEmu_BlitTinted(u16* dst, u16* src, s32 color, s32 width, s32 height) {
 
 /**
  * Additively blends a solid color into the destination using a 4-bit alpha map.
- * Seen in play (2026-11-13) ran on the GB player screen while Pocket Monsters Green booted; also
- * when the GB player C-Up menu closed (B); also on the GB player loading screen (ロードちゅう).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-13) ran on the GB Player screen while Pocket Monsters Green booted; also
+ * when the GB Player C-Up menu closed (B); also on the GB Player loading screen (ロードちゅう, "Loading").
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_DrawAccessOverlay.
  */
 void GbEmu_BlendColorWithAlphaMap(u16* dst, u8* alpha_map, s32 color, s32 width, s32 height, u32 alpha_stride) {
@@ -827,9 +827,9 @@ extern u16 D_811207F8[];
 /**
  * Draws a horizontal bar into a 16-bit framebuffer from tinted 8x16 tiles: left cap, repeated
  * middle, right cap.
- * Seen in play (2026-11-13) ran on the GB player screen while Pocket Monsters Green booted; also
- * when the GB player C-Up menu closed (B); also on the GB player loading screen (ロードちゅう).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-13) ran on the GB Player screen while Pocket Monsters Green booted; also
+ * when the GB Player C-Up menu closed (B); also on the GB Player loading screen (ロードちゅう, "Loading").
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_DrawAccessOverlay.
  */
 void GbEmu_DrawTintedBar(u8* arg0, s32 arg1, s32 arg2) {
@@ -847,9 +847,9 @@ void func_80052100(void*, s32);
 /**
  * Draws one 12x11 frame of the animated Transfer Pak access icon; direction selects
  * the mirrored (zero) or normal direction, frame selects the frame (0-10).
- * Seen in play (2026-11-12): draws the animated pak icon on the 「ロードちゅう」 banner below the GB
+ * Seen in play (2026-11-12): draws the animated pak icon on the 「ロードちゅう」 ("Loading") banner below the GB
  * screen while Green loads.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_DrawAccessOverlay.
  */
 void GbEmu_DrawAccessIcon(u16* arg0, s32 arg1, s32 arg2) {
@@ -928,9 +928,9 @@ extern u8 D_811541F0[];
 extern u8 D_81120A18[];
 extern u16 D_81120B58[];
 /**
- * Draws the ロードちゅう Transfer Pak access banner into the status bar, with the access icon facing
+ * Draws the ロードちゅう ("Loading") Transfer Pak access banner into the status bar, with the access icon facing
  * `direction`.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_LoadCartridge.
  */
 void GbEmu_DrawAccessOverlay(s32 direction) {
@@ -950,7 +950,7 @@ void GbEmu_DrawAccessOverlay(s32 direction) {
     }
     p = &D_811541F0[direction];
     do {
-        GbEmu_BlendColorWithAlphaMap((u16*)dst, D_81156598 + *p * 0xA0, 0xFFFE, 0xC, 0xA, 0x10);
+        GbEmu_BlendColorWithAlphaMap((u16*)dst, D_81156598 + *p * 0xA0, 0xFFFE, 12, 10, 16); // #FFFFFF
         i += 0x12;
         dst += 0x12;
         p++;
@@ -971,7 +971,7 @@ extern u8* D_8115659C;
 extern s32 D_81154C00;
 
 /**
- * Draws the status bar below the GB screen: the tinted bar, the ▲でメニュー hint and, when a speed-up
+ * Draws the status bar below the GB screen: the tinted bar, the ▲でメニュー ("▲: Menu") hint and, when a speed-up
  * level is unlocked (D_8111E308), the speed indicator.
  * Seen in play (2026-11-14) ran while Green's intro played in the GB Player; called from
  * GbEmu_UpdateFrame.
@@ -1010,7 +1010,7 @@ void GbEmu_DrawStatusBar(void) {
     dst = pos + 0x29C;
     /* The comma expression is what gives the ROM's register allocation. */
     for (p = D_811541FC; (0, p) != &D_811541FC[5]; p++) { // FAKE: comma expression
-        GbEmu_BlendColorWithAlphaMap((u16*)dst, D_8115659C + *p * 0xC0, 0xFFFE, 0xC, 0xC, 0x10);
+        GbEmu_BlendColorWithAlphaMap((u16*)dst, D_8115659C + *p * 0xC0, 0xFFFE, 12, 12, 16); // #FFFFFF
         dst += 0x18;
     }
     D_81154C00 = D_81156540.framebuffer;
@@ -1020,10 +1020,10 @@ void func_8004FD20(s32, s32);                /* extern */
 extern s32 D_81156550;
 
 /**
- * Clears the 16 RGBA5551 GB palette colours at GB memory +0x12D00 (4 palettes of 4), so the GB
+ * Clears the 16 RGBA5551 GB palette colors at GB memory +0x12D00 (4 palettes of 4), so the GB
  * screen turns black before the fade out. Seen in RAM (2026-11-14): the 0x20 bytes held F7FA DDB0
  * ABEE 1884 ... before the quit.
- * Seen in play (2026-11-14) ran when はい on the ゲームをやめる prompt left the GB Player; called from
+ * Seen in play (2026-11-14) ran when はい ("Yes") on the ゲームをやめる ("Quit game") prompt left the GB Player; called from
  * GbEmu_RunFrame.
  */
 void GbEmu_ClearPalettes(void) {
@@ -1035,9 +1035,9 @@ extern u32 D_811565B0;
 /**
  * Bump allocator: aligns the heap pointer to 64 bytes, reserves the size and hangs when the heap
  * runs out.
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_LoadCartridge.
  */
 s32 GbEmu_AllocAligned64(s32 arg0, M2C_UNK arg1)
@@ -1046,12 +1046,12 @@ s32 GbEmu_AllocAligned64(s32 arg0, M2C_UNK arg1)
   s32 temp_v1;
   u32 temp_t6;
   temp_v1 = (D_811565AC + 0x3F) & (~0x3F);
-  new_var = temp_v1;
-  ;
-  if ((D_811565AC = new_var + arg0) >= ((u32) D_811565B0))
+  new_var = temp_v1; // FAKE: permuter temp
+  ; // FAKE: empty statement
+  if ((D_811565AC = new_var + arg0) >= ((u32) D_811565B0)) // FAKE: permuter temp
   {
     loop_1:
-    goto loop_1;
+    goto loop_1; // FAKE: m2c's endless hang
 
   }
   return new_var; // FAKE: permuter temp
@@ -1073,9 +1073,9 @@ void GbPak_RequestBankLoadCurrentPort(s32 bank) {
 
 /**
  * Blocks on an OS timer for the given number of milliseconds.
- * Seen in play (2026-11-13) ran when quitting the GB player (C-Up menu, Quit game, Yes) and when it
+ * Seen in play (2026-11-13) ran when quitting the GB Player (C-Up menu, Quit game, Yes) and when it
  * started again.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_PauseAndBlankScreen.
  */
 void GbEmu_Delay(OSTime arg0) {
@@ -1097,7 +1097,7 @@ extern u8 D_81122854[];
  * Seen in play (2026-11-12): the table D_81122854 holds YELLOW, BLUE, GREEN and RED with
  * destination 0 (Japan) and licensee 01, so it returns 4 Yellow, 3 Blue, 2 Green, 1 Red; Pocket
  * Monsters Green got 2 and went on to load. The version byte is not compared.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_LoadCartridge.
  */
 s32 GbPak_IdentifyCartridge(u8* arg0) {
@@ -1122,7 +1122,7 @@ s32 GbPak_IdentifyCartridge(u8* arg0) {
  * Seen in play (2026-11-12): starting GB from the main menu with a valid Pocket Monsters Green
  * save ran this right after the cartridge RAM was read, and it returned 0. The game then booted
  * (GAME FREAK logo).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbPak_IoThreadMain.
  */
 s32 GbPak_CheckGen1SaveChecksum(s8* arg0) {
@@ -1155,7 +1155,7 @@ extern s32 D_81154C48;
  * Blacks out the screen, resets the VI X scale, stores the error code in D_81154C48 and returns
  * -1.
  * Seen in play (2026-11-12): error 1 after a failed bank checksum blacked out the screen and led
- * to the 「64GBパックが ただしくセットされていません」 screen.
+ * to the 「64GBパックが ただしくセットされていません」 ("The Transfer Pak is not inserted correctly") screen.
  */
 s32 GbEmu_BlackScreenAndFail(s32 arg0) {
     osViBlack(1);
@@ -1201,9 +1201,9 @@ extern f32 D_FLT_81154254;
  * while the game runs. For a streamed load it keeps ROM bytes 0x000-0x101 in D_811565A8 and
  * replaces them with the boot stub D_8111E570, which ends in `jr $` at 0x100. GbEmu_UpdateFrame
  * puts the real bytes back once the GB PC reaches 0x100 while banks are still loading. Seen in
- * play: with Green this showed the 「ロードちゅう」 banner and the Nintendo logo, then the game's own
+ * play: with Green this showed the 「ロードちゅう」 ("Loading") banner and the Nintendo logo, then the game's own
  * copyright screen.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_Init.
  */
 s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {

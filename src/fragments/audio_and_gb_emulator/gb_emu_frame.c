@@ -113,7 +113,7 @@ void func_811177D0(s32);
  * stopped, otherwise 0.
  * Seen in play (2026-11-12): runs Green frame by frame and, while banks load, restores the header
  * bytes once the GB PC (gbPc) reaches 0x100.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_RunFrame.
  */
 s32 GbEmu_UpdateFrame(void) {
@@ -464,7 +464,7 @@ extern u8 D_811565A0;
  * Asks the I/O thread to re-init the pak and read the cartridge ID into the channel (request
  * 0x80), waits, and then checks the RAM probe block. Returns the error, or 0 when it is the same
  * cartridge.
- * Seen in play (2026-11-14) ran in the 「レポートできませんでした」 recovery flow (state forced to 20, cartridge
+ * Seen in play (2026-11-14) ran in the 「レポートできませんでした」 ("Couldn't save") recovery flow (state forced to 20, cartridge
  * removal faked by stubbing GbPak_IsCartridgeInserted); called from GbEmu_RunFrame.
  */
 s32 GbPak_ReidentifyCartridge(void) {
@@ -488,7 +488,7 @@ s32 GbPak_ReidentifyCartridge(void) {
 /**
  * Asks the I/O thread for a status check (request 8), waits, and returns the GB cartridge-present
  * bit (0x80) of the pak status.
- * Seen in play (2026-11-14) ran in the 「レポートできませんでした」 recovery flow (state forced to 20, cartridge
+ * Seen in play (2026-11-14) ran in the 「レポートできませんでした」 ("Couldn't save") recovery flow (state forced to 20, cartridge
  * removal faked by stubbing GbPak_IsCartridgeInserted); called from GbEmu_RunFrame.
  */
 s32 GbPak_IsCartridgeInserted(void) {
@@ -508,9 +508,9 @@ extern u8 D_811565A1;
 
 /**
  * Returns 1 when D_811565A1 is set or any of the 128 cartridge RAM blocks is still waiting to be
- * written back; the menu then goes to the 「レポートできませんでした」 recovery instead of failing.
+ * written back; the menu then goes to the 「レポートできませんでした」 ("Couldn't save") recovery instead of failing.
  * Seen in play (2026-11-14) ran when the emulator result D_81154C40 was poked to -1 from the GB
- * Tower menu; the game went to 「レポートできませんでした」; called from GbEmu_RunFrame.
+ * Player menu; the game went to 「レポートできませんでした」 ("Couldn't save"); called from GbEmu_RunFrame.
  */
 s32 GbPak_HasUnsavedSramBlocks(void) {
     s32 var_v0;
@@ -520,7 +520,7 @@ s32 GbPak_HasUnsavedSramBlocks(void) {
     if (D_811565A1 != 0) {
         return 1;
     }
-    var_v1 = *((M2C_UNK*)((u8*)&D_8115623C + (D_811565A0 * 0xA4)));
+    var_v1 = *((M2C_UNK*)((u8*)&D_8115623C + (D_811565A0 * 0xA4))); // FAKE: cast chain
 loop_3:
     var_v0 += 4;
     if (M2C_FIELD(var_v1, u8 *, 0) == 0) {
@@ -539,7 +539,7 @@ loop_3:
     if (var_v0 == 0x80) {
         return 0;
     }
-    goto loop_3;
+    goto loop_3; // FAKE: m2c loop
 }
 
 extern u8 D_81156261[];
@@ -548,7 +548,7 @@ extern volatile u8 D_81156475;
 
 /**
  * Asks the I/O thread to power the Transfer Pak off (request 4) and waits.
- * Seen in play (2026-11-14) ran in the 「レポートできませんでした」 recovery flow (state forced to 20, cartridge
+ * Seen in play (2026-11-14) ran in the 「レポートできませんでした」 ("Couldn't save") recovery flow (state forced to 20, cartridge
  * removal faked by stubbing GbPak_IsCartridgeInserted); called from GbEmu_RunFrame.
  */
 void GbPak_PowerOff(void) {
@@ -562,7 +562,7 @@ extern s8 D_81156546;
 
 /**
  * Sets D_81156546, which stops the per-frame GB audio update.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_PauseAndBlankScreen.
  */
 void GbEmu_PauseEmulation(void) {
@@ -581,8 +581,8 @@ void osViBlack(u8);
  * Per-frame tail of the GB Player emulator: unless emulation is paused (D_81156546) or
  * the screen is being blanked (D_800AA148), runs the GB audio frame and mirrors the
  * emulated NR52 (0xFF26) register into GB memory; while D_800AA148 is set it blanks video.
- * Seen in play (2026-11-13) ran every frame from the moment JP Green booted in the N64 GB player.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-13) ran every frame from the moment JP Green booted in the N64 GB Player.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbPlayer_OutputThreadEntry.
  */
 void GbEmu_UpdateAudioOrBlankVideo(UNUSED s32 arg0) {
@@ -606,7 +606,7 @@ extern u16 D_81124C40[];
 /**
  * Draws a 46x46 framed panel (8x8 edge and corner tiles from sUiGraphics) with a
  * solid interior, used behind each party icon on the loading screen.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
@@ -811,7 +811,7 @@ void GbEmu_DrawLoadingScreen(u16* dst, u8 (*party_icons)[0xC80], s32 port, s32 v
 
 /**
  * Adds a scrolling image layer to the destination with per-channel saturation.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */

@@ -70,9 +70,9 @@ extern M2C_UNK *D_81186250;
 /**
  * Corresponds to OoT AudioThread_InitMesgQueuesImpl (original name Nap_AudioPortInit). Same three
  * queues of 1, 4 and 1 messages. Stadium 1's name BattleAnim_DisableEffectSpawning did not fit.
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioThread_InitMesgQueues.
  */
 void AudioThread_InitMesgQueuesImpl(void) {
@@ -104,50 +104,21 @@ void AudioThread_QueueCmd(DisplayObject* arg0, s32* arg1) {
     }
 }
 
-/*
- * AudioThread_QueueCmdF32
- *
- * Calls AudioThread_QueueCmd(arg0, &value) where `value` is a local copy of the
- * second argument, so the callee receives it by pointer.  Siblings
- * AudioThread_QueueCmdS8 / AudioThread_QueueCmdU16 do the same after shifting an s8 / s16
- * left by 24 / 16 bits; this one passes the word through unchanged.
- *
- * arg0 is declared s32 because the one known caller of the twin function
- * AudioThread_QueueCmdS32 passes the constant 0xF9000000 there, so it is a plain
- * word and not necessarily an object pointer.  The cast below only
- * satisfies the DisplayObject* prototype of AudioThread_QueueCmd used by the
- * siblings and produces no code.
- *
- * AudioThread_QueueCmdS32 compiles to identical machine code (the original source
- * probably differed in a type that cannot be recovered from the assembly).
- */
 void AudioThread_QueueCmd(DisplayObject* arg0, s32* arg1);
 /**
- * Queues a command with an f32 argument.
- * Corresponds to OoT AudioThread_QueueCmdF32 (original name Nap_SetF32).
+ * Queues a command with an f32 argument, passed by pointer from a stack copy.
+ * Corresponds to OoT AudioThread_QueueCmdF32 (original name Nap_SetF32). Compiles to the same
+ * machine code as AudioThread_QueueCmdS32; the argument is declared s32 here.
  * @unverified Name follows the counterpart; not checked in play.
  */
 void AudioThread_QueueCmdF32(s32 arg0, s32 arg1) {
     AudioThread_QueueCmd((DisplayObject*)arg0, &arg1);
 }
 
-/*
- * AudioThread_QueueCmdS32
- *
- * Passes arg0 and the address of a stack copy of arg1 on to AudioThread_QueueCmd.
- * This is the function the project's symbol list also knows as
- * AudioThread_QueueCmdS32(s32 cmd, s32 arg1); callers pass a 32-bit command word
- * such as 0xF9000000 or 0xF1000000 as the first argument, which is why arg0
- * is an s32 here.  The cast only satisfies the DisplayObject* prototype of
- * AudioThread_QueueCmd used by the sibling functions and produces no code.
- *
- * It is a machine-code twin of AudioThread_QueueCmdF32; the two cannot be told apart
- * from the assembly.  The address-style name is kept because the other C
- * functions in this file (e.g. AudioThread_QueueCmdS8) also use address names.
- */
 void AudioThread_QueueCmd(DisplayObject* arg0, s32* arg1);
 /**
- * Queues a command with an s32 argument.
+ * Queues a command with an s32 argument, passed by pointer from a stack copy. Callers pass a 32-bit
+ * command word such as 0xF9000000 or 0xF1000000 as arg0.
  * Corresponds to OoT AudioThread_QueueCmdS32 (original name Nap_SetS32).
  * @unverified Name follows the counterpart; not checked in play.
  */
@@ -184,9 +155,9 @@ s32 func_8004CFB0(OSMesgQueue*, s32, s32);
 /**
  * Sends the queued command range to the audio thread and tracks the largest batch seen.
  * Corresponds to OoT AudioThread_ScheduleProcessCmds (original name Nap_SendStart).
+ * No return statement: retail leaves the send result in v0 and AudioThread_ResetAudioHeap returns it.
  * @unverified Name follows the counterpart; not checked in play.
  */
-// No return statement: retail leaves the send result in v0 and AudioThread_ResetAudioHeap returns it.
 s32 AudioThread_ScheduleProcessCmds(void) {
     s32 head;
     s32 tail;
@@ -243,7 +214,8 @@ u32 AudioThread_GetExternalLoadQueueMsg(s32 *arg0) {
 }
 
 /**
- * Returns the number of sounds active in an audio category.
+ * Returns the font list of sequence arg0 from AudioLoad_GetFontsForSequence; the font count
+ * pointer that function takes is passed through untouched in the second argument register.
  * Corresponds to OoT AudioThread_GetFontsForSequence. Stadium 1's name Audio_CountCategorySounds
  * did not fit.
  */
@@ -253,14 +225,9 @@ s32 AudioThread_GetFontsForSequence(s32 arg0) {
 
 extern u8 D_81184658;
 
-/*
- * AudioThread_CheckSpecChange
- *
- * Calls func_8004D1C0 once with the queue pointer in D_81186250, the address
- * of a local word and a third argument of 0 (see AudioThread_ClearSpecChangeQueue). Returns 0 if
- * that call returns -1; otherwise returns 1 when the word it stored equals
- * D_81184658 and 0 when it does not. The caller-visible meaning of the
- * comparison is not established here.
+/**
+ * Polls the audio reset queue D_81186250 once without blocking (func_8004D1C0 is osRecvMesg): returns 1 when the audio thread has reported the reset to the
+ * current spec D_81184658 as done, otherwise 0.
  * Matching note: the unused leading `pad` local moves `sp18` to the ROM's
  * stack offset (sp+0x18); the two returns are written as separate
  * `return 0` / `return 1` paths because that is the form that compiles to the
@@ -281,15 +248,9 @@ s32 AudioThread_CheckSpecChange(void) {
     return 1;
 }
 
-/*
- * AudioThread_ClearSpecChangeQueue
- *
- * Calls func_8004D1C0 with the queue pointer in D_81186250, the address of a
- * local word and a third argument of 0, repeatedly until it returns -1. The
- * received word is never read, so the loop only discards what the call hands
- * back. (dp_intro.c declares func_8004D1C0 as taking an OSMesgQueue*, and the
- * other callers pass 1 as the third argument; what 0 and -1 mean to the
- * callee is not established here.)
+/**
+ * Empties the audio reset queue D_81186250: receives from it without blocking (func_8004D1C0
+ * with flag 0) until it reports that it is empty (-1), discarding the messages.
  * Matching note: the -1 is kept in a local assigned inside the loop body.
  * With a literal -1 in the condition the compiler hands out the saved
  * registers in a different order. Declaring `neg` before `sp28` puts `sp28`
@@ -306,8 +267,6 @@ void AudioThread_ClearSpecChangeQueue(void) {
     } while (func_8004D1C0(D_81186250, &sp28, 0) != neg);
 }
 
-extern u8* D_86B0E5E8;
-extern GraphNode* D_86B0E5D0;
 void AudioThread_ClearSpecChangeQueue(void);
 void AudioThread_QueueCmdS32(s32, s32);
 s32 AudioThread_ScheduleProcessCmds(void);
@@ -342,9 +301,10 @@ s32 AudioThread_ResetAudioHeap(s32 arg0) {
 extern volatile s32 D_811859D4;
 
 /**
- * Sets the volatile flag D_811859D4 to 1, calls AudioThread_ResetAudioHeap(0), then
- * clears the volatile byte D_81184657.
+ * Prepares the audio driver for a reset (pre-NMI): starts the reset timer D_811859D4 at 1, queues an
+ * audio heap reset to spec 0 and clears the reset status D_81184657.
  * Corresponds to OoT AudioThread_PreNMIInternal (original name Nap_StartReset).
+ * @unverified Name follows the counterpart; not checked in play.
  */
 void AudioThread_PreNMIInternal(void) {
     D_811859D4 = 1;
@@ -393,7 +353,7 @@ void AudioThread_InitExternalPool(s32 arg0, M2C_UNK arg1) {
 }
 
 /**
- * Clears the battle effect state flag.
+ * Disables the external allocation pool by clearing its start address (D_811842A0).
  * Corresponds to OoT AudioThread_ResetExternalPool. Stadium 1's name
  * BattleAnim_ClearEffectStateFlag did not fit.
  */
@@ -415,7 +375,7 @@ void AudioThread_Unused5(void) {
  * Sets up the audio thread message queues.
  * Corresponds to OoT AudioThread_InitMesgQueues (original name Nas_InitGAudio). Stadium 1's name
  * BattleAnim_DisableEffectSpawningAlias did not fit.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioLoad_Init.
  */
 void AudioThread_InitMesgQueues(void) {

@@ -25,8 +25,8 @@ u32 GbApu_FreqToStep(u16 arg0) {
 /**
  * Applies NR43: selects the 16 KB noise waveform for (shift, width), its loop start, and returns
  * the playback step for the clock divider.
- * Seen in play (2026-11-13) ran while Pocket Monsters Green played sound in the GB player; also
- * when quitting the GB player (C-Up menu, Quit game, Yes) back to the main menu.
+ * Seen in play (2026-11-13) ran while Pocket Monsters Green played sound in the GB Player; also
+ * when quitting the GB Player (C-Up menu, Quit game, Yes) back to the main menu.
  * Seen in play (2026-11-14) ran while Green's intro played in the GB Player; called from
  * GbApu_WriteRegister.
  */
@@ -47,7 +47,7 @@ u32 GbApu_ConfigureNoiseTable(u16 arg0, u16 arg1, u16 arg2) {
  * Seen in play (2026-11-12) during Pocket Monsters Green's intro in the GB Player: turned square
  * period 0x5AC into step 0x2588. That is 131072 / (2048 - 1452) = 219.9 Hz, times 32 steps per
  * cycle at 48 kHz, in 16.16 fixed point.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbApu_WriteRegister.
  */
 u32 GbApu_FreqToStep2x(u16 arg0) {
@@ -69,9 +69,9 @@ void GbApu_Unused1(void) {
  * One sample (0..0x7F) of waveform `type` at step `pos`: 0-3 are the NRx1 duty cycles 12.5%, 25%,
  * 50% and 75% over 32 steps, 6 reads the selected noise waveform, 7 wave RAM (4-bit << 3).
  * Types 4 and 5 are unused and return nothing.
- * Seen in play (2026-11-13) ran while Pocket Monsters Green played sound in the GB player; also
- * when the GB player C-Up menu opened.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-13) ran while Pocket Monsters Green played sound in the GB Player; also
+ * when the GB Player C-Up menu opened.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbApu_UpdateSquare1Channel.
  */
 s32 GbApu_GetWaveformSample(u32 arg0, s32 arg1) {
@@ -110,8 +110,8 @@ s32 GbApu_GetWaveformSample(u32 arg0, s32 arg1) {
  * Produces one sample of square channel 1 and advances its frequency sweep (NR10), volume
  * envelope (NR12) and length timer. A stopped channel decays to silence instead of cutting off.
  * Seen in play (2026-11-13) ran every audio frame while JP Green played its title screen music in
- * the N64 GB player, together with the square 2, wave and noise channel updates.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * the N64 GB Player, together with the square 2, wave and noise channel updates.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbApu_RenderBuffer.
  */
 u16 GbApu_UpdateSquare1Channel(void) {
@@ -209,8 +209,8 @@ u16 GbApu_UpdateSquare1Channel(void) {
 /**
  * Produces one sample of square channel 2 (GbApu_UpdateSquare1Channel without the sweep).
  * Seen in play (2026-11-13) ran every audio frame while JP Green played its title screen music in
- * the N64 GB player, together with the square 1, wave and noise channel updates.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * the N64 GB Player, together with the square 1, wave and noise channel updates.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbApu_RenderBuffer.
  */
 s32 GbApu_UpdateSquare2Channel(void) {
@@ -288,8 +288,8 @@ s32 GbApu_UpdateSquare2Channel(void) {
  * Produces one sample of the wave channel from wave RAM at the NR32 output level, averaged with
  * the previous sample. On a retrigger the old note fades out before the phase restarts.
  * Seen in play (2026-11-13) ran every audio frame while JP Green played its title screen music in
- * the N64 GB player, together with the two square channel updates and the noise channel update.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * the N64 GB Player, together with the two square channel updates and the noise channel update.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbApu_RenderBuffer.
  */
 u16 GbApu_UpdateWaveChannel(void) {
@@ -308,9 +308,9 @@ u16 GbApu_UpdateWaveChannel(void) {
     } else {    
         if (gGbApuWave.retriggerTimer != 0) {
             gGbApuWave.retriggerTimer--;
-            if (gGbApuWave.retriggerTimer >= 0x21) {
+            if (gGbApuWave.retriggerTimer >= 33) {
                 if (gGbApuWave.appliedAmplitude == 0) {
-                    gGbApuWave.retriggerTimer = 0x20;
+                    gGbApuWave.retriggerTimer = 32;
                     gGbApuWave.phase.acc = 0;
                     gGbApuWave.step = GbApu_FreqToStep(gGbApuWave.frequency);
                     gGbApuWave.amplitude = D_81138B2C[gGbApuWave.initialVolume];
@@ -367,8 +367,8 @@ u16 GbApu_Unused2(void) {
  * Noise channel counterpart of GbApu_UpdateSquare1Channel. The step slews toward a new NR43
  * value over ~128 samples and the applied amplitude moves one unit every 95 samples.
  * Seen in play (2026-11-13) ran every audio frame while JP Green played its title screen music in
- * the N64 GB player, together with the two square channel updates and the wave channel update.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * the N64 GB Player, together with the two square channel updates and the wave channel update.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbApu_RenderBuffer.
  */
 u16 GbApu_UpdateNoiseChannel(void) {
@@ -452,7 +452,7 @@ u16 GbApu_UpdateNoiseChannel(void) {
  * Applies one queued write to sound register 0xFF00 + reg (NR10-NR52, wave RAM 0x30-0x3F).
  * Seen in play (2026-11-12) during Pocket Monsters Green's intro in the GB Player: the next
  * GbApu_RenderBuffer applied that queued write as (0x24, 0x77).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbApu_RenderBuffer.
  */
 void GbApu_WriteRegister(u16 reg, u8 value) {
@@ -575,7 +575,7 @@ void GbApu_WriteRegister(u16 reg, u8 value) {
             gGbApuWave.lengthEnabled = GB_APU_REGS.counter3;
             if ((s32)GB_APU_REGS.trigger3 == 1) {
                 gGbApuWave.lengthTimer = gGbApuWave.length * 200;
-                gGbApuWave.retriggerTimer = 0x140;
+                gGbApuWave.retriggerTimer = 320;
                 if (GB_APU_REGS.power && ((s32)GB_APU_REGS.waveOn == 1)) {
                     gGbApuWave.enabled = 1;
                 }
@@ -664,25 +664,25 @@ void GbApu_WriteRegister(u16 reg, u8 value) {
 }
 
 /**
- * Renders sample_count interleaved stereo samples of GB sound. Drains the register-write queue,
+ * Renders num_samples interleaved stereo samples of GB sound. Drains the register-write queue,
  * applies each write when the buffer position reaches its timestamp, then mixes the four
  * channels per NR51 panning and NR50 master volume.
  * Seen in play (2026-11-12) during Pocket Monsters Green's intro in the GB Player: ran once a
  * frame from GbAudio_UpdateFrame with 0x310 (784) samples, drained the queued NR50 write, and
  * called the square, wave and noise channel updates once per sample.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbAudio_UpdateFrame.
  */
 void GbApu_RenderBuffer(s32 num_samples, s16* out) {
     s32 i;
-    u32 sq1R;
-    u32 sq1L;
-    u32 sq2R;
-    u32 sq2L;
-    u32 waveR;
-    u32 waveL;
-    u32 noiseR;
-    u32 noiseL;
+    u32 sq1_r;
+    u32 sq1_l;
+    u32 sq2_r;
+    u32 sq2_l;
+    u32 wave_r;
+    u32 wave_l;
+    u32 noise_r;
+    u32 noise_l;
     u32 right;
     u32 left;
     s32 sq1;
@@ -759,17 +759,17 @@ void GbApu_RenderBuffer(s32 num_samples, s16* out) {
         wave = GbApu_UpdateWaveChannel();
         noise = GbApu_UpdateNoiseChannel();
 
-        noiseL = GB_APU_REGS.noiseLeft ? noise : 0;
-        noiseR = GB_APU_REGS.noiseRight ? noise : 0;
-        waveL = GB_APU_REGS.waveLeft ? wave : 0;
-        waveR = GB_APU_REGS.waveRight ? wave : 0;
-        sq2L = GB_APU_REGS.sq2Left ? sq2 : 0;
-        sq2R = GB_APU_REGS.sq2Right ? sq2 : 0;
-        sq1L = GB_APU_REGS.sq1Left ? sq1 : 0;
-        sq1R = GB_APU_REGS.sq1Right ? sq1 : 0;
+        noise_l = GB_APU_REGS.noiseLeft ? noise : 0;
+        noise_r = GB_APU_REGS.noiseRight ? noise : 0;
+        wave_l = GB_APU_REGS.waveLeft ? wave : 0;
+        wave_r = GB_APU_REGS.waveRight ? wave : 0;
+        sq2_l = GB_APU_REGS.sq2Left ? sq2 : 0;
+        sq2_r = GB_APU_REGS.sq2Right ? sq2 : 0;
+        sq1_l = GB_APU_REGS.sq1Left ? sq1 : 0;
+        sq1_r = GB_APU_REGS.sq1Right ? sq1 : 0;
 
-        right = (sq1R + sq2R + waveR + noiseR) / (8 - GB_APU_REGS.rightVolume);
-        left = (sq1L + sq2L + waveL + noiseL) / (8 - GB_APU_REGS.leftVolume);
+        right = (sq1_r + sq2_r + wave_r + noise_r) / (8 - GB_APU_REGS.rightVolume);
+        left = (sq1_l + sq2_l + wave_l + noise_l) / (8 - GB_APU_REGS.leftVolume);
         if (right >= 0x8000) {
             right = 0x7FFF;
         }
@@ -799,42 +799,42 @@ void GbApu_RenderBuffer(s32 num_samples, s16* out) {
  * Seen in play (2026-11-12) during Pocket Monsters Green's intro in the GB Player: called from the
  * CPU core's I/O write with (0xFF24, 0x77, timestamp 0x42FA), Green writing NR50; it returned the
  * value 0x77.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbCpu_Reset.
  */
 void GbApu_QueueRegisterWrite(u16 arg0, u8 arg1, u16 arg2) {
     s32 temp_v1;
 
-    temp_v1 = arg0 + 0xFFFF0100;
+    temp_v1 = arg0 + 0xFFFF0100; // FAKE: arg0 - 0xFF00 written as an unsigned add
     osSendMesg(&D_811824C0, (temp_v1 << 0x18) | (arg1 << 0x10) | arg2, 0);
     D_81138AD8 = (s32) arg2;
     switch (temp_v1) {
-    case 20:
+    case 0x14:
         if (arg1 & 0x80) {
             D_811824B8.square1 = 2;
             return;
         }
     default:
         return;
-    case 25:
+    case 0x19:
         if (arg1 & 0x80) {
             D_811824B8.square2 = 2;
             return;
         }
         break;
-    case 30:
+    case 0x1E:
         if (arg1 & 0x80) {
             D_811824B8.wave = 2;
             return;
         }
         break;
-    case 35:
+    case 0x23:
         if (arg1 & 0x80) {
             D_811824B8.noise = 2;
             return;
         }
         break;
-    case 38:
+    case 0x26:
         if (!(arg1 & 1)) {
             D_811824B8.square1 = 1;
         }
@@ -862,7 +862,7 @@ void GbApu_QueueRegisterWrite(u16 arg0, u8 arg1, u16 arg2) {
  * GbApu_WriteRegister and silences all four channels.
  * Seen in play (2026-11-13) ran once as the GB session ended (JP Green, "report is not correct"
  * panel), next to GbAudio_RampToSilence.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbApu_Reset.
  */
 void GbApu_ResetChannels(void) {
@@ -887,10 +887,11 @@ void GbApu_ResetChannels(void) {
 }
 
 /**
- * noise_table: the decompressed noise waveforms (GbEmu_Init / GbEmu_InitContext).
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Stores `arg0`, the decompressed noise waveforms from GbEmu_Init / GbEmu_InitContext, in
+ * D_81180704 (read by GbApu_GetWaveformSample) and resets the channels.
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_Init.
  */
 void GbApu_Reset(s32 arg0) {
@@ -903,7 +904,7 @@ void GbApu_Reset(s32 arg0) {
  * avoiding a click when audio stops. No C callers.
  * Seen in play (2026-11-13) ran once as the GB session ended (JP Green, "report is not correct"
  * panel); the game's music stopped there.
- * Seen in play (2026-11-14) ran when はい on the ゲームをやめる prompt left the GB Player; called from
+ * Seen in play (2026-11-14) ran when はい ("Yes") on the ゲームをやめる ("Quit game") prompt left the GB Player; called from
  * GbEmu_RunFrame.
  */
 void GbAudio_RampToSilence(void) {
@@ -925,13 +926,13 @@ void GbAudio_RampToSilence(void) {
     }
      do {
      } while (osAiGetStatus() & 0x80000000);
-    osWritebackDCache(sp34, 0xA00);
-    osGbSetNextBuffer(sp34, 0xA00);
+    osWritebackDCache(sp34, 2560);
+    osGbSetNextBuffer(sp34, 2560);
 }
 
 /**
  * Empty; GbEmu_RunFrame calls it every frame.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_RunFrame.
  */
 void GbAudio_FrameStub(void) {
@@ -942,7 +943,7 @@ void GbAudio_FrameStub(void) {
  * state; every other address is read straight from gGbMemoryMap.
  * Seen in play (2026-11-12) during Pocket Monsters Green's intro in the GB Player: Green read
  * 0xFF26 (NR52) and got 0x8F: sound on, all four channels active.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_UpdateAudioOrBlankVideo.
  */
 u8 GbMem_ReadIoRegister(u16 arg0) {
@@ -984,7 +985,7 @@ u8 GbMem_ReadIoRegister(u16 arg0) {
  * to [min, max]. Source is the GB APU, or the menu sounds while sGbAudioMenuSoundMode is set.
  * Seen in play (2026-11-12) during Pocket Monsters Green's intro in the GB Player: ran once a
  * frame and called GbApu_RenderBuffer for 784 samples.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_UpdateAudioOrBlankVideo.
  */
 s32 GbAudio_UpdateFrame(void) {
@@ -1058,7 +1059,7 @@ s32 GbAudio_UpdateFrame(void) {
  * 1 while the GB Player pause/options menu is open: output menu sounds instead of the GB APU mix.
  * Seen in play (2026-11-12): called with 1 when C-Up opened the GB Player menu over Pocket
  * Monsters Green.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_PauseAndBlankScreen.
  */
 void GbAudio_SetMenuSoundMode(s32 arg0) {
