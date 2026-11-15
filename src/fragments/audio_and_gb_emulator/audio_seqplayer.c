@@ -171,9 +171,9 @@ extern u8 D_81136998[];
 /**
  * Resets a sequence channel to its defaults.
  * Corresponds to OoT AudioSeq_InitSequenceChannel (original name Nas_InitSubTrack).
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioSeq_ResetSequencePlayer.
  */
 void AudioSeq_InitSequenceChannel(void* obj) {
@@ -281,7 +281,7 @@ s32 AudioSeq_SeqChannelSetLayer(SequenceChannel* arg0, s32 arg1) {
 /**
  * Decays the layer's note and turns the layer off.
  * Corresponds to OoT AudioSeq_SeqLayerDisable (original name Nas_ReleaseNoteTrack).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -296,9 +296,9 @@ void AudioSeq_SeqLayerDisable(SequenceLayer* arg0) {
 /**
  * Returns layer slot `arg1` of a channel to the free list.
  * Corresponds to OoT AudioSeq_SeqLayerFree (original name Nas_CloseNoteTrack).
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioSeq_SequenceChannelDisable.
  */
 void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1) {
@@ -315,7 +315,7 @@ void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1) {
  * Turns a sequence channel off and frees its layers and notes.
  * Corresponds to OoT AudioSeq_SequenceChannelDisable (original name Nas_ReleaseSubTrack). Stadium
  * 1's name Particle31_ResetAllSlots did not fit.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioSeq_SequencePlayerDisableChannels.
  */
 void AudioSeq_SequenceChannelDisable(DisplayObject* arg0) {
@@ -336,16 +336,16 @@ void AudioSeq_SequenceChannelDisable(DisplayObject* arg0) {
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-void AudioSeq_SequencePlayerSetupChannels(SequencePlayer* seqPlayer, u16 mask) {
+void AudioSeq_SequencePlayerSetupChannels(SequencePlayer* seq_player, u16 mask) {
     s32 i;
     SequenceChannel* channel;
 
     for (i = 0; i < 16; i++) {
         if (mask & 1) {
-            channel = seqPlayer->channels[i];
-            channel->fontId = seqPlayer->defaultFont;
-            channel->muteBehavior = seqPlayer->muteBehavior;
-            channel->noteAllocPolicy = seqPlayer->noteAllocPolicy;
+            channel = seq_player->channels[i];
+            channel->fontId = seq_player->defaultFont;
+            channel->muteBehavior = seq_player->muteBehavior;
+            channel->noteAllocPolicy = seq_player->noteAllocPolicy;
         }
         mask = (s32)mask >> 1;
     }
@@ -356,17 +356,17 @@ void func_81112B84(SequenceChannel*);
 /**
  * Disables each channel selected in `channel_bits`.
  * Corresponds to OoT AudioSeq_SequencePlayerDisableChannels (original name Nas_DeAllocSub).
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioSeq_SequencePlayerDisable.
  */
-void AudioSeq_SequencePlayerDisableChannels(u8* seqPlayer, s32 channel_bits) {
+void AudioSeq_SequencePlayerDisableChannels(u8* seq_player, s32 channel_bits) {
     SequenceChannel* channel;
     s32 i;
 
     for (i = 0; i < 16; i++) {
-        channel = M2C_FIELD(seqPlayer, SequenceChannel**, 0x34 + i * 4);
+        channel = M2C_FIELD(seq_player, SequenceChannel**, 0x34 + i * 4);
         if (((u32)channel != (u32)&D_81184850) == 1) {
             func_81112B84(channel);
         }
@@ -380,8 +380,8 @@ void AudioSeq_SequencePlayerDisableChannels(u8* seqPlayer, s32 channel_bits) {
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-void AudioSeq_SequenceChannelEnable(SequencePlayer* seqPlayer, u8 channel_index, void* script) {
-    SequenceChannel* p = seqPlayer->channels[channel_index];
+void AudioSeq_SequenceChannelEnable(SequencePlayer* seq_player, u8 channel_index, void* script) {
+    SequenceChannel* p = seq_player->channels[channel_index];
     s32 i;
 
     p->scriptState.depth = 0;
@@ -400,9 +400,9 @@ void AudioSeq_SequenceChannelEnable(SequencePlayer* seqPlayer, u8 channel_index,
  * Stops a sequence player: disables its channels, clears its note pool and marks its data discardable.
  * Corresponds to OoT AudioSeq_SequencePlayerDisable (original name Nas_ReleaseGroup). OoT also
  * releases the notes of the player's fonts (AudioHeap_ReleaseNotesForFont).
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioSeq_ResetSequencePlayer.
  */
 void AudioSeq_SequencePlayerDisable(u8* arg0) {
@@ -426,19 +426,19 @@ void AudioSeq_SequencePlayerDisable(u8* arg0) {
 /**
  * Appends an item to the end of a list if it is on no list.
  * Corresponds to OoT AudioSeq_AudioListPushBack (original name Nas_AddList).
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioPlayback_InitNoteFreeList.
  */
 void AudioSeq_AudioListPushBack(s8 *arg0, s8 *arg1)
 {
-  if ((*((s8 **) (((s8 *) arg1) + 0))) == 0)
+  if ((*((s8 **) (((s8 *) arg1) + 0))) == 0) // FAKE: decomp slop, raw pointer casts stand in for struct fields
   {
     *((s8 **) (((s8 *) (*((s8 **) (((s8 *) arg0) + 0)))) + 4)) = arg1; // FAKE: decomp slop, raw pointer casts stand in for struct fields
     *((s8 **) (((s8 *) arg1) + 0)) = (s8 *) (*((s8 **) (((s8 *) arg0) + 0))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-    *((s8 **) (((s8 *) arg1) + 4)) = arg0;
-    *((s8 **) (((s8 *) arg0) + 0)) = arg1;
+    *((s8 **) (((s8 *) arg1) + 4)) = arg0; // FAKE: decomp slop, raw pointer casts stand in for struct fields
+    *((s8 **) (((s8 *) arg0) + 0)) = arg1; // FAKE: decomp slop, raw pointer casts stand in for struct fields
     *((s32 *) (((s8 *) arg0) + 8)) = ((s32) ((*((s32 *) (((s8 *) arg0) + 8))) + 1)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     *((s32 *) (((s8 *) arg1) + 0xC)) = (s32) (*((s32 *) (((s8 *) arg0) + 0xC))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   }
@@ -468,9 +468,9 @@ s32 AudioSeq_AudioListPopBack(AudioListItem* list) {
 /**
  * Puts every sequence layer on the free list.
  * Corresponds to OoT AudioSeq_InitLayerFreelist (original name Nas_InitNoteList).
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioSeq_InitSequencePlayers.
  */
 void AudioSeq_InitLayerFreelist(void) {
@@ -498,7 +498,7 @@ u8 AudioSeq_ScriptReadU8(u8 **arg0)
 {
   u8 new_var; // FAKE: permuter temp
   u8 *temp_a1;
-  new_var = *(*arg0);
+  new_var = *(*arg0); // FAKE: permuter temp
   temp_a1 = *arg0;
   *arg0 = temp_a1 + 1;
   return new_var; // FAKE: permuter temp
@@ -683,7 +683,7 @@ u8 AudioSeq_GetInstrument(u8* arg0, u8 arg1, u8** arg2, u8* arg3);
 s32 AudioSeq_SeqLayerProcessScriptStep2(SequenceLayer* layer) {
     SequenceChannel* channel = layer->channel;
     SeqScriptState* state = &layer->scriptState;
-    SequencePlayer* seqPlayer = channel->seqPlayer;
+    SequencePlayer* seq_player = channel->seqPlayer;
     u8 cmd;
     u8 cmd_arg8;
     u16 cmd_arg16;
@@ -696,7 +696,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep2(SequenceLayer* layer) {
         }
         if (cmd >= 0xF2) {
             cmd_arg16 = AudioSeq_GetScriptControlFlowArgument(&state->pc, cmd);
-            if (AudioSeq_HandleScriptFlowControl(seqPlayer, state, cmd, cmd_arg16) == 0) {
+            if (AudioSeq_HandleScriptFlowControl(seq_player, state, cmd, cmd_arg16) == 0) {
                 continue;
             }
             AudioSeq_SeqLayerDisable((SequenceLayer*)layer);
@@ -759,7 +759,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep2(SequenceLayer* layer) {
                 cmd = AudioSeq_ScriptReadU8(&state->pc);
                 cmd += channel->transposition;
                 cmd += layer->transposition;
-                cmd += seqPlayer->transposition;
+                cmd += seq_player->transposition;
                 if (cmd >= 0x80) {
                     cmd = 0;
                 }
@@ -776,7 +776,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep2(SequenceLayer* layer) {
                 break;
             case 0xCB:
                 cmd_arg16 = AudioSeq_ScriptReadS16(&state->pc);
-                layer->adsr.envelope = seqPlayer->seqData + cmd_arg16;
+                layer->adsr.envelope = seq_player->seqData + cmd_arg16;
             case 0xCF:
                 layer->adsr.decayIndex = AudioSeq_ScriptReadU8(&state->pc);
                 break;
@@ -792,11 +792,11 @@ s32 AudioSeq_SeqLayerProcessScriptStep2(SequenceLayer* layer) {
             default:
                 switch (cmd & 0xF0) {
                     case 0xD0:
-                        velocity = seqPlayer->shortNoteVelocityTable[cmd & 0xF];
+                        velocity = seq_player->shortNoteVelocityTable[cmd & 0xF];
                         layer->velocitySquare = (f32)(velocity * velocity) / 16129.0f;
                         break;
                     case 0xE0:
-                        layer->noteDuration = seqPlayer->shortNoteGateTimeTable[cmd & 0xF];
+                        layer->noteDuration = seq_player->shortNoteGateTimeTable[cmd & 0xF];
                         break;
                 }
                 break;
@@ -819,33 +819,33 @@ u8* AudioPlayback_GetDrum(s32 arg0, s32 arg1);
  */
 s32 AudioSeq_SeqLayerProcessScriptStep4(SequenceLayer* layer, s32 cmd_semitone) {
     s32 same_sound = 1;
-    s32 instOrWave;
+    s32 inst_or_wave;
     s32 vel;
     f32 temp_f14;
     f32 temp_f2;
     Portamento* portamento;
-    f32 freqScale;
+    f32 freq_scale;
     f32 freq_scale2;
     SoundFontSound* sound;
     u8* instrument;
     Drum* drum;
     f32 tuning;
     SequenceChannel* channel;
-    SequencePlayer* seqPlayer;
+    SequencePlayer* seq_player;
     u8 semitone = cmd_semitone;
 
-    instOrWave = layer->instOrWave;
+    inst_or_wave = layer->instOrWave;
     channel = layer->channel;
-    seqPlayer = channel->seqPlayer;
+    seq_player = channel->seqPlayer;
 
-    if (instOrWave == 0xFF) {
+    if (inst_or_wave == 0xFF) {
         if (!channel->hasInstrument) {
             return -1;
         }
-        instOrWave = channel->instOrWave;
+        inst_or_wave = channel->instOrWave;
     }
 
-    switch (instOrWave) {
+    switch (inst_or_wave) {
         case 0:
             semitone += channel->transposition + layer->transposition;
             drum = (Drum*)AudioPlayback_GetDrum(channel->fontId, semitone);
@@ -865,7 +865,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep4(SequenceLayer* layer, s32 cmd_semitone) 
             break;
 
         default:
-            semitone += seqPlayer->transposition + channel->transposition + layer->transposition;
+            semitone += seq_player->transposition + channel->transposition + layer->transposition;
             if (semitone >= 0x80) {
                 layer->stopSomething = 1;
                 return -1;
@@ -885,8 +885,8 @@ s32 AudioSeq_SeqLayerProcessScriptStep4(SequenceLayer* layer, s32 cmd_semitone) 
                 } else {
                     layer->sound = NULL;
                     tuning = 1.0f;
-                    if (instOrWave >= 0xC0) {
-                        layer->sound = &D_81184110[instOrWave - 0xC0].sound;
+                    if (inst_or_wave >= 0xC0) {
+                        layer->sound = &D_81184110[inst_or_wave - 0xC0].sound;
                     }
                 }
                 temp_f2 = D_81136778[(s32)semitone] * tuning; // FAKE: no-op cast; only changes the spill slot
@@ -897,27 +897,27 @@ s32 AudioSeq_SeqLayerProcessScriptStep4(SequenceLayer* layer, s32 cmd_semitone) 
                     case 3:
                     case 5:
                         freq_scale2 = temp_f2;
-                        freqScale = temp_f14;
+                        freq_scale = temp_f14;
                         break;
                     case 2:
                     case 4:
-                        freqScale = temp_f2;
+                        freq_scale = temp_f2;
                         freq_scale2 = temp_f14;
                         break;
                     default:
-                        freqScale = temp_f2;
+                        freq_scale = temp_f2;
                         freq_scale2 = temp_f2;
                         break;
                 }
-                portamento->extent = (freq_scale2 / freqScale) - 1.0f;
+                portamento->extent = (freq_scale2 / freq_scale) - 1.0f;
                 if (layer->portamento.mode & 0x80) {
-                    portamento->speed = 32512.0f * (f32)(s32)seqPlayer->tempo /
+                    portamento->speed = 32512.0f * (f32)(s32)seq_player->tempo /
                                         ((f32)layer->delay * (f32)D_811858EC * (f32)(s32)layer->portamentoTime);
                 } else {
                     portamento->speed = 127.0f / (f32)(s32)layer->portamentoTime;
                 }
                 portamento->cur = 0.0f;
-                layer->freqScale = freqScale;
+                layer->freqScale = freq_scale;
                 if ((layer->portamento.mode & ~0x80) == 5) {
                     layer->portamentoTargetNote = semitone;
                 }
@@ -931,8 +931,8 @@ s32 AudioSeq_SeqLayerProcessScriptStep4(SequenceLayer* layer, s32 cmd_semitone) 
             } else {
                 layer->sound = NULL;
                 layer->freqScale = D_81136778[(s32)semitone]; // FAKE: no-op cast
-                if (instOrWave >= 0xC0) {
-                    layer->sound = &D_81184110[instOrWave - 0xC0].sound;
+                if (inst_or_wave >= 0xC0) {
+                    layer->sound = &D_81184110[inst_or_wave - 0xC0].sound;
                 }
             }
             break;

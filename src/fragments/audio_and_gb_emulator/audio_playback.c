@@ -42,18 +42,18 @@ void AudioPlayback_InitSampleState(s8* note, NoteSubAttributes* reverb_info) {
     s32 small_pan_index;
     UNUSED u32 pad; // FAKE: stack padding
     UNUSED u32 pad1; // FAKE: stack padding
-    u8 strongRight;
-    u8 strongLeft;
+    u8 strong_right;
+    u8 strong_left;
     f32 velocity;
     u8 pan;
-    u8 reverbVol;
-    Stereo reverbBits;
+    u8 reverb_vol;
+    Stereo reverb_bits;
 
     AudioPlayback_NoteSetResamplingRate(note, reverb_info->freqScale);
     velocity = reverb_info->velocity;
     pan = reverb_info->pan;
-    reverbVol = reverb_info->reverbVol;
-    reverbBits = reverb_info->reverbBits;
+    reverb_vol = reverb_info->reverbVol;
+    reverb_bits = reverb_info->reverbBits;
     sub = (NoteSampleState*)(note + 0xB4);
     pan &= 0x7F;
 
@@ -70,33 +70,33 @@ void AudioPlayback_InitSampleState(s8* note, NoteSubAttributes* reverb_info) {
         vol_left = D_81136AD8[pan];
         vol_right = D_81136AD8[0x7F - pan];
     } else if (sub->stereoHeadsetEffects && D_811858EE == 0) {
-        strongLeft = strongRight = 0;
+        strong_left = strong_right = 0;
         sub->headsetPanRight = 0;
         sub->headsetPanLeft = 0;
         sub->usesHeadsetPanEffects = 0;
         vol_left = D_81136CD8[pan];
         vol_right = D_81136CD8[0x7F - pan];
         if (pan < 0x20) {
-            strongLeft = 1;
+            strong_left = 1;
         } else if (pan > 0x60) {
-            strongRight = 1;
+            strong_right = 1;
         }
-        sub->stereoStrongRight = strongRight;
-        sub->stereoStrongLeft = strongLeft;
-        switch (reverbBits.s.stereoHeadsetEffects) {
+        sub->stereoStrongRight = strong_right;
+        sub->stereoStrongLeft = strong_left;
+        switch (reverb_bits.s.stereoHeadsetEffects) {
             case 0:
-                sub->stereoStrongRight = reverbBits.s.strongRight;
-                sub->stereoStrongLeft = reverbBits.s.strongLeft;
+                sub->stereoStrongRight = reverb_bits.s.strongRight;
+                sub->stereoStrongLeft = reverb_bits.s.strongLeft;
                 break;
             case 1:
                 break;
             case 2:
-                sub->stereoStrongRight = reverbBits.s.strongRight | strongRight;
-                sub->stereoStrongLeft = reverbBits.s.strongLeft | strongLeft;
+                sub->stereoStrongRight = reverb_bits.s.strongRight | strong_right;
+                sub->stereoStrongLeft = reverb_bits.s.strongLeft | strong_left;
                 break;
             case 3:
-                sub->stereoStrongRight = reverbBits.s.strongRight ^ strongRight;
-                sub->stereoStrongLeft = reverbBits.s.strongLeft ^ strongLeft;
+                sub->stereoStrongRight = reverb_bits.s.strongRight ^ strong_right;
+                sub->stereoStrongLeft = reverb_bits.s.strongLeft ^ strong_left;
                 break;
         }
     } else if (D_811858EE == 3) {
@@ -119,8 +119,8 @@ void AudioPlayback_InitSampleState(s8* note, NoteSubAttributes* reverb_info) {
     sub->gain = reverb_info->gain;
     sub->filter = reverb_info->filter;
 
-    if (sub->reverbVol != reverbVol) {
-        sub->reverbVol = reverbVol;
+    if (sub->reverbVol != reverb_vol) {
+        sub->reverbVol = reverb_vol;
         sub->envMixerNeedsInit = 1;
     } else if (sub->needsInit) {
         sub->envMixerNeedsInit = 1;
@@ -235,96 +235,96 @@ void AudioEffects_UpdatePortamentoAndVibrato(Note*);
 void AudioPlayback_ProcessNotes(void)
 {
   Note *note;
-  NotePlaybackState *playbackState;
+  NotePlaybackState *playback_state;
   NoteSampleState *note_sub_eu;
   NoteAttributes *attrs;
   s32 pad[2]; // FAKE
   NoteSubAttributes sub_attrs;
-  u8 bookOffset;
+  u8 book_offset;
   f32 scale;
   s32 i;
   for (i = 0; i < D_811858E8; i++)
   {
     note = i + (Note*)D_81184664; // FAKE: index first, for retail's addu operand order
-    playbackState = &note->playbackState;
-    if (playbackState->parentLayer != ((SequenceLayer *) (-1)))
+    playback_state = &note->playbackState;
+    if (playback_state->parentLayer != ((SequenceLayer *) (-1)))
     {
-      if (((u32) playbackState->parentLayer) < 0x7FFFFFFF)
+      if (((u32) playback_state->parentLayer) < 0x7FFFFFFF)
       {
         continue;
       }
-      if ((note != playbackState->parentLayer->note) && (playbackState->unk_04 == 0))
+      if ((note != playback_state->parentLayer->note) && (playback_state->unk_04 == 0))
       {
-        playbackState->adsr.action |= 0x10;
-        playbackState->adsr.fadeOutVel = D_811858D4;
-        playbackState->priority = 1;
-        playbackState->unk_04 = 2;
+        playback_state->adsr.action |= 0x10;
+        playback_state->adsr.fadeOutVel = D_811858D4;
+        playback_state->priority = 1;
+        playback_state->unk_04 = 2;
         goto d;
       }
       else
-        if (((!playbackState->parentLayer->enabled) && (playbackState->unk_04 == 0)) && (playbackState->priority >= 1)) // FAKE: no-op ^ 0
+        if (((!playback_state->parentLayer->enabled) && (playback_state->unk_04 == 0)) && (playback_state->priority >= 1)) // FAKE: no-op ^ 0
       {
       }
       else
-        if (playbackState->parentLayer->channel->seqPlayer == 0)
+        if (playback_state->parentLayer->channel->seqPlayer == 0)
       {
-        func_81112B84(playbackState->parentLayer->channel);
-        playbackState->priority = 1;
-        playbackState->unk_04 = 1;
+        func_81112B84(playback_state->parentLayer->channel);
+        playback_state->priority = 1;
+        playback_state->unk_04 = 1;
         continue;
       }
       else
-        if (playbackState->parentLayer->channel->seqPlayer->muted && (playbackState->parentLayer->channel->muteBehavior & 0x40))
+        if (playback_state->parentLayer->channel->seqPlayer->muted && (playback_state->parentLayer->channel->muteBehavior & 0x40))
       {
       }
       else
       {
         goto d;
       }
-      AudioPlayback_SeqLayerNoteRelease((Particle *) playbackState->parentLayer);
+      AudioPlayback_SeqLayerNoteRelease((Particle *) playback_state->parentLayer);
       AudioPlayback_AudioListRemove((s8 *) note);
       AudioPlayback_AudioListPushFront((M2C_UNK*)&note->listItem.pool->decaying, (M2C_UNK *) note);
-      playbackState->priority = 1;
-      playbackState->unk_04 = 2;
+      playback_state->priority = 1;
+      playback_state->unk_04 = 2;
     }
     else
-      if ((playbackState->unk_04 == 0) && (playbackState->priority >= 1))
+      if ((playback_state->unk_04 == 0) && (playback_state->priority >= 1))
     {
       continue;
     }
     d:
-    if (playbackState->priority != 0)
+    if (playback_state->priority != 0)
     {
-      if (1)
+      if (1) // FAKE
       {
         note_sub_eu = &note->sampleState;
       }
-      if ((playbackState->unk_04 >= 1) || note_sub_eu->finished)
+      if ((playback_state->unk_04 >= 1) || note_sub_eu->finished)
       {
-        if ((playbackState->adsr.state == 0) || note_sub_eu->finished)
+        if ((playback_state->adsr.state == 0) || note_sub_eu->finished)
         {
-          if (playbackState->wantedParentLayer != ((SequenceLayer *) (-1)))
+          if (playback_state->wantedParentLayer != ((SequenceLayer *) (-1)))
           {
             AudioPlayback_NoteDisable((Note *) note);
-            if (playbackState->wantedParentLayer->channel != 0)
+            if (playback_state->wantedParentLayer->channel != 0)
             {
-              AudioPlayback_NoteInitForLayer((s8 *) note, (s8 *) playbackState->wantedParentLayer);
+              AudioPlayback_NoteInitForLayer((s8 *) note, (s8 *) playback_state->wantedParentLayer);
               AudioEffects_InitVibrato(note);
               AudioPlayback_AudioListRemove((s8 *) note);
               AudioSeq_AudioListPushBack(&note->listItem.pool->active, (struct Note *) note);
-              playbackState->wantedParentLayer = (SequenceLayer *) (-1);
+              playback_state->wantedParentLayer = (SequenceLayer *) (-1);
               goto process;
             }
             AudioPlayback_NoteDisable((Note *) note);
             AudioPlayback_AudioListRemove((s8 *) note);
             AudioSeq_AudioListPushBack(&note->listItem.pool->disabled, (struct Note *) note);
-            playbackState->wantedParentLayer = (SequenceLayer *) (-1);
+            playback_state->wantedParentLayer = (SequenceLayer *) (-1);
           }
           else
           {
-            if (playbackState->parentLayer != ((SequenceLayer *) (-1)))
+            if (playback_state->parentLayer != ((SequenceLayer *) (-1)))
             {
-              playbackState->parentLayer->bit1 = 1;
+              playback_state->parentLayer->bit1 = 1;
             }
             AudioPlayback_NoteDisable((Note *) note);
             AudioPlayback_AudioListRemove((s8 *) note);
@@ -337,11 +337,11 @@ void AudioPlayback_ProcessNotes(void)
         }
       }
       else
-        if (playbackState->adsr.state == 0)
+        if (playback_state->adsr.state == 0)
       {
-        if (playbackState->parentLayer != ((SequenceLayer *) (-1)))
+        if (playback_state->parentLayer != ((SequenceLayer *) (-1)))
         {
-          playbackState->parentLayer->bit1 = 1;
+          playback_state->parentLayer->bit1 = 1;
         }
         AudioPlayback_NoteDisable((Note *) note);
         AudioPlayback_AudioListRemove((s8 *) note);
@@ -350,11 +350,11 @@ void AudioPlayback_ProcessNotes(void)
       else
       {
         process:
-        attrs = &playbackState->attributes;
+        attrs = &playback_state->attributes;
 
-        scale = AudioEffects_UpdateAdsr((u8 *) (&playbackState->adsr));
+        scale = AudioEffects_UpdateAdsr((u8 *) (&playback_state->adsr));
         AudioEffects_UpdatePortamentoAndVibrato(note);
-        if ((playbackState->unk_04 == 1) || (playbackState->unk_04 == 2))
+        if ((playback_state->unk_04 == 1) || (playback_state->unk_04 == 2))
         {
           sub_attrs.freqScale = attrs->freqScale;
           sub_attrs.velocity = attrs->velocity;
@@ -363,12 +363,12 @@ void AudioPlayback_ProcessNotes(void)
           sub_attrs.reverbBits = attrs->stereo;
           sub_attrs.gain = attrs->gain;
           sub_attrs.filter = attrs->filter;
-          bookOffset = note_sub_eu->bookOffset;
+          book_offset = note_sub_eu->bookOffset;
         }
         else
         {
-          SequenceChannel *channel = playbackState->parentLayer->channel;
-          SequenceLayer *layer = playbackState->parentLayer;
+          SequenceChannel *channel = playback_state->parentLayer->channel;
+          SequenceLayer *layer = playback_state->parentLayer;
           sub_attrs.freqScale = layer->noteFreqScale;
           sub_attrs.velocity = layer->noteVelocity;
           sub_attrs.pan = layer->notePan;
@@ -376,18 +376,18 @@ void AudioPlayback_ProcessNotes(void)
           sub_attrs.reverbVol = channel->reverb;
           sub_attrs.gain = channel->gain;
           sub_attrs.filter = channel->filter;
-          bookOffset = channel->bookOffset & 7;
+          book_offset = channel->bookOffset & 7;
           if (channel->seqPlayer->muted && (channel->muteBehavior & 8))
           {
             sub_attrs.freqScale = 0.0f;
             sub_attrs.velocity = 0.0f;
           }
         }
-        sub_attrs.freqScale *= playbackState->vibratoFreqScale * playbackState->portamentoFreqScale;
+        sub_attrs.freqScale *= playback_state->vibratoFreqScale * playback_state->portamentoFreqScale;
         sub_attrs.freqScale *= D_811858D0;
         sub_attrs.velocity *= scale;
         AudioPlayback_InitSampleState((s8 *) note, &sub_attrs);
-        note_sub_eu->bookOffset = bookOffset;
+        note_sub_eu->bookOffset = book_offset;
       }
     }
 
@@ -423,7 +423,7 @@ extern s32 D_811859D0;
 /**
  * Returns instrument `arg1` of font `arg0`, or NULL when the font is not loaded or the id is out of range.
  * Corresponds to OoT Audio_GetInstrumentInner (original name ProgToVp).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -451,7 +451,7 @@ u8* AudioPlayback_GetInstrumentInner(s32 arg0, s32 arg1) {
 /**
  * Returns drum `arg1` of font `arg0`, or NULL when the font is not loaded or the id is out of range.
  * Corresponds to OoT Audio_GetDrum (original name PercToPp).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -489,7 +489,7 @@ void AudioPlayback_AudioListPushFront(M2C_UNK* arg0, M2C_UNK* arg1);
 /**
  * Starts the decay (6) or release (7) of the note a sequence layer is playing.
  * Corresponds to OoT Audio_SeqLayerDecayRelease (original name __Nas_Release_Channel_Main).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -567,7 +567,7 @@ void AudioPlayback_SeqLayerDecayRelease(SequenceLayer* layer, s32 target) {
 /**
  * Starts the decay of the layer's note.
  * Corresponds to OoT Audio_SeqLayerNoteDecay (original name Nas_Release_Channel).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -589,9 +589,9 @@ void AudioPlayback_SeqLayerNoteRelease(Particle* arg0) {
 /**
  * Makes an empty circular note list.
  * Corresponds to OoT Audio_InitNoteList (original name __Nas_InitList).
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioPlayback_InitNoteLists.
  */
 void AudioPlayback_InitNoteList(s8 *arg0) {
@@ -601,19 +601,13 @@ void AudioPlayback_InitNoteList(s8 *arg0) {
 }
 
 /**
- * AudioPlayback_InitNoteLists
- *
- * Calls AudioPlayback_InitNoteList on four 16-byte blocks at arg0 + 0x00, 0x10, 0x20 and
- * 0x30.  AudioPlayback_InitNoteList stores the block's own address in its first two words
- * and clears the third, giving an empty circular list head {next, prev,
- * count, owner}: AudioPlayback_AudioListPushFront and AudioSeq_AudioListPushBack, which insert into such a
- * list, link through the first two words, increment the third and copy the
- * fourth into the inserted node.  Afterwards arg0 itself is stored in the
- * fourth word (offset 0xC) of each block.
+ * Empties the four lists of a NotePool (disabled, decaying, releasing and active at arg0 + 0x00,
+ * 0x10, 0x20 and 0x30) with AudioPlayback_InitNoteList and points each list head's pool field
+ * (+0xC) at the pool.
  * Corresponds to OoT Audio_InitNoteLists (original name Nas_InitChNode).
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioPlayback_InitNoteFreeList.
  */
 void AudioPlayback_InitNoteLists(s8 *arg0) {
@@ -633,18 +627,13 @@ extern s8 D_81184938;
 extern s32 D_811858E8;
 
 /**
- * AudioPlayback_InitNoteFreeList
- *
- * Calls AudioPlayback_InitNoteLists(&D_81184938), then for each of the D_811858E8 records of
- * the array at D_81184664 (0xCC bytes each, indexed directly each time):
- * stores the record's own address at offset 8, clears the word at offset 0,
- * and calls AudioSeq_AudioListPushBack(&D_81184938, record). AudioHeap_DiscardFont, which walks the
- * same array, passes the same list argument to the same function. What the
- * records are is not established from this function.
+ * Sets up the global note pool D_81184938 and puts all D_811858E8 notes (D_81184664) on its
+ * disabled list: each note's listItem gets the note as its value and is marked as on no list
+ * before it is pushed.
  * Corresponds to OoT Audio_InitNoteFreeList (original name Nas_InitChannelList).
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioPlayback_InitNoteFreeList(void) {
@@ -668,9 +657,9 @@ void AudioPlayback_AudioListRemove(s8*);
  * global free list (D_81184938, D_81184948, D_81184958, D_81184968). Same
  * structure as note_pool_clear in the Super Mario 64 audio library.
  * Corresponds to OoT Audio_NotePoolClear (original name Nas_DeAllocAllVoices).
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioSeq_SequencePlayerDisable.
  */
 void AudioPlayback_NotePoolClear(NotePool* pool) {
@@ -725,7 +714,7 @@ s32 AudioSeq_AudioListPopBack(AudioListItem* list);
  * @unverified Name and comment guessed from the code.
  */
 void AudioPlayback_NotePoolFill(s8* arg0, s32 arg1) {
-    s32 pad[3]; /* places src/dst at sp+0x48/0x44 and the frame at 0x58 as in the ROM */
+    s32 pad[3]; // FAKE: stack padding; places src/dst at sp+0x48/0x44 and the frame at 0x58 as in the ROM
     s8* src;
     s8* dst;
     s32 n;
@@ -769,7 +758,7 @@ void AudioPlayback_NotePoolFill(s8* arg0, s32 arg1) {
 /**
  * Pushes list item `arg1` onto the front of list `arg0` if it is on no list.
  * Corresponds to OoT Audio_AudioListPushFront (original name Nas_AddListHead).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -787,7 +776,7 @@ void AudioPlayback_AudioListPushFront(M2C_UNK *arg0, M2C_UNK *arg1) {
 /**
  * Unlinks a list item from its list.
  * Corresponds to OoT Audio_AudioListRemove (original name Nas_CutList).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -899,29 +888,12 @@ extern f32 D_FLT_811858D4;
  */
 void AudioPlayback_NoteReleaseAndTakeOwnership(s8 *arg0, s8 *arg1)
 {
-  *((s8 **) (((s8 *) arg0) + 0x48)) = arg1;
+  *((s8 **) (((s8 *) arg0) + 0x48)) = arg1; // FAKE: decomp slop, raw pointer casts stand in for struct fields
   *((u8 *) (((s8 *) arg0) + 0x30)) = (u8) (*((u8 *) (((s8 *) (*((s8 **) (((s8 *) arg1) + 0x54)))) + 5))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-  *((f32 *) (((s8 *) arg0) + 0x6C)) = (f32) D_FLT_811858D4;
+  *((f32 *) (((s8 *) arg0) + 0x6C)) = (f32) D_FLT_811858D4; // FAKE: decomp slop, raw pointer casts stand in for struct fields
   *((u8 *) (((s8 *) arg0) + 0x5C)) = (u8) ((*((u8 *) (((s8 *) arg0) + 0x5C))) | 0x10); // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
-/*
- * AudioPlayback_AllocNoteFromDisabled
- *
- * Moves one entry from the list headed at arg0 to the list headed at
- * arg0 + 0x30.  The list heads are 16-byte blocks laid out as
- * {next, prev, count, owner}, as set up by AudioPlayback_InitNoteList and AudioPlayback_InitNoteLists.
- *
- *   1. AudioSeq_AudioListPopBack(arg0) unlinks the first node of the list at arg0 and
- *      returns the word stored at offset 8 of that node (0 if the list is
- *      empty).  That value is the entry used below and the return value.
- *   2. If it is not 0, AudioPlayback_NoteInitForLayer(entry, arg1) is called on it, and
- *      AudioPlayback_AudioListPushFront then appends the entry to the list at arg0 + 0x30
- *      (it does nothing if the entry's first word is already non-zero).
- *
- * Returns the entry, or 0 if there was none.  What AudioPlayback_NoteInitForLayer does with
- * arg1 is not established (it is still assembly).
- */
 s32 AudioSeq_AudioListPopBack(AudioListItem* list);
 void AudioPlayback_NoteInitForLayer(s8*, s8*);
 
@@ -943,18 +915,6 @@ s32 AudioPlayback_AllocNoteFromDisabled(s8 *arg0, s32 arg1) {
     return ret;
 }
 
-/*
- * AudioPlayback_AllocNoteFromDecaying
- *
- * Like AudioPlayback_AllocNoteFromDisabled, but it takes the entry from the list headed at
- * arg0 + 0x10, initializes it with AudioPlayback_NoteReleaseAndTakeOwnership(entry, arg1), and inserts
- * it at the front of the list headed at arg0 + 0x20 with AudioSeq_AudioListPushBack.
- * List heads are {next, prev, count, owner} blocks (see AudioPlayback_InitNoteList).
- *
- * AudioSeq_AudioListPopBack unlinks the first node of the list at arg0 + 0x10 and
- * returns the word at offset 8 of that node, or 0 if the list is empty.
- * Returns that entry, or 0 if there was none; nothing else happens then.
- */
 s32 AudioSeq_AudioListPopBack(AudioListItem* list);
 
 /**
@@ -1074,9 +1034,9 @@ s32 func_81109868(s8 *, s32);
  * Resets every note's state and sample buffers.
  * Corresponds to OoT Audio_NoteInitAll (original name Nas_ChannelInit). Zero allocates with
  * AudioHeap_Alloc; OoT uses AudioHeap_AllocDmaMemory.
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioPlayback_NoteInitAll(void) {

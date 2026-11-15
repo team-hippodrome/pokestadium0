@@ -3,7 +3,9 @@
 
 /**
  * Renders `num_samples` stereo samples of the GB Player menu sounds: starts the sound
- * GbAudio_PlayMenuSound queued and mixes it with the previous one, which fades out.
+ * GbAudio_PlayMenuSound queued and mixes it with the previous one still playing (left = new + old,
+ * right = new - old). The old sound is scaled by D_8122869C / 1024, but D_8122869C is only ever
+ * set to 0x400, so it plays at full volume and never fades.
  * Seen in play (2026-11-14) ran when C-Up opened the GB Player menu; called from
  * GbAudio_UpdateFrame.
  */

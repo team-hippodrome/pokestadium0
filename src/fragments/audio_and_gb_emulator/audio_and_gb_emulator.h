@@ -5,11 +5,7 @@
 #include "global.h"
 #include "m2c_macros.h"
 
-/* Struct types that were defined identically in each of these files; this is
- * now the one definition they all include:
- * src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0.c
- * src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0_81102C20.c
- */
+/* Struct types shared by the GB emulator files (gb_emu_*.c, gb_pak.c). */
 
 typedef struct unk_D_8122C4FA {
   /* 0x00 */ u8 unk_00;
@@ -47,11 +43,7 @@ typedef struct unk_D_8120D7F3 {
     u8 unk116;
 } unk_D_8120D7F3;
 
-/* Struct types that were defined identically in each of these files; this is
- * now the one definition they all include:
- * src/fragments/fragment000_80C00/gb_tower_emulator_86920.c
- * src/fragments/fragment000_80C00/gb_tower_emulator_86920_8110B880.c
- */
+/* Struct types shared by the audio driver files (audio_*.c). */
 
 /* A bump allocator over one region of the audio heap. */
 typedef struct AudioAllocPool {
@@ -839,18 +831,6 @@ typedef struct Note {
 
 
 
-/* Struct types that were defined identically in each of these files; this is
- * now the one definition they all include:
- * src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c
- * src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81113A44.c
- */
-
-/* Struct types that were defined identically in each of these files; this is
- * now the one definition they all include:
- * src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c
- * src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81114B54.c
- */
-
 // Yay0 files in fragment1_misc_yay0 (retail ROM 0xADC80), named by their retail ROM address.
 // Offsets from the segment rather than fixed addresses, so they follow it when an earlier
 // segment changes size.
@@ -980,7 +960,7 @@ void AudioPlayback_ProcessNotes(void);
 void AudioSeq_SeqLayerDisable(SequenceLayer* arg0);
 void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1);
 void AudioSeq_SequenceChannelDisable(DisplayObject* arg0);
-void AudioSeq_SequenceChannelEnable(SequencePlayer* seqPlayer, u8 channelIndex, void* script);
+void AudioSeq_SequenceChannelEnable(SequencePlayer* seq_player, u8 channel_index, void* script);
 s32 AudioSeq_AudioListPopBack(AudioListItem* list);
 void AudioSeq_InitLayerFreelist(void);
 u8 AudioSeq_ScriptReadU8(u8 **arg0);
@@ -988,15 +968,7 @@ s16 AudioSeq_ScriptReadS16(u8** arg0);
 void AudioSeq_SeqLayerProcessScriptStep1(SequenceLayer* arg0);
 
 // audio_seqplayer_2.c
-/*
- * AudioSeq_SequenceChannelSetVolume
- *
- * Stores (float)arg1 / 127.0f into the float at offset 0x2C of the object
- * arg0 points to.  arg1 is an unsigned byte (the generated code masks it
- * with 0xFF), so the stored value runs from 0.0 to 255/127 (about 2.0);
- * the stored value is 1.0 when arg1 is 127.  What the field at +0x2C
- * represents is not known.
- */
+/* Sets SequenceChannel.volume (+0x2C) to arg1 / 127.0f (0.0 to about 2.0). */
 void AudioSeq_SequenceChannelSetVolume(u8* arg0, u8 arg1);
 
 // audio_seqplayer_3.c

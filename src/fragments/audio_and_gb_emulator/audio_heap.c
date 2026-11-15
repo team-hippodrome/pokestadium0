@@ -29,9 +29,9 @@ extern u8 D_81184656[1];
 /**
  * Marks the fonts that are not permanently loaded (status 5) as unloaded.
  * Corresponds to OoT AudioHeap_ResetLoadStatus (original name Nas_ResetIDtable).
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioHeap_ResetLoadStatus(void) {
@@ -54,8 +54,6 @@ void AudioHeap_ResetLoadStatus(void) {
     }
 }
 
-/* One 0xCC-byte record; only the fields AudioHeap_DiscardFont touches are named. */
-
 s32 AudioPlayback_NoteDisable(Note*);
 s32 AudioPlayback_AudioListRemove(Note*);
 s32 AudioSeq_AudioListPushBack(s8*, Note*);
@@ -64,16 +62,11 @@ extern s8 D_81184938;
 extern s32 D_811858E8;
 
 /**
- * AudioHeap_DiscardFont
- *
- * Walks the D_811858E8 records of the array at D_81184664 (0xCC bytes each,
- * the array pointer is re-read on every iteration). For each record whose
- * byte at 0x33 equals arg0: if the bytes at 0x34 and 0x30 are 0 and non-zero
- * respectively, it clears bit 7 and then sets bit 6 of the byte that the
- * pointer at 0x44 points to. In every matching record it then calls
- * AudioPlayback_NoteDisable(rec), AudioPlayback_AudioListRemove(rec) and AudioSeq_AudioListPushBack(&D_81184938, rec).
- * Records whose byte at 0x33 differs are skipped. What the record and the
- * flag bits mean is not established from this function.
+ * Stops every note that plays font arg0. Walks the D_811858E8 notes at D_81184664 (the array
+ * pointer is re-read on every iteration); for each note whose playbackState.fontId is arg0, it
+ * first disables and finishes the parent layer when playbackState.unk_04 is 0 and the note has a
+ * priority, then disables the note, takes it off its list and pushes it onto the disabled list
+ * D_81184938.
  *
  * Corresponds to OoT AudioHeap_DiscardFont (original name Nas_ForceStopChannel).
  * Matching notes: the two single-bit writes are declared as bit-fields; the
@@ -114,13 +107,13 @@ void AudioSeq_SequencePlayerDisable(unk_D_81184668* seqPlayer);
 extern unk_D_81184668 D_81184668[];
 extern s16 D_811858CC;
 /**
- * Stops every sequence player that plays sequence `arg0`.
+ * Stops every sequence player that plays sequence `arg0` (func_81112E00 is
+ * AudioSeq_SequencePlayerDisable).
  * Corresponds to OoT AudioHeap_DiscardSequence (original name Nas_ForceStopSeq).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-
 void AudioHeap_DiscardSequence(s32 arg0) {
     s32 i;
 
@@ -136,9 +129,9 @@ void AudioHeap_DiscardSequence(s32 arg0) {
  * Corresponds to OoT AudioHeap_AllocZeroed (original name Nas_HeapAlloc_CL). Zero clears the block
  * in its own loop; OoT calls AudioHeap_Alloc and then clears. Stadium 1's name GbApu_AllocZeroed
  * did not fit.
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioHeap_Init.
  */
 u32 AudioHeap_AllocZeroed(AudioAllocPool* arg0, s32 arg1) {
@@ -164,9 +157,9 @@ u32 AudioHeap_AllocZeroed(AudioAllocPool* arg0, s32 arg1) {
  * AudioHeap_AllocZeroed without the clear.
  * Corresponds to OoT AudioHeap_Alloc (original name Nas_HeapAlloc). Same 16-byte alignment, bounds
  * test and entry count. Stadium 1's name GbApu_Alloc did not fit.
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioLoad_Init.
  */
 s32 AudioHeap_Alloc(AudioAllocPool* arg0, s32 arg1) {
@@ -188,9 +181,9 @@ s32 AudioHeap_Alloc(AudioAllocPool* arg0, s32 arg1) {
  * Like alHeapInit.
  * Corresponds to OoT AudioHeap_InitPool (original name Nas_HeapInit). Stadium 1's name
  * GbApu_InitAllocator did not fit.
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioHeap_InitMainPools.
  */
 void AudioHeap_InitPool(AudioAllocPool* arg0, s32 arg1, s32 arg2) {
@@ -204,9 +197,9 @@ void AudioHeap_InitPool(AudioAllocPool* arg0, s32 arg1, s32 arg2) {
  * Empties a persistent cache and rewinds its pool.
  * Corresponds to OoT AudioHeap_InitPersistentCache (original name Nas_SzStayClear). This was
  * AudioHeap_PersistentCacheClear; OoT and MM use AudioHeap_InitPersistentCache for this reset.
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioHeap_InitPersistentPoolsAndCaches.
  */
 void AudioHeap_InitPersistentCache(s8 *arg0) {
@@ -216,23 +209,18 @@ void AudioHeap_InitPersistentCache(s8 *arg0) {
 }
 
 /**
- * AudioHeap_InitTemporaryCache
- *
- * Resets a small record: the words at +0x00 and +0x10 are cleared, the words
- * at +0x08 and +0x14 are set to the value at +0x04, the word at +0x20 is set
- * to (+0x0C) + (+0x04), and the halfwords at +0x1E and +0x2A are set to -1.
- * It reads like the set-up of a cursor over a buffer (start at +0x04, length
- * at +0x0C, end stored at +0x20), but the role of the record is not
- * established from the code alone, so the fields are left unnamed.
+ * Empties an AudioTemporaryCache: nextSide (+0x00) and pool.numEntries (+0x10) become 0, the pool is
+ * rewound (pool.curRamAddr = pool.startRamAddr), entry 0 is placed at the pool's start and entry 1
+ * at its end (start + size), and both entry ids (+0x1E, +0x2A) become -1 (free).
  *
  * The sum is written with the fields in this order, and read from memory
  * rather than through a local, because IDO orders the two operands of the
  * addu differently otherwise.
  * Corresponds to OoT AudioHeap_InitTemporaryCache (original name Nas_SzAutoClear). This was
  * AudioHeap_TemporaryCacheClear; OoT and MM use AudioHeap_InitTemporaryCache for this reset.
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioHeap_InitTemporaryPoolsAndCaches.
  */
 void AudioHeap_InitTemporaryCache(s32* arg0) {
@@ -265,14 +253,14 @@ extern s32 D_811526FC;
 extern s32 D_811842A0;
 
 /**
- * Runs func_811098C0 twice: first on D_811842B0 with the buffer D_81186270 and
- * length arg0, then on D_81184290 with the remainder of the buffer (starting
- * at arg0 and D_811526FC - arg0 long). Finally clears D_811842A0. What
- * func_811098C0 does with its arguments is not established.
+ * Splits the audio heap D_81186270 (D_811526FC bytes): the first arg0 bytes become the init pool
+ * D_811842B0, the rest the session pool D_81184290, and the external pool D_811842A0 is cleared.
+ * func_811098C0 is AudioHeap_InitPool and func_81109868 is AudioHeap_Alloc; this file still calls
+ * them by address.
  * Corresponds to OoT AudioHeap_InitMainPools (original name Nas_SzHeapReset).
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioLoad_Init.
  */
 void AudioHeap_InitMainPools(s32 arg0) {
@@ -290,9 +278,9 @@ extern M2C_UNK D_811842F0;
 /**
  * Splits the session pool into the misc and cache pools.
  * Corresponds to OoT AudioHeap_InitSessionPools (original name Nas_SzHeapDivide).
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioHeap_InitSessionPools(s8 *arg0) {
@@ -310,9 +298,9 @@ extern M2C_UNK D_81184310;
 /**
  * Splits the cache pool into the persistent and temporary pools.
  * Corresponds to OoT AudioHeap_InitCachePools (original name Nas_SzDataDivide).
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioHeap_InitCachePools(s8 *arg0) {
@@ -335,9 +323,9 @@ extern M2C_UNK D_811843E4;
  * Splits the persistent pool between the sequence, font and sample caches.
  * Corresponds to OoT AudioHeap_InitPersistentPoolsAndCaches (original name Nas_SzStayDivide). This
  * was AudioHeap_InitPersistentCache, which OoT uses for the reset above.
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioHeap_InitPersistentPoolsAndCaches(s8 *arg0) {
@@ -364,9 +352,9 @@ extern M2C_UNK D_81184404;
  * Splits the temporary pool between the sequence, font and sample caches.
  * Corresponds to OoT AudioHeap_InitTemporaryPoolsAndCaches (original name Nas_SzAutoDivide). This
  * was AudioHeap_InitTemporaryCache, which OoT uses for the reset above.
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioHeap_InitTemporaryPoolsAndCaches(s8 *arg0) {
@@ -540,7 +528,7 @@ void* AudioHeap_AllocCached(s32 table_type, s32 size, s32 cache, s32 id) {
                 }
             }
 
-            if (0) {
+            if (0) { // FAKE: dead block that only holds the fail label
             fail:
                 return NULL;
             }
@@ -623,20 +611,14 @@ void* AudioHeap_AllocCached(s32 table_type, s32 size, s32 cache, s32 id) {
     return loaded_cache->persistent.entries[loaded_cache->persistent.numEntries++].ramAddr;
 }
 
-/*
- * AudioHeap_SearchCaches
- *
- * Calls AudioHeap_SearchPermanentCache(arg0, arg2) and returns its result if that is
- * non-zero.  Otherwise returns 0 if arg1 is 3, and
- * AudioHeap_SearchRegularCaches(arg0, arg1, arg2) for any other arg1.
- */
 s32 AudioHeap_SearchRegularCaches(s32 arg0, s32 arg1, s32 arg2);
 s32 AudioHeap_SearchPermanentCache(s32 arg0, s32 arg1);
 
 /**
- * Looks up entry `arg2` of table `arg0`, in the permanent cache first, then the regular caches.
+ * Looks up entry `arg2` of table `arg0`, in the permanent cache first, then the regular caches
+ * (none when cache policy `arg1` is 3).
  * Corresponds to OoT AudioHeap_SearchCaches (original name Nas_SzCacheCheck).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -655,7 +637,7 @@ s32 AudioHeap_SearchCaches(s32 arg0, s32 arg1, s32 arg2) {
 /**
  * Looks up entry `arg2` of table `arg0` in its temporary or persistent cache.
  * Corresponds to OoT AudioHeap_SearchRegularCaches (original name __Nas_SzCacheCheck_Inner).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -756,7 +738,7 @@ extern s16 D_811371D8[];
  * D_811371D8 (entries are 8 s16 = 16 bytes long; the loop is unrolled by four
  * in the retail code).
  * Corresponds to OoT AudioHeap_LoadLowPassFilter (original name Nas_SetLPFilter).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name guessed from the code; comment kept.
  */
@@ -822,7 +804,7 @@ extern s8 D_8118427B;
  * Steps every reverb's settings once per audio frame.
  * Corresponds to OoT AudioHeap_UpdateReverbs (original name __Nas_DelayDown). OoT moves the
  * per-reverb body into AudioHeap_UpdateReverb.
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -848,7 +830,7 @@ extern s16 D_811858C2;
 /**
  * Clears the audio buffer that is being filled.
  * Corresponds to OoT AudioHeap_ClearCurrentAiBuffer (original name __Nas_DacClear).
- * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
@@ -872,9 +854,9 @@ void AudioHeap_DiscardSampleCaches(void);
  * Corresponds to OoT AudioHeap_ResetStep (original name Nas_SpecChange). Zero calls
  * AudioSeq_SequencePlayerDisable where OoT calls AudioSeq_SequencePlayerDisableAsFinished, and has
  * no sample-bank discard.
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioLoad_Init.
  */
 s32 AudioHeap_ResetStep(void) {
@@ -988,9 +970,9 @@ void AudioSeq_InitSequencePlayers(void);
  * Lays out the audio heap and reverbs for the current audio spec.
  * Corresponds to OoT AudioHeap_Init (original name __Nas_MemoryReconfig). OoT adds the external
  * pool, ADSR decay table and the slow/async/script load initializers.
- * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
  * quitting).
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from AudioHeap_ResetStep.
  */
 void AudioHeap_Init(void) {
@@ -1011,7 +993,7 @@ void AudioHeap_Init(void) {
     D_811858B8.samplesPerFrameTarget = ((D_811858B8.samplingFrequency / D_811859B4) + 0xF) & 0xFFF0;
     D_811858B8.minAiBufferLength = D_811858B8.samplesPerFrameTarget - 0x10;
     D_811858B8.maxAiBufferLength = D_811858B8.samplesPerFrameTarget + 0x10;
-    D_811858B8.ticksPerUpdate = ((D_811858B8.samplesPerFrameTarget + 0x10) / 0xD0) + 1;
+    D_811858B8.ticksPerUpdate = ((D_811858B8.samplesPerFrameTarget + 0x10) / 208) + 1;
     D_811858B8.samplesPerTick = (D_811858B8.samplesPerFrameTarget / D_811858B8.ticksPerUpdate) & ~7;
     D_811858B8.samplesPerTickMax = D_811858B8.samplesPerTick + 8;
     D_811858B8.samplesPerTickMin = D_811858B8.samplesPerTick - 8;
@@ -1034,7 +1016,7 @@ void AudioHeap_Init(void) {
     if (D_811858B8.specUnk4 >= 2) {
         D_811858B8.maxAiBufferLength -= 0x10;
     }
-    D_811858E4 = D_811858E8 * 0x14 * D_811858B8.ticksPerUpdate + spec->numReverbs * 0x20 + 0x1E0;
+    D_811858E4 = D_811858E8 * 20 * D_811858B8.ticksPerUpdate + spec->numReverbs * 32 + 480;
     persistent_mem = spec->persistentSeqMem + spec->persistentFontMem + spec->persistentSampleMem + spec->persistentSampleCacheSize + 0x10;
     temporary_mem = spec->temporarySeqMem + spec->temporaryFontMem + spec->temporarySampleMem + spec->temporarySampleCacheSize + 0x10;
     total_mem = persistent_mem + temporary_mem;

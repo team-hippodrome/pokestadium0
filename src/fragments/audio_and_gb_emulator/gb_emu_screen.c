@@ -16,7 +16,7 @@ extern s32 D_81154C3C;
 /**
  * Stops the menu sounds, pauses emulation, blanks the display, waits 20 ms, resets the X scale,
  * shows the current framebuffer and clears it to black.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbEmu_Init.
  */
 void GbEmu_PauseAndBlankScreen(void) {
@@ -43,9 +43,9 @@ void GbEmu_DrawTextCommands(s8* arg0, u8* arg1);
 s32 func_81103C40(s32, s32*, s32, s32, s32);
 extern s32 D_8111C568;
 /**
- * Draws the GB Player menu (メニュー) over the GB screen: ゲームをつづける, ゲームをやめる and せつめい・コンフィグ with the
- * pointer on item `cursor` and that item's help text; `cursor` 5 draws the menu behind the ゲームをやめる
- * prompt.
+ * Draws the GB Player menu (メニュー, "Menu") over the GB screen: ゲームをつづける ("Continue game"),
+ * ゲームをやめる ("Quit game") and せつめい・コンフィグ ("Help/Config") with the pointer on item `cursor`
+ * and that item's help text; `cursor` 5 draws the menu behind the ゲームをやめる prompt.
  * Seen in play (2026-11-14) ran when C-Up opened the GB Player menu; called from GbEmu_RunFrame.
  */
 void GbEmu_DrawPauseMenu(s8* fb, u8 cursor) {
@@ -89,7 +89,7 @@ extern s32 D_8111D828[];
 /**
  * Returns the icon of N64 button choice `index` for the START/SELECT bindings: 0 START, 1 L, 2 R,
  * 3 C-Left, 4 C-Down.
- * Seen in play (2026-11-14) ran on the せつめい・コンフィグ screen while the START binding was changed;
+ * Seen in play (2026-11-14) ran on the せつめい・コンフィグ ("Help/Config") screen while the START binding was changed;
  * called from GbEmu_DrawButtonConfig.
  */
 s32* GbEmu_GetButtonIcon(s32 index) {
@@ -102,7 +102,7 @@ s32 func_81103C40(s32, s32*, s32, s32, s32);
 extern s32 D_8111DFA8;
 
 /*
- * Draws the row of five N64 button icons on the せつめい・コンフィグ screen with the frame on choice `cursor
+ * Draws the row of five N64 button icons on the せつめい・コンフィグ ("Help/Config") screen with the frame on choice `cursor
  * & 7`.
  * GbEmu_DrawButtonChoices
  *
@@ -117,7 +117,7 @@ extern s32 D_8111DFA8;
  * decomp-permuter): the extra use of `i` makes IDO keep `arg1 & 7` in s0 and
  * reuse s0 as the loop counter, as the retail code does. Without it the mask is
  * computed in a temporary and the output differs.
- * Seen in play (2026-11-14) ran on the せつめい・コンフィグ screen while the START binding was changed;
+ * Seen in play (2026-11-14) ran on the せつめい・コンフィグ ("Help/Config") screen while the START binding was changed;
  * called from GbEmu_DrawButtonConfig.
  */
 void GbEmu_DrawButtonChoices(s32 fb, s32 cursor) {
@@ -156,13 +156,13 @@ extern u8 D_8111E47C[];
 extern u8 D_8111E4A0[];
 extern u8 D_8111E4AC[];
 /*
- * Draws the せつめい・コンフィグ screen into `screen`: the START and SELECT bindings, the B ボタンでもどる hint and, while
+ * Draws the せつめい・コンフィグ ("Help/Config") screen into `screen`: the START and SELECT bindings, the B ボタンでもどる ("B Button: Back") hint and, while
  * `slide` animates the row open, the button choices for the binding picked by bit 3 of `cursor`.
  * GB Player option screen. Draws the panel frame tiles into the framebuffer
  * (three loops), then the two cursors and the selected options.
  * Register allocation depends on reusing the same few locals: one IDO live
  * range per local, so i, j, q and r each carry several roles on purpose.
- * Seen in play (2026-11-14) ran on the せつめい・コンフィグ screen while the START binding was changed;
+ * Seen in play (2026-11-14) ran on the せつめい・コンフィグ ("Help/Config") screen while the START binding was changed;
  * called from GbEmu_RunFrame.
  */
 void GbEmu_DrawButtonConfig(s32 screen, s32 cursor, s32 slide) {
@@ -257,8 +257,9 @@ extern u8 D_8111E4BC[];
 extern s32 D_8111C568;
 
 /**
- * Draws the ゲームをやめる prompt (「レポート」した? ホントに おわってもいい?) with the pointer on はい (`no` = 0) or いいえ.
- * Seen in play (2026-11-14) ran when ゲームをやめる showed its 「レポート」した? prompt; called from
+ * Draws the ゲームをやめる prompt (「レポート」した? ホントに おわってもいい?, "Did you save? Really quit?") with the pointer on はい
+ * ("Yes", `no` = 0) or いいえ ("No").
+ * Seen in play (2026-11-14) ran when ゲームをやめる ("Quit game") showed its 「レポート」した? ("Did you save?") prompt; called from
  * GbEmu_RunFrame.
  */
 void GbEmu_DrawQuitConfirm(s8* fb, s32 no) {
@@ -322,7 +323,7 @@ void func_81117288(s32);
  * data, inits the sound driver, the GB APU and the video mode, starts the Transfer Pak I/O thread
  * and loads the cartridge, then reads the speed-up level and the START/SELECT bindings from the
  * Stadium save.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbPlayer_EmulatorThreadEntry.
  */
 void GbEmu_Init(s8* params) {
@@ -412,9 +413,9 @@ void GbPak_StopIoThread(s32);
 
 /**
  * GB Player per-frame state machine: runs the emulator, fades in, and drives the menu (4), the
- * button config (7-10), the quit prompt (11), the 「レポートできませんでした」 cartridge recovery (20-26) and
+ * button config (7-10), the quit prompt (11), the 「レポートできませんでした」 ("Couldn't save") cartridge recovery (20-26) and
  * the shutdown, which writes the bindings back to the save.
- * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
  * Transfer Pak; called from GbPlayer_EmulatorThreadEntry.
  */
 void GbEmu_RunFrame(s8* params) {
