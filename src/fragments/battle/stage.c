@@ -99,8 +99,8 @@ s32 Battle_StageLightAngleCallbackA(s32 event, GeoLightNode* light) {
 
     if (event == 2) {
         Vec3f_CalculateDistanceAngles(&D_80060488->view.targetPosition, &D_80060488->view.eyePosition, &distance, &angle_x, &angle_y);
-        light->pitch = angle_x + 0x2000;
-        light->yaw = angle_y - 0x2000;
+        light->rotationX = angle_x + 0x2000;
+        light->rotationY = angle_y - 0x2000;
     }
     return 0;
 }

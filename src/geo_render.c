@@ -1234,9 +1234,9 @@ void Geo_NodeLight(GraphNode* arg0) {
     *(u32*)light->l.col = arg->color.rgba;
     *(u32*)light->l.colc = arg->color.rgba;
 
-    light->l.dir[0] = (120.0f * COSS(arg->pitch)) * SINS(arg->yaw);
-    light->l.dir[1] = (120.0f) * SINS(arg->pitch);
-    light->l.dir[2] = (120.0f * COSS(arg->pitch)) * COSS(arg->yaw);
+    light->l.dir[0] = (120.0f * COSS(arg->rotationX)) * SINS(arg->rotationY);
+    light->l.dir[1] = (120.0f) * SINS(arg->rotationX);
+    light->l.dir[2] = (120.0f * COSS(arg->rotationX)) * COSS(arg->rotationY);
 
     ambient->l.col[0] += ((arg->color.r * arg->color.a) / 100);
     if (ambient->l.col[0] > 0xFF) {

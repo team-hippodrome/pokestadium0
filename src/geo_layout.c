@@ -195,8 +195,8 @@ void GeoLayout_CmdCreateCamera(void) {
     if (temp_v0 != NULL) {
         temp_v0->perspective.verticalFieldOfView = cmd->fovY;
         Vec3f_FromVec3s(&temp_v0->view.targetPosition, &cmd->target);
-        Camera_ComputeEyeFromAngles(&temp_v0->view.targetPosition, &temp_v0->view.eyePosition, cmd->distance, (cmd->pitchDegrees << 0xF) / 180,
-                      (cmd->yawDegrees << 0xF) / 180);
+        Camera_ComputeEyeFromAngles(&temp_v0->view.targetPosition, &temp_v0->view.eyePosition, cmd->distance, (cmd->rotationXDegrees << 0xF) / 180,
+                      (cmd->rotationYDegrees << 0xF) / 180);
     }
 
     GeoLayout_RegisterGraphNode(&temp_v0->node);
@@ -273,7 +273,7 @@ void GeoLayout_CmdCreateFog(void) {
 void GeoLayout_CmdCreateLight(void) {
     GeoLayoutCmdCreateLight* cmd = (GeoLayoutCmdCreateLight*)gGeoLayoutCommand;
 
-    GeoLayout_RegisterGraphNode(GeoNode_CreateLight(gGraphNodePool, NULL, (cmd->pitchDegrees << 0xF) / 180, (cmd->yawDegrees << 0xF) / 180, cmd->r,
+    GeoLayout_RegisterGraphNode(GeoNode_CreateLight(gGraphNodePool, NULL, (cmd->rotationXDegrees << 0xF) / 180, (cmd->rotationYDegrees << 0xF) / 180, cmd->r,
                                 cmd->g, cmd->b, cmd->a));
 
     gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateLight);

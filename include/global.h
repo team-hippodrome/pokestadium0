@@ -386,8 +386,8 @@ typedef struct GeoFogNode {
 typedef struct GeoLightNode {
     /* 0x00 */ GraphNode node;
     /* 0x18 */ Color_RGBA8_u32 color; // light color; alpha is the percent added to the ambient color; poking FF0000 turned both battle models red, alpha 100 washed them out and 0 darkened them in play
-    /* 0x1C */ s16 pitch; // binary angle: dir.y = 120*sin(pitch); with the node callback cleared, poking -0x4000 lit Onix from below (dark) in play; Battle_StageLightAngleCallbackA rewrites it every frame
-    /* 0x1E */ s16 yaw; // @unverified: binary angle around the vertical axis
+    /* 0x1C */ s16 rotationX; // binary angle: dir.y = 120*sin(rotationX); with the node callback cleared, poking -0x4000 lit Onix from below (dark) in play; Battle_StageLightAngleCallbackA rewrites it every frame
+    /* 0x1E */ s16 rotationY; // @unverified: binary angle around the vertical axis
 } GeoLightNode; // size = 0x20
 
 // Graph node type 0xD.

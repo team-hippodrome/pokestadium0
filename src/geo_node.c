@@ -260,8 +260,8 @@ GeoLightNode* GeoNode_CreateLight(MainPoolState* arg0, GeoLightNode* arg1, s16 a
         arg1->color.g = g;
         arg1->color.b = b;
         arg1->color.a = a;
-        arg1->pitch = arg2;
-        arg1->yaw = arg3;
+        arg1->rotationX = arg2;
+        arg1->rotationY = arg3;
         GeoNode_Init(arg1, 0xB);
     }
 

@@ -1280,7 +1280,7 @@ extern s8 D_800AD210;
 /**
  * Returns 1 when the port's Gen 1 save has the got-Pokedex event flag: bit 0x20 of byte 0x46D of
  * the main-data copy, which is save file offset 0x29ED. Seen in play (2026-11-12): with that bit
- * clear the main menu greys out ずかん and warns 「ずかんをもっていない」; setting it enables ずかん.
+ * clear the main menu grays out ずかん (Pokédex) and warns 「ずかんをもっていない」 ("You don't have a Pokédex"); setting it enables ずかん.
  */
 s32 GbSave_HasPokedex(s32 arg0) {
     s32 var_v1;

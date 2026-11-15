@@ -40,13 +40,13 @@ Vec3s* Vec3s_FromVec3f(Vec3s* dest, Vec3f* float_vector);
 void MtxF_Copy(MtxF* dest, MtxF* src);
 void MtxF_Identity(MtxF* dest);
 void MtxF_SetTranslation(MtxF* identity, Vec3f* translate);
-void MtxF_SetLookAt(MtxF* mtx, Vec3f* from, Vec3f* to, u16 roll);
+void MtxF_SetLookAt(MtxF* mtx, Vec3f* from, Vec3f* to, u16 rotation_z);
 void MtxF_SetRotationTranslation(MtxF* out, Vec3s* translate, Vec3s* rotate);
 void MtxF_SetRotationTranslationF(MtxF* out, Vec3f* translate, Vec3s* rotate);
 void MtxF_SetRotationAndTransformTranslation(MtxF* out, Vec3f* translate, Vec3s* rotate);
 void MtxF_SetRotationScaleTranslation(MtxF* dest, Vec3f* translate, Vec3s* rotate, Vec3f* scale);
 void MtxF_SetRotationAndScaledTranslation(MtxF* dest, Vec3f* translate, Vec3s* rotate, Vec3f* scale);
-void MtxF_SetOrthonormalBasis(MtxF* dest, Vec3f* up_direction, Vec3f* pos, s16 yaw);
+void MtxF_SetOrthonormalBasis(MtxF* dest, Vec3f* up_direction, Vec3f* pos, s16 rotation_y);
 void MtxF_Multiply(MtxF* dest, MtxF* A, MtxF* B);
 void MtxF_ScaleRows(MtxF* dest, MtxF* matrix, Vec3f* scale);
 void MtxF_GetScale(MtxF* matrix, Vec3f* dest);
@@ -308,10 +308,10 @@ void MtxF_SetTranslation(MtxF* identity, Vec3f* translate) {
 }
 
 /**
- * Builds a look-at view matrix from an eye point, a target point and a roll
+ * Builds a look-at view matrix from an eye point, a target point and a rotationZ
  * angle.
  */
-void MtxF_SetLookAt(MtxF* mtx, Vec3f* from, Vec3f* to, u16 roll) {
+void MtxF_SetLookAt(MtxF* mtx, Vec3f* from, Vec3f* to, u16 rotation_z) {
     f32 inv_length;
     f32 dx;
     f32 dz;
@@ -332,9 +332,9 @@ void MtxF_SetLookAt(MtxF* mtx, Vec3f* from, Vec3f* to, u16 roll) {
     dx *= inv_length;
     dz *= inv_length;
 
-    y_col_y = COSS(roll);
-    x_col_y = SINS(roll) * dz;
-    z_col_y = -SINS(roll) * dx;
+    y_col_y = COSS(rotation_z);
+    x_col_y = SINS(rotation_z) * dz;
+    z_col_y = -SINS(rotation_z) * dx;
 
     x_col_z = to->x - from->x;
     y_col_z = to->y - from->y;
@@ -601,12 +601,12 @@ void MtxF_SetBillboard(MtxF* dest, MtxF* basis, MtxF* transform, Vec3f* local_po
  * Builds a matrix from an up direction, a position and a heading angle about
  * the up direction.
  */
-void MtxF_SetOrthonormalBasis(MtxF* dest, Vec3f* up_direction, Vec3f* pos, s16 yaw) {
+void MtxF_SetOrthonormalBasis(MtxF* dest, Vec3f* up_direction, Vec3f* pos, s16 rotation_y) {
     Vec3f lateral_direction;
     Vec3f left_direction;
     Vec3f forward_direction;
 
-    Vec3f_SetComponentsDuplicate(&lateral_direction, SINS(yaw), 0, COSS(yaw));
+    Vec3f_SetComponentsDuplicate(&lateral_direction, SINS(rotation_y), 0, COSS(rotation_y));
     Vec3f_Normalize(up_direction);
 
     Vec3f_CrossProduct(&left_direction, up_direction, &lateral_direction);
@@ -780,7 +780,7 @@ u16 MathUtil_Atan2Lookup(f32 y, f32 x) {
 
 /**
  * Compute the angle from (0, 0) to (x, y) as a s16. Given that terrain is in
- * the xz-plane, this is commonly called with (z, x) to get a yaw angle.
+ * the xz-plane, this is commonly called with (z, x) to get a rotationY angle.
  */
 s16 MathUtil_Atan2s(f32 y, f32 x) {
     u16 ret;
