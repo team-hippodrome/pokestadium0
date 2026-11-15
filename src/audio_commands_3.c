@@ -2,6 +2,7 @@
 /* Split from audio_commands.c: the code after the jump tables of Audio_PlayCommand. */
 
 #include "audio_commands.h"
+#include "pokemon.h"
 #include "libnumus/player.h"
 #include "m2c_macros.h"
 
@@ -25,7 +26,7 @@ s32 func_8003834C(s32, s32, s32, s32, s32, s32, s32);
 
 /**
  * Plays the announcer's voice clip for a Pokémon and move: `species` (dex number, table D_80077064) and
- * `move` (< 165), on `side` (0 or 1). Stops that side's previous clip, and both sides' for events 1 and 5.
+ * `move` (below 166), on `side` (0 or 1). Stops that side's previous clip, and both sides' for events 1 and 5.
  * Ignored while the announcer is busy or within 20 frames of the last call.
  * Seen in play (2026-11-14, COM battle, breakpoint): called from BattleScene_EnterIdleRow with side 0, species 95 (Onix), event 10. The Pikachu reward calls it
  * with Pikachu and Surf, the opening demo with Blastoise and Hydro Pump.
@@ -43,19 +44,19 @@ s32 Announcer_CallMove(u8 side, u32 move, u32 species, u32 event, u8 hi) {
     if (D_80077534 != 0) {
         return 0;
     }
-    if (move >= 0xA6U) {
+    if (move >= 166U) {
         return 0;
     }
-    if (species == 0x84 || species == 0x5E) {
+    if (species == DITTO || species == GENGAR) {
         return 0;
     }
-    D_80077534 = 0x14;
-    if (species >= 0x98U) {
+    D_80077534 = 20;
+    if (species >= 152U) {
         return 0;
     }
     hi = (event & 0xFF00) >> 8;
     event &= 0xFF;
-    if ((event == 0xA || event == 0xB) && (hi == 0x10 || hi == 0x20)) {
+    if ((event == 10 || event == 11) && (hi == 0x10 || hi == 0x20)) {
         return 0;
     }
     if (side >= 2) {
@@ -67,19 +68,19 @@ s32 Announcer_CallMove(u8 side, u32 move, u32 species, u32 event, u8 hi) {
         entry = (u8*)D_80077064[species][0];
     }
     if (Audio_QueueSetMonoOutputCommand(D_800FD670[side])) {
-        func_80037AC4(D_800FD670[side], 0xA);
+        func_80037AC4(D_800FD670[side], 10);
         D_800FD670[side] = 0;
     }
     if (event == 1 || event == 5) {
         for (flags = 0; flags < 4; flags++) {
-            func_80037AC4(D_800FD670[flags], 0xA);
+            func_80037AC4(D_800FD670[flags], 10);
             D_800FD670[flags] = 0;
         }
     }
     switch (event) {
     case 11:
         if (Audio_QueueSetMonoOutputCommand(D_800FD670[side ^ 1])) {
-            func_80037AC4(D_800FD670[side ^ 1], 0xA);
+            func_80037AC4(D_800FD670[side ^ 1], 10);
             D_800FD670[side ^ 1] = 0;
         }
         flags = (entry[0] & 0xF0) >> 4;
@@ -129,14 +130,6 @@ void Audio_PlaySystemBankSound(s32 id) {
     func_8003834C(D_800B418C, D_800B41A8, id, 0x80, 0x80, 0, -1);
 }
 
-/*
- * Announcer_GetHp
- *
- * Bounds-checked lookup into the array of two words at D_800FD698.
- * Returns the entry for index 0 or 1, and -1 for any other index
- * (the index is treated as unsigned, so negative values also give -1).
- * What the table entries mean is not known.
- */
 extern s32 D_800FD698[];
 /**
  * Returns the announcer's copy of `side`'s current HP, or -1 for a bad side.
@@ -148,12 +141,6 @@ s32 Announcer_GetHp(u32 side) {
     return D_800FD698[side];
 }
 
-/*
- * Announcer_GetMaxHp
- *
- * Same shape as Announcer_GetHp but reading the array of two words at
- * D_800FD6A8: index 0 or 1 returns the entry, anything else returns -1.
- */
 extern s32 D_800FD6A8[];
 /**
  * Returns the announcer's copy of `side`'s max HP, or -1 for a bad side.
@@ -198,12 +185,12 @@ extern M2C_UNK D_800FD6B4;
  * Stores both sides' team sizes (doubled) as the announcer's team and remaining counts. Called by the
  * battle opening with each side's numberOfPokemonBrought.
  */
-void Announcer_SetTeamSizes(s32 side0Count, s32 side1Count) {
+void Announcer_SetTeamSizes(s32 side0_count, s32 side1_count) {
     s8 temp_v0;
     s8 temp_v1;
 
-    temp_v0 = side0Count * 2;
-    temp_v1 = side1Count * 2;
+    temp_v0 = side0_count * 2;
+    temp_v1 = side1_count * 2;
     M2C_FIELD(&D_800FD6B2, s8 *, 0) = temp_v0;
     M2C_FIELD(&D_800FD6B4, s8 *, 0) = temp_v0;
     M2C_FIELD(&D_800FD6B2, s8 *, 1) = temp_v1;
@@ -295,7 +282,7 @@ void Announcer_SetActive(u32 enable) {
 
     if (enable != 0) {
         if ((D_80077528 == 0) && (D_8007754C == 0)) {
-            mask = func_8004D300(mask); // mask is read uninitialised here, as in the original
+            mask = func_8004D300(mask); // mask is read uninitialized here, as in the original
             D_8007754C = 1;
             D_80077598 = 0;
             D_80077594 = 0;
@@ -303,7 +290,7 @@ void Announcer_SetActive(u32 enable) {
             D_800775A0 = 0;
             func_8004D300(mask);
             if (D_800775A4 == 0) {
-                D_800775A4 = func_8003834C(D_800B4188, D_800B41A4, 0x18, 0x80, 0x80, 0, -1);
+                D_800775A4 = func_8003834C(D_800B4188, D_800B41A4, 24, 0x80, 0x80, 0, -1);
             }
             if (D_80077548 == 0) {
                 return;
@@ -318,72 +305,72 @@ void Announcer_SetActive(u32 enable) {
             }
             ratio[0] = (u32)(D_800FD698[0] * 100) / (u32)D_800FD6A8[0];
             ratio[1] = (u32)(D_800FD698[1] * 100) / (u32)D_800FD6A8[1];
-            if (D_80077548 >= 0x15) {
+            if (D_80077548 >= 21) {
                 if ((D_800FD698[0] != 0) && (D_800FD698[1] != 0)) {
                     if ((u8)func_80053A80() & 1) {
                         d = (ratio[1] < ratio[0]) ? ratio[0] - ratio[1] : ratio[1] - ratio[0];
-                        if (d >= 0x33) {
-                            Announcer_QueueLine(0x30, 0.0f, 0x80);
+                        if (d >= 51) {
+                            Announcer_QueueLine(48, 0.0f, 0x80);
                             return;
                         }
                     }
-                    if (((u8)func_80053A80() & 4) && (ratio[0] < 0x15) && (ratio[1] < 0x15)) {
-                        Announcer_QueueLine(0x2D, 0.0f, 0x80);
+                    if (((u8)func_80053A80() & 4) && (ratio[0] < 21) && (ratio[1] < 21)) {
+                        Announcer_QueueLine(45, 0.0f, 0x80);
                         return;
                     }
-                    if (((u8)func_80053A80() & 8) && (ratio[0] >= 0x3D) && (ratio[1] >= 0x3D) && (ratio[0] < 100) && (ratio[1] < 100)) {
+                    if (((u8)func_80053A80() & 8) && (ratio[0] >= 61) && (ratio[1] >= 61) && (ratio[0] < 100) && (ratio[1] < 100)) {
                         d = (ratio[1] < ratio[0]) ? ratio[0] - ratio[1] : ratio[1] - ratio[0];
-                        if (d < 0xA) {
-                            Announcer_QueueLine(0x57, 0.0f, 0x80);
+                        if (d < 10) {
+                            Announcer_QueueLine(87, 0.0f, 0x80);
                             return;
                         }
-                        Announcer_QueueLine(0x2C, 0.0f, 0x80);
+                        Announcer_QueueLine(44, 0.0f, 0x80);
                         return;
                     }
                     if ((u8)func_80053A80() & 2) {
                         d = (((u8*)&D_800FD6B4)[1] < ((u8*)&D_800FD6B4)[0]) ? ((u8*)&D_800FD6B4)[0] - ((u8*)&D_800FD6B4)[1] : ((u8*)&D_800FD6B4)[1] - ((u8*)&D_800FD6B4)[0];
                         if ((d >= 4) && (((u8*)&D_800FD6B2)[0] >= 3) && (((u8*)&D_800FD6B2)[1] >= 3)) {
-                            Announcer_QueueLine(0x58, 0.0f, 0x80);
+                            Announcer_QueueLine(88, 0.0f, 0x80);
                             return;
                         }
                         if ((((u8*)&D_800FD6B4)[0] < 3) && (((u8*)&D_800FD6B4)[1] < 3) && (((u8*)&D_800FD6B2)[0] >= 3) && (((u8*)&D_800FD6B2)[1] >= 3)) {
-                            Announcer_QueueLine(0x5A, 0.0f, 0x80);
+                            Announcer_QueueLine(90, 0.0f, 0x80);
                             return;
                         }
                         if (D_80077578 != 1) {
-                            Announcer_QueueLine(0x34, 0.0f, 0x80);
+                            Announcer_QueueLine(52, 0.0f, 0x80);
                             D_80077578 = 1;
                             return;
                         }
-                        Announcer_QueueLine(0x5D, 0.0f, 0x80);
+                        Announcer_QueueLine(93, 0.0f, 0x80);
                         D_80077578 = 2;
                         return;
                     }
                     if (((u8)func_80053A80() & 2) && (D_80077578 != 1)) {
-                        Announcer_QueueLine(0x34, 0.0f, 0x80);
+                        Announcer_QueueLine(52, 0.0f, 0x80);
                         D_80077578 = 1;
                         return;
                     }
                     if (((u8)func_80053A80() & 1) && (D_80077578 != 2)) {
-                        Announcer_QueueLine(0x5D, 0.0f, 0x80);
+                        Announcer_QueueLine(93, 0.0f, 0x80);
                         D_80077578 = 2;
                         return;
                     }
-                    Announcer_QueueLine(0x35, 0.0f, 0x80);
+                    Announcer_QueueLine(53, 0.0f, 0x80);
                     D_80077578 = 0;
                     return;
                 }
                 if ((((u8*)&D_800FD6B4)[0] < 3) && (((u8*)&D_800FD6B4)[1] < 3) && (D_80077540 == 8)) {
-                    Announcer_QueueLine(0x6C, 0.0f, 0x80);
+                    Announcer_QueueLine(108, 0.0f, 0x80);
                 } else if (D_80077578 != 1) {
-                    Announcer_QueueLine(0x34, 0.0f, 0x80);
+                    Announcer_QueueLine(52, 0.0f, 0x80);
                     D_80077578 = 1;
                 } else {
-                    Announcer_QueueLine(0x5D, 0.0f, 0x80);
+                    Announcer_QueueLine(93, 0.0f, 0x80);
                     D_80077578 = 2;
                 }
                 mask = func_8004D300(1);
-                D_80077598 = 0x320;
+                D_80077598 = 800;
                 D_8007759C = 1;
                 func_8004D300(mask);
                 return;
@@ -392,94 +379,94 @@ void Announcer_SetActive(u32 enable) {
                 if ((D_800FD698[0] != 0) && (D_800FD698[1] != 0)) {
                     if ((u8)func_80053A80() & 1) {
                         d = (ratio[1] < ratio[0]) ? ratio[0] - ratio[1] : ratio[1] - ratio[0];
-                        if (d >= 0x33) {
-                            Announcer_QueueLine(0x30, 0.0f, 0x80);
+                        if (d >= 51) {
+                            Announcer_QueueLine(48, 0.0f, 0x80);
                             return;
                         }
                     }
-                    if (((u8)func_80053A80() & 4) && (ratio[0] < 0x15) && (ratio[1] < 0x15)) {
-                        Announcer_QueueLine(0x2D, 0.0f, 0x80);
+                    if (((u8)func_80053A80() & 4) && (ratio[0] < 21) && (ratio[1] < 21)) {
+                        Announcer_QueueLine(45, 0.0f, 0x80);
                         return;
                     }
-                    if (((u8)func_80053A80() & 8) && (ratio[0] >= 0x51) && (ratio[1] >= 0x51) && (ratio[0] < 100) && (ratio[1] < 100)) {
+                    if (((u8)func_80053A80() & 8) && (ratio[0] >= 81) && (ratio[1] >= 81) && (ratio[0] < 100) && (ratio[1] < 100)) {
                         if ((D_800FD6B6[0] == 0) && (D_800FD6B6[1] == 0)) {
-                            Announcer_QueueLine(0x5E, 0.0f, 0x80);
+                            Announcer_QueueLine(94, 0.0f, 0x80);
                             return;
                         }
-                        Announcer_QueueLine(0x2C, 0.0f, 0x80);
+                        Announcer_QueueLine(44, 0.0f, 0x80);
                         return;
                     }
                     if ((u8)func_80053A80() & 2) {
                         d = (((u8*)&D_800FD6B4)[1] < ((u8*)&D_800FD6B4)[0]) ? ((u8*)&D_800FD6B4)[0] - ((u8*)&D_800FD6B4)[1] : ((u8*)&D_800FD6B4)[1] - ((u8*)&D_800FD6B4)[0];
                         if ((d >= 4) && (((u8*)&D_800FD6B2)[0] >= 3) && (((u8*)&D_800FD6B2)[1] >= 3)) {
-                            Announcer_QueueLine(0x58, 0.0f, 0x80);
+                            Announcer_QueueLine(88, 0.0f, 0x80);
                             return;
                         }
                         if ((((u8*)&D_800FD6B4)[0] < 3) && (((u8*)&D_800FD6B4)[1] < 3) && (((u8*)&D_800FD6B2)[0] >= 3) && (((u8*)&D_800FD6B2)[1] >= 3)) {
-                            Announcer_QueueLine(0x5A, 0.0f, 0x80);
+                            Announcer_QueueLine(90, 0.0f, 0x80);
                             return;
                         }
                         if (D_80077578 != 1) {
-                            Announcer_QueueLine(0x34, 0.0f, 0x80);
+                            Announcer_QueueLine(52, 0.0f, 0x80);
                             D_80077578 = 1;
                             return;
                         }
                         if ((u8)func_80053A80() & 2) {
-                            Announcer_QueueLine(0x5D, 0.0f, 0x80);
+                            Announcer_QueueLine(93, 0.0f, 0x80);
                             D_80077578 = 2;
                         }
                     } else {
                         if (((u8)func_80053A80() & 1) && (D_80077578 != 2)) {
-                            Announcer_QueueLine(0x5D, 0.0f, 0x80);
+                            Announcer_QueueLine(93, 0.0f, 0x80);
                             D_80077578 = 2;
                             return;
                         }
                         if (((u8)func_80053A80() & 2) && (D_80077578 != 1)) {
-                            Announcer_QueueLine(0x34, 0.0f, 0x80);
+                            Announcer_QueueLine(52, 0.0f, 0x80);
                             D_80077578 = 1;
                             return;
                         }
                         if ((u8)func_80053A80() & 0x40) {
-                            Announcer_QueueLine(0x35, 0.0f, 0x80);
+                            Announcer_QueueLine(53, 0.0f, 0x80);
                             D_80077578 = 0;
                         }
                     }
                 } else {
                     if (D_80077578 != 1) {
-                        Announcer_QueueLine(0x34, 0.0f, 0x80);
+                        Announcer_QueueLine(52, 0.0f, 0x80);
                         D_80077578 = 1;
                     } else {
-                        Announcer_QueueLine(0x5D, 0.0f, 0x80);
+                        Announcer_QueueLine(93, 0.0f, 0x80);
                         D_80077578 = 2;
                     }
                     mask = func_8004D300(1);
-                    D_80077598 = 0x320;
+                    D_80077598 = 800;
                     D_8007759C = 1;
                     func_8004D300(mask);
                 }
             } else if ((D_800FD698[0] != 0) && (D_800FD698[1] != 0)) {
                 if ((u8)func_80053A80() & 1) {
                     d = (ratio[1] < ratio[0]) ? ratio[0] - ratio[1] : ratio[1] - ratio[0];
-                    if (d >= 0x33) {
-                        Announcer_QueueLine(0x30, 0.0f, 0x80);
+                    if (d >= 51) {
+                        Announcer_QueueLine(48, 0.0f, 0x80);
                         return;
                     }
                 }
-                if (((u8)func_80053A80() & 4) && (ratio[0] < 0x15) && (ratio[1] < 0x15)) {
+                if (((u8)func_80053A80() & 4) && (ratio[0] < 21) && (ratio[1] < 21)) {
                     if ((u8)func_80053A80() & 1) {
-                        Announcer_QueueLine(0x2D, 0.0f, 0x80);
+                        Announcer_QueueLine(45, 0.0f, 0x80);
                         return;
                     }
-                    Announcer_QueueLine(0x59, 0.0f, 0x80);
+                    Announcer_QueueLine(89, 0.0f, 0x80);
                     return;
                 }
-                if ((ratio[0] >= 0x5B) && (ratio[1] >= 0x5B) && (D_800FD6B6[0] == 0) && (D_800FD6B6[1] == 0)) {
-                    Announcer_QueueLine(0x33, 0.0f, 0x80);
+                if ((ratio[0] >= 91) && (ratio[1] >= 91) && (D_800FD6B6[0] == 0) && (D_800FD6B6[1] == 0)) {
+                    Announcer_QueueLine(51, 0.0f, 0x80);
                 }
             } else {
-                Announcer_QueueLine(0x59, 0.0f, 0x80);
+                Announcer_QueueLine(89, 0.0f, 0x80);
                 mask = func_8004D300(1);
-                D_80077598 = 0x320;
+                D_80077598 = 800;
                 D_8007759C = 1;
                 func_8004D300(mask);
             }
@@ -488,8 +475,8 @@ void Announcer_SetActive(u32 enable) {
         mask = func_8004D300(1);
         D_8007754C = 0;
         func_8004D300(mask);
-        func_80037AC4(D_800775A4, 0x78);
-        func_80037AC4(D_800775A0, 0x78);
+        func_80037AC4(D_800775A4, 120);
+        func_80037AC4(D_800775A0, 120);
         for (i = 0; i < 4; i++) {
             if (Audio_QueueSetMonoOutputCommand(D_800FD670[i]) != 0) {
                 func_800386E4(D_800FD670[i], 0xF);

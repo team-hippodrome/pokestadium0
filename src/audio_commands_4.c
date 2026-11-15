@@ -96,7 +96,7 @@ void Announcer_QueueLine(s32, f32, s32);
 /**
  * Commentary when `side` acts (low nibble; bit 4 set skips the HP checks): picks a line from the side's
  * HP percentage, the opponent's, and a faint armed by Announcer_SetHp.
- * Seen in play (2026-11-14, COM battle, breakpoint): queued line 0x41 from here during a turn.
+ * Seen in play (2026-11-14, COM battle, breakpoint): queued line 65 from here during a turn.
  */
 void Announcer_CommentOnMove(u32 arg0) {
     s32 other;
@@ -130,15 +130,15 @@ void Announcer_CommentOnMove(u32 arg0) {
                 D_8007756C = 1;
                 if ((D_800FD6B4[arg0] < 3) && (D_800FD6B2[arg0] >= 3)) {
                     if ((u32)D_800FD698[arg0] < 50) {
-                        Announcer_QueueLine(0x54, 0.0f, 0x80);
+                        Announcer_QueueLine(84, 0.0f, 0x80);
                     } else {
-                        Announcer_QueueLine(0x37, 0.0f, 0x80);
+                        Announcer_QueueLine(55, 0.0f, 0x80);
                     }
                     D_800FD6B0[arg0] = 0;
                     return;
                 }
                 if ((D_800FD6B4[arg0] < D_800FD6B4[other]) && (D_800FD6B2[arg0] >= 3)) {
-                    Announcer_QueueLine(0x6D, 0.0f, 0x80);
+                    Announcer_QueueLine(109, 0.0f, 0x80);
                     D_800FD6B0[arg0] = 0;
                     return;
                 }
@@ -147,84 +147,84 @@ void Announcer_CommentOnMove(u32 arg0) {
             if ((pct < 50) && (pct >= 21)) {
                 if ((u8)func_80053A80() & 1) {
                     if (D_80077550 == 1) {
-                        Announcer_QueueLine(0x42, 0.0f, 0x80);
+                        Announcer_QueueLine(66, 0.0f, 0x80);
                         return;
                     }
-                    Announcer_QueueLine(0x44, 0.0f, 0x80);
+                    Announcer_QueueLine(68, 0.0f, 0x80);
                     return;
                 }
-                Announcer_QueueLine(0x20, 0.0f, 0x80);
+                Announcer_QueueLine(32, 0.0f, 0x80);
                 return;
             }
             if ((pct < 21) && (pct >= 6)) {
                 if ((u8)func_80053A80() & 1) {
                     if (D_80077550 == 1) {
-                        Announcer_QueueLine(0x42, 0.0f, 0x80);
+                        Announcer_QueueLine(66, 0.0f, 0x80);
                         return;
                     }
-                    Announcer_QueueLine(0x44, 0.0f, 0x80);
+                    Announcer_QueueLine(68, 0.0f, 0x80);
                     return;
                 }
-                Announcer_QueueLine(0x21, 0.0f, 0x80);
+                Announcer_QueueLine(33, 0.0f, 0x80);
                 return;
             }
             if ((pct < 6) && (D_800FD698[arg0] != 0)) {
                 if ((D_800FD6B4[arg0] < 3) && ((u8)func_80053A80() & 0x11)) {
-                    Announcer_QueueLine(0x54, 0.0f, 0x80);
+                    Announcer_QueueLine(84, 0.0f, 0x80);
                     return;
                 }
                 if ((u8)func_80053A80() & 0x10) {
-                    Announcer_QueueLine(0x42, 0.0f, 0x80);
+                    Announcer_QueueLine(66, 0.0f, 0x80);
                     return;
                 }
-                Announcer_QueueLine(0x38, 0.0f, 0x80);
+                Announcer_QueueLine(56, 0.0f, 0x80);
                 return;
             }
             if ((D_800FD6B4[other] < 3) && (D_800FD6B2[other] >= 3)) {
                 if ((u32)D_800FD698[other] < 30) {
-                    Announcer_QueueLine(0x46, 0.0f, 0x80);
+                    Announcer_QueueLine(70, 0.0f, 0x80);
                     return;
                 }
                 if ((u8)func_80053A80() & 1) {
                     if (D_80077550 == 1) {
                         if ((u8)func_80053A80() & 1) {
-                            Announcer_QueueLine(0x42, 0.0f, 0x80);
+                            Announcer_QueueLine(66, 0.0f, 0x80);
                             return;
                         }
-                        Announcer_QueueLine(0x43, 0.0f, 0x80);
+                        Announcer_QueueLine(67, 0.0f, 0x80);
                         return;
                     }
-                    Announcer_QueueLine(0x44, 0.0f, 0x80);
+                    Announcer_QueueLine(68, 0.0f, 0x80);
                     return;
                 }
-                Announcer_QueueLine(0x36, 0.0f, 0x80);
+                Announcer_QueueLine(54, 0.0f, 0x80);
                 return;
             }
             if ((D_800FD698[arg0] != 0) && (other_pct < 21)) {
                 if (D_800FD6B4[other] < 3) {
-                    Announcer_QueueLine(0x40, 0.0f, 0x80);
+                    Announcer_QueueLine(64, 0.0f, 0x80);
                     return;
                 }
-                Announcer_QueueLine(0x39, 0.0f, 0x80);
+                Announcer_QueueLine(57, 0.0f, 0x80);
                 return;
             }
             if (D_80077550 == 1) {
                 if (D_80077548 < 2) {
-                    Announcer_QueueLine(0x41, 0.0f, 0x80);
+                    Announcer_QueueLine(65, 0.0f, 0x80);
                     return;
                 }
                 if (D_80077548 == 2) {
-                    Announcer_QueueLine(0x43, 0.0f, 0x80);
+                    Announcer_QueueLine(67, 0.0f, 0x80);
                     return;
                 }
                 if ((u8)func_80053A80() & 1) {
-                    Announcer_QueueLine(0x42, 0.0f, 0x80);
+                    Announcer_QueueLine(66, 0.0f, 0x80);
                     return;
                 }
-                Announcer_QueueLine(0x43, 0.0f, 0x80);
+                Announcer_QueueLine(67, 0.0f, 0x80);
                 return;
             }
-            Announcer_QueueLine(0x44, 0.0f, 0x80);
+            Announcer_QueueLine(68, 0.0f, 0x80);
         }
     }
 }
@@ -248,132 +248,132 @@ void Announcer_CommentOnSideMessage(s32 kind) {
     switch (kind) {
         case 3:
             if (D_80077560 != 0 && D_8007757C == 0) {
-                Announcer_QueueLine(0x45, 0.0f, 0x80);
+                Announcer_QueueLine(69, 0.0f, 0x80);
                 D_80077560 = 0;
             } else {
-                Announcer_QueueLine(0x1D, 0.0f, 0x80);
+                Announcer_QueueLine(29, 0.0f, 0x80);
             }
-            func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+            func_8003834C(D_800B4188, D_800B41A4, 26, 0x80, 0x80, 0, -1);
             break;
         case 5:
             if (D_8007756C != 0) {
-                Announcer_QueueLine(0x56, 0.0f, 0x80);
+                Announcer_QueueLine(86, 0.0f, 0x80);
                 D_8007756C = 0;
             } else if (D_80077568 == 0) {
-                Announcer_QueueLine(0x3A, 0.0f, 0x80);
+                Announcer_QueueLine(58, 0.0f, 0x80);
             }
             break;
         case 6:
-            Announcer_QueueLine(0x26, 0.0f, 0x80);
-            func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x70, 0x80, 0, -1);
+            Announcer_QueueLine(38, 0.0f, 0x80);
+            func_8003834C(D_800B4188, D_800B41A4, 26, 112, 0x80, 0, -1);
             break;
         case 7:
             if (D_8007756C != 0) {
-                Announcer_QueueLine(0x56, 0.0f, 0x80);
+                Announcer_QueueLine(86, 0.0f, 0x80);
                 D_8007756C = 0;
             } else if (D_80077568 == 0) {
-                Announcer_QueueLine(0x3A, 0.0f, 0x80);
+                Announcer_QueueLine(58, 0.0f, 0x80);
             }
             break;
         case 8:
         case 9:
         case 10:
-            Announcer_QueueLine(0x3A, 0.0f, 0x80);
+            Announcer_QueueLine(58, 0.0f, 0x80);
             break;
         case 14:
-            Announcer_QueueLine(0x49, 0.0f, 0x80);
+            Announcer_QueueLine(73, 0.0f, 0x80);
             break;
         case 15:
-            Announcer_QueueLine(0x68, 0.0f, 0x80);
+            Announcer_QueueLine(104, 0.0f, 0x80);
             break;
         case 16:
-            Announcer_QueueLine(0x3A, 0.0f, 0x80);
+            Announcer_QueueLine(58, 0.0f, 0x80);
             break;
         case 18:
-            Announcer_QueueLine(0x4D, 0.0f, 0x80);
+            Announcer_QueueLine(77, 0.0f, 0x80);
             break;
         case 19:
             if ((u8)osGetCount() & 1) {
-                Announcer_QueueLine(0x50, 0.0f, 0x80);
+                Announcer_QueueLine(80, 0.0f, 0x80);
             } else {
-                Announcer_QueueLine(0x67, 0.0f, 0x80);
+                Announcer_QueueLine(103, 0.0f, 0x80);
             }
             break;
         case 25:
-            Announcer_QueueLine(0x4C, 0.0f, 0x80);
+            Announcer_QueueLine(76, 0.0f, 0x80);
             break;
         case 26:
-            Announcer_QueueLine(0x3B, 0.0f, 0x80);
+            Announcer_QueueLine(59, 0.0f, 0x80);
             D_80077580 = 1;
             break;
         case 27:
-            Announcer_QueueLine(0x4C, 0.0f, 0x80);
+            Announcer_QueueLine(76, 0.0f, 0x80);
             break;
         case 29:
-            Announcer_QueueLine(0x19, 0.0f, 0x80);
-            D_800FD6BC = func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+            Announcer_QueueLine(25, 0.0f, 0x80);
+            D_800FD6BC = func_8003834C(D_800B4188, D_800B41A4, 26, 0x80, 0x80, 0, -1);
             D_800FD6B8 = 1;
             D_8007755C = 1;
             break;
         case 30:
-            Announcer_QueueLine(0x1A, 0.0f, 0x80);
-            func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+            Announcer_QueueLine(26, 0.0f, 0x80);
+            func_8003834C(D_800B4188, D_800B41A4, 26, 0x80, 0x80, 0, -1);
             D_8007755C = 1;
             break;
         case 31:
-            Announcer_QueueLine(0x51, 0.0f, 0x80);
+            Announcer_QueueLine(81, 0.0f, 0x80);
             D_80077574 = 1;
             break;
         case 32:
-            Announcer_QueueLine(0x3C, 0.0f, 0x80);
+            Announcer_QueueLine(60, 0.0f, 0x80);
             break;
         case 33:
         case 34:
         case 35:
         case 36:
-            func_80037AC4(D_800775A8, 0x50);
-            D_800775A8 = func_8003834C(D_800B4188, D_800B41A4, 0xF, 0x80, 0x80, 0, -1);
+            func_80037AC4(D_800775A8, 80);
+            D_800775A8 = func_8003834C(D_800B4188, D_800B41A4, 15, 0x80, 0x80, 0, -1);
             break;
         case 37:
         case 38:
         case 39:
         case 40:
             if (D_800FD6B4[0] >= 2 && D_800FD6B4[1] >= 2) {
-                Announcer_QueueLine(0x1F, 0.0f, 0x80);
+                Announcer_QueueLine(31, 0.0f, 0x80);
             }
             break;
         case 41:
-            Announcer_QueueLine(0x1B, 0.0f, 0x80);
+            Announcer_QueueLine(27, 0.0f, 0x80);
             if (D_800FD6B8 == 0) {
-                func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+                func_8003834C(D_800B4188, D_800B41A4, 26, 0x80, 0x80, 0, -1);
             }
             D_8007755C = 1;
             break;
         case 42:
             if (D_800FD6B4[0] >= 2 && D_800FD6B4[1] >= 2) {
-                Announcer_QueueLine(0x1C, 0.0f, 0x80);
-                func_80037AC4(D_800FD6BC, 0x3C);
+                Announcer_QueueLine(28, 0.0f, 0x80);
+                func_80037AC4(D_800FD6BC, 60);
                 D_800FD6BC = 0;
-                func_8003834C(D_800B4188, D_800B41A4, 0x1C, 0x80, 0x80, 0, -1);
+                func_8003834C(D_800B4188, D_800B41A4, 28, 0x80, 0x80, 0, -1);
                 D_8007755C = 1;
                 D_80077564 = 1;
             }
             break;
         case 43:
             if (D_80077580 == 0) {
-                Announcer_QueueLine(0x69, 0.0f, 0x80);
+                Announcer_QueueLine(105, 0.0f, 0x80);
             }
             break;
         case 44:
             if (D_80077580 == 0) {
-                Announcer_QueueLine(0x5B, 0.0f, 0x80);
+                Announcer_QueueLine(91, 0.0f, 0x80);
             }
             break;
         case 45:
-            Announcer_QueueLine(0x1E, 0.0f, 0x80);
+            Announcer_QueueLine(30, 0.0f, 0x80);
             break;
         case 46:
-            Announcer_QueueLine(0x4E, 0.0f, 0x80);
+            Announcer_QueueLine(78, 0.0f, 0x80);
             break;
     }
 }
@@ -384,243 +384,243 @@ u32 func_80053A80(void);
  */
 void Announcer_CommentOnMessage(s32 kind) {
     switch (kind) {
-    case 0x0:
-        Announcer_QueueLine(0x3C, 0.0f, 0x80);
+    case 0:
+        Announcer_QueueLine(60, 0.0f, 0x80);
         break;
-    case 0x1:
-        Announcer_QueueLine(0x3C, 0.0f, 0x80);
+    case 1:
+        Announcer_QueueLine(60, 0.0f, 0x80);
         break;
-    case 0x2:
-        Announcer_QueueLine(0x24, 0.0f, 0x80);
+    case 2:
+        Announcer_QueueLine(36, 0.0f, 0x80);
         if ((u8)func_80053A80() & 1) {
-            Announcer_QueueLine(0x2F, 0.0f, 0x80);
+            Announcer_QueueLine(47, 0.0f, 0x80);
             D_80077568 = 1;
         }
-        func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+        func_8003834C(D_800B4188, D_800B41A4, 26, 0x80, 0x80, 0, -1);
         break;
-    case 0x3:
-        Announcer_QueueLine(0x3C, 0.0f, 0x80);
+    case 3:
+        Announcer_QueueLine(60, 0.0f, 0x80);
         break;
-    case 0x4:
+    case 4:
         if (D_80077564 == 0) {
-            Announcer_QueueLine(0x5C, 0.0f, 0x80);
+            Announcer_QueueLine(92, 0.0f, 0x80);
         }
         break;
-    case 0x5:
+    case 5:
         if (D_80077564 == 0) {
-            Announcer_QueueLine(0x5C, 0.0f, 0x80);
+            Announcer_QueueLine(92, 0.0f, 0x80);
         }
         break;
-    case 0x6:
-        Announcer_QueueLine(0x3C, 0.0f, 0x80);
+    case 6:
+        Announcer_QueueLine(60, 0.0f, 0x80);
         break;
-    case 0x9:
-        Announcer_QueueLine(0x27, 0.0f, 0x80);
-        func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+    case 9:
+        Announcer_QueueLine(39, 0.0f, 0x80);
+        func_8003834C(D_800B4188, D_800B41A4, 26, 0x80, 0x80, 0, -1);
         break;
-    case 0xA:
+    case 10:
         if (D_80077564 == 0) {
-            Announcer_QueueLine(0x5C, 0.0f, 0x80);
+            Announcer_QueueLine(92, 0.0f, 0x80);
         }
         break;
-    case 0xB:
-        Announcer_QueueLine(0x25, 0.0f, 0x80);
+    case 11:
+        Announcer_QueueLine(37, 0.0f, 0x80);
         if ((u8)func_80053A80() & 1) {
-            Announcer_QueueLine(0x2F, 0.0f, 0x80);
+            Announcer_QueueLine(47, 0.0f, 0x80);
             D_80077568 = 1;
         }
-        func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+        func_8003834C(D_800B4188, D_800B41A4, 26, 0x80, 0x80, 0, -1);
         break;
-    case 0xC:
+    case 12:
         if (D_80077564 == 0) {
-            Announcer_QueueLine(0x5C, 0.0f, 0x80);
+            Announcer_QueueLine(92, 0.0f, 0x80);
         }
         break;
-    case 0xD:
+    case 13:
         if (D_80077574 == 0) {
-            Announcer_QueueLine(0x5F, 0.0f, 0x80);
+            Announcer_QueueLine(95, 0.0f, 0x80);
         } else {
             D_80077574 = 0;
         }
         break;
-    case 0xE:
-        Announcer_QueueLine(0x60, 0.0f, 0x80);
+    case 14:
+        Announcer_QueueLine(96, 0.0f, 0x80);
         break;
-    case 0xF:
-        Announcer_QueueLine(0x61, 0.0f, 0x80);
+    case 15:
+        Announcer_QueueLine(97, 0.0f, 0x80);
         break;
-    case 0x10:
-        Announcer_QueueLine(0x62, 0.0f, 0x80);
+    case 16:
+        Announcer_QueueLine(98, 0.0f, 0x80);
         break;
-    case 0x11:
-        Announcer_QueueLine(0x63, 0.0f, 0x80);
+    case 17:
+        Announcer_QueueLine(99, 0.0f, 0x80);
         break;
-    case 0x12:
-        Announcer_QueueLine(0x64, 0.0f, 0x80);
+    case 18:
+        Announcer_QueueLine(100, 0.0f, 0x80);
         break;
-    case 0x13:
+    case 19:
         if (D_80077574 == 0) {
-            Announcer_QueueLine(0x5F, 0.0f, 0x80);
+            Announcer_QueueLine(95, 0.0f, 0x80);
         } else {
             D_80077574 = 0;
         }
         break;
-    case 0x14:
-        Announcer_QueueLine(0x60, 0.0f, 0x80);
+    case 20:
+        Announcer_QueueLine(96, 0.0f, 0x80);
         break;
-    case 0x15:
-        Announcer_QueueLine(0x61, 0.0f, 0x80);
+    case 21:
+        Announcer_QueueLine(97, 0.0f, 0x80);
         break;
-    case 0x16:
-        Announcer_QueueLine(0x62, 0.0f, 0x80);
+    case 22:
+        Announcer_QueueLine(98, 0.0f, 0x80);
         break;
-    case 0x17:
-        Announcer_QueueLine(0x63, 0.0f, 0x80);
+    case 23:
+        Announcer_QueueLine(99, 0.0f, 0x80);
         break;
-    case 0x18:
-        Announcer_QueueLine(0x64, 0.0f, 0x80);
+    case 24:
+        Announcer_QueueLine(100, 0.0f, 0x80);
         break;
-    case 0x19:
-        Announcer_QueueLine(0x4C, 0.0f, 0x80);
+    case 25:
+        Announcer_QueueLine(76, 0.0f, 0x80);
         break;
-    case 0x1A:
-    case 0x1B:
-    case 0x1C:
-    case 0x1D:
-    case 0x1E:
-    case 0x1F:
-    case 0x20:
-    case 0x21:
-    case 0x22:
-    case 0x23:
-    case 0x24:
-    case 0x25:
+    case 26:
+    case 27:
+    case 28:
+    case 29:
+    case 30:
+    case 31:
+    case 32:
+    case 33:
+    case 34:
+    case 35:
+    case 36:
+    case 37:
         if (D_80077564 == 0) {
-            Announcer_QueueLine(0x5C, 0.0f, 0x80);
+            Announcer_QueueLine(92, 0.0f, 0x80);
         }
         break;
-    case 0x26:
-        Announcer_QueueLine(0x4C, 0.0f, 0x80);
+    case 38:
+        Announcer_QueueLine(76, 0.0f, 0x80);
         break;
-    case 0x27:
-        Announcer_QueueLine(0x3C, 0.0f, 0x80);
+    case 39:
+        Announcer_QueueLine(60, 0.0f, 0x80);
         break;
-    case 0x28:
-        Announcer_QueueLine(0x3C, 0.0f, 0x80);
+    case 40:
+        Announcer_QueueLine(60, 0.0f, 0x80);
         break;
-    case 0x29:
-        Announcer_QueueLine(0x4C, 0.0f, 0x80);
+    case 41:
+        Announcer_QueueLine(76, 0.0f, 0x80);
         break;
-    case 0x2D:
-        Announcer_QueueLine(0x3C, 0.0f, 0x80);
+    case 45:
+        Announcer_QueueLine(60, 0.0f, 0x80);
         break;
-    case 0x2E:
-        Announcer_QueueLine(0x4C, 0.0f, 0x80);
+    case 46:
+        Announcer_QueueLine(76, 0.0f, 0x80);
         break;
-    case 0x35:
-        Announcer_QueueLine(0x3C, 0.0f, 0x80);
+    case 53:
+        Announcer_QueueLine(60, 0.0f, 0x80);
         break;
-    case 0x36:
-        Announcer_QueueLine(0x65, 0.0f, 0x80);
+    case 54:
+        Announcer_QueueLine(101, 0.0f, 0x80);
         break;
-    case 0x37:
-        Announcer_QueueLine(0x3C, 0.0f, 0x80);
+    case 55:
+        Announcer_QueueLine(60, 0.0f, 0x80);
         break;
-    case 0x38:
-        Announcer_QueueLine(0x48, 0.0f, 0x80);
+    case 56:
+        Announcer_QueueLine(72, 0.0f, 0x80);
         break;
-    case 0x3A:
+    case 58:
         if (D_80077564 == 0) {
-            Announcer_QueueLine(0x5C, 0.0f, 0x80);
+            Announcer_QueueLine(92, 0.0f, 0x80);
         }
         break;
-    case 0x3B:
+    case 59:
         if (D_80077564 == 0) {
-            Announcer_QueueLine(0x5C, 0.0f, 0x80);
+            Announcer_QueueLine(92, 0.0f, 0x80);
         }
         break;
-    case 0x3C:
-        Announcer_QueueLine(0x3C, 0.0f, 0x80);
+    case 60:
+        Announcer_QueueLine(60, 0.0f, 0x80);
         break;
-    case 0x3D:
+    case 61:
         if (D_80077564 == 0) {
-            Announcer_QueueLine(0x5C, 0.0f, 0x80);
+            Announcer_QueueLine(92, 0.0f, 0x80);
         }
         break;
-    case 0x3E:
-        Announcer_QueueLine(0x4C, 0.0f, 0x80);
+    case 62:
+        Announcer_QueueLine(76, 0.0f, 0x80);
         break;
-    case 0x3F:
-        Announcer_QueueLine(0x4C, 0.0f, 0x80);
+    case 63:
+        Announcer_QueueLine(76, 0.0f, 0x80);
         break;
-    case 0x40:
-        Announcer_QueueLine(0x6B, 0.0f, 0x80);
+    case 64:
+        Announcer_QueueLine(107, 0.0f, 0x80);
         break;
-    case 0x41:
-        Announcer_QueueLine(0x3C, 0.0f, 0x80);
+    case 65:
+        Announcer_QueueLine(60, 0.0f, 0x80);
         break;
-    case 0x42:
+    case 66:
         if (D_80077564 == 0) {
-            Announcer_QueueLine(0x47, 0.0f, 0x80);
+            Announcer_QueueLine(71, 0.0f, 0x80);
         }
         break;
-    case 0x43:
-        Announcer_QueueLine(0x3B, 0.0f, 0x80);
+    case 67:
+        Announcer_QueueLine(59, 0.0f, 0x80);
         break;
-    case 0x44:
-        Announcer_QueueLine(0x4C, 0.0f, 0x80);
+    case 68:
+        Announcer_QueueLine(76, 0.0f, 0x80);
         break;
-    case 0x45:
+    case 69:
         if (D_80077564 == 0) {
-            Announcer_QueueLine(0x5C, 0.0f, 0x80);
+            Announcer_QueueLine(92, 0.0f, 0x80);
         }
         break;
-    case 0x46:
-        Announcer_QueueLine(0x3C, 0.0f, 0x80);
+    case 70:
+        Announcer_QueueLine(60, 0.0f, 0x80);
         break;
-    case 0x48:
-        Announcer_QueueLine(0x6B, 0.0f, 0x80);
+    case 72:
+        Announcer_QueueLine(107, 0.0f, 0x80);
         break;
-    case 0x49:
-        Announcer_QueueLine(0x3C, 0.0f, 0x80);
+    case 73:
+        Announcer_QueueLine(60, 0.0f, 0x80);
         break;
-    case 0x4A:
-        Announcer_QueueLine(0x2B, 0.0f, 0x80);
-        func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+    case 74:
+        Announcer_QueueLine(43, 0.0f, 0x80);
+        func_8003834C(D_800B4188, D_800B41A4, 26, 0x80, 0x80, 0, -1);
         break;
-    case 0x4D:
-        Announcer_QueueLine(0x2A, 0.0f, 0x80);
-        func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+    case 77:
+        Announcer_QueueLine(42, 0.0f, 0x80);
+        func_8003834C(D_800B4188, D_800B41A4, 26, 0x80, 0x80, 0, -1);
         break;
-    case 0x4E:
-        Announcer_QueueLine(0x3C, 0.0f, 0x80);
+    case 78:
+        Announcer_QueueLine(60, 0.0f, 0x80);
         break;
-    case 0x4F:
-        Announcer_QueueLine(0x28, 0.0f, 0x80);
-        func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+    case 79:
+        Announcer_QueueLine(40, 0.0f, 0x80);
+        func_8003834C(D_800B4188, D_800B41A4, 26, 0x80, 0x80, 0, -1);
         break;
-    case 0x50:
-        Announcer_QueueLine(0x3C, 0.0f, 0x80);
+    case 80:
+        Announcer_QueueLine(60, 0.0f, 0x80);
         break;
-    case 0x51:
-        Announcer_QueueLine(0x65, 0.0f, 0x80);
+    case 81:
+        Announcer_QueueLine(101, 0.0f, 0x80);
         break;
-    case 0x52:
-        Announcer_QueueLine(0x3C, 0.0f, 0x80);
+    case 82:
+        Announcer_QueueLine(60, 0.0f, 0x80);
         break;
-    case 0x53:
-        Announcer_QueueLine(0x66, 0.0f, 0x80);
+    case 83:
+        Announcer_QueueLine(102, 0.0f, 0x80);
         break;
-    case 0x54:
-        Announcer_QueueLine(0x3C, 0.0f, 0x80);
+    case 84:
+        Announcer_QueueLine(60, 0.0f, 0x80);
         break;
-    case 0x55:
-    case 0x56:
-        Announcer_QueueLine(0x3C, 0.0f, 0x80);
+    case 85:
+    case 86:
+        Announcer_QueueLine(60, 0.0f, 0x80);
         break;
-    case 0x57:
-        Announcer_QueueLine(0x29, 0.0f, 0x80);
-        func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+    case 87:
+        Announcer_QueueLine(41, 0.0f, 0x80);
+        func_8003834C(D_800B4188, D_800B41A4, 26, 0x80, 0x80, 0, -1);
         break;
     }
 }
@@ -649,7 +649,7 @@ void Announcer_CommentOnHpChange(u32 side) {
             prev = (u32*)&D_800FD6A0[side];
             if (side == D_80077554) {
                 if ((hp < 30) && (D_80077570 != 0)) {
-                    Announcer_QueueLine(0x6A, 0.0f, 0x80);
+                    Announcer_QueueLine(106, 0.0f, 0x80);
                     D_80077570 = 0;
                 }
             } else {
@@ -657,23 +657,23 @@ void Announcer_CommentOnHpChange(u32 side) {
                 *prev = hp;
                 if (lost > 0) {
                     if ((hp < 10) && (hp != 0)) {
-                        Announcer_QueueLine(0x22, 0.0f, 0x80);
-                        func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+                        Announcer_QueueLine(34, 0.0f, 0x80);
+                        func_8003834C(D_800B4188, D_800B41A4, 26, 0x80, 0x80, 0, -1);
                         return;
                     }
                     if (D_8007755C == 0) {
                         if (lost < 15) {
                             if (((u8)osGetCount() & 0x11) || (D_80077548 < 2)) {
-                                Announcer_QueueLine(0x3F, 0.0f, 0x80);
+                                Announcer_QueueLine(63, 0.0f, 0x80);
                                 D_80077564 = 1;
                             }
                         } else if (lost < 60) {
                             if (((u8)osGetCount() & 1) || (D_80077548 < 2)) {
-                                Announcer_QueueLine(0x3D, 0.0f, 0x80);
+                                Announcer_QueueLine(61, 0.0f, 0x80);
                                 D_80077564 = 1;
                             }
                         } else {
-                            Announcer_QueueLine(0x3E, 0.0f, 0x80);
+                            Announcer_QueueLine(62, 0.0f, 0x80);
                         }
                     } else {
                         D_8007755C = 0;
@@ -684,23 +684,6 @@ void Announcer_CommentOnHpChange(u32 side) {
     }
 }
 
-/*
- * Announcer_CommentOnBattleEnd
- *
- * Chooses between two settings depending on D_80077540 and D_800FD6B4 and
- * sets the flag byte D_80077530.
- *
- *   - If D_80077540 == 8 and the byte D_800FD6B4 is at least 2:
- *     Announcer_QueueLine(0x18, 0.0f, 0x80) and D_80077530 = 1; nothing else.
- *   - In every other case: Announcer_QueueLine(0x1E, 0.0f, 0x80), D_80077530 = 0,
- *     then func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1).
- *
- * The second argument of Announcer_QueueLine is a float: with a float parameter
- * the compiler loads the constant into $a1 with `li`, which is what the ROM
- * does (an integer 0 would use `move $a1, $zero`).  What Announcer_QueueLine
- * (still assembly) and func_8003834C do with these values is not
- * established here.
- */
 void Announcer_QueueLine(s32, f32, s32);
 extern s8 D_80077530;
 extern u8 D_80077540;
@@ -708,25 +691,26 @@ extern s32 D_800B4188;
 extern s32 D_800B41A4;
 
 /**
- * Queues the closing line when a side wins (turn_actions sets the winner right before). In mode 8 a
- * winner with two or more left gets line 0x18 instead of 0x1E.
+ * Queues the closing line when a side wins (turn_actions sets the winner right before). In mode 8, if
+ * side 0 has two or more Pokémon left it queues line 24 and sets D_80077530 (Audio_PlayCommand 80 then
+ * skips the music); otherwise it queues line 30 and plays system sound 26.
  * @unverified: called right after the winner is set; the line ids are not mapped to clips.
  */
 void Announcer_CommentOnBattleEnd(void) {
     if (D_80077540 == 8) {
         if (D_800FD6B4[0] >= 2) {
-            Announcer_QueueLine(0x18, 0.0f, 0x80);
+            Announcer_QueueLine(24, 0.0f, 0x80);
             D_80077530 = 1;
             return;
         }
-        Announcer_QueueLine(0x1E, 0.0f, 0x80);
+        Announcer_QueueLine(30, 0.0f, 0x80);
         D_80077530 = 0;
-        func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+        func_8003834C(D_800B4188, D_800B41A4, 26, 0x80, 0x80, 0, -1);
         return;
     }
-    Announcer_QueueLine(0x1E, 0.0f, 0x80);
+    Announcer_QueueLine(30, 0.0f, 0x80);
     D_80077530 = 0;
-    func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+    func_8003834C(D_800B4188, D_800B41A4, 26, 0x80, 0x80, 0, -1);
 }
 
 extern s32 D_80077590;
@@ -812,8 +796,8 @@ extern QueuedEntry80043CE8 D_800FD6C0[];
 s32 func_8004D300(s32);
 
 /**
- * Queues announcer line `lineId` with `delay` and volume `volume` + 0x70 (clamped to 255) in a ring of 10, at
- * most 2 pending. Does nothing while the announcer is off. Seen in play (2026-11-14, COM battle, breakpoint): called with line 0x41, 0.0, 0x80.
+ * Queues announcer line `line_id` with `delay` and volume `volume` + 112 (clamped to 255) in a ring of 10, at
+ * most 2 pending. Does nothing while the announcer is off. Seen in play (2026-11-14, COM battle, breakpoint): called with line 65, 0.0, 128.
  */
 void Announcer_QueueLine(s32 line_id, f32 delay, s32 volume) {
     s32 prev_mask;
@@ -828,7 +812,7 @@ void Announcer_QueueLine(s32 line_id, f32 delay, s32 volume) {
         if (count < 2) {
             idx = D_8007758C;
             entry = &D_800FD6C0[idx];
-            level = volume + 0x70;
+            level = volume + 112;
             entry->level = level;
             entry->id = line_id;
             entry->value = delay;
@@ -855,6 +839,10 @@ s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 s32 func_800383DC(s32, s32, s32, s32, s32, s32, s32);
 
 /**
+ * Runs once per audio frame (from __amHandleFrame): when the previous announcer clip has ended, plays the
+ * next line queued by Announcer_QueueLine from the announcer bank (D_800B418C). While the announcer is
+ * active it also counts frames (D_80077598) and queues lines 46, 49 (with system sound 25) and 50 as the
+ * count passes 1001, 1601 and 2201 (2601, 3201 and 3801 while D_80077548 is 0); line 50 rewinds the count.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the main menu, the Pokédex,
  * the party screen, the Lab list, Lab sort, registration, the Lab PC, Free Battle setup, the battle
  * opening, a switch in battle, running from battle and a Pound turn.
@@ -875,31 +863,31 @@ void Audio_UpdateBattleAudioFrame(void) {
     }
 
     if (D_8007754C != 0) {
-        if ((D_80077598 >= 0x3E9) && (D_8007759C == 0) && (D_80077548 > 0)) {
-            Announcer_QueueLine(0x2E, 0.0f, 0x80);
+        if ((D_80077598 >= 1001) && (D_8007759C == 0) && (D_80077548 > 0)) {
+            Announcer_QueueLine(46, 0.0f, 0x80);
             D_8007759C = 1;
-        } else if ((D_80077598 >= 0xA29) && (D_8007759C == 0) && (D_80077548 == 0)) {
-            Announcer_QueueLine(0x2E, 0.0f, 0x80);
+        } else if ((D_80077598 >= 2601) && (D_8007759C == 0) && (D_80077548 == 0)) {
+            Announcer_QueueLine(46, 0.0f, 0x80);
             D_8007759C = 1;
-        } else if ((D_80077598 >= 0x641) && (D_8007759C == 1) && (D_80077548 > 0)) {
-            Announcer_QueueLine(0x31, 0.0f, 0x80);
+        } else if ((D_80077598 >= 1601) && (D_8007759C == 1) && (D_80077548 > 0)) {
+            Announcer_QueueLine(49, 0.0f, 0x80);
             if (D_800775A0 == 0) {
-                D_800775A0 = func_800383DC(D_800B4188, D_800B41A4, 0x19, 0x80, 0x80, 0, -1);
+                D_800775A0 = func_800383DC(D_800B4188, D_800B41A4, 25, 0x80, 0x80, 0, -1);
             }
             D_8007759C = 2;
-        } else if ((D_80077598 >= 0xC81) && (D_8007759C == 1) && (D_80077548 == 0)) {
-            Announcer_QueueLine(0x31, 0.0f, 0x80);
+        } else if ((D_80077598 >= 3201) && (D_8007759C == 1) && (D_80077548 == 0)) {
+            Announcer_QueueLine(49, 0.0f, 0x80);
             if (D_800775A0 == 0) {
-                D_800775A0 = func_800383DC(D_800B4188, D_800B41A4, 0x19, 0x80, 0x80, 0, -1);
+                D_800775A0 = func_800383DC(D_800B4188, D_800B41A4, 25, 0x80, 0x80, 0, -1);
             }
             D_8007759C = 2;
-        } else if ((D_80077598 >= 0x899) && (D_80077548 > 0)) {
-            Announcer_QueueLine(0x32, 0.0f, 0x80);
-            D_80077598 = 0x3E8;
+        } else if ((D_80077598 >= 2201) && (D_80077548 > 0)) {
+            Announcer_QueueLine(50, 0.0f, 0x80);
+            D_80077598 = 1000;
             D_8007759C = 1;
-        } else if ((D_80077598 >= 0xED9) && (D_80077548 == 0)) {
-            Announcer_QueueLine(0x32, 0.0f, 0x80);
-            D_80077598 = 0xA28;
+        } else if ((D_80077598 >= 3801) && (D_80077548 == 0)) {
+            Announcer_QueueLine(50, 0.0f, 0x80);
+            D_80077598 = 2600;
             D_8007759C = 1;
         }
         D_80077598++;
@@ -914,6 +902,9 @@ s32 func_80037F68(u8*, u8*);
 void func_80037C04(s32, u32);
 
 /**
+ * Loads the second sound bank and its wave table into `arg0` (13000 bytes of bank, then the wave data),
+ * relocates them, marks the wave data as loaded (D_80075C30 bit 31), then loads the first sequence file
+ * and starts it at volume 112. Returns the sound handle.
  * Seen in play (2026-11-13) ran just after Start at the title screen (console reset, then N64 logo,
  * opening, title and main menu).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
@@ -923,19 +914,19 @@ s32 Audio_LoadWaveTablesAndMusic(u8* arg0) {
     u8* sp1C;
 
     D_800FD690 = arg0;
-    sp1C = D_800FD690 + 0x32C0;
+    sp1C = D_800FD690 + 12992;
 
     if (1) {}  // karodo
 
     Rom_DmaRead(D_800B4164->offset1, (u32)D_800B41F0, D_800B4164->wave_tables_offset - D_800B4164->offset1);
-    Audio_CopyDataWithCacheSync((s32)D_800B41F0, D_800FD690, 0x32C0);
+    Audio_CopyDataWithCacheSync((s32)D_800B41F0, D_800FD690, 12992);
     Rom_DmaRead(D_800B4164->wave_tables_offset, (u32)sp1C, D_800B4164->files[0] - D_800B4164->wave_tables_offset);
     Audio_RelocateSoundBankWrapper((s32)D_800FD690, (s32)sp1C);
     D_80075C30 |= 0x80000000;
     Rom_DmaRead(D_800B4164->files[0], (u32)D_800B41F0, D_800B4164->files[1] - D_800B4164->files[0]);
-    Audio_CopyDataWithCacheSync((s32)D_800B41F0, D_800B419C, 0x8CA0);
+    Audio_CopyDataWithCacheSync((s32)D_800B41F0, D_800B419C, 36000);
     D_800FD608 = func_80037F68(D_800FD690, D_800B419C);
-    func_80037C04(D_800FD608, 0x70);
+    func_80037C04(D_800FD608, 112);
 
     return D_800FD608;
 }

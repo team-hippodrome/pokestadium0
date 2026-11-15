@@ -271,10 +271,10 @@ Acmd* n_alEnvmixerPull(N_PVoice* filter, s32 sample_offset, Acmd* p) {
 }
 
 /** Sets a parameter on an envelope mixer voice. */
-s32 n_alEnvmixerParam(N_PVoice* filter, s32 paramID, void* param) {
+s32 n_alEnvmixerParam(N_PVoice* filter, s32 param_id, void* param) {
     N_PVoice* e = filter;
 
-    switch (paramID) {
+    switch (param_id) {
         case (AL_FILTER_ADD_UPDATE):
             if (e->em_ctrlTail) {
                 e->em_ctrlTail->next = (ALParam*)param;
@@ -296,7 +296,7 @@ s32 n_alEnvmixerParam(N_PVoice* filter, s32 paramID, void* param) {
             e->em_motion = AL_PLAYING;
             break;
         default:
-            n_alLoadParam(e, paramID, param);
+            n_alLoadParam(e, param_id, param);
             break;
     }
     return 0;
@@ -429,7 +429,7 @@ void amCreateAudioMgr(ALSynConfig* c, amConfig* amc, u32 num_dma_buffers, s32 ar
 
     frameSize = ((frameSize / SAMPLES) + 1) * SAMPLES;
     minFrameSize = frameSize - SAMPLES;
-    maxFrameSize = frameSize + 0x120;
+    maxFrameSize = frameSize + 288;
 
     alInit(&__am.g, c);
 
@@ -570,7 +570,7 @@ OSTask* __amHandleFrame(OSTask* arg0) {
         osAiSetNextBuffer(lastInfo->data, lastInfo->frameSamples << 2);
     }
 
-    if ((samples_left >= 0x1C9) && (min_only_one != 0)) {
+    if ((samples_left >= 457) && (min_only_one != 0)) {
         info->frameSamples = minFrameSize;
         min_only_one = 0;
     } else {
@@ -613,7 +613,7 @@ OSTask* __amHandleFrame(OSTask* arg0) {
     if (D_80075E04[0] != 0) {
         GbMusic_UpdateChannels();
         if (lastInfo != NULL) {
-            GbAudio_GenerateSamples(lastInfo->data, 0, ((audFrameCt % 3) == 0) ? 0x216 : 0x215, 0);
+            GbAudio_GenerateSamples(lastInfo->data, 0, ((audFrameCt % 3) == 0) ? 534 : 533, 0);
         }
     }
 
@@ -706,11 +706,14 @@ void Audio_SetOutputMode(s32 mode) {
     }
 }
 
-/** Enables or disables Pokemon cries. */
+/**
+ * Starts (`arg0` != 0) or stops the Game Boy sound emulator output that __amHandleFrame mixes into each
+ * audio frame: resets it for 32000 Hz with echo level 120 and delay 1600, at volume 0.8.
+ */
 void Cry_SetEnabled(s32 arg0) {
     const f32 D_8007C7C0 = 0.8000000119f;
     if (arg0 != 0) {
-        GbAudio_Reset(0x7D00, 0x78, 0x640);
+        GbAudio_Reset(32000, 120, 1600);
         D_80075E04[0] = 1;
         D_80075E08 = D_8007C7C0;
         return;
@@ -718,10 +721,13 @@ void Cry_SetEnabled(s32 arg0) {
     D_80075E04[0] = 0;
 }
 
-/** Plays a Pokemon's cry from the Pokedex. */
+/**
+ * Plays the Game Boy cry of species `arg0` (Pokédex), through the Game Boy sound emulator with echo delay
+ * 800, unless it is already running; Cry_Update steps it.
+ */
 void Cry_PlayFromPokedex(s32 arg0) {
     if (D_80075E04[0] == 0) {
-        GbAudio_Reset(0x7D00, 0x78, 0x320);
+        GbAudio_Reset(32000, 120, 800);
         D_80075E04[0] = 1;
         D_80075E10[0] = 1;
         D_80075E08 = 0.0f;
@@ -756,7 +762,7 @@ void Cry_Update(void) {
             }
             break;
         case 4:
-            if (D_80075E18 >= 0x1F) {
+            if (D_80075E18 >= 31) {
                 D_80075E10[0]++;
             }
             D_80075E18++;
@@ -785,7 +791,10 @@ extern s8 D_800B3F78;
 extern s32 D_800B3F94;
 
 /**
- * Seen in play (2026-11-13) ran each time the GB player started (main menu GB, Yes) and when
+ * Pauses (`arg0` == 0) or resumes the N64 audio task. Pausing only works once all sound has stopped
+ * (Audio_GetActivityScore is 0) and returns 0 otherwise; resuming restores the output rate and clears
+ * the pause flag D_80075E0C. Returns 1 when done.
+ * Seen in play (2026-11-13) ran each time the GB Player started (main menu GB, Yes) and when
  * quitting it (C-Up menu, Quit game, Yes).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
@@ -795,7 +804,7 @@ s32 Audio_SetEnabled(s32 arg0) {
             return 0;
         }
         D_80075E0C = 1;
-        goto block_5;
+        goto block_5; // FAKE: goto
     }
     func_80058100(D_800B3F94);
     D_80075E30 = 0;

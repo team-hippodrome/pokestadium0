@@ -33,7 +33,12 @@ s32 func_8003834C(s32, s32, s32, s32, s32, s32, s32);
 s32 func_80047260(s32);
 void Announcer_Reset(s32, s32);
 
-/** Plays an audio command with the given parameters. */
+/**
+ * Plays sound command `arg0` from the system sound bank (D_800B4188) and returns its handle, or 0 when
+ * nothing plays. `arg1` is a species for commands 6-8, 15-17, 50 and 51 (its sound class from
+ * D_80077068), a pan angle (-90 to 90) for command 1 and the announcer mode for command 60 (with `arg2`
+ * the team size, see Announcer_Reset). Commands 30-35 play the special move sound 166 with kinds 0-5.
+ */
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2) {
     s32 pad[3]; // FAKE
     s32 ret;
@@ -48,7 +53,7 @@ s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2) {
             if (Audio_QueueSetMonoOutputCommand(D_800FD654) != 0) {
                 return 0;
             }
-            ret = D_800FD654 = func_8003834C(D_800B4188, D_800B41A4, 1, 0x70, 0x80, 0, -1);
+            ret = D_800FD654 = func_8003834C(D_800B4188, D_800B41A4, 1, 112, 0x80, 0, -1);
             break;
 
         case 1:
@@ -68,7 +73,7 @@ s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2) {
 
         case 2:
             if (func_80047260(D_800FD66C) != 0) {
-                func_80037AC4(D_800FD66C, 0x14);
+                func_80037AC4(D_800FD66C, 20);
                 D_800FD66C = 0;
             }
             ret = func_8003834C(D_800B4188, D_800B41A4, 3, 0x80, 0x80, 0, -1);
@@ -89,8 +94,8 @@ s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2) {
         case 7:
         case 8:
             arg1 = 3;
-        case 0x33:
-            if ((arg1 > 0) && (arg1 < 0x98)) {
+        case 51:
+            if ((arg1 > 0) && (arg1 < 152)) {
                 arg1--;
             } else {
                 arg1 = 0;
@@ -122,8 +127,8 @@ s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2) {
         case 16:
         case 17:
             arg1 = 2;
-        case 0x32:
-            if ((arg1 > 0) && (arg1 < 0x98)) {
+        case 50:
+            if ((arg1 > 0) && (arg1 < 152)) {
                 arg1--;
             } else {
                 arg1 = 0;
@@ -159,7 +164,7 @@ s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2) {
         case 24:
             break;
 
-        case 0x3C:
+        case 60:
             if (Audio_QueueSetMonoOutputCommand(D_800FD738) != 0) {
                 func_80037AC4(D_800FD738, 100);
                 D_800FD738 = 0;
@@ -178,61 +183,61 @@ s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2) {
             }
             Announcer_Reset(arg1, arg2);
             if (arg1 == 0) {
-                ret = func_8003834C(D_800B4188, D_800B41A4, 0x23, 0xA0, 0x80, 0, -1);
+                ret = func_8003834C(D_800B4188, D_800B41A4, 35, 160, 0x80, 0, -1);
             } else {
-                ret = func_8003834C(D_800B4188, D_800B41A4, arg1 + 0xF, 0xA0, 0x80, 0, -1);
+                ret = func_8003834C(D_800B4188, D_800B41A4, arg1 + 15, 160, 0x80, 0, -1);
             }
             break;
 
-        case 0x3D:
+        case 61:
             D_8007753C = 1;
             switch (arg1) {
                 case 0:
-                    D_800FD738 = ret = func_8003834C(D_800B4188, D_800B41A4, 0x1D, 0x80, 0x80, 0, -1);
+                    D_800FD738 = ret = func_8003834C(D_800B4188, D_800B41A4, 29, 0x80, 0x80, 0, -1);
                     break;
                 case 1:
-                    ret = func_8003834C(D_800B4188, D_800B41A4, 0x1E, 0x80, 0x80, 0, -1);
+                    ret = func_8003834C(D_800B4188, D_800B41A4, 30, 0x80, 0x80, 0, -1);
                     break;
                 case 2:
                     switch (arg2) {
                         case 1:
-                            pan = 0x1E;
+                            pan = 30;
                             break;
                         case 2:
-                            pan = 0x64;
+                            pan = 100;
                             break;
                         case 3:
-                            pan = 0xAA;
+                            pan = 170;
                             break;
                         case 4:
-                            pan = 0x55;
+                            pan = 85;
                             break;
                         case 5:
-                            pan = 0x9B;
+                            pan = 155;
                             break;
                         case 6:
-                            pan = 0xE1;
+                            pan = 225;
                             break;
                         default:
-                            pan = 0x7F;
+                            pan = 127;
                             break;
                     }
-                    ret = func_8003834C(D_800B4188, D_800B41A4, 0x1F, 0x80, pan, 0, -1);
+                    ret = func_8003834C(D_800B4188, D_800B41A4, 31, 0x80, pan, 0, -1);
                     break;
                 case 3:
                     if (D_80077540 == 8) {
-                        ret = func_8003834C(D_800B4188, D_800B41A4, 0x2A, 0x80, 0x80, 0, -1);
+                        ret = func_8003834C(D_800B4188, D_800B41A4, 42, 0x80, 0x80, 0, -1);
                     } else {
-                        Audio_StartMusicTrack(0x14);
-                        ret = func_8003834C(D_800B4188, D_800B41A4, 0x20, 0x80, 0x80, 0, -1);
+                        Audio_StartMusicTrack(20);
+                        ret = func_8003834C(D_800B4188, D_800B41A4, 32, 0x80, 0x80, 0, -1);
                     }
                     break;
                 case 4:
                     if (D_80077540 == 0) {
-                        Audio_StartMusicTrack(0x14);
-                        ret = func_8003834C(D_800B4188, D_800B41A4, 0x2B, 0x80, 0x80, 0, -1);
+                        Audio_StartMusicTrack(20);
+                        ret = func_8003834C(D_800B4188, D_800B41A4, 43, 0x80, 0x80, 0, -1);
                     } else {
-                        ret = func_8003834C(D_800B4188, D_800B41A4, 0x21, 0x80, 0x80, 0, -1);
+                        ret = func_8003834C(D_800B4188, D_800B41A4, 33, 0x80, 0x80, 0, -1);
                     }
                     break;
                 default:
@@ -240,81 +245,81 @@ s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2) {
             }
             break;
 
-        case 0x50:
-            ret = func_8003834C(D_800B418C, D_800B41A8, D_80077540, 0xFF, 0x60, 0, -1);
-            func_8003834C(D_800B418C, D_800B41A8, D_80077540, 0xFF, 0xA0, 0, -1);
+        case 80:
+            ret = func_8003834C(D_800B418C, D_800B41A8, D_80077540, 0xFF, 96, 0, -1);
+            func_8003834C(D_800B418C, D_800B41A8, D_80077540, 0xFF, 160, 0, -1);
             if (D_80077530 == 0) {
-                D_800FD608 = Audio_StartMusicTrack(0xE);
+                D_800FD608 = Audio_StartMusicTrack(14);
             }
             break;
 
-        case 0x51:
-            ret = func_8003834C(D_800B4188, D_800B41A4, 0x24, 0x80, 0x80, 0, -1);
+        case 81:
+            ret = func_8003834C(D_800B4188, D_800B41A4, 36, 0x80, 0x80, 0, -1);
             break;
 
-        case 0x52:
-            ret = func_8003834C(D_800B4188, D_800B41A4, 0x27, 0xFF, 0x60, 0, -1);
-            func_8003834C(D_800B4188, D_800B41A4, 0x27, 0xFF, 0xA0, 0, -1);
-            func_8003834C(D_800B4188, D_800B41A4, 0x1A, 0x80, 0x80, 0, -1);
+        case 82:
+            ret = func_8003834C(D_800B4188, D_800B41A4, 39, 0xFF, 96, 0, -1);
+            func_8003834C(D_800B4188, D_800B41A4, 39, 0xFF, 160, 0, -1);
+            func_8003834C(D_800B4188, D_800B41A4, 26, 0x80, 0x80, 0, -1);
             break;
 
-        case 0x53:
-        case 0x54:
-        case 0x55:
-        case 0x56:
+        case 83:
+        case 84:
+        case 85:
+        case 86:
             break;
 
-        case 0x57:
-            ret = func_8003834C(D_800B4188, D_800B41A4, 0x29, 0xFF, 0x80, 0, -1);
+        case 87:
+            ret = func_8003834C(D_800B4188, D_800B41A4, 41, 0xFF, 0x80, 0, -1);
             break;
 
-        case 0x46:
+        case 70:
             switch (arg1) {
                 case 1:
                     if (Audio_QueueSetMonoOutputCommand(D_800FD680) == 0) {
-                        D_800FD680 = func_8003834C(D_800B4188, D_800B41A4, 0x22, 0x50, 0x80, 0, -1);
+                        D_800FD680 = func_8003834C(D_800B4188, D_800B41A4, 34, 80, 0x80, 0, -1);
                     } else {
-                        func_80037C04(D_800FD680, 0x50);
+                        func_80037C04(D_800FD680, 80);
                     }
                     break;
                 case 2:
                     if (Audio_QueueSetMonoOutputCommand(D_800FD680) == 0) {
-                        D_800FD680 = func_8003834C(D_800B4188, D_800B41A4, 0x22, 0x50, 0x80, 0, -1);
+                        D_800FD680 = func_8003834C(D_800B4188, D_800B41A4, 34, 80, 0x80, 0, -1);
                     } else {
-                        func_80037C04(D_800FD680, 0x50);
+                        func_80037C04(D_800FD680, 80);
                     }
                     break;
                 case 3:
                     if (Audio_QueueSetMonoOutputCommand(D_800FD680) == 0) {
-                        D_800FD680 = func_8003834C(D_800B4188, D_800B41A4, 0x22, 0x50, 0x80, 0, -1);
+                        D_800FD680 = func_8003834C(D_800B4188, D_800B41A4, 34, 80, 0x80, 0, -1);
                     } else {
-                        func_80037C04(D_800FD680, 0x50);
+                        func_80037C04(D_800FD680, 80);
                     }
                     break;
                 default:
-                    func_80037AC4(D_800FD680, 0x5A);
+                    func_80037AC4(D_800FD680, 90);
                     D_800FD680 = 0;
                     return 0;
             }
             break;
 
-        case 0x1E:
-            ret = Audio_PlayMoveSound(0xA6, 1, 0);
+        case 30:
+            ret = Audio_PlayMoveSound(166, 1, 0);
             break;
-        case 0x1F:
-            ret = Audio_PlayMoveSound(0xA6, 1, 1);
+        case 31:
+            ret = Audio_PlayMoveSound(166, 1, 1);
             break;
-        case 0x20:
-            ret = Audio_PlayMoveSound(0xA6, 1, 2);
+        case 32:
+            ret = Audio_PlayMoveSound(166, 1, 2);
             break;
-        case 0x21:
-            ret = Audio_PlayMoveSound(0xA6, 1, 3);
+        case 33:
+            ret = Audio_PlayMoveSound(166, 1, 3);
             break;
-        case 0x22:
-            ret = Audio_PlayMoveSound(0xA6, 1, 4);
+        case 34:
+            ret = Audio_PlayMoveSound(166, 1, 4);
             break;
-        case 0x23:
-            ret = Audio_PlayMoveSound(0xA6, 1, 5);
+        case 35:
+            ret = Audio_PlayMoveSound(166, 1, 5);
             break;
 
         default:
@@ -330,7 +335,7 @@ extern s32 D_800FD658[];
 extern s32 D_800FD738;
 extern s32 D_800FD680;
 /**
- * Fades out the stored sound handle of `category` (0 music, 3, 4, 5 = per-slot, 0x3D, 0x46) over
+ * Fades out the stored sound handle of `category` (0 music, 3, 4, 5 = per-slot, 61, 70) over
  * `frames` (at least 1; some categories use fixed times) and clears it. Returns 0 for an unknown category.
  * @unverified: categories named from the handles they use.
  */
@@ -353,19 +358,19 @@ s32 Audio_StopSoundByCategory(s32 category, s32 frames) {
             D_800B3CE4 = 0;
             break;
         case 3:
-            func_80037AC4(D_800FD66C, 0x3C);
+            func_80037AC4(D_800FD66C, 60);
             D_800FD66C = 0;
             break;
         case 5:
             idx = frames - 1;
-            func_80037AC4(D_800FD658[idx ^ 0], 0xA); // FAKE: keeps idx unfolded in v0
+            func_80037AC4(D_800FD658[idx ^ 0], 10); // FAKE: keeps idx unfolded in v0
             D_800FD658[idx] = 0;
             break;
-        case 0x3D:
-            func_80037AC4(D_800FD738, 0x78);
+        case 61:
+            func_80037AC4(D_800FD738, 120);
             D_800FD738 = 0;
             break;
-        case 0x46:
+        case 70:
             if (frames == 0) {
                 frames = 1;
             }
