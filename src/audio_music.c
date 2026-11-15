@@ -67,7 +67,7 @@ s32 Audio_WaitForIdle(s32 arg0) {
 
 /** Fades out all audio categories ahead of a shutdown. */
 void Audio_FadeOutForShutdown(void) {
-    Audio_FadeCategoriesAndStreamsWithDuration(0x10);
+    Audio_FadeCategoriesAndStreamsWithDuration(16);
 }
 
 /** Disables audio output. */
@@ -114,19 +114,19 @@ void Audio_ThreadEntry(s32 arg0) {
     D_800AAF38 = 0;
     func_800567E0(&D_800AAE6C, &D_800AAE68, 1);
     func_800567E0(&D_800AAED4, &D_800AAED0, 1);
-    func_8004CFB0(&D_800AAE6C, 0x444F4E45, 0);
-    func_8004CFB0(&D_800AAED4, 0x444F4E45, 0);
+    func_8004CFB0(&D_800AAE6C, 0x444F4E45, 0); // 'DONE'
+    func_8004CFB0(&D_800AAED4, 0x444F4E45, 0); // 'DONE'
     Audio_LoadSoundData();
     Audio_SetOutputMode(1);
     Audio_SetChannelVolume(3, 4);
 loop_1:
     SchedClient_WaitMessage(&D_800AAE38);
     func_800082D0();
-    if ((D_800AAE30 != 0) && (D_800A9710.preNmiFrames < 0x15)) {
+    if ((D_800AAE30 != 0) && (D_800A9710.preNmiFrames < 21)) {
         __amHandleFrame(&D_800AAE68 + (D_800AAF38 * 0x68) + 0x20);
         func_80004F34(&D_800AAE68 + (D_800AAF38 * 0x68), 0);
     }
     D_800AAF38 ^= 1;
     func_800082D0();
-    goto loop_1;
+    goto loop_1; // FAKE: goto loop
 }
