@@ -334,6 +334,8 @@ Gfx* StatRibbon_DrawPool(Gfx* arg0) {
 
 
 /**
+ * Fills a camera-facing quad that covers the view at distance arg1 past the near plane, from the
+ * camera's eye, target, up direction and field of view.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Surf.
  */
@@ -568,6 +570,9 @@ f32 SurfTerrainGrid_SampleHeightAndSlope(f32 x, f32 z, f32* rotation_x) {
 
 
 /**
+ * Advances the Surf height map by one frame: for the first 60 frames it raises a rolling sine
+ * wave, then it alternates lowering and raising the wave rows on a 90-frame cycle, and finally
+ * recomputes each point's next height from its neighbors. Returns -1 once the duration has passed.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Surf.
  */
@@ -664,6 +669,8 @@ s32 SurfTerrainGrid_UpdateWaves(void) {
 
 
 /**
+ * Lays out the 16x16 Surf height map (mirrored in X by arg0) flat at y = 1 with the edges
+ * transparent, sets its duration to arg2 and resets the texture scroll offsets.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Surf.
  */
@@ -715,6 +722,8 @@ void SurfTerrainGrid_Init(s32 arg0, s16 arg1, s16 arg2) {
 }
 
 /**
+ * Advances the Surf waves, scrolls the three texture offsets by one step and rebuilds the
+ * camera-facing backdrop quad. Returns the wave status.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Surf.
  */

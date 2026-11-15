@@ -90,10 +90,10 @@ void Particle_SetFieldOffsetCEIfNotSentinel(Particle* arg0, u8 arg1) {
 void Particle_SetByteParam0Checked(s8 *particle, unsigned char value)
 {
   int new_var; // FAKE: permuter temp
-  new_var = particle != ((s8 *) (-1));
-  if (new_var)
+  new_var = particle != ((s8 *) (-1)); // FAKE
+  if (new_var) // FAKE
   {
-    *((s8 *) (((s8 *) particle) + 0xC9)) = (s8) (value & 0xFF);
+    *((s8 *) (((s8 *) particle) + 0xC9)) = (s8) (value & 0xFF); // FAKE
   }
 }
 

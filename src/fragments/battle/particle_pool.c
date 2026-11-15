@@ -86,6 +86,8 @@ s32 func_800023C4(M2C_UNK, M2C_UNK);                /* extern */
 M2C_UNK func_8004FD20(s32, M2C_UNK);                /* extern */
 
 /**
+ * Allocates and zeroes the effect slot table (0x20D0 bytes) and the 300-particle pool, and resets
+ * both allocation indices.
  * Seen in play (2026-11-13) ran during the opening of a COM Free Battle, before the first command
  * menu.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
@@ -727,6 +729,8 @@ void Particle_DispatchDraw(Particle* arg0, CameraNode* arg1) {
 }
 
 /**
+ * Copies an effect slot's callback, descriptor and parameters into each particle of a chain,
+ * numbering them from arg3, and anchors them to the owner arg1 when there is one.
  * Seen in play (2026-11-13) in the 165-move sweep (Pound and most hit moves): it filled each new
  * particle from its effect slot: the update callback (e.g. 0x80168350), the descriptor pointer, the
  * owner (1P 0x8028FB20 or COM 0x802905C0) and the origin position.
@@ -1235,6 +1239,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnGlobalTintColorFadeDetach(s32 arg0, s16 ar
 }
 
 /**
+ * Queues an effect slot after arg0 frames that runs BattleAnim_RunWhiteHueChange with descriptor
+ * 37 and no owner.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
@@ -1395,6 +1401,9 @@ BattleAnimEffectSlot* BattleAnim_SpawnOwnerTintHoldFadeDetach(s32 arg0, s16 arg1
 }
 
 /**
+ * Queues an effect slot after arg0 frames that tints the current owner's model toward a palette
+ * color and stops (BattleAnim_CallbackOwnerTintPaletteApproachStop). Same as
+ * BattleAnim_SpawnOwnerTintPaletteApproachStopAlt.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Hydro Pump, Bubble Beam, Hyper Beam, Metronome, Egg Bomb, Waterfall, Sky Attack.
  */
@@ -1415,6 +1424,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnOwnerTintPaletteApproachStopAlt(s32 arg0, 
 }
 
 /**
+ * Queues an effect slot after arg0 frames that runs the Ice Beam/Blizzard hit hue change on the
+ * current owner's model.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ice Beam, Blizzard.
  */
@@ -1434,6 +1445,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnOwnerTintPaletteCycleVariant(s32 arg0, s16
 }
 
 /**
+ * Queues an effect slot after arg0 frames that fades the current owner's model tint through a
+ * palette (BattleAnim_CallbackOwnerTintPaletteFade).
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
@@ -1457,6 +1470,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnOwnerTintRandomPaletteCycle(s32 arg0, s16 
 }
 
 /**
+ * Queues an effect slot after arg0 frames that cycles the current owner's model through rainbow
+ * hues (BattleAnim_RunRainbowHueChange).
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Psybeam, Aurora Beam.
  */
@@ -1465,6 +1480,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnRainbowHueChange(s32 arg0, s16 arg1, s16 a
 }
 
 /**
+ * Queues an effect slot after arg0 frames that fades the current owner's model alpha
+ * (BattleAnim_CallbackOwnerModelAlphaFade).
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
  * switch in battle.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec

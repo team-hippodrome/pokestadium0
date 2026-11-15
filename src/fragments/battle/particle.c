@@ -1056,6 +1056,7 @@ void Particle_SetMotionOffsetXScaled(Particle* arg0, f32 arg1) {
 }
 
 /**
+ * Sets motionOffset.y to arg1 times the particle render scale.
  * Seen in play (2026-11-13) in the move sweep (Solar Beam): with arg1 = 76.0 it set motionOffset.y
  * (0x50) to 273.6, arg1 times the 3.6 render scale; x and z were untouched.
  */
@@ -1185,6 +1186,8 @@ s32 Particle_ApproachMotionOffsetX(Particle* arg0, f32 arg1) {
 }
 
 /**
+ * Moves motionOffset.y toward arg1 times the render scale by motionTarget.y per call. Returns
+ * nonzero once it is reached.
  * Seen in play (2026-11-13) in the move sweep (Solar Beam): with arg1 = 0 it moved motionOffset.y
  * (0x50) from 273.6 to 266.4 and then 259.2, steps of motionTarget.y (7.2).
  */
@@ -1246,6 +1249,7 @@ M2C_UNK Particle_ApplyMotionStep(s32 arg0) {
 }
 
 /**
+ * Adds motionStep.x and motionStep.z to motionOffset.x and motionOffset.z (Y is left alone).
  * Seen in play (2026-11-13) in the 165-move sweep (Mega Kick, Thunder Punch): it added motionStep.x
  * and .z (0x78, 0x80) to motionOffset.x and .z (0x4C, 0x54); y was untouched.
  */
@@ -2508,6 +2512,8 @@ void Particle_MotionStep_SetZFromRotationY(Particle* arg0) {
 }
 
 /**
+ * Sets motionStep.x to the step magnitude times cos(rotation.z) and motionStep.y to it times
+ * sin(rotation.z). Only rotation.z is used, despite the name.
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
  * tables or fragment headers.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
@@ -2850,6 +2856,7 @@ extern s16 D_8219A8B4;
 extern s16 D_8219A8B6;
 
 /**
+ * Copies the global tint color D_8219A8B2/B4/B6 into the particle's prim RGB.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
  * switch in battle.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
@@ -2904,13 +2911,16 @@ void Particle_ApproachEnvGreen(Particle* arg0, s32 arg1, s32 arg2) {
     func_82137804((s32)&arg0->env_g, arg1 & 0xFF, arg2 & 0xFF);
 }
 
+/**
+ * Sets the particle's prim alpha (+0xC0) to arg1.
+ */
 void Particle_SetPrimAlpha(s8 *arg0, char arg1)
 {
   s8 *new_var; // FAKE: permuter temp
   s8 *new_var2; // FAKE: permuter temp
-  new_var2 = arg0;
-  new_var = (s8 *) new_var2;
-  *((s8 *) (new_var + 0xC0)) = arg1;
+  new_var2 = arg0; // FAKE
+  new_var = (s8 *) new_var2; // FAKE
+  *((s8 *) (new_var + 0xC0)) = arg1; // FAKE
 }
 
 M2C_UNK func_82137804(s32, s32, s32);               /* extern */
@@ -3083,8 +3093,8 @@ s32 Particle_Countdown_TickToZeroAndStepState(Particle* arg0) {
 void Particle_SetEffectList(s8 *particle, int effect_list)
 {
   int *new_var; // FAKE: permuter temp
-  new_var = &effect_list;
-  *((s8 *) (((s8 *) particle) + 0xC6)) = *new_var;
+  new_var = &effect_list; // FAKE
+  *((s8 *) (((s8 *) particle) + 0xC6)) = *new_var; // FAKE
 }
 
 /**
@@ -3102,8 +3112,8 @@ void Particle_SetSpawnIndex(Particle* arg0, s16 arg1) {
 void Particle_SetByteParam1(s8 *particle, unsigned char value)
 {
   s8 *new_var; // FAKE: permuter temp
-  new_var = (s8 *) (((s8 *) particle) + 0xCB);
-  *new_var = value;
+  new_var = (s8 *) (((s8 *) particle) + 0xCB); // FAKE
+  *new_var = value; // FAKE
 }
 
 /**
@@ -3115,8 +3125,8 @@ void Particle_SetByteParam1(s8 *particle, unsigned char value)
 void Particle_SetByteParam1Copy(s8 *particle, unsigned char value)
 {
   s8 *new_var; // FAKE: permuter temp
-  new_var = ((s8 *) particle) + 0xCB;
-  *((s8 *) new_var) = value;
+  new_var = ((s8 *) particle) + 0xCB; // FAKE
+  *((s8 *) new_var) = value; // FAKE
 }
 
 /**
@@ -3126,7 +3136,7 @@ void Particle_SetByteParam1Copy(s8 *particle, unsigned char value)
  */
 void Particle_SetAnchorMode(s8 *arg0, unsigned short arg1)
 {
-  *((s8 *) (((s8 *) arg0) + 0xC8)) = arg1;
+  *((s8 *) (((s8 *) arg0) + 0xC8)) = arg1; // FAKE
 }
 
 /**

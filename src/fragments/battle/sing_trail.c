@@ -18,6 +18,9 @@ Gfx* SingTrail_BuildGfx(Gfx* arg0);
 void Trail40Variant_SetupCameraTransform(void);
 
 /**
+ * Adds a ripple centered on grid node (arg0, arg1) to the Sing wave grid: each node's wave phase
+ * grows by a quarter turn divided by its distance from the center (a full quarter turn at the
+ * center).
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Sing.
  */
@@ -43,6 +46,8 @@ void SingTrail_ApplyRippleAtPoint(s16 arg0, s16 arg1) {
 }
 
 /**
+ * Lays out the 16x16 Sing wave grid with texture coordinates and starts it with duration arg0,
+ * alpha 0 and wave amplitude 0.01.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Sing.
  */
@@ -97,6 +102,8 @@ void SingTrail_InitPool(s16 arg0) {
 }
 
 /**
+ * Computes the normal of grid node (arg0, arg1) by averaging the face normals of its neighboring
+ * quads, and stores it in the node.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Sing.
  */
@@ -208,6 +215,8 @@ void SingTrail_UpdateNodes(s32 arg0, s32 arg1) {
 }
 
 /**
+ * Writes a grid node's position, texture coordinates and normal to a vertex, with the grid's
+ * alpha.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Sing.
  */
@@ -234,6 +243,10 @@ void SingTrail_WriteVertex(Trail40VariantNode* arg0, Vtx* arg1) {
 }
 
 /**
+ * Advances the Sing wave grid by one frame: fades alpha in by 10 per frame for the first 30 frames
+ * (up to 128) and out over the last 30, grows the wave amplitude up to 0.5, raises each node by
+ * the sine of its wave phase and recomputes the normals. Returns -1 once the duration has passed,
+ * otherwise 0.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Sing.
  */
@@ -287,6 +300,9 @@ void func_80031F14(f32*, f32*, f32*);
 void func_800320A8(s32, f32, f32, f32, f32, f32, f32);
 extern s32 D_821A8B80;
 /**
+ * Allocates the Sing grid's 64-byte matrix (D_821A8B80) and fills it from the camera context: the
+ * point at +0xA8 is moved 140 units toward the point at +0xB4 (times 30 over the field of view at
+ * +0x2C), and both points are passed to func_800320A8.
  * Seen in play (2026-11-13) (title-screen demo battle, left idle after boot): ran twice in a row
  * while Lapras was on screen, called from SingTrail_BuildGfx.
  * Also ran in the COM-side move sweep when COM's Metronome was pinned to Sing (move 47).
@@ -333,6 +349,8 @@ void Trail40Variant_SetupCameraTransform(void) {
 }
 
 /**
+ * Converts the 16x16 Sing grid to vertices and draws it as 15x15 quads, alternating the triangle
+ * split per quad.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Sing.
  */
