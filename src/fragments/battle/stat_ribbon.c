@@ -86,7 +86,7 @@ void StatRibbon_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5
             ptr->origin.y = (arg4 * 0.0) + arg1;
             ptr->duration = 60;
             ptr->riseSpeed = 1.5f;
-            StatRibbon_Configure(&D_8219CB20[var_v1], 0xFF, 0xFF, 0xC8, 0x20, 0x20, 0xFF, 0x80, 0x80, 0xFF);
+            StatRibbon_Configure(&D_8219CB20[var_v1], 0xFF, 0xFF, 0xC8, 0x20, 0x20, 0xFF, 0x80, 0x80, 0xFF); // prim #FFFFC8, env #2020FF
             ptr->auxEffectId = AuxiliaryEffect_Alloc();
             break;
 
@@ -95,7 +95,7 @@ void StatRibbon_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5
             ptr->duration = 120;
             ptr->origin.y = (arg4 * 100.0) + arg1;
             ptr->riseSpeed = 1.5f;
-            StatRibbon_Configure(&D_8219CB20[var_v1], 0xFF, 0xFF, 0xC8, 0xFF, 0x20, 0x20, 0x80, 0x80, 0);
+            StatRibbon_Configure(&D_8219CB20[var_v1], 0xFF, 0xFF, 0xC8, 0xFF, 0x20, 0x20, 0x80, 0x80, 0); // prim #FFFFC8, env #FF2020
             break;
 
         default:

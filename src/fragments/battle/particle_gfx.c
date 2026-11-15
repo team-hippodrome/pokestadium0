@@ -373,7 +373,7 @@ void ParticleGfx_SetPrimEnvLodTextureCombine(u8 l, u8 prim_r, u8 prim_g, u8 prim
  */
 void ParticleGfx_SetTextureAlphaCombine(u8 a) {
     gDPPipeSync(gDisplayListHead++);
-    gDPSetPrimColor(gDisplayListHead++, 0, 0, 255, 255, 255, a);
+    gDPSetPrimColor(gDisplayListHead++, 0, 0, 255, 255, 255, a); // #FFFFFF
     gDPSetCombineLERP(gDisplayListHead++, SHADE, 0, TEXEL0, 0, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED, 0, 0, 0,
                       COMBINED);
 }

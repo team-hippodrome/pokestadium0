@@ -142,26 +142,26 @@ void Particle_SetScratchBChecked(s8 *particle, s16 value) {
 }
 
 /**
- * Returns the particle's unk_CE.
+ * Returns the particle's byteParam2.
  * Seen in play (2026-11-13) in the 165-move sweep (Pay Day, Vice Grip): it returned 7 and 2, the
  * byte at 0xCA each time.
  */
-u8 Particle_GetUnkCE(s8 *arg0) {
+u8 Particle_GetByteParam2(s8 *arg0) {
     return M2C_FIELD(arg0, u8 *, 0xCA);
 }
 
 /**
- * Returns the particle's unk_CD.
+ * Returns the particle's byteParam0.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
  * @unverified Name and comment guessed from the code.
  */
-u8 Particle_GetUnkCD(s8 *arg0) {
+u8 Particle_GetByteParam0(s8 *arg0) {
     return M2C_FIELD(arg0, u8 *, 0xC9);
 }
 
 /**
- * Return the particle's unk_AA field.
+ * Return the particle's scratchA field.
  * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
@@ -171,7 +171,7 @@ s16 Particle_ScratchA_GetS16_0C068(Particle* arg0) {
 }
 
 /**
- * Returns the particle's unk_AC.
+ * Returns the particle's spawnIndex.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
  * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
@@ -191,10 +191,9 @@ s16 Particle_GetByteParam1(Particle* arg0) {
 }
 
 /**
- * Returns the particle's unk_AA (offset 0xA6). Renamed from Particle_FieldA6_GetS16_0BCBC, which
+ * Returns the particle's param1 (offset 0xA6). Renamed from Particle_FieldA6_GetS16_0BCBC, which
  * used the Stadium 1 offset.
- * Return the particle's unk_A6 field.
- * Seen in play (2026-11-13) in the 165-move sweep (Guillotine): it returned 32, the halfword at
+ *  * Seen in play (2026-11-13) in the 165-move sweep (Guillotine): it returned 32, the halfword at
  * 0xA6.
  */
 s16 Particle_GetParam1(Particle* arg0) {
@@ -202,7 +201,7 @@ s16 Particle_GetParam1(Particle* arg0) {
 }
 
 /**
- * Returns the particle's unk_A6.
+ * Returns the particle's param0.
  * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
@@ -212,7 +211,7 @@ s16 Particle_GetParam0(s8 *arg0) {
 }
 
 /**
- * Returns the particle's unk_A8.
+ * Returns the particle's countdown.
  * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.

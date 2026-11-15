@@ -773,6 +773,10 @@ s32 ParticleMath_IsWithinRadius2D(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 ar
 
 u32 func_80055640();                                /* extern */
 
+/**
+ * Returns a random value in [0, arg0): the next random number divided by 10, modulo arg0.
+ * Returns 0 when arg0 is 0.
+ */
 u32 ParticleMath_RandomRange(u32 arg0) {
     u32 temp_v0;
     u32 var_v1;

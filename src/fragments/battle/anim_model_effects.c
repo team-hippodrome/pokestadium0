@@ -21,7 +21,7 @@ M2C_UNK Particle_ApproachPrimRed(s8 *, M2C_UNK, M2C_UNK);
 M2C_UNK Particle_ApproachStepMagnitude(s8 *, M2C_UNK, M2C_UNK);
 M2C_UNK Particle_ApproachScratchA(s8 *, M2C_UNK, M2C_UNK);
 M2C_UNK Particle_ApproachScratchB(s8 *, M2C_UNK, M2C_UNK);
-M2C_UNK Particle_GetUnkCE();
+M2C_UNK Particle_GetByteParam2();
 M2C_UNK Particle_SetRotationY(s8 *, s16);
 M2C_UNK Particle_SetParam0(s8 *, s16);
 M2C_UNK Particle_SetScratchB(s8 *, M2C_UNK);
@@ -36,7 +36,7 @@ extern M2C_UNK BattleAnim_RunDigHitRocks;
 extern M2C_UNK BattleAnim_RunOscillatingFlameUnderneathPokemon;
 extern M2C_UNK D_8218E7B8;
 extern M2C_UNK BattleAnim_CallbackModelBurstAlphaFade;
-s16 Particle_GetUnkCD();
+s16 Particle_GetByteParam0();
 s16 Particle_GetByteParam1();
 s32 ParticleMath_ComputeViewRotationY();
 s32 func_82140690(s8 *);
@@ -2157,7 +2157,7 @@ void Particle_CreateDisplayList_CustomColors(s32 arg0, arg1_func_84344CE8* arg1)
 void BattleAnim_CallbackStartEffects50And82CenterModelScalePaletteFade(Particle* particle) {
     s16 temp_v1;
 
-    Particle_GetUnkCE();
+    Particle_GetByteParam2();
     temp_v1 = particle->lifecycle;
     switch (temp_v1) {                              /* irregular */
     case 1:
@@ -2252,7 +2252,7 @@ void BattleAnim_RunBoomUseEffect6(Particle* arg0) {
 void BattleAnim_RunBoomHitEffect1(Particle* arg0) {
     s16 temp_v1;
 
-    Particle_GetUnkCE();
+    Particle_GetByteParam2();
     temp_v1 = arg0->lifecycle;
     switch (temp_v1) {                              /* irregular */
     case 1:
@@ -3502,7 +3502,7 @@ void BattleAnim_CallbackStartEffects95To97EndEffects62And63ModelFadeIn_InitParti
     s16 sp26;
     s32 temp_v0;
 
-    sp26 = Particle_GetUnkCD();
+    sp26 = Particle_GetByteParam0();
     temp_v0 = func_82136AC0(arg0);
     M2C_FIELD(arg0, s32 *, 0x14) = temp_v0;
     if (temp_v0 != 0) {

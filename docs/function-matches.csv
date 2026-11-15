@@ -3174,8 +3174,8 @@ func_8213C3D4,0x8213C3D4,src/fragments/battle/particle_fields.c,Particle_SetPara
 func_8213C3F4,0x8213C3F4,src/fragments/battle/particle_fields.c,Particle_SetPrimAlphaIfNotSentinel,s1,stadium1:src/fragments/particle_math/particle_math_269820.c,c
 func_8213C424,0x8213C424,src/fragments/battle/particle_fields.c,Particle_SetFieldOffsetAAIfNotSentinel,s1,stadium1:src/fragments/particle_math/particle_math_269820.c,c
 func_8213C444,0x8213C444,src/fragments/battle/particle_fields.c,Particle_SetScratchBChecked,m2c,m2c,c
-func_8213C464,0x8213C464,src/fragments/battle/particle_fields.c,Particle_GetUnkCE,m2c,m2c,c
-func_8213C46C,0x8213C46C,src/fragments/battle/particle_fields.c,Particle_GetUnkCD,m2c,m2c,c
+func_8213C464,0x8213C464,src/fragments/battle/particle_fields.c,Particle_GetByteParam2,m2c,m2c,c
+func_8213C46C,0x8213C46C,src/fragments/battle/particle_fields.c,Particle_GetByteParam0,m2c,m2c,c
 func_8213C474,0x8213C474,src/fragments/battle/particle_fields.c,Particle_ScratchA_GetS16_0C068,s1,stadium1:src/fragments/particle_math/particle_math_269820.c,c
 func_8213C47C,0x8213C47C,src/fragments/battle/particle_fields.c,Particle_GetSpawnIndex,m2c,m2c,c
 func_8213C484,0x8213C484,src/fragments/battle/particle_fields.c,Particle_GetByteParam1,m2c,m2c+permuter,c
