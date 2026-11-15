@@ -12,7 +12,7 @@ extern PokeIconRenderer* sGbPlayerIconRenderer;
 extern BattleMon sGbPlayerParty[6];
 extern s32 sGbPlayerPartyCount;
 
-s32 GbPlayer_PartyIconsFrameCallback(u8 fadeMode);
+s32 GbPlayer_PartyIconsFrameCallback(u8 fade_mode);
 
 /**
  * Reads the party from the Game Boy save in the Transfer Pak on `port` (0-based) and queues a
@@ -59,13 +59,13 @@ s32 Save_GetGbPlayerSettings(s8*, s32*);
  */
 void GbPlayer_FillLaunchParams(GbPlayerLaunchParams* params) {
     s32 i;
-    s8 framesUnlocked;
-    s32 buttonConfig;
-    u16(*icon)[0x640] = params->partyIcons[0];
+    s8 frames_unlocked;
+    s32 button_config;
+    u16(*icon)[1600] = params->partyIcons[0];
 
-    Save_GetGbPlayerSettings(&framesUnlocked, &buttonConfig);
-    params->framesUnlocked = framesUnlocked;
-    params->buttonConfig = buttonConfig;
+    Save_GetGbPlayerSettings(&frames_unlocked, &button_config);
+    params->framesUnlocked = frames_unlocked;
+    params->buttonConfig = button_config;
     params->partyCount = sGbPlayerPartyCount;
 
     for (i = 0; i < sGbPlayerPartyCount; i++, icon++) {
@@ -73,7 +73,7 @@ void GbPlayer_FillLaunchParams(GbPlayerLaunchParams* params) {
     }
 
     if (sGbPlayerPartyCount < 6) {
-        bzero(icon, 0x4B00 + (-sGbPlayerPartyCount * 0xC80));
+        bzero(icon, 19200 + (-sGbPlayerPartyCount * 3200)); // 6 icons of 40x40 RGBA16, minus the filled ones
     }
 }
 
@@ -82,7 +82,7 @@ extern ModelLoadContext* sGbPlayerIconFramebuffers;
  * Fragment entry, called by State_GbPlayer before the GB emulator starts (Zero's main menu "GB",
  * ゲームボーイのポケモン). Reads the party from the Game Boy save on `port`, renders a 40x40 icon of
  * each Pokémon over 8 blank frames and fills `params` for the emulator. Returns the party count.
- * There is no team selection screen; the name GB Tower comes from Stadium 1.
+ * There is no team selection screen here, unlike Stadium 1's GB mode.
  * Seen in play (2026-11-14): runs between confirming GB and the GB boot screen, screen black.
  */
 s32 GbPlayer_PreparePartyIcons(s32 port, GbPlayerLaunchParams* params) {
@@ -97,7 +97,7 @@ s32 GbPlayer_PreparePartyIcons(s32 port, GbPlayerLaunchParams* params) {
     FRAGMENT_LOAD(FRAGMENT_PARTICLE_DATA_LIBRARY);
 
     sGbPlayerIconFramebuffers = PokeIcon_AllocFramebuffers(1);
-    sGbPlayerIconRenderer = PokeIcon_CreateRenderList(sGbPlayerIconFramebuffers, 6, 0x28, 0x28);
+    sGbPlayerIconRenderer = PokeIcon_CreateRenderList(sGbPlayerIconFramebuffers, 6, 40, 40);
     PokeIcon_OpenModelArchives();
     GbPlayer_LoadPartyFromDeck(port);
     Save_LoadSram();

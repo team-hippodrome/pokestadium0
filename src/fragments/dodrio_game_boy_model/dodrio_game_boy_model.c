@@ -11,7 +11,7 @@ extern Gfx D_8E923340[]; // Screen glare quad over the Game Boy Pocket's screen.
 /**
  * Geo callback on the Dodrio Game Boy (Pocket) prize model, the model fragment006 shows with
  * "ドードリオのゲームボーイ プレゼント!!" ("A Dodrio Game Boy for you!!") when
- * gSessionContext.transitionFlags has bit 4 (0x10) set. On the render pass (callContext 2) it
+ * gSessionContext.transitionFlags has bit 4 (0x10) set. On the render pass (call_context 2) it
  * builds a display list that scrolls the two glare stripe layers across the screen in opposite
  * directions. The scroll values are 10.2 fixed-point S coordinates, so each layer moves a quarter
  * texel per frame and wraps after 0x80 (32 texels, one texture width).

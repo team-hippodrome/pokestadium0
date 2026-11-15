@@ -38,7 +38,7 @@ Gfx* FireFx_BuildFlameBackdropDisplayList(Gfx* gfx, s32 frame) {
  */
 void FireFx_FlameBackdropGeoCallback(s32 context, GeoDisplayListNode* node) {
     if (context == 2) {
-        node->displayList = Gfx_AllocDisplayList(0x50);
+        node->displayList = Gfx_AllocDisplayList(80);
         FireFx_BuildFlameBackdropDisplayList(node->displayList, D_80060484 & 7);
     }
 }

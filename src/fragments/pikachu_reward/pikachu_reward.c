@@ -126,7 +126,7 @@ loop_1:
         count += 1;
         move += 1;
         if (count != 4) {
-            goto loop_1;
+            goto loop_1; // FAKE: goto loop kept from m2c output
         }
     }
     return count;
@@ -240,7 +240,7 @@ void PikachuReward_DrawBlinkingNextArrow(s16 x, s16 y) {
         sNextArrowBlink.unk_00 = 0;
     }
 
-    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, alpha);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, alpha); // #FFFFFF
     Font_DrawCharAt(x, y, 0x2177);
 }
 
@@ -256,7 +256,7 @@ void PikachuReward_DrawTextBoxPanel(s16 x, s16 y, s16 width, s16 height) {
 void PikachuReward_DrawSelectionCursor(s16 x, s16 y) {
     gSPDisplayList(gDisplayListHead++, D_80060290);
 
-    Gfx_DrawTextureRgba16(x, y, 0x18, 0xE, Util_ConvertAddrToVirtAddr(D_8FC00090), 0x18, 0x200000);
+    Gfx_DrawTextureRgba16(x, y, 24, 14, Util_ConvertAddrToVirtAddr(D_8FC00090), 24, 0x200000);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
@@ -270,7 +270,7 @@ void PikachuReward_ShowTextForFrames(char* text, s32 frames) {
         Font_BeginTranslucentTextRendering();
         Font_SetActive(2, 0);
         Font_SetLineHeight(0x10);
-        Font_Printf(0x2E, 0x28, text);
+        Font_Printf(46, 40, text);
         Font_EndTexturedTextRendering();
         BgStage_AdvanceFrame();
     }
@@ -289,7 +289,7 @@ void PikachuReward_ShowTextWaitForA(char* text, s32 show_arrow) {
         Font_BeginTranslucentTextRendering();
         Font_SetActive(2, 0);
         Font_SetLineHeight(0x10);
-        Font_Printf(0x2E, 0x28, text);
+        Font_Printf(46, 40, text);
         if (show_arrow != 0) {
             PikachuReward_DrawBlinkingNextArrow(0x104, 0x38);
         }
@@ -319,8 +319,8 @@ void PikachuReward_ScrollTextIn(s8* text) {
         Font_BeginTranslucentTextRendering();
         Font_SetActive(2, 0);
         Font_SetLineHeight(0x10);
-        Font_Printf(0x2E, y1 - i * 4, sShownText);
-        Font_Printf(0x2E, y2 - i * 4, text);
+        Font_Printf(46, y1 - i * 4, sShownText);
+        Font_Printf(46, y2 - i * 4, text);
         Font_EndTexturedTextRendering();
         BgStage_AdvanceFrame();
     }
@@ -364,7 +364,7 @@ s32 PikachuReward_ConfirmYesNoPrompt(char* question) {
         Font_BeginTranslucentTextRendering();
         Font_SetActive(2, 0);
         Font_SetLineHeight(0x10);
-        Font_Printf(0x2E, 0x28, question);
+        Font_Printf(46, 40, question);
 
         if (is_yes != 0) {
             blue = 0;
@@ -372,8 +372,8 @@ s32 PikachuReward_ConfirmYesNoPrompt(char* question) {
             blue = 0xFF;
         }
 
-        Gfx_SetEnvColor(0xFF, 0xFF, blue, 0xFF);
-        Font_Printf(0xF2, 0x5C, sTextYes);
+        Gfx_SetEnvColor(0xFF, 0xFF, blue, 0xFF); // #FFFF00 when selected, else #FFFFFF
+        Font_Printf(242, 92, sTextYes);
 
         if (cursor == 1) {
             blue = 0;
@@ -381,8 +381,8 @@ s32 PikachuReward_ConfirmYesNoPrompt(char* question) {
             blue = 0xFF;
         }
 
-        Gfx_SetEnvColor(0xFF, 0xFF, blue, 0xFF);
-        Font_Printf(0xF2, 0x6C, sTextNo);
+        Gfx_SetEnvColor(0xFF, 0xFF, blue, 0xFF); // #FFFF00 when selected, else #FFFFFF
+        Font_Printf(242, 108, sTextNo);
         Font_EndTexturedTextRendering();
         BgStage_AdvanceFrame();
     } while (waiting != 0);
@@ -455,39 +455,39 @@ s32 PikachuReward_SelectMoveToForget(char* prompt) {
         Font_BeginTranslucentTextRendering();
         Font_SetActive(2, 0);
         Font_SetLineHeight(0x10);
-        Font_Printf(0x2E, 0x28, prompt);
+        Font_Printf(46, 40, prompt);
 
         if (cursor == 0) {
             blue = 0;
         } else {
             blue = 0xFF;
         }
-        Gfx_SetEnvColor(0xFF, 0xFF, blue, 0xFF);
-        Font_Printf(0xB6, 0x28, D_8006A9D4[sPikachuPartyMon->moves[0] - 1].name);
+        Gfx_SetEnvColor(0xFF, 0xFF, blue, 0xFF); // #FFFF00 when selected, else #FFFFFF
+        Font_Printf(182, 40, D_8006A9D4[sPikachuPartyMon->moves[0] - 1].name);
 
         if (cursor == 1) {
             blue = 0;
         } else {
             blue = 0xFF;
         }
-        Gfx_SetEnvColor(0xFF, 0xFF, blue, 0xFF);
-        Font_Printf(0xB6, 0x38, D_8006A9D4[sPikachuPartyMon->moves[1] - 1].name);
+        Gfx_SetEnvColor(0xFF, 0xFF, blue, 0xFF); // #FFFF00 when selected, else #FFFFFF
+        Font_Printf(182, 56, D_8006A9D4[sPikachuPartyMon->moves[1] - 1].name);
 
         if (cursor == 2) {
             blue = 0;
         } else {
             blue = 0xFF;
         }
-        Gfx_SetEnvColor(0xFF, 0xFF, blue, 0xFF);
-        Font_Printf(0xB6, 0x48, D_8006A9D4[sPikachuPartyMon->moves[2] - 1].name);
+        Gfx_SetEnvColor(0xFF, 0xFF, blue, 0xFF); // #FFFF00 when selected, else #FFFFFF
+        Font_Printf(182, 72, D_8006A9D4[sPikachuPartyMon->moves[2] - 1].name);
 
         if (cursor == 3) {
             blue = 0;
         } else {
             blue = 0xFF;
         }
-        Gfx_SetEnvColor(0xFF, 0xFF, blue, 0xFF);
-        Font_Printf(0xB6, 0x58, D_8006A9D4[sPikachuPartyMon->moves[3] - 1].name);
+        Gfx_SetEnvColor(0xFF, 0xFF, blue, 0xFF); // #FFFF00 when selected, else #FFFFFF
+        Font_Printf(182, 88, D_8006A9D4[sPikachuPartyMon->moves[3] - 1].name);
 
         Font_EndTexturedTextRendering();
         BgStage_AdvanceFrame();
@@ -595,7 +595,7 @@ loop_3:
         PikachuReward_ShowDeclinedEnding();
         return 0;
     }
-    goto loop_3;
+    goto loop_3; // FAKE: goto loop kept from m2c output
 }
 
 typedef struct SpeciesNameEntry817010E8 {
@@ -698,28 +698,28 @@ void PikachuReward_ShowSaveStatusScreen(s32 status) {
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, 0);
     Font_SetLineHeight(0x10);
-    Font_Printf(0x2E, 0x28, sTextLearnedSurf);
+    Font_Printf(46, 40, sTextLearnedSurf);
 
     if (status == 0) {
         Font_BeginTranslucentTextRendering();
         Font_SetActive(4, -1);
-        Font_Printf(0x5C, 0x70, sTextSaving);
+        Font_Printf(92, 112, sTextSaving);
         Font_EndTexturedTextRendering();
     } else {
-        Font_Printf(0x40, 0x84, sTextSaveHelpLine1);
-        Font_Printf(0x40, 0x94, sTextSaveHelpLine2);
-        Font_Printf(0x40, 0xA4, sTextSaveHelpLine3);
-        Font_Printf(0x40, 0xB4, sTextSaveHelpLine4);
-        Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF);
-        Font_Printf(0x94, 0x84, sTextDontTurnOffPower);
-        Gfx_SetEnvColor(0xFF, 0xFF, 0x64, 0xFF);
+        Font_Printf(64, 132, sTextSaveHelpLine1);
+        Font_Printf(64, 148, sTextSaveHelpLine2);
+        Font_Printf(64, 164, sTextSaveHelpLine3);
+        Font_Printf(64, 180, sTextSaveHelpLine4);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF); // #FFFF00
+        Font_Printf(148, 132, sTextDontTurnOffPower);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0x64, 0xFF); // #FFFF64
 
         if (status == 2) {
             Font_SetActive(4, -2);
-            Font_Printf(0x4C, 0x64, sTextSaveFailed);
+            Font_Printf(76, 100, sTextSaveFailed);
         } else if (status == 3) {
-            Font_Printf(0x40, 0x5C, sTextWrongCartridgeLine1);
-            Font_Printf(0x40, 0x6C, sTextWrongCartridgeLine2);
+            Font_Printf(64, 92, sTextWrongCartridgeLine1);
+            Font_Printf(64, 108, sTextWrongCartridgeLine2);
         }
     }
 
@@ -759,7 +759,7 @@ loop_3:
             }
             PikachuReward_ShowSaveStatusScreen(status);
             if (poll != 2) {
-                goto loop_3;
+                goto loop_3; // FAKE: goto loop kept from m2c output
             }
             PikachuReward_ShowSaveStatusScreen(0);
             PikachuReward_ShowSaveStatusScreen(0);

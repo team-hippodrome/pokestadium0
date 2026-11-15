@@ -11,9 +11,10 @@ extern Gfx D_8E824BB0[]; // Screen glare quad over the Game Boy Pocket's screen.
 /**
  * Geo callback on the Doduo Game Boy (Pocket) prize model, the model fragment006 shows with
  * "ドードーのゲームボーイ プレゼント!!" ("A Doduo Game Boy for you!!") when
- * gSessionContext.transitionFlags has bit 3 set. On the render pass (callContext 2) it builds a
- * display list that scrolls the two glare stripe layers across the screen in opposite directions,
- * one texel per frame, wrapping at 128 (0x80 texels in 10.2 fixed point is 32 texels).
+ * gSessionContext.transitionFlags has bit 3 (0x8) set. On the render pass (call_context 2) it
+ * builds a display list that scrolls the two glare stripe layers across the screen in opposite
+ * directions. The scroll values are 10.2 fixed-point S coordinates, so each layer moves a quarter
+ * texel per frame and wraps after 0x80 (32 texels, one texture width).
  * Seen in play (2026-11-14): with transitionFlags = 8 the cartridge check screen showed this model;
  * both counters advanced every frame (one up, one down), and stubbing the function with `jr ra`
  * froze them and removed the moving glare from the screen.

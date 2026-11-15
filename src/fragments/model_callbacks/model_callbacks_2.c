@@ -39,7 +39,7 @@ void ModelCallback_IndexedTexture(s32 phase, DisplayListState* state) {
 
     if (phase == 2) {
         addresses = state->addresses;
-        gfx = Gfx_AllocDisplayList(0x50);
+        gfx = Gfx_AllocDisplayList(80);
         state->gfx = gfx;
         ModelCallback_BuildIndexedTextureList(gfx, addresses, D_80060484 & 7);
     }
@@ -72,7 +72,7 @@ void ModelCallback_FlameTexture(s32 phase, DisplayListState* state) {
 
     if (phase == 2) {
         addresses = state->addresses;
-        gfx = Gfx_AllocDisplayList(0x140);
+        gfx = Gfx_AllocDisplayList(320);
         state->gfx = gfx;
         ModelCallback_BuildFlameTextureList(gfx, addresses, (D_80060484 + D_800AFB28 * 3) % 8);
     }

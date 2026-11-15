@@ -6,7 +6,7 @@
 
 // gb_player_party_icons.c
 void GbPlayer_LoadPartyFromDeck(s32 port);
-s32 GbPlayer_PartyIconsFrameCallback(u8 fadeMode);
+s32 GbPlayer_PartyIconsFrameCallback(u8 fade_mode);
 void GbPlayer_FillLaunchParams(GbPlayerLaunchParams* params);
 s32 GbPlayer_PreparePartyIcons(s32 port, GbPlayerLaunchParams* params);
 

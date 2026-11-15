@@ -30,8 +30,8 @@ extern u8 sVsPanelNicknameText[];
 /**
  * Boot-code check: with interrupts masked and the PI idle, reads the cartridge word at ROM 0xD10
  * (inside the IPL3 boot code, 0x00800400 in the retail ROM) and returns -1 instead of
- * `displayList` when its low half is not 0x0400. A copier or a ROM with other boot code then gets
- * a broken display list pointer. vs_results_board and geo_model_038
+ * `display_list` when its low half is not 0x0400. A copier or a ROM with other boot code then gets
+ * a broken display list pointer. vs_results_board and cartridge_check_models
  * (CartridgeCheckModels_CheckBootCode) have the same check on other boot-code words.
  * Seen in play (2026-11-14): called for both portraits every frame of the panels; forcing it to
  * return -1 turned the whole screen black from the panels on.
@@ -65,8 +65,8 @@ void VsPanel_SelectTitleRound(s32 event, GeoModelRootNode* node) {
  * Writes the portrait display list: segment 0x0F = the trainer's BinArchive file, then a branch
  * to sVsPanelPortraitDL.
  */
-Gfx* VsPanel_WritePortraitGfx(Gfx* gfx, void* trainerFile) {
-    gSPSegment(gfx++, 0x0F, osVirtualToPhysical(trainerFile));
+Gfx* VsPanel_WritePortraitGfx(Gfx* gfx, void* trainer_file) {
+    gSPSegment(gfx++, 0x0F, osVirtualToPhysical(trainer_file));
     gSPBranchList(gfx++, sVsPanelPortraitDL);
     return gfx;
 }
@@ -104,10 +104,10 @@ void VsPanel_TitleTextCallback(s32 event, DemoGeoNode* node) {
 
 /**
  * Name text node callback: shows the side's name (rosterInfo[0]->fullName) and moves the text by
- * the roster's flags: bit 0 sets unk_20 to 0xD2, bit 1 sets unk_22 to -0xF0, otherwise unk_22 is
- * -0x12C.
+ * the roster's flags: bit 0 sets unk_20 to 210, bit 1 sets unk_22 to -240, otherwise unk_22 is
+ * -300.
  * Seen in play (2026-11-14): stubbing it removed the names (1P, ＣＯＭ) from both panels.
- * @unverified: the offsets; Free Battle rosters have unk_000 = 0, so only the -0x12C case ran.
+ * @unverified: the offsets; Free Battle rosters have unk_000 = 0, so only the -300 case ran.
  */
 void VsPanel_NameTextCallback(s32 event, DemoGeoNode* node) {
     VsSceneSide* teams;
@@ -116,11 +116,11 @@ void VsPanel_NameTextCallback(s32 event, DemoGeoNode* node) {
         teams = D_80060490->node.callbackArg;
         node->unk_24 = (u8*)teams[(s32)node->node.callbackArg].rosterInfo[0]->fullName;
         if (*(s16*)&teams[(s32)node->node.callbackArg].rosterInfo[0]->unk_000 & 1) {
-            node->unk_20 = 0xD2;
+            node->unk_20 = 210;
         } else if (*(s16*)&teams[(s32)node->node.callbackArg].rosterInfo[0]->unk_000 & 2) {
-            node->unk_22 = -0xF0;
+            node->unk_22 = -240;
         } else {
-            node->unk_22 = -0x12C;
+            node->unk_22 = -300;
         }
     }
 }
@@ -129,8 +129,8 @@ void VsPanel_NameTextCallback(s32 event, DemoGeoNode* node) {
  * Writes an icon display list: segment 0x0F = the Pokémon's icon image, then a branch to
  * sVsPanelIconDL.
  */
-Gfx* VsPanel_WriteIconGfx(Gfx* gfx, void* iconImage) {
-    gSPSegment(gfx++, 0x0F, osVirtualToPhysical(iconImage));
+Gfx* VsPanel_WriteIconGfx(Gfx* gfx, void* icon_image) {
+    gSPSegment(gfx++, 0x0F, osVirtualToPhysical(icon_image));
     gSPBranchList(gfx++, sVsPanelIconDL);
     return gfx;
 }
@@ -184,7 +184,7 @@ void VsPanel_NicknameCallback(s32 event, DemoGeoNode* node) {
         slot = (u32)node->node.callbackArg & 0xFFFF;
         if (slot < teams[team].rosterInfo[0]->numberOfPokemonCanBePicked) {
             sVsPanelNicknameText[0] = 9;
-            _bcopy(teams[team].rosterInfo[0]->battleMon[slot].nickname, &sVsPanelNicknameText[1], 0xC);
+            _bcopy(teams[team].rosterInfo[0]->battleMon[slot].nickname, &sVsPanelNicknameText[1], 12);
             node->unk_24 = sVsPanelNicknameText;
         } else {
             node->unk_24 = NULL;

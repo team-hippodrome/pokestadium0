@@ -267,7 +267,7 @@ M2C_UNK FreeBattle_DrawScreen(FreeBattleScreen* screen) {
     s8* base = (s8*)screen;
 
     BgStage_DrawFrame();
-    Ui_DrawTintedScreenBackground(0x38, 0x1E0, D_82008F50[0], D_82008F50[1], D_82008F50[2]);
+    Ui_DrawTintedScreenBackground(56, 480, D_82008F50[0], D_82008F50[1], D_82008F50[2]);
     switch (*(s32*)base) {
         case 1:
             FreeBattle_DrawBattleModeWindow(base + 0x4378);
@@ -528,7 +528,7 @@ s32 FreeBattle_UpdateScreen(FreeBattleScreen* screen) {
                     if (((s32*)((s8*)screen + 0x432C))[M2C_FIELD(screen, s32*, 0x4354)] == 0) {
                         M2C_FIELD(screen, s32*, 0x4354)++;
                         if (M2C_FIELD(screen, s32*, 0x4354) < 5) {
-                            goto loop;
+                            goto loop; // FAKE: goto loop kept from m2c output
                         }
                     }
                 }
@@ -675,7 +675,7 @@ s32 FreeBattle_UpdateFade(FreeBattleScreen* screen) {
     GbSave_DrawSummaryBar(0, var_a1, &D_82009E10, D_8200AD2C);
     n = D_820090D4;
     func_8002C8D8(&sp2C, *(Col8200579C*)&D_82008F50, n / (f64)8.0f);
-    Ui_DrawTintedScreenBackground(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
+    Ui_DrawTintedScreenBackground(56, 480, sp2C.r, sp2C.g, sp2C.b);
     if (D_820090D8 == 0) {
         n = D_820090D4;
         n++;

@@ -54,7 +54,10 @@ void CupClear_PollInput(void) {
     Input_ResetRepeatState();
 }
 
-// No callers in the ROM (checked: no jal, no address word, no lui/addiu pair).
+/**
+ * Empty stub that takes a camera node and does nothing with it.
+ * No callers in the ROM (checked: no jal, no address word, no lui/addiu pair).
+ */
 void func_8180006C(UNUSED CameraNode* arg0) {
     if (arg0) {}  // karodo
 }
@@ -98,13 +101,13 @@ void Font_DisableTwoCycleTexturing(void);
 s32 CupClear_DrawFrame(s32 arg0);
 // Title shown in the banner: 0-3 the four cups, 4 the L50-55 tournament.
 extern s32 sCupClearTitleIndex;
-extern char sCupClearPokeBallCupText[];   // "モンスターボールカップ" (Poké Ball Cup)
-extern char sCupClearGreatBallCupText[];  // "スーパーボールカップ" (Great Ball Cup)
-extern char sCupClearUltraBallCupText[];  // "ハイパーボールカップ" (Ultra Ball Cup)
-extern char sCupClearMasterBallCupText[]; // "マスターボールカップ" (Master Ball Cup)
-extern char sCupClearTournamentText[];    // "トーナメント" (Tournament)
-extern char sCupClearClearText[];         // "クリアー！" (Clear!)
-extern char sCupClearExclamationText[];   // "！" (!)
+extern char sCupClearPokeBallCupText[];   // モンスターボールカップ (Poké Ball Cup)
+extern char sCupClearGreatBallCupText[];  // スーパーボールカップ (Great Ball Cup)
+extern char sCupClearUltraBallCupText[];  // ハイパーボールカップ (Ultra Ball Cup)
+extern char sCupClearMasterBallCupText[]; // マスターボールカップ (Master Ball Cup)
+extern char sCupClearTournamentText[];    // トーナメント (Tournament)
+extern char sCupClearClearText[];         // クリアー！ (Clear!)
+extern char sCupClearExclamationText[];   // ！ (!)
 
 /**
  * Shows the banner for `frames` frames: the cup name, and under it クリアー！! ("Clear!!").
@@ -117,40 +120,40 @@ void CupClear_ShowBannerText(s32 frames, s32 blink) {
     for (i = 0; i < frames; i++) {
         CupClear_PollInput();
         CupClear_DrawFrame(0);
-        CupClear_DrawBannerPanel(0xAB, 0x172, 0x12A, 0x48);
+        CupClear_DrawBannerPanel(171, 370, 298, 72);
         Font_BeginTranslucentTextRendering();
         Font_EnableTwoCycleTexturing();
         Font_SetActive(0x10, -1);
-        Gfx_SetPrimColor(0xFF, 0xFF, 0x32, 0xFF);
+        Gfx_SetPrimColor(0xFF, 0xFF, 0x32, 0xFF); // #FFFF32
         switch ((u32)sCupClearTitleIndex) {
             case 0:
-                Font_Printf(0xC1, 0x17A, sCupClearPokeBallCupText);
+                Font_Printf(193, 378, sCupClearPokeBallCupText);
                 break;
             case 1:
-                Font_Printf(0xCD, 0x17A, sCupClearGreatBallCupText);
+                Font_Printf(205, 378, sCupClearGreatBallCupText);
                 break;
             case 2:
-                Font_Printf(0xCD, 0x17A, sCupClearUltraBallCupText);
+                Font_Printf(205, 378, sCupClearUltraBallCupText);
                 break;
             case 3:
-                Font_Printf(0xCD, 0x17A, sCupClearMasterBallCupText);
+                Font_Printf(205, 378, sCupClearMasterBallCupText);
                 break;
             case 4:
-                Font_Printf(0xFB, 0x17A, sCupClearTournamentText);
+                Font_Printf(251, 378, sCupClearTournamentText);
                 break;
         }
         Font_DisableTwoCycleTexturing();
         if ((blink == 0) || ((i >= 10) && (i < 20)) || ((i >= 25) && (i < 35)) || (i >= 40)) {
-            Gfx_SetEnvColor(0xFF, 0xFF, 0x96, 0xFF);
-            Font_Printf(0x105, 0x19A, sCupClearClearText);
-            Font_Printf(0x16B, 0x19A, sCupClearExclamationText);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0x96, 0xFF); // #FFFF96
+            Font_Printf(261, 410, sCupClearClearText);
+            Font_Printf(363, 410, sCupClearExclamationText);
         }
         Font_EndTexturedTextRendering();
         BgStage_AdvanceFrame();
     }
 }
 
-/*
+/**
  * Pulls the camera back from the trophy over 30 frames: the eye and target y go from 220
  * down to -130 and the eye z from 1200 out to 2700.
  * Seen in play: the trophy shrinks from a close-up during the first second of the scene.
@@ -206,7 +209,10 @@ void CupClear_OpenBannerPanel(void) {
     } while (i != 8);
 }
 
-// No callers in the ROM (checked: no jal, no address word, no lui/addiu pair).
+/**
+ * Empty stub.
+ * No callers in the ROM (checked: no jal, no address word, no lui/addiu pair).
+ */
 void func_8180050C(void) {
 }
 

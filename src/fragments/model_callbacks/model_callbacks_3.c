@@ -27,7 +27,7 @@ void ModelCallback_TwoSegments(s32 phase, DisplayListState* state) {
 
     if (phase == 2) {
         addresses = state->addresses;
-        gfx = Gfx_AllocDisplayList(0x18);
+        gfx = Gfx_AllocDisplayList(24);
         state->gfx = gfx;
         ModelCallback_BuildTwoSegmentList(gfx, addresses);
     }
@@ -52,7 +52,7 @@ void ModelCallback_DefaultModeSegment(s32 phase, DisplayListState* state) {
 
     if (phase == 2) {
         addresses = state->addresses;
-        gfx = Gfx_AllocDisplayList(0x50);
+        gfx = Gfx_AllocDisplayList(80);
         state->gfx = gfx;
         ModelCallback_BuildDefaultModeList(gfx, addresses);
     }

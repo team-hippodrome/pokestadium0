@@ -221,7 +221,7 @@ void FreeBattle_InitEntryListCursor(s8*);
 void FreeBattle_InitEntrySelect(s8* entry, s32 x, s32 y, s32 teams, s32 picks, s32 rule_category) {
     s8* var_s1;
 
-    Window_SetRect(entry + 0x14, x, y, 0x220, 0x158);
+    Window_SetRect(entry + 0x14, x, y, 544, 344);
     M2C_FIELD(entry, s32*, 0x38) = 0;
     M2C_FIELD(entry, s32*, 0x3C) = 0;
     M2C_FIELD(entry, s32*, 0x28) = 0x801;
@@ -268,8 +268,8 @@ void Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
 void FreeBattle_DrawRentalTitle(s32 x, s32 y, s32 width) {
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-    func_8001B884(x, y, width, 0x14, D_05000008, 8, 0);
-    Ui_DrawPrimColorRect(x + 0xE, y, 0x84, 0x14, 0, 0, 0, 0xFF);
+    func_8001B884(x, y, width, 20, D_05000008, 8, 0);
+    Ui_DrawPrimColorRect(x + 14, y, 132, 20, 0, 0, 0, 0xFF); // #000000
     func_8001AB6C();
     func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
     func_8001A384(4, 0);
@@ -294,13 +294,13 @@ void Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, char*);
  * Seen in play: draws 「1Pせんたくちゅう」 next to the entry screen title.
  */
 void FreeBattle_DrawChoosingLabel(s8* entry) {
-    Ui_DrawTexturedFrameDecal(M2C_FIELD(entry, s32*, 0x14) + 0x127, M2C_FIELD(entry, s32*, 0x18) - 0x12, 0xA6, 0x14, D_800735C4);
+    Ui_DrawTexturedFrameDecal(M2C_FIELD(entry, s32*, 20) + 295, M2C_FIELD(entry, s32*, 24) - 18, 166, 20, D_800735C4);
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(M2C_FIELD(entry, s32*, 0x14) + 0x129, M2C_FIELD(entry, s32*, 0x18) - 0x10, 0xA2, 0x10, D_82009098[M2C_FIELD(entry, s32*, 0x738) - 1]);
+    func_80029028(M2C_FIELD(entry, s32*, 20) + 297, M2C_FIELD(entry, s32*, 24) - 0x10, 162, 0x10, D_82009098[M2C_FIELD(entry, s32*, 0x738) - 1]);
     func_8001AB6C();
     func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
     func_8001A384(4, 0);
-    Font_Printf(M2C_FIELD(entry, s32*, 0x14) + 0x12A, M2C_FIELD(entry, s32*, 0x18) - 0x10, D_82009CF0, D_820090A8[M2C_FIELD(entry, s32*, 0x738)]);
+    Font_Printf(M2C_FIELD(entry, s32*, 20) + 298, M2C_FIELD(entry, s32*, 24) - 0x10, D_82009CF0, D_820090A8[M2C_FIELD(entry, s32*, 0x738)]);
     func_8001ABBC();
 }
 
@@ -333,7 +333,7 @@ void FreeBattle_DrawRentalTitleWindow(s8* entry, s32 cursor_style) {
     sp44 = 0xFED;
     FreeBattle_DrawRentalTitle(M2C_FIELD(entry, s32*, 0x14) + 6, M2C_FIELD(entry, s32*, 0x18) + 0x88, M2C_FIELD(entry, s32*, 0x1C) - 0xC);
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(M2C_FIELD(entry, s32*, 0x14) + 6, M2C_FIELD(entry, s32*, 0x18) + 0x9C, 2, 0xB6, D_820090C0);
+    func_80029028(M2C_FIELD(entry, s32*, 20) + 6, M2C_FIELD(entry, s32*, 24) + 156, 2, 182, D_820090C0);
     sp34.table = D_8200AC58;
     sp34.unk_04 = 0x18;
     sp34.unk_08 = 0x10;
@@ -357,8 +357,8 @@ void FreeBattle_DrawRentalTitleWindow(s8* entry, s32 cursor_style) {
  */
 void FreeBattle_DrawTeamWindowPanels(s8* entry) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(M2C_FIELD(entry, s32*, 0x14) + 6, M2C_FIELD(entry, s32*, 0x18) + 0x6A, 0x88, 0xE8, D_82008F5C);
-    func_80029028(M2C_FIELD(entry, s32*, 0x14) + 0x8E, M2C_FIELD(entry, s32*, 0x18) + 0x6A, 0x18C, 0xE8, D_82008F58);
+    func_80029028(M2C_FIELD(entry, s32*, 20) + 6, M2C_FIELD(entry, s32*, 24) + 106, 136, 232, D_82008F5C);
+    func_80029028(M2C_FIELD(entry, s32*, 20) + 142, M2C_FIELD(entry, s32*, 24) + 106, 396, 232, D_82008F58);
 }
 
 /**
@@ -368,8 +368,8 @@ void FreeBattle_DrawTeamWindowPanels(s8* entry) {
  */
 void FreeBattle_DrawRentalTeamPanels(s8* entry) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(M2C_FIELD(entry, s32*, 0x14) + 6, M2C_FIELD(entry, s32*, 0x18) + 0x6A, 0x88, 0x1E, D_82008F5C);
-    func_80029028(M2C_FIELD(entry, s32*, 0x14) + 0x8E, M2C_FIELD(entry, s32*, 0x18) + 0x6A, 0x18C, 0x1E, D_82008F58);
+    func_80029028(M2C_FIELD(entry, s32*, 20) + 6, M2C_FIELD(entry, s32*, 24) + 106, 136, 30, D_82008F5C);
+    func_80029028(M2C_FIELD(entry, s32*, 20) + 142, M2C_FIELD(entry, s32*, 24) + 106, 396, 30, D_82008F58);
 }
 
 s32 func_8002AE6C(s8*);
@@ -590,7 +590,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
   s32 ret = 0;
   s32 next;
   u8 *rec;
-  if ((*((s32 *) (((s8 *) entry) + 8))) != 0)
+  if ((*((s32 *) (((s8 *) entry) + 8))) != 0) // FAKE: decomp slop, raw pointer casts stand in for struct fields
   {
     next = *((s32 *) (((s8 *) (*((s8 **) (((s8 *) entry) + 0xC)))) + 0x28)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     if (next == 4)
@@ -599,14 +599,14 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
       {
       }
       *((s32 *) (((s8 *) entry) + 4)) = *((s32 *) (((s8 *) entry) + 8)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-      if ((*((s32 *) (((s8 *) entry) + 8))) == 0xD)
+      if ((*((s32 *) (((s8 *) entry) + 8))) == 0xD) // FAKE: decomp slop, raw pointer casts stand in for struct fields
       {
         ret = 1;
       }
       else
       {
         FreeBattle_EnterEntryScreenState(entry);
-        *((s32 *) (((s8 *) entry) + 8)) = 0;
+        *((s32 *) (((s8 *) entry) + 8)) = 0; // FAKE: decomp slop, raw pointer casts stand in for struct fields
       }
       return ret;
     }
@@ -615,12 +615,12 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
       return 0;
     }
   }
-  switch (*((s32 *) (((s8 *) entry) + 4)))
+  switch (*((s32 *) (((s8 *) entry) + 4))) // FAKE: decomp slop, raw pointer casts stand in for struct fields
   {
     case 1:
       if (ScrollList_UpdateCursor(entry + 0x40) == 0)
     {
-      next = func_8002BC14(*((s32 *) (((s8 *) entry) + 0x744)));
+      next = func_8002BC14(*((s32 *) (((s8 *) entry) + 0x744))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       if (next == (-1))
       {
         Audio_PlaySystemSound(3);
@@ -631,7 +631,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
       {
         s32 sp40;
         rec = (*(*((u8 ****) (((s8 *) entry) + 0xC4))))[*((s32 *) (((s8 *) entry) + 0x48))]; // FAKE: decomp slop, raw pointer casts stand in for struct fields
-        if (((*((s32 *) (((s8 *) entry) + 0x740))) == 0) && ((FreeBattle_FindFlaggedSlot(rec + 0x1C, &sp40), sp40 == 6)))
+        if (((*((s32 *) (((s8 *) entry) + 0x740))) == 0) && ((FreeBattle_FindFlaggedSlot(rec + 0x1C, &sp40), sp40 == 6))) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
           Audio_PlaySystemSound(8);
           TextBox_Init(entry + 0x74C, D_82009D04, 1, 2, 9);
@@ -640,24 +640,24 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
         else
         {
           Audio_PlaySystemSound(2);
-          *((s32 *) (((s8 *) entry) + 0x784)) = 0;
+          *((s32 *) (((s8 *) entry) + 0x784)) = 0; // FAKE: decomp slop, raw pointer casts stand in for struct fields
           if (rec[0] & 2)
           {
-            FreeBattle_InitNamedTeam(entry + 0xC8, *((s32 *) (((s8 *) entry) + 0x738)));
-            *((s32 *) (((s8 *) entry) + 0x784)) |= 1;
+            FreeBattle_InitNamedTeam(entry + 0xC8, *((s32 *) (((s8 *) entry) + 0x738))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+            *((s32 *) (((s8 *) entry) + 0x784)) |= 1; // FAKE: decomp slop, raw pointer casts stand in for struct fields
           }
           else
           {
             *((Blk820038B0 *) (entry + 0xC8)) = *((Blk820038B0 *) rec);
           }
           func_80027410(entry + 0x2DC, (s32) (entry + 0xE4), 0x54, 6, 6);
-          GridMenu_Init(entry + 0x2F8, entry + 0x2DC, entry + 0x2EC, FreeBattle_DrawSlotCell, 3, 0x84, 0x32);
-          *((s32 *) (((s8 *) entry) + 0x6EC)) = 0;
-          *((s32 *) (((s8 *) entry) + 0x318)) |= 0x10000;
+          GridMenu_Init(entry + 0x2F8, entry + 0x2DC, entry + 0x2EC, FreeBattle_DrawSlotCell, 3, 132, 50);
+          *((s32 *) (((s8 *) entry) + 0x6EC)) = 0; // FAKE: decomp slop, raw pointer casts stand in for struct fields
+          *((s32 *) (((s8 *) entry) + 0x318)) |= 0x10000; // FAKE: decomp slop, raw pointer casts stand in for struct fields
           FreeBattle_MarkIneligibleSlots(entry + 0x2F8);
           FreeBattle_SetEntryScreenState(entry, FreeBattle_CheckEntryRules(entry), 0);
           *((s32 *) (((s8 *) entry) + 0x310)) = *((s32 *) (((s8 *) entry) + 0x744)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-          func_8000B2F4(*((s32 *) (((s8 *) entry) + 0x744)));
+          func_8000B2F4(*((s32 *) (((s8 *) entry) + 0x744))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
         }
       }
     }
@@ -666,7 +666,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
     case 2:
       if (FreeBattle_UpdateTeamSlotCursor(entry) == 0)
     {
-      next = func_8002BC14(*((s32 *) (((s8 *) entry) + 0x744)));
+      next = func_8002BC14(*((s32 *) (((s8 *) entry) + 0x744))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       if (next == (-1))
       {
         Audio_PlaySystemSound(3);
@@ -699,7 +699,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
     {
       Audio_PlaySystemSound(2);
       FreeBattle_EnableNonDuplicateRows(entry + 0x2F8);
-      FreeBattle_KeepChosenDuplicate(entry + 0xE4, *((s32 *) (((s8 *) entry) + 0x300)));
+      FreeBattle_KeepChosenDuplicate(entry + 0xE4, *((s32 *) (((s8 *) entry) + 0x300))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       FreeBattle_MarkSlotsToReplace(entry + 0x2F8);
       FreeBattle_SetEntryScreenState(entry, FreeBattle_CheckEntryRules(entry), 1);
     }
@@ -731,7 +731,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
       if (entry)
       {
       }
-      *((s32 *) (((s8 *) entry) + 0x784)) |= 2;
+      *((s32 *) (((s8 *) entry) + 0x784)) |= 2; // FAKE: decomp slop, raw pointer casts stand in for struct fields
       FreeBattle_SetEntryScreenState(entry, 6, 1);
     }
       break;
@@ -739,11 +739,11 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
     case 6:
       if (FreeBattle_UpdateTeamSlotCursor(entry) == 0)
     {
-      next = func_8002BC14(*((s32 *) (((s8 *) entry) + 0x744)));
+      next = func_8002BC14(*((s32 *) (((s8 *) entry) + 0x744))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       if (next == (-1))
       {
         Audio_PlaySystemSound(3);
-        if ((*((s32 *) (((s8 *) entry) + 0x784))) & 2)
+        if ((*((s32 *) (((s8 *) entry) + 0x784))) & 2) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
           FreeBattle_SetEntryScreenState(entry, 1, 0);
         }
@@ -771,11 +771,11 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
     case 8:
       if (ScrollGrid_UpdateCursor(entry + 0x6E4) == 0)
     {
-      next = func_8002BC14(*((s32 *) (((s8 *) entry) + 0x744)));
+      next = func_8002BC14(*((s32 *) (((s8 *) entry) + 0x744))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       if (next == (-1))
       {
         Audio_PlaySystemSound(3);
-        if ((*((s32 *) (((s8 *) entry) + 0x748))) != 0)
+        if ((*((s32 *) (((s8 *) entry) + 0x748))) != 0) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
           FreeBattle_SetEntryScreenState(entry, 1, 0);
         }
@@ -839,8 +839,8 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
       if (next == 2)
     {
       Audio_PlaySystemSound(2);
-      *((s32 *) (((s8 *) entry) + 0x300)) = 0;
-      *((s32 *) (((s8 *) entry) + 0x6EC)) = 0;
+      *((s32 *) (((s8 *) entry) + 0x300)) = 0; // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      *((s32 *) (((s8 *) entry) + 0x6EC)) = 0; // FAKE: decomp slop, raw pointer casts stand in for struct fields
       FreeBattle_SetEntryScreenState(entry, 6, 1);
     }
     else
@@ -961,13 +961,13 @@ void Session_LoadPortSnapshot(u8);
  * Seen in play (2026-11-13) ran once after both Free Battle teams were confirmed, just before the
  * VS screen, and called FreeBattle_CopyTeamToRoster for each side.
  */
-void FreeBattle_BuildBattleRosters(s32* side0_players, s32* side1_players, Src82004020** teams, s32 mode, s32 ruleCategory, s32 modeSelection) {
+void FreeBattle_BuildBattleRosters(s32* side0_players, s32* side1_players, Src82004020** teams, s32 mode, s32 rule_category, s32 mode_selection) {
     Src82004020* src;
 
     D_8200ACF8->mode = mode;
-    D_8200ACF8->ruleCategory = ruleCategory;
+    D_8200ACF8->ruleCategory = rule_category;
     if (D_8200ACF8->mode == 2) {
-        D_8200ACF8->modeSelection = modeSelection;
+        D_8200ACF8->modeSelection = mode_selection;
     }
     if ((D_8200ACF8->mode == 1) || (D_8200ACF8->mode == 2)) {
         if (side0_players[0] > 0) {

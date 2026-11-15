@@ -28,7 +28,7 @@ void ModelCallback_BaseAndDefaultModeSegments(s32 phase, DisplayListState* state
 
     if (phase == 2) {
         addresses = state->addresses;
-        gfx = Gfx_AllocDisplayList(0x50);
+        gfx = Gfx_AllocDisplayList(80);
         state->gfx = gfx;
         ModelCallback_BuildBaseAndDefaultModeList(gfx, addresses);
     }

@@ -17,18 +17,18 @@ typedef struct DemoGeoNode {
 } DemoGeoNode;
 
 // vs_results_board.c
-s32 VsResults_CheckBootCode(s32 displayList);
-Gfx* VsResults_WritePortraitGfx(Gfx* gfx, void* trainerFile);
+s32 VsResults_CheckBootCode(s32 display_list);
+Gfx* VsResults_WritePortraitGfx(Gfx* gfx, void* trainer_file);
 void VsResults_PortraitCallback(s32 event, DemoGeoNode* node);
 void VsResults_TitleTextCallback(s32 event, DemoGeoNode* node);
 void VsResults_NameTextCallback(s32 event, DemoGeoNode* node);
 void VsResults_NicknameCallback(s32 event, DemoGeoNode* node);
 void VsResults_SelectLayout(s32 event, GeoModelRootNode* node);
-Gfx* VsResults_WriteRowIconGfx(Gfx* gfx, void* iconImage);
+Gfx* VsResults_WriteRowIconGfx(Gfx* gfx, void* icon_image);
 void VsResults_RowIconCallback(s32 event, DemoGeoNode* node);
-Gfx* VsResults_WriteGridIconGfx(Gfx* gfx, void* iconImage);
+Gfx* VsResults_WriteGridIconGfx(Gfx* gfx, void* icon_image);
 void VsResults_GridIconCallback(s32 event, DemoGeoNode* node);
-Gfx* VsResults_WriteHpBarGfx(Gfx* gfx, void* hpBarImage);
+Gfx* VsResults_WriteHpBarGfx(Gfx* gfx, void* hp_bar_image);
 void VsResults_HpBarCallback(s32 event, DemoGeoNode* node);
 
 #endif // FRAGMENT_VS_RESULTS_BOARD_H

@@ -5,9 +5,9 @@
  * - D_8EB300B0 (drawn by D_822033D0): a red-and-white trainer cap with eight badge slots, one per
  *   tournament round. The slots use three badge kinds: four red, three silver and one gold.
  * - D_8EB37440 (drawn by D_82203538): the sparkles around the badge just won. A switch node picks
- *   the sparkle color for the round: dark red (0x960000) for rounds 1-4, silver (0xCDCDE1) for
- *   rounds 5-7, gold (0xFFFF00) for round 8.
- * Seen in play (2026-11-14) after winning round 1 of the L1-30 Monster Ball Cup: after かち the cap
+ *   the sparkle color for the round: dark red (#960000) for rounds 1-4, silver (#CDCDE1) for
+ *   rounds 5-7, gold (#FFFF00) for round 8.
+ * Seen in play (2026-11-14) after winning round 1 of the L1-30 Poké Ball Cup: after かち the cap
  * spins in over the flames, the round 1 badge flies onto it with sparkles, and
  * トーナメントをつづけますか？ (Tournament_RunContinuePrompt) is asked over it. All eight functions
  * here ran every frame of that screen.
@@ -21,8 +21,8 @@
 extern Gfx sBadgeMaterialDL[];
 extern s32 sBadgeTextureScroll;
 extern u16 sGoldBadgeEdgeTex[];
-Gfx* BadgeCap_BuildBadgeTextureDL(Gfx* gfx, Gfx* mesh, void* texture, s32 shiftS, s32 shiftT, s32 scaleS,
-                                  s32 scaleT);
+Gfx* BadgeCap_BuildBadgeTextureDL(Gfx* gfx, Gfx* mesh, void* texture, s32 shift_s, s32 shift_t, s32 scale_s,
+                                  s32 scale_t);
 
 extern DisplayObject* D_8006049C;
 
@@ -47,12 +47,12 @@ void BadgeSparkle_SelectRoundColor(s32 event, GeoSwitchCaseNode* node) {
  * Seen in play (2026-11-14): called by each badge callback below every frame of the round 1 win
  * screen.
  */
-Gfx* BadgeCap_BuildBadgeTextureDL(Gfx* gfx, Gfx* mesh, void* texture, s32 shiftS, s32 shiftT, s32 scaleS,
-                                  s32 scaleT) {
+Gfx* BadgeCap_BuildBadgeTextureDL(Gfx* gfx, Gfx* mesh, void* texture, s32 shift_s, s32 shift_t, s32 scale_s,
+                                  s32 scale_t) {
     gSPDisplayList(gfx++, sBadgeMaterialDL);
-    gSPTexture(gfx++, scaleS, scaleT, 0, G_TX_RENDERTILE, G_ON);
+    gSPTexture(gfx++, scale_s, scale_t, 0, G_TX_RENDERTILE, G_ON);
     gDPLoadTextureBlock(gfx++, texture, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_WRAP | G_TX_NOMIRROR,
-                        G_TX_WRAP | G_TX_NOMIRROR, 5, 5, shiftS, shiftT);
+                        G_TX_WRAP | G_TX_NOMIRROR, 5, 5, shift_s, shift_t);
     gDPSetTileSize(gfx++, G_TX_RENDERTILE, 0, sBadgeTextureScroll, 0x7C, sBadgeTextureScroll + 0x7C);
     gSPBranchList(gfx++, mesh);
     return gfx;
@@ -68,7 +68,7 @@ extern u16 sRedBadgeRingTex[];
  */
 void BadgeCap_DrawRedBadgeRing(s32 event, GeoDisplayListNode* node) {
     if (event == 2) {
-        node->displayList = Gfx_AllocDisplayList(0x58);
+        node->displayList = Gfx_AllocDisplayList(88);
         BadgeCap_BuildBadgeTextureDL(node->displayList, (Gfx*)node->node.callbackArg, sRedBadgeRingTex, 1, 1,
                                      0x1F40, 0x1F40);
     }
@@ -83,7 +83,7 @@ extern u16 sRedBadgeEdgeTex[];
  */
 void BadgeCap_DrawRedBadgeEdge(s32 event, GeoDisplayListNode* node) {
     if (event == 2) {
-        node->displayList = Gfx_AllocDisplayList(0x58);
+        node->displayList = Gfx_AllocDisplayList(88);
         BadgeCap_BuildBadgeTextureDL(node->displayList, (Gfx*)node->node.callbackArg, sRedBadgeEdgeTex, 1, 1,
                                      0x1F40, 0x1F40);
     }
@@ -98,7 +98,7 @@ extern u16 sSilverBadgeRingTex[];
  */
 void BadgeCap_DrawSilverBadgeRing(s32 event, GeoDisplayListNode* node) {
     if (event == 2) {
-        node->displayList = Gfx_AllocDisplayList(0x58);
+        node->displayList = Gfx_AllocDisplayList(88);
         BadgeCap_BuildBadgeTextureDL(node->displayList, (Gfx*)node->node.callbackArg, sSilverBadgeRingTex, 0, 0xF,
                                      0x1F40, 0x206C);
     }
@@ -107,12 +107,12 @@ void BadgeCap_DrawSilverBadgeRing(s32 event, GeoDisplayListNode* node) {
 extern u16 sSilverBadgeEdgeTex[];
 
 /**
- * Display-list callback for the side band of a silver badge's ring (sSilverBadgeEdgeTex, grey bands).
+ * Display-list callback for the side band of a silver badge's ring (sSilverBadgeEdgeTex, gray bands).
  * @unverified Ran on the round 1 win screen, but no silver badge was on screen to see.
  */
 void BadgeCap_DrawSilverBadgeEdge(s32 event, GeoDisplayListNode* node) {
     if (event == 2) {
-        node->displayList = Gfx_AllocDisplayList(0x58);
+        node->displayList = Gfx_AllocDisplayList(88);
         BadgeCap_BuildBadgeTextureDL(node->displayList, (Gfx*)node->node.callbackArg, sSilverBadgeEdgeTex, 0, 1,
                                      0xFA0, 0xFA0);
     }
@@ -127,7 +127,7 @@ extern u16 sGoldBadgeRingTex[];
  */
 void BadgeCap_DrawGoldBadgeRing(s32 event, GeoDisplayListNode* node) {
     if (event == 2) {
-        node->displayList = Gfx_AllocDisplayList(0x58);
+        node->displayList = Gfx_AllocDisplayList(88);
         BadgeCap_BuildBadgeTextureDL(node->displayList, (Gfx*)node->node.callbackArg, sGoldBadgeRingTex, 2, 0xE,
                                      0xFA0, 0xFA0);
     }
@@ -146,7 +146,7 @@ void BadgeCap_DrawGoldBadgeEdge(s32 event, GeoDisplayListNode* node) {
         if (sBadgeTextureScroll < 0) {
             sBadgeTextureScroll = 0x7F;
         }
-        node->displayList = Gfx_AllocDisplayList(0x58);
+        node->displayList = Gfx_AllocDisplayList(88);
         BadgeCap_BuildBadgeTextureDL(node->displayList, (Gfx*)node->node.callbackArg, sGoldBadgeEdgeTex, 1, 1,
                                      0x1F40, 0x1F40);
     }

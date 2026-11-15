@@ -110,7 +110,7 @@ void CartridgeCheck_DrawNextArrow(s16 x, s16 y) {
         D_88403364 = 0;
     }
 
-    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, var_a3);
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, var_a3); // #FFFFFF
     Font_DrawCharAt(x, y, 0x2177);
 }
 
@@ -126,8 +126,8 @@ void CartridgeCheck_ShowMessageUntilA(s32 text) {
         CartridgeCheck_DrawMessageWindow(0x1E, 0x20, 0x104, 0x34);
         func_8001AB6C();
         func_8001A384(4, -1);
-        Font_SetLineHeight(0x14);
-        Font_Printf(0x2E, 0x28, text);
+        Font_SetLineHeight(20);
+        Font_Printf(46, 40, text);
         CartridgeCheck_DrawNextArrow(0x104, 0x3C);
         func_8001ABBC();
         func_80006780();
@@ -157,9 +157,9 @@ void CartridgeCheck_ScrollToNextMessage(s8* text) {
 
         Font_BeginTranslucentTextRendering();
         Font_SetActive(4, -1);
-        Font_SetLineHeight(0x14);
-        Font_Printf(0x2E, y1 - i * 4, (s8*)D_88402D70);
-        Font_Printf(0x2E, 0x50 - i * 4, text);
+        Font_SetLineHeight(20);
+        Font_Printf(46, y1 - i * 4, (s8*)D_88402D70);
+        Font_Printf(46, 80 - i * 4, text);
         Font_EndTexturedTextRendering();
         BgStage_AdvanceFrame();
     }
@@ -302,31 +302,31 @@ void CartridgeCheck_DrawScreen(void) {
 
     if (D_88403358 >= 0) {
         D_88403358 = CartridgeCheck_MoveCursor(D_88403358);
-        Ui_DrawGradientPanel(0x1E, 0x1E, 0x104, 0x18, &top, &bottom);
+        Ui_DrawGradientPanel(30, 30, 260, 24, &top, &bottom);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(2, -1);
         Font_SetLineHeight(0x10);
-        Font_Printf(0x23, 0x24, D_88402D80);
+        Font_Printf(35, 36, D_88402D80);
         Font_EndTexturedTextRendering();
         CartridgeCheck_DrawPortPanel(0, 0x1E, 0x38);
         CartridgeCheck_DrawPortPanel(1, 0xA2, 0x38);
         CartridgeCheck_DrawPortPanel(2, 0x1E, 0x80);
         CartridgeCheck_DrawPortPanel(3, 0xA2, 0x80);
     } else {
-        Ui_DrawGradientPanel(0x1E, 0x1E, 0x104, 0x4A, &top, &bottom);
+        Ui_DrawGradientPanel(30, 30, 260, 74, &top, &bottom);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(2, -1);
         Font_SetLineHeight(0x10);
-        Font_Printf(0x32, 0x23, D_88402D84);
+        Font_Printf(50, 35, D_88402D84);
         Font_EndTexturedTextRendering();
     }
-    Ui_DrawGradientPanel(0xBE, 0xCA, 0x64, 0x18, &top, &bottom);
+    Ui_DrawGradientPanel(190, 202, 100, 24, &top, &bottom);
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     Gfx_DrawTextureRgba32(0xC8, 0xCF, 0x10, 0xE, (u8*)Util_ConvertAddrToVirtAddr((uintptr_t)D_8F4B2B30), 0x10, 0);
     gSPDisplayList(gDisplayListHead++, D_80060398);
     Font_BeginTranslucentTextRendering();
     Font_SetActive(2, -1);
-    Font_Printf(0xDC, 0xD0, D_88403228);
+    Font_Printf(220, 208, D_88403228);
     Font_EndTexturedTextRendering();
 }
 
@@ -352,25 +352,25 @@ void Options_DrawMenu(s32 sel_row, u8 flags) {
     s32 row;
 
     row = sel_row;
-    Ui_DrawGradientPanel(0x32, 0x3C, 0xDC, 0x7D, &sp44, &sp40);
+    Ui_DrawGradientPanel(50, 60, 220, 125, &sp44, &sp40);
     gSPDisplayList(gDisplayListHead++, D_80060290);
-    Gfx_DrawTextureRgba16(0x3A, (row * 20) + 0x63, 0x18, 0xE, (u8 *) Util_ConvertAddrToVirtAddr((uintptr_t) D_8F4B2EB0), 0x18, 0x200000);
+    Gfx_DrawTextureRgba16(58, (row * 20) + 99, 24, 14, (u8 *) Util_ConvertAddrToVirtAddr((uintptr_t) D_8F4B2EB0), 24, 0x200000);
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
     Font_BeginTranslucentTextRendering();
     Font_EnableTwoCycleTexturing();
     Font_SetActive(8, -2);
-    Gfx_SetPrimColor(100, 255, 150, 255);
-    Font_Printf(0x6E, 0x44, D_8840325C);
+    Gfx_SetPrimColor(100, 255, 150, 255); // #64FF96
+    Font_Printf(110, 68, D_8840325C);
     Font_DisableTwoCycleTexturing();
     Font_SetActive(4, -2);
-    Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x63) ? 0 : 255, 255);
-    Font_Printf(0x52, 0x62, D_88403268, D_88402FA4[(flags & 1) != 0]);
-    Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x77) ? 0 : 255, 255);
-    Font_Printf(0x52, 0x76, D_8840327C, D_88402FAC[(flags & 2) != 0]);
-    Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x8B) ? 0 : 255, 255);
-    Font_Printf(0x52, 0x8A, D_88403290);
-    Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x9F) ? 0 : 255, 255);
-    Font_Printf(0x52, 0x9E, D_884032A0);
+    Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x63) ? 0 : 255, 255); // #FFFF00 when selected, else #FFFFFF
+    Font_Printf(82, 98, D_88403268, D_88402FA4[(flags & 1) != 0]);
+    Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x77) ? 0 : 255, 255); // #FFFF00 when selected, else #FFFFFF
+    Font_Printf(82, 118, D_8840327C, D_88402FAC[(flags & 2) != 0]);
+    Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x8B) ? 0 : 255, 255); // #FFFF00 when selected, else #FFFFFF
+    Font_Printf(82, 138, D_88403290);
+    Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x9F) ? 0 : 255, 255); // #FFFF00 when selected, else #FFFFFF
+    Font_Printf(82, 158, D_884032A0);
     Font_EndTexturedTextRendering();
 }
 
@@ -393,23 +393,23 @@ void Options_DrawClearSavePrompt(s32 second_ask, s32 choice) {
         temp = 0x6E;
     }
     pos[1] = temp + 0x28;
-    Ui_DrawGradientPanel(0x28, 0x82, 0xF0, 0x5A, &sp4C, &sp48);
+    Ui_DrawGradientPanel(40, 130, 240, 90, &sp4C, &sp48);
     gSPDisplayList(gDisplayListHead++, D_80060290);
-    Gfx_DrawTextureRgba16(pos[1], 0xC5, 0x18, 0xE, (u8*)Util_ConvertAddrToVirtAddr((uintptr_t)D_8F4B2EB0), 0x18, 0x200000);
+    Gfx_DrawTextureRgba16(pos[1], 197, 24, 14, (u8*)Util_ConvertAddrToVirtAddr((uintptr_t)D_8F4B2EB0), 24, 0x200000);
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
     Font_BeginTranslucentTextRendering();
     Font_EnableTwoCycleTexturing();
     Font_SetActive(4, -2);
-    Gfx_SetPrimColor(100, 255, 150, 255);
-    Font_Printf(0x30, 0x8A, D_884032A8);
+    Gfx_SetPrimColor(100, 255, 150, 255); // #64FF96
+    Font_Printf(48, 138, D_884032A8);
     Font_DisableTwoCycleTexturing();
     Font_SetActive(8, -2);
-    Gfx_SetEnvColor(255, 255, 100, 255);
+    Gfx_SetEnvColor(255, 255, 100, 255); // #FFFF64
     if (second_ask == 0) {
-        Font_Printf(0x5A, 0xA2, D_884032CC);
+        Font_Printf(90, 162, D_884032CC);
     } else {
-        Font_Printf(0x32, 0xA2, D_884032E0);
+        Font_Printf(50, 162, D_884032E0);
     }
     Font_SetActive(4, -1);
     if (choice == 0) {
@@ -417,15 +417,15 @@ void Options_DrawClearSavePrompt(s32 second_ask, s32 choice) {
     } else {
         temp = 0xFF;
     }
-    Gfx_SetEnvColor(255, 255, temp, 255);
-    Font_Printf(100, 0xC4, D_884032FC);
+    Gfx_SetEnvColor(255, 255, temp, 255); // #FFFF00 when selected, else #FFFFFF
+    Font_Printf(100, 196, D_884032FC);
     if (choice == 1) {
         temp = 0;
     } else {
         temp = 0xFF;
     }
-    Gfx_SetEnvColor(255, 255, temp, 255);
-    Font_Printf(0xAA, 0xC4, D_88403304);
+    Gfx_SetEnvColor(255, 255, temp, 255); // #FFFF00 when selected, else #FFFFFF
+    Font_Printf(170, 196, D_88403304);
     Font_EndTexturedTextRendering();
 }
 
@@ -652,8 +652,8 @@ void CartridgeCheck_PlaySetCartridgeAnimation(void) {
     func_80010F9C(&D_88403648, 0x2E);
     M2C_FIELD(&D_88403648, u8 *, 2) = (u8) (M2C_FIELD(&D_88403648, u8 *, 2) | 0x20);
     if (D_88403358 >= 0) {
-        Model_InitDisplayObject(&D_88403378, 0, 0, *((M2C_UNK*)((u8*)&D_884037B0 + (sp1F * 4))));
-        func_80010F14(&D_88403378, 1, *((M2C_UNK*)((u8*)&D_88402D74 + (sp1F * 4))), 0x10000);
+        Model_InitDisplayObject(&D_88403378, 0, 0, *((M2C_UNK*)((u8*)&D_884037B0 + (sp1F * 4)))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+        func_80010F14(&D_88403378, 1, *((M2C_UNK*)((u8*)&D_88402D74 + (sp1F * 4))), 0x10000); // FAKE: decomp slop, raw pointer casts stand in for struct fields
         func_80010F9C(&D_88403378, 0x2E);
     }
     Audio_PlaySystemSound(0xB);
@@ -942,8 +942,8 @@ void CartridgeCheck_InitModels(s32 from_main_menu) {
     M2C_FIELD(&D_88403648, u8 *, 2) &= ~0x20;
     if (D_88403358 >= 0) {
         Save_GetGbPlayerSettings(&sp27, 0);
-        Model_InitDisplayObject(&D_88403378, 0, 0, *((M2C_UNK*)((u8*)&D_884037B0 + (sp27 * 4))));
-        func_80010F14(&D_88403378, 1, *((M2C_UNK**)((u8*)&D_88402D74 + (sp27 * 4))), 0xFFFF0000);
+        Model_InitDisplayObject(&D_88403378, 0, 0, *((M2C_UNK*)((u8*)&D_884037B0 + (sp27 * 4)))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+        func_80010F14(&D_88403378, 1, *((M2C_UNK**)((u8*)&D_88402D74 + (sp27 * 4))), 0xFFFF0000); // FAKE: decomp slop, raw pointer casts stand in for struct fields
         func_80010F9C(&D_88403378, 0x4A);
         M2C_FIELD(&D_88403378, u8 *, 2) &= ~0x20;
     }

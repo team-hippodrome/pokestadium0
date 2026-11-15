@@ -5,6 +5,6 @@
 #include "global.h"
 
 // unused_relay_023.c
-s32 UnusedRelay023_QueueMainMenuLauncher(s32 unusedArg0, s32 unusedArg1);
+s32 UnusedRelay023_QueueMainMenuLauncher(s32 unused_arg0, s32 unused_arg1);
 
 #endif // UNUSED_RELAY_023_H
