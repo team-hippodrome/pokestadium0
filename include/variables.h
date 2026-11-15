@@ -52,7 +52,10 @@
 #define SFX_TRADE_BALL_READY  0x01200006
 #define SFX_EVOLUTION_START  0x01200007
 
-// game states
+// Stadium 1 (international) game states, carried over from that decomp. Nothing in Zero uses this enum
+// and Zero has none of these modes (no Kids Club, Gym Leader Castle, Gallery or Victory Palace). Zero's
+// states are 0x8001 State_Boot, 0x8010 State_TitleScreen, 0x8040 State_MainMenu, 0x8050 State_Battle,
+// 0x8060 State_GbPlayer and 0x8080 State_ReturnToTitle (//@src/game_state.c).
 typedef enum {
     STATE_N64_LOGO_INTRO      = 0x01, // N64 Logo + Intro
     STATE_TITLE_SCREEN        = 0x02, // Title screen
