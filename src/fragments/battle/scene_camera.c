@@ -148,9 +148,9 @@ f32 BattleScene_GetParticipantModelRadiusScaled(ActivePokemon* active_pokemon);
 /**
  * Stadium 0 counterpart of Stadium 1's BattleScene_IsOwnerInViewWedgeAlt.
  * Returns 1 when a2 lies inside the wedge in front of the camera eye
- * (half-angle arg3, length arg4). In camera modes 2 and 6 the result is
- * cleared again when the eye is within 1.5x arg0's BattleScene_GetParticipantModelRadiusScaled radius of
- * arg0's anchor point.
+ * (half_angle, length). In camera modes 2 and 6 the result is
+ * cleared again when the eye is within 1.5x owner's BattleScene_GetParticipantModelRadiusScaled radius of
+ * owner's anchor point.
  * @unverified Name guessed from the code.
  */
 u16 BattleScene_IsParticipantInViewWedge(ActivePokemon* owner, CameraNode* camera, ActivePokemon* a2, s16 half_angle, f32 length) {
@@ -210,7 +210,7 @@ u16 BattleScene_IsParticipantInViewWedge(ActivePokemon*, CameraNode*, ActivePoke
 /**
  * Unless the scene's unk_1C is one of 4, 7, 8, 9, 0xA or 0xB, it calls
  * BattleScene_IsParticipantInViewWedge once for each of the two active Pokemon (sActivePokemon[0]
- * and [1]).  Each call gets the Pokemon (twice), arg0, the halfword at offset
+ * and [1]).  Each call gets the Pokemon (twice), camera, the halfword at offset
  * 0x34 of that Pokemon's state block, and a float (D_FLT_82196230 for the
  * first Pokemon, D_FLT_82196234 for the second).  Bit 0 of the byte at offset 1
  * of the Pokemon is set when the call returns non-zero and cleared when it
@@ -416,7 +416,7 @@ s32 BattleScene_ApproachCameraRotationY(s32 arg0, s16 arg1, s16 arg2) {
             sBattleScene.scene->rotationY = arg2;
             return 1;
         }
-        goto block_7;
+        goto block_7; // FAKE
     }
     sBattleScene.scene->rotationY = (s16) (sBattleScene.scene->rotationY - arg1);
     var_v0 = sBattleScene.scene->rotationY;
@@ -505,7 +505,7 @@ void BattleScene_UpdateCameraClipPlanes(CameraNode* camera) {
         func_82121D78(camera, 20.0f, 32000.0f);
         var_v0 = sBattleScene.scene->mode;
     }
-    if ((var_v0 == 9) && (D_8219A4F4 == 5) && (sBattleScene.scene->phaseStep != 0x1D)) {
+    if ((var_v0 == 9) && (D_8219A4F4 == 5) && (sBattleScene.scene->phaseStep != 29)) {
         func_82121D78(camera, 60.0f, 32000.0f);
     }
 }
@@ -879,7 +879,7 @@ void BattleScene_EaseCameraTargetFromSavedEye(CameraNode* camera, ActivePokemon*
 /**
  * Eases the camera toward a front view of the Pokemon (size-scaled distance): the target
  * moves a sixth of the way, the distance 5% and the eye angles by 0xB6 and 0x108 per frame.
- * arg2 is unused.
+ * unused_color is unused.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
  * breakpoint): ran only for Fly.
  * @unverified Name guessed from the code.
@@ -1168,7 +1168,7 @@ void BattleScene_FrameParticipantFrontAlt(CameraNode* camera, ActivePokemon* act
 
 /**
  * Starts an impact framing on the Pokemon: target from its side's facing at zoom 3.5 times
- * its size (at least 200), eye 5 times its size (at least 400) away offset by arg2, and the
+ * its size (at least 200), eye 5 times its size (at least 400) away offset by eye_height, and the
  * eye at least 15 high.
  * @unverified Name guessed from the code.
  */

@@ -42,24 +42,24 @@ void BattleMenu_DrawSide0Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
             case 2:
                 if (arg1->showingCommandOptions == 1) {
                     if ((arg0->side->tagTeamSize == 2) && (arg0->teamRoster->numberOfPokemonBrought == 3)) {
-                        BattleMenu_DrawRosterPanel(arg0->side->teamMember[0], 0x60, 0xF, arg0->side->teamMember[0]->controllerPort);
-                        BattleMenu_DrawRosterPanel(arg0->side->teamMember[1], 0xC6, 0xF, arg0->side->teamMember[1]->controllerPort);
+                        BattleMenu_DrawRosterPanel(arg0->side->teamMember[0], 96, 15, arg0->side->teamMember[0]->controllerPort);
+                        BattleMenu_DrawRosterPanel(arg0->side->teamMember[1], 198, 15, arg0->side->teamMember[1]->controllerPort);
                     } else if (arg0->teamRoster->numberOfPokemonBrought == 3) {
-                        BattleMenu_DrawRosterPanel(arg0->side->teamMember[0], 0x60, 0xF, sp2C->controllerPort);
+                        BattleMenu_DrawRosterPanel(arg0->side->teamMember[0], 96, 15, sp2C->controllerPort);
                     } else {
                         BattleMenu_DrawSwitchPanel(arg0, 0x60, 0xF, sp2C->controllerPort);
                     }
                 } else if (arg1->faintState == 0x10) {
                     BattleMenu_DrawConfirmButton(arg0, 0x60, 0xF, sp2C->controllerPort);
                 } else {
-                    BattleMenu_DrawBackConfirmBar(arg0, 0x60, 0xF, sp2C->controllerPort);
+                    BattleMenu_DrawBackConfirmBar(arg0, 96, 15, sp2C->controllerPort);
                 }
                 break;
             case 1:
                 if (arg1->showingCommandOptions == 1) {
                     BattleMenu_DrawMovePanel(arg0, 0x60, 0xF, sp2C->controllerPort);
                 } else {
-                    BattleMenu_DrawBackConfirmBar(arg0, 0x60, 0xF, sp2C->controllerPort);
+                    BattleMenu_DrawBackConfirmBar(arg0, 96, 15, sp2C->controllerPort);
                 }
                 break;
             case 4:
@@ -90,24 +90,24 @@ void BattleMenu_DrawSide1Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
             case 2:
                 if (arg1->showingCommandOptions == 1) {
                     if ((arg0->side->tagTeamSize == 2) && (arg0->teamRoster->numberOfPokemonBrought == 3)) {
-                        BattleMenu_DrawRosterPanel(arg0->side->teamMember[0], 0x16, 0x79, arg0->side->teamMember[0]->controllerPort);
-                        BattleMenu_DrawRosterPanel(arg0->side->teamMember[1], 0x7C, 0x79, arg0->side->teamMember[1]->controllerPort);
+                        BattleMenu_DrawRosterPanel(arg0->side->teamMember[0], 22, 121, arg0->side->teamMember[0]->controllerPort);
+                        BattleMenu_DrawRosterPanel(arg0->side->teamMember[1], 124, 121, arg0->side->teamMember[1]->controllerPort);
                     } else if (arg0->teamRoster->numberOfPokemonBrought == 3) {
-                        BattleMenu_DrawRosterPanel(arg0->side->teamMember[0], 0x7C, 0x79, sp2C->controllerPort);
+                        BattleMenu_DrawRosterPanel(arg0->side->teamMember[0], 124, 121, sp2C->controllerPort);
                     } else {
                         BattleMenu_DrawSwitchPanel(arg0, 0x18, 0x79, sp2C->controllerPort);
                     }
                 } else if (arg1->faintState == 0x10) {
                     BattleMenu_DrawConfirmButton(arg0, 0x9A, 0xCE, sp2C->controllerPort);
                 } else {
-                    BattleMenu_DrawBackConfirmBar(arg0, 0x62, 0xCE, sp2C->controllerPort);
+                    BattleMenu_DrawBackConfirmBar(arg0, 98, 206, sp2C->controllerPort);
                 }
                 break;
             case 1:
                 if (arg1->showingCommandOptions == 1) {
                     BattleMenu_DrawMovePanel(arg0, 0x19, 0xA6, sp2C->controllerPort);
                 } else {
-                    BattleMenu_DrawBackConfirmBar(arg0, 0x62, 0xCE, sp2C->controllerPort);
+                    BattleMenu_DrawBackConfirmBar(arg0, 98, 206, sp2C->controllerPort);
                 }
                 break;
             case 4:

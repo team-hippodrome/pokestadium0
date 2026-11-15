@@ -83,10 +83,10 @@ void BattleScene_UpdateBRollCameraSequence(CameraNode* arg0) {
             BattleScene_BRollHoldOrbit(arg0);
             break;
         case 17:
-            BattleScene_BRollPitchUpRestoreFov(arg0);
+            BattleScene_BRollRaiseRotationXRestoreFov(arg0);
             break;
         case 19:
-            BattleScene_BRollPitchUpRestoreFov(arg0);
+            BattleScene_BRollRaiseRotationXRestoreFov(arg0);
             break;
         case 21:
             BattleScene_BRollDollyIn(arg0);

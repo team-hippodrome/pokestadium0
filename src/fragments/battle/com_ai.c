@@ -61,7 +61,7 @@ void ComAi_UnusedNopL(void);
 extern s32 D_821CF2B0;
 extern u32 D_821CF2B4;
 /**
- * The COM AI's own random source: an LCG (x * 0x41C64E6D + 0x3039) mixed with a
+ * The COM's own random source: an LCG (x * 0x41C64E6D + 0x3039) mixed with a
  * 17-bit shift register, reduced to 0..99. Seeded by BattleAi_SelectTeam.
  * Stadium 1 has the same generator in its audio code, which is where the old
  * name came from.
@@ -708,7 +708,7 @@ s32 BattleAi_GetTypeMultiplier(ComBattler* arg0, ComBattler* arg1, s32 move) {
  * Returns the move if the battler knows it, has PP left for it and it is not the
  * disabled move (byte 0x63); otherwise 0.
  * Seen in play (2026-11-12): during a COM decision it returned each move it was asked about
- * (0x0B, 0x42, 0x68, 0x75) for COM's Pinsir, whose AI record holds exactly those four moves
+ * (0x0B, 0x42, 0x68, 0x75) for COM's Pinsir, whose COM record holds exactly those four moves
  * with 30, 25, 15 and 10 PP.
  */
 s32 BattleAi_CanUseMove(ComBattler* arg0, s32 arg1) {

@@ -85,7 +85,7 @@ void BattleScene_TickCameraSubstateDefault(CameraNode* arg0) {
             sBattleScene.scene->transitionStep += 1;
 
         case 4:
-            if (arg0->overlay.stepIndex == 0xA) {
+            if (arg0->overlay.stepIndex == 10) {
                 func_82105E6C();
                 func_82106374(sActivePokemon[0]);
                 func_82106374(sActivePokemon[1]);
@@ -115,7 +115,7 @@ void BattleScene_TickCameraSubstateDefault(CameraNode* arg0) {
             arg0->perspective.verticalFieldOfView = 30.0f;
             sBattleScene.scene->verticalFieldOfView = 30.0f;
             sBattleScene.scene->transitionStage = 0;
-            if (arg0->overlay.stepIndex == 0xA) {
+            if (arg0->overlay.stepIndex == 10) {
                 sBattleScene.scene->transitionStep = 0;
                 if (sBattleScene.scene->modeAfterTransition == 1) {
                     BattleThumbnail_SetBothOwnerIdleFlags();

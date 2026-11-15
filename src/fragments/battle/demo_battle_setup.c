@@ -259,7 +259,7 @@ void DemoBattle_Update(void) {
 
     sBattleScene.scene->cameraPresetId = 0;
     mons = (s8**)&D_82199DE0;
-    if (sBattleScene.scene->phaseStep != 0x1D) {
+    if (sBattleScene.scene->phaseStep != 29) {
         D_8219A4F0.unk_1E++;
         D_8219A4F0.unk_20++;
         D_8219A4F0.timer++;

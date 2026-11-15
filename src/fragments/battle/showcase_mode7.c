@@ -157,14 +157,14 @@ s32 func_821217DC(s32);
  * The meaning of the entry's first byte and of flag 0x80 is not established
  * here.  Notes: the casts of D_8219A580 repeat because the ROM re-reads the
  * global for each statement, and "mon" is only used for the first read (the ROM
- * keeps its address in a register); arg0 is unused.
+ * keeps its address in a register); camera is unused.
  * @unverified Name guessed from the code.
  */
 void SceneMode7_StepLoadNextRosterPokemon(UNUSED CameraNode* camera) {
     ActivePokemonState* st = &((ActivePokemon*)D_8219A580)->state;
     BattleMon* mon;
 
-    if (func_821217DC(0xA) != 0) {
+    if (func_821217DC(10) != 0) {
         st->rosterIndex++;
         mon = &((ActivePokemon*)D_8219A580)->teamRoster->pokemonPicked[st->rosterIndex];
         ((ActivePokemon*)D_8219A580)->side->displayModel = mon->species.id;

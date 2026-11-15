@@ -83,7 +83,7 @@ void BattleScene_SetReactionFlagFromByte1(s8 *arg0) {
 }
 
 /**
- * When both HP displays have caught up (*arg1 and *arg2 are 1) and 30 frames have passed,
+ * When both HP displays have caught up (*user_hp_done and *target_hp_done are 1) and 30 frames have passed,
  * ends the user's effect mode, clears the camera and message state and runs the HP bar step.
  * @unverified Name guessed from the code.
  */
@@ -250,7 +250,7 @@ void BattleScene_ReactionNormal(CameraNode* arg0, s32 arg1) {
             if (D_8219A578 == 0) {
                 BattleScene_ResetCameraSubstepCounter();
                 sBattleScene.scene->phaseSubstep++;
-            } else if (BattleScene_AdvanceCameraFrameCounter(0x1E) != 0) {
+            } else if (BattleScene_AdvanceCameraFrameCounter(30) != 0) {
                 BattleScene_ResetCameraSubstepCounter();
                 BattleMessage_ShowForSide((s32)gBattleMessageQueues->messageBuffers[6], sBattleScene.scene->actingSide);
                 sBattleScene.scene->phaseSubstep++;
@@ -274,7 +274,7 @@ void BattleScene_ReactionNormal(CameraNode* arg0, s32 arg1) {
             break;
 
         case 3:
-            if (BattleScene_AdvanceCameraSubstepCounter(0x1E) != 0) {
+            if (BattleScene_AdvanceCameraSubstepCounter(30) != 0) {
                 Battle_ClearMessageCursor();
             }
             D_8219A560 = Battle_StepPartyHpToDisplay((s32)sOtherPokemon);
@@ -285,7 +285,7 @@ void BattleScene_ReactionNormal(CameraNode* arg0, s32 arg1) {
             break;
 
         case 4:
-            if (BattleScene_AdvanceCameraSubstepCounter(0x1E) != 0) {
+            if (BattleScene_AdvanceCameraSubstepCounter(30) != 0) {
                 Battle_ClearMessageCursor();
             }
             D_8219A560 = Battle_StepPartyHpToDisplay((s32)sOtherPokemon);
@@ -301,7 +301,7 @@ void BattleScene_ReactionNormal(CameraNode* arg0, s32 arg1) {
             D_8219A564 = Battle_StepPartyHpToDisplay(sActingPokemon);
             if (*(s8*)((s32)&gBattleMessageQueues->messageBuffers[13][1]) == 0) {
                 sBattleScene.scene->phaseSubstep = 7;
-            } else if (BattleScene_AdvanceCameraFrameCounter(0x1E) != 0) {
+            } else if (BattleScene_AdvanceCameraFrameCounter(30) != 0) {
                 BattleScene_ResetCameraFrameCounter();
                 BattleMessage_ShowForSide((s32)gBattleMessageQueues->messageBuffers[13], sBattleScene.scene->actingSide);
                 sBattleScene.scene->phaseSubstep++;
@@ -311,7 +311,7 @@ void BattleScene_ReactionNormal(CameraNode* arg0, s32 arg1) {
         case 6:
             D_8219A560 = Battle_StepPartyHpToDisplay((s32)sOtherPokemon);
             D_8219A564 = Battle_StepPartyHpToDisplay(sActingPokemon);
-            if (BattleScene_AdvanceCameraFrameCounter(0x1E) != 0) {
+            if (BattleScene_AdvanceCameraFrameCounter(30) != 0) {
                 sBattleScene.scene->phaseSubstep++;
                 Battle_ClearMessageCursor();
             }
@@ -358,7 +358,7 @@ void BattleScene_ReactionCritical(CameraNode* arg0, s32 arg1) {
             D_8219A560 = Battle_StepPartyHpToDisplay((s32)sOtherPokemon);
             D_8219A564 = Battle_StepPartyHpToDisplay(sActingPokemon);
             BattleScene_FrameReactingParticipant(arg0, sOtherPokemon);
-            if (BattleScene_AdvanceCameraFrameCounter(0x1E) != 0) {
+            if (BattleScene_AdvanceCameraFrameCounter(30) != 0) {
                 BattleScene_UseCameraPreset1AndIdleUser();
                 BattleScene_SetReactionFlagFromByte1((s8*)((s32)gBattleMessageQueues->messageBuffers[0]));
                 BattleMessage_ShowForSide((s32)gBattleMessageQueues->messageBuffers[0], sBattleScene.scene->actingSide);
@@ -374,7 +374,7 @@ void BattleScene_ReactionCritical(CameraNode* arg0, s32 arg1) {
                 BattleScene_ResetCameraSubstepCounter();
                 BattleMessage_ShowForSide((s32)gBattleMessageQueues->messageBuffers[6], sBattleScene.scene->actingSide);
                 sBattleScene.scene->phaseSubstep++;
-            } else if (BattleScene_AdvanceCameraFrameCounter(0x14) != 0) {
+            } else if (BattleScene_AdvanceCameraFrameCounter(20) != 0) {
                 BattleScene_ResetCameraSubstepCounter();
                 BattleMessage_ShowForSide((s32)gBattleMessageQueues->messageBuffers[6], sBattleScene.scene->actingSide);
                 sBattleScene.scene->phaseSubstep++;
@@ -398,7 +398,7 @@ void BattleScene_ReactionCritical(CameraNode* arg0, s32 arg1) {
             break;
 
         case 4:
-            if (BattleScene_AdvanceCameraSubstepCounter(0x1E) != 0) {
+            if (BattleScene_AdvanceCameraSubstepCounter(30) != 0) {
                 Battle_ClearMessageCursor();
             }
             D_8219A560 = Battle_StepPartyHpToDisplay((s32)sOtherPokemon);
@@ -409,7 +409,7 @@ void BattleScene_ReactionCritical(CameraNode* arg0, s32 arg1) {
             break;
 
         case 5:
-            if (BattleScene_AdvanceCameraSubstepCounter(0x1E) != 0) {
+            if (BattleScene_AdvanceCameraSubstepCounter(30) != 0) {
                 Battle_ClearMessageCursor();
             }
             BattleScene_FrameReactingParticipant(arg0, sOtherPokemon);
@@ -425,7 +425,7 @@ void BattleScene_ReactionCritical(CameraNode* arg0, s32 arg1) {
             D_8219A564 = Battle_StepPartyHpToDisplay(sActingPokemon);
             if (*(s8*)((s32)&gBattleMessageQueues->messageBuffers[13][1]) == 0) {
                 sBattleScene.scene->phaseSubstep = 8;
-            } else if (BattleScene_AdvanceCameraFrameCounter(0x1E) != 0) {
+            } else if (BattleScene_AdvanceCameraFrameCounter(30) != 0) {
                 BattleScene_ResetCameraFrameCounter();
                 BattleMessage_ShowForSide((s32)gBattleMessageQueues->messageBuffers[13], sBattleScene.scene->actingSide);
                 sBattleScene.scene->phaseSubstep++;
@@ -435,7 +435,7 @@ void BattleScene_ReactionCritical(CameraNode* arg0, s32 arg1) {
         case 7:
             D_8219A560 = Battle_StepPartyHpToDisplay((s32)sOtherPokemon);
             D_8219A564 = Battle_StepPartyHpToDisplay(sActingPokemon);
-            if (BattleScene_AdvanceCameraFrameCounter(0x1E) != 0) {
+            if (BattleScene_AdvanceCameraFrameCounter(30) != 0) {
                 sBattleScene.scene->phaseSubstep++;
                 Battle_ClearMessageCursor();
             }

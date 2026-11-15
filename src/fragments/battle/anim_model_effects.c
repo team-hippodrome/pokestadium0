@@ -63,7 +63,7 @@ void BattleAnim_InitModelAnimationSlot(Particle* arg0, s16 arg1) {
         Particle_SetScaleScaled(arg0, 0.2f);
         BattleAnim_ApplyModelSpeciesOffset(arg0);
         Vec3f_SetComponentsDuplicate(&sp24, (arg1 * 5.0f * 2) + -10.0f, 5.0f, 10.0f);
-        Particle_AddPositionRotatedVectorByYaw(arg0, sp24);
+        Particle_AddPositionRotatedVectorByRotationY(arg0, sp24);
 
         switch (arg1) {
             case 0:

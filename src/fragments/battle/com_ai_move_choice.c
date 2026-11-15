@@ -202,7 +202,7 @@ s32 BattleAi_PickBoomMove(ComBattler*, ComBattler*);
  *   (BattleAi_PickStrongestMove with the opponent's HP percent);
  * - set up when the opponent cannot act (BattleAi_OpponentCannotAct), otherwise Toxic or Leech Seed,
  *   paralysis, sleep, then a stat-lowering move;
- * - a move doing more than half the opponent's HP, a stat boost, Self-Destruct or Explosion when about
+ * - a move doing more than half the opponent's HP, a stat boost, a boom move when about
  *   to faint, or the strongest move;
  * then BattleAi_ReplaceHyperBeam, and finally the first move that is useful.
  * Each step was seen picking its move in game (Hypnosis, Tail Whip, Swords Dance, Explosion, Earthquake).
@@ -245,14 +245,14 @@ s32 BattleAi_ChooseMove(void)
   if (r < 0)
   {
     r = BattleAi_PickStrongestMove(50);
-    if ((r < 0) && ((BattleAi_PickStrongestMove(30) != 0) || (BattleAi_FindUsableHealingMove(D_821CF2A0) != 0)) && ((BattleAi_GetHpPercent(D_821CF2A0) >= 51) || (BattleAi_GetHpPercent(D_821CF29C) >= 0x51)))
+    if ((r < 0) && ((BattleAi_PickStrongestMove(30) != 0) || (BattleAi_FindUsableHealingMove(D_821CF2A0) != 0)) && ((BattleAi_GetHpPercent(D_821CF2A0) >= 51) || (BattleAi_GetHpPercent(D_821CF29C) >= 81)))
     {
       r = BattleAi_PickStatBoostMove(D_821CF29C);
     }
   }
   if (r < 0)
   {
-    if ((((BattleAi_MovesFirst(D_821CF29C, D_821CF2A0) != 0) && (BattleAi_GetHpPercent(D_821CF29C) < 0x14)) || ((BattleAi_MovesFirst(D_821CF29C, D_821CF2A0) == 0) && ((D_821CF29C->mon.hp / 2) < ((BattleAi_GetBestDamage(D_821CF2A0, D_821CF29C, 0) * 0x5A) / 100))) || ((BattleAi_FindUsableHealingMove(D_821CF29C) == 0) && (BattleAi_GetHpPercent(D_821CF29C) < 0x28))) && (BattleAi_CountUnfainted(D_821CF294) >= 2))
+    if ((((BattleAi_MovesFirst(D_821CF29C, D_821CF2A0) != 0) && (BattleAi_GetHpPercent(D_821CF29C) < 20)) || ((BattleAi_MovesFirst(D_821CF29C, D_821CF2A0) == 0) && ((D_821CF29C->mon.hp / 2) < ((BattleAi_GetBestDamage(D_821CF2A0, D_821CF29C, 0) * 0x5A) / 100))) || ((BattleAi_FindUsableHealingMove(D_821CF29C) == 0) && (BattleAi_GetHpPercent(D_821CF29C) < 40))) && (BattleAi_CountUnfainted(D_821CF294) >= 2))
     {
       r = BattleAi_PickBoomMove(D_821CF29C, D_821CF2A0);
     }
@@ -337,7 +337,7 @@ s32 BattleAi_ChooseSwitch(void);
 s32 BattleAi_ChooseRandomMove(void);
 /**
  * Per-turn COM entry point. Copies both active Pokemon (arg0 own, arg1 opponent's
- * visible state) into the AI's model, updates its turn bookkeeping, then returns
+ * visible state) into the COM's model, updates its turn bookkeeping, then returns
  * a move slot (0..3) or 4 + a party slot to switch, also stored in D_821CF2A4.
  */
 s32 BattleAi_ChooseTurnAction(BattleMonRuntime* arg0, BattleMonRuntime* arg1, s32 arg2, s32 arg3, UNUSED TeamRoster* arg4) {
@@ -387,7 +387,7 @@ s32 BattleAi_ChooseTurnAction(BattleMonRuntime* arg0, BattleMonRuntime* arg1, s3
     move = BattleAi_ChooseSwitch();
     if ((move >= 0) && (D_821CF29C->partyBit != ((one = 1) << move))) { // FAKE: one
         r = -1;
-        if ((D_821CF29C->mon.hp != 0) && (BattleAi_GetHpPercent(D_821CF29C) < 0x23) &&
+        if ((D_821CF29C->mon.hp != 0) && (BattleAi_GetHpPercent(D_821CF29C) < 35) &&
             (BattleAi_CountUnfainted(D_821CF294) >= 2) && (BattleAi_PickBoomMove(D_821CF29C, D_821CF2A0) >= 0)) {
             r = BattleAi_PickBoomMove(D_821CF29C, D_821CF2A0);
         }
@@ -413,7 +413,7 @@ extern u8 D_8006B18F[];
 /**
  * Learns the opponent's chosen move once both sides have picked their actions
  * (called from Battle_StartTurn, before the moves run): the move goes into the
- * first empty move slot of the AI's opponent record with its maximum PP minus
+ * first empty move slot of the COM's opponent record with its maximum PP minus
  * one, or one PP is taken off a move already recorded. arg2 is 0 when the COM
  * acts first, 1 when it acts second and 2 for a move used later in the turn.
  * In game, after a Poison Sting the record held move 40 with 55 PP (35 + 3 PP Ups - 1).

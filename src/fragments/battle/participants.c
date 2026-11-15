@@ -782,7 +782,7 @@ void Battle_LoadOwnerModelForSwitchIn(ActivePokemon* active_pokemon) {
  * Substitute: ran at sample 183 as the doll model replaced Onix in a puff of smoke (「ぶんしんが あらわれた」).
  */
 void Battle_ResetOwnerModelToSubstituteDoll(ActivePokemon* active_pokemon) {
-    Model_SetMaterialColor(&active_pokemon->displayObject, 0xFF, 0xFF, 0xFF, active_pokemon->state.alpha = 0xFF);
+    Model_SetMaterialColor(&active_pokemon->displayObject, 0xFF, 0xFF, 0xFF, active_pokemon->state.alpha = 0xFF); // #FFFFFF
     active_pokemon->state.model = active_pokemon->displayObject.objectType;
     func_8210840C(active_pokemon, active_pokemon, SUBSTITUTE_DOLL);
     func_82108648(active_pokemon, SUBSTITUTE_DOLL);
@@ -815,7 +815,7 @@ void Battle_ReloadDisplayModel(ActivePokemon* active_pokemon) {
     s16 object_type = Battle_GetDisplayModelId(active_pokemon, 0);
 
     state->alpha = 0xFF;
-    Model_SetMaterialColor(&active_pokemon->displayObject, 0xFF, 0xFF, 0xFF, state->alpha);
+    Model_SetMaterialColor(&active_pokemon->displayObject, 0xFF, 0xFF, 0xFF, state->alpha); // #FFFFFF
     func_8210840C(active_pokemon, active_pokemon, object_type);
     func_82108648(active_pokemon, object_type);
     Battle_ResetEventTrack(active_pokemon);

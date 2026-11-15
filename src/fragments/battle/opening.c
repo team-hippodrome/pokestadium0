@@ -153,7 +153,7 @@ void BattleScene_OpeningStepLowerCameraAndThrowSide0(CameraNode* arg0) {
     s16 sp3A;
     s16 sp38;
 
-    if (sBattleScene.scene->stepFrameTimer == 0x3C) {
+    if (sBattleScene.scene->stepFrameTimer == 60) {
         Audio_StopSoundByCategory(4, 0x3C);
     }
     sBattleScene.scene->easeRampRates.z = func_8000F23C(sBattleScene.scene->easeRampRates.z, 0.02f, 0.0007f, 0.0007f);
@@ -165,7 +165,7 @@ void BattleScene_OpeningStepLowerCameraAndThrowSide0(CameraNode* arg0) {
     sBattleScene.scene->rotationY += 0x2D8;
     func_8210BCF0(&arg0->view.targetPosition, &arg0->view.eyePosition, (s8*)&sp3C, (s8*)&sp3A, (s8*)&sp38);
     func_8000EEBC(&arg0->view.targetPosition, &arg0->view.eyePosition, sBattleScene.scene->orbitDistance, sp3A, sBattleScene.scene->rotationY);
-    if (func_821217DC(0x6E) != 0) {
+    if (func_821217DC(110) != 0) {
         Audio_PlayCommand(1, 0xFE, 0);
         func_8000D41C(&arg0->view.targetPosition, 0.0f, 75.0f, 0.0f);
         func_8000D41C(&arg0->view.eyePosition, -1.79f, 0.075f, 155.2f);

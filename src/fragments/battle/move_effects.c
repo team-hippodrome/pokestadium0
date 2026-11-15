@@ -4,8 +4,8 @@
 #include "battle.h"
 #include "moves.h"
 #include "pokemon_types.h"
-typedef void (*func_D_8438AE50)(void);
-extern func_D_8438AE50 sMoveEffectHandlers[];
+typedef void (*MoveEffectHandler)(void);
+extern MoveEffectHandler sMoveEffectHandlers[];
 
 #include "m2c_macros.h"
 
@@ -77,10 +77,10 @@ void BattleEffect_MultiHit(void) {
         sBattleUser->immobilizedReason |= 4;
 
         switch (sBattleUser->moveCache.effect) {
-            case 0x4D:
+            case 77:
                 sBattleUser->moveCache.effect = 2;
 
-            case 0x2C:
+            case 44:
                 sBattleUser->effectCounter = 2;
                 sBattleUser->effectTurnsLeft = sBattleUser->effectCounter;
                 break;
@@ -123,10 +123,10 @@ void Battle_Effect_Flinch(void) {
     if (!(sBattleTarget->volatileStatusFlags & 0x10)) {
         sBattleTarget->volatileStatusFlags &= 0xFFDF;
         if (sBattleUser->moveCache.effect == 0x1F) {
-            if (Battle_Random() >= 0x1A) {
+            if (Battle_Random() >= 26) {
                 return;
             }
-        } else if (Battle_Random() >= 0x4D) {
+        } else if (Battle_Random() >= 77) {
             return;
         }
         sBattleTarget->immobilizedReason |= 8;
@@ -305,7 +305,7 @@ extern s32 D_8218C8A4;
  * @unverified Name guessed from the code.
  */
 void Battle_Effect_ConfuseChance(void) {
-    if ((Battle_Random() < 0x1A) && !(sBattleTarget->immobilizedReason & 0x80)) {
+    if ((Battle_Random() < 26) && !(sBattleTarget->immobilizedReason & 0x80)) {
         sBattleScene.scene->hitReactionKind = 3;
         D_82199FCD = 0;
         sBattleTarget->immobilizedReason |= 0x80;
@@ -364,7 +364,7 @@ void Battle_Effect_Paralyze(void) {
             Battle_MoveHitTest();
             if (sBattleMoveFailed == 0) {
                 sBattleTarget->statusCondition |= 0x40;
-                ApplyParalysisSpeedCut(sActivePokemon[!sBattleScene.scene->actingSide]);
+                Battle_ApplyParalysisSpeedCut(sActivePokemon[!sBattleScene.scene->actingSide]);
                 BattleMessage_Format((s32)gBattleMessageQueues->messageBuffers[0], -0x43, D_8218C8B0, ActivePokemon_GetNickname(sActivePokemon[!sBattleScene.scene->actingSide]));
                 return;
             }

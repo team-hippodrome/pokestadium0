@@ -39,7 +39,7 @@ void BattleScene_FrameParticipantFromBelowClamped(s32, s32);
 void BattleScene_FrameParticipantFrontAltThunk(s32, s32);
 
 /**
- * Runs one of four camera framings on Pokemon arg0 with camera arg1, chosen by arg2 (0 the
+ * Runs one of four camera framings on Pokemon active_pokemon with camera, chosen by framing (0 the
  * high target shot, 1-3 BattleScene_FrameParticipantFromAboveThunk/830/874).
  * @unverified Name guessed from the code.
  */
@@ -64,14 +64,14 @@ void BattleScene_GetParticipantAimPoint(s32, Vec3f*);
 void func_8212254C(s32, s32, Vec3f, s32, s32, f32, f32);
 void func_82122628(s32, Vec3f, s32, s32, f32, f32);
 /**
- * Frames Pokemon arg1 from its aim point: target from angle 0x4000 at zoom arg3, eye at the
- * angles (arg4, arg5) and distance arg2.
+ * Frames Pokemon active_pokemon from its aim point: target from angle 0x4000 at zoom, eye at the
+ * angles (rotation_x, rotation_y) and the distance.
  * @unverified Name guessed from the code.
  */
-void SceneMode11_FrameFromAimPoint(s32 camera, s32 active_pokemon, f32 distance, f32 zoom, s16 pitch, s16 yaw) {
+void SceneMode11_FrameFromAimPoint(s32 camera, s32 active_pokemon, f32 distance, f32 zoom, s16 rotation_x, s16 rotation_y) {
     BattleScene_GetParticipantAimPoint(active_pokemon, &sBattleScene.scene->anchorPosition);
     func_8212254C(active_pokemon, camera, sBattleScene.scene->anchorPosition, 0, 0x4000, zoom, 0.0f);
-    func_82122628(camera, sBattleScene.scene->anchorPosition, pitch, yaw, distance, 0.0f);
+    func_82122628(camera, sBattleScene.scene->anchorPosition, rotation_x, rotation_y, distance, 0.0f);
 }
 
 extern s16 D_8219A4F0[];
@@ -107,12 +107,13 @@ extern u8 D_8219A594;
 /**
  * Starts demo cut D_8219A50C (0-5) of scene mode 11: plays a sound, frames the demo
  * Pokemon (raising it by 500 in cut 1), and starts its move-cue animation and model
- * reaction from the cut tables.
+ * reaction from the cut tables. The cuts use the cues of Pound, Fly, Rolling Kick, Stomp,
+ * Take Down and Hydro Pump.
  * @unverified Name guessed from the code.
  */
 void SceneMode11_StartCut(CameraNode* camera) {
-    u8 sp40[6] = { 0x01, 0x13, 0x1B, 0x17, 0x24, 0x38 };
-    u8 sp38[6] = { 0x00, 0x0C, 0x0E, 0x0F, 0x46, 0x1B };
+    u8 sp40[6] = { POUND, FLY, ROLLING_KICK, STOMP, TAKE_DOWN, HYDRO_PUMP };
+    u8 sp38[6] = { 0, 12, 14, 15, 70, 27 };
     MovePresentationCue* cue = D_82189180[func_82107A5C(D_8219A590)]->moveCues + sp40[D_8219A50C] - 1;
 
     switch (D_8219A50C) {
@@ -192,7 +193,7 @@ void SceneMode11_StepFadeInCut(CameraNode* camera) {
         case 2:
         case 3:
         case 4:
-            if (func_821217DC(0x28) != 0) {
+            if (func_821217DC(40) != 0) {
                 sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
             }
             break;
@@ -249,7 +250,7 @@ void SceneMode11_StepHoldCut(CameraNode* camera) {
         if (((s32) M2C_FIELD(D_8219A590, s32 *, 0x48) >> 0x10) == 0x26) {
             Audio_PlayMoveSound(0x38, 9, 0);
         }
-        if (func_821217DC(0x37) != 0) {
+        if (func_821217DC(55) != 0) {
             sBattleScene.scene->winner = 3;
             func_80006998(0xFFFF);
             func_80005C4C(4);
@@ -270,7 +271,6 @@ M2C_UNK func_80019B28(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32);
  * the cut model list (D_8218B350) or ends the sequence at 0xFF.
  * @unverified Name guessed from the code.
  */
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 void SceneMode11_StepFadeOutAndSwapModel(CameraNode *camera)
 {
   s32 pad[2]; // FAKE: stack padding
@@ -289,7 +289,7 @@ void SceneMode11_StepFadeOutAndSwapModel(CameraNode *camera)
     }
     else
     {
-      ((ActivePokemon*)D_8219A590)->side->displayModel = v;
+      ((ActivePokemon*)D_8219A590)->side->displayModel = v; // FAKE: cast because D_8219A590 is declared s8*
       ((ActivePokemon*)D_8219A590)->side->modelFlags |= 0x80;
       sBattleScene.scene->phaseStep++;
     }
@@ -329,26 +329,16 @@ void SceneMode11_StepWaitModelReload(s32 camera) {
 void SceneMode11_StepEnd(UNUSED s32 unused) {
 }
 
-/*
- * SceneMode11_Update
- *
- * Dispatches one tick of the "faint after residual damage" phase of a
- * battle scene by the scene's step counter (sBattleScene.scene->unk_20, 0..6):
- *   0 SceneMode11_StepInit   1 SceneMode11_StepStartCut   2 SceneMode11_StepFadeInCut   3 SceneMode11_StepHoldCut
- *   4 SceneMode11_StepFadeOutAndSwapModel   5 SceneMode11_StepWaitModelReload   6 SceneMode11_StepEnd
- * Any other step does nothing.  The camera node arg0 is passed through to
- * the step functions in the register a0 untouched.
- *
- * Same switch as BattleScene_PhaseFaintAfterResidualDamage in the Stadium 1
- * decomp (steps begin, animate, advance/finish camera close, complete,
- * no-op, alternate animation).
- */
 void SceneMode11_StepFadeInCut(CameraNode* arg0);
 void SceneMode11_StepHoldCut(CameraNode* arg0);
 void SceneMode11_StepFadeOutAndSwapModel(CameraNode* arg0);
 
 /**
- * Scene mode 11 (a demo sequence of move cuts): runs the step for the current phase step.
+ * Scene mode 11 (a demo sequence of move cuts): runs the step for the current phase step
+ * (sBattleScene.scene->phaseStep, 0-6): 0 SceneMode11_StepInit, 1 SceneMode11_StepStartCut,
+ * 2 SceneMode11_StepFadeInCut, 3 SceneMode11_StepHoldCut, 4 SceneMode11_StepFadeOutAndSwapModel,
+ * 5 SceneMode11_StepWaitModelReload, 6 SceneMode11_StepEnd. Any other step does nothing.
+ * Stadium 1 has the same switch shape in BattleScene_PhaseFaintAfterResidualDamage.
  * @unverified Name guessed from the code.
  */
 void SceneMode11_Update(CameraNode* camera) {

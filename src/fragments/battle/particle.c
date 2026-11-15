@@ -807,7 +807,7 @@ void Particle_AddPositionFromRotationTemplate2(Particle* arg0, f32 arg1) {
  * breakpoint): ran only for Amnesia, Supersonic.
  * @unverified Name guessed from the code.
  */
-void Particle_AddPositionRotatedVectorByYaw(Particle* arg0, Vec3f arg1) {
+void Particle_AddPositionRotatedVectorByRotationY(Particle* arg0, Vec3f arg1) {
     Vec3f sp24;
 
     ParticleMath_RotateVec3fY(&sp24, arg1, arg0->rotation);

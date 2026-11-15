@@ -83,7 +83,7 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
             BattleScene_FrameParticipantFrontWide(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
             D_8219A560 = Battle_StepPartyHpToDisplay(sActivePokemon[sBattleScene.scene->actingSide]);
             D_8219A564 = Battle_StepPartyHpToDisplay(sActivePokemon[!sBattleScene.scene->actingSide]);
-            if ((D_8219A560 == 1) && (D_8219A564 == 1) && (BattleScene_AdvanceCameraFrameCounterUntil(0x32) != 0)) {
+            if ((D_8219A560 == 1) && (D_8219A564 == 1) && (BattleScene_AdvanceCameraFrameCounterUntil(50) != 0)) {
                 BattleScene_ResetCameraFrameCounter();
                 Battle_ClearMessageCursor();
                 if (func_82107CA0(sActivePokemon[sBattleScene.scene->actingSide]) == 0) {
@@ -107,7 +107,7 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
             BattleScene_FrameParticipantFrontWide(arg0, sActivePokemon[sBattleScene.scene->actingSide]);
             D_8219A560 = Battle_StepPartyHpToDisplay(sActivePokemon[sBattleScene.scene->actingSide]);
             D_8219A564 = Battle_StepPartyHpToDisplay(sActivePokemon[!sBattleScene.scene->actingSide]);
-            if ((BattleScene_AdvanceCameraFrameCounterUntil(0x32) != 0) && (D_8219A560 == 1) && (D_8219A564 == 1)) {
+            if ((BattleScene_AdvanceCameraFrameCounterUntil(50) != 0) && (D_8219A560 == 1) && (D_8219A564 == 1)) {
                 sBattleScene.scene->phaseStep++;
                 BattleScene_ResetCameraFrameCounter();
                 Battle_ClearMessageCursor();
@@ -133,8 +133,9 @@ void BattleScene_PhaseResidualDamageWithoutMove(CameraNode* arg0) {
 
 /**
  * Phase 33. Shows residual damage on the acting Pokemon only (the other HP bar is treated as settled). If
- * it reaches 0 HP, flips the acting side and enters BattleScene_PhaseFaintAfterResidualDamage; otherwise
- * continues with BattleScene_CleanupActionAndAdvance.
+ * it reaches 0 HP, flips the acting side and enters phase 34 (Stadium 1's
+ * BattleScene_PhaseFaintAfterResidualDamage); otherwise it ends the action with
+ * BattleScene_EndActingSideAction.
  * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
  * once, from the command menu to the end of its turn).
  * @unverified Name and comment from Stadium 1, matched by code similarity.
@@ -168,12 +169,12 @@ void BattleScene_PhaseResidualDamageFaintCheck(CameraNode* arg0) {
             D_8219A560 = Battle_StepPartyHpToDisplay(sActivePokemon[sBattleScene.scene->actingSide]);
             D_8219A564 = 1;
 
-            if ((D_8219A560 == 1) && (D_8219A564 == 1) && (BattleScene_AdvanceCameraFrameCounterUntil(0x32) != 0)) {
+            if ((D_8219A560 == 1) && (D_8219A564 == 1) && (BattleScene_AdvanceCameraFrameCounterUntil(50) != 0)) {
                 BattleScene_ResetCameraFrameCounter();
                 Battle_ClearMessageCursor();
                 if (func_82107CA0(sActivePokemon[sBattleScene.scene->actingSide]) == 0) {
                     func_82125570();
-                    BattleScene_SetPhase(arg0, 0x22);
+                    BattleScene_SetPhase(arg0, 34);
                     sBattleScene.scene->actingSide = !sBattleScene.scene->actingSide;
                 } else {
                     BattleScene_EndActingSideAction();
@@ -227,10 +228,10 @@ void BattleScene_PhaseWithdraw(CameraNode* arg0) {
 
         case 2:
             BattleScene_ApproachCameraZoom(arg0, temp_s0);
-            if (sBattleScene.scene->stepFrameTimer == 0x23) {
+            if (sBattleScene.scene->stepFrameTimer == 35) {
                 Battle_ClearMessageCursor();
             }
-            if (BattleScene_AdvanceCameraFrameCounter(0x69) != 0) {
+            if (BattleScene_AdvanceCameraFrameCounter(105) != 0) {
                 Vec3f_SetComponentsDuplicate((Vec3f*)((u8*)arg0 + 0xB4), temp_s0->facingDirection * -150.0f, 0.0, 0.0f);
                 if (sBattleScene.scene && sBattleScene.scene) {}  // FAKE
                 Vec3f_SetComponentsDuplicate((Vec3f*)((u8*)arg0 + 0xA8), temp_s0->facingDirection * -50.0f, 5.0f, 0.0f);
@@ -278,10 +279,10 @@ void BattleScene_PhaseWithdraw(CameraNode* arg0) {
 
         case 7:
             BattleScene_EaseCameraTargetToParticipant(arg0, temp_s0);
-            if (sBattleScene.scene->stepFrameTimer == 0x1E) {
+            if (sBattleScene.scene->stepFrameTimer == 30) {
                 Battle_ClearMessageCursor();
             }
-            if (BattleScene_IsRowWaitCompleteWithEventCount(temp_s0, 0x64) != 0) {
+            if (BattleScene_IsRowWaitCompleteWithEventCount(temp_s0, 100) != 0) {
                 Audio_FadeAndClearStoredSounds();
                 BattleAnim_CleanupEffects(2);
                 Battle_ClearMessageCursor();
@@ -371,7 +372,7 @@ void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0) {
 
         case 6:
             BattleScene_EaseCameraTargetToParticipant(arg0, temp_s0);
-            if (BattleScene_AdvanceCameraFrameCounter(0x15) != 0) {
+            if (BattleScene_AdvanceCameraFrameCounter(21) != 0) {
                 Battle_ClearMessageCursor();
                 BattleAnim_ResetFreezeStatusAndRestoreAnimation(temp_s0);
                 sBattleScene.scene->phaseStep += 1;
@@ -380,7 +381,7 @@ void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0) {
 
         case 7:
             BattleScene_EaseCameraTargetToParticipant(arg0, temp_s0);
-            if (BattleScene_IsRowWaitCompleteWithEventCount(temp_s0, 0x32) != 0) {
+            if (BattleScene_IsRowWaitCompleteWithEventCount(temp_s0, 50) != 0) {
                 Audio_FadeAndClearStoredSounds();
                 BattleAnim_CleanupEffects(2);
                 Battle_ClearMessageCursor();
@@ -399,7 +400,8 @@ void BattleScene_PhaseSendOutAfterFaint(CameraNode* arg0) {
 
 /**
  * Runs the per-frame battle presentation phase selected by scene->phase and phaseStep. Move-specific phases
- * (7, 12-15, 17, 25, 27-31, 38) are entered through BattleScene_PhaseDispatchMoveEffect.
+ * (7, 12-15, 17, 25, 27-31, 38) are entered through BattleScene_TransitionToPhaseFull (called as
+ * func_82125930 in most files), for example from BattleScene_TryEnterEffectPhaseBeforeImpact.
  * Seen in play (2026-11-12): in a turn where 1P's Poison Sting went first, it was running the
  * presentation from the frame after Battle_StartTurn (phase 0, then 2).
  */
@@ -555,10 +557,10 @@ void BattleScene_IntroStepSpinOverheadCamera(CameraNode* arg0) {
     BattleScene_SetCameraEyeAndStoreAngles(arg0, D_8218B630, 0x3C6E, sBattleScene.scene->rotationY -= 0x16C, sBattleScene.scene->orbitDistance, 0.0f);
     BattleAnim_ApproachF(&sBattleScene.scene->stageScale, 1.0f, 0.06f);
     Battle_SetStageScale(sBattleScene.scene->stageScale);
-    if (sBattleScene.scene->stepFrameTimer == 0x3C) {
+    if (sBattleScene.scene->stepFrameTimer == 60) {
         Audio_StopSoundByCategory(4, 0x3C);
     }
-    if (func_821217DC(0x50) != 0) {
+    if (func_821217DC(80) != 0) {
         Audio_PlayCommand(1, 0xFE, 0);
         Vec3f_SetComponentsDuplicate((Vec3f*)((u8*)arg0 + 0xB4), 0.0f, 75.0f, 0.0f);
         Vec3f_SetComponentsDuplicate((Vec3f*)((u8*)arg0 + 0xA8), -1.79f, 0.075f, 155.2f);
@@ -683,7 +685,7 @@ void BattleScene_OpeningStepWaitSide0SendOut(CameraNode* arg0) {
     sActivePokemon[1]->displayObject.node.flags &= ~1;
     BattleScene_EaseCameraTargetToParticipant(arg0, sActivePokemon[0]);
     sBattleScene.scene->substepFrameCounter++;
-    if (sBattleScene.scene->substepFrameCounter == 0x28) {
+    if (sBattleScene.scene->substepFrameCounter == 40) {
         func_8211EE8C();
     }
     if (func_821057D4(sActivePokemon[0], 0x3C) != 0) {
@@ -721,10 +723,10 @@ void BattleScene_OpeningStepWaitSide1SendOut(CameraNode* arg0) {
     sActivePokemon[0]->displayObject.node.flags &= ~1;
     BattleScene_EaseCameraTargetToParticipant(arg0, sActivePokemon[1]);
     sBattleScene.scene->substepFrameCounter++;
-    if (sBattleScene.scene->substepFrameCounter == 0x28) {
+    if (sBattleScene.scene->substepFrameCounter == 40) {
         Battle_ClearMessageCursor();
     }
-    if (BattleScene_IsRowWaitCompleteWithEventCount(sActivePokemon[1], 0x3C) != 0) {
+    if (BattleScene_IsRowWaitCompleteWithEventCount(sActivePokemon[1], 60) != 0) {
         Battle_ClearMessageCursor();
         BattleScene_BeginCameraReturnTransition();
     }
