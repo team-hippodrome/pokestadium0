@@ -36,7 +36,7 @@ present, bit 1 dirty (always clear in a committed copy).
 | 17 | 0x2500 + 0xAC0 × n | 0x560 | 4 | 64のボックス 1–4, 30 Pokémon |
 | 18 | 0x5000 + 0x1C0 × n | 0xE0 | 4 | 64の カセット item storage, one per trainer, 100 items |
 | 19 | 0x5700 | 0x11A0 | 1 | List of 100 Pokémon. No screen using it was found; never written in play |
-| 20 | 0x7A40 | 0x10 | 1 | Options, GB Tower settings, cup progress |
+| 20 | 0x7A40 | 0x10 | 1 | Options, GB Player settings, cup progress |
 | 21 | 0x7A60 | 0x288 | 1 | Tournament continue data |
 
 0x7F70–0x7FFF is unused. Backup copy = primary + copy size.
@@ -66,9 +66,9 @@ one shown.
 
 | Offset | Type | Field |
 |---|---|---|
-| 0x02 | u8 | GB Tower picture frames unlocked, 0–2 (1 Doduo, 2 Dodrio); Z cycles them in the tower. Seen: Master Ball Cup clear 0 → 1 |
+| 0x02 | u8 | GB Player picture frames unlocked, 0–2 (1 Doduo, 2 Dodrio); Z cycles them in the GB Player. Seen: Master Ball Cup clear 0 → 1 |
 | 0x03 | u8 | bit 0 サウンド モノラル, bit 1 じっきょう なし |
-| 0x04 | s32 | GB Tower コンフィグ: bits 8–15 START button, bits 0–7 SELECT button − 1. Choices 0 START, 1 L, 2 R, 3 C-Left, 4 C-Down. Seen: START → R stored 0x0200 |
+| 0x04 | s32 | GB Player コンフィグ: bits 8–15 START button, bits 0–7 SELECT button − 1. Choices 0 START, 1 L, 2 R, 3 C-Left, 4 C-Down. Seen: START → R stored 0x0200 |
 | 0x08 | u8 | high byte of progress: bit 0 L50～55 tournament won (code), bit 1 マスターボールカップ won. Seen: bit 1 set by the final |
 | 0x09 | u8 | L1～30 cups cleared, 0–4. A win raises it only when the cup index ≥ the count. Seen: 2 opens ハイパーボールカップ; Master Ball Cup win 0 → 1 |
 

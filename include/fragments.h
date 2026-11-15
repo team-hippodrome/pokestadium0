@@ -5,7 +5,7 @@
 // Names identify the existing source modules, not recovered original identifiers.
 // Segment membership is defined in the version's ROM YAML.
 
-#define FRAGMENT_GB_TOWER_EMULATOR fragment1
+#define FRAGMENT_GB_PLAYER_EMULATOR fragment1
 #define FRAGMENT_WIDGET_TOOLKIT fragment2
 #define FRAGMENT_MINIGAME_ACTOR_FRAMEWORK fragment3
 #define FRAGMENT_MINIGAME_SHARED_GRAPHICS fragment4
@@ -55,9 +55,9 @@
 #define FRAGMENT_GALLERY_DEBUGGER fragment48
 #define FRAGMENT_SNAP_PRINT_CLUB_BACKGROUND_SELECT fragment49
 #define FRAGMENT_HALL_OF_FAME fragment50
-#define FRAGMENT_GB_TOWER_UNUSED fragment51
+#define FRAGMENT_GB_PLAYER_UNUSED fragment51
 #define FRAGMENT_MINIGAME_SAMPLE2_VIEWER fragment52
-#define FRAGMENT_GB_TOWER_TEAM_PREP fragment53
+#define FRAGMENT_GB_PLAYER_PARTY_ICONS fragment53
 #define FRAGMENT_RENTAL_HUB fragment54
 #define FRAGMENT_RENTAL_RULES fragment55
 #define FRAGMENT_OPTIONS fragment56

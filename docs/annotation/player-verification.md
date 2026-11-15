@@ -759,7 +759,7 @@ selected, the panel showed HP: 19, こうげき 9, ぼうぎょ 9, すばやさ 
 (`PcSort_DrawMonStats`) and the moves たいあたり and なきごえ
 (`PcBox_DrawMoveName`).
 
-## GB Tower sound
+## GB Player sound
 
 These were probed while Pocket Monsters Green's intro (Gengar against
 Nidorino) played in the GB player (Zero has no GB Tower):
@@ -775,7 +775,7 @@ Nidorino) played in the GB player (Zero has no GB Tower):
   fixed point).
 * The four channel updates keep their tags, because play cannot tell square 1
   from square 2.
-* GB Tower menu: C-Up opens メニュー (ゲームをつづける, ゲームをやめる,
+* GB Player menu: C-Up opens メニュー (ゲームをつづける, ゲームをやめる,
   せつめい・コンフィグ). This calls `GbAudio_SetMenuSoundMode(1)` and
   `GbAudio_PlayMenuSound(1)`. Its text is drawn by `GbEmu_DrawTextCommands`
   from a command list whose headers and glyph counts match each line.
@@ -789,13 +789,13 @@ Nidorino) played in the GB player (Zero has no GB Tower):
 
 This was traced from power-on with Green in port 1:
 
-1. `GbSave_ScanAllPorts` calls `GbTower_ScanPaks`, which returns 0x10001.
+1. `GbSave_ScanAllPorts` calls `GbPlayer_ScanPaks`, which returns 0x10001.
 2. `GbPak_ReadRom` reads the header from 0x120, which matches the ROM
    (POKEMON GREEN).
 3. `GbPak_DetectRam` checks cartridge RAM with two `GbPak_VerifyPattern`
    rounds, each writing with `GbPak_MbcWrite` and reading back with
    `GbPak_MbcRead`.
-4. `GbSave_OpenMainData` runs, and `GbTower_SetPollMask(1)` ends the scan.
+4. `GbSave_OpenMainData` runs, and `GbPlayer_SetPollMask(1)` ends the scan.
 
 ## ずかん counts
 
@@ -900,7 +900,7 @@ Traced from a fresh boot with the Green save, through a せいとん move of one
 Pokémon into GBのボックス1, to レポートしてやめる:
 
 1. At boot, `GbSave_ScanAllPorts` runs `GbSave_OpenMainData` for port 0 (with
-   `GbTower_ProbePak`).
+   `GbPlayer_ProbePak`).
 2. Opening せいとん runs `GbSave_OpenMainData` and `GbSave_OpenBoxData`. Then
    `Deck_ReadEntry` runs for deck 0x20 entries 0-2, through
    `GbSave_LoadMainPokemon`.

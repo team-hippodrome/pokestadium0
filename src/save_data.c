@@ -893,26 +893,26 @@ s32 Save_WriteTypedRecord(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
 }
 
 /**
- * Reads the GB Tower settings from the options record: picture frames unlocked (+0x02, s8) and button config (+0x04, s32).
- * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): the button config set in the GB Tower menu came back the next time the tower started.
+ * Reads the GB Player settings from the options record: picture frames unlocked (+0x02, s8) and button config (+0x04, s32).
+ * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): the button config set in the GB Player menu came back the next time the GB Player started.
  */
-s32 Save_GetGbTowerSettings(s8 *arg0, s32 *arg1) {
+s32 Save_GetGbPlayerSettings(s8 *arg0, s32 *arg1) {
     if (arg0 != NULL) {
-        *arg0 = gSaveSram->options[0].towerFrames;
+        *arg0 = gSaveSram->options[0].gbPlayerFrames;
     }
     if (arg1 != NULL) {
-        *arg1 = gSaveSram->options[0].towerButtons;
+        *arg1 = gSaveSram->options[0].gbPlayerButtons;
     }
     return 1;
 }
 
 M2C_UNK Save_SetTypedRecordFlags(M2C_UNK, M2C_UNK, M2C_UNK);   /**
- * Stores the GB Tower button config at +0x04 of the options record: high byte = START choice, low byte = SELECT choice - 1
+ * Stores the GB Player button config at +0x04 of the options record: high byte = START choice, low byte = SELECT choice - 1
  * (choices 0 START, 1 L, 2 R, 3 C-Left, 4 C-Down).
  * Seen in play (2026-11-12, docs/annotation/n64-save-format.md): START → R in コンフィグ stored 0x0200.
  */
-s32 Save_SetGbTowerButtonConfig(s32 arg0) {
-    gSaveSram->options[0].towerButtons = arg0;
+s32 Save_SetGbPlayerButtonConfig(s32 arg0) {
+    gSaveSram->options[0].gbPlayerButtons = arg0;
     Save_SetTypedRecordFlags(0x14, 0, 2);
     return 1;
 }
@@ -920,13 +920,13 @@ s32 Save_SetGbTowerButtonConfig(s32 arg0) {
 M2C_UNK Save_SetTypedRecordFlags(s32, s32, M2C_UNK);
 M2C_UNK Save_SetTypedRecordFlags(M2C_UNK, M2C_UNK, M2C_UNK);
 /**
- * Stores how many extra GB Tower picture frames are unlocked (+0x02 of the options record, 0 to 2). Z cycles the frame around the
- * Game Boy screen in the tower: 1 adds the Doduo frame, 2 the Dodrio frame.
+ * Stores how many extra GB Player picture frames are unlocked (+0x02 of the options record, 0 to 2). Z cycles the frame around the
+ * Game Boy screen in the GB Player: 1 adds the Doduo frame, 2 the Dodrio frame.
  * Seen in play (2026-11-13, docs/annotation/n64-save-format.md): clearing マスターボールカップ raised it from 0 to 1; with 2 set, Z cycled
  * green, Doduo and Dodrio frames.
  */
-s32 Save_SetGbTowerFrameTier(s8 arg0) {
-    gSaveSram->options[0].towerFrames = arg0;
+s32 Save_SetGbPlayerFrameTier(s8 arg0) {
+    gSaveSram->options[0].gbPlayerFrames = arg0;
     Save_SetTypedRecordFlags(0x14, 0, 2);
     return 1;
 }

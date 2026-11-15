@@ -544,26 +544,26 @@ void VsScene_Play(void) {
     }
 }
 
-M2C_UNK Save_GetGbTowerSettings(s8 *, M2C_UNK);               /* extern */
-M2C_UNK Save_SetGbTowerFrameTier(s8);                          /* extern */
+M2C_UNK Save_GetGbPlayerSettings(s8 *, M2C_UNK);               /* extern */
+M2C_UNK Save_SetGbPlayerFrameTier(s8);                          /* extern */
 
 /**
- * Unlocks the next GB Tower frame (reads the count with func_80025100, stores it + 1 with
+ * Unlocks the next GB Player frame (reads the count with func_80025100, stores it + 1 with
  * func_80025168) and sets transitionFlags 0x8 for the first unlock, 0x10 for the second.
  * Named by the save-format thread from play (docs/annotation/n64-save-format.md on its branch);
  * not played again here.
  */
-void Tournament_UnlockGbTowerFrame(void) {
+void Tournament_UnlockGbPlayerFrame(void) {
     s8 sp1F;
 
-    Save_GetGbTowerSettings(&sp1F, 0);
+    Save_GetGbPlayerSettings(&sp1F, 0);
     switch (sp1F) {                                 /* irregular */
     case 0:
-        Save_SetGbTowerFrameTier((s8) (sp1F + 1));
+        Save_SetGbPlayerFrameTier((s8) (sp1F + 1));
         D_822036A4->transitionFlags |= 8;
         return;
     case 1:
-        Save_SetGbTowerFrameTier((s8) (sp1F + 1));
+        Save_SetGbPlayerFrameTier((s8) (sp1F + 1));
         D_822036A4->transitionFlags |= 0x10;
         return;
     }
@@ -618,7 +618,7 @@ void Save_SetProgressFlags(u16 arg0);
 /**
  * The cup champion handler, called by Tournament_PlayBadgeAward after round 8: sets transitionFlags
  * 0x2 (and 0x4 for an L1-30 or Master Ball cup clear), records the cleared cup in the progress
- * flags and saves record 0x14; the first clear also unlocks a GB Tower frame and checks the Surfing
+ * flags and saves record 0x14; the first clear also unlocks a GB Player frame and checks the Surfing
  * Pikachu reward. The game then loads fragment 011, the cup-cleared trophy scene.
  * Named by the save-format thread from play (docs/annotation/n64-save-format.md on its branch);
  * not played again here.
@@ -635,7 +635,7 @@ void Tournament_RecordCupClear(void) {
         if (!(hi & 1)) {
             hi |= 1;
             Save_SetProgressFlags((hi << 8) | lo);
-            Tournament_UnlockGbTowerFrame();
+            Tournament_UnlockGbPlayerFrame();
             Save_CommitTypedRecord(0x14, 0);
         }
     } else if (D_822036A4->mode == 2) {
@@ -650,7 +650,7 @@ void Tournament_RecordCupClear(void) {
             if (!(hi & 2)) {
                 hi |= 2;
                 Save_SetProgressFlags((hi << 8) | lo);
-                Tournament_UnlockGbTowerFrame();
+                Tournament_UnlockGbPlayerFrame();
                 Save_CommitTypedRecord(0x14, 0);
             }
         }

@@ -29,7 +29,7 @@ M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);
 void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 M2C_UNK func_8001AB6C();
 M2C_UNK func_8001ABBC();
-M2C_UNK Save_GetGbTowerSettings(s8 *, M2C_UNK);
+M2C_UNK Save_GetGbPlayerSettings(s8 *, M2C_UNK);
 s32 func_800023C4(M2C_UNK, M2C_UNK);
 s32 func_800051F0(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32);
 s32 BezierPath_Step(s8*, s32);
@@ -646,7 +646,7 @@ void CartridgeCheck_PlayExitToTitle(void) {
 void CartridgeCheck_PlaySetCartridgeAnimation(void) {
     s8 sp1F;
 
-    Save_GetGbTowerSettings(&sp1F, 0);
+    Save_GetGbPlayerSettings(&sp1F, 0);
     func_8001107C(&D_88403648, 1, &D_8F4889B8);
     func_80010F14(&D_88403648, 1, &D_8F4014CC, 0x10000);
     func_80010F9C(&D_88403648, 0x2E);
@@ -941,7 +941,7 @@ void CartridgeCheck_InitModels(s32 fromMainMenu) {
     func_80010F9C(&D_88403648, 0x4A);
     M2C_FIELD(&D_88403648, u8 *, 2) &= ~0x20;
     if (D_88403358 >= 0) {
-        Save_GetGbTowerSettings(&sp27, 0);
+        Save_GetGbPlayerSettings(&sp27, 0);
         Model_InitDisplayObject(&D_88403378, 0, 0, *((M2C_UNK*)((u8*)&D_884037B0 + (sp27 * 4))));
         func_80010F14(&D_88403378, 1, *((M2C_UNK**)((u8*)&D_88402D74 + (sp27 * 4))), 0xFFFF0000);
         func_80010F9C(&D_88403378, 0x4A);

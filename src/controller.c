@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "controller.h"
-#include "gb_tower.h"
+#include "gb_player.h"
 #include "matrix.h"
 extern Controller* gPlayer1Controller;
 extern Controller* gPlayer2Controller;
@@ -142,7 +142,7 @@ void Cont_StartReadInputs(void) {
     func_80051C70(&D_800AAFE0);
 }
 
-void GbTower_PollPakConnection(void);
+void GbPlayer_PollPakConnection(void);
 /**
  * Reads the controller inputs requested by Cont_StartReadInputs and updates
  * the button state.
@@ -169,7 +169,7 @@ void Cont_ReadInputs(void) {
                 Cont_AdjustAnalogStick(controller);
             }
         }
-        GbTower_PollPakConnection();
+        GbPlayer_PollPakConnection();
     }
 }
 

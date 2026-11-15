@@ -5,8 +5,8 @@
 #include "asset_archive.h"
 #include "audio_music.h"
 #include "font.h"
-#include "gb_tower.h"
-#include "gb_tower_launch.h"
+#include "gb_player.h"
+#include "gb_player_launch.h"
 #include "gfx_buffer.h"
 #include "graphics_textures.h"
 #include "leo.h"
@@ -697,19 +697,19 @@ extern s32 gPrevGameState;
 void func_8000A838(s32);
 void func_8000A8DC(void);
 void func_8000A904(void);
-void GbTower_Start(GbTowerLaunchParams*);
+void GbPlayer_Start(GbPlayerLaunchParams*);
 s32 GbPlayer_WaitForExit(void);
-void func_8000AE1C(GbTowerLaunchParams*);
+void func_8000AE1C(GbPlayerLaunchParams*);
 void func_800268E4(s32, s32);
 void GbSave_ForceReloadPort(s32);
 void Save_LoadSram(void);
-void Save_SetGbTowerButtonConfig(s32);
+void Save_SetGbPlayerButtonConfig(s32);
 void Save_CommitTypedRecord(s32, s32);
 
 /** Game state: runs Game Boy Tower. */
-void State_GbTower(void) {
+void State_GbPlayer(void) {
     s32 sp2C;
-    GbTowerLaunchParams sp24;
+    GbPlayerLaunchParams sp24;
 
     main_pool_push_state('EMU0');
     func_8000A838(1);
@@ -719,7 +719,7 @@ void State_GbTower(void) {
     sp24.partyIcons = main_pool_alloc(sizeof(*sp24.partyIcons), 0);
 
     func_80025B60(((u32) ((s32) &D_81300000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015F8F0, &D_0015FCE0, gActiveGbPort, (s32) &sp24);
-    GbTower_Start(&sp24);
+    GbPlayer_Start(&sp24);
 
     sp2C = GbPlayer_WaitForExit();
 
@@ -733,7 +733,7 @@ void State_GbTower(void) {
 
     GbSave_ForceReloadPort(gActiveGbPort);
     Save_LoadSram();
-    Save_SetGbTowerButtonConfig(sp24.buttonConfig);
+    Save_SetGbPlayerButtonConfig(sp24.buttonConfig);
     Save_CommitTypedRecord(0x14, 0);
     gNextGameState = gPrevGameState;
     D_800AF988 = 1;
@@ -767,7 +767,7 @@ void Game_UnusedStub(void) {
 /** Powers off the paks, blanks the screen and loads a fragment. */
 void Game_ShutdownAndLoadFragment(s32 arg0, s32 arg1) {
     osViBlack(1);
-    GbTower_PowerOffAllPaks();
+    GbPlayer_PowerOffAllPaks();
     Audio_FadeOutForShutdown();
     Game_ResetStorageDevice();
     Display_ClearFramebufferLine(1);

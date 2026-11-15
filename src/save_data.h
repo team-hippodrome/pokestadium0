@@ -10,8 +10,8 @@
 #include "pokemon_stats.h"
 
 typedef struct GameOptions {
-    /* 0x00 */ s16 gbTowerUnlockTier; // 0 = normal, 1 = Doduo, 2 = Dodrio.
-    // Word carried into/out of GB Tower by State_GbTower; its pointer role is unknown.
+    /* 0x00 */ s16 gbPlayerUnlockTier; // 0 = normal, 1 = Doduo, 2 = Dodrio.
+    // Word carried into/out of GB Player by State_GbPlayer; its pointer role is unknown.
     /* 0x04 */ struct GameOptions* unk_04;
 } GameOptions; // size = 0x8
 
@@ -93,9 +93,9 @@ typedef struct SaveListRecord {
 
 typedef struct SaveOptionsRecord {
     /* 0x0 */ s16 flags;
-    /* 0x2 */ s8 towerFrames; // @unverified: per docs/n64-save-format.md, not rechecked. GB Tower picture frames unlocked: 0-2 (1 Doduo, 2 Dodrio).
+    /* 0x2 */ s8 gbPlayerFrames; // @unverified: per docs/n64-save-format.md, not rechecked. GB Player picture frames unlocked: 0-2 (1 Doduo, 2 Dodrio).
     /* 0x3 */ u8 soundFlags; // Bit 0 mono sound, bit 1 commentary off.
-    /* 0x4 */ s32 towerButtons; // @unverified: per docs/n64-save-format.md, not rechecked; 0 (START S, SELECT L) seen. GB Tower config: bits 8-15 START button, bits 0-7 SELECT button - 1.
+    /* 0x4 */ s32 gbPlayerButtons; // @unverified: per docs/n64-save-format.md, not rechecked; 0 (START S, SELECT L) seen. GB Player config: bits 8-15 START button, bits 0-7 SELECT button - 1.
     /* 0x8 */ u8 progress[2]; // @unverified: per docs/n64-save-format.md, not rechecked. Big-endian u16 (Save_GetProgressFlags): high byte bit 0 L50-55 won (code), bit 1 Master Ball Cup won; low byte L1-30 cups cleared.
     /* 0xA */ SaveFooter footer;
 } SaveOptionsRecord; // size = 0x10

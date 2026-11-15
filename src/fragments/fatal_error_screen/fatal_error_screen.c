@@ -150,15 +150,15 @@ s32 FatalError_DrawFrame(u8 fadeMode) {
  * Entry point of the Transfer Pak fatal error screen, reached only through
  * Game_ShutdownAndLoadFragment(port, message_id) after the game has blanked video, powered off
  * all Transfer Paks and faded out audio. //@src/game_state.c
- * Callers in gb_tower.c and pokemon_stats_2.c mostly pass 1 for Transfer Pak communication
+ * Callers in gb_player.c and pokemon_stats_2.c mostly pass 1 for Transfer Pak communication
  * failures (osGbpak* errors, failed connection polling, Game Boy save changed before a write)
  * and 2 for cartridge-side failures (connector check, cartridge RAM detection, cartridge reset
- * or removal); State_GbTower forwards a nonzero Game Boy emulator exit code, and message 3 says
+ * or removal); State_GbPlayer forwards a nonzero Game Boy emulator exit code, and message 3 says
  * the Game Boy save is invalid. See FatalError_DrawMessagePanel for the texts.
  * Loads common_menu1_ui and transfer_pak_error_ui, then draws forever: the only exit is turning
  * the console off, as the message instructs.
  * Seen in play (2026-11-14): pulling the Transfer Pak (tpak.remove port 1) on the Game Boy
- * cartridge select screen made GbTower_PollPakConnection call
+ * cartridge select screen made GbPlayer_PollPakConnection call
  * Game_ShutdownAndLoadFragment(0, 1); the breakpoint here hit with port 0, messageId 1, and the
  * screen showed message 1 with the cable in controller port 1.
  */

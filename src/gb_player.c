@@ -1,7 +1,7 @@
 /* Stadium Zero resident code. */
-/* C ported from the Stadium 1 decomp: src/gb_tower.c. */
+/* C ported from the Stadium 1 decomp: src/gb_player.c. */
 
-#include "gb_tower.h"
+#include "gb_player.h"
 #include "game_state.h"
 #include "gb_mbc.h"
 #include "hal_libc.h"
@@ -15,20 +15,20 @@ s32 GbPak_MbcRead(s32 arg0, void* arg1, u16 arg2, u16 arg3);
 s32 GbPak_MbcWrite(s32 arg0, void* arg1, u16 arg2, u16 arg3);
 
 s32 GbPak_DetectRam(s32 arg0, u8* arg1);
-s32 GbTower_ProbePak(s32 arg0, u8* arg1, u8* arg2);
-s32 GbTower_IsPakInserted(s32 arg0, u8 arg1);
-void GbTower_PowerOffAllPaks(void);
+s32 GbPlayer_ProbePak(s32 arg0, u8* arg1, u8* arg2);
+s32 GbPlayer_IsPakInserted(s32 arg0, u8 arg1);
+void GbPlayer_PowerOffAllPaks(void);
 s32 GbPak_IsCartOff(s32 arg0);
 s32 GbPak_IsCartOn(s32 arg0);
-s32 GbTower_ReinitPak(s32 arg0);
+s32 GbPlayer_ReinitPak(s32 arg0);
 s32 GbPak_MbcRead(s32 arg0, void* arg1, u16 arg2, u16 arg3);
 s32 GbPak_MbcWrite(s32 arg0, void* arg1, u16 arg2, u16 arg3);
 s32 GbPak_RawRead(s32 arg0, u8* arg1, u16 arg2, u16 arg3);
 s32 GbPak_RawWrite(s32 arg0, u8* arg1, u16 arg2, u16 arg3);
 int GbPak_SelectRomBank(s32 arg0, s32 arg1);
 s32 GbPak_ReadRom(s32 arg0, u8* arg1, s32 arg2, s32 arg3);
-u8 GbTower_SetPollMask(u8 arg0);
-void GbTower_PollPakConnection(void);
+u8 GbPlayer_SetPollMask(u8 arg0);
+void GbPlayer_PollPakConnection(void);
 void func_8000B340_jp(void);
 
 s32 GbPak_VerifyPattern(s32 arg0, void* arg1);
@@ -55,7 +55,7 @@ s32 GbPak_VerifyPattern(s32 arg0, void* arg1) {
 
 /**
  * Detects working cartridge RAM by verifying 0x55, 0xAA and then an osGetCount
- * pattern; the last pattern is left in the pattern buffer for GbTower_VerifyPakStillInserted.
+ * pattern; the last pattern is left in the pattern buffer for GbPlayer_VerifyPakStillInserted.
  * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
  * 1: ran GbPak_VerifyPattern twice (both returned 1), then returned 1.
  */
@@ -87,7 +87,7 @@ s32 GbPak_DetectRam(s32 arg0, u8* arg1) {
  * menu).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-s32 GbTower_ProbePak(s32 arg0, u8* arg1, u8* arg2) {
+s32 GbPlayer_ProbePak(s32 arg0, u8* arg1, u8* arg2) {
     u8 status;
     OSGbpakId gbpak_id;
     s32 sp28 = 0;
@@ -117,7 +117,7 @@ s32 GbTower_ProbePak(s32 arg0, u8* arg1, u8* arg2) {
  * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
  * 1: returned 1 for port 1, twice during the boot scan.
  */
-s32 GbTower_IsPakInserted(s32 arg0, u8 arg1) {
+s32 GbPlayer_IsPakInserted(s32 arg0, u8 arg1) {
     u8 status;
     s32 temp_v1;
 
@@ -134,11 +134,11 @@ s32 GbTower_IsPakInserted(s32 arg0, u8 arg1) {
 }
 
 /**
- * Powers off every pak that was initialized by GbTower_ScanPaks.
+ * Powers off every pak that was initialized by GbPlayer_ScanPaks.
  * Seen in play (2026-11-13) with a JP Green cart in the Transfer Pak, it ran once, right as the GB
  * session ended on the "report is not correct" panel, and not while the game played.
  */
-void GbTower_PowerOffAllPaks(void) {
+void GbPlayer_PowerOffAllPaks(void) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
@@ -158,7 +158,7 @@ extern u8 D_800AB1F6;
  * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
  * 1: returned 0x10001, port 1 both usable and inserted.
  */
-s32 GbTower_ScanPaks(void) {
+s32 GbPlayer_ScanPaks(void) {
     s32 i;
     s32 temp_v0;
     u8 status;
@@ -239,7 +239,7 @@ s32 GbPak_IsCartOn(s32 arg0) {
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-s32 GbTower_ReinitPak(s32 arg0) {
+s32 GbPlayer_ReinitPak(s32 arg0) {
     UNUSED u8 filler[4];
     u8 status;
     OSGbpakId sp28;
@@ -263,7 +263,7 @@ s32 GbTower_ReinitPak(s32 arg0) {
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-s32 GbTower_VerifyPakStillInserted(s32 arg0, void* arg1) {
+s32 GbPlayer_VerifyPakStillInserted(s32 arg0, void* arg1) {
     u8 status;
     u8 sp1C[0x20];
     s32 sp18;
@@ -423,11 +423,11 @@ s32 GbPak_ReadRom(s32 arg0, u8* arg1, s32 arg2, s32 arg3) {
 }
 
 /**
- * Sets the ports polled by GbTower_PollPakConnection; returns the old mask.
+ * Sets the ports polled by GbPlayer_PollPakConnection; returns the old mask.
  * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
  * 1: was set to 1 (port 1) at the end of the scan and returned the old mask 0.
  */
-u8 GbTower_SetPollMask(u8 arg0) {
+u8 GbPlayer_SetPollMask(u8 arg0) {
     u8 temp_v0 = D_800AB1F7;
 
     D_800AB1F7 = arg0;
@@ -435,11 +435,11 @@ u8 GbTower_SetPollMask(u8 arg0) {
 }
 
 // Polls one Game Boy pak per call, rotating through ports 0-3. The first
-// osGbpakGetStatus failure on a port enabled by GbTower_SetPollMask latches
+// osGbpakGetStatus failure on a port enabled by GbPlayer_SetPollMask latches
 // D_800AB1F8 and calls Game_ShutdownAndLoadFragment(port, 1); the per-port
 // failure counter D_800A82AC is not used.
 /** Polls the Transfer Pak connection state. */
-void GbTower_PollPakConnection(void) {
+void GbPlayer_PollPakConnection(void) {
     u8 sp1F;
     static s32 D_800697D0 = 0; // .data
 
@@ -454,8 +454,8 @@ void GbTower_PollPakConnection(void) {
     }
 }
 
-// Checks every pak enabled by GbTower_SetPollMask in one call, using the same
-// failure handling as GbTower_PollPakConnection.
+// Checks every pak enabled by GbPlayer_SetPollMask in one call, using the same
+// failure handling as GbPlayer_PollPakConnection.
 void func_8000B340_jp(void) {
     s32 i;
     u8 status;

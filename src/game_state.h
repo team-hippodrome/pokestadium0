@@ -251,7 +251,7 @@ TeamRoster* Trainer_GetSlots(void);
 s32 GbSave_GetActivePort(void);
 void GbSave_SetActivePort(s32 arg0);
 void State_N64ddBootUnused(void);
-void State_GbTower(void);
+void State_GbPlayer(void);
 void State_TitleScreen(void);
 void Game_UnusedStub(void);
 void Game_ShutdownAndLoadFragment(s32 arg0, s32 arg1);

@@ -2,7 +2,7 @@
 /* C ported from the Stadium 1 decomp: src/pokemon_stats.c. */
 
 #include "pokemon_stats.h"
-#include "gb_tower.h"
+#include "gb_player.h"
 #include "hal_libc.h"
 #include "memory_main.h"
 #include "m2c_macros.h"
@@ -346,12 +346,12 @@ s32 GbSave_OpenMainData(s32 arg0) {
 
     if (sGbSavePorts[arg0].mainData != NULL) {
         sGbSavePorts[arg0].flags |= 1;
-        if (GbTower_ProbePak(arg0, &sp2F, sGbSavePorts[arg0].pakId) == 0) {
+        if (GbPlayer_ProbePak(arg0, &sp2F, sGbSavePorts[arg0].pakId) == 0) {
             Game_ShutdownAndLoadFragment(arg0, 2);
         }
 
         sp28 = GbSave_ReadMainData(arg0);
-        if (GbTower_IsPakInserted(arg0, sp2F) == 0) {
+        if (GbPlayer_IsPakInserted(arg0, sp2F) == 0) {
             Game_ShutdownAndLoadFragment(arg0, 2);
         }
 
@@ -402,7 +402,7 @@ s32 GbSave_OpenBoxData(s32 arg0) {
     if (sGbSavePorts[arg0].boxData != NULL) {
         sGbSavePorts[arg0].flags |= 2;
         if (GbSave_GetBoxCount(arg0) > 0) {
-            if (GbTower_ProbePak(arg0, &sp37, sGbSavePorts[arg0].pakId) == 0) {
+            if (GbPlayer_ProbePak(arg0, &sp37, sGbSavePorts[arg0].pakId) == 0) {
                 Game_ShutdownAndLoadFragment(arg0, 2);
             }
 
@@ -410,7 +410,7 @@ s32 GbSave_OpenBoxData(s32 arg0) {
                 sp2C = GbSave_ReadBoxBank(arg0, 1);
             }
 
-            if (GbTower_IsPakInserted(arg0, sp37) == 0) {
+            if (GbPlayer_IsPakInserted(arg0, sp37) == 0) {
                 Game_ShutdownAndLoadFragment(arg0, 2);
             }
 
@@ -437,14 +437,14 @@ s32 GbSave_LoadPort(s32 arg0) {
     u8 sp2B;
     s32 temp_s1;
 
-    if (GbTower_ProbePak(arg0, &sp2B, sGbSavePorts[arg0].pakId) == 0) {
+    if (GbPlayer_ProbePak(arg0, &sp2B, sGbSavePorts[arg0].pakId) == 0) {
         Game_ShutdownAndLoadFragment(arg0, 2);
     }
 
     temp_s1 = GbSave_EnsureMainDataLoaded(arg0);
     temp_s1 &= GbSave_OpenBoxData(arg0);
 
-    if (GbTower_IsPakInserted(arg0, sp2B) == 0) {
+    if (GbPlayer_IsPakInserted(arg0, sp2B) == 0) {
         Game_ShutdownAndLoadFragment(arg0, 2);
     }
 
@@ -461,13 +461,13 @@ s32 GbSave_LoadPort(s32 arg0) {
  * Per-port state machine that waits for a Game Boy cartridge to be pulled
  * out and put back, then checks it is the same one.  D_8006BB9C[arg0] is
  * the state:
- *   0  start the removal check (GbTower_IsPakInserted), fall into 1
+ *   0  start the removal check (GbPlayer_IsPakInserted), fall into 1
  *   1  wait until the cartridge is off (GbPak_IsCartOff)
  *   2  wait until it is back on (GbPak_IsCartOn); returns 1 meanwhile
- *   3  re-initialize the pak (GbTower_ReinitPak); if that worked, return 3,
+ *   3  re-initialize the pak (GbPlayer_ReinitPak); if that worked, return 3,
  *      or 2 if the cartridge also identifies as the same game as before
  *      (GbCart_IdentifyGame == port byte 2) and
- *      GbTower_VerifyPakStillInserted accepts the port's data at offset
+ *      GbPlayer_VerifyPakStillInserted accepts the port's data at offset
  *      0x18.  The state returns to 0.
  * Returns 0 when there is nothing to report yet.
  *
@@ -478,7 +478,7 @@ s32 GbSave_PollCartRemoval(s32 arg0) {
 
     switch (D_8006BB9C[arg0]) {
         case 0:
-            GbTower_IsPakInserted(arg0, 0);
+            GbPlayer_IsPakInserted(arg0, 0);
             D_8006BB9C[arg0] += 1;
             // fallthrough
 
@@ -496,10 +496,10 @@ s32 GbSave_PollCartRemoval(s32 arg0) {
             break;
 
         case 3:
-            if (GbTower_ReinitPak(arg0) != 0) {
+            if (GbPlayer_ReinitPak(arg0) != 0) {
                 sp24 = 3;
                 if (GbCart_IdentifyGame(arg0) == sGbSavePorts[arg0].gameType) {
-                    if (GbTower_VerifyPakStillInserted(arg0, sGbSavePorts[arg0].pakId) != 0) {
+                    if (GbPlayer_VerifyPakStillInserted(arg0, sGbSavePorts[arg0].pakId) != 0) {
                         sp24 = 2;
                     }
                 }
@@ -548,7 +548,7 @@ s32 GbSave_OpenMainData(s32);
  */
 s32 GbSave_ScanAllPorts(void) {
     s32 i;
-    s32 temp_v0 = GbTower_ScanPaks();
+    s32 temp_v0 = GbPlayer_ScanPaks();
 
     D_800AD334 = temp_v0 & 0xFF;
     D_800AD335 = (temp_v0 >> 0x10) & 0xFF;
@@ -582,12 +582,12 @@ s32 GbSave_ScanAllPorts(void) {
                     var_s0->saveState = 3;
                 }
             }
-            GbTower_IsPakInserted(i, 0);
+            GbPlayer_IsPakInserted(i, 0);
         }
     }
 
     if (D_800AD334 != 0) {
-        GbTower_SetPollMask(D_800AD330);
+        GbPlayer_SetPollMask(D_800AD330);
     }
 
     return D_800AD330;
@@ -614,11 +614,11 @@ s32 GbSave_InitializeBoxesAndWrite(s32 portId) {
     port->boxData[0x15A0 + 0x566 * 2] = 0;
     port->boxData[0x566 * 3] = 0;
     port->boxData[0x15A0 + 0x566 * 3] = 0;
-    if (GbTower_ProbePak(portId, &sp33, port->pakId) == 0) {
+    if (GbPlayer_ProbePak(portId, &sp33, port->pakId) == 0) {
         Game_ShutdownAndLoadFragment(portId, 2);
     }
     ret = GbSave_RebuildAndWriteSave(portId);
-    ret &= GbTower_IsPakInserted(portId, sp33);
+    ret &= GbPlayer_IsPakInserted(portId, sp33);
     return ret;
 }
 
@@ -628,7 +628,7 @@ s32 GbSave_WriteBoxBanks(s32 arg0) {
     s32 sp28 = 0;
 
     if (sGbSavePorts[arg0].flags & 2) {
-        if (GbTower_ProbePak(arg0, &sp2F, sGbSavePorts[arg0].pakId) == 0) {
+        if (GbPlayer_ProbePak(arg0, &sp2F, sGbSavePorts[arg0].pakId) == 0) {
             Game_ShutdownAndLoadFragment(arg0, 2);
         }
 
@@ -637,7 +637,7 @@ s32 GbSave_WriteBoxBanks(s32 arg0) {
         if (sp28 != 0) {
             sp28 = GbSave_WriteBoxBank(arg0, 1);
         }
-        sp28 &= GbTower_IsPakInserted(arg0, sp2F);
+        sp28 &= GbPlayer_IsPakInserted(arg0, sp2F);
     }
     return sp28;
 }
@@ -652,11 +652,11 @@ s32 GbSave_CommitMainData(s32 arg0) {
     s32 sp28 = 0;
 
     if (sGbSavePorts[arg0].flags & 1) {
-        if (GbTower_ProbePak(arg0, &sp2F, sGbSavePorts[arg0].pakId) == 0) {
+        if (GbPlayer_ProbePak(arg0, &sp2F, sGbSavePorts[arg0].pakId) == 0) {
             Game_ShutdownAndLoadFragment(arg0, 2);
         }
         sp28 = GbSave_WriteMainDataWithRetry(arg0);
-        sp28 &= GbTower_IsPakInserted(arg0, sp2F);
+        sp28 &= GbPlayer_IsPakInserted(arg0, sp2F);
     }
     return sp28;
 }
@@ -666,7 +666,7 @@ s32 GbSave_RebuildAndWriteSave(s32 arg0) {
     u8 sp2F;
     s32 sp28;
 
-    if (GbTower_ProbePak(arg0, &sp2F, sGbSavePorts[arg0].pakId) == 0) {
+    if (GbPlayer_ProbePak(arg0, &sp2F, sGbSavePorts[arg0].pakId) == 0) {
         Game_ShutdownAndLoadFragment(arg0, 2);
     }
 
@@ -679,7 +679,7 @@ s32 GbSave_RebuildAndWriteSave(s32 arg0) {
         }
     }
 
-    sp28 &= GbTower_IsPakInserted(arg0, sp2F);
+    sp28 &= GbPlayer_IsPakInserted(arg0, sp2F);
     return sp28;
 }
 
@@ -687,7 +687,7 @@ s32 GbSave_RebuildAndWriteSave(s32 arg0) {
 void GbSave_ValidateBeforeWrite(s32 arg0) {
     u8 sp27;
 
-    if (GbTower_ProbePak(arg0, &sp27, sGbSavePorts[arg0].pakId) == 0) {
+    if (GbPlayer_ProbePak(arg0, &sp27, sGbSavePorts[arg0].pakId) == 0) {
         Game_ShutdownAndLoadFragment(arg0, 2);
     }
 
@@ -698,7 +698,7 @@ void GbSave_ValidateBeforeWrite(s32 arg0) {
 
 /** Shuts down to a fragment when no Transfer Pak is inserted in the port. */
 void GbSave_RequirePakPresent(s32 arg0) {
-    if (GbTower_IsPakInserted(arg0, 0) == 0) {
+    if (GbPlayer_IsPakInserted(arg0, 0) == 0) {
         Game_ShutdownAndLoadFragment(arg0, 2);
     }
 }

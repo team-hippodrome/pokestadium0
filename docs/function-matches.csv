@@ -173,11 +173,11 @@ func_8005CC30,0x8005CC30,src/libultra/io/spsetpc.c,__osSpSetPc,ultralib,libultra
 func_800093C0,0x800093C0,src/debug_stub.c,,asm,,asm
 func_800093D0,0x800093D0,src/libultra/debug/assertbreak.c,__assertBreak,ultralib-asm,libultra:src/debug/assertbreak.s,asm
 func_800093E0,0x800093E0,src/debug_stub_2.c,,asm,,asm
-func_8000AAE0,0x8000AAE0,src/gb_tower_launch.c,GbPlayer_OutputThreadEntry,m2c,m2c,c
-func_8000AB98,0x8000AB98,src/gb_tower_launch.c,GbPlayer_EmulatorThreadEntry,m2c,m2c,c
-func_8000AC78,0x8000AC78,src/gb_tower_launch.c,GbTower_Start,hand,,c
-func_8000ADE8,0x8000ADE8,src/gb_tower_launch.c,GbPlayer_WaitForExit,m2c,m2c,c
-func_8000AE1C,0x8000AE1C,src/gb_tower_launch.c,GbTower_Stop,hand,,c
+func_8000AAE0,0x8000AAE0,src/gb_player_launch.c,GbPlayer_OutputThreadEntry,m2c,m2c,c
+func_8000AB98,0x8000AB98,src/gb_player_launch.c,GbPlayer_EmulatorThreadEntry,m2c,m2c,c
+func_8000AC78,0x8000AC78,src/gb_player_launch.c,GbPlayer_Start,hand,,c
+func_8000ADE8,0x8000ADE8,src/gb_player_launch.c,GbPlayer_WaitForExit,m2c,m2c,c
+func_8000AE1C,0x8000AE1C,src/gb_player_launch.c,GbPlayer_Stop,hand,,c
 func_8000A7A0,0x8000A7A0,src/audio_music.c,Audio_ResetCurrentMusic,s1,stadium1:src/audio_music.c,c
 func_8000A7B0,0x8000A7B0,src/audio_music.c,Audio_PlayMusicIfChanged,s1,stadium1:src/audio_music.c,c
 func_8000A7FC,0x8000A7FC,src/audio_music.c,Audio_StopMusic,s1,stadium1:src/audio_music.c,c
@@ -678,10 +678,10 @@ func_815002B4,0x815002B4,src/fragments/n64_logo/n64_logo.c,N64Logo_DrawFrame,s1,
 func_815002F0,0x815002F0,src/fragments/n64_logo/n64_logo.c,N64Logo_HoldForOneSecond,s1,stadium1:src/fragments/n64_logo/n64_logo.c,c
 func_8150036C,0x8150036C,src/fragments/n64_logo/n64_logo.c,N64Logo_ScanTransferPaks,s1,stadium1:src/fragments/n64_logo/n64_logo.c,c
 func_815003A4,0x815003A4,src/fragments/n64_logo/n64_logo.c,N64Logo_Main,s1,,c
-func_81300020,0x81300020,src/fragments/gb_tower_team_prep/gb_tower_team_prep.c,GbTower_LoadPartyFromDeck,s1,stadium1:src/fragments/gb_tower_team_prep/gb_tower_team_prep.c,c
-func_813000F0,0x813000F0,src/fragments/gb_tower_team_prep/gb_tower_team_prep.c,GbTower_PartyIconsFrameCallback,s1,stadium1:src/fragments/gb_tower_team_prep/gb_tower_team_prep.c (VERSION_JP),c
-func_81300144,0x81300144,src/fragments/gb_tower_team_prep/gb_tower_team_prep.c,GbTower_FillLaunchParams,hand,,c
-func_81300228,0x81300228,src/fragments/gb_tower_team_prep/gb_tower_team_prep.c,GbTower_PreparePartyIcons,hand,,c
+func_81300020,0x81300020,src/fragments/gb_player_party_icons/gb_player_party_icons.c,GbPlayer_LoadPartyFromDeck,s1,stadium1:src/fragments/gb_tower_team_prep/gb_tower_team_prep.c,c
+func_813000F0,0x813000F0,src/fragments/gb_player_party_icons/gb_player_party_icons.c,GbPlayer_PartyIconsFrameCallback,s1,stadium1:src/fragments/gb_tower_team_prep/gb_tower_team_prep.c (VERSION_JP),c
+func_81300144,0x81300144,src/fragments/gb_player_party_icons/gb_player_party_icons.c,GbPlayer_FillLaunchParams,hand,,c
+func_81300228,0x81300228,src/fragments/gb_player_party_icons/gb_player_party_icons.c,GbPlayer_PreparePartyIcons,hand,,c
 func_82300020,0x82300020,src/fragments/battle_order_select/battle_order_select.c,BattleMenu_DrawBottomActionButtons,hand,,c
 func_8230016C,0x8230016C,src/fragments/battle_order_select/battle_order_select.c,BattleMenu_DrawScrollingInstructionPanel,hand,,c
 func_823003B8,0x823003B8,src/fragments/battle_order_select/battle_order_select.c,BattleMenu_InitOrderSidebar,hand,,c
@@ -3503,7 +3503,7 @@ func_82200850,0x82200850,src/fragments/vs_scene/vs_scene.c,VsScene_UnusedStubB,s
 func_82200858,0x82200858,src/fragments/vs_scene/vs_scene.c,VsScene_LoadTeamIcons,hand,,c
 func_8220091C,0x8220091C,src/fragments/vs_scene/vs_scene.c,VsScene_PlayTitleAndRevealTeams,hand,,c
 func_82200C04,0x82200C04,src/fragments/vs_scene/vs_scene.c,VsScene_Play,hand,,c
-func_82200DA4,0x82200DA4,src/fragments/vs_scene/vs_scene.c,Tournament_UnlockGbTowerFrame,m2c,m2c,c
+func_82200DA4,0x82200DA4,src/fragments/vs_scene/vs_scene.c,Tournament_UnlockGbPlayerFrame,m2c,m2c,c
 func_82200E2C,0x82200E2C,src/fragments/vs_scene/vs_scene.c,Tournament_CheckSurfPikachuReward,hand,,c
 func_82200F08,0x82200F08,src/fragments/vs_scene/vs_scene.c,Tournament_RecordCupClear,hand,,c
 func_82201084,0x82201084,src/fragments/vs_scene/vs_scene.c,VsScene_DrawHpBars,hand,,c
@@ -4181,7 +4181,7 @@ func_80025F3C,0x80025F3C,src/game_state.c,State_Boot,m2c,m2c,c
 func_80025FDC,0x80025FDC,src/game_state.c,State_TitleScreen,hand,,c
 func_800260C4,0x800260C4,src/game_state.c,State_MainMenu,hand,,c
 func_80026368,0x80026368,src/game_state.c,State_Battle,hand,,c
-func_8002677C,0x8002677C,src/game_state.c,State_GbTower,hand,,c
+func_8002677C,0x8002677C,src/game_state.c,State_GbPlayer,hand,,c
 func_80026898,0x80026898,src/game_state.c,State_ReturnToTitle,m2c,m2c,c
 func_800268A8,0x800268A8,src/game_state.c,State_N64ddBootUnused,s1,stadium1:src/game_state.c,c
 func_800268DC,0x800268DC,src/game_state.c,Game_UnusedStub,s1,stadium1:src/game_state.c,c
@@ -4352,25 +4352,25 @@ func_8002D454,0x8002D454,src/gb_save.c,BattleMon_GetMoveIndexChecked,m2c,m2c,c
 func_8002D498,0x8002D498,src/gb_save.c,Pokemon_GetTypeIndex,hand,,c
 func_8002D520,0x8002D520,src/gb_save.c,Save_DrawReportResultWindow,hand,,c
 func_8002D7D4,0x8002D7D4,src/gb_save.c,GbSave_RunReportErrorLoop,hand,,c
-func_8000BA20,0x8000BA20,src/gb_tower.c,GbPak_VerifyPattern,s1,stadium1:src/gb_tower.c,c
-func_8000BAC8,0x8000BAC8,src/gb_tower.c,GbPak_DetectRam,s1,stadium1:src/gb_tower.c,c
-func_8000BB88,0x8000BB88,src/gb_tower.c,GbTower_ProbePak,s1,stadium1:src/gb_tower.c,c
-func_8000BC78,0x8000BC78,src/gb_tower.c,GbTower_IsPakInserted,s1,stadium1:src/gb_tower.c,c
-func_8000BD14,0x8000BD14,src/gb_tower.c,GbTower_PowerOffAllPaks,s1,stadium1:src/gb_tower.c,c
-func_8000BDC0,0x8000BDC0,src/gb_tower.c,GbTower_ScanPaks,hand,,c
-func_8000BF74,0x8000BF74,src/gb_tower.c,GbPak_IsCartOff,s1,stadium1:src/gb_tower.c,c
-func_8000BFEC,0x8000BFEC,src/gb_tower.c,GbPak_IsCartOn,s1,stadium1:src/gb_tower.c,c
-func_8000C060,0x8000C060,src/gb_tower.c,GbTower_ReinitPak,s1,stadium1:src/gb_tower.c,c
-func_8000C120,0x8000C120,src/gb_tower.c,GbTower_VerifyPakStillInserted,s1,stadium1:src/gb_tower.c,c
-func_8000C1B4,0x8000C1B4,src/gb_tower.c,GbPak_MbcRead,s1,stadium1:src/gb_tower.c,c
-func_8000C238,0x8000C238,src/gb_tower.c,GbPak_MbcWrite,s1,stadium1:src/gb_tower.c,c
-func_8000C2BC,0x8000C2BC,src/gb_tower.c,GbPak_RawRead,s1,stadium1:src/gb_tower.c,c
-func_8000C340,0x8000C340,src/gb_tower.c,GbPak_RawWrite,s1,stadium1:src/gb_tower.c,c
-func_8000C3C4,0x8000C3C4,src/gb_tower.c,GbPak_SelectRomBank,s1,stadium1:src/gb_tower.c,c
-func_8000C4BC,0x8000C4BC,src/gb_tower.c,GbPak_ReadRom,s1,stadium1:src/gb_tower.c,c
-func_8000C610,0x8000C610,src/gb_tower.c,GbTower_SetPollMask,s1,stadium1:src/gb_tower.c,c
-func_8000C628,0x8000C628,src/gb_tower.c,GbTower_PollPakConnection,s1,stadium1:src/gb_tower.c (VERSION_JP),c
-func_8000C6D4,0x8000C6D4,src/gb_tower.c,func_8000B340_jp,s1,stadium1:src/gb_tower.c (VERSION_JP),c
+func_8000BA20,0x8000BA20,src/gb_player.c,GbPak_VerifyPattern,s1,stadium1:src/gb_tower.c,c
+func_8000BAC8,0x8000BAC8,src/gb_player.c,GbPak_DetectRam,s1,stadium1:src/gb_tower.c,c
+func_8000BB88,0x8000BB88,src/gb_player.c,GbPlayer_ProbePak,s1,stadium1:src/gb_tower.c,c
+func_8000BC78,0x8000BC78,src/gb_player.c,GbPlayer_IsPakInserted,s1,stadium1:src/gb_tower.c,c
+func_8000BD14,0x8000BD14,src/gb_player.c,GbPlayer_PowerOffAllPaks,s1,stadium1:src/gb_tower.c,c
+func_8000BDC0,0x8000BDC0,src/gb_player.c,GbPlayer_ScanPaks,hand,,c
+func_8000BF74,0x8000BF74,src/gb_player.c,GbPak_IsCartOff,s1,stadium1:src/gb_tower.c,c
+func_8000BFEC,0x8000BFEC,src/gb_player.c,GbPak_IsCartOn,s1,stadium1:src/gb_tower.c,c
+func_8000C060,0x8000C060,src/gb_player.c,GbPlayer_ReinitPak,s1,stadium1:src/gb_tower.c,c
+func_8000C120,0x8000C120,src/gb_player.c,GbPlayer_VerifyPakStillInserted,s1,stadium1:src/gb_tower.c,c
+func_8000C1B4,0x8000C1B4,src/gb_player.c,GbPak_MbcRead,s1,stadium1:src/gb_tower.c,c
+func_8000C238,0x8000C238,src/gb_player.c,GbPak_MbcWrite,s1,stadium1:src/gb_tower.c,c
+func_8000C2BC,0x8000C2BC,src/gb_player.c,GbPak_RawRead,s1,stadium1:src/gb_tower.c,c
+func_8000C340,0x8000C340,src/gb_player.c,GbPak_RawWrite,s1,stadium1:src/gb_tower.c,c
+func_8000C3C4,0x8000C3C4,src/gb_player.c,GbPak_SelectRomBank,s1,stadium1:src/gb_tower.c,c
+func_8000C4BC,0x8000C4BC,src/gb_player.c,GbPak_ReadRom,s1,stadium1:src/gb_tower.c,c
+func_8000C610,0x8000C610,src/gb_player.c,GbPlayer_SetPollMask,s1,stadium1:src/gb_tower.c,c
+func_8000C628,0x8000C628,src/gb_player.c,GbPlayer_PollPakConnection,s1,stadium1:src/gb_tower.c (VERSION_JP),c
+func_8000C6D4,0x8000C6D4,src/gb_player.c,func_8000B340_jp,s1,stadium1:src/gb_tower.c (VERSION_JP),c
 func_80015980,0x80015980,src/geo_layout.c,geo_layout_cmd_branch_and_link,s1,stadium1:src/geo_layout.c,c
 func_80015A14,0x80015A14,src/geo_layout.c,geo_layout_cmd_end,s1,stadium1:src/geo_layout.c,c
 func_80015A9C,0x80015A9C,src/geo_layout.c,geo_layout_cmd_jump,s1,stadium1:src/geo_layout.c,c
@@ -5343,9 +5343,9 @@ func_80024B90,0x80024B90,src/save_data.c,Deck_SetSaveEntryCount,m2c,m2c,c
 func_80024C80,0x80024C80,src/save_data.c,Deck_IncrementSaveEntryCount,m2c,m2c,c
 func_80024D88,0x80024D88,src/save_data.c,Deck_ReadSaveEntry,hand,,c
 func_80024F14,0x80024F14,src/save_data.c,Save_WriteTypedRecord,hand,,c
-func_80025100,0x80025100,src/save_data.c,Save_GetGbTowerSettings,m2c,m2c,c
-func_80025130,0x80025130,src/save_data.c,Save_SetGbTowerButtonConfig,m2c,m2c,c
-func_80025168,0x80025168,src/save_data.c,Save_SetGbTowerFrameTier,m2c,m2c+context,c
+func_80025100,0x80025100,src/save_data.c,Save_GetGbPlayerSettings,m2c,m2c,c
+func_80025130,0x80025130,src/save_data.c,Save_SetGbPlayerButtonConfig,m2c,m2c,c
+func_80025168,0x80025168,src/save_data.c,Save_SetGbPlayerFrameTier,m2c,m2c+context,c
 func_800251A8,0x800251A8,src/save_data.c,Save_GetProgressFlags,m2c,m2c+permuter,c
 func_800251C8,0x800251C8,src/save_data.c,Save_SetProgressFlags,hand,,c
 func_80025214,0x80025214,src/save_data.c,Save_GetOptionFlags,m2c,m2c,c

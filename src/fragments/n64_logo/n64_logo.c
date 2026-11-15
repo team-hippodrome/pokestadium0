@@ -75,7 +75,7 @@ void N64Logo_HoldForOneSecond(u64 startTime) {
 
 /**
  * Boot-time Transfer Pak scan, run once while the logo is held on screen.
- * GbSave_ScanAllPorts (via GbTower_ScanPaks) initializes every plugged-in Transfer Pak,
+ * GbSave_ScanAllPorts (via GbPlayer_ScanPaks) initializes every plugged-in Transfer Pak,
  * identifies supported Pokemon Red/Green/Blue/Yellow cartridges for the region, checks
  * cartridge RAM, resets the per-port Game Boy save cache and enables disconnect polling for
  * ports holding a recognized Pokemon cartridge. This is the only caller of
@@ -83,7 +83,7 @@ void N64Logo_HoldForOneSecond(u64 startTime) {
  * N64Logo_Main starts its 1-second hold timer before the scan, so the controller-bus work
  * overlaps the logo instead of adding a blank delay.
  * A faulty pak or cartridge sends the game straight to the fatal error screen via
- * Game_ShutdownAndLoadFragment. //@src/pokemon_stats.c //@src/gb_tower.c
+ * Game_ShutdownAndLoadFragment. //@src/pokemon_stats.c //@src/gb_player.c
  * Allocations made during the scan are released when the 'GPAK' pool state is popped.
  * Verified in play (2026-11-14): runs once at boot while the logo is held, and calls
  * GbSave_ScanAllPorts. With a Transfer Pak holding Pocket Monsters Green in port 1, the pak masks

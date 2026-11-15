@@ -58,7 +58,7 @@ typedef enum {
     STATE_TITLE_SCREEN        = 0x02, // Title screen
     STATE_N64DD_BOOT_UNUSED   = 0x03, // seems to be unused, but boots an N64DD disk. Leftover from JP.
     STATE_MENU_SELECT         = 0x04, // Menu Select (select Battle Now!, POKeMON Stadium, etc)
-    STATE_AREA_SELECT         = 0x10, // Area Select (select Stadium, GB Tower, Gym Leader Castle, etc)
+    STATE_AREA_SELECT         = 0x10, // Area Select (select Stadium, GB Player, Gym Leader Castle, etc)
     STATE_GALLERY             = 0x11, // Gallery
     STATE_EVENT_BATTLE        = 0x12, // Event Battle
     STATE_OPTIONS             = 0x13, // Options
@@ -69,7 +69,7 @@ typedef enum {
     STATE_KIDS_CLUB           = 0x23, // Kids Club
     STATE_VICTORY_PALACE      = 0x24, // Victory Palace
     STATE_POKEMON_LAB         = 0x25, // POKeMON Lab
-    STATE_GB_TOWER            = 0x26, // GB Tower
+    STATE_GB_PLAYER            = 0x26, // GB Player
     STATE_GYM_LEADER_CASTLE   = 0x27, // Gym Leader Castle
     STATE_BATTLE_NOW_1P       = 0x28, // Battle Now! (1P)
     STATE_BATTLE_NOW_2P       = 0x29, // Battle Now! (2P)

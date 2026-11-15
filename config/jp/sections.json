@@ -668,7 +668,7 @@
       "size": "0x4"
     }
   },
-  "src/gb_tower.c": {
+  "src/gb_player.c": {
     ".data": "0x800603F0"
   },
   "src/jpeg_stream.c": {
