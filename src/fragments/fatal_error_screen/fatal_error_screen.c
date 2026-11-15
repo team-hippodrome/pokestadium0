@@ -18,7 +18,7 @@ void FatalError_DrawBackground(s32 unused0, s32 unused1, s32 unused2);
 void FatalError_DrawMessagePanel(s32 message_id);
 void FatalError_DrawPortDiagram(s32 port);
 
-void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
 /**
  * Fills the 320x240 screen with the green Poké Ball wallpaper from transfer_pak_error_ui
  * (64x64 RGBA16 at segment offset 0x0), drawn in COPY mode as 64x16 strips.
@@ -58,7 +58,7 @@ void FatalError_DrawWarningIcon(s32 x, s32 y) {
     gDPSetRenderMode(gDisplayListHead++, G_RM_NOOP, G_RM_NOOP2);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
 
-    func_8001B884(x, y, 24, 24, D_2002000, 24, 0x200000);
+    Gfx_DrawTextureRgba16(x, y, 24, 24, D_2002000, 24, 0x200000);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
@@ -121,11 +121,11 @@ void FatalError_DrawPortDiagram(s32 port) {
 
     gSPTextureRectangle(gDisplayListHead++, 0x026C, 0x02A4, 0x028C, 0x0350, G_TX_RENDERTILE, 0, 0, 0x0400, 0);
 
-    func_8001B884(sp80[port], 212, 8, 8, D_2006920, 8, 0);
+    Gfx_DrawTextureRgba16(sp80[port], 212, 8, 8, D_2006920, 8, 0);
 
     gSPTextureRectangle(gDisplayListHead++, 0x028C, 0x0350, sp80[port] << 2, 0x0370, G_TX_RENDERTILE, 0, 0, 0, 0x0400);
 
-    func_8001B884(sp80[port], 192, 8, 8, D_2006820, 8, 0);
+    Gfx_DrawTextureRgba16(sp80[port], 192, 8, 8, D_2006820, 8, 0);
 
     gSPTextureRectangle(gDisplayListHead++, sp80[port] << 2, 0x0320, (sp80[port] + 8) << 2, 0x0350, G_TX_RENDERTILE, 0,
                         0x00E0, 0x0400, 0);

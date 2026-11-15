@@ -5,10 +5,10 @@
 #include "m2c_macros.h"
 
 #include "free_battle_setup.h"
-s32 func_80020AFC(s32, s32, s32, s32);
-s32 func_80020CE4(void*, s32, s32);
-void func_80020C60(s32);
-void func_800207F8(u8*);
+s32 Deck_Open(s32, s32, s32, s32);
+s32 Deck_ReadEntries(void*, s32, s32);
+void Deck_CloseAndFlush(s32);
+void Pokemon_PrepareBattleMon(u8*);
 extern u8 D_80065D00[];
 
 s32 FreeBattle_ReadTeam(s32 arg0, s32 arg1, s32 arg2, TeamMonSlot* entry);
@@ -22,11 +22,11 @@ typedef struct Entry80066AD8 {
 } Entry80066AD8;
 extern Entry80066AD8 D_80066AD8[];
 s32 Pokemon_GetTypeIndex(s32, s32);
-void func_8001AB6C(void);
-void func_8001A384(s32, s32);
-void func_8001ABBC(void);
+void Font_BeginTranslucentTextRendering(void);
+void Font_SetActive(s32, s32);
+void Font_EndTexturedTextRendering(void);
 void Font_SetLineHeight(s32 arg0);
-void func_8001AA9C(u8, u8, u8, u8);
+void Gfx_SetEnvColor(u8, u8, u8, u8);
 void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 
 typedef struct Entry8006A9D4 {
@@ -44,8 +44,8 @@ void FreeBattle_DrawMoveName(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
 void FreeBattle_DrawTypeName(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 
-s32 func_8002B390(s32);
-s32 func_8002BC14(s32);
+s32 Ui_HandleHorizontalSelectionInput(s32);
+s32 Ui_GetSelectionDirection(s32);
 M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 
 s32 FreeBattle_UpdateRentalConfirmChoice(s8* arg0);
@@ -80,9 +80,9 @@ void FreeBattle_CommitEntries(s8 *arg0);
 extern s32 D_8200AD28;
 extern s32 D_8200AD2C;
 extern M2C_UNK D_8200AD30;
-s32 func_80025BD8(void);
+s32 GbSave_GetActivePort(void);
 void func_80027FF8(void*, s32);
-s32 func_80002D98(s32);
+s32 Util_Malloc(s32);
 void FreeBattle_InitBattleModeScreen(s32);
 void FreeBattle_CreateScreen(void);
 
@@ -103,7 +103,7 @@ extern M2C_UNK D_8200AD30;
 
 s32 FreeBattle_DrawScreenWithSummary(s32 arg0);
 
-M2C_UNK func_80002DC0(s32);                         /* extern */
+M2C_UNK Util_Free(s32);                         /* extern */
 extern s32 D_8200AD28;
 
 void FreeBattle_FreeScreen(void);
@@ -111,7 +111,7 @@ void FreeBattle_FreeScreen(void);
 extern s32 D_8200AD08[8];
 extern s32 D_8200AC40;
 extern s32 D_820090DC[8];
-s32 func_800044AC(s32, s32);
+s32 BinArchive_GetFile(s32, s32);
 
 void FreeBattle_LoadArchiveFiles(void);
 
@@ -119,19 +119,19 @@ s32 Font_Init(s32 load_size, s32 side);
 s8 *PokeIcon_AllocFramebuffers(s32 arg0);
 u16* func_80018F2C(s32, s32, s32, s32, s32, s32, s32, s32);
 s32 func_80017FDC(s32, s32, s32, s32);
-s32 func_80004154(u8*, u8*, s32, s32);
+s32 BinArchive_Open(u8*, u8*, s32, s32);
 void PokeIcon_OpenModelArchives(void);
-void func_800040B4(s32, u8*, u8*);
-void func_80003EB8(s32, u8*, u8*, s32);
-s32 func_80001B10(u8*);
+void Fragment_Load(s32, u8*, u8*);
+void Asset_LoadToSegment(s32, u8*, u8*, s32);
+s32 Memmap_GetSegmentVaddr(u8*);
 void FreeBattle_RestoreMenuState(s32);
 s32 StageFade_Start(s32);
 void func_80006828(s32, void*);
-void func_8000A7B0(s32);
+void Audio_PlayMusicIfChanged(s32);
 void func_80006998(s32);
-void func_8000A7FC(s32);
-void func_80006724(void);
-void func_8000675C(void);
+void Audio_StopMusic(s32);
+void StageLoader_WaitForRetrace(void);
+void StageLoader_UpdateSegments(void);
 s32 FreeBattle_UpdateFade(s32);
 extern u8 D_81000000[];
 extern u8 D_0015B1A0[];
@@ -162,8 +162,8 @@ extern s32 D_8200AD28;
 extern s32 D_82008F84;
 M2C_UNK FreeBattle_RunSetupScreen(void);
 
-M2C_UNK func_8000256C(M2C_UNK);                     /* extern */
-M2C_UNK func_80002620(M2C_UNK);                     /* extern */
+M2C_UNK MainPool_PushState(M2C_UNK);                     /* extern */
+M2C_UNK MainPool_PopState(M2C_UNK);                     /* extern */
 M2C_UNK func_80025BA0(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, s32); /* extern */
 M2C_UNK FreeBattle_RunSetupScreen();                            /* extern */
 M2C_UNK FreeBattle_SetupGbCartVersus();                            /* extern */
@@ -264,12 +264,12 @@ void FreeBattle_DrawMenuWindow(MenuWindow* window, s32 flags) {
         Ui_FillRectPrimEnvColor(window->window.frame.x + 6, window->window.frame.y + temp_s1 + 12, window->window.frame.width - 12, window->descriptionLines * 28, D_82009104, D_82009108);
         sp38 = window->window.frame.width - 12;
         Menu_DrawItems(&window->menu, window->window.frame.x + 6, window->window.frame.y + 10, flags | 0xFFED, (s8*)&sp38);
-        func_8001AB6C();
-        func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
-        func_8001A384(8, 0);
+        Font_BeginTranslucentTextRendering();
+        Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
+        Font_SetActive(8, 0);
         Font_SetLineHeight(28);
         Font_Printf(window->window.frame.x + 14, window->window.frame.y + temp_s1 + 0x10, window->descriptions[window->menu.cursor]);
-        func_8001ABBC();
+        Font_EndTexturedTextRendering();
     }
 }
 
@@ -279,7 +279,7 @@ extern s32 D_800603C0;
  * FreeBattle_UpdateMenuWindow
  *
  * Returns 0 immediately unless the word at window + 0x28 is 1 or 2. Otherwise,
- * if Menu_UpdateCursor(window + 0x2C, window) returns 0, it reads func_8002BC14(D_800603C0):
+ * if Menu_UpdateCursor(window + 0x2C, window) returns 0, it reads Ui_GetSelectionDirection(D_800603C0):
  * -1 calls Audio_PlaySystemSound(3) and returns -1; 1 calls Audio_PlaySystemSound(2) and
  * returns the word at window + 0x34 plus 1; any other value returns 0.
  * (FreeBattle_UpdatePopupMenu is the same pattern without the mode check.)
@@ -294,7 +294,7 @@ s32 FreeBattle_UpdateMenuWindow(MenuWindow* window) {
         return 0;
     }
     if (Menu_UpdateCursor(&window->menu, window) == 0) {
-        tmp = func_8002BC14(D_800603C0);
+        tmp = Ui_GetSelectionDirection(D_800603C0);
         if (tmp == -1) {
             Audio_PlaySystemSound(3);
             result = -1;
@@ -375,7 +375,7 @@ void FreeBattle_DrawPopupMenu(MenuWindow* window, s32 flags)
   }
 }
 
-s32 func_8002BC14(s32);
+s32 Ui_GetSelectionDirection(s32);
 M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 extern s32 D_800603C0;
 /**
@@ -387,7 +387,7 @@ s32 FreeBattle_UpdatePopupMenu(MenuWindow* window) {
     s32 dir;
 
     if (Menu_UpdateCursor(&window->menu) == 0) {
-        dir = func_8002BC14(D_800603C0);
+        dir = Ui_GetSelectionDirection(D_800603C0);
         if (dir == -1) {
             Audio_PlaySystemSound(3);
             sp1C = -1;
@@ -546,11 +546,11 @@ void FreeBattle_DrawOpponentSelect(FreeBattleOpponentWindow* window) {
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(window->window.frame.x + 6, window->window.frame.y + 153, window->window.frame.width - 12, 112, *(Color82001CCC*)&D_82009100);
         Ui_DrawImageInStrips(D_8200910C, window->window.frame.x + 169, window->window.frame.y + 193);
-        func_8001AB6C();
-        func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
-        func_8001A384(8, 0);
+        Font_BeginTranslucentTextRendering();
+        Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
+        Font_SetActive(8, 0);
         Font_Printf(window->window.frame.x + 54, window->window.frame.y + 195, D_82009F84);
-        func_8001ABBC();
+        Font_EndTexturedTextRendering();
         Menu_DrawItems(&window->menu, window->window.frame.x + 272, window->window.frame.y + 153, 0xFEF, 0);
         switch (window->menu.cursor) {
             case 0:
@@ -571,7 +571,7 @@ void FreeBattle_DrawOpponentSelect(FreeBattleOpponentWindow* window) {
  * Variant of FreeBattle_UpdateBattleModeWindow whose sub-object is at window + 0x38. Returns 0
  * immediately unless the word at window + 0x28 is 1 or 2. Otherwise, if
  * Menu_UpdateCursorSkipDisabled(window + 0x38, window) returns 0, it reads
- * func_8002BC14(D_800603C0): -1 calls Audio_PlaySystemSound(3) and returns -1; 1 calls
+ * Ui_GetSelectionDirection(D_800603C0): -1 calls Audio_PlaySystemSound(3) and returns -1; 1 calls
  * Audio_PlaySystemSound(2), returns 1 and maps the word at window + 0x40 (0..3) to the
  * value 2..5 stored in the word at window + 0x64. Any other value returns 0.
  * Seen in play: runs while 「あいてをせんたく」 is open.
@@ -585,7 +585,7 @@ s32 FreeBattle_UpdateOpponentSelect(FreeBattleOpponentWindow* window) {
         return 0;
     }
     if (Menu_UpdateCursorSkipDisabled(&window->menu, window) == 0) {
-        tmp = func_8002BC14(D_800603C0);
+        tmp = Ui_GetSelectionDirection(D_800603C0);
         if (tmp == -1) {
             Audio_PlaySystemSound(3);
             result = -1;
@@ -816,7 +816,7 @@ s32 FreeBattle_UpdateTagOpponentSelect(FreeBattleTeamOpponentWindow* window) {
     switch (window->focus) {
         case 1:
             if (Menu_UpdateCursorSkipDisabled((u8*)&window->sideMenu, window) == 0) {
-                res = func_8002BC14(D_800603C0);
+                res = Ui_GetSelectionDirection(D_800603C0);
                 if (res == -1) {
                     Audio_PlaySystemSound(3);
                     result = -1;
@@ -864,7 +864,7 @@ s32 FreeBattle_UpdateTagOpponentSelect(FreeBattleTeamOpponentWindow* window) {
             break;
         case 0:
         if (Menu_UpdateCursorSkipDisabled((u8*)&window->opponentMenu, window) == 0) {
-            res = func_8002BC14(D_800603C0);
+            res = Ui_GetSelectionDirection(D_800603C0);
             if (res == -1) {
                 Audio_PlaySystemSound(3);
                 window->focus = 1;
@@ -993,12 +993,12 @@ void FreeBattle_DrawBattleModeWindow(FreeBattleModeWindow* window) {
         func_80029028(window->window.frame.x + 6, window->window.frame.y + 6, window->window.frame.width - 12, 220, *(Color82001CCC*)&D_82009100);
         Ui_FillRectPrimEnvColor(window->window.frame.x + 6, window->window.frame.y + 232, window->window.frame.width - 12, 0x40, D_820091BC, D_820091C0);
         GridMenu_DrawInlineItems(&window->menu, window->window.frame.x + 0x10, window->window.frame.y + 0x10, 0xFFEF, 0);
-        func_8001AB6C();
-        func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
-        func_8001A384(8, 0);
+        Font_BeginTranslucentTextRendering();
+        Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
+        Font_SetActive(8, 0);
         Font_SetLineHeight(28);
         Font_Printf(window->window.frame.x + 20, window->window.frame.y + 236, ((FreeBattleModeEntry*)window->modes)[window->menu.cursor].text);
-        func_8001ABBC();
+        Font_EndTexturedTextRendering();
     }
 }
 
@@ -1008,7 +1008,7 @@ extern s32 D_800603C0;
  * FreeBattle_UpdateBattleModeWindow
  *
  * Returns 0 immediately unless the word at window + 0x28 is 1 or 2. Otherwise,
- * if GridMenu_UpdateCursor(window + 0x2C, window) returns 0, it reads func_8002BC14(D_800603C0):
+ * if GridMenu_UpdateCursor(window + 0x2C, window) returns 0, it reads Ui_GetSelectionDirection(D_800603C0):
  * -1 calls Audio_PlaySystemSound(3) and returns -1; 1 calls Audio_PlaySystemSound(2) and
  * returns the word at window + 0x34 plus 1; any other value returns 0.
  * (FreeBattle_UpdatePopupMenu is the same pattern without the mode check.)
@@ -1024,7 +1024,7 @@ s32 FreeBattle_UpdateBattleModeWindow(FreeBattleModeWindow* window) {
         return 0;
     }
     if (GridMenu_UpdateCursor(&window->menu, window) == 0) {
-        tmp = func_8002BC14(D_800603C0);
+        tmp = Ui_GetSelectionDirection(D_800603C0);
         if (tmp == -1) {
             Audio_PlaySystemSound(3);
             result = -1;
@@ -1044,7 +1044,7 @@ typedef struct {
 extern Gfx D_80060290[];
 extern Gfx D_80060398[];
 void Ui_SetTextColorForFlags(s32);
-void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
 
 /**
  * Draws one row of 「カップせんたく」: highlight box when selected (flag 0x10), a cleared-cup icon at the
@@ -1062,7 +1062,7 @@ void FreeBattle_DrawCupRow(s32 x, s32 y, IconPanel* cup, s32 index, s32 flags) {
     }
     if (flags & 0x100) {
         gSPDisplayList(gDisplayListHead++, D_80060290);
-        func_8001B884(x + 300, y + 6, 24, 24, cup->icon, 24, 0x200000);
+        Gfx_DrawTextureRgba16(x + 300, y + 6, 24, 24, cup->icon, 24, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80060398);
     }
     sp28 = y + 6;
@@ -1125,7 +1125,7 @@ void FreeBattle_DrawCupSelect(FreeBattleCupWindow* window, s32 flags) {
 /**
  * Variant of FreeBattle_UpdateBattleModeWindow with an extra check. Returns 0 immediately unless the
  * word at window + 0x28 is 1 or 2. Otherwise, if Menu_UpdateCursorSkipDisabled(window + 0x2C, window)
- * returns 0, it reads func_8002BC14(D_800603C0): -1 calls Audio_PlaySystemSound(3) and
+ * returns 0, it reads Ui_GetSelectionDirection(D_800603C0): -1 calls Audio_PlaySystemSound(3) and
  * returns -1; 1 looks at bit 0 of the u16 at index window->unk_34 of the array
  * pointed to by the word at window + 0x30. If that bit is clear it calls
  * Audio_PlaySystemSound(2) and returns unk_34 + 1; if it is set it calls
@@ -1141,7 +1141,7 @@ s32 FreeBattle_UpdateCupSelect(FreeBattleCupWindow* window) {
         return 0;
     }
     if (Menu_UpdateCursorSkipDisabled((u8*)&window->menu, window) == 0) {
-        tmp = func_8002BC14(D_800603C0);
+        tmp = Ui_GetSelectionDirection(D_800603C0);
         if (tmp == -1) {
             Audio_PlaySystemSound(3);
             result = -1;
@@ -1231,15 +1231,15 @@ void FreeBattle_DrawUsableMonGrid(FreeBattleMonGridWindow* window, s32 flags) {
         BgStage_DrawFrame();
         entry = window->mons.rows;
         for (i = 0; i < window->mons.count; i++) {
-            func_8001AB6C();
-            func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
-            func_8001A384(4, -1);
+            Font_BeginTranslucentTextRendering();
+            Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
+            Font_SetActive(4, -1);
             x = (i % 7) * 79 + x0;
             y = (i / 7) * 60 + y0;
             Font_Printf(x + 2, y + 42, entry + 0x30);
-            func_8001ABBC();
+            Font_EndTexturedTextRendering();
             gSPDisplayList(gDisplayListHead++, D_80073408);
-            func_8001B884(x + 38, y + 2, 40, 40, PokeIcon_GetImage(window->icons, i), 40, 0x200000);
+            Gfx_DrawTextureRgba16(x + 38, y + 2, 40, 40, PokeIcon_GetImage(window->icons, i), 40, 0x200000);
             gSPDisplayList(gDisplayListHead++, D_80073438);
             entry += 0x50;
         }
@@ -1260,7 +1260,7 @@ s32 FreeBattle_UpdateUsableMonGrid(FreeBattleMonGridWindow* window) {
     if ((tmp != 1) && (tmp != 2)) {
         return 0;
     }
-    tmp = func_8002BC14(D_800603C0);
+    tmp = Ui_GetSelectionDirection(D_800603C0);
     if ((tmp == -1) || (tmp == 1)) {
         Audio_PlaySystemSound(3);
         result = -1;
@@ -1289,12 +1289,12 @@ void FreeBattle_InitDuplicateWarning(FreeBattleDuplicateWarning* window, s32 x, 
     window->value = duplicates;
 }
 
-void func_8001AB6C(void);
-void func_8001AA9C(u8, u8, u8, u8);
-void func_8001A384(s32, s32);
+void Font_BeginTranslucentTextRendering(void);
+void Gfx_SetEnvColor(u8, u8, u8, u8);
+void Font_SetActive(s32, s32);
 void Font_SetLineHeight(s32 arg0);
 void Font_Printf(s32 x, s32 y, const char* fmt, ...);
-void func_8001ABBC(void);
+void Font_EndTexturedTextRendering(void);
 extern u8 D_800734A8[];
 extern char D_8200A0B0[];
 
@@ -1305,12 +1305,12 @@ extern char D_8200A0B0[];
  */
 void FreeBattle_DrawDuplicateWarning(FreeBattleDuplicateWarning* window) {
     if (func_8002AE6C() == 0) {
-        func_8001AB6C();
-        func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
-        func_8001A384(8, 0);
+        Font_BeginTranslucentTextRendering();
+        Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
+        Font_SetActive(8, 0);
         Font_SetLineHeight(28);
         Font_Printf(window->window.frame.x + 14, window->window.frame.y + 14, D_8200A0B0, window->value);
-        func_8001ABBC();
+        Font_EndTexturedTextRendering();
     }
 }
 
@@ -1376,19 +1376,19 @@ void FreeBattle_DrawShortageWarning(FreeBattleShortageWarning* window) {
         Ui_FillRectPrimEnvColor(window->window.frame.x + 6, window->window.frame.y + 6, 296, 92, D_8200921C, D_82009220);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(window->window.frame.x + 6, window->window.frame.y + 104, window->window.frame.width - 12, 36, *(Color82001CCC*)&D_82009100);
-        func_8001AB6C();
-        func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
-        func_8001A384(8, 0);
+        Font_BeginTranslucentTextRendering();
+        Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
+        Font_SetActive(8, 0);
         Font_SetLineHeight(28);
         Font_Printf(window->window.frame.x + 14, window->window.frame.y + 14, D_8200A124, window->count, window->count);
-        func_8001ABBC();
+        Font_EndTexturedTextRendering();
         Window_DrawLabeled(&window->yesButton, (window->choice.cursor == 0) ? 2 : 0);
         Window_DrawLabeled(&window->noButton, (window->choice.cursor == 1) ? 2 : 0);
     }
 }
 
-s32 func_8002B390(s32);
-s32 func_8002BC14(s32);
+s32 Ui_HandleHorizontalSelectionInput(s32);
+s32 Ui_GetSelectionDirection(s32);
 M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 
 /**
@@ -1400,8 +1400,8 @@ s32 FreeBattle_UpdateShortageWarning(FreeBattleShortageWarning* window) {
     s32 ret = 0;
     s32 temp_v0;
 
-    if (func_8002B390(&window->choice) == 0) {
-        temp_v0 = func_8002BC14(window->controller);
+    if (Ui_HandleHorizontalSelectionInput(&window->choice) == 0) {
+        temp_v0 = Ui_GetSelectionDirection(window->controller);
         if (temp_v0 == -1) {
             Audio_PlaySystemSound(3);
             ret = -1;
@@ -1483,19 +1483,19 @@ void FreeBattle_DrawLevelSumWarning(FreeBattleLevelSumWarning* window) {
         Ui_FillRectPrimEnvColor(window->window.frame.x + 6, window->window.frame.y + 6, 296, 92, D_8200922C, D_82009230);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(window->window.frame.x + 6, window->window.frame.y + 104, window->window.frame.width - 12, 36, *(Color82001CCC*)&D_82009100);
-        func_8001AB6C();
-        func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
-        func_8001A384(8, 0);
+        Font_BeginTranslucentTextRendering();
+        Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
+        Font_SetActive(8, 0);
         Font_SetLineHeight(28);
         Font_Printf(window->window.frame.x + 14, window->window.frame.y + 14, D_8200A198);
-        func_8001ABBC();
+        Font_EndTexturedTextRendering();
         Window_DrawLabeled(&window->yesButton, (window->choice.cursor == 0) ? 2 : 0);
         Window_DrawLabeled(&window->noButton, (window->choice.cursor == 1) ? 2 : 0);
     }
 }
 
-s32 func_8002B390(s32);
-s32 func_8002BC14(s32);
+s32 Ui_HandleHorizontalSelectionInput(s32);
+s32 Ui_GetSelectionDirection(s32);
 M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 
 /**
@@ -1506,8 +1506,8 @@ s32 FreeBattle_UpdateLevelSumWarning(FreeBattleLevelSumWarning* window) {
     s32 ret = 0;
     s32 temp_v0;
 
-    if (func_8002B390(&window->choice) == 0) {
-        temp_v0 = func_8002BC14(window->controller);
+    if (Ui_HandleHorizontalSelectionInput(&window->choice) == 0) {
+        temp_v0 = Ui_GetSelectionDirection(window->controller);
         if (temp_v0 == -1) {
             Audio_PlaySystemSound(3);
             ret = -1;
@@ -1588,11 +1588,11 @@ void FreeBattle_DrawEntryConfirm(FreeBattleRentalConfirm* window) {
         Ui_FillRectPrimEnvColor(window->window.frame.x + 6, window->window.frame.y + 6, window->window.frame.width - 12, 48, D_82009238, D_8200923C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(window->window.frame.x + 6, window->window.frame.y + 60, window->window.frame.width - 12, 36, *(Color82001CCC*)&D_82009100);
-        func_8001AB6C();
-        func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
-        func_8001A384(0x10, 0);
+        Font_BeginTranslucentTextRendering();
+        Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
+        Font_SetActive(0x10, 0);
         Font_Printf(window->window.frame.x + 18, window->window.frame.y + 18, D_8200A208);
-        func_8001ABBC();
+        Font_EndTexturedTextRendering();
         Window_DrawLabeled(&window->buttons[0], (window->choice.cursor == 0) ? 2 : 0);
         Window_DrawLabeled(&window->buttons[1], (window->choice.cursor == 1) ? 2 : 0);
         if (window->hasThirdButton != 0) {
@@ -1601,8 +1601,8 @@ void FreeBattle_DrawEntryConfirm(FreeBattleRentalConfirm* window) {
     }
 }
 
-s32 func_8002B390(s32);                             /* extern */
-s32 func_8002BC14(s32);                             /* extern */
+s32 Ui_HandleHorizontalSelectionInput(s32);                             /* extern */
+s32 Ui_GetSelectionDirection(s32);                             /* extern */
 M2C_UNK Audio_PlaySystemSound(M2C_UNK);                     /* extern */
 
 /**
@@ -1615,8 +1615,8 @@ s32 FreeBattle_UpdateRentalConfirm(FreeBattleRentalConfirm* window) {
     s32 var_s0;
 
     var_s0 = 0;
-    if (func_8002B390(&window->choice) == 0) {
-        temp_v0 = func_8002BC14(window->choice.controller);
+    if (Ui_HandleHorizontalSelectionInput(&window->choice) == 0) {
+        temp_v0 = Ui_GetSelectionDirection(window->choice.controller);
         if (temp_v0 == -1) {
             Audio_PlaySystemSound(3);
             var_s0 = -1;

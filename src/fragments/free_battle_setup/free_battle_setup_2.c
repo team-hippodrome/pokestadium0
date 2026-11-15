@@ -8,12 +8,12 @@
 typedef struct { u8 b[9]; } Bytes9;
 extern u8 D_8200AC30[];
 s32 GbSave_GetTrainerId(s32 arg0);
-s32 func_80020AFC(s32, s32, s32, s32);
-u8 func_80020CE4(void*, s32, s32);
-void func_80020C60(s32);
+s32 Deck_Open(s32, s32, s32, s32);
+u8 Deck_ReadEntries(void*, s32, s32);
+void Deck_CloseAndFlush(s32);
 void GbSave_GetPlayerName(s32, void*);
-void func_80058410(void*, void*, s32);
-void func_8000A460(void*, void*);
+void _bcopy(void*, void*, s32);
+void HAL_Strcpy(void*, void*);
 
 /**
  * Fills the trainer slot `slot` and its roster info `info` for a human player on controller
@@ -34,16 +34,16 @@ void FreeBattle_LoadGbCartTrainer(TeamRoster* slot, ExtendedRosterInfo* info, s3
     slot->trainerId = GbSave_GetTrainerId(gb_port);
     slot->numberOfPokemonBrought = 0;
     slot->rosterInfo = info;
-    sp2C = func_80020AFC(0x20, gb_port, 0, 0);
-    slot->numberOfPokemonBrought = func_80020CE4(slot->pokemonPicked, 6, sp2C);
-    func_80020C60(sp2C);
+    sp2C = Deck_Open(0x20, gb_port, 0, 0);
+    slot->numberOfPokemonBrought = Deck_ReadEntries(slot->pokemonPicked, 6, sp2C);
+    Deck_CloseAndFlush(sp2C);
     GbSave_GetPlayerName(gb_port, slot->trainerName);
     info->unk_000 = 0;
     info->numberOfPokemonCanBePicked = slot->numberOfPokemonBrought;
     info->trainerIndex = gb_port;
-    func_80058410(slot->pokemonPicked, info->battleMon, 0x1E0);
+    _bcopy(slot->pokemonPicked, info->battleMon, 0x1E0);
     *(Bytes9*)info->title = *(Bytes9*)D_8200AC30;
-    func_8000A460(info->fullName, slot->trainerName);
+    HAL_Strcpy(info->fullName, slot->trainerName);
 }
 
 /**
@@ -106,7 +106,7 @@ void FreeBattle_BuildGbCartSides(s32 slot0_port, s32 slot1_port, s32 slot2_port,
     }
 }
 
-M2C_UNK func_80021894(M2C_UNK);                     /* extern */
+M2C_UNK GbSave_EnsureMainDataLoaded(M2C_UNK);                     /* extern */
 void FreeBattle_BuildGbCartSides(s32, s32, s32, s32);
 
 /**
@@ -117,7 +117,7 @@ void FreeBattle_BuildGbCartSides(s32, s32, s32, s32);
  * @unverified Name from the code.
  */
 void FreeBattle_SetupGbCartVersus(void) {
-    func_80021894(0);
-    func_80021894(1);
+    GbSave_EnsureMainDataLoaded(0);
+    GbSave_EnsureMainDataLoaded(1);
     FreeBattle_BuildGbCartSides(1, 0, 2, 0);
 }

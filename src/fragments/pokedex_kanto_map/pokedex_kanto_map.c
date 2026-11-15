@@ -1,6 +1,6 @@
 /**
  * Stadium Zero fragment030_326700: the 3D Kanto map model that the Pokedex habitat screen
- * ("ぶんぷをみる" / "View area") loads (pokedex fragment, func_8A1053E8). Its two geo callbacks
+ * ("ぶんぷをみる" / "View area") loads (pokedex fragment, Pokedex_LoadAreaMap). Its two geo callbacks
  * scroll the textures of the sea plane and of the rivers every frame.
  */
 

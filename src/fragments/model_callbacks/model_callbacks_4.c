@@ -35,7 +35,7 @@ void ModelParticle_ResetSlot(s32 effect_slot, s32 index) {
 }
 
 /**
- * Clears every particle of an effect slot. Resident func_800325B0 calls it through
+ * Clears every particle of an effect slot. Resident ModelRenderer_ResetSlot calls it through
  * Util_ConvertAddrToVirtAddr when a display object animation starts (hit in play).
  */
 void ModelParticle_ResetEffectSlot(s32 effect_slot) {

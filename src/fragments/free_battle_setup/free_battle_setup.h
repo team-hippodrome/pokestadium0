@@ -44,7 +44,7 @@ typedef struct FreeBattleLevelSumWarning {
     /* 0x2C */ LabeledButton yesButton; // @unverified: label D_8200A188
     /* 0x68 */ LabeledButton noButton; // @unverified: label D_8200A190
     /* 0xA4 */ ChoiceCursor choice;
-    /* 0xB0 */ Controller* controller; // @unverified: the player asked; read by func_8002BC14
+    /* 0xB0 */ Controller* controller; // @unverified: the player asked; read by Ui_GetSelectionDirection
 } FreeBattleLevelSumWarning; // size = 0xB4
 
 /* A yes/no question with a number, asked of one controller (FreeBattle_InitShortageWarning). */
@@ -54,7 +54,7 @@ typedef struct FreeBattleShortageWarning {
     /* 0x68 */ LabeledButton noButton; // @unverified: label D_8200A11C
     /* 0xA4 */ ChoiceCursor choice;
     /* 0xB0 */ s32 count; // @unverified: printed twice with the format D_8200A124
-    /* 0xB4 */ Controller* controller; // @unverified: the player asked; read by func_8002BC14
+    /* 0xB4 */ Controller* controller; // @unverified: the player asked; read by Ui_GetSelectionDirection
 } FreeBattleShortageWarning; // size = 0xB8
 
 /* The confirm window of the rental and entry screens: two or three buttons (FreeBattle_InitRentalConfirm). */

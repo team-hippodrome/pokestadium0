@@ -270,7 +270,7 @@ s32 VsScene_DrawFrame(s32 unused) {
     return sp24;
 }
 
-M2C_UNK func_80006780();                            /* extern */
+M2C_UNK BgStage_AdvanceFrame();                            /* extern */
 s32 BezierPath_Step(s8 *, s32);                       /* extern */
 
 /*
@@ -282,7 +282,7 @@ s32 BezierPath_Step(s8 *, s32);                       /* extern */
  * when D_822036A4->mode is 0, from D_82202C60 and D_82202C7C otherwise.
  * Then, while BezierPath_Step(buf1, rec + 0xA8) returns non-zero, it calls
  * BezierPath_Step(buf2, rec + 0xB4), then VsScene_DrawFrameToImage(0) and
- * func_80006780(), and stops as soon as VsScene_DrawFrameToImage returns non-zero.
+ * BgStage_AdvanceFrame(), and stops as soon as VsScene_DrawFrameToImage returns non-zero.
  *
  * Same buffer pair and loop as CartridgeCheck_PlayExitToTitle. What the buffers, the record
  * and the helpers are is not established.
@@ -318,7 +318,7 @@ void VsScene_ZoomIntoScreen(void) {
     while (BezierPath_Step(sp7C, sp3C + 0xA8) != 0) {
         BezierPath_Step(sp40, sp3C + 0xB4);
         temp_s0_2 = VsScene_DrawFrameToImage(0);
-        func_80006780();
+        BgStage_AdvanceFrame();
         if (temp_s0_2 != 0) {
             break;
         }
@@ -330,11 +330,11 @@ extern s8 D_82202CB4;
 extern s8 D_82202D08;
 extern s8 D_82202D24;
 s32 StageFade_Start(s32);
-M2C_UNK func_8000A7FC(M2C_UNK);
+M2C_UNK Audio_StopMusic(M2C_UNK);
 /**
  * The reverse of VsScene_ZoomIntoScreen: moves the camera along the path from the big screen back
  * out to the stadium (D_82202D08/D_82202D24 in Free Battle, D_82202C98/D_82202CB4 in tournaments),
- * one frame per step. On step 20 it calls StageFade_Start(0x20) and func_8000A7FC(60) (@unverified:
+ * one frame per step. On step 20 it calls StageFade_Start(0x20) and Audio_StopMusic(60) (@unverified:
  * the screen fades to white as the step runs).
  * Seen in play (2026-11-14) at the end of the pre-battle panels, the results board and the
  * next-round panels: the camera pulls back out of the screen to the field, then the screen fades.
@@ -359,11 +359,11 @@ void VsScene_ZoomOutOfScreen(void) {
     while (BezierPath_Step(sp8C, rec + 0xA8) != 0) {
         if (i++ == 20) {
             StageFade_Start(0x20);
-            func_8000A7FC(60);
+            Audio_StopMusic(60);
         }
         BezierPath_Step(sp50, rec + 0xB4);
         done = VsScene_DrawFrameToImage(0);
-        func_80006780();
+        BgStage_AdvanceFrame();
         if (done != 0) {
             break;
         }
@@ -550,8 +550,8 @@ M2C_UNK Save_GetGbPlayerSettings(s8 *, M2C_UNK);               /* extern */
 M2C_UNK Save_SetGbPlayerFrameTier(s8);                          /* extern */
 
 /**
- * Unlocks the next GB Player frame (reads the count with func_80025100, stores it + 1 with
- * func_80025168) and sets transitionFlags 0x8 for the first unlock, 0x10 for the second.
+ * Unlocks the next GB Player frame (reads the count with Save_GetGbPlayerSettings, stores it + 1 with
+ * Save_SetGbPlayerFrameTier) and sets transitionFlags 0x8 for the first unlock, 0x10 for the second.
  * Named by the save-format thread from play (docs/annotation/n64-save-format.md on its branch);
  * not played again here.
  */
@@ -717,7 +717,7 @@ void VsScene_DrawHpBars(s32 percent) {
 }
 
 extern u8 D_8F625700[];
-void func_8001C058(s32, s32, s32, s32, u8*, s32, s32);
+void Gfx_DrawTextureI4(s32, s32, s32, s32, u8*, s32, s32);
 
 /**
  * Draws the red cross (64x64 texture D_8F625700 tinted #FF3214) over a Pokémon's icon image on the
@@ -730,8 +730,8 @@ void VsScene_DrawFaintCross(GfxImage* icon_image) {
     GfxImage_SetRenderTarget(&gDisplayListHead, icon_image);
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     gDPSetEnvColor(gDisplayListHead++, 255, 50, 20, 255); // #FF3214FF
-    func_8001C058(0, 0, 0x40, 0x20, sp34, 0x40, 0);
-    func_8001C058(0, 0x20, 0x40, 0x20, sp34 + 0x400, 0x40, 0);
+    Gfx_DrawTextureI4(0, 0, 0x40, 0x20, sp34, 0x40, 0);
+    Gfx_DrawTextureI4(0, 0x20, 0x40, 0x20, sp34 + 0x400, 0x40, 0);
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 }
 
@@ -786,7 +786,7 @@ void VsScene_MarkFaintedBatch(s32 batch) {
 
     for (i = 0; i != 2; i++) {
         if (D_822036A4->battleSides[i].tagTeamSize == 2) {
-            // The tag branch has its own team/idx, as in func_82201084.
+            // The tag branch has its own team/idx, as in VsScene_DrawHpBars.
             TeamRoster* team;
             s32 idx;
 
@@ -848,7 +848,7 @@ s32 VsScene_AnyMonDamaged(void) {
     return 0;
 }
 
-M2C_UNK func_80006780();                            /* extern */
+M2C_UNK BgStage_AdvanceFrame();                            /* extern */
 M2C_UNK func_80006828(M2C_UNK, M2C_UNK (*)(M2C_UNK)); /* extern */
 s32 func_80018E24(s32);                             /* extern */
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);   /* extern */
@@ -878,13 +878,13 @@ void VsScene_PlayResultsBoard(void) {
     do {
         VsScene_DrawHpBars(var_s0);
         VsScene_DrawFrame(0);
-        func_80006780();
+        BgStage_AdvanceFrame();
         var_s0 -= 4;
     } while (var_s0 >= 0);
     if (func_80018E24(D_82203264) == 0) {
         do {
             VsScene_DrawFrame(0);
-            func_80006780();
+            BgStage_AdvanceFrame();
         } while (func_80018E24(D_82203264) == 0);
     }
     var_s0_2 = 1;
@@ -974,7 +974,7 @@ s32 Tournament_RunContinuePrompt(void) {
         x = ((sel == 0) ? 33 : 118) + 30;
         Gfx_DrawTextureRgba16(x, 197, 24, 14, (u8*)Util_ConvertAddrToVirtAddr((uintptr_t)tex), 24, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80060398);
-        func_80006780();
+        BgStage_AdvanceFrame();
     } while (!(gPlayer1Controller->buttonPressed & BTN_A));
     if (sel == 1) {
         Audio_PlaySoundEffectById(0x1D);
@@ -988,7 +988,7 @@ s32 Tournament_RunContinuePrompt(void) {
             Font_Printf(52, 189, D_82203128);
             Font_Printf(52, 203, D_8220314C);
             Font_EndTexturedTextRendering();
-            func_80006780();
+            BgStage_AdvanceFrame();
         } while (gPlayer1Controller->buttonPressed == 0);
         Audio_PlayCommand(0x56, 0, 0);
     }

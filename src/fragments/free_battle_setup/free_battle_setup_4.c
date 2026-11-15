@@ -29,10 +29,10 @@ typedef struct {
 M2C_UNK GridMenu_UpdateCursor();
 void FreeBattle_SetScreenState(FreeBattleScreen*, s32, s32);
 extern s32 D_8200AC58[];
-void func_8001AB6C(void);
-void func_8001A384(s32, s32);
-void func_8001ABBC(void);
-void func_8001AA9C(u8, u8, u8, u8);
+void Font_BeginTranslucentTextRendering(void);
+void Font_SetActive(s32, s32);
+void Font_EndTexturedTextRendering(void);
+void Gfx_SetEnvColor(u8, u8, u8, u8);
 void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 extern M2C_UNK D_800734A8;
 void Menu_ClearItemFlags(FlagOwner*);
@@ -252,12 +252,12 @@ void FreeBattle_InitEntrySelect(s8* entry, s32 x, s32 y, s32 teams, s32 picks, s
 extern Gfx D_80073450[];
 extern u8 D_05000008[];
 extern char D_82009CC8[];
-void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
 void Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
 
 /**
  * Emits the display list D_80073450 and the DECALRGBA combiner, then calls
- * func_8001B884 at (x, y) with D_05000008 as its texture argument (width
+ * Gfx_DrawTextureRgba16 at (x, y) with D_05000008 as its texture argument (width
  * is passed straight through as the third argument), calls Ui_DrawPrimColorRect with
  * (x + 0xE, y, 0x84, 0x14, ...) and then
  * prints the string D_82009CC8 at (x + 0x10, y + 2) in the color
@@ -268,13 +268,13 @@ void Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
 void FreeBattle_DrawRentalTitle(s32 x, s32 y, s32 width) {
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-    func_8001B884(x, y, width, 20, D_05000008, 8, 0);
+    Gfx_DrawTextureRgba16(x, y, width, 20, D_05000008, 8, 0);
     Ui_DrawPrimColorRect(x + 14, y, 132, 20, 0, 0, 0, 0xFF); // #000000
-    func_8001AB6C();
-    func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
-    func_8001A384(4, 0);
+    Font_BeginTranslucentTextRendering();
+    Gfx_SetEnvColor(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
+    Font_SetActive(4, 0);
     Font_Printf(x + 0x10, y + 2, D_82009CC8);
-    func_8001ABBC();
+    Font_EndTexturedTextRendering();
 }
 
 extern char D_800735C4[];
@@ -297,11 +297,11 @@ void FreeBattle_DrawChoosingLabel(s8* entry) {
     Ui_DrawTexturedFrameDecal(M2C_FIELD(entry, s32*, 20) + 295, M2C_FIELD(entry, s32*, 24) - 18, 166, 20, D_800735C4);
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(M2C_FIELD(entry, s32*, 20) + 297, M2C_FIELD(entry, s32*, 24) - 0x10, 162, 0x10, D_82009098[M2C_FIELD(entry, s32*, 0x738) - 1]);
-    func_8001AB6C();
-    func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
-    func_8001A384(4, 0);
+    Font_BeginTranslucentTextRendering();
+    Gfx_SetEnvColor(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
+    Font_SetActive(4, 0);
     Font_Printf(M2C_FIELD(entry, s32*, 20) + 298, M2C_FIELD(entry, s32*, 24) - 0x10, D_82009CF0, D_820090A8[M2C_FIELD(entry, s32*, 0x738)]);
-    func_8001ABBC();
+    Font_EndTexturedTextRendering();
 }
 
 typedef struct {
@@ -620,7 +620,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
     case 1:
       if (ScrollList_UpdateCursor(entry + 0x40) == 0)
     {
-      next = func_8002BC14(*((s32 *) (((s8 *) entry) + 0x744))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      next = Ui_GetSelectionDirection(*((s32 *) (((s8 *) entry) + 0x744))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       if (next == (-1))
       {
         Audio_PlaySystemSound(3);
@@ -657,7 +657,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
           FreeBattle_MarkIneligibleSlots(entry + 0x2F8);
           FreeBattle_SetEntryScreenState(entry, FreeBattle_CheckEntryRules(entry), 0);
           *((s32 *) (((s8 *) entry) + 0x310)) = *((s32 *) (((s8 *) entry) + 0x744)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-          func_8000B2F4(*((s32 *) (((s8 *) entry) + 0x744))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+          Input_SetRepeatController(*((s32 *) (((s8 *) entry) + 0x744))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
         }
       }
     }
@@ -666,7 +666,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
     case 2:
       if (FreeBattle_UpdateTeamSlotCursor(entry) == 0)
     {
-      next = func_8002BC14(*((s32 *) (((s8 *) entry) + 0x744))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      next = Ui_GetSelectionDirection(*((s32 *) (((s8 *) entry) + 0x744))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       if (next == (-1))
       {
         Audio_PlaySystemSound(3);
@@ -739,7 +739,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
     case 6:
       if (FreeBattle_UpdateTeamSlotCursor(entry) == 0)
     {
-      next = func_8002BC14(*((s32 *) (((s8 *) entry) + 0x744))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      next = Ui_GetSelectionDirection(*((s32 *) (((s8 *) entry) + 0x744))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       if (next == (-1))
       {
         Audio_PlaySystemSound(3);
@@ -771,7 +771,7 @@ s32 FreeBattle_UpdateEntrySelect(s8 *entry)
     case 8:
       if (ScrollGrid_UpdateCursor(entry + 0x6E4) == 0)
     {
-      next = func_8002BC14(*((s32 *) (((s8 *) entry) + 0x744))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+      next = Ui_GetSelectionDirection(*((s32 *) (((s8 *) entry) + 0x744))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
       if (next == (-1))
       {
         Audio_PlaySystemSound(3);
@@ -886,7 +886,7 @@ typedef struct Src82004020 {
 } Src82004020;
 extern char D_82009D28[];
 extern char D_82009D40[];
-char* func_8000A460(char*, const char*);
+char* HAL_Strcpy(char*, const char*);
 void func_80058410(void*, void*, s32, s32);
 /**
  * Copies a picked team into a battle roster: its name (the preset or saved name), source buffer
@@ -913,11 +913,11 @@ void FreeBattle_CopyTeamToRoster(TeamRoster* slot, ExtendedRosterInfo* info, s32
         slot->controller = &gControllers[player - 1];
         name = slot->trainerName;
         if (team->unk_01 == 0x20 && player == team->unk_02 + 1) {
-            func_8000A460(name, team->name);
+            HAL_Strcpy(name, team->name);
             slot->trainerId = team->unk_04;
         } else {
             slot->trainerId = 0;
-            func_8000A460(name, ((char**)&D_820090C0)[player]);
+            HAL_Strcpy(name, ((char**)&D_820090C0)[player]);
         }
     }
     for (i = 0, n = 0; i < team->count; i++) {
@@ -931,7 +931,7 @@ void FreeBattle_CopyTeamToRoster(TeamRoster* slot, ExtendedRosterInfo* info, s32
     info->numberOfPokemonCanBePicked = slot->numberOfPokemonBrought;
     func_80058410(slot->pokemonPicked, info->battleMon, 0x1E0, n);
     *(Str82009D40*)info->title = *(Str82009D40*)D_82009D40;
-    func_8000A460(info->fullName, name);
+    HAL_Strcpy(info->fullName, name);
 }
 
 /**

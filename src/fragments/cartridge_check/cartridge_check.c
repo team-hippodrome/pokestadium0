@@ -85,10 +85,10 @@ void CartridgeCheck_UnusedNoop2(void) {
  */
 s32 CartridgeCheck_DrawFrame(s32 arg0) {
     CartridgeCheck_ReadInputs();
-    func_800158C0();
+    GeoRender_AdvanceFrameCounter();
     BgStage_DrawFrame();
-    func_80005770(&D_800AA150, 0, 0, 320, 240);
-    func_8001560C(D_88403370);
+    GfxImage_ClearDepthRectangle(&D_800AA150, 0, 0, 320, 240);
+    Geo_RenderRootNode(D_88403370);
     return 0;
 }
 
