@@ -407,7 +407,7 @@ void LabTerminal_DrawMenuWindow(LabTerminalMenuWindow* win) {
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(win->window.frame.x + 6, win->window.frame.y + 6, win->window.frame.width - 12, h, *(Color_RGBA8*)&D_8900A5BC);
         Ui_FillRectPrimEnvColor(win->window.frame.x + 6, win->window.frame.y + h + 12, win->window.frame.width - 12, win->descriptionLines * 28, D_8900A6FC, D_8900A700);
-        sp38 = win->window.frame.width - 0xC;
+        sp38 = win->window.frame.width - 12;
         Menu_DrawItems(&win->menu, win->window.frame.x + 6, win->window.frame.y + 10, 0xFFEF, (s32)&sp38);
         Font_BeginTranslucentTextRendering();
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);

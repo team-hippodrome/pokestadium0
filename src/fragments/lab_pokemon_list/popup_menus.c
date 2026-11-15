@@ -74,7 +74,7 @@ void LabTextMenu_Init(s8 *menu, s32 x, s32 y, s32 *texts, s32 flags, s32 count) 
         }
     }
     func_80027804(menu + 0x50, texts, count, count);
-    h = max * 0x14 + 0x10;
+    h = max * 20 + 0x10;
     Menu_Init(menu + 0x2C, menu + 0x50, flags, LabTextMenu_DrawRow, h, 28);
     M2C_FIELD(menu, s32 *, 0x4C) |= 0x10000;
     Window_SetRect(menu, x, y, h + 12, 132);
@@ -107,7 +107,7 @@ void LabTextMenu_Draw(Box89104E38* menu) {
     if (func_8002AE6C() == 0) {
         s32 sp2C[4];
 
-        sp2C[0] = menu->w - 0xC;
+        sp2C[0] = menu->w - 12;
         label = (s32)menu->label;
         Menu_DrawItems(label, menu->x + 6, menu->y + 10, 0xFFEF, (s8*)sp2C);
     }
@@ -234,7 +234,7 @@ void LabMoveSelect_Draw(LabMoveSelectWindow* window) {
     if (func_8002AE6C() == 0) {
         s32 sp2C[4];
 
-        sp2C[0] = window->window.frame.width - 0xC;
+        sp2C[0] = window->window.frame.width - 12;
         label = &window->menu;
         Menu_DrawInlineItems(label, window->window.frame.x + 6, window->window.frame.y + 10, 0xFFEF, (s8*)sp2C);
     }
@@ -630,7 +630,7 @@ void LabSourceSelect_Init(LabSourceSelectWindow* window, s32 x, s32 y, s8* sourc
     window->listFrame.style = 0;
     window->listFrame.color = color;
     Window_InitLabeled(&window->okButton, window->listFrame.x + 112, window->listFrame.y + 92, 72, color, D_8910E024);
-    window->okButton.labelX = 0xA;
+    window->okButton.labelX = 10;
     window->okButton.unk_34 = 0xC;
     list = *(s32*)sources;
     LabBoxList_Init(&window->gbBoxes, window->window.frame.x + window->window.frame.width, window->listFrame.y + 28, (ByteMatrix*)(list + 0x34), (s32)(&window->gbBoxFlags), color);
@@ -820,7 +820,7 @@ void LabPCList_InitPopupMenu(LabPopupMenu* popup, s32 *labels, s32 item_flags, s
         }
     }
     func_80027804((s8*)&popup->itemList, labels, count, count);
-    h = max * 0x14 + 0x10;
+    h = max * 20 + 0x10;
     Menu_Init((s8*)&popup->menu, (s8*)&popup->itemList, item_flags, LabPCList_DrawPopupRow, h, 28);
     popup->menu.options |= 0x10000;
     Window_SetRect(popup, 0, 0, h + 12, popup->itemList.count * 28 + 20);

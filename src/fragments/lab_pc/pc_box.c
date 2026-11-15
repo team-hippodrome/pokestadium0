@@ -133,7 +133,7 @@ void PcBox_ReadBoxes(s8 *boxes, M2C_UNK deck_type, M2C_UNK port, s32 count)
   {
     do
     {
-      temp_v0 = PcBox_ReadDeck(deck_type, port, var_s0, boxes, 0x1E);
+      temp_v0 = PcBox_ReadDeck(deck_type, port, var_s0, boxes, 30);
       var_s0 += 1;
       boxes += 0x964;
       new_var2 = (s32 *) (((s8 *) boxes) + (-4)); // FAKE: permuter temp
@@ -198,7 +198,7 @@ void PcBox_InitMonStatusWindow(PcBoxConfirmWindow* win, s32 x, s32 y, s32 mon, s
     win->window.state = 0;
     win->window.frame.style = 0x1001;
     Window_InitLabeled((s8*)&win->yesButton, win->window.frame.x + 266, win->window.frame.y + 0x100, 72, *(Color_RGBA8 *)D_8900A870, D_89018E60);
-    win->yesButton.labelX = 0xA;
+    win->yesButton.labelX = 10;
     win->yesButton.unk_34 = 0xC;
     Window_InitLabeled((s8*)&win->noButton, win->window.frame.x + 346, win->window.frame.y + 0x100, 72, *(Color_RGBA8 *)D_8900A870, D_89018E68);
     win->choice.count = 2;
@@ -1440,7 +1440,7 @@ s32 PcBox_UpdateScreen(PcBoxScreen* screen) {
             } else if (r > 0) {
                 ent2 = screen->operationWindow.sourceMenu->cursor + *(LabPCBoxEntry**)screen->operationWindow.sourceMenu->items;
                 entry = &ent2->box->mons[screen->listWindow.menu.cursor];
-                if ((entry->species.id <= 0) || (entry->species.id >= 0x98)) {
+                if ((entry->species.id <= 0) || (entry->species.id >= 152)) {
                     Audio_PlaySystemSound(8);
                 } else {
                     Audio_PlaySystemSound(2);

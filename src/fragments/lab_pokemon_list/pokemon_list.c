@@ -192,7 +192,7 @@ s32 LabPCList_GetColumnCursorX(LabPCListScreen* screen) {
     for (i = screen->pageColumnStart[screen->page], end = screen->pageColumnStart[screen->page] + screen->headerCursor.cursor - 2; i < end; i++) {
         x += screen->columnWidths[i];
     }
-    return screen->listFrame.x + x + 0x78;
+    return screen->listFrame.x + x + 120;
 }
 
 /**

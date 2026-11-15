@@ -129,7 +129,7 @@ s32 LabPCList_UpdateSortMenu(LabPCListScreen* screen) {
                     screen->state = 0;
                     break;
                 case 1:
-                    screen->sortKey = 0x11;
+                    screen->sortKey = 17;
                     func_80027D68(M2C_FIELD(screen, s32*, 0xB160), D_8910D9D4);
                     screen->state = 0;
                     break;

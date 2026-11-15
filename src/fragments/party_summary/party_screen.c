@@ -100,7 +100,7 @@ void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 /**
  * Menu row callback for the てもち list: the row highlight, PartyScreen_DrawRowText and the
- * cursor frame. `*modePtr` is PartyScreen_DrawList's mode; mode 2 (reordering) frames the cursor in
+ * cursor frame. `*mode_ptr` is PartyScreen_DrawList's mode; mode 2 (reordering) frames the cursor in
  * another color. Seen in play (2026-11-14): one call per party Pokémon.
  */
 void PartyScreen_DrawListRow(s32 x, s32 y, BattleMon *mon, s32 index, s32 flags, s32 *mode_ptr) {
@@ -247,7 +247,7 @@ void PartyScreen_InitActionMenu(PartyActionMenuWindow* window, s32 x, s32 y, u8*
   {
   }
   window->menu.options |= 0x10000;
-  if (((mon[0] > 0) && (mon[0] < 0x98)) && (BattleMon_CountMoves(mon) != 0))
+  if (((mon[0] > 0) && (mon[0] < 152)) && (BattleMon_CountMoves(mon) != 0))
   {
     return;
   }
