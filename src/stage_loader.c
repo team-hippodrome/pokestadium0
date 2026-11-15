@@ -233,13 +233,13 @@ void StageLoader_SetupFrame(void) {
     StageFade_Draw();
 
     if (gShowCPUProfiler != 0) {
-        print_profiler_metrics();
+        Profiler_PrintMetrics();
     }
 
     TextRenderer_FlushQueuedStrings(&gDisplayListHead, StageContext_IsHighResolution());
 
     if (gShowCPUProfiler != 0) {
-        draw_profiler(gShowCPUProfiler - 1);
+        Profiler_Draw(gShowCPUProfiler - 1);
     }
 
     if ((gShowCPUProfiler != 0) && (gShowMEMProfiler != 0)) {
@@ -292,7 +292,7 @@ void StageLoader_FillFrame(void) {
  * buffer.
  */
 StageContext* StageContext_Allocate(s8 zoom, s8 arg1, s8 render_target_count, s8 has_depth_buffer, s8 arg4, s32 allocate_render_targets) {
-    StageContext* temp_v0 = main_pool_alloc(sizeof(StageContext), 0);
+    StageContext* temp_v0 = MainPool_Alloc(sizeof(StageContext), 0);
 
     if (temp_v0 != NULL) {
         if (zoom == 1) {

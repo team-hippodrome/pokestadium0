@@ -84,7 +84,7 @@ void Font_RegisterSet(s32 mask, s32 advance, s32 height, s32 width, void* file) 
  *
  * Creates the font context.  Allocates a 0x3C-byte block from the main pool
  * on heap `side` (the second argument is passed straight through to
- * main_pool_alloc_with_func), tagged 'PRNT', with Font_ResetContext as the
+ * MainPool_AllocWithFunc), tagged 'PRNT', with Font_ResetContext as the
  * free callback; opens the font archive (ROM range D_002B2C80..D_002E0BE0)
  * into font_context->unk_48 and clears the two bytes at +0x38 / +0x39.
  * Then, for every bit set in `load_size`, loads one font set with
@@ -108,7 +108,7 @@ void Font_RegisterSet(s32 mask, s32 arg1, s32 arg2, s32 arg3, void* file);
 
 /** Allocates the font context. */
 s32 Font_Init(s32 load_size, s32 side) {
-    font_context = main_pool_alloc_with_func(sizeof(*font_context), side, 'PRNT', (AllocateFunc)Font_ResetContext);
+    font_context = MainPool_AllocWithFunc(sizeof(*font_context), side, 'PRNT', (AllocateFunc)Font_ResetContext);
     font_context->unk_48 = BinArchive_Open(D_002B2C80, D_002E0BE0, 1, 1);
     font_context->unk_50 = 0;
     font_context->unk_51 = 0;
@@ -136,7 +136,7 @@ s32 Font_Init(s32 load_size, s32 side) {
 
 /** Frees the font context. */
 void Font_Free(void) {
-    main_pool_try_free(font_context);
+    MainPool_TryFree(font_context);
 }
 
 /** Selects the active font set. */

@@ -1216,7 +1216,7 @@ void PokeIcon_OpenModelArchives(void);
 s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 session) {
     StageContext* sp24;
 
-    main_pool_push_state('MSEL');
+    MainPool_PushState('MSEL');
 
     Gfx_InitDisplayListBuffers(0x10000, 0);
     sp24 = StageContext_Allocate(1, 1, 2, 0, 2, 1);
@@ -1239,6 +1239,6 @@ s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 session) {
     Font_Free();
     Gfx_FreeDisplayListBuffers();
 
-    main_pool_pop_state('MSEL');
+    MainPool_PopState('MSEL');
     return 0;
 }

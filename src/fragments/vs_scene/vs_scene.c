@@ -165,7 +165,7 @@ void VsScene_PrepareTeams(void) {
     VsSceneSide* team;
     s32 i;
 
-    main_pool_push_state('ICON');
+    MainPool_PushState('ICON');
 
     for (i = 0, team = D_82203170; i < 2; i++, team++) {
         if (D_822036A4->ruleCategory != 0) {
@@ -1097,7 +1097,7 @@ void Tournament_PlayNextRoundTitle(void) {
         if (state->roundOrDemoId < 8) {
             state->roundOrDemoId++;
             ModelRenderer_ClearDisplayObject(&D_82203268);
-            main_pool_pop_state('ICON');
+            MainPool_PopState('ICON');
             Fragment_LoadAndCall((((u32)D_82400000 & 0x0FF00000) >> 0x14) - 0x10, D_00175570, D_0017BE70, 0,
                                  (u32)D_822036A4);
             VsScene_PrepareTeams();
@@ -1194,38 +1194,38 @@ void ImageGrid_Create(s32 arg0, s32 arg1, s32 arg2, u8* arg3, s32 arg4, s32 arg5
  * Seen in play (2026-11-13) ran once as the VS screen started; 2026-11-14 called from VsScene_Run.
  */
 void VsScene_LoadGeoLayout(s32 round) {
-    MemoryBlock* block = MainPool_AllocState(main_pool_get_available(), 0);
+    MemoryBlock* block = MainPool_AllocState(MainPool_GetAvailable(), 0);
 
     switch (D_822036A8) {
         case 0:
-            D_82203240 = process_geo_layout(block, D_8220301C);
+            D_82203240 = GeoLayout_Process(block, D_8220301C);
             break;
 
         case 1:
-            D_82203240 = process_geo_layout(block, D_82202DDC);
+            D_82203240 = GeoLayout_Process(block, D_82202DDC);
             break;
 
         case 2:
-            D_82203240 = process_geo_layout(block, D_82202E9C);
+            D_82203240 = GeoLayout_Process(block, D_82202E9C);
             break;
 
         case 3:
-            D_82203240 = process_geo_layout(block, D_82202F5C);
+            D_82203240 = GeoLayout_Process(block, D_82202F5C);
             break;
     }
 
-    D_82203244 = process_geo_layout(block, D_82202D40);
+    D_82203244 = GeoLayout_Process(block, D_82202D40);
     if ((round > 0) && (round < 7)) {
-        D_82203248 = process_geo_layout(block, D_8EC13F98);
+        D_82203248 = GeoLayout_Process(block, D_8EC13F98);
     } else if (round == 7) {
-        D_82203248 = process_geo_layout(block, D_8ED0E1A0);
+        D_82203248 = GeoLayout_Process(block, D_8ED0E1A0);
     } else if (round == 8) {
-        D_82203248 = process_geo_layout(block, D_8EE0F378);
+        D_82203248 = GeoLayout_Process(block, D_8EE0F378);
     }
-    D_8220324C = process_geo_layout(block, D_8F504830);
-    D_82203250 = (ModelNodeView*)process_geo_layout(block, D_8F619890);
-    D_82203254 = (ModelNodeView*)process_geo_layout(block, D_8EB300B0);
-    D_82203258 = (ModelNodeView*)process_geo_layout(block, D_8EB37440);
+    D_8220324C = GeoLayout_Process(block, D_8F504830);
+    D_82203250 = (ModelNodeView*)GeoLayout_Process(block, D_8F619890);
+    D_82203254 = (ModelNodeView*)GeoLayout_Process(block, D_8EB300B0);
+    D_82203258 = (ModelNodeView*)GeoLayout_Process(block, D_8EB37440);
     MainPool_FinalizeAllocation(block);
 
     if (D_822036A8 == 0) {
@@ -1317,7 +1317,7 @@ s32 VsScene_Run(s32 kind, SessionContext* session) {
     }
     sp24 = round;
 
-    main_pool_push_state('BTLS');
+    MainPool_PushState('BTLS');
     Save_LoadSram();
     Gfx_InitDisplayListBuffers(0x10000, 0);
     D_82203204 = StageContext_Allocate(0, 1, 3, 1, 2, 1);
@@ -1381,6 +1381,6 @@ s32 VsScene_Run(s32 kind, SessionContext* session) {
     StageContext_Deactivate();
     ImageGrid_Clear();
     Gfx_FreeDisplayListBuffers();
-    main_pool_pop_state('BTLS');
+    MainPool_PopState('BTLS');
     return 0;
 }

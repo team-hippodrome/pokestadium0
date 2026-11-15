@@ -905,26 +905,26 @@ void CartridgeCheck_InitModels(s32 from_main_menu) {
     s8 sp27;
     MemoryBlock* sp20;
 
-    sp20 = MainPool_AllocState(main_pool_get_available(), 0);
+    sp20 = MainPool_AllocState(MainPool_GetAvailable(), 0);
     ModelRenderer_InitDisplayRoots();
     ModelRenderer_AttachDisplayObject((DisplayObject*)&D_88403648);
     ModelRenderer_AttachDisplayObject((DisplayObject*)&D_88403378);
     ModelRenderer_AttachDisplayObject((DisplayObject*)&D_884034E0);
-    D_88403370 = (s32)process_geo_layout(sp20, D_88402EB0);
-    D_884037B0 = (s32)process_geo_layout(sp20, D_8F4A4240);
-    D_884037B4 = (s32)process_geo_layout(sp20, D_8F4B2AF0);
-    D_884037B8 = (s32)process_geo_layout(sp20, D_8F4959C8);
-    Model_InitDisplayObject(&D_88403648, 0, 0, (s32)process_geo_layout(sp20, D_8F4886F8));
+    D_88403370 = (s32)GeoLayout_Process(sp20, D_88402EB0);
+    D_884037B0 = (s32)GeoLayout_Process(sp20, D_8F4A4240);
+    D_884037B4 = (s32)GeoLayout_Process(sp20, D_8F4B2AF0);
+    D_884037B8 = (s32)GeoLayout_Process(sp20, D_8F4959C8);
+    Model_InitDisplayObject(&D_88403648, 0, 0, (s32)GeoLayout_Process(sp20, D_8F4886F8));
     if (gSessionContext.transitionFlags & 8) {
         // Doduo Game Boy prize model (fragment039, seen in play 2026-11-14).
-        Model_InitDisplayObject(&D_884034E0, 1, 0, (s32)process_geo_layout(sp20, D_8E825FE8));
+        Model_InitDisplayObject(&D_884034E0, 1, 0, (s32)GeoLayout_Process(sp20, D_8E825FE8));
         func_80010F14(&D_884034E0, 1, &D_8E802B64, 0x10000);
         M2C_FIELD(&D_884034E0, u8 *, 1) &= ~1;
         Vec3f_SetComponentsDuplicate(&D_88403504, 0.0f, 275.0f, 750.0f);
         Vec3f_SetComponentsDuplicate(&D_88403510, 3.0f, 3.0f, 3.0f);
     } else if (gSessionContext.transitionFlags & 0x10) {
         // Dodrio Game Boy prize model (fragment040, seen in play 2026-11-14).
-        Model_InitDisplayObject(&D_884034E0, 0, 0, (s32)process_geo_layout(sp20, D_8E924770));
+        Model_InitDisplayObject(&D_884034E0, 0, 0, (s32)GeoLayout_Process(sp20, D_8E924770));
         func_80010F14(&D_884034E0, 1, &D_8E902B64, 0x10000);
         M2C_FIELD(&D_884034E0, u8 *, 1) &= ~1;
         Vec3f_SetComponentsDuplicate(&D_88403504, 0.0f, 275.0f, 750.0f);
@@ -982,7 +982,7 @@ s32 CartridgeCheck_Main(s32 from_main_menu, s32 arg1) {
     s32 result;
     s32 ret;
 
-    main_pool_push_state('BCMP');
+    MainPool_PushState('BCMP');
 
     D_88403368 = (s8*)StageContext_GetCurrent();
     D_8840336C = (s8*)StageContext_Allocate(0, 1, 2, 1, 2, 0);
@@ -1021,7 +1021,7 @@ s32 CartridgeCheck_Main(s32 from_main_menu, s32 arg1) {
     StageLoader_WaitForRetrace();
     Font_Free();
 
-    main_pool_pop_state('BCMP');
+    MainPool_PopState('BCMP');
 
     if (result == 1) {
         Fragment_QueueCall(((((u32)D_88000000) & 0x0FF00000) >> 0x14) - 0x10, D_00235D70, D_00238BD0, 1, arg1);

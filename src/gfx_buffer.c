@@ -24,15 +24,15 @@ s32 Gfx_GetDisplayListRemaining(void);
 void Gfx_InitDisplayListBuffers(u32 buffer_size, s32 pool_side) {
     D_800AA158.current = 0;
     D_800AA158.bufferSize = buffer_size;
-    D_800AA158.buffers[0] = main_pool_alloc_with_func(buffer_size, pool_side, 'DYN0', NULL);
-    D_800AA158.buffers[1] = main_pool_alloc_with_func(buffer_size, pool_side, 'DYN1', NULL);
+    D_800AA158.buffers[0] = MainPool_AllocWithFunc(buffer_size, pool_side, 'DYN0', NULL);
+    D_800AA158.buffers[1] = MainPool_AllocWithFunc(buffer_size, pool_side, 'DYN1', NULL);
     Gfx_SwapDisplayListBuffer();
 }
 
 /** Frees the display list buffers. */
 void Gfx_FreeDisplayListBuffers(void) {
-    main_pool_try_free(D_800AA158.buffers[1]);
-    main_pool_try_free(D_800AA158.buffers[0]);
+    MainPool_TryFree(D_800AA158.buffers[1]);
+    MainPool_TryFree(D_800AA158.buffers[0]);
 }
 
 /** Switches to the other display list buffer. */

@@ -71,14 +71,14 @@ void Memory_InitPools(void) {
  * Allocate memory from the main pool.
  */
 void* Util_Malloc(s32 size) {
-    return mem_pool_alloc(gMainPool, size);
+    return MemPool_Alloc(gMainPool, size);
 }
 
 /**
  * Free a pointer being used in the main pool.
  */
 void Util_Free(void* ptr) {
-    mem_pool_free(gMainPool, ptr);
+    MemPool_Free(gMainPool, ptr);
 }
 
 /**
@@ -109,9 +109,9 @@ void Util_DrawRect(Gfx** dlist, s32 ulx, s32 lrx, u16 color) {
  * @unverified: debug overlay, not turned on in play.
  */
 void Util_DrawMemoryProfiler(Gfx** dlist) {
-    MainPool* pool = main_pool_get_pool();
+    MainPool* pool = MainPool_GetPool();
     UNUSED s32 pad; // FAKE: stack padding
-    s32 available = main_pool_get_available();
+    s32 available = MainPool_GetAvailable();
 
     if (available >= 0) {
         s32 baseX = 30;

@@ -26,7 +26,7 @@ void* MainPool_AllocState(u32 size, s32 side) {
 
     size = ALIGN4(size);
     ptr = 0;
-    block = main_pool_alloc(size, side);
+    block = MainPool_Alloc(size, side);
     if (block != NULL) {
         ptr = MainPool_InitState(block, size);
     }
@@ -37,7 +37,7 @@ void* MainPool_AllocState(u32 size, s32 side) {
 void MainPool_FinalizeAllocation(struct MemoryBlock* block) {
     s32 size = ALIGN16(block->size + 0x10);
 
-    main_pool_realloc(block, size);
+    MainPool_Realloc(block, size);
     block->next = (void*)(size - 0x10);
 }
 

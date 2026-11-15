@@ -91,11 +91,11 @@ void N64Logo_HoldForOneSecond(u64 start_time) {
  * pak is initialized.
  */
 void N64Logo_ScanTransferPaks(void) {
-    main_pool_push_state('GPAK');
+    MainPool_PushState('GPAK');
 
     GbSave_ScanAllPorts();
 
-    main_pool_pop_state('GPAK');
+    MainPool_PopState('GPAK');
 }
 
 void Save_LoadSram(void);
@@ -119,7 +119,7 @@ s32 N64Logo_Main(UNUSED s32 loader_arg0, UNUSED s32 loader_arg1) {
     u64 logo_start_time;
     StageContext* stage_context;
 
-    main_pool_push_state('LOGO');
+    MainPool_PushState('LOGO');
 
     Gfx_InitDisplayListBuffers(0x10000, 0);
     stage_context = StageContext_Allocate(0, 1, 2, 0, 2, 1);
@@ -154,6 +154,6 @@ s32 N64Logo_Main(UNUSED s32 loader_arg0, UNUSED s32 loader_arg1) {
     StageContext_Deactivate();
     Gfx_FreeDisplayListBuffers();
 
-    main_pool_pop_state('LOGO');
+    MainPool_PopState('LOGO');
     return 0x8010;
 }

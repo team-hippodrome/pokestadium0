@@ -168,7 +168,7 @@ void FatalError_Main(s32 port, s32 messageId) {
     sFatalErrorPort = port;
     sFatalErrorMessageId = messageId;
 
-    main_pool_push_state('FATL');
+    MainPool_PushState('FATL');
 
     Gfx_InitDisplayListBuffers(0x10000, 0);
     temp_s0 = StageContext_Allocate(0, 1, 2, 0, 2, 1);

@@ -95,8 +95,8 @@ extern u8 D_000DA9B0[];
 extern u8 D_002B2C80[];
 extern u8 D_002E0BE0[];
 extern u8 D_800AAF48;
-void main_pool_push_state(u32 tag);
-void* main_pool_alloc(u32 size, s32 side);
+void MainPool_PushState(u32 tag);
+void* MainPool_Alloc(u32 size, s32 side);
 M2C_UNK Fragment_Load(s32 id, u8* romStart, u8* romEnd);
 void* BinArchive_Open(u8* romStart, u8* romEnd, s32 arg2, s32 arg3);
 void* BinArchive_GetFile(void* archive, s32 index);
@@ -114,9 +114,9 @@ u8 func_8000C610(u8);
 void GbPlayer_Start(GbPlayerLaunchParams* arg0) {
     void* temp_v0;
 
-    main_pool_push_state('GBEM');
-    D_800AAF40 = (s32)main_pool_alloc(0x2208, 0);
-    D_800AAF44 = (s32)main_pool_alloc(0x21E0, 0);
+    MainPool_PushState('GBEM');
+    D_800AAF40 = (s32)MainPool_Alloc(0x2208, 0);
+    D_800AAF44 = (s32)MainPool_Alloc(0x21E0, 0);
     Fragment_Load(((((u32)D_81100000) & 0x0FF00000) >> 20) - 16, D_00080C00, D_000DA9B0);
     temp_v0 = BinArchive_Open(D_002B2C80, D_002E0BE0, 1, 1);
     M2C_FIELD(D_800AAF40, void**, 0x21CC) = BinArchive_GetFile(temp_v0, 0);

@@ -193,11 +193,11 @@ extern M2C_UNK D_02000000;
  * Fragment entry: pushes the 'BMNU' pool state, loads the font and the assets for segments
  * 1 and 2, runs the menu until an item or B is chosen, then frees the font, pops the pool
  * state and returns 0x8040. The two call arguments from the loader are not read.
- * Seen in play (2026-11-14): on load main_pool_push_state('BMNU') and Font_Init(0x30) were
+ * Seen in play (2026-11-14): on load MainPool_PushState('BMNU') and Font_Init(0x30) were
  * called from here, then PokedexMenu_RunFrame ran every frame.
  */
 s32 PokedexMenu_Init(s32 unused0, M2C_UNK unused1) {
-    main_pool_push_state(0x424D4E55);
+    MainPool_PushState(0x424D4E55);
     Font_Init(0x30, 0);
     Asset_LoadToSegment((u32) ((s32) &D_01000000 & 0x0F000000) >> 0x18, &D_002E0BE0, &D_002E2B90, 0);
     Asset_LoadToSegment((u32) ((s32) &D_02000000 & 0x0F000000) >> 0x18, &D_002F0A50, &D_002F3BD0, 0);
@@ -207,6 +207,6 @@ s32 PokedexMenu_Init(s32 unused0, M2C_UNK unused1) {
     BgStage_RunUntilCondition(0, (s32 (*)(u8)) PokedexMenu_RunFrame);
     StageLoader_WaitForRetrace();
     Font_Free();
-    main_pool_pop_state(0x424D4E55);
+    MainPool_PopState(0x424D4E55);
     return 0x8040;
 }

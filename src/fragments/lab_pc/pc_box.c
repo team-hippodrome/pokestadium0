@@ -1297,7 +1297,7 @@ extern u8 D_0015E220[];
 void PcBox_Init(PcBoxScreen* screen) {
     s32 i;
 
-    main_pool_push_state('PBOX');
+    MainPool_PushState('PBOX');
     screen->iconFramebuffers = PokeIcon_AllocFramebuffers(1);
     screen->monRenderer = (u16*)func_80018F2C(screen->iconFramebuffers, 0x80, 0x78, 0, 0, 0x78, 0x78, 0);
     screen->iconRenderer = func_80017FDC(screen->iconFramebuffers, 0x1E, 0x28, 0x28);

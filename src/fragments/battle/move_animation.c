@@ -2727,7 +2727,7 @@ void BattleAnim_TriggerStatusAfflictionCry(ActivePokemon* active_pokemon) {
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_AllocateParticipantRecord(BattleSide* session_teams, s32 side_index) {
-    ActivePokemon* active_pokemon = main_pool_alloc(0xA8C, 0);
+    ActivePokemon* active_pokemon = MainPool_Alloc(0xA8C, 0);
 
     sActivePokemon[side_index] = active_pokemon;
 

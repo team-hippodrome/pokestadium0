@@ -737,7 +737,7 @@ void Pokedex_LoadIcon(u8* dest, s32 species) {
     PokeIconRenderer* sp1C;
     void* sp18;
 
-    main_pool_push_state('ICON');
+    MainPool_PushState('ICON');
     sp1C = PokeIcon_CreateRenderList(sIconFramebuffers, 1, 0x50, 0x50);
     sp18 = PokeIcon_GetImage(sp1C, 0);
     PokeIcon_SetSpeciesSlot(sp1C, 0, species, 0x9530);
@@ -745,7 +745,7 @@ void Pokedex_LoadIcon(u8* dest, s32 species) {
     StageLoader_RunFrames(2);
     osInvalDCache(sp18, 0x3200);
     _bcopy(sp18, dest, 0x3200);
-    main_pool_pop_state('ICON');
+    MainPool_PopState('ICON');
 }
 
 extern u8 D_8A105818;
@@ -759,7 +759,7 @@ extern u8 D_8A105818;
  * Seen in play (2026-11-14): species 1 for フシギダネ's page; the model turned in the preview box.
  */
 void Pokedex_CreateModelPreview(s32 framebuffers, s32 species) {
-    main_pool_push_state(0x50494354);
+    MainPool_PushState(0x50494354);
     sModelPreview = (s32)PokeIcon_CreateModelPreview((ModelLoadContext*)framebuffers, 0x100, 0xD2, 0, 0, 0xF4, 0xD2, &D_8A105818);
     PokeIcon_SetPreviewSpecies((PokeModelPreview*)sModelPreview, species, 0x108D);
 }
@@ -773,7 +773,7 @@ extern M2C_UNK D_8A12FE30;
  */
 void Pokedex_FreeModelPreview(void) {
     func_800199E4(&D_8A12FE30);
-    main_pool_pop_state(0x50494354);
+    MainPool_PopState(0x50494354);
 }
 
 void Cont_StartReadInputs(void);
@@ -1002,7 +1002,7 @@ void Pokedex_InitFramebuffers(void) {
     u32 sp2C;
     GfxImage* sp28;
 
-    sp28 = main_pool_alloc(sizeof(GfxImage), 0);
+    sp28 = MainPool_Alloc(sizeof(GfxImage), 0);
 
     sp34 = sMenuStageContext->renderTargets[0]->img_p;
     sAreaMapPool = sMenuStageContext->renderTargets[0]->img_p + 0x25800;
@@ -1010,8 +1010,8 @@ void Pokedex_InitFramebuffers(void) {
     sAreaMapLoadBuffer = sMenuStageContext->renderTargets[1]->img_p + 0x25800;
     sp2C = sMenuStageContext->renderTargets[1]->img_p + 0x70800;
 
-    sAreaMapStageContext->renderTargets[0] = main_pool_alloc(sizeof(GfxImage), 0);
-    sAreaMapStageContext->renderTargets[1] = main_pool_alloc(sizeof(GfxImage), 0);
+    sAreaMapStageContext->renderTargets[0] = MainPool_Alloc(sizeof(GfxImage), 0);
+    sAreaMapStageContext->renderTargets[1] = MainPool_Alloc(sizeof(GfxImage), 0);
 
     GfxImage_Initialize(sAreaMapStageContext->renderTargets[0], 0, 2, 320, 240, sp34);
     GfxImage_Initialize(sAreaMapStageContext->renderTargets[1], 0, 2, 320, 240, sp30);
@@ -1066,7 +1066,7 @@ s32 Pokedex_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
     sHighestSeenIndex = Pokedex_GetHighestSeenSpeciesIndex() - 1;
     sSelectedDexIndex = 0;
 
-    main_pool_push_state('BOOK');
+    MainPool_PushState('BOOK');
 
     sMenuStageContext = StageContext_GetCurrent();
     sAreaMapStageContext = StageContext_Allocate(0, 1, 2, 1, 2, 0);
@@ -1089,7 +1089,7 @@ s32 Pokedex_Main(UNUSED s32 arg0, UNUSED s32 arg1) {
     StageLoader_WaitForRetrace();
     Font_Free();
 
-    main_pool_pop_state('BOOK');
+    MainPool_PopState('BOOK');
 
     Fragment_QueueCall(((((u32)D_88000000) & 0x0FF00000) >> 0x14) - 0x10, D_00235D70, D_00238BD0, 0, 0);
     return 0x8040;

@@ -118,6 +118,6 @@ void BattleScene_StartPresentationForMode(CameraNode* arg0, UNUSED s32 arg1, UNU
  * @unverified Name from Stadium 1.
  */
 void BattleScene_AllocateMemory(void) {
-    sBattleScene.scene = main_pool_alloc(sizeof(BattleScene), 0);
+    sBattleScene.scene = MainPool_Alloc(sizeof(BattleScene), 0);
     bzero(sBattleScene.scene, sizeof(BattleScene));
 }

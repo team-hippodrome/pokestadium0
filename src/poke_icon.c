@@ -24,7 +24,7 @@ s32 PokeIcon_CaptureGeoNode(s32 arg0, GraphNode* arg1) {
     return 0;
 }
 
-s32 main_pool_get_available(void);                                /* extern */
+s32 MainPool_GetAvailable(void);                                /* extern */
 s32 func_80002B10(s32, M2C_UNK);                    /* extern */
 M2C_UNK func_80002B60(s32);                         /* extern */
 M2C_UNK func_80010B3C(s32, M2C_UNK, M2C_UNK, s16, s32); /* extern */
@@ -39,7 +39,7 @@ void PokeIcon_CreateScene(s8 *renderer, s16 width, s16 height) {
     s32 sp24;
     s32 temp_v0;
 
-    temp_v0 = func_80002B10(main_pool_get_available(), 0);
+    temp_v0 = func_80002B10(MainPool_GetAvailable(), 0);
     sp24 = temp_v0;
     M2C_FIELD(renderer, s8 **, 0xC) = func_80016C70(temp_v0, &D_80060740);
     M2C_FIELD(renderer, s32 *, 0x10) = (s32) D_800AD1B0;
@@ -52,14 +52,14 @@ PokeIconRenderer* PokeIcon_CreateRenderList(ModelLoadContext* arg0, s16 arg1, s1
     s32 var_s0;
     GfxImage* temp_a1;
     s32 i;
-    PokeIconRenderer* temp_v0 = main_pool_alloc(0x18, 0);
+    PokeIconRenderer* temp_v0 = MainPool_Alloc(0x18, 0);
 
     if (temp_v0 != NULL) {
         temp_v0->flags = 0;
         temp_v0->nextSlot = 0;
         temp_v0->lastRenderedSlot = -1;
         temp_v0->slotCount = arg1;
-        temp_v0->slots = main_pool_alloc(arg1 * sizeof(PokeIconSlot), 0);
+        temp_v0->slots = MainPool_Alloc(arg1 * sizeof(PokeIconSlot), 0);
         temp_v0->loadContext = arg0;
         temp_v0->depthImage = GfxImage_Allocate(0, 2, arg2, arg3, 1);
 

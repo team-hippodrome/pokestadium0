@@ -58,7 +58,7 @@ void Cont_ReadInputs(void);
 s32 Cont_IsEepromPresent(void);
 s32 Cont_AttemptReadEeprom(u8* buffer, u32 size, s32 inaddr);
 u8 Cont_SetupControllers(u8 arg0);
-void crash_screen_wait_for_button_combo(void);
+void CrashScreen_WaitForButtonCombo(void);
 void Input_SetRepeatController(Controller*);
 s32 Input_GetRepeatedDPad(void);
 

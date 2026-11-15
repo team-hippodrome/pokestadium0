@@ -413,7 +413,7 @@ void BattleMessage_UnusedNopB(void) {
  * @unverified Name guessed from the code.
  */
 void Battle_AllocMessageQueues(void) {
-    gBattleMessageQueues = main_pool_alloc(sizeof(BattleMessageQueues), 0);
+    gBattleMessageQueues = MainPool_Alloc(sizeof(BattleMessageQueues), 0);
     bzero(gBattleMessageQueues, sizeof(BattleMessageQueues));
 }
 

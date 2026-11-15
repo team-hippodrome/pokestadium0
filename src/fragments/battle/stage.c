@@ -732,7 +732,7 @@ s32 BattleScene_Init(s32* arg0) { // FAKE: s32 return (value unused) fixes calle
     D_82198D14[0].framebuffers = PokeIcon_AllocFramebuffers(3);
     D_82198D14[1].framebuffers = PokeIcon_AllocFramebuffers(3);
     PokeIcon_OpenModelArchives();
-    D_82198CFC = main_pool_alloc(0x10, 0);
+    D_82198CFC = MainPool_Alloc(0x10, 0);
     GfxImage_Initialize(D_82198CFC, 0, 2, 0x4C, 0x4C, ((s32**)((s32**)arg0)[6])[3][2]);
     D_82198D00 = GfxImage_Allocate(0, 2, 0x4C, 0x4C, 0);
     D_82198D04 = GfxImage_Allocate(0, 2, 0x4C, 0x4C, 0);
@@ -771,23 +771,23 @@ s32 BattleScene_Init(s32* arg0) { // FAKE: s32 return (value unused) fixes calle
     func_821076FC(0, &D_82198B10, &D_82198C00);
     func_82134CC0(0, &D_82198A20);
     func_821370DC(0, &D_82198A20);
-    block = MainPool_AllocState(main_pool_get_available(), 0);
+    block = MainPool_AllocState(MainPool_GetAvailable(), 0);
     switch (D_82198D1C) {
         case 0:
-            D_82198CF0 = process_geo_layout(block, D_82188DD0);
+            D_82198CF0 = GeoLayout_Process(block, D_82188DD0);
             break;
         case 1:
-            D_82198CF0 = process_geo_layout(block, D_82188E90);
+            D_82198CF0 = GeoLayout_Process(block, D_82188E90);
             break;
         case 2:
-            D_82198CF0 = process_geo_layout(block, D_82188F50);
+            D_82198CF0 = GeoLayout_Process(block, D_82188F50);
             break;
         case 3:
-            D_82198CF0 = process_geo_layout(block, D_82189010);
+            D_82198CF0 = GeoLayout_Process(block, D_82189010);
             break;
     }
-    D_82198CF4 = process_geo_layout(block, D_821890D0);
-    D_82198CF8 = process_geo_layout(block, D_82189120);
+    D_82198CF4 = GeoLayout_Process(block, D_821890D0);
+    D_82198CF8 = GeoLayout_Process(block, D_82189120);
     MainPool_FinalizeAllocation(block);
     func_821070E0(3, D_82198D14);
     func_821076FC(3, &D_82198B10, &D_82198C00);
@@ -842,7 +842,7 @@ s32 BattleStage_Init(s32 unused, SessionContext *session)
   {
     D_82198D1C = 3;
   }
-  main_pool_push_state('BATL');
+  MainPool_PushState('BATL');
   Gfx_InitDisplayListBuffers(0x20000, 0);
   stage_context = StageContext_Allocate(0, 1, 3, 1, 2, 1);
   BattleScene_Init((s32*)stage_context);
@@ -903,6 +903,6 @@ s32 BattleStage_Init(s32 unused, SessionContext *session)
 
   StageContext_Deactivate();
   Gfx_FreeDisplayListBuffers();
-  main_pool_pop_state('BATL');
+  MainPool_PopState('BATL');
   return 0;
 }

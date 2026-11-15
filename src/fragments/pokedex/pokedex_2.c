@@ -990,9 +990,9 @@ void Pokedex_LoadAreaMap(s32 species, MainPoolState* pool, UNUSED s32 pool_size,
 
     sAreaMapSpeciesIndex = species - 1;
     sprintf(sAreaMapSpeciesName, "%s", D_80064C60[sAreaMapSpeciesIndex].unk_00);
-    main_pool_push_state('MAPV');
+    MainPool_PushState('MAPV');
 
-    sSpeciesIcon = main_pool_alloc(0x3200, 0);
+    sSpeciesIcon = MainPool_Alloc(0x3200, 0);
     Pokedex_LoadIcon(sSpeciesIcon, species);
 
     Fragment_LoadAndRelocateFromRomRange(sp44, (((u32)&D_8F100000 & 0x0FF00000) >> 0x14) - 0x10, (s32)D_00326700,
@@ -1052,7 +1052,7 @@ void Pokedex_LoadAreaMap(s32 species, MainPoolState* pool, UNUSED s32 pool_size,
     GeoNode_CreateDisplayList(NULL, &sGbMapMarkersNode, 5, NULL);
     GeoNode_CreateDisplayList(NULL, &sLabelFramesNode, 5, NULL);
     GeoNode_CreateDisplayList(NULL, &sAreaPinsNode, 4, NULL);
-    sAreaMapRoot = process_geo_layout(sp44, sAreaMapGeoLayout);
+    sAreaMapRoot = GeoLayout_Process(sp44, sAreaMapGeoLayout);
     ptr = (CameraNode*)sAreaMapRoot->children;
     ptr->view.targetPosition = sOverviewCameraTarget;
     ptr->view.eyePosition = sOverviewCameraEye;
@@ -1063,5 +1063,5 @@ void Pokedex_LoadAreaMap(s32 species, MainPoolState* pool, UNUSED s32 pool_size,
  * Seen in play (2026-11-14): ran as the area map closed.
  */
 void Pokedex_ExitAreaMapPool(void) {
-    main_pool_pop_state('MAPV');
+    MainPool_PopState('MAPV');
 }

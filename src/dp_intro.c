@@ -148,7 +148,7 @@ void DisplayWorker_ProcessFrame(void) {
             DpIntro_SetViMode((s8)D_800870D0.renderFrame.hiRes, (s8)D_800870D0.renderFrame.antiAlias);
         }
         osViBlack(0U);
-        crash_screen_set_draw_info((u16*)D_800870D0.renderFrame.framebuffer->img_p, D_800870D0.renderFrame.framebuffer->width, 0x10);
+        CrashScreen_SetDrawInfo((u16*)D_800870D0.renderFrame.framebuffer->img_p, D_800870D0.renderFrame.framebuffer->width, 0x10);
     } else {
         osViRepeatLine(1);
         osViSwapBuffer(D_800870D0.lineImage->img_p);
@@ -163,7 +163,7 @@ void DisplayWorker_ProcessFrame(void) {
 
     D_800870D0.shownFrame = D_800870D0.renderFrame;
     D_800870D0.renderFrame = D_800870D0.requestFrame;
-    profiler_log_thread5_time(THREAD5_END);
+    Profiler_LogThread5Time(THREAD5_END);
     SchedClient_WaitMessage(&D_800870D0.client);
 }
 

@@ -312,45 +312,45 @@ typedef struct GeoLayoutCmdCreateGroup {
 #include "memory.h"
 
 // geo_layout.c
-void geo_layout_cmd_branch_and_link(void); // cmd  0
-void geo_layout_cmd_end(void); // cmd  1
-void geo_layout_cmd_jump(void); // cmd  2
-void geo_layout_cmd_branch(void); // cmd  3
-void geo_layout_cmd_return(void); // cmd  4
-void geo_layout_cmd_open_node(void); // cmd  5
-void geo_layout_cmd_close_node(void); // cmd  6
-void geo_layout_cmd_attach_node(void); // cmd  7
-void geo_layout_cmd_set_callback(void); // cmd  8
-void geo_layout_cmd_create_container(void); // cmd  9
-void geo_layout_cmd_create_reference(void); // cmd 10
-void geo_layout_cmd_create_camera(void); // cmd 11
-void geo_layout_cmd_create_type3(void); // cmd 12
-void geo_layout_cmd_create_type4(void); // cmd 13
-void geo_layout_cmd_create_ortho(void); // cmd 14
-void geo_layout_cmd_create_perspective(void); // cmd 15
-void geo_layout_cmd_create_background(void); // cmd 16
-void geo_layout_cmd_create_clear_depth(void); // cmd 17
-void geo_layout_cmd_noop(void); // cmd 18
-void geo_layout_cmd_create_fog(void); // cmd 19
-void geo_layout_cmd_create_light(void); // cmd 20
-void geo_layout_cmd_skip(void); // cmd 21
-void geo_layout_cmd_create_ambient_light(void); // cmd 22
-void geo_layout_cmd_create_texture_bank(void); // cmd 23
-void geo_layout_cmd_create_shadow(void); // cmd 24
-void geo_layout_cmd_create_cull_distance(void); // cmd 25
-void geo_layout_cmd_create_switch_case(void); // cmd 26
-void geo_layout_cmd_create_translate_rotate(void); // cmd 27
-void geo_layout_cmd_create_translate(void); // cmd 28
-void geo_layout_cmd_create_animated_part(void); // cmd 29
-void geo_layout_cmd_create_display_list_part(void); // cmd 30
-void geo_layout_cmd_create_model_part(void); // cmd 31
-void geo_layout_cmd_create_display_list_matrix(void); // cmd 32
-void geo_layout_cmd_create_billboard(void); // cmd 33
-void geo_layout_cmd_create_display_list(void); // cmd 34
-void geo_layout_cmd_create_material(void); // cmd 35
-void geo_layout_cmd_create_anchor(void); // cmd 36
-void geo_layout_cmd_set_node_flag4(void); // cmd 37
-void geo_layout_cmd_create_group(void); // cmd 38
-GraphNode* process_geo_layout(MemoryBlock*, void*);
+void GeoLayout_CmdBranchAndLink(void); // cmd  0
+void GeoLayout_CmdEnd(void); // cmd  1
+void GeoLayout_CmdJump(void); // cmd  2
+void GeoLayout_CmdBranch(void); // cmd  3
+void GeoLayout_CmdReturn(void); // cmd  4
+void GeoLayout_CmdOpenNode(void); // cmd  5
+void GeoLayout_CmdCloseNode(void); // cmd  6
+void GeoLayout_CmdAttachNode(void); // cmd  7
+void GeoLayout_CmdSetCallback(void); // cmd  8
+void GeoLayout_CmdCreateContainer(void); // cmd  9
+void GeoLayout_CmdCreateReference(void); // cmd 10
+void GeoLayout_CmdCreateCamera(void); // cmd 11
+void GeoLayout_CmdCreateType3(void); // cmd 12
+void GeoLayout_CmdCreateType4(void); // cmd 13
+void GeoLayout_CmdCreateOrtho(void); // cmd 14
+void GeoLayout_CmdCreatePerspective(void); // cmd 15
+void GeoLayout_CmdCreateBackground(void); // cmd 16
+void GeoLayout_CmdCreateClearDepth(void); // cmd 17
+void GeoLayout_CmdNoop(void); // cmd 18
+void GeoLayout_CmdCreateFog(void); // cmd 19
+void GeoLayout_CmdCreateLight(void); // cmd 20
+void GeoLayout_CmdSkip(void); // cmd 21
+void GeoLayout_CmdCreateAmbientLight(void); // cmd 22
+void GeoLayout_CmdCreateTextureBank(void); // cmd 23
+void GeoLayout_CmdCreateShadow(void); // cmd 24
+void GeoLayout_CmdCreateCullDistance(void); // cmd 25
+void GeoLayout_CmdCreateSwitchCase(void); // cmd 26
+void GeoLayout_CmdCreateTranslateRotate(void); // cmd 27
+void GeoLayout_CmdCreateTranslate(void); // cmd 28
+void GeoLayout_CmdCreateAnimatedPart(void); // cmd 29
+void GeoLayout_CmdCreateDisplayListPart(void); // cmd 30
+void GeoLayout_CmdCreateModelPart(void); // cmd 31
+void GeoLayout_CmdCreateDisplayListMatrix(void); // cmd 32
+void GeoLayout_CmdCreateBillboard(void); // cmd 33
+void GeoLayout_CmdCreateDisplayList(void); // cmd 34
+void GeoLayout_CmdCreateMaterial(void); // cmd 35
+void GeoLayout_CmdCreateAnchor(void); // cmd 36
+void GeoLayout_CmdSetNodeFlag4(void); // cmd 37
+void GeoLayout_CmdCreateGroup(void); // cmd 38
+GraphNode* GeoLayout_Process(MemoryBlock*, void*);
 
 #endif // GEO_LAYOUT_H
