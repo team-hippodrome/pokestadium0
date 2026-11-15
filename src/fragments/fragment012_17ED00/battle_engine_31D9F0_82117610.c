@@ -6,11 +6,14 @@ extern u8 D_03006C40[];
 extern u8 D_03006CA0[];
 extern u8 D_03006D00[];
 
+/**
+ * Draws the "TIME" label and the battle time (minutes, seconds, hundredths) at (x, y).
+ */
 void func_82117610(s16 x, s16 y) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s8 buf[12];
     f32 time = D_FLT_82199EB0 / 30.0f;
-    UNUSED s32 pad2[3];
+    UNUSED s32 pad2[3]; // FAKE: stack padding
 
     Font_BeginTranslucentTextRendering();
     Font_SetActive(1, 0);
@@ -25,11 +28,14 @@ void func_82117610(s16 x, s16 y) {
 }
 
 
+/**
+ * Draws the "TOTAL TIME" label and the total time (minutes, seconds, hundredths) at (x, y).
+ */
 void func_8211778C(s16 x, s16 y) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s8 buf[12];
     f32 time = D_FLT_82199EB4 / 30.0f;
-    UNUSED s32 pad2[3];
+    UNUSED s32 pad2[3]; // FAKE: stack padding
 
     Font_BeginTranslucentTextRendering();
     Font_SetActive(1, 0);
@@ -44,9 +50,15 @@ void func_8211778C(s16 x, s16 y) {
 }
 
 
+/**
+ * Draws the row of party balls under a status box: one icon per Pokemon brought, chosen by
+ * fainted, has a status condition or healthy. Draws both trainers' rows in tag battles.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleHud_DrawPartyBallRow(ActivePokemon* arg0, s16 arg1, s16 arg2) {
     u8* sp74[] = { D_03006C40, D_03006CA0, D_03006D00 };
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 i;
     s32 j;
     s32 var_v0_2;
@@ -131,8 +143,14 @@ void BattleHud_DrawPartyBallRow(ActivePokemon* arg0, s16 arg1, s16 arg2) {
 }
 
 
+/**
+ * Draws side 0's status box: the info box tinted with the controller color, the trainer name
+ * label, the border tiles, the drop shadows and the party ball row below.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleHud_DrawMonStatusBoxPlayer(ActivePokemon* arg0, s16 arg1, s16 arg2, u16 arg3, s32 arg4) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     TeamRoster* sp80;
     BattleMon* sp7C;
     Color_RGB8* temp_v0_2;
@@ -148,9 +166,9 @@ void BattleHud_DrawMonStatusBoxPlayer(ActivePokemon* arg0, s16 arg1, s16 arg2, u
     }
 
     temp_v0_2 = &((Color_RGB8*)&D_8218B008)[sp80->controllerPort];
-    func_821172F0(arg0, sp7C, &D_80066AA0[var_v1], arg1 + 1, arg2 + 0x12, 0x46, 0x28, temp_v0_2->r, temp_v0_2->g,
+    BattleHud_DrawMonInfoBox(arg0, sp7C, &D_80066AA0[var_v1], arg1 + 1, arg2 + 0x12, 0x46, 0x28, temp_v0_2->r, temp_v0_2->g,
                   temp_v0_2->b, 0xB2);
-    BattleHud_DrawSpeciesNameLabelAuto(arg0, sp80, arg1 + 1, arg2 + 1, sp80->controllerPort, arg3, arg4);
+    BattleHud_DrawTrainerNameLabelAuto(arg0, sp80, arg1 + 1, arg2 + 1, sp80->controllerPort, arg3, arg4);
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
@@ -219,8 +237,14 @@ void BattleHud_DrawMonStatusBoxPlayer(ActivePokemon* arg0, s16 arg1, s16 arg2, u
     BattleHud_DrawPartyBallRow(arg0, arg1, arg2 + 0x62);
 }
 
+/**
+ * Draws side 1's status box: the same parts as BattleHud_DrawMonStatusBoxPlayer, laid out
+ * with the name label below the box and the party ball row above it.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleHud_DrawMonStatusBoxOpponent(ActivePokemon* arg0, s16 arg1, s16 arg2, u16 arg3, s32 arg4) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     TeamRoster* sp80;
     BattleMon* sp7C;
     Color_RGB8* temp_v0;
@@ -236,9 +260,9 @@ void BattleHud_DrawMonStatusBoxOpponent(ActivePokemon* arg0, s16 arg1, s16 arg2,
     }
 
     temp_v0 = &((Color_RGB8*)&D_8218B008)[sp80->controllerPort];
-    func_821172F0(arg0, sp7C, &D_80066AA0[var_v1], arg1, arg2 + 0x28, 0x46, 0x28, temp_v0->r, temp_v0->g, temp_v0->b,
+    BattleHud_DrawMonInfoBox(arg0, sp7C, &D_80066AA0[var_v1], arg1, arg2 + 0x28, 0x46, 0x28, temp_v0->r, temp_v0->g, temp_v0->b,
                   0xB2);
-    BattleHud_DrawSpeciesNameLabelAuto(arg0, sp80, arg1, arg2 + 0x50, sp80->controllerPort, arg3, arg4);
+    BattleHud_DrawTrainerNameLabelAuto(arg0, sp80, arg1, arg2 + 0x50, sp80->controllerPort, arg3, arg4);
 
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
@@ -311,7 +335,10 @@ extern u8 D_0300A440[];
 extern char D_821959C4[];
 extern char D_821959D0[];
 extern char D_821959DC[];
-void func_82118FD8(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
+/**
+ * Draws the battle command menu: たたかう (Fight), ポケモン (Pokemon), にげる (Run).
+ */
+void BattleMenu_DrawCommandMenu(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 i;
     s32 pad; // FAKE
 
@@ -348,7 +375,10 @@ extern u8 D_030099C0[];
 extern u8 D_03009B40[];
 extern char D_821959E4[];
 extern char D_821959EC[];
-void func_82119364(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
+/**
+ * Draws the wide button bar with もどる (Back) and かくにん (Confirm).
+ */
+void BattleMenu_DrawBackConfirmBar(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 i;
     s32 pad; // FAKE
 
@@ -380,7 +410,12 @@ void func_82119364(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
 extern u8 D_03009C00[];
 extern u8 D_03009D80[];
 extern char D_821959F8[];
-void func_821196A4(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
+/**
+ * Draws the small かくにん (Confirm) button.
+ * Seen in play (2026-11-12): first ran on the frame before the R かくにん button appeared beside
+ * COM's panel while COM picked a replacement for its fainted Pinsir (カイのすけ).
+ */
+void BattleMenu_DrawConfirmButton(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     s32 i;
     s32 pad; // FAKE
 
@@ -407,6 +442,12 @@ void func_821196A4(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     BattleHud_DrawTranslucentShadowRect(arg1 - 2, arg2 - 2, 0x4A, 0x16, 0);
 }
 
-void func_82119994(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Draws a string centered on x, assuming 10 pixels per two-byte character.
+ * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
+ * once, from the command menu to the end of its turn).
+ * @unverified Name from the code.
+ */
+void BattleHud_DrawTextCentered(s32 arg0, s32 arg1, s32 arg2) {
     func_8001A944(arg0 - ((func_800566BC(arg2) >> 1) * 0xA), arg1, arg2);
 }

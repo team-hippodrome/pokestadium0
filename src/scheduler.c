@@ -27,18 +27,24 @@ void Sched_SubmitTask(UnkStruct80001380* arg0, s32 arg1);
 
 void Sched_ThreadEntry(void* arg0);
 
+/** Writes back the data cache and resets a task's scheduler state. */
 void Sched_ResetTaskState(UnkStruct80001380* arg0) {
     osWritebackDCacheAll();
     arg0->unk_1C = 0;
     arg0->unk_1E = 0;
 }
 
+/** Blocks until a task's completion message arrives. */
 void Sched_WaitForTaskMessage(UnkStruct80001380* arg0) {
     void* sp1C;
 
     osRecvMesg(&arg0->queue, &sp1C, 1);
 }
 
+/**
+ * Starts a task on the RSP and RDP if it is ready, returning whether it
+ * started.
+ */
 s32 Sched_StartTask(UnkStruct80001380* arg0) {
     s32 var_v1 = 0;
 
@@ -73,6 +79,7 @@ s32 Sched_StartTask(UnkStruct80001380* arg0) {
     return var_v1;
 }
 
+/** Asks the running task to yield the RSP. */
 s32 Sched_RequestTaskYield(UnkStruct80001380* arg0) {
     s32 var_v1 = 0;
 
@@ -90,6 +97,7 @@ s32 Sched_RequestTaskYield(UnkStruct80001380* arg0) {
     return var_v1;
 }
 
+/** Handles an RSP completion event for a task. */
 s32 Sched_HandleRspCompletion(UnkStruct80001380* arg0) {
     s32 sp24 = 0;
 
@@ -135,6 +143,7 @@ s32 Sched_HandleRspCompletion(UnkStruct80001380* arg0) {
     return sp24;
 }
 
+/** Handles an RDP completion event for a task. */
 void Sched_HandleRdpCompletion(UnkStruct80001380* arg0) {
     profiler_log_gfx_time(RDP_COMPLETE);
     if (arg0->unk_1C == 3) {
@@ -162,6 +171,7 @@ s32 func_8000494C(s8 *arg0) {
     return sp1C;
 }
 
+/** Moves queued tasks into the pending slots. */
 void Sched_PromotePendingTasks(void) {
     if ((D_800A9710.unk_A18 == NULL) && (D_800A9710.unk_A20 != NULL)) {
         D_800A9710.unk_A18 = D_800A9710.unk_A20;
@@ -192,6 +202,7 @@ void func_800049E8(s32 arg0) {
     }
 }
 
+/** Tries to start a task; returns it when it started and NULL otherwise. */
 UnkStruct80001380* Sched_TryStartTask(UnkStruct80001380* arg0) {
     if (arg0 != NULL) {
         if (Sched_StartTask(arg0) == 0) {
@@ -201,12 +212,14 @@ UnkStruct80001380* Sched_TryStartTask(UnkStruct80001380* arg0) {
     return arg0;
 }
 
+/** Starts the pending task when the RSP is idle. */
 void Sched_StartPendingTask(void) {
     if (D_800A9710.unk_A14 == NULL) {
         D_800A9710.unk_A14 = Sched_TryStartTask(D_800A9710.unk_A1C);
     }
 }
 
+/** Tries to make the active task yield for a waiting one. */
 s32 Sched_TryYieldActiveTask(void) {
     s32 ret = 0;
 
@@ -221,13 +234,26 @@ M2C_UNK func_8000A8BC();                            /* extern */
 M2C_UNK func_80026980();                            /* extern */
 extern s16 D_800AA148;
 
-void func_80004AE0(void) {
+/**
+ * Handles the pre-NMI (reset button) message: sets D_800AA148 and calls the
+ * shutdown hooks func_8000A8BC and func_80026980.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name from Stadium 1, where the same call sits in the same place.
+ */
+void Sched_HandlePreNMI(void) {
     D_800AA148 = 1;
     func_8000A8BC();
     func_80026980();
 }
 
-void func_80004B10(void) {
+/**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the main menu, the Pokédex,
+ * the party screen, the Lab list, Lab sort, registration, the Lab PC, Free Battle setup, the battle
+ * opening, a switch in battle, running from battle and a Pound turn.
+ * @unverified Name from Stadium 1, matched by code similarity.
+ */
+void Sched_HandleRetrace(void) {
     D_800A9710.time = osGetTime();
     D_800A9710.unk_A34++;
 
@@ -253,6 +279,10 @@ void func_80004B10(void) {
     func_800049E8('VTRE');
 }
 
+/**
+ * Handles an RSP event: finishes or yields the active task and starts the
+ * next.
+ */
 void Sched_HandleRspEvent(void) {
     UnkStruct80001380* sp24 = D_800A9710.unk_A14;
     s32 tmp = Sched_HandleRspCompletion(D_800A9710.unk_A14);
@@ -286,6 +316,7 @@ void Sched_HandleRspEvent(void) {
     }
 }
 
+/** Handles an RDP event: finishes the RDP task and notifies its client. */
 void Sched_HandleRdpEvent(void) {
     Sched_HandleRdpCompletion(D_800A9710.unk_A1C);
     if (D_800A9710.unk_A1C->unk_1C == 3) {
@@ -305,12 +336,12 @@ void Sched_HandleRdpEvent(void) {
  *   - register the queue for the video retrace message (0x66) and for the
  *     RSP-done (0x64), RDP-done (0x65) and pre-NMI (0x68) OS events.
  * Then it blocks on the queue forever and dispatches on the message:
- *   0x66 video retrace    -> func_80004B10
+ *   0x66 video retrace    -> Sched_HandleRetrace
  *   0x64 RSP finished     -> Sched_HandleRspEvent
  *   0x65 RDP finished     -> Sched_HandleRdpEvent
  *   0x67 start next task  -> Sched_StartPendingTask (sent by other
  *                            scheduler code with osSendMesg)
- *   0x68 pre-NMI          -> func_80004AE0
+ *   0x68 pre-NMI          -> Sched_HandlePreNMI
  * Unknown messages are ignored.  `arg0` is the thread argument and is unused.
  */
 void Sched_ThreadEntry(void* arg0) {
@@ -328,7 +359,7 @@ void Sched_ThreadEntry(void* arg0) {
 
         switch (sp24) {
             case 0x66:
-                func_80004B10();
+                Sched_HandleRetrace();
                 break;
 
             case 0x64:
@@ -344,12 +375,13 @@ void Sched_ThreadEntry(void* arg0) {
                 break;
 
             case 0x68:
-                func_80004AE0();
+                Sched_HandlePreNMI();
                 break;
         }
     }
 }
 
+/** Initializes the scheduler state. */
 void Sched_Init(void) {
     D_800A9710.unk_A10 = NULL;
     D_800A9710.unk_A14 = NULL;
@@ -367,14 +399,14 @@ void func_80004EA8(s8 *arg0)
 {
   s8 *var_a1;
   s8 *var_v1;
-  if ((*((s8 **) (((s8 *) (&(*((s8 *) (&D_800A9710))))) + 0xA10))) == 0)
+  if ((*((s8 **) (((s8 *) (&(*((s8 *) (&D_800A9710))))) + 0xA10))) == 0) // FAKE: decomp slop, raw pointer casts stand in for struct fields
   {
     *((s8 **) ((&(*((s8 *) (&D_800A9710)))) + 0xA10)) = arg0;
   }
   else
   {
-    var_v1 = *((s8 **) (((s8 *) (&(*((s8 *) (&D_800A9710))))) + 0xA10));
-    var_a1 = *((s8 **) (((s8 *) (*((s8 **) (((s8 *) (&(*((s8 *) (&D_800A9710))))) + 0xA10)))) + 0x28));
+    var_v1 = *((s8 **) (((s8 *) (&(*((s8 *) (&D_800A9710))))) + 0xA10)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+    var_a1 = *((s8 **) (((s8 *) (*((s8 **) (((s8 *) (&(*((s8 *) (&D_800A9710))))) + 0xA10)))) + 0x28)); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     if (var_a1 != 0)
     {
       do
@@ -389,6 +421,7 @@ void func_80004EA8(s8 *arg0)
   *((s32 *) (((s8 *) arg0) + 0x28)) = 0;
 }
 
+/** Removes a client from the scheduler's client list. */
 void Sched_RemoveClient(unk_D_800AA660* arg0) {
     unk_D_800AA660** var_v0 = &D_800A9710.unk_A10;
     unk_D_800AA660* var_v1 = D_800A9710.unk_A10;
@@ -403,6 +436,7 @@ void Sched_RemoveClient(unk_D_800AA660* arg0) {
     }
 }
 
+/** Submits a task to the scheduler's queue for a client. */
 void Sched_SubmitTask(UnkStruct80001380* arg0, s32 arg1) {
     if (arg0 != NULL) {
         Sched_ResetTaskState(arg0);

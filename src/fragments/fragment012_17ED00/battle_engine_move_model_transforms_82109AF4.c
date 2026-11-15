@@ -1,12 +1,19 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_move_model_transforms.h"
 
+/**
+ * Makes the first two afterimages trail the Pokémon: copies its animation and frame, pulls
+ * each afterimage part of the way toward the model (0.5 and 0.4 of the distance), and
+ * turns each toward the model's Y rotation at a scaled rate.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (10 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_UpdateSecondaryModelTrailPosition(ActivePokemon* pokemon, s16 new_position) {
     s32 i;
     f32 distance;
     s16 angle_x;
     s16 angle_y;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     f32 eye[3] = { 0.5f, 0.4f, 0.3f };    // Zero afterimage spacing at D_821891D8
     f32 rate[3] = { 0.98f, 0.96f, 0.95f }; // D_84384644
 
@@ -20,11 +27,22 @@ void BattleScene_UpdateSecondaryModelTrailPosition(ActivePokemon* pokemon, s16 n
 }
 
 
+/**
+ * Clears the Pokémon's model transform (transform 0, timer 0).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (15 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_ResetParticipantModelFlags(ActivePokemon* active_pokemon) {
     BattleScene_SetParticipantModelTransform(active_pokemon, 0, 0);
 }
 
-void func_82109CAC(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon) {
+/**
+ * Places the Poke Ball above the field on this Pokemon's side and starts its sway.
+ * Seen in play (2026-11-13) in a Pokémon Cup (L1～30, モンスターボールカップ) battle it ran once per side as
+ * the opening send-out threw its Poké Ball.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleAnim_PokeBallThrowStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     animated_pokemon->pokeBall.node.flags |= 1;
     if (animated_pokemon == sActivePokemon[0]) {
         Vec3f_SetComponentsDuplicate(&animated_pokemon->pokeBall.position, 35.0f, 50.0f, -250.0f);
@@ -37,7 +55,13 @@ void func_82109CAC(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon)
     ModelAnim_SetFrame(&animated_pokemon->pokeBall, 0);
 }
 
-void func_82109D50(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
+/**
+ * Spins the Poke Ball and lets it fall; hides it once it drops below the floor.
+ * Seen in play (2026-11-13) in a Pokémon Cup (L1～30, モンスターボールカップ) battle it ran on the frames the
+ * opening send-out's Poké Ball spun and fell.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleAnim_PokeBallThrowContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     if (animated_pokemon == sSide1ActivePokemon) {
         BattleAnim_UpdateSwayPhysicsToTarget(owner, animated_pokemon, 0, 0, 0x1FFE, 0x4440);
     } else {
@@ -55,20 +79,33 @@ void func_82109D50(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     }
 }
 
-void func_82109E0C(s32 arg0, s8 *arg1) {
+/**
+ * Poke Ball throw model transform (case 1): start, then continue.
+ * Seen in play (2026-11-13) in a Pokémon Cup (L1～30, モンスターボールカップ) battle it ran as the opening
+ * send-out threw the Poké Balls, before 「ゆけっ！ ゲンガー」.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleAnim_PokeBallThrow(s32 arg0, s8 *arg1) {
     s32 temp_v0;
 
     temp_v0 = M2C_FIELD(arg1, s32 *, 0x614);
     switch (temp_v0) {                              /* irregular */
     case 0:
-        func_82109CAC((ActivePokemon*)arg0, (ActivePokemon*)arg1);
+        BattleAnim_PokeBallThrowStart((ActivePokemon*)arg0, (ActivePokemon*)arg1);
         /* fallthrough */
     case 1:
-        func_82109D50(arg0, arg1);
+        BattleAnim_PokeBallThrowContinue(arg0, arg1);
         return;
     }
 }
 
+/**
+ * Start of the Poké Ball landing transform: places the ball 150 units out and 100 up on
+ * the Pokémon's side, starts its fall, shows it and rewinds its animation.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_PokeBallLandStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     Vec3f_SetComponentsDuplicate(&animated_pokemon->pokeBall.position, animated_pokemon->facingDirection * -150.0f, 100.0f, 0.0f);
     animated_pokemon->modelTransformTimer++;
@@ -78,6 +115,13 @@ void BattleAnim_PokeBallLandStart(UNUSED ActivePokemon* owner, ActivePokemon* an
     ModelAnim_SetFrame(&animated_pokemon->pokeBall, 0);
 }
 
+/**
+ * Spins the falling Poké Ball and moves it along its arc. When it reaches the ground,
+ * sets it upright facing the other side and ends the transform.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_PokeBallLandContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     animated_pokemon->pokeBall.rotation.x += 5461;
     animated_pokemon->pokeBall.rotation.z += 3640;
@@ -98,7 +142,17 @@ void BattleAnim_PokeBallLandContinue(ActivePokemon* owner, ActivePokemon* animat
     }
 }
 
-void func_82109FA8(s32 arg0, s8 *arg1) {
+/**
+ * Poke Ball landing model transform (case 2). In game it ran on the player's
+ * side for 12 frames during a recall (「もういい！ もどれ！」), not when the
+ * next Pokemon was sent out; what it shows there is not established.
+ * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran when
+ * A confirmed the switch, during the recall.
+ * Seen in play (2026-11-13) it also ran when COM sent out its next Pokémon (ゆけっ！ゲンのすけ) after its
+ * first one fainted.
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleAnim_PokeBallLand(s32 arg0, s8 *arg1) {
     s32 temp_v0;
 
     temp_v0 = M2C_FIELD(arg1, s32 *, 0x614);
@@ -112,6 +166,9 @@ void func_82109FA8(s32 arg0, s8 *arg1) {
     }
 }
 
+/**
+ * fly start
+ */
 void BattleAnim_FlyStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     Vec3f_SetComponentsDuplicate(&animated_pokemon->modelTransform, 0.0f, 0.0f, 0.0f);
     Vec3f_SetComponentsDuplicate(&animated_pokemon->modelTransform.rotation, 0.0f, 0.0f, 0.0f);
@@ -120,6 +177,9 @@ void BattleAnim_FlyStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_po
     animated_pokemon->modelTransformTimer++;
 }
 
+/**
+ * fly continue
+ */
 void BattleAnim_FlyContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     BattleAnim_UpdateTransform(owner, animated_pokemon, 7.0f, 0.1f, NINETY_DEGREES);
     BattleScene_UpdateSecondaryModelTrailPosition(animated_pokemon, 0);
@@ -130,7 +190,10 @@ void BattleAnim_FlyContinue(ActivePokemon* owner, ActivePokemon* animated_pokemo
     }
 }
 
-void func_8210A120(s32 arg0, s8 *arg1) {
+/**
+ * Fly model transform (case 3).
+ */
+void BattleAnim_Fly(s32 arg0, s8 *arg1) {
     s32 temp_v0;
 
     temp_v0 = M2C_FIELD(arg1, s32 *, 0x614);
@@ -144,6 +207,9 @@ void func_8210A120(s32 arg0, s8 *arg1) {
     }
 }
 
+/**
+ * waterfall init
+ */
 void BattleAnim_WaterfallStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     Vec3f_SetComponentsDuplicate(&animated_pokemon->modelTransform, 0.0f, 0.0f, 0.0f);
     Vec3f_SetComponentsDuplicate(&animated_pokemon->modelTransform.rotation, 0.0f, 0.0f, 0.0f);
@@ -151,6 +217,9 @@ void BattleAnim_WaterfallStart(UNUSED ActivePokemon* owner, ActivePokemon* anima
     animated_pokemon->modelTransformTimer++;
 }
 
+/**
+ * waterfall continue
+ */
 void BattleAnim_WaterfallContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     BattleAnim_UpdateTransform(owner, animated_pokemon, 3.0f, 0.01f, NINETY_DEGREES);
     if (owner->displayObject.position.y - D_FLT_82189354[M2C_FIELD(owner, s16*, 0x1A)][0] >= 300.0f) {
@@ -159,9 +228,18 @@ void BattleAnim_WaterfallContinue(ActivePokemon* owner, ActivePokemon* animated_
     }
 }
 
+/**
+ * End step of a model transform that does nothing.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_WaterfallEnd(UNUSED ActivePokemon* owner, UNUSED ActivePokemon* animated_pokemon) {
 }
 
+/**
+ * Waterfall's animation: climb a waterfall
+ * https://youtu.be/Dn5oyCQ3wUs?t=1360
+ */
 void BattleAnim_Waterfall(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     switch (animated_pokemon->modelTransformTimer) {
         case 0:
@@ -177,6 +255,10 @@ void BattleAnim_Waterfall(ActivePokemon* owner, ActivePokemon* animated_pokemon)
     }
 }
 
+/**
+ * Model transform init: clears the animated Pokemon's offset and rotation, starts a sway at
+ * angle 0x2AAA and advances the transform timer.
+ */
 void func_8210A2F4(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     Vec3f_SetComponentsDuplicate(&animated_pokemon->modelTransform, 0.0f, 0.0f, 0.0f);
     Vec3f_SetComponentsDuplicate(&animated_pokemon->modelTransform.rotation, 0.0f, 0.0f, 0.0f);
@@ -184,6 +266,10 @@ void func_8210A2F4(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon)
     animated_pokemon->modelTransformTimer++;
 }
 
+/**
+ * Model transform step: moves the animated Pokemon with the sway (9, 0.9, 0x2AAA) and resets
+ * it once the owner's model is below the ground.
+ */
 void func_8210A374(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     BattleAnim_UpdateTransform(owner, animated_pokemon, 9.0f, 0.9f, 0x2AAA);
     if (owner->displayObject.position.y < 0.0f) {
@@ -192,6 +278,10 @@ void func_8210A374(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     }
 }
 
+/**
+ * Model transform dispatcher: step 0 runs the init then falls through to the step
+ * (func_8210A374).
+ */
 void func_8210A3DC(s32 arg0, s8 *arg1) {
     s32 temp_v0;
 
@@ -206,6 +296,12 @@ void func_8210A3DC(s32 arg0, s8 *arg1) {
     }
 }
 
+/**
+ * Turns the Pokémon's Y rotation by phase and returns 1 on the frame it reaches or passes
+ * camera_offset_scale.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (9 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleAnim_ApproachAngleAndCheckThreshold(ActivePokemon* pokemon, s16 phase, s16 camera_offset_scale) {
     pokemon->displayObject.rotation.y -= phase;
 
@@ -220,7 +316,10 @@ s32 BattleAnim_ApproachAngleAndCheckThreshold(ActivePokemon* pokemon, s16 phase,
     return 0;
 }
 
-void func_8210A4AC(s32 arg0, s8 *arg1) {
+/**
+ * Submission: resets the oscillation and the phase counter.
+ */
+void BattleAnim_SubmissionStart(s32 arg0, s8 *arg1) {
     func_821099CC(arg1);
     M2C_FIELD(arg1, s16 *, 0x602) = 0;
     M2C_FIELD(arg1, s16 *, 0x600) = 0;
@@ -228,7 +327,10 @@ void func_8210A4AC(s32 arg0, s8 *arg1) {
     M2C_FIELD(arg1, s32 *, 0x614) = (s32) (M2C_FIELD(arg1, s32 *, 0x614) + 1);
 }
 
-void func_8210A4F0(s32 arg0, s8 *arg1) {
+/**
+ * Submission: spins the model and counts three turns before the end step.
+ */
+void BattleAnim_SubmissionContinue(s32 arg0, s8 *arg1) {
     M2C_FIELD(arg1, s16 *, 0x602) = func_8000F1FC(M2C_FIELD(arg1, s16 *, 0x602), 0x3330, 0x16C, 0x16C);
     if (func_8210A430(arg0, M2C_FIELD(arg1, s16 *, 0x602), (s16) (M2C_FIELD(arg1, s32 *, 0x60C) << 0xE)) != 0) {
         M2C_FIELD(arg1, s32 *, 0x61C) = (s32) (M2C_FIELD(arg1, s32 *, 0x61C) + 1);
@@ -239,6 +341,13 @@ void func_8210A4F0(s32 arg0, s8 *arg1) {
     }
 }
 
+/**
+ * End of the Submission spin: slows the owner's turn as it nears its facing direction
+ * (but never below 20 degrees a frame), trails the afterimages, and once facing forward
+ * ends the transform and hides the afterimages.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (9 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SubmissionEnd(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     f32 angle_offset = NINETY_DEGREES - owner->displayObject.rotation.y;
     f32 angle_offset_fractional;
@@ -264,13 +373,16 @@ void BattleAnim_SubmissionEnd(ActivePokemon* owner, ActivePokemon* animated_poke
     }
 }
 
-void func_8210A694(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
+/**
+ * Submission model transform (case 4).
+ */
+void BattleAnim_Submission(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     switch (animated_pokemon->modelTransformTimer) {
         case 0:
-            func_8210A4AC(owner, animated_pokemon);
+            BattleAnim_SubmissionStart(owner, animated_pokemon);
 
         case 1:
-            func_8210A4F0(owner, animated_pokemon);
+            BattleAnim_SubmissionContinue(owner, animated_pokemon);
             break;
 
         case 2:
@@ -279,7 +391,10 @@ void func_8210A694(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     }
 }
 
-void func_8210A700(s32 arg0, s8 *arg1) {
+/**
+ * Dig: resets the oscillation and the phase counter.
+ */
+void BattleAnim_DigStart(s32 arg0, s8 *arg1) {
     func_821099CC(arg1);
     M2C_FIELD(arg1, s16 *, 0x602) = 0;
     M2C_FIELD(arg1, s16 *, 0x600) = 0;
@@ -287,7 +402,10 @@ void func_8210A700(s32 arg0, s8 *arg1) {
     M2C_FIELD(arg1, s32 *, 0x614) = (s32) (M2C_FIELD(arg1, s32 *, 0x614) + 1);
 }
 
-void func_8210A744(s32 arg0, s8 *arg1) {
+/**
+ * Dig: spins the model and counts three turns before it sinks.
+ */
+void BattleAnim_DigContinue(s32 arg0, s8 *arg1) {
     M2C_FIELD(arg1, s16 *, 0x602) = func_8000F1FC(M2C_FIELD(arg1, s16 *, 0x602), 0x3FFC, 0x16C, 0x16C);
     if (func_8210A430(arg0, M2C_FIELD(arg1, s16 *, 0x602), (s16) (M2C_FIELD(arg1, s32 *, 0x60C) << 0xE)) != 0) {
         M2C_FIELD(arg1, s32 *, 0x61C) = (s32) (M2C_FIELD(arg1, s32 *, 0x61C) + 1);
@@ -298,25 +416,32 @@ void func_8210A744(s32 arg0, s8 *arg1) {
     }
 }
 
-f32 func_82107EC8(s8*);
+f32 BattleScene_GetParticipantHeight(s8*);
+/**
+ * Model transform step that sinks the Pokemon below the ground: turns it toward its side,
+ * lowers it toward -2.6 heights and ends the transform once it is 2.5 heights down.
+ */
 void func_8210A7D8(s32 arg0, s8* arg1) {
     func_8210A430(arg0, M2C_FIELD(arg1, s16*, 0x602), (s16)(M2C_FIELD(arg1, s32*, 0x60C) << 0xE));
     func_82109AF4(arg1, M2C_FIELD(arg1, s16*, 0x602));
-    BattleAnim_ApproachF((f32*)(arg0 + 0x28), -(func_82107EC8(arg1) * 2.6), 0.04f);
-    if (*(f32*)(arg0 + 0x28) <= -(func_82107EC8(arg1) * 2.5)) {
+    BattleAnim_ApproachF((f32*)(arg0 + 0x28), -(BattleScene_GetParticipantHeight(arg1) * 2.6), 0.04f);
+    if (*(f32*)(arg0 + 0x28) <= -(BattleScene_GetParticipantHeight(arg1) * 2.5)) {
         func_8000D700(arg0 + 0x1E, 0, (s16)(M2C_FIELD(arg1, s32*, 0x60C) << 0xE), 0);
         func_82109C88(arg1);
         func_8210942C((s32)arg1);
     }
 }
 
-void func_8210A8CC(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
+/**
+ * Dig model transform (case 5).
+ */
+void BattleAnim_Dig(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     switch (animated_pokemon->modelTransformTimer) {
         case 0:
-            func_8210A700(owner, animated_pokemon);
+            BattleAnim_DigStart(owner, animated_pokemon);
 
         case 1:
-            func_8210A744(owner, animated_pokemon);
+            BattleAnim_DigContinue(owner, animated_pokemon);
             break;
 
         case 2:
@@ -325,7 +450,10 @@ void func_8210A8CC(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     }
 }
 
-void func_8210A938(s32 arg0, s8 *arg1) {
+/**
+ * Agility: resets the oscillation, the facing and the transform.
+ */
+void BattleAnim_AgilityStart(s32 arg0, s8 *arg1) {
     M2C_FIELD(arg1, s16 *, 0x602) = 0;
     M2C_FIELD(arg1, s16 *, 0x600) = 0;
     M2C_FIELD(arg1, s32 *, 0x61C) = 0;
@@ -336,6 +464,12 @@ void func_8210A938(s32 arg0, s8 *arg1) {
     M2C_FIELD(arg1, s32 *, 0x614) = (s32) (M2C_FIELD(arg1, s32 *, 0x614) + 1);
 }
 
+/**
+ * Agility: swings the Pokémon side to side with a growing amplitude (up to 50 units),
+ * with trailing afterimages, and moves on once the swing is nearly full.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_AgilityContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     f32 magnitude;
     Vec3f zero_vector = { 0.0f, 0.0f, 0.0f }; // D_84384654
@@ -353,6 +487,12 @@ void BattleAnim_AgilityContinue(ActivePokemon* owner, ActivePokemon* animated_po
     }
 }
 
+/**
+ * End of Agility: shrinks the side-to-side swing back to zero, then puts the Pokémon back
+ * in place facing forward and hides the afterimages.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_AgilityEnd(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     f32 magnitude;
     Vec3f zero_vector = { 0.0f, 0.0f, 0.0f };
@@ -375,10 +515,13 @@ void BattleAnim_AgilityEnd(ActivePokemon* owner, ActivePokemon* animated_pokemon
     }
 }
 
-void func_8210ABC4(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
+/**
+ * Agility model transform (case 6).
+ */
+void BattleAnim_Agility(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     switch (animated_pokemon->modelTransformTimer) {
         case 0:
-            func_8210A938(owner, animated_pokemon);
+            BattleAnim_AgilityStart(owner, animated_pokemon);
 
         case 1:
             func_8210A9B4(owner, animated_pokemon);
@@ -390,14 +533,23 @@ void func_8210ABC4(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     }
 }
 
-void func_8210AC30(s32 arg0, s8 *arg1) {
-    func_821094C0(arg1);
+/**
+ * Double Team: shows the secondary models at the main transform and resets the orbit timer.
+ */
+void BattleAnim_DoubleTeamStart(s32 arg0, s8 *arg1) {
+    BattleScene_ShowSecondaryModelsAtMainTransform(arg1);
     M2C_FIELD(arg1, s32 *, 0x608) = 0;
     func_82107790(arg1);
     func_8000D700(arg0 + 0x1E, 0, (s16) (M2C_FIELD(arg1, s32 *, 0x60C) << 0xE), 0);
     M2C_FIELD(arg1, s32 *, 0x614) = (s32) (M2C_FIELD(arg1, s32 *, 0x614) + 1);
 }
 
+/**
+ * Double Team: orbits the afterimages around the Pokémon for 60 frames, then ends the
+ * transform and hides them.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_DoubleTeamContinue(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     BattleScene_UpdateSecondaryModelOrbit(animated_pokemon);
     animated_pokemon->doubleTeamTimer++;
@@ -407,19 +559,30 @@ void BattleAnim_DoubleTeamContinue(UNUSED ActivePokemon* owner, ActivePokemon* a
     }
 }
 
-void BattleAnim_PokeBallThrow(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
+/**
+ * Double Team model transform: shows the secondary copies, then orbits them for
+ * 60 frames (transform case 7, the same slot as Stadium 1).
+ * BattleAnim_DoubleTeamContinue.
+ */
+void BattleAnim_DoubleTeam(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     switch (animated_pokemon->modelTransformTimer) {
         case 0:
-            BattleAnim_PokeBallThrowStart(owner, animated_pokemon);
+            BattleAnim_DoubleTeamStart(owner, animated_pokemon);
 
         case 1:
-            BattleAnim_PokeBallThrowContinue(owner, animated_pokemon);
+            BattleAnim_DoubleTeamContinue(owner, animated_pokemon);
             break;
     }
 }
 
+/**
+ * Puts the Pokémon back in place facing forward, resets the camera's up direction and
+ * ends the model transform.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_ResetOwnerFacingAndExitStatusIdle(ActivePokemon* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     CameraNode* sp18 = sBattleScene.scene->camera;
 
     BattleScene_PositionParticipantModel(arg0);
@@ -428,7 +591,10 @@ void BattleAnim_ResetOwnerFacingAndExitStatusIdle(ActivePokemon* arg0) {
     BattleScene_ResetParticipantModelFlags(arg0);
 }
 
-void func_8210ADBC(s32 arg0, s8 *arg1) {
+/**
+ * Seismic Toss: resets the oscillation and facing.
+ */
+void BattleAnim_SeismicTossStart(s32 arg0, s8 *arg1) {
     M2C_FIELD(arg1, s16 *, 0x602) = 0;
     M2C_FIELD(arg1, s16 *, 0x604) = 0;
     M2C_FIELD(arg1, s16 *, 0x600) = 0;
@@ -439,6 +605,12 @@ void func_8210ADBC(s32 arg0, s8 *arg1) {
     M2C_FIELD(arg1, s32 *, 0x614) = (s32) (M2C_FIELD(arg1, s32 *, 0x614) + 1);
 }
 
+/**
+ * Seismic Toss: eases the camera's rotation about its view axis toward half a turn by
+ * tilting its up vector, so the view flips over, and keeps the Pokémon above the ground.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SeismicTossContinue(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     CameraNode* camera = sBattleScene.scene->camera;
     f32 normal_x;
@@ -474,10 +646,13 @@ void BattleAnim_SeismicTossContinue(UNUSED ActivePokemon* owner, ActivePokemon* 
     }
 }
 
-void func_8210AFB8(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
+/**
+ * Seismic Toss model transform (case 8).
+ */
+void BattleAnim_SeismicToss(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     switch (animated_pokemon->modelTransformTimer) {
         case 0:
-            func_8210ADBC(owner, animated_pokemon);
+            BattleAnim_SeismicTossStart(owner, animated_pokemon);
 
         case 1:
             func_8210AE34(owner, animated_pokemon);
@@ -485,7 +660,10 @@ void func_8210AFB8(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     }
 }
 
-void func_8210B00C(s8 *arg0, s8 *arg1) {
+/**
+ * Minimize: skips when the model is already scaled; otherwise starts shrinking.
+ */
+void BattleAnim_MinimizeStart(s8 *arg0, s8 *arg1) {
     if (M2C_FIELD(arg0, f32 *, 0x34) != 1.0f) {
         func_82109C88(arg1);
         return;
@@ -494,7 +672,10 @@ void func_8210B00C(s8 *arg0, s8 *arg1) {
     M2C_FIELD(arg1, s32 *, 0x614) = (s32) (M2C_FIELD(arg1, s32 *, 0x614) + 1);
 }
 
-void func_8210B06C(s32 arg0, s32 arg1) {
+/**
+ * Minimize: eases the model scale toward 0.65.
+ */
+void BattleAnim_MinimizeContinue(s32 arg0, s32 arg1) {
     func_8210C1A8(arg0 + 0x30, 0x3F266666, 0x3D23D70A);
     func_8210C1A8(arg0 + 0x34, 0x3F266666, 0x3D23D70A);
     func_8210C1A8(arg0 + 0x38, 0x3F266666, 0x3D23D70A);
@@ -504,21 +685,33 @@ void func_8210B06C(s32 arg0, s32 arg1) {
     }
 }
 
-void func_8210B0FC(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
+/**
+ * Minimize model transform (case 9).
+ */
+void BattleAnim_Minimize(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     switch (animated_pokemon->modelTransformTimer) {
         case 0:
-            func_8210B00C(owner, animated_pokemon);
+            BattleAnim_MinimizeStart(owner, animated_pokemon);
 
         case 1:
-            func_8210B06C(owner, animated_pokemon);
+            BattleAnim_MinimizeContinue(owner, animated_pokemon);
             break;
     }
 }
 
-void func_8210B150(s32 arg0, s8 *arg1) {
+/**
+ * Withdraw: advances straight to the continue step.
+ */
+void BattleAnim_WithdrawStart(s32 arg0, s8 *arg1) {
     M2C_FIELD(arg1, s32 *, 0x614) = (s32) (M2C_FIELD(arg1, s32 *, 0x614) + 1);
 }
 
+/**
+ * Withdraw: shrinks the owner model toward zero size by 0.05 a frame, snapping to almost
+ * zero once small.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_WithdrawContinue(ActivePokemon* owner, UNUSED ActivePokemon* animated_pokemon) {
     owner->displayObject.scale.x = Math_StepToF(owner->displayObject.scale.x, 0.0f, 0.05f, 0.05f);
     owner->displayObject.scale.y = Math_StepToF(owner->displayObject.scale.y, 0.0f, 0.05f, 0.05f);
@@ -529,10 +722,13 @@ void BattleAnim_WithdrawContinue(ActivePokemon* owner, UNUSED ActivePokemon* ani
     }
 }
 
-void func_8210B22C(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
+/**
+ * Withdraw model transform (case 12).
+ */
+void BattleAnim_Withdraw(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     switch (animated_pokemon->modelTransformTimer) {
         case 0:
-            func_8210B150(owner, animated_pokemon);
+            BattleAnim_WithdrawStart(owner, animated_pokemon);
 
         case 1:
             func_8210B164(owner, animated_pokemon);
@@ -540,6 +736,12 @@ void func_8210B22C(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     }
 }
 
+/**
+ * Start of the Meditate stretch: saves the owner's scale and sets up the stretch
+ * oscillation.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_MeditateStart(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     animated_pokemon->oscillationVelocityEasePhase = 364;
     animated_pokemon->oscillationPhase = 0;
@@ -551,6 +753,12 @@ void BattleAnim_MeditateStart(UNUSED ActivePokemon* owner, ActivePokemon* animat
     animated_pokemon->modelTransformTimer++;
 }
 
+/**
+ * Meditate: stretches the owner tall and thin as the oscillation phase grows to a quarter
+ * turn, then moves on.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_MeditateContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     f32 scale_resize;
 
@@ -576,6 +784,12 @@ void BattleAnim_MeditateContinue(ActivePokemon* owner, ActivePokemon* animated_p
     }
 }
 
+/**
+ * End of Meditate: lets the stretch bounce back with a shrinking amplitude, then restores
+ * the saved scale and ends the transform.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_MeditateEnd(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     f32 scale_resize;
     f32 sin_value;
@@ -603,7 +817,10 @@ void BattleAnim_MeditateEnd(ActivePokemon* owner, ActivePokemon* animated_pokemo
     }
 }
 
-void func_8210B520(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
+/**
+ * Meditate model transform (case 13).
+ */
+void BattleAnim_Meditate(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     switch (animated_pokemon->modelTransformTimer) {
         case 0:
             func_8210B280(owner, animated_pokemon);
@@ -618,6 +835,12 @@ void func_8210B520(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     }
 }
 
+/**
+ * Start of the squish hit reaction: saves the owner's scale and sets up the squish
+ * oscillation.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SquishHitReactionStart(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     animated_pokemon->oscillationAngularVelocity = 1820;
     animated_pokemon->oscillationAmplitude = 0.4f;
@@ -628,6 +851,12 @@ void BattleAnim_SquishHitReactionStart(ActivePokemon* owner, ActivePokemon* anim
 }
 
 
+/**
+ * Squish hit reaction: wobbles the owner's scale with a fading amplitude around 1.0 (or
+ * 0.65 while shrunk), then restores the scale and ends the transform.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SquishHitReactionContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     BattleMonRuntime* runtime = &animated_pokemon->state.runtime;
     s16 angular_velocity;
@@ -662,7 +891,11 @@ void BattleAnim_SquishHitReactionContinue(ActivePokemon* owner, ActivePokemon* a
 }
 
 
-void func_8210B790(s32 arg0, s8 *arg1) {
+/**
+ * Squish hit reaction model transform (case 15), on the target of Body Slam
+ * or Stomp (seen in game).
+ */
+void BattleAnim_SquishHitReaction(s32 arg0, s8 *arg1) {
     s32 temp_v0;
 
     temp_v0 = M2C_FIELD(arg1, s32 *, 0x614);
@@ -677,7 +910,10 @@ void func_8210B790(s32 arg0, s8 *arg1) {
 }
 
 
-void func_8210B7E4(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
+/**
+ * Bind hit reaction: sets up a small fast oscillation from the owner's scale.
+ */
+void BattleAnim_BindHitReactionStart(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     animated_pokemon->oscillationAngularVelocity = 0x4000;
     animated_pokemon->oscillationAmplitude = 0.1f;
     animated_pokemon->modelTransform.rotation.x = owner->displayObject.scale.x;
@@ -688,10 +924,16 @@ void func_8210B7E4(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
 }
 
 
-void BattleAnim_LassoMoveHitReactionContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
+/**
+ * Bind-style hit reaction: squeezes the owner thin and tall by the strip's tail fade
+ * ratio for 150 frames, then restores the scale and ends the transform.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_BindHitReactionContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     BattleMonRuntime* runtime = &animated_pokemon->state.runtime;
     f32 scale_delta;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     if (runtime->scaleResize == 0) {
         scale_delta = (1.0f - Strip400_GetTailFadeRatio()) * 0.6f;
@@ -705,7 +947,7 @@ void BattleAnim_LassoMoveHitReactionContinue(ActivePokemon* owner, ActivePokemon
         BattleAnim_ApproachF(&owner->displayObject.scale.z, 0.65 - scale_delta, 0.5f);
     }
 
-    if (M2C_FIELD(animated_pokemon, s32*, 0x608)++ == 0x96) {
+    if (animated_pokemon->doubleTeamTimer++ == 150) {
         if (runtime->scaleResize == 0) {
             Vec3f_SetComponentsDuplicate(&owner->displayObject.scale, 1.0f, 1.0f, 1.0f);
         } else {
@@ -716,13 +958,17 @@ void BattleAnim_LassoMoveHitReactionContinue(ActivePokemon* owner, ActivePokemon
 }
 
 
-void func_8210B9F8(s32 arg0, s8 *arg1) {
+/**
+ * Hit reaction of the target of Bind, Wrap or Constrict (transform case 16;
+ * Stadium 1 called it the lasso reaction). Seen in game for all three moves.
+ */
+void BattleAnim_BindHitReaction(s32 arg0, s8 *arg1) {
     s32 temp_v0;
 
     temp_v0 = M2C_FIELD(arg1, s32 *, 0x614);
     switch (temp_v0) {                              /* irregular */
     case 0:
-        func_8210B7E4((ActivePokemon*)arg0, (ActivePokemon*)arg1);
+        BattleAnim_BindHitReactionStart((ActivePokemon*)arg0, (ActivePokemon*)arg1);
         /* fallthrough */
     case 1:
         func_8210B824(arg0, arg1);
@@ -730,19 +976,25 @@ void func_8210B9F8(s32 arg0, s8 *arg1) {
     }
 }
 
-void func_8210BA4C(s32 arg0, s8 *arg1) {
+/**
+ * Surf: resets the animation counter.
+ */
+void BattleAnim_SurfStart(s32 arg0, s8 *arg1) {
     M2C_FIELD(arg1, s32 *, 0x61C) = 0;
     M2C_FIELD(arg1, s32 *, 0x614) = (s32) (M2C_FIELD(arg1, s32 *, 0x614) + 1);
 }
 
 extern f32 D_FLT_8218935C[][4];
-void func_8210BA64(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
+/**
+ * Surf: keeps the rider on the wave height from SurfTerrainGrid_SampleHeightAndSlope.
+ */
+void BattleAnim_SurfContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     f32 rotation_x;
     f32 water_height;
     f32* model_row;
 
     animated_pokemon->animationState++;
-    water_height = TerrainGrid_SampleHeightAndSlope(owner->displayObject.position.x, owner->displayObject.position.z, &rotation_x);
+    water_height = SurfTerrainGrid_SampleHeightAndSlope(owner->displayObject.position.x, owner->displayObject.position.z, &rotation_x);
     model_row = D_FLT_8218935C[owner->displayObject.objectType];
     owner->displayObject.position.y = model_row[-2] + (water_height + 5.0f);
     owner->displayObject.rotation.x = (s16)rotation_x * 182;
@@ -753,21 +1005,35 @@ void func_8210BA64(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     }
 }
 
-void func_8210BB28(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
+/**
+ * Surf model transform (case 10).
+ */
+void BattleAnim_Surf(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     switch (animated_pokemon->modelTransformTimer) {
         case 0:
-            func_8210BA4C(owner, animated_pokemon);
+            BattleAnim_SurfStart(owner, animated_pokemon);
 
         case 1:
-            func_8210BA64(owner, animated_pokemon);
+            BattleAnim_SurfContinue(owner, animated_pokemon);
             break;
     }
 }
 
+/**
+ * Model transform 0: does nothing.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_DrawParticleNoop(UNUSED Particle* arg0, UNUSED CameraNode* arg1) {
 }
 
 
+/**
+ * Runs the side's current model transform (Poké Ball throw and landing, Fly, Dig and the
+ * other move transforms) by its transform ID.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_PlayTransformInducingAnimation(s32 side_index) {
     ActivePokemon* owner = sActivePokemon[side_index];
     ActivePokemon* animated_pokemon = sActivePokemon[side_index];
@@ -778,52 +1044,52 @@ void BattleAnim_PlayTransformInducingAnimation(s32 side_index) {
             BattleAnim_DrawParticleNoop((Particle*)owner, (CameraNode*)animated_pokemon);
             break;
         case 1:
-            func_82109E0C((s32)owner, (s8*)animated_pokemon);
+            BattleAnim_PokeBallThrow((s32)owner, (s8*)animated_pokemon);
             break;
         case 2:
-            func_82109FA8((s32)owner, (s8*)animated_pokemon);
+            BattleAnim_PokeBallLand((s32)owner, (s8*)animated_pokemon);
             break;
         case 3:
-            func_8210A120((s32)owner, (s8*)animated_pokemon);
+            BattleAnim_Fly((s32)owner, (s8*)animated_pokemon);
             break;
         case 4:
-            func_8210A694(owner, animated_pokemon);
+            BattleAnim_Submission(owner, animated_pokemon);
             break;
         case 5:
-            func_8210A8CC(owner, animated_pokemon);
+            BattleAnim_Dig(owner, animated_pokemon);
             break;
         case 6:
-            func_8210ABC4(owner, animated_pokemon);
+            BattleAnim_Agility(owner, animated_pokemon);
             break;
         case 7:
-            BattleAnim_PokeBallThrow(owner, animated_pokemon);
+            BattleAnim_DoubleTeam(owner, animated_pokemon);
             break;
         case 8:
-            func_8210AFB8(owner, animated_pokemon);
+            BattleAnim_SeismicToss(owner, animated_pokemon);
             break;
         case 9:
-            func_8210B0FC(owner, animated_pokemon);
+            BattleAnim_Minimize(owner, animated_pokemon);
             break;
         case 10:
-            func_8210BB28(owner, animated_pokemon);
+            BattleAnim_Surf(owner, animated_pokemon);
             break;
         case 11:
             func_8210A3DC((s32)owner, (s8*)animated_pokemon);
             break;
         case 12:
-            func_8210B22C(owner, animated_pokemon);
+            BattleAnim_Withdraw(owner, animated_pokemon);
             break;
         case 13:
-            func_8210B520(owner, animated_pokemon);
+            BattleAnim_Meditate(owner, animated_pokemon);
             break;
         case 14:
             BattleAnim_Waterfall(owner, animated_pokemon);
             break;
         case 15:
-            func_8210B790((s32)owner, (s8*)animated_pokemon);
+            BattleAnim_SquishHitReaction((s32)owner, (s8*)animated_pokemon);
             break;
         case 16:
-            func_8210B9F8((s32)owner, (s8*)animated_pokemon);
+            BattleAnim_BindHitReaction((s32)owner, (s8*)animated_pokemon);
             break;
         default:
             BattleScene_ResetParticipantModelFlags(animated_pokemon);

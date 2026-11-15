@@ -41,7 +41,7 @@ function that depends on its offset in the object. Those functions stay as `GLOB
 * When several Stadium 1 functions compile identically, the choice is
   made greedily, longest function first. A candidate is accepted only if all of its
   symbol bindings agree with the names already assigned. Ties go to the Stadium 1
-  file of the neighbouring functions.
+  file of the neighboring functions.
 
 ## Source layout
 

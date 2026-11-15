@@ -59,6 +59,7 @@ void Display_SetBufferConfig(struct UnkArray4* arg0, u8 arg1, u8 arg2, u8 arg3, 
 u32 Audio_GetSpecialSequenceState(void);
 u8 Cont_GetControllerBits(void);
 
+/** Initializes a graphics task. */
 void DisplayTask_Initialize(UnkStruct80001380* arg0) {
     arg0->task.t.type = M_GFXTASK;
     arg0->task.t.flags = 0;
@@ -77,6 +78,7 @@ void DisplayTask_Initialize(UnkStruct80001380* arg0) {
     osCreateMesgQueue(&arg0->queue, &arg0->mesg, 1);
 }
 
+/** Fills in a graphics task from a display list buffer and submits it. */
 void DisplayTask_Submit(UnkStruct80001380* arg0, struct UnkArray4* arg1, s32 arg2) {
     arg0->task.t.data_ptr = (void*)(uintptr_t)arg1->unk_04;
     arg0->task.t.data_size = arg1->unk_08;
@@ -85,7 +87,13 @@ void DisplayTask_Submit(UnkStruct80001380* arg0, struct UnkArray4* arg1, s32 arg
 
 extern u8 D_8005F664[][2];
 extern OSViMode D_80077F40[];
-M2C_UNK func_80001234(s8 arg0, s8 arg1) {
+/**
+ * Selects the VI mode from the D_8005F664 table (indices arg0, arg1) and turns on
+ * dither filter and divot, gamma off.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening.
+ * @unverified Name and comment guessed from the code.
+ */
+M2C_UNK DpIntro_SetViMode(s8 arg0, s8 arg1) {
     osViSetMode(&D_80077F40[D_8005F664[arg0][arg1]]);
     osViSetSpecialFeatures(OS_VI_DITHER_FILTER_ON);
     osViSetSpecialFeatures(OS_VI_GAMMA_OFF);
@@ -116,10 +124,14 @@ void func_800012AC(s8 *arg0) {
 void func_8000460C(void*);
 void func_80004920(void*);
 void func_8000494C(void*);
-M2C_UNK func_80001234(s8, s8);
+M2C_UNK DpIntro_SetViMode(s8, s8);
 
 #define DW(type, off) M2C_FIELD(&D_800870D0, type*, off)
 
+/**
+ * Processes one frame in the display worker: builds and submits its graphics
+ * task.
+ */
 void DisplayWorker_ProcessFrame(void) {
     s32 i;
     s32 sp20 = 0;
@@ -145,7 +157,7 @@ void DisplayWorker_ProcessFrame(void) {
         osViSwapBuffer(DW(struct unk_D_80068BB0*, 0xAA0)->img_p);
         osViRepeatLine(0);
         if ((DW(u8, 0xAA5) != DW(u8, 0xA95)) || (DW(u8, 0xAA6) != DW(u8, 0xA96))) {
-            func_80001234((s8)DW(u8, 0xA95), (s8)DW(u8, 0xA96));
+            DpIntro_SetViMode((s8)DW(u8, 0xA95), (s8)DW(u8, 0xA96));
         }
         osViBlack(0U);
         crash_screen_set_draw_info((u16*)DW(struct unk_D_80068BB0*, 0xAA0)->img_p, DW(struct unk_D_80068BB0*, 0xAA0)->width, 0x10);
@@ -153,7 +165,7 @@ void DisplayWorker_ProcessFrame(void) {
         osViRepeatLine(1);
         osViSwapBuffer(DW(struct unk_D_80068BB0*, 0x9B0)->img_p);
         if ((DW(u8, 0xAA5) != DW(u8, 0xA95)) || (DW(u8, 0xAA6) != DW(u8, 0xA96))) {
-            func_80001234((s8)DW(u8, 0xA95), (s8)DW(u8, 0xA96));
+            DpIntro_SetViMode((s8)DW(u8, 0xA95), (s8)DW(u8, 0xA96));
         }
     }
 
@@ -218,7 +230,12 @@ void func_800012AC(s8* arg0);
 void func_80001328(void);
 void func_80001558(void);
 
-void func_800016C4(UNUSED void* arg0) {
+/**
+ * Seen in play (2026-11-13) ran at boot (console reset, then N64 logo, opening, title and main
+ * menu).
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void DisplayWorker_ThreadMain(UNUSED void* arg0) {
     OSMesg msg;
 
     func_800594D0(0x01000F00);
@@ -228,7 +245,7 @@ void func_800016C4(UNUSED void* arg0) {
     func_80004EA8(&D_80087ABC);
     func_80001140(D_80087AE8);
     while (1) {
-        if (M2C_FIELD(&D_800A9710, s16*, 0xA38) > 0) {
+        if (D_800A9710.unk_A38 > 0) {
             func_80001558();
             continue;
         }
@@ -244,10 +261,11 @@ void func_800016C4(UNUSED void* arg0) {
     }
 }
 
-void func_800016C4(void*);
+void DisplayWorker_ThreadMain(void*);
 
+/** Creates the display worker thread. */
 void DisplayWorker_Initialize(void) {
-    osCreateThread((OSThread*)&D_800870D0, 5, func_800016C4, NULL, &M2C_FIELD(&D_800870D0, s32*, 0x9B0), 0x28);
+    osCreateThread((OSThread*)&D_800870D0, 5, DisplayWorker_ThreadMain, NULL, &M2C_FIELD(&D_800870D0, s32*, 0x9B0), 0x28);
     osStartThread((OSThread*)&D_800870D0);
     osCreateMesgQueue(&M2C_FIELD(&D_800870D0, OSMesgQueue*, 0x9BC), &M2C_FIELD(&D_800870D0, OSMesg*, 0x9B4), 1);
     osCreateMesgQueue(&M2C_FIELD(&D_800870D0, OSMesgQueue*, 0x9D4), &M2C_FIELD(&D_800870D0, OSMesg*, 0x9B8), 1);
@@ -278,19 +296,23 @@ void Display_ClearFramebufferLine(u16 color) {
     }
 }
 
+/** Returns the color the framebuffer is cleared to. */
 u16 Display_GetFramebufferClearColor(void) {
     u16* ptr = (u16*)D_800870A0.unk_9E0->img_p;
     return *ptr;
 }
 
+/** Blocks until the queued frame has finished. */
 void Display_WaitForCompletion(void) {
     osRecvMesg(&D_800870A0.unk_A04, NULL, 1);
 }
 
+/** Queues a frame request for the display worker. */
 void Display_QueueFramebufferRequest(void* arg0) {
     osSendMesg(&D_800870A0.unk_9EC, arg0, 0);
 }
 
+/** Waits for the given number of frames. */
 void Display_WaitForFrames(s32 arg0) {
     while (arg0-- > 0) {
         Display_QueueFramebufferRequest(0);
@@ -298,6 +320,7 @@ void Display_WaitForFrames(s32 arg0) {
     }
 }
 
+/** Sets the configuration of a display buffer entry. */
 void Display_SetBufferConfig(struct UnkArray4* arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, s32 arg5, s32 arg6, s32 arg7) {
     arg0->unk_01 = arg1;
     arg0->unk_02 = arg2;
@@ -308,20 +331,31 @@ void Display_SetBufferConfig(struct UnkArray4* arg0, u8 arg1, u8 arg2, u8 arg3, 
     arg0->unk_0C = (struct unk_D_80068BB0*)(uintptr_t)arg7;
 }
 
+/** Returns the state of the special audio sequence. */
 u32 Audio_GetSpecialSequenceState(void) {
     return D_80087B80;
 }
 
-M2C_UNK func_80001234(s8, s8);                      /* extern */
+M2C_UNK DpIntro_SetViMode(s8, s8);                      /* extern */
 extern M2C_UNK D_800870D0;
 
-void func_80001A78(void) {
-    func_80001234(M2C_FIELD(&D_800870D0, s8 *, 0xAA5), M2C_FIELD(&D_800870D0, s8 *, 0xAA6));
+/**
+ * Seen in play (2026-11-13) ran when quitting the GB player (C-Up menu, Quit game, Yes) back to the
+ * main menu.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Display_ApplyPendingVideoMode(void) {
+    DpIntro_SetViMode(M2C_FIELD(&D_800870D0, s8 *, 0xAA5), M2C_FIELD(&D_800870D0, s8 *, 0xAA6));
 }
 
 extern M2C_UNK D_800870D0;
 
-s32 func_80001AA4(void) {
+/**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
+ * the Lab list, Lab sort, registration, the Lab PC and Free Battle setup.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Display_IsFrameReady(void) {
     s32 var_v1;
 
     var_v1 = 1;

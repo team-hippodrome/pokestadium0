@@ -30,6 +30,7 @@ void crash_screen_printf_with_bg(s16 x, s16 y, const char* fmt, ...);
 
 void crash_screen_thread_entry(UNUSED void* unused);
 
+/** Fills a rectangle on the crash screen framebuffer. */
 void crash_screen_draw_rect(s32 x, s32 y, s32 width, s32 height) {
     u16* ptr;
     s32 i;
@@ -54,6 +55,7 @@ void crash_screen_draw_rect(s32 x, s32 y, s32 width, s32 height) {
     }
 }
 
+/** Draws one font glyph on the crash screen. */
 void crash_screen_draw_glyph(s32 x, s32 y, s32 glyph) {
     s32 shift = ((glyph % 5) * 6);
     const u32* data = &gCrashScreenFont[glyph / 5 * 7];
@@ -97,10 +99,12 @@ void crash_screen_draw_glyph(s32 x, s32 y, s32 glyph) {
     }
 }
 
+/** Copies bytes into a buffer and returns the pointer past them. */
 char* crash_screen_copy_to_buf(char* buffer, const char* data, size_t size) {
     return (char*)memcpy(buffer, data, size) + size;
 }
 
+/** Prints formatted text on the crash screen. */
 void crash_screen_printf(s32 x, s32 y, const char* fmt, ...) {
     signed char* ptr;
     u32 glyph;
@@ -133,6 +137,7 @@ void crash_screen_printf(s32 x, s32 y, const char* fmt, ...) {
     va_end(args);
 }
 
+/** Busy-waits for a number of milliseconds. */
 void crash_screen_sleep(s32 ms) {
     u64 cycles = OS_USEC_TO_CYCLES(ms * 1000LL); // why not just do OS_NSEC_TO_CYCLES and not multiply by 1000LL?
 
@@ -140,19 +145,24 @@ void crash_screen_sleep(s32 ms) {
     while (osGetTime() < cycles) {}
 }
 
-void crash_screen_print_fpr(s32 x, s32 y, s32 regNum, void* addr) {
+/** Prints a floating-point register on the crash screen. */
+void crash_screen_print_fpr(s32 x, s32 y, s32 reg_num, void* addr) {
     u32 bits;
     s32 exponent;
 
     bits = *(u32*)addr;
     exponent = ((bits & 0x7f800000U) >> 0x17) - 0x7f;
     if ((exponent >= -0x7e && exponent <= 0x7f) || bits == 0) {
-        crash_screen_printf(x, y, "F%02d:%+.3e", regNum, *(f32*)addr);
+        crash_screen_printf(x, y, "F%02d:%+.3e", reg_num, *(f32*)addr);
     } else {
-        crash_screen_printf(x, y, "F%02d:---------", regNum);
+        crash_screen_printf(x, y, "F%02d:---------", reg_num);
     }
 }
 
+/**
+ * Prints the floating-point control and status register and its flags on the
+ * crash screen.
+ */
 void crash_screen_print_fpcsr(u32 fpcsr) {
     s32 i;
     u32 bit = 1 << 17;
@@ -168,26 +178,27 @@ void crash_screen_print_fpcsr(u32 fpcsr) {
     }
 }
 
-void crash_screen_draw(OSThread* faultedThread) {
-    s16 causeIndex;
+/** Draws the crash screen for a faulted thread. */
+void crash_screen_draw(OSThread* faulted_thread) {
+    s16 cause_index;
     __OSThreadContext* ctx;
     u32 ret;
 
-    ctx = &faultedThread->context;
-    causeIndex = ((faultedThread->context.cause >> 2) & 0x1F);
+    ctx = &faulted_thread->context;
+    cause_index = ((faulted_thread->context.cause >> 2) & 0x1F);
 
-    if (causeIndex == 23) {
-        causeIndex = 16;
+    if (cause_index == 23) {
+        cause_index = 16;
     }
 
-    if (causeIndex == 31) {
-        causeIndex = 17;
+    if (cause_index == 31) {
+        cause_index = 17;
     }
 
     osWritebackDCacheAll();
 
     crash_screen_draw_rect(25, 20, 270, 25);
-    crash_screen_printf(30, 25, "THREAD:%d  (%s)", faultedThread->id, gFaultCauses[causeIndex]);
+    crash_screen_printf(30, 25, "THREAD:%d  (%s)", faulted_thread->id, gFaultCauses[cause_index]);
     crash_screen_printf(30, 35, "PC:%08XH   SR:%08XH   VA:%08XH", ctx->pc, ctx->sr, ctx->badvaddr);
 
     crash_screen_sleep(2000);
@@ -240,6 +251,7 @@ void crash_screen_draw(OSThread* faultedThread) {
 
 }
 
+/** Returns the thread that faulted. */
 OSThread* crash_screen_get_faulted_thread(void) {
     OSThread* thread = __osGetActiveQueue();
 
@@ -267,7 +279,7 @@ OSThread* crash_screen_get_faulted_thread(void) {
  */
 void crash_screen_thread_entry(UNUSED void* unused) {
     OSMesg mesg;
-    OSThread* faultedThread;
+    OSThread* faulted_thread;
 
     osSetEventMesg(OS_EVENT_CPU_BREAK, &gCrashScreen.queue, (OSMesg)1);
     osSetEventMesg(OS_EVENT_FAULT, &gCrashScreen.queue, (OSMesg)2);
@@ -276,23 +288,25 @@ void crash_screen_thread_entry(UNUSED void* unused) {
         /* Block until the OS reports a break or a fault... */
         osRecvMesg(&gCrashScreen.queue, &mesg, 1);
         /* ...then see whether some thread really has faulted. */
-        faultedThread = crash_screen_get_faulted_thread();
-    } while (faultedThread == NULL);
+        faulted_thread = crash_screen_get_faulted_thread();
+    } while (faulted_thread == NULL);
 
-    osStopThread(faultedThread);
+    osStopThread(faulted_thread);
     crash_screen_wait_for_button_combo();
-    crash_screen_draw(faultedThread);
+    crash_screen_draw(faulted_thread);
 
     /* Nothing more to do; keep this thread alive on the crash screen. */
     while (TRUE) {}
 }
 
-void crash_screen_set_draw_info(u16* frameBufPtr, u16 width, u16 height) {
-    gCrashScreen.frameBuf = (u16*)((uintptr_t)frameBufPtr | 0xA0000000);
+/** Sets the framebuffer pointer and size used by the crash screen. */
+void crash_screen_set_draw_info(u16* frame_buf_ptr, u16 width, u16 height) {
+    gCrashScreen.frameBuf = (u16*)((uintptr_t)frame_buf_ptr | 0xA0000000);
     gCrashScreen.width = width;
     gCrashScreen.height = height;
 }
 
+/** Initializes the crash screen's framebuffer. */
 void crash_screen_init(void) {
     gCrashScreen.frameBuf = (u16*)(uintptr_t)((osMemSize | 0xA0000000) - ((SCREEN_WIDTH * SCREEN_HEIGHT) * 2));
     gCrashScreen.width = SCREEN_WIDTH;
@@ -303,6 +317,7 @@ void crash_screen_init(void) {
     osStartThread(&gCrashScreen.thread);
 }
 
+/** Prints formatted text on the crash screen over a background. */
 void crash_screen_printf_with_bg(s16 x, s16 y, const char* fmt, ...) {
     signed char* ptr;
     u32 glyph;

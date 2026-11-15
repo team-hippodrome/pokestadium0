@@ -39,14 +39,28 @@ void func_8216D978(void);
 void func_8216D980(void);
 void func_8216D988(void);
 
+/**
+ * Empty end callback for effect 16.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_EndEffect16_NoOpDraw(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D978(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D980(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D988(void) {
 }

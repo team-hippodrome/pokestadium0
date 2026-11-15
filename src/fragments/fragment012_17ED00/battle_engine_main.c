@@ -79,6 +79,12 @@ void Battle_UpdateFaintBatches(void);
 
 // called every frame: bug boy in GLC
 // Geo_ProcessNodeChildren invokes render callbacks with event 2.
+/**
+ * Stage graph node callback: on event 2, runs the stage camera's battle animation
+ * presentation step 5.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s32 Battle_StageGeoDispatchCallback(s32 event, GraphNode* node) {
     if (event == 2) {
         BattleAnim_DispatchPresentation(5, &sStageCamera);
@@ -88,8 +94,14 @@ s32 Battle_StageGeoDispatchCallback(s32 event, GraphNode* node) {
 
 // called every frame: bug boy in GLC
 // Orient the first stage light relative to the current camera's viewing axis.
+/**
+ * Stage light callback: on event 2, points the light 45 degrees off the camera's view
+ * direction about both axes.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s32 Battle_StageLightAngleCallbackA(s32 event, unk_D_86002F34_alt18* light) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     f32 distance;
     s16 angle_x;
     s16 angle_y;
@@ -104,6 +116,11 @@ s32 Battle_StageLightAngleCallbackA(s32 event, unk_D_86002F34_alt18* light) {
 
 // called every frame: bug boy in GLC
 // Apply presentation effects to each of the three stage-layout containers.
+/**
+ * Stage model callback: on event 2, applies the stage scale and tint color.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s32 Battle_StageMaterialTintCallback(s32 event, DisplayObject* object) {
     if (event == 2) {
         Vec3f_SetComponentsDuplicate(&object->scale, sStageScale, sStageScale, sStageScale);
@@ -115,14 +132,26 @@ s32 Battle_StageMaterialTintCallback(s32 event, DisplayObject* object) {
 extern u8 D_8007838C[4];
 extern u8 D_82198D28[];
 
-void func_82100118(u8 arg0, u8 arg1, u8 arg2) {
-    D_82198D28[0] = arg0;
-    D_82198D28[1] = arg1;
-    D_82198D28[2] = arg2;
+/**
+ * Stores the RGB tint applied to the battle stage.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
+ * @unverified Name from the header prototype; comment guessed from the code.
+ */
+void Battle_SetStageTintColor(u8 r, u8 g, u8 b) {
+    D_82198D28[0] = r;
+    D_82198D28[1] = g;
+    D_82198D28[2] = b;
 }
 
 // Called at the start of battles
 // Uniform scale consumed by the stage material callbacks, not the Pokemon models.
+/**
+ * Sets the scale applied to the stage models.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void Battle_SetStageScale(f32 scale) {
     sStageScale = scale;
 }
@@ -133,7 +162,16 @@ extern u8 D_8FA08900[];
 extern u8 D_8FB08900[];
 extern Gfx D_80060398[];
 
-void func_82100148(void) {
+/**
+ * called every frame: bug boy in GLC
+ * Archive entry 2 returns a tagged backdrop value: NULL clears depth, -1 fills
+ * black, a value below 0x10000 is RGBA5551, and larger values address a texture.
+ * The 4 x 64 RGBA32 texture stretches over the upper half; its last row fills below.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void Battle_DrawStageBackdrop(void) {
     void* tex;
     s16 left;
     s16 right;
@@ -181,6 +219,12 @@ void func_82100148(void) {
 */
 // Capture only when camera flag 0x10 requests a refresh. Restoring the viewport
 // keeps the camera's on-screen placement separate from its off-screen render size.
+/**
+ * If the thumbnail camera is enabled, renders its scene into the 76x76 thumbnail image,
+ * then restores the camera's viewport.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Battle_RenderActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer* thumbnail) {
     CameraNode* camera_node = thumbnail_root->children;
     CameraViewport viewport;
@@ -204,7 +248,15 @@ void Battle_RenderActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer*
 }
 
 s32 func_80006B50(s32 *, s32 *, s32 *, s32 *);
-void func_82100650(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
+/**
+ * called every frame: bug boy in GLC
+ * Use clipped destination offsets as 10.5 texture coordinates with a half-texel bias.
+ * @src/gfx_rect.c
+ * Seen in play (2026-11-13) in the 165-move sweep: for (0x17, 0x48, 0x3B, 0x51) it emitted
+ * G_TEXRECT E40F0148 0005C120 (corners 0x17,0x48 to 0x3C,0x52 in 10.2 fixed point), then
+ * G_RDPHALF_1 and G_RDPHALF_2 with s,t 0x10 and steps 0x800.
+ */
+void Battle_DrawClippedTextureRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 x0 = arg0;
     s32 y0 = arg1;
 
@@ -218,6 +270,11 @@ void func_82100650(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
 
 // called every frame: bug boy in GLC
 // Load full-width source rows and draw at half size using the clipped rectangle helper.
+/**
+ * Loads a band of an RGBA16 texture and draws it as a clipped rectangle at (x1, y1).
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Battle_DrawTexturedRectSegment(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, G_IM_FMT_RGBA, G_IM_SIZ_16b, load_width, (height * 2) + 2, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -230,6 +287,11 @@ void Battle_DrawTexturedRectSegment(s32 x1, s32 y1, s32 draw_width, s32 height, 
     Fills in the texture of the pokemon thumbnail
 */
 // Blit the captured side image as four strips, producing a 37 x 37 thumbnail.
+/**
+ * Draws the Pokémon thumbnail image to the screen at its camera's viewport.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Battle_FillActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer* thumbnail) {
     s32 x;
     s32 y;
@@ -265,6 +327,14 @@ void Battle_FillActivePokemonThumbnail(GraphNode* thumbnail_root, DepthBuffer* t
     gDPSetTextureFilter(gDisplayListHead++, G_TF_BILERP);
 }
 
+/**
+ * Clear the faint-batch stamps for every picked Pokemon, including teammate rosters.
+ * BattleMon.unk_25 is written by Battle_UpdateFaintBatches when its current HP reaches zero.
+ * Seen in play (2026-11-13) (title-screen demo battle, left idle after boot): ran once as each of
+ * the two demo battles started (frames 9674 and 16663), called from BattleScene_Init. The Free
+ * Battle sweeps start from savestates taken mid-battle, so they never see BattleScene_Init.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Battle_ResetFaintBatches(void) {
     s32 side_index;
     s32 trainer_index;
@@ -282,6 +352,14 @@ void Battle_ResetFaintBatches(void) {
     }
 }
 
+/**
+ * called every frame: bug boy in GLC
+ * Stamp newly observed zero-HP Pokemon with the same batch number this frame.
+ * Increment once per nonempty batch, so simultaneous faints share a stamp.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Battle_UpdateFaintBatches(void) {
     s32 side_index;
     s32 trainer_index;
@@ -308,15 +386,27 @@ void Battle_UpdateFaintBatches(void) {
 }
 
 // Empty retail hook; its intended purpose is not established.
+/**
+ * Empty.
+ */
 void func_82100CB8(void) {
 }
 
 // Empty retail hook; no purpose is established by callers in this fragment.
+/**
+ * Empty.
+ */
 void func_82100CC0(void) {
 }
 
 // called every frame: bug boy in GLC
 // Advance simulation/presentation, capture dirty thumbnails, then draw the scene and UI.
+/**
+ * Runs one battle frame: advances animations, updates both sides, the thumbnails and the
+ * battle scene, then draws the stage, models, HUD and fade. Returns the battle result.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleScene_UpdateFrame(s32 fade_mode) {
     s32 battle_result;
 
@@ -354,6 +444,13 @@ s32 BattleScene_UpdateFrame(s32 fade_mode) {
 */
 // Dormant frame-step path: this translation unit initializes the selector to zero
 // and never sets it to one. A steps and Start resumes only while fade_mode is zero.
+/**
+ * Frame while the battle is paused: redraws without advancing, runs one frame each time A
+ * is pressed (frame step), and unpauses when Start is pressed.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleScene_UpdatePausedFrame(s32 fade_mode) {
     s32 battle_result = 0;
 
@@ -382,7 +479,15 @@ extern u8* D_800603C0;
 s32 func_800010B8(void);
 s32 func_8003BF40(u8*);
 void func_8000D304(void);
-void func_82100ED4(void) {
+/**
+ * triggers every frame: bug boy in GLC
+ * Count the initial two callbacks toward zero; once the gate is zero, the attract
+ * demo battle (mode 16) can request exit on a button press. The normal path waits for the scene result.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void Battle_UpdateCompletionGate(void) {
     u8 sp1F;
     if (D_82198D30 < 0) {
         D_82198D30++;
@@ -411,6 +516,15 @@ void func_82100ED4(void) {
 extern SessionContext* D_82198D10;
 void func_8000A7FC(s32);
 
+/**
+ * triggers every frame: bug boy in GLC
+ * BgStage_WaitForCondition passes the current fade mode and starts the exit fade
+ * after a nonzero return. Latch 2 prevents repeating the audio shutdown request.
+ * @src/stage_loader.c
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Battle_FrameCallback(s32 fade_mode) {
     s32 battle_result = 0;
 
@@ -454,6 +568,12 @@ s32 Battle_FrameCallback(s32 fade_mode) {
 // triggers on battle start: bug boy in glc
 // Preserve the picked prefix and append missing roster indices 0..5 in order.
 // This completes the copy order; it does not choose additional battle participants.
+/**
+ * Appends the roster slots (0 to 5) that were not picked to the end of the picked order.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void Battle_CompleteRosterOrder(u8* roster_order, s32 number_of_pokemon_picked) {
     s32 roster_index;
     s32 picked_index;
@@ -473,10 +593,19 @@ void Battle_CompleteRosterOrder(u8* roster_order, s32 number_of_pokemon_picked) 
 
 extern u8 D_82189170[];
 extern u8 D_82189174[];
-void func_82187738(TeamRoster*, TeamRoster*, s32, u8*, s32);
+void BattleAi_SelectTeam(TeamRoster*, TeamRoster*, s32, u8*, s32);
 
+/**
+ * triggers on battle start: bug boy in glc
+ * Ask the COM selection routine for the picked prefix, then copy the brought
+ * roster in that order. numberOfPokemonChosen keeps only the prefix length.
+ * @src/fragments/battle_engine/battle_engine_com_decision_logic.c
+ * Seen in play (2026-11-12): ran once when 1P confirmed its order for a COM free battle, before
+ * the first send-out; COM then brought Pinsir (カイのすけ), Gengar (ゲンのすけ) and Pikachu (ピカのすけ) in that
+ * order.
+ */
 void Battle_SelectComRoster(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     u8 order_of_picked_pokemon[8];
     s32 difficulty;
     TeamRoster* com_roster;
@@ -499,30 +628,37 @@ void Battle_SelectComRoster(void) {
             break;
     }
 
-    if (com_roster->unk_000 & 2) {
+    if (com_roster->isHuman & 2) {
         number_of_pokemon_picked = com_roster->rosterInfo->numberOfPokemonCanBePicked;
         if (player_roster->numberOfPokemonBrought < number_of_pokemon_picked) {
             number_of_pokemon_picked = player_roster->numberOfPokemonBrought;
         }
-        func_82187738(player_roster, com_roster, difficulty, order_of_picked_pokemon, number_of_pokemon_picked);
+        BattleAi_SelectTeam(player_roster, com_roster, difficulty, order_of_picked_pokemon, number_of_pokemon_picked);
         Battle_CompleteRosterOrder(order_of_picked_pokemon, number_of_pokemon_picked);
         com_roster->numberOfPokemonBrought = number_of_pokemon_picked;
 
         for (i = 0; i < com_roster->rosterInfo->numberOfPokemonCanBePicked; i++) {
-            com_roster->pokemonPicked[i] = com_roster->rosterInfo->unk_028[order_of_picked_pokemon[i]];
+            com_roster->pokemonPicked[i] = com_roster->rosterInfo->battleMon[order_of_picked_pokemon[i]];
         }
     }
 }
 
 // triggers at the start of battle: bug boy in glc
 // Seed icon/presentation state from the side's first trainer and first picked Pokemon.
+/**
+ * Sets up a side's model and display state from its first trainer's lead Pokémon and
+ * requests its icon.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_InitializeParticipantPresentation(BattleSessionTeams* side, unk_D_86002F30* model) {
     TeamRoster* first_trainer = side->teamMember[0];
 
     side->unk_18 = model->unk_08->unk_00[0];
     side->uniqueStatusFlags |= 0xA0;
     side->unk_1C = 0;
-    side->displayModel = first_trainer->pokemonPicked[0].unk_00.unk_00;
+    side->displayModel = first_trainer->pokemonPicked[0].species.id;
     side->unk_04 = first_trainer->pokemonPicked;
     Trainer_RequestPokeIcon(side);
 }
@@ -572,7 +708,7 @@ extern u8 D_00326700[];
 extern u8 D_003139C0[];
 extern u8 D_00317EF0[];
 extern u8 D_0031C300[];
-s32 func_8001A194(s32, s32);
+s32 Font_Init(s32 load_size, s32 side);
 s32 func_800040B4(s32, u8*, u8*);
 void func_82101178(void);
 void func_821012D8(Unit82101324*, unk_D_86002F30*);
@@ -587,12 +723,12 @@ s32 func_82101324(s32* arg0) { // FAKE: s32 return (value unused) fixes caller r
     MemoryBlock* block;
     unk_D_86002F30* model;
 
-    func_82100118(0xFF, 0xFF, 0xFF);
+    Battle_SetStageTintColor(0xFF, 0xFF, 0xFF);
     Battle_SetStageScale(1.0f);
     if (D_82198D10->mode == 4) {
-        func_8001A194(4, 0);
+        Font_Init(4, 0);
     } else {
-        func_8001A194(3, 0);
+        Font_Init(3, 0);
     }
     D_82198D14[0].framebuffers = PokeIcon_AllocFramebuffers(3);
     D_82198D14[1].framebuffers = PokeIcon_AllocFramebuffers(3);
@@ -662,6 +798,9 @@ s32 func_82101324(s32* arg0) { // FAKE: s32 return (value unused) fixes caller r
     D_82198D18 = 0;
 }
 
+/**
+ * Empty.
+ */
 void func_8210186C(void) {
 }
 

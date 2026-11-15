@@ -82,7 +82,7 @@ typedef struct unk_func_89109990 {
 
 void func_80027804(void*, u8**, s32, s32);
 void func_89109990(unk_func_89109990* arg0, u8** arg1, u8* arg2, s32 arg3) {
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     unk_func_89109990_010* var_s1 = arg0->unk_10;
     s32 var_t0 = 0;
     s32 i;
@@ -190,6 +190,7 @@ typedef struct LabPCListBoxZero {
     /* 0x1C */ char unk1C[0x8];
 } LabPCListBoxZero; // size = 0x24
 
+/** Flattens the list's nested entries into one list. */
 void LabPCList_FlattenEntries(unk_func_88200FA0_030_038* arg0, unk_func_8830867C_02C_144* arg1) {
     s32 i;
     s32 j;
@@ -262,12 +263,12 @@ s32 func_80025BD8(void);
 void func_80027410(void*, void*, s32, s32, s32);
 void func_80027FF8(void*, s32);
 s32 func_800246A8(s32, s32);
-s32 func_800246C8(s32, s32);
-s32 func_8002479C(s32, s32, u8*);
+s32 Deck_GetSaveEntryTrainerId(s32, s32);
+s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2);
 s32 func_80024ADC(s32, s32);
 s32 func_8000A4E8(char*, char*);
 void func_89109E5C(unk_func_8830867C_02C_154* arg0, void* arg1, void* arg2, void* arg3) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 temp_s1;
     char sp54[4];
     unk_func_8002D860 sp48;
@@ -294,8 +295,8 @@ void func_89109E5C(unk_func_8830867C_02C_154* arg0, void* arg1, void* arg2, void
 
     for (i = 0; i < 4; i++) {
         if ((func_800246A8(0x12, i) != 0) && (func_80024ADC(0x12, i) > 0)) {
-            temp_s1 = func_800246C8(0x12, i);
-            func_8002479C(0x12, i, sp38);
+            temp_s1 = Deck_GetSaveEntryTrainerId(0x12, i);
+            Deck_GetSaveEntryName(0x12, i, sp38);
             if ((sp48.unk_08 == temp_s1) && (func_8000A4E8(sp54, sp38) == 0)) {
                 break;
             }
@@ -310,6 +311,7 @@ void func_89109E5C(unk_func_8830867C_02C_154* arg0, void* arg1, void* arg2, void
     }
 }
 
+/** Reads a deck category into the list. */
 void LabPCList_ReadDeckCategory(unk_func_8830867C_02C_154* arg0) {
     DeckHandle* sp24;
 
@@ -319,6 +321,7 @@ void LabPCList_ReadDeckCategory(unk_func_8830867C_02C_154* arg0) {
     arg0->unk_08 = 0;
 }
 
+/** Writes the list back to a deck category. */
 void LabPCList_WriteDeckCategory(unk_func_8830867C_02C_154* arg0) {
     DeckHandle* sp24 = Deck_Open(arg0->unk_00, arg0->unk_01, arg0->unk_02, 1);
 
@@ -327,6 +330,7 @@ void LabPCList_WriteDeckCategory(unk_func_8830867C_02C_154* arg0) {
     arg0->unk_08 = 0;
 }
 
+/** Returns whether an item ID is a TM; converts the ID to the TM index. */
 s32 LabPCList_IsTmItemId(s32* arg0) {
     if ((*arg0 >= 0xC9) && (*arg0 < 0xFB)) {
         *arg0 -= 0x65;
@@ -339,6 +343,7 @@ s32 LabPCList_IsTmItemId(s32* arg0) {
     return 0;
 }
 
+/** Returns whether an item ID is an HM. */
 s32 LabPCList_IsHmItemId(s32* arg0) {
     static u8 D_8831A250[] = { 0x23, 0x24, 0x25, 0x26, 0x27, 0x28 };
 
@@ -354,6 +359,7 @@ s32 LabPCList_IsHmItemId(s32* arg0) {
     return 0;
 }
 
+/** Returns whether an item ID is the special TM. */
 s32 LabPCList_IsSpecialTmItemId(s32* arg0) {
     static u8 D_8831A258[] = { 0x4F };
 
@@ -369,6 +375,7 @@ s32 LabPCList_IsSpecialTmItemId(s32* arg0) {
     return 0;
 }
 
+/** List comparison for TM and HM entries. */
 s32 LabPCList_CompareTmHmEntries(unk_func_88200FA0_030_038* arg0, unk_func_88200FA0_030_038* arg1) {
     return (arg0->unk_08 - arg1->unk_08 != 0) ? arg0->unk_08 - arg1->unk_08 : (s32)arg0[1].unk_00 - (s32)arg1[1].unk_00;
 }
@@ -438,6 +445,7 @@ void func_8910A21C(unk_func_88200FA0_030_038* arg0, TmEntry8910A21C* arg1, unk_f
     PointerList_Sort(arg0, LabPCList_CompareTmHmEntries);
 }
 
+/** Returns whether a species learns a move by level up. */
 s32 LabPCList_CanLearnMoveByLevelUp(s32 arg0, s32 arg1) {
     static SpeciesData D_8831757C[] = {
         { 0x06, 0x4E, 0x54, 0x4E, 0x64, 0x55, 0x14, 0x02, 0x2D, 0xD1, {0x0A, 0x2D, 0x34, 0x2B}, 0x03, {0xB5, 0x43, 0x4F, 0xCE, 0xE3, 0x08, 0x2E}, 0x00 },
@@ -467,8 +475,8 @@ s32 LabPCList_CanLearnMoveByLevelUp(s32 arg0, s32 arg1) {
 }
 
 s32 func_80020974(s32);
-s32 func_8002D3D0(u8*);
-s32 func_8002D430(s32, s32);
+s32 BattleMon_CountMoves(u8* arg0);
+s32 BattleMon_GetMoveIndex(s32, s32);
 
 void func_8910A4C8(s8* arg0, u8* arg1) {
     s32 i;
@@ -491,7 +499,7 @@ void func_8910A4C8(s8* arg0, u8* arg1) {
             } else {
                 move = **(u8**)e - 0x92;
             }
-            n = func_8002D3D0(arg1);
+            n = BattleMon_CountMoves(arg1);
             for (j = 0; j < n; j++) {
                 if (func_80020974(move) == arg1[j + 9]) {
                     break;
@@ -504,9 +512,9 @@ void func_8910A4C8(s8* arg0, u8* arg1) {
                 M2C_FIELD(base[i], s32*, 0x10) |= 0x10;
             }
         } else if (M2C_FIELD(e, s32*, 8) >= 50) {
-            n2 = func_8002D3D0(arg1);
+            n2 = BattleMon_CountMoves(arg1);
             for (j = 0; j < n2; j++) {
-                if ((func_8002D430((s32)arg1, j) != -2) && ((arg1 + j)[0x20] < 0xC0)) {
+                if ((BattleMon_GetMoveIndex((s32)arg1, j) != -2) && ((arg1 + j)[0x20] < 0xC0)) {
                     break;
                 }
             }
@@ -550,6 +558,7 @@ void func_8910A4C8(s8* arg0, u8* arg1) {
     }
 }
 
+/** Consumes a TM item after use. */
 void LabPCList_ConsumeUsedTmItem(unk_func_8830867C_04C_030_02C_000* arg0) {
     if ((LabItem_IsQuantitylessItemForOperation(arg0->unk_00[0]->unk_00) != 0) || (arg0->unk_00[0]->unk_01 < 2)) {
         s32 tmp = arg0->unk_00[1]->unk_0C.unk_00;

@@ -9,12 +9,19 @@ extern Vtx D_82193080[];
 
 Gfx* Gfx_DrawThickLine(Gfx* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8);
 
+/**
+ * Appends a display list that draws a thick line from arg1 to arg2 with width arg4, turned
+ * toward the camera direction arg3, using the 10-vertex template with the middle vertices
+ * colored (arg5, arg6, arg7, arg8). Returns the advanced display list pointer.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 Gfx* Gfx_DrawThickLine(Gfx* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8) {
     s32 i;
     Vtx* sp1E8;
-    s32 pad[2];
+    s32 pad[2]; // FAKE: stack padding
     Mtx* sp1DC;
-    s32 pad2[42];
+    s32 pad2[42]; // FAKE: stack padding
     f32 sp130;
     f32 sp12C;
     f32 sp128;
@@ -24,7 +31,7 @@ Gfx* Gfx_DrawThickLine(Gfx* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg
     f32 sp80;
     f32 sp7C;
     f32 sp78;
-    s32 pad4[7];
+    s32 pad4[7]; // FAKE: stack padding
     Vtx* var_a1;
     Vtx* temp_v1;
     f32 a1_x;

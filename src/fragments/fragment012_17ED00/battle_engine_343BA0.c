@@ -28,18 +28,25 @@ extern const char D_821978C8[];
 
 void func_821329F0(void);
 
+/**
+ * Empty.
+ */
 void func_821329F0(void) {
 }
 
 M2C_UNK func_80006998(M2C_UNK);                     /* extern */
 M2C_UNK func_8212188C();                            /* extern */
 M2C_UNK func_82121D78(s32, M2C_UNK, M2C_UNK);       /* extern */
-M2C_UNK func_82124984(s8 *, s32, M2C_UNK);        /* extern */
+M2C_UNK BattleCamera_PlayShot(s8 *, s32, M2C_UNK);        /* extern */
 M2C_UNK func_82136918(s32, M2C_UNK);                /* extern */
 extern s8 *D_82199DE0;
 extern s8 *D_8219A580;
 extern s8 *D_8219A5A0;
 
+/**
+ * Scene mode 7 step 0: camera preset 0, clip planes 20-4000, picks side 0 as the featured
+ * Pokemon, plays its camera shot 3, starts its model reaction 9, stops music and advances.
+ */
 void func_821329F8(s32 arg0) {
     s8 *sp1C;
 
@@ -50,7 +57,7 @@ void func_821329F8(s32 arg0) {
     M2C_FIELD(D_8219A5A0, u16 *, 0x2C) = 0U;
     D_8219A580 = (&D_82199DE0)[M2C_FIELD(D_8219A5A0, u16 *, 0x2C)];
     M2C_FIELD(sp1C, s32 *, 8) = 0;
-    func_82124984(D_8219A580, arg0, 3);
+    BattleCamera_PlayShot(D_8219A580, arg0, 3);
     func_82136918(M2C_FIELD(D_8219A580, s32 *, 0x85C), 9);
     func_80006998(0);
     M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
@@ -59,6 +66,9 @@ void func_821329F8(s32 arg0) {
 s32 func_82101FD4(s32);                             /* extern */
 extern s8 *D_8219A5A0;
 
+/**
+ * Advances the phase step once the featured Pokemon's model is ready.
+ */
 void func_82132AC4(s32 arg0) {
     if (func_82101FD4(D_8219A580) != 0) {
         M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
@@ -70,7 +80,7 @@ void func_82132AC4(s32 arg0) {
  *
  * Clears the byte at D_8219A4F1, calls func_821351F8(arg0, D_8219A580) and
  * func_82104C68(D_8219A580, 1), then adds 1 to the word at offset 0x20 of the
- * structure that D_8219A5A0 points to.  That word is advanced by neighbouring
+ * structure that D_8219A5A0 points to.  That word is advanced by neighboring
  * functions in this file in the same way (see func_82132AC4), so it looks
  * like a step counter, but this is not established from the code alone.
  */
@@ -78,6 +88,9 @@ extern s8 D_8219A4F1;
 void func_821351F8(CameraNode* arg0, s8* arg1);
 void func_82104C68(s8* arg0, s32 arg1);
 
+/**
+ * Starts camera path 0x19 on the featured Pokemon with model reaction 1 and advances.
+ */
 void func_82132B04(CameraNode* arg0) {
     D_8219A4F1 = 0;
     func_821351F8(arg0, D_8219A580);
@@ -96,6 +109,9 @@ void func_82132B04(CameraNode* arg0) {
  */
 s32 func_82135894(CameraNode* arg0, s8* arg1);
 
+/**
+ * Advances the phase step once the camera path on the featured Pokemon finishes.
+ */
 void func_82132B54(CameraNode* arg0) {
     if (func_82135894(arg0, D_8219A580) != 0) {
         M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
@@ -153,7 +169,7 @@ void func_82132C14(UNUSED CameraNode* arg0) {
     if (func_821217DC(0xA) != 0) {
         st->rosterIndex++;
         mon = &((ActivePokemon*)D_8219A580)->teamRoster->pokemonPicked[st->rosterIndex];
-        ((ActivePokemon*)D_8219A580)->sessionTeams->displayModel = mon->unk_00.unk_00;
+        ((ActivePokemon*)D_8219A580)->sessionTeams->displayModel = mon->species.id;
         ((ActivePokemon*)D_8219A580)->sessionTeams->unk_04 = (TeamRoster*)&((ActivePokemon*)D_8219A580)->teamRoster->pokemonPicked[st->rosterIndex];
         ((ActivePokemon*)D_8219A580)->sessionTeams->uniqueStatusFlags |= 0x80;
         M2C_FIELD(D_8219A5A0, s32*, 0x20) = M2C_FIELD(D_8219A5A0, s32*, 0x20) + 1;
@@ -166,7 +182,7 @@ void func_82132C14(UNUSED CameraNode* arg0) {
  * Case 6 of the scene-state switch in func_82132D60. The word at
  * D_8219A580 + 0x85C is a pointer to a flag byte. If bit 0x10 of that byte is
  * set, the code clears bits 0x10 and 0x80 in it (the mask is 0xFF6F), calls
- * func_821088BC with D_8219A580, calls func_80005B98(0xF), and sets the word
+ * Battle_LoadOwnerModelForSwitchIn with D_8219A580, calls func_80005B98(0xF), and sets the word
  * at D_8219A5A0 + 0x20 to 2. D_8219A5A0 is the address of sBattleScene, whose
  * first member is `scene`, so that word is sBattleScene.scene->unk_20, the
  * field func_82132D60 switches on. The argument is not used. What the flag bits and the
@@ -178,13 +194,16 @@ void func_82132CDC(CameraNode* arg0) {
     flags = M2C_FIELD(D_8219A580, u8**, 0x85C);
     if (*flags & 0x10) {
         *flags &= 0xFF6F;
-        func_821088BC(D_8219A580);
+        Battle_LoadOwnerModelForSwitchIn(D_8219A580);
         func_80005B98(0xF);
         M2C_FIELD(D_8219A5A0, s32*, 0x20) = 2;
     }
 }
 
 // Zero's version takes only the particle; the header keeps Stadium 1's callback signature.
+/**
+ * Draws the featured Pokemon's I4 atlas, scaled in Y.
+ */
 void func_82132D3C(Particle* arg0) {
     BattleAnim_DrawI4AtlasYScaled(arg0, D_8219A580);
 }
@@ -195,8 +214,11 @@ void func_82132B90(CameraNode* arg0);
 void func_82132C14(CameraNode* arg0);
 void func_82132CDC(CameraNode* arg0);
 
+/**
+ * Scene mode 7, a single-Pokemon showcase: runs the step for the current phase step.
+ */
 void func_82132D60(CameraNode* arg0) {
-    switch (sBattleScene.scene->unk_20) {
+    switch (sBattleScene.scene->phaseStep) {
         case 0:
             func_821329F8((s32)arg0);
             break;

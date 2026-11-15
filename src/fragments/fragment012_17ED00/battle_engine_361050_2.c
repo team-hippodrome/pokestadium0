@@ -34,7 +34,10 @@ typedef struct unk_func_8437F85C_sp74 {
 #include "memmap.h"
 #include "memory.h"
 
-#include "fragments/clefairy_game/clefairy_game.h"
+#include "global.h"
+#include "fragments/particle_math/particle_math.h"
+#include "jpeg_stream.h"
+#include "controller.h"
 #include "geo_render.h"
 #include "model_animation.h"
 #include "model_animation_events.h"
@@ -52,7 +55,6 @@ typedef struct unk_func_8437F85C_sp74 {
 #include "gfx_rect.h"
 #include "controller.h"
 #include "fragments/widget_toolkit/widget_toolkit.h"
-#include "fragments/minigame_shared_graphics/minigame_shared_graphics.h"
 #include "memory.h"
 #include "stage_loader.h"
 typedef struct unk_D_861054C0 {
@@ -88,7 +90,7 @@ typedef struct unk_D_86106450 {
     /* 0x16C */ ModelNodeView* unk_16C;
 } unk_D_86106450;
 void ClefairyGame_DespawnPatternIcons(void);
-void ClefairyGame_SpawnPatternIcons(void);
+void func_82123D4C(void);
 typedef struct unk_D_861047B8 {
     /* 0x00 */ u8 unk_00[6];
     /* 0x06 */ u8 unk_06[4];
@@ -243,18 +245,7 @@ s32 Diorama_GroupStateCallback(s32, GraphNode*);
 #include "controller.h"
 #include "memory.h"
 #include "stage_loader.h"
-typedef struct unk_D_86B10BD0 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-} unk_D_86B10BD0;
-typedef struct unk_D_86B10BE0 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ s32 unk_10;
-} unk_D_86B10BE0;
+#include "fragments/fragment012_17ED00/battle_engine_361050_2_types.h"
 extern unk_D_86B10BE0 D_8219A82C;
 
 void func_8216D990(void);
@@ -275,57 +266,122 @@ s32 BattleAnim_DefaultEndEffect_CompleteImmediately(void);
 void func_8216DA50(void);
 void func_8216DA58(void);
 
+/**
+ * Empty.
+ */
 void func_8216D990(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D998(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D9A0(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D9A8(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D9B0(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D9B8(void) {
 }
 
+/**
+ * Intro camera step that does nothing.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_IntroStepNop(UNUSED CameraNode* arg0) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D9C8(UNUSED s32 arg0) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216D9D0(void) {
 }
 
+/**
+ * Draws a full-screen overlay in the saved primitive color, fully opaque.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_DrawStoredColorOverlay(void) {
     BattleAnim_DrawFullScreenColorOverlay(gSavedPrimColorR, gSavedPrimColorG, gSavedPrimColorB, 0xFF);
 }
 
+/**
+ * Calls AuxiliaryEffect_Init.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_ReinitAuxiliaryEffects(void) {
     AuxiliaryEffect_Init();
 }
 
+/**
+ * Empty.
+ */
 void func_8216DA30(void) {
 }
 
+/**
+ * Empty draw hook.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (112 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void MewtwoIntro_DrawOverlay(void) {
 }
 
+/**
+ * Update hook for start effects with nothing to run: returns -1 (done) right away.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (130 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleAnim_DefaultStartEffect_CompleteImmediately(void) {
     return -1;
 }
 
+/**
+ * Update hook for end effects with nothing to run: returns -1 (done) right away.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (112 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleAnim_DefaultEndEffect_CompleteImmediately(void) {
     return -1;
 }
 
+/**
+ * Empty.
+ */
 void func_8216DA50(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_8216DA58(void) {
 }

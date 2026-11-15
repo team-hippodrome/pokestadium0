@@ -1,4 +1,4 @@
-/* Fixed-layout split (func_88000020 only); original translation-unit boundaries remain unconfirmed. */
+/* Fixed-layout split (MainMenu_LoadSelectedFragment only); original translation-unit boundaries remain unconfirmed. */
 
 #include "global.h"
 #include "m2c_macros.h"
@@ -22,12 +22,13 @@ extern M2C_UNK D_002B1360;
 extern M2C_UNK D_00162BE0;
 extern M2C_UNK D_00175570;
 
-//@unverified
 /**
- * Queues the fragment for lab menu choice arg0 with func_80025BA0 and returns
- * the next state (0x8040, or 0x8060 for choice 6, which loads nothing).
+ * Loads the fragment for main menu choice `arg0`.
+ * Seen in play (2026-11-12) by choosing each main menu item and answering はい: 0 せいとん
+ * (0x89000000), 2 いちらん (0x89100000), 3 ずかん (0x8A100000), 4 バトル (0x82000000), 5 てもち (0x8A200000),
+ * 6 GB (returns 0x8060 and loads nothing), 7 OFF (0x88400000), 8 とうろく (0x88100000).
  */
-s32 func_88000020(u32 arg0) {
+s32 MainMenu_LoadSelectedFragment(u32 arg0) {
     s32 ret;
 
     // Each "ret = ...; func_80025BA0(...);" pair has to share one line (as a macro

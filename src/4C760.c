@@ -4,7 +4,7 @@
 #include "global.h"
 
 #include "libleo/internal.h"
-void func_8004BB60(void) {
+void leoMode_sel(void) {
     u32 sense;
 
     sense = leoSend_asic_cmd_w_nochkDiskChange(ASIC_SET_STBY, LEOcur_command->data.time.yearlo << 0x10);

@@ -9,7 +9,10 @@
 extern AuxiliaryEffect D_821CEEA0[2];
 extern Gfx D_82193E18[];
 
-#include "fragments/ekans_game/ekans_game.h"
+#include "global.h"
+#include "fragments/particle_math/particle_math.h"
+#include "jpeg_stream.h"
+#include "controller.h"
 #include "geo_render.h"
 #include "model_animation.h"
 #include "display_object_textures.h"
@@ -31,58 +34,6 @@ extern Gfx D_82193E18[];
 #include "memory.h"
 #include "stage_loader.h"
 #include "geo_layout.h"
-typedef struct ActiveDiglettInfo {
-    /* 0x00 */ s16 diglettId;
-    /* 0x02 */ s16 state;
-    /* 0x04 */ s16 timer;
-    /* 0x06 */ s16 unk_06; //	0
-    /* 0x08 */ s16 gotHoop;
-    /* 0x0A */ s16 unk_0A; //	0
-    /* 0x0C */ s16 collidingActorId;
-} ActiveDiglettInfo;
-typedef struct ActorOriginPosition {
-    /* 0x00 */ Vec3f pos;
-    /* 0x0C */ char unk0C[0x6];
-    /* 0x12 */ s16 unk_12;
-    /* 0x12 */ s16 unk_14;
-} ActorOriginPosition;
-extern MiniActor miniDigletts[9];
-extern MiniActor miniDiglettHoles[9];
-extern MiniActor miniEkanses[4];
-extern ActiveDiglettInfo activeDigletts[3];
-extern s16 ekansMinigameCountdownStarted;
-extern u32 redDiglettTileTexture[];
-extern u32 yellowDiglettTileTexture[];
-extern u32 blueDiglettTileTexture[];
-extern u32 floorTexture1[];
-extern u32 floorTexture2[];
-extern u32 sceneDecorationTextureBlue[];
-extern u32 sceneDecorationTextureGreen[];
-extern u32 sceneDecorationTextureRed[];
-extern u32 sceneDecorationTextureYellow[];
-extern unk_D_86002F34_018 sceneTextures[];
-extern Vtx sceneGeometry_1[];
-extern Vtx sceneGeometry_2[];
-extern Vtx sceneGeometry_3[];
-extern Vtx sceneGeometry_4[];
-extern Vtx sceneGeometry_5[];
-extern Vtx sceneGeometry_6[];
-extern Vtx sceneGeometry_7[];
-extern Vtx sceneGeometry_8[];
-extern Vtx sceneGeometry_9[];
-extern Vtx sceneGeometry_10[];
-extern Vtx sceneGeometry_11[];
-extern Vtx sceneGeometry_12[];
-extern Vtx sceneGeometry_13[];
-extern u32 ekansShadowTexture[];
-extern MiniActor* miniDiglettPtr;
-extern MiniActor* miniDiglettHolePtr;
-extern MiniActor* miniEkansPtr;
-extern s16 miniEkansDifficulties[4][4];
-extern ActorOriginPosition skansActorInfo[];
-extern ActorOriginPosition diglettActorInfo[];
-extern s16 playerGUIScoreXPositions[];
-extern Color_RGB8 playerColors[];
 
 void AuxiliaryEffect_Init(void);
 s16 AuxiliaryEffect_Alloc(void);
@@ -94,6 +45,11 @@ void func_821832F4(void);
 void func_821832FC(void);
 s32 AuxEffect_GetId(s32 arg0);
 
+/**
+ * Marks both auxiliary effect pools free.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void AuxiliaryEffect_Init(void) {
     s32 i;
 
@@ -102,6 +58,12 @@ void AuxiliaryEffect_Init(void) {
     }
 }
 
+/**
+ * Claims a free auxiliary effect pool (of 2), clears its 20 nodes and returns its index,
+ * or -1 if both are in use.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (20 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s16 AuxiliaryEffect_Alloc(void) {
     AuxiliaryEffect* var_a0;
     AuxiliaryEffectNode* var_v1;
@@ -126,6 +88,12 @@ s16 AuxiliaryEffect_Alloc(void) {
     return -1;
 }
 
+/**
+ * Starts a node in auxiliary effect pool arg0 at (arg1, arg2, arg3) with parameters arg4
+ * and arg5, if the pool is active and a node is free.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (16 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void AuxiliaryEffect_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, s16 arg4, f32 arg5) {
     s32 i;
     AuxiliaryEffect* temp_v0 = &D_821CEEA0[arg0];
@@ -148,6 +116,11 @@ void AuxiliaryEffect_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, s16 arg4, f32
     }
 }
 
+/**
+ * Advances every running node in auxiliary effect pool arg0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (20 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void AuxiliaryEffect_Update(s16 arg0) {
     AuxiliaryEffect* temp_v0 = &D_821CEEA0[arg0];
     AuxiliaryEffectNode* var_v1;
@@ -167,6 +140,12 @@ void AuxiliaryEffect_Update(s16 arg0) {
     }
 }
 
+/**
+ * Adds the display list for one auxiliary effect node, transformed by arg2, and returns
+ * the new end of the list.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (16 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 Gfx* AuxiliaryEffect_DrawOne(Gfx* arg0, AuxiliaryEffectNode* arg1, MtxF* arg2) {
     f32 spCC;
     f32 spC8;
@@ -189,15 +168,21 @@ Gfx* AuxiliaryEffect_DrawOne(Gfx* arg0, AuxiliaryEffectNode* arg1, MtxF* arg2) {
     guMtxCatL(arg2, spBC, spBC);
 
     gSPMatrix(arg0++, spBC, G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-    gDPSetPrimColor(arg0++, 0, 0, 255, 255, 255, 200);
+    gDPSetPrimColor(arg0++, 0, 0, 255, 255, 255, 200); // #FFFFFFC8
     gSPDisplayList(arg0++, D_82193E18);
     gSPPopMatrix(arg0++, G_MTX_MODELVIEW);
 
     return arg0;
 }
 
+/**
+ * Adds the display lists for every running node in auxiliary effect pool arg0 and returns
+ * the new end of the list.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (28 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 Gfx* AuxiliaryEffect_Draw(s16 arg0, Gfx* arg1) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     AuxiliaryEffect* temp_s3 = &D_821CEEA0[arg0];
     AuxiliaryEffectNode* var_s0;
     s32 i;
@@ -221,12 +206,24 @@ Gfx* AuxiliaryEffect_Draw(s16 arg0, Gfx* arg1) {
     return arg1;
 }
 
+/**
+ * Empty.
+ */
 void func_821832F4(void) {
 }
 
+/**
+ * Empty.
+ */
 void func_821832FC(void) {
 }
 
+/**
+ * Returns its argument.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 s32 AuxEffect_GetId(s32 arg0) {
     return arg0;
 }

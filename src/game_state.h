@@ -22,19 +22,19 @@ typedef struct unk_D_800AE520 {
 } unk_D_800AE520; // size >= 0x14
 
 typedef struct BattleMonSpecies {
-    /* 0x00 */ u8 unk_00;
+    /* 0x00 */ u8 id;
     /* 0x01 */ u8 unk_01;
 } BattleMonSpecies; // size = 0x2
 
 typedef struct BattleMon {
-    /* 0x00 */ BattleMonSpecies unk_00;
+    /* 0x00 */ BattleMonSpecies species;
     /* 0x02 */ u16 hp;
     /* 0x04 */ u8 unk_04;
     /* 0x05 */ u8 statusCondition;
-    /* 0x06 */ u8 unk_06;
-    /* 0x07 */ u8 unk_07;
+    /* 0x06 */ u8 type1;
+    /* 0x07 */ u8 type2;
     /* 0x08 */ u8 unk_08;
-    /* 0x09 */ u8 unk_09[4];
+    /* 0x09 */ u8 moves[4];
     /* 0x0D */ u8 pad0D;
     /* 0x0E */ u16 unk_0E;
     /* 0x10 */ u32 unk_10;
@@ -44,15 +44,15 @@ typedef struct BattleMon {
     /* 0x1A */ u16 unk_1A;
     /* 0x1C */ u16 unk_1C;
     /* 0x1E */ u16 unk_1E;
-    /* 0x20 */ u8 unk_20[4];
-    /* 0x24 */ u8 unk_24;
+    /* 0x20 */ u8 pp[4];
+    /* 0x24 */ u8 level;
     /* 0x25 */ u8 unk_25;
-    /* 0x26 */ u16 unk_26;
-    /* 0x28 */ u16 unk_28;
-    /* 0x2A */ u16 unk_2A;
-    /* 0x2C */ u16 unk_2C;
-    /* 0x2E */ u16 unk_2E;
-    /* 0x30 */ u8 unk_30[11];
+    /* 0x26 */ u16 maxHp;
+    /* 0x28 */ u16 attack;
+    /* 0x2A */ u16 defense;
+    /* 0x2C */ u16 speed;
+    /* 0x2E */ u16 special;
+    /* 0x30 */ u8 nickname[11]; // @unverified: ActivePokemon_GetNickname passes it as the %s of "Go! %s"
     /* 0x3B */ u8 unk_3B[11];
     /* 0x46 */ u8 unk_46[7];
     /* 0x4D */ u8 pad4D;
@@ -67,16 +67,16 @@ typedef struct ExtendedRosterInfo {
     /* 0x004 */ char unk004[0x10];
     /* 0x014 */ char unk_014[4];
     /* 0x018 */ char unk018[0x10];
-    /* 0x028 */ BattleMon unk_028[1];
+    /* 0x028 */ BattleMon battleMon[1];
     /* 0x078 */ char unk078[0x190];
 } ExtendedRosterInfo; // size = 0x208 (Stadium 1: 0x248)
 
 typedef struct TeamRoster {
-    /* 0x000 */ u8 unk_000;
+    /* 0x000 */ u8 isHuman;
     /* 0x001 */ u8 controllerPort;
     /* 0x002 */ u8 numberOfPokemonBrought;
     /* 0x004 */ Controller* controller;
-    /* 0x008 */ char unk_008[4];
+    /* 0x008 */ char trainerName[4];
     /* 0x00C */ char unk00C[0xC];
     /* 0x018 */ s32 unk_018;
     /* 0x01C */ BattleMon pokemonPicked[6];

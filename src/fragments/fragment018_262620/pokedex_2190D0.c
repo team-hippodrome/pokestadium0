@@ -118,6 +118,7 @@ void Pokedex_ExitAreaMapPool(void);
 
 void Pokedex_BuildMapLabelsDisplayList(void);
 
+/** Finds the next area on the map after the current one. */
 s32 Pokedex_FindNextMapArea(s32 arg0) {
     s32 i;
     s32 idx;
@@ -132,6 +133,7 @@ s32 Pokedex_FindNextMapArea(s32 arg0) {
     return a0;
 }
 
+/** Finds the previous area on the map before the current one. */
 s32 Pokedex_FindPrevMapArea(s32 arg0) {
     s32 i;
     s32 idx;
@@ -146,6 +148,7 @@ s32 Pokedex_FindPrevMapArea(s32 arg0) {
     return a0;
 }
 
+/** Builds the display list that draws one map marker. */
 void Pokedex_BuildMapMarkerDisplayList(void) {
     Gfx* temp_v0 = Gfx_AllocDisplayList(sizeof(Gfx) * 5);
 
@@ -157,6 +160,7 @@ void Pokedex_BuildMapMarkerDisplayList(void) {
     gSPEndDisplayList(temp_v0++);
 }
 
+/** Builds the display list that draws the map markers. */
 void Pokedex_BuildMapMarkersDisplayList(void) {
     s32 i;
     Mtx sp1A8;
@@ -190,10 +194,10 @@ void Pokedex_BuildMapMarkersDisplayList(void) {
 
         if (D_8A130458[i].unk_00 == 1) {
             if ((i + 1) == D_8A12FAD8[D_8A1302D6]) {
-                gDPSetPrimColor(temp_v0++, 0xFF, 0xFF, 255, 150, 100, 255);
+                gDPSetPrimColor(temp_v0++, 0xFF, 0xFF, 255, 150, 100, 255); // #FF9664FF
                 guScale(&sp168, 8.0f, 8.0f, 8.0f);
             } else {
-                gDPSetPrimColor(temp_v0++, 0xFF, 0xFF, 255, 255, 255, 255);
+                gDPSetPrimColor(temp_v0++, 0xFF, 0xFF, 255, 255, 255, 255); // #FFFFFFFF
                 guScale(&sp168, 4.0f, 4.0f, 4.0f);
             }
             guTranslate(&sp1A8, vec->x, vec->y, vec->z);
@@ -245,6 +249,7 @@ void Pokedex_BuildMapMarkersDisplayList(void) {
     gSPEndDisplayList(temp_v0++);
 }
 
+/** Builds the display list that draws the overview map markers. */
 void Pokedex_BuildOverviewMarkersDisplayList(void) {
     s32 i;
     s32 temp_a0;
@@ -277,7 +282,7 @@ void Pokedex_BuildOverviewMarkersDisplayList(void) {
         temp_t1 = (D_8A12FA00[D_8A12FAD8[D_8A1302D6] - 1].unk_00 * 8) + 0x4F;
         temp_t2 = (D_8A12FA00[D_8A12FAD8[D_8A1302D6] - 1].unk_02 * 8) + 0x2F;
 
-        gDPSetPrimColor(temp_v0++, 0xFF, 0xFF, 150, 30, 0, 255);
+        gDPSetPrimColor(temp_v0++, 0xFF, 0xFF, 150, 30, 0, 255); // #961E00FF
 
         gDPPipeSync(temp_v0++);
 
@@ -296,9 +301,10 @@ void Pokedex_BuildOverviewMarkersDisplayList(void) {
     gSPEndDisplayList(temp_v0++);
 }
 
+/** Draws a map pin icon at a position. */
 Gfx* Pokedex_DrawMapPinIcon(Gfx* arg0, s16 arg1, s16 arg2) {
     gSPDisplayList(arg0++, D_8A12EC18);
-    gDPSetPrimColor(arg0++, 0xFF, 0xFF, 255, 255, 255, 255);
+    gDPSetPrimColor(arg0++, 0xFF, 0xFF, 255, 255, 255, 255); // #FFFFFFFF
     gDPPipeSync(arg0++);
     gDPLoadTextureBlock(arg0++, D_8A12E788, G_IM_FMT_IA, G_IM_SIZ_8b, 16, 12, 0, G_TX_MIRROR | G_TX_CLAMP,
                         G_TX_MIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -385,19 +391,19 @@ Gfx* func_8A1033CC(Gfx* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, 
     if (arg6 == 1) {
         switch (D_8A1302DE) {
             case 0:
-                gDPSetPrimColor(arg0++, 0xFF, 0xFF, 106, 40, 20, 200);
+                gDPSetPrimColor(arg0++, 0xFF, 0xFF, 106, 40, 20, 200); // #6A2814C8
                 break;
 
             case 1:
-                gDPSetPrimColor(arg0++, 0xFF, 0xFF, 0, 44, 0, 200);
+                gDPSetPrimColor(arg0++, 0xFF, 0xFF, 0, 44, 0, 200); // #002C00C8
                 break;
 
             case 2:
-                gDPSetPrimColor(arg0++, 0xFF, 0xFF, 0, 0, 139, 200);
+                gDPSetPrimColor(arg0++, 0xFF, 0xFF, 0, 0, 139, 200); // #00008BC8
                 break;
 
             case 3:
-                gDPSetPrimColor(arg0++, 0xFF, 0xFF, 160, 160, 0, 200);
+                gDPSetPrimColor(arg0++, 0xFF, 0xFF, 160, 160, 0, 200); // #A0A000C8
                 break;
 
             default:
@@ -408,7 +414,7 @@ Gfx* func_8A1033CC(Gfx* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, 
                             G_TX_MIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
         gSPTextureRectangle(arg0++, (tmp + 2) << 2, (arg2 + 2) << 2, ((tmp + arg3) - 2) << 2,
                             ((arg2 + arg4) - 2) << 2, G_TX_RENDERTILE, 0, 0, 0x0400, 0x0400);
-        gDPSetPrimColor(arg0++, 0xFF, 0xFF, 255, 255, 255, 200);
+        gDPSetPrimColor(arg0++, 0xFF, 0xFF, 255, 255, 255, 200); // #FFFFFFC8
     }
     y = arg2;
     switch (arg5) {
@@ -454,14 +460,19 @@ extern Gfx D_8A12EBB8[];
 extern Gfx D_8A12EBF0[];
 extern Gfx D_8A12F128[];
 extern Gfx D_8A12F150[];
-void func_8A104290(void) {
+/**
+ * Seen in play (2026-11-13) ran on the habitat map (ずかん > ぶんぷをみる) for フシギダネ and ヒトカゲ; only the
+ * せいそくちふめい label showed, so the per-area labels were not seen.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Pokedex_BuildMapLabelsDisplayList(void) {
     s16 sp46;
     s16 sp44;
     s16 sp42;
     s16 sp40;
     s16 sp3E;
     s16 sp3C;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 temp_v0_2;
     Gfx* temp_v0;
     s32 sp2C;
@@ -528,11 +539,13 @@ void func_8A104290(void) {
     gSPEndDisplayList(temp_v0++);
 }
 
+/** Resets the camera easing state. */
 void Pokedex_ResetCameraEase(void) {
     D_8A13044C = 8.0f;
     D_8A130450 = 0;
 }
 
+/** Slows the camera easing speed each frame. */
 void Pokedex_UpdateCameraEaseSpeed(void) {
     D_8A13044C -= 0.5f;
     if (D_8A13044C < 1.0f) {
@@ -541,6 +554,7 @@ void Pokedex_UpdateCameraEaseSpeed(void) {
     }
 }
 
+/** Moves a vector toward a target by the current easing speed. */
 void Pokedex_EaseVec3Toward(Vec3f* arg0, Vec3f* arg1) {
     f32 sp2C;
     f32 sp28;
@@ -581,8 +595,9 @@ void Pokedex_EaseVec3Toward(Vec3f* arg0, Vec3f* arg1) {
     }
 }
 
+/** Updates the area map camera for the frame. */
 void Pokedex_UpdateAreaMapFrame(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     CameraNode* node = D_8A1302CC->children;
     Vec3f* vec;
     Vec3f sp28;
@@ -616,6 +631,7 @@ void Pokedex_UpdateAreaMapFrame(void) {
     Pokedex_BuildMapLabelsDisplayList();
 }
 
+/** Returns the tier for a count of species. */
 s32 Pokedex_GetCountTier(s32 arg0) {
     s32 ret;
 
@@ -677,8 +693,13 @@ extern char D_8A12FE1C[];
 extern s16 D_8A130432;
 extern char D_8A1302E8[];
 extern s16 D_8A130446;
-void func_800069CC(void);
-s32 func_8A104B00(s32 arg0)
+void BgStage_DrawFrame(void);
+/**
+ * Draws the habitat page: のすみか (habitat), せいそくちふめい (habitat unknown), level, rate, and the button hint to show or hide the GB map.
+ * Seen in play (2026-11-13) drew フシギダネのすみか and ヒトカゲのすみか over the Kanto map with the せいそくちふめい
+ * (habitat unknown) label, from ずかん > ぶんぷをみる.
+ */
+s32 Pokedex_DrawHabitatPage(s32 arg0)
 {
   char *name = D_8A12F2A4[D_8A1302D6];
   unk_D_88826CF0_004 *temp_s2;
@@ -696,7 +717,7 @@ s32 func_8A104B00(s32 arg0)
   s32 pad[1]; // FAKE: unused stack word
   Pokedex_UpdateAreaMapFrame();
   GeoRender_AdvanceFrameCounter();
-  func_800069CC();
+  BgStage_DrawFrame();
   Geo_RenderRootNode(D_8A1302CC);
   Font_BeginTranslucentTextRendering();
   Font_SetActive(1, 0);
@@ -829,6 +850,7 @@ s32 func_8A104B00(s32 arg0)
   return 0;
 }
 
+/** Returns -1 when the player presses the button that leaves the area map. */
 s32 Pokedex_CheckAreaMapExit(void) {
     if ((gPlayer1Controller->buttonPressed & 0x4000) && (D_8A1302DA == 0)) {
         return -1;
@@ -892,10 +914,7 @@ s32 Pokedex_CheckAreaMapExit(void) {
     return 0;
 }
 
-typedef struct unk_D_80064C60 {
-    /* 0x00 */ char* unk_00;
-    /* 0x04 */ char unk04[0x18];
-} unk_D_80064C60; // size = 0x1C
+#include "fragments/fragment018_262620/pokedex_214920_types.h"
 extern unk_D_80064C60 D_80064C60[];
 extern s16 D_8A130432;
 extern s16 D_8A130446;
@@ -1001,6 +1020,7 @@ void func_8A1053E8(s32 arg0, MainPoolState* arg1, UNUSED s32 arg2, PERSSZP* arg3
     ptr->view.eyePosition = D_8A12F844;
 }
 
+/** Pops the memory pool state used by the area map. */
 void Pokedex_ExitAreaMapPool(void) {
     main_pool_pop_state('MAPV');
 }

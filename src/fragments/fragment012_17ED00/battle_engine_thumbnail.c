@@ -26,7 +26,7 @@ void BattleThumbnail_TickBothOwnerSlideAnimations(ActivePokemon* side1_pokemon, 
     Sets up the camera framing for both pokemons's thumbnails.
 */
 void BattleThumbnail_SetupOwnerCameraFraming(ActivePokemon* side1_pokemon, ActivePokemon* side2_pokemon) {
-    if (sBattleScene.scene->unk_1C == 1) {
+    if (sBattleScene.scene->mode == 1) {
         BattleThumbnail_SetBothOwnerIdleFlags();
     } else {
         BattleThumbnail_ClearBothOwnerIdleFlags();
@@ -41,6 +41,12 @@ void BattleThumbnail_SetupOwnerCameraFraming(ActivePokemon* side1_pokemon, Activ
 void BattleThumbnail_OwnerCameraLifecycleNop(void) {
 }
 
+/**
+ * Applies the sets coordinates for the Camera that generates the owner's thumbnail.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleThumbnail_ApplyOwnerCameraFraming(ActivePokemon* active_pokemon) {
     s32 side;
     CameraNode* camera;
@@ -50,12 +56,12 @@ void BattleThumbnail_ApplyOwnerCameraFraming(ActivePokemon* active_pokemon) {
     camera = active_pokemon->thumbnail.camera;
     side = BattleScene_GetParticipantSideIndex(active_pokemon);
 
-    active_pokemon->thumbnail.rotationX = sSidePresentationTransform[side]->unk_0C;
+    active_pokemon->thumbnail.rotationX = sSidePresentationTransform[side]->rotationX;
     if (sSidePresentationTransform[side]->unk_10 == 0xFF) {
-        active_pokemon->thumbnail.rotationY = sSidePresentationTransform[side]->unk_0E * active_pokemon->thumbnail.side;
+        active_pokemon->thumbnail.rotationY = sSidePresentationTransform[side]->rotationY * active_pokemon->thumbnail.side;
         tmp_z = sSidePresentationTransform[side]->coordinates.z * active_pokemon->thumbnail.side;
     } else {
-        active_pokemon->thumbnail.rotationY = sSidePresentationTransform[side]->unk_0E;
+        active_pokemon->thumbnail.rotationY = sSidePresentationTransform[side]->rotationY;
         tmp_z = sSidePresentationTransform[side]->coordinates.z;
     }
 
@@ -90,13 +96,11 @@ void func_82107428(s32 arg0, s8 *arg1, s32 arg2, s8 *arg3) {
 s32 func_80032890(s32);
 void func_80032840(s32);
 
-//@unverified
 /**
- * Moves the owner's thumbnail camera by up to `delta` per call towards x = 23
- * (side 1) or x = 259 (the other side). When the camera is still at its start
- * position (-72 or 351) and the Pokemon has no Substitute (flag 0x2000), it
- * triggers the owner model animation. When func_80032890(side) is non-zero and
- * the thumbnail status is 0, it sets status 2 and calls func_80032840(side).
+ * Handles the slide-in animation for the owner's thumbnail for when move selection is ongoing.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleThumbnail_TickOwnerSlideIn(ActivePokemon* active_pokemon, s32 delta) {
     CameraNode* camera_node;
@@ -154,6 +158,12 @@ void func_821075B4(s8 *arg0, M2C_UNK arg1) {
     }
 }
 
+/**
+ * Handles the slide animation for the owner's thumbnail.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleThumbnail_TickOwnerSlideAnimation(ActivePokemon* active_pokemon) {
     switch (active_pokemon->thumbnail.showing) {
         case 0:
@@ -166,6 +176,12 @@ void BattleThumbnail_TickOwnerSlideAnimation(ActivePokemon* active_pokemon) {
     }
 }
 
+/**
+ * Avoids drawing the thumbnails in the attract demo
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void BattleThumbnail_TickBothOwnerSlideAnimations(ActivePokemon* side1_pokemon, ActivePokemon* side2_pokemon) {
     BattleThumbnail_TickOwnerSlideAnimation(side1_pokemon);
     BattleThumbnail_TickOwnerSlideAnimation(side2_pokemon);

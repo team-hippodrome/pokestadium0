@@ -7,12 +7,12 @@ extern u8 D_800B3CE0;
 extern s16* D_800B41EC;
 extern u32 D_800FDED0;
 
-Acmd* n_alMainBusPull(s32 sampleOffset, Acmd* p) {
+Acmd* n_alMainBusPull(s32 sample_offset, Acmd* p) {
     Acmd* ptr = p;
 
     aClearBuffer(ptr++, N_AL_MAIN_L_OUT, N_AL_DIVIDED << 1);
 
-    ptr = (n_syn->mainBus->filter.handler)(sampleOffset, ptr);
+    ptr = (n_syn->mainBus->filter.handler)(sample_offset, ptr);
 
     aMix(ptr++, 0, 0x7fff, N_AL_AUX_L_OUT, N_AL_MAIN_L_OUT);
     aMix(ptr++, 0, 0x7fff, N_AL_AUX_R_OUT, N_AL_MAIN_R_OUT);

@@ -904,7 +904,7 @@ typedef struct unk_D_8006FF00 {
 	/* 0x02 */ s16 unk_02;
 	/* 0x04 */ char* name;
 	/* 0x08 */ s32 unk_08;
-	/* 0x0C */ u8 unk_0C;
+	/* 0x0C */ u8 cupEligibilityFlags;
 	/* 0x0D */ u8 unk_0D;
 	/* 0x0E */ s16 unk_0E;
 	/* 0x10 */ s16 unk_10;
@@ -915,10 +915,10 @@ typedef struct unk_D_8006FF00 {
 
 
 typedef struct FontSet {
-	/* 0x00 */ s16 unk_00;
-	/* 0x02 */ s16 unk_02;
-	/* 0x04 */ u8* unk_04;
-	/* 0x08 */ u8* unk_08;
+	/* 0x00 */ s16 width;
+	/* 0x02 */ s16 height;
+	/* 0x04 */ u8* glyphWidths;
+	/* 0x08 */ u8* texture;
 } FontSet; // size = 0xC
 
 // Zero has four font sets where Stadium 1 has six.
@@ -982,18 +982,18 @@ typedef struct unk_D_70B10 {
  // start of some rom area
 
 typedef struct MoveData {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
+    /* 0x00 */ u8 moveId;
+    /* 0x01 */ u8 effect;
+    /* 0x02 */ u8 power;
+    /* 0x03 */ u8 type;
+    /* 0x04 */ u8 accuracy;
+    /* 0x05 */ u8 pp;
 } MoveData; // size = 0x6
 extern MoveData gMoveData[];
 
 typedef struct unk_D_80072338 {
     /* 0x00 */ char unk00[0x1];
-    /* 0x01 */ u8 unk_01;
+    /* 0x01 */ u8 type;
     /* 0x02 */ char unk02[0x2];
     /* 0x04 */ char* unk_04;
     /* 0x08 */ char* comment;

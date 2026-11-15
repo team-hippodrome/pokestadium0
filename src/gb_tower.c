@@ -17,7 +17,7 @@ s32 GbPak_MbcWrite(s32 arg0, void* arg1, u16 arg2, u16 arg3);
 
 s32 GbPak_DetectRam(s32 arg0, u8* arg1);
 s32 GbTower_ProbePak(s32 arg0, u8* arg1, u8* arg2);
-s32 GbTower_CheckPakRemoved(s32 arg0, u8 arg1);
+s32 GbTower_IsPakInserted(s32 arg0, u8 arg1);
 void GbTower_PowerOffAllPaks(void);
 s32 GbPak_IsCartOff(s32 arg0);
 s32 GbPak_IsCartOn(s32 arg0);
@@ -34,6 +34,13 @@ void func_8000B340_jp(void);
 
 s32 GbPak_VerifyPattern(s32 arg0, void* arg1);
 
+/**
+ * Writes a 32-byte pattern to cartridge RAM 0xA000 through the MBC, reads it back
+ * and returns 1 if it matches and the pak status bit 2 is clear.
+ * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
+ * 1: wrote a pattern through GbPak_MbcWrite, read it back through GbPak_MbcRead and returned 1,
+ * both times it ran.
+ */
 s32 GbPak_VerifyPattern(s32 arg0, void* arg1) {
     u8 sp47;
     u8 sp24[0x20];
@@ -47,6 +54,12 @@ s32 GbPak_VerifyPattern(s32 arg0, void* arg1) {
     return sp20;
 }
 
+/**
+ * Detects working cartridge RAM by verifying 0x55, 0xAA and then an osGetCount
+ * pattern; the last pattern is left in the pattern buffer for GbTower_VerifyPakStillInserted.
+ * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
+ * 1: ran GbPak_VerifyPattern twice (both returned 1), then returned 1.
+ */
 s32 GbPak_DetectRam(s32 arg0, u8* arg1) {
     s32 var_s0 = 0;
     u8 sp34[0x20];
@@ -68,9 +81,16 @@ s32 GbPak_DetectRam(s32 arg0, u8* arg1) {
     return var_s0;
 }
 
+/**
+ * Prepares the pak on a port once (gGbPakPortReady): reads the ID, enables
+ * cartridge RAM and runs GbPak_DetectRam. Shuts down with error 1 if the read fails.
+ * Seen in play (2026-11-13) ran at boot (console reset, then N64 logo, opening, title and main
+ * menu).
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbTower_ProbePak(s32 arg0, u8* arg1, u8* arg2) {
     u8 status;
-    OSGbpakId gbpakId;
+    OSGbpakId gbpak_id;
     s32 sp28 = 0;
 
     if (arg1 != NULL) {
@@ -81,7 +101,7 @@ s32 GbTower_ProbePak(s32 arg0, u8* arg1, u8* arg2) {
         return 1;
     }
 
-    if (osGbpakReadId(&D_800AB050[arg0], &gbpakId, &status) != 0) {
+    if (osGbpakReadId(&D_800AB050[arg0], &gbpak_id, &status) != 0) {
         Game_ShutdownAndLoadFragment(arg0, 1);
     }
     if ((status & OS_GBPAK_RSTB_STATUS) && (osGbpakCheckConnector(&D_800AB050[arg0], &status) == 0)) {
@@ -92,7 +112,13 @@ s32 GbTower_ProbePak(s32 arg0, u8* arg1, u8* arg2) {
     return sp28;
 }
 
-s32 GbTower_CheckPakRemoved(s32 arg0, u8 arg1) {
+/**
+ * Returns 1 if the pak has not latched a reset (OS_GBPAK_RSTB_DETECTION clear), i.e. the
+ * cartridge was not removed; powers the pak off when keep_powered == 0.
+ * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
+ * 1: returned 1 for port 1, twice during the boot scan.
+ */
+s32 GbTower_IsPakInserted(s32 arg0, u8 arg1) {
     u8 status;
     s32 temp_v1;
 
@@ -108,6 +134,11 @@ s32 GbTower_CheckPakRemoved(s32 arg0, u8 arg1) {
     return temp_v1;
 }
 
+/**
+ * Powers off every pak that was initialized by GbTower_ScanPaks.
+ * Seen in play (2026-11-13) with a JP Green cart in the Transfer Pak, it ran once, right as the GB
+ * session ended on the "report is not correct" panel, and not while the game played.
+ */
 void GbTower_PowerOffAllPaks(void) {
     s32 i;
 
@@ -122,6 +153,12 @@ void GbTower_PowerOffAllPaks(void) {
 extern u8 D_800A82A6;
 extern u8 D_800AB1F6;
 
+/**
+ * Initializes every plugged-in Transfer Pak and checks its cartridge. Returns
+ * (gGbPakUsableMask << 16) | gGbPakInitMask.
+ * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
+ * 1: returned 0x10001, port 1 both usable and inserted.
+ */
 s32 GbTower_ScanPaks(void) {
     s32 i;
     s32 temp_v0;
@@ -162,6 +199,12 @@ s32 GbTower_ScanPaks(void) {
     return (D_800AB1F5 << 0x10) | D_800AB1F4;
 }
 
+/**
+ * Returns 1 if the Transfer Pak reports no powered cartridge; shuts down on a pak error.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbPak_IsCartOff(s32 arg0) {
     u8 status;
     s32 ret = osGbpakGetStatus(&D_800AB050[arg0], &status);
@@ -175,6 +218,12 @@ s32 GbPak_IsCartOff(s32 arg0) {
     return !((status & OS_GBPAK_GBCART_ON) != 0);
 }
 
+/**
+ * Returns 1 if the Transfer Pak reports a powered cartridge; shuts down on a pak error.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbPak_IsCartOn(s32 arg0) {
     u8 status;
     s32 ret = osGbpakGetStatus(&D_800AB050[arg0], &status);
@@ -185,6 +234,12 @@ s32 GbPak_IsCartOn(s32 arg0) {
     return ((status & OS_GBPAK_GBCART_ON) != 0);
 }
 
+/**
+ * Re-initializes the pak on a port and enables cartridge RAM; returns 1 on success.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbTower_ReinitPak(s32 arg0) {
     UNUSED u8 filler[4];
     u8 status;
@@ -202,6 +257,13 @@ s32 GbTower_ReinitPak(s32 arg0) {
     return D_800AB1F0[arg0] == 1;
 }
 
+/**
+ * Returns 1 if the 32-byte pattern left by GbPak_DetectRam is still in
+ * cartridge RAM and the pak was not reset, i.e. the same cartridge is still inserted.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbTower_VerifyPakStillInserted(s32 arg0, void* arg1) {
     u8 status;
     u8 sp1C[0x20];
@@ -215,6 +277,11 @@ s32 GbTower_VerifyPakStillInserted(s32 arg0, void* arg1) {
     return sp18;
 }
 
+/**
+ * Reads cartridge memory through osGbmbcReadWrite if the port is usable.
+ * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
+ * 1: GbPak_VerifyPattern read its pattern back through it (returned 0, success).
+ */
 s32 GbPak_MbcRead(s32 arg0, void* arg1, u16 arg2, u16 arg3) {
     s32 var_v1;
 
@@ -225,6 +292,11 @@ s32 GbPak_MbcRead(s32 arg0, void* arg1, u16 arg2, u16 arg3) {
     return var_v1;
 }
 
+/**
+ * Writes cartridge memory through osGbmbcReadWrite if the port is usable.
+ * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
+ * 1: GbPak_VerifyPattern wrote its pattern through it (returned 0, success).
+ */
 s32 GbPak_MbcWrite(s32 arg0, void* arg1, u16 arg2, u16 arg3) {
     s32 var_v1;
 
@@ -235,6 +307,11 @@ s32 GbPak_MbcWrite(s32 arg0, void* arg1, u16 arg2, u16 arg3) {
     return var_v1;
 }
 
+/**
+ * Reads raw Transfer Pak address space through osGbpakReadWrite if the port is usable.
+ * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
+ * 1: GbPak_ReadRom read the header through it (returned 0, success).
+ */
 s32 GbPak_RawRead(s32 arg0, u8* arg1, u16 arg2, u16 arg3) {
     s32 var_v1;
 
@@ -245,6 +322,12 @@ s32 GbPak_RawRead(s32 arg0, u8* arg1, u16 arg2, u16 arg3) {
     return var_v1;
 }
 
+/**
+ * Writes raw Transfer Pak address space through osGbpakReadWrite if the port is usable.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbPak_RawWrite(s32 arg0, u8* arg1, u16 arg2, u16 arg3) {
     s32 var_v1;
 
@@ -255,6 +338,13 @@ s32 GbPak_RawWrite(s32 arg0, u8* arg1, u16 arg2, u16 arg3) {
     return var_v1;
 }
 
+/**
+ * Selects a ROM bank by writing 0x5000, the upper bank bits to 0x4000 and the
+ * lower 5 bits to 0x2000.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 int GbPak_SelectRomBank(s32 arg0, s32 arg1) {
     u8 sp28[0x20];
     int i;
@@ -280,6 +370,13 @@ int GbPak_SelectRomBank(s32 arg0, s32 arg1) {
     return GbPak_RawWrite(arg0, sp28, 0x2000U, 0x20U);
 }
 
+/**
+ * Reads a linear range of cartridge ROM, aligned to 32 bytes, switching banks
+ * for addresses at or above 0x4000.
+ * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
+ * 1: read the cartridge header range from 0x120 into 0x80082A00. The bytes matched the ROM,
+ * including the title POKEMON GREEN at 0x134.
+ */
 s32 GbPak_ReadRom(s32 arg0, u8* arg1, s32 arg2, s32 arg3) {
     s32 ret = 1;
     u32 temp_s1 = (arg2 & ~0x1F);
@@ -326,6 +423,11 @@ s32 GbPak_ReadRom(s32 arg0, u8* arg1, s32 arg2, s32 arg3) {
     return ret;
 }
 
+/**
+ * Sets the ports polled by GbTower_PollPakConnection; returns the old mask.
+ * Seen in play (2026-11-12) at power-on with a Transfer Pak holding Pocket Monsters Green in port
+ * 1: was set to 1 (port 1) at the end of the scan and returned the old mask 0.
+ */
 u8 GbTower_SetPollMask(u8 arg0) {
     u8 temp_v0 = D_800AB1F7;
 
@@ -337,6 +439,7 @@ u8 GbTower_SetPollMask(u8 arg0) {
 // osGbpakGetStatus failure on a port enabled by GbTower_SetPollMask latches
 // D_800AB1F8 and calls Game_ShutdownAndLoadFragment(port, 1); the per-port
 // failure counter D_800A82AC is not used.
+/** Polls the Transfer Pak connection state. */
 void GbTower_PollPakConnection(void) {
     u8 sp1F;
     static s32 D_800697D0 = 0; // .data

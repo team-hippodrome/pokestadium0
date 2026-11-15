@@ -24,18 +24,18 @@ void func_824000F0(s8* arg0, s32 arg1);
 s32 func_82400118(s8* arg0);
 
 void func_82400020(TeamRoster* roster, ExtendedRosterInfo* info, DemoTeamTemplate* template, s32 arg3) {
-    roster->unk_000 = 3;
+    roster->isHuman = 3;
     roster->controllerPort = 1;
     roster->controller = D_800603C4;
     roster->unk_018 = template->unk_02;
     roster->numberOfPokemonBrought = 6;
     roster->rosterInfo = info;
-    HAL_Strcpy(roster->unk_008, template->unk_0C);
+    HAL_Strcpy(roster->trainerName, template->unk_0C);
     _bcopy(template->mons, roster->pokemonPicked, sizeof(roster->pokemonPicked));
     info->unk_000 = template->unk_00;
     info->numberOfPokemonCanBePicked = 6;
     info->unk_003 = arg3;
-    _bcopy(roster->pokemonPicked, info->unk_028, sizeof(roster->pokemonPicked));
+    _bcopy(roster->pokemonPicked, info->battleMon, sizeof(roster->pokemonPicked));
     HAL_Strcpy(info->unk004, template->unk_04);
     HAL_Strcpy(info->unk_014, template->unk_08);
 }

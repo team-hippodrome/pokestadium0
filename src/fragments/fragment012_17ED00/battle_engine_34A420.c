@@ -36,12 +36,18 @@ Strip400Node sTrailPoints[400];
 extern s32 pad_D_84398F48[2];
 extern s32 pad_D_84389178[2];
 
-void Radial20_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9);
+void LassoHit_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9);
 f32 Strip400_GetTailFadeRatio(void);
 void Radial20_RotateVertexOffset(f32 arg0, UNUSED Vec3f* arg1, Vec3f* arg2, f32 arg3, UNUSED f32 arg4, UNUSED f32 arg5,
                    UNUSED f32 arg6);
 
-void Radial20_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9) {
+/**
+ * Moves: Bind (hit), Constrict (hit), Disable (hit), String Shot (hit), Wrap (hit)
+ * TODO: Human contributor add screenshot
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bind, Constrict, String Shot and Wrap. Disable did not use it.
+ */
+void LassoHit_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9) {
     Strip400State* ptr1 = &sTrailState;
     Strip400Node* ptr2;
     s32 i;
@@ -76,6 +82,12 @@ void Radial20_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 
     }
 }
 
+/**
+ * Returns how far the trail strip's tail has faded, from 1.0 (not started) down toward 0,
+ * based on the strip's current point count.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 f32 Strip400_GetTailFadeRatio(void) {
     Strip400State* ptr = &sTrailState;
     f32 tmp;
@@ -93,7 +105,13 @@ f32 Strip400_GetTailFadeRatio(void) {
     return tmp;
 }
 
-s32 func_821742F0(void) {
+/**
+ * Moves: Bind (hit), Constrict (hit), Disable (hit), String Shot (hit), Wrap (hit)
+ * TODO: Human contributor add screenshot
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Bind, Constrict, String Shot and Wrap. Disable did not use it.
+ */
+s32 LassoHit_Update(void) {
     s32 i;
     f32 spB8;
     f32 temp_fs0_2;
@@ -194,7 +212,12 @@ s32 func_821742F0(void) {
 }
 
 extern Gfx D_82192AB0[];
-Gfx* func_821748CC(Gfx* arg0) {
+/**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+Gfx* Strip400_Draw(Gfx* arg0) {
     Vtx* vtx;
     s32 i;
     Strip400Node* var_a0;
@@ -252,6 +275,11 @@ Gfx* func_821748CC(Gfx* arg0) {
 }
 
 extern Radial20 D_821A3490[10];
+/**
+ * Clears the 10 radial effects and their nodes.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (5 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Radial20_ResetPool(void) {
     s16 temp_v0;
     s32 i;
@@ -288,7 +316,11 @@ void Radial20_ResetPool(void) {
 
 extern Radial20 D_84398F50[10];
 extern Radial20 D_821A3490[10];
-void func_82174C30(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
+/**
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Tri Attack.
+ */
+void TriAttackRadial_EmitVariantA(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
                    u8 argA, f32 argB, f32 argC, f32 argD, s16 argE) {
     Radial20* var_v0;
     Radial20Node* var_a1_2;
@@ -342,6 +374,13 @@ void func_82174C30(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s
 }
 
 extern Radial20 D_821A3490[10];
+/**
+ * Starts a free radial effect from (arg0, arg1, arg2) toward (arg3, arg4, arg5) with
+ * node count arg6, color arg7..argA and spread, speed and length parameters.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void Radial20_VariantB(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
                    u8 argA, f32 argB, f32 argC, f32 argD, s16 argE) {
     Radial20* var_v0;
@@ -387,7 +426,12 @@ void Radial20_VariantB(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg
 }
 
 extern Radial20 D_821A3490[10];
-void func_82175068(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
+/**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome):
+ * ran.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Radial20_VariantC(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
                    u8 argA, f32 argB, f32 argC, f32 argD, s16 argE) {
     Radial20* var_v0;
     Radial20Node* var_s0;
@@ -455,6 +499,10 @@ void func_82175068(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s
 }
 
 extern Radial20 D_821A3490[10];
+/**
+ * Starts a radial effect in a free Radial20 slot: from (arg0, arg1, arg2) toward (arg3,
+ * arg4, arg5), with its colors, widths and lifetime argE.
+ */
 void func_82175440(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
                    u8 argA, f32 argB, f32 argC, f32 argD, s16 argE) {
     Radial20* var_v0;
@@ -523,6 +571,12 @@ void func_82175440(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s
 }
 
 extern Radial20 D_821A3490[10];
+/**
+ * Like Radial20_VariantB with a different node layout.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void Radial20_VariantE(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, s16 arg6, u8 arg7, u8 arg8, u8 arg9,
                    u8 argA, f32 argB, f32 argC, f32 argD, s16 argE) {
     Radial20* var_v0;
@@ -586,6 +640,11 @@ void Radial20_VariantE(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg
     }
 }
 
+/**
+ * Writes the point arg3 units along Z rotated arg0 radians about X to arg2.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (5 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void Radial20_RotateVertexOffset(f32 arg0, UNUSED Vec3f* arg1, Vec3f* arg2, f32 arg3, UNUSED f32 arg4, UNUSED f32 arg5,
                    UNUSED f32 arg6) {
     UNUSED MtxF pad;
@@ -596,9 +655,14 @@ void Radial20_RotateVertexOffset(f32 arg0, UNUSED Vec3f* arg1, Vec3f* arg2, f32 
     guMtxXFMF(sp30.mf, 0.0f, 0.0f, arg3, &arg2->x, &arg2->y, &arg2->z);
 }
 
-void func_82175C74(Radial20* arg0) {
+/**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Radial20_UpdateNode(Radial20* arg0) {
     Radial20Node* var_v0;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 i;
     Vec3f sp28;
 
@@ -745,6 +809,11 @@ void func_82175C74(Radial20* arg0) {
 }
 
 extern Radial20 D_821A3490[10];
+/**
+ * Advances every active radial effect. Returns -1 once none are left running, else 0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (5 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s32 Radial20_IsComplete(void) {
     s32 i;
     s32 var_s2 = 0;
@@ -775,7 +844,12 @@ extern u8 D_82192B50[];
 extern u8 D_82192B54[];
 extern u8 D_82192B58[];
 extern f32 D_82192B5C[];
-Gfx* func_821765B4(Gfx* arg0) {
+/**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+Gfx* Radial20_Draw(Gfx* arg0) {
     s32 i;
     s32 x;
     s32 j;

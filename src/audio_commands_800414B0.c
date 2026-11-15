@@ -1,5 +1,5 @@
 /* Stadium Zero resident code. */
-/* Split from audio_commands.c: the code after the jump tables of func_800407B0. */
+/* Split from audio_commands.c: the code after the jump tables of Audio_PlayCommand. */
 
 #include "audio_commands.h"
 #include "audio_commands_category2.h"
@@ -24,7 +24,7 @@ extern s32* D_800B4160;
 extern u8* D_800B41F0;
 extern s32 D_800B41D0[];
 extern s32 D_800B4198;
-s32 func_80037B7C(s32);
+s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 s32 func_80037AC4(s32, s32);
 void func_8004609C(u32, u8*, s32);
 void func_80047FB0(u8*, s32, s32);
@@ -69,7 +69,7 @@ s32 func_800414B0(u8 arg0, u32 arg1, u32 arg2, u32 arg3, u8 hi) {
     } else {
         entry = (u8*)D_80077064[arg2][0];
     }
-    if (func_80037B7C(D_800FD670[arg0])) {
+    if (Audio_QueueSetMonoOutputCommand(D_800FD670[arg0])) {
         func_80037AC4(D_800FD670[arg0], 0xA);
         D_800FD670[arg0] = 0;
     }
@@ -81,7 +81,7 @@ s32 func_800414B0(u8 arg0, u32 arg1, u32 arg2, u32 arg3, u8 hi) {
     }
     switch (arg3) {
     case 11:
-        if (func_80037B7C(D_800FD670[arg0 ^ 1])) {
+        if (Audio_QueueSetMonoOutputCommand(D_800FD670[arg0 ^ 1])) {
             func_80037AC4(D_800FD670[arg0 ^ 1], 0xA);
             D_800FD670[arg0 ^ 1] = 0;
         }
@@ -232,7 +232,7 @@ extern u8 D_80077540;
 extern s32 D_800B4188;
 extern s32 D_800B41A4;
 s32 func_8003834C(s32, s32, s32, s32, s32, s32, s32);
-s32 func_80037B7C(s32);
+s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 s32 func_80037AC4(s32, s32);
 s32 func_8004D300(s32);
 u32 func_80053A80(void);
@@ -460,7 +460,7 @@ void func_800419F8(u32 arg0) {
         func_80037AC4(D_800775A4, 0x78);
         func_80037AC4(D_800775A0, 0x78);
         for (i = 0; i < 4; i++) {
-            if (func_80037B7C(D_800FD670[i]) != 0) {
+            if (Audio_QueueSetMonoOutputCommand(D_800FD670[i]) != 0) {
                 func_800386E4(D_800FD670[i], 0xF);
                 D_800FD670[i] = 0;
             }

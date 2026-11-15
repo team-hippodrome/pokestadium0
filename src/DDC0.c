@@ -14,10 +14,7 @@
 #include "audio_channel.h"
 #include "audio_loop_point.h"
 #include "m2c_macros.h"
-typedef struct unk_D_800A8480 {
-  /* 0x0000 */ OSThread thread;
-  /* 0x01B0 */ char unk01B0[0x2030];
-} unk_D_800A8480;
+#include "33FE0_types_2.h"
 extern s32 D_800AAE30;
 extern s32 D_800AAF3C;
 
@@ -29,10 +26,12 @@ void Audio_FadeOutForShutdown(void);
 void Audio_Disable(void);
 void Audio_Enable(void);
 
+/** Marks that no music is current. */
 void Audio_ResetCurrentMusic(void) {
     D_800AAF3C = -1;
 }
 
+/** Starts a music track unless it is already the current one. */
 void Audio_PlayMusicIfChanged(s32 arg0) {
     if (arg0 != D_800AAF3C) {
         if (D_800AAF3C >= 0) {
@@ -43,6 +42,7 @@ void Audio_PlayMusicIfChanged(s32 arg0) {
     }
 }
 
+/** Fades out the current music over the given time. */
 void Audio_StopMusic(s32 arg0) {
     if (D_800AAF3C >= 0) {
         Audio_FadeOutAll(arg0);
@@ -50,6 +50,7 @@ void Audio_StopMusic(s32 arg0) {
     }
 }
 
+/** Waits for the audio system to become idle, returning nonzero on timeout. */
 s32 Audio_WaitForIdle(s32 arg0) {
     s32 retvar = 0;
 
@@ -67,15 +68,18 @@ s32 Audio_WaitForIdle(s32 arg0) {
     return retvar;
 }
 
+/** Fades out all audio categories ahead of a shutdown. */
 void Audio_FadeOutForShutdown(void) {
     Audio_FadeCategoriesAndStreamsWithDuration(0x10);
 }
 
+/** Disables audio output. */
 void Audio_Disable(void) {
     D_800AAE30 = 0;
     Audio_SetEnabled(0);
 }
 
+/** Enables audio output. */
 void Audio_Enable(void) {
     Audio_SetEnabled(1);
     D_800AAE30 = 1;
@@ -88,7 +92,7 @@ M2C_UNK func_800082D0();                            /* extern */
 M2C_UNK func_8003B868(s8 *);                      /* extern */
 M2C_UNK func_8003BC9C(M2C_UNK);                     /* extern */
 M2C_UNK func_8003E1F8();                            /* extern */
-M2C_UNK func_80046170(M2C_UNK, M2C_UNK);            /* extern */
+void Audio_SetChannelVolume(s32 arg0, u32 arg1);            /* extern */
 M2C_UNK func_8004CFB0(M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_800567E0(M2C_UNK *, M2C_UNK *, M2C_UNK); /* extern */
 extern s32 D_800AAE30;
@@ -112,11 +116,11 @@ void func_8000A92C(s32 arg0) {
     func_8004CFB0(&D_800AAED4, 0x444F4E45, 0);
     func_8003E1F8();
     func_8003BC9C(1);
-    func_80046170(3, 4);
+    Audio_SetChannelVolume(3, 4);
 loop_1:
     func_80004920(&D_800AAE38);
     func_800082D0();
-    if ((D_800AAE30 != 0) && (M2C_FIELD(&D_800A9710, s16 *, 0xA38) < 0x15)) {
+    if ((D_800AAE30 != 0) && (D_800A9710.unk_A38 < 0x15)) {
         func_8003B868(&D_800AAE68 + (D_800AAF38 * 0x68) + 0x20);
         func_80004F34(&D_800AAE68 + (D_800AAF38 * 0x68), 0);
     }

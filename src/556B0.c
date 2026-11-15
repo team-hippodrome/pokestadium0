@@ -13,16 +13,16 @@ void __osPiCreateAccessQueue(void);
 s32 func_800551F0(s32, u32, void*, u32);
 s32 func_800574C0(OSPiHandle*, s32, u32, void*, u32);
 void func_80054D60(void*);
-void func_80054AB0(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgCnt) {
-    u32 savedMask;
-    OSPri oldPri;
-    OSPri myPri;
+void func_80054AB0(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmd_buf, s32 cmd_msg_cnt) {
+    u32 saved_mask;
+    OSPri old_pri;
+    OSPri my_pri;
 
     if (__osPiDevMgr.active) {
         return;
     }
     func_80054C2C();
-    osCreateMesgQueue(cmdQ, cmdBuf, cmdMsgCnt);
+    osCreateMesgQueue(cmdQ, cmd_buf, cmd_msg_cnt);
     osCreateMesgQueue(&D_80103E60, D_80103E78, 1);
 
     if (!__osPiAccessQueueEnabled) {
@@ -30,15 +30,15 @@ void func_80054AB0(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgCnt) 
     }
 
     osSetEventMesg(OS_EVENT_PI, &D_80103E60, (OSMesg)0x22222222);
-    oldPri = -1;
-    myPri = osGetThreadPri(NULL);
+    old_pri = -1;
+    my_pri = osGetThreadPri(NULL);
 
-    if (myPri < pri) {
-        oldPri = myPri;
+    if (my_pri < pri) {
+        old_pri = my_pri;
         osSetThreadPri(NULL, pri);
     }
 
-    savedMask = __osDisableInt();
+    saved_mask = __osDisableInt();
     __osPiDevMgr.active = 1;
     __osPiDevMgr.thread = &D_80102CB0;
     __osPiDevMgr.cmdQueue = cmdQ;
@@ -48,10 +48,10 @@ void func_80054AB0(OSPri pri, OSMesgQueue* cmdQ, OSMesg* cmdBuf, s32 cmdMsgCnt) 
     __osPiDevMgr.edma = func_800574C0;
     osCreateThread(&D_80102CB0, 0, func_80054D60, &__osPiDevMgr, &D_80103E60, pri);
     osStartThread(&D_80102CB0);
-    __osRestoreInt(savedMask);
+    __osRestoreInt(saved_mask);
 
-    if (oldPri != -1) {
-        osSetThreadPri(NULL, oldPri);
+    if (old_pri != -1) {
+        osSetThreadPri(NULL, old_pri);
     }
 }
 

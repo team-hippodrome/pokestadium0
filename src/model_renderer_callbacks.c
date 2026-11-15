@@ -66,11 +66,13 @@ s32 func_80032890(u32 arg0) {
     return 0;
 }
 
+/** Saves the current matrices of a model slot. */
 void ModelRenderer_CacheSlotMatrices(u8 arg0) {
     MtxF_Copy(D_800AFB38[arg0].mtx, GeoRender_GetRelativeMatrix(0));
     MtxF_Copy(D_800AFB38[arg0].mtx[1].mf, GeoRender_GetRelativeMatrix(-1));
 }
 
+/** Applies a model slot's scale to its matrix. */
 void ModelRenderer_ApplySlotScale(u8 index) {
     MtxF* temp_a1;
     MtxF sp1C;
@@ -80,10 +82,11 @@ void ModelRenderer_ApplySlotScale(u8 index) {
     guMtxCatF(sp1C.mf, temp_a1->mf, temp_a1->mf);
 }
 
+/** Rebuilds a model slot's matrix. */
 void ModelRenderer_RebuildSlotMatrix(u8 index) {
     MtxF* temp_a0;
     
-    s32 pad[2];
+    s32 pad[2]; // FAKE: stack padding
     f32 spC0;
     f32 spBC;
     f32 spB8;
@@ -101,6 +104,7 @@ void ModelRenderer_RebuildSlotMatrix(u8 index) {
     guMtxCatF(sp38.mf, sp78.mf, temp_a0->mf);
 }
 
+/** Clears all the models of a slot. */
 void ModelRenderer_ClearSlotModels(s32 arg0) {
     s32 i;
     StadiumModelSlot* slot = &D_800B0338[arg0];
@@ -115,6 +119,7 @@ extern unk_D_800B2EA8 D_800B3218[];
 extern u8 D_80075C10[];
 extern u8 D_80075A68[];
 
+/** Updates the model of the current slot. */
 void ModelRenderer_UpdateSlotModel(void) {
     u8 index;
     s32 mode;
@@ -138,6 +143,7 @@ extern s16 D_800AF7C0[4];
 extern s16 D_800AFB30[];
 extern s16 D_800AFB28;
 
+/** Updates the vertices of the current slot's model. */
 void ModelRenderer_UpdateSlotVertices(void) {
     u8 index;
     s32 mode;
@@ -164,12 +170,12 @@ Gfx* func_80032C74(Gfx* gfx) {
             break;
         case 0x92:
             gSPDisplayList(gfx++, D_80074540);
-            gDPSetEnvColor(gfx++, 0xFF, 0x20, 0x00, 0x00);
+            gDPSetEnvColor(gfx++, 0xFF, 0x20, 0x00, 0x00); // #FF200000
             break;
         case 0x7E:
             gSPDisplayList(gfx++, D_800744D8);
-            gDPSetEnvColor(gfx++, 0xFF, 0x20, 0x00, 0x00);
-            gDPSetPrimColor(gfx++, 0xFF, 0xFF, 0xFF, 0xFF, 0x05, 0xFF);
+            gDPSetEnvColor(gfx++, 0xFF, 0x20, 0x00, 0x00); // #FF200000
+            gDPSetPrimColor(gfx++, 0xFF, 0xFF, 0xFF, 0xFF, 0x05, 0xFF); // #FFFF05FF
             break;
     }
     return gfx;

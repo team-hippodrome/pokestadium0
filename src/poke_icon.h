@@ -82,7 +82,7 @@ void func_8001833C(unk_func_8001A024*, s32, BattleMon*, u16);
 s32 PokeIcon_ProcessNextSlot(unk_func_8001A024*, s32);
 s32 PokeIcon_ProcessAllSlots(unk_func_8001A024*, s32);
 s32 PokeIcon_RenderNextSlotBlocking(unk_func_8001A024*, s32);
-u8* PokeIcon_GetImage(unk_func_8001A024*, s32);
+s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
 s32 PokeIcon_AreSlotsIdle(unk_func_8001A024*);
 void PokeIcon_OpenModelArchive(void);
 void PokeIcon_LoadModelTextureForMon(u16*, s32, BattleMon*);

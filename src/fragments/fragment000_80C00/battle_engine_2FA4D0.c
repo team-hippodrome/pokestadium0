@@ -64,7 +64,12 @@ extern M2C_UNK D_81186234;
 extern M2C_UNK D_81186238;
 extern M2C_UNK *D_81186250;
 
-void func_8110FC48(void) {
+/**
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void BattleAnim_DisableEffectSpawning(void) {
     D_811861DA = 0;
     D_811861DB = 0;
     D_811861DC = 0;
@@ -115,7 +120,7 @@ void func_8110FD48(s32 arg0, s32 arg1) {
  *
  * Passes arg0 and the address of a stack copy of arg1 on to func_8110FCF0.
  * This is the function the project's symbol list also knows as
- * func_8121036C_jp(s32 cmd, s32 arg1); callers pass a 32-bit command word
+ * func_8110FD6C(s32 cmd, s32 arg1); callers pass a 32-bit command word
  * such as 0xF9000000 or 0xF1000000 as the first argument, which is why arg0
  * is an s32 here.  The cast only satisfies the DisplayObject* prototype of
  * func_8110FCF0 used by the sibling functions and produces no code.
@@ -182,6 +187,7 @@ u32 func_8110FE98(s32 *arg0) {
     return sp1C >> 0x18;
 }
 
+/** Returns the number of sounds active in an audio category. */
 s32 Audio_CountCategorySounds(s32 arg0) {
     return Audio_CountActiveSoundsByCategory(arg0);
 }
@@ -202,7 +208,7 @@ extern u8 D_81184658;
  * ROM's branch layout.
  */
 s32 func_8110FF1C(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     u32 sp18;
 
     if (func_8004D1C0(D_81186250, &sp18, 0) == -1) {
@@ -309,13 +315,16 @@ void func_81110128(s32 arg0, M2C_UNK arg1) {
     func_811098C0(&D_811842A0, arg0, arg1);
 }
 
+/** Clears the battle effect state flag. */
 void BattleAnim_ClearEffectStateFlag(void) {
     D_811842A0 = 0;
 }
 
+/** Effect start hook that does nothing. */
 void BattleAnim_EffectStartNop(void) {
 }
 
+/** Alias that disables battle effect spawning. */
 void BattleAnim_DisableEffectSpawningAlias(void) {
     BattleAnim_DisableEffectSpawning();
 }

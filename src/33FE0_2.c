@@ -57,6 +57,7 @@ s32 func_800332B0(s32 arg0) {
     return ((u8*)(s32)ptr + (arg0 * 0x10)) - ptr;
 }
 
+/** Returns the absolute value of a float. */
 f32 Math_FAbs(f32 value) {
     if (value < 0.0f) {
         value = -value;
@@ -64,6 +65,10 @@ f32 Math_FAbs(f32 value) {
     return value;
 }
 
+/**
+ * Stores the cross product of (ax, ay, az) and (bx, by, bz) in the output
+ * components.
+ */
 void Math_CrossProduct(f32 ax, f32 ay, f32 az, f32 bx, f32 by, f32 bz, f32* cx, f32* cy, f32* cz) {
     *cx = (ay * bz) - (az * by);
     *cy = (az * bx) - (ax * bz);
@@ -76,15 +81,15 @@ f32 func_80033360(
     f32 bx, f32 by, f32 bz
 ) {
     UNUSED s32 pad[4];
-    f32 lenSq;
+    f32 len_sq;
 
-    lenSq = ((bx - ax) * (bx - ax)) + ((by - ay) * (by - ay)) + ((bz - az) * (bz - az));
+    len_sq = ((bx - ax) * (bx - ax)) + ((by - ay) * (by - ay)) + ((bz - az) * (bz - az));
 
-    if (lenSq == 0.0f) {
+    if (len_sq == 0.0f) {
         return 0.0f;
     }
 
-    return (((bx - ax) * (px - ax)) + ((by - ay) * (py - ay)) + ((bz - az) * (pz - az))) / lenSq;
+    return (((bx - ax) * (px - ax)) + ((by - ay) * (py - ay)) + ((bz - az) * (pz - az))) / len_sq;
 }
 
 f32 func_80033408(
@@ -103,10 +108,10 @@ f32 func_80033408(
     f32 ez;
     f32 dx2;
     f32 pad[1];
-    f32 lenSq;
+    f32 len_sq;
 
-    lenSq = SQ(bx - ax) + SQ(by - ay) + SQ(bz - az);
-    if (lenSq == 0.0f) {
+    len_sq = SQ(bx - ax) + SQ(by - ay) + SQ(bz - az);
+    if (len_sq == 0.0f) {
         return -1.0f;
     }
     dx = bx - ax;
@@ -114,7 +119,7 @@ f32 func_80033408(
     dz = bz - az;
     dx2 = px - ax;
 
-    sp68 = t = ((dx * dx2) + (dy * (py - ay)) + (dz * (pz - az))) / lenSq;
+    sp68 = t = ((dx * dx2) + (dy * (py - ay)) + (dz * (pz - az))) / len_sq;
     if (t < -0.5f || t > 1.5f) {
         return -2.0f;
     }
@@ -125,6 +130,7 @@ f32 func_80033408(
     return sqrtf(SQ(ex - px) + SQ(ey - py) + SQ(ez - pz));
 }
 
+/** Returns the vertex class of a vertex from a packed index table. */
 s16 Model_GetVertexClass(s16* table, s32 index) {
     s16 temp;
     s16 slot = table[index];
@@ -160,6 +166,7 @@ s16 Model_GetVertexClass(s16* table, s32 index) {
     return slot;
 }
 
+/** Returns the threshold value of a vertex from a packed index table. */
 s16 Model_GetVertexThreshold(s16* arg0, s32 arg1) {
     s16 temp_v0;
     s16 temp_v1;
@@ -174,6 +181,7 @@ s16 Model_GetVertexThreshold(s16* arg0, s32 arg1) {
     return 0;
 }
 
+/** Returns the joint of a vertex from a packed index table. */
 s16 Model_GetVertexJoint(s16* arg0, s32 arg1) {
     s16 temp_v1;
     s16 temp_a2;
@@ -182,6 +190,7 @@ s16 Model_GetVertexJoint(s16* arg0, s32 arg1) {
     return temp_a2;
 }
 
+/** Returns the merge class of a vertex from a packed index table. */
 s16 Model_GetVertexMergeClass(s16* arg0, s32 arg1) {
     s16 temp_v1;
     s16 temp_a2;
@@ -190,6 +199,7 @@ s16 Model_GetVertexMergeClass(s16* arg0, s32 arg1) {
     return temp_a2;
 }
 
+/** Returns the target class of a vertex from a packed index table. */
 s16 Model_GetVertexTargetClass(s16* arg0, s32 arg1) {
     s16 temp_v1;
     s16 temp_a2;
@@ -198,6 +208,7 @@ s16 Model_GetVertexTargetClass(s16* arg0, s32 arg1) {
     return temp_a2;
 }
 
+/** Returns the source class of a vertex from a packed index table. */
 s16 Model_GetVertexSourceClass(s16* arg0, s32 arg1) {
     s16 temp_v1;
     s16 temp_a2;
@@ -206,6 +217,7 @@ s16 Model_GetVertexSourceClass(s16* arg0, s32 arg1) {
     return temp_a2;
 }
 
+/** Returns the matrix class of a vertex from a packed index table. */
 s16 Model_GetVertexMatrixClass(s16* arg0, s32 arg1) {
     s16 temp_v1;
     s16 temp_a2;

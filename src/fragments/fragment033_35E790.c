@@ -31,7 +31,7 @@ Gfx* func_8F600088(Gfx* gfx, void* segment) {
 }
 
 void func_8F6000E8(s32 arg0, DemoGeoNode* arg1) {
-    s32 pad;
+    s32 pad; // FAKE: stack padding
     DemoGeoTeam* teams;
 
     if (arg0 == 2) {
@@ -103,7 +103,7 @@ Gfx* func_8F600300(Gfx* gfx, void* segment) {
 
 void func_8F600360(s32 arg0, DemoGeoNode *arg1)
 {
-  s32 pad;
+  s32 pad; // FAKE: stack padding
   DemoGeoTeam *teams;
   s32 team;
   s32 slot;
@@ -134,11 +134,11 @@ Gfx* func_8F600420(Gfx* gfx, void* segment) {
 }
 
 void func_8F600480(s32 arg0, DemoGeoNode* arg1) {
-    s32 pad0;
+    s32 pad0; // FAKE: stack padding
     DemoGeoTeam* teams;
     s32 team;
     s32 slot;
-    s32 pad1[2];
+    s32 pad1[2]; // FAKE: stack padding
 
     if (arg0 == 2) {
         teams = D_80060490->node.callbackArg;
@@ -167,11 +167,11 @@ Gfx* func_8F6005E8(Gfx* gfx, void* segment) {
 }
 
 void func_8F600648(s32 arg0, DemoGeoNode* arg1) {
-    s32 pad0;
+    s32 pad0; // FAKE: stack padding
     DemoGeoTeam* teams;
     s32 team;
     s32 slot;
-    s32 pad1[2];
+    s32 pad1[2]; // FAKE: stack padding
 
     if (arg0 == 2) {
         teams = D_80060490->node.callbackArg;

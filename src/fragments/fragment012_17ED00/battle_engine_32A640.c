@@ -30,25 +30,38 @@ extern const char D_821978C8[];
 
 void BattleAnim_UnusedResetAppearanceAndAdvance(Particle* arg0);
 void BattleAnim_SetupOrphanDescriptor2BSpinFade(Particle* arg0);
-void BattleAnim_SetupEndEffect26Descriptor2CGravityScatterFall(Particle* arg0);
+void BattleAnim_SetupPetalDanceLingeringHitEffect(Particle* arg0);
 void BattleAnim_DefaultStartEffect_Draw(void);
 void BattleAnim_OrphanDescriptor2BAnd2EEmitterSequence(void);
-void RegisterParticleEffect_ComplexMovement(void);
-void RegisterParticleEffect_Burst(void);
+void BattleAnim_InitializePetalDanceHit(void);
+void BattleAnim_InitializeWingAttackHit(void);
 
 void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0);
 void BattleAnim_CallbackOrphanDescriptor2EScatterFade(Particle* arg0);
-void BattleAnim_CallbackEndEffect26Descriptor2CGravityScatterFall(Particle* arg0);
-void BattleAnim_CallbackEndEffects85And87GravityFallDelay(Particle* arg0);
+void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0);
+void BattleAnim_RunSlowFallingHitEffect(Particle* arg0);
 
+/**
+ * Lifecycle init: white and fully opaque.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_UnusedResetAppearanceAndAdvance(Particle* arg0) {
     Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
     Particle_SetPrimAlpha(arg0, 0xFF);
     Particle_AdvanceLifecycle(arg0);
 }
 
+/**
+ * Particle callback: resets the color, then fades the particle while moving it on a
+ * circle of radius 32.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackUnusedGenericFadeApproach(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 0:
             break;
 
@@ -57,8 +70,8 @@ void BattleAnim_CallbackUnusedGenericFadeApproach(Particle* arg0) {
             break;
 
         case 2:
-            Particle_Field1C_Approach_0B98C(arg0, 3.0f, 0.025f);
-            Particle_TickDelayAndAdvanceLifecycle(arg0, 0x12C);
+            Particle_ApproachScale(arg0, 3.0f, 0.025f);
+            Particle_TickDelayAndAdvanceLifecycle(arg0, 300);
             break;
 
         case 3:
@@ -75,10 +88,17 @@ void BattleAnim_CallbackUnusedGenericFadeApproach(Particle* arg0) {
     Particle_UpdateRotatingVelocityXZ(arg0, 32.0f, 0x400);
 }
 
+/**
+ * Lifecycle init: small, randomly rotated and spinning, fast, delayed 4 frames per burst
+ * index.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupOrphanDescriptor2BSpinFade(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
-    Particle_Field1C_SetScaled_0B938(arg0, 0.2f);
+    Particle_SetScaleScaled(arg0, 0.2f);
     Particle_Field7C_SetYScaled_0AF24(arg0, 1.0f);
     Particle_Field94_SetX_0A2A4(arg0, ParticleMath_RandomRange(0x10000));
     Particle_Field94_SetZ_0A2CC(arg0, ParticleMath_RandomRange(0x10000));
@@ -90,28 +110,35 @@ void BattleAnim_SetupOrphanDescriptor2BSpinFade(Particle* arg0) {
 }
 
 void func_8213E1FC(Particle* arg0, f32 arg1);
-s32 func_8213F658(Particle* arg0, f32 arg1, f32 arg2);
+s32 Particle_ApproachStepMagnitude(Particle* arg0, f32 arg1, f32 arg2);
+/**
+ * Particle callback: after the delay shows the particle, flies it out spinning, then
+ * fades it.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0) {
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
             BattleAnim_SetupOrphanDescriptor2BSpinFade(arg0);
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
                 Particle_BeginPhase(arg0);
             }
             break;
 
         case 3:
-            if (Particle_TickDelayAndAdvanceLifecycle(arg0, 0x32) != 0) {
+            if (Particle_TickDelayAndAdvanceLifecycle(arg0, 50) != 0) {
                 Particle_AdvancePhase(arg0);
             }
             break;
 
         case 4:
-            if (Particle_TickDelayAndAdvanceLifecycle(arg0, 0x14) != 0) {}
+            if (Particle_TickDelayAndAdvanceLifecycle(arg0, 20) != 0) {} // karodo
             break;
 
         case 5:
@@ -119,29 +146,36 @@ void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0) {
             break;
     }
 
-    switch (arg0->unk_B8) {
+    switch (arg0->phase) {
         case 1:
-            func_8213F658(arg0, 50.0f, 0.5f);
+            Particle_ApproachStepMagnitude(arg0, 50.0f, 0.5f);
             func_8213E1FC(arg0, 1.0f);
-            Particle_UpdateRotatingVelocityXZ(arg0, arg0->unk_74, 0x1000);
+            Particle_UpdateRotatingVelocityXZ(arg0, arg0->stepMagnitude, 0x1000);
             Particle_Field94_AddX_0A578(arg0, 0x2000);
             Particle_Field94_AddZ_0A5B0(arg0, 0x3000);
             break;
 
         case 2:
-            func_8213F658(arg0, 0.0f, 1.0f);
+            Particle_ApproachStepMagnitude(arg0, 0.0f, 1.0f);
             func_8213E1FC(arg0, -2.0f);
-            Particle_UpdateRotatingVelocityXZ(arg0, arg0->unk_74, 0x1000);
+            Particle_UpdateRotatingVelocityXZ(arg0, arg0->stepMagnitude, 0x1000);
             Particle_Field94_AddX_0A578(arg0, 0x2000);
             Particle_Field94_AddZ_0A5B0(arg0, 0x3000);
             break;
     }
 }
 
+/**
+ * Lifecycle init: half scale, fast, small random tilt, palette color 0x22, delayed 4
+ * frames per burst index.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_SetupOrphanDescriptor2EScatterFade(Particle* arg0) {
     s16 sp2E = Particle_FieldAC_GetS16_0C038(arg0);
 
-    Particle_Field1C_SetScaled_0B938(arg0, 0.5f);
+    Particle_SetScaleScaled(arg0, 0.5f);
     Particle_Field74_SetScaled_0AD8C(arg0, 10.0f);
     Particle_Field94_AddVec_0A52C(arg0, ParticleMath_RandomSigned(0x1000), ParticleMath_RandomSigned(0x1000), 0);
     Particle_FieldA6_SetS16_0BCA8(arg0, sp2E * 4);
@@ -151,12 +185,12 @@ void BattleAnim_SetupOrphanDescriptor2EScatterFade(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK func_8213C938(s8 *);                      /* extern */
+void Particle_DisableAndDetach(s8 *arg0);                      /* extern */
 M2C_UNK func_8213CA80(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 s32 func_8213CB7C(s8 *);                          /* extern */
-M2C_UNK func_8213E528(s8 *);                      /* extern */
-M2C_UNK func_8213EDCC(s8 *, M2C_UNK);             /* extern */
+void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /* extern */
+M2C_UNK Particle_AddRotationZ(s8 *, M2C_UNK);             /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_821519AC(s8 *);                      /* extern */
 
@@ -177,19 +211,23 @@ void func_82151A5C(s8 *arg0) {
         func_8213CA80(arg0, 0x46);
         break;
     case 4:
-        func_8213C938(arg0);
+        Particle_DisableAndDetach(arg0);
         break;
     }
     if (func_8213CB7C(arg0) != 0) {
-        func_8213E528(arg0);
-        func_8213EDCC(arg0, 0x2000);
+        Particle_AddVelocityFromRotationTemplate1(arg0);
+        Particle_AddRotationZ(arg0, 0x2000);
     }
 }
 
-void BattleAnim_SetupEndEffect26Descriptor2CGravityScatterFall(Particle* arg0) {
+/**
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Petal Dance.
+ */
+void BattleAnim_SetupPetalDanceLingeringHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
 
-    Particle_Field1C_SetScaled_0B938(arg0, 0.12f);
+    Particle_SetScaleScaled(arg0, 0.12f);
     Particle_Field7C_SetYScaled_0AF24(arg0, (ParticleMath_RandomRange(0x14) * 0.02f) + 0.25f);
     Particle_Field94_SetX_0A2A4(arg0, ParticleMath_RandomRange(0x10000));
     Particle_Field94_SetZ_0A2CC(arg0, ParticleMath_RandomRange(0x10000));
@@ -206,16 +244,21 @@ void BattleAnim_SetupEndEffect26Descriptor2CGravityScatterFall(Particle* arg0) {
 }
 
 void func_8213E1FC(Particle* arg0, f32 arg1);
-s32 func_8213F658(Particle* arg0, f32 arg1, f32 arg2);
-void func_8213ECD0(Particle* arg0);
-void BattleAnim_CallbackEndEffect26Descriptor2CGravityScatterFall(Particle* arg0) {
-    switch (arg0->unk_B2) {
+s32 Particle_ApproachStepMagnitude(Particle* arg0, f32 arg1, f32 arg2);
+void Particle_ApplyRotationStepX(Particle* arg0);
+/**
+ * Handles the floating pedals that linger when being hit by pedal dance
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Petal Dance.
+ */
+void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
+    switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupEndEffect26Descriptor2CGravityScatterFall(arg0);
+            BattleAnim_SetupPetalDanceLingeringHitEffect(arg0);
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
                 Particle_BeginPhase(arg0);
                 Particle_FieldA6_SetS16_0BCA8(arg0, ParticleMath_RandomRange(0xA) + 0x1E);
@@ -223,28 +266,28 @@ void BattleAnim_CallbackEndEffect26Descriptor2CGravityScatterFall(Particle* arg0
             break;
 
         case 3:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_FieldA6_SetS16_0BCA8(arg0, 8);
                 Particle_AdvancePhase(arg0);
             }
             break;
 
         case 4:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_Field9A_SetX_0A3C4(arg0, ParticleMath_RandomSignedOffsetBySign(0x1000, 0x600));
                 Particle_FieldB0_SetS16_0BFEC(arg0, ParticleMath_RandomSignedOffsetBySign(0x400, 0x400));
                 Particle_Field9A_SetZ_0A3EC(arg0, ParticleMath_RandomSignedOffsetBySign(0x1000, 0x600));
-                arg0->unk_38.x += arg0->unk_50.x;
-                arg0->unk_50.x = 0;
-                arg0->unk_38.z += arg0->unk_50.z;
-                arg0->unk_50.z = 0;
+                arg0->positionOffset.x += arg0->motionOffset.x;
+                arg0->motionOffset.x = 0;
+                arg0->positionOffset.z += arg0->motionOffset.z;
+                arg0->motionOffset.z = 0;
                 Particle_AdvancePhase(arg0);
-                arg0->unk_7C.y = -((ParticleMath_RandomRange(8) * 0.1f) + 0.5f);
+                arg0->motionStep.y = -((ParticleMath_RandomRange(8) * 0.1f) + 0.5f);
             }
             break;
 
         case 5:
-            Particle_TickDelayAndAdvanceLifecycle(arg0, 0x46);
+            Particle_TickDelayAndAdvanceLifecycle(arg0, 70);
             break;
 
         case 6:
@@ -252,36 +295,40 @@ void BattleAnim_CallbackEndEffect26Descriptor2CGravityScatterFall(Particle* arg0
             break;
     }
 
-    switch (arg0->unk_B8) {
+    switch (arg0->phase) {
         case 1:
-            func_8213F658(arg0, 20.0f, 0.5f);
-            func_8213E1FC(arg0, arg0->unk_7C.y);
-            Particle_UpdateRotatingVelocityXZ(arg0, arg0->unk_74, arg0->unk_AE);
+            Particle_ApproachStepMagnitude(arg0, 20.0f, 0.5f);
+            func_8213E1FC(arg0, arg0->motionStep.y);
+            Particle_UpdateRotatingVelocityXZ(arg0, arg0->stepMagnitude, arg0->unk_AE);
             break;
 
         case 2:
             Particle_FieldAE_Approach_0BF60(arg0, 0, 0x200);
-            func_8213E1FC(arg0, arg0->unk_7C.y);
-            Particle_UpdateRotatingVelocityXZ(arg0, arg0->unk_74, arg0->unk_AE);
+            func_8213E1FC(arg0, arg0->motionStep.y);
+            Particle_UpdateRotatingVelocityXZ(arg0, arg0->stepMagnitude, arg0->unk_AE);
             break;
 
         case 3:
-            func_8213E1FC(arg0, arg0->unk_7C.y);
+            func_8213E1FC(arg0, arg0->motionStep.y);
             Particle_UpdateRotatingVelocityXZ(arg0, 5.0f, 0x400);
             break;
     }
 
     if (Particle_IsRenderingEnabled(arg0) != 0) {
-        func_8213ECD0(arg0);
+        Particle_ApplyRotationStepX(arg0);
         Particle_Field94_AddY_0A594(arg0, arg0->unk_B0);
-        Particle_Field94_AddZFromField9A_0A4DC(arg0);
-        if (arg0->unk_2C.y < 0.0f) {
+        Particle_Field94_AddXFromField9A_0A4B4(arg0);
+        if (arg0->worldPosition.y < 0.0f) {
             Particle_MarkInactive(arg0);
         }
     }
 }
 
-void BattleAnim_SetupEndEffects85And87GravityFallDelay(Particle* arg0) {
+/**
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Vine Whip and Wing Attack.
+ */
+void BattleAnim_SetupSlowFallingHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldAC_GetS16_0C038(arg0);
     s16 sp24 = Particle_FieldCE_GetS32_0C040(arg0);
 
@@ -289,16 +336,16 @@ void BattleAnim_SetupEndEffects85And87GravityFallDelay(Particle* arg0) {
 
     switch (sp24) {
         case 0:
-            Particle_Field1C_SetScaled_0B938(arg0, 0.12f);
-            arg0->unk_5C.y = -((ParticleMath_RandomRange(0xA) * 0.1f) + 0.5f);
+            Particle_SetScaleScaled(arg0, 0.12f);
+            arg0->motionTarget.y = -((ParticleMath_RandomRange(0xA) * 0.1f) + 0.5f);
             Particle_Field38_AddYScaled_08E90(arg0, ParticleMath_RandomRange(0x28) + 0x1E);
             Particle_SetRandomVelocityXSymmetric(arg0, 0x1E, 0);
             Particle_SetRandomVelocityZSymmetric(arg0, 0x1E, 0);
             break;
 
         case 1:
-            Particle_Field1C_SetScaled_0B938(arg0, 0.2f);
-            arg0->unk_5C.y = -((ParticleMath_RandomRange(4) * 0.1f) + 0.2f);
+            Particle_SetScaleScaled(arg0, 0.2f);
+            arg0->motionTarget.y = -((ParticleMath_RandomRange(4) * 0.1f) + 0.2f);
             Particle_Field38_AddYScaled_08E90(arg0, ParticleMath_RandomSigned(0x14) + 0x1E);
             Particle_SetRandomVelocityXSymmetric(arg0, 0xF, 5);
             Particle_SetRandomVelocityZSymmetric(arg0, 0x14, 5);
@@ -318,17 +365,22 @@ void BattleAnim_SetupEndEffects85And87GravityFallDelay(Particle* arg0) {
 }
 
 void func_8213E1FC(Particle* arg0, f32 arg1);
-void func_8213ECD0(Particle* arg0);
-void BattleAnim_CallbackEndEffects85And87GravityFallDelay(Particle* arg0) {
+void Particle_ApplyRotationStepX(Particle* arg0);
+/**
+ * Handles the leaves that spawn when being hit by vine whip and the feathers that spawn when being hit by wing attack
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Vine Whip and Wing Attack.
+ */
+void BattleAnim_RunSlowFallingHitEffect(Particle* arg0) {
     s16 sp26 = Particle_FieldCE_GetS32_0C040(arg0);
 
-    switch (arg0->unk_B2) {
+    switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupEndEffects85And87GravityFallDelay(arg0);
+            BattleAnim_SetupSlowFallingHitEffect(arg0);
             break;
 
         case 2:
-            if (Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0) != 0) {
+            if (Particle_DecrementUnkA6ToZeroThenAdvance(arg0) != 0) {
                 Particle_EnableRendering(arg0);
                 Particle_BeginPhase(arg0);
                 switch (sp26) {
@@ -344,7 +396,7 @@ void BattleAnim_CallbackEndEffects85And87GravityFallDelay(Particle* arg0) {
             break;
 
         case 3:
-            Particle_FieldA6_DecrementToZeroStep1AndStepState_0BDD0(arg0);
+            Particle_DecrementUnkA6ToZeroThenAdvance(arg0);
             break;
 
         case 4:
@@ -352,43 +404,66 @@ void BattleAnim_CallbackEndEffects85And87GravityFallDelay(Particle* arg0) {
             break;
     }
 
-    if (arg0->unk_B8 == 1) {
-        func_8213E1FC(arg0, arg0->unk_5C.y);
+    if (arg0->phase == 1) {
+        func_8213E1FC(arg0, arg0->motionTarget.y);
         Particle_UpdateRotatingVelocityXZ(arg0, 5.0f, 0x400);
     }
 
     if (Particle_IsRenderingEnabled(arg0) != 0) {
-        func_8213ECD0(arg0);
+        Particle_ApplyRotationStepX(arg0);
         Particle_Field94_AddYFromField9A_0A4C8(arg0);
-        Particle_Field94_AddZFromField9A_0A4DC(arg0);
-        if (arg0->unk_2C.y < 0.0f) {
+        Particle_Field94_AddXFromField9A_0A4B4(arg0);
+        if (arg0->worldPosition.y < 0.0f) {
             Particle_MarkInactive(arg0);
         }
     }
 }
 
+/**
+ * Draw hook for start effects that draw nothing.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_DefaultStartEffect_Draw(void) {
 }
 
+/**
+ * Effect sequence: sets effect state flag 1 after 128 frames, spawns four waves of
+ * spinning particles, then 58 frames later four scatter bursts.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_OrphanDescriptor2BAnd2EEmitterSequence(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x80, 1);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackOrphanDescriptor2BSpinFade, &gBattleAnimParticleDescriptors[0x2B], 0, 0x10, 0xA, 0, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(2, BattleAnim_CallbackOrphanDescriptor2BSpinFade, &gBattleAnimParticleDescriptors[0x2B], 0, 0x10, 0xA, 0, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackOrphanDescriptor2BSpinFade, &gBattleAnimParticleDescriptors[0x2B], 0, 0x10, 0xA, 0, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackOrphanDescriptor2BSpinFade, &gBattleAnimParticleDescriptors[0x2B], 0, 8, 0xA, 0, 0, 0);
-    BattleAnim_AddSpawnDelay(0x3A);
+    BattleAnim_AddSpawnDelay(58);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackOrphanDescriptor2EScatterFade, &gBattleAnimParticleDescriptors[0x2E], 0, 0x10, 2, 0, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackOrphanDescriptor2EScatterFade, &gBattleAnimParticleDescriptors[0x2E], 0, 0x10, 2, 0, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackOrphanDescriptor2EScatterFade, &gBattleAnimParticleDescriptors[0x2E], 0, 0x10, 2, 0, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackOrphanDescriptor2EScatterFade, &gBattleAnimParticleDescriptors[0x2E], 0, 0x10, 2, 0, 0, 0);
 }
 
-void RegisterParticleEffect_ComplexMovement(void) {
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 0x14, BattleAnim_CallbackEndEffect26Descriptor2CGravityScatterFall, &gBattleAnimParticleDescriptors[0x2C], 0, 4, 0xE, 0, 0, 0);
-    BattleAnim_EndEffect26DelayedDescriptor29ScatterSequence();
+/**
+ * initializes being hit by pedal dance
+ * Effect end init 26 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Petal Dance.
+ */
+void BattleAnim_InitializePetalDanceHit(void) {
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 0x14, BattleAnim_RunPetalDanceLingeringHitEffect, &gBattleAnimParticleDescriptors[0x2C], 0, 4, 0xE, 0, 0, 0);
+    BattleAnim_InitializePetalDanceHitSequence();
 }
 
-void RegisterParticleEffect_Burst(void) {
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 5, BattleAnim_CallbackEndEffects85And87GravityFallDelay, &gBattleAnimParticleDescriptors[0x2D], 0, 1, 0xE, 0, 0, 1);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_CallbackEndEffects85And87GravityFallDelay, &gBattleAnimParticleDescriptors[0x2D], 0, 1, 0xE, 0, 0, 1);
+/**
+ * initializes being hit by wing attack
+ * Effect end init 87 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
+ * ran for exactly Wing Attack.
+ */
+void BattleAnim_InitializeWingAttackHit(void) {
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 5, BattleAnim_RunSlowFallingHitEffect, &gBattleAnimParticleDescriptors[0x2D], 0, 1, 0xE, 0, 0, 1);
+    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_RunSlowFallingHitEffect, &gBattleAnimParticleDescriptors[0x2D], 0, 1, 0xE, 0, 0, 1);
 }

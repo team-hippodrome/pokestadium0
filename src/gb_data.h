@@ -228,7 +228,7 @@ char* Text_CopySpeciesName(char* arg0, s32 arg1);
 char* Text_GetTmHmName(s32 arg0, char* arg1);
 void Pokemon_FromGbRecord(BattleMon* arg0, GbPokemonRecord* arg1);
 void Pokemon_FromGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1);
-void Pokemon_ToGbRecord(BattleMon* arg0, GbPokemonRecord* arg1);
+void Pokemon_ToGbRecord(s8 *arg0, s8 *arg1);
 void Pokemon_ToGbRecordExt(unk_func_88205880_00D0* arg0, GbPokemonRecordExt* arg1);
 u16 StatExpSqrt(u16 arg0);
 void func_80020188(void);

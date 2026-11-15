@@ -29,6 +29,13 @@ void func_8213436C(void);
 extern s32 D_8219A760;
 void func_821079E8(s32);
 
+/**
+ * Camera frame on the Pokemon of side D_8219A760: aims at its default anchor from the
+ * front, at a distance scaled by its size, then advances the phase step.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name guessed from the code.
+ */
 void BattleScene_FinalPresentationFrameActiveOwner(CameraNode* arg0) {
     f32 sp3C;
 
@@ -41,31 +48,39 @@ void BattleScene_FinalPresentationFrameActiveOwner(CameraNode* arg0) {
     BattleScene_SetCameraEyeFromAt(arg0, 0, BattleScene_GetParticipantFacingAngle(sActivePokemon[D_8219A760]), sp3C, 0.0f);
 
     if (sActivePokemon[0]) {}  // karodo
-    sBattleScene.scene->unk_20 += 1;
+    sBattleScene.scene->phaseStep += 1;
     if (D_8219A760) {}  // karodo
 }
 
+/**
+ * Empty.
+ */
 void func_8213436C(void) {
 }
 
-void BattleScene_SelectNextIntroCameraShot(CameraNode* arg0);
+void BattleScene_SelectNextBRollCameraShot(CameraNode* arg0);
 void func_82121434(CameraNode* arg0);
-void func_8212601C(s32 arg0);
+void BattleScene_InitTurnPresentation(s32 arg0);
 void BattleScene_SetPhase(CameraNode* arg0, s32 arg1);
-void func_821324D8(CameraNode* arg0);
-void func_82131880(CameraNode* arg0);
+void BattleScene_OpeningStepInitCamera(CameraNode* arg0);
+void BattleScene_IntroStepInitOverheadCamera(CameraNode* arg0);
 void func_821329F8(s32 arg0);
 void func_82132F88(CameraNode* arg0);
+/**
+ * Starts the battle scene: clears the winner, sets the field of view to 30 and runs the
+ * opening step for the scene mode (mode 0 frames the active Pokemon, modes 1 and 5 start
+ * the B-roll), then stores the camera.
+ */
 void func_82134374(CameraNode* arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
-    sBattleScene.scene->unk_40 = 0;
-    sBattleScene.scene->unk_60 = 30.0f;
-    switch (sBattleScene.scene->unk_1C) {
+    sBattleScene.scene->winner = 0;
+    sBattleScene.scene->verticalFieldOfView = 30.0f;
+    switch (sBattleScene.scene->mode) {
         case 0:
             BattleScene_FinalPresentationFrameActiveOwner(arg0);
             break;
         case 1:
         case 5:
-            BattleScene_SelectNextIntroCameraShot(arg0);
+            BattleScene_SelectNextBRollCameraShot(arg0);
             break;
         case 9:
             func_82121434(arg0);
@@ -73,18 +88,18 @@ void func_82134374(CameraNode* arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
         case 2:
         case 6:
         case 10:
-            func_8212601C((s32)arg0);
+            BattleScene_InitTurnPresentation((s32)arg0);
             BattleScene_SetPhase(arg0, 1);
             break;
         case 3:
-            func_8212601C((s32)arg0);
+            BattleScene_InitTurnPresentation((s32)arg0);
             BattleScene_SetPhase(arg0, 5);
             break;
         case 8:
-            func_821324D8(arg0);
+            BattleScene_OpeningStepInitCamera(arg0);
             break;
         case 4:
-            func_82131880(arg0);
+            BattleScene_IntroStepInitOverheadCamera(arg0);
             break;
         case 7:
             func_821329F8((s32)arg0);
@@ -96,6 +111,12 @@ void func_82134374(CameraNode* arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
     sBattleScene.scene->camera = arg0;
 }
 
+/**
+ * Allocates the battle scene from the main pool and zeroes it.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_AllocateMemory(void) {
     sBattleScene.scene = main_pool_alloc(sizeof(BattleScene), 0);
     bzero(sBattleScene.scene, sizeof(BattleScene));

@@ -76,6 +76,13 @@ void Cont_AdjustAnalogStick(Controller* controller) {
 
 extern u8 D_800AAFFA;
 extern u8 D_800AAFF8;
+/**
+ * Initialize the gControllers structs. Clear each member, then set their cont
+ * id and set the status and pads pointers.
+ * Seen in play (2026-11-13) ran at boot (console reset, then N64 logo, opening, title and main
+ * menu).
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Cont_InitControllers(void) {
     s16 port;
     s16 cont;
@@ -108,6 +115,16 @@ extern u8 D_800AAFFA;
 extern u8 D_800AAFF8;
 s32 func_80053A90(OSMesgQueue*);
 
+/**
+ * Setup the controllers for initial use by initializing the EEPROM queue
+ * and SI Event queues. EEPROM probing was handled by game_init.c in Super
+ * Mario 64 which also handled the controllers in the same file. Since
+ * Nintendo EAD is also credited with co-developing Pokemon Stadium, this
+ * organization may be a holdover from that era.
+ * Seen in play (2026-11-13) ran at boot (console reset, then N64 logo, opening, title and main
+ * menu).
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 u8 Cont_SetupControllers(u8 arg0) {
     D_800AAFFA = arg0;
     osCreateMesgQueue(&gSIEventMesgQueue, gSIEventMesgBuf, 1);
@@ -121,12 +138,17 @@ u8 Cont_SetupControllers(u8 arg0) {
 M2C_UNK func_80051C70(M2C_UNK *);                   /* extern */
 extern M2C_UNK D_800AAFE0;
 
-void func_8000B1FC(void) {
+/** Requests a read of the controller inputs. */
+void Cont_StartReadInputs(void) {
     func_80051C70(&D_800AAFE0);
 }
 
 void GbTower_PollPakConnection(void);
-void func_8000B220(void) {
+/**
+ * Reads the controller inputs requested by Cont_StartReadInputs and updates
+ * the button state.
+ */
+void Cont_ReadInputs(void) {
     OSMesg msg;
     s32 i;
     Controller* controller;
@@ -142,7 +164,7 @@ void func_8000B220(void) {
                 controller->rawStickY = controller->controllerData->stick_y;
                 controller->buttonPressed =
                     controller->controllerData->button & (controller->controllerData->button ^ controller->buttonDown);
-                controller->unk_0A = controller->buttonDown & (controller->controllerData->button ^ controller->buttonDown);
+                controller->buttonReleased = controller->buttonDown & (controller->controllerData->button ^ controller->buttonDown);
                 controller->buttonDown = controller->controllerData->button;
 
                 Cont_AdjustAnalogStick(controller);
@@ -158,11 +180,23 @@ u8 func_8000B2E8(void) {
     return D_800AAFF8;
 }
 
+/**
+ * Select the controller to poll and initialize its D-pad repeat delay.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
+ * the Lab list, Lab sort, registration, the Lab PC and Free Battle setup.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Input_SetRepeatController(Controller* arg0) {
     D_800AB02C = 0xA;
     D_800AB030 = arg0;
 }
 
+/**
+ * Return one D-pad press, repeating held directions after 10 frames and then every 2 frames.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the main menu, the Pokédex,
+ * the party screen, the Lab list, Lab sort, registration, the Lab PC and Free Battle setup.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Input_GetRepeatedDPad(void) {
     if (D_800AB030->buttonPressed & 0x800) {
         D_800AB02C = 0xA;
@@ -221,6 +255,13 @@ s32 Cont_IsEepromPresent(void) {
     return gEepromProbe != 0;
 }
 
+/**
+ * Attempt to read from EEPROM up to 4 times given a buffer and size and inaddr.
+ * A return of 0 indicates success while -1 is an EEPROM error.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
+ * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 Cont_AttemptReadEeprom(u8* buffer, u32 size, s32 inaddr) {
     s32 result = 1;
     if (gEepromProbe) {
@@ -261,7 +302,13 @@ s32 func_8000B4D4(u8* buffer, u32 size, s32 inaddr) {
     return result;
 }
 
-void func_8000B570(s32 ms) {
+/**
+ * Busy-waits for `ms` milliseconds using osGetTime.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name and comment guessed from the code.
+ */
+void Cont_BusyWaitMs(s32 ms) {
     u64 cycles = OS_USEC_TO_CYCLES(ms * 1000LL); // why not just do OS_NSEC_TO_CYCLES and not multiply by 1000LL?
 
     osSetTime(0);
@@ -269,7 +316,8 @@ void func_8000B570(s32 ms) {
 }
 
 extern u16 gCrashScreenUnlockInputs[];
-void func_8000B570(s32 ms);
+void Cont_BusyWaitMs(s32 ms);
+/** Waits for the button combination that continues from the crash screen. */
 void crash_screen_wait_for_button_combo(void) {
     s32 breakloop = FALSE;
     s32 i = 0;
@@ -287,6 +335,6 @@ void crash_screen_wait_for_button_combo(void) {
                 i = 0;
             }
         }
-        func_8000B570(10);
+        Cont_BusyWaitMs(10);
     } while (breakloop == FALSE);
 }

@@ -11,34 +11,7 @@
 #include "controller.h"
 #include "memory.h"
 #include "variables.h"
-typedef struct unk_D_8122C4FA {
-  /* 0x00 */ u8 unk_00;
-  /* 0x01 */ u8 unk_01;
-} unk_D_8122C4FA;
-typedef struct unk_D_8122B2F8 {
-  /* 0x000000 */ char unk000000[0x1FEAE8];
-} unk_D_8122B2F8;
-typedef struct unk_D_8122B1E8 {
-  /* 0x00 */ OSMesg mesg[1];
-  /* 0x04 */ OSMesgQueue queue;
-  /* 0x1C */ char unk1C[0x4];
-  /* 0x20 */ s32 unk_20;
-  /* 0x24 */ s32 unk_24;
-  /* 0x28 */ void* unk_28;
-  /* 0x2C */ s32 unk_2C;
-  /* 0x30 */ char unk30[0x8];
-  /* 0x38 */ s32 unk_38;
-  /* 0x3C */ s32 unk_3C;
-  /* 0x40 */ void* unk_40;
-  /* 0x44 */ char unk44[0x4];
-  /* 0x48 */ void* unk_48;
-  /* 0x4C */ void* unk_4C;
-  /* 0x50 */ u32 unk_50;
-  /* 0x54 */ s32 unk_54;
-  /* 0x58 */ void* unk_58;
-  /* 0x5C */ s32 unk_5C;
-  /* 0x60 */ char unk60[0x8];
-} unk_D_8122B1E8;
+#include "fragments/fragment000_80C00/gb_tower_emulator_7F9A0_types.h"
 typedef struct unk_func_812009D0 {
   /* 0x00 */ u8 unk00[0x34];
   /* 0x34 */ u8 data[0x10];  
@@ -49,10 +22,6 @@ typedef struct unk_func_812009D0 {
   /* 0x49 */ u8 unk_49;
   /* 0x4A */ u8 unk_4A;
 } unk_func_812009D0;
-typedef struct unk_D_8120D7F3 {
-    u8 pad[0x116];
-    u8 unk116;
-} unk_D_8120D7F3;
 extern OSThread gGbPakServiceThread;
 extern u8 gGbPakServiceThreadStack[0x1000];
 extern OSMesg gGbPakServiceQueueMessages[4];
@@ -65,11 +34,11 @@ extern u8* gGbEmuFont1Data;
 extern u8* gGbEmuFont2Data;
 void func_812070A0(void);
 void GbApu_SelectRegionClock(s32);
-void func_81117068(u16, u8, u16);
+void GbApu_QueueRegisterWrite(u16, u8, u16);
 void GbApu_ResetChannels(void);
 void GbApu_Reset(unk_D_8122B2F8*);
 void func_811173F4(void);
-void GbAudio_SetAlternateRendererEnabled(s32);
+void GbAudio_SetMenuSoundMode(s32);
 #define GB_EMU_PAL_Y_SCALE 0.833f
 
 #include "m2c_macros.h"
@@ -79,10 +48,10 @@ s32 GbEmu_PixelOpDitherB(s32 arg0, s32 arg1);
 s32 GbEmu_PixelOpAverage555(s32 arg0, s32 arg1);
 s32 GbEmu_PixelOpReplace(UNUSED s32 arg0, s32 arg1);
 void GbEmu_BlitWithPixelOp(u16* dst, u16* src, s32 mode, s32 width, s32 height);
-void func_81103D60(u16* dst, u16* src, s32 color, s32 width, s32 height);
-void func_8110427C(u16* dst, u8* alpha_map, s32 color, s32 width, s32 height, u32 alpha_stride);
+void GbEmu_BlitTinted(u16* dst, u16* src, s32 color, s32 width, s32 height);
+void GbEmu_BlendColorWithAlphaMap(u16* dst, u8* alpha_map, s32 color, s32 width, s32 height, u32 alpha_stride);
 void GbEmu_Delay(OSTime arg0);
-void func_81107128(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4);
+void GbEmu_BlendScrollingLayer(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4);
 
 M2C_UNK func_8005C670(s32, M2C_UNK, u16, M2C_UNK *, s32); /* extern */
 extern M2C_UNK D_81156480;
@@ -120,19 +89,19 @@ s32 func_811020A8(void *arg0);
 
 s32 func_80051110(s32, s8 *, s8 *);             /* extern */
 
-s32 func_81102168(s8 *arg0);
+s32 GbPak_CheckCartInserted(s8 *arg0);
 
 s32 func_81101FE8(s8 *);                            /* extern */
-s32 func_81102F7C(s32, s32, s32);                     /* extern */
+s32 GbPak_WriteVerifiedSramBlock(s32, s32, s32);                     /* extern */
 
 /*
- * func_811021D4
+ * GbPak_ProbeCartridge
  *
  * Returns 0 right away when bit 0 of the byte at arg0 + 0x9B is set.
- * Otherwise runs func_81102168(arg0), then func_81101FE8(arg0) while the
+ * Otherwise runs GbPak_CheckCartInserted(arg0), then func_81101FE8(arg0) while the
  * result is 0, then, if bit 0 of the byte at 0x9B is (now) set and the byte
  * at 0x98 is non-zero, func_811020A8(arg0), then
- * func_81102F7C(byte 0x9C, word 0x94, byte 0x98), stopping at the first
+ * GbPak_WriteVerifiedSramBlock(byte 0x9C, word 0x94, byte 0x98), stopping at the first
  * non-zero result. If the result is non-zero, clears bit 0 of the byte at
  * 0x9B. Returns the result.
  *
@@ -143,9 +112,9 @@ s32 func_81102F7C(s32, s32, s32);                     /* extern */
  * found with decomp-permuter and is the only form tried that makes the
  * compiler copy arg0 to s0 before the first load, as the ROM does; the
  * triple test is needed (one or two do not match). The same kind of empty
- * test already exists in func_88100100.
+ * test already exists in Registration_WriteTeam.
  */
-s32 func_811021D4(u8 *arg0);
+s32 GbPak_ProbeCartridge(u8 *arg0);
 
 s32 GbPak_SelectRomAddress(unk_D_8122B2C0* arg0, s32 arg1);
 
@@ -188,16 +157,16 @@ typedef struct GbpakChannel811023DC {
     /* 0xA3 */ char unkA3[0x1];
 } GbpakChannel811023DC; // size = 0xA4
 GbpakChannel811023DC D_811561C8[4];
-s32 func_811023DC(OSPfs* arg0);
+s32 GbPak_CheckTransferStatus(OSPfs* arg0);
 
-s32 func_811021D4(u8*);
+s32 GbPak_ProbeCartridge(u8*);
 s32 func_81102280(u8*, s32);
-s32 func_811023DC(OSPfs*);
-s32 func_81102460(u8* arg0);
+s32 GbPak_CheckTransferStatus(OSPfs*);
+s32 GbPak_ReadRomSummed(u8* arg0);
 
-s32 func_811021D4(u8*);
+s32 GbPak_ProbeCartridge(u8*);
 s32 func_81102344(u8*, s32);
-s32 func_811023DC(OSPfs*);
+s32 GbPak_CheckTransferStatus(OSPfs*);
 
 s32 GbPak_TransferBankedRam(u8* arg0, s32 arg1);
 
@@ -208,7 +177,7 @@ extern volatile u8 D_81156476;
 extern OSMesgQueue D_81156458;
 s32 func_8004CFB0(OSMesgQueue*, s32, s32);
 
-s32 func_81102970(s32 chan, s32 bank);
+s32 GbPak_RequestBankLoad(s32 chan, s32 bank);
 
 extern volatile u8 D_81156475;
 extern volatile u8 D_81156476;
@@ -216,9 +185,16 @@ extern volatile u8 D_81156477;
 extern OSMesgQueue D_81156458;
 s32 func_8004CFB0(OSMesgQueue*, s32, s32);
 
-s32 func_81102AC8(s32 arg0);
+s32 GbPak_WriteBackDirtySramBlock(s32 arg0);
 
-s32 func_81102C20(s32 arg0) {
+/**
+ * Reads each clean 0x100-byte block of cartridge RAM back and compares it with the cached copy; a
+ * mismatch rewrites the block and restarts the pass, up to 20 times. Returns -1 on failure.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
+ * @unverified Name and comment from the code; no Transfer Pak was emulated.
+ */
+s32 GbPak_VerifyRamBlocks(s32 arg0) {
     GbpakChannel811023DC* ch2;
     GbpakChannel811023DC* ch;
     s32 retries;
@@ -230,7 +206,7 @@ s32 func_81102C20(s32 arg0) {
     ch2 = ch;
     retries = 20;
     for (;;) {
-        r = func_81102AC8(arg0);
+        r = GbPak_WriteBackDirtySramBlock(arg0);
         if (r >= 3) {
         fail:
             for (i = 0; i < ch->ramSize >> 8; i++) {
@@ -265,7 +241,7 @@ restart:
                 if (retries == 0) {
                     goto fail;
                 }
-                if ((func_81102168((s8*)ch) != 0) || ((ch->unk98 != 0) && (func_811020A8(ch) != 0))) {
+                if ((GbPak_CheckCartInserted((s8*)ch) != 0) || ((ch->unk98 != 0) && (func_811020A8(ch) != 0))) {
                     goto fail;
                 }
                 retries--;
@@ -290,6 +266,13 @@ void func_80058260(u32*);
 u32 func_80053A80(void);
 M2C_UNK func_8005C0A0();
 
+/**
+ * Fills the 32-byte probe block (probePattern and unk_5D90) for the writable-RAM
+ * probe: mode 3 all zeros, mode 2 all ones, mode 1 DP counters and osGetCount values
+ * so the pattern differs each run.
+ * Seen in play (2026-11-13) ran on the GB player loading screen (ロードちゅう).
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void GbPak_PrepareProbeBlock(u32* arg0, s32 arg1) {
     s32 i;
 
@@ -316,7 +299,13 @@ void GbPak_PrepareProbeBlock(u32* arg0, s32 arg1) {
 
 void func_81102EB0(u8*, s32);
 
-s32 func_81102F7C(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Selects the SRAM bank for the address, then writes a 0x20-byte block at 0xA000 + offset and
+ * reads it back until three writes in a row compare equal.
+ * Seen in play (2026-11-12): wrote and read back 0x55, 0xAA and 0xAC blocks at GB 0xA000 when the
+ * GB item started.
+ */
+s32 GbPak_WriteVerifiedSramBlock(s32 arg0, s32 arg1, s32 arg2) {
     GbpakChannel811023DC* ch = &D_811561C8[arg0];
     s32 ret;
     s32 n;
@@ -354,17 +343,16 @@ extern u8 D_81155E18[];
 extern u8 D_81155F18[];
 extern volatile u8 D_81156474;
 s32 func_81102690(GbpakChannel811023DC*, s32);
-s32 func_81104CD4(s8*);
+s32 GbPak_CheckGen1SaveChecksum(s8*);
 
-//@unverified
 /**
- * Game Boy pak worker thread. Waits for a channel number on D_81156458 (0xFF
- * stops the thread), re-initializes and checks the pak when the request has bit
- * 0x80, then runs the request (low 7 bits: 1, 2, 3 or 5) on that channel.
- * Failed steps retry while the retry counter (unkA1) lasts, then set error and
- * clear the request.
+ * Game Boy Pak I/O thread: takes a channel number from the queue and serves that channel's
+ * request (init and read the cartridge ID, read or write cartridge RAM). 0xFF ends the thread.
+ * Seen in play (2026-11-12): serviced requests 6 (bank load with checksum check), 8 (status) and
+ * 4 (power off) while Green loaded. A bank whose 0x2000-byte sums differ from the table sets
+ * error 1.
  */
-void func_811030F0(s32 arg0) {
+void GbPak_IoThreadMain(s32 arg0) {
     s32 pad0; // FAKE
     s32 chan;
     OSPfs* pfs;
@@ -401,13 +389,13 @@ void func_811030F0(s32 arg0) {
             if (osGbpakReadId(pfs, (OSGbpakId*)idp, &ch->status) != 0) {
                 goto error;
             }
-            if (func_81102168((s8*)ch) != 0) {
+            if (GbPak_CheckCartInserted((s8*)ch) != 0) {
                 goto error;
             }
             if (func_81101FE8((s8*)ch) != 0) {
                 goto error;
             }
-            if (func_811023DC(pfs) != 0) {
+            if (GbPak_CheckTransferStatus(pfs) != 0) {
                 goto error;
             }
             if (!(ch->status & 1)) {
@@ -436,7 +424,7 @@ void func_811030F0(s32 arg0) {
         idp = (u8*)ch;
         switch (ch->request & 0x7F) {
             case 1:
-                if (func_81102460((u8*)ch) != 0) {
+                if (GbPak_ReadRomSummed((u8*)ch) != 0) {
                     goto error;
                 }
                 break;
@@ -451,7 +439,7 @@ void func_811030F0(s32 arg0) {
                 }
                 break;
             case 5:
-                if (func_811021D4((u8*)ch) != 0) {
+                if (GbPak_ProbeCartridge((u8*)ch) != 0) {
                     goto error;
                 }
                 if (func_81102344((u8*)ch, (u32)ch->addr >> 13) != 0) {
@@ -467,7 +455,7 @@ void func_811030F0(s32 arg0) {
                 goto error;
             case 6:
                 *(s32*)ch->unk88 = ch->sum;
-                if (func_81102460((u8*)ch) != 0) {
+                if (GbPak_ReadRomSummed((u8*)ch) != 0) {
                     goto error;
                 }
                 if ((((u16*)ch->bankEntry)[1] ^ (ch->sum - *(s32*)ch->unk88)) & 0xFFFF) {
@@ -476,7 +464,7 @@ void func_811030F0(s32 arg0) {
                 *(s32*)ch->unk88 = ch->sum;
                 ch->buf += ch->size;
                 ch->addr += ch->size;
-                if (func_81102460((u8*)ch) != 0) {
+                if (GbPak_ReadRomSummed((u8*)ch) != 0) {
                     goto error;
                 }
                 if ((((u16*)ch->bankEntry)[2] ^ (ch->sum - *(s32*)ch->unk88)) & 0xFFFF) {
@@ -489,14 +477,14 @@ void func_811030F0(s32 arg0) {
                 if (func_81102690(ch, 0) != 0) {
                     goto error;
                 }
-                if (func_81104CD4((s8*)ch) != 0 && ch->unkA3[0] < 3) {
+                if (GbPak_CheckGen1SaveChecksum((s8*)ch) != 0 && ch->unkA3[0] < 3) {
                     ch->unkA3[0]++;
                     goto loop7;
                 }
                 ch->sramState[ch->bankEntry[0] & 0x7F] = 0;
                 break;
             case 8:
-                if (func_811023DC(pfs) != 0) {
+                if (GbPak_CheckTransferStatus(pfs) != 0) {
                     goto error;
                 }
                 break;
@@ -528,8 +516,13 @@ void func_800567E0(OSMesgQueue*, OSMesg*, s32);
 void func_80051B20(OSThread*, s32, void (*)(), s32, u8*, s32);
 void func_8005C130(OSThread*);
 void func_8004FD20(s32, s32);
-void func_811030F0();
-void func_811035B4(s32 arg0, s32 arg1, s32 arg2) {
+void GbPak_IoThreadMain();
+/**
+ * Clears the four Transfer Pak channel records, gives each its OSPfs and starts the Game Boy Pak
+ * I/O thread (GbPak_IoThreadMain) on the given message queue.
+ * Seen in play (2026-11-12): runs when the GB item is entered, before the cartridge loads.
+ */
+void GbPak_StartIoThread(s32 arg0, s32 arg1, s32 arg2) {
     s32 i;
 
     D_81156470 = arg2;
@@ -547,7 +540,7 @@ void func_811035B4(s32 arg0, s32 arg1, s32 arg2) {
         D_811561C8[i].pfs = &D_81156018[i];
     }
     func_800567E0(&D_81156458, D_811561B8, 4);
-    func_80051B20(&D_81154C68, arg0, func_811030F0, 0, D_81155E18, arg1);
+    func_80051B20(&D_81154C68, arg0, GbPak_IoThreadMain, 0, D_81155E18, arg1);
     func_8005C130(&D_81154C68);
 }
 
@@ -561,7 +554,14 @@ extern s32 D_81156470;
 extern OSMesgQueue D_81156458;
 void func_800515B0(s32, s32);
 s32 func_8004CFB0(OSMesgQueue *, s32, s32);
-void func_81103728(s32 arg0) {
+/**
+ * Waits for the I/O thread to go idle, sends it the 0xFF quit message and waits until it has
+ * exited.
+ * Seen in play (2026-11-13) with a JP Green cart in the Transfer Pak, it ran once when the GB
+ * session ended (Continue was picked on a save the game refused, and Stadium showed its "report is
+ * not correct" panel); it did not run while the game played.
+ */
+void GbPak_StopIoThread(s32 arg0) {
     s32 i;
 
     while (D_81156475 != 0) {
@@ -599,13 +599,16 @@ extern u16 D_81122380[];
 extern u16 D_811223A0[];
 extern u16 D_811223C0[];
 /**
- * Draws a list of glyph-strip commands into a 320-pixel-wide RGBA16 framebuffer.
- * Each command is a 6-byte header followed by its glyph indices: flags (0 ends
- * the list; bit 0 = x bit 8, 0x20 = also draw colour-0 pixels, 0x40 = glyphs
- * overlap by one pixel), x, y, glyph size (0xA or 0xC), palette index and
- * glyph count.
+ * Draws a list of text commands into a 320-wide RGBA5551 image. Each command is
+ * 0x80|flags, x, y, font height (0x0A = font1, 0x0C = font2), palette index, length,
+ * then ASCII characters mapped through sFont1GlyphTable/sFont2GlyphTable.
+ * A zero byte ends the list.
+ * Seen in play (2026-11-12): opening the GB Tower menu (C-Up) passed the list 80 38 07 0C 0B 04 +
+ * 4 glyphs (メニュー), 80 20 1B 0C 0A 08 + 8 glyphs (ゲームをつづける), C0 03 59 0C 09 0A + 10 glyphs
+ * (このメニューをぬけて), matching flags, x, y, font height, palette, length and characters; the same glyph
+ * bytes repeat for the same kana (71 65 4C 3B = メニュー).
  */
-void func_81103850(u16* fb, u8* cmd) {
+void GbEmu_DrawTextCommands(u16* fb, u8* cmd) {
     u8* ptr;
     u8* data;
     u8* src;
@@ -617,7 +620,7 @@ void func_81103850(u16* fb, u8* cmd) {
     s32 x;
     s32 dir;
     s32 trans;
-    s32 tileSize;
+    s32 tile_size;
     s32 row;
     s32 col;
     s32 n;
@@ -638,14 +641,14 @@ void func_81103850(u16* fb, u8* cmd) {
         switch (ptr[3]) {
             case 0xC:
                 width = 0xC;
-                tileSize = 0xC;
+                tile_size = 0xC;
                 data = D_8115659C;
                 break;
             case 0xA:
             default:
                 data = D_81156598;
                 width = 0xA;
-                tileSize = 0xA;
+                tile_size = 0xA;
                 break;
         }
 
@@ -692,8 +695,8 @@ void func_81103850(u16* fb, u8* cmd) {
         n = ptr[5];
         while (n != 0) {
             n--;
-            src = data + ((ptr[6] * tileSize) * 0x10);
-            for (row = 0; row != tileSize; row++) {
+            src = data + ((ptr[6] * tile_size) * 0x10);
+            for (row = 0; row != tile_size; row++) {
                 for (col = 0; col != width; col++) {
                     if (trans || (pal[*src & 0xF] != 0)) {
                         *dst = pal[*src & 0xF];
@@ -705,7 +708,7 @@ void func_81103850(u16* fb, u8* cmd) {
                 src = (src - width) + 0x10;
             }
             ptr++;
-            dst -= ((tileSize * 0x140) - width) - dir;
+            dst -= ((tile_size * 0x140) - width) - dir;
         }
 
         flags = ptr[6];
@@ -713,22 +716,53 @@ void func_81103850(u16* fb, u8* cmd) {
     }
 }
 
+/**
+ * Pixel op: keeps the destination when the source alpha bit is clear, else the source.
+ * Seen in play (2026-11-13) ran on the GB player screen while Pocket Monsters Green booted; also
+ * when the GB player C-Up menu opened.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbEmu_PixelOpDitherA(s32 arg0, s32 arg1) {
   return (arg1 & 1) ? arg1 : arg0;
 }
 
+/**
+ * Pixel op: alternate keyed source/destination selection.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbEmu_PixelOpDitherB(s32 arg0, s32 arg1) {
   return (arg1 & 1) ? arg0 : arg1;
 }
 
+/**
+ * Pixel op: averages source and destination per RGBA5551 channel.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbEmu_PixelOpAverage555(s32 arg0, s32 arg1) {
   return (((s32) ((arg0 & 0xF800) + (arg1 & 0xF800)) >> 1) & 0xF800) | (((s32) ((arg0 & 0x7C0) + (arg1 & 0x7C0)) >> 1) & 0x7C0) | (((s32) ((arg0 & 0x3E) + (arg1 & 0x3E)) >> 1) & 0x3E);
 }
 
+/**
+ * Pixel op: replaces the destination with the source.
+ * Not reached in play (2026-11-13): did not run in a GB player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 s32 GbEmu_PixelOpReplace(UNUSED s32 arg0, s32 arg1) {
   return arg1;
 }
 
+/**
+ * Copies a width x height RGBA5551 image into a 320-wide destination, combining
+ * each pixel with the selected pixel op.
+ * Seen in play (2026-11-13) ran on the GB player screen while Pocket Monsters Green booted; also
+ * when the GB player C-Up menu opened.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void GbEmu_BlitWithPixelOp(u16* dst, u16* src, s32 mode, s32 width, s32 height) {
   s32 (*operation)(s32, s32);
   s32 x;
@@ -760,7 +794,13 @@ void func_81103D30(void) {
     func_8005C0A0();
 }
 
-void func_81103D60(u16* dst, u16* src, s32 color, s32 width, s32 height) {
+/**
+ * Copies an image using its blue channel as intensity to scale the given color.
+ * Seen in play (2026-11-13) ran on the GB player screen while Pocket Monsters Green booted; also
+ * when the GB player C-Up menu closed (B); also on the GB player loading screen (ロードちゅう).
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void GbEmu_BlitTinted(u16* dst, u16* src, s32 color, s32 width, s32 height) {
     s32 x;
     s32 y;
     s32 intensity;
@@ -775,7 +815,13 @@ void func_81103D60(u16* dst, u16* src, s32 color, s32 width, s32 height) {
     }
 }
 
-void func_8110427C(u16* dst, u8* alpha_map, s32 color, s32 width, s32 height, u32 alpha_stride) {
+/**
+ * Additively blends a solid color into the destination using a 4-bit alpha map.
+ * Seen in play (2026-11-13) ran on the GB player screen while Pocket Monsters Green booted; also
+ * when the GB player C-Up menu closed (B); also on the GB player loading screen (ロードちゅう).
+ * @unverified Name and comment from Stadium 1, matched by code similarity.
+ */
+void GbEmu_BlendColorWithAlphaMap(u16* dst, u8* alpha_map, s32 color, s32 width, s32 height, u32 alpha_stride) {
   u16* dst_row;
   u8* alpha_row;
   s32 x;
@@ -803,19 +849,32 @@ extern u16 D_811205F8[];
 extern u16 D_811206F8[];
 extern u16 D_811207F8[];
 
-void func_8110445C(u8* arg0, s32 arg1, s32 arg2) {
+/**
+ * Draws a horizontal bar into a 16-bit framebuffer from tinted 8x16 tiles: left cap, repeated
+ * middle, right cap.
+ * Seen in play (2026-11-13) ran on the GB player screen while Pocket Monsters Green booted; also
+ * when the GB player C-Up menu closed (B); also on the GB player loading screen (ロードちゅう).
+ * @unverified Name and comment from the code.
+ */
+void GbEmu_DrawTintedBar(u8* arg0, s32 arg1, s32 arg2) {
     s32 i;
 
     for (i = 8; i < arg2 - 8; i += 8) {
-        func_81103D60((u16*)arg0 + i, D_811206F8, arg1, 8, 0x10);
+        GbEmu_BlitTinted((u16*)arg0 + i, D_811206F8, arg1, 8, 0x10);
     }
-    func_81103D60((u16*)arg0, D_811205F8, arg1, 8, 0x10);
-    func_81103D60((u16*)(arg0 + arg2 * 2 - 0x10), D_811207F8, arg1, 8, 0x10);
+    GbEmu_BlitTinted((u16*)arg0, D_811205F8, arg1, 8, 0x10);
+    GbEmu_BlitTinted((u16*)(arg0 + arg2 * 2 - 0x10), D_811207F8, arg1, 8, 0x10);
 }
 
 extern u16 D_81120FD8[];
 void func_80052100(void*, s32);
-void func_81104540(u16* arg0, s32 arg1, s32 arg2) {
+/**
+ * Draws one 12x11 frame of the animated Transfer Pak access icon; direction selects
+ * the mirrored (zero) or normal direction, frame selects the frame (0-10).
+ * Seen in play (2026-11-12): draws the animated pak icon on the 「ロードちゅう」 banner below the GB
+ * screen while Green loads.
+ */
+void GbEmu_DrawAccessIcon(u16* arg0, s32 arg1, s32 arg2) {
     u16* src;
     u32 row;
     s32 y;
@@ -893,7 +952,7 @@ void func_811047A0(s32 arg0) {
     pos = D_81156590;
     func_8004FD20(pos, 0x2800);
     pos += 0xAE;
-    func_8110445C((u8*)pos, D_811223E0[D_81156594], 0x70);
+    GbEmu_DrawTintedBar((u8*)pos, D_811223E0[D_81156594], 0x70);
     i = 0;
     dst = pos + 0x788;
     if (arg0 != 0) {
@@ -901,14 +960,14 @@ void func_811047A0(s32 arg0) {
     }
     p = &D_811541F0[arg0];
     do {
-        func_8110427C((u16*)dst, D_81156598 + *p * 0xA0, 0xFFFE, 0xC, 0xA, 0x10);
+        GbEmu_BlendColorWithAlphaMap((u16*)dst, D_81156598 + *p * 0xA0, 0xFFFE, 0xC, 0xA, 0x10);
         i += 0x12;
         dst += 0x12;
         p++;
     } while (i != 0x6C);
     func_81103C40(pos + 0x7FE, D_81120A18, 0, 0x10, 0xA);
     func_81103C40(pos + 0x5C2, (u8*)&D_81120B58[D_81156594 * 12 * 12], 0, 0xC, 0xC);
-    func_81104540((u16*)pos, arg0, 0);
+    GbEmu_DrawAccessIcon((u16*)pos, arg0, 0);
     D_811565A2 = 0;
     D_81154C00 = D_81156590;
 }
@@ -953,14 +1012,14 @@ void func_81104930(void) {
         case 1:
 
             pos = D_81156540.framebuffer + 0xA4;
-            func_8110445C((u8*)pos, D_811223E0[D_81156540.colorIndex], 0x7C);
+            GbEmu_DrawTintedBar((u8*)pos, D_811223E0[D_81156540.colorIndex], 0x7C);
             func_81104618(D_81156540.framebuffer);
             pos += 0x2DE;
             break;
         case 2:
 
             pos = D_81156540.framebuffer + 0x94;
-            func_8110445C((u8*)pos, D_811223E0[D_81156540.colorIndex], 0x84);
+            GbEmu_DrawTintedBar((u8*)pos, D_811223E0[D_81156540.colorIndex], 0x84);
             func_81104618(D_81156540.framebuffer);
             pos += 0x2EE;
             break;
@@ -968,15 +1027,15 @@ void func_81104930(void) {
         default:
 
             pos = D_81156540.framebuffer + 0xCE;
-            func_8110445C((u8*)pos, D_811223E0[D_81156540.colorIndex], 0x50);
+            GbEmu_DrawTintedBar((u8*)pos, D_811223E0[D_81156540.colorIndex], 0x50);
             pos += 0x288;
             break;
     }
     func_81103C40(pos + 0x280, D_811208F8, 0, 0xC, 0xC);
     dst = pos + 0x29C;
     /* The comma expression is what gives the ROM's register allocation. */
-    for (p = D_811541FC; (0, p) != &D_811541FC[5]; p++) {
-        func_8110427C((u16*)dst, D_8115659C + *p * 0xC0, 0xFFFE, 0xC, 0xC, 0x10);
+    for (p = D_811541FC; (0, p) != &D_811541FC[5]; p++) { // FAKE: comma expression
+        GbEmu_BlendColorWithAlphaMap((u16*)dst, D_8115659C + *p * 0xC0, 0xFFFE, 0xC, 0xC, 0x10);
         dst += 0x18;
     }
     D_81154C00 = D_81156540.framebuffer;
@@ -991,9 +1050,16 @@ void func_81104AE4(void) {
 
 extern u32 D_811565AC;
 extern u32 D_811565B0;
-s32 func_81104B18(s32 arg0, M2C_UNK arg1)
+/**
+ * Bump allocator: aligns the heap pointer to 64 bytes, reserves the size and hangs when the heap
+ * runs out.
+ * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
+ * quitting).
+ * @unverified Name and comment from the code.
+ */
+s32 GbEmu_AllocAligned64(s32 arg0, M2C_UNK arg1)
 {
-  s32 new_var;
+  s32 new_var; // FAKE: permuter temp
   s32 temp_v1;
   u32 temp_t6;
   temp_v1 = (D_811565AC + 0x3F) & (~0x3F);
@@ -1005,16 +1071,22 @@ s32 func_81104B18(s32 arg0, M2C_UNK arg1)
     goto loop_1;
 
   }
-  return new_var;
+  return new_var; // FAKE: permuter temp
 }
 
-s32 func_81102970(s32, s32);                     /* extern */
+s32 GbPak_RequestBankLoad(s32, s32);                     /* extern */
 extern u8 D_811565A0;
 
 void func_81104B60(s32 arg0) {
-    func_81102970(D_811565A0, arg0);
+    GbPak_RequestBankLoad(D_811565A0, arg0);
 }
 
+/**
+ * Blocks on an OS timer for the given number of milliseconds.
+ * Seen in play (2026-11-13) ran when quitting the GB player (C-Up menu, Quit game, Yes) and when it
+ * started again.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void GbEmu_Delay(OSTime arg0) {
   OSMesgQueue sp68;
   void* sp64;
@@ -1028,7 +1100,14 @@ void GbEmu_Delay(OSTime arg0) {
 void func_80058410(void*, void*, s32);
 extern u8 D_81122854[];
 
-s32 func_81104C30(u8* arg0) {
+/**
+ * Compares the cartridge header title and version bytes with the four known cartridges in
+ * D_81122854 and returns 4..1 for a match, 0 for none.
+ * Seen in play (2026-11-12): the table D_81122854 holds YELLOW, BLUE, GREEN and RED with
+ * destination 0 (Japan) and licensee 01, so it returns 4 Yellow, 3 Blue, 2 Green, 1 Red; Pocket
+ * Monsters Green got 2 and went on to load. The version byte is not compared.
+ */
+s32 GbPak_IdentifyCartridge(u8* arg0) {
     u8 buf[8];
     u8* entry = D_81122854;
     s32 i;
@@ -1043,7 +1122,15 @@ s32 func_81104C30(u8* arg0) {
     return i;
 }
 
-s32 func_81104CD4(s8* arg0) {
+/**
+ * For a cartridge with RAM bank 1 loaded, checks the Gen 1 main save: the player name at 0x598
+ * must end in 0x50 within 6 bytes (else 11), and the byte after 0x598-0x1593 must be the inverted
+ * sum (else 10). Returns 0 when the save is valid.
+ * Seen in play (2026-11-12): starting GB from the main menu with a valid Pocket Monsters Green
+ * save ran this right after the cartridge RAM was read, and it returned 0. The game then booted
+ * (GAME FREAK logo).
+ */
+s32 GbPak_CheckGen1SaveChecksum(s8* arg0) {
     s32 i;
     s32 sum;
 
@@ -1069,7 +1156,13 @@ s32 func_81104CD4(s8* arg0) {
 
 extern s32 D_81154C48;
 
-s32 func_81104D84(s32 arg0) {
+/**
+ * Blacks out the screen, resets the VI X scale, stores the error code in D_81154C48 and returns
+ * -1.
+ * Seen in play (2026-11-12): error 1 after a failed bank checksum blacked out the screen and led
+ * to the 「64GBパックが ただしくセットされていません」 screen.
+ */
+s32 GbEmu_BlackScreenAndFail(s32 arg0) {
     osViBlack(1);
     GbEmu_Delay(20);
     osViSetXScale(1.0f);
@@ -1083,7 +1176,7 @@ s32 func_80025BD8(void);
 void func_80052DC0(s32);
 void func_8005C280(f32);
 void func_81100020(void);
-void func_811027A8(GbpakChannel811023DC*);
+void GbPak_QueueNextBankLoad(GbpakChannel811023DC*);
 void func_81106CC8(u16*, u8 (*)[0xC80], s32, s32);
 void func_81117B20(Screen81104930*);
 extern u8 D_8111E570[];
@@ -1105,7 +1198,18 @@ extern u8 D_81122694[];
 extern u8 D_81122774[];
 extern f32 D_FLT_81154254;
 
-s32 func_81104DD0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
+/**
+ * Starts a Game Boy session on Transfer Pak channel arg3: allocates the GB memory, ROM and RAM
+ * buffers and identifies the cartridge on every port (GbPak_IdentifyCartridge). A cartridge
+ * without a bank list (Yellow, or a revision the tables don't cover) has its four SRAM banks and
+ * whole ROM copied before play; Red, Green and Blue instead stream their banks in the background
+ * while the game runs. For a streamed load it keeps ROM bytes 0x000-0x101 in D_811565A8 and
+ * replaces them with the boot stub D_8111E570, which ends in `jr $` at 0x100. GbEmu_UpdateFrame
+ * puts the real bytes back once the GB PC reaches 0x100 while banks are still loading. Seen in
+ * play: with Green this showed the 「ロードちゅう」 banner and the Nintendo logo, then the game's own
+ * copyright screen.
+ */
+s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     GbpakChannel811023DC* cur;
     GbpakChannel811023DC* slot;
     u8* buf;
@@ -1120,15 +1224,15 @@ s32 func_81104DD0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     D_811565A0 = arg3;
     D_81156598 = M2C_FIELD(arg4, u8**, 0x21CC);
     D_8115659C = M2C_FIELD(arg4, u8**, 0x21D0);
-    D_81156540.unk_10 = (u8*)func_81104B18(0x27F80, 0);
-    D_81156540.unk_1C = (u8*)func_81104B18(0x100000, 0);
+    D_81156540.unk_10 = (u8*)GbEmu_AllocAligned64(0x27F80, 0);
+    D_81156540.unk_1C = (u8*)GbEmu_AllocAligned64(0x100000, 0);
     D_81156540.unk_40 = 0x8000;
-    D_81156540.unk_20 = (u8*)func_81104B18(D_81156540.unk_40, 0);
-    D_81156540.unk_44 = (u8*)func_81104B18(0xF000, 0);
-    D_81156540.unk_48 = (u8*)func_81104B18(0xF000, 0);
-    D_81154C00 = D_81156540.framebuffer = func_81104B18(0x2800, 0);
-    D_81156540.unk_50 = (u8*)func_81104B18(0x2800, 0);
-    D_811565A8 = (u8*)func_81104B18(0x102, 0);
+    D_81156540.unk_20 = (u8*)GbEmu_AllocAligned64(D_81156540.unk_40, 0);
+    D_81156540.unk_44 = (u8*)GbEmu_AllocAligned64(0xF000, 0);
+    D_81156540.unk_48 = (u8*)GbEmu_AllocAligned64(0xF000, 0);
+    D_81154C00 = D_81156540.framebuffer = GbEmu_AllocAligned64(0x2800, 0);
+    D_81156540.unk_50 = (u8*)GbEmu_AllocAligned64(0x2800, 0);
+    D_811565A8 = (u8*)GbEmu_AllocAligned64(0x102, 0);
     D_811565A3 = 0;
     D_81156477 = 1;
     D_811565A1 = 0;
@@ -1148,7 +1252,7 @@ s32 func_81104DD0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     while (D_81156475 != 0) {
     }
 
-    buf = (u8*)func_81104B18(0x200, 0);
+    buf = (u8*)GbEmu_AllocAligned64(0x200, 0);
     for (i = 0; i < 4; i++) {
         slot = &D_811561C8[i];
         slot->bankState = D_81156540.unk_10 + 0x16B20;
@@ -1162,23 +1266,23 @@ s32 func_81104DD0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
             slot->blockDirty[j] = 0xFF;
             slot->blockState[j] = 0xFF;
         }
-        slot->unkA0 = func_81104C30((u8*)slot);
+        slot->unkA0 = GbPak_IdentifyCartridge((u8*)slot);
         slot->romBuf = D_81156540.unk_1C;
         slot->sramBuf = D_81156540.unk_20;
     }
     cur = &D_811561C8[D_811565A0];
     if (cur->error != 0) {
-        func_81104D84(1);
+        GbEmu_BlackScreenAndFail(1);
         return (cur->unkA2 != 0) ? 2 : 1;
     }
     if (cur->unkA0 == 0) {
-        return func_81104D84(1);
+        return GbEmu_BlackScreenAndFail(1);
     }
     D_81156540.colorIndex = cur->unkA0 - 1;
     while (D_81156475 != 0) {
     }
-    if (func_81102F7C(D_811565A0, 0, 0xFF) != 0) {
-        func_81104D84(1);
+    if (GbPak_WriteVerifiedSramBlock(D_811565A0, 0, 0xFF) != 0) {
+        GbEmu_BlackScreenAndFail(1);
         return (cur->unkA2 != 0) ? 2 : 1;
     }
     D_81156540.unk_38 = 0xE;
@@ -1215,7 +1319,7 @@ s32 func_81104DD0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
             }
             if (cur->error) goto fail; /* one line: gives the ROM's beqz/b pair */
             if (D_800AA148 != 0) {
-                func_81104D84(0);
+                GbEmu_BlackScreenAndFail(0);
             }
         }
         for (i = 0; i < (D_81156540.unk_3C >> 13); i++) {
@@ -1232,7 +1336,7 @@ s32 func_81104DD0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
             }
             if (cur->error) goto fail; /* one line: gives the ROM's beqz/b pair */
             if (D_800AA148 != 0) {
-                func_81104D84(0);
+                GbEmu_BlackScreenAndFail(0);
             }
         }
         for (i = 0; i < (D_81156540.unk_3C >> 14); i++) {
@@ -1247,20 +1351,20 @@ s32 func_81104DD0(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
         func_811047A0(0);
         func_8005C0A0();
         D_81156476 = 1;
-        func_81102970(D_811565A0, 0);
+        GbPak_RequestBankLoad(D_811565A0, 0);
         while (*cur->bankState != 0) {
-            func_811027A8(cur);
+            GbPak_QueueNextBankLoad(cur);
             if (cur->error != 0) {
             fail:
-                func_81104D84(1);
+                GbEmu_BlackScreenAndFail(1);
                 return (cur->unkA2 != 0) ? 2 : 1;
             }
             if (D_800AA148 != 0) {
-                func_81104D84(0);
+                GbEmu_BlackScreenAndFail(0);
             }
         }
         D_811565A4 = 1;
-        for (i = 0; i < 0x102; i++) {
+        for (i = 0; i < 258; i++) {
             D_811565A8[i] = D_81156540.unk_1C[i];
             D_81156540.unk_1C[i] = D_8111E570[i];
         }

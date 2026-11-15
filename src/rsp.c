@@ -35,9 +35,10 @@ void* Storage_WriteRtc(struct UnkStruct80000A80* arg0);
 void Storage_ResetDisk(void);
 void Storage_QueueRequest(void* arg0, s32 arg1);
 
+/** Creates the Leo disk drive manager and its message queues. */
 s32 Storage_InitializeLeoManager(void) {
-    UNUSED s32 unused;
-    UNUSED s32 unused2[6];
+    UNUSED s32 unused; // FAKE: stack padding
+    UNUSED s32 unused2[6]; // FAKE: stack padding
     s32 result;
 
     result = LeoCJCreateLeoManager(0x95, 0x96, &D_80086F7C, 0x10);
@@ -50,26 +51,28 @@ s32 Storage_InitializeLeoManager(void) {
     return result;
 }
 
+/** Returns the Peripheral Interface handle for SRAM, creating it on first use. */
 OSPiHandle* Storage_GetSramHandle(void) {
-    static OSPiHandle sramHandle;
+    static OSPiHandle sram_handle;
 
-    void* baseAddr = OS_PHYSICAL_TO_K1(SRAM_START_ADDR);
-    if (baseAddr != (void*)(uintptr_t)sramHandle.baseAddress) {
-        sramHandle.type = DEVICE_TYPE_SRAM;
-        sramHandle.baseAddress = (uintptr_t)baseAddr;
-        sramHandle.latency = SRAM_latency;
-        sramHandle.pulse = SRAM_pulse;
-        sramHandle.pageSize = SRAM_pageSize;
-        sramHandle.relDuration = SRAM_relDuration;
+    void* base_addr = OS_PHYSICAL_TO_K1(SRAM_START_ADDR);
+    if (base_addr != (void*)(uintptr_t)sram_handle.baseAddress) {
+        sram_handle.type = DEVICE_TYPE_SRAM;
+        sram_handle.baseAddress = (uintptr_t)base_addr;
+        sram_handle.latency = SRAM_latency;
+        sram_handle.pulse = SRAM_pulse;
+        sram_handle.pageSize = SRAM_pageSize;
+        sram_handle.relDuration = SRAM_relDuration;
 
-        sramHandle.domain = PI_DOMAIN2;
-        sramHandle.speed = 0;
-        bzero(&sramHandle.transferInfo, sizeof(sramHandle.transferInfo));
-        osEPiLinkHandle(&sramHandle);
+        sram_handle.domain = PI_DOMAIN2;
+        sram_handle.speed = 0;
+        bzero(&sram_handle.transferInfo, sizeof(sram_handle.transferInfo));
+        osEPiLinkHandle(&sram_handle);
     }
-    return &sramHandle;
+    return &sram_handle;
 }
 
+/** Reads a block from SRAM. */
 s32 Storage_ReadSram(struct UnkStruct800006C4_2* arg0) {
     OSIoMesg msg;
     OSPiHandle* handle = Storage_GetSramHandle();
@@ -86,6 +89,7 @@ s32 Storage_ReadSram(struct UnkStruct800006C4_2* arg0) {
     return 0;
 }
 
+/** Writes a block to SRAM. */
 s32 Storage_WriteSram(struct UnkStruct800006C4_2* arg0) {
     OSIoMesg msg;
     OSPiHandle* handle = Storage_GetSramHandle();
@@ -102,6 +106,7 @@ s32 Storage_WriteSram(struct UnkStruct800006C4_2* arg0) {
     return 0;
 }
 
+/** Reads a block from the cartridge ROM. */
 s32 Storage_ReadRom(struct UnkStruct800006C4_2* arg0, s32 arg1) {
     OSIoMesg msg;
     OSPiHandle* handle;
@@ -124,6 +129,7 @@ s32 Storage_ReadRom(struct UnkStruct800006C4_2* arg0, s32 arg1) {
     return 0;
 }
 
+/** Blocks until the next storage I/O message arrives and returns it. */
 void* Storage_WaitForIoMessage(void) {
     void* msg;
 
@@ -131,31 +137,37 @@ void* Storage_WaitForIoMessage(void) {
     return msg;
 }
 
+/** Reads blocks from the 64DD disk. */
 void* Storage_ReadDisk(struct UnkStruct800006C4_2* arg0) {
     LeoReadWrite(arg0, 0, arg0->unk1C, arg0->vaddr, arg0->size, &D_80087000.queue2);
     return Storage_WaitForIoMessage();
 }
 
+/** Writes blocks to the 64DD disk. */
 void* Storage_WriteDisk(struct UnkStruct800006C4_2* arg0) {
     LeoReadWrite(arg0, 1, arg0->unk1C, arg0->vaddr, arg0->size, &D_80087000.queue2);
     return Storage_WaitForIoMessage();
 }
 
+/** Reads the 64DD disk ID. */
 void* Storage_ReadDiskId(struct UnkStruct80000A80* arg0) {
     LeoReadDiskID(&arg0->cmd, arg0->addr, &D_80087000.queue2);
     return Storage_WaitForIoMessage();
 }
 
+/** Seeks the 64DD drive to a block address. */
 void* Storage_SeekDisk(struct UnkStruct80000A80* arg0) {
     LeoSeek(&arg0->cmd, arg0->lba, &D_80087000.queue2);
     return Storage_WaitForIoMessage();
 }
 
+/** Sets the 64DD spindle motor mode. */
 void* Storage_SetDiskMotor(struct UnkStruct80000A80* arg0) {
     LeoSpdlMotor(&arg0->cmd, arg0->mode, &D_80087000.queue2);
     return Storage_WaitForIoMessage();
 }
 
+/** Reads the 64DD real-time clock. */
 void* Storage_ReadRtc(struct UnkStruct80000A80* arg0) {
     void* temp_v0;
 
@@ -167,11 +179,13 @@ void* Storage_ReadRtc(struct UnkStruct80000A80* arg0) {
     return temp_v0;
 }
 
+/** Sets the 64DD real-time clock. */
 void* Storage_WriteRtc(struct UnkStruct80000A80* arg0) {
     LeoSetRTC(&arg0->cmd, arg0->addr, &D_80087000.queue2);
     return Storage_WaitForIoMessage();
 }
 
+/** Main loop of the storage thread: serves queued storage requests. */
 void thread20_rsp(UNUSED void* arg) {
     struct UnkStruct800006C4_2* sp2C;
     OSMesg var_v0;
@@ -252,6 +266,7 @@ void func_80000C14(void) {
     func_8005C130(&D_80084D30);
 }
 
+/** Resets the 64DD drive if it was initialized. */
 void Storage_ResetDisk(void) {
     if (D_8008704C != 0) {
         LeoReset();
@@ -259,6 +274,7 @@ void Storage_ResetDisk(void) {
     }
 }
 
+/** Queues a storage request for the storage thread. */
 void Storage_QueueRequest(void* arg0, s32 arg1) {
     if (arg1 == 1) {
         osJamMesg(&D_80087000.queue1, arg0, OS_MESG_BLOCK);

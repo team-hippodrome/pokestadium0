@@ -173,9 +173,9 @@ typedef struct unk_D_81287B08_jp {
 } unk_D_81287B08_jp;
 extern unk_D_81287B08_jp D_81287B08_jp[];
 extern OSMesgQueue* D_812896A0_jp;
-void func_8121036C_jp(s32 cmd, s32 arg1);
-void func_81210390_jp(s32 cmd, s8 arg1);
-void func_812103F0_jp(void);
+void func_8110FD6C(s32 cmd, s32 arg1);
+void func_8110FD90(s32 cmd, s8 arg1);
+void func_8110FDF0(void);
 extern s32 D_81138A70;
 extern u8 D_81138A80[0x10];
 extern u8 sGbApuRegs[0x40];
@@ -217,28 +217,28 @@ void func_81215D0C_jp(s32 arg0, s32 arg1, s32 arg2);
 void func_81215D50_jp(void);
 void func_81215D8C_jp(s32 arg0, s32 arg1, s32 arg2);
 void func_81215DDC_jp(void);
-void GbApu_SetNoisePeriodBounds(s32 arg0, s32 arg1);
+void GbApu_SetNoiseLoopBounds(s32 arg0, s32 arg1);
 u32 GbApu_FreqToStep(u16 arg0);
-u32 func_811158F4(u16 arg0, u16 arg1, u16 arg2);
+u32 GbApu_ConfigureNoiseTable(u16 arg0, u16 arg1, u16 arg2);
 u32 GbApu_FreqToStep2x(u16 arg0);
 void func_81115AF0(void);
-s32 func_81115AF8(u32 arg0, s32 arg1);
+s32 GbApu_GetWaveformSample(u32 arg0, s32 arg1);
 u16 GbApu_UpdateSquare1Channel(void);
 s32 GbApu_UpdateSquare2Channel(void);
 u16 GbApu_UpdateWaveChannel(void);
 u16 func_81207C5C_Empty(void);
-u16 func_81116258(void);
-void func_811164CC(u16 reg, u8 value);
-void func_81116C88(s32 numSamples, s16* out);
-void func_81117068(u16 arg0, u8 arg1, u16 arg2);
+u16 GbApu_UpdateNoiseChannel(void);
+void GbApu_WriteRegister(u16 reg, u8 value);
+void GbApu_RenderBuffer(s32 numSamples, s16* out);
+void GbApu_QueueRegisterWrite(u16 arg0, u8 arg1, u16 arg2);
 void GbApu_ResetChannels(void);
 void GbApu_Reset(s32 arg0);
-void func_811172AC(void);
+void GbAudio_RampToSilence(void);
 void func_811173F4(void);
 u8 GbMem_ReadIoRegister(u16 arg0);
-s32 func_811174D8(void);
-void GbAudio_SetAlternateRendererEnabled(s32 arg0);
-void GbAudio_SetAlternateStreamId(s32 arg0);
+s32 GbAudio_UpdateFrame(void);
+void GbAudio_SetMenuSoundMode(s32 arg0);
+void GbAudio_PlayMenuSound(s32 arg0);
 void func_81117AFC(UNUSED s32 arg0);
 void func_81218104_jp(UNUSED s32 arg0);
 
@@ -247,21 +247,21 @@ typedef struct Particle31FlagsA {
     u8 b40 : 1;
 } Particle31FlagsA;
 
-void func_81111090(Particle31FlagsA*);
-void func_81112AF8(Particle31FlagsA* arg0);
+void AudioPlayback_SeqLayerNoteDecay(Particle31FlagsA*);
+void AudioSeq_SeqLayerDisable(Particle31FlagsA* arg0);
 
 extern struct GbEmuListZ D_81184928;
-void func_81112EAC(s8* arg0, s8* arg1);
-void func_81112B34(s8** arg0, s32 arg1);
+void AudioSeq_AudioListPushBack(s8* arg0, s8* arg1);
+void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1);
 
 typedef struct Particle31Flags {
     u8 b80 : 1;
     u8 b40 : 1;
 } Particle31Flags;
 
-void func_811111E0(s8*);
+void AudioPlayback_NotePoolClear(s8*);
 
-void func_81112B34();
+void AudioSeq_SeqLayerFree();
 void Particle31_ResetAllSlots(DisplayObject* arg0);
 
 typedef struct Particle2D68 {
@@ -276,11 +276,11 @@ typedef struct Particle2D68 {
     u8 unk_78;
 } Particle2D68;
 
-void func_81112D68(Particle2D68** arg0, u8 arg1, s32 arg2);
+void AudioSeq_SequenceChannelEnable(Particle2D68** arg0, u8 arg1, s32 arg2);
 
-void func_81112EAC(s8 *arg0, s8 *arg1);
+void AudioSeq_AudioListPushBack(s8 *arg0, s8 *arg1);
 
-s32 func_81112EEC(s8 *arg0);
+s32 AudioSeq_AudioListPopBack(s8 *arg0);
 
 typedef struct GbEmuListZ {
     /* 0x00 */ void* next;
@@ -298,11 +298,11 @@ typedef struct GbEmuEntryZ {
 extern GbEmuListZ D_81184928;
 extern GbEmuEntryZ D_811847C8[1];
 
-void func_81112F2C(void);
+void AudioSeq_InitLayerFreelist(void);
 
-u8 func_81112FB0(u8 **arg0);
+u8 AudioSeq_ScriptReadU8(u8 **arg0);
 
-s16 func_81112FC4(u8** arg0);
+s16 AudioSeq_ScriptReadS16(u8** arg0);
 
 typedef struct Particle3140 {
     u32 b80 : 1;
@@ -318,7 +318,7 @@ typedef struct Particle3140 {
     struct Particle3140* unk_48;
 } Particle3140;
 
-void func_81113140(Particle3140* arg0);
+void AudioSeq_SeqLayerProcessScriptStep1(Particle3140* arg0);
 
 /*
  * func_81113F84
@@ -340,7 +340,7 @@ typedef struct Entry811151C8 {
 } Entry811151C8;
 extern s16 D_811858CC;
 extern Entry811151C8 D_81184668[];
-void func_81110798(void);
+void AudioPlayback_ProcessNotes(void);
 void func_811151C8(s32 arg0);
 
 M2C_UNK func_81111DC8(s8 *);                      /* extern */

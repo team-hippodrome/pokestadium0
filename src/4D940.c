@@ -4,7 +4,7 @@
 #include "libleo/internal.h"
 
 s32 LeoTestUnitReady(u8* status) {
-    volatile LEOCmdTestUnitReady cmdBlock;
+    volatile LEOCmdTestUnitReady cmd_block;
 
     if (!__leoActive) {
         return -1;
@@ -12,14 +12,14 @@ s32 LeoTestUnitReady(u8* status) {
     if (HW_REG(PI_STATUS_REG, u32) & 1) {
         return LEO_STATUS_BUSY;
     }
-    cmdBlock.header.command = 3;
-    cmdBlock.header.reserve1 = 0;
-    cmdBlock.header.control = 0;
-    cmdBlock.header.reserve3 = 0;
-    leoCommand((void*)&cmdBlock);
+    cmd_block.header.command = 3;
+    cmd_block.header.reserve1 = 0;
+    cmd_block.header.control = 0;
+    cmd_block.header.reserve3 = 0;
+    leoCommand((void*)&cmd_block);
 
-    while (cmdBlock.header.status == LEO_STATUS_BUSY) {}
+    while (cmd_block.header.status == LEO_STATUS_BUSY) {}
 
-    *status = cmdBlock.test;
-    return cmdBlock.header.sense;
+    *status = cmd_block.test;
+    return cmd_block.header.sense;
 }

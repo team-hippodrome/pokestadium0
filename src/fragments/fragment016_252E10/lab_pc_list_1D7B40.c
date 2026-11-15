@@ -39,17 +39,17 @@ void func_891053E0(void);
 void func_89108F0C(void);
 
 extern Color_RGBA8 D_8910A910;
-void func_8002A0AC(s32, s32, s32, s32, Color_RGBA8);
-void func_80027F20(s32);
+void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
+void Font_SetColorForFlags(s32);
 
 void func_89104C70(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5) {
     s32 temp_v0 = *arg5;
 
     if (arg4 & 8) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, temp_v0 - 6, 0x16, D_8910A910);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, temp_v0 - 6, 0x16, D_8910A910);
     }
     Font_BeginTranslucentTextRendering();
-    func_80027F20(arg4);
+    Font_SetColorForFlags(arg4);
     Font_SetActive(8, 0);
     Font_Printf(arg0 + 8, arg1 + 4, arg2);
     Font_EndTexturedTextRendering();
@@ -58,8 +58,8 @@ void func_89104C70(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s32* arg5
 typedef struct Str89104D14 { s8 c[4]; } Str89104D14;
 extern Str89104D14 D_8910A914;
 void func_80027804(s8 *, s32 *, s32, s32);
-void func_8002A8C4(s8 *, s32, s32, s32, s32);
-void func_8002D880(s8 *, s8 *, s32, void *, s32, s32);
+void Window_SetRect(s8 *, s32, s32, s32, s32);
+void Menu_Init(s8 *, s8 *, s32, void *, s32, s32);
 u32 func_800566BC(s32);
 void func_89104C70();
 void func_89104D14(s8 *arg0, s32 arg1, s32 arg2, s32 *arg3, s32 arg4, s32 arg5) {
@@ -76,9 +76,9 @@ void func_89104D14(s8 *arg0, s32 arg1, s32 arg2, s32 *arg3, s32 arg4, s32 arg5) 
     }
     func_80027804(arg0 + 0x50, arg3, arg5, arg5);
     h = max * 0x14 + 0x10;
-    func_8002D880(arg0 + 0x2C, arg0 + 0x50, arg4, func_89104C70, h, 0x1C);
+    Menu_Init(arg0 + 0x2C, arg0 + 0x50, arg4, func_89104C70, h, 0x1C);
     M2C_FIELD(arg0, s32 *, 0x4C) |= 0x10000;
-    func_8002A8C4(arg0, arg1, arg2, h + 0xC, 0x84);
+    Window_SetRect(arg0, arg1, arg2, h + 0xC, 0x84);
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
     M2C_FIELD(arg0, s32 *, 0x20) = 0;
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
@@ -87,7 +87,7 @@ void func_89104D14(s8 *arg0, s32 arg1, s32 arg2, s32 *arg3, s32 arg4, s32 arg5) 
 }
 
 s32 func_8002AE6C();
-M2C_UNK func_8002D9B8(s32, s32, s32, s32, s8*);
+M2C_UNK Menu_DrawItems(s32, s32, s32, s32, s8*);
 
 typedef struct Box89104E38 {
     s32 x;
@@ -105,17 +105,17 @@ void func_89104E38(Box89104E38* arg0) {
 
         sp2C[0] = arg0->w - 0xC;
         label = (s32)arg0->label;
-        func_8002D9B8(label, arg0->x + 6, arg0->y + 0xA, 0xFFEF, (s8*)sp2C);
+        Menu_DrawItems(label, arg0->x + 6, arg0->y + 0xA, 0xFFEF, (s8*)sp2C);
     }
     /* Empty test kept from the permuter: it keeps arg0 in $s0 as in the ROM. */
     if (arg0) {  // karodo
     }
 }
 
-M2C_UNK func_8002DC04(s32);                         /* extern */
+M2C_UNK Menu_UpdateCursor(s32);                         /* extern */
 
 void func_89104E94(s32 arg0) {
-    func_8002DC04(arg0 + 0x2C);
+    Menu_UpdateCursor(arg0 + 0x2C);
 }
 
 typedef struct Entry891078E0 {
@@ -130,7 +130,7 @@ extern char D_8910E000[];
 extern char D_8910E010[];
 
 void func_89104EB4(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4, s32* arg5) {
-    UNUSED s32 padA[4];
+    UNUSED s32 padA[4]; // FAKE: stack padding
     const char* name;
     s32 temp;
     s32 alpha;
@@ -154,7 +154,7 @@ void func_89104EB4(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4, s32* arg5)
         alpha = *arg5;
         Gfx_SetEnvColor(0xFF, 0xC8, 0xC8, alpha);
     } else {
-        func_80027F20(arg4);
+        Font_SetColorForFlags(arg4);
     }
     Font_SetActive(8, 0);
     Font_Printf(arg0 + 8, arg1 + 4, name);
@@ -163,25 +163,25 @@ void func_89104EB4(s32 arg0, s32 arg1, s32* arg2, s32 arg3, s32 arg4, s32* arg5)
 
 typedef struct Str89104FC0 { s8 c[4]; } Str89104FC0;
 extern Str89104FC0 D_8910A91C;
-s32 func_8002D3D0(u8*);
-s32 func_8002D430(s32, s32);
+s32 BattleMon_CountMoves(u8* arg0);
+s32 BattleMon_GetMoveIndex(s32, s32);
 void func_80027410(void*, void*, s32, s32, s32);
 void func_89104EB4();
 
 void func_89104FC0(s8* arg0, s32 arg1, s32 arg2, u8* arg3) {
-    s32 n = func_8002D3D0(arg3);
+    s32 n = BattleMon_CountMoves(arg3);
     s32 i;
 
     for (i = 0; i < n; i++) {
-        M2C_FIELD(arg0, s32*, 0x60 + i * 4) = func_8002D430((s32)arg3, i);
+        M2C_FIELD(arg0, s32*, 0x60 + i * 4) = BattleMon_GetMoveIndex((s32)arg3, i);
     }
     for (i = n; i < 4; i++) {
         M2C_FIELD(arg0, s32*, 0x60 + i * 4) = -1;
     }
     func_80027410(arg0 + 0x50, arg0 + 0x60, 4, 4, 4);
-    func_8002D880(arg0 + 0x2C, arg0 + 0x50, (s32)(arg0 + 0x70), func_89104EB4, 0x9C, 0x1C);
+    Menu_Init(arg0 + 0x2C, arg0 + 0x50, (s32)(arg0 + 0x70), func_89104EB4, 0x9C, 0x1C);
     M2C_FIELD(arg0, s32*, 0x4C) |= 0x10000;
-    func_8002A8C4(arg0, arg1, arg2, 0xA8, 0x84);
+    Window_SetRect(arg0, arg1, arg2, 0xA8, 0x84);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
@@ -190,6 +190,7 @@ void func_89104FC0(s8* arg0, s32 arg1, s32 arg2, u8* arg3) {
 }
 
 extern s32 D_8910A920[5];
+/** Disables the move list entries that are restricted for the current cup. */
 void BattleMoveListWidget_DisableRestrictedMoves(unk_func_8830867C_04C_078* arg0) {
     s32 j;
     s32 i;
@@ -204,7 +205,7 @@ void BattleMoveListWidget_DisableRestrictedMoves(unk_func_8830867C_04C_078* arg0
     }
 }
 
-M2C_UNK func_8002DAD8(s8*, s32, s32, s32, s8*);
+M2C_UNK Menu_DrawInlineItems(s8*, s32, s32, s32, s8*);
 
 void func_891051A4(Box89104E38* arg0) {
     s8* label;
@@ -214,7 +215,7 @@ void func_891051A4(Box89104E38* arg0) {
 
         sp2C[0] = arg0->w - 0xC;
         label = arg0->label;
-        func_8002DAD8(label, arg0->x + 6, arg0->y + 0xA, 0xFFEF, (s8*)sp2C);
+        Menu_DrawInlineItems(label, arg0->x + 6, arg0->y + 0xA, 0xFFEF, (s8*)sp2C);
     }
     /* Empty test kept from the permuter: it keeps arg0 in $s0 as in the ROM. */
     if (arg0) {  // karodo
@@ -271,7 +272,7 @@ s32 func_89105200(Box89105200* arg0) {
         color = 0xFEED;
         params[0] = ((30 - arg0->timer) * 0xFF) / 30;
     }
-    func_8002DAD8((s8*)&arg0->label, arg0->x + 6, arg0->y + 10, color, (s8*)params);
+    Menu_DrawInlineItems((s8*)&arg0->label, arg0->x + 6, arg0->y + 10, color, (s8*)params);
     return arg0->timer == 0;
 }
 
@@ -292,10 +293,10 @@ void func_89105340(Box89105200* arg0, s32 arg1, s32 arg2) {
     arg0->label.flags[arg1] |= 0x300;
 }
 
-M2C_UNK func_8002DC04(s32);                         /* extern */
+M2C_UNK Menu_UpdateCursor(s32);                         /* extern */
 
 s32 func_89105390(s32 arg0) {
-    return func_8002DC04(arg0 + 0x2C);
+    return Menu_UpdateCursor(arg0 + 0x2C);
 }
 
 s32 func_891053B0(s8 *arg0) {
@@ -314,6 +315,7 @@ s32 func_891053B0(s8 *arg0) {
 void func_891053E0(void) {
 }
 
+/** Updates the flags of every entry in the info widget. */
 void BattleInfoWidget_UpdateEntryFlags(unk_func_8830867C_034* arg0) {
     s32 i;
     s8** sub = &M2C_FIELD(arg0, s8**, 0x20);
@@ -358,8 +360,8 @@ void func_89105504(s32 arg0) {
     }
 }
 
-void func_8002A3F8(void*, s32, s32);
-void func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+void Ui_DrawImageInStrips(void*, s32, s32);
+void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 extern u8 D_80073614[];
 extern u8 D_80073624[];
@@ -370,19 +372,23 @@ extern Gfx D_80060290[];
 extern Gfx D_80060398[];
 extern u8 D_8910CF80[];
 extern char D_8910E018[];
-void func_89105560(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws ボックス%d (Box %d).
+ * Seen in play (2026-11-12): ボックス1 ... ボックス4 in the 64カセットのボックス submenu.
+ */
+void PcSort_DrawBoxName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
     Color_RGBA8 color;
-    s32 pad[6];
+    s32 pad[6]; // FAKE: stack padding
     s32 sel;
 
     if (arg4 & 8) {
-        func_8002A3F8(D_80073614, arg0 + 8, arg1 + 4);
+        Ui_DrawImageInStrips(D_80073614, arg0 + 8, arg1 + 4);
     } else {
-        func_8002A3F8(D_80073624, arg0 + 8, arg1 + 4);
+        Ui_DrawImageInStrips(D_80073624, arg0 + 8, arg1 + 4);
     }
     sel = arg4 & 2;
     if (sel) {
-        func_80029A64(arg0 + 0x2A, arg1 + 2, 0x70, 0x18, D_80073520);
+        Ui_DrawRoundedFrame(arg0 + 0x2A, arg1 + 2, 0x70, 0x18, D_80073520);
         gSPDisplayList(gDisplayListHead++, D_80060290);
         func_8001B884(arg0 + 0x1D, arg1 + 5, 0xB, 0x12, D_8910CF80, 0xC, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80060398);
@@ -403,34 +409,34 @@ typedef struct Rgba8910576C {
     u8 r, g, b, a;
 } Rgba8910576C;
 
-void func_89105560();
+void PcSort_DrawBoxName();
 void func_891053E8(void* arg0);
 
 void func_8910576C(void* arg0, s32 arg1, s32 arg2, void* arg3, s32 arg4, Rgba8910576C arg5) {
-    func_8002A8C4((s8*)arg0, arg1, arg2, 0x9C, M2C_FIELD(arg3, s32*, 8) * 0x1C + 8);
+    Window_SetRect((s8*)arg0, arg1, arg2, 0x9C, M2C_FIELD(arg3, s32*, 8) * 0x1C + 8);
     M2C_FIELD(arg0, s32*, 0x14) = 0;
     M2C_FIELD(arg0, Rgba8910576C*, 0x18) = arg5;
-    func_8002D880((s8*)arg0 + 0x20, arg3, arg4, func_89105560, 0x9C, 0x1C);
+    Menu_Init((s8*)arg0 + 0x20, arg3, arg4, PcSort_DrawBoxName, 0x9C, 0x1C);
     func_891053E8(arg0);
 }
 
-M2C_UNK func_800295E8(s32, s32, s32, s32, M2C_UNK *); /* extern */
-M2C_UNK func_8002A8E0(s8 *);                      /* extern */
-M2C_UNK func_8002DAD8(s8 *, s32, s32, s32, s8 *); /* extern */
+M2C_UNK Ui_DrawTexturedFrameDecal(s32, s32, s32, s32, M2C_UNK *); /* extern */
+M2C_UNK Window_DrawFrame(s8 *);                      /* extern */
+M2C_UNK Menu_DrawInlineItems(s8 *, s32, s32, s32, s8 *); /* extern */
 extern M2C_UNK D_80073554;
 
 void func_891057FC(s8 *arg0, s32 arg1) {
-    func_800295E8(M2C_FIELD(arg0, s32 *, 0) - 6, M2C_FIELD(arg0, s32 *, 4) - 6, M2C_FIELD(arg0, s32 *, 8) + 0xC, M2C_FIELD(arg0, s32 *, 0xC) + 0xC, &D_80073554);
-    func_8002A8E0(arg0);
-    func_8002DAD8(arg0 + 0x20, M2C_FIELD(arg0, s32 *, 0), M2C_FIELD(arg0, s32 *, 4) + 4, arg1 | 0xFFED, arg0);
+    Ui_DrawTexturedFrameDecal(M2C_FIELD(arg0, s32 *, 0) - 6, M2C_FIELD(arg0, s32 *, 4) - 6, M2C_FIELD(arg0, s32 *, 8) + 0xC, M2C_FIELD(arg0, s32 *, 0xC) + 0xC, &D_80073554);
+    Window_DrawFrame(arg0);
+    Menu_DrawInlineItems(arg0 + 0x20, M2C_FIELD(arg0, s32 *, 0), M2C_FIELD(arg0, s32 *, 4) + 4, arg1 | 0xFFED, arg0);
 }
 
 M2C_UNK func_8003F6AC(M2C_UNK);
 extern s32 D_800603C0;
 
 /**
- * List-menu input handler (same family as func_8A20093C). arg0 is the menu object (passed as
- * an integer address here, as elsewhere in this file). Calls func_8002DC04(arg0 + 0x20) and
+ * List-menu input handler (same family as PartyScreen_UpdateActionMenu). arg0 is the menu object (passed as
+ * an integer address here, as elsewhere in this file). Calls Menu_UpdateCursor(arg0 + 0x20) and
  * acts on its result: 0x200 plays sound func_8003F6AC(1) and returns 2. 0 reads the button
  * halfword at D_800603C0 + 8: if bit 0x8000 is set it plays sound 2, toggles bit 3 of the
  * halfword table entry arg0->0x24[arg0->0x28] and returns 1; otherwise if bit 0x4000 is set it
@@ -443,7 +449,7 @@ s32 func_8910587C(s32 arg0) {
     s32 buttons;
     u16* entry;
 
-    res = func_8002DC04(arg0 + 0x20);
+    res = Menu_UpdateCursor(arg0 + 0x20);
     if (res == 0x200) {
         func_8003F6AC(1);
         ret = 2;
@@ -532,6 +538,7 @@ void func_891059FC(u8* widget) {
     }
 }
 
+/** Applies the selection state to an info widget entry. */
 void BattleInfoWidget_ApplyEntrySelection(unk_func_8830867C_034* arg0, s32 arg1) {
     s8* ptr = M2C_FIELD(M2C_FIELD(arg0, s8**, 0x70), s8**, 0) + arg1 * 0x24;
     s8* ptr2 = M2C_FIELD(ptr, s8**, 0x10);
@@ -539,8 +546,8 @@ void BattleInfoWidget_ApplyEntrySelection(unk_func_8830867C_034* arg0, s32 arg1)
     M2C_FIELD(ptr2, s32*, 0xC) = (M2C_FIELD(arg0, u16**, 0x74)[arg1] & 8) != 0;
 }
 
-void func_8002A3F8(void*, s32, s32);
-void func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+void Ui_DrawImageInStrips(void*, s32, s32);
+void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 extern u8 D_80073614[];
 extern u8 D_80073624[];
 extern Color_RGBA8 D_80073520;
@@ -548,17 +555,17 @@ extern Color_RGBA8 D_8910A934[];
 extern Color_RGBA8 D_800734A8[];
 void func_89105AD4(s32 arg0, s32 arg1, char** arg2, s32 arg3, s32 arg4) {
     Color_RGBA8 color;
-    s32 pad[5];
+    s32 pad[5]; // FAKE: stack padding
     s32 sel;
 
     if (arg4 & 8) {
-        func_8002A3F8(D_80073614, arg0 + 8, arg1 + 4);
+        Ui_DrawImageInStrips(D_80073614, arg0 + 8, arg1 + 4);
     } else {
-        func_8002A3F8(D_80073624, arg0 + 8, arg1 + 4);
+        Ui_DrawImageInStrips(D_80073624, arg0 + 8, arg1 + 4);
     }
     sel = arg4 & 2;
     if (sel) {
-        func_80029A64(arg0 + 0x2A, arg1 + 2, 0xE8, 0x18, D_80073520);
+        Ui_DrawRoundedFrame(arg0 + 0x2A, arg1 + 2, 0xE8, 0x18, D_80073520);
     }
     if (arg4 & 0x100) {
         color = D_8910A934[sel ? 0 : 1];
@@ -572,7 +579,7 @@ void func_89105AD4(s32 arg0, s32 arg1, char** arg2, s32 arg3, s32 arg4) {
     Font_EndTexturedTextRendering();
 }
 
-void func_8002AE94(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Rgba8910576C arg4, char* arg5);
+void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Rgba8910576C arg4, char* arg5);
 void func_8910576C(void* arg0, s32 arg1, s32 arg2, void* arg3, s32 arg4, Rgba8910576C arg5);
 void func_89105AD4(s32 arg0, s32 arg1, char** arg2, s32 arg3, s32 arg4);
 void func_891059FC(u8* widget);
@@ -582,29 +589,29 @@ extern Rgba8910576C D_8910A93C;
 extern Rgba8910576C D_8910A940;
 extern char D_8910E024[];
 void func_89105C54(s8* arg0, s32 arg1, s32 arg2, s8* arg3, Rgba8910576C arg4) {
-    s32 pad[5];
+    s32 pad[5]; // FAKE: stack padding
     s32 list;
 
-    func_8002A8C4(arg0 + 4, arg1, arg2, 0x134, 0xCE);
+    Window_SetRect(arg0 + 4, arg1, arg2, 0x134, 0xCE);
     M2C_FIELD(arg0, s32*, 0x28) = 0;
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x2C) = 0;
     M2C_FIELD(arg0, s32*, 0x18) = 1;
     M2C_FIELD(arg0, Rgba8910576C*, 0x1C) = arg4;
-    func_8002A8C4(arg0 + 0x30, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0x40);
+    Window_SetRect(arg0 + 0x30, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 6, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0x40);
     M2C_FIELD(arg0, s32*, 0x44) = 6;
     M2C_FIELD(arg0, Rgba8910576C*, 0x48) = D_8910A93C;
     M2C_FIELD(arg0, Rgba8910576C*, 0x4C) = D_8910A940;
-    func_8002A8C4(arg0 + 0x50, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x4C, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0x7C);
+    Window_SetRect(arg0 + 0x50, M2C_FIELD(arg0, s32*, 4) + 6, M2C_FIELD(arg0, s32*, 8) + 0x4C, M2C_FIELD(arg0, s32*, 0xC) - 0xC, 0x7C);
     M2C_FIELD(arg0, s32*, 0x64) = 0;
     M2C_FIELD(arg0, Rgba8910576C*, 0x68) = arg4;
-    func_8002AE94(arg0 + 0x94, M2C_FIELD(arg0, s32*, 0x50) + 0x70, M2C_FIELD(arg0, s32*, 0x54) + 0x5C, 0x48, arg4, D_8910E024);
+    Window_InitLabeled(arg0 + 0x94, M2C_FIELD(arg0, s32*, 0x50) + 0x70, M2C_FIELD(arg0, s32*, 0x54) + 0x5C, 0x48, arg4, D_8910E024);
     M2C_FIELD(arg0, s32*, 0xC0) = 0xA;
     M2C_FIELD(arg0, s32*, 0xC8) = 0xC;
     list = *(s32*)arg3;
     func_8910576C(arg0 + 0xDC, M2C_FIELD(arg0, s32*, 0xC) + M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 0x54) + 0x1C, (void*)(list + 0x34), (s32)(arg0 + 0x16C), arg4);
     func_8910576C(arg0 + 0x120, M2C_FIELD(arg0, s32*, 0xC) + M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 0x54) + 0x38, (void*)(list + 0x58), (s32)(arg0 + 0x17C), arg4);
-    func_8002D880(arg0 + 0x70, arg3, (s32)(arg0 + 0x164), func_89105AD4, 0x128, 0x1C);
+    Menu_Init(arg0 + 0x70, arg3, (s32)(arg0 + 0x164), func_89105AD4, 0x128, 0x1C);
     func_891059FC((u8*)arg0);
     M2C_FIELD(arg0, s32*, 0xD8) = 4;
     M2C_FIELD(arg0, s32*, 0xD4) = 0;
@@ -615,8 +622,8 @@ void func_89105C54(s8* arg0, s32 arg1, s32 arg2, s8* arg3, Rgba8910576C arg4) {
 }
 
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
-void func_80029658(s32, s32, s32, void*);
-void func_8002AF04(s8 *, s32);
+void Ui_DrawTexturedDivider(s32, s32, s32, void*);
+void Window_DrawLabeled(s8 *, s32);
 extern u8 D_8007356C[];
 extern Color_RGBA8 D_800734A8[];
 extern char D_8910E02C[];
@@ -624,14 +631,14 @@ extern Gfx D_80060290[];
 extern Gfx D_80060398[];
 extern u8 D_8910D138[];
 void func_89105E70(s8* arg0, s32 arg1) {
-    UNUSED s32 pad[3];
+    UNUSED s32 pad[3]; // FAKE: stack padding
     s32 sp38 = 0xFFED;
     s32 sp34 = 0;
 
     if (func_8002AE6C(arg0 + 4) == 0) {
-        func_8002A8E0(arg0 + 0x30);
-        func_8002A8E0(arg0 + 0x50);
-        func_80029658(M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8) + 0x45, M2C_FIELD(arg0, s32*, 0xC), D_8007356C);
+        Window_DrawFrame(arg0 + 0x30);
+        Window_DrawFrame(arg0 + 0x50);
+        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 4), M2C_FIELD(arg0, s32*, 8) + 0x45, M2C_FIELD(arg0, s32*, 0xC), D_8007356C);
         Font_BeginTranslucentTextRendering();
         Gfx_SetEnvColor(D_800734A8[0].r, D_800734A8[0].g, D_800734A8[0].b, D_800734A8[0].a);
         Font_SetActive(8, 0);
@@ -650,8 +657,8 @@ void func_89105E70(s8* arg0, s32 arg1) {
                 }
             }
         }
-        func_8002DAD8(arg0 + 0x70, M2C_FIELD(arg0, s32*, 0x50), M2C_FIELD(arg0, s32*, 0x54) + 4, sp38, arg0);
-        func_8002AF04(arg0 + 0x94, sp34);
+        Menu_DrawInlineItems(arg0 + 0x70, M2C_FIELD(arg0, s32*, 0x50), M2C_FIELD(arg0, s32*, 0x54) + 4, sp38, arg0);
+        Window_DrawLabeled(arg0 + 0x94, sp34);
         if (M2C_FIELD(arg0, s32*, 0xD4) == 1) {
             func_891057FC(arg0 + 0xDC, (M2C_FIELD(arg0, s32*, 0) == 1) ? 2 : 0);
         } else if (M2C_FIELD(arg0, s32*, 0xD4) == 2) {
@@ -742,20 +749,30 @@ s32 func_89106254(s8 *arg0) {
     return ret;
 }
 
-void func_89106384(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s8* arg5) {
+/**
+ * Draws one popup menu row with the selection highlight.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): drew the popup rows, with
+ * the highlight on the selected one.
+ */
+void LabPCList_DrawPopupRow(s32 arg0, s32 arg1, char* arg2, s32 arg3, s32 arg4, s8* arg5) {
     s32 temp_v0 = M2C_FIELD(arg5, s32*, 8) - 0xC;
 
     if (arg4 & 0x10) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, temp_v0 - 6, 0x16, M2C_FIELD(arg5, Color_RGBA8*, 0x18));
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, temp_v0 - 6, 0x16, M2C_FIELD(arg5, Color_RGBA8*, 0x18));
     }
     Font_BeginTranslucentTextRendering();
-    func_80027F20(arg4);
+    Font_SetColorForFlags(arg4);
     Font_SetActive(8, 0);
     Font_Printf(arg0 + 8, arg1 + 4, arg2);
     Font_EndTexturedTextRendering();
 }
 
-void func_89106424(s8 *arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4) {
+/**
+ * Sets up a popup menu sized to its widest string.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): A on フシギダネ set up the popup
+ * (フシギダネをあつめる, おなじタイプをあつめる, いどうする, どうぐをつかう).
+ */
+void LabPCList_InitPopupMenu(s8 *arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4) {
     s32 i;
     s32 w;
     s32 max = 0;
@@ -770,9 +787,9 @@ void func_89106424(s8 *arg0, s32 *arg1, s32 arg2, s32 arg3, s32 arg4) {
     }
     func_80027804(arg0 + 0x64, arg1, arg3, arg3);
     h = max * 0x14 + 0x10;
-    func_8002D880(arg0 + 0x40, arg0 + 0x64, arg2, func_89106384, h, 0x1C);
+    Menu_Init(arg0 + 0x40, arg0 + 0x64, arg2, LabPCList_DrawPopupRow, h, 0x1C);
     M2C_FIELD(arg0, s32 *, 0x60) |= 0x10000;
-    func_8002A8C4(arg0, 0, 0, h + 0xC, M2C_FIELD(arg0, s32 *, 0x6C) * 0x1C + 0x14);
+    Window_SetRect(arg0, 0, 0, h + 0xC, M2C_FIELD(arg0, s32 *, 0x6C) * 0x1C + 0x14);
     M2C_FIELD(arg0, s32 *, 0x24) = 0;
     M2C_FIELD(arg0, s32 *, 0x20) = 0;
     M2C_FIELD(arg0, s32 *, 0x28) = 0;
@@ -805,16 +822,18 @@ typedef struct Popup89106570 {
     /* 0x78 */ s32 limitY;
 } Popup89106570;
 
-/*
- * func_89106570
+/**
+ * LabPCList_PlacePopup
  *
  * Places a popup next to its anchor rectangle while keeping it inside the
  * limits at +0x74/+0x78.  With flag 0x01000000 it goes to the right of the
  * anchor (or to its left when that would overflow) and is pushed up by the
  * overflow, at least 8; otherwise it goes below the anchor (or above it) and
  * is pushed left the same way.  Field names describe that geometry only.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): placed that popup over the
+ * list next to the selected row.
  */
-void func_89106570(Popup89106570* arg0) {
+void LabPCList_PlacePopup(Popup89106570* arg0) {
     s32 over;
 
     if (arg0->flags & 0x01000000) {
@@ -846,38 +865,40 @@ void func_89106570(Popup89106570* arg0) {
 }
 
 s32 func_8002AE6C();                                /* extern */
-M2C_UNK func_8002D9B8(s32, s32, s32, s32, s8 *);  /* extern */
-//@unverified
 /**
- * If func_8002AE6C() is zero, calls func_8002D9B8 on the menu at +0x40, at
- * the panel's position (x + 6, y + 0xA) with flags arg1 | 0xFFED.
+ * Draws a popup menu's items.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): drew that popup's four rows.
  */
-void func_8910666C(s8* arg0, s32 arg1) {
+M2C_UNK Menu_DrawItems(s32, s32, s32, s32, s8 *);  /* extern */
+void LabPCList_DrawPopupMenu(s8* arg0, s32 arg1) {
     if (func_8002AE6C() == 0) {
         if (arg0) {} // karodo
         func_8002D9B8(arg0 + 0x40, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 10, arg1 | 0xFFED, arg0);
     }
 }
 
-M2C_UNK func_8002DC04(s32);                         /* extern */
+M2C_UNK Menu_UpdateCursor(s32);                         /* extern */
 
-s32 func_891066C0(s32 arg0) {
-    return func_8002DC04(arg0 + 0x40);
+/**
+ * Moves a popup menu's cursor.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): D-Down twice moved the popup
+ * cursor from フシギダネをあつめる to いどうする.
+ */
+s32 LabPCList_UpdatePopupMenu(s32 arg0) {
+    return Menu_UpdateCursor(arg0 + 0x40);
 }
 
 extern char D_8910E064[];
 extern Rgba8910576C D_8910A94C;
 extern char D_8910E07C[];
 extern char D_8910E088[];
-//@unverified
 /**
- * Initializes a 316x80 window in arg0 at (arg1, arg2) with the color arg3,
- * fills in its fields (arg4 at +0xA4, arg5 at +0xB8, the pairs at +0xA8/+0xAC
- * and +0xBC/+0xC0 set to 1 and 100), and sets up two func_8002AE94 items at
- * x + 210 with labels D_8910E07C and D_8910E088. arg6 == 0 sets bit 0 at +0x3C.
+ * Sets up the レベルのにゅうりょく (level input) window.
+ * Seen in play (2026-11-12) in いちらん: レベルをきめてあつめる (page 3/3, A on the レベル header) ran this once
+ * and opened 「001 から 100」; かいじょ is greyed out when no level filter is active.
  */
-void func_891066E0(s8* arg0, s32 arg1, s32 arg2, Rgba8910576C arg3, s32 arg4, s32 arg5, s32 arg6) {
-    func_8002A8C4(arg0, arg1, arg2, 316, 80);
+void LabPCList_InitLevelInputWindow(s8* arg0, s32 arg1, s32 arg2, Rgba8910576C arg3, s32 arg4, s32 arg5, s32 arg6) {
+    Window_SetRect(arg0, arg1, arg2, 316, 80);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
     M2C_FIELD(arg0, s32*, 0x14) = 0x800;
@@ -892,8 +913,8 @@ void func_891066E0(s8* arg0, s32 arg1, s32 arg2, Rgba8910576C arg3, s32 arg4, s3
     M2C_FIELD(arg0, s32*, 0xC8) = 0;
     M2C_FIELD(arg0, s32*, 0xC0) = 100;
     M2C_FIELD(arg0, s32*, 0xBC) = 1;
-    func_8002AE94(arg0 + 0x68, M2C_FIELD(arg0, s32*, 0) + 210, M2C_FIELD(arg0, s32*, 4) + 14, 92, D_8910A94C, D_8910E07C);
-    func_8002AE94(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 210, M2C_FIELD(arg0, s32*, 4) + 42, 92, D_8910A94C, D_8910E088);
+    Window_InitLabeled(arg0 + 0x68, M2C_FIELD(arg0, s32*, 0) + 210, M2C_FIELD(arg0, s32*, 4) + 14, 92, D_8910A94C, D_8910E07C);
+    Window_InitLabeled(arg0 + 0x2C, M2C_FIELD(arg0, s32*, 0) + 210, M2C_FIELD(arg0, s32*, 4) + 42, 92, D_8910A94C, D_8910E088);
     if (arg6 == 0) {
         M2C_FIELD(arg0, s32*, 0x3C) |= 1;
     }
@@ -913,11 +934,16 @@ extern u8 D_04002130[];
 extern u8 D_04002238[];
 extern u8 D_04002340[];
 extern u8 D_04002448[];
-void func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 extern Color_RGBA8 D_80073520;
 M2C_UNK func_8001AA60(s32, s32, s32);
 
-void func_89106864(s8* arg0, s32 x, s32 y, s32 flags) {
+/**
+ * Draws the level input digits and the up/down arrows.
+ * Seen in play (2026-11-12) in いちらん: drew the three digits of each bound with a yellow frame on
+ * the selected digit.
+ */
+void LabPCList_DrawLevelInput(s8* arg0, s32 x, s32 y, s32 flags) {
     s32 hl = flags & 2;
     s32 bx;
     s32 v;
@@ -938,36 +964,42 @@ void func_89106864(s8* arg0, s32 x, s32 y, s32 flags) {
         }
         func_8001B884(bx + 3, y + 0x16, 0xE, 8, (u8*)v, 0x10, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);
-        func_80029A64(bx - 3, y - 3, 0x1A, 0x1A, D_80073520);
+        Ui_DrawRoundedFrame(bx - 3, y - 3, 0x1A, 0x1A, D_80073520);
     }
     func_8001AB6C();
     func_8001A384(8, 2);
     v = (M2C_FIELD(arg0, s32*, 0x10) == 2) ? hl : 0;
-    func_80027F20(v);
+    Font_SetColorForFlags(v);
     func_8001AA60(x, y, M2C_FIELD(arg0, s32*, 0) / 100 + '0');
     v = (M2C_FIELD(arg0, s32*, 0x10) == 1) ? hl : 0;
-    func_80027F20(v);
+    Font_SetColorForFlags(v);
     func_8001AA60(x + 0x16, y, M2C_FIELD(arg0, s32*, 0) / 10 % 10 + '0');
     v = (M2C_FIELD(arg0, s32*, 0x10) == 0) ? hl : 0;
-    func_80027F20(v);
+    Font_SetColorForFlags(v);
     func_8001AA60(x + 0x2C, y, M2C_FIELD(arg0, s32*, 0) % 10 + '0');
     func_8001ABBC();
 }
 
-void func_8002AF04(s8 *, s32);
-void func_89106864(s8 *, s32, s32, s32);
+void Window_DrawLabeled(s8 *, s32);
+void LabPCList_DrawLevelInput(s8 *, s32, s32, s32);
 extern char D_8910E094[];
-void func_89106B54(s8 *arg0) {
+/**
+ * Draws the レベルのにゅうりょく (level input) window: the lower and upper level digits with から
+ * between them, and the あつめる and かいじょ buttons.
+ * Seen in play (2026-11-12) in いちらん: ran every frame while the window showed 「001 から 100」.
+ * D_8910E094 is から ("from"), not "Empty".
+ */
+void LabPCList_DrawLevelInputWindow(s8 *arg0) {
     if (func_8002AE6C() == 0) {
         func_8001AB6C();
         func_8001A384(4, 0);
         func_8001AA9C(0xC8, 0xC8, 0xFF, 0xFF);
         func_8001A944(M2C_FIELD(arg0, s32 *, 0) + 0x54, M2C_FIELD(arg0, s32 *, 4) + 0x13, D_8910E094);
         func_8001ABBC();
-        func_89106864(arg0 + 0xA4, M2C_FIELD(arg0, s32 *, 0) + 0xE, M2C_FIELD(arg0, s32 *, 4) + 0x10, (M2C_FIELD(arg0, s32 *, 0xE4) == 0) ? 2 : 0);
-        func_89106864(arg0 + 0xB8, M2C_FIELD(arg0, s32 *, 0) + 0x7A, M2C_FIELD(arg0, s32 *, 4) + 0x10, (M2C_FIELD(arg0, s32 *, 0xE4) == 1) ? 2 : 0);
-        func_8002AF04(arg0 + 0x68, (M2C_FIELD(arg0, s32 *, 0xE4) == 2 && M2C_FIELD(arg0, s32 *, 0xD0) == 0) ? 2 : 0);
-        func_8002AF04(arg0 + 0x2C, (M2C_FIELD(arg0, s32 *, 0xE4) == 2 && M2C_FIELD(arg0, s32 *, 0xD0) == 1) ? 2 : 0);
+        LabPCList_DrawLevelInput(arg0 + 0xA4, M2C_FIELD(arg0, s32 *, 0) + 0xE, M2C_FIELD(arg0, s32 *, 4) + 0x10, (M2C_FIELD(arg0, s32 *, 0xE4) == 0) ? 2 : 0);
+        LabPCList_DrawLevelInput(arg0 + 0xB8, M2C_FIELD(arg0, s32 *, 0) + 0x7A, M2C_FIELD(arg0, s32 *, 4) + 0x10, (M2C_FIELD(arg0, s32 *, 0xE4) == 1) ? 2 : 0);
+        Window_DrawLabeled(arg0 + 0x68, (M2C_FIELD(arg0, s32 *, 0xE4) == 2 && M2C_FIELD(arg0, s32 *, 0xD0) == 0) ? 2 : 0);
+        Window_DrawLabeled(arg0 + 0x2C, (M2C_FIELD(arg0, s32 *, 0xE4) == 2 && M2C_FIELD(arg0, s32 *, 0xD0) == 1) ? 2 : 0);
     }
 }
 
@@ -979,7 +1011,12 @@ s32 func_8002BC14(s32, s32, s8 *);                /* extern */
 M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
 extern s32 D_800603C0;
 
-s32 func_89106C98(s8 *arg0) {
+/**
+ * Handles the level input digits.
+ * Seen in play (2026-11-12) in いちらん: D-Up raised the selected digit (001 to 006), D-Right moved
+ * across the six digits to あつめる/かいじょ, and A on those returned 1 or 2.
+ */
+s32 LabPCList_UpdateLevelInput(s8 *arg0) {
     s32 sp1C;
     s32 temp_v0;
     s32 temp_v0_2;
@@ -1037,11 +1074,11 @@ s32 func_89106C98(s8 *arg0) {
 /*
  * func_89106E34
  *
- * Calls func_8002A8C4(arg0, arg1, arg2, arg3, 0), which fills the first five
+ * Calls Window_SetRect(arg0, arg1, arg2, arg3, 0), which fills the first five
  * words of the object (arg1, arg2, arg3, 0, 0), then stores arg4 at +0x14.
  */
 void func_89106E34(s8 *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
-    func_8002A8C4(arg0, arg1, arg2, arg3, 0);
+    Window_SetRect(arg0, arg1, arg2, arg3, 0);
     M2C_FIELD(arg0, s32 *, 0x14) = arg4;
 }
 
@@ -1105,23 +1142,29 @@ extern Gfx D_80060270[];
 extern u8 D_8910A968[];
 extern u8 D_8910A970[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
-void func_8002B940(s32, s32, s32, s32);
-void func_89106FD8(s32 arg0, s32 arg1, char **arg2, s32 arg3, s32 arg4) {
+void Ui_DrawNumber(s32, s32, s32, s32);
+/**
+ * Draws one numbered row of the type filter list.
+ * Seen in play (2026-11-12) in いちらん: drew the numbered rows of the type list (1 ノーマル, 2 かくとう, 3
+ * ひこう, ...).
+ */
+void LabPCList_DrawTypeFilterRow(s32 arg0, s32 arg1, char **arg2, s32 arg3, s32 arg4) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(arg0, arg1 + 1, 0xAE, 0x1A, *(Color_RGBA8 *)D_8910A968);
     func_80029028(arg0, arg1, 0xAE, 1, *(Color_RGBA8 *)D_8910A970);
     func_80029028(arg0, arg1 + 0x1B, 0xAE, 1, *(Color_RGBA8 *)D_8910A970);
     if (arg4 & 8) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, 0xA8, 0x16, *(Color_RGBA8 *)D_8910A968);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0xA8, 0x16, *(Color_RGBA8 *)D_8910A968);
     }
-    func_8002B940(arg0 + 9, arg1 + 8, arg3 + 1, 2);
+    Ui_DrawNumber(arg0 + 9, arg1 + 8, arg3 + 1, 2);
     Font_BeginTranslucentTextRendering();
-    func_80027F20(arg4);
+    Font_SetColorForFlags(arg4);
     Font_SetActive(8, 0);
     Font_Printf(arg0 + 0x42, arg1 + 4, *arg2);
     Font_EndTexturedTextRendering();
 }
 
+/** Converts a move table index to its display index by skipping unused slots. */
 s32 Move_NormalizeDisplayIndex(s32 a) {
     return a >= 20 ? a - 12 : (a >= 7 ? a - 1 : a);
 }
@@ -1163,8 +1206,8 @@ typedef struct Entry891071A4 {
     u8 color[4];
 } Entry891071A4;
 
-void func_8002EC24(s8*, s32, s32, s32, void*, s32, s32);
-void func_8002AE94(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Rgba8910576C arg4, char* arg5);
+void ScrollList_Init(s8*, s32, s32, s32, void*, s32, s32);
+void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Rgba8910576C arg4, char* arg5);
 void func_8000B2F4(s32);
 extern Entry891071A4 D_80066AD8[];
 extern Rgba8910576C D_8910A974;
@@ -1173,10 +1216,16 @@ extern char D_8910E0B0[];
 extern char D_8910E0B8[];
 extern char D_8910E0C4[];
 
-void func_891071A4(Lab891071A4* arg0, s32 x, s32 y, s32* arg3) {
+/**
+ * Sets up the type filter window.
+ * Seen in play (2026-11-12) in いちらん: A on the タイプ1 header opened the タイプであつめる (gather by type)
+ * window, with two empty type slots, the numbered type list (1 ノーマル, 2 かくとう, ... 8 ゴースト) and あつめる
+ * / かいじょ buttons.
+ */
+void LabPCList_InitTypeFilter(Lab891071A4* arg0, s32 x, s32 y, s32* arg3) {
     s32 i;
 
-    func_8002A8C4((s8*)arg0, x, y, 0x156, 0x120);
+    Window_SetRect((s8*)arg0, x, y, 0x156, 0x120);
     arg0->unk24 = 0;
     arg0->unk20 = NULL;
     arg0->unk28 = 0;
@@ -1187,7 +1236,7 @@ void func_891071A4(Lab891071A4* arg0, s32 x, s32 y, s32* arg3) {
     for (i = 0; i < 0xF; i++) {
         arg0->names[i] = (s8*)&D_80066AD8[i + ((i < 6) ? 0 : 1)];
     }
-    func_8002EC24(arg0->list, (s32)arg0->unk1D0, (s32)arg0->unk1B0, 8, func_89106FD8, 0xAE, 0x1C);
+    ScrollList_Init(arg0->list, (s32)arg0->unk1D0, (s32)arg0->unk1B0, 8, LabPCList_DrawTypeFilterRow, 0xAE, 0x1C);
     arg0->unk150 |= 0x10000;
     for (i = 0; i < *arg3; i++) {
         M2C_FIELD(arg0, s32*, 0x68 + i * 0x40) = Move_NormalizeDisplayIndex(((u8*)arg3)[4 + i]);
@@ -1197,14 +1246,14 @@ void func_891071A4(Lab891071A4* arg0, s32 x, s32 y, s32* arg3) {
     }
     for (i = 0; i < 2; i++) {
         if (M2C_FIELD(arg0, s32*, 0x68 + i * 0x40) == -1) {
-            func_8002AE94(arg0->buttons[i], arg0->x + 0x20, arg0->y + i * 0x1C + 0x22, 0x5C, D_8910A974, D_8910E0B0);
+            Window_InitLabeled(arg0->buttons[i], arg0->x + 0x20, arg0->y + i * 0x1C + 0x22, 0x5C, D_8910A974, D_8910E0B0);
         } else {
-            func_8002AE94(arg0->buttons[i], arg0->x + 0x20, arg0->y + i * 0x1C + 0x22, 0x5C, D_8910A974, *(char**)arg0->names[M2C_FIELD(arg0, s32*, 0x68 + i * 0x40)]);
+            Window_InitLabeled(arg0->buttons[i], arg0->x + 0x20, arg0->y + i * 0x1C + 0x22, 0x5C, D_8910A974, *(char**)arg0->names[M2C_FIELD(arg0, s32*, 0x68 + i * 0x40)]);
             arg0->flags[M2C_FIELD(arg0, s32*, 0x68 + i * 0x40)] |= 8;
         }
     }
-    func_8002AE94(arg0->unkE8, arg0->x + 0x20, arg0->y + 0xCA, 0x5C, D_8910A974, D_8910E0B8);
-    func_8002AE94(arg0->unkAC, arg0->x + 0x20, arg0->y + 0xE6, 0x5C, D_8910A974, D_8910E0C4);
+    Window_InitLabeled(arg0->unkE8, arg0->x + 0x20, arg0->y + 0xCA, 0x5C, D_8910A974, D_8910E0B8);
+    Window_InitLabeled(arg0->unkAC, arg0->x + 0x20, arg0->y + 0xE6, 0x5C, D_8910A974, D_8910E0C4);
     if (*arg3 == 0) {
         arg0->unkBC |= 1;
     }
@@ -1228,9 +1277,13 @@ typedef struct Ctx891074CC {
     /* 0x1DC */ s32 mode;
 } Ctx891074CC;
 extern u8 D_800735C4[];
-void func_8002F3C4(s8*, s32, s32, s32, s32);
+void ScrollList_DrawItems(s8*, s32, s32, s32, s32);
 
-void func_891074CC(Ctx891074CC* arg0) {
+/**
+ * Draws the type filter window.
+ * Seen in play (2026-11-12) in いちらん: drew the タイプであつめる window.
+ */
+void LabPCList_DrawTypeFilter(Ctx891074CC* arg0) {
     s32 i;
     s32 hl;
     s32 mask;
@@ -1238,21 +1291,21 @@ void func_891074CC(Ctx891074CC* arg0) {
     if (func_8002AE6C() == 0) {
         hl = (arg0->mode == 0) ? 2 : 0x10;
         for (i = 0; i < 2; i++) {
-            func_8002AF04(arg0->buttons[i], (i == arg0->cursor) ? hl : 0);
+            Window_DrawLabeled(arg0->buttons[i], (i == arg0->cursor) ? hl : 0);
         }
         hl = (arg0->mode == 0) ? 2 : 0;
-        func_8002AF04(arg0->unk0E8, (arg0->cursor == 2) ? hl : 0);
-        func_8002AF04(arg0->unk0AC, (arg0->cursor == 3) ? hl : 0);
-        func_800295E8(arg0->x + 0x96, arg0->y + 0xE, 0xB2, 0x104, D_800735C4);
+        Window_DrawLabeled(arg0->unk0E8, (arg0->cursor == 2) ? hl : 0);
+        Window_DrawLabeled(arg0->unk0AC, (arg0->cursor == 3) ? hl : 0);
+        Ui_DrawTexturedFrameDecal(arg0->x + 0x96, arg0->y + 0xE, 0xB2, 0x104, D_800735C4);
         mask = 0xFFED;
         if (arg0->mode == 1) {
             mask = 0xFFEF;
         }
-        func_8002F3C4(arg0->text, arg0->x + 0x98, arg0->y + 0x20, mask, 0);
+        ScrollList_DrawItems(arg0->text, arg0->x + 0x98, arg0->y + 0x20, mask, 0);
     }
 }
 
-s32 func_8002FD8C(s8*);
+s32 ScrollList_UpdateCursor(s8*);
 
 typedef struct Slot89107614 {
     s32 unk64;
@@ -1274,7 +1327,12 @@ typedef struct Lab89107614 {
     s32 unk1DC;
 } Lab89107614;
 
-s32 func_89107614(Lab89107614* arg0) {
+/**
+ * Handles the type filter window. Returns -1 on cancel, 1 on confirm, 2 on clear.
+ * Seen in play (2026-11-12) in いちらん: handled the タイプであつめる window; A moved the cursor into the
+ * type list (1 ノーマル).
+ */
+s32 LabPCList_UpdateTypeFilter(Lab89107614* arg0) {
     s32 ret = 0;
     u16 buttons;
 
@@ -1309,7 +1367,7 @@ s32 func_89107614(Lab89107614* arg0) {
             }
             break;
         case 1:
-            if (func_8002FD8C(arg0->unk130) == 0) {
+            if (ScrollList_UpdateCursor(arg0->unk130) == 0) {
                 buttons = ((u16*)D_800603C0)[4];
                 if (buttons & 0x4000) {
                     func_8003F6AC(3);
@@ -1338,7 +1396,12 @@ s32 func_89107614(Lab89107614* arg0) {
     return ret;
 }
 
-void func_89107850(s8* arg0, s32* arg1) {
+/**
+ * Copies the chosen types into the list's filter state.
+ * Seen in play (2026-11-12) in いちらん: after choosing どく and pressing あつめる, it wrote count 1 and
+ * type byte 0x03 (Poison) into the filter state at +0x9918.
+ */
+void LabPCList_CommitTypeFilter(s8* arg0, s32* arg1) {
     s32 count = 0;
     s32 i;
 
@@ -1353,7 +1416,12 @@ void func_89107850(s8* arg0, s32* arg1) {
 
 extern u8 D_8910AAC0[];
 extern u8 D_8910AAC8[];
-void func_891078E0(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
+/**
+ * Draws one numbered row of the move filter list.
+ * Seen in play (2026-11-12) in いちらん: drew the numbered move rows of わざであつめる (row index 0 = 1
+ * 10まんボルト, 1 = 2 あくまのキッス).
+ */
+void LabPCList_DrawMoveFilterRow(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
     s32 idx;
 
     idx = *arg2;
@@ -1362,11 +1430,11 @@ void func_891078E0(s32 arg0, s32 arg1, u8* arg2, s32 arg3, s32 arg4) {
     func_80029028(arg0, arg1, 0xD4, 1, *(Color_RGBA8 *)D_8910AAC8);
     func_80029028(arg0, arg1 + 0x1B, 0xD4, 1, *(Color_RGBA8 *)D_8910AAC8);
     if (arg4 & 8) {
-        func_8002A0AC(arg0 + 3, arg1 + 3, 0xCE, 0x16, *(Color_RGBA8 *)D_8910AAC0);
+        Ui_FillRectHighlighted(arg0 + 3, arg1 + 3, 0xCE, 0x16, *(Color_RGBA8 *)D_8910AAC0);
     }
-    func_8002B940(arg0 + 9, arg1 + 8, arg3 + 1, 3);
+    Ui_DrawNumber(arg0 + 9, arg1 + 8, arg3 + 1, 3);
     Font_BeginTranslucentTextRendering();
-    func_80027F20(arg4);
+    Font_SetColorForFlags(arg4);
     Font_SetActive(8, 0);
     Font_Printf(arg0 + 0x37, arg1 + 4, D_8006A9D4[idx].name);
     Font_EndTexturedTextRendering();
@@ -1400,8 +1468,8 @@ typedef struct Lab89107A60 {
     /* 0x34C */ s32 mode;
 } Lab89107A60;
 
-void func_8002EC24(s8*, s32, s32, s32, void*, s32, s32);
-void func_8002AE94(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Rgba8910576C arg4, char* arg5);
+void ScrollList_Init(s8*, s32, s32, s32, void*, s32, s32);
+void Window_InitLabeled(s8* arg0, s32 arg1, s32 arg2, s32 arg3, Rgba8910576C arg4, char* arg5);
 void func_8000B2F4(s32);
 extern u8 D_8910A978[];
 extern u8 D_8910AA1C[];
@@ -1411,10 +1479,15 @@ extern char D_8910E0E0[];
 extern char D_8910E0E8[];
 extern char D_8910E0F4[];
 
-void func_89107A60(Lab89107A60* arg0, s32 x, s32 y, u8* arg3) {
+/**
+ * Sets up the move filter window.
+ * Seen in play (2026-11-12) in いちらん: A on the わざ header (detail page 2/3) ran this once and
+ * opened わざであつめる, with four empty slots and the move list starting at 1 10まんボルト.
+ */
+void LabPCList_InitMoveFilter(Lab89107A60* arg0, s32 x, s32 y, u8* arg3) {
     s32 i;
 
-    func_8002A8C4((s8*)arg0, x, y, 0x194, 0x120);
+    Window_SetRect((s8*)arg0, x, y, 0x194, 0x120);
     arg0->unk24 = 0;
     arg0->unk20 = NULL;
     arg0->unk28 = 0;
@@ -1422,7 +1495,7 @@ void func_89107A60(Lab89107A60* arg0, s32 x, s32 y, u8* arg3) {
     arg0->color = D_8910AACC;
     arg0->unk20 = D_8910E0D0;
     func_80027410(arg0->unk33C, D_8910A978, 1, 0xA4, 0xA4);
-    func_8002EC24(arg0->list, (s32)arg0->unk33C, (s32)arg0->unk1F4, 8, func_891078E0, 0xD4, 0x1C);
+    ScrollList_Init(arg0->list, (s32)arg0->unk33C, (s32)arg0->unk1F4, 8, LabPCList_DrawMoveFilterRow, 0xD4, 0x1C);
     arg0->unk1D0 |= 0x10000;
     for (i = 0; i < M2C_FIELD(arg3, s32*, 4); i++) {
         M2C_FIELD(arg0, s32*, 0x68 + i * 0x40) = D_8910AA1C[arg3[i] - 1];
@@ -1432,14 +1505,14 @@ void func_89107A60(Lab89107A60* arg0, s32 x, s32 y, u8* arg3) {
     }
     for (i = 0; i < 4; i++) {
         if (M2C_FIELD(arg0, s32*, 0x68 + i * 0x40) == -1) {
-            func_8002AE94(arg0->buttons[i], arg0->x + 0xE, arg0->y + i * 0x1C + 0x22, 0x98, D_8910AACC, D_8910E0E0);
+            Window_InitLabeled(arg0->buttons[i], arg0->x + 0xE, arg0->y + i * 0x1C + 0x22, 0x98, D_8910AACC, D_8910E0E0);
         } else {
-            func_8002AE94(arg0->buttons[i], arg0->x + 0xE, arg0->y + i * 0x1C + 0x22, 0x98, D_8910AACC, (char*)D_8006A9D4[D_8910A978[M2C_FIELD(arg0, s32*, 0x68 + i * 0x40)]].name);
+            Window_InitLabeled(arg0->buttons[i], arg0->x + 0xE, arg0->y + i * 0x1C + 0x22, 0x98, D_8910AACC, (char*)D_8006A9D4[D_8910A978[M2C_FIELD(arg0, s32*, 0x68 + i * 0x40)]].name);
             arg0->flags[M2C_FIELD(arg0, s32*, 0x68 + i * 0x40)] |= 8;
         }
     }
-    func_8002AE94(arg0->unk168, arg0->x + 0x4A, arg0->y + 0xCA, 0x5C, D_8910AACC, D_8910E0E8);
-    func_8002AE94(arg0->unk12C, arg0->x + 0x4A, arg0->y + 0xE6, 0x5C, D_8910AACC, D_8910E0F4);
+    Window_InitLabeled(arg0->unk168, arg0->x + 0x4A, arg0->y + 0xCA, 0x5C, D_8910AACC, D_8910E0E8);
+    Window_InitLabeled(arg0->unk12C, arg0->x + 0x4A, arg0->y + 0xE6, 0x5C, D_8910AACC, D_8910E0F4);
     if (M2C_FIELD(arg3, s32*, 4) == 0) {
         arg0->unk13C |= 1;
     }
@@ -1462,9 +1535,13 @@ typedef struct Ctx89107D7C {
     /* 0x1B0 */ s8 text[0x19C];
     /* 0x34C */ s32 mode;
 } Ctx89107D7C;
-void func_8002F6C4(s8*, s32, s32, s32, s32);
+void ScrollList_DrawInlineItems(s8*, s32, s32, s32, s32);
 
-void func_89107D7C(Ctx89107D7C* arg0) {
+/**
+ * Draws the move filter window.
+ * Seen in play (2026-11-12) in いちらん: ran every frame while わざであつめる was open.
+ */
+void LabPCList_DrawMoveFilter(Ctx89107D7C* arg0) {
     s32 i;
     s32 hl;
     s32 mask;
@@ -1472,17 +1549,17 @@ void func_89107D7C(Ctx89107D7C* arg0) {
     if (func_8002AE6C() == 0) {
         hl = (arg0->mode == 0) ? 2 : 0x10;
         for (i = 0; i < 4; i++) {
-            func_8002AF04(arg0->buttons[i], (i == arg0->cursor) ? hl : 0);
+            Window_DrawLabeled(arg0->buttons[i], (i == arg0->cursor) ? hl : 0);
         }
         hl = (arg0->mode == 0) ? 2 : 0;
-        func_8002AF04(arg0->unk168, (arg0->cursor == 4) ? hl : 0);
-        func_8002AF04(arg0->unk12C, (arg0->cursor == 5) ? hl : 0);
-        func_800295E8(arg0->x + 0xAE, arg0->y + 0xE, 0xD8, 0x104, D_800735C4);
+        Window_DrawLabeled(arg0->unk168, (arg0->cursor == 4) ? hl : 0);
+        Window_DrawLabeled(arg0->unk12C, (arg0->cursor == 5) ? hl : 0);
+        Ui_DrawTexturedFrameDecal(arg0->x + 0xAE, arg0->y + 0xE, 0xD8, 0x104, D_800735C4);
         mask = 0xFFED;
         if (arg0->mode == 1) {
             mask = 0xFFEF;
         }
-        func_8002F6C4(arg0->text, arg0->x + 0xB0, arg0->y + 0x20, mask, 0);
+        ScrollList_DrawInlineItems(arg0->text, arg0->x + 0xB0, arg0->y + 0x20, mask, 0);
     }
 }
 
@@ -1501,7 +1578,12 @@ typedef struct Lab89107EC4 {
     /* 0x34C */ s32 mode;
 } Lab89107EC4;
 
-s32 func_89107EC4(Lab89107EC4* arg0) {
+/**
+ * Handles the move filter window. Returns -1 on cancel, 1 on confirm, 2 on clear.
+ * Seen in play (2026-11-12) in いちらん: handled わざであつめる. あつめる led to the commit path (1) and かいじょ to
+ * the clear path (2).
+ */
+s32 LabPCList_UpdateMoveFilter(Lab89107EC4* arg0) {
     s32 ret = 0;
     u16 buttons;
 
@@ -1538,7 +1620,7 @@ s32 func_89107EC4(Lab89107EC4* arg0) {
             }
             break;
         case 1:
-            if (func_8002FD8C(arg0->unk1B0) == 0) {
+            if (ScrollList_UpdateCursor(arg0->unk1B0) == 0) {
                 buttons = ((u16*)D_800603C0)[4];
                 if (buttons & 0x4000) {
                     func_8003F6AC(3);
@@ -1569,7 +1651,12 @@ s32 func_89107EC4(Lab89107EC4* arg0) {
 
 extern u8 D_8910A978[];
 
-void func_89108108(s8* arg0, s8* arg1) {
+/**
+ * Copies the chosen moves into the list's filter state.
+ * Seen in play (2026-11-12) in いちらん: after choosing ひっさつまえば and pressing あつめる, it wrote move 0x9E
+ * (Hyper Fang) and count 1 into the filter state at +0x9B00.
+ */
+void LabPCList_CommitMoveFilter(s8* arg0, s8* arg1) {
     s32 count = 0;
     s32 i;
 
@@ -1592,7 +1679,13 @@ extern Gfx D_80060270[];
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 char* func_8001FDC8(u8, char*);
 s32 func_80031CC8(u8);
-void func_891081A8(s32 x, s32 y, u8** item, UNUSED s32 index, s32 flags) {
+/**
+ * Draws an item row with パソコン (PC) / てもち (Party) and ×%02d.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DrawItemRow(s32 x, s32 y, u8** item, UNUSED s32 index, s32 flags) {
     char buf[0x38];
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
@@ -1602,11 +1695,11 @@ void func_891081A8(s32 x, s32 y, u8** item, UNUSED s32 index, s32 flags) {
     func_80029028(x, y + 0x1B, 0x178, 1, D_8910AAD8);
     if (item != NULL) {
         if (flags & 0x10) {
-            func_8002A0AC(x + 3, y + 3, 0x109, 0x16, D_8910AAD0);
-            func_8002A0AC(x + 0x10C, y + 3, 0x69, 0x16, D_8910AAD4);
+            Ui_FillRectHighlighted(x + 3, y + 3, 0x109, 0x16, D_8910AAD0);
+            Ui_FillRectHighlighted(x + 0x10C, y + 3, 0x69, 0x16, D_8910AAD4);
         }
         func_8001AB6C();
-        func_80027F20(flags);
+        Font_SetColorForFlags(flags);
         func_8001A384(8, 0);
         func_8001A944(x + 8, y + 4, func_8001FDC8(item[0][0], buf));
         if (item[1][0] == 0x12) {
@@ -1682,10 +1775,15 @@ extern u8 D_8910E120[];
 extern u8 D_8910AAE0[];
 extern u8 D_8910AAE4[];
 void func_8000A460(s8*, s8*);
-void func_8002EC24(s8*, s32, s32, s32, void*, s32, s32);
-void func_891081A8();
-void func_891084B4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8* arg5) {
-    func_8002A8C4(arg0, arg1, arg2, 0x184, 0x16E);
+void ScrollList_Init(s8*, s32, s32, s32, void*, s32, s32);
+void PcSort_DrawItemRow();
+/**
+ * Sets up the window that uses an item on the selected Pokemon.
+ * Seen in play (2026-11-12) in いちらん: どうぐをつかう on フシギダネ opened 「フシギダネがつかえるどうぐ」, listing the bag
+ * items from the Game Boy save (マックスアップ ×5, タウリン ×5, ふしぎなアメ ×5, ポイントアップ ×3, わざマシン06, ひでんマシン01).
+ */
+void LabPCList_InitItemWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8* arg5) {
+    Window_SetRect(arg0, arg1, arg2, 0x184, 0x16E);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
@@ -1693,11 +1791,11 @@ void func_891084B4(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, u8* arg5) {
     func_8000A460(D_89119BD0, *(s8**)D_80064C44[arg5[8]]);
     *(Str891084B4*)(func_800566BC((s32)D_89119BD0) + D_89119BD0) = *(Str891084B4*)D_8910E120;
     M2C_FIELD(arg0, s8**, 0x20) = D_89119BD0;
-    func_8002A8C4(arg0 + 0x2C, arg1 + 6, arg2 + 0x10C, 0x178, 0x5C);
+    Window_SetRect(arg0 + 0x2C, arg1 + 6, arg2 + 0x10C, 0x178, 0x5C);
     M2C_FIELD(arg0, s32*, 0x40) = 6;
     M2C_FIELD(arg0, Rgba891084B4*, 0x44) = *(Rgba891084B4*)D_8910AAE0;
     M2C_FIELD(arg0, Rgba891084B4*, 0x48) = *(Rgba891084B4*)D_8910AAE4;
-    func_8002EC24(arg0 + 0x4C, arg3, arg4, 8, func_891081A8, 0x178, 0x1C);
+    ScrollList_Init(arg0 + 0x4C, arg3, arg4, 8, PcSort_DrawItemRow, 0x178, 0x1C);
     M2C_FIELD(arg0, s32*, 0x6C) |= 0x10000;
     func_89108450((FlagScanOwner*)arg0);
     M2C_FIELD(arg0, u8**, 0x1AC) = arg5;
@@ -1709,18 +1807,24 @@ extern char D_8910E134[];
 extern char D_8910E150[];
 extern char D_8910E16C[];
 char* func_80031BC0(u8, char*);
-void func_89108650(s8* arg0) {
+/**
+ * Draws このどうぐをつかいますか？ (Use this item?), どの わざに つかいますか？ (On which move?) or どの わざを わすれさせたい？ (Which move should it forget?).
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name and comment guessed from the code.
+ */
+void PcSort_DrawUseItemPrompt(s8* arg0) {
     s32 flags;
     s32 x;
     s32 y;
     char buf[0x70];
 
-    if (func_8002AB84() == 0) {
-        func_8002A8E0(arg0 + 0x2C);
-        func_80029658(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 0x30) - 7, M2C_FIELD(arg0, s32*, 8), D_8007356C);
+    if (Particle_Field50_SetXZFromField7C_09BB4() == 0) {
+        Window_DrawFrame(arg0 + 0x2C);
+        Ui_DrawTexturedDivider(M2C_FIELD(arg0, s32*, 0), M2C_FIELD(arg0, s32*, 0x30) - 7, M2C_FIELD(arg0, s32*, 8), D_8007356C);
         flags = 0xFFED;
         flags |= (M2C_FIELD(arg0, s32*, 0x1B0) == 0) ? 2 : 0x10;
-        func_8002F3C4(arg0 + 0x4C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x16, flags, 0);
+        ScrollList_DrawItems(arg0 + 0x4C, M2C_FIELD(arg0, s32*, 0) + 6, M2C_FIELD(arg0, s32*, 4) + 0x16, flags, 0);
         if (M2C_FIELD(M2C_FIELD(arg0, s8**, 0x4C), s32*, 8) > 0) {
             Font_BeginTranslucentTextRendering();
             Font_SetActive(8, 0);
@@ -1754,7 +1858,7 @@ void func_89108650(s8* arg0) {
             Font_EndTexturedTextRendering();
             switch (M2C_FIELD(arg0, s32*, 0x1B0)) {
                 case 1:
-                    func_8910666C(arg0 + 0x94, 2);
+                    LabPCList_DrawPopupMenu(arg0 + 0x94, 2);
                     break;
                 case 2:
                 case 3:
@@ -1770,10 +1874,16 @@ void func_89108650(s8* arg0) {
 
 extern u8 D_8910AAE8[];
 extern Rgba891084B4 D_8910AAEC;
-s32 func_8002FD8C(s8 *);
+s32 ScrollList_UpdateCursor(s8 *);
 void func_89105144(s8 *);
 s32 func_80020974(s32);
-s32 func_891089BC(s8 *arg0)
+/**
+ * Handles the item window. Returns 1 for a vitamin, 2 for PP Up, 3 for a TM or HM.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name and comment guessed from the code.
+ */
+s32 LabPCList_UpdateItemWindow(s8 *arg0)
 {
   s32 ret = 0;
   s8 *self = arg0;
@@ -1784,7 +1894,7 @@ s32 func_891089BC(s8 *arg0)
   switch (*((u32 *) (((s8 *) self) + 0x1B0)))
   {
     case 0:
-      if (func_8002FD8C(self + 0x4C) == 0)
+      if (ScrollList_UpdateCursor(self + 0x4C) == 0)
     {
       if (((u16 *) D_800603C0)[4] & 0x4000)
       {
@@ -1794,14 +1904,14 @@ s32 func_891089BC(s8 *arg0)
       else
         if (((u16 *) D_800603C0)[4] & 0x8000)
       {
-        if (!((*((u16 **) (((s8 *) self) + 0x50)))[*((s32 *) (((s8 *) self) + 0x54))] & 1))
+        if (!((*((u16 **) (((s8 *) self) + 0x50)))[*((s32 *) (((s8 *) self) + 0x54))] & 1)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
           func_8003F6AC(2);
-          func_89106424(self + 0x94, (s32 *) D_8910AAE8, (s32) (self + 0x90), 1, 0);
-          func_8002A8C4(self + 0xC0, (*((s32 *) (((s8 *) self) + 0))) + 6, (((*((s32 *) (((s8 *) self) + 4))) + (*((s32 *) (((s8 *) self) + 0x80)))) - (*((s32 *) (((s8 *) self) + 0x78)))) + 0x16, (*((s32 *) (((s8 *) self) + 8))) - 0xC, 0x1C);
-          *((s32 *) (((s8 *) self) + 0x108)) = ((*((s32 *) (((s8 *) self) + 8))) + (*((s32 *) (((s8 *) self) + 0)))) - 6;
-          *((s32 *) (((s8 *) self) + 0x10C)) = (*((s32 *) (((s8 *) self) + 4))) + 0xF6;
-          func_89106570((Popup89106570 *) (self + 0x94));
+          LabPCList_InitPopupMenu(self + 0x94, (s32 *) D_8910AAE8, (s32) (self + 0x90), 1, 0);
+          Window_SetRect(self + 0xC0, (*((s32 *) (((s8 *) self) + 0))) + 6, (((*((s32 *) (((s8 *) self) + 4))) + (*((s32 *) (((s8 *) self) + 0x80)))) - (*((s32 *) (((s8 *) self) + 0x78)))) + 0x16, (*((s32 *) (((s8 *) self) + 8))) - 0xC, 0x1C); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+          *((s32 *) (((s8 *) self) + 0x108)) = ((*((s32 *) (((s8 *) self) + 8))) + (*((s32 *) (((s8 *) self) + 0)))) - 6; // FAKE: decomp slop, raw pointer casts stand in for struct fields
+          *((s32 *) (((s8 *) self) + 0x10C)) = (*((s32 *) (((s8 *) self) + 4))) + 0xF6; // FAKE: decomp slop, raw pointer casts stand in for struct fields
+          LabPCList_PlacePopup((Popup89106570 *) (self + 0x94));
           *((Rgba891084B4 *) (((s8 *) self) + 0xAC)) = D_8910AAEC;
           *((u32 *) (((s8 *) self) + 0x1B0)) = 1;
         }
@@ -1814,7 +1924,7 @@ s32 func_891089BC(s8 *arg0)
       break;
 
     case 1:
-      if (func_891066C0((s32) (self + 0x94)) == 0)
+      if (LabPCList_UpdatePopupMenu((s32) (self + 0x94)) == 0)
     {
       if (((u16 *) D_800603C0)[4] & 0x4000)
       {
@@ -1826,10 +1936,10 @@ s32 func_891089BC(s8 *arg0)
       {
         if ((*((s32 *) (((s8 *) self) + 0xDC))) == 0)
         {
-          entry = (*(*((u8 *****) (((s8 *) self) + 0x4C))))[*((s32 *) (((s8 *) self) + 0x54))];
+          entry = (*(*((u8 *****) (((s8 *) self) + 0x4C))))[*((s32 *) (((s8 *) self) + 0x54))]; // FAKE: decomp slop, raw pointer casts stand in for struct fields
           if ((*((s32 *) (((s8 *) entry) + 8))) >= 100)
           {
-            n = func_8002D3D0((*((u8 **) (((s8 *) self) + 0x1AC))) + 8);
+            n = BattleMon_CountMoves((*((u8 **) (((s8 *) self) + 0x1AC))) + 8);
             func_8003F6AC(2);
             if (n < 4)
             {
@@ -1842,13 +1952,13 @@ s32 func_891089BC(s8 *arg0)
               {
                 species = (*entry[0]) - 146;
               }
-              func_89104FC0(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8);
+              func_89104FC0(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8); // FAKE: decomp slop, raw pointer casts stand in for struct fields
               *((s32 *) (((s8 *) self) + 0x144)) = n;
               func_89105340(self + 0x110, *((s32 *) (((s8 *) self) + 0x144)), func_80020974(species));
             }
             else
             {
-              func_89104FC0(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8);
+              func_89104FC0(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8); // FAKE: decomp slop, raw pointer casts stand in for struct fields
               func_89105144(self + 0x110);
               *((u32 *) (((s8 *) self) + 0x1B0)) = 3;
             }
@@ -1857,10 +1967,10 @@ s32 func_891089BC(s8 *arg0)
             if ((*((s32 *) (((s8 *) entry) + 8))) >= 50)
           {
             func_8003F6AC(2);
-            func_89104FC0(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8);
+            func_89104FC0(self + 0x110, (*((s32 *) (((s8 *) self) + 0))) + 0xD5, (*((s32 *) (((s8 *) self) + 4))) + 0x81, (*((u8 **) (((s8 *) self) + 0x1AC))) + 8); // FAKE: decomp slop, raw pointer casts stand in for struct fields
             for (i = 0; i < 4; i++)
             {
-              if ((((*((s32 *) (((s8 *) self) + (0x170 + (i * 4))))) == (-1)) || ((*((s32 *) (((s8 *) self) + (0x170 + (i * 4))))) == (-2))) || ((*((u8 **) (((s8 *) self) + 0x1AC)))[0x28 + i] >= 0xC0))
+              if ((((*((s32 *) (((s8 *) self) + (0x170 + (i * 4))))) == (-1)) || ((*((s32 *) (((s8 *) self) + (0x170 + (i * 4))))) == (-2))) || ((*((u8 **) (((s8 *) self) + 0x1AC)))[0x28 + i] >= 0xC0)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
               {
                 (*((u16 **) (((s8 *) self) + 0x140)))[i] |= 1;
               }
@@ -1895,7 +2005,7 @@ s32 func_891089BC(s8 *arg0)
       else
         if (((u16 *) D_800603C0)[4] & 0x8000)
       {
-        if (!((*((u16 **) (((s8 *) self) + 0x140)))[*((s32 *) (((s8 *) self) + 0x144))] & 1))
+        if (!((*((u16 **) (((s8 *) self) + 0x140)))[*((s32 *) (((s8 *) self) + 0x144))] & 1)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
           func_8003F6AC(0x22);
           *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
@@ -1920,11 +2030,11 @@ s32 func_891089BC(s8 *arg0)
       else
         if (((u16 *) D_800603C0)[4] & 0x8000)
       {
-        if (!((*((u16 **) (((s8 *) self) + 0x140)))[*((s32 *) (((s8 *) self) + 0x144))] & 1))
+        if (!((*((u16 **) (((s8 *) self) + 0x140)))[*((s32 *) (((s8 *) self) + 0x144))] & 1)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
         {
           u8 **entry2;
           s32 sp38;
-          entry2 = (*(*((u8 *****) (((s8 *) self) + 0x4C))))[*((s32 *) (((s8 *) self) + 0x54))];
+          entry2 = (*(*((u8 *****) (((s8 *) self) + 0x4C))))[*((s32 *) (((s8 *) self) + 0x54))]; // FAKE: decomp slop, raw pointer casts stand in for struct fields
           if ((*entry2[0]) >= 201)
           {
             sp38 = (*entry2[0]) - 201;
@@ -1946,7 +2056,7 @@ s32 func_891089BC(s8 *arg0)
       break;
 
     case 4:
-      if (((*((s32 *) (((s8 *) self) + 0x188))) == 0) && (((u16 *) D_800603C0)[4] & 0xC000))
+      if (((*((s32 *) (((s8 *) self) + 0x188))) == 0) && (((u16 *) D_800603C0)[4] & 0xC000)) // FAKE: decomp slop, raw pointer casts stand in for struct fields
     {
       func_8003F6AC(3);
       *((u32 *) (((s8 *) self) + 0x1B0)) = 0;
@@ -1969,8 +2079,13 @@ typedef struct Rgba89108F14 {
 extern u8 D_8910AAF4[];
 extern u8 D_8910AAF8[];
 
-void func_89108F14(void* arg0, s32 arg1, s32 arg2, s32 arg3) {
-    func_8002A8C4((s8*)arg0, arg1, arg2, 0x114, 0x60);
+/**
+ * Sets up the result message window.
+ * Seen in play (2026-11-12) in いちらん: opened the result window after an item was used (「HP 19 ->
+ * 20」).
+ */
+void LabPCList_InitMessageWindow(void* arg0, s32 arg1, s32 arg2, s32 arg3) {
+    Window_SetRect((s8*)arg0, arg1, arg2, 0x114, 0x60);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
@@ -1991,7 +2106,11 @@ extern u8 D_8910D2F0[];
 extern char D_8910E1AC[];
 extern char D_8910E1B0[];
 
-void func_89108F94(s8* arg0) {
+/**
+ * Draws the result message window.
+ * Seen in play (2026-11-12) in いちらん: drew the item result window every frame while it was open.
+ */
+void LabPCList_DrawMessageWindow(s8* arg0) {
     Entry89108F94* entry;
 
     if (func_8002AE6C() == 0) {
@@ -2020,7 +2139,12 @@ void func_89108F94(s8* arg0) {
 
 M2C_UNK func_8003F6AC(M2C_UNK);                     /* extern */
 
-s32 func_89109174(s32 arg0) {
+/**
+ * Returns 1 once the message has been confirmed.
+ * Seen in play (2026-11-12) in いちらん: returned 0 while the item result window was up and 1 after
+ * A.
+ */
+s32 LabPCList_UpdateMessageWindow(s32 arg0) {
     s32 var_v1;
 
     var_v1 = 0;

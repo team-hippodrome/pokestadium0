@@ -10,34 +10,7 @@
 #include "controller.h"
 #include "memory.h"
 #include "variables.h"
-typedef struct unk_D_8122C4FA {
-  /* 0x00 */ u8 unk_00;
-  /* 0x01 */ u8 unk_01;
-} unk_D_8122C4FA;
-typedef struct unk_D_8122B2F8 {
-  /* 0x000000 */ char unk000000[0x1FEAE8];
-} unk_D_8122B2F8;
-typedef struct unk_D_8122B1E8 {
-  /* 0x00 */ OSMesg mesg[1];
-  /* 0x04 */ OSMesgQueue queue;
-  /* 0x1C */ char unk1C[0x4];
-  /* 0x20 */ s32 unk_20;
-  /* 0x24 */ s32 unk_24;
-  /* 0x28 */ void* unk_28;
-  /* 0x2C */ s32 unk_2C;
-  /* 0x30 */ char unk30[0x8];
-  /* 0x38 */ s32 unk_38;
-  /* 0x3C */ s32 unk_3C;
-  /* 0x40 */ void* unk_40;
-  /* 0x44 */ char unk44[0x4];
-  /* 0x48 */ void* unk_48;
-  /* 0x4C */ void* unk_4C;
-  /* 0x50 */ u32 unk_50;
-  /* 0x54 */ s32 unk_54;
-  /* 0x58 */ void* unk_58;
-  /* 0x5C */ s32 unk_5C;
-  /* 0x60 */ char unk60[0x8];
-} unk_D_8122B1E8;
+#include "fragments/fragment000_80C00/gb_tower_emulator_7F9A0_types.h"
 typedef struct unk_func_812009D0 {
   /* 0x00 */ u8 unk00[0x34];
   /* 0x34 */ u8 data[0x10];  
@@ -48,10 +21,6 @@ typedef struct unk_func_812009D0 {
   /* 0x49 */ u8 unk_49;
   /* 0x4A */ u8 unk_4A;
 } unk_func_812009D0;
-typedef struct unk_D_8120D7F3 {
-    u8 pad[0x116];
-    u8 unk116;
-} unk_D_8120D7F3;
 extern OSThread gGbPakServiceThread;
 extern u8 gGbPakServiceThreadStack[0x1000];
 extern OSMesg gGbPakServiceQueueMessages[4];
@@ -64,11 +33,11 @@ extern u8* gGbEmuFont1Data;
 extern u8* gGbEmuFont2Data;
 void func_812070A0(void);
 void GbApu_SelectRegionClock(s32);
-void func_81117068(u16, u8, u16);
+void GbApu_QueueRegisterWrite(u16, u8, u16);
 void GbApu_ResetChannels(void);
 void GbApu_Reset(unk_D_8122B2F8*);
 void func_811173F4(void);
-void GbAudio_SetAlternateRendererEnabled(s32);
+void GbAudio_SetMenuSoundMode(s32);
 #define GB_EMU_PAL_Y_SCALE 0.833f
 
 #include "m2c_macros.h"
@@ -78,10 +47,10 @@ s32 GbEmu_PixelOpDitherB(s32 arg0, s32 arg1);
 s32 GbEmu_PixelOpAverage555(s32 arg0, s32 arg1);
 s32 GbEmu_PixelOpReplace(UNUSED s32 arg0, s32 arg1);
 void GbEmu_BlitWithPixelOp(u16* dst, u16* src, s32 mode, s32 width, s32 height);
-void func_81103D60(u16* dst, u16* src, s32 color, s32 width, s32 height);
-void func_8110427C(u16* dst, u8* alpha_map, s32 color, s32 width, s32 height, u32 alpha_stride);
+void GbEmu_BlitTinted(u16* dst, u16* src, s32 color, s32 width, s32 height);
+void GbEmu_BlendColorWithAlphaMap(u16* dst, u8* alpha_map, s32 color, s32 width, s32 height, u32 alpha_stride);
 void GbEmu_Delay(OSTime arg0);
-void func_81107128(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4);
+void GbEmu_BlendScrollingLayer(u16* arg0, u16* arg1, s16* arg2, s32 arg3, s32 arg4);
 
 M2C_UNK func_8005C670(s32, M2C_UNK, u16, M2C_UNK *, s32); /* extern */
 extern M2C_UNK D_81156480;
@@ -90,12 +59,18 @@ void func_81101FA0(void *arg0, s32 arg1, s32 arg2) {
     func_8005C670(M2C_FIELD(arg0, s32 *, 0x50), 1, arg1, &D_81156480, 0x20);
 }
 
+/**
+ * Puts the MBC1 into a known state: RAM enable (0x0A), RAM banking mode,
+ * bank 0, ROM banking mode, ROM bank 1. Caches pakRomBank/pakRamBank/pakMbcMode.
+ * Seen in play (2026-11-12): the Transfer Pak trace shows the MBC1 writes 0x0000=0x0A, 0x6000=1,
+ * 0x4000=0, 0x6000=0, 0x4000=0 and 0x2100=1 in that order.
+ */
 s32 GbPak_InitializeCartridgeMapper(unk_D_8122B2C0* arg0) {
   s32 ret;
 
-  if (!(ret = GbPak_WriteFilledRegisterBlock(arg0, 0, 0xA))    && !(ret = GbPak_WriteFilledRegisterBlock(arg0, 0x6000, 1))
-   && !(ret = GbPak_WriteFilledRegisterBlock(arg0, 0x4000, 0)) && !(ret = GbPak_WriteFilledRegisterBlock(arg0, 0x6000, 0))
-   && !(ret = GbPak_WriteFilledRegisterBlock(arg0, 0x4000, 0)) && !(ret = GbPak_WriteFilledRegisterBlock(arg0, 0x2100, 1))) {
+  if (!(ret = GbPak_WriteMapperRegister(arg0, 0, 0xA))    && !(ret = GbPak_WriteMapperRegister(arg0, 0x6000, 1))
+   && !(ret = GbPak_WriteMapperRegister(arg0, 0x4000, 0)) && !(ret = GbPak_WriteMapperRegister(arg0, 0x6000, 0))
+   && !(ret = GbPak_WriteMapperRegister(arg0, 0x4000, 0)) && !(ret = GbPak_WriteMapperRegister(arg0, 0x2100, 1))) {
       *((u8*)arg0 + 0x9D) = 1;
       *((u8*)arg0 + 0x9E) = 0;
       *((u8*)arg0 + 0x9F) = 0;
@@ -131,7 +106,7 @@ s32 func_80057910(M2C_UNK *, void *, u32); /* extern */
 extern M2C_UNK D_811564A0;
 extern M2C_UNK D_811564C0;
 s32 func_811020A8(void *arg0) {
-    s32 pad;
+    s32 pad; // FAKE: stack padding
     s32 sp28;
     s32 var_v0;
     s32 var_v1;
@@ -158,7 +133,12 @@ s32 func_811020A8(void *arg0) {
 
 s32 func_80051110(s32, s8 *, s8 *);             /* extern */
 
-s32 func_81102168(s8 *arg0) {
+/**
+ * Reads the Transfer Pak status into status (0x9B) and fails with 0x63 unless bits 0 and 3 are
+ * both set, i.e. the pak is powered and a cartridge is inserted. Seen in play (2026-11-12): runs
+ * before every transfer while Pocket Monsters Green loads.
+ */
+s32 GbPak_CheckCartInserted(s8 *arg0) {
     s32 temp_v0;
     s32 var_v1;
 
@@ -176,42 +156,28 @@ s32 func_81102168(s8 *arg0) {
 }
 
 s32 func_81101FE8(s8 *);                            /* extern */
-s32 func_81102F7C(s32, s32, s32);                     /* extern */
+s32 GbPak_WriteVerifiedSramBlock(s32, s32, s32);                     /* extern */
 
-/*
- * func_811021D4
- *
- * Returns 0 right away when bit 0 of the byte at arg0 + 0x9B is set.
- * Otherwise runs func_81102168(arg0), then func_81101FE8(arg0) while the
- * result is 0, then, if bit 0 of the byte at 0x9B is (now) set and the byte
- * at 0x98 is non-zero, func_811020A8(arg0), then
- * func_81102F7C(byte 0x9C, word 0x94, byte 0x98), stopping at the first
- * non-zero result. If the result is non-zero, clears bit 0 of the byte at
- * 0x9B. Returns the result.
- *
- * Same record as GbPak_TransferBankedRam and func_811020A8 take; what the
- * flag bit and the other fields mean is not established.
- *
- * Matching note: the empty `if` on `arg0` has no meaning of its own. It was
- * found with decomp-permuter and is the only form tried that makes the
- * compiler copy arg0 to s0 before the first load, as the ROM does; the
- * triple test is needed (one or two do not match). The same kind of empty
- * test already exists in func_88100100.
+/**
+ * Before each transfer: checks the connector, resets the mapper, re-reads the
+ * cartridge header ID and compares it with cartridgeId (detects a swapped cartridge),
+ * then re-verifies the RAM probe block if one was written.
+ * Seen in play (2026-11-12): runs before each ROM read while Green streams in.
  */
-s32 func_811021D4(u8 *arg0) {
+s32 GbPak_ProbeCartridge(u8 *arg0) {
     s32 ret;
 
     if (((!arg0) && (!arg0)) && (!arg0)) {  // FAKE
     }
     ret = 0;
     if (!(M2C_FIELD(arg0, u8 *, 0x9B) & 1)) {
-        ret = func_81102168(arg0);
+        ret = GbPak_CheckCartInserted(arg0);
         if (ret == 0) {
             ret = func_81101FE8(arg0);
             if ((ret == 0) && (M2C_FIELD(arg0, u8 *, 0x9B) & 1) && (M2C_FIELD(arg0, u8 *, 0x98) != 0)) {
                 ret = func_811020A8(arg0);
                 if (ret == 0) {
-                    ret = func_81102F7C(M2C_FIELD(arg0, u8 *, 0x9C), M2C_FIELD(arg0, s32 *, 0x94), M2C_FIELD(arg0, u8 *, 0x98));
+                    ret = GbPak_WriteVerifiedSramBlock(M2C_FIELD(arg0, u8 *, 0x9C), M2C_FIELD(arg0, s32 *, 0x94), M2C_FIELD(arg0, u8 *, 0x98));
                 }
             }
         }
@@ -222,6 +188,12 @@ s32 func_811021D4(u8 *arg0) {
     return ret;
 }
 
+/**
+ * Selects the MBC1 ROM bank for a 0x4000-0x7FFF read of a linear ROM address,
+ * switching to ROM banking mode and writing the upper bank bits when needed.
+ * Seen in play (2026-11-12): its writes reached the emulated MBC1 as 0x6000=0, 0x4000=bank/32 and
+ * 0x2100=bank (Transfer Pak trace).
+ */
 s32 GbPak_SelectRomAddress(unk_D_8122B2C0* arg0, s32 arg1) {
     s32 temp_a2;
     s32 var_v1;
@@ -230,7 +202,7 @@ s32 GbPak_SelectRomAddress(unk_D_8122B2C0* arg0, s32 arg1) {
     M2C_FIELD(arg0, u8*, 0x9E) = 0xFF;
     if (M2C_FIELD(arg0, u8*, 0x9F) != 0) {
         M2C_FIELD(arg0, u8*, 0x9D) = 0xFF;
-        var_v1 = GbPak_WriteFilledRegisterBlock(arg0, 0x6000, 0);
+        var_v1 = GbPak_WriteMapperRegister(arg0, 0x6000, 0);
         if (var_v1 == 0) {
             M2C_FIELD(arg0, u8*, 0x9F) = 0;
         }
@@ -239,10 +211,10 @@ s32 GbPak_SelectRomAddress(unk_D_8122B2C0* arg0, s32 arg1) {
         if (arg1 != M2C_FIELD(arg0, u8*, 0x9D)) {
             temp_a2 = arg1 / 32;
             if (temp_a2 != ((s32)M2C_FIELD(arg0, u8*, 0x9D) / 32)) {
-                var_v1 = GbPak_WriteFilledRegisterBlock(arg0, 0x4000, temp_a2);
+                var_v1 = GbPak_WriteMapperRegister(arg0, 0x4000, temp_a2);
             }
             if (var_v1 == 0) {
-                var_v1 = GbPak_WriteFilledRegisterBlock(arg0, 0x2100, arg1);
+                var_v1 = GbPak_WriteMapperRegister(arg0, 0x2100, arg1);
                 if (var_v1 == 0) {
                     M2C_FIELD(arg0, u8*, 0x9D) = arg1;
                 }
@@ -252,6 +224,11 @@ s32 GbPak_SelectRomAddress(unk_D_8122B2C0* arg0, s32 arg1) {
     return var_v1;
 }
 
+/**
+ * Selects an 8 KB cartridge RAM bank (MBC1 RAM banking mode).
+ * Seen in play (2026-11-12): wrote 0x6000=1 and 0x4000=bank on the emulated MBC1 before the SRAM
+ * probe.
+ */
 s32 GbPak_SelectRamBank(unk_D_8122B2C0* arg0, s32 arg1) {
     s32 var_v1;
 
@@ -259,13 +236,13 @@ s32 GbPak_SelectRamBank(unk_D_8122B2C0* arg0, s32 arg1) {
     M2C_FIELD(arg0, u8*, 0x9D) = 0xFF;
     if (M2C_FIELD(arg0, u8*, 0x9F) != 1) {
         M2C_FIELD(arg0, u8*, 0x9E) = 0xFF;
-        var_v1 = GbPak_WriteFilledRegisterBlock(arg0, 0x6000, 1);
+        var_v1 = GbPak_WriteMapperRegister(arg0, 0x6000, 1);
         if (var_v1 == 0) {
             M2C_FIELD(arg0, u8*, 0x9F) = 1;
         }
     }
     if ((var_v1 == 0) && (arg1 != M2C_FIELD(arg0, u8*, 0x9E))) {
-        var_v1 = GbPak_WriteFilledRegisterBlock(arg0, 0x4000, arg1);
+        var_v1 = GbPak_WriteMapperRegister(arg0, 0x4000, arg1);
         if (var_v1 == 0) {
             M2C_FIELD(arg0, u8*, 0x9E) = arg1;
         }
@@ -305,7 +282,12 @@ typedef struct GbpakChannel811023DC {
     /* 0xA3 */ char unkA3[0x1];
 } GbpakChannel811023DC; // size = 0xA4
 extern GbpakChannel811023DC D_811561C8[4];
-s32 func_811023DC(OSPfs* arg0) {
+/**
+ * Reads the Transfer Pak status; returns 0 only when bit 7 is set and bit 6 is clear.
+ * Seen in play (2026-11-12): polled every fourth frame (request 8) while Green runs; the emulated
+ * status 0x89 passes.
+ */
+s32 GbPak_CheckTransferStatus(OSPfs* arg0) {
     s32 ret = osGbpakGetStatus(arg0, &D_811561C8[arg0->channel].status);
 
     if (ret == 0) {
@@ -314,10 +296,16 @@ s32 func_811023DC(OSPfs* arg0) {
     return ret;
 }
 
-s32 func_811021D4(u8*);
+s32 GbPak_ProbeCartridge(u8*);
 s32 func_81102280(u8*, s32);
-s32 func_811023DC(OSPfs*);
-s32 func_81102460(u8* arg0) {
+s32 GbPak_CheckTransferStatus(OSPfs*);
+/**
+ * Reads size bytes of cartridge ROM at addr into buf through the Transfer Pak, selecting the MBC
+ * bank for the 0x4000-0x7FFF window, and adds every byte read to sum. The bank checksum check in
+ * GbPak_IoThreadMain (request 6) compares these sums with the known-cartridge tables. Seen in
+ * play: two 0x2000-byte reads per bank while Green loads.
+ */
+s32 GbPak_ReadRomSummed(u8* arg0) {
     s32 ret;
     u8* buf;
     s32 addr;
@@ -326,7 +314,7 @@ s32 func_81102460(u8* arg0) {
     s32 sum;
     s32 off;
 
-    ret = func_811021D4(arg0);
+    ret = GbPak_ProbeCartridge(arg0);
     buf = M2C_FIELD(arg0, u8**, 0x54);
     addr = M2C_FIELD(arg0, s32*, 0x8C);
     remaining = M2C_FIELD(arg0, s32*, 0x80);
@@ -369,15 +357,21 @@ s32 func_81102460(u8* arg0) {
         }
     }
     if (ret == 0) {
-        ret = func_811023DC(M2C_FIELD(arg0, OSPfs**, 0x50));
+        ret = GbPak_CheckTransferStatus(M2C_FIELD(arg0, OSPfs**, 0x50));
     }
     return ret;
 }
 
-s32 func_811021D4(u8*);
+s32 GbPak_ProbeCartridge(u8*);
 s32 func_81102344(u8*, s32);
-s32 func_811023DC(OSPfs*);
+s32 GbPak_CheckTransferStatus(OSPfs*);
 
+/**
+ * Reads (is_write == 0) or writes (is_write != 0) transferSize bytes of banked cartridge
+ * RAM at gbAddress, selecting each 8 KB bank as it goes.
+ * Seen in play (2026-11-12): starting GB from the main menu ran this as a read (is_write 0) of
+ * cartridge RAM, just before GbPak_CheckGen1SaveChecksum checked the save; returned 0.
+ */
 s32 GbPak_TransferBankedRam(u8* arg0, s32 arg1) {
     s32 temp_v0;
     s32 var_s0;
@@ -387,7 +381,7 @@ s32 GbPak_TransferBankedRam(u8* arg0, s32 arg1) {
     s32 var_v1;
     s32 var_s2;
 
-    var_v0 = func_811021D4(arg0);
+    var_v0 = GbPak_ProbeCartridge(arg0);
     var_v1 = var_v0;
     var_s3 = M2C_FIELD(arg0, u8**, 0x54);
     var_s2 = M2C_FIELD(arg0, s32*, 0x8C);
@@ -410,7 +404,7 @@ s32 GbPak_TransferBankedRam(u8* arg0, s32 arg1) {
         }
     }
     if (var_v0 == 0) {
-        var_v1 = func_811023DC(M2C_FIELD(arg0, OSPfs**, 0x50));
+        var_v1 = GbPak_CheckTransferStatus(M2C_FIELD(arg0, OSPfs**, 0x50));
     }
     return var_v1;
 }
@@ -423,7 +417,14 @@ typedef struct GbpakBankEntry {
 extern volatile u8 D_81156476;
 extern OSMesgQueue D_81156458;
 s32 func_8004CFB0(OSMesgQueue*, s32, s32);
-void func_811027A8(GbpakChannel811023DC* ch) {
+/**
+ * Called once a frame while the cartridge streams in. Queues the next ROM bank (request 6) or
+ * SRAM bank (request 7) from the channel's bank list that is not loaded yet. Once all are loaded
+ * it checks the running byte sum against the header's global checksum (error 2 on mismatch),
+ * powers the pak off (request 4) and sets D_81156476 to 2. Seen in play: streamed all 32 banks of
+ * Green, after which bankState was all zero.
+ */
+void GbPak_QueueNextBankLoad(GbpakChannel811023DC* ch) {
     GbpakBankEntry* entry;
 
     if ((D_81156476 != 0) && (ch->request == 0)) {
@@ -480,7 +481,13 @@ extern volatile u8 D_81156476;
 extern OSMesgQueue D_81156458;
 s32 func_8004CFB0(OSMesgQueue*, s32, s32);
 
-s32 func_81102970(s32 chan, s32 bank) {
+/**
+ * Queues the ROM bank `bank` for loading (request 6, state 3) ahead of the bank list order and
+ * waits for the I/O thread. Returns -2 when no load is running or the channel is busy, and -1
+ * when the bank is not in the list or the transfer failed. Seen in play: GbEmu_LoadCartridge
+ * requests bank 0 first.
+ */
+s32 GbPak_RequestBankLoad(s32 chan, s32 bank) {
     u8* entry;
     u8* state;
 
@@ -522,7 +529,14 @@ extern volatile u8 D_81156477;
 extern OSMesgQueue D_81156458;
 s32 func_8004CFB0(OSMesgQueue*, s32, s32);
 
-s32 func_81102AC8(s32 arg0) {
+/**
+ * Once the ROM has loaded, finds the first 256-byte block of cartridge RAM whose blockState is 0
+ * (changed by the game) and queues request 5 to write it back to the cartridge. Returns 1 while
+ * the I/O thread is busy, 2 when a write was queued, 3 when it must wait, 4 on a pak error and 0
+ * when nothing is dirty. Seen in play: runs every frame of GbEmu_UpdateFrame once Green is
+ * running.
+ */
+s32 GbPak_WriteBackDirtySramBlock(s32 arg0) {
     s32 chan = arg0;
     GbpakChannel811023DC* ch;
     GbpakChannel811023DC* ch2;

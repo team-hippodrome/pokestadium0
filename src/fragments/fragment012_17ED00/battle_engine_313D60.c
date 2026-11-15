@@ -18,29 +18,7 @@ extern s32 pad_D_84390290[4];
 #include "text_system.h"
 #include "matrix.h"
 #include "moves.h"
-typedef struct unk_D_843C4DA0 {
-    /* 0x00 */ u16 unk_00;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u8 unk_04;
-    /* 0x05 */ u8 unk_05;
-    /* 0x06 */ char unk06[0x3];
-    /* 0x09 */ u8 unk_09;
-    /* 0x0A */ char unk0A[0xA];
-    /* 0x13 */ u8 unk_13;
-    /* 0x14 */ char unk14[0x1];
-    /* 0x15 */ u8 unk_15;
-    /* 0x16 */ char unk16[0x1];
-    /* 0x17 */ u8 unk_17;
-    /* 0x18 */ char unk18[0xB];
-    /* 0x22 */ u8 unk_22;
-    /* 0x24 */ u16 unk_24;
-    /* 0x26 */ u16 unk_26;
-    /* 0x28 */ u16 unk_28;
-    /* 0x2A */ u16 unk_2A;
-    /* 0x2C */ u16 unk_2C;
-    /* 0x2E */ char unk2E[0x1E];
-} unk_D_843C4DA0;
+#include "fragments/fragment012_17ED00/battle_engine_313D60_types.h"
 extern u8 sBattleMoveFailed;
 extern u8 sBattleCritFlag;
 extern u8 D_82199F4E;
@@ -74,41 +52,56 @@ void Battle_SetActiveMoveFromSlotIndex(void);
 s32 Battle_CheckMoveSuccess(void);
 void ComputePokemonStat(s32 arg0, BattleMon* arg1);
 
+/**
+ * Empty.
+ */
 void func_8210F4E0(void) {
 }
 
 extern s32 D_8219A520;
-s32 func_8211EF74(s32, s32, s32, ...);
-s32 func_82107F88(ActivePokemon*);
+s32 BattleMessage_Format(s32, s32, s32, ...);
+s32 ActivePokemon_GetNickname(ActivePokemon*);
 extern s32 D_8218C788;
 extern s32 D_8218C78C;
 extern s32 D_8218C790;
 extern s32 D_8218C794;
-void func_8210F4E8(s32 attacker, s32 defender) {
+/**
+ * Save the target's current HP and queue an HP-band message for the acting participant.
+ * Seen in play (2026-11-13) in a Free Battle switch (1P switched to its second Pokémon) it ran when
+ * C-Left picked the Pokémon to switch in.
+ * Seen in play (2026-11-13) it also ran when COM sent out its next Pokémon (ゆけっ！ゲンのすけ) after its
+ * first one fainted.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
+ */
+void ShowDamageMessage(s32 attacker, s32 defender) {
     ActivePokemon** atk = &sActivePokemon[attacker];
     ActivePokemonState* state = &(*atk)->state;
     BattleMonRuntime* runtime = &sActivePokemon[defender]->state.runtime;
     s32 pct;
 
-    if (runtime->unk_0C == 0) {
-        func_8211EF74(D_8219A520 + 0x88, 0x21, D_8218C788, func_82107F88(*atk));
+    if (runtime->hp == 0) {
+        BattleMessage_Format(D_8219A520 + 0x88, 0x21, D_8218C788, ActivePokemon_GetNickname(*atk));
         return;
     }
-    state->unk_28 = runtime->unk_0C;
-    pct = (runtime->unk_0C * 0x19) / (runtime->unk_28 >> 2);
+    state->unk_28 = runtime->hp;
+    pct = (runtime->hp * 0x19) / (runtime->maxHp >> 2);
     if (pct >= 0x46) {
-        func_8211EF74(D_8219A520 + 0x88, 0x21, D_8218C788, func_82107F88(*atk));
+        BattleMessage_Format(D_8219A520 + 0x88, 0x21, D_8218C788, ActivePokemon_GetNickname(*atk));
     } else if (pct >= 0x28) {
-        func_8211EF74(D_8219A520 + 0x88, 0x22, D_8218C78C, func_82107F88(*atk));
+        BattleMessage_Format(D_8219A520 + 0x88, 0x22, D_8218C78C, ActivePokemon_GetNickname(*atk));
     } else if (pct >= 0xA) {
-        func_8211EF74(D_8219A520 + 0x88, 0x23, D_8218C790, func_82107F88(*atk));
+        BattleMessage_Format(D_8219A520 + 0x88, 0x23, D_8218C790, ActivePokemon_GetNickname(*atk));
     } else {
-        func_8211EF74(D_8219A520 + 0x88, 0x24, D_8218C794, func_82107F88(*atk));
+        BattleMessage_Format(D_8219A520 + 0x88, 0x24, D_8218C794, ActivePokemon_GetNickname(*atk));
     }
 }
 
 extern u8 D_82199F3F;
 extern u8 D_82199F30;
+/**
+ * Clear the incoming participant's temporary effects and the opponent's trapping lock.
+ * Seen in play (2026-11-12): ran on the same switch-in.
+ */
 void Battle_ResetTransientRuntimeState(s32 arg0, s32 arg1) {
     BattleMonRuntime* sp1C = &sActivePokemon[arg0]->state.runtime;
     BattleMonRuntime* sp18 = &sActivePokemon[arg1]->state.runtime;
@@ -117,28 +110,36 @@ void Battle_ResetTransientRuntimeState(s32 arg0, s32 arg1) {
     D_82199F4E = 0;
     D_82199F3F = 0;
     sp1C->moveCache.lastMove = 0;
-    sp1C->unk_58 = 0;
-    sp18->unk_58 = 0;
+    sp1C->lastMove = 0;
+    sp18->lastMove = 0;
     sp1C->unk_4A = 0;
     sp1C->unk_4B = 0;
-    sp1C->unk_4C = 0;
-    sp1C->unk_4D = 0;
-    sp1C->unk_4E = 0;
-    sp1C->unk_52 = 0;
-    sp1C->unk_57 = 0;
+    sp1C->immobilizedReason = 0;
+    sp1C->volatileStatusFlags = 0;
+    sp1C->uniqueStatusFlags = 0;
+    sp1C->disabledMoveState = 0;
+    sp1C->disabledMove = 0;
     sp1C->scaleResize = 0;
-    sp18->unk_4C &= ~0x20;
+    sp18->immobilizedReason &= ~0x20;
     D_82199F30 = 1;
 }
 
-s32 func_8211EF74(s32, s32, s32, ...);
+s32 BattleMessage_Format(s32, s32, s32, ...);
 extern s32 D_8219A520;
 extern s32 D_8218C798;
 extern s32 D_8218C79C;
 extern s32 D_8218C7A0;
 extern s32 D_8218C7A4;
 extern char D_8219544C[];
-void Battle_ResetEntityState(ActivePokemon* active_pokemon) {
+/**
+ * Formats the comment on the hit that just landed from the share of the target's max HP lost
+ * (unk_28, the HP before the hit, minus hp, as a percentage): message 0x25 for 0%, 0x26 under 30%,
+ * 0x27 under 70% and 0x28 for 70% or more. Adds message 0 when state.unk_2D is 0x10.
+ * Was misnamed Battle_ResetEntityState.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle.
+ * @unverified Named from the code; not checked in play.
+ */
+void Battle_FormatDamageComment(ActivePokemon* active_pokemon) {
     ActivePokemonState* sp1C = &sActivePokemon[0]->state;
     ActivePokemonState* sp18 = &sActivePokemon[1]->state;
     BattleMonRuntime* temp_a1 = &sActivePokemon[0]->state.runtime;
@@ -146,40 +147,49 @@ void Battle_ResetEntityState(ActivePokemon* active_pokemon) {
     s32 var_v0;
 
     if (active_pokemon == sActivePokemon[0]) {
-        var_v0 = ((sp1C->unk_28 - temp_a2->unk_0C) * 0x19) / (temp_a2->unk_28 >> 2);
+        var_v0 = ((sp1C->unk_28 - temp_a2->hp) * 0x19) / (temp_a2->maxHp >> 2);
     } else {
-        var_v0 = ((sp18->unk_28 - temp_a1->unk_0C) * 0x19) / (temp_a1->unk_28 >> 2);
+        var_v0 = ((sp18->unk_28 - temp_a1->hp) * 0x19) / (temp_a1->maxHp >> 2);
     }
 
     if (var_v0 == 0) {
-        func_8211EF74(D_8219A520 + 0x1C8, 0x25, D_8218C798);
+        BattleMessage_Format(D_8219A520 + 0x1C8, 0x25, D_8218C798);
     } else if (var_v0 < 0x1E) {
-        func_8211EF74(D_8219A520 + 0x1C8, 0x26, D_8218C79C);
+        BattleMessage_Format(D_8219A520 + 0x1C8, 0x26, D_8218C79C);
     } else if (var_v0 < 0x46) {
-        func_8211EF74(D_8219A520 + 0x1C8, 0x27, D_8218C7A0);
+        BattleMessage_Format(D_8219A520 + 0x1C8, 0x27, D_8218C7A0);
     } else {
-        func_8211EF74(D_8219A520 + 0x1C8, 0x28, D_8218C7A4);
+        BattleMessage_Format(D_8219A520 + 0x1C8, 0x28, D_8218C7A4);
     }
 
     if (active_pokemon->state.unk_2D == 0x10) {
-        func_8211EF74(D_8219A520 + 0x1C8, 0, (s32)D_8219544C);
+        BattleMessage_Format(D_8219A520 + 0x1C8, 0, (s32)D_8219544C);
     }
 }
 
-s32 func_8210F3F0();                                /* extern */
+u8 Battle_Random(void);                                /* extern */
 extern u16 D_82199F50;
 
-void func_8210F8E8(void) {
+/**
+ * Gen 1 RandomizeDamage: when the damage is at least 2, multiplies it by a random 217-255 and
+ * divides by 255.
+ */
+void Battle_RandomizeDamage(void) {
     s32 temp_v0;
 
     if ((s32) D_82199F50 >= 2) {
         do {
-            temp_v0 = func_8210F3F0();
+            temp_v0 = Battle_Random();
         } while (temp_v0 < 0xD9);
         D_82199F50 = (u16) ((s32) (D_82199F50 * temp_v0) / 255);
     }
 }
 
+/**
+ * Return which participant acts first using Quick Attack, Counter, Speed and a random tie break.
+ * Seen in play (2026-11-12): returned 1 (COM first) with Pinsir at Speed 50 against Nidoqueen, and
+ * Pinsir moved first; with Pinsir's Speed set to 1 it returned 0 and 1P moved first.
+ */
 u16 Battle_DetermineMoveOrder(ActivePokemon* pokemon, ActivePokemon* other_pokemon) {
     BattleMonRuntime* runtime = &pokemon->state.runtime;
     BattleMonRuntime* other_runtime = &other_pokemon->state.runtime;
@@ -214,6 +224,11 @@ u16 Battle_DetermineMoveOrder(ActivePokemon* pokemon, ActivePokemon* other_pokem
     return 1;
 }
 
+/**
+ * Test membership in a byte array of the supplied length.
+ * Seen in play (2026-11-12): returned 0 for 0x28 (Poison Sting) in the two-byte list 0E 4A and in
+ * the five-byte list 60 69 75 78 85.
+ */
 s32 IsByteInArray(u8 lookup, u8* array, s32 array_length) {
     while (array_length--) {
         if (lookup == *array) {
@@ -225,15 +240,29 @@ s32 IsByteInArray(u8 lookup, u8* array, s32 array_length) {
     return 0;
 }
 
+/**
+ * Empty.
+ */
 void func_8210FA74(void) {
 }
 
+/**
+ * Select a move in the first scratch runtime using the current scratch move-slot index.
+ * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
+ * no function-pointer word in any fragment), so play cannot reach it.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Battle_SetActiveMoveFromSlotIndex(void) {
     D_8219A3C8[0].usedMove = D_8219A3C8[0].moves[D_82199F4E];
 }
 
+/**
+ * Execute the cached effect and report whether it left the move-failed flag clear.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Guillotine, Horn Drill, Fissure.
+ */
 s32 Battle_CheckMoveSuccess(void) {
-    Battle_ExecuteMoveEffect();
+    BattleEffect_ExecuteMoveEffect();
 
     if (sBattleMoveFailed == 1) {
         return 0;
@@ -241,6 +270,12 @@ s32 Battle_CheckMoveSuccess(void) {
     return 1;
 }
 
+/**
+ * Calculate the requested stored stat from the selected base-stat/experience entries and DVs.
+ * No caller in play (2026-11-13): it is only called from ComputeAllPokemonStats, which has no
+ * caller in the ROM itself.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void ComputePokemonStat(s32 arg0, BattleMon* arg1) {
     u16 i;
     u16 spC;
@@ -251,27 +286,27 @@ void ComputePokemonStat(s32 arg0, BattleMon* arg1) {
 
     switch (arg0) {
         case 1:
-            spA = gSpeciesData[arg1->unk_24].baseHitPoints;
+            spA = gSpeciesData[arg1->level].baseHitPoints;
             spC = arg1->unk_14;
             break;
 
         case 2:
-            spA = gSpeciesData[arg1->unk_24].baseAttack;
+            spA = gSpeciesData[arg1->level].baseAttack;
             spC = arg1->unk_16;
             break;
 
         case 3:
-            spA = gSpeciesData[arg1->unk_24].baseDefense;
+            spA = gSpeciesData[arg1->level].baseDefense;
             spC = arg1->unk_18;
             break;
 
         case 4:
-            spA = gSpeciesData[arg1->unk_24].baseSpeed;
+            spA = gSpeciesData[arg1->level].baseSpeed;
             spC = arg1->unk_1A;
             break;
 
         case 5:
-            spA = gSpeciesData[arg1->unk_24].baseSpecial;
+            spA = gSpeciesData[arg1->level].baseSpecial;
             spC = arg1->unk_1C;
             break;
     }
@@ -306,9 +341,9 @@ void ComputePokemonStat(s32 arg0, BattleMon* arg1) {
             break;
     }
 
-    temp_a0 = ((((spA + sp6) * 2) + (i >> 2)) * arg1->unk_24) / 100;
+    temp_a0 = ((((spA + sp6) * 2) + (i >> 2)) * arg1->level) / 100;
     if (arg0 == 1) {
-        temp_a0 += arg1->unk_24 + 0xA;
+        temp_a0 += arg1->level + 0xA;
     } else {
         temp_a0 += 5;
     }
@@ -319,23 +354,23 @@ void ComputePokemonStat(s32 arg0, BattleMon* arg1) {
 
     switch (arg0) {
         case 1:
-            arg1->unk_26 = temp_a0;
+            arg1->maxHp = temp_a0;
             break;
 
         case 2:
-            arg1->unk_28 = temp_a0;
+            arg1->attack = temp_a0;
             break;
 
         case 3:
-            arg1->unk_2A = temp_a0;
+            arg1->defense = temp_a0;
             break;
 
         case 4:
-            arg1->unk_2C = temp_a0;
+            arg1->speed = temp_a0;
             break;
 
         case 5:
-            arg1->unk_2E = temp_a0;
+            arg1->special = temp_a0;
             break;
     }
 }

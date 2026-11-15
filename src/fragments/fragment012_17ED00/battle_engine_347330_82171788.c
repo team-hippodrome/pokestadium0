@@ -1,7 +1,13 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle_engine_347330.h"
 
-void RibbonMesh_UpdateEnvAlpha(RibbonMesh* arg0) {
+/**
+ * Part of the stat-change ribbon (see StatRibbon_Spawn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
+ * @unverified Named after the ribbon seen in play; this function itself was not traced.
+ */
+void StatRibbon_UpdateEnvAlpha(RibbonMesh* arg0) {
     s32 var_v0;
 
     if (arg0->unk_01C >= 0) {
@@ -21,7 +27,13 @@ void RibbonMesh_UpdateEnvAlpha(RibbonMesh* arg0) {
     }
 }
 
-s32 RibbonMesh_Update(RibbonMesh* arg0) {
+/**
+ * Part of the stat-change ribbon (see StatRibbon_Spawn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
+ * @unverified Named after the ribbon seen in play; this function itself was not traced.
+ */
+s32 StatRibbon_Update(RibbonMesh* arg0) {
     RibbonMeshVertexState* temp_s0;
     RibbonMeshVertexState* temp_s1;
     RibbonMeshVertexState* ptr;
@@ -56,7 +68,7 @@ s32 RibbonMesh_Update(RibbonMesh* arg0) {
     sp84 = arg0->unk_020 * tmp;
 
     var_s2 = &arg0->unk_050[0];
-    RibbonMesh_UpdateEnvAlpha(arg0);
+    StatRibbon_UpdateEnvAlpha(arg0);
 
     var_s5 = 0;
     sp94 = 0.0f;
@@ -173,7 +185,13 @@ s32 RibbonMesh_Update(RibbonMesh* arg0) {
     return 0;
 }
 
-s32 RibbonMesh_UpdatePool(void) {
+/**
+ * Part of the stat-change ribbon (see StatRibbon_Spawn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
+ * @unverified Named after the ribbon seen in play; this function itself was not traced.
+ */
+s32 StatRibbon_UpdatePool(void) {
     s32 i;
     s32 var_s2;
     RibbonMesh* ptr = &D_8219CB20[0];
@@ -184,7 +202,7 @@ s32 RibbonMesh_UpdatePool(void) {
 
     for (i = 0; i < 4; i++, ptr++) {
         if (ptr->unk_000 == 1) {
-            if (RibbonMesh_Update(ptr) == 0) {
+            if (StatRibbon_Update(ptr) == 0) {
                 var_s2 = 0;
             } else {
                 ptr->unk_000 = 0;
@@ -195,7 +213,13 @@ s32 RibbonMesh_UpdatePool(void) {
     return var_s2;
 }
 
-Gfx* RibbonMesh_Draw(Gfx* arg0, RibbonMesh* arg1) {
+/**
+ * Part of the stat-change ribbon (see StatRibbon_Spawn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
+ * @unverified Named after the ribbon seen in play; this function itself was not traced.
+ */
+Gfx* StatRibbon_Draw(Gfx* arg0, RibbonMesh* arg1) {
     s32 i;
     Vtx* temp_v0 = Gfx_AllocDisplayList(sizeof(Vtx) * 62);
     Vtx* vtx = temp_v0;
@@ -217,7 +241,13 @@ Gfx* RibbonMesh_Draw(Gfx* arg0, RibbonMesh* arg1) {
 }
 
 
-Gfx* RibbonMesh_DrawPool(Gfx* arg0) {
+/**
+ * Part of the stat-change ribbon (see StatRibbon_Spawn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
+ * @unverified Named after the ribbon seen in play; this function itself was not traced.
+ */
+Gfx* StatRibbon_DrawPool(Gfx* arg0) {
     static Gfx D_84388E88[] = {
         gsDPPipeSync(),
         gsDPSetCycleType(G_CYC_2CYCLE),
@@ -280,12 +310,12 @@ Gfx* RibbonMesh_DrawPool(Gfx* arg0) {
             gSPClearGeometryMode(arg0++, G_CULL_BACK);
             gSPSetGeometryMode(arg0++, G_CULL_FRONT);
 
-            arg0 = RibbonMesh_Draw(arg0, ptr);
+            arg0 = StatRibbon_Draw(arg0, ptr);
 
             gSPClearGeometryMode(arg0++, G_CULL_FRONT);
             gSPSetGeometryMode(arg0++, G_CULL_BACK);
 
-            arg0 = RibbonMesh_Draw(arg0, ptr);
+            arg0 = StatRibbon_Draw(arg0, ptr);
         }
     }
 
@@ -300,7 +330,11 @@ Gfx* RibbonMesh_DrawPool(Gfx* arg0) {
 }
 
 
-void TerrainGrid_BuildCameraBounds(unk_D_843975E8* arg0, f32 arg1) {
+/**
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
+ */
+void SurfTerrainGrid_BuildCameraBounds(unk_D_843975E8* arg0, f32 arg1) {
     CameraNode* spB4 = BattleAnim_GetCameraContext();
     f32 spB0;
     f32 spAC;
@@ -310,7 +344,7 @@ void TerrainGrid_BuildCameraBounds(unk_D_843975E8* arg0, f32 arg1) {
     f32 sp9C;
     f32 var_fs0;
     f32 sp94;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     f32 sp8C;
     f32 sp44;
     f32 sp84;
@@ -384,8 +418,26 @@ void TerrainGrid_BuildCameraBounds(unk_D_843975E8* arg0, f32 arg1) {
 }
 
 
-f32 TerrainGrid_SampleHeightAndSlope(f32 x, f32 z, f32* rotation_x) {
-    UNUSED s32 pad1[2];
+/**
+ * Samples the Surf water surface (sWaterHeightMap) at world position (x, z).
+ *
+ * Returns the water height (world Y) at that point and writes the surface tilt
+ * in degrees, in the range [-90, 90], to *rotation_x. The surface is a 16x16
+ * grid of vertices, so the height is found by picking the grid cell under
+ * (x, z), picking one of the cell's two triangles, and evaluating that
+ * triangle's plane at (x, z).
+ *
+ * Called by BattleAnim_SurfContinue to keep the Surf rider on the wave:
+ * the return value is added to the model's base height and the tilt becomes its
+ * X rotation. Also called by SurfTerrainGrid_Draw to compare the camera-aligned
+ * quad corners against the water surface.
+ * //@src/fragments/battle_engine/battle_engine_2F3CB0.c
+ * //@src/fragments/battle_engine/battle_engine_ribbon_mesh_and_surf_grid.c SurfTerrainGrid_UpdateWaves
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
+ */
+f32 SurfTerrainGrid_SampleHeightAndSlope(f32 x, f32 z, f32* rotation_x) {
+    UNUSED s32 pad1[2]; // FAKE: stack padding
     f32 height;
     // Corner naming: c<i><j> is the grid vertex at (cell_x + i, cell_z + j).
     // Each corner is read as world X, height (Y), world Z.
@@ -401,7 +453,7 @@ f32 TerrainGrid_SampleHeightAndSlope(f32 x, f32 z, f32* rotation_x) {
     f32 c11_x;
     f32 c11_y;
     f32 c11_z;
-    UNUSED s32 pad2[8];
+    UNUSED s32 pad2[8]; // FAKE: stack padding
     f32 dx_to_c11;
     f32 dz_to_c11;
     f32 dx_to_c10;
@@ -416,7 +468,7 @@ f32 TerrainGrid_SampleHeightAndSlope(f32 x, f32 z, f32* rotation_x) {
 
     // Convert world position to the index of the grid cell containing it.
     // Grid vertex i sits at X = 150 * (i - 8) - 440 and vertex j at Z = 200 * (j - 8),
-    // matching the layout built by TerrainGrid_Init. Inverting that gives the indices below
+    // matching the layout built by SurfTerrainGrid_Init. Inverting that gives the indices below
     // (truncated to an integer, so the cell is the one whose lower corner is at or before x/z).
     cell_x = ((x + 440.0f) / 150.0f) + 8.0f;
     cell_z = (z / 200.0f) + 8.0f;
@@ -512,7 +564,11 @@ f32 TerrainGrid_SampleHeightAndSlope(f32 x, f32 z, f32* rotation_x) {
 }
 
 
-s32 TerrainGrid_UpdateWaves(void) {
+/**
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
+ */
+s32 SurfTerrainGrid_UpdateWaves(void) {
     s32 i;
     s32 j;
     unk_D_843951D0_1010* ptr;
@@ -604,7 +660,11 @@ s32 TerrainGrid_UpdateWaves(void) {
 }
 
 
-void TerrainGrid_Init(s32 arg0, s16 arg1, s16 arg2) {
+/**
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
+ */
+void SurfTerrainGrid_Init(s32 arg0, s16 arg1, s16 arg2) {
     s32 i;
     s32 j;
     unk_D_843951D0_1010* ptr;
@@ -644,21 +704,25 @@ void TerrainGrid_Init(s32 arg0, s16 arg1, s16 arg2) {
 
     if (arg1 > 0) {
         for (i = 0; i < arg1; i++) {
-            TerrainGrid_UpdateWaves();
+            SurfTerrainGrid_UpdateWaves();
         }
 
-        TerrainGrid_BuildCameraBounds(&D_821A1B28, 50.0f);
+        SurfTerrainGrid_BuildCameraBounds(&D_821A1B28, 50.0f);
     }
 }
 
-s32 TerrainGrid_Update(void) {
-    UNUSED s32 pad[2];
-    s32 sp1C = TerrainGrid_UpdateWaves();
+/**
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Surf.
+ */
+s32 SurfTerrainGrid_Update(void) {
+    UNUSED s32 pad[2]; // FAKE: stack padding
+    s32 sp1C = SurfTerrainGrid_UpdateWaves();
 
     D_821A1B20 = (D_821A1B20 - 1) & 0x3FFF;
     D_821A1B22 = (D_821A1B22 - 1) & 0x3FFF;
     D_821A1B24 = (D_821A1B24 - 1) & 0x3FFF;
-    TerrainGrid_BuildCameraBounds(&D_821A1B28, 50.0f);
+    SurfTerrainGrid_BuildCameraBounds(&D_821A1B28, 50.0f);
 
     return sp1C;
 }

@@ -18,6 +18,7 @@ s32 osGbmbcRamEnable(OSPfs* pfs);
 s32 osGbmbcSelectRamBank(OSPfs* pfs, u8 bank);
 s32 osGbmbcReadWrite(OSPfs* pfs, u16 flag, u32 address, u8* buffer, u32 size);
 
+/** Enables cartridge RAM on a Game Boy cartridge's memory bank controller. */
 s32 osGbmbcRamEnable(OSPfs* pfs) {
   s32 i;
   s32 ret;
@@ -49,6 +50,7 @@ s32 osGbmbcRamEnable(OSPfs* pfs) {
   return ret;
 }
 
+/** Selects a RAM bank on a Game Boy cartridge's memory bank controller. */
 s32 osGbmbcSelectRamBank(OSPfs* pfs, u8 bank) {
     s32 i;
     s32 ret;
@@ -63,6 +65,7 @@ s32 osGbmbcSelectRamBank(OSPfs* pfs, u8 bank) {
     return ret;
 }
 
+/** Reads or writes cartridge memory through the memory bank controller. */
 s32 osGbmbcReadWrite(OSPfs* pfs, u16 flag, u32 address, u8* buffer, u32 size) {
     s32 ret;
     s32 var_s0;

@@ -32,6 +32,7 @@ MemoryPool* mem_pool_try_init(u32 size, s32 side) {
 // TODO: This function is strange, it cant be using MemoryPool, as it allocates
 // more variables than the MemoryPool struct, and it doesnt line up. Whats going
 // on with these structs?
+/** Initializes a memory pool of the given size. */
 MainPool* mem_pool_init(MainPool* pool, s32 size) {
     s32 aligned_size =
         ALIGN4(size - 3) - 0x28; // whats the deal with 0x28? this size doesnt match any known pool struct.
@@ -51,36 +52,43 @@ MainPool* mem_pool_init(MainPool* pool, s32 size) {
  * Allocate from a memory pool. Return NULL if there is not enough space.
  */
 void* mem_pool_alloc(MemoryPool* node, s32 size) {
-    struct MemoryBlock* freeBlock;
+    struct MemoryBlock* free_block;
     void* addr;
 
     osRecvMesg(&node->queue, 0, 1);
 
     addr = NULL;
     size = ALIGN4(size) + sizeof(struct MemoryBlock);
-    freeBlock = &node->freeList;
+    free_block = &node->freeList;
 
-    while (freeBlock->next != NULL) {
-        if (freeBlock->next->size >= size) {
-            addr = (u8*)freeBlock->next + sizeof(struct MemoryBlock); // get data after header
-            if (freeBlock->next->size - size <= sizeof(struct MemoryBlock)) {
-                freeBlock->next = freeBlock->next->next;
+    while (free_block->next != NULL) {
+        if (free_block->next->size >= size) {
+            addr = (u8*)free_block->next + sizeof(struct MemoryBlock); // get data after header
+            if (free_block->next->size - size <= sizeof(struct MemoryBlock)) {
+                free_block->next = free_block->next->next;
             } else {
-                struct MemoryBlock* newBlock = (struct MemoryBlock*)((u8*)freeBlock->next + size);
-                newBlock->size = freeBlock->next->size - size; // set size
-                newBlock->next = freeBlock->next->next;
-                freeBlock->next->size = size; // set size
-                freeBlock->next = newBlock;
+                struct MemoryBlock* new_block = (struct MemoryBlock*)((u8*)free_block->next + size);
+                new_block->size = free_block->next->size - size; // set size
+                new_block->next = free_block->next->next;
+                free_block->next->size = size; // set size
+                free_block->next = new_block;
             }
             break;
         }
-        freeBlock = freeBlock->next;
+        free_block = free_block->next;
     }
     osSendMesg(&node->queue, 0, 0);
     return addr;
 }
 
-void func_800029D0(MemoryPool* pool, void* addr) {
+/**
+ * Free a block that was allocated using mem_pool_alloc.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
+ * the Lab list, Lab sort, registration, the Lab PC, Free Battle setup, the battle opening, a switch
+ * in battle and a Pound turn.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
+void mem_pool_free(MemoryPool* pool, void* addr) {
     struct MemoryBlock* block;
     struct MemoryBlock* freeList;
 

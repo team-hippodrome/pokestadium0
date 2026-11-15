@@ -28,6 +28,10 @@ s16 Model_GetVertexClass(s16* table, s32 index);
 s16 Model_GetVertexMatrixClass(s16* arg0, s32 arg1);
 void Model_TransformPoint(MtxF* mtx, Vec3f* out, s16 (*in)[3]);
 
+/**
+ * Adds a weighted offset toward a target position to a vertex's blended
+ * position.
+ */
 void Model_AccumulateVertexOffset(MtxF* mtx, PosBlend* position, s16 (*target)[3], f32 alpha) {
     f32 sp44;
     f32 sp40;
@@ -55,21 +59,22 @@ void Model_AccumulateVertexOffset(MtxF* mtx, PosBlend* position, s16 (*target)[3
     position->offset.z += dz;
 }
 
+/** Initializes blended vertex positions of a model segment from a matrix. */
 void Model_InitializeVertexPositions(ModelSegment* segment, MtxF* mtx, ModelVertex* mvtx) {
-    s16* indexTable;
+    s16* index_table;
     s32 i;
     Vtx* vtx;
     PosBlend* position;
     ModelVertex* tmp;
 
-    indexTable = Memmap_GetSegmentVaddr(segment->tableSegment);
+    index_table = Memmap_GetSegmentVaddr(segment->tableSegment);
     vtx = Memmap_GetSegmentVaddr(segment->vertexSegment);
     Memmap_GetSegmentVaddr(segment->remapSegment);
     tmp = mvtx;
     
     for(i = 0; i < segment->vertexCount; i++) {
         position = &tmp->position;
-        switch (Model_GetVertexClass(indexTable, i)) {
+        switch (Model_GetVertexClass(index_table, i)) {
             case 0:
             default:
                 Model_TransformPoint(mtx, &position->base, &vtx->v.ob);
@@ -78,7 +83,7 @@ void Model_InitializeVertexPositions(ModelSegment* segment, MtxF* mtx, ModelVert
                 position->offset.z = 0.0f;
                 break;
             case 4:
-                Model_TransformPoint(mtx + Model_GetVertexMatrixClass(indexTable, i), &position->base, &vtx->v.ob);
+                Model_TransformPoint(mtx + Model_GetVertexMatrixClass(index_table, i), &position->base, &vtx->v.ob);
                 position->offset.x = 0.0f;
                 position->offset.y = 0.0f;
                 position->offset.z = 0.0f;
@@ -89,6 +94,7 @@ void Model_InitializeVertexPositions(ModelSegment* segment, MtxF* mtx, ModelVert
     }
 }
 
+/** Copies a blended position buffer. */
 void Model_CopyPositionBuffer(PosBlend* src, PosBlend* dst) {
     *dst = *src;
 }

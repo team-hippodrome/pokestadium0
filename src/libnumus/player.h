@@ -247,7 +247,7 @@ void Audio_QueueVoiceVolume(s32, s32);
 void Audio_QueueVoiceVolumeByte(u32, s32);
 void Audio_RelocateSoundBankWrapper(s32, s32);
 void Audio_RelocateSoundBankTable(bank_remap_descriptor_t*);
-void Audio_QueueSetMonoOutputCommand(s32);
+s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 void Audio_SetVoiceStartTimingMode(s32);
 void Audio_StopAllSoundEffects(void);
 s32 Audio_PlayMusicSequenceLooped(SoundBank*, song_t*, u32);

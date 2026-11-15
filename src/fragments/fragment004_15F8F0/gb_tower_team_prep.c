@@ -18,6 +18,7 @@ extern s32 D_81300370;
 
 s32 GbTower_TeamPrepFrameCallback(u8 arg0);
 
+/** Loads the party from a deck into the Game Boy Tower team state. */
 void GbTower_LoadPartyFromDeck(s32 arg0) {
     s32 i;
     DeckHandle* temp_v0;
@@ -33,6 +34,7 @@ void GbTower_LoadPartyFromDeck(s32 arg0) {
     }
 }
 
+/** Frame callback for the Game Boy Tower team preparation screen: reads input. */
 s32 GbTower_TeamPrepFrameCallback(u8 arg0) {
     Cont_StartReadInputs();
     Cont_ReadInputs();
@@ -45,6 +47,7 @@ s32 GbTower_TeamPrepFrameCallback(u8 arg0) {
 s32 func_80023C30(void);
 s32 func_80025100(s8*, s32*);
 
+/** Builds the party selection result of Game Boy Tower team preparation. */
 void GbTower_BuildPartyResult(UnkInputStruct8000D738* arg0) {
     s32 i;
     s8 tier;
@@ -66,6 +69,7 @@ void GbTower_BuildPartyResult(UnkInputStruct8000D738* arg0) {
 }
 
 extern ModelLoadContext* D_81300380;
+/** Runs the Game Boy Tower team preparation screen. */
 s32 GbTower_TeamPrep(s32 arg0, UnkInputStruct8000D738* arg1) {
     StageContext* sp24;
 

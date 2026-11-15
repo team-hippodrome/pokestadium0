@@ -1,3 +1,4 @@
+#include "moves.h"
 /* Stadium Zero fragment012_17ED00. */
 
 #include "fragments/battle_engine/battle_engine.h"
@@ -5,13 +6,13 @@
 
 //@unverified
 /**
- * Copies the battle runtime HP (state.runtime.unk_0C) to the first party
+ * Copies the battle runtime HP (state.runtime.hp) to the first party
  * Pokemon of arg0's roster.
  */
 void func_821337A0(ActivePokemon* arg0) {
     BattleMon* mon = arg0->teamRoster->pokemonPicked;
 
-    mon->hp = arg0->state.runtime.unk_0C;
+    mon->hp = arg0->state.runtime.hp;
 }
 
 /*
@@ -40,6 +41,10 @@ void func_82133868();
 extern M2C_UNK D_82199DE0;
 extern void *D_8219A5A0;
 
+/**
+ * Sets up the scene mode 11 demo battle: switches the camera to mode 0 for both sides, runs
+ * func_82133868 for the selected side and restores the side index.
+ */
 void func_821337B4(void) {
     s32 saved;
     void *sp20;
@@ -66,6 +71,11 @@ extern s8 D_82199F31;
 extern s32 D_82199F78;
 extern s8 D_82199FCC;
 extern s8 D_82199FCD;
+/**
+ * Sets up the demo move for the selected side: both sides get 900 HP, the move state is
+ * reset, and the move picks the demo effect (String Shot, Harden/Minimize/Splash, Sing and
+ * Rest each set their own effect kind; Sing puts the target and Rest the user to sleep).
+ */
 void func_82133868(void) {
     s8* self;
     s8* other;
@@ -91,19 +101,19 @@ void func_82133868(void) {
     func_8211ED90();
     move = M2C_FIELD(self, u8*, 0x5A);
     switch (move) {
-        case 0x51:
+        case STRING_SHOT:
             M2C_FIELD(D_8219A5A0, s8*, 0x1A) = 3;
             break;
-        case 0x6A:
-        case 0x6B:
-        case 0x96:
+        case HARDEN:
+        case MINIMIZE:
+        case SPLASH:
             M2C_FIELD(D_8219A5A0, s32*, 0x48) = 7;
             break;
-        case 0x2F:
+        case SING:
             M2C_FIELD(D_8219A5A0, s32*, 0x48) = 0x16;
             M2C_FIELD(other, s8*, 0x15) = 3;
             break;
-        case 0x9C:
+        case REST:
             M2C_FIELD(D_8219A5A0, s32*, 0x48) = 0x15;
             M2C_FIELD(self, s8*, 0x15) = 3;
             break;
@@ -114,18 +124,22 @@ void func_82101AD0(void);
 void func_82136708(s32, ActivePokemon*);
 M2C_UNK func_8213B31C(M2C_UNK);
 
+/**
+ * Clears the Pokemon's status for the demo: plays reaction 3 if it was asleep, clears its
+ * roster status byte, state flags and pending status, and resets both camera modes.
+ */
 void func_821339CC(ActivePokemon* arg0) {
-    s32 pad;
+    s32 pad; // FAKE: stack padding
     s8* sp20 = (s8*)arg0->teamRoster + 0x1C;
     BattleMonRuntime* rt = &arg0->state.runtime;
 
     func_82101AD0();
-    if (rt->unk_15 & 7) {
+    if (rt->pendingStatusCondition & 7) {
         func_82136708(3, arg0);
     }
     M2C_FIELD(sp20, s8*, 5) = 0;
     M2C_FIELD(arg0, s16*, 0x7C2) = 0;
-    rt->unk_15 = 0;
+    rt->pendingStatusCondition = 0;
     func_8213B31C(1);
     func_8213B31C(2);
 }
@@ -163,6 +177,10 @@ extern s32 D_82199F18[2];
 extern s32 D_82199F10[2];
 extern u16 D_82199ED0[][0x12];
 
+/**
+ * Steps side 0's scripted demo input: when its timer runs out, takes the next (duration,
+ * value) entry of the script for demo D_8219A4F0.index and outputs the value for one frame.
+ */
 void func_82133A44(void) {
     s32 i = 0; // FAKE: constant side index kept in a variable
 
@@ -179,6 +197,9 @@ void func_82133A44(void) {
     }
 }
 
+/**
+ * Same as func_82133A44 for side 1.
+ */
 void func_82133AD8(void) {
     s32 i = 1; // FAKE: constant side index kept in a variable
 
@@ -212,7 +233,7 @@ void func_80005B98(s32);
 void func_80006998(s32);
 f32 func_8000F23C(f32, f32, f32, f32);
 void func_80010B3C(void*, s16, s16, s16, s16);
-void func_821088BC(s8*);
+void Battle_LoadOwnerModelForSwitchIn(ActivePokemon* active_pokemon);
 void func_8210BE1C(f32*, f32, s16);
 s16 func_8210BEE0(f32, f32, f32, f32);
 f32 func_8210BFA4(f32, f32, f32, f32);
@@ -287,7 +308,7 @@ void func_82133B6C(void) {
                 D_8219A4F0.flags &= ~8;
                 D_8219A4F0.flags |= 0x10;
             }
-            if ((D_8219A4F0.timer == 0x19) && (D_8219A4F0.flags & 0x10)) {
+            if ((D_8219A4F0.timer == 25) && (D_8219A4F0.flags & 0x10)) {
                 if (D_8219A4F0.index == 4) {
                     M2C_FIELD(M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C), s16*, 2) = 0x96;
                 } else {
@@ -301,7 +322,7 @@ void func_82133B6C(void) {
             if (D_8219A4F0.flags & 2) {
                 if (*M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C) & 0x10) {
                     *M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C) &= ~0x90;
-                    func_821088BC(((s8**)&D_82199DE0)[0]);
+                    Battle_LoadOwnerModelForSwitchIn(((s8**)&D_82199DE0)[0]);
                     if (D_8219A4F0.index == 4) {
                         M2C_FIELD(M2C_FIELD(((s8**)&D_82199DE0)[0], u8**, 0x85C), s16*, 2) = 0x96;
                     }
@@ -314,7 +335,7 @@ void func_82133B6C(void) {
             if (D_8219A4F0.flags & 4) {
                 if (*M2C_FIELD(((s8**)&D_82199DE0)[1], u8**, 0x85C) & 0x10) {
                     *M2C_FIELD(((s8**)&D_82199DE0)[1], u8**, 0x85C) &= ~0x90;
-                    func_821088BC(((s8**)&D_82199DE0)[1]);
+                    Battle_LoadOwnerModelForSwitchIn(((s8**)&D_82199DE0)[1]);
                     D_8219A4F0.flags &= ~4;
                     func_80005B98(0x18);
                     D_82199F10[0] = 0;

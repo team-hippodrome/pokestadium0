@@ -19,7 +19,12 @@ typedef struct OwnerLinkedFourStreamZero {
 
 extern OwnerLinkedFourStreamZero D_821B6F00[4];
 
-void func_8217DC80(void) {
+/**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void OwnerAnchoredFourStream_Init(void) {
     s32 i;
     s32 j;
     OwnerLinkedFourStreamZero* var_a2 = &D_821B6F00[0];
@@ -54,7 +59,12 @@ typedef struct OwnerAnchoredFourStreamZero {
     /* 0x01C */ OwnerAnchoredFourStreamNode unk_01C[15];
 } OwnerAnchoredFourStreamZero; // size = 0x418
 
-void func_8217DDD4(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
+/**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void OwnerAnchoredFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
                    f32 argA, f32 argB, f32 argC, s16 argD) {
     s32 i;
     s32 j;
@@ -102,15 +112,27 @@ void func_8217DDD4(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u
     }
 }
 
+/**
+ * Rotates the point (0, 0, arg2) about the X axis by arg0 radians and writes it to arg1.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void OwnerAnchoredFourStream_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
     UNUSED MtxF sp70;
     MtxF sp30;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     guRotateF(sp30.mf, (arg0 * 360.0) / 6.2831854820251465, 1.0f, 0.0f, 0.0f);
     guMtxXFMF(sp30.mf, 0.0f, 0.0f, arg2, &arg1->x, &arg1->y, &arg1->z);
 }
 
+/**
+ * Steps a stream's 15-node chain: the head node moves by its velocity, bending sideways by
+ * 0.4 a frame up to 20, and grows its width by 2 up to the stream's maximum; each other node
+ * takes the previous frame's values of the node before it.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void OwnerAnchoredFourStream_UpdateNodeChain(OwnerAnchoredFourStream* arg0) {
     s32 i;
     OwnerAnchoredFourStreamNode* var_s0 = &arg0->unk_01C[0];
@@ -161,19 +183,24 @@ void OwnerAnchoredFourStream_UpdateNodeChain(OwnerAnchoredFourStream* arg0) {
     }
 }
 
-M2C_UNK func_8217E0C0(M2C_UNK *);                   /* extern */
-s32 func_8217E34C(void)
+/**
+ * M2C_UNK func_8217E0C0(M2C_UNK *);                   /* extern
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 OwnerAnchoredFourStream_IsComplete(void)
 {
-  s8 *new_var;
+  s8 *new_var; // FAKE: permuter temp
   s32 var_s1;
   new_var = (s8*)D_821B6F00;
   var_s1 = 0;
   do
   {
-    new_var = (s8 *) ((0, new_var));
+    new_var = (s8 *) ((0, new_var)); // FAKE: comma expression
     if ((*((s16 *) (new_var + 0))) == 1)
     {
-      new_var = new_var;
+      new_var = new_var; // FAKE: self-assignment
       *((s16 *) (new_var + 2)) = (s16) ((*((s16 *) (new_var + 2))) + 1);
       if ((*((s16 *) (new_var + 4))) < (*((s16 *) (new_var + 2))))
       {
@@ -192,7 +219,12 @@ s32 func_8217E34C(void)
 }
 
 extern Gfx D_82193270[];
-Gfx* func_8217E3E0(Gfx* arg0) {
+/**
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
+ * turns): ran.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+Gfx* OwnerAnchoredFourStream_Draw(Gfx* arg0) {
     s32 i;
     s32 j;
     s32 k;
@@ -200,7 +232,7 @@ Gfx* func_8217E3E0(Gfx* arg0) {
     OwnerAnchoredFourStreamZero* var_s5;
     Vtx* var_s0;
     Vec3f sp154;
-    UNUSED s32 pad[15];
+    UNUSED s32 pad[15]; // FAKE: stack padding
     Mtx* temp_v0;
     Mtx sp100;
     Mtx spC0;

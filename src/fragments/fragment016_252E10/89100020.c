@@ -8,7 +8,7 @@
 #include "m2c_macros.h"
 
 extern u8 D_80073520[];
-M2C_UNK func_80029A64(s32, s32, s32, s32, Color_RGBA8);
+M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 
 M2C_UNK func_89109E5C(s32, s32, s32, s32);          /* extern */
 M2C_UNK func_89109FE0(s32);                         /* extern */
@@ -144,7 +144,12 @@ typedef struct LabPCInitialStateFields {
     s32 unk_9B04;
 } LabPCInitialStateFields;
 
-void func_89100380(LabPCInitialStateFields* state) {
+/**
+ * Resets the list filters: level range 1..100, and no type or move filter.
+ * Seen in play (2026-11-12) in いちらん: すべてのせんたくをやめる ran this, then LabPCList_ClearFilterFlags, and
+ * the full party list came back.
+ */
+void LabPCList_ResetFilterState(LabPCInitialStateFields* state) {
     /* IDO schedules these byte stores together when they share a source line. */
     state->unk_9828 = 1; state->unk_9829 = 100;
     state->unk_982C = 0;
@@ -152,14 +157,14 @@ void func_89100380(LabPCInitialStateFields* state) {
     state->unk_9B04 = 0;
 }
 
-typedef struct Rgba891024A4 { u8 r, g, b, a; } Rgba891024A4;
-void func_8002A8C4(s8 *, s32, s32, s32, s32);
+#include "fragments/fragment016_252E10/89100020_types_3.h"
+void Window_SetRect(s8 *, s32, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
 void func_89109B60(s8*);
 M2C_UNK func_89109C6C(s32, s32);                    /* extern */
 void func_80027D68(s32, s32);
-void func_8002EC24(s8*, s8*, s8*, s32, void*, s32, s32);
-void func_891012A8();
+void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
+void LabPCList_DrawMonRow();
 void func_89105C54(s8*, s32, s32, s8*, Rgba891024A4);
 extern s32 D_8910D990[];
 extern Rgba891024A4 D_8910A7F4;
@@ -179,27 +184,25 @@ typedef struct Big891003A4 {
     /* 0xB55C */ char unkB55C[0x38];
     /* 0xB594 */ s32 unkB594;
 } Big891003A4;
-//@unverified
 /**
- * Initializes the lab PC screen state in arg0: three windows with
- * func_8002A8C4, two func_80027804 buffers, the list (func_89109B60,
- * func_89109C6C, func_8002EC24), func_89100020 and func_89100294, stores arg3 in
- * unkB594, and calls func_89105C54 at (120, 103).
+ * Sets up the Pokemon list window (564x382) and its widgets.
+ * Seen in play (2026-11-12) in いちらん (party list: フシギダネ, ヒトカゲ, ゼニガメ): ran on entry as the list
+ * window appeared.
  */
-void func_891003A4(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
-    UNUSED s32 pad[1];
+void LabPCList_InitListWindow(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
+    UNUSED s32 pad[1]; // FAKE: stack padding
 
     func_89100140((Ctx89100140*)arg0);
-    func_8002A8C4(arg0, arg1, arg2, 564, 382);
+    Window_SetRect(arg0, arg1, arg2, 564, 382);
     M2C_FIELD(arg0, s32*, 0x24) = 0;
     M2C_FIELD(arg0, s32*, 0x20) = 0;
     M2C_FIELD(arg0, s32*, 0x28) = 0;
     M2C_FIELD(arg0, s32*, 0x14) = 1;
-    func_8002A8C4(arg0 + 0x4C, arg1 + 6, arg2 + 6, 552, 30);
+    Window_SetRect(arg0 + 0x4C, arg1 + 6, arg2 + 6, 552, 30);
     M2C_FIELD(arg0, s32*, 0x60) = 6;
     M2C_FIELD(arg0, Rgba891024A4*, 0x64) = *(Rgba891024A4*)D_8910A844;
     M2C_FIELD(arg0, Rgba891024A4*, 0x68) = *(Rgba891024A4*)D_8910A848;
-    func_8002A8C4(arg0 + 0x2C, arg1 + 6, arg2 + 58, 552, 302);
+    Window_SetRect(arg0 + 0x2C, arg1 + 6, arg2 + 58, 552, 302);
     M2C_FIELD(arg0, s32*, 0x40) = 1;
     func_80027804(arg0 + 0x9648, arg0 + 0x87B8, 0x1D2, 0);
     func_80027804(arg0 + 0x6C, arg0 + 0x8F00, 0x1D2, 0);
@@ -213,13 +216,13 @@ void func_891003A4(s8* arg0, s32 arg1, s32 arg2, s32 arg3) {
     func_89100020(arg0);
     M2C_FIELD(arg0, s32*, 0x80) = 0;
     ((Big891003A4*)arg0)->unkB15C = 0;
-    func_8002EC24(arg0 + 0xB160, arg0 + 0x9648, arg0 + 0xB1A4, 14, func_891012A8, 552, 20);
+    ScrollList_Init(arg0 + 0xB160, arg0 + 0x9648, arg0 + 0xB1A4, 14, LabPCList_DrawMonRow, 552, 20);
     ((Big891003A4*)arg0)->unkB180 &= ~0x100000;
     ((Big891003A4*)arg0)->unkB548 = D_8910A84C;
     func_89100294((Ctx89100294*)arg0);
     ((Big891003A4*)arg0)->unkB558 = 0;
     ((Big891003A4*)arg0)->unkB594 = arg3;
-    func_89100380((LabPCInitialStateFields*)arg0);
+    LabPCList_ResetFilterState((LabPCInitialStateFields*)arg0);
     M2C_FIELD(arg0, s32*, 0x88) = 1;
     func_89105C54(arg0 + 0x230, 120, 103, arg0 + 0x420, D_8910A7F4);
 }
@@ -238,7 +241,13 @@ typedef struct Ctx89100688 {
     /* 0xB550 */ s32 cursor;
 } Ctx89100688;
 
-s32 func_891005CC(Ctx89100688* arg0) {
+/**
+ * Returns the x position of the header cursor for the current detail page.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name and comment guessed from the code.
+ */
+s32 LabPCList_GetColumnCursorX(Ctx89100688* arg0) {
     s32 i;
     s32 x = 0;
     s32 end;
@@ -264,7 +273,7 @@ void func_89100688(Ctx89100688* arg0) {
             } else {
                 w = arg0->widths[i];
             }
-            func_80029A64(func_891005CC(arg0), arg0->y, w, 0x14, *(Color_RGBA8*)D_80073520);
+            Ui_DrawRoundedFrame(LabPCList_GetColumnCursorX(arg0), arg0->y, w, 0x14, *(Color_RGBA8*)D_80073520);
             break;
         case 1:
             w = 0;
@@ -274,28 +283,31 @@ void func_89100688(Ctx89100688* arg0) {
             for (; i < end; i++) {
                 w += arg0->widths[i];
             }
-            func_80029A64(func_891005CC(arg0), arg0->y, w, 0x14, *(Color_RGBA8*)D_80073520);
+            Ui_DrawRoundedFrame(LabPCList_GetColumnCursorX(arg0), arg0->y, w, 0x14, *(Color_RGBA8*)D_80073520);
             break;
         case 2:
-            func_80029A64(func_891005CC(arg0), arg0->y, arg0->widths[arg0->ranges[arg0->mode] + arg0->cursor - 2], 0x14, *(Color_RGBA8*)D_80073520);
+            Ui_DrawRoundedFrame(LabPCList_GetColumnCursorX(arg0), arg0->y, arg0->widths[arg0->ranges[arg0->mode] + arg0->cursor - 2], 0x14, *(Color_RGBA8*)D_80073520);
             break;
     }
 }
 
 /**
- * Draws a highlight rectangle (via func_80029A64) for the screen object arg0, positioned from
+ * Draws a highlight rectangle (via Ui_DrawRoundedFrame) for the screen object arg0, positioned from
  * the two words at arg0 + 0x2C / 0x30 (what they mean is not established). The word at
  * arg0 + 0xB550 selects the shape: 0 draws a 0x26 x 0x14 rectangle at the origin, 1 a
- * 0x50 x 0x14 rectangle offset 0x26 to the right; other values draw nothing. The colour is
- * read from D_80073520. (Compare func_8910179C.)
+ * 0x50 x 0x14 rectangle offset 0x26 to the right; other values draw nothing. The color is
+ * read from D_80073520. (Compare LabPCList_DrawRowCursor.)
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name guessed from the code; comment kept.
  */
-void func_89100870(s8* arg0) {
+void LabPCList_DrawHeaderCursor(s8* arg0) {
     switch (M2C_FIELD(arg0, s32*, 0xB550)) {
         case 0:
-            func_80029A64(M2C_FIELD(arg0, s32*, 0x2C), M2C_FIELD(arg0, s32*, 0x30), 0x26, 0x14, *(Color_RGBA8*)D_80073520);
+            Ui_DrawRoundedFrame(M2C_FIELD(arg0, s32*, 0x2C), M2C_FIELD(arg0, s32*, 0x30), 0x26, 0x14, *(Color_RGBA8*)D_80073520);
             return;
         case 1:
-            func_80029A64(M2C_FIELD(arg0, s32*, 0x2C) + 0x26, M2C_FIELD(arg0, s32*, 0x30), 0x50, 0x14, *(Color_RGBA8*)D_80073520);
+            Ui_DrawRoundedFrame(M2C_FIELD(arg0, s32*, 0x2C) + 0x26, M2C_FIELD(arg0, s32*, 0x30), 0x50, 0x14, *(Color_RGBA8*)D_80073520);
             return;
     }
 }

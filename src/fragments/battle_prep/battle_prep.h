@@ -188,7 +188,7 @@ void BattlePrep_DrawTrainerStatusIcon(DepthBuffer*, s16, u8*, u8*);
 void BattlePrep_AnimateBallBurstEffect(s16 arg0);
 void BattlePrep_FadeInBallBurstObjects(s16 arg0);
 void BattlePrep_RenderFrame(void);
-void BattlePrep_UpdateSingleBattleIntroFrame(void);
+void LabPCList_Setup(void);
 s32 BattlePrep_ShowSingleBattleIntro(void);
 void BattlePrep_UpdateRoundIntroFrame(void);
 void BattlePrep_InitRoundIntroScene(void);

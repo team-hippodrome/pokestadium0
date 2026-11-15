@@ -26,10 +26,12 @@ void Gfx_SetEnvColor(s32 r, s32 g, s32 b, s32 a);
 void Gfx_SetPrimColor(s32 r, s32 g, s32 b, s32 a);
 void Font_EndTexturedTextRendering(void);
 
+/** Clears the font context pointer. */
 void Font_ResetContext(UNUSED s32 arg0, UNUSED s32 arg1) {
     font_context = NULL;
 }
 
+/** Returns the index of the font set selected by a bit mask. */
 s32 Font_GetSetIndexFromMask(s32 mask) {
     s32 index = 0;
 
@@ -55,10 +57,10 @@ s32 Font_GetSetIndexFromMask(s32 mask) {
  *
  * Takes the next free slot index from func_8001A0A4 and fills the 8-byte
  * entry at that index in the table at the start of *font_context: three
- * size bytes (arg1, arg2, arg3 -- their meaning is not established; func_8001A194
+ * size bytes (arg1, arg2, arg3 -- their meaning is not established; Font_Init
  * passes e.g. 0x20/0x20/0x20 for mask 0x20 and 0xA/0xA/0x10 for mask 0x1) and
  * the pointer to the font file.  The slot index is then stored at
- * font_context + 0x38 (FontContext::unk_50, cleared by func_8001A194).
+ * font_context + 0x38 (FontContext::unk_50, cleared by Font_Init).
  *
  * `mask` is not used by the retail code; the empty `if (mask) {}` is only there
  * so IDO does not spill the unused argument register.
@@ -85,7 +87,7 @@ void func_8001A118(s32 mask, s32 arg1, s32 arg2, s32 arg3, void* file) {
 }
 
 /*
- * func_8001A194 (Font_Init in symbol_addrs.txt)
+ * Font_Init (Font_Init in symbol_addrs.txt)
  *
  * Creates the font context.  Allocates a 0x3C-byte block from the main pool
  * on heap `side` (the second argument is passed straight through to
@@ -111,7 +113,8 @@ extern u8 D_002B2C80[];
 extern u8 D_002E0BE0[];
 void func_8001A118(s32 mask, s32 arg1, s32 arg2, s32 arg3, void* file);
 
-s32 func_8001A194(s32 load_size, s32 side) {
+/** Allocates the font context. */
+s32 Font_Init(s32 load_size, s32 side) {
     font_context = main_pool_alloc_with_func(sizeof(*font_context), side, 'PRNT', (AllocateFunc)Font_ResetContext);
     font_context->unk_48 = BinArchive_Open(D_002B2C80, D_002E0BE0, 1, 1);
     font_context->unk_50 = 0;
@@ -138,10 +141,12 @@ s32 func_8001A194(s32 load_size, s32 side) {
     return 1;
 }
 
+/** Frees the font context. */
 void Font_Free(void) {
     main_pool_try_free(font_context);
 }
 
+/** Selects the active font set. */
 void Font_SetActive(s32 mask, s32 arg1) {
     if (font_context != NULL) {
         font_context->unk_50 = Font_GetSetIndexFromMask(mask);
@@ -180,22 +185,22 @@ s32 func_8001A3E4(s16 x, s16 y, s16 chr)
     {
       {
         Gfx *_g = (Gfx *) (gDisplayListHead++);
-        _g->words.w0 = ((((unsigned int) ((((unsigned int) 0xfd) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 4) & ((0x01 << 3) - 1)) << 21))) | ((unsigned int) ((((unsigned int) 2) & ((0x01 << 2) - 1)) << 19))) | ((unsigned int) ((((unsigned int) (1 - 1)) & ((0x01 << 12) - 1)) << 0));
-        _g->words.w1 = (unsigned int) (set->tex + ((set->width << 8) * set->height));
+        _g->words.w0 = ((((unsigned int) ((((unsigned int) 0xfd) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 4) & ((0x01 << 3) - 1)) << 21))) | ((unsigned int) ((((unsigned int) 2) & ((0x01 << 2) - 1)) << 19))) | ((unsigned int) ((((unsigned int) (1 - 1)) & ((0x01 << 12) - 1)) << 0)); // FAKE: hand-expanded gbi macro
+        _g->words.w1 = (unsigned int) (set->tex + ((set->width << 8) * set->height)); // FAKE: hand-expanded gbi macro
       }
       ;
-      { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (((((unsigned int) ((((unsigned int) 0xf5) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 4) & ((0x01 << 3) - 1)) << 21))) | ((unsigned int) ((((unsigned int) 2) & ((0x01 << 2) - 1)) << 19))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 9) - 1)) << 9))) | ((unsigned int) ((((unsigned int) 0x0100) & ((0x01 << 9) - 1)) << 0)); _g->words.w1 = ((((((((unsigned int) ((((unsigned int) 7) & ((0x01 << 3) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 20))) | ((unsigned int) ((((unsigned int) (0 | 0x2)) & ((0x01 << 2) - 1)) << 18))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 14))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 10))) | ((unsigned int) ((((unsigned int) (0 | 0x2)) & ((0x01 << 2) - 1)) << 8))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 4))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 0)); }
+      { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (((((unsigned int) ((((unsigned int) 0xf5) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 4) & ((0x01 << 3) - 1)) << 21))) | ((unsigned int) ((((unsigned int) 2) & ((0x01 << 2) - 1)) << 19))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 9) - 1)) << 9))) | ((unsigned int) ((((unsigned int) 0x0100) & ((0x01 << 9) - 1)) << 0)); _g->words.w1 = ((((((((unsigned int) ((((unsigned int) 7) & ((0x01 << 3) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 20))) | ((unsigned int) ((((unsigned int) (0 | 0x2)) & ((0x01 << 2) - 1)) << 18))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 14))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 10))) | ((unsigned int) ((((unsigned int) (0 | 0x2)) & ((0x01 << 2) - 1)) << 8))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 4))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 0)); } // FAKE: hand-expanded gbi macro
       ;
- { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (unsigned int) ((((unsigned int) 0xe6) & ((0x01 << 8) - 1)) << 24); _g->words.w1 = 0; } ; { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (((unsigned int) ((((unsigned int) 0xf3) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 12) - 1)) << 0)); _g->words.w1 = (((unsigned int) ((((unsigned int) 7) & ((0x01 << 3) - 1)) << 24)) | ((unsigned int) ((((unsigned int) ((((((set->width * set->height) + 1) >> 1) - 1) < 2047) ? ((((set->width * set->height) + 1) >> 1) - 1) : (2047))) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) ((((1 << 11) + ((1 > ((set->width * 1) / 8)) ? (1) : ((set->width * 1) / 8))) - 1) / ((1 > ((set->width * 1) / 8)) ? (1) : ((set->width * 1) / 8)))) & ((0x01 << 12) - 1)) << 0)); } ; { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (unsigned int) ((((unsigned int) 0xe7) & ((0x01 << 8) - 1)) << 24); _g->words.w1 = 0; } ; { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (((((unsigned int) ((((unsigned int) 0xf5) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 4) & ((0x01 << 3) - 1)) << 21))) | ((unsigned int) ((((unsigned int) 1) & ((0x01 << 2) - 1)) << 19))) | ((unsigned int) ((((unsigned int) (((set->width * 1) + 7) >> 3)) & ((0x01 << 9) - 1)) << 9))) | ((unsigned int) ((((unsigned int) 0x0100) & ((0x01 << 9) - 1)) << 0)); _g->words.w1 = ((((((((unsigned int) ((((unsigned int) 1) & ((0x01 << 3) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 20))) | ((unsigned int) ((((unsigned int) (0 | 0x2)) & ((0x01 << 2) - 1)) << 18))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 14))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 10))) | ((unsigned int) ((((unsigned int) (0 | 0x2)) & ((0x01 << 2) - 1)) << 8))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 4))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 0)); } ; { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (((unsigned int) ((((unsigned int) 0xf2) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 12) - 1)) << 0)); _g->words.w1 = (((unsigned int) ((((unsigned int) 1) & ((0x01 << 3) - 1)) << 24)) | ((unsigned int) ((((unsigned int) ((set->width - 1) << 2)) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) ((set->height - 1) << 2)) & ((0x01 << 12) - 1)) << 0)); } ; } ; } if (((s32) (set->tex + offset)) != font_context->unk_4C) { font_context->unk_4C = (s32) (set->tex + offset); { { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = ((((unsigned int) ((((unsigned int) 0xfd) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 3) & ((0x01 << 3) - 1)) << 21))) | ((unsigned int) ((((unsigned int) 2) & ((0x01 << 2) - 1)) << 19))) | ((unsigned int) ((((unsigned int) (1 - 1)) & ((0x01 << 12) - 1)) << 0)); _g->words.w1 = (unsigned int) (set->tex + offset); } ; { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (((((unsigned int) ((((unsigned int) 0xf5) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 3) & ((0x01 << 3) - 1)) << 21))) | ((unsigned int) ((((unsigned int) 2) & ((0x01 << 2) - 1)) << 19))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 9) - 1)) << 9))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 9) - 1)) << 0)); _g->words.w1 = ((((((((unsigned int) ((((unsigned int) 7) & ((0x01 << 3) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 20))) | ((unsigned int) ((((unsigned int) (0 | 0x2)) & ((0x01 << 2) - 1)) << 18))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 14))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 10))) | ((unsigned int) ((((unsigned int) (0 | 0x2)) & ((0x01 << 2) - 1)) << 8))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 4))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 0)); } ; { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (unsigned int) ((((unsigned int) 0xe6) & ((0x01 << 8) - 1)) << 24); _g->words.w1 = 0; } ; { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (((unsigned int) ((((unsigned int) 0xf3) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 12) - 1)) << 0)); _g->words.w1 = (((unsigned int) ((((unsigned int) 7) & ((0x01 << 3) - 1)) << 24)) | ((unsigned int) ((((unsigned int) ((((((set->width * set->height) + 1) >> 1) - 1) < 2047) ? ((((set->width * set->height) + 1) >> 1) - 1) : (2047))) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) ((((1 << 11) + ((1 > ((set->width * 1) / 8)) ? (1) : ((set->width * 1) / 8))) - 1) / ((1 > ((set->width * 1) / 8)) ? (1) : ((set->width * 1) / 8)))) & ((0x01 << 12) - 1)) << 0)); }
+ { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (unsigned int) ((((unsigned int) 0xe6) & ((0x01 << 8) - 1)) << 24); _g->words.w1 = 0; } ; { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (((unsigned int) ((((unsigned int) 0xf3) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 12) - 1)) << 0)); _g->words.w1 = (((unsigned int) ((((unsigned int) 7) & ((0x01 << 3) - 1)) << 24)) | ((unsigned int) ((((unsigned int) ((((((set->width * set->height) + 1) >> 1) - 1) < 2047) ? ((((set->width * set->height) + 1) >> 1) - 1) : (2047))) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) ((((1 << 11) + ((1 > ((set->width * 1) / 8)) ? (1) : ((set->width * 1) / 8))) - 1) / ((1 > ((set->width * 1) / 8)) ? (1) : ((set->width * 1) / 8)))) & ((0x01 << 12) - 1)) << 0)); } ; { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (unsigned int) ((((unsigned int) 0xe7) & ((0x01 << 8) - 1)) << 24); _g->words.w1 = 0; } ; { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (((((unsigned int) ((((unsigned int) 0xf5) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 4) & ((0x01 << 3) - 1)) << 21))) | ((unsigned int) ((((unsigned int) 1) & ((0x01 << 2) - 1)) << 19))) | ((unsigned int) ((((unsigned int) (((set->width * 1) + 7) >> 3)) & ((0x01 << 9) - 1)) << 9))) | ((unsigned int) ((((unsigned int) 0x0100) & ((0x01 << 9) - 1)) << 0)); _g->words.w1 = ((((((((unsigned int) ((((unsigned int) 1) & ((0x01 << 3) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 20))) | ((unsigned int) ((((unsigned int) (0 | 0x2)) & ((0x01 << 2) - 1)) << 18))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 14))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 10))) | ((unsigned int) ((((unsigned int) (0 | 0x2)) & ((0x01 << 2) - 1)) << 8))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 4))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 0)); } ; { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (((unsigned int) ((((unsigned int) 0xf2) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 12) - 1)) << 0)); _g->words.w1 = (((unsigned int) ((((unsigned int) 1) & ((0x01 << 3) - 1)) << 24)) | ((unsigned int) ((((unsigned int) ((set->width - 1) << 2)) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) ((set->height - 1) << 2)) & ((0x01 << 12) - 1)) << 0)); } ; } ; } if (((s32) (set->tex + offset)) != font_context->unk_4C) { font_context->unk_4C = (s32) (set->tex + offset); { { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = ((((unsigned int) ((((unsigned int) 0xfd) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 3) & ((0x01 << 3) - 1)) << 21))) | ((unsigned int) ((((unsigned int) 2) & ((0x01 << 2) - 1)) << 19))) | ((unsigned int) ((((unsigned int) (1 - 1)) & ((0x01 << 12) - 1)) << 0)); _g->words.w1 = (unsigned int) (set->tex + offset); } ; { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (((((unsigned int) ((((unsigned int) 0xf5) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 3) & ((0x01 << 3) - 1)) << 21))) | ((unsigned int) ((((unsigned int) 2) & ((0x01 << 2) - 1)) << 19))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 9) - 1)) << 9))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 9) - 1)) << 0)); _g->words.w1 = ((((((((unsigned int) ((((unsigned int) 7) & ((0x01 << 3) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 20))) | ((unsigned int) ((((unsigned int) (0 | 0x2)) & ((0x01 << 2) - 1)) << 18))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 14))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 10))) | ((unsigned int) ((((unsigned int) (0 | 0x2)) & ((0x01 << 2) - 1)) << 8))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 4))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 0)); } ; { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (unsigned int) ((((unsigned int) 0xe6) & ((0x01 << 8) - 1)) << 24); _g->words.w1 = 0; } ; { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (((unsigned int) ((((unsigned int) 0xf3) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 12) - 1)) << 0)); _g->words.w1 = (((unsigned int) ((((unsigned int) 7) & ((0x01 << 3) - 1)) << 24)) | ((unsigned int) ((((unsigned int) ((((((set->width * set->height) + 1) >> 1) - 1) < 2047) ? ((((set->width * set->height) + 1) >> 1) - 1) : (2047))) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) ((((1 << 11) + ((1 > ((set->width * 1) / 8)) ? (1) : ((set->width * 1) / 8))) - 1) / ((1 > ((set->width * 1) / 8)) ? (1) : ((set->width * 1) / 8)))) & ((0x01 << 12) - 1)) << 0)); } // FAKE: hand-expanded gbi macro
       ;
-      { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (unsigned int) ((((unsigned int) 0xe7) & ((0x01 << 8) - 1)) << 24); _g->words.w1 = 0; }
+      { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (unsigned int) ((((unsigned int) 0xe7) & ((0x01 << 8) - 1)) << 24); _g->words.w1 = 0; } // FAKE: hand-expanded gbi macro
       ;
-      { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (((((unsigned int) ((((unsigned int) 0xf5) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 3) & ((0x01 << 3) - 1)) << 21))) | ((unsigned int) ((((unsigned int) 1) & ((0x01 << 2) - 1)) << 19))) | ((unsigned int) ((((unsigned int) (((set->width * 1) + 7) >> 3)) & ((0x01 << 9) - 1)) << 9))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 9) - 1)) << 0)); _g->words.w1 = ((((((((unsigned int) ((((unsigned int) 0) & ((0x01 << 3) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 20))) | ((unsigned int) ((((unsigned int) (0 | 0x2)) & ((0x01 << 2) - 1)) << 18))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 14))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 10))) | ((unsigned int) ((((unsigned int) (0 | 0x2)) & ((0x01 << 2) - 1)) << 8))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 4))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 0)); }
+      { Gfx *_g = (Gfx *) (gDisplayListHead++); _g->words.w0 = (((((unsigned int) ((((unsigned int) 0xf5) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 3) & ((0x01 << 3) - 1)) << 21))) | ((unsigned int) ((((unsigned int) 1) & ((0x01 << 2) - 1)) << 19))) | ((unsigned int) ((((unsigned int) (((set->width * 1) + 7) >> 3)) & ((0x01 << 9) - 1)) << 9))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 9) - 1)) << 0)); _g->words.w1 = ((((((((unsigned int) ((((unsigned int) 0) & ((0x01 << 3) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 20))) | ((unsigned int) ((((unsigned int) (0 | 0x2)) & ((0x01 << 2) - 1)) << 18))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 14))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 10))) | ((unsigned int) ((((unsigned int) (0 | 0x2)) & ((0x01 << 2) - 1)) << 8))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 4))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 4) - 1)) << 0)); } // FAKE: hand-expanded gbi macro
       ;
       {
         Gfx *_g = (Gfx *) (gDisplayListHead++);
-        _g->words.w0 = (((unsigned int) ((((unsigned int) 0xf2) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 12) - 1)) << 0));
-        _g->words.w1 = (((unsigned int) ((((unsigned int) 0) & ((0x01 << 3) - 1)) << 24)) | ((unsigned int) ((((unsigned int) ((set->width - 1) << 2)) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) ((set->height - 1) << 2)) & ((0x01 << 12) - 1)) << 0));
+        _g->words.w0 = (((unsigned int) ((((unsigned int) 0xf2) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 12) - 1)) << 0)); // FAKE: hand-expanded gbi macro
+        _g->words.w1 = (((unsigned int) ((((unsigned int) 0) & ((0x01 << 3) - 1)) << 24)) | ((unsigned int) ((((unsigned int) ((set->width - 1) << 2)) & ((0x01 << 12) - 1)) << 12))) | ((unsigned int) ((((unsigned int) ((set->height - 1) << 2)) & ((0x01 << 12) - 1)) << 0)); // FAKE: hand-expanded gbi macro
       }
       ;
     }
@@ -209,8 +214,8 @@ s32 func_8001A3E4(s16 x, s16 y, s16 chr)
     ;
     {
       Gfx *_g = (Gfx *) (gDisplayListHead++);
-      _g->words.w0 = (unsigned int) ((((unsigned int) 0xf1) & ((0x01 << 8) - 1)) << 24);
-      _g->words.w1 = (unsigned int) (((unsigned int) ((((unsigned int) 0x400) & ((0x01 << 16) - 1)) << 16)) | ((unsigned int) ((((unsigned int) 0x400) & ((0x01 << 16) - 1)) << 0)));
+      _g->words.w0 = (unsigned int) ((((unsigned int) 0xf1) & ((0x01 << 8) - 1)) << 24); // FAKE: hand-expanded gbi macro
+      _g->words.w1 = (unsigned int) (((unsigned int) ((((unsigned int) 0x400) & ((0x01 << 16) - 1)) << 16)) | ((unsigned int) ((((unsigned int) 0x400) & ((0x01 << 16) - 1)) << 0))); // FAKE: hand-expanded gbi macro
     }
     ;
   }
@@ -218,6 +223,7 @@ s32 func_8001A3E4(s16 x, s16 y, s16 chr)
   return (x + set->advance) + font_context->unk_51;
 }
 
+/** Copies bytes into a buffer and returns the pointer past the copy. */
 char* String_CopyBytesAndAdvance(char* buffer, const char* data, u32 size) {
     return (char*)memcpy(buffer, data, size) + size;
 }
@@ -225,7 +231,7 @@ char* String_CopyBytesAndAdvance(char* buffer, const char* data, u32 size) {
 s32 func_8001A3E4(s16, s16, s16);
 void func_8001A944(s32 x, s32 y, const char* fmt, ...) {
     u8 buf[0x100];
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 startX;
     s32 len;
     u8* p;
@@ -268,16 +274,19 @@ void func_8001AA60(s32 arg0, s32 arg1, s32 arg2) {
     func_8001A3E4(arg0, arg1, (s16) (arg2 & 0x7F7F));
 }
 
+/** Emits a command that sets the RDP environment color. */
 void Gfx_SetEnvColor(s32 r, s32 g, s32 b, s32 a) {
     gDPSetEnvColor(gDisplayListHead++, r, g, b, a);
 }
 
+/** Emits a command that sets the RDP primitive color. */
 void Gfx_SetPrimColor(s32 r, s32 g, s32 b, s32 a) {
     gDPSetPrimColor(gDisplayListHead++, 0, 0, r, g, b, a);
 }
 
 extern s8 *D_800AD200;
-void func_8001AB2C(s32 arg0) {
+/** Sets the line height used for text. */
+void Font_SetLineHeight(s32 arg0) {
     M2C_FIELD(D_800AD200, s8 *, 0x3A) = arg0;
 }
 
@@ -293,6 +302,7 @@ void func_8001AB54(void) {
     M2C_FIELD(D_800AD200, u8 *, 0x3B) = (u8) (M2C_FIELD(D_800AD200, u8 *, 0x3B) & 0xFFFB);
 }
 
+/** Begins rendering text with translucency. */
 void Font_BeginTranslucentTextRendering(void) {
     font_context->line_break_flag = 0;
     font_context->line_height = 0x28;
@@ -301,10 +311,12 @@ void Font_BeginTranslucentTextRendering(void) {
     gSPDisplayList(gDisplayListHead++, D_80060950);
 }
 
+/** Ends textured text rendering by restoring the default state. */
 void Font_EndTexturedTextRendering(void) {
     gSPDisplayList(gDisplayListHead++, D_80060990);
 }
 
+/** Enables two-cycle texturing for text. */
 void Font_EnableTwoCycleTexturing(void) {
     font_context->line_break_flag |= 1;
     font_context->line_break_flag &= ~2;
@@ -314,13 +326,21 @@ void Font_EnableTwoCycleTexturing(void) {
 
 extern Gfx D_800609D8[];
 
+/** Disables two-cycle texturing for text. */
 void Font_DisableTwoCycleTexturing(void) {
-    M2C_FIELD(font_context, u8*, 0x3B) &= ~3;
+    font_context->line_break_flag &= ~3;
     gSPDisplayList(gDisplayListHead++, D_800609D8);
 }
 
 extern Gfx D_80060A00[];
-void func_8001AC7C(s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b, s32 a) {
+/**
+ * Draws a textured rectangle tinted with the given RGBA primitive color.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
+ * in battle, running from battle and a Pound turn. Stubbed on the battle command menu, the COM
+ * info box lost its colored background fill.
+ * @unverified Name and comment guessed from the code.
+ */
+void Ui_DrawPrimColorRect(s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b, s32 a) {
     gSPDisplayList(gDisplayListHead++, D_80060A00);
     gDPSetPrimColor(gDisplayListHead++, 0, 0, r, g, b, a);
     gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x + w) << 2, (y + h) << 2, G_TX_RENDERTILE, 0, 0, 0x1000, 0x0400);
@@ -369,7 +389,7 @@ s32 func_8001AFB0(Gfx** arg0, s16 x, s16 y, s16 arg3, s16 arg4, u16 chr) {
 /**
  * Builds a small display list in freshly allocated display-list memory:
  * lighting is switched off, textures are enabled with full scale, a two-cycle
- * combiner (TEXEL0 * ENVIRONMENT) is selected, the environment colour is set
+ * combiner (TEXEL0 * ENVIRONMENT) is selected, the environment color is set
  * to arg1, the caller's display list
  * arg0 is called, and lighting is switched back on.
  *
@@ -404,7 +424,14 @@ typedef struct Font8001B32C {
     s8 spacing;
 } Font8001B32C;
 
-s32 func_8001B32C(s32 x, s32 scale, const char* str) {
+/**
+ * Returns the x position at which `str` starts when centered on x, using the
+ * current font's glyph width, spacing and the scale (percent).
+ * Seen in play (2026-11-13) ran during the VS intro (トレーナー 1P vs トレーナー COM) (Free Battle, L1-30
+ * rules, six L30 rentals vs COM); also in an ordinary Free Battle.
+ * @unverified Name and comment guessed from the code.
+ */
+s32 Font_GetCenteredStartX(s32 x, s32 scale, const char* str) {
     s32 width;
     Font8001B32C* font = (Font8001B32C*)D_800AD200;
 
@@ -415,7 +442,7 @@ s32 func_8001B32C(s32 x, s32 scale, const char* str) {
 
 Gfx* func_8001B3AC(s16 x, s16 y, s16 arg2, s16 arg3, Color_RGBA8_u32 color, const char* fmt, ...) {
     u8 buf[0x100];
-    UNUSED s32 pad[2];
+    UNUSED s32 pad[2]; // FAKE: stack padding
     s32 startX;
     Gfx* dl;
     s32 len;
@@ -436,7 +463,7 @@ Gfx* func_8001B3AC(s16 x, s16 y, s16 arg2, s16 arg3, Color_RGBA8_u32 color, cons
                 x = startX;
                 y -= ((u8)((FontEntry8001A118*)D_800AD200)[M2C_FIELD(D_800AD200, u8*, 0x38)].size_b * ((arg3 * 0xB) / 10)) / 100;
             } else if (chr == 9) {
-                x = func_8001B32C(x, arg2, (const char*)p);
+                x = Font_GetCenteredStartX(x, arg2, (const char*)p);
             } else {
                 if (chr >= 0x80) {
                     if (*p != 0) {

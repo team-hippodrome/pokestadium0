@@ -5,6 +5,10 @@
 
 void Audio_CopyDataWithCacheSync(s32 arg0, void* arg1, s32 arg2);
 
+/**
+ * Invalidates the instruction and data caches over a range after audio data
+ * was copied.
+ */
 void Audio_CopyDataWithCacheSync(s32 arg0, void* arg1, s32 arg2) {
     osInvalICache(arg1, arg2);
     osInvalDCache(arg1, arg2);

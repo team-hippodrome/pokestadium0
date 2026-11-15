@@ -9,6 +9,13 @@ extern Controller* D_800AB030;
 
 void Input_ResetRepeatState(void);
 
+/**
+ * Empty input-repeat initialization hook.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the main menu, the Pokédex,
+ * the party screen, the Lab list, Lab sort, registration, the Lab PC, Free Battle setup, the battle
+ * opening, a switch in battle, running from battle and a Pound turn.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
 void Input_ResetRepeatState(void) {
 }
 
@@ -27,6 +34,7 @@ void func_8001B5F8(s32 x1, s32 y1, s32 width, s32 height, s32 mode) {
 
 void func_8001B5F8(s32, s32, s32, s32, s32);
 
+/** Draws an RGBA32 texture as a rectangle. */
 void Gfx_DrawTextureRgba32(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 texture_spread_x_mode) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, G_IM_FMT_RGBA, G_IM_SIZ_32b, load_width, height, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -35,6 +43,7 @@ void Gfx_DrawTextureRgba32(s32 x1, s32 y1, s32 draw_width, s32 height, u8* textu
     func_8001B5F8(x1, y1, draw_width, height, texture_spread_x_mode);
 }
 
+/** Draws an RGBA16 texture as a rectangle. */
 void Gfx_DrawTextureRgba16(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 texture_spread_x_mode) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, G_IM_FMT_RGBA, G_IM_SIZ_16b, load_width, height, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -43,30 +52,33 @@ void Gfx_DrawTextureRgba16(s32 x1, s32 y1, s32 draw_width, s32 height, u8* textu
     func_8001B5F8(x1, y1, draw_width, height, texture_spread_x_mode);
 }
 
-void func_8000A610(s32, s32, s32, s32, s32, s32, s32);
+void Gfx_DrawTexturedRect(s32, s32, s32, s32, s32, s32, s32);
 void func_8001BA54(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 mode) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, G_IM_FMT_RGBA, G_IM_SIZ_16b, load_width, height, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
     if (mode == G_CYC_COPY) {
-        func_8000A610(x1, y1, x1 + draw_width - 1, y1 + height - 1, 0x1000, 0x400, mode);
+        Gfx_DrawTexturedRect(x1, y1, x1 + draw_width - 1, y1 + height - 1, 0x1000, 0x400, mode);
     } else {
-        func_8000A610(x1, y1, x1 + draw_width - 1, y1 + height - 1, 0x400, 0x400, mode);
+        Gfx_DrawTexturedRect(x1, y1, x1 + draw_width - 1, y1 + height - 1, 0x400, 0x400, mode);
     }
 }
 
+/** Draws an IA8 texture as a rectangle. */
 void Gfx_DrawTextureIa8(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 texture_spread_x_mode) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, load_width, height, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     func_8001B5F8(x1, y1, draw_width, height, texture_spread_x_mode);
 }
 
+/** Draws an IA16 texture as a rectangle. */
 void Gfx_DrawTextureIa16(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 texture_spread_x_mode) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, G_IM_FMT_IA, G_IM_SIZ_16b, load_width, height, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
     func_8001B5F8(x1, y1, draw_width, height, texture_spread_x_mode);
 }
 
+/** Draws an I4 texture as a rectangle. */
 void Gfx_DrawTextureI4(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 texture_spread_x_mode) {
     gDPLoadTextureBlock_4b(gDisplayListHead++, texture, G_IM_FMT_I, load_width, height, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                            G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -74,6 +86,7 @@ void Gfx_DrawTextureI4(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, 
     func_8001B5F8(x1, y1, draw_width, height, texture_spread_x_mode);
 }
 
+/** Draws an I8 texture as a rectangle. */
 void Gfx_DrawTextureI8(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 texture_spread_x_mode) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, G_IM_FMT_I, G_IM_SIZ_8b, load_width, height, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -81,6 +94,7 @@ void Gfx_DrawTextureI8(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, 
     func_8001B5F8(x1, y1, draw_width, height, texture_spread_x_mode);
 }
 
+/** Draws an I16 texture as a rectangle. */
 void Gfx_DrawTextureI16(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 texture_spread_x_mode) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, G_IM_FMT_I, G_IM_SIZ_16b, load_width, height, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
@@ -89,6 +103,7 @@ void Gfx_DrawTextureI16(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture,
 }
 
 
+/** Draws an RGBA16 texture combined with an IA8 texture as a rectangle. */
 void Gfx_DrawTextureRgba16Ia8(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, u8* texture_multi, s32 load_width, s32 texture_x_spread_mode) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, G_IM_FMT_RGBA, G_IM_SIZ_16b, load_width, height, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
@@ -140,7 +155,7 @@ void func_8001CE20(s32 x, s32 y, s32 width, s32 height) {
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
     if (x % 128 != 0) {
-        UNUSED s32 pad;
+        UNUSED s32 pad; // FAKE: stack padding
         n = 128 - x % 128;
         gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x + n) << 2, (y + height) << 2, G_TX_RENDERTILE,
                             (x % 128) << 5, 0, 0x400, 0x400);
@@ -160,7 +175,7 @@ void func_8001CE20(s32 x, s32 y, s32 width, s32 height) {
 }
 
 void func_8001D148(s32 x, s32 y, s32 width, s32 height, s32 r, s32 g, s32 b) {
-    UNUSED s32 pad[7];
+    UNUSED s32 pad[7]; // FAKE: stack padding
     s32 s;
     s32 n;
 

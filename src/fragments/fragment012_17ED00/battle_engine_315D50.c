@@ -13,12 +13,7 @@
 #include "cry.h"
 #include "matrix.h"
 #include "math_util.h"
-typedef struct unk_D_84392040 {
-    /* 0x00 */ char unk00[0xC];
-    /* 0x0C */ f32 unk_0C;
-    /* 0x10 */ f32 unk_10;
-    /* 0x14 */ char unk14[0x4];
-} unk_D_84392040;
+#include "fragments/fragment012_17ED00/battle_engine_315D50_types.h"
 #include "prevent_bss_reordering.h"
 extern s32 gBattleAnimFrameCounter;
 extern s32 gBattleAnimSpawnDelay;
@@ -394,14 +389,31 @@ void BattleAnim_PlaySoundEffect1(void);
 void BattleAnim_PlaySoundEffect2(void);
 void BattleAnim_PlaySoundEffect3(void);
 
+/**
+ * Plays the menu scroll sound.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_PlaySoundEffect1(void) {
     Audio_PlaySoundEffectById(SFX_MENU_SCROLL);
 }
 
+/**
+ * Plays the menu confirm sound.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_PlaySoundEffect2(void) {
     Audio_PlaySoundEffectById(SFX_MENU_CONFIRM);
 }
 
+/**
+ * Plays the menu back sound.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name guessed from the code.
+ */
 void BattleAnim_PlaySoundEffect3(void) {
     Audio_PlaySoundEffectById(SFX_MENU_BACK);
 }
@@ -427,19 +439,29 @@ void func_82134DC8(s32 arg0) {
 /*
  * func_82134DEC
  *
- * Calls func_8003F96C(arg0, 2) with arg0 taken as a signed 16-bit value
+ * Calls Audio_PlayCry(arg0, 2) with arg0 taken as a signed 16-bit value
  * (sign-extended before the call).  The `* 1` is there on purpose: it makes
  * IDO emit the separate shift pair (sll 16 / sra 16) the retail code has
  * instead of folding it into the argument register.
  */
-void func_8003F96C(s32, s32);
+void Audio_PlayCry(s32, s32);
+/**
+ * Plays the cry of species arg0 with mode 2.
+ */
 void func_82134DEC(s16 arg0) {
-    func_8003F96C(arg0 * 1, 2);
+    Audio_PlayCry(arg0 * 1, 2); // FAKE: no-op * 1
 }
 
 extern f32 D_FLT_82189360[][4];
 
-void func_82134E18(ActivePokemon* active_pokemon) {
+/**
+ * Plays the landing sound for the Pokemon's size: audio command 6 for size 25 and up, 7 for 12.5
+ * and up, else 8. The size comes from the per-species float table D_FLT_82189360.
+ * Player sweep: reached only by Self-Destruct and Explosion.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Self-Destruct, Explosion.
+ */
+void ActivePokemon_PlayLandingSoundBySize(ActivePokemon* active_pokemon) {
     s16 idx = active_pokemon->displayObject.objectType - 1;
     f32 height = D_FLT_82189360[idx][0];
 
@@ -452,6 +474,12 @@ void func_82134E18(ActivePokemon* active_pokemon) {
     }
 }
 
+/**
+ * Sends the battle audio command sequence_id for the known sequences; sequence 0x32 is the
+ * Pokémon's cry and passes its species.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (24 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleAnim_PlayBattleSequenceById(ActivePokemon* active_pokemon, s32 sequence_id) {
     s16 species = active_pokemon->displayObject.objectType;
 
@@ -494,13 +522,13 @@ s32 func_82107A5C(s8*);
  * audio calls, but that is a guess).
  */
 void func_82134FD0(ActivePokemon* arg0) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     BattleMon* mon = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
 
-    func_80041940(func_82107A5C(arg0), mon->hp, mon->unk_26);
+    func_80041940(func_82107A5C(arg0), mon->hp, mon->maxHp);
     if (arg0->displayObject.objectType != 0x98) {
         if ((mon->statusCondition & 7) || (mon->statusCondition & 0x20) ||
-            (sBattleScene.scene->unk_48 == 0x1F) || (sBattleScene.scene->unk_48 == 0x1B)) {
+            (sBattleScene.scene->moveEffectKind == 0x1F) || (sBattleScene.scene->moveEffectKind == 0x1B)) {
             func_80042508(func_82107A5C(arg0) | 0x10);
         } else {
             func_80042508(func_82107A5C(arg0));
@@ -524,6 +552,6 @@ void func_82135098(ActivePokemon* arg0) {
 
     if (arg0->displayObject.objectType != 152) {
         side = func_82107A5C(arg0);
-        func_80041940(side, arg0->state.runtime.unk_0C, mon->unk_26, arg0);
+        func_80041940(side, arg0->state.runtime.hp, mon->maxHp, arg0);
     }
 }

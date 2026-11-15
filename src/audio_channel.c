@@ -15,10 +15,12 @@
 void Audio_SetMonoOutput(s32 arg0);
 void Audio_IsSoundPlayingWrapper(s32 arg0);
 
+/** Sets mono or stereo audio output. */
 void Audio_SetMonoOutput(s32 arg0) {
     Audio_QueueSetMonoOutputCommand(arg0);
 }
 
+/** Wrapper that checks whether a sound is playing. */
 void Audio_IsSoundPlayingWrapper(s32 arg0) {
     Audio_IsSoundPlaying(arg0);
 }

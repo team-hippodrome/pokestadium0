@@ -25,10 +25,7 @@
 #include "audio_sound_state.h"
 #include "audio_channel.h"
 #include "audio_loop_point.h"
-typedef struct unk_D_800A8480 {
-  /* 0x0000 */ OSThread thread;
-  /* 0x01B0 */ char unk01B0[0x2030];
-} unk_D_800A8480;
+#include "33FE0_types_2.h"
 extern s32 D_800AAE30;
 extern s32 D_800AAF3C;
 
@@ -46,6 +43,7 @@ s32 Save_IsTypedRecordFlagSet(s32 arg0, s32 arg1, s16 arg2);
 void Save_CommitTypedRecord(s32 arg0, s32 arg1);
 void Save_ClearTypedRecord(s32 arg0, s32 arg1);
 
+/** Computes the checksum of a save record. */
 u16 Save_Checksum(u8* arg0, s32 arg1) {
     u16 var_v1 = 0;
 
@@ -55,6 +53,7 @@ u16 Save_Checksum(u8* arg0, s32 arg1) {
     return var_v1;
 }
 
+/** Returns whether a save record's checksum is valid. */
 s32 Save_RecordIsValid(u8* arg0, s32 arg1) {
     u16* temp_v1 = arg1 + arg0;
 
@@ -75,6 +74,7 @@ s32 Save_RecordIsValid(u8* arg0, s32 arg1) {
     return 1;
 }
 
+/** Writes the footer of a save record. */
 void Save_WriteFooter(u8* arg0, s32 arg1, s32 arg2) {
     u16* temp_v1;
 
@@ -118,7 +118,7 @@ void func_80023890(s32 arg0, s32 arg1, s32 arg2) {
  * 1.  What func_80003774 does with them (the offset and doubled size suggest
  * a write of both copies out to the save medium) is not established here.
  *
- * Callers such as func_8002404C pass a third argument that this function
+ * Callers such as Save_CommitTypedRecord pass a third argument that this function
  * ignores, so the prototype is left unspecified at the call sites and the
  * definition is written in K&R style.  The unused pad[2] only reproduces the
  * retail stack frame.
@@ -149,7 +149,7 @@ void func_800238D8(arg0, arg1)
  * func_80003774 is called with the record address, its offset from the start
  * of the buffer at D_800AE8E0, twice the size and 1.  Unlike func_800238D8
  * the flag bit is left set.  `arg0` is the record address and `arg1` its size.
- * A third argument passed by func_80024170 is ignored; the definition is K&R
+ * A third argument passed by Save_InvalidateTypedRecord is ignored; the definition is K&R
  * style for that reason, and the unused pad[2] reproduces the retail stack
  * frame.
  */
@@ -200,7 +200,7 @@ void func_800239F0(arg0)
 s32 func_800237AC(s32, s32);
 void func_800245E0(s32, s32);
 void func_80023A20(s32 arg0, s32 arg1) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 size;
     s32 primary;
     s32 backup;
@@ -306,6 +306,7 @@ s32 func_80023C30(void)
   return D_8006BBA0;
 }
 
+/** Returns the number of free voices. */
 s32 Audio_GetFreeVoiceCount(void) {
     return mus_free_voices_count;
 }
@@ -329,7 +330,13 @@ void func_80023D3C(s32 arg0, s32 arg1) {
     func_8001FB10(arg0 + 0x40, sp24);
 }
 
-void func_80023DB8(s32 arg0, s32 arg1) {
+/**
+ * Packs a BattleMon into a GB-format save record with its transcoded name and trainer data.
+ * Seen in play (2026-11-13) ran when the party was registered into slot 01 and again into slot 02
+ * (とうろく > ポケモンをとうろくする, はい).
+ * @unverified Name and comment guessed from the code.
+ */
+void BattleMon_ToGbSaveRecord(s32 arg0, s32 arg1) {
     M2C_FIELD(arg0, u8*, 4) = M2C_FIELD(arg0, u8*, 0x24);
     Pokemon_ToGbRecord((BattleMon*)arg0, (GbPokemonRecord*)arg1);
     Text_TranscodeName((char*)(arg1 + 0x21), (char*)(arg0 + 0x30));
@@ -337,7 +344,12 @@ void func_80023DB8(s32 arg0, s32 arg1) {
     func_80058410(arg0 + 0x4D, arg1 + 0x2A, 3);
 }
 
-s32 func_80023E28(arg0, arg1, arg2)
+/**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Lab list, registration,
+ * the Lab PC and Free Battle setup.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Save_IsTypedRecordFlagSet(arg0, arg1, arg2)
     s32 arg0;
     s32 arg1;
     s16 arg2;
@@ -397,7 +409,12 @@ void func_80024044(void) {
 }
 
 void func_800238D8(); // Called with two or three arguments.
-void func_8002404C(s32 arg0, s32 arg1) {
+/**
+ * Seen in play (2026-11-13) ran when quitting the GB player (C-Up menu, Quit game, Yes) back to the
+ * main menu.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Save_CommitTypedRecord(s32 arg0, s32 arg1) {
     switch (arg0) {
     case 16:
         func_800238D8((*(s32 *)&D_800AE8E0) + (arg1 * 0x250), 0x128, arg1);
@@ -423,7 +440,12 @@ void func_8002404C(s32 arg0, s32 arg1) {
 }
 
 void func_80023954(); // Called with three arguments; the third is ignored.
-void func_80024170(s32 arg0, s32 arg1) {
+/**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Save_InvalidateTypedRecord(s32 arg0, s32 arg1) {
     switch (arg0) {
     case 16:
         func_80023954((*(s32 *)&D_800AE8E0) + (arg1 * 0x250), 0x128, arg1);
@@ -486,7 +508,12 @@ void func_800243B8(void) {
     func_800238D8(*(s32*)&D_800AE8E0 + 0x5700, 0x11A0);
 }
 
-void func_80024470(s32 arg0, s32 arg1) {
+/**
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Save_ClearTypedRecord(s32 arg0, s32 arg1) {
     switch (arg0) {
     case 16: {
         SaveRecA80023F38* rec = &(*(Save80023F38**)&D_800AE8E0)->a[arg1];
@@ -526,12 +553,18 @@ void func_80024470(s32 arg0, s32 arg1) {
     }
 }
 
+/** Clears a typed save record and commits it. */
 void Save_ResetAndCommitTypedRecord(s32 arg0, s32 arg1) {
     Save_ClearTypedRecord(arg0, arg1);
     Save_CommitTypedRecord(arg0, arg1);
 }
 
-s32 func_80024610(s32 arg0) {
+/**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Lab list, Lab sort and the
+ * Lab PC.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Deck_GetSaveRecordCapacity(s32 arg0) {
     s32 ret = 0;
 
     switch (arg0) {
@@ -555,7 +588,12 @@ s32 func_80024610(s32 arg0) {
     return ret;
 }
 
-s32 func_8002465C(s32 arg0) {
+/**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Lab list, Lab sort and the
+ * Lab PC.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Deck_GetSaveRecordSize(s32 arg0) {
     s32 ret = 0;
 
     switch (arg0) {
@@ -575,12 +613,18 @@ s32 func_8002465C(s32 arg0) {
     return ret;
 }
 
+/** Returns whether a deck entry exists in the save data. */
 s32 Deck_IsSaveEntryPresent(s32 arg0, s32 arg1) {
     return Save_IsTypedRecordFlagSet(arg0, arg1, 1);
 }
 
 s32 func_800246A8(s32, s32);
-s32 func_800246C8(s32 arg0, s32 arg1) {
+/**
+ * Seen in play (2026-11-13) ran when slot 01 was picked in とうろく > とうろくしたポケモンをけす, before the
+ * このポケモンをけす？ prompt.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+s32 Deck_GetSaveEntryTrainerId(s32 arg0, s32 arg1) {
     s32 ret = -1;
 
     if (func_800246A8(arg0, arg1) != 0) {
@@ -600,7 +644,8 @@ s32 func_800246C8(s32 arg0, s32 arg1) {
 }
 
 s32 func_800246A8(s32, s32);
-s32 func_8002479C(s32 arg0, s32 arg1, u8* arg2) {
+/** Copies the name of a deck entry from the save data. */
+s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2) {
     s32 ret = 0;
     s32 src;
 
@@ -648,7 +693,8 @@ s32 func_8002488C(s32 arg0, s32 arg1, u8* arg2) {
     return ret;
 }
 
-void func_80024954(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
+/** Sets the trainer ID and name of a deck entry in the save data. */
+void Deck_SetSaveEntryTrainerIdAndName(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
     switch (arg0) {
         case 16: {
             s8* rec = (s8*)&(*(Save80023F38**)&D_800AE8E0)->a[arg1];
@@ -716,7 +762,12 @@ s32 func_80024ADC(arg0, arg1) s32 arg0; s32 arg1; {
 M2C_UNK func_80023F38(s32, s32, M2C_UNK);           /* extern */
 s32 func_80024ADC();                                /* extern */
 
-void func_80024B90(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Seen in play (2026-11-13) ran when the party was registered into slot 01 and again into slot 02
+ * (とうろく > ポケモンをとうろくする, はい).
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void Deck_SetSaveEntryCount(s32 arg0, s32 arg1, s32 arg2) {
     if (arg2 < func_80024ADC()) {
         switch (arg0) {                             /* irregular */
         case 16:
@@ -737,14 +788,14 @@ void func_80024B90(s32 arg0, s32 arg1, s32 arg2) {
 }
 
 M2C_UNK func_80023F38(s32, s32, M2C_UNK);           /* extern */
-s32 func_80024610(s32);                             /* extern */
+s32 Deck_GetSaveRecordCapacity(s32);                             /* extern */
 s32 func_80024ADC();                                /* extern */
 
 void func_80024C80(s32 arg0, s32 arg1) {
     s32 sp1C;
 
     sp1C = func_80024ADC();
-    if (sp1C < func_80024610(arg0)) {
+    if (sp1C < Deck_GetSaveRecordCapacity(arg0)) {
         switch (arg0) {                             /* irregular */
         case 16:
             M2C_FIELD((D_800AE8E0 + (arg1 * 0x250)), s16 *, 0x12) = (s16) (sp1C + 1);
@@ -764,7 +815,8 @@ void func_80024C80(s32 arg0, s32 arg1) {
 }
 
 typedef struct { u8 a; u8 b; } Pair80024D88;
-s32 func_80024D88(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
+/** Reads a deck entry from the save data. */
+s32 Deck_ReadSaveEntry(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     s32 ret = 0;
 
     if (arg2 < func_80024ADC()) {
@@ -787,21 +839,22 @@ s32 func_80024D88(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     return ret;
 }
 
-s32 func_80024F14(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
+/** Writes a typed record to the save data, up to its capacity. */
+s32 Save_WriteTypedRecord(s32 arg0, s32 arg1, s32 arg2, u8* arg3) {
     s32 ret = 0;
-    s32 max = func_80024610(arg0);
+    s32 max = Deck_GetSaveRecordCapacity(arg0);
     s32 count = func_80024ADC(arg0, arg1);
 
     if ((arg2 < count) || ((arg2 == count) && (arg2 < max))) {
         switch (arg0) {
             case 16:
-                func_80023DB8((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->a[arg1] + arg2 * 0x2D + 0x14));
+                BattleMon_ToGbSaveRecord((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->a[arg1] + arg2 * 0x2D + 0x14));
                 break;
             case 17:
-                func_80023DB8((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->b[arg1] + arg2 * 0x2D + 0x14));
+                BattleMon_ToGbSaveRecord((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->b[arg1] + arg2 * 0x2D + 0x14));
                 break;
             case 19:
-                func_80023DB8((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->d + arg2 * 0x2D + 4));
+                BattleMon_ToGbSaveRecord((s32)arg3, (s32)((u8*)&(*(Save80023F38**)&D_800AE8E0)->d + arg2 * 0x2D + 4));
                 break;
             case 18:
                 ((Pair80024D88*)((u8*)&(*(Save80023F38**)&D_800AE8E0)->c[arg1] + 0xC))[arg2] = *(Pair80024D88*)arg3;
@@ -843,16 +896,23 @@ s32 func_80025168(s8 arg0) {
     return 1;
 }
 
-//@unverified
 /**
- * Returns the big-endian 16-bit value at +0x7A48 of the save buffer (the
- * value func_800251C8 stores).
+ * Returns the 16-bit progress flags at save offset 0x7A48.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name and comment guessed from the code.
  */
-s32 func_800251A8(void) {
-    return ((M2C_FIELD(D_800AE8E0, u8*, 0x7A48) << 8) | M2C_FIELD(D_800AE8E0, u8*, 0x7A49)) & 0xFFFF;
+s32 Save_GetProgressFlags(void) {
+    return ((M2C_FIELD(D_800AE8E0, u8*, 0x7A48) << 8) | M2C_FIELD(D_800AE8E0, u8*, 0x7A49)) & 0xFFFF; // FAKE: decomp slop, raw pointer casts stand in for struct fields
 }
 
-void func_800251C8(u16 arg0) {
+/**
+ * Sets the progress flags at save offset 0x7A48 and writes the block.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name and comment guessed from the code.
+ */
+void Save_SetProgressFlags(u16 arg0) {
     M2C_FIELD(D_800AE8E0, u8 *, 0x7A48) = (arg0 >> 8) & 0xFF;
     M2C_FIELD(D_800AE8E0, u8 *, 0x7A49) = arg0 & 0xFF;
     func_80023F38(0x14, 0, 2);
@@ -880,7 +940,13 @@ typedef struct SaveF80025260 {
     /* 0x11E */ SaveBlob80025260 blob;
     /* 0x280 */ u8 mask;
 } SaveF80025260;
-void func_80025260(SaveName80025260* arg0, SaveBlob80025260* arg1, SaveMon80025260* arg2, s32 arg3) {
+/**
+ * Fills the continue block at save offset 0x7A60 with the name, session and Pokemon data.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name and comment guessed from the code.
+ */
+void Save_WriteContinueData(SaveName80025260* arg0, SaveBlob80025260* arg1, SaveMon80025260* arg2, s32 arg3) {
     SaveF80025260* f;
     s32 i;
 
@@ -892,7 +958,7 @@ void func_80025260(SaveName80025260* arg0, SaveBlob80025260* arg1, SaveMon800252
         f->count = arg3;
         f->mask = 0;
         for (i = 0; i < arg3; i++) {
-            func_80023DB8((s32)&arg2[i], (s32)f->records[i]);
+            BattleMon_ToGbSaveRecord((s32)&arg2[i], (s32)f->records[i]);
             if (arg2[i].unk1 == 1) {
                 f->mask |= 1 << i;
             }
@@ -913,7 +979,13 @@ typedef struct {
 } ContinueBlock7A60;
 typedef struct { u8 unk_00; u8 unk_01; u8 pad[0x4E]; } Mon50;
 
-s16 func_800253BC(Unk12Bytes* arg0, Unk162Bytes* arg1, Mon50* arg2) {
+/**
+ * Reads the continue block at save offset 0x7A60 back; returns -1 when it is empty.
+ * Seen in play (2026-11-13) ran on Start at the title screen and again at the main menu (console
+ * reset, then N64 logo, opening, title and main menu).
+ * @unverified Name and comment guessed from the code.
+ */
+s16 Save_ReadContinueData(Unk12Bytes* arg0, Unk162Bytes* arg1, Mon50* arg2) {
     s16 count = -1;
     ContinueBlock7A60* blk;
     s32 i;

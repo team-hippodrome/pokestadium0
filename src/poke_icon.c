@@ -22,6 +22,7 @@ s32 PokeIcon_CaptureGeoNode(s32, GraphNode*);
 
 s32 PokeIcon_CaptureGeoNode(s32 arg0, GraphNode* arg1);
 
+/** Stores a geo node so the icon renderer can find it. */
 s32 PokeIcon_CaptureGeoNode(s32 arg0, GraphNode* arg1) {
     if (arg0 == 0) {
         D_800AC7A0.unk_A04.unk_0C = arg1;
@@ -29,7 +30,7 @@ s32 PokeIcon_CaptureGeoNode(s32 arg0, GraphNode* arg1) {
     return 0;
 }
 
-s32 func_8000255C();                                /* extern */
+s32 main_pool_get_available(void);                                /* extern */
 s32 func_80002B10(s32, M2C_UNK);                    /* extern */
 M2C_UNK func_80002B60(s32);                         /* extern */
 M2C_UNK func_80010B3C(s32, M2C_UNK, M2C_UNK, s16, s32); /* extern */
@@ -41,7 +42,7 @@ void func_80017F54(s8 *arg0, s16 arg1, s16 arg2) {
     s32 sp24;
     s32 temp_v0;
 
-    temp_v0 = func_80002B10(func_8000255C(), 0);
+    temp_v0 = func_80002B10(main_pool_get_available(), 0);
     sp24 = temp_v0;
     M2C_FIELD(arg0, s8 **, 0xC) = func_80016C70(temp_v0, &D_80060740);
     M2C_FIELD(arg0, s32 *, 0x10) = (s32) D_800AD1B0;
@@ -49,6 +50,7 @@ void func_80017F54(s8 *arg0, s16 arg1, s16 arg2) {
     func_80010B3C(M2C_FIELD(M2C_FIELD(arg0, s8 **, 0xC), s32 *, 0xC), 0, 0, arg1, (s32) arg2);
 }
 
+/** Creates the render list for a Pokemon icon. */
 unk_func_8001A024* PokeIcon_CreateRenderList(ModelLoadContext* arg0, s16 arg1, s16 arg2, s16 arg3) {
     s32 var_s0;
     DepthBuffer* temp_a1;
@@ -115,7 +117,7 @@ void func_80018168(s8 *arg0) {
 
 void func_80018234(unk_func_8001A024* arg0, s32 arg1, s32 arg2, u16 arg3) {
     DepthBuffer* buf;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     if (arg1 < arg0->unk_01) {
         buf = arg0->unk_08[arg1].unk_0C;
@@ -131,20 +133,20 @@ void func_80018234(unk_func_8001A024* arg0, s32 arg1, s32 arg2, u16 arg3) {
     }
 }
 
-void func_80019BDC(arg1_func_80010CA8*);
+void Model_ComputeNicknameColorVariant(arg1_func_80010CA8*);
 void func_8001833C(unk_func_8001A024* arg0, s32 arg1, BattleMon* arg2, u16 arg3) {
     DepthBuffer* buf;
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
 
     if (arg1 < arg0->unk_01) {
         buf = arg0->unk_08[arg1].unk_0C;
         func_8004FD20((s32)buf->img_p, buf->width * buf->height * 2, buf->width, buf->height);
-        if ((arg2->unk_00.unk_00 > 0) && (arg2->unk_00.unk_00 < 0x98)) {
+        if ((arg2->species.id > 0) && (arg2->species.id < 0x98)) {
             arg0->unk_08[arg1].unk_00 = 3;
             arg0->unk_08[arg1].unk_14.ptr = (u8*)arg2;
             arg0->unk_08[arg1].unk_02 = arg3 & 0xFFFE;
-            arg0->unk_08[arg1].unk_08 = *(s16*)&gSpeciesDataById[arg2->unk_00.unk_00 - 1][0x1A] / 100.0f;
-            func_80019BDC(&arg0->unk_08[arg1].unk_10);
+            arg0->unk_08[arg1].unk_08 = *(s16*)&gSpeciesDataById[arg2->species.id - 1][0x1A] / 100.0f;
+            Model_ComputeNicknameColorVariant(&arg0->unk_08[arg1].unk_10);
         } else {
             arg0->unk_08[arg1].unk_00 = 1;
             arg0->unk_08[arg1].unk_02 = arg3 & 0xFFFE;
@@ -155,6 +157,7 @@ void func_8001833C(unk_func_8001A024* arg0, s32 arg1, BattleMon* arg2, u16 arg3)
     }
 }
 
+/** Adjusts the colors of a rendered icon image. */
 void PokeIcon_AdjustImageColors(u8* arg0, arg1_func_80010CA8 arg1) {
     s32 cond;
     u16* pixels = M2C_FIELD(arg0, u16**, 8);
@@ -178,7 +181,12 @@ void PokeIcon_AdjustImageColors(u8* arg0, arg1_func_80010CA8 arg1) {
 }
 
 extern unk_D_8006FF00 D_80064C5C[];
-void func_80018550(unk_func_8001A024* arg0, s32 arg1) {
+/**
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the party screen, registration
+ * and Free Battle setup.
+ * @unverified Name was previously used only by callers of this address; the definition was still func_.
+ */
+void PokeIcon_RenderSlot(unk_func_8001A024* arg0, s32 arg1) {
     Vec3s sp38;
     unk_func_8001A024_008* temp_s1;
     ModelNodeView* sp30;
@@ -209,7 +217,7 @@ void func_80018550(unk_func_8001A024* arg0, s32 arg1) {
     arg0->unk_10->node.renderFlags &= ~0x40;
     arg0->unk_10->node.renderFlags |= 0x80;
     Vec3f_SetComponentsDuplicate(&arg0->unk_10->scale, temp_s1->unk_08, temp_s1->unk_08, temp_s1->unk_08);
-    func_8000533C(&gDisplayListHead, arg0->unk_08[arg1].unk_0C);
+    GfxImage_SetRenderTarget(&gDisplayListHead, arg0->unk_08[arg1].unk_0C);
     GeoRender_AdvanceFrameCounter();
     GeoRender_SetMode(3);
     Geo_RenderRootNode(arg0->unk_0C);
@@ -218,6 +226,7 @@ void func_80018550(unk_func_8001A024* arg0, s32 arg1) {
     Geo_RenderRootNode(arg0->unk_0C);
 }
 
+/** Processes the next pending icon slot. */
 s32 PokeIcon_ProcessNextSlot(unk_func_8001A024* arg0, s32 arg1) {
     s32 i;
     s32 var_v0;
@@ -267,8 +276,9 @@ s32 PokeIcon_ProcessNextSlot(unk_func_8001A024* arg0, s32 arg1) {
     return sp24;
 }
 
+/** Processes every pending icon slot. */
 s32 PokeIcon_ProcessAllSlots(unk_func_8001A024* arg0, s32 arg1) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     arg1_func_80010CA8 sp48;
     s32 sp44;
     s32 var_s1;
@@ -282,7 +292,7 @@ s32 PokeIcon_ProcessAllSlots(unk_func_8001A024* arg0, s32 arg1) {
         temp_s0 = &arg0->unk_08[arg0->unk_03];
         if (temp_s0->unk_00 & 4) {
             while (Display_IsFrameReady() == 0) {}
-            PokeIcon_AdjustImageColorBuffer(temp_s0->unk_0C, temp_s0->unk_10);
+            PokeIcon_AdjustImageColors(temp_s0->unk_0C, temp_s0->unk_10);
             temp_s0->unk_00 &= ~4;
         }
     }
@@ -325,6 +335,7 @@ s32 PokeIcon_ProcessAllSlots(unk_func_8001A024* arg0, s32 arg1) {
     return sp44;
 }
 
+/** Renders the next icon slot and waits for it to finish. */
 s32 PokeIcon_RenderNextSlotBlocking(unk_func_8001A024* arg0, s32 arg1) {
     s32 i;
     s32 var_a2;
@@ -367,6 +378,7 @@ s32 PokeIcon_RenderNextSlotBlocking(unk_func_8001A024* arg0, s32 arg1) {
     return var_a2;
 }
 
+/** Redraws an icon slot. */
 void PokeIcon_RedrawSlot(unk_func_8001A024* arg0, s32 arg1) {
     s32 i;
 
@@ -387,7 +399,8 @@ void PokeIcon_RedrawSlot(unk_func_8001A024* arg0, s32 arg1) {
     }
 }
 
-s32 func_80018DEC(s8 *arg0, s32 arg1) {
+/** Returns the rendered image of an icon slot. */
+s32 PokeIcon_GetImage(s8 *arg0, s32 arg1) {
     s32 var_v1;
 
     var_v1 = 0;
@@ -397,6 +410,7 @@ s32 func_80018DEC(s8 *arg0, s32 arg1) {
     return var_v1;
 }
 
+/** Returns whether every icon slot is idle. */
 s32 PokeIcon_AreSlotsIdle(unk_func_8001A024* arg0) {
     s32 i;
 

@@ -27,6 +27,7 @@ s32 func_800193EC(Vec3s* arg0);
 void PokeIcon_AdvancePreviewMotion(unk_func_8001B1FC* arg0);
 void PokeIcon_UpdatePreview(unk_func_8001B1FC* arg0);
 
+/** Stores a geo node so the preview renderer can find it. */
 s32 PokeIcon_CapturePreviewGeoNode(s32 arg0, GraphNode* arg1) {
     if (arg0 == 0) {
         D_800AD1C0 = arg1;
@@ -34,6 +35,7 @@ s32 PokeIcon_CapturePreviewGeoNode(s32 arg0, GraphNode* arg1) {
     return 0;
 }
 
+/** Initializes the preview scene of a Pokemon model. */
 void PokeIcon_InitPreviewScene(unk_func_8001B1FC* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
     static u32 D_8006F3E0[] = {
         0x0C00FFFF, 0x05000000, 0x0B00001E, 0x00000000, 0x010000E0, 0x00000000,
@@ -54,6 +56,10 @@ void PokeIcon_InitPreviewScene(unk_func_8001B1FC* arg0, s16 arg1, s16 arg2, s16 
     GeoCamera_SetPerspective(arg0->unk_20->children, 30.0f, 100.0f, 12800.0f);
 }
 
+/**
+ * Allocates a Pokémon model preview of arg1 x arg2 pixels with its own color and depth
+ * images, then sets up its preview scene.
+ */
 unk_func_8001B1FC* PokeIcon_CreateModelPreview(ModelLoadContext* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5,
                                  s16 arg6, u8* arg7) {
     unk_func_8001B1FC* temp_v0 = main_pool_alloc(sizeof(unk_func_8001B1FC), 0);
@@ -77,18 +83,19 @@ unk_func_8001B1FC* PokeIcon_CreateModelPreview(ModelLoadContext* arg0, s16 arg1,
 
 extern unk_D_8006FF00 D_80064C5C[];
 
+/** Sets the Pokemon shown in the preview. */
 void PokeIcon_SetPreviewMon(unk_func_8001B1FC* arg0, BattleMon* arg1, u16 arg2) {
     arg1_func_80010CA8 sp2C;
-    s16 tmp1 = (s16)(D_80064C5C[arg1->unk_00.unk_00 - 1].unk_14 >> 0x10) >> 5;
-    s16 tmp2 = (s16)(D_80064C5C[arg1->unk_00.unk_00 - 1].unk_14 >> 5) >> 6;
-    s16 tmp3 = (s16)(D_80064C5C[arg1->unk_00.unk_00 - 1].unk_14 << 5) >> 5;
+    s16 tmp1 = (s16)(D_80064C5C[arg1->species.id - 1].unk_14 >> 0x10) >> 5;
+    s16 tmp2 = (s16)(D_80064C5C[arg1->species.id - 1].unk_14 >> 5) >> 6;
+    s16 tmp3 = (s16)(D_80064C5C[arg1->species.id - 1].unk_14 << 5) >> 5;
 
     arg0->unk_00 |= 1;
     arg0->unk_14 = arg1;
     arg0->unk_12 = 0x100;
     arg0->unk_10 = 0;
     arg0->unk_02 = arg2;
-    arg0->unk_18 = D_80064C5C[arg1->unk_00.unk_00 - 1].unk_02 / 100.0f;
+    arg0->unk_18 = D_80064C5C[arg1->species.id - 1].unk_02 / 100.0f;
 
     arg0->unk_24->position.x = tmp1;
     arg0->unk_24->position.y = tmp2;
@@ -96,10 +103,10 @@ void PokeIcon_SetPreviewMon(unk_func_8001B1FC* arg0, BattleMon* arg1, u16 arg2) 
 
     arg0->unk_24->rotation = D_8006045C;
     Model_ComputeSizeVariant(&sp2C, arg1);
-    PokeIcon_RequestFrameLoad(arg0->unk_1C, arg1->unk_00.unk_00, sp2C);
+    PokeIcon_RequestFrameLoad(arg0->unk_1C, arg1->species.id, sp2C);
     PokeIcon_WaitFrameLoad(arg0->unk_1C);
     ModelRenderer_ClearDisplayObject(arg0->unk_24);
-    Model_InitDisplayObject(arg0->unk_24, 0, arg1->unk_00.unk_00, arg0->unk_1C->loadedModel->modelRoot->unk_00[0]);
+    Model_InitDisplayObject(arg0->unk_24, 0, arg1->species.id, arg0->unk_1C->loadedModel->modelRoot->unk_00[0]);
     ModelAnim_SetAnimation(arg0->unk_24, 1);
     arg0->unk_24->node.renderFlags &= ~0x40;
     arg0->unk_24->node.renderFlags |= 0x80;
@@ -107,6 +114,7 @@ void PokeIcon_SetPreviewMon(unk_func_8001B1FC* arg0, BattleMon* arg1, u16 arg2) 
 
 extern unk_D_8006FF00 D_80064C5C[];
 
+/** Sets the species shown in the preview. */
 void PokeIcon_SetPreviewSpecies(unk_func_8001B1FC* arg0, s32 arg1, u16 arg2) {
     arg1_func_80010CA8 sp34;
     s16 tmp1 = (s16)(D_80064C5C[arg1 - 1].unk_14 >> 0x10) >> 5;
@@ -135,6 +143,7 @@ void PokeIcon_SetPreviewSpecies(unk_func_8001B1FC* arg0, s32 arg1, u16 arg2) {
     arg0->unk_24->node.renderFlags |= 0x80;
 }
 
+/** Handles the controller input that rotates the preview. */
 s32 PokeIcon_HandlePreviewInput(Vec3s* arg0) {
     s32 var_v1 = 0;
 
@@ -165,6 +174,7 @@ s32 func_800193EC(Vec3s* arg0) {
     return 0;
 }
 
+/** Advances the preview model's rotation. */
 void PokeIcon_AdvancePreviewMotion(unk_func_8001B1FC* arg0) {
     s32 var_a0;
     Vec3s* sp18 = &arg0->unk_24->rotation;
@@ -194,6 +204,7 @@ void PokeIcon_AdvancePreviewMotion(unk_func_8001B1FC* arg0) {
     sp18->x = Math_StepToS(sp18->x, 0, var_a2);
 }
 
+/** Updates the preview scene for the frame. */
 void PokeIcon_UpdatePreview(unk_func_8001B1FC* arg0) {
     f32 temp_fv0;
     s16 temp_v0_2;
@@ -222,6 +233,7 @@ void PokeIcon_UpdatePreview(unk_func_8001B1FC* arg0) {
     Vec3f_SetComponentsDuplicate(&D_800AD1C0->scale, arg0->unk_18, arg0->unk_18, arg0->unk_18);
 }
 
+/** Draws the preview scene. */
 void PokeIcon_DrawPreview(unk_func_8001B1FC* arg0) {
     s32 var_v0;
     s32 var_s2;
@@ -260,6 +272,7 @@ void func_80019564();
 extern char D_80079A60[];
 extern char D_80079A70[];
 
+/** Updates the preview and renders it to its render target. */
 u8* PokeIcon_RenderPreview(unk_func_8001B1FC* arg0) {
     PokeIcon_UpdatePreview(arg0);
     GfxImage_SetRenderTarget(&gDisplayListHead, arg0->unk_28);

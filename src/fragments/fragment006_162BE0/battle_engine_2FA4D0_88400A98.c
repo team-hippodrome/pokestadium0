@@ -73,7 +73,7 @@ void func_88400CE8(s32 arg0) {
         func_88400A1C(0x1E, 0x20, 0x104, 0x34);
         func_8001AB6C();
         func_8001A384(4, -1);
-        func_8001AB2C(0x14);
+        Font_SetLineHeight(0x14);
         func_8001A944(0x2E, 0x28, arg0);
         func_88400C48(0x104, 0x3C);
         func_8001ABBC();
@@ -114,7 +114,7 @@ void func_88400F4C(void) {
     func_80006828(0x73, &func_88400108);
     M2C_FIELD(&D_884034E0, u8 *, 2) = (u8) (M2C_FIELD(&D_884034E0, u8 *, 2) & 0xFFDF);
     func_88400A98();
-    func_800407B0(0x51, 0, 0);
+    Audio_PlayCommand(0x51, 0, 0);
     if (D_800AF986 & 8) {
         func_88400CE8(D_88402D88);
         func_88400DAC(D_88402D8C);
@@ -140,7 +140,7 @@ void func_88401040(void) {
     s8 sp50[0x3C];
     s32 i = 0;
     s32 rec;
-    s32 pad;
+    s32 pad; // FAKE: stack padding
 
     rec = M2C_FIELD(D_88403370, s32 *, 0xC);
     func_800273E8(sp8C, (s32) &D_88402DB4);
@@ -172,7 +172,7 @@ void func_8840115C(void) {
     s8 sp50[0x3C];
     s32 i = 0;
     s32 rec;
-    s32 pad;
+    s32 pad; // FAKE: stack padding
 
     rec = M2C_FIELD(D_88403370, s32 *, 0xC);
     if (D_800AF986 & 0x18) {
@@ -202,25 +202,32 @@ extern char* D_88402D84;
 extern char D_88403228[];
 extern u8 D_8F4B2B30[];
 extern Gfx D_80060398[];
-s32 func_8840079C(s32);
-void func_88400458(s32, s32, s32);
+s32 TransferPak_MoveCartridgeCursor(s32);
+void TransferPak_DrawStatusScreen(s32, s32, s32);
 
-void func_88401290(void) {
+/**
+ * Draws the cartridge check screen. With a cartridge cursor it shows the four ports' Transfer Pak
+ * status (TransferPak_DrawStatusScreen); without one, the 'no Pokemon cartridge is set' message.
+ * Then it draws the 「オプション」 button with its C-Right icon.
+ * Seen in play: runs every frame on that screen, without a Transfer Pak. The first pass had it as
+ * Options_DrawTitle.
+ */
+void TransferPak_DrawCartridgeCheckScreen(void) {
     Color_RGB8 top = D_88402F94;
     Color_RGB8 bottom = D_88402F98;
 
     if (D_88403358 >= 0) {
-        D_88403358 = func_8840079C(D_88403358);
+        D_88403358 = TransferPak_MoveCartridgeCursor(D_88403358);
         Ui_DrawGradientPanel(0x1E, 0x1E, 0x104, 0x18, &top, &bottom);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(2, -1);
         Font_SetLineHeight(0x10);
         Font_Printf(0x23, 0x24, D_88402D80);
         Font_EndTexturedTextRendering();
-        func_88400458(0, 0x1E, 0x38);
-        func_88400458(1, 0xA2, 0x38);
-        func_88400458(2, 0x1E, 0x80);
-        func_88400458(3, 0xA2, 0x80);
+        TransferPak_DrawStatusScreen(0, 0x1E, 0x38);
+        TransferPak_DrawStatusScreen(1, 0xA2, 0x38);
+        TransferPak_DrawStatusScreen(2, 0x1E, 0x80);
+        TransferPak_DrawStatusScreen(3, 0xA2, 0x80);
     } else {
         Ui_DrawGradientPanel(0x1E, 0x1E, 0x104, 0x4A, &top, &bottom);
         Font_BeginTranslucentTextRendering();
@@ -249,9 +256,13 @@ extern char D_8840327C[];
 extern char D_88403290[];
 extern char D_884032A0[];
 extern u8 D_8F4B2EB0[];
-void func_884014B4(s32 arg0, u8 arg1) {
-    Color_RGB8 sp44 = {0x00, 0x00, 0x32};
-    Color_RGB8 sp40 = {0x00, 0x00, 0xC8};
+/**
+ * Draws the options: ステレオ/モノラル (Stereo/Mono), あり/なし (On/Off), バックアップ (Backup), おわり (End).
+ * Seen in play: draws 「オプション」 with サウンド/じっきょう/バックアップ/おわり; the cursor moves with D-Down.
+ */
+void Options_DrawMenu(s32 arg0, u8 arg1) {
+    Color_RGB8 sp44 = {0x00, 0x00, 0x32}; // #000032
+    Color_RGB8 sp40 = {0x00, 0x00, 0xC8}; // #0000C8
     static char *D_88402FA4[] = {D_88403234, D_88403240};
     static char *D_88402FAC[] = {D_8840324C, D_88403254};
     s32 row;
@@ -279,10 +290,14 @@ void func_884014B4(s32 arg0, u8 arg1) {
     Font_EndTexturedTextRendering();
 }
 
-void func_8840173C(s32 arg0, s32 arg1) {
-    Color_RGB8 sp4C = { 0x00, 0x00, 0x32 };
-    Color_RGB8 sp48 = { 0x00, 0x00, 0xC8 };
-    UNUSED s32 pad;
+/**
+ * ６４のセーブデータをクリアします よろしいですか？ / ほんとうにいいんですね？ (Clear the N64 save data, OK? / Really?) with はい/いいえ.
+ * Seen in play: draws 「64のセーブデータをクリアします よろしいですか？」 with はい / いいえ.
+ */
+void Options_DrawClearSavePrompt(s32 arg0, s32 arg1) {
+    Color_RGB8 sp4C = { 0x00, 0x00, 0x32 }; // #000032
+    Color_RGB8 sp48 = { 0x00, 0x00, 0xC8 }; // #0000C8
+    UNUSED s32 pad; // FAKE: stack padding
     s16 pos[2];
     s32 temp;
 
@@ -328,14 +343,18 @@ void func_8840173C(s32 arg0, s32 arg1) {
     Font_EndTexturedTextRendering();
 }
 
-s32 func_88401970(s32 arg0, s32 arg1, u8 arg2) {
+/**
+ * Loop for the clear-save prompt: Left/Right toggles the choice, A confirms, B cancels (returns No).
+ * Seen in play: A on バックアップ enters it (「64のセーブデータをクリアします よろしいですか？ はい いいえ」); B backs out.
+ */
+s32 Options_RunClearSavePrompt(s32 arg0, s32 arg1, u8 arg2) {
     s32 loop = 1;
     s32 sel = 1;
     s32 buttons;
 
     do {
         func_88400108(0);
-        func_884014B4(arg1, arg2);
+        Options_DrawMenu(arg1, arg2);
         buttons = M2C_FIELD(D_800603C0, u16 *, 8);
         if (buttons & 0x300) {
             func_8003F6AC(1);
@@ -346,7 +365,7 @@ s32 func_88401970(s32 arg0, s32 arg1, u8 arg2) {
             sel = 1;
             loop = 0;
         }
-        func_8840173C(arg0, sel);
+        Options_DrawClearSavePrompt(arg0, sel);
         func_80006780();
     } while (loop);
 
@@ -363,6 +382,7 @@ s32 func_88401970(s32 arg0, s32 arg1, u8 arg2) {
     return loop;
 }
 
+/** Initializes save bank 3. */
 void Save_InitializeBank3(void) {
     s32 i;
 
@@ -384,8 +404,13 @@ void Save_InitializeBank3(void) {
 
 s32 func_80025214(void);
 void func_80025224(u8);
-void func_8002404C(s32, s32);
-void func_88401B40(void) {
+void Save_CommitTypedRecord(s32, s32);
+/**
+ * Loop for the options menu: Up/Down move the cursor through four entries and the chosen settings are saved.
+ * Seen in play: C-Right on the cartridge check screen opens 「オプション」 (サウンド ステレオ, じっきょう あり, バックアップ,
+ * おわり) and enters this.
+ */
+void Options_RunMenu(void) {
     s32 done = 0;
     s32 sel = 0;
     u8 flags = func_80025214();
@@ -416,7 +441,7 @@ void func_88401B40(void) {
                     break;
                 case 2:
                     func_8003F6AC(2);
-                    if (func_88401970(0, sel, flags) != 0 && func_88401970(1, sel, flags) != 0) {
+                    if (Options_RunClearSavePrompt(0, sel, flags) != 0 && Options_RunClearSavePrompt(1, sel, flags) != 0) {
                         flags = 0;
                         Save_InitializeBank3();
                     }
@@ -431,7 +456,7 @@ void func_88401B40(void) {
             func_8003F6AC(3);
         }
         func_88400108(0);
-        func_884014B4(sel, flags);
+        Options_DrawMenu(sel, flags);
         func_80006780();
     } while (done == 0);
     if (done == 1) {
@@ -452,18 +477,25 @@ void func_88401B40(void) {
                 }
             }
             func_80025224(flags);
-            func_8002404C(0x14, 0);
+            Save_CommitTypedRecord(0x14, 0);
         }
     }
 }
 
-s32 func_88401D54(void) {
+/**
+ * Loop of the screen shown after the title: draws it each frame. A (with a cartridge picked)
+ * commits the chosen port and returns 1, B returns 2, and C-Right opens the options menu
+ * (Options_RunMenu).
+ * Seen in play: with no Transfer Pak, the screen read 「ポケモンの カートリッジが セット されていません。…」 with an
+ * 「オプション」 button, and C-Right opened the options menu. The first pass had it as Options_RunTitle.
+ */
+s32 TransferPak_RunCartridgeCheckScreen(void) {
     s32 var_s0;
 
     var_s0 = 0;
     do {
         func_88400108(0);
-        func_88401290();
+        TransferPak_DrawCartridgeCheckScreen();
         func_80006780();
         if (M2C_FIELD(D_800603C0, u16 *, 8) & 0x8000) {
             var_s0 = 1;
@@ -473,7 +505,7 @@ s32 func_88401D54(void) {
             var_s0 = 2;
         } else if (M2C_FIELD(D_800603C0, u16 *, 8) & 1) {
             func_8003F6AC(2);
-            func_88401B40();
+            Options_RunMenu();
         }
     } while (var_s0 == 0);
     if ((var_s0 == 1) && (D_88403358 >= 0)) {
@@ -514,7 +546,7 @@ void func_88401F38(void) {
     func_80010F9C(&D_88403648, 0x2E);
     M2C_FIELD(&D_88403648, u8 *, 2) = (u8) (M2C_FIELD(&D_88403648, u8 *, 2) | 0x20);
     if (D_88403358 >= 0) {
-        func_80019924(&D_88403378, 0, 0, *((M2C_UNK*)((u8*)&D_884037B0 + (sp1F * 4))));
+        Model_InitDisplayObject(&D_88403378, 0, 0, *((M2C_UNK*)((u8*)&D_884037B0 + (sp1F * 4))));
         func_80010F14(&D_88403378, 1, *((M2C_UNK*)((u8*)&D_88402D74 + (sp1F * 4))), 0x10000);
         func_80010F9C(&D_88403378, 0x2E);
     }
@@ -562,7 +594,7 @@ void func_88402174(void) {
     s8 sp58[0x3C];
     s32 i = 0;
     s32 temp_s1;
-    s32 pad;
+    s32 pad; // FAKE: stack padding
 
     temp_s1 = M2C_FIELD(D_88403370, s32 *, 0xC);
     func_800273E8(sp94, (s32) &D_88402E94);
@@ -597,7 +629,15 @@ void func_884022AC(void) {
     }
 }
 
-s32 func_88402334(void) {
+/**
+ * Fragment006_Main entry when no Transfer Pak is detected (D_800AF986 == 0): sets up the screen
+ * and runs TransferPak_RunCartridgeCheckScreen.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name from the code; this path ran in play (no paks), but the function was already
+ * running when breakpoints went in.
+ */
+s32 TransferPak_EnterCheckScreenNoPaks(void) {
     s32 sp1C;
     s32 sp18;
     s32 temp_v0;
@@ -612,7 +652,7 @@ s32 func_88402334(void) {
     func_8000D520(sp18 + 0xA8, &D_88402DB4 + 2);
     func_80006828(5, &func_88400108);
     func_88401040();
-    temp_v0 = func_88401D54();
+    temp_v0 = TransferPak_RunCartridgeCheckScreen();
     sp1C = temp_v0;
     if (temp_v0 == 1) {
         func_884022AC();
@@ -622,7 +662,14 @@ s32 func_88402334(void) {
     return sp1C;
 }
 
-s32 func_884023F0(void) {
+/**
+ * Fragment006_Main entry when a Transfer Pak is present: commits the detected cartridge
+ * (func_80025BE4) and continues without the check loop.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name from the code.
+ */
+s32 TransferPak_EnterWithPakSkippingCheck(void) {
     s32 sp1C;
 
     sp1C = M2C_FIELD(D_88403370, s32 *, 0xC);
@@ -639,7 +686,14 @@ s32 func_884023F0(void) {
     return 1;
 }
 
-s32 func_8840248C(void) {
+/**
+ * Fragment006_Main entry when arg0 != 0 (coming back from the menus): rebuilds the scene and runs
+ * the cartridge check loop again.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name from the code.
+ */
+s32 TransferPak_EnterCheckScreenOnReturn(void) {
     s32 sp1C;
     s32 sp18;
     s32 temp_v0;
@@ -653,7 +707,7 @@ s32 func_8840248C(void) {
     func_8000D520(sp18 + 0xA8, &D_88402E94 + 2);
     func_88402174();
     func_88402038();
-    temp_v0 = func_88401D54();
+    temp_v0 = TransferPak_RunCartridgeCheckScreen();
     sp1C = temp_v0;
     if (temp_v0 == 1) {
         func_884022AC();
@@ -718,15 +772,15 @@ void func_884026A4(s32 arg0) {
     D_884037B0 = (s32)process_geo_layout(sp20, D_8F4A4240);
     D_884037B4 = (s32)process_geo_layout(sp20, D_8F4B2AF0);
     D_884037B8 = (s32)process_geo_layout(sp20, D_8F4959C8);
-    func_80019924(&D_88403648, 0, 0, (s32)process_geo_layout(sp20, D_8F4886F8));
+    Model_InitDisplayObject(&D_88403648, 0, 0, (s32)process_geo_layout(sp20, D_8F4886F8));
     if (D_800AF986 & 8) {
-        func_80019924(&D_884034E0, 1, 0, (s32)process_geo_layout(sp20, D_8E825FE8));
+        Model_InitDisplayObject(&D_884034E0, 1, 0, (s32)process_geo_layout(sp20, D_8E825FE8));
         func_80010F14(&D_884034E0, 1, &D_8E802B64, 0x10000);
         M2C_FIELD(&D_884034E0, u8 *, 1) &= ~1;
         Vec3f_SetComponentsDuplicate(&D_88403504, 0.0f, 275.0f, 750.0f);
         Vec3f_SetComponentsDuplicate(&D_88403510, 3.0f, 3.0f, 3.0f);
     } else if (D_800AF986 & 0x10) {
-        func_80019924(&D_884034E0, 0, 0, (s32)process_geo_layout(sp20, D_8E924770));
+        Model_InitDisplayObject(&D_884034E0, 0, 0, (s32)process_geo_layout(sp20, D_8E924770));
         func_80010F14(&D_884034E0, 1, &D_8E902B64, 0x10000);
         M2C_FIELD(&D_884034E0, u8 *, 1) &= ~1;
         Vec3f_SetComponentsDuplicate(&D_88403504, 0.0f, 275.0f, 750.0f);
@@ -744,7 +798,7 @@ void func_884026A4(s32 arg0) {
     M2C_FIELD(&D_88403648, u8 *, 2) &= ~0x20;
     if (D_88403358 >= 0) {
         func_80025100(&sp27, 0);
-        func_80019924(&D_88403378, 0, 0, *((M2C_UNK*)((u8*)&D_884037B0 + (sp27 * 4))));
+        Model_InitDisplayObject(&D_88403378, 0, 0, *((M2C_UNK*)((u8*)&D_884037B0 + (sp27 * 4))));
         func_80010F14(&D_88403378, 1, *((M2C_UNK**)((u8*)&D_88402D74 + (sp27 * 4))), 0xFFFF0000);
         func_80010F9C(&D_88403378, 0x4A);
         M2C_FIELD(&D_88403378, u8 *, 2) &= ~0x20;
@@ -764,7 +818,17 @@ void func_884029FC(void) {
     func_800052E8(M2C_FIELD(D_8840336C, s32 *, 0x1C), sp2C);
 }
 
-s32 ClefairyGame_Main(s32 arg0, s32 arg1) {
+/**
+ * Entry point of fragment006 (pool tag 'BCMP'). Loads its segments and the fragments
+ * at 0x8F400000/0x8E800000/0x8E900000, polls the Game Boy saves, runs one of three
+ * loops depending on arg0 and D_800AF986, and on success queues fragment014
+ * (0x88000000) and returns 0x8040; otherwise returns 0x8010. Which game mode this is
+ * has not been identified.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name says only which fragment this is.
+ */
+s32 Fragment006_Main(s32 arg0, s32 arg1) {
     s32 result;
     s32 ret;
 
@@ -784,7 +848,7 @@ s32 ClefairyGame_Main(s32 arg0, s32 arg1) {
         Fragment_Load(((((u32)D_8E900000) & 0x0FF00000) >> 0x14) - 0x10, D_003CE090, D_003D64A0);
     }
 
-    func_8001A194(0xF, 0);
+    Font_Init(0xF, 0);
     func_88402538();
     func_884025E4();
     func_884026A4(arg0);
@@ -794,12 +858,12 @@ s32 ClefairyGame_Main(s32 arg0, s32 arg1) {
 
     if (arg0 == 0) {
         if (D_800AF986 == 0) {
-            result = func_88402334();
+            result = TransferPak_EnterCheckScreenNoPaks();
         } else {
-            result = func_884023F0();
+            result = TransferPak_EnterWithPakSkippingCheck();
         }
     } else {
-        result = func_8840248C();
+        result = TransferPak_EnterCheckScreenOnReturn();
     }
 
     StageContext_SaveAndSwitch((StageContext*)D_88403368);

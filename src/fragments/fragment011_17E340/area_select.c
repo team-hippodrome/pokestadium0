@@ -162,18 +162,20 @@ s32 func_81800020(s32 arg0, s8 *arg1) {
     return 0;
 }
 
+/** Starts and finishes a controller read for the area select screen. */
 void AreaSelect_PollInput(void) {
     Cont_StartReadInputs();
     Cont_ReadInputs();
     Input_ResetRepeatState();
 }
 
+/** Camera preset hook that does nothing. */
 void BattleScene_CameraPresetNop(UNUSED CameraNode* arg0) {
     if (arg0) {}  // karodo
 }
 
 M2C_UNK func_80005928(M2C_UNK *, M2C_UNK);          /* extern */
-M2C_UNK func_800069CC();                            /* extern */
+void BgStage_DrawFrame(void);                            /* extern */
 M2C_UNK func_8001560C(s32);                         /* extern */
 M2C_UNK func_800158C0();                            /* extern */
 extern M2C_UNK D_800AA150;
@@ -183,7 +185,7 @@ extern M2C_UNK D_818008B0;
 s32 func_81800074(s32 arg0) {
     M2C_FIELD(&D_818008B0, s16 *, 0x20) = (s16) (M2C_FIELD(&D_818008B0, s16 *, 0x20) - 0xC0);
     func_800158C0();
-    func_800069CC();
+    BgStage_DrawFrame();
     func_80005928(&D_800AA150, 1);
     func_8001560C(D_818008A0);
     return 0;
@@ -194,12 +196,12 @@ s32 func_81800074(s32 arg0) {
  *
  * Draws a rectangular vertical-gradient panel.  The four arguments are the
  * panel's x, y, width and height (as s16), passed straight on to
- * Ui_DrawGradientPanel.  The top colour is dark blue (R0 G0 B50) and the
- * bottom colour is a brighter blue (R0 G0 B200).
+ * Ui_DrawGradientPanel.  The top color is dark blue (R0 G0 B50) and the
+ * bottom color is a brighter blue (R0 G0 B200).
  */
 void func_818000D0(s16 arg0, s16 arg1, s16 arg2, s16 arg3) {
-    Color_RGB8 sp24 = { 0x00, 0x00, 0x32 }; /* top colour    */
-    Color_RGB8 sp20 = { 0x00, 0x00, 0xC8 }; /* bottom colour */
+    Color_RGB8 sp24 = { 0x00, 0x00, 0x32 }; /* top color    */ // #000032
+    Color_RGB8 sp20 = { 0x00, 0x00, 0xC8 }; /* bottom color */ // #0000C8
 
     Ui_DrawGradientPanel(arg0, arg1, arg2, arg3, &sp24, &sp20);
 }
@@ -218,7 +220,13 @@ extern char D_8180086C[];
 extern char D_8180087C[];
 extern char D_81800888[];
 
-void func_8180014C(s32 frames, s32 blink) {
+/**
+ * Draws the cup list (Poke Ball, Great Ball, Ultra Ball and Master Ball Cups, Tournament) with blinking クリアー！ (Cleared!) marks.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name and comment guessed from the code.
+ */
+void AreaSelect_DrawCupClearList(s32 frames, s32 blink) {
     s32 i;
 
     for (i = 0; i < frames; i++) {
@@ -275,7 +283,7 @@ M2C_UNK func_8180003C();
  * the three float fields are is not established from this function.
  *
  * Matching notes: the declaration order (var_s0, var_s2, target) and the
- * initialisation order (var_s0, target, var_s2) decide which saved registers
+ * initialization order (var_s0, target, var_s2) decide which saved registers
  * the three values get. The `(var_s0 ^ 0)` in the loop test is a
  * matching-only construct (found with decomp-permuter): it only swaps the
  * operand order of the final `bne` to the retail order; `(var_s0 | 0)` does
@@ -333,21 +341,27 @@ M2C_UNK func_80005B98(M2C_UNK);                     /* extern */
 M2C_UNK func_800067BC(M2C_UNK);                     /* extern */
 M2C_UNK func_80006998(M2C_UNK);                     /* extern */
 M2C_UNK func_8000A7FC(M2C_UNK);                     /* extern */
-M2C_UNK func_800407B0(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
-void func_8180014C(s32 frames, s32 blink);
+s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);   /* extern */
+void AreaSelect_DrawCupClearList(s32 frames, s32 blink);
 void func_81800320(void);
 
-void func_81800514(void) {
+/**
+ * Plays the cup-cleared sequence: music cue, then the cup list with blinking クリアー！ marks.
+ * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
+ * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * @unverified Name and comment guessed from the code.
+ */
+void AreaSelect_PlayCupClearSequence(void) {
     func_800067BC(2);
     func_80005B98(0x1E);
     func_81800320();
     func_8180042C();
-    func_800407B0(0x51, 0, 0);
+    Audio_PlayCommand(0x51, 0, 0);
     func_8000A7FC(0x1F4);
-    func_8180014C(0x64, 1);
+    AreaSelect_DrawCupClearList(0x64, 1);
     func_80006998(1);
     func_80005B98(0x1E);
-    func_8180014C(0x28, 0);
+    AreaSelect_DrawCupClearList(0x28, 0);
     func_800067BC(2);
 }
 
@@ -355,8 +369,9 @@ extern u32 D_81800760[];
 extern u32 D_8EA1B414[];
 extern ModelNodeView* D_818008A4;
 extern s16 D_818008D0;
+/** Sets up the scene for the Transfer Pak screen. */
 void TransferPak_InitScene(void) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     MemoryBlock* sp18;
 
     sp18 = MainPool_AllocState(main_pool_get_available(), 0);
@@ -379,7 +394,7 @@ M2C_UNK func_800050AC();
 s32 func_8000645C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32);
 M2C_UNK func_80006680(s32);
 M2C_UNK func_800066C8();
-M2C_UNK func_8001A194(M2C_UNK, M2C_UNK);
+s32 Font_Init(s32 load_size, s32 side);
 M2C_UNK func_8001A360();
 M2C_UNK func_81800594();
 extern M2C_UNK D_002E0BE0;
@@ -396,9 +411,9 @@ extern M2C_UNK D_8EA00000;
  *
  * Stores arg1 into D_818008AC and D_818008A8; D_818008A8 is changed to 3 if
  * arg1 is 4. Then it calls func_8000256C(0x54435550), func_80005040(0x10000, 0),
- * func_8000645C(1, 1, 2, 1, 2, 1) (result kept in a local), func_8001A194(0x10, 0),
+ * func_8000645C(1, 1, 2, 1, 2, 1) (result kept in a local), Font_Init(0x10, 0),
  * func_80003EB8 and func_800040B4 with the segment-derived arguments below,
- * func_81800594(), func_80006680(result of func_8000645C), func_81800514(),
+ * func_81800594(), func_80006680(result of func_8000645C), AreaSelect_PlayCupClearSequence(),
  * func_800066C8(), func_8001A360(), func_800050AC() and finally
  * func_80002620(0x54435550). Returns 0. arg0 is not used.
  *
@@ -412,7 +427,7 @@ extern M2C_UNK D_8EA00000;
  * What the calls do is not established from this function.
  */
 s32 func_81800634(s32 arg0, s32 arg1) {
-    UNUSED s32 pad;
+    UNUSED s32 pad; // FAKE: stack padding
     s32 sp20;
 
     D_818008AC = arg1;
@@ -423,12 +438,12 @@ s32 func_81800634(s32 arg0, s32 arg1) {
     func_8000256C(0x54435550);
     func_80005040(0x10000, 0);
     sp20 = func_8000645C(1, 1, 2, 1, 2, 1);
-    func_8001A194(0x10, 0);
+    Font_Init(0x10, 0);
     func_80003EB8((u32)((s32)&D_01000000 & 0x0F000000) >> 0x18, &D_002E0BE0, &D_002E2B90, 0);
     func_800040B4(((u32)((s32)&D_8EA00000 & 0x0FF00000) >> 0x14) - 0x10, &D_0042CC80, &D_00434C00);
     func_81800594();
     func_80006680(sp20);
-    func_81800514();
+    AreaSelect_PlayCupClearSequence();
     func_800066C8();
     func_8001A360();
     func_800050AC();

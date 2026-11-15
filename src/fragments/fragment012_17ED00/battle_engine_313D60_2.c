@@ -25,12 +25,30 @@ void BattleScene_TickCameraSubstateDefault(CameraNode* arg0);
 void BattleScene_TickCameraSubstateStripWipe(CameraNode* arg0);
 void BattleScene_Update(CameraNode* arg0);
 
+/**
+ * Camera mode 0: does nothing.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_UpdateCameraDefaultModeNoop(UNUSED CameraNode* arg0) {
 }
 
+/**
+ * Camera mode that does nothing.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_UpdateCameraOwner0FramingModeNoop(UNUSED CameraNode* arg0) {
 }
 
+/**
+ * Nudges the camera target if it sits right above or below the eye, which would break
+ * the look-at matrix.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_AvoidDegenerateCameraLookAt(CameraNode* arg0) {
     if (BattleAnim_Distance2D(arg0->view.targetPosition.x, arg0->view.targetPosition.z, arg0->view.eyePosition.x, arg0->view.eyePosition.z) < 0.0001f) {
         arg0->view.targetPosition.z += 0.001f;
@@ -42,38 +60,43 @@ void func_82124A40(void);
 void func_82106374(ActivePokemon*);
 void func_821054A8(ActivePokemon*);
 
+/**
+ * Runs the default (fade) camera transition step by step.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_TickCameraSubstateDefault(CameraNode* arg0) {
-    switch (sBattleScene.scene->unk_30) {
+    switch (sBattleScene.scene->transitionStep) {
         case 0:
-            sBattleScene.scene->unk_18 = 0;
+            sBattleScene.scene->transitionStage = 0;
             break;
 
         case 1:
             if (sBattleScene.scene->unk_44 == 2) {
                 BattleThumbnail_ClearBothOwnerIdleFlags();
             }
-            sBattleScene.scene->unk_30++;
+            sBattleScene.scene->transitionStep++;
             break;
 
         case 2:
             if (sActivePokemon[0]->thumbnail.camera->viewport.x == -0x48) {
-                sBattleScene.scene->unk_30++;
+                sBattleScene.scene->transitionStep++;
             }
             break;
 
         case 3:
             GeoCamera_SetBackgroundTexture(arg0, 0x12C, 0xA, 2, Util_ConvertAddrToVirtAddr((u32)D_1000000));
             GeoCamera_SetBackground(arg0, 5, 0xA, 0, 0, 0);
-            sBattleScene.scene->unk_18 = 0;
-            sBattleScene.scene->unk_30 += 1;
+            sBattleScene.scene->transitionStage = 0;
+            sBattleScene.scene->transitionStep += 1;
 
         case 4:
             if (arg0->overlay.stepIndex == 0xA) {
                 func_82105E6C();
                 func_82106374(sActivePokemon[0]);
                 func_82106374(sActivePokemon[1]);
-                sBattleScene.scene->unk_30 += 1;
-                sBattleScene.scene->unk_18 = 1;
+                sBattleScene.scene->transitionStep += 1;
+                sBattleScene.scene->transitionStage = 1;
             }
             break;
 
@@ -84,22 +107,22 @@ void BattleScene_TickCameraSubstateDefault(CameraNode* arg0) {
                 }
                 func_821054A8(sActivePokemon[0]);
                 func_821054A8(sActivePokemon[1]);
-                sBattleScene.scene->unk_18 = 2;
+                sBattleScene.scene->transitionStage = 2;
                 GeoCamera_SetBackgroundTexture(arg0, 0xA, 0x12C, 2, Util_ConvertAddrToVirtAddr((u32)D_1000000));
                 GeoCamera_SetBackground(arg0, 4, 0xA, 0, 0, 0);
                 arg0->perspective.verticalFieldOfView = 30.0f;
-                sBattleScene.scene->unk_60 = 30.0f;
-                sBattleScene.scene->unk_30 += 1;
+                sBattleScene.scene->verticalFieldOfView = 30.0f;
+                sBattleScene.scene->transitionStep += 1;
             }
             break;
 
         case 6:
             func_82124A40();
             arg0->perspective.verticalFieldOfView = 30.0f;
-            sBattleScene.scene->unk_60 = 30.0f;
-            sBattleScene.scene->unk_18 = 0;
+            sBattleScene.scene->verticalFieldOfView = 30.0f;
+            sBattleScene.scene->transitionStage = 0;
             if (arg0->overlay.stepIndex == 0xA) {
-                sBattleScene.scene->unk_30 = 0;
+                sBattleScene.scene->transitionStep = 0;
                 if (sBattleScene.scene->unk_44 == 1) {
                     BattleThumbnail_SetBothOwnerIdleFlags();
                 }
@@ -108,30 +131,35 @@ void BattleScene_TickCameraSubstateDefault(CameraNode* arg0) {
     }
 }
 
+/**
+ * Runs the strip-wipe camera transition step by step.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_TickCameraSubstateStripWipe(CameraNode* arg0) {
-    switch (sBattleScene.scene->unk_30) {
+    switch (sBattleScene.scene->transitionStep) {
         case 0:
-            sBattleScene.scene->unk_18 = 0;
+            sBattleScene.scene->transitionStage = 0;
             break;
 
         case 1:
             if (sBattleScene.scene->unk_44 == 2) {
                 BattleThumbnail_ClearBothOwnerIdleFlags();
             }
-            sBattleScene.scene->unk_30++;
+            sBattleScene.scene->transitionStep++;
             break;
 
         case 2:
             if (sActivePokemon[0]->thumbnail.camera->viewport.x == -0x48) {
-                sBattleScene.scene->unk_30++;
+                sBattleScene.scene->transitionStep++;
             }
             break;
 
         case 3:
             BattleScene_SetStripWipeState(3, 0x1E);
             BattleScene_UpdateStripWipe();
-            sBattleScene.scene->unk_18 = 0;
-            sBattleScene.scene->unk_30 += 1;
+            sBattleScene.scene->transitionStage = 0;
+            sBattleScene.scene->transitionStep += 1;
 
         case 4:
             BattleScene_UpdateStripWipe();
@@ -139,24 +167,24 @@ void BattleScene_TickCameraSubstateStripWipe(CameraNode* arg0) {
                 func_82105E6C();
                 BattleScene_CleanupParticipantEffectMode(sActivePokemon[0]);
                 BattleScene_CleanupParticipantEffectMode(sActivePokemon[1]);
-                sBattleScene.scene->unk_30 += 1;
-                sBattleScene.scene->unk_18 = 1;
+                sBattleScene.scene->transitionStep += 1;
+                sBattleScene.scene->transitionStage = 1;
             }
             break;
 
         case 5:
-            sBattleScene.scene->unk_18 = 1;
-            sBattleScene.scene->unk_30 += 1;
+            sBattleScene.scene->transitionStage = 1;
+            sBattleScene.scene->transitionStep += 1;
             break;
 
         case 6:
-            sBattleScene.scene->unk_18 = 1;
-            sBattleScene.scene->unk_30 += 1;
+            sBattleScene.scene->transitionStage = 1;
+            sBattleScene.scene->transitionStep += 1;
             break;
 
         case 7:
-            sBattleScene.scene->unk_18 = 1;
-            sBattleScene.scene->unk_30 += 1;
+            sBattleScene.scene->transitionStage = 1;
+            sBattleScene.scene->transitionStep += 1;
             break;
 
         case 8:
@@ -166,23 +194,23 @@ void BattleScene_TickCameraSubstateStripWipe(CameraNode* arg0) {
                 }
                 func_821054A8(sActivePokemon[0]);
                 func_821054A8(sActivePokemon[1]);
-                sBattleScene.scene->unk_18 = 2;
+                sBattleScene.scene->transitionStage = 2;
                 BattleScene_SetStripWipeState(2, 0x1E);
                 BattleScene_UpdateStripWipe();
                 arg0->perspective.verticalFieldOfView = 30.0f;
-                sBattleScene.scene->unk_60 = 30.0f;
-                sBattleScene.scene->unk_30 += 1;
+                sBattleScene.scene->verticalFieldOfView = 30.0f;
+                sBattleScene.scene->transitionStep += 1;
             }
             break;
 
         case 9:
             func_82124A40();
             arg0->perspective.verticalFieldOfView = 30.0f;
-            sBattleScene.scene->unk_60 = 30.0f;
-            sBattleScene.scene->unk_18 = 0;
+            sBattleScene.scene->verticalFieldOfView = 30.0f;
+            sBattleScene.scene->transitionStage = 0;
             BattleScene_UpdateStripWipe();
             if (BattleScene_GetStripWipeState() == 0) {
-                sBattleScene.scene->unk_30 = 0;
+                sBattleScene.scene->transitionStep = 0;
                 if (sBattleScene.scene->unk_44 == 1) {
                     BattleThumbnail_SetBothOwnerIdleFlags();
                 }
@@ -191,8 +219,13 @@ void BattleScene_TickCameraSubstateStripWipe(CameraNode* arg0) {
     }
 }
 
+/**
+ * Runs the camera transition in the scene's transition style: fade (0) or strip wipe.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_TickCameraSubstate(CameraNode* arg0) {
-    if (sBattleScene.scene->unk_2E == 0) {
+    if (sBattleScene.scene->transitionStyle == 0) {
         BattleScene_TickCameraSubstateDefault(arg0);
     } else {
         BattleScene_TickCameraSubstateStripWipe(arg0);
@@ -200,8 +233,8 @@ void BattleScene_TickCameraSubstate(CameraNode* arg0) {
 }
 
 void func_82121DAC(void);
-void func_821328DC(CameraNode*);
-void func_82121604(CameraNode*);
+void BattleScene_RunOpeningSendOut(CameraNode*);
+void Rental_TeamSlotsUpdate(CameraNode*);
 void func_82132D60(CameraNode*);
 void func_821336EC(CameraNode*);
 void func_82121C3C(CameraNode*);
@@ -211,16 +244,22 @@ void func_82122458(CameraNode*);
 void func_82122374(CameraNode*);
 extern ActivePokemon* sSide1ActivePokemon;
 extern ActivePokemon* sSide2ActivePokemon;
+/**
+ * Per-frame battle scene update: runs the camera transition and the current camera mode,
+ * then the shared camera steps.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 void BattleScene_Update(CameraNode* arg0) {
     BattleScene_TickCameraSubstate(arg0);
     func_82121DAC();
 
-    switch (sBattleScene.scene->unk_1C) {
+    switch (sBattleScene.scene->mode) {
         case 0:
             BattleScene_UpdateCameraDefaultModeNoop(arg0);
             break;
         case 1:
-            BattleScene_UpdateIntroCameraSequence(arg0);
+            BattleScene_UpdateBRollCameraSequence(arg0);
             break;
         case 2:
             BattleScene_UpdatePhase(arg0);
@@ -232,16 +271,16 @@ void BattleScene_Update(CameraNode* arg0) {
             BattleScene_UpdateIntroSequence(arg0);
             break;
         case 8:
-            func_821328DC(arg0);
+            BattleScene_RunOpeningSendOut(arg0);
             break;
         case 5:
-            BattleScene_UpdateIntroCameraSequence(arg0);
+            BattleScene_UpdateBRollCameraSequence(arg0);
             break;
         case 6:
             BattleScene_UpdatePhase(arg0);
             break;
         case 9:
-            func_82121604(arg0);
+            Rental_TeamSlotsUpdate(arg0);
             break;
         case 10:
             BattleScene_UpdatePhase(arg0);
@@ -254,10 +293,10 @@ void BattleScene_Update(CameraNode* arg0) {
             break;
     }
 
-    if ((sBattleScene.scene->unk_1C != 4) && (sBattleScene.scene->unk_1C != 8)) {
+    if ((sBattleScene.scene->mode != 4) && (sBattleScene.scene->mode != 8)) {
         func_82121C3C(arg0);
     }
-    if ((sBattleScene.scene->unk_1C == 9) || (sBattleScene.scene->unk_1C == 10)) {
+    if ((sBattleScene.scene->mode == 9) || (sBattleScene.scene->mode == 10)) {
         func_82133B6C();
     }
     BattleScene_TickStateCallbacks();
@@ -270,6 +309,12 @@ void BattleScene_Update(CameraNode* arg0) {
     BattleScene_AvoidDegenerateCameraLookAt(arg0);
 }
 
+/**
+ * Battle scene lifecycle: 0 allocates it, 1 and 2 update it, and 3 runs the final
+ * presentation. Returns the winner.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
+ * @unverified Name from Stadium 1.
+ */
 s32 BattleScene_Dispatch(s32 arg0, CameraNode* arg1) {
     switch (arg0) {
         case 0:
@@ -285,5 +330,5 @@ s32 BattleScene_Dispatch(s32 arg0, CameraNode* arg1) {
             BattleScene_RunFinalPresentation(arg1, sActivePokemon[0], sActivePokemon[1]);
             break;
     }
-    return sBattleScene.scene->unk_40;
+    return sBattleScene.scene->winner;
 }
