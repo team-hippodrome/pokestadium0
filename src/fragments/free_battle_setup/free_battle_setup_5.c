@@ -227,7 +227,7 @@ void FreeBattle_InitEntryScreen(FreeBattleScreen* screen)
   s32 i;
   M2C_FIELD(screen, s32*, 0x4368) = (!((screen->unk_4370) == 0)) || (!((screen->unk_4374) == 0));
   M2C_FIELD(screen, s32*, 0x436C) = ((screen->unk_4370) == 0) && ((screen->unk_4374) == 0);
-  func_80027410((s8*)screen + 0x4310, (s32) ((s8*)screen + 0x10), 0x214, 0x20, 0);
+  TableView_Initialize((s8*)screen + 0x4310, (s32) ((s8*)screen + 0x10), 0x214, 0x20, 0);
   FreeBattle_LoadGbTeams((s8*)screen + 0x4310);
   if (M2C_FIELD(screen, s32*, 0x4368))
   {
@@ -329,7 +329,7 @@ typedef struct Blobs82004E9C {
 } Blobs82004E9C;
 
 void func_80027814(s8*, s8*, s32);
-s32 func_8002BC14(s32);
+s32 Ui_GetSelectionDirection(s32);
 void Audio_PlaySystemSound(s32);
 s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
 void FreeBattle_ClearIndices(void*, s32, s32);
@@ -437,7 +437,7 @@ s32 FreeBattle_UpdateScreen(FreeBattleScreen* screen) {
             }
             break;
         case 13:
-            res = func_8002BC14(D_800603C0);
+            res = Ui_GetSelectionDirection(D_800603C0);
             if ((res == -1) || (res == 1)) {
                 Audio_PlaySystemSound(3);
                 FreeBattle_SetScreenState(screen, 0xC, 3);
@@ -614,9 +614,9 @@ void FreeBattle_RestoreMenuState(FreeBattleScreen* screen) {
 extern s32 D_8200AD28;
 extern s32 D_8200AD2C;
 extern M2C_UNK D_8200AD30;
-s32 func_80025BD8(void);
+s32 GbSave_GetActivePort(void);
 void func_80027FF8(void*, s32);
-s32 func_80002D98(s32);
+s32 Util_Malloc(s32);
 /**
  * Reads the GB save summary of the active port (if any), allocates the 0x5020-byte
  * FreeBattleScreen (D_8200AD28) and opens it on the battle mode window.
@@ -624,11 +624,11 @@ s32 func_80002D98(s32);
  * バトルモード window appeared.
  */
 void FreeBattle_CreateScreen(void) {
-    D_8200AD2C = func_80025BD8();
+    D_8200AD2C = GbSave_GetActivePort();
     if (D_8200AD2C != -1) {
         func_80027FF8(&D_8200AD30, D_8200AD2C);
     }
-    D_8200AD28 = func_80002D98(0x5020);
+    D_8200AD28 = Util_Malloc(0x5020);
     FreeBattle_InitBattleModeScreen(D_8200AD28);
 }
 
@@ -725,7 +725,7 @@ s32 FreeBattle_DrawScreenWithSummary(FreeBattleScreen* screen) {
     return 0;
 }
 
-M2C_UNK func_80002DC0(s32);                         /* extern */
+M2C_UNK Util_Free(s32);                         /* extern */
 extern s32 D_8200AD28;
 
 /**
@@ -733,13 +733,13 @@ extern s32 D_8200AD28;
  * Seen in play (2026-11-14): ran after B on the バトルモード window, as the screen closed.
  */
 void FreeBattle_FreeScreen(void) {
-    func_80002DC0(D_8200AD28);
+    Util_Free(D_8200AD28);
 }
 
 extern s32 D_8200AD08[8];
 extern s32 D_8200AC40;
 extern s32 D_820090DC[8];
-s32 func_800044AC(s32, s32);
+s32 BinArchive_GetFile(s32, s32);
 
 /**
  * Loads the eight files listed in D_820090DC from the archive D_8200AC40 into D_8200AD08.
@@ -750,7 +750,7 @@ void FreeBattle_LoadArchiveFiles(void) {
     s32 i;
 
     for (i = 0; i < 8; i++) {
-        D_8200AD08[i] = func_800044AC(D_8200AC40, D_820090DC[i]);
+        D_8200AD08[i] = BinArchive_GetFile(D_8200AC40, D_820090DC[i]);
     }
 }
 
@@ -758,19 +758,19 @@ s32 Font_Init(s32 load_size, s32 side);
 s8 *PokeIcon_AllocFramebuffers(s32 arg0);
 u16* func_80018F2C(s32, s32, s32, s32, s32, s32, s32, s32);
 s32 func_80017FDC(s32, s32, s32, s32);
-s32 func_80004154(u8*, u8*, s32, s32);
+s32 BinArchive_Open(u8*, u8*, s32, s32);
 void PokeIcon_OpenModelArchives(void);
-void func_800040B4(s32, u8*, u8*);
-void func_80003EB8(s32, u8*, u8*, s32);
-s32 func_80001B10(u8*);
+void Fragment_Load(s32, u8*, u8*);
+void Asset_LoadToSegment(s32, u8*, u8*, s32);
+s32 Memmap_GetSegmentVaddr(u8*);
 void FreeBattle_RestoreMenuState(FreeBattleScreen*);
 s32 StageFade_Start(s32);
 void func_80006828(s32, void*);
-void func_8000A7B0(s32);
+void Audio_PlayMusicIfChanged(s32);
 void func_80006998(s32);
-void func_8000A7FC(s32);
-void func_80006724(void);
-void func_8000675C(void);
+void Audio_StopMusic(s32);
+void StageLoader_WaitForRetrace(void);
+void StageLoader_UpdateSegments(void);
 s32 FreeBattle_UpdateFade(FreeBattleScreen*);
 extern u8 D_81000000[];
 extern u8 D_0015B1A0[];
@@ -815,28 +815,28 @@ M2C_UNK FreeBattle_RunSetupScreen(void) {
     *D_8200AC48 &= ~4;
     D_8200AC4C = 0;
     D_8200AC50 = func_80017FDC(D_8200AC44, 0x28, 0x28, 0x28);
-    D_8200AC40 = func_80004154(D_002F5940, D_003139C0, 1, 1);
+    D_8200AC40 = BinArchive_Open(D_002F5940, D_003139C0, 1, 1);
     PokeIcon_OpenModelArchives();
 
-    func_800040B4(((((u32)D_81000000) & 0x0FF00000) >> 0x14) - 0x10, D_0015B1A0, D_0015E220);
-    func_80003EB8(((u32)D_01000000 & 0x0F000000) >> 0x18, D_002E0BE0, D_002E2B90, 0);
-    func_80003EB8(((u32)D_0A000000 & 0x0F000000) >> 0x18, D_003FFD60, D_00400F70, 0);
-    func_80003EB8(((u32)D_04000000 & 0x0F000000) >> 0x18, D_00400F70, D_004076E0, 0);
-    func_80003EB8(((u32)D_05000000 & 0x0F000000) >> 0x18, D_004199E0, D_0042C4A0, 0);
+    Fragment_Load(((((u32)D_81000000) & 0x0FF00000) >> 0x14) - 0x10, D_0015B1A0, D_0015E220);
+    Asset_LoadToSegment(((u32)D_01000000 & 0x0F000000) >> 0x18, D_002E0BE0, D_002E2B90, 0);
+    Asset_LoadToSegment(((u32)D_0A000000 & 0x0F000000) >> 0x18, D_003FFD60, D_00400F70, 0);
+    Asset_LoadToSegment(((u32)D_04000000 & 0x0F000000) >> 0x18, D_00400F70, D_004076E0, 0);
+    Asset_LoadToSegment(((u32)D_05000000 & 0x0F000000) >> 0x18, D_004199E0, D_0042C4A0, 0);
 
-    D_8200ACFC = func_80001B10(D_0A000000);
-    D_8200AD00 = func_80001B10(D_0A000C80);
-    D_8200AD04 = func_80001B10(D_0A0016D0);
+    D_8200ACFC = Memmap_GetSegmentVaddr(D_0A000000);
+    D_8200AD00 = Memmap_GetSegmentVaddr(D_0A000C80);
+    D_8200AD04 = Memmap_GetSegmentVaddr(D_0A0016D0);
     FreeBattle_LoadArchiveFiles();
     FreeBattle_CreateScreen();
-    func_8000675C();
+    StageLoader_UpdateSegments();
 
     if (gSessionContext.transitionFlags & 0x100) {
         gSessionContext.transitionFlags &= ~0x100;
         FreeBattle_RestoreMenuState(D_8200AD28);
         StageFade_Start(0xF);
         func_80006828(17, FreeBattle_DrawScreenWithSummary);
-        func_8000A7B0(9);
+        Audio_PlayMusicIfChanged(9);
     } else {
         func_80006828(8, FreeBattle_UpdateFade);
     }
@@ -846,16 +846,16 @@ M2C_UNK FreeBattle_RunSetupScreen(void) {
         func_80006998(0xFFFF);
         StageFade_Start(0xF);
         func_80006828(17, FreeBattle_DrawScreenWithSummary);
-        func_8000A7FC(0xF);
+        Audio_StopMusic(0xF);
     } else {
         func_80006828(8, FreeBattle_UpdateFade);
     }
-    func_80006724();
+    StageLoader_WaitForRetrace();
     FreeBattle_FreeScreen();
 }
 
-M2C_UNK func_8000256C(M2C_UNK);                     /* extern */
-M2C_UNK func_80002620(M2C_UNK);                     /* extern */
+M2C_UNK MainPool_PushState(M2C_UNK);                     /* extern */
+M2C_UNK MainPool_PopState(M2C_UNK);                     /* extern */
 M2C_UNK func_80025BA0(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, s32); /* extern */
 M2C_UNK FreeBattle_RunSetupScreen();                            /* extern */
 M2C_UNK FreeBattle_SetupGbCartVersus();                            /* extern */
@@ -876,7 +876,7 @@ extern s8 D_88000000;
 s32 FreeBattle_Main(s32 mode, M2C_UNK unused)
 {
   s32 temp_v1;
-  func_8000256C(0x4D454E54);
+  MainPool_PushState(0x4D454E54);
   D_8200ACF8 = &gSessionContext;
   if (mode == 1)
   {
@@ -886,7 +886,7 @@ s32 FreeBattle_Main(s32 mode, M2C_UNK unused)
   {
     FreeBattle_RunSetupScreen();
   }
-  func_80002620(0x4D454E54);
+  MainPool_PopState(0x4D454E54);
   temp_v1 = D_82008F84;
   if (temp_v1 == 0x8040)
   {

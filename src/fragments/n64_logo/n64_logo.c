@@ -105,7 +105,7 @@ void Announcer_SetEnabled(s32);
 
 /**
  * Boot logo sequence: the fragment's entry point. Its only loader is State_Boot, the boot
- * state (0x8001) of Game_RunStateLoop, which passes 0 for both arguments through func_80025B60
+ * state (0x8001) of Game_RunStateLoop, which passes 0 for both arguments through Fragment_LoadAndCall
  * and ignores the return value. //@src/game_state.c
  * Fades in the Nintendo 64 logo over 3 frames, applies the saved sound options (bit 0 = mono
  * output, bit 1 = Announcer voice off, as in Options_ApplySoundSettings), plays SFX_N64_LOGO,

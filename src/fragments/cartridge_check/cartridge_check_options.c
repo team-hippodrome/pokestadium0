@@ -34,7 +34,7 @@ s32 func_800023C4(M2C_UNK, M2C_UNK);
 s32 func_800051F0(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32);
 s32 BezierPath_Step(s8*, s32);
 void MainPool_FinalizeAllocation(struct MemoryBlock* block);
-void func_8000A7FC(s32);
+void Audio_StopMusic(s32);
 void Audio_StopSoundByCategory(s32, s32);
 
 extern M2C_UNK D_88402E40;
@@ -59,7 +59,7 @@ void CartridgeCheck_OpenMessageWindow(void) {
     do {
         CartridgeCheck_DrawFrame(0);
         CartridgeCheck_DrawMessageWindow((s16) (160 - (var_s0 / 2)), (s16) (60 - (var_s1 / 2)), var_s0, var_s1);
-        func_80006780();
+        BgStage_AdvanceFrame();
         var_s2 += 1;
         var_s0 += 20;
         var_s1 += 4;
@@ -81,7 +81,7 @@ void CartridgeCheck_CloseMessageWindow(void) {
     do {
         CartridgeCheck_DrawFrame(0);
         CartridgeCheck_DrawMessageWindow((s16) (160 - (var_s0 / 2)), (s16) (60 - (var_s1 / 2)), var_s0, var_s1);
-        func_80006780();
+        BgStage_AdvanceFrame();
         var_s2 += 1;
         var_s0 -= 20;
         var_s1 -= 4;
@@ -130,7 +130,7 @@ void CartridgeCheck_ShowMessageUntilA(s32 text) {
         Font_Printf(46, 40, text);
         CartridgeCheck_DrawNextArrow(260, 60);
         func_8001ABBC();
-        func_80006780();
+        BgStage_AdvanceFrame();
     } while (!(gPlayer1Controller->buttonPressed & 0x8000));
     Audio_PlaySystemSound(1);
     D_88402D70 = text;
@@ -173,12 +173,12 @@ void CartridgeCheck_ScrollToNextMessage(s8* text) {
  * 「GBモードに スピードアップの きのうが ついたぞ！」 (Doduo Game Boy: GB mode gets speed-up);
  * flag 0x10: 「ドードリオのゲームボーイ プレゼント！！」 / 「スピードアップの きのうが
  * きょうりょくに なったぞ！」 (Dodrio Game Boy: the speed-up gets stronger). VsScene sets the
- * flag on the first and second cup clear (func_82200DA4).
+ * flag on the first and second cup clear (Tournament_UnlockGbPlayerFrame).
  * Seen in play (2026-11-14) with transitionFlags poked to 0x0A at CartridgeCheck_Main entry:
  * the Doduo Game Boy dropped in and both Doduo messages showed. The Dodrio text is from the ROM strings.
  */
 void CartridgeCheck_RunGameBoyGiftEvent(void) {
-    func_8000A7B0(0xC);
+    Audio_PlayMusicIfChanged(0xC);
     M2C_FIELD(&D_884034E0, u8 *, 1) = (u8) (M2C_FIELD(&D_884034E0, u8 *, 1) | 1);
     func_80006828(115, &CartridgeCheck_DrawFrame);
     M2C_FIELD(&D_884034E0, u8 *, 2) = (u8) (M2C_FIELD(&D_884034E0, u8 *, 2) & 0xFFDF);
@@ -228,7 +228,7 @@ void CartridgeCheck_PlayBootIntro(void) {
             }
             BezierPath_Step(sp50, rec + 0xB4);
             CartridgeCheck_DrawFrame(0);
-            func_80006780();
+            BgStage_AdvanceFrame();
         } while (BezierPath_Step(sp8C, rec + 0xA8) != 0);
     }
     func_80006828(25, &CartridgeCheck_DrawFrame);
@@ -247,7 +247,7 @@ M2C_UNK Audio_PlaySystemSound(M2C_UNK);
  * (console shown on frame 10).
  * Seen in play (2026-11-14) with transitionFlags poked to 0x0A: the Doduo Game Boy event ran,
  * then the camera moved to the console.
- * @unverified "CupWin": transitionFlags 2 comes from VsScene's win handler (func_82200F08); a
+ * @unverified "CupWin": transitionFlags 2 comes from VsScene's win handler (Tournament_RecordCupClear); a
  * real cup win was not played.
  */
 void CartridgeCheck_PlayCupWinIntro(void) {
@@ -272,7 +272,7 @@ void CartridgeCheck_PlayCupWinIntro(void) {
             }
             BezierPath_Step(sp50, rec + 0xB4);
             CartridgeCheck_DrawFrame(0);
-            func_80006780();
+            BgStage_AdvanceFrame();
         } while (BezierPath_Step(sp8C, rec + 0xA8) != 0);
     }
     func_80006828(25, &CartridgeCheck_DrawFrame);
@@ -452,7 +452,7 @@ s32 Options_RunClearSavePrompt(s32 second_ask, s32 row, u8 flags) {
             loop = 0;
         }
         Options_DrawClearSavePrompt(second_ask, sel);
-        func_80006780();
+        BgStage_AdvanceFrame();
     } while (loop);
 
     loop = sel == 0;
@@ -480,17 +480,17 @@ void Save_ResetAll(void) {
     s32 i;
 
     for (i = 0; i < 16; i++) {
-        func_800245E0(16, i);
+        Save_ResetAndCommitTypedRecord(16, i);
     }
     for (i = 0; i < 4; i++) {
-        func_800245E0(17, i);
+        Save_ResetAndCommitTypedRecord(17, i);
     }
     for (i = 0; i < 4; i++) {
-        func_800245E0(18, i);
+        Save_ResetAndCommitTypedRecord(18, i);
     }
-    func_800245E0(19, 0);
-    func_800245E0(20, 0);
-    func_800245E0(21, 0);
+    Save_ResetAndCommitTypedRecord(19, 0);
+    Save_ResetAndCommitTypedRecord(20, 0);
+    Save_ResetAndCommitTypedRecord(21, 0);
     Audio_SetOutputMode(1);
     Announcer_SetEnabled(1);
 }
@@ -550,7 +550,7 @@ void Options_RunMenu(void) {
         }
         CartridgeCheck_DrawFrame(0);
         Options_DrawMenu(sel, flags);
-        func_80006780();
+        BgStage_AdvanceFrame();
     } while (done == 0);
     if (done == 1) {
         diff = Save_GetOptionFlags() ^ flags;
@@ -590,7 +590,7 @@ s32 CartridgeCheck_RunScreen(void) {
     do {
         CartridgeCheck_DrawFrame(0);
         CartridgeCheck_DrawScreen();
-        func_80006780();
+        BgStage_AdvanceFrame();
         if (gPlayer1Controller->buttonPressed & 0x8000) {
             var_s0 = 1;
             Audio_PlaySystemSound(0x1B);
@@ -603,7 +603,7 @@ s32 CartridgeCheck_RunScreen(void) {
         }
     } while (var_s0 == 0);
     if ((var_s0 == 1) && (D_88403358 >= 0)) {
-        func_80025BE4(D_88403358);
+        GbSave_SetActivePort(D_88403358);
     }
     return var_s0;
 }
@@ -621,18 +621,18 @@ void CartridgeCheck_PlayExitToTitle(void) {
     sp34 = M2C_FIELD(D_88403370, s32 *, 0xC);
     BezierPath_InitEased(sp74, (s32)&D_88402E24);
     BezierPath_InitEased(sp38, (s32)&D_88402E08);
-    func_80010F8C(&D_88403648, 0xFFFF0000);
-    func_80010F9C(&D_88403648, 0x2E);
+    ModelAnim_SetSpeed(&D_88403648, 0xFFFF0000);
+    ModelAnim_SetFrame(&D_88403648, 0x2E);
     M2C_FIELD(&D_88403648, u8 *, 2) |= 0x20;
     func_80006998(0xFFFF);
     StageFade_Start(30);
-    func_8000A7FC(60);
+    Audio_StopMusic(60);
     Audio_StopSoundByCategory(0x46, 0x3C);
     Audio_PlaySystemSound(0x23);
     while (BezierPath_Step(sp74, sp34 + 0xA8)) {
         BezierPath_Step(sp38, sp34 + 0xB4);
         CartridgeCheck_DrawFrame(0);
-        func_80006780();
+        BgStage_AdvanceFrame();
     }
 }
 
@@ -647,14 +647,14 @@ void CartridgeCheck_PlaySetCartridgeAnimation(void) {
     s8 sp1F;
 
     Save_GetGbPlayerSettings(&sp1F, 0);
-    func_8001107C(&D_88403648, 1, &D_8F4889B8);
-    func_80010F14(&D_88403648, 1, &D_8F4014CC, 0x10000);
-    func_80010F9C(&D_88403648, 0x2E);
+    ModelAnim_BindEventTrack(&D_88403648, 1, &D_8F4889B8);
+    ModelAnim_BindTransformCurve(&D_88403648, 1, &D_8F4014CC, 0x10000);
+    ModelAnim_SetFrame(&D_88403648, 0x2E);
     M2C_FIELD(&D_88403648, u8 *, 2) = (u8) (M2C_FIELD(&D_88403648, u8 *, 2) | 0x20);
     if (D_88403358 >= 0) {
         Model_InitDisplayObject(&D_88403378, 0, 0, *((M2C_UNK*)((u8*)&D_884037B0 + (sp1F * 4)))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-        func_80010F14(&D_88403378, 1, *((M2C_UNK*)((u8*)&D_88402D74 + (sp1F * 4))), 0x10000); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-        func_80010F9C(&D_88403378, 0x2E);
+        ModelAnim_BindTransformCurve(&D_88403378, 1, *((M2C_UNK*)((u8*)&D_88402D74 + (sp1F * 4))), 0x10000); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+        ModelAnim_SetFrame(&D_88403378, 0x2E);
     }
     Audio_PlaySystemSound(0xB);
     func_80006828(20, (s32 *) CartridgeCheck_DrawFrame);
@@ -686,7 +686,7 @@ void CartridgeCheck_PlayZoomIntoMonitor(void) {
     s32 temp_s0;
 
     temp_s0 = M2C_FIELD(D_88403370, s32 *, 0xC);
-    func_8000A7FC(50);
+    Audio_StopMusic(50);
     BezierPath_InitEased(sp7C, (s32) &D_88402E5C);
     BezierPath_InitEased(sp40, (s32) &D_88402E40);
     if (BezierPath_Step(sp7C, temp_s0 + 0xA8) != 0) {
@@ -696,7 +696,7 @@ void CartridgeCheck_PlayZoomIntoMonitor(void) {
                 D_88403360 += 1;
             }
             CartridgeCheck_DrawFrame(0);
-            func_80006780();
+            BgStage_AdvanceFrame();
         } while (BezierPath_Step(sp7C, temp_s0 + 0xA8) != 0);
     }
 }
@@ -732,7 +732,7 @@ void CartridgeCheck_PlayZoomOutOfMonitor(void) {
             }
             BezierPath_Step(sp58, temp_s1 + 0xB4);
             CartridgeCheck_DrawFrame(0);
-            func_80006780();
+            BgStage_AdvanceFrame();
         } while (BezierPath_Step(sp94, temp_s1 + 0xA8) != 0);
     }
 }
@@ -771,11 +771,11 @@ s32 CartridgeCheck_EnterFromBoot(void) {
     sp18 = M2C_FIELD(D_88403370, s32 *, 0xC);
     D_88403360 = 0;
     CartridgeCheck_ReadInputs();
-    func_800067BC(1);
-    func_8000A7B0(0xA);
+    StageLoader_RunFrames(1);
+    Audio_PlayMusicIfChanged(0xA);
     StageFade_Start(30);
-    func_8000D520(sp18 + 0xB4, &D_88402D98 + 2);
-    func_8000D520(sp18 + 0xA8, &D_88402DB4 + 2);
+    Vec3f_FromVec3s(sp18 + 0xB4, &D_88402D98 + 2);
+    Vec3f_FromVec3s(sp18 + 0xA8, &D_88402DB4 + 2);
     func_80006828(5, &CartridgeCheck_DrawFrame);
     CartridgeCheck_PlayBootIntro();
     temp_v0 = CartridgeCheck_RunScreen();
@@ -793,7 +793,7 @@ s32 CartridgeCheck_EnterFromBoot(void) {
  * CartridgeCheck_PlayCupWinIntro (with the Game Boy present event) and goes straight on to
  * the main menu without the cartridge check loop. Always returns 1.
  * Seen in play (2026-11-14) with transitionFlags poked to 0x0A at CartridgeCheck_Main entry.
- * @unverified "CupWin": transitionFlags 2 is set only in VsScene's win handler (func_82200F08),
+ * @unverified "CupWin": transitionFlags 2 is set only in VsScene's win handler (Tournament_RecordCupClear),
  * and State_MainMenu skips this fragment when flag 1 is set without 2, so only a win should
  * reach here; a real cup win was not played.
  */
@@ -801,13 +801,13 @@ s32 CartridgeCheck_EnterAfterCupWin(void) {
     s32 sp1C;
 
     sp1C = M2C_FIELD(D_88403370, s32 *, 0xC);
-    func_80025BE4(D_88403358);
+    GbSave_SetActivePort(D_88403358);
     D_88403360 = 0;
     CartridgeCheck_ReadInputs();
-    func_800067BC(1);
+    StageLoader_RunFrames(1);
     StageFade_Start(30);
-    func_8000D520(sp1C + 0xB4, &D_88402DD0 + 2);
-    func_8000D520(sp1C + 0xA8, &D_88402DEC + 2);
+    Vec3f_FromVec3s(sp1C + 0xB4, &D_88402DD0 + 2);
+    Vec3f_FromVec3s(sp1C + 0xA8, &D_88402DEC + 2);
     func_80006828(5, &CartridgeCheck_DrawFrame);
     CartridgeCheck_PlayCupWinIntro();
     CartridgeCheck_TransitionToMainMenu();
@@ -827,10 +827,10 @@ s32 CartridgeCheck_EnterFromMainMenu(void) {
     sp18 = M2C_FIELD(D_88403370, s32 *, 0xC);
     D_88403360 = 0;
     CartridgeCheck_ReadInputs();
-    func_8000A7FC(60);
-    func_800067BC(1);
-    func_8000D520(sp18 + 0xB4, &D_88402E78 + 2);
-    func_8000D520(sp18 + 0xA8, &D_88402E94 + 2);
+    Audio_StopMusic(60);
+    StageLoader_RunFrames(1);
+    Vec3f_FromVec3s(sp18 + 0xB4, &D_88402E78 + 2);
+    Vec3f_FromVec3s(sp18 + 0xA8, &D_88402E94 + 2);
     CartridgeCheck_PlayZoomOutOfMonitor();
     CartridgeCheck_PlayLowerMonitor();
     temp_v0 = CartridgeCheck_RunScreen();
@@ -867,11 +867,11 @@ void CartridgeCheck_ReadPortSummaries(void) {
  * Seen in play (2026-11-14): -1 without paks, 0 (1P) with paks in all four ports.
  */
 void CartridgeCheck_InitCursor(void) {
-    if (func_80022B40() == 0) {
+    if (GbSave_GetPresentPortMask() == 0) {
         D_88403358 = -1;
         return;
     }
-    D_88403358 = func_80025BD8();
+    D_88403358 = GbSave_GetActivePort();
     if ((D_88403358 < 0) || (D_88403310[D_88403358].game == 0)) {
         D_88403358 = 0;
         while (D_88403310[D_88403358].game == 0) {
@@ -918,33 +918,33 @@ void CartridgeCheck_InitModels(s32 from_main_menu) {
     if (gSessionContext.transitionFlags & 8) {
         // Doduo Game Boy prize model (fragment039, seen in play 2026-11-14).
         Model_InitDisplayObject(&D_884034E0, 1, 0, (s32)GeoLayout_Process(sp20, D_8E825FE8));
-        func_80010F14(&D_884034E0, 1, &D_8E802B64, 0x10000);
+        ModelAnim_BindTransformCurve(&D_884034E0, 1, &D_8E802B64, 0x10000);
         M2C_FIELD(&D_884034E0, u8 *, 1) &= ~1;
         Vec3f_SetComponentsDuplicate(&D_88403504, 0.0f, 275.0f, 750.0f);
         Vec3f_SetComponentsDuplicate(&D_88403510, 3.0f, 3.0f, 3.0f);
     } else if (gSessionContext.transitionFlags & 0x10) {
         // Dodrio Game Boy prize model (fragment040, seen in play 2026-11-14).
         Model_InitDisplayObject(&D_884034E0, 0, 0, (s32)GeoLayout_Process(sp20, D_8E924770));
-        func_80010F14(&D_884034E0, 1, &D_8E902B64, 0x10000);
+        ModelAnim_BindTransformCurve(&D_884034E0, 1, &D_8E902B64, 0x10000);
         M2C_FIELD(&D_884034E0, u8 *, 1) &= ~1;
         Vec3f_SetComponentsDuplicate(&D_88403504, 0.0f, 275.0f, 750.0f);
         Vec3f_SetComponentsDuplicate(&D_88403510, 3.0f, 3.0f, 3.0f);
     }
     MainPool_FinalizeAllocation(sp20);
     if (from_main_menu == 0) {
-        func_80010F14(&D_88403648, 1, &D_8F4014B0, 0x10000);
+        ModelAnim_BindTransformCurve(&D_88403648, 1, &D_8F4014B0, 0x10000);
         M2C_FIELD(&D_88403648, s32 *, 0x14) = 0;
         M2C_FIELD(&D_88403648, u8 *, 2) &= ~0x20;
         return;
     }
-    func_80010F14(&D_88403648, 1, &D_8F4014CC, 0xFFFF0000);
-    func_80010F9C(&D_88403648, 0x4A);
+    ModelAnim_BindTransformCurve(&D_88403648, 1, &D_8F4014CC, 0xFFFF0000);
+    ModelAnim_SetFrame(&D_88403648, 0x4A);
     M2C_FIELD(&D_88403648, u8 *, 2) &= ~0x20;
     if (D_88403358 >= 0) {
         Save_GetGbPlayerSettings(&sp27, 0);
         Model_InitDisplayObject(&D_88403378, 0, 0, *((M2C_UNK*)((u8*)&D_884037B0 + (sp27 * 4)))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-        func_80010F14(&D_88403378, 1, *((M2C_UNK**)((u8*)&D_88402D74 + (sp27 * 4))), 0xFFFF0000); // FAKE: decomp slop, raw pointer casts stand in for struct fields
-        func_80010F9C(&D_88403378, 0x4A);
+        ModelAnim_BindTransformCurve(&D_88403378, 1, *((M2C_UNK**)((u8*)&D_88402D74 + (sp27 * 4))), 0xFFFF0000); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+        ModelAnim_SetFrame(&D_88403378, 0x4A);
         M2C_FIELD(&D_88403378, u8 *, 2) &= ~0x20;
     }
     D_8840365C = 1;
@@ -962,10 +962,10 @@ void CartridgeCheck_InitRenderTargets(void) {
     sp2C = func_800051F0(0, 2, 320, 240, 0);
     M2C_FIELD(D_8840336C, s32 *, 0x18) = func_800023C4(0x10, 0);
     M2C_FIELD(D_8840336C, s32 *, 0x1C) = func_800023C4(0x10, 0);
-    func_800051C0(M2C_FIELD(D_8840336C, s32 *, 0x18), 0, 2, 0x140, 0xF0, M2C_FIELD(M2C_FIELD(D_88403368, s8 **, 0x18), s32 *, 8));
-    func_800051C0(M2C_FIELD(D_8840336C, s32 *, 0x1C), 0, 2, 0x140, 0xF0, M2C_FIELD(M2C_FIELD(D_88403368, s8 **, 0x1C), s32 *, 8));
-    func_800052E8(M2C_FIELD(D_8840336C, s32 *, 0x18), sp2C);
-    func_800052E8(M2C_FIELD(D_8840336C, s32 *, 0x1C), sp2C);
+    GfxImage_Initialize(M2C_FIELD(D_8840336C, s32 *, 0x18), 0, 2, 0x140, 0xF0, M2C_FIELD(M2C_FIELD(D_88403368, s8 **, 0x18), s32 *, 8));
+    GfxImage_Initialize(M2C_FIELD(D_8840336C, s32 *, 0x1C), 0, 2, 0x140, 0xF0, M2C_FIELD(M2C_FIELD(D_88403368, s8 **, 0x1C), s32 *, 8));
+    GfxImage_AttachDepthBuffer(M2C_FIELD(D_8840336C, s32 *, 0x18), sp2C);
+    GfxImage_AttachDepthBuffer(M2C_FIELD(D_8840336C, s32 *, 0x1C), sp2C);
 }
 
 /**

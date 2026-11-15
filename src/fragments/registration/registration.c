@@ -8,7 +8,7 @@
 #include "pokemon.h"
 #include "moves.h"
 
-s32 func_800246A8(M2C_UNK, s32);                    /* extern */
+s32 Deck_IsSaveEntryPresent(M2C_UNK, s32);                    /* extern */
 
 /**
  * Returns the first empty slot of the 16 registered team slots, or -1 when all are used.
@@ -19,7 +19,7 @@ s32 Registration_FindFreeSlot(void) {
 
     var_s0 = 0;
 loop_1:
-    if (func_800246A8(0x10, var_s0) == 0) {
+    if (Deck_IsSaveEntryPresent(0x10, var_s0) == 0) {
         return var_s0;
     }
     var_s0 += 1;
@@ -29,9 +29,9 @@ loop_1:
     goto loop_1; // FAKE: goto loop kept from m2c output
 }
 
-s32 func_80020AFC(s32, s32, s32, s32);
-s32 func_80020CE4(void*, s32, s32);
-M2C_UNK func_80020C60(s32);
+s32 Deck_Open(s32, s32, s32, s32);
+s32 Deck_ReadEntries(void*, s32, s32);
+M2C_UNK Deck_CloseAndFlush(s32);
 /**
  * Reads up to six Pokémon of deck `deck` (0x10 the Stadium save, 0x20 a Game Boy cartridge), Transfer Pak
  * `pak` and slot `slot` into `mons` and stores the count.
@@ -40,22 +40,22 @@ M2C_UNK func_80020C60(s32);
  */
 void Registration_ReadTeam(s32 deck, s32 pak, s32 slot, ByteMatrix* mons) {
     TeamMonSlot* entry = (TeamMonSlot*)mons->rows;
-    s32 handle = func_80020AFC(deck, pak, slot, 0);
+    s32 handle = Deck_Open(deck, pak, slot, 0);
     s32 i;
 
     for (i = 0; i < 6; i++, entry++) {
-        if (func_80020CE4(&entry->mon, 1, handle) == 0) {
+        if (Deck_ReadEntries(&entry->mon, 1, handle) == 0) {
             break;
         }
         entry->flags = 0;
     }
-    func_80020C60(handle);
+    Deck_CloseAndFlush(handle);
     mons->count = i;
 }
 
-s32 func_80020B94(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s8 *, s32); /* extern */
-M2C_UNK func_80020C60(s32);                         /* extern */
-s32 func_80020DF0(s32, M2C_UNK, s32);               /* extern */
+s32 Deck_OpenAndSetName(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s8 *, s32); /* extern */
+M2C_UNK Deck_CloseAndFlush(s32);                         /* extern */
+s32 Deck_WriteEntries(s32, M2C_UNK, s32);               /* extern */
 /**
  * Writes `team` into registered slot `slot` of the Stadium save (deck 0x10).
  * Seen in play (2026-11-12): 「このポケモンをとうろくする？」 > はい stored the party in slot 01.
@@ -65,16 +65,16 @@ void Registration_WriteTeam(s8* arg0, M2C_UNK arg1) {
     s32 handle;
     s32 i;
 
-    handle = func_80020B94(0x10, 0, arg1, 0, arg0 + 8, M2C_FIELD(arg0, s32*, 4));
+    handle = Deck_OpenAndSetName(0x10, 0, arg1, 0, arg0 + 8, M2C_FIELD(arg0, s32*, 4));
     for (i = 0; i < M2C_FIELD(arg0, s32*, 0x20); i++, entry++) {
-        if (func_80020DF0((s32)&entry->mon, 1, handle) == 0) {
+        if (Deck_WriteEntries((s32)&entry->mon, 1, handle) == 0) {
             break;
         }
     }
-    func_80020C60(handle);
+    Deck_CloseAndFlush(handle);
 }
 
-s32 func_800245E0(M2C_UNK, s32);
+s32 Save_ResetAndCommitTypedRecord(M2C_UNK, s32);
 /**
  * Writes every team of `teams` back to slots 0.. in order, then deletes the saved teams in the
  * slots after them, so the registered teams stay packed from slot 01.
@@ -99,8 +99,8 @@ void Registration_WriteAllTeams(PointerList* teams) {
         } while (i < teams->count);
     }
     for (; i < teams->capacity; i++) {
-        if (func_800246A8(0x10, i) != 0) {
-            func_800245E0(0x10, i);
+        if (Deck_IsSaveEntryPresent(0x10, i) != 0) {
+            Save_ResetAndCommitTypedRecord(0x10, i);
         }
     }
 }
@@ -118,7 +118,7 @@ void Registration_LoadRegisteredTeams(ByteMatrix* table) {
     s32 i;
 
     for (i = 0; i < 0x10; i++) {
-        if (func_800246A8(0x10, i) == 0) {
+        if (Deck_IsSaveEntryPresent(0x10, i) == 0) {
             continue;
         }
         if (Deck_GetSaveEntryCount(0x10, i) == 0) {
@@ -137,7 +137,7 @@ void Registration_LoadRegisteredTeams(ByteMatrix* table) {
     table->count = p - (RegisteredTeam*)table->rows;
 }
 
-s32 func_80021894(s32);
+s32 GbSave_EnsureMainDataLoaded(s32);
 s32 GbSave_GetTrainerId(s32 arg0);
 void GbSave_GetPlayerName(s32, u8*);
 /**
@@ -149,7 +149,7 @@ void Registration_LoadGbTeams(ByteMatrix* table) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        if (func_80021894(i) == 0) {
+        if (GbSave_EnsureMainDataLoaded(i) == 0) {
             continue;
         }
         p->unk_00 = 0;
@@ -187,7 +187,7 @@ void Registration_DrawMenuRow(s32 x, s32 y, char* label, s32 index, s32 flags, s
 }
 
 void Window_SetRect(void* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-s32 func_800226BC(s32, s32, s32);
+s32 Deck_GetCount(s32, s32, s32);
 void func_80027804(void*, void*, s32, s32);
 M2C_UNK Menu_Init(void*, void*, void*, M2C_UNK *, s32, s32);
 extern s32 D_88103078;
@@ -210,7 +210,7 @@ void Registration_InitMainMenu(MenuWindow* menu, s32 x, s32 y, s32 width, s32 he
     menu->descriptions = (s32)descriptions;
     menu->descriptionLines = description_lines;
     sp2C = Registration_FindFreeSlot();
-    if ((func_800226BC(0x20, D_88103078, 0) == 0) || (sp2C == -1)) {
+    if ((Deck_GetCount(0x20, D_88103078, 0) == 0) || (sp2C == -1)) {
         menu->menu.itemFlags[0] |= 1;
     }
     if (sp2C == 0) {
@@ -256,14 +256,14 @@ void Registration_DrawMainMenu(MenuWindow* menu, s32 flags) {
 }
 
 s32 Menu_UpdateCursor(void*);
-M2C_UNK func_8002BC14(s32);
+M2C_UNK Ui_GetSelectionDirection(s32);
 M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 extern s32 D_800603C0;
 
 /**
  * Menu-list input handler (same pattern as PartyScreen_UpdateActionMenu and FreeBattle_UpdatePopupMenu). Returns 0
  * immediately unless the window state is 1 or 2. Then, while Menu_UpdateCursor(&menu->menu)
- * is zero, reads the input result from func_8002BC14(D_800603C0): -1 plays sound
+ * is zero, reads the input result from Ui_GetSelectionDirection(D_800603C0): -1 plays sound
  * Audio_PlaySystemSound(3) and returns -1; 1 checks bit 0 of the cursor item's menu.itemFlags
  * -- if it is clear it plays sound 2 and returns
  * cursor + 1, otherwise it plays sound 8 and returns 0. Every other case returns 0.
@@ -282,7 +282,7 @@ s32 Registration_UpdateMainMenu(MenuWindow* menu) {
             return 0;
     }
     if (Menu_UpdateCursor(&menu->menu) == 0) {
-        dir = func_8002BC14(D_800603C0);
+        dir = Ui_GetSelectionDirection(D_800603C0);
         if (dir == -1) {
             Audio_PlaySystemSound(3);
             ret = -1;
@@ -359,8 +359,8 @@ void Registration_DrawConfirmWindow(RegistrationConfirmWindow* confirm) {
     }
 }
 
-s32 func_8002B390(void*);
-M2C_UNK func_8002BC14(s32);
+s32 Ui_HandleHorizontalSelectionInput(void*);
+M2C_UNK Ui_GetSelectionDirection(s32);
 extern s32 D_800603C0;
 /**
  * Handles the confirm window. Returns 1 for yes, -1 for no or cancel.
@@ -369,8 +369,8 @@ extern s32 D_800603C0;
 s32 Registration_UpdateConfirmWindow(RegistrationConfirmWindow* confirm) {
     s32 ret = 0;
 
-    if (func_8002B390(&confirm->choice) == 0) {
-        ret = func_8002BC14(D_800603C0);
+    if (Ui_HandleHorizontalSelectionInput(&confirm->choice) == 0) {
+        ret = Ui_GetSelectionDirection(D_800603C0);
         if (ret == 1) {
             switch (confirm->choice.cursor) {
                 case 0:
@@ -425,7 +425,7 @@ void Registration_DrawMessageWindow(RegistrationMessageWindow* message) {
     }
 }
 
-M2C_UNK func_8002BC14(s32);                         /* extern */
+M2C_UNK Ui_GetSelectionDirection(s32);                         /* extern */
 extern s32 D_800603C0;
 
 /**
@@ -433,7 +433,7 @@ extern s32 D_800603C0;
  * Seen in play (2026-11-12): A closed that message.
  */
 s32 Registration_UpdateMessageWindow(s32 message) {
-    return func_8002BC14(D_800603C0);
+    return Ui_GetSelectionDirection(D_800603C0);
 }
 
 /**
@@ -472,7 +472,7 @@ extern char D_88102F24[];
 extern char D_88102F2C[];
 extern Gfx D_80073450[];
 extern u8 D_04010918[];
-void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
+void Gfx_DrawTextureIa8(s32, s32, s32, s32, void*, s32, s32);
 u8 GbSave_GetPortGame(s32 arg0);
 void GbSave_DrawCartridgeIcon(s32, s32, u8, s32);
 void Ui_DrawImageInStrips(u8*, s32, s32);
@@ -509,7 +509,7 @@ void Registration_DrawTrainerPanel(s32 x, s32 y, s32 text_flags, RegisteredTeam*
     if (team->trainerId != 0) {
         gSPDisplayList(gDisplayListHead++, D_80073450);
         gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-        func_8001BCB4(x + 37, y + 86, 40, 10, D_04010918, 40, 0);
+        Gfx_DrawTextureIa8(x + 37, y + 86, 40, 10, D_04010918, 40, 0);
         Ui_DrawNumberZeroPadded(x + 81, y + 84, team->trainerId, 5);
     }
 }
@@ -531,7 +531,7 @@ extern Gfx D_80073408[];
 extern Gfx D_80073438[];
 extern u8 D_04011A60[];
 s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
-void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
 void Ui_DrawNumber(s32, s32, s32, s32);
 /**
  * Draws one Pokemon cell of a team row: nickname, level and icon.
@@ -551,7 +551,7 @@ void Registration_DrawMonCell(s32 x, s32 y, u8* mon, s32 icon_id, s32 text_flags
         Font_Printf(x + 4, y + 4, mon + 0x30);
         Font_EndTexturedTextRendering();
         gSPDisplayList(gDisplayListHead++, D_80073450);
-        func_8001BCB4(x + 44, y + 25, 8, 10, D_04011A60, 8, 0);
+        Gfx_DrawTextureIa8(x + 44, y + 25, 8, 10, D_04011A60, 8, 0);
         Ui_DrawNumber(x + 56, y + 23, mon[0x24], 3);
         slot = cache->base + icon_id % cache->count;
         p = &cache->slots[slot];
@@ -561,7 +561,7 @@ void Registration_DrawMonCell(s32 x, s32 y, u8* mon, s32 icon_id, s32 text_flags
         }
         if (cache) {} // karodo
         gSPDisplayList(gDisplayListHead++, D_80073408);
-        func_8001B884(x + 86, y + 6, 40, 40, (u8*)PokeIcon_GetImage((s8*)D_88103074, slot), 40, 0x200000);
+        Gfx_DrawTextureRgba16(x + 86, y + 6, 40, 40, (u8*)PokeIcon_GetImage((s8*)D_88103074, slot), 40, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);
     }
 }
@@ -570,7 +570,7 @@ extern s32 D_88103074;
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
 s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
-void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
 /**
  * Draws a cell with the Ditto placeholder icon (icon slot 24, which Registration_AllocScreen
  * renders from species 132 = Ditto).
@@ -581,13 +581,13 @@ void Registration_DrawDittoCell(s32 x, s32 y) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(x, y, 132, 50, D_88102D78[0]);
     gSPDisplayList(gDisplayListHead++, D_80073408);
-    func_8001B884(x + 86, y + 6, 40, 40, (u8*)PokeIcon_GetImage((s8*)D_88103074, 24), 40, 0x200000);
+    Gfx_DrawTextureRgba16(x + 86, y + 6, 40, 40, (u8*)PokeIcon_GetImage((s8*)D_88103074, 24), 40, 0x200000);
     gSPDisplayList(gDisplayListHead++, D_80073438);
 }
 
 extern Gfx D_80073450[];
 extern u8 D_04011A60[];
-void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
+void Gfx_DrawTextureIa8(s32, s32, s32, s32, void*, s32, s32);
 void Ui_DrawNumber(s32, s32, s32, s32);
 /**
  * Draws a Pokémon cell of the Ditto transform row: nickname, level and the icon already in
@@ -606,11 +606,11 @@ void Registration_DrawRevealedMonCell(s32 x, s32 y, u8* mon, s32 icon_id, s32 te
         Font_Printf(x + 4, y + 4, mon + 0x30);
         Font_EndTexturedTextRendering();
         gSPDisplayList(gDisplayListHead++, D_80073450);
-        func_8001BCB4(x + 44, y + 25, 8, 10, D_04011A60, 8, 0);
+        Gfx_DrawTextureIa8(x + 44, y + 25, 8, 10, D_04011A60, 8, 0);
         Ui_DrawNumber(x + 56, y + 23, mon[0x24], 3);
         idx = icon_id % cache[2] + cache[1];
         gSPDisplayList(gDisplayListHead++, D_80073408);
-        func_8001B884(x + 86, y + 6, 40, 40, (u8*)PokeIcon_GetImage((s8*)D_88103074, idx), 40, 0x200000);
+        Gfx_DrawTextureRgba16(x + 86, y + 6, 40, 40, (u8*)PokeIcon_GetImage((s8*)D_88103074, idx), 40, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);
     }
 }
@@ -920,7 +920,7 @@ s32 Registration_UpdateTeamList(RegistrationTeamList* list) {
     switch (list->state) {
         case 0:
             if (ScrollList_UpdateCursor(&list->list) == 0) {
-                res = func_8002BC14(D_800603C0);
+                res = Ui_GetSelectionDirection(D_800603C0);
                 if (res == -1) {
                     Audio_PlaySystemSound(3);
                     ret = -1;
@@ -935,14 +935,14 @@ s32 Registration_UpdateTeamList(RegistrationTeamList* list) {
             }
             break;
         case 1:
-            if ((ScrollList_UpdateCursor(&list->list) == 0) && (func_8002BC14(D_800603C0) == -1)) {
+            if ((ScrollList_UpdateCursor(&list->list) == 0) && (Ui_GetSelectionDirection(D_800603C0) == -1)) {
                 Audio_PlaySystemSound(3);
                 ret = -1;
             }
             break;
         case 2:
             if (ScrollList_UpdateCursor(&list->list) == 0) {
-                res = func_8002BC14(D_800603C0);
+                res = Ui_GetSelectionDirection(D_800603C0);
                 if (res == -1) {
                     Audio_PlaySystemSound(3);
                     ret = -1;
@@ -1087,7 +1087,7 @@ void Registration_OpenRegisterList(RegistrationScreen* screen) {
     Registration_InitTeamList(&screen->teamList, 48, 92, &screen->teamPointerList, 0);
 }
 
-s32 func_80025BD8();
+s32 GbSave_GetActivePort();
 M2C_UNK func_80027FF8(M2C_UNK *, s32);
 extern M2C_UNK D_88102D84;
 extern M2C_UNK D_88102D90;
@@ -1101,7 +1101,7 @@ extern M2C_UNK D_88103080;
  * Seen in play (2026-11-14): ran once when the とうろく screen loaded, with the screen from Registration_AllocScreen.
  */
 void Registration_InitScreen(RegistrationScreen* screen) {
-    D_88103078 = func_80025BD8();
+    D_88103078 = GbSave_GetActivePort();
     if (D_88103078 != -1) {
         func_80027FF8(&D_88103080, D_88103078);
     }
@@ -1172,7 +1172,7 @@ s32 Registration_UpdateScreen(RegistrationScreen* screen) {
     return done;
 }
 
-s32 func_80002D98(s32);
+s32 Util_Malloc(s32);
 extern s32 D_88103074;
 extern RegistrationScreen* D_881030F8;
 
@@ -1184,7 +1184,7 @@ extern RegistrationScreen* D_881030F8;
  * Seen in play (2026-11-14): ran once when the とうろく screen loaded.
  */
 void Registration_AllocScreen(void) {
-    D_881030F8 = (RegistrationScreen*)func_80002D98(sizeof(RegistrationScreen));
+    D_881030F8 = (RegistrationScreen*)Util_Malloc(sizeof(RegistrationScreen));
     Registration_InitScreen(D_881030F8);
     PokeIcon_SetSpeciesSlot(D_88103074, 24, DITTO, 0xF800); // #FF0000 (RGBA5551)
 }
@@ -1253,7 +1253,7 @@ void Registration_RunFrame(s32 fade_mode) {
     Registration_UpdateScreen(D_881030F8);
 }
 
-M2C_UNK func_80002DC0(s32);                         /* extern */
+M2C_UNK Util_Free(s32);                         /* extern */
 extern RegistrationScreen* D_881030F8;
 
 /**
@@ -1262,13 +1262,13 @@ extern RegistrationScreen* D_881030F8;
  * Seen in play (2026-11-14): breakpoint hit when B left for the main menu.
  */
 void Registration_FreeScreen(void) {
-    func_80002DC0(D_881030F8);
+    Util_Free(D_881030F8);
 }
 
-M2C_UNK func_8000256C(M2C_UNK);
-M2C_UNK func_80002620(M2C_UNK);
-M2C_UNK func_80003EB8(u32, M2C_UNK *, M2C_UNK *, M2C_UNK);
-M2C_UNK func_800040B4(s32, M2C_UNK *, M2C_UNK *);
+M2C_UNK MainPool_PushState(M2C_UNK);
+M2C_UNK MainPool_PopState(M2C_UNK);
+M2C_UNK Asset_LoadToSegment(u32, M2C_UNK *, M2C_UNK *, M2C_UNK);
+M2C_UNK Fragment_Load(s32, M2C_UNK *, M2C_UNK *);
 M2C_UNK func_80006724();
 M2C_UNK func_8000675C();
 M2C_UNK func_80006828(M2C_UNK, void*);
@@ -1300,15 +1300,15 @@ extern s32 D_88103074;
  * Seen in play (2026-11-14): breakpoint hit when はい on the main menu's 「ポケモンとうろく」 prompt loaded the fragment.
  */
 s32 Registration_Init(s32 unused0, s32 unused1) {
-    func_8000256C(0x52454753); // 'REGS'
+    MainPool_PushState(0x52454753); // 'REGS'
     Font_Init(0x3C, 0);
     D_88103070 = PokeIcon_AllocFramebuffers(1);
     D_88103074 = func_80017FDC(D_88103070, 25, 40, 40);
     PokeIcon_OpenModelArchives();
-    func_800040B4(((u32)((s32)&D_81000000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015B1A0, &D_0015E220);
-    func_80003EB8((u32)((s32)&D_01000000 & 0x0F000000) >> 0x18, &D_002E0BE0, &D_002E2B90, 0);
-    func_80003EB8((u32)((s32)&D_04000000 & 0x0F000000) >> 0x18, &D_00400F70, &D_004076E0, 0);
-    func_80003EB8((u32)((s32)&D_05000000 & 0x0F000000) >> 0x18, &D_004199E0, &D_0042C4A0, 0);
+    Fragment_Load(((u32)((s32)&D_81000000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015B1A0, &D_0015E220);
+    Asset_LoadToSegment((u32)((s32)&D_01000000 & 0x0F000000) >> 0x18, &D_002E0BE0, &D_002E2B90, 0);
+    Asset_LoadToSegment((u32)((s32)&D_04000000 & 0x0F000000) >> 0x18, &D_00400F70, &D_004076E0, 0);
+    Asset_LoadToSegment((u32)((s32)&D_05000000 & 0x0F000000) >> 0x18, &D_004199E0, &D_0042C4A0, 0);
     Registration_AllocScreen();
     func_8000675C();
     func_80006828(8, Registration_UpdateFade);
@@ -1316,7 +1316,7 @@ s32 Registration_Init(s32 unused0, s32 unused1) {
     func_80006828(8, Registration_UpdateFade);
     func_80006724();
     Registration_FreeScreen();
-    func_80002620(0x52454753); // 'REGS'
+    MainPool_PopState(0x52454753); // 'REGS'
     Fragment_QueueCall(((u32)((s32)&D_88000000 & 0x0FF00000) >> 0x14) - 0x10, &D_00235D70, &D_00238BD0, 0, 0);
     return 0x8040;
 }

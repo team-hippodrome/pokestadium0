@@ -29,10 +29,10 @@ void FreeBattle_ClearIndices(s32* indices, s32 start, s32 count) {
     }
 }
 
-s32 func_80020AFC(s32, s32, s32, s32);
-s32 func_80020CE4(void*, s32, s32);
-void func_80020C60(s32);
-void func_800207F8(u8*);
+s32 Deck_Open(s32, s32, s32, s32);
+s32 Deck_ReadEntries(void*, s32, s32);
+void Deck_CloseAndFlush(s32);
+void Pokemon_PrepareBattleMon(u8*);
 extern u8 D_80065D00[];
 
 /**
@@ -41,17 +41,17 @@ extern u8 D_80065D00[];
  * (フシ, ヒト, カメ at L10).
  */
 s32 FreeBattle_ReadTeam(s32 deck_kind, s32 port, s32 deck_index, TeamMonSlot* entry) {
-    s32 handle = func_80020AFC(deck_kind, port, deck_index, 0);
+    s32 handle = Deck_Open(deck_kind, port, deck_index, 0);
     s32 i;
     u8* row;
     s32 idx;
 
     for (i = 0; i < 6; i++, entry++) {
-        if (func_80020CE4(&entry->mon, 1, handle) == 0) {
+        if (Deck_ReadEntries(&entry->mon, 1, handle) == 0) {
             break;
         }
         if ((entry->mon.species.id > 0) && (entry->mon.species.id < 152)) {
-            func_800207F8(&entry->mon);
+            Pokemon_PrepareBattleMon(&entry->mon);
             idx = entry->mon.species.id - 1;
             row = &D_80065D00[idx * 23];
             entry->mon.type1 = row[6];
@@ -59,7 +59,7 @@ s32 FreeBattle_ReadTeam(s32 deck_kind, s32 port, s32 deck_index, TeamMonSlot* en
             entry->flags = 0;
         }
     }
-    func_80020C60(handle);
+    Deck_CloseAndFlush(handle);
     return i;
 }
 
@@ -187,10 +187,10 @@ typedef struct {
     /* 0x1C */ TeamMonSlot slots[6];
 } SlotList;
 
-s32 func_80021894(s32);
+s32 GbSave_EnsureMainDataLoaded(s32);
 s32 GbSave_GetTrainerId(s32 arg0);
 s32 GbSave_GetPlayerName(s32, void*);
-s32 func_800246A8(s32, s32);
+s32 Deck_IsSaveEntryPresent(s32, s32);
 s32 Deck_GetSaveEntryTrainerId(s32, s32);
 s32 Deck_GetSaveEntryName(s32 arg0, s32 arg1, u8* arg2);
 
@@ -204,7 +204,7 @@ void FreeBattle_LoadGbTeams(RecordList* list) {
     s32 i;
 
     for (i = 0; i < 4; i++) {
-        if (func_80021894(i) == 0) {
+        if (GbSave_EnsureMainDataLoaded(i) == 0) {
             continue;
         }
         rec->unk_00 = 0;
@@ -219,7 +219,7 @@ void FreeBattle_LoadGbTeams(RecordList* list) {
     }
 
     for (i = 0; i < 0x10; i++) {
-        if (func_800246A8(0x10, i) == 0) {
+        if (Deck_IsSaveEntryPresent(0x10, i) == 0) {
             continue;
         }
         rec->unk_00 = 0;
@@ -273,9 +273,9 @@ typedef struct Rec82000594 {
 typedef struct List82000594 { Rec82000594* records; s32 unk04; s32 count; } List82000594;
 extern Src82000594* D_8200AD04;
 void func_8000A460(char*, void*);
-void* func_80001B10(s32);
+void* Memmap_GetSegmentVaddr(s32);
 /**
- * Appends the 8 preset teams in D_8200AD04 (type 4, six Pokemon each, named via func_80001B10) to
+ * Appends the 8 preset teams in D_8200AD04 (type 4, six Pokemon each, named via Memmap_GetSegmentVaddr) to
  * the entry list.
  * Seen in play: runs when the 「エントリーポケモンのせんたく」 screen opens; the list shows the preset trainers
  * (なまえ ガール, むしとり, リかけい, …).
@@ -293,7 +293,7 @@ void FreeBattle_AddPresetTeams(List82000594* list) {
         rec->unk_02 = 0;
         rec->index = i;
         rec->unk_04 = D_8200AD04[i].unk_02;
-        func_8000A460(rec->name, func_80001B10(D_8200AD04[i].name));
+        func_8000A460(rec->name, Memmap_GetSegmentVaddr(D_8200AD04[i].name));
         rec->slotCount = 6;
         for (j = 0; j < 6; j++) {
             rec->slots[j].flags = 0;
@@ -416,10 +416,10 @@ typedef struct Entry80066AD8 {
 } Entry80066AD8;
 extern Entry80066AD8 D_80066AD8[];
 s32 Pokemon_GetTypeIndex(s32, s32);
-void func_8001AB6C(void);
-void func_8001A384(s32, s32);
-void func_8001ABBC(void);
-void func_8001AA9C(u8, u8, u8, u8);
+void Font_BeginTranslucentTextRendering(void);
+void Font_SetActive(s32, s32);
+void Font_EndTexturedTextRendering(void);
+void Gfx_SetEnvColor(u8, u8, u8, u8);
 void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 
 typedef struct Entry8006A9D4 {
@@ -444,14 +444,14 @@ void FreeBattle_DrawMoveName(s32 x, s32 y, s32 move, s32 centered) {
     const char* str;
     Color82000BC4* c;
 
-    func_8001A384(8, 0);
+    Font_SetActive(8, 0);
     if (move == -2) {
-        func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
+        Gfx_SetEnvColor(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
         str = D_82009B90;
     } else {
         entry = &D_8006A9D4[move];
         c = &D_80066AD8[entry->type].color;
-        func_8001AA9C(c->r, c->g, c->b, c->a);
+        Gfx_SetEnvColor(c->r, c->g, c->b, c->a);
         str = entry->name;
     }
     if (centered != 0) {
@@ -470,11 +470,11 @@ void FreeBattle_DrawTypeName(s32 x, s32 y, s32 mon, s32 type_slot) {
 
     if (idx != -1) {
         c = D_80066AD8[idx].color;
-        func_8001AB6C();
-        func_8001A384(8, 0);
-        func_8001AA9C(c.r, c.g, c.b, c.a);
+        Font_BeginTranslucentTextRendering();
+        Font_SetActive(8, 0);
+        Gfx_SetEnvColor(c.r, c.g, c.b, c.a);
         Font_Printf(x, y, D_80066AD8[idx].str);
-        func_8001ABBC();
+        Font_EndTexturedTextRendering();
     }
 }
 
@@ -539,10 +539,10 @@ extern s32 D_8200AC48;
 void BgStage_DrawFrame(void);
 void func_80019008(s32, Mon82000C5C*, s32);
 u8* func_800196F8(s32);
-void func_8001AAE4(u8, u8, u8, u8);
-void func_8001ABE8(void);
-void func_8001AC3C(void);
-void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+void Gfx_SetPrimColor(u8, u8, u8, u8);
+void Font_EnableTwoCycleTexturing(void);
+void Font_DisableTwoCycleTexturing(void);
+void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
 void func_80029028(s32, s32, s32, s32, Color82001CCC);
 void Ui_DrawTexturedDivider(s32, s32, s32, u8*);
 void Ui_FillRectPrimEnvColor(s32, s32, s32, s32, Color_RGBA8, Color_RGBA8);
@@ -571,23 +571,23 @@ void FreeBattle_DrawMonStatusWindow(Screen82000C5C* window) {
         func_80029028(x + 120, y + 0x20, window->w - 132, 120, D_82009034);
         func_80029028(x, y + 244, window->w - 12, 36, D_82008F54);
         Ui_FillRectPrimEnvColor(x, y + 152, window->w - 12, 86, D_82009038, D_8200903C);
-        func_8001AB6C();
-        func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
-        func_8001A384(8, 0);
+        Font_BeginTranslucentTextRendering();
+        Gfx_SetEnvColor(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
+        Font_SetActive(8, 0);
         Font_Printf(window->x + 14, window->y + 258, window->title);
-        func_8001ABBC();
-        func_8001AB6C();
-        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
-        func_8001A384(8, 0);
-        func_8001ABE8();
-        func_8001AAE4(0x7F, 0xA8, 0xFF, 0xFF); // #7FA8FF
+        Font_EndTexturedTextRendering();
+        Font_BeginTranslucentTextRendering();
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
+        Font_SetActive(8, 0);
+        Font_EnableTwoCycleTexturing();
+        Gfx_SetPrimColor(0x7F, 0xA8, 0xFF, 0xFF); // #7FA8FF
         Font_Printf(x + 10, y + 5, window->mon->nickname);
-        func_8001AC3C();
-        func_8001A384(4, -1);
-        func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
+        Font_DisableTwoCycleTexturing();
+        Font_SetActive(4, -1);
+        Gfx_SetEnvColor(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
         Font_Printf(x + 132, y + 9, D_82009BA0);
         Font_Printf(x + 274, y + 9, D_82009BA4);
-        func_8001A384(8, 0);
+        Font_SetActive(8, 0);
         Font_Printf(x + 178, y + 5, D_82009BA8, window->mon->level);
         Font_Printf(x + 320, y + 5, D_82009BAC, window->mon->maxHp);
         Font_Printf(x + 136, y + 40, D_82009BB0);
@@ -605,12 +605,12 @@ void FreeBattle_DrawMonStatusWindow(Screen82000C5C* window) {
         for (i = 0; i < count; i++) {
             FreeBattle_DrawMoveName(D_82009040[i].x + x, D_82009040[i].y + y, BattleMon_GetMoveIndex(window->mon, i), D_82009040[i].centered);
         }
-        func_8001ABBC();
+        Font_EndTexturedTextRendering();
         FreeBattle_DrawTypeName(x + 156, y + 0x40, (s32)window->mon, 0);
         FreeBattle_DrawTypeName(x + 156, y + 124, (s32)window->mon, 1);
         gSPDisplayList(gDisplayListHead++, D_80060290);
         for (i = 0; i < count; i++) {
-            func_8001B884(D_82009040[i].iconX + x, D_82009040[i].y + y, 20, 20, (u8*)D_82009040[i].icon, 20, 0x200000);
+            Gfx_DrawTextureRgba16(D_82009040[i].iconX + x, D_82009040[i].y + y, 20, 20, (u8*)D_82009040[i].icon, 20, 0x200000);
         }
         gSPDisplayList(gDisplayListHead++, D_80060398);
         Window_DrawLabeled(window->button1, (window->selection == 0) ? 2 : 0);
@@ -629,15 +629,15 @@ void FreeBattle_DrawMonStatusWindow(Screen82000C5C* window) {
             } else {
                 n = 0x10;
             }
-            func_8001B884(x, y + row + 0x20, 120, n, tex, 0x80, 0x200000);
+            Gfx_DrawTextureRgba16(x, y + row + 0x20, 120, n, tex, 0x80, 0x200000);
             tex += n << 8;
         }
         gSPDisplayList(gDisplayListHead++, D_80060398);
     }
 }
 
-s32 func_8002B390(s32);
-s32 func_8002BC14(s32);
+s32 Ui_HandleHorizontalSelectionInput(s32);
+s32 Ui_GetSelectionDirection(s32);
 M2C_UNK Audio_PlaySystemSound(M2C_UNK);
 
 /**
@@ -649,8 +649,8 @@ s32 FreeBattle_UpdateRentalConfirmChoice(s8* window) {
     s32 ret = 0;
     s32 temp_v0;
 
-    if (func_8002B390(window + 0xA4) == 0) {
-        temp_v0 = func_8002BC14(M2C_FIELD(window, s32*, 0xA4));
+    if (Ui_HandleHorizontalSelectionInput(window + 0xA4) == 0) {
+        temp_v0 = Ui_GetSelectionDirection(M2C_FIELD(window, s32*, 0xA4));
         if (temp_v0 == -1) {
             Audio_PlaySystemSound(3);
             ret = -1;
@@ -861,15 +861,15 @@ extern Gfx D_80073438[];
 extern u8 D_04011A60[];
 extern u8 D_05000AA0[];
 extern u8 D_05000478[];
-void func_8001AB6C(void);
-void func_8001ABBC(void);
-void func_8001A384(s32, s32);
+void Font_BeginTranslucentTextRendering(void);
+void Font_EndTexturedTextRendering(void);
+void Font_SetActive(s32, s32);
 void Font_SetColorForFlags(s32);
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color82001CCC);
-void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
+void Gfx_DrawTextureIa8(s32, s32, s32, s32, void*, s32, s32);
 void Ui_DrawNumberUnpadded(s32, s32, u8);
 s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
-void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
 /**
  * Draws one Pokemon cell of a team row: nickname, level and icon.
  * Seen in play: draws each Pokemon cell of a team row (icon, nickname, L20).
@@ -887,14 +887,14 @@ void FreeBattle_DrawMonCell(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 
         Ui_FillRectHighlighted(x + 3, y + 3, 126, 44, D_82008F58);
     }
     if (entry != NULL) {
-        func_8001AB6C();
+        Font_BeginTranslucentTextRendering();
         Font_SetColorForFlags(flags);
-        func_8001A384(4, 0);
+        Font_SetActive(4, 0);
         Font_Printf(x + 4, y + 4, (char*)entry + 0x30);
-        func_8001ABBC();
+        Font_EndTexturedTextRendering();
         gSPDisplayList(gDisplayListHead++, D_80073450);
         gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-        func_8001BCB4(x + 44, y + 25, 8, 10, D_04011A60, 8, 0);
+        Gfx_DrawTextureIa8(x + 44, y + 25, 8, 10, D_04011A60, 8, 0);
         Ui_DrawNumberUnpadded(x + 56, y + 23, ((u8*)entry)[0x24]);
         key = cache->start + frame;
         idx = cache->base + key % cache->count;
@@ -903,16 +903,16 @@ void FreeBattle_DrawMonCell(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 
             PokeIcon_SetMonSlot((PokeIconRenderer*)D_8200AC50, idx, (BattleMon*)entry, ((D_82008F58.c[1] << 3) & 0x7C0) | ((D_82008F58.c[2] >> 2) & 0x3E) | ((D_82008F58.c[0] << 8) & 0xF800) | 1);
         }
         gSPDisplayList(gDisplayListHead++, D_80073408);
-        func_8001B884(x + 86, y + 6, 40, 40, PokeIcon_GetImage(D_8200AC50, idx), 40, 0x200000);
+        Gfx_DrawTextureRgba16(x + 86, y + 6, 40, 40, PokeIcon_GetImage(D_8200AC50, idx), 40, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);
         if (flags & 0x800) {
             gSPDisplayList(gDisplayListHead++, D_80073408);
-            func_8001B884(x + 4, y + 20, 28, 28, D_05000AA0, 28, 0x200000);
+            Gfx_DrawTextureRgba16(x + 4, y + 20, 28, 28, D_05000AA0, 28, 0x200000);
             gSPDisplayList(gDisplayListHead++, D_80073438);
         }
         if (flags & 0x200) {
             gSPDisplayList(gDisplayListHead++, D_80073408);
-            func_8001B884(x + 4, y + 20, 28, 28, D_05000478, 28, 0x200000);
+            Gfx_DrawTextureRgba16(x + 4, y + 20, 28, 28, D_05000478, 28, 0x200000);
             gSPDisplayList(gDisplayListHead++, D_80073438);
         }
     }
@@ -967,10 +967,10 @@ void FreeBattle_DrawRowBorders(s32 x, s32 y, Color82001CCC color) {
 }
 
 extern char D_82009C08[];
-void func_8001AAE4(u8, u8, u8, u8);
+void Gfx_SetPrimColor(u8, u8, u8, u8);
 void Font_SetLineHeight(s32 arg0);
-void func_8001ABE8(void);
-void func_8001AC3C(void);
+void Font_EnableTwoCycleTexturing(void);
+void Font_DisableTwoCycleTexturing(void);
 
 /**
  * FreeBattle_DrawRentalPrompt
@@ -984,15 +984,15 @@ void func_8001AC3C(void);
  */
 void FreeBattle_DrawRentalPrompt(s32 x, s32 y, s32 flags) {
     FreeBattle_FillTeamPanel(x, y, D_82008F58);
-    func_8001AB6C();
-    func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
-    func_8001A384(0x20, 0);
+    Font_BeginTranslucentTextRendering();
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
+    Font_SetActive(0x20, 0);
     Font_SetLineHeight(42);
-    func_8001ABE8();
-    func_8001AAE4(0xFF, 0x64, 0xFF, 0xFF); // #FF64FF
+    Font_EnableTwoCycleTexturing();
+    Gfx_SetPrimColor(0xFF, 0x64, 0xFF, 0xFF); // #FF64FF
     Font_Printf(x + 174, y + 14, D_82009C08);
-    func_8001AC3C();
-    func_8001ABBC();
+    Font_DisableTwoCycleTexturing();
+    Font_EndTexturedTextRendering();
 }
 
 typedef struct Img82001E20 {
@@ -1021,7 +1021,7 @@ void Font_SetColorForFlags(s32);
 void Ui_DrawImageInStrips(Img82001E20*, s32, s32);
 void Ui_DrawNumberZeroPadded(s32, s32, s32, s32);
 void GbSave_DrawCartridgeIcon(s32, s32, s32, s32);
-void func_8001BCB4(s32, s32, s32, s32, void*, s32, s32);
+void Gfx_DrawTextureIa8(s32, s32, s32, s32, void*, s32, s32);
 /**
  * Draws the レンタルポケモン (Rental Pokemon) list with its なまえ (Name) header.
  * Seen in play (2026-11-13) ran while the entry screen showed the rental teams (ガール and むしとり rows
@@ -1037,11 +1037,11 @@ void FreeBattle_DrawRentalNameList(s32 x, s32 y, s32 flags, Slot82001E20* team) 
             GbSave_DrawCartridgeIcon(x + 5, y + 4, team->species, GbSave_GetPortGame(team->species));
         } else if (team->kind == 0x10) {
             Ui_DrawImageInStrips(&D_82008F64, x + 4, y + 4);
-            func_8001AB6C();
+            Font_BeginTranslucentTextRendering();
             Font_SetColorForFlags(flags);
-            func_8001A384(8, 0);
+            Font_SetActive(8, 0);
             Font_Printf(x + 27, y + 26, D_82009C2C, team->index + 1);
-            func_8001ABBC();
+            Font_EndTexturedTextRendering();
         }
     } else if (team->flags & 4) {
         img.width = img.height = img.stride = 0x40;
@@ -1049,25 +1049,25 @@ void FreeBattle_DrawRentalNameList(s32 x, s32 y, s32 flags, Slot82001E20* team) 
         Ui_DrawImageInStrips(&img, x + 22, y + 2);
     }
     if (team->flags & 2) {
-        func_8001AB6C();
+        Font_BeginTranslucentTextRendering();
         Font_SetColorForFlags(flags);
-        func_8001A384(4, 0);
+        Font_SetActive(4, 0);
         Font_Printf(x + 4, y + 65, D_82009C34);
-        func_8001ABBC();
+        Font_EndTexturedTextRendering();
         return;
     }
-    func_8001AB6C();
-    func_8001AA9C(0xFF, 0xC8, 0xC8, 0xFF); // #FFC8C8
-    func_8001A384(4, -1);
+    Font_BeginTranslucentTextRendering();
+    Gfx_SetEnvColor(0xFF, 0xC8, 0xC8, 0xFF); // #FFC8C8
+    Font_SetActive(4, -1);
     Font_Printf(x + 4, y + 65, D_82009C48);
     Font_SetColorForFlags(flags);
-    func_8001A384(4, 0);
+    Font_SetActive(4, 0);
     Font_Printf(x + 56, y + 65, team->name);
-    func_8001ABBC();
+    Font_EndTexturedTextRendering();
     if (team->value != 0) {
         gSPDisplayList(gDisplayListHead++, D_80073450);
         gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-        func_8001BCB4(x + 37, y + 86, 40, 10, D_04010918, 40, 0);
+        Gfx_DrawTextureIa8(x + 37, y + 86, 40, 10, D_04010918, 40, 0);
         Ui_DrawNumberZeroPadded(x + 81, y + 84, team->value, 5);
     }
 }
@@ -1083,7 +1083,7 @@ extern Color82001CCC D_82008F60;
 extern u8* D_82008F74[];
 extern Gfx D_80073408[];
 extern Gfx D_80073438[];
-void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
 /**
  * Draws a full team row: trainer panel and six Pokemon cells.
  * Seen in play: draws each team row on 「エントリーポケモンのせんたく」.
@@ -1142,7 +1142,7 @@ void FreeBattle_DrawTeamRow(s32 x, s32 y, SlotList *team, s32 row, s32 flags, Sl
           _g->words.w0 = (((unsigned int) ((((unsigned int) 0xde) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0x00) & ((0x01 << 8) - 1)) << 16))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 16) - 1)) << 0)); // FAKE: hand-expanded gbi macro
         }
         ;
-        func_8001B884(x + 96, (y + 5) + (i * 14), 40, 14, D_82008F74[i], 40, 0x200000);
+        Gfx_DrawTextureRgba16(x + 96, (y + 5) + (i * 14), 40, 14, D_82008F74[i], 40, 0x200000);
         {
           Gfx *_g = (Gfx *) (gDisplayListHead++);
           _g->words.w1 = (unsigned int) D_80073438; // FAKE: hand-expanded gbi macro

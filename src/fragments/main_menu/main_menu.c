@@ -117,7 +117,7 @@ void MainMenu_DrawContinueTournamentPrompt(MainMenuPromptWindow* prompt) {
 }
 
 s32 Menu_UpdateCursor(s8*);
-s32 func_8002BC14(s32);
+s32 Ui_GetSelectionDirection(s32);
 extern s32 D_800603C0;
 
 /**
@@ -136,7 +136,7 @@ s32 MainMenu_UpdatePromptCursor(MainMenuPromptWindow* prompt) {
             return 0;
     }
     if (Menu_UpdateCursor(&prompt->menu) == 0) {
-        if (func_8002BC14(D_800603C0) == 1) {
+        if (Ui_GetSelectionDirection(D_800603C0) == 1) {
             ret = prompt->menu.cursor + 1;
         }
     }
@@ -144,7 +144,7 @@ s32 MainMenu_UpdatePromptCursor(MainMenuPromptWindow* prompt) {
 }
 
 extern Gfx D_80073450[];
-void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
+void Gfx_DrawTextureRgba16(s32, s32, s32, s32, u8*, s32, s32);
 /**
  * Draws an IA image at (x, y) in strips with primitive alpha `alpha`.
  * Seen in play (2026-11-12) on the main menu: it drew the 96 x 64 item pictures at x 89
@@ -171,7 +171,7 @@ void MainMenu_DrawImageWithAlpha(s32 x, s32 y, s32 width, s32 height, s32 stride
             } else {
                 n = rows;
             }
-            func_8001B884(x, cur_y, width, n, pix, stride, 0);
+            Gfx_DrawTextureRgba16(x, cur_y, width, n, pix, stride, 0);
             rows -= n;
             cur_y += n;
             pix += n * stride * 2;
@@ -206,7 +206,7 @@ void MainMenu_DrawTexturedFrameWithAlpha(s32 x, s32 y, s32 width, s32 height, u8
 extern u8 D_88002034[][0x18];
 /* A main menu item's frame. */
 typedef struct MainMenuRect { s32 x; s32 y; s32 w; s32 h; } MainMenuRect;
-/* A main menu item's label: x, y offset in the frame, an argument of func_8001A384 and the text (none when NULL). */
+/* A main menu item's label: x, y offset in the frame, an argument of Font_SetActive and the text (none when NULL). */
 typedef struct MainMenuLabel { s32 x; s32 y; s32 unk_08; char* text; } MainMenuLabel;
 extern Color_RGBA8 D_88002010[];
 extern MainMenuRect D_8800210C[];
@@ -216,11 +216,11 @@ extern Color_RGBA8 D_80073520;
 extern u8 D_80073554[];
 void Ui_FillRectPrimColor(s32, s32, s32, s32, Color_RGBA8);
 void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
-void func_8001AB6C(void);
+void Font_BeginTranslucentTextRendering(void);
 void func_8001AA9C(u8, u8, u8, u8);
-void func_8001A384(s32, s32);
+void Font_SetActive(s32, s32);
 void Font_Printf(s32 x, s32 y, const char* fmt, ...);
-void func_8001ABBC(void);
+void Font_EndTexturedTextRendering(void);
 
 // D_88002034 is declared as raw bytes in this file; each 0x18 byte row is one MainMenuImage.
 #define ICON(i) (((MainMenuImage*)D_88002034)[i])
@@ -270,11 +270,11 @@ void MainMenu_DrawItem(s32 x, s32 y, s32 item, s32 index, s32 flags, f32* opacit
     if (D_8800219C[index].text) {
         text_color = *(Color_RGBA8*)D_800734A8;
         text_color.a = alpha;
-        func_8001AB6C();
+        Font_BeginTranslucentTextRendering();
         func_8001AA9C(text_color.r, text_color.g, text_color.b, text_color.a);
-        func_8001A384(0x10, D_8800219C[index].unk_08);
+        Font_SetActive(0x10, D_8800219C[index].unk_08);
         Font_Printf(D_8800210C[index].x + D_8800219C[index].x, D_8800210C[index].y + D_8800219C[index].y, D_8800219C[index].text);
-        func_8001ABBC();
+        Font_EndTexturedTextRendering();
     }
     if (flags & 2) {
         Ui_DrawRoundedFrame(D_8800210C[index].x - 4, D_8800210C[index].y - 4, D_8800210C[index].w + 8, D_8800210C[index].h + 8, D_80073520);
@@ -283,8 +283,8 @@ void MainMenu_DrawItem(s32 x, s32 y, s32 item, s32 index, s32 flags, f32* opacit
 
 void func_80027410(void*, void*, s32, s32, s32);
 void GridMenu_Init(void*, void*, void*, void*, s32, s32, s32);
-s32 func_800226BC(s32, s32, s32);
-s32 func_80025BD8();
+s32 Deck_GetCount(s32, s32, s32);
+s32 GbSave_GetActivePort();
 void MainMenu_DrawItem();
 /**
  * Sets up the main menu item grid with the cursor on `cursor` and disables (bit 0) the items
@@ -325,7 +325,7 @@ M2C_UNK MainMenu_InitItemList(MainMenuItemList* item_list, s32 cursor, s32 gb_sa
             item_list->menu.itemFlags[2] |= 1;
             break;
     }
-    if ((gb_save_status == 1 || gb_save_status == 2) && func_800226BC(0x20, func_80025BD8(), 0) == 0) {
+    if ((gb_save_status == 1 || gb_save_status == 2) && Deck_GetCount(0x20, GbSave_GetActivePort(), 0) == 0) {
         item_list->menu.itemFlags[5] |= 1;
     }
 }
@@ -469,8 +469,8 @@ void MainMenu_DrawMessageWindow(MainMenuMessageWindow* window) {
     }
 }
 
-s32 func_8002B390(s8*);
-s32 func_8002BC14(s32);
+s32 Ui_HandleHorizontalSelectionInput(s8*);
+s32 Ui_GetSelectionDirection(s32);
 extern s32 D_800603C0;
 
 /**
@@ -487,8 +487,8 @@ s32 MainMenu_UpdateMessageWindow(MainMenuMessageWindow* window) {
         default:
             return 0;
     }
-    if (func_8002B390(&window->choice) == 0) {
-        ret = func_8002BC14(D_800603C0);
+    if (Ui_HandleHorizontalSelectionInput(&window->choice) == 0) {
+        ret = Ui_GetSelectionDirection(D_800603C0);
         if (ret == 1) {
             switch (window->choice.cursor) {
                 case 0:
@@ -618,7 +618,7 @@ extern s32 D_880022A0[];
 extern Color_RGBA8 D_88001FEC[];
 extern u8 D_88002034[][0x18];
 s32 GridMenu_UpdateCursorSkipDisabled(s8*);
-void func_800245E0(s32, s32);
+void Save_ResetAndCommitTypedRecord(s32, s32);
 s32 MainMenu_LoadSelectedFragment(s32);
 /**
  * Runs the main menu screen's state machine for one frame and returns the chosen item.
@@ -655,7 +655,7 @@ s32 MainMenu_UpdateScreen(MainMenuScreen* screen) {
                         break;
                     case 3:
                         Audio_PlaySystemSound(0x1F);
-                        func_800245E0(0x15, 0);
+                        Save_ResetAndCommitTypedRecord(0x15, 0);
                         gSessionContext.sessionFlags &= ~1;
                         screen->promptWindow.window.animTimer = 7;
                         screen->nextState = 2;
@@ -665,7 +665,7 @@ s32 MainMenu_UpdateScreen(MainMenuScreen* screen) {
             break;
         case 2:
             if (GridMenu_UpdateCursorSkipDisabled(&screen->itemList.menu) == 0) {
-                dir = func_8002BC14(D_800603C0);
+                dir = Ui_GetSelectionDirection(D_800603C0);
                 if (dir == -1) {
                     Audio_PlaySystemSound(8);
                 } else if (dir == 1) {
@@ -705,12 +705,12 @@ s32 MainMenu_UpdateScreen(MainMenuScreen* screen) {
     return ret;
 }
 
-s32 func_80002D98(M2C_UNK);
+s32 Util_Malloc(M2C_UNK);
 M2C_UNK func_8000B2F4(s32);
 u8 GbSave_GetSaveState(s32 arg0);
 s32 GbSave_HasPokedex(s32);
-s32 func_80022EDC(s32);
-s32 func_80025BD8();
+s32 GbSave_SavedAtPokemonCenter(s32);
+s32 GbSave_GetActivePort();
 M2C_UNK func_80027FF8(M2C_UNK *, s32);
 extern s32 D_800603C0;
 extern s32 D_80073400;
@@ -725,7 +725,7 @@ extern MainMenuScreen* D_88002B20;
  *     if there is one, GbSave_BuildPortSummary fills D_88002B08 for the summary bar.
  *  2. Picks the GB save status: no port -> 4; GbSave_GetSaveState != 0 -> 3 (no GB Pokémon:
  *     blank or broken save); no Pokédex -> 2; not saved at a Pokémon Center -> 1; else 0.
- *  3. D_88002B20 = func_80002D98(0x3B0), then
+ *  3. D_88002B20 = Util_Malloc(0x3B0), then
  *     MainMenu_InitScreen(D_88002B20, status, D_80073400 == 0 ? 4 : D_80073400 - 1, &D_88002B20)
  *     and finally func_8000B2F4(D_800603C0). D_80073400 is the last cursor + 1 (MainMenu_Init
  *     stores it), so the menu reopens on the item last chosen, and on バトル (4) the first time.
@@ -743,7 +743,7 @@ void MainMenu_LoadGbSaveSummary(void) {
     s32 var_s0;
 
     var_s0 = 0;
-    sp24 = func_80025BD8();
+    sp24 = GbSave_GetActivePort();
     D_88002B00 = sp24;
     if (D_88002B00 != -1) {
         func_80027FF8(&D_88002B08, D_88002B00);
@@ -754,10 +754,10 @@ void MainMenu_LoadGbSaveSummary(void) {
         var_s0 = 3;
     } else if (GbSave_HasPokedex(sp24) == 0) {
         var_s0 = 2;
-    } else if (func_80022EDC(sp24) == 0) {
+    } else if (GbSave_SavedAtPokemonCenter(sp24) == 0) {
         var_s0 = 1;
     }
-    D_88002B20 = (MainMenuScreen*)func_80002D98(sizeof(MainMenuScreen));
+    D_88002B20 = (MainMenuScreen*)Util_Malloc(sizeof(MainMenuScreen));
     MainMenu_InitScreen(D_88002B20, var_s0, (D_80073400 == 0) ? 4 : D_80073400 - 1, &D_88002B20);
     func_8000B2F4(D_800603C0);
 }
@@ -894,7 +894,7 @@ s32 MainMenu_DrawSummaryBarAndBackground(s32 fade_mode) {
 
 void Cont_StartReadInputs(void);                            /* extern */
 void Cont_ReadInputs(void);                            /* extern */
-M2C_UNK func_8001B5F0();                            /* extern */
+M2C_UNK Input_ResetRepeatState();                            /* extern */
 s32 MainMenu_UpdateScreen(MainMenuScreen*);
 extern MainMenuScreen* D_88002B20;
 
@@ -908,7 +908,7 @@ s32 MainMenu_RunFrame(s32 fade_mode) {
     sp1C = 0;
     Cont_StartReadInputs();
     Cont_ReadInputs();
-    func_8001B5F0();
+    Input_ResetRepeatState();
     MainMenu_DrawScreen(D_88002B20);
     if (fade_mode == 0) {
         sp1C = MainMenu_UpdateScreen(D_88002B20);
@@ -916,7 +916,7 @@ s32 MainMenu_RunFrame(s32 fade_mode) {
     return sp1C;
 }
 
-M2C_UNK func_80002DC0(s32);                         /* extern */
+M2C_UNK Util_Free(s32);                         /* extern */
 extern MainMenuScreen* D_88002B20;
 
 /**
@@ -924,7 +924,7 @@ extern MainMenuScreen* D_88002B20;
  * Seen in play (2026-11-12): ran once as the main menu was left for いちらん.
  */
 void MainMenu_Free(void) {
-    func_80002DC0(D_88002B20);
+    Util_Free(D_88002B20);
 }
 
 extern MainMenuScreen* D_88002B20;
@@ -939,16 +939,16 @@ s32 MainMenu_DrawFrame(s32 fade_mode) {
     return 0;
 }
 
-M2C_UNK func_8000256C(M2C_UNK);                     /* extern */
-M2C_UNK func_80002620(M2C_UNK);                     /* extern */
+M2C_UNK MainPool_PushState(M2C_UNK);                     /* extern */
+M2C_UNK MainPool_PopState(M2C_UNK);                     /* extern */
 M2C_UNK func_80003EB8(u32, M2C_UNK *, M2C_UNK *, M2C_UNK); /* extern */
 M2C_UNK StageFade_Start(M2C_UNK);                     /* extern */
 M2C_UNK func_80006724();                            /* extern */
 M2C_UNK func_8000675C();                            /* extern */
 s32 func_80006828(M2C_UNK, M2C_UNK *);              /* extern */
 M2C_UNK func_80006998(M2C_UNK);                     /* extern */
-M2C_UNK func_8000A7B0(M2C_UNK);                     /* extern */
-M2C_UNK func_8000A7FC(M2C_UNK);                     /* extern */
+M2C_UNK Audio_PlayMusicIfChanged(M2C_UNK);                     /* extern */
+M2C_UNK Audio_StopMusic(M2C_UNK);                     /* extern */
 s32 Font_Init(s32 load_size, s32 side);            /* extern */
 M2C_UNK func_8001A360();                            /* extern */
 void MainMenu_LoadGbSaveSummary(void);                          /* extern */
@@ -976,7 +976,7 @@ s32 MainMenu_Init(s32 is_first_entry) {
     s32 sp1C;
     s32 temp_v0;
 
-    func_8000256C(0x434F4D50); // 'COMP'
+    MainPool_PushState(0x434F4D50); // 'COMP'
     Font_Init(0x18, 0);
     func_80003EB8((u32) ((s32) &D_01000000 & 0x0F000000) >> 0x18, &D_002E0BE0, &D_002E2B90, 0);
     func_80003EB8((u32) ((s32) &D_04000000 & 0x0F000000) >> 0x18, &D_00400F70, &D_004076E0, 0);
@@ -992,7 +992,7 @@ s32 MainMenu_Init(s32 is_first_entry) {
     } else {
         func_80006828(17, &MainMenu_DrawSummaryBarAndBackground);
     }
-    func_8000A7B0(9);
+    Audio_PlayMusicIfChanged(9);
     temp_v0 = func_80006828(0, &MainMenu_RunFrame);
     sp1C = temp_v0;
     D_80073400 = D_88002B20->itemList.menu.cursor + 1;
@@ -1004,14 +1004,14 @@ s32 MainMenu_Init(s32 is_first_entry) {
         }
         StageFade_Start(15);
         func_80006828(17, &MainMenu_DrawFrame);
-        func_8000A7FC(15);
+        Audio_StopMusic(15);
     } else {
         func_80006998(1);
     }
     func_80006724();
     MainMenu_Free();
     func_8001A360();
-    func_80002620(0x434F4D50); // 'COMP'
+    MainPool_PopState(0x434F4D50); // 'COMP'
     return sp1C;
 }
 

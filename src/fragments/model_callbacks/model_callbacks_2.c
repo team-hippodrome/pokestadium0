@@ -8,7 +8,7 @@
 #include "vector_math.h"
 
 extern s16 D_800AFB28;
-Gfx* func_80032D90(Gfx* gfx);
+Gfx* ModelRenderer_DrawSlotModel(Gfx* gfx);
 
 /**
  * Builds a display list that loads I16 texture `index` between the two segments.
@@ -55,7 +55,7 @@ Gfx* ModelCallback_BuildFlameTextureList(Gfx* gfx, DisplayListAddresses* address
                         G_TX_NOLOD);
     ModelRenderer_UpdateSlotVertices();
     {
-        Gfx* gfx2 = func_80032D90(gfx);
+        Gfx* gfx2 = ModelRenderer_DrawSlotModel(gfx);
         gSPEndDisplayList(gfx2++);
         return gfx2;
     }

@@ -104,7 +104,7 @@ void Registration_DrawTrainerPanel(s32 x, s32 y, s32 text_flags, RegisteredTeam*
 void Registration_FillRowBackground(s32 x, s32 y, s32 height);
 void Registration_DrawMonCell(s32 x, s32 y, u8* entry, s32 id, s32 color, RegistrationIconCache* cache);
 void Registration_DrawEmptyMonCell(s32 arg0, s32 arg1);
-void func_88101478(s32 x, s32 y, u8* entry, s32 frame, s32 color, s32* anim);
+void Registration_DrawRevealedMonCell(s32 x, s32 y, u8* entry, s32 frame, s32 color, s32* anim);
 void Registration_InitTimer(RegistrationTimer* arg0, s32 arg1);
 void Registration_InitTimerFull(RegistrationTimer* arg0, s32 arg1);
 struct unk_func_88101690;
