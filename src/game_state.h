@@ -28,7 +28,7 @@ typedef struct unk_D_800AE520 {
 
 typedef struct BattleMonSpecies {
     /* 0x00 */ u8 id;
-    /* 0x01 */ u8 isRental; // 1 for a rental picked in the tournament entry screen (seen: a rented Pikachu); 0 for GB Pokemon (Pokemon_FromGbRecord). Free Battle rentals had 0. func_82200E2C skips its Pikachu-without-Surf check (likely the Surf Pikachu reward) when any team member has it
+    /* 0x01 */ u8 isRental; // 1 for a rental picked in the tournament entry screen (seen: a rented Pikachu); 0 for GB Pokemon (Pokemon_FromGbRecord). Free Battle rentals had 0. Tournament_CheckSurfPikachuReward skips its Pikachu-without-Surf check (likely the Surf Pikachu reward) when any team member has it
 } BattleMonSpecies; // size = 0x2
 
 typedef struct BattleMon {
@@ -126,7 +126,7 @@ typedef struct BattleMonRuntime {
 typedef struct ExtendedRosterInfo {
     /* 0x000 */ u16 unk_000;
     /* 0x002 */ u8 numberOfPokemonCanBePicked; // size of the team the order screen picks from (battleMon[0..n-1]); 6 for a tournament template team
-    /* 0x003 */ u8 trainerIndex; // @unverified: index of the trainer's BinArchive file the VS screen loads (vs_scene), 23 for 1P and 15 for the round-1 bug catcher in play; nintendo_cup_teams sets the template index or round + 0x16; func_82008C40 (GB-cart teams) stores the 0-based controller/GB port, so ports 0-3 pick the players' pictures
+    /* 0x003 */ u8 trainerIndex; // @unverified: index of the trainer's BinArchive file the VS screen loads (vs_scene), 23 for 1P and 15 for the round-1 bug catcher in play; nintendo_cup_teams sets the template index or round + 0x16; FreeBattle_LoadGbCartTrainer (GB-cart teams) stores the 0-based controller/GB port, so ports 0-3 pick the players' pictures
     /* 0x004 */ char title[0x10]; // the small line over the name on the VS screen: poking the bug catcher's to ＡＢ showed ＡＢ there; 「トレーナー」 (Trainer) for both sides in Free Battle and the round-1 tournament; copied from the trainer template's title, e.g. 「ほっかいどう」 (Hokkaido) or 「トレーナー」 (Trainer)
     /* 0x014 */ char fullName[0x14]; // the name on the VS screen (「むしとり\nしょうねん」 in round 1); the trainerName (1P, ＣＯＭ) in Free Battle; copied from the template's two-line name, e.g. 「むしとり\nしょうねん」 (Bug Catcher)
     /* 0x028 */ BattleMon battleMon[6];
@@ -146,12 +146,12 @@ typedef struct TeamRoster {
 
 // One side of a battle: its trainer(s) (two in a tag battle), the Pokémon model it shows and model load state.
 typedef struct BattleSide {
-    /* 0x00 */ u8 modelFlags; // 0x80 asks for the side's model to be reloaded, 0x40 while it is requested, 0x10 once loaded; a switch in play wrote 0x80 (BattleScene_PhaseWithdraw), 0xC0 (Trainer_RequestPokeIcon), 0x10 (PokeIcon_WaitFrameLoadForObject), then 0
+    /* 0x00 */ u8 modelFlags; // 0x80 asks for the side's model to be reloaded, 0x40 while it is requested, 0x10 once loaded; a switch in play wrote 0x80 (BattleScene_PhaseWithdraw), 0xC0 (BattleSide_RequestModelLoad), 0x10 (PokeIcon_WaitFrameLoadForObject), then 0
     /* 0x01 */ u8 tagTeamSize;
     /* 0x02 */ s16 displayModel;
     /* 0x04 */ BattleMon* displayMon; // party BattleMon whose model the side shows; moved from pokemonPicked[0] to [3] with displayModel 95 to 31 when 1P switched Onix for Nidoqueen
     /* 0x08 */ TeamRoster* teamMember[2];
-    /* 0x10 */ ModelLoadContext* modelLoadContext; // @unverified: loader Trainer_RequestPokeIcon and the PokeIcon_*ForObject functions use
+    /* 0x10 */ ModelLoadContext* modelLoadContext; // @unverified: loader BattleSide_RequestModelLoad and the PokeIcon_*ForObject functions use
     /* 0x14 */ ModelNodeView* loadedModel; // @unverified: modelLoadContext->loadedModel once the model load finishes
     /* 0x18 */ ModelNodeView* unk_18;
     /* 0x1C */ u8 unk_1C;
@@ -161,7 +161,7 @@ typedef struct BattleSide {
     /* 0x24 */ arg1_func_80019420* background; // @unverified: buffer passed to PokeIcon_RequestBackgroundLoad, then modelLoadContext->loadedBackground
 } BattleSide; // size = 0x28
 
-// Zero's layout (offsets checked against func_80025910, func_8002572C and func_80025830, which
+// Zero's layout (offsets checked against Session_InitContinueTrainer, BattleSide_InitSingleTrainer and Tournament_SaveContinueData, which
 // reach these fields by raw offset). gSessionContext at 0x800AE8F0 is defined in game_state.c.
 typedef struct SessionContext {
     /* 0x0000 */ s8 mode;
@@ -180,7 +180,7 @@ typedef struct SessionContext {
     /* 0x1091 */ char unk1091[0x1];
     /* 0x1092 */ u8 inRound2;
     /* 0x1093 */ u8 continueCount;
-    /* 0x1094 */ u8 teamGbPort; // @unverified: GB port of the continued team, 0xFF for rentals (func_80025A64); passed to Session_LoadPortSnapshot
+    /* 0x1094 */ u8 teamGbPort; // @unverified: GB port of the continued team, 0xFF for rentals (Tournament_LoadContinueData); passed to Session_LoadPortSnapshot
     /* 0x1095 */ u8 sessionFlags;
     /* 0x1096 */ u16 transitionFlags;
 } SessionContext; // size = 0x1098
@@ -251,13 +251,13 @@ TeamRoster* Trainer_GetSlots(void);
 s32 GbSave_GetActivePort(void);
 void GbSave_SetActivePort(s32 arg0);
 void State_N64ddBootUnused(void);
-void State_GbTower(void);
-void State_FastN64Logo(void);
-void func_800268DC(void);
+void State_GbPlayer(void);
+void State_TitleScreen(void);
+void Game_UnusedStub(void);
 void Game_ShutdownAndLoadFragment(s32 arg0, s32 arg1);
 void Game_ResetStorageDevice(void);
-void Display_DisableBlackout(void);
-void func_800273E8(s8* arg0, s32 arg1);
+void ImageGrid_Clear(void);
+void BezierPath_InitEased(s8* arg0, s32 arg1);
 M2C_UNK func_80025BE4(s32);                         /* extern */
 
 #endif // GAME_STATE_H

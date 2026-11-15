@@ -418,14 +418,14 @@ void BattleSound_PlayCommand5(s16 unused, s32 param) {
     Audio_PlayCommand(5, param, param);
 }
 
-M2C_UNK func_80041374(M2C_UNK, s32);                /* extern */
+M2C_UNK Audio_StopSoundByCategory(M2C_UNK, s32);                /* extern */
 
 /**
- * Calls func_80041374(5, param).
+ * Calls Audio_StopSoundByCategory(5, param).
  * @unverified Name guessed from the code.
  */
 void BattleSound_SendCommand5(s32 param) {
-    func_80041374(5, param);
+    Audio_StopSoundByCategory(5, param);
 }
 
 /*
@@ -493,21 +493,21 @@ void BattleAnim_PlayBattleSequenceById(ActivePokemon* active_pokemon, s32 sequen
     }
 }
 
-M2C_UNK func_80041940();
-void func_80042508(s32);
+M2C_UNK Announcer_SetHp();
+void Announcer_CommentOnMove(s32);
 s32 func_82107A5C(s8*);
 /**
  * Takes the active Pokemon's roster entry (teamRoster->pokemonPicked indexed
- * by state.rosterIndex) and calls func_80041940 with the side index of the
+ * by state.rosterIndex) and calls Announcer_SetHp with the side index of the
  * Pokemon (func_82107A5C), the entry's hp and its unk_26.  Unless the display
- * object's objectType is 0x98, it then calls func_80042508 with the side index,
+ * object's objectType is 0x98, it then calls Announcer_CommentOnMove with the side index,
  * OR-ed with 0x10 when the entry's status byte has a sleep bit (mask 0x07) or
  * the freeze bit (0x20) set, or when the scene's unk_48 is 0x1F or 0x1B.
- * Related to BattleSound_UpdateSideHp, which makes the func_80041940 call alone.
- * Notes: func_80041940 is declared without a prototype because this function
+ * Related to BattleSound_UpdateSideHp, which makes the Announcer_SetHp call alone.
+ * Notes: Announcer_SetHp is declared without a prototype because this function
  * passes three arguments while BattleSound_UpdateSideHp passes four; the unused "pad"
  * local only reproduces the retail stack slot of "mon" (0x18).  What
- * func_80041940/func_80042508 do is not established here (they look like
+ * Announcer_SetHp/Announcer_CommentOnMove do is not established here (they look like
  * audio calls, but that is a guess).
  * @unverified Name guessed from the code.
  */
@@ -515,13 +515,13 @@ void BattleSound_UpdateSideHpAndStatus(ActivePokemon* active_pokemon) {
     UNUSED s32 pad; // FAKE: stack padding
     BattleMon* mon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->state.rosterIndex];
 
-    func_80041940(func_82107A5C(active_pokemon), mon->hp, mon->maxHp);
+    Announcer_SetHp(func_82107A5C(active_pokemon), mon->hp, mon->maxHp);
     if (active_pokemon->displayObject.objectType != 0x98) {
         if ((mon->statusCondition & 7) || (mon->statusCondition & 0x20) ||
             (sBattleScene.scene->moveEffectKind == 0x1F) || (sBattleScene.scene->moveEffectKind == 0x1B)) {
-            func_80042508(func_82107A5C(active_pokemon) | 0x10);
+            Announcer_CommentOnMove(func_82107A5C(active_pokemon) | 0x10);
         } else {
-            func_80042508(func_82107A5C(active_pokemon));
+            Announcer_CommentOnMove(func_82107A5C(active_pokemon));
         }
     }
 }
@@ -529,7 +529,7 @@ void BattleSound_UpdateSideHpAndStatus(ActivePokemon* active_pokemon) {
 s32 func_82107A5C(s8 *);                          /* extern */
 /**
  * Same as BattleSound_UpdateSideHpAndStatus without the status call: passes the Pokemon's side,
- * battle HP (0x7D2) and max HP to func_80041940, unless its display object type is 0x98.
+ * battle HP (0x7D2) and max HP to Announcer_SetHp, unless its display object type is 0x98.
  * @unverified Name guessed from the code.
  */
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
@@ -541,6 +541,6 @@ void BattleSound_UpdateSideHp(s8 *arg0)
   if ((*((s16 *) (((s8 *) arg0) + 0x1A))) != 0x98)
   {
     sp18 = temp_v1;
-    func_80041940(func_82107A5C(arg0), *((u16 *) (((s8 *) arg0) + 0x7D2)), *((u16 *) (((s8 *) temp_v1) + 0x26)), arg0); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+    Announcer_SetHp(func_82107A5C(arg0), *((u16 *) (((s8 *) arg0) + 0x7D2)), *((u16 *) (((s8 *) temp_v1) + 0x26)), arg0); // FAKE: decomp slop, raw pointer casts stand in for struct fields
   }
 }

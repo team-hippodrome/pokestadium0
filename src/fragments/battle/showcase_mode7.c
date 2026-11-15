@@ -119,13 +119,13 @@ void SceneMode7_StepFollowCameraPath(CameraNode* camera) {
 }
 
 M2C_UNK func_80006998(M2C_UNK);
-s32 func_80005B98(s32);
+s32 StageFade_Start(s32);
 /**
  * Looks at the word at offset 8 of the state block (D_8219A580 + 0x78C, i.e.
  * ActivePokemonState::rosterIndex).  If rosterIndex + 1 is 6 or more as an
  * unsigned value (rosterIndex outside -1..4), it writes 3 to offset 0x40 and 7
  * to sBattleScene.scene->phaseStep and returns.
- * Otherwise it calls func_80006998(0) and func_80005B98(5) and adds 1 to the
+ * Otherwise it calls func_80006998(0) and StageFade_Start(5) and adds 1 to the
  * word at offset 0x20, the same step counter that SceneMode7_StepWaitModelReady and
  * SceneMode7_StepStartCameraPath advance.  What the two values written in the first case mean
  * is not established from the code alone.
@@ -141,7 +141,7 @@ void SceneMode7_StepFadeOutOrFinish(CameraNode* camera) {
         return;
     }
     func_80006998(0);
-    func_80005B98(5);
+    StageFade_Start(5);
     sBattleScene.scene->phaseStep = (s32)(sBattleScene.scene->phaseStep + 1);
 }
 
@@ -178,7 +178,7 @@ void SceneMode7_StepLoadNextRosterPokemon(UNUSED CameraNode* camera) {
  * Case 6 of the scene-state switch in SceneMode7_Update. The word at
  * D_8219A580 + 0x85C is a pointer to a flag byte. If bit 0x10 of that byte is
  * set, the code clears bits 0x10 and 0x80 in it (the mask is 0xFF6F), calls
- * Battle_LoadOwnerModelForSwitchIn with D_8219A580, calls func_80005B98(0xF), and sets
+ * Battle_LoadOwnerModelForSwitchIn with D_8219A580, calls StageFade_Start(0xF), and sets
  * sBattleScene.scene->phaseStep to 2, the field SceneMode7_Update switches on.
  * The argument is not used. What the flag bits and the
  * two calls mean is not established from this function.
@@ -191,7 +191,7 @@ void SceneMode7_StepWaitModelReload(CameraNode* camera) {
     if (*flags & 0x10) {
         *flags &= 0xFF6F;
         Battle_LoadOwnerModelForSwitchIn(D_8219A580);
-        func_80005B98(0xF);
+        StageFade_Start(0xF);
         sBattleScene.scene->phaseStep = 2;
     }
 }

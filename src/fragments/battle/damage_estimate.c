@@ -427,7 +427,7 @@ void Battle_SyncHpToRoster(s8 *arg0)
  if (1) { }  // karodo
 }
 
-void func_80043860(s32);
+void Announcer_CommentOnHpChange(s32);
 
 /**
  * Steps the party Pokemon's HP one point toward the battle display HP. Returns 1
@@ -448,7 +448,7 @@ s32 Battle_StepPartyHpToDisplay(ActivePokemon* arg0) {
         if (arg0->displayObject.objectType == 0x98) {
             return 1;
         }
-        func_80043860(BattleScene_GetParticipantSideIndex(sOtherPokemon));
+        Announcer_CommentOnHpChange(BattleScene_GetParticipantSideIndex(sOtherPokemon));
         return 1;
     }
     return 0;

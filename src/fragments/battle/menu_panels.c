@@ -9,7 +9,7 @@
 
 // Declared here instead of in a header: the callers of these disagree on their types.
 M2C_UNK Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
-M2C_UNK func_8001A944(s32, s32, s8*);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 M2C_UNK func_8001AA9C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK);
 M2C_UNK func_8001AB6C();
 extern StatusLabel D_80066AA0[];
@@ -263,10 +263,10 @@ void BattleMenu_DrawMovePanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3)
     if (runtime->uniqueStatusFlags & 8) {
         if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) { BattleHud_DrawTextCentered(arg1 + 0x5A, arg2 + 4, D_8006A9D4[runtime->moves[0] - 1].name); }
         if (runtime->moves[1] && (runtime->moves[1] < 0xA6)) {
-            func_8001A944(arg1 + 0x7C, arg2 + 0x11, D_8006A9D4[runtime->moves[1] - 1].name);
+            Font_Printf(arg1 + 0x7C, arg2 + 0x11, D_8006A9D4[runtime->moves[1] - 1].name);
         }
         if (runtime->moves[2] && (runtime->moves[2] < 0xA6)) {
-            func_8001A944(arg1 + 0x6E, arg2 + 0x25, D_8006A9D4[runtime->moves[2] - 1].name);
+            Font_Printf(arg1 + 0x6E, arg2 + 0x25, D_8006A9D4[runtime->moves[2] - 1].name);
         }
         if (runtime->moves[3] && (runtime->moves[3] < 0xA6)) {
             BattleHud_DrawTextCentered(arg1 + 0x4C, arg2 + 0x18, D_8006A9D4[runtime->moves[3] - 1].name);
@@ -274,10 +274,10 @@ void BattleMenu_DrawMovePanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3)
     } else {
         if (runtime->moves[0] && (runtime->moves[0] < 0xA6)) { BattleHud_DrawTextCentered(arg1 + 0x5A, arg2 + 4, D_8006A9D4[runtime->moves[0] - 1].name); }
         if (runtime->moves[1] && (runtime->moves[1] < 0xA6)) {
-            func_8001A944(arg1 + 0x7C, arg2 + 0x11, D_8006A9D4[runtime->moves[1] - 1].name);
+            Font_Printf(arg1 + 0x7C, arg2 + 0x11, D_8006A9D4[runtime->moves[1] - 1].name);
         }
         if (runtime->moves[2] && (runtime->moves[2] < 0xA6)) {
-            func_8001A944(arg1 + 0x6E, arg2 + 0x25, D_8006A9D4[runtime->moves[2] - 1].name);
+            Font_Printf(arg1 + 0x6E, arg2 + 0x25, D_8006A9D4[runtime->moves[2] - 1].name);
         }
         if (runtime->moves[3] && (runtime->moves[3] < 0xA6)) {
             BattleHud_DrawTextCentered(arg1 + 0x4C, arg2 + 0x18, D_8006A9D4[runtime->moves[3] - 1].name);
@@ -288,10 +288,10 @@ void BattleMenu_DrawMovePanel(ActivePokemon* arg0, s16 arg1, s16 arg2, s32 arg3)
         BattleHud_DrawTextCentered(arg1 + 0x5A, arg2 + 4, D_82195A14);
     }
     if (runtime->moves[1] >= 0xA6) {
-        func_8001A944(arg1 + 0x7C, arg2 + 0x11, D_82195A20);
+        Font_Printf(arg1 + 0x7C, arg2 + 0x11, D_82195A20);
     }
     if (runtime->moves[2] >= 0xA6) {
-        func_8001A944(arg1 + 0x6E, arg2 + 0x25, D_82195A2C);
+        Font_Printf(arg1 + 0x6E, arg2 + 0x25, D_82195A2C);
     }
     if (runtime->moves[3] >= 0xA6) {
         BattleHud_DrawTextCentered(arg1 + 0x4C, arg2 + 0x18, D_82195A38);
@@ -325,9 +325,9 @@ void BattleMenu_DrawSurrenderPrompt(s16 arg0, s16 arg1, s16 arg2, s32 arg3) {
     func_82116CF4(arg0 + 1, arg1 + 1, 0xC6, 0x28, idx * 3 + &D_8218B008, idx * 3 + &D_8218B014);
     func_8001AB6C();
     func_8001A384(2, 0);
-    func_8001A944(arg0 + 0x2E, arg1 + 6, D_82195A44);
-    func_8001A944(arg0 + 0x38, arg1 + 0x18, D_82195A58);
-    func_8001A944(arg0 + 0x81, arg1 + 0x18, D_82195A60);
+    Font_Printf(arg0 + 0x2E, arg1 + 6, D_82195A44);
+    Font_Printf(arg0 + 0x38, arg1 + 0x18, D_82195A58);
+    Font_Printf(arg0 + 0x81, arg1 + 0x18, D_82195A60);
     func_8001ABBC();
     gSPDisplayList(gDisplayListHead++, D_80060308);
     Gfx_DrawTextureRgba16Ia8(arg0 + 0x21, arg1 + 0x17, 0x18, 0xE, D_0300A500, D_0300A7A0, 0x18, 0x100000);
@@ -700,7 +700,7 @@ void BattleMessage_DrawBox(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     func_8001AB6C();
     func_8001A384(2, 0);
     Font_SetLineHeight(0x10);
-    func_8001A944(arg1 + 0xA, arg2 + 5, arg3);
+    Font_Printf(arg1 + 0xA, arg2 + 5, arg3);
     func_8001ABBC();
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     BattleHud_DrawBorderTile(arg1, arg2, 8, 8, D_030096C0);
@@ -732,7 +732,7 @@ void BattleHud_DrawCaptionBox(s32 arg0, s16 arg1, s16 arg2, s32 arg3) {
     func_8001AB6C();
     func_8001A384(2, 0);
     Font_SetLineHeight(0x10);
-    func_8001A944(arg1 + 0xA, arg2 + 5, arg3);
+    Font_Printf(arg1 + 0xA, arg2 + 5, arg3);
     func_8001ABBC();
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
     BattleHud_DrawBorderTile(arg1, arg2, 8, 8, D_030096C0);
@@ -766,9 +766,9 @@ void BattleMenu_DrawSurrenderPromptWithCursor(ActivePokemon* arg0, s16 arg1, s16
     Battle_DrawGradientRectWrapper(arg1 + 1, arg2 + 1, 0xC8, 0x24, (Color_RGB8*)(&D_8218B008 + arg3 * 3), (Color_RGB8*)(&D_8218B014 + arg3 * 3));
     func_8001AB6C();
     func_8001A384(2, 0);
-    func_8001A944(arg1 + 0x28, arg2 + 5, D_82195A68);
-    func_8001A944(arg1 + 0x32, arg2 + 0x14, D_82195A7C);
-    func_8001A944(arg1 + 0x7A, arg2 + 0x14, D_82195A84);
+    Font_Printf(arg1 + 0x28, arg2 + 5, D_82195A68);
+    Font_Printf(arg1 + 0x32, arg2 + 0x14, D_82195A7C);
+    Font_Printf(arg1 + 0x7A, arg2 + 0x14, D_82195A84);
     func_8001ABBC();
     gSPDisplayList(gDisplayListHead++, D_80060308);
     Gfx_DrawTextureRgba16Ia8(arg1 + arg0->state.surrenderCursor * 0x49 + 0x1B, arg2 + 0x14, 0x18, 0xE, D_0300A500, D_0300A7A0, 0x18, 0x100000);
@@ -811,7 +811,7 @@ void BattleHud_DrawActingPokemonNickname(void) {
     name = (s8*)bm + 0x30;
     len = func_800566BC((s32)name) >> 1;
     func_8001A384(4, 0);
-    func_8001A944(0x9A - len * 6, 0xBE, (s32)name);
+    Font_Printf(0x9A - len * 6, 0xBE, (s32)name);
     func_8001AC3C();
     func_8001ABBC();
 }
@@ -959,13 +959,13 @@ void BattleText_DrawTextBox(void) {
         if ((BattleText_SplitAtFirstSpace(D_82189D8C[i].str) == 0) || (D_82189D8C[i].color == 1)) {
             len = func_800566BC(D_82189D8C[i].str) >> 1;
             func_8001A384(2, -1);
-            func_8001A944(x - len * 6 - 6, ty, D_82189D8C[i].str);
+            Font_Printf(x - len * 6 - 6, ty, D_82189D8C[i].str);
         } else {
             len = func_800566BC(D_8219A4A0) >> 1;
             func_8001A384(2, -1);
-            func_8001A944(x - len * 0xC - 0xC, ty, D_8219A4A0);
+            Font_Printf(x - len * 0xC - 0xC, ty, D_8219A4A0);
             func_8001A384(2, -1);
-            func_8001A944(x - 6, ty, D_8219A4C8);
+            Font_Printf(x - 6, ty, D_8219A4C8);
         }
         func_8001AC3C();
         func_8001ABBC();
@@ -1060,16 +1060,16 @@ void BattleMenu_DrawListPanelUnused(s16 x, s16 y) {
         func_8001AA9C(0xFF, 0xFF, 0xFF, 0x78);
     }
     func_8001A384(1, 0);
-    func_8001A944(x + 0x18, y + 4, D_8218B13C[0]);
-    func_8001A944(x + 0x18, y + 0x10, D_8218B13C[1]);
-    func_8001A944(x + 0x18, y + 0x1C, D_8218B13C[2]);
-    func_8001A944(x + 0x18, y + 0x28, D_8218B13C[3]);
-    func_8001A944(x + 0x18, y + 0x34, D_8218B13C[4]);
-    func_8001A944(x + 0x18, y + 0x40, D_8218B13C[5]);
-    func_8001A944(x + 0x18, y + 0x4C, D_8218B13C[6]);
-    func_8001A944(x + 0x18, y + 0x58, D_8218B13C[7]);
+    Font_Printf(x + 0x18, y + 4, D_8218B13C[0]);
+    Font_Printf(x + 0x18, y + 0x10, D_8218B13C[1]);
+    Font_Printf(x + 0x18, y + 0x1C, D_8218B13C[2]);
+    Font_Printf(x + 0x18, y + 0x28, D_8218B13C[3]);
+    Font_Printf(x + 0x18, y + 0x34, D_8218B13C[4]);
+    Font_Printf(x + 0x18, y + 0x40, D_8218B13C[5]);
+    Font_Printf(x + 0x18, y + 0x4C, D_8218B13C[6]);
+    Font_Printf(x + 0x18, y + 0x58, D_8218B13C[7]);
     func_8001AA9C(0xFF, 0xFF, 0, 0xFF);
-    func_8001A944(x + 0x18, y + 0x69, D_8218B13C[D_8219A731]);
+    Font_Printf(x + 0x18, y + 0x69, D_8218B13C[D_8219A731]);
     func_8001ABBC();
     gSPDisplayList(gDisplayListHead++, D_80060308);
     Gfx_DrawTextureRgba16Ia8(x + 2, y + D_8219A732 * 0xC + 3, 0x18, 0xE, D_0300A500, D_0300A7A0, 0x18, 0x100000);
@@ -1102,12 +1102,12 @@ void BattleDebug_DrawCameraParams(s16 arg0, s16 arg1) {
     Ui_DrawPrimColorRect(arg0, arg1, 0x82, 0x50, 0, 0, 0, 0x3C);
     func_8001AB6C();
     func_8001A384(1, 0);
-    func_8001A944(arg0 + 3, arg1 + 4, (s32)D_82195B00);
-    func_8001A944(arg0 + 3, arg1 + 0x10, (s32)D_82195B0C);
-    func_8001A944(arg0 + 3, arg1 + 0x1C, (s32)D_82195B18);
-    func_8001A944(arg0 + 3, arg1 + 0x28, (s32)D_82195B24);
-    func_8001A944(arg0 + 3, arg1 + 0x34, (s32)D_82195B30);
-    func_8001A944(arg0 + 3, arg1 + 0x40, (s32)D_82195B3C);
+    Font_Printf(arg0 + 3, arg1 + 4, (s32)D_82195B00);
+    Font_Printf(arg0 + 3, arg1 + 0x10, (s32)D_82195B0C);
+    Font_Printf(arg0 + 3, arg1 + 0x1C, (s32)D_82195B18);
+    Font_Printf(arg0 + 3, arg1 + 0x28, (s32)D_82195B24);
+    Font_Printf(arg0 + 3, arg1 + 0x34, (s32)D_82195B30);
+    Font_Printf(arg0 + 3, arg1 + 0x40, (s32)D_82195B3C);
     func_8001ABBC();
     func_800564D4(buf, D_82195B4C, M2C_FIELD(D_82199DE0, f32*, 0x9F0));
     BattleHud_DrawSmallDigits(buf, arg0 + 0x46, arg1 + 6);
@@ -1144,8 +1144,8 @@ void BattleDebug_DrawCameraLabel(s16 arg0, s16 arg1) {
     Ui_DrawPrimColorRect(arg0, arg1, 0x6E, 0x1E, 0, 0, 0, 0x3C);
     func_8001AB6C();
     func_8001A384(1, 0);
-    func_8001A944(arg0 + 3, arg1 + 4, (s32)&D_82195BE4);
-    func_8001A944(arg0 + 0x23, arg1 + 0x10, D_8218B15C[D_8219A5A4]);
+    Font_Printf(arg0 + 3, arg1 + 4, (s32)&D_82195BE4);
+    Font_Printf(arg0 + 0x23, arg1 + 0x10, D_8218B15C[D_8219A5A4]);
     func_8001ABBC();
 }
 
@@ -1198,36 +1198,36 @@ void BattleDebug_DrawStepMenu(s16 arg0, s16 arg1) {
     Ui_DrawPrimColorRect(arg0, arg1, 0x78, 0x82, 0, 0, 0, 0x3C);
     func_8001AB6C();
     func_8001A384(1, 0);
-    func_8001A944(arg0 + 3, arg1 + 2, (s32)D_82195D40);
+    Font_Printf(arg0 + 3, arg1 + 2, (s32)D_82195D40);
     if (D_8219A764 == 0) {
-        func_8001A944(arg0 + 0x3C, arg1 + 2, (s32)D_82195D48);
+        Font_Printf(arg0 + 0x3C, arg1 + 2, (s32)D_82195D48);
     } else {
-        func_8001A944(arg0 + 0x3C, arg1 + 2, (s32)D_82195D50);
+        Font_Printf(arg0 + 0x3C, arg1 + 2, (s32)D_82195D50);
     }
-    func_8001A944(arg0 + 0x3C, arg1 + 0x10, *(s32*)((&D_82199DE0)[D_8219A760] + 0x860) + 8);
-    func_8001A944(arg0 + 3, arg1 + 0x10, (s32)D_82195D5C);
-    func_8001A944(arg0 + 3, arg1 + 0x1C, (s32)D_82195D68);
+    Font_Printf(arg0 + 0x3C, arg1 + 0x10, *(s32*)((&D_82199DE0)[D_8219A760] + 0x860) + 8);
+    Font_Printf(arg0 + 3, arg1 + 0x10, (s32)D_82195D5C);
+    Font_Printf(arg0 + 3, arg1 + 0x1C, (s32)D_82195D68);
     if (D_8219A740 == 0xA6) {
-        func_8001A944(arg0 + 0x23, arg1 + 0x1C, (s32)D_82195D70);
+        Font_Printf(arg0 + 0x23, arg1 + 0x1C, (s32)D_82195D70);
     } else {
-        func_8001A944(arg0 + 0x23, arg1 + 0x1C, (s32)D_8006A9CC[D_8219A740].name);
+        Font_Printf(arg0 + 0x23, arg1 + 0x1C, (s32)D_8006A9CC[D_8219A740].name);
     }
-    func_8001A944(arg0 + 3, arg1 + 0x28, (s32)D_82195D7C);
-    func_8001A944(arg0 + 3, arg1 + 0x34, (s32)D_82195D88);
+    Font_Printf(arg0 + 3, arg1 + 0x28, (s32)D_82195D7C);
+    Font_Printf(arg0 + 3, arg1 + 0x34, (s32)D_82195D88);
     if (D_8219A744 == 0xA6) {
-        func_8001A944(arg0 + 0x23, arg1 + 0x34, (s32)D_82195D90);
+        Font_Printf(arg0 + 0x23, arg1 + 0x34, (s32)D_82195D90);
     } else {
-        func_8001A944(arg0 + 0x23, arg1 + 0x34, (s32)D_8006A9CC[D_8219A744].name);
+        Font_Printf(arg0 + 0x23, arg1 + 0x34, (s32)D_8006A9CC[D_8219A744].name);
     }
-    func_8001A944(arg0 + 3, arg1 + 0x40, (s32)D_82195D9C);
-    func_8001A944(arg0 + 3, arg1 + 0x4C, (s32)labels[0]);
-    func_8001A944(arg0 + 0x3C, arg1 + 0x4C, (s32)names0[D_8219A748]);
-    func_8001A944(arg0 + 3, arg1 + 0x58, (s32)labels[1]);
-    func_8001A944(arg0 + 0x3C, arg1 + 0x58, (s32)names1[D_8219A749]);
-    func_8001A944(arg0 + 3, arg1 + 0x64, (s32)labels[2]);
-    func_8001A944(arg0 + 0x3C, arg1 + 0x64, (s32)names2[D_8219A74A]);
-    func_8001A944(arg0 + 3, arg1 + 0x70, (s32)labels[3]);
-    func_8001A944(arg0 + 0x3C, arg1 + 0x70, (s32)names3[D_8219A74B]);
+    Font_Printf(arg0 + 3, arg1 + 0x40, (s32)D_82195D9C);
+    Font_Printf(arg0 + 3, arg1 + 0x4C, (s32)labels[0]);
+    Font_Printf(arg0 + 0x3C, arg1 + 0x4C, (s32)names0[D_8219A748]);
+    Font_Printf(arg0 + 3, arg1 + 0x58, (s32)labels[1]);
+    Font_Printf(arg0 + 0x3C, arg1 + 0x58, (s32)names1[D_8219A749]);
+    Font_Printf(arg0 + 3, arg1 + 0x64, (s32)labels[2]);
+    Font_Printf(arg0 + 0x3C, arg1 + 0x64, (s32)names2[D_8219A74A]);
+    Font_Printf(arg0 + 3, arg1 + 0x70, (s32)labels[3]);
+    Font_Printf(arg0 + 0x3C, arg1 + 0x70, (s32)names3[D_8219A74B]);
     func_8001ABBC();
     func_800564D4(buf, D_82195DA8, D_8219A740);
     BattleHud_DrawSmallDigits(buf, arg0 + 0x3C, arg1 + 0x28);
@@ -1273,28 +1273,28 @@ void BattleDebug_DrawMoveEffectViewer(s16 arg0, s16 arg1) {
     Ui_DrawPrimColorRect(arg0, arg1, 0xAA, 0x70, 0, 0, 0, 0x3C);
     func_8001AB6C();
     func_8001A384(1, 0);
-    func_8001A944(arg0 + 3, arg1 + 4, (s32)D_82195E04);
-    func_8001A944(arg0 + 0x64, arg1 + 4, (s32)D_8006A9CC[D_8219A740].name);
-    func_8001A944(arg0 + 3, arg1 + 0x10, (s32)D_82195E10);
-    func_8001A944(arg0 + 3, arg1 + 0x1C, (s32)D_82195E20);
+    Font_Printf(arg0 + 3, arg1 + 4, (s32)D_82195E04);
+    Font_Printf(arg0 + 0x64, arg1 + 4, (s32)D_8006A9CC[D_8219A740].name);
+    Font_Printf(arg0 + 3, arg1 + 0x10, (s32)D_82195E10);
+    Font_Printf(arg0 + 3, arg1 + 0x1C, (s32)D_82195E20);
     if (D_8219A75C == 3) {
         func_8001AA9C(0xFF, 0xFF, 0xFF, 0x3C);
-        func_8001A944(arg0 + 0x64, arg1 + 0x1C, D_8218B218[D_8219A75C]);
+        Font_Printf(arg0 + 0x64, arg1 + 0x1C, D_8218B218[D_8219A75C]);
         func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
     } else {
-        func_8001A944(arg0 + 0x64, arg1 + 0x1C, D_8218B218[D_8219A75C]);
+        Font_Printf(arg0 + 0x64, arg1 + 0x1C, D_8218B218[D_8219A75C]);
     }
-    func_8001A944(arg0 + 3, arg1 + 0x28, (s32)D_82195E28);
-    func_8001A944(arg0 + 3, arg1 + 0x34, (s32)D_82195E3C);
+    Font_Printf(arg0 + 3, arg1 + 0x28, (s32)D_82195E28);
+    Font_Printf(arg0 + 3, arg1 + 0x34, (s32)D_82195E3C);
     if (D_8219A750 == 0) {
-        func_8001A944(arg0 + 0x69, arg1 + 0x34, (s32)D_82195E50);
+        Font_Printf(arg0 + 0x69, arg1 + 0x34, (s32)D_82195E50);
     }
-    func_8001A944(arg0 + 3, arg1 + 0x40, (s32)D_82195E54);
+    Font_Printf(arg0 + 3, arg1 + 0x40, (s32)D_82195E54);
     func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
-    func_8001A944(arg0 + 3, arg1 + 0x4C, (s32)D_82195E6C);
-    func_8001A944(arg0 + 3, arg1 + 0x58, (s32)D_82195E7C);
-    func_8001A944(arg0 + 0x64, arg1 + 0x58, D_8218B204[D_8219A5A4]);
-    func_8001A944(arg0 + 3, arg1 + 0x64, (s32)D_82195E84);
+    Font_Printf(arg0 + 3, arg1 + 0x4C, (s32)D_82195E6C);
+    Font_Printf(arg0 + 3, arg1 + 0x58, (s32)D_82195E7C);
+    Font_Printf(arg0 + 0x64, arg1 + 0x58, D_8218B204[D_8219A5A4]);
+    Font_Printf(arg0 + 3, arg1 + 0x64, (s32)D_82195E84);
     func_8001ABBC();
     func_800564D4(buf, D_82195E90, D_8219A740);
     BattleHud_DrawSmallDigits(buf, arg0 + 0x64, arg1 + 0x12);
@@ -1341,18 +1341,18 @@ void BattleDebug_DrawMoveCameraViewer(s16 arg0, s16 arg1) {
     Ui_DrawPrimColorRect(arg0, arg1, 0xAA, 0x5A, 0, 0, 0, 0x3C);
     func_8001AB6C();
     func_8001A384(1, 0);
-    func_8001A944(arg0 + 3, arg1 + 4, (s32)D_82195EF0);
-    func_8001A944(arg0 + 0x69, arg1 + 4, (s32)D_8006A9CC[D_8219A740].name);
-    func_8001A944(arg0 + 3, arg1 + 0x10, (s32)D_82195EFC);
-    func_8001A944(arg0 + 3, arg1 + 0x1C, (s32)D_82195F0C);
-    func_8001A944(arg0 + 3, arg1 + 0x28, (s32)D_82195F20);
+    Font_Printf(arg0 + 3, arg1 + 4, (s32)D_82195EF0);
+    Font_Printf(arg0 + 0x69, arg1 + 4, (s32)D_8006A9CC[D_8219A740].name);
+    Font_Printf(arg0 + 3, arg1 + 0x10, (s32)D_82195EFC);
+    Font_Printf(arg0 + 3, arg1 + 0x1C, (s32)D_82195F0C);
+    Font_Printf(arg0 + 3, arg1 + 0x28, (s32)D_82195F20);
     if (D_8219A750 == 0) {
-        func_8001A944(arg0 + 0x69, arg1 + 0x28, (s32)D_82195F34);
+        Font_Printf(arg0 + 0x69, arg1 + 0x28, (s32)D_82195F34);
     }
-    func_8001A944(arg0 + 3, arg1 + 0x34, (s32)D_82195F38);
-    func_8001A944(arg0 + 3, arg1 + 0x40, (s32)D_82195F48);
-    func_8001A944(arg0 + 0x69, arg1 + 0x40, D_8218B228[D_8219A5A4]);
-    func_8001A944(arg0 + 3, arg1 + 0x4C, (s32)D_82195F50);
+    Font_Printf(arg0 + 3, arg1 + 0x34, (s32)D_82195F38);
+    Font_Printf(arg0 + 3, arg1 + 0x40, (s32)D_82195F48);
+    Font_Printf(arg0 + 0x69, arg1 + 0x40, D_8218B228[D_8219A5A4]);
+    Font_Printf(arg0 + 3, arg1 + 0x4C, (s32)D_82195F50);
     func_8001ABBC();
     func_800564D4(buf, D_82195F5C, D_8219A740);
     BattleHud_DrawSmallDigits(buf, arg0 + 0x69, arg1 + 0x12);
@@ -1392,11 +1392,11 @@ void BattleDebug_DrawEffectSoundTiming(s16 arg0, s16 arg1) {
     Ui_DrawPrimColorRect(arg0, arg1, 0xAA, 0x36, 0, 0, 0, 0x3C);
     func_8001AB6C();
     func_8001A384(1, 0);
-    func_8001A944(arg0 + 3, arg1 + 4, (s32)D_82195F70);
-    func_8001A944(arg0 + 3, arg1 + 0x10, (s32)D_82195F84);
+    Font_Printf(arg0 + 3, arg1 + 4, (s32)D_82195F70);
+    Font_Printf(arg0 + 3, arg1 + 0x10, (s32)D_82195F84);
     func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
-    func_8001A944(arg0 + 3, arg1 + 0x1C, (s32)D_82195F98);
-    func_8001A944(arg0 + 3, arg1 + 0x28, (s32)D_82195FA8);
+    Font_Printf(arg0 + 3, arg1 + 0x1C, (s32)D_82195F98);
+    Font_Printf(arg0 + 3, arg1 + 0x28, (s32)D_82195FA8);
     func_8001ABBC();
     func_800564D4(buf, D_82195FB4, val);
     BattleHud_DrawSmallDigits(buf, arg0 + 0x64, arg1 + 0x1E);
@@ -1427,15 +1427,15 @@ void BattleDebug_DrawPokeBallViewer(s16 arg0, s16 arg1) {
     Ui_DrawPrimColorRect(arg0, arg1, 0x78, 0x3C, 0, 0, 0, 0x3C);
     func_8001AB6C();
     func_8001A384(1, 0);
-    func_8001A944(arg0 + 3, arg1 + 4, (s32)D_82195FC4);
+    Font_Printf(arg0 + 3, arg1 + 4, (s32)D_82195FC4);
     if (mon[0xB] >= 0x98) {
-        func_8001A944(arg0 + 0x3C, arg1 + 4, (s32)D_82195FD0);
+        Font_Printf(arg0 + 0x3C, arg1 + 4, (s32)D_82195FD0);
     } else {
-        func_8001A944(arg0 + 0x3C, arg1 + 4, *(s32*)D_80064C44[mon[0xB]]);
+        Font_Printf(arg0 + 0x3C, arg1 + 4, *(s32*)D_80064C44[mon[0xB]]);
     }
-    func_8001A944(arg0 + 3, arg1 + 0x10, (s32)D_82195FD8);
-    func_8001A944(arg0 + 3, arg1 + 0x1C, (s32)D_82195FE4);
-    func_8001A944(arg0 + 0x3C, arg1 + 0x1C, M2C_FIELD(((s32*)&D_82199DE0)[D_8219A760], s32*, 0x860) + 8);
+    Font_Printf(arg0 + 3, arg1 + 0x10, (s32)D_82195FD8);
+    Font_Printf(arg0 + 3, arg1 + 0x1C, (s32)D_82195FE4);
+    Font_Printf(arg0 + 0x3C, arg1 + 0x1C, M2C_FIELD(((s32*)&D_82199DE0)[D_8219A760], s32*, 0x860) + 8);
     func_8001ABBC();
     func_800564D4(buf, D_82195FF0, mon[0xB]);
     BattleHud_DrawSmallDigits(buf, arg0 + 0x3C, arg1 + 0x12);

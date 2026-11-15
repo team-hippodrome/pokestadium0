@@ -2,10 +2,11 @@
 /* C ported from the Stadium 1 decomp: src/pokemon_stats.c. */
 
 #include "pokemon_stats.h"
-#include "gb_tower.h"
+#include "gb_player.h"
 #include "hal_libc.h"
 #include "memory_main.h"
 #include "m2c_macros.h"
+char* Text_TranscodeName(char* gbDst, char* src);
 
 extern s8 D_800AD210;
 #define sGbSavePorts ((GbSavePort*)&D_800AD210)
@@ -183,23 +184,24 @@ s32 GbSave_ReadMainData(s32 arg0) {
     return sp30;
 }
 
-s32 func_8000C1B4(s32, M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
-s32 func_8000C238(s32, s8 *, M2C_UNK, M2C_UNK);   /* extern */
-M2C_UNK func_8002107C(s32, s32);                    /* extern */
-s32 func_800210AC(s8 *, M2C_UNK);                 /* extern */
 extern s8 D_800AD210;
-s32 func_80021334(s32 arg0) {
+/**
+ * Recomputes the checksum of `port`'s main save data, writes the 0x1020 bytes to cartridge SRAM
+ * at 0x2580, reads them back and compares. Tries 4 times; returns 1 on a verified write, 0 if all fail.
+ * @unverified: named from the code (only caller is GbSave_WriteMainData, which was seen in play).
+ */
+s32 GbSave_WriteMainDataWithRetry(s32 port) {
     s32 var_s0;
     GbSaveMainData* temp_s1;
     GbSavePort* temp_s3;
 
-    temp_s3 = (GbSavePort*)((arg0 * 0x48) + &D_800AD210);
+    temp_s3 = (GbSavePort*)((port * 0x48) + &D_800AD210);
     temp_s1 = temp_s3->mainData;
-    func_8002107C((s32)temp_s1->playerName, (s32)&temp_s1->checksum);
+    GbSave_ComputeChecksum((u8*)temp_s1->playerName, (u8*)&temp_s1->checksum);
     var_s0 = 0;
     temp_s3->checksum = temp_s1->checksum;
 loop_1:
-    if ((func_8000C238(arg0, (s8*)temp_s1, 0x2580, 0x1020) == 0) && (func_8000C1B4(arg0, (M2C_UNK*)&D_800AD338, 0x2580, 0x1020) == 0) && (func_800210AC((s8*)temp_s1, 0x1020) != 0)) {
+    if ((GbPak_MbcWrite(port, temp_s1, 0x2580, 0x1020) == 0) && (GbPak_MbcRead(port, &D_800AD338, 0x2580, 0x1020) == 0) && (GbSave_VerifyWriteback((u8*)temp_s1, 0x1020) != 0)) {
         return 1;
     }
     var_s0 += 1;
@@ -344,12 +346,12 @@ s32 GbSave_OpenMainData(s32 arg0) {
 
     if (sGbSavePorts[arg0].mainData != NULL) {
         sGbSavePorts[arg0].flags |= 1;
-        if (GbTower_ProbePak(arg0, &sp2F, sGbSavePorts[arg0].pakId) == 0) {
+        if (GbPlayer_ProbePak(arg0, &sp2F, sGbSavePorts[arg0].pakId) == 0) {
             Game_ShutdownAndLoadFragment(arg0, 2);
         }
 
         sp28 = GbSave_ReadMainData(arg0);
-        if (GbTower_IsPakInserted(arg0, sp2F) == 0) {
+        if (GbPlayer_IsPakInserted(arg0, sp2F) == 0) {
             Game_ShutdownAndLoadFragment(arg0, 2);
         }
 
@@ -400,7 +402,7 @@ s32 GbSave_OpenBoxData(s32 arg0) {
     if (sGbSavePorts[arg0].boxData != NULL) {
         sGbSavePorts[arg0].flags |= 2;
         if (GbSave_GetBoxCount(arg0) > 0) {
-            if (GbTower_ProbePak(arg0, &sp37, sGbSavePorts[arg0].pakId) == 0) {
+            if (GbPlayer_ProbePak(arg0, &sp37, sGbSavePorts[arg0].pakId) == 0) {
                 Game_ShutdownAndLoadFragment(arg0, 2);
             }
 
@@ -408,7 +410,7 @@ s32 GbSave_OpenBoxData(s32 arg0) {
                 sp2C = GbSave_ReadBoxBank(arg0, 1);
             }
 
-            if (GbTower_IsPakInserted(arg0, sp37) == 0) {
+            if (GbPlayer_IsPakInserted(arg0, sp37) == 0) {
                 Game_ShutdownAndLoadFragment(arg0, 2);
             }
 
@@ -435,14 +437,14 @@ s32 GbSave_LoadPort(s32 arg0) {
     u8 sp2B;
     s32 temp_s1;
 
-    if (GbTower_ProbePak(arg0, &sp2B, sGbSavePorts[arg0].pakId) == 0) {
+    if (GbPlayer_ProbePak(arg0, &sp2B, sGbSavePorts[arg0].pakId) == 0) {
         Game_ShutdownAndLoadFragment(arg0, 2);
     }
 
     temp_s1 = GbSave_EnsureMainDataLoaded(arg0);
     temp_s1 &= GbSave_OpenBoxData(arg0);
 
-    if (GbTower_IsPakInserted(arg0, sp2B) == 0) {
+    if (GbPlayer_IsPakInserted(arg0, sp2B) == 0) {
         Game_ShutdownAndLoadFragment(arg0, 2);
     }
 
@@ -459,13 +461,13 @@ s32 GbSave_LoadPort(s32 arg0) {
  * Per-port state machine that waits for a Game Boy cartridge to be pulled
  * out and put back, then checks it is the same one.  D_8006BB9C[arg0] is
  * the state:
- *   0  start the removal check (GbTower_IsPakInserted), fall into 1
+ *   0  start the removal check (GbPlayer_IsPakInserted), fall into 1
  *   1  wait until the cartridge is off (GbPak_IsCartOff)
  *   2  wait until it is back on (GbPak_IsCartOn); returns 1 meanwhile
- *   3  re-initialize the pak (GbTower_ReinitPak); if that worked, return 3,
+ *   3  re-initialize the pak (GbPlayer_ReinitPak); if that worked, return 3,
  *      or 2 if the cartridge also identifies as the same game as before
  *      (GbCart_IdentifyGame == port byte 2) and
- *      GbTower_VerifyPakStillInserted accepts the port's data at offset
+ *      GbPlayer_VerifyPakStillInserted accepts the port's data at offset
  *      0x18.  The state returns to 0.
  * Returns 0 when there is nothing to report yet.
  *
@@ -476,7 +478,7 @@ s32 GbSave_PollCartRemoval(s32 arg0) {
 
     switch (D_8006BB9C[arg0]) {
         case 0:
-            GbTower_IsPakInserted(arg0, 0);
+            GbPlayer_IsPakInserted(arg0, 0);
             D_8006BB9C[arg0] += 1;
             // fallthrough
 
@@ -494,10 +496,10 @@ s32 GbSave_PollCartRemoval(s32 arg0) {
             break;
 
         case 3:
-            if (GbTower_ReinitPak(arg0) != 0) {
+            if (GbPlayer_ReinitPak(arg0) != 0) {
                 sp24 = 3;
                 if (GbCart_IdentifyGame(arg0) == sGbSavePorts[arg0].gameType) {
-                    if (GbTower_VerifyPakStillInserted(arg0, sGbSavePorts[arg0].pakId) != 0) {
+                    if (GbPlayer_VerifyPakStillInserted(arg0, sGbSavePorts[arg0].pakId) != 0) {
                         sp24 = 2;
                     }
                 }
@@ -546,7 +548,7 @@ s32 GbSave_OpenMainData(s32);
  */
 s32 GbSave_ScanAllPorts(void) {
     s32 i;
-    s32 temp_v0 = GbTower_ScanPaks();
+    s32 temp_v0 = GbPlayer_ScanPaks();
 
     D_800AD334 = temp_v0 & 0xFF;
     D_800AD335 = (temp_v0 >> 0x10) & 0xFF;
@@ -580,21 +582,27 @@ s32 GbSave_ScanAllPorts(void) {
                     var_s0->saveState = 3;
                 }
             }
-            GbTower_IsPakInserted(i, 0);
+            GbPlayer_IsPakInserted(i, 0);
         }
     }
 
     if (D_800AD334 != 0) {
-        GbTower_SetPollMask(D_800AD330);
+        GbPlayer_SetPollMask(D_800AD330);
     }
 
     return D_800AD330;
 }
 
-s32 func_80021E64(s32 arg0) {
+/**
+ * Formats the eight PC boxes (two banks of four) of `portId`'s Gen 1 save as empty (0xFF fill, count 0),
+ * sets the boxes-initialized bit 0x8000 of the current-box word, and writes the save back. Called by
+ * Session_RestoreContinueSession when the cartridge has never had its boxes initialized.
+ * @unverified: named from the code, not reached in play (our saves already had initialized boxes).
+ */
+s32 GbSave_InitializeBoxesAndWrite(s32 portId) {
     s32 ret;
     u8 sp33;
-    GbSavePort* port = &sGbSavePorts[arg0];
+    GbSavePort* port = &sGbSavePorts[portId];
 
     GbData_WriteU16BE(port->mainData->currentBox, GbData_ReadU16BE(port->mainData->currentBox) | 0x8000);
     HAL_Memset(port->boxData, 0xFF, 0x2B40);
@@ -606,11 +614,11 @@ s32 func_80021E64(s32 arg0) {
     port->boxData[0x15A0 + 0x566 * 2] = 0;
     port->boxData[0x566 * 3] = 0;
     port->boxData[0x15A0 + 0x566 * 3] = 0;
-    if (GbTower_ProbePak(arg0, &sp33, port->pakId) == 0) {
-        Game_ShutdownAndLoadFragment(arg0, 2);
+    if (GbPlayer_ProbePak(portId, &sp33, port->pakId) == 0) {
+        Game_ShutdownAndLoadFragment(portId, 2);
     }
-    ret = GbSave_RebuildAndWriteSave(arg0);
-    ret &= GbTower_IsPakInserted(arg0, sp33);
+    ret = GbSave_RebuildAndWriteSave(portId);
+    ret &= GbPlayer_IsPakInserted(portId, sp33);
     return ret;
 }
 
@@ -620,7 +628,7 @@ s32 GbSave_WriteBoxBanks(s32 arg0) {
     s32 sp28 = 0;
 
     if (sGbSavePorts[arg0].flags & 2) {
-        if (GbTower_ProbePak(arg0, &sp2F, sGbSavePorts[arg0].pakId) == 0) {
+        if (GbPlayer_ProbePak(arg0, &sp2F, sGbSavePorts[arg0].pakId) == 0) {
             Game_ShutdownAndLoadFragment(arg0, 2);
         }
 
@@ -629,7 +637,7 @@ s32 GbSave_WriteBoxBanks(s32 arg0) {
         if (sp28 != 0) {
             sp28 = GbSave_WriteBoxBank(arg0, 1);
         }
-        sp28 &= GbTower_IsPakInserted(arg0, sp2F);
+        sp28 &= GbPlayer_IsPakInserted(arg0, sp2F);
     }
     return sp28;
 }
@@ -644,11 +652,11 @@ s32 GbSave_CommitMainData(s32 arg0) {
     s32 sp28 = 0;
 
     if (sGbSavePorts[arg0].flags & 1) {
-        if (GbTower_ProbePak(arg0, &sp2F, sGbSavePorts[arg0].pakId) == 0) {
+        if (GbPlayer_ProbePak(arg0, &sp2F, sGbSavePorts[arg0].pakId) == 0) {
             Game_ShutdownAndLoadFragment(arg0, 2);
         }
-        sp28 = func_80021334(arg0);
-        sp28 &= GbTower_IsPakInserted(arg0, sp2F);
+        sp28 = GbSave_WriteMainDataWithRetry(arg0);
+        sp28 &= GbPlayer_IsPakInserted(arg0, sp2F);
     }
     return sp28;
 }
@@ -658,7 +666,7 @@ s32 GbSave_RebuildAndWriteSave(s32 arg0) {
     u8 sp2F;
     s32 sp28;
 
-    if (GbTower_ProbePak(arg0, &sp2F, sGbSavePorts[arg0].pakId) == 0) {
+    if (GbPlayer_ProbePak(arg0, &sp2F, sGbSavePorts[arg0].pakId) == 0) {
         Game_ShutdownAndLoadFragment(arg0, 2);
     }
 
@@ -671,7 +679,7 @@ s32 GbSave_RebuildAndWriteSave(s32 arg0) {
         }
     }
 
-    sp28 &= GbTower_IsPakInserted(arg0, sp2F);
+    sp28 &= GbPlayer_IsPakInserted(arg0, sp2F);
     return sp28;
 }
 
@@ -679,7 +687,7 @@ s32 GbSave_RebuildAndWriteSave(s32 arg0) {
 void GbSave_ValidateBeforeWrite(s32 arg0) {
     u8 sp27;
 
-    if (GbTower_ProbePak(arg0, &sp27, sGbSavePorts[arg0].pakId) == 0) {
+    if (GbPlayer_ProbePak(arg0, &sp27, sGbSavePorts[arg0].pakId) == 0) {
         Game_ShutdownAndLoadFragment(arg0, 2);
     }
 
@@ -690,7 +698,7 @@ void GbSave_ValidateBeforeWrite(s32 arg0) {
 
 /** Shuts down to a fragment when no Transfer Pak is inserted in the port. */
 void GbSave_RequirePakPresent(s32 arg0) {
-    if (GbTower_IsPakInserted(arg0, 0) == 0) {
+    if (GbPlayer_IsPakInserted(arg0, 0) == 0) {
         Game_ShutdownAndLoadFragment(arg0, 2);
     }
 }
@@ -1190,52 +1198,65 @@ s32 GbSave_GetBoxCount(s32 arg0) {
 
 s32 func_8001FCC0(M2C_UNK, s32, M2C_UNK);           /* extern */
 extern s8 D_800AD210;
-// FAKE: the arg1 mask is decomp slop that reproduces the retail register choice.
-s32 func_80022D84(s32 arg0, M2C_UNK arg1) {
+/**
+ * Copies the player name of `port`'s Gen 1 save into `dst`, converted to the N64 text encoding
+ * (Text_UntranscodeFixedName). Returns 0 when the port has no loaded save.
+ * @unverified: the trainer slot names shown in Free Battle come from here, not checked with a breakpoint.
+ */
+s32 GbSave_GetPlayerName(s32 port, M2C_UNK dst) {
     GbSavePort* temp_v0;
 
-    temp_v0 = (GbSavePort*)((arg0 * 0x48) + &D_800AD210);
+    temp_v0 = (GbSavePort*)((port * 0x48) + &D_800AD210);
     if (!(temp_v0->flags & 1)) {
         return 0;
     }
-    return func_8001FCC0(arg1 & 0xFFFFFFFFFFFFFFFF, (s32)temp_v0->mainData->playerName, arg1); // FAKE
+    return func_8001FCC0(dst & 0xFFFFFFFFFFFFFFFF, (s32)temp_v0->mainData->playerName, dst); // FAKE
 }
 
-s32 func_8001FBE4(s32);                             /* extern */
 extern s8 D_800AD210;
-s32 func_80022DDC(s32 arg0) {
+/**
+ * Writes `name` (N64 text) into the player name of `port`'s Gen 1 save in the Game Boy encoding.
+ * Returns 0 when the port has no loaded save. @unverified: no caller in the resident code.
+ */
+s32 GbSave_SetPlayerName(s32 port, char* name) {
     GbSavePort* temp_v0;
 
-    temp_v0 = (GbSavePort*)((arg0 * 0x48) + &D_800AD210);
+    temp_v0 = (GbSavePort*)((port * 0x48) + &D_800AD210);
     if (!(temp_v0->flags & 1)) {
         return 0;
     }
-    return func_8001FBE4((s32)temp_v0->mainData->playerName);
+    return (s32)Text_TranscodeName((char*)temp_v0->mainData->playerName, name);
 }
 
 s32 func_8001FCC0(M2C_UNK, s32, M2C_UNK);           /* extern */
 extern s8 D_800AD210;
-// FAKE: the arg1 ^ 0 is decomp slop that reproduces the retail register choice.
-s32 func_80022E30(s32 arg0, M2C_UNK arg1) {
+/**
+ * Copies the rival name of `port`'s Gen 1 save into `dst` in the N64 text encoding. Returns 0
+ * when the port has no loaded save. @unverified: named from the field it reads.
+ */
+s32 GbSave_GetRivalName(s32 port, M2C_UNK dst) {
     GbSavePort* temp_v0;
 
-    temp_v0 = (GbSavePort*)((arg0 * 0x48) + &D_800AD210);
+    temp_v0 = (GbSavePort*)((port * 0x48) + &D_800AD210);
     if (!(temp_v0->flags & 1)) {
         return 0;
     }
-    return func_8001FCC0(arg1 ^ 0, (s32)temp_v0->mainData->rivalName, arg1); // FAKE
+    return func_8001FCC0(dst ^ 0, (s32)temp_v0->mainData->rivalName, dst); // FAKE
 }
 
-s32 func_8001FBE4(s32);                             /* extern */
 extern s8 D_800AD210;
-s32 func_80022E88(s32 arg0) {
+/**
+ * Writes `name` (N64 text) into the rival name of `port`'s Gen 1 save. Returns 0 when the port has
+ * no loaded save. @unverified: no caller in the resident code.
+ */
+s32 GbSave_SetRivalName(s32 port, char* name) {
     GbSavePort* temp_v0;
 
-    temp_v0 = (GbSavePort*)((arg0 * 0x48) + &D_800AD210);
+    temp_v0 = (GbSavePort*)((port * 0x48) + &D_800AD210);
     if (!(temp_v0->flags & 1)) {
         return 0;
     }
-    return func_8001FBE4((s32)temp_v0->mainData->rivalName);
+    return (s32)Text_TranscodeName((char*)temp_v0->mainData->rivalName, name);
 }
 
 /*
@@ -1276,13 +1297,17 @@ s32 GbSave_HasPokedex(s32 arg0) {
 }
 
 extern s8 D_800AD210;
-s32 func_80022F48(s32 arg0) {
+/**
+ * Returns bit 0 of byte 0x513 of `port`'s Gen 1 main data, or 0 when the port has no loaded save.
+ * @unverified: no callers found; what the flag means is unknown.
+ */
+s32 GbSave_UnusedTestFlag513(s32 port) {
     s32 var_v1;
     GbSavePort* temp_v0;
 
     var_v1 = 0;
-    if (arg0 >= 0) {
-        temp_v0 = (GbSavePort*)((arg0 * 0x48) + &D_800AD210);
+    if (port >= 0) {
+        temp_v0 = (GbSavePort*)((port * 0x48) + &D_800AD210);
         if (temp_v0->flags & 1) {
             var_v1 = (temp_v0->mainData->unk_513 & 1) != 0;
         }
@@ -1372,34 +1397,39 @@ s32 GbSave_GetSpeciesProgressLevel(s32 arg0, s32 arg1) {
     return 0;
 }
 
-void func_80023268(s32 arg0, s32 arg1, s32 arg2) {
+/**
+ * Sets the Pokédex flags of dex number `species` (1..151) on `port`'s Gen 1 save: `level` 0 clears
+ * seen and owned, 1 sets seen only, 2 or more sets both. Called with 3 by the PC box and Pokémon list
+ * screens when a Pokémon is moved in. @unverified: Pokédex bits not dumped after a move.
+ */
+void GbSave_SetSeenOwnedBits(s32 port, s32 species, s32 level) {
     u8* temp_a3;
     u8* temp_v0;
     s32 var_a2;
     s32 var_a3;
     u8* temp_v1;
 
-    if ((arg1 > 0) && (arg1 < 0x98)) {
-        temp_v0 = sGbSavePorts[arg0].mainData->pokedexOwned;
-        temp_a3 = sGbSavePorts[arg0].mainData->pokedexSeen;
-        temp_v1 = sGbSavePorts[arg0].heldSpecies;
+    if ((species > 0) && (species < 0x98)) {
+        temp_v0 = sGbSavePorts[port].mainData->pokedexOwned;
+        temp_a3 = sGbSavePorts[port].mainData->pokedexSeen;
+        temp_v1 = sGbSavePorts[port].heldSpecies;
 
-        var_a2 = (arg1 - 1) / 8;
-        var_a3 = (arg1 - 1) % 8;
+        var_a2 = (species - 1) / 8;
+        var_a3 = (species - 1) % 8;
 
-        if (arg2 > 0) {
+        if (level > 0) {
             temp_a3[var_a2] |= (1 << var_a3);
         } else {
             temp_a3[var_a2] &= ~(1 << var_a3);
         }
 
-        if (arg2 >= 2) {
+        if (level >= 2) {
             temp_v0[var_a2] |= (1 << var_a3);
         } else {
             temp_v0[var_a2] &= ~(1 << var_a3);
         }
 
-        if (arg2 >= 3) {
+        if (level >= 3) {
             temp_v1[var_a2] |= (1 << var_a3);
         } else {
             temp_v1[var_a2] &= ~(1 << var_a3);

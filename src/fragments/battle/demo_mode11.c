@@ -95,7 +95,7 @@ void SceneMode11_StepInit(CameraNode* camera) {
     sBattleScene.scene->phaseStep++;
 }
 
-s32 func_8003F6AC(s32);
+s32 Audio_PlaySystemSound(s32);
 void func_800199F8(s8*, s32);
 void func_80010F9C(s8*, s32);
 s32 func_82107A5C(s8*);
@@ -117,40 +117,40 @@ void SceneMode11_StartCut(CameraNode* camera) {
 
     switch (D_8219A50C) {
         case 0:
-            func_8003F6AC(0x12);
+            Audio_PlaySystemSound(0x12);
             SceneMode11_FrameDemoPokemon((s32)D_8219A590, (s32)camera, 3);
             func_800199F8(D_8219A590, cue->id);
             func_80010F9C(D_8219A590, sp38[D_8219A50C]);
             break;
         case 1:
-            func_8003F6AC(0x13);
+            Audio_PlaySystemSound(0x13);
             ((ActivePokemon*)D_8219A590)->displayObject.position.y += 500.0;
             SceneMode11_FrameFromAimPoint((s32)camera, (s32)D_8219A590, 350.0f, 0.0f, -0x1C71, 0x38E3);
             func_800199F8(D_8219A590, cue->id);
             func_80010F9C(D_8219A590, sp38[D_8219A50C]);
             break;
         case 2:
-            func_8003F6AC(0x14);
+            Audio_PlaySystemSound(0x14);
             ((ActivePokemon*)D_8219A590)->displayObject.rotation.y = -0x4000;
             SceneMode11_FrameFromAimPoint((s32)camera, (s32)D_8219A590, 300.0f, -75.0f, 0x71C, -0x2AAA);
             func_800199F8(D_8219A590, cue->id);
             func_80010F9C(D_8219A590, sp38[D_8219A50C]);
             break;
         case 3:
-            func_8003F6AC(0x15);
+            Audio_PlaySystemSound(0x15);
             SceneMode11_FrameFromAimPoint((s32)camera, (s32)D_8219A590, 200.0f, 0.0f, 0x71C, 0x2AAA);
             func_800199F8(D_8219A590, cue->id);
             func_80010F9C(D_8219A590, sp38[D_8219A50C]);
             break;
         case 4:
-            func_8003F6AC(0x16);
+            Audio_PlaySystemSound(0x16);
             ((ActivePokemon*)D_8219A590)->displayObject.rotation.y = -0x4000;
             SceneMode11_FrameFromAimPoint((s32)camera, (s32)D_8219A590, 600.0f, -200.0f, 0, -0x238E);
             func_800199F8(D_8219A590, cue->id);
             func_80010F9C(D_8219A590, sp38[D_8219A50C]);
             break;
         case 5:
-            func_8003F6AC(0x17);
+            Audio_PlaySystemSound(0x17);
             func_80010F9C(D_8219A590, sp38[D_8219A50C]);
             D_8219A4F4 = 0xA;
             BattleCamera_StartDemoPath(camera, D_8219A590);
@@ -176,7 +176,7 @@ s32 func_821217DC(M2C_UNK);
 extern u8 D_8219A594;
 extern u8 D_8219A4F4;
 s16 func_8000F1FC(s16, M2C_UNK, M2C_UNK, M2C_UNK);
-void func_800414B0(s32, s32, s32, s32);
+void Announcer_CallMove(s32, s32, s32, s32);
 void func_82104C68(s8*, s32);
 /**
  * Fades the demo Pokemon in over 30 frames. Cuts 0-4 advance after 40 frames; cut 5 follows
@@ -199,7 +199,7 @@ void SceneMode11_StepFadeInCut(CameraNode* camera) {
         case 5:
             BattleCamera_StepDemoPath(camera, D_8219A590);
             if (sBattleScene.scene->splineSegment == 4) {
-                func_800414B0(0, 0x38, 9, 0);
+                Announcer_CallMove(0, 0x38, 9, 0);
                 D_8219A4F4 = 1;
                 func_82104C68(D_8219A590, 0x14);
                 sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);

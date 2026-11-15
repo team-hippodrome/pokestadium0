@@ -302,7 +302,7 @@ s32 n_alEnvmixerParam(N_PVoice* filter, s32 paramID, void* param) {
     return 0;
 }
 
-s16 func_8003B0F8(f64 vol, f64 tgt, s32 count, u16* ratel);
+s16 _getRate(f64 vol, f64 tgt, s32 count, u16* ratel);
 extern s16 D_80075D00[];
 
 /**
@@ -326,9 +326,9 @@ Acmd* _pullSubFrame(N_PVoice* filter, s16* inp, s16* outp, s32 out_count, Acmd* 
         e->em_first = 0;
 
         e->em_ltgt = (e->em_volume * D_80075D00[e->em_pan]) >> 15;
-        e->em_lratm = func_8003B0F8((f64)e->em_cvolL, (f64)e->em_ltgt, e->em_segEnd, &(e->em_lratl));
+        e->em_lratm = _getRate((f64)e->em_cvolL, (f64)e->em_ltgt, e->em_segEnd, &(e->em_lratl));
         e->em_rtgt = (e->em_volume * D_80075D00[128 - e->em_pan - 1]) >> 15;
-        e->em_rratm = func_8003B0F8((f64)e->em_cvolR, (f64)e->em_rtgt, e->em_segEnd, &(e->em_rratl));
+        e->em_rratm = _getRate((f64)e->em_cvolR, (f64)e->em_rtgt, e->em_segEnd, &(e->em_rratl));
 
         // clang-format off
         // needs to be on same line.
@@ -344,7 +344,10 @@ Acmd* _pullSubFrame(N_PVoice* filter, s16* inp, s16* outp, s32 out_count, Acmd* 
     return ptr;
 }
 
-s16 func_8003B0F8(f64 vol, f64 tgt, s32 count, u16* ratel) {
+/**
+ * libultra envelope mixer helper (n_env.c _getRate): ramp rate from vol to tgt over count samples.
+ */
+s16 _getRate(f64 vol, f64 tgt, s32 count, u16* ratel) {
     s16 s, tmp;
     f64 invn, a, f;
 
@@ -545,8 +548,12 @@ extern u8 D_80077534;
 extern s32 D_800FD68C;
 extern long long int D_8005E120[];
 extern long long int D_8007FCF0[];
-void func_8003BDB0(void);
-OSTask* func_8003B868(OSTask* arg0) {
+void Cry_Update(void);
+/**
+ * libultra audio manager frame handler (name from the SDK samples): builds the audio command list for
+ * the next AI buffer and returns the audio task.
+ */
+OSTask* __amHandleFrame(OSTask* arg0) {
     s16* audio_ptr;
     Acmd* cmdp;
     s32 cmd_len;
@@ -600,7 +607,7 @@ OSTask* func_8003B868(OSTask* arg0) {
     audFrameCt++;
 
     if (D_80075E10[0] != 0) {
-        func_8003BDB0();
+        Cry_Update();
     }
 
     if (D_80075E04[0] != 0) {
@@ -678,8 +685,12 @@ void __clearAudioDMA(void) {
 
 extern s32 D_80075E00;
 
-void func_8003BC9C(s32 arg0) {
-    switch (arg0) {                                 /* irregular */
+/**
+ * Sets the audio output mode flag D_80075E00 to 0, 1 or 2 (anything else is 1). The audio thread sets 1
+ * at start. @unverified: meaning of the modes not checked.
+ */
+void Audio_SetOutputMode(s32 mode) {
+    switch (mode) {                                 /* irregular */
     case 0:
         D_80075E00 = 0;
         return;
@@ -699,7 +710,7 @@ void func_8003BC9C(s32 arg0) {
 void Cry_SetEnabled(s32 arg0) {
     const f32 D_8007C7C0 = 0.8000000119f;
     if (arg0 != 0) {
-        func_80044BA8(0x7D00, 0x78, 0x640);
+        GbAudio_Reset(0x7D00, 0x78, 0x640);
         D_80075E04[0] = 1;
         D_80075E08 = D_8007C7C0;
         return;
@@ -710,7 +721,7 @@ void Cry_SetEnabled(s32 arg0) {
 /** Plays a Pokemon's cry from the Pokedex. */
 void Cry_PlayFromPokedex(s32 arg0) {
     if (D_80075E04[0] == 0) {
-        func_80044BA8(0x7D00, 0x78, 0x320);
+        GbAudio_Reset(0x7D00, 0x78, 0x320);
         D_80075E04[0] = 1;
         D_80075E10[0] = 1;
         D_80075E08 = 0.0f;
@@ -720,7 +731,11 @@ void Cry_PlayFromPokedex(s32 arg0) {
     }
 }
 
-void func_8003BDB0(void) {
+/**
+ * Steps the cry playback state machine started by Cry_PlayFromPokedex: start, wait two frames, wait for
+ * the sound to end, wait 31 frames, done. Run from __amHandleFrame each audio frame.
+ */
+void Cry_Update(void) {
     switch (D_80075E10[0]) {
         case 1:
             func_8003C110(D_80075E14);

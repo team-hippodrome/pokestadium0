@@ -238,7 +238,7 @@ void Battle_RenderActivePokemonThumbnail(GraphNode* thumbnail_root, GfxImage* th
     }
 }
 
-s32 func_80006B50(s32 *, s32 *, s32 *, s32 *);
+s32 Stage_ClipRectToClearArea(s32 *, s32 *, s32 *, s32 *);
 /**
  * called every frame: bug boy in GLC
  * Use clipped destination offsets as 10.5 texture coordinates with a half-texel bias.
@@ -251,7 +251,7 @@ void Battle_DrawClippedTextureRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 x0 = arg0;
     s32 y0 = arg1;
 
-    if (func_80006B50(&arg0, &arg1, &arg2, &arg3) != 0) {
+    if (Stage_ClipRectToClearArea(&arg0, &arg1, &arg2, &arg3) != 0) {
         x0 = ((arg0 - x0) << 5) + 16;
         y0 = ((arg1 - y0) << 5) + 16;
         gSPTextureRectangle(gDisplayListHead++, arg0 << 2, arg1 << 2, (arg2 + 1) << 2, (arg3 + 1) << 2,
@@ -522,9 +522,9 @@ s32 Battle_FrameCallback(s32 fade_mode) {
     s32 battle_result = 0;
 
     Cont_StartReadInputs();
-    Trainer_RequestPokeIcon(&sBattleSides[0]);
+    BattleSide_RequestModelLoad(&sBattleSides[0]);
     PokeIcon_WaitFrameLoadForObject(&sBattleSides[0]);
-    Trainer_RequestPokeIcon(&sBattleSides[1]);
+    BattleSide_RequestModelLoad(&sBattleSides[1]);
     PokeIcon_WaitFrameLoadForObject(&sBattleSides[1]);
     Cont_ReadInputs();
     Input_ResetRepeatState();
@@ -653,7 +653,7 @@ void BattleScene_InitializeParticipantPresentation(BattleSide* side, unk_D_86002
     side->unk_1C = 0;
     side->displayModel = first_trainer->pokemonPicked[0].species.id;
     side->displayMon = first_trainer->pokemonPicked;
-    Trainer_RequestPokeIcon(side);
+    BattleSide_RequestModelLoad(side);
 }
 
 typedef struct Unit82101324 {

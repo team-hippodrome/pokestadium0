@@ -93,8 +93,8 @@ void BattleThumbnail_InitializeOwnerCameraFraming(s32 camera0, ActivePokemon* po
     func_82107408(pokemon1);
 }
 
-s32 func_80032890(s32);
-void func_80032840(s32);
+s32 ModelRenderer_IsSlotModelReady(s32);
+void ModelRenderer_UnusedSlotLoop(s32);
 
 /**
  * Handles the slide-in animation for the owner's thumbnail for when move selection is ongoing.
@@ -115,9 +115,9 @@ void BattleThumbnail_TickOwnerSlideIn(ActivePokemon* active_pokemon, s32 delta) 
             BattleThumbnail_TriggerOwnerModelAnimation(active_pokemon);
         }
 
-        if ((func_80032890(0) != 0) && (active_pokemon->thumbnail.status == 0)) {
+        if ((ModelRenderer_IsSlotModelReady(0) != 0) && (active_pokemon->thumbnail.status == 0)) {
             active_pokemon->thumbnail.status = 2;
-            func_80032840(0);
+            ModelRenderer_UnusedSlotLoop(0);
         }
         active_pokemon->thumbnail.camera->viewport.x = Math_StepToS32(active_pokemon->thumbnail.camera->viewport.x, 0x17, delta, delta);
     } else {
@@ -127,9 +127,9 @@ void BattleThumbnail_TickOwnerSlideIn(ActivePokemon* active_pokemon, s32 delta) 
 
         active_pokemon->thumbnail.camera->viewport.x = Math_StepToS32(active_pokemon->thumbnail.camera->viewport.x, 0x103, delta, delta);
 
-        if ((func_80032890(1) != 0) && (active_pokemon->thumbnail.status == 0)) {
+        if ((ModelRenderer_IsSlotModelReady(1) != 0) && (active_pokemon->thumbnail.status == 0)) {
             active_pokemon->thumbnail.status = 2;
-            func_80032840(1);
+            ModelRenderer_UnusedSlotLoop(1);
         }
     }
 }

@@ -81,7 +81,7 @@ void GeoRender_AdvanceFrameCounter(void);
 s32 GeoRender_IsModelFrameCurrent(void);
 Vec3f* GeoRender_FindAnchorPosition(DisplayObject* display_object, s16 lookup_id, Vec3f* dest);
 
-void func_80011D14(Vtx* arg0, CameraOverlay* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6,
+void GeoOverlay_SetRotatedVertex(Vtx* arg0, CameraOverlay* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6,
                    s16 arg7);
 
 void Geo_NodeModelPartRoot(struct Root80013DC8* arg0);
@@ -334,15 +334,21 @@ typedef struct EventTrackRender {
 
 extern EventTrackRender D_800AC6A8;
 
-void func_80011838(EventTrackState* arg0, s32 arg1) {
-    EventTrackData* data = arg0->data;
+/**
+ * Makes event track `track` the one the current model part draws with: optionally advances its
+ * frame (`advance`), stamps it with this render frame and publishes its frame, track table and frame
+ * values in D_800AC6A8.
+ * Seen in play (2026-11-14): Geo_NodeModelPart calls it at boot and in battle.
+ */
+void ModelAnim_PrepareEventTrackRender(EventTrackState* track, s32 advance) {
+    EventTrackData* data = track->data;
 
-    if (arg1 != 0) {
-        arg0->frame = ModelAnim_AdvanceEventFrame(arg0);
+    if (advance != 0) {
+        track->frame = ModelAnim_AdvanceEventFrame(track);
     }
-    arg0->lastRenderFrame = D_80060484;
+    track->lastRenderFrame = D_80060484;
     D_800AC6A8.active = 1;
-    D_800AC6A8.frame = arg0->frame;
+    D_800AC6A8.frame = track->frame;
     D_800AC6A8.data = data;
     D_800AC6A8.trackTable = func_80002C80((s32)data->trackTable);
     D_800AC6A8.frameValues = func_80002C80((s32)data->frameValues);
@@ -440,17 +446,22 @@ void GeoOverlay_DrawFadeQuad(CameraOverlay* arg0, CameraOrthographic* arg1) {
 
 void func_8000A560();
 
-void func_80011D14(Vtx* arg0, CameraOverlay* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6, s16 arg7) {
-    u16 angle = arg1->unk_18;
+/**
+ * Writes one vertex of the rotating screen overlay: offset (dx, dy) rotated by the overlay's angle
+ * around (cx, cy), texture coordinate (s, t) and the overlay's color.
+ * Seen in play (2026-11-14): GeoOverlay_BuildRotatingQuad calls it during a COM battle.
+ */
+void GeoOverlay_SetRotatedVertex(Vtx* vtx, CameraOverlay* overlay, s16 cx, s16 cy, s16 dx, s16 dy, s16 s, s16 t) {
+    u16 angle = overlay->unk_18;
     s32 idx = angle >> 4;
     s16 x;
     s16 y;
 
-    x = (s16)(arg2 + (s16)(arg4 * gCosineTable[idx] - arg5 * gSineTable[idx]));
-    y = (s16)(arg3 + (s16)(arg4 * gSineTable[idx] + arg5 * gCosineTable[idx]));
+    x = (s16)(cx + (s16)(dx * gCosineTable[idx] - dy * gSineTable[idx]));
+    y = (s16)(cy + (s16)(dx * gSineTable[idx] + dy * gCosineTable[idx]));
 
-    func_8000A560(arg0, x, y, -1, arg6 << 5, arg7 << 5,
-                  arg1->color.r, arg1->color.g, arg1->color.b, 0xFF);
+    func_8000A560(vtx, x, y, -1, s << 5, t << 5,
+                  overlay->color.r, overlay->color.g, overlay->color.b, 0xFF);
 }
 
 /** Builds the vertices of the rotating-quad screen overlay. */
@@ -469,21 +480,21 @@ Vtx* GeoOverlay_BuildRotatingQuad(CameraOverlay* arg0) {
         temp_s2 = arg0->unk_0C + (((arg0->unk_0E - arg0->unk_0C) * arg0->stepIndex) / arg0->stepCount);
 
         if (arg0->mode == 2) {
-            func_80011D14(temp_s0++, arg0, temp_s4, temp_s5, -temp_s2, -temp_s2, -0x1F, 0x3F);
-            func_80011D14(temp_s0++, arg0, temp_s4, temp_s5, temp_s2, -temp_s2, 0x1F, 0x3F);
-            func_80011D14(temp_s0++, arg0, temp_s4, temp_s5, temp_s2, temp_s2, 0x1F, 0);
-            func_80011D14(temp_s0++, arg0, temp_s4, temp_s5, -temp_s2, temp_s2, -0x1F, 0);
+            GeoOverlay_SetRotatedVertex(temp_s0++, arg0, temp_s4, temp_s5, -temp_s2, -temp_s2, -0x1F, 0x3F);
+            GeoOverlay_SetRotatedVertex(temp_s0++, arg0, temp_s4, temp_s5, temp_s2, -temp_s2, 0x1F, 0x3F);
+            GeoOverlay_SetRotatedVertex(temp_s0++, arg0, temp_s4, temp_s5, temp_s2, temp_s2, 0x1F, 0);
+            GeoOverlay_SetRotatedVertex(temp_s0++, arg0, temp_s4, temp_s5, -temp_s2, temp_s2, -0x1F, 0);
         } else {
-            func_80011D14(temp_s0++, arg0, temp_s4, temp_s5, -temp_s2, -temp_s2, 0, 0x3F);
-            func_80011D14(temp_s0++, arg0, temp_s4, temp_s5, temp_s2, -temp_s2, 0x3F, 0x3F);
-            func_80011D14(temp_s0++, arg0, temp_s4, temp_s5, temp_s2, temp_s2, 0x3F, 0);
-            func_80011D14(temp_s0++, arg0, temp_s4, temp_s5, -temp_s2, temp_s2, 0, 0);
+            GeoOverlay_SetRotatedVertex(temp_s0++, arg0, temp_s4, temp_s5, -temp_s2, -temp_s2, 0, 0x3F);
+            GeoOverlay_SetRotatedVertex(temp_s0++, arg0, temp_s4, temp_s5, temp_s2, -temp_s2, 0x3F, 0x3F);
+            GeoOverlay_SetRotatedVertex(temp_s0++, arg0, temp_s4, temp_s5, temp_s2, temp_s2, 0x3F, 0);
+            GeoOverlay_SetRotatedVertex(temp_s0++, arg0, temp_s4, temp_s5, -temp_s2, temp_s2, 0, 0);
         }
 
-        func_80011D14(temp_s0++, arg0, temp_s4, temp_s5, -0x7D0, -0x7D0, 0, 0);
-        func_80011D14(temp_s0++, arg0, temp_s4, temp_s5, 0x7D0, -0x7D0, 0, 0);
-        func_80011D14(temp_s0++, arg0, temp_s4, temp_s5, 0x7D0, 0x7D0, 0, 0);
-        func_80011D14(temp_s0++, arg0, temp_s4, temp_s5, -0x7D0, 0x7D0, 0, 0);
+        GeoOverlay_SetRotatedVertex(temp_s0++, arg0, temp_s4, temp_s5, -0x7D0, -0x7D0, 0, 0);
+        GeoOverlay_SetRotatedVertex(temp_s0++, arg0, temp_s4, temp_s5, 0x7D0, -0x7D0, 0, 0);
+        GeoOverlay_SetRotatedVertex(temp_s0++, arg0, temp_s4, temp_s5, 0x7D0, 0x7D0, 0, 0);
+        GeoOverlay_SetRotatedVertex(temp_s0++, arg0, temp_s4, temp_s5, -0x7D0, 0x7D0, 0, 0);
     }
 
     arg0->unk_18 += arg0->unk_1A;
@@ -570,10 +581,15 @@ void GeoRender_SetCombineMode(Gfx* arg0, arg1_func_81407874_014_000_010* arg1) {
 
 
 extern arg1_func_81407874_014_000_010 D_80060534[];
-void func_800128E0(GeoLayerRenderState* arg0) {
-    bzero(arg0, 0x20);
-    M2C_FIELD(arg0, u8 *, 0x19) = 0xFF;
-    M2C_FIELD(arg0, u32 *, 4) = 0xFFFFFFFF;
+/**
+ * Clears the layer render state before a model's layers are drawn and sets the 2-cycle pipeline with
+ * white primitive color and the default combiner.
+ * Seen in play (2026-11-14): runs once per model root, from GeoRender_DrawModelLayers.
+ */
+void GeoRender_InitLayerState(GeoLayerRenderState* state) {
+    bzero(state, 0x20);
+    M2C_FIELD(state, u8 *, 0x19) = 0xFF;
+    M2C_FIELD(state, u32 *, 4) = 0xFFFFFFFF;
     gDPPipeSync(gDisplayListHead++);
     gDPSetCycleType(gDisplayListHead++, G_CYC_2CYCLE);
     gDPSetPrimColor(gDisplayListHead++, 0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFFFF
@@ -581,15 +597,20 @@ void func_800128E0(GeoLayerRenderState* arg0) {
 }
 
 extern s32 D_800604A4[][9];
-s32 func_8001298C(arg0) GeoLayerRenderState* arg0; {
-    s32 mode = D_800604A4[arg0->flags][arg0->layer];
+/**
+ * Sets the render mode for the current layer and surface flags (D_800604A4), with fog when the scene
+ * has it enabled. Resets the fog color to transparent white.
+ * @unverified Name read from the code.
+ */
+s32 GeoRender_SetLayerRenderMode(state) GeoLayerRenderState* state; {
+    s32 mode = D_800604A4[state->flags][state->layer];
     Gfx* gfx;
 
-    arg0->fogColor = 0xFFFFFF00;
+    state->fogColor = 0xFFFFFF00;
     gfx = gDisplayListHead++;
     gfx->words.w0 = 0xF8000000;
-    gfx->words.w1 = arg0->fogColor;
-    if ((D_80060480 & 1) && (arg0->flags == 1) && (arg0->layer == 5)) {
+    gfx->words.w1 = state->fogColor;
+    if ((D_80060480 & 1) && (state->flags == 1) && (state->layer == 5)) {
         mode = 0x107A58;
     }
     if (D_80060490->fogEnabled != 0) {
@@ -606,73 +627,92 @@ typedef union Rgba80012D04 {
     } c;
 } Rgba80012D04;
 
-void func_80012A80(GeoLayerRenderState* arg0) {
+/**
+ * Turns texturing and texture generation back off after an environment-mapped entry and restores
+ * the primitive color and combiner of the current state.
+ * @unverified Name read from the code.
+ */
+void GeoRender_ResetMaterialState(GeoLayerRenderState* state) {
     Rgba80012D04 color;
 
-    color.word = arg0->primColor;
-    arg0->texture = 0;
-    arg0->palette = 0;
-    arg0->unk_00 = 0;
-    arg0->unk_1A = 0;
+    color.word = state->primColor;
+    state->texture = 0;
+    state->palette = 0;
+    state->unk_00 = 0;
+    state->unk_1A = 0;
     gDPPipeSync(gDisplayListHead++);
-    gDPSetPrimColor(gDisplayListHead++, 0, arg0->primLodFraction, color.c.r, color.c.g, color.c.b, color.c.a);
+    gDPSetPrimColor(gDisplayListHead++, 0, state->primLodFraction, color.c.r, color.c.g, color.c.b, color.c.a);
     gDPSetTextureLUT(gDisplayListHead++, G_TT_NONE);
     gSPTexture(gDisplayListHead++, 0xFFFF, 0xFFFF, 0, G_TX_RENDERTILE, G_OFF);
-    GeoRender_SetCombineMode(gDisplayListHead++, &D_80060534[arg0->combineMode]);
+    GeoRender_SetCombineMode(gDisplayListHead++, &D_80060534[state->combineMode]);
     gSPClearGeometryMode(gDisplayListHead++, G_TEXTURE_GEN);
     gSPLookAt(gDisplayListHead++, M2C_FIELD(D_80060488, u32*, 0xA4) & 0x1FFFFFFF);
 }
 
-void func_80012C00(GeoLayerRenderState* arg0, GeoLayerEntry* arg1) {
+/**
+ * Emits the entry's fog color (with a fog render mode) when it differs from the current one.
+ * @unverified Name read from the code.
+ */
+void GeoRender_ApplyEntryFog(GeoLayerRenderState* state, GeoLayerEntry* entry) {
     Gfx *gfx;
 
-    if (arg1->fogColor != arg0->fogColor) {
-        if (arg0->syncPending == 0) {
-            arg0->syncPending = 1;
+    if (entry->fogColor != state->fogColor) {
+        if (state->syncPending == 0) {
+            state->syncPending = 1;
             gDPPipeSync(gDisplayListHead++);
         }
         gfx = gDisplayListHead++;
         gfx->words.w0 = 0xF8000000;
-        gfx->words.w1 = arg1->fogColor;
-        gSPSetOtherMode(gDisplayListHead++, G_SETOTHERMODE_L, G_MDSFT_RENDERMODE, 29, D_800604A4[arg0->flags][arg0->layer] | 0xC4000000);
-        arg0->fogColor = arg1->fogColor;
+        gfx->words.w1 = entry->fogColor;
+        gSPSetOtherMode(gDisplayListHead++, G_SETOTHERMODE_L, G_MDSFT_RENDERMODE, 29, D_800604A4[state->flags][state->layer] | 0xC4000000);
+        state->fogColor = entry->fogColor;
     }
 }
 
-M2C_UNK func_8001298C();                            /* extern */
-
-void func_80012CC0(GeoLayerRenderState* arg0, GeoLayerEntry* arg1) {
-    if (arg0->fogColor & 0xFF) {
-        func_8001298C();
+M2C_UNK GeoRender_SetLayerRenderMode();                            /**
+ * Entry without fog: restores the layer's plain render mode if fog was on.
+ * @unverified Name read from the code.
+ */
+void GeoRender_ClearEntryFog(GeoLayerRenderState* state, GeoLayerEntry* entry) {
+    if (state->fogColor & 0xFF) {
+        GeoRender_SetLayerRenderMode();
     }
-    arg0->fogColor = (s32) arg1->fogColor;
+    state->fogColor = (s32) entry->fogColor;
 }
 
-void func_80012D04(GeoLayerRenderState* arg0, GeoLayerEntry* arg1) {
+/**
+ * Emits the entry's primitive color and LOD fraction when they differ from the current ones.
+ * @unverified Name read from the code.
+ */
+void GeoRender_ApplyEntryPrimColor(GeoLayerRenderState* state, GeoLayerEntry* entry) {
     Rgba80012D04 color;
 
-    if ((arg1->primColor != arg0->primColor) || (arg1->lodFraction != arg0->primLodFraction)) {
-        if (arg0->syncPending == 0) {
-            arg0->syncPending = 1;
+    if ((entry->primColor != state->primColor) || (entry->lodFraction != state->primLodFraction)) {
+        if (state->syncPending == 0) {
+            state->syncPending = 1;
             gDPPipeSync(gDisplayListHead++);
         }
-        color.word = arg1->primColor;
-        gDPSetPrimColor(gDisplayListHead++, 0, arg1->lodFraction, color.c.r, color.c.g, color.c.b, color.c.a);
-        arg0->primColor = arg1->primColor;
-        arg0->primLodFraction = arg1->lodFraction;
+        color.word = entry->primColor;
+        gDPSetPrimColor(gDisplayListHead++, 0, entry->lodFraction, color.c.r, color.c.g, color.c.b, color.c.a);
+        state->primColor = entry->primColor;
+        state->primLodFraction = entry->lodFraction;
     }
 }
 
 extern arg1_func_81407874_014_000_010 D_80060534[];
 
-void func_80012DC8(GeoLayerRenderState* arg0, GeoLayerEntry* arg1) {
-    if (arg1->combineMode != arg0->combineMode) {
-        if (arg0->syncPending == 0) {
-            arg0->syncPending = 1;
+/**
+ * Emits the entry's color combiner (from D_80060534) when it differs from the current one.
+ * @unverified Name read from the code.
+ */
+void GeoRender_ApplyEntryCombineMode(GeoLayerRenderState* state, GeoLayerEntry* entry) {
+    if (entry->combineMode != state->combineMode) {
+        if (state->syncPending == 0) {
+            state->syncPending = 1;
             gDPPipeSync(gDisplayListHead++);
         }
-        GeoRender_SetCombineMode(gDisplayListHead++, &D_80060534[arg1->combineMode]);
-        arg0->combineMode = arg1->combineMode;
+        GeoRender_SetCombineMode(gDisplayListHead++, &D_80060534[entry->combineMode]);
+        state->combineMode = entry->combineMode;
     }
 }
 
@@ -746,8 +786,13 @@ void GeoRender_BindTexture(GeoLayerRenderState* arg0, GeoLayerEntry* arg1) {
 
 extern u8 D_1001800[];
 
-void func_80013148(GeoLayerRenderState* arg0, s32 arg1) {
-    if (arg0->unk_1A == 0) {
+/**
+ * Switches to environment mapping (G_TEXTURE_GEN with the shared 32x32 reflection texture) for an
+ * entry that asks for it, once per run of such entries.
+ * @unverified Name from Stadium 1; matches the code.
+ */
+void GeoRender_EnableTextureGeneration(GeoLayerRenderState* state, s32 entry) {
+    if (state->unk_1A == 0) {
         gDPLoadTextureBlock(gDisplayListHead++, D_1001800, G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0,
                             G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, 1, 1);
         gSPTexture(gDisplayListHead++, 0x1194, 0x1194, 0, G_TX_RENDERTILE, G_ON);
@@ -756,43 +801,41 @@ void func_80013148(GeoLayerRenderState* arg0, s32 arg1) {
         gSPClearGeometryMode(gDisplayListHead++, G_TEXTURE_GEN_LINEAR);
         gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEI, G_CC_MODULATEI2);
 
-        arg0->unk_1A = 1;
+        state->unk_1A = 1;
     }
 }
 
-/*
- * func_800132C8
- *
- * Emits display-list commands for one object, `arg1`. `*arg0` caches the
- * last matrix address handled: when arg1's word at offset 0xC differs from
- * it, the cache is updated and a gSPMatrix (G_MTX_NOPUSH | G_MTX_LOAD |
- * G_MTX_MODELVIEW) for that address masked to a physical address is
- * emitted. Then arg1's word at offset 8 is emitted as a gSPDisplayList
- * target; if it lies in 0x81000000..0x8FFFFFFF (the fragment address range)
- * it is first run through Memmap_GetFragmentVaddr. The meaning of the two
- * fields is inferred from how they are used, not from a declaration.
- * Matching note: the extra registers m2c shows as arguments to the
- * Memmap_GetFragmentVaddr call are leftovers, not arguments.
+/**
+ * Draws one layer entry: loads its matrix when it differs from the cached one in *`lastMatrix`,
+ * then calls its display list (translated to the fragment's load address when it points into a
+ * fragment).
+ * @unverified Name read from the code.
  */
-void func_800132C8(s32* arg0, void* arg1) {
-    if (*arg0 != M2C_FIELD(arg1, s32*, 0xC)) {
-        *arg0 = M2C_FIELD(arg1, s32*, 0xC);
-        gSPMatrix(gDisplayListHead++, M2C_FIELD(arg1, u32*, 0xC) & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+void GeoRender_DrawEntryDisplayList(s32* lastMatrix, void* entry) {
+    if (*lastMatrix != M2C_FIELD(entry, s32*, 0xC)) {
+        *lastMatrix = M2C_FIELD(entry, s32*, 0xC);
+        gSPMatrix(gDisplayListHead++, M2C_FIELD(entry, u32*, 0xC) & 0x1FFFFFFF, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     }
-    if ((M2C_FIELD(arg1, u32*, 8) >= 0x81000000U) && (M2C_FIELD(arg1, u32*, 8) < 0x90000000U)) {
-        gSPDisplayList(gDisplayListHead++, Memmap_GetFragmentVaddr(M2C_FIELD(arg1, void**, 8)));
+    if ((M2C_FIELD(entry, u32*, 8) >= 0x81000000U) && (M2C_FIELD(entry, u32*, 8) < 0x90000000U)) {
+        gSPDisplayList(gDisplayListHead++, Memmap_GetFragmentVaddr(M2C_FIELD(entry, void**, 8)));
     } else {
-        gSPDisplayList(gDisplayListHead++, M2C_FIELD(arg1, u32*, 8));
+        gSPDisplayList(gDisplayListHead++, M2C_FIELD(entry, u32*, 8));
     }
 }
 
 
-void func_80013398(struct Root80013DC8 *arg0)
+/**
+ * Draws a model root's display lists layer by layer (9 layers, opaque to translucent), switching fog,
+ * primitive color, combiner and texture state per entry only when it changes.
+ * Verified in play (2026-11-14): stubbed at the battle command menu, both Pokémon and the stadium
+ * vanished and only the 2D HUD stayed.
+ */
+void GeoRender_DrawModelLayers(struct Root80013DC8 *root)
 {
   s8 *entry;
   GeoLayerRenderState ctx;
-  func_800128E0((s8 *) (&ctx));
-  ctx.flags = (*((u8 *) (((s8 *) arg0) + 2))) & 3;
+  GeoRender_InitLayerState((s8 *) (&ctx));
+  ctx.flags = (*((u8 *) (((s8 *) root) + 2))) & 3;
   if (ctx.flags & 1)
   {
     gSPSetGeometryMode(gDisplayListHead++, G_ZBUFFER);
@@ -803,30 +846,30 @@ void func_80013398(struct Root80013DC8 *arg0)
   }
   for (ctx.layer = 0; ctx.layer < 9; ctx.layer++)
   {
-    entry = ((s8 **) (((s8 *) arg0) + 0x18))[ctx.layer];
+    entry = ((s8 **) (((s8 *) root) + 0x18))[ctx.layer];
     if (entry != 0)
     {
       gDPPipeSync(gDisplayListHead++);
-      func_8001298C((s8 *) (&ctx));
+      GeoRender_SetLayerRenderMode((s8 *) (&ctx));
       for (; entry != 0; entry = *((s8 **) entry))
       {
         if ((*((s32 *) (((s8 *) entry) + 0x14))) & 0xFF)
         {
-          func_80012C00((s8 *) (&ctx), entry);
+          GeoRender_ApplyEntryFog((s8 *) (&ctx), entry);
         }
         else
         {
-          func_80012CC0(&ctx, (GeoLayerEntry*) entry);
+          GeoRender_ClearEntryFog(&ctx, (GeoLayerEntry*) entry);
         }
         if ((*((u8 *) (((s8 *) entry) + 5))) != 0)
         {
-          func_80013148(&ctx, (s32) entry);
+          GeoRender_EnableTextureGeneration(&ctx, (s32) entry);
         }
         else
         {
           if (ctx.unk_1A == 1)
           {
-            func_80012A80(&ctx);
+            GeoRender_ResetMaterialState(&ctx);
           }
           if ((*((s32 *) (((s8 *) entry) + 0x18))) != 0)
           {
@@ -836,13 +879,13 @@ void func_80013398(struct Root80013DC8 *arg0)
           {
             GeoRender_DisableTexture((s32 *) (&ctx), (s32) entry);
           }
-          func_80012D04((s8 *) (&ctx), entry);
-          func_80012DC8((s8 *) (&ctx), entry);
+          GeoRender_ApplyEntryPrimColor((s8 *) (&ctx), entry);
+          GeoRender_ApplyEntryCombineMode((s8 *) (&ctx), entry);
         }
-        func_800132C8((s32 *) (&ctx), entry);
+        GeoRender_DrawEntryDisplayList((s32 *) (&ctx), entry);
         if ((*((u8 *) (((s8 *) entry) + 4))) != 0)
         {
-          func_80012A80(&ctx);
+          GeoRender_ResetMaterialState(&ctx);
         }
       }
 
@@ -1064,7 +1107,7 @@ extern s32 D_800AB45C;
 s32 main_pool_get_available(void);
 s32 func_80002B10(s32, s32);
 void main_pool_try_free(s32 arg0);
-void func_80013398(Root80013DC8*);
+void GeoRender_DrawModelLayers(Root80013DC8*);
 s32 func_8001380C();
 /**
  * Renders a model part root once: resets the material state, renders the children, then flushes the layers. Stadium 1 name for the same handler.
@@ -1089,7 +1132,7 @@ void Geo_NodeModelPartRoot(Root80013DC8* arg0) {
         D_800AB240 = func_80002B10(main_pool_get_available(), 0);
         D_80060494 = (CameraNode*)arg0;
         func_8001380C(arg0);
-        func_80013398(arg0);
+        GeoRender_DrawModelLayers(arg0);
         D_80060494 = NULL;
         main_pool_try_free(D_800AB240);
     }
@@ -1278,14 +1321,18 @@ void Geo_NodeTextureBank(GraphNode* arg0) {
 }
 
 M2C_UNK func_8001380C();                            /* extern */
-// FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
-void func_8001473C(s8 *arg0)
+/**
+ * Geo node handler: processes the children only while the current matrix's z translation is inside
+ * the node's [min, max) range (node +0x18 / +0x1A).
+ * @unverified Name read from the code; no direct caller (reached through the node table).
+ */
+void Geo_NodeDepthRange(s8 *node)
 {
   unsigned char temp_f6;
  goto dummy_label_201075; dummy_label_201075: ;  // FAKE
  do { } while (0);  // karodo
   ;
-  if ((((s16) ((s32) (*((f32 *) (((s8 *) ((&(*((s8 *) (&D_800AB460)))) + ((*((s32 *) (((s8 *) (&(*((s8 *) (&D_800AB460))))) + 0x10A0))) << 6))) + 0x38))))) >= (*((s16 *) (((s8 *) arg0) + 0x18)))) && (((s16) ((s32) (*((f32 *) (((s8 *) ((&(*((s8 *) (&D_800AB460)))) + ((*((s32 *) (((s8 *) (&(*((s8 *) (&D_800AB460))))) + 0x10A0))) << 6))) + 0x38))))) < (*((s16 *) (((s8 *) arg0) + 0x1A))))) // FAKE: decomp slop, raw pointer casts stand in for struct fields
+  if ((((s16) ((s32) (*((f32 *) (((s8 *) ((&(*((s8 *) (&D_800AB460)))) + ((*((s32 *) (((s8 *) (&(*((s8 *) (&D_800AB460))))) + 0x10A0))) << 6))) + 0x38))))) >= (*((s16 *) (((s8 *) node) + 0x18)))) && (((s16) ((s32) (*((f32 *) (((s8 *) ((&(*((s8 *) (&D_800AB460)))) + ((*((s32 *) (((s8 *) (&(*((s8 *) (&D_800AB460))))) + 0x10A0))) << 6))) + 0x38))))) < (*((s16 *) (((s8 *) node) + 0x1A))))) // FAKE: decomp slop, raw pointer casts stand in for struct fields
   {
     func_8001380C();
   }
@@ -1334,7 +1381,7 @@ void Geo_NodeTranslate(GraphNode* arg0) {
 }
 
 extern s32 D_800AB248[];
-void func_8000ED9C(MtxF* dest, Vec3f* local_position, Vec3s* rotate, Vec3f* scale, MtxF* basis, MtxF* transform);
+void MtxF_ComposeBillboardTransform(MtxF* dest, Vec3f* local_position, Vec3s* rotate, Vec3f* scale, MtxF* basis, MtxF* transform);
 /**
  * Geo_NodeAnimatedPart from Stadium 1, with the joint evaluation inlined. D_800AC690 is declared as u8 in this file, so it is cast to the anim record type.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
@@ -1373,7 +1420,7 @@ void Geo_NodeAnimatedPart(GraphNode* arg0) {
     }
 
     if (arg->transformMode & 2) {
-        func_8000ED9C(&sp40, &sp8C, &sp98, &sp80, &D_80060488->view.floatMatrix,
+        MtxF_ComposeBillboardTransform(&sp40, &sp8C, &sp98, &sp80, &D_80060488->view.floatMatrix,
                       &D_800AB460.unk_0000[D_800AB460.unk_10A0]);
         D_800AB460.unk_10A0++;
         GeoRender_SetMatrix(&sp40);
@@ -1446,7 +1493,7 @@ void Geo_NodeDisplayListPart(void *arg0) {
     func_8001380C(arg0);
 }
 
-void func_80011838(EventTrackState*, s32);
+void ModelAnim_PrepareEventTrackRender(EventTrackState*, s32);
 void MtxF_SetBillboard(MtxF*, MtxF*, MtxF*, Vec3f*);
 extern s32 D_800AB44C;
 /**
@@ -1466,7 +1513,7 @@ void Geo_NodeModelPart(GraphNode* arg0) {
             ModelAnim_BeginCurveContext(&arg->transformAnim, arg->node.renderFlags & 0x20);
         }
         if (arg->eventTrack.data != NULL) {
-            func_80011838(&arg->eventTrack, arg->node.renderFlags & 0x20);
+            ModelAnim_PrepareEventTrackRender(&arg->eventTrack, arg->node.renderFlags & 0x20);
         }
 
         if (arg->node.renderFlags & 0x10) {
@@ -1667,7 +1714,7 @@ typedef struct GeoTextNode {
     /* 0x24 */ const char* text;
     /* 0x28 */ Color_RGBA8_u32 arg;
 } GeoTextNode;
-Gfx* func_8001B3AC(s16 x, s16 y, s16 arg2, s16 arg3, Color_RGBA8_u32 color, const char* fmt, ...);
+Gfx* Font_PrintfToDisplayList(s16 x, s16 y, s16 arg2, s16 arg3, Color_RGBA8_u32 color, const char* fmt, ...);
 /**
  * Geo callback for a text node: prints the node's formatted string with its
  * font and color and queues the resulting display list on the node's layer.
@@ -1681,7 +1728,7 @@ void Geo_NodeText(GraphNode* arg0) {
 
     if (arg->text != NULL) {
         Font_SetActive(arg->font, arg->fontArg);
-        dl = func_8001B3AC(arg->x, arg->y, arg->w, arg->h, arg->arg, arg->text);
+        dl = Font_PrintfToDisplayList(arg->x, arg->y, arg->w, arg->h, arg->arg, arg->text);
         if (dl != NULL) {
             GeoRender_SubmitLayerDisplayList(arg->node.renderLayer, (s32)dl, 0, arg->node.renderFlags & 4);
         }

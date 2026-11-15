@@ -75,19 +75,19 @@ void BattleAnim_CallbackBoneDriftEmber(Particle* particle) {
 
 extern void* D_82199DE0[];
 extern void* D_8219A810;
-extern s32 D_800733C8;
+extern s32 gNextGameState;
 extern u8 D_8218E5A0[];
 s32 func_82107CF0(void*);
 void func_8213B5D8(s32, s32, s32, void (*)(Particle*), u8*, s32, s32, s32, s32, s32, s32);
 
 /**
- * Spawns the BattleAnim_CallbackBoneDriftEmber effect for side arg0 when D_800733C8 is 0x8080 and that
+ * Spawns the BattleAnim_CallbackBoneDriftEmber effect for side arg0 when gNextGameState is 0x8080 and that
  * Pokemon's species is 6 (Charizard).
  * @unverified Name guessed from the code.
  */
 void BattleAnim_SpawnCharizardBoneDriftEmbers(s32 side) {
     D_8219A810 = D_82199DE0[side];
-    if (D_800733C8 == 0x8080) {
+    if (gNextGameState == 0x8080) {
         if (func_82107CF0(D_8219A810) == 6) {
             func_8213B5D8(0, 0, -1, BattleAnim_CallbackBoneDriftEmber, D_8218E5A0, 0, 1, 0x11, 0xA, 0, 0);
         }

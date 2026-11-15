@@ -2,7 +2,7 @@
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_328F10.c, src/gallery.c. */
 
 #include "battle.h"
-#include "fragments/disk_error_screen/disk_error_screen.h"
+#include "fragments/title_screen/title_screen.h"
 
 typedef struct {
     /* 0x00 */ s16 unk_00;

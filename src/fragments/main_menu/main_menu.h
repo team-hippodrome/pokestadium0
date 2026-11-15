@@ -23,7 +23,7 @@ typedef struct MainMenuImage {
 /* The prompt トーナメントのつづきをする？ (Continue the tournament?) (MainMenu_InitPromptWindow). */
 typedef struct MainMenuPromptWindow {
     /* 0x00 */ Window window;
-    /* 0x2C */ WindowFrame textFrame; // @unverified: the inner box behind the question text
+    /* 0x2C */ WindowFrame textFrame; // the inner box behind the question text (seen in play with the prompt open)
     /* 0x4C */ Menu menu;
     /* 0x70 */ PointerList itemList;
     /* 0x7C */ u16 itemFlags[3];
@@ -45,12 +45,12 @@ typedef struct MainMenuMessageWindow {
 
 /* The 3x3 grid of main menu items, with its fade in and out (MainMenu_InitItemList). */
 typedef struct MainMenuItemList {
-    /* 0x000 */ s32 fadeState; // @unverified: 0 fading in, 1-2 shown, 3 fading out, 4 gone (MainMenu_StepItemFade)
-    /* 0x004 */ s32 fadeTimer; // @unverified: counts up; 0xD starts the fade out
+    /* 0x000 */ s32 fadeState; // 0 fading in, 1-2 shown, 3 fading out, 4 gone (MainMenu_StepItemFade); 2 with fadeTimer 12 while the menu sat idle in play
+    /* 0x004 */ s32 fadeTimer; // counts up and holds at 12 while shown; 0xD starts the fade out
     /* 0x008 */ GridMenu menu;
     /* 0x030 */ u8 itemBuffer[9][0x30];
     /* 0x1E0 */ ByteMatrix items;
-    /* 0x1F0 */ u16 itemFlags[9]; // @unverified: bit 0 = disabled; set for the items the save cannot use
+    /* 0x1F0 */ u16 itemFlags[9]; // bit 0 = disabled; set for the items the save cannot use (blank Green save in play: 1,1,1,1,0,1,0,0,1, ずかん/てもち/とうろく greyed out)
     /* 0x202 */ char pad202[0x2];
 } MainMenuItemList; // size = 0x204
 
@@ -66,7 +66,7 @@ typedef struct MainMenuScreen {
     /* 0x000 */ s32 state; // 1 prompt, 2 item grid, 3 item confirm window; in play 2 on the grid, 3 after A on バトル (Battle), 2 again after B
     /* 0x004 */ s32 nextState; // 4 = leave with `result` once the grid has faded (set by はい in play); 2 = back to the grid
     /* 0x008 */ s32 result; // returned by MainMenu_UpdateScreen; from MainMenu_LoadSelectedFragment (0x8040 after はい on バトル in play)
-    /* 0x00C */ s32 mode; // arg1 of MainMenu_InitScreen; above 0 shows the text window (4 with no GB cart; poking 0 hid the 「GBのカートリッジがない」 window)
+    /* 0x00C */ s32 mode; // GB save status from MainMenu_LoadGbSaveSummary (0 OK, 1 not at a Pokémon Center, 2 no Pokédex, 3 no GB Pokémon, 4 no cartridge); above 0 shows the text window
     /* 0x010 */ char unk10[0x1C];
     /* 0x02C */ MainMenuItemList itemList;
     /* 0x230 */ char unk230[0x4];

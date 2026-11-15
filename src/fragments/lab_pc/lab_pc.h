@@ -57,11 +57,11 @@ typedef struct PcBoxStorage {
 /* A row of the box tables of the box screens: a box and whether it was changed. */
 typedef struct LabPCBoxEntry {
     /* 0x0 */ PcBoxStorage* box; // the PcBoxStorage of the row: gbBoxEntries[i].box = &gbBoxes[i] (stride 0x964)
-    /* 0x4 */ s32 dirty; // set by the swaps: ボックスをならべかえる of GB box 1 and 2 set it on both; func_890070BC writes back the boxes that have it, PcBox_HasUnsavedChanges asks to save
+    /* 0x4 */ s32 dirty; // set by the swaps: ボックスをならべかえる of GB box 1 and 2 set it on both; PcBox_SaveChanges writes back the boxes that have it, PcBox_HasUnsavedChanges asks to save
 } LabPCBoxEntry; // size = 0x8
 
 /* The ほんとうにいいの？ はい/いいえ window of the box screens with the Pokémon's stats and moves
- * (PcBox_InitConfirmWindow, PcBox_DrawMonStatusWindow). Without a title it only shows the stats. */
+ * (PcBox_InitMonStatusWindow, PcBox_DrawMonStatusWindow). Without a title it only shows the stats. */
 typedef struct PcBoxConfirmWindow {
     /* 0x00 */ Window window; // 430x292 at (105, 125), the Pokémon status window of ボックスのなかをみる
     /* 0x2C */ LabeledButton yesButton; // @unverified: label D_89018E60
@@ -73,12 +73,12 @@ typedef struct PcBoxConfirmWindow {
     /* 0xBC */ u16* anim; // renderer of the Pokémon picture from func_80018F2C; bits 1 and 2 of its flags cleared while a question is up
 } PcBoxConfirmWindow; // size = 0xC0
 
-/* The window of one box's Pokémon in the box screens (func_8900806C, PcBox_DrawList). */
+/* The window of one box's Pokémon in the box screens (PcBox_InitListWindow, PcBox_DrawList). */
 typedef struct PcBoxListWindow {
     /* 0x00 */ Window window; // 552x342 at (44, 95), the ＧＢのボックス１ grid
     /* 0x2C */ GridMenu menu; // the 6x5 grid of the box: columns 6, cells 90x66
     /* 0x54 */ u16 itemFlags[30]; // @unverified: itemFlags of menu
-    /* 0x90 */ s32 iconRenderer; // @unverified: PokeIconRenderer for the icons (func_8001833C, func_800189C0)
+    /* 0x90 */ s32 iconRenderer; // @unverified: PokeIconRenderer for the icons (PokeIcon_SetMonSlot, func_800189C0)
     /* 0x94 */ ByteMatrix mons; // rows over the box's mons, 0x50 bytes each: rows = gbBoxes[0].mons, count 1
 } PcBoxListWindow; // size = 0xA4
 
@@ -96,8 +96,8 @@ typedef struct PcBoxOperationWindow {
     /* 0x12C */ ImageButton viewButton; // operation 4 「ボックスのなかをみる」 (look inside a box), the bottom button
     /* 0x158 */ ChoiceCursor operationCursor; // cursor = the operation 0-5 (titles D_8900A924), count = 6; D-Up from 0 went to 5, D-Down from 5 to 0 .. 4
     /* 0x164 */ ChoiceCursor boxCursor; // operation 4: count 12, 0-7 = the GB boxes, 8-11 the 64 boxes; 0 opened ＧＢのボックス１
-    /* 0x170 */ Menu gbBoxMenu; // the GB box list (PcBox_DrawBoxName); items = gbBoxTable, D-Down moved its cursor to 1 while reordering
-    /* 0x194 */ Menu stadiumBoxMenu; // the 64 box list (PcBox_DrawBoxCount); items = stadiumBoxTable
+    /* 0x170 */ Menu gbBoxMenu; // the GB box list (PcBox_DrawGbBoxRow); items = gbBoxTable, D-Down moved its cursor to 1 while reordering
+    /* 0x194 */ Menu stadiumBoxMenu; // the 64 box list (PcBox_DrawStadiumBoxRow); items = stadiumBoxTable
     /* 0x1B8 */ u16 gbBoxFlags[8]; // @unverified: itemFlags of gbBoxMenu
     /* 0x1C8 */ u16 stadiumBoxFlags[8]; // @unverified: itemFlags of stadiumBoxMenu
     /* 0x1D8 */ Menu* sourceMenu; // the box list picked first (PcBox_SetActiveLists): gbBoxMenu for ボックスをならべかえる
@@ -176,17 +176,17 @@ typedef struct LabItemDeleteDataWindow {
 } LabItemDeleteDataWindow; // size = 0x88
 
 /* The window of one item save picked in the データをけす window: three operation buttons and its item list
- * (func_89002E58, func_890032E4, func_8900352C). */
+ * (LabItem_InitSaveDataWindow, LabItem_DrawSaveDataWindow, LabItem_UpdateSaveDataWindow). */
 typedef struct LabItemSaveDataWindow {
-    /* 0x000 */ s32 state; // @unverified: 1 = picking an operation, 2 = scrolling itemList (func_8900352C)
+    /* 0x000 */ s32 state; // @unverified: 1 = picking an operation, 2 = scrolling itemList (LabItem_UpdateSaveDataWindow)
     /* 0x004 */ Window window; // @unverified: typed from the function it is passed to
-    /* 0x030 */ WindowFrame footerFrame; // @unverified: frame of the bottom strip with the help line (func_8900323C)
+    /* 0x030 */ WindowFrame footerFrame; // @unverified: frame of the bottom strip with the help line (LabItem_DrawSaveDataHelpText)
     /* 0x050 */ ImageButton backButton; // @unverified: operation 2 「データせんたくにもどる」 (back to picking data)
     /* 0x07C */ ImageButton viewItemsButton; // @unverified: operation 1 「どうぐをかくにんする」 (check the items)
     /* 0x0A8 */ ImageButton discardButton; // @unverified: operation 0 「このデータをすてる」 (discard this data)
     /* 0x0D4 */ ChoiceCursor operationCursor; // @unverified: cursor = the operation 0-2 (titles D_8900A6CC), count = 3
-    /* 0x0E0 */ LabItemList itemList; // @unverified: the save's items (func_89002E58 arg4)
-    /* 0x1F4 */ LabItemSaveSlot* slot; // @unverified: name and ID drawn by func_890030C8
+    /* 0x0E0 */ LabItemList itemList; // @unverified: the save's items (LabItem_InitSaveDataWindow arg4)
+    /* 0x1F4 */ LabItemSaveSlot* slot; // @unverified: name and ID drawn by LabItem_DrawSaveDataOwner
 } LabItemSaveDataWindow; // size = 0x1F8
 
 /* The どうぐのせいり (organize items) window: four operation buttons, two box pickers and two item lists
@@ -211,7 +211,7 @@ typedef struct LabItemOrganizeWindow {
     /* 0x2F8 */ LabItemList rightList; // the right item list at (354, 123)
     /* 0x40C */ s32 swapIndex; // reorder: the first item picked in leftList (2 after picking ふしぎなアメ)
     /* 0x410 */ LabItemCountSelector countSelector; // move: how many of the item to move; ×01 box at (202, 195), max 5 for モンスターボール x5
-    /* 0x490 */ ByteMatrix* tables; // @unverified: the 3 item tables of the boxes (func_89003650's list0..list2)
+    /* 0x490 */ ByteMatrix* tables; // @unverified: the 3 item tables of the boxes (LabItem_Init's list0..list2)
     /* 0x494 */ s32* dirty; // @unverified: one per table, set when it changed
     /* 0x498 */ s32* gamePakSlot; // @unverified: picking box 2 as target with -1 here ends the window with 1
     /* 0x49C */ ByteMatrix reorderView; // func_80027410 over the rows of tables[0] with no rows in use; rightList shows it (000/020) while reordering
@@ -229,7 +229,7 @@ typedef struct LabTerminalMenuWindow {
     /* 0x80 */ s32 descriptionLines; // 3; height of the blue description fill in 0x1C-pixel lines (poking 1 shrank it to one line)
 } LabTerminalMenuWindow; // size = 0x84
 
-/* The どうぐのせいり screen, D_89019128 (func_89003650, LabItem_UpdateScreen, LabItem_DrawScreen). */
+/* The どうぐのせいり screen, D_89019128 (LabItem_Init, LabItem_UpdateScreen, LabItem_DrawScreen). */
 typedef struct LabItemScreen {
     /* 0x000 */ s32 state; // 1 = organizeWindow, 2 = save prompt (seen after メニューへもどる with changes), 3-6 = deleting a ６４の カセット save (LabItem_UpdateScreen)
     /* 0x004 */ LabItemOrganizeWindow organizeWindow; // the どうぐのせいり window, 564x372 at (38, 81)
@@ -279,7 +279,7 @@ typedef struct PcSortScreen {
     /* 0x0000 */ s32 state; // @unverified: PcSort_UpdateScreen
     /* 0x0004 */ s8* iconFramebuffers; // @unverified: PokeIcon_AllocFramebuffers
     /* 0x0008 */ u16* monRenderer; // @unverified: func_80018F2C; the anim of statusWindow
-    /* 0x000C */ s32 mode; // @unverified: PcSort_Init's arg1
+    /* 0x000C */ s32 title; // PcSort_Init's title: LabTerminal_RunFrame passes the ポケモンのせいり string D_89018918 (seen 2026-11-14); never read
     /* 0x0010 */ PcSortOrganizeWindow organizeWindow; // the ポケモンのせいり window
     /* 0x0408 */ SavePrompt savePrompt; // @unverified: typed from the function it is passed to
     /* 0x046C */ PcBoxConfirmWindow statusWindow; // @unverified: typed from the function it is passed to
@@ -292,7 +292,7 @@ typedef struct PcSortScreen {
     /* 0x785C */ s32 dirty[13]; // set when a table changed: [1] (GB box 1) and [12] (64 box 4) after moving ハナ; PcSort_SaveChanges writes those back
 } PcSortScreen; // size = 0x7890
 
-void PcBox_InitConfirmWindow(PcBoxConfirmWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16* arg6);
+void PcBox_InitMonStatusWindow(PcBoxConfirmWindow* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, u16* arg6);
 s32 PcBox_UpdateConfirmCursor(PcBoxConfirmWindow* arg0);
 void PcBox_DrawMonStatusWindow(PcBoxConfirmWindow* arg0);
 
@@ -689,14 +689,14 @@ void LabItem_LoadGamePakBoxSlots(LabItemSaveSlot* arg0);
 s32 LabItem_FindOrAllocateGamePakBoxSlot(LabItemSaveSlot* arg0, s32 arg1, char* arg2);
 s32 LabItem_ComputeRemainingCapacity(s32 arg0, ByteMatrix* arg1);
 s32 LabItem_ComputeMaxTransferQuantity(s32 arg0, ByteMatrix* arg1);
-void func_8900020C(void);
+void LabItem_Unused(void);
 
 // pc_sort.c
-void func_89004708(void);
-void func_89004710(void);
+void PcSort_Unused1(void);
+void PcSort_Unused2(void);
 
 // functions defined in assembly
-void LabItem_SubtractSelectedItemQuantity(unk_func_8820BE14_02C_038* arg0, s32 arg1);
-void WidgetTree_RemoveScrollableGridEntry(unk_func_8820BE14_02C_038*);
+void LabItem_DecreaseSelectedCount(ScrollList* list, s32 count);
+void LabList_RemoveSelectedEntry(ScrollList* list);
 
 #endif // FRAGMENT_LAB_PC_H

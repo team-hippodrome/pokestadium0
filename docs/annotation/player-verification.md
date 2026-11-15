@@ -407,9 +407,9 @@ the orbit, which a still frame can't tell apart.
 On the order select screen (`battle_order_select.c`, Free Battle against the
 COM), presses were matched to the functions they reached:
 
-* Each pick reaches `BattleMenu_AppendOrderSlotIcon`, the level-sum check and
+* Each pick reaches `BattleMenu_AddSidebarPickBall`, the level-sum check and
   the completeness check.
-* L reaches `BattleMenu_ResetOrderSlotIcons`.
+* L reaches `BattleMenu_ShrinkSidebarPickBalls`.
 * The sixth pick opens 「これで いいですか？ はい えらびなおす」
   (`BattleMenu_DrawOrderSelectConfirmPrompt`, `..._ConfirmInput`).
 
@@ -464,9 +464,11 @@ Functions that ran on each screen were caught with breakpoints. A name lost
 its tag only where the screen showed what the name says. About 30 helpers on
 these screens got names from their code and from the moment they ran.
 
-Not reached: the screens after a tournament win. Scripted inputs in a
-tournament battle didn't land reliably, and setting COM HP mid-battle stalled
-the next send-out once.
+The screens after a tournament win were reached on 2026-11-14 (see
+`src/fragments/cup_clear/cup_clear.c`): round 1 of the L1～30 Poké Ball Cup
+with `gSessionContext.roundOrDemoId` set to 8 and the COM team's HP set to
+1/0 in both the active slot and the roster, then one attack. That plays かち,
+チャンピオン!, the team parade and the cup-cleared trophy scene.
 
 ## The GB item with a Japanese cartridge
 
@@ -757,7 +759,7 @@ selected, the panel showed HP: 19, こうげき 9, ぼうぎょ 9, すばやさ 
 (`PcSort_DrawMonStats`) and the moves たいあたり and なきごえ
 (`PcBox_DrawMoveName`).
 
-## GB Tower sound
+## GB Player sound
 
 These were probed while Pocket Monsters Green's intro (Gengar against
 Nidorino) played in the GB player (Zero has no GB Tower):
@@ -773,7 +775,7 @@ Nidorino) played in the GB player (Zero has no GB Tower):
   fixed point).
 * The four channel updates keep their tags, because play cannot tell square 1
   from square 2.
-* GB Tower menu: C-Up opens メニュー (ゲームをつづける, ゲームをやめる,
+* GB Player menu: C-Up opens メニュー (ゲームをつづける, ゲームをやめる,
   せつめい・コンフィグ). This calls `GbAudio_SetMenuSoundMode(1)` and
   `GbAudio_PlayMenuSound(1)`. Its text is drawn by `GbEmu_DrawTextCommands`
   from a command list whose headers and glyph counts match each line.
@@ -787,13 +789,13 @@ Nidorino) played in the GB player (Zero has no GB Tower):
 
 This was traced from power-on with Green in port 1:
 
-1. `GbSave_ScanAllPorts` calls `GbTower_ScanPaks`, which returns 0x10001.
+1. `GbSave_ScanAllPorts` calls `GbPlayer_ScanPaks`, which returns 0x10001.
 2. `GbPak_ReadRom` reads the header from 0x120, which matches the ROM
    (POKEMON GREEN).
 3. `GbPak_DetectRam` checks cartridge RAM with two `GbPak_VerifyPattern`
    rounds, each writing with `GbPak_MbcWrite` and reading back with
    `GbPak_MbcRead`.
-4. `GbSave_OpenMainData` runs, and `GbTower_SetPollMask(1)` ends the scan.
+4. `GbSave_OpenMainData` runs, and `GbPlayer_SetPollMask(1)` ends the scan.
 
 ## ずかん counts
 
@@ -813,7 +815,7 @@ On the order screen of a COM free battle:
 
 * COM's panel is ready at once (じゅんび かんりょう！) from scripted input
   (`BattleMenu_FeedScriptedComOrderInput`).
-* Each C/A/B button adds a slot (`BattleMenu_SelectSlotOrShowSummary`), and L
+* Each C/A/B button adds a slot (`BattleMenu_PickOrderSlot`), and L
   clears the picks (`BattleMenu_UndoSelections`).
 * After six picks, 「これで いいですか？ はい / えらびなおす」 appears, and はい
   commits the order (`BattleMenu_CommitOrderSelection`).
@@ -898,7 +900,7 @@ Traced from a fresh boot with the Green save, through a せいとん move of one
 Pokémon into GBのボックス1, to レポートしてやめる:
 
 1. At boot, `GbSave_ScanAllPorts` runs `GbSave_OpenMainData` for port 0 (with
-   `GbTower_ProbePak`).
+   `GbPlayer_ProbePak`).
 2. Opening せいとん runs `GbSave_OpenMainData` and `GbSave_OpenBoxData`. Then
    `Deck_ReadEntry` runs for deck 0x20 entries 0-2, through
    `GbSave_LoadMainPokemon`.

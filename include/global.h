@@ -453,8 +453,8 @@ typedef struct GeoTexture {
 } GeoTexture; // size = 0xC
 
 typedef struct GeoPalette {
-    /* 0x00 */ s32 count; // @unverified: number of 16-bit colors recolored in func_80016D40
-    /* 0x04 */ s16* data; // @unverified: RGBA5551 colors recolored in func_80016D40
+    /* 0x00 */ s32 count; // @unverified: number of 16-bit colors recolored in GeoTextureBank_AdjustColors
+    /* 0x04 */ s16* data; // @unverified: RGBA5551 colors recolored in GeoTextureBank_AdjustColors
     /* 0x08 */ Gfx* loadDisplayList; // @unverified: called by GeoRender_BindTexture before the texture image (TLUT load)
 } GeoPalette; // size = 0xC
 
@@ -476,12 +476,12 @@ typedef struct unk_D_86002F30 {
     /* 0x08 */ ModelNodeView* unk_08;
 } unk_D_86002F30; // size = 0x18 ??
 
-typedef struct GbTowerLaunchParams {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 partyCount; // @unverified: number of party Pokémon GbTower_BuildPartyResult read from the GB save deck
-    /* 0x04 */ u16 (*partyIcons)[6][0x640]; // @unverified: 40x40 icon images of the party, copied by GbTower_BuildPartyResult
-} GbTowerLaunchParams; // size = 0x8
+typedef struct GbPlayerLaunchParams {
+    /* 0x00 */ s16 buttonConfig; // Saved GB button mapping (SaveOptionsRecord.gbPlayerButtons): bits 8-15 START button, bits 0-7 SELECT button - 1. Written back to the save after the GB session. 0 in play with a fresh save (2026-11-14). @unverified: button meaning from docs/n64-save-format.md and gb_emu_screen.c, not changed in play.
+    /* 0x02 */ u8 framesUnlocked; // Saved GB picture frames unlocked (SaveOptionsRecord.gbPlayerFrames). 0 in play with a fresh save (2026-11-14). @unverified: meaning from docs/n64-save-format.md, not changed in play.
+    /* 0x03 */ u8 partyCount; // Party Pokémon read from the Game Boy save; 2 in play with a two-Pokémon Green party (2026-11-14).
+    /* 0x04 */ u16 (*partyIcons)[6][0x640]; // 40x40 RGBA16 icon images of the party, filled by GbPlayer_FillLaunchParams (unused slots zeroed). @unverified: images came back blank in the emulator, which does not copy rendered frames back to RDRAM.
+} GbPlayerLaunchParams; // size = 0x8
 
 typedef struct unk_D_800AA660 {
     /* 0x0000 */ OSThread thread;
@@ -494,7 +494,7 @@ typedef struct unk_D_800AA660 {
     /* 0x21E4 */ OSMesgQueue queue2;
     /* 0x21FC */ u8* font1;
     /* 0x2200 */ u8* font2;
-    /* 0x2204 */ GbTowerLaunchParams unk_2204;
+    /* 0x2204 */ GbPlayerLaunchParams unk_2204;
     /* 0x220C */ char unk220C[4];
 } unk_D_800AA660; // size = 0x2210
 

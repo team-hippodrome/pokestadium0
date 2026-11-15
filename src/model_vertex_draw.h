@@ -86,20 +86,20 @@ typedef struct ModelSegment {
 } ModelSegment; // size = 20
 
 typedef struct StadiumModel {
-    /* 0x00 */  s16 isActive;       // @unverified: set to 1 in func_800339CC, cleared by ModelRenderer_ClearSlotModels
-    /* 0x02 */  s16 transformCount; // @unverified: used entries of transforms[], func_80033BE4 appends one
+    /* 0x00 */  s16 isActive;       // @unverified: set to 1 in Model_InitSkinned, cleared by ModelRenderer_ClearSlotModels
+    /* 0x02 */  s16 transformCount; // @unverified: used entries of transforms[], Model_AddSkinBone appends one
     /* 0x04 */  StadiumTransform transforms[5];
     /* 0x130 */ u32 modelSegment;
     /* 0x134 */ s8 pad134[0x4];
-    /* 0x138 */ ModelSegment segment; // @unverified: func_800339CC copies the model's segment header here
-    /* 0x158 */ Vec3f scale;          // @unverified: axis lengths of the model matrix (func_800339CC), fed to Model_ComputeScaledDistance
+    /* 0x138 */ ModelSegment segment; // @unverified: Model_InitSkinned copies the model's segment header here
+    /* 0x158 */ Vec3f scale;          // @unverified: axis lengths of the model matrix (Model_InitSkinned), fed to Model_ComputeScaledDistance
     /* 0x164 */ s8 pad164[0xC];
     /* 0x170 */ ModelVertex mvtx;
 } StadiumModel; // size = 0x204
 
 // model_vertex_draw.c
-void func_80035694(StadiumModel* model);
+void Model_BuildVertexLinks(StadiumModel* model);
 void Model_ApplyTransformCommands(ModelSegment*, ModelVertex*, StadiumModel*, f32);
-void func_80035E48(ModelSegment*, ModelVertex*);
+void Model_ApplyVertexOffsets(ModelSegment*, ModelVertex*);
 
 #endif // MODEL_VERTEX_DRAW_H

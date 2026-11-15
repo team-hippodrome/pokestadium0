@@ -20,7 +20,12 @@ void Input_ResetRepeatState(void);
 void Input_ResetRepeatState(void) {
 }
 
-void func_8001B5F8(s32 x1, s32 y1, s32 width, s32 height, s32 mode) {
+/**
+ * Emits a texture rectangle for the already loaded tile at (x1, y1), width x height pixels. In copy
+ * mode the right/bottom edges are inclusive and S steps 4 texels per pixel, as copy mode requires.
+ * Shared tail of the Gfx_DrawTexture* helpers.
+ */
+void Gfx_DrawLoadedTextureRect(s32 x1, s32 y1, s32 width, s32 height, s32 mode) {
     s32 xh = (x1 + width) << 2;
     s32 yh = (y1 + height) << 2;
     s32 dsdx = 0x400;
@@ -33,7 +38,7 @@ void func_8001B5F8(s32 x1, s32 y1, s32 width, s32 height, s32 mode) {
     gSPTextureRectangle(gDisplayListHead++, x1 << 2, y1 << 2, xh, yh, G_TX_RENDERTILE, 0, 0, dsdx, 0x400);
 }
 
-void func_8001B5F8(s32, s32, s32, s32, s32);
+void Gfx_DrawLoadedTextureRect(s32, s32, s32, s32, s32);
 
 /** Draws an RGBA32 texture as a rectangle. */
 void Gfx_DrawTextureRgba32(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 texture_spread_x_mode) {
@@ -41,7 +46,7 @@ void Gfx_DrawTextureRgba32(s32 x1, s32 y1, s32 draw_width, s32 height, u8* textu
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
 
-    func_8001B5F8(x1, y1, draw_width, height, texture_spread_x_mode);
+    Gfx_DrawLoadedTextureRect(x1, y1, draw_width, height, texture_spread_x_mode);
 }
 
 /** Draws an RGBA16 texture as a rectangle. */
@@ -50,11 +55,15 @@ void Gfx_DrawTextureRgba16(s32 x1, s32 y1, s32 draw_width, s32 height, u8* textu
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
 
-    func_8001B5F8(x1, y1, draw_width, height, texture_spread_x_mode);
+    Gfx_DrawLoadedTextureRect(x1, y1, draw_width, height, texture_spread_x_mode);
 }
 
 void Gfx_DrawTexturedRect(s32, s32, s32, s32, s32, s32, s32);
-void func_8001BA54(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 mode) {
+/**
+ * Loads an RGBA16 texture and draws it with Gfx_DrawTexturedRect (inclusive corners). Same as
+ * Gfx_DrawTextureRgba16 but through the clipped rectangle path. @unverified: no callers in resident code.
+ */
+void Gfx_DrawTextureRgba16Rect(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 mode) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, G_IM_FMT_RGBA, G_IM_SIZ_16b, load_width, height, 0,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                         G_TX_NOLOD);
@@ -69,14 +78,14 @@ void func_8001BA54(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 
 void Gfx_DrawTextureIa8(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 texture_spread_x_mode) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, G_IM_FMT_IA, G_IM_SIZ_8b, load_width, height, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8001B5F8(x1, y1, draw_width, height, texture_spread_x_mode);
+    Gfx_DrawLoadedTextureRect(x1, y1, draw_width, height, texture_spread_x_mode);
 }
 
 /** Draws an IA16 texture as a rectangle. */
 void Gfx_DrawTextureIa16(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width, s32 texture_spread_x_mode) {
     gDPLoadTextureBlock(gDisplayListHead++, texture, G_IM_FMT_IA, G_IM_SIZ_16b, load_width, height, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
-    func_8001B5F8(x1, y1, draw_width, height, texture_spread_x_mode);
+    Gfx_DrawLoadedTextureRect(x1, y1, draw_width, height, texture_spread_x_mode);
 }
 
 /** Draws an I4 texture as a rectangle. */
@@ -84,7 +93,7 @@ void Gfx_DrawTextureI4(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, 
     gDPLoadTextureBlock_4b(gDisplayListHead++, texture, G_IM_FMT_I, load_width, height, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                            G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-    func_8001B5F8(x1, y1, draw_width, height, texture_spread_x_mode);
+    Gfx_DrawLoadedTextureRect(x1, y1, draw_width, height, texture_spread_x_mode);
 }
 
 /** Draws an I8 texture as a rectangle. */
@@ -92,7 +101,7 @@ void Gfx_DrawTextureI8(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, 
     gDPLoadTextureBlock(gDisplayListHead++, texture, G_IM_FMT_I, G_IM_SIZ_8b, load_width, height, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-    func_8001B5F8(x1, y1, draw_width, height, texture_spread_x_mode);
+    Gfx_DrawLoadedTextureRect(x1, y1, draw_width, height, texture_spread_x_mode);
 }
 
 /** Draws an I16 texture as a rectangle. */
@@ -100,7 +109,7 @@ void Gfx_DrawTextureI16(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture,
     gDPLoadTextureBlock(gDisplayListHead++, texture, G_IM_FMT_I, G_IM_SIZ_16b, load_width, height, 0, G_TX_NOMIRROR | G_TX_CLAMP,
                         G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD, G_TX_NOLOD);
 
-    func_8001B5F8(x1, y1, draw_width, height, texture_spread_x_mode);
+    Gfx_DrawLoadedTextureRect(x1, y1, draw_width, height, texture_spread_x_mode);
 }
 
 
@@ -113,11 +122,15 @@ void Gfx_DrawTextureRgba16Ia8(s32 x1, s32 y1, s32 draw_width, s32 height, u8* te
                       G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK, G_TX_NOLOD,
                       G_TX_NOLOD);
 
-    func_8001B5F8(x1, y1, draw_width, height, texture_x_spread_mode);
+    Gfx_DrawLoadedTextureRect(x1, y1, draw_width, height, texture_x_spread_mode);
 }
 
 extern u8 D_02000000[];
-void func_8001C97C(s32 y) {
+/**
+ * Draws one 16-pixel-high band of the 128x128 I8 pattern texture at segment 0x02 across the whole
+ * 640-wide screen at row y, picking the texture rows by y mod 128.
+ */
+void Gfx_DrawPatternBand(s32 y) {
     s32 x;
 
     gDPLoadTextureBlock(gDisplayListHead++, D_02000000 + (y % 128) * 128, G_IM_FMT_I, G_IM_SIZ_8b, 128, 16, 0,
@@ -129,7 +142,12 @@ void func_8001C97C(s32 y) {
     }
 }
 
-void func_8001CC90(s32 start, s32 end, s32 r, s32 g, s32 b) {
+/**
+ * Fills screen rows start..end (rounded to even) with the segment-0x02 I8 pattern tinted by
+ * (r, g, b) through the environment color. The Pokédex menu calls it for its full-screen background
+ * (0..480, color 50,100,162). @unverified: background not stubbed in play.
+ */
+void Gfx_DrawPatternRows(s32 start, s32 end, s32 r, s32 g, s32 b) {
     s32 y;
 
     gDPPipeSync(gDisplayListHead++);
@@ -143,13 +161,17 @@ void func_8001CC90(s32 start, s32 end, s32 r, s32 g, s32 b) {
     start &= ~1;
     end = (end + 1) & ~1;
     for (y = start; y < end; y += 16) {
-        func_8001C97C(y);
+        Gfx_DrawPatternBand(y);
     }
     gDPPipeSync(gDisplayListHead++);
     gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);
 }
 
-void func_8001CE20(s32 x, s32 y, s32 width, s32 height) {
+/**
+ * Draws the pattern texture over a rectangle at most 16 rows high, splitting it into 128-pixel
+ * texture rectangles aligned to the pattern.
+ */
+void Gfx_DrawPatternSpan(s32 x, s32 y, s32 width, s32 height) {
     s32 n;
 
     gDPLoadTextureBlock(gDisplayListHead++, D_02000000 + (y % 128) * 128, G_IM_FMT_I, G_IM_SIZ_8b, 128, 16, 0,
@@ -175,7 +197,11 @@ void func_8001CE20(s32 x, s32 y, s32 width, s32 height) {
     }
 }
 
-void func_8001D148(s32 x, s32 y, s32 width, s32 height, s32 r, s32 g, s32 b) {
+/**
+ * Fills a rectangle with the segment-0x02 I8 pattern tinted by (r, g, b), in 16-row strips aligned
+ * to the pattern. @unverified: no callers found in resident code.
+ */
+void Gfx_DrawPatternRect(s32 x, s32 y, s32 width, s32 height, s32 r, s32 g, s32 b) {
     UNUSED s32 pad[7]; // FAKE: stack padding
     s32 s;
     s32 n;
@@ -194,17 +220,17 @@ void func_8001D148(s32 x, s32 y, s32 width, s32 height, s32 r, s32 g, s32 b) {
         if (height < n) {
             n = height;
         }
-        func_8001CE20(x, y, width, n);
+        Gfx_DrawPatternSpan(x, y, width, n);
         y += n;
         height -= n;
     }
     while (height >= 16) {
-        func_8001CE20(x, y, width, 16);
+        Gfx_DrawPatternSpan(x, y, width, 16);
         height -= 16;
         y += 16;
     }
     if (height != 0) {
-        func_8001CE20(x, y, width, height);
+        Gfx_DrawPatternSpan(x, y, width, height);
     }
     gDPPipeSync(gDisplayListHead++);
     gDPSetTexturePersp(gDisplayListHead++, G_TP_PERSP);

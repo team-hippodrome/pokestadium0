@@ -4155,6 +4155,5 @@ u8 Particle_FieldCD_GetU8_0C048(Particle* arg0);
 s16 Particle_GetByteParam1(); // takes the particle; most callers pass it through a0
 void ParticleGfx_RecolorPrim(u8* arg0, u16 arg1);
 void ParticleGfx_RecolorEnv(u8* arg0, u16 arg1);
-BattleMon* Pokemon_CreateDefault(BattleMon* arg0, u8 arg1, s16 arg2);
 
 #endif // FRAGMENT_BATTLE_H

@@ -5,7 +5,7 @@
 
 // Declared here instead of in a header: the callers of these disagree on their types.
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);
-M2C_UNK func_800419F8();
+M2C_UNK Announcer_SetActive();
 M2C_UNK BattleAnim_StartQueuedCategory2Effect();
 M2C_UNK BattleScene_SetCameraClipMaskBothSides(M2C_UNK);
 M2C_UNK func_82108C0C(s32);
@@ -22,13 +22,13 @@ extern BattleScene* D_8219A5A0;
 extern u8 D_82199F31;
 f32 BattleScene_GetParticipantHeight(s32);
 s32 Battle_StepPartyHpToDisplay(s32);
-s32 func_80041374(s32, u32);
+s32 Audio_StopSoundByCategory(s32, u32);
 s32 BattleScene_FrameParticipantFromAboveThunk(void*, void*);
 u16 func_82107CA0(ActivePokemon* active_pokemon);
 void BattleMessage_ShowForSide(s32, s32);
 void BattleScene_CameraShotTargetHighThunk(void*, void*);
 void func_8000EEBC(s8*, s8*, f32, s32, s32);
-void func_80041940(s32, s32, s32, s32);
+void Announcer_SetHp(s32, s32, s32, s32);
 void func_8210C1A8(f32*, f32, f32);
 void func_8211EE8C(void);
 void func_8212188C(void);
@@ -193,10 +193,10 @@ void BattleScene_InitializeSwitchActions(void) {
 }
 
 extern s32 D_82199DE0;
-M2C_UNK func_800419F8();
+M2C_UNK Announcer_SetActive();
 void func_82121D8C(s32, s32, s8 *);
 /**
- * Calls func_800419F8 on both Pokemon's records and clears their +0x10 fields, then calls
+ * Calls Announcer_SetActive on both Pokemon's records and clears their +0x10 fields, then calls
  * func_82121D8C(1, flag, side 1's record) with flag 0 in scene modes 4, 9 and 10, when
  * either side's state byte is 16 or when scene+0x2E is 2, and 1 otherwise. Sets scene+0x44
  * from the scene mode (5 for mode 6, 9 for mode 10, else 1) and advances the phase step.
@@ -209,7 +209,7 @@ void BattleScene_BeginCameraReturnTransition(void) {
 
     a = M2C_FIELD(&D_82199DE0, s8 **, 0) + 0x78C;
     b = M2C_FIELD(&D_82199DE0, s8 **, 4) + 0x78C;
-    func_800419F8(1, a, b);
+    Announcer_SetActive(1, a, b);
     M2C_FIELD(a, s32 *, 0x10) = 0;
     M2C_FIELD(b, s32 *, 0x10) = 0;
     st = sBattleScene.scene->mode;
@@ -637,7 +637,7 @@ void BattleScene_InitTurnPresentation(s32 arg0) {
 
     sp34 = sActingPokemon;
     sp30 = sOtherPokemon;
-    func_800419F8(0);
+    Announcer_SetActive(0);
     func_82121D78(arg0, 0x41A00000, 0x457A0000);
     func_82124A40();
     sBattleScene.scene->stepFrameTimer = 0;
@@ -816,7 +816,7 @@ void BattleScene_FaintStepFinishVanish(CameraNode* arg0) {
 
     if (BattleScene_AdvanceCameraFrameCounter(5) != 0) {
         BattleAnim_CleanupEffects(1);
-        func_80041374(3, 0);
+        Audio_StopSoundByCategory(3, 0);
 
         if (temp_s0->faintState != 0x12) {
             temp_s0->faintState = 0x10;
@@ -847,7 +847,7 @@ void BattleScene_FaintStepEnd(UNUSED CameraNode* arg0) {
 
     if (func_821217DC(2) != 0) {
         side = sBattleScene.scene->actingSide;
-        func_80041940(side == 0, 0, mon->maxHp, side);
+        Announcer_SetHp(side == 0, 0, mon->maxHp, side);
         func_8212188C();
         func_82125570();
         func_8211EE8C();
@@ -874,7 +874,7 @@ void BattleScene_FaintStepEnd(UNUSED CameraNode* arg0) {
             sBattleScene.scene->actingSide = side;
         } else {
             sBattleScene.scene->winner = sBattleScene.scene->actingSide + 1;
-            func_80043A10();
+            Announcer_CommentOnBattleEnd();
         }
         Audio_FadeAndClearStoredSounds();
     }
@@ -982,7 +982,7 @@ void BattleScene_FaintStepUpdateHudOrEndBattle(UNUSED CameraNode* camera) {
 
     if (func_821217DC(2) != 0) {
         side = sBattleScene.scene->actingSide;
-        func_80041940(side == 0, 0, mon->maxHp, side);
+        Announcer_SetHp(side == 0, 0, mon->maxHp, side);
         func_8212188C();
         func_82125570();
         func_8211EE8C();
@@ -993,7 +993,7 @@ void BattleScene_FaintStepUpdateHudOrEndBattle(UNUSED CameraNode* camera) {
             sBattleScene.scene->phase = 4;
         } else {
             sBattleScene.scene->winner = sBattleScene.scene->actingSide + 1;
-            func_80043A10();
+            Announcer_CommentOnBattleEnd();
         }
         Audio_FadeAndClearStoredSounds();
     }

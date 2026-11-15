@@ -24,7 +24,7 @@ void PokeIcon_InitPreviewScene(PokeModelPreview* arg0, s16 arg1, s16 arg2, s16 a
 PokeModelPreview* PokeIcon_CreateModelPreview(ModelLoadContext* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5,
                                  s16 arg6, u8* arg7);
 s32 PokeIcon_HandlePreviewInput(Vec3s* arg0);
-s32 func_800193EC(Vec3s* arg0);
+s32 PokeIcon_UnusedReturnZero(Vec3s* arg0);
 void PokeIcon_AdvancePreviewMotion(PokeModelPreview* arg0);
 void PokeIcon_UpdatePreview(PokeModelPreview* arg0);
 
@@ -171,7 +171,11 @@ s32 PokeIcon_HandlePreviewInput(Vec3s* arg0) {
     return var_v1;
 }
 
-s32 func_800193EC(Vec3s* arg0) {
+/**
+ * Returns 0. Its caller in poke_icon_2.c tests it on a display object rotation, so this was probably a
+ * rotation check left stubbed.
+ */
+s32 PokeIcon_UnusedReturnZero(Vec3s* arg0) {
     return 0;
 }
 
@@ -216,7 +220,7 @@ void PokeIcon_UpdatePreview(PokeModelPreview* arg0) {
     if (arg0->flags & 2) {
         var_v1 = PokeIcon_HandlePreviewInput(&arg0->displayObject->rotation);
         if (var_v1 == 0) {
-            var_v1 = func_800193EC(&arg0->displayObject->rotation);
+            var_v1 = PokeIcon_UnusedReturnZero(&arg0->displayObject->rotation);
         }
     }
 

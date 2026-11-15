@@ -7,7 +7,7 @@
 
 // Declared here instead of in a header: the callers of these disagree on their types.
 M2C_UNK Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
-M2C_UNK func_8001A944(s32, s32, s8*);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 M2C_UNK func_8001AA9C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK);
 M2C_UNK func_8001AB6C();
 u32 func_800566BC(s8*);
@@ -125,7 +125,7 @@ void BattleHud_DrawTrainerNameLabel(s16 arg0, s16 arg1, s32 arg2, s32 arg3, s32 
     }
     sp24 = func_800566BC(arg3) >> 1;
     func_8001A384(2, 0);
-    func_8001A944((arg0 - (sp24 * 5)) + 0x1E, arg1 + 2, arg3);
+    Font_Printf((arg0 - (sp24 * 5)) + 0x1E, arg1 + 2, arg3);
     func_8001ABBC();
 }
 
@@ -157,9 +157,9 @@ void BattleHud_DrawTrainerNameLabelBlink(s16 arg0, s16 arg1, s32 arg2, s32 arg3,
     }
     half = func_800566BC(arg3) >> 1;
     if (wave > 0) {
-        func_8001A944(arg0 + 0xE, arg1 + 2, (s32)&D_8219597C);
+        Font_Printf(arg0 + 0xE, arg1 + 2, (s32)&D_8219597C);
     } else {
-        func_8001A944((arg0 - (half * 5)) + 0x1E, arg1 + 2, arg3);
+        Font_Printf((arg0 - (half * 5)) + 0x1E, arg1 + 2, arg3);
     }
     func_8001ABBC();
 }
@@ -214,10 +214,10 @@ void BattleHud_DrawMonInfoBox(ActivePokemon* arg0, BattleMon* arg1, StatusLabel*
     func_8001AB6C();
     func_8001A384(2, 0);
     half = func_800566BC((s32)arg1->nickname) >> 1;
-    func_8001A944((arg3 - (half * 5)) + 0x1D, arg4 + 2, arg1->nickname);
+    Font_Printf((arg3 - (half * 5)) + 0x1D, arg4 + 2, arg1->nickname);
     func_8001A384(1, 0);
     func_8001AA9C(arg2->color.r, arg2->color.g, arg2->color.b, 0xFF);
-    func_8001A944(arg3 + 0x1F, arg4 + 0xE, arg2->text);
+    Font_Printf(arg3 + 0x1F, arg4 + 0xE, arg2->text);
     func_8001ABBC();
 }
 
