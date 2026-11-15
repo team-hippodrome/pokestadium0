@@ -1,8 +1,14 @@
-#ifndef _STAGE_LOADER_H_
-#define _STAGE_LOADER_H_
+/* Declarations for src/stage_loader.c. */
+#ifndef STAGE_LOADER_H
+#define STAGE_LOADER_H
 
 #include "global.h"
-#include "src/gfx_rect.h"
+#include "stdarg.h"
+#include "moves.h"
+#include "m2c_macros.h"
+#include <ultra64.h>
+#include <macros.h>
+#include "gfx_rect.h"
 
 typedef struct unk_D_800A7450 {
     /* 0x00 */ u8 unk_00;
@@ -43,11 +49,26 @@ typedef struct StageContext {
 
 typedef StageContext unk_func_80007444;
 
-void StageFade_Update(void);
-s32 StageFade_Start(s32 arg0);
+#define MEMORY_POOL_LEFT  0
+
+#define MEMORY_POOL_RIGHT 1
+
+/* Struct types that were defined identically in each of these files; this is
+ * now the one definition they all include:
+ * src/stage_loader.c
+ * src/stage_loader_2.c
+ */
+
+typedef struct unk_D_80068CA0 {
+    /* 0x00 */ struct unk_D_80068CA0* next;
+    /* 0x04 */ s16 unk_04;
+    /* 0x06 */ s16 unk_06;
+    /* 0x08 */ s8 unk_08[4];
+} unk_D_80068CA0;
+
+// stage_loader.c
 s32 StageFade_StartFromOpaque(s32 arg0);
 s32 StageFade_StartFromTransparent(s32 arg0);
-void StageFade_SetMode(s32 fade_mode);
 void Profiler_SetDisplayModes(u32 arg0, u32 arg1);
 void Gfx_SetDefaultRenderState(void);
 void Gfx_SetDefaultGeometryState(void);
@@ -58,7 +79,6 @@ void StageLoader_BeginFrame(void);
 void StageLoader_FillFrame(void);
 StageContext* StageContext_Allocate(s8 zoom, s8 arg1, s8 render_target_count, s8 has_depth_buffer, s8 arg4, s32 allocate_render_targets);
 StageContext* StageContext_GetCurrent(void);
-s32 StageContext_GetFadeMode(void);
 void StageContext_SaveAndSwitch(StageContext* arg0);
 void StageContext_Activate(StageContext* arg0);
 void StageContext_Deactivate(void);
@@ -69,19 +89,13 @@ void StageLoader_RunFrames(s32 timer);
 s32 BgStage_RunUntilCondition(u32 timer, s32 (*f)(u8));
 s32 BgStage_WaitForCondition(s32 (*arg0)(u8), s32 arg1, s32 arg2);
 void StageContext_SetClearColor(u16 color);
-void BgStage_DrawFrame(void);
 DepthBuffer* StageContext_GetCurrentImage(void);
 s32 StageContext_IsHighResolution(void);
-void TextRenderer_SetupGlyphState(void);
-void TextRenderer_RestoreState(void);
-void TextRenderer_DrawGlyphSmall(s16 arg0, s16 arg1, s16 arg2);
-void TextRenderer_DrawGlyphLarge(s16 arg0, s16 arg1, s16 arg2);
-void TextRenderer_DrawString(s16 arg0, s16 arg1, s8* arg2, s32 arg3);
-void TextRenderer_FlushQueuedStrings(Gfx** arg0, s32 arg1);
-void TextRenderer_ClearQueuedStrings(void);
-char* TextRenderer_FormatCopy(char* buffer, const char* data, size_t size);
-s32 HAL_Printf(s16 x, s16 y, const char* fmt, ...);
-s32 TextRenderer_QueuePersistentString(s16 x, s16 y, const char* fmt, ...);
+void BgStage_DrawFrame(void);                            /* extern */
+M2C_UNK func_80006780();                            /* extern */
+M2C_UNK func_800067BC(M2C_UNK);                     /* extern */
 
+// functions defined in assembly
+s32 StageFade_Start(s32 arg0);
 
-#endif // _STAGE_LOADER_H_
+#endif // STAGE_LOADER_H

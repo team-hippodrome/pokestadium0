@@ -2,6 +2,7 @@
 /* C ported from the Stadium 1 decomp: src/audio_cache.c. */
 
 #include "global.h"
+#include "audio_cache.h"
 
 void Audio_CopyDataWithCacheSync(s32 arg0, void* arg1, s32 arg2);
 

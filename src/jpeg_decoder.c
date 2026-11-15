@@ -1,7 +1,6 @@
 /* Stadium Zero resident code. */
 /* C ported from the Stadium 1 decomp: src/jpeg_decoder.c. */
 
-#include "jpegutils.h"
 #include "jpeg_decoder.h"
 extern u8* sJpegBitStreamPtr;
 extern u32 sJpegBitStreamByteIdx;

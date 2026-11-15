@@ -2,7 +2,7 @@
 /* C ported from the Stadium 1 decomp: src/audio_sfx_wrapper.c. */
 
 #include "audio_sfx_wrapper.h"
-#include "audio_sfx.h"
+#include "fragments/battle/battle.h"
 
 void Audio_PlaySoundEffectByIdWrapper(s32 arg0);
 

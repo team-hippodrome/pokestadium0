@@ -1,11 +1,10 @@
-#ifndef _19840_H_
-#define _19840_H_
+/* Declarations for src/display_object_textures.c. */
+#ifndef DISPLAY_OBJECT_TEXTURES_H
+#define DISPLAY_OBJECT_TEXTURES_H
 
 #include "global.h"
-#include "src/jpeg_stream.h"
-#include "src/matrix.h"
-#include "src/model_renderer.h"
-#include "src/game_state.h"
+#include "asset_archive.h"
+#include "memory.h"
 
 typedef struct unk_func_80019600 {
     /* 0x00 */ s16 unk_00;
@@ -48,8 +47,12 @@ typedef struct unk_D_800ABE10 {
     /* 0xA04 */ unk_D_800ABE10_A04 unk_A04;
 } unk_D_800ABE10; // size >= 0xA18
 
+#include "game_state.h"
+#include "memmap.h"
+
 extern unk_D_800ABE10 D_800AC7A0;
 
+// display_object_textures.c
 void func_80016D40(unk_D_86002F34* arg0, arg1_func_80010CA8 arg1);
 Fragment* Jpeg_AllocAndDecodeFragment(MemoryBlock* arg0, PRESJPEG* arg1, PRESJPEG* arg2);
 Fragment* Yay0_AllocAndDecompressFragment(MainPoolState* arg0, PERSSZP* arg1, PERSSZP* arg2);
@@ -69,18 +72,17 @@ void PokeIcon_StartThread(void);
 s8 *PokeIcon_AllocFramebuffers(s32 arg0);
 void PokeIcon_OpenModelArchives(void);
 s32 PokeIcon_RequestFrameLoad(ModelLoadContext* arg0, u16 arg1, arg1_func_80010CA8 arg2);
-s32 PokeIcon_RequestFrameLoadWithVariant(ModelLoadContext* arg0, u16 arg1, arg1_func_80010CA8 arg2, s16 arg3);
 s32 PokeIcon_RequestBackgroundLoad(ModelLoadContext* arg0, s32 arg1, s32 arg2);
 s32 PokeIcon_ApplyLoadResult(ModelLoadContext* arg0, sp18_func_800198E4* arg1);
 s32 PokeIcon_PollFrameLoad(ModelLoadContext* arg0);
 s32 PokeIcon_PollBackgroundLoad(ModelLoadContext* arg0);
-s32 PokeIcon_WaitFrameLoad(ModelLoadContext* arg0);
 void PokeIcon_WaitBackgroundLoad(s32 arg0);
 unk_D_86002F30* Model_LoadByArchiveIndex(s32 arg0);
 unk_D_86002F30* Model_LoadForPokemon(BattleMon* arg0);
-s32 Model_LoadWithScale(s32 arg0, s32 arg1);
 arg1_func_80019420* BattleAnim_LoadResourceTable(s32 arg0);
 Fragment* Fragment_LoadAndRelocateFromRomRange(MainPoolState* arg0, u32 arg1, s32 arg2, s32 arg3, PERSSZP* arg4, s32 arg5);
 
+// functions defined in assembly
+s32 PokeIcon_WaitFrameLoad(ModelLoadContext* arg0);
 
-#endif // _19840_H_
+#endif // DISPLAY_OBJECT_TEXTURES_H

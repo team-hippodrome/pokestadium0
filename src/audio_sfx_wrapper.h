@@ -1,9 +1,10 @@
-#ifndef _37370_H_
-#define _37370_H_
+/* Declarations for src/audio_sfx_wrapper.c. */
+#ifndef AUDIO_SFX_WRAPPER_H
+#define AUDIO_SFX_WRAPPER_H
 
 #include "global.h"
 
+// audio_sfx_wrapper.c
 void Audio_PlaySoundEffectByIdWrapper(s32);
-void func_82150DEC(void);
 
-#endif // _37370_H_
+#endif // AUDIO_SFX_WRAPPER_H

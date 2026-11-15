@@ -2,12 +2,9 @@
 /* C ported from the Stadium 1 decomp: src/pokemon_stats.c. */
 
 #include "pokemon_stats.h"
-#include "gb_data.h"
-#include "save_data.h"
-#include "text_system.h"
 #include "gb_tower.h"
 #include "hal_libc.h"
-#include "util.h"
+#include "memory_main.h"
 #include "m2c_macros.h"
 
 // Zero's per-port Game Boy save state; Stadium 1's GbSavePort is 0x58 bytes.

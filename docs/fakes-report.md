@@ -21,12 +21,12 @@ Rank weighs how much the fake obscures meaning and how likely a clean rewrite ex
 
 | # | Function | File | Why it is bad | Suggested alternative to try |
 |---|---|---|---|---|
-| 1 | `func_8001A3E4` | `src/graphics_textures_2.c` | 13 hand-expanded `gDPLoadTextureBlock`/`gDPSetTile` macro bodies, several joined on one line (IDO schedules by line). Unreadable and unportable. | Rewrite with `gDPLoadTextureBlock_4b` / `gDPSetTileSize` macros, keeping the original one-line grouping via a local macro. |
+| 1 | `func_8001A3E4` | `src/font.c` | 13 hand-expanded `gDPLoadTextureBlock`/`gDPSetTile` macro bodies, several joined on one line (IDO schedules by line). Unreadable and unportable. | Rewrite with `gDPLoadTextureBlock_4b` / `gDPSetTileSize` macros, keeping the original one-line grouping via a local macro. |
 | 2 | `func_821125C0` (ProcessBattleTurn) | `fragments/fragment012_17ED00/battle_engine_317E70.c` | Core turn loop. `user = user;` self-assignment plus 8 m2c `goto`s. | Restructure the gotos into the Stadium 1 shape (`ProcessBattleTurn` in pokestadium `src/fragments/battle_engine/battle_engine_mechanics.c`) and drop the self-assignment. |
 | 3 | `func_8217E34C` | `fragments/fragment012_17ED00/battle_engine_3540B0.c` | `new_var = (s8 *)((0, new_var));`, `new_var = new_var;` and raw `+0/+2/+4` casts on a 0x418-byte record. | Declare the record struct (s16 state, timer, limit at 0x0/0x2/0x4) and iterate a typed pointer. |
 | 4 | `func_81109764` | `fragments/fragment000_80C00/gb_tower_emulator_86920.c` | Self-assignment, two permuter temps and a bitfield test written as `>> 0x1F` on a raw cast. | Typed 0x15C-byte entry with a sign-bit flag; GB Tower struct work should cover it. |
 | 5 | `func_80027F20` | `src/gb_save.c` | Save data path. 8 permuter temps and a self-assignment. | Re-derive from Stadium 1's save code before porting. |
-| 6 | `func_8002EDA8` / `func_8002ED70` | `src/2E480.c` | Scroll-menu tick: 29 raw casts into `ScrollMenu8002F6C4`, three stacked `if (1) {}`, 9 permuter pointers in the helper. | Fill in the menu struct fields 0x28–0x3C; the casts then become member reads, and the karodo may drop. |
+| 6 | `func_8002EDA8` / `func_8002ED70` | `src/menu.c` | Scroll-menu tick: 29 raw casts into `ScrollMenu8002F6C4`, three stacked `if (1) {}`, 9 permuter pointers in the helper. | Fill in the menu struct fields 0x28–0x3C; the casts then become member reads, and the karodo may drop. |
 | 7 | `func_820020EC` | `fragments/fragment007_166580.c` | Permuter temp, `pad[1]`, an alias kept only to pin s6, and 4 expanded gbi words. | Same macro rewrite as #1. |
 | 8 | `func_89007264` | `fragments/fragment015_238BD0/89006FC0.c` | `arg0 = arg0;` plus 7 permuter temps. | Typed lab PC struct. |
 | 9 | `func_8212C398` | `fragments/fragment012_17ED00/battle_engine_3438B0.c` | `D_8219A568 = 0 ^ 0;` and the whole body on one source line. | Split back to statements once the scheduling dependency is understood. |

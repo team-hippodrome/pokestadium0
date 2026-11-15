@@ -3,17 +3,12 @@
 
 #include "global.h"
 #include "model_renderer.h"
-#include "geo_node.h"
-#include "model_animation.h"
-#include "matrix.h"
-#include "model_animation_events.h"
-#include "battle_hud.h"
-#include "gb_data.h"
 #include "display_object_textures.h"
-#include "game_state.h"
-#include "dp_intro.h"
-#include "hal_libc.h"
+#include "gb_data.h"
+#include "geo_node.h"
 #include "geo_render.h"
+#include "hal_libc.h"
+#include "matrix.h"
 extern struct DisplayNodeHeader D_800AD1D0;
 extern struct DisplayNodeHeader D_800AD1E8;
 

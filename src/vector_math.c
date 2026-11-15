@@ -1,9 +1,9 @@
 /* Stadium Zero resident code. */
 /* C ported from the Stadium 1 decomp: src/vector_math.c. */
 
-#include "gallery.h"
+#include "vector_math.h"
+#include "matrix.h"
 #include "math.h"
-#include "math_util.h"
 
 void Mtx_BuildDirectionRotation(Mtx* mtx, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, f32 arg6);
 f32 Math_AbsF32(f32 arg0);

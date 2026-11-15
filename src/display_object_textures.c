@@ -2,14 +2,22 @@
 /* C ported from the Stadium 1 decomp: src/display_object_textures.c. */
 
 #include "display_object_textures.h"
-#include "geo_layout.h"
 #include "dma.h"
-#include "memmap.h"
-#include "memory.h"
+#include "geo_layout.h"
+#include "jpeg_stream.h"
+#include "main_pool.h"
+#include "matrix.h"
+#include "memory_main.h"
+#include "model_renderer.h"
 #include "util.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+void MainPool_FinalizeAllocation(struct MemoryBlock* block);
+void MainPool_ResetStateToOffset(struct MainPoolState* state, s32 size);
+void* MainPool_AllocAligned(struct MainPoolState* state, s32 arg1, s32 arg2);
+void* MainPool_InitState(struct MainPoolState* block, s32 size);
 #include <PR/os_internal_reg.h>
 #include <PR/leo.h>
-#include "memory.h"
 typedef struct ret_func_unk_D_800ABE10 {
     /* 0x00 */ char unk00[0x3];
     /* 0x03 */ u8 unk_03;

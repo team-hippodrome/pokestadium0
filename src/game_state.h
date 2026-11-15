@@ -1,10 +1,15 @@
-#ifndef _29BA0_H_
-#define _29BA0_H_
+/* Declarations for src/game_state.c. */
+#ifndef GAME_STATE_H
+#define GAME_STATE_H
 
 #include "global.h"
-#include "jpeg_stream.h"
-#include "src/controller.h"
 #include "PR/leo.h"
+#include "stdarg.h"
+#include "moves.h"
+#include "m2c_macros.h"
+#include "controller.h"
+#include "dp_intro.h"
+#include "scheduler.h"
 
 typedef struct arg1_func_80019420 {
     /* 0x00 */ s8 unk_00;
@@ -123,80 +128,104 @@ typedef struct SessionContext {
     /* 0x11F5 */ u8 sessionFlags;
     /* 0x11F6 */ u16 transitionFlags;
 } SessionContext; // size = 0x11F8 (JP: 0x1138)
+
 #define RULE_CATEGORY_ANYTHING_GOES 0
+
 #define RULE_CATEGORY_NINTENDO_CUP_97 1
+
 #define RULE_CATEGORY_NINTENDO_CUP_98 2
+
 #define RULE_CATEGORY_NINTENDO_CUP_99 3
+
 #define RULE_CATEGORY_PETIT_CUP 4
+
 #define RULE_CATEGORY_PIKA_CUP 5
+
 #define RULE_CATEGORY_PRIME_CUP 6
+
 #define RULE_CATEGORY_GYM_LEADER_CASTLE 7
+
 #define RULE_CATEGORY_VS_MEWTWO 8
+
 #define SESSION_MODE_ANYTHING_GOES 0
+
 #define SESSION_MODE_NINTENDO_CUP_97 1
+
 #define SESSION_MODE_NINTENDO_CUP_98 2
+
 #define SESSION_MODE_NINTENDO_CUP_99 3
+
 #define SESSION_MODE_PETIT_CUP 4
+
 #define SESSION_MODE_PIKA_CUP 5
+
 #define SESSION_MODE_PRIME_CUP 6
+
 #define SESSION_MODE_GYM_LEADER_CASTLE 7
+
 #define SESSION_MODE_VS_MEWTWO 8
+
 #define SESSION_MODE_BATTLE_NOW 9
+
 #define SESSION_MODE_EVENT_BATTLE 10
+
 // 11-15 Unknown
 #define SESSION_MODE_ATTRACT_DEMO_BATTLE 16
+
 // 17, 18: Cutscenes
 // 19, 20: Unknown
 // 21-24: Cutscenes
 #define SESSION_MODE_ATTRACT_DEMO_MINIGAME 25
+
 // 26: Cutscene
 #define SESSION_FLAG_REVEAL_MEWTWO 0x04
 
-
+typedef struct UnkStruct80083CA0_2 {
+    /* 0x000 */ OSThread thread;
+    /* 0x1B0 */ OSMesg unk_1B0;
+    /* 0x1B4 */ char unk1B4[0xC];
+    /* 0x1C0 */ OSMesgQueue unk_1C0;
+    /* 0x1D8 */ s32 unk_1D8;
+    /* 0x1DC */ s32 unk_1DC;
+    /* 0x1E0 */ u8 unk1E0[0x800];
+    /* 0x9E0 */ struct unk_D_80068BB0* unk_9E0;
+    /* 0x9E4 */ OSMesg unk_9E4;
+    /* 0x9E8 */ OSMesg unk_9E8;
+    /* 0x9EC */ OSMesgQueue unk_9EC;
+    /* 0xA04 */ OSMesgQueue unk_A04;
+    /* 0xA1C */ char unkA1C[0x4];
+    /* 0xA20 */ UnkStruct80001380 unk_A20;
+    /* 0xA88 */ u16 unk_A88;
+    /* 0xA8A */ u8 unk_A8A;
+    /* 0xA8B */ u8 unk_A8B;
+    /* 0xA8C */ UnkArray4 unk_A8C;
+    /* 0xA9C */ UnkArray4 unk_A9C;
+    /* 0xAAC */ UnkArray4 unk_AAC;
+    /* 0xABC */ char unkABC[0x4];
+} UnkStruct80083CA0_2; // size = 0xAC0
 
 extern u16 D_8006BBB0[16][256];
+
 extern s32 gCurrentGameState;
+
 extern unk_D_800AE520 D_800AF990;
+
 extern SessionContext gSessionContext;
 
-
-s32 Game_DoCopyProtection(s32 state);
+// game_state.c
 s32 Fragment_LoadAndCall(s32 arg0, u8* romStart, u8* romEnd, u32 arg3, u32 arg4);
 void Fragment_QueueCall(s32 arg0, u8* arg1, u8* arg2, s32 arg3, s32 arg4);
 TeamRoster* Trainer_GetSlots(void);
 s32 GbSave_GetActivePort(void);
 void GbSave_SetActivePort(s32 arg0);
-void Controller_PollInputs(void);
-s32 Stage_RunDemoScene(s16 arg0);
-void State_RunCredits(void);
-void State_N64LogoIntro(void);
-void State_TitleScreen(void);
 void State_N64ddBootUnused(void);
-void State_StubbedDebug(void);
-void State_AreaSelect(void);
-void State_EventBattle(void);
-void State_Options(void);
-void State_MenuSelect(void);
-s16 RuleWizard_StadiumMenu(s16 arg0);
-void State_StadiumMenu(void);
-s32 RuleWizard_FreeBattle(s16 arg0);
-void State_FreeBattle(void);
-s16 RuleWizard_VsMewtwo(s16 arg0);
-void State_VsMewtwo(void);
-void State_KidsClub(void);
-void State_Gallery(void);
-void State_VictoryPalace(void);
 void State_GbTower(void);
-s16 RuleWizard_GymLeaderCastle(s16 arg0, s16 arg1);
-void State_GymLeaderCastle(void);
-void State_BattleNow(s32 arg0);
-void State_BattleFromEvent(void);
 void State_FastN64Logo(void);
-void State_FastBattle(void);
 void func_800268DC(void);
-void State_KidsClubTitle(void);
 void Game_ShutdownAndLoadFragment(s32 arg0, s32 arg1);
 void Game_ResetStorageDevice(void);
-void Game_Thread(UNUSED LEODiskID* arg);
+void Display_DisableBlackout(void);
+void func_800273E8(s8* arg0, s32 arg1);
+M2C_UNK func_80025BE4(s32);                         /* extern */
 
-#endif // _29BA0_H_
+#endif // GAME_STATE_H

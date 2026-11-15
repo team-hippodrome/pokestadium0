@@ -6,11 +6,9 @@
 #include "matrix.h"
 #include "util.h"
 
-#include "model_animation.h"
-#include "util.h"
-#include "matrix.h"
-#include "model_animation_events.h"
-#include "geo_node_types.h"
+// Declared here instead of in a header: the callers of these disagree on their types.
+void* MainPool_AllocAligned(struct MainPoolState* state, s32 arg1, s32 arg2);
+
 typedef union AnimFixedFrame {
     struct {
         s16 whole;
@@ -27,8 +25,6 @@ typedef struct TransformAnimRaw {
     /* 0x12 */ u16 lastRenderFrame;
 } TransformAnimRaw;
 
-#include "model_animation_events.h"
-#include "util.h"
 
 void GeoNode_Init(GraphNode* arg0, u8 arg1);
 void GeoNode_SetCallback(GraphNode* arg0, GraphNodeCallback arg1, void* arg2);

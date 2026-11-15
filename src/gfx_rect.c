@@ -3,7 +3,7 @@
 
 #include "global.h"
 #include "gfx_rect.h"
-#include "memory.h"
+#include "memory_main.h"
 extern DepthBuffer* D_8005F670;
 
 #include "m2c_macros.h"

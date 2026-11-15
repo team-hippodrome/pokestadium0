@@ -4,7 +4,7 @@
 #include "global.h"
 #include "controller.h"
 #include "gb_tower.h"
-#include "math_util.h"
+#include "matrix.h"
 extern Controller* gPlayer1Controller;
 extern Controller* gPlayer2Controller;
 extern Controller* gPlayer3Controller;
@@ -20,7 +20,6 @@ extern OSMesg gEepromMesgBuf[1];
 extern OSMesgQueue gEepromMesgQueue;
 
 #include "global.h"
-#include "input.h"
 extern s32 pad_D_800AC880[0x2];
 extern s32 D_800AB02C;
 extern Controller* D_800AB030;

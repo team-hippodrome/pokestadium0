@@ -2,14 +2,12 @@
 /* C ported from the Stadium 1 decomp: src/geo_render.c, src/model_animation.c, src/model_animation_events.c. */
 
 #include "geo_render.h"
-#include "geo_render.h"
-#include "graphics_textures.h"
-#include "graphics_textures.h"
-#include "model_animation.h"
-#include "model_animation_events.h"
+#include "battle_hud.h"
+#include "font.h"
+#include "fragments/cartridge_check/cartridge_check.h"
 #include "gfx_buffer.h"
 #include "gfx_rect.h"
-#include "battle_hud.h"
+#include "graphics_textures.h"
 #include "matrix.h"
 #include "memmap.h"
 #include "util.h"
@@ -35,11 +33,6 @@ extern u8 pad_D_800AA6E8[0x1E0];
 extern unk_D_800AA8C8 D_800AB460;
 extern unk_D_800AB970 D_800AC508;
 
-#include "model_animation.h"
-#include "util.h"
-#include "matrix.h"
-#include "model_animation_events.h"
-#include "geo_node_types.h"
 typedef union AnimFixedFrame {
     struct {
         s16 whole;
@@ -55,9 +48,6 @@ typedef struct TransformAnimRaw {
     /* 0x10 */ char unk10[0x2];
     /* 0x12 */ u16 lastRenderFrame;
 } TransformAnimRaw;
-
-#include "model_animation_events.h"
-#include "util.h"
 
 #include "m2c_macros.h"
 
@@ -102,7 +92,7 @@ Vec3f* GeoRender_FindAnchorPosition(DisplayObject* display_object, s16 lookup_id
 
 void func_80011D14(Vtx* arg0, CameraOverlay* arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5, s16 arg6,
                    s16 arg7);
-struct Root80013DC8;
+
 void Geo_NodeModelPartRoot(struct Root80013DC8* arg0);
 
 /** Resets the geo matrix stack to a single identity matrix. */
@@ -814,7 +804,6 @@ void func_800132C8(s32* arg0, void* arg1) {
     }
 }
 
-
 typedef struct GeoRenderCtx80013398 {
     /* 0x00 */ s32 unk_00[6];
     /* 0x18 */ u8 unk_18;
@@ -827,7 +816,6 @@ typedef struct GeoRenderCtx80013398 {
     /* 0x1F */ u8 unk_1F;
 } GeoRenderCtx80013398; // size = 0x20
 
-struct Root80013DC8;
 void func_80013398(struct Root80013DC8 *arg0)
 {
   s8 *entry;

@@ -2,21 +2,15 @@
 /* C ported from the Stadium 1 decomp: src/fragments/particle_math/particle_math_269820.c, src/gb_save.c. */
 
 #include "gb_save.h"
-#include "input.h"
-#include "gb_data.h"
 #include "pokemon_stats.h"
-#include "save_data.h"
-#include "game_state.h"
-#include "audio_sfx.h"
-#include "gfx_buffer.h"
-#include "controller.h"
-#include "memory.h"
-#include "stage_loader.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+s32 Particle_Field50_SetXZFromField7C_09BB4(s32* arg0);
+s32 Ui_GetSelectionDirection(unk_func_8002EBD8_arg0* arg0);
+s32 Ui_HandleHorizontalSelectionInput(unk_func_8002DD98_arg0* arg0);
 extern u32 D_8007360C[];
 extern u8 pad_D_80075944[];
 
-#include "fragments/particle_math/particle_math.h"
-#include "geo_render.h"
 extern ParticleDescriptor gDefaultParticleDescriptor;
 
 #include "m2c_macros.h"

@@ -1,11 +1,10 @@
-#ifndef _MEMORY_H_
-#define _MEMORY_H_
+/* Declarations for src/memory.c. */
+#ifndef MEMORY_H
+#define MEMORY_H
 
+#include "global.h"
 #include <ultra64.h>
 #include <macros.h>
-
-#define MEMORY_POOL_LEFT  0
-#define MEMORY_POOL_RIGHT 1
 
 struct MainPoolBlock;
 
@@ -51,33 +50,11 @@ typedef struct MemoryPool {
     /* 0x24 */ struct MemoryBlock freeList;
 } MemoryPool;
 
-// memory_main.c
-void main_pool_init(void *start, void *end);
-void *main_pool_alloc_from_pool(u32 size, u32 side);
-u32 main_pool_free(void *addr, u32 runBlockFunc);
-void *main_pool_alloc_with_func(u32 size, s32 side, s32 arg, AllocateFunc func);
-void *main_pool_alloc(u32 size, s32 side);
-void main_pool_try_free(s32 arg0);
-void *main_pool_realloc(void *addr, size_t size);
-s32 main_pool_get_available(void);
-u32 main_pool_push_state(u32 arg);
-u32 main_pool_pop_state(u32 arg);
-void *main_pool_search(uintptr_t addr, s32 *argPtr);
-void main_pool_set_func(void *block, s32 arg, AllocateFunc func);
-size_t main_pool_get_block_dist(MainPoolBlock *block);
-MainPool*main_pool_get_pool(void);
-
+// memory.c
 // memory.c
 MemoryPool *mem_pool_try_init(u32 size, s32 side);
 MainPool* mem_pool_init(MainPool* pool, s32 size);
 void *mem_pool_alloc(MemoryPool* node, s32 size);
-
 void mem_pool_free(MemoryPool* pool, void* addr);
-void *MainPool_AllocState(u32 size, s32 side);
-void MainPool_FinalizeAllocation(struct MemoryBlock* block);
-void* MainPool_InitState(struct MainPoolState* block, s32 size);
-void* MainPool_AllocAligned(struct MainPoolState* state, s32 arg1, s32 arg2);
-void MainPool_ResetStateToOffset(struct MainPoolState* state, s32 size);
-void MainPool_ResetState(struct MainPoolState* state);
 
-#endif /* _MEMORY_H_ */
+#endif // MEMORY_H

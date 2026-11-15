@@ -1,15 +1,18 @@
-#ifndef _18480_H_
-#define _18480_H_
+/* Declarations for src/geo_layout.c. */
+#ifndef GEO_LAYOUT_H
+#define GEO_LAYOUT_H
 
 #include "global.h"
-#include "src/memory.h"
-#include "src/geo_node.h"
+#include "geo_node.h"
 
 #define GEO_CMD_FLAGS_RESET 0
+
 #define GEO_CMD_FLAGS_SET   1
+
 #define GEO_CMD_FLAGS_CLEAR 2
 
 #define CMD_SIZE_SHIFT (sizeof(void *) >> 3)
+
 #define CMD_PROCESS_OFFSET(offset) (((offset) & 3) | (((offset) & ~3) << CMD_SIZE_SHIFT))
 
 #define cur_geo_cmd_u8(offset) \
@@ -312,6 +315,9 @@ typedef struct unk_D_800ABE00_cmd26 {
     /* 0x13 */ u8 a;
 } unk_D_800ABE00_cmd26; // size = 0x14
 
+#include "memory.h"
+
+// geo_layout.c
 void geo_layout_cmd_branch_and_link(void); // cmd  0
 void geo_layout_cmd_end(void); // cmd  1
 void geo_layout_cmd_jump(void); // cmd  2
@@ -353,4 +359,4 @@ void geo_layout_cmd_set_node_flag4(void); // cmd 37
 void geo_layout_cmd_create_group(void); // cmd 38
 GraphNode* process_geo_layout(MemoryBlock*, void*);
 
-#endif // _18480_H_
+#endif // GEO_LAYOUT_H

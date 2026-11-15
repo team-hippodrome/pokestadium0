@@ -3,7 +3,6 @@
 
 #include "global.h"
 #include "rsp.h"
-#include "flash.h"
 #include "util.h"
 #define SRAM_START_ADDR 0x08000000
 #define SRAM_SIZE 0x8000

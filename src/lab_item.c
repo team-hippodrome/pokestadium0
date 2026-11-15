@@ -1,7 +1,7 @@
 /* Stadium Zero resident code. */
 /* C ported from the Stadium 1 decomp: src/lab_item.c. */
 
-#include "gb_save.h"
+#include "lab_item.h"
 #include "hal_libc.h"
 typedef struct OneByte {
     char c[1];

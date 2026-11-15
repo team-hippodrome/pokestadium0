@@ -2,18 +2,19 @@
 /* C ported from the Stadium 1 decomp: src/poke_icon.c. */
 
 #include "poke_icon.h"
-#include "geo_node.h"
-#include "geo_render.h"
-#include "model_animation.h"
 #include "display_object_textures.h"
-#include "model_renderer.h"
-#include "graphics_textures.h"
-#include "jpeg_stream.h"
-#include "gfx_rect.h"
-#include "matrix.h"
-#include "dp_intro.h"
+#include "font.h"
 #include "geo_layout.h"
-#include "memory.h"
+#include "geo_render.h"
+#include "graphics_textures.h"
+#include "input.h"
+#include "main_pool.h"
+#include "matrix.h"
+#include "memory_main.h"
+#include "model_renderer.h"
+
+// Declared here instead of in a header: the callers of these disagree on their types.
+void MainPool_FinalizeAllocation(struct MemoryBlock* block);
 extern DisplayObject* D_800AD1C0;
 s32 PokeIcon_CapturePreviewGeoNode(s32, GraphNode*);
 s32 PokeIcon_CaptureGeoNode(s32, GraphNode*);

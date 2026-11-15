@@ -1,5 +1,6 @@
-#ifndef _E890_H_
-#define _E890_H_
+/* Declarations for src/leo.c. */
+#ifndef LEO_H
+#define LEO_H
 
 #include "global.h"
 
@@ -20,6 +21,7 @@ typedef struct unk_D_800AA690 {
 
 extern unk_D_800AA680 D_800AB200;
 
+// leo.c
 s32 Leo_ValidateBootDiskId(void);
 s32 Leo_AcceptPokemonDiskDescriptor(unk_D_800AA680* arg0);
 s32 Leo_QueueDiskIdRead(void);
@@ -37,4 +39,4 @@ s32 Leo_InitializeBootState(void);
 void Leo_AbortPendingBootRequest(void);
 void Leo_ResetBootStateIfReady(void);
 
-#endif // _E890_H_
+#endif // LEO_H

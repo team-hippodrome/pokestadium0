@@ -2,7 +2,6 @@
 /* C ported from the Stadium 1 decomp: src/model_animation_events.c. */
 
 #include "model_animation_events.h"
-#include "util.h"
 
 s32 ModelAnim_IsEventFrame(DisplayObject* display_object, s16 frame_number);
 s32 ModelAnim_IsEventTrackNearEnd(DisplayObject* display_object);

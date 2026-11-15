@@ -4,12 +4,6 @@
 #include "global.h"
 #include "graphics_textures.h"
 #include "string.h"
-#include "jpeg_stream.h"
-#include "gfx_buffer.h"
-#include "ui_graphics.h"
-#include "gfx_rect.h"
-#include "matrix.h"
-#include "memory.h"
 #include "stdarg.h"
 #include "lib/ultralib/src/libc/xstdio.h"
 extern FontContext* font_context;

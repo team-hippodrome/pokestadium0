@@ -1,3 +1,4 @@
+/* Declarations for src/jpeg_decoder.c. */
 #ifndef JPEG_DECODER_H
 #define JPEG_DECODER_H
 
@@ -59,6 +60,7 @@ typedef struct JpegDecoderState {
     /* 0x10 */ s16 unk_10;
 } JpegDecoderState; // size = 0x14
 
+// jpeg_decoder.c
 s32 Jpeg_DecodeMcus(JpegDecoder*, u16*, s32, u8, JpegDecoderState*);
 s32 Jpeg_DecodeBlock(JpegHuffmanTable*, JpegHuffmanTable*, u16*, s16*);
 s32 Jpeg_DecodeHuffmanSymbol(JpegHuffmanTable*, s16*, s8*);

@@ -1,17 +1,17 @@
 {
-  "src/4C760.c": {
+  "src/libleo/leomodesel.c": {
     "extra": [],
     "ido": "5.3",
     "mips": "-mips2",
     "opt": "-O2"
   },
-  "src/4D700.c": {
+  "src/libleo/cjcreateleomanager.c": {
     "extra": [],
     "ido": "5.3",
     "mips": "-mips2",
     "opt": "-O2"
   },
-  "src/5D5B0.c": {
+  "src/libultra/io/ai.c": {
     "extra": [],
     "ido": "7.1",
     "mips": "-mips2",
@@ -992,31 +992,31 @@
     "opt": "-O1",
     "profile": "ultralib"
   },
-  "src/56F50.c": {
+  "src/libultra/io/gbpakgetstatus.c": {
     "ido": "5.3",
     "opt": "-O2",
     "mips": "-mips2",
     "profile": "ultralib"
   },
-  "src/53080.c": {
+  "src/libultra/io/gbpakinit.c": {
     "ido": "5.3",
     "opt": "-O2",
     "mips": "-mips2",
     "profile": "ultralib"
   },
-  "src/51D10.c": {
+  "src/libultra/io/gbpakcheckconnector.c": {
     "ido": "5.3",
     "opt": "-O2",
     "mips": "-mips2",
     "profile": "ultralib"
   },
-  "src/5C980.c": {
+  "src/libultra/io/vimgr.c": {
     "extra": [],
     "ido": "5.3",
     "mips": "-mips2",
     "opt": "-O2"
   },
-  "src/52D80.c": {
+  "src/libultra/os/initialize.c": {
     "ido": "5.3",
     "opt": "-O1",
     "mips": "-mips2",
@@ -1118,7 +1118,7 @@
     "opt": "-O1",
     "profile": "ultralib-asm"
   },
-  "src/50920.c": {
+  "src/libultra/libc/bzero.c": {
     "assembly_source": "lib/ultralib/src/libc/bzero.s",
     "extra": [],
     "ido": "5.3",
@@ -1126,7 +1126,7 @@
     "opt": "-O2",
     "profile": "ultralib-asm"
   },
-  "src/57330.c": {
+  "src/libultra/os/invaldcache.c": {
     "assembly_source": "lib/ultralib/src/os/invaldcache.s",
     "extra": [],
     "ido": "5.3",
@@ -1134,7 +1134,7 @@
     "opt": "-O1",
     "profile": "ultralib-asm"
   },
-  "src/57410.c": {
+  "src/libultra/os/invalicache.c": {
     "assembly_source": "lib/ultralib/src/os/invalicache.s",
     "extra": [],
     "ido": "5.3",
@@ -1150,7 +1150,7 @@
     "opt": "-O1",
     "profile": "ultralib-asm"
   },
-  "src/4DF00.c": {
+  "src/libultra/os/setintmask.c": {
     "assembly_source": "lib/ultralib/src/os/setintmask.s",
     "extra": [],
     "ido": "5.3",
@@ -1158,7 +1158,7 @@
     "opt": "-O1",
     "profile": "ultralib-asm"
   },
-  "src/52D00.c": {
+  "src/libultra/os/writebackdcache.c": {
     "assembly_source": "lib/ultralib/src/os/writebackdcache.s",
     "extra": [],
     "ido": "5.3",
@@ -1166,7 +1166,7 @@
     "opt": "-O1",
     "profile": "ultralib-asm"
   },
-  "src/5CCA0.c": {
+  "src/libultra/os/writebackdcacheall.c": {
     "assembly_source": "lib/ultralib/src/os/writebackdcacheall.s",
     "extra": [],
     "ido": "5.3",
@@ -1174,7 +1174,7 @@
     "opt": "-O1",
     "profile": "ultralib-asm"
   },
-  "src/4E980.c": {
+  "src/libultra/os/exceptasm.c": {
     "assembly_source": "lib/ultralib/src/os/exceptasm.s",
     "extra": [
       "-32"

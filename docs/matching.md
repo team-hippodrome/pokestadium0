@@ -45,7 +45,7 @@ function that depends on its offset in the object. Those functions stay as `GLOB
 
 ## Source layout
 
-Resident code that used to be `src/1060.c` is now split at Stadium 1 file
+Resident code that used to be `src/main.c` is now split at Stadium 1 file
 boundaries: `src/rsp.c`, `src/dma.c`, and so on. Fragments with Stadium 1
 counterparts became directories, such as `src/fragments/fragment012_17ED00/`. Runs
 with no counterpart are named by ROM offset (resident) or link address (fragments).

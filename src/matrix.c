@@ -3,7 +3,7 @@
 
 #include "matrix.h"
 #include "game_state.h"
-#include "math_util.h"
+#include "gfx_rect.h"
 extern Mtx gIdentityMtx;
 extern Vec3f D_80060450;
 extern Vec3s D_8006045C;
@@ -12,12 +12,9 @@ extern Vec3f D_80060464;
 #define GET_LOW_S16_OF_32(var) (((s16*)&(var))[1])
 
 #include "global.h"
-#include "gfx_rect.h"
-#include "memory.h"
 extern DepthBuffer* D_8005F670;
 
 #include "global.h"
-#include "math_util.h"
 // gSineTable, gCosineTable and gArctanTable (include/trig_tables.inc.c) match the
 // ROM at 0x8006DBB0; they stay in the resident data region until it is split.
 

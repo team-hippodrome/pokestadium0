@@ -2,7 +2,6 @@
 /* C ported from the Stadium 1 decomp: src/geo_layout.c. */
 
 #include "geo_layout.h"
-#include "geo_node.h"
 #include "matrix.h"
 #include "util.h"
 extern GeoLayoutCommandProc GeoLayoutJumpTable[];

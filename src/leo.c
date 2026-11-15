@@ -2,8 +2,8 @@
 /* C ported from the Stadium 1 decomp: src/leo.c. */
 
 #include "leo.h"
-#include "PR/leo.h"
 #include "dma.h"
+#include "PR/leo.h"
 extern unk_D_800AA680 D_800AB200;
 extern unk_D_800AA690 D_800AB210;
 extern OSMesgQueue D_800AB218;
