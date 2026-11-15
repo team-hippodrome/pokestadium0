@@ -38,17 +38,17 @@ void BattleMenu_DrawBottomActionButtons(void) {
 
     gSPDisplayList(gDisplayListHead++, D_80060290);
 
-    Gfx_DrawTextureRgba16(0x71, 0x1A8, 0x20, 0x18, D_3002220, 0x20, 0x200000);
-    Gfx_DrawTextureRgba16(0x162, 0x1A8, 0x20, 0x18, D_3002820, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(113, 424, 0x20, 24, D_3002220, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(354, 424, 0x20, 24, D_3002820, 0x20, 0x200000);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
     Font_BeginTranslucentTextRendering();
     Font_SetActive(8, 0);
-    Font_Printf(0x5A, 0x1AA, D_82302A08);
-    Font_Printf(0x149, 0x1AA, D_82302A0C);
-    Font_Printf(0x91, 0x1A8, D_82302A10);
-    Font_Printf(0x180, 0x1A8, D_82302A20);
+    Font_Printf(90, 426, D_82302A08);
+    Font_Printf(329, 426, D_82302A0C);
+    Font_Printf(145, 424, D_82302A10);
+    Font_Printf(384, 424, D_82302A20);
     Font_EndTexturedTextRendering();
 }
 
@@ -77,16 +77,16 @@ void BattleMenu_DrawScrollingInstructionPanel(void) {
     sp4C = StageContext_GetCurrentImage();
     sp48 = D_823028C4;
     sp44 = D_823028C8;
-    Ui_DrawGradientPanel(0x228, 0x20, 0x2E, 0x186, &sp48, &sp44);
+    Ui_DrawGradientPanel(552, 0x20, 46, 390, &sp48, &sp44);
 
     gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 563, 48, 587, 408);
 
     Font_BeginTranslucentTextRendering();
     Font_SetActive(0x10, 0);
-    Gfx_SetEnvColor(0xA5, 0xDE, 0x8C, 0xFF);
+    Gfx_SetEnvColor(0xA5, 0xDE, 0x8C, 0xFF); // #A5DE8C
 
     for (i = 0; i < 16; i++) {
-        Font_DrawCharAt(0x233, var_s4, D_82302808[idx][var_s2]);
+        Font_DrawCharAt(563, var_s4, D_82302808[idx][var_s2]);
         var_s2 += 1;
         if (var_s2 >= 0x35) {
             var_s2 = 0;
@@ -157,9 +157,9 @@ void BattleMenu_DrawSidebarTrainerBadge(s32 x, s32 y, OrderSidebarIcons* sidebar
 
     if (sidebar->secondPort == -1) {
         if (sidebar->isCom != 0) {
-            Gfx_DrawTextureRgba16(x, y, 0x24, 0x1A, D_03008880, 0x24, 0x200000);
+            Gfx_DrawTextureRgba16(x, y, 36, 26, D_03008880, 36, 0x200000);
         } else {
-            Gfx_DrawTextureRgba16(x, y, 0x24, 0x1A, D_823028CC[sidebar->firstPort], 0x24, 0x200000);
+            Gfx_DrawTextureRgba16(x, y, 36, 26, D_823028CC[sidebar->firstPort], 36, 0x200000);
         }
     } else {
         switch (sidebar->firstPort) {
@@ -175,7 +175,7 @@ void BattleMenu_DrawSidebarTrainerBadge(s32 x, s32 y, OrderSidebarIcons* sidebar
                 sp2C = D_823028E4[0][sidebar->secondPort];
                 break;
         }
-        Gfx_DrawTextureRgba16(x, y, 0x24, 0x2D, sp2C, 0x24, 0x200000);
+        Gfx_DrawTextureRgba16(x, y, 36, 45, sp2C, 36, 0x200000);
     }
 }
 
@@ -185,7 +185,7 @@ extern u8* D_823028E4[][3];
  * Draws one pick slot of the sidebar and steps its grow/shrink animation. The icon byte holds the
  * picking port + 1 in the high nibble and the animation frame (0-3) in the low nibble; -1 draws an
  * empty hole (unused slot). Returns the updated icon byte.
- * Seen in play (2026-11-14, L50-55 tournament, rental team vs マサハル): a pick added a ball in the picking port's colour (1P blue, COM green) and
+ * Seen in play (2026-11-14, L50-55 tournament, rental team vs マサハル): a pick added a ball in the picking port's color (1P blue, COM green) and
  * the slots a tournament leaves unused stayed as holes.
  */
 s32 BattleMenu_DrawSidebarPickBall(s32 x, s32 y, s8 icon, s8 growth) {
@@ -194,7 +194,7 @@ s32 BattleMenu_DrawSidebarPickBall(s32 x, s32 y, s8 icon, s8 growth) {
 
     if (icon != 0) {
         if (icon == -1) {
-            Gfx_DrawTextureRgba16(x, y, 0x20, 0x14, D_3005680, 0x20, 0x200000);
+            Gfx_DrawTextureRgba16(x, y, 0x20, 20, D_3005680, 0x20, 0x200000);
         } else {
             sp34 = (icon >> 4) & 0xF;
             sp30 = icon & 0xF;
@@ -208,7 +208,7 @@ s32 BattleMenu_DrawSidebarPickBall(s32 x, s32 y, s8 icon, s8 growth) {
             }
 
             if (sp30 > 0) {
-                Gfx_DrawTextureRgba16(x + 6, y, 0x18, 0x14, D_823028E4[sp34][sp30], 0x18, 0x200000);
+                Gfx_DrawTextureRgba16(x + 6, y, 24, 20, D_823028E4[sp34][sp30], 24, 0x200000);
                 icon = (sp34 * 0x10) | sp30;
             } else {
                 icon = 0;
@@ -236,12 +236,12 @@ void BattleMenu_DrawTeamOrderSidebarTeam0(void) {
 
     gSPDisplayList(gDisplayListHead++, D_80060290);
 
-    Gfx_DrawTextureRgba16(0x2D, var_s2, 0x20, 0xC, D_3003C80, 0x20, 0x200000);
-    Gfx_DrawTextureRgba16(0x2D, var_s2 + 0xC, 0x20, 0x17, D_30050C0, 0x20, 0x200000);
-    Gfx_DrawTextureRgba16(0x2D, var_s2 + 0x23, 0x20, 0x17, D_30050C0, 0x20, 0x200000);
-    Gfx_DrawTextureRgba16(0x2D, var_s2 + 0x3A, 0x20, 0x17, D_30050C0, 0x20, 0x200000);
-    Gfx_DrawTextureRgba16(0x2D, var_s2 + 0x51, 0x20, 0x17, D_30050C0, 0x20, 0x200000);
-    Gfx_DrawTextureRgba16(0x25, var_s2 + 0x68, 0x28, 0x2E, D_3002E20, 0x28, 0x200000);
+    Gfx_DrawTextureRgba16(45, var_s2, 0x20, 12, D_3003C80, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(45, var_s2 + 12, 0x20, 23, D_30050C0, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(45, var_s2 + 35, 0x20, 23, D_30050C0, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(45, var_s2 + 58, 0x20, 23, D_30050C0, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(45, var_s2 + 81, 0x20, 23, D_30050C0, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(37, var_s2 + 104, 40, 46, D_3002E20, 40, 0x200000);
 
     if (temp_v0->secondPort == -1) {
         BattleMenu_DrawSidebarTrainerBadge(0x2D, 0x21, &D_82302B20[0]);
@@ -275,12 +275,12 @@ void BattleMenu_DrawTeamOrderSidebarTeam1(void) {
 
     gSPDisplayList(gDisplayListHead++, D_80060290);
 
-    Gfx_DrawTextureRgba16(0x2D, var_s2, 0x28, 0x2C, D_3003F80, 0x28, 0x200000);
-    Gfx_DrawTextureRgba16(0x2D, var_s2 + 0x2C, 0x20, 0x17, D_30050C0, 0x20, 0x200000);
-    Gfx_DrawTextureRgba16(0x2D, var_s2 + 0x43, 0x20, 0x17, D_30050C0, 0x20, 0x200000);
-    Gfx_DrawTextureRgba16(0x2D, var_s2 + 0x5A, 0x20, 0x17, D_30050C0, 0x20, 0x200000);
-    Gfx_DrawTextureRgba16(0x2D, var_s2 + 0x71, 0x20, 0x17, D_30050C0, 0x20, 0x200000);
-    Gfx_DrawTextureRgba16(0x2D, var_s2 + 0x88, 0x20, 0xE, D_3004D40, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(45, var_s2, 40, 44, D_3003F80, 40, 0x200000);
+    Gfx_DrawTextureRgba16(45, var_s2 + 44, 0x20, 23, D_30050C0, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(45, var_s2 + 67, 0x20, 23, D_30050C0, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(45, var_s2 + 90, 0x20, 23, D_30050C0, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(45, var_s2 + 113, 0x20, 23, D_30050C0, 0x20, 0x200000);
+    Gfx_DrawTextureRgba16(45, var_s2 + 136, 0x20, 14, D_3004D40, 0x20, 0x200000);
 
     if (temp_v0->secondPort == -1) {
         BattleMenu_DrawSidebarTrainerBadge(0x2D, 0x189, &D_82302B20[1]);
@@ -324,7 +324,7 @@ void BattleMenu_ShrinkSidebarPickBalls(s32 sidebar_team) {
 }
 
 /**
- * Draws a bordered panel in the colour assigned to the controller port (1P blue, COM green).
+ * Draws a bordered panel in the color assigned to the controller port (1P blue, COM green).
  * Seen in play (2026-11-13/14): ran every frame for the party grids, prompts and name labels.
  */
 void BattleMenu_DrawPanelBorder(s16 x, s16 y, s16 width, s16 height, s16 controller_port) {
@@ -344,7 +344,7 @@ extern s32 D_82302BCC;
 /**
  * Draws a panel's six Pokémon (button glyph, icon, name, L%d). While R is held the picked names
  * turn yellow. While popupEraseFrames (popupEraseFrames) counts down it repaints the prompt area with the
- * background colour, erasing a closed prompt.
+ * background color, erasing a closed prompt.
  * Seen in play (2026-11-14, L50-55 tournament, rental team vs マサハル): drew both grids; holding R after picking リザードン turned its name yellow,
  * and closing the level-sum notice repainted its area.
  */
@@ -363,19 +363,19 @@ void BattleMenu_DrawOrderSelectPartyGrid(OrderSelectPanel* panel) {
 
     gSPDisplayList(gDisplayListHead++, D_80060290);
 
-    Gfx_DrawTextureRgba16(x + 7, y + 0xB, 0x1A, 0x1A, D_030005B0, 0x1C, 0x200000);
-    Gfx_DrawTextureRgba16(x + 0xA1, y + 0xB, 0x1A, 0x1A, D_03001110, 0x1C, 0x200000);
-    Gfx_DrawTextureRgba16(x + 0x13B, y + 0xB, 0x1A, 0x1A, D_03001C70, 0x1C, 0x200000);
-    Gfx_DrawTextureRgba16(x + 7, y + 0x35, 0x1A, 0x1A, D_03000000, 0x1C, 0x200000);
-    Gfx_DrawTextureRgba16(x + 0xA1, y + 0x35, 0x1A, 0x1A, D_03000B60, 0x1C, 0x200000);
-    Gfx_DrawTextureRgba16(x + 0x13B, y + 0x35, 0x1A, 0x1A, D_030016C0, 0x1C, 0x200000);
+    Gfx_DrawTextureRgba16(x + 7, y + 11, 26, 26, D_030005B0, 28, 0x200000);
+    Gfx_DrawTextureRgba16(x + 161, y + 11, 26, 26, D_03001110, 28, 0x200000);
+    Gfx_DrawTextureRgba16(x + 315, y + 11, 26, 26, D_03001C70, 28, 0x200000);
+    Gfx_DrawTextureRgba16(x + 7, y + 53, 26, 26, D_03000000, 28, 0x200000);
+    Gfx_DrawTextureRgba16(x + 161, y + 53, 26, 26, D_03000B60, 28, 0x200000);
+    Gfx_DrawTextureRgba16(x + 315, y + 53, 26, 26, D_030016C0, 28, 0x200000);
 
-    Gfx_DrawTextureRgba16(x + 0x23, y + 6, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, panel->panelIndex), 0x28, 0x200000);
-    Gfx_DrawTextureRgba16(x + 0xBD, y + 6, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, panel->panelIndex + 4), 0x28, 0x200000);
-    Gfx_DrawTextureRgba16(x + 0x157, y + 6, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, panel->panelIndex + 8), 0x28, 0x200000);
-    Gfx_DrawTextureRgba16(x + 0x23, y + 0x30, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, panel->panelIndex + 0xC), 0x28, 0x200000);
-    Gfx_DrawTextureRgba16(x + 0xBD, y + 0x30, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, panel->panelIndex + 0x10), 0x28, 0x200000);
-    Gfx_DrawTextureRgba16(x + 0x157, y + 0x30, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, panel->panelIndex + 0x14), 0x28, 0x200000);
+    Gfx_DrawTextureRgba16(x + 35, y + 6, 40, 40, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, panel->panelIndex), 40, 0x200000);
+    Gfx_DrawTextureRgba16(x + 189, y + 6, 40, 40, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, panel->panelIndex + 4), 40, 0x200000);
+    Gfx_DrawTextureRgba16(x + 343, y + 6, 40, 40, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, panel->panelIndex + 8), 40, 0x200000);
+    Gfx_DrawTextureRgba16(x + 35, y + 48, 40, 40, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, panel->panelIndex + 0xC), 40, 0x200000);
+    Gfx_DrawTextureRgba16(x + 189, y + 48, 40, 40, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, panel->panelIndex + 0x10), 40, 0x200000);
+    Gfx_DrawTextureRgba16(x + 343, y + 48, 40, 40, (u8*)PokeIcon_GetImage((s8*)D_82302BCC, panel->panelIndex + 0x14), 40, 0x200000);
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
 
@@ -385,15 +385,15 @@ void BattleMenu_DrawOrderSelectPartyGrid(OrderSelectPanel* panel) {
     for (i = 0; i < panel->candidateCount; i++) {
         sel = BattleMenu_IsSlotAlreadySelected(panel, i);
         if ((panel->highlightPicks != 0) && (sel != 0)) {
-            Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0, 0xFF); // #FFFF00
         }
         tx = x + ((i % 3) * 0x9A) + 0x4C;
         ty = y + ((i / 3) * 0x2A) + 8;
         Font_Printf(tx, ty, (char*)panel->candidates[i].nickname);
         if ((panel->highlightPicks != 0) && (sel != 0)) {
-            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+            Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
         }
-        Font_Printf(tx, ty + 0x14, D_82302A34, panel->candidates[i].level);
+        Font_Printf(tx, ty + 20, D_82302A34, panel->candidates[i].level);
     }
 
     Font_EndTexturedTextRendering();
@@ -440,15 +440,15 @@ void BattleMenu_DrawOrderSelectConfirmPrompt(OrderSelectPanel* panel) {
         }
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
-        Font_Printf(x + 0x1F, y + 0xB, D_82302A38);
-        Font_Printf(x + 0x4F, y + 0x30, D_82302A4C);
+        Font_Printf(x + 0x1F, y + 11, D_82302A38);
+        Font_Printf(x + 79, y + 48, D_82302A4C);
         Font_EndTexturedTextRendering();
         panel->popupEraseFrames = 2;
     } else {
         x = panel->x;
         y = panel->y;
         BattleMenu_DrawOrderSelectPartyGrid(panel);
-        Ui_DrawPrimColorRect(x + 5, y + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
+        Ui_DrawPrimColorRect(x + 5, y + 5, 461, 84, 0, 0, 0, 0x80); // #000000
         if (panel->confirmCursor == 0) {
             Ui_DrawTextureMarker(x + 0x5C, y + 0x3C);
         } else {
@@ -456,10 +456,10 @@ void BattleMenu_DrawOrderSelectConfirmPrompt(OrderSelectPanel* panel) {
         }
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
-        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
-        Font_Printf(x + 0x50, y + 0x14, D_82302A60);
-        Font_Printf(x + 0x80, y + 0x3C, D_82302A74);
-        Font_Printf(x + 0xE0, y + 0x3C, D_82302A7C);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
+        Font_Printf(x + 80, y + 20, D_82302A60);
+        Font_Printf(x + 0x80, y + 60, D_82302A74);
+        Font_Printf(x + 224, y + 60, D_82302A7C);
         Font_EndTexturedTextRendering();
     }
 }
@@ -490,21 +490,21 @@ void BattleMenu_DrawLevelSumOverNotice(OrderSelectPanel* panel) {
         BattleMenu_DrawPanelBorder(x, y, 0x15F, 0x53, panel->controllerPort);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
-        Gfx_SetEnvColor(0xFF, 0x63, 0x63, 0xFF);
-        Font_Printf(x + 0x10, y + 0xB, D_82302A8C);
-        Font_Printf(x + 0x10, y + 0x30, D_82302AA0);
+        Gfx_SetEnvColor(0xFF, 0x63, 0x63, 0xFF); // #FF6363
+        Font_Printf(x + 0x10, y + 11, D_82302A8C);
+        Font_Printf(x + 0x10, y + 48, D_82302AA0);
         Font_EndTexturedTextRendering();
         panel->popupEraseFrames = 2;
     } else {
         x = panel->x;
         y = panel->y;
         BattleMenu_DrawOrderSelectPartyGrid(panel);
-        Ui_DrawPrimColorRect(x + 5, y + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
+        Ui_DrawPrimColorRect(x + 5, y + 5, 461, 84, 0, 0, 0, 0x80); // #000000
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
-        Gfx_SetEnvColor(0xFF, 0x63, 0x63, 0xFF);
-        Font_Printf(x + 0x50, y + 0x14, D_82302AB8);
-        Font_Printf(x + 0x50, y + 0x3C, D_82302ACC);
+        Gfx_SetEnvColor(0xFF, 0x63, 0x63, 0xFF); // #FF6363
+        Font_Printf(x + 80, y + 20, D_82302AB8);
+        Font_Printf(x + 80, y + 60, D_82302ACC);
         Font_EndTexturedTextRendering();
     }
 }
@@ -535,8 +535,8 @@ void BattleMenu_DrawOrderSelectPanel_Ready(OrderSelectPanel* panel) {
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x20, -4);
         Font_EnableTwoCycleTexturing();
-        Gfx_SetPrimColor(0x1C, 0x74, 0xFF, 0xFF);
-        Font_Printf(sp3C + 0x14, sp38 + 0x19, D_82302AE4);
+        Gfx_SetPrimColor(0x1C, 0x74, 0xFF, 0xFF); // #1C74FF
+        Font_Printf(sp3C + 20, sp38 + 25, D_82302AE4);
         Font_DisableTwoCycleTexturing();
         Font_EndTexturedTextRendering();
     } else {
@@ -559,13 +559,13 @@ void BattleMenu_DrawOrderSelectPanel_Ready(OrderSelectPanel* panel) {
         }
 
         BattleMenu_DrawOrderSelectPartyGrid(panel);
-        Ui_DrawPrimColorRect(sp3C + 5, sp38 + 5, 0x1CD, 0x54, 0, 0, 0, 0x80);
+        Ui_DrawPrimColorRect(sp3C + 5, sp38 + 5, 461, 84, 0, 0, 0, 0x80); // #000000
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x20, 0);
         Font_EnableTwoCycleTexturing();
-        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, sp34);
-        Gfx_SetPrimColor(0x1C, 0x74, 0xFF, sp34);
-        Font_Printf(sp3C + 0x39, sp38 + 0x25, D_82302AFC);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, sp34); // #FFFFFF
+        Gfx_SetPrimColor(0x1C, 0x74, 0xFF, sp34); // #1C74FF
+        Font_Printf(sp3C + 57, sp38 + 37, D_82302AFC);
         Font_DisableTwoCycleTexturing();
         Font_EndTexturedTextRendering();
     }
@@ -1102,7 +1102,7 @@ void BattleMenu_CommitOrderSelection(void) {
  * Pokémon icons.
  * Seen in play (2026-11-14, L50-55 tournament, rental team vs マサハル): ran at screen start; 1P's panel at (0x50, 0x21), partner -1.
  */
-void BattleMenu_AddOrderSelectPanel(s16 x, s16 y, TeamRoster* roster, s32 sidebarTeam, s32 partnerPanelIndex) {
+void BattleMenu_AddOrderSelectPanel(s16 x, s16 y, TeamRoster* roster, s32 sidebar_team, s32 partner_panel_index) {
     s32 i;
     OrderSelectPanel* temp_v1;
     s32 j;
@@ -1111,8 +1111,8 @@ void BattleMenu_AddOrderSelectPanel(s16 x, s16 y, TeamRoster* roster, s32 sideba
     temp_v1 = &(D_82302B48)[D_82302B44];
     temp_v1->panelIndex = D_82302B44;
     temp_v1->controllerPort = roster->controllerPort;
-    temp_v1->partnerPanelIndex = partnerPanelIndex;
-    temp_v1->sidebarTeam = sidebarTeam;
+    temp_v1->partnerPanelIndex = partner_panel_index;
+    temp_v1->sidebarTeam = sidebar_team;
     temp_v1->state = 0;
     temp_v1->pickCount = 0;
     temp_v1->redrawFrames = 2;

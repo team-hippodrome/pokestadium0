@@ -36,11 +36,11 @@ extern u8 sVsResultsNicknameText[];
 /**
  * Boot-code check: with interrupts masked and the PI idle, reads the cartridge word at ROM 0x800
  * (inside the IPL3 boot code, 0x24050001 in the retail ROM) and returns -1 instead of
- * `displayList` when its low half is not 1. A copier or a ROM with other boot code then gets a
+ * `display_list` when its low half is not 1. A copier or a ROM with other boot code then gets a
  * broken portrait display list. vs_trainer_panel (VsPanel_CheckBootCode, ROM 0xD10) and
- * geo_model_038 (CartridgeCheckModels_CheckBootCode) check other boot-code words.
+ * cartridge_check_models (CartridgeCheckModels_CheckBootCode) check other boot-code words.
  * Seen in play (2026-11-14): ran for both portraits every frame of the board and the panels and
- * returned `displayList` unchanged.
+ * returned `display_list` unchanged.
  * @unverified: the -1 path; the emulator runs the retail boot code, so it was not taken.
  */
 s32 VsResults_CheckBootCode(s32 display_list) {
@@ -58,8 +58,8 @@ s32 VsResults_CheckBootCode(s32 display_list) {
  * Writes the portrait display list: segment 0x0F = the trainer's BinArchive file, then a branch
  * to sVsResultsPortraitDL.
  */
-Gfx* VsResults_WritePortraitGfx(Gfx* gfx, void* trainerFile) {
-    gSPSegment(gfx++, 0x0F, osVirtualToPhysical(trainerFile));
+Gfx* VsResults_WritePortraitGfx(Gfx* gfx, void* trainer_file) {
+    gSPSegment(gfx++, 0x0F, osVirtualToPhysical(trainer_file));
     gSPBranchList(gfx++, sVsResultsPortraitDL);
     return gfx;
 }
@@ -98,7 +98,7 @@ void VsResults_TitleTextCallback(s32 event, DemoGeoNode* node) {
 /**
  * Name text node callback: shows the side's name (rosterInfo[0]->fullName, 1P / ＣＯＭ in Free
  * Battle) on the win/lose panel and moves the text by the roster's flags: bit 0 sets unk_20 to
- * 0xD2, bit 1 sets unk_22 to -0xF0, otherwise unk_22 is -0x12C.
+ * 210, bit 1 sets unk_22 to -240, otherwise unk_22 is -300.
  * Seen in play (2026-11-14): poking 1P's fullName to ＣＤ showed ＣＤ as the name.
  * @unverified: the offsets; setting COM's unk_000 to 1 or 2 moved nothing visible.
  */
@@ -109,11 +109,11 @@ void VsResults_NameTextCallback(s32 event, DemoGeoNode* node) {
         teams = D_80060490->node.callbackArg;
         node->unk_24 = (u8*)teams[(s32)node->node.callbackArg].rosterInfo[0]->fullName;
         if (*(s16*)&teams[(s32)node->node.callbackArg].rosterInfo[0]->unk_000 & 1) {
-            node->unk_20 = 0xD2;
+            node->unk_20 = 210;
         } else if (*(s16*)&teams[(s32)node->node.callbackArg].rosterInfo[0]->unk_000 & 2) {
-            node->unk_22 = -0xF0;
+            node->unk_22 = -240;
         } else {
-            node->unk_22 = -0x12C;
+            node->unk_22 = -300;
         }
     }
 }
@@ -136,7 +136,7 @@ void VsResults_NicknameCallback(s32 event, DemoGeoNode* node) {
         slot = (u32)node->node.callbackArg & 0xFFFF;
         if (slot < teams[team].teamMember[0]->numberOfPokemonBrought) {
             sVsResultsNicknameText[0] = 9;
-            _bcopy(teams[team].teamMember[0]->pokemonPicked[slot].nickname, &sVsResultsNicknameText[1], 0xC);
+            _bcopy(teams[team].teamMember[0]->pokemonPicked[slot].nickname, &sVsResultsNicknameText[1], 12);
             node->unk_24 = sVsResultsNicknameText;
         } else {
             node->unk_24 = NULL;
@@ -163,8 +163,8 @@ void VsResults_SelectLayout(s32 event, GeoModelRootNode* node) {
  * Writes a row-layout icon display list: segment 0x0F = the Pokémon's icon image, then a branch
  * to sVsResultsRowIconDL.
  */
-Gfx* VsResults_WriteRowIconGfx(Gfx* gfx, void* iconImage) {
-    gSPSegment(gfx++, 0x0F, osVirtualToPhysical(iconImage));
+Gfx* VsResults_WriteRowIconGfx(Gfx* gfx, void* icon_image) {
+    gSPSegment(gfx++, 0x0F, osVirtualToPhysical(icon_image));
     gSPBranchList(gfx++, sVsResultsRowIconDL);
     return gfx;
 }
@@ -205,8 +205,8 @@ void VsResults_RowIconCallback(s32 event, DemoGeoNode *node)
  * Writes a grid-layout icon display list: segment 0x0F = the Pokémon's icon image, then a branch
  * to sVsResultsGridIconDL.
  */
-Gfx* VsResults_WriteGridIconGfx(Gfx* gfx, void* iconImage) {
-    gSPSegment(gfx++, 0x0F, osVirtualToPhysical(iconImage));
+Gfx* VsResults_WriteGridIconGfx(Gfx* gfx, void* icon_image) {
+    gSPSegment(gfx++, 0x0F, osVirtualToPhysical(icon_image));
     gSPBranchList(gfx++, sVsResultsGridIconDL);
     return gfx;
 }
@@ -250,8 +250,8 @@ void VsResults_GridIconCallback(s32 event, DemoGeoNode* node) {
  * Writes an HP bar display list: segment 0x0F = the slot's HP bar image, then a branch to
  * sVsResultsHpBarDL.
  */
-Gfx* VsResults_WriteHpBarGfx(Gfx* gfx, void* hpBarImage) {
-    gSPSegment(gfx++, 0x0F, osVirtualToPhysical(hpBarImage));
+Gfx* VsResults_WriteHpBarGfx(Gfx* gfx, void* hp_bar_image) {
+    gSPSegment(gfx++, 0x0F, osVirtualToPhysical(hp_bar_image));
     gSPBranchList(gfx++, sVsResultsHpBarDL);
     return gfx;
 }

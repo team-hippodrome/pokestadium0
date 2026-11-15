@@ -46,11 +46,11 @@ typedef struct MainMenuMessageWindow {
 /* The 3x3 grid of main menu items, with its fade in and out (MainMenu_InitItemList). */
 typedef struct MainMenuItemList {
     /* 0x000 */ s32 fadeState; // 0 fading in, 1-2 shown, 3 fading out, 4 gone (MainMenu_StepItemFade); 2 with fadeTimer 12 while the menu sat idle in play
-    /* 0x004 */ s32 fadeTimer; // counts up and holds at 12 while shown; 0xD starts the fade out
+    /* 0x004 */ s32 fadeTimer; // counts up and holds at 12 while shown; 13 starts the fade out
     /* 0x008 */ GridMenu menu;
     /* 0x030 */ u8 itemBuffer[9][0x30];
     /* 0x1E0 */ ByteMatrix items;
-    /* 0x1F0 */ u16 itemFlags[9]; // bit 0 = disabled; set for the items the save cannot use (blank Green save in play: 1,1,1,1,0,1,0,0,1, ずかん/てもち/とうろく greyed out)
+    /* 0x1F0 */ u16 itemFlags[9]; // bit 0 = disabled; set for the items the save cannot use (blank Green save in play: 1,1,1,1,0,1,0,0,1, ずかん/てもち/とうろく grayed out)
     /* 0x202 */ char pad202[0x2];
 } MainMenuItemList; // size = 0x204
 

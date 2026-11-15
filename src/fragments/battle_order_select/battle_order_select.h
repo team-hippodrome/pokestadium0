@@ -63,14 +63,14 @@ typedef struct unk_D_84803548 {
 // battle_order_select.c
 void BattleMenu_DrawBottomActionButtons(void);
 void BattleMenu_DrawScrollingInstructionPanel(void);
-void BattleMenu_InitOrderSidebar(OrderSidebarIcons* sidebar, BattleSide* side, s32 ruleCategory);
+void BattleMenu_InitOrderSidebar(OrderSidebarIcons* sidebar, BattleSide* side, s32 rule_category);
 void BattleMenu_DrawSidebarTrainerBadge(s32 x, s32 y, OrderSidebarIcons* sidebar);
 s32 BattleMenu_DrawSidebarPickBall(s32 x, s32 y, s8 icon, s8 growth);
 void BattleMenu_DrawTeamOrderSidebarTeam0(void);
 void BattleMenu_DrawTeamOrderSidebarTeam1(void);
-void BattleMenu_AddSidebarPickBall(s32 sidebarTeam, s32 controllerPort);
-void BattleMenu_ShrinkSidebarPickBalls(s32 sidebarTeam);
-void BattleMenu_DrawPanelBorder(s16 x, s16 y, s16 width, s16 height, s16 controllerPort);
+void BattleMenu_AddSidebarPickBall(s32 sidebar_team, s32 controller_port);
+void BattleMenu_ShrinkSidebarPickBalls(s32 sidebar_team);
+void BattleMenu_DrawPanelBorder(s16 x, s16 y, s16 width, s16 height, s16 controller_port);
 void BattleMenu_DrawOrderSelectPartyGrid(OrderSelectPanel* panel);
 void BattleMenu_DrawOrderSelectConfirmPrompt(OrderSelectPanel* panel);
 void BattleMenu_DrawLevelSumOverNotice(OrderSelectPanel* panel);
@@ -86,12 +86,12 @@ void BattleMenu_UndoSelections(OrderSelectPanel* panel);
 void BattleMenu_HandleOrderSelectPanel_PartyInput(Controller* cont, OrderSelectPanel* panel);
 void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* cont, OrderSelectPanel* panel);
 void BattleMenu_HandleOrderSelectPanel_LevelSumNoticeInput(Controller* cont, OrderSelectPanel* panel);
-s32 BattleMenu_UpdateOrderSelectPanel(s32 fadeMode, OrderSelectPanel* panel);
-s32 BattleMenu_UpdateOrderSelect(s32 fadeMode);
+s32 BattleMenu_UpdateOrderSelectPanel(s32 fade_mode, OrderSelectPanel* panel);
+s32 BattleMenu_UpdateOrderSelect(s32 fade_mode);
 void BattleMenu_SetLeadTagTeamMember(BattleSide* side, OrderSidebarIcons* sidebar);
 void BattleMenu_AppendUnpickedSlots(s8* order, s32 count);
 void BattleMenu_CommitOrderSelection(void);
-void BattleMenu_AddOrderSelectPanel(s16 x, s16 y, TeamRoster* roster, s32 sidebarTeam, s32 partnerPanelIndex);
+void BattleMenu_AddOrderSelectPanel(s16 x, s16 y, TeamRoster* roster, s32 sidebar_team, s32 partner_panel_index);
 void BattleMenu_InitOrderSelectPanels(SessionContext* session);
 s32 BattleMenu_RunOrderSelectScreen(s32 arg0, s32 session);
 

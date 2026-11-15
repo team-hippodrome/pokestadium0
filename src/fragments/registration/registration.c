@@ -24,7 +24,7 @@ loop_1:
     if (var_s0 == 0x10) {
         return -1;
     }
-    goto loop_1;
+    goto loop_1; // FAKE: goto loop kept from m2c output
 }
 
 s32 func_80020AFC(s32, s32, s32, s32);
@@ -79,7 +79,7 @@ s32 func_800245E0(M2C_UNK, s32);
  * The separate `base` local reproduces the ROM's register copy (the array pointer is loaded
  * before the first count is tested).
  * Seen in play (2026-11-12) in とうろく: ran after はい on 「このポケモンをけす？」 (「へんしん していた メタモンが もとの すがたに
- * もどった。」). With no team left, the view and delete entries were then greyed out.
+ * もどった。」). With no team left, the view and delete entries were then grayed out.
  */
 void Registration_WriteAllTeams(PointerList* teams) {
     s32 i;
@@ -175,7 +175,7 @@ void Registration_DrawMenuRow(s32 x, s32 y, char* label, s32 index, s32 flags, s
     s32 temp_v0 = *width;
 
     if (flags & 0x10) {
-        Ui_FillRectHighlighted(x + 3, y + 3, temp_v0 - 6, 0x1A, D_88102D74);
+        Ui_FillRectHighlighted(x + 3, y + 3, temp_v0 - 6, 26, D_88102D74);
     }
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(flags);
@@ -194,7 +194,7 @@ extern s32 D_88103078;
  * Sets up the registration menu: ポケモンをとうろくする (register), とうろくしたポケモンをみる (view), とうろくしたポケモンをけす (delete).
  * Seen in play (2026-11-12): ポケモンを とうろくする / とうろくした ポケモンをみる / とうろくした ポケモンをけす.
  */
-void Registration_InitMainMenu(MenuWindow* menu, s32 x, s32 y, s32 width, s32 height, M2C_UNK* labels, s32 label_count, M2C_UNK* descriptions, s32 descriptionLines, M2C_UNK* title) {
+void Registration_InitMainMenu(MenuWindow* menu, s32 x, s32 y, s32 width, s32 height, M2C_UNK* labels, s32 label_count, M2C_UNK* descriptions, s32 description_lines, M2C_UNK* title) {
     s32 sp2C;
 
     Window_SetRect(menu, x, y, width, height);
@@ -203,10 +203,10 @@ void Registration_InitMainMenu(MenuWindow* menu, s32 x, s32 y, s32 width, s32 he
     menu->window.frame.style = 0x801;
     menu->window.title = (s32)title;
     func_80027804(&menu->itemList, (s8*)labels, label_count, label_count);
-    Menu_Init(&menu->menu, &menu->itemList, &menu->itemFlags, (M2C_UNK*)Registration_DrawMenuRow, width - 0xC, 0x20);
+    Menu_Init(&menu->menu, &menu->itemList, &menu->itemFlags, (M2C_UNK*)Registration_DrawMenuRow, width - 12, 0x20);
     menu->menu.options = (s32) (menu->menu.options | 0x10000);
     menu->descriptions = (s32)descriptions;
-    menu->descriptionLines = descriptionLines;
+    menu->descriptionLines = description_lines;
     sp2C = Registration_FindFreeSlot();
     if ((func_800226BC(0x20, D_88103078, 0) == 0) || (sp2C == -1)) {
         menu->menu.itemFlags[0] |= 1;
@@ -240,15 +240,15 @@ void Registration_DrawMainMenu(MenuWindow* menu, s32 flags) {
         h = (menu->menu.items->count << 5) + 8;
         Ui_DrawTexturedDivider(menu->window.frame.x, menu->window.frame.y + h + 5, menu->window.frame.width, D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(menu->window.frame.x + 6, menu->window.frame.y + 6, menu->window.frame.width - 0xC, h, *(Color88100D9C*)&D_88102D74);
-        Ui_FillRectPrimEnvColor(menu->window.frame.x + 6, menu->window.frame.y + h + 0xC, menu->window.frame.width - 0xC, menu->descriptionLines * 0x1C, D_88102D9C, D_88102DA0);
+        func_80029028(menu->window.frame.x + 6, menu->window.frame.y + 6, menu->window.frame.width - 12, h, *(Color88100D9C*)&D_88102D74);
+        Ui_FillRectPrimEnvColor(menu->window.frame.x + 6, menu->window.frame.y + h + 12, menu->window.frame.width - 12, menu->descriptionLines * 28, D_88102D9C, D_88102DA0);
         sp38 = menu->window.frame.width - 0xC;
-        Menu_DrawItems(&menu->menu, menu->window.frame.x + 6, menu->window.frame.y + 0xA, flags | 0xFFED, (s32)&sp38);
+        Menu_DrawItems(&menu->menu, menu->window.frame.x + 6, menu->window.frame.y + 10, flags | 0xFFED, (s32)&sp38);
         Font_BeginTranslucentTextRendering();
         Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         Font_SetActive(8, 0);
-        Font_SetLineHeight(0x1C);
-        Font_Printf(menu->window.frame.x + 0xE, menu->window.frame.y + h + 0x10, menu->descriptions[menu->menu.cursor]);
+        Font_SetLineHeight(28);
+        Font_Printf(menu->window.frame.x + 14, menu->window.frame.y + h + 0x10, menu->descriptions[menu->menu.cursor]);
         Font_EndTexturedTextRendering();
     }
 }
@@ -309,15 +309,15 @@ M2C_UNK func_8000B2F4(s32);
  */
 void Registration_InitConfirmWindow(RegistrationConfirmWindow* confirm, s32 x, s32 y, s32 text) {
     RegistrationConfirmWindow* w = confirm;
-    Window_SetRect(confirm, x, y, 0x174, 0x66);
+    Window_SetRect(confirm, x, y, 372, 102);
     w->window.animTimer = 0;
     w->window.title = 0;
     w->window.state = 0;
     w->window.frame.style = 0x1001;
-    Window_InitLabeled(&w->yesButton, w->window.frame.x + 0x62, w->window.frame.y + 0x42, 0x48, D_88102DA4, D_88102F14);
+    Window_InitLabeled(&w->yesButton, w->window.frame.x + 98, w->window.frame.y + 66, 72, D_88102DA4, D_88102F14);
     w->yesButton.labelX = 0xA;
     w->yesButton.unk_34 = 0xC;
-    Window_InitLabeled(&w->noButton, w->window.frame.x + 0xCA, w->window.frame.y + 0x42, 0x48, D_88102DA4, D_88102F1C);
+    Window_InitLabeled(&w->noButton, w->window.frame.x + 202, w->window.frame.y + 66, 72, D_88102DA4, D_88102F1C);
     w->choice.count = 2;
     w->choice.cursor = 0;
     w->choice.controller = (Controller*)D_800603C0;
@@ -343,14 +343,14 @@ void Window_DrawLabeled(void*, s32);
  */
 void Registration_DrawConfirmWindow(RegistrationConfirmWindow* confirm) {
     if (func_8002AE6C() == 0) {
-        Ui_DrawTexturedDivider(confirm->window.frame.x, confirm->window.frame.y + 0x35, confirm->window.frame.width, D_8007356C);
-        Ui_FillRectPrimEnvColor(confirm->window.frame.x + 6, confirm->window.frame.y + 6, confirm->window.frame.width - 0xC, 0x30, D_88102DA8, D_88102DAC);
+        Ui_DrawTexturedDivider(confirm->window.frame.x, confirm->window.frame.y + 53, confirm->window.frame.width, D_8007356C);
+        Ui_FillRectPrimEnvColor(confirm->window.frame.x + 6, confirm->window.frame.y + 6, confirm->window.frame.width - 12, 48, D_88102DA8, D_88102DAC);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(confirm->window.frame.x + 6, confirm->window.frame.y + 0x3C, confirm->window.frame.width - 0xC, 0x24, *(Color88100D9C*)&D_88102D74);
+        func_80029028(confirm->window.frame.x + 6, confirm->window.frame.y + 60, confirm->window.frame.width - 12, 36, *(Color88100D9C*)&D_88102D74);
         Font_BeginTranslucentTextRendering();
         Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         Font_SetActive(0x10, 0);
-        Font_Printf(confirm->window.frame.x + 0x12, confirm->window.frame.y + 0x12, confirm->text);
+        Font_Printf(confirm->window.frame.x + 18, confirm->window.frame.y + 18, confirm->text);
         Font_EndTexturedTextRendering();
         Window_DrawLabeled(&confirm->yesButton, (confirm->choice.cursor == 0) ? 2 : 0);
         Window_DrawLabeled(&confirm->noButton, (confirm->choice.cursor == 1) ? 2 : 0);
@@ -393,7 +393,7 @@ void Window_SetRect(void* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
  * Seen in play (2026-11-12): opened the message after registering.
  */
 void Registration_InitMessageWindow(RegistrationMessageWindow* message, s32 x, s32 y, s32 text) {
-    Window_SetRect(message, x, y, 0x170, 0x68);
+    Window_SetRect(message, x, y, 368, 104);
     message->window.animTimer = 0;
     message->window.title = 0;
     message->window.state = 0;
@@ -417,8 +417,8 @@ void Registration_DrawMessageWindow(RegistrationMessageWindow* message) {
         c = D_800734A8;
         Gfx_SetEnvColor(c[0], c[1], c[2], c[3]);
         Font_SetActive(8, 0);
-        Font_SetLineHeight(0x1C);
-        Font_Printf(message->window.frame.x + 0xE, message->window.frame.y + 0xE, message->text);
+        Font_SetLineHeight(28);
+        Font_Printf(message->window.frame.x + 14, message->window.frame.y + 14, message->text);
         Font_EndTexturedTextRendering();
     }
 }
@@ -441,7 +441,7 @@ s32 Registration_UpdateMessageWindow(s32 message) {
  */
 void Registration_FillTrainerPanel(s32 x, s32 y, Color88100D9C color) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x, y, 0x88, 0x64, color);
+    func_80029028(x, y, 136, 100, color);
 }
 
 /**
@@ -451,7 +451,7 @@ void Registration_FillTrainerPanel(s32 x, s32 y, Color88100D9C color) {
  */
 void Registration_FillTeamPanel(s32 x, s32 y, Color88100D9C color) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x + 0x88, y, 0x18C, 0x64, color);
+    func_80029028(x + 136, y, 396, 100, color);
 }
 
 /**
@@ -460,8 +460,8 @@ void Registration_FillTeamPanel(s32 x, s32 y, Color88100D9C color) {
  */
 void Registration_DrawRowBorders(s32 x, s32 y, Color88100D9C color) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x, y, 0x214, 1, color);
-    func_80029028(x, y + 0x63, 0x214, 1, color);
+    func_80029028(x, y, 532, 1, color);
+    func_80029028(x, y + 99, 532, 1, color);
 }
 
 extern Color88100D9C D_88102D7C;
@@ -483,7 +483,7 @@ void Registration_DrawTrainerPanel(s32 x, s32 y, s32 text_flags, RegisteredTeam*
     UNUSED s32 pad[3]; // FAKE: stack padding
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x, y, 0x88, 0x64, D_88102D7C);
+    func_80029028(x, y, 136, 100, D_88102D7C);
     if (team->unk_00 == 0) {
         if (team->source == 0x20) {
             GbSave_DrawCartridgeIcon(x + 5, y + 4, team->pak, GbSave_GetPortGame(team->pak));
@@ -492,17 +492,17 @@ void Registration_DrawTrainerPanel(s32 x, s32 y, s32 text_flags, RegisteredTeam*
             Font_BeginTranslucentTextRendering();
             Font_SetColorForFlags(text_flags);
             Font_SetActive(8, 0);
-            Font_Printf(x + 0x1B, y + 0x1A, D_88102F24, team->slot + 1);
+            Font_Printf(x + 27, y + 26, D_88102F24, team->slot + 1);
             Font_EndTexturedTextRendering();
         }
     }
     Font_BeginTranslucentTextRendering();
-    Gfx_SetEnvColor(0xFF, 0xC8, 0xC8, 0xFF);
+    Gfx_SetEnvColor(0xFF, 0xC8, 0xC8, 0xFF); // #FFC8C8
     Font_SetActive(4, -1);
-    Font_Printf(x + 4, y + 0x41, D_88102F2C);
+    Font_Printf(x + 4, y + 65, D_88102F2C);
     Font_SetColorForFlags(text_flags);
     Font_SetActive(4, 0);
-    Font_Printf(x + 0x38, y + 0x41, (char*)team->name);
+    Font_Printf(x + 56, y + 65, (char*)team->name);
     Font_EndTexturedTextRendering();
     if (team->trainerId != 0) {
         gSPDisplayList(gDisplayListHead++, D_80073450);
@@ -519,9 +519,9 @@ extern Color88100D9C D_88102D78[2];
  */
 void Registration_FillRowBackground(s32 x, s32 y, s32 height) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x, y, 0x88, height, D_88102D78[1]);
+    func_80029028(x, y, 136, height, D_88102D78[1]);
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x + 0x88, y, 0x18C, height, D_88102D78[0]);
+    func_80029028(x + 136, y, 396, height, D_88102D78[0]);
 }
 
 extern s32 D_88103074;
@@ -577,9 +577,9 @@ void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
  */
 void Registration_DrawDittoCell(s32 x, s32 y) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x, y, 0x84, 0x32, D_88102D78[0]);
+    func_80029028(x, y, 132, 50, D_88102D78[0]);
     gSPDisplayList(gDisplayListHead++, D_80073408);
-    func_8001B884(x + 0x56, y + 6, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_88103074, 0x18), 0x28, 0x200000);
+    func_8001B884(x + 86, y + 6, 40, 40, (u8*)PokeIcon_GetImage((s8*)D_88103074, 0x18), 40, 0x200000);
     gSPDisplayList(gDisplayListHead++, D_80073438);
 }
 
@@ -596,7 +596,7 @@ void Registration_DrawRevealedMonCell(s32 x, s32 y, u8* mon, s32 icon_id, s32 te
     s32 idx;
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x, y, 0x84, 0x32, D_88102D78[0]);
+    func_80029028(x, y, 132, 50, D_88102D78[0]);
     if (mon != NULL) {
         Font_BeginTranslucentTextRendering();
         Font_SetColorForFlags(text_flags);
@@ -608,7 +608,7 @@ void Registration_DrawRevealedMonCell(s32 x, s32 y, u8* mon, s32 icon_id, s32 te
         Ui_DrawNumber(x + 0x38, y + 0x17, mon[0x24], 3);
         idx = icon_id % cache[2] + cache[1];
         gSPDisplayList(gDisplayListHead++, D_80073408);
-        func_8001B884(x + 0x56, y + 6, 0x28, 0x28, (u8*)PokeIcon_GetImage((s8*)D_88103074, idx), 0x28, 0x200000);
+        func_8001B884(x + 86, y + 6, 40, 40, (u8*)PokeIcon_GetImage((s8*)D_88103074, idx), 40, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);
     }
 }
@@ -815,7 +815,7 @@ M2C_UNK ScrollList_Init();
  * Seen in play (2026-11-12): opened the team list.
  */
 void Registration_InitTeamList(RegistrationTeamList* list, s32 x, s32 y, s8 *teams, s32 mode) {
-    Window_SetRect(&list->window, x, y, 0x220, 0x158);
+    Window_SetRect(&list->window, x, y, 544, 344);
     list->window.animTimer = 0;
     list->window.title = 0;
     list->window.state = 0;
@@ -1116,7 +1116,7 @@ extern u8 D_88102D70[];
  */
 M2C_UNK Registration_DrawScreen(RegistrationScreen* screen) {
     BgStage_DrawFrame();
-    Ui_DrawTintedScreenBackground(0x38, 0x1E0, D_88102D70[0], D_88102D70[1], D_88102D70[2]);
+    Ui_DrawTintedScreenBackground(56, 480, D_88102D70[0], D_88102D70[1], D_88102D70[2]);
     switch (screen->state) {
         case 0:
             Registration_DrawMainMenu(&screen->mainMenu, 2);
@@ -1175,7 +1175,7 @@ extern s32 D_88103074;
 extern RegistrationScreen* D_881030F8;
 
 /**
- * Allocates the RegistrationScreen (0x26B4 bytes) into D_881030F8, initialises it and renders the
+ * Allocates the RegistrationScreen (0x26B4 bytes) into D_881030F8, initializes it and renders the
  * Ditto placeholder icon (species 0x84) into icon slot 0x18.
  * Matching note: the call result is stored straight into D_881030F8 and the global is read back
  * for the next call; going through a local gives a different store sequence.
@@ -1225,7 +1225,7 @@ s32 Registration_UpdateFade(s32 fade_mode) {
     GbSave_DrawSummaryBar(0, var_a1, &D_88103018, D_88103078);
     n = D_88102DCC;
     func_8002C8D8(&sp2C, *(Col88102A2C*)D_88102D70, n / (f64)8.0f);
-    Ui_DrawTintedScreenBackground(0x38, 0x1E0, sp2C.r, sp2C.g, sp2C.b);
+    Ui_DrawTintedScreenBackground(56, 480, sp2C.r, sp2C.g, sp2C.b);
     if (D_88102DD0 == 0) {
         n = D_88102DCC;
         n++;
@@ -1274,7 +1274,6 @@ s8 *PokeIcon_AllocFramebuffers(s32 arg0);
 M2C_UNK PokeIcon_OpenModelArchives();
 s32 func_80017FDC(s32, M2C_UNK, M2C_UNK, M2C_UNK);
 s32 Font_Init(s32 load_size, s32 side);
-M2C_UNK func_80025BA0(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, s32);
 extern M2C_UNK D_0015B1A0;
 extern M2C_UNK D_0015E220;
 extern M2C_UNK D_00235D70;
@@ -1316,6 +1315,6 @@ s32 Registration_Init(s32 unused0, s32 unused1) {
     func_80006724();
     Registration_FreeScreen();
     func_80002620(0x52454753);
-    func_80025BA0(((u32)((s32)&D_88000000 & 0x0FF00000) >> 0x14) - 0x10, &D_00235D70, &D_00238BD0, 0, 0);
+    Fragment_QueueCall(((u32)((s32)&D_88000000 & 0x0FF00000) >> 0x14) - 0x10, &D_00235D70, &D_00238BD0, 0, 0);
     return 0x8040;
 }

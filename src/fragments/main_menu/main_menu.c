@@ -39,12 +39,12 @@ void Font_SetColorForFlags(s32);
  */
 void MainMenu_DrawMenuRow(s32 x, s32 y, char* text, s32 index, s32 flags) {
     if (flags & 8) {
-        Ui_FillRectHighlighted(x + 3, y + 3, 0x162, 0x1E, D_88001FD0);
+        Ui_FillRectHighlighted(x + 3, y + 3, 354, 30, D_88001FD0);
     }
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(flags);
     Font_SetActive(0x10, 0);
-    Font_Printf(x + 0xC, y + 6, text);
+    Font_Printf(x + 12, y + 6, text);
     Font_EndTexturedTextRendering();
 }
 
@@ -56,24 +56,24 @@ extern u8 D_88001FE0[];
 extern u8 D_88001FE4[];
 /**
  * Sets up the continue-tournament prompt (372x274) and its three-row menu.
- * Seen in play (2026-11-14): runs from MainMenu_InitScreen at (0x82, 0x6E) when
+ * Seen in play (2026-11-14): runs from MainMenu_InitScreen at (130, 110) when
  * gSessionContext.sessionFlags bit 0 (poked on in the emulator) says a tournament is in progress.
  */
 M2C_UNK MainMenu_InitPromptWindow(MainMenuPromptWindow* prompt, s32 x, s32 y) {
     MainMenuPromptWindow* obj = prompt;
     s32 pad; // FAKE: stack padding
 
-    Window_SetRect(obj, x, y, 0x174, 0x112);
+    Window_SetRect(obj, x, y, 372, 274);
     obj->window.animTimer = 0;
     obj->window.title = 0;
     obj->window.state = 0;
     obj->window.frame.style = 0x1001;
-    Window_SetRect(&obj->textFrame, obj->window.frame.x + 6, obj->window.frame.y + 6, obj->window.frame.width - 0xC, 0x88);
+    Window_SetRect(&obj->textFrame, obj->window.frame.x + 6, obj->window.frame.y + 6, obj->window.frame.width - 12, 136);
     obj->textFrame.style = 6;
     obj->textFrame.color = *(Color_RGBA8 *)D_88001FE0;
     obj->textFrame.color2 = *(Color_RGBA8 *)D_88001FE4;
     func_80027804(&obj->itemList, D_88001FD4, 3, 3);
-    Menu_Init(&obj->menu, &obj->itemList, obj->itemFlags, MainMenu_DrawMenuRow, 0x168, 0x24);
+    Menu_Init(&obj->menu, &obj->itemList, obj->itemFlags, MainMenu_DrawMenuRow, 360, 36);
     obj->menu.options |= 0x10000;
 }
 
@@ -97,22 +97,22 @@ void Menu_DrawItems(s8 *, s32, s32, s32, s32);
 void MainMenu_DrawContinueTournamentPrompt(MainMenuPromptWindow* prompt) {
     if (func_8002AE6C() == 0) {
         Window_DrawFrame(&prompt->textFrame);
-        Ui_DrawTexturedDivider(prompt->window.frame.x, prompt->window.frame.y + 0x8D, prompt->window.frame.width, D_8007356C);
+        Ui_DrawTexturedDivider(prompt->window.frame.x, prompt->window.frame.y + 141, prompt->window.frame.width, D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(prompt->window.frame.x + 6, prompt->window.frame.y + 0x94, prompt->window.frame.width - 0xC, 0x78, D_88001FE8);
+        func_80029028(prompt->window.frame.x + 6, prompt->window.frame.y + 148, prompt->window.frame.width - 12, 120, D_88001FE8);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(0x10, 0);
-        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
         Font_EnableTwoCycleTexturing();
-        Gfx_SetPrimColor(0xFF, 0x96, 0x96, 0xFF);
-        Font_Printf(prompt->textFrame.x + 0xC, prompt->textFrame.y + 0xC, D_88002308);
+        Gfx_SetPrimColor(0xFF, 0x96, 0x96, 0xFF); // #FF9696
+        Font_Printf(prompt->textFrame.x + 12, prompt->textFrame.y + 12, D_88002308);
         Font_DisableTwoCycleTexturing();
         Font_SetActive(8, 0);
         Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
-        Font_SetLineHeight(0x1C);
-        Font_Printf(prompt->textFrame.x + 0x34, prompt->textFrame.y + 0x30, D_88002328);
+        Font_SetLineHeight(28);
+        Font_Printf(prompt->textFrame.x + 52, prompt->textFrame.y + 48, D_88002328);
         Font_EndTexturedTextRendering();
-        Menu_DrawItems(&prompt->menu, prompt->window.frame.x + 6, prompt->window.frame.y + 0x9A, 0xFFEF, 0);
+        Menu_DrawItems(&prompt->menu, prompt->window.frame.x + 6, prompt->window.frame.y + 154, 0xFFEF, 0);
     }
 }
 
@@ -147,22 +147,22 @@ extern Gfx D_80073450[];
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 /**
  * Draws an IA image at (x, y) in strips with primitive alpha `alpha`.
- * Seen in play (2026-11-12) on the main menu: it drew the 0x60 x 0x40 item pictures at x 0x59
- * (せいとん column) and 0x1C7 (いちらん column).
+ * Seen in play (2026-11-12) on the main menu: it drew the 96 x 64 item pictures at x 89
+ * (せいとん column) and 455 (いちらん column).
  */
 void MainMenu_DrawImageWithAlpha(s32 x, s32 y, s32 width, s32 height, s32 stride, u8* pixels, s32 alpha) {
     s32 rows;
     s32 n;
     s32 max_rows;
-    s32 curY;
+    s32 cur_y;
     u8* pix;
 
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineLERP(gDisplayListHead++, 0, 0, 0, TEXEL0, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, TEXEL0, TEXEL0, 0, PRIMITIVE, 0);
-    gDPSetPrimColor(gDisplayListHead++, 0, 0, 255, 255, 255, alpha);
+    gDPSetPrimColor(gDisplayListHead++, 0, 0, 255, 255, 255, alpha); // #FFFFFF
     rows = height;
     pix = pixels;
-    curY = y;
+    cur_y = y;
     if (rows > 0) {
         max_rows = 0x1000 / (stride * 2);
         do {
@@ -171,14 +171,18 @@ void MainMenu_DrawImageWithAlpha(s32 x, s32 y, s32 width, s32 height, s32 stride
             } else {
                 n = rows;
             }
-            func_8001B884(x, curY, width, n, pix, stride, 0);
+            func_8001B884(x, cur_y, width, n, pix, stride, 0);
             rows -= n;
-            curY += n;
+            cur_y += n;
             pix += n * stride * 2;
         } while (rows > 0);
     }
 }
 
+/**
+ * Empty stub.
+ * @unverified No caller found in this fragment's C.
+ */
 void func_8800075C(void) {
 }
 
@@ -190,12 +194,12 @@ void Ui_DrawTexturedFrame(s32, s32, s32, s32, u8*);
  * list, then forwards its first five arguments unchanged to Ui_DrawTexturedFrame (compare
  * Ui_DrawTexturedFrameDecal, which does the same with a decal combiner and no primitive color).
  * Seen in play (2026-11-14): a breakpoint bound to this fragment hit for each item panel's frame
- * (first call x 0x4F, y 0x4E, 0x74 x 0x70, the せいとん panel).
+ * (first call x 79, y 78, 116 x 112, the せいとん panel).
  */
 void MainMenu_DrawTexturedFrameWithAlpha(s32 x, s32 y, s32 width, s32 height, u8* texture, s32 alpha) {
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
-    gDPSetPrimColor(gDisplayListHead++, 0, 0, 255, 255, 255, alpha);
+    gDPSetPrimColor(gDisplayListHead++, 0, 0, 255, 255, 255, alpha); // #FFFFFF
     Ui_DrawTexturedFrame(x, y, width, height, texture);
 }
 
@@ -285,7 +289,7 @@ void MainMenu_DrawItem();
 /**
  * Sets up the main menu item grid with the cursor on `cursor` and disables (bit 0) the items
  * that `gb_save_status` (see MainMenu_LoadGbSaveSummary) does not allow.
- * Seen in play (2026-11-14): with a blank Green save (status 3) ずかん, てもち and とうろく drew greyed out.
+ * Seen in play (2026-11-14): with a blank Green save (status 3) ずかん, てもち and とうろく drew grayed out.
  * Seen in play (2026-11-13) ran once each time the main menu came back from another screen, before
  * its eight items were drawn.
  */
@@ -336,19 +340,19 @@ s32 MainMenu_StepItemFade(MainMenuItemList* item_list) {
 
     temp_v0 = item_list->fadeTimer;
     var_v1 = 1;
-    if (temp_v0 >= 0x17) {
+    if (temp_v0 >= 23) {
         item_list->fadeState = 4;
         return 1;
     }
-    if (temp_v0 >= 0xD) {
+    if (temp_v0 >= 13) {
         item_list->fadeState = 3;
         item_list->fadeTimer = (s32) (temp_v0 + 1);
-    } else if (temp_v0 < 0xA) {
+    } else if (temp_v0 < 10) {
         item_list->fadeState = 0;
         item_list->fadeTimer = (s32) (temp_v0 + 1);
     } else {
         var_v1 = 0;
-        if (temp_v0 < 0xC) {
+        if (temp_v0 < 12) {
             item_list->fadeState = 1;
             item_list->fadeTimer = (s32) (temp_v0 + 1);
         } else {
@@ -378,7 +382,7 @@ s32 MainMenu_DrawItemList(MainMenuItemList* item_list, s32 cursor_flags) {
         case 4:
             return 1;
         case 3:
-            n = 0x17 - item_list->fadeTimer;
+            n = 23 - item_list->fadeTimer;
             alpha = (f32)n / 10.0f;
             break;
         case 0:
@@ -393,10 +397,14 @@ s32 MainMenu_DrawItemList(MainMenuItemList* item_list, s32 cursor_flags) {
             break;
     }
     GridMenu_DrawInlineItems(&item_list->menu, 0, 0, color, &alpha);
-    MainMenu_DrawImageWithAlpha(0xE6, 0x56, 0xC8, 0x64, 0xC8, D_05018868, 255.0f * alpha);
+    MainMenu_DrawImageWithAlpha(230, 86, 200, 100, 200, D_05018868, 255.0f * alpha);
     return ret;
 }
 
+/**
+ * Empty stub.
+ * @unverified No caller found in this fragment's C.
+ */
 void func_88000FE0(void) {
 }
 
@@ -411,7 +419,7 @@ extern char D_880023C8[];
  * this.
  */
 void MainMenu_InitMessageWindow(MainMenuMessageWindow* window, s32 x, s32 y, s32 title, s32 text, s32 text2, Color_RGBA8 color, s32 image) {
-    Window_SetRect(window, x, y, 0x214, 0x8A);
+    Window_SetRect(window, x, y, 532, 138);
     window->window.animTimer = 0;
     window->window.title = 0;
     window->window.state = 0;
@@ -420,10 +428,10 @@ void MainMenu_InitMessageWindow(MainMenuMessageWindow* window, s32 x, s32 y, s32
     window->window.title = title;
     window->text = text;
     window->text2 = text2;
-    Window_InitLabeled(&window->yesButton, window->window.frame.x + 0x165, window->window.frame.y + 0x66, 0x48, *(Color_RGBA8 *)D_8800222C, D_880023C0);
-    window->yesButton.labelX = 0xA;
-    window->yesButton.unk_34 = 0xC;
-    Window_InitLabeled(&window->noButton, window->window.frame.x + 0x1BA, window->window.frame.y + 0x66, 0x48, *(Color_RGBA8 *)D_8800222C, D_880023C8);
+    Window_InitLabeled(&window->yesButton, window->window.frame.x + 357, window->window.frame.y + 102, 72, *(Color_RGBA8 *)D_8800222C, D_880023C0);
+    window->yesButton.labelX = 10;
+    window->yesButton.unk_34 = 12;
+    Window_InitLabeled(&window->noButton, window->window.frame.x + 442, window->window.frame.y + 102, 72, *(Color_RGBA8 *)D_8800222C, D_880023C8);
     window->choice.count = 2;
     window->choice.cursor = 0;
     window->choice.controller = (Controller*)D_800603C0;
@@ -446,18 +454,18 @@ void MainMenu_DrawMessageWindow(MainMenuMessageWindow* window) {
     MainMenuImage* p;
 
     if (func_8002AE6C() == 0) {
-        Ui_DrawTexturedDivider(window->window.frame.x, window->window.frame.y + 0x59, window->window.frame.width, D_8007356C);
+        Ui_DrawTexturedDivider(window->window.frame.x, window->window.frame.y + 89, window->window.frame.width, D_8007356C);
         Font_BeginTranslucentTextRendering();
         Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         Font_SetActive(8, 0);
-        Font_SetLineHeight(0x1C);
-        Font_Printf(window->window.frame.x + 0x8A, window->window.frame.y + 0xA, window->text);
-        Font_Printf(window->window.frame.x + 0xBC, window->window.frame.y + 0x68, window->text2);
+        Font_SetLineHeight(28);
+        Font_Printf(window->window.frame.x + 138, window->window.frame.y + 10, window->text);
+        Font_Printf(window->window.frame.x + 188, window->window.frame.y + 104, window->text2);
         Font_EndTexturedTextRendering();
         Window_DrawLabeled(&window->yesButton, (window->choice.cursor == 0) ? 2 : 0);
         Window_DrawLabeled(&window->noButton, (window->choice.cursor == 1) ? 2 : 0);
         p = window->image;
-        MainMenu_DrawImageWithAlpha(window->window.frame.x + 0xA, window->window.frame.y + 0xA, p->width, p->height, p->stride, p->pixels, 0xFF);
+        MainMenu_DrawImageWithAlpha(window->window.frame.x + 10, window->window.frame.y + 10, p->width, p->height, p->stride, p->pixels, 0xFF);
     }
 }
 
@@ -500,13 +508,13 @@ void Window_SetRect(s8* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
 
 /**
  * Sets up the text window (MainMenuTextWindow; same family as FreeBattle_InitLevelSumWarning):
- * a 0x224x0x60 window with style 0x2800, fill color D_88002230, title `title` and text `text`.
+ * a 548x96 window with style 0x2800, fill color D_88002230, title `title` and text `text`.
  * Seen in play (2026-11-14): runs from MainMenu_InitScreen whenever the GB save status is above 0,
  * e.g. title ポケモンセンターにいない (Not at a Pokémon Center) for a save made outside one and
  * ＧＢのポケモンがいない (No GB Pokémon) for a blank save.
  */
 void MainMenu_InitTextWindow(MainMenuTextWindow* window, s32 x, s32 y, s32 title, s32 text) {
-    Window_SetRect(window, x, y, 0x224, 0x60);
+    Window_SetRect(window, x, y, 548, 96);
     window->window.animTimer = 0;
     window->window.title = 0;
     window->window.state = 0;
@@ -527,8 +535,8 @@ void MainMenu_DrawTextWindow(MainMenuTextWindow* window) {
         Font_BeginTranslucentTextRendering();
         Gfx_SetEnvColor(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         Font_SetActive(8, 0);
-        Font_SetLineHeight(0x1C);
-        Font_Printf(window->window.frame.x + 0xA, window->window.frame.y + 0xA, window->text);
+        Font_SetLineHeight(28);
+        Font_Printf(window->window.frame.x + 10, window->window.frame.y + 10, window->text);
         Font_EndTexturedTextRendering();
     }
 }
@@ -538,6 +546,9 @@ M2C_UNK MainMenu_InitItemList(MainMenuItemList*, s32, s32);            /* extern
 extern M2C_UNK D_88002240;
 
 /**
+ * Sets up the main menu screen: the continue-tournament prompt (state 1) when
+ * gSessionContext.sessionFlags bit 0 says a tournament is in progress, otherwise the item grid
+ * (state 2), plus the GB save warning window when `gb_save_status` is above 0.
  * The caller MainMenu_LoadGbSaveSummary passes a fourth argument, &D_88002B20, which this function
  * never reads. It is declared so that call compiles; the empty `if (unused_screen_ptr)` only stops
  * the compiler from spilling the unused argument, which the ROM does not do.
@@ -551,7 +562,7 @@ void MainMenu_InitScreen(MainMenuScreen* screen, s32 gb_save_status, s32 cursor,
     }
 
     if (gSessionContext.sessionFlags & 1) {
-        MainMenu_InitPromptWindow(&screen->promptWindow, 0x82, 0x6E);
+        MainMenu_InitPromptWindow(&screen->promptWindow, 130, 110);
         screen->state = 1;
     } else {
         screen->state = 2;
@@ -561,7 +572,7 @@ void MainMenu_InitScreen(MainMenuScreen* screen, s32 gb_save_status, s32 cursor,
     screen->mode = gb_save_status;
     if (gb_save_status > 0) {
         temp_v0 = gb_save_status * 4;
-        MainMenu_InitTextWindow(&screen->textWindow, 0x2E, 0x53, *((M2C_UNK*)((u8*)&D_88002230 + temp_v0)), *((M2C_UNK*)((u8*)&D_88002240 + temp_v0))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
+        MainMenu_InitTextWindow(&screen->textWindow, 46, 83, *((M2C_UNK*)((u8*)&D_88002230 + temp_v0)), *((M2C_UNK*)((u8*)&D_88002240 + temp_v0))); // FAKE: decomp slop, raw pointer casts stand in for struct fields
     }
 }
 
@@ -580,7 +591,7 @@ void MainMenu_DrawScreen(MainMenuScreen* screen) {
     s32 temp_v0;
 
     BgStage_DrawFrame();
-    Ui_DrawTintedScreenBackground(0x38, 0x1E0, M2C_FIELD(&D_88002254, u8 *, 0), M2C_FIELD(&D_88002254, u8 *, 1), (s32) M2C_FIELD(&D_88002254, u8 *, 2));
+    Ui_DrawTintedScreenBackground(56, 480, M2C_FIELD(&D_88002254, u8 *, 0), M2C_FIELD(&D_88002254, u8 *, 1), (s32) M2C_FIELD(&D_88002254, u8 *, 2));
     temp_v0 = screen->state;
     switch (temp_v0) {                              /* irregular */
     case 1:
@@ -634,7 +645,7 @@ s32 MainMenu_UpdateScreen(MainMenuScreen* screen) {
                         screen->result = 0x8050;
                         screen->promptWindow.window.animTimer = 7;
                         screen->nextState = 4;
-                        screen->itemList.fadeTimer = 0xD;
+                        screen->itemList.fadeTimer = 13;
                         break;
                     case 2:
                         Audio_PlaySystemSound(3);
@@ -661,7 +672,7 @@ s32 MainMenu_UpdateScreen(MainMenuScreen* screen) {
                     Audio_PlaySystemSound(2);
                     screen->state = 3;
                     idx = screen->itemList.menu.cursor;
-                    MainMenu_InitMessageWindow(&screen->messageWindow, 0x36, 0x57, D_88002258[idx], D_8800227C[idx], D_880022A0[idx], D_88001FEC[idx], (s32)D_88002034[idx]);
+                    MainMenu_InitMessageWindow(&screen->messageWindow, 54, 87, D_88002258[idx], D_8800227C[idx], D_880022A0[idx], D_88001FEC[idx], (s32)D_88002034[idx]);
                 }
             }
             break;
@@ -686,7 +697,7 @@ s32 MainMenu_UpdateScreen(MainMenuScreen* screen) {
                     screen->result = MainMenu_LoadSelectedFragment(screen->itemList.menu.cursor);
                     screen->messageWindow.window.animTimer = 7;
                     screen->nextState = 4;
-                    screen->itemList.fadeTimer = 0xD;
+                    screen->itemList.fadeTimer = 13;
                 }
             }
             break;
@@ -781,7 +792,7 @@ s32 MainMenu_DrawFadeInBackground(s32 fade_mode) {
     }
     BgStage_DrawFrame();
     sp24 = MainMenu_ScaleColor(*(Color_RGBA8*)&D_88002254, D_880022C4 / 20.0);
-    Ui_DrawTintedScreenBackground(0, 0x1E0, sp24.r, sp24.g, sp24.b);
+    Ui_DrawTintedScreenBackground(0, 480, sp24.r, sp24.g, sp24.b);
     D_880022C4++;
     return 0;
 }
@@ -796,7 +807,7 @@ extern M2C_UNK D_88002254;
  */
 s32 MainMenu_DrawBackground(s32 fade_mode) {
     BgStage_DrawFrame();
-    Ui_DrawTintedScreenBackground(0, 0x1E0, M2C_FIELD(&D_88002254, u8 *, 0), M2C_FIELD(&D_88002254, u8 *, 1), (s32) M2C_FIELD(&D_88002254, u8 *, 2));
+    Ui_DrawTintedScreenBackground(0, 480, M2C_FIELD(&D_88002254, u8 *, 0), M2C_FIELD(&D_88002254, u8 *, 1), (s32) M2C_FIELD(&D_88002254, u8 *, 2));
     return 0;
 }
 
@@ -804,7 +815,7 @@ M2C_UNK GbSave_DrawSummaryBar(M2C_UNK, M2C_UNK *, M2C_UNK *, s32); /* extern */
 extern M2C_UNK D_88002A8C;
 
 /**
- * Draws the GB save summary bar sliding in from the top (6 frames, y from -0x38 to 0).
+ * Draws the GB save summary bar sliding in from the top (6 frames, y from -56 to 0).
  * Seen in play (2026-11-14): three frames in, the bar was still above the screen; once it ended,
  * the bar (1P シトシ IDNo/12345 メインメニュー) sat at the top.
  */
@@ -813,7 +824,7 @@ s32 MainMenu_DrawSummaryBarSlideIn(UNUSED s32 fade_mode) {
     s32 sp1C;
     M2C_UNK *var_a1;
 
-    sp1C = ((D_880022C8 * 0x38) / 6) - 0x38;
+    sp1C = ((D_880022C8 * 56) / 6) - 56;
     BgStage_DrawFrame();
     if (D_88002B00 == -1) {
         var_a1 = NULL;
@@ -867,7 +878,7 @@ s32 MainMenu_DrawSummaryBarAndBackground(s32 fade_mode) {
     M2C_UNK *var_a1;
 
     if (fade_mode == 1) {
-        StageFade_Start(0xF);
+        StageFade_Start(15);
     }
     BgStage_DrawFrame();
     if (D_88002B00 == -1) {
@@ -876,7 +887,7 @@ s32 MainMenu_DrawSummaryBarAndBackground(s32 fade_mode) {
         var_a1 = &D_88002B08;
     }
     GbSave_DrawSummaryBar(0, var_a1, &D_88002AAC, D_88002B00);
-    Ui_DrawTintedScreenBackground(0x38, 0x1E0, M2C_FIELD(&D_88002254, u8 *, 0), M2C_FIELD(&D_88002254, u8 *, 1), (s32) M2C_FIELD(&D_88002254, u8 *, 2));
+    Ui_DrawTintedScreenBackground(56, 480, M2C_FIELD(&D_88002254, u8 *, 0), M2C_FIELD(&D_88002254, u8 *, 1), (s32) M2C_FIELD(&D_88002254, u8 *, 2));
     MainMenu_DrawItemList(&D_88002B20->itemList, 2);
     return 0;
 }
@@ -965,7 +976,7 @@ s32 MainMenu_Init(s32 is_first_entry) {
     s32 sp1C;
     s32 temp_v0;
 
-    func_8000256C(0x434F4D50);
+    func_8000256C(0x434F4D50); // 'COMP'
     Font_Init(0x18, 0);
     func_80003EB8((u32) ((s32) &D_01000000 & 0x0F000000) >> 0x18, &D_002E0BE0, &D_002E2B90, 0);
     func_80003EB8((u32) ((s32) &D_04000000 & 0x0F000000) >> 0x18, &D_00400F70, &D_004076E0, 0);
@@ -974,12 +985,12 @@ s32 MainMenu_Init(s32 is_first_entry) {
     func_8000675C();
     if (is_first_entry == 1) {
         D_80073400 = 4;
-        func_80006828(0x14, &MainMenu_DrawFadeInBackground);
+        func_80006828(20, &MainMenu_DrawFadeInBackground);
         func_80006828(2, &MainMenu_DrawBackground);
         func_80006828(6, &MainMenu_DrawSummaryBarSlideIn);
         func_80006828(2, &MainMenu_DrawSummaryBar);
     } else {
-        func_80006828(0x11, &MainMenu_DrawSummaryBarAndBackground);
+        func_80006828(17, &MainMenu_DrawSummaryBarAndBackground);
     }
     func_8000A7B0(9);
     temp_v0 = func_80006828(0, &MainMenu_RunFrame);
@@ -987,24 +998,23 @@ s32 MainMenu_Init(s32 is_first_entry) {
     D_80073400 = D_88002B20->itemList.menu.cursor + 1;
     if (temp_v0 != 0x8040) {
         if (temp_v0 == 0x8050) {
-            func_80006998(0xFFFF);
+            func_80006998(0xFFFF); // #FFFFFF
         } else {
             func_80006998(1);
         }
-        StageFade_Start(0xF);
-        func_80006828(0x11, &MainMenu_DrawFrame);
-        func_8000A7FC(0xF);
+        StageFade_Start(15);
+        func_80006828(17, &MainMenu_DrawFrame);
+        func_8000A7FC(15);
     } else {
         func_80006998(1);
     }
     func_80006724();
     MainMenu_Free();
     func_8001A360();
-    func_80002620(0x434F4D50);
+    func_80002620(0x434F4D50); // 'COMP'
     return sp1C;
 }
 
-M2C_UNK func_80025BA0(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, s32);
 extern M2C_UNK D_82000000;
 extern M2C_UNK D_00166580;
 extern M2C_UNK D_001720F0;
@@ -1021,7 +1031,7 @@ s32 MainMenu_Enter(s32 is_first_entry, s32 unused) {
 
     if (gSessionContext.transitionFlags & 0x100) {
         ret = 0x8040;
-        func_80025BA0(((u32)((s32)&D_82000000 & 0x0FF00000) >> 0x14) - 0x10, &D_00166580, &D_001720F0, 0, 0);
+        Fragment_QueueCall(((u32)((s32)&D_82000000 & 0x0FF00000) >> 0x14) - 0x10, &D_00166580, &D_001720F0, 0, 0);
     } else {
         ret = MainMenu_Init(is_first_entry);
     }

@@ -50,7 +50,7 @@ void CartridgeCheck_UnusedNoop1(void) {
  * from the second angle where Zero adds it.
  */
 s32 CartridgeCheck_LightAngleCallback(s32 event, GeoLightNode* light) {
-    UNUSED s32 pad; // keeps the retail stack layout: the three locals below sit 4 bytes lower
+    UNUSED s32 pad; // FAKE: stack padding; keeps the retail stack layout: the three locals below sit 4 bytes lower
     f32 sp28;
     s16 sp26;
     s16 sp24;
@@ -113,8 +113,8 @@ void CartridgeCheck_DrawGameBoyIcon(s32 x, s32 y, s32 port, s32 game) {
     if (game == 0) {
         gDPSetEnvColor(gDisplayListHead++, 0xFF, 0xFF, 0xFF, 0x64); // #FFFFFF64
     }
-    Gfx_DrawTextureRgba16(x, y, 0x32, 0x20, D_04007298, 0x40, 0);
-    Gfx_DrawTextureRgba16(x, y + 0x20, 0x32, 0x19, D_04008298, 0x40, 0);
+    Gfx_DrawTextureRgba16(x, y, 50, 0x20, D_04007298, 0x40, 0);
+    Gfx_DrawTextureRgba16(x, y + 0x20, 50, 25, D_04008298, 0x40, 0);
     gDPSetCombineMode(gDisplayListHead++, G_CC_MODULATEIA_PRIM, G_CC_MODULATEIA_PRIM);
     if (game != 0) {
         switch (game) {
@@ -175,45 +175,45 @@ void CartridgeCheck_DrawPortPanel(s32 port, s32 x, s32 y) {
     Color_RGB8 sel_bottom = D_88402F88;
 
     if (port == D_88403358) {
-        Ui_DrawGradientPanel(x, y, 0x80, 0x46, &sel_top, &sel_bottom);
+        Ui_DrawGradientPanel(x, y, 0x80, 70, &sel_top, &sel_bottom);
     } else {
-        Ui_DrawGradientPanel(x, y, 0x80, 0x46, &top, &bottom);
+        Ui_DrawGradientPanel(x, y, 0x80, 70, &top, &bottom);
     }
     CartridgeCheck_DrawGameBoyIcon(x + 6, y + 6, port, D_88403310[port].game);
     Font_BeginTranslucentTextRendering();
     if (D_88403310[port].game != 0) {
         Font_SetActive(1, -2);
-        Gfx_SetEnvColor(0xFF, 0xBD, 0x6B, 0xFF);
-        Font_Printf(x + 0x3E, y + 6, D_88403170);
-        Font_Printf(x + 0x52, y + 6, D_88403174);
-        Font_Printf(x + 0x3E, y + 0x24, D_88403178);
-        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+        Gfx_SetEnvColor(0xFF, 0xBD, 0x6B, 0xFF); // #FFBD6B
+        Font_Printf(x + 62, y + 6, D_88403170);
+        Font_Printf(x + 82, y + 6, D_88403174);
+        Font_Printf(x + 62, y + 36, D_88403178);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
         if (D_88403310[port].saveState == 0) {
             Font_SetActive(2, -2);
-            Font_Printf(x + 0x3E, y + 0x12, D_88403184, D_88403310[port].trainerId);
+            Font_Printf(x + 62, y + 18, D_88403184, D_88403310[port].trainerId);
             Font_SetActive(2, -1);
-            Font_Printf(x + 0x3E, y + 0x30, D_88403310[port].name);
+            Font_Printf(x + 62, y + 48, D_88403310[port].name);
         } else {
             Font_SetActive(2, -2);
-            Font_Printf(x + 0x3E, y + 0x12, D_8840318C);
+            Font_Printf(x + 62, y + 18, D_8840318C);
             Font_SetActive(2, -1);
-            Font_Printf(x + 0x3E, y + 0x30, D_88403198);
+            Font_Printf(x + 62, y + 48, D_88403198);
         }
     } else {
         Font_SetActive(1, -1);
-        Gfx_SetEnvColor(0xFF, 0xFF, 0x64, 0xFF);
+        Gfx_SetEnvColor(0xFF, 0xFF, 0x64, 0xFF); // #FFFF64
         if (D_88403310[port].saveState == 2) {
-            Font_Printf(x + 0xE, y + 0x14, D_884031A4);
-            Font_Printf(x + 0x1E, y + 0x23, D_884031BC);
+            Font_Printf(x + 14, y + 20, D_884031A4);
+            Font_Printf(x + 30, y + 35, D_884031BC);
         } else if (D_88403310[port].saveState == 1) {
             switch (GbSave_GetPortAvailability(port)) {
                 case 1:
-                    Font_Printf(x + 0x19, y + 0x14, D_884031D0);
-                    Font_Printf(x + 0x19, y + 0x23, D_884031E0);
+                    Font_Printf(x + 25, y + 20, D_884031D0);
+                    Font_Printf(x + 25, y + 35, D_884031E0);
                     break;
                 case 2:
-                    Font_Printf(x + 4, y + 0x14, D_884031F4);
-                    Font_Printf(x + 0x14, y + 0x23, D_88403210);
+                    Font_Printf(x + 4, y + 20, D_884031F4);
+                    Font_Printf(x + 20, y + 35, D_88403210);
                     break;
             }
         }

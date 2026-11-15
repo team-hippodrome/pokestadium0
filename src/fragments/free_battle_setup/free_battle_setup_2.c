@@ -25,12 +25,12 @@ void func_8000A460(void*, void*);
  * Not reached in play: only FreeBattle_BuildGbCartSides calls it (see FreeBattle_SetupGbCartVersus).
  * @unverified Name from the code.
  */
-void FreeBattle_LoadGbCartTrainer(TeamRoster* slot, ExtendedRosterInfo* info, s32 controllerPort, s32 gb_port) {
+void FreeBattle_LoadGbCartTrainer(TeamRoster* slot, ExtendedRosterInfo* info, s32 controller_port, s32 gb_port) {
     s32 sp2C;
 
     slot->isHuman = 1;
-    slot->controllerPort = controllerPort;
-    slot->controller = &gControllers[controllerPort];
+    slot->controllerPort = controller_port;
+    slot->controller = &gControllers[controller_port];
     slot->trainerId = GbSave_GetTrainerId(gb_port);
     slot->numberOfPokemonBrought = 0;
     slot->rosterInfo = info;

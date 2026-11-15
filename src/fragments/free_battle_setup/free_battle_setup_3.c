@@ -198,7 +198,7 @@ void FreeBattle_DrawMenuRow(s32 x, s32 y, char* text, s32 index, s32 flags, s32*
     s32 temp_v0 = *row_width;
 
     if (flags & 0x10) {
-        Ui_FillRectHighlighted(x + 3, y + 3, temp_v0 - 6, 0x1A, D_82009100);
+        Ui_FillRectHighlighted(x + 3, y + 3, temp_v0 - 6, 26, D_82009100);
     }
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(flags);
@@ -225,17 +225,17 @@ M2C_UNK Menu_Init(void*, void*, void*, void (*)(s32, s32, char *, s32, s32, s32 
  * Sets up a titled menu window with item and description tables.
  * Seen in play: A on フリーバトル opens 「たいせんルールせんたく」 (フリーバトル, L 1～30 バトル, L50～55 バトル) and runs this.
  */
-void FreeBattle_InitMenuWindow(MenuWindow* window, s32 x, s32 y, s32 width, s32 height, s32 items, s32 item_count, char** descriptions, s32 descriptionLines, char* title) {
+void FreeBattle_InitMenuWindow(MenuWindow* window, s32 x, s32 y, s32 width, s32 height, s32 items, s32 item_count, char** descriptions, s32 description_lines, char* title) {
     Window_SetRect(&window->window, x, y, width, height);
     window->window.state = 0;
     window->window.animTimer = 0;
     window->window.frame.style = 0x801;
     window->window.title = title;
     func_80027804(&window->itemList, items, item_count, item_count);
-    Menu_Init(&window->menu, &window->itemList, window->itemFlags, FreeBattle_DrawMenuRow, width - 0xC, 0x20);
+    Menu_Init(&window->menu, &window->itemList, window->itemFlags, FreeBattle_DrawMenuRow, width - 12, 0x20);
     window->menu.options = (s32) (window->menu.options | 0x10000);
     window->descriptions = descriptions;
-    window->descriptionLines = descriptionLines;
+    window->descriptionLines = description_lines;
 }
 
 s32 func_8002AE6C();
@@ -260,15 +260,15 @@ void FreeBattle_DrawMenuWindow(MenuWindow* window, s32 flags) {
         temp_s1 = (window->menu.items->count << 5) + 8;
         Ui_DrawTexturedDivider(window->window.frame.x, window->window.frame.y + temp_s1 + 5, window->window.frame.width, &D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(window->window.frame.x + 6, window->window.frame.y + 6, window->window.frame.width - 0xC, temp_s1, *(Color82001CCC*)&D_82009100);
-        Ui_FillRectPrimEnvColor(window->window.frame.x + 6, window->window.frame.y + temp_s1 + 0xC, window->window.frame.width - 0xC, window->descriptionLines * 0x1C, D_82009104, D_82009108);
+        func_80029028(window->window.frame.x + 6, window->window.frame.y + 6, window->window.frame.width - 12, temp_s1, *(Color82001CCC*)&D_82009100);
+        Ui_FillRectPrimEnvColor(window->window.frame.x + 6, window->window.frame.y + temp_s1 + 12, window->window.frame.width - 12, window->descriptionLines * 28, D_82009104, D_82009108);
         sp38 = window->window.frame.width - 0xC;
-        Menu_DrawItems(&window->menu, window->window.frame.x + 6, window->window.frame.y + 0xA, flags | 0xFFED, (s8*)&sp38);
+        Menu_DrawItems(&window->menu, window->window.frame.x + 6, window->window.frame.y + 10, flags | 0xFFED, (s8*)&sp38);
         func_8001AB6C();
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
-        Font_SetLineHeight(0x1C);
-        Font_Printf(window->window.frame.x + 0xE, window->window.frame.y + temp_s1 + 0x10, window->descriptions[window->menu.cursor]);
+        Font_SetLineHeight(28);
+        Font_Printf(window->window.frame.x + 14, window->window.frame.y + temp_s1 + 0x10, window->descriptions[window->menu.cursor]);
         func_8001ABBC();
     }
 }
@@ -312,12 +312,12 @@ s32 FreeBattle_UpdateMenuWindow(MenuWindow* window) {
  */
 void FreeBattle_DrawPopupRow(s32 x, s32 y, char* text, s32 index, s32 flags, MenuWindow* window) {
     if (flags & 0x18) {
-        Ui_FillRectHighlighted(x + 3, y + 3, window->window.frame.width - 0x12, 0x1E, window->window.frame.color);
+        Ui_FillRectHighlighted(x + 3, y + 3, window->window.frame.width - 18, 30, window->window.frame.color);
     }
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(flags);
     Font_SetActive(0x10, 0);
-    Font_Printf(x + 0xC, y + 6, text);
+    Font_Printf(x + 12, y + 6, text);
     Font_EndTexturedTextRendering();
 }
 
@@ -345,9 +345,9 @@ void FreeBattle_InitPopupMenu(MenuWindow* window, s32 x, s32 y, List820061F0 *it
     }
     func_80027804(&window->itemList, (s32)items->items, items->count, items->count);
     h = max * 0x18 + 0x18;
-    Menu_Init(&window->menu, &window->itemList, item_flags, (void (*)(s32, s32, char *, s32, s32, s32 *))FreeBattle_DrawPopupRow, h, 0x24);
+    Menu_Init(&window->menu, &window->itemList, item_flags, (void (*)(s32, s32, char *, s32, s32, s32 *))FreeBattle_DrawPopupRow, h, 36);
     window->menu.options |= 0x10000;
-    Window_SetRect(&window->window, x, y, h + 0xC, items->count * 0x24 + 0x18);
+    Window_SetRect(&window->window, x, y, h + 12, items->count * 36 + 24);
     window->window.animTimer = 0;
     window->window.title = 0;
     window->window.state = 0;
@@ -371,7 +371,7 @@ void FreeBattle_DrawPopupMenu(MenuWindow* window, s32 flags)
     if (window && window)
     {
     }
-    Menu_DrawItems(new_var = &window->menu, window->window.frame.x + 6, window->window.frame.y + 0xC, flags | 0xFFED, (s8*)window);
+    Menu_DrawItems(new_var = &window->menu, window->window.frame.x + 6, window->window.frame.y + 12, flags | 0xFFED, (s8*)window); // FAKE: permuter temp
   }
 }
 
@@ -409,7 +409,7 @@ void FreeBattle_DrawOpponentOption(s32 x, s32 y, char* text, s32 index, s32 flag
     Color_RGBA8 c;
 
     if (flags & 0x10) {
-        Ui_FillRectHighlighted(x + 3, y + 3, 0x46, 0x16, D_82009100);
+        Ui_FillRectHighlighted(x + 3, y + 3, 70, 22, D_82009100);
     }
     Font_BeginTranslucentTextRendering();
     c = ((Color_RGBA8*)&D_800734A8)[(flags & 2) ? 0 : 1];
@@ -442,10 +442,10 @@ void Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
  * Draws the four controller ports, marking the connected and active ones.
  * Seen in play: draws the controller pictures in 「あいてをせんたく」.
  */
-void FreeBattle_DrawControllerPanel(s32 x, s32 y, s32 present, s32 active, s32 markA, s32 markB) {
+void FreeBattle_DrawControllerPanel(s32 x, s32 y, s32 present, s32 active, s32 mark_a, s32 mark_b) {
     s32 i;
 
-    Ui_FillRectPrimEnvColor(x, y, 0x186, 0x8D, D_8200914C, D_82009150);
+    Ui_FillRectPrimEnvColor(x, y, 390, 141, D_8200914C, D_82009150);
     Ui_DrawImageInStrips(D_8200911C, x + 0x88, y + 5);
     for (i = 0; i != 4; i++) {
         if ((present >> i) & 1) {
@@ -455,11 +455,11 @@ void FreeBattle_DrawControllerPanel(s32 x, s32 y, s32 present, s32 active, s32 m
                 Ui_DrawImageInStrips(D_8200913C, D_8200915C[i].x + x, D_8200915C[i].y + y + 0xC);
             }
         }
-        if ((markA >> i) & 1) {
-            Ui_DrawRoundedFrame(D_8200915C[i].x + x, D_8200915C[i].y + y, 0x3A, 0x43, D_82009154);
+        if ((mark_a >> i) & 1) {
+            Ui_DrawRoundedFrame(D_8200915C[i].x + x, D_8200915C[i].y + y, 58, 67, D_82009154);
         }
-        if ((markB >> i) & 1) {
-            Ui_DrawRoundedFrame(D_8200915C[i].x + x, D_8200915C[i].y + y, 0x3A, 0x43, D_82009158);
+        if ((mark_b >> i) & 1) {
+            Ui_DrawRoundedFrame(D_8200915C[i].x + x, D_8200915C[i].y + y, 58, 67, D_82009158);
         }
     }
 }
@@ -474,7 +474,7 @@ extern M2C_UNK D_82009F70;
  * FreeBattle_InitOpponentSelect
  *
  * Initializes the FreeBattleOpponentWindow window: calls
- * Window_SetRect(&window->window, x, y, 0x192, 0x10F), style 0x801, title D_82009F70; the
+ * Window_SetRect(&window->window, x, y, 402, 271), style 0x801, title D_82009F70; the
  * four options D_8200917C go into itemList and the menu (FreeBattle_DrawOpponentOption rows).
  * controllerMask = controllerMask. With mask = ~controllerMask (OR 0xE when controllerCount == 1), each of the bits 2, 4 and 8
  * set in mask disables option 0, 1 or 2. Stores gbSaveReadyMask at unk_70 and moves the cursor to an
@@ -487,13 +487,13 @@ extern M2C_UNK D_82009F70;
  * sp+0x28.
  * Seen in play: たいせんする opens 「あいてをせんたく」 (1P VS, 2P 3P 4P COM) and runs this.
  */
-void FreeBattle_InitOpponentSelect(FreeBattleOpponentWindow* window, s32 x, s32 y, s32 controllerMask, s32 controller_count, s32 gb_save_ready_mask) {
+void FreeBattle_InitOpponentSelect(FreeBattleOpponentWindow* window, s32 x, s32 y, s32 controller_mask, s32 controller_count, s32 gb_save_ready_mask) {
     s32 pad; // FAKE: stack padding
     s8 *sp2C;
     s8 *sp28;
     s32 var_v1;
 
-    Window_SetRect(&window->window, x, y, 0x192, 0x10F);
+    Window_SetRect(&window->window, x, y, 402, 271);
     window->window.animTimer = 0;
     window->window.state = 0;
     window->window.frame.style = 0x801;
@@ -501,10 +501,10 @@ void FreeBattle_InitOpponentSelect(FreeBattleOpponentWindow* window, s32 x, s32 
     sp2C = (s8*)&window->itemList;
     func_80027804(sp2C, (s32)&D_8200917C, 4, 4);
     sp28 = (s8*)&window->menu;
-    Menu_Init(sp28, sp2C, window->itemFlags, (void (*)(s32, s32, char *, s32, s32, s32 *))FreeBattle_DrawOpponentOption, 0x4C, 0x1C);
+    Menu_Init(sp28, sp2C, window->itemFlags, (void (*)(s32, s32, char *, s32, s32, s32 *))FreeBattle_DrawOpponentOption, 76, 28);
     window->menu.options = (s32) (window->menu.options | 0x10000);
-    window->controllerMask = controllerMask;
-    var_v1 = ~controllerMask;
+    window->controllerMask = controller_mask;
+    var_v1 = ~controller_mask;
     if (controller_count == 1) {
         var_v1 |= 0xE;
     }
@@ -518,7 +518,7 @@ void FreeBattle_InitOpponentSelect(FreeBattleOpponentWindow* window, s32 x, s32 
         window->menu.itemFlags[2] |= 1;
     }
     window->unk_70 = gb_save_ready_mask;
-    Menu_SkipDisabledForward(sp28, controllerMask);
+    Menu_SkipDisabledForward(sp28, controller_mask);
 }
 
 void Ui_DrawImageInStrips(void*, s32, s32);
@@ -542,16 +542,16 @@ void FreeBattle_DrawOpponentSelect(FreeBattleOpponentWindow* window) {
 
     sp2C = 0;
     if (func_8002AE6C() == 0) {
-        Ui_DrawTexturedDivider(window->window.frame.x, window->window.frame.y + 0x92, window->window.frame.width, &D_8007356C);
+        Ui_DrawTexturedDivider(window->window.frame.x, window->window.frame.y + 146, window->window.frame.width, &D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(window->window.frame.x + 6, window->window.frame.y + 0x99, window->window.frame.width - 0xC, 0x70, *(Color82001CCC*)&D_82009100);
+        func_80029028(window->window.frame.x + 6, window->window.frame.y + 153, window->window.frame.width - 12, 112, *(Color82001CCC*)&D_82009100);
         Ui_DrawImageInStrips(D_8200910C, window->window.frame.x + 0xA9, window->window.frame.y + 0xC1);
         func_8001AB6C();
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
-        Font_Printf(window->window.frame.x + 0x36, window->window.frame.y + 0xC3, D_82009F84);
+        Font_Printf(window->window.frame.x + 54, window->window.frame.y + 195, D_82009F84);
         func_8001ABBC();
-        Menu_DrawItems(&window->menu, window->window.frame.x + 0x110, window->window.frame.y + 0x99, 0xFEF, 0);
+        Menu_DrawItems(&window->menu, window->window.frame.x + 272, window->window.frame.y + 153, 0xFEF, 0);
         switch (window->menu.cursor) {
             case 0:
                 sp2C = 2;
@@ -623,7 +623,7 @@ void FreeBattle_DrawTagOpponentOption(s32 x, s32 y, char* text, s32 index, s32 f
     Color_RGBA8 c;
 
     if (flags & 0x10) {
-        Ui_FillRectHighlighted(x + 3, y + 3, 0x6E, 0x16, D_82009100);
+        Ui_FillRectHighlighted(x + 3, y + 3, 110, 22, D_82009100);
     }
     Font_BeginTranslucentTextRendering();
     c = ((Color_RGBA8*)&D_800734A8)[(flags & 2) ? 0 : 1];
@@ -686,13 +686,13 @@ extern M2C_UNK D_82009FCC;
  * Free Battle only offers 1P against one opponent.
  * @unverified Name from the code.
  */
-void FreeBattle_InitTagOpponentSelect(FreeBattleTeamOpponentWindow* window, s32 x, s32 y, s32 controllerMask, s32 controller_count, s32 gb_save_ready_mask) {
+void FreeBattle_InitTagOpponentSelect(FreeBattleTeamOpponentWindow* window, s32 x, s32 y, s32 controller_mask, s32 controller_count, s32 gb_save_ready_mask) {
     s32 pad; // FAKE: stack padding
     void *sp2C;
     void *sp28;
     s32 var_v1;
 
-    Window_SetRect(&window->window, x, y, 0x192, 0x163);
+    Window_SetRect(&window->window, x, y, 402, 355);
     window->window.animTimer = 0;
     window->window.state = 0;
     window->window.frame.style = 0x801;
@@ -700,14 +700,14 @@ void FreeBattle_InitTagOpponentSelect(FreeBattleTeamOpponentWindow* window, s32 
     sp2C = &window->sideItemList;
     func_80027804(sp2C, (s32)&D_82009190, 4, 4);
     sp28 = &window->sideMenu;
-    Menu_Init(sp28, sp2C, &window->sideItemFlags, (void (*)(s32, s32, char *, s32, s32, s32 *))FreeBattle_DrawTagOpponentOption, 0x74, 0x1C);
+    Menu_Init(sp28, sp2C, &window->sideItemFlags, (void (*)(s32, s32, char *, s32, s32, s32 *))FreeBattle_DrawTagOpponentOption, 116, 28);
     sp2C = &window->opponentItemList;
     window->sideMenu.options = (s32) (window->sideMenu.options | 0x10000);
     func_80027804(sp2C, (s32)&D_820091A0, 7, 7);
-    Menu_Init(&window->opponentMenu, sp2C, &window->opponentItemFlags, (void (*)(s32, s32, char *, s32, s32, s32 *))FreeBattle_DrawTagOpponentOption, 0x74, 0x1C);
+    Menu_Init(&window->opponentMenu, sp2C, &window->opponentItemFlags, (void (*)(s32, s32, char *, s32, s32, s32 *))FreeBattle_DrawTagOpponentOption, 116, 28);
     window->opponentMenu.options = (s32) (window->opponentMenu.options | 0x10000);
-    window->controllerMask = controllerMask;
-    var_v1 = ~controllerMask;
+    window->controllerMask = controller_mask;
+    var_v1 = ~controller_mask;
     if (controller_count == 2) {
         var_v1 |= 0xE;
     }
@@ -734,63 +734,63 @@ void FreeBattle_InitTagOpponentSelect(FreeBattleTeamOpponentWindow* window, s32 
  * @unverified Name from the code.
  */
 void FreeBattle_DrawTagOpponentSelect(FreeBattleTeamOpponentWindow* window) {
-    s32 maskB = 0xFED, maskA = 0xFED;
+    s32 mask_b = 0xFED, mask_a = 0xFED;
     s32 pad[1]; // FAKE: stack padding
-    s32 markA = 0;
-    s32 markB = 0;
+    s32 mark_a = 0;
+    s32 mark_b = 0;
 
     if (func_8002AE6C(&window->window) == 0) {
-        Ui_DrawTexturedDivider(window->window.frame.x, window->window.frame.y + 0x92, window->window.frame.width, &D_8007356C);
+        Ui_DrawTexturedDivider(window->window.frame.x, window->window.frame.y + 146, window->window.frame.width, &D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(window->window.frame.x + 6, window->window.frame.y + 0x99, window->window.frame.width - 0xC, 0xC4, *(Color82001CCC*)&D_82009100);
+        func_80029028(window->window.frame.x + 6, window->window.frame.y + 153, window->window.frame.width - 12, 196, *(Color82001CCC*)&D_82009100);
         Ui_DrawImageInStrips(D_8200910C, window->window.frame.x + 0xA9, window->window.frame.y + 0xF9);
         if (window->focus != 0) {
             if (window->focus == 1) {
-                maskB = 0xFEF;
+                mask_b = 0xFEF;
             }
         } else {
-            maskB = 0xFFD;
-            maskA = 0xFEF;
+            mask_b = 0xFFD;
+            mask_a = 0xFEF;
         }
-        Menu_DrawItems(&window->sideMenu, window->window.frame.x + 0x22, window->window.frame.y + 0xD1, maskB, NULL);
-        Menu_DrawItems(&window->opponentMenu, window->window.frame.x + 0xFC, window->window.frame.y + 0x99, maskA, NULL);
+        Menu_DrawItems(&window->sideMenu, window->window.frame.x + 34, window->window.frame.y + 209, mask_b, NULL);
+        Menu_DrawItems(&window->opponentMenu, window->window.frame.x + 252, window->window.frame.y + 153, mask_a, NULL);
         switch ((u32)window->sideMenu.cursor) {
             case 0:
-                markA = 1;
+                mark_a = 1;
                 break;
             case 1:
-                markA = 3;
+                mark_a = 3;
                 break;
             case 2:
-                markA = 5;
+                mark_a = 5;
                 break;
             case 3:
-                markA = 9;
+                mark_a = 9;
                 break;
         }
         if (window->focus == 0) {
             switch ((u32)window->opponentMenu.cursor) {
                 case 0:
-                    markB = 2;
+                    mark_b = 2;
                     break;
                 case 1:
-                    markB = 4;
+                    mark_b = 4;
                     break;
                 case 2:
-                    markB = 8;
+                    mark_b = 8;
                     break;
                 case 3:
-                    markB = 6;
+                    mark_b = 6;
                     break;
                 case 4:
-                    markB = 0xA;
+                    mark_b = 0xA;
                     break;
                 case 5:
-                    markB = 0xC;
+                    mark_b = 0xC;
                     break;
             }
         }
-        FreeBattle_DrawControllerPanel(window->window.frame.x + 6, window->window.frame.y + 6, window->controllerMask, window->unk_C4, markA, markB);
+        FreeBattle_DrawControllerPanel(window->window.frame.x + 6, window->window.frame.y + 6, window->controllerMask, window->unk_C4, mark_a, mark_b);
     }
 }
 
@@ -920,7 +920,7 @@ void FreeBattle_DrawBattleModeCard(s32 x, s32 y, s32* mode, s32 index, s32 flags
     Box82007398 sp24;
 
     if (flags & 0x10) {
-        Ui_FillRectHighlighted(x + 3, y + 3, 0xB2, 0xC2, D_82009100);
+        Ui_FillRectHighlighted(x + 3, y + 3, 178, 194, D_82009100);
     }
     sp24.unk_08 = sp24.unk_04 = sp24.unk_00 = 0x98;
     sp24.unk_0C = mode[2];
@@ -928,7 +928,7 @@ void FreeBattle_DrawBattleModeCard(s32 x, s32 y, s32* mode, s32 index, s32 flags
     Font_BeginTranslucentTextRendering();
     Font_SetColorForFlags(flags);
     Font_SetActive(0x10, 0);
-    Font_Printf(x + 0x16, y + 0xAA, (char*)mode[0]);
+    Font_Printf(x + 22, y + 170, (char*)mode[0]);
     Font_EndTexturedTextRendering();
 }
 
@@ -936,7 +936,7 @@ void FreeBattle_DrawBattleModeCard(s32 x, s32 y, s32* mode, s32 index, s32 flags
  * FreeBattle_InitBattleModeWindow
  *
  * Initializes the FreeBattleModeWindow arg0: calls
- * Window_SetRect(arg0, arg1, arg2, 0x190, 0x12E), clears the words at 0x24
+ * Window_SetRect(arg0, arg1, arg2, 400, 302), clears the words at 0x24
  * and 0x28, sets the word at 0x14 to 0x801 and the word at 0x20 to arg4.
  * Calls func_80027410 on the sub-object at arg0 + 0x54 with (arg3, 0xC, 2, 2),
  * then GridMenu_Init on the sub-objects at 0x2C, 0x54 and 0x64 with
@@ -956,13 +956,13 @@ M2C_UNK GridMenu_Init(s8 *, s8 *, s8 *, M2C_UNK *, s32, s32, s32); /* extern */
  * Seen in play: runs when B backs out of the rule list to the バトルモード window.
  */
 void FreeBattle_InitBattleModeWindow(FreeBattleModeWindow* window, s32 x, s32 y, s32 modes, s32 title) {
-    Window_SetRect(window, x, y, 0x190, 0x12E);
+    Window_SetRect(window, x, y, 400, 302);
     window->window.animTimer = 0;
     window->window.state = 0;
     window->window.frame.style = 0x801;
     window->window.title = title;
     func_80027410(&window->items, modes, 0xC, 2, 2);
-    GridMenu_Init(&window->menu, &window->items, &window->itemFlags, (M2C_UNK*)FreeBattle_DrawBattleModeCard, 2, 0xB8, 0xC8);
+    GridMenu_Init(&window->menu, &window->items, &window->itemFlags, (M2C_UNK*)FreeBattle_DrawBattleModeCard, 2, 184, 200);
     window->menu.options = (s32)(window->menu.options | 0x10000);
     window->modes = modes;
 }
@@ -987,17 +987,17 @@ M2C_UNK GridMenu_DrawInlineItems(s8*, s32, s32, s32, s32);
  */
 void FreeBattle_DrawBattleModeWindow(FreeBattleModeWindow* window) {
     if (func_8002AE6C() == 0) {
-        Ui_DrawTexturedFrameDecal(window->window.frame.x + 0xE, window->window.frame.y + 0xE, 0x174, 0xCC, D_800735C4);
-        Ui_DrawTexturedDivider(window->window.frame.x, window->window.frame.y + 0xE1, window->window.frame.width, &D_8007356C);
+        Ui_DrawTexturedFrameDecal(window->window.frame.x + 14, window->window.frame.y + 14, 372, 204, D_800735C4);
+        Ui_DrawTexturedDivider(window->window.frame.x, window->window.frame.y + 225, window->window.frame.width, &D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(window->window.frame.x + 6, window->window.frame.y + 6, window->window.frame.width - 0xC, 0xDC, *(Color82001CCC*)&D_82009100);
-        Ui_FillRectPrimEnvColor(window->window.frame.x + 6, window->window.frame.y + 0xE8, window->window.frame.width - 0xC, 0x40, D_820091BC, D_820091C0);
+        func_80029028(window->window.frame.x + 6, window->window.frame.y + 6, window->window.frame.width - 12, 220, *(Color82001CCC*)&D_82009100);
+        Ui_FillRectPrimEnvColor(window->window.frame.x + 6, window->window.frame.y + 232, window->window.frame.width - 12, 0x40, D_820091BC, D_820091C0);
         GridMenu_DrawInlineItems(&window->menu, window->window.frame.x + 0x10, window->window.frame.y + 0x10, 0xFFEF, 0);
         func_8001AB6C();
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
-        Font_SetLineHeight(0x1C);
-        Font_Printf(window->window.frame.x + 0x14, window->window.frame.y + 0xEC, ((FreeBattleModeEntry*)window->modes)[window->menu.cursor].text);
+        Font_SetLineHeight(28);
+        Font_Printf(window->window.frame.x + 20, window->window.frame.y + 236, ((FreeBattleModeEntry*)window->modes)[window->menu.cursor].text);
         func_8001ABBC();
     }
 }
@@ -1049,27 +1049,27 @@ void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 /**
  * Draws one row of 「カップせんたく」: highlight box when selected (flag 0x10), a cleared-cup icon at the
  * right when flag 0x100 is set, and the cup name dimmed when locked.
- * Seen in play: draws モンスターボールカップ (boxed) and the greyed スーパーボール, ハイパーボール and マスターボールカップ.
+ * Seen in play: draws モンスターボールカップ (boxed) and the grayed スーパーボール, ハイパーボール and マスターボールカップ.
  * Seen in play (2026-11-13) drew the rows of 「カップせんたく」 for the L1～30 tournament (モンスターボールカップ, then
- * the greyed スーパー, ハイパー and マスターボール cups).
+ * the grayed スーパー, ハイパー and マスターボール cups).
  */
 void FreeBattle_DrawCupRow(s32 x, s32 y, IconPanel* cup, s32 index, s32 flags) {
     UNUSED s32 pad[5]; // FAKE: stack padding
     s32 sp28;
 
     if (flags & 0x10) {
-        Ui_FillRectHighlighted(x + 3, y + 3, 0x14A, 0x1E, D_82009100);
+        Ui_FillRectHighlighted(x + 3, y + 3, 330, 30, D_82009100);
     }
     if (flags & 0x100) {
         gSPDisplayList(gDisplayListHead++, D_80060290);
-        func_8001B884(x + 0x12C, y + 6, 0x18, 0x18, cup->icon, 0x18, 0x200000);
+        func_8001B884(x + 300, y + 6, 24, 24, cup->icon, 24, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80060398);
     }
     sp28 = y + 6;
     Font_BeginTranslucentTextRendering();
     Ui_SetTextColorForFlags(flags);
     Font_SetActive(0x10, 0);
-    Font_Printf(x + 0xC, sp28, cup->text);
+    Font_Printf(x + 12, sp28, cup->text);
     Font_EndTexturedTextRendering();
 }
 
@@ -1090,7 +1090,7 @@ void FreeBattle_InitCupSelect(FreeBattleCupWindow* window, s32 x, s32 y, s32 cup
     } else {
         n = cups_cleared + 1;
     }
-    Window_SetRect(window, x, y, 0x15C, 0xA8);
+    Window_SetRect(window, x, y, 348, 168);
     window->window.animTimer = 0;
     window->window.title = NULL;
     window->window.state = 0;
@@ -1098,7 +1098,7 @@ void FreeBattle_InitCupSelect(FreeBattleCupWindow* window, s32 x, s32 y, s32 cup
     window->window.frame.color = D_82009100;
     window->window.title = D_8200A040;
     func_80027410(&window->items, (s32)D_820091C4, 8, 4, 4);
-    Menu_Init(&window->menu, &window->items, &window->itemFlags, (void (*)(s32, s32, char*, s32, s32, s32*))FreeBattle_DrawCupRow, 0x150, 0x24);
+    Menu_Init(&window->menu, &window->items, &window->itemFlags, (void (*)(s32, s32, char*, s32, s32, s32*))FreeBattle_DrawCupRow, 336, 36);
     window->menu.options |= 0x10000;
     window->menu.cursor = n - 1;
     for (i = 0; i < cups_cleared; i++) {
@@ -1183,7 +1183,7 @@ void FreeBattle_InitUsableMonGrid(FreeBattleMonGridWindow* window, s32 x, s32 y,
     }
     D_820091EC[0].mons = all_mons;
     D_820091EC[1].mons = l130_mons;
-    Window_SetRect(window, x, y, 0x235, 0x174);
+    Window_SetRect(window, x, y, 565, 372);
     window->window.animTimer = 0;
     window->window.title = 0;
     window->window.state = 0;
@@ -1225,7 +1225,7 @@ void FreeBattle_DrawUsableMonGrid(FreeBattleMonGridWindow* window, s32 flags) {
     if (func_8002AE6C() == 0) {
         for (i = 0; i < 42; i++) {
             gSPDisplayList(gDisplayListHead++, D_80060270);
-            func_80029028((i % 7) * 0x4F + x0, (i / 7) * 0x3C + y0, 0x4F, 0x3C, D_82009204[i & 1]);
+            func_80029028((i % 7) * 79 + x0, (i / 7) * 60 + y0, 79, 60, D_82009204[i & 1]);
         }
         func_800189C0(window->icons, 0);
         BgStage_DrawFrame();
@@ -1236,10 +1236,10 @@ void FreeBattle_DrawUsableMonGrid(FreeBattleMonGridWindow* window, s32 flags) {
             func_8001A384(4, -1);
             x = (i % 7) * 0x4F + x0;
             y = (i / 7) * 0x3C + y0;
-            Font_Printf(x + 2, y + 0x2A, entry + 0x30);
+            Font_Printf(x + 2, y + 42, entry + 0x30);
             func_8001ABBC();
             gSPDisplayList(gDisplayListHead++, D_80073408);
-            func_8001B884(x + 0x26, y + 2, 0x28, 0x28, PokeIcon_GetImage(window->icons, i), 0x28, 0x200000);
+            func_8001B884(x + 38, y + 2, 40, 40, PokeIcon_GetImage(window->icons, i), 40, 0x200000);
             gSPDisplayList(gDisplayListHead++, D_80073438);
             entry += 0x50;
         }
@@ -1278,7 +1278,7 @@ extern u8 D_8200A0A0[];
  * L1～30 Battle held two スピアー (one poked in RAM).
  */
 void FreeBattle_InitDuplicateWarning(FreeBattleDuplicateWarning* window, s32 x, s32 y, s32 duplicates) {
-    Window_SetRect(window, x, y, 0x148, 0x68);
+    Window_SetRect(window, x, y, 328, 104);
     window->window.animTimer = 0;
     window->window.title = 0;
     window->window.state = 0;
@@ -1308,8 +1308,8 @@ void FreeBattle_DrawDuplicateWarning(FreeBattleDuplicateWarning* window) {
         func_8001AB6C();
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
-        Font_SetLineHeight(0x1C);
-        Font_Printf(window->window.frame.x + 0xE, window->window.frame.y + 0xE, D_8200A0B0, window->value);
+        Font_SetLineHeight(28);
+        Font_Printf(window->window.frame.x + 14, window->window.frame.y + 14, D_8200A0B0, window->value);
         func_8001ABBC();
     }
 }
@@ -1325,7 +1325,7 @@ extern char D_8200A11C[];
  * Initializes the FreeBattleShortageWarning window; the same
  * setup as FreeBattle_InitLevelSumWarning with different strings (D_8200A104, D_8200A114 and
  * D_8200A11C) and color (D_82009218), and one more argument. Calls
- * Window_SetRect(window, x, y, 0x134, 0x92), clears the words at 0x24 and
+ * Window_SetRect(window, x, y, 308, 146), clears the words at 0x24 and
  * 0x28, sets the word at 0x14 to 0x2801 and the pointer at 0x20 to D_8200A104.
  * Calls Window_InitLabeled on the sub-objects at window + 0x2C and window + 0x68, sets
  * the words at 0x58, 0x60, 0xAC and 0xA8 to 0xA, 0xC, 2 and 0, stores
@@ -1336,15 +1336,15 @@ extern char D_8200A11C[];
  * opened 「ちゅうい!! つかえるポケモンが 6たい たりません」 with はい/いいえ, and this ran once as it appeared.
  */
 void FreeBattle_InitShortageWarning(FreeBattleShortageWarning* window, s32 x, s32 y, s32 controller, s32 count) {
-    Window_SetRect(window, x, y, 0x134, 0x92);
+    Window_SetRect(window, x, y, 308, 146);
     window->window.animTimer = 0;
     window->window.state = 0;
     window->window.frame.style = 0x2801;
     window->window.title = D_8200A104;
-    Window_InitLabeled(&window->yesButton, window->window.frame.x + 0x2E, window->window.frame.y + 0x6E, 0x48, D_82009218, D_8200A114);
+    Window_InitLabeled(&window->yesButton, window->window.frame.x + 46, window->window.frame.y + 110, 72, D_82009218, D_8200A114);
     window->yesButton.labelX = 0xA;
     window->yesButton.unk_34 = 0xC;
-    Window_InitLabeled(&window->noButton, window->window.frame.x + 0xBE, window->window.frame.y + 0x6E, 0x48, D_82009218, D_8200A11C);
+    Window_InitLabeled(&window->noButton, window->window.frame.x + 190, window->window.frame.y + 110, 72, D_82009218, D_8200A11C);
     window->choice.count = 2;
     window->choice.cursor = 0;
     window->choice.controller = D_800603C0;
@@ -1372,15 +1372,15 @@ extern char D_8200A124[];
  */
 void FreeBattle_DrawShortageWarning(FreeBattleShortageWarning* window) {
     if (func_8002AE6C() == 0) {
-        Ui_DrawTexturedDivider(window->window.frame.x, window->window.frame.y + 0x61, window->window.frame.width, &D_8007356C);
-        Ui_FillRectPrimEnvColor(window->window.frame.x + 6, window->window.frame.y + 6, 0x128, 0x5C, D_8200921C, D_82009220);
+        Ui_DrawTexturedDivider(window->window.frame.x, window->window.frame.y + 97, window->window.frame.width, &D_8007356C);
+        Ui_FillRectPrimEnvColor(window->window.frame.x + 6, window->window.frame.y + 6, 296, 92, D_8200921C, D_82009220);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(window->window.frame.x + 6, window->window.frame.y + 0x68, window->window.frame.width - 0xC, 0x24, *(Color82001CCC*)&D_82009100);
+        func_80029028(window->window.frame.x + 6, window->window.frame.y + 104, window->window.frame.width - 12, 36, *(Color82001CCC*)&D_82009100);
         func_8001AB6C();
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
-        Font_SetLineHeight(0x1C);
-        Font_Printf(window->window.frame.x + 0xE, window->window.frame.y + 0xE, D_8200A124, window->count, window->count);
+        Font_SetLineHeight(28);
+        Font_Printf(window->window.frame.x + 14, window->window.frame.y + 14, D_8200A124, window->count, window->count);
         func_8001ABBC();
         Window_DrawLabeled(&window->yesButton, (window->choice.cursor == 0) ? 2 : 0);
         Window_DrawLabeled(&window->noButton, (window->choice.cursor == 1) ? 2 : 0);
@@ -1429,7 +1429,7 @@ void func_8000B2F4(s32);
 
 /**
  * Initializes the FreeBattleLevelSumWarning window: calls
- * Window_SetRect(window, x, y, 0x134, 0x92), clears the words at 0x24 and
+ * Window_SetRect(window, x, y, 308, 146), clears the words at 0x24 and
  * 0x28, sets the word at 0x14 to 0x2801 and the pointer at 0x20 to
  * D_8200A178. Calls Window_InitLabeled twice, on the sub-objects at window + 0x2C
  * (string D_8200A188) and window + 0x68 (string D_8200A190), both with width
@@ -1442,15 +1442,15 @@ void func_8000B2F4(s32);
  * 「レンタルポケモンからえらぶ？」).
  */
 void FreeBattle_InitLevelSumWarning(FreeBattleLevelSumWarning* window, s32 x, s32 y, s32 controller) {
-    Window_SetRect(window, x, y, 0x134, 0x92);
+    Window_SetRect(window, x, y, 308, 146);
     window->window.animTimer = 0;
     window->window.state = 0;
     window->window.frame.style = 0x2801;
     window->window.title = D_8200A178;
-    Window_InitLabeled(&window->yesButton, window->window.frame.x + 0x2E, window->window.frame.y + 0x6E, 0x48, D_82009228, D_8200A188);
+    Window_InitLabeled(&window->yesButton, window->window.frame.x + 46, window->window.frame.y + 110, 72, D_82009228, D_8200A188);
     window->yesButton.labelX = 0xA;
     window->yesButton.unk_34 = 0xC;
-    Window_InitLabeled(&window->noButton, window->window.frame.x + 0xBE, window->window.frame.y + 0x6E, 0x48, D_82009228, D_8200A190);
+    Window_InitLabeled(&window->noButton, window->window.frame.x + 190, window->window.frame.y + 110, 72, D_82009228, D_8200A190);
     window->choice.count = 2;
     window->choice.cursor = 0;
     window->choice.controller = D_800603C0;
@@ -1479,15 +1479,15 @@ extern char D_8200A198[];
  */
 void FreeBattle_DrawLevelSumWarning(FreeBattleLevelSumWarning* window) {
     if (func_8002AE6C() == 0) {
-        Ui_DrawTexturedDivider(window->window.frame.x, window->window.frame.y + 0x61, window->window.frame.width, &D_8007356C);
-        Ui_FillRectPrimEnvColor(window->window.frame.x + 6, window->window.frame.y + 6, 0x128, 0x5C, D_8200922C, D_82009230);
+        Ui_DrawTexturedDivider(window->window.frame.x, window->window.frame.y + 97, window->window.frame.width, &D_8007356C);
+        Ui_FillRectPrimEnvColor(window->window.frame.x + 6, window->window.frame.y + 6, 296, 92, D_8200922C, D_82009230);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(window->window.frame.x + 6, window->window.frame.y + 0x68, window->window.frame.width - 0xC, 0x24, *(Color82001CCC*)&D_82009100);
+        func_80029028(window->window.frame.x + 6, window->window.frame.y + 104, window->window.frame.width - 12, 36, *(Color82001CCC*)&D_82009100);
         func_8001AB6C();
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
-        Font_SetLineHeight(0x1C);
-        Font_Printf(window->window.frame.x + 0xE, window->window.frame.y + 0xE, D_8200A198);
+        Font_SetLineHeight(28);
+        Font_Printf(window->window.frame.x + 14, window->window.frame.y + 14, D_8200A198);
         func_8001ABBC();
         Window_DrawLabeled(&window->yesButton, (window->choice.cursor == 0) ? 2 : 0);
         Window_DrawLabeled(&window->noButton, (window->choice.cursor == 1) ? 2 : 0);
@@ -1533,7 +1533,7 @@ extern char D_8200A1FC[];
 
 /**
  * Initializes the FreeBattleRentalConfirm window; a sibling of
- * FreeBattle_InitConfirmWindow. Calls Window_SetRect(window, x, y, 0x18C, 0x66), clears the words at
+ * FreeBattle_InitConfirmWindow. Calls Window_SetRect(window, x, y, 396, 102), clears the words at
  * 0x20, 0x24 and 0x28 and sets the word at 0x14 to 0x1001. Calls Window_InitLabeled three times,
  * on the sub-objects at window + 0x2C (string D_8200A1EC), + 0x68 (D_8200A1F4) and + 0xA4
  * (D_8200A1FC, width 0x5C; the other two use width 0x48), all with color D_82009234 and
@@ -1544,20 +1544,20 @@ extern char D_8200A1FC[];
  * What the object is and what the constants mean is not established.
  * Seen in play: A on a team opens 「このデータでエントリーします。 はい いいえ」 and runs this.
  */
-void FreeBattle_InitRentalConfirm(FreeBattleRentalConfirm* window, s32 x, s32 y, s32 hasThirdButton, s32 controller) {
-    Window_SetRect(window, x, y, 0x18C, 0x66);
+void FreeBattle_InitRentalConfirm(FreeBattleRentalConfirm* window, s32 x, s32 y, s32 has_third_button, s32 controller) {
+    Window_SetRect(window, x, y, 396, 102);
     window->window.animTimer = 0;
     window->window.title = 0;
     window->window.state = 0;
     window->window.frame.style = 0x1001;
-    Window_InitLabeled(&window->buttons[0], window->window.frame.x + 0x76, window->window.frame.y + 0x42, 0x48, D_82009234, D_8200A1EC);
+    Window_InitLabeled(&window->buttons[0], window->window.frame.x + 118, window->window.frame.y + 66, 72, D_82009234, D_8200A1EC);
     window->buttons[0].labelX = 0xA;
     window->buttons[0].unk_34 = 0xC;
-    Window_InitLabeled(&window->buttons[1], window->window.frame.x + 0xC6, window->window.frame.y + 0x42, 0x48, D_82009234, D_8200A1F4);
-    Window_InitLabeled(&window->buttons[2], window->window.frame.x + 0x122, window->window.frame.y + 0x42, 0x5C, D_82009234, D_8200A1FC);
+    Window_InitLabeled(&window->buttons[1], window->window.frame.x + 198, window->window.frame.y + 66, 72, D_82009234, D_8200A1F4);
+    Window_InitLabeled(&window->buttons[2], window->window.frame.x + 290, window->window.frame.y + 66, 92, D_82009234, D_8200A1FC);
     window->choice.cursor = 0;
-    window->hasThirdButton = hasThirdButton;
-    if (hasThirdButton != 0) {
+    window->hasThirdButton = has_third_button;
+    if (has_third_button != 0) {
         window->choice.count = 3;
     } else {
         window->choice.count = 2;
@@ -1584,14 +1584,14 @@ extern char D_8200A208[];
  */
 void FreeBattle_DrawEntryConfirm(FreeBattleRentalConfirm* window) {
     if (func_8002AE6C() == 0) {
-        Ui_DrawTexturedDivider(window->window.frame.x, window->window.frame.y + 0x35, window->window.frame.width, &D_8007356C);
-        Ui_FillRectPrimEnvColor(window->window.frame.x + 6, window->window.frame.y + 6, window->window.frame.width - 0xC, 0x30, D_82009238, D_8200923C);
+        Ui_DrawTexturedDivider(window->window.frame.x, window->window.frame.y + 53, window->window.frame.width, &D_8007356C);
+        Ui_FillRectPrimEnvColor(window->window.frame.x + 6, window->window.frame.y + 6, window->window.frame.width - 12, 48, D_82009238, D_8200923C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(window->window.frame.x + 6, window->window.frame.y + 0x3C, window->window.frame.width - 0xC, 0x24, *(Color82001CCC*)&D_82009100);
+        func_80029028(window->window.frame.x + 6, window->window.frame.y + 60, window->window.frame.width - 12, 36, *(Color82001CCC*)&D_82009100);
         func_8001AB6C();
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(0x10, 0);
-        Font_Printf(window->window.frame.x + 0x12, window->window.frame.y + 0x12, D_8200A208);
+        Font_Printf(window->window.frame.x + 18, window->window.frame.y + 18, D_8200A208);
         func_8001ABBC();
         Window_DrawLabeled(&window->buttons[0], (window->choice.cursor == 0) ? 2 : 0);
         Window_DrawLabeled(&window->buttons[1], (window->choice.cursor == 1) ? 2 : 0);

@@ -6,12 +6,14 @@
 #include "model_renderer_callbacks.h"
 #include "battle_hud.h"
 #include "vector_math.h"
+#include "pokemon.h"
 
 extern s16 D_800AFB26;
 
 /**
  * Builds a display list that loads RGBA16 64x32 texture (frame & 7) of the strip, scrolled
- * along S by scrollSpeed per frame, only while textureMode is 0.
+ * along S by scrollSpeed per frame (0x4000 minus scrollSpeed times the frame counter), only while
+ * textureMode is 0.
  */
 void ModelCallback_BuildScrollStripList(Gfx* gfx, ModelScrollStrip* strip) {
     s16 scroll_s;
@@ -45,7 +47,7 @@ void ModelCallback_ScrollStrip(s32 phase, ModelScrollStripState* state) {
 
     if (phase == 2) {
         strip = state->strip;
-        gfx = Gfx_AllocDisplayList(0x50);
+        gfx = Gfx_AllocDisplayList(80);
         state->gfx = gfx;
         ModelCallback_BuildScrollStripList(gfx, strip);
     }
@@ -64,7 +66,7 @@ Gfx* ModelCallback_BuildSelectedTextureList(Gfx* gfx, u32* textures, s32 index) 
 
 /**
  * Phase 2: picks the texture and builds ModelCallback_BuildSelectedTextureList. Grimer follows its animation frame
- * (frame - 0x42 from frame 0x42 on); other models cycle every frame.
+ * (frame - 66 from frame 66 on); other models cycle every frame.
  * @unverified Only Grimer uses it, and Grimer cannot battle in Stadium Zero.
  */
 void ModelCallback_SelectedTexture(s32 phase, TextureState* state) {
@@ -73,11 +75,11 @@ void ModelCallback_SelectedTexture(s32 phase, TextureState* state) {
 
     if (phase == 2) {
         textures = state->textures;
-        state->gfx = (Gfx*)Gfx_AllocDisplayList(0x50);
-        if (D_8006049C->objectType == 0x58) {
+        state->gfx = (Gfx*)Gfx_AllocDisplayList(80);
+        if (D_8006049C->objectType == GRIMER) {
             index = (s32)D_8006049C->transformAnim.frameFixed >> 0x10;
-            if (index >= 0x42) {
-                index = index - 0x42;
+            if (index >= 66) {
+                index = index - 66;
             } else {
                 index = 0;
             }

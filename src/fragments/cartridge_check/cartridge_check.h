@@ -125,8 +125,8 @@ void CartridgeCheck_PlayBootIntro(void);
 void CartridgeCheck_PlayCupWinIntro(void);
 void CartridgeCheck_DrawScreen(void);
 void Options_DrawMenu(s32 row, u8 flags);
-void Options_DrawClearSavePrompt(s32 secondAsk, s32 choice);
-s32 Options_RunClearSavePrompt(s32 secondAsk, s32 row, u8 flags);
+void Options_DrawClearSavePrompt(s32 second_ask, s32 choice);
+s32 Options_RunClearSavePrompt(s32 second_ask, s32 row, u8 flags);
 void Save_ResetAll(void);
 void Options_RunMenu(void);
 s32 CartridgeCheck_RunScreen(void);
@@ -142,8 +142,8 @@ s32 CartridgeCheck_EnterAfterCupWin(void);
 s32 CartridgeCheck_EnterFromMainMenu(void);
 void CartridgeCheck_ReadPortSummaries(void);
 void CartridgeCheck_InitCursor(void);
-void CartridgeCheck_InitModels(s32 fromMainMenu);
+void CartridgeCheck_InitModels(s32 from_main_menu);
 void CartridgeCheck_InitRenderTargets(void);
-s32 CartridgeCheck_Main(s32 fromMainMenu, s32 arg1);
+s32 CartridgeCheck_Main(s32 from_main_menu, s32 arg1);
 
 #endif // FRAGMENT_CARTRIDGE_CHECK_H

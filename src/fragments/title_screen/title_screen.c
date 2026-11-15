@@ -36,7 +36,7 @@ void TitleScreen_DrawNoControllerTicker(void) {
         Font_BeginTranslucentTextRendering();
         Font_SetActive(4, 0);
         for (i = 0; i < 19; i++) {
-            Font_DrawCharAt(x, 0xC0, sNoControllerMessage[idx]);
+            Font_DrawCharAt(x, 192, sNoControllerMessage[idx]);
             idx++;
             if (len - 1 < idx) {
                 idx = 0;
@@ -102,7 +102,7 @@ extern char sDiskErrorPleaseCheckText[];
 void Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
 
 /**
- * Draws the 64DD disk error box over the title screen. `bootError` is the low halfword of
+ * Draws the 64DD disk error box over the title screen. `boot_error` is the low halfword of
  * Leo_RunBootStateMachine's result: LeoBootState.errorKind << 8 | LeoBootState.leoError.
  * Kind 0 draws nothing. Kinds 1-4 start with エラー：%2d (Error: leoError):
  *   1: "Please read the instruction manual."
@@ -120,37 +120,37 @@ void TitleScreen_DrawDiskError(s32 boot_error) {
     s32 pad[1]; // FAKE: stack padding
 
     if (kind != 0) {
-        Ui_DrawPrimColorRect(0x1E, 0x5F, 0x104, 0x5F, 0, 0, 0, 0x96);
+        Ui_DrawPrimColorRect(30, 95, 260, 95, 0, 0, 0, 0x96); // #000000
         Font_BeginTranslucentTextRendering();
         Font_SetActive(2, -2);
         switch (kind) {
             case 1:
-                Font_Printf(0x32, 0x64, sDiskErrorCodeText1, boot_error & 0xFF);
-                Font_Printf(0x3C, 0x87, sDiskErrorReadManualText);
+                Font_Printf(50, 100, sDiskErrorCodeText1, boot_error & 0xFF);
+                Font_Printf(60, 135, sDiskErrorReadManualText);
                 break;
             case 2:
-                Font_Printf(0x32, 0x64, sDiskErrorCodeText2, boot_error & 0xFF);
-                Font_Printf(0x3C, 0x7D, sDiskErrorAccessLampText1);
-                Font_Printf(0x6E, 0x8C, sDiskErrorAccessLampText2);
-                Font_Printf(0x41, 0xA5, sDiskErrorReinsertText);
+                Font_Printf(50, 100, sDiskErrorCodeText2, boot_error & 0xFF);
+                Font_Printf(60, 125, sDiskErrorAccessLampText1);
+                Font_Printf(110, 140, sDiskErrorAccessLampText2);
+                Font_Printf(65, 165, sDiskErrorReinsertText);
                 break;
             case 3:
-                Font_Printf(0x32, 0x64, sDiskErrorCodeText3, boot_error & 0xFF);
-                Font_Printf(0x2D, 0x7D, sDiskErrorEjectButtonText);
-                Font_Printf(0x69, 0x96, sDiskErrorRemoveDiskText);
-                Font_Printf(0x5A, 0xA5, sDiskErrorInsertFirmlyText);
+                Font_Printf(50, 100, sDiskErrorCodeText3, boot_error & 0xFF);
+                Font_Printf(45, 125, sDiskErrorEjectButtonText);
+                Font_Printf(105, 150, sDiskErrorRemoveDiskText);
+                Font_Printf(90, 165, sDiskErrorInsertFirmlyText);
                 break;
             case 4:
-                Font_Printf(0x32, 0x64, sDiskErrorCodeText4, boot_error & 0xFF);
-                Font_Printf(0x5F, 0x73, sDiskErrorExpansionPakText1);
-                Font_Printf(0x50, 0x82, sDiskErrorExpansionPakText2);
-                Font_Printf(0x41, 0x9B, sDiskErrorSeeManualText1);
-                Font_Printf(0x7D, 0xAA, sDiskErrorSeeManualText2);
+                Font_Printf(50, 100, sDiskErrorCodeText4, boot_error & 0xFF);
+                Font_Printf(95, 115, sDiskErrorExpansionPakText1);
+                Font_Printf(80, 130, sDiskErrorExpansionPakText2);
+                Font_Printf(65, 155, sDiskErrorSeeManualText1);
+                Font_Printf(125, 170, sDiskErrorSeeManualText2);
                 break;
             case 5:
-                Font_Printf(0x46, 0x73, sDiskErrorWrongDiskText1);
-                Font_Printf(0x50, 0x82, sDiskErrorWrongDiskText2);
-                Font_Printf(0x69, 0xA5, sDiskErrorPleaseCheckText);
+                Font_Printf(70, 115, sDiskErrorWrongDiskText1);
+                Font_Printf(80, 130, sDiskErrorWrongDiskText2);
+                Font_Printf(105, 165, sDiskErrorPleaseCheckText);
                 break;
         }
         Font_EndTexturedTextRendering();
@@ -180,12 +180,12 @@ void TitleScreen_DrawBackground(void) {
     gDPSetConvert(gDisplayListHead++, G_CV_K0, G_CV_K1, G_CV_K2, G_CV_K3, G_CV_K4, G_CV_K5);
     gDPPipeSync(gDisplayListHead++);
 
-    for (y = 0; y < 0xF0; y += 0x10) {
-        for (x = 0; x < 0x140; x += 0x10) {
+    for (y = 0; y < 240; y += 16) {
+        for (x = 0; x < 320; x += 16) {
             gDPLoadTextureBlockYuv(gDisplayListHead++, image, G_IM_FMT_YUV, G_IM_SIZ_16b, 16, 16, 0,
                                 G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
-            gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x + 0x10) << 2, (y + 0x10) << 2, G_TX_RENDERTILE,
+            gSPTextureRectangle(gDisplayListHead++, x << 2, y << 2, (x + 16) << 2, (y + 16) << 2, G_TX_RENDERTILE,
                                 0, 0, 0x0400, 0x0400);
             image += 0x200;
         }
@@ -206,41 +206,41 @@ void Gfx_DrawTextureIa16(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture
 
 /**
  * Draws the blinking PUSH START graphic (88x16 IA16, four 4-line strips from segment 2) at
- * (`x`, `y`). sPushStartBlinkTimer runs from 0x30 to 0x6C and wraps: the graphic fades in over
+ * (`x`, `y`). sPushStartBlinkTimer runs from 48 to 108 and wraps: the graphic fades in over
  * 16 frames, holds, fades out, then stays hidden.
- * Seen in play (2026-11-14): called each title frame with (0x74, 0xC0); stubbing it removed
+ * Seen in play (2026-11-14): called each title frame with (116, 192); stubbing it removed
  * PUSH START.
  */
 void TitleScreen_DrawPushStart(s16 x, s16 y) {
-    s32 t = sPushStartBlinkTimer - 0x30;
+    s32 t = sPushStartBlinkTimer - 48;
     s32 alpha = 0;
 
     if (t >= 0) {
         if (t < 0x10) {
             alpha = t * 0x10;
-        } else if (t < 0x23) {
+        } else if (t < 35) {
             alpha = 0xFF;
-        } else if (t < 0x32) {
+        } else if (t < 50) {
             alpha = -t * 0x10 + 0x320;
         }
     }
     sPushStartBlinkTimer++;
-    if (sPushStartBlinkTimer >= 0x6D) {
-        sPushStartBlinkTimer = 0x30;
+    if (sPushStartBlinkTimer >= 109) {
+        sPushStartBlinkTimer = 48;
     }
     gSPDisplayList(gDisplayListHead++, D_800602C8);
-    gDPSetEnvColor(gDisplayListHead++, 0xFF, 0xFF, 0xFF, alpha);
-    Gfx_DrawTextureIa16(x, y, 0x58, 4, (u8*)&D_02000000, 0x58, 0);
-    Gfx_DrawTextureIa16(x, y + 4, 0x58, 4, D_020002C0, 0x58, 0);
-    Gfx_DrawTextureIa16(x, y + 8, 0x58, 4, D_02000580, 0x58, 0);
-    Gfx_DrawTextureIa16(x, y + 0xC, 0x58, 4, D_02000840, 0x58, 0);
+    gDPSetEnvColor(gDisplayListHead++, 0xFF, 0xFF, 0xFF, alpha); // #FFFFFF
+    Gfx_DrawTextureIa16(x, y, 88, 4, (u8*)&D_02000000, 88, 0);
+    Gfx_DrawTextureIa16(x, y + 4, 88, 4, D_020002C0, 88, 0);
+    Gfx_DrawTextureIa16(x, y + 8, 88, 4, D_02000580, 88, 0);
+    Gfx_DrawTextureIa16(x, y + 12, 88, 4, D_02000840, 88, 0);
     gSPDisplayList(gDisplayListHead++, D_80060398);
 }
 
 extern s32 sTitleFrameCounter;
 
 /**
- * Returns whether the title screen may leave: the 64DD boot state `bootState` is 0, 1, 3 or 5
+ * Returns whether the title screen may leave: the 64DD boot state `boot_state` is 0, 1, 3 or 5
  * (no disk, or waiting on the drive; not while a disk read is being queued or loaded) and the
  * title has run at least 16 frames.
  * Seen in play (2026-11-14): with LeoBootState.state poked to 0, Start (and A) left the title;
@@ -273,16 +273,16 @@ s32 TitleScreen_CanAcceptInput(s32 boot_state)
 s32 Audio_GetActivityScore(void);
 
 /**
- * Returns whether to start the attract-mode demo battle: the title has run 601 (0x259) frames
+ * Returns whether to start the attract-mode demo battle: the title has run 601 frames
  * or more, Audio_GetActivityScore() is 0 (the title music has ended) and
- * TitleScreen_CanAcceptInput(`bootState`) holds.
+ * TitleScreen_CanAcceptInput(`boot_state`) holds.
  * Seen in play (2026-11-14): left idle, the counter passed 601 at about frame 601 but the demo
  * started only at frame 1102, once the music was silent.
  */
 s32 TitleScreen_ShouldStartDemo(s32 boot_state) {
     s32 var_v1 = 0;
 
-    if ((sTitleFrameCounter >= 0x259) && (Audio_GetActivityScore() == 0) && (TitleScreen_CanAcceptInput(boot_state) != 0)) {
+    if ((sTitleFrameCounter >= 601) && (Audio_GetActivityScore() == 0) && (TitleScreen_CanAcceptInput(boot_state) != 0)) {
         var_v1 = 1;
     }
     return var_v1;
@@ -304,7 +304,7 @@ extern void *D_800603C0;
 extern LeoBootDescriptor* sDiskBootBlock;
 
 /**
- * The title screen's per-frame callback for BgStage_WaitForCondition; `fadeMode` is the stage's
+ * The title screen's per-frame callback for BgStage_WaitForCondition; `fade_mode` is the stage's
  * fade mode, and input is read only while it is 0 (no fade running). Each frame it polls the
  * 64DD boot (Leo_RunBootStateMachine) and returns:
  *   - TITLE_EXIT_DISK_BOOT (0xF000) when the boot state reaches 10 (disk payload loaded),
@@ -336,7 +336,7 @@ s32 TitleScreen_Update(s32 fade_mode) {
     if (fade_mode == 0) {
         temp_v0 = Leo_RunBootStateMachine(sDiskBootBlock);
         boot_status = temp_v0;
-        if (((temp_v0 >> 0x10) & 0xFFFF) == 0xA) {
+        if (((temp_v0 >> 0x10) & 0xFFFF) == 10) {
             Audio_FadeCategoriesAndStreams(0x10);
             result = TITLE_EXIT_DISK_BOOT;
         } else if (M2C_FIELD(D_800603C0, u16 *, 8) & 0x9000) {
@@ -352,7 +352,7 @@ s32 TitleScreen_Update(s32 fade_mode) {
     BgStage_DrawFrame();
     TitleScreen_DrawBackground();
     if (Cont_GetConnectedMask() & 1) {
-        TitleScreen_DrawPushStart(0x74, 0xC0);
+        TitleScreen_DrawPushStart(116, 192);
     }
     TitleScreen_DrawNoControllerTicker();
     TitleScreen_DrawDiskError(boot_status & 0xFFFF);

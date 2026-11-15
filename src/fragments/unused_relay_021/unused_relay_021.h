@@ -6,6 +6,6 @@
 #include "game_state.h"
 
 // unused_relay_021.c
-s32 UnusedRelay021_QueueMainMenuLauncher(s32 unusedArg0, s32 unusedArg1, s32 unusedArg2);
+s32 UnusedRelay021_QueueMainMenuLauncher(s32 unused_arg0, s32 unused_arg1, s32 unused_arg2);
 
 #endif // UNUSED_RELAY_021_H

@@ -374,7 +374,7 @@ void func_8000B2F4(s32);
 
 /**
  * Initializes the object window (size and layout not established); a sibling of
- * FreeBattle_InitLevelSumWarning. Calls Window_SetRect(window, x, y, 0x1AE, 0x124), clears the
+ * FreeBattle_InitLevelSumWarning. Calls Window_SetRect(window, x, y, 430, 292), clears the
  * words at 0x20, 0x24 and 0x28 and sets the word at 0x14 to 0x1001. Calls
  * Window_InitLabeled twice, on the sub-objects at window + 0x2C (string D_82009B80)
  * and window + 0x68 (string D_82009B88), both with width 0x48 and color
@@ -387,15 +387,15 @@ void func_8000B2F4(s32);
  * this.
  */
 void FreeBattle_InitConfirmWindow(s8* window, s32 x, s32 y, s32 mon, s32 prompt, s32 controller) {
-    Window_SetRect(window, x, y, 0x1AE, 0x124);
+    Window_SetRect(window, x, y, 430, 292);
     M2C_FIELD(window, s32*, 0x24) = 0;
     M2C_FIELD(window, s32*, 0x20) = 0;
     M2C_FIELD(window, s32*, 0x28) = 0;
     M2C_FIELD(window, s32*, 0x14) = 0x1001;
-    Window_InitLabeled(window + 0x2C, M2C_FIELD(window, s32*, 0) + 0x10A, M2C_FIELD(window, s32*, 4) + 0x100, 0x48, D_8200902C, D_82009B80);
+    Window_InitLabeled(window + 0x2C, M2C_FIELD(window, s32*, 0) + 266, M2C_FIELD(window, s32*, 4) + 0x100, 72, D_8200902C, D_82009B80);
     M2C_FIELD(window, s32*, 0x58) = 0xA;
     M2C_FIELD(window, s32*, 0x60) = 0xC;
-    Window_InitLabeled(window + 0x68, M2C_FIELD(window, s32*, 0) + 0x15A, M2C_FIELD(window, s32*, 4) + 0x100, 0x48, D_8200902C, D_82009B88);
+    Window_InitLabeled(window + 0x68, M2C_FIELD(window, s32*, 0) + 346, M2C_FIELD(window, s32*, 4) + 0x100, 72, D_8200902C, D_82009B88);
     M2C_FIELD(window, s32*, 0xAC) = 2;
     M2C_FIELD(window, s32*, 0xA8) = 0;
     M2C_FIELD(window, s32*, 0xA4) = D_800603C0;
@@ -565,43 +565,43 @@ void FreeBattle_DrawMonStatusWindow(Screen82000C5C* window) {
     u8* tex;
 
     if (func_8002AE6C(window) == 0) {
-        Ui_DrawTexturedDivider(window->x, window->y + 0xF3, window->w, D_8007356C);
+        Ui_DrawTexturedDivider(window->x, window->y + 243, window->w, D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
-        func_80029028(x, y, window->w - 0xC, 0x20, D_82009030);
-        func_80029028(x + 0x78, y + 0x20, window->w - 0x84, 0x78, D_82009034);
-        func_80029028(x, y + 0xF4, window->w - 0xC, 0x24, D_82008F54);
-        Ui_FillRectPrimEnvColor(x, y + 0x98, window->w - 0xC, 0x56, D_82009038, D_8200903C);
+        func_80029028(x, y, window->w - 12, 0x20, D_82009030);
+        func_80029028(x + 120, y + 0x20, window->w - 132, 120, D_82009034);
+        func_80029028(x, y + 244, window->w - 12, 36, D_82008F54);
+        Ui_FillRectPrimEnvColor(x, y + 152, window->w - 12, 86, D_82009038, D_8200903C);
         func_8001AB6C();
         func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
         func_8001A384(8, 0);
-        Font_Printf(window->x + 0xE, window->y + 0x102, window->title);
+        Font_Printf(window->x + 14, window->y + 258, window->title);
         func_8001ABBC();
         func_8001AB6C();
         func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
         func_8001A384(8, 0);
         func_8001ABE8();
         func_8001AAE4(0x7F, 0xA8, 0xFF, 0xFF);
-        Font_Printf(x + 0xA, y + 5, window->mon->nickname);
+        Font_Printf(x + 10, y + 5, window->mon->nickname);
         func_8001AC3C();
         func_8001A384(4, -1);
         func_8001AA9C(((u8*)&D_800734A8)[0], ((u8*)&D_800734A8)[1], ((u8*)&D_800734A8)[2], ((u8*)&D_800734A8)[3]);
-        Font_Printf(x + 0x84, y + 9, D_82009BA0);
-        Font_Printf(x + 0x112, y + 9, D_82009BA4);
+        Font_Printf(x + 132, y + 9, D_82009BA0);
+        Font_Printf(x + 274, y + 9, D_82009BA4);
         func_8001A384(8, 0);
-        Font_Printf(x + 0xB2, y + 5, D_82009BA8, window->mon->level);
-        Font_Printf(x + 0x140, y + 5, D_82009BAC, window->mon->maxHp);
-        Font_Printf(x + 0x88, y + 0x28, D_82009BB0);
+        Font_Printf(x + 178, y + 5, D_82009BA8, window->mon->level);
+        Font_Printf(x + 320, y + 5, D_82009BAC, window->mon->maxHp);
+        Font_Printf(x + 136, y + 40, D_82009BB0);
         if (Pokemon_GetTypeIndex((s32)window->mon, 1) != -1) {
-            Font_Printf(x + 0x88, y + 0x64, D_82009BBC);
+            Font_Printf(x + 136, y + 100, D_82009BBC);
         }
-        Font_Printf(x + 0x102, y + 0x28, D_82009BC8);
-        Font_Printf(x + 0x102, y + 0x44, D_82009BD4);
-        Font_Printf(x + 0x102, y + 0x60, D_82009BE0);
-        Font_Printf(x + 0x102, y + 0x7C, D_82009BEC);
-        Font_Printf(x + 0x15C, y + 0x28, D_82009BF8, window->mon->attack);
-        Font_Printf(x + 0x15C, y + 0x44, D_82009BFC, window->mon->defense);
-        Font_Printf(x + 0x15C, y + 0x60, D_82009C00, window->mon->speed);
-        Font_Printf(x + 0x15C, y + 0x7C, D_82009C04, window->mon->special);
+        Font_Printf(x + 258, y + 40, D_82009BC8);
+        Font_Printf(x + 258, y + 68, D_82009BD4);
+        Font_Printf(x + 258, y + 96, D_82009BE0);
+        Font_Printf(x + 258, y + 124, D_82009BEC);
+        Font_Printf(x + 348, y + 40, D_82009BF8, window->mon->attack);
+        Font_Printf(x + 348, y + 68, D_82009BFC, window->mon->defense);
+        Font_Printf(x + 348, y + 96, D_82009C00, window->mon->speed);
+        Font_Printf(x + 348, y + 124, D_82009C04, window->mon->special);
         for (i = 0; i < count; i++) {
             FreeBattle_DrawMoveName(D_82009040[i].x + x, D_82009040[i].y + y, BattleMon_GetMoveIndex(window->mon, i), D_82009040[i].centered);
         }
@@ -610,7 +610,7 @@ void FreeBattle_DrawMonStatusWindow(Screen82000C5C* window) {
         FreeBattle_DrawTypeName(x + 0x9C, y + 0x7C, (s32)window->mon, 1);
         gSPDisplayList(gDisplayListHead++, D_80060290);
         for (i = 0; i < count; i++) {
-            func_8001B884(D_82009040[i].iconX + x, D_82009040[i].y + y, 0x14, 0x14, (u8*)D_82009040[i].icon, 0x14, 0x200000);
+            func_8001B884(D_82009040[i].iconX + x, D_82009040[i].y + y, 20, 20, (u8*)D_82009040[i].icon, 20, 0x200000);
         }
         gSPDisplayList(gDisplayListHead++, D_80060398);
         Window_DrawLabeled(window->button1, (window->selection == 0) ? 2 : 0);
@@ -629,7 +629,7 @@ void FreeBattle_DrawMonStatusWindow(Screen82000C5C* window) {
             } else {
                 n = 0x10;
             }
-            func_8001B884(x, y + row + 0x20, 0x78, n, tex, 0x80, 0x200000);
+            func_8001B884(x, y + row + 0x20, 120, n, tex, 0x80, 0x200000);
             tex += n << 8;
         }
         gSPDisplayList(gDisplayListHead++, D_80060398);
@@ -882,9 +882,9 @@ void FreeBattle_DrawMonCell(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 
     s32 pad2; // FAKE
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x, y, 0x84, 0x32, D_82008F58);
+    func_80029028(x, y, 132, 50, D_82008F58);
     if (flags & 0x10) {
-        Ui_FillRectHighlighted(x + 3, y + 3, 0x7E, 0x2C, D_82008F58);
+        Ui_FillRectHighlighted(x + 3, y + 3, 126, 44, D_82008F58);
     }
     if (entry != NULL) {
         func_8001AB6C();
@@ -903,16 +903,16 @@ void FreeBattle_DrawMonCell(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 
             PokeIcon_SetMonSlot((PokeIconRenderer*)D_8200AC50, idx, (BattleMon*)entry, ((D_82008F58.c[1] << 3) & 0x7C0) | ((D_82008F58.c[2] >> 2) & 0x3E) | ((D_82008F58.c[0] << 8) & 0xF800) | 1);
         }
         gSPDisplayList(gDisplayListHead++, D_80073408);
-        func_8001B884(x + 0x56, y + 6, 0x28, 0x28, PokeIcon_GetImage(D_8200AC50, idx), 0x28, 0x200000);
+        func_8001B884(x + 86, y + 6, 40, 40, PokeIcon_GetImage(D_8200AC50, idx), 40, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80073438);
         if (flags & 0x800) {
             gSPDisplayList(gDisplayListHead++, D_80073408);
-            func_8001B884(x + 4, y + 0x14, 0x1C, 0x1C, D_05000AA0, 0x1C, 0x200000);
+            func_8001B884(x + 4, y + 20, 28, 28, D_05000AA0, 28, 0x200000);
             gSPDisplayList(gDisplayListHead++, D_80073438);
         }
         if (flags & 0x200) {
             gSPDisplayList(gDisplayListHead++, D_80073408);
-            func_8001B884(x + 4, y + 0x14, 0x1C, 0x1C, D_05000478, 0x1C, 0x200000);
+            func_8001B884(x + 4, y + 20, 28, 28, D_05000478, 28, 0x200000);
             gSPDisplayList(gDisplayListHead++, D_80073438);
         }
     }
@@ -938,7 +938,7 @@ void FreeBattle_DrawSlotCell(s32 x, s32 y, s32* slot, s32 index, s32 flags, s32 
  */
 void FreeBattle_FillTrainerPanel(s32 x, s32 y, Color82001CCC color) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x, y, 0x88, 0x64, color);
+    func_80029028(x, y, 136, 100, color);
 }
 
 /**
@@ -952,7 +952,7 @@ void FreeBattle_FillTrainerPanel(s32 x, s32 y, Color82001CCC color) {
  */
 void FreeBattle_FillTeamPanel(s32 x, s32 y, Color82001CCC color) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x + 0x88, y, 0x18C, 0x64, color);
+    func_80029028(x + 136, y, 396, 100, color);
 }
 
 /**
@@ -962,8 +962,8 @@ void FreeBattle_FillTeamPanel(s32 x, s32 y, Color82001CCC color) {
  */
 void FreeBattle_DrawRowBorders(s32 x, s32 y, Color82001CCC color) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(x, y, 0x214, 1, color);
-    func_80029028(x, y + 0x63, 0x214, 1, color);
+    func_80029028(x, y, 532, 1, color);
+    func_80029028(x, y + 99, 532, 1, color);
 }
 
 extern char D_82009C08[];
@@ -977,7 +977,7 @@ void func_8001AC3C(void);
  *
  * Draws a filled rectangle with FreeBattle_FillTeamPanel using the color D_82008F58,
  * then switches the font to translucent, two-cycle text rendering (white
- * environment color, font set mask 0x20, Font_SetLineHeight(0x2A), prim color
+ * environment color, font set mask 0x20, Font_SetLineHeight(42), prim color
  * 255/100/255/255) and prints the string D_82009C08 at
  * (x + 0xAE, y + 0xE) before ending text rendering. flags is not used.
  * Seen in play: draws 「レンタルポケモンから 6たいえらぶ」 in the rental entry row.
@@ -987,10 +987,10 @@ void FreeBattle_DrawRentalPrompt(s32 x, s32 y, s32 flags) {
     func_8001AB6C();
     func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
     func_8001A384(0x20, 0);
-    Font_SetLineHeight(0x2A);
+    Font_SetLineHeight(42);
     func_8001ABE8();
     func_8001AAE4(0xFF, 0x64, 0xFF, 0xFF);
-    Font_Printf(x + 0xAE, y + 0xE, D_82009C08);
+    Font_Printf(x + 174, y + 14, D_82009C08);
     func_8001AC3C();
     func_8001ABBC();
 }
@@ -1040,7 +1040,7 @@ void FreeBattle_DrawRentalNameList(s32 x, s32 y, s32 flags, Slot82001E20* team) 
             func_8001AB6C();
             Font_SetColorForFlags(flags);
             func_8001A384(8, 0);
-            Font_Printf(x + 0x1B, y + 0x1A, D_82009C2C, team->index + 1);
+            Font_Printf(x + 27, y + 26, D_82009C2C, team->index + 1);
             func_8001ABBC();
         }
     } else if (team->flags & 4) {
@@ -1052,17 +1052,17 @@ void FreeBattle_DrawRentalNameList(s32 x, s32 y, s32 flags, Slot82001E20* team) 
         func_8001AB6C();
         Font_SetColorForFlags(flags);
         func_8001A384(4, 0);
-        Font_Printf(x + 4, y + 0x41, D_82009C34);
+        Font_Printf(x + 4, y + 65, D_82009C34);
         func_8001ABBC();
         return;
     }
     func_8001AB6C();
     func_8001AA9C(0xFF, 0xC8, 0xC8, 0xFF);
     func_8001A384(4, -1);
-    Font_Printf(x + 4, y + 0x41, D_82009C48);
+    Font_Printf(x + 4, y + 65, D_82009C48);
     Font_SetColorForFlags(flags);
     func_8001A384(4, 0);
-    Font_Printf(x + 0x38, y + 0x41, team->name);
+    Font_Printf(x + 56, y + 65, team->name);
     func_8001ABBC();
     if (team->value != 0) {
         gSPDisplayList(gDisplayListHead++, D_80073450);
@@ -1100,7 +1100,7 @@ void FreeBattle_DrawTeamRow(s32 x, s32 y, SlotList *team, s32 row, s32 flags, Sl
   if (team != 0)
   {
     FreeBattle_DrawRentalNameList(x, y, flags, (Slot82001E20 *) team);
-    new_var = icon_cache;
+    new_var = icon_cache; // FAKE: permuter temp
     if (team->unk_00 & 2)
     {
       FreeBattle_DrawRentalPrompt(x, y, flags);
@@ -1134,7 +1134,7 @@ void FreeBattle_DrawTeamRow(s32 x, s32 y, SlotList *team, s32 row, s32 flags, Sl
     }
     for (i = 0; i != 4; i++)
     {
-      if (team == new_var[i])
+      if (team == new_var[i]) // FAKE: permuter temp
       {
         {
           Gfx *_g = (Gfx *) (gDisplayListHead++);
@@ -1142,7 +1142,7 @@ void FreeBattle_DrawTeamRow(s32 x, s32 y, SlotList *team, s32 row, s32 flags, Sl
           _g->words.w0 = (((unsigned int) ((((unsigned int) 0xde) & ((0x01 << 8) - 1)) << 24)) | ((unsigned int) ((((unsigned int) 0x00) & ((0x01 << 8) - 1)) << 16))) | ((unsigned int) ((((unsigned int) 0) & ((0x01 << 16) - 1)) << 0)); // FAKE: hand-expanded gbi macro
         }
         ;
-        func_8001B884(x + 0x60, (y + 5) + (i * 0xE), 0x28, 0xE, D_82008F74[i], 0x28, 0x200000);
+        func_8001B884(x + 96, (y + 5) + (i * 14), 40, 14, D_82008F74[i], 40, 0x200000);
         {
           Gfx *_g = (Gfx *) (gDisplayListHead++);
           _g->words.w1 = (unsigned int) D_80073438; // FAKE: hand-expanded gbi macro
@@ -1266,7 +1266,7 @@ void FreeBattle_DrawRentalListWindow(s8 *entry, s32 cursor_style)
   def.items = D_8200AC58;
   def.count = 0;
   def.itemCount = 0x18;
-  def.itemSize = (*((s32 *) (((s8 *) entry) + 0x48))) * 6;
+  def.itemSize = (*((s32 *) (((s8 *) entry) + 0x48))) * 6; // FAKE: decomp slop, raw pointer casts stand in for struct fields
   switch (cursor_style)
   {
     case 1:

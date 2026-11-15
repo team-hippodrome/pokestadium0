@@ -70,7 +70,7 @@ s32 TournamentOpponent_PickUnfacedFinalist(SessionContext* session) {
         i = 0;
         do {
             pick = MathUtil_Random16() & 0xF;
-        } while (pick == 0xF);
+        } while (pick == 15);
         for (i = 0; i < session->roundOrDemoId - 1; i++) {
             if (pick == session->opponentHistory[0][i]) {
                 found = TRUE;

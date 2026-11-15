@@ -4,7 +4,7 @@
 #include "m2c_macros.h"
 #include "unused_relay_022.h"
 
-M2C_UNK func_80025BA0(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, s32); /* extern */
+M2C_UNK Fragment_QueueCall(s32, M2C_UNK *, M2C_UNK *, M2C_UNK, s32); /* extern */
 extern M2C_UNK D_002B1360;
 extern M2C_UNK D_002B13F0;
 extern M2C_UNK D_8E000000;
@@ -25,6 +25,6 @@ extern M2C_UNK D_8E000000;
  * @unverified Not reachable in play.
  */
 s32 UnusedRelay022_QueueMainMenuLauncher(UNUSED s32 arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
-    func_80025BA0(((u32) ((s32) &D_8E000000 & 0x0FF00000) >> 0x14) - 0x10, &D_002B1360, &D_002B13F0, 0, 0);
+    Fragment_QueueCall(((u32) ((s32) &D_8E000000 & 0x0FF00000) >> 0x14) - 0x10, &D_002B1360, &D_002B13F0, 0, 0);
     return 0x8040;
 }

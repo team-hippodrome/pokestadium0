@@ -136,8 +136,8 @@ void VsScene_StoreNodeCallback(s32 phase, s8 *node)
   s8 **new_var; // FAKE: permuter temp
   if (phase == 0)
   {
-    new_var = *((s8 ***) (((s8 *) node) + 0x14));
-    *new_var = node;
+    new_var = *((s8 ***) (((s8 *) node) + 0x14)); // FAKE: permuter temp
+    *new_var = node; // FAKE: permuter temp
   }
 }
 
@@ -312,7 +312,7 @@ void VsScene_ZoomIntoScreen(void) {
         BezierPath_InitEased(sp40, (s32) &D_82202C7C);
     }
     do {  // karodo
-    } while (0);
+    } while (0); // karodo
     while (BezierPath_Step(sp7C, sp3C + 0xA8) != 0) {
         BezierPath_Step(sp40, sp3C + 0xB4);
         temp_s0_2 = VsScene_DrawFrameToImage(0);
@@ -353,7 +353,7 @@ void VsScene_ZoomOutOfScreen(void) {
         BezierPath_InitEased(sp50, (s32) &D_82202CB4);
     }
     do {  // karodo
-    } while (0);
+    } while (0); // karodo
     while (BezierPath_Step(sp8C, rec + 0xA8) != 0) {
         if (i++ == 0x14) {
             StageFade_Start(0x20);
@@ -427,7 +427,7 @@ extern u8 D_8F5054C8[];
  *    (@unverified: no two-trainer battle was played).
  * The panel model is left on screen for VsScene_ZoomOutOfScreen.
  * Seen in play (2026-11-14) before a Free Battle (1P vs COM: panels and flip only) and from
- * Tournament_PlayNextRoundTitle before Monster Ball Cup round 2 (バトル-2, then 1P vs かじばどろぼう).
+ * Tournament_PlayNextRoundTitle before Poké Ball Cup round 2 (バトル-2, then 1P vs かじばどろぼう).
  */
 void VsScene_PlayTitleAndRevealTeams(void) {
     s32 track;
@@ -959,19 +959,19 @@ s32 Tournament_RunContinuePrompt(void) {
             Audio_PlaySoundEffectById(1);
             sel ^= 1;
         }
-        Ui_DrawGradientPanel(0x1E, 0xAA, 0x104, 0x32, &top, &bottom);
+        Ui_DrawGradientPanel(30, 170, 260, 50, &top, &bottom);
         Font_BeginTranslucentTextRendering();
         Font_SetActive(2, 0);
-        Font_Printf(0x4B, 0xB2, D_822030CC);
-        Gfx_SetEnvColor(0xFF, 0xFF, (sel == 0) ? 0 : 0xFF, 0xFF);
-        Font_Printf(0x55, 0xC6, D_822030EC);
-        Gfx_SetEnvColor(0xFF, 0xFF, (sel == 1) ? 0 : 0xFF, 0xFF);
-        Font_Printf(0xAA, 0xC6, D_822030F8);
+        Font_Printf(75, 178, D_822030CC);
+        Gfx_SetEnvColor(0xFF, 0xFF, (sel == 0) ? 0 : 0xFF, 0xFF); // #FFFF00 when selected, else #FFFFFF
+        Font_Printf(85, 198, D_822030EC);
+        Gfx_SetEnvColor(0xFF, 0xFF, (sel == 1) ? 0 : 0xFF, 0xFF); // #FFFF00 when selected, else #FFFFFF
+        Font_Printf(170, 198, D_822030F8);
         Font_EndTexturedTextRendering();
         gSPDisplayList(gDisplayListHead++, D_80060290);
         tex = D_8F625F00; // FAKE: temp stops the address being hoisted
         x = ((sel == 0) ? 0x21 : 0x76) + 0x1E;
-        Gfx_DrawTextureRgba16(x, 0xC5, 0x18, 0xE, (u8*)Util_ConvertAddrToVirtAddr((uintptr_t)tex), 0x18, 0x200000);
+        Gfx_DrawTextureRgba16(x, 197, 24, 14, (u8*)Util_ConvertAddrToVirtAddr((uintptr_t)tex), 24, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80060398);
         func_80006780();
     } while (!(gPlayer1Controller->buttonPressed & BTN_A));
@@ -980,12 +980,12 @@ s32 Tournament_RunContinuePrompt(void) {
         Tournament_SaveContinueData();
         do {
             VsScene_DrawFrame(0);
-            Ui_DrawGradientPanel(0x1E, 0xAA, 0x104, 0x32, &top, &bottom);
+            Ui_DrawGradientPanel(30, 170, 260, 50, &top, &bottom);
             Font_BeginTranslucentTextRendering();
             Font_SetActive(2, 0);
-            Font_Printf(0x34, 0xAF, D_82203108);
-            Font_Printf(0x34, 0xBD, D_82203128);
-            Font_Printf(0x34, 0xCB, D_8220314C);
+            Font_Printf(52, 175, D_82203108);
+            Font_Printf(52, 189, D_82203128);
+            Font_Printf(52, 203, D_8220314C);
             Font_EndTexturedTextRendering();
             func_80006780();
         } while (gPlayer1Controller->buttonPressed == 0);
@@ -1005,7 +1005,7 @@ s32 Tournament_RunContinuePrompt(void);
  * from D_82202C1C and D_82202C3C, and the round's badge lands on the cap (audio 0x50, 0x51, and
  * 0x52 for the final). After round 8 it calls Tournament_RecordCupClear; otherwise it asks
  * Tournament_RunContinuePrompt and returns its answer (1 = quit). Returns 0 when side 0 lost.
- * Seen in play (2026-11-14) after winning Monster Ball Cup round 1: the cap with the badge, then
+ * Seen in play (2026-11-14) after winning Poké Ball Cup round 1: the cap with the badge, then
  * トーナメントをつづけますか？. The fragment 034 thread saw the badge and sparkles too.
  */
 s32 Tournament_PlayBadgeAward(void) {
@@ -1037,7 +1037,7 @@ s32 Tournament_PlayBadgeAward(void) {
 
 extern u8 D_8F625614[];
 extern u8 D_8F61F87C[];
-void VsScene_LoadBroughtIcons(VsSceneSide* side, s32 sideIndex);
+void VsScene_LoadBroughtIcons(VsSceneSide* side, s32 side_index);
 void VsScene_DrawHpBars(s32);
 void VsScene_ZoomOutOfScreen(void);
 void Audio_StopSoundByCategory(s32 arg0, s32 arg1);
@@ -1120,7 +1120,7 @@ void Tournament_PlayNextRoundTitle(void) {
  * VS_SCENE_TOURNAMENT_RESULTS: the scene after a tournament battle. Results board and かち/まけ as
  * in Free Battle (music 0xD, 0x10 for the final), then the badge award; quitting at the continue
  * prompt sets transitionFlags 0x41, continuing plays the next round's title and panels.
- * Seen in play (2026-11-14) after winning Monster Ball Cup round 1.
+ * Seen in play (2026-11-14) after winning Poké Ball Cup round 1.
  */
 void VsScene_PlayTournamentResults(void) {
     CameraNode* camera = D_82203240->children;
@@ -1239,7 +1239,7 @@ void VsScene_LoadGeoLayout(s32 round) {
     ModelRenderer_AttachDisplayObject(&D_82203268);
     ModelRenderer_AttachDisplayObject(&D_822033D0);
     ModelRenderer_AttachDisplayObject(&D_82203538);
-    Color_SetRGB(&D_822036A0, 0xFF, 0xFF, 0xFF);
+    Color_SetRGB(&D_822036A0, 0xFF, 0xFF, 0xFF); // #FFFFFF
 }
 
 extern StageContext* D_82203204;

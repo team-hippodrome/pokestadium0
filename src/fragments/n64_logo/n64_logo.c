@@ -7,8 +7,8 @@
 #include "memory_main.h"
 
 void N64Logo_DrawLogoTexture(void);
-s32 N64Logo_DrawFrame(UNUSED u8 fadeMode);
-void N64Logo_HoldForOneSecond(u64 startTime);
+s32 N64Logo_DrawFrame(UNUSED u8 fade_mode);
+void N64Logo_HoldForOneSecond(u64 start_time);
 void N64Logo_ScanTransferPaks(void);
 
 /**
@@ -21,7 +21,7 @@ void N64Logo_ScanTransferPaks(void);
 void N64Logo_DrawLogoTexture(void) {
     s32 y;
     u8* strip;
-    u32 stripHeightMinusOne = 0xF;
+    u32 strip_height_minus_one = 15;
 
     gDPPipeSync(gDisplayListHead++);
     gDPSetCycleType(gDisplayListHead++, G_CYC_COPY);
@@ -31,10 +31,10 @@ void N64Logo_DrawLogoTexture(void) {
     gDPPipeSync(gDisplayListHead++);
 
     strip = D_2000000;
-    for (y = 0x40; y < 0xB0; y += 0x10, strip += 0x1000) {
+    for (y = 64; y < 176; y += 16, strip += 0x1000) {
         gDPLoadTextureBlock(gDisplayListHead++, strip, G_IM_FMT_RGBA, G_IM_SIZ_16b, 128, 16, 0,
                             G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, 7, 4, G_TX_NOLOD, G_TX_NOLOD);
-        gSPTextureRectangle(gDisplayListHead++, 0x0180, y << 2, 0x037C, (y + stripHeightMinusOne) << 2, G_TX_RENDERTILE, 0, 0,
+        gSPTextureRectangle(gDisplayListHead++, 0x0180, y << 2, 0x037C, (y + strip_height_minus_one) << 2, G_TX_RENDERTILE, 0, 0,
                             0x1000, 0x0400);
     }
 
@@ -58,18 +58,18 @@ s32 N64Logo_DrawFrame(UNUSED u8 fade_mode) {
 }
 
 /**
- * Busy-waits until 1,000,000 microseconds (1 second) have passed since startTime (an osGetTime
+ * Busy-waits until 1,000,000 microseconds (1 second) have passed since start_time (an osGetTime
  * count). ticks * 64 / 3000 is the libultra OS_CYCLES_TO_USEC conversion for the 46.875 MHz
  * counter. No frames are drawn meanwhile, so the last logo frame stays on screen.
  * Verified in play (2026-11-14): called once at boot right after N64Logo_ScanTransferPaks, with
- * startTime taken just after SFX_N64_LOGO; it returned 59 frames later (about 1 second).
+ * start_time taken just after SFX_N64_LOGO; it returned 59 frames later (about 1 second).
  * Renamed from Stadium 1's N64Logo_WaitForElapsed: the wait is always one second.
  */
 void N64Logo_HoldForOneSecond(u64 start_time) {
-    u32 elapsed_usec = 0xF;
+    u32 elapsed_usec = 15;
 
-    while (elapsed_usec < 0xF4240) {
-        elapsed_usec = __ull_div(__ll_mul(osGetTime() - start_time, 0x40), 0xBB8);
+    while (elapsed_usec < 1000000) {
+        elapsed_usec = __ull_div(__ll_mul(osGetTime() - start_time, 64), 3000);
     }
 }
 

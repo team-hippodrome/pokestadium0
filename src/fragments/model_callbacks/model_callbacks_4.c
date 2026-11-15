@@ -7,6 +7,7 @@
 #include "model_renderer_callbacks.h"
 #include "battle_hud.h"
 #include "vector_math.h"
+#include "pokemon.h"
 
 extern Vec3f sModelParticleResetPosition;
 extern Vec3f sModelParticleResetVelocity;
@@ -79,11 +80,11 @@ void ModelParticle_Spawn(ModelParticle* particles) {
     sp5C = D_8006049C->scale.y;
     sp58 = D_8006049C->scale.z;
     switch (D_8006049C->objectType) {
-        case 0x6D:
-        case 0x6E:
+        case KOFFING:
+        case WEEZING:
             var_fs0 = 0.5f;
             break;
-        case 0x92:
+        case MOLTRES:
             var_fs0 = 1.0f;
             sp64.x = 0.1f;
             sp64.y = 0.1f;
@@ -92,7 +93,7 @@ void ModelParticle_Spawn(ModelParticle* particles) {
             sp84.y += (f32)((guRandom() % 10) - 5) * sp5C;
             sp84.z += (f32)((guRandom() % 10) - 5) * sp58;
             break;
-        case 0x4D:
+        case PONYTA:
             var_fs0 = 0.5f;
             sp64.x = 0.002f;
             sp64.y = 0.002f;
@@ -101,7 +102,7 @@ void ModelParticle_Spawn(ModelParticle* particles) {
             sp84.y += (f32)((guRandom() % 20) - 10) * sp5C;
             sp84.z += (f32)((guRandom() % 20) - 10) * sp58;
             break;
-        case 0x4E:
+        case RAPIDASH:
             var_fs0 = 0.5f;
             sp64.x = 0.05f;
             sp64.y = 0.05f;
@@ -110,7 +111,7 @@ void ModelParticle_Spawn(ModelParticle* particles) {
             sp84.y += (f32)((guRandom() % 10) - 5) * sp5C;
             sp84.z += (f32)((guRandom() % 20) - 10) * sp58;
             break;
-        case 0x90:
+        case ARTICUNO:
             var_fs0 = 0.0f;
             sp64.x = 0.5f;
             sp64.y = 0.5f;
@@ -119,7 +120,7 @@ void ModelParticle_Spawn(ModelParticle* particles) {
             sp84.y += (f32)((guRandom() % 20) - 10) * sp5C;
             sp84.z += (f32)((guRandom() % 20) - 10) * sp58;
             break;
-        case 0x86:
+        case VAPOREON:
             var_fs0 = 0.0f;
             sp64.x = 0.5f;
             sp64.y = 0.5f;
@@ -128,7 +129,7 @@ void ModelParticle_Spawn(ModelParticle* particles) {
             sp84.y += (f32)((guRandom() % 40) - 10) * sp5C;
             sp84.z += (f32)((guRandom() % 60) - 30) * sp58;
             break;
-        case 0x5C:
+        case GASTLY:
             var_fs0 = 0.0f;
             var_s1 = 3;
             sp64.x = 20.0f;
@@ -181,8 +182,8 @@ void ModelParticle_UpdateSpawn(ModelParticle* particles) {
 
     var_a1 = D_8006049C->transformAnim.frameFixed >> 0x10;
     switch (D_8006049C->objectType) {
-        case 0x6D:
-        case 0x6E:
+        case KOFFING:
+        case WEEZING:
             temp_v1 = D_8006049C->transformAnim.animationId;
             temp_a0 = sModelSmokeSpawnFrameSets[sModelParticleCallbackCount % 18];
             switch (temp_v1) {
@@ -218,32 +219,32 @@ void ModelParticle_UpdateSpawn(ModelParticle* particles) {
                     return;
             }
             break;
-        case 0x92:
+        case MOLTRES:
             if ((guRandom() % 60) == 0) {
                 ModelParticle_Spawn(particles);
                 return;
             }
             break;
-        case 0x90:
+        case ARTICUNO:
             if ((guRandom() % 30) == 0) {
                 ModelParticle_Spawn(particles);
                 return;
             }
             break;
-        case 0x86:
+        case VAPOREON:
             if ((guRandom() % 7) == 0) {
                 ModelParticle_Spawn(particles);
                 return;
             }
             break;
-        case 0x5C:
+        case GASTLY:
             if ((var_a1 & 7) == 0) {
                 ModelParticle_Spawn(particles);
                 return;
             }
             break;
-        case 0x4D:
-        case 0x4E:
+        case PONYTA:
+        case RAPIDASH:
             if ((guRandom() % 7) == 0) {
                 ModelParticle_Spawn(particles);
             }
@@ -275,48 +276,48 @@ Gfx* ModelParticle_Draw(Gfx* gfx, ModelParticle* particle, DisplayListAddresses*
     gSPMatrix(gfx++, sp1EC, G_MTX_PUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
     gSPDisplayList(gfx++, addresses->segments[0]);
     switch (D_8006049C->objectType) {
-        case 0x6D:
-        case 0x6E:
+        case KOFFING:
+        case WEEZING:
             gDPLoadTextureBlock_4b(gfx++, addresses->textures[particle->age / 2], G_IM_FMT_I, 32, 32, 0,
                                    G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                    G_TX_NOLOD, G_TX_NOLOD);
-            gDPSetPrimColor(gfx++, 0, 0, 0x0A, 0x00, 0x00, 0xC8 - (particle->age * 0xD));
+            gDPSetPrimColor(gfx++, 0, 0, 0x0A, 0x00, 0x00, 0xC8 - (particle->age * 0xD)); // #0A0000
             break;
-        case 0x5C:
+        case GASTLY:
             gDPLoadTextureBlock_4b(gfx++, addresses->textures[particle->age / 2], G_IM_FMT_I, 32, 32, 0,
                                    G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                    G_TX_NOLOD, G_TX_NOLOD);
-            gDPSetEnvColor(gfx++, 0x32, 0x14, 0x46, 0x00);
-            if (particle->age < 0xA) {
-                gDPSetPrimColor(gfx++, 0, 0, 0x64, 0x46, 0x82, 0xFF);
+            gDPSetEnvColor(gfx++, 0x32, 0x14, 0x46, 0x00); // #321446
+            if (particle->age < 10) {
+                gDPSetPrimColor(gfx++, 0, 0, 0x64, 0x46, 0x82, 0xFF); // #644682
             } else {
-                gDPSetPrimColor(gfx++, 0, 0, 0x64, 0x46, 0x82, 0x28F - (particle->age * 0x28));
+                gDPSetPrimColor(gfx++, 0, 0, 0x64, 0x46, 0x82, 0x28F - (particle->age * 0x28)); // #644682
             }
             break;
-        case 0x92:
-        case 0x4D:
-        case 0x4E:
+        case MOLTRES:
+        case PONYTA:
+        case RAPIDASH:
             gDPLoadTextureBlock_4b(gfx++, addresses->textures[particle->age / 2], G_IM_FMT_I, 32, 32, 0,
                                    G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                    G_TX_NOLOD, G_TX_NOLOD);
-            gDPSetPrimColor(gfx++, 0, 0, 0xFF, 0xFF, 0x00, 0xFA - (particle->age * 3));
+            gDPSetPrimColor(gfx++, 0, 0, 0xFF, 0xFF, 0x00, 0xFA - (particle->age * 3)); // #FFFF00
             break;
-        case 0x86:
-        case 0x90:
+        case VAPOREON:
+        case ARTICUNO:
             gDPLoadTextureBlock(gfx++, addresses->textures[particle->age / 2], G_IM_FMT_IA, G_IM_SIZ_16b, 32, 32, 0,
                                 G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                 G_TX_NOLOD, G_TX_NOLOD);
             if (particle->age < 4) {
-                gDPSetPrimColor(gfx++, 0, 0, 0xFF, 0xFF, 0xFF, (particle->age * 0x14) + 0xB4);
+                gDPSetPrimColor(gfx++, 0, 0, 0xFF, 0xFF, 0xFF, (particle->age * 0x14) + 0xB4); // #FFFFFF
             } else {
-                gDPSetPrimColor(gfx++, 0, 0, 0xFF, 0xFF, 0xFF, 0x122 - (particle->age * 0xA));
+                gDPSetPrimColor(gfx++, 0, 0, 0xFF, 0xFF, 0xFF, 0x122 - (particle->age * 0xA)); // #FFFFFF
             }
             break;
         default:
             gDPLoadTextureBlock_4b(gfx++, addresses->textures[particle->age / 2], G_IM_FMT_I, 32, 32, 0,
                                    G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMIRROR | G_TX_CLAMP, G_TX_NOMASK, G_TX_NOMASK,
                                    G_TX_NOLOD, G_TX_NOLOD);
-            gDPSetPrimColor(gfx++, 0, 0, 0x0A, 0x00, 0x00, 0xC8 - (particle->age * 0xD));
+            gDPSetPrimColor(gfx++, 0, 0, 0x0A, 0x00, 0x00, 0xC8 - (particle->age * 0xD)); // #0A0000
             break;
     }
     gSPDisplayList(gfx++, addresses->segments[1]);
@@ -324,8 +325,8 @@ Gfx* ModelParticle_Draw(Gfx* gfx, ModelParticle* particle, DisplayListAddresses*
     if (ModelPhase_IsIdle() == 0) {
         ptr = D_8006049C;
         switch (ptr->objectType) {
-            case 0x6D:
-            case 0x6E:
+            case KOFFING:
+            case WEEZING:
                 particle->position.y += 0.5f * ptr->scale.y;
                 particle->age++;
                 particle->scale.x += 0.1f;
@@ -335,13 +336,13 @@ Gfx* ModelParticle_Draw(Gfx* gfx, ModelParticle* particle, DisplayListAddresses*
                     particle->active = 0;
                 }
                 break;
-            case 0x5C:
+            case GASTLY:
                 particle->age++;
                 if (particle->age >= 0x10) {
                     particle->active = 0;
                 }
                 break;
-            case 0x92:
+            case MOLTRES:
                 particle->position.y += 1.5f * ptr->scale.y;
                 particle->age++;
                 particle->scale.x += 0.005f;
@@ -351,7 +352,7 @@ Gfx* ModelParticle_Draw(Gfx* gfx, ModelParticle* particle, DisplayListAddresses*
                     particle->active = 0;
                 }
                 break;
-            case 0x4D:
+            case PONYTA:
                 particle->position.y += 0.75f * ptr->scale.y;
                 particle->age++;
                 particle->scale.x += 0.005f;
@@ -361,7 +362,7 @@ Gfx* ModelParticle_Draw(Gfx* gfx, ModelParticle* particle, DisplayListAddresses*
                     particle->active = 0;
                 }
                 break;
-            case 0x4E:
+            case RAPIDASH:
                 particle->position.y += ptr->scale.y;
                 particle->age++;
                 particle->scale.x += 0.005f;
@@ -371,7 +372,7 @@ Gfx* ModelParticle_Draw(Gfx* gfx, ModelParticle* particle, DisplayListAddresses*
                     particle->active = 0;
                 }
                 break;
-            case 0x90:
+            case ARTICUNO:
                 particle->position.y -= 0.5f * ptr->scale.y;
                 if (particle->age < 4) {
                     particle->scale.x += 0.15f;
@@ -383,11 +384,11 @@ Gfx* ModelParticle_Draw(Gfx* gfx, ModelParticle* particle, DisplayListAddresses*
                     particle->scale.z -= 0.075f;
                 }
                 particle->age++;
-                if ((particle->age >= 0xC) || (particle->position.y < 0.0f)) {
+                if ((particle->age >= 12) || (particle->position.y < 0.0f)) {
                     particle->active = 0;
                 }
                 break;
-            case 0x86:
+            case VAPOREON:
                 if (particle->age < 4) {
                     particle->scale.x += 0.15f;
                     particle->scale.y += 0.15f;
@@ -398,7 +399,7 @@ Gfx* ModelParticle_Draw(Gfx* gfx, ModelParticle* particle, DisplayListAddresses*
                     particle->scale.z -= 0.075f;
                 }
                 particle->age++;
-                if ((particle->age >= 0xC) || (particle->position.y < 0.0f)) {
+                if ((particle->age >= 12) || (particle->position.y < 0.0f)) {
                     particle->active = 0;
                 }
                 break;
@@ -454,7 +455,7 @@ void ModelCallback_Particles(s32 phase, DisplayListState* state) {
     if (phase == 0) { // karodo
     } else if (phase == 2) {
         if (sModelParticleCallbackCount == 0) {
-            state->gfx = Gfx_AllocDisplayList(0x418);
+            state->gfx = Gfx_AllocDisplayList(1048);
         } else {
             state->gfx = Gfx_AllocDisplayList(8);
         }

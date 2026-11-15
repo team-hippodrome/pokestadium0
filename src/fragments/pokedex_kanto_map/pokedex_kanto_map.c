@@ -76,7 +76,7 @@ Gfx* KantoMap_BuildRiversDisplayList(Gfx* gfx) {
  */
 void KantoMap_RiversGeoCallback(s32 call_context, GeoDisplayListNode* node) {
     if (call_context == 2) {
-        node->displayList = Gfx_AllocDisplayList(0x18);
+        node->displayList = Gfx_AllocDisplayList(24);
         KantoMap_BuildRiversDisplayList(node->displayList);
     }
 }
