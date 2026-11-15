@@ -226,7 +226,7 @@ void PokeIcon_UpdatePreview(PokeModelPreview* arg0) {
 
     if (var_v1 != 0) {
         arg0->spinSpeed = 0;
-        arg0->idleTimer = 0x78;
+        arg0->idleTimer = 120;
     } else if (arg0->flags & 4) {
         if (arg0->idleTimer > 0) {
             arg0->idleTimer--;
@@ -291,11 +291,11 @@ u8* PokeIcon_RenderPreview(PokeModelPreview* arg0) {
 
         switch (D_800AD1C4) {
             case 1:
-                Font_Printf(0, 0x64, D_80079A60, arg0->scale, (s32)arg0->displayObject->position.y);
+                Font_Printf(0, 100, D_80079A60, arg0->scale, (s32)arg0->displayObject->position.y);
                 break;
 
             case 2:
-                Font_Printf(0, 0x64, D_80079A70, (s32)arg0->displayObject->position.x, (s32)arg0->displayObject->position.z);
+                Font_Printf(0, 100, D_80079A70, (s32)arg0->displayObject->position.x, (s32)arg0->displayObject->position.z);
                 break;
         }
         Font_EndTexturedTextRendering();
