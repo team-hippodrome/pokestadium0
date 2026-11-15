@@ -117,7 +117,7 @@ s16 GbAudio_RenderNoise(void);
 void GbAudio_GenerateSamples(s16* arg0, s32 arg1, u32 arg2, f32 arg3);
 void GbAudio_QueueRegisterWrite(u16 arg0, u8 arg1, u16 arg2);
 u8 GbAudio_GetRegisterValue(u16 arg0);
-void GbAudio_Reset(u32 arg0, u8 arg1, u32 arg2);
+void GbAudio_Reset(u32 sample_rate, u8 echo_level, u32 echo_delay);
 void GbAudio_RenderSamples(u32 arg0);
 void GbAudio_ApplyQueuedWrites(u16 arg0);
 s16 GbAudio_RenderPulse1(void);
@@ -127,7 +127,7 @@ void GbAudio_ClearInterpolationHistory(void);
 void GbAudio_ClearOutputBuffer(void);
 void GbAudio_UnusedStub(void);
 
-/** Generates emulated Game Boy audio samples. */
+/** Renders `arg2` / 2 stereo samples of emulated Game Boy audio (GbAudio_RenderSamples); the other arguments are unused. */
 void GbAudio_GenerateSamples(s16* arg0, s32 arg1, u32 arg2, f32 arg3) {
     GbAudio_RenderSamples(arg2);
 }
@@ -149,11 +149,12 @@ u8 GbAudio_GetRegisterValue(u16 arg0) {
 }
 
 /**
- * Resets the Game Boy sound emulator for output at `sampleRate` Hz (32000): clears every sound register and
- * the write queue and silences all channels. Called by Cry_SetEnabled and Cry_PlayFromPokedex before a
- * Gen 1 cry is played through the emulated APU.
+ * Resets the Game Boy sound emulator for output at `sample_rate` Hz (32000): clears every sound register and
+ * the write queue and silences all channels. `echo_level` (out of 256) and `echo_delay` (in stereo
+ * samples, at most 2208) set the echo mixed in by GbAudio_RenderSamples. Called by Cry_SetEnabled and
+ * Cry_PlayFromPokedex before a Gen 1 cry is played through the emulated APU.
  */
-void GbAudio_Reset(u32 sample_rate, u8 arg1, u32 arg2) {
+void GbAudio_Reset(u32 sample_rate, u8 echo_level, u32 echo_delay) {
     u32 temp_t3;
     u8* p;
     s32 i;
@@ -210,11 +211,11 @@ void GbAudio_Reset(u32 sample_rate, u8 arg1, u32 arg2) {
     GbAudio_ClearOutputBuffer();
     GbAudio_ClearInterpolationHistory();
 
-    D_8010015C = arg1;
-    D_80100160 = arg2;
+    D_8010015C = echo_level;
+    D_80100160 = echo_delay;
     D_80100160 *= 2;
-    if (D_80100160 >= 0x1141U) {
-        D_80100160 = 0x1140;
+    if (D_80100160 >= 4417U) {
+        D_80100160 = 4416;
     }
     D_800FDEC8 = 2;
 }
@@ -241,7 +242,7 @@ void GbAudio_RenderSamples(u32 count) {
     var_a0 = ((var_t & 1) ? -1 : 0) + ((var_t & 2) ? -1 : 0) + ((var_t & 8) ? -1 : 0);
 
     if (D_800FDED4 < D_800FDED0) {
-        if ((0xB80 - (count * 4)) < (D_800FDED0 - D_800FDED4)) {
+        if ((2944 - (count * 4)) < (D_800FDED0 - D_800FDED4)) {
             count++;
         }
     } else if ((D_800FDED4 - D_800FDED0) < (count * 4)) {
@@ -279,12 +280,12 @@ void GbAudio_RenderSamples(u32 count) {
             if (1) {}  // karodo
             if (1) {}  // karodo
             if (1) {}  // karodo
-            tmp = (f32)D_800FDED8[((D_80100158 - D_80100160) + 0x1140) % 4416];
+            tmp = (f32)D_800FDED8[((D_80100158 - D_80100160) + 4416) % 4416]; // FAKE: f32 round trip
 
             var_a0 += (s16)(((tmp - var_a0) * D_8010015C) >> 8);
             D_800FDED8[D_80100158++] = var_a0;
-            if (D_80100158 >= 0x1140) {
-                D_80100158 -= 0x1140;
+            if (D_80100158 >= 4416) {
+                D_80100158 -= 4416;
             }
         }
 
@@ -292,8 +293,8 @@ void GbAudio_RenderSamples(u32 count) {
         D_800B41EC[D_800FDED4 + 1] = var_a0;
 
         D_800FDED4 += 2;
-        if (D_800FDED4 >= 0xB80) {
-            D_800FDED4 -= 0xB80;
+        if (D_800FDED4 >= 2944) {
+            D_800FDED4 -= 2944;
         }
 
         var_s4++;
@@ -307,8 +308,8 @@ void GbAudio_ApplyQueuedWrites(u16 arg0) {
         D_800FD848[D_800FDE88].reg[0] = D_800FD848[D_800FDE88].value;
         D_800FD848[D_800FDE88].reg[1] = 1;
         D_800FDE88++;
-        if (D_800FDE88 >= 0xC8) {
-            D_800FDE88 -= 0xC8;
+        if (D_800FDE88 >= 200) {
+            D_800FDE88 -= 200;
         }
     }
 }
@@ -345,7 +346,7 @@ s16 GbAudio_RenderPulse1(void) {
                 }
                 phase = 1;
                 D_800FD740.halfPeriods[0] = D_800FD740.period - D_800FD740.halfPeriods[1];
-                goto duty_done;
+                goto duty_done; // FAKE: goto
             case 1:
                 D_800FD740.halfPeriods[1] = D_800FD740.period >> 2;
                 if (D_800FD740.halfPeriods[1] < 0x40) {
@@ -353,7 +354,7 @@ s16 GbAudio_RenderPulse1(void) {
                 }
                 phase = 0;
                 D_800FD740.halfPeriods[0] = D_800FD740.period - D_800FD740.halfPeriods[1];
-                goto duty_done;
+                goto duty_done; // FAKE: goto
             case 2:
                 D_800FD740.halfPeriods[1] = D_800FD740.period >> 1;
                 if (D_800FD740.halfPeriods[1] < 0x40) {
@@ -361,7 +362,7 @@ s16 GbAudio_RenderPulse1(void) {
                 }
                 phase = 0;
                 D_800FD740.halfPeriods[0] = D_800FD740.period - D_800FD740.halfPeriods[1];
-                goto duty_done;
+                goto duty_done; // FAKE: goto
             case 3:
                 D_800FD740.halfPeriods[0] = D_800FD740.period >> 2;
                 if (D_800FD740.halfPeriods[0] < 0x40) {
@@ -369,7 +370,7 @@ s16 GbAudio_RenderPulse1(void) {
                 }
                 phase = 1;
                 D_800FD740.halfPeriods[1] = D_800FD740.period - D_800FD740.halfPeriods[0];
-                goto duty_done;
+                goto duty_done; // FAKE: goto
         }
         D_800FD740.halfPeriods[1] = 0;
         phase = 1;
@@ -442,7 +443,7 @@ s16 GbAudio_RenderPulse1(void) {
         } else {
             freq = (D_800FD740.frequency - (D_800FD740.frequency >> (GB_REG(0) & 7)));
             if ((freq >= 0x800) || (freq < 0)) {
-                goto skip;
+                goto skip; // FAKE: goto
             }
             D_800FD740.frequency = freq;
         }
@@ -538,7 +539,7 @@ s16 GbAudio_RenderPulse2(void) {
                 }
                 phase = 1;
                 D_800FD770.halfPeriods[0] = D_800FD770.period - D_800FD770.halfPeriods[1];
-                goto duty_done;
+                goto duty_done; // FAKE: goto
             case 1:
                 D_800FD770.halfPeriods[1] = D_800FD770.period >> 2;
                 if (D_800FD770.halfPeriods[1] < 0x40) {
@@ -546,7 +547,7 @@ s16 GbAudio_RenderPulse2(void) {
                 }
                 phase = 0;
                 D_800FD770.halfPeriods[0] = D_800FD770.period - D_800FD770.halfPeriods[1];
-                goto duty_done;
+                goto duty_done; // FAKE: goto
             case 2:
                 D_800FD770.halfPeriods[1] = D_800FD770.period >> 1;
                 if (D_800FD770.halfPeriods[1] < 0x40) {
@@ -554,7 +555,7 @@ s16 GbAudio_RenderPulse2(void) {
                 }
                 phase = 0;
                 D_800FD770.halfPeriods[0] = D_800FD770.period - D_800FD770.halfPeriods[1];
-                goto duty_done;
+                goto duty_done; // FAKE: goto
             case 3:
                 D_800FD770.halfPeriods[0] = D_800FD770.period >> 2;
                 if (D_800FD770.halfPeriods[0] < 0x40) {
@@ -562,7 +563,7 @@ s16 GbAudio_RenderPulse2(void) {
                 }
                 phase = 1;
                 D_800FD770.halfPeriods[1] = D_800FD770.period - D_800FD770.halfPeriods[0];
-                goto duty_done;
+                goto duty_done; // FAKE: goto
         }
         D_800FD770.halfPeriods[1] = 0;
         phase = 1;
@@ -657,12 +658,12 @@ s16 GbAudio_RenderNoise(void) {
     u32 nr44;
     u16 col;
     GbNoiseEntry* entry;
-    u8 sampleId;
+    u8 sample_id;
     s16 sample;
     GbNoiseSampleEntry* ent;
 
     changed = 0;
-    for (i = 0x10; i < 0x14; i++) {
+    for (i = 16; i < 20; i++) {
         if (GB_REG_DIRTY(i) != 0) {
             changed = 1;
             GB_REG_DIRTY(i) = 0;
@@ -674,17 +675,17 @@ s16 GbAudio_RenderNoise(void) {
         row = nr43 & 7;
         col = (GB_REG(0x12) & 0xF0) >> 4;
         entry = &GB_NOISE_TABLE[row][col];
-        sampleId = entry->sampleId;
-        if (sampleId == 0xFF) {
+        sample_id = entry->sampleId;
+        if (sample_id == 0xFF) {
             D_800FD7B8.enabled = 0;
             return 0;
         }
         if (GB_REG(0x12) & 8) {
-            sampleId += 0x10;
+            sample_id += 16;
         }
         D_800FD7B8.pitchStep = GB_NOISE_TABLE[nr43 & 7][col].pitchStep;
-        if (sampleId != D_800FD7B8.sampleId) {
-            D_800FD7B8.sampleId = sampleId;
+        if (sample_id != D_800FD7B8.sampleId) {
+            D_800FD7B8.sampleId = sample_id;
             ent = (GbNoiseSampleEntry*)((u32*)D_800B41E4 + (D_800FD7B8.sampleId << 1));
             Rom_DmaRead(ent->romAddr, (u32)D_800B41E8, ent->size);
         }
@@ -770,7 +771,7 @@ s16 GbAudio_RenderNoise(void) {
     return sample;
 }
 
-/** Clears the sample interpolation history. */
+/** Clears the echo delay line D_800FDED8 and its write position (see GbAudio_Reset). */
 void GbAudio_ClearInterpolationHistory(void) {
     s32 i;
 
@@ -780,7 +781,7 @@ void GbAudio_ClearInterpolationHistory(void) {
     D_80100158 = 0;
 }
 
-/** Clears the audio output buffer. */
+/** Clears the 2944-sample ring buffer D_800B41EC that GbAudio_RenderSamples writes, and its read and write positions. */
 void GbAudio_ClearOutputBuffer(void) {
     s32 i;
 

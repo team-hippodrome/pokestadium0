@@ -196,7 +196,7 @@ void GbMusic_UpdateChannel(u32 arg0) {
                     sp2F = D_800B4000[arg0].vibratoExtent & 0xF;
                     D_800B3FE8[arg0] &= ~8;
                     if (D_800B4000[arg0].frequencyLow < sp2F) {
-                        sp2F = D_800B3FE8[arg0] * 0;
+                        sp2F = D_800B3FE8[arg0] * 0; // FAKE: * 0
                     } else {
                         sp2F = D_800B4000[arg0].frequencyLow - sp2F;
                     }
@@ -356,6 +356,8 @@ u8 GbMusic_CmdLoop(u32 arg0) {
     sp27 = GbMusic_ReadStreamByte(arg0);
     sp26 = GbMusic_ReadStreamByte(arg0);
 
+    //!bug adds the offset to the address of D_800B4118 itself, not to the channel's base D_800B4118[arg0]
+    // as GbMusic_CmdCall does
     D_800B40D8[arg0] = (u8*)D_800B4118 + ((sp26 << 8) | sp27);
     return 0;
 }
@@ -366,7 +368,11 @@ u8 GbMusic_CmdToggleFinePitch(u32 arg0) {
     return 0;
 }
 
-/** Music command: sets the channel's volume envelope. */
+/**
+ * Music command 0xEA (pokered's vibrato): reads the vibrato delay, then one byte whose high nybble
+ * gives the vibrato extent (split into up and down steps) and whose low nybble the vibrato rate.
+ * The name says envelope; the code sets the vibrato fields.
+ */
 u8 GbMusic_CmdSetEnvelope(u32 arg0) {
     u8 temp_a0;
     u8 temp_a1;
@@ -560,7 +566,7 @@ u8 GbMusic_TriggerNoteFromByte(u32 arg0, u8 arg1) {
     s32 temp_v0 = arg1 & 0xF0;
 
     if ((arg0 != 3) || (temp_v0 > 0xB0)) {
-        GbMusic_ScheduleNote(arg0, arg1);
+        GbMusic_ScheduleNote(arg0, arg1); //!bug the call below then passes sp1F uninitialized
     } else {
         if (temp_v0 == 0xB0) {
             sp1F = GbMusic_ReadStreamByte(arg0);
@@ -625,13 +631,13 @@ s32 GbMusic_TriggerChannelNote(u32 arg0, u16 arg1, u16 arg2) {
     s32 tmp;
     u8 tmp1;
 
-    arg1 = (arg1 & 0xF0) >> 8;
+    arg1 = (arg1 & 0xF0) >> 8; //!bug always 0: the pitch nybble is shifted out
 
     tmp1 = D_800B40C8[arg0];
     var_s1 = GbMusic_GetNoteFrequency(arg1, tmp1);
     tmp = D_800B3FE8[arg0] == 0;
 
-    if (tmp & 0x10) {
+    if (tmp & 0x10) { //!bug never true: tmp is 0 or 1
         GbMusic_StartPitchSlide(arg0, var_s1);
     }
 
@@ -715,12 +721,12 @@ s32 GbMusic_WriteChannelFrequency(u32 arg0, u16 arg1) {
         u32 new_var2 = arg1 & 0xFF; // FAKE: permuter temp
         u32 new_var = (((arg1 >> 8) & 0xFF) | 0x80) & 0xC7; // FAKE: permuter temp
 
-        sp2E[2] = new_var2;
-        sp2E[3] = new_var;
+        sp2E[2] = new_var2; // FAKE
+        sp2E[3] = new_var; // FAKE
 
         temp_v0 = GbMusic_GetChannelRegister(arg0, 3);
-        GbAudio_QueueRegisterWrite(temp_v0, new_var2, 0);
-        GbAudio_QueueRegisterWrite(temp_v0 + 1, new_var, 0);
+        GbAudio_QueueRegisterWrite(temp_v0, new_var2, 0); // FAKE
+        GbAudio_QueueRegisterWrite(temp_v0 + 1, new_var, 0); // FAKE
 
         if (D_800B3FD8[4] != 0) {
             GbMusic_WriteTransposedFrequency(sp2E[2] + (sp2E[3] << 8), temp_v0);
@@ -834,7 +840,7 @@ u8 GbMusic_ReadStreamByte(u32 arg0) {
 u16 GbMusic_GetChannelRegister(u32 arg0, s32 arg1) {
     UNUSED s32 pad; // FAKE: stack padding
     u16 D_800785BC[] = {
-        0xFF10, 0XFF15, 0xFF1A, 0XFF1F, 0xFF10, 0XFF15, 0xFF1A, 0XFF1F,
+        0xFF10, 0xFF15, 0xFF1A, 0xFF1F, 0xFF10, 0xFF15, 0xFF1A, 0xFF1F,
     };
     s32 ret = D_800785BC[arg0] + arg1;
 
@@ -854,12 +860,9 @@ u16 GbMusic_GetNoteFrequency(u8 arg0, u8 arg1) {
 }
 
 /**
- * GbMusic_StartMusic
- *
  * Resets the Game Boy sound-chip emulation state and starts music sequence
  * arg0: clears the per-channel arrays for the four channels (and the two
- * 8-entry pointer/word tables), sets the halfword D_800B4140 to 0x100 (its
- * meaning is not established here), programs the
+ * 8-entry pointer/word tables), sets the music tempo D_800B4140 to 0x100, programs the
  * master registers 0xFF24/0xFF10/0xFF25/0xFF1A through the register-write
  * queue (GbAudio_QueueRegisterWrite) and finally binds the sequence tracks
  * (GbMusic_BindSequenceTracks).
@@ -1084,7 +1087,7 @@ void GbMusic_RelocateBank(GbMusicBank* bank) {
     bank->offset = (u32)temp_v1;
     for (i = 0; i != (end * 3); i++) {
         temp_v0 = (GbMusicTrackHeader*)((u32)i * 8 + (u32)temp_v1);
-        temp_v0 += 0;
+        temp_v0 += 0; // FAKE: + 0
         temp_v0->data += base;
     }
     bank->flags = 1;

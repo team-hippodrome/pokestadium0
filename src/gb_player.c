@@ -44,11 +44,11 @@ s32 GbPak_VerifyPattern(s32 arg0, void* arg1) {
     u8 sp47;
     u8 sp24[0x20];
     s32 sp20 = 0;
-    UNUSED u8 padding[8];
+    UNUSED u8 padding[8]; // FAKE: stack padding
 
     if ((GbPak_MbcWrite(arg0, arg1, 0, 0x20) == 0) && (GbPak_MbcRead(arg0, (uintptr_t)&sp24, 0, 0x20) == 0) &&
         (bcmp(&sp24, arg1, 0x20) == 0) && (osGbpakGetStatus(&D_800AB050[arg0], &sp47) == 0)) {
-        sp20 = ((sp47 & 4) != 0) == 0;
+        sp20 = ((sp47 & 4) != 0) == 0; // FAKE: double negation
     }
     return sp20;
 }
@@ -125,7 +125,7 @@ s32 GbPlayer_IsPakInserted(s32 arg0, u8 arg1) {
         Game_ShutdownAndLoadFragment(arg0, 1);
     }
 
-    temp_v1 = !((status & OS_GBPAK_RSTB_DETECTION) != 0);
+    temp_v1 = !((status & OS_GBPAK_RSTB_DETECTION) != 0); // FAKE: double negation
     if (arg1 == 0) {
         osGbpakPower(&D_800AB050[arg0], 0);
         D_800AB1F0[arg0] = 0;
@@ -207,14 +207,14 @@ s32 GbPlayer_ScanPaks(void) {
 s32 GbPak_IsCartOff(s32 arg0) {
     u8 status;
     s32 ret = osGbpakGetStatus(&D_800AB050[arg0], &status);
-    UNUSED u8 filler;
+    UNUSED u8 filler; // FAKE: stack padding
 
     // check the error code returned (if applicable) by the osGbpakGetStatus
     // call.
     if ((ret == PFS_ERR_NOPACK) || (ret == PFS_ERR_DEVICE) || (ret == PFS_ERR_CONTRFAIL)) {
         Game_ShutdownAndLoadFragment(arg0, 1);
     }
-    return !((status & OS_GBPAK_GBCART_ON) != 0);
+    return !((status & OS_GBPAK_GBCART_ON) != 0); // FAKE: double negation
 }
 
 /**
@@ -240,7 +240,7 @@ s32 GbPak_IsCartOn(s32 arg0) {
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 GbPlayer_ReinitPak(s32 arg0) {
-    UNUSED u8 filler[4];
+    UNUSED u8 filler[4]; // FAKE: stack padding
     u8 status;
     OSGbpakId sp28;
 
@@ -434,11 +434,11 @@ u8 GbPlayer_SetPollMask(u8 arg0) {
     return temp_v0;
 }
 
-// Polls one Game Boy pak per call, rotating through ports 0-3. The first
-// osGbpakGetStatus failure on a port enabled by GbPlayer_SetPollMask latches
-// D_800AB1F8 and calls Game_ShutdownAndLoadFragment(port, 1); the per-port
-// failure counter D_800A82AC is not used.
-/** Polls the Transfer Pak connection state. */
+/**
+ * Polls one Transfer Pak per call, rotating through ports 0-3. The first osGbpakGetStatus failure on a
+ * port enabled by GbPlayer_SetPollMask latches D_800AB1F8 and calls Game_ShutdownAndLoadFragment(port, 1);
+ * the per-port failure counter D_800A82AC is not used.
+ */
 void GbPlayer_PollPakConnection(void) {
     u8 sp1F;
     static s32 D_800697D0 = 0; // .data
@@ -454,8 +454,10 @@ void GbPlayer_PollPakConnection(void) {
     }
 }
 
-// Checks every pak enabled by GbPlayer_SetPollMask in one call, using the same
-// failure handling as GbPlayer_PollPakConnection.
+/**
+ * Checks every pak enabled by GbPlayer_SetPollMask in one call, with the same failure handling as
+ * GbPlayer_PollPakConnection.
+ */
 void func_8000B340_jp(void) {
     s32 i;
     u8 status;

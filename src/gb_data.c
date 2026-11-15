@@ -43,10 +43,10 @@ char* Text_CopySpeciesName(char* arg0, s32 arg1);
 char* Text_GetTmHmName(s32 arg0, char* arg1);
 void Pokemon_FromGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1);
 void Pokemon_ToGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1);
-u16 StatExpSqrt(u16 square);
+u16 Pokemon_StatExpSqrt(u16 square);
 void GbData_UnusedStub(void);
-u16 GetPokemonDV(s32 statId, u16 dvBits);
-u32 CalculateStatValue(s32 statId, s32 speciesId, u16 statModifier, u16 level, u16 dvBits);
+u16 Pokemon_GetDv(s32 stat_id, u16 dv_bits);
+u32 Pokemon_CalcStat(s32 stat_id, s32 species_id, u16 stat_modifier, u16 level, u16 dv_bits);
 void Pokemon_RecalcStats(BattleMon* arg0);
 u16 Pokemon_StatExpForTarget(s32 arg0, s32 arg1, u16 arg2, u16 arg3, u16 arg4);
 u32 Pokemon_ExpForLevel(s32 arg0, u16 arg1);
@@ -202,12 +202,15 @@ char* Text_CopySpeciesName(char* arg0, s32 arg1) {
     return arg0;
 }
 
-/** Builds the name of a TM or HM into a buffer. */
+/**
+ * Writes the name of item `arg0` into `arg1`: items 1-83 from the name table D_8006B570, 196-200 as
+ * HM01-HM05, 201-254 as TM01-TM54, anything else as table entry 6.
+ */
 char* Text_GetTmHmName(s32 arg0, char* arg1) {
-    // "ひでんマシン%02d"
+    // ひでんマシン%02d: "HM%02d"
     static const char D_0007CCA0[] = { 164, 210, 164, 199, 164, 243, 165, 222, 165, 183,
                                        165, 243, 37, 48, 50, 100, 0, 0, 0, 0 };
-    // "わざマシン%02d"
+    // わざマシン%02d: "TM%02d"
     static const char D_0007CCB4[] = { 164, 239, 164, 182, 165, 222, 165, 183,
                                        165, 243, 37, 48, 50, 100, 0, 0 };
 
@@ -228,6 +231,7 @@ s16 func_8001FAB0(s8 *);                          /* extern */
 s32 func_8001FAC8(s8 *);                          /* extern */
 M2C_UNK func_80056690(s8 *, s8 *, M2C_UNK);     /* extern */
 
+/** Converts a Game Boy Pokémon record (big-endian, internal species index) to a battle Pokémon. */
 void Pokemon_FromGbRecord(BattleMon* arg0, GbPokemonRecord* arg1) {
     arg0->species.id = Species_FromInternalIndex(arg1->species);
     arg0->species.isRental = 0;
@@ -297,7 +301,7 @@ void Pokemon_ToGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1) {
 }
 
 /** Returns the integer square root used for stat experience, found by search. */
-u16 StatExpSqrt(u16 square) {
+u16 Pokemon_StatExpSqrt(u16 square) {
     u16 i;
 
     for (i = 1; i < 255; i++) {
@@ -314,7 +318,8 @@ u16 StatExpSqrt(u16 square) {
 void GbData_UnusedStub(void) {
 }
 
-u16 GetPokemonDV(s32 stat_id, u16 dv_bits) { //GetPokemonDV
+/** Returns the DV (0-15) for stat `stat_id` from the packed `dv_bits`; the HP DV is built from the others' low bits. */
+u16 Pokemon_GetDv(s32 stat_id, u16 dv_bits) {
     u16 dv_value;
 
     switch (stat_id) {
@@ -346,7 +351,7 @@ u16 GetPokemonDV(s32 stat_id, u16 dv_bits) { //GetPokemonDV
 }
 
 /** Calculates a stat from the base stat, DVs, stat experience and level. */
-u32 CalculateStatValue(s32 stat_id, s32 species_id, u16 stat_modifier, u16 level, u16 dv_bits) {
+u32 Pokemon_CalcStat(s32 stat_id, s32 species_id, u16 stat_modifier, u16 level, u16 dv_bits) {
     u16 stat_value;
     u16 base_stat;
     u16 dv_value;
@@ -370,10 +375,10 @@ u32 CalculateStatValue(s32 stat_id, s32 species_id, u16 stat_modifier, u16 level
     }
 
     // Get the Pokémon's DV for the stat (or HP DV)
-    dv_value = GetPokemonDV(stat_id, dv_bits);
+    dv_value = Pokemon_GetDv(stat_id, dv_bits);
 
     // Compute the preliminary stat value
-    stat_value = (((StatExpSqrt(stat_modifier) / 4) + ((base_stat + dv_value) * 2)) * level) / 100;
+    stat_value = (((Pokemon_StatExpSqrt(stat_modifier) / 4) + ((base_stat + dv_value) * 2)) * level) / 100;
 
     // Add final adjustments
     if (stat_id == STAT_HP) {
@@ -393,11 +398,11 @@ u32 CalculateStatValue(s32 stat_id, s32 species_id, u16 stat_modifier, u16 level
 /** Recalculates a Pokemon's level and all of its stats. */
 void Pokemon_RecalcStats(BattleMon* arg0) {
     arg0->level = Pokemon_LevelFromExp(arg0->species.id, arg0->exp);
-    arg0->maxHp = CalculateStatValue(1, arg0->species.id, arg0->statExp[0], arg0->level, arg0->dvs);
-    arg0->attack = CalculateStatValue(2, arg0->species.id, arg0->statExp[1], arg0->level, arg0->dvs);
-    arg0->defense = CalculateStatValue(3, arg0->species.id, arg0->statExp[2], arg0->level, arg0->dvs);
-    arg0->speed = CalculateStatValue(4, arg0->species.id, arg0->statExp[3], arg0->level, arg0->dvs);
-    arg0->special = CalculateStatValue(5, arg0->species.id, arg0->statExp[4], arg0->level, arg0->dvs);
+    arg0->maxHp = Pokemon_CalcStat(STAT_HP, arg0->species.id, arg0->statExp[0], arg0->level, arg0->dvs);
+    arg0->attack = Pokemon_CalcStat(STAT_ATTACK, arg0->species.id, arg0->statExp[1], arg0->level, arg0->dvs);
+    arg0->defense = Pokemon_CalcStat(STAT_DEFENSE, arg0->species.id, arg0->statExp[2], arg0->level, arg0->dvs);
+    arg0->speed = Pokemon_CalcStat(STAT_SPEED, arg0->species.id, arg0->statExp[3], arg0->level, arg0->dvs);
+    arg0->special = Pokemon_CalcStat(STAT_SPECIAL, arg0->species.id, arg0->statExp[4], arg0->level, arg0->dvs);
 }
 
 /** Searches for the stat experience that produces a target stat value. */
@@ -406,7 +411,7 @@ u16 Pokemon_StatExpForTarget(s32 arg0, s32 arg1, u16 arg2, u16 arg3, u16 arg4) {
     s32 tmp;
 
     for (i = 1; i < 0xFFFF; i += 2) {
-        tmp = CalculateStatValue(arg0, arg1, i + 2, arg3, arg4);
+        tmp = Pokemon_CalcStat(arg0, arg1, i + 2, arg3, arg4);
         if (arg2 < tmp) {
             break;
         }
@@ -483,7 +488,7 @@ void Pokemon_PrepareBattleMon(BattleMon* arg0) {
             temp_a3 = (arg0->pp[i] >> 6) & 3;
             var_v0 = gMoveData[arg0->moves[i] - 1].pp;
 
-            if (var_v0 >= 0x28) {
+            if (var_v0 >= 40) {
                 var_v0 = var_v0 + (temp_a3 * 7);
             } else {
                 var_v0 = var_v0 + ((var_v0 / 5) * temp_a3);
@@ -531,7 +536,7 @@ u8 Species_GetKanaOrderEntry(s32 pos) {
 extern s8 D_8006BAEB;
 /**
  * Returns entry `pos` of a second species order table (D_8006BAEB) beside the kana order.
- * @unverified: no caller found and the order is not recognised.
+ * @unverified: no caller found and the order is not recognized.
  */
 u8 Species_GetAltOrderEntry(s32 pos) {
     return *(&D_8006BAEB + pos);
@@ -586,11 +591,11 @@ DeckHandle* Deck_Open(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
         sp1C->flags = 0;
 
         switch (arg0 & 0xF0) {
-            case 16:
+            case 0x10:
                 Deck_InitializeSaveBackend(sp1C);
                 break;
 
-            case 32:
+            case 0x20:
                 Deck_InitializeBoxBackend(sp1C);
                 break;
         }

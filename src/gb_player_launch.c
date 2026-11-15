@@ -27,11 +27,11 @@ void GbPlayer_OutputThreadEntry(s32 arg0) {
     Sched_AddClient(D_800AAF44 + 0x21B0);
 loop_1:
     SchedClient_WaitMessage(D_800AAF44 + 0x21B0);
-    if (M2C_FIELD(&D_800A9710, s16 *, 0xA38) >= 0x15) {
-        goto loop_1;
+    if (M2C_FIELD(&D_800A9710, s16 *, 0xA38) >= 21) {
+        goto loop_1; // FAKE: goto loop
     }
     temp_s2(D_800AAF44);
-    goto loop_1;
+    goto loop_1; // FAKE: goto loop
 }
 
 M2C_UNK (*func_80002C80(M2C_UNK *))(s32);           /* extern */
@@ -62,19 +62,15 @@ void GbPlayer_EmulatorThreadEntry(s32 arg0) {
     func_8005C130(D_800AAF44);
 loop_1:
     SchedClient_WaitMessage(D_800AAF40 + 0x21D4);
-    if (M2C_FIELD(&D_800A9710, s16 *, 0xA38) >= 0x15) {
-        goto loop_1;
+    if (M2C_FIELD(&D_800A9710, s16 *, 0xA38) >= 21) {
+        goto loop_1; // FAKE: goto loop
     }
     temp_s2(D_800AAF40);
-    goto loop_1;
+    goto loop_1; // FAKE: goto loop
 }
 
 /*
- * GbPlayer_Start
- *
- * Starts the Game Boy Tower emulator (the counterpart of GbPlayer_Stop below;
- * the donor decomp calls this function GbPlayer_Start and the symbol table
- * keeps that name).  Steps, in the order the code does them:
+ * GbPlayer_Start steps, in the order the code does them:
  *   1. push a memory-pool state tagged 'GBEM' and allocate two blocks:
  *      D_800AAF40 (0x2208 bytes, the emulator thread's data) and D_800AAF44
  *      (0x21E0 bytes, the audio thread's data);
@@ -84,8 +80,8 @@ loop_1:
  *   3. save the 8-byte input state *arg0 at offset 0x2200 of D_800AAF40
  *      (GbPlayer_Stop copies it back);
  *   4. create a one-slot message queue at D_800AAF40 + 0x21B4 with its
- *      buffer at +0x21B0, then create the audio thread (id 9, priority 0x11,
- *      GbPlayer_OutputThreadEntry) and the emulator thread (id 8, priority 0xF,
+ *      buffer at +0x21B0, then create the audio thread (id 9, priority 17,
+ *      GbPlayer_OutputThreadEntry) and the emulator thread (id 8, priority 15,
  *      GbPlayer_EmulatorThreadEntry), each with its stack top at its block + 0x21B0;
  *   5. record the previous GbPlayer_SetPollMask(0) value in D_800AAF48 and
  *      start the emulator thread.
@@ -111,7 +107,7 @@ u8 func_8000C610(u8);
 /**
  * Starts a GB Player session: allocates both thread blocks, loads the emulator
  * fragment and fonts, copies the session parameters and starts the emulator thread.
- * Seen in play (2026-11-13) ran each time the GB player started (main menu GB, Yes), twice in one
+ * Seen in play (2026-11-13) ran each time the GB Player started (main menu GB, Yes), twice in one
  * session.
  * @unverified Name was previously used only by callers of this address; the definition was still func_. Comment from Stadium 1.
  */
@@ -121,14 +117,14 @@ void GbPlayer_Start(GbPlayerLaunchParams* arg0) {
     main_pool_push_state('GBEM');
     D_800AAF40 = (s32)main_pool_alloc(0x2208, 0);
     D_800AAF44 = (s32)main_pool_alloc(0x21E0, 0);
-    Fragment_Load(((((u32)D_81100000) & 0x0FF00000) >> 0x14) - 0x10, D_00080C00, D_000DA9B0);
+    Fragment_Load(((((u32)D_81100000) & 0x0FF00000) >> 20) - 16, D_00080C00, D_000DA9B0);
     temp_v0 = BinArchive_Open(D_002B2C80, D_002E0BE0, 1, 1);
     M2C_FIELD(D_800AAF40, void**, 0x21CC) = BinArchive_GetFile(temp_v0, 0);
     M2C_FIELD(D_800AAF40, void**, 0x21D0) = BinArchive_GetFile(temp_v0, 1);
     M2C_FIELD(D_800AAF40, GbPlayerLaunchParams*, 0x2200) = *arg0;
     func_800567E0(D_800AAF40 + 0x21B4, D_800AAF40 + 0x21B0, 1);
-    func_80051B20(D_800AAF44, 9, GbPlayer_OutputThreadEntry, 0, D_800AAF44 + 0x21B0, 0x11);
-    func_80051B20(D_800AAF40, 8, GbPlayer_EmulatorThreadEntry, 0, D_800AAF40 + 0x21B0, 0xF);
+    func_80051B20(D_800AAF44, 9, GbPlayer_OutputThreadEntry, 0, D_800AAF44 + 0x21B0, 17);
+    func_80051B20(D_800AAF40, 8, GbPlayer_EmulatorThreadEntry, 0, D_800AAF40 + 0x21B0, 15);
     D_800AAF48 = func_8000C610(0);
     func_8005C130(D_800AAF40);
 }
@@ -157,7 +153,7 @@ void func_80002620(s32);
 /**
  * Ends the session: copies the session parameters back (button bindings), restores
  * the pak poll mask and destroys both threads.
- * Seen in play (2026-11-13) ran when quitting the GB player (C-Up menu, Quit game, Yes) back to the
+ * Seen in play (2026-11-13) ran when quitting the GB Player (C-Up menu, Quit game, Yes) back to the
  * main menu.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
