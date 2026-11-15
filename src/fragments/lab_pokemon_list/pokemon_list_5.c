@@ -19,12 +19,12 @@ extern u8 D_80073520[];
 M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 extern s32 D_8910A7F8[3];
 void func_80027410(void*, void*, s32, s32, s32);
-void func_89109990(void*, void*, void*, s32);
+void LabPCList_InitSourceBoxes(void*, void*, void*, s32);
 extern s32 D_800603C0;
 void func_8000B2F4(s32);
 void Window_SetRect(s8 *, s32, s32, s32, s32);
 void func_80027804(s8*, s8*, s32, s32);
-void func_89109B60(s8*);
+void LabPCList_LoadAllBoxes(s8*);
 void func_80027D68(s32, s32);
 void ScrollList_Init(s8*, s8*, s8*, s32, void*, s32, s32);
 void LabPCList_DrawMonRow();
@@ -38,7 +38,7 @@ s32 LabPCList_GetColumnCursorX();
 extern Entry80066AD8 D_80066AD8[];
 s32 Pokemon_GetTypeIndex(u8*, s32);
 M2C_UNK func_8001A384(M2C_UNK, M2C_UNK);
-M2C_UNK func_8001A944(s32, s32, M2C_UNK *, ...);
+void Font_Printf(s32 x, s32 y, const char* fmt, ...);
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);
 M2C_UNK func_8001AB6C();
 M2C_UNK func_8001ABBC();
@@ -64,23 +64,23 @@ extern s32 D_8910D990[];
 void ScrollList_SetItems(s32*, void*, void*);
 void func_80027D94(s32, void*, void*, void*);
 void func_80027D68(s32, s32);
-s32 func_891096F4();
-s32 func_89109720();
-s32 func_891097E4();
-s32 func_89109884();
-s32 func_89109898();
-s32 func_89109960();
+int LabPCList_FilterByLevelRange();
+s32 LabPCList_FilterByAnyType();
+s32 LabPCList_FilterByAnyMove();
+s32 LabPCList_FilterBySpeciesId();
+s32 LabPCList_FilterByExactTypePair();
+s32 LabPCList_FilterByBattleEligible();
 void func_8000A460(s8*, s8*);
 u32 func_800566BC(s8*);
 void LabPCList_InitPopupMenu(LabPopupMenu*, void*, s8*, s32, s32);
 void LabPCList_PlacePopup(LabPopupMenu*);
-void func_8910A21C(s8*, s8*, s8*, s32);
+void LabPCList_BuildUsableItemList(s8*, s8*, s8*, s32);
 extern s8* D_8910A890[];
 extern u8 D_8910A898[];
 extern u8 D_8910DC50[];
 extern s8 D_8910E2D0[];
 extern s8 D_8910E312[];
-s32 func_8003F6AC();
+s32 Audio_PlaySystemSound();
 s32 ScrollList_UpdateCursor(void*);
 void ScrollList_SetCursor(void*, s32);
 void LabPCList_FormatGatherPrompt(LabPCListScreen*);
@@ -109,48 +109,48 @@ extern s32 D_8910D9D4;
  * Seen in play (2026-11-12) in いちらん: handled that menu: ポケモンばんごうでならべる sorted the party as フシギダネ,
  * ヒトカゲ, ゼニガメ, and アイウエオじゅんにならべる as ゼニガメ, ヒトカゲ, フシギダネ.
  */
-s32 LabPCList_UpdateSortMenu(LabPCListScreen* arg0) {
+s32 LabPCList_UpdateSortMenu(LabPCListScreen* screen) {
     s32 buttons;
 
-    if (LabPCList_UpdatePopupMenu(&arg0->popup) != 0) {
+    if (LabPCList_UpdatePopupMenu(&screen->popup) != 0) {
         return 0;
     }
     buttons = ((u16*)D_800603C0)[4];
     if (buttons & 0x4000) {
-        func_8003F6AC(3);
-        arg0->state = 0;
+        Audio_PlaySystemSound(3);
+        screen->state = 0;
     } else if (buttons & 0x8000) {
-        if (!(arg0->popup.menu.itemFlags[arg0->popup.menu.cursor] & 1)) {
-            func_8003F6AC(2);
-            switch (arg0->popup.menu.cursor) {
+        if (!(screen->popup.menu.itemFlags[screen->popup.menu.cursor] & 1)) {
+            Audio_PlaySystemSound(2);
+            switch (screen->popup.menu.cursor) {
                 case 0:
-                    arg0->sortKey = 0x10;
-                    func_80027D68(M2C_FIELD(arg0, s32*, 0xB160), D_8910D9D0);
-                    arg0->state = 0;
+                    screen->sortKey = 0x10;
+                    func_80027D68(M2C_FIELD(screen, s32*, 0xB160), D_8910D9D0);
+                    screen->state = 0;
                     break;
                 case 1:
-                    arg0->sortKey = 0x11;
-                    func_80027D68(M2C_FIELD(arg0, s32*, 0xB160), D_8910D9D4);
-                    arg0->state = 0;
+                    screen->sortKey = 0x11;
+                    func_80027D68(M2C_FIELD(screen, s32*, 0xB160), D_8910D9D4);
+                    screen->state = 0;
                     break;
                 case 2:
-                    LabPCList_ToggleFilterFlag(arg0, 0x20);
-                    LabPCList_ApplyFiltersAndSort(arg0);
-                    arg0->state = 0;
+                    LabPCList_ToggleFilterFlag(screen, 0x20);
+                    LabPCList_ApplyFiltersAndSort(screen);
+                    screen->state = 0;
                     break;
                 case 3:
-                    LabPCList_ResetFilterState(arg0);
-                    LabPCList_ClearFilterFlags(arg0);
-                    LabPCList_ApplyFiltersAndSort(arg0);
-                    arg0->state = 0;
+                    LabPCList_ResetFilterState(screen);
+                    LabPCList_ClearFilterFlags(screen);
+                    LabPCList_ApplyFiltersAndSort(screen);
+                    screen->state = 0;
                     break;
                 case 4:
-                    arg0->state = 1;
-                    func_89105C54(&arg0->sourceSelectWindow, 0x78, 0x67, (s8*)&arg0->sourceMatrix, D_8910A7F4);
+                    screen->state = 1;
+                    LabSourceSelect_Init(&screen->sourceSelectWindow, 0x78, 0x67, (s8*)&screen->sourceMatrix, D_8910A7F4);
                     return 0;
             }
         } else {
-            func_8003F6AC(8);
+            Audio_PlaySystemSound(8);
         }
     }
     return 0;

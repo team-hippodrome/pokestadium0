@@ -61,7 +61,7 @@ typedef struct unk_D_80071D88 {
 } unk_D_80071D88; // size = 0x8
 
 // A Gen 1 box Pokemon record (pokered box_struct), copied to and from BattleMon by
-// func_8001FE84 and Pokemon_ToGbRecord. Multi-byte fields are big-endian byte arrays.
+// Pokemon_FromGbRecord and Pokemon_ToGbRecord. Multi-byte fields are big-endian byte arrays.
 typedef struct GbPokemonRecord {
     /* 0x00 */ u8 species; // Gen 1 internal index (0x54 Pikachu seen in play); Species_FromInternalIndex gives BattleMon.species.id
     /* 0x01 */ u8 hp[2]; // Current HP, big-endian
@@ -146,7 +146,7 @@ typedef struct GbSaveMainData {
     /* 0x2C4 */ char unk2C4[0x1A9];
     /* 0x46D */ s8 pokedexEventFlags; // Event flag byte at SRAM 0x29ED: bit 0x20 got the Pokedex (GbSave_HasPokedex); set, ずかん (Pokedex) is enabled on the main menu
     /* 0x46E */ char unk46E[0xA5];
-    /* 0x513 */ s8 unk_513; // bit 0 read by func_80022F48
+    /* 0x513 */ s8 unk_513; // bit 0 read by GbSave_UnusedTestFlag513
     /* 0x514 */ char unk514[0x441];
     /* 0x955 */ GbSaveParty party;
     /* 0xAAD */ GbSaveBox currentBoxData; // the current box (GbSave_GetBoxEntry): box 1 when currentBox was 0x80; saving wrote it to cart SRAM 0x302D
@@ -177,7 +177,7 @@ void Pokemon_FromGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1);
 void Pokemon_ToGbRecord(BattleMon* arg0, GbPokemonRecord* arg1);
 void Pokemon_ToGbRecordExt(BattleMon* arg0, GbPokemonRecordExt* arg1);
 u16 StatExpSqrt(u16 arg0);
-void func_80020188(void);
+void GbData_UnusedStub(void);
 u32 CalculateStatValue(s32 statId, s32 speciesId, u16 statModifier, u16 level, u16 dvBits);
 void Pokemon_RecalcStats(BattleMon* arg0);
 u16 Pokemon_StatExpForTarget(s32 arg0, s32 arg1, u16 arg2, u16 arg3, u16 arg4);
@@ -187,7 +187,7 @@ u16 Pokemon_LevelFromExp(s32 arg0, u32 arg1);
 void Pokemon_PrepareBattleMon(BattleMon* arg0);
 u8 Move_GetIdFromTableIndex(s32 tm_hm_index);
 u8 Species_FromInternalIndex(s32 arg0);
-u8 func_80020984(s32 arg0);
+u8 Species_ToInternalIndex(s32 arg0);
 void Deck_InitializeSaveBackend(DeckHandle* arg0);
 void Deck_InitializeBoxBackend(DeckHandle* arg0);
 DeckHandle* Deck_Open(s32 arg0, s32 arg1, s32 arg2, s32 arg3);

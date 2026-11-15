@@ -82,8 +82,9 @@ f32 BattleScene_GetParticipantModelXOffset(ActivePokemon* active_pokemon) {
 
 /**
  * Sets field 0x34 of both Pokemon's state (the camera clip mask) to value.
+ * @unverified Name guessed from the code.
  */
-void func_821079E8(s16 value) {
+void BattleScene_SetCameraClipMaskBothSides(s16 value) {
     ActivePokemonState* side1 = &sActivePokemon[0]->state;
     ActivePokemonState* side2 = &sActivePokemon[1]->state;
     M2C_FIELD(side1, s16*, 0x34) = value;
@@ -179,8 +180,9 @@ s16 BattleScene_GetHitCueDefaultAnchor(ActivePokemon* active_pokemon) {
 
 /**
  * Returns the alternate anchor of the Pokemon's side hit cue.
+ * @unverified Name guessed from the code.
  */
-s16 func_82107B54(ActivePokemon* active_pokemon) {
+s16 BattleScene_GetHitCueAlternateAnchor(ActivePokemon* active_pokemon) {
     MovePresentationCue* hit_cue = &sSideBattleCues[BattleScene_GetParticipantSideIndex(active_pokemon)]->hitCue;
 
     return hit_cue->alternateAnchor;
@@ -218,9 +220,10 @@ f32 ActivePokemon_GetSizeRatio(ActivePokemon* active_pokemon) {
 
 /**
  * Returns the Pokemon's move id (+0x820).
+ * @unverified Name guessed from the code.
  */
-u8 func_82107BF4(ActivePokemon* arg0) {
-    return arg0->state.runtime.usedMove;
+u8 BattleScene_GetParticipantUsedMove(ActivePokemon* active_pokemon) {
+    return active_pokemon->state.runtime.usedMove;
 }
 
 extern f32 D_FLT_8218935C[][4];
@@ -832,7 +835,7 @@ void Battle_ReturnToIdleAnimIfFinished(ActivePokemon* active_pokemon, ActivePoke
     idx = BattleScene_GetParticipantSideIndex(active_pokemon);
     sleep_idle_cue = (MovePresentationCue*)((u8*)sSideBattleCues[idx] + 0x785);
     if (!(pokemon_state->flags & (ACTIVE_UNDERGROUND | ACTIVE_FREEZE))) {
-        if ((BattleAnim_IsSessionBusy(active_pokemon) == 0) && (animated_pokemon->displayObject.transformAnim.animationId != -1) &&
+        if ((BattleAnim_IsModelBusy(active_pokemon) == 0) && (animated_pokemon->displayObject.transformAnim.animationId != -1) &&
             (ModelAnim_IsFinished(&animated_pokemon->displayObject) == 1)) {
             if (pokemon_state->flags & ACTIVE_AIRBORNE) {
                 ModelAnim_SetAnimation(&animated_pokemon->displayObject, flying_cue->id);
@@ -872,7 +875,7 @@ void Battle_ResetModelToIdleAnim(ActivePokemon* active_pokemon) {
     idx = BattleScene_GetParticipantSideIndex(active_pokemon);
     sleep_idle_cue = (u8*)sSideBattleCues[idx] + 0x785;
 
-    if (!(state->flags & (ACTIVE_UNDERGROUND | ACTIVE_FREEZE)) && (BattleAnim_IsSessionBusy(active_pokemon) == 0) && (active_pokemon->displayObject.transformAnim.animationId != -1)) {
+    if (!(state->flags & (ACTIVE_UNDERGROUND | ACTIVE_FREEZE)) && (BattleAnim_IsModelBusy(active_pokemon) == 0) && (active_pokemon->displayObject.transformAnim.animationId != -1)) {
         if (state->flags & ACTIVE_AIRBORNE) {
             ModelAnim_SetAnimation(&active_pokemon->displayObject, *flying_idle_cue);
         } else if ((state->flags & ACTIVE_SLEEP) && ((active_pokemon->displayObject.objectType == PRIMEAPE) || (active_pokemon->displayObject.objectType == EXEGGUTOR))) {

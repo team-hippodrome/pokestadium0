@@ -63,8 +63,9 @@ void Ui_DrawGradientRectangle(s32 x1, s32 y1, s32 width, s32 height, Color_RGB8*
 /**
  * Draws up to seven digits (and '-') of the string arg0 at (arg1, arg2) with the small 8x6
  * digit textures, stopping at the first space or the end.
+ * @unverified Name guessed from the code.
  */
-void func_82116480(s8* arg0, s16 arg1, s16 arg2) {
+void BattleHud_DrawSmallDigits(s8* str, s16 x, s16 y) {
     u8** temp_s4;
     u8* var_v1;
     s32 i;
@@ -75,7 +76,7 @@ void func_82116480(s8* arg0, s16 arg1, s16 arg2) {
     gSPDisplayList(gDisplayListHead++, gUiEnvTintTextureDL);
 
     for (i = 0; i < 7; i++) {
-        c = arg0[i];
+        c = str[i];
         if ((c == ' ') || (c == 0)) {
             return;
         }
@@ -95,10 +96,10 @@ void func_82116480(s8* arg0, s16 arg1, s16 arg2) {
         }
 
         if (var_v1 != NULL) {
-            Gfx_DrawTextureRgba16(arg1, arg2, 8, 6, var_v1, 8, 0);
+            Gfx_DrawTextureRgba16(x, y, 8, 6, var_v1, 8, 0);
         }
 
-        arg1 += 8;
+        x += 8;
     }
 
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);

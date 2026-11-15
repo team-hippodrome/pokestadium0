@@ -727,7 +727,12 @@ void MtxF_ToFixed(MtxF* dest, MtxF* src) {
 }
 
 void MtxF_SetBillboard(MtxF* dest, MtxF* basis, MtxF* transform, Vec3f* local_position);
-void func_8000ED9C(MtxF* dest, Vec3f* local_position, Vec3s* rotate, Vec3f* scale, MtxF* basis, MtxF* transform) {
+/**
+ * Builds `dest` = scale x rotate x billboard: a billboard matrix that faces the camera of `basis`/
+ * `transform` at `local_position`, rotated by `rotate` and scaled per row by `scale`. Used by
+ * geo_render for camera-facing nodes. @unverified: named from the code.
+ */
+void MtxF_ComposeBillboardTransform(MtxF* dest, Vec3f* local_position, Vec3s* rotate, Vec3f* scale, MtxF* basis, MtxF* transform) {
     MtxF sp58;
     MtxF sp18;
 

@@ -36,15 +36,20 @@ extern s16 D_800AFB26;
 extern s16 D_800AFB30[];
 extern u8 D_8100060C[];
 
-void func_800325B0(u32 arg0) {
+/**
+ * Clears effect slot `slot` (0 or 1) of the model renderer: its flags, its slot models, then calls the
+ * reset function in the loaded fragment (D_8100060C). @unverified: named from the code; model_renderer.c
+ * calls it with a second argument (object type).
+ */
+void ModelRenderer_ResetSlot(u32 slot) {
     void (*func)(u32);
 
     D_800AFB26 = 0;
-    D_800AFB30[arg0 & 1] = 0;
-    if (arg0 < 2) {
-        ModelRenderer_ClearSlotModels(arg0);
+    D_800AFB30[slot & 1] = 0;
+    if (slot < 2) {
+        ModelRenderer_ClearSlotModels(slot);
         func = Util_ConvertAddrToVirtAddr(D_8100060C);
-        func(arg0);
+        func(slot);
     }
 }
 

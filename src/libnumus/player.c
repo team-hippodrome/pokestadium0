@@ -33,7 +33,6 @@ extern audio_voice_t* mus_releasing_voice_3;
 extern audio_voice_t* mus_releasing_voice_4;
 extern ALHeap* audio_heap;
 extern u32 mus_num_vvoices;
-extern s32 mus_free_voices_count;
 extern s32 mus_releasing_voices_count;
 
 #include "m2c_macros.h"
@@ -1188,7 +1187,7 @@ s32 func_8003815C(s32 arg0, s32 arg1, s8* cp, s32 arg3, s32 arg4, s32 arg5, s32 
     return M2C_FIELD(cp, s32*, 0x5C);
 }
 
-void func_8003A710(void *);
+void Block_RelocateSelf(void *);
 // FAKE: decomp slop. Raw pointer-offset casts stand in for struct fields.
 s32 func_8003821C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6)
 {
@@ -1201,7 +1200,7 @@ s32 func_8003821C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s3
   found = 0;
   if (!((*((s32 *) (((s8 *) arg1) - (-(four = 4))))) & 1))
   {
-    func_8003A710((void *) arg1);
+    Block_RelocateSelf((void *) arg1);
   }
   if (((u32) arg6) == 0xFFFFFFFFU)
   {
@@ -1253,13 +1252,13 @@ s32 func_8003834C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s3
     return ret;
 }
 
-void func_8003A710(void*);
+void Block_RelocateSelf(void*);
 
 /**
  * Starts a sound on the first free channel without masking interrupts (compare
  * func_8003821C, which does the same with osSetIntMask(1) around each claim). Returns -1
  * at once if D_800B3CCC or D_800B3CC8 is non-zero. Otherwise, if bit 0 of the word at
- * arg1+4 is clear it calls func_8003A710(arg1); if arg6 is -1 it is replaced by
+ * arg1+4 is clear it calls Block_RelocateSelf(arg1); if arg6 is -1 it is replaced by
  * ((s32*)arg1[+8])[arg2]. It then scans the D_800B3640 channel array (0x148 bytes each,
  * D_800B3638 entries) for one whose word at offset 0x30 is 0, marks it in use by storing
  * -1 there, and returns func_8003815C(arg0, arg1, channel, arg2, arg3, arg4, arg6). If
@@ -1277,7 +1276,7 @@ s32 func_800383DC(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, UNUSED s32 a
         return -1;
     }
     if (!(M2C_FIELD(arg1, s32*, 4) & 1)) {
-        func_8003A710((void*)arg1);
+        Block_RelocateSelf((void*)arg1);
     }
     if ((u32)arg6 == 0xFFFFFFFFU) {
         tbl = (s32*)M2C_FIELD(arg1, s32*, 8);

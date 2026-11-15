@@ -42,9 +42,13 @@ s32 Deck_CloseAndFlush(DeckHandle* arg0) {
     return sp1C;
 }
 
-void func_80020CC8(s32 *arg0, s32 arg1) {
-    if (M2C_FIELD(arg0, s16 *, 8) >= arg1) {
-        M2C_FIELD(arg0, s16 *, 0xA) = arg1;
+/**
+ * Stores `value` in the s16 at +0xA of `obj` when the s16 at +0x8 is at least `value`.
+ * @unverified: no callers found; the struct is unknown.
+ */
+void Counter_SetIfAtMostMax(s32 *obj, s32 value) {
+    if (M2C_FIELD(obj, s16 *, 8) >= value) {
+        M2C_FIELD(obj, s16 *, 0xA) = value;
     }
 }
 

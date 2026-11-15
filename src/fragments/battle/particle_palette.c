@@ -49,11 +49,9 @@ s32 ParticleGfx_ApproachPrimPalette(Particle* arg0, u16 arg1, u8 arg2);
 s32 ParticleGfx_ApproachEnvPalette(Particle* arg0, u16 arg1, u8 arg2);
 s32 ParticleGfx_ApproachPrimEnvPalettePair(Particle* arg0, u16 arg1, u8 arg2);
 void BattleAnim_SetupBackgroundRecolor(Particle* arg0);
-void func_82143C08(void);
+void ParticlePalette_UnusedNop(void);
 void BattleAnim_SetupIceBeamBlizzardHitHueChange(Particle* arg0);
 
-void ParticleGfx_RecolorPrim(Particle* arg0, u16 arg1);
-void ParticleGfx_RecolorEnv(Particle* arg0, u16 arg1);
 
 /**
  * Copy the selected RGB palette entry or pair into the caller's color buffers.
@@ -81,8 +79,9 @@ void ParticleGfx_CopyPalettePairRgb(u8* arg0, u8* arg1, u16 arg2) {
 
 /**
  * Sets the particle's prim color (0xBA-0xBC) from palette entry arg1.
+ * @unverified Name guessed from the code.
  */
-void func_82143408(u8* arg0, u16 arg1) {
+void ParticleGfx_RecolorPrim(u8* arg0, u16 arg1) {
     arg0[0xBA] = gParticlePalette[arg1][0];
     arg0[0xBB] = gParticlePalette[arg1][1];
     arg0[0xBC] = gParticlePalette[arg1][2];
@@ -90,8 +89,9 @@ void func_82143408(u8* arg0, u16 arg1) {
 
 /**
  * Sets the particle's env color (0xBD-0xBF) from palette entry arg1.
+ * @unverified Name guessed from the code.
  */
-void func_82143440(u8* arg0, u16 arg1) {
+void ParticleGfx_RecolorEnv(u8* arg0, u16 arg1) {
     arg0[0xBD] = gParticlePalette[arg1][0];
     arg0[0xBE] = gParticlePalette[arg1][1];
     arg0[0xBF] = gParticlePalette[arg1][2];
@@ -305,7 +305,11 @@ M2C_UNK Particle_StorePrimColorInTemp(s8 *);                      /* extern */
 s32 func_821436A0(s8 *, u8, s32);                 /* extern */
 M2C_UNK func_8214390C(s8 *);                      /* extern */
 
-void func_82143934(s8 *arg0) {
+/**
+ *
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackGlobalTintColorFadeDetach(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -337,7 +341,7 @@ void func_82143934(s8 *arg0) {
  * particle's lifecycle (0xAE, 1 to 2) and wrote its colors.
  */
 void BattleAnim_SetupTargetHueChange(Particle* arg0) {
-    ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrim(arg0, Particle_GetByteParam1(arg0));
     Particle_ScratchA_SetS16_0BF4C(arg0, arg0->param0);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -349,7 +353,11 @@ M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 s32 Particle_ApproachScratchA(s8 *, u8, s16);                 /* extern */
 M2C_UNK func_821439D0(s8 *);                      /* extern */
 
-void func_82143A18(s8 *arg0) {
+/**
+ *
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackOwnerModelTintRampDetach(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -381,7 +389,7 @@ void func_82143A18(s8 *arg0) {
  * lifecycle and, for Thrash, set prim r, g, b to (0xF0, 0x28, 0x28), red.
  */
 void BattleAnim_SetupUserHueChange(Particle* arg0) {
-    ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrim(arg0, Particle_GetByteParam1(arg0));
     Particle_ScratchA_SetS16_0BF4C(arg0, arg0->byteParam2);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -427,8 +435,9 @@ void BattleAnim_RunUserHueChange(Particle* arg0) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82143C08(void) {
+void ParticlePalette_UnusedNop(void) {
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
@@ -438,7 +447,11 @@ M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_82143AD0(s8 *);                      /* extern */
 
-void func_82143C10(s8 *arg0) {
+/**
+ *
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackOwnerModelTintHoldFadeDetach(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -465,11 +478,12 @@ void func_82143C10(s8 *arg0) {
 
 /**
  * Init step: recolors the prim color from palette CF, copies field A6 into AE and advances.
+ * @unverified Name guessed from the code.
  */
-void func_82143CE0(Particle* arg0) {
-    ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_ScratchA_SetS16_0BF4C(arg0, arg0->param0);
-    Particle_AdvanceLifecycle(arg0);
+void BattleAnim_SetupOwnerModelTintPaletteApproach(Particle* particle) {
+    ParticleGfx_RecolorPrim(particle, Particle_GetByteParam1(particle));
+    Particle_ScratchA_SetS16_0BF4C(particle, particle->param0);
+    Particle_AdvanceLifecycle(particle);
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
@@ -478,13 +492,17 @@ s32 Particle_IsRunning(Particle* arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK Particle_SetScratchA(s8 *, M2C_UNK);             /* extern */
 
-void func_82143D28(s8 *arg0) {
+/**
+ *
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackOwnerModelTintPaletteApproachInactive(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82143CE0(arg0);
+        BattleAnim_SetupOwnerModelTintPaletteApproach(arg0);
         break;
     case 2:
         if (func_821436A0(arg0, M2C_FIELD(arg0, u8 *, 0xC9), M2C_FIELD(arg0, u8 *, 0xA7)) != 0) {
@@ -502,12 +520,13 @@ void func_82143D28(s8 *arg0) {
 }
 
 /**
- * Same init step as func_82143CE0.
+ * Same init step as BattleAnim_SetupOwnerModelTintPaletteApproach.
+ * @unverified Name guessed from the code.
  */
-void func_82143DE8(Particle* arg0) {
-    ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_ScratchA_SetS16_0BF4C(arg0, arg0->param0);
-    Particle_AdvanceLifecycle(arg0);
+void BattleAnim_SetupOwnerModelTintPaletteHold(Particle* particle) {
+    ParticleGfx_RecolorPrim(particle, Particle_GetByteParam1(particle));
+    Particle_ScratchA_SetS16_0BF4C(particle, particle->param0);
+    Particle_AdvanceLifecycle(particle);
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
@@ -515,25 +534,30 @@ void Particle_MarkInactive(Particle* arg0);                      /* extern */
 s32 Particle_IsRunning(Particle* arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 
-void func_82143E30(s8 *arg0) {
+/**
+ * Particle callback: tints the owner's model toward palette byteParam0 and keeps the tint when done
+ * (marks itself inactive without clearing the tint alpha).
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackOwnerModelTintPaletteApproachHold(s8 *particle) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = M2C_FIELD(particle, s16 *, 0xAE);
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82143DE8(arg0);
+        BattleAnim_SetupOwnerModelTintPaletteHold(particle);
         break;
     case 2:
-        if (func_821436A0(arg0, M2C_FIELD(arg0, u8 *, 0xC9), M2C_FIELD(arg0, u8 *, 0xA7)) != 0) {
-            func_8213C9D0(arg0);
+        if (func_821436A0(particle, M2C_FIELD(particle, u8 *, 0xC9), M2C_FIELD(particle, u8 *, 0xA7)) != 0) {
+            func_8213C9D0(particle);
         }
         break;
     case 3:
-        Particle_MarkInactive(arg0);
+        Particle_MarkInactive(particle);
         break;
     }
-    if (Particle_IsRunning(arg0) != 0) {
-        func_80019B28(M2C_FIELD(arg0, s32 *, 0x10), M2C_FIELD(arg0, u8 *, 0xBA), M2C_FIELD(arg0, u8 *, 0xBB), M2C_FIELD(arg0, u8 *, 0xBC), (s32) M2C_FIELD(arg0, s16 *, 0xAA));
+    if (Particle_IsRunning(particle) != 0) {
+        func_80019B28(M2C_FIELD(particle, s32 *, 0x10), M2C_FIELD(particle, u8 *, 0xBA), M2C_FIELD(particle, u8 *, 0xBB), M2C_FIELD(particle, u8 *, 0xBC), (s32) M2C_FIELD(particle, s16 *, 0xAA));
     }
 }
 
@@ -543,7 +567,7 @@ void func_82143E30(s8 *arg0) {
  * for Ice Beam, Blizzard.
  */
 void BattleAnim_SetupIceBeamBlizzardHitHueChange(Particle* arg0) {
-    ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrim(arg0, Particle_GetByteParam1(arg0));
     Particle_ScratchA_SetS16_0BF4C(arg0, 0);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -584,12 +608,13 @@ void BattleAnim_RunIceBeamBlizzardHitHueChange(Particle* arg0) {
 }
 
 /**
- * Same init step as func_82143CE0.
+ * Same init step as BattleAnim_SetupOwnerModelTintPaletteApproach.
+ * @unverified Name guessed from the code.
  */
-void func_82144010(Particle* arg0) {
-    ParticleGfx_RecolorPrim(arg0, Particle_FieldCF_GetS16_0C058(arg0));
-    Particle_ScratchA_SetS16_0BF4C(arg0, arg0->param0);
-    Particle_AdvanceLifecycle(arg0);
+void BattleAnim_SetupOwnerModelTintPaletteFade(Particle* particle) {
+    ParticleGfx_RecolorPrim(particle, Particle_GetByteParam1(particle));
+    Particle_ScratchA_SetS16_0BF4C(particle, particle->param0);
+    Particle_AdvanceLifecycle(particle);
 }
 
 M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
@@ -598,27 +623,32 @@ s32 Particle_IsRunning(Particle* arg0);                          /* extern */
 M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK func_82140874(s8 *, M2C_UNK, u8);         /* extern */
 
-void func_82144058(s8 *arg0) {
+/**
+ * Particle callback: tints the owner's model toward palette byteParam0, then fades the tint alpha
+ * back to 0 before it marks itself inactive.
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackOwnerModelTintPaletteApproachFade(s8 *particle) {
     s16 temp_v0;
 
-    temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
+    temp_v0 = M2C_FIELD(particle, s16 *, 0xAE);
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82144010(arg0);
+        BattleAnim_SetupOwnerModelTintPaletteFade(particle);
         break;
     case 2:
-        if (func_821436A0(arg0, M2C_FIELD(arg0, u8 *, 0xC9), M2C_FIELD(arg0, u8 *, 0xA7)) != 0) {
-            func_8213C9D0(arg0);
+        if (func_821436A0(particle, M2C_FIELD(particle, u8 *, 0xC9), M2C_FIELD(particle, u8 *, 0xA7)) != 0) {
+            func_8213C9D0(particle);
         }
         break;
     case 3:
-        func_82140874(arg0, 0, M2C_FIELD(arg0, u8 *, 0xCA));
+        func_82140874(particle, 0, M2C_FIELD(particle, u8 *, 0xCA));
         break;
     case 4:
-        Particle_MarkInactive(arg0);
+        Particle_MarkInactive(particle);
         break;
     }
-    if (Particle_IsRunning(arg0) != 0) {
-        func_80019B28(M2C_FIELD(arg0, s32 *, 0x10), M2C_FIELD(arg0, u8 *, 0xBA), M2C_FIELD(arg0, u8 *, 0xBB), M2C_FIELD(arg0, u8 *, 0xBC), (s32) M2C_FIELD(arg0, s16 *, 0xAA));
+    if (Particle_IsRunning(particle) != 0) {
+        func_80019B28(M2C_FIELD(particle, s32 *, 0x10), M2C_FIELD(particle, u8 *, 0xBA), M2C_FIELD(particle, u8 *, 0xBB), M2C_FIELD(particle, u8 *, 0xBC), (s32) M2C_FIELD(particle, s16 *, 0xAA));
     }
 }

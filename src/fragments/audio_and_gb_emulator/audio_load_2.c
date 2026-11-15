@@ -11,8 +11,8 @@ extern s32 sMultihitCountdown;
 
 #include "m2c_macros.h"
 
-void func_8110DC90(void);
-void func_8110DC98(void);
+void AudioLoad_Unused1A(void);
+void AudioLoad_Unused1B(void);
 void AudioLoad_ProcessLoads(s32 reset_status);
 void AudioLoad_Unused2(void);
 
@@ -21,15 +21,21 @@ void AudioLoad_Unused2(void);
  * No OoT counterpart is certain. Zero has two empty stubs between AudioLoad_Dma and
  * AudioLoad_SyncLoadSimple, as SM64 Shindou does (func_sh_802f3ec4, func_sh_802f3ed4); OoT keeps
  * one there, AudioLoad_Unused1 (__OfsToLbaOfs).
+ * No caller (2026-11-14): nothing in the built ROM jumps to it or holds its address, so play
+ * cannot reach it.
+ * @unverified Name from the code; it never runs.
  */
-void func_8110DC90(void) {
+void AudioLoad_Unused1A(void) {
 }
 
 /**
  * Empty.
- * See func_8110DC90.
+ * See AudioLoad_Unused1A.
+ * No caller (2026-11-14): nothing in the built ROM jumps to it or holds its address, so play
+ * cannot reach it.
+ * @unverified Name from the code; it never runs.
  */
-void func_8110DC98(void) {
+void AudioLoad_Unused1B(void) {
 }
 
 void AudioLoad_SyncLoad(Particle* arg0, s32 arg1, s32* arg2);
@@ -232,7 +238,8 @@ void AudioLoad_InitTable(AudioTable*, u8*, s32);
  * handlers and moves the per-font loop into AudioLoad_InitSoundFont (__SetVlute).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbEmu_Init.
  */
 void AudioLoad_Init(void) {
     s32 num_fonts;
@@ -1174,7 +1181,8 @@ void AudioLoad_PreloadSamplesForFont(s32, s32, RelocInfo8110EF7C*);
 /**
  * Preloads the samples of every permanently cached font.
  * Corresponds to OoT AudioLoad_LoadPermanentSamples (original name EmemReload).
- * @unverified Name follows the counterpart; not checked in play.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioLoad_LoadPermanentSamples(void) {
     AudioTable* base = AudioLoad_GetLoadTable(2);

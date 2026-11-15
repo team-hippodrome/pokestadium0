@@ -602,14 +602,23 @@ void BattleAnim_StopOwnerCategoryParticles(u8 category, ActivePokemon* owner) {
 M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 M2C_UNK func_8213C220(M2C_UNK, M2C_UNK);            /* extern */
 
-void func_8213672C(void) {
+/**
+ * Shared start-effect init (effects 0, 5, 9 and 19): spawns a category 17 marker slot (0x80, 1) and
+ * a global tint fade (0, 32, 8).
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_StartEffectDefaultTint(void) {
     func_8213C220(0x80, 1);
     func_8213B644(0, 0x20, 8);
 }
 
 M2C_UNK func_8213B644(M2C_UNK, M2C_UNK, M2C_UNK);   /* extern */
 
-void func_82136760(void) {
+/**
+ * Shared end-effect init (effects 0, 1, 9 and 11): spawns a global tint fade (0, 32, 8).
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_EndEffectDefaultTint(void) {
     func_8213B644(0, 0x20, 8);
 }
 
@@ -951,8 +960,9 @@ extern s32 D_8219A7C8;
  * Advances the battle animation frame counter and its derived timers: the counter masked to
  * 64, 32, 16, 8, 4 and 2 frames, and for each period a wrap counter and a toggle. Counts the
  * countdown D_8219A77C down to 0.
+ * @unverified Name guessed from the code.
  */
-void func_82136E48(void) {
+void BattleAnim_AdvanceFrameCounters(void) {
     D_8219A780++;
     D_8219A77C--;
     if (D_8219A77C <= 0) {
@@ -1022,7 +1032,7 @@ void BattleAnim_DrawEffectCallbacks(UNUSED CameraNode* arg0) {
     }
 }
 
-M2C_UNK func_82135FD0(s32);                         /* extern */
+M2C_UNK BattleAnim_UpdateEffectSystems(s32);                         /* extern */
 M2C_UNK func_82137000(s32);                         /* extern */
 M2C_UNK func_82137160();                            /* extern */
 M2C_UNK func_8216D720(s32);                         /* extern */
@@ -1030,8 +1040,9 @@ extern s32 D_8219A878;
 /**
  * Effect list command handler: 0 resets (func_82137160), 2 selects list arg1, 5 calls
  * func_8216D720(arg1); 1, 3 and 4 do nothing. Returns 0.
+ * @unverified Name guessed from the code.
  */
-s32 func_821370DC(u32 arg0, s32 arg1) {
+s32 BattleAnim_DispatchPresentation(u32 arg0, s32 arg1) {
     switch (arg0) {
     case 1:
     case 3:
@@ -1042,7 +1053,7 @@ s32 func_821370DC(u32 arg0, s32 arg1) {
         break;
     case 2:
         D_8219A878 = arg1;
-        func_82135FD0(arg1);
+        BattleAnim_UpdateEffectSystems(arg1);
         func_82137000(arg1);
         break;
     case 5:

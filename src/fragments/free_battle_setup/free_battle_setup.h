@@ -79,10 +79,10 @@ typedef struct FreeBattleOpponentWindow {
 } FreeBattleOpponentWindow; // size = 0x74
 
 /* The opponent select window with partners, 「あいてをせんたく」 (Choose your opponent) with two
- * menus (func_82006C74): your side (1P, 1P&2P, 1P&3P, 1P&4P), then the other side (2P, 3P, 4P,
+ * menus (FreeBattle_InitTagOpponentSelect): your side (1P, 1P&2P, 1P&3P, 1P&4P), then the other side (2P, 3P, 4P,
  * 2P&3P, 2P&4P, 3P&4P, COM). */
 typedef struct FreeBattleTeamOpponentWindow {
-    /* 0x00 */ u32 focus; // @unverified: 1 while the side menu has the cursor, 0 for the opponent menu (func_82007030)
+    /* 0x00 */ u32 focus; // @unverified: 1 while the side menu has the cursor, 0 for the opponent menu (FreeBattle_UpdateTagOpponentSelect)
     /* 0x04 */ Window window;
     /* 0x30 */ PointerList sideItemList; // D_82009190
     /* 0x3C */ PointerList opponentItemList; // D_820091A0
@@ -101,16 +101,16 @@ typedef struct FreeBattleTeamOpponentWindow {
 /* One of the two configurations of the Pokémon grid window (D_820091EC). */
 typedef struct FreeBattleMonGridConfig {
     /* 0x0 */ char* title; // @unverified: copied to window.title
-    /* 0x4 */ BattleMon* mons; // @unverified: row buffer for FreeBattleMonGridWindow.mons; arg4/arg5 of func_82007C30
+    /* 0x4 */ BattleMon* mons; // @unverified: row buffer for FreeBattleMonGridWindow.mons; arg4/arg5 of FreeBattle_InitUsableMonGrid
     /* 0x8 */ s32 count; // @unverified: rows in mons
 } FreeBattleMonGridConfig; // size = 0xC
 
-/* A 7x6 grid of Pokémon with their names and icons (func_82007C30, func_82007D94). */
+/* A 7x6 grid of Pokémon with their names and icons (FreeBattle_InitUsableMonGrid, FreeBattle_DrawUsableMonGrid). */
 typedef struct FreeBattleMonGridWindow {
     /* 0x00 */ Window window;
     /* 0x2C */ char unk2C[0xA0];
     /* 0xCC */ ByteMatrix mons; // rows of BattleMon; the cell shows nickname and icon
-    /* 0xDC */ PokeIconRenderer* icons; // @unverified: icon set built by func_80018168/func_80018234, drawn with PokeIcon_GetImage
+    /* 0xDC */ PokeIconRenderer* icons; // @unverified: icon set built by PokeIcon_ResetSlots/PokeIcon_SetSpeciesSlot, drawn with PokeIcon_GetImage
 } FreeBattleMonGridWindow; // size = 0xE0 (FreeBattleScreen.monGridWindow is followed by connectedControllerMask)
 
 /* The Free Battle setup screen: its state machine and every window it switches between
@@ -147,8 +147,8 @@ typedef struct FreeBattleScreen {
     /* 0x4EAC */ char popupMenu2[0x5C]; // @unverified: state 13, FreeBattle_InitPopupMenu
     /* 0x4F08 */ char popupMenuText[0x14]; // @unverified: text buffer passed with popupMenu
     /* 0x4F1C */ char popupMenu2Text[0x14]; // @unverified: text buffer passed with popupMenu2
-    /* 0x4F30 */ FreeBattleMonGridWindow monGridWindow; // @unverified: state 14, func_82007C30
-    /* 0x5010 */ s32 connectedControllerMask; // @unverified: func_8000B2E8 (the controller-present mask controller.c builds gControllers from)
+    /* 0x4F30 */ FreeBattleMonGridWindow monGridWindow; // @unverified: state 14, FreeBattle_InitUsableMonGrid
+    /* 0x5010 */ s32 connectedControllerMask; // @unverified: Cont_GetConnectedMask (the controller-present mask controller.c builds gControllers from)
     /* 0x5014 */ s32 connectedControllerCount; // @unverified: bits set in connectedControllerMask
     /* 0x5018 */ s32 gbSaveReadyMask; // @unverified: bit i set when GbSave_GetSaveState(i) is 0
     /* 0x501C */ s32 unk_501C;

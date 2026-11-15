@@ -1,4 +1,4 @@
-/* Stadium Zero fragment009_175570. */
+/* Stadium Zero fragment009_175570: COM opponents for each tournament round. */
 
 #include "global.h"
 #include "game_state.h"
@@ -8,13 +8,19 @@
 #include "nintendo_cup_teams.h"
 
 extern Controller* D_800603C4;
-extern DemoTeamTemplate D_82400400[];
-extern s8 D_82405F10[];
+extern TournamentOpponentTemplate sTournamentOpponents[];
+extern s8 sCupFirstOpponent[];
 
-void func_824000F0(BattleSide* arg0, TeamRoster* arg1);
-s32 func_82400118(SessionContext* arg0);
-
-void func_82400020(TeamRoster* roster, ExtendedRosterInfo* info, DemoTeamTemplate* template, s32 arg3) {
+/**
+ * Fills a COM trainer slot from an opponent template: a COM controller on port 1, the template's
+ * trainer id and short name, and all six of its Pokémon brought. The roster info gets the same
+ * team plus the region (or 「トレーナー」) title and the full name, and `trainer_index` picks the
+ * trainer picture the VS screen loads.
+ * Seen in play (2026-11-14): in Lv. 50-55 Tournament round 1 it loaded template 0 with
+ * trainer_index 0, and the VS screen showed 「ほっかいどう かとう かずひと」 (Hokkaido, Katou Kazuhito)
+ * with that template's Lapras, Jolteon, Starmie, Alakazam, Tauros and Dugtrio.
+ */
+void TournamentOpponent_LoadTemplate(TeamRoster* roster, ExtendedRosterInfo* info, TournamentOpponentTemplate* template, s32 trainer_index) {
     roster->isHuman = 3;
     roster->controllerPort = 1;
     roster->controller = D_800603C4;
@@ -25,24 +31,36 @@ void func_82400020(TeamRoster* roster, ExtendedRosterInfo* info, DemoTeamTemplat
     _bcopy(template->mons, roster->pokemonPicked, sizeof(roster->pokemonPicked));
     info->unk_000 = template->unk_00;
     info->numberOfPokemonCanBePicked = 6;
-    info->trainerIndex = arg3;
+    info->trainerIndex = trainer_index;
     _bcopy(roster->pokemonPicked, info->battleMon, sizeof(roster->pokemonPicked));
     HAL_Strcpy(info->title, template->title);
     HAL_Strcpy(info->fullName, template->fullName);
 }
 
-void func_824000F0(BattleSide* arg0, TeamRoster* arg1) {
-    arg0->modelFlags = 0;
-    arg0->tagTeamSize = 1;
-    arg0->displayModel = 0;
-    arg0->displayMon = NULL;
-    arg0->loadedModel = NULL;
-    arg0->teamMember[0] = arg1;
-    arg0->backgroundLoadFlags = 0;
-    arg0->backgroundFileList = 0;
+/**
+ * Resets a battle side to a single trainer, `roster`, with no model or background loaded yet.
+ * Seen in play (2026-11-14): ran for side 2 right after the opponent template was loaded, in
+ * both tournaments.
+ */
+void TournamentOpponent_InitBattleSide(BattleSide* side, TeamRoster* roster) {
+    side->modelFlags = 0;
+    side->tagTeamSize = 1;
+    side->displayModel = 0;
+    side->displayMon = NULL;
+    side->loadedModel = NULL;
+    side->teamMember[0] = roster;
+    side->backgroundLoadFlags = 0;
+    side->backgroundFileList = 0;
 }
 
-s32 func_82400118(SessionContext* arg0) {
+/**
+ * Picks a random Nintendo Cup '97 finalist (0-14) that the player has not met in an earlier round
+ * of this Lv. 50-55 Tournament, rerolling until the pick is not in `opponentHistory`.
+ * Seen in play (2026-11-14): from the same savestate, round 1 picked finalist 0; with round
+ * poked to 2 and finalist 0 poked into the round-1 history it picked 1 instead, and the VS
+ * screen showed 「とうほくＡ ゆうき ようじろう」 (Tohoku A, Yuuki Youjirou).
+ */
+s32 TournamentOpponent_PickUnfacedFinalist(SessionContext* session) {
     s32 found;
     s32 i;
     s32 pick;
@@ -53,8 +71,8 @@ s32 func_82400118(SessionContext* arg0) {
         do {
             pick = MathUtil_Random16() & 0xF;
         } while (pick == 0xF);
-        for (i = 0; i < arg0->roundOrDemoId - 1; i++) {
-            if (pick == arg0->opponentHistory[0][i]) {
+        for (i = 0; i < session->roundOrDemoId - 1; i++) {
+            if (pick == session->opponentHistory[0][i]) {
                 found = TRUE;
                 break;
             }
@@ -63,67 +81,96 @@ s32 func_82400118(SessionContext* arg0) {
     return pick;
 }
 
-void func_824001B4(SessionContext* arg0) {
-    arg0->modeSelection = 0;
-    arg0->battleSides[0].teamMember[0]->rosterInfo->trainerIndex = arg0->roundOrDemoId + 0x16;
-    arg0->battleSides[1].teamMember[0]->rosterInfo->trainerIndex = arg0->roundOrDemoId + 0x16;
+/**
+ * Mode 0 (Free Battle): loads no opponent, and gives both sides the default trainer picture
+ * (round + 22).
+ * Seen in play (2026-11-14): ran in a Free Battle against COM (mode 0), and the VS screen showed
+ * the same 「トレーナー」 picture for 1P and COM.
+ */
+void TournamentOpponent_SetUpFreeBattle(SessionContext* session) {
+    session->modeSelection = 0;
+    session->battleSides[0].teamMember[0]->rosterInfo->trainerIndex = session->roundOrDemoId + 22;
+    session->battleSides[1].teamMember[0]->rosterInfo->trainerIndex = session->roundOrDemoId + 22;
 }
 
-void func_824001E4(SessionContext* arg0) {
-    s32 round = arg0->roundOrDemoId - 1;
+/**
+ * Mode 1, the Lv. 50-55 Tournament: puts a random finalist the player has not met yet on side 2,
+ * records the pick in `opponentHistory` and shows the finalist's own picture.
+ * Seen in play (2026-11-14): ran on entering the L５０〜５５での トーナメント (Lv. 50-55 Tournament),
+ * session mode 1, and set rule category 1.
+ */
+void TournamentOpponent_SetUpLv50Round(SessionContext* session) {
+    s32 round = session->roundOrDemoId - 1;
     TeamRoster* roster;
-    s32 pick = func_82400118(arg0);
+    s32 pick = TournamentOpponent_PickUnfacedFinalist(session);
 
-    arg0->ruleCategory = 1;
-    arg0->opponentHistory[0][round] = pick;
-    arg0->rosterInfo[0].trainerIndex = arg0->roundOrDemoId + 0x16;
-    roster = &arg0->trainerSlots[1];
-    func_82400020(roster, &arg0->rosterInfo[1], &D_82400400[pick], pick);
-    func_824000F0(&arg0->battleSides[1], roster);
+    session->ruleCategory = 1;
+    session->opponentHistory[0][round] = pick;
+    session->rosterInfo[0].trainerIndex = session->roundOrDemoId + 22;
+    roster = &session->trainerSlots[1];
+    TournamentOpponent_LoadTemplate(roster, &session->rosterInfo[1], &sTournamentOpponents[pick], pick);
+    TournamentOpponent_InitBattleSide(&session->battleSides[1], roster);
 }
 
-void func_82400270(SessionContext* arg0) {
+/**
+ * Mode 2, the Lv. 1-30 Tournament: puts the current cup's trainer for this round on side 2
+ * (template sCupFirstOpponent[cup] + round) and shows that trainer class's picture (round + 15).
+ * Seen in play (2026-11-14): on entering the モンスターボールカップ (Poké Ball Cup) of the
+ * L １〜３０での トーナメント (Lv. 1-30 Tournament) it loaded template 15 (Bug Catcher) with
+ * trainer_index 15 and set rule category 2; with the cup poked to 3 (Master Ball Cup) it
+ * loaded template 39.
+ */
+void TournamentOpponent_SetUpLv1To30Round(SessionContext* session) {
     TeamRoster* roster;
-    s32 round = arg0->roundOrDemoId - 1;
-    s32 pick = D_82405F10[arg0->modeSelection] + round;
+    s32 round = session->roundOrDemoId - 1;
+    s32 pick = sCupFirstOpponent[session->modeSelection] + round;
 
-    arg0->ruleCategory = 2;
-    arg0->opponentHistory[0][round] = pick;
-    arg0->rosterInfo[0].trainerIndex = arg0->roundOrDemoId + 0x16;
-    roster = &arg0->trainerSlots[1];
-    func_82400020(roster, &arg0->rosterInfo[1], &D_82400400[pick], round + 0xF);
-    func_824000F0(&arg0->battleSides[1], roster);
+    session->ruleCategory = 2;
+    session->opponentHistory[0][round] = pick;
+    session->rosterInfo[0].trainerIndex = session->roundOrDemoId + 22;
+    roster = &session->trainerSlots[1];
+    TournamentOpponent_LoadTemplate(roster, &session->rosterInfo[1], &sTournamentOpponents[pick], round + 15);
+    TournamentOpponent_InitBattleSide(&session->battleSides[1], roster);
 }
 
-void func_82400304(SessionContext* arg0) {
-    s32 round = arg0->roundOrDemoId - 1;
+/**
+ * Mode -1: puts finalist number `round` on side 2, in table order instead of at random, with Lv. 50-55
+ * rules. No code found that sets mode -1.
+ * Seen in play (2026-11-14) only with RAM poked: mode -1 and round 3 at the Lv. 50-55
+ * Tournament's start loaded finalist 2, and the VS screen showed that template's team
+ * (Articuno, Jolteon, Tauros, Starmie, Jynx, Alakazam).
+ */
+void TournamentOpponent_SetUpFinalistByRound(SessionContext* session) {
+    s32 round = session->roundOrDemoId - 1;
 
-    arg0->ruleCategory = 1;
-    arg0->rosterInfo[0].trainerIndex = arg0->roundOrDemoId + 0x16;
-    func_82400020(&arg0->trainerSlots[1], &arg0->rosterInfo[1], &D_82400400[round], round);
-    func_824000F0(&arg0->battleSides[1], &arg0->trainerSlots[1]);
+    session->ruleCategory = 1;
+    session->rosterInfo[0].trainerIndex = session->roundOrDemoId + 22;
+    TournamentOpponent_LoadTemplate(&session->trainerSlots[1], &session->rosterInfo[1], &sTournamentOpponents[round], round);
+    TournamentOpponent_InitBattleSide(&session->battleSides[1], &session->trainerSlots[1]);
 }
 
-void func_824001E4(SessionContext* arg0);
-void func_82400270(SessionContext* arg0);
-void func_82400304(SessionContext* arg0);
+/**
+ * Fragment entry, called by the VS scene before each tournament round (and again after each win):
+ * sets up the COM opponent for `roundOrDemoId` by session mode.
+ * Seen in play (2026-11-14): loaded by VsScene_Play and dispatched to the mode 0 (Free Battle),
+ * 1 (Lv. 50-55), 2 (Lv. 1-30) and -1 (poked) handlers.
+ */
+s32 TournamentOpponent_SetUpRound(s32 unused, SessionContext* session) {
+    s8 mode;
 
-s32 func_82400374(s32 arg0, SessionContext* arg1) {
-    s8 temp_v0;
-
-    temp_v0 = arg1->mode;
-    switch (temp_v0) {                              /* irregular */
+    mode = session->mode;
+    switch (mode) {                              /* irregular */
     case 0:
-        func_824001B4(arg1);
+        TournamentOpponent_SetUpFreeBattle(session);
         break;
     case 1:
-        func_824001E4(arg1);
+        TournamentOpponent_SetUpLv50Round(session);
         break;
     case 2:
-        func_82400270(arg1);
+        TournamentOpponent_SetUpLv1To30Round(session);
         break;
     case -1:
-        func_82400304(arg1);
+        TournamentOpponent_SetUpFinalistByRound(session);
         break;
     }
     return 0;

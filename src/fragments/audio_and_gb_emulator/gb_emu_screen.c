@@ -4,7 +4,7 @@
 #include "audio_and_gb_emulator.h"
 
 void func_811177D0(s32);
-void func_81106820(void);
+void GbEmu_PauseEmulation(void);
 void func_80052DC0(s32);
 void func_81104B88(OSTime);
 void func_8005C280(f32);
@@ -13,9 +13,15 @@ void func_80008014(s32, s32, s32);
 void func_8004FD20(s32, s32);
 extern s8* D_81154C30[];
 extern s32 D_81154C3C;
-void func_81100020(void) {
+/**
+ * Stops the menu sounds, pauses emulation, blanks the display, waits 20 ms, resets the X scale,
+ * shows the current framebuffer and clears it to black.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbEmu_Init.
+ */
+void GbEmu_PauseAndBlankScreen(void) {
     func_811177D0(0);
-    func_81106820();
+    GbEmu_PauseEmulation();
     func_80052DC0(1);
     func_81104B88(20);
     func_8005C280(1.0f);
@@ -36,36 +42,42 @@ extern u8 D_8111E3E0[];
 void GbEmu_DrawTextCommands(s8* arg0, u8* arg1);
 s32 func_81103C40(s32, s32*, s32, s32, s32);
 extern s32 D_8111C568;
-void func_811000DC(s8* arg0, u8 arg1) {
+/**
+ * Draws the GB Player menu (メニュー) over the GB screen: ゲームをつづける, ゲームをやめる and せつめい・コンフィグ with the
+ * pointer on item `cursor` and that item's help text; `cursor` 5 draws the menu behind the ゲームをやめる
+ * prompt.
+ * Seen in play (2026-11-14) ran when C-Up opened the GB Player menu; called from GbEmu_RunFrame.
+ */
+void GbEmu_DrawPauseMenu(s8* fb, u8 cursor) {
     s32 i;
     u8* last;
 
-    arg0 += 0x787C;
-    GbEmu_DrawTextCommands(arg0, D_8111E318);
+    fb += 0x787C;
+    GbEmu_DrawTextCommands(fb, D_8111E318);
     for (i = 0; i != 0x140; i += 0x20) {
-        func_81103C40((s32)(arg0 + 0xC806 + i), &D_8111C4F0, 0, 0xC, 5);
+        func_81103C40((s32)(fb + 0xC806 + i), &D_8111C4F0, 0, 0xC, 5);
     }
-    func_81103C40((s32)(arg0 + (arg1 & 3) * 0x2D00 + 0x4618), &D_8111C568, 0, 0x10, 0xA);
+    func_81103C40((s32)(fb + (cursor & 3) * 0x2D00 + 0x4618), &D_8111C568, 0, 0x10, 0xA);
     D_8111E324[4] = 0xA;
     D_8111E364[4] = 0xA;
     D_8111E3CC[4] = 0xA;
-    if (arg1 == 0) {
+    if (cursor == 0) {
         D_8111E324[4] = 8;
         last = D_8111E334;
-    } else if (arg1 == 1) {
+    } else if (cursor == 1) {
         D_8111E364[4] = 8;
         last = D_8111E374;
-    } else if (arg1 == 2) {
+    } else if (cursor == 2) {
         D_8111E3CC[4] = 8;
         last = D_8111E3E0;
-    } else if (arg1 == 5) {
+    } else if (cursor == 5) {
         D_8111E364[4] = 8;
         last = D_8111E3A8;
     }
-    GbEmu_DrawTextCommands(arg0, D_8111E324);
-    GbEmu_DrawTextCommands(arg0, D_8111E364);
-    GbEmu_DrawTextCommands(arg0, D_8111E3CC);
-    GbEmu_DrawTextCommands(arg0, last);
+    GbEmu_DrawTextCommands(fb, D_8111E324);
+    GbEmu_DrawTextCommands(fb, D_8111E364);
+    GbEmu_DrawTextCommands(fb, D_8111E3CC);
+    GbEmu_DrawTextCommands(fb, last);
 }
 
 extern s32 D_8111D0A8[];
@@ -74,41 +86,51 @@ extern s32 D_8111D528[];
 extern s32 D_8111D6A8[];
 extern s32 D_8111D828[];
 
-s32* func_81100284(s32 arg0) {
-    arg0 &= 7;
-    return (arg0 == 1) ? D_8111D528 : (arg0 == 2) ? D_8111D6A8 : (arg0 == 3) ? D_8111D228 : (arg0 == 4) ? D_8111D0A8 : D_8111D828;
+/**
+ * Returns the icon of N64 button choice `index` for the START/SELECT bindings: 0 START, 1 L, 2 R,
+ * 3 C-Left, 4 C-Down.
+ * Seen in play (2026-11-14) ran on the せつめい・コンフィグ screen while the START binding was changed;
+ * called from GbEmu_DrawButtonConfig.
+ */
+s32* GbEmu_GetButtonIcon(s32 index) {
+    index &= 7;
+    return (index == 1) ? D_8111D528 : (index == 2) ? D_8111D6A8 : (index == 3) ? D_8111D228 : (index == 4) ? D_8111D0A8 : D_8111D828;
 }
 
-s32* func_81100284(s32);
+s32* GbEmu_GetButtonIcon(s32);
 s32 func_81103C40(s32, s32*, s32, s32, s32);
 extern s32 D_8111DFA8;
 
 /*
- * func_811002F4
+ * Draws the row of five N64 button icons on the せつめい・コンフィグ screen with the frame on choice `cursor
+ * & 7`.
+ * GbEmu_DrawButtonChoices
  *
  * arg0 is treated as a plain address and offsets are added to it in bytes.
  * Calls func_81103C40 once with (arg0 + (arg1 & 7) * 0x24, &D_8111DFA8, 0,
  * 0x18, 0x12), then five more times with (arg0 + 0x786 + n * 0x24,
- * func_81100284(n), 0, 0x10, 0xC) for n = 0..4. What func_81103C40 and
- * func_81100284 do, and what arg0 points to, is not established from this
+ * GbEmu_GetButtonIcon(n), 0, 0x10, 0xC) for n = 0..4. What func_81103C40 and
+ * GbEmu_GetButtonIcon do, and what arg0 points to, is not established from this
  * function.
  *
  * The empty `if (i) {}` is a matching-only construct (found with
  * decomp-permuter): the extra use of `i` makes IDO keep `arg1 & 7` in s0 and
  * reuse s0 as the loop counter, as the retail code does. Without it the mask is
  * computed in a temporary and the output differs.
+ * Seen in play (2026-11-14) ran on the せつめい・コンフィグ screen while the START binding was changed;
+ * called from GbEmu_DrawButtonConfig.
  */
-void func_811002F4(s32 arg0, s32 arg1) {
+void GbEmu_DrawButtonChoices(s32 fb, s32 cursor) {
     s32 i;
     s32 p;
 
-    i = arg1 & 7;
-    func_81103C40(arg0 + i * 0x24, &D_8111DFA8, 0, 0x18, 0x12);
+    i = cursor & 7;
+    func_81103C40(fb + i * 0x24, &D_8111DFA8, 0, 0x18, 0x12);
     if (i) {  // karodo
     }
-    p = arg0 + 0x786;
+    p = fb + 0x786;
     for (i = 0; i != 5; i++) {
-        func_81103C40(p, func_81100284(i), 0, 0x10, 0xC);
+        func_81103C40(p, GbEmu_GetButtonIcon(i), 0, 0x10, 0xC);
         p += 0x24;
     }
 }
@@ -134,29 +156,33 @@ extern u8 D_8111E47C[];
 extern u8 D_8111E4A0[];
 extern u8 D_8111E4AC[];
 /*
- * GB Tower option screen. Draws the panel frame tiles into the framebuffer
+ * Draws the せつめい・コンフィグ screen into `screen`: the START and SELECT bindings, the B ボタンでもどる hint and, while
+ * `slide` animates the row open, the button choices for the binding picked by bit 3 of `cursor`.
+ * GB Player option screen. Draws the panel frame tiles into the framebuffer
  * (three loops), then the two cursors and the selected options.
  * Register allocation depends on reusing the same few locals: one IDO live
  * range per local, so i, j, q and r each carry several roles on purpose.
+ * Seen in play (2026-11-14) ran on the せつめい・コンフィグ screen while the START binding was changed;
+ * called from GbEmu_RunFrame.
  */
-void func_81100390(s32 arg0, s32 arg1, s32 arg2) {
+void GbEmu_DrawButtonConfig(s32 screen, s32 cursor, s32 slide) {
     s32 fb;
     s32 q;
     s32 r;
     s32 i;
     s32 j;
 
-    arg0 += 0x787C;
-    fb = arg0;
+    screen += 0x787C;
+    fb = screen;
     if (D_8111E308 == 0) {
-        fb = arg0 - 0x4B00;
+        fb = screen - 0x4B00;
     } else {
-        func_81103C40(arg0 + 0xF22, &D_8111D3A8, 0, 0x10, 0xC);
-        GbEmu_DrawTextCommands((s8*)arg0, D_8111E40C);
+        func_81103C40(screen + 0xF22, &D_8111D3A8, 0, 0x10, 0xC);
+        GbEmu_DrawTextCommands((s8*)screen, D_8111E40C);
         if (D_8111E308 == 1) {
-            GbEmu_DrawTextCommands((s8*)arg0, D_8111E454);
+            GbEmu_DrawTextCommands((s8*)screen, D_8111E454);
         } else {
-            GbEmu_DrawTextCommands((s8*)arg0, D_8111E47C);
+            GbEmu_DrawTextCommands((s8*)screen, D_8111E47C);
         }
     }
     GbEmu_DrawTextCommands((s8*)fb, D_8111E4A0);
@@ -188,22 +214,22 @@ void func_81100390(s32 arg0, s32 arg1, s32 arg2) {
     fb -= 0xBB80;
     q = 0x2D;
     r = 0x2B;
-    if (arg1 & 8) {
-        if (arg2 != 0) {
-            r = arg2 * 6 + 0x2B;
+    if (cursor & 8) {
+        if (slide != 0) {
+            r = slide * 6 + 0x2B;
             j = 1;
-            if (arg2 == -6) {
-                func_811002F4(fb + 0xFF76, arg1);
+            if (slide == -6) {
+                GbEmu_DrawButtonChoices(fb + 0xFF76, cursor);
             }
         } else {
             func_81103C40(fb + 0x10BA8, &D_8111C568, 0, 0x10, 0xA);
             j = 3;
         }
-    } else if (arg2 != 0) {
-        q = arg2 * 6 + 0x2D;
+    } else if (slide != 0) {
+        q = slide * 6 + 0x2D;
         j = 2;
-        if (arg2 == -6) {
-            func_811002F4(fb + 0xCAF6, arg1);
+        if (slide == -6) {
+            GbEmu_DrawButtonChoices(fb + 0xCAF6, cursor);
         }
     } else {
         func_81103C40(fb + 0xD728, &D_8111C568, 0, 0x10, 0xA);
@@ -217,29 +243,34 @@ void func_81100390(s32 arg0, s32 arg1, s32 arg2) {
     func_81103C40(i + 0x10680, &D_8111D9A8, 0, 0x18, 0xC);
     func_81103C40(i + 0x106BA, &D_8111DE28, 0, 0x10, 0xC);
     if (j & 1) {
-        func_81103C40(fb + 0xD2C4, func_81100284(D_8111E314[0]), 0, 0x10, 0xC);
+        func_81103C40(fb + 0xD2C4, GbEmu_GetButtonIcon(D_8111E314[0]), 0, 0x10, 0xC);
     }
     if (j & 2) {
-        func_81103C40(fb + 0x10744, func_81100284(D_8111E314[1]), 0, 0x10, 0xC);
+        func_81103C40(fb + 0x10744, GbEmu_GetButtonIcon(D_8111E314[1]), 0, 0x10, 0xC);
     }
 }
 
-void func_811000DC(s8* arg0, u8 arg1);
+void GbEmu_DrawPauseMenu(s8* arg0, u8 arg1);
 void GbEmu_DrawTextCommands(s8* arg0, u8* arg1);
 s32 func_81103C40(s32, s32*, s32, s32, s32);
 extern u8 D_8111E4BC[];
 extern s32 D_8111C568;
 
-void func_81100818(s8* arg0, s32 arg1) {
-    func_811000DC(arg0, 5);
-    arg0 += 0x787C;
-    D_8111E4BC[arg1 ? 4 : 0xC] = 8;
-    D_8111E4BC[arg1 ? 0xC : 4] = 0xA;
-    GbEmu_DrawTextCommands(arg0, D_8111E4BC);
-    func_81103C40((s32)&((u16*)(arg0 + 0x13B00))[arg1 ? 0xE : 0x45], &D_8111C568, 0, 0x10, 0xA);
+/**
+ * Draws the ゲームをやめる prompt (「レポート」した? ホントに おわってもいい?) with the pointer on はい (`no` = 0) or いいえ.
+ * Seen in play (2026-11-14) ran when ゲームをやめる showed its 「レポート」した? prompt; called from
+ * GbEmu_RunFrame.
+ */
+void GbEmu_DrawQuitConfirm(s8* fb, s32 no) {
+    GbEmu_DrawPauseMenu(fb, 5);
+    fb += 0x787C;
+    D_8111E4BC[no ? 4 : 0xC] = 8;
+    D_8111E4BC[no ? 0xC : 4] = 0xA;
+    GbEmu_DrawTextCommands(fb, D_8111E4BC);
+    func_81103C40((s32)&((u16*)(fb + 0x13B00))[no ? 0xE : 0x45], &D_8111C568, 0, 0x10, 0xA);
 }
 
-typedef struct GbTowerTask {
+typedef struct GbPlayerTask {
     /* 0x00 */ OSMesg mesg[1];
     /* 0x04 */ OSMesgQueue queue;
     /* 0x1C */ u8 unk_1C[4];
@@ -249,7 +280,7 @@ typedef struct GbTowerTask {
     /* 0x40 */ u8 unk_40[8];
     /* 0x48 */ s32 unk_48;
     /* 0x4C */ u8 unk_4C[0x1C];
-} GbTowerTask; // size = 0x68
+} GbPlayerTask; // size = 0x68
 
 extern u8 D_000DA9B0[];
 extern u8 D_0015A9B0[];
@@ -260,7 +291,7 @@ extern s16 D_8111E30C;
 extern s16 D_8111E310;
 extern u8 D_8111E314[2];
 extern u8 D_8112A960[];
-extern GbTowerTask D_81154B20[2];
+extern GbPlayerTask D_81154B20[2];
 extern u8 D_81154B24[];
 extern u8 D_81154B88[];
 extern u8 D_81154B8C[];
@@ -286,7 +317,15 @@ s32 GbEmu_LoadCartridge(s32, s32, s32, s32, s8*);
 void AudioLoad_Init(void);
 void func_811171DC(void);
 void func_81117288(s32);
-void func_811008DC(s8* arg0) {
+/**
+ * GB Player entry: allocates both framebuffers and the emulator heap, decompresses the emulator
+ * data, inits the sound driver, the GB APU and the video mode, starts the Transfer Pak I/O thread
+ * and loads the cartridge, then reads the speed-up level and the START/SELECT bindings from the
+ * Stadium save.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbPlayer_EmulatorThreadEntry.
+ */
+void GbEmu_Init(s8* params) {
 
     D_81154C30[0] = func_800051F0(0, 2, 0x140, 0xF0, 1);
     D_81154C30[1] = func_800051F0(0, 2, 0x140, 0xF0, 1);
@@ -307,15 +346,15 @@ void func_811008DC(s8* arg0) {
     func_800535A0(D_80077F40);
     func_80058FB0(0x2A);
     func_80058FB0(0x80);
-    func_81100020();
+    GbEmu_PauseAndBlankScreen();
     func_800093E0(D_8112A960, D_811565F0);
     GbPak_StartIoThread(0xC, 0x12, D_800AAFE0);
-    D_8111E308 = *(u8*)(arg0 + 0x2202);
+    D_8111E308 = *(u8*)(params + 0x2202);
     if (D_8111E308 >= 3) {
         D_8111E308 = 0;
     }
     D_81154C4F = D_8111E308;
-    switch (GbEmu_LoadCartridge(*(s32*)(D_81154C30[D_81154C3C] + 8), D_81154C38, 0x158000, func_80025BD8(), arg0)) {
+    switch (GbEmu_LoadCartridge(*(s32*)(D_81154C30[D_81154C3C] + 8), D_81154C38, 0x158000, func_80025BD8(), params)) {
         case 1:
         default:
             D_81154C4E = 1;
@@ -334,8 +373,8 @@ void func_811008DC(s8* arg0) {
     D_81154C4D = 0;
     D_81154C40 = 0;
     D_81154C44 = 0;
-    D_8111E314[0] = ((*(s16*)(arg0 + 0x2200)) & 0xFF00) >> 8;
-    D_8111E314[1] = ((*(s16*)(arg0 + 0x2200)) & 0xFF) + 1;
+    D_8111E314[0] = ((*(s16*)(params + 0x2200)) & 0xFF00) >> 8;
+    D_8111E314[1] = ((*(s16*)(params + 0x2200)) & 0xFF) + 1;
     if ((D_8111E314[0] >= 5) || (D_8111E314[1] >= 5) || (D_8111E314[0] == D_8111E314[1])) {
         D_8111E314[0] = 0;
         D_8111E314[1] = 1;
@@ -353,29 +392,36 @@ extern u8 D_8111E4D0[];
 extern u8 D_8111E4E4[];
 extern u8 D_8111E540[];
 s32 GbEmu_UpdateFrame(void);
-void func_811173F4(void);
+void GbAudio_FrameStub(void);
 void GbAudio_RampToSilence(void);
-s32 func_81106700(void);
+s32 GbPak_HasUnsavedSramBlocks(void);
 void GbEmu_BlackScreenAndFail(s32);
 void func_80004F34(void*, s32);
-void func_81103D30(void);
+void GbEmu_ClearStatusBar(void);
 void func_811177DC(s32);
 void Cont_StartReadInputs(void);
 void Cont_ReadInputs(void);
-s32 func_811064DC(void);
-void func_81104930(void);
-void func_81104AE4(void);
-void func_811067B0(void);
-s32 func_8110665C(void);
-s32 func_8110659C(void);
+s32 GbPak_CheckConnectionBlocking(void);
+void GbEmu_DrawStatusBar(void);
+void GbEmu_ClearPalettes(void);
+void GbPak_PowerOff(void);
+s32 GbPak_IsCartridgeInserted(void);
+s32 GbPak_ReidentifyCartridge(void);
 s32 GbPak_VerifyRamBlocks(u8);
 void GbPak_StopIoThread(s32);
 
-void func_81100C84(s8* arg0) {
+/**
+ * GB Player per-frame state machine: runs the emulator, fades in, and drives the menu (4), the
+ * button config (7-10), the quit prompt (11), the 「レポートできませんでした」 cartridge recovery (20-26) and
+ * the shutdown, which writes the bindings back to the save.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbPlayer_EmulatorThreadEntry.
+ */
+void GbEmu_RunFrame(s8* params) {
     s32 sel;
     u8* fade;
     s32 keep;
-    GbTowerTask* task;
+    GbPlayerTask* task;
     static u8 D_81154C50;
     static u8 D_81154C51;
     static u8 D_81154C52;
@@ -395,14 +441,14 @@ void func_81100C84(s8* arg0) {
     if (D_81154C40 == 0) {
         D_81154C40 = GbEmu_UpdateFrame();
     }
-    func_811173F4();
+    GbAudio_FrameStub();
     bcopy(D_81154BF0, D_81154B20[D_81154C3C].task, 0x40);
     D_81154B20[D_81154C3C].unk_48 = *(s32*)(D_81154C30[D_81154C3C ^ 1] + 8);
     if (D_81154C4C != 0) {
         osRecvMesg(&D_81154B20[D_81154C3C ^ 1].queue, 0, 1);
     }
     if ((D_81154C40 == -1) || (D_81154C40 == -2)) {
-        if ((D_81154C4D < 20) && (func_81106700() != 0)) {
+        if ((D_81154C4D < 20) && (GbPak_HasUnsavedSramBlocks() != 0)) {
             D_81154C40 = 1;
             D_81154C4D = 20;
         } else {
@@ -437,7 +483,7 @@ void func_81100C84(s8* arg0) {
 
         case 2:
             if (D_81154C40 == 1) {
-                func_81103D30();
+                GbEmu_ClearStatusBar();
                 D_81154C4D = 3;
                 D_81154C50 = 15;
                 func_811177D0(1);
@@ -449,13 +495,13 @@ void func_81100C84(s8* arg0) {
             Cont_StartReadInputs();
             Cont_ReadInputs();
             if (--D_81154C50 != 0) {
-                if (func_811064DC() != 0) {
+                if (GbPak_CheckConnectionBlocking() != 0) {
                     goto error;
                 }
                 fade[3] = 0xBF - (s32)((D_81154C50 / 15.0f) * 63.0f);
             } else {
                 fade[3] = 0xBF;
-                if (func_811064DC() != 0) {
+                if (GbPak_CheckConnectionBlocking() != 0) {
                     goto error;
                 }
                 D_81154C4D = 4;
@@ -467,7 +513,7 @@ void func_81100C84(s8* arg0) {
             fade[3] = 0xBF;
             Cont_StartReadInputs();
             Cont_ReadInputs();
-            if (func_811064DC() != 0) {
+            if (GbPak_CheckConnectionBlocking() != 0) {
                 goto error;
             }
             keep = 1;
@@ -489,7 +535,7 @@ void func_81100C84(s8* arg0) {
                         D_81154C4D = 2;
                         func_811177DC(1);
                         func_811177D0(0);
-                        func_81104930();
+                        GbEmu_DrawStatusBar();
                         keep = 0;
                     } else if (sel == 1) {
                         D_81154C51 = 1;
@@ -533,7 +579,7 @@ void func_81100C84(s8* arg0) {
                 }
             }
             if (keep) {
-                func_811000DC(*(s8**)(D_81154C30[D_81154C3C] + 8), D_81154C51 & 3);
+                GbEmu_DrawPauseMenu(*(s8**)(D_81154C30[D_81154C3C] + 8), D_81154C51 & 3);
             }
             break;
 
@@ -547,7 +593,7 @@ void func_81100C84(s8* arg0) {
         osViBlack(1);
         GbAudio_RampToSilence();
         func_81104B88(20);
-        func_81103D30();
+        GbEmu_ClearStatusBar();
         osWritebackDCacheAll();
         task = &D_81154B20[D_81154C3C ^ 1];
         if (task->queue.validCount != 0) {
@@ -557,8 +603,8 @@ void func_81100C84(s8* arg0) {
         if (task->queue.validCount != 0) {
             osRecvMesg(&task->queue, 0, 1);
         }
-        *(s16*)(arg0 + 0x2200) = (D_8111E314[0] << 8) | ((D_8111E314[1] - 1) & 0xFF);
-        osSendMesg((OSMesgQueue*)(arg0 + 0x21B4), D_81154C48, 1);
+        *(s16*)(params + 0x2200) = (D_8111E314[0] << 8) | ((D_8111E314[1] - 1) & 0xFF);
+        osSendMesg((OSMesgQueue*)(params + 0x21B4), D_81154C48, 1);
         while (1) {
         }
 
@@ -584,7 +630,7 @@ void func_81100C84(s8* arg0) {
             fade[3] = 0xBF;
             Cont_StartReadInputs();
             Cont_ReadInputs();
-            if (func_811064DC() != 0) {
+            if (GbPak_CheckConnectionBlocking() != 0) {
                 goto error;
             }
             sel = *(u16*)(D_800603C0 + 8);
@@ -625,26 +671,26 @@ void func_81100C84(s8* arg0) {
                         break;
                 }
             }
-            func_81100390(*(s32*)(D_81154C30[D_81154C3C] + 8), D_81154C52, 0);
+            GbEmu_DrawButtonConfig(*(s32*)(D_81154C30[D_81154C3C] + 8), D_81154C52, 0);
             break;
 
         case 8:
             fade[3] = 0xBF;
-            if (func_811064DC() != 0) {
+            if (GbPak_CheckConnectionBlocking() != 0) {
                 goto error;
             }
             if (--D_81154C54 < -6) {
                 D_81154C54 = -6;
                 D_81154C4D = 9;
             }
-            func_81100390(*(s32*)(D_81154C30[D_81154C3C] + 8), D_81154C52, D_81154C54);
+            GbEmu_DrawButtonConfig(*(s32*)(D_81154C30[D_81154C3C] + 8), D_81154C52, D_81154C54);
             break;
 
         case 9:
             fade[3] = 0xBF;
             Cont_StartReadInputs();
             Cont_ReadInputs();
-            if (func_811064DC() != 0) {
+            if (GbPak_CheckConnectionBlocking() != 0) {
                 goto error;
             }
             sel = *(u16*)(D_800603C0 + 8);
@@ -697,28 +743,28 @@ void func_81100C84(s8* arg0) {
                 }
             }
         call9:
-            func_81100390(*(s32*)(D_81154C30[D_81154C3C] + 8), D_81154C52, D_81154C54);
+            GbEmu_DrawButtonConfig(*(s32*)(D_81154C30[D_81154C3C] + 8), D_81154C52, D_81154C54);
             break;
 
         case 10:
             fade[3] = 0xBF;
-            if (func_811064DC() != 0) {
+            if (GbPak_CheckConnectionBlocking() != 0) {
                 goto error;
             }
             if (++D_81154C54 == 0) {
                 D_81154C4D = 7;
             }
-            func_81100390(*(s32*)(D_81154C30[D_81154C3C] + 8), D_81154C52, D_81154C54);
+            GbEmu_DrawButtonConfig(*(s32*)(D_81154C30[D_81154C3C] + 8), D_81154C52, D_81154C54);
             break;
 
         case 11:
             fade[3] = 0xBF;
             Cont_StartReadInputs();
             Cont_ReadInputs();
-            if (func_811064DC() != 0) {
+            if (GbPak_CheckConnectionBlocking() != 0) {
                 goto error;
             }
-            func_81100818(*(s8**)(D_81154C30[D_81154C3C] + 8), D_81154C51 & 1);
+            GbEmu_DrawQuitConfirm(*(s8**)(D_81154C30[D_81154C3C] + 8), D_81154C51 & 1);
             if (!(D_81154C51 & 2)) {
                 sel = *(u16*)(D_800603C0 + 8);
                 if (sel & 0x4000) {
@@ -734,7 +780,7 @@ void func_81100C84(s8* arg0) {
                     D_81154C51 |= 2;
                 }
             } else if (D_81154C51 == 3) {
-                func_81104AE4();
+                GbEmu_ClearPalettes();
                 D_81154C50 = 30;
                 D_81154C4D = 5;
             } else {
@@ -745,7 +791,7 @@ void func_81100C84(s8* arg0) {
         case 20:
             fade[3] = 0xFF;
             func_811177D0(1);
-            func_811067B0();
+            GbPak_PowerOff();
             D_81154C4D = 21;
             break;
 
@@ -753,7 +799,7 @@ void func_81100C84(s8* arg0) {
             fade[3] = 0xFF;
             GbEmu_DrawTextCommands(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E4D0);
             GbEmu_DrawTextCommands(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E4E4);
-            if (func_8110665C() == 0) {
+            if (GbPak_IsCartridgeInserted() == 0) {
                 D_81154C53 = 30;
                 D_81154C4D = 22;
             }
@@ -764,9 +810,9 @@ void func_81100C84(s8* arg0) {
         case 26:
             fade[3] = 0xFF;
             GbEmu_DrawTextCommands(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E4E4);
-            if (func_8110665C() != 0) {
+            if (GbPak_IsCartridgeInserted() != 0) {
                 if (D_81154C53 == 0) {
-                    if (func_8110659C() == 0) {
+                    if (GbPak_ReidentifyCartridge() == 0) {
                         D_81154C4D = 23;
                     } else {
                         D_81154C4D = 25;
@@ -794,7 +840,7 @@ void func_81100C84(s8* arg0) {
                 D_811565A1 = 10;
                 D_81154C48 = 0;
             } else {
-                func_811067B0();
+                GbPak_PowerOff();
                 D_81154C4D = 25;
             }
             break;
@@ -803,7 +849,7 @@ void func_81100C84(s8* arg0) {
             fade[3] = 0xFF;
             GbEmu_DrawTextCommands(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E540);
             GbEmu_DrawTextCommands(*(s8**)(D_81154C30[D_81154C3C] + 8), D_8111E4E4);
-            if (func_8110665C() == 0) {
+            if (GbPak_IsCartridgeInserted() == 0) {
                 D_81154C53 = 30;
                 D_81154C4D = 26;
             }

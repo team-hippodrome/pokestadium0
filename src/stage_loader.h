@@ -21,7 +21,7 @@ typedef struct StageContext {
     /* 0x0D */ s8 antiAlias; // @unverified: copied to DisplayFrame.antiAlias, the column of the VI mode table D_8005F664; 1 in every caller
     /* 0x0E */ s8 renderTargetCount; // Number of slots used in renderTargets.
     /* 0x0F */ s8 hasDepthBuffer;
-    /* 0x10 */ s8 retracesPerFrame; // @unverified: copied to DisplayFrame.retracesPerFrame; 2 in most screens, 1 in the GB Tower team prep
+    /* 0x10 */ s8 retracesPerFrame; // @unverified: copied to DisplayFrame.retracesPerFrame; 2 in most screens, 1 in the GB party icon render (GbPlayer_PreparePartyIcons)
     /* 0x11 */ u8 fadeMode; // 0 transparent, 1 opaque, 2 fading in, 3 fading out.
     /* 0x12 */ u8 fadeDuration;
     /* 0x13 */ u8 fadeFrame;

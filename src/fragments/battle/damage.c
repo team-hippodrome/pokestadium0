@@ -35,12 +35,12 @@ s32 ActivePokemon_GetNickname(ActivePokemon*);
 void BattleMessage_Format(s32, s32, s32, ...);
 
 void ComputeAllPokemonStats(BattleMon* arg0);
-void func_82110FB0(void);
-void func_82110FB8(void);
+void Damage_UnusedNopA(void);
+void Damage_UnusedNopB(void);
 void Battle_LoadMoveCache(void);
 s32 Battle_Effect_Metronome(void);
 void Battle_ApplyPoisonOrBurnDamage(void);
-void func_82111870(void);
+void Battle_ResidualEffectsNop(void);
 
 u8 Battle_Random(void);
 void ComputePokemonStat(s32 arg0, BattleMon* arg1);
@@ -442,7 +442,7 @@ void ApplyBurnAttackCut(ActivePokemon* arg0) {
 }
 
 void Battle_CheckMovesetLegality(ActivePokemon*);
-void func_80041940(s32, s32, s32);
+void Announcer_SetHp(s32, s32, s32);
 
 /**
  * Populate runtime species, HP, types, moves, stats and neutral stages from the selected roster.
@@ -526,15 +526,15 @@ void Battle_InitPokemonRuntimeState(ActivePokemon* arg0) {
     // clang-format on
 
     Battle_CheckMovesetLegality(arg0);
-    func_80041940(BattleScene_GetParticipantSideIndex(arg0), sp34->hp, sp34->maxHp);
+    Announcer_SetHp(BattleScene_GetParticipantSideIndex(arg0), sp34->hp, sp34->maxHp);
 }
 
-//@unverified
 /**
- * Returns 1 if the party Pokemon before slot state.unk_18 (a 1-based slot)
- * still has HP, otherwise 0.
+ * Returns 1 when the team member picked by the action choice (state.actionChosen, 1-based) still
+ * has HP.
+ * @unverified Name guessed from the code.
  */
-s32 func_82110EAC(ActivePokemon* arg0) {
+s32 Battle_IsChosenMemberAlive(ActivePokemon* arg0) {
     if (arg0->teamRoster->pokemonPicked[arg0->state.actionChosen - 1].hp != 0) {
         return 1;
     }
@@ -545,8 +545,9 @@ extern u8 D_82199F6A;
 /**
  * Applies the Gen 1 badge boosts to side 0's Pokemon: each flagged stat (bits of
  * D_82199F6A: Attack, Defense, Speed, Special) goes up by 1/8, capped at 999.
+ * @unverified Name guessed from the code.
  */
-void func_82110EE4(void) {
+void Battle_ApplyBadgeStatBoosts(void) {
     if (D_82199F6A & 1) {
         D_8219A3C8[0].modifiedAttack += D_8219A3C8[0].modifiedAttack >> 3;
         if (D_8219A3C8[0].modifiedAttack >= 1000) {
@@ -575,14 +576,16 @@ void func_82110EE4(void) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82110FB0(void) {
+void Damage_UnusedNopA(void) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82110FB8(void) {
+void Damage_UnusedNopB(void) {
 }
 
 /**
@@ -899,8 +902,9 @@ void Battle_ApplyLeechSeedDamage(void) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82111870(void) {
+void Battle_ResidualEffectsNop(void) {
 }
 
 extern s32 D_8218C704;
@@ -909,7 +913,7 @@ extern s32 D_8218C70C;
 
 // Matches the ROM, but uses rodata data that is not placed in this file yet.
 void Battle_ApplyLeechSeedDamage(void);
-void func_82111870(void);
+void Battle_ResidualEffectsNop(void);
 
 /**
  * Queue and stage poison/burn and Leech Seed effects after the action.
@@ -934,7 +938,7 @@ s32 Battle_ApplyResidualEffects(void) {
 
     if (sBattleUser->volatileStatusFlags & 0x80) {
         Battle_ApplyLeechSeedDamage();
-        func_82111870();
+        Battle_ResidualEffectsNop();
         BattleMessage_Format((s32)gBattleMessageQueues->messageBuffers[8], 2, D_8218C70C, ActivePokemon_GetNickname(sActivePokemon[sBattleScene.scene->actingSide]));
     }
 

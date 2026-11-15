@@ -22,10 +22,10 @@ extern s16 D_8219CB18;
 extern s16 D_8219CB1A;
 extern const char D_821978C8[];
 
-void func_8213436C(void);
+void BattleScene_MemoryUnusedNop(void);
 
 extern s32 D_8219A760;
-void func_821079E8(s32);
+void BattleScene_SetCameraClipMaskBothSides(s32);
 
 /**
  * Camera frame on the Pokemon of side D_8219A760: aims at its default anchor from the
@@ -37,7 +37,7 @@ void func_821079E8(s32);
 void BattleScene_FinalPresentationFrameActiveOwner(CameraNode* arg0) {
     f32 sp3C;
 
-    func_821079E8(0x1FFE);
+    BattleScene_SetCameraClipMaskBothSides(0x1FFE);
     BattleScene_SetCameraClipPlanes(arg0, 20.0f, 4000.0f);
     BattleAnim_GetOwnerDefaultAnchorPosition(sActivePokemon[D_8219A760], &sBattleScene.scene->anchorPosition);
     sp3C = BattleScene_ScaleCameraDistance(sActivePokemon[D_8219A760], 3.5f, 300.0f);
@@ -52,24 +52,26 @@ void BattleScene_FinalPresentationFrameActiveOwner(CameraNode* arg0) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8213436C(void) {
+void BattleScene_MemoryUnusedNop(void) {
 }
 
 void BattleScene_SelectNextBRollCameraShot(CameraNode* arg0);
-void func_82121434(CameraNode* arg0);
+void BattleCamera_StartNextBRollShot(CameraNode* arg0);
 void BattleScene_InitTurnPresentation(s32 arg0);
 void BattleScene_SetPhase(CameraNode* arg0, s32 arg1);
 void BattleScene_OpeningStepInitCamera(CameraNode* arg0);
 void BattleScene_IntroStepInitOverheadCamera(CameraNode* arg0);
-void func_821329F8(s32 arg0);
-void func_82132F88(CameraNode* arg0);
+void SceneMode7_StepInit(s32 arg0);
+void SceneMode11_StepInit(CameraNode* arg0);
 /**
  * Starts the battle scene: clears the winner, sets the field of view to 30 and runs the
  * opening step for the scene mode (mode 0 frames the active Pokemon, modes 1 and 5 start
  * the B-roll), then stores the camera.
+ * @unverified Name guessed from the code.
  */
-void func_82134374(CameraNode* arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
+void BattleScene_StartPresentationForMode(CameraNode* arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
     sBattleScene.scene->winner = 0;
     sBattleScene.scene->verticalFieldOfView = 30.0f;
     switch (sBattleScene.scene->mode) {
@@ -81,7 +83,7 @@ void func_82134374(CameraNode* arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
             BattleScene_SelectNextBRollCameraShot(arg0);
             break;
         case 9:
-            func_82121434(arg0);
+            BattleCamera_StartNextBRollShot(arg0);
             break;
         case 2:
         case 6:
@@ -100,10 +102,10 @@ void func_82134374(CameraNode* arg0, UNUSED s32 arg1, UNUSED s32 arg2) {
             BattleScene_IntroStepInitOverheadCamera(arg0);
             break;
         case 7:
-            func_821329F8((s32)arg0);
+            SceneMode7_StepInit((s32)arg0);
             break;
         case 11:
-            func_82132F88(arg0);
+            SceneMode11_StepInit(arg0);
             break;
     }
     sBattleScene.scene->camera = arg0;

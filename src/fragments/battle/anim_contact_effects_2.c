@@ -10,11 +10,10 @@ M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);
 M2C_UNK Particle_IncrementPhase(s8 *);
 M2C_UNK Particle_SetMagnitudeStepScaled(s8 *, M2C_UNK);
 M2C_UNK Particle_SetParam0(s8 *, M2C_UNK);
-M2C_UNK func_8213E77C(s8 *);
 s32 func_82140690(s8 *);
 void BattleAnim_RunDigHitDust(Particle* arg0);
 void BattleAnim_RunDigHitRocks(Particle* arg0);
-void func_82164AD0(Particle* arg0);
+void BattleAnim_CallbackSharedAnimatedVerticalFade(Particle* arg0);
 
 /**
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -35,13 +34,13 @@ void BattleAnim_RunAcidArmorUseEffect2(Particle* arg0) {
 
         case 3:
             Particle_DecrementParam0ToZeroThenAdvance(arg0);
-            Particle_AddVelocityYFromFieldOffset74(arg0);
+            Particle_RiseByStepMagnitude(arg0);
             break;
 
         case 4:
             Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
             Particle_PrimAlpha_Approach_0BC2C(arg0, 0x40, 4);
-            Particle_AddVelocityYFromFieldOffset74(arg0);
+            Particle_RiseByStepMagnitude(arg0);
             break;
 
         case 5:
@@ -65,7 +64,7 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
     /* common setup shared by every variant */
     Particle_ScratchB_SetS16_0BFEC(arg0, 2);
     Particle_Param0_SetS16_0BCA8(arg0, sp2E * 2);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
 
     /* sp2C selects which variant of the effect this particle belongs to (0..12) */
     switch (sp2C) {
@@ -217,28 +216,29 @@ void BattleAnim_InitSharedVerticalFadeParticle(Particle* arg0) {
 /**
  * Particle callback: shared vertical-fade init, wait for the spawn step, the later stages,
  * then inactive.
+ * @unverified Name guessed from the code.
  */
-void func_82164AD0(Particle* arg0) {
+void BattleAnim_CallbackSharedAnimatedVerticalFade(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        BattleAnim_InitSharedVerticalFadeParticle(arg0);
+        BattleAnim_InitSharedVerticalFadeParticle(particle);
         return;
     case 2:
-        if (func_821406B4(arg0) != 0) {
-            func_8213CB3C(arg0);
+        if (func_821406B4(particle) != 0) {
+            func_8213CB3C(particle);
             return;
         }
         return;
     case 3:
-        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, (s32) arg0->scratchB, 0);
-        Particle_ApproachPrimAlpha(arg0, 0x40, M2C_FIELD(arg0, u8 *, 0xAB));
-        func_8213E77C(arg0);
+        Particle_AnimateFramesForwardLoopedThenAdvance(particle, 0, 7, 1, (s32) particle->scratchB, 0);
+        Particle_ApproachPrimAlpha(particle, 0x40, M2C_FIELD(particle, u8 *, 0xAB));
+        Particle_RiseByStepMagnitude(particle);
         return;
     case 4:
-        Particle_MarkInactive(arg0);
+        Particle_MarkInactive(particle);
         break;
     }
 }
@@ -413,7 +413,7 @@ void BattleAnim_SetupBarrageUseEffect2(Particle* arg0) {
 
     Particle_SpawnIndex_GetS16_0C038(arg0);
     Particle_FieldCD_GetU8_0C048(arg0);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_SetScaleScaled(arg0, 0.5f);
     Particle_Rotation_AddVec_0A52C(arg0, ParticleMath_RandomRange(0x10000), ParticleMath_RandomRange(0x10000), 0);
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.75f);
@@ -452,7 +452,7 @@ void BattleAnim_RunBarrageUseEffect2(Particle* arg0) {
  */
 void BattleAnim_CallbackDescriptor50BurstChild_InitParticle(Particle* arg0) {
     Vec3s sp28;
-    s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp26 = Particle_GetByteParam1(arg0);
 
     Particle_SpawnIndex_GetS16_0C038(arg0);
     sp28.x = ParticleMath_RandomSignedOffset(0x1000, -0x2000);
@@ -472,29 +472,30 @@ void BattleAnim_CallbackDescriptor50BurstChild_InitParticle(Particle* arg0) {
 /**
  * Particle callback: init, loops frames 1-7 until the spawn step is done, then fades; falls
  * with speed -1.5 by 0.1 while running.
+ * @unverified Name guessed from the code.
  */
-void func_82165224(Particle* arg0) {
+void BattleAnim_CallbackDescriptor50BurstChild(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82165100(arg0);
+        func_82165100(particle);
         break;
     case 2:
-        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 1, 7, 1, 2, 0);
-        if (func_82140690(arg0) != 0) {
-            Particle_ApproachPrimAlpha(arg0, 0x64, 0x10);
+        Particle_AnimateFramesForwardLoopedThenAdvance(particle, 1, 7, 1, 2, 0);
+        if (func_82140690(particle) != 0) {
+            Particle_ApproachPrimAlpha(particle, 0x64, 0x10);
         }
         break;
     case 3:
-        Particle_MarkInactive(arg0);
+        Particle_MarkInactive(particle);
         break;
     }
-    if (Particle_IsRunning(arg0) != 0) {
-        func_821402B8(arg0);
-        func_8213F940(arg0, 0xBFC00000, 0x3DCCCCCD);
-        Particle_ApplyMotionStep(arg0);
+    if (Particle_IsRunning(particle) != 0) {
+        func_821402B8(particle);
+        func_8213F940(particle, 0xBFC00000, 0x3DCCCCCD);
+        Particle_ApplyMotionStep(particle);
     }
 }
 
@@ -561,30 +562,31 @@ void BattleAnim_EndEffect16_NoOpInit(void) {
 }
 
 /**
- * Like func_82165224 with the shared vertical-fade init and a fall step of 0.2.
+ * Like BattleAnim_CallbackDescriptor50BurstChild with the shared vertical-fade init and a fall step of 0.2.
+ * @unverified Name guessed from the code.
  */
-void func_8216547C(Particle* arg0) {
+void BattleAnim_CallbackVerticalFadeBurstChild(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        BattleAnim_InitSharedVerticalFadeParticle(arg0);
+        BattleAnim_InitSharedVerticalFadeParticle(particle);
         break;
     case 2:
-        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 1, 7, 1, 2, 0);
-        if (func_82140690(arg0) != 0) {
-            Particle_ApproachPrimAlpha(arg0, 0x64, 0x10);
+        Particle_AnimateFramesForwardLoopedThenAdvance(particle, 1, 7, 1, 2, 0);
+        if (func_82140690(particle) != 0) {
+            Particle_ApproachPrimAlpha(particle, 0x64, 0x10);
         }
         break;
     case 3:
-        Particle_MarkInactive(arg0);
+        Particle_MarkInactive(particle);
         break;
     }
-    if (Particle_IsRunning(arg0) != 0) {
-        func_821402B8(arg0);
-        func_8213F940(arg0, 0xBFC00000, 0x3E4CCCCD);
-        Particle_ApplyMotionStep(arg0);
+    if (Particle_IsRunning(particle) != 0) {
+        func_821402B8(particle);
+        func_8213F940(particle, 0xBFC00000, 0x3E4CCCCD);
+        Particle_ApplyMotionStep(particle);
     }
 }
 
@@ -593,7 +595,7 @@ void func_8216547C(Particle* arg0) {
  * for Solar Beam.
  */
 void BattleAnim_SetupSolarBeamUseEffect(Particle* arg0) {
-    s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp26 = Particle_GetByteParam1(arg0);
 
     Particle_SetScaleScaled(arg0, 0.2f);
     Particle_PositionOffset_AddYScaled_08E90(arg0, 5.0f);
@@ -629,7 +631,7 @@ void BattleAnim_RunSolarBeamUseEffect(Particle* arg0) {
  */
 void BattleAnim_SetupQiChargeChild(Particle* arg0) {
     s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
-    s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp24 = Particle_GetByteParam1(arg0);
 
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, 100.0f);
     Particle_MagnitudeStep_SetScaled_0ADA4(arg0, 3.0f);

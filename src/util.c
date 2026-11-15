@@ -57,7 +57,11 @@ M2C_UNK func_80003670();                            /* extern */
 extern s32 D_800A94E0;
 extern M2C_UNK D_80105360;
 
-void func_80002D58(void) {
+/**
+ * Sets up the main memory pool from the end of the resident image (0x80105360) to 0x80400000, the
+ * DMA completion queue, and a 64 KiB general pool. Called once from Main at boot.
+ */
+void Memory_InitPools(void) {
     func_800020C0(&D_80105360, 0x80400000);
     func_80003670();
     D_800A94E0 = func_80002840(0x10000, 0);
@@ -99,7 +103,12 @@ void Util_DrawRect(Gfx** dlist, s32 ulx, s32 lrx, u16 color) {
     *dlist = gfx;
 }
 
-void func_80002EC8(Gfx** dlist) {
+/**
+ * Debug bar of main pool usage (start, left head, right head, end, at 32 KiB per pixel) with
+ * "MEM: +XH" free bytes text. Drawn only when both gShowCPUProfiler and gShowMEMProfiler are set.
+ * @unverified: debug overlay, not turned on in play.
+ */
+void Util_DrawMemoryProfiler(Gfx** dlist) {
     MainPool* pool = main_pool_get_pool();
     UNUSED s32 pad; // FAKE: stack padding
     s32 available = main_pool_get_available();

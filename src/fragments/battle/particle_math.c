@@ -449,31 +449,32 @@ s32 ParticleMath_ApproachS16DownByPointer(s16* arg0, s16 arg1, s16* arg2) {
 
 /**
  * Steps the byte *arg0 toward arg1 by |arg2|; returns 1 once it gets there.
+ * @unverified Name guessed from the code.
  */
-s32 func_8213775C(s8* arg0, s8 arg1, s8 arg2) {
-    s8 temp_v0 = *arg0;
+s32 ParticleMath_StepS8Toward(s8* value, s8 target, s8 step) {
+    s8 temp_v0 = *value;
     s32 var_v1 = 0;
 
-    if (temp_v0 < arg1) {
-        if (arg2 >= 0) {
-            *arg0 = temp_v0 + arg2;
+    if (temp_v0 < target) {
+        if (step >= 0) {
+            *value = temp_v0 + step;
         } else {
-            *arg0 = temp_v0 - arg2;
+            *value = temp_v0 - step;
         }
 
-        if (*arg0 >= arg1) {
-            *arg0 = arg1;
+        if (*value >= target) {
+            *value = target;
             var_v1 = 1;
         }
-    } else if (arg1 < temp_v0) {
-        if (arg2 >= 0) {
-            *arg0 = temp_v0 - arg2;
+    } else if (target < temp_v0) {
+        if (step >= 0) {
+            *value = temp_v0 - step;
         } else {
-            *arg0 = temp_v0 + arg2;
+            *value = temp_v0 + step;
         }
 
-        if (arg1 >= *arg0) {
-            *arg0 = arg1;
+        if (target >= *value) {
+            *value = target;
             var_v1 = 1;
         }
     } else {
@@ -515,31 +516,32 @@ s32 ParticleMath_ApproachU8(u8* arg0, u8 arg1, u8 arg2) {
 
 /**
  * Steps the halfword *arg0 toward arg1 by |arg2|; returns 1 once it gets there.
+ * @unverified Name guessed from the code.
  */
-s32 func_82137898(s16* arg0, s16 arg1, s16 arg2) {
-    s16 temp_v0 = *arg0;
+s32 ParticleMath_StepS16Toward(s16* value, s16 target, s16 step) {
+    s16 temp_v0 = *value;
     s32 var_v1 = 0;
 
-    if (temp_v0 < arg1) {
-        if (arg2 >= 0) {
-            *arg0 = temp_v0 + arg2;
+    if (temp_v0 < target) {
+        if (step >= 0) {
+            *value = temp_v0 + step;
         } else {
-            *arg0 = temp_v0 - arg2;
+            *value = temp_v0 - step;
         }
 
-        if (*arg0 >= arg1) {
-            *arg0 = arg1;
+        if (*value >= target) {
+            *value = target;
             var_v1 = 1;
         }
-    } else if (arg1 < temp_v0) {
-        if (arg2 >= 0) {
-            *arg0 = temp_v0 - arg2;
+    } else if (target < temp_v0) {
+        if (step >= 0) {
+            *value = temp_v0 - step;
         } else {
-            *arg0 = temp_v0 + arg2;
+            *value = temp_v0 + step;
         }
 
-        if (arg1 >= *arg0) {
-            *arg0 = arg1;
+        if (target >= *value) {
+            *value = target;
             var_v1 = 1;
         }
     } else {
@@ -978,7 +980,7 @@ Vec3f* ParticleMath_NormalizedDirection(Vec3f* arg0, Vec3f arg1, Vec3f arg2) {
 s32 BattleAnim_GetCameraContext(void);
 
 #ifdef NON_MATCHING
-/* TODO: decompile func_82138244; signature not recovered. */
+/* TODO: decompile ParticleMath_GetPointAlongTurnedView; signature not recovered. */
 #else
 void func_821381E4(Vec3f*, Vec3f, Vec3f);
 s32 BattleAnim_GetCameraContext(void);
@@ -986,22 +988,26 @@ void func_82137F10();
 /**
  * Writes to arg0 the point arg2 units from the camera eye along the view direction turned
  * by arg1.
+ * @unverified Name guessed from the code.
  */
-void func_82138244(Vec3f *arg0, s32 arg1, f32 arg2) {
+void ParticleMath_GetPointAlongTurnedView(Vec3f *out, s32 angle, f32 distance) {
     Vec3f dir;
     CameraNode *camera;
 
     camera = (CameraNode *)BattleAnim_GetCameraContext();
     func_821381E4(&dir, camera->view.eyePosition, camera->view.targetPosition);
-    func_82137F10(arg1, dir);
-    arg0->x = camera->view.eyePosition.x + arg2 * dir.x;
-    arg0->y = camera->view.eyePosition.y + arg2 * dir.y;
-    arg0->z = camera->view.eyePosition.z + arg2 * dir.z;
+    func_82137F10(angle, dir);
+    out->x = camera->view.eyePosition.x + distance * dir.x;
+    out->y = camera->view.eyePosition.y + distance * dir.y;
+    out->z = camera->view.eyePosition.z + distance * dir.z;
 }
 #endif
 
-/* Place a point at the requested distance from the scene camera eye. */
-void func_8213831C(Vec3f* out, f32 distance) {
+/**
+ * Place a point at the requested distance from the scene camera eye.
+ * @unverified Name guessed from the code.
+ */
+void ParticleMath_GetPointAlongView(Vec3f* out, f32 distance) {
     Vec3f direction;
     CameraNode* camera;
     camera = (CameraNode*)BattleAnim_GetCameraContext();
@@ -1086,8 +1092,9 @@ void func_821381E4(Vec3f*, Vec3f, Vec3f);
  * Vec3f arguments are passed by value, in $a1-$a3 and on the stack), and
  * passes the result's z and x components to MathUtil_Atan2s (the angle itself
  * is discarded).
+ * @unverified Name guessed from the code.
  */
-void func_821385C0(void) {
+void ParticleMath_ComputeViewYawUnused(void) {
     UNUSED s32 pad; // FAKE: stack padding
     Vec3f sp30;
     CameraNode* camera;

@@ -33,18 +33,18 @@ extern s16 sRoomDescriptionHeight;
 extern s16 sEliteFourTransition;
 #include "math.h"
 #include "m2c_macros.h"
-void func_82183BA8(void);
-void func_82183D9C(void);
-void func_82183DA4(void);
-void func_82183DAC(void);
-void func_82183DB4(void);
-void func_82183DBC(void);
-void func_82183DC4(void);
-void func_82183E1C(void);
-void func_821853EC(void);
-void func_821853F4(void);
-void func_821853FC(void);
-void func_82185404(void);
+void ComAi_UnusedNopA(void);
+void ComAi_UnusedNopB(void);
+void ComAi_UnusedNopC(void);
+void ComAi_UnusedNopD(void);
+void ComAi_UnusedNopE(void);
+void ComAi_UnusedNopF(void);
+void ComAi_UnusedNopG(void);
+void ComAi_UnusedNopH(void);
+void ComAi_UnusedNopI(void);
+void ComAi_UnusedNopJ(void);
+void ComAi_UnusedNopK(void);
+void ComAi_UnusedNopL(void);
 extern s32 D_821CF2B0;
 extern u32 D_821CF2B4;
 extern ComSide* D_821CF298;
@@ -340,26 +340,30 @@ void BattleAi_ResetBattleStats(BattleMonRuntime* arg0, BattleMon *arg1)
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_821853EC(void) {
+void ComAi_UnusedNopI(void) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_821853F4(void) {
+void ComAi_UnusedNopJ(void) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_821853FC(void) {
+void ComAi_UnusedNopK(void) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82185404(void) {
+void ComAi_UnusedNopL(void) {
 }
 
 /**
@@ -395,10 +399,11 @@ s32 BattleAi_OpponentCannotAct(ComBattler* arg0, ComBattler* arg1) {
 extern ComBattler* D_821CF2A0;
 
 /**
- * COM AI check: returns 1 when bit 0x10 of byte 0x59 of the AI's opponent record
- * (D_821CF2A0) is clear.
+ * COM AI check: returns 1 when the AI's opponent (D_821CF2A0) has no Substitute up (Gen 1
+ * battle status 2, bit 4). The AI checks it before Toxic, Leech Seed and stat-lowering moves.
+ * @unverified Name guessed from the code.
  */
-s32 func_82185494(void) {
+s32 BattleAi_IsFoeWithoutSubstitute(void) {
     return (D_821CF2A0->mon.volatileStatusFlags & 0x10) == 0;
 }
 
@@ -444,7 +449,7 @@ s32 BattleAi_PickSetupMove(ComBattler* arg0) {
                 case SPLASH:
                     return i;
                 case SUBSTITUTE:
-                    if (func_82185494() != 0 && BattleAi_GetHpPercent((s8*)arg0) >= 0x33) {
+                    if (BattleAi_IsFoeWithoutSubstitute() != 0 && BattleAi_GetHpPercent((s8*)arg0) >= 0x33) {
                         return i;
                     }
                     break;
@@ -621,7 +626,7 @@ s32 BattleAi_PickToxicOrLeechSeed(ComBattler* arg0) {
     s32 i;
     s32 r;
 
-    if (func_82185494() == 0) {
+    if (BattleAi_IsFoeWithoutSubstitute() == 0) {
         return -1;
     }
     if (D_821CF29C->lastMoves[0] == TOXIC) {
@@ -672,7 +677,7 @@ s32 BattleAi_PickStatLowerMove(ComBattler* arg0, s32 arg1) {
     s32 pad; // FAKE: stack padding
     u8 *p;
 
-    if (func_82185494() != 0) {
+    if (BattleAi_IsFoeWithoutSubstitute() != 0) {
         i = 0;
         p = arg0;
         if (!(D_821CF2A0->mon.volatileStatusFlags & 2)) {
@@ -736,7 +741,7 @@ s32 BattleAi_IsMoveUseful(s32 move) {
         case 28:
             goto fail;
         case 66:
-            if (func_82185494() == 0) {
+            if (BattleAi_IsFoeWithoutSubstitute() == 0) {
                 goto fail;
             }
             if (BattleAi_HasType(D_821CF2A0, TYPE_POISON) != 0) {
@@ -750,7 +755,7 @@ s32 BattleAi_IsMoveUseful(s32 move) {
             }
             return 0;
         case 3:
-            if (func_82185494() == 0) {
+            if (BattleAi_IsFoeWithoutSubstitute() == 0) {
                 goto fail;
             }
             if (BattleAi_OpponentCannotAct(D_821CF29C, D_821CF2A0) != 0) {
@@ -770,7 +775,7 @@ s32 BattleAi_IsMoveUseful(s32 move) {
         case 34:
         case 35:
         case 36:
-            if (func_82185494() == 0) {
+            if (BattleAi_IsFoeWithoutSubstitute() == 0) {
                 goto fail;
             }
             if (D_821CF2A0->mon.statusCondition != 0) {
@@ -784,7 +789,7 @@ s32 BattleAi_IsMoveUseful(s32 move) {
             if ((D_821CF2A0->mon.statusCondition & 7) == 0) {
                 goto fail;
             }
-            if (func_82185494() == 0) {
+            if (BattleAi_IsFoeWithoutSubstitute() == 0) {
                 goto fail;
             }
             if (BattleAi_OpponentCannotAct(D_821CF29C, D_821CF2A0) == 0) {
@@ -801,7 +806,7 @@ s32 BattleAi_IsMoveUseful(s32 move) {
             return 0;
         case 18: case 19: case 20: case 21: case 22: case 23:
         case 58: case 59: case 60: case 61: case 62: case 63:
-            if (func_82185494() == 0) {
+            if (BattleAi_IsFoeWithoutSubstitute() == 0) {
                 goto fail;
             }
             if (D_821CF2A0->mon.volatileStatusFlags & 2) {
@@ -852,7 +857,7 @@ s32 BattleAi_IsMoveUseful(s32 move) {
             }
             return 0;
         case 31: case 37:
-            if (func_82185494() != 0) {
+            if (BattleAi_IsFoeWithoutSubstitute() != 0) {
                 break;
             }
             return 0;
@@ -888,7 +893,7 @@ s32 BattleAi_IsMoveUseful(s32 move) {
             }
             return 0;
         case 49:
-            if (func_82185494() == 0) {
+            if (BattleAi_IsFoeWithoutSubstitute() == 0) {
                 goto fail;
             }
             if (D_821CF2A0->mon.immobilizedReason & 0x80) {
@@ -907,7 +912,7 @@ s32 BattleAi_IsMoveUseful(s32 move) {
             if (BattleAi_OpponentCannotAct(D_821CF29C, D_821CF2A0) != 0) {
                 goto fail;
             }
-            if (func_82185494() != 0) {
+            if (BattleAi_IsFoeWithoutSubstitute() != 0) {
                 break;
             }
             return 0;
@@ -935,7 +940,7 @@ s32 BattleAi_IsMoveUseful(s32 move) {
             }
             return 0;
         case 79:
-            if (func_82185494() == 0) {
+            if (BattleAi_IsFoeWithoutSubstitute() == 0) {
                 goto fail;
             }
             if (D_821CF29C->mon.hp >= (D_821CF29C->mon.maxHp >> 2)) {

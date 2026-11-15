@@ -82,13 +82,13 @@ void Audio_Enable(void) {
     D_800AAE30 = 1;
 }
 
-M2C_UNK func_80004920(M2C_UNK *);                   /* extern */
-M2C_UNK func_80004EA8(M2C_UNK *);                   /* extern */
+M2C_UNK SchedClient_WaitMessage(M2C_UNK *);                   /* extern */
+M2C_UNK Sched_AddClient(M2C_UNK *);                   /* extern */
 M2C_UNK func_80004F34(s8 *, M2C_UNK);             /* extern */
 M2C_UNK func_800082D0();                            /* extern */
-M2C_UNK func_8003B868(s8 *);                      /* extern */
-M2C_UNK func_8003BC9C(M2C_UNK);                     /* extern */
-M2C_UNK func_8003E1F8();                            /* extern */
+M2C_UNK __amHandleFrame(s8 *);                      /* extern */
+M2C_UNK Audio_SetOutputMode(M2C_UNK);                     /* extern */
+M2C_UNK Audio_LoadSoundData();                            /* extern */
 void Audio_SetChannelVolume(s32 arg0, u32 arg1);            /* extern */
 M2C_UNK func_8004CFB0(M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_800567E0(M2C_UNK *, M2C_UNK *, M2C_UNK); /* extern */
@@ -101,9 +101,14 @@ extern s8 D_800AAED0;
 extern s8 D_800AAED4;
 extern s32 D_800AAF38;
 extern s32 D_800AAF3C;
-void func_8000A92C(s32 arg0) {
+/**
+ * Audio thread (id 4, started by Idle_ThreadEntry): sets up its queues, registers as a scheduler client,
+ * loads the sound data, then each retrace builds and sends an audio frame task (__amHandleFrame) while
+ * the console is not about to reset.
+ */
+void Audio_ThreadEntry(s32 arg0) {
     func_800567E0(&D_800AAE48, &D_800AAE38, 1);
-    func_80004EA8(&D_800AAE38);
+    Sched_AddClient(&D_800AAE38);
     D_800AAE30 = 1;
     D_800AAF3C = -1;
     D_800AAF38 = 0;
@@ -111,14 +116,14 @@ void func_8000A92C(s32 arg0) {
     func_800567E0(&D_800AAED4, &D_800AAED0, 1);
     func_8004CFB0(&D_800AAE6C, 0x444F4E45, 0);
     func_8004CFB0(&D_800AAED4, 0x444F4E45, 0);
-    func_8003E1F8();
-    func_8003BC9C(1);
+    Audio_LoadSoundData();
+    Audio_SetOutputMode(1);
     Audio_SetChannelVolume(3, 4);
 loop_1:
-    func_80004920(&D_800AAE38);
+    SchedClient_WaitMessage(&D_800AAE38);
     func_800082D0();
     if ((D_800AAE30 != 0) && (D_800A9710.preNmiFrames < 0x15)) {
-        func_8003B868(&D_800AAE68 + (D_800AAF38 * 0x68) + 0x20);
+        __amHandleFrame(&D_800AAE68 + (D_800AAF38 * 0x68) + 0x20);
         func_80004F34(&D_800AAE68 + (D_800AAF38 * 0x68), 0);
     }
     D_800AAF38 ^= 1;

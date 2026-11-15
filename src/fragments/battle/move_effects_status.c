@@ -10,13 +10,14 @@ s32 ActivePokemon_GetNickname(ActivePokemon*);
 typedef void (*func_D_8438AE50)(void);
 extern func_D_8438AE50 sMoveEffectHandlers[];
 
-void func_82113660(void);
+void MoveEffect_UnusedNop(void);
 void BattleEffect_Explosion(void);
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82113660(void) {
+void MoveEffect_UnusedNop(void) {
 }
 
 extern s32 D_8218C7BC;

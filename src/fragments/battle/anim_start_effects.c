@@ -2,7 +2,7 @@
 /* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_328F10.c, src/gallery.c. */
 
 #include "battle.h"
-#include "fragments/disk_error_screen/disk_error_screen.h"
+#include "fragments/title_screen/title_screen.h"
 
 typedef struct {
     /* 0x00 */ s16 unk_00;
@@ -32,8 +32,8 @@ s32 Gallery_SetSceneModelNode();
 s32 Gallery_SetSceneRenderState();
 s32 Gallery_SetSceneGraphNode();
 s32 func_800303C8();
-void func_82150D1C(void);
-void func_82183DA4(void);
+void BattleAnim_StartEffect137RiseFadePair(void);
+void ComAi_UnusedNopC(void);
 typedef union unk_func_80026268_arg0_000_raw {
     struct {
         u8 unk_00;
@@ -88,11 +88,11 @@ void BattleAnim_InitStartEffect139Descriptor42FallingScale(Particle* arg0);
 void BattleAnim_InitStartEffect139Descriptor22SpinFade(Particle* arg0);
 void BattleAnim_InitExplosionOrbit(Particle* arg0);
 void BattleAnim_InitExplosionBurst(Particle* arg0);
-void func_82150DCC(void);
-void func_82150EB0(void);
+void BattleAnim_StartEffect138(void);
+void BattleAnim_StartEffect140(void);
 void BattleAnim_StartEffect122GlobalAndOwnerTintFade(void);
 
-void func_82150D1C(void);
+void BattleAnim_StartEffect137RiseFadePair(void);
 
 /**
  * Lifecycle init for effect 135's rising particles: starts tiny and 2.5 units up, spreads
@@ -104,7 +104,7 @@ void func_82150D1C(void);
  */
 void BattleAnim_InitStartEffect135Descriptor1CRisingScale(Particle* arg0) {
     Vec3s sp28;
-    s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp26 = Particle_GetByteParam1(arg0);
     s16 sp24 = Particle_SpawnIndex_GetS16_0C038(arg0);
 
     Particle_PositionOffset_SetYScaled_08CA0(arg0, 2.5f);
@@ -156,11 +156,11 @@ void BattleAnim_CallbackStartEffect135Descriptor1CRisingScaleFade(Particle* arg0
     Particle_AddVelocityFromRotationTemplate1(arg0);
 }
 
-u16 func_8213C484();                                /* extern */
+u16 func_8213C484(); // Particle_GetByteParam1 with the u16 return this call needs
 M2C_UNK func_8213C9D0(s32);                         /* extern */
 M2C_UNK func_821401D4(s32, M2C_UNK);                /* extern */
 M2C_UNK func_82143478(s32, u16);                    /* extern */
-void func_821501B4(s32 arg0)
+void BattleAnim_InitStartEffect135ExpandingFlash(s32 arg0)
 {
   u16 sp26;
   sp26 = func_8213C484();
@@ -213,7 +213,7 @@ void BattleAnim_CallbackStartEffect135ExpandingFlashFade(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_InitStartEffect139Descriptor42FallingScale(Particle* arg0) {
-    s16 sp2E = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp2E = Particle_GetByteParam1(arg0);
     s16 sp2C = Particle_SpawnIndex_GetS16_0C038(arg0);
 
     Particle_SetScaleScaled(arg0, 0.05f);
@@ -279,7 +279,7 @@ void BattleAnim_InitStartEffect139Descriptor22SpinFade(Particle* arg0) {
     s16 sp2C;
 
     Particle_SpawnIndex_GetS16_0C038(arg0);
-    sp2C = Particle_FieldCF_GetS16_0C058(arg0);
+    sp2C = Particle_GetByteParam1(arg0);
     Particle_SetScaleScaled(arg0, 0.175f);
     Particle_SetRotation(arg0, ParticleMath_RandomRange(0x10000), ParticleMath_RandomRange(0x10000), 0);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp2C);
@@ -294,22 +294,27 @@ M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_82150474(s8 *);                      /* extern */
 
-void func_82150504(Particle* arg0) {
+/**
+ * Particle callback for start effect 137: initializes on lifecycle 1; on 2 grows, fades out by 8 a
+ * frame and moves; detaches on 3.
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackStartEffect137RiseFade(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82150474(arg0);
+        func_82150474(particle);
         return;
     case 2:
-        func_82140228(arg0, 0x3DCCCCCD, 0x3C23D70A);
-        Particle_ApproachPrimAlpha(arg0, 0, 8);
-        Particle_AddVelocityFromRotationTemplate1(arg0);
-        func_821406B4(arg0);
+        func_82140228(particle, 0x3DCCCCCD, 0x3C23D70A);
+        Particle_ApproachPrimAlpha(particle, 0, 8);
+        Particle_AddVelocityFromRotationTemplate1(particle);
+        func_821406B4(particle);
         return;
     case 3:
-        Particle_DisableAndDetach(arg0);
+        Particle_DisableAndDetach(particle);
         return;
     }
 }
@@ -390,7 +395,7 @@ void BattleAnim_InitExplosionOrbit(Particle* arg0) {
     s16 sp36;
     s16 sp34;
     s16 sp32 = Particle_SpawnIndex_GetS16_0C038(arg0);
-    s16 sp30 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp30 = Particle_GetByteParam1(arg0);
     s16 sp2E = Particle_FieldCE_GetS32_0C040(arg0);
 
     Particle_SetRotation(arg0, ParticleMath_RandomRange(0x10000), ParticleMath_RandomRange(0x10000), 0);
@@ -504,7 +509,7 @@ void BattleAnim_ExplosionOrbitSwirl(Particle* arg0) {
  * @unverified Name guessed from the code.
  */
 void BattleAnim_InitExplosionBurst(Particle* arg0) {
-    s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp26 = Particle_GetByteParam1(arg0);
 
     Particle_SetScaleScaled(arg0, 0.2f);
     Particle_PositionOffset_AddYScaled_08E90(arg0, 5.0f);
@@ -559,26 +564,29 @@ extern M2C_UNK D_8218E798;
 extern M2C_UNK func_8215036C;
 
 /**
- * Queues func_82150504 and func_8215036C on the current owner, 30 repeats each.
+ * Queues BattleAnim_CallbackStartEffect137RiseFade and func_8215036C on the current owner, 30 repeats each.
+ * @unverified Name guessed from the code.
  */
-void func_82150D1C(void) {
-    func_8213B5D8(0, 1, 0x1E, &func_82150504, &D_8218E698, 0x10, 1, 0x1E, 0, 0x3B, 0);
+void BattleAnim_StartEffect137RiseFadePair(void) {
+    func_8213B5D8(0, 1, 0x1E, &BattleAnim_CallbackStartEffect137RiseFade, &D_8218E698, 0x10, 1, 0x1E, 0, 0x3B, 0);
     func_8213B5D8(0, 1, 0x1E, &func_8215036C, &D_8218E798, 0x10, 2, 0x1E, 0, 0x3B, 0);
 }
 
 /**
- * Calls func_82150D1C.
+ * Calls BattleAnim_StartEffect137RiseFadePair.
+ * @unverified Name guessed from the code.
  */
-void func_82150DCC(void) {
-    func_82150D1C();
+void BattleAnim_StartEffect138(void) {
+    BattleAnim_StartEffect137RiseFadePair();
 }
 
 extern M2C_UNK D_8218E668;
 
 /**
  * Queues five sparkle hits, then after 16 frames a grid rise-fade and an alpha fade-in hold.
+ * @unverified Name guessed from the code.
  */
-void func_82150DEC(void) {
+void BattleAnim_StartEffect139SparkleGridRise(void) {
     BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(11, 1, 5, BattleAnim_RunSparkleHit, (ParticleDescriptor*)&D_8218E798, 0, 5, 0x1E, 0, 0x3B, 8);
     BattleAnim_SetSpawnDelay(0x10);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffect141Descriptor1CGridRiseFade, (ParticleDescriptor*)&D_8218E668, 0, 0x40, 0x1E, 0, 8, 0);
@@ -586,10 +594,11 @@ void func_82150DEC(void) {
 }
 
 /**
- * Calls func_82150DEC.
+ * Calls BattleAnim_StartEffect139SparkleGridRise.
+ * @unverified Name guessed from the code.
  */
-void func_82150EB0(void) {
-    func_82150DEC();
+void BattleAnim_StartEffect140(void) {
+    BattleAnim_StartEffect139SparkleGridRise();
 }
 
 /**

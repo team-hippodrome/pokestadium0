@@ -1,5 +1,5 @@
 /* Audio driver, matching the end of OoT src/audio/internal/seqplayer.c in function order, then
- * (from func_811155A0) Zero's own game-side wrappers that queue audio thread commands. The driver
+ * (from Audio_ScheduleProcessCmds) Zero's own game-side wrappers that queue audio thread commands. The driver
  * is Nintendo's "Nas" library (original names Nas_*); this revision sits between SM64 Shindou and
  * OoT. See docs/annotation/audio-driver.md for the per-function mapping. */
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
@@ -283,7 +283,8 @@ void AudioSeq_InitSequenceChannel(void*);
 /**
  * Stops sequence player `arg0` and restores its tempo, volumes and channels to their defaults.
  * Corresponds to OoT AudioSeq_ResetSequencePlayer (original name Nas_InitMySeq).
- * @unverified Name follows the counterpart; not checked in play.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioSeq_InitSequencePlayers.
  */
 void AudioSeq_ResetSequencePlayer(s32 arg0) {
     SequencePlayer* chan = (SequencePlayer*)&D_81184668[arg0];
@@ -319,7 +320,8 @@ void* func_811097E8(void*, s32);
 /**
  * Allocates sequence player `arg0`'s 16 channels, falling back to the shared dummy channel.
  * Corresponds to OoT AudioSeq_InitSequencePlayerChannels (original name Nas_AssignSubTrack).
- * @unverified Name follows the counterpart; not checked in play.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioSeq_InitSequencePlayerChannels(s32 arg0) {
     SequencePlayer* rec = (SequencePlayer*)&D_81184668[arg0];
@@ -347,7 +349,8 @@ void AudioPlayback_InitNoteLists(void*);
  * Sets up the layer free list, the sequence layers and the one sequence player.
  * Corresponds to OoT AudioSeq_InitSequencePlayers (original name Nas_InitPlayer). Zero has OoT's
  * AudioSeq_InitSequencePlayer (__InitGroup) inlined for its single player.
- * @unverified Name follows the counterpart; not checked in play.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioSeq_InitSequencePlayers(void) {
     s32 i;
@@ -378,8 +381,11 @@ void AudioSeq_InitSequencePlayers(void) {
 /**
  * Sends the queued audio commands. First function of Zero's game-side audio layer, which follows
  * the driver and has no counterpart in OoT's driver files.
+ * No caller (2026-11-14): nothing in the built ROM jumps to it or holds its address, so play
+ * cannot reach it.
+ * @unverified Name from the code; it never runs.
  */
-void func_811155A0(void) {
+void Audio_ScheduleProcessCmds(void) {
     AudioThread_ScheduleProcessCmds();
 }
 
@@ -405,37 +411,56 @@ void Audio_QueueGlobalUnmute(void) {
     D_81138A70 = 0;
 }
 
-void func_81215C14_jp(s32 arg0, s32 arg1, u8 arg2) {
-    SequencePlayer* ch = &D_81287B08_jp[arg0];
+/**
+ * Fades sequence player `player`'s volume to `percent` percent of its current fade volume over
+ * `frames` frames (at once when 0).
+ * No caller (2026-11-14): nothing in the built ROM jumps to it or holds its address, so play
+ * cannot reach it.
+ * @unverified Name from the code; it never runs.
+ */
+void Audio_FadeSeqPlayerVolumeToPercent(s32 player, s32 frames, u8 percent) {
+    SequencePlayer* ch = &D_81287B08_jp[player];
     f32 target;
 
     ch->fadeTimer = 0;
-    target = ((s32)arg2 / 100.0f) * ch->fadeVolume;
+    target = ((s32)percent / 100.0f) * ch->fadeVolume;
     ch->volume = ch->fadeVolume;
-    if (arg1 == 0) {
+    if (frames == 0) {
         ch->fadeVolume = target;
         return;
     }
     ch->state = 0;
-    ch->fadeTimer = arg1;
-    ch->fadeVelocity = (target - ch->fadeVolume) / arg1;
+    ch->fadeTimer = frames;
+    ch->fadeVelocity = (target - ch->fadeVolume) / frames;
 }
 
-void func_81215C9C_jp(s32 arg0, s32 arg1) {
-    SequencePlayer* ch = &D_81287B08_jp[arg0];
+/**
+ * Fades sequence player `player`'s volume back to its base volume over `frames` frames (at once
+ * when 0).
+ * No caller (2026-11-14): nothing in the built ROM jumps to it or holds its address, so play
+ * cannot reach it.
+ * @unverified Name from the code; it never runs.
+ */
+void Audio_FadeSeqPlayerVolumeBack(s32 player, s32 frames) {
+    SequencePlayer* ch = &D_81287B08_jp[player];
 
     ch->fadeTimer = 0;
-    if (arg1 == 0) {
+    if (frames == 0) {
         ch->fadeVolume = ch->volume;
         return;
     }
     ch->state = 0;
-    ch->fadeTimer = arg1;
-    ch->fadeVelocity = (ch->volume - ch->fadeVolume) / arg1;
+    ch->fadeTimer = frames;
+    ch->fadeVelocity = (ch->volume - ch->fadeVolume) / frames;
 }
 
-/** Empty. */
-void func_81115704(void) {
+/**
+ * Empty.
+ * No caller (2026-11-14): nothing in the built ROM jumps to it or holds its address, so play
+ * cannot reach it.
+ * @unverified Name from the code; it never runs.
+ */
+void Audio_Unused1(void) {
 }
 
 /**
@@ -450,8 +475,11 @@ void Audio_QueueChannelMute(s32 arg0, s32 arg1, s32 arg2) {
 /**
  * Queues sequence 1 on sequence player 2 (OoT AUDIOCMD_OP_GLOBAL_INIT_SEQPLAYER, 0x82), sends it,
  * then queues 0xF8 (AUDIOCMD_OP_GLOBAL_STOP_AUDIOCMDS).
+ * No caller (2026-11-14): nothing in the built ROM jumps to it or holds its address, so play
+ * cannot reach it.
+ * @unverified Name from the code; it never runs.
  */
-void func_81215D50_jp(void) {
+void Audio_InitSfxSeqPlayer(void) {
     AudioThread_QueueCmdS32(0x82020100, 0);
     AudioThread_ScheduleProcessCmds();
     AudioThread_QueueCmdS32(0xF8000000, 0);
@@ -460,15 +488,23 @@ void func_81215D50_jp(void) {
 /**
  * Writes `arg1`, `arg0` and `arg2` to IO ports 2, 1 and 0 of sequence player 2's channel 0
  * (OoT AUDIOCMD_OP_CHANNEL_SET_IO, 0x06).
+ * No caller (2026-11-14): nothing in the built ROM jumps to it or holds its address, so play
+ * cannot reach it.
+ * @unverified Name from the code; it never runs.
  */
-void func_81215D8C_jp(s32 arg0, s32 arg1, s32 arg2) {
-    AudioThread_QueueCmdS8(0x06020002, arg1);
-    AudioThread_QueueCmdS8(0x06020001, arg0);
-    AudioThread_QueueCmdS8(0x06020000, arg2);
+void Audio_SetSfxSeqPlayerIo(s32 io1, s32 io2, s32 io0) {
+    AudioThread_QueueCmdS8(0x06020002, io2);
+    AudioThread_QueueCmdS8(0x06020001, io1);
+    AudioThread_QueueCmdS8(0x06020000, io0);
 }
 
-/** Writes -1 to IO port 4 of sequence player 2's channel 0 (OoT AUDIOCMD_OP_CHANNEL_SET_IO, 0x06). */
-void func_81215DDC_jp(void) {
+/**
+ * Writes -1 to IO port 4 of sequence player 2's channel 0 (OoT AUDIOCMD_OP_CHANNEL_SET_IO, 0x06).
+ * No caller (2026-11-14): nothing in the built ROM jumps to it or holds its address, so play
+ * cannot reach it.
+ * @unverified Name from the code; it never runs.
+ */
+void Audio_ClearSfxSeqPlayerIo4(void) {
     AudioThread_QueueCmdS8(0x06020004, -1);
 }
 

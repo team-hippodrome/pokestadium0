@@ -28,7 +28,6 @@ void BattleAnim_DestroyParticle(Particle* arg0);
 void BattleAnim_ReleaseParticleModel(Particle* arg0);
 void BattleAnim_GetOwnerBonePosition(ActivePokemon* arg0, s16 arg1, Vec3f* arg2);
 f32 BattleAnim_GetSpeciesBaseScale(ActivePokemon* arg0);
-void BattleAnim_GetOwnerSpeciesBaseScaleAlias(ActivePokemon* arg0);
 void BattleScene_GetParticipantModelSizeScaled(ActivePokemon* arg0);
 
 /**
@@ -147,8 +146,13 @@ f32 BattleAnim_GetOwnerModelScale(ActivePokemon* arg0) {
 
 M2C_UNK ActivePokemon_GetSizeRatio();                            /* extern */
 
-void func_8213C75C(void) {
-    ActivePokemon_GetSizeRatio();
+/**
+ * Returns the owner Pokémon's size ratio (ActivePokemon_GetSizeRatio); the result is left in f0
+ * for the caller.
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_GetOwnerSizeRatio(ActivePokemon* active_pokemon) {
+    ActivePokemon_GetSizeRatio(active_pokemon);
 }
 
 /**
@@ -167,7 +171,7 @@ f32 BattleAnim_GetSecondaryOwnerModelScale(void) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_GetSecondaryOwnerSpeciesBaseScale(void) {
-    BattleAnim_GetOwnerSpeciesBaseScaleAlias(gBattleAnimSecondaryOwner);
+    BattleAnim_GetOwnerSizeRatio(gBattleAnimSecondaryOwner);
 }
 
 /**
@@ -186,7 +190,7 @@ f32 BattleAnim_GetTertiaryOwnerModelScale(void) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_GetTertiaryOwnerSpeciesBaseScale(void) {
-    BattleAnim_GetOwnerSpeciesBaseScaleAlias(gBattleAnimTertiaryOwner);
+    BattleAnim_GetOwnerSizeRatio(gBattleAnimTertiaryOwner);
 }
 
 extern s32 D_8219A878;

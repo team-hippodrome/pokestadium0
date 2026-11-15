@@ -22,9 +22,9 @@ void BattleAnim_DrawFullScreenColorOverlay(u8 arg0, u8 arg1, u8 arg2, u8 arg3) {
     gSPDisplayList(gDisplayListHead++, gDL_EndColorFill);
 }
 
-void func_8216D9D0(void);
-void func_8216D948(s32, M2C_UNK);
-void func_8216D924(s32, M2C_UNK);
+void BattleAnim_RenderEffectsFrameNop(void);
+void BattleAnim_DrawWorldParticleChainsThunk(s32, M2C_UNK);
+void BattleAnim_DrawScreenParticlesThunk(s32, M2C_UNK);
 extern Gfx D_82190100[];
 extern Gfx D_821900B0[];
 extern s32 D_8219A7CC;
@@ -57,13 +57,13 @@ void BattleAnim_RenderEffectsFrame(CameraNode* arg0) {
 
     gSPDisplayList(gDisplayListHead++, D_82190100);
 
-    func_8216D9D0();
+    BattleAnim_RenderEffectsFrameNop();
     ParticleGfx_SetPrimColor(D_8219A8BA, D_8219A8BC, D_8219A8BE, D_8219A8C0);
     ParticleGfx_SetFogColor(D_8219A8CA, D_8219A8CC, D_8219A8CE, D_8219A8D0);
     ParticleGfx_SetEnvColor(D_8219A8C2, D_8219A8C4, D_8219A8C6, D_8219A8C8);
     ParticleGfx_SetBlendColor(gBlendColorR, gBlendColorG, D_8219A8D6, D_8219A8D8);
     Battle_SetStageTintColor(gSavedPrimColorR, gSavedPrimColorG, gSavedPrimColorB);
-    func_8216D948(0, (M2C_UNK)arg0);
+    BattleAnim_DrawWorldParticleChainsThunk(0, (M2C_UNK)arg0);
     guOrtho(&gParticleMatrixPool->orthoMatrix, 0.0f, 320.0f, 240.0f, 0.0f, -2.0f, 2.0f, 1.0f);
 
     gSPMatrix(gDisplayListHead++, (u32)&gParticleMatrixPool->orthoMatrix & 0x1FFFFFFF,
@@ -71,19 +71,27 @@ void BattleAnim_RenderEffectsFrame(CameraNode* arg0) {
     gSPDisplayList(gDisplayListHead++, gDL_BeginUIOverlay);
 
     ParticleGfx_PipeSync();
-    func_8216D924(0, (M2C_UNK)arg0);
+    BattleAnim_DrawScreenParticlesThunk(0, (M2C_UNK)arg0);
 
     gSPDisplayList(gDisplayListHead++, D_821900B0);
 }
 
-M2C_UNK func_8213A858(M2C_UNK);                     /* extern */
+M2C_UNK BattleAnim_DrawScreenParticles(M2C_UNK);                     /* extern */
 
-void func_8216D924(s32 arg0, M2C_UNK arg1) {
-    func_8213A858(arg1);
+/**
+ * Forwards arg1 to BattleAnim_DrawScreenParticles.
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_DrawScreenParticlesThunk(s32 unused, M2C_UNK camera) {
+    BattleAnim_DrawScreenParticles(camera);
 }
 
-M2C_UNK func_8213A784(M2C_UNK);                     /* extern */
+M2C_UNK BattleAnim_DrawWorldParticleChains(M2C_UNK);                     /* extern */
 
-void func_8216D948(s32 arg0, M2C_UNK arg1) {
-    func_8213A784(arg1);
+/**
+ * Forwards arg1 to BattleAnim_DrawWorldParticleChains.
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_DrawWorldParticleChainsThunk(s32 unused, M2C_UNK camera) {
+    BattleAnim_DrawWorldParticleChains(camera);
 }

@@ -34,17 +34,18 @@ extern u8 sHighCritMoves[];
 
 #include "m2c_macros.h"
 
-void func_8210F4E0(void);
+void TurnOrder_UnusedNopA(void);
 s32 IsByteInArray(u8 lookup, u8* array, s32 array_length);
-void func_8210FA74(void);
+void TurnOrder_UnusedNopB(void);
 void Battle_SetActiveMoveFromSlotIndex(void);
 s32 Battle_CheckMoveSuccess(void);
 void ComputePokemonStat(s32 arg0, BattleMon* arg1);
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8210F4E0(void) {
+void TurnOrder_UnusedNopA(void) {
 }
 
 s32 BattleMessage_Format(s32, s32, s32, ...);
@@ -229,8 +230,9 @@ s32 IsByteInArray(u8 lookup, u8* array, s32 array_length) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8210FA74(void) {
+void TurnOrder_UnusedNopB(void) {
 }
 
 /**

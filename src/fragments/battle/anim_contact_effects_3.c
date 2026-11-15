@@ -1,5 +1,6 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle.h"
+M2C_UNK func_82143408(s32, M2C_UNK); // ParticleGfx_RecolorPrim under its address name; this file's calls need this declaration
 
 // Declared here instead of in a header: the callers of these disagree on their types.
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32);
@@ -7,7 +8,6 @@ M2C_UNK Particle_ApplyMotionStep(s8 *);
 M2C_UNK Particle_SetParam0(s8 *, M2C_UNK);
 M2C_UNK func_8213C9D0(s8 *);
 M2C_UNK func_821401D4(s8 *, M2C_UNK);
-M2C_UNK func_82143408(s32, M2C_UNK);
 
 /**
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
@@ -57,8 +57,9 @@ void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0) {
 /**
  * Init step: scale 0.5, position offset 100, a delay of spawn index + 1 frames, prim
  * palette 8 and env palette 0x33.
+ * @unverified Name guessed from the code.
  */
-void func_82165BC8(s32 arg0) {
+void BattleAnim_CallbackDescriptor26BurstEmitter_InitParticle(s32 arg0) {
     s16 sp26;
 
     sp26 = Particle_GetSpawnIndex();
@@ -66,7 +67,7 @@ void func_82165BC8(s32 arg0) {
     func_8213E14C(arg0, 0x42C80000);
     Particle_SetParam0(arg0, (s16) (sp26 + 1));
     func_82143408(arg0, 8);
-    func_82143440(arg0, 0x33);
+    ParticleGfx_RecolorEnv(arg0, 0x33);
     func_8213CB5C(arg0);
     func_8213C9D0(arg0);
 }

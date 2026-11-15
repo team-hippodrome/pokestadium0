@@ -95,7 +95,7 @@ void GbMusic_StartSfx(u8 arg0);
 void GbMusic_ResetApu(void);
 void GbMusic_BindSequenceTracks(u8 arg0);
 s32 GbMusic_CountActiveHighChannels(void);
-void func_8003E0B0(GbMusicBank* arg0);
+void GbMusic_RelocateBank(GbMusicBank* arg0);
 
 void GbMusic_StartMusic(u8 arg0);
 
@@ -134,7 +134,7 @@ s32 GbMusic_StartTableSequence(u16 arg0) {
         return 0;
     }
 
-    func_8003E0B0(D_800FD688);
+    GbMusic_RelocateBank(D_800FD688);
 
     if (D_800FD688->num_entries < arg0) {
         return 0;
@@ -1067,21 +1067,25 @@ s32 GbMusic_CountActiveHighChannels(void) {
     return ret;
 }
 
-void func_8003E0B0(GbMusicBank* arg0) {
+/**
+ * Relocates a loaded GB music bank in place (its track table offset and each track data pointer) and
+ * marks it relocated. Does nothing if already relocated.
+ */
+void GbMusic_RelocateBank(GbMusicBank* bank) {
     s32 i, end;
     u32 base;
     u8* temp_v1;
     GbMusicTrackHeader* temp_v0;
-    if (arg0->flags != 0) return;
-    end = arg0->numSequences;
-    base = (u32)arg0;
-    temp_v1 = arg0->offset;
+    if (bank->flags != 0) return;
+    end = bank->numSequences;
+    base = (u32)bank;
+    temp_v1 = bank->offset;
     temp_v1 += base;
-    arg0->offset = (u32)temp_v1;
+    bank->offset = (u32)temp_v1;
     for (i = 0; i != (end * 3); i++) {
         temp_v0 = (GbMusicTrackHeader*)((u32)i * 8 + (u32)temp_v1);
         temp_v0 += 0;
         temp_v0->data += base;
     }
-    arg0->flags = 1;
+    bank->flags = 1;
 }

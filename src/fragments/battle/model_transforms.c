@@ -194,26 +194,27 @@ void BattleScene_ShowSecondaryModelsAtMainPose(ActivePokemon* active_pokemon) {
 /**
  * Steps the two afterimages: each follows the Pokemon's position and shrinks toward 0.65 at
  * its own speed. Returns 1 once both are done.
+ * @unverified Name guessed from the code.
  */
-s32 func_82109824(ActivePokemon* arg0) {
+s32 BattleAnim_StepMinimizeAfterimages(ActivePokemon* active_pokemon) {
     s32 i;
     s32 count;
     Vec3f speeds = D_821891CC;
 
     count = 0;
     for (i = 0; i < 2; i++) {
-        BattleAnim_Vec3fCopy(&arg0->afterimages[i].displayObject.position, &arg0->displayObject.position);
-        BattleAnim_ApproachF(&arg0->afterimages[i].displayObject.scale.x, 0.65f, (&speeds.x)[i]);
-        BattleAnim_ApproachF(&arg0->afterimages[i].displayObject.scale.y, 0.65f, (&speeds.x)[i]);
-        BattleAnim_ApproachF(&arg0->afterimages[i].displayObject.scale.z, 0.65f, (&speeds.x)[i]);
-        ModelAnim_SetFrame(&arg0->afterimages[i].displayObject, arg0->displayObject.transformAnim.frameFixed >> 16);
-        ModelAnim_SetAnimation(&arg0->afterimages[i].displayObject, arg0->displayObject.transformAnim.animationId);
-        if (arg0->afterimages[i].displayObject.scale.y < 0.68f) {
-            arg0->afterimages[i].minimized = 1;
+        BattleAnim_Vec3fCopy(&active_pokemon->afterimages[i].displayObject.position, &active_pokemon->displayObject.position);
+        BattleAnim_ApproachF(&active_pokemon->afterimages[i].displayObject.scale.x, 0.65f, (&speeds.x)[i]);
+        BattleAnim_ApproachF(&active_pokemon->afterimages[i].displayObject.scale.y, 0.65f, (&speeds.x)[i]);
+        BattleAnim_ApproachF(&active_pokemon->afterimages[i].displayObject.scale.z, 0.65f, (&speeds.x)[i]);
+        ModelAnim_SetFrame(&active_pokemon->afterimages[i].displayObject, active_pokemon->displayObject.transformAnim.frameFixed >> 16);
+        ModelAnim_SetAnimation(&active_pokemon->afterimages[i].displayObject, active_pokemon->displayObject.transformAnim.animationId);
+        if (active_pokemon->afterimages[i].displayObject.scale.y < 0.68f) {
+            active_pokemon->afterimages[i].minimized = 1;
         }
     }
     for (i = 0; i < 2; i++) {
-        if (arg0->afterimages[i].minimized == 1) {
+        if (active_pokemon->afterimages[i].minimized == 1) {
             count++;
         }
     }

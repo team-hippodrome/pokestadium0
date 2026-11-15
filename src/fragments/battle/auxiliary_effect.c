@@ -16,8 +16,8 @@ void AuxiliaryEffect_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, s16 arg4, f32
 void AuxiliaryEffect_Update(s16 arg0);
 Gfx* AuxiliaryEffect_DrawOne(Gfx* arg0, AuxiliaryEffectNode* arg1, MtxF* arg2);
 Gfx* AuxiliaryEffect_Draw(s16 arg0, Gfx* arg1);
-void func_821832F4(void);
-void func_821832FC(void);
+void AuxiliaryEffect_UnusedNopA(void);
+void AuxiliaryEffect_UnusedNopB(void);
 s32 AuxEffect_GetId(s32 arg0);
 
 /**
@@ -183,14 +183,16 @@ Gfx* AuxiliaryEffect_Draw(s16 arg0, Gfx* arg1) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_821832F4(void) {
+void AuxiliaryEffect_UnusedNopA(void) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_821832FC(void) {
+void AuxiliaryEffect_UnusedNopB(void) {
 }
 
 /**

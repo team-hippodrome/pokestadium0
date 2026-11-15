@@ -36,12 +36,13 @@ void BattleMenu_ResetCommandTimer(void) {
 /**
  * While the Pokemon's command state (+0x79C) is 3, adds 0x38E to its action timer and
  * returns 1; otherwise returns 0.
+ * @unverified Name guessed from the code.
  */
-s32 func_8210C708(ActivePokemon* arg0) {
+s32 BattleScene_ApplyForcedActionDelay(ActivePokemon* active_pokemon) {
     s8 *temp_v1;
 
-    temp_v1 = &arg0->state;
-    if (M2C_FIELD(arg0, s32 *, 0x79C) == 3) {
+    temp_v1 = &active_pokemon->state;
+    if (M2C_FIELD(active_pokemon, s32 *, 0x79C) == 3) {
         M2C_FIELD(temp_v1, u16 *, 0x1E) = (u16) (M2C_FIELD(temp_v1, u16 *, 0x1E) + 0x38E);
         return 1;
     }
@@ -71,9 +72,10 @@ extern s8 D_82199DE0;
  * While the command menu option is 3, waits for L on the Pokemon's controller (unless the
  * other side's state byte is 16): then runs func_8210C738 for command 2, resets the option
  * and returns 0. Until then adds 0x38E to the action timer and returns 1.
+ * @unverified Name guessed from the code.
  */
-s32 func_8210C778(ActivePokemon* arg0) {
-    ActivePokemonState* state = &arg0->state;
+s32 BattleMenu_WaitForLAfterCommit(ActivePokemon* active_pokemon) {
+    ActivePokemonState* state = &active_pokemon->state;
     ActivePokemonState* other = &((ActivePokemon**)&D_82199DE0)[func_82107A5C() == 0]->state;
     Controller* controller = state->controller;
     s32 pad; // FAKE: stack padding
@@ -81,7 +83,7 @@ s32 func_8210C778(ActivePokemon* arg0) {
     if (state->selectedCommandOption == 3) {
         if ((controller->buttonPressed & 0x20) && (other->faintState != 0x10)) {
             if (state->selectedCommand == 2) {
-                func_8210C738(arg0, other, controller);
+                func_8210C738(active_pokemon, other, controller);
             }
             state->selectedCommandOption = 0;
             func_82134D80();
@@ -117,7 +119,7 @@ void BattleMenu_CommitMoveSelection(ActivePokemon* arg0) {
     }
 }
 
-void func_8211F274();
+void ActivePokemon_ClearCaption();
 s32 ActivePokemon_GetNickname(s32);
 M2C_UNK ActivePokemon_ShowCaption();
 extern s32 D_8218C6F0;
@@ -162,20 +164,20 @@ s32 BattleMenu_HandleNoUsableMoves(arg0) ActivePokemon *arg0;
       {
         temp_v0->selectedCommandOption = 1;
       }
-      func_8211F274(arg0);
+      ActivePokemon_ClearCaption(arg0);
       ActivePokemon_ShowCaption(arg0, D_8218C6F0, ActivePokemon_GetNickname((s32) arg0));
     }
     else
       if (cont->buttonPressed & 0x20)
     {
-      func_8211F274(arg0);
+      ActivePokemon_ClearCaption(arg0);
       arg0->state.selectedCommandOption = 0;
       BattleAnim_PlaySoundEffect3();
     }
     else
       if (cont->buttonPressed & 0x8000)
     {
-      func_8211F274(arg0);
+      ActivePokemon_ClearCaption(arg0);
       temp_v0->actionDelayTimer = 0;
       temp_v0->selectedCommandOption = 3;
       temp_v0->moveIndex = 4;
@@ -185,7 +187,7 @@ s32 BattleMenu_HandleNoUsableMoves(arg0) ActivePokemon *arg0;
   return 0;
 }
 
-void func_8211F274();
+void ActivePokemon_ClearCaption();
 M2C_UNK ActivePokemon_ShowCaption();
 extern s32 D_8218C6F4;
 extern s32 D_8218C6F8;
@@ -209,14 +211,14 @@ s32 BattleMenu_TryConfirmMove(ActivePokemon* arg0) {
     s8* state;
 
     if (!(((BattleMoveCheck8210CA24*)arg0)->moveFlags[((BattleMoveCheck8210CA24*)arg0)->slot] & 0x3F)) {
-        func_8211F274(arg0);
+        ActivePokemon_ClearCaption(arg0);
         ActivePokemon_ShowCaption(arg0, D_8218C6F4);
         return 1;
     }
     flags = arg0->state.runtime.disabledMoveState;
     state = (s8*)arg0 + 0x78C;
     if ((flags & 0xF) && ((flags >> 4) == M2C_FIELD(state, s32*, 0x14))) {
-        func_8211F274(arg0);
+        ActivePokemon_ClearCaption(arg0);
         ActivePokemon_ShowCaption(arg0, D_8218C6F8);
         return 1;
     }
@@ -260,7 +262,7 @@ void BattleMenu_HandleMoveButtons(ActivePokemon* arg0) {
 s32 BattleMenu_HandleNoUsableMoves();                                /* extern */
 void func_82134D40(s8 *);
 M2C_UNK func_82134D80(s8 *);                        /* extern */
-void func_8211F274();
+void ActivePokemon_ClearCaption();
 
 /**
  * Fight menu, every frame: L goes back to the command menu, holding R shows the
@@ -272,7 +274,7 @@ void func_8211F274();
  * Does nothing unless the word at arg0 + 0x790 is 1 and BattleMenu_HandleNoUsableMoves()
  * returns 0. Then, with `rec` = the pointer at arg0 + 0x858 and `sub` =
  * &arg0->state:
- *  - if the word at arg0 + 0xA04 is non-zero: calls func_8211F274(arg0) when
+ *  - if the word at arg0 + 0xA04 is non-zero: calls ActivePokemon_ClearCaption(arg0) when
  *    any of the bits 0xE03F is set in the halfword at rec + 8;
  *  - otherwise clears sub[0x20]; if sub[0x10] is 0 it sets it to 1 and
  *    returns; else if bit 0x20 of rec + 8 is set and bit 0x10 of the halfword
@@ -297,7 +299,7 @@ void BattleMenu_UpdateMoveMenu(ActivePokemon* arg0) {
         temp_v0 = &arg0->state;
         if (arg0->captionState.active != 0) {
             if (M2C_FIELD(temp_v1, u16 *, 8) & 0xE03F) {
-                func_8211F274(arg0);
+                ActivePokemon_ClearCaption(arg0);
             }
         } else {
             M2C_FIELD(temp_v0, s32 *, 0x20) = 0;
@@ -322,14 +324,18 @@ void BattleMenu_UpdateMoveMenu(ActivePokemon* arg0) {
     }
 }
 
-s32 func_8210CCDC(s8 *arg0, M2C_UNK arg1)
+/**
+ * Marks the move menu as locked (+0x7B6) and updates it; returns 0.
+ * @unverified Name guessed from the code.
+ */
+s32 BattleScene_HandlePlayerMoveSelectionLocked(s8 *active_pokemon, M2C_UNK unused)
 {
-  *((s8 *) (((s8 *) arg0) + 0x7B6)) = 1;
+  *((s8 *) (((s8 *) active_pokemon) + 0x7B6)) = 1;
   if (1)
   {
-    *((s8 *) (((s8 *) arg0) + 0x7B6)) = 1;
-    BattleMenu_UpdateMoveMenu(arg0);
-    *((s8 *) (((s8 *) arg0) + 0x7B6)) = 1;
+    *((s8 *) (((s8 *) active_pokemon) + 0x7B6)) = 1;
+    BattleMenu_UpdateMoveMenu(active_pokemon);
+    *((s8 *) (((s8 *) active_pokemon) + 0x7B6)) = 1;
   }
   return 0;
 }
@@ -360,7 +366,7 @@ void BattleMenu_CommitSwitchSelection(ActivePokemon* arg0) {
     }
 }
 
-void func_8211F274();
+void ActivePokemon_ClearCaption();
 M2C_UNK ActivePokemon_ShowCaption();
 extern s32 D_8218C6FC;
 
@@ -376,7 +382,7 @@ s32 BattleScene_ValidateSelectedPartyMember(ActivePokemon* arg0) {
         return 1;
     }
 
-    func_8211F274(arg0);
+    ActivePokemon_ClearCaption(arg0);
     ActivePokemon_ShowCaption(arg0, D_8218C6FC);
     return 0;
 }
@@ -464,16 +470,17 @@ void BattleMenu_TakeControlOnCButtonPress(ActivePokemon* arg0, u8* arg1, u8* arg
 }
 
 s32 ActivePokemon_GetNickname(s32);                             /* extern */
-void func_8211F274();                            /* extern */
+void ActivePokemon_ClearCaption();                            /* extern */
 M2C_UNK ActivePokemon_ShowCaption(s32, s32, s32);               /* extern */
 extern s32 D_8218C700;
 
 /**
  * Clears the caption state and shows caption D_8218C700 with the Pokemon's nickname.
+ * @unverified Name guessed from the code.
  */
-void func_8210CFE4(s32 arg0) {
-    func_8211F274();
-    ActivePokemon_ShowCaption(arg0, D_8218C700, ActivePokemon_GetNickname(arg0));
+void BattleMenu_ShowNicknameCaption(s32 active_pokemon) {
+    ActivePokemon_ClearCaption();
+    ActivePokemon_ShowCaption(active_pokemon, D_8218C700, ActivePokemon_GetNickname(active_pokemon));
 }
 
 void func_82134D60(void);
@@ -522,7 +529,7 @@ void BattleMenu_HandleSwitchButtons(ActivePokemon* arg0, s8* arg1) {
     if (M2C_FIELD(arg1, u16*, 8) & 0xC00F) {
         if ((state->rosterIndex == state->actionChosen) && (state->teamMemberIndex == state->menuTeamMemberIndex)) {
             if (func_8210CD7C(arg0) != 0) {
-                func_8210CFE4((s32)arg0);
+                BattleMenu_ShowNicknameCaption((s32)arg0);
             }
         } else if (state->actionChosen <= (u32)(team[2] - 1)) {
             if (func_8210CD7C(arg0) != 0) {
@@ -559,7 +566,7 @@ void BattleMenu_UpdateSwitchMenu(ActivePokemon* arg0) {
 
     if (arg0->captionState.active != 0) {
         if (sp18->controller->buttonPressed & 0xE03F) {
-            func_8211F274(arg0);
+            ActivePokemon_ClearCaption(arg0);
         }
     } else if (sp18->selectedCommandOption == 0) {
         sp18->selectedCommandOption = 2;
@@ -604,7 +611,7 @@ s32 BattleScene_HandlePlayerFaintedSwitch(ActivePokemon* arg0, ActivePokemon* ar
     }
     if ((state->faintState == 0x10) && (other->faintState == 0x10)) {
         if (state->selectedCommandOption == 3) {
-            func_8210C708((s8*)arg0);
+            BattleScene_ApplyForcedActionDelay((s8*)arg0);
             return 1;
         }
         state->selectedCommand = 2;
@@ -687,10 +694,11 @@ void func_82134D60(void);
  * Reads the buttons of the Pokemon's controller(s) (both trainers in a tag battle) into its
  * command state: A sets 1, B sets 2 and lets the partner take control, Start sets 3. A, B
  * or Start (when the other side isn't in state 4) also calls func_82134D60.
+ * @unverified Name guessed from the code.
  */
-void func_8210D6BC(ActivePokemon* arg0) {
-    ActivePokemonState* state = &arg0->state;
-    ActivePokemonState* other = &sActivePokemon[BattleScene_GetParticipantSideIndex(arg0) == 0]->state;
+void BattleMenu_ReadCommandButtons(ActivePokemon* active_pokemon) {
+    ActivePokemonState* state = &active_pokemon->state;
+    ActivePokemonState* other = &sActivePokemon[BattleScene_GetParticipantSideIndex(active_pokemon) == 0]->state;
     u8* c1;
     u8* c2;
     s8* team;
@@ -699,10 +707,10 @@ void func_8210D6BC(ActivePokemon* arg0) {
     if (M2C_FIELD(state, s32*, 0x10) != 0) {
         return;
     }
-    if (arg0->side->tagTeamSize == 1U) {
-        c1 = c2 = &D_800AAF50[M2C_FIELD(arg0->side->teamMember[0], u8*, 1) * 0x24];
+    if (active_pokemon->side->tagTeamSize == 1U) {
+        c1 = c2 = &D_800AAF50[M2C_FIELD(active_pokemon->side->teamMember[0], u8*, 1) * 0x24];
     } else {
-        team = M2C_FIELD(arg0, s8**, 0x85C);
+        team = M2C_FIELD(active_pokemon, s8**, 0x85C);
         c1 = &D_800AAF50[M2C_FIELD(M2C_FIELD(team, s8**, 8), u8*, 1) * 0x24];
         c2 = &D_800AAF50[M2C_FIELD(M2C_FIELD(team, s8**, 0xC), u8*, 1) * 0x24];
     }
@@ -712,7 +720,7 @@ void func_8210D6BC(ActivePokemon* arg0) {
         buttons = M2C_FIELD(c2, u16*, 8) | M2C_FIELD(c1, u16*, 8);
         if (buttons & 0x4000) {
             M2C_FIELD(state, s32*, 4) = 2;
-            BattleMenu_TakeControlOnBPress(arg0, c1, c2, arg0->side->tagTeamSize);
+            BattleMenu_TakeControlOnBPress(active_pokemon, c1, c2, active_pokemon->side->tagTeamSize);
         } else if (buttons & 0x1000) {
             M2C_FIELD(state, s32*, 4) = 3;
         } else {
@@ -725,9 +733,9 @@ void func_8210D6BC(ActivePokemon* arg0) {
     }
 }
 
-s32 func_8210C778(ActivePokemon*);
+s32 BattleMenu_WaitForLAfterCommit(ActivePokemon*);
 
-void func_8210D6BC(ActivePokemon* active_pokemon);
+void BattleMenu_ReadCommandButtons(ActivePokemon* active_pokemon);
 void BattleMenu_UpdateSwitchMenu(ActivePokemon* active_pokemon);
 void BattleMenu_UpdateSurrenderPrompt(ActivePokemon* active_pokemon);
 /**
@@ -740,14 +748,14 @@ s32 BattleScene_HandlePlayerActionInput(ActivePokemon* arg0) {
     ActivePokemonState* opponent_state = &sActivePokemon[BattleScene_GetParticipantSideIndex(arg0) == 0]->state;
 
     if (opponent_state->faintState == 0x10) {
-        if (func_8210C708(arg0) != 0) {
+        if (BattleScene_ApplyForcedActionDelay(arg0) != 0) {
             return 1;
         }
-    } else if (func_8210C778(arg0) != 0) {
+    } else if (BattleMenu_WaitForLAfterCommit(arg0) != 0) {
         return 1;
     }
 
-    func_8210D6BC(arg0);
+    BattleMenu_ReadCommandButtons(arg0);
 
     switch (arg0->state.selectedCommand) {
         case 2:
@@ -852,7 +860,7 @@ s32 BattleScene_HandleCpuFaintedSwitch(ActivePokemon* arg0, ActivePokemon* arg1)
 
     if ((state->faintState == 0x10) && (other->faintState == 0x10)) {
         if (state->selectedCommandOption == 3) {
-            func_8210C708((s8*)arg0);
+            BattleScene_ApplyForcedActionDelay((s8*)arg0);
             return 1;
         }
         state->selectedCommand = 2;
@@ -1102,7 +1110,11 @@ s32 BattleScene_CollectCpuAction(ActivePokemon* arg0, ActivePokemon* arg1) {
 }
 
 extern s8 D_82199DE0;
-void func_8210E318(void)
+/**
+ * Sets bit 0 of both Pokemon's thumbnail flag bytes (0x865 and the byte at 0x9CC + 1).
+ * @unverified Name guessed from the code.
+ */
+void BattleDebug_SetThumbnailFlagBothSides(void)
 {
   s8 *temp_v1;
   s8 **new_var; // FAKE: permuter temp
@@ -1119,7 +1131,11 @@ void func_8210E318(void)
 }
 
 extern s8 D_82199DE0;
-void func_8210E36C(void)
+/**
+ * Clears bit 0 of both Pokemon's thumbnail flag bytes (0x865 and the byte at 0x9CC + 1).
+ * @unverified Name guessed from the code.
+ */
+void BattleDebug_ClearThumbnailFlagBothSides(void)
 {
   s8 *temp_a1;
   s8 *temp_v1;
@@ -1195,11 +1211,12 @@ extern s32 D_82199F10[2];
 extern s32 D_82199F18[2];
 void Battle_StartTurn(void);
 extern Controller D_82199EC8[];
-/*
+/**
  * Stadium 0 counterpart of Stadium 1's BattleScene_TickAttractModeInput
  * (debug/attract-mode buttons on controller D_82199EC8).
+ * @unverified Name guessed from the code.
  */
-void func_8210E504(void) {
+void BattleScene_TickAttractModeInput(void) {
     ActivePokemonState* sp24 = &sActivePokemon[0]->state;
     ActivePokemonState* sp20 = &sActivePokemon[1]->state;
     BattleMonRuntime* sp1C = &sActivePokemon[0]->state.runtime;
@@ -1212,13 +1229,13 @@ void func_8210E504(void) {
     Battle_PrepareTurnInput(sActivePokemon[1], sActivePokemon[0]);
 
     if (cont->buttonPressed & 0x20) {
-        func_8210E318();
+        BattleDebug_SetThumbnailFlagBothSides();
         BattleThumbnail_TriggerOwnerModelAnimation(sActivePokemon[0]);
         BattleThumbnail_TriggerOwnerModelAnimation(sActivePokemon[1]);
     }
 
     if (cont->buttonPressed & 0x10) {
-        func_8210E36C();
+        BattleDebug_ClearThumbnailFlagBothSides();
     }
 
     if (cont->buttonPressed & 0x1000) {
@@ -1365,7 +1382,7 @@ void Battle_ChooseActions(void) {
     }
 }
 
-void func_8210E504(void);
+void BattleScene_TickAttractModeInput(void);
 void Battle_ChooseActions(void);
 
 /**
@@ -1387,7 +1404,7 @@ void Battle_ChooseActionsForMode(void) {
             Battle_ChooseActions();
             break;
         case 5:
-            func_8210E504();
+            BattleScene_TickAttractModeInput();
             break;
     }
     BattleMenu_TickCommandTimer();

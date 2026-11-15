@@ -19,8 +19,8 @@ typedef struct Unk8003A7AC {
 } Unk8003A7AC;
 
 // block_relocate.c
-void func_8003A6F0(s32 arg0);
-void func_8003A710(RelocHeader8003A710* arg0);
-s32 func_8003A7AC(Unk8003A7AC* arg0);
+void Audio_RelocateSoundBankInPlace(s32 arg0);
+void Block_RelocateSelf(RelocHeader8003A710* arg0);
+s32 Audio_RelocateSoundBankHeader(Unk8003A7AC* arg0);
 
 #endif // BLOCK_RELOCATE_H

@@ -25,10 +25,9 @@ M2C_UNK Particle_GetUnkCE();
 M2C_UNK Particle_SetRotationY(s8 *, s16);
 M2C_UNK Particle_SetParam0(s8 *, s16);
 M2C_UNK Particle_SetScratchB(s8 *, M2C_UNK);
-M2C_UNK func_8213831C(s8 *, M2C_UNK);
+M2C_UNK ParticleMath_GetPointAlongView(s8 *, M2C_UNK);
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32);
 M2C_UNK func_8213C9D0(s8 *);
-M2C_UNK func_8213E77C(s8 *);
 M2C_UNK func_821401D4(s8 *, M2C_UNK);
 M2C_UNK func_82143478(s8 *, M2C_UNK);
 extern M2C_UNK BattleAnim_RunBlizzardHitUpwardColdAir;
@@ -36,12 +35,10 @@ extern M2C_UNK BattleAnim_RunDigHitDust;
 extern M2C_UNK BattleAnim_RunDigHitRocks;
 extern M2C_UNK BattleAnim_RunOscillatingFlameUnderneathPokemon;
 extern M2C_UNK D_8218E7B8;
-extern M2C_UNK func_82144750;
-extern M2C_UNK func_82163D7C;
-extern M2C_UNK func_82164AD0;
+extern M2C_UNK BattleAnim_CallbackModelBurstAlphaFade;
 s16 Particle_GetUnkCD();
-s16 func_8213C484();
-s32 func_821385C0();
+s16 Particle_GetByteParam1();
+s32 ParticleMath_ComputeViewYawUnused();
 s32 func_82140690(s8 *);
 void Particle_AddPosOffsetYScaled(s8*, f32);
 void func_8213E1FC(Particle* arg0, f32 arg1);
@@ -135,8 +132,9 @@ void func_8213D790(s8*, f32);
 /**
  * Raises or lowers the particle by a per-species offset (species from the owner at +0x10):
  * -10, 10 or 15 for the listed species, and also pushes it forward for species 0x3B.
+ * @unverified Name guessed from the code.
  */
-void func_82154704(s8* arg0) {
+void BattleAnim_OffsetParticleForSpecies(s8* arg0) {
     f32 var_f20 = 0.0f;
 
     switch (func_82107CF0(M2C_FIELD(arg0, s32*, 0x10))) {
@@ -424,11 +422,12 @@ void BattleAnim_AllocateEffect125DisplayList(s32 arg0, arg1_func_84344CE8* arg1)
 
 /**
  * Queues two effect slots on the current owner: func_82154EA4 at once (lifetime 30) and
- * func_82144750 after 20 frames (lifetime 80).
+ * BattleAnim_CallbackModelBurstAlphaFade after 20 frames (lifetime 80).
+ * @unverified Name guessed from the code.
  */
-void func_82155084(void) {
+void BattleAnim_StartEffect123ModelBurst(void) {
     func_8213B560(0, &func_82154EA4, &D_8218E580, 0x1E, 1, 7, 0, 0, 0);
-    func_8213B560(0x14, &func_82144750, &D_8218E580, 0x50, 1, 0, 0, 0x33, 0);
+    func_8213B560(0x14, &BattleAnim_CallbackModelBurstAlphaFade, &D_8218E580, 0x50, 1, 0, 0, 0x33, 0);
 }
 
 /**
@@ -446,7 +445,7 @@ void BattleAnim_InitEffect65Overlay(Particle* arg0) {
     sp26 = BattleAnim_GetQueuedMoveId();
     sp24 = 0x17;
     sp22 = 0x8;
-    Particle_EffectList_SetU8_0BECC(arg0, 7);
+    Particle_SetEffectList(arg0, 7);
     Particle_SetScaleScaled(arg0, 1.0f);
     Particle_SetPosition(arg0, 160.0f, 120.0f, 0.0f);
 
@@ -506,9 +505,9 @@ void ParticleEffect_RegisterParticleNodes(void) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_InitEffect28Overlay(Particle* arg0) {
-    s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp26 = Particle_GetByteParam1(arg0);
 
-    Particle_EffectList_SetU8_0BECC(arg0, 7);
+    Particle_SetEffectList(arg0, 7);
     Particle_SetScaleScaled(arg0, 1.0f);
     Particle_SetPosition(arg0, 160.0f, 120.0f, 0.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp26);
@@ -541,7 +540,7 @@ void BattleAnim_RunGasAttack(Particle* arg0) {
  */
 void BattleAnim_InitializeHazePoisonGasSmokescreenUse(void) {
     func_8213B560(8, &func_82155380, &D_8218E720, 0, 1, 0x18, 0, 0x1C, 0);
-    func_8213B560(0, &func_82163D7C, &D_8218E7B8, 0, 0xF, 0x11, (s32) D_8219A80A, 0, 0);
+    func_8213B560(0, &BattleAnim_PowderCloudScaleMotion, &D_8218E7B8, 0, 0xF, 0x11, (s32) D_8219A80A, 0, 0);
 }
 
 /**
@@ -552,7 +551,7 @@ void BattleAnim_InitializeHazePoisonGasSmokescreenUse(void) {
  */
 void BattleAnim_InitializeSmogUse(void) {
     func_8213B560(8, &func_82155380, &D_8218E720, 0, 1, 0x18, 0, 0x1E, 0);
-    func_8213B560(0, &func_82163D7C, &D_8218E7B8, 0, 0xF, 0x11, (s32) D_8219A80A, 0, 0);
+    func_8213B560(0, &BattleAnim_PowderCloudScaleMotion, &D_8218E7B8, 0, 0xF, 0x11, (s32) D_8219A80A, 0, 0);
 }
 
 /**
@@ -563,7 +562,7 @@ void BattleAnim_InitializeSmogUse(void) {
  */
 void BattleAnim_InitializeMistUse(void) {
     func_8213B560(8, &func_82155380, &D_8218E720, 0, 1, 0x18, 0, 0x1D, 0);
-    func_8213B560(0, &func_82163D7C, &D_8218E7B8, 0, 0xF, 0x11, (s32) D_8219A80A, 0, 0);
+    func_8213B560(0, &BattleAnim_PowderCloudScaleMotion, &D_8218E7B8, 0, 0xF, 0x11, (s32) D_8219A80A, 0, 0);
 }
 
 /**
@@ -682,26 +681,27 @@ void BattleAnim_InitEffect31Model(Particle* arg0) {
  * Particle callback (lifecycle at 0xAE): starts after a random delay of up to 24 frames,
  * then when the spawn step reports done spawns a func_821624FC hit effect, and finishes once
  * the owner's model animation (+0x14) ends.
+ * @unverified Name guessed from the code.
  */
-void func_821558F4(Particle* arg0) {
+void BattleAnim_CallbackMove73EndEffect31SpawnDescriptor42(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        Particle_SetParam0(arg0, ParticleMath_RandomRange(0x18));
-        func_8213C9D0(arg0);
+        Particle_SetParam0(particle, ParticleMath_RandomRange(0x18));
+        func_8213C9D0(particle);
         return;
     case 2:
-        if (func_82140690(arg0) != 0) {
-            func_82155878(arg0);
-            func_8213B560(0, &func_821624FC, &D_8218E798, 0, 1, 0x10, (s32) arg0->byteParam0, 0x17, 4);
+        if (func_82140690(particle) != 0) {
+            func_82155878(particle);
+            func_8213B560(0, &func_821624FC, &D_8218E798, 0, 1, 0x10, (s32) particle->byteParam0, 0x17, 4);
             return;
         }
         return;
     case 3:
-        if (func_8001104C(M2C_FIELD(arg0, s32 *, 0x14)) != 0) {
-            func_8213C9D0(arg0);
+        if (func_8001104C(M2C_FIELD(particle, s32 *, 0x14)) != 0) {
+            func_8213C9D0(particle);
         }
         break;
     }
@@ -713,7 +713,7 @@ void func_821558F4(Particle* arg0) {
  */
 void BattleAnim_InitializeLeechSeedUse(void) {
     func_8213B5D8(0, 4, 5, &func_82155724, &D_8218E580, 0, 2, 0x11, (s32) D_8219A80A, 0, 0);
-    func_8213B5D8(0, 8, 3, &func_82164AD0, &D_8218E7D0, 0, 1, 0x11, (s32) D_8219A80A, 0x33, 6);
+    func_8213B5D8(0, 8, 3, &BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E7D0, 0, 1, 0x11, (s32) D_8219A80A, 0x33, 6);
 }
 
 /**
@@ -807,7 +807,7 @@ void BattleAnim_BlizzardParticleUpdate(s8 *arg0) {
         break;
     }
     if (Particle_IsRunning(arg0) != 0) {
-        func_8213831C(arg0 + 0x4C, 0x45674000);
+        ParticleMath_GetPointAlongView(arg0 + 0x4C, 0x45674000);
     }
 }
 
@@ -822,9 +822,9 @@ void BattleAnim_SetupBlizzard(Particle* arg0) {
     s16 sp22;
 
     Particle_FieldCE_GetS32_0C040(arg0);
-    sp22 = Particle_FieldCF_GetS16_0C058(arg0);
+    sp22 = Particle_GetByteParam1(arg0);
     Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_SetScaleScaled(arg0, 1.2f);
     Particle_SetScaleTarget(arg0, 1.0f);
     Particle_SetScaleStep(arg0, 0.02f);
@@ -991,7 +991,7 @@ void BattleAnim_DefaultEndEffect_Draw(void) {
  * @unverified Name guessed from the code.
  */
 void BattleAnim_InitMove146Model(Particle* arg0) {
-    s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp26 = Particle_GetByteParam1(arg0);
     s16 sp24;
 
     arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
@@ -1060,7 +1060,7 @@ void BattleAnim_InitializeDizzyPunchHit(void) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_InitEffect49Model(Particle* arg0) {
-    s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp26 = Particle_GetByteParam1(arg0);
     u16 sp24;
 
     switch (BattleAnim_GetQueuedMoveId()) {
@@ -1333,7 +1333,7 @@ void BattleAnim_AllocateEffect75DisplayList(s32 arg0, arg1_func_84344CE8* arg1) 
  * only for Strength, Rock Throw and Rock Slide.
  */
 void BattleAnim_InitRockModel(Particle* arg0) {
-    s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp26 = Particle_GetByteParam1(arg0);
 
     arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
     if (arg0->displayObject != NULL) {
@@ -1380,7 +1380,7 @@ void BattleAnim_RockModelAnimWait(Particle* arg0) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_InitEffects10And50Model(Particle* arg0) {
-    u16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
+    u16 sp26 = Particle_GetByteParam1(arg0);
 
     arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
     if (arg0->displayObject != NULL) {
@@ -1732,7 +1732,7 @@ void BattleAnim_SetupStrongWinds(Particle* arg0) {
     arg0->displayObject = BattleAnim_AllocOwnerDisplayContext(arg0);
     if (arg0->displayObject != NULL) {
         BattleAnim_InitModel(arg0->displayObject, 0x60);
-        Particle_EffectList_SetU8_0BECC(arg0, 7);
+        Particle_SetEffectList(arg0, 7);
         Particle_SetFlags(arg0, 0x200);
         Particle_SetScale(arg0, 3.3f);
         Particle_SetPrimAlpha(arg0, 0);
@@ -1745,8 +1745,9 @@ void BattleAnim_SetupStrongWinds(Particle* arg0) {
 /**
  * Particle callback: init, fade alpha toward 155, then mark inactive. While running it
  * keeps motionOffset (+0x4C) moving toward 200.
+ * @unverified Name guessed from the code.
  */
-void func_82157E28(s8 *arg0) {
+void BattleAnim_CallbackStartEffect10Model60AlphaFadeIn(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -1762,7 +1763,7 @@ void func_82157E28(s8 *arg0) {
         break;
     }
     if (Particle_IsRunning(arg0) != 0) {
-        func_8213831C(arg0 + 0x4C, 0x43480000);
+        ParticleMath_GetPointAlongView(arg0 + 0x4C, 0x43480000);
     }
 }
 
@@ -1874,7 +1875,7 @@ void BattleAnim_RunBoomUseEffect1(Particle* arg0) {
 void BattleAnim_CallbackStartEffects50And82ScalePulse_InitParticle(Particle* arg0) {
     Particle_SetScaleScaled(arg0, 2.0f);
     Particle_AddPositionOffsetAlongRotationYPlus180(arg0, 10.0f);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_SetPrimAlpha(arg0, 0xFF);
     Particle_SetTextureFrame(arg0, 1);
     Particle_Rotation_SetZ_0A2CC(arg0, ParticleMath_RandomRange(0x10000));
@@ -1917,7 +1918,7 @@ void BattleAnim_SetupBoomUseEffect3(Particle* arg0) {
     UNUSED s32 pad2[3]; // FAKE: stack padding
 
     Particle_SpawnIndex_GetS16_0C038(arg0);
-    sp34 = Particle_FieldCF_GetS16_0C058(arg0);
+    sp34 = Particle_GetByteParam1(arg0);
     Particle_SetRandomVelocityXYZ(arg0, 5, 5, 5);
     Particle_SetScaleScaled(arg0, 1.5f);
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, 1.5f);
@@ -1981,7 +1982,7 @@ void BattleAnim_SetupBoomUseEffect4(Particle* arg0) {
     s16 sp24;
 
     Particle_SpawnIndex_GetS16_0C038(arg0);
-    sp24 = Particle_FieldCF_GetS16_0C058(arg0);
+    sp24 = Particle_GetByteParam1(arg0);
     Particle_FieldCE_GetS32_0C040(arg0);
     Particle_SetScaleScaled(arg0, 1.0f);
     Particle_SetRandomVelocityXYZ(arg0, 0xF, 0xF, 0x14);
@@ -2013,7 +2014,7 @@ void BattleAnim_RunBoomUseEffect4(Particle* arg0) {
         return;
     case 3:
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
-        func_8213E77C(arg0);
+        Particle_RiseByStepMagnitude(arg0);
         if (func_82140690(arg0) != 0) {
             Particle_ApproachPrimGreen(arg0, 0, 0x14);
             Particle_ApproachEnvRed(arg0, 0, 0x14);
@@ -2065,38 +2066,39 @@ void Particle_CreateDisplayList_CustomColors(s32 arg0, arg1_func_84344CE8* arg1)
  * Particle callback: init with scale 0.5, field B0 100, palette 0x17 and a 5-frame delay;
  * then grows toward scale 7 by 0.25 with 5-frame delays between stages before it is marked
  * inactive.
+ * @unverified Name guessed from the code.
  */
-void func_821588C0(Particle* arg0) {
+void BattleAnim_CallbackStartEffects50And82CenterModelScalePaletteFade(Particle* particle) {
     s16 temp_v1;
 
     Particle_GetUnkCE();
-    temp_v1 = arg0->lifecycle;
+    temp_v1 = particle->lifecycle;
     switch (temp_v1) {                              /* irregular */
     case 1:
-        func_82152730(arg0, 2);
-        func_821401D4(arg0, 0x3F000000);
-        Particle_SetScratchB(arg0, 0x64);
-        func_82143478(arg0, 0x17);
-        Particle_SetParam0(arg0, 5);
+        func_82152730(particle, 2);
+        func_821401D4(particle, 0x3F000000);
+        Particle_SetScratchB(particle, 0x64);
+        func_82143478(particle, 0x17);
+        Particle_SetParam0(particle, 5);
         return;
     case 2:
-        func_82140228(arg0, 0x40E00000, 0x3E800000);
-        if (func_821406B4(arg0) != 0) {
-            Particle_SetParam0(arg0, 5);
+        func_82140228(particle, 0x40E00000, 0x3E800000);
+        if (func_821406B4(particle) != 0) {
+            Particle_SetParam0(particle, 5);
             return;
         }
         return;
     case 3:
-        func_82140228(arg0, 0x40E00000, 0x3E800000);
-        func_821437E0(arg0, 0x1A, 0x19);
-        if (func_82140690(arg0) != 0) {
-            Particle_ApproachScratchB(arg0, 0, 8);
-            func_82140548(arg0, 0, 0x10);
+        func_82140228(particle, 0x40E00000, 0x3E800000);
+        func_821437E0(particle, 0x1A, 0x19);
+        if (func_82140690(particle) != 0) {
+            Particle_ApproachScratchB(particle, 0, 8);
+            func_82140548(particle, 0, 0x10);
             return;
         }
         break;
     case 4:
-        Particle_MarkInactive(arg0);
+        Particle_MarkInactive(particle);
         break;
     }
 }
@@ -2206,9 +2208,9 @@ void BattleAnim_SetupBoomHitEffect2(Particle* arg0) {
     s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
 
     Particle_FieldCE_GetS32_0C040(arg0);
-    Particle_FieldCF_GetS16_0C058(arg0);
+    Particle_GetByteParam1(arg0);
     Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_SetScaleScaled(arg0, 1.2f);
     Particle_SetScaleTarget(arg0, 1.0f);
     Particle_SetScaleStep(arg0, 0.02f);
@@ -2269,9 +2271,9 @@ void BattleAnim_SetupBoomHitEffect3(Particle* arg0) {
     s16 sp22;
 
     Particle_FieldCE_GetS32_0C040(arg0);
-    sp22 = Particle_FieldCF_GetS16_0C058(arg0);
+    sp22 = Particle_GetByteParam1(arg0);
     Particle_Param0_SetS16_0BCA8(arg0, sp26 * 2);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_SetScaleScaled(arg0, 1.0f);
     Particle_SetScaleTarget(arg0, 0.5f);
     Particle_SetScaleStep(arg0, 0.01f);
@@ -2371,8 +2373,9 @@ void BattleAnim_InitializeBoomHit(void) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_821597B8(UNUSED ActivePokemon* active_pokemon, UNUSED s32 unused) {
+void BattleAnim_ModelEffectNop(UNUSED ActivePokemon* active_pokemon, UNUSED s32 unused) {
 }
 
 /**
@@ -2389,7 +2392,7 @@ void BattleAnim_TransformNop(UNUSED ActivePokemon* owner, UNUSED ActivePokemon* 
  * for Vise Grip, Guillotine, Bite, Clamp, Hyper Fang, Super Fang.
  */
 void BattleAnim_SetupBitingEffect(Particle* arg0) {
-    s16 sp26 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp26 = Particle_GetByteParam1(arg0);
 
     arg0->displayObject = BattleAnim_AllocParticleDisplayContext(arg0);
     if (arg0->displayObject != NULL) {
@@ -2400,7 +2403,7 @@ void BattleAnim_SetupBitingEffect(Particle* arg0) {
         }
         BattleAnim_BindModelAnim(arg0->displayObject, 0x56);
         Particle_SetFlags(arg0, 0x200);
-        Particle_EffectList_SetU8_0BECC(arg0, 7);
+        Particle_SetEffectList(arg0, 7);
         Particle_SetScale(arg0, 1.0f);
         ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x24);
         Particle_SetPrimAlpha(arg0, 0);
@@ -2414,12 +2417,13 @@ void BattleAnim_SetupBitingEffect(Particle* arg0) {
  * Particle callback: init, then a color stage that brightens prim green/blue, env green and
  * alpha, then one that fades blue and green back out. While running it moves motionOffset
  * toward 140.
+ * @unverified Name guessed from the code.
  */
-void func_82159898(s8 *arg0) {
+void BattleAnim_CallbackStartEffects71And74And111SpecialModelColorCycle(s8 *arg0) {
     s16 sp26;
     s16 temp_v1;
 
-    sp26 = func_8213C484();
+    sp26 = Particle_GetByteParam1();
     temp_v1 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v1) {                              /* irregular */
     case 1:
@@ -2446,10 +2450,10 @@ void func_82159898(s8 *arg0) {
     }
     if (Particle_IsRunning(arg0) != 0) {
         if (sp26 == 0) {
-            func_8213831C(arg0 + 0x4C, 0x432A0000);
+            ParticleMath_GetPointAlongView(arg0 + 0x4C, 0x432A0000);
             return;
         }
-        func_8213831C(arg0 + 0x4C, 0x430C0000);
+        ParticleMath_GetPointAlongView(arg0 + 0x4C, 0x430C0000);
     }
 }
 
@@ -2805,7 +2809,7 @@ void BattleAnim_RunSlimePuddle(Particle* arg0) {
  */
 void Gfx_DrawParticlePaletteBased(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
     UNUSED s32 pad[2]; // FAKE: stack padding
-    s16 sp2E = Particle_FieldCF_GetS16_0C058(BattleAnim_GetOwnerContextParticle(D_8006049C));
+    s16 sp2E = Particle_GetByteParam1(BattleAnim_GetOwnerContextParticle(D_8006049C));
     u8 sp2D;
     u8 sp2C;
     u8 sp2B;
@@ -2893,7 +2897,7 @@ void Gfx_ParticlePaletteDL(Gfx* arg0, UNUSED arg1_func_8434E21C* arg1, UNUSED u1
     u8 sp19;
     u8 sp18;
 
-    switch (Particle_FieldCF_GetS16_0C058(tmp)) {
+    switch (Particle_GetByteParam1(tmp)) {
         case 0:
             sp1D = 0xFF;
             sp1C = 0x96;
@@ -3077,11 +3081,12 @@ void ParticleEffect_PaletteMultiBurst(void) {
 /**
  * Returns the particle scale for the owner's species: 0.3 for Onix, 0.25 for Gyarados, 0.4
  * for Lapras, 0.5 for any other.
+ * @unverified Name guessed from the code.
  */
-f32 func_8215AEA4(Particle* arg0) {
+f32 BattleAnim_GetLargeSpeciesParticleScale(Particle* particle) {
     f32 sp1C = 0.5f;
 
-    switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
+    switch (BattleAnim_GetOwnerSpecies(particle->pokemon)) {
         case ONIX:
             sp1C = 0.3f;
             break;
@@ -3276,8 +3281,9 @@ void BattleAnim_InitializeSpeedLines(void) {
 
 /**
  * Sets the spawn timing (0, 32, 14) and starts the Quick Attack / Hi Jump Kick use effect.
+ * @unverified Name guessed from the code.
  */
-void func_8215B5B8(void) {
+void BattleAnim_StartEffect112QuickAttackHiJumpKick(void) {
     func_8213B644(0, 0x20, 0xE);
     BattleAnim_InitializeQuickAttackHiJumpKickUse();
 }
@@ -3306,14 +3312,15 @@ void BattleAnim_InitializeLickUse(void) {
  * Adjusts the particle for large species and returns its scale: Onix is moved 15 to the
  * side, Onix, Gyarados and Lapras are raised by 10, and the scale is 0.5 (Onix), 0.4
  * (Gyarados, Lapras) or 1.
+ * @unverified Name guessed from the code.
  */
-f32 func_8215B6A4(Particle* arg0) {
+f32 BattleAnim_OffsetAndScaleParticleForLargeSpecies(Particle* particle) {
     f32 a = 0.0f;
     f32 b = 1.0f;
 
-    switch (BattleAnim_GetOwnerSpecies(arg0->pokemon)) {
+    switch (BattleAnim_GetOwnerSpecies(particle->pokemon)) {
         case ONIX:
-            Particle_AddPositionOffsetAlongRotationYMinus90(arg0, 15.0f);
+            Particle_AddPositionOffsetAlongRotationYMinus90(particle, 15.0f);
             a = 10.0f;
             b = 0.5f;
             break;
@@ -3326,7 +3333,7 @@ f32 func_8215B6A4(Particle* arg0) {
             b = 0.4f;
             break;
     }
-    Particle_PositionOffset_AddYScaled_08E90(arg0, a);
+    Particle_PositionOffset_AddYScaled_08E90(particle, a);
     return b;
 }
 
@@ -3352,8 +3359,9 @@ void BattleAnim_InitializeLovelyKissHit(void) {
  * Init step: creates a model object for the particle (+0x14) and picks model 0x8C, 0x8E or
  * 0x8D from field CD (0-1, 2-3, other), with scale 1 and alpha 0. Detaches if no model
  * could be created.
+ * @unverified Name guessed from the code.
  */
-void func_8215B83C(s8 *arg0) {
+void BattleAnim_CallbackStartEffects95To97EndEffects62And63ModelFadeIn_InitParticle(s8 *arg0) {
     s16 sp26;
     s32 temp_v0;
 
@@ -3765,21 +3773,22 @@ void BattleAnim_SetupConfuseRayUseSpotlight(Particle* arg0) {
 /**
  * Particle callback: init, then fades in to full alpha while field AE moves toward 200.
  * Always turns the particle to face away from the camera (camera yaw + 0x8000).
+ * @unverified Name guessed from the code.
  */
-void func_8215C984(Particle* arg0) {
+void BattleAnim_CallbackStartEffects21And93ModelAlphaAnchorFollow(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_8215C8FC(arg0);
+        func_8215C8FC(particle);
         break;
     case 2:
-        Particle_ApproachPrimAlpha(arg0, 0xFF, 8);
-        Particle_ApproachScratchA(arg0, 0xC8, 6);
+        Particle_ApproachPrimAlpha(particle, 0xFF, 8);
+        Particle_ApproachScratchA(particle, 0xC8, 6);
         break;
     }
-    Particle_SetRotationY(arg0, (s16) (func_821385C0() + 0x8000));
+    Particle_SetRotationY(particle, (s16) (ParticleMath_ComputeViewYawUnused() + 0x8000));
 }
 
 /**
@@ -3808,7 +3817,7 @@ void BattleAnim_ConfuseRayParticleUpdate(Particle* arg0) {
     if (arg0->lifecycle == 1) {
         func_8215CA14();
     }
-    Particle_SetRotationY(arg0, (s16) (func_821385C0() + 0x8000));
+    Particle_SetRotationY(arg0, (s16) (ParticleMath_ComputeViewYawUnused() + 0x8000));
 }
 
 /**
@@ -3866,8 +3875,9 @@ void ParticleEffect_WaterAnimBurst(void) {
 
 /**
  * Sets the spawn timing (16, 16, 8).
+ * @unverified Name guessed from the code.
  */
-void func_8215CCF0(void) {
+void BattleAnim_EndEffect51GlobalTintFade(void) {
     func_8213B644(0x10, 0x10, 8);
 }
 
@@ -3876,7 +3886,7 @@ void func_8215CCF0(void) {
  * it ran for exactly Confuse Ray.
  */
 void BattleAnim_InitializeConfuseRayUse(void) {
-    func_8213B560(0, &func_8215C984, &D_8218E580, 0, 1, 0xA, 0, 0, 0);
+    func_8213B560(0, &BattleAnim_CallbackStartEffects21And93ModelAlphaAnchorFollow, &D_8218E580, 0, 1, 0xA, 0, 0, 0);
     func_8213B644(0, 0x20, 3);
     func_8213BC00(8, 8, 0, 0xFF, 0x40);
     func_8213B878(0xC, 5, 0x10, 8);
@@ -3963,7 +3973,7 @@ void BattleAnim_InitializeWaterfallHit(void) {
     func_8213B560(0, &func_821530F4, &D_8218E580, 0xFF, 1, 0xC, 0, 0xF, 0x40);
     BattleAnim_InitializeWaterfallUseB();
     func_8213B464(0x10);
-    func_8213B5D8(0, 4, 5, &func_82164AD0, &D_8218E5D8, 0, 1, 0xE, 0, 0xC, 4);
+    func_8213B5D8(0, 4, 5, &BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E5D8, 0, 1, 0xE, 0, 0xC, 4);
 }
 
 /**
@@ -4016,24 +4026,25 @@ void BattleAnim_SetupBarrageEffect(Particle* arg0) {
 /**
  * Particle callback: init, then loops frames 0-7 while fading alpha toward 32, then detaches.
  * Scale moves toward 0.5 by 0.1 every frame.
+ * @unverified Name guessed from the code.
  */
-void func_8215D76C(Particle* arg0) {
+void BattleAnim_CallbackStartEffect101EndEffect65Descriptor4ABurstChild(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_8215D724(arg0);
+        func_8215D724(particle);
         break;
     case 2:
-        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
-        Particle_ApproachPrimAlpha(arg0, 0x20, 0x40);
+        Particle_AnimateFramesForwardLoopedThenAdvance(particle, 0, 7, 1, 2, 0);
+        Particle_ApproachPrimAlpha(particle, 0x20, 0x40);
         break;
     case 3:
-        Particle_DisableAndDetach(arg0);
+        Particle_DisableAndDetach(particle);
         break;
     }
-    func_82140228(arg0, 0x3F000000, 0x3DCCCCCD);
+    func_82140228(particle, 0x3F000000, 0x3DCCCCCD);
 }
 
 /**
@@ -4120,28 +4131,29 @@ void BattleAnim_SetupBarrageHitEffect(Particle* arg0) {
 }
 
 /**
- * Particle callback: init, then emits one func_8215D76C child per frame while spinning and
+ * Particle callback: init, then emits one BattleAnim_CallbackStartEffect101EndEffect65Descriptor4ABurstChild child per frame while spinning and
  * counting down 7 frames, then detaches. Moves along its rotation while the countdown runs.
+ * @unverified Name guessed from the code.
  */
-void func_8215DAEC(Particle* arg0) {
+void BattleAnim_CallbackMove140EndEffect65EmitDescriptor4A(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_8215DA5C(arg0);
+        func_8215DA5C(particle);
         break;
     case 2:
-        func_82139E5C(arg0, &func_8215D76C, &D_8218E7D0, 1);
-        func_8213EF88(arg0, 0x1000, 0x80);
-        func_8213CA80(arg0, 7);
+        func_82139E5C(particle, &BattleAnim_CallbackStartEffect101EndEffect65Descriptor4ABurstChild, &D_8218E7D0, 1);
+        func_8213EF88(particle, 0x1000, 0x80);
+        func_8213CA80(particle, 7);
         break;
     case 3:
-        Particle_DisableAndDetach(arg0);
+        Particle_DisableAndDetach(particle);
         break;
     }
-    if (func_8213CB7C(arg0) != 0) {
-        Particle_AddVelocityFromRotationTemplate1(arg0);
+    if (func_8213CB7C(particle) != 0) {
+        Particle_AddVelocityFromRotationTemplate1(particle);
     }
 }
 
@@ -4200,7 +4212,7 @@ void Gfx_SimpleNodeDL(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg2) {
     s16 sp44;
     s16 sp42;
 
-    switch (Particle_FieldCF_GetS16_0C058(sp48)) {
+    switch (Particle_GetByteParam1(sp48)) {
         case 0:
             sp44 = -5;
             sp42 = 3;
@@ -4375,7 +4387,7 @@ void BattleAnim_InitializeSkyAttackUse2(void) {
     func_8213BC00(0, 0x12, 0, 0x80, 0x10);
     func_8213C0D8(0, 0xFF, 0, 0x10);
     func_8213B560(0, &func_82152FE0, &D_8218E580, 0xFF, 1, 9, (s32) D_8219A80A, 0x12, 0x20);
-    func_8213B5D8(0, 1, 0xC, &func_82164AD0, &D_8218E770, 0, 1, 9, 0, 0x16, 5);
+    func_8213B5D8(0, 1, 0xC, &BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x16, 5);
 }
 
 /**
@@ -4670,20 +4682,21 @@ void BattleAnim_InitializeHornAttackUse(void) {
 /**
  * Particle callback: starts a model animation (func_82152730 0), then fades alpha in and
  * marks itself inactive once the model animation ends.
+ * @unverified Name guessed from the code.
  */
-void func_8215F1B0(Particle* arg0) {
+void BattleAnim_CallbackEndEffect79DefaultDescriptorPaletteFade(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82152730(arg0, 0);
+        func_82152730(particle, 0);
         return;
     case 2:
-        func_821437E0(arg0, 0x33, 0x24);
-        Particle_ApproachPrimAlpha(arg0, 0xFF, 0x1D);
-        if (func_8001104C(M2C_FIELD(arg0, s32 *, 0x14)) != 0) {
-            Particle_MarkInactive(arg0);
+        func_821437E0(particle, 0x33, 0x24);
+        Particle_ApproachPrimAlpha(particle, 0xFF, 0x1D);
+        if (func_8001104C(M2C_FIELD(particle, s32 *, 0x14)) != 0) {
+            Particle_MarkInactive(particle);
         }
         return;
     }
@@ -4718,7 +4731,7 @@ void BattleAnim_InitializeSonicBoomUse(void) {
  */
 void BattleAnim_CallbackStartEffects127And128Descriptor39ScaleFade_InitParticle(Particle* arg0) {
     s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
-    s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp24 = Particle_GetByteParam1(arg0);
 
     Particle_FieldCE_GetS32_0C040(arg0);
 
@@ -4749,31 +4762,32 @@ void BattleAnim_CallbackStartEffects127And128Descriptor39ScaleFade_InitParticle(
 /**
  * Particle callback with several staged waits: init, wait for the spawn step, then a
  * 10-frame delay, then the approach steps of func_821402B8 / func_82140548, then inactive.
+ * @unverified Name guessed from the code.
  */
-void func_8215F3EC(Particle* arg0) {
+void BattleAnim_CallbackStartEffects127And128Descriptor39ScaleFade(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_8215F2B8(arg0);
+        func_8215F2B8(particle);
         return;
     case 2:
-        if (func_821406B4(arg0) != 0) {
-            func_8213CB3C(arg0);
-            Particle_SetParam0(arg0, 0xA);
+        if (func_821406B4(particle) != 0) {
+            func_8213CB3C(particle);
+            Particle_SetParam0(particle, 0xA);
             return;
         }
         return;
     case 3:
-        func_821402B8(arg0);
-        if (func_82140690(arg0) != 0) {
-            func_82140548(arg0, 0, 0x10);
+        func_821402B8(particle);
+        if (func_82140690(particle) != 0) {
+            func_82140548(particle, 0, 0x10);
             return;
         }
         break;
     case 4:
-        Particle_MarkInactive(arg0);
+        Particle_MarkInactive(particle);
         break;
     }
 }
@@ -4835,7 +4849,7 @@ void ParticleEffect_CreateSmokeHighPriority(void) {
  */
 void BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade_InitParticle(Particle* arg0) {
     s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
-    s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp24 = Particle_GetByteParam1(arg0);
 
     Particle_FieldCE_GetS32_0C040(arg0);
 

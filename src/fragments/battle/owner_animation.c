@@ -2,8 +2,8 @@
 #include "battle.h"
 
 // Declared here instead of in a header: the callers of these disagree on their types.
-void func_821020FC(ActivePokemon*);
-void func_8210211C(ActivePokemon* active_pokemon);
+void BattleAnim_SwapToSubstituteModel(ActivePokemon*);
+void BattleAnim_RestoreDisplayModel(ActivePokemon* active_pokemon);
 
 /**
  * Resets the scene's model-reload step to 0.
@@ -18,12 +18,13 @@ void BattleScene_ResetAnimationStep(void) {
  * Model reload for a Pokemon with state flag 0x2000 (not while moveEffectKind is 0x19):
  * step 0 marks the model pending, step 1 waits for the reload bit (0x10), clears 0x90 and
  * reloads the model. Returns 1 while in progress.
+ * @unverified Name guessed from the code.
  */
-s32 func_82124A50(ActivePokemon* arg0) {
+s32 BattleScene_ReloadModelForFlag2000(ActivePokemon* active_pokemon) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s32 sp1C = 0;
 
-    if (!(arg0->state.flags & 0x2000)) {
+    if (!(active_pokemon->state.flags & 0x2000)) {
         return 0;
     }
 
@@ -33,16 +34,16 @@ s32 func_82124A50(ActivePokemon* arg0) {
 
     switch (sBattleScene.scene->modelReloadStep) {
         case 0:
-            func_8210211C(arg0);
+            BattleAnim_RestoreDisplayModel(active_pokemon);
             sp1C = 1;
             sBattleScene.scene->modelReloadStep++;
             break;
 
         case 1:
             sp1C = 1;
-            if (arg0->side->modelFlags & 0x10) {
-                arg0->side->modelFlags &= ~0x90;
-                func_82108A0C(arg0);
+            if (active_pokemon->side->modelFlags & 0x10) {
+                active_pokemon->side->modelFlags &= ~0x90;
+                func_82108A0C(active_pokemon);
                 sBattleScene.scene->modelReloadStep++;
             }
             break;
@@ -70,7 +71,7 @@ s32 BattleScene_AdvanceOwnerAnimation98(ActivePokemon* arg0) {
 
     switch (sBattleScene.scene->modelReloadStep) {
         case 0:
-            func_821020FC(arg0);
+            BattleAnim_SwapToSubstituteModel(arg0);
             sp1C = 1;
             sBattleScene.scene->modelReloadStep++;
             break;
@@ -91,29 +92,30 @@ s32 BattleScene_AdvanceOwnerAnimation98(ActivePokemon* arg0) {
 }
 
 /**
- * Same as func_82124A50 for state flag 0x1000.
+ * Same as BattleScene_ReloadModelForFlag2000 for state flag 0x1000.
+ * @unverified Name guessed from the code.
  */
-s32 func_82124BF8(ActivePokemon* arg0) {
+s32 BattleScene_ReloadModelForFlag1000(ActivePokemon* active_pokemon) {
     UNUSED s32 pad[2]; // FAKE: stack padding
     s32 sp1C = 0;
 
-    if (!(arg0->state.flags & 0x1000)) {
+    if (!(active_pokemon->state.flags & 0x1000)) {
         return 0;
     }
 
     switch (sBattleScene.scene->modelReloadStep) {
         case 0:
-            func_8210211C(arg0);
+            BattleAnim_RestoreDisplayModel(active_pokemon);
             sp1C = 1;
             sBattleScene.scene->modelReloadStep++;
             break;
 
         case 1:
             sp1C = 1;
-            if (arg0->side->modelFlags & 0x10) {
-                arg0->side->modelFlags &= ~0x90;
-                func_82108A0C(arg0);
-                Battle_ClearRuntimeFlags(arg0, 0x3800);
+            if (active_pokemon->side->modelFlags & 0x10) {
+                active_pokemon->side->modelFlags &= ~0x90;
+                func_82108A0C(active_pokemon);
+                Battle_ClearRuntimeFlags(active_pokemon, 0x3800);
                 sBattleScene.scene->modelReloadStep++;
             }
             break;
@@ -149,7 +151,7 @@ s32 BattleScene_AdvanceBothOwnerAnimations(void) {
     switch (sBattleScene.scene->modelReloadStep) {
         case 0:
             if (temp_a1->flags & 0x2000) {
-                func_821020FC(sActivePokemon[0]);
+                BattleAnim_SwapToSubstituteModel(sActivePokemon[0]);
             }
             sp1C = 1;
             sBattleScene.scene->modelReloadStep = sBattleScene.scene->modelReloadStep + 1;
@@ -170,7 +172,7 @@ s32 BattleScene_AdvanceBothOwnerAnimations(void) {
 
         case 2:
             if (temp_a2->flags & 0x2000) {
-                func_821020FC(sActivePokemon[1]);
+                BattleAnim_SwapToSubstituteModel(sActivePokemon[1]);
             }
             sp1C = 1;
             sBattleScene.scene->modelReloadStep = sBattleScene.scene->modelReloadStep + 1;

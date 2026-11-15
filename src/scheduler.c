@@ -14,7 +14,7 @@ s32 Sched_RequestTaskYield(SchedTask* arg0);
 s32 Sched_HandleRspCompletion(SchedTask* arg0);
 void Sched_HandleRdpCompletion(SchedTask* arg0);
 void Sched_PromotePendingTasks(void);
-void func_800049E0(void);
+void Sched_UnusedStub(void);
 SchedTask* Sched_TryStartTask(SchedTask* arg0);
 void Sched_StartPendingTask(void);
 s32 Sched_TryYieldActiveTask(void);
@@ -150,21 +150,28 @@ void Sched_HandleRdpCompletion(SchedTask* arg0) {
     arg0->rdpState = 2;
 }
 
-M2C_UNK func_8004D1C0(s32, s32 *, M2C_UNK);         /* extern */
-
-s32 func_80004920(SchedClient* arg0) {
+M2C_UNK func_8004D1C0(s32, s32 *, M2C_UNK);         /**
+ * Blocks until the scheduler posts a message to `client`'s queue and returns it (for example 'VTRE'
+ * from Sched_BroadcastMessage on each retrace). Used by the audio thread, the GB Player threads and the
+ * 64DD intro to wait a frame.
+ */
+s32 SchedClient_WaitMessage(SchedClient* client) {
     s32 sp1C;
 
-    func_8004D1C0((s32*)&arg0->queue, &sp1C, 1);
+    func_8004D1C0((s32*)&client->queue, &sp1C, 1);
     return sp1C;
 }
 
-s32 func_8000494C(SchedClient* arg0) {
+/**
+ * Returns the next message on `client`'s queue without blocking, or 'NULL' (0x4E554C4C) when it is
+ * empty. Used to drain stale retrace messages before waiting.
+ */
+s32 SchedClient_PollMessage(SchedClient* client) {
     s32 sp1C;
 
     sp1C = 0x4E554C4C;
-    if (arg0->queue.validCount != 0) {
-        func_8004D1C0((s32*)&arg0->queue, &sp1C, 1);
+    if (client->queue.validCount != 0) {
+        func_8004D1C0((s32*)&client->queue, &sp1C, 1);
     }
     return sp1C;
 }
@@ -182,18 +189,23 @@ void Sched_PromotePendingTasks(void) {
     }
 }
 
-void func_800049E0(void) {
+/**
+ * Empty; no callers.
+ */
+void Sched_UnusedStub(void) {
 }
 
-M2C_UNK func_8004CFB0(s8 *, s32, M2C_UNK);        /* extern */
-
-void func_800049E8(s32 arg0) {
+M2C_UNK func_8004CFB0(s8 *, s32, M2C_UNK);        /**
+ * Posts `msg` (non-blocking) to the queue of every client registered with Sched_AddClient. The
+ * retrace handler sends 'VTRE' each frame.
+ */
+void Sched_BroadcastMessage(s32 msg) {
     SchedClient* var_s0;
 
     var_s0 = D_800A9710.clients;
     if (var_s0 != NULL) {
         do {
-            func_8004CFB0((s8*)&var_s0->queue, arg0, 0);
+            func_8004CFB0((s8*)&var_s0->queue, msg, 0);
             var_s0 = var_s0->next;
         } while (var_s0 != NULL);
     }
@@ -272,7 +284,7 @@ void Sched_HandleRetrace(void) {
         D_800A9710.runningTask = Sched_TryStartTask(D_800A9710.gfxTask);
     }
 
-    func_800049E8('VTRE');
+    Sched_BroadcastMessage('VTRE');
 }
 
 /**
@@ -391,13 +403,15 @@ void Sched_Init(void) {
     osStartThread(&D_800A9710.thread);
 }
 
-/** Appends a client to the scheduler's retrace client list. */
-void func_80004EA8(SchedClient* arg0) {
+/**
+ * Appends `client` to the end of the scheduler's client list so it receives broadcast messages.
+ */
+void Sched_AddClient(SchedClient* client) {
     SchedClient* var_a1;
     SchedClient* var_v1;
 
     if (D_800A9710.clients == NULL) {
-        D_800A9710.clients = arg0;
+        D_800A9710.clients = client;
     } else {
         var_v1 = D_800A9710.clients;
         var_a1 = D_800A9710.clients->next;
@@ -407,9 +421,9 @@ void func_80004EA8(SchedClient* arg0) {
                 var_a1 = var_a1->next;
             } while (var_a1 != NULL);
         }
-        var_v1->next = arg0;
+        var_v1->next = client;
     }
-    arg0->next = NULL;
+    client->next = NULL;
 }
 
 /** Removes a client from the scheduler's client list. */
@@ -458,7 +472,11 @@ void Sched_SubmitTask(SchedTask* arg0, s32 arg1) {
     }
 }
 
-s32 func_80005014(void) {
+/**
+ * Returns 1 while a graphics task is running or queued to run next. Callers spin on it before
+ * reusing a frame buffer (model renderer, JPEG stream).
+ */
+s32 Sched_IsGfxTaskPending(void) {
     s32 var_v1;
 
     var_v1 = D_800A9710.gfxTask != NULL;

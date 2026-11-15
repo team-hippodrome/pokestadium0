@@ -14,6 +14,8 @@
  * (osAiSetNextBuffer in src/audio/internal/os.c).
  * Seen in play (2026-11-12): GbAudio_UpdateFrame passed it the buffer GbApu_RenderBuffer filled
  * the frame before (0x801A64F0) with length 0xC40, that is 784 stereo 16-bit samples.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from GbAudio_UpdateFrame.
  */
 s32 osGbSetNextBuffer(void* buf_ptr, u32 size) {
   static u8 hdwr_bug_flag = FALSE;

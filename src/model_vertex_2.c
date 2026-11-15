@@ -23,26 +23,26 @@ extern Vec3fCounter* D_800B32C0;
 extern PosBlend D_800B32C8[0x10];
 extern Mtx D_800B35C8;
 
-void func_80033750(void);
+void Model_UnusedStub(void);
 s16 Model_GetVertexHeightClass(s16* arg0, s32 arg1);
 void Model_BuildVertexRuntimeData(StadiumModel* model, MtxF* mtx);
-void func_800339CC(StadiumModel* model, void* arg1,  void* arg2, void* arg3);
-void func_80033BBC(StadiumModel* model, MtxF* mtx);
-void func_80033BE4(StadiumModel* model, s16 maxDist, f32 radius, f32 ax, f32 ay, f32 az, f32 bx, f32 by, f32 bz, MtxF* mtx);
-void func_800340F4(StadiumModel* model);
-void func_800346C4(ModelSegment* segment, StadiumTransform* xf, s32 index, ModelVertex* vertices);
+void Model_InitSkinned(StadiumModel* model, void* arg1,  void* arg2, void* arg3);
+void Model_RebuildVertexData(StadiumModel* model, MtxF* mtx);
+void Model_AddSkinBone(StadiumModel* model, s16 maxDist, f32 radius, f32 ax, f32 ay, f32 az, f32 bx, f32 by, f32 bz, MtxF* mtx);
+void Model_AssignNearestBones(StadiumModel* model);
+void Model_ApplySkinBone(ModelSegment* segment, StadiumTransform* xf, s32 index, ModelVertex* vertices);
 void Model_ApplyVertexTransforms(StadiumModel* model);
-void func_80034A74(u32 modelSegment, StadiumTransform* xf, s32 index, ModelVertex* vertices);
+void Model_ApplySkinBoneInRange(u32 modelSegment, StadiumTransform* xf, s32 index, ModelVertex* vertices);
 void Model_TransformPoint(MtxF* mtx, Vec3f* out, s16 (*in)[3]);
 
 f32 Math_FAbs(f32 value);
 void Math_CrossProduct(f32 ax, f32 ay, f32 az, f32 bx, f32 by, f32 bz, f32* cx, f32* cy, f32* cz);
-f32 func_80033360(
+f32 Math_ProjectPointOnSegment(
     f32 px, f32 py, f32 pz,
     f32 ax, f32 ay, f32 az,
     f32 bx, f32 by, f32 bz
 );
-f32 func_80033408(
+f32 Math_DistancePointToSegment(
     f32 px, f32 py, f32 pz,
     f32 ax, f32 ay, f32 az,
     f32 bx, f32 by, f32 bz,
@@ -51,11 +51,14 @@ f32 func_80033408(
 s16 Model_GetVertexClass(s16* table, s32 index);
 s16 Model_GetVertexJoint(s16* arg0, s32 arg1);
 void Model_InitializeVertexPositions(ModelSegment* segment, MtxF* mtx, ModelVertex* mvtx);
-void func_80035694(StadiumModel* model);
+void Model_BuildVertexLinks(StadiumModel* model);
 void Model_ApplyTransformCommands(ModelSegment* segment, ModelVertex* vertices, StadiumModel* model, f32 deltaTime);
-void func_80035E48(ModelSegment* segment, ModelVertex* vertices);
+void Model_ApplyVertexOffsets(ModelSegment* segment, ModelVertex* vertices);
 
-void func_80033750(void) {
+/**
+ * Empty function with no callers.
+ */
+void Model_UnusedStub(void) {
 }
 
 /** Returns the height class of a vertex from a packed index table. */
@@ -145,7 +148,14 @@ void Model_BuildVertexRuntimeData(StadiumModel* model, MtxF* mtx) {
     }
 }
 
-void func_800339CC(StadiumModel* model, void* arg1,  void* arg2, void* arg3) {
+/**
+ * Sets up a deformable (skinned) model in `model` from the segment header at `segmentSrc`, with the
+ * normal accumulation buffer `normalBuf` and the base matrix `mtx`: records the matrix's axis scales,
+ * builds the per-vertex runtime data and its draw lists. All four pointers are segmented addresses.
+ * Seen in play (2026-11-14): ModelRenderer_UpdateSlotModel calls it at boot.
+ * @unverified Name read from the code.
+ */
+void Model_InitSkinned(StadiumModel* model, void* normalBuf,  void* mtxSeg, void* segmentSrc) {
     f32 sp4C;
     f32 sp48;
     f32 sp44;
@@ -163,11 +173,11 @@ void func_800339CC(StadiumModel* model, void* arg1,  void* arg2, void* arg3) {
     ModelSegment* temp_v0;
 
     model = Memmap_GetSegmentVaddr(model);
-    arg1 = Memmap_GetSegmentVaddr(arg1);
-    temp_s0 = Memmap_GetSegmentVaddr(arg2);
-    temp_v0 = Memmap_GetSegmentVaddr(arg3);
+    normalBuf = Memmap_GetSegmentVaddr(normalBuf);
+    temp_s0 = Memmap_GetSegmentVaddr(mtxSeg);
+    temp_v0 = Memmap_GetSegmentVaddr(segmentSrc);
     segment = &model->segment;
-    D_800B32C0 = arg1;
+    D_800B32C0 = normalBuf;
     *segment = *temp_v0;
     model->isActive = 1;
     model->transformCount = 0;
@@ -198,15 +208,25 @@ void func_800339CC(StadiumModel* model, void* arg1,  void* arg2, void* arg3) {
     model->scale.z = sp44;
     guScale(&D_800B35C8, 0.1f, 0.1f, 0.1f);
     Model_BuildVertexRuntimeData(model, temp_s0);
-    func_80035694(model);
+    Model_BuildVertexLinks(model);
 }
 
-void func_80033BBC(StadiumModel* model, MtxF* mtx) {
+/**
+ * Rebuilds a skinned model's per-vertex data from matrix `mtx` and refreshes its draw lists.
+ * @unverified Name read from the code.
+ */
+void Model_RebuildVertexData(StadiumModel* model, MtxF* mtx) {
     Model_BuildVertexRuntimeData(model, mtx);
-    func_80035694(model);
+    Model_BuildVertexLinks(model);
 }
 
-void func_80033BE4(StadiumModel* model, s16 maxDist, f32 radius, f32 ax, f32 ay, f32 az, f32 bx, f32 by, f32 bz, MtxF* mtx) {
+/**
+ * Adds bone `index` = model->transformCount to a skinned model: a segment from (ax, ay, az) to
+ * (bx, by, bz) with two perpendicular axes, influence `radius`, under matrix `mtx`. Stores every
+ * vertex's coordinates in the bone's frame (Math_ProjectPointOnSegment) and its distance to the bone.
+ * @unverified Name read from the code; not reached in play.
+ */
+void Model_AddSkinBone(StadiumModel* model, s16 id, f32 radius, f32 ax, f32 ay, f32 az, f32 bx, f32 by, f32 bz, MtxF* mtx) {
     ModelSegment* segment;
     f32 cx, cy, cz;
     f32 dx, dy, dz;
@@ -259,7 +279,7 @@ void func_80033BE4(StadiumModel* model, s16 maxDist, f32 radius, f32 ax, f32 ay,
         dz = az + pz;
 
         t = &model->transforms[index];
-        t->unk_00 = maxDist;
+        t->unk_00 = id;
         t->maxDist = radius;
         t->x0 = ax;
         t->y0 = ay;
@@ -286,23 +306,27 @@ void func_80033BE4(StadiumModel* model, s16 maxDist, f32 radius, f32 ax, f32 ay,
             x = mvtx->position.base.x;
             y = mvtx->position.base.y;
             z = mvtx->position.base.z;
-            dist = func_80033408(x, y, z, tax, tay, taz, tbx, tby, tbz, &nx, &ny, &nz);
+            dist = Math_DistancePointToSegment(x, y, z, tax, tay, taz, tbx, tby, tbz, &nx, &ny, &nz);
             if (dist > 0.0f) {
                 x = (((x - nx) * radius) / dist) + nx;
                 y = (((y - ny) * radius) / dist) + ny;
                 z = (((z - nz) * radius) / dist) + nz;
             }
             w = &mvtx->cmd.weights[index];
-            w->w0 = func_80033360(x, y, z, tax, tay, taz, tbx, tby, tbz);
-            w->w1 = func_80033360(x, y, z, tax, tay, taz, tcx, tcy, tcz);
-            w->w2 = func_80033360(x, y, z, tax, tay, taz, tdx, tdy, tdz);
+            w->w0 = Math_ProjectPointOnSegment(x, y, z, tax, tay, taz, tbx, tby, tbz);
+            w->w1 = Math_ProjectPointOnSegment(x, y, z, tax, tay, taz, tcx, tcy, tcz);
+            w->w2 = Math_ProjectPointOnSegment(x, y, z, tax, tay, taz, tdx, tdy, tdz);
             w->dist = dist;
             mvtx++;
         }
     }
 }
 
-void func_800340F4(StadiumModel* model) {
+/**
+ * Gives every primary vertex of a skinned model the bone it is closest to.
+ * @unverified Name read from the code.
+ */
+void Model_AssignNearestBones(StadiumModel* model) {
     u32 pad[2]; // FAKE: stack padding
     ModelSegment* segment;
     s16* index_table;
@@ -339,7 +363,12 @@ void func_800340F4(StadiumModel* model) {
     }
 }
 
-void func_800341E8(ModelSegment* segment, ModelVertex* vertices) {
+/**
+ * Averages face normals (scaled to 120) into each vertex's normal (stored in its color). Retail
+ * adds all three contributions of a triangle to its first vertex.
+ * @unverified Name read from the code.
+ */
+void Model_ComputeVertexNormals(ModelSegment* segment, ModelVertex* vertices) {
     s32 i;
     f32 x0, y0, z0;
     f32 x1, y1, z1;
@@ -428,7 +457,12 @@ void func_800341E8(ModelSegment* segment, ModelVertex* vertices) {
     }
 }
 
-void func_800346C4(ModelSegment* segment, StadiumTransform* xf, s32 index, ModelVertex* vertices) {
+/**
+ * Moves every vertex bound to bone `index` with the bone's current matrix, storing the result as an
+ * offset from its base position.
+ * @unverified Name read from the code.
+ */
+void Model_ApplySkinBone(ModelSegment* segment, StadiumTransform* bone, s32 index, ModelVertex* vertices) {
     f32 x0, y0, z0;
     f32 x1, y1, z1;
     f32 x2, y2, z2;
@@ -456,19 +490,19 @@ void func_800346C4(ModelSegment* segment, StadiumTransform* xf, s32 index, Model
     temp_s6 = segment->vertexCount;
     spA0 = Memmap_GetSegmentVaddr(segment->remapSegment);
     temp_v0 = Memmap_GetSegmentVaddr(segment->tableSegment);
-    x0 = xf->x0;
-    y0 = xf->y0;
-    z0 = xf->z0;
-    x1 = xf->x1;
-    y1 = xf->y1;
-    z1 = xf->z1;
-    x2 = xf->x2;
-    y2 = xf->y2;
-    z2 = xf->z2;
-    sp184 = xf->x3;
-    sp180 = xf->y3;
-    sp17C = xf->z3;
-    mtx = xf->mtx;
+    x0 = bone->x0;
+    y0 = bone->y0;
+    z0 = bone->z0;
+    x1 = bone->x1;
+    y1 = bone->y1;
+    z1 = bone->z1;
+    x2 = bone->x2;
+    y2 = bone->y2;
+    z2 = bone->z2;
+    sp184 = bone->x3;
+    sp180 = bone->y3;
+    sp17C = bone->z3;
+    mtx = bone->mtx;
 
     guMtxXFMF(mtx->mf, x0, y0, z0, &sp178, &sp174, &sp170);
     guMtxXFMF(mtx->mf, x1, y1, z1, &sp16C, &sp168, &sp164);
@@ -522,14 +556,19 @@ void Model_ApplyVertexTransforms(StadiumModel* model) {
     count = model->transformCount;
 
     for (i = 0; i < count; i++) {
-        func_800346C4(segment, &model->transforms[i], i, mvtx);
+        Model_ApplySkinBone(segment, &model->transforms[i], i, mvtx);
     }
 
-    func_80035E48(segment, mvtx);
+    Model_ApplyVertexOffsets(segment, mvtx);
     Model_ApplyTransformCommands(segment, mvtx, model, 1.0f);
 }
 
-void func_80034A74(u32 model_segment, StadiumTransform* xf, s32 index, ModelVertex* vertices) {
+/**
+ * Like Model_ApplySkinBone, but for every vertex within the bone's maxDist of its segment; vertices
+ * out of range drop the bone.
+ * @unverified Name read from the code.
+ */
+void Model_ApplySkinBoneInRange(u32 model_segment, StadiumTransform* bone, s32 index, ModelVertex* vertices) {
     ModelBlendWeight* wt;
     ModelVertex* vtx;
     s32 pad0[3]; // FAKE: stack padding
@@ -585,11 +624,11 @@ void func_80034A74(u32 model_segment, StadiumTransform* xf, s32 index, ModelVert
     spCA = temp_v0->vertexCount;
     temp_s1 = Memmap_GetSegmentVaddr(temp_v0->remapSegment);
     spC0 = Memmap_GetSegmentVaddr(temp_v0->tableSegment);
-    mtx = xf->mtx;
-    guMtxXFMF(mtx->mf, xf->x0, xf->y0, xf->z0, &sp180, &sp17C, &sp178);
-    guMtxXFMF(mtx->mf, xf->x1, xf->y1, xf->z1, &sp174, &sp170, &sp16C);
-    guMtxXFMF(mtx->mf, xf->x2, xf->y2, xf->z2, &sp168, &sp164, &sp160);
-    guMtxXFMF(mtx->mf, xf->x3, xf->y3, xf->z3, &sp15C, &sp158, &sp154);
+    mtx = bone->mtx;
+    guMtxXFMF(mtx->mf, bone->x0, bone->y0, bone->z0, &sp180, &sp17C, &sp178);
+    guMtxXFMF(mtx->mf, bone->x1, bone->y1, bone->z1, &sp174, &sp170, &sp16C);
+    guMtxXFMF(mtx->mf, bone->x2, bone->y2, bone->z2, &sp168, &sp164, &sp160);
+    guMtxXFMF(mtx->mf, bone->x3, bone->y3, bone->z3, &sp15C, &sp158, &sp154);
     sp150 = sp174 - sp180;
     sp14C = sp170 - sp17C;
     sp148 = sp16C - sp178;
@@ -607,9 +646,9 @@ void func_80034A74(u32 model_segment, StadiumTransform* xf, s32 index, ModelVert
             temp_fs1 = vtx->position.base.y;
             temp_fs2 = vtx->position.base.z;
             temp_s1_3 = 1 << index;
-            temp_fv0 = func_80033408(temp_fs0, temp_fs1, temp_fs2, sp180, sp17C, sp178, sp174, sp170, sp16C, &sp104, &sp100, &spFC);
+            temp_fv0 = Math_DistancePointToSegment(temp_fs0, temp_fs1, temp_fs2, sp180, sp17C, sp178, sp174, sp170, sp16C, &sp104, &sp100, &spFC);
             temp_v0_2 = &vtx->position;
-            if ((temp_fv0 > 0.0f) && (temp_fv0 < xf->maxDist)) {
+            if ((temp_fv0 > 0.0f) && (temp_fv0 < bone->maxDist)) {
                 wt = &vtx->cmd.weights[index];
                 w0 = wt->w0;
                 w1 = wt->w1;

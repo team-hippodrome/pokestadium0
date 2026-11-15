@@ -411,18 +411,17 @@ void Battle_CheckMovesetLegality(ActivePokemon* arg0) {
     }
 }
 
-//@unverified
 /**
- * Copies the battle runtime HP (state.runtime.hp) back to arg0's party
- * Pokemon.
+ * Copies the Pokemon's battle HP (0x7D2) into its team roster entry (state.rosterIndex).
+ * @unverified Name guessed from the code.
  */
-void func_8210F2F4(ActivePokemon* arg0) {
+void Battle_SyncHpToRoster(ActivePokemon* arg0) {
     BattleMon* mon = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
 
     mon->hp = arg0->state.runtime.hp;
 }
 
-void func_80043860(s32);
+void Announcer_CommentOnHpChange(s32);
 
 /**
  * Steps the party Pokemon's HP one point toward the battle display HP. Returns 1
@@ -443,7 +442,7 @@ s32 Battle_StepPartyHpToDisplay(ActivePokemon* arg0) {
         if (arg0->displayObject.objectType == 0x98) {
             return 1;
         }
-        func_80043860(BattleScene_GetParticipantSideIndex(sOtherPokemon));
+        Announcer_CommentOnHpChange(BattleScene_GetParticipantSideIndex(sOtherPokemon));
         return 1;
     }
     return 0;

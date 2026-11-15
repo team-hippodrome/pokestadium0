@@ -266,8 +266,9 @@ void BattleAnim_Waterfall(ActivePokemon* owner, ActivePokemon* animated_pokemon)
 /**
  * Model transform init: clears the animated Pokemon's offset and rotation, starts a sway at
  * angle 0x2AAA and advances the transform timer.
+ * @unverified Name guessed from the code.
  */
-void func_8210A2F4(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon) {
+void BattleAnim_InitSwayTransform(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     Vec3f_SetComponentsDuplicate(&animated_pokemon->modelTransform, 0.0f, 0.0f, 0.0f);
     Vec3f_SetComponentsDuplicate(&animated_pokemon->modelTransform.rotation, 0.0f, 0.0f, 0.0f);
     BattleAnim_InitSwayOffset(animated_pokemon, sModelTransformConstants[0], 0x2AAA);
@@ -277,8 +278,9 @@ void func_8210A2F4(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon)
 /**
  * Model transform step: moves the animated Pokemon with the sway (9, 0.9, 0x2AAA) and resets
  * it once the owner's model is below the ground.
+ * @unverified Name guessed from the code.
  */
-void func_8210A374(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
+void BattleAnim_StepSwayTransformUntilGrounded(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     BattleAnim_UpdateTransform(owner, animated_pokemon, 9.0f, 0.9f, 0x2AAA);
     if (owner->displayObject.position.y < 0.0f) {
         animated_pokemon->modelTransform.rotation.y = 0;
@@ -288,18 +290,19 @@ void func_8210A374(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
 
 /**
  * Model transform dispatcher: step 0 runs the init then falls through to the step
- * (func_8210A374).
+ * (BattleAnim_StepSwayTransformUntilGrounded).
+ * @unverified Name guessed from the code.
  */
-void func_8210A3DC(s32 arg0, ActivePokemon* arg1) {
+void BattleAnim_RunSwayTransform(s32 owner, ActivePokemon* animated_pokemon) {
     s32 temp_v0;
 
-    temp_v0 = arg1->modelTransformTimer;
+    temp_v0 = animated_pokemon->modelTransformTimer;
     switch (temp_v0) {                              /* irregular */
     case 0:
-        func_8210A2F4((ActivePokemon*)arg0, (ActivePokemon*)arg1);
+        BattleAnim_InitSwayTransform((ActivePokemon*)owner, (ActivePokemon*)animated_pokemon);
         /* fallthrough */
     case 1:
-        func_8210A374(arg0, arg1);
+        BattleAnim_StepSwayTransformUntilGrounded(owner, animated_pokemon);
         return;
     }
 }
@@ -428,15 +431,16 @@ f32 BattleScene_GetParticipantHeight(s8*);
 /**
  * Model transform step that sinks the Pokemon below the ground: turns it toward its side,
  * lowers it toward -2.6 heights and ends the transform once it is 2.5 heights down.
+ * @unverified Name guessed from the code.
  */
-void func_8210A7D8(s32 arg0, ActivePokemon* arg1) {
-    func_8210A430(arg0, arg1->oscillationPhase, (s16)(arg1->facingDirection << 0xE));
-    func_82109AF4(arg1, arg1->oscillationPhase);
-    BattleAnim_ApproachF((f32*)(arg0 + 0x28), -(BattleScene_GetParticipantHeight(arg1) * 2.6), 0.04f);
-    if (*(f32*)(arg0 + 0x28) <= -(BattleScene_GetParticipantHeight(arg1) * 2.5)) {
-        func_8000D700(arg0 + 0x1E, 0, (s16)(arg1->facingDirection << 0xE), 0);
-        func_82109C88(arg1);
-        func_8210942C((s32)arg1);
+void BattleAnim_DigSinkUnderground(s32 transform, ActivePokemon* active_pokemon) {
+    func_8210A430(transform, active_pokemon->oscillationPhase, (s16)(active_pokemon->facingDirection << 0xE));
+    func_82109AF4(active_pokemon, active_pokemon->oscillationPhase);
+    BattleAnim_ApproachF((f32*)(transform + 0x28), -(BattleScene_GetParticipantHeight(active_pokemon) * 2.6), 0.04f);
+    if (*(f32*)(transform + 0x28) <= -(BattleScene_GetParticipantHeight(active_pokemon) * 2.5)) {
+        func_8000D700(transform + 0x1E, 0, (s16)(active_pokemon->facingDirection << 0xE), 0);
+        func_82109C88(active_pokemon);
+        func_8210942C((s32)active_pokemon);
     }
 }
 
@@ -453,7 +457,7 @@ void BattleAnim_Dig(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
             break;
 
         case 2:
-            func_8210A7D8(owner, animated_pokemon);
+            BattleAnim_DigSinkUnderground(owner, animated_pokemon);
             break;
     }
 }
@@ -687,7 +691,7 @@ void BattleAnim_MinimizeContinue(s32 arg0, s32 arg1) {
     func_8210C1A8(arg0 + 0x30, 0x3F266666, 0x3D23D70A);
     func_8210C1A8(arg0 + 0x34, 0x3F266666, 0x3D23D70A);
     func_8210C1A8(arg0 + 0x38, 0x3F266666, 0x3D23D70A);
-    if (func_82109824(arg1) != 0) {
+    if (BattleAnim_StepMinimizeAfterimages(arg1) != 0) {
         func_82109C88(arg1);
         func_8210942C(arg1);
     }
@@ -1082,7 +1086,7 @@ void BattleAnim_PlayTransformInducingAnimation(s32 side_index) {
             BattleAnim_Surf(owner, animated_pokemon);
             break;
         case 11:
-            func_8210A3DC((s32)owner, (s8*)animated_pokemon);
+            BattleAnim_RunSwayTransform((s32)owner, (s8*)animated_pokemon);
             break;
         case 12:
             BattleAnim_Withdraw(owner, animated_pokemon);

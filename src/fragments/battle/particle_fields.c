@@ -22,7 +22,6 @@ void Particle_SetPrimAlpha(s8 *arg0, char arg1);
 void Particle_Param0_SetS16_0BCA8(Particle* arg0, s16 arg1);
 void Particle_Countdown_SetS16_0BE14(Particle* arg0, s16 arg1);
 void Particle_SpawnIndex_SetS16_0BED8(Particle* arg0, s16 arg1);
-void Particle_ByteParam1_SetU8_0BEEC(Particle* arg0, u8 arg1);
 
 /**
  * Store the parameter only when it differs from the field-specific sentinel.
@@ -44,7 +43,7 @@ void Particle_SetFieldOffsetACIfNotSentinel(Particle* arg0, s16 arg1) {
  */
 void Particle_SetFieldOffsetCFIfNotSentinel(Particle* arg0, u8 arg1) {
     if ((u32)arg0 != -1) {
-        Particle_ByteParam1_SetU8_0BEEC(arg0, arg1);
+        Particle_SetByteParam1(arg0, arg1);
     }
 }
 
@@ -84,22 +83,27 @@ void Particle_SetFieldOffsetCEIfNotSentinel(Particle* arg0, u8 arg1) {
     }
 }
 
-void func_8213C3B8(s8 *arg0, unsigned char arg1)
+/**
+ * Sets byteParam0 (0xC9) to arg1, unless the particle pointer is -1.
+ * @unverified Name guessed from the code.
+ */
+void Particle_SetByteParam0Checked(s8 *particle, unsigned char value)
 {
   int new_var; // FAKE: permuter temp
-  new_var = arg0 != ((s8 *) (-1));
+  new_var = particle != ((s8 *) (-1));
   if (new_var)
   {
-    *((s8 *) (((s8 *) arg0) + 0xC9)) = (s8) (arg1 & 0xFF);
+    *((s8 *) (((s8 *) particle) + 0xC9)) = (s8) (value & 0xFF);
   }
 }
 
 /**
  * Sets field A6 of the particle to arg1, unless the particle pointer is -1.
+ * @unverified Name guessed from the code.
  */
-void func_8213C3D4(s8 *arg0, s16 arg1) {
-    if (arg0 != (s8 *)-1) {
-        M2C_FIELD(arg0, s16 *, 0xA6) = arg1;
+void Particle_SetParam1Checked(s8 *particle, s16 value) {
+    if (particle != (s8 *)-1) {
+        M2C_FIELD(particle, s16 *, 0xA6) = value;
     }
 }
 
@@ -129,10 +133,11 @@ void Particle_SetFieldOffsetAAIfNotSentinel(Particle* arg0, s16 arg1) {
 
 /**
  * Sets field AC of the particle to arg1, unless the particle pointer is -1.
+ * @unverified Name guessed from the code.
  */
-void func_8213C444(s8 *arg0, s16 arg1) {
-    if (arg0 != (s8 *)-1) {
-        M2C_FIELD(arg0, s16 *, 0xAC) = arg1;
+void Particle_SetScratchBChecked(s8 *particle, s16 value) {
+    if (particle != (s8 *)-1) {
+        M2C_FIELD(particle, s16 *, 0xAC) = value;
     }
 }
 
@@ -175,9 +180,11 @@ s16 Particle_GetSpawnIndex(s8 *arg0) {
     return M2C_FIELD(arg0, s16 *, 0xA8);
 }
 
-//@unverified
-/** Returns the particle's unk_CF byte (offset 0xCB). */
-s16 func_8213C484(Particle* arg0) {
+/**
+ * Returns the particle's byteParam1 (+0xCB) as an s16. Most callers pass the particle through a0.
+ * @unverified Name guessed from the code.
+ */
+s16 Particle_GetByteParam1(Particle* arg0) {
     u8 value = arg0->byteParam1;
 
     return value;

@@ -14,11 +14,11 @@ typedef struct SchedTask {
     /* 0x60 */ char unk60[0x8];
 } SchedTask; // size = 0x68
 
-// A thread that gets a 'VTRE' message on every video retrace (func_800049E8).
+// A thread that gets a 'VTRE' message on every video retrace (Sched_BroadcastMessage).
 typedef struct SchedClient {
     /* 0x00 */ OSMesg mesgBuf[4]; // @unverified: buffer of queue, created with 4 entries in DisplayWorker_ThreadMain
-    /* 0x10 */ OSMesgQueue queue; // @unverified: func_800049E8 sends 'VTRE' to it, func_80004920 receives from it
-    /* 0x28 */ struct SchedClient* next; // @unverified: list link walked in func_80004EA8 and Sched_RemoveClient
+    /* 0x10 */ OSMesgQueue queue; // @unverified: Sched_BroadcastMessage sends 'VTRE' to it, SchedClient_WaitMessage receives from it
+    /* 0x28 */ struct SchedClient* next; // @unverified: list link walked in Sched_AddClient and Sched_RemoveClient
 } SchedClient; // size = 0x2C
 
 typedef struct Scheduler {
@@ -27,7 +27,7 @@ typedef struct Scheduler {
     /* 0x9B0 */ OSMesg mesgBuf[16]; // @unverified: buffer of queue (also the top of threadStack)
     /* 0x9F0 */ OSMesgQueue queue;
     /* 0xA08 */ u64 time;
-    /* 0xA10 */ SchedClient* clients; // @unverified: head of the retrace client list (func_80004EA8, func_800049E8)
+    /* 0xA10 */ SchedClient* clients; // @unverified: head of the retrace client list (Sched_AddClient, Sched_BroadcastMessage)
     /* 0xA14 */ SchedTask* runningTask; // @unverified: the task on the RSP now (Sched_HandleRspEvent)
     /* 0xA18 */ SchedTask* audioTask; // @unverified: the audio task to run (Sched_HandleRetrace, Sched_HandleRspEvent)
     /* 0xA1C */ SchedTask* gfxTask; // @unverified: the graphics or JPEG task to run (Sched_SubmitTask, Sched_HandleRdpEvent)

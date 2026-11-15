@@ -26,9 +26,9 @@ extern Gfx D_82193E18[];
 
 
 void BattleAnim_EndEffect16_NoOpDraw(void);
-void func_8216D978(void);
-void func_8216D980(void);
-void func_8216D988(void);
+void BattleAnim_UnusedNopA(void);
+void BattleAnim_UnusedNopB(void);
+void BattleAnim_UnusedNopC(void);
 
 /**
  * Empty end callback for effect 16.
@@ -40,18 +40,21 @@ void BattleAnim_EndEffect16_NoOpDraw(void) {
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8216D978(void) {
+void BattleAnim_UnusedNopA(void) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8216D980(void) {
+void BattleAnim_UnusedNopB(void) {
 }
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8216D988(void) {
+void BattleAnim_UnusedNopC(void) {
 }

@@ -32,16 +32,19 @@ s8 *func_80016C70(s32, M2C_UNK *);                /* extern */
 extern M2C_UNK D_80060740;
 extern s32 D_800AD1B0;
 
-void func_80017F54(s8 *arg0, s16 arg1, s16 arg2) {
+/**
+ * Builds the renderer's offscreen scene (geo layout D_80060740) and sets its viewport to `width` x `height`.
+ */
+void PokeIcon_CreateScene(s8 *renderer, s16 width, s16 height) {
     s32 sp24;
     s32 temp_v0;
 
     temp_v0 = func_80002B10(main_pool_get_available(), 0);
     sp24 = temp_v0;
-    M2C_FIELD(arg0, s8 **, 0xC) = func_80016C70(temp_v0, &D_80060740);
-    M2C_FIELD(arg0, s32 *, 0x10) = (s32) D_800AD1B0;
+    M2C_FIELD(renderer, s8 **, 0xC) = func_80016C70(temp_v0, &D_80060740);
+    M2C_FIELD(renderer, s32 *, 0x10) = (s32) D_800AD1B0;
     func_80002B60(sp24);
-    func_80010B3C(M2C_FIELD(M2C_FIELD(arg0, s8 **, 0xC), s32 *, 0xC), 0, 0, arg1, (s32) arg2);
+    func_80010B3C(M2C_FIELD(M2C_FIELD(renderer, s8 **, 0xC), s32 *, 0xC), 0, 0, width, (s32) height);
 }
 
 /** Creates the render list for a Pokemon icon. */
@@ -68,16 +71,17 @@ PokeIconRenderer* PokeIcon_CreateRenderList(ModelLoadContext* arg0, s16 arg1, s1
             bzero(temp_v0->slots[i].image->img_p, arg2 * arg3 * 2);
         }
 
-        func_80017F54((s8*)temp_v0, arg2, arg3);
+        PokeIcon_CreateScene((s8*)temp_v0, arg2, arg3);
     }
     return temp_v0;
 }
 
-M2C_UNK func_80017D00(s32);                         /* extern */
 M2C_UNK func_800199E4(s32);                         /* extern */
-M2C_UNK func_8004FD20(s32, s32, u16, u16);          /* extern */
-
-void func_80018168(PokeIconRenderer* arg0) {
+M2C_UNK func_8004FD20(s32, s32, u16, u16);          /**
+ * Waits for any pending model load, then clears every slot's image and marks the slots empty. Free Battle
+ * setup calls it before refilling its portraits.
+ */
+void PokeIcon_ResetSlots(PokeIconRenderer* arg0) {
     s32 var_s0;
     s32 var_s2;
     u16 temp_a2;
@@ -86,7 +90,7 @@ void func_80018168(PokeIconRenderer* arg0) {
     GfxImage* temp_v1;
 
     if (arg0->flags & 1) {
-        func_80017D00((s32)arg0->loadContext);
+        PokeIcon_WaitFrameLoad(arg0->loadContext);
         func_800199E4((s32)arg0->displayObject);
     }
     arg0->flags = 0U;
@@ -109,44 +113,53 @@ void func_80018168(PokeIconRenderer* arg0) {
     }
 }
 
-void func_80018234(PokeIconRenderer* arg0, s32 arg1, s32 arg2, u16 arg3) {
+/**
+ * Clears slot `slot` and queues a render of `species` (dex number; out of range uses 152, the
+ * placeholder) on background `fillColor`, scaled by the species' model size.
+ */
+void PokeIcon_SetSpeciesSlot(PokeIconRenderer* renderer, s32 slot, s32 species, u16 fillColor) {
     GfxImage* buf;
     UNUSED s32 pad; // FAKE: stack padding
 
-    if (arg1 < arg0->slotCount) {
-        buf = arg0->slots[arg1].image;
+    if (slot < renderer->slotCount) {
+        buf = renderer->slots[slot].image;
         func_8004FD20((s32)buf->img_p, buf->width * buf->height * 2, buf->width, buf->height);
-        if ((arg2 <= 0) || (arg2 >= 0x98)) {
-            arg2 = 0x98;
+        if ((species <= 0) || (species >= 0x98)) {
+            species = 0x98;
         }
-        arg0->slots[arg1].flags = 1;
-        arg0->slots[arg1].fillColor = arg3 & 0xFFFE;
-        arg0->slots[arg1].source.raw = arg2;
-        arg0->slots[arg1].scale = *(s16*)&gSpeciesDataById[arg2 - 1][0x1A] / 100.0f;
-        arg0->slots[arg1].colorVariant.raw = 0;
+        renderer->slots[slot].flags = 1;
+        renderer->slots[slot].fillColor = fillColor & 0xFFFE;
+        renderer->slots[slot].source.raw = species;
+        renderer->slots[slot].scale = *(s16*)&gSpeciesDataById[species - 1][0x1A] / 100.0f;
+        renderer->slots[slot].colorVariant.raw = 0;
     }
 }
 
 void Model_ComputeNicknameColorVariant(arg1_func_80010CA8*);
-void func_8001833C(PokeIconRenderer* arg0, s32 arg1, BattleMon* arg2, u16 arg3) {
+/**
+ * Clears slot `slot` and queues a render of party Pokémon `mon` (its species, size and nickname color
+ * variant) on background `fillColor`; an invalid species falls back to the placeholder. Used for the
+ * portraits in Free Battle setup, registration and the GB Player party icons.
+ */
+void PokeIcon_SetMonSlot(PokeIconRenderer* renderer, s32 slot, BattleMon* mon, u16 fillColor) {
     GfxImage* buf;
     UNUSED s32 pad; // FAKE: stack padding
 
-    if (arg1 < arg0->slotCount) {
-        buf = arg0->slots[arg1].image;
+    if (slot < renderer->slotCount) {
+        buf = renderer->slots[slot].image;
         func_8004FD20((s32)buf->img_p, buf->width * buf->height * 2, buf->width, buf->height);
-        if ((arg2->species.id > 0) && (arg2->species.id < 0x98)) {
-            arg0->slots[arg1].flags = 3;
-            arg0->slots[arg1].source.ptr = (u8*)arg2;
-            arg0->slots[arg1].fillColor = arg3 & 0xFFFE;
-            arg0->slots[arg1].scale = *(s16*)&gSpeciesDataById[arg2->species.id - 1][0x1A] / 100.0f;
-            Model_ComputeNicknameColorVariant(&arg0->slots[arg1].colorVariant);
+        if ((mon->species.id > 0) && (mon->species.id < 0x98)) {
+            renderer->slots[slot].flags = 3;
+            renderer->slots[slot].source.ptr = (u8*)mon;
+            renderer->slots[slot].fillColor = fillColor & 0xFFFE;
+            renderer->slots[slot].scale = *(s16*)&gSpeciesDataById[mon->species.id - 1][0x1A] / 100.0f;
+            Model_ComputeNicknameColorVariant(&renderer->slots[slot].colorVariant);
         } else {
-            arg0->slots[arg1].flags = 1;
-            arg0->slots[arg1].fillColor = arg3 & 0xFFFE;
-            arg0->slots[arg1].source.raw = 0x98;
-            arg0->slots[arg1].scale = *(s16*)&gSpeciesDataById[0x97][0x1A] / 100.0f;
-            arg0->slots[arg1].colorVariant.raw = 0;
+            renderer->slots[slot].flags = 1;
+            renderer->slots[slot].fillColor = fillColor & 0xFFFE;
+            renderer->slots[slot].source.raw = 0x98;
+            renderer->slots[slot].scale = *(s16*)&gSpeciesDataById[0x97][0x1A] / 100.0f;
+            renderer->slots[slot].colorVariant.raw = 0;
         }
     }
 }

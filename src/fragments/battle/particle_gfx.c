@@ -200,31 +200,37 @@ void ParticleGfx_NoopStub2(void) {
 void ParticleGfx_NoopStub3(void) {
 }
 
-s32 func_82168F54(s32 arg0)
+/**
+ * Returns how many times value can be halved before it reaches 1 (log2 for powers of two).
+ * @unverified Name guessed from the code.
+ */
+s32 ParticleGfx_Log2(s32 value)
 {
   s32 var_v1;
-  arg0 = arg0; // FAKE: self-assignment
+  value = value; // FAKE: self-assignment
   var_v1 = 0;
   do
   {
-    arg0 = arg0 / 2;
+    value = value / 2;
     var_v1 += 1;
   }
-  while (arg0 != 1);
+  while (value != 1);
   return var_v1;
 }
 
 /**
  * Sets the render mode to 0x0C180000 / 0x5978.
+ * @unverified Name guessed from the code.
  */
-void func_82168F7C(void) {
+void ParticleGfx_SetRenderModeXlu(void) {
     gDPSetRenderMode(gDisplayListHead++, 0x0C180000, 0x5978);
 }
 
 /**
  * Loads a 256-color palette.
+ * @unverified Name guessed from the code.
  */
-void func_82168FAC(u16* palette) {
+void ParticleGfx_LoadTlut256(u16* palette) {
     gDPLoadTLUT_pal256(gDisplayListHead++, palette);
 }
 
@@ -269,11 +275,12 @@ void ParticleGfx_SetEnvColor(u8 r, u8 g, u8 b, u8 a) {
 
 /**
  * Sets the prim color (arg0, arg1, arg2, alpha arg6) and env color (arg3, arg4, arg5).
+ * @unverified Name guessed from the code.
  */
-void func_82169200(u8 arg0, u8 arg1, u8 arg2, u8 arg3, u8 arg4, u8 arg5, u8 arg6) {
+void ParticleGfx_SetPrimEnvColor(u8 prim_r, u8 prim_g, u8 prim_b, u8 env_r, u8 env_g, u8 env_b, u8 prim_a) {
     gDPPipeSync(gDisplayListHead++);
-    gDPSetPrimColor(gDisplayListHead++, 0, 0, arg0, arg1, arg2, arg6);
-    gDPSetEnvColor(gDisplayListHead++, arg3, arg4, arg5, 0);
+    gDPSetPrimColor(gDisplayListHead++, 0, 0, prim_r, prim_g, prim_b, prim_a);
+    gDPSetEnvColor(gDisplayListHead++, env_r, env_g, env_b, 0);
 }
 
 /**
@@ -456,8 +463,9 @@ s32 ParticleGfx_TextureSizeLog2(s32 arg0) {
 
 /**
  * Sets up the load and render tiles for a width x height RGBA16 texture loaded as a block.
+ * @unverified Name guessed from the code.
  */
-void func_82169B14(s32 width, s32 height) {
+void ParticleGfx_SetTilesRgba16Block(s32 width, s32 height) {
     gDPPipeSync(gDisplayListHead++);
     gDPTileSync(gDisplayListHead++);
     gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 0, 0, G_TX_LOADTILE, 0,
@@ -470,8 +478,9 @@ void func_82169B14(s32 width, s32 height) {
 
 /**
  * Sets up the load and render tiles for a width x height RGBA16 texture loaded as a tile.
+ * @unverified Name guessed from the code.
  */
-void func_82169BF0(s32 width, s32 height) {
+void ParticleGfx_SetTilesRgba16Tile(s32 width, s32 height) {
     gDPPipeSync(gDisplayListHead++);
     gDPTileSync(gDisplayListHead++);
     gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, ((width * 2 + 7) >> 3), 0, G_TX_LOADTILE, 0,
@@ -485,8 +494,9 @@ void func_82169BF0(s32 width, s32 height) {
 /**
  * Sets up the load and render tiles for a width x height RGBA32 texture loaded as a block.
  * The render tile line uses the RGBA16 size (width * 2 bytes).
+ * @unverified Name guessed from the code.
  */
-void func_82169CCC(s32 width, s32 height) {
+void ParticleGfx_SetTilesRgba32Block(s32 width, s32 height) {
     gDPPipeSync(gDisplayListHead++);
     gDPTileSync(gDisplayListHead++);
     gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 0, 0, G_TX_LOADTILE, 0,
@@ -500,8 +510,9 @@ void func_82169CCC(s32 width, s32 height) {
 /**
  * Sets up the load and render tiles for a width x height RGBA32 texture loaded as a tile.
  * The line size uses the RGBA16 size (width * 2 bytes).
+ * @unverified Name guessed from the code.
  */
-void func_82169DA8(s32 width, s32 height) {
+void ParticleGfx_SetTilesRgba32Tile(s32 width, s32 height) {
     gDPPipeSync(gDisplayListHead++);
     gDPTileSync(gDisplayListHead++);
     gDPSetTile(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, ((width * 2 + 7) >> 3), 0, G_TX_LOADTILE, 0,
@@ -514,8 +525,9 @@ void func_82169DA8(s32 width, s32 height) {
 
 /**
  * Loads a width x height RGBA16 texture as one block.
+ * @unverified Name guessed from the code.
  */
-void func_82169E84(u8* texture, s32 width, s32 height) {
+void ParticleGfx_LoadRgba16Block(u8* texture, s32 width, s32 height) {
     gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, 1, texture);
     gDPLoadSync(gDisplayListHead++);
     gDPLoadBlock(gDisplayListHead++, G_TX_LOADTILE, 0, 0, width * height - 1, CALC_DXT(width, G_IM_SIZ_16b_BYTES));
@@ -523,8 +535,9 @@ void func_82169E84(u8* texture, s32 width, s32 height) {
 
 /**
  * Loads a width x height RGBA16 texture as a tile.
+ * @unverified Name guessed from the code.
  */
-void func_82169F74(void* img, s32 width, s32 height) {
+void ParticleGfx_LoadRgba16Tile(void* img, s32 width, s32 height) {
     gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_16b, width, img);
     gDPLoadSync(gDisplayListHead++);
     gDPLoadTile(gDisplayListHead++, G_TX_LOADTILE, 0, 0, (width - 1) << G_TEXTURE_IMAGE_FRAC, (height - 1) << G_TEXTURE_IMAGE_FRAC);
@@ -532,8 +545,9 @@ void func_82169F74(void* img, s32 width, s32 height) {
 
 /**
  * Loads a width x height RGBA32 texture as one block.
+ * @unverified Name guessed from the code.
  */
-void func_82169FF8(u8* texture, s32 width, s32 height) {
+void ParticleGfx_LoadRgba32Block(u8* texture, s32 width, s32 height) {
     gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, 1, texture);
     gDPLoadSync(gDisplayListHead++);
     gDPLoadBlock(gDisplayListHead++, G_TX_LOADTILE, 0, 0, width * height - 1, CALC_DXT(width, G_IM_SIZ_32b_BYTES));
@@ -541,8 +555,9 @@ void func_82169FF8(u8* texture, s32 width, s32 height) {
 
 /**
  * Loads a width x height RGBA32 texture as a tile.
+ * @unverified Name guessed from the code.
  */
-void func_8216A0E8(void* img, s32 width, s32 height) {
+void ParticleGfx_LoadRgba32Tile(void* img, s32 width, s32 height) {
     gDPSetTextureImage(gDisplayListHead++, G_IM_FMT_RGBA, G_IM_SIZ_32b, width, img);
     gDPLoadSync(gDisplayListHead++);
     gDPLoadTile(gDisplayListHead++, G_TX_LOADTILE, 0, 0, (width - 1) << G_TEXTURE_IMAGE_FRAC, (height - 1) << G_TEXTURE_IMAGE_FRAC);

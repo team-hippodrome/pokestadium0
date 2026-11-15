@@ -407,27 +407,28 @@ void BattleAnim_PlaySoundEffect3(void) {
     Audio_PlaySoundEffectById(SFX_MENU_BACK);
 }
 
-/*
- * func_82134DA0
- *
+/**
  * Calls Audio_PlayCommand(5, arg1, arg1).  The first argument (a 16-bit
  * value) is accepted but never used; the second argument is passed both as
  * the command parameter and in the third (unused) slot.  The meaning of
  * command 5 is not determined here.
+ * @unverified Name guessed from the code.
  */
-void func_82134DA0(s16 arg0, s32 arg1) {
-    Audio_PlayCommand(5, arg1, arg1);
+void BattleSound_PlayCommand5(s16 unused, s32 param) {
+    Audio_PlayCommand(5, param, param);
 }
 
-M2C_UNK func_80041374(M2C_UNK, s32);                /* extern */
+M2C_UNK Audio_StopSoundByCategory(M2C_UNK, s32);                /* extern */
 
-void func_82134DC8(s32 arg0) {
-    func_80041374(5, arg0);
+/**
+ * Calls Audio_StopSoundByCategory(5, param).
+ * @unverified Name guessed from the code.
+ */
+void BattleSound_SendCommand5(s32 param) {
+    Audio_StopSoundByCategory(5, param);
 }
 
 /*
- * func_82134DEC
- *
  * Calls Audio_PlayCry(arg0, 2) with arg0 taken as a signed 16-bit value
  * (sign-extended before the call).  The `* 1` is there on purpose: it makes
  * IDO emit the separate shift pair (sll 16 / sra 16) the retail code has
@@ -436,9 +437,10 @@ void func_82134DC8(s32 arg0) {
 void Audio_PlayCry(s32, s32);
 /**
  * Plays the cry of species arg0 with mode 2.
+ * @unverified Name guessed from the code.
  */
-void func_82134DEC(s16 arg0) {
-    Audio_PlayCry(arg0 * 1, 2); // FAKE: no-op * 1
+void BattleSound_PlayCry(s16 species) {
+    Audio_PlayCry(species * 1, 2); // FAKE: no-op * 1
 }
 
 extern f32 D_FLT_82189360[][4];
@@ -491,51 +493,46 @@ void BattleAnim_PlayBattleSequenceById(ActivePokemon* active_pokemon, s32 sequen
     }
 }
 
-M2C_UNK func_80041940();
-void func_80042508(s32);
+M2C_UNK Announcer_SetHp();
+void Announcer_CommentOnMove(s32);
 s32 func_82107A5C(s8*);
-/*
- * func_82134FD0
- *
+/**
  * Takes the active Pokemon's roster entry (teamRoster->pokemonPicked indexed
- * by state.rosterIndex) and calls func_80041940 with the side index of the
+ * by state.rosterIndex) and calls Announcer_SetHp with the side index of the
  * Pokemon (func_82107A5C), the entry's hp and its unk_26.  Unless the display
- * object's objectType is 0x98, it then calls func_80042508 with the side index,
+ * object's objectType is 0x98, it then calls Announcer_CommentOnMove with the side index,
  * OR-ed with 0x10 when the entry's status byte has a sleep bit (mask 0x07) or
  * the freeze bit (0x20) set, or when the scene's unk_48 is 0x1F or 0x1B.
- * Related to func_82135098, which makes the func_80041940 call alone.
- * Notes: func_80041940 is declared without a prototype because this function
- * passes three arguments while func_82135098 passes four; the unused "pad"
+ * Related to BattleSound_UpdateSideHp, which makes the Announcer_SetHp call alone.
+ * Notes: Announcer_SetHp is declared without a prototype because this function
+ * passes three arguments while BattleSound_UpdateSideHp passes four; the unused "pad"
  * local only reproduces the retail stack slot of "mon" (0x18).  What
- * func_80041940/func_80042508 do is not established here (they look like
+ * Announcer_SetHp/Announcer_CommentOnMove do is not established here (they look like
  * audio calls, but that is a guess).
+ * @unverified Name guessed from the code.
  */
-void func_82134FD0(ActivePokemon* arg0) {
+void BattleSound_UpdateSideHpAndStatus(ActivePokemon* active_pokemon) {
     UNUSED s32 pad; // FAKE: stack padding
-    BattleMon* mon = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
+    BattleMon* mon = &active_pokemon->teamRoster->pokemonPicked[active_pokemon->state.rosterIndex];
 
-    func_80041940(func_82107A5C(arg0), mon->hp, mon->maxHp);
-    if (arg0->displayObject.objectType != 0x98) {
+    Announcer_SetHp(func_82107A5C(active_pokemon), mon->hp, mon->maxHp);
+    if (active_pokemon->displayObject.objectType != 0x98) {
         if ((mon->statusCondition & 7) || (mon->statusCondition & 0x20) ||
             (sBattleScene.scene->moveEffectKind == 0x1F) || (sBattleScene.scene->moveEffectKind == 0x1B)) {
-            func_80042508(func_82107A5C(arg0) | 0x10);
+            Announcer_CommentOnMove(func_82107A5C(active_pokemon) | 0x10);
         } else {
-            func_80042508(func_82107A5C(arg0));
+            Announcer_CommentOnMove(func_82107A5C(active_pokemon));
         }
     }
 }
 
 s32 func_82107A5C(s8 *);                          /* extern */
-//@unverified
 /**
- * Unless arg0 is model 152 (0x98), passes func_82107A5C(arg0), its runtime HP
- * and its party Pokemon's maximum HP (unk_26) to func_80041940.
-//@unverified
-/**
- * Unless arg0 is model 152 (0x98), passes func_82107A5C(arg0), its runtime HP
- * and its party Pokemon's maximum HP (unk_26) to func_80041940.
+ * Same as BattleSound_UpdateSideHpAndStatus without the status call: passes the Pokemon's side,
+ * battle HP (0x7D2) and max HP to Announcer_SetHp, unless its display object type is 0x98.
+ * @unverified Name guessed from the code.
  */
-void func_82135098(ActivePokemon* arg0) {
+void BattleSound_UpdateSideHp(ActivePokemon* arg0) {
     s32 side;
     BattleMon* mon = &arg0->teamRoster->pokemonPicked[arg0->state.rosterIndex];
 

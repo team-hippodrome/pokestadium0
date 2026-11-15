@@ -7,7 +7,6 @@
 
 // Declared here instead of in a header: the callers of these disagree on their types.
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32);
-M2C_UNK func_8213E4D8(s8 *);
 
 /**
  * Builds a reflection look-at matrix from the battle camera for environment-mapped
@@ -25,7 +24,7 @@ void BattleAnim_SetupReflectiveCamera(void) {
                     temp_v0->view.upDirection.y, temp_v0->view.upDirection.z);
 }
 
-void func_82154704(s8*);
+void BattleAnim_OffsetParticleForSpecies(s8*);
 /**
  * Lifecycle init for a model particle: the CF parameter picks the model and animation
  * assets (and sometimes an offset, color or species scale). arg1 0 plays the animation,
@@ -40,12 +39,12 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
     s16 sp26;
     s16 sp24 = Particle_FieldCD_GetU8_0C048(arg0);
 
-    switch (Particle_FieldCF_GetS16_0C058(arg0)) {
+    switch (Particle_GetByteParam1(arg0)) {
         case 30:
             sp2A = 0x23;
             sp28 = 0x24;
             Particle_PositionOffset_AddYScaled_08E90(arg0, 10.0f);
-            func_82154704(arg0);
+            BattleAnim_OffsetParticleForSpecies(arg0);
             break;
 
         case 0:
@@ -69,7 +68,7 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
         case 3:
             sp2A = 0x73;
             sp28 = 0x74;
-            sp2C = func_8215AEA4(arg0);
+            sp2C = BattleAnim_GetLargeSpeciesParticleScale(arg0);
             Particle_SetPrimAlpha(arg0, 0);
             Particle_PositionOffset_SetYScaled_08CA0(arg0, 5.0f);
             break;
@@ -129,7 +128,7 @@ void BattleAnim_SelectParticleModelFrames(Particle* arg0, s32 arg1) {
         case 11:
             sp2A = 0x88;
             sp28 = 0x89;
-            sp2C = func_8215B6A4(arg0);
+            sp2C = BattleAnim_OffsetAndScaleParticleForLargeSpecies(arg0);
             break;
 
         case 12:
@@ -675,7 +674,7 @@ void BattleAnim_RunThunderWaveHitEffect(Particle* arg0) {
     }
 
     Particle_ApproachScale(arg0, 0.0f, 0.1f);
-    Particle_AddVelocityXZFromRotationYViaImpulse(arg0);
+    Particle_MoveXZAlongRotationY(arg0);
 }
 
 /**
@@ -722,27 +721,28 @@ void BattleAnim_SetupMove86StartDescriptor24(Particle* arg0) {
 /**
  * Particle callback: init, wait for the spawn step, then the later stages; scale moves
  * toward 10 by 0.05 and the particle rises every frame.
+ * @unverified Name guessed from the code.
  */
-void func_82153E28(Particle* arg0) {
+void BattleAnim_CallbackMove86StartDescriptor24(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82153D00(arg0);
+        func_82153D00(particle);
         break;
     case 2:
-        func_821406B4(arg0);
+        func_821406B4(particle);
         break;
     case 3:
-        func_82140548(arg0, 0, 0x20);
+        func_82140548(particle, 0, 0x20);
         break;
     case 4:
-        Particle_DisableAndDetach(arg0);
+        Particle_DisableAndDetach(particle);
         break;
     }
-    func_82140228(arg0, 0x41200000, 0x3D4CCCCD);
-    func_8213E4D8(arg0);
+    func_82140228(particle, 0x41200000, 0x3D4CCCCD);
+    Particle_MoveXZAlongRotationY(particle);
 }
 
 /**
@@ -876,7 +876,8 @@ void BattleAnim_SleepMovePhaseFadeOut(Particle* arg0) {
 /**
  * Effect start init 1 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Hypnosis, Lovely Kiss, Sing, Sleep Powder, Spore.
+ * @unverified Name guessed from the code.
  */
-void func_821542BC(void) {
+void BattleAnim_StartEffect1Sleep(void) {
     func_8213B560(0, &func_82154248, &D_8218E700, 0, 1, 0x10, 7, 0, 0);
 }

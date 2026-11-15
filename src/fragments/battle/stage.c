@@ -56,13 +56,13 @@ void Battle_SetStageScale(f32 scale);
 void Battle_RenderActivePokemonThumbnail(GraphNode* thumbnail_root, GfxImage* thumbnail);
 void Battle_DrawTexturedRectSegment(s32 x1, s32 y1, s32 draw_width, s32 height, u8* texture, s32 load_width);
 void Battle_FillActivePokemonThumbnail(GraphNode* thumbnail_root, GfxImage* thumbnail);
-void func_82100CB8(void);
-void func_82100CC0(void);
+void BattleStage_UnusedNopA(void);
+void BattleStage_UnusedNopB(void);
 s32 BattleScene_UpdateFrame(s32 fade_mode);
 s32 BattleScene_UpdatePausedFrame(s32 fade_mode);
 void Battle_CompleteRosterOrder(u8* roster_order, s32 number_of_pokemon_picked);
 void BattleScene_InitializeParticipantPresentation(BattleSide* side, unk_D_86002F30* model);
-void func_8210186C(void);
+void BattleStage_UnusedNopC(void);
 
 void Battle_DrawStageBackdrop(void);
 void Battle_DrawClippedTextureRect(s32 x1, s32 y1, s32 x2, s32 y2);
@@ -238,7 +238,7 @@ void Battle_RenderActivePokemonThumbnail(GraphNode* thumbnail_root, GfxImage* th
     }
 }
 
-s32 func_80006B50(s32 *, s32 *, s32 *, s32 *);
+s32 Stage_ClipRectToClearArea(s32 *, s32 *, s32 *, s32 *);
 /**
  * called every frame: bug boy in GLC
  * Use clipped destination offsets as 10.5 texture coordinates with a half-texel bias.
@@ -251,7 +251,7 @@ void Battle_DrawClippedTextureRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 x0 = arg0;
     s32 y0 = arg1;
 
-    if (func_80006B50(&arg0, &arg1, &arg2, &arg3) != 0) {
+    if (Stage_ClipRectToClearArea(&arg0, &arg1, &arg2, &arg3) != 0) {
         x0 = ((arg0 - x0) << 5) + 16;
         y0 = ((arg1 - y0) << 5) + 16;
         gSPTextureRectangle(gDisplayListHead++, arg0 << 2, arg1 << 2, (arg2 + 1) << 2, (arg3 + 1) << 2,
@@ -379,15 +379,17 @@ void Battle_UpdateFaintBatches(void) {
 // Empty retail hook; its intended purpose is not established.
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82100CB8(void) {
+void BattleStage_UnusedNopA(void) {
 }
 
 // Empty retail hook; no purpose is established by callers in this fragment.
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_82100CC0(void) {
+void BattleStage_UnusedNopB(void) {
 }
 
 // called every frame: bug boy in GLC
@@ -520,9 +522,9 @@ s32 Battle_FrameCallback(s32 fade_mode) {
     s32 battle_result = 0;
 
     Cont_StartReadInputs();
-    Trainer_RequestPokeIcon(&sBattleSides[0]);
+    BattleSide_RequestModelLoad(&sBattleSides[0]);
     PokeIcon_WaitFrameLoadForObject(&sBattleSides[0]);
-    Trainer_RequestPokeIcon(&sBattleSides[1]);
+    BattleSide_RequestModelLoad(&sBattleSides[1]);
     PokeIcon_WaitFrameLoadForObject(&sBattleSides[1]);
     Cont_ReadInputs();
     Input_ResetRepeatState();
@@ -651,7 +653,7 @@ void BattleScene_InitializeParticipantPresentation(BattleSide* side, unk_D_86002
     side->unk_1C = 0;
     side->displayModel = first_trainer->pokemonPicked[0].species.id;
     side->displayMon = first_trainer->pokemonPicked;
-    Trainer_RequestPokeIcon(side);
+    BattleSide_RequestModelLoad(side);
 }
 
 typedef struct Unit82101324 {
@@ -707,9 +709,15 @@ void func_82100B84(void);
 void func_821070E0(s32, Unit82101324*);
 void func_821076FC(s32, CameraNode*, CameraNode*);
 void func_82134CC0(s32, CameraNode*);
-void func_821370DC(s32, CameraNode*);
+void func_821370DC(s32, CameraNode*); // BattleAnim_DispatchPresentation, declared here with the argument types this file's calls need
 
-s32 func_82101324(s32* arg0) { // FAKE: s32 return (value unused) fixes caller regalloc
+/**
+ * Sets up the battle stage: fonts, icon framebuffers, the thumbnail images, the stage assets
+ * and models, and runs the presentation, camera and participant setup for lifecycle stages 0
+ * and 3.
+ * @unverified Name from Stadium 1.
+ */
+s32 BattleScene_Init(s32* arg0) { // FAKE: s32 return (value unused) fixes caller regalloc
     UNUSED s32 pad; // FAKE
     MemoryBlock* block;
     unk_D_86002F30* model;
@@ -791,8 +799,9 @@ s32 func_82101324(s32* arg0) { // FAKE: s32 return (value unused) fixes caller r
 
 /**
  * Empty.
+ * @unverified Name guessed from the code.
  */
-void func_8210186C(void) {
+void BattleStage_UnusedNopC(void) {
 }
 
 extern s32 D_82198D1C;
@@ -801,19 +810,17 @@ void Audio_PlayMusicIfChanged(s32);
 s32 Storage_GetDiskStatus(void);
 void Audio_SetDiskReadyPolling(s32);
 void Audio_WaitForIdle(s32);
-//@unverified
 /**
- * Battle fragment entry. Stores the session context, sets D_82198D1C (0-3)
- * from the mode and round, pushes the 'BATL' pool state, sets up display lists
- * and a stage context, plays the mode's music, waits on Battle_FrameCallback
- * with BgStage_WaitForCondition, then runs a mode-dependent number of extra
- * frames and tears everything down. Returns 0.
+ * Stage entry: stores the session context, picks the battle kind (D_82198D1C) from the mode and
+ * round, allocates the stage context, sets up the battle scene, starts the mode's music and runs
+ * the stage loop.
+ * @unverified Name guessed from the code.
  */
-s32 func_82101874(s32 arg0, SessionContext *arg1)
+s32 BattleStage_Init(s32 unused, SessionContext *session)
 {
   StageContext *stage_context;
   SessionContext *ctx;
-  ctx = (D_82198D10 = arg1);
+  ctx = (D_82198D10 = session);
   sBattleSides = (BattleSide *) (((u8 *) ctx) + 0x1034);
   sCompletionGate = -2;
   if (ctx->mode == 0)
@@ -838,7 +845,7 @@ s32 func_82101874(s32 arg0, SessionContext *arg1)
   main_pool_push_state('BATL');
   Gfx_InitDisplayListBuffers(0x20000, 0);
   stage_context = StageContext_Allocate(0, 1, 3, 1, 2, 1);
-  func_82101324((s32*)stage_context);
+  BattleScene_Init((s32*)stage_context);
   switch (D_82198D10->mode)
   {
     case 3:

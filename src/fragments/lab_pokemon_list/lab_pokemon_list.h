@@ -175,7 +175,7 @@ typedef struct Entry89100140 {
     /* 0x04 */ s32 unk_04;
     /* 0x08 */ s32 unk_08;
     /* 0x0C */ s32 unk_0C;
-    /* 0x10 */ ByteMatrix boxes; // @unverified: 0x20-byte rows: 1 for てもち, 8 for the GB boxes, 4 for the cartridge boxes (func_89100140); row +0xC = checked, +0x1C = Pokémon count (func_891053B0)
+    /* 0x10 */ ByteMatrix boxes; // @unverified: 0x20-byte rows: 1 for てもち, 8 for the GB boxes, 4 for the cartridge boxes (LabPCList_InitSources); row +0xC = checked, +0x1C = Pokémon count (LabBoxList_GetBoxFlags)
     /* 0x20 */ s32 unk_20;
 } Entry89100140; // size = 0x24
 
@@ -243,23 +243,23 @@ typedef struct LabLevelInputWindow {
 } LabLevelInputWindow; // size = 0xE8
 
 /* A list of boxes that opens next to the source-select window when a box source is checked
- * (func_8910576C): one row per box, ボックス%d (Box %d), each with a check mark. */
+ * (LabBoxList_Init): one row per box, ボックス%d (Box %d), each with a check mark. */
 typedef struct LabBoxListWindow {
-    /* 0x00 */ WindowFrame frame; // @unverified: 156 wide, 28 per row (func_8910576C)
-    /* 0x20 */ Menu menu; // @unverified: items are the boxes of one source; itemFlags bit 3 = checked (func_8910587C)
+    /* 0x00 */ WindowFrame frame; // @unverified: 156 wide, 28 per row (LabBoxList_Init)
+    /* 0x20 */ Menu menu; // @unverified: items are the boxes of one source; itemFlags bit 3 = checked (LabBoxList_Update)
 } LabBoxListWindow; // size = 0x44
 
 /* The source-select window of the いちらん screen: 「どこのポケモンを いちらん するか えらんでください。」
- * (Which Pokémon do you want to list? Choose.), a checkbox row per source and an ＯＫ button (func_89105C54). */
+ * (Which Pokémon do you want to list? Choose.), a checkbox row per source and an ＯＫ button (LabSourceSelect_Init). */
 typedef struct LabSourceSelectWindow {
-    /* 0x000 */ s32 openBoxList; // @unverified: 0 = none, 1 = gbBoxes, 2 = cartBoxes takes the input (func_89106254)
-    /* 0x004 */ Window window; // @unverified: 308x206 (func_89105C54)
-    /* 0x030 */ WindowFrame textFrame; // @unverified: frame of the prompt text (func_89105E70)
+    /* 0x000 */ s32 openBoxList; // @unverified: 0 = none, 1 = gbBoxes, 2 = cartBoxes takes the input (LabSourceSelect_Update)
+    /* 0x004 */ Window window; // @unverified: 308x206 (LabSourceSelect_Init)
+    /* 0x030 */ WindowFrame textFrame; // @unverified: frame of the prompt text (LabSourceSelect_Draw)
     /* 0x050 */ WindowFrame listFrame; // @unverified: frame of the source rows
     /* 0x070 */ Menu menu; // @unverified: the sources: てもち, ゲームボーイのボックス, 64カセットのボックス; itemFlags bit 3 = checked
     /* 0x094 */ LabeledButton okButton; // @unverified: ＯＫ (D_8910E024)
-    /* 0x0D0 */ ChoiceCursor cursor; // @unverified: count 4: the three sources, then okButton (func_891060BC)
-    /* 0x0DC */ LabBoxListWindow gbBoxes; // @unverified: boxes of row 1 (func_89105C54)
+    /* 0x0D0 */ ChoiceCursor cursor; // @unverified: count 4: the three sources, then okButton (LabSourceSelect_UpdateSources)
+    /* 0x0DC */ LabBoxListWindow gbBoxes; // @unverified: boxes of row 1 (LabSourceSelect_Init)
     /* 0x120 */ LabBoxListWindow cartBoxes; // @unverified: boxes of row 2
     /* 0x164 */ u16 itemFlags[4]; // @unverified: menu.itemFlags
     /* 0x16C */ u16 gbBoxFlags[8]; // @unverified: gbBoxes.menu.itemFlags
@@ -267,30 +267,30 @@ typedef struct LabSourceSelectWindow {
 } LabSourceSelectWindow; // size = 0x184
 
 /* The move list of the item window: どの わざに つかいますか？ (On which move?) for a PP Up, どの わざを
- * わすれさせたい？ (Which move should it forget?) for a TM or HM (func_89104FC0). */
+ * わすれさせたい？ (Which move should it forget?) for a TM or HM (LabMoveSelect_Init). */
 typedef struct LabMoveSelectWindow {
-    /* 0x00 */ Window window; // @unverified: 168x132 (func_89104FC0)
-    /* 0x2C */ Menu menu; // @unverified: rows drawn by func_89104EB4
-    /* 0x50 */ ByteMatrix moveMatrix; // @unverified: over moves (func_89104FC0)
-    /* 0x60 */ s32 moves[4]; // @unverified: move index - 1 of each slot, -1 when empty (func_89104FC0)
+    /* 0x00 */ Window window; // @unverified: 168x132 (LabMoveSelect_Init)
+    /* 0x2C */ Menu menu; // @unverified: rows drawn by LabMoveSelect_DrawMoveRow
+    /* 0x50 */ ByteMatrix moveMatrix; // @unverified: over moves (LabMoveSelect_Init)
+    /* 0x60 */ s32 moves[4]; // @unverified: move index - 1 of each slot, -1 when empty (LabMoveSelect_Init)
     /* 0x70 */ u16 itemFlags[4]; // @unverified: menu.itemFlags; bit 0 = an HM move, which cannot be forgotten (LabMoveSelect_DisableHmMoves)
-    /* 0x78 */ s32 learnTimer; // @unverified: 60 frames: the old move fades out, at 29 it becomes learnMove (func_89105200)
-    /* 0x7C */ s32 learnSlot; // @unverified: slot that learnMove replaces (func_89105340)
-    /* 0x80 */ s32 learnMove; // @unverified: written to moves[learnSlot] (func_89105200)
+    /* 0x78 */ s32 learnTimer; // @unverified: 60 frames: the old move fades out, at 29 it becomes learnMove (LabMoveSelect_DrawLearnAnimation)
+    /* 0x7C */ s32 learnSlot; // @unverified: slot that learnMove replaces (LabMoveSelect_StartLearnAnimation)
+    /* 0x80 */ s32 learnMove; // @unverified: written to moves[learnSlot] (LabMoveSelect_DrawLearnAnimation)
 } LabMoveSelectWindow; // size = 0x84
 
 /* The どうぐをつかう (use an item) window of the いちらん screen: 「<name>がつかえるどうぐ」 (Items <name>
  * can use) over the Game Boy bag items (LabPCList_InitItemWindow). */
 typedef struct LabItemWindow {
     /* 0x000 */ Window window; // @unverified: 388x366; title = D_89119BD0, the Pokémon's name and がつかえるどうぐ
-    /* 0x02C */ WindowFrame textFrame; // @unverified: frame of the prompt text at the bottom (PcSort_DrawUseItemPrompt)
-    /* 0x04C */ ScrollList list; // @unverified: the bag items, 8 rows; itemFlags bit 0 = cannot be used (func_89108450)
+    /* 0x02C */ WindowFrame textFrame; // @unverified: frame of the prompt text at the bottom (LabPCList_DrawItemWindow)
+    /* 0x04C */ ScrollList list; // @unverified: the bag items, 8 rows; itemFlags bit 0 = cannot be used (LabPCList_DisableUnusableItems)
     /* 0x090 */ u16 confirmItemFlags[2]; // @unverified: confirmPopup.menu.itemFlags
     /* 0x094 */ LabPopupMenu confirmPopup; // @unverified: このどうぐをつかいますか？ (Use this item?) choice (mode 1)
     /* 0x110 */ LabMoveSelectWindow moveSelect; // @unverified: the move list of modes 2 to 4
     /* 0x194 */ char unk_194[0x1AC - 0x194];
     /* 0x1AC */ u8* mon; // @unverified: the Pokémon the item is used on; its species names the window (LabPCList_InitItemWindow)
-    /* 0x1B0 */ s32 mode; // @unverified: 0 = pick an item, 1 = confirm, 2 = PP Up move, 3 = move to forget, 4 = learning (PcSort_DrawUseItemPrompt)
+    /* 0x1B0 */ s32 mode; // @unverified: 0 = pick an item, 1 = confirm, 2 = PP Up move, 3 = move to forget, 4 = learning (LabPCList_DrawItemWindow)
 } LabItemWindow; // size = 0x1B4
 
 /* What a used item did, shown by the message window: a title and a value change (LabPCList_DrawMessageWindow). */
@@ -358,7 +358,7 @@ typedef struct LabPCListScreen {
     /* 0x0090 */ char unk_0090[0x230 - 0x90];
     /* 0x0230 */ LabSourceSelectWindow sourceSelectWindow; // 「どこのポケモンを いちらん するか えらんでください。」 ("Choose whose Pokémon to list.") with てもち, ゲームボーイのボックス, 64カセットのボックス, OK; shown at state 1
     /* 0x03B4 */ Entry89100140 sources[3]; // @unverified: rows of sourceMatrix: てもち, ゲームボーイのボックス, 64カセットのボックス
-    /* 0x0420 */ ByteMatrix sourceMatrix; // @unverified: over sources (func_89100140)
+    /* 0x0420 */ ByteMatrix sourceMatrix; // @unverified: over sources (LabPCList_InitSources)
     /* 0x0430 */ char unk_0430[0x87B8 - 0x430];
     /* 0x87B8 */ void* rowBuffer[LAB_PC_LIST_MAX_ROWS]; // @unverified: storage of rows
     /* 0x8F00 */ void* filteredRowBuffer[LAB_PC_LIST_MAX_ROWS]; // @unverified: storage of filteredRows
@@ -375,7 +375,7 @@ typedef struct LabPCListScreen {
     /* 0x9918 */ s32 typeFilterCount; // number of types in typeFilterTypes: 1 after あつめる (gather) with でんき (Electric); 0 turns the type filter off
     /* 0x991C */ u8 typeFilterTypes[4]; // the types to gather: 0x17 (Electric) seen in play
     /* 0x9920 */ LabTypeFilterWindow typeFilterWindow; // @unverified: LabPCList_DrawTypeFilter
-    /* 0x9B00 */ u8 moveFilterMoves[4]; // @unverified: the moves to gather (LabPCList_CommitMoveFilter, func_891097E4)
+    /* 0x9B00 */ u8 moveFilterMoves[4]; // @unverified: the moves to gather (LabPCList_CommitMoveFilter, LabPCList_FilterByAnyMove)
     /* 0x9B04 */ s32 moveFilterCount; // @unverified: number of moves in moveFilterMoves; 0 turns the move filter off
     /* 0x9B08 */ LabMoveFilterWindow moveFilterWindow; // @unverified: LabPCList_DrawMoveFilter
     /* 0x9E58 */ s32 unk_9E58;
@@ -411,30 +411,30 @@ typedef struct LabPCList {
 extern Gfx D_8910D028[];
 
 // pokemon_list_2.c
-void LabPCList_DrawPlainText(s32 arg0, s32 arg1, s8* arg2, s32 arg3, s32 arg4);
+void LabPCList_DrawPlainText(s32 x, s32 y, s8* fmt, s32 value, s32 fontFlags);
 
 // pokemon_list_8.c
 void LabPCList_Setup(void);
 
 // popup_menus.c
-void LabMoveSelect_DisableHmMoves(LabMoveSelectWindow* arg0);
-void LabBoxList_UpdateItemFlags(LabBoxListWindow* arg0);
-void LabSourceSelect_ApplyCheck(LabSourceSelectWindow* arg0, s32 arg1);
-void func_89105C54(LabSourceSelectWindow* arg0, s32 arg1, s32 arg2, s8* arg3, Color_RGBA8 arg4);
-void func_89105E70(LabSourceSelectWindow* arg0, s32 arg1);
-s32 func_891060BC(LabSourceSelectWindow* arg0);
-s32 func_89106254(LabSourceSelectWindow* arg0);
-void LabPCList_InitTypeFilter(LabTypeFilterWindow* arg0, s32 x, s32 y, s32* arg3);
-void LabPCList_DrawTypeFilter(LabTypeFilterWindow* arg0);
-s32 LabPCList_UpdateTypeFilter(LabTypeFilterWindow* arg0);
-void LabPCList_CommitTypeFilter(LabTypeFilterWindow* arg0, s32* arg1);
-void LabPCList_InitMoveFilter(LabMoveFilterWindow* arg0, s32 x, s32 y, u8* arg3);
-void LabPCList_DrawMoveFilter(LabMoveFilterWindow* arg0);
-s32 LabPCList_UpdateMoveFilter(LabMoveFilterWindow* arg0);
-void LabPCList_CommitMoveFilter(LabMoveFilterWindow* arg0, u8* arg1);
-void func_891053E0(void);
-void func_89108F0C(void);
-s32 Move_NormalizeDisplayIndex(s32 arg0);
+void LabMoveSelect_DisableHmMoves(LabMoveSelectWindow* window);
+void LabBoxList_UpdateItemFlags(LabBoxListWindow* boxList);
+void LabSourceSelect_ApplyCheck(LabSourceSelectWindow* window, s32 row);
+void LabSourceSelect_Init(LabSourceSelectWindow* window, s32 x, s32 y, s8* sources, Color_RGBA8 color);
+void LabSourceSelect_Draw(LabSourceSelectWindow* window, s32 flags);
+s32 LabSourceSelect_UpdateSources(LabSourceSelectWindow* window);
+s32 LabSourceSelect_Update(LabSourceSelectWindow* window);
+void LabPCList_InitTypeFilter(LabTypeFilterWindow* window, s32 x, s32 y, s32* filter);
+void LabPCList_DrawTypeFilter(LabTypeFilterWindow* window);
+s32 LabPCList_UpdateTypeFilter(LabTypeFilterWindow* window);
+void LabPCList_CommitTypeFilter(LabTypeFilterWindow* window, s32* filter);
+void LabPCList_InitMoveFilter(LabMoveFilterWindow* window, s32 x, s32 y, u8* filter);
+void LabPCList_DrawMoveFilter(LabMoveFilterWindow* window);
+s32 LabPCList_UpdateMoveFilter(LabMoveFilterWindow* window);
+void LabPCList_CommitMoveFilter(LabMoveFilterWindow* window, u8* filter);
+void LabPCList_UnusedStub1(void);
+void LabPCList_UnusedStub2(void);
+s32 LabPCList_TypeIdToListIndex(s32 a);
 
 // pokemon_list_9.c
 s32 LabPCList_CompareByLevelAsc(LabMonEntry*, LabMonEntry*);
@@ -450,27 +450,20 @@ s32 LabPCList_CompareBySpeedDesc(LabMonEntry*, LabMonEntry*);
 s32 LabPCList_CompareBySpecialAsc(LabMonEntry*, LabMonEntry*);
 s32 LabPCList_CompareBySpecialDesc(LabMonEntry*, LabMonEntry*);
 s32 LabPCList_CompareById(LabMonEntry*, LabMonEntry*);
-s32 LabPCList_CompareByOtName(LabMonEntry* arg0, LabMonEntry* arg1);
+s32 LabPCList_CompareByOtName(LabMonEntry* a, LabMonEntry* b);
 s32 LabPCList_CompareByNickname(LabMonEntry*, LabMonEntry*);
-s32 LabPCList_CompareBySpeciesRawId(LabMonEntry*, LabMonEntry*);
-int LabPCList_FilterByLevelRange(LabMonEntry* arg0, u8* arg1);
-s32 LabPCList_FilterByAnyType(LabMonEntry* arg0, unk_func_8830867C_02C_C54_01C* arg1);
-s32 LabPCList_FilterByAnyMove(LabMonEntry* arg0, unk_func_8830867C_02C_C54_024* arg1);
-s32 LabPCList_FilterBySpeciesId(LabMonEntry* arg0, s32* arg1);
-s32 LabPCList_FilterByExactTypePair(LabMonEntry* arg0, unk_func_8830867C_02C_C54_014* arg1);
+s32 LabPCList_CompareBySpeciesNumber(LabMonEntry*, LabMonEntry*);
+int LabPCList_FilterByLevelRange(LabMonEntry* entryArg, u8* range);
+s32 LabPCList_FilterByAnyType(LabMonEntry* entry, unk_func_8830867C_02C_C54_01C* filterArg);
+s32 LabPCList_FilterByAnyMove(LabMonEntry* entryArg, unk_func_8830867C_02C_C54_024* filterArg);
+s32 LabPCList_FilterBySpeciesId(LabMonEntry* entry, s32* species);
+s32 LabPCList_FilterByExactTypePair(LabMonEntry* entry, unk_func_8830867C_02C_C54_014* filterArg);
 
 // pokemon_list_10.c
-s32 LabPCList_CanLearnMoveByLevelUp(s32 arg0, s32 arg1);
+s32 LabPCList_CanLearnMoveByLevelUp(s32 species, s32 tmIndex);
 void LabPCList_FlattenEntries(PointerList*, unk_func_8830867C_02C_144*);
 void LabPCList_ReadDeckCategory(unk_func_8830867C_02C_154*);
 void LabPCList_WriteDeckCategory(unk_func_8830867C_02C_154*);
 
-// functions defined in assembly
-s32 LabPCList_CompareByPointer(LabMonEntry*, LabMonEntry*);
-void LabPCList_LoadAllBoxes(unk_func_8830867C_02C_144*);
-void LabPCList_SaveDirtyBoxes(unk_func_8830867C_02C_144*, s32);
-void LabPCList_InitDeckCategories(unk_func_8830867C_02C_154*, MemoryPool* arg1);
-void LabPCList_BuildTmHmList(PointerList*, unk_func_8830867C_02C_1A8*, unk_func_8830867C_02C_154*, s32, s32);
-void PokeIcon_AttachDepthBuffer(PokeIconRenderer*, ModelLoadContext*, GfxImage*);
 
 #endif // FRAGMENT_LAB_POKEMON_LIST_H

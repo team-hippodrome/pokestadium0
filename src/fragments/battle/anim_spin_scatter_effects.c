@@ -190,29 +190,33 @@ M2C_UNK Particle_AddRotationZ(s8 *, M2C_UNK);             /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_821519AC(s8 *);                      /* extern */
 
-void func_82151A5C(Particle* arg0) {
+/**
+ *
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackOrphanDescriptor2EScatterFade(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_821519AC(arg0);
+        func_821519AC(particle);
         break;
     case 2:
-        if (func_821406B4(arg0) != 0) {
-            func_8213CB3C(arg0);
+        if (func_821406B4(particle) != 0) {
+            func_8213CB3C(particle);
         }
         break;
     case 3:
-        func_8213CA80(arg0, 0x46);
+        func_8213CA80(particle, 0x46);
         break;
     case 4:
-        Particle_DisableAndDetach(arg0);
+        Particle_DisableAndDetach(particle);
         break;
     }
-    if (func_8213CB7C(arg0) != 0) {
-        Particle_AddVelocityFromRotationTemplate1(arg0);
-        Particle_AddRotationZ(arg0, 0x2000);
+    if (func_8213CB7C(particle) != 0) {
+        Particle_AddVelocityFromRotationTemplate1(particle);
+        Particle_AddRotationZ(particle, 0x2000);
     }
 }
 

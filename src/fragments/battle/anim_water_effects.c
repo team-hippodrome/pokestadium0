@@ -51,7 +51,7 @@ void BattleAnim_CallbackEndEffect86Descriptor19ModePositionedAnimFade(Particle* 
  */
 void BattleAnim_SetupSurfHitSpark(Particle* arg0) {
     s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
-    s16 sp24 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp24 = Particle_GetByteParam1(arg0);
 
     Particle_SetScaleScaled(arg0, (ParticleMath_RandomRange(0xA) * 0.01f) + 0.05f);
     Particle_MotionStep_SetYScaled_0AF24(arg0, (ParticleMath_RandomRange(0x1E) * 0.1f) + 1.0f);
@@ -119,7 +119,7 @@ void BattleAnim_RunSurfHitSpark(Particle* arg0) {
 void BattleAnim_SetupBubbleBubbles(Particle* arg0, s16 arg1) {
     s16 sp2E = Particle_SpawnIndex_GetS16_0C038(arg0);
 
-    Particle_EffectList_SetU8_0BECC(arg0, 7);
+    Particle_SetEffectList(arg0, 7);
     Particle_SetScaleScaled(arg0, 0.1f);
     Particle_Rotation_AddVec_0A52C(arg0, ParticleMath_RandomSigned(0xC00), ParticleMath_RandomSigned(0x1000), 0);
     ParticleGfx_RecolorEnvRandomPalette(arg0);
@@ -135,7 +135,7 @@ void BattleAnim_SetupBubbleBubbles(Particle* arg0, s16 arg1) {
  * for Bubble.
  */
 void BattleAnim_RunBubbleBubbles(Particle* arg0) {
-    s16 temp_a1 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 temp_a1 = Particle_GetByteParam1(arg0);
 
     switch (arg0->lifecycle) {
         case 1:
@@ -171,7 +171,7 @@ void BattleAnim_SetupBubbleBeamBubblesSlow(Particle* arg0) {
     UNUSED s32 pad[3]; // FAKE: stack padding
     s16 sp22 = Particle_SpawnIndex_GetS16_0C038(arg0);
 
-    Particle_FieldCF_GetS16_0C058(arg0);
+    Particle_GetByteParam1(arg0);
     Particle_SetScaleScaled(arg0, 0.05f);
     Particle_SetRandomVelocityXYZ(arg0, 4, 2, 2);
     Particle_Rotation_AddX_0A578(arg0, ParticleMath_RandomSignedOffset(0x200, 0xE00));
@@ -256,7 +256,7 @@ void BattleAnim_SetupBubbleBeamBubblesFast(Particle* arg0) {
     Vec3f sp30;
     s16 sp2E;
 
-    Particle_EffectList_SetU8_0BECC(arg0, 7);
+    Particle_SetEffectList(arg0, 7);
     Particle_SetScaleScaled(arg0, 0.1f);
     Particle_SetScaleTarget(arg0, 0.2f);
     Particle_SetScaleStep(arg0, 0.02f);
@@ -336,7 +336,7 @@ void BattleAnim_SetupUnusedRotatingSparkVariant(Particle* arg0) {
     s16 sp30 = Particle_SpawnIndex_GetS16_0C038(arg0);
     s16 sp2E = Particle_FieldCE_GetS32_0C040(arg0);
 
-    Particle_EffectList_SetU8_0BECC(arg0, 7);
+    Particle_SetEffectList(arg0, 7);
     Particle_SetScaleScaled(arg0, 0.1f);
     BattleAnim_GetSecondaryOwnerAnchorPosition(&sp40);
     BattleAnim_GetTertiaryOwnerBone9Position(&sp34);
@@ -400,7 +400,7 @@ void BattleAnim_MotionUnusedRotatingSparkVariant(Particle* arg0) {
     }
 
     if (arg0->phase > 0) {
-        Particle_AddVelocityFromRotationTemplate5(arg0);
+        Particle_MoveAlongRotationXYZAlt(arg0);
     }
 }
 
@@ -413,30 +413,35 @@ s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82149FD8(s8 *);                      /* extern */
 M2C_UNK func_8214A190(s8 *);                      /* extern */
 
-void func_8214A220(Particle* arg0) {
+/**
+ * Particle callback (no reference found): runs BattleAnim_SetupUnusedRotatingSparkVariant on
+ * lifecycle 1, then steps it until its spawn step is done.
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackUnusedRotatingSpark(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_82149FD8(arg0);
+        func_82149FD8(particle);
         break;
     case 2:
-        if (func_821406B4(arg0) != 0) {
-            func_8213D238(arg0);
-            func_8213CB3C(arg0);
-            Particle_SetParam0(arg0, 0x1E);
+        if (func_821406B4(particle) != 0) {
+            func_8213D238(particle);
+            func_8213CB3C(particle);
+            Particle_SetParam0(particle, 0x1E);
         }
         break;
     case 3:
-        func_821406B4(arg0);
+        func_821406B4(particle);
         break;
     case 4:
-        Particle_MarkInactive(arg0);
+        Particle_MarkInactive(particle);
         break;
     }
-    if (func_8213CB7C(arg0) != 0) {
-        func_8214A190(arg0);
+    if (func_8213CB7C(particle) != 0) {
+        func_8214A190(particle);
     }
 }
 
@@ -453,7 +458,7 @@ void BattleAnim_SetupUnusedAimedSparkVariant(Particle* arg0) {
     Vec3f sp34;
     s16 temp_v1;
 
-    Particle_EffectList_SetU8_0BECC(arg0, 7);
+    Particle_SetEffectList(arg0, 7);
     Particle_SetScaleScaled(arg0, 0.1f);
     Particle_SetScaleTarget(arg0, 0.1f);
     BattleAnim_GetSecondaryOwnerAnchorPosition(&sp40);
@@ -473,7 +478,7 @@ void BattleAnim_SetupUnusedAimedSparkVariant(Particle* arg0) {
             break;
     }
 
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -581,24 +586,28 @@ M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214A634(s8 *);                      /* extern */
 
-void func_8214A6B4(Particle* arg0) {
+/**
+ *
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackStartEffect58Descriptor0ABurstChild(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_8214A634(arg0);
+        func_8214A634(particle);
         return;
     case 2:
-        func_82140228(arg0, 0x3E99999A, 0x3D4CCCCD);
-        Particle_ApproachPrimAlpha(arg0, 0x20, 0x10);
-        Particle_ApproachStepMagnitude(arg0, 0.5f, 0.05f);
-        Particle_AddVelocityFromRotationTemplate1(arg0);
-        Particle_AddPosOffsetYScaled(arg0, 0xBF800000);
-        func_8213CA80(arg0, 0x10);
+        func_82140228(particle, 0x3E99999A, 0x3D4CCCCD);
+        Particle_ApproachPrimAlpha(particle, 0x20, 0x10);
+        Particle_ApproachStepMagnitude(particle, 0.5f, 0.05f);
+        Particle_AddVelocityFromRotationTemplate1(particle);
+        Particle_AddPosOffsetYScaled(particle, 0xBF800000);
+        func_8213CA80(particle, 0x10);
         return;
     case 3:
-        Particle_MarkInactive(arg0);
+        Particle_MarkInactive(particle);
         return;
     }
 }
@@ -627,24 +636,28 @@ M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 s32 Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);        /* extern */
 M2C_UNK func_8214A77C(s8 *);                      /* extern */
 
-void func_8214A7F4(Particle* arg0) {
+/**
+ *
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackStartEffect58Descriptor08MetadataBurstChild(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_8214A77C(arg0);
+        func_8214A77C(particle);
         break;
     case 2:
-        if (Particle_ApproachPrimAlpha(arg0, 0x80, 0x20) != 0) {
-            func_8213C9D0(arg0);
+        if (Particle_ApproachPrimAlpha(particle, 0x80, 0x20) != 0) {
+            func_8213C9D0(particle);
         }
         break;
     case 3:
-        Particle_DisableAndDetach(arg0);
+        Particle_DisableAndDetach(particle);
         break;
     }
-    func_82140228(arg0, 0x3EB33333, 0x3D4CCCCD);
+    func_82140228(particle, 0x3EB33333, 0x3D4CCCCD);
 }
 
 /**
@@ -708,23 +721,27 @@ M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214A9DC(s8 *);                      /* extern */
 
-void func_8214AA60(Particle* arg0) {
+/**
+ *
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackStartEffect6Descriptor0ABurstChild(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_8214A9DC(arg0);
+        func_8214A9DC(particle);
         return;
     case 2:
-        func_82140228(arg0, 0x3DCCCCCD, 0x3CA3D70A);
-        Particle_ApproachPrimAlpha(arg0, 0x20, 0xC);
-        Particle_AddVelocityFromRotationTemplate1(arg0);
-        Particle_AddPosOffsetYScaled(arg0, 0xBF000000);
-        func_8213CA80(arg0, 0x10);
+        func_82140228(particle, 0x3DCCCCCD, 0x3CA3D70A);
+        Particle_ApproachPrimAlpha(particle, 0x20, 0xC);
+        Particle_AddVelocityFromRotationTemplate1(particle);
+        Particle_AddPosOffsetYScaled(particle, 0xBF000000);
+        func_8213CA80(particle, 0x10);
         return;
     case 3:
-        Particle_MarkInactive(arg0);
+        Particle_MarkInactive(particle);
         return;
     }
 }
@@ -759,24 +776,28 @@ M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 s32 Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);        /* extern */
 M2C_UNK func_8214AB14(s8 *);                      /* extern */
 
-void func_8214ABAC(Particle* arg0) {
+/**
+ *
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackStartEffect6Descriptor08MetadataBurstChild(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_8214AB14(arg0);
+        func_8214AB14(particle);
         break;
     case 2:
-        if (Particle_ApproachPrimAlpha(arg0, 0x80, 0x20) != 0) {
-            func_8213C9D0(arg0);
+        if (Particle_ApproachPrimAlpha(particle, 0x80, 0x20) != 0) {
+            func_8213C9D0(particle);
         }
         break;
     case 3:
-        Particle_DisableAndDetach(arg0);
+        Particle_DisableAndDetach(particle);
         break;
     }
-    func_82140228(arg0, 0x3DCCCCCD, 0x3CA3D70A);
+    func_82140228(particle, 0x3DCCCCCD, 0x3CA3D70A);
 }
 
 /**
@@ -824,7 +845,7 @@ void BattleAnim_RunWaterGunProjectile(Particle* arg0) {
 void BattleAnim_SetupIceBeamColdBreath(Particle* arg0) {
     UNUSED s32 pad[3]; // FAKE: stack padding
     s16 sp22 = Particle_SpawnIndex_GetS16_0C038(arg0);
-    s16 sp20 = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp20 = Particle_GetByteParam1(arg0);
 
     Particle_SetScaleScaled(arg0, 0.25f);
     Particle_SetRandomVelocityXYZ(arg0, 4, 2, 2);
@@ -945,7 +966,7 @@ void BattleAnim_SetupInitialBeamEmanator(Particle* arg0) {
     Particle_SetScaleScaled(arg0, 1.0f);
     Particle_SetScaleTarget(arg0, 2.0f);
     Particle_SetScaleStep(arg0, 0.75f);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_AdvanceLifecycle(arg0);
 }
 
@@ -980,7 +1001,7 @@ void BattleAnim_SetupPulsingBeamEmanator(Particle* arg0) {
     Particle_SetScaleScaled(arg0, 0.4f);
     Particle_SetScaleTarget(arg0, 0.7f);
     Particle_SetScaleStep(arg0, 0.1f);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_SetTextureFrame(arg0, 1);
     Particle_Rotation_SetZ_0A2CC(arg0, ParticleMath_RandomRange(0x10000));
     Particle_AdvanceLifecycle(arg0);
@@ -1032,7 +1053,7 @@ void BattleAnim_RunPulsingBeamEmanator(Particle* arg0) {
 void BattleAnim_SetupStrongBeamHitEffect(Particle* arg0) {
     Particle_SetScaleScaled(arg0, 2.0f);
     Particle_AddPositionOffsetAlongRotationYPlus180(arg0, 10.0f);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_SetPrimAlpha(arg0, 0xFF);
     Particle_SetTextureFrame(arg0, 1);
     Particle_Rotation_SetZ_0A2CC(arg0, ParticleMath_RandomRange(0x10000));
@@ -1070,7 +1091,7 @@ void BattleAnim_RunStrongBeamHitEffect(Particle* arg0) {
  * for Psybeam.
  */
 void BattleAnim_SetupPsybeamHitSparkFlicker(Particle* arg0) {
-    Particle_FieldCF_GetS16_0C058(arg0);
+    Particle_GetByteParam1(arg0);
     Particle_SetScaleScaled(arg0, 2.0f);
     Particle_AddPositionOffsetAlongRotationYPlus180(arg0, 10.0f);
     ParticleGfx_RecolorPrimFromPaletteSetB(arg0, ParticleMath_RandomRange(6));
@@ -1086,7 +1107,7 @@ void BattleAnim_SetupPsybeamHitSparkFlicker(Particle* arg0) {
  * for Psybeam.
  */
 void BattleAnim_RunPsybeamHitSparkFlicker(Particle* arg0) {
-    Particle_FieldCF_GetS16_0C058(arg0);
+    Particle_GetByteParam1(arg0);
 
     switch (arg0->lifecycle) {
         case 1:
@@ -1121,7 +1142,7 @@ void BattleAnim_SetupAuroraBeamHitSpark(Particle* arg0) {
     UNUSED s16 pad; // FAKE: stack padding
     s16 sp24;
 
-    Particle_FieldCF_GetS16_0C058(arg0);
+    Particle_GetByteParam1(arg0);
     sp24 = Particle_SpawnIndex_GetS16_0C038(arg0);
     Particle_SetScaleScaled(arg0, 2.0f);
     Particle_AddPositionOffsetAlongRotationYPlus180(arg0, 10.0f);
@@ -1178,7 +1199,7 @@ void BattleAnim_RunAuroraBeamHitSpark(Particle* arg0) {
  */
 void BattleAnim_SetupStrongOutwardMovingLargeHitSpark(Particle* arg0) {
     Particle_SpawnIndex_GetS16_0C038(arg0);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_SetScaleScaled(arg0, 1.35f);
     Particle_AddPositionOffsetAlongRotationY(arg0, 5.0f);
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, 5.5f);
@@ -1228,7 +1249,7 @@ void BattleAnim_RunStrongOutwardMovingLargeHitSpark(Particle* arg0) {
  */
 void BattleAnim_SetupBlizzardHitUpwardColdAir(Particle* arg0) {
     Particle_SpawnIndex_GetS16_0C038(arg0);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_SetScaleScaled(arg0, 1.0f);
     Particle_AddPositionOffsetAlongRotationY(arg0, 5.0f);
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, 4.0f);
@@ -1277,7 +1298,7 @@ void BattleAnim_RunBlizzardHitUpwardColdAir(Particle* arg0) {
  */
 void BattleAnim_SetupWaterGunHitEffect(Particle* arg0) {
     Particle_SpawnIndex_GetS16_0C038(arg0);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_SetScaleScaled(arg0, 0.6f);
     Particle_AddPositionOffsetAlongRotationY(arg0, 5.0f);
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, 3.0f);
@@ -1326,7 +1347,7 @@ void BattleAnim_RunWaterGunHitEffect(Particle* arg0) {
 void BattleAnim_SetupWeakBeamHitEffect(Particle* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
 
-    switch (Particle_FieldCF_GetS16_0C058(arg0)) {
+    switch (Particle_GetByteParam1(arg0)) {
         case 0:
             ParticleGfx_RecolorPrim(arg0, 0x8);
             ParticleGfx_RecolorEnvFromPaletteSetA(arg0, ParticleMath_RandomRange(6));
@@ -1349,7 +1370,7 @@ void BattleAnim_SetupWeakBeamHitEffect(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-s16 func_8213C484();                                /* extern */
+s16 Particle_GetByteParam1();                                /* extern */
 void Particle_MarkInactive(Particle* arg0);                      /* extern */
 s32 Particle_IsRunning(Particle* arg0);                          /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
@@ -1372,7 +1393,7 @@ void BattleAnim_RunWeakBeamHitEffect(Particle* arg0) {
     s16 sp2E;
     s16 temp_v1;
 
-    sp2E = func_8213C484();
+    sp2E = Particle_GetByteParam1();
     temp_v1 = arg0->lifecycle;
     switch (temp_v1) {                              /* switch 1; irregular */
     case 1:                                         /* switch 1 */
@@ -1417,7 +1438,7 @@ void BattleAnim_SetupTriAttackHitSpark(Particle* arg0) {
     s16 sp2A;
 
     sp2E = Particle_SpawnIndex_GetS16_0C038(arg0);
-    sp2C = Particle_FieldCF_GetS16_0C058(arg0);
+    sp2C = Particle_GetByteParam1(arg0);
     sp2A = Particle_FieldCE_GetS32_0C040(arg0);
 
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp2C);
@@ -1499,7 +1520,7 @@ void BattleAnim_RunTriAttackHitSpark(Particle* arg0) {
  */
 void BattleAnim_SetupStrongOutwardMovingSmallHitSpark(Particle* arg0) {
     s16 sp2E = Particle_SpawnIndex_GetS16_0C038(arg0);
-    s16 sp2C = Particle_FieldCF_GetS16_0C058(arg0);
+    s16 sp2C = Particle_GetByteParam1(arg0);
 
     Particle_SetRandomVelocityXYZ(arg0, 0, 0xF, 0x14);
     Particle_PositionOffset_AddYScaled_08E90(arg0, 5.0f);
@@ -1522,32 +1543,36 @@ M2C_UNK Particle_SetParam0(s8 *, M2C_UNK);             /* extern */
 s32 func_82140690(s8 *);                          /* extern */
 M2C_UNK func_8214C134(s8 *);                      /* extern */
 
-void func_8214C208(Particle* arg0) {
+/**
+ *
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_8214C134(arg0);
+        func_8214C134(particle);
         return;
     case 2:
-        if (func_8213CA80(arg0, arg0->param0) != 0) {
-            Particle_SetParam0(arg0, 2);
-            func_8213CB3C(arg0);
+        if (func_8213CA80(particle, particle->param0) != 0) {
+            Particle_SetParam0(particle, 2);
+            func_8213CB3C(particle);
             return;
         }
         return;
     case 3:
-        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 1, 0);
-        func_82140228(arg0, 0x3F000000, 0x3DCCCCCD);
-        Particle_AddVelocityFromRotationTemplate1(arg0);
-        if (func_82140690(arg0) != 0) {
-            Particle_ApproachPrimAlpha(arg0, 0, 0x20);
+        Particle_AnimateFramesForwardLoopedThenAdvance(particle, 0, 7, 1, 1, 0);
+        func_82140228(particle, 0x3F000000, 0x3DCCCCCD);
+        Particle_AddVelocityFromRotationTemplate1(particle);
+        if (func_82140690(particle) != 0) {
+            Particle_ApproachPrimAlpha(particle, 0, 0x20);
             return;
         }
         break;
     case 4:
-        Particle_DisableAndDetach(arg0);
+        Particle_DisableAndDetach(particle);
         break;
     }
 }
@@ -1562,7 +1587,7 @@ void func_8214C208(Particle* arg0) {
 void BattleAnim_SetupUnusedIndexedFadeVariantA(Particle* arg0) {
     s16 sp2E = Particle_SpawnIndex_GetS16_0C038(arg0);
 
-    Particle_FieldCF_GetS16_0C058(arg0);
+    Particle_GetByteParam1(arg0);
     Particle_SetRandomVelocityXYZ(arg0, 0xA, 0x14, 0x14);
     Particle_SetScaleScaled(arg0, 0.25f);
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, 2.5f);
@@ -1584,32 +1609,37 @@ M2C_UNK Particle_SetParam0(s8 *, M2C_UNK);             /* extern */
 s32 func_82140690(s8 *);                          /* extern */
 M2C_UNK func_8214C300(s8 *);                      /* extern */
 
-void func_8214C3C8(Particle* arg0) {
+/**
+ * Particle callback (no reference found) for BattleAnim_SetupUnusedIndexedFadeVariantA: waits
+ * param0 frames, then fades.
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackUnusedIndexedFadeA(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_8214C300(arg0);
+        func_8214C300(particle);
         return;
     case 2:
-        if (func_8213CA80(arg0, arg0->param0) != 0) {
-            Particle_SetParam0(arg0, 2);
-            func_8213CB3C(arg0);
+        if (func_8213CA80(particle, particle->param0) != 0) {
+            Particle_SetParam0(particle, 2);
+            func_8213CB3C(particle);
             return;
         }
         return;
     case 3:
-        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 1, 0);
-        func_82140228(arg0, 0x3ECCCCCD, 0x3DCCCCCD);
-        Particle_AddVelocityFromRotationTemplate1(arg0);
-        if (func_82140690(arg0) != 0) {
-            Particle_ApproachPrimAlpha(arg0, 0, 0x20);
+        Particle_AnimateFramesForwardLoopedThenAdvance(particle, 0, 7, 1, 1, 0);
+        func_82140228(particle, 0x3ECCCCCD, 0x3DCCCCCD);
+        Particle_AddVelocityFromRotationTemplate1(particle);
+        if (func_82140690(particle) != 0) {
+            Particle_ApproachPrimAlpha(particle, 0, 0x20);
             return;
         }
         break;
     case 4:
-        Particle_MarkInactive(arg0);
+        Particle_MarkInactive(particle);
         break;
     }
 }
@@ -1624,7 +1654,7 @@ void func_8214C3C8(Particle* arg0) {
 void BattleAnim_SetupUnusedIndexedFadeVariantB(Particle* arg0) {
     s16 sp2E = Particle_SpawnIndex_GetS16_0C038(arg0);
 
-    Particle_FieldCF_GetS16_0C058(arg0);
+    Particle_GetByteParam1(arg0);
     Particle_SetRandomVelocityXYZ(arg0, 0xA, 0x14, 0x14);
     Particle_SetScaleScaled(arg0, 0.4f);
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, 2.5f);
@@ -1643,28 +1673,33 @@ void Particle_AddVelocityFromRotationTemplate1(s32 arg0);                      /
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214C4C4(s8 *);                      /* extern */
 
-void func_8214C598(Particle* arg0) {
+/**
+ * Particle callback (no reference found) for BattleAnim_SetupUnusedIndexedFadeVariantB: waits
+ * param0 frames, switches to texture frame 1, then fades.
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackUnusedIndexedFadeB(Particle* particle) {
     s16 temp_v0;
 
-    temp_v0 = arg0->lifecycle;
+    temp_v0 = particle->lifecycle;
     switch (temp_v0) {                              /* irregular */
     case 1:
-        func_8214C4C4(arg0);
+        func_8214C4C4(particle);
         return;
     case 2:
-        if (func_8213CA80(arg0, arg0->param0) != 0) {
-            func_8213CB3C(arg0);
-            Particle_SetTextureFrame(arg0, 1);
+        if (func_8213CA80(particle, particle->param0) != 0) {
+            func_8213CB3C(particle);
+            Particle_SetTextureFrame(particle, 1);
             return;
         }
         return;
     case 3:
-        func_82140228(arg0, 0x3F000000, 0x3CCCCCCD);
-        Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 2, 7, 1, 1, 0);
-        Particle_AddVelocityFromRotationTemplate1(arg0);
+        func_82140228(particle, 0x3F000000, 0x3CCCCCCD);
+        Particle_AnimateFramesForwardLoopedThenAdvance(particle, 2, 7, 1, 1, 0);
+        Particle_AddVelocityFromRotationTemplate1(particle);
         return;
     case 4:
-        Particle_MarkInactive(arg0);
+        Particle_MarkInactive(particle);
         break;
     }
 }
@@ -1678,7 +1713,7 @@ void BattleAnim_SetupBubbleBubbleBeamSharedEffect(Particle* arg0) {
     UNUSED s16 pad; // FAKE: stack padding
     s16 sp24;
 
-    Particle_FieldCF_GetS16_0C058(arg0);
+    Particle_GetByteParam1(arg0);
     sp24 = Particle_SpawnIndex_GetS16_0C038(arg0);
     Particle_SetScaleScaled(arg0, 0.05f);
     Particle_SetRotationTargetXY(arg0, arg0->rotation.x, arg0->rotation.y + 0x8000);
@@ -1736,7 +1771,7 @@ void BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade(Particle
     }
 
     if (Particle_IsRunning(arg0) != 0) {
-        Particle_AddVelocityFromRotationTemplate3(arg0);
+        Particle_MoveAlongRotationXYAlt(arg0);
     }
 }
 
@@ -1746,7 +1781,7 @@ void BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade(Particle
  */
 void BattleAnim_SetupHydroPumpColorShiftFade(Particle* arg0) {
     Particle_SetScaleScaled(arg0, 0.2f);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_SetPrimAlpha(arg0, 0xC8);
     Particle_Param0_SetS16_0BCA8(arg0, 24);
     arg0->stepMagnitude = 0.02f;
@@ -1827,7 +1862,7 @@ void BattleAnim_SetupWaterGunEmitterColoration(Particle* arg0) {
     }
 
     Particle_AddVelocityFromDirVector(arg0, 10.0f);
-    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_FieldCF_GetS16_0C058(arg0));
+    ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_SetPrimAlpha(arg0, 0xC8);
     Particle_Param0_SetS16_0BCA8(arg0, 24);
     Particle_AdvanceLifecycle(arg0);
@@ -1887,7 +1922,7 @@ void BattleAnim_SetupHydroPumpWaterGunProjectileHit(Particle* arg0) {
     s16 sp2C;
 
     Particle_SpawnIndex_GetS16_0C038(arg0);
-    sp2C = Particle_FieldCF_GetS16_0C058(arg0);
+    sp2C = Particle_GetByteParam1(arg0);
     Particle_SetScaleScaled(arg0, 0.5f);
     Particle_Rotation_AddVec_0A52C(arg0, ParticleMath_RandomRange(0x10000), ParticleMath_RandomRange(0x10000), 0);
     Particle_AddPositionOffsetAlongRotationY(arg0, 5.0f);
@@ -2043,7 +2078,7 @@ void BattleAnim_InitializeHydroPumpHit(void) {
     func_8213BD78(4, 8, 0x33, 0x10, 0xFF);
     func_8213B560(0, &func_82145998, &D_8218E5A8, 0, 1, 0x10, (s32) D_8219A80A, 0x33, 0);
     func_8213B5D8(0, 5, 3, &BattleAnim_RunStrongOutwardMovingLargeHitSpark, &D_8218E650, 0, 8, 0x10, (s32) D_8219A80A, 0x26, 0);
-    func_8213B5D8(0xA, 1, 8, &func_8214C208, &D_8218E650, 0, 3, 0x11, (s32) D_8219A80A, 0x26, 0);
+    func_8213B5D8(0xA, 1, 8, &BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade, &D_8218E650, 0, 3, 0x11, (s32) D_8219A80A, 0x26, 0);
     func_8213B560(0xC, &BattleAnim_RunHydroPumpColorShiftFade, &D_8218E7D8, 0, 1, 0xA, 0, 0x4C, 0);
     func_8213B5D8(2, 1, 0x10, &BattleAnim_RunHydroPumpWaterGunProjectileHit, &D_8218E5D8, 0, 4, 0x11, (s32) D_8219A80A, 0x4C, 0);
 }
@@ -2161,8 +2196,9 @@ extern M2C_UNK func_8214B1F8;
 /**
  * Starts a beam effect: sets the spawn and tint timing, then queues func_8214B1F8 at once and
  * the pulsing beam emanator after 6 frames (lifetime 70).
+ * @unverified Name guessed from the code.
  */
-void func_8214D938(void) {
+void BattleAnim_StartEffect70PulsingBeam(void) {
     func_8213B6AC(0, 0, 0x20, 8, 0xA0);
     func_8213B644(0, 8, 0x20);
     func_8213B560(0, &func_8214B1F8, &D_8218E818, 0, 1, 0x10, (s32) D_8219A80A, 0x17, 0);
@@ -2204,7 +2240,7 @@ void BattleAnim_InitializeWaterfallUseB(void) {
     func_8213BD78(4, 8, 0x33, 0xC, 0xFF);
     func_8213B560(0, &func_82145998, &D_8218E5A8, 0, 1, 0x10, (s32) D_8219A80A, 0x33, 0);
     func_8213B5D8(0, 5, 3, &BattleAnim_RunStrongOutwardMovingLargeHitSpark, &D_8218E650, 0, 8, 0x10, (s32) D_8219A80A, 0x26, 0);
-    func_8213B5D8(0xA, 1, 3, &func_8214C208, &D_8218E650, 0, 8, 0x11, (s32) D_8219A80A, 0x26, 0);
+    func_8213B5D8(0xA, 1, 3, &BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade, &D_8218E650, 0, 8, 0x11, (s32) D_8219A80A, 0x26, 0);
 }
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
@@ -2219,7 +2255,6 @@ extern M2C_UNK D_8218E820;
 extern s16 D_8219A80A;
 extern M2C_UNK func_82145998;
 extern M2C_UNK func_8214B468;
-extern M2C_UNK func_82161288;
 extern M2C_UNK BattleAnim_IceBeamParticleUpdateB;
 
 /**
@@ -2232,8 +2267,8 @@ void BattleAnim_InitializeIceBeamHit(void) {
     func_8213B560(3, &func_82145998, &D_8218E5A8, 0, 1, 0x10, (s32) D_8219A80A, 0x33, 0);
     func_8213B5D8(0, 5, 3, &BattleAnim_RunStrongOutwardMovingLargeHitSpark, &D_8218E650, 0, 8, 0x10, (s32) D_8219A80A, 0x26, 0);
     func_8213B5D8(4, 4, 2, &func_8214B468, &D_8218E820, 0, 1, 0x10, (s32) D_8219A80A, 0x33, 0);
-    func_8213B5D8(0xC, 1, 3, &func_8214C208, &D_8218E650, 0, 8, 0x11, (s32) D_8219A80A, 0x26, 0);
-    func_8213B5D8(0xE, 4, 2, &func_82161288, &D_8218E770, 0, 6, 0x10, 0x64, 0, 0);
+    func_8213B5D8(0xC, 1, 3, &BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade, &D_8218E650, 0, 8, 0x11, (s32) D_8219A80A, 0x26, 0);
+    func_8213B5D8(0xE, 4, 2, &BattleAnim_CallbackEndEffect67Descriptor3DAnimatedGravityFade, &D_8218E770, 0, 6, 0x10, 0x64, 0, 0);
     func_8213B5D8(0, 2, 6, &BattleAnim_IceBeamParticleUpdateB, &D_8218E798, 0, 8, 0x11, 9, 0x18, 0xB);
     func_8213B644(0x30, 0x20, 8);
 }
@@ -2295,7 +2330,7 @@ void BattleAnim_InitializeAuroraBeamHit(void) {
     func_8213C060(4, 0x32, 0x20, 0xA0);
     func_8213B560(4, &func_8214B77C, &D_8218E820, 0, 9, 0x10, (s32) D_8219A80A, 0, 0);
     func_8213B5D8(3, 5, 3, &BattleAnim_RunWeakBeamHitEffect, &D_8218E650, 0, 8, 0x10, (s32) D_8219A80A, 0, 0);
-    func_8213B5D8(0xC, 1, 3, &func_8214C208, &D_8218E650, 0, 8, 0x11, (s32) D_8219A80A, 0x39, 0);
+    func_8213B5D8(0xC, 1, 3, &BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade, &D_8218E650, 0, 8, 0x11, (s32) D_8219A80A, 0x39, 0);
     func_8213B644(0x16, 0x20, 8);
 }
 

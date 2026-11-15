@@ -1,7 +1,7 @@
 /* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
 #include "battle.h"
 #include "m2c_macros.h"
-void func_8211F580(void);
+void BattleScene_BRollStepNop(void);
 void BattleScene_BRollCameraUpdateRotatingArenaOverview(CameraNode* arg0);
 void BattleScene_SelectNextBRollCameraShot(CameraNode* arg0);
 extern f32 D_FLT_8218935C[][4];
@@ -10,30 +10,30 @@ extern Vec3f D_8218B63C;
 void func_821224F4(CameraNode*);
 void func_82121D78(CameraNode*, f32, f32);
 void func_8212187C(s32);
-void func_821351F8(CameraNode*, ActivePokemon*);
+void BattleCamera_StartSpeciesPath(CameraNode*, ActivePokemon*);
 s32 func_8211F644(ActivePokemon*, CameraNode*);
 void func_82104C68(ActivePokemon*, s32);
 f32 BattleScene_GetParticipantHeight(ActivePokemon*);
 void BattleCamera_CaptureModelOrbit(ActivePokemon*, CameraNode*);
 extern f32 D_FLT_82196040;
 void BattleCamera_CaptureModelOrbit(ActivePokemon*, CameraNode*);
-void func_8212054C(CameraNode*);
+void BattleScene_BRollShotFrontClose(CameraNode*);
 extern const f64 D_DBL_821960A0;
 extern f32 D_FLT_82189358[][4];
 void BattleScene_SelectNextBRollCameraShot(CameraNode*);
 void BattleScene_SelectNextBRollCameraShot(CameraNode*);
-void func_82122FD8(CameraNode*, ActivePokemon*);
+void BattleScene_EaseCameraTargetFromSavedEye(CameraNode*, ActivePokemon*);
 s32 func_821217DC(M2C_UNK);
 extern f32 D_FLT_82189358[][4];
 void BattleScene_SelectNextBRollCameraShot(CameraNode*);
 void BattleScene_SelectNextBRollCameraShot(CameraNode*);
-s32 func_82135734(CameraNode*, ActivePokemon*);
+s32 BattleCamera_StepPath(CameraNode*, ActivePokemon*);
 s32 func_821217DC(M2C_UNK);
 void func_82122628(s32, Vec3f, s32, s32, f32, f32);
 extern f32 D_FLT_821960A8;
 f32 func_82121750(ActivePokemon*, f32, f32);
-void func_82122A7C(CameraNode*, ActivePokemon*);
-s32 func_82135734(CameraNode*, ActivePokemon*);
+void BattleScene_EaseCameraTargetToParticipant(CameraNode*, ActivePokemon*);
+s32 BattleCamera_StepPath(CameraNode*, ActivePokemon*);
 void func_8212188C(void);
 extern u8* D_800603C0;
 void Audio_FadeCategoriesAndStreams(s32 arg0);
@@ -41,17 +41,18 @@ void Audio_FadeCategoriesAndStreams(s32 arg0);
 extern u8 D_8219A4F4;
 extern u8* D_8218B2B8[];
 void func_8211F9C4(CameraNode*);
-void func_82121C3C(CameraNode*);
+void BattleScene_UpdateParticipantsInView(CameraNode*);
 void func_82108C0C(ActivePokemon*);
 
 /**
  * Selects the next B-roll camera shot from the shot list for D_8219A4F4 (wrapping at 0xFF)
  * and starts it; list 5 jumps straight to phase step 24.
+ * @unverified Name guessed from the code.
  */
-void func_82121434(CameraNode* arg0) {
+void BattleCamera_StartNextBRollShot(CameraNode* camera) {
     if (D_8219A4F4 == 5) {
         sBattleScene.scene->phaseStep = 0x18;
-        func_8211F9C4(arg0);
+        func_8211F9C4(camera);
         return;
     }
     if (D_8218B2B8[D_8219A4F4][sBattleScene.scene->bRollShotIndex] == 0xFF) {
@@ -64,41 +65,41 @@ void func_82121434(CameraNode* arg0) {
     func_8212188C();
     switch (sBattleScene.scene->phaseStep) {
         case 0:
-            func_8211F6B8(arg0);
+            func_8211F6B8(camera);
             break;
         case 2:
-            func_8211F84C(arg0);
+            func_8211F84C(camera);
             break;
         case 4:
-            func_8211FB54(arg0);
+            BattleScene_BRollShotFrontHigh(camera);
             break;
         case 6:
-            func_8211FCC8(arg0);
+            BattleScene_BRollShotRandomPokemon0(camera);
             break;
         case 8:
-            func_8211FF08(arg0);
+            BattleScene_BRollShotRandomPokemon1(camera);
             break;
         case 10:
-            func_82120134(arg0);
+            BattleScene_BRollShotFrontLow(camera);
             break;
         case 12:
-            func_8211FA34(arg0);
+            BattleScene_BRollShotAimPokemon0(camera);
             break;
         case 14:
-            func_8211FAC4(arg0);
+            BattleScene_BRollShotAimPokemon1(camera);
             break;
         case 16:
-            func_821202AC(arg0);
+            BattleScene_BRollShotWideFovPitched(camera);
             break;
         case 18:
-            func_821202AC(arg0);
+            BattleScene_BRollShotWideFovPitched(camera);
             break;
         case 20:
-            func_82120418(arg0);
+            BattleScene_BRollShotFrontWide(camera);
             break;
         case 22:
-            func_8212054C(arg0);
+            BattleScene_BRollShotFrontClose(camera);
             break;
     }
-    func_82121C3C(arg0);
+    BattleScene_UpdateParticipantsInView(camera);
 }

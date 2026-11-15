@@ -23,22 +23,6 @@ typedef struct GbIdentityZ {
 
 extern s32 D_88403358;
 
-/*
- * func_88400064
- *
- * Light-node callback (the stage light's "angle" callback A, declared in
- * battle_engine.h as Battle_StageLightAngleCallbackA).  When called with
- * event 2 it takes the direction from the current camera's eye position to
- * its target position (Vec3f_CalculateDistanceAngles) and stores the two
- * resulting angles, each offset by +0x2000, in the light's halfwords at
- * offsets 0x1C and 0x1E.  Always returns 0.
- *
- * Structure follows Intro_LightAngleCallbackA / Completion_LightAngleCallbackA
- * in the Stadium 1 decomp, but Zero adds +0x2000 to both angles where those
- * subtract 0x2000 from the second one (the constants come from the retail
- * code).  The locals sit 4 bytes below where a plain declaration would put
- * them, which the unused leading `pad` reproduces.
- */
 extern CameraNode* D_80060488;
 
 extern M2C_UNK D_800AA150;
@@ -119,39 +103,47 @@ extern u8 D_00235D70[];
 extern u8 D_00238BD0[];
 
 // cartridge_check.c
-void BattleHud_Noop(void);
-void func_88400100(void);
-void Trade_DrawSaveSeqMessageBackdrop(s16 arg0, s16 arg1, s16 arg2, s16 arg3);
-void func_88400020(s32 arg0, s8 *arg1);
-s32 func_88400064(s32 arg0, GeoLightNode* arg1);
-s32 func_884000CC(void);
-s32 func_88400108(s32 arg0);
-M2C_UNK func_88400A1C(s16, s16, s16, s16);          /* extern */
+void CartridgeCheck_PokeBallVisibilityCallback(s32 event, s8 *node);
+void CartridgeCheck_UnusedNoop1(void);
+s32 CartridgeCheck_LightAngleCallback(s32 event, GeoLightNode* light);
+s32 CartridgeCheck_ReadInputs(void);
+void CartridgeCheck_UnusedNoop2(void);
+s32 CartridgeCheck_DrawFrame(s32 arg0);
+void CartridgeCheck_DrawGameBoyIcon(s32 x, s32 y, s32 port, s32 game);
+void CartridgeCheck_DrawPortPanel(s32 port, s32 x, s32 y);
+s32 CartridgeCheck_MoveCursor(s32 cursor);
+void CartridgeCheck_DrawMessageWindow(s16 x, s16 y, s16 width, s16 height);
 
 // cartridge_check_options.c
-void func_884022A4(void);
-void func_88400A98(void);
-void func_88400B70(void);
-void func_88400C48(s16 arg0, s16 arg1);
-void func_88400CE8(s32 arg0);
-void func_88400DAC(s8* arg0);
-void func_88400F4C(void);
-void Options_DrawClearSavePrompt(s32 arg0, s32 arg1);
-void Options_DrawMenu(s32, u8);
-s32 Options_RunClearSavePrompt(s32 arg0, s32 arg1, u8 arg2);
-void Save_InitializeBank3(void);
-void func_88401E24(void);
-void func_88401F38(void);
-void func_88402038(void);
-void func_8840115C(void);
-void func_884022AC(void);                            /* extern */
-s32 TransferPak_EnterWithPakSkippingCheck(void);
-void func_88402538(void);
-void func_884029FC(void);
-void func_884025E4(void);
-void func_884026A4(s32);
-s32 TransferPak_EnterCheckScreenNoPaks(void);
-s32 TransferPak_EnterCheckScreenOnReturn(void);
-s32 Fragment006_Main(s32 arg0, s32 arg1);
+void CartridgeCheck_OpenMessageWindow(void);
+void CartridgeCheck_CloseMessageWindow(void);
+void CartridgeCheck_DrawNextArrow(s16 x, s16 y);
+void CartridgeCheck_ShowMessageUntilA(s32 text);
+void CartridgeCheck_ScrollToNextMessage(s8* text);
+void CartridgeCheck_RunGameBoyGiftEvent(void);
+void CartridgeCheck_PlayBootIntro(void);
+void CartridgeCheck_PlayCupWinIntro(void);
+void CartridgeCheck_DrawScreen(void);
+void Options_DrawMenu(s32 row, u8 flags);
+void Options_DrawClearSavePrompt(s32 secondAsk, s32 choice);
+s32 Options_RunClearSavePrompt(s32 secondAsk, s32 row, u8 flags);
+void Save_ResetAll(void);
+void Options_RunMenu(void);
+s32 CartridgeCheck_RunScreen(void);
+void CartridgeCheck_PlayExitToTitle(void);
+void CartridgeCheck_PlaySetCartridgeAnimation(void);
+void CartridgeCheck_PlayLowerMonitor(void);
+void CartridgeCheck_PlayZoomIntoMonitor(void);
+void CartridgeCheck_PlayZoomOutOfMonitor(void);
+void CartridgeCheck_UnusedNoop3(void);
+void CartridgeCheck_TransitionToMainMenu(void);
+s32 CartridgeCheck_EnterFromBoot(void);
+s32 CartridgeCheck_EnterAfterCupWin(void);
+s32 CartridgeCheck_EnterFromMainMenu(void);
+void CartridgeCheck_ReadPortSummaries(void);
+void CartridgeCheck_InitCursor(void);
+void CartridgeCheck_InitModels(s32 fromMainMenu);
+void CartridgeCheck_InitRenderTargets(void);
+s32 CartridgeCheck_Main(s32 fromMainMenu, s32 arg1);
 
 #endif // FRAGMENT_CARTRIDGE_CHECK_H

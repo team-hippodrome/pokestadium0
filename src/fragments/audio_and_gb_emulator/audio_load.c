@@ -234,7 +234,8 @@ extern s32 D_8118461C;
  * with AudioHeap_Alloc; OoT tries the external pool first.
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioHeap_InitSampleCaches(s32 arg0, s32 arg1) {
     s32 temp_v0;
@@ -665,7 +666,8 @@ extern s32 D_811858E0;
  * Corresponds to OoT AudioLoad_InitSampleDmaBuffers (original name Nas_WaveDmaNew).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioHeap_Init.
  */
 void AudioLoad_InitSampleDmaBuffers(s32 num_notes) {
     s32 i;
@@ -740,7 +742,8 @@ extern u8 D_81184655[1];
  * Corresponds to OoT AudioLoad_IsFontLoadComplete (original name Nas_CheckIDbank).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioSeq_SequencePlayerDisable.
  */
 s32 AudioLoad_IsFontLoadComplete(s32 arg0) {
     if (arg0 == 0xFF) {
@@ -759,7 +762,8 @@ extern u8 D_81184656[1];
  * Corresponds to OoT AudioLoad_IsSeqLoadComplete (original name Nas_CheckIDseq).
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name and comment guessed from the code.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioSeq_SequencePlayerDisable.
  */
 s32 AudioLoad_IsSeqLoadComplete(s32 arg0) {
     if (arg0 == 0xFF) {
@@ -851,7 +855,8 @@ void AudioLoad_SetSampleLoadStatus(s32 arg0, s32 arg1) {
  * Stores `table`'s ROM base `romAddr` and medium parameter `unkMediumParam`, and adds the base to every
  * cartridge entry (medium 2) that has a size.
  * Corresponds to OoT AudioLoad_InitTable (original name Nas_BankHeaderInit).
- * @unverified Name follows the counterpart; not checked in play.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioLoad_Init.
  */
 void AudioLoad_InitTable(AudioTable* table, u32 romAddr, u16 unkMediumParam) {
     s32 i;
@@ -1428,7 +1433,8 @@ extern u8* D_811858A4;
  * Corresponds to OoT AudioLoad_GetLoadTable.
  * Seen in play (2026-11-13) ran when the GB player started (main menu GB, Yes; second entry after
  * quitting).
- * @unverified Name guessed from the code; comment kept.
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい) with JP Green in the
+ * Transfer Pak; called from AudioLoad_LoadPermanentSamples.
  */
 u8* AudioLoad_GetLoadTable(s32 arg0) {
     u8* ret;

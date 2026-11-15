@@ -5,10 +5,9 @@
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32);
 extern M2C_UNK BattleAnim_RunOscillatingFlameUnderneathPokemon;
 extern M2C_UNK D_8218E7B8;
-extern M2C_UNK func_8214E67C;
 s32 func_82107CF0(s32);
-void func_82163D7C(Particle* arg0);
-void func_82164AD0(Particle* arg0);
+void BattleAnim_PowderCloudScaleMotion(Particle* arg0);
+void BattleAnim_CallbackSharedAnimatedVerticalFade(Particle* arg0);
 
 /**
  * Particle callback for the growing spark: waits its delay, shows for 12 frames, fades out
@@ -171,7 +170,7 @@ void BattleAnim_InitializeIcePunchHit(void) {
 void BattleAnim_InitializeThunderPunchHit(void) {
     func_8213B560(0, &func_82162C68, &D_8218E728, 0, 1, 0x11, 9, 3, 5);
     func_8213B560(4, &func_82162938, &D_8218E788, 0, 1, 0x10, 0x64, 0, 0);
-    func_8213B5D8(0, 4, 5, &func_8214E67C, &D_8218E610, 8, 4, 2, 0, 0, 0);
+    func_8213B5D8(0, 4, 5, &BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade, &D_8218E610, 8, 4, 2, 0, 0, 0);
     func_8213B794(0, 0, 0x40, 8, 0xC8);
     func_8213BC00(0, 0x17, 0xE1, 0, 0x40);
 }
@@ -273,8 +272,9 @@ void BattleAnim_StartEffect137Descriptor3FRisingFade(void) {
 
 /**
  * Queues the small and large sand particles on the current owner.
+ * @unverified Name guessed from the code.
  */
-void func_82166DC4(void) {
+void BattleAnim_StartEffect136Sand(void) {
     func_8213B5D8(0, 3, 2, &BattleAnim_RunSmallSand, &D_8218E7D0, 0, 6, 0x11, (s32) D_8219A80A, 0x11, 0);
     func_8213B5D8(0, 4, 2, &BattleAnim_RunLargeSand, &D_8218E7D0, 0, 4, 0x11, (s32) D_8219A80A, 0x11, 0);
 }
@@ -290,7 +290,7 @@ void BattleAnim_InitializeScratchSlashUse(void) {
         BattleAnim_InitializeCutUse();
         return;
     }
-    sp30 = func_8215FAA4;
+    sp30 = BattleAnim_CallbackSharedDescriptor29ScaleAnimFade;
     func_8213B560(0, (M2C_UNK*)sp30, &D_8218E6D0, 0, 3, 0x10, (s32) D_8219A80A, 0xB, 0);
     func_8213B560(4, (M2C_UNK*)sp30, &D_8218E6D0, 0, 3, 0x10, (s32) D_8219A80A, 0xB, 1);
     func_8213B560(0xA, (M2C_UNK*)sp30, &D_8218E6D0, 0, 3, 0x10, (s32) D_8219A80A, 0xB, 2);
@@ -341,7 +341,7 @@ void BattleAnim_InitializeCutEffect(void) {
  */
 void BattleAnim_InitializeCutCrabhammerHit(void) {
     func_8213B794(0, 2, 0x10, 0x12, 0xFF);
-    func_8213B560(3, &func_821603C8, &D_8218E6D8, 0, 1, 0x10, (s32) D_8219A80A, 0x10, 2);
+    func_8213B560(3, &BattleAnim_SlashGrowFade, &D_8218E6D8, 0, 1, 0x10, (s32) D_8219A80A, 0x10, 2);
     func_8213B560(3, &BattleAnim_RunSlashMoveWhiteFlashOverlay, &D_8218E790, 0, 1, 0x18, 0, 0xF, 0);
 }
 
@@ -467,7 +467,7 @@ void BattleAnim_InitializePowderSporeGasMoveHit(void) {
         func_8213BC7C(0, 0x64, 0x3B, 0, 0xA0, 4);
         break;
     }
-    func_8213B560(0, &func_82163D7C, &D_8218E7B8, 0, 7, 0x10, 0x64, 1, 0);
+    func_8213B560(0, &BattleAnim_PowderCloudScaleMotion, &D_8218E7B8, 0, 7, 0x10, 0x64, 1, 0);
 }
 
 /**
@@ -543,9 +543,9 @@ void BattleAnim_InitializeBideRageUse(void) {
     M2C_UNK *sp38;
 
     func_8213BC7C(0, 1, 0xA, 0, 0xC8, 0x10);
-    sp38 = &func_82164AD0;
-    func_8213B5D8(6, 4, 0xE, &func_82164AD0, &D_8218E770, 0, 1, 0x11, 7, 0x1A, 0);
-    func_8213B5D8(7, 8, 7, &func_82164AD0, &D_8218E770, 0, 1, 0x11, 7, 0x1A, 0);
+    sp38 = &BattleAnim_CallbackSharedAnimatedVerticalFade;
+    func_8213B5D8(6, 4, 0xE, &BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 0x11, 7, 0x1A, 0);
+    func_8213B5D8(7, 8, 7, &BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 0x11, 7, 0x1A, 0);
     func_8213B560(0, &BattleAnim_RunOscillatingFlameUnderneathPokemon, &D_8218E7F8, 0, 0x20, 7, 0, 0, 0);
     func_8215E510();
 }
@@ -595,8 +595,9 @@ void BattleAnim_InitializeEarthquakeFissureHitSequence(void) {
 /**
  * Queues four vertical-fade particles (frames 4-7) and two default hit sparks (frames 8 and
  * 16) on the current owner.
+ * @unverified Name guessed from the code.
  */
-void func_82168364(void) {
+void BattleAnim_SpawnVerticalFadesAndHitSparks(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E580[0x4A], 0, 8, 0xA, 0, 0x33, 1);
     BattleAnim_CreateEffectSlotForCurrentOwner(5, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E580[0x4A], 0, 8, 0xA, 0, 0x33, 1);
     BattleAnim_CreateEffectSlotForCurrentOwner(6, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E580[0x4A], 0, 8, 0xA, 0, 0x33, 1);
