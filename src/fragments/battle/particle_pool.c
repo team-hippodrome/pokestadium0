@@ -125,8 +125,8 @@ void Particle_ResetDefaults(Particle* arg0) {
     Particle_Param1_SetS16_0BF10(arg0, 0);
     Particle_SpawnIndex_SetS16_0BED8(arg0, 0);
     Particle_SetByteParam1(arg0, 0);
-    Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
-    Particle_SetEnvColor(arg0, 0xFF, 0xFF, 0xFF);
+    Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF); // #FFFFFF
+    Particle_SetEnvColor(arg0, 0xFF, 0xFF, 0xFF); // #FFFFFF
     Particle_SetPrimAlpha(arg0, 0xFF);
 
     arg0->scale = 1.0f;
@@ -403,7 +403,7 @@ Particle* BattleAnim_CreateProceduralParticle(s16 arg0, s16 arg1, s32 arg2, f32 
 void func_80015908(ActivePokemon*, s32, Vec3f*);
 void BattleScene_GetParticipantModelSizeScaled(ActivePokemon* arg0, Vec3f* arg1);
 /**
- * Sets the particle's origin once at spawn from its anchor mode (unk_CC): the owner's model
+ * Sets the particle's origin once at spawn from its anchor mode (anchorMode): the owner's model
  * position, its default anchor, bone 100 (optionally on the ground, or pushed forward or
  * backward along its facing by its size), or its Poke Ball position.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (146 of the moves).
@@ -848,7 +848,7 @@ void BattleAnim_SpawnSingleParticle(BattleAnimEffectSlot* arg0) {
 }
 
 /**
- * Runs an effect slot that is due: by its kind (unk_16) it spawns batched particles, a
+ * Runs an effect slot that is due: by its kind (anchorMode, +0x16) it spawns batched particles, a
  * screen-centered or screen-origin procedural particle, sets an effect state flag,
  * queues effect list 9, spawns a single particle, or spawns standard particles.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (157 of the moves).
@@ -1020,8 +1020,8 @@ void BattleAnim_CleanupEffectsRetainingCategory4(void) {
         }
     }
 
-    Model_SetMaterialColor(&sActivePokemon[0]->displayObject, 0xFF, 0xFF, 0xFF, 0);
-    Model_SetMaterialColor(&sActivePokemon[1]->displayObject, 0xFF, 0xFF, 0xFF, 0);
+    Model_SetMaterialColor(&sActivePokemon[0]->displayObject, 0xFF, 0xFF, 0xFF, 0); // #FFFFFF
+    Model_SetMaterialColor(&sActivePokemon[1]->displayObject, 0xFF, 0xFF, 0xFF, 0); // #FFFFFF
     Model_SetMaterialAlpha(&sActivePokemon[0]->displayObject, 0xFF);
     Model_SetMaterialAlpha(&sActivePokemon[1]->displayObject, 0xFF);
 
@@ -1119,7 +1119,7 @@ void BattleAnim_CleanupEffects(s32 cleanup_mode) {
 }
 
 /**
- * Advances the lifecycle of every list-4 particle of owner arg1 whose sub-kind (unk_CB)
+ * Advances the lifecycle of every list-4 particle of owner arg1 whose resourceListId
  * is arg0, which tells looping effects to finish.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec

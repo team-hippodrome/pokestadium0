@@ -1336,6 +1336,10 @@ void Particle_AddVelocityFromRotationTemplate2(Particle* arg0) {
 M2C_UNK Particle_ApplyMotionStep(s32);                         /* extern */
 M2C_UNK func_8213FB50();                            /* extern */
 
+/**
+ * Calls func_8213FB50 and then Particle_ApplyMotionStep on the particle; the counterpart of
+ * Particle_AddVelocityFromRotationTemplate2 with the full motion step.
+ */
 void Particle_AddVelocityFromRotationTemplate1(s32 arg0) {
     func_8213FB50();
     Particle_ApplyMotionStep(arg0);
@@ -2950,7 +2954,7 @@ s32 Particle_ApproachPrimAlphaThenAdvance(Particle* arg0, u8 arg1, u8 arg2) {
 }
 
 /**
- * Sets the particle's unk_A6 to arg1.
+ * Sets the particle's param0 to arg1.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
  * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
@@ -2960,7 +2964,7 @@ void Particle_SetParam0(Particle* arg0, s16 arg1) {
 }
 
 /**
- * Counts field A2 down by arg2 to at least arg1; returns 1 once it reaches arg1.
+ * Counts param0 (+0xA2) down by arg2 to at least arg1; returns 1 once it reaches arg1.
  * @unverified Name guessed from the code.
  */
 s32 Particle_StepParam0DownTo(Particle* particle, s16 floor, s16 step) {
@@ -3011,18 +3015,18 @@ s32 Particle_Param0_DecrementToStep1_0BD80(Particle* arg0, s16 arg1) {
 }
 
 /**
- * Counts unk_A6 (offset 0xA2) down by 1 toward 0; returns 1 when it gets there.
+ * Counts param0 (offset 0xA2) down by 1 toward 0; returns 1 when it gets there.
  * Decrease the selected field toward its threshold and return the completion result.
- * Seen in play (2026-11-13) in the 165-move sweep (Cut): unk_A6 at 0xA2 went from 7 to 6.
+ * Seen in play (2026-11-13) in the 165-move sweep (Cut): param0 at 0xA2 went from 7 to 6.
  */
 s32 Particle_DecrementParam0ToZero(Particle* arg0) {
     return Particle_StepParam0DownTo(arg0, 0, 1);
 }
 
 /**
- * Counts unk_A6 (offset 0xA2) down by 1 toward 0 and advances the lifecycle when it gets there.
+ * Counts param0 (offset 0xA2) down by 1 toward 0 and advances the lifecycle when it gets there.
  * Run the countdown helper and advance lifecycle when it reports completion.
- * Seen in play (2026-11-13) in the 165-move sweep (Mega Kick, Vice Grip): unk_A6 at 0xA2 went from
+ * Seen in play (2026-11-13) in the 165-move sweep (Mega Kick, Vice Grip): param0 at 0xA2 went from
  * 0x32 to 0x31.
  */
 s32 Particle_DecrementParam0ToZeroThenAdvance(Particle* arg0) {
@@ -3035,7 +3039,7 @@ s32 Particle_DecrementParam0ToZeroThenAdvance(Particle* arg0) {
 }
 
 /**
- * Sets the particle's unk_A8 to arg1.
+ * Sets the particle's countdown to arg1.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
  * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
@@ -3045,7 +3049,7 @@ void Particle_SetCountdown(Particle* arg0, s16 arg1) {
 }
 
 /**
- * Counts field A4 down by 1 to at least arg1; returns 1 once it reaches arg1.
+ * Counts countdown (+0xA4) down by 1 to at least arg1; returns 1 once it reaches arg1.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
  * breakpoint): ran only for Aurora Beam, Psybeam.
  * @unverified Name guessed from the code.
@@ -3063,9 +3067,9 @@ s32 Particle_TickCountdownTo(Particle* particle, s16 floor) {
 }
 
 /**
- * Counts unk_A8 (offset 0xA4) down by 1 toward 0; returns 1 when it gets there.
+ * Counts countdown (offset 0xA4) down by 1 toward 0; returns 1 when it gets there.
  * Decrease the selected field toward its threshold and return the completion result.
- * Seen in play (2026-11-13) in the 165-move sweep (Ember): unk_A8 at 0xA4 went from 7 to 6.
+ * Seen in play (2026-11-13) in the 165-move sweep (Ember): countdown at 0xA4 went from 7 to 6.
  */
 s32 Particle_DecrementCountdownToZero(Particle* arg0) {
     return Particle_TickCountdownTo(arg0, 0);
@@ -3098,8 +3102,8 @@ void Particle_SetEffectList(s8 *particle, int effect_list)
 }
 
 /**
- * Sets the particle's unk_AC to arg1.
- * Seen in play (2026-11-13) in the 165-move sweep: arg1 = 0 cleared unk_AC (offset 0xA8) from 0x16.
+ * Sets the particle's spawnIndex to arg1.
+ * Seen in play (2026-11-13) in the 165-move sweep: arg1 = 0 cleared spawnIndex (offset 0xA8) from 0x16.
  */
 void Particle_SetSpawnIndex(Particle* arg0, s16 arg1) {
     arg0->spawnIndex = arg1;
@@ -3130,9 +3134,9 @@ void Particle_SetByteParam1Copy(s8 *particle, unsigned char value)
 }
 
 /**
- * Sets the particle's unk_CC to arg1.
+ * Sets the particle's anchorMode to arg1.
  * Seen in play (2026-11-13) in the 165-move sweep (Selfdestruct): arg1 = 9 set the byte at 0xC8
- * (unk_CC) from 2 to 9.
+ * (anchorMode) from 2 to 9.
  */
 void Particle_SetAnchorMode(s8 *arg0, unsigned short arg1)
 {
@@ -3140,8 +3144,8 @@ void Particle_SetAnchorMode(s8 *arg0, unsigned short arg1)
 }
 
 /**
- * Sets the particle's unk_AA to arg1.
- * Seen in play (2026-11-13) in the 165-move sweep (Thunder Punch, Scratch): arg1 = 0 cleared unk_AA
+ * Sets the particle's param1 to arg1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Thunder Punch, Scratch): arg1 = 0 cleared param1
  * (offset 0xA6) from 1.
  */
 void Particle_SetParam1(Particle* arg0, s16 arg1) {
@@ -3149,7 +3153,7 @@ void Particle_SetParam1(Particle* arg0, s16 arg1) {
 }
 
 /**
- * Sets the particle's unk_CE to arg1.
+ * Sets the particle's byteParam2 to arg1.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
  * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
@@ -3159,7 +3163,7 @@ void Particle_SetByteParam2(Particle* arg0, s16 arg1) {
 }
 
 /**
- * Sets the particle's unk_CD to arg1.
+ * Sets the particle's byteParam0 to arg1.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening, a switch
  * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
@@ -3169,9 +3173,9 @@ void Particle_SetByteParam0(Particle* arg0, s16 arg1) {
 }
 
 /**
- * Sets the particle's unk_AE to arg1.
+ * Sets the particle's scratchA to arg1.
  * Seen in play (2026-11-13) in the 165-move sweep (Pay Day, Double Kick): arg1 = 0xE1 was written
- * to unk_AE, which sits at offset 0xAA.
+ * to scratchA, which sits at offset 0xAA.
  */
 void Particle_SetScratchA(Particle* arg0, s16 arg1) {
     arg0->scratchA = arg1;
@@ -3180,8 +3184,8 @@ void Particle_SetScratchA(Particle* arg0, s16 arg1) {
 M2C_UNK ParticleMath_StepS16Toward(s32, s16, s16);               /* extern */
 
 /**
- * Steps the particle's unk_AE toward a target (helper of the approach family).
- * Seen in play (2026-11-13) in the 165-move sweep (Pay Day): with target 0 and step 0x40, unk_AE
+ * Steps the particle's scratchA toward a target (helper of the approach family).
+ * Seen in play (2026-11-13) in the 165-move sweep (Pay Day): with target 0 and step 0x40, scratchA
  * (offset 0xAA) went from 0xE1 to 0xA1.
  */
 void Particle_ApproachScratchA(Particle* arg0, s16 arg1, s16 arg2) {
@@ -3191,7 +3195,7 @@ void Particle_ApproachScratchA(Particle* arg0, s16 arg1, s16 arg2) {
 /**
  * Run the field-approach helper and advance lifecycle when it reports completion.
  * Seen in play (2026-11-13) in the 165-move sweep (Ice Beam, Blizzard): with target 0xDC and step
- * 0x20 it moved unk_AE (offset 0xAA) from 0 to 0x20 and returned 0, so the lifecycle did not
+ * 0x20 it moved scratchA (offset 0xAA) from 0 to 0x20 and returned 0, so the lifecycle did not
  * advance yet.
  */
 s32 Particle_ApproachScratchAThenAdvance(Particle* arg0, s16 arg1, s16 arg2) {
@@ -3204,8 +3208,8 @@ s32 Particle_ApproachScratchAThenAdvance(Particle* arg0, s16 arg1, s16 arg2) {
 }
 
 /**
- * Sets the particle's unk_B0 to arg1.
- * Seen in play (2026-11-13) in the 165-move sweep (Bite): arg1 = 2 was written to unk_B0, which
+ * Sets the particle's scratchB to arg1.
+ * Seen in play (2026-11-13) in the 165-move sweep (Bite): arg1 = 2 was written to scratchB, which
  * sits at offset 0xAC.
  */
 void Particle_SetScratchB(Particle* arg0, s16 arg1) {
@@ -3215,8 +3219,8 @@ void Particle_SetScratchB(Particle* arg0, s16 arg1) {
 M2C_UNK ParticleMath_StepS16Toward(s32, s16, s16);               /* extern */
 
 /**
- * Steps the particle's unk_B0 toward a target (helper of the approach family).
- * Seen in play (2026-11-13) in the 165-move sweep (Selfdestruct): with target 0 and step 8, unk_B0
+ * Steps the particle's scratchB toward a target (helper of the approach family).
+ * Seen in play (2026-11-13) in the 165-move sweep (Selfdestruct): with target 0 and step 8, scratchB
  * (offset 0xAC) went from 0x64 to 0x5C.
  */
 void Particle_ApproachScratchB(Particle* arg0, s16 arg1, s16 arg2) {

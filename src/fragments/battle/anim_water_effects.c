@@ -1480,7 +1480,7 @@ void BattleAnim_SetupTriAttackHitSpark(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-M2C_UNK Particle_GetUnkCE();                            /* extern */
+M2C_UNK Particle_GetByteParam2();                            /* extern */
 void Particle_MarkInactive(Particle* arg0);                      /* extern */
 M2C_UNK func_8213CB3C(s8 *);                      /* extern */
 M2C_UNK Particle_AnimateFramesForwardLoopedThenAdvance(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32); /* extern */
@@ -1499,7 +1499,7 @@ M2C_UNK func_8214BEE8(s8 *);                      /* extern */
 void BattleAnim_RunTriAttackHitSpark(Particle* arg0) {
     s16 temp_v1;
 
-    Particle_GetUnkCE();
+    Particle_GetByteParam2();
     temp_v1 = arg0->lifecycle;
     switch (temp_v1) {                              /* irregular */
     case 1:

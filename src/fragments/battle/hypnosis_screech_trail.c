@@ -334,7 +334,7 @@ Gfx* HypnosisScreechTrail_Draw(Gfx* arg0) {
     gDPLoadTextureBlock(arg0++, sBattleAnimAssetPointers[0xA8], G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
     gSPDisplayList(arg0++, D_82192B98);
-    gDPSetPrimColor(arg0++, 0, 0, 255, 255, 255, sWaterSurface.alpha);
+    gDPSetPrimColor(arg0++, 0, 0, 255, 255, 255, sWaterSurface.alpha); // #FFFFFF
     gSPMatrix(arg0++, sWaterSurface.mtx, G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
     vtx = sWaterSurface.vtx;

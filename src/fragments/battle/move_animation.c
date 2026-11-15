@@ -1998,7 +1998,7 @@ s32 BattleAnim_TrySetModelEventTrackFromRow(ActivePokemon* active_pokemon, s32 c
 
 /**
  * Sets the model event track of move cue cue_index (when it has one and the model is not
- * busy), restarts it at frame 0 and stores event_state in state.unk_36.
+ * busy), restarts it at frame 0 and stores event_state in state.modelEventTrackState.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
  * breakpoint): ran only for Hypnosis, Lovely Kiss, Sing, Sleep Powder, Spore.
  * @unverified Name guessed from the code.

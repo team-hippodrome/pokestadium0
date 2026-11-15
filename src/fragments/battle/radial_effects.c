@@ -98,7 +98,7 @@ void BattleAnim_StartEffect19Radial20_EmitVariantD(void) {
     sp54 += 6.0f;
     r1 = guRandom();
     r2 = guRandom();
-    Radial20_VariantD(sp64, sp60, sp5C, sp58, ((r1 % 4) * 0.01) + sp54 - 0.02, sp50 - ((r2 % 5) * 0.3) + 0.6, 3, 0x80, 0xC0, 0xFF, 0xC8, 0.1f, 2.0f, 5.0f, 60);
+    Radial20_VariantD(sp64, sp60, sp5C, sp58, ((r1 % 4) * 0.01) + sp54 - 0.02, sp50 - ((r2 % 5) * 0.3) + 0.6, 3, 0x80, 0xC0, 0xFF, 0xC8, 0.1f, 2.0f, 5.0f, 60); // #80C0FF
 }
 
 /**
@@ -161,7 +161,7 @@ void BattleAnim_EndEffect9Radial20_Init(void) {
     func_8216DAC0(&sp34);
     sp30 = BattleAnim_EffectTertiaryOwnerModelScale();
     BattleAnim_ResetSharedEffectMatrix();
-    LassoHit_Init(sp34.x, sp34.y, sp34.z, sp30, 0x40, 0xFF, 0xFF, 0, 0, 0xFF);
+    LassoHit_Init(sp34.x, sp34.y, sp34.z, sp30, 0x40, 0xFF, 0xFF, 0, 0, 0xFF); // inner #40FFFF, outer #0000FF
 }
 
 /**
@@ -339,7 +339,7 @@ void BattleAnim_InitializeStringShotUse(void) {
     BattleAnim_EffectSecondaryOwnerBonePosition(&sp34);
     sp30 = BattleAnim_EffectTertiaryOwnerModelScale();
     BattleAnim_ResetSharedEffectMatrix();
-    LassoHit_Init(sp34.x, sp34.y, sp34.z, sp30, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF);
+    LassoHit_Init(sp34.x, sp34.y, sp34.z, sp30, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF); // inner #FFFFFF, outer #FFFFFF
 }
 
 /**
@@ -380,7 +380,7 @@ void BattleAnim_SetupStringShotHitRadial(void) {
     BattleAnim_EffectSecondaryOwnerBonePosition(&sp34);
     sp30 = BattleAnim_EffectTertiaryOwnerModelScale();
     BattleAnim_ResetSharedEffectMatrix();
-    LassoHit_Init(sp34.x, sp34.y, sp34.z, sp30, 0xFF, 0xFF, 0x40, 0xFF, 0xFF, 0x40);
+    LassoHit_Init(sp34.x, sp34.y, sp34.z, sp30, 0xFF, 0xFF, 0x40, 0xFF, 0xFF, 0x40); // inner #FFFF40, outer #FFFF40
 }
 
 /**
@@ -430,5 +430,5 @@ void BattleAnim_StartEffect98Radial20_EmitVariantD(void) {
     sp54 += 6.0f;
     r1 = guRandom();
     r2 = guRandom();
-    Radial20_VariantD(sp64, sp60, sp5C, sp58, ((r1 % 4) * 0.01) + sp54 - 0.02, sp50 - ((r2 % 5) * 0.3) + 0.6, 3, 0xFF, 0xFF, 0x40, 0xC8, 0.1f, 2.0f, 5.0f, 60);
+    Radial20_VariantD(sp64, sp60, sp5C, sp58, ((r1 % 4) * 0.01) + sp54 - 0.02, sp50 - ((r2 % 5) * 0.3) + 0.6, 3, 0xFF, 0xFF, 0x40, 0xC8, 0.1f, 2.0f, 5.0f, 60); // #FFFF40
 }
