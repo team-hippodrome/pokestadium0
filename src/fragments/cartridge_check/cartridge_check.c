@@ -57,8 +57,8 @@ s32 CartridgeCheck_LightAngleCallback(s32 event, GeoLightNode* light) {
 
     if (event == 2) {
         Vec3f_CalculateDistanceAngles(&D_80060488->view.targetPosition, &D_80060488->view.eyePosition, &sp28, &sp26, &sp24);
-        light->pitch = sp26 + 0x2000;
-        light->yaw = sp24 + 0x2000;
+        light->rotationX = sp26 + 0x2000;
+        light->rotationY = sp24 + 0x2000;
     }
     return 0;
 }

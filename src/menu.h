@@ -21,7 +21,7 @@ typedef struct Menu {
     /* 0x04 */ u16* itemFlags; // @unverified: one per item slot, bit 0 = disabled (Menu_UpdateCursorSkipDisabled skips it)
     /* 0x08 */ s32 cursor; // index of the selected item: 0-2 in the Free Battle rule window
     /* 0x0C */ s32 cellWidth; // 396 for the Free Battle rule window rows
-    /* 0x10 */ s32 cellHeight; // row pitch in pixels: 32 in the rule window
+    /* 0x10 */ s32 cellHeight; // row height in pixels: 32 in the rule window
     /* 0x14 */ MenuDrawItemFunc drawItem; // called once per item with 0x12 added to the flags of the cursor item; FreeBattle_DrawMenuRow
     /* 0x18 */ Controller* controller; // gControllers (D_800603C0)
     /* 0x1C */ s32 unk_1C; // set to 0xC00 by the Init functions

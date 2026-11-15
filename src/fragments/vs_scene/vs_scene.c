@@ -119,8 +119,8 @@ s32 VsScene_LightFollowCameraCallback(s32 phase, GraphNode* node) {
 
     if (phase == 2) {
         Vec3f_CalculateDistanceAngles(&D_80060488->view.targetPosition, &D_80060488->view.eyePosition, &sp28, &sp26, &sp24);
-        ptr->pitch = sp26 + 0x2000;
-        ptr->yaw = sp24 - 0x2000;
+        ptr->rotationX = sp26 + 0x2000;
+        ptr->rotationY = sp24 - 0x2000;
     }
     return 0;
 }
