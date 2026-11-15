@@ -1431,8 +1431,8 @@ u16 ScrollGrid_UpdateCursor(ScrollGrid *menu)
       menu->cursorY = (menu->cursorY + menu->cellHeight) - 1;
     }
     menu->scrollFlags |= 0x400;
-    new_var = (((menu->items->count + menu->columns) - 1) / menu->columns) * menu->cellHeight;
-    menu->cursorY += (((new_var - menu->cursorY) - 1) < menu->cursorStep) ? ((new_var - menu->cursorY) - 1) : (menu->cursorStep);
+    new_var = (((menu->items->count + menu->columns) - 1) / menu->columns) * menu->cellHeight; // FAKE: permuter temp
+    menu->cursorY += (((new_var - menu->cursorY) - 1) < menu->cursorStep) ? ((new_var - menu->cursorY) - 1) : (menu->cursorStep); // FAKE: permuter temp
     ScrollGrid_ScrollDownToCursor(menu);
     lim = (ScrollGrid_GetRowLength((ScrollGrid *) menu) - 1) * menu->cellWidth;
     if (lim < menu->cursorX)

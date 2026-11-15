@@ -89,7 +89,7 @@ f32 Math_ProjectPointOnSegment(
     f32 ax, f32 ay, f32 az,
     f32 bx, f32 by, f32 bz
 ) {
-    UNUSED s32 pad[4];
+    UNUSED s32 pad[4]; // FAKE: stack padding
     f32 len_sq;
 
     len_sq = ((bx - ax) * (bx - ax)) + ((by - ay) * (by - ay)) + ((bz - az) * (bz - az));
@@ -121,7 +121,7 @@ f32 Math_DistancePointToSegment(
     f32 ey;
     f32 ez;
     f32 dx2;
-    f32 pad[1];
+    f32 pad[1]; // FAKE: stack padding
     f32 len_sq;
 
     len_sq = SQ(bx - ax) + SQ(by - ay) + SQ(bz - az);

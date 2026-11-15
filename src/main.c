@@ -40,7 +40,7 @@ void Idle_ThreadEntry(s32 arg0) {
     func_8005C130(&D_800809B0);
     func_80057370(0, 0);
 loop_1:
-    goto loop_1;
+    goto loop_1; // FAKE: m2c goto loop, an idle forever loop
 }
 
 M2C_UNK Memory_InitPools();                            /* extern */

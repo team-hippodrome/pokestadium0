@@ -835,7 +835,7 @@ void GeoRender_DrawModelLayers(struct Root80013DC8 *root)
   s8 *entry;
   GeoLayerRenderState ctx;
   GeoRender_InitLayerState((s8 *) (&ctx));
-  ctx.flags = (*((u8 *) (((s8 *) root) + 2))) & 3;
+  ctx.flags = (*((u8 *) (((s8 *) root) + 2))) & 3; // FAKE: cast chain
   if (ctx.flags & 1)
   {
     gSPSetGeometryMode(gDisplayListHead++, G_ZBUFFER);
@@ -853,7 +853,7 @@ void GeoRender_DrawModelLayers(struct Root80013DC8 *root)
       GeoRender_SetLayerRenderMode((s8 *) (&ctx));
       for (; entry != 0; entry = *((s8 **) entry))
       {
-        if ((*((s32 *) (((s8 *) entry) + 0x14))) & 0xFF)
+        if ((*((s32 *) (((s8 *) entry) + 0x14))) & 0xFF) // FAKE: cast chain
         {
           GeoRender_ApplyEntryFog((s8 *) (&ctx), entry);
         }
@@ -861,7 +861,7 @@ void GeoRender_DrawModelLayers(struct Root80013DC8 *root)
         {
           GeoRender_ClearEntryFog(&ctx, (GeoLayerEntry*) entry);
         }
-        if ((*((u8 *) (((s8 *) entry) + 5))) != 0)
+        if ((*((u8 *) (((s8 *) entry) + 5))) != 0) // FAKE: cast chain
         {
           GeoRender_EnableTextureGeneration(&ctx, (s32) entry);
         }
@@ -871,7 +871,7 @@ void GeoRender_DrawModelLayers(struct Root80013DC8 *root)
           {
             GeoRender_ResetMaterialState(&ctx);
           }
-          if ((*((s32 *) (((s8 *) entry) + 0x18))) != 0)
+          if ((*((s32 *) (((s8 *) entry) + 0x18))) != 0) // FAKE: cast chain
           {
             GeoRender_BindTexture((GeoLayerRenderState *) (&ctx), (GeoLayerEntry *) entry);
           }
@@ -883,7 +883,7 @@ void GeoRender_DrawModelLayers(struct Root80013DC8 *root)
           GeoRender_ApplyEntryCombineMode((s8 *) (&ctx), entry);
         }
         GeoRender_DrawEntryDisplayList((s32 *) (&ctx), entry);
-        if ((*((u8 *) (((s8 *) entry) + 4))) != 0)
+        if ((*((u8 *) (((s8 *) entry) + 4))) != 0) // FAKE: cast chain
         {
           GeoRender_ResetMaterialState(&ctx);
         }

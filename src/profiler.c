@@ -357,7 +357,7 @@ void Profiler_PrintMetrics(void) {
         &gProfiler.profiler_data[(gProfiler.frameIdx1 == 0) ? 2 : gProfiler.frameIdx1 - 1];
     struct ProfilerFrameData* profiler_2 =
         &gProfiler.profiler_data[(gProfiler.frameIdx2 == 0) ? 2 : gProfiler.frameIdx2 - 1];
-    s32 pad[3]; // i dont understand. but ok.
+    s32 pad[3]; // FAKE: stack padding; i dont understand. but ok.
 
     HAL_Printf(240, 210, "CPU:%5.3f",
                ((profiler->gameTimes[2] - profiler->gameTimes[0])) * (1 / (float)UNK_FPS_60_APPROX_VALUE));
