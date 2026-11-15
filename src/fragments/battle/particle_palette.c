@@ -359,7 +359,7 @@ M2C_UNK func_821439D0(s8 *);                      /* extern */
  * state.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackOwnerModelTintRampDetach(s8 *arg0) {
+void BattleAnim_CallbackOwnerTintRampDetach(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -454,7 +454,7 @@ M2C_UNK func_82143AD0(s8 *);                      /* extern */
  * lifecycle state.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackOwnerModelTintHoldFadeDetach(s8 *arg0) {
+void BattleAnim_CallbackOwnerTintHoldFadeDetach(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
@@ -486,7 +486,7 @@ void BattleAnim_CallbackOwnerModelTintHoldFadeDetach(s8 *arg0) {
  * Sky Attack, Solar Beam, Waterfall.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_SetupOwnerModelTintPaletteApproach(Particle* particle) {
+void BattleAnim_SetupOwnerTintPaletteApproach(Particle* particle) {
     ParticleGfx_RecolorPrim(particle, Particle_GetByteParam1(particle));
     Particle_ScratchA_SetS16_0BF4C(particle, particle->param0);
     Particle_AdvanceLifecycle(particle);
@@ -506,13 +506,13 @@ M2C_UNK Particle_SetScratchA(s8 *, M2C_UNK);             /* extern */
  * Sky Attack, Solar Beam, Waterfall.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackOwnerModelTintPaletteApproachInactive(s8 *arg0) {
+void BattleAnim_CallbackOwnerTintPaletteApproachStop(s8 *arg0) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(arg0, s16 *, 0xAE);
     switch (temp_v0) {                              /* irregular */
     case 1:
-        BattleAnim_SetupOwnerModelTintPaletteApproach(arg0);
+        BattleAnim_SetupOwnerTintPaletteApproach(arg0);
         break;
     case 2:
         if (func_821436A0(arg0, M2C_FIELD(arg0, u8 *, 0xC9), M2C_FIELD(arg0, u8 *, 0xA7)) != 0) {
@@ -530,10 +530,10 @@ void BattleAnim_CallbackOwnerModelTintPaletteApproachInactive(s8 *arg0) {
 }
 
 /**
- * Same init step as BattleAnim_SetupOwnerModelTintPaletteApproach.
+ * Same init step as BattleAnim_SetupOwnerTintPaletteApproach.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_SetupOwnerModelTintPaletteHold(Particle* particle) {
+void BattleAnim_SetupOwnerTintPaletteHold(Particle* particle) {
     ParticleGfx_RecolorPrim(particle, Particle_GetByteParam1(particle));
     Particle_ScratchA_SetS16_0BF4C(particle, particle->param0);
     Particle_AdvanceLifecycle(particle);
@@ -549,13 +549,13 @@ M2C_UNK func_8213C9D0(s8 *);                      /* extern */
  * (marks itself inactive without clearing the tint alpha).
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackOwnerModelTintPaletteApproachHold(s8 *particle) {
+void BattleAnim_CallbackOwnerTintPaletteApproachHold(s8 *particle) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(particle, s16 *, 0xAE);
     switch (temp_v0) {                              /* irregular */
     case 1:
-        BattleAnim_SetupOwnerModelTintPaletteHold(particle);
+        BattleAnim_SetupOwnerTintPaletteHold(particle);
         break;
     case 2:
         if (func_821436A0(particle, M2C_FIELD(particle, u8 *, 0xC9), M2C_FIELD(particle, u8 *, 0xA7)) != 0) {
@@ -618,10 +618,10 @@ void BattleAnim_RunIceBeamBlizzardHitHueChange(Particle* arg0) {
 }
 
 /**
- * Same init step as BattleAnim_SetupOwnerModelTintPaletteApproach.
+ * Same init step as BattleAnim_SetupOwnerTintPaletteApproach.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_SetupOwnerModelTintPaletteFade(Particle* particle) {
+void BattleAnim_SetupOwnerTintPaletteFade(Particle* particle) {
     ParticleGfx_RecolorPrim(particle, Particle_GetByteParam1(particle));
     Particle_ScratchA_SetS16_0BF4C(particle, particle->param0);
     Particle_AdvanceLifecycle(particle);
@@ -638,13 +638,13 @@ M2C_UNK func_82140874(s8 *, M2C_UNK, u8);         /* extern */
  * back to 0 before it marks itself inactive.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackOwnerModelTintPaletteApproachFade(s8 *particle) {
+void BattleAnim_CallbackOwnerTintPaletteApproachFade(s8 *particle) {
     s16 temp_v0;
 
     temp_v0 = M2C_FIELD(particle, s16 *, 0xAE);
     switch (temp_v0) {                              /* irregular */
     case 1:
-        BattleAnim_SetupOwnerModelTintPaletteFade(particle);
+        BattleAnim_SetupOwnerTintPaletteFade(particle);
         break;
     case 2:
         if (func_821436A0(particle, M2C_FIELD(particle, u8 *, 0xC9), M2C_FIELD(particle, u8 *, 0xA7)) != 0) {

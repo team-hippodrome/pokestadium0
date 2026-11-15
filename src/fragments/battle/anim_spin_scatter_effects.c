@@ -455,7 +455,7 @@ void BattleAnim_OrphanDescriptor2BAnd2EEmitterSequence(void) {
  * ran for exactly Petal Dance.
  */
 void BattleAnim_InitializePetalDanceHit(void) {
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 0x14, BattleAnim_RunPetalDanceLingeringHitEffect, &gBattleAnimParticleDescriptors[0x2C], 0, 4, 0xE, 0, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 2, 0x14, BattleAnim_RunPetalDanceLingeringHitEffect, &gBattleAnimParticleDescriptors[0x2C], 0, 4, 0xE, 0, 0, 0);
     BattleAnim_InitializePetalDanceHitSequence();
 }
 
@@ -465,6 +465,6 @@ void BattleAnim_InitializePetalDanceHit(void) {
  * ran for exactly Wing Attack.
  */
 void BattleAnim_InitializeWingAttackHit(void) {
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 5, BattleAnim_RunSlowFallingHitEffect, &gBattleAnimParticleDescriptors[0x2D], 0, 1, 0xE, 0, 0, 1);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_RunSlowFallingHitEffect, &gBattleAnimParticleDescriptors[0x2D], 0, 1, 0xE, 0, 0, 1);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 2, 5, BattleAnim_RunSlowFallingHitEffect, &gBattleAnimParticleDescriptors[0x2D], 0, 1, 0xE, 0, 0, 1);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_RunSlowFallingHitEffect, &gBattleAnimParticleDescriptors[0x2D], 0, 1, 0xE, 0, 0, 1);
 }

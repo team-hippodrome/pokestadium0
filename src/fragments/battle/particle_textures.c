@@ -10,12 +10,12 @@ extern u8 gParticlePalettePairs[][2];
 
 #include "m2c_macros.h"
 
-void ParticleGfx_LoadTextureCallbackIa8_32x32(UNUSED Particle* arg0, u8* texture);
-void ParticleGfx_LoadTextureCallbackI4_32x32(UNUSED Particle* arg0, u8* texture);
-void ParticleGfx_LoadTextureCallbackI4FrameMod4_32x32(UNUSED Particle* arg0, u8* texture);
-void ParticleGfx_LoadTextureCallbackI4FrameDiv2Mod4_32x32(UNUSED Particle* arg0, u8* texture);
-void ParticleGfx_LoadTextureCallbackI4FrameDiv4Mod4_32x32(UNUSED Particle* arg0, u8* texture);
-void ParticleGfx_LoadTextureCallbackI4FrameDiv2Mod8_32x32(UNUSED Particle* arg0, u8* texture);
+void ParticleGfx_LoadTexCallbackIa8_32x32(UNUSED Particle* arg0, u8* texture);
+void ParticleGfx_LoadTexCallbackI4_32x32(UNUSED Particle* arg0, u8* texture);
+void ParticleGfx_LoadTexCallbackI4FrameMod4_32x32(UNUSED Particle* arg0, u8* texture);
+void ParticleGfx_LoadTexCallbackI4FrameDiv2Mod4_32x32(UNUSED Particle* arg0, u8* texture);
+void ParticleGfx_LoadTexCallbackI4FrameDiv4Mod4_32x32(UNUSED Particle* arg0, u8* texture);
+void ParticleGfx_LoadTexCallbackI4FrameDiv2Mod8_32x32(UNUSED Particle* arg0, u8* texture);
 
 M2C_UNK func_8216BBF8(s32, M2C_UNK, M2C_UNK);       /* extern */
 
@@ -23,7 +23,7 @@ M2C_UNK func_8216BBF8(s32, M2C_UNK, M2C_UNK);       /* extern */
  * Texture callback: loads 32x32 IA8 frame (byte 0xC3) of the texture at arg1.
  * @unverified Name guessed from the code.
  */
-void ParticleGfx_LoadTextureCallbackIa8FrameC3_32x32(s8 *particle, s32 texture) {
+void ParticleGfx_LoadTexCallbackIa8FrameC3_32x32(s8 *particle, s32 texture) {
     func_8216BBF8((M2C_FIELD(particle, s8 *, 0xC3) << 0xA) + texture, 0x20, 0x20);
 }
 
@@ -33,7 +33,7 @@ void ParticleGfx_LoadTextureCallbackIa8FrameC3_32x32(s8 *particle, s32 texture) 
  * Ice Beam and others): it emitted an IA texture load (FD700000) of the passed texture with the
  * 32x32 tile (G_LOADBLOCK 071FF200).
  */
-void ParticleGfx_LoadTextureCallbackIa8_32x32(UNUSED Particle* arg0, u8* texture) {
+void ParticleGfx_LoadTexCallbackIa8_32x32(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureIa8(texture, 32, 32);
 }
 
@@ -43,7 +43,7 @@ M2C_UNK func_8216BBF8(s32, M2C_UNK, M2C_UNK);       /* extern */
  * Texture callback: loads 32x64 IA8 frame (byte 0xC3) of the texture at arg1.
  * @unverified Name guessed from the code.
  */
-void ParticleGfx_LoadTextureCallbackIa8FrameC3_32x64(s8 *particle, s32 texture) {
+void ParticleGfx_LoadTexCallbackIa8FrameC3_32x64(s8 *particle, s32 texture) {
     func_8216BBF8((M2C_FIELD(particle, s8 *, 0xC3) << 0xB) + texture, 0x20, 0x40);
 }
 
@@ -52,7 +52,7 @@ void ParticleGfx_LoadTextureCallbackIa8FrameC3_32x64(s8 *particle, s32 texture) 
  * Seen in play (2026-11-13) in the 165-move sweep (Solarbeam): it emitted an I texture load
  * (FD900000) of the passed texture 0x8033CB00 with the 32x32 block (070FF400).
  */
-void ParticleGfx_LoadTextureCallbackI4_32x32(UNUSED Particle* arg0, u8* texture) {
+void ParticleGfx_LoadTexCallbackI4_32x32(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureI4Alias(texture, 32, 32);
 }
 
@@ -62,7 +62,7 @@ M2C_UNK func_8216BFE8(s32, M2C_UNK, M2C_UNK);       /* extern */
  * Texture callback: loads 32x32 I4 frame (byte 0xC3) of the texture at arg1.
  * @unverified Name guessed from the code.
  */
-void ParticleGfx_LoadTextureCallbackI4FrameC3_32x32(s8 *particle, s32 texture) {
+void ParticleGfx_LoadTexCallbackI4FrameC3_32x32(s8 *particle, s32 texture) {
     func_8216BFE8((M2C_FIELD(particle, s8 *, 0xC3) << 9) + texture, 0x20, 0x20);
 }
 
@@ -72,7 +72,7 @@ void ParticleGfx_LoadTextureCallbackI4FrameC3_32x32(s8 *particle, s32 texture) {
  * and others): from base 0x8033DA50 it loaded 0x8033DE50, frame 2 of the 0x200-byte 32x32 I4
  * frames, picked by gParticleFrameMod4.
  */
-void ParticleGfx_LoadTextureCallbackI4FrameMod4_32x32(UNUSED Particle* arg0, u8* texture) {
+void ParticleGfx_LoadTexCallbackI4FrameMod4_32x32(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureI4Alias(&texture[gParticleFrameMod4 * (32 * 32 / 2)], 32, 32);
 }
 
@@ -82,7 +82,7 @@ void ParticleGfx_LoadTextureCallbackI4FrameMod4_32x32(UNUSED Particle* arg0, u8*
  * base 0x8033F250 it loaded 0x8033F650, frame 2 of the 32x32 I4 frames, picked by
  * gParticleFrameDiv2 & 3.
  */
-void ParticleGfx_LoadTextureCallbackI4FrameDiv2Mod4_32x32(UNUSED Particle* arg0, u8* texture) {
+void ParticleGfx_LoadTexCallbackI4FrameDiv2Mod4_32x32(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureI4Alias(&texture[(gParticleFrameDiv2 & 3) * (32 * 32 / 2)], 32, 32);
 }
 
@@ -94,7 +94,7 @@ void ParticleGfx_LoadTextureCallbackI4FrameDiv2Mod4_32x32(UNUSED Particle* arg0,
  * first one fainted.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-void ParticleGfx_LoadTextureCallbackI4FrameDiv4Mod4_32x32(UNUSED Particle* arg0, u8* texture) {
+void ParticleGfx_LoadTexCallbackI4FrameDiv4Mod4_32x32(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureI4Alias(&texture[(gParticleFrameDiv4 & 3) * (32 * 32 / 2)], 32, 32);
 }
 
@@ -104,6 +104,6 @@ void ParticleGfx_LoadTextureCallbackI4FrameDiv4Mod4_32x32(UNUSED Particle* arg0,
  * Beam): from base 0x80342AE0 it loaded 0x80342CE0 and 0x803432E0 (frames 1 and 4 of 8), picked by
  * gParticleFrameDiv2 & 7.
  */
-void ParticleGfx_LoadTextureCallbackI4FrameDiv2Mod8_32x32(UNUSED Particle* arg0, u8* texture) {
+void ParticleGfx_LoadTexCallbackI4FrameDiv2Mod8_32x32(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureI4Alias(&texture[(gParticleFrameDiv2 & 7) * (32 * 32 / 2)], 32, 32);
 }

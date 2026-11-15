@@ -530,7 +530,7 @@ void BattleAnim_SetupEndEffect28Descriptor10UpwardBurstFade(Particle* arg0) {
     sp30.x = ParticleMath_RandomRange(0x64) + -50.0f;
     sp30.y = 200.0f;
     sp30.z = ParticleMath_RandomRange(0x64) + -50.0f;
-    Particle_PositionOffset_AddVecScaledFromVec3f_08D78(arg0, sp30);
+    Particle_PositionOffset_AddVecScaled(arg0, sp30);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
     Particle_AdvanceLifecycle(arg0);
 }
@@ -632,15 +632,15 @@ void BattleAnim_CallbackEndEffect28StreamB(Particle* particle) {
 void BattleAnim_InitializeThunderThunderboltUse(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x64, 1);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x20, 3);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 3, 8, BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade, &gBattleAnimParticleDescriptors[0x11], 8, 4, 2, 0, 0x25, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 3, 8, BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade, &gBattleAnimParticleDescriptors[0x11], 8, 4, 2, 0, 0x25, 0);
     BattleAnim_AddSpawnDelay(25);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunThunderThunderboltUseEffect, &gBattleAnimParticleDescriptors[0x15], 0xE, 1, 2, 0, 0x25, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunThunderThunderboltUseEffect, &gBattleAnimParticleDescriptors[0x16], 0xE, 1, 2, 0, 0x25, 0);
-    BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(8, 2, 8, 0x8, 0xFF);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_RunDeterministicRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 7, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_RunRandomRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 7, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDirectionalSprayFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x25, 0);
+    BattleAnim_SpawnDesc25AlphaHoldFadeOut(8, 2, 8, 0x8, 0xFF);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_RunDeterministicRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 7, 0, 0x25, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_RunRandomRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 4, 7, 0, 0x25, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x25, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDirectionalSprayFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x25, 0);
 }
 
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32); /* extern */
@@ -695,14 +695,14 @@ void BattleAnim_InitializeThunderHit(void) {
 void BattleAnim_InitializeThunderShockUse(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x64, 1);
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 3);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 3, BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade, &gBattleAnimParticleDescriptors[0x14], 2, 1, 2, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 5, 5, BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade, &gBattleAnimParticleDescriptors[0x13], 2, 1, 2, 0, 0x25, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 8, 3, BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade, &gBattleAnimParticleDescriptors[0x14], 2, 1, 2, 0, 0x25, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 5, 5, BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade, &gBattleAnimParticleDescriptors[0x13], 2, 1, 2, 0, 0x25, 0);
     BattleAnim_AddSpawnDelay(35);
-    BattleAnim_SpawnDescriptor25AlphaHoldFadeOutFullAlpha(8, 4, 8, 0x8);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 2, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 5, 2, BattleAnim_CallbackSharedDirectionalSprayFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 2, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 6, 2, BattleAnim_RunDeterministicRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 2, 1, 0, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_RunRandomRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 2, 1, 0, 0x25, 0);
+    BattleAnim_SpawnDesc25AlphaHoldFadeOutFullAlpha(8, 4, 8, 0x8);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 2, 0, 0x25, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 5, 2, BattleAnim_CallbackSharedDirectionalSprayFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 2, 0, 0x25, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 6, 2, BattleAnim_RunDeterministicRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 2, 1, 0, 0x25, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 2, BattleAnim_RunRandomRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 2, 1, 0, 0x25, 0);
 }
 
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32); /* extern */
@@ -731,8 +731,8 @@ void BattleAnim_EndEffect28ThreePartStream(void) {
  * it ran for exactly Thunder Punch.
  */
 void BattleAnim_InitializeThunderPunchUse(void) {
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade, &gBattleAnimParticleDescriptors[0x11], 8, 4, 0x10, gBattleAnimCurrentAnchor, 0x25, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 1, 0x24, BattleAnim_CallbackStartEffect73Descriptor15AnimatedColorImpulseFade, &gBattleAnimParticleDescriptors[0x15], 0, 1, 0x11, gBattleAnimCurrentAnchor, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 5, BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade, &gBattleAnimParticleDescriptors[0x11], 8, 4, 0x10, gBattleAnimCurrentAnchor, 0x25, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 1, 0x24, BattleAnim_CallbackStartEffect73Descriptor15AnimatedColorImpulseFade, &gBattleAnimParticleDescriptors[0x15], 0, 1, 0x11, gBattleAnimCurrentAnchor, 0, 0);
 }
 
 /**
@@ -741,8 +741,8 @@ void BattleAnim_InitializeThunderPunchUse(void) {
  * for Hyper Beam.
  */
 void BattleAnim_InitializeHyperBeamHitSequence(void) {
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x2C, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDirectionalSprayFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 3, 7, 0, 0xF, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 4, 7, 0, 0x2C, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(8, 4, 2, BattleAnim_CallbackSharedDirectionalSprayFade, &gBattleAnimParticleDescriptors[0x13], 0x14, 3, 7, 0, 0xF, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_RunDeterministicRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 1, 7, 0, 0x2C, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_RunRandomRotatingBoltOfLightning, &gBattleAnimParticleDescriptors[0xF], 0x14, 1, 7, 0, 0xF, 0);
 }

@@ -48,7 +48,7 @@ void Particle_AddRotationRandomSignedXY(Particle* arg0, s32 arg1, s32 arg2);
 void Particle_AddRotationRandomSignedXYWithXHalfTurn(Particle* arg0, s32 arg1, s32 arg2);
 void Particle_AddRotationRandomSignedY(Particle* arg0, s32 arg1);
 void Particle_AddRotationRandomSignedYWithHalfTurn(Particle* arg0, s32 arg1);
-void Particle_AddRotationRandomSignedXWithFixedYQuarterTurn(Particle* arg0);
+void Particle_AddRotationRandomXQuarterTurnY(Particle* arg0);
 s32 Particle_MagnitudeStep_Approach_0ADBC(Particle* arg0, f32 arg1, f32 arg2);
 s32 Particle_MotionStep_IncrementXUntilAtLeast_0AF54(Particle* arg0, f32 arg1, f32 arg2);
 s32 Particle_MotionStep_IncrementYUntilAtLeast_0AFA8(Particle* arg0, f32 arg1, f32 arg2);
@@ -70,15 +70,15 @@ s32 Particle_Param0_DecrementToStep1_0BD80(Particle* arg0, s16 arg1);
 s32 Particle_DecrementParam0ToZero(Particle* arg0);
 s32 Particle_DecrementParam0ToZeroThenAdvance(Particle* arg0);
 s32 Particle_DecrementCountdownToZero(Particle* arg0);
-s32 Particle_Countdown_DecrementToZeroStep1AndStepState_0BE8C(Particle* arg0);
+s32 Particle_Countdown_TickToZeroAndStepState(Particle* arg0);
 s32 Particle_ApproachScratchAThenAdvance(Particle* arg0, s16 arg1, s16 arg2);
 
 void Particle_AdvanceLifecycle(Particle* arg0);
 s32 Particle_TickDelayTimer(Particle* arg0, s16 arg1);
 s32 Particle_AnimateFramesPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
 s32 Particle_AnimateFramesReverseFirstPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
-void Particle_PositionOffset_SetVecFromVec3fScaled_08C20(Particle* arg0, Vec3f arg1);
-void Particle_PositionOffset_AddVecScaledFromVec3f_08D78(Particle* arg0, Vec3f arg1);
+void Particle_PositionOffset_SetVecScaled(Particle* arg0, Vec3f arg1);
+void Particle_PositionOffset_AddVecScaled(Particle* arg0, Vec3f arg1);
 void Particle_ApplyMotionStepXY(Particle* arg0);
 void Particle_MotionOffset_AddXYFromMotionStep_09C34(Particle* arg0);
 void Particle_RotationTarget_SetX_0A400(Particle* arg0, s16 arg1);
@@ -564,7 +564,7 @@ void Particle_SetPosition(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name guessed from the code.
  */
-void Particle_PositionOffset_SetVecFromVec3fScaled_08C20(Particle* arg0, Vec3f arg1) {
+void Particle_PositionOffset_SetVecScaled(Particle* arg0, Vec3f arg1) {
     arg0->positionOffset.x = arg1.x * gParticleRenderContext.scale.y;
     arg0->positionOffset.y = arg1.y * gParticleRenderContext.scale.y;
     arg0->positionOffset.z = arg1.z * gParticleRenderContext.scale.y;
@@ -620,7 +620,7 @@ void Particle_SetPosOffsetZScaled(Particle* arg0, f32 arg1) {
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (24 of the moves).
  * @unverified Name guessed from the code.
  */
-void Particle_PositionOffset_AddVecScaledFromVec3f_08D78(Particle* arg0, Vec3f arg1) {
+void Particle_PositionOffset_AddVecScaled(Particle* arg0, Vec3f arg1) {
     arg0->positionOffset.x += arg1.x * gParticleRenderContext.scale.y;
     arg0->positionOffset.y += arg1.y * gParticleRenderContext.scale.y;
     arg0->positionOffset.z += arg1.z * gParticleRenderContext.scale.y;
@@ -758,7 +758,7 @@ void Particle_SetPositionFromRotationTemplate1(Particle* arg0, f32 arg1) {
     Vec3f sp1C;
 
     Particle_ComputeVectorFromRotationXYZAlt(arg0, arg1, &sp1C);
-    Particle_PositionOffset_SetVecFromVec3fScaled_08C20(arg0, sp1C);
+    Particle_PositionOffset_SetVecScaled(arg0, sp1C);
 }
 
 /**
@@ -771,7 +771,7 @@ void Particle_SetPositionFromRotationTemplate2(Particle* arg0, f32 arg1) {
     Vec3f sp1C;
 
     Particle_ComputeVectorFromRotationYZVariant(arg0, arg1, &sp1C);
-    Particle_PositionOffset_SetVecFromVec3fScaled_08C20(arg0, sp1C);
+    Particle_PositionOffset_SetVecScaled(arg0, sp1C);
 }
 
 /**
@@ -783,7 +783,7 @@ void Particle_AddPositionFromRotationTemplate1(Particle* arg0, f32 arg1) {
     Vec3f sp1C;
 
     Particle_ComputeVectorFromRotationXYZAlt(arg0, arg1, &sp1C);
-    Particle_PositionOffset_AddVecScaledFromVec3f_08D78(arg0, sp1C);
+    Particle_PositionOffset_AddVecScaled(arg0, sp1C);
 }
 
 /**
@@ -796,7 +796,7 @@ void Particle_AddPositionFromRotationTemplate2(Particle* arg0, f32 arg1) {
     Vec3f sp1C;
 
     Particle_ComputeVectorFromRotationYZVariant(arg0, arg1, &sp1C);
-    Particle_PositionOffset_AddVecScaledFromVec3f_08D78(arg0, sp1C);
+    Particle_PositionOffset_AddVecScaled(arg0, sp1C);
 }
 
 /**
@@ -811,7 +811,7 @@ void Particle_AddPositionRotatedVectorByYaw(Particle* arg0, Vec3f arg1) {
     Vec3f sp24;
 
     ParticleMath_RotateVec3fY(&sp24, arg1, arg0->rotation);
-    Particle_PositionOffset_AddVecScaledFromVec3f_08D78(arg0, sp24);
+    Particle_PositionOffset_AddVecScaled(arg0, sp24);
 }
 
 s32 func_82137DF4(M2C_UNK);                         /* extern */
@@ -1339,14 +1339,14 @@ void Particle_AddVelocityFromRotationTemplate1(s32 arg0) {
 
 M2C_UNK Particle_ApplyMotionStep(s32);                         /* extern */
 
-void Particle_MotionStep_SetVecFromStepMagnitudeAnglesXZ(Particle* arg0);
+void Particle_MotionStep_SetVecFromRotationXZ(Particle* arg0);
 
 /**
  * Sets motionStep from rotation.x and rotation.z and adds it to motionOffset.
  * @unverified Name guessed from the code.
  */
 void Particle_MoveAlongRotationXZ(s32 particle) {
-    Particle_MotionStep_SetVecFromStepMagnitudeAnglesXZ((Particle*)particle);
+    Particle_MotionStep_SetVecFromRotationXZ((Particle*)particle);
     Particle_ApplyMotionStep(particle);
 }
 
@@ -2132,7 +2132,7 @@ void Particle_AddRotationRandomSignedYWithHalfTurn(Particle* arg0, s32 arg1) {
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-void Particle_AddRotationRandomSignedXWithFixedYQuarterTurn(Particle* arg0) {
+void Particle_AddRotationRandomXQuarterTurnY(Particle* arg0) {
     Particle_Rotation_AddX_0A578(arg0, ParticleMath_RandomSigned(0x10000));
     Particle_Rotation_AddY_0A594(arg0, 0x4000);
 }
@@ -2484,7 +2484,7 @@ s32 Particle_ApproachMotionStepY(Particle* arg0, f32 arg1, f32 arg2) {
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
-void Particle_MotionStep_SetXFromStepMagnitudeAngleY_0B1EC(Particle* arg0) {
+void Particle_MotionStep_SetYFromRotationX(Particle* arg0) {
     arg0->motionStep.y = COSS((u16)arg0->rotation.x) * arg0->stepMagnitude;
 }
 
@@ -2503,7 +2503,7 @@ void Particle_SetMotionStepXFromRotationY(Particle* particle) {
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
-void Particle_MotionStep_SetYFromStepMagnitudeAngleX_0B1C4(Particle* arg0) {
+void Particle_MotionStep_SetZFromRotationY(Particle* arg0) {
     arg0->motionStep.z = COSS((u16)arg0->rotation.y) * arg0->stepMagnitude;
 }
 
@@ -2546,7 +2546,7 @@ void Particle_SetMotionStepFromRotationXY(Particle* arg0) {
  * tables or fragment headers.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
-void Particle_MotionStep_SetVecFromStepMagnitudeAnglesXZ(Particle* arg0) {
+void Particle_MotionStep_SetVecFromRotationXZ(Particle* arg0) {
     arg0->motionStep.x = arg0->stepMagnitude * SINS(arg0->rotation.x) * SINS(arg0->rotation.z);
     arg0->motionStep.y = -arg0->stepMagnitude * SINS(arg0->rotation.x) * COSS(arg0->rotation.z);
     arg0->motionStep.z = arg0->stepMagnitude * COSS(arg0->rotation.x);
@@ -2668,7 +2668,7 @@ void Particle_UpdateRotatingVelocityXZ(Particle* arg0, f32 arg1, s16 arg2) {
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
-s32 Particle_MotionOffset_AdvanceMotionStepWithTimer_0B854(Particle* arg0, f32 arg1, f32 arg2, f32 arg3, s16 arg4, s16 arg5) {
+s32 Particle_MotionOffset_StepArcWithTimer(Particle* arg0, f32 arg1, f32 arg2, f32 arg3, s16 arg4, s16 arg5) {
     s32 sp24 = 0;
 
     if (Particle_LacksFlags(arg0, 2) != 0) {
@@ -3067,7 +3067,7 @@ s32 Particle_DecrementCountdownToZero(Particle* arg0) {
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-s32 Particle_Countdown_DecrementToZeroStep1AndStepState_0BE8C(Particle* arg0) {
+s32 Particle_Countdown_TickToZeroAndStepState(Particle* arg0) {
     s32 sp1C = Particle_TickCountdownTo(arg0, 0);
 
     if (sp1C != 0) {

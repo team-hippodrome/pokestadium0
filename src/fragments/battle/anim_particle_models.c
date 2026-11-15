@@ -723,7 +723,7 @@ void BattleAnim_SetupMove86StartDescriptor24(Particle* arg0) {
             break;
     }
 
-    Particle_PositionOffset_AddVecScaledFromVec3f_08D78(arg0, sp34);
+    Particle_PositionOffset_AddVecScaled(arg0, sp34);
     Particle_PositionOffset_AddYScaled_08E90(arg0, 10.0f);
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.0f);
     ParticleGfx_RecolorPrim(arg0, 8);
@@ -766,9 +766,9 @@ void BattleAnim_CallbackMove86StartDescriptor24(Particle* particle) {
  */
 void BattleAnim_InitializeThunderWaveUse(void) {
     BattleAnim_SpawnCategory17MarkerSlot(0x55, 1);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 0xC, BattleAnim_CallbackMove86StartDescriptor24, &gBattleAnimParticleDescriptors[0x24], 0xA, 1, 4, 0, 0, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 0xC, BattleAnim_CallbackMove86StartDescriptor24, &gBattleAnimParticleDescriptors[0x24], 0xA, 1, 4, 1, 0, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 8, 0xC, BattleAnim_CallbackMove86StartDescriptor24, &gBattleAnimParticleDescriptors[0x24], 0xA, 1, 4, 2, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 8, 0xC, BattleAnim_CallbackMove86StartDescriptor24, &gBattleAnimParticleDescriptors[0x24], 0xA, 1, 4, 0, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 8, 0xC, BattleAnim_CallbackMove86StartDescriptor24, &gBattleAnimParticleDescriptors[0x24], 0xA, 1, 4, 1, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 8, 0xC, BattleAnim_CallbackMove86StartDescriptor24, &gBattleAnimParticleDescriptors[0x24], 0xA, 1, 4, 2, 0, 0);
 }
 
 /**
