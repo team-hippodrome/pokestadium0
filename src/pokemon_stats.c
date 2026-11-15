@@ -5,7 +5,7 @@
 #include "save_data.h"
 #include "util.h"
 #include "m2c_macros.h"
-extern u8 D_8006B8C4[0x420];
+extern u8 D_8006B8C4[1056];
 typedef struct unk_func_800228F0_sp24 {
     /* 0x00 */ u8 unk_00;
     /* 0x01 */ u8 unk_01;

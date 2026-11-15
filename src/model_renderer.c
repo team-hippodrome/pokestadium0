@@ -160,7 +160,7 @@ extern SpeciesInfo D_80064C5C[];
  */
 arg1_func_80010CA8* Model_ComputeNicknameColorVariant(arg1_func_80010CA8* arg0, BattleMon* arg1) {
     UNUSED s32 pad; // FAKE: stack padding
-    char sp38[0xB];
+    char sp38[11];
     arg1_func_80010CA8 sp34;
     SpeciesInfo* sp30;
     UNUSED s32 pad2; // FAKE: stack padding

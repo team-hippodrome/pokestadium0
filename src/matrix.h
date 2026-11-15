@@ -21,7 +21,7 @@ extern f32 gSineTable[];
 
 extern f32 gCosineTable[0x1000];
 
-extern s16 gArctanTable[0x401];
+extern s16 gArctanTable[1025];
 
 // matrix.c
 Color_RGBA8* Color_SetRGB(Color_RGBA8* dest, u8 r, u8 g, u8 b);

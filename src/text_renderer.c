@@ -146,7 +146,7 @@ char* TextRenderer_FormatCopy(char* buffer, const char* data, size_t size) {
 /** Formats text and draws it at a position. */
 s32 HAL_Printf(s16 x, s16 y, const char* fmt, ...) {
     s32 sp124;
-    char sp20[0x104];
+    char sp20[260];
     QueuedString* sp1C;
     va_list args;
 
@@ -174,7 +174,7 @@ s32 HAL_Printf(s16 x, s16 y, const char* fmt, ...) {
 /** Formats text and queues it to be drawn each frame. */
 s32 TextRenderer_QueuePersistentString(s16 x, s16 y, const char* fmt, ...) {
     s32 sp124;
-    char sp20[0x104];
+    char sp20[260];
     QueuedString* sp1C;
     va_list args;
 

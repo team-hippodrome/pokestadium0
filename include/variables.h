@@ -91,7 +91,7 @@ extern u64 _binary_assets_us_F3DEX2_bin_start[];
 
 extern f32 gSineTable[];
 extern f32 gCosineTable[0x1000];
-extern s16 gArctanTable[0x401];
+extern s16 gArctanTable[1025];
 
 
 

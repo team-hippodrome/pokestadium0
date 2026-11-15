@@ -103,7 +103,7 @@ void Pokemon_CreateDefault(BattleMon *mon, s32 species) {
     *(Unk5Bytes *)mon->otName = *(Unk5Bytes *)&D_8007B7B0;
 }
 
-typedef struct { s32 w[0x14]; } Unk50Bytes;
+typedef struct { s32 w[20]; } Unk50Bytes;
 extern u8 D_800AAF50[];
 extern M2C_UNK D_8007B7B8;
 
@@ -279,7 +279,7 @@ s32 func_80057910(s8 *, M2C_UNK *, M2C_UNK);        /* extern */
  * トーナメントのつづきをする？ ("Continue the tournament?") after a saved round.
  */
 s32 Tournament_LoadContinueData(void) {
-    s8 buf[0x162];
+    s8 buf[354];
     UNUSED s32 pad; // FAKE: stack padding
     s32 ret;
     s8 temp_v0;
