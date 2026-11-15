@@ -50,10 +50,10 @@ s32 FreeBattle_ReadTeam(s32 deck_kind, s32 port, s32 deck_index, TeamMonSlot* en
         if (func_80020CE4(&entry->mon, 1, handle) == 0) {
             break;
         }
-        if ((entry->mon.species.id > 0) && (entry->mon.species.id < 0x98)) {
+        if ((entry->mon.species.id > 0) && (entry->mon.species.id < 152)) {
             func_800207F8(&entry->mon);
             idx = entry->mon.species.id - 1;
-            row = &D_80065D00[idx * 0x17];
+            row = &D_80065D00[idx * 23];
             entry->mon.type1 = row[6];
             entry->mon.type2 = row[7];
             entry->flags = 0;
@@ -455,7 +455,7 @@ void FreeBattle_DrawMoveName(s32 x, s32 y, s32 move, s32 centered) {
         str = entry->name;
     }
     if (centered != 0) {
-        x = x - (func_800566BC(str) >> 1) * 20 + 0x8C;
+        x = x - (func_800566BC(str) >> 1) * 20 + 140;
     }
     Font_Printf(x, y, str);
 }
@@ -577,10 +577,10 @@ void FreeBattle_DrawMonStatusWindow(Screen82000C5C* window) {
         Font_Printf(window->x + 14, window->y + 258, window->title);
         func_8001ABBC();
         func_8001AB6C();
-        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+        func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
         func_8001A384(8, 0);
         func_8001ABE8();
-        func_8001AAE4(0x7F, 0xA8, 0xFF, 0xFF);
+        func_8001AAE4(0x7F, 0xA8, 0xFF, 0xFF); // #7FA8FF
         Font_Printf(x + 10, y + 5, window->mon->nickname);
         func_8001AC3C();
         func_8001A384(4, -1);
@@ -606,8 +606,8 @@ void FreeBattle_DrawMonStatusWindow(Screen82000C5C* window) {
             FreeBattle_DrawMoveName(D_82009040[i].x + x, D_82009040[i].y + y, BattleMon_GetMoveIndex(window->mon, i), D_82009040[i].centered);
         }
         func_8001ABBC();
-        FreeBattle_DrawTypeName(x + 0x9C, y + 0x40, (s32)window->mon, 0);
-        FreeBattle_DrawTypeName(x + 0x9C, y + 0x7C, (s32)window->mon, 1);
+        FreeBattle_DrawTypeName(x + 156, y + 0x40, (s32)window->mon, 0);
+        FreeBattle_DrawTypeName(x + 156, y + 124, (s32)window->mon, 1);
         gSPDisplayList(gDisplayListHead++, D_80060290);
         for (i = 0; i < count; i++) {
             func_8001B884(D_82009040[i].iconX + x, D_82009040[i].y + y, 20, 20, (u8*)D_82009040[i].icon, 20, 0x200000);
@@ -623,9 +623,9 @@ void FreeBattle_DrawMonStatusWindow(Screen82000C5C* window) {
         BgStage_DrawFrame();
         gSPDisplayList(gDisplayListHead++, D_80060290);
         gDPSetAlphaCompare(gDisplayListHead++, G_AC_NONE);
-        for (row = 0; row < 0x78; row += n) {
-            if (0x78 - row < 0x10) {
-                n = 0x78 - row;
+        for (row = 0; row < 120; row += n) {
+            if (120 - row < 0x10) {
+                n = 120 - row;
             } else {
                 n = 0x10;
             }
@@ -766,7 +766,7 @@ void FreeBattle_MarkIneligibleMons(TeamList8200140C *list, s32 rule_category) {
             if (mon->flags & 1) {
                 continue;
             }
-            if ((mon->species <= 0) || (mon->species >= 0x98)) {
+            if ((mon->species <= 0) || (mon->species >= 152)) {
                 mon->flags |= 0x20;
             } else if (rule_category == 1) {
                 if (!(D_80064C5C[mon->species - 1].flags & 1) || (mon->level < 50) || (mon->level >= 56)) {
@@ -895,7 +895,7 @@ void FreeBattle_DrawMonCell(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 
         gSPDisplayList(gDisplayListHead++, D_80073450);
         gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
         func_8001BCB4(x + 44, y + 25, 8, 10, D_04011A60, 8, 0);
-        Ui_DrawNumberUnpadded(x + 0x38, y + 0x17, ((u8*)entry)[0x24]);
+        Ui_DrawNumberUnpadded(x + 56, y + 23, ((u8*)entry)[0x24]);
         key = cache->start + frame;
         idx = cache->base + key % cache->count;
         if (key != cache->slots[idx]) {
@@ -945,7 +945,7 @@ void FreeBattle_FillTrainerPanel(s32 x, s32 y, Color82001CCC color) {
  * FreeBattle_FillTeamPanel
  *
  * Emits the display list D_80060270, then fills a 0x18C by 0x64 rectangle at
- * (x + 0x88, y) with the color in color using func_80029028
+ * (x + 136, y) with the color in color using func_80029028
  * (Trade_DrawSolidFillRect).
  * Seen in play (2026-11-13) ran while the tournament entry screen showed the GB party row (フシ, ヒト,
  * カメ, L10).
@@ -985,11 +985,11 @@ void func_8001AC3C(void);
 void FreeBattle_DrawRentalPrompt(s32 x, s32 y, s32 flags) {
     FreeBattle_FillTeamPanel(x, y, D_82008F58);
     func_8001AB6C();
-    func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF);
+    func_8001AA9C(0xFF, 0xFF, 0xFF, 0xFF); // #FFFFFF
     func_8001A384(0x20, 0);
     Font_SetLineHeight(42);
     func_8001ABE8();
-    func_8001AAE4(0xFF, 0x64, 0xFF, 0xFF);
+    func_8001AAE4(0xFF, 0x64, 0xFF, 0xFF); // #FF64FF
     Font_Printf(x + 174, y + 14, D_82009C08);
     func_8001AC3C();
     func_8001ABBC();
@@ -1057,7 +1057,7 @@ void FreeBattle_DrawRentalNameList(s32 x, s32 y, s32 flags, Slot82001E20* team) 
         return;
     }
     func_8001AB6C();
-    func_8001AA9C(0xFF, 0xC8, 0xC8, 0xFF);
+    func_8001AA9C(0xFF, 0xC8, 0xC8, 0xFF); // #FFC8C8
     func_8001A384(4, -1);
     Font_Printf(x + 4, y + 65, D_82009C48);
     Font_SetColorForFlags(flags);
@@ -1109,7 +1109,7 @@ void FreeBattle_DrawTeamRow(s32 x, s32 y, SlotList *team, s32 row, s32 flags, Sl
     {
       def.items = D_8200AC58;
       def.count = 0;
-      def.itemCount = 0x18;
+      def.itemCount = 24;
       def.itemSize = row * 6;
       i = 0;
       if (team->slotCount > 0)
@@ -1126,7 +1126,7 @@ void FreeBattle_DrawTeamRow(s32 x, s32 y, SlotList *team, s32 row, s32 flags, Sl
               hl = 0x200;
             }
           }
-          FreeBattle_DrawMonCell((x + 0x88) + ((i % 3) * 0x84), ((i / 3) * 0x32) + y, name, i, hl, (s32) (&def));
+          FreeBattle_DrawMonCell((x + 136) + ((i % 3) * 132), ((i / 3) * 50) + y, name, i, hl, (s32) (&def));
           i++;
         } while (i < list->slotCount);
       }
@@ -1265,7 +1265,7 @@ void FreeBattle_DrawRentalListWindow(s8 *entry, s32 cursor_style)
   FreeBattle_DrawRentalNameList(x, y, 2, entry + 0xC8);
   def.items = D_8200AC58;
   def.count = 0;
-  def.itemCount = 0x18;
+  def.itemCount = 24;
   def.itemSize = (*((s32 *) (((s8 *) entry) + 0x48))) * 6; // FAKE: decomp slop, raw pointer casts stand in for struct fields
   switch (cursor_style)
   {
@@ -1279,6 +1279,6 @@ void FreeBattle_DrawRentalListWindow(s8 *entry, s32 cursor_style)
 
   }
 
-  GridMenu_DrawInlineItems(entry + 0x2F8, x + 0x88, y, mode, &def);
+  GridMenu_DrawInlineItems(entry + 0x2F8, x + 136, y, mode, &def);
   FreeBattle_DrawRowBorders(x, y, D_82008F60);
 }

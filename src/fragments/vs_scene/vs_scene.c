@@ -22,6 +22,8 @@
 /* C ported from the Stadium 1 decomp: src/fragments/demo_scenes/demo_scenes_161E60.c, src/fragments/jigglypuff_doodle/jigglypuff_doodle.c. */
 
 #include "vs_scene.h"
+#include "pokemon.h"
+#include "moves.h"
 #include "display_object_textures.h"
 #include "font.h"
 #include "fragments/cartridge_check/cartridge_check.h"
@@ -245,7 +247,7 @@ s32 VsScene_DrawFrameToImage(s32 unused) {
     GeoRender_AdvanceFrameCounter();
     PokeIcon_ProcessNextSlot((PokeIconRenderer*)D_82203264, 0);
     GfxImage_SetRenderTarget(&gDisplayListHead, D_82203208);
-    GfxImage_ClearDepthRectangle(&gDisplayListHead, 0, 0, 0x140, 0xF0);
+    GfxImage_ClearDepthRectangle(&gDisplayListHead, 0, 0, 320, 240);
     Geo_RenderRootNode(D_82203244);
     BgStage_DrawFrame();
     VsScene_DrawBackground();
@@ -263,7 +265,7 @@ s32 VsScene_DrawFrame(s32 unused) {
     GeoRender_AdvanceFrameCounter();
     PokeIcon_ProcessNextSlot((PokeIconRenderer*)D_82203264, 0);
     BgStage_DrawFrame();
-    GfxImage_ClearDepthRectangle(&gDisplayListHead, 0, 0, 0x140, 0xF0);
+    GfxImage_ClearDepthRectangle(&gDisplayListHead, 0, 0, 320, 240);
     Geo_RenderRootNode(D_82203244);
     return sp24;
 }
@@ -572,8 +574,7 @@ void Tournament_UnlockGbPlayerFrame(void) {
 
 /**
  * Sets transitionFlags 0x20 when the player's team came from a GB cartridge (port teamGbPort 0-3,
- * no rental on the team) and it brought a non-rental Pikachu (species 0x19) that does not know Surf
- * (move 0x39), presumably to start the Surfing Pikachu reward (fragment 010).
+ * no rental on the team) and it brought a non-rental Pikachu that does not know Surf, presumably to start the Surfing Pikachu reward (fragment 010).
  * @unverified Not reached in play: needs a cup won with a GB Pikachu.
  */
 void Tournament_CheckSurfPikachuReward(void) {
@@ -596,12 +597,12 @@ void Tournament_CheckSurfPikachuReward(void) {
 
         for (i = 0; i < roster->numberOfPokemonBrought; i++) {
             mon = &roster->pokemonPicked[i];
-            if ((mon->species.id == 0x19) && (mon->species.isRental == 0)) {
+            if ((mon->species.id == PIKACHU) && (mon->species.isRental == 0)) {
                 for (j = 0; j < 4; j++) {
                     if (mon->moves[j] == 0) {
                         break;
                     }
-                    if (mon->moves[j] == 0x39) {
+                    if (mon->moves[j] == SURF) {
                         return;
                     }
                 }
@@ -873,7 +874,7 @@ void VsScene_PlayResultsBoard(void) {
     if (VsScene_AnyMonDamaged() != 0) {
         Audio_PlayCommand(0x3D, 1, 0);
     }
-    var_s0 = 0x64;
+    var_s0 = 100;
     do {
         VsScene_DrawHpBars(var_s0);
         VsScene_DrawFrame(0);
@@ -893,7 +894,7 @@ void VsScene_PlayResultsBoard(void) {
             VsScene_MarkFaintedBatch(var_s0_3);
             func_80006828(6, VsScene_DrawFrame);
             var_s0_3 += 1;
-        } while (var_s0_3 != 0xD);
+        } while (var_s0_3 != 13);
     } else {
         do {
             VsScene_MarkFaintedBatch(var_s0_2);
@@ -970,7 +971,7 @@ s32 Tournament_RunContinuePrompt(void) {
         Font_EndTexturedTextRendering();
         gSPDisplayList(gDisplayListHead++, D_80060290);
         tex = D_8F625F00; // FAKE: temp stops the address being hoisted
-        x = ((sel == 0) ? 0x21 : 0x76) + 0x1E;
+        x = ((sel == 0) ? 33 : 118) + 30;
         Gfx_DrawTextureRgba16(x, 197, 24, 14, (u8*)Util_ConvertAddrToVirtAddr((uintptr_t)tex), 24, 0x200000);
         gSPDisplayList(gDisplayListHead++, D_80060398);
         func_80006780();
@@ -1066,7 +1067,7 @@ void VsScene_PlayFreeBattleResults(void) {
     D_82203268.node.renderFlags &= ~0x20;
     StageFade_Start(0x20);
     Audio_PlayMusicIfChanged(0xD);
-    VsScene_DrawHpBars(0x64);
+    VsScene_DrawHpBars(100);
     VsScene_ZoomIntoScreen();
     VsScene_PlayResultsBoard();
     VsScene_PlayWinLose();
@@ -1144,7 +1145,7 @@ void VsScene_PlayTournamentResults(void) {
     } else {
         Audio_PlayMusicIfChanged(0x10);
     }
-    VsScene_DrawHpBars(0x64);
+    VsScene_DrawHpBars(100);
     VsScene_ZoomIntoScreen();
     VsScene_PlayResultsBoard();
     VsScene_PlayWinLose();
@@ -1169,9 +1170,9 @@ void VsScene_AllocNameImages(void) {
     s32 j;
 
     for (i = 0; i < 12; i++) {
-        D_82203210[i] = GfxImage_Allocate(0, 2, 0x68, 0xC, 0);
-        for (j = 0; j < 0x68 * 0xC; j++) {
-            ((u16*)D_82203210[i]->img_p)[j] = 0xFFFE;
+        D_82203210[i] = GfxImage_Allocate(0, 2, 104, 12, 0);
+        for (j = 0; j < 104 * 12; j++) {
+            ((u16*)D_82203210[i]->img_p)[j] = 0xFFFE; // #FFFFFF, alpha bit clear
         }
     }
 }
@@ -1321,7 +1322,7 @@ s32 VsScene_Run(s32 kind, SessionContext* session) {
     Save_LoadSram();
     Gfx_InitDisplayListBuffers(0x10000, 0);
     D_82203204 = StageContext_Allocate(0, 1, 3, 1, 2, 1);
-    D_82203208 = GfxImage_Allocate(0, 2, 0x140, 0xF0, 1);
+    D_82203208 = GfxImage_Allocate(0, 2, 320, 240, 1);
     GfxImage_AttachDepthBuffer(D_82203208, D_82203204->renderTargets[0]->depth_p);
     Font_Init(0x2A, 0);
     Asset_LoadToSegment(((u32)D_01000000 & 0x0F000000) >> 0x18, D_002E0BE0, D_002E2B90, 0);
@@ -1358,7 +1359,7 @@ s32 VsScene_Run(s32 kind, SessionContext* session) {
     }
 
     D_82203260 = PokeIcon_AllocFramebuffers(5);
-    D_82203264 = (s32)PokeIcon_CreateRenderList(D_82203260, 0xC, 0x40, 0x40);
+    D_82203264 = (s32)PokeIcon_CreateRenderList(D_82203260, 12, 0x40, 0x40);
     D_8220325C = BinArchive_Open(D_002F5940, D_003139C0, 1, 1);
     PokeIcon_OpenModelArchives();
     VsScene_LoadGeoLayout(sp24);
