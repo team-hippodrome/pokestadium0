@@ -217,7 +217,7 @@ void HyperBeamIceBeamTrail_ComputeRotatedOffset(f32 arg0, Vec3f* arg1, Vec3f* ar
  */
 void HyperBeamIceBeamTrail_UpdateSlot(BeamTrail* arg0) {
     BeamTrailSegment* var_s0;
-    s32 spA8;
+    s32 spA8; //!bug never set before it is read below, so the wobble phase comes from stack garbage
     s32 i;
     Vec3f sp98;
     UNUSED s32 pad; // FAKE: stack padding

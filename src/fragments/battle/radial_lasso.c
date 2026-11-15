@@ -319,6 +319,9 @@ void Radial20_ResetPool(void) {
 extern Radial20 D_84398F50[10];
 extern Radial20 D_821A3490[10];
 /**
+ * Starts a radial strand in the first free of 10 slots from (arg0, arg1, arg2) toward (arg3,
+ * arg4, arg5): variant arg6, color (arg7, arg8, arg9), alpha argA, lifetime argE, with its 20
+ * nodes released one frame apart.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Tri Attack.
  */
@@ -429,6 +432,9 @@ void Radial20_VariantB(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg
 
 extern Radial20 D_821A3490[10];
 /**
+ * Starts a radial strand in the first free of 10 slots from (arg0, arg1, arg2) toward (arg3,
+ * arg4, arg5): variant arg6, color (arg7, arg8, arg9), alpha argA, lifetime argE, with random
+ * per-node wobble.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome):
  * ran.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.

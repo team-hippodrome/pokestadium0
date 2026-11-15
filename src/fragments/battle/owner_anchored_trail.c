@@ -45,6 +45,10 @@ void OwnerAnchoredFourStream_Init(void) {
 
 
 /**
+ * Starts an owner-anchored stream in the first free of 4 slots: spawns a particle for the
+ * secondary owner at (arg0, arg1, arg2), heads toward (arg3, arg4, arg5) with direction from the
+ * sign of arg3, color (arg6, arg7, arg8), node alphas fading from arg9, half width argB up to
+ * argC, angle step argA and lifetime argD.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
