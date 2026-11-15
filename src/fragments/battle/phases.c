@@ -253,6 +253,8 @@ void BattleScene_ReactionMultiHitEnd(CameraNode* arg0, void* arg1) {
  * by Battle_Effect_LowerStat and Battle_Effect_ConfuseChance).
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Acid, Aurora Beam, Bubble, BubbleBeam, Constrict, Psychic.
  * @unverified Name from BattleScene_ActionStepReaction's dispatch.
  */
 void BattleScene_ReactionSideEffect(CameraNode* arg0, void* arg1) {
@@ -497,6 +499,8 @@ void BattleScene_PhaseSecondAction(CameraNode* arg0) {
 
 /**
  * Plays one of the user's camera shots 0-2, picked at random (the pick is kept in D_8219A568).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Conversion, Double Team, Growth, Harden, Hyper Beam, Mimic, Minimize.
  * @unverified Name guessed from the code.
  */
 void BattleCamera_PlayRandomUserShot3(s32 camera)
@@ -567,6 +571,8 @@ void BattleCamera_PlayRandomUserShot4(s32 camera)
 /**
  * Plays one of the user's camera shots 0, 1, 2 or 4, picked at random (the pick is kept in
  * D_8219A568).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Bide, Explosion, Selfdestruct, Swords Dance.
  * @unverified Name guessed from the code.
  */
 void BattleCamera_PlayRandomUserShotWith4(s32 camera)
@@ -1178,7 +1184,9 @@ void BattleAnim_StartCueEventTrack(ActivePokemon*, s32, s32);
  * Plays a Pokemon's pending model reactions from its state flags: 2 (reaction 1), 1 (resets
  * its roster byte 5, sets event track 0xB8, reaction 3) and the acting Pokemon's 0x80
  * (reaction 2), clearing each flag, then commits its pending status.
- * @unverified Name guessed from the code.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Haze: ran at sample 340, after 「すべての ステータスが もとに もどった！」 (all stat changes were reset); only move
+ * that ran it.
  */
 s32 BattleScene_HazeClearStatusEffects(ActivePokemon* active_pokemon) {
     ActivePokemonState* state = &active_pokemon->state;
@@ -1466,6 +1474,8 @@ void BattleScene_PhaseCannotMove(CameraNode* arg0) {
  * Brings a Pokemon back to its normal height after an air or underground move: with flag
  * 0x200 it only restores the height; with 0x4008 it also makes the model opaque and visible
  * again and plays reaction 4.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Supersonic.
  * @unverified Name guessed from the code.
  */
 void BattleScene_ReturnToGroundHeight(ActivePokemon* active_pokemon) {

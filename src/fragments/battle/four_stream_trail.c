@@ -18,6 +18,8 @@ Gfx* FourStreamTrail_Draw(Gfx* arg0);
 /**
  * Clears the 4 four-stream trails and their 15 nodes each.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Sonicboom.
  * @unverified Name from Stadium 1.
  */
 void FourStreamTrail_Init(void) {
@@ -109,7 +111,8 @@ void FourStreamTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32
  * Writes the point arg2 units along Z, scaled by arg3 and rotated arg0 radians about X,
  * to arg1.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Sonic Boom: ran from sample 290 with the white streaks on screen; only move that ran it.
  */
 void FourStreamTrail_Update(f32 arg0, Vec3f* arg1, f32 arg2, f32 arg3) {
     MtxF spB0;
@@ -126,6 +129,8 @@ void FourStreamTrail_Update(f32 arg0, Vec3f* arg1, f32 arg2, f32 arg3) {
 /**
  * Advances a trail's 15 nodes, each following the one ahead of it.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Sonicboom.
  * @unverified Name from Stadium 1.
  */
 void FourStreamTrail_UpdateNodeChain(FourStreamTrail* arg0) {
@@ -194,6 +199,8 @@ void FourStreamTrail_UpdateNodeChain(FourStreamTrail* arg0) {
 /**
  * Advances every active four-stream trail and counts its frames. Always returns 0.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Sonicboom.
  * @unverified Name from Stadium 1.
  */
 s32 FourStreamTrail_IsComplete(void) {
@@ -218,7 +225,8 @@ s32 FourStreamTrail_IsComplete(void) {
  * Adds the display lists that draw every active four-stream trail and returns the new end
  * of the list.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Sonic Boom: drew the white streaks around Onix from sample 290; only move that ran it.
  */
 Gfx* FourStreamTrail_Draw(Gfx* arg0) {
     s32 i;

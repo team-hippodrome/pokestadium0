@@ -33,6 +33,8 @@ void BattleScene_GetParticipantModelSizeScaled(ActivePokemon* arg0);
 /**
  * Returns 1 if the current animation owner's model shows species arg0.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Lick.
  * @unverified Name from Stadium 1.
  */
 s32 BattleAnim_IsCurrentOwnerSpecies(s32 arg0) {
@@ -78,6 +80,8 @@ void BattleAnim_GetOwnerBonePosition(ActivePokemon *arg0, s16 arg1, Vec3f *arg2)
 /**
  * Writes the position of bone 0x64 of the current animation owner.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Bind, Constrict, Disable, String Shot, Wrap.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_GetCurrentOwnerBonePosition(Vec3f* arg0) {
@@ -119,6 +123,8 @@ void BattleAnim_GetSecondaryOwnerAnchorPosition(Vec3f* arg0) {
 /**
  * Writes the position of bone 9 of the tertiary animation owner.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Aurora Beam, BubbleBeam, Hyper Beam, Psybeam, Solar Beam.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_GetTertiaryOwnerBone9Position(Vec3f* arg0) {
@@ -208,6 +214,8 @@ s32 BattleAnim_GetCameraContext(void) {
  * Allocates a stinger-move particle of kind arg1 at arg0, owned by the secondary owner,
  * with anchor kind 0x15. Returns -1 if the pool is full.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Pin Missile, Poison Sting, Spike Cannon, Twineedle.
  * @unverified Name from Stadium 1.
  */
 Particle* BattleAnim_SpawnSecondaryOwnerParticle(Vec3f arg0, u8 arg1) {
@@ -228,6 +236,8 @@ Particle* BattleAnim_SpawnSecondaryOwnerParticle(Vec3f arg0, u8 arg1) {
 /**
  * Sets a particle's origin, unless the particle pointer is -1 (allocation failed).
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Pin Missile, Poison Sting, Spike Cannon, Twineedle.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetParticlePosition(Particle* arg0, Vec3f arg1) {

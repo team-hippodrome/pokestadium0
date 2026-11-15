@@ -226,6 +226,8 @@ s16 Particle_GetCountdown(s8 *arg0) {
  * BattleAnim_GetEffectState clear and read it.
  * Seen in play (2026-11-13) (title-screen demo battle, left idle after boot): ran once, with state
  * 1, called from BattleAnim_DispatchParticleEmission.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Amnesia, Sing.
  * @unverified Named from the code.
  */
 void BattleAnim_SetEffectState(s32 arg0) {
@@ -237,6 +239,8 @@ void BattleAnim_SetEffectState(s32 arg0) {
  * FirstClearBonus_HideDialogBox.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Fly.
  * @unverified Named from the code.
  */
 void BattleAnim_ClearEffectState(void) {

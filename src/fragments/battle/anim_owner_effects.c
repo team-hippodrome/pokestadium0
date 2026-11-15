@@ -174,7 +174,8 @@ void BattleAnim_SetupStatRaiseRibbon(void) {
  * Part of the stat-raise ribbon (see BattleAnim_SetupStatRaiseRibbon).
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
- * @unverified Named after the ribbon seen in play; this function itself was not traced.
+ * Seen in play (2026-11-14) (Metronome bench, Acid Armor, 1P Onix): ran at sample 234 with
+ * BattleAnim_DrawStatRaiseRibbon; stubbing the draw function removed the ribbon rising around Onix.
  */
 s32 BattleAnim_RunStatRaiseRibbon(void) {
     return StatRibbon_UpdatePool();
@@ -184,7 +185,9 @@ s32 BattleAnim_RunStatRaiseRibbon(void) {
  * Part of the stat-raise ribbon (see BattleAnim_SetupStatRaiseRibbon).
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
- * @unverified Named after the ribbon seen in play; this function itself was not traced.
+ * Seen in play (2026-11-14) (Metronome bench, Acid Armor, 1P Onix): ran at sample 234 while a
+ * purple and yellow ribbon wall rose around Onix, before 「ぼうぎょりょくが ぐーんと あがった！」. With the function
+ * stubbed (jr ra) the ribbon was gone and the rest of the animation still played.
  */
 void BattleAnim_DrawStatRaiseRibbon(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -213,7 +216,8 @@ void BattleAnim_SetupStatLowerRibbon(void) {
 /**
  * Updates the stat-change ribbon pool; returns its result.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (8 of the moves).
- * @unverified Name guessed from the code.
+ * Seen in play (2026-11-14) (Metronome bench, Acid hit on Pinsir): ran with
+ * BattleAnim_DrawStatLowerRibbon while the red ribbon sank and 「ぼうぎょりょくが さがった！」 showed.
  */
 s32 BattleAnim_RunStatLowerRibbon(void) {
     return StatRibbon_UpdatePool();
@@ -222,7 +226,8 @@ s32 BattleAnim_RunStatLowerRibbon(void) {
 /**
  * Loads the shared effect matrix and draws the stat-change ribbon pool.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (8 of the moves).
- * @unverified Name guessed from the code.
+ * Seen in play (2026-11-14) (Metronome bench, Acid hit on Pinsir): first ran at sample 346;
+ * screenshots show the red ribbon sinking around Pinsir with 「ぼうぎょりょくが さがった！」 (Defense fell).
  */
 void BattleAnim_DrawStatLowerRibbon(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);

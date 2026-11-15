@@ -1040,6 +1040,9 @@ void BattleScene_PhaseFaintEndingBattle(CameraNode* camera) {
  * Camera step: keeps the field of view, clears camera and message state, zeroes the zoom and
  * advances the phase step after 10 frames, placing the eye from the stored distance and
  * angles.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Dig, Fly, Hyper Beam, Petal Dance, Rage, Razor Wind, Skull Bash, Sky
+ * Attack, Solar Beam, Thrash.
  * @unverified Name guessed from the code.
  */
 void BattleScene_CommandCameraResetStep(CameraNode* camera) {
@@ -1538,6 +1541,8 @@ void BattleScene_MoveIntroCameraRandom(CameraNode* camera) {
  * the camera swing to count its frames (passed on to BattleAnim_AlignIdleLoopToFrameCount) and then
  * resets the camera; case 1 runs the swing for real and advances scene field
  * 0x20 once it settles.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Fly.
  * @unverified Name guessed from the code.
  */
 void BattleScene_MoveIntroCameraSwing(CameraNode* arg0) {

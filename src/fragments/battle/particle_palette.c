@@ -306,7 +306,8 @@ s32 func_821436A0(s8 *, u8, s32);                 /* extern */
 M2C_UNK func_8214390C(s8 *);                      /* extern */
 
 /**
- *
+ * Particle lifecycle callback (global tint color fade detach): steps the particle by its lifecycle
+ * state.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackGlobalTintColorFadeDetach(s8 *arg0) {
@@ -354,7 +355,8 @@ s32 Particle_ApproachScratchA(s8 *, u8, s16);                 /* extern */
 M2C_UNK func_821439D0(s8 *);                      /* extern */
 
 /**
- *
+ * Particle lifecycle callback (owner model tint ramp detach): steps the particle by its lifecycle
+ * state.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackOwnerModelTintRampDetach(s8 *arg0) {
@@ -448,7 +450,8 @@ M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_82143AD0(s8 *);                      /* extern */
 
 /**
- *
+ * Particle lifecycle callback (owner model tint hold fade detach): steps the particle by its
+ * lifecycle state.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackOwnerModelTintHoldFadeDetach(s8 *arg0) {
@@ -478,6 +481,9 @@ void BattleAnim_CallbackOwnerModelTintHoldFadeDetach(s8 *arg0) {
 
 /**
  * Init step: recolors the prim color from palette CF, copies field A6 into AE and advances.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for BubbleBeam, Egg Bomb, Explosion, Hydro Pump, Hyper Beam, Selfdestruct,
+ * Sky Attack, Solar Beam, Waterfall.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_SetupOwnerModelTintPaletteApproach(Particle* particle) {
@@ -493,7 +499,11 @@ M2C_UNK func_8213C9D0(s8 *);                      /* extern */
 M2C_UNK Particle_SetScratchA(s8 *, M2C_UNK);             /* extern */
 
 /**
- *
+ * Particle lifecycle callback (owner model tint palette approach inactive): steps the particle by
+ * its lifecycle state.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for BubbleBeam, Egg Bomb, Explosion, Hydro Pump, Hyper Beam, Selfdestruct,
+ * Sky Attack, Solar Beam, Waterfall.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackOwnerModelTintPaletteApproachInactive(s8 *arg0) {

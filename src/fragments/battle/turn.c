@@ -84,6 +84,9 @@ s32 Battle_TryLoadFollowupMoveFromTarget(void) {
  * Self-Destruct and Explosion check of the target's Substitute and state; the body does nothing
  * in Zero. Runs after every move.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a Pound turn.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Dig, Fly, Petal Dance, Rage, Razor Wind, Skull Bash, Sky Attack, Solar
+ * Beam, Thrash.
  * @unverified Name and comment from the code.
  */
 void Battle_CheckExplosionVsSubstitute(void)
@@ -164,6 +167,9 @@ void Battle_ApplyTypeEffectAndSTAB(void) {
  * Replace Counter damage with twice the eligible Normal/Fighting damage, or mark failure.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
  * turn.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Dig, Fly, Petal Dance, Rage, Razor Wind, Skull Bash, Sky Attack, Solar
+ * Beam, Thrash.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s32 Battle_Effect_Counter(void) {

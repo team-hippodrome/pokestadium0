@@ -73,6 +73,8 @@ void BattleAnim_SetupSlashingMoveUse(Particle* arg0) {
 /**
  * Particle callback (lifecycle at 0xAE): init, loop frames 0-7 once, fade alpha out by 64,
  * then mark inactive. Scale moves toward 3.5 by 0.25 every frame.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Cut, Fury Swipes, Scratch, Slash, Vine Whip.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackSharedDescriptor29ScaleAnimFade(Particle* particle) {
@@ -99,7 +101,8 @@ void BattleAnim_CallbackSharedDescriptor29ScaleAnimFade(Particle* particle) {
 /**
  * Called from BattleAnim_RunRazorWindHitEffect, the Razor Wind hit effect's callback (an earlier
  * no-caller note here was wrong).
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Razor Wind: ran at sample 802 to set up the wind blades hitting Pinsir.
  */
 void BattleAnim_SetupRazorWindHitEffect(Particle* arg0) {
     s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
@@ -153,7 +156,8 @@ void BattleAnim_SetupRazorWindHitEffect(Particle* arg0) {
 /**
  * Passed as the effect-slot callback by BattleAnim_InitializeRazorWindHit, which ran when Razor
  * Wind hit on its second turn (2026-11-13; an earlier no-caller note here was wrong).
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Razor Wind: ran at sample 802, on the second turn, as the wind blades hit Pinsir.
  */
 void BattleAnim_RunRazorWindHitEffect(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -394,6 +398,8 @@ void BattleAnim_SlashGrowFade_InitParticle(Particle* arg0) {
 /**
  * Particle callback: init, an 8-frame countdown, a fade-out by 32, then inactive. Loops
  * frames 0-7 and moves scale toward 5 by 0.4 every frame.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Crabhammer, Cut, Fury Swipes, Scratch, Slash, Vine Whip.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_SlashGrowFade(Particle* particle) {
@@ -802,6 +808,8 @@ void BattleAnim_SetupIceBeamIcePunchEffect(Particle* arg0) {
 /**
  * Particle callback: init, wait the delay in field A2, run the effect stages, then mark
  * inactive.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Ice Beam, Ice Punch.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackEndEffect67Descriptor3DAnimatedGravityFade(Particle* particle) {
@@ -887,6 +895,9 @@ void BattleAnim_CallbackOrphanDescriptor34ColorFadeDetach(Particle* particle) {
 
 /**
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a Pound turn.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Body Slam, Crabhammer, Double Edge, Fly, Seismic Toss, Slam, Stomp,
+ * Submission, Thrash.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupGroundedCircularHitSpark(Particle* arg0) {
@@ -901,6 +912,9 @@ void BattleAnim_SetupGroundedCircularHitSpark(Particle* arg0) {
  * Stomp (hit), Submission (hit), Thrash (hit)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a Pound turn.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Body Slam, Crabhammer, Double Edge, Fly, Seismic Toss, Slam, Stomp,
+ * Submission, Thrash.
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunGroundedCircularHitSpark(Particle* arg0) {
@@ -1157,7 +1171,8 @@ void BattleAnim_RunPhysicalHitPurpleSmoke(Particle* arg0) {
  * Init step for a Swift burst star: scale 0.1, random X/Y spin with a random Z spin speed,
  * step magnitude 8, palette pair 0x17, no delay, hidden until it starts.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
- * @unverified Name guessed from the code.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Swift: ran at sample 353 as the stars burst on Pinsir.
  */
 void BattleAnim_SwiftBurstChild_InitParticle(Particle* arg0) {
     s16 sp2E = Particle_SpawnIndex_GetS16_0C038(arg0);
@@ -1350,6 +1365,9 @@ void BattleAnim_SetupSharedScalePulseFallSetup(Particle* arg0) {
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
  * switch in battle.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Barrier, Harden, Ice Punch, Kinesis, Leech Seed, Light Screen, Pay Day,
+ * Reflect, Swift, Swords Dance.
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_RunSparkleHit(Particle* arg0) {
@@ -2010,6 +2028,8 @@ void BattleAnim_SetupThunderPunchUseEffect(Particle* arg0) {
 /**
  * Particle callback: init, wait the delay in field A2, run the effect stages, then mark
  * inactive.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Thunder Punch.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackStartEffect73Descriptor15AnimatedColorImpulseFade(Particle* particle) {
@@ -2047,6 +2067,9 @@ void BattleAnim_CallbackStartEffect73Descriptor15AnimatedColorImpulseFade(Partic
 /**
  * Picks the particle's palette pair from the queued move (the powder moves and others).
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (10 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Haze, Mist, Poison Gas, Poisonpowder, Sand Attack, Sleep Powder, Smog,
+ * Smokescreen, Spore, Stun Spore.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_RecolorParticleByQueuedMoveId(Particle* arg0) {
@@ -2128,6 +2151,9 @@ void BattleAnim_PowderCloudScaleMotion_InitParticle(Particle* arg0) {
 /**
  * Particle callback: init, wait the delay in field A2, run the effect stages, then mark
  * inactive.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Haze, Mist, Poison Gas, Poisonpowder, Sand Attack, Sleep Powder, Smog,
+ * Smokescreen, Spore, Stun Spore.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_PowderCloudScaleMotion(Particle* particle) {

@@ -354,6 +354,8 @@ M2C_UNK func_821453F4(s8 *);                      /* extern */
 /**
  * Particle callback for the Fire Blast/Flamethrower smoke, Dragon Rage and Fire Spin particles:
  * init, step until the spawn step is done, then fade.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Dragon Rage, Fire Blast, Fire Spin, Flamethrower.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackFireSmokeParticle(Particle* particle) {
@@ -511,6 +513,9 @@ void BattleAnim_FlameRotatingFallColorCycle(Particle* arg0) {
  * and Sky Attack Oddly, Psybeam calls this setup, but not the runner for the effect
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for BubbleBeam, Egg Bomb, Hydro Pump, Hyper Beam, Ice Beam, Psybeam, Sky
+ * Attack, Solar Beam, Waterfall.
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_SetupExpandingHitSpark(Particle* arg0) {
@@ -1904,7 +1909,10 @@ M2C_UNK func_82147ED0(s8 *);                      /* extern */
 M2C_UNK func_82147FF0(s8 *);                      /* extern */
 
 /**
- *
+ * Particle lifecycle callback (end effects15 and22 and59 descriptor3 drotating alpha scale fade):
+ * steps the particle by its lifecycle state.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Dragon Rage, Fire Blast, Flamethrower.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade(Particle* particle) {

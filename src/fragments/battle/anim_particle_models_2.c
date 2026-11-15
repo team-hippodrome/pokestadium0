@@ -5,6 +5,8 @@
 /**
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Amnesia, Supersonic.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_ApplyModelSpeciesOffset(Particle* arg0) {

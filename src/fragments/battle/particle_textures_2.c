@@ -36,6 +36,8 @@ M2C_UNK func_8216BFE8(s32, M2C_UNK, M2C_UNK);       /* extern */
 
 /**
  * Texture callback: loads 64x64 I4 frame (byte 0xC3) of the texture at arg1.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Fire Punch, Thunder Punch.
  * @unverified Name guessed from the code.
  */
 void ParticleGfx_LoadTextureCallbackI4FrameC3_64x64(s8 *arg0, s32 arg1) {
@@ -190,6 +192,8 @@ void ParticleGfx_DrawBillboardQuad1040(Particle* particle, CameraNode* camera) {
 /**
  * Particle draw callback: sets the particle's colors and draws camera-facing quad
  * D_82191440.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Fire Punch, Thunder, Thunderbolt, Thunder Punch.
  * @unverified Name guessed from the code.
  */
 void ParticleGfx_DrawBillboardQuad1440(Particle* particle, CameraNode* camera) {

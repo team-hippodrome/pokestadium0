@@ -191,7 +191,8 @@ s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_821519AC(s8 *);                      /* extern */
 
 /**
- *
+ * Particle lifecycle callback (orphan descriptor2 escatter fade): steps the particle by its
+ * lifecycle state.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackOrphanDescriptor2EScatterFade(Particle* particle) {

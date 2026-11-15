@@ -247,6 +247,8 @@ extern s32 D_821A6F60;
 /**
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Hypnosis, Screech.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Trail40_Reset(void) {

@@ -8,6 +8,8 @@
  * Starts a sway or arc: sets the height y, splits it into Z and Y components by angle
  * theta, and sets the default speed.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Fly, Waterfall.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_InitSwayOffset(ActivePokemon* pokemon, f32 y, s16 theta) {
@@ -21,6 +23,8 @@ void BattleAnim_InitSwayOffset(ActivePokemon* pokemon, f32 y, s16 theta) {
  * Moves the owner model one step along its sway arc toward height, by delta_y and
  * delta_theta, offsetting its position sideways from its facing.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Fly, Waterfall.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_UpdateTransform(ActivePokemon* owner, ActivePokemon* animated_pokemon, f32 height, f32 delta_y, s32 delta_theta) {
@@ -108,6 +112,8 @@ void BattleAnim_UpdateSwayPhysicsToTarget(UNUSED ActivePokemon* owner, ActivePok
 /**
  * Hides the Pokémon's three afterimages and resets their scale.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (11 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Agility, Dig, Double Team, Fly, Minimize, Submission.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_HideParticipantSecondaryModels(ActivePokemon* active_pokemon) {
@@ -124,6 +130,8 @@ void BattleScene_HideParticipantSecondaryModels(ActivePokemon* active_pokemon) {
 /**
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Double Team.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleScene_ShowSecondaryModelsAtMainTransform(ActivePokemon* pokemon) {
@@ -146,6 +154,8 @@ void BattleScene_ShowSecondaryModelsAtMainTransform(ActivePokemon* pokemon) {
  * Double Team step: fades the afterimages to alpha 60, speeds up their orbit and places
  * each one around the Pokémon, copying its animation.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Double Team.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_UpdateSecondaryModelOrbit(ActivePokemon* pokemon) {
@@ -176,6 +186,8 @@ void BattleScene_UpdateSecondaryModelOrbit(ActivePokemon* pokemon) {
 /**
  * Shows the first two afterimages at the Pokémon's position at alpha 60.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Minimize.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ShowSecondaryModelsAtMainPose(ActivePokemon* active_pokemon) {
@@ -194,7 +206,8 @@ void BattleScene_ShowSecondaryModelsAtMainPose(ActivePokemon* active_pokemon) {
 /**
  * Steps the two afterimages: each follows the Pokemon's position and shrinks toward 0.65 at
  * its own speed. Returns 1 once both are done.
- * @unverified Name guessed from the code.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Minimize: ran from sample 264 as Onix's two shrinking afterimages showed (「かいひりつが あがった！」).
  */
 s32 BattleAnim_StepMinimizeAfterimages(ActivePokemon* active_pokemon) {
     s32 i;
@@ -229,6 +242,8 @@ s32 BattleAnim_StepMinimizeAfterimages(ActivePokemon* active_pokemon) {
  * Shows the first two afterimages exactly on the Pokémon, copying its animation, pose
  * and scale, at alpha 65 and 61.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (10 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Agility, Dig, Fly, Submission.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ShowSecondaryModelsStaggeredFrame(ActivePokemon* active_pokemon) {

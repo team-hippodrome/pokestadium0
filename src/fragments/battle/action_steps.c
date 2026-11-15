@@ -668,6 +668,8 @@ void BattleScene_ImpactCameraOrbit(CameraNode* camera) {
 /**
  * Impact camera variant 4: orbit like variant 3 with wider settings (10, 12, 3.5, 6) at
  * angle 0x11C6.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Fly, Strength.
  * @unverified Name guessed from the code.
  */
 void BattleScene_ImpactCameraWideOrbit(s32 camera) {

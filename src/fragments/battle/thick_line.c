@@ -14,6 +14,8 @@ Gfx* Gfx_DrawThickLine(Gfx* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg
  * toward the camera direction arg3, using the 10-vertex template with the middle vertices
  * colored (arg5, arg6, arg7, arg8). Returns the advanced display list pointer.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Aurora Beam, Hyper Beam, Psybeam, Solar Beam.
  * @unverified Name from Stadium 1.
  */
 Gfx* Gfx_DrawThickLine(Gfx* arg0, Vec3f* arg1, Vec3f* arg2, Vec3f* arg3, f32 arg4, u8 arg5, u8 arg6, u8 arg7, u8 arg8) {

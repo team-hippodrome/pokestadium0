@@ -69,6 +69,9 @@ extern u16 D_843C4DCC;
  * Select damage power, offensive/defensive stats and level, including screens and critical hits.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
  * turn.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Dig, Fly, Petal Dance, Rage, Razor Wind, Skull Bash, Sky Attack, Solar
+ * Beam, Supersonic, Thrash.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void InitBattleParameters(void) {
@@ -607,6 +610,9 @@ extern s32 D_8218C780;
  * Gen 1 HandleBuildingRage: when the target is using Rage and its Attack stage isn't maxed,
  * queues the rage message and raises its Attack through BattleEffect_ApplyStatBoost.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a Pound turn.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Dig, Fly, Petal Dance, Rage, Razor Wind, Skull Bash, Sky Attack, Solar
+ * Beam, Thrash.
  * @unverified Name and comment from the code (matches the Gen 1 engine).
  */
 void Battle_HandleBuildingRage(void) {
@@ -902,6 +908,8 @@ void Battle_ApplyLeechSeedDamage(void) {
 
 /**
  * Empty.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Leech Seed.
  * @unverified Name guessed from the code.
  */
 void Battle_ResidualEffectsNop(void) {

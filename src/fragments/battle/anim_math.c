@@ -98,6 +98,8 @@ Vec3f* BattleAnim_Vec3fCopy(Vec3f* dest, Vec3f* src) {
  * `dest`. Callers use it to copy display object rotations.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle and a Pound
  * turn.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Agility, Dig, Double Team, Fly, Submission.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 Vec3s* BattleAnim_Vec3sCopy(Vec3s* arg0, Vec3s* arg1) {
@@ -257,6 +259,8 @@ void BattleAnim_ApproachU16(u16* dest, u16 value, s16 speed) {
 /**
  * Writes the four uniform cubic B-spline weights for parameter arg1 (0 to 1) to arg0.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Barrier, Bide, Defense Curl, Mirror Move, Recover, Rest, Softboiled.
  * @unverified Name guessed from the code.
  */
 void Battle_ComputeSplineWeightsVariantA(f32* arg0, f32 arg1) {

@@ -27,6 +27,8 @@ Gfx* WaterParticle_DrawPass(Gfx* arg0, DoubleTextureTrail* arg1, s16 arg2, s16 a
 /**
  * Clears the 4 double-texture trails and their segments.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Aurora Beam, Hyper Beam, Psybeam, Solar Beam.
  * @unverified Name from Stadium 1.
  */
 void DoubleTextureTrail_InitPool(void) {
@@ -153,6 +155,8 @@ void DoubleTextureTrail_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, 
 /**
  * Writes the point arg2 units along Z rotated by arg0 radians about X to arg1.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Aurora Beam, Hyper Beam, Psybeam, Solar Beam.
  * @unverified Name from Stadium 1.
  */
 void DoubleTextureTrail_RotateVertexOffset(f32 arg0, Vec3f* arg1, f32 arg2) {
@@ -167,6 +171,8 @@ void DoubleTextureTrail_RotateVertexOffset(f32 arg0, Vec3f* arg1, f32 arg2) {
 /**
  * Advances one trail: moves its head and updates each segment's position and fade.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Aurora Beam, Hyper Beam, Psybeam, Solar Beam.
  * @unverified Name from Stadium 1.
  */
 void DoubleTextureTrail_Update(DoubleTextureTrail* arg0) {
@@ -239,6 +245,8 @@ void DoubleTextureTrail_Update(DoubleTextureTrail* arg0) {
 /**
  * Advances every active trail and counts its frames. Returns 0.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Aurora Beam, Hyper Beam, Psybeam, Solar Beam.
  * @unverified Name from Stadium 1.
  */
 s32 DoubleTextureTrail_UpdateAll(void) {
@@ -258,6 +266,8 @@ s32 DoubleTextureTrail_UpdateAll(void) {
 /**
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Aurora Beam, Hyper Beam, Psybeam, Solar Beam.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 Gfx* WaterParticle_DrawPass(Gfx* arg0, DoubleTextureTrail* arg1, s16 arg2, s16 arg3) {
@@ -312,6 +322,8 @@ Gfx* WaterParticle_DrawPass(Gfx* arg0, DoubleTextureTrail* arg1, s16 arg2, s16 a
 /**
  * Adds the loads for a trail's two scrolling 32x32 I4 textures to the display list.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Aurora Beam, Hyper Beam, Psybeam, Solar Beam.
  * @unverified Name from Stadium 1.
  */
 Gfx* DoubleTextureTrail_LoadTextures(Gfx* arg0, DoubleTextureTrail* arg1) {
@@ -334,6 +346,8 @@ Gfx* DoubleTextureTrail_LoadTextures(Gfx* arg0, DoubleTextureTrail* arg1) {
  * Adds the display lists that draw every active trail as textured strips and returns the
  * new end of the list.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Aurora Beam, Hyper Beam, Psybeam, Solar Beam.
  * @unverified Name from Stadium 1.
  */
 Gfx* DoubleTextureTrail_DrawAll(Gfx* arg0) {

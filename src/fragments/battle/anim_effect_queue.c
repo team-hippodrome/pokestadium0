@@ -501,6 +501,8 @@ void BattleAnim_QueueMoveEffectEnd(s32 move_id, ActivePokemon* user, ActivePokem
 /**
  * Queues a move's charging animation (effect list 1).
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (6 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Dig, Fly, Razor Wind, Skull Bash, Sky Attack, Solar Beam.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_QueueChargingMoveEffectScript(s32 move_id, ActivePokemon* user, ActivePokemon* user_fallback, s16 default_anchor, s16 alternate_anchor) {
@@ -563,6 +565,8 @@ extern s32 D_8219A804;
 /**
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Kinesis.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_QueueEffectList9(s32 arg0) {
@@ -593,6 +597,8 @@ void BattleAnim_QueueEffectList(u8 arg0, s32 arg1) {
 /**
  * Calls BattleAnim_StopParticlesForOwnerCategory.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Dig.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_StopOwnerCategoryParticles(u8 category, ActivePokemon* owner) {
@@ -828,6 +834,8 @@ void BattleAnim_FreeOwnerDisplayContext(DisplayObject* arg0) {
  * Takes a free display object from the 4-entry particle pool, binds it to particle arg0
  * and sets the particle's flag 0x400. Returns NULL if none is free.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (7 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Bite, Blizzard, Clamp, Guillotine, Hyper Fang, Super Fang, Vicegrip.
  * @unverified Name from Stadium 1.
  */
 DisplayObject* BattleAnim_AllocParticleDisplayContext(Particle* arg0) {
@@ -856,6 +864,8 @@ DisplayObject* BattleAnim_AllocParticleDisplayContext(Particle* arg0) {
 /**
  * Returns display object arg0 to the particle pool and clears it.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (7 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Bite, Blizzard, Clamp, Guillotine, Hyper Fang, Super Fang, Vicegrip.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_FreeParticleDisplayContext(DisplayObject* arg0) {
@@ -887,6 +897,8 @@ void BattleAnim_InitModelWithAnim(DisplayObject* arg0, s16 arg1, s16 arg2) {
 /**
  * Sets the display object's animation frame.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Confuse Ray.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetModelAnimFrame(DisplayObject* arg0, s16 arg1) {
@@ -905,6 +917,9 @@ void BattleAnim_InitModel(DisplayObject* arg0, s16 arg1) {
 /**
  * Binds animation asset arg1 to the display object at normal speed.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (9 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Absorb, Bite, Clamp, Guillotine, Hyper Fang, Leech Life, Mega Drain,
+ * Super Fang, Vicegrip.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_BindModelAnim(DisplayObject* arg0, s16 arg1) {
@@ -914,6 +929,8 @@ void BattleAnim_BindModelAnim(DisplayObject* arg0, s16 arg1) {
 /**
  * Binds animation asset arg1 to the display object to play backward from its last frame.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Dream Eater.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_BindModelAnimReversed(DisplayObject* arg0, s16 arg1) {
@@ -924,6 +941,8 @@ void BattleAnim_BindModelAnimReversed(DisplayObject* arg0, s16 arg1) {
 /**
  * Returns 1 when the display object's animation frame is 0.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Dream Eater.
  * @unverified Name from Stadium 1.
  */
 s32 BattleAnim_IsModelAnimComplete(DisplayObject* arg0) {

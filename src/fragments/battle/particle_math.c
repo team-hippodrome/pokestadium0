@@ -1005,6 +1005,9 @@ void ParticleMath_GetPointAlongTurnedView(Vec3f *out, s32 angle, f32 distance) {
 
 /**
  * Place a point at the requested distance from the scene camera eye.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Bite, Blizzard, Clamp, Guillotine, Gust, Hyper Fang, Razor Wind, Super
+ * Fang, Vicegrip, Whirlwind.
  * @unverified Name guessed from the code.
  */
 void ParticleMath_GetPointAlongView(Vec3f* out, f32 distance) {
@@ -1092,6 +1095,8 @@ void func_821381E4(Vec3f*, Vec3f, Vec3f);
  * Vec3f arguments are passed by value, in $a1-$a3 and on the stack), and
  * passes the result's z and x components to MathUtil_Atan2s (the angle itself
  * is discarded).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Confuse Ray.
  * @unverified Name guessed from the code.
  */
 void ParticleMath_ComputeViewYawUnused(void) {
@@ -1118,6 +1123,8 @@ s16 ParticleMath_AngleXBetweenPoints(Vec3f arg0, Vec3f arg1) {
  * Return the ZX-component atan2 of end - start in that argument order.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Barrage.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 s16 ParticleMath_AngleYBetweenPoints(Vec3f arg0, Vec3f arg1) {

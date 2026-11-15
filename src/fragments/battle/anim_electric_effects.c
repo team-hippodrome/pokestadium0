@@ -54,7 +54,10 @@ M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214E590(s8 *);                      /* extern */
 
 /**
- *
+ * Particle lifecycle callback (start effects18 and73 descriptor11 scatter rise fade): steps the
+ * particle by its lifecycle state.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Thunder, Thunderbolt, Thunder Punch.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade(Particle* particle) {
@@ -274,6 +277,8 @@ void BattleAnim_RunRandomRotatingBoltOfLightning(Particle* arg0) {
  * Lifecycle init: half scale, no speed, pointed up with a random spread about Z, palette
  * color from the CF parameter.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Hyper Beam, Thunder, Thunderbolt, Thundershock.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupSharedDirectionalSprayFade(Particle* arg0) {
@@ -297,7 +302,10 @@ M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214EC88(s8 *);                      /* extern */
 
 /**
- *
+ * Particle lifecycle callback (shared directional spray fade): steps the particle by its lifecycle
+ * state.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Hyper Beam, Thunder, Thunderbolt, Thundershock.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackSharedDirectionalSprayFade(Particle* particle) {
@@ -350,7 +358,10 @@ M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214EDE0(s8 *);                      /* extern */
 
 /**
- *
+ * Particle lifecycle callback (shared descriptor13 directional spray scaled fade): steps the
+ * particle by its lifecycle state.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Hyper Beam, Thunder, Thunderbolt, Thundershock.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackSharedDescriptor13DirectionalSprayScaledFade(Particle* particle) {
@@ -407,7 +418,10 @@ M2C_UNK func_821406B4(s8 *);                      /* extern */
 M2C_UNK func_8214EF84(s8 *);                      /* extern */
 
 /**
- *
+ * Particle lifecycle callback (start effect59 end effect28 directional stream fade): steps the
+ * particle by its lifecycle state.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Thundershock.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackStartEffect59EndEffect28DirectionalStreamFade(Particle* particle) {

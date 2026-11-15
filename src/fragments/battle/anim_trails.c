@@ -719,6 +719,8 @@ void BattleAnim_StartEffect77DoubleTextureTrail_Draw(void) {
 /**
  * Seen in play (2026-11-13) ran on SolarBeam's second turn, when the charged beam fired (the sweep
  * only saw the charging turn).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Solar Beam.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SeedSolarBeamUseDoubleTextureTrail(void) {
@@ -743,6 +745,8 @@ void BattleAnim_SeedSolarBeamUseDoubleTextureTrail(void) {
 
 /**
  * Seen in play (2026-11-13) ran on SolarBeam's second turn, when the charged beam fired.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Solar Beam.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupSolarBeamUseDoubleTextureTrail(void) {
@@ -753,6 +757,8 @@ void BattleAnim_SetupSolarBeamUseDoubleTextureTrail(void) {
 
 /**
  * Seen in play (2026-11-13) ran on SolarBeam's second turn, while the charged beam fired.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Solar Beam.
  * @unverified Name from Stadium 1.
  */
 s32 BattleAnim_RunSolarBeamUseDoubleTextureTrail(void) {
@@ -761,6 +767,8 @@ s32 BattleAnim_RunSolarBeamUseDoubleTextureTrail(void) {
 
 /**
  * Seen in play (2026-11-13) ran on SolarBeam's second turn, while the charged beam fired.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Solar Beam.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_DrawSolarBeamUseDoubleTextureTrail(void) {

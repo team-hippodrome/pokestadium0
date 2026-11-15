@@ -139,7 +139,9 @@ void BattleScene_FrameParticipantFrontAltThunk(CameraNode* camera, ActivePokemon
 
 /**
  * Frames the Pokemon from the front of its facing at 3.5 times its size (at least 300).
- * @unverified Name guessed from the code.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Fire Blast burn and Leech Seed drain: ran at the residual-damage step, framing Pinsir from the
+ * front.
  */
 void BattleScene_FrameParticipantFrontWide(CameraNode* camera, ActivePokemon* active_pokemon) {
     BattleAnim_GetOwnerDefaultAnchorPosition(active_pokemon, &sBattleScene.scene->anchorPosition);

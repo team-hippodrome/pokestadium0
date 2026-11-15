@@ -642,6 +642,8 @@ void Particle_PositionOffset_AddVecFromVec3f_08DD8(Particle* arg0, Vec3f arg1) {
  * Adds (arg1, arg2, arg3) times the global particle scale to the particle's position
  * offset.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Rock Slide, Rock Throw.
  * @unverified Name guessed from the code.
  */
 void Particle_PositionOffset_AddVecScaled_08E18(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
@@ -710,6 +712,8 @@ void Particle_AddPositionOffsetAlongRotationYPlus180(Particle* arg0, f32 arg1) {
  * Moves the position offset arg1 units (scaled) in the XZ plane, a quarter turn from the
  * particle's Y rotation.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Thunder, Thunderbolt.
  * @unverified Name guessed from the code.
  */
 void Particle_AddPositionOffsetAlongRotationYPlus90(Particle* arg0, f32 arg1) {
@@ -732,6 +736,8 @@ void Particle_AddPositionOffsetAlongRotationYMinus90(Particle* arg0, f32 arg1) {
  * Adds the vector of length arg1 along the particle's Y rotation, times the global
  * particle scale, to the position offset.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Water Gun.
  * @unverified Name guessed from the code.
  */
 void Particle_AddVelocityFromDirVector(Particle* arg0, f32 arg1) {
@@ -797,6 +803,8 @@ void Particle_AddPositionFromRotationTemplate2(Particle* arg0, f32 arg1) {
  * Rotates arg1 by the particle's rotation about Y and adds it, scaled, to the position
  * offset.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Amnesia, Supersonic.
  * @unverified Name guessed from the code.
  */
 void Particle_AddPositionRotatedVectorByYaw(Particle* arg0, Vec3f arg1) {
@@ -1103,6 +1111,9 @@ void Particle_AddMotionOffsetXScaled(Particle* arg0, f32 arg1) {
 /**
  * Adds arg1 times the global particle scale to motionOffset.y.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (11 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Ember, Fire Spin, Leech Seed, Petal Dance, Rage, Sand Attack, Sky
+ * Attack, Vine Whip, Wing Attack.
  * @unverified Name guessed from the code.
  */
 void Particle_AddMotionOffsetYScaled(Particle* arg0, f32 arg1) {
@@ -1345,6 +1356,8 @@ M2C_UNK func_8213FC48();                            /* extern */
 /**
  * Sets the motion step from rotation.x and rotation.y (alternate form) and adds it to the motion
  * offset.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Bubble, BubbleBeam.
  * @unverified Name guessed from the code.
  */
 void Particle_MoveAlongRotationXYAlt(Particle* particle) {
@@ -1370,6 +1383,9 @@ M2C_UNK func_8213FE04();                            /* extern */
 /**
  * Sets the motion step from all three rotation angles (alternate form) and adds it to the motion
  * offset.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Fire Blast, Hyper Beam, Thunder, Thunderbolt, Thunder Punch,
+ * Thundershock.
  * @unverified Name guessed from the code.
  */
 void Particle_MoveAlongRotationXYZAlt(Particle* particle) {
@@ -1821,6 +1837,8 @@ void Particle_ApplyRotationStepY(s8 *arg0)
 /**
  * Adds rotationStep.z to rotation.z.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (6 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Aurora Beam, Petal Dance, Swift, Vine Whip, Wing Attack.
  * @unverified Name guessed from the code.
  */
 void Particle_Rotation_AddXFromRotationStep_0A4B4(Particle* arg0) {
@@ -1876,6 +1894,8 @@ void Particle_AddRotationZ(Particle* arg0, s16 arg1) {
 
 /**
  * Adds arg1 and arg2 to the particle's rotation speeds at 0x9C and 0x9E.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Egg Bomb, Ember, Explosion, Fire Punch, Selfdestruct.
  * @unverified Name guessed from the code.
  */
 void Particle_AddRotationTargetXY(Particle* particle, s16 delta_x, s16 delta_y) {
@@ -2123,6 +2143,8 @@ extern struct ActivePokemon* D_8219A818;
  * Returns the Y angle from the particle's origin to the default anchor of the Pokémon in
  * D_8219A818, plus the particle's own Y rotation.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Barrage.
  * @unverified Name from Stadium 1.
  */
 s16 BattleAnim_GetParticleAngleYToTertiaryOwner(Particle* arg0) {
@@ -2138,6 +2160,8 @@ s16 BattleAnim_GetParticleAngleYToTertiaryOwner(Particle* arg0) {
  * Write a direction vector using the indicated rotation components and the supplied magnitude.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Water Gun.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_ComputeVectorFromRotationY(Particle* arg0, f32 arg1, Vec3f* arg2) {
@@ -2242,6 +2266,8 @@ s32 Particle_StepMagnitude_ApproachUsingMagnitudeStep(Particle* arg0, f32 arg1) 
 /**
  * Steps magnitudeStep toward arg1 by arg2, both scaled. Returns nonzero once it arrives.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Surf.
  * @unverified Name guessed from the code.
  */
 s32 Particle_MagnitudeStep_Approach_0ADBC(Particle* arg0, f32 arg1, f32 arg2) {
@@ -2391,6 +2417,8 @@ s32 Particle_MotionStep_DecrementYUntilAtMost(Particle* arg0, f32 arg1, f32 arg2
  * Lowers motionStep.y by arg2 (scaled) and clamps it at arg1 (scaled). Returns 1 once
  * clamped.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Dig.
  * @unverified Name guessed from the code.
  */
 s32 Particle_MotionStep_DecrementXUntilAtMost_0B050(Particle* arg0, f32 arg1, f32 arg2) {
@@ -2528,6 +2556,8 @@ void Particle_MotionStep_SetVecFromStepMagnitudeAnglesXZ(Particle* arg0) {
  * Sets motionStep from rotation.x and rotation.y with the other rotation order: x from
  * rotation.y alone, y and z from both angles.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Bubble, BubbleBeam.
  * @unverified Name guessed from the code.
  */
 void Particle_SetMotionStepFromRotationXYAlt(Particle* arg0) {
@@ -2565,6 +2595,9 @@ void Particle_SetMotionStepFromRotationXYZ(Particle* arg0) {
  * Sets motionStep to stepMagnitude along the direction given by all three rotation angles,
  * with a different rotation order from Particle_SetMotionStepFromRotationXYZ.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (6 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Fire Blast, Hyper Beam, Thunder, Thunderbolt, Thunder Punch,
+ * Thundershock.
  * @unverified Name guessed from the code.
  */
 void Particle_SetMotionStepFromRotationXYZAlt(Particle* arg0) {
@@ -2609,6 +2642,8 @@ void Particle_SetMotionStepFromRotationYZVariant(Particle* arg0) {
  * Advances rotationStep.y by arg2 and puts motionOffset on a circle of radius arg1
  * (scaled) at that angle. motionStep.x and motionStep.z become the change from last frame.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (8 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Fire Spin, Petal Dance, Rage, Sky Attack, Surf, Vine Whip, Wing Attack.
  * @unverified Name guessed from the code.
  */
 void Particle_UpdateRotatingVelocityXZ(Particle* arg0, f32 arg1, s16 arg2) {
@@ -3001,6 +3036,8 @@ void Particle_SetCountdown(Particle* arg0, s16 arg1) {
 
 /**
  * Counts field A4 down by 1 to at least arg1; returns 1 once it reaches arg1.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Aurora Beam, Psybeam.
  * @unverified Name guessed from the code.
  */
 s32 Particle_TickCountdownTo(Particle* particle, s16 floor) {
@@ -3071,6 +3108,8 @@ void Particle_SetByteParam1(s8 *particle, unsigned char value)
 
 /**
  * Same as Particle_SetByteParam1.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Egg Bomb, Ember, Fire Punch.
  * @unverified Name guessed from the code.
  */
 void Particle_SetByteParam1Copy(s8 *particle, unsigned char value)

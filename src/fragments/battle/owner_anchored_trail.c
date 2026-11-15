@@ -15,6 +15,8 @@ extern OwnerAnchoredFourStream D_821B6F00[4];
 /**
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Pin Missile, Poison Sting, Twineedle.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void OwnerAnchoredFourStream_Init(void) {
@@ -96,6 +98,8 @@ void OwnerAnchoredFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 a
 /**
  * Rotates the point (0, 0, arg2) about the X axis by arg0 radians and writes it to arg1.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Pin Missile, Poison Sting, Twineedle.
  * @unverified Name from Stadium 1.
  */
 void OwnerAnchoredFourStream_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
@@ -112,6 +116,8 @@ void OwnerAnchoredFourStream_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
  * 0.4 a frame up to 20, and grows its width by 2 up to the stream's maximum; each other node
  * takes the previous frame's values of the node before it.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Pin Missile, Poison Sting, Twineedle.
  * @unverified Name from Stadium 1.
  */
 void OwnerAnchoredFourStream_UpdateNodeChain(OwnerAnchoredFourStream* arg0) {
@@ -168,6 +174,8 @@ void OwnerAnchoredFourStream_UpdateNodeChain(OwnerAnchoredFourStream* arg0) {
  * M2C_UNK func_8217E0C0(M2C_UNK *);                   /* extern
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Pin Missile, Poison Sting, Twineedle.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 s32 OwnerAnchoredFourStream_IsComplete(void)
@@ -203,6 +211,8 @@ extern Gfx D_82193270[];
 /**
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Pin Missile, Poison Sting, Twineedle.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 Gfx* OwnerAnchoredFourStream_Draw(Gfx* arg0) {

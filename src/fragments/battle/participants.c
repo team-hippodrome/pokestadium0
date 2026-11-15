@@ -29,6 +29,8 @@ extern f32 D_FLT_82189354[][4];
  * for Venusaur and Lapras, 200 for Gyarados and Onix), at the species' standing height.
  * Side 1 is at negative X.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (6 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Agility, Double Team, Seismic Toss, Substitute, Transform, Waterfall.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_PositionParticipantModel(ActivePokemon* active_pokemon) {
@@ -406,6 +408,8 @@ f32 BattleScene_GetParticipantModelRadiusScaled(ActivePokemon* active_pokemon) {
 /**
  * Returns node node_index of the model loaded for the Pokémon's session team.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Substitute, Transform.
  * @unverified Name from Stadium 1.
  */
 ModelNodeView* Battle_GetLoadedModelNode(ActivePokemon* active_pokemon, s32 node_index) {
@@ -416,6 +420,8 @@ ModelNodeView* Battle_GetLoadedModelNode(ActivePokemon* active_pokemon, s32 node
  * Returns the session's display model id (side+0x2).
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
  * switch in battle.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Transform.
  * @unverified Name and comment guessed from the code.
  */
 s16 ActivePokemon_GetDisplayModel(ActivePokemon* arg0, M2C_UNK arg1) {
@@ -589,6 +595,8 @@ void BattleScene_InitializeParticipantAuxiliaryModel(ActivePokemon* active_pokem
  * side. Diglett is not in Zero's battle roster, so only the Dugtrio case comes up in
  * normal play.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Substitute, Transform.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ReinitParticipantBodyModel(ActivePokemon* owner, ActivePokemon* pokemon, s16 object_type) {
@@ -633,6 +641,8 @@ void BattleScene_ReinitParticipantBodyModel(ActivePokemon* owner, ActivePokemon*
  * Reloads the Pokémon's thumbnail model as object_type, using effect slot 2 or 3 and model
  * slot 1 or 2 depending on side.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Transform.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ReinitParticipantThumbnailModel(ActivePokemon* pokemon, ThumbnailState* thumbnail, s16 object_type) {
@@ -661,6 +671,8 @@ void BattleScene_ReinitParticipantThumbnailModel(ActivePokemon* pokemon, Thumbna
 /**
  * Reloads the Pokémon's three afterimage models as object_type and hides them.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Substitute, Transform.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ReinitParticipantAfterimages(ActivePokemon* pokemon, s16 object_type) {
@@ -701,6 +713,8 @@ void BattleScene_ReinitParticipantAfterimages(ActivePokemon* pokemon, s16 object
 /**
  * Clears the model's event track, or for a sleeping Pokémon sets the sleep event track.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Substitute, Transform.
  * @unverified Name from Stadium 1.
  */
 void Battle_ResetEventTrack(ActivePokemon* active_pokemon) {
@@ -718,6 +732,8 @@ void Battle_ResetEventTrack(ActivePokemon* active_pokemon) {
  * show, resets its event track, keeps only the substitute presentation flags and resets
  * its scale.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Transform.
  * @unverified Name from Stadium 1.
  */
 void Battle_LoadOwnerModelForSpecies(ActivePokemon* active_pokemon) {
@@ -762,7 +778,8 @@ void Battle_LoadOwnerModelForSwitchIn(ActivePokemon* active_pokemon) {
  * Swaps the Pokémon's model for the Substitute doll at full alpha, remembering the species
  * model it had.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Substitute: ran at sample 183 as the doll model replaced Onix in a puff of smoke (「ぶんしんが あらわれた」).
  */
 void Battle_ResetOwnerModelToSubstituteDoll(ActivePokemon* active_pokemon) {
     Model_SetMaterialColor(&active_pokemon->displayObject, 0xFF, 0xFF, 0xFF, active_pokemon->state.alpha = 0xFF);
@@ -776,6 +793,8 @@ void Battle_ResetOwnerModelToSubstituteDoll(ActivePokemon* active_pokemon) {
  * Reloads the Substitute doll model for the Pokémon.
  * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Substitute.
  * @unverified Name from Stadium 1.
  */
 void Battle_ReloadSubstituteDoll(ActivePokemon* active_pokemon) {

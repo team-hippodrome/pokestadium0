@@ -80,6 +80,8 @@ void LassoHit_Init(f32 arg0, f32 arg1, f32 arg2, f32 arg3, u8 arg4, u8 arg5, u8 
  * Returns how far the trail strip's tail has faded, from 1.0 (not started) down toward 0,
  * based on the strip's current point count.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Bind, Constrict, Disable, String Shot, Wrap.
  * @unverified Name from Stadium 1.
  */
 f32 Strip400_GetTailFadeRatio(void) {
@@ -209,6 +211,8 @@ extern Gfx D_82192AB0[];
 /**
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Bind, Constrict, Disable, String Shot, Wrap.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 Gfx* Strip400_Draw(Gfx* arg0) {
@@ -272,6 +276,8 @@ extern Radial20 D_821A3490[10];
 /**
  * Clears the 10 radial effects and their nodes.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (5 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Bind, Constrict, Disable, String Shot, Tri Attack, Wrap.
  * @unverified Name from Stadium 1.
  */
 void Radial20_ResetPool(void) {
@@ -653,6 +659,8 @@ void Radial20_RotateVertexOffset(f32 arg0, UNUSED Vec3f* arg1, Vec3f* arg2, f32 
 /**
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Bind, Constrict, Disable, String Shot, Tri Attack, Wrap.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Radial20_UpdateNode(Radial20* arg0) {
@@ -807,6 +815,8 @@ extern Radial20 D_821A3490[10];
 /**
  * Advances every active radial effect. Returns -1 once none are left running, else 0.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (5 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Bind, Constrict, Disable, String Shot, Tri Attack, Wrap.
  * @unverified Name from Stadium 1.
  */
 s32 Radial20_IsComplete(void) {
@@ -842,6 +852,8 @@ extern f32 D_82192B5C[];
 /**
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Bind, Constrict, Disable, String Shot, Tri Attack, Wrap.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 Gfx* Radial20_Draw(Gfx* arg0) {

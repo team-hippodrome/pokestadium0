@@ -357,6 +357,8 @@ void BattleScene_ApplyCameraShake(CameraNode* arg0) {
 
 /**
  * Resets scene+0x68 to 30 and scene+0x6C to 0.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Earthquake, Growl, Roar.
  * @unverified Name guessed from the code.
  */
 void BattleScene_ResetCameraShake(s32 camera) {
@@ -878,6 +880,8 @@ void BattleScene_EaseCameraTargetFromSavedEye(CameraNode* camera, ActivePokemon*
  * Eases the camera toward a front view of the Pokemon (size-scaled distance): the target
  * moves a sixth of the way, the distance 5% and the eye angles by 0xB6 and 0x108 per frame.
  * arg2 is unused.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Fly.
  * @unverified Name guessed from the code.
  */
 void BattleScene_EaseCameraToFrontView(CameraNode* camera, ActivePokemon* active_pokemon, Color_RGBA8 unused_color) {
@@ -911,6 +915,8 @@ void BattleScene_EaseCameraToFrontView(CameraNode* camera, ActivePokemon* active
 /**
  * Moves the camera target's height toward the Pokemon's orbit eye point by the factor
  * D_FLT_82196258, keeping it at least 15.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Dig.
  * @unverified Name guessed from the code.
  */
 void BattleScene_EaseCameraTargetHeight(CameraNode* camera, ActivePokemon* active_pokemon) {
@@ -938,6 +944,8 @@ void BattleScene_EaseCameraTargetHeight(CameraNode* camera, ActivePokemon* activ
  * Eases the camera from where it is toward a shot facing the Pokémon from 3.5 times its
  * radius (at most 300 units), moving the target an eighth of the way per frame.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Substitute, Transform.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_RecenterCameraOnOwner(CameraNode* arg0, ActivePokemon* arg1) {
@@ -988,6 +996,8 @@ void BattleScene_ApproachCameraZoom(CameraNode* arg0, ActivePokemon* arg1) {
 /**
  * Moves the camera target toward the framing of BattleScene_FrameParticipantFrontAltThunk for the Pokemon while keeping
  * the current eye angles and distance.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Double Edge, Submission, Take Down.
  * @unverified Name guessed from the code.
  */
 void BattleScene_EaseCameraToRecoilFraming(CameraNode* camera, ActivePokemon* active_pokemon) {
@@ -1019,6 +1029,8 @@ void BattleScene_EaseCameraToRecoilFraming(CameraNode* camera, ActivePokemon* ac
  * Wide shot of the Pokémon: target on its anchor, eye 8 times its radius away (at most
  * 300 units) along the direction it faces.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (9 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Double Edge, Submission, Take Down.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_SetCameraOwnerWideShot(CameraNode* arg0, ActivePokemon* arg1) {

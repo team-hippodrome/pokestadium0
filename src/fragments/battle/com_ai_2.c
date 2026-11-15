@@ -305,6 +305,8 @@ s32 BattleAi_GetBestDamage(ComBattler* arg0, ComBattler* arg1, s32 arg2)
  * layout), resets its in-battle stats to the party Pokemon's stats (arg1, BattleMon
  * layout) and resets all eight stat stages to 7 (neutral).
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a switch in battle.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Hypnosis, Lovely Kiss, Sing, Sleep Powder, Spore, Toxic, Transform.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 void BattleAi_ResetBattleStats(BattleMonRuntime* arg0, BattleMon *arg1)
@@ -413,6 +415,8 @@ s32 BattleAi_IsFoeWithoutSubstitute(void) {
  * Substitute above half HP. Returns the move slot or -1.
  * Seen in play (2026-11-13) (unattended all-Metronome Free Battle with randomized teams, battle 1
  * turn 25): ran once on the COM side. Which condition led to it was not logged.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Dig, Fly.
  * @unverified Name and comment guessed from the code (COM AI pass).
  */
 s32 BattleAi_PickSetupMove(ComBattler* arg0) {

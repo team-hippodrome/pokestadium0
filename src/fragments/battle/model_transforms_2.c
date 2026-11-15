@@ -14,6 +14,8 @@ s16 func_8000F1FC(s16, M2C_UNK, M2C_UNK, M2C_UNK);
  * each afterimage part of the way toward the model (0.5 and 0.4 of the distance), and
  * turns each toward the model's Y rotation at a scaled rate.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (10 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Agility, Dig, Fly, Submission.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_UpdateSecondaryModelTrailPosition(ActivePokemon* pokemon, s16 new_position) {
@@ -38,6 +40,9 @@ void BattleScene_UpdateSecondaryModelTrailPosition(ActivePokemon* pokemon, s16 n
 /**
  * Clears the Pokémon's model transform (transform 0, timer 0).
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (15 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Agility, Body Slam, Dig, Double Team, Fly, Meditate, Seismic Toss,
+ * Stomp, Submission.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ResetParticipantModelFlags(ActivePokemon* active_pokemon) {
@@ -239,7 +244,8 @@ void BattleAnim_WaterfallContinue(ActivePokemon* owner, ActivePokemon* animated_
 /**
  * End step of a model transform that does nothing.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Waterfall: ran at sample 335, as the wave cleared and the camera came back to Pinsir.
  */
 void BattleAnim_WaterfallEnd(UNUSED ActivePokemon* owner, UNUSED ActivePokemon* animated_pokemon) {
 }
@@ -311,6 +317,8 @@ void BattleAnim_RunSwayTransform(s32 owner, ActivePokemon* animated_pokemon) {
  * Turns the Pokémon's Y rotation by phase and returns 1 on the frame it reaches or passes
  * camera_offset_scale.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (9 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Dig, Submission.
  * @unverified Name from Stadium 1.
  */
 s32 BattleAnim_ApproachAngleAndCheckThreshold(ActivePokemon* pokemon, s16 phase, s16 camera_offset_scale) {
@@ -357,6 +365,8 @@ void BattleAnim_SubmissionContinue(s32 arg0, ActivePokemon* arg1) {
  * (but never below 20 degrees a frame), trails the afterimages, and once facing forward
  * ends the transform and hides the afterimages.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (9 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Submission.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SubmissionEnd(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
@@ -431,7 +441,8 @@ f32 BattleScene_GetParticipantHeight(s8*);
 /**
  * Model transform step that sinks the Pokemon below the ground: turns it toward its side,
  * lowers it toward -2.6 heights and ends the transform once it is 2.5 heights down.
- * @unverified Name guessed from the code.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Dig: first ran at sample 277, the frame where rocks fly up and Onix sinks into the hole.
  */
 void BattleAnim_DigSinkUnderground(s32 transform, ActivePokemon* active_pokemon) {
     func_8210A430(transform, active_pokemon->oscillationPhase, (s16)(active_pokemon->facingDirection << 0xE));
@@ -480,6 +491,8 @@ void BattleAnim_AgilityStart(s32 arg0, ActivePokemon* arg1) {
  * Agility: swings the Pokémon side to side with a growing amplitude (up to 50 units),
  * with trailing afterimages, and moves on once the swing is nearly full.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Agility.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_AgilityContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
@@ -503,6 +516,8 @@ void BattleAnim_AgilityContinue(ActivePokemon* owner, ActivePokemon* animated_po
  * End of Agility: shrinks the side-to-side swing back to zero, then puts the Pokémon back
  * in place facing forward and hides the afterimages.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Agility.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_AgilityEnd(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
@@ -560,7 +575,8 @@ void BattleAnim_DoubleTeamStart(s32 arg0, ActivePokemon* arg1) {
  * Double Team: orbits the afterimages around the Pokémon for 60 frames, then ends the
  * transform and hides them.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Double Team: ran from sample 264 with 「かげぶんしんした！」 and the afterimages on screen.
  */
 void BattleAnim_DoubleTeamContinue(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     BattleScene_UpdateSecondaryModelOrbit(animated_pokemon);
@@ -591,6 +607,8 @@ void BattleAnim_DoubleTeam(ActivePokemon* owner, ActivePokemon* animated_pokemon
  * Puts the Pokémon back in place facing forward, resets the camera's up direction and
  * ends the model transform.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Seismic Toss.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_ResetOwnerFacingAndExitStatusIdle(ActivePokemon* arg0) {
@@ -621,7 +639,8 @@ void BattleAnim_SeismicTossStart(s32 arg0, ActivePokemon* arg1) {
  * Seismic Toss: eases the camera's rotation about its view axis toward half a turn by
  * tilting its up vector, so the view flips over, and keeps the Pokémon above the ground.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Seismic Toss: ran from sample 269 while Onix lifted Pinsir.
  */
 void BattleAnim_SeismicTossContinue(UNUSED ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     CameraNode* camera = sBattleScene.scene->camera;
@@ -722,6 +741,8 @@ void BattleAnim_WithdrawStart(s32 arg0, ActivePokemon* arg1) {
  * Withdraw: shrinks the owner model toward zero size by 0.05 a frame, snapping to almost
  * zero once small.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Withdraw.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_WithdrawContinue(ActivePokemon* owner, UNUSED ActivePokemon* animated_pokemon) {
@@ -769,7 +790,8 @@ void BattleAnim_MeditateStart(UNUSED ActivePokemon* owner, ActivePokemon* animat
  * Meditate: stretches the owner tall and thin as the oscillation phase grows to a quarter
  * turn, then moves on.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Meditate: ran from sample 254 with 「ヨガのポーズを した！」 on screen.
  */
 void BattleAnim_MeditateContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     f32 scale_resize;
@@ -800,7 +822,8 @@ void BattleAnim_MeditateContinue(ActivePokemon* owner, ActivePokemon* animated_p
  * End of Meditate: lets the stretch bounce back with a shrinking amplitude, then restores
  * the saved scale and ends the transform.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Meditate: ran at sample 288 as the yoga pose ended and Attack rose.
  */
 void BattleAnim_MeditateEnd(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     f32 scale_resize;
@@ -851,7 +874,8 @@ void BattleAnim_Meditate(ActivePokemon* owner, ActivePokemon* animated_pokemon) 
  * Start of the squish hit reaction: saves the owner's scale and sets up the squish
  * oscillation.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Body Slam: ran at sample 333 as Pinsir is flattened by the hit (paralysed, まひ).
  */
 void BattleAnim_SquishHitReactionStart(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     animated_pokemon->oscillationAngularVelocity = 1820;
@@ -867,7 +891,8 @@ void BattleAnim_SquishHitReactionStart(ActivePokemon* owner, ActivePokemon* anim
  * Squish hit reaction: wobbles the owner's scale with a fading amplitude around 1.0 (or
  * 0.65 while shrunk), then restores the scale and ends the transform.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Body Slam: ran from sample 333 while Pinsir stayed squashed.
  */
 void BattleAnim_SquishHitReactionContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon) {
     BattleMonRuntime* runtime = &animated_pokemon->state.runtime;
@@ -940,6 +965,8 @@ void BattleAnim_BindHitReactionStart(ActivePokemon* owner, ActivePokemon* animat
  * Bind-style hit reaction: squeezes the owner thin and tall by the strip's tail fade
  * ratio for 150 frames, then restores the scale and ends the transform.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Bind, Constrict, Disable, String Shot, Wrap.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_BindHitReactionContinue(ActivePokemon* owner, ActivePokemon* animated_pokemon) {

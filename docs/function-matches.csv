@@ -1962,7 +1962,7 @@ func_8215B338,0x8215B338,src/fragments/battle/anim_model_effects.c,BattleAnim_In
 func_8215B3B8,0x8215B3B8,src/fragments/battle/anim_model_effects.c,Gfx_PokemonPortraitCallback,s1,stadium1:src/fragments/battle_engine/battle_engine_32B680.c,c
 func_8215B510,0x8215B510,src/fragments/battle/anim_model_effects.c,Gfx_PokemonPortraitAllocCallback,s1,stadium1:src/fragments/battle_engine/battle_engine_32B680.c,c
 func_8215B558,0x8215B558,src/fragments/battle/anim_model_effects.c,BattleAnim_InitializeSpeedLines,s1,stadium1:src/fragments/battle_engine/battle_engine_32B680.c,c
-func_8215B5B8,0x8215B5B8,src/fragments/battle/anim_model_effects.c,BattleAnim_StartEffect112QuickAttackHiJumpKick,m2c,m2c,c
+func_8215B5B8,0x8215B5B8,src/fragments/battle/anim_model_effects.c,BattleAnim_StartEffect112SkullBashDash,m2c,m2c,c
 func_8215B5E8,0x8215B5E8,src/fragments/battle/anim_model_effects.c,BattleAnim_InitializeWithdrawUse,s1,stadium1:src/fragments/battle_engine/battle_engine_32B680.c,c
 func_8215B63C,0x8215B63C,src/fragments/battle/anim_model_effects.c,BattleAnim_InitializeLickUse,m2c,m2c,c
 func_8215B6A4,0x8215B6A4,src/fragments/battle/anim_model_effects.c,BattleAnim_OffsetAndScaleParticleForLargeSpecies,hand,,c

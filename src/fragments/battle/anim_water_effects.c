@@ -587,7 +587,10 @@ M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214A634(s8 *);                      /* extern */
 
 /**
- *
+ * Particle lifecycle callback (start effect58 descriptor0 aburst child): steps the particle by its
+ * lifecycle state.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Hydro Pump.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackStartEffect58Descriptor0ABurstChild(Particle* particle) {
@@ -637,7 +640,10 @@ s32 Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);        /* extern */
 M2C_UNK func_8214A77C(s8 *);                      /* extern */
 
 /**
- *
+ * Particle lifecycle callback (start effect58 descriptor08 metadata burst child): steps the
+ * particle by its lifecycle state.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Hydro Pump.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackStartEffect58Descriptor08MetadataBurstChild(Particle* particle) {
@@ -722,7 +728,10 @@ M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_8214A9DC(s8 *);                      /* extern */
 
 /**
- *
+ * Particle lifecycle callback (start effect6 descriptor0 aburst child): steps the particle by its
+ * lifecycle state.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Water Gun.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackStartEffect6Descriptor0ABurstChild(Particle* particle) {
@@ -777,7 +786,10 @@ s32 Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);        /* extern */
 M2C_UNK func_8214AB14(s8 *);                      /* extern */
 
 /**
- *
+ * Particle lifecycle callback (start effect6 descriptor08 metadata burst child): steps the particle
+ * by its lifecycle state.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Water Gun.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackStartEffect6Descriptor08MetadataBurstChild(Particle* particle) {
@@ -1516,6 +1528,8 @@ void BattleAnim_RunTriAttackHitSpark(Particle* arg0) {
  * Handles hit effect shared by Hydro Pump, Ice Beam, Hyper Beam, Solar Beam, Waterfall, and Sky Attack
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Aurora Beam, Hydro Pump, Ice Beam, Sky Attack, Solar Beam, Waterfall.
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_SetupStrongOutwardMovingSmallHitSpark(Particle* arg0) {
@@ -1544,7 +1558,10 @@ s32 func_82140690(s8 *);                          /* extern */
 M2C_UNK func_8214C134(s8 *);                      /* extern */
 
 /**
- *
+ * Particle lifecycle callback (shared descriptor19 delayed animated grow fade): steps the particle
+ * by its lifecycle state.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Aurora Beam, Hydro Pump, Ice Beam, Sky Attack, Solar Beam, Waterfall.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackSharedDescriptor19DelayedAnimatedGrowFade(Particle* particle) {
@@ -1732,6 +1749,8 @@ void BattleAnim_SetupBubbleBubbleBeamSharedEffect(Particle* arg0) {
  * Particle callback for end effects 34 and 53 (the Bubble/BubbleBeam hit): bubbles grow,
  * slow and turn toward their target, then bounce and fade.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Bubble, BubbleBeam.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackEndEffects34And53Descriptor45RotatingBounceFade(Particle* arg0) {
@@ -2196,6 +2215,8 @@ extern M2C_UNK func_8214B1F8;
 /**
  * Starts a beam effect: sets the spawn and tint timing, then queues func_8214B1F8 at once and
  * the pulsing beam emanator after 6 frames (lifetime 70).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Solar Beam.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_StartEffect70PulsingBeam(void) {
@@ -2359,6 +2380,8 @@ extern ParticleDescriptor D_8218E588[86];
  * fading particles, and a global tint fade at frame 22.
  * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Sky Attack, Solar Beam.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_EndEffect71PaletteApproachWithExpandingScaleFades(void) {

@@ -534,6 +534,8 @@ extern f32 D_FLT_82196810;
  * (+0xB4) into the camera's eye position, uses the bare object-type table width
  * (D_FLT_82189350[type][0]) as the distance threshold and eases the camera
  * target by D_FLT_82196810 times the remaining distance.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Bide, Transform.
  * @unverified Name guessed from the code.
  */
 void BattleCamera_EaseTargetFromSavedEye(ActivePokemon* active_pokemon, CameraNode* camera) {

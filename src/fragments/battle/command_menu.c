@@ -326,6 +326,8 @@ void BattleMenu_UpdateMoveMenu(ActivePokemon* arg0) {
 
 /**
  * Marks the move menu as locked (+0x7B6) and updates it; returns 0.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Bide, Bind, Clamp, Fire Spin, Wrap.
  * @unverified Name guessed from the code.
  */
 s32 BattleScene_HandlePlayerMoveSelectionLocked(s8 *active_pokemon, M2C_UNK unused)
@@ -344,6 +346,9 @@ s32 BattleScene_HandlePlayerMoveSelectionLocked(s8 *active_pokemon, M2C_UNK unus
  * Locks in a forced repeat of the Pokémon's current move (for example a multi-turn move)
  * after the usual delay.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Dig, Fly, Hyper Beam, Petal Dance, Rage, Razor Wind, Skull Bash, Sky
+ * Attack, Solar Beam, Thrash.
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ConfirmForcedMoveRepeat(ActivePokemon* arg0) {

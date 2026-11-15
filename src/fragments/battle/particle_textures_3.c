@@ -45,6 +45,9 @@ M2C_UNK func_8216C008(s32, M2C_UNK, M2C_UNK);       /* extern */
 
 /**
  * Texture callback: loads 24x24 I4 frame (byte 0xC3) of the texture at arg1 as a tile.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Crabhammer, Cut, Fury Swipes, Hydro Pump, Scratch, Slash, Surf, Vine
+ * Whip, Water Gun, Waterfall.
  * @unverified Name guessed from the code.
  */
 void ParticleGfx_LoadTextureCallbackTileI4FrameC3_24x24(s8 *particle, s32 texture) {

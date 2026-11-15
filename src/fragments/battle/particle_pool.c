@@ -1118,6 +1118,8 @@ void BattleAnim_CleanupEffects(s32 cleanup_mode) {
  * Advances the lifecycle of every list-4 particle of owner arg1 whose sub-kind (unk_CB)
  * is arg0, which tells looping effects to finish.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Dig.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_StopParticlesForOwnerCategory(u8 arg0, ActivePokemon* arg1) {
@@ -1143,6 +1145,8 @@ void BattleAnim_ResetSpawnDelay(void) {
 /**
  * Sets the delay, in frames, added to newly created effect slots.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Blizzard, Sky Attack.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetSpawnDelay(s32 arg0) {
@@ -1233,6 +1237,9 @@ BattleAnimEffectSlot* BattleAnim_SpawnGlobalTintColorFadeDetach(s32 arg0, s16 ar
 /**
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Aurora Beam, Confusion, Hyper Beam, Ice Beam, Light Screen, Psybeam,
+ * Psychic, Reflect, Solar Beam, Tri Attack.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnWhiteHueChange(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4) {
@@ -1274,6 +1281,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOutRepeating(s32 
  * Queues an overlay over the screen and the Pokémon (descriptor 37) after arg0 frames
  * that fades in to full alpha and holds.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Confuse Ray, Flash.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHoldFullAlpha(s32 arg0, s16 arg1, s16 arg2, u8 arg3) {
@@ -1284,6 +1293,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHoldFullAlpha(s32 a
  * Queues an overlay over the screen and the Pokémon (descriptor 37) after arg0 frames
  * that fades in to alpha arg4 and holds.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Blizzard, Explosion, Selfdestruct.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHold(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4) {
@@ -1395,6 +1406,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnBeamBoomWaterfallHueChange(s32 arg0, s16 a
  * Queues a tint on the current owner's model after arg0 frames that approaches a palette
  * color and then stops.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Explosion, Selfdestruct.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteApproachInactiveAlt(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
@@ -1423,6 +1436,9 @@ BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteCycleVariant(s32 arg0
 /**
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Absorb, Dragon Rage, Fire Blast, Fire Spin, Flamethrower, Leech Life,
+ * Mega Drain.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnDrainFlameHueChange(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
@@ -1451,6 +1467,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnRainbowHueChange(s32 arg0, s16 arg1, s16 a
 /**
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
  * switch in battle.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Acid Armor, Sky Attack, Teleport.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnInvisibility(s32 arg0, s16 arg1, s16 arg2, s16 arg3) {
@@ -1472,6 +1490,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelAlphaFadeFullPreset(s32 arg0) {
  * Queues an alpha fade of the current owner's model after arg0 frames, starting from
  * zero alpha.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Defense Curl, Sharpen.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelAlphaFadeZeroStartPreset(s32 arg0) {
@@ -1492,6 +1512,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnCategory17MarkerSlot(s32 arg0, u8 arg1) {
  * Queues a kind-25 effect slot for the current owner after arg0 frames, which queues
  * effect list 9 with value arg1 when it runs.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Kinesis.
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnCategory19MarkerSlot(s32 arg0, u8 arg1) {

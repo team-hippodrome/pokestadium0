@@ -12,7 +12,8 @@ M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32,
  * Builds a reflection look-at matrix from the battle camera for environment-mapped
  * effects. The results are allocated but not added to any display list here.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Barrier: ran at sample 252 for the reflective wall (only move that ran it).
  */
 void BattleAnim_SetupReflectiveCamera(void) {
     Mtx* sp3C = Gfx_AllocDisplayList(sizeof(Mtx) * 1);
@@ -390,6 +391,9 @@ void BattleAnim_CallbackInitModelAnimWait(Particle* arg0) {
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Barrier, Defense Curl, Dig, Earthquake, Fissure, Light Screen, Pay Day,
+ * Reflect, Sharpen, Withdraw.
  * @unverified Name and comment from Stadium 1.
  */
 void BattleAnim_InitializeParticleModel(Particle* arg0) {
@@ -456,7 +460,9 @@ void BattleAnim_CallbackInitModelAnimMode2(Particle* arg0) {
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Confusion (purple swirl) and Absorb (teal swirl): ran as the full-screen swirl background filled
+ * the screen.
  */
 void BattleAnim_RunFillScreenOverlay(Particle* arg0) {
     switch (arg0->lifecycle) {
@@ -544,6 +550,9 @@ void ParticleEffect_AllocateGfxIfNeeded(s32 arg0, arg1_func_84344CE8* arg1) {
  * Builds a display list whose colors, tile scroll and shifts are chosen by the owner
  * particle's CE parameter.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (5 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Drill Peck, Earthquake, Fissure, Horn Drill, Mega Kick, Mega Punch,
+ * Skull Bash.
  * @unverified Name from Stadium 1.
  */
 void Gfx_DrawParticleTextureWithParams(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg2) {
@@ -638,6 +647,8 @@ void ParticleEffect_AllocateGfxAndDraw(s32 arg0, arg1_func_84344CE8* arg1) {
  * Lifecycle init for a descriptor-0x24 particle of a move's end effect: triple scale,
  * raised 10 and moved 15 forward, moving backward, palette colors 8 and 0x17.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Thunder Wave.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_SetupMove86EndDescriptor24(Particle* arg0) {
@@ -681,6 +692,8 @@ void BattleAnim_RunThunderWaveHitEffect(Particle* arg0) {
  * Lifecycle init for a descriptor-0x24 particle of a move's start effect: tiny, with a
  * start offset chosen by the CD parameter, palette colors 8 and 0x17.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Thunder Wave.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_SetupMove86StartDescriptor24(Particle* arg0) {
@@ -721,6 +734,8 @@ void BattleAnim_SetupMove86StartDescriptor24(Particle* arg0) {
 /**
  * Particle callback: init, wait for the spawn step, then the later stages; scale moves
  * toward 10 by 0.05 and the particle rises every frame.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Thunder Wave.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_CallbackMove86StartDescriptor24(Particle* particle) {
@@ -770,6 +785,8 @@ void BattleAnim_InitializeThunderWaveHit(void) {
 /**
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Hypnosis, Lovely Kiss, Sing, Sleep Powder, Spore.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_ApplyEffect1SpeciesMotion(Particle* arg0) {
@@ -876,7 +893,8 @@ void BattleAnim_SleepMovePhaseFadeOut(Particle* arg0) {
 /**
  * Effect start init 1 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Hypnosis, Lovely Kiss, Sing, Sleep Powder, Spore.
- * @unverified Name guessed from the code.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Hypnosis and Lovely Kiss: ran as Pinsir fell asleep (Z marks, 「ねむってしまった！」).
  */
 void BattleAnim_StartEffect1Sleep(void) {
     func_8213B560(0, &func_82154248, &D_8218E700, 0, 1, 0x10, 7, 0, 0);

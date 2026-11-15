@@ -335,6 +335,8 @@ void BattleAnim_RunFullScreenHueChange(Particle* arg0) {
  * Lifecycle init for a fade-in overlay: palette color from the CF parameter, fully
  * transparent.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (5 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Blizzard, Confuse Ray, Explosion, Flash, Selfdestruct.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupDescriptor25AlphaFadeInHold(Particle* arg0) {

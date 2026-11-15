@@ -75,6 +75,8 @@ void BattleAnim_CalcVectorAtToDm(f32* arg0, f32* arg1, f32* arg2, f32* arg3, f32
 /**
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Bind, Constrict, Wrap.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_StartEffect19Radial20_EmitVariantD(void) {
@@ -146,7 +148,8 @@ void func_8216DAC0(Vec3f*);
  * Init hook for end effect 9: resets the shared matrix and starts the lasso hit effect at
  * the target, sized for the tertiary owner.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Bind and Constrict: ran at sample 345 as the blue rings closed around Pinsir.
  */
 void BattleAnim_EndEffect9Radial20_Init(void) {
     Vec3f sp34;
@@ -162,7 +165,8 @@ void BattleAnim_EndEffect9Radial20_Init(void) {
 /**
  * Update hook for end effect 9: advances the lasso hit effect.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Bind and Constrict: ran with the blue rings around Pinsir from sample 345.
  */
 s32 BattleAnim_EndEffect9Radial20_Update(void) {
     return LassoHit_Update();
@@ -171,7 +175,8 @@ s32 BattleAnim_EndEffect9Radial20_Update(void) {
 /**
  * Draw hook for end effect 9: loads the shared matrix and draws the trail strip.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
- * @unverified Name from Stadium 1.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Bind and Constrict: drew the blue rings around Pinsir from sample 345.
  */
 void BattleAnim_EndEffect9Radial20_Draw(void) {
     gSPMatrix(gDisplayListHead++, &D_8219CAC8, G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
@@ -182,6 +187,8 @@ void BattleAnim_EndEffect9Radial20_Draw(void) {
 /**
  * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Swift.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_StartEffect7TexturedRibbonSheet_Emit(void) {
@@ -249,6 +256,8 @@ void BattleAnim_DrawSwiftUseRibbonSheet(void) {
  * Emits one radial effect for start effect 33 from the owner toward the target with a
  * small random spread.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for String Shot.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_StartEffect33Radial20_EmitVariantC(void) {
@@ -343,6 +352,8 @@ void BattleAnim_DrawStringShotHitRadial(void) {
  * Seen in play (2026-11-13) (COM-side move sweep, COM's Metronome pinned to Disable): ran when the
  * yellow rings closed around Onix, with 「イワイワの ゆびをふるを ふうじこめた！」 on screen. Disable reuses String
  * Shot's hit rings when it targets 1P.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Disable.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_SetupStringShotHitRadial(void) {
@@ -378,6 +389,8 @@ void BattleAnim_DrawDisableHitRadial(void) {
  * Seen in play (2026-11-13) (COM-side move sweep: 1P Splash, then COM's Metronome pinned to
  * Disable): ran as the yellow strand left Pinsir toward Onix, before 「イワイワの ゆびをふるを ふうじこめた！」. In the
  * 1P-side sweep Disable never ran it, so it is the COM-side (target 1P) variant.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Disable.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_StartEffect98Radial20_EmitVariantD(void) {

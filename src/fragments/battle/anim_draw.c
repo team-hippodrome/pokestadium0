@@ -79,6 +79,9 @@ void ParticleEffect_Noop(UNUSED s32 arg0, UNUSED s32 arg1) {
  * asset 0x76, blended with the scrolling 64x64 I4 texture in asset 0x77 by the particle's
  * colors.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (8 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Dragon Rage, Explosion, Fire Blast, Fire Spin, Flamethrower, Rage,
+ * Selfdestruct, Sky Attack.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_DrawAsset76Ia8FrameWithAsset77I4Overlay(Particle* arg0, CameraNode* arg1) {
@@ -105,7 +108,8 @@ void BattleAnim_DrawFlameHit(Particle* arg0, CameraNode* arg1) {
  * or Explosion
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
- * @unverified Name and comment from Stadium 1.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Dragon Rage: drew from sample 290 while Onix breathed the blue flame, before it engulfed Pinsir.
  */
 void BattleAnim_DrawFlameUse(Particle* arg0, CameraNode* arg1) {
     gSPDisplayList(gDisplayListHead++, D_82190548);
@@ -151,6 +155,8 @@ extern Vtx D_82191880[];
  * Draws the particle as a 2D screen quad of the 64x64 I4 textures in assets 0x27 and
  * 0x28 scrolling over each other, colored by the particle.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Poisonpowder, Sleep Powder, Spore, Stun Spore.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_DrawAssets27And28LayeredI4QuadVariantA(Particle* arg0, UNUSED CameraNode* arg1) {
@@ -172,6 +178,8 @@ extern Vtx D_821918C0[];
  * Same as BattleAnim_DrawAssets27And28LayeredI4QuadVariantA with different scroll
  * speeds and vertices.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Poisonpowder, Sleep Powder, Spore, Stun Spore.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_DrawAssets27And28LayeredI4QuadVariantB(Particle* arg0, UNUSED CameraNode* arg1) {
@@ -226,6 +234,8 @@ void BattleAnim_DrawAsset87AnimatedI4Quad(Particle* arg0, UNUSED CameraNode* arg
 /**
  * Particle draw callback: draws 64x64 I4 atlas asset 0x19 as a 2D sprite at the particle's
  * screen position, Z rotation and scale with its colors.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Fury Swipes, Scratch, Slash.
  * @unverified Name guessed from the code.
  */
 void ParticleGfx_DrawI4AtlasSpriteAsset19(Particle* particle, u8* arg1) {
@@ -239,6 +249,8 @@ void ParticleGfx_DrawI4AtlasSpriteAsset19(Particle* particle, u8* arg1) {
 
 /**
  * Same as ParticleGfx_DrawI4AtlasSpriteAsset19 with atlas asset 0x5E.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Crabhammer, Cut, Vine Whip.
  * @unverified Name guessed from the code.
  */
 void ParticleGfx_DrawI4AtlasSpriteAsset5E(Particle* particle, u8* arg1) {
@@ -257,6 +269,9 @@ extern Vtx D_84385D00[];
  * Draws frame textureFrame of the 32x32 I4 strip in asset 0x1A as a two-sided quad at
  * the particle's transform.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (8 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Cut, Fury Swipes, Petal Dance, Razor Leaf, Razor Wind, Scratch, Slash,
+ * Vine Whip.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_DrawAsset1AFrameI4Quad(Particle* arg0, UNUSED CameraNode* arg1) {
@@ -274,6 +289,8 @@ void BattleAnim_DrawAsset1AFrameI4Quad(Particle* arg0, UNUSED CameraNode* arg1) 
  * Draws the 32x32 RGBA16 texture in asset 0x1C as a two-sided quad at the particle's
  * transform.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Vine Whip.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_DrawAsset1CRgba16Quad(Particle* arg0, UNUSED CameraNode* arg1) {
@@ -351,6 +368,8 @@ extern Vtx D_82191100[];
  * Draws the current frame (of 8) of the 32x96 I4 strip in asset 0x13 as a two-sided quad
  * scaled in Y.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (4 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Hyper Beam, Thunder, Thunderbolt, Thundershock.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_DrawAsset13FrameI4YScaledQuadA(Particle* arg0, UNUSED CameraNode* arg1) {
@@ -389,6 +408,8 @@ extern Vtx D_82191180[];
 /**
  * Particle draw callback: draws a double-sided quad with frame (frame counter mod 8) of the
  * 32x96 I4 texture asset 0x13, at the particle's position, rotation and scale.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Thunder, Thunderbolt, Thunder Punch.
  * @unverified Name guessed from the code.
  */
 void ParticleGfx_DrawAnimatedQuadAsset13(Particle* particle, UNUSED CameraNode* camera) {
@@ -408,6 +429,8 @@ extern Vtx D_82191100[];
  * Draws the current frame (of 8) of asset 0x13 as a camera-facing quad scaled in Y and
  * rotated about Z by the particle.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (3 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Thunder, Thunderbolt, Thundershock.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_DrawAsset13FrameI4ModelQuadA(Particle* arg0, CameraNode* arg1) {
@@ -425,6 +448,8 @@ extern Vtx D_82191140[];
 
 /**
  * Like ParticleGfx_DrawAnimatedQuadAsset13 but draws a camera-facing quad rotated by rotation.z.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Hyper Beam, Thunder, Thunderbolt, Thundershock.
  * @unverified Name guessed from the code.
  */
 void ParticleGfx_DrawAnimatedBillboardAsset13(Particle* particle, CameraNode* camera) {

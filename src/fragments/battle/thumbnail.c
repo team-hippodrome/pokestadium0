@@ -41,6 +41,8 @@ void BattleThumbnail_OwnerCameraLifecycleNop(void) {
  * Applies the sets coordinates for the Camera that generates the owner's thumbnail.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
  * switch in battle.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Transform.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleThumbnail_ApplyOwnerCameraFraming(ActivePokemon* active_pokemon) {

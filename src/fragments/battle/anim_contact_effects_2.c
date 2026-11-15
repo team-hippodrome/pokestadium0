@@ -248,6 +248,8 @@ void BattleAnim_CallbackSharedAnimatedVerticalFade(Particle* particle) {
  * Moves a particle to the owner's mouth or front: 50 units forward and 30 up by default,
  * with per-species distances.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Surf.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_ApplySpeciesKeyedSpawnOffset(Particle* arg0) {
@@ -700,6 +702,8 @@ void BattleAnim_SetupQiCharge(Particle* arg0) {
 /**
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for SolarBeam, Mimic, Sky Attack and Conversion.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Conversion, Mimic, Sky Attack, Solar Beam.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_SolarbeamMimicBurstEmitter(Particle* arg0) {

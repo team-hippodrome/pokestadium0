@@ -3389,7 +3389,7 @@ f32 BattleAnim_GetLargeSpeciesParticleScale(Particle* arg0);
 void BattleAnim_InitializeEarthquakeFissureUse(void);
 void BattleAnim_InitializeDefenseCurlUse(void);
 void BattleAnim_InitializeSharpenUse(void);
-void BattleAnim_StartEffect112QuickAttackHiJumpKick(void);
+void BattleAnim_StartEffect112SkullBashDash(void);
 void BattleAnim_InitializeLickUse(void);
 f32 BattleAnim_OffsetAndScaleParticleForLargeSpecies(Particle* arg0);
 void BattleAnim_InitializeLovelyKissUse(void);

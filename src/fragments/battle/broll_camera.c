@@ -142,6 +142,8 @@ void BattleScene_BRollShotAimPokemon0(CameraNode* camera) {
 
 /**
  * Same as BattleScene_BRollShotAimPokemon0 with message mode 1.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Bide, Mirror Move, Rest, Softboiled.
  * @unverified Name guessed from the code.
  */
 void BattleScene_BRollShotAimPokemon1(CameraNode* camera) {

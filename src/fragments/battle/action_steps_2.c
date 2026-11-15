@@ -122,6 +122,8 @@ void BattleCamera_StoreShotIndex(s32 shot) {
 
 /**
  * Target framing chooser: picks one of three framings at random on substep 0 and runs it.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Fire Punch, Fly, Ice Punch, Mega Punch, Skull Bash, Thunder Punch.
  * @unverified Name guessed from the code.
  */
 void BattleCamera_PlayRandomReactionFraming3(ActivePokemon* active_pokemon, CameraNode* camera) {
@@ -149,6 +151,8 @@ void BattleCamera_PlayRandomReactionFraming3(ActivePokemon* active_pokemon, Came
 
 /**
  * Target framing chooser: picks one of four framings at random on substep 0 and runs it.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Headbutt, Horn Attack, Jump Kick, Rolling Kick, Strength.
  * @unverified Name guessed from the code.
  */
 void BattleCamera_PlayRandomReactionFraming4(ActivePokemon* active_pokemon, CameraNode* camera) {

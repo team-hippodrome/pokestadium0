@@ -146,6 +146,8 @@ void BattleAnim_PlayMoveEffectScript(ActivePokemon* user, s32 move_id) {
  * Queues the charging animation of move_id from user at the other side's Pokémon, with
  * the move's camera anchors.
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (6 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Dig, Fly, Razor Wind, Skull Bash, Sky Attack, Solar Beam.
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_PlayChargingMoveEffectScript(ActivePokemon* user, s32 move_id) {
@@ -374,7 +376,8 @@ void BattleScene_LoadUsedMoveResourceList(ActivePokemon* active_pokemon) {
 /**
  * Sets the Pokemon's model state to 0x98 and marks it pending (bit 0x80): starts a model
  * reload.
- * @unverified Name guessed from the code.
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Substitute: ran at sample 164, just before Onix was replaced by the doll (「ぶんしんが あらわれた」).
  */
 void BattleAnim_SwapToSubstituteModel(ActivePokemon* active_pokemon) {
     BattleSide* temp_v0;
@@ -685,6 +688,8 @@ void BattleScene_EnterConfusedRow(ActivePokemon* active_pokemon) {
  * State row 21 tick: when move cue 0 ends, plays the species sound.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Supersonic.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_TickRow22PlaySpeciesSound(ActivePokemon* active_pokemon) {
@@ -1105,6 +1110,8 @@ void BattleScene_TickRow21CleanupAndEnterState18(ActivePokemon* active_pokemon) 
  * neutral placeholder.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Substitute.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_ResetOwnerModelIfLoaded(ActivePokemon* active_pokemon) {
@@ -1241,6 +1248,8 @@ void BattleScene_EnterMissRowPlaySound(ActivePokemon* active_pokemon) {
  * Seen in play (2026-11-13) (Free Battle, crafted states): ran as the state-row-13 callback for
  * 1P's Onix after its move in four battles, each time with the poison bit (0x08) set in its
  * statusCondition.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Fire Blast, Leech Seed, Poison Gas, Poisonpowder, Sludge, Smog, Toxic.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void BattleScene_Row13PlaySequences14And21(ActivePokemon* active_pokemon) {
@@ -1988,6 +1997,8 @@ s32 BattleAnim_TrySetModelEventTrackFromRow(ActivePokemon* active_pokemon, s32 c
 /**
  * Sets the model event track of move cue cue_index (when it has one and the model is not
  * busy), restarts it at frame 0 and stores event_state in state.unk_36.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Hypnosis, Lovely Kiss, Sing, Sleep Powder, Spore.
  * @unverified Name guessed from the code.
  */
 void BattleAnim_StartCueEventTrack(ActivePokemon* active_pokemon, s32 cue_index, s32 event_state) {
@@ -2430,6 +2441,8 @@ M2C_UNK func_82107A5C();                            /* extern */
 
 /**
  * Calls BattleScene_GetParticipantSideIndex and drops the result; does nothing else.
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Fire Blast, Leech Seed, Poison Gas, Poisonpowder, Sludge, Smog, Toxic.
  * @unverified Name guessed from the code.
  */
 void BattleScene_ResidualPhaseNop(void) {
