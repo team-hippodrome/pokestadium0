@@ -36,7 +36,7 @@ s32 Particle_ApproachScratchA(s8 *, s16, u8);                 /* extern */
 s32 func_821436A0(s8 *, u8, u8);                  /* extern */
 M2C_UNK func_82144130(s8 *);                      /* extern */
 
-void BattleAnim_CallbackOwnerModelTintPaletteFade(Particle* arg0) {
+void BattleAnim_CallbackOwnerTintPaletteFade(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = arg0->lifecycle;
@@ -70,7 +70,7 @@ void BattleAnim_CallbackOwnerModelTintPaletteFade(Particle* arg0) {
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_SetupOwnerModelTintRandomPaletteCycle(Particle* arg0) {
+void BattleAnim_SetupOwnerTintRandomPaletteCycle(Particle* arg0) {
     ParticleGfx_RecolorPrim(arg0, gParticlePaletteSetA[ParticleMath_RandomRange(6)]);
     Particle_SetByteParam1(arg0, gParticlePaletteSetA[ParticleMath_RandomRange(6)]);
     Particle_SetPrimAlpha(arg0, arg0->byteParam0);
@@ -90,10 +90,10 @@ void BattleAnim_SetupOwnerModelTintRandomPaletteCycle(Particle* arg0) {
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_CallbackOwnerModelTintRandomPaletteCycle(Particle* arg0) {
+void BattleAnim_CallbackOwnerTintRandomPaletteCycle(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupOwnerModelTintRandomPaletteCycle(arg0);
+            BattleAnim_SetupOwnerTintRandomPaletteCycle(arg0);
             break;
 
         case 2:

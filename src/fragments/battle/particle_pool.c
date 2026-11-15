@@ -32,30 +32,30 @@ BattleAnimEffectSlot* BattleAnim_CreateEffectSlot(s32 arg0, s32 arg1, s8 arg2, f
                               ActivePokemon* arg5, s16 arg6, s16 arg7, u8 arg8, u8 arg9, u8 argA, u8 argB);
 BattleAnimEffectSlot* BattleAnim_CreateEffectSlotForCurrentOwner(s32 arg0, func_unk_D_8140E724 arg1, ParticleDescriptor* arg2, s16 arg3, s16 arg4, u8 arg5,
                               u8 arg6, u8 arg7, u8 arg8);
-BattleAnimEffectSlot* BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(s32 arg0, s32 arg1, s8 arg2, func_unk_D_8140E724 arg3, ParticleDescriptor* arg4, s16 arg5,
+BattleAnimEffectSlot* BattleAnim_CreateRepeatEffectSlotForCurrentOwner(s32 arg0, s32 arg1, s8 arg2, func_unk_D_8140E724 arg3, ParticleDescriptor* arg4, s16 arg5,
                               s16 arg6, u8 arg7, u8 arg8, u8 arg9, u8 argA);
 BattleAnimEffectSlot* BattleAnim_SpawnGlobalTintColorFadeDetach(s32 arg0, s16 arg1, u8 arg2);
 BattleAnimEffectSlot* BattleAnim_SpawnWhiteHueChange(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4);
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOutFullAlpha(s32 arg0, s16 arg1, s16 arg2, u8 arg3);
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4);
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOutRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3, s16 arg4, u8 arg5, u8 arg6);
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHoldFullAlpha(s32 arg0, s16 arg1, s16 arg2, u8 arg3);
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHold(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4);
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHoldRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3, s16 arg4, u8 arg5, u8 arg6);
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldDetachFullAlpha(s32 arg0, s16 arg1, u8 arg2);
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldDetach(s32 arg0, s16 arg1, u8 arg2, u8 arg3);
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldDetachRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3, u8 arg4, u8 arg5);
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25PaletteFadeOut(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25PaletteFadeIn(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintRampDetach(s32 arg0, u8 arg1, s16 arg2, s16 arg3, s16 arg4);
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPulseDetach(s32 arg0, s16 arg1, u8 arg2, s16 arg3, s16 arg4, s16 arg5);
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintHoldFadeDetach(s32 arg0, s16 arg1, u8 arg2, s16 arg3, s16 arg4);
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25AlphaHoldFadeOutFullAlpha(s32 arg0, s16 arg1, s16 arg2, u8 arg3);
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25AlphaHoldFadeOut(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4);
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25AlphaHoldFadeOutRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3, s16 arg4, u8 arg5, u8 arg6);
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25AlphaFadeInHoldFullAlpha(s32 arg0, s16 arg1, s16 arg2, u8 arg3);
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25AlphaFadeInHold(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4);
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25AlphaFadeInHoldRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3, s16 arg4, u8 arg5, u8 arg6);
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25AlphaHoldDetachFullAlpha(s32 arg0, s16 arg1, u8 arg2);
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25AlphaHoldDetach(s32 arg0, s16 arg1, u8 arg2, u8 arg3);
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25AlphaHoldDetachRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3, u8 arg4, u8 arg5);
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25PaletteFadeOut(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25PaletteFadeIn(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
+BattleAnimEffectSlot* BattleAnim_SpawnOwnerTintRampDetach(s32 arg0, u8 arg1, s16 arg2, s16 arg3, s16 arg4);
+BattleAnimEffectSlot* BattleAnim_SpawnOwnerTintPulseDetach(s32 arg0, s16 arg1, u8 arg2, s16 arg3, s16 arg4, s16 arg5);
+BattleAnimEffectSlot* BattleAnim_SpawnOwnerTintHoldFadeDetach(s32 arg0, s16 arg1, u8 arg2, s16 arg3, s16 arg4);
 BattleAnimEffectSlot* BattleAnim_SpawnBeamBoomWaterfallHueChange(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteApproachInactiveAlt(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
+BattleAnimEffectSlot* BattleAnim_SpawnOwnerTintPaletteApproachStopAlt(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4);
 BattleAnimEffectSlot* BattleAnim_SpawnIceBeamBlizzardHitHueChange(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteCycleVariant(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
+BattleAnimEffectSlot* BattleAnim_SpawnOwnerTintPaletteCycleVariant(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
 BattleAnimEffectSlot* BattleAnim_SpawnDrainFlameHueChange(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintRandomPaletteCycle(s32 arg0, s16 arg1, u8 arg2);
+BattleAnimEffectSlot* BattleAnim_SpawnOwnerTintRandomPaletteCycle(s32 arg0, s16 arg1, u8 arg2);
 BattleAnimEffectSlot* BattleAnim_SpawnRainbowHueChange(s32 arg0, s16 arg1, s16 arg2, u8 arg3);
 BattleAnimEffectSlot* BattleAnim_SpawnInvisibility(s32 arg0, s16 arg1, s16 arg2, s16 arg3);
 BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelAlphaFadeFullPreset(s32 arg0);
@@ -1219,7 +1219,7 @@ BattleAnimEffectSlot* BattleAnim_CreateEffectSlotForCurrentOwner(s32 arg0, func_
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (81 of the moves).
  * @unverified Name from Stadium 1.
  */
-BattleAnimEffectSlot* BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(s32 arg0, s32 arg1, s8 arg2, func_unk_D_8140E724 arg3, ParticleDescriptor* arg4, s16 arg5,
+BattleAnimEffectSlot* BattleAnim_CreateRepeatEffectSlotForCurrentOwner(s32 arg0, s32 arg1, s8 arg2, func_unk_D_8140E724 arg3, ParticleDescriptor* arg4, s16 arg5,
                               s16 arg6, u8 arg7, u8 arg8, u8 arg9, u8 argA) {
     return BattleAnim_CreateEffectSlot(arg0, arg1, arg2, arg3, arg4, gBattleAnimCurrentOwner, arg5, arg6, arg7, arg8, arg9, argA);
 }
@@ -1252,7 +1252,7 @@ BattleAnimEffectSlot* BattleAnim_SpawnWhiteHueChange(s32 arg0, s16 arg1, s16 arg
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (13 of the moves).
  * @unverified Name from Stadium 1.
  */
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOutFullAlpha(s32 arg0, s16 arg1, s16 arg2, u8 arg3) {
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25AlphaHoldFadeOutFullAlpha(s32 arg0, s16 arg1, s16 arg2, u8 arg3) {
     return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_RunFullScreenHueChange, &gBattleAnimParticleDescriptors[37], NULL, arg1, arg2, 0x16, 0xFF, arg3, 0);
 }
 
@@ -1262,18 +1262,18 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOutFullAlpha(s32 
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (15 of the moves).
  * @unverified Name from Stadium 1.
  */
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4) {
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25AlphaHoldFadeOut(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4) {
     return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_RunFullScreenHueChange, &gBattleAnimParticleDescriptors[37], NULL, arg1, arg2, 0x16, arg4, arg3, 0);
 }
 
 /**
- * Repeating version of BattleAnim_SpawnDescriptor25AlphaHoldFadeOut: runs arg2 times,
+ * Repeating version of BattleAnim_SpawnDesc25AlphaHoldFadeOut: runs arg2 times,
  * arg1 frames apart.
  * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOutRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3, s16 arg4, u8 arg5, u8 arg6) {
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25AlphaHoldFadeOutRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3, s16 arg4, u8 arg5, u8 arg6) {
     return BattleAnim_CreateEffectSlot(arg0, arg1, arg2, BattleAnim_RunFullScreenHueChange, &gBattleAnimParticleDescriptors[37], NULL, arg3, arg4, 0x16, arg6, arg5, 0);
 }
 
@@ -1285,7 +1285,7 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldFadeOutRepeating(s32 
  * breakpoint): ran only for Confuse Ray, Flash.
  * @unverified Name from Stadium 1.
  */
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHoldFullAlpha(s32 arg0, s16 arg1, s16 arg2, u8 arg3) {
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25AlphaFadeInHoldFullAlpha(s32 arg0, s16 arg1, s16 arg2, u8 arg3) {
     return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_RunPokemonAndFullScreenHueChange, &gBattleAnimParticleDescriptors[37], NULL, arg1, arg2, 0x16, 0xFF, arg3, 0);
 }
 
@@ -1297,18 +1297,18 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHoldFullAlpha(s32 a
  * breakpoint): ran only for Blizzard, Explosion, Selfdestruct.
  * @unverified Name from Stadium 1.
  */
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHold(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4) {
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25AlphaFadeInHold(s32 arg0, s16 arg1, s16 arg2, u8 arg3, u8 arg4) {
     return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_RunPokemonAndFullScreenHueChange, &gBattleAnimParticleDescriptors[37], NULL, arg1, arg2, 0x16, arg4, arg3, 0);
 }
 
 /**
- * Repeating version of BattleAnim_SpawnDescriptor25AlphaFadeInHold: runs arg2 times,
+ * Repeating version of BattleAnim_SpawnDesc25AlphaFadeInHold: runs arg2 times,
  * arg1 frames apart.
  * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHoldRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3, s16 arg4, u8 arg5, u8 arg6) {
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25AlphaFadeInHoldRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3, s16 arg4, u8 arg5, u8 arg6) {
     return BattleAnim_CreateEffectSlot(arg0, arg1, arg2, BattleAnim_RunPokemonAndFullScreenHueChange, &gBattleAnimParticleDescriptors[37], NULL, arg3, arg4, 0x16, arg6, arg5, 0);
 }
 
@@ -1319,7 +1319,7 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaFadeInHoldRepeating(s32 a
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldDetachFullAlpha(s32 arg0, s16 arg1, u8 arg2) {
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25AlphaHoldDetachFullAlpha(s32 arg0, s16 arg1, u8 arg2) {
     return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackDescriptor25AlphaHoldDetach, &gBattleAnimParticleDescriptors[37], NULL, arg1, 0, 0x16, 0xFF, arg2, 0);
 }
 
@@ -1330,18 +1330,18 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldDetachFullAlpha(s32 a
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldDetach(s32 arg0, s16 arg1, u8 arg2, u8 arg3) {
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25AlphaHoldDetach(s32 arg0, s16 arg1, u8 arg2, u8 arg3) {
     return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackDescriptor25AlphaHoldDetach, &gBattleAnimParticleDescriptors[37], NULL, arg1, 0, 0x16, arg3, arg2, 0);
 }
 
 /**
- * Repeating version of BattleAnim_SpawnDescriptor25AlphaHoldDetach: runs arg2 times, arg1
+ * Repeating version of BattleAnim_SpawnDesc25AlphaHoldDetach: runs arg2 times, arg1
  * frames apart.
  * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal or j,
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldDetachRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3, u8 arg4, u8 arg5) {
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25AlphaHoldDetachRepeating(s32 arg0, s32 arg1, s8 arg2, s16 arg3, u8 arg4, u8 arg5) {
     return BattleAnim_CreateEffectSlot(arg0, arg1, arg2, BattleAnim_CallbackDescriptor25AlphaHoldDetach, &gBattleAnimParticleDescriptors[37], NULL, arg3, 0, 0x16, arg5, arg4, 0);
 }
 
@@ -1351,7 +1351,7 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25AlphaHoldDetachRepeating(s32 a
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25PaletteFadeOut(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25PaletteFadeOut(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
     return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackDescriptor25PaletteFadeOut, &gBattleAnimParticleDescriptors[37], NULL, arg1, arg2, 0x16, arg4, arg3, 0);
 }
 
@@ -1361,7 +1361,7 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25PaletteFadeOut(s32 arg0, s16 a
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
-BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25PaletteFadeIn(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
+BattleAnimEffectSlot* BattleAnim_SpawnDesc25PaletteFadeIn(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
     return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackDescriptor25PaletteFadeIn, &gBattleAnimParticleDescriptors[37], NULL, arg1, arg2, 0x16, arg4, arg3, 0);
 }
 
@@ -1370,8 +1370,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnDescriptor25PaletteFadeIn(s32 arg0, s16 ar
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (28 of the moves).
  * @unverified Name from Stadium 1.
  */
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintRampDetach(s32 arg0, u8 arg1, s16 arg2, s16 arg3, s16 arg4) {
-    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerModelTintRampDetach, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg2, arg4, 0x1A, arg3, arg1, 0);
+BattleAnimEffectSlot* BattleAnim_SpawnOwnerTintRampDetach(s32 arg0, u8 arg1, s16 arg2, s16 arg3, s16 arg4) {
+    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerTintRampDetach, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg2, arg4, 0x1A, arg3, arg1, 0);
 }
 
 /**
@@ -1380,7 +1380,7 @@ BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintRampDetach(s32 arg0, u8 arg1
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (17 of the moves).
  * @unverified Name from Stadium 1.
  */
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPulseDetach(s32 arg0, s16 arg1, u8 arg2, s16 arg3, s16 arg4, s16 arg5) {
+BattleAnimEffectSlot* BattleAnim_SpawnOwnerTintPulseDetach(s32 arg0, s16 arg1, u8 arg2, s16 arg3, s16 arg4, s16 arg5) {
     return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_RunUserHueChange, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg1, arg5, 0x1A, arg4, arg2, arg3);
 }
 
@@ -1390,8 +1390,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPulseDetach(s32 arg0, s16 ar
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintHoldFadeDetach(s32 arg0, s16 arg1, u8 arg2, s16 arg3, s16 arg4) {
-    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerModelTintHoldFadeDetach, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg1, arg4, 0x1A, 0, arg2, arg3);
+BattleAnimEffectSlot* BattleAnim_SpawnOwnerTintHoldFadeDetach(s32 arg0, s16 arg1, u8 arg2, s16 arg3, s16 arg4) {
+    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerTintHoldFadeDetach, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg1, arg4, 0x1A, 0, arg2, arg3);
 }
 
 /**
@@ -1399,7 +1399,7 @@ BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintHoldFadeDetach(s32 arg0, s16
  * for Hydro Pump, Bubble Beam, Hyper Beam, Metronome, Egg Bomb, Waterfall, Sky Attack.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnBeamBoomWaterfallHueChange(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
-    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerModelTintPaletteApproachInactive, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg4, arg3, 0x1A, arg2, arg1, 0);
+    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerTintPaletteApproachStop, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg4, arg3, 0x1A, arg2, arg1, 0);
 }
 
 /**
@@ -1410,8 +1410,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnBeamBoomWaterfallHueChange(s32 arg0, s16 a
  * breakpoint): ran only for Explosion, Selfdestruct.
  * @unverified Name from Stadium 1.
  */
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteApproachInactiveAlt(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
-    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerModelTintPaletteApproachInactive, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg4, arg3, 0x1A, arg2, arg1, 0);
+BattleAnimEffectSlot* BattleAnim_SpawnOwnerTintPaletteApproachStopAlt(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4) {
+    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerTintPaletteApproachStop, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg4, arg3, 0x1A, arg2, arg1, 0);
 }
 
 /**
@@ -1429,7 +1429,7 @@ BattleAnimEffectSlot* BattleAnim_SpawnIceBeamBlizzardHitHueChange(s32 arg0, s16 
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteCycleVariant(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
+BattleAnimEffectSlot* BattleAnim_SpawnOwnerTintPaletteCycleVariant(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
     return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_RunIceBeamBlizzardHitHueChange, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg4, arg3, 0x1A, arg2, arg1, arg5);
 }
 
@@ -1442,7 +1442,7 @@ BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintPaletteCycleVariant(s32 arg0
  * @unverified Name from Stadium 1.
  */
 BattleAnimEffectSlot* BattleAnim_SpawnDrainFlameHueChange(s32 arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5) {
-    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerModelTintPaletteFade, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg4, arg3, 0x1A, arg2, arg1, arg5);
+    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerTintPaletteFade, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, arg4, arg3, 0x1A, arg2, arg1, arg5);
 }
 
 /**
@@ -1452,8 +1452,8 @@ BattleAnimEffectSlot* BattleAnim_SpawnDrainFlameHueChange(s32 arg0, s16 arg1, s1
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
-BattleAnimEffectSlot* BattleAnim_SpawnOwnerModelTintRandomPaletteCycle(s32 arg0, s16 arg1, u8 arg2) {
-    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerModelTintRandomPaletteCycle, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, 0, arg1, 0x1A, arg2, 0, 0);
+BattleAnimEffectSlot* BattleAnim_SpawnOwnerTintRandomPaletteCycle(s32 arg0, s16 arg1, u8 arg2) {
+    return BattleAnim_CreateEffectSlot(arg0, 0, 1, BattleAnim_CallbackOwnerTintRandomPaletteCycle, &gDefaultParticleDescriptor, gBattleAnimCurrentOwner, 0, arg1, 0x1A, arg2, 0, 0);
 }
 
 /**

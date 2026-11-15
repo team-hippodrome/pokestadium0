@@ -16,9 +16,9 @@ extern Vtx D_82191040[];
 extern Vtx D_82191080[];
 extern Vtx D_82191000[];
 
-void ParticleGfx_LoadTextureCallbackI4FrameDiv2Mod8_64x64(UNUSED Particle* arg0, u8* texture);
-void ParticleGfx_LoadTextureCallbackI4WrapST_64x64(UNUSED Particle* arg0, u8* texture);
-void ParticleGfx_LoadTextureCallbackIa8WrapST_64x64(UNUSED Particle* arg0, u8* texture);
+void ParticleGfx_LoadTexCallbackI4FrameDiv2Mod8_64x64(UNUSED Particle* arg0, u8* texture);
+void ParticleGfx_LoadTexCallbackI4WrapST_64x64(UNUSED Particle* arg0, u8* texture);
+void ParticleGfx_LoadTexCallbackIa8WrapST_64x64(UNUSED Particle* arg0, u8* texture);
 
 /**
  * Load a texture frame selected by the shared particle clock using ParticleGfx_LoadTextureI4Alias.
@@ -28,7 +28,7 @@ void ParticleGfx_LoadTextureCallbackIa8WrapST_64x64(UNUSED Particle* arg0, u8* t
  * first one fainted.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-void ParticleGfx_LoadTextureCallbackI4FrameDiv2Mod8_64x64(UNUSED Particle* arg0, u8* texture) {
+void ParticleGfx_LoadTexCallbackI4FrameDiv2Mod8_64x64(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureI4Alias(&texture[(gParticleFrameDiv2 & 7) * (64 * 64 / 2)], 64, 64);
 }
 
@@ -40,7 +40,7 @@ M2C_UNK func_8216BFE8(s32, M2C_UNK, M2C_UNK);       /* extern */
  * breakpoint): ran only for Fire Punch, Thunder Punch.
  * @unverified Name guessed from the code.
  */
-void ParticleGfx_LoadTextureCallbackI4FrameC3_64x64(s8 *arg0, s32 arg1) {
+void ParticleGfx_LoadTexCallbackI4FrameC3_64x64(s8 *arg0, s32 arg1) {
     func_8216BFE8((M2C_FIELD(arg0, s8 *, 0xC3) << 0xB) + arg1, 0x40, 0x40);
 }
 
@@ -50,7 +50,7 @@ void ParticleGfx_LoadTextureCallbackI4FrameC3_64x64(s8 *arg0, s32 arg1) {
  * emitted an I texture load (FD900000) with mirror+wrap and mask 6 on S and T (G_SETTILE 07058160),
  * i.e. 64x64.
  */
-void ParticleGfx_LoadTextureCallbackI4WrapST_64x64(UNUSED Particle* arg0, u8* texture) {
+void ParticleGfx_LoadTexCallbackI4WrapST_64x64(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureI4WrapST(texture, 64, 64);
 }
 
@@ -59,7 +59,7 @@ void ParticleGfx_LoadTextureCallbackI4WrapST_64x64(UNUSED Particle* arg0, u8* te
  * Seen in play (2026-11-13) in the 165-move sweep (Water Gun, Hydro Pump): it emitted an IA texture
  * load (FD700000) with mirror+wrap and mask 6 on S and T (G_SETTILE 07058160), i.e. 64x64.
  */
-void ParticleGfx_LoadTextureCallbackIa8WrapST_64x64(UNUSED Particle* arg0, u8* texture) {
+void ParticleGfx_LoadTexCallbackIa8WrapST_64x64(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureIa8WrapST(texture, 64, 64);
 }
 
