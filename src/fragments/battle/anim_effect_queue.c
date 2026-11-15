@@ -563,6 +563,7 @@ extern s32 D_8219A800;
 extern s32 D_8219A804;
 
 /**
+ * Queues effect list 9 with value arg0 for the next effect update.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec

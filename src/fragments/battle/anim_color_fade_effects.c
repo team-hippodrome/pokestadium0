@@ -28,7 +28,7 @@ extern ParticleDescriptor D_8218E580[];
 M2C_UNK Particle_AnimateFramesForwardLooped(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32, s32);
 
 void BattleAnim_SetupFireBreathFlameFading(Particle* arg0, s16 arg1);
-void BattleAnim_SetupUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0);
+void BattleAnim_SetupUnusedDesc4FColorCycleScaleFade(Particle* arg0);
 void BattleAnim_SetupFireBreathFlameGeometry(Particle* arg0);
 void BattleAnim_SetupFireBreathFlameColoration(Particle* arg0, s16 arg1);
 void BattleAnim_SetupExpandingHitSpark(Particle* arg0);
@@ -64,6 +64,9 @@ void BattleAnim_DefaultEndEffect_Init(void);
 void BattleAnim_RunFlamethrowerHitRotation(Particle* arg0, s32 arg1);
 
 /**
+ * Inits a fire-breath flame particle: scale 0.25, a random upward rotationX and small random
+ * rotationY, speed 2.5, palette pair 0x17 (arg1 = 0) or 0x18 (arg1 = 1), hidden for a start delay
+ * of twice its spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Flamethrower, Dragon Rage, Fire Spin, Fire Blast.
  */
@@ -93,6 +96,8 @@ void BattleAnim_SetupFireBreathFlameFading(Particle* arg0, s16 arg1) {
 
 s32 Particle_DecreaseRotationXTo(Particle* arg0, s32 arg1, s32 arg2);
 /**
+ * Phase step for a fire-breath flame: after 2 frames it bends its rotationX down toward -0x400 for
+ * 16 frames. Moves along its rotation once the phases have started.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Flamethrower, Dragon Rage, Fire Spin, Fire Blast.
  */
@@ -195,7 +200,7 @@ void BattleAnim_RunFireBreathFlameFading(Particle* arg0) {
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_SetupUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0) {
+void BattleAnim_SetupUnusedDesc4FColorCycleScaleFade(Particle* arg0) {
     UNUSED s32 pad[3]; // FAKE: stack padding
     s16 sp22 = Particle_SpawnIndex_GetS16_0C038(arg0);
 
@@ -215,7 +220,7 @@ void BattleAnim_SetupUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_MotionUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0) {
+void BattleAnim_MotionUnusedDesc4FColorCycleScaleFade(Particle* arg0) {
     switch (arg0->phase) {
         case 1:
             if (Particle_TickPhaseTimer(arg0, 2) != 0) {
@@ -241,10 +246,10 @@ void BattleAnim_MotionUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_CallbackUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* arg0) {
+void BattleAnim_CallbackUnusedDesc4FColorCycleScaleFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_SetupUnusedDescriptor4FColorCycleScaleFadeVariant(arg0);
+            BattleAnim_SetupUnusedDesc4FColorCycleScaleFade(arg0);
             break;
 
         case 2:
@@ -280,11 +285,14 @@ void BattleAnim_CallbackUnusedDescriptor4FColorCycleScaleFadeVariant(Particle* a
 
     if (Particle_IsRenderingEnabled(arg0) != 0) {
         Particle_AnimateFramesForwardLooped((s8*)arg0, 0, 7, 1, 2, -1);
-        BattleAnim_MotionUnusedDescriptor4FColorCycleScaleFadeVariant(arg0);
+        BattleAnim_MotionUnusedDesc4FColorCycleScaleFade(arg0);
     }
 }
 
 /**
+ * Inits a wider fire-breath flame: scale 0.4, a random upward rotationX and a wide random
+ * rotationY, speed 2, palette pair 0x1A (variant 0) or 6 (variant 1), alpha 0xC8, hidden for a
+ * start delay of twice its spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Flamethrower, Dragon Rage, Fire Spin, Fire Blast.
  */
@@ -316,6 +324,8 @@ void BattleAnim_SetupFireBreathFlameGeometry(Particle* arg0) {
 
 s32 Particle_DecreaseRotationXTo(Particle* arg0, s32 arg1, s32 arg2);
 /**
+ * Phase step for a wide fire-breath flame: after 1 frame it bends its rotationX down toward -0x1800
+ * for 16 frames. Moves along its rotation once the phases have started.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Flamethrower, Dragon Rage, Fire Spin, Fire Blast.
  */
@@ -375,7 +385,7 @@ void BattleAnim_CallbackFireSmokeParticle(Particle* particle) {
     case 3:
         Particle_AnimateFramesForwardLoopedThenAdvance(particle, 0, 7, 1, 2, 0);
         Particle_ApproachPrimAlpha(particle, 0x20, 4);
-        func_82140228(particle, 0x3F400000, 0x3D4CCCCD);
+        func_82140228(particle, 0x3F400000, 0x3D4CCCCD); // 0.75f, 0.05f
         break;
     case 4:
         Particle_MarkInactive(particle);
@@ -387,6 +397,9 @@ void BattleAnim_CallbackFireSmokeParticle(Particle* particle) {
 }
 
 /**
+ * Inits a falling fire-breath flame: scale 0.2, a random upward rotationX and wide random
+ * rotationY, speed 2, palette pair 0x17 (arg1 = 0) or 0x18 (arg1 = 1), hidden for a start delay of
+ * twice its spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Flamethrower, Dragon Rage, Fire Spin, Fire Blast.
  */
@@ -415,6 +428,9 @@ void BattleAnim_SetupFireBreathFlameColoration(Particle* arg0, s16 arg1) {
 }
 
 /**
+ * Phase step for a falling fire-breath flame: after a random 0 to 2 frame wait it turns its
+ * rotationX toward straight down (0x4000) for 16 frames. Moves along its rotation once the phases
+ * have started.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Flamethrower, Dragon Rage, Fire Spin, Fire Blast.
  */
@@ -440,6 +456,8 @@ void BattleAnim_ContinueFireBreathFlameColoration(Particle* arg0) {
 }
 
 /**
+ * Particle callback for a falling fire-breath flame: waits out its start delay, starts the phases
+ * and shows it, then for 8 frames drains blue (variant 0) or red (variant 1) before fading out.
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Flamethrower, Dragon Rage, Fire Spin and Fire Blast.
  */
@@ -509,8 +527,9 @@ void BattleAnim_FlameRotatingFallColorCycle(Particle* arg0) {
 }
 
 /**
- * handles setting up the hit spark for Hydro Pump, Ice Beam, Bubble Beam, Hyper Beam, Solar Beam, Egg Bomb, Waterfall,
- * and Sky Attack Oddly, Psybeam calls this setup, but not the runner for the effect
+ * handles setting up the hit spark for Hydro Pump, Ice Beam, Bubble Beam, Hyper Beam, Solar Beam,
+ * Egg Bomb, Waterfall, and Sky Attack Oddly, Psybeam calls this setup, but not the runner for the
+ * effect
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
@@ -527,8 +546,8 @@ void BattleAnim_SetupExpandingHitSpark(Particle* arg0) {
 }
 
 /**
- * handles expanding hit spark for Hydro Pump, Ice Beam, Bubble Beam, Hyper Beam, Solar Beam, Egg Bomb, Waterfall, and
- * Sky Attack
+ * handles expanding hit spark for Hydro Pump, Ice Beam, Bubble Beam, Hyper Beam, Solar Beam, Egg
+ * Bomb, Waterfall, and Sky Attack
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Bubblebeam, Egg Bomb, Hydro Pump, Hyper Beam, Ice Beam and Waterfall (the sweep used only
  * the charge turn of Solar Beam and Sky Attack).
@@ -638,6 +657,8 @@ void BattleAnim_CallbackUnusedGrowFadeVariant(Particle* arg0) {
 }
 
 /**
+ * Inits a flame under the Pokémon: scale 0.5, rising 2 per frame, a random spin speed, palette
+ * pair 0x1A, full alpha, hidden for a start delay of 4 frames per spawn index.
  * Seen in play (2026-11-13) (Free Battle, 1P Metronome pinned to Rage): ran 32 times during Rage's
  * use animation, the flames rising around Onix.
  */
@@ -695,9 +716,9 @@ void BattleAnim_RunOscillatingFlameUnderneathPokemon(Particle* arg0) {
         return;
     case 3:
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, -1);
-        func_82140228(arg0, 0x3F800000, 0x3DCCCCCD);
-        func_8213E1FC(arg0, 0x40000000);
-        func_82140064(arg0, 0x41200000, 0x800);
+        func_82140228(arg0, 0x3F800000, 0x3DCCCCCD); // 1.0f, 0.1f
+        func_8213E1FC(arg0, 0x40000000); // 2.0f
+        func_82140064(arg0, 0x41200000, 0x800); // 10.0f
         Particle_ApproachPrimGreen(arg0, 0, 4);
         Particle_ApproachEnvRed(arg0, 0, 4);
         if ((func_82140690(arg0) != 0) && (Particle_ApproachPrimAlpha(arg0, 0, 0x18) != 0)) {
@@ -712,6 +733,9 @@ void BattleAnim_RunOscillatingFlameUnderneathPokemon(Particle* arg0) {
 }
 
 /**
+ * Inits a Fire Spin flame: scale 0.5, 10 units up, rising 1 per frame, palette pair 0x1A, full
+ * alpha, spin speed set by spawn index (an eighteenth of a turn apart), hidden for a start delay
+ * of 3 frames per spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Fire Spin.
  */
@@ -754,11 +778,11 @@ void BattleAnim_FireSpinParticleUpdate(Particle* arg0) {
         }
         break;
     case 3:
-        func_82140228(arg0, 0x3F800000, 0x3DCCCCCD);
+        func_82140228(arg0, 0x3F800000, 0x3DCCCCCD); // 1.0f, 0.1f
         break;
     }
     if (func_8213CB7C(arg0) != 0) {
-        func_82140064(arg0, 0x42480000, 0);
+        func_82140064(arg0, 0x42480000, 0); // 50.0f
     }
 }
 
@@ -820,6 +844,7 @@ void BattleAnim_CallbackUnusedVariant2(Particle* arg0) {
 }
 
 /**
+ * Inits an Ember afterimage: scale 0.4, palette pair 0x1A, alpha 0xA0.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ember.
  */
@@ -856,10 +881,11 @@ void BattleAnim_EmberParticleUpdateB(Particle* arg0) {
         Particle_DisableAndDetach(arg0);
         break;
     }
-    func_82140228(arg0, 0x3F19999A, 0x3D4CCCCD);
+    func_82140228(arg0, 0x3F19999A, 0x3D4CCCCD); // 0.6f, 0.05f
 }
 
 /**
+ * Inits the Ember fireball: scale 0.4, speed 8, palette pair 0x29, texture frame 2, full alpha.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ember.
  */
@@ -953,7 +979,7 @@ void BattleAnim_EmberParticleUpdateA(Particle* arg0) {
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 3, 1, 2, 0);
         func_8213E6BC(arg0);
         func_821437E0(arg0, 0, 0x20);
-        func_82140228(arg0, 0x3FC00000, 0x3DCCCCCD);
+        func_82140228(arg0, 0x3FC00000, 0x3DCCCCCD); // 1.5f, 0.1f
         return;
     case 4:
         Particle_MarkInactive(arg0);
@@ -962,6 +988,8 @@ void BattleAnim_EmberParticleUpdateA(Particle* arg0) {
 }
 
 /**
+ * Inits an Ember use flame: scale 0.45, a random rotationX and rotationY, palette pair 0x1D, alpha
+ * 0x64, speed 2.5.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ember.
  */
@@ -984,6 +1012,9 @@ void BattleAnim_SetupEmberUseEffect(Particle* arg0) {
 
 s32 Particle_ApproachStepMagnitude(Particle* arg0, f32 arg1, f32 arg2);
 /**
+ * Particle callback for an Ember use flame: animates frames 0 to 7 once while slowing to 0.5 and
+ * fading toward alpha 0x20, then is marked inactive. While running it grows toward 0.75, moves
+ * along its rotation and shifts toward palette pair 0x1A.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ember.
  */
@@ -1051,6 +1082,8 @@ void BattleAnim_ColorFadeUnusedNop(void) {
 }
 
 /**
+ * Shifts the particle's colors toward a palette pair picked by its variant: 0x2E (variant 0), 0x2D
+ * (variants 1 and 2) or 0x2B (variant 3), at rate 16.
  * Moves: Egg Bomb (hit), Ember (hit), Fire Punch (hit)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -1087,6 +1120,8 @@ void BattleAnim_FirePunchEmberEggBombColorChange(Particle* arg0) {
 }
 
 /**
+ * Inits a background bomb blast: placed at one of three points (by spawn index) and given a start
+ * scale, target scale and growth step picked by its size variant.
  * Seen in play (2026-11-12): in the per-move sweep it ran only for Egg Bomb (not for Explosion or
  * Selfdestruct).
  */
@@ -1169,6 +1204,8 @@ void BattleAnim_RunBackgroundBombExplosion(Particle* arg0) {
 }
 
 /**
+ * Inits a small boom blast: a random position offset, speed 3 to 4, scale 0.75, recolored from its
+ * palette pair, full alpha, hidden for a start delay of twice its spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Explosion and Selfdestruct.
  */
@@ -1179,9 +1216,9 @@ void BattleAnim_SetupBoomSmallExplosion(Particle* arg0) {
 
     sp2A = Particle_SpawnIndex_GetS16_0C038(arg0);
     sp28 = Particle_GetByteParam1(arg0);
-    sp2C.x = ParticleMath_RandomSigned(0xA);
-    sp2C.y = ParticleMath_RandomSignedOffset(0xF, 0xA);
-    sp2C.z = ParticleMath_RandomSigned(0xF);
+    sp2C.x = ParticleMath_RandomSigned(10);
+    sp2C.y = ParticleMath_RandomSignedOffset(15, 10);
+    sp2C.z = ParticleMath_RandomSigned(15);
     Particle_PositionOffset_AddVecScaled(arg0, sp2C);
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(5) * 0.25f) + 3.0f);
     Particle_SetScaleScaled(arg0, 0.75f);
@@ -1240,6 +1277,9 @@ void BattleAnim_RunBoomSmallExplosion(Particle* arg0) {
 }
 
 /**
+ * Inits an Egg Bomb blast: a random position offset, scale 1.0, speed 0.5, a random rotationX and
+ * rotationY, recolored from its palette pair, alpha 0xC8, texture frame 2, hidden for a start delay
+ * of twice its spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Egg Bomb.
  */
@@ -1251,9 +1291,9 @@ void BattleAnim_SetupEggBombHitEffect(Particle* arg0) {
 
     sp22 = Particle_SpawnIndex_GetS16_0C038(arg0);
     sp20 = Particle_GetByteParam1(arg0);
-    sp24.x = ParticleMath_RandomSigned(0xA);
-    sp24.y = ParticleMath_RandomSignedOffset(0xA, 5);
-    sp24.z = ParticleMath_RandomSigned(0xA);
+    sp24.x = ParticleMath_RandomSigned(10);
+    sp24.y = ParticleMath_RandomSignedOffset(10, 5);
+    sp24.z = ParticleMath_RandomSigned(10);
     Particle_PositionOffset_AddVecScaled(arg0, sp24);
     Particle_SetScaleScaled(arg0, 1.0f);
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.5f);
@@ -1278,7 +1318,12 @@ M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82146BEC(s8 *);                      /* extern */
 
-void BattleAnim_CallbackEndEffect40Descriptor48SpreadScaleAlphaFade(Particle* arg0) {
+/**
+ * Particle callback for end effect 40 (descriptor 0x48): waits out its start delay, shows it,
+ * plays frames 2 to 7 once while growing toward 1.2, fading toward alpha 0x64 and moving along its
+ * rotation, then detaches.
+ */
+void BattleAnim_CallbackEnd40Desc48SpreadScaleAlphaFade(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = arg0->lifecycle;
@@ -1294,7 +1339,7 @@ void BattleAnim_CallbackEndEffect40Descriptor48SpreadScaleAlphaFade(Particle* ar
         return;
     case 3:
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 2, 7, 1, 1, 0);
-        func_82140228(arg0, 0x3F99999A, 0x3D4CCCCD);
+        func_82140228(arg0, 0x3F99999A, 0x3D4CCCCD); // 1.2f, 0.05f
         Particle_ApproachPrimAlpha(arg0, 0x64, 0x10);
         Particle_AddVelocityFromRotationTemplate1(arg0);
         return;
@@ -1305,6 +1350,9 @@ void BattleAnim_CallbackEndEffect40Descriptor48SpreadScaleAlphaFade(Particle* ar
 }
 
 /**
+ * Inits a secondary bomb blast: random velocity, scale 0.5, speed 1, a random rotationX and
+ * rotationY kept as its rotation target, palette pair 0x1A, alpha 0xC8, hidden for a start delay of
+ * 3 frames per spawn index.
  * Seen in play (2026-11-12): in the per-move sweep it ran only for Egg Bomb (not for Explosion or
  * Selfdestruct).
  */
@@ -1365,11 +1413,11 @@ void BattleAnim_RunSecondaryBombExplosion(Particle* arg0) {
         }
         return;
     case 3:
-        func_82140228(arg0, 0x3F800000, 0x3DCCCCCD);
+        func_82140228(arg0, 0x3F800000, 0x3DCCCCCD); // 1.0f, 0.1f
         Particle_ApproachPrimRed(arg0, 0, 0xC);
         Particle_ApproachPrimGreen(arg0, 0, 0x20);
         Particle_AddVelocityFromRotationTemplate1(arg0);
-        Particle_AddPosOffsetYScaled(arg0, 0x3ECCCCCD);
+        Particle_AddPosOffsetYScaled(arg0, 0x3ECCCCCD); // 0.4f
         func_8214667C(arg0);
         if ((func_82140690(arg0) != 0) && (Particle_ApproachPrimAlpha(arg0, 0x20, 0x10) != 0)) {
             func_8213C9D0(arg0);
@@ -1383,6 +1431,9 @@ void BattleAnim_RunSecondaryBombExplosion(Particle* arg0) {
 }
 
 /**
+ * Inits an Ember hit fireball: a random position offset, scale 0.15, speed 0.5, a random rotationX
+ * and rotationY, one of four explosion colors (by spawn index), alpha 0xC8, texture frame 2, hidden
+ * for a start delay equal to its spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ember.
  */
@@ -1391,9 +1442,9 @@ void BattleAnim_SetupEmberHitFireball(Particle* arg0) {
     Vec3s sp30;
     Vec3f sp24;
 
-    sp24.x = ParticleMath_RandomSigned(0x19);
-    sp24.y = ParticleMath_RandomSignedOffset(0xF, 5);
-    sp24.z = ParticleMath_RandomSigned(0xA);
+    sp24.x = ParticleMath_RandomSigned(25);
+    sp24.y = ParticleMath_RandomSignedOffset(15, 5);
+    sp24.z = ParticleMath_RandomSigned(10);
     Particle_PositionOffset_AddVecScaled(arg0, sp24);
     Particle_SetScaleScaled(arg0, 0.15f);
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.5f);
@@ -1420,7 +1471,12 @@ M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 s32 func_821406B4(s8 *);                          /* extern */
 M2C_UNK func_82147050(s8 *);                      /* extern */
 
-void BattleAnim_CallbackEndEffect56Descriptor46RisingScaleAlphaFade(Particle* arg0) {
+/**
+ * Particle callback for end effect 56 (descriptor 0x46): waits out its start delay, shows it,
+ * plays frames 2 to 7 once while growing toward 0.45, fading toward alpha 0x64 and moving along
+ * its rotation, then detaches.
+ */
+void BattleAnim_CallbackEnd56Desc46RisingScaleAlphaFade(Particle* arg0) {
     s16 temp_v0;
 
     temp_v0 = arg0->lifecycle;
@@ -1436,7 +1492,7 @@ void BattleAnim_CallbackEndEffect56Descriptor46RisingScaleAlphaFade(Particle* ar
         return;
     case 3:
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 2, 7, 1, 1, 0);
-        func_82140228(arg0, 0x3EE66667, 0x3D99999A);
+        func_82140228(arg0, 0x3EE66667, 0x3D99999A); // 0.45f, 0.075f
         Particle_ApproachPrimAlpha(arg0, 0x64, 0x10);
         Particle_AddVelocityFromRotationTemplate1(arg0);
         return;
@@ -1447,6 +1503,9 @@ void BattleAnim_CallbackEndEffect56Descriptor46RisingScaleAlphaFade(Particle* ar
 }
 
 /**
+ * Inits an Ember hit smoke puff: random velocity, scale 0.9, speed 1, a random rotationX and
+ * rotationY, one of four explosion colors (by spawn index), alpha 0xC8, texture frame 2, no start
+ * delay.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Ember.
  */
@@ -1455,7 +1514,7 @@ void BattleAnim_SetupEmberHitSmoke(Particle* arg0) {
     Vec3s sp30;
     UNUSED s32 pad[3]; // FAKE: stack padding
 
-    Particle_SetRandomVelocityXYZ(arg0, 5, 0xA, 0xA);
+    Particle_SetRandomVelocityXYZ(arg0, 5, 10, 10);
     Particle_SetScaleScaled(arg0, 0.90000004f);
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, 1.0f);
     sp30.x = ParticleMath_RandomSigned(0x2000);
@@ -1472,6 +1531,9 @@ void BattleAnim_SetupEmberHitSmoke(Particle* arg0) {
 
 s32 Particle_ApproachStepMagnitude(Particle* arg0, f32 arg1, f32 arg2);
 /**
+ * Particle callback for an Ember hit smoke puff: shows it, plays frames 0 to 7 once while growing
+ * toward 1.05, slowing down and moving along its rotation; after 5 frames it also rises and fades
+ * toward alpha 0x64.
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Ember.
  */
@@ -1494,7 +1556,7 @@ void BattleAnim_EmberSpreadScaleAlphaRise(Particle* arg0) {
             Particle_ApproachStepMagnitude(arg0, 0.5, 0.5f);
             Particle_AddVelocityFromRotationTemplate1(arg0);
             if (Particle_DecrementParam0ToZero(arg0) != 0) {
-                func_8213E1FC(arg0, 0x3F000000);
+                func_8213E1FC(arg0, 0x3F000000); // 0.5f
                 Particle_PrimAlpha_Approach_0BC2C(arg0, 0x64, 0x10);
             }
             break;
@@ -1506,6 +1568,9 @@ void BattleAnim_EmberSpreadScaleAlphaRise(Particle* arg0) {
 }
 
 /**
+ * Inits a Fire Punch lingering spark: random velocity, scale 0.75, speed 1, a random rotationX and
+ * rotationY, one of four explosion colors (by spawn index), alpha 0xC8, hidden for a start delay of
+ * 3 frames per spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Fire Punch, Ember.
  */
@@ -1568,10 +1633,10 @@ void BattleAnim_RunFirePunchLingeringHitSpark(Particle* arg0) {
     case 3:
         Particle_ApproachPrimRed(arg0, 0, 0xC);
         Particle_ApproachPrimGreen(arg0, 0, 0x20);
-        func_82140228(arg0, 0x3FC00000, 0x3E19999A);
+        func_82140228(arg0, 0x3FC00000, 0x3E19999A); // 1.5f, 0.15f
         func_8214667C(arg0);
         Particle_AddVelocityFromRotationTemplate1(arg0);
-        Particle_AddPosOffsetYScaled(arg0, 0x3ECCCCCD);
+        Particle_AddPosOffsetYScaled(arg0, 0x3ECCCCCD); // 0.4f
         if ((func_82140690(arg0) != 0) && (Particle_ApproachPrimAlpha(arg0, 0x20, 0x10) != 0)) {
             func_8213C9D0(arg0);
             return;
@@ -1584,6 +1649,9 @@ void BattleAnim_RunFirePunchLingeringHitSpark(Particle* arg0) {
 }
 
 /**
+ * Inits an after-impact smoke puff: a random position offset, scale 0.1, a random rotation, one of
+ * four explosion colors (by spawn index), alpha 0xC8, texture frame 2, hidden for a start delay of
+ * twice its spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Egg Bomb and Fire Punch.
  */
@@ -1593,9 +1661,9 @@ void BattleAnim_SetupAfterImpactSmoke(Particle* arg0) {
     Vec3f sp24;
 
     sp36 = Particle_SpawnIndex_GetS16_0C038(arg0);
-    sp24.x = ParticleMath_RandomSigned(0x14);
-    sp24.y = ParticleMath_RandomSignedOffset(0xF, 0xA);
-    sp24.z = ParticleMath_RandomSigned(0xF);
+    sp24.x = ParticleMath_RandomSigned(20);
+    sp24.y = ParticleMath_RandomSignedOffset(15, 10);
+    sp24.z = ParticleMath_RandomSigned(15);
     Particle_PositionOffset_AddVecScaled(arg0, sp24);
     Particle_SetScaleScaled(arg0, 0.1f);
     sp30.x = ParticleMath_RandomRange(0x10000);
@@ -1641,7 +1709,7 @@ void BattleAnim_RunAfterImpactSmoke(Particle* arg0) {
         return;
     case 3:
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 2, 7, 1, 1, 0);
-        func_82140228(arg0, 0x3E99999A, 0x3D4CCCCD);
+        func_82140228(arg0, 0x3E99999A, 0x3D4CCCCD); // 0.3f, 0.05f
         Particle_ApproachPrimAlpha(arg0, 0x64, 0x10);
         return;
     case 4:
@@ -1712,7 +1780,7 @@ void BattleAnim_RunFirePunchHitEffect(Particle* arg0) {
         return;
     case 3:
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 1, 0);
-        func_82140228(arg0, 0x3F800000, 0x3CA3D70A);
+        func_82140228(arg0, 0x3F800000, 0x3CA3D70A); // 1.0f, 0.02f
         Particle_ApproachPrimBlue(arg0, 0, 0x20);
         Particle_ApproachEnvGreen(arg0, 0, 0x20);
         if (arg0->textureFrame >= 6) {
@@ -1728,6 +1796,9 @@ void BattleAnim_RunFirePunchHitEffect(Particle* arg0) {
 }
 
 /**
+ * Inits a Flamethrower hit flame: 10 units down and 50 forward, scale 0.5, speed 5, a random
+ * rotationX and a rotationY turned back toward the attacker (wider for arg1 = 1), palette pair 0x1A
+ * (arg2 = 0) or 6 (arg2 = 1), alpha 0xC8, hidden for a start delay of 4 frames per spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Flamethrower, Dragon Rage.
  */
@@ -1824,6 +1895,7 @@ void BattleAnim_RunFlamethrowerHitRotation(Particle* arg0, s32 arg1) {
 }
 
 /**
+ * Particle callback for the narrow Flamethrower hit flame (spread 0).
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Flamethrower, Dragon Rage.
  */
@@ -1832,6 +1904,7 @@ void BattleAnim_RunFlamethrowerHitRotationWeak(Particle* arg0) {
 }
 
 /**
+ * Particle callback for the wide Flamethrower hit flame (spread 1).
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Flamethrower, Dragon Rage.
  */
@@ -1840,6 +1913,9 @@ void BattleAnim_RunFlamethrowerHitRotationStrong(Particle* arg0) {
 }
 
 /**
+ * Inits a Fire Blast hit flame in front of the target: scale 0.4, 15 units forward, a random
+ * rotationX and rotationY, bending toward straight up, speed 3, palette pair 0x1A (variant 0) or 6
+ * (variant 1), alpha 0xC8, hidden for a start delay of twice its spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Flamethrower, Dragon Rage, Fire Blast.
  */
@@ -1873,6 +1949,8 @@ void BattleAnim_SetupFireBlastHitFrontFlames(Particle* arg0) {
 }
 
 /**
+ * Phase step for a Fire Blast hit flame: after 1 frame it turns toward its rotation target for 16
+ * frames. Moves along its rotation once the phases have started.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Flamethrower, Dragon Rage, Fire Blast.
  */
@@ -1915,7 +1993,7 @@ M2C_UNK func_82147FF0(s8 *);                      /* extern */
  * breakpoint): ran only for Dragon Rage, Fire Blast, Flamethrower.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade(Particle* particle) {
+void BattleAnim_CallbackEnd15And22And59Desc3DSpinFade(Particle* particle) {
     s16 temp_v0;
 
     temp_v0 = particle->lifecycle;
@@ -1932,7 +2010,7 @@ void BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade
     case 3:
         Particle_AnimateFramesForwardLoopedThenAdvance(particle, 0, 7, 1, 2, 0);
         Particle_ApproachPrimAlpha(particle, 0x20, 4);
-        func_82140228(particle, 0x3F99999A, 0x3DCCCCCD);
+        func_82140228(particle, 0x3F99999A, 0x3DCCCCCD); // 1.2f, 0.1f
         break;
     case 4:
         Particle_MarkInactive(particle);
@@ -1944,6 +2022,8 @@ void BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade
 }
 
 /**
+ * Inits a flame of Fire Blast's 大 shape: scale 0.6, 15 up and 20 back, then a speed and direction
+ * picked by its stroke variant so the strokes spread into the character.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Fire Blast.
  */
@@ -1994,6 +2074,8 @@ void BattleAnim_SetupDaimonji(Particle* arg0) {
 }
 
 /**
+ * Phase step for a Fire Blast 大 flame: waits 2 frames, then 16 more, while it moves along its
+ * rotation.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Fire Blast.
  */
@@ -2018,7 +2100,8 @@ void BattleAnim_ContinueDaimonji(Particle* arg0) {
 }
 
 /**
- * used to create the Daimonji of Fire blast that spells out 大
+ * Used to create the 大 ("great") shaped flame of Fire Blast, whose Japanese name Daimonji
+ * comes from this bonfire:
  * https://en.wikipedia.org/wiki/Gozan_no_Okuribi
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Fire Blast.
@@ -2066,6 +2149,8 @@ void BattleAnim_RunDaimonji(Particle* arg0) {
 }
 
 /**
+ * Inits a Fire Blast flame: scale 0.7, random velocity with an upward bias, palette pair 0x1A,
+ * alpha 0xC8, hidden for a start delay of 4 frames per spawn index.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Fire Blast.
  */
@@ -2076,7 +2161,7 @@ void BattleAnim_SetupDaimonjiColoration(Particle* arg0) {
     Particle_GetByteParam1(arg0);
     Particle_SetScaleScaled(arg0, 0.7f);
     Particle_SetRandomVelocityX(arg0, 0xF);
-    Particle_SetRandomVelocityYOffset(arg0, 0xF, 0xA);
+    Particle_SetRandomVelocityYOffset(arg0, 15, 10);
     Particle_SetRandomVelocityZ(arg0, 0xF);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, 0x1A);
     Particle_SetPrimAlpha(arg0, 0xC8);
@@ -2131,7 +2216,7 @@ void BattleAnim_RunDaimonjiColoration(Particle* arg0) {
         break;
     }
     if (func_8213CB7C(arg0) != 0) {
-        func_82140228(arg0, 0x3F800000, 0x3CCCCCCD);
+        func_82140228(arg0, 0x3F800000, 0x3CCCCCCD); // 1.0f, 0.025f
         Particle_AnimateFramesForwardLooped(arg0, 0, 7, 1, 2, 0);
     }
 }
@@ -2167,8 +2252,8 @@ extern ParticleDescriptor D_8218E7B8;
 void BattleAnim_InitializeEmberHit(void) {
     BattleAnim_SpawnDesc25AlphaHoldFadeOut(2, 0, 0x40, 0x8, 0xC8);
     BattleAnim_SpawnOwnerTintRampDetach(0, 0xA, 0xFF, 0, 0x30);
-    BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackEndEffect56Descriptor46RisingScaleAlphaFade, &D_8218E7B0, 0, 6, 0x10, 9, 0, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackEndEffect56Descriptor46RisingScaleAlphaFade, &D_8218E7B0, 0, 6, 0x10, 9, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackEnd56Desc46RisingScaleAlphaFade, &D_8218E7B0, 0, 6, 0x10, 9, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackEnd56Desc46RisingScaleAlphaFade, &D_8218E7B0, 0, 6, 0x10, 9, 0, 0);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 2, 2, BattleAnim_CallbackEndEffects54And56Descriptor3DRisingColorScaleFade, &D_8218E770, 0, 4, 0x10, 9, 0, 0);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 2, 2, BattleAnim_EmberSpreadScaleAlphaRise, &D_8218E7B8, 0, 4, 0x10, 9, 0, 0);
 }
@@ -2189,8 +2274,8 @@ void BattleAnim_InitializeFirePunchHit(void) {
     func_8213B794(2, 0, 0x40, 8, 0xC8);
     func_8213BC00(2, 9, 0xC8, 0, 0x10);
     func_8213B560(0, &BattleAnim_RunFirePunchHitEffect, &D_8218E7B0, 0, 3, 0x10, 9, 0, 0);
-    func_8213B560(0xA, &BattleAnim_RunAfterImpactSmoke, &D_8218E7B0, 0, 8, 0x11, 9, 0, 0);
-    func_8213B5D8(0xC, 2, 2, &BattleAnim_RunFirePunchLingeringHitSpark, &D_8218E770, 0, 4, 0x11, 9, 0, 0);
+    func_8213B560(10, &BattleAnim_RunAfterImpactSmoke, &D_8218E7B0, 0, 8, 0x11, 9, 0, 0);
+    func_8213B5D8(12, 2, 2, &BattleAnim_RunFirePunchLingeringHitSpark, &D_8218E770, 0, 4, 0x11, 9, 0, 0);
 }
 
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32); /* extern */
@@ -2210,9 +2295,9 @@ extern M2C_UNK func_82145718;
 void BattleAnim_InitializeFireBlastFlamethrowerUseSmoke(void) {
     func_8213C220(0x64, 1);
     func_8213B644(0, 8, 6);
-    func_8213B5D8(0, 2, 0x3C, &func_82144E24, &D_8218E7F8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
-    func_8213B5D8(0, 4, 0x1E, &BattleAnim_CallbackFireSmokeParticle, &D_8218E770, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
-    func_8213B5D8(0, 4, 0x1E, &func_82145718, &D_8218E7F8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
+    func_8213B5D8(0, 2, 60, &func_82144E24, &D_8218E7F8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
+    func_8213B5D8(0, 4, 30, &BattleAnim_CallbackFireSmokeParticle, &D_8218E770, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
+    func_8213B5D8(0, 4, 30, &func_82145718, &D_8218E7F8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
 }
 
 extern ParticleDescriptor D_8218E588[86];
@@ -2223,11 +2308,11 @@ extern M2C_UNK D_8218E7F0;
  * ran for exactly Flamethrower.
  */
 void BattleAnim_InitializeFlamethrowerHit(void) {
-    BattleAnim_SpawnDrainFlameHueChange(0xA, 0x9, 0xE, 8, 0xC8, 0x10);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 2, 0x14, BattleAnim_RunFlamethrowerHitRotationWeak, &D_8218E7F0, 0, 1, 0x11, 9, 0, 0);
+    BattleAnim_SpawnDrainFlameHueChange(10, 0x9, 0xE, 8, 0xC8, 0x10);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 2, 20, BattleAnim_RunFlamethrowerHitRotationWeak, &D_8218E7F0, 0, 1, 0x11, 9, 0, 0);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 2, 2, BattleAnim_RunFlamethrowerHitRotationStrong, &D_8218E7F0, 0, 0xC, 0x11, 9, 0, 0);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(14, 8, 5, BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade, &D_8218E770, 0, 2, 0x11, 9, 0, 0);
-    BattleAnim_SpawnOwnerTintRampDetach(0x3C, 0xE, 0xC8, 0, 8);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(14, 8, 5, BattleAnim_CallbackEnd15And22And59Desc3DSpinFade, &D_8218E770, 0, 2, 0x11, 9, 0, 0);
+    BattleAnim_SpawnOwnerTintRampDetach(60, 0xE, 0xC8, 0, 8);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(58, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x33, 0);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(60, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x33, 0);
 }
@@ -2248,9 +2333,9 @@ extern M2C_UNK func_82145718;
  */
 void BattleAnim_InitializeDragonRageUse(void) {
     func_8213B644(0, 8, 6);
-    func_8213B5D8(0, 2, 0x3C, &func_82144E24, &D_8218E7F8, 0, 1, 0x11, (s32) D_8219A80A, 1, 0);
-    func_8213B5D8(0, 4, 0x1E, &BattleAnim_CallbackFireSmokeParticle, &D_8218E770, 0, 1, 0x11, (s32) D_8219A80A, 1, 0);
-    func_8213B5D8(0, 4, 0x1E, &func_82145718, &D_8218E7F8, 0, 1, 0x11, (s32) D_8219A80A, 1, 0);
+    func_8213B5D8(0, 2, 60, &func_82144E24, &D_8218E7F8, 0, 1, 0x11, (s32) D_8219A80A, 1, 0);
+    func_8213B5D8(0, 4, 30, &BattleAnim_CallbackFireSmokeParticle, &D_8218E770, 0, 1, 0x11, (s32) D_8219A80A, 1, 0);
+    func_8213B5D8(0, 4, 30, &func_82145718, &D_8218E7F8, 0, 1, 0x11, (s32) D_8219A80A, 1, 0);
 }
 
 extern ParticleDescriptor D_8218E588[86];
@@ -2260,11 +2345,11 @@ extern ParticleDescriptor D_8218E588[86];
  * ran for exactly Dragon Rage.
  */
 void BattleAnim_InitializeDragonRageHit(void) {
-    BattleAnim_SpawnDrainFlameHueChange(0xA, 0x33, 0x2C, 8, 0xC8, 0x10);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 2, 0x14, BattleAnim_RunFlamethrowerHitRotationWeak, &D_8218E7F0, 0, 1, 0x11, 9, 1, 0);
+    BattleAnim_SpawnDrainFlameHueChange(10, 0x33, 0x2C, 8, 0xC8, 0x10);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 2, 20, BattleAnim_RunFlamethrowerHitRotationWeak, &D_8218E7F0, 0, 1, 0x11, 9, 1, 0);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 2, 2, BattleAnim_RunFlamethrowerHitRotationStrong, &D_8218E7F0, 0, 0xC, 0x11, 9, 1, 0);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(14, 8, 5, BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade, &D_8218E770, 0, 2, 0x11, 9, 1, 0);
-    BattleAnim_SpawnOwnerTintRampDetach(0x3C, 0x2C, 0xC8, 0, 8);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(14, 8, 5, BattleAnim_CallbackEnd15And22And59Desc3DSpinFade, &D_8218E770, 0, 2, 0x11, 9, 1, 0);
+    BattleAnim_SpawnOwnerTintRampDetach(60, 0x2C, 0xC8, 0, 8);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(58, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x18, 0);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(60, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x18, 0);
 }
@@ -2285,9 +2370,9 @@ extern M2C_UNK func_82145718;
  */
 void BattleAnim_InitializeFireSpinUse(void) {
     func_8213B644(0, 8, 6);
-    func_8213B5D8(0, 2, 0x50, &func_82144E24, &D_8218E7F8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
-    func_8213B5D8(0, 4, 0x28, &BattleAnim_CallbackFireSmokeParticle, &D_8218E770, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
-    func_8213B5D8(0, 4, 0x28, &func_82145718, &D_8218E7F8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
+    func_8213B5D8(0, 2, 80, &func_82144E24, &D_8218E7F8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
+    func_8213B5D8(0, 4, 40, &BattleAnim_CallbackFireSmokeParticle, &D_8218E770, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
+    func_8213B5D8(0, 4, 40, &func_82145718, &D_8218E7F8, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
 }
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
@@ -2338,7 +2423,7 @@ void BattleAnim_InitializeEggBombHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(6, BattleAnim_RunBackgroundBombExplosion, &D_8218E7B0, 0, 3, 0x10, 9, 0x2C, 1);
     BattleAnim_CreateEffectSlotForCurrentOwner(12, BattleAnim_RunBackgroundBombExplosion, &D_8218E7B0, 0, 3, 0x10, 9, 0x1A, 1);
     BattleAnim_CreateEffectSlotForCurrentOwner(18, BattleAnim_RunBackgroundBombExplosion, &D_8218E7B0, 0, 2, 0x10, 9, 0x1A, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(20, BattleAnim_CallbackEndEffect40Descriptor48SpreadScaleAlphaFade, &D_8218E7C0, 0, 3, 0x11, 9, 0x1A, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(20, BattleAnim_CallbackEnd40Desc48SpreadScaleAlphaFade, &D_8218E7C0, 0, 3, 0x11, 9, 0x1A, 0);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(20, 2, 2, BattleAnim_CallbackEndEffect40Descriptor3DSpreadRisingColorFade, &D_8218E770, 0, 6, 0x11, 9, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(24, BattleAnim_CallbackEndEffects40And54Descriptor46SpreadScaleFade, &D_8218E7B0, 0, 8, 0x11, 9, 0, 0);
 }
@@ -2359,12 +2444,12 @@ void BattleAnim_DefaultEndEffect_Init(void) {
  */
 void BattleAnim_InitializeFireBlastHit(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0xFF, 0);
-    BattleAnim_SpawnDrainFlameHueChange(0xA, 9, 0xE, 8, 0xC8, 0x10);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(4, 8, 0x14, BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade, &D_8218E580[0x3E], 0, 2, 0xE, 0, 0, 0);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(4, 8, 0x14, BattleAnim_CallbackEndEffect59Descriptor4FColorScaleFade, &D_8218E580[0x4F], 0, 2, 9, 0, 0, 0);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 6, 0x28, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 0, 0);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 0x3C, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 1, 0);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 0x3C, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 2, 0);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 3, 0x50, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 3, 0);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 3, 0x50, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 4, 0);
+    BattleAnim_SpawnDrainFlameHueChange(10, 9, 0xE, 8, 0xC8, 0x10);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(4, 8, 20, BattleAnim_CallbackEnd15And22And59Desc3DSpinFade, &D_8218E580[0x3E], 0, 2, 0xE, 0, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(4, 8, 20, BattleAnim_CallbackEndEffect59Descriptor4FColorScaleFade, &D_8218E580[0x4F], 0, 2, 9, 0, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 6, 40, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 60, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 1, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 60, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 2, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 3, 80, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 3, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 3, 80, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 4, 0);
 }

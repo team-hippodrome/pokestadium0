@@ -104,8 +104,8 @@ void BattleAnim_DrawFlameHit(Particle* arg0, CameraNode* arg1) {
 }
 
 /**
- * Draw the flames when using Flamethrower, Dragon Rage, Fire Spin, Rage, Bide, Self-Destruct, Fire Blast, Sky Attack,
- * or Explosion
+ * Draw the flames when using Flamethrower, Dragon Rage, Fire Spin, Rage, Bide, Self-Destruct, Fire
+ * Blast, Sky Attack, or Explosion
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
@@ -118,6 +118,8 @@ void BattleAnim_DrawFlameUse(Particle* arg0, CameraNode* arg1) {
 }
 
 /**
+ * Draws a sleep-move Z mark: a billboard at the particle with the 32x64 I4 texture, white prim and
+ * env with the particle's alpha, translucent render mode.
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Sing, Sleep Powder, Hypnosis, Lovely Kiss and Spore.
  */
@@ -128,7 +130,7 @@ void BattleAnim_DrawSleepMoveAnimatedI4(Particle* arg0, CameraNode* arg1) {
 
     ParticleGfx_LoadTextureI4WrapSTNoMirror(sBattleAnimAssetPointers[0x1F], 0x20, 0x40);
     ParticleGfx_SetAnimatedTileSize(0, 8, 0x20, 0x40);
-    ParticleGfx_SetPrimEnvColorShadeCombine(0xFF, 0xFF, 0xFF, arg0->prim_a, 0xFF, 0xFF, 0xFF, 0xFF);
+    ParticleGfx_SetPrimEnvColorShadeCombine(0xFF, 0xFF, 0xFF, arg0->prim_a, 0xFF, 0xFF, 0xFF, 0xFF); // prim #FFFFFF, env #FFFFFF
 
     gDPSetRenderMode(gDisplayListHead++, G_RM_PASS, G_RM_AA_ZB_XLU_SURF2);
     gSPDisplayList(gDisplayListHead++, sBattleAnimAssetPointers[0x20]);
@@ -492,7 +494,7 @@ void BattleAnim_DrawAsset1BI4TriangleA(Particle* arg0, UNUSED CameraNode* arg1) 
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     ParticleGfx_LoadTextureI4Alias(sBattleAnimAssetPointers[0x1B], 0x10, 0x100);
-    ParticleGfx_SetPrimEnvColorCombine(0xFF, 0xFF, 0xFF, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->prim_a);
+    ParticleGfx_SetPrimEnvColorCombine(0xFF, 0xFF, 0xFF, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->prim_a); // prim #FFFFFF, env from the particle
     ParticleGfx_DrawTransformedTriangle(arg0->worldPosition, arg0->rotation, arg0->scale, gVtx_UI_TriangleSmall);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -509,7 +511,7 @@ void ParticleGfx_DrawTriangleAsset1B(Particle* particle, UNUSED CameraNode* came
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     ParticleGfx_LoadTextureI4Alias(sBattleAnimAssetPointers[0x1B], 0x10, 0x100);
-    ParticleGfx_SetPrimEnvColorCombine(0xFF, 0xFF, 0xFF, particle->prim_r, particle->prim_g, particle->prim_b, particle->prim_a);
+    ParticleGfx_SetPrimEnvColorCombine(0xFF, 0xFF, 0xFF, particle->prim_r, particle->prim_g, particle->prim_b, particle->prim_a); // prim #FFFFFF, env from the particle
     ParticleGfx_DrawTransformedTriangle(particle->worldPosition, particle->rotation, particle->scale, D_82190D60);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);
@@ -526,7 +528,7 @@ void BattleAnim_DrawAsset13FrameDiv2I4Quad(Particle* arg0, UNUSED CameraNode* ar
     gSPClearGeometryMode(gDisplayListHead++, G_CULL_BACK);
 
     ParticleGfx_LoadTextureI4Alias(sBattleAnimAssetPointers[0x13] + ((gParticleFrameDiv2 & 7) * 0x600), 0x20, 0x60);
-    ParticleGfx_SetPrimEnvColorCombine(0xFF, 0xFF, 0xFF, 0, 0x64, 0xC8, 0xFF);
+    ParticleGfx_SetPrimEnvColorCombine(0xFF, 0xFF, 0xFF, 0, 0x64, 0xC8, 0xFF); // prim #FFFFFF, env #0064C8
     ParticleGfx_DrawTransformedQuad(arg0->worldPosition, arg0->rotation, arg0->scale, gVtx_UI_ComplexQuad);
 
     gSPSetGeometryMode(gDisplayListHead++, G_CULL_BACK);

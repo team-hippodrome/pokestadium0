@@ -122,11 +122,12 @@ void BattleAnim_ConfuseRayAmnesiaModelAnimWait(Particle* arg0) {
 }
 
 /**
+ * Effect script for Amnesia's use: a marker at frame 85 and three model particles.
  * Effect start init 12 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Amnesia.
  */
 void BattleAnim_InitializeAmnesiaUse(void) {
-    BattleAnim_SpawnCategory17MarkerSlot(0x55, 1);
+    BattleAnim_SpawnCategory17MarkerSlot(85, 1);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_ConfuseRayAmnesiaModelAnimWait, &gDefaultParticleDescriptor, 0x1E, 3, 6, 0, 0, 0);
 }
 
@@ -199,10 +200,12 @@ void BattleAnim_OffsetParticleForSpecies(s8* arg0) {
 }
 
 /**
- * Moves: Barrier (use), Light Screen (use), Reflect (use)
- * TODO: Human contributor add screenshot
- * Effect start init 14 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
- * it ran for exactly Barrier, Light Screen, Reflect.
+ * Effect script for the screen moves: spawns the particle model and queues 15 frames of spawn
+ * delay, then by move: Barrier spawns 8 particles every 16 frames; Light Screen and Reflect also
+ * get a global tint fade, a user hue pulse and a white flash. Moves: Barrier (use), Light Screen
+ * (use), Reflect (use) TODO: Human contributor add screenshot Effect start init 14
+ * (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it ran for exactly
+ * Barrier, Light Screen, Reflect.
  */
 void BattleAnim_InitializeScreenMove(void) {
     s32 temp_v0;
@@ -211,16 +214,16 @@ void BattleAnim_InitializeScreenMove(void) {
     func_8213B464(0xF);
     temp_v0 = func_8213646C();
     switch (temp_v0) {                              /* irregular */
-    case 0x70:
+    case BARRIER:
         func_8213B5D8(0, 0x10, 8, &func_821624FC, &D_8218E7A0, 0, 4, 0xB, 0, 0x18, 5);
         return;
-    case 0x71:
+    case LIGHT_SCREEN:
         func_8213B644(0, 0x10, 0x1E);
         func_8213BC7C(0, 0, 8, 0, 0xFF, 0x30);
         func_8213B5D8(0, 0x10, 8, &func_821624FC, &D_8218E7A0, 0, 8, 0xB, 0, 0x17, 5);
         func_8213B6AC(0, 1, 0x20, 8, 0xFF);
         return;
-    case 0x73:
+    case REFLECT:
         func_8213B644(0, 0x10, 0x1E);
         func_8213BC7C(0, 0, 8, 0, 0xFF, 0x30);
         func_8213B5D8(0, 0x10, 8, &func_821624FC, &D_8218E7A0, 0, 8, 0xB, 0, 0, 5);
@@ -282,6 +285,8 @@ void BattleAnim_AllocateReflectiveTextureDisplayList(s32 arg0, arg1_func_84344CE
 }
 
 /**
+ * Sets the particle's scale from the owner's species (1.2 by default; larger for big Pokémon such
+ * as Aerodactyl, smaller for Pikachu). The height offset it adds is 0.
  * Seen in play (2026-11-13) (unattended all-Metronome Free Battle with randomized teams, battle 0
  * turn 8): ran. The move was not logged.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
@@ -409,7 +414,7 @@ void BattleAnim_BuildEffect125DisplayList(Gfx* arg0, u16 arg1) {
 
     gDPPipeSync(arg0++);
 
-    gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, tmp->alpha);
+    gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, tmp->alpha); // #FFFFFF
 
     ParticleGfx_SetAnimatedTileSizeOnList(arg0++, 1, 1, 0x20, 0x20);
     ParticleGfx_SetAnimatedAuxTileSizeOnList(arg0++, 2, 2, 0x20, 0x20);
@@ -439,7 +444,7 @@ void BattleAnim_AllocateEffect125DisplayList(s32 arg0, arg1_func_84344CE8* arg1)
  */
 void BattleAnim_StartEffect123ModelBurst(void) {
     func_8213B560(0, &func_82154EA4, &D_8218E580, 0x1E, 1, 7, 0, 0, 0);
-    func_8213B560(0x14, &BattleAnim_CallbackModelBurstAlphaFade, &D_8218E580, 0x50, 1, 0, 0, 0x33, 0);
+    func_8213B560(20, &BattleAnim_CallbackModelBurstAlphaFade, &D_8218E580, 0x50, 1, 0, 0, 0x33, 0);
 }
 
 /**
@@ -485,6 +490,8 @@ void BattleAnim_InitEffect65Overlay(Particle* arg0) {
 }
 
 /**
+ * Particle callback for the powder/spore overlay: inits it as the effect 65 overlay, then fades
+ * its alpha up to 0xFF.
  * Moves: Poison Powder (use), Sleep Powder (use), Spore (use), Stun Spore (use)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -503,13 +510,15 @@ void BattleAnim_RunSporePowderMoveOverlay(Particle* arg0) {
 }
 
 /**
+ * Effect script for the powder overlays: two full-screen overlays at frame 8 and 20 powder cloud
+ * particles, 3 frames apart.
  * Effect start init 65 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Poison Powder, Sleep Powder, Spore, Stun Spore.
  */
 void ParticleEffect_RegisterParticleNodes(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_RunSporePowderMoveOverlay, &gBattleAnimParticleDescriptors[0x32], 0, 1, 0x18, 0, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_RunSporePowderMoveOverlay, &gBattleAnimParticleDescriptors[0x31], 0, 1, 0x18, 0, 0, 0);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 3, 0x14, BattleAnim_PowderCloudScaleMotion, &gBattleAnimParticleDescriptors[0x46], 0, 1, 0x10, 0x64, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 3, 20, BattleAnim_PowderCloudScaleMotion, &gBattleAnimParticleDescriptors[0x46], 0, 1, 0x10, 0x64, 0, 0);
 }
 
 /**
@@ -532,6 +541,8 @@ void BattleAnim_InitEffect28Overlay(Particle* arg0) {
 }
 
 /**
+ * Particle callback for the gas overlay: inits it as the effect 28 overlay, then fades its alpha
+ * up to 0xB4.
  * Moves: Haze (use), Mist (use), Poison Gas (use), Smog (use), Smokescreen (use)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -582,6 +593,7 @@ void BattleAnim_InitializeMistUse(void) {
 }
 
 /**
+ * Inits a Leech Seed seed particle: scale 0.2, palette pair 0x0D, full alpha.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Leech Seed.
  */
@@ -612,10 +624,12 @@ void BattleAnim_LeechSeedParticleUpdate(Particle* arg0) {
         Particle_DisableAndDetach(arg0);
         break;
     }
-    func_82140228(arg0, 0x3DCCCCCD, 0x3C23D70A);
+    func_82140228(arg0, 0x3DCCCCCD, 0x3C23D70A); // 0.1f, 0.01f
 }
 
 /**
+ * Inits a Leech Seed particle: scale 0.5, speed 4.5, a random upward rotationX and rotationY, a
+ * start delay of twice its spawn index, and hidden until the delay ends.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Leech Seed.
  */
@@ -705,7 +719,7 @@ void BattleAnim_InitEffect31Model(Particle* arg0) {
  * breakpoint): ran only for Leech Seed.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackMove73EndEffect31SpawnDescriptor42(Particle* particle) {
+void BattleAnim_CallbackMove73End31SpawnDesc42(Particle* particle) {
     s16 temp_v0;
 
     temp_v0 = particle->lifecycle;
@@ -730,6 +744,8 @@ void BattleAnim_CallbackMove73EndEffect31SpawnDescriptor42(Particle* particle) {
 }
 
 /**
+ * Effect script for Leech Seed's use: 5 seed emitters every 4 frames and 3 rising particles every
+ * 8 frames.
  * Effect start init 8 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Leech Seed.
  */
@@ -739,6 +755,8 @@ void BattleAnim_InitializeLeechSeedUse(void) {
 }
 
 /**
+ * Effect script for Leech Seed's hit: spawns a seed particle on each of the owner's anchors, at
+ * most 8.
  * Effect end init 31 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Leech Seed.
  */
@@ -751,7 +769,7 @@ void BattleAnim_InitializeLeechSeedHit(void) {
     if (end != 0) {
         for (i = 0; i < end; i++) {
             tmp = gBattleAnimCurrentOwner->displayObject.anchors[i].id;
-            BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackMove73EndEffect31SpawnDescriptor42, &gDefaultParticleDescriptor, 0, 1, 0x10, tmp, 0, 0);
+            BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackMove73End31SpawnDesc42, &gDefaultParticleDescriptor, 0, 1, 0x10, tmp, 0, 0);
             var_s2++;
             if (var_s2 >= 8) {
                 break;
@@ -800,6 +818,8 @@ void ParticleEffect_CreateSimpleDL(s32 arg0, arg1_func_84344CE8* arg1) {
 }
 
 /**
+ * Inits the Blizzard hit model particle: allocates a display context with model 0x30 at scale 5.3
+ * and alpha 0, or detaches the particle if no context is free.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Blizzard.
  */
@@ -833,11 +853,14 @@ void BattleAnim_BlizzardParticleUpdate(s8 *arg0) {
         break;
     }
     if (Particle_IsRunning(arg0) != 0) {
-        ParticleMath_GetPointAlongView(arg0 + 0x4C, 0x45674000);
+        ParticleMath_GetPointAlongView(arg0 + 0x4C, 0x45674000); // 3700.0f
     }
 }
 
 /**
+ * Inits a Blizzard snow particle: start delay of twice its spawn index, recolored from its palette
+ * pair, shrinking from scale 1.2 to 1.0, random velocity, raised by 10, speed 8 to 12.5 and alpha
+ * 0xC8; hidden until the delay ends.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Blizzard.
  */
@@ -856,7 +879,7 @@ void BattleAnim_SetupBlizzard(Particle* arg0) {
     Particle_SetScaleStep(arg0, 0.02f);
     Particle_SetRandomVelocityXYZ(arg0, 5, 0xF, 0xF);
     Particle_PositionOffset_AddYScaled_08E90(arg0, 10.0f);
-    Particle_StepMagnitude_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0xA) * 0.5f) + 8.0f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(10) * 0.5f) + 8.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp22);
     Particle_SetPrimAlpha(arg0, 0xC8);
     Particle_ScratchA_SetS16_0BF4C(arg0, 4);
@@ -865,6 +888,8 @@ void BattleAnim_SetupBlizzard(Particle* arg0) {
 }
 
 /**
+ * Particle callback for a Blizzard snow particle: waits out the start delay, then shows it,
+ * animates frames 1 to 7, moves it forward and fades it out to alpha 0x40.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Blizzard.
  */
@@ -916,9 +941,9 @@ void BattleAnim_InitializeBlizzardHit(void) {
     func_8213BE70(4, 8, 0x33, 8, 0xC8, 0x18);
     func_8213B458(4);
     func_8213B5D8(0, 4, 6, &BattleAnim_RunBlizzard, &D_8218E7D0, 0, 4, 0xB, 9, 0x13, 0);
-    func_8213B5D8(0, 2, 0xC, &func_821626F4, &D_8218E7A0, 0, 4, 0xB, 9, 0x18, 0xB);
+    func_8213B5D8(0, 2, 12, &func_821626F4, &D_8218E7A0, 0, 4, 0xB, 9, 0x18, 0xB);
     func_8213B5D8(0, 5, 4, &BattleAnim_RunBlizzardHitUpwardColdAir, &D_8218E650, 0, 6, 0x10, (s32) D_8219A80A, 0x26, 0);
-    func_8213B644(0x32, 0x20, 8);
+    func_8213B644(50, 0x20, 8);
 }
 
 /**
@@ -933,7 +958,7 @@ void ParticleEffect_DrawNode(Gfx* arg0, s32 arg1, u16 arg2) {
     Particle* temp_v0 = BattleAnim_GetOwnerContextParticle(D_8006049C);
 
     gDPPipeSync(arg0++);
-    gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, temp_v0->prim_a);
+    gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, temp_v0->prim_a); // #FFFFFF
 
     arg0 = BattleAnim_BuildAnimatedTileDisplayListFromStruct(arg0, arg1, 0x40, 6, -4, 0xF, 0, 0, -0xF, 5, 0, 0);
 
@@ -1060,6 +1085,8 @@ void BattleAnim_InitMove146Model(Particle* arg0) {
 }
 
 /**
+ * Particle callback for Dizzy Punch's hit model: inits move model 146, waits for its animation to
+ * finish, then detaches.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Dizzy Punch.
  */
@@ -1082,6 +1109,7 @@ void BattleAnim_RunDizzyPunchHitEffect(Particle* arg0) {
 }
 
 /**
+ * Effect script for Dizzy Punch's hit: three Dizzy Punch hit models (variants 0 to 2).
  * Effect end init 6 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Dizzy Punch.
  */
@@ -1139,7 +1167,7 @@ void BattleAnim_InitEffect49Model(Particle* arg0) {
  * wrong). Not reached in play.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-void BattleAnim_CallbackEndEffect49Model33Anim34WaitCleanup(Particle* arg0) {
+void BattleAnim_CallbackEnd49Model33Anim34WaitCleanup(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
             func_82156654(arg0);
@@ -1158,6 +1186,8 @@ void BattleAnim_CallbackEndEffect49Model33Anim34WaitCleanup(Particle* arg0) {
 }
 
 /**
+ * Particle callback for end effect 21: inits its model, waits for the animation to finish, then
+ * detaches.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
@@ -1223,7 +1253,7 @@ void BattleAnim_AllocateEffect49DisplayList(s32 arg0, arg1_func_84344CE8* arg1) 
  * @unverified Name from Stadium 1.
  */
 void ParticleEffect_RegisterColorAnim(void) {
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffect49Model33Anim34WaitCleanup, &gDefaultParticleDescriptor, 0, 1, 2, gBattleAnimCurrentAnchor, 1, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEnd49Model33Anim34WaitCleanup, &gDefaultParticleDescriptor, 0, 1, 2, gBattleAnimCurrentAnchor, 1, 0);
 }
 
 /**
@@ -1250,6 +1280,8 @@ void BattleAnim_InitializeDrainingMoveHit(void) {
 }
 
 /**
+ * Inits Fly's rising model particle: model 0x35 at scale 5.0, 100 units below the owner, alpha 0;
+ * detaches if no display context is free.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Fly, Teleport.
  */
@@ -1301,13 +1333,15 @@ void BattleAnim_InitializeFlyUse(void) {
 }
 
 /**
+ * Effect script for Teleport's use: a rising model, the owner fading out, and the owner fading
+ * back in at frame 45.
  * Effect start init 86 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Teleport.
  */
 void BattleAnim_InitializeTeleportUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunFlyUpwardMovementEffect, &gDefaultParticleDescriptor, 0x40, 1, 0xA, 0, 0, 0);
     BattleAnim_SpawnInvisibility(0, 0xFF, 0, 0x10);
-    BattleAnim_SpawnInvisibility(0x2D, 0, 0xFF, 0x20);
+    BattleAnim_SpawnInvisibility(45, 0, 0xFF, 0x20);
 }
 
 /**
@@ -1327,7 +1361,7 @@ void BattleAnim_BuildEffect63DisplayList(Gfx* arg0, s32 arg1, u16 arg2) {
 
     gDPPipeSync(arg0++);
 
-    gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, sp28->prim_a);
+    gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, sp28->prim_a); // #FFFFFF
     gDPSetEnvColor(arg0++, 255, 55, 100, 255); // #FF3764FF
 
     gSPEndDisplayList(arg0++);
@@ -1361,7 +1395,7 @@ void BattleAnim_BuildEffect75DisplayList(Gfx* arg0, UNUSED s32 arg1, UNUSED u16 
 
     gDPPipeSync(arg0++);
 
-    gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, temp_v0->prim_a);
+    gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, temp_v0->prim_a); // #FFFFFF
     gDPSetEnvColor(arg0++, 255, 255, 100, 255); // #FFFF64FF
 
     gSPEndDisplayList(arg0++);
@@ -1383,6 +1417,9 @@ void BattleAnim_AllocateEffect75DisplayList(s32 arg0, arg1_func_84344CE8* arg1) 
 }
 
 /**
+ * Inits a rock model particle: variant 0 uses model 0x36 with animation 0x37 at scale 0.75, any
+ * other variant model 0x61 with animation 0x62 at scale 1.0. Detaches if no display context is
+ * free.
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Strength, Rock Throw and Rock Slide.
  */
@@ -1405,6 +1442,7 @@ void BattleAnim_InitRockModel(Particle* arg0) {
 }
 
 /**
+ * Particle callback for a rock model: inits it, waits for its animation to finish, then detaches.
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Strength, Rock Throw and Rock Slide.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
@@ -1481,7 +1519,7 @@ void BattleAnim_InitEffects10And50Model(Particle* arg0) {
                 Particle_SetScaleScaled(arg0, 1.5f);
                 break;
         }
-        Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
+        Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF); // #FFFFFF
         Particle_AdvanceLifecycle(arg0);
     } else {
         Particle_DisableAndDetach(arg0);
@@ -1489,6 +1527,8 @@ void BattleAnim_InitEffects10And50Model(Particle* arg0) {
 }
 
 /**
+ * Particle callback for a falling rock: inits it, waits 10 frames, then darkens it (red and green
+ * toward 0) until its model animation finishes, then detaches.
  * Moves: Rock Slide (hit), Rock Throw (hit), Strength (hit)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -1503,7 +1543,7 @@ void BattleAnim_RunFallingRock(Particle* arg0) {
         func_82156F70(arg0);
         return;
     case 2:
-        func_8213CA80(arg0, 0xA);
+        func_8213CA80(arg0, 10);
         return;
     case 3:
         Particle_ApproachPrimRed(arg0, 0, 0x10);
@@ -1520,6 +1560,8 @@ void BattleAnim_RunFallingRock(Particle* arg0) {
 }
 
 /**
+ * Sets the rock particle's scale and height from the owner's species (scale 0.6 and no lift by
+ * default; bigger and higher for large Pokémon).
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Strength, Rock Throw and Rock Slide.
  */
@@ -1582,6 +1624,8 @@ void BattleAnim_ApplyRockSpeciesScaleOffset(Particle* arg0) {
 }
 
 /**
+ * Inits a rock model particle with model 0x38, sized for the owner's species, at alpha 0. Detaches
+ * if no display context is free.
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Strength, Rock Throw and Rock Slide.
  */
@@ -1598,6 +1642,7 @@ void BattleAnim_InitRockModel38(Particle* arg0) {
 }
 
 /**
+ * Particle callback for a rock model: inits it, then fades it in to full alpha.
  * Seen in play (2026-11-13) in the 165-move sweep (Strength, Rock Throw): step 1 attached a model
  * and set prim alpha to 0; step 2 then raised prim alpha by 4 per frame (0, 4, 8, ...).
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
@@ -1628,7 +1673,7 @@ void Gfx_DrawParticleAlpha(Gfx* arg0, s32 arg1, u16 arg2) {
 
     gDPPipeSync(arg0++);
 
-    gDPSetPrimColor(arg0++, 0, 0xC8, 255, 255, 255, temp_v0->prim_a);
+    gDPSetPrimColor(arg0++, 0, 0xC8, 255, 255, 255, temp_v0->prim_a); // #FFFFFF
     gDPSetEnvColor(arg0++, 255, 155, 0, 255); // #FF9B00FF
 
     arg0 = BattleAnim_BuildAnimatedTileDisplayListFromStruct(arg0, arg1, 0x20, 5, 1, 0, 0, 0, -1, 0, 0, 0);
@@ -1664,7 +1709,7 @@ void Gfx_DrawParticleTexture4b(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
 
     gDPPipeSync(arg0++);
 
-    gDPSetPrimColor(arg0++, 0, 0, 255, 255, 255, temp_v0->prim_r);
+    gDPSetPrimColor(arg0++, 0, 0, 255, 255, 255, temp_v0->prim_r); // #FFFFFF
     gDPSetEnvColor(arg0++, 255, 155, 0, 255); // #FF9B00FF
     gDPSetCombineLERP(arg0++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED,
                       0, 0, 0, COMBINED);
@@ -1704,7 +1749,7 @@ void Gfx_DrawParticleGreenPrim(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
 
     gDPPipeSync(arg0++);
 
-    gDPSetPrimColor(arg0++, 0, 0, 255, 255, 255, temp_v0->prim_g);
+    gDPSetPrimColor(arg0++, 0, 0, 255, 255, 255, temp_v0->prim_g); // #FFFFFF
     gDPSetEnvColor(arg0++, 255, 255, 0, 255); // #FFFF00FF
     gDPSetCombineLERP(arg0++, PRIMITIVE, ENVIRONMENT, TEXEL0, ENVIRONMENT, TEXEL0, 0, PRIMITIVE, 0, 0, 0, 0, COMBINED,
                       0, 0, 0, COMBINED);
@@ -1742,6 +1787,8 @@ void BattleAnim_InitializeRockThrowRockSlideUse(void) {
 }
 
 /**
+ * Effect script for the Rock Slide and Rock Throw hit: seven falling rock models over frames 0 to
+ * 13, and rising particles 3 at a time every 2 frames from frame 10.
  * Effect end init 10 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Rock Slide, Rock Throw.
  */
@@ -1757,6 +1804,7 @@ void BattleAnim_InitializeRockSlideRockThrowHit(void) {
 }
 
 /**
+ * Effect script for Strength's use: two rock models, one fading in.
  * Effect start init 75 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Strength.
  */
@@ -1766,6 +1814,8 @@ void BattleAnim_InitializeStrengthUse(void) {
 }
 
 /**
+ * Effect script for Strength's hit: a rock model, and rising particles 3 at a time every
+ * 2 frames from frame 10.
  * Effect end init 50 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Strength.
  */
@@ -1775,6 +1825,7 @@ void BattleAnim_InitializeStrengthHit(void) {
 }
 
 /**
+ * Effect script for Egg Bomb's use: spawns its model (slot 0x23).
  * Effect start init 64 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Egg Bomb.
  */
@@ -1783,6 +1834,8 @@ void BattleAnim_InitializeEggBombUse(void) {
 }
 
 /**
+ * Effect script for Soft-Boiled's use: spawns three egg models 8 frames apart, then at frame 95 a
+ * user hue pulse and 12 sparkles every 8 frames.
  * Seen in play (2026-11-12): Soft-Boiled used with 1P's HP lowered to 20 ran this as start effect
  * 0x42.
  */
@@ -1790,11 +1843,13 @@ void BattleAnim_InitializeSoftBoiledUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 0x24, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xA, 1, 0x24, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0x10, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xA, 2, 0x24, 0);
-    BattleAnim_SpawnOwnerTintPulseDetach(0x5F, 0, 0x8, 0, 0xFF, 8);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(95, 8, 0xC, BattleAnim_RunSparkleHit, &gBattleAnimParticleDescriptors[0x42], 0, 8, 9, 0, 0x17, 6);
+    BattleAnim_SpawnOwnerTintPulseDetach(95, 0, 0x8, 0, 0xFF, 8);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(95, 8, 12, BattleAnim_RunSparkleHit, &gBattleAnimParticleDescriptors[0x42], 0, 8, 9, 0, 0x17, 6);
 }
 
 /**
+ * Inits the strong-wind model particle: model 0x60 in effect list 7, scale 3.3, alpha 0. Detaches
+ * if no display context is free.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Gust, Whirlwind.
  */
@@ -1835,7 +1890,7 @@ void BattleAnim_CallbackStartEffect10Model60AlphaFadeIn(s8 *arg0) {
         break;
     }
     if (Particle_IsRunning(arg0) != 0) {
-        ParticleMath_GetPointAlongView(arg0 + 0x4C, 0x43480000);
+        ParticleMath_GetPointAlongView(arg0 + 0x4C, 0x43480000); // 200.0f
     }
 }
 
@@ -1885,7 +1940,7 @@ void Gfx_DrawParticleBluePrim(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 ar
     Particle* temp_v0 = BattleAnim_GetOwnerContextParticle(D_8006049C);
 
     gDPPipeSync(arg0++);
-    gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, temp_v0->prim_a);
+    gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, temp_v0->prim_a); // #FFFFFF
     gDPSetEnvColor(arg0++, 0, 255, 255, 255); // #00FFFFFF
 
     arg0 = BattleAnim_BuildAnimatedTileDisplayListFromStruct(arg0, arg1, 0x20, 5, -3, -5, 0xD, 3, 0, -2, 0xF, 2);
@@ -1928,6 +1983,8 @@ void BattleAnim_InitializeRazorWindUse(void) {
 }
 
 /**
+ * Particle callback for the boom (Explosion, Self-Destruct) use: picks model frame set 0, waits
+ * param0 frames, then detaches.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Self-Destruct, Explosion.
  */
@@ -1948,11 +2005,13 @@ void BattleAnim_RunBoomUseEffect1(Particle* arg0) {
 }
 
 /**
+ * Inits a pulse particle: scale 2.0, pushed 10 units backward, recolored from its palette pair,
+ * full alpha, texture frame 1, random Z rotation.
  * Seen in play (2026-11-13) in the 165-move sweep (Selfdestruct): it set scale to 7.2 (2.0 times
  * 3.6), moved positionOffset.x by -36 (10 along rotation.y + 0x8000), set a random rotation.z
  * (0xF0E2) and advanced the lifecycle.
  */
-void BattleAnim_CallbackStartEffects50And82ScalePulse_InitParticle(Particle* arg0) {
+void BattleAnim_CallbackStart50And82Pulse_InitParticle(Particle* arg0) {
     Particle_SetScaleScaled(arg0, 2.0f);
     Particle_AddPositionOffsetAlongRotationYPlus180(arg0, 10.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, Particle_GetByteParam1(arg0));
@@ -1963,13 +2022,15 @@ void BattleAnim_CallbackStartEffects50And82ScalePulse_InitParticle(Particle* arg
 }
 
 /**
+ * Particle callback for a boom pulse: grows to scale 10, then shrinks to 0 while fading out, then
+ * detaches.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Self-Destruct, Explosion.
  */
 void BattleAnim_RunBoomUseEffect2(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackStartEffects50And82ScalePulse_InitParticle(arg0);
+            BattleAnim_CallbackStart50And82Pulse_InitParticle(arg0);
             break;
 
         case 2:
@@ -1988,6 +2049,9 @@ void BattleAnim_RunBoomUseEffect2(Particle* arg0) {
 }
 
 /**
+ * Inits a boom smoke particle: random velocity, scale 1.5, speed 1.5, a random rotationX and
+ * rotationY, recolored from its palette pair, half alpha, a start delay of twice its spawn index;
+ * hidden until the delay ends.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Self-Destruct, Explosion.
  */
@@ -2016,6 +2080,8 @@ void BattleAnim_SetupBoomUseEffect3(Particle* arg0) {
 }
 
 /**
+ * Particle callback for a boom smoke particle: waits out the delay, then animates frames 0 to 7,
+ * grows toward scale 2.5, drifts up and outward, and fades out as green and env red drop.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Self-Destruct, Explosion.
  */
@@ -2036,7 +2102,7 @@ void BattleAnim_RunBoomUseEffect3(Particle* arg0) {
         return;
     case 3:
         Particle_AnimateFramesForwardLoopedThenAdvance(arg0, 0, 7, 1, 2, 0);
-        func_82140228(arg0, 0x40200000, 0x3E800000);
+        func_82140228(arg0, 0x40200000, 0x3E800000); // 2.5f, 0.25f
         Particle_AddVelocityFromRotationTemplate1(arg0);
         Particle_AddPosOffsetYScaled(arg0, 0.5f);
         if (func_82140690(arg0) != 0) {
@@ -2053,6 +2119,8 @@ void BattleAnim_RunBoomUseEffect3(Particle* arg0) {
 }
 
 /**
+ * Inits a rising boom smoke particle: random velocity, speed 1 to 2, recolored from its palette
+ * pair, half alpha; hidden until its delay ends.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Self-Destruct, Explosion.
  */
@@ -2065,8 +2133,8 @@ void BattleAnim_SetupBoomUseEffect4(Particle* arg0) {
     sp24 = Particle_GetByteParam1(arg0);
     Particle_FieldCE_GetS32_0C040(arg0);
     Particle_SetScaleScaled(arg0, 1.0f);
-    Particle_SetRandomVelocityXYZ(arg0, 0xF, 0xF, 0x14);
-    Particle_StepMagnitude_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0x32) * 0.02f) + 1.0f);
+    Particle_SetRandomVelocityXYZ(arg0, 15, 15, 20);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(50) * 0.02f) + 1.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp24);
     Particle_SetPrimAlpha(arg0, 0x80);
     Particle_DisableRendering(arg0);
@@ -2074,6 +2142,8 @@ void BattleAnim_SetupBoomUseEffect4(Particle* arg0) {
 }
 
 /**
+ * Particle callback for a rising boom smoke particle: waits out a delay, then animates frames 0 to
+ * 7, rises, and fades out as green and env red drop.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Self-Destruct, Explosion.
  */
@@ -2154,7 +2224,7 @@ void Particle_CreateDisplayList_CustomColors(s32 arg0, arg1_func_84344CE8* arg1)
  * breakpoint): ran only for Explosion, Selfdestruct.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackStartEffects50And82CenterModelScalePaletteFade(Particle* particle) {
+void BattleAnim_CallbackStart50And82ModelScalePalFade(Particle* particle) {
     s16 temp_v1;
 
     Particle_GetByteParam2();
@@ -2162,20 +2232,20 @@ void BattleAnim_CallbackStartEffects50And82CenterModelScalePaletteFade(Particle*
     switch (temp_v1) {                              /* irregular */
     case 1:
         func_82152730(particle, 2);
-        func_821401D4(particle, 0x3F000000);
+        func_821401D4(particle, 0x3F000000); // 0.5f
         Particle_SetScratchB(particle, 0x64);
         func_82143478(particle, 0x17);
         Particle_SetParam0(particle, 5);
         return;
     case 2:
-        func_82140228(particle, 0x40E00000, 0x3E800000);
+        func_82140228(particle, 0x40E00000, 0x3E800000); // 7.0f, 0.25f
         if (func_821406B4(particle) != 0) {
             Particle_SetParam0(particle, 5);
             return;
         }
         return;
     case 3:
-        func_82140228(particle, 0x40E00000, 0x3E800000);
+        func_82140228(particle, 0x40E00000, 0x3E800000); // 7.0f, 0.25f
         func_821437E0(particle, 0x1A, 0x19);
         if (func_82140690(particle) != 0) {
             Particle_ApproachScratchB(particle, 0, 8);
@@ -2190,6 +2260,8 @@ void BattleAnim_CallbackStartEffects50And82CenterModelScalePaletteFade(Particle*
 }
 
 /**
+ * Particle callback for a boom flash: places it at one of three offsets (by its variant), grows it
+ * toward scale 5 for 5 frames, then shifts its palette and fades it out before detaching.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Self-Destruct, Explosion.
  */
@@ -2246,6 +2318,8 @@ void BattleAnim_RunBoomUseEffect6(Particle* arg0) {
 }
 
 /**
+ * Particle callback for the boom hit flash: same as the use flash but placed 30 units forward
+ * instead of at three offsets.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Self-Destruct, Explosion.
  */
@@ -2257,21 +2331,21 @@ void BattleAnim_RunBoomHitEffect1(Particle* arg0) {
     switch (temp_v1) {                              /* irregular */
     case 1:
         func_82152730(arg0, 2);
-        func_821401D4(arg0, 0x3E800000);
+        func_821401D4(arg0, 0x3E800000); // 0.25f
         Particle_SetScratchB(arg0, 0x64);
         func_82143478(arg0, 0x17);
         Particle_SetParam0(arg0, 5);
         func_8213D644(arg0, 30.0f);
         return;
     case 2:
-        func_82140228(arg0, 0x40A00000, 0x3E99999A);
+        func_82140228(arg0, 0x40A00000, 0x3E99999A); // 5.0f, 0.3f
         if (func_821406B4(arg0) != 0) {
             Particle_SetParam0(arg0, 5);
             return;
         }
         return;
     case 3:
-        func_82140228(arg0, 0x40A00000, 0x3E99999A);
+        func_82140228(arg0, 0x40A00000, 0x3E99999A); // 5.0f, 0.3f
         func_821437E0(arg0, 0x1A, 0x19);
         if (func_82140690(arg0) != 0) {
             Particle_ApproachScratchB(arg0, 0, 8);
@@ -2286,6 +2360,8 @@ void BattleAnim_RunBoomHitEffect1(Particle* arg0) {
 }
 
 /**
+ * Inits a boom hit debris particle: like the Blizzard particle (delay, shrink, random velocity,
+ * speed 8 to 12.5) but recolored with palette 0x17.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Self-Destruct, Explosion.
  */
@@ -2302,7 +2378,7 @@ void BattleAnim_SetupBoomHitEffect2(Particle* arg0) {
     Particle_SetScaleStep(arg0, 0.02f);
     Particle_SetRandomVelocityXYZ(arg0, 5, 0xF, 0xF);
     Particle_PositionOffset_AddYScaled_08E90(arg0, 10.0f);
-    Particle_StepMagnitude_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0xA) * 0.5f) + 8.0f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(10) * 0.5f) + 8.0f);
     ParticleGfx_RecolorPrim(arg0, 0x17);
     ParticleGfx_RecolorEnv(arg0, 0x17);
     Particle_SetPrimAlpha(arg0, 0xC8);
@@ -2312,6 +2388,8 @@ void BattleAnim_SetupBoomHitEffect2(Particle* arg0) {
 }
 
 /**
+ * Particle callback for a boom hit debris particle: waits out the delay, then animates frames 1 to
+ * 7, moves it forward and drops its green toward 0.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Self-Destruct, Explosion.
  */
@@ -2347,6 +2425,8 @@ void BattleAnim_RunBoomHitEffect2(Particle* arg0) {
 }
 
 /**
+ * Inits a boom hit smoke particle: start delay, shrinking from 1.0 to 0.5, random velocity, pushed
+ * forward 10 and up 5, speed 8 to 12.5, alpha 0xB4; hidden until the delay ends.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Self-Destruct, Explosion.
  */
@@ -2363,10 +2443,10 @@ void BattleAnim_SetupBoomHitEffect3(Particle* arg0) {
     Particle_SetScaleScaled(arg0, 1.0f);
     Particle_SetScaleTarget(arg0, 0.5f);
     Particle_SetScaleStep(arg0, 0.01f);
-    Particle_SetRandomVelocityXYZ(arg0, 0xA, 0, 0xF);
+    Particle_SetRandomVelocityXYZ(arg0, 10, 0, 15);
     Particle_AddPositionOffsetAlongRotationY(arg0, 10.0f);
     Particle_PositionOffset_AddYScaled_08E90(arg0, 5.0f);
-    Particle_StepMagnitude_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(0xA) * 0.5f) + 8.0f);
+    Particle_StepMagnitude_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(10) * 0.5f) + 8.0f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp22);
     Particle_SetPrimAlpha(arg0, 0xB4);
     Particle_ScratchA_SetS16_0BF4C(arg0, 4);
@@ -2375,6 +2455,9 @@ void BattleAnim_SetupBoomHitEffect3(Particle* arg0) {
 }
 
 /**
+ * Particle callback for a boom hit smoke particle: waits out the delay, fades toward alpha 0x40
+ * while shifting to palette pair 0x16, slows down and moves forward; while visible it also shrinks
+ * and animates frames 0 to 7.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Self-Destruct, Explosion.
  */
@@ -2397,7 +2480,7 @@ void BattleAnim_RunBoomHitEffect3(Particle* arg0) {
         if (func_82140690(arg0) != 0) {
             func_821437E0(arg0, 0x16, 0x20);
         }
-        Particle_ApproachStepMagnitude(arg0, 0x40800000, 0x3F000000);
+        Particle_ApproachStepMagnitude(arg0, 0x40800000, 0x3F000000); // 4.0f, 0.5f
         func_8213E6BC(arg0);
         break;
     case 4:
@@ -2411,6 +2494,9 @@ void BattleAnim_RunBoomHitEffect3(Particle* arg0) {
 }
 
 /**
+ * Effect script for the boom (Explosion, Self-Destruct) use: a global tint fade, a charge model
+ * and a white fade-in, the pulse at frame 22, three flashes at frames 30, 34 and 38, smoke and
+ * rising particles from frame 40, and owner tint changes from frame 22 to 72.
  * Effect start init 50, start init 82 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all
  * 165 moves used: it ran for exactly Explosion, Self Destruct.
  */
@@ -2419,8 +2505,8 @@ void BattleAnim_InitializeBoomUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunBoomUseEffect1, &gDefaultParticleDescriptor, 0x19, 1, 0xE, 0, 0x27, 0);
     BattleAnim_SpawnDesc25AlphaFadeInHold(0, 0, 4, 0x8, 0x80);
     BattleAnim_CreateEffectSlotForCurrentOwner(22, BattleAnim_RunBoomUseEffect2, &D_8218E580[0x54], 0, 1, 0xC, 0, 0x33, 0);
-    BattleAnim_SpawnDesc25AlphaHoldFadeOut(0x1A, 3, 0x20, 0x8, 0xC8);
-    BattleAnim_CreateEffectSlotForCurrentOwner(27, BattleAnim_CallbackStartEffects50And82CenterModelScalePaletteFade, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0x21, 0);
+    BattleAnim_SpawnDesc25AlphaHoldFadeOut(26, 3, 0x20, 0x8, 0xC8);
+    BattleAnim_CreateEffectSlotForCurrentOwner(27, BattleAnim_CallbackStart50And82ModelScalePalFade, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0x21, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(30, BattleAnim_RunBoomUseEffect6, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0x21, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(34, BattleAnim_RunBoomUseEffect6, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0x21, 1);
     BattleAnim_CreateEffectSlotForCurrentOwner(38, BattleAnim_RunBoomUseEffect6, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0x21, 2);
@@ -2429,15 +2515,17 @@ void BattleAnim_InitializeBoomUse(void) {
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(51, 2, 2, BattleAnim_CallbackStartEffects50And82Descriptor4AAnimatedVerticalFade, &D_8218E580[0x4A], 0, 1, 9, 0, 0x1A, 0);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(52, 2, 2, BattleAnim_CallbackStartEffects50And82Descriptor4AAnimatedVerticalFade, &D_8218E580[0x4A], 0, 1, 9, 0, 0x1A, 0);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(54, 2, 2, BattleAnim_CallbackStartEffects50And82Descriptor4AAnimatedVerticalFade, &D_8218E580[0x4A], 0, 1, 9, 0, 0x1A, 0);
-    BattleAnim_SpawnOwnerTintRampDetach(0x16, 0x8, 0, 0xFF, 0x40);
-    BattleAnim_SpawnOwnerTintRampDetach(0x24, 0x8, 0xFF, 0xDC, 0xC);
-    BattleAnim_SpawnOwnerTintPaletteApproachStopAlt(0x28, 0x8, 0x17, 0x10, 0xDC);
-    BattleAnim_SpawnOwnerTintPaletteApproachStopAlt(0x38, 0x17, 0x11, 0x10, 0xDC);
+    BattleAnim_SpawnOwnerTintRampDetach(22, 0x8, 0, 0xFF, 0x40);
+    BattleAnim_SpawnOwnerTintRampDetach(36, 0x8, 0xFF, 0xDC, 0xC);
+    BattleAnim_SpawnOwnerTintPaletteApproachStopAlt(40, 0x8, 0x17, 0x10, 0xDC);
+    BattleAnim_SpawnOwnerTintPaletteApproachStopAlt(56, 0x17, 0x11, 0x10, 0xDC);
     BattleAnim_SpawnOwnerTintPaletteApproachStopAlt(0x40, 0x11, 0xE, 0x10, 0xDC);
-    BattleAnim_SpawnOwnerTintRampDetach(0x48, 0xE, 0xDC, 0xB4, 6);
+    BattleAnim_SpawnOwnerTintRampDetach(72, 0xE, 0xDC, 0xB4, 6);
 }
 
 /**
+ * Effect script for the boom hit: a global tint fade, two model fades, model particles from frame
+ * 10, smoke and color bursts from frame 12, and owner tint changes from frame 3 to 48.
  * Effect end init 81, end init 82 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165
  * moves used: it ran for exactly Explosion, Self Destruct.
  */
@@ -2447,14 +2535,14 @@ void BattleAnim_InitializeBoomHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackEndEffects81And82ModelScalePaletteFade, &gDefaultParticleDescriptor, 0, 1, 0xB, 0, 0x21, 0);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(10, 8, 4, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xC, 0, 0x8, 0);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(12, 8, 5, BattleAnim_CallbackEndEffects81And82Descriptor46AnimatedFade, &D_8218E580[0x46], 0, 5, 0x10, 9, 0x48, 0);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(12, 4, 0xA, BattleAnim_CallbackEndEffects81And82Descriptor4AAnimatedColorFade, &D_8218E580[0x4A], 0, 4, 0xB, 9, 0, 0);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(12, 4, 0xA, BattleAnim_CallbackEndEffects81And82Descriptor4FAnimatedPaletteFade, &D_8218E580[0x4F], 0, 4, 0xE, 9, 0x1A, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(12, 4, 10, BattleAnim_CallbackEndEffects81And82Descriptor4AAnimatedColorFade, &D_8218E580[0x4A], 0, 4, 0xB, 9, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(12, 4, 10, BattleAnim_CallbackEndEffects81And82Descriptor4FAnimatedPaletteFade, &D_8218E580[0x4F], 0, 4, 0xE, 9, 0x1A, 0);
     BattleAnim_SpawnOwnerTintRampDetach(3, 0x8, 0, 0xFF, 0x40);
-    BattleAnim_SpawnOwnerTintRampDetach(0xA, 0x8, 0xFF, 0xE6, 5);
+    BattleAnim_SpawnOwnerTintRampDetach(10, 0x8, 0xFF, 0xE6, 5);
     BattleAnim_SpawnOwnerTintPaletteApproachStopAlt(0x10, 0x8, 0x17, 0x10, 0xDC);
-    BattleAnim_SpawnOwnerTintPaletteApproachStopAlt(0x18, 0x17, 0x9, 0x10, 0xD2);
-    BattleAnim_SpawnOwnerTintPaletteApproachStopAlt(0x28, 0x9, 0xE, 0x10, 0xC8);
-    BattleAnim_SpawnOwnerTintRampDetach(0x30, 0xE, 0xC8, 0xB4, 6);
+    BattleAnim_SpawnOwnerTintPaletteApproachStopAlt(24, 0x17, 0x9, 0x10, 0xD2);
+    BattleAnim_SpawnOwnerTintPaletteApproachStopAlt(40, 0x9, 0xE, 0x10, 0xC8);
+    BattleAnim_SpawnOwnerTintRampDetach(48, 0xE, 0xC8, 0xB4, 6);
 }
 
 /**
@@ -2474,6 +2562,8 @@ void BattleAnim_TransformNop(UNUSED ActivePokemon* owner, UNUSED ActivePokemon* 
 }
 
 /**
+ * Inits the biting jaw model particle: model 0x55 (variant 0) or 0x63, animation 0x56, effect list
+ * 7, palette pair 0x24, alpha 0. Detaches if no display context is free.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Vise Grip, Guillotine, Bite, Clamp, Hyper Fang, Super Fang.
  */
@@ -2507,7 +2597,7 @@ void BattleAnim_SetupBitingEffect(Particle* arg0) {
  * breakpoint): ran only for Bite, Clamp, Guillotine, Hyper Fang, Super Fang, Vicegrip.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackStartEffects71And74And111SpecialModelColorCycle(s8 *arg0) {
+void BattleAnim_CallbackStart71And74And111ColorCycle(s8 *arg0) {
     s16 sp26;
     s16 temp_v1;
 
@@ -2518,7 +2608,7 @@ void BattleAnim_CallbackStartEffects71And74And111SpecialModelColorCycle(s8 *arg0
         func_821597D0(arg0);
         break;
     case 2:
-        func_8213CA80(arg0, 0xE);
+        func_8213CA80(arg0, 14);
         Particle_ApproachPrimGreen(arg0, 0xFF, 7);
         Particle_ApproachPrimBlue(arg0, 0xFF, 0x13);
         Particle_ApproachEnvGreen(arg0, 0xFF, 0x13);
@@ -2538,10 +2628,10 @@ void BattleAnim_CallbackStartEffects71And74And111SpecialModelColorCycle(s8 *arg0
     }
     if (Particle_IsRunning(arg0) != 0) {
         if (sp26 == 0) {
-            ParticleMath_GetPointAlongView(arg0 + 0x4C, 0x432A0000);
+            ParticleMath_GetPointAlongView(arg0 + 0x4C, 0x432A0000); // 170.0f
             return;
         }
-        ParticleMath_GetPointAlongView(arg0 + 0x4C, 0x430C0000);
+        ParticleMath_GetPointAlongView(arg0 + 0x4C, 0x430C0000); // 140.0f
     }
 }
 
@@ -2582,11 +2672,12 @@ void Particle_CreateDisplayList_TempColors(s32 arg0, arg1_func_84344CE8* arg1) {
 }
 
 /**
+ * Effect script for the Clamp and Vise Grip use: starts the owner model color cycle.
  * Effect start init 71 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Clamp, Vice Grip.
  */
 void BattleAnim_InitializeClampViceGripUse(void) {
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects71And74And111SpecialModelColorCycle, &gDefaultParticleDescriptor, 0, 1, 0x14, 0, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStart71And74And111ColorCycle, &gDefaultParticleDescriptor, 0, 1, 0x14, 0, 0, 0);
 }
 
 /**
@@ -2596,20 +2687,22 @@ void BattleAnim_InitializeClampViceGripUse(void) {
  */
 void BattleAnim_InitializeGuillotineUse(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x20, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects71And74And111SpecialModelColorCycle, &gDefaultParticleDescriptor, 0, 1, 0x14, 0, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStart71And74And111ColorCycle, &gDefaultParticleDescriptor, 0, 1, 0x14, 0, 0, 0);
 }
 
 /**
+ * Effect script for the biting moves' use: starts the owner model color cycle.
  * Moves: Bite (use), Hyper Fang (use), Super Fang (use)
  * TODO: Human contributor add screenshot
  * Effect start init 74 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Bite, Hyper Fang, Super Fang.
  */
 void BattleAnim_InitializeBitingMoveUse(void) {
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects71And74And111SpecialModelColorCycle, &gDefaultParticleDescriptor, 0, 1, 0x14, 0, 1, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStart71And74And111ColorCycle, &gDefaultParticleDescriptor, 0, 1, 0x14, 0, 1, 0);
 }
 
 /**
+ * Effect script for the biting moves' hit: runs the shared biting end effect.
  * Moves: Bite (hit), Clamp (hit), Hyper Fang (hit), Super Fang (hit), Vice Grip (hit)
  * TODO: Human contributor add screenshot
  * Effect end init 41 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
@@ -2628,7 +2721,7 @@ void BattleAnim_InitializeBitingMoveHit(void) {
 void BattleAnim_InitializeGuillotineHit(void) {
     func_8213BC00(0, 0xA, 0, 0xFF, 0x40);
     func_82166B34();
-    func_8213BC00(0x30, 0xA, 0xFF, 0, 2);
+    func_8213BC00(48, 0xA, 0xFF, 0, 2);
 }
 
 /**
@@ -2697,7 +2790,7 @@ void Particle_CreateDisplayList_DualTileAntiDiagonal1(s32 arg0, arg1_func_84344C
  */
 void BattleAnim_InitializeSwordsDanceUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 2, 0, 0x28, 0);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(4, 8, 0xC, BattleAnim_RunSparkleHit, &gBattleAnimParticleDescriptors[0x42], 0, 8, 9, 0, 0x22, 6);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(4, 8, 12, BattleAnim_RunSparkleHit, &gBattleAnimParticleDescriptors[0x42], 0, 8, 9, 0, 0x22, 6);
 }
 
 /**
@@ -2758,11 +2851,12 @@ void BattleAnim_CallbackStartEffect69ModelPhaseWait(Particle* arg0) {
  */
 void BattleAnim_InitializeDigBurrowUse(void) {
     func_8213B560(0, &func_82159F70, &D_8218E580, 0, 1, 0xA, 0, 0x29, 0);
-    func_8213B5D8(5, 2, 0xA, &BattleAnim_RunDigHitDust, &D_8218E7D0, 0, 2, 0xA, 0, 0x44, 9);
-    func_8213B5D8(0xA, 5, 6, &BattleAnim_RunDigHitRocks, &D_8218E708, 0, 3, 0xA, 0, 0x44, 0xB);
+    func_8213B5D8(5, 2, 10, &BattleAnim_RunDigHitDust, &D_8218E7D0, 0, 2, 0xA, 0, 0x44, 9);
+    func_8213B5D8(10, 5, 6, &BattleAnim_RunDigHitRocks, &D_8218E708, 0, 3, 0xA, 0, 0x44, 0xB);
 }
 
 /**
+ * Effect script for Dig's use: spawns the particle model for model slot 0x16.
  * Seen in play (2026-11-12): Dig's second turn, the attack out of the ground, ran this as start
  * effect 0x34. The first turn uses 0x45 (BattleAnim_InitializeDigBurrowUse).
  */
@@ -2771,6 +2865,8 @@ void BattleAnim_InitializeDigUse(void) {
 }
 
 /**
+ * Effect script for Dig's hit: spawns the particle model, three hit sparks, then after 4 frames
+ * the dust and rock particles.
  * Seen in play (2026-11-12): Dig's second turn ran this as end effect 0x4E.
  */
 void BattleAnim_InitializeDigHit(void) {
@@ -2781,25 +2877,29 @@ void BattleAnim_InitializeDigHit(void) {
 }
 
 /**
+ * Effect script for Kinesis's use: its model, a marker at frame 40, and 3 sparkles every 4
+ * frames from frame 4.
  * Effect start init 55 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Kinesis.
  */
 void BattleAnim_InitializeKinesisUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 0xB, 0, 0, 0);
-    BattleAnim_SpawnCategory19MarkerSlot(0x28, 1);
+    BattleAnim_SpawnCategory19MarkerSlot(40, 1);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(4, 4, 3, BattleAnim_RunSparkleHit, &gBattleAnimParticleDescriptors[0x42], 0, 4, 0xB, 0, 0x17, 0xA);
 }
 
 /**
+ * Effect script for Bone Club's use: its model and a full-screen flash at frame 29.
  * Effect start init 79 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Bone Club.
  */
 void BattleAnim_InitializeBoneClubUse(void) {
     func_8213B560(0, &func_82152F44, &D_8218E580, 0, 1, 4, 0, 1, 0);
-    func_8213B720(0x1D, 2, 0x20, 0x12);
+    func_8213B720(29, 2, 0x20, 0x12);
 }
 
 /**
+ * Effect script for Bonemerang's use: its model at the current anchor.
  * Effect start init 80 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Bonemerang.
  */
@@ -2808,6 +2908,8 @@ void BattleAnim_InitializeBonemerangUse(void) {
 }
 
 /**
+ * Inits the sludge model particle: model 0x71 with animation 0x72 at scale 1.0 and a 30-frame
+ * timer. Detaches if no display context is free.
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Acid, Toxic and Sludge.
  */
@@ -2825,6 +2927,8 @@ void BattleAnim_SludgeModelAnimFinish_InitParticle(Particle* arg0) {
 }
 
 /**
+ * Particle callback for the sludge model: inits it and marks it inactive when its animation
+ * finishes.
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Acid, Toxic and Sludge.
  */
@@ -2843,6 +2947,8 @@ void BattleAnim_SludgeModelAnimFinish(Particle* arg0) {
 }
 
 /**
+ * Inits a slime puddle model particle at one of four fixed spots (by its variant), model 0x6E with
+ * animation 0x6F, scale 1.0, a 30-frame timer. Detaches if no display context is free.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Acid, Toxic, Lick, Sludge.
  */
@@ -2879,6 +2985,8 @@ void BattleAnim_SetupSlimePuddle(Particle* arg0) {
 }
 
 /**
+ * Particle callback for a slime puddle: inits it, waits 30 frames, then shrinks and fades it out
+ * before detaching.
  * Moves: Acid (hit), Lick (hit), Sludge (hit), Toxic (hit)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -2929,7 +3037,7 @@ void Gfx_DrawParticlePaletteBased(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
     ParticleGfx_SetAnimatedTileSizeOnList(arg0++, 5, 0, 0x20, 0x20);
 
     switch (sp2E) {
-        case 0:
+        case 0: // prim #963232, env #000000
             sp2D = 0x96;
             sp2C = 0x32;
             sp2B = 0x32;
@@ -2938,7 +3046,7 @@ void Gfx_DrawParticlePaletteBased(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
             sp28 = 0;
             break;
 
-        case 1:
+        case 1: // prim #789600, env #647800
             sp2D = 0x78;
             sp2C = 0x96;
             sp2B = 0;
@@ -2947,7 +3055,7 @@ void Gfx_DrawParticlePaletteBased(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
             sp28 = 0;
             break;
 
-        case 2:
+        case 2: // prim #460078, env #640096
             sp2D = 0x46;
             sp2C = 0;
             sp2B = 0x78;
@@ -2956,7 +3064,7 @@ void Gfx_DrawParticlePaletteBased(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
             sp28 = 0x96;
             break;
 
-        case 3:
+        case 3: // prim #649696, env #649696
             sp2D = 0x64;
             sp2C = 0x96;
             sp2B = 0x96;
@@ -2966,7 +3074,7 @@ void Gfx_DrawParticlePaletteBased(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
             break;
     }
 
-    gDPSetPrimColor(arg0++, 0, 0xFF, sp2D, sp2C, sp2B, 255);
+    gDPSetPrimColor(arg0++, 0, 0xFF, sp2D, sp2C, sp2B, 255); // per-variant color, see the switch
     gDPSetEnvColor(arg0++, sp2A, sp29, sp28, 255);
 
     gSPEndDisplayList(arg0++);
@@ -3069,6 +3177,8 @@ void Gfx_ParticlePaletteColorOnlyCallback(s32 arg0, arg1_func_84344CE8* arg1) {
 }
 
 /**
+ * Returns the slime color variant for the queued move: 0 Sludge, 1 Acid, 2 Toxic, 3 Lick. Other
+ * moves leave it uninitialized.
  * Moves: Acid (use/hit), Lick (hit), Sludge (use/hit), Toxic (use/hit)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -3172,6 +3282,8 @@ void BattleAnim_InitializeSlimeMove(void) {
 }
 
 /**
+ * Effect script for the slime moves (Sludge, Acid, Toxic, Lick): four slime puddles 4 frames apart
+ * in the move's color, owner tint ramps at frames 4 and 40, and two streams of rising particles.
  * Effect end init 7 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Acid, Lick, Sludge, Toxic.
  */
@@ -3189,8 +3301,8 @@ void ParticleEffect_PaletteMultiBurst(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_RunSlimePuddle, &gDefaultParticleDescriptor, 0, 1, 0xA, 1, sp4E, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_RunSlimePuddle, &gDefaultParticleDescriptor, 0, 1, 0xA, 2, sp4E, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(12, BattleAnim_RunSlimePuddle, &gDefaultParticleDescriptor, 0, 1, 0xA, 3, sp4E, 0);
-    BattleAnim_SpawnOwnerTintRampDetach(0x28, sp44, 0xFF, 0, 0x10);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(6, 4, 0xA, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 9, 0, sp4A, 0);
+    BattleAnim_SpawnOwnerTintRampDetach(40, sp44, 0xFF, 0, 0x10);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(6, 4, 10, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 9, 0, sp4A, 0);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(7, 8, 5, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 9, 0, sp4A, 0);
 }
 
@@ -3261,7 +3373,7 @@ void Gfx_ParticleRedPrimCallback(Gfx* arg0, UNUSED arg1_func_8434E21C* arg1, UNU
 
     gDPPipeSync(arg0++);
 
-    gDPSetPrimColor(arg0++, 0, 0, 255, 0, 0, temp_v0->prim_a);
+    gDPSetPrimColor(arg0++, 0, 0, 255, 0, 0, temp_v0->prim_a); // #FF0000
     gSPEndDisplayList(arg0++);
 }
 
@@ -3281,6 +3393,7 @@ void Gfx_ParticleRedPrimAllocCallback(s32 arg0, arg1_func_84344CE8* arg1) {
 }
 
 /**
+ * Effect script for the Glare and Leer use: a global tint fade and the scary eyes.
  * Effect start init 83 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Glare, Leer.
  */
@@ -3299,6 +3412,8 @@ void BattleAnim_InitializeHyperBeamUseSequence(void) {
 }
 
 /**
+ * Effect script for the Earthquake and Fissure use: a global tint fade (color 0x0E for Earthquake,
+ * 0 for Fissure) and a model.
  * Effect start init 37 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Earthquake, Fissure.
  */
@@ -3321,6 +3436,8 @@ void BattleAnim_InitializeEarthquakeFissureUse(void) {
 }
 
 /**
+ * Effect script for the Earthquake and Fissure hit: spawns a particle model after 6 frames and a
+ * model particle (slot 5), then runs the shared hit sequence.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Earthquake.
  */
@@ -3331,6 +3448,7 @@ void BattleAnim_InitializeEarthquakeFissureHit(void) {
 }
 
 /**
+ * Effect script for Earthquake's hit: runs the shared Earthquake and Fissure hit.
  * Effect end init 75 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Earthquake.
  */
@@ -3339,24 +3457,28 @@ void BattleAnim_InitializeEarthquakeHit(void) {
 }
 
 /**
+ * Effect script for Defense Curl's use: an owner tint ramp at frame 4, an owner alpha fade, a
+ * particle model at frame 12, and the shared Defense Curl and Sharpen particles.
  * Effect start init 87 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Defense Curl.
  */
 void BattleAnim_InitializeDefenseCurlUse(void) {
     func_8213BC00(4, 8, 0, 0xFF, 0x40);
     func_8213C1BC(8);
-    func_8213B560(0xC, &func_82152FB0, &D_8218E580, 0, 1, 0xE, 0, 6, 0);
+    func_8213B560(12, &func_82152FB0, &D_8218E580, 0, 1, 0xE, 0, 6, 0);
     func_82168504();
 }
 
 /**
+ * Effect script for Sharpen's use: an owner tint ramp at frame 6, an owner alpha fade, a particle
+ * model at frame 12, and the shared Defense Curl and Sharpen particles.
  * Effect start init 88 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Sharpen.
  */
 void BattleAnim_InitializeSharpenUse(void) {
     func_8213BC00(6, 8, 0, 0xFF, 0x40);
     func_8213C1BC(0xA);
-    func_8213B560(0xC, &func_82152FB0, &D_8218E580, 0, 1, 0xA, 0, 7, 0);
+    func_8213B560(12, &func_82152FB0, &D_8218E580, 0, 1, 0xA, 0, 7, 0);
     func_82168504();
 }
 
@@ -3400,8 +3522,9 @@ void Gfx_PokemonPortraitAllocCallback(s32 arg0, arg1_func_84344CE8* arg1) {
 }
 
 /**
- * Moves: Double-Edge (use), Hi Jump Kick (use), Quick Attack (use), Skull Bash (use), Take Down (use)
- * TODO: Human contributor add screenshot
+ * Effect script for the speed lines: spawns a model particle (slot 8) 6 times, every 8 frames.
+ * Moves: Double-Edge (use), Hi Jump Kick (use), Quick Attack (use), Skull Bash (use), Take Down
+ * (use) TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Take Down, Double Edge, Quick Attack, Hi Jump Kick.
  */
@@ -3422,6 +3545,7 @@ void BattleAnim_StartEffect112SkullBashDash(void) {
 }
 
 /**
+ * Effect script for Withdraw's use: spawns particle model slot 9.
  * Effect start init 91 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Withdraw.
  */
@@ -3473,15 +3597,17 @@ f32 BattleAnim_OffsetAndScaleParticleForLargeSpecies(Particle* particle) {
 }
 
 /**
+ * Effect script for Lovely Kiss's use: its model and a global tint fade at frame 42.
  * Effect start init 94 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Lovely Kiss.
  */
 void BattleAnim_InitializeLovelyKissUse(void) {
     func_8213B560(0, &func_82152F44, &D_8218E580, 0, 1, 0xB, 0, 0xB, 0);
-    func_8213B644(0x2A, 0x10, 0x15);
+    func_8213B644(42, 0x10, 0x15);
 }
 
 /**
+ * Effect script for Lovely Kiss's hit: a user hue pulse and the hit model.
  * Effect end init 61 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Lovely Kiss.
  */
@@ -3498,7 +3624,7 @@ void BattleAnim_InitializeLovelyKissHit(void) {
  * breakpoint): ran only for Dream Eater, Meditate, Night Shade.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackStartEffects95To97EndEffects62And63ModelFadeIn_InitParticle(s8 *arg0) {
+void BattleAnim_CallbackStart95To97End62And63Fade_Init(s8 *arg0) {
     s16 sp26;
     s32 temp_v0;
 
@@ -3513,7 +3639,7 @@ void BattleAnim_CallbackStartEffects95To97EndEffects62And63ModelFadeIn_InitParti
         } else {
             func_82136D58(M2C_FIELD(arg0, s32 *, 0x14), 0x8D);
         }
-        func_821401D4(arg0, 0x3F800000);
+        func_821401D4(arg0, 0x3F800000); // 1.0f
         Particle_SetPrimAlpha(arg0, 0);
         func_8213C9D0(arg0);
         return;
@@ -3531,7 +3657,7 @@ void BattleAnim_RunPsychedelicOverlay(Particle* arg0) {
 
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackStartEffects95To97EndEffects62And63ModelFadeIn_InitParticle(arg0);
+            BattleAnim_CallbackStart95To97End62And63Fade_Init(arg0);
             break;
 
         case 2:
@@ -3645,7 +3771,7 @@ void Gfx_PaletteParticleDL(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
             break;
 
         case 5:
-            spC0 = -0xA;
+            spC0 = -10;
             spBE = -0xF;
             spC4 = 0;
             spC2 = 0;
@@ -3799,6 +3925,8 @@ void Gfx_PaletteParticleDLCallback(s32 arg0, arg1_func_84344CE8* arg1) {
 }
 
 /**
+ * Effect script for Dream Eater's use: the psychedelic overlay, nine Dream Eater models every 4
+ * frames cycling through three variants, and a global tint fade.
  * Effect start init 95 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Dream Eater.
  */
@@ -3807,16 +3935,18 @@ void BattleAnim_InitializeDreamEaterUse(void) {
     func_8213B560(0, &func_82153040, &D_8218E580, 0, 1, 9, 0, 0xD, 0);
     func_8213B560(4, &func_82153040, &D_8218E580, 0, 1, 9, 1, 0xD, 0);
     func_8213B560(8, &func_82153040, &D_8218E580, 0, 1, 9, 2, 0xD, 0);
-    func_8213B560(0xC, &func_82153040, &D_8218E580, 0, 1, 9, 0, 0xD, 0);
+    func_8213B560(12, &func_82153040, &D_8218E580, 0, 1, 9, 0, 0xD, 0);
     func_8213B560(0x10, &func_82153040, &D_8218E580, 0, 1, 9, 1, 0xD, 0);
-    func_8213B560(0x14, &func_82153040, &D_8218E580, 0, 1, 9, 2, 0xD, 0);
-    func_8213B560(0x18, &func_82153040, &D_8218E580, 0, 1, 9, 0, 0xD, 0);
-    func_8213B560(0x1C, &func_82153040, &D_8218E580, 0, 1, 9, 1, 0xD, 0);
+    func_8213B560(20, &func_82153040, &D_8218E580, 0, 1, 9, 2, 0xD, 0);
+    func_8213B560(24, &func_82153040, &D_8218E580, 0, 1, 9, 0, 0xD, 0);
+    func_8213B560(28, &func_82153040, &D_8218E580, 0, 1, 9, 1, 0xD, 0);
     func_8213B560(0x20, &func_82153040, &D_8218E580, 0, 1, 9, 2, 0xD, 0);
     func_8213B644(0, 8, 0x33);
 }
 
 /**
+ * Effect script for Dream Eater's hit: starts the psychedelic overlay and spawns nine model
+ * particles every 4 frames, cycling through three variants.
  * Seen in play (2026-11-12): Dream Eater on a sleeping COM Pinsir ran this as end effect 0x3E.
  */
 void BattleAnim_InitializeDreamEaterHit(void) {
@@ -3833,6 +3963,8 @@ void BattleAnim_InitializeDreamEaterHit(void) {
 }
 
 /**
+ * Effect script for the draining moves (Leech Life, Absorb, Mega Drain): a global tint fade and a
+ * full-screen color overlay, each colored by move.
  * Moves: Absorb (use), Leech Life (use), Mega Drain (use)
  * TODO: Human contributor add screenshot
  * Effect start init 24 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
@@ -3858,6 +3990,7 @@ void BattleAnim_CreateDrainingMoveOverlay(void) {
 }
 
 /**
+ * Effect script for Meditate's use: the psychedelic overlay (variant 4).
  * Effect start init 96 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Meditate.
  */
@@ -3866,6 +3999,8 @@ void BattleAnim_InitializeMeditateUse(void) {
 }
 
 /**
+ * Effect script for Night Shade's use: the psychedelic overlay, a global tint fade, 64 frames of
+ * spawn delay, then a full-screen flash.
  * Effect start init 97 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Night Shade.
  */
@@ -3877,6 +4012,8 @@ void BattleAnim_InitializeNightShadeUse(void) {
 }
 
 /**
+ * Effect script for Night Shade's hit: a full-screen flash, an owner tint ramp after 4 frames, the
+ * hit model, and four hit sparks every 4 frames.
  * Moves: Night Shade (hit)
  * TODO: Human contributor add screenshot
  * Effect end init 63 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
@@ -3890,6 +4027,8 @@ void BattleAnim_InitializeNightShadeHit(void) {
 }
 
 /**
+ * Inits Confuse Ray's use spotlight: model 0x42 with animation 0xC2, scale 1.0, palette pair 0x23,
+ * alpha 0. Detaches if no display context is free.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Confuse Ray.
  */
@@ -3909,12 +4048,12 @@ void BattleAnim_SetupConfuseRayUseSpotlight(Particle* arg0) {
 
 /**
  * Particle callback: init, then fades in to full alpha while field AE moves toward 200.
- * Always turns the particle to face away from the camera (camera yaw + 0x8000).
+ * Always turns the particle to face away from the camera (camera rotationY + 0x8000, a half turn).
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
  * breakpoint): ran only for Confuse Ray.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackStartEffects21And93ModelAlphaAnchorFollow(Particle* particle) {
+void BattleAnim_CallbackStart21And93ModelAlphaAnchor(Particle* particle) {
     s16 temp_v0;
 
     temp_v0 = particle->lifecycle;
@@ -3931,6 +4070,8 @@ void BattleAnim_CallbackStartEffects21And93ModelAlphaAnchorFollow(Particle* part
 }
 
 /**
+ * Inits Confuse Ray's hit spotlight: like the use spotlight but starting at animation frame 40
+ * with scratch alpha 0xFF.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Confuse Ray.
  */
@@ -4013,7 +4154,7 @@ void Gfx_WaterAnimPrimEnvDLCallback(s32 arg0, arg1_func_84344CE8* arg1) {
  */
 void ParticleEffect_WaterAnimBurst(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 8, 3);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects21And93ModelAlphaAnchorFollow, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStart21And93ModelAlphaAnchor, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 0, 0);
 }
 
 /**
@@ -4025,33 +4166,37 @@ void BattleAnim_EndEffect51GlobalTintFade(void) {
 }
 
 /**
+ * Effect script for Confuse Ray's use: the Confuse Ray particle, a global tint fade, owner tint
+ * ramps, a fade-in overlay and hit sparks at frame 12, then 33 frames of spawn delay before a
+ * full-screen flash and a last tint ramp.
  * Effect start init 93 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Confuse Ray.
  */
 void BattleAnim_InitializeConfuseRayUse(void) {
-    func_8213B560(0, &BattleAnim_CallbackStartEffects21And93ModelAlphaAnchorFollow, &D_8218E580, 0, 1, 0xA, 0, 0, 0);
+    func_8213B560(0, &BattleAnim_CallbackStart21And93ModelAlphaAnchor, &D_8218E580, 0, 1, 0xA, 0, 0, 0);
     func_8213B644(0, 0x20, 3);
     func_8213BC00(8, 8, 0, 0xFF, 0x40);
-    func_8213B878(0xC, 5, 0x10, 8);
-    func_8213B560(0xC, &func_82162C68, &D_8218E728, 0, 4, 9, 0, 0x18, 0xD);
-    func_8213B464(0x21);
+    func_8213B878(12, 5, 0x10, 8);
+    func_8213B560(12, &func_82162C68, &D_8218E728, 0, 4, 9, 0, 0x18, 0xD);
+    func_8213B464(33);
     func_8213B720(0, 0, 0x10, 8);
     func_8213BC00(0, 8, 0xFF, 0, 0x10);
 }
 
 /**
- * Moves: Confuse Ray (hit)
- * TODO: Human contributor add screenshot
- * Effect end init 60 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
- * ran for exactly Confuse Ray.
+ * Effect script for Confuse Ray's hit: the Confuse Ray particle, a full-screen flash, a global tint
+ * fade, owner tint ramps and hit sparks after 12 frames, then 33 more frames of spawn delay before
+ * the last tint ramp. Moves: Confuse Ray (hit) TODO: Human contributor add screenshot Effect end
+ * init 60 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it ran for
+ * exactly Confuse Ray.
  */
 void BattleAnim_InitializeConfuseRayHit(void) {
     func_8213B560(0, &BattleAnim_ConfuseRayParticleUpdate, &D_8218E580, 0, 1, 0xA, 0, 0, 0);
     func_8213B720(0, 0, 0x10, 8);
     func_8213B644(0, 0x20, 3);
     func_8213BC00(8, 8, 0, 0xFF, 0x40);
-    func_8213B560(0xC, &func_82162C68, &D_8218E728, 0, 4, 9, 0, 0x18, 0xD);
-    func_8213B464(0x21);
+    func_8213B560(12, &func_82162C68, &D_8218E728, 0, 4, 9, 0, 0x18, 0xD);
+    func_8213B464(33);
     func_8213BC00(0, 8, 0xFF, 0, 0x10);
 }
 
@@ -4067,7 +4212,7 @@ void Gfx_WaterAnimDL(Gfx* arg0, u8* arg1, UNUSED u16 arg2) {
     Particle* temp_v0 = BattleAnim_GetOwnerContextParticle(D_8006049C);
 
     gDPPipeSync(arg0++);
-    gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, temp_v0->prim_a);
+    gDPSetPrimColor(arg0++, 0, 0x80, 255, 255, 255, temp_v0->prim_a); // #FFFFFF
 
     gDPLoadTextureTile_4b(arg0++, arg1, G_IM_FMT_I, 32, 0, 0, 0, 31, 31, 0, G_TX_NOMIRROR | G_TX_WRAP,
                           G_TX_NOMIRROR | G_TX_WRAP, 5, 5, 14, 15);
@@ -4133,10 +4278,12 @@ void BattleAnim_InitializeSurfUseSpray(void) {
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 0x20, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E7D0, 0, 2, 7, 0, 0x33, 8);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 0x20, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E650, 0, 2, 7, 0, 0xC, 8);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 0x20, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E5F8, 0, 2, 7, 0, 0xC, 8);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 8, 0xA, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E5D8, 0, 2, 7, 0, 0xC, 4);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 8, 10, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E5D8, 0, 2, 7, 0, 0xC, 4);
 }
 
 /**
+ * Effect script for Surf's hit: four falling water particle streams (4 particles every 4 frames,
+ * each with its own descriptor) and 12 rotating particles every 2 frames.
  * Moves: Surf (hit)
  * TODO: Human contributor add screenshot
  * Effect end init 16 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
@@ -4147,19 +4294,21 @@ void BattleAnim_InitializeSurfHit(void) {
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 4, BattleAnim_CallbackEndEffect16MultiDescriptorAnimatedFallFade, &D_8218E650, 0, 3, 0xE, 0, 0xC, 0xC);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 4, BattleAnim_CallbackEndEffect16MultiDescriptorAnimatedFallFade, &D_8218E5F8, 0, 3, 0xE, 0, 0xC, 0xC);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 4, BattleAnim_CallbackEndEffect16MultiDescriptorAnimatedFallFade, &D_8218E5D8, 0, 3, 0xE, 0, 0xC, 4);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 2, 0xC, BattleAnim_CallbackEndEffect16Descriptor45DelayedRotatingMotion, &D_8218E7A8, 0, 4, 0x11, 7, 0x33, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 2, 12, BattleAnim_CallbackEndEffect16Descriptor45DelayedRotatingMotion, &D_8218E7A8, 0, 4, 0x11, 7, 0x33, 0);
 }
 
 /**
+ * Effect script for Crabhammer's use: its model and a full-screen flash at frame 34.
  * Effect start init 100 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Crabhammer.
  */
 void BattleAnim_InitializeCrabhammerUse(void) {
     func_8213B560(0, &func_82152F44, &D_8218E580, 0, 1, 0x13, (s32) D_8219A80A, 0x10, 0);
-    func_8213B720(0x22, 0, 0x10, 8);
+    func_8213B720(34, 0, 0x10, 8);
 }
 
 /**
+ * Inits a Barrage ball particle: scale 0.2, palette pair 0x33, full alpha.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Barrage.
  */
@@ -4177,7 +4326,7 @@ void BattleAnim_SetupBarrageEffect(Particle* arg0) {
  * breakpoint): ran only for Barrage.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackStartEffect101EndEffect65Descriptor4ABurstChild(Particle* particle) {
+void BattleAnim_CallbackStart101End65Desc4ABurstChild(Particle* particle) {
     s16 temp_v0;
 
     temp_v0 = particle->lifecycle;
@@ -4193,10 +4342,12 @@ void BattleAnim_CallbackStartEffect101EndEffect65Descriptor4ABurstChild(Particle
         Particle_DisableAndDetach(particle);
         break;
     }
-    func_82140228(particle, 0x3F000000, 0x3DCCCCCD);
+    func_82140228(particle, 0x3F000000, 0x3DCCCCCD); // 0.5f, 0.1f
 }
 
 /**
+ * Inits a thrown Barrage ball: scale 0.3, rotated up about X, turning toward the target (tertiary
+ * owner) by 0x80 per frame; hidden at first.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Barrage.
  */
@@ -4235,13 +4386,13 @@ void BattleAnim_CallbackStartEffect101ModelBurstEmitter(Particle* arg0) {
         case 3:
             if (Particle_TickDelayAndAdvanceLifecycle(arg0, 10) != 0) {
                 Particle_StepMagnitude_SetScaled_0AD8C(arg0, 8.0f);
-                BattleAnim_EmitParticleBurst(arg0, BattleAnim_CallbackStartEffect101EndEffect65Descriptor4ABurstChild, &D_8218E7D0, 1);
+                BattleAnim_EmitParticleBurst(arg0, BattleAnim_CallbackStart101End65Desc4ABurstChild, &D_8218E7D0, 1);
                 BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_RunBarrageUseEffect2, &D_8218E770, 0xC, 0x33, 0);
             }
             break;
 
         case 4:
-            BattleAnim_EmitParticleBurst(arg0, BattleAnim_CallbackStartEffect101EndEffect65Descriptor4ABurstChild, &D_8218E7D0, 1);
+            BattleAnim_EmitParticleBurst(arg0, BattleAnim_CallbackStart101End65Desc4ABurstChild, &D_8218E7D0, 1);
             Particle_ApproachRotationXTo(arg0, 0x1000, 0x200);
             Particle_ApproachRotationTargetY(arg0);
             Particle_TickDelayAndAdvanceLifecycle(arg0, 0xF);
@@ -4258,6 +4409,7 @@ void BattleAnim_CallbackStartEffect101ModelBurstEmitter(Particle* arg0) {
 }
 
 /**
+ * Effect script for Barrage's use: the Barrage ball emitter at the current anchor.
  * Effect start init 101 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Barrage.
  */
@@ -4266,6 +4418,8 @@ void BattleAnim_InitializeBarrageUse(void) {
 }
 
 /**
+ * Inits a Barrage hit particle 15 units up and 50 forward, rotated about X and turned around, speed
+ * 8, with model 0xA0.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Barrage.
  */
@@ -4282,13 +4436,14 @@ void BattleAnim_SetupBarrageHitEffect(Particle* arg0) {
 }
 
 /**
- * Particle callback: init, then emits one BattleAnim_CallbackStartEffect101EndEffect65Descriptor4ABurstChild child per frame while spinning and
- * counting down 7 frames, then detaches. Moves along its rotation while the countdown runs.
+ * Particle callback: init, then emits one BattleAnim_CallbackStart101End65Desc4ABurstChild child
+ * per frame while spinning and counting down 7 frames, then detaches. Moves along its rotation
+ * while the countdown runs.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
  * breakpoint): ran only for Barrage.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackMove140EndEffect65EmitDescriptor4A(Particle* particle) {
+void BattleAnim_CallbackMove140End65EmitDesc4A(Particle* particle) {
     s16 temp_v0;
 
     temp_v0 = particle->lifecycle;
@@ -4297,7 +4452,7 @@ void BattleAnim_CallbackMove140EndEffect65EmitDescriptor4A(Particle* particle) {
         func_8215DA5C(particle);
         break;
     case 2:
-        func_82139E5C(particle, &BattleAnim_CallbackStartEffect101EndEffect65Descriptor4ABurstChild, &D_8218E7D0, 1);
+        func_82139E5C(particle, &BattleAnim_CallbackStart101End65Desc4ABurstChild, &D_8218E7D0, 1);
         func_8213EF88(particle, 0x1000, 0x80);
         func_8213CA80(particle, 7);
         break;
@@ -4311,16 +4466,20 @@ void BattleAnim_CallbackMove140EndEffect65EmitDescriptor4A(Particle* particle) {
 }
 
 /**
+ * Effect script for Barrage's hit: the burst emitter, a hit spark at frame 5 and 8 smoke puffs at
+ * frame 7.
  * Effect end init 65 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Barrage.
  */
 void BattleAnim_InitializeBarrageHit(void) {
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackMove140EndEffect65EmitDescriptor4A, &gDefaultParticleDescriptor, 0, 1, 0x11, gBattleAnimCurrentAnchor, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackMove140End65EmitDesc4A, &gDefaultParticleDescriptor, 0, 1, 0x11, gBattleAnimCurrentAnchor, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(5, BattleAnim_RunDefaultHitSpark, &gBattleAnimParticleDescriptors[0x34], 0, 1, 0x11, 9, 0, 6);
     BattleAnim_CreateEffectSlotForCurrentOwner(7, BattleAnim_RunPhysicalHitPurpleSmoke, &gBattleAnimParticleDescriptors[0x3D], 0, 8, 0x11, 9, 0, 0);
 }
 
 /**
+ * Inits Psywave's model particle: model 0xA2, scale 1.0, alpha 0. Detaches if no display context
+ * is free.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Psywave.
  */
@@ -4337,6 +4496,7 @@ void BattleAnim_SetupPsywaveEffect(Particle* arg0) {
 }
 
 /**
+ * Particle callback for Psywave's model: inits it, then fades it in to half alpha.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Psywave.
  */
@@ -4380,7 +4540,7 @@ void Gfx_SimpleNodeDL(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg2) {
     }
 
     gDPPipeSync(arg0++);
-    gDPSetPrimColor(arg0++, 0, 0x80, 55, 255, 255, sp48->prim_a);
+    gDPSetPrimColor(arg0++, 0, 0x80, 55, 255, 255, sp48->prim_a); // #37FFFF
 
     arg0 = BattleAnim_BuildAnimatedTileDisplayListFromStruct(arg0++, arg1, 0x20, 5, 1, sp44, 0xD, 0xC, -1, sp42, 0xB, 0xD);
     gSPEndDisplayList(arg0++);
@@ -4403,6 +4563,7 @@ void Gfx_SimpleNodeDLCallback(s32 arg0, arg1_func_84344CE8* arg1) {
 }
 
 /**
+ * Effect script for Psywave's use: a global tint fade and the Psywave model.
  * Effect start init 49 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Psywave.
  */
@@ -4412,6 +4573,8 @@ void BattleAnim_InitializePsywaveUse(void) {
 }
 
 /**
+ * Effect script for Psywave's hit: a user hue pulse, the Psywave model, and 4 hit sparks every 4
+ * frames from frame 4.
  * Effect end init 66 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Psywave.
  */
@@ -4422,6 +4585,8 @@ void BattleAnim_InitializePsywaveHit(void) {
 }
 
 /**
+ * Particle callback for the Confusion and Psychic hit: picks model frame set 2, fades in to
+ * param0, holds 32 frames, fades out, then detaches.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Confusion, Psychic M.
  */
@@ -4450,25 +4615,28 @@ void BattleAnim_RunConfusionPsychicHitEffect(Particle* arg0) {
 }
 
 /**
+ * Effect script for Psychic's use: a global tint fade, a full-screen overlay, and at frame 50 a
+ * user hue pulse and a white flash.
  * Effect start init 106 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Psychic.
  */
 void BattleAnim_InitializePsychicUse(void) {
     func_8213B644(0, 5, 0);
     func_8213B560(0, &func_821530F4, &D_8218E580, 0xFF, 1, 0xC, 8, 0x18, 5);
-    func_8213BC7C(0x32, 1, 8, 0, 0xFF, 0x20);
-    func_8213B6AC(0x32, 1, 0x20, 8, 0xFF);
+    func_8213BC7C(50, 1, 8, 0, 0xFF, 0x20);
+    func_8213B6AC(50, 1, 0x20, 8, 0xFF);
 }
 
 /**
+ * Effect script for Confusion's use: like Psychic's use with a different tint and overlay color.
  * Effect start init 107 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Confusion.
  */
 void BattleAnim_InitializeConfusionUse(void) {
     func_8213B644(0, 6, 0);
     func_8213B560(0, &func_821530F4, &D_8218E580, 0xFF, 1, 0xC, 7, 0x17, 6);
-    func_8213B6AC(0x32, 1, 0x20, 8, 0xFF);
-    func_8213BC7C(0x32, 1, 8, 0, 0xFF, 0x20);
+    func_8213B6AC(50, 1, 0x20, 8, 0xFF);
+    func_8213BC7C(50, 1, 8, 0, 0xFF, 0x20);
 }
 
 /**
@@ -4482,7 +4650,7 @@ void BattleAnim_InitializePsychicHit(void) {
     func_8213B5D8(4, 4, 4, &func_82162C68, &D_8218E728, 0, 3, 9, 0, 0x18, 0xD);
     func_8213BC00(8, 8, 0, 0xFF, 0x40);
     func_8213B720(0, 0, 0x10, 8);
-    func_8213B464(0x21);
+    func_8213B464(33);
     func_8213BC00(0, 8, 0xFF, 0, 4);
     func_8213B644(8, 4, 8);
 }
@@ -4498,12 +4666,14 @@ void BattleAnim_InitializeConfusionHit(void) {
     func_8213B5D8(4, 4, 4, &func_82162C68, &D_8218E728, 0, 3, 9, 0, 0x18, 0xD);
     func_8213BC00(8, 8, 0, 0xFF, 0x40);
     func_8213B720(0, 0, 0x10, 8);
-    func_8213B464(0x21);
+    func_8213B464(33);
     func_8213BC00(0, 8, 0xFF, 0, 4);
     func_8213B644(8, 4, 8);
 }
 
 /**
+ * Effect script for Focus Energy's use: a global tint fade, a full-screen overlay, a user hue
+ * pulse, and two streams of rising particles from frame 60.
  * Effect start init 3 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Focus Energy.
  */
@@ -4511,11 +4681,12 @@ void BattleAnim_InitializeFocusEnergyUse(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0x10, 6);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunFillScreenOverlay, &gDefaultParticleDescriptor, 0x80, 1, 0xC, 0xA, 0x1A, 4);
     BattleAnim_SpawnOwnerTintPulseDetach(0, 1, 0xA, 0, 0xC8, 3);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(60, 4, 0xE, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 0x11, 7, 0x33, 7);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(60, 4, 14, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 0x11, 7, 0x33, 7);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(61, 8, 7, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 0x11, 7, 0x33, 7);
 }
 
 /**
+ * Effect script for the Bide and Rage use: a global tint fade and a full-screen color overlay.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Rage.
  */
@@ -4525,6 +4696,8 @@ void BattleAnim_InitializeBideRageUseSequence(void) {
 }
 
 /**
+ * Effect script for Sky Attack's first use phase: the energy charge, a global tint fade, an owner
+ * tint ramp, a hue change at frame 50 and 32 flames under the Pokémon at frame 64.
  * Effect start init 104 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Sky Attack.
  */
@@ -4532,11 +4705,13 @@ void BattleAnim_InitializeSkyAttackUse1(void) {
     func_82168844(0xE);
     func_8213B644(0, 2, 0xE);
     func_8213BC00(0, 0xA, 0, 0xC8, 4);
-    func_8213BD78(0x32, 0xA, 0x17, 2, 0xC8);
+    func_8213BD78(50, 0xA, 0x17, 2, 0xC8);
     func_8213B560(0x40, &BattleAnim_RunOscillatingFlameUnderneathPokemon, &D_8218E7F8, 0, 0x20, 7, 0, 0, 0);
 }
 
 /**
+ * Effect script for Sky Attack's second use phase: a global tint fade, an owner tint ramp, the
+ * owner turning invisible, a particle model, and 12 rising particles.
  * Seen in play (2026-11-12): Sky Attack's second turn ran this as start effect 0x67. The charge
  * turn uses 0x68.
  */
@@ -4545,16 +4720,18 @@ void BattleAnim_InitializeSkyAttackUse2(void) {
     func_8213BC00(0, 0x12, 0, 0x80, 0x10);
     func_8213C0D8(0, 0xFF, 0, 0x10);
     func_8213B560(0, &func_82152FE0, &D_8218E580, 0xFF, 1, 9, (s32) D_8219A80A, 0x12, 0x20);
-    func_8213B5D8(0, 1, 0xC, &BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x16, 5);
+    func_8213B5D8(0, 1, 12, &BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x16, 5);
 }
 
 /**
+ * Effect script for Sky Attack's hit: spawns the hit model, adds 4 frames of spawn delay, then
+ * runs end effect 71 (palette approach and expanding fades).
  * Seen in play (2026-11-12): Sky Attack's second turn ran this as end effect 0x19.
  */
 void BattleAnim_InitializeSkyAttackHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackInitModelAnimWait, &gDefaultParticleDescriptor, 0, 1, 9, 0, 0x13, 0);
     BattleAnim_SetSpawnDelay(4);
-    BattleAnim_EndEffect71PaletteApproachWithExpandingScaleFades();
+    BattleAnim_End71PaletteApproachExpandingScaleFades();
 }
 
 /**
@@ -4595,8 +4772,8 @@ void ParticleEffect_DrawQuad(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg
         case 1:
             sp82 = -5;
             sp80 = -0xF;
-            sp7E = -0xA;
-            sp7C = -0xA;
+            sp7E = -10;
+            sp7C = -10;
             sp7A = 0;
             sp78 = 1;
             sp76 = 0;
@@ -4607,7 +4784,7 @@ void ParticleEffect_DrawQuad(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg
             sp82 = 5;
             sp80 = -0xF;
             sp7E = 0;
-            sp7C = -0xA;
+            sp7C = -10;
             sp7A = 0;
             sp78 = 0xF;
             sp76 = 0;
@@ -4617,7 +4794,7 @@ void ParticleEffect_DrawQuad(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg
         case 3:
             sp82 = 5;
             sp80 = -0xF;
-            sp7C = -0xA;
+            sp7C = -10;
             sp7E = 0;
             sp7A = 1;
             sp78 = 1;
@@ -4629,7 +4806,7 @@ void ParticleEffect_DrawQuad(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg
             sp82 = 5;
             sp80 = -0xF;
             sp7E = 0;
-            sp7C = -0xA;
+            sp7C = -10;
             sp7A = 0;
             sp78 = 0;
             sp76 = 0;
@@ -4638,7 +4815,7 @@ void ParticleEffect_DrawQuad(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg
 
         case 5:
             sp82 = -5;
-            sp80 = -0xA;
+            sp80 = -10;
             sp7E = 0;
             sp7C = 0;
             sp7A = 1;
@@ -4653,7 +4830,7 @@ void ParticleEffect_DrawQuad(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg
 
         case 6:
             sp82 = 0;
-            sp80 = -0xA;
+            sp80 = -10;
             sp7E = 0;
             sp7C = 0;
             sp7A = 1;
@@ -4668,7 +4845,7 @@ void ParticleEffect_DrawQuad(Gfx* arg0, arg1_func_8434E21C* arg1, UNUSED u16 arg
     }
 
     gDPPipeSync(arg0++);
-    gDPSetPrimColor(arg0++, 0, var_t1, 255, var_t2, 0, temp_v0->prim_a);
+    gDPSetPrimColor(arg0++, 0, var_t1, 255, var_t2, 0, temp_v0->prim_a); // #FFFF00, #FFC800 for variants 5 and 6
 
     gDPLoadTextureTile_4b(arg0++, arg1->textureA, G_IM_FMT_I, 32, 32, 0, 0, 31, 31, 0, G_TX_NOMIRROR | G_TX_WRAP,
                           G_TX_NOMIRROR | G_TX_WRAP, 5, 5, sp7A, sp78);
@@ -4699,6 +4876,7 @@ void ParticleEffect_AllocateDisplayList(s32 arg0, arg1_func_84344CE8* arg1) {
 }
 
 /**
+ * Effect script for the Thunder hit: spawns model particle slot 0x14.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Thunder.
  */
@@ -4707,6 +4885,8 @@ void BattleAnim_InitializeThunderHitSequence(void) {
 }
 
 /**
+ * Effect script for Solar Beam's second use phase: a full-screen overlay, an owner tint ramp at
+ * frame 8, and the Solar Beam charge sequence.
  * Effect start init 105 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Solar Beam.
  */
@@ -4717,6 +4897,8 @@ void BattleAnim_InitializeSolarBeamUse2(void) {
 }
 
 /**
+ * Particle callback for the Mega Punch and Mega Kick hit model: picks model frame set 0, then
+ * fades green and alpha toward 0 and marks it inactive when its animation finishes.
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Mega Punch and Mega Kick.
  */
@@ -4788,7 +4970,7 @@ void BattleAnim_InitializeHornDrillUse(void) {
 void BattleAnim_InitializeHornDrillHit(void) {
     func_8213BC00(0, 0xA, 0, 0xFF, 0x40);
     func_8213B560(0, &func_82152F44, &D_8218E580, 0, 1, 0x11, (s32) D_8219A80A, 0x1C, 1);
-    func_8213BC00(0x30, 0xA, 0xFF, 0, 2);
+    func_8213BC00(48, 0xA, 0xFF, 0, 2);
 }
 
 /**
@@ -4825,6 +5007,7 @@ void BattleAnim_RunWeakSpear(Particle* arg0) {
 }
 
 /**
+ * Effect script for the Fury Attack and Peck use: 3 spear particles every 2 frames.
  * Effect start init 118 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Fury Attack, Peck.
  */
@@ -4848,7 +5031,7 @@ void BattleAnim_InitializeHornAttackUse(void) {
  * breakpoint): ran only for Body Slam, Fly, Seismic Toss, Stomp.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackEndEffect79DefaultDescriptorPaletteFade(Particle* particle) {
+void BattleAnim_CallbackEnd79DefaultDescPaletteFade(Particle* particle) {
     s16 temp_v0;
 
     temp_v0 = particle->lifecycle;
@@ -4867,13 +5050,15 @@ void BattleAnim_CallbackEndEffect79DefaultDescriptorPaletteFade(Particle* partic
 }
 
 /**
+ * Effect script for the vertical landing hit spark: spawns the end effect 79 palette-fade
+ * particle.
  * Moves: Body Slam (hit), Fly (hit), Seismic Toss (hit), Stomp (hit)
  * TODO: Human contributor add screenshot
  * Effect end init 79 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Body Slam, Seismic Toss, Stomp.
  */
 void BattleAnim_InitializeVerticalLandingHitSpark(void) {
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEndEffect79DefaultDescriptorPaletteFade, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 0x1F, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackEnd79DefaultDescPaletteFade, &gDefaultParticleDescriptor, 0, 1, 0xA, 0, 0x1F, 0);
 }
 
 /**
@@ -4895,7 +5080,7 @@ void BattleAnim_InitializeSonicBoomUse(void) {
  * breakpoint): ran only for Fire Blast, Poison Gas, Poisonpowder, Sludge, Smog, Toxic.
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_CallbackStartEffects127And128Descriptor39ScaleFade_InitParticle(Particle* arg0) {
+void BattleAnim_CallbackStart127And128Desc39_Init(Particle* arg0) {
     s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
     s16 sp24 = Particle_GetByteParam1(arg0);
 
@@ -4931,7 +5116,7 @@ void BattleAnim_CallbackStartEffects127And128Descriptor39ScaleFade_InitParticle(
  * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
  * Fire Blast: ran from sample 637 for the burn-damage flame on Pinsir.
  */
-void BattleAnim_CallbackStartEffects127And128Descriptor39ScaleFade(Particle* particle) {
+void BattleAnim_CallbackStart127And128Desc39ScaleFade(Particle* particle) {
     s16 temp_v0;
 
     temp_v0 = particle->lifecycle;
@@ -4965,10 +5150,11 @@ void BattleAnim_CallbackStartEffects127And128Descriptor39ScaleFade(Particle* par
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
  * Poison Powder and Poison Gas: ran at sample 609 on the poison turn, drawing the purple cloud on
- * Pinsir with 「どくの ダメージを うけている！」.
+ * Pinsir with 「どくの ダメージを うけている！」
+ * ("is hurt by poison!").
  */
 void BattleAnim_StartEffect127Descriptor39ScaleFade(void) {
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects127And128Descriptor39ScaleFade, &gBattleAnimParticleDescriptors[0x39], 8, 3, 2, 0, 0x45, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStart127And128Desc39ScaleFade, &gBattleAnimParticleDescriptors[0x39], 8, 3, 2, 0, 0x45, 0);
 }
 
 /**
@@ -4977,10 +5163,10 @@ void BattleAnim_StartEffect127Descriptor39ScaleFade(void) {
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
  * Fire Blast: ran at sample 637 on the burn turn, drawing the flame on Pinsir with 「やけどの ダメージを
- * うけている！」.
+ * うけている！」 ("is hurt by its burn!").
  */
 void BattleAnim_StartEffect128Descriptor39ScaleFade(void) {
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffects127And128Descriptor39ScaleFade, &gBattleAnimParticleDescriptors[0x39], 8, 3, 2, 0, 0x47, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStart127And128Desc39ScaleFade, &gBattleAnimParticleDescriptors[0x39], 8, 3, 2, 0, 0x47, 0);
 }
 
 /**
@@ -5008,6 +5194,7 @@ void ParticleEffect_CreateSmoke(void) {
 }
 
 /**
+ * Effect script that spawns one default hit spark at frame 16.
  * Effect start init 129 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Double Edge, Struggle, Submission, Take Down.
  */
@@ -5024,7 +5211,7 @@ void ParticleEffect_CreateSmokeHighPriority(void) {
  * breakpoint): ran only for Leech Seed.
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade_InitParticle(Particle* arg0) {
+void BattleAnim_CallbackStart132Desc39Rise_InitParticle(Particle* arg0) {
     s16 sp26 = Particle_SpawnIndex_GetS16_0C038(arg0);
     s16 sp24 = Particle_GetByteParam1(arg0);
 
@@ -5060,12 +5247,13 @@ void BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade_InitParticle(P
  * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
- * Leech Seed: ran at sample 561 on the residual drain turn (「やどりぎが ... たいりょくを うばう！」).
+ * Leech Seed: ran at sample 561 on the residual drain turn (「やどりぎが ... たいりょくを うばう！」,
+ * "Leech Seed saps ...'s HP!").
  */
-void BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade(Particle* arg0) {
+void BattleAnim_CallbackStart132Desc39DelayedRiseFade(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade_InitParticle(arg0);
+            BattleAnim_CallbackStart132Desc39Rise_InitParticle(arg0);
             break;
 
         case 2:
@@ -5084,7 +5272,7 @@ void BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade(Particle* arg0
             break;
 
         case 4:
-            Particle_ApproachStepMagnitude(arg0, 0x40800000, 0x3F000000);
+            Particle_ApproachStepMagnitude(arg0, 0x40800000, 0x3F000000); // 4.0f, 0.5f
             func_8213E1FC(arg0, arg0->stepMagnitude);
             Particle_PrimAlpha_Approach_0BC2C(arg0, 0, 0x10);
             if (Particle_DecrementParam0ToZeroThenAdvance(arg0) != 0) {
@@ -5108,6 +5296,6 @@ void BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade(Particle* arg0
  * @unverified Name from Stadium 1.
  */
 void ParticleEffect_CreateDual(void) {
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade, &gBattleAnimParticleDescriptors[0x39], 8, 3, 2, 0, 0x46, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(0x10, BattleAnim_CallbackStartEffect132Descriptor39DelayedRiseFade, &gBattleAnimParticleDescriptors[0x39], 8, 3, 2, 0, 0x46, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackStart132Desc39DelayedRiseFade, &gBattleAnimParticleDescriptors[0x39], 8, 3, 2, 0, 0x46, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0x10, BattleAnim_CallbackStart132Desc39DelayedRiseFade, &gBattleAnimParticleDescriptors[0x39], 8, 3, 2, 0, 0x46, 0);
 }

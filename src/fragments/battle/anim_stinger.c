@@ -13,13 +13,14 @@ void BattleAnim_UpdateNeedleBlueFadeGrow(Particle* arg0);
 void BattleAnim_UpdateSecondaryOwnerParticleBlueGrow(Particle* arg0);
 
 /**
+ * Inits a stinger needle particle: scale 0.1, white prim and light blue env, full alpha.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Pin Missile, Poison Sting, Spike Cannon and Twineedle.
  */
 void BattleAnim_InitStingerTrailColor(Particle* arg0) {
     Particle_SetScaleScaled(arg0, 0.1f);
-    Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
-    Particle_SetEnvColor(arg0, 0x64, 0xC8, 0xFF);
+    Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF); // #FFFFFF
+    Particle_SetEnvColor(arg0, 0x64, 0xC8, 0xFF); // #64C8FF
     Particle_SetPrimAlpha(arg0, 0xFF);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -32,6 +33,8 @@ M2C_UNK Particle_ApproachPrimAlpha(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82140920(s8 *);                      /* extern */
 
 /**
+ * Particle callback for a stinger needle: inits it, plays frames 0 to 7 once while fading toward
+ * alpha 0x20, then is marked inactive. While running it grows toward scale 0.5.
  * Seen in play (2026-11-13) in the 165-move sweep (each move used once by the 1P Pokémon): it ran
  * only for Poison Sting, Twineedle, Pin Missile and Spike Cannon.
  */
@@ -52,18 +55,19 @@ void BattleAnim_UpdateNeedleBlueFadeGrow(Particle* arg0) {
         break;
     }
     if (Particle_IsRunning(arg0) != 0) {
-        func_82140228(arg0, 0x3F000000, 0x3D4CCCCD);
+        func_82140228(arg0, 0x3F000000, 0x3D4CCCCD); // 0.5f, 0.05f
     }
 }
 
 /**
+ * Same as BattleAnim_InitStingerTrailColor: scale 0.1, white prim and light blue env, full alpha.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Pin Missile, Poison Sting, Spike Cannon and Twineedle.
  */
 void BattleAnim_InitStingerTrailColorDuplicate(Particle* arg0) {
     Particle_SetScaleScaled(arg0, 0.1f);
-    Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF);
-    Particle_SetEnvColor(arg0, 0x64, 0xC8, 0xFF);
+    Particle_SetPrimColor(arg0, 0xFF, 0xFF, 0xFF); // #FFFFFF
+    Particle_SetEnvColor(arg0, 0x64, 0xC8, 0xFF); // #64C8FF
     Particle_SetPrimAlpha(arg0, 0xFF);
     Particle_AdvanceLifecycle(arg0);
 }
@@ -72,16 +76,23 @@ s32 Particle_IsRunning(Particle* arg0);                          /* extern */
 M2C_UNK func_82140228(s8 *, M2C_UNK, M2C_UNK);    /* extern */
 M2C_UNK func_82140A48();                            /* extern */
 
+/**
+ * Particle callback for the stinger particle on the target: inits it on its first frame and grows
+ * it toward scale 0.8 while it runs. The init call goes through an address alias declared without
+ * arguments.
+ */
 void BattleAnim_UpdateSecondaryOwnerParticleBlueGrow(Particle* arg0) {
     if (arg0->lifecycle == 1) {
         func_82140A48();
     }
     if (Particle_IsRunning(arg0) != 0) {
-        func_82140228(arg0, 0x3F4CCCCD, 0x3DA3D70A);
+        func_82140228(arg0, 0x3F4CCCCD, 0x3DA3D70A); // 0.8f, 0.08f
     }
 }
 
 /**
+ * Sets a stinger particle's callback and descriptor by kind: 1 is the needle (descriptor 25), 2
+ * the particle on the target (descriptor 22).
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Poison Sting, Twineedle, Pin Missile, Spike Cannon.
  */

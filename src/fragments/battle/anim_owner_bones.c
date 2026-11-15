@@ -284,6 +284,9 @@ void Particle_MarkInactive(Particle* arg0) {
 
 M2C_UNK func_8213D260();                            /* extern */
 
+/**
+ * Ends the particle: clears its lifecycle and the words at 0x08 and 0x0C, then resets its phase.
+ */
 void Particle_DisableAndDetach(Particle* arg0) {
     arg0->lifecycle = 0;
     M2C_FIELD(arg0, s32 *, 8) = 0;
@@ -343,7 +346,8 @@ void Particle_AdvanceLifecycle(Particle* arg0) {
 }
 
 /**
- * Initialize once under flag 0x80, decrement immediately, and finish at zero while clearing that flag.
+ * Initialize once under flag 0x80, decrement immediately, and finish at zero while clearing that
+ * flag.
  * Seen in play (2026-11-13) in the 165-move sweep: on its first call with 0x14 it set flag 0x80,
  * set delayTimer to 0x13 and returned 0; called with 0 it returned 1 at once.
  */

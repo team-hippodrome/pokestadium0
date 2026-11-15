@@ -17,7 +17,7 @@ M2C_UNK func_821401D4(s8 *, M2C_UNK);
 void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackDescriptor26BurstChild_InitParticle(arg0);
+            BattleAnim_CallbackDesc26BurstChild_InitParticle(arg0);
             break;
 
         case 2:
@@ -59,12 +59,12 @@ void BattleAnim_CallbackDescriptor26BurstChild(Particle* arg0) {
  * palette 8 and env palette 0x33.
  * @unverified Name guessed from the code.
  */
-void BattleAnim_CallbackDescriptor26BurstEmitter_InitParticle(s32 arg0) {
+void BattleAnim_CallbackDesc26BurstEmitter_InitParticle(s32 arg0) {
     s16 sp26;
 
     sp26 = Particle_GetSpawnIndex();
-    func_821401D4(arg0, 0x3F000000);
-    func_8213E14C(arg0, 0x42C80000);
+    func_821401D4(arg0, 0x3F000000); // 0.5f
+    func_8213E14C(arg0, 0x42C80000); // 100.0f
     Particle_SetParam0(arg0, (s16) (sp26 + 1));
     func_82143408(arg0, 8);
     ParticleGfx_RecolorEnv(arg0, 0x33);
@@ -82,7 +82,7 @@ void BattleAnim_CallbackDescriptor26BurstEmitter_InitParticle(s32 arg0) {
 void BattleAnim_CallbackDescriptor26BurstEmitter(Particle* arg0) {
     switch (arg0->lifecycle) {
         case 1:
-            BattleAnim_CallbackDescriptor26BurstEmitter_InitParticle(arg0);
+            BattleAnim_CallbackDesc26BurstEmitter_InitParticle(arg0);
             break;
 
         case 2:

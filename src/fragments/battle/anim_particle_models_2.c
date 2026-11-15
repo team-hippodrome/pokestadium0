@@ -3,6 +3,8 @@
 #include "battle.h"
 
 /**
+ * Raises or lowers the particle by a species-dependent height (0 by default); for Exeggutor it is
+ * also pushed 10 units forward.
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec

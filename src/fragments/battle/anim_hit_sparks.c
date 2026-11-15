@@ -50,11 +50,12 @@ void BattleAnim_CallbackUnusedGrowingSparkVariant(Particle* arg0) {
 
 
 /**
- * Moves: Bone Club (hit), Dizzy Punch (hit), Double Slap (hit), Drill Peck (hit), Headbutt (hit), Pay Day
- * (hit)
- * TODO: Human contributor add screenshot
- * Effect end init 14 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
- * ran for exactly Bone Club, Dizzy Punch, Double Slap, Drill Peck, Headbutt, Pay Day.
+ * Effect script for a strong contact hit: one default hit spark (descriptor 0x34, variant 7), then
+ * after 2 frames 8 smoke puffs (descriptor 0x3D).
+ * Moves: Bone Club (hit), Dizzy Punch (hit), Double Slap (hit), Drill Peck (hit), Headbutt (hit),
+ * Pay Day (hit) TODO: Human contributor add screenshot Effect end init 14
+ * (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it ran for exactly Bone
+ * Club, Dizzy Punch, Double Slap, Drill Peck, Headbutt, Pay Day.
  */
 void BattleAnim_RunStrongContactMoveHitSpark(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunDefaultHitSpark, &gBattleAnimParticleDescriptors[0x34], 0, 1, 0x11, 7, 0, 7);
@@ -72,6 +73,7 @@ void BattleAnim_InitializeUniqueSharedHitSpark(void) {
 }
 
 /**
+ * Effect script for Low Kick's hit: one default hit spark, then 8 smoke puffs after 2 frames.
  * Effect end init 36 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Low Kick.
  */
@@ -81,13 +83,14 @@ void BattleAnim_InitializeLowKickHit(void) {
 }
 
 /**
- * Moves: Bide (hit), Bonemerang (hit), Counter (hit), Hi Jump Kick (hit), Jump Kick (hit), Karate Chop (hit),
- * Pound (hit), Quick Attack (hit), Rage (hit), Rolling Kick (hit), Struggle (hit), Tackle (hit), Take Down
- * (hit)
- * TODO: Human contributor add screenshot
- * Effect end init 44 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
- * ran for exactly Bonemerang, Hi Jump Kick, Jump Kick, Karate Chop, Pound, Quick Attack, Rage,
- * Rolling Kick, Struggle, Tackle, Take Down.
+ * Effect script for a default contact hit: one default hit spark (descriptor 0x34, variant 9),
+ * then after 2 frames 8 smoke puffs.
+ * Moves: Bide (hit), Bonemerang (hit), Counter (hit), Hi Jump Kick (hit), Jump Kick (hit), Karate
+ * Chop (hit), Pound (hit), Quick Attack (hit), Rage (hit), Rolling Kick (hit), Struggle (hit),
+ * Tackle (hit), Take Down (hit) TODO: Human contributor add screenshot Effect end init 44
+ * (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it ran for exactly
+ * Bonemerang, Hi Jump Kick, Jump Kick, Karate Chop, Pound, Quick Attack, Rage, Rolling Kick,
+ * Struggle, Tackle, Take Down.
  */
 void BattleAnim_InitializeDefaultLimbForMove(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunDefaultHitSpark, &gBattleAnimParticleDescriptors[0x34], 0, 1, 0x11, 9, 0, 6);
@@ -95,6 +98,8 @@ void BattleAnim_InitializeDefaultLimbForMove(void) {
 }
 
 /**
+ * Effect script for a special contact hit: like the default limb hit but with a different spark
+ * color, then 8 smoke puffs after 2 frames.
  * Moves: Mega Kick (hit), Mega Punch (hit), Skull Bash (hit)
  * TODO: Human contributor add screenshot
  * Effect end init 80 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
@@ -106,6 +111,8 @@ void BattleAnim_InitializeSpecialLimbForMove(void) {
 }
 
 /**
+ * Effect script for a pointy-move hit: one pointy-move hit spark (descriptor 0x34), which emits
+ * its own spark children.
  * Moves: Horn Attack (hit), Horn Drill (hit), Peck (hit), Pin Missile (hit), Spike Cannon (hit)
  * TODO: Human contributor add screenshot
  * Effect end init 37 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
@@ -116,6 +123,7 @@ void BattleAnim_InitializePointyMoveHitSparks(void) {
 }
 
 /**
+ * Effect script for the Poison Sting and Twineedle hit: one pointy-move hit spark (variant 4).
  * Effect end init 38 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Poison Sting, Twineedle.
  */
@@ -124,6 +132,7 @@ void BattleAnim_InitializePoisonStingTwineedleHit(void) {
 }
 
 /**
+ * Effect script for the Fury Attack and Gust hit: 7 default hit sparks.
  * Effect end init 47 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Fury Attack, Gust.
  */
@@ -143,11 +152,13 @@ void BattleAnim_InitializeIcePunchUse(void) {
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(1, 8, 6, BattleAnim_RunSparkleHit, &D_8218E798, 0, 8, 0x11, temp_s1, 0x18, 2);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(2, 8, 6, BattleAnim_RunSparkleHit, &D_8218E798, 0, 8, 0x11, temp_s1, 0x18, 2);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(4, 8, 6, BattleAnim_RunSparkleHit, &D_8218E798, 0, 8, 0x11, temp_s1, 0x18, 2);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 6, 0xC, BattleAnim_CallbackEndEffect67Descriptor3DAnimatedGravityFade, &D_8218E7D0, 0, 2, 0x11, temp_s1, 1, 0);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(1, 6, 0xA, BattleAnim_CallbackEndEffect67Descriptor3DAnimatedGravityFade, &D_8218E7D0, 0, 2, 0x11, temp_s1, 1, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 6, 12, BattleAnim_CallbackEnd67Desc3DAnimatedGravityFade, &D_8218E7D0, 0, 2, 0x11, temp_s1, 1, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(1, 6, 10, BattleAnim_CallbackEnd67Desc3DAnimatedGravityFade, &D_8218E7D0, 0, 2, 0x11, temp_s1, 1, 0);
 }
 
 /**
+ * Effect script for Ice Punch's hit: a hit spark, two bursts of 8 falling ice bits at frames 2 and
+ * 3, sparkles at frames 4, 8 and 12, and an owner tint ramp.
  * Effect end init 42 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Ice Punch.
  */
@@ -155,8 +166,8 @@ void BattleAnim_InitializeIcePunchHit(void) {
     UNUSED s32 pad; // FAKE: stack padding
 
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunDefaultHitSpark, &gBattleAnimParticleDescriptors[0x34], 0, 1, 0x11, 9, 3, 5);
-    BattleAnim_CreateEffectSlotForCurrentOwner(2, BattleAnim_CallbackEndEffect67Descriptor3DAnimatedGravityFade, &gBattleAnimParticleDescriptors[0x3D], 0, 8, 0x10, 0x64, 0, 0);
-    BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_CallbackEndEffect67Descriptor3DAnimatedGravityFade, &gBattleAnimParticleDescriptors[0x3D], 0, 8, 0x10, 0x64, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(2, BattleAnim_CallbackEnd67Desc3DAnimatedGravityFade, &gBattleAnimParticleDescriptors[0x3D], 0, 8, 0x10, 0x64, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(3, BattleAnim_CallbackEnd67Desc3DAnimatedGravityFade, &gBattleAnimParticleDescriptors[0x3D], 0, 8, 0x10, 0x64, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_RunSparkleHit, &gBattleAnimParticleDescriptors[0x42], 0, 8, 9, 0, 0x18, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_RunSparkleHit, &gBattleAnimParticleDescriptors[0x42], 0, 4, 9, 0, 0x18, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(12, BattleAnim_RunSparkleHit, &gBattleAnimParticleDescriptors[0x42], 0, 4, 9, 0, 0x18, 0);
@@ -164,13 +175,15 @@ void BattleAnim_InitializeIcePunchHit(void) {
 }
 
 /**
+ * Effect script for Thunder Punch's hit: a hit spark, the Thunder Punch sparks at frame 4, rising
+ * scatter particles, a full-screen flash and an owner tint ramp.
  * Effect end init 43 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Thunder Punch.
  */
 void BattleAnim_InitializeThunderPunchHit(void) {
     func_8213B560(0, &func_82162C68, &D_8218E728, 0, 1, 0x11, 9, 3, 5);
     func_8213B560(4, &func_82162938, &D_8218E788, 0, 1, 0x10, 0x64, 0, 0);
-    func_8213B5D8(0, 4, 5, &BattleAnim_CallbackStartEffects18And73Descriptor11ScatterRiseFade, &D_8218E610, 8, 4, 2, 0, 0, 0);
+    func_8213B5D8(0, 4, 5, &BattleAnim_CallbackStart18And73Desc11ScatterRise, &D_8218E610, 8, 4, 2, 0, 0, 0);
     func_8213B794(0, 0, 0x40, 8, 0xC8);
     func_8213BC00(0, 0x17, 0xE1, 0, 0x40);
 }
@@ -181,10 +194,12 @@ void BattleAnim_InitializeThunderPunchHit(void) {
  * @unverified Name from Stadium 1.
  */
 void BattleAnim_OrphanDescriptor34Emitter(void) {
-    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackOrphanDescriptor34ColorFadeDetach, &gBattleAnimParticleDescriptors[0x34], 0, 5, 0x11, gBattleAnimCurrentAnchor, 0, 0);
+    BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_CallbackOrphanDesc34ColorFadeDetach, &gBattleAnimParticleDescriptors[0x34], 0, 5, 0x11, gBattleAnimCurrentAnchor, 0, 0);
 }
 
 /**
+ * Effect script for Submission's use: rising particles 3 at a time every 2 frames, at frame 0 and
+ * again at frame 40.
  * Effect start init 108 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Submission.
  */
@@ -194,6 +209,8 @@ void BattleAnim_InitializeSubmissionUse(void) {
 }
 
 /**
+ * Effect script for Stomp's hit: a heavy-hit spark, a ground ring spark, and rising particles 3 at
+ * a time every 2 frames from frame 4.
  * Effect end init 39 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Stomp.
  */
@@ -204,11 +221,12 @@ void BattleAnim_InitializeStompHit(void) {
 }
 
 /**
- * Moves: Body Slam (hit), Crabhammer (hit), Double-Edge (hit), Fly (hit), Seismic Toss (hit), Slam (hit),
- * Thrash (hit)
- * TODO: Human contributor add screenshot
- * Effect end init 45 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
- * ran for exactly Body Slam, Crabhammer, Double Edge, Seismic Toss, Slam, Thrash.
+ * Effect script for a grounded hit: 5 heavy-hit sparks, a ground ring spark after 8 frames, and
+ * rising particles 3 at a time every 2 frames from frame 12.
+ * Moves: Body Slam (hit), Crabhammer (hit), Double-Edge (hit), Fly (hit), Seismic Toss (hit), Slam
+ * (hit), Thrash (hit) TODO: Human contributor add screenshot Effect end init 45
+ * (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it ran for exactly Body
+ * Slam, Crabhammer, Double Edge, Seismic Toss, Slam, Thrash.
  */
 void BattleAnim_InitializeGroundedCircularHitSpark(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunHeavyHitSparksAndSmoke, &gBattleAnimParticleDescriptors[0x34], 0, 5, 0x11, 0x64, 9, 0);
@@ -217,6 +235,8 @@ void BattleAnim_InitializeGroundedCircularHitSpark(void) {
 }
 
 /**
+ * Effect script for Submission's hit: 5 heavy-hit sparks, a ground ring spark at frame 8, and
+ * rising particles 3 at a time every 2 frames from frame 12.
  * Effect end init 46 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Submission.
  */
@@ -227,8 +247,9 @@ void BattleAnim_InitializeSubmissionHit(void) {
 }
 
 /**
- * Moves: Bite (hit), Clamp (hit), Guillotine (hit), Hyper Fang (hit), Super Fang (hit), Vice Grip (hit)
- * TODO: Human contributor add screenshot
+ * Effect script for the biting moves' hit: 7 heavy-hit sparks (descriptor 0x34).
+ * Moves: Bite (hit), Clamp (hit), Guillotine (hit), Hyper Fang (hit), Super Fang (hit), Vice Grip
+ * (hit) TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Vise Grip, Bite, Clamp, Hyper Fang, Super Fang.
  */
@@ -247,6 +268,8 @@ void BattleAnim_InitializeSwiftUse(void) {
 }
 
 /**
+ * Effect script for Swift's hit: four star bursts at frames 0, 3, 5 and 8, and sparkles at frames
+ * 12, 18 and 32.
  * Effect end init 52 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Swift.
  */
@@ -280,22 +303,25 @@ void BattleAnim_StartEffect136Sand(void) {
 }
 
 /**
+ * Effect script for the Scratch and Slash use: a Scyther runs the Cut animation instead; otherwise
+ * three slash streaks at frames 0, 4 and 10, the slash flash at frame 30 and a full-screen flash
+ * at frame 35.
  * Effect start init 13 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Fury Swipes, Scratch, Slash.
  */
 void BattleAnim_InitializeScratchSlashUse(void) {
     void (*sp30)(s8*);
 
-    if (func_82107CF0(D_8219A814) == 0x7B) {
+    if (func_82107CF0(D_8219A814) == SCYTHER) {
         BattleAnim_InitializeCutUse();
         return;
     }
     sp30 = BattleAnim_CallbackSharedDescriptor29ScaleAnimFade;
     func_8213B560(0, (M2C_UNK*)sp30, &D_8218E6D0, 0, 3, 0x10, (s32) D_8219A80A, 0xB, 0);
     func_8213B560(4, (M2C_UNK*)sp30, &D_8218E6D0, 0, 3, 0x10, (s32) D_8219A80A, 0xB, 1);
-    func_8213B560(0xA, (M2C_UNK*)sp30, &D_8218E6D0, 0, 3, 0x10, (s32) D_8219A80A, 0xB, 2);
-    func_8213B560(0x1E, &BattleAnim_RunSlashingMoveFullScreenFlash, &D_8218E6C8, 0, 1, 0x18, 0, 0xF, 0);
-    func_8213B720(0x23, 0, 0x10, 0x12);
+    func_8213B560(10, (M2C_UNK*)sp30, &D_8218E6D0, 0, 3, 0x10, (s32) D_8219A80A, 0xB, 2);
+    func_8213B560(30, &BattleAnim_RunSlashingMoveFullScreenFlash, &D_8218E6C8, 0, 1, 0x18, 0, 0xF, 0);
+    func_8213B720(35, 0, 0x10, 0x12);
 }
 
 /**
@@ -306,7 +332,7 @@ void BattleAnim_InitializeScratchSlashUse(void) {
 void BattleAnim_InitializeScratchSlashHit(void) {
     UNUSED s32 pad; // FAKE: stack padding
 
-    if (BattleAnim_GetOwnerSpecies(gBattleAnimSecondaryOwner) == 0x7B) {
+    if (BattleAnim_GetOwnerSpecies(gBattleAnimSecondaryOwner) == SCYTHER) {
         BattleAnim_InitializeCutCrabhammerHit();
         return;
     }
@@ -319,6 +345,8 @@ void BattleAnim_InitializeScratchSlashHit(void) {
 }
 
 /**
+ * Effect script for Cut: three slash streaks at frames 0, 4 and 10, a colored grow-fade at frame
+ * 30, and a full-screen flash at frame 35.
  * Moves: Cut (use), Scratch (use), Slash (use)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep it ran only for Cut, not for Slash or Scratch,
@@ -331,7 +359,7 @@ void BattleAnim_InitializeCutEffect(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackSharedDescriptor29ScaleAnimFade, &gBattleAnimParticleDescriptors[0x29], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0xB, 1);
     BattleAnim_CreateEffectSlotForCurrentOwner(10, BattleAnim_CallbackSharedDescriptor29ScaleAnimFade, &gBattleAnimParticleDescriptors[0x29], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0xB, 2);
     BattleAnim_CreateEffectSlotForCurrentOwner(30, BattleAnim_CallbackSharedOwnerKeyedGrowColorFade, &gBattleAnimParticleDescriptors[0x41], 0, 1, 0x18, 0, 0xF, 0);
-    BattleAnim_SpawnDesc25AlphaHoldFadeOutFullAlpha(0x23, 0, 0x10, 0x12);
+    BattleAnim_SpawnDesc25AlphaHoldFadeOutFullAlpha(35, 0, 0x10, 0x12);
 }
 
 /**
@@ -346,6 +374,8 @@ void BattleAnim_InitializeCutCrabhammerHit(void) {
 }
 
 /**
+ * Effect script for Vine Whip's use: three whip streaks at frames 0, 4 and 10, a grow-fade at
+ * frame 30 and a full-screen flash at frame 35.
  * Effect start init 117 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Vine Whip.
  */
@@ -356,10 +386,12 @@ void BattleAnim_InitializeVineWhipUse(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackSharedDescriptor29ScaleAnimFade, &gBattleAnimParticleDescriptors[0x29], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0xD, 1);
     BattleAnim_CreateEffectSlotForCurrentOwner(10, BattleAnim_CallbackSharedDescriptor29ScaleAnimFade, &gBattleAnimParticleDescriptors[0x29], 0, 1, 0x10, gBattleAnimCurrentAnchor, 0xD, 2);
     BattleAnim_CreateEffectSlotForCurrentOwner(30, BattleAnim_CallbackSharedOwnerKeyedGrowColorFade, &gBattleAnimParticleDescriptors[0x41], 0, 1, 0x18, 0, 0xD, 1);
-    BattleAnim_SpawnDesc25AlphaHoldFadeOutFullAlpha(0x23, 0, 0x10, 0x27);
+    BattleAnim_SpawnDesc25AlphaHoldFadeOutFullAlpha(35, 0, 0x10, 0x27);
 }
 
 /**
+ * Effect script for Vine Whip's hit: a full-screen flash, a slash grow-fade and a colored fade at
+ * frame 3, and three streams of slowly falling leaves.
  * Effect end init 85 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Vine Whip.
  */
@@ -381,11 +413,12 @@ void BattleAnim_InitializeVineWhipHit(void) {
  * it ran for exactly Fire Punch.
  */
 void BattleAnim_InitializeFirePunchUse(void) {
-    func_8213B5D8(0, 1, 0x24, &BattleAnim_FirePunchParticleUpdate, &D_8218E7B0, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
+    func_8213B5D8(0, 1, 36, &BattleAnim_FirePunchParticleUpdate, &D_8218E7B0, 0, 1, 0x11, (s32) D_8219A80A, 0, 0);
     func_8213B560(0, &func_82163540, &D_8218E788, 0, 1, 0x10, (s32) D_8219A80A, 0, 0);
 }
 
 /**
+ * Effect script for Razor Wind's hit: 6 Razor Wind hit particles (descriptor 0x29).
  * Seen in play (2026-11-13) (Free Battle, 1P Onix's Razor Wind with its accuracy raised so it
  * lands): called through the effect table on the second (attacking) turn, and
  * Pinsir dropped from 75 to 68 HP. In the earlier sweep the second turn missed and this did not
@@ -406,13 +439,15 @@ void BattleAnim_InitializeRazorLeafUse(void) {
 }
 
 /**
+ * Effect script for Razor Leaf's hit: 8 leaves at frame 0, 10 more at frame 16, and a global tint
+ * fade at frame 70.
  * Effect end init 4 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Razor Leaf.
  */
 void BattleAnim_InitializeRazorLeafHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunPetalDanceRazorLeafHitEffect, &gBattleAnimParticleDescriptors[0x29], 0, 8, 0x10, 9, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(0x10, BattleAnim_RunPetalDanceRazorLeafHitEffect, &gBattleAnimParticleDescriptors[0x29], 0, 0xA, 0x10, 9, 0, 0);
-    BattleAnim_SpawnGlobalTintColorFadeDetach(0x46, 4, 0x8);
+    BattleAnim_SpawnGlobalTintColorFadeDetach(70, 4, 0x8);
 }
 
 /**
@@ -426,6 +461,8 @@ void BattleAnim_InitializePetalDanceUse(void) {
 }
 
 /**
+ * Effect script for Petal Dance's hit: adds 16 frames of spawn delay, then four bursts of 8 petals
+ * at frames 0, 16, 32 and 48.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Petal Dance.
  */
@@ -438,32 +475,35 @@ void BattleAnim_InitializePetalDanceHitSequence(void) {
 }
 
 /**
- * Moves: Poison Gas (hit), Poison Powder (hit), Sleep Powder (hit), Smog (hit), Spore (hit), Stun Spore (hit)
- * TODO: Human contributor add screenshot
- * Effect end init 18 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
- * ran for exactly Poison Gas, Poison Powder, Sleep Powder, Smog, Spore, Stun Spore.
+ * Effect script for the powder, spore and gas moves' hit: a user hue pulse colored by move (Poison
+ * Powder, Smog and Poison Gas share one color, Stun Spore and Spore another, Sleep Powder its
+ * own), then 7 powder cloud particles.
+ * Moves: Poison Gas (hit), Poison Powder (hit), Sleep Powder (hit), Smog (hit), Spore (hit), Stun
+ * Spore (hit) TODO: Human contributor add screenshot Effect end init 18
+ * (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it ran for exactly
+ * Poison Gas, Poison Powder, Sleep Powder, Smog, Spore, Stun Spore.
  */
 void BattleAnim_InitializePowderSporeGasMoveHit(void) {
     s32 temp_v0;
 
     temp_v0 = func_8213646C();
     switch (temp_v0) {                              /* irregular */
-    case 0x4D:
+    case POISONPOWDER:
         func_8213BC7C(0, 0x64, 0x3B, 0, 0xA0, 4);
         break;
-    case 0x4E:
+    case STUN_SPORE:
         func_8213BC7C(0, 0x64, 0x17, 0, 0xA0, 4);
         break;
-    case 0x4F:
+    case SLEEP_POWDER:
         func_8213BC7C(0, 0x64, 0x2D, 0, 0xA0, 4);
         break;
-    case 0x93:
+    case SPORE:
         func_8213BC7C(0, 0x64, 0x17, 0, 0xA0, 4);
         break;
-    case 0x7B:
+    case SMOG:
         func_8213BC7C(0, 0x64, 0x3B, 0, 0xA0, 4);
         break;
-    case 0x8B:
+    case POISON_GAS:
         func_8213BC7C(0, 0x64, 0x3B, 0, 0xA0, 4);
         break;
     }
@@ -483,6 +523,8 @@ void BattleAnim_InitializeSandAttackUse(void) {
 }
 
 /**
+ * Effect script for Sand-Attack's hit: two bursts of 5 rising sand grains at frames 0 and 3, and 7
+ * sand cloud particles.
  * Effect end init 55 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Sand Attack.
  */
@@ -493,12 +535,14 @@ void BattleAnim_InitializeSandAttackHit(void) {
 }
 
 /**
+ * Effect script for Acid Armor's use: the owner fades out and back in at frame 36, an owner tint
+ * ramp, 6 frames of spawn delay, the Acid Armor particle, and 8 bubbles every 4 frames.
  * Effect start init 81 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Acid Armor.
  */
 void BattleAnim_InitializeAcidArmorUse(void) {
     func_8213C0D8(0, 0xFF, 0x30, 6);
-    func_8213C0D8(0x24, 0, 0, 0xFF);
+    func_8213C0D8(36, 0, 0, 0xFF);
     func_8213BC00(0, 0x21, 0, 0xFF, 8);
     func_8213B464(6);
     func_8213B560(2, &BattleAnim_AcidArmorParticleUpdateA, &D_8218E7D8, 0, 1, 0xA, 0, 0x2F, 0);
@@ -506,6 +550,9 @@ void BattleAnim_InitializeAcidArmorUse(void) {
 }
 
 /**
+ * Effect script for Flash's use: a global tint fade, owner tint ramps, a fade-in overlay at frame
+ * 12, hit sparks at frame 12, then 33 more frames of spawn delay before a full-screen flash, a
+ * second tint fade and a last tint ramp.
  * Moves: Flash (use)
  * TODO: Human contributor add screenshot
  * Effect start init 16 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
@@ -514,15 +561,17 @@ void BattleAnim_InitializeAcidArmorUse(void) {
 void BattleAnim_InitializeFlashUse(void) {
     func_8213B644(0, 0x20, 6);
     func_8213BC00(8, 8, 0, 0xFF, 0x40);
-    func_8213B878(0xC, 5, 0x10, 8);
-    func_8213B560(0xC, &func_82162C68, &D_8218E728, 0, 4, 9, 0, 0x18, 0xD);
-    func_8213B464(0x21);
+    func_8213B878(12, 5, 0x10, 8);
+    func_8213B560(12, &func_82162C68, &D_8218E728, 0, 4, 9, 0, 0x18, 0xD);
+    func_8213B464(33);
     func_8213B720(0, 0, 0x10, 8);
     func_8213B644(0, 0x10, 8);
     func_8213BC00(0, 8, 0xFF, 0, 0x10);
 }
 
 /**
+ * Effect script for Flash's hit: a global tint fade, an owner tint ramp at frame 8, a full-screen
+ * flash, then 33 frames of spawn delay before a second tint fade and a last tint ramp.
  * Effect end init 57 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used: it
  * ran for exactly Flash.
  */
@@ -530,12 +579,14 @@ void BattleAnim_InitializeFlashHit(void) {
     func_8213B644(0, 0x20, 6);
     func_8213BC00(8, 8, 0, 0xFF, 0x40);
     func_8213B720(0, 0, 0x10, 8);
-    func_8213B464(0x21);
+    func_8213B464(33);
     func_8213B644(0, 0x10, 8);
     func_8213BC00(0, 8, 0xFF, 0, 0x10);
 }
 
 /**
+ * Effect script for the Bide and Rage use: a user hue pulse, rising particles (14 every 4 frames,
+ * 7 every 8 frames), 32 flames under the Pokémon, and the shared Bide/Rage overlay.
  * Effect start init 85 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Rage.
  */
@@ -544,24 +595,28 @@ void BattleAnim_InitializeBideRageUse(void) {
 
     func_8213BC7C(0, 1, 0xA, 0, 0xC8, 0x10);
     sp38 = &BattleAnim_CallbackSharedAnimatedVerticalFade;
-    func_8213B5D8(6, 4, 0xE, &BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 0x11, 7, 0x1A, 0);
+    func_8213B5D8(6, 4, 14, &BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 0x11, 7, 0x1A, 0);
     func_8213B5D8(7, 8, 7, &BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 0x11, 7, 0x1A, 0);
     func_8213B560(0, &BattleAnim_RunOscillatingFlameUnderneathPokemon, &D_8218E7F8, 0, 0x20, 7, 0, 0, 0);
     func_8215E510();
 }
 
 /**
+ * Effect script for the Struggle and Thrash use: a user hue pulse, rising particles 3 at a time
+ * every 2 frames from frame 4, and two more streams of rising particles.
  * Effect start init 114 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Struggle, Thrash.
  */
 void BattleAnim_InitializeStruggleThrashUse(void) {
     BattleAnim_SpawnOwnerTintPulseDetach(0, 1, 0xA, 0, 0xC8, 4);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(4, 3, 2, BattleAnim_HeavyHitAnimatedRiseFade, &gBattleAnimParticleDescriptors[0x3F], 0, 0x10, 0xA, 0, 0x11, 0);
-    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(6, 4, 0xE, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 0x11, 7, 0x33, 7);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(6, 4, 14, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 0x11, 7, 0x33, 7);
     BattleAnim_CreateRepeatEffectSlotForCurrentOwner(7, 8, 7, BattleAnim_CallbackSharedAnimatedVerticalFade, &gBattleAnimParticleDescriptors[0x3D], 0, 1, 0x11, 7, 0x33, 7);
 }
 
 /**
+ * Effect script for the Double-Edge and Take Down use: a global tint fade, the speed lines, and
+ * rising particles 3 at a time every 2 frames from frame 8.
  * Effect start init 115 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Double Edge, Take Down.
  */
@@ -572,6 +627,7 @@ void BattleAnim_InitializeDoubleEdgeTakeDownUse(void) {
 }
 
 /**
+ * Effect script for Body Slam's use: rising particles 3 at a time every 2 frames from frame 4.
  * Effect start init 116 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Body Slam.
  */
@@ -580,6 +636,8 @@ void BattleAnim_InitializeBodySlamUse(void) {
 }
 
 /**
+ * Effect script for the Earthquake and Fissure hit: four bursts of 8 rising dust particles on
+ * frames 4 to 7, then 5 hit sparks at frames 8 and 16.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Earthquake.
  */
@@ -607,6 +665,8 @@ void BattleAnim_SpawnVerticalFadesAndHitSparks(void) {
 }
 
 /**
+ * Effect script for the Defense Curl and Sharpen use: several bursts of rising particles
+ * (descriptor 0x3D) at frames 0, 4 and 8.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Defense Curl, Sharpen.
  */
@@ -620,6 +680,8 @@ void BattleAnim_InitializeDefenseCurlSharpenUseSequence(void) {
 }
 
 /**
+ * Effect script for the Substitute and Transform use: owner tint ramps at frames 4 and 9 and six
+ * bursts of 8 rising particles over frames 0 to 8.
  * Effect start init 89 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Substitute, Transform.
  */
@@ -635,6 +697,9 @@ void BattleAnim_InitializeSubstituteTransformUse(void) {
 }
 
 /**
+ * Effect script for the gathering-energy charge: seven groups of burst emitters at frames 0, 8,
+ * 16, 24, 32, 48 and 60 (4 emitters in each of the first two, 8 in the rest), with arg0 as their
+ * palette parameter.
  * Moves: Conversion (use), Mimic (use), Recover (use), Sky Attack (use), Solar Beam (use)
  * TODO: Human contributor add screenshot
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
@@ -651,6 +716,8 @@ void BattleAnim_InitializeQiCharge(s32 arg0) {
 }
 
 /**
+ * Effect script for the Mimic and Conversion use: a global tint fade, the energy charge in color
+ * 0x0E, and a second tint fade at frame 100.
  * Moves: Conversion (use), Mimic (use)
  * TODO: Human contributor add screenshot
  * Effect start init 29, start init 60 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all
@@ -659,18 +726,20 @@ void BattleAnim_InitializeQiCharge(s32 arg0) {
 void BattleAnim_InitializeMimicConversionUse(void) {
     func_8213B644(0, 8, 6);
     func_82168844(0xE);
-    func_8213B644(0x64, 0x20, 8);
+    func_8213B644(100, 0x20, 8);
 }
 
 /**
+ * Effect script for Solar Beam's charge: a global tint fade, the energy charge in color 0x17, the
+ * Solar Beam glow at frame 10, and a second tint fade at frame 100.
  * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
  * for Solar Beam.
  */
 void BattleAnim_InitializeSolarBeamUseSequence(void) {
     func_8213B644(0, 8, 6);
     func_82168844(0x17);
-    func_8213B560(0xA, &func_821655C0, &D_8218E768, 0x1A, 1, 5, 0, 0x33, 0);
-    func_8213B644(0x64, 0x20, 8);
+    func_8213B560(10, &func_821655C0, &D_8218E768, 0x1A, 1, 5, 0, 0x33, 0);
+    func_8213B644(100, 0x20, 8);
 }
 
 /**
@@ -680,10 +749,12 @@ void BattleAnim_InitializeSolarBeamUseSequence(void) {
  * it ran for exactly Growth.
  */
 void BattleAnim_InitializeGrowthUse(void) {
-    func_8213BC7C(0xA, 1, 8, 0, 0xFF, 0x20);
+    func_8213BC7C(10, 1, 8, 0, 0xFF, 0x20);
 }
 
 /**
+ * Effect script for Recover's use: a global tint fade, the energy charge in color 0x0C, a rainbow
+ * hue change at frame 4, and 5 sparkles every 8 frames from frame 4.
  * Seen in play (2026-11-13) ran when 1P used Recover with its HP set to 5 (at full HP the move
  * fails and the sweep never saw the animation).
  * @unverified Name from Stadium 1.
@@ -696,6 +767,8 @@ void BattleAnim_InitializeRecoverUse(void) {
 }
 
 /**
+ * Effect script for Harden's use: an owner tint ramp and 2 particle bursts every 2 frames from
+ * frame 4.
  * Effect start init 30 (BattleAnim_RunEffectInitStart/End). Effect-id sweep, all 165 moves used:
  * it ran for exactly Harden.
  */
