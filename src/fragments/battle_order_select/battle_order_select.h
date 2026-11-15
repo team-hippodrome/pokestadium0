@@ -85,7 +85,7 @@ void BattleMenu_PickOrderSlot(OrderSelectPanel* panel, s8 slot);
 void BattleMenu_UndoSelections(OrderSelectPanel* panel);
 void BattleMenu_HandleOrderSelectPanel_PartyInput(Controller* cont, OrderSelectPanel* panel);
 void BattleMenu_HandleOrderSelectPanel_ConfirmInput(Controller* cont, OrderSelectPanel* panel);
-void BattleMenu_HandleOrderSelectPanel_LevelSumNoticeInput(Controller* cont, OrderSelectPanel* panel);
+void BattleMenu_HandleLevelSumNoticeInput(Controller* cont, OrderSelectPanel* panel);
 s32 BattleMenu_UpdateOrderSelectPanel(s32 fade_mode, OrderSelectPanel* panel);
 s32 BattleMenu_UpdateOrderSelect(s32 fade_mode);
 void BattleMenu_SetLeadTagTeamMember(BattleSide* side, OrderSidebarIcons* sidebar);

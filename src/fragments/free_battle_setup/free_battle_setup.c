@@ -894,7 +894,7 @@ void FreeBattle_DrawMonCell(s32 x, s32 y, s32* entry, s32 frame, s32 flags, s32 
         func_8001ABBC();
         gSPDisplayList(gDisplayListHead++, D_80073450);
         gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-        func_8001BCB4(x + 0x2C, y + 0x19, 8, 0xA, D_04011A60, 8, 0);
+        func_8001BCB4(x + 44, y + 25, 8, 10, D_04011A60, 8, 0);
         Ui_DrawNumberUnpadded(x + 0x38, y + 0x17, ((u8*)entry)[0x24]);
         key = cache->start + frame;
         idx = cache->base + key % cache->count;
@@ -1046,7 +1046,7 @@ void FreeBattle_DrawRentalNameList(s32 x, s32 y, s32 flags, Slot82001E20* team) 
     } else if (team->flags & 4) {
         img.width = img.height = img.stride = 0x40;
         img.pixels = D_8200AD08[team->index];
-        Ui_DrawImageInStrips(&img, x + 0x16, y + 2);
+        Ui_DrawImageInStrips(&img, x + 22, y + 2);
     }
     if (team->flags & 2) {
         func_8001AB6C();
@@ -1067,8 +1067,8 @@ void FreeBattle_DrawRentalNameList(s32 x, s32 y, s32 flags, Slot82001E20* team) 
     if (team->value != 0) {
         gSPDisplayList(gDisplayListHead++, D_80073450);
         gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-        func_8001BCB4(x + 0x25, y + 0x56, 0x28, 0xA, D_04010918, 0x28, 0);
-        Ui_DrawNumberZeroPadded(x + 0x51, y + 0x54, team->value, 5);
+        func_8001BCB4(x + 37, y + 86, 40, 10, D_04010918, 40, 0);
+        Ui_DrawNumberZeroPadded(x + 81, y + 84, team->value, 5);
     }
 }
 

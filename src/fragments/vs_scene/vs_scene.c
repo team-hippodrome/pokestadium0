@@ -332,7 +332,7 @@ M2C_UNK func_8000A7FC(M2C_UNK);
 /**
  * The reverse of VsScene_ZoomIntoScreen: moves the camera along the path from the big screen back
  * out to the stadium (D_82202D08/D_82202D24 in Free Battle, D_82202C98/D_82202CB4 in tournaments),
- * one frame per step. On step 20 it calls StageFade_Start(0x20) and func_8000A7FC(0x3C) (@unverified:
+ * one frame per step. On step 20 it calls StageFade_Start(0x20) and func_8000A7FC(60) (@unverified:
  * the screen fades to white as the step runs).
  * Seen in play (2026-11-14) at the end of the pre-battle panels, the results board and the
  * next-round panels: the camera pulls back out of the screen to the field, then the screen fades.
@@ -355,9 +355,9 @@ void VsScene_ZoomOutOfScreen(void) {
     do {  // karodo
     } while (0); // karodo
     while (BezierPath_Step(sp8C, rec + 0xA8) != 0) {
-        if (i++ == 0x14) {
+        if (i++ == 20) {
             StageFade_Start(0x20);
-            func_8000A7FC(0x3C);
+            func_8000A7FC(60);
         }
         BezierPath_Step(sp50, rec + 0xB4);
         done = VsScene_DrawFrameToImage(0);
@@ -901,7 +901,7 @@ void VsScene_PlayResultsBoard(void) {
             var_s0_2 += 1;
         } while (var_s0_2 != 7);
     }
-    func_80006828(0x1E, VsScene_DrawFrame);
+    func_80006828(30, VsScene_DrawFrame);
 }
 
 M2C_UNK func_8001107C(M2C_UNK *, M2C_UNK, M2C_UNK *); /* extern */
@@ -923,7 +923,7 @@ void VsScene_PlayWinLose(void) {
     }
     D_82203268.node.renderFlags |= 0x20;
     func_8001107C(&D_82203268, 0, &D_8F6256E0);
-    func_80006828(0x96, &VsScene_DrawFrame);
+    func_80006828(150, &VsScene_DrawFrame);
 }
 
 extern Color_RGB8 D_8220308C;
@@ -1019,14 +1019,14 @@ s32 Tournament_PlayBadgeAward(void) {
         Audio_PlayCommand(0x50, 0, 0);
         D_8220354C = D_822036A4->roundOrDemoId - 1;
         if (D_822036A4->roundOrDemoId == 8) {
-            BgStage_RunUntilCondition(0x5A, VsScene_DrawFrame);
+            BgStage_RunUntilCondition(90, VsScene_DrawFrame);
             Audio_PlayCommand(0x51, 0, 0);
-            BgStage_RunUntilCondition(0x19, VsScene_DrawFrame);
+            BgStage_RunUntilCondition(25, VsScene_DrawFrame);
             Audio_PlayCommand(0x52, 0, 0);
-            BgStage_RunUntilCondition(0x37, VsScene_DrawFrame);
+            BgStage_RunUntilCondition(55, VsScene_DrawFrame);
             Tournament_RecordCupClear();
         } else {
-            BgStage_RunUntilCondition(0x55, VsScene_DrawFrame);
+            BgStage_RunUntilCondition(85, VsScene_DrawFrame);
             Audio_PlayCommand(0x51, 0, 0);
             BgStage_RunUntilCondition(0xF, VsScene_DrawFrame);
             sp24 = Tournament_RunContinuePrompt();

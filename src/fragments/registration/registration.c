@@ -5,6 +5,8 @@
 #include "font.h"
 #include "graphics_textures.h"
 #include "registration.h"
+#include "pokemon.h"
+#include "moves.h"
 
 s32 func_800246A8(M2C_UNK, s32);                    /* extern */
 
@@ -507,8 +509,8 @@ void Registration_DrawTrainerPanel(s32 x, s32 y, s32 text_flags, RegisteredTeam*
     if (team->trainerId != 0) {
         gSPDisplayList(gDisplayListHead++, D_80073450);
         gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-        func_8001BCB4(x + 0x25, y + 0x56, 0x28, 0xA, D_04010918, 0x28, 0);
-        Ui_DrawNumberZeroPadded(x + 0x51, y + 0x54, team->trainerId, 5);
+        func_8001BCB4(x + 37, y + 86, 40, 10, D_04010918, 40, 0);
+        Ui_DrawNumberZeroPadded(x + 81, y + 84, team->trainerId, 5);
     }
 }
 
@@ -570,8 +572,8 @@ extern Gfx D_80073438[];
 s32 PokeIcon_GetImage(s8 *arg0, s32 arg1);
 void func_8001B884(s32, s32, s32, s32, u8*, s32, s32);
 /**
- * Draws a cell with the Ditto placeholder icon (icon slot 0x18, which Registration_AllocScreen
- * renders from species 0x84 = Ditto).
+ * Draws a cell with the Ditto placeholder icon (icon slot 24, which Registration_AllocScreen
+ * renders from species 132 = Ditto).
  * Seen in play (2026-11-12): the pink Ditto placeholders in slot 01.
  * Seen in play (2026-11-14): also ran while the delete animation turned the Pokémon back into Ditto.
  */
@@ -579,7 +581,7 @@ void Registration_DrawDittoCell(s32 x, s32 y) {
     gSPDisplayList(gDisplayListHead++, D_80060270);
     func_80029028(x, y, 132, 50, D_88102D78[0]);
     gSPDisplayList(gDisplayListHead++, D_80073408);
-    func_8001B884(x + 86, y + 6, 40, 40, (u8*)PokeIcon_GetImage((s8*)D_88103074, 0x18), 40, 0x200000);
+    func_8001B884(x + 86, y + 6, 40, 40, (u8*)PokeIcon_GetImage((s8*)D_88103074, 24), 40, 0x200000);
     gSPDisplayList(gDisplayListHead++, D_80073438);
 }
 
@@ -604,8 +606,8 @@ void Registration_DrawRevealedMonCell(s32 x, s32 y, u8* mon, s32 icon_id, s32 te
         Font_Printf(x + 4, y + 4, mon + 0x30);
         Font_EndTexturedTextRendering();
         gSPDisplayList(gDisplayListHead++, D_80073450);
-        func_8001BCB4(x + 0x2C, y + 0x19, 8, 0xA, D_04011A60, 8, 0);
-        Ui_DrawNumber(x + 0x38, y + 0x17, mon[0x24], 3);
+        func_8001BCB4(x + 44, y + 25, 8, 10, D_04011A60, 8, 0);
+        Ui_DrawNumber(x + 56, y + 23, mon[0x24], 3);
         idx = icon_id % cache[2] + cache[1];
         gSPDisplayList(gDisplayListHead++, D_80073408);
         func_8001B884(x + 86, y + 6, 40, 40, (u8*)PokeIcon_GetImage((s8*)D_88103074, idx), 40, 0x200000);
@@ -621,7 +623,7 @@ void Registration_DrawRevealedMonCell(s32 x, s32 y, u8* mon, s32 icon_id, s32 te
 void Registration_InitTimer(RegistrationTimer* timer, s32 steps) {
     timer->frame = 0;
     timer->steps = steps;
-    timer->framesPerStep = 0xF;
+    timer->framesPerStep = 15;
 }
 
 /**
@@ -631,8 +633,8 @@ void Registration_InitTimer(RegistrationTimer* timer, s32 steps) {
  */
 void Registration_InitTimerFull(RegistrationTimer* timer, s32 steps) {
     timer->steps = steps;
-    timer->framesPerStep = 0xF;
-    timer->frame = (s32) (steps * 0xF);
+    timer->framesPerStep = 15;
+    timer->frame = (s32) (steps * 15);
 }
 
 typedef struct unk_func_88101690 {
@@ -717,14 +719,14 @@ void Registration_DrawTeamRow(s32 x, s32 y, s32 item, s32 row, s32 flags, s32 un
             if (flags & 2) {
                 color = 0x10000;
             }
-            Registration_DrawMonCell(x + 0x88 + (i % 3) * 0x84, (i / 3) * 0x32 + y, entry + 4, row * 6 + i, color, &cache);
+            Registration_DrawMonCell(x + 136 + (i % 3) * 132, (i / 3) * 50 + y, entry + 4, row * 6 + i, color, &cache);
         }
         for (; i < 6; i++) {
             color = 0;
             if (flags & 2) {
                 color = 0x10000;
             }
-            Registration_DrawMonCell(x + 0x88 + (i % 3) * 0x84, (i / 3) * 0x32 + y, NULL, row * 6 + i, color, &cache);
+            Registration_DrawMonCell(x + 136 + (i % 3) * 132, (i / 3) * 50 + y, NULL, row * 6 + i, color, &cache);
         }
     } else {
         Registration_FillTrainerPanel(x, y, D_88102D7C);
@@ -763,20 +765,20 @@ void Registration_DrawDittoTransformRow(s32 x, s32 y, RegisteredTeam* team, s32 
         }
     }
     for (i = 0; i < n; i++, entry += 0x54) {
-        Registration_DrawRevealedMonCell(x + 0x88 + (i % 3) * 0x84, (i / 3) * 0x32 + y, entry + 4, row * 6 + i, 0, (s32*)&cache);
+        Registration_DrawRevealedMonCell(x + 136 + (i % 3) * 132, (i / 3) * 50 + y, entry + 4, row * 6 + i, 0, (s32*)&cache);
     }
     for (; i < team->mons.count; i++) {
-        Registration_DrawDittoCell(x + 0x88 + (i % 3) * 0x84, (i / 3) * 0x32 + y);
+        Registration_DrawDittoCell(x + 136 + (i % 3) * 132, (i / 3) * 50 + y);
     }
     for (; i < 6; i++) {
-        Registration_DrawMonCell(x + 0x88 + (i % 3) * 0x84, (i / 3) * 0x32 + y, NULL, i, 0, NULL);
+        Registration_DrawMonCell(x + 136 + (i % 3) * 132, (i / 3) * 50 + y, NULL, i, 0, NULL);
     }
     Registration_DrawRowBorders(x, y, D_88102D80);
 }
 
 /**
  * Sets `count` entries of `slots` from `start` to -1, so every icon cache slot renders again.
- * Seen in play (2026-11-12) in とうろく: ran with D_88103098 (the icon cache slots), 0, 0x18 when a
+ * Seen in play (2026-11-12) in とうろく: ran with D_88103098 (the icon cache slots), 0, 24 when a
  * team list opened.
  */
 void Registration_ClearIconCacheSlots(s32* slots, s32 start, s32 count) {
@@ -823,10 +825,10 @@ void Registration_InitTeamList(RegistrationTeamList* list, s32 x, s32 y, s8 *tea
     Registration_SetListMode(list, mode);
     list->window.title = ((s32 *)&D_88102D84)[list->mode];
     list->teams = teams;
-    ScrollList_Init(&list->list, teams, &list->itemFlags, 3, Registration_DrawTeamRow, 0x214, 0x64);
+    ScrollList_Init(&list->list, teams, &list->itemFlags, 3, Registration_DrawTeamRow, 532, 100);
     list->list.options |= 0x10000;
     list->unk_00 = 0;
-    Registration_ClearIconCacheSlots(D_88103098, 0, 0x18);
+    Registration_ClearIconCacheSlots(D_88103098, 0, 24);
 }
 
 
@@ -856,43 +858,43 @@ void Registration_DrawTeamList(RegistrationTeamList* list) {
             case 0:
             case 1:
             case 2:
-                ScrollList_DrawItems(&list->list, list->window.frame.x + 6, list->window.frame.y + 0x16, 0xFFFF, 0);
+                ScrollList_DrawItems(&list->list, list->window.frame.x + 6, list->window.frame.y + 22, 0xFFFF, 0);
                 break;
             case 3:
                 Registration_DrawCursorTeamRow(list);
-                Registration_FillRowBackground(list->window.frame.x + 6, list->window.frame.y + 0x6A, 0x84);
-                Registration_DrawDittoTransformRow(list->window.frame.x + 6, list->window.frame.y + 0xEE, &list->selectedTeam,
+                Registration_FillRowBackground(list->window.frame.x + 6, list->window.frame.y + 106, 132);
+                Registration_DrawDittoTransformRow(list->window.frame.x + 6, list->window.frame.y + 238, &list->selectedTeam,
                               list->list.cursor, 0);
                 Registration_DrawConfirmWindow(&list->confirmWindow);
                 break;
             case 4:
                 Registration_DrawCursorTeamRow(list);
-                Registration_FillRowBackground(list->window.frame.x + 6, list->window.frame.y + 0x6A, 0x84);
-                Registration_DrawDittoTransformRow(list->window.frame.x + 6, list->window.frame.y + 0xEE, &list->selectedTeam,
+                Registration_FillRowBackground(list->window.frame.x + 6, list->window.frame.y + 106, 132);
+                Registration_DrawDittoTransformRow(list->window.frame.x + 6, list->window.frame.y + 238, &list->selectedTeam,
                               list->list.cursor, Registration_GetTimer((s32*)(&list->timer)) + 0x10);
                 break;
             case 5:
                 Registration_DrawCursorTeamRow(list);
-                Registration_FillRowBackground(list->window.frame.x + 6, list->window.frame.y + 0x6A, 0x84);
-                Registration_DrawDittoTransformRow(list->window.frame.x + 6, list->window.frame.y + 0xEE, &list->selectedTeam,
+                Registration_FillRowBackground(list->window.frame.x + 6, list->window.frame.y + 106, 132);
+                Registration_DrawDittoTransformRow(list->window.frame.x + 6, list->window.frame.y + 238, &list->selectedTeam,
                               list->list.cursor, 1);
                 Registration_DrawMessageWindow(&list->messageWindow);
                 break;
             case 6:
                 Registration_DrawDittoTransformRow(list->window.frame.x + 6, list->window.frame.y + 6, &list->selectedTeam,
                               list->list.cursor, 1);
-                Registration_FillRowBackground(list->window.frame.x + 6, list->window.frame.y + 0x6A, 0xE8);
+                Registration_FillRowBackground(list->window.frame.x + 6, list->window.frame.y + 106, 232);
                 Registration_DrawConfirmWindow(&list->confirmWindow);
                 break;
             case 7:
                 Registration_DrawDittoTransformRow(list->window.frame.x + 6, list->window.frame.y + 6, &list->selectedTeam,
                               list->list.cursor, Registration_GetTimer((s32*)(&list->timer)) + 2);
-                Registration_FillRowBackground(list->window.frame.x + 6, list->window.frame.y + 0x6A, 0xE8);
+                Registration_FillRowBackground(list->window.frame.x + 6, list->window.frame.y + 106, 232);
                 break;
             case 8:
                 Registration_DrawDittoTransformRow(list->window.frame.x + 6, list->window.frame.y + 6, &list->selectedTeam,
                               list->list.cursor, 0);
-                Registration_FillRowBackground(list->window.frame.x + 6, list->window.frame.y + 0x6A, 0xE8);
+                Registration_FillRowBackground(list->window.frame.x + 6, list->window.frame.y + 106, 232);
                 Registration_DrawMessageWindow(&list->messageWindow);
                 break;
         }
@@ -925,7 +927,7 @@ s32 Registration_UpdateTeamList(RegistrationTeamList* list) {
                 } else if (res == 1) {
                     Audio_PlaySystemSound(2);
                     list->state = 3;
-                    Registration_InitConfirmWindow(&list->confirmWindow, list->window.frame.x + 0x56, list->window.frame.y + 0x79, (s32)D_88102F34);
+                    Registration_InitConfirmWindow(&list->confirmWindow, list->window.frame.x + 86, list->window.frame.y + 121, (s32)D_88102F34);
                     list->selectedTeam = *((RegisteredTeam**)list->list.items->rows)[list->list.cursor];
                     list->selectedTeam.source = 0x10;
                     list->selectedTeam.slot = Registration_FindFreeSlot();
@@ -948,7 +950,7 @@ s32 Registration_UpdateTeamList(RegistrationTeamList* list) {
                 } else if (res == 1) {
                     Audio_PlaySystemSound(2);
                     list->selectedTeam = *((RegisteredTeam**)list->list.items->rows)[list->list.cursor];
-                    Registration_InitConfirmWindow(&list->confirmWindow, list->window.frame.x + 0x56, list->window.frame.y + 0x79, (s32)D_88102F54);
+                    Registration_InitConfirmWindow(&list->confirmWindow, list->window.frame.x + 86, list->window.frame.y + 121, (s32)D_88102F54);
                     list->confirmWindow.choice.cursor = 1;
                     list->state = 6;
                 }
@@ -968,11 +970,11 @@ s32 Registration_UpdateTeamList(RegistrationTeamList* list) {
             break;
         case 4:
             if (list->timer.frame % 15 == 0) {
-                Audio_PlayMoveSound(0x90, 1, 0);
+                Audio_PlayMoveSound(TRANSFORM, 1, 0);
             }
             if (Registration_StepTimer(&list->timer) != 0) {
                 Audio_PlaySystemSound(0x1E);
-                Registration_InitMessageWindow(&list->messageWindow, list->window.frame.x + 0x58, list->window.frame.y + 0x78, (s32)D_88102F6C);
+                Registration_InitMessageWindow(&list->messageWindow, list->window.frame.x + 88, list->window.frame.y + 120, (s32)D_88102F6C);
                 list->state = 5;
             }
             break;
@@ -996,13 +998,13 @@ s32 Registration_UpdateTeamList(RegistrationTeamList* list) {
             break;
         case 7:
             if (list->timer.frame % 15 == 0) {
-                Audio_PlayMoveSound(0x90, 1, 0);
+                Audio_PlayMoveSound(TRANSFORM, 1, 0);
             }
             if (Registration_StepTimerDown((s32*)(&list->timer)) != 0) {
                 Audio_PlaySystemSound(0x1F);
                 func_80027868(list->teams, list->list.cursor);
                 Registration_WriteAllTeams(list->teams);
-                Registration_InitMessageWindow(&list->messageWindow, list->window.frame.x + 0x58, list->window.frame.y + 0x78, (s32)D_88102FC8);
+                Registration_InitMessageWindow(&list->messageWindow, list->window.frame.x + 88, list->window.frame.y + 120, (s32)D_88102FC8);
                 list->state = 8;
             }
             break;
@@ -1051,7 +1053,7 @@ void Registration_OpenViewList(RegistrationScreen* screen) {
     Registration_LoadRegisteredTeams(&screen->teamTable);
     func_80027804(&screen->teamPointerList, screen->teamPointers, 0x10, 0);
     Registration_BuildTeamPointers((s32*)&screen->teamPointerList, (s32*)&screen->teamTable);
-    Registration_InitTeamList(&screen->teamList, 0x30, 0x5C, &screen->teamPointerList, 1);
+    Registration_InitTeamList(&screen->teamList, 48, 92, &screen->teamPointerList, 1);
 }
 
 void func_80027410(void*, void*, s32, s32, s32);
@@ -1067,7 +1069,7 @@ void Registration_OpenDeleteList(RegistrationScreen* screen) {
     Registration_LoadRegisteredTeams(&screen->teamTable);
     func_80027804(&screen->teamPointerList, screen->teamPointers, 0x10, 0);
     Registration_BuildTeamPointers((s32*)&screen->teamPointerList, (s32*)&screen->teamTable);
-    Registration_InitTeamList(&screen->teamList, 0x30, 0x5C, &screen->teamPointerList, 2);
+    Registration_InitTeamList(&screen->teamList, 48, 92, &screen->teamPointerList, 2);
 }
 
 void func_80027410(void*, void*, s32, s32, s32);
@@ -1082,7 +1084,7 @@ void Registration_OpenRegisterList(RegistrationScreen* screen) {
     Registration_LoadGbTeams(&screen->teamTable);
     func_80027804(&screen->teamPointerList, screen->teamPointers, 4, 0);
     Registration_BuildTeamPointers((s32*)&screen->teamPointerList, (s32*)&screen->teamTable);
-    Registration_InitTeamList(&screen->teamList, 0x30, 0x5C, &screen->teamPointerList, 0);
+    Registration_InitTeamList(&screen->teamList, 48, 92, &screen->teamPointerList, 0);
 }
 
 s32 func_80025BD8();
@@ -1103,7 +1105,7 @@ void Registration_InitScreen(RegistrationScreen* screen) {
     if (D_88103078 != -1) {
         func_80027FF8(&D_88103080, D_88103078);
     }
-    Registration_InitMainMenu(&screen->mainMenu, 0x40, 0x74, 0x1AC, 0xCE, &D_88102D84, 3, &D_88102D90, 3, &D_88103000);
+    Registration_InitMainMenu(&screen->mainMenu, 0x40, 116, 428, 206, &D_88102D84, 3, &D_88102D90, 3, &D_88103000);
     screen->state = 0;
 }
 
@@ -1162,7 +1164,7 @@ s32 Registration_UpdateScreen(RegistrationScreen* screen) {
         break;
     case 1:
         if (Registration_UpdateTeamList(&screen->teamList) == -1) {
-            Registration_InitMainMenu(&screen->mainMenu, 0x40, 0x74, 0x1AC, 0xCE, &D_88102D84, 3, &D_88102D90, 3, &D_8810300C);
+            Registration_InitMainMenu(&screen->mainMenu, 0x40, 116, 428, 206, &D_88102D84, 3, &D_88102D90, 3, &D_8810300C);
             screen->state = 0;
         }
         break;
@@ -1176,7 +1178,7 @@ extern RegistrationScreen* D_881030F8;
 
 /**
  * Allocates the RegistrationScreen (0x26B4 bytes) into D_881030F8, initializes it and renders the
- * Ditto placeholder icon (species 0x84) into icon slot 0x18.
+ * Ditto placeholder icon into icon slot 24.
  * Matching note: the call result is stored straight into D_881030F8 and the global is read back
  * for the next call; going through a local gives a different store sequence.
  * Seen in play (2026-11-14): ran once when the とうろく screen loaded.
@@ -1184,7 +1186,7 @@ extern RegistrationScreen* D_881030F8;
 void Registration_AllocScreen(void) {
     D_881030F8 = (RegistrationScreen*)func_80002D98(sizeof(RegistrationScreen));
     Registration_InitScreen(D_881030F8);
-    PokeIcon_SetSpeciesSlot(D_88103074, 0x18, 0x84, 0xF800);
+    PokeIcon_SetSpeciesSlot(D_88103074, 24, DITTO, 0xF800); // #FF0000 (RGBA5551)
 }
 
 typedef struct Col88102A2C { u8 r, g, b, a; } Col88102A2C;
@@ -1298,10 +1300,10 @@ extern s32 D_88103074;
  * Seen in play (2026-11-14): breakpoint hit when はい on the main menu's 「ポケモンとうろく」 prompt loaded the fragment.
  */
 s32 Registration_Init(s32 unused0, s32 unused1) {
-    func_8000256C(0x52454753);
+    func_8000256C(0x52454753); // 'REGS'
     Font_Init(0x3C, 0);
     D_88103070 = PokeIcon_AllocFramebuffers(1);
-    D_88103074 = func_80017FDC(D_88103070, 0x19, 0x28, 0x28);
+    D_88103074 = func_80017FDC(D_88103070, 25, 40, 40);
     PokeIcon_OpenModelArchives();
     func_800040B4(((u32)((s32)&D_81000000 & 0x0FF00000) >> 0x14) - 0x10, &D_0015B1A0, &D_0015E220);
     func_80003EB8((u32)((s32)&D_01000000 & 0x0F000000) >> 0x18, &D_002E0BE0, &D_002E2B90, 0);
@@ -1314,7 +1316,7 @@ s32 Registration_Init(s32 unused0, s32 unused1) {
     func_80006828(8, Registration_UpdateFade);
     func_80006724();
     Registration_FreeScreen();
-    func_80002620(0x52454753);
+    func_80002620(0x52454753); // 'REGS'
     Fragment_QueueCall(((u32)((s32)&D_88000000 & 0x0FF00000) >> 0x14) - 0x10, &D_00235D70, &D_00238BD0, 0, 0);
     return 0x8040;
 }

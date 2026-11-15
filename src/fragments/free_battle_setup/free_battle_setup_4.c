@@ -227,7 +227,7 @@ void FreeBattle_InitEntrySelect(s8* entry, s32 x, s32 y, s32 teams, s32 picks, s
     M2C_FIELD(entry, s32*, 0x28) = 0x801;
     M2C_FIELD(entry, M2C_UNK**, 0x34) = &D_82009C98;
     M2C_FIELD(entry, s32*, 0xC4) = teams;
-    ScrollList_Init(entry + 0x40, teams, entry + 0x84, 3, &FreeBattle_DrawTeamRow, 0x214, 0x64);
+    ScrollList_Init(entry + 0x40, teams, entry + 0x84, 3, &FreeBattle_DrawTeamRow, 532, 100);
     M2C_FIELD(entry, s32*, 0x60) = M2C_FIELD(entry, s32*, 0x60) | 0x10000;
     M2C_FIELD(entry, s32*, 0) = 0;
     FreeBattle_ClearIndices(D_8200AC58, 0, 0x28);
@@ -397,7 +397,7 @@ void FreeBattle_DrawRentalScreen(s8* entry) {
         case 1:
             func_800189C0(D_8200AC50, 0);
             BgStage_DrawFrame();
-            ScrollList_DrawItems(entry + 0x40, M2C_FIELD(entry, s32*, 0x14) + 6, M2C_FIELD(entry, s32*, 0x18) + 0x16, 0xFFF, M2C_FIELD(entry, s32*, 0x73C));
+            ScrollList_DrawItems(entry + 0x40, M2C_FIELD(entry, s32*, 20) + 6, M2C_FIELD(entry, s32*, 24) + 22, 0xFFF, M2C_FIELD(entry, s32*, 0x73C));
             break;
         case 2:
             func_800189C0(D_8200AC50, 0);
@@ -456,7 +456,7 @@ void FreeBattle_DrawRentalScreen(s8* entry) {
         case 12:
             func_800189C0(D_8200AC50, 0);
             BgStage_DrawFrame();
-            ScrollList_DrawItems(entry + 0x40, M2C_FIELD(entry, s32*, 0x14) + 6, M2C_FIELD(entry, s32*, 0x18) + 0x16, 0xFFF, M2C_FIELD(entry, s32*, 0x73C));
+            ScrollList_DrawItems(entry + 0x40, M2C_FIELD(entry, s32*, 20) + 6, M2C_FIELD(entry, s32*, 24) + 22, 0xFFF, M2C_FIELD(entry, s32*, 0x73C));
             TextBox_Draw(entry + 0x74C);
             break;
     }

@@ -446,13 +446,13 @@ void FreeBattle_DrawControllerPanel(s32 x, s32 y, s32 present, s32 active, s32 m
     s32 i;
 
     Ui_FillRectPrimEnvColor(x, y, 390, 141, D_8200914C, D_82009150);
-    Ui_DrawImageInStrips(D_8200911C, x + 0x88, y + 5);
+    Ui_DrawImageInStrips(D_8200911C, x + 136, y + 5);
     for (i = 0; i != 4; i++) {
         if ((present >> i) & 1) {
             if ((active >> i) & 1) {
                 Ui_DrawImageInStrips(D_8200912C, D_8200915C[i].x + x, D_8200915C[i].y + y);
             } else {
-                Ui_DrawImageInStrips(D_8200913C, D_8200915C[i].x + x, D_8200915C[i].y + y + 0xC);
+                Ui_DrawImageInStrips(D_8200913C, D_8200915C[i].x + x, D_8200915C[i].y + y + 12);
             }
         }
         if ((mark_a >> i) & 1) {
@@ -545,7 +545,7 @@ void FreeBattle_DrawOpponentSelect(FreeBattleOpponentWindow* window) {
         Ui_DrawTexturedDivider(window->window.frame.x, window->window.frame.y + 146, window->window.frame.width, &D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(window->window.frame.x + 6, window->window.frame.y + 153, window->window.frame.width - 12, 112, *(Color82001CCC*)&D_82009100);
-        Ui_DrawImageInStrips(D_8200910C, window->window.frame.x + 0xA9, window->window.frame.y + 0xC1);
+        Ui_DrawImageInStrips(D_8200910C, window->window.frame.x + 169, window->window.frame.y + 193);
         func_8001AB6C();
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
         func_8001A384(8, 0);
@@ -743,7 +743,7 @@ void FreeBattle_DrawTagOpponentSelect(FreeBattleTeamOpponentWindow* window) {
         Ui_DrawTexturedDivider(window->window.frame.x, window->window.frame.y + 146, window->window.frame.width, &D_8007356C);
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(window->window.frame.x + 6, window->window.frame.y + 153, window->window.frame.width - 12, 196, *(Color82001CCC*)&D_82009100);
-        Ui_DrawImageInStrips(D_8200910C, window->window.frame.x + 0xA9, window->window.frame.y + 0xF9);
+        Ui_DrawImageInStrips(D_8200910C, window->window.frame.x + 169, window->window.frame.y + 249);
         if (window->focus != 0) {
             if (window->focus == 1) {
                 mask_b = 0xFEF;
