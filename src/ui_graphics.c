@@ -282,13 +282,13 @@ void Ui_DrawFramedYuvImage(s32 x, s32 y, u8* image) {
     gDPSetConvert(gDisplayListHead++, G_CV_K0, G_CV_K1, G_CV_K2, G_CV_K3, G_CV_K4, G_CV_K5);
     gDPPipeSync(gDisplayListHead++);
 
-    for (i = 0; i < 0x90; i += 0x10) {
-            h = 0x82 - i;
+    for (i = 0; i < 144; i += 16) {
+            h = 130 - i;
             if (h > 0x10) {
                 h = 0x10;
             }
-        for (j = 0; j < 0x120; j += 0x10) {
-            w = 0x11A - j;
+        for (j = 0; j < 288; j += 16) {
+            w = 282 - j;
             if (w > 0x10) {
                 w = 0x10;
             }
@@ -306,7 +306,7 @@ void Ui_DrawFramedYuvImage(s32 x, s32 y, u8* image) {
 
     gDPSetTextureConvert(gDisplayListHead++, G_TC_FILT);
     gSPDisplayList(gDisplayListHead++, D_800602C8);
-    Ui_DrawBorderStyleA(x, y, 0x126, 0x8E);
+    Ui_DrawBorderStyleA(x, y, 294, 142);
     gSPDisplayList(gDisplayListHead++, D_80060398);
 }
 

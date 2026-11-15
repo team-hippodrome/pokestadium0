@@ -272,6 +272,11 @@ extern u8 D_8006081F[];
 extern u8 D_8005E7D2[];
 extern u8 D_8005E47F[];
 extern u8 D_8005E37F[];
+/**
+ * Maps a character code (ASCII 0x21-0x7E, or a JIS X 0208 code: symbols, full-width digits and
+ * Latin letters, hiragana, katakana) to its glyph index in the font. 0x2574 (ヴ, "vu") is glyph 0xFF.
+ * Returns 0 for any other code.
+ */
 s32 Font_GetGlyphIndex(u16 arg0) {
     s32 c = arg0;
     s32 ret = 0;
