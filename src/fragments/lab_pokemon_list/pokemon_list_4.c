@@ -87,7 +87,7 @@ void LabPCList_DrawListScreen(LabPCListScreen* screen) {
     LabPCList_DrawPageHint(screen);
     ScrollList_DrawScrollArrows((s8*)&screen->list, screen->listFrame.x, screen->listFrame.y - 0x10,
                   screen->listFrame.y + screen->listFrame.height, screen->listFrame.width);
-    y = screen->listFrame.y + 0x16;
+    y = screen->listFrame.y + 22;
     if (screen->focus == 0) {
         flags[0] = ((screen->state != 0) ? 0x10 : 0) | 2;
     } else {

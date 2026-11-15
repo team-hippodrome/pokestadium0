@@ -128,13 +128,13 @@ s32 LabPCList_UpdateColumnMenu(LabPCListScreen* screen) {
             case 0:
                 switch (sel) {
                     case 0:
-                        screen->sortKey = 0xF;
+                        screen->sortKey = 15;
                         break;
                     case 1:
-                        screen->sortKey = 0xD;
+                        screen->sortKey = 13;
                         break;
                     case 2:
-                        screen->sortKey = 0xE;
+                        screen->sortKey = 14;
                         break;
                     case 3:
                         screen->sortKey = 0;
@@ -152,10 +152,10 @@ s32 LabPCList_UpdateColumnMenu(LabPCListScreen* screen) {
                         screen->sortKey = 8;
                         break;
                     case 14:
-                        screen->sortKey = 0xA;
+                        screen->sortKey = 10;
                         break;
                     case 15:
-                        screen->sortKey = 0xC;
+                        screen->sortKey = 12;
                         break;
                 }
                 func_80027D68(M2C_FIELD(screen, s32*, 0xB160), D_8910D990[screen->sortKey]);
@@ -179,7 +179,7 @@ s32 LabPCList_UpdateColumnMenu(LabPCListScreen* screen) {
                         screen->sortKey = 9;
                         break;
                     case 15:
-                        screen->sortKey = 0xB;
+                        screen->sortKey = 11;
                         break;
                 }
                 func_80027D68(M2C_FIELD(screen, s32*, 0xB160), D_8910D990[screen->sortKey]);

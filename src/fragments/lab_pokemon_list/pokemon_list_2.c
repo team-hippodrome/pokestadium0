@@ -53,7 +53,7 @@ void LabPCList_DrawDetailColumns(LabPCListScreen* screen, s32 left, s32 top, s32
     func_80029028(left, screen->listFrame.y, 38, 20, *(Color_RGBA8*)D_8910A85C);
     func_80029028(left + 38, screen->listFrame.y, 80, 20, *(Color_RGBA8*)D_8910A860);
     i = screen->pageColumnStart[screen->page];
-    for (x = left + 0x78; x < screen->listFrame.width; i++) {
+    for (x = left + 120; x < screen->listFrame.width; i++) {
         func_80029028(x, top, screen->columnWidths[i], 20, *(Color_RGBA8*)&D_8910A85C[(i & 1) * 4]);
         x += screen->columnWidths[i];
     }
@@ -69,7 +69,7 @@ void LabPCList_DrawDetailColumns(LabPCListScreen* screen, s32 left, s32 top, s32
     Font_Printf(left + 46, top + 2, D_8910DAF8);
     Font_EndTexturedTextRendering();
     Font_BeginTranslucentTextRendering();
-    for (x = left + 0x78, i = screen->pageColumnStart[screen->page]; x < screen->listFrame.width; i++) {
+    for (x = left + 120, i = screen->pageColumnStart[screen->page]; x < screen->listFrame.width; i++) {
         hl = (i + 2 == screen->pageColumnStart[screen->page] + screen->headerCursor.cursor) ? 0x12 : 0;
         Font_SetColorForFlags(hl & flags);
         switch (i) {
@@ -166,7 +166,7 @@ void LabPCList_DrawTypeIcon(s32 x, s32 y, u8* mon, s32 type_slot) {
     Color82000BC4 c;
     s32 idx;
 
-    if ((*mon > 0) && (*mon < 0x98) && ((idx = Pokemon_GetTypeIndex(mon, type_slot)) != -1)) {
+    if ((*mon > 0) && (*mon < 152) && ((idx = Pokemon_GetTypeIndex(mon, type_slot)) != -1)) {
         c = D_80066AD8[idx].color;
         func_8001AB6C();
         func_8001A384(4, 0);

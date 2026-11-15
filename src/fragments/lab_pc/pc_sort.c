@@ -219,7 +219,7 @@ void PcSort_DrawMonRow(s32 x, s32 y, u8* row, s32 index, s32 flags) {
     if (mon != NULL) {
         Font_BeginTranslucentTextRendering();
         Font_SetActive(8, 0);
-        if ((mon->species.id > 0) && (mon->species.id < 0x98) && (D_80064C44[mon->species.id][8] & 1)) {
+        if ((mon->species.id > 0) && (mon->species.id < 152) && (D_80064C44[mon->species.id][8] & 1)) {
             func_8001AA9C(0xFF, 0xC8, 0xA0, 0xFF); // #FFC8A0FF
         } else {
             Font_SetColorForFlags(flags);
@@ -273,7 +273,7 @@ void PcSort_DrawMonList(PcSortMonList* list, s32 flags) {
     Ui_DrawNumberZeroPadded(list->x + 179, list->y + 186, list->list.items->capacity, 2);
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-    func_8001BCB4(list->x + 0xAA, list->y + 0xBC, 8, 0xA, D_04011AB8, 8, 0);
+    func_8001BCB4(list->x + 170, list->y + 188, 8, 10, D_04011AB8, 8, 0);
 }
 
 s32 ScrollList_UpdateCursor(void*);
@@ -483,7 +483,7 @@ void PcSort_DrawMonStats(s32 x, s32 y, u8* mon) {
     Font_Printf(x + 423, y + 86, D_89018AE8);
     func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
     Font_SetActive(8, 0);
-    if ((mon[0] <= 0) || (mon[0] >= 0x98)) {
+    if ((mon[0] <= 0) || (mon[0] >= 152)) {
         name = D_89018AF4;
     } else {
         name = *(char**)D_80064C44[mon[0]];
@@ -812,7 +812,7 @@ s32 PcSort_UpdateOrganizeWindow(PcSortOrganizeWindow* win) {
                     win->state = 6;
                 } else if (win->operationMenu.cursor == 4) {
                     mon = win->leftList.list.cursor + *(BattleMon**)win->leftList.list.items;
-                    if ((mon->species.id <= 0) || (mon->species.id >= 0x98)) {
+                    if ((mon->species.id <= 0) || (mon->species.id >= 152)) {
                         Audio_PlaySystemSound(8);
                     } else {
                         Audio_PlaySystemSound(2);
@@ -821,7 +821,7 @@ s32 PcSort_UpdateOrganizeWindow(PcSortOrganizeWindow* win) {
                 } else {
                     mon = win->leftList.list.cursor + *(BattleMon**)win->leftList.list.items;
                     species = mon->species.id;
-                    if ((species <= 0) || (species >= 0x98)) {
+                    if ((species <= 0) || (species >= 152)) {
                         Audio_PlaySystemSound(8);
                     } else {
                         Audio_PlaySystemSound(2);
@@ -941,10 +941,10 @@ void PcSort_Init(PcSortScreen* screen, s32 title) {
     screen->title = title;
     func_80027410(&screen->partyTable, screen->partyMons, 0x50, 6, 0);
     for (i = 0; i < 8; i++) {
-        func_80027410(&screen->gbBoxTables[i], screen->gbBoxMons[i], 0x50, 0x1E, 0);
+        func_80027410(&screen->gbBoxTables[i], screen->gbBoxMons[i], 0x50, 30, 0);
     }
     for (i = 0; i < 4; i++) {
-        func_80027410(&screen->stadiumBoxTables[i], screen->stadiumBoxMons[i], 0x50, 0x1E, 0);
+        func_80027410(&screen->stadiumBoxTables[i], screen->stadiumBoxMons[i], 0x50, 30, 0);
     }
     LabItem_ReadDeckEntries(0x20, D_89019108, 0, &screen->partyTable);
     for (i = 0; i < 8; i++) {

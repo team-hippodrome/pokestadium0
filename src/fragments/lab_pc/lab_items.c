@@ -138,10 +138,10 @@ void LabItem_InsertItemStacks(s32* list, s32 item_id, s32 quantity) {
     var_s3 = list[2];
 
     while (quantity > 0) {
-        if (quantity < 0x63) {
+        if (quantity < 99) {
             var_v0 = quantity;
         } else {
-            var_v0 = 0x63;
+            var_v0 = 99;
         }
         quantity -= var_v0;
         sp3C[1] = var_v0;
@@ -187,7 +187,7 @@ s32 LabItem_ComputeRemainingCapacity(s32 item_id, ByteMatrix* table) {
 
     for (i = 0; i < table->count; i++, var_v0 += 2) {
         if (item_id == var_v0[0]) {
-            var_v1 = (var_v1 - var_v0[1]) + 0x63;
+            var_v1 = (var_v1 - var_v0[1]) + 99;
         }
     }
 
@@ -205,7 +205,7 @@ s32 LabItem_ComputeMaxTransferQuantity(s32 item_id, ByteMatrix* table) {
             var_v1 = 0;
         }
     } else if (table->count < table->capacity) {
-        var_v1 = 0x63;
+        var_v1 = 99;
     } else {
         var_v1 = LabItem_ComputeRemainingCapacity(item_id, table);
     }
@@ -252,13 +252,18 @@ void LabItem_ReadDeckEntries(s32 deck_type, s32 port, s32 index, ByteMatrix* tab
     Deck_CloseAndFlush(sp1C);
 }
 
-/** Writes item entries back to a deck. */
-void LabItem_WriteDeckBack(s32 deck_type, s32 port, s32 index, ByteMatrix* table, s32 unused, char* trainer_name, s32 trainer_id) {
+/**
+ * Writes `table`'s rows back to deck (`deck_type`, `port`, `index`). With `trainer_id` -1 the deck is
+ * opened for writing as is; otherwise Deck_OpenAndSetName also stamps it with `trainer_name` and
+ * `trainer_id` (`arg4` is passed through and is 0 at every call). Box decks 0x10-0x13 are closed
+ * with Deck_CloseAndFlushBox, the rest with Deck_CloseAndFlush.
+ */
+void LabItem_WriteDeckBack(s32 deck_type, s32 port, s32 index, ByteMatrix* table, s32 arg4, char* trainer_name, s32 trainer_id) {
     DeckHandle* sp2C;
 
     if (trainer_id != -1) {
         if (1) {}  // karodo
-        sp2C = Deck_OpenAndSetName(deck_type, port, index, unused, trainer_name, trainer_id);
+        sp2C = Deck_OpenAndSetName(deck_type, port, index, arg4, trainer_name, trainer_id);
     } else {
         sp2C = Deck_Open(deck_type, port, index, 1);
     }
@@ -302,7 +307,7 @@ void LabItem_InitConfirmWindow(LabItemConfirmWindow* win, s32 x, s32 y, char *ti
     win->window.frame.style = 0x2801;
     win->window.title = title;
     Window_InitLabeled(&win->yesButton, win->window.frame.x + 46, win->window.frame.y + 110, 72, D_8900A5C0, D_89018460);
-    win->yesButton.labelX = 0xA;
+    win->yesButton.labelX = 10;
     win->yesButton.unk_34 = 0xC;
     Window_InitLabeled(&win->noButton, win->window.frame.x + 150, win->window.frame.y + 110, 72, D_8900A5C0, D_89018468);
     win->choice.count = 2;
@@ -436,7 +441,7 @@ void LabItem_DrawCountSelector(LabItemCountSelector* sel) {
     s32 v;
 
     if (func_8002AE6C(&sel->window) == 0) {
-        x = sel->window.frame.x - sel->count.digit * 0x16 + 0x36;
+        x = sel->window.frame.x - sel->count.digit * 22 + 54;
         gSPDisplayList(gDisplayListHead++, D_80073408);
         if (((u16*)D_800603C0)[3] & 0x800) {
             v = (s32)D_04002340;
@@ -751,7 +756,7 @@ void LabItem_DrawItemList(LabItemList* list, s32 flags) {
     Ui_DrawNumberZeroPadded(list->x + 206, list->y + 242, list->list.items->capacity, 3);
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
-    func_8001BCB4(list->x + 0xC4, list->y + 0xF4, 8, 0xA, D_04011AB8, 8, 0);
+    func_8001BCB4(list->x + 196, list->y + 244, 8, 10, D_04011AB8, 8, 0);
 }
 
 s32 ScrollList_UpdateCursor(void*);

@@ -69,7 +69,7 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
   func_80029028(x, y, 38, 20, colors[0]);
   func_80029028(x + 38, y, 80, 20, colors[1]);
   col = c->pageColumnStart[c->page];
-  cx = x + 0x78;
+  cx = x + 120;
   for (; cx < c->listFrame.width; col++)
   {
     func_80029028(cx, y, c->columnWidths[col], 20, loop_colors[col & 1]);
@@ -83,7 +83,7 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
       Ui_FillRectHighlighted(x + 39, y + 1, 78, 18, D_8910A860);
     }
     Ui_DrawNumberZeroPadded(x + 1, y + 4, row + 1, 4);
-    if ((entry->species <= 0) || (entry->species >= 0x98))
+    if ((entry->species <= 0) || (entry->species >= 152))
     {
       func_8001AB6C();
       Font_SetColorForFlags(flags);
@@ -106,7 +106,7 @@ void LabPCList_DrawMonRow(s32 x, s32 y, Entry891012A8 *entry, s32 row, s32 flags
       Font_Printf(x + 40, y + 2, (M2C_UNK *) D_80064C5C[entry->species - 1].name);
       func_8001ABBC();
     }
-    cx = x + 0x78;
+    cx = x + 120;
     for (col = c->pageColumnStart[c->page]; cx < c->listFrame.width; col++)
     {
       switch (col)
