@@ -23,9 +23,9 @@ s32 func_8F500020(s32 arg0) {
     return arg0;
 }
 
-void func_8F500088(s32 arg0, unk_D_86002F34_alt1* arg1) {
+void func_8F500088(s32 arg0, GeoModelRootNode* arg1) {
     if (arg0 == 2) {
-        arg1->unk_1A = D_80060490->unk_18 - 1;
+        arg1->unk_1A = D_80060490->rootId - 1;
     }
 }
 
@@ -37,34 +37,34 @@ Gfx* func_8F5000AC(Gfx* gfx, void* segment) {
 
 void func_8F50010C(s32 arg0, DemoGeoNode* arg1) {
     s32 pad; // FAKE: stack padding
-    DemoGeoTeam* teams;
+    VsSceneSide* teams;
 
     if (arg0 == 2) {
         teams = D_80060490->node.callbackArg;
-        arg1->unk_18 = Gfx_AllocDisplayList(0x10);
-        func_8F5000AC(arg1->unk_18, teams[(s32)arg1->node.callbackArg].unk_04);
-        arg1->unk_18 = (Gfx*)func_8F500020((s32)arg1->unk_18);
+        arg1->displayList = Gfx_AllocDisplayList(0x10);
+        func_8F5000AC(arg1->displayList, teams[(s32)arg1->node.callbackArg].trainerFile);
+        arg1->displayList = (Gfx*)func_8F500020((s32)arg1->displayList);
     }
 }
 
 void func_8F500188(s32 arg0, DemoGeoNode* arg1) {
-    DemoGeoTeam* teams;
+    VsSceneSide* teams;
 
     if (arg0 == 2) {
         teams = D_80060490->node.callbackArg;
-        arg1->unk_24 = teams[(s32)arg1->node.callbackArg].unk_40[0] + 4;
+        arg1->unk_24 = (u8*)teams[(s32)arg1->node.callbackArg].rosterInfo[0]->title;
     }
 }
 
 void func_8F5001C4(s32 arg0, DemoGeoNode* arg1) {
-    DemoGeoTeam* teams;
+    VsSceneSide* teams;
 
     if (arg0 == 2) {
         teams = D_80060490->node.callbackArg;
-        arg1->unk_24 = teams[(s32)arg1->node.callbackArg].unk_40[0] + 0x14;
-        if (*(s16*)teams[(s32)arg1->node.callbackArg].unk_40[0] & 1) {
+        arg1->unk_24 = (u8*)teams[(s32)arg1->node.callbackArg].rosterInfo[0]->fullName;
+        if (*(s16*)&teams[(s32)arg1->node.callbackArg].rosterInfo[0]->unk_000 & 1) {
             arg1->unk_20 = 0xD2;
-        } else if (*(s16*)teams[(s32)arg1->node.callbackArg].unk_40[0] & 2) {
+        } else if (*(s16*)&teams[(s32)arg1->node.callbackArg].rosterInfo[0]->unk_000 & 2) {
             arg1->unk_22 = -0xF0;
         } else {
             arg1->unk_22 = -0x12C;
@@ -81,7 +81,7 @@ Gfx* func_8F500238(Gfx* gfx, void* segment) {
 void func_8F500298(s32 arg0, DemoGeoNode *arg1)
 {
   s32 pad; // FAKE: stack padding
-  DemoGeoTeam *teams;
+  VsSceneSide *teams;
   s32 team;
   s32 slot;
   if (arg0 == 2)
@@ -89,14 +89,14 @@ void func_8F500298(s32 arg0, DemoGeoNode *arg1)
     teams = D_80060490->node.callbackArg;
     team = (((u32) arg1->node.callbackArg) >> 16) & 0xFFFF;
     slot = ((u32) arg1->node.callbackArg) & 0xFFFF;
-    if (slot < teams[team].unk_40[0][2])
+    if (slot < teams[team].rosterInfo[0]->numberOfPokemonCanBePicked)
     {
-      arg1->unk_18 = Gfx_AllocDisplayList(0x10);
-      func_8F500238(arg1->unk_18, teams[team].unk_08[slot]);
+      arg1->displayList = Gfx_AllocDisplayList(0x10);
+      func_8F500238(arg1->displayList, teams[team].iconImages[slot]);
     }
     else
     {
-      arg1->unk_18 = 0;
+      arg1->displayList = 0;
       if (arg1)
       {
       }
@@ -105,7 +105,7 @@ void func_8F500298(s32 arg0, DemoGeoNode *arg1)
 }
 
 void func_8F500358(s32 arg0, DemoGeoNode* arg1) {
-    DemoGeoTeam* teams;
+    VsSceneSide* teams;
     s32 team;
     s32 slot;
 
@@ -113,9 +113,9 @@ void func_8F500358(s32 arg0, DemoGeoNode* arg1) {
         teams = D_80060490->node.callbackArg;
         team = ((u32)arg1->node.callbackArg >> 16) & 0xFFFF;
         slot = (u32)arg1->node.callbackArg & 0xFFFF;
-        if (slot < teams[team].unk_40[0][2]) {
+        if (slot < teams[team].rosterInfo[0]->numberOfPokemonCanBePicked) {
             D_8F505770[0] = 9;
-            _bcopy(teams[team].unk_40[0] + slot * 0x50 + 0x58, &D_8F505770[1], 0xC);
+            _bcopy(teams[team].rosterInfo[0]->battleMon[slot].nickname, &D_8F505770[1], 0xC);
             arg1->unk_24 = D_8F505770;
         } else {
             arg1->unk_24 = NULL;

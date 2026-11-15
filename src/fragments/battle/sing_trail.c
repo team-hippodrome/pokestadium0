@@ -22,7 +22,7 @@ void Trail40Variant_SetupCameraTransform(void);
  * for Sing.
  */
 void SingTrail_ApplyRippleAtPoint(s16 arg0, s16 arg1) {
-    Trail40VariantNode* var_s0 = &D_821A8B70.unk_0014[0][0];
+    Trail40VariantNode* var_s0 = &D_821A8B70.grid[0][0];
     s32 i;
     s32 j;
 
@@ -33,9 +33,9 @@ void SingTrail_ApplyRippleAtPoint(s16 arg0, s16 arg1) {
             s32 tmp2 = arg0 - j;
 
             if ((tmp2 == 0.0f) && (tmp1 == (0, 0.0f))) { // FAKE: comma expression
-                var_s0->unk_1C += 1.5707963705062866;
+                var_s0->wavePhase += 1.5707963705062866;
             } else {
-                var_s0->unk_1C += 1.5707963705062866 / sqrtf(SQ((f32)tmp2) + SQ((f32)tmp1));
+                var_s0->wavePhase += 1.5707963705062866 / sqrtf(SQ((f32)tmp2) + SQ((f32)tmp1));
             }
             var_s0++;
         }
@@ -52,28 +52,28 @@ void SingTrail_InitPool(s16 arg0) {
     s32 k;
     s16 tmp1;
     s16 tmp2;
-    Trail40VariantNode* var_v0 = &D_821A8B70.unk_0014[0][0];
+    Trail40VariantNode* var_v0 = &D_821A8B70.grid[0][0];
 
-    D_821A8B70.unk_0000 = 0;
-    D_821A8B70.unk_0002 = arg0;
-    D_821A8B70.unk_0004 = 0;
-    D_821A8B70.unk_0008 = 0.01f;
+    D_821A8B70.frame = 0;
+    D_821A8B70.duration = arg0;
+    D_821A8B70.alpha = 0;
+    D_821A8B70.waveAmplitude = 0.01f;
 
     for (i = 0; i < 16; i++) {
         for (j = 0; j < 16; j++) {
             tmp1 = i * 0x20;
 
-            var_v0->unk_00 = (i * 9.0f) - 72.0f;
+            var_v0->position.x = (i * 9.0f) - 72.0f;
 
-            var_v0->unk_1C = 0.0f;
-            var_v0->unk_04 = (__sinf(var_v0->unk_1C) * 0.5) + 1.0;
+            var_v0->wavePhase = 0.0f;
+            var_v0->position.y = (__sinf(var_v0->wavePhase) * 0.5) + 1.0;
 
             tmp2 = j * 0x20;
 
-            var_v0->unk_08 = (j * 7.0f) - 56.0f;
+            var_v0->position.z = (j * 7.0f) - 56.0f;
 
-            var_v0->unk_18 = tmp1 * 0x10;
-            var_v0->unk_1A = tmp2 * 0x10;
+            var_v0->texS = tmp1 * 0x10;
+            var_v0->texT = tmp2 * 0x10;
 
             var_v0++;
         }
@@ -87,10 +87,10 @@ void SingTrail_InitPool(s16 arg0) {
         SingTrail_ApplyRippleAtPoint(rand1, rand2);
     }
 
-    var_v0 = &D_821A8B70.unk_0014[0][0];
+    var_v0 = &D_821A8B70.grid[0][0];
     for (i = 0; i < 16; i++) {
         for (j = 0; j < 16; j++) {
-            var_v0->unk_04 = (__sinf(var_v0->unk_1C) * 0.5) + 1.0;
+            var_v0->position.y = (__sinf(var_v0->wavePhase) * 0.5) + 1.0;
             var_v0++;
         }
     }
@@ -119,22 +119,22 @@ void SingTrail_UpdateNodes(s32 arg0, s32 arg1) {
     UNUSED s32 pad; // FAKE: stack padding
     s16 sp46;
 
-    sp6C = D_821A8B70.unk_0014[arg0][arg1].unk_00;
-    sp68 = D_821A8B70.unk_0014[arg0][arg1].unk_04;
-    sp64 = D_821A8B70.unk_0014[arg0][arg1].unk_08;
+    sp6C = D_821A8B70.grid[arg0][arg1].position.x;
+    sp68 = D_821A8B70.grid[arg0][arg1].position.y;
+    sp64 = D_821A8B70.grid[arg0][arg1].position.z;
     sp84 = 0.0f;
     sp80 = 0.0f;
     sp7C = 0.0f;
     sp46 = 0;
 
     if ((arg0 > 0) && (arg1 >= 1)) {
-        sp60 = D_821A8B70.unk_0014[arg0 - 1][arg1].unk_00 - sp6C;
-        sp5C = D_821A8B70.unk_0014[arg0 - 1][arg1].unk_04 - sp68;
-        sp58 = D_821A8B70.unk_0014[arg0 - 1][arg1].unk_08 - sp64;
+        sp60 = D_821A8B70.grid[arg0 - 1][arg1].position.x - sp6C;
+        sp5C = D_821A8B70.grid[arg0 - 1][arg1].position.y - sp68;
+        sp58 = D_821A8B70.grid[arg0 - 1][arg1].position.z - sp64;
         Vec3f_NormalizeComponents(&sp60, &sp5C, &sp58);
-        sp54 = D_821A8B70.unk_0014[arg0][arg1 - 1].unk_00 - sp6C;
-        sp50 = D_821A8B70.unk_0014[arg0][arg1 - 1].unk_04 - sp68;
-        sp4C = D_821A8B70.unk_0014[arg0][arg1 - 1].unk_08 - sp64;
+        sp54 = D_821A8B70.grid[arg0][arg1 - 1].position.x - sp6C;
+        sp50 = D_821A8B70.grid[arg0][arg1 - 1].position.y - sp68;
+        sp4C = D_821A8B70.grid[arg0][arg1 - 1].position.z - sp64;
         Vec3f_NormalizeComponents(&sp54, &sp50, &sp4C);
         Vec3f_CrossProductComponents(sp60, sp5C, sp58, sp54, sp50, sp4C, &sp78, &sp74, &sp70);
         Vec3f_NormalizeComponents(&sp78, &sp74, &sp70);
@@ -145,13 +145,13 @@ void SingTrail_UpdateNodes(s32 arg0, s32 arg1) {
     }
 
     if ((0 < arg0) && (arg1 < 15)) {
-        sp60 = D_821A8B70.unk_0014[arg0 - 1][arg1].unk_00 - sp6C;
-        sp5C = D_821A8B70.unk_0014[arg0 - 1][arg1].unk_04 - sp68;
-        sp58 = D_821A8B70.unk_0014[arg0 - 1][arg1].unk_08 - sp64;
+        sp60 = D_821A8B70.grid[arg0 - 1][arg1].position.x - sp6C;
+        sp5C = D_821A8B70.grid[arg0 - 1][arg1].position.y - sp68;
+        sp58 = D_821A8B70.grid[arg0 - 1][arg1].position.z - sp64;
         Vec3f_NormalizeComponents(&sp60, &sp5C, &sp58);
-        sp54 = D_821A8B70.unk_0014[arg0][arg1 + 1].unk_00 - sp6C;
-        sp50 = D_821A8B70.unk_0014[arg0][arg1 + 1].unk_04 - sp68;
-        sp4C = D_821A8B70.unk_0014[arg0][arg1 + 1].unk_08 - sp64;
+        sp54 = D_821A8B70.grid[arg0][arg1 + 1].position.x - sp6C;
+        sp50 = D_821A8B70.grid[arg0][arg1 + 1].position.y - sp68;
+        sp4C = D_821A8B70.grid[arg0][arg1 + 1].position.z - sp64;
         Vec3f_NormalizeComponents(&sp54, &sp50, &sp4C);
         Vec3f_CrossProductComponents(sp60, sp5C, sp58, sp54, sp50, sp4C, &sp78, &sp74, &sp70);
         Vec3f_NormalizeComponents(&sp78, &sp74, &sp70);
@@ -162,13 +162,13 @@ void SingTrail_UpdateNodes(s32 arg0, s32 arg1) {
     }
 
     if ((arg0 < 15) && (arg1 >= 1)) {
-        sp60 = D_821A8B70.unk_0014[arg0 + 1][arg1].unk_00 - sp6C;
-        sp5C = D_821A8B70.unk_0014[arg0 + 1][arg1].unk_04 - sp68;
-        sp58 = D_821A8B70.unk_0014[arg0 + 1][arg1].unk_08 - sp64;
+        sp60 = D_821A8B70.grid[arg0 + 1][arg1].position.x - sp6C;
+        sp5C = D_821A8B70.grid[arg0 + 1][arg1].position.y - sp68;
+        sp58 = D_821A8B70.grid[arg0 + 1][arg1].position.z - sp64;
         Vec3f_NormalizeComponents(&sp60, &sp5C, &sp58);
-        sp54 = D_821A8B70.unk_0014[arg0][arg1 - 1].unk_00 - sp6C;
-        sp50 = D_821A8B70.unk_0014[arg0][arg1 - 1].unk_04 - sp68;
-        sp4C = D_821A8B70.unk_0014[arg0][arg1 - 1].unk_08 - sp64;
+        sp54 = D_821A8B70.grid[arg0][arg1 - 1].position.x - sp6C;
+        sp50 = D_821A8B70.grid[arg0][arg1 - 1].position.y - sp68;
+        sp4C = D_821A8B70.grid[arg0][arg1 - 1].position.z - sp64;
         Vec3f_NormalizeComponents(&sp54, &sp50, &sp4C);
         Vec3f_CrossProductComponents(sp60, sp5C, sp58, sp54, sp50, sp4C, &sp78, &sp74, &sp70);
         Vec3f_NormalizeComponents(&sp78, &sp74, &sp70);
@@ -179,13 +179,13 @@ void SingTrail_UpdateNodes(s32 arg0, s32 arg1) {
     }
 
     if ((arg0 < 15) && (arg1 < 15)) {
-        sp60 = D_821A8B70.unk_0014[arg0 + 1][arg1].unk_00 - sp6C;
-        sp5C = D_821A8B70.unk_0014[arg0 + 1][arg1].unk_04 - sp68;
-        sp58 = D_821A8B70.unk_0014[arg0 + 1][arg1].unk_08 - sp64;
+        sp60 = D_821A8B70.grid[arg0 + 1][arg1].position.x - sp6C;
+        sp5C = D_821A8B70.grid[arg0 + 1][arg1].position.y - sp68;
+        sp58 = D_821A8B70.grid[arg0 + 1][arg1].position.z - sp64;
         Vec3f_NormalizeComponents(&sp60, &sp5C, &sp58);
-        sp54 = D_821A8B70.unk_0014[arg0][arg1 + 1].unk_00 - sp6C;
-        sp50 = D_821A8B70.unk_0014[arg0][arg1 + 1].unk_04 - sp68;
-        sp4C = D_821A8B70.unk_0014[arg0][arg1 + 1].unk_08 - sp64;
+        sp54 = D_821A8B70.grid[arg0][arg1 + 1].position.x - sp6C;
+        sp50 = D_821A8B70.grid[arg0][arg1 + 1].position.y - sp68;
+        sp4C = D_821A8B70.grid[arg0][arg1 + 1].position.z - sp64;
         Vec3f_NormalizeComponents(&sp54, &sp50, &sp4C);
         Vec3f_CrossProductComponents(sp60, sp5C, sp58, sp54, sp50, sp4C, &sp78, &sp74, &sp70);
         Vec3f_NormalizeComponents(&sp78, &sp74, &sp70);
@@ -201,9 +201,9 @@ void SingTrail_UpdateNodes(s32 arg0, s32 arg1) {
         } else {
             Vec3f_NormalizeComponents(&sp84, &sp80, &sp7C);
         }
-        D_821A8B70.unk_0014[arg0][arg1].unk_0C = sp84;
-        D_821A8B70.unk_0014[arg0][arg1].unk_10 = sp80;
-        D_821A8B70.unk_0014[arg0][arg1].unk_14 = sp7C;
+        D_821A8B70.grid[arg0][arg1].normal.x = sp84;
+        D_821A8B70.grid[arg0][arg1].normal.y = sp80;
+        D_821A8B70.grid[arg0][arg1].normal.z = sp7C;
     }
 }
 
@@ -216,21 +216,21 @@ void SingTrail_WriteVertex(Trail40VariantNode* arg0, Vtx* arg1) {
     f32 g;
     f32 b;
 
-    arg1->v.ob[0] = arg0->unk_00;
-    arg1->v.ob[1] = arg0->unk_04;
-    arg1->v.ob[2] = arg0->unk_08;
+    arg1->v.ob[0] = arg0->position.x;
+    arg1->v.ob[1] = arg0->position.y;
+    arg1->v.ob[2] = arg0->position.z;
 
-    arg1->v.tc[0] = arg0->unk_18;
-    arg1->v.tc[1] = arg0->unk_1A;
+    arg1->v.tc[0] = arg0->texS;
+    arg1->v.tc[1] = arg0->texT;
 
-    r = arg0->unk_0C;
-    g = arg0->unk_10;
-    b = arg0->unk_14;
+    r = arg0->normal.x;
+    g = arg0->normal.y;
+    b = arg0->normal.z;
 
     arg1->v.cn[0] = (s32)(r * 120.0);
     arg1->v.cn[1] = (s32)(g * 120.0);
     arg1->v.cn[2] = (s32)(b * 120.0);
-    arg1->v.cn[3] = D_821A8B70.unk_0004;
+    arg1->v.cn[3] = D_821A8B70.alpha;
 }
 
 /**
@@ -242,31 +242,31 @@ s32 SingTrail_AdvanceTimer(void) {
     s32 i;
     s32 j;
 
-    D_821A8B70.unk_0000 = D_821A8B70.unk_0000 + 1;
-    if (D_821A8B70.unk_0002 < D_821A8B70.unk_0000) {
+    D_821A8B70.frame = D_821A8B70.frame + 1;
+    if (D_821A8B70.duration < D_821A8B70.frame) {
         return -1;
     }
-    if (D_821A8B70.unk_0000 < 0x1E) {
-        D_821A8B70.unk_0004 += 0xA;
-        if (D_821A8B70.unk_0004 >= 0x81) {
-            D_821A8B70.unk_0004 = 0x80;
+    if (D_821A8B70.frame < 0x1E) {
+        D_821A8B70.alpha += 0xA;
+        if (D_821A8B70.alpha >= 0x81) {
+            D_821A8B70.alpha = 0x80;
         }
-    } else if ((D_821A8B70.unk_0002 - 0x1E) < D_821A8B70.unk_0000) {
-        D_821A8B70.unk_0004 -= 0xA;
-        if (D_821A8B70.unk_0004 < 0) {
-            D_821A8B70.unk_0004 = 0;
+    } else if ((D_821A8B70.duration - 0x1E) < D_821A8B70.frame) {
+        D_821A8B70.alpha -= 0xA;
+        if (D_821A8B70.alpha < 0) {
+            D_821A8B70.alpha = 0;
         }
     }
 
-    if (D_821A8B70.unk_0008 < 0.5) {
-        D_821A8B70.unk_0008 += 0.05;
+    if (D_821A8B70.waveAmplitude < 0.5) {
+        D_821A8B70.waveAmplitude += 0.05;
     }
 
-    var_s1 = &D_821A8B70.unk_0014[0][0];
+    var_s1 = &D_821A8B70.grid[0][0];
     for (i = 0; i < 16; i++) {
         for (j = 0; j < 16; j++) {
-            var_s1->unk_04 = (__sinf(var_s1->unk_1C) * 0.5) + 1.0;
-            var_s1->unk_1C += 0.1;
+            var_s1->position.y = (__sinf(var_s1->wavePhase) * 0.5) + 1.0;
+            var_s1->wavePhase += 0.1;
 
             var_s1++;
         }
@@ -343,10 +343,10 @@ Gfx* SingTrail_BuildGfx(Gfx* arg0) {
     s32 idx;
 
     var_s4 = 0;
-    D_821A8B70.unk_000C = Gfx_AllocDisplayList(sizeof(Vtx) * 16 * 16);
+    D_821A8B70.vtx = Gfx_AllocDisplayList(sizeof(Vtx) * 16 * 16);
 
-    vtx = D_821A8B70.unk_000C;
-    var_s2 = &D_821A8B70.unk_0014[0][0];
+    vtx = D_821A8B70.vtx;
+    var_s2 = &D_821A8B70.grid[0][0];
     for (i = 0; i < 16; i++) {
         for (j = 0; j < 16; j++) {
             SingTrail_WriteVertex(var_s2, vtx);
@@ -360,10 +360,10 @@ Gfx* SingTrail_BuildGfx(Gfx* arg0) {
     gDPLoadTextureBlock(arg0++, sBattleAnimAssetPointers[0x48], G_IM_FMT_RGBA, G_IM_SIZ_16b, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
                         G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
     gSPDisplayList(arg0++, D_82192CC8);
-    gDPSetPrimColor(arg0++, 0, 0, 255, 255, 255, D_821A8B70.unk_0004);
-    gSPMatrix(arg0++, D_821A8B70.unk_0010, G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+    gDPSetPrimColor(arg0++, 0, 0, 255, 255, 255, D_821A8B70.alpha);
+    gSPMatrix(arg0++, D_821A8B70.mtx, G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
 
-    vtx = D_821A8B70.unk_000C;
+    vtx = D_821A8B70.vtx;
     for (i = 0; i < 15; i++) {
         for (j = 0; j < 15; j++) {
             idx = (i + 0) * 16 + j;

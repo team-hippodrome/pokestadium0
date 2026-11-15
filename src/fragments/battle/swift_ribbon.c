@@ -31,17 +31,17 @@ void SwiftRibbonSheet_Init(void) {
 
     var_v0 = &D_821AC7B0[0];
     for (i = 0; i < 40; i++, var_v0++) {
-        var_v0->unk_000 = 0;
-        var_v0->unk_004 = 0;
-        var_v0->unk_006 = 0;
+        var_v0->active = 0;
+        var_v0->frame = 0;
+        var_v0->duration = 0;
 
-        var_a0 = &var_v0->unk_038[0];
+        var_a0 = &var_v0->nodes[0];
         for (j = 0; j < 10; j++, var_a0++) {
-            var_a0->unk_00 = 0.0f;
-            var_a0->unk_04 = 0;
-            var_a0->unk_08 = 0.0f;
-            var_a0->unk_0C.z = var_a0->unk_0C.y = var_a0->unk_0C.x = 0.0f;
-            var_a0->unk_18.z = var_a0->unk_18.y = var_a0->unk_18.x = 0.0f;
+            var_a0->startDelay = 0.0f;
+            var_a0->alpha = 0;
+            var_a0->angle = 0.0f;
+            var_a0->position.z = var_a0->position.y = var_a0->position.x = 0.0f;
+            var_a0->velocity.z = var_a0->velocity.y = var_a0->velocity.x = 0.0f;
         }
     }
 }
@@ -80,31 +80,31 @@ void SwiftRibbonSheet_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f3
     var_v1 = &D_821AC7B0[0];
 
     for (i = 0; i < 40; i++, var_v1++) {
-        if (var_v1->unk_000 == 0) {
-            var_v1->unk_000 = 1;
-            var_v1->unk_002 = 0;
-            var_v1->unk_004 = 0;
-            var_v1->unk_006 = argB;
-            var_v1->unk_00A.r = arg6;
-            var_v1->unk_00A.g = arg7;
-            var_v1->unk_00A.b = arg8;
-            var_v1->unk_010 = temp_fv0 * 0.5f;
-            var_v1->unk_014 = argA;
+        if (var_v1->active == 0) {
+            var_v1->active = 1;
+            var_v1->phase = 0;
+            var_v1->frame = 0;
+            var_v1->duration = argB;
+            var_v1->color.r = arg6;
+            var_v1->color.g = arg7;
+            var_v1->color.b = arg8;
+            var_v1->scale = temp_fv0 * 0.5f;
+            var_v1->angleStep = argA;
 
             if (arg0 > 0) {
-                var_v1->unk_008 = -1;
+                var_v1->direction = -1;
             } else {
-                var_v1->unk_008 = 1;
+                var_v1->direction = 1;
             }
 
-            var_s0 = &var_v1->unk_038[0];
+            var_s0 = &var_v1->nodes[0];
             for (j = 0; j < 10; j++, var_s0++) {
-                var_s0->unk_00 = j;
-                var_s0->unk_04 = (arg9 * (9 - j)) / 10;
-                var_s0->unk_08 = (RAND(100) * 6.2831854820251465) / 100.0;
-                var_s0->unk_0C = sp74;
-                var_s0->unk_18 = sp68;
-                var_s0->unk_24 = sp5C;
+                var_s0->startDelay = j;
+                var_s0->alpha = (arg9 * (9 - j)) / 10;
+                var_s0->angle = (RAND(100) * 6.2831854820251465) / 100.0;
+                var_s0->position = sp74;
+                var_s0->velocity = sp68;
+                var_s0->riseVelocity = sp5C;
             }
             break;
         }
@@ -134,42 +134,42 @@ void SwiftRibbonSheet_UpdateRecord(TexturedRibbonSheet* arg0) {
     TexturedRibbonSheetNode* var_v0;
     TexturedRibbonSheetNode* var_v1;
 
-    var_v0 = &arg0->unk_038[9];
+    var_v0 = &arg0->nodes[9];
     for (i = 0; i < 9; i++, var_v0--) {
-        var_a1 = &var_v0[0].unk_30[0];
-        var_a2 = &var_v0[-1].unk_30[0];
+        var_a1 = &var_v0[0].vertices[0];
+        var_a2 = &var_v0[-1].vertices[0];
         for (j = 0; j < 2; j++) {
             *var_a1++ = *var_a2++;
         }
     }
 
-    var_v1 = &arg0->unk_038[0];
-    switch (arg0->unk_002) {
+    var_v1 = &arg0->nodes[0];
+    switch (arg0->phase) {
         case 0:
-            var_v1->unk_0C.y += var_v1->unk_24.y;
-            if (arg0->unk_004 >= 0xB) {
-                arg0->unk_002 = 1;
+            var_v1->position.y += var_v1->riseVelocity.y;
+            if (arg0->frame >= 0xB) {
+                arg0->phase = 1;
             }
-            var_v1->unk_08 += 2.0 * arg0->unk_014;
+            var_v1->angle += 2.0 * arg0->angleStep;
             break;
 
         case 1:
-            var_v1->unk_0C.x += var_v1->unk_18.x;
-            var_v1->unk_0C.y += var_v1->unk_18.y;
-            var_v1->unk_0C.z += var_v1->unk_18.z;
+            var_v1->position.x += var_v1->velocity.x;
+            var_v1->position.y += var_v1->velocity.y;
+            var_v1->position.z += var_v1->velocity.z;
 
-            if (arg0->unk_008 > 0) {
-                var_v1->unk_18.x += 2.0;
-                if (var_v1->unk_18.x > 20.0) {
-                    var_v1->unk_18.x = 20.0f;
+            if (arg0->direction > 0) {
+                var_v1->velocity.x += 2.0;
+                if (var_v1->velocity.x > 20.0) {
+                    var_v1->velocity.x = 20.0f;
                 }
             } else {
-                var_v1->unk_18.x -= 2.0;
-                if (var_v1->unk_18.x < -20.0) {
-                    var_v1->unk_18.x = -20.0f;
+                var_v1->velocity.x -= 2.0;
+                if (var_v1->velocity.x < -20.0) {
+                    var_v1->velocity.x = -20.0f;
                 }
             }
-            var_v1->unk_08 += arg0->unk_014;
+            var_v1->angle += arg0->angleStep;
             break;
     }
 }
@@ -184,10 +184,10 @@ s32 SwiftRibbonSheet_IsComplete(void) {
     TexturedRibbonSheet* var_s0 = &D_821AC7B0[0];
 
     for (i = 0; i < 40; i++, var_s0++) {
-        if (var_s0->unk_000 == 1) {
-            var_s0->unk_004 += 1;
-            if ((var_s0->unk_006 + 0xA) < var_s0->unk_004) {
-                var_s0->unk_000 = 0;
+        if (var_s0->active == 1) {
+            var_s0->frame += 1;
+            if ((var_s0->duration + 0xA) < var_s0->frame) {
+                var_s0->active = 0;
             } else {
                 SwiftRibbonSheet_UpdateRecord(var_s0);
                 var_s2++;
@@ -225,16 +225,16 @@ Gfx* SwiftRibbonSheet_Draw(Gfx* arg0) {
 
     var_s5 = &D_821AC7B0[0];
     for (i = 0; i < 40; i++, var_s5++) {
-        if (var_s5->unk_000 == 1) {
-            temp_s0 = &var_s5->unk_038[0];
-            tmp = var_s5->unk_010;
+        if (var_s5->active == 1) {
+            temp_s0 = &var_s5->nodes[0];
+            tmp = var_s5->scale;
 
             temp_s1 = Gfx_AllocDisplayList(sizeof(Mtx) * 1);
 
-            spB4 = (temp_s0->unk_08 * 360.0) / 6.2831854820251465;
-            guTranslate(temp_s1, temp_s0->unk_0C.x, temp_s0->unk_0C.y, temp_s0->unk_0C.z);
+            spB4 = (temp_s0->angle * 360.0) / 6.2831854820251465;
+            guTranslate(temp_s1, temp_s0->position.x, temp_s0->position.y, temp_s0->position.z);
 
-            if (var_s5->unk_002 == 0) {
+            if (var_s5->phase == 0) {
                 guRotateRPY(&spF8, 90.0f, spB4, 0.0f);
             } else {
                 guRotateRPY(&spF8, 90.0f, spB4, spB4);
@@ -248,40 +248,40 @@ Gfx* SwiftRibbonSheet_Draw(Gfx* arg0) {
             gSPDisplayList(arg0++, D_82192F90);
             gSPPopMatrix(arg0++, G_MTX_MODELVIEW);
 
-            var_s5->unk_018 = Gfx_AllocDisplayList(sizeof(Vtx) * 20);
-            vtx = var_s5->unk_018;
+            var_s5->vtx = Gfx_AllocDisplayList(sizeof(Vtx) * 20);
+            vtx = var_s5->vtx;
 
             for (j = 0; j < 10; j++, temp_s0++) {
-                if ((j == 0) || (var_s5->unk_004 < 2)) {
-                    for (k = 0, vtx2 = &temp_s0->unk_30[0]; k < 2; k++) {
-                        if (temp_s0->unk_00 <= 0.0) {
-                            SwiftRibbonSheet_Update(temp_s0->unk_08 + ((2.0 * k * 3.1415927410125732) / 2), &sp13C,
+                if ((j == 0) || (var_s5->frame < 2)) {
+                    for (k = 0, vtx2 = &temp_s0->vertices[0]; k < 2; k++) {
+                        if (temp_s0->startDelay <= 0.0) {
+                            SwiftRibbonSheet_Update(temp_s0->angle + ((2.0 * k * 3.1415927410125732) / 2), &sp13C,
                                           (10.0f * tmp) * 0.8f);
                         }
 
-                        vtx->v.ob[0] = temp_s0->unk_0C.x + sp13C.x;
-                        vtx->v.ob[1] = temp_s0->unk_0C.y + sp13C.y;
-                        vtx->v.ob[2] = temp_s0->unk_0C.z + sp13C.z;
+                        vtx->v.ob[0] = temp_s0->position.x + sp13C.x;
+                        vtx->v.ob[1] = temp_s0->position.y + sp13C.y;
+                        vtx->v.ob[2] = temp_s0->position.z + sp13C.z;
 
-                        vtx->v.cn[0] = var_s5->unk_00A.r;
-                        vtx->v.cn[1] = var_s5->unk_00A.g;
-                        vtx->v.cn[2] = var_s5->unk_00A.b;
-                        vtx->v.cn[3] = temp_s0->unk_04;
+                        vtx->v.cn[0] = var_s5->color.r;
+                        vtx->v.cn[1] = var_s5->color.g;
+                        vtx->v.cn[2] = var_s5->color.b;
+                        vtx->v.cn[3] = temp_s0->alpha;
 
                         *vtx2++ = *vtx++;
                     }
                 } else {
-                    for (k = 0, vtx2 = &temp_s0->unk_30[0]; k < 2; k++) {
+                    for (k = 0, vtx2 = &temp_s0->vertices[0]; k < 2; k++) {
                         *vtx = *vtx2++;
-                        vtx->v.cn[3] = temp_s0->unk_04;
+                        vtx->v.cn[3] = temp_s0->alpha;
 
                         vtx++;
                     }
                 }
             }
 
-            if (var_s5->unk_002 == 1) {
-                vtx = var_s5->unk_018;
+            if (var_s5->phase == 1) {
+                vtx = var_s5->vtx;
 
                 for (k = 0; k < 9; k++) {
                     gSPDisplayList(arg0++, D_82192F40);

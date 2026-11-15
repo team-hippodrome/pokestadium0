@@ -38,7 +38,6 @@ M2C_UNK BattleCamera_PlayShot(s8 *, s32, M2C_UNK);        /* extern */
 M2C_UNK func_82136918(s32, M2C_UNK);                /* extern */
 extern s8 *D_82199DE0;
 extern s8 *D_8219A580;
-extern s8 *D_8219A5A0;
 
 /**
  * Scene mode 7 step 0: camera preset 0, clip planes 20-4000, picks side 0 as the featured
@@ -48,27 +47,26 @@ void func_821329F8(s32 arg0) {
     s8 *sp1C;
 
     sp1C = D_82199DE0 + 0x78C;
-    M2C_FIELD(D_8219A5A0, s32 *, 0x50) = 0;
+    sBattleScene.scene->cameraPresetId = 0;
     func_82121D78(arg0, 0x41A00000, 0x457A0000);
     func_8212188C();
-    M2C_FIELD(D_8219A5A0, u16 *, 0x2C) = 0U;
-    D_8219A580 = (&D_82199DE0)[M2C_FIELD(D_8219A5A0, u16 *, 0x2C)];
+    sBattleScene.scene->actingSide = 0U;
+    D_8219A580 = (&D_82199DE0)[sBattleScene.scene->actingSide];
     M2C_FIELD(sp1C, s32 *, 8) = 0;
     BattleCamera_PlayShot(D_8219A580, arg0, 3);
-    func_82136918(M2C_FIELD(D_8219A580, s32 *, 0x85C), 9);
+    func_82136918((s32)((ActivePokemon*)D_8219A580)->side, 9);
     func_80006998(0);
-    M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
+    sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
 }
 
 s32 func_82101FD4(s32);                             /* extern */
-extern s8 *D_8219A5A0;
 
 /**
  * Advances the phase step once the featured Pokemon's model is ready.
  */
 void func_82132AC4(s32 arg0) {
     if (func_82101FD4(D_8219A580) != 0) {
-        M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
+        sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
     }
 }
 
@@ -76,10 +74,10 @@ void func_82132AC4(s32 arg0) {
  * func_82132B04
  *
  * Clears the byte at D_8219A4F1, calls func_821351F8(arg0, D_8219A580) and
- * func_82104C68(D_8219A580, 1), then adds 1 to the word at offset 0x20 of the
- * structure that D_8219A5A0 points to.  That word is advanced by neighboring
- * functions in this file in the same way (see func_82132AC4), so it looks
- * like a step counter, but this is not established from the code alone.
+ * func_82104C68(D_8219A580, 1), then adds 1 to
+ * sBattleScene.scene->phaseStep, which is advanced by neighboring
+ * functions in this file in the same way (see func_82132AC4), so it
+ * is a step counter.
  */
 extern s8 D_8219A4F1;
 void func_821351F8(CameraNode* arg0, s8* arg1);
@@ -92,14 +90,14 @@ void func_82132B04(CameraNode* arg0) {
     D_8219A4F1 = 0;
     func_821351F8(arg0, D_8219A580);
     func_82104C68(D_8219A580, 1);
-    M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
+    sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
 }
 
 /*
  * func_82132B54
  *
  * Calls func_82135894(arg0, D_8219A580).  If that returns non-zero, adds 1
- * to the word at offset 0x20 of the structure that D_8219A5A0 points to.
+ * to sBattleScene.scene->phaseStep.
  * func_82132AC4, just above, is the same pattern with func_82101FD4 and a
  * single argument.  What the counter at +0x20 counts is not established
  * from the code alone.
@@ -111,7 +109,7 @@ s32 func_82135894(CameraNode* arg0, s8* arg1);
  */
 void func_82132B54(CameraNode* arg0) {
     if (func_82135894(arg0, D_8219A580) != 0) {
-        M2C_FIELD(D_8219A5A0, s32 *, 0x20) = (s32) (M2C_FIELD(D_8219A5A0, s32 *, 0x20) + 1);
+        sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
     }
 }
 
@@ -123,7 +121,7 @@ s32 func_80005B98(s32);
  * Looks at the word at offset 8 of the state block (D_8219A580 + 0x78C, i.e.
  * ActivePokemonState::rosterIndex).  If rosterIndex + 1 is 6 or more as an
  * unsigned value (rosterIndex outside -1..4), it writes 3 to offset 0x40 and 7
- * to offset 0x20 of the structure D_8219A5A0 points to and returns.
+ * to sBattleScene.scene->phaseStep and returns.
  * Otherwise it calls func_80006998(0) and func_80005B98(5) and adds 1 to the
  * word at offset 0x20, the same step counter that func_82132AC4 and
  * func_82132B04 advance.  What the two values written in the first case mean
@@ -134,13 +132,13 @@ s32 func_80005B98(s32);
 void func_82132B90(CameraNode* arg0) {
     s8* st = D_8219A580 + 0x78C;
     if ((u32)(M2C_FIELD(st, s32*, 8) + 1) >= 6U) {
-        M2C_FIELD(D_8219A5A0, s32*, 0x40) = 3;
-        M2C_FIELD(D_8219A5A0, s32*, 0x20) = 7;
+        sBattleScene.scene->winner = 3;
+        sBattleScene.scene->phaseStep = 7;
         return;
     }
     func_80006998(0);
     func_80005B98(5);
-    M2C_FIELD(D_8219A5A0, s32*, 0x20) = (s32)(M2C_FIELD(D_8219A5A0, s32*, 0x20) + 1);
+    sBattleScene.scene->phaseStep = (s32)(sBattleScene.scene->phaseStep + 1);
 }
 
 s32 func_821217DC(s32);
@@ -149,10 +147,10 @@ s32 func_821217DC(s32);
  *
  * Once func_821217DC(0xA) returns non-zero it advances the roster index of the
  * Pokemon in D_8219A580 (state.rosterIndex) by one and makes that roster entry
- * the current one in the session teams block: sessionTeams->displayModel gets
- * the first byte of the new entry, sessionTeams->unk_04 is pointed at the entry
- * itself, and bit 0x80 is set in sessionTeams->uniqueStatusFlags.  It then adds
- * 1 to the word at offset 0x20 of the structure D_8219A5A0 points to, the same
+ * the current one in the session teams block: side->displayModel gets
+ * the first byte of the new entry, side->unk_04 is pointed at the entry
+ * itself, and bit 0x80 is set in side->uniqueStatusFlags.  It then adds
+ * 1 to the word at sBattleScene.scene->phaseStep, the same
  * step counter that func_82132AC4 and func_82132B04 advance.
  * The meaning of the entry's first byte and of flag 0x80 is not established
  * here.  Notes: the casts of D_8219A580 repeat because the ROM re-reads the
@@ -166,10 +164,10 @@ void func_82132C14(UNUSED CameraNode* arg0) {
     if (func_821217DC(0xA) != 0) {
         st->rosterIndex++;
         mon = &((ActivePokemon*)D_8219A580)->teamRoster->pokemonPicked[st->rosterIndex];
-        ((ActivePokemon*)D_8219A580)->sessionTeams->displayModel = mon->species.id;
-        ((ActivePokemon*)D_8219A580)->sessionTeams->unk_04 = (TeamRoster*)&((ActivePokemon*)D_8219A580)->teamRoster->pokemonPicked[st->rosterIndex];
-        ((ActivePokemon*)D_8219A580)->sessionTeams->uniqueStatusFlags |= 0x80;
-        M2C_FIELD(D_8219A5A0, s32*, 0x20) = M2C_FIELD(D_8219A5A0, s32*, 0x20) + 1;
+        ((ActivePokemon*)D_8219A580)->side->displayModel = mon->species.id;
+        ((ActivePokemon*)D_8219A580)->side->displayMon = &((ActivePokemon*)D_8219A580)->teamRoster->pokemonPicked[st->rosterIndex];
+        ((ActivePokemon*)D_8219A580)->side->modelFlags |= 0x80;
+        sBattleScene.scene->phaseStep = sBattleScene.scene->phaseStep + 1;
     }
 }
 
@@ -179,21 +177,20 @@ void func_82132C14(UNUSED CameraNode* arg0) {
  * Case 6 of the scene-state switch in func_82132D60. The word at
  * D_8219A580 + 0x85C is a pointer to a flag byte. If bit 0x10 of that byte is
  * set, the code clears bits 0x10 and 0x80 in it (the mask is 0xFF6F), calls
- * Battle_LoadOwnerModelForSwitchIn with D_8219A580, calls func_80005B98(0xF), and sets the word
- * at D_8219A5A0 + 0x20 to 2. D_8219A5A0 is the address of sBattleScene, whose
- * first member is `scene`, so that word is sBattleScene.scene->unk_20, the
- * field func_82132D60 switches on. The argument is not used. What the flag bits and the
+ * Battle_LoadOwnerModelForSwitchIn with D_8219A580, calls func_80005B98(0xF), and sets
+ * sBattleScene.scene->phaseStep to 2, the field func_82132D60 switches on.
+ * The argument is not used. What the flag bits and the
  * two calls mean is not established from this function.
  */
 void func_82132CDC(CameraNode* arg0) {
     u8* flags;
 
-    flags = M2C_FIELD(D_8219A580, u8**, 0x85C);
+    flags = &((ActivePokemon*)D_8219A580)->side->modelFlags;
     if (*flags & 0x10) {
         *flags &= 0xFF6F;
         Battle_LoadOwnerModelForSwitchIn(D_8219A580);
         func_80005B98(0xF);
-        M2C_FIELD(D_8219A5A0, s32*, 0x20) = 2;
+        sBattleScene.scene->phaseStep = 2;
     }
 }
 

@@ -60,5 +60,5 @@ void BattleAnim_ApplyModelSpeciesOffset(Particle* arg0) {
             offset = -15.0f;
             break;
     }
-    Particle_Field38_AddYScaled_08E90(arg0, offset);
+    Particle_PositionOffset_AddYScaled_08E90(arg0, offset);
 }

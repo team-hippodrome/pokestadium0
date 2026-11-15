@@ -111,7 +111,7 @@ void func_82116480(s8* arg0, s16 arg1, s16 arg2) {
  * @unverified Name from Stadium 1.
  */
 void BattleHud_DrawTranslucentShadowRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4) {
-    DepthBuffer* temp_s1;
+    GfxImage* temp_s1;
     Vtx* temp_s2;
     Mtx* sp84;
     Vp* sp80;
@@ -152,7 +152,7 @@ void BattleHud_DrawTranslucentShadowRect(s32 arg0, s32 arg1, s32 arg2, s32 arg3,
 void Ui_DrawGradientRectangle(s32 x1, s32 y1, s32 width, s32 height, Color_RGB8* top_color,
                               Color_RGB8* bottom_color) {
     Vtx* temp_s2;
-    DepthBuffer* temp_s1;
+    GfxImage* temp_s1;
     Mtx* sp7C;
     Vp* sp78;
 

@@ -4,37 +4,39 @@
 
 #include "global.h"
 
-typedef struct unk_D_800AA680 {
-    /* 0x00 */ s32 unk_00;
-    /* 0x04 */ u16 unk_04;
-    /* 0x06 */ u16 unk_06;
-    /* 0x08 */ void* unk_08;
+// The boot block of a 64DD disk (LBA 0x230), checked by Leo_AcceptPokemonDiskDescriptor.
+typedef struct LeoBootDescriptor {
+    /* 0x00 */ s32 magic; // @unverified: 'POKE' (Leo_AcceptPokemonDiskDescriptor)
+    /* 0x04 */ u16 payloadLba; // @unverified: Leo_QueueDiskPayloadRead
+    /* 0x06 */ u16 payloadLbaCount; // @unverified: Leo_QueueDiskPayloadRead
+    /* 0x08 */ void* loadAddr; // @unverified: payload destination, then passed to LeoBootGame (game_state.c)
     /* 0x0C */ s32 unk_0C;
-} unk_D_800AA680; // size = 0x10
+} LeoBootDescriptor; // size = 0x10
 
-typedef struct unk_D_800AA690 {
-    /* 0x00 */ u16 unk_00;
-    /* 0x02 */ u16 unk_02;
-    /* 0x04 */ u16 unk_04;
-    /* 0x06 */ u16 unk_06;
-} unk_D_800AA690; // size = 0x8
+// The 64DD boot state machine (D_800AB210, Leo_RunBootStateMachine).
+typedef struct LeoBootState {
+    /* 0x00 */ u16 state; // @unverified: 0-10, the case of Leo_RunBootStateMachine
+    /* 0x02 */ u16 errorKind; // @unverified: 0-5, set with leoError on a failed step
+    /* 0x04 */ u16 leoError; // @unverified: the LEO error code that failed a step
+    /* 0x06 */ u16 resetRetries; // @unverified: counts LEO error 43 in Leo_HandleDiskIdCompletion; errorKind 1 after 32
+} LeoBootState; // size = 0x8
 
-extern unk_D_800AA680 D_800AB200;
+extern LeoBootDescriptor D_800AB200;
 
 // leo.c
 s32 Leo_ValidateBootDiskId(void);
-s32 Leo_AcceptPokemonDiskDescriptor(unk_D_800AA680* arg0);
+s32 Leo_AcceptPokemonDiskDescriptor(LeoBootDescriptor* arg0);
 s32 Leo_QueueDiskIdRead(void);
 s32 Leo_QueueDiskReset(void);
-s32 Leo_QueueBootBlockRead(unk_D_800AA680* arg0);
+s32 Leo_QueueBootBlockRead(LeoBootDescriptor* arg0);
 s32 Leo_QueueDiskPayloadRead(void);
 s32 Leo_HandleDiskIdCompletion(void);
 s32 Leo_HandleResetCompletion(void);
-s32 Leo_HandleBootBlockCompletion(unk_D_800AA680* arg0);
+s32 Leo_HandleBootBlockCompletion(LeoBootDescriptor* arg0);
 s32 Leo_HandlePayloadCompletion(void);
 s32 Leo_PollDiskReady(void);
 void func_8000D0D4(void);
-s32 Leo_RunBootStateMachine(unk_D_800AA680* arg0);
+s32 Leo_RunBootStateMachine(LeoBootDescriptor* arg0);
 s32 Leo_InitializeBootState(void);
 void Leo_AbortPendingBootRequest(void);
 void Leo_ResetBootStateIfReady(void);

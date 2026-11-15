@@ -34,7 +34,7 @@ typedef struct JpegDecoder {
     /* 0x04 */ u8 mode;
     /* 0x05 */ u8 unk_05;
     /* 0x08 */ JpegHuffmanTable* hTablePtrs[4];
-    /* 0x18 */ u8 unk_18;
+    /* 0x18 */ u8 hasRestartMarkers; // @unverified: JpegStreamInfo.hasRestartMarkers (Jpeg_BuildDspInput); not read in Zero
 } JpegDecoder; // size = 0x1C
 
 typedef struct JpegContext {
@@ -55,9 +55,9 @@ typedef struct JpegDecoderState {
     /* 0x04 */ u8 bitIdx;
     /* 0x05 */ u8 dontSkip;
     /* 0x08 */ u32 curWord;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ s16 unk_0E;
-    /* 0x10 */ s16 unk_10;
+    /* 0x0C */ s16 dcPredY; // @unverified: previous DC coefficient of Y, passed to Jpeg_DecodeBlock (Jpeg_DecodeMcus)
+    /* 0x0E */ s16 dcPredU; // @unverified: previous DC coefficient of U (Jpeg_DecodeMcus)
+    /* 0x10 */ s16 dcPredV; // @unverified: previous DC coefficient of V (Jpeg_DecodeMcus)
 } JpegDecoderState; // size = 0x14
 
 // jpeg_decoder.c

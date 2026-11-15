@@ -7,25 +7,12 @@
 extern u8 D_80073520[];
 M2C_UNK Ui_DrawRoundedFrame(s32, s32, s32, s32, Color_RGBA8);
 
-typedef struct Ctx89100914 {
-    /* 0x0000 */ char unk0000[0x30];
-    /* 0x0030 */ s32 y;
-    /* 0x0034 */ s32 xEnd;
-    /* 0x0038 */ char unk0038[0x84 - 0x38];
-    /* 0x0084 */ s32* widths;
-    /* 0x0088 */ char unk0088[0xB15C - 0x88];
-    /* 0xB15C */ s32 mode;
-    /* 0xB160 */ char unkB160[0xB548 - 0xB160];
-    /* 0xB548 */ s32* ranges;
-    /* 0xB54C */ s32 unkB54C;
-    /* 0xB550 */ s32 cursor;
-} Ctx89100914;
 extern u8 D_8910A85C[];
 extern u8 D_8910A860[];
 extern Gfx D_80060270[];
 extern Gfx D_80073450[];
 extern u8 D_8910AB08[];
-extern M2C_UNK D_800734A8;
+extern u8 D_800734A8[];
 extern char D_8910DAF8[];
 extern char D_8910DB04[];
 extern char D_8910DB14[];
@@ -43,7 +30,7 @@ extern char D_8910DB7C[];
 extern char D_8910DB88[];
 extern char D_8910DB94[];
 extern char D_8910DBA0[];
-s32 LabPCList_GetColumnCursorX(Ctx89100914* arg0);
+s32 LabPCList_GetColumnCursorX(LabPCListScreen* arg0);
 void func_80029028(s32, s32, s32, s32, Color_RGBA8);
 void Ui_FillRectHighlighted(s32, s32, s32, s32, Color_RGBA8);
 void Font_SetColorForFlags(s32);
@@ -57,21 +44,21 @@ void Font_Printf(s32 x, s32 y, const char* fmt, ...);
  * Draws the list column headers: Pokemon, nickname, ID, OT, location, Type 1/2, level, HP, Attack...
  * Seen in play (2026-11-12): the headers ポケモン, ニックネーム, ID, おや, ばしょ, タイプ1, タイプ2.
  */
-void LabPCList_DrawDetailColumns(Ctx89100914* arg0, s32 arg1, s32 arg2, s32 arg3) {
+void LabPCList_DrawDetailColumns(LabPCListScreen* arg0, s32 arg1, s32 arg2, s32 arg3) {
     s32 x;
     s32 i;
     s32 hl;
 
     gSPDisplayList(gDisplayListHead++, D_80060270);
-    func_80029028(arg1, arg0->y, 0x26, 0x14, *(Color_RGBA8*)D_8910A85C);
-    func_80029028(arg1 + 0x26, arg0->y, 0x50, 0x14, *(Color_RGBA8*)D_8910A860);
-    i = arg0->ranges[arg0->mode];
-    for (x = arg1 + 0x78; x < arg0->xEnd; i++) {
-        func_80029028(x, arg2, arg0->widths[i], 0x14, *(Color_RGBA8*)&D_8910A85C[(i & 1) * 4]);
-        x += arg0->widths[i];
+    func_80029028(arg1, arg0->listFrame.y, 0x26, 0x14, *(Color_RGBA8*)D_8910A85C);
+    func_80029028(arg1 + 0x26, arg0->listFrame.y, 0x50, 0x14, *(Color_RGBA8*)D_8910A860);
+    i = arg0->pageColumnStart[arg0->page];
+    for (x = arg1 + 0x78; x < arg0->listFrame.width; i++) {
+        func_80029028(x, arg2, arg0->columnWidths[i], 0x14, *(Color_RGBA8*)&D_8910A85C[(i & 1) * 4]);
+        x += arg0->columnWidths[i];
     }
     if (arg3 & 0x10) {
-        Ui_FillRectHighlighted(LabPCList_GetColumnCursorX(arg0) + 1, arg2 + 1, arg0->widths[arg0->ranges[arg0->mode] + arg0->cursor - 2] - 2, 0x12, *(Color_RGBA8*)D_8910A860);
+        Ui_FillRectHighlighted(LabPCList_GetColumnCursorX(arg0) + 1, arg2 + 1, arg0->columnWidths[arg0->pageColumnStart[arg0->page] + arg0->headerCursor.cursor - 2] - 2, 0x12, *(Color_RGBA8*)D_8910A860);
     }
     gSPDisplayList(gDisplayListHead++, D_80073450);
     gDPSetCombineMode(gDisplayListHead++, G_CC_DECALRGBA, G_CC_DECALRGBA);
@@ -82,8 +69,8 @@ void LabPCList_DrawDetailColumns(Ctx89100914* arg0, s32 arg1, s32 arg2, s32 arg3
     Font_Printf(arg1 + 0x2E, arg2 + 2, D_8910DAF8);
     Font_EndTexturedTextRendering();
     Font_BeginTranslucentTextRendering();
-    for (x = arg1 + 0x78, i = arg0->ranges[arg0->mode]; x < arg0->xEnd; i++) {
-        hl = (i + 2 == arg0->ranges[arg0->mode] + arg0->cursor) ? 0x12 : 0;
+    for (x = arg1 + 0x78, i = arg0->pageColumnStart[arg0->page]; x < arg0->listFrame.width; i++) {
+        hl = (i + 2 == arg0->pageColumnStart[arg0->page] + arg0->headerCursor.cursor) ? 0x12 : 0;
         Font_SetColorForFlags(hl & arg3);
         switch (i) {
             case 0:
@@ -151,7 +138,7 @@ void LabPCList_DrawDetailColumns(Ctx89100914* arg0, s32 arg1, s32 arg2, s32 arg3
                 Font_Printf(x + 4, arg2 + 2, D_8910DBA0);
                 break;
         }
-        x += arg0->widths[i];
+        x += arg0->columnWidths[i];
     }
     Font_EndTexturedTextRendering();
 }
@@ -194,7 +181,7 @@ typedef struct Label89100FC4 {
     const char* str;
 } Label89100FC4;
 extern Entry89100FC4 D_8006A9D4[];
-extern M2C_UNK D_800734A8;
+extern u8 D_800734A8[];
 extern char D_8910DBAC[];
 s32 BattleMon_GetMoveIndexChecked(s32, s32);
 void func_89100FC4(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -225,7 +212,7 @@ M2C_UNK func_8001AA60(s32, s32, s32);               /* extern */
 M2C_UNK func_8001AA9C(u8, u8, u8, u8);              /* extern */
 M2C_UNK func_8001AB6C();                            /* extern */
 M2C_UNK func_8001ABBC();                            /* extern */
-extern M2C_UNK D_800734A8;
+extern u8 D_800734A8[];
 extern M2C_UNK D_8910DBB4;
 extern M2C_UNK D_8910DBBC;
 extern M2C_UNK D_8910DBC0;
@@ -240,7 +227,7 @@ void LabPCList_DrawLocation(s32 arg0, s32 arg1, s8 ***arg2) {
     s32 temp_v0;
 
     func_8001AB6C();
-    func_8001AA9C(M2C_FIELD(&D_800734A8, u8 *, 0), M2C_FIELD(&D_800734A8, u8 *, 1), M2C_FIELD(&D_800734A8, u8 *, 2), M2C_FIELD(&D_800734A8, u8 *, 3));
+    func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
     temp_v0 = M2C_FIELD(**arg2, s32 *, 4);
     switch (temp_v0) {                              /* irregular */
     case 32:

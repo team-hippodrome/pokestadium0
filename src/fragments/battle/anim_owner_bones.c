@@ -29,7 +29,7 @@ void BattleAnim_ReleaseParticleModel(Particle* arg0);
 void BattleAnim_GetOwnerBonePosition(ActivePokemon* arg0, s16 arg1, Vec3f* arg2);
 f32 BattleAnim_GetSpeciesBaseScale(ActivePokemon* arg0);
 void BattleAnim_GetOwnerSpeciesBaseScaleAlias(ActivePokemon* arg0);
-void BattleScene_GetParticipantModelSizeScaled(unk_D_82F20A88* arg0);
+void BattleScene_GetParticipantModelSizeScaled(ActivePokemon* arg0);
 
 /**
  * Returns 1 if the current animation owner's model shows species arg0.
@@ -214,9 +214,9 @@ Particle* BattleAnim_SpawnSecondaryOwnerParticle(Vec3f arg0, u8 arg1) {
         BattleAnim_InitStingerMoveParticle(sp1C, arg1);
         sp1C->pokemon = gBattleAnimSecondaryOwner;
         sp1C->displayObject = NULL;
-        sp1C->unk_CD = 0xFF;
-        sp1C->unk_CC = 0x15;
-        sp1C->unk_CA = 0;
+        sp1C->byteParam0 = 0xFF;
+        sp1C->anchorMode = 0x15;
+        sp1C->effectList = 0;
     }
     return sp1C;
 }
@@ -264,14 +264,14 @@ void Particle_InitLifecycle(Particle* arg0) {
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (130 of the moves).
  * @unverified Name from Stadium 1.
  */
-void Particle_MarkInactive(s8 *arg0) {
-    M2C_FIELD(arg0, s16 *, 0xAE) = 0;
+void Particle_MarkInactive(Particle* arg0) {
+    arg0->lifecycle = 0;
 }
 
 M2C_UNK func_8213D260();                            /* extern */
 
-void Particle_DisableAndDetach(s8 *arg0) {
-    M2C_FIELD(arg0, s16 *, 0xAE) = 0;
+void Particle_DisableAndDetach(Particle* arg0) {
+    arg0->lifecycle = 0;
     M2C_FIELD(arg0, s32 *, 8) = 0;
     M2C_FIELD(arg0, s32 *, 0xC) = 0;
     func_8213D260();
@@ -294,11 +294,11 @@ void BattleAnim_DestroyParticle(Particle* arg0) {
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (157 of the moves).
  * @unverified Name from Stadium 1.
  */
-s32 Particle_IsInactive(s8 *arg0) {
+s32 Particle_IsInactive(Particle* arg0) {
     s32 var_v1;
 
     var_v1 = 0;
-    if (M2C_FIELD(arg0, s16 *, 0xAE) == 0) {
+    if (arg0->lifecycle == 0) {
         var_v1 = 1;
     }
     return var_v1;
@@ -309,11 +309,11 @@ s32 Particle_IsInactive(s8 *arg0) {
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (110 of the moves).
  * @unverified Name from Stadium 1.
  */
-s32 Particle_IsRunning(s8 *arg0) {
+s32 Particle_IsRunning(Particle* arg0) {
     s32 var_v1;
 
     var_v1 = 0;
-    if (M2C_FIELD(arg0, s16 *, 0xAE) >= 2) {
+    if (arg0->lifecycle >= 2) {
         var_v1 = 1;
     }
     return var_v1;

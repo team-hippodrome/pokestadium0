@@ -4,7 +4,7 @@ This started as a first-pass reading of the code. The player agent has since
 checked the entry points and most move pickers in game (Free Battle, 1P vs
 COM); see `docs/annotation/player-verification.md` for what was run. Names that
 still carry `@unverified` were seen running but their rules were not tested. Function names are in
-`src/fragments/fragment012_17ED00/battle_engine_com_ai*.c`.
+`src/fragments/battle/com_ai*.c`.
 
 ## Entry points
 
@@ -56,10 +56,8 @@ Battler record layout (offsets from the record, which is slot + 4 in `BattleSlot
 | 0x7A | consecutive recharge turns |
 | 0x7C..0x7E | last three moves used |
 
-`BattleSlotZ` in the source is the same memory, viewed four bytes early, so
-`BattleSlotZ.hp` is record 0x18. Turning these into one proper `ComSide` /
-`ComBattler` pair is left for the struct pass; the code reaches the fields
-through raw `u8 *` offsets today.
+In the source these are `ComSide` and `ComBattler` (src/fragments/battle/battle.h); the battler's
+battle Pokémon is `ComBattler.mon`, a `BattleMonRuntime`, so record offset 0x18 is `mon.hp`.
 
 ## Rules the AI encodes
 
@@ -74,5 +72,9 @@ through raw `u8 *` offsets today.
 - **Team levels**: three picks must sum to 150..155 (`BattleAi_LevelSumAllowed`, Nintendo Cup '97 rules).
 - **Per-trainer picks** (`BattleAi_AddTrainerPickScore`):
   - Hand-written preferences keyed by the COM trainer's id word (0x6974, 0x95EC, 0x6299, 0xC0FC, 0x3C5E, 0x813A, 0x77CB, 0xBBBD, 0x940F, 0xD870, 0xCD7E, 0x4FC7).
-  - Which trainer each id belongs to is not established yet.
+  - The ids are the `trainerId` words of the tournament trainer templates in nintendo_cup_teams
+    (`D_82400400`, read from the fragment's data): 0x755B ほっかいどう (Hokkaido), 0x6974 とうほくＡ, 0xCD7E とうほくＢ,
+    0x4FC7 ほくりく, 0xC0FC かんとうＡ１, 0xC3E5 かんとうＡ２, 0x95EC かんとうＢ, 0x6299 ちゅうぶＡ, 0x3C5E ちゅうぶＢ,
+    0x813A かんさい, 0x77CB ちゅうごくＡ, 0xBBBD ちゅうごくＢ, 0xD870 しこく, 0x940F きゅうしゅうＡ, 0x14FC きゅうしゅうＢ
+    (regional players), and 0x473B むしとりしょうねん (Bug Catcher), 0x4353 かじばどろぼう, 0x3F6B とりつかい (Bird Keeper).
 - **Random source**: `BattleAi_RandomPercent` is separate from the battle engine's RNG (`Battle_Random`). Seeding it to fixed values makes the COM deterministic for a given battle.

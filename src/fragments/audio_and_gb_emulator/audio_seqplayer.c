@@ -2,11 +2,11 @@
 #include "audio_and_gb_emulator.h"
 
 // Declared here instead of in a header: the callers of these disagree on their types.
-extern Entry811151C8 D_81184668[];
-extern unk_D_81234690 D_811858B8;
+extern SequencePlayer D_81184668[];
+extern AudioBufferParameters D_811858B8;
 extern volatile u32 D_811859D4;
 void AudioPlayback_NotePoolClear(s8*);
-void AudioPlayback_SeqLayerNoteDecay(Particle31FlagsA*);
+void AudioPlayback_SeqLayerNoteDecay(SequenceLayer*);
 void AudioSeq_AudioListPushBack(s8 *arg0, s8 *arg1);
 
 extern u8 D_81138690[];
@@ -17,12 +17,6 @@ void AudioLoad_SetFontLoadStatus(s32, s32);
 void AudioLoad_SetSeqLoadStatus(s32, s32);
 extern M2C_UNK D_81184380;
 u8* AudioPlayback_GetInstrumentInner(s32, s32);
-typedef struct TradeFlags81112E00 {
-    u8 bit7 : 1;
-    u8 bit6 : 1;
-    u8 rest : 6;
-} TradeFlags81112E00;
-
 extern u16 D_81138A96;
 extern u32 D_81138A90;
 extern s16 D_81180700;
@@ -31,10 +25,10 @@ extern u8* D_81180704;
 extern GbApuWrite D_81180848[GB_APU_WRITE_QUEUE_LEN];
 extern u8 D_81182468[0x40];
 extern s32 D_811824A8;
-extern unk_D_8122EEA8 D_811824B8;
+extern GbApuStatusOverride D_811824B8;
 extern OSMesgQueue D_811824C0;
 extern OSMesg D_811824D8[GB_APU_WRITE_QUEUE_LEN + 1];
-extern unk_D_81234690 D_811858B8;
+extern AudioBufferParameters D_811858B8;
 extern volatile s32 D_811858F0;
 extern s32 D_811858F8;
 extern s32 D_811858FC;
@@ -42,7 +36,7 @@ extern s16* D_811859B8[3];
 extern s16 D_811859C4[3];
 extern u32 D_811859CC;
 extern volatile u32 D_811859D4;
-extern unk_D_81287B08_jp D_81287B08_jp[];
+extern SequencePlayer D_81287B08_jp[];
 extern OSMesgQueue* D_812896A0_jp;
 extern s32 D_81138A70;
 extern u8 D_81138A80[0x10];
@@ -57,11 +51,11 @@ extern u8 D_81138B40[0x10];
 extern u32 D_81138B50[9];
 extern s32 D_81138B80;
 extern GbAudioStream D_81138B84;
-extern struct GbEmuListZ D_81184928;
-extern GbEmuListZ D_81184928;
-extern GbEmuEntryZ D_811847C8[1];
+extern struct AudioListItem D_81184928;
+extern AudioListItem D_81184928;
+extern SequenceLayer D_811847C8[1];
 extern s16 D_811858CC;
-extern Entry811151C8 D_81184668[];
+extern SequencePlayer D_81184668[];
 
 /**
  * Reads the argument of a control-flow command of kind `kind` from the script stream. Zelda 64 audio driver (seqplayer.c), same position and shape.
@@ -91,11 +85,6 @@ typedef struct SeqScriptState811126B8 {
     /* 0x19 */ s8 value;
 } SeqScriptState811126B8;
 
-typedef struct SeqPlayer811126B8 {
-    /* 0x00 */ u8 unk00[0x18];
-    /* 0x18 */ u8* seqData;
-} SeqPlayer811126B8;
-
 u16 AudioSeq_ScriptReadCompressedU16(u8** arg0);
 
 /**
@@ -104,7 +93,7 @@ u16 AudioSeq_ScriptReadCompressedU16(u8** arg0);
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-s32 AudioSeq_HandleScriptFlowControl(SeqPlayer811126B8* seq_player, SeqScriptState811126B8* state, s32 cmd, s32 cmd_arg) {
+s32 AudioSeq_HandleScriptFlowControl(SequencePlayer* seq_player, SeqScriptState811126B8* state, s32 cmd, s32 cmd_arg) {
     u8 depth;
 
     switch (cmd) {
@@ -170,19 +159,9 @@ s32 AudioSeq_HandleScriptFlowControl(SeqPlayer811126B8* seq_player, SeqScriptSta
     return 0;
 }
 
-extern Item8111539C D_81184850;
+extern SequenceChannel D_81184850;
 
 void AudioPlayback_InitNoteLists(void*);
-typedef struct Bits81112894 {
-    u8 b80 : 1;
-    u8 b40 : 1;
-    u8 b20 : 1;
-    u8 b10 : 1;
-    u8 b08 : 1;
-    u8 b04 : 1;
-    u8 b02 : 1;
-    u8 b01 : 1;
-} Bits81112894;
 extern u8 D_81136998[];
 /**
  * Resets a sequence channel to its defaults. Zelda 64 audio driver.
@@ -191,99 +170,58 @@ extern u8 D_81136998[];
  * @unverified Name and comment guessed from the code.
  */
 void AudioSeq_InitSequenceChannel(void* obj) {
-    s8* arg0 = obj;
+    SequenceChannel* channel = obj;
     s32 i;
 
-    if ((Item8111539C*)arg0 != &D_81184850) {
-        ((Bits81112894*)arg0)->b80 = 0;
-        ((Bits81112894*)arg0)->b40 = 0;
-        ((Bits81112894*)arg0)->b20 = 0;
-        ((Bits81112894*)arg0)->b10 = 0;
-        ((Bits81112894*)arg0)->b08 = 0;
-        ((Bits81112894*)arg0)->b04 = 0;
-        M2C_FIELD(arg0, s16*, 0x24) = 0;
-        ((Bits81112894*)arg0)->b02 = 0;
-        M2C_FIELD(arg0, s8*, 9) = 0;
-        M2C_FIELD(arg0, u8*, 1) = 0xFF;
-        M2C_FIELD(arg0, s8*, 0x78) = 0;
-        M2C_FIELD(arg0, s8*, 0xA) = 0x40;
-        M2C_FIELD(arg0, u8*, 0xB) = 0x80;
-        M2C_FIELD(arg0, s8*, 0xD) = 0;
-        M2C_FIELD(arg0, s8*, 0xE) = 0;
-        M2C_FIELD(arg0, s32*, 0x40) = 0;
-        M2C_FIELD(arg0, s8*, 8) = 0;
-        M2C_FIELD(arg0, s8*, 4) = 0;
-        M2C_FIELD(arg0, s8*, 0xC) = 0;
-        M2C_FIELD(arg0, s8*, 5) = 3;
-        M2C_FIELD(arg0, s8*, 6) = 1;
-        M2C_FIELD(arg0, s16*, 0x1E) = 0;
-        M2C_FIELD(arg0, u8**, 0x80) = D_81136998;
-        M2C_FIELD(arg0, s8*, 0x7C) = 0x20;
-        M2C_FIELD(arg0, s16*, 0x14) = 0x800;
-        M2C_FIELD(arg0, s16*, 0x10) = 0x800;
-        M2C_FIELD(arg0, s8*, 0x7D) = 0;
-        M2C_FIELD(arg0, s16*, 0x16) = 0;
-        M2C_FIELD(arg0, s16*, 0x12) = 0;
-        M2C_FIELD(arg0, s16*, 0x18) = 0;
-        M2C_FIELD(arg0, s16*, 0x1A) = 0;
-        M2C_FIELD(arg0, s16*, 0x1C) = 0;
-        M2C_FIELD(arg0, s32*, 0xD0) = 0;
-        M2C_FIELD(arg0, s16*, 0x20) = 0;
-        M2C_FIELD(arg0, s8*, 0xF) = 0;
-        M2C_FIELD(arg0, f32*, 0x2C) = 1.0f;
-        M2C_FIELD(arg0, f32*, 0x28) = 1.0f;
-        M2C_FIELD(arg0, f32*, 0x38) = 1.0f;
+    if (channel != &D_81184850) {
+        channel->enabled = 0;
+        channel->finished = 0;
+        channel->stopScript = 0;
+        channel->muted = 0;
+        channel->hasInstrument = 0;
+        channel->stereoHeadsetEffects = 0;
+        channel->transposition = 0;
+        channel->largeNotes = 0;
+        channel->bookOffset = 0;
+        channel->changes.asByte = 0xFF;
+        channel->scriptState.depth = 0;
+        channel->newPan = 0x40;
+        channel->panChannelWeight = 0x80;
+        channel->velocityRandomVariance = 0;
+        channel->gateTimeRandomVariance = 0;
+        channel->noteUnused = 0;
+        channel->reverbIndex = 0;
+        channel->reverb = 0;
+        channel->gain = 0;
+        channel->notePriority = 3;
+        channel->someOtherPriority = 1;
+        channel->delay = 0;
+        channel->adsr.envelope = D_81136998;
+        channel->adsr.decayIndex = 0x20;
+        channel->vibratoRateTarget = 0x800;
+        channel->vibratoRateStart = 0x800;
+        channel->adsr.sustain = 0;
+        channel->vibratoExtentTarget = 0;
+        channel->vibratoExtentStart = 0;
+        channel->vibratoRateChangeDelay = 0;
+        channel->vibratoExtentChangeDelay = 0;
+        channel->vibratoDelay = 0;
+        channel->filter = 0;
+        channel->combFilterGain = 0;
+        channel->combFilterSize = 0;
+        channel->volume = 1.0f;
+        channel->volumeScale = 1.0f;
+        channel->freqScale = 1.0f;
         for (i = 0; i < 8; i++) {
-            M2C_FIELD(arg0, s8*, 0xC4 + i) = -1;
+            channel->soundScriptIO[i] = -1;
         }
-        ((Bits81112894*)arg0)->b01 = 0;
-        AudioPlayback_InitNoteLists(arg0 + 0x84);
+        channel->unused = 0;
+        AudioPlayback_InitNoteLists(&channel->notePool);
     }
 }
 
-extern struct GbEmuListZ D_81184928;
-typedef struct Pair811129E0 { u8 a; u8 pad[3]; s32 b; } Pair811129E0;
-typedef struct Part811129E0 {
-    u8 b80 : 1;
-    u8 b40 : 1;
-    u8 b20 : 1;
-    u8 b10 : 1;
-    u8 b08 : 1;
-    u8 b04 : 1;
-    u8 b02 : 1;
-    u8 b01 : 1;
-    u8 unk01;
-    u8 unk02;
-    u8 unk03;
-    u8 unk04;
-    u8 pad05;
-    u8 unk06;
-    u8 pad07;
-    u8 unk08;
-    char pad09[0xF];
-    Pair811129E0 unk18;
-    char pad20[2];
-    s16 unk22;
-    f32 unk24;
-    f32 unk28;
-    f32 unk2C;
-    char pad30[0x10];
-    s16 unk40;
-    s16 unk42;
-    s16 unk44;
-    s32 unk48;
-    s32 unk4C;
-    char pad50[4];
-    void* owner;
-    char pad58[0x18];
-    u8 unk70;
-} Part811129E0;
-typedef struct Owner811129E0 {
-    char pad0[0x50];
-    Part811129E0* slots[11];
-    Pair811129E0 unk7C;
-} Owner811129E0;
-s32 AudioSeq_AudioListPopBack(s8*);
+extern struct AudioListItem D_81184928;
+s32 AudioSeq_AudioListPopBack(AudioListItem* list);
 void AudioPlayback_SeqLayerNoteDecay();
 /**
  * Gives channel `arg0` a layer in slot `arg1`, taking one from the free list when needed. Zelda 64 audio driver.
@@ -291,44 +229,44 @@ void AudioPlayback_SeqLayerNoteDecay();
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-s32 AudioSeq_SeqChannelSetLayer(Owner811129E0* arg0, s32 arg1) {
-    Part811129E0* p;
+s32 AudioSeq_SeqChannelSetLayer(SequenceChannel* arg0, s32 arg1) {
+    SequenceLayer* p;
     s32 pad; // FAKE: stack padding
-    if (arg0->slots[arg1] == NULL) {
-        arg0->slots[arg1] = (Part811129E0*)AudioSeq_AudioListPopBack((s8*)&D_81184928);
-        if (arg0->slots[arg1] == NULL) {
-            arg0->slots[arg1] = NULL;
+    if (arg0->layers[arg1] == NULL) {
+        arg0->layers[arg1] = (SequenceLayer*)AudioSeq_AudioListPopBack((s8*)&D_81184928);
+        if (arg0->layers[arg1] == NULL) {
+            arg0->layers[arg1] = NULL;
             return -1;
         }
     } else {
-        AudioPlayback_SeqLayerNoteDecay(arg0->slots[arg1]);
+        AudioPlayback_SeqLayerNoteDecay(arg0->layers[arg1]);
     }
-    p = arg0->slots[arg1];
-    p->owner = arg0;
-    p->unk18 = arg0->unk7C;
-    p->b80 = 1;
-    p->b20 = 0;
-    p->b10 = 0;
-    p->b40 = 0;
-    p->b02 = 0;
-    p->unk18.a = 0;
-    p->b01 = 0;
-    p->unk01 = 0x40;
-    p->unk08 = 0;
-    p->unk70 = 0;
-    p->unk03 = 0;
-    p->unk04 = 0x80;
-    p->unk06 = 0x40;
-    p->unk22 = 0;
-    p->unk40 = 0;
-    p->unk42 = 0;
-    p->unk44 = 0;
-    p->unk48 = 0;
-    p->unk4C = 0;
-    p->unk02 = 0xFF;
-    p->unk24 = 1.0f;
-    p->unk28 = 1.0f;
-    p->unk2C = 0.0f;
+    p = arg0->layers[arg1];
+    p->channel = arg0;
+    p->adsr = arg0->adsr;
+    p->enabled = 1;
+    p->stopSomething = 0;
+    p->continuousNotes = 0;
+    p->finished = 0;
+    p->ignoreDrumPan = 0;
+    p->adsr.decayIndex = 0;
+    p->bit1 = 0;
+    p->stereo.asByte = 0x40;
+    p->portamento.mode = 0;
+    p->scriptState.depth = 0;
+    p->status = 0;
+    p->noteDuration = 0x80;
+    p->pan = 0x40;
+    p->transposition = 0;
+    p->delay = 0;
+    p->gateDelay = 0;
+    p->duration = 0;
+    p->note = 0;
+    p->instrument = 0;
+    p->instOrWave = 0xFF;
+    p->freqScale = 1.0f;
+    p->bend = 1.0f;
+    p->velocitySquare2 = 0.0f;
     return 0;
 }
 
@@ -338,11 +276,11 @@ s32 AudioSeq_SeqChannelSetLayer(Owner811129E0* arg0, s32 arg1) {
  * in a tour of the menus and a COM battle.
  * @unverified Name and comment guessed from the code.
  */
-void AudioSeq_SeqLayerDisable(Particle31FlagsA* arg0) {
+void AudioSeq_SeqLayerDisable(SequenceLayer* arg0) {
     if (arg0 != NULL) {
         AudioPlayback_SeqLayerNoteDecay(arg0);
-        arg0->b80 = 0;
-        arg0->b40 = 1;
+        arg0->enabled = 0;
+        arg0->finished = 1;
     }
 }
 
@@ -357,7 +295,7 @@ void AudioSeq_SeqLayerFree(s8** arg0, s32 arg1) {
 
     if (temp != NULL) {
         AudioSeq_AudioListPushBack((s8*)&D_81184928, temp + 0x74);
-        AudioSeq_SeqLayerDisable((Particle31FlagsA*)temp);
+        AudioSeq_SeqLayerDisable((SequenceLayer*)temp);
         arg0[arg1 + 0x14] = NULL;
     }
 }
@@ -370,8 +308,8 @@ void Particle31_ResetAllSlots(DisplayObject* arg0) {
         AudioSeq_SeqLayerFree(arg0, i);
     }
     AudioPlayback_NotePoolClear((s8*)arg0 + 0x84);
-    ((Particle31Flags*)arg0)->b80 = 0;
-    ((Particle31Flags*)arg0)->b40 = 1;
+    ((SequenceChannel*)arg0)->enabled = 0;
+    ((SequenceChannel*)arg0)->finished = 1;
 }
 
 /**
@@ -380,22 +318,22 @@ void Particle31_ResetAllSlots(DisplayObject* arg0) {
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-void AudioSeq_SequencePlayerSetupChannels(s8* arg0, u16 mask) {
+void AudioSeq_SequencePlayerSetupChannels(SequencePlayer* seqPlayer, u16 mask) {
     s32 i;
-    s8* item;
+    SequenceChannel* channel;
 
     for (i = 0; i < 16; i++) {
         if (mask & 1) {
-            item = M2C_FIELD(arg0, s8**, 0x34 + i * 4);
-            M2C_FIELD(item, u8*, 7) = M2C_FIELD(arg0, u8*, 5);
-            M2C_FIELD(item, u8*, 3) = M2C_FIELD(arg0, u8*, 3);
-            M2C_FIELD(item, u8*, 2) = M2C_FIELD(arg0, u8*, 2);
+            channel = seqPlayer->channels[i];
+            channel->fontId = seqPlayer->defaultFont;
+            channel->muteBehavior = seqPlayer->muteBehavior;
+            channel->noteAllocPolicy = seqPlayer->noteAllocPolicy;
         }
         mask = (s32)mask >> 1;
     }
 }
 
-void func_81112B84(Item8111539C*);
+void func_81112B84(SequenceChannel*);
 
 /**
  * Disables each channel selected in `channel_bits`. Zelda 64 audio driver.
@@ -404,11 +342,11 @@ void func_81112B84(Item8111539C*);
  * @unverified Name and comment guessed from the code.
  */
 void AudioSeq_SequencePlayerDisableChannels(u8* seqPlayer, s32 channel_bits) {
-    Item8111539C* channel;
+    SequenceChannel* channel;
     s32 i;
 
     for (i = 0; i < 16; i++) {
-        channel = M2C_FIELD(seqPlayer, Item8111539C**, 0x34 + i * 4);
+        channel = M2C_FIELD(seqPlayer, SequenceChannel**, 0x34 + i * 4);
         if (((u32)channel != (u32)&D_81184850) == 1) {
             func_81112B84(channel);
         }
@@ -421,17 +359,17 @@ void AudioSeq_SequencePlayerDisableChannels(u8* seqPlayer, s32 channel_bits) {
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-void AudioSeq_SequenceChannelEnable(Particle2D68** arg0, u8 arg1, s32 arg2) {
-    Particle2D68* p = arg0[arg1 + 13];
+void AudioSeq_SequenceChannelEnable(SequencePlayer* seqPlayer, u8 channelIndex, void* script) {
+    SequenceChannel* p = seqPlayer->channels[channelIndex];
     s32 i;
 
-    p->unk_78 = 0;
-    p->unk_60 = arg2;
-    p->b80 = 1;
-    p->b40 = 0;
-    p->unk_1E = 0;
+    p->scriptState.depth = 0;
+    p->scriptState.pc = script;
+    p->enabled = 1;
+    p->finished = 0;
+    p->delay = 0;
     for (i = 0; i < 4; i++) {
-        if (p->unk_50[i] != NULL) {
+        if (p->layers[i] != NULL) {
             AudioSeq_SeqLayerFree((s8**)p, i);
         }
     }
@@ -446,8 +384,8 @@ void AudioSeq_SequenceChannelEnable(Particle2D68** arg0, u8 arg1, s32 arg2) {
 void AudioSeq_SequencePlayerDisable(u8* arg0) {
     AudioSeq_SequencePlayerDisableChannels(arg0, 0xFFFF);
     AudioPlayback_NotePoolClear((s8*)arg0 + 0x98);
-    ((TradeFlags81112E00*)arg0)->bit6 = 1;
-    ((TradeFlags81112E00*)arg0)->bit7 = 0;
+    ((SequencePlayer*)arg0)->finished = 1;
+    ((SequencePlayer*)arg0)->enabled = 0;
     if (AudioLoad_IsSeqLoadComplete(arg0[4]) != 0) {
         AudioLoad_SetSeqLoadStatus(arg0[4], 3);
     }
@@ -486,18 +424,18 @@ void AudioSeq_AudioListPushBack(s8 *arg0, s8 *arg1)
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-s32 AudioSeq_AudioListPopBack(s8 *arg0) {
-    s8 *temp_v1;
+s32 AudioSeq_AudioListPopBack(AudioListItem* list) {
+    AudioListItem* item;
 
-    temp_v1 = M2C_FIELD(arg0, s8 **, 0);
-    if (temp_v1 == arg0) {
+    item = list->prev;
+    if (item == list) {
         return 0;
     }
-    M2C_FIELD(M2C_FIELD(temp_v1, s8 **, 0), s8 **, 4) = arg0;
-    M2C_FIELD(arg0, s8 **, 0) = (s8 *) M2C_FIELD(temp_v1, s8 **, 0);
-    M2C_FIELD(temp_v1, s8 **, 0) = NULL;
-    M2C_FIELD(arg0, s32 *, 8) = (s32) (M2C_FIELD(arg0, s32 *, 8) - 1);
-    return M2C_FIELD(temp_v1, s32 *, 8);
+    item->prev->next = list;
+    list->prev = item->prev;
+    item->prev = NULL;
+    list->u.count = (s32)(list->u.count - 1);
+    return (s32)item->u.value;
 }
 
 /**
@@ -509,14 +447,14 @@ s32 AudioSeq_AudioListPopBack(s8 *arg0) {
 void AudioSeq_InitLayerFreelist(void) {
     s32 i;
 
-    D_81184928.next = &D_81184928;
     D_81184928.prev = &D_81184928;
-    D_81184928.count = 0;
-    D_81184928.unk_0C = 0;
+    D_81184928.next = &D_81184928;
+    D_81184928.u.count = 0;
+    D_81184928.pool = 0;
     for (i = 0; i < 1; i++) {
-        D_811847C8[i].owner = &D_811847C8[i];
-        D_811847C8[i].next = NULL;
-        AudioSeq_AudioListPushBack((s8*)&D_81184928, (s8*)&D_811847C8[i].next);
+        D_811847C8[i].listItem.u.value = &D_811847C8[i];
+        D_811847C8[i].listItem.prev = NULL;
+        AudioSeq_AudioListPushBack((s8*)&D_81184928, (s8*)&D_811847C8[i].listItem);
     }
 }
 
@@ -571,18 +509,6 @@ u16 AudioSeq_ScriptReadCompressedU16(u8** arg0) {
     return v;
 }
 
-typedef struct Particle303C {
-    u32 b80 : 1;
-    u32 b40 : 1;
-    u32 b20 : 1;
-    u32 b10 : 1;
-    u32 rest : 28;
-    char pad04[0x3C];
-    s16 unk40;
-    s16 unk42;
-    char pad44[4];
-    s32 unk48;
-} Particle303C;
 void AudioSeq_SeqLayerProcessScriptStep1();
 s32 AudioSeq_SeqLayerProcessScriptStep2();
 s32 func_81113A44();
@@ -594,14 +520,14 @@ s32 AudioSeq_SeqLayerProcessScriptStep5();
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-void AudioSeq_SeqLayerProcessScript(Particle303C* arg0) {
+void AudioSeq_SeqLayerProcessScript(SequenceLayer* arg0) {
     s32 ret;
-    if (arg0->b80) {
-        if (arg0->unk40 >= 2) {
-            arg0->unk40--;
-            if (!arg0->b20 && arg0->unk42 >= arg0->unk40) {
-                AudioPlayback_SeqLayerNoteDecay((Particle31FlagsA*)arg0);
-                arg0->b20 = 1;
+    if (arg0->enabled) {
+        if (arg0->delay >= 2) {
+            arg0->delay--;
+            if (!arg0->stopSomething && arg0->gateDelay >= arg0->delay) {
+                AudioPlayback_SeqLayerNoteDecay((SequenceLayer*)arg0);
+                arg0->stopSomething = 1;
             }
         } else {
             AudioSeq_SeqLayerProcessScriptStep1(arg0);
@@ -614,8 +540,8 @@ void AudioSeq_SeqLayerProcessScript(Particle303C* arg0) {
                 if (ret != -1) {
                     AudioSeq_SeqLayerProcessScriptStep5(arg0, ret);
                 }
-                if (arg0->b20 == 1 && (arg0->unk48 != 0 || arg0->b10)) {
-                    AudioPlayback_SeqLayerNoteDecay((Particle31FlagsA*)arg0);
+                if (arg0->stopSomething == 1 && (arg0->note != 0 || arg0->continuousNotes)) {
+                    AudioPlayback_SeqLayerNoteDecay((SequenceLayer*)arg0);
                 }
             }
         }
@@ -628,55 +554,53 @@ void AudioSeq_SeqLayerProcessScript(Particle303C* arg0) {
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-void AudioSeq_SeqLayerProcessScriptStep1(Particle3140* arg0) {
-    if (!arg0->b10) {
-        AudioPlayback_SeqLayerNoteDecay((Particle31FlagsA*)arg0);
-    } else if (arg0->unk_48 != NULL && arg0 == arg0->unk_48->unk_48) {
-        AudioPlayback_SeqLayerNoteDecay((Particle31FlagsA*)arg0);
+void AudioSeq_SeqLayerProcessScriptStep1(SequenceLayer* arg0) {
+    if (!arg0->continuousNotes) {
+        AudioPlayback_SeqLayerNoteDecay((SequenceLayer*)arg0);
+    } else if (arg0->note != NULL && arg0 == arg0->note->playbackState.wantedParentLayer) {
+        AudioPlayback_SeqLayerNoteDecay((SequenceLayer*)arg0);
     }
-    switch (arg0->unk_08 & ~0x80) {
+    switch (arg0->portamento.mode & ~0x80) {
         case 1:
         case 2:
-            arg0->unk_08 = 0;
+            arg0->portamento.mode = 0;
             break;
     }
-    arg0->b04 = 1;
+    arg0->notePropertiesNeedInit = 1;
 }
 
 s8* AudioPlayback_AllocNote(s8*);
 void func_81112278(void*);
 
-typedef struct Sample811131CC {
+/* SequenceLayer and Sample as AudioSeq_SeqLayerProcessScriptStep5 reads them. The layouts are the same as
+ * SequenceLayer/Sample, but the function only matches with the layer flags in a u32 container and the sample
+ * word split as codec:4/medium:2/rest:26 (tested: SequenceLayer's u8 flag byte or Sample's finer split both
+ * change the register allocation), so this view stays. */
+typedef struct SampleStep5 {
     /* 0x00 */ u32 codec : 4;
     /* 0x00 */ u32 medium : 2;
     /* 0x00 */ u32 rest : 26;
-} Sample811131CC;
+} SampleStep5;
+typedef struct SoundStep5 {
+    /* 0x00 */ SampleStep5* sample;
+} SoundStep5;
 
-typedef struct Sound811131CC {
-    /* 0x00 */ Sample811131CC* sample;
-} Sound811131CC;
-
-typedef struct Layer811131CC {
+typedef struct SequenceLayerFlagsU32 {
     /* 0x00 */ u32 enabled : 1;
     /* 0x00 */ u32 finished : 1;
     /* 0x00 */ u32 stopSomething : 1;
     /* 0x00 */ u32 continuousNotes : 1;
     /* 0x00 */ u32 bit3 : 1;
+    /* 0x00 */ u32 notePropertiesNeedInit : 1;
     /* 0x00 */ u32 ignoreDrumPan : 1;
-    /* 0x00 */ u32 bit6 : 1;
     /* 0x00 */ u32 bit1 : 1;
     /* 0x01 */ u32 pad01 : 16;
     /* 0x03 */ u8 status;
     /* 0x04 */ u8 pad04[0x48 - 0x04];
-    /* 0x48 */ struct Note811131CC* note;
+    /* 0x48 */ Note* note;
     /* 0x4C */ u8 pad4C[4];
-    /* 0x50 */ Sound811131CC* sound;
-} Layer811131CC;
-
-typedef struct Note811131CC {
-    /* 0x00 */ u8 pad00[0x44];
-    /* 0x44 */ Layer811131CC* parentLayer;
-} Note811131CC;
+    /* 0x50 */ struct SoundStep5* sound;
+} SequenceLayerFlagsU32;
 
 /**
  * Gets a note for the layer, reusing the current one for the same sound. Zelda 64 audio driver.
@@ -684,8 +608,8 @@ typedef struct Note811131CC {
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-s32 AudioSeq_SeqLayerProcessScriptStep5(Layer811131CC* layer, u32 same_sound) {
-    Note811131CC* note;
+s32 AudioSeq_SeqLayerProcessScriptStep5(SequenceLayerFlagsU32* layer, u32 same_sound) {
+    Note* note;
 
     if (!layer->stopSomething && layer->sound != NULL && layer->sound->sample->codec == 2 &&
         layer->sound->sample->medium != 0) {
@@ -698,75 +622,18 @@ s32 AudioSeq_SeqLayerProcessScriptStep5(Layer811131CC* layer, u32 same_sound) {
     }
 
     if (layer->continuousNotes != 1 || layer->note == NULL || !layer->status || same_sound != 1 ||
-        layer != layer->note->parentLayer) {
+        layer != (SequenceLayerFlagsU32*)layer->note->playbackState.parentLayer) {
         if (same_sound == 0) {
-            AudioPlayback_SeqLayerNoteDecay((Particle31FlagsA*)layer);
+            AudioPlayback_SeqLayerNoteDecay((SequenceLayer*)layer);
         }
-        layer->note = (Note811131CC*)AudioPlayback_AllocNote((s8*)layer);
+        layer->note = (Note*)AudioPlayback_AllocNote((s8*)layer);
     }
-    if (layer->note != NULL && layer->note->parentLayer == layer) {
+    if (layer->note != NULL && layer->note->playbackState.parentLayer == (SequenceLayer*)layer) {
         note = layer->note;
         func_81112278(note);
     }
     return 0;
 }
-
-typedef struct SeqPlayer811132E4 {
-    /* 0x00 */ u8 unk00[0xE];
-    /* 0x0E */ s16 transposition;
-    /* 0x10 */ u8 unk10[0x18 - 0x10];
-    /* 0x18 */ u8* seqData;
-    /* 0x1C */ u8 unk1C[0x90 - 0x1C];
-    /* 0x90 */ u8* velocityTable;
-    /* 0x94 */ u8* durationTable;
-} SeqPlayer811132E4;
-
-typedef struct Channel811132E4 {
-    /* 0x00 */ u8 unk00[0x24];
-    /* 0x24 */ s16 transposition;
-    /* 0x26 */ u8 unk26[0x4C - 0x26];
-    /* 0x4C */ struct SeqPlayer811132E4* seqPlayer;
-} Channel811132E4;
-
-typedef struct ScriptState811132E4 {
-    /* 0x00 */ u8* pc;
-} ScriptState811132E4;
-
-typedef struct Layer811132E4 {
-    /* 0x00 */ u8 enabled : 1;
-    /* 0x00 */ u8 finished : 1;
-    /* 0x00 */ u8 stopSomething : 1;
-    /* 0x00 */ u8 continuousNotes : 1;
-    /* 0x00 */ u8 bit3 : 1;
-    /* 0x00 */ u8 notePropertiesNeedInit : 1;
-    /* 0x00 */ u8 ignoreDrumPan : 1;
-    /* 0x00 */ u8 bit1 : 1;
-    /* 0x01 */ s8 unk01;
-    /* 0x02 */ u8 instOrWave;
-    /* 0x03 */ u8 unk03;
-    /* 0x04 */ u8 noteDuration;
-    /* 0x05 */ u8 portamentoTargetNote;
-    /* 0x06 */ u8 pan;
-    /* 0x07 */ u8 unk07;
-    /* 0x08 */ u8 portamentoMode;
-    /* 0x09 */ u8 unk09[0x18 - 0x09];
-    /* 0x18 */ u8 releaseRate;
-    /* 0x19 */ u8 unk19[3];
-    /* 0x1C */ u8* envelope;
-    /* 0x20 */ s16 portamentoTime;
-    /* 0x22 */ s16 transposition;
-    /* 0x24 */ u8 unk24[4];
-    /* 0x28 */ f32 freqScale;
-    /* 0x2C */ u8 unk2C[4];
-    /* 0x30 */ f32 velocitySquare;
-    /* 0x34 */ u8 unk34[0x3C - 0x34];
-    /* 0x3C */ s16 shortNoteDefaultDelay;
-    /* 0x3E */ u8 unk3E[0x4C - 0x3E];
-    /* 0x4C */ u8* instrument;
-    /* 0x50 */ u8 unk50[4];
-    /* 0x54 */ Channel811132E4* channel;
-    /* 0x58 */ ScriptState811132E4 scriptState;
-} Layer811132E4;
 
 extern f32 D_81136378[];
 u8 func_81113E84(u8* arg0, u8 arg1, u8** arg2, u8* arg3);
@@ -777,10 +644,10 @@ u8 func_81113E84(u8* arg0, u8 arg1, u8** arg2, u8* arg3);
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-s32 AudioSeq_SeqLayerProcessScriptStep2(Layer811132E4* layer) {
-    Channel811132E4* channel = layer->channel;
-    ScriptState811132E4* state = &layer->scriptState;
-    SeqPlayer811132E4* seqPlayer = channel->seqPlayer;
+s32 AudioSeq_SeqLayerProcessScriptStep2(SequenceLayer* layer) {
+    SequenceChannel* channel = layer->channel;
+    SeqScriptState* state = &layer->scriptState;
+    SequencePlayer* seqPlayer = channel->seqPlayer;
     u8 cmd;
     u8 cmd_arg8;
     u16 cmd_arg16;
@@ -796,7 +663,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep2(Layer811132E4* layer) {
             if (AudioSeq_HandleScriptFlowControl(seqPlayer, state, cmd, cmd_arg16) == 0) {
                 continue;
             }
-            AudioSeq_SeqLayerDisable((Particle31FlagsA*)layer);
+            AudioSeq_SeqLayerDisable((SequenceLayer*)layer);
             return -1;
         }
 
@@ -827,7 +694,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep2(Layer811132E4* layer) {
                     layer->continuousNotes = 0;
                 }
                 layer->bit1 = 0;
-                AudioPlayback_SeqLayerNoteDecay((Particle31FlagsA*)layer);
+                AudioPlayback_SeqLayerNoteDecay((SequenceLayer*)layer);
                 break;
             case 0xC3:
                 cmd_arg16 = AudioSeq_ScriptReadCompressedU16(&state->pc);
@@ -843,16 +710,16 @@ s32 AudioSeq_SeqLayerProcessScriptStep2(Layer811132E4* layer) {
                         layer->instrument = NULL;
                     }
                     if (cmd == 0xFF) {
-                        layer->releaseRate = 0;
+                        layer->adsr.decayIndex = 0;
                     }
                     break;
                 }
-                if ((layer->instOrWave = func_81113E84((u8*)channel, cmd, &layer->instrument, &layer->releaseRate)) == 0) {
+                if ((layer->instOrWave = func_81113E84((u8*)channel, cmd, &layer->instrument, &layer->adsr.decayIndex)) == 0) {
                     layer->instOrWave = 0xFF;
                 }
                 break;
             case 0xC7:
-                layer->portamentoMode = AudioSeq_ScriptReadU8(&state->pc);
+                layer->portamento.mode = AudioSeq_ScriptReadU8(&state->pc);
                 cmd = AudioSeq_ScriptReadU8(&state->pc);
                 cmd += channel->transposition;
                 cmd += layer->transposition;
@@ -861,7 +728,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep2(Layer811132E4* layer) {
                     cmd = 0;
                 }
                 layer->portamentoTargetNote = cmd;
-                if (layer->portamentoMode & 0x80) {
+                if (layer->portamento.mode & 0x80) {
                     layer->portamentoTime = *(state->pc++);
                     break;
                 }
@@ -869,31 +736,31 @@ s32 AudioSeq_SeqLayerProcessScriptStep2(Layer811132E4* layer) {
                 layer->portamentoTime = cmd_arg16;
                 break;
             case 0xC8:
-                layer->portamentoMode = 0;
+                layer->portamento.mode = 0;
                 break;
             case 0xCB:
                 cmd_arg16 = AudioSeq_ScriptReadS16(&state->pc);
-                layer->envelope = seqPlayer->seqData + cmd_arg16;
+                layer->adsr.envelope = seqPlayer->seqData + cmd_arg16;
             case 0xCF:
-                layer->releaseRate = AudioSeq_ScriptReadU8(&state->pc);
+                layer->adsr.decayIndex = AudioSeq_ScriptReadU8(&state->pc);
                 break;
             case 0xCC:
                 layer->ignoreDrumPan = 1;
                 break;
             case 0xCD:
-                layer->unk01 = AudioSeq_ScriptReadU8(&state->pc);
+                layer->stereo.asByte = AudioSeq_ScriptReadU8(&state->pc);
                 break;
             case 0xCE:
-                layer->freqScale = D_81136378[(u8)(AudioSeq_ScriptReadU8(&state->pc) + 0x80)];
+                layer->bend = D_81136378[(u8)(AudioSeq_ScriptReadU8(&state->pc) + 0x80)];
                 break;
             default:
                 switch (cmd & 0xF0) {
                     case 0xD0:
-                        velocity = seqPlayer->velocityTable[cmd & 0xF];
+                        velocity = seqPlayer->shortNoteVelocityTable[cmd & 0xF];
                         layer->velocitySquare = (f32)(velocity * velocity) / 16129.0f;
                         break;
                     case 0xE0:
-                        layer->noteDuration = seqPlayer->durationTable[cmd & 0xF];
+                        layer->noteDuration = seqPlayer->shortNoteGateTimeTable[cmd & 0xF];
                         break;
                 }
                 break;
@@ -901,92 +768,9 @@ s32 AudioSeq_SeqLayerProcessScriptStep2(Layer811132E4* layer) {
     }
 }
 
-typedef struct Sound81113650 {
-    /* 0x00 */ u8* sample;
-    /* 0x04 */ f32 tuning;
-} Sound81113650;
-
-typedef struct Drum81113650 {
-    /* 0x00 */ u8 releaseRate;
-    /* 0x01 */ u8 pan;
-    /* 0x02 */ u8 unk02[2];
-    /* 0x04 */ Sound81113650 sound;
-    /* 0x0C */ u8* envelope;
-} Drum81113650;
-
-typedef struct SeqPlayer81113650 {
-    /* 0x00 */ u8 unk00[8];
-    /* 0x08 */ u16 tempo;
-    /* 0x0A */ u8 unk0A[4];
-    /* 0x0E */ s16 transposition;
-} SeqPlayer81113650;
-
-typedef struct Channel81113650 {
-    /* 0x00 */ u32 enabled : 1;
-    /* 0x00 */ u32 finished : 1;
-    /* 0x00 */ u32 stopScript : 1;
-    /* 0x00 */ u32 stopSomething2 : 1;
-    /* 0x00 */ u32 hasInstrument : 1;
-    /* 0x00 */ u32 rest : 27;
-    /* 0x04 */ u8 unk04[3];
-    /* 0x07 */ u8 bankId;
-    /* 0x08 */ u8 unk08[0x22 - 0x08];
-    /* 0x22 */ s16 instOrWave;
-    /* 0x24 */ s16 transposition;
-    /* 0x26 */ u8 unk26[0x48 - 0x26];
-    /* 0x48 */ u8* instrument;
-    /* 0x4C */ SeqPlayer81113650* seqPlayer;
-} Channel81113650;
-
-typedef struct Portamento81113650 {
-    /* 0x00 */ u8 mode;
-    /* 0x04 */ f32 cur;
-    /* 0x08 */ f32 speed;
-    /* 0x0C */ f32 extent;
-} Portamento81113650;
-
-typedef struct Layer81113650 {
-    /* 0x00 */ u8 enabled : 1;
-    /* 0x00 */ u8 finished : 1;
-    /* 0x00 */ u8 stopSomething : 1;
-    /* 0x00 */ u8 continuousNotes : 1;
-    /* 0x00 */ u8 bit3 : 1;
-    /* 0x00 */ u8 notePropertiesNeedInit : 1;
-    /* 0x00 */ u8 ignoreDrumPan : 1;
-    /* 0x00 */ u8 bit1 : 1;
-    /* 0x01 */ u8 unk01;
-    /* 0x02 */ u8 instOrWave;
-    /* 0x03 */ u8 unk03[2];
-    /* 0x05 */ u8 portamentoTargetNote;
-    /* 0x06 */ u8 pan;
-    /* 0x07 */ u8 unk07;
-    /* 0x08 */ Portamento81113650 portamento;
-    /* 0x18 */ u8 releaseRate;
-    /* 0x19 */ u8 unk19[3];
-    /* 0x1C */ u8* envelope;
-    /* 0x20 */ u16 portamentoTime;
-    /* 0x22 */ s16 transposition;
-    /* 0x24 */ f32 freqScale;
-    /* 0x28 */ f32 bendPitch;
-    /* 0x2C */ u8 unk2C[0x40 - 0x2C];
-    /* 0x40 */ s16 delay;
-    /* 0x42 */ u8 unk42[2];
-    /* 0x44 */ s16 duration;
-    /* 0x46 */ u8 unk46[0x4C - 0x46];
-    /* 0x4C */ u8* instrument;
-    /* 0x50 */ Sound81113650* sound;
-    /* 0x54 */ Channel81113650* channel;
-} Layer81113650;
-
 extern f32 D_81136778[];
 extern s16 D_811858EC;
-typedef struct Reverb81113650 {
-    /* 0x000 */ u8 unk000[0x110];
-    /* 0x110 */ Sound81113650 sound;
-    /* 0x118 */ u8 unk118[0x158 - 0x118];
-} Reverb81113650; // size = 0x158
-
-extern Reverb81113650 D_81184110[];
+extern SynthesisReverb D_81184110[];
 u8* AudioPlayback_GetInstrumentTunedSample(u8* arg0, s32 arg1);
 u8* AudioPlayback_GetDrum(s32 arg0, s32 arg1);
 
@@ -996,21 +780,21 @@ u8* AudioPlayback_GetDrum(s32 arg0, s32 arg1);
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-s32 AudioSeq_SeqLayerProcessScriptStep4(Layer81113650* layer, s32 cmd_semitone) {
+s32 AudioSeq_SeqLayerProcessScriptStep4(SequenceLayer* layer, s32 cmd_semitone) {
     s32 same_sound = 1;
     s32 instOrWave;
     s32 vel;
     f32 temp_f14;
     f32 temp_f2;
-    Portamento81113650* portamento;
+    Portamento* portamento;
     f32 freqScale;
     f32 freq_scale2;
-    Sound81113650* sound;
+    SoundFontSound* sound;
     u8* instrument;
-    Drum81113650* drum;
+    Drum* drum;
     f32 tuning;
-    Channel81113650* channel;
-    SeqPlayer81113650* seqPlayer;
+    SequenceChannel* channel;
+    SequencePlayer* seqPlayer;
     u8 semitone = cmd_semitone;
 
     instOrWave = layer->instOrWave;
@@ -1027,15 +811,15 @@ s32 AudioSeq_SeqLayerProcessScriptStep4(Layer81113650* layer, s32 cmd_semitone) 
     switch (instOrWave) {
         case 0:
             semitone += channel->transposition + layer->transposition;
-            drum = (Drum81113650*)AudioPlayback_GetDrum(channel->bankId, semitone);
+            drum = (Drum*)AudioPlayback_GetDrum(channel->fontId, semitone);
             if (drum == NULL) {
                 layer->stopSomething = 1;
                 layer->duration = layer->delay;
                 return -1;
             }
             sound = &drum->sound;
-            layer->envelope = drum->envelope;
-            layer->releaseRate = drum->releaseRate;
+            layer->adsr.envelope = drum->envelope;
+            layer->adsr.decayIndex = drum->adsrDecayIndex;
             if (!layer->ignoreDrumPan) {
                 layer->pan = drum->pan;
             }
@@ -1057,7 +841,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep4(Layer81113650* layer, s32 cmd_semitone) 
             if (layer->portamento.mode != 0) {
                 vel = (semitone > layer->portamentoTargetNote) ? semitone : layer->portamentoTargetNote;
                 if (instrument != NULL) {
-                    sound = (Sound81113650*)AudioPlayback_GetInstrumentTunedSample(instrument, vel);
+                    sound = (SoundFontSound*)AudioPlayback_GetInstrumentTunedSample(instrument, vel);
                     same_sound = (layer->sound == sound);
                     layer->sound = sound;
                     tuning = sound->tuning;
@@ -1103,7 +887,7 @@ s32 AudioSeq_SeqLayerProcessScriptStep4(Layer81113650* layer, s32 cmd_semitone) 
                 break;
             }
             if (instrument != NULL) {
-                sound = (Sound81113650*)AudioPlayback_GetInstrumentTunedSample(instrument, semitone);
+                sound = (SoundFontSound*)AudioPlayback_GetInstrumentTunedSample(instrument, semitone);
                 same_sound = (sound == layer->sound);
                 layer->sound = sound;
                 layer->freqScale = D_81136778[(s32)semitone] * sound->tuning; // FAKE: no-op cast
@@ -1117,6 +901,6 @@ s32 AudioSeq_SeqLayerProcessScriptStep4(Layer81113650* layer, s32 cmd_semitone) 
             break;
     }
     layer->duration = layer->delay;
-    layer->freqScale *= layer->bendPitch;
+    layer->freqScale *= layer->bend;
     return same_sound;
 }

@@ -30,7 +30,6 @@ M2C_UNK func_8001A944(M2C_UNK, M2C_UNK, s32);
 M2C_UNK func_8001AB6C();
 M2C_UNK func_8001ABBC();
 M2C_UNK func_80025100(s8 *, M2C_UNK);
-extern s8 *D_800603C0;
 s32 func_800023C4(M2C_UNK, M2C_UNK);
 s32 func_800051F0(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK, s32);
 s32 func_80027214(s8*, s32);
@@ -115,7 +114,7 @@ void func_88400CE8(s32 arg0) {
         func_88400C48(0x104, 0x3C);
         func_8001ABBC();
         func_80006780();
-    } while (!(M2C_FIELD(D_800603C0, u16 *, 8) & 0x8000));
+    } while (!(gPlayer1Controller->buttonPressed & 0x8000));
     func_8003F6AC(1);
     D_88402D70 = arg0;
 }
@@ -152,7 +151,7 @@ void func_88400F4C(void) {
     M2C_FIELD(&D_884034E0, u8 *, 2) = (u8) (M2C_FIELD(&D_884034E0, u8 *, 2) & 0xFFDF);
     func_88400A98();
     Audio_PlayCommand(0x51, 0, 0);
-    if (D_800AF986 & 8) {
+    if (gSessionContext.transitionFlags & 8) {
         func_88400CE8(D_88402D88);
         func_88400DAC(D_88402D8C);
         func_88400CE8((s32) D_88402D8C);
@@ -212,7 +211,7 @@ void func_8840115C(void) {
     s32 pad; // FAKE: stack padding
 
     rec = M2C_FIELD(D_88403370, s32 *, 0xC);
-    if (D_800AF986 & 0x18) {
+    if (gSessionContext.transitionFlags & 0x18) {
         func_88400F4C();
     }
     func_800273E8(sp8C, (s32) &D_88402DEC);
@@ -392,7 +391,7 @@ s32 Options_RunClearSavePrompt(s32 arg0, s32 arg1, u8 arg2) {
     do {
         func_88400108(0);
         Options_DrawMenu(arg1, arg2);
-        buttons = M2C_FIELD(D_800603C0, u16 *, 8);
+        buttons = gPlayer1Controller->buttonPressed;
         if (buttons & 0x300) {
             func_8003F6AC(1);
             sel ^= 1;
@@ -454,19 +453,19 @@ void Options_RunMenu(void) {
     u8 diff;
 
     do {
-        if (M2C_FIELD(D_800603C0, u16*, 8) & 0x800) {
+        if (gPlayer1Controller->buttonPressed & 0x800) {
             sel--;
             if (sel < 0) {
                 sel = 3;
             }
             func_8003F6AC(1);
-        } else if (M2C_FIELD(D_800603C0, u16*, 8) & 0x400) {
+        } else if (gPlayer1Controller->buttonPressed & 0x400) {
             sel++;
             if (sel >= 4) {
                 sel = 0;
             }
             func_8003F6AC(1);
-        } else if (M2C_FIELD(D_800603C0, u16*, 8) & 0x8000) {
+        } else if (gPlayer1Controller->buttonPressed & 0x8000) {
             switch (sel) {
                 case 0:
                     func_8003F6AC(2);
@@ -488,7 +487,7 @@ void Options_RunMenu(void) {
                     func_8003F6AC(0x1D);
                     break;
             }
-        } else if (M2C_FIELD(D_800603C0, u16*, 8) & 0x4000) {
+        } else if (gPlayer1Controller->buttonPressed & 0x4000) {
             done = 2;
             func_8003F6AC(3);
         }
@@ -534,13 +533,13 @@ s32 TransferPak_RunCartridgeCheckScreen(void) {
         func_88400108(0);
         TransferPak_DrawCartridgeCheckScreen();
         func_80006780();
-        if (M2C_FIELD(D_800603C0, u16 *, 8) & 0x8000) {
+        if (gPlayer1Controller->buttonPressed & 0x8000) {
             var_s0 = 1;
             func_8003F6AC(0x1B);
-        } else if (M2C_FIELD(D_800603C0, u16 *, 8) & 0x4000) {
+        } else if (gPlayer1Controller->buttonPressed & 0x4000) {
             func_8003F6AC(3);
             var_s0 = 2;
-        } else if (M2C_FIELD(D_800603C0, u16 *, 8) & 1) {
+        } else if (gPlayer1Controller->buttonPressed & 1) {
             func_8003F6AC(2);
             Options_RunMenu();
         }
@@ -667,7 +666,7 @@ void func_884022AC(void) {
 }
 
 /**
- * Fragment006_Main entry when no Transfer Pak is detected (D_800AF986 == 0): sets up the screen
+ * Fragment006_Main entry when no Transfer Pak is detected (gSessionContext.transitionFlags == 0): sets up the screen
  * and runs TransferPak_RunCartridgeCheckScreen.
  * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
  * registration, Free Battle setup and a COM battle (opening, a switch, running, a Pound turn).
@@ -810,13 +809,13 @@ void func_884026A4(s32 arg0) {
     D_884037B4 = (s32)process_geo_layout(sp20, D_8F4B2AF0);
     D_884037B8 = (s32)process_geo_layout(sp20, D_8F4959C8);
     Model_InitDisplayObject(&D_88403648, 0, 0, (s32)process_geo_layout(sp20, D_8F4886F8));
-    if (D_800AF986 & 8) {
+    if (gSessionContext.transitionFlags & 8) {
         Model_InitDisplayObject(&D_884034E0, 1, 0, (s32)process_geo_layout(sp20, D_8E825FE8));
         func_80010F14(&D_884034E0, 1, &D_8E802B64, 0x10000);
         M2C_FIELD(&D_884034E0, u8 *, 1) &= ~1;
         Vec3f_SetComponentsDuplicate(&D_88403504, 0.0f, 275.0f, 750.0f);
         Vec3f_SetComponentsDuplicate(&D_88403510, 3.0f, 3.0f, 3.0f);
-    } else if (D_800AF986 & 0x10) {
+    } else if (gSessionContext.transitionFlags & 0x10) {
         Model_InitDisplayObject(&D_884034E0, 0, 0, (s32)process_geo_layout(sp20, D_8E924770));
         func_80010F14(&D_884034E0, 1, &D_8E902B64, 0x10000);
         M2C_FIELD(&D_884034E0, u8 *, 1) &= ~1;
@@ -858,7 +857,7 @@ void func_884029FC(void) {
 /**
  * Entry point of fragment006 (pool tag 'BCMP'). Loads its segments and the fragments
  * at 0x8F400000/0x8E800000/0x8E900000, polls the Game Boy saves, runs one of three
- * loops depending on arg0 and D_800AF986, and on success queues fragment014
+ * loops depending on arg0 and gSessionContext.transitionFlags, and on success queues fragment014
  * (0x88000000) and returns 0x8040; otherwise returns 0x8010. Which game mode this is
  * has not been identified.
  * Not reached in play (2026-11-13): did not run in a tour of the main menu, Pokédex, party, Lab,
@@ -878,10 +877,10 @@ s32 Fragment006_Main(s32 arg0, s32 arg1) {
     Asset_LoadToSegment(((u32)D_01000000 & 0x0F000000) >> 0x18, D_002E0BE0, D_002E2B90, 0);
     Asset_LoadToSegment(((u32)D_04000000 & 0x0F000000) >> 0x18, D_00400F70, D_004076E0, 0);
     Fragment_Load(((((u32)D_8F400000) & 0x0FF00000) >> 0x14) - 0x10, D_0038A540, D_003C5200);
-    if (D_800AF986 & 8) {
+    if (gSessionContext.transitionFlags & 8) {
         Fragment_Load(((((u32)D_8E800000) & 0x0FF00000) >> 0x14) - 0x10, D_003C5200, D_003CE090);
     }
-    if (D_800AF986 & 0x10) {
+    if (gSessionContext.transitionFlags & 0x10) {
         Fragment_Load(((((u32)D_8E900000) & 0x0FF00000) >> 0x14) - 0x10, D_003CE090, D_003D64A0);
     }
 
@@ -894,7 +893,7 @@ s32 Fragment006_Main(s32 arg0, s32 arg1) {
     Audio_PlayCommand(0x46, 3, 0);
 
     if (arg0 == 0) {
-        if (D_800AF986 == 0) {
+        if (gSessionContext.transitionFlags == 0) {
             result = TransferPak_EnterCheckScreenNoPaks();
         } else {
             result = TransferPak_EnterWithPakSkippingCheck();

@@ -38,31 +38,31 @@ typedef union {
     File2SubHeader2 file2sub2;
 } FileHeaders;
 
-typedef struct unk_D_800FC6CC {
-    /* 0x00 */ u32 unk_00;
-    /* 0x04 */ u32 unk_04;
-} unk_D_800FC6CC; // size = 0x8
+typedef struct GbNoiseSampleEntry {
+    /* 0x00 */ u32 romAddr; // @unverified: from the code: ROM address of the noise sample, relocated by the table's file offset and DMA'd in gb_audio_render.c
+    /* 0x04 */ u32 size; // @unverified: from the code: size in bytes of the noise sample (sample count * 2)
+} GbNoiseSampleEntry; // size = 0x8
 
-typedef struct unk_D_800FC6D4_entry {
-    /* 0x00 */ u16 unk_00;
+typedef struct GbMusicSongEntry {
+    /* 0x00 */ u16 seqId; // @unverified: from the code: index of the song's sequence header (GbMusic_StartTableSequence)
     /* 0x02 */ u8 unk_02;
     /* 0x03 */ u8 unk_03;
-} unk_D_800FC6D4_entry; // size = 0x4
+} GbMusicSongEntry; // size = 0x4
 
-typedef struct unk_D_800FC6D4_008 {
-    /* 0x00 */ u32 unk_00;
-    /* 0x04 */ u8 unk_04;
-} unk_D_800FC6D4_008; // size = 0x5
+typedef struct GbMusicTrackHeader {
+    /* 0x00 */ u32 data; // @unverified: from the code: track data address, copied into the channel's stream pointer
+    /* 0x04 */ u8 channel; // @unverified: from the code: low nybble = sound channel; bits 6-7 of the first track = number of further tracks
+} GbMusicTrackHeader; // size = 0x5
 
-typedef struct unk_D_800FC6D4 {
+typedef struct GbMusicBank {
     /* 0x00 */ u16 flags;
     /* 0x02 */ u16 num_entries;
-    /* 0x04 */ u16 unk_04;
+    /* 0x04 */ u16 numSequences; // @unverified: from the code: func_8003E0B0 relocates numSequences * 3 track pointers
     /* 0x06 */ u16 unk_06;
-    /* 0x08 */ unk_D_800FC6D4_008* offset;
+    /* 0x08 */ GbMusicTrackHeader* offset;
     /* 0x0C */ char unk_0C[0x4];
-    /* 0x10 */ unk_D_800FC6D4_entry entries[ENTRY_SIZE];
-} unk_D_800FC6D4; // size = 0x10
+    /* 0x10 */ GbMusicSongEntry entries[ENTRY_SIZE];
+} GbMusicBank; // size = 0x10
 
 typedef struct MoveSoundEntry { u8 unk0[0x6]; } MoveSoundEntry;
 
@@ -82,11 +82,11 @@ typedef struct unk_D_80077970 {
     /* 0x04 */ u8 unk_04;
 } unk_D_80077970;
 
-extern unk_D_800FC6CC* D_800B41E4;
+extern GbNoiseSampleEntry* D_800B41E4;
 
 extern u8* D_800B41E8;
 
-extern unk_D_800FC6D4* D_800FD688;
+extern GbMusicBank* D_800FD688;
 
 extern s16* D_800B41EC;
 

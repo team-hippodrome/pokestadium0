@@ -39,21 +39,21 @@ void Particle_AddVelocityFromRotationTemplate2(Particle* arg0);
 void Particle_SetMotionTargetXScaled(Particle* arg0, f32 arg1);
 f32 ParticleMath_ScaleApproachStep(f32 arg0);
 void Particle_SetRotationTargetXY(Particle* arg0, s16 arg1, s16 arg2);
-void Particle_Field94_AddXFromField9A_0A4B4(Particle* arg0);
-void Particle_Field94_SubX_0A63C(Particle* arg0, s16 arg1);
+void Particle_Rotation_AddXFromRotationStep_0A4B4(Particle* arg0);
+void Particle_Rotation_SubX_0A63C(Particle* arg0, s16 arg1);
 void Particle_ApproachRotationTargetXY(Particle* arg0);
 void Particle_ApproachRotationTargetXYZ(Particle* arg0);
-s32 Particle_Field94_DecrementXTo_0A7DC(Particle* arg0, s32 arg1, s32 arg2);
+s32 Particle_Rotation_DecrementXTo_0A7DC(Particle* arg0, s32 arg1, s32 arg2);
 void Particle_AddRotationRandomSignedXY(Particle* arg0, s32 arg1, s32 arg2);
 void Particle_AddRotationRandomSignedXYWithXHalfTurn(Particle* arg0, s32 arg1, s32 arg2);
 void Particle_AddRotationRandomSignedY(Particle* arg0, s32 arg1);
 void Particle_AddRotationRandomSignedYWithHalfTurn(Particle* arg0, s32 arg1);
 void Particle_AddRotationRandomSignedXWithFixedYQuarterTurn(Particle* arg0);
-s32 Particle_Field74_Approach_0ADBC(Particle* arg0, f32 arg1, f32 arg2);
-s32 Particle_Field7C_IncrementXUntilAtLeast_0AF54(Particle* arg0, f32 arg1, f32 arg2);
-s32 Particle_Field7C_IncrementYUntilAtLeast_0AFA8(Particle* arg0, f32 arg1, f32 arg2);
-s32 Particle_Field7C_DecrementXUntilAtMost_0B050(Particle* arg0, f32 arg1, f32 arg2);
-s32 Particle_Field7C_DecrementYUntilAtMost_0B0A4(Particle* arg0, f32 arg1, f32 arg2);
+s32 Particle_MagnitudeStep_Approach_0ADBC(Particle* arg0, f32 arg1, f32 arg2);
+s32 Particle_MotionStep_IncrementXUntilAtLeast_0AF54(Particle* arg0, f32 arg1, f32 arg2);
+s32 Particle_MotionStep_IncrementYUntilAtLeast_0AFA8(Particle* arg0, f32 arg1, f32 arg2);
+s32 Particle_MotionStep_DecrementXUntilAtMost_0B050(Particle* arg0, f32 arg1, f32 arg2);
+s32 Particle_MotionStep_DecrementYUntilAtMost_0B0A4(Particle* arg0, f32 arg1, f32 arg2);
 void Particle_SetScaleScaled(Particle* arg0, f32 arg1);
 void Particle_SetScale(Particle* arg0, f32 arg1);
 void Particle_SetScaleTarget(Particle* arg0, f32 arg1);
@@ -64,27 +64,27 @@ s32 Particle_ApproachScaleTarget(Particle* arg0);
 s32 Particle_ApproachScaleTargetThenAdvance(Particle* arg0);
 s32 Particle_StepScaleTarget(Particle* arg0, f32 arg1, f32 arg2);
 s32 Particle_ApproachPrimAlphaThenAdvance(Particle* arg0, u8 arg1, u8 arg2);
-s32 Particle_FieldA6_DecrementToZero_0BD08(Particle* arg0, s16 arg1);
-s32 Particle_FieldA6_DecrementToZeroAndStepState_0BD34(Particle* arg0, s16 arg1);
-s32 Particle_FieldA6_DecrementToStep1_0BD80(Particle* arg0, s16 arg1);
-s32 Particle_DecrementUnkA6ToZero(Particle* arg0);
-s32 Particle_DecrementUnkA6ToZeroThenAdvance(Particle* arg0);
-s32 Particle_DecrementUnkA8ToZero(Particle* arg0);
-s32 Particle_FieldA8_DecrementToZeroStep1AndStepState_0BE8C(Particle* arg0);
-s32 Particle_ApproachUnkAEThenAdvance(Particle* arg0, s16 arg1, s16 arg2);
+s32 Particle_Param0_DecrementToZero_0BD08(Particle* arg0, s16 arg1);
+s32 Particle_Param0_DecrementToZeroAndStepState_0BD34(Particle* arg0, s16 arg1);
+s32 Particle_Param0_DecrementToStep1_0BD80(Particle* arg0, s16 arg1);
+s32 Particle_DecrementParam0ToZero(Particle* arg0);
+s32 Particle_DecrementParam0ToZeroThenAdvance(Particle* arg0);
+s32 Particle_DecrementCountdownToZero(Particle* arg0);
+s32 Particle_Countdown_DecrementToZeroStep1AndStepState_0BE8C(Particle* arg0);
+s32 Particle_ApproachScratchAThenAdvance(Particle* arg0, s16 arg1, s16 arg2);
 
 void Particle_AdvanceLifecycle(Particle* arg0);
 s32 Particle_TickDelayTimer(Particle* arg0, s16 arg1);
 s32 Particle_AnimateFramesPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
 s32 Particle_AnimateFramesReverseFirstPingPong(Particle* arg0, s16 arg1, s16 arg2, s16 arg3, s16 arg4, s16 arg5);
-void Particle_Field38_SetVecFromVec3fScaled_08C20(Particle* arg0, Vec3f arg1);
-void Particle_Field38_AddVecScaledFromVec3f_08D78(Particle* arg0, Vec3f arg1);
+void Particle_PositionOffset_SetVecFromVec3fScaled_08C20(Particle* arg0, Vec3f arg1);
+void Particle_PositionOffset_AddVecScaledFromVec3f_08D78(Particle* arg0, Vec3f arg1);
 void Particle_ApplyMotionStepXY(Particle* arg0);
-void Particle_Field50_AddXYFromField7C_09C34(Particle* arg0);
-void Particle_FieldA0_SetX_0A400(Particle* arg0, s16 arg1);
-void Particle_FieldA0_SetY_0A414(Particle* arg0, s16 arg1);
-void Particle_Field94_AddX_0A578(Particle* arg0, s16 arg1);
-void Particle_Field94_AddY_0A594(Particle* arg0, s16 arg1);
+void Particle_MotionOffset_AddXYFromMotionStep_09C34(Particle* arg0);
+void Particle_RotationTarget_SetX_0A400(Particle* arg0, s16 arg1);
+void Particle_RotationTarget_SetY_0A414(Particle* arg0, s16 arg1);
+void Particle_Rotation_AddX_0A578(Particle* arg0, s16 arg1);
+void Particle_Rotation_AddY_0A594(Particle* arg0, s16 arg1);
 void Particle_ApproachRotationTargetX(Particle* arg0);
 void Particle_ApproachRotationTargetY(Particle* arg0);
 void Particle_ApproachRotationTargetZ(Particle* arg0);
@@ -93,9 +93,9 @@ void Particle_ComputeVectorFromRotationYZVariant(Particle* arg0, f32 arg1, Vec3f
 void Particle_SetMotionStepXZFromRotationY(Particle* arg0);
 void Particle_SetMotionStepFromRotationXZ(Particle* arg0);
 s32 Particle_PrimAlpha_Approach_0BC2C(Particle* arg0, u8 arg1, u8 arg2);
-s32 Particle_FieldA6_DecrementTo_0BCC4(Particle* arg0, s16 arg1, s16 arg2);
-s32 Particle_FieldA8_DecrementTo_0BE30(Particle* arg0, s16 arg1);
-s32 Particle_FieldAE_Approach_0BF60(Particle* arg0, s16 arg1, s16 arg2);
+s32 Particle_Param0_DecrementTo_0BCC4(Particle* arg0, s16 arg1, s16 arg2);
+s32 Particle_Countdown_DecrementTo_0BE30(Particle* arg0, s16 arg1);
+s32 Particle_ScratchA_Approach_0BF60(Particle* arg0, s16 arg1, s16 arg2);
 
 /**
  * Tick the delay timer and advance lifecycle when it expires.
@@ -232,7 +232,7 @@ void Particle_HasFlag40(Particle* arg0) {
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetTextureFrame(Particle* arg0, s16 arg1) {
-    M2C_FIELD(arg0, s8 *, 0xC3) = (s8) arg1;
+    arg0->textureFrame = (s8) arg1;
 }
 
 /**
@@ -495,8 +495,8 @@ void Particle_ResetPhase(Particle* arg0) {
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed phase (0xB4) of the
  * live particle, e.g. 0x1 -> 0x2.
  */
-void Particle_IncrementPhase(s8 *arg0) {
-    M2C_FIELD(arg0, s16 *, 0xB4) = (s16) (M2C_FIELD(arg0, s16 *, 0xB4) + 1);
+void Particle_IncrementPhase(Particle* arg0) {
+    arg0->phase = (s16) (arg0->phase + 1);
 }
 
 /**
@@ -544,7 +544,7 @@ void Particle_UpdateWorldTransform(Particle* arg0) {
             arg0->displayObject->rotation.y = arg0->rotation.y;
             arg0->displayObject->rotation.z = arg0->rotation.z;
         }
-        arg0->displayObject->lodFraction = arg0->prim_a;
+        arg0->displayObject->alpha = arg0->prim_a;
     }
 }
 
@@ -554,9 +554,9 @@ void Particle_UpdateWorldTransform(Particle* arg0) {
  * from -19.36 to 0.
  */
 void Particle_SetPosition(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
-    M2C_FIELD(arg0, f32*, 0x34) = arg1 * gParticleRenderContext.scale.y;
-    M2C_FIELD(arg0, f32*, 0x34 + 4) = arg2 * gParticleRenderContext.scale.y;
-    M2C_FIELD(arg0, f32*, 0x34 + 8) = arg3 * gParticleRenderContext.scale.y;
+    arg0->positionOffset.x = arg1 * gParticleRenderContext.scale.y;
+    arg0->positionOffset.y = arg2 * gParticleRenderContext.scale.y;
+    arg0->positionOffset.z = arg3 * gParticleRenderContext.scale.y;
 }
 
 /**
@@ -564,7 +564,7 @@ void Particle_SetPosition(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name guessed from the code.
  */
-void Particle_Field38_SetVecFromVec3fScaled_08C20(Particle* arg0, Vec3f arg1) {
+void Particle_PositionOffset_SetVecFromVec3fScaled_08C20(Particle* arg0, Vec3f arg1) {
     arg0->positionOffset.x = arg1.x * gParticleRenderContext.scale.y;
     arg0->positionOffset.y = arg1.y * gParticleRenderContext.scale.y;
     arg0->positionOffset.z = arg1.z * gParticleRenderContext.scale.y;
@@ -576,10 +576,10 @@ void Particle_Field38_SetVecFromVec3fScaled_08C20(Particle* arg0, Vec3f arg1) {
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_SetPositionOffset(s8 *arg0, f32 arg1, f32 arg2, f32 arg3) {
-    M2C_FIELD(arg0, f32 *, 0x34) = arg1;
-    M2C_FIELD(arg0, f32 *, 0x38) = arg2;
-    M2C_FIELD(arg0, f32 *, 0x3C) = arg3;
+void Particle_SetPositionOffset(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
+    arg0->positionOffset.x = arg1;
+    arg0->positionOffset.y = arg2;
+    arg0->positionOffset.z = arg3;
 }
 
 extern f32 D_FLT_8219A824;
@@ -589,8 +589,8 @@ extern f32 D_FLT_8219A824;
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.x
  * (0x34) of the live particle, e.g. 0 -> 23.4.
  */
-void Particle_SetPosOffsetXScaled(s8 *arg0, f32 arg1) {
-    M2C_FIELD(arg0, f32 *, 0x34) = (f32) (arg1 * D_FLT_8219A824);
+void Particle_SetPosOffsetXScaled(Particle* arg0, f32 arg1) {
+    arg0->positionOffset.x = (f32) (arg1 * D_FLT_8219A824);
 }
 
 extern f32 D_FLT_8219A824;
@@ -600,8 +600,8 @@ extern f32 D_FLT_8219A824;
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.y
  * (0x38) of the live particle, e.g. 0 -> -17.6.
  */
-void Particle_SetPosOffsetYScaled(s8 *arg0, f32 arg1) {
-    M2C_FIELD(arg0, f32 *, 0x38) = (f32) (arg1 * D_FLT_8219A824);
+void Particle_SetPosOffsetYScaled(Particle* arg0, f32 arg1) {
+    arg0->positionOffset.y = (f32) (arg1 * D_FLT_8219A824);
 }
 
 extern f32 D_FLT_8219A824;
@@ -611,8 +611,8 @@ extern f32 D_FLT_8219A824;
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.z
  * (0x3C) of the live particle, e.g. 0 -> 23.4.
  */
-void Particle_SetPosOffsetZScaled(s8 *arg0, f32 arg1) {
-    M2C_FIELD(arg0, f32 *, 0x3C) = (f32) (arg1 * D_FLT_8219A824);
+void Particle_SetPosOffsetZScaled(Particle* arg0, f32 arg1) {
+    arg0->positionOffset.z = (f32) (arg1 * D_FLT_8219A824);
 }
 
 /**
@@ -620,7 +620,7 @@ void Particle_SetPosOffsetZScaled(s8 *arg0, f32 arg1) {
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (24 of the moves).
  * @unverified Name guessed from the code.
  */
-void Particle_Field38_AddVecScaledFromVec3f_08D78(Particle* arg0, Vec3f arg1) {
+void Particle_PositionOffset_AddVecScaledFromVec3f_08D78(Particle* arg0, Vec3f arg1) {
     arg0->positionOffset.x += arg1.x * gParticleRenderContext.scale.y;
     arg0->positionOffset.y += arg1.y * gParticleRenderContext.scale.y;
     arg0->positionOffset.z += arg1.z * gParticleRenderContext.scale.y;
@@ -632,7 +632,7 @@ void Particle_Field38_AddVecScaledFromVec3f_08D78(Particle* arg0, Vec3f arg1) {
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
-void Particle_Field38_AddVecFromVec3f_08DD8(Particle* arg0, Vec3f arg1) {
+void Particle_PositionOffset_AddVecFromVec3f_08DD8(Particle* arg0, Vec3f arg1) {
     arg0->positionOffset.x += arg1.x;
     arg0->positionOffset.y += arg1.y;
     arg0->positionOffset.z += arg1.z;
@@ -644,7 +644,7 @@ void Particle_Field38_AddVecFromVec3f_08DD8(Particle* arg0, Vec3f arg1) {
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name guessed from the code.
  */
-void Particle_Field38_AddVecScaled_08E18(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
+void Particle_PositionOffset_AddVecScaled_08E18(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
     arg0->positionOffset.x += arg1 * gParticleRenderContext.scale.y;
     arg0->positionOffset.y += arg2 * gParticleRenderContext.scale.y;
     arg0->positionOffset.z += arg3 * gParticleRenderContext.scale.y;
@@ -658,8 +658,8 @@ extern f32 D_FLT_8219A824;
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_AddPosOffsetXScaled(s8 *arg0, f32 arg1) {
-    M2C_FIELD(arg0, f32 *, 0x34) = (f32) (M2C_FIELD(arg0, f32 *, 0x34) + (arg1 * D_FLT_8219A824));
+void Particle_AddPosOffsetXScaled(Particle* arg0, f32 arg1) {
+    arg0->positionOffset.x = (f32) (arg0->positionOffset.x + (arg1 * D_FLT_8219A824));
 }
 
 extern f32 D_FLT_8219A824;
@@ -669,8 +669,8 @@ extern f32 D_FLT_8219A824;
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.y
  * (0x38) of the live particle, e.g. 10.56 -> 28.16.
  */
-void Particle_AddPosOffsetYScaled(s8 *arg0, f32 arg1) {
-    M2C_FIELD(arg0, f32 *, 0x38) = (f32) (M2C_FIELD(arg0, f32 *, 0x38) + (arg1 * D_FLT_8219A824));
+void Particle_AddPosOffsetYScaled(Particle* arg0, f32 arg1) {
+    arg0->positionOffset.y = (f32) (arg0->positionOffset.y + (arg1 * D_FLT_8219A824));
 }
 
 extern f32 D_FLT_8219A824;
@@ -681,8 +681,8 @@ extern f32 D_FLT_8219A824;
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_AddPosOffsetZScaled(s8 *arg0, f32 arg1) {
-    M2C_FIELD(arg0, f32 *, 0x3C) = (f32) (M2C_FIELD(arg0, f32 *, 0x3C) + (arg1 * D_FLT_8219A824));
+void Particle_AddPosOffsetZScaled(Particle* arg0, f32 arg1) {
+    arg0->positionOffset.z = (f32) (arg0->positionOffset.z + (arg1 * D_FLT_8219A824));
 }
 
 /**
@@ -752,7 +752,7 @@ void Particle_SetPositionFromRotationTemplate1(Particle* arg0, f32 arg1) {
     Vec3f sp1C;
 
     Particle_ComputeVectorFromRotationXYZAlt(arg0, arg1, &sp1C);
-    Particle_Field38_SetVecFromVec3fScaled_08C20(arg0, sp1C);
+    Particle_PositionOffset_SetVecFromVec3fScaled_08C20(arg0, sp1C);
 }
 
 /**
@@ -765,7 +765,7 @@ void Particle_SetPositionFromRotationTemplate2(Particle* arg0, f32 arg1) {
     Vec3f sp1C;
 
     Particle_ComputeVectorFromRotationYZVariant(arg0, arg1, &sp1C);
-    Particle_Field38_SetVecFromVec3fScaled_08C20(arg0, sp1C);
+    Particle_PositionOffset_SetVecFromVec3fScaled_08C20(arg0, sp1C);
 }
 
 /**
@@ -777,7 +777,7 @@ void Particle_AddPositionFromRotationTemplate1(Particle* arg0, f32 arg1) {
     Vec3f sp1C;
 
     Particle_ComputeVectorFromRotationXYZAlt(arg0, arg1, &sp1C);
-    Particle_Field38_AddVecScaledFromVec3f_08D78(arg0, sp1C);
+    Particle_PositionOffset_AddVecScaledFromVec3f_08D78(arg0, sp1C);
 }
 
 /**
@@ -790,7 +790,7 @@ void Particle_AddPositionFromRotationTemplate2(Particle* arg0, f32 arg1) {
     Vec3f sp1C;
 
     Particle_ComputeVectorFromRotationYZVariant(arg0, arg1, &sp1C);
-    Particle_Field38_AddVecScaledFromVec3f_08D78(arg0, sp1C);
+    Particle_PositionOffset_AddVecScaledFromVec3f_08D78(arg0, sp1C);
 }
 
 /**
@@ -803,7 +803,7 @@ void Particle_AddPositionRotatedVectorByYaw(Particle* arg0, Vec3f arg1) {
     Vec3f sp24;
 
     ParticleMath_RotateVec3fY(&sp24, arg1, arg0->rotation);
-    Particle_Field38_AddVecScaledFromVec3f_08D78(arg0, sp24);
+    Particle_PositionOffset_AddVecScaledFromVec3f_08D78(arg0, sp24);
 }
 
 s32 func_82137DF4(M2C_UNK);                         /* extern */
@@ -814,8 +814,8 @@ extern f32 D_FLT_8219A824;
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.x
  * (0x34) of the live particle, e.g. 0 -> 47.52.
  */
-void Particle_SetPosOffsetXRandomScaled(s8 *arg0, M2C_UNK arg1) {
-    M2C_FIELD(arg0, f32 *, 0x34) = (f32) ((f32) func_82137DF4(arg1) * D_FLT_8219A824);
+void Particle_SetPosOffsetXRandomScaled(Particle* arg0, M2C_UNK arg1) {
+    arg0->positionOffset.x = (f32) ((f32) func_82137DF4(arg1) * D_FLT_8219A824);
 }
 
 s32 func_82137DF4(M2C_UNK);                         /* extern */
@@ -827,8 +827,8 @@ extern f32 D_FLT_8219A824;
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_SetPosOffsetYRandomScaled(s8 *arg0, M2C_UNK arg1) {
-    M2C_FIELD(arg0, f32 *, 0x38) = (f32) ((f32) func_82137DF4(arg1) * D_FLT_8219A824);
+void Particle_SetPosOffsetYRandomScaled(Particle* arg0, M2C_UNK arg1) {
+    arg0->positionOffset.y = (f32) ((f32) func_82137DF4(arg1) * D_FLT_8219A824);
 }
 
 s32 func_82137DF4(M2C_UNK);                         /* extern */
@@ -839,8 +839,8 @@ extern f32 D_FLT_8219A824;
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.z
  * (0x3C) of the live particle, e.g. 0 -> 44.
  */
-void Particle_SetPosOffsetZRandomScaled(s8 *arg0, M2C_UNK arg1) {
-    M2C_FIELD(arg0, f32 *, 0x3C) = (f32) ((f32) func_82137DF4(arg1) * D_FLT_8219A824);
+void Particle_SetPosOffsetZRandomScaled(Particle* arg0, M2C_UNK arg1) {
+    arg0->positionOffset.z = (f32) ((f32) func_82137DF4(arg1) * D_FLT_8219A824);
 }
 
 s32 func_82137DF4(M2C_UNK);                         /* extern */
@@ -852,8 +852,8 @@ extern f32 D_FLT_8219A824;
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_SetPosOffsetXRandomScaledPlus(s8 *arg0, M2C_UNK arg1, s32 arg2) {
-    M2C_FIELD(arg0, f32 *, 0x34) = (f32) (((f32) func_82137DF4(arg1) * D_FLT_8219A824) + (f32) arg2);
+void Particle_SetPosOffsetXRandomScaledPlus(Particle* arg0, M2C_UNK arg1, s32 arg2) {
+    arg0->positionOffset.x = (f32) (((f32) func_82137DF4(arg1) * D_FLT_8219A824) + (f32) arg2);
 }
 
 s32 func_82137DF4(M2C_UNK);                         /* extern */
@@ -864,8 +864,8 @@ extern f32 D_FLT_8219A824;
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.y
  * (0x38) of the live particle, e.g. 0 -> 1.2.
  */
-void Particle_SetPosOffsetYRandomScaledPlus(s8 *arg0, M2C_UNK arg1, s32 arg2) {
-    M2C_FIELD(arg0, f32 *, 0x38) = (f32) (((f32) func_82137DF4(arg1) * D_FLT_8219A824) + (f32) arg2);
+void Particle_SetPosOffsetYRandomScaledPlus(Particle* arg0, M2C_UNK arg1, s32 arg2) {
+    arg0->positionOffset.y = (f32) (((f32) func_82137DF4(arg1) * D_FLT_8219A824) + (f32) arg2);
 }
 
 s32 func_82137DF4(M2C_UNK);                         /* extern */
@@ -877,8 +877,8 @@ extern f32 D_FLT_8219A824;
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_SetPosOffsetZRandomScaledPlus(s8 *arg0, M2C_UNK arg1, s32 arg2) {
-    M2C_FIELD(arg0, f32 *, 0x3C) = (f32) (((f32) func_82137DF4(arg1) * D_FLT_8219A824) + (f32) arg2);
+void Particle_SetPosOffsetZRandomScaledPlus(Particle* arg0, M2C_UNK arg1, s32 arg2) {
+    arg0->positionOffset.z = (f32) (((f32) func_82137DF4(arg1) * D_FLT_8219A824) + (f32) arg2);
 }
 
 s32 func_82137DF4(M2C_UNK);                         /* extern */
@@ -889,15 +889,15 @@ extern f32 D_FLT_8219A824;
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.x
  * (0x34) of the live particle, e.g. 0 -> 44.
  */
-void Particle_SetRandomPositionOffsetXWithGap(s8 *arg0, M2C_UNK arg1, s32 arg2) {
+void Particle_SetRandomPositionOffsetXWithGap(Particle* arg0, M2C_UNK arg1, s32 arg2) {
     f32 temp_f0;
 
     temp_f0 = (f32) func_82137DF4(arg1);
     if (temp_f0 >= 0.0f) {
-        M2C_FIELD(arg0, f32 *, 0x34) = (f32) (((f32) arg2 + temp_f0) * D_FLT_8219A824);
+        arg0->positionOffset.x = (f32) (((f32) arg2 + temp_f0) * D_FLT_8219A824);
         return;
     }
-    M2C_FIELD(arg0, f32 *, 0x34) = (f32) ((temp_f0 - (f32) arg2) * D_FLT_8219A824);
+    arg0->positionOffset.x = (f32) ((temp_f0 - (f32) arg2) * D_FLT_8219A824);
 }
 
 s32 func_82137DF4(M2C_UNK);                         /* extern */
@@ -909,15 +909,15 @@ extern f32 D_FLT_8219A824;
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_SetRandomPositionOffsetYWithGap(s8 *arg0, M2C_UNK arg1, s32 arg2) {
+void Particle_SetRandomPositionOffsetYWithGap(Particle* arg0, M2C_UNK arg1, s32 arg2) {
     f32 temp_f0;
 
     temp_f0 = (f32) func_82137DF4(arg1);
     if (temp_f0 >= 0.0f) {
-        M2C_FIELD(arg0, f32 *, 0x38) = (f32) (((f32) arg2 + temp_f0) * D_FLT_8219A824);
+        arg0->positionOffset.y = (f32) (((f32) arg2 + temp_f0) * D_FLT_8219A824);
         return;
     }
-    M2C_FIELD(arg0, f32 *, 0x38) = (f32) ((temp_f0 - (f32) arg2) * D_FLT_8219A824);
+    arg0->positionOffset.y = (f32) ((temp_f0 - (f32) arg2) * D_FLT_8219A824);
 }
 
 s32 func_82137DF4(M2C_UNK);                         /* extern */
@@ -928,15 +928,15 @@ extern f32 D_FLT_8219A824;
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.z
  * (0x3C) of the live particle, e.g. 0 -> -51.04.
  */
-void Particle_SetRandomPositionOffsetZWithGap(s8 *arg0, M2C_UNK arg1, s32 arg2) {
+void Particle_SetRandomPositionOffsetZWithGap(Particle* arg0, M2C_UNK arg1, s32 arg2) {
     f32 temp_f0;
 
     temp_f0 = (f32) func_82137DF4(arg1);
     if (temp_f0 >= 0.0f) {
-        M2C_FIELD(arg0, f32 *, 0x3C) = (f32) (((f32) arg2 + temp_f0) * D_FLT_8219A824);
+        arg0->positionOffset.z = (f32) (((f32) arg2 + temp_f0) * D_FLT_8219A824);
         return;
     }
-    M2C_FIELD(arg0, f32 *, 0x3C) = (f32) ((temp_f0 - (f32) arg2) * D_FLT_8219A824);
+    arg0->positionOffset.z = (f32) ((temp_f0 - (f32) arg2) * D_FLT_8219A824);
 }
 
 /**
@@ -1030,9 +1030,9 @@ void Particle_SetOrigin(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
  * into this field each frame, so this is a position offset, not a velocity.
  */
 void Particle_SetMotionOffset(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
-    M2C_FIELD(arg0, f32*, 0x4C) = arg1 * gParticleRenderContext.scale.y;
-    M2C_FIELD(arg0, f32*, 0x4C + 4) = arg2 * gParticleRenderContext.scale.y;
-    M2C_FIELD(arg0, f32*, 0x4C + 8) = arg3 * gParticleRenderContext.scale.y;
+    arg0->motionOffset.x = arg1 * gParticleRenderContext.scale.y;
+    arg0->motionOffset.y = arg2 * gParticleRenderContext.scale.y;
+    arg0->motionOffset.z = arg3 * gParticleRenderContext.scale.y;
 }
 
 extern f32 D_FLT_8219A824;
@@ -1043,8 +1043,8 @@ extern f32 D_FLT_8219A824;
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_SetMotionOffsetXScaled(s8 *arg0, f32 arg1) {
-    M2C_FIELD(arg0, f32 *, 0x4C) = (f32) (arg1 * D_FLT_8219A824);
+void Particle_SetMotionOffsetXScaled(Particle* arg0, f32 arg1) {
+    arg0->motionOffset.x = (f32) (arg1 * D_FLT_8219A824);
 }
 
 /**
@@ -1083,9 +1083,9 @@ void Particle_SetVelocityRandomDirection(Particle* arg0, f32 arg1) {
  * @unverified Name and comment guessed from the code.
  */
 void Particle_AddMotionOffsetScaled(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
-    M2C_FIELD(arg0, f32*, 0x4C) += arg1 * gParticleRenderContext.scale.y;
-    M2C_FIELD(arg0, f32*, 0x50) += arg2 * gParticleRenderContext.scale.y;
-    M2C_FIELD(arg0, f32*, 0x54) += arg3 * gParticleRenderContext.scale.y;
+    arg0->motionOffset.x += arg1 * gParticleRenderContext.scale.y;
+    arg0->motionOffset.y += arg2 * gParticleRenderContext.scale.y;
+    arg0->motionOffset.z += arg3 * gParticleRenderContext.scale.y;
 }
 
 extern f32 D_FLT_8219A824;
@@ -1096,8 +1096,8 @@ extern f32 D_FLT_8219A824;
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_AddMotionOffsetXScaled(s8 *arg0, f32 arg1) {
-    M2C_FIELD(arg0, f32 *, 0x4C) = (f32) (M2C_FIELD(arg0, f32 *, 0x4C) + (arg1 * D_FLT_8219A824));
+void Particle_AddMotionOffsetXScaled(Particle* arg0, f32 arg1) {
+    arg0->motionOffset.x = (f32) (arg0->motionOffset.x + (arg1 * D_FLT_8219A824));
 }
 
 /**
@@ -1139,8 +1139,8 @@ extern f32 D_FLT_8219A824;
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_SubMotionOffsetXScaled(s8 *arg0, f32 arg1) {
-    M2C_FIELD(arg0, f32 *, 0x4C) = (f32) (M2C_FIELD(arg0, f32 *, 0x4C) - (arg1 * D_FLT_8219A824));
+void Particle_SubMotionOffsetXScaled(Particle* arg0, f32 arg1) {
+    arg0->motionOffset.x = (f32) (arg0->motionOffset.x - (arg1 * D_FLT_8219A824));
 }
 
 /**
@@ -1198,18 +1198,18 @@ s32 Particle_ApproachMotionOffsetZ(Particle* arg0, f32 arg1) {
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_CopyMotionStepToOffset(s8 *arg0) {
-    M2C_FIELD(arg0, f32 *, 0x4C) = (f32) M2C_FIELD(arg0, f32 *, 0x78);
-    M2C_FIELD(arg0, f32 *, 0x50) = (f32) M2C_FIELD(arg0, f32 *, 0x7C);
-    M2C_FIELD(arg0, f32 *, 0x54) = (f32) M2C_FIELD(arg0, f32 *, 0x80);
+void Particle_CopyMotionStepToOffset(Particle* arg0) {
+    arg0->motionOffset.x = (f32) arg0->motionStep.x;
+    arg0->motionOffset.y = (f32) arg0->motionStep.y;
+    arg0->motionOffset.z = (f32) arg0->motionStep.z;
 }
 
 /**
  * Sets motionOffset.x and .z to motionStep.
  */
-void Particle_CopyMotionStepToOffsetXZ(s8 *arg0) {
-    M2C_FIELD(arg0, f32 *, 0x4C) = (f32) M2C_FIELD(arg0, f32 *, 0x78);
-    M2C_FIELD(arg0, f32 *, 0x54) = (f32) M2C_FIELD(arg0, f32 *, 0x80);
+void Particle_CopyMotionStepToOffsetXZ(Particle* arg0) {
+    arg0->motionOffset.x = (f32) arg0->motionStep.x;
+    arg0->motionOffset.z = (f32) arg0->motionStep.z;
 }
 
 /**
@@ -1218,9 +1218,9 @@ void Particle_CopyMotionStepToOffsetXZ(s8 *arg0) {
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_CopyMotionStepToOffsetXY(s8 *arg0) {
-    M2C_FIELD(arg0, f32 *, 0x4C) = (f32) M2C_FIELD(arg0, f32 *, 0x78);
-    M2C_FIELD(arg0, f32 *, 0x50) = (f32) M2C_FIELD(arg0, f32 *, 0x7C);
+void Particle_CopyMotionStepToOffsetXY(Particle* arg0) {
+    arg0->motionOffset.x = (f32) arg0->motionStep.x;
+    arg0->motionOffset.y = (f32) arg0->motionStep.y;
 }
 
 /**
@@ -1239,8 +1239,8 @@ M2C_UNK Particle_ApplyMotionStep(s32 arg0) {
  * and .z (0x78, 0x80) to motionOffset.x and .z (0x4C, 0x54); y was untouched.
  */
 void Particle_ApplyMotionStepXZ(Particle* arg0) {
-    M2C_FIELD(arg0, f32*, 0x4C) += M2C_FIELD(arg0, f32*, 0x78);
-    M2C_FIELD(arg0, f32*, 0x54) += M2C_FIELD(arg0, f32*, 0x80);
+    arg0->motionOffset.x += arg0->motionStep.x;
+    arg0->motionOffset.z += arg0->motionStep.z;
 }
 
 /**
@@ -1288,7 +1288,7 @@ void Particle_ApplyMotionStepZ(Particle* arg0) {
  */
 void Particle_AddVelocityXZFromRotationYViaHelpers(Particle* arg0) {
     Particle_SetMotionStepXZFromRotationY(arg0);
-    Particle_Field50_AddXYFromField7C_09C34(arg0);
+    Particle_MotionOffset_AddXYFromMotionStep_09C34(arg0);
 }
 
 M2C_UNK func_8213FB14();                            /* extern */
@@ -1320,13 +1320,13 @@ void Particle_AddVelocityFromRotationTemplate1(s32 arg0) {
 
 M2C_UNK Particle_ApplyMotionStep(s32);                         /* extern */
 
-void Particle_MotionStep_SetVecFromField74AnglesXZ(Particle* arg0);
+void Particle_MotionStep_SetVecFromStepMagnitudeAnglesXZ(Particle* arg0);
 
 /**
  * Sets motionStep from rotation.x and rotation.z and adds it to motionOffset.
  */
 void func_8213E550(s32 arg0) {
-    Particle_MotionStep_SetVecFromField74AnglesXZ((Particle*)arg0);
+    Particle_MotionStep_SetVecFromStepMagnitudeAnglesXZ((Particle*)arg0);
     Particle_ApplyMotionStep(arg0);
 }
 
@@ -1418,8 +1418,8 @@ void Particle_StepBackwardAlongRotationY(Particle* arg0, f32 arg1) {
 
 M2C_UNK func_8213E488();                            /* extern */
 
-void func_8213E77C(s8 *arg0) {
-    M2C_FIELD(arg0, f32 *, 0x7C) = (f32) M2C_FIELD(arg0, f32 *, 0x70);
+void func_8213E77C(Particle* arg0) {
+    arg0->motionStep.y = (f32) arg0->stepMagnitude;
     func_8213E488();
 }
 
@@ -1492,8 +1492,8 @@ extern f32 D_FLT_8219A824;
  * Seen in play (2026-11-13) in the 165-move sweep (Petal Dance): with arg1 = 2.0 it wrote 7.2 (2.0
  * × scale 3.6) to motionTarget.y (0x5C).
  */
-void Particle_SetMotionTargetYScaled(s8 *arg0, f32 arg1) {
-    M2C_FIELD(arg0, f32 *, 0x5C) = (f32) (arg1 * D_FLT_8219A824);
+void Particle_SetMotionTargetYScaled(Particle* arg0, f32 arg1) {
+    arg0->motionTarget.y = (f32) (arg1 * D_FLT_8219A824);
 }
 
 extern f32 D_FLT_8219A824;
@@ -1504,8 +1504,8 @@ extern f32 D_FLT_8219A824;
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_SetMotionTargetZScaled(s8 *arg0, f32 arg1) {
-    M2C_FIELD(arg0, f32 *, 0x60) = (f32) (arg1 * D_FLT_8219A824);
+void Particle_SetMotionTargetZScaled(Particle* arg0, f32 arg1) {
+    arg0->motionTarget.z = (f32) (arg1 * D_FLT_8219A824);
 }
 
 /**
@@ -1514,7 +1514,7 @@ void Particle_SetMotionTargetZScaled(s8 *arg0, f32 arg1) {
  * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
  * @unverified Name guessed from the code.
  */
-s32 Particle_Field5C_ApproachY_0A0C4(Particle* arg0, f32 arg1, f32 arg2) {
+s32 Particle_MotionTarget_ApproachY_0A0C4(Particle* arg0, f32 arg1, f32 arg2) {
     return ParticleMath_ApproachFloat(&arg0->motionTarget.y, arg1 * gParticleRenderContext.scale.y, arg2 * gParticleRenderContext.scale.y);
 }
 
@@ -1561,10 +1561,10 @@ void Particle_ApproachPosition(Particle* arg0, Vec3f arg1) {
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (25 of the moves).
  * @unverified Name guessed from the code.
  */
-void Particle_Field9A_SetVecFromVec3s_0A37C(Particle* arg0, Vec3s arg1) {
-    M2C_FIELD(arg0, s16*, 0x90) = arg1.x;
-    M2C_FIELD(arg0, s16*, 0x92) = arg1.y;
-    M2C_FIELD(arg0, s16*, 0x94) = arg1.z;
+void Particle_Rotation_SetVecFromVec3s_0A37C(Particle* arg0, Vec3s arg1) {
+    arg0->rotation.x = arg1.x;
+    arg0->rotation.y = arg1.y;
+    arg0->rotation.z = arg1.z;
 }
 
 /**
@@ -1581,8 +1581,8 @@ void Particle_SetRotation(Particle* arg0, s16 arg1, s16 arg2, s16 arg3) {
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotation.x (0x90) of
  * the live particle, e.g. 0x0 -> 0x76ef.
  */
-void Particle_SetRotationX(s8 *arg0, s16 arg1) {
-    M2C_FIELD(arg0, s16 *, 0x90) = arg1;
+void Particle_SetRotationX(Particle* arg0, s16 arg1) {
+    arg0->rotation.x = arg1;
 }
 
 /**
@@ -1590,8 +1590,8 @@ void Particle_SetRotationX(s8 *arg0, s16 arg1) {
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotation.y (0x92) of
  * the live particle, e.g. 0xc000 -> 0x1a98.
  */
-void Particle_SetRotationY(s8 *arg0, s16 arg1) {
-    M2C_FIELD(arg0, s16 *, 0x92) = arg1;
+void Particle_SetRotationY(Particle* arg0, s16 arg1) {
+    arg0->rotation.y = arg1;
 }
 
 /**
@@ -1599,8 +1599,8 @@ void Particle_SetRotationY(s8 *arg0, s16 arg1) {
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotation.z (0x94) of
  * the live particle, e.g. 0x0 -> 0xd4a3.
  */
-void Particle_SetRotationZ(s8 *arg0, s16 arg1) {
-    M2C_FIELD(arg0, s16 *, 0x94) = arg1;
+void Particle_SetRotationZ(Particle* arg0, s16 arg1) {
+    arg0->rotation.z = arg1;
 }
 
 /**
@@ -1609,10 +1609,10 @@ void Particle_SetRotationZ(s8 *arg0, s16 arg1) {
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_AddHalfTurnToRotation(s8 *arg0) {
-    M2C_FIELD(arg0, s16 *, 0x90) = (s16) (M2C_FIELD(arg0, s16 *, 0x90) + 0x8000);
-    M2C_FIELD(arg0, s16 *, 0x92) = (s16) (M2C_FIELD(arg0, s16 *, 0x92) + 0x8000);
-    M2C_FIELD(arg0, s16 *, 0x94) = (s16) (M2C_FIELD(arg0, s16 *, 0x94) + 0x8000);
+void Particle_AddHalfTurnToRotation(Particle* arg0) {
+    arg0->rotation.x = (s16) (arg0->rotation.x + 0x8000);
+    arg0->rotation.y = (s16) (arg0->rotation.y + 0x8000);
+    arg0->rotation.z = (s16) (arg0->rotation.z + 0x8000);
 }
 
 /**
@@ -1621,8 +1621,8 @@ void Particle_AddHalfTurnToRotation(s8 *arg0) {
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_FlipRotationX(s8 *arg0) {
-    M2C_FIELD(arg0, s16 *, 0x90) = (s16) (M2C_FIELD(arg0, s16 *, 0x90) + 0x8000);
+void Particle_FlipRotationX(Particle* arg0) {
+    arg0->rotation.x = (s16) (arg0->rotation.x + 0x8000);
 }
 
 /**
@@ -1631,8 +1631,8 @@ void Particle_FlipRotationX(s8 *arg0) {
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_FlipRotationY(s8 *arg0) {
-    M2C_FIELD(arg0, s16 *, 0x92) = (s16) (M2C_FIELD(arg0, s16 *, 0x92) + 0x8000);
+void Particle_FlipRotationY(Particle* arg0) {
+    arg0->rotation.y = (s16) (arg0->rotation.y + 0x8000);
 }
 
 /**
@@ -1640,8 +1640,8 @@ void Particle_FlipRotationY(s8 *arg0) {
  * Seen in play (2026-11-13) in the 165-move sweep (Pin Missile): rotation.z (0x94) went from 0x18xx
  * to 0x98xx, a turn of 0x8000.
  */
-void Particle_FlipRotationZ(s8 *arg0) {
-    M2C_FIELD(arg0, s16 *, 0x94) = (s16) (M2C_FIELD(arg0, s16 *, 0x94) + 0x8000);
+void Particle_FlipRotationZ(Particle* arg0) {
+    arg0->rotation.z = (s16) (arg0->rotation.z + 0x8000);
 }
 
 /**
@@ -1650,10 +1650,10 @@ void Particle_FlipRotationZ(s8 *arg0) {
  * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_SetRotationStep(s8 *arg0, s16 arg1, s16 arg2, s16 arg3) {
-    M2C_FIELD(arg0, s16 *, 0x96) = arg1;
-    M2C_FIELD(arg0, s16 *, 0x98) = arg2;
-    M2C_FIELD(arg0, s16 *, 0x9A) = arg3;
+void Particle_SetRotationStep(Particle* arg0, s16 arg1, s16 arg2, s16 arg3) {
+    arg0->rotationStep.x = arg1;
+    arg0->rotationStep.y = arg2;
+    arg0->rotationStep.z = arg3;
 }
 
 /**
@@ -1674,9 +1674,9 @@ void Particle_SetRotationStepVec(Particle* arg0, Vec3s arg1) {
  * Bomb): with (0x800, 0x300) it set rotationStep.x (0x96) to 0x800 and rotationStep.y (0x98) to
  * 0x300; z was untouched.
  */
-void Particle_SetRotationStepXY(s8 *arg0, s16 arg1, s16 arg2) {
-    M2C_FIELD(arg0, s16 *, 0x96) = arg1;
-    M2C_FIELD(arg0, s16 *, 0x98) = arg2;
+void Particle_SetRotationStepXY(Particle* arg0, s16 arg1, s16 arg2) {
+    arg0->rotationStep.x = arg1;
+    arg0->rotationStep.y = arg2;
 }
 
 /**
@@ -1684,8 +1684,8 @@ void Particle_SetRotationStepXY(s8 *arg0, s16 arg1, s16 arg2) {
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotationStep.x (0x96)
  * of the live particle, e.g. 0x0 -> 0x1000.
  */
-void Particle_SetRotationStepX(s8 *arg0, s16 arg1) {
-    M2C_FIELD(arg0, s16 *, 0x96) = arg1;
+void Particle_SetRotationStepX(Particle* arg0, s16 arg1) {
+    arg0->rotationStep.x = arg1;
 }
 
 /**
@@ -1693,8 +1693,8 @@ void Particle_SetRotationStepX(s8 *arg0, s16 arg1) {
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotationStep.y (0x98)
  * of the live particle, e.g. 0x0 -> 0x44ac.
  */
-void Particle_SetRotationStepY(s8 *arg0, s16 arg1) {
-    M2C_FIELD(arg0, s16 *, 0x98) = arg1;
+void Particle_SetRotationStepY(Particle* arg0, s16 arg1) {
+    arg0->rotationStep.y = arg1;
 }
 
 /**
@@ -1702,8 +1702,8 @@ void Particle_SetRotationStepY(s8 *arg0, s16 arg1) {
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotationStep.z (0x9A)
  * of the live particle, e.g. 0x0 -> 0x995.
  */
-void Particle_SetRotationStepZ(s8 *arg0, s16 arg1) {
-    M2C_FIELD(arg0, s16 *, 0x9A) = arg1;
+void Particle_SetRotationStepZ(Particle* arg0, s16 arg1) {
+    arg0->rotationStep.z = arg1;
 }
 
 /**
@@ -1711,8 +1711,8 @@ void Particle_SetRotationStepZ(s8 *arg0, s16 arg1) {
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotationTarget.x
  * (0x9C) of the live particle, e.g. 0x0 -> 0xc000.
  */
-void Particle_SetRotationTargetX(s8 *arg0, s16 arg1) {
-    M2C_FIELD(arg0, s16 *, 0x9C) = arg1;
+void Particle_SetRotationTargetX(Particle* arg0, s16 arg1) {
+    arg0->rotationTarget.x = arg1;
 }
 
 /**
@@ -1720,8 +1720,8 @@ void Particle_SetRotationTargetX(s8 *arg0, s16 arg1) {
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotationTarget.y
  * (0x9E) of the live particle, e.g. 0x0 -> 0x4000.
  */
-void Particle_SetRotationTargetY(s8 *arg0, s16 arg1) {
-    M2C_FIELD(arg0, s16 *, 0x9E) = arg1;
+void Particle_SetRotationTargetY(Particle* arg0, s16 arg1) {
+    arg0->rotationTarget.y = arg1;
 }
 
 /**
@@ -1730,8 +1730,8 @@ void Particle_SetRotationTargetY(s8 *arg0, s16 arg1) {
  * (0x9C/0x9E) of the live particle, e.g. 0x0 -> 0x4000.
  */
 void Particle_SetRotationTargetXY(Particle* arg0, s16 arg1, s16 arg2) {
-    Particle_FieldA0_SetX_0A400(arg0, arg1);
-    Particle_FieldA0_SetY_0A414(arg0, arg2);
+    Particle_RotationTarget_SetX_0A400(arg0, arg1);
+    Particle_RotationTarget_SetY_0A414(arg0, arg2);
 }
 
 /**
@@ -1740,10 +1740,10 @@ void Particle_SetRotationTargetXY(Particle* arg0, s16 arg1, s16 arg2) {
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_SetRotationTargetToRotation(s8 *arg0) {
-    M2C_FIELD(arg0, s16 *, 0x9C) = (s16) M2C_FIELD(arg0, s16 *, 0x90);
-    M2C_FIELD(arg0, s16 *, 0x9E) = (s16) M2C_FIELD(arg0, s16 *, 0x92);
-    M2C_FIELD(arg0, s16 *, 0xA0) = (s16) M2C_FIELD(arg0, s16 *, 0x94);
+void Particle_SetRotationTargetToRotation(Particle* arg0) {
+    arg0->rotationTarget.x = (s16) arg0->rotation.x;
+    arg0->rotationTarget.y = (s16) arg0->rotation.y;
+    arg0->rotationTarget.z = (s16) arg0->rotation.z;
 }
 
 /**
@@ -1783,7 +1783,7 @@ void Particle_ApplyRotationStepY(s8 *arg0)
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (6 of the moves).
  * @unverified Name guessed from the code.
  */
-void Particle_Field94_AddXFromField9A_0A4B4(Particle* arg0) {
+void Particle_Rotation_AddXFromRotationStep_0A4B4(Particle* arg0) {
     arg0->rotation.z += arg0->rotationStep.z;
 }
 
@@ -1792,7 +1792,7 @@ void Particle_Field94_AddXFromField9A_0A4B4(Particle* arg0) {
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (45 of the moves).
  * @unverified Name guessed from the code.
  */
-void Particle_Field94_AddVecFromVec3s_0A4F0(Particle* arg0, Vec3s arg1) {
+void Particle_Rotation_AddVecFromVec3s_0A4F0(Particle* arg0, Vec3s arg1) {
     arg0->rotation.x += arg1.x;
     arg0->rotation.y += arg1.y;
     arg0->rotation.z += arg1.z;
@@ -1801,10 +1801,10 @@ void Particle_Field94_AddVecFromVec3s_0A4F0(Particle* arg0, Vec3s arg1) {
 /**
  * Adds the three angles to rotation.
  */
-void Particle_AddRotationXYZ(s8 *arg0, s16 arg1, s16 arg2, s16 arg3) {
-    M2C_FIELD(arg0, s16 *, 0x90) = (s16) (M2C_FIELD(arg0, s16 *, 0x90) + arg1);
-    M2C_FIELD(arg0, s16 *, 0x92) = (s16) (M2C_FIELD(arg0, s16 *, 0x92) + arg2);
-    M2C_FIELD(arg0, s16 *, 0x94) = (s16) (M2C_FIELD(arg0, s16 *, 0x94) + arg3);
+void Particle_AddRotationXYZ(Particle* arg0, s16 arg1, s16 arg2, s16 arg3) {
+    arg0->rotation.x = (s16) (arg0->rotation.x + arg1);
+    arg0->rotation.y = (s16) (arg0->rotation.y + arg2);
+    arg0->rotation.z = (s16) (arg0->rotation.z + arg3);
 }
 
 /**
@@ -1812,8 +1812,8 @@ void Particle_AddRotationXYZ(s8 *arg0, s16 arg1, s16 arg2, s16 arg3) {
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotation.x (0x90) of
  * the live particle, e.g. 0x0 -> 0x1160.
  */
-void Particle_AddRotationX(s8 *arg0, s16 arg1) {
-    M2C_FIELD(arg0, s16 *, 0x90) = (s16) (M2C_FIELD(arg0, s16 *, 0x90) + arg1);
+void Particle_AddRotationX(Particle* arg0, s16 arg1) {
+    arg0->rotation.x = (s16) (arg0->rotation.x + arg1);
 }
 
 /**
@@ -1821,8 +1821,8 @@ void Particle_AddRotationX(s8 *arg0, s16 arg1) {
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotation.y (0x92) of
  * the live particle, e.g. 0x4000 -> 0x3f46.
  */
-void Particle_AddRotationY(s8 *arg0, s16 arg1) {
-    M2C_FIELD(arg0, s16 *, 0x92) = (s16) (M2C_FIELD(arg0, s16 *, 0x92) + arg1);
+void Particle_AddRotationY(Particle* arg0, s16 arg1) {
+    arg0->rotation.y = (s16) (arg0->rotation.y + arg1);
 }
 
 /**
@@ -1830,16 +1830,16 @@ void Particle_AddRotationY(s8 *arg0, s16 arg1) {
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotation.z (0x94) of
  * the live particle, e.g. 0x0 -> 0x2000.
  */
-void Particle_AddRotationZ(s8 *arg0, s16 arg1) {
-    M2C_FIELD(arg0, s16 *, 0x94) = (s16) (M2C_FIELD(arg0, s16 *, 0x94) + arg1);
+void Particle_AddRotationZ(Particle* arg0, s16 arg1) {
+    arg0->rotation.z = (s16) (arg0->rotation.z + arg1);
 }
 
 /**
  * Adds arg1 and arg2 to the particle's rotation speeds at 0x9C and 0x9E.
  */
-void func_8213EDE8(s8 *arg0, s16 arg1, s16 arg2) {
-    M2C_FIELD(arg0, s16 *, 0x9C) = (s16) (M2C_FIELD(arg0, s16 *, 0x9C) + arg1);
-    M2C_FIELD(arg0, s16 *, 0x9E) = (s16) (M2C_FIELD(arg0, s16 *, 0x9E) + arg2);
+void func_8213EDE8(Particle* arg0, s16 arg1, s16 arg2) {
+    arg0->rotationTarget.x = (s16) (arg0->rotationTarget.x + arg1);
+    arg0->rotationTarget.y = (s16) (arg0->rotationTarget.y + arg2);
 }
 
 /**
@@ -1848,7 +1848,7 @@ void func_8213EDE8(s8 *arg0, s16 arg1, s16 arg2) {
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
-void Particle_Field94_SubVecFromVec3s_0A600(Particle* arg0, Vec3s arg1) {
+void Particle_Rotation_SubVecFromVec3s_0A600(Particle* arg0, Vec3s arg1) {
     arg0->rotation.x -= arg1.x;
     arg0->rotation.y -= arg1.y;
     arg0->rotation.z -= arg1.z;
@@ -1860,8 +1860,8 @@ void Particle_Field94_SubVecFromVec3s_0A600(Particle* arg0, Vec3s arg1) {
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_SubRotationX(s8 *arg0, s16 arg1) {
-    M2C_FIELD(arg0, s16 *, 0x90) = (s16) (M2C_FIELD(arg0, s16 *, 0x90) - arg1);
+void Particle_SubRotationX(Particle* arg0, s16 arg1) {
+    arg0->rotation.x = (s16) (arg0->rotation.x - arg1);
 }
 
 /**
@@ -1870,8 +1870,8 @@ void Particle_SubRotationX(s8 *arg0, s16 arg1) {
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_SubRotationY(s8 *arg0, s16 arg1) {
-    M2C_FIELD(arg0, s16 *, 0x92) = (s16) (M2C_FIELD(arg0, s16 *, 0x92) - arg1);
+void Particle_SubRotationY(Particle* arg0, s16 arg1) {
+    arg0->rotation.y = (s16) (arg0->rotation.y - arg1);
 }
 
 /**
@@ -1880,7 +1880,7 @@ void Particle_SubRotationY(s8 *arg0, s16 arg1) {
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
-void Particle_Field94_SubX_0A63C(Particle* arg0, s16 arg1) {
+void Particle_Rotation_SubX_0A63C(Particle* arg0, s16 arg1) {
     arg0->rotation.z -= arg1;
 }
 
@@ -1891,8 +1891,8 @@ M2C_UNK func_82137940(s8 *, s16, s16, s8 *);    /* extern */
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotation.x (0x90) of
  * the live particle, e.g. 0xe02 -> 0xfe02.
  */
-void Particle_ApproachRotationX(s8 *arg0) {
-    func_82137940(arg0 + 0x90, M2C_FIELD(arg0, s16 *, 0x9C), M2C_FIELD(arg0, s16 *, 0x96), arg0);
+void Particle_ApproachRotationX(Particle* arg0) {
+    func_82137940((s8*)&arg0->rotation.x, arg0->rotationTarget.x, arg0->rotationStep.x, (s8*)arg0);
 }
 
 M2C_UNK func_82137940(s8 *, s16, s16, s8 *);    /* extern */
@@ -1902,8 +1902,8 @@ M2C_UNK func_82137940(s8 *, s16, s16, s8 *);    /* extern */
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed rotation.y (0x92) of
  * the live particle, e.g. 0xec64 -> 0xef64.
  */
-void Particle_ApproachRotationY(s8 *arg0) {
-    func_82137940(arg0 + 0x92, M2C_FIELD(arg0, s16 *, 0x9E), M2C_FIELD(arg0, s16 *, 0x98), arg0);
+void Particle_ApproachRotationY(Particle* arg0) {
+    func_82137940((s8*)&arg0->rotation.y, arg0->rotationTarget.y, arg0->rotationStep.y, (s8*)arg0);
 }
 
 M2C_UNK func_82137940(s8 *, s16, s16, s8 *);    /* extern */
@@ -1914,8 +1914,8 @@ M2C_UNK func_82137940(s8 *, s16, s16, s8 *);    /* extern */
  * has no caller in the ROM itself.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_ApproachRotationZ(s8 *arg0) {
-    func_82137940(arg0 + 0x94, M2C_FIELD(arg0, s16 *, 0xA0), M2C_FIELD(arg0, s16 *, 0x9A), arg0);
+void Particle_ApproachRotationZ(Particle* arg0) {
+    func_82137940((s8*)&arg0->rotation.z, arg0->rotationTarget.z, arg0->rotationStep.z, (s8*)arg0);
 }
 
 /**
@@ -1987,7 +1987,7 @@ s32 Particle_DecreaseRotationXTo(Particle* arg0, s32 arg1, s32 arg2) {
  */
 s32 Particle_DecreaseRotationYTo(Particle* arg0, s32 arg1, s32 arg2) {
     s32 var_v1 = 0;
-    s32 var_v0 = M2C_FIELD(arg0, s16*, 0x92);
+    s32 var_v0 = arg0->rotation.y;
 
     if (arg1 < var_v0) {
         var_v0 -= arg2;
@@ -1995,7 +1995,7 @@ s32 Particle_DecreaseRotationYTo(Particle* arg0, s32 arg1, s32 arg2) {
             var_v0 = arg1;
             var_v1 = 1;
         }
-        M2C_FIELD(arg0, s16*, 0x92) = var_v0;
+        arg0->rotation.y = var_v0;
     }
 
     return var_v1;
@@ -2007,7 +2007,7 @@ s32 Particle_DecreaseRotationYTo(Particle* arg0, s32 arg1, s32 arg2) {
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
-s32 Particle_Field94_DecrementXTo_0A7DC(Particle* arg0, s32 arg1, s32 arg2) {
+s32 Particle_Rotation_DecrementXTo_0A7DC(Particle* arg0, s32 arg1, s32 arg2) {
     s32 var_v1 = 0;
     s32 var_v0 = arg0->rotation.z;
 
@@ -2030,8 +2030,8 @@ s32 Particle_Field94_DecrementXTo_0A7DC(Particle* arg0, s32 arg1, s32 arg2) {
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_AddRotationRandomSignedXY(Particle* arg0, s32 arg1, s32 arg2) {
-    Particle_Field94_AddX_0A578(arg0, ParticleMath_RandomSigned(arg1));
-    Particle_Field94_AddY_0A594(arg0, ParticleMath_RandomSigned(arg2));
+    Particle_Rotation_AddX_0A578(arg0, ParticleMath_RandomSigned(arg1));
+    Particle_Rotation_AddY_0A594(arg0, ParticleMath_RandomSigned(arg2));
 }
 
 /**
@@ -2041,8 +2041,8 @@ void Particle_AddRotationRandomSignedXY(Particle* arg0, s32 arg1, s32 arg2) {
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_AddRotationRandomSignedXYWithXHalfTurn(Particle* arg0, s32 arg1, s32 arg2) {
-    Particle_Field94_AddX_0A578(arg0, ParticleMath_RandomSignedOffset(arg1, 0x8000));
-    Particle_Field94_AddY_0A594(arg0, ParticleMath_RandomSigned(arg2));
+    Particle_Rotation_AddX_0A578(arg0, ParticleMath_RandomSignedOffset(arg1, 0x8000));
+    Particle_Rotation_AddY_0A594(arg0, ParticleMath_RandomSigned(arg2));
 }
 
 /**
@@ -2052,7 +2052,7 @@ void Particle_AddRotationRandomSignedXYWithXHalfTurn(Particle* arg0, s32 arg1, s
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_AddRotationRandomSignedY(Particle* arg0, s32 arg1) {
-    Particle_Field94_AddY_0A594(arg0, ParticleMath_RandomSigned(arg1));
+    Particle_Rotation_AddY_0A594(arg0, ParticleMath_RandomSigned(arg1));
 }
 
 /**
@@ -2062,7 +2062,7 @@ void Particle_AddRotationRandomSignedY(Particle* arg0, s32 arg1) {
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_AddRotationRandomSignedYWithHalfTurn(Particle* arg0, s32 arg1) {
-    Particle_Field94_AddY_0A594(arg0, ParticleMath_RandomSignedOffset(arg1, 0x8000));
+    Particle_Rotation_AddY_0A594(arg0, ParticleMath_RandomSignedOffset(arg1, 0x8000));
 }
 
 /**
@@ -2072,8 +2072,8 @@ void Particle_AddRotationRandomSignedYWithHalfTurn(Particle* arg0, s32 arg1) {
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
 void Particle_AddRotationRandomSignedXWithFixedYQuarterTurn(Particle* arg0) {
-    Particle_Field94_AddX_0A578(arg0, ParticleMath_RandomSigned(0x10000));
-    Particle_Field94_AddY_0A594(arg0, 0x4000);
+    Particle_Rotation_AddX_0A578(arg0, ParticleMath_RandomSigned(0x10000));
+    Particle_Rotation_AddY_0A594(arg0, 0x4000);
 }
 
 extern struct ActivePokemon* D_8219A818;
@@ -2164,8 +2164,8 @@ extern f32 D_FLT_8219A824;
  * Seen in play (2026-11-13) in the 165-move sweep: arg1 = 0.4 set stepMagnitude (0x70) to 0.704,
  * arg1 times the particle scale D_FLT_8219A824 (1.76).
  */
-void Particle_SetStepMagnitudeScaled(s8 *arg0, f32 arg1) {
-    M2C_FIELD(arg0, f32 *, 0x70) = (f32) (arg1 * D_FLT_8219A824);
+void Particle_SetStepMagnitudeScaled(Particle* arg0, f32 arg1) {
+    arg0->stepMagnitude = (f32) (arg1 * D_FLT_8219A824);
 }
 
 extern f32 D_FLT_8219A824;
@@ -2176,8 +2176,8 @@ extern f32 D_FLT_8219A824;
  * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_SetMagnitudeStepScaled(s8 *arg0, f32 arg1) {
-    M2C_FIELD(arg0, f32 *, 0x74) = (f32) (arg1 * D_FLT_8219A824);
+void Particle_SetMagnitudeStepScaled(Particle* arg0, f32 arg1) {
+    arg0->magnitudeStep = (f32) (arg1 * D_FLT_8219A824);
 }
 
 /**
@@ -2203,7 +2203,7 @@ s32 Particle_StepMagnitude_ApproachUsingMagnitudeStep(Particle* arg0, f32 arg1) 
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name guessed from the code.
  */
-s32 Particle_Field74_Approach_0ADBC(Particle* arg0, f32 arg1, f32 arg2) {
+s32 Particle_MagnitudeStep_Approach_0ADBC(Particle* arg0, f32 arg1, f32 arg2) {
     return ParticleMath_ApproachFloat(&arg0->magnitudeStep, arg1 * gParticleRenderContext.scale.y, arg2 * gParticleRenderContext.scale.y);
 }
 
@@ -2214,9 +2214,9 @@ s32 Particle_Field74_Approach_0ADBC(Particle* arg0, f32 arg1, f32 arg2) {
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetMotionStepScaled(Particle* arg0, Vec3f arg1) {
-    M2C_FIELD(arg0, f32*, 0x78) = arg1.x * gParticleRenderContext.scale.y;
-    M2C_FIELD(arg0, f32*, 0x7C) = arg1.y * gParticleRenderContext.scale.y;
-    M2C_FIELD(arg0, f32*, 0x80) = arg1.z * gParticleRenderContext.scale.y;
+    arg0->motionStep.x = arg1.x * gParticleRenderContext.scale.y;
+    arg0->motionStep.y = arg1.y * gParticleRenderContext.scale.y;
+    arg0->motionStep.z = arg1.z * gParticleRenderContext.scale.y;
 }
 
 /**
@@ -2224,9 +2224,9 @@ void Particle_SetMotionStepScaled(Particle* arg0, Vec3f arg1) {
  * scaled (x, y, z). Was Particle_SetVelocityImpulse. Seen in play (2026-11-12) in move animations: wrote 0x78-0x80.
  */
 void Particle_SetMotionStep(Particle* arg0, f32 arg1, f32 arg2, f32 arg3) {
-    M2C_FIELD(arg0, f32*, 0x78) = arg1 * gParticleRenderContext.scale.y;
-    M2C_FIELD(arg0, f32*, 0x78 + 4) = arg2 * gParticleRenderContext.scale.y;
-    M2C_FIELD(arg0, f32*, 0x78 + 8) = arg3 * gParticleRenderContext.scale.y;
+    arg0->motionStep.x = arg1 * gParticleRenderContext.scale.y;
+    arg0->motionStep.y = arg2 * gParticleRenderContext.scale.y;
+    arg0->motionStep.z = arg3 * gParticleRenderContext.scale.y;
 }
 
 extern f32 D_FLT_8219A824;
@@ -2237,8 +2237,8 @@ extern f32 D_FLT_8219A824;
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_SetMotionStepXScaled(s8 *arg0, f32 arg1) {
-    M2C_FIELD(arg0, f32 *, 0x78) = (f32) (arg1 * D_FLT_8219A824);
+void Particle_SetMotionStepXScaled(Particle* arg0, f32 arg1) {
+    arg0->motionStep.x = (f32) (arg1 * D_FLT_8219A824);
 }
 
 extern f32 D_FLT_8219A824;
@@ -2248,8 +2248,8 @@ extern f32 D_FLT_8219A824;
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed motionStep.y (0x7C) of
  * the live particle, e.g. 0 -> 2.112.
  */
-void Particle_SetMotionStepYScaled(s8 *arg0, f32 arg1) {
-    M2C_FIELD(arg0, f32 *, 0x7C) = (f32) (arg1 * D_FLT_8219A824);
+void Particle_SetMotionStepYScaled(Particle* arg0, f32 arg1) {
+    arg0->motionStep.y = (f32) (arg1 * D_FLT_8219A824);
 }
 
 extern f32 D_FLT_8219A824;
@@ -2260,8 +2260,8 @@ extern f32 D_FLT_8219A824;
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_SetMotionStepZScaled(s8 *arg0, f32 arg1) {
-    M2C_FIELD(arg0, f32 *, 0x80) = (f32) (arg1 * D_FLT_8219A824);
+void Particle_SetMotionStepZScaled(Particle* arg0, f32 arg1) {
+    arg0->motionStep.z = (f32) (arg1 * D_FLT_8219A824);
 }
 
 /**
@@ -2291,7 +2291,7 @@ s32 Particle_IncreaseMotionStepXTo(Particle* arg0, f32 arg1, f32 arg2) {
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
-s32 Particle_Field7C_IncrementXUntilAtLeast_0AF54(Particle* arg0, f32 arg1, f32 arg2) {
+s32 Particle_MotionStep_IncrementXUntilAtLeast_0AF54(Particle* arg0, f32 arg1, f32 arg2) {
     f32 temp_fv0;
     s32 var_v1 = 0;
 
@@ -2312,7 +2312,7 @@ s32 Particle_Field7C_IncrementXUntilAtLeast_0AF54(Particle* arg0, f32 arg1, f32 
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
-s32 Particle_Field7C_IncrementYUntilAtLeast_0AFA8(Particle* arg0, f32 arg1, f32 arg2) {
+s32 Particle_MotionStep_IncrementYUntilAtLeast_0AFA8(Particle* arg0, f32 arg1, f32 arg2) {
     f32 temp_fv0;
     s32 var_v1 = 0;
 
@@ -2352,7 +2352,7 @@ s32 Particle_MotionStep_DecrementYUntilAtMost(Particle* arg0, f32 arg1, f32 arg2
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
  * @unverified Name guessed from the code.
  */
-s32 Particle_Field7C_DecrementXUntilAtMost_0B050(Particle* arg0, f32 arg1, f32 arg2) {
+s32 Particle_MotionStep_DecrementXUntilAtMost_0B050(Particle* arg0, f32 arg1, f32 arg2) {
     f32 temp_fv0;
     s32 var_v1 = 0;
 
@@ -2373,7 +2373,7 @@ s32 Particle_Field7C_DecrementXUntilAtMost_0B050(Particle* arg0, f32 arg1, f32 a
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
-s32 Particle_Field7C_DecrementYUntilAtMost_0B0A4(Particle* arg0, f32 arg1, f32 arg2) {
+s32 Particle_MotionStep_DecrementYUntilAtMost_0B0A4(Particle* arg0, f32 arg1, f32 arg2) {
     s32 var_v1 = 0;
     f32 temp_fv0;
 
@@ -2393,10 +2393,10 @@ s32 Particle_Field7C_DecrementYUntilAtMost_0B0A4(Particle* arg0, f32 arg1, f32 a
  * tables or fragment headers.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_ScaleMotionStep(s8 *arg0, f32 arg1) {
-    M2C_FIELD(arg0, f32 *, 0x78) = (f32) (M2C_FIELD(arg0, f32 *, 0x78) * arg1);
-    M2C_FIELD(arg0, f32 *, 0x7C) = (f32) (M2C_FIELD(arg0, f32 *, 0x7C) * arg1);
-    M2C_FIELD(arg0, f32 *, 0x80) = (f32) (M2C_FIELD(arg0, f32 *, 0x80) * arg1);
+void Particle_ScaleMotionStep(Particle* arg0, f32 arg1) {
+    arg0->motionStep.x = (f32) (arg0->motionStep.x * arg1);
+    arg0->motionStep.y = (f32) (arg0->motionStep.y * arg1);
+    arg0->motionStep.z = (f32) (arg0->motionStep.z * arg1);
 }
 
 /**
@@ -2415,15 +2415,15 @@ s32 Particle_ApproachMotionStepY(Particle* arg0, f32 arg1, f32 arg2) {
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
-void Particle_Field7C_SetXFromField74AngleY_0B1EC(Particle* arg0) {
-    M2C_FIELD(arg0, f32*, 0x7C) = COSS(M2C_FIELD(arg0, u16*, 0x90)) * arg0->stepMagnitude;
+void Particle_MotionStep_SetXFromStepMagnitudeAngleY_0B1EC(Particle* arg0) {
+    arg0->motionStep.y = COSS((u16)arg0->rotation.x) * arg0->stepMagnitude;
 }
 
 /**
  * Sets motionStep.y (0x78) to stepMagnitude times the sine of the angle at 0x92.
  */
 void func_8213FA88(Particle* arg0) {
-    M2C_FIELD(arg0, f32*, 0x78) = arg0->stepMagnitude * SINS(M2C_FIELD(arg0, u16*, 0x92));
+    arg0->motionStep.x = arg0->stepMagnitude * SINS((u16)arg0->rotation.y);
 }
 
 /**
@@ -2433,8 +2433,8 @@ void func_8213FA88(Particle* arg0) {
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
-void Particle_Field7C_SetYFromField74AngleX_0B1C4(Particle* arg0) {
-    M2C_FIELD(arg0, f32*, 0x80) = COSS(M2C_FIELD(arg0, u16*, 0x92)) * arg0->stepMagnitude;
+void Particle_MotionStep_SetYFromStepMagnitudeAngleX_0B1C4(Particle* arg0) {
+    arg0->motionStep.z = COSS((u16)arg0->rotation.y) * arg0->stepMagnitude;
 }
 
 /**
@@ -2443,8 +2443,8 @@ void Particle_Field7C_SetYFromField74AngleX_0B1C4(Particle* arg0) {
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void Particle_SetMotionStepFromRotationXZ(Particle* arg0) {
-    M2C_FIELD(arg0, f32*, 0x78) = arg0->stepMagnitude * COSS(M2C_FIELD(arg0, u16*, 0x94));
-    M2C_FIELD(arg0, f32*, 0x7C) = arg0->stepMagnitude * SINS(M2C_FIELD(arg0, u16*, 0x94));
+    arg0->motionStep.x = arg0->stepMagnitude * COSS((u16)arg0->rotation.z);
+    arg0->motionStep.y = arg0->stepMagnitude * SINS((u16)arg0->rotation.z);
 }
 
 /**
@@ -2454,8 +2454,8 @@ void Particle_SetMotionStepFromRotationXZ(Particle* arg0) {
  * @unverified Name guessed from the code.
  */
 void Particle_SetMotionStepXZFromRotationY(Particle* arg0) {
-    M2C_FIELD(arg0, f32*, 0x78) = SINS(M2C_FIELD(arg0, u16*, 0x92)) * arg0->stepMagnitude;
-    M2C_FIELD(arg0, f32*, 0x80) = COSS(M2C_FIELD(arg0, u16*, 0x92)) * arg0->stepMagnitude;
+    arg0->motionStep.x = SINS((u16)arg0->rotation.y) * arg0->stepMagnitude;
+    arg0->motionStep.z = COSS((u16)arg0->rotation.y) * arg0->stepMagnitude;
 }
 
 /**
@@ -2476,7 +2476,7 @@ void Particle_SetMotionStepFromRotationXY(Particle* arg0) {
  * tables or fragment headers.
  * @unverified Name and comment from Stadium 1, matched by code similarity.
  */
-void Particle_MotionStep_SetVecFromField74AnglesXZ(Particle* arg0) {
+void Particle_MotionStep_SetVecFromStepMagnitudeAnglesXZ(Particle* arg0) {
     arg0->motionStep.x = arg0->stepMagnitude * SINS(arg0->rotation.x) * SINS(arg0->rotation.z);
     arg0->motionStep.y = -arg0->stepMagnitude * SINS(arg0->rotation.x) * COSS(arg0->rotation.z);
     arg0->motionStep.z = arg0->stepMagnitude * COSS(arg0->rotation.x);
@@ -2591,7 +2591,7 @@ void Particle_UpdateRotatingVelocityXZ(Particle* arg0, f32 arg1, s16 arg2) {
  * no pointer word, no lui/addiu pair in any fragment), so play cannot reach it.
  * @unverified Name guessed from the code.
  */
-s32 Particle_Field50_AdvanceField7CWithTimer_0B854(Particle* arg0, f32 arg1, f32 arg2, f32 arg3, s16 arg4, s16 arg5) {
+s32 Particle_MotionOffset_AdvanceMotionStepWithTimer_0B854(Particle* arg0, f32 arg1, f32 arg2, f32 arg3, s16 arg4, s16 arg5) {
     s32 sp24 = 0;
 
     if (Particle_LacksFlags(arg0, 2) != 0) {
@@ -2726,8 +2726,8 @@ M2C_UNK func_82137804(s32, s32, s32);               /* extern */
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed prim_r (0xBA) of the
  * live particle, e.g. 0xffff -> 0xf7ff.
  */
-void Particle_ApproachPrimRed(s32 arg0, s32 arg1, s32 arg2) {
-    func_82137804(arg0 + 0xBA, arg1 & 0xFF, arg2 & 0xFF);
+void Particle_ApproachPrimRed(Particle* arg0, s32 arg1, s32 arg2) {
+    func_82137804((s32)&arg0->prim_r, arg1 & 0xFF, arg2 & 0xFF);
 }
 
 M2C_UNK func_82137804(s32, s32, s32);               /* extern */
@@ -2737,8 +2737,8 @@ M2C_UNK func_82137804(s32, s32, s32);               /* extern */
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed prim_g (0xBB) of the
  * live particle, e.g. 0xf7ff -> 0xf7f7.
  */
-void Particle_ApproachPrimGreen(s32 arg0, s32 arg1, s32 arg2) {
-    func_82137804(arg0 + 0xBB, arg1 & 0xFF, arg2 & 0xFF);
+void Particle_ApproachPrimGreen(Particle* arg0, s32 arg1, s32 arg2) {
+    func_82137804((s32)&arg0->prim_g, arg1 & 0xFF, arg2 & 0xFF);
 }
 
 M2C_UNK func_82137804(s32, s32, s32);               /* extern */
@@ -2748,8 +2748,8 @@ M2C_UNK func_82137804(s32, s32, s32);               /* extern */
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed prim_b (0xBC) of the
  * live particle, e.g. 0xffffffff -> 0xf7ffffff.
  */
-void Particle_ApproachPrimBlue(s32 arg0, s32 arg1, s32 arg2) {
-    func_82137804(arg0 + 0xBC, arg1 & 0xFF, arg2 & 0xFF);
+void Particle_ApproachPrimBlue(Particle* arg0, s32 arg1, s32 arg2) {
+    func_82137804((s32)&arg0->prim_b, arg1 & 0xFF, arg2 & 0xFF);
 }
 
 extern s16 D_8219A8B2;
@@ -2762,10 +2762,10 @@ extern s16 D_8219A8B6;
  * switch in battle.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_StorePrimColorInTemp(s8 *arg0) {
-    D_8219A8B2 = (s16) M2C_FIELD(arg0, u8 *, 0xBA);
-    D_8219A8B4 = (s16) M2C_FIELD(arg0, u8 *, 0xBB);
-    D_8219A8B6 = (s16) M2C_FIELD(arg0, u8 *, 0xBC);
+void Particle_StorePrimColorInTemp(Particle* arg0) {
+    D_8219A8B2 = (s16) arg0->prim_r;
+    D_8219A8B4 = (s16) arg0->prim_g;
+    D_8219A8B6 = (s16) arg0->prim_b;
 }
 
 extern s16 D_8219A8B2;
@@ -2777,10 +2777,10 @@ extern s16 D_8219A8B6;
  * switch in battle.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
-void BattleAnim_LoadGlobalTintToParticle(s8 *arg0) {
-    M2C_FIELD(arg0, s8 *, 0xBA) = (s8) D_8219A8B2;
-    M2C_FIELD(arg0, s8 *, 0xBB) = (s8) D_8219A8B4;
-    M2C_FIELD(arg0, s8 *, 0xBC) = (s8) D_8219A8B6;
+void BattleAnim_LoadGlobalTintToParticle(Particle* arg0) {
+    arg0->prim_r = D_8219A8B2;
+    arg0->prim_g = D_8219A8B4;
+    arg0->prim_b = D_8219A8B6;
 }
 
 /**
@@ -2801,8 +2801,8 @@ M2C_UNK func_82137804(s32, s32, s32);               /* extern */
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed env_r (0xBD) of the
  * live particle, e.g. 0xff0000 -> 0xdf0000.
  */
-void Particle_ApproachEnvRed(s32 arg0, s32 arg1, s32 arg2) {
-    func_82137804(arg0 + 0xBD, arg1 & 0xFF, arg2 & 0xFF);
+void Particle_ApproachEnvRed(Particle* arg0, s32 arg1, s32 arg2) {
+    func_82137804((s32)&arg0->env_r, arg1 & 0xFF, arg2 & 0xFF);
 }
 
 M2C_UNK func_82137804(s32, s32, s32);               /* extern */
@@ -2812,8 +2812,8 @@ M2C_UNK func_82137804(s32, s32, s32);               /* extern */
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed env_b (0xBF) of the
  * live particle, e.g. 0xf7c0cfff -> 0xf7c0cff7.
  */
-void Particle_ApproachEnvBlue(s32 arg0, s32 arg1, s32 arg2) {
-    func_82137804(arg0 + 0xBF, arg1 & 0xFF, arg2 & 0xFF);
+void Particle_ApproachEnvBlue(Particle* arg0, s32 arg1, s32 arg2) {
+    func_82137804((s32)&arg0->env_b, arg1 & 0xFF, arg2 & 0xFF);
 }
 
 M2C_UNK func_82137804(s32, s32, s32);               /* extern */
@@ -2823,8 +2823,8 @@ M2C_UNK func_82137804(s32, s32, s32);               /* extern */
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed env_g (0xBE) of the
  * live particle, e.g. 0xe7ffff00 -> 0xe7ffe700.
  */
-void Particle_ApproachEnvGreen(s32 arg0, s32 arg1, s32 arg2) {
-    func_82137804(arg0 + 0xBE, arg1 & 0xFF, arg2 & 0xFF);
+void Particle_ApproachEnvGreen(Particle* arg0, s32 arg1, s32 arg2) {
+    func_82137804((s32)&arg0->env_g, arg1 & 0xFF, arg2 & 0xFF);
 }
 
 void Particle_SetPrimAlpha(s8 *arg0, char arg1)
@@ -2843,8 +2843,8 @@ M2C_UNK func_82137804(s32, s32, s32);               /* extern */
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed prim_a (0xC0) of the
  * live particle, e.g. 0xc8000000 -> 0xc4000000.
  */
-void Particle_ApproachPrimAlpha(s32 arg0, s32 arg1, s32 arg2) {
-    func_82137804(arg0 + 0xC0, arg1 & 0xFF, arg2 & 0xFF);
+void Particle_ApproachPrimAlpha(Particle* arg0, s32 arg1, s32 arg2) {
+    func_82137804((s32)&arg0->prim_a, arg1 & 0xFF, arg2 & 0xFF);
 }
 
 /**
@@ -2868,20 +2868,20 @@ s32 Particle_ApproachPrimAlphaThenAdvance(Particle* arg0, u8 arg1, u8 arg2) {
  * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_SetUnkA6(s8 *arg0, s16 arg1) {
-    M2C_FIELD(arg0, s16 *, 0xA2) = arg1;
+void Particle_SetParam0(Particle* arg0, s16 arg1) {
+    arg0->param0 = arg1;
 }
 
 /**
  * Counts field A2 down by arg2 to at least arg1; returns 1 once it reaches arg1.
  */
-s32 func_821405A8(s8 *arg0, s16 arg1, s16 arg2) {
+s32 func_821405A8(Particle* arg0, s16 arg1, s16 arg2) {
     s32 var_v1;
 
-    M2C_FIELD(arg0, s16 *, 0xA2) = (s16) (M2C_FIELD(arg0, s16 *, 0xA2) - arg2);
+    arg0->param0 = (s16) (arg0->param0 - arg2);
     var_v1 = 0;
-    if (arg1 >= M2C_FIELD(arg0, s16 *, 0xA2)) {
-        M2C_FIELD(arg0, s16 *, 0xA2) = arg1;
+    if (arg1 >= arg0->param0) {
+        arg0->param0 = arg1;
         var_v1 = 1;
     }
     return var_v1;
@@ -2893,8 +2893,8 @@ s32 func_821405A8(s8 *arg0, s16 arg1, s16 arg2) {
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-s32 Particle_FieldA6_DecrementToZero_0BD08(Particle* arg0, s16 arg1) {
-    return Particle_FieldA6_DecrementTo_0BCC4(arg0, 0, arg1);
+s32 Particle_Param0_DecrementToZero_0BD08(Particle* arg0, s16 arg1) {
+    return Particle_Param0_DecrementTo_0BCC4(arg0, 0, arg1);
 }
 
 /**
@@ -2903,8 +2903,8 @@ s32 Particle_FieldA6_DecrementToZero_0BD08(Particle* arg0, s16 arg1) {
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-s32 Particle_FieldA6_DecrementToZeroAndStepState_0BD34(Particle* arg0, s16 arg1) {
-    s32 sp1C = Particle_FieldA6_DecrementTo_0BCC4(arg0, 0, arg1);
+s32 Particle_Param0_DecrementToZeroAndStepState_0BD34(Particle* arg0, s16 arg1) {
+    s32 sp1C = Particle_Param0_DecrementTo_0BCC4(arg0, 0, arg1);
 
     if (sp1C != 0) {
         Particle_AdvanceLifecycle(arg0);
@@ -2918,8 +2918,8 @@ s32 Particle_FieldA6_DecrementToZeroAndStepState_0BD34(Particle* arg0, s16 arg1)
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-s32 Particle_FieldA6_DecrementToStep1_0BD80(Particle* arg0, s16 arg1) {
-    return Particle_FieldA6_DecrementTo_0BCC4(arg0, arg1, 1);
+s32 Particle_Param0_DecrementToStep1_0BD80(Particle* arg0, s16 arg1) {
+    return Particle_Param0_DecrementTo_0BCC4(arg0, arg1, 1);
 }
 
 /**
@@ -2927,8 +2927,8 @@ s32 Particle_FieldA6_DecrementToStep1_0BD80(Particle* arg0, s16 arg1) {
  * Decrease the selected field toward its threshold and return the completion result.
  * Seen in play (2026-11-13) in the 165-move sweep (Cut): unk_A6 at 0xA2 went from 7 to 6.
  */
-s32 Particle_DecrementUnkA6ToZero(Particle* arg0) {
-    return Particle_FieldA6_DecrementTo_0BCC4(arg0, 0, 1);
+s32 Particle_DecrementParam0ToZero(Particle* arg0) {
+    return Particle_Param0_DecrementTo_0BCC4(arg0, 0, 1);
 }
 
 /**
@@ -2937,8 +2937,8 @@ s32 Particle_DecrementUnkA6ToZero(Particle* arg0) {
  * Seen in play (2026-11-13) in the 165-move sweep (Mega Kick, Vice Grip): unk_A6 at 0xA2 went from
  * 0x32 to 0x31.
  */
-s32 Particle_DecrementUnkA6ToZeroThenAdvance(Particle* arg0) {
-    s32 sp1C = Particle_FieldA6_DecrementTo_0BCC4(arg0, 0, 1);
+s32 Particle_DecrementParam0ToZeroThenAdvance(Particle* arg0) {
+    s32 sp1C = Particle_Param0_DecrementTo_0BCC4(arg0, 0, 1);
 
     if (sp1C != 0) {
         Particle_AdvanceLifecycle(arg0);
@@ -2952,20 +2952,20 @@ s32 Particle_DecrementUnkA6ToZeroThenAdvance(Particle* arg0) {
  * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_SetUnkA8(s8 *arg0, s16 arg1) {
-    M2C_FIELD(arg0, s16 *, 0xA4) = arg1;
+void Particle_SetCountdown(Particle* arg0, s16 arg1) {
+    arg0->countdown = arg1;
 }
 
 /**
  * Counts field A4 down by 1 to at least arg1; returns 1 once it reaches arg1.
  */
-s32 func_8214070C(s8 *arg0, s16 arg1) {
+s32 func_8214070C(Particle* arg0, s16 arg1) {
     s32 var_v1;
 
-    M2C_FIELD(arg0, s16 *, 0xA4) = (s16) (M2C_FIELD(arg0, s16 *, 0xA4) - 1);
+    arg0->countdown = (s16) (arg0->countdown - 1);
     var_v1 = 0;
-    if (arg1 >= M2C_FIELD(arg0, s16 *, 0xA4)) {
-        M2C_FIELD(arg0, s16 *, 0xA4) = arg1;
+    if (arg1 >= arg0->countdown) {
+        arg0->countdown = arg1;
         var_v1 = 1;
     }
     return var_v1;
@@ -2976,8 +2976,8 @@ s32 func_8214070C(s8 *arg0, s16 arg1) {
  * Decrease the selected field toward its threshold and return the completion result.
  * Seen in play (2026-11-13) in the 165-move sweep (Ember): unk_A8 at 0xA4 went from 7 to 6.
  */
-s32 Particle_DecrementUnkA8ToZero(Particle* arg0) {
-    return Particle_FieldA8_DecrementTo_0BE30(arg0, 0);
+s32 Particle_DecrementCountdownToZero(Particle* arg0) {
+    return Particle_Countdown_DecrementTo_0BE30(arg0, 0);
 }
 
 /**
@@ -2986,8 +2986,8 @@ s32 Particle_DecrementUnkA8ToZero(Particle* arg0) {
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name matches Stadium 1. Comment from Stadium 1.
  */
-s32 Particle_FieldA8_DecrementToZeroStep1AndStepState_0BE8C(Particle* arg0) {
-    s32 sp1C = Particle_FieldA8_DecrementTo_0BE30(arg0, 0);
+s32 Particle_Countdown_DecrementToZeroStep1AndStepState_0BE8C(Particle* arg0) {
+    s32 sp1C = Particle_Countdown_DecrementTo_0BE30(arg0, 0);
 
     if (sp1C != 0) {
         Particle_AdvanceLifecycle(arg0);
@@ -3006,8 +3006,8 @@ void func_821407A8(s8 *arg0, int arg1)
  * Sets the particle's unk_AC to arg1.
  * Seen in play (2026-11-13) in the 165-move sweep: arg1 = 0 cleared unk_AC (offset 0xA8) from 0x16.
  */
-void Particle_SetUnkAC(s8 *arg0, s16 arg1) {
-    M2C_FIELD(arg0, s16 *, 0xA8) = arg1;
+void Particle_SetSpawnIndex(Particle* arg0, s16 arg1) {
+    arg0->spawnIndex = arg1;
 }
 
 void func_821407C8(s8 *arg0, unsigned char arg1)
@@ -3029,7 +3029,7 @@ void func_821407D4(s8 *arg0, unsigned char arg1)
  * Seen in play (2026-11-13) in the 165-move sweep (Selfdestruct): arg1 = 9 set the byte at 0xC8
  * (unk_CC) from 2 to 9.
  */
-void Particle_SetUnkCC(s8 *arg0, unsigned short arg1)
+void Particle_SetAnchorMode(s8 *arg0, unsigned short arg1)
 {
   *((s8 *) (((s8 *) arg0) + 0xC8)) = arg1;
 }
@@ -3039,8 +3039,8 @@ void Particle_SetUnkCC(s8 *arg0, unsigned short arg1)
  * Seen in play (2026-11-13) in the 165-move sweep (Thunder Punch, Scratch): arg1 = 0 cleared unk_AA
  * (offset 0xA6) from 1.
  */
-void Particle_SetUnkAA(s8 *arg0, s16 arg1) {
-    M2C_FIELD(arg0, s16 *, 0xA6) = arg1;
+void Particle_SetParam1(Particle* arg0, s16 arg1) {
+    arg0->param1 = arg1;
 }
 
 /**
@@ -3049,8 +3049,8 @@ void Particle_SetUnkAA(s8 *arg0, s16 arg1) {
  * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_SetUnkCE(s8 *arg0, s16 arg1) {
-    M2C_FIELD(arg0, s8 *, 0xCA) = (s8) arg1;
+void Particle_SetByteParam2(Particle* arg0, s16 arg1) {
+    arg0->byteParam2 = arg1;
 }
 
 /**
@@ -3059,8 +3059,8 @@ void Particle_SetUnkCE(s8 *arg0, s16 arg1) {
  * in battle and a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
-void Particle_SetUnkCD(s8 *arg0, s16 arg1) {
-    M2C_FIELD(arg0, s8 *, 0xC9) = (s8) arg1;
+void Particle_SetByteParam0(Particle* arg0, s16 arg1) {
+    arg0->byteParam0 = arg1;
 }
 
 /**
@@ -3068,8 +3068,8 @@ void Particle_SetUnkCD(s8 *arg0, s16 arg1) {
  * Seen in play (2026-11-13) in the 165-move sweep (Pay Day, Double Kick): arg1 = 0xE1 was written
  * to unk_AE, which sits at offset 0xAA.
  */
-void Particle_SetUnkAE(s8 *arg0, s16 arg1) {
-    M2C_FIELD(arg0, s16 *, 0xAA) = arg1;
+void Particle_SetScratchA(Particle* arg0, s16 arg1) {
+    arg0->scratchA = arg1;
 }
 
 M2C_UNK func_82137898(s32, s16, s16);               /* extern */
@@ -3079,8 +3079,8 @@ M2C_UNK func_82137898(s32, s16, s16);               /* extern */
  * Seen in play (2026-11-13) in the 165-move sweep (Pay Day): with target 0 and step 0x40, unk_AE
  * (offset 0xAA) went from 0xE1 to 0xA1.
  */
-void Particle_ApproachUnkAE(s32 arg0, s16 arg1, s16 arg2) {
-    func_82137898(arg0 + 0xAA, arg1, arg2);
+void Particle_ApproachScratchA(Particle* arg0, s16 arg1, s16 arg2) {
+    func_82137898((s32)&arg0->scratchA, arg1, arg2);
 }
 
 /**
@@ -3089,8 +3089,8 @@ void Particle_ApproachUnkAE(s32 arg0, s16 arg1, s16 arg2) {
  * 0x20 it moved unk_AE (offset 0xAA) from 0 to 0x20 and returned 0, so the lifecycle did not
  * advance yet.
  */
-s32 Particle_ApproachUnkAEThenAdvance(Particle* arg0, s16 arg1, s16 arg2) {
-    s32 sp1C = Particle_FieldAE_Approach_0BF60(arg0, arg1, arg2);
+s32 Particle_ApproachScratchAThenAdvance(Particle* arg0, s16 arg1, s16 arg2) {
+    s32 sp1C = Particle_ScratchA_Approach_0BF60(arg0, arg1, arg2);
 
     if (sp1C != 0) {
         Particle_AdvanceLifecycle(arg0);
@@ -3103,8 +3103,8 @@ s32 Particle_ApproachUnkAEThenAdvance(Particle* arg0, s16 arg1, s16 arg2) {
  * Seen in play (2026-11-13) in the 165-move sweep (Bite): arg1 = 2 was written to unk_B0, which
  * sits at offset 0xAC.
  */
-void Particle_SetUnkB0(s8 *arg0, s16 arg1) {
-    M2C_FIELD(arg0, s16 *, 0xAC) = arg1;
+void Particle_SetScratchB(Particle* arg0, s16 arg1) {
+    arg0->scratchB = arg1;
 }
 
 M2C_UNK func_82137898(s32, s16, s16);               /* extern */
@@ -3114,6 +3114,6 @@ M2C_UNK func_82137898(s32, s16, s16);               /* extern */
  * Seen in play (2026-11-13) in the 165-move sweep (Selfdestruct): with target 0 and step 8, unk_B0
  * (offset 0xAC) went from 0x64 to 0x5C.
  */
-void Particle_ApproachUnkB0(s32 arg0, s16 arg1, s16 arg2) {
-    func_82137898(arg0 + 0xAC, arg1, arg2);
+void Particle_ApproachScratchB(Particle* arg0, s16 arg1, s16 arg2) {
+    func_82137898((s32)&arg0->scratchB, arg1, arg2);
 }

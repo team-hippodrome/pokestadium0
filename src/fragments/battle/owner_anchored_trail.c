@@ -9,15 +9,8 @@ extern OwnerLinkedFourStream D_821B5E30[4];
 void OwnerAnchoredFourStream_Update(f32 arg0, Vec3f* arg1, f32 arg2);
 void OwnerAnchoredFourStream_UpdateNodeChain(OwnerAnchoredFourStream* arg0);
 
-typedef struct OwnerLinkedFourStreamZero {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ s16 unk_004;
-    /* 0x006 */ char unk006[0x16];
-    /* 0x01C */ OwnerLinkedFourStreamNode unk_01C[15];
-} OwnerLinkedFourStreamZero; // size = 0x418
 
-extern OwnerLinkedFourStreamZero D_821B6F00[4];
+extern OwnerAnchoredFourStream D_821B6F00[4];
 
 /**
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
@@ -27,37 +20,25 @@ extern OwnerLinkedFourStreamZero D_821B6F00[4];
 void OwnerAnchoredFourStream_Init(void) {
     s32 i;
     s32 j;
-    OwnerLinkedFourStreamZero* var_a2 = &D_821B6F00[0];
-    OwnerLinkedFourStreamNode* var_v0;
+    OwnerAnchoredFourStream* var_a2 = &D_821B6F00[0];
+    FourStreamTrailNode* var_v0;
 
     for (i = 0; i < 4; i++, var_a2++) {
-        var_a2->unk_000 = 0;
-        var_a2->unk_002 = 0;
-        var_a2->unk_004 = 0;
+        var_a2->active = 0;
+        var_a2->frame = 0;
+        var_a2->duration = 0;
 
-        var_v0 = &var_a2->unk_01C[0];
+        var_v0 = &var_a2->nodes[0];
         for (j = 0; j < 15; j++, var_v0++) {
-            var_v0->unk_00 = 0;
-            var_v0->unk_04 = 1.0f;
-            var_v0->unk_08 = 0.0f;
-            var_v0->unk_0C.z = var_v0->unk_0C.y = var_v0->unk_0C.x = 0.0f;
-            var_v0->unk_18.z = var_v0->unk_18.y = var_v0->unk_18.x = 0.0f;
+            var_v0->alpha = 0;
+            var_v0->halfWidth = 1.0f;
+            var_v0->angle = 0.0f;
+            var_v0->position.z = var_v0->position.y = var_v0->position.x = 0.0f;
+            var_v0->velocity.z = var_v0->velocity.y = var_v0->velocity.x = 0.0f;
         }
     }
 }
 
-typedef struct OwnerAnchoredFourStreamZero {
-    /* 0x000 */ s16 unk_000;
-    /* 0x002 */ s16 unk_002;
-    /* 0x004 */ s16 unk_004;
-    /* 0x006 */ s16 unk_006;
-    /* 0x008 */ Color_RGB8 unk_008;
-    /* 0x00C */ f32 unk_00C;
-    /* 0x010 */ f32 unk_010;
-    /* 0x014 */ Vtx* unk_014;
-    /* 0x018 */ Particle* unk_018;
-    /* 0x01C */ OwnerAnchoredFourStreamNode unk_01C[15];
-} OwnerAnchoredFourStreamZero; // size = 0x418
 
 /**
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
@@ -68,8 +49,8 @@ void OwnerAnchoredFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 a
                    f32 argA, f32 argB, f32 argC, s16 argD) {
     s32 i;
     s32 j;
-    OwnerAnchoredFourStreamZero* var_v1;
-    OwnerAnchoredFourStreamNode* var_s0;
+    OwnerAnchoredFourStream* var_v1;
+    FourStreamTrailNode* var_s0;
     Vec3f sp64;
     Vec3f sp58;
 
@@ -80,32 +61,32 @@ void OwnerAnchoredFourStream_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 a
     sp58.y = arg4;
     sp58.z = arg5;
 
-    var_v1 = (OwnerAnchoredFourStreamZero*)&D_821B6F00[0];
+    var_v1 = &D_821B6F00[0];
     for (i = 0; i < 4; i++, var_v1++) {
-        if (var_v1->unk_000 == 0) {
-            var_v1->unk_000 = 1;
-            var_v1->unk_002 = 0;
-            var_v1->unk_004 = argD;
-            var_v1->unk_008.r = arg6;
-            var_v1->unk_008.g = arg7;
-            var_v1->unk_008.b = arg8;
-            var_v1->unk_00C = argC;
-            var_v1->unk_010 = argA;
+        if (var_v1->active == 0) {
+            var_v1->active = 1;
+            var_v1->frame = 0;
+            var_v1->duration = argD;
+            var_v1->color.r = arg6;
+            var_v1->color.g = arg7;
+            var_v1->color.b = arg8;
+            var_v1->maxHalfWidth = argC;
+            var_v1->angleStep = argA;
 
-            var_v1->unk_018 = BattleAnim_SpawnSecondaryOwnerParticle(sp64, 2);
+            var_v1->particle = BattleAnim_SpawnSecondaryOwnerParticle(sp64, 2);
             if (arg3 < 0.0) {
-                var_v1->unk_006 = -1;
+                var_v1->direction = -1;
             } else {
-                var_v1->unk_006 = 1;
+                var_v1->direction = 1;
             }
 
-            var_s0 = &var_v1->unk_01C[0];
+            var_s0 = &var_v1->nodes[0];
             for (j = 0; j < 15; j++, var_s0++) {
-                var_s0->unk_00 = (arg9 * (0xE - j)) / 15;
-                var_s0->unk_04 = argB;
-                var_s0->unk_08 = (RAND(120) * 6.2831855f) / 120.0;
-                var_s0->unk_0C = sp64;
-                var_s0->unk_18 = sp58;
+                var_s0->alpha = (arg9 * (0xE - j)) / 15;
+                var_s0->halfWidth = argB;
+                var_s0->angle = (RAND(120) * 6.2831855f) / 120.0;
+                var_s0->position = sp64;
+                var_s0->velocity = sp58;
             }
             break;
         }
@@ -135,50 +116,50 @@ void OwnerAnchoredFourStream_Update(f32 arg0, Vec3f* arg1, f32 arg2) {
  */
 void OwnerAnchoredFourStream_UpdateNodeChain(OwnerAnchoredFourStream* arg0) {
     s32 i;
-    OwnerAnchoredFourStreamNode* var_s0 = &arg0->unk_01C[0];
+    FourStreamTrailNode* var_s0 = &arg0->nodes[0];
 
     for (i = 0; i < 15; i++, var_s0++) {
         if (i == 0) {
-            var_s0->unk_24 = var_s0->unk_04;
-            var_s0->unk_28 = var_s0->unk_08;
+            var_s0->prevHalfWidth = var_s0->halfWidth;
+            var_s0->prevAngle = var_s0->angle;
 
-            var_s0->unk_2C = var_s0->unk_0C;
-            var_s0->unk_38 = var_s0->unk_18;
+            var_s0->prevPosition = var_s0->position;
+            var_s0->prevVelocity = var_s0->velocity;
 
-            var_s0->unk_0C.x += var_s0->unk_18.x;
-            var_s0->unk_0C.y += var_s0->unk_18.y;
-            var_s0->unk_0C.z += var_s0->unk_18.z;
+            var_s0->position.x += var_s0->velocity.x;
+            var_s0->position.y += var_s0->velocity.y;
+            var_s0->position.z += var_s0->velocity.z;
 
-            var_s0->unk_08 += arg0->unk_010;
-            if (arg0->unk_006 > 0) {
-                var_s0->unk_18.x += 0.4;
-                if (var_s0->unk_18.x > 20.0) {
-                    var_s0->unk_18.x = 20.0f;
+            var_s0->angle += arg0->angleStep;
+            if (arg0->direction > 0) {
+                var_s0->velocity.x += 0.4;
+                if (var_s0->velocity.x > 20.0) {
+                    var_s0->velocity.x = 20.0f;
                 }
             } else {
-                var_s0->unk_18.x -= 0.4;
-                if (var_s0->unk_18.x < -20.0) {
-                    var_s0->unk_18.x = -20.0f;
+                var_s0->velocity.x -= 0.4;
+                if (var_s0->velocity.x < -20.0) {
+                    var_s0->velocity.x = -20.0f;
                 }
             }
 
-            BattleAnim_SetParticlePosition(arg0->unk_018, var_s0->unk_0C);
+            BattleAnim_SetParticlePosition(arg0->particle, var_s0->position);
 
-            var_s0->unk_04 += 2.0;
-            if (arg0->unk_00C < var_s0->unk_04) {
-                var_s0->unk_04 = arg0->unk_00C;
+            var_s0->halfWidth += 2.0;
+            if (arg0->maxHalfWidth < var_s0->halfWidth) {
+                var_s0->halfWidth = arg0->maxHalfWidth;
             }
         } else {
-            var_s0->unk_24 = var_s0->unk_04;
-            var_s0->unk_28 = var_s0->unk_08;
+            var_s0->prevHalfWidth = var_s0->halfWidth;
+            var_s0->prevAngle = var_s0->angle;
 
-            var_s0->unk_2C = var_s0->unk_0C;
-            var_s0->unk_38 = var_s0->unk_18;
+            var_s0->prevPosition = var_s0->position;
+            var_s0->prevVelocity = var_s0->velocity;
 
-            var_s0->unk_0C = var_s0[-1].unk_2C;
-            var_s0->unk_08 = var_s0[-1].unk_28;
-            var_s0->unk_18 = var_s0[-1].unk_38;
-            var_s0->unk_04 = var_s0[-1].unk_24;
+            var_s0->position = var_s0[-1].prevPosition;
+            var_s0->angle = var_s0[-1].prevAngle;
+            var_s0->velocity = var_s0[-1].prevVelocity;
+            var_s0->halfWidth = var_s0[-1].prevHalfWidth;
         }
     }
 }
@@ -228,8 +209,8 @@ Gfx* OwnerAnchoredFourStream_Draw(Gfx* arg0) {
     s32 i;
     s32 j;
     s32 k;
-    OwnerAnchoredFourStreamNode* temp_s0;
-    OwnerAnchoredFourStreamZero* var_s5;
+    FourStreamTrailNode* temp_s0;
+    OwnerAnchoredFourStream* var_s5;
     Vtx* var_s0;
     Vec3f sp154;
     UNUSED s32 pad[15]; // FAKE: stack padding
@@ -238,15 +219,15 @@ Gfx* OwnerAnchoredFourStream_Draw(Gfx* arg0) {
     Mtx spC0;
     s16 var_s3;
 
-    var_s5 = (OwnerAnchoredFourStreamZero*)&D_821B6F00[0];
+    var_s5 = &D_821B6F00[0];
     for (i = 0; i < 4; i++, var_s5++) {
-        if (var_s5->unk_000 == 1) {
-            temp_s0 = &var_s5->unk_01C[0];
-            if (temp_s0->unk_0C.y > 0.0f) {
+        if (var_s5->active == 1) {
+            temp_s0 = &var_s5->nodes[0];
+            if (temp_s0->position.y > 0.0f) {
                 temp_v0 = Gfx_AllocDisplayList(sizeof(Mtx) * 1);
-                guTranslate(temp_v0, temp_s0->unk_0C.x, temp_s0->unk_0C.y, temp_s0->unk_0C.z);
-                guRotateRPY(&sp100, (temp_s0->unk_08 * -360.0f * var_s5->unk_006) / 6.2831854820251465,
-                            0x5A - (var_s5->unk_006 * 0x5A), 0.0f);
+                guTranslate(temp_v0, temp_s0->position.x, temp_s0->position.y, temp_s0->position.z);
+                guRotateRPY(&sp100, (temp_s0->angle * -360.0f * var_s5->direction) / 6.2831854820251465,
+                            0x5A - (var_s5->direction * 0x5A), 0.0f);
                 guMtxCatL(&sp100, temp_v0, temp_v0);
                 guScale(&spC0, 0.16f, 0.16f, 0.16f);
                 guMtxCatL(&spC0, temp_v0, temp_v0);
@@ -256,46 +237,46 @@ Gfx* OwnerAnchoredFourStream_Draw(Gfx* arg0) {
                 gSPPopMatrix(arg0++, G_MTX_MODELVIEW);
             }
 
-            var_s5->unk_014 = Gfx_AllocDisplayList(sizeof(Vtx) * 30);
+            var_s5->vtx = Gfx_AllocDisplayList(sizeof(Vtx) * 30);
 
-            var_s0 = var_s5->unk_014;
+            var_s0 = var_s5->vtx;
             for (j = 0; j < 15; j++) {
-                OwnerAnchoredFourStream_Update(temp_s0->unk_08, &sp154, temp_s0->unk_04);
+                OwnerAnchoredFourStream_Update(temp_s0->angle, &sp154, temp_s0->halfWidth);
 
-                var_s3 = temp_s0->unk_0C.y + sp154.y;
+                var_s3 = temp_s0->position.y + sp154.y;
                 if (var_s3 < 0) {
                     var_s3 = 0;
                 }
 
-                var_s0->v.ob[0] = temp_s0->unk_0C.x + sp154.x;
+                var_s0->v.ob[0] = temp_s0->position.x + sp154.x;
                 var_s0->v.ob[1] = var_s3;
-                var_s0->v.ob[2] = temp_s0->unk_0C.z + sp154.z;
-                var_s0->v.cn[0] = var_s5->unk_008.r;
-                var_s0->v.cn[1] = var_s5->unk_008.g;
-                var_s0->v.cn[2] = var_s5->unk_008.b;
-                var_s0->v.cn[3] = temp_s0->unk_00;
+                var_s0->v.ob[2] = temp_s0->position.z + sp154.z;
+                var_s0->v.cn[0] = var_s5->color.r;
+                var_s0->v.cn[1] = var_s5->color.g;
+                var_s0->v.cn[2] = var_s5->color.b;
+                var_s0->v.cn[3] = temp_s0->alpha;
                 var_s0++;
 
-                OwnerAnchoredFourStream_Update(temp_s0->unk_08 + 3.1415927f, &sp154, temp_s0->unk_04);
+                OwnerAnchoredFourStream_Update(temp_s0->angle + 3.1415927f, &sp154, temp_s0->halfWidth);
 
-                var_s3 = temp_s0->unk_0C.y + sp154.y;
+                var_s3 = temp_s0->position.y + sp154.y;
                 if (var_s3 < 0) {
                     var_s3 = 0;
                 }
 
-                var_s0->v.ob[0] = temp_s0->unk_0C.x + sp154.x;
+                var_s0->v.ob[0] = temp_s0->position.x + sp154.x;
                 var_s0->v.ob[1] = var_s3;
-                var_s0->v.ob[2] = temp_s0->unk_0C.z + sp154.z;
-                var_s0->v.cn[0] = var_s5->unk_008.r;
-                var_s0->v.cn[1] = var_s5->unk_008.g;
-                var_s0->v.cn[2] = var_s5->unk_008.b;
-                var_s0->v.cn[3] = temp_s0->unk_00;
+                var_s0->v.ob[2] = temp_s0->position.z + sp154.z;
+                var_s0->v.cn[0] = var_s5->color.r;
+                var_s0->v.cn[1] = var_s5->color.g;
+                var_s0->v.cn[2] = var_s5->color.b;
+                var_s0->v.cn[3] = temp_s0->alpha;
                 var_s0++;
 
                 temp_s0++;
             }
 
-            var_s0 = var_s5->unk_014;
+            var_s0 = var_s5->vtx;
 
             gSPDisplayList(arg0++, D_82193270);
 

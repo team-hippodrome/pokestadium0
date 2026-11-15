@@ -43,8 +43,8 @@ typedef struct unk_func_888044BC_038_02C_000 {
 
 typedef struct unk_func_888044BC_038_02C {
     /* 0x00 */ unk_func_888044BC_038_02C_000 unk_00;
-    /* 0x70 */ unk_func_88205880_A030 unk_70;
-    /* 0x7C */ unk_func_88205880_A030 unk_7C;
+    /* 0x70 */ PointerList unk_70;
+    /* 0x7C */ PointerList unk_7C;
     /* 0x88 */ s32 unk_88;
     /* 0x8C */ s32 unk_8C;
 } unk_func_888044BC_038_02C; // size = 0x90
@@ -58,7 +58,7 @@ typedef struct unk_func_888044BC_03C_02C {
     /* 0x00 */ WidgetNode unk_00;
     /* 0x2C */ s32 unk_2C;
     /* 0x30 */ char unk_30[8];
-    /* 0x38 */ unk_func_88200FA0_030_038* unk_38;
+    /* 0x38 */ PointerList* unk_38;
     /* 0x3C */ s32 unk_3C;
     /* 0x40 */ s32 unk_40;
     /* 0x44 */ s32 unk_44;
@@ -74,7 +74,7 @@ typedef struct unk_func_888044BC_040 {
     /* 0x2C */ char unk2C[0x4];
     /* 0x30 */ unk_func_888044BC_040_030* unk_30;
     /* 0x34 */ unk_func_88200FA0_030_030* unk_34;
-    /* 0x38 */ unk_func_88200FA0_030_038 unk_38;
+    /* 0x38 */ PointerList unk_38;
 } unk_func_888044BC_040; // size = 0x44
 
 typedef struct unk_func_888044BC_044_02C {
@@ -103,6 +103,34 @@ typedef struct unk_D_80064C60 {
     /* 0x00 */ char* unk_00;
     /* 0x04 */ char unk04[0x18];
 } unk_D_80064C60; // size = 0x1C
+
+/* The ずかんもくじ (index) list window: 151 rows of number, name and caught icon, and the アイウエオじゅん /
+ * ばんごうじゅん (kana / number order) bar (Pokedex_InitListWindow, Pokedex_DrawSortOrderMenu). */
+typedef struct PokedexListWindow {
+    /* 0x000 */ Window window; // the ずかんもくじ window, 272x366 at (54, 85)
+    /* 0x02C */ ScrollList list; // rows drawn by Pokedex_DrawListRow; D-Down moved list.cursor 0 -> 1, D-Right paged it to 9
+    /* 0x070 */ ByteMatrix entries; // rows = the 0x1C-byte entries of D_80064C5C: capacity and count 151, rowSize 28
+    /* 0x080 */ u16 itemFlags[0x97]; // @unverified: itemFlags of list
+    /* 0x1AE */ char pad1AE[0x2];
+    /* 0x1B0 */ s32 sortByKana; // C-Right (button bit 1, not A) toggles it (Pokedex_UpdateListCursor): 1 showed アイウエオじゅん with 023, 024, 119, 133 first; 0 ばんごうじゅん
+} PokedexListWindow; // size = 0x1B4
+
+/* The データをみる / なきごえ / ぶんぷをみる / やめる (data, cry, area, quit) menu window (Pokedex_InitSortMenuWindow). */
+typedef struct PokedexMenuWindow {
+    /* 0x00 */ Window window; // 180x168 at (390, 262)
+    /* 0x2C */ Menu menu; // rows drawn by Pokedex_DrawMenuRow: データをみる, なきごえ, ぶんぷをみる, やめる; D-Down moved menu.cursor to 1
+    /* 0x50 */ u16 itemFlags[4]; // @unverified: itemFlags of menu; bit 0 = disabled (func_8A1013C0)
+    /* 0x58 */ PointerList items; // func_80027804 over the 4 strings D_8A1057E8 (count 4)
+} PokedexMenuWindow; // size = 0x64
+
+/* The ずかんもくじ screen, D_8A12FFC0 (Pokedex_InitIndexWindows). The code also reaches the windows through
+ * their own symbols D_8A130174, D_8A1301A0 and D_8A130204. */
+typedef struct PokedexIndexScreen {
+    /* 0x000 */ PokedexListWindow listWindow; // the ずかんもくじ list
+    /* 0x1B4 */ Window countsWindow; // みつけたかず / つかまえたかず / もっているかず (Pokedex_DrawCounts), 248x104 at (342, 114)
+    /* 0x1E0 */ PokedexMenuWindow menuWindow; // the データをみる / なきごえ / ぶんぷをみる / やめる menu
+    /* 0x244 */ Window entryWindow; // the データをみる page (Pokedex_InitEntryWindow), also reached as D_8A130204: 552x348 at (44, 84) with ヒトカゲ's entry
+} PokedexIndexScreen; // size = 0x270
 
 #include "controller.h"
 

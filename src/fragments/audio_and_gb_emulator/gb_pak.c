@@ -243,38 +243,7 @@ s32 GbPak_SelectRamBank(unk_D_8122B2C0* arg0, s32 arg1) {
     return var_v1;
 }
 
-typedef struct GbpakChannel811023DC {
-    /* 0x00 */ char unk00[0x4E];
-    /* 0x4E */ u8 checksum[2];
-    /* 0x50 */ OSPfs* pfs;
-    /* 0x54 */ u8* buf;
-    /* 0x58 */ u8* romBuf;
-    /* 0x5C */ u8* sramBuf;
-    /* 0x60 */ volatile u8* bankState;
-    /* 0x64 */ volatile u8* sramState;
-    /* 0x68 */ u8* bankList;
-    /* 0x6C */ u8* bankEntry;
-    /* 0x70 */ u8* ramBuf;
-    /* 0x74 */ u8* blockState;
-    /* 0x78 */ u8* verifyBuf;
-    /* 0x7C */ u8* blockDirty;
-    /* 0x80 */ s32 size;
-    /* 0x84 */ s32 sum;
-    /* 0x88 */ char unk88[0x4];
-    /* 0x8C */ s32 addr;
-    /* 0x90 */ u32 ramSize;
-    /* 0x94 */ s32 sramAddr;
-    /* 0x98 */ u8 unk98;
-    /* 0x99 */ volatile u8 request;
-    /* 0x9A */ volatile u8 error;
-    /* 0x9B */ u8 status;
-    /* 0x9C */ u8 channel;
-    /* 0x9D */ char unk9D[0x4];
-    /* 0xA1 */ u8 unkA1;
-    /* 0xA2 */ u8 unkA2;
-    /* 0xA3 */ char unkA3[0x1];
-} GbpakChannel811023DC; // size = 0xA4
-extern GbpakChannel811023DC D_811561C8[4];
+extern GbPakChannel D_811561C8[4];
 /**
  * Reads the Transfer Pak status; returns 0 only when bit 7 is set and bit 6 is clear.
  * Seen in play (2026-11-12): polled every fourth frame (request 8) while Green runs; the emulated
@@ -417,7 +386,7 @@ s32 func_8004CFB0(OSMesgQueue*, s32, s32);
  * powers the pak off (request 4) and sets D_81156476 to 2. Seen in play: streamed all 32 banks of
  * Green, after which bankState was all zero.
  */
-void GbPak_QueueNextBankLoad(GbpakChannel811023DC* ch) {
+void GbPak_QueueNextBankLoad(GbPakChannel* ch) {
     GbpakBankEntry* entry;
 
     if ((D_81156476 != 0) && (ch->request == 0)) {
@@ -531,8 +500,8 @@ s32 func_8004CFB0(OSMesgQueue*, s32, s32);
  */
 s32 GbPak_WriteBackDirtySramBlock(s32 arg0) {
     s32 chan = arg0;
-    GbpakChannel811023DC* ch;
-    GbpakChannel811023DC* ch2;
+    GbPakChannel* ch;
+    GbPakChannel* ch2;
     u32 i;
 
     if (D_81156475 != 0) {

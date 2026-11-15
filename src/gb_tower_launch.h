@@ -5,7 +5,7 @@
 #include "global.h"
 
 // gb_tower_launch.c
-void GbTower_Start(UnkInputStruct8000D738* arg0);
-void GbTower_Stop(UnkInputStruct8000D738* arg0);
+void GbTower_Start(GbTowerLaunchParams* arg0);
+void GbTower_Stop(GbTowerLaunchParams* arg0);
 
 #endif // GB_TOWER_LAUNCH_H

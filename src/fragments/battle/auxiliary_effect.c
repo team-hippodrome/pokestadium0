@@ -29,7 +29,7 @@ void AuxiliaryEffect_Init(void) {
     s32 i;
 
     for (i = 0; i < 2; i++) {
-        D_821CEEA0[i].unk_000 = 0;
+        D_821CEEA0[i].inUse = 0;
     }
 }
 
@@ -46,17 +46,17 @@ s16 AuxiliaryEffect_Alloc(void) {
     s32 j;
 
     for (i = 0, var_a0 = &D_821CEEA0[0]; i < 2; i++, var_a0++) {
-        if (var_a0->unk_000 == 0) {
-            var_v1 = &var_a0->unk_004[0];
+        if (var_a0->inUse == 0) {
+            var_v1 = &var_a0->nodes[0];
             for (j = 0; j < 20; j++, var_v1++) {
-                var_v1->unk_00 = 0;
-                var_v1->unk_04 = 0;
-                var_v1->unk_08 = 1.0f;
-                var_v1->unk_0C.x = 0.0f;
-                var_v1->unk_0C.y = 0.0f;
-                var_v1->unk_0C.z = 0.0f;
+                var_v1->active = 0;
+                var_v1->frame = 0;
+                var_v1->scale = 1.0f;
+                var_v1->position.x = 0.0f;
+                var_v1->position.y = 0.0f;
+                var_v1->position.z = 0.0f;
             }
-            var_a0->unk_000 = 1;
+            var_a0->inUse = 1;
             return i;
         }
     }
@@ -74,17 +74,17 @@ void AuxiliaryEffect_Spawn(s16 arg0, f32 arg1, f32 arg2, f32 arg3, s16 arg4, f32
     AuxiliaryEffect* temp_v0 = &D_821CEEA0[arg0];
     AuxiliaryEffectNode* var_v1;
 
-    if (temp_v0->unk_000 != 0) {
-        var_v1 = &temp_v0->unk_004[0];
+    if (temp_v0->inUse != 0) {
+        var_v1 = &temp_v0->nodes[0];
         for (i = 0; i < 20; i++, var_v1++) {
-            if (var_v1->unk_00 == 0) {
-                var_v1->unk_00 = 1;
-                var_v1->unk_04 = 0;
-                var_v1->unk_06 = arg4;
-                var_v1->unk_08 = arg5;
-                var_v1->unk_0C.x = arg1;
-                var_v1->unk_0C.y = arg2;
-                var_v1->unk_0C.z = arg3;
+            if (var_v1->active == 0) {
+                var_v1->active = 1;
+                var_v1->frame = 0;
+                var_v1->duration = arg4;
+                var_v1->scale = arg5;
+                var_v1->position.x = arg1;
+                var_v1->position.y = arg2;
+                var_v1->position.z = arg3;
                 return;
             }
         }
@@ -101,15 +101,15 @@ void AuxiliaryEffect_Update(s16 arg0) {
     AuxiliaryEffectNode* var_v1;
     s32 i;
 
-    if (temp_v0->unk_000 != 0) {
-        var_v1 = &temp_v0->unk_004[0];
+    if (temp_v0->inUse != 0) {
+        var_v1 = &temp_v0->nodes[0];
         for (i = 0; i < 20; i++, var_v1++) {
-            if (var_v1->unk_00 == 1) {
-                var_v1->unk_04++;
-                if (var_v1->unk_06 < var_v1->unk_04) {
-                    var_v1->unk_00 = 0;
+            if (var_v1->active == 1) {
+                var_v1->frame++;
+                if (var_v1->duration < var_v1->frame) {
+                    var_v1->active = 0;
                 }
-                var_v1->unk_0C.y -= 0.75f;
+                var_v1->position.y -= 0.75f;
             }
         }
     }
@@ -130,11 +130,11 @@ Gfx* AuxiliaryEffect_DrawOne(Gfx* arg0, AuxiliaryEffectNode* arg1, MtxF* arg2) {
     Mtx sp78;
     Mtx sp38;
 
-    spCC = arg1->unk_0C.x;
-    spC8 = arg1->unk_0C.y;
-    spC4 = arg1->unk_0C.z;
-    spC0 = arg1->unk_08;
-    spC0 *= __sinf((arg1->unk_04 * 3.1415927f) / 10.0f);
+    spCC = arg1->position.x;
+    spC8 = arg1->position.y;
+    spC4 = arg1->position.z;
+    spC0 = arg1->scale;
+    spC0 *= __sinf((arg1->frame * 3.1415927f) / 10.0f);
 
     guScale(&sp38, spC0, spC0, spC0);
     guTranslate(&sp78, spCC, spC8, spC4);
@@ -164,16 +164,16 @@ Gfx* AuxiliaryEffect_Draw(s16 arg0, Gfx* arg1) {
     MtxF sp78;
     MtxF sp38;
 
-    if (temp_s3->unk_000 == 0) {
+    if (temp_s3->inUse == 0) {
         return arg1;
     }
 
     MtxF_ExtractScale(sp78.mf, &D_80060488->view.floatMatrix);
     guMtxF2L(sp78.mf, sp38.mf);
 
-    var_s0 = &temp_s3->unk_004;
+    var_s0 = &temp_s3->nodes;
     for (i = 0; i < 20; i++, var_s0++) {
-        if (var_s0->unk_00 == 1) {
+        if (var_s0->active == 1) {
             arg1 = AuxiliaryEffect_DrawOne(arg1, var_s0, &sp38);
         }
     }

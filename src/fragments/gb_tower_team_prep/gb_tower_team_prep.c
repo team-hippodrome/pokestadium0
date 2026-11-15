@@ -8,7 +8,7 @@
 #include "poke_icon.h"
 #include "pokemon_stats.h"
 #include "stage_loader.h"
-extern unk_func_8001A024* D_81300384;
+extern PokeIconRenderer* D_81300384;
 extern BattleMon D_81300388[6];
 extern s32 D_81300370;
 
@@ -44,16 +44,16 @@ s32 func_80023C30(void);
 s32 func_80025100(s8*, s32*);
 
 /** Builds the party selection result of Game Boy Tower team preparation. */
-void GbTower_BuildPartyResult(UnkInputStruct8000D738* arg0) {
+void GbTower_BuildPartyResult(GbTowerLaunchParams* arg0) {
     s32 i;
     s8 tier;
     s32 field;
-    u16(*var_s1)[0x640] = arg0->unk_04[0];
+    u16(*var_s1)[0x640] = arg0->partyIcons[0];
 
     func_80025100(&tier, &field);
     arg0->unk_02 = tier;
     arg0->unk_00 = field;
-    arg0->unk_03 = D_81300370;
+    arg0->partyCount = D_81300370;
 
     for (i = 0; i < D_81300370; i++, var_s1++) {
         _bcopy(PokeIcon_GetImage(D_81300384, i), var_s1, sizeof(var_s1[0]));
@@ -66,7 +66,7 @@ void GbTower_BuildPartyResult(UnkInputStruct8000D738* arg0) {
 
 extern ModelLoadContext* D_81300380;
 /** Runs the Game Boy Tower team preparation screen. */
-s32 GbTower_TeamPrep(s32 arg0, UnkInputStruct8000D738* arg1) {
+s32 GbTower_TeamPrep(s32 arg0, GbTowerLaunchParams* arg1) {
     StageContext* sp24;
 
     main_pool_push_state('PREP');

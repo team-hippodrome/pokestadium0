@@ -5,7 +5,7 @@
 #include "memory_main.h"
 #include "stdarg.h"
 #include "moves.h"
-extern unk_D_843901A0* gBattleMessageQueues;
+extern BattleMessageQueues* gBattleMessageQueues;
 
 
 
@@ -29,7 +29,7 @@ void BattleMenu_DrawCommandMenu(ActivePokemon*, s32, s32, s32);
  * Draws side 0's status box and whichever battle menu its state has open (command, move, confirm, surrender).
  */
 void BattleMenu_DrawSide0Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
-    TeamRoster* sp2C = arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)];
+    TeamRoster* sp2C = arg0->side->teamMember[arg0->thumbnail.shownTeamMemberIndex];
 
     if (arg1->selectedCommandOption == 3) {
         BattleHud_DrawMonStatusBoxPlayer(arg0, arg0->thumbnail.camera->viewport.x - 2, arg0->thumbnail.camera->viewport.y - 0x3A, arg1->actionDelayTimer, 1);
@@ -41,15 +41,15 @@ void BattleMenu_DrawSide0Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
         switch (arg1->selectedCommandOption) {
             case 2:
                 if (arg1->showingCommandOptions == 1) {
-                    if ((arg0->sessionTeams->tagTeamSize == 2) && (arg0->teamRoster->numberOfPokemonBrought == 3)) {
-                        func_8211B484(arg0->sessionTeams->teamMember[0], 0x60, 0xF, arg0->sessionTeams->teamMember[0]->controllerPort);
-                        func_8211B484(arg0->sessionTeams->teamMember[1], 0xC6, 0xF, arg0->sessionTeams->teamMember[1]->controllerPort);
+                    if ((arg0->side->tagTeamSize == 2) && (arg0->teamRoster->numberOfPokemonBrought == 3)) {
+                        func_8211B484(arg0->side->teamMember[0], 0x60, 0xF, arg0->side->teamMember[0]->controllerPort);
+                        func_8211B484(arg0->side->teamMember[1], 0xC6, 0xF, arg0->side->teamMember[1]->controllerPort);
                     } else if (arg0->teamRoster->numberOfPokemonBrought == 3) {
-                        func_8211B484(arg0->sessionTeams->teamMember[0], 0x60, 0xF, sp2C->controllerPort);
+                        func_8211B484(arg0->side->teamMember[0], 0x60, 0xF, sp2C->controllerPort);
                     } else {
                         BattleMenu_DrawSwitchPanel(arg0, 0x60, 0xF, sp2C->controllerPort);
                     }
-                } else if (arg1->unk_2D == 0x10) {
+                } else if (arg1->faintState == 0x10) {
                     BattleMenu_DrawConfirmButton(arg0, 0x60, 0xF, sp2C->controllerPort);
                 } else {
                     BattleMenu_DrawBackConfirmBar(arg0, 0x60, 0xF, sp2C->controllerPort);
@@ -77,7 +77,7 @@ void func_82118738(ActivePokemon*, s16, s16, u16, s32);
  * Draws side 1's status box and whichever battle menu its state has open (command, move, confirm, surrender).
  */
 void BattleMenu_DrawSide1Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
-    TeamRoster* sp2C = arg0->sessionTeams->teamMember[M2C_FIELD(arg0, s32*, 0x9D4)];
+    TeamRoster* sp2C = arg0->side->teamMember[arg0->thumbnail.shownTeamMemberIndex];
 
     if (arg1->selectedCommandOption == 3) {
         func_82118738(arg0, arg0->thumbnail.camera->viewport.x - 0x20, arg0->thumbnail.camera->viewport.y - 2, arg1->actionDelayTimer, 1);
@@ -89,15 +89,15 @@ void BattleMenu_DrawSide1Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
         switch (arg1->selectedCommandOption) {
             case 2:
                 if (arg1->showingCommandOptions == 1) {
-                    if ((arg0->sessionTeams->tagTeamSize == 2) && (arg0->teamRoster->numberOfPokemonBrought == 3)) {
-                        func_8211B484(arg0->sessionTeams->teamMember[0], 0x16, 0x79, arg0->sessionTeams->teamMember[0]->controllerPort);
-                        func_8211B484(arg0->sessionTeams->teamMember[1], 0x7C, 0x79, arg0->sessionTeams->teamMember[1]->controllerPort);
+                    if ((arg0->side->tagTeamSize == 2) && (arg0->teamRoster->numberOfPokemonBrought == 3)) {
+                        func_8211B484(arg0->side->teamMember[0], 0x16, 0x79, arg0->side->teamMember[0]->controllerPort);
+                        func_8211B484(arg0->side->teamMember[1], 0x7C, 0x79, arg0->side->teamMember[1]->controllerPort);
                     } else if (arg0->teamRoster->numberOfPokemonBrought == 3) {
-                        func_8211B484(arg0->sessionTeams->teamMember[0], 0x7C, 0x79, sp2C->controllerPort);
+                        func_8211B484(arg0->side->teamMember[0], 0x7C, 0x79, sp2C->controllerPort);
                     } else {
                         BattleMenu_DrawSwitchPanel(arg0, 0x18, 0x79, sp2C->controllerPort);
                     }
-                } else if (arg1->unk_2D == 0x10) {
+                } else if (arg1->faintState == 0x10) {
                     BattleMenu_DrawConfirmButton(arg0, 0x9A, 0xCE, sp2C->controllerPort);
                 } else {
                     BattleMenu_DrawBackConfirmBar(arg0, 0x62, 0xCE, sp2C->controllerPort);
@@ -126,36 +126,36 @@ void BattleMenu_DrawSide1Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
  * @unverified Name from Stadium 1.
  */
 void Battle_ClearAllMessageQueues(void) {
-    gBattleMessageQueues->unk_088[0] = 0;
-    gBattleMessageQueues->unk_088[1] = 0;
-    gBattleMessageQueues->unk_0C8[0] = 0;
-    gBattleMessageQueues->unk_0C8[1] = 0;
-    gBattleMessageQueues->unk_108[0] = 0;
-    gBattleMessageQueues->unk_108[1] = 0;
-    gBattleMessageQueues->unk_148[0] = 0;
-    gBattleMessageQueues->unk_148[1] = 0;
-    gBattleMessageQueues->unk_188[0] = 0;
-    gBattleMessageQueues->unk_188[1] = 0;
-    gBattleMessageQueues->unk_1C8[0] = 0;
-    gBattleMessageQueues->unk_1C8[1] = 0;
-    gBattleMessageQueues->unk_448[0][0] = 0;
-    gBattleMessageQueues->unk_448[0][1] = 0;
-    gBattleMessageQueues->unk_448[1][0] = 0;
-    gBattleMessageQueues->unk_448[1][1] = 0;
-    gBattleMessageQueues->unk_208[0] = 0;
-    gBattleMessageQueues->unk_208[1] = 0;
-    gBattleMessageQueues->unk_308[0] = 0;
-    gBattleMessageQueues->unk_308[1] = 0;
-    gBattleMessageQueues->unk_2C8[0] = 0;
-    gBattleMessageQueues->unk_2C8[1] = 0;
-    gBattleMessageQueues->unk_348[0] = 0;
-    gBattleMessageQueues->unk_348[1] = 0;
-    gBattleMessageQueues->unk_388[0] = 0;
-    gBattleMessageQueues->unk_388[1] = 0;
-    gBattleMessageQueues->unk_3C8[0] = 0;
-    gBattleMessageQueues->unk_3C8[1] = 0;
-    gBattleMessageQueues->unk_408[0] = 0;
-    gBattleMessageQueues->unk_408[1] = 0;
+    gBattleMessageQueues->messageBuffers[0][0] = 0;
+    gBattleMessageQueues->messageBuffers[0][1] = 0;
+    gBattleMessageQueues->messageBuffers[1][0] = 0;
+    gBattleMessageQueues->messageBuffers[1][1] = 0;
+    gBattleMessageQueues->messageBuffers[2][0] = 0;
+    gBattleMessageQueues->messageBuffers[2][1] = 0;
+    gBattleMessageQueues->messageBuffers[3][0] = 0;
+    gBattleMessageQueues->messageBuffers[3][1] = 0;
+    gBattleMessageQueues->messageBuffers[4][0] = 0;
+    gBattleMessageQueues->messageBuffers[4][1] = 0;
+    gBattleMessageQueues->messageBuffers[5][0] = 0;
+    gBattleMessageQueues->messageBuffers[5][1] = 0;
+    gBattleMessageQueues->messageBuffers[15][0] = 0;
+    gBattleMessageQueues->messageBuffers[15][1] = 0;
+    gBattleMessageQueues->messageBuffers[16][0] = 0;
+    gBattleMessageQueues->messageBuffers[16][1] = 0;
+    gBattleMessageQueues->messageBuffers[6][0] = 0;
+    gBattleMessageQueues->messageBuffers[6][1] = 0;
+    gBattleMessageQueues->messageBuffers[10][0] = 0;
+    gBattleMessageQueues->messageBuffers[10][1] = 0;
+    gBattleMessageQueues->messageBuffers[9][0] = 0;
+    gBattleMessageQueues->messageBuffers[9][1] = 0;
+    gBattleMessageQueues->messageBuffers[11][0] = 0;
+    gBattleMessageQueues->messageBuffers[11][1] = 0;
+    gBattleMessageQueues->messageBuffers[12][0] = 0;
+    gBattleMessageQueues->messageBuffers[12][1] = 0;
+    gBattleMessageQueues->messageBuffers[13][0] = 0;
+    gBattleMessageQueues->messageBuffers[13][1] = 0;
+    gBattleMessageQueues->messageBuffers[14][0] = 0;
+    gBattleMessageQueues->messageBuffers[14][1] = 0;
 }
 
 /**
@@ -164,11 +164,11 @@ void Battle_ClearAllMessageQueues(void) {
  * @unverified Name from Stadium 1.
  */
 void Battle_ClearMessageCursor(void) {
-    gBattleMessageQueues->unk_004 = 0;
-    gBattleMessageQueues->unk_048[0] = 0;
-    gBattleMessageQueues->unk_048[1] = 0;
-    gBattleMessageQueues->unk_008[0] = 0;
-    gBattleMessageQueues->unk_008[1] = 0;
+    gBattleMessageQueues->cursor = 0;
+    gBattleMessageQueues->fullText[0] = 0;
+    gBattleMessageQueues->fullText[1] = 0;
+    gBattleMessageQueues->shownText[0] = 0;
+    gBattleMessageQueues->shownText[1] = 0;
 }
 
 /**
@@ -245,7 +245,6 @@ void func_8211EE8C(void);
 void func_8211EEC0(void*, s8*);
 void func_80042A6C(s32);
 void func_80042FF8(s32);
-extern void* D_8219A520;
 
 /**
  * Shows a message built by BattleMessage_Format in `side`'s trainer color and plays its announcer clip (bit 7 picks the second clip bank), then clears the id.
@@ -257,8 +256,8 @@ void BattleMessage_ShowForSide(s8* arg0, s32 side) {
 
     func_8211EE8C();
     ap = sActivePokemon[side];
-    *(u8*)D_8219A520 = (*(u8***)((u8*)ap + 0x85C))[*(s32*)((u8*)ap + 0x9D4) + 2][1];
-    func_8211EEC0((u8*)D_8219A520 + 0x48, arg0 + 1);
+    gBattleMessageQueues->controllerPort = ap->side->teamMember[ap->thumbnail.shownTeamMemberIndex]->controllerPort;
+    func_8211EEC0(gBattleMessageQueues->fullText, arg0 + 1);
     if (!(arg0[0] & 0x80)) {
         func_80042A6C(arg0[0] & 0x7F);
     } else {
@@ -267,8 +266,6 @@ void BattleMessage_ShowForSide(s8* arg0, s32 side) {
     arg0[0] = 0;
 }
 
-typedef struct Msg8211F0DC { u8 id; s32 pos; s8 out[0x40]; s8 in[0x40]; } Msg8211F0DC;
-#define MSG ((Msg8211F0DC*)D_8219A520)
 void BattleMessage_DrawBox();
 /**
  * Reveals the battle message one character per frame (one byte for ASCII and spaces, two for EUC-
@@ -277,34 +274,33 @@ void BattleMessage_DrawBox();
  */
 void BattleMessage_TickTypewriter(void)
 {
-  s8 c = MSG->in[MSG->pos];
+  s8 c = gBattleMessageQueues->fullText[gBattleMessageQueues->cursor];
   if (c != 0)
   {
     if ((c == 0xA) || (c == 0x20))
     {
-      MSG->out[MSG->pos] = c;
-      MSG->pos++;
+      gBattleMessageQueues->shownText[gBattleMessageQueues->cursor] = c;
+      gBattleMessageQueues->cursor++;
     }
-    c = MSG->in[MSG->pos];
+    c = gBattleMessageQueues->fullText[gBattleMessageQueues->cursor];
     if ((c >= 0x21) && (c < 0x40))
     {
-      MSG->out[MSG->pos] = c;
-      MSG->pos++;
+      gBattleMessageQueues->shownText[gBattleMessageQueues->cursor] = c;
+      gBattleMessageQueues->cursor++;
     }
     else
     {
-      MSG->out[MSG->pos] = c;
-      MSG->out[MSG->pos + 1] = MSG->in[MSG->pos + 1];
-      MSG->pos += 2;
+      gBattleMessageQueues->shownText[gBattleMessageQueues->cursor] = c;
+      gBattleMessageQueues->shownText[gBattleMessageQueues->cursor + 1] = gBattleMessageQueues->fullText[gBattleMessageQueues->cursor + 1];
+      gBattleMessageQueues->cursor += 2;
     }
   }
-  MSG->out[MSG->pos] = 0;
-  if (MSG->in[0] != 0)
+  gBattleMessageQueues->shownText[gBattleMessageQueues->cursor] = 0;
+  if (gBattleMessageQueues->fullText[0] != 0)
   {
-    BattleMessage_DrawBox(MSG->id, 0x29, 0xBB, MSG->out);
+    BattleMessage_DrawBox(gBattleMessageQueues->controllerPort, 0x29, 0xBB, gBattleMessageQueues->shownText);
   }
 }
-#undef MSG
 
 void BattleMessage_TickTypewriter(void);
 /**
@@ -318,8 +314,8 @@ void Battle_DrawCompactStatusBoxesIfVisible(void) {
     ActivePokemon* ptr2 = sActivePokemon[1];
 
     if (sBattleScene.scene->transitionStep == 0) {
-        BattleHud_DrawCompactMonStatusBox(ptr1, 0x15, 0xF, ptr1->sessionTeams->teamMember[M2C_FIELD(ptr1, s32*, 0x9D4)]->controllerPort);
-        BattleHud_DrawCompactMonStatusBox(ptr2, 0xE1, 0xF, ptr2->sessionTeams->teamMember[M2C_FIELD(ptr2, s32*, 0x9D4)]->controllerPort);
+        BattleHud_DrawCompactMonStatusBox(ptr1, 0x15, 0xF, ptr1->side->teamMember[ptr1->thumbnail.shownTeamMemberIndex]->controllerPort);
+        BattleHud_DrawCompactMonStatusBox(ptr2, 0xE1, 0xF, ptr2->side->teamMember[ptr2->thumbnail.shownTeamMemberIndex]->controllerPort);
         BattleMessage_TickTypewriter();
     }
 }
@@ -327,11 +323,11 @@ void Battle_DrawCompactStatusBoxesIfVisible(void) {
 /**
  * Clears the Pokemon's caption state fields (0xA04, 0xA08, 0xA0C, 0xA4C).
  */
-void func_8211F274(s8 *arg0) {
-    M2C_FIELD(arg0, s32 *, 0xA04) = 0;
-    M2C_FIELD(arg0, s32 *, 0xA08) = 0;
-    M2C_FIELD(arg0, s8 *, 0xA4C) = 0;
-    M2C_FIELD(arg0, s8 *, 0xA0C) = 0;
+void func_8211F274(ActivePokemon* arg0) {
+    arg0->captionState.active = 0;
+    arg0->captionState.revealIndex = 0;
+    arg0->captionState.fullText[0] = 0;
+    arg0->captionState.shownText[0] = 0;
 }
 
 /*
@@ -339,7 +335,7 @@ void func_8211F274(s8 *arg0) {
  *
  * Starts a caption for the participant: stores the byte at index 1 of the
  * session entry selected by state.unk_2D_zero (+0x7B9) + 2 (from the table at
- * ActivePokemon +0x85C) into the byte D_8219A520 points to, sets
+ * ActivePokemon +0x85C) into gBattleMessageQueues->controllerPort, sets
  * captionState.unk_00 to 1, and formats the string arg1 into
  * captionState.unk_48 with func_8211EEC0 (Battle_SimpleStringFormat). The
  * function is variadic: the extra arguments are the format's values, which is
@@ -353,9 +349,9 @@ void func_8211F274(s8 *arg0) {
  * @unverified Name from the code.
  */
 void ActivePokemon_ShowCaption(ActivePokemon* arg0, s8* arg1, ...) {
-    *(u8*)D_8219A520 = (*(u8***)((u8*)arg0 + 0x85C))[arg0->state.replacementState + 2][1];
+    gBattleMessageQueues->controllerPort = arg0->side->teamMember[arg0->state.menuTeamMemberIndex]->controllerPort;
     arg0->captionState.active = 1;
-    func_8211EEC0(&arg0->captionState.unk_48, arg1);
+    func_8211EEC0(&arg0->captionState.fullText, arg1);
 }
 
 void BattleHud_DrawCaptionBox(u8, s32, s32, s8*);
@@ -370,29 +366,29 @@ extern ActivePokemon* sSide1ActivePokemon;
  */
 void ActivePokemon_TickCaptionTypewriter(ActivePokemon* arg0) {
     TeamRoster* roster = arg0->teamRoster;
-    s8 c = arg0->captionState.unk_48[arg0->captionState.unk_04];
+    s8 c = arg0->captionState.fullText[arg0->captionState.revealIndex];
 
     if (c != 0) {
         if ((c == 0xA) || (c == 0x20)) {
-            arg0->captionState.unk_08[arg0->captionState.unk_04] = c;
-            arg0->captionState.unk_04++;
-            c = arg0->captionState.unk_48[arg0->captionState.unk_04];
+            arg0->captionState.shownText[arg0->captionState.revealIndex] = c;
+            arg0->captionState.revealIndex++;
+            c = arg0->captionState.fullText[arg0->captionState.revealIndex];
         }
         if ((c > 0x20) && (c < 0x40)) {
-            arg0->captionState.unk_08[arg0->captionState.unk_04] = c;
-            arg0->captionState.unk_04++;
+            arg0->captionState.shownText[arg0->captionState.revealIndex] = c;
+            arg0->captionState.revealIndex++;
         } else {
-            arg0->captionState.unk_08[arg0->captionState.unk_04] = c;
-            arg0->captionState.unk_08[arg0->captionState.unk_04 + 1] = arg0->captionState.unk_48[arg0->captionState.unk_04 + 1];
-            arg0->captionState.unk_04 += 2;
+            arg0->captionState.shownText[arg0->captionState.revealIndex] = c;
+            arg0->captionState.shownText[arg0->captionState.revealIndex + 1] = arg0->captionState.fullText[arg0->captionState.revealIndex + 1];
+            arg0->captionState.revealIndex += 2;
         }
     }
-    arg0->captionState.unk_08[arg0->captionState.unk_04] = 0;
-    if (arg0->captionState.unk_48[0] != 0) {
+    arg0->captionState.shownText[arg0->captionState.revealIndex] = 0;
+    if (arg0->captionState.fullText[0] != 0) {
         if (arg0 == sSide1ActivePokemon) {
-            BattleHud_DrawCaptionBox(roster->controllerPort, 0x5F, 0xE, arg0->captionState.unk_08);
+            BattleHud_DrawCaptionBox(roster->controllerPort, 0x5F, 0xE, arg0->captionState.shownText);
         } else {
-            BattleHud_DrawCaptionBox(roster->controllerPort, 0x17, 0xBB, arg0->captionState.unk_08);
+            BattleHud_DrawCaptionBox(roster->controllerPort, 0x17, 0xBB, arg0->captionState.shownText);
         }
     }
 }
@@ -409,14 +405,12 @@ void func_8211F3E4(void) {
 void func_8211F3EC(void) {
 }
 
-extern void* D_8219A520;
-
 /**
- * Allocates and zeroes the 0x4C8-byte battle message buffer D_8219A520.
+ * Allocates and zeroes the battle message buffers (gBattleMessageQueues).
  */
 void func_8211F3F4(void) {
-    D_8219A520 = main_pool_alloc(0x4C8, 0);
-    bzero(D_8219A520, 0x4C8);
+    gBattleMessageQueues = main_pool_alloc(sizeof(BattleMessageQueues), 0);
+    bzero(gBattleMessageQueues, sizeof(BattleMessageQueues));
 }
 
 /**
@@ -426,8 +420,8 @@ void func_8211F3F4(void) {
  * @unverified Name from Stadium 1.
  */
 void BattleScene_ResetMessageQueue(void) {
-    gBattleMessageQueues->unk_004 = 0;
-    gBattleMessageQueues->unk_008[gBattleMessageQueues->unk_004] = 0;
+    gBattleMessageQueues->cursor = 0;
+    gBattleMessageQueues->shownText[gBattleMessageQueues->cursor] = 0;
     Battle_ClearMessageCursor();
 }
 

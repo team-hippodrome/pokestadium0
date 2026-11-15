@@ -10,12 +10,12 @@
 extern Gfx D_8E824B00[];
 extern Gfx D_8E824BB0[];
 
-void func_8E800020(s32 arg0, s8* arg1) {
+void func_8E800020(s32 arg0, GeoDisplayListNode* arg1) {
     static s32 D_8E825728;
     static s32 D_8E82572C;
 
     if (arg0 == 2) {
-        M2C_FIELD(arg1, Gfx**, 0x18) = Gfx_AllocDisplayList(0x20);
+        arg1->displayList = Gfx_AllocDisplayList(0x20);
         D_8E825728++;
         if (D_8E825728 >= 0x80) {
             D_8E825728 = 0;
@@ -24,9 +24,9 @@ void func_8E800020(s32 arg0, s8* arg1) {
         if (D_8E82572C < 0) {
             D_8E82572C = 0x7F;
         }
-        gSPDisplayList(&M2C_FIELD(arg1, Gfx**, 0x18)[0], D_8E824B00);
-        gDPSetTileSize(&M2C_FIELD(arg1, Gfx**, 0x18)[1], G_TX_RENDERTILE, D_8E825728, 0, (D_8E825728 + 0x1F) << 2, 0x7C);
-        gDPSetTileSize(&M2C_FIELD(arg1, Gfx**, 0x18)[2], 1, D_8E82572C, 0, (D_8E82572C + 0x1F) << 2, 0x7C);
-        gSPBranchList(&M2C_FIELD(arg1, Gfx**, 0x18)[3], D_8E824BB0);
+        gSPDisplayList(&arg1->displayList[0], D_8E824B00);
+        gDPSetTileSize(&arg1->displayList[1], G_TX_RENDERTILE, D_8E825728, 0, (D_8E825728 + 0x1F) << 2, 0x7C);
+        gDPSetTileSize(&arg1->displayList[2], 1, D_8E82572C, 0, (D_8E82572C + 0x1F) << 2, 0x7C);
+        gSPBranchList(&arg1->displayList[3], D_8E824BB0);
     }
 }

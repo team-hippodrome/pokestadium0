@@ -57,9 +57,9 @@ s32 Jpeg_DecodeMcus(JpegDecoder* decoder, u16* mcu_buff, s32 count, u8 is_follow
         sJpegBitStreamBitIdx = state->bitIdx;
         sJpegBitStreamCurWord = state->curWord;
         sJpegBitStreamDontSkip = state->dontSkip;
-        unk0 = state->unk_0C;
-        unk1 = state->unk_0E;
-        unk2 = state->unk_10;
+        unk0 = state->dcPredY;
+        unk1 = state->dcPredU;
+        unk2 = state->dcPredV;
     }
 
     while (count != 0) {
@@ -88,9 +88,9 @@ s32 Jpeg_DecodeMcus(JpegDecoder* decoder, u16* mcu_buff, s32 count, u8 is_follow
     state->bitIdx = sJpegBitStreamBitIdx;
     state->curWord = sJpegBitStreamCurWord;
     state->dontSkip = sJpegBitStreamDontSkip;
-    state->unk_0C = unk0;
-    state->unk_0E = unk1;
-    state->unk_10 = unk2;
+    state->dcPredY = unk0;
+    state->dcPredU = unk1;
+    state->dcPredV = unk2;
     return 0;
 }
 

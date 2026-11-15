@@ -127,7 +127,7 @@ void Model_BuildVertexRuntimeData(StadiumModel* model, MtxF* mtx) {
 
     mvtx = base;
     var_a1 = 0;
-    index_table = Memmap_GetSegmentVaddr(segment->unk_0C);
+    index_table = Memmap_GetSegmentVaddr(segment->neighborSegment);
     for (i = 0; i < segment->vertexCount; i++) {
         mvtx->childIndex = var_a1;
         do {
@@ -166,11 +166,11 @@ void func_800339CC(StadiumModel* model, void* arg1,  void* arg2, void* arg3) {
     arg1 = Memmap_GetSegmentVaddr(arg1);
     temp_s0 = Memmap_GetSegmentVaddr(arg2);
     temp_v0 = Memmap_GetSegmentVaddr(arg3);
-    segment = &model->unkSegment;
+    segment = &model->segment;
     D_800B32C0 = arg1;
     *segment = *temp_v0;
-    model->unk_00 = 1;
-    model->unk_02 = 0;
+    model->isActive = 1;
+    model->transformCount = 0;
     model->modelSegment = segment;
     sp40 = temp_s0->xx;
     sp3C = temp_s0->yx;
@@ -193,9 +193,9 @@ void func_800339CC(StadiumModel* model, void* arg1,  void* arg2, void* arg3) {
     if (sp44 == 0.0f) {
         sp44 = 1.0f;
     }
-    model->position.x = sp4C;
-    model->position.y = sp48;
-    model->position.z = sp44;
+    model->scale.x = sp4C;
+    model->scale.y = sp48;
+    model->scale.z = sp44;
     guScale(&D_800B35C8, 0.1f, 0.1f, 0.1f);
     Model_BuildVertexRuntimeData(model, temp_s0);
     func_80035694(model);
@@ -229,7 +229,7 @@ void func_80033BE4(StadiumModel* model, s16 maxDist, f32 radius, f32 ax, f32 ay,
     s32 i;
 
     segment = (ModelSegment*) Memmap_GetSegmentVaddr(model->modelSegment);
-    index = model->unk_02++;
+    index = model->transformCount++;
 
     vx = bx - ax;
     len = sqrtf((vx * vx) + ((by - ay) * (by - ay)) + ((bz - az) * (bz - az)));
@@ -327,7 +327,7 @@ void func_800340F4(StadiumModel* model) {
         temp_v1 = index_table[i];
         if (temp_v1 == i) {
             var_fv0 = 10000.0f;
-            for (j = 0; j < model->unk_02; j++) {
+            for (j = 0; j < model->transformCount; j++) {
                 var_a0 = &var_a2->cmd.weights[j];
                 if (var_a0->dist < var_fv0) {
                     var_fv0 = var_a0->dist;
@@ -519,7 +519,7 @@ void Model_ApplyVertexTransforms(StadiumModel* model) {
 
     segment = Memmap_GetSegmentVaddr(model->modelSegment);
     mvtx = &model->mvtx;
-    count = model->unk_02;
+    count = model->transformCount;
 
     for (i = 0; i < count; i++) {
         func_800346C4(segment, &model->transforms[i], i, mvtx);

@@ -26,7 +26,6 @@ void func_82122628(s32, Vec3f, s32, s32, f32, f32);
 extern f32 D_FLT_821960A8;
 void func_82122A7C(CameraNode*, ActivePokemon*);
 void func_8212188C(void);
-extern s8 *D_8219A5A0;
 extern u8* D_800603C0;
 
 void func_82120A34(CameraNode*);

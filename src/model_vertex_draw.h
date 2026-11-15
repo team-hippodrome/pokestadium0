@@ -78,7 +78,7 @@ typedef struct ModelSegment {
     /* 0x04 */ u16 vertexCount;
     /* 0x06 */ u16 triangleCount;
     /* 0x08 */ u32 indexSegment;
-    /* 0x0C */ u32 unk_0C;
+    /* 0x0C */ u32 neighborSegment; // @unverified: per-vertex index lists ending in -1, walked in Model_BuildVertexRuntimeData
     /* 0x10 */ u32 tableSegment;
     /* 0x14 */ u32 remapSegment;
     /* 0x18 */ u32 vertexSegment;
@@ -86,14 +86,13 @@ typedef struct ModelSegment {
 } ModelSegment; // size = 20
 
 typedef struct StadiumModel {
-    /* 0x00 */  s16 unk_00;
-    /* 0x02 */  s16 unk_02;
+    /* 0x00 */  s16 isActive;       // @unverified: set to 1 in func_800339CC, cleared by ModelRenderer_ClearSlotModels
+    /* 0x02 */  s16 transformCount; // @unverified: used entries of transforms[], func_80033BE4 appends one
     /* 0x04 */  StadiumTransform transforms[5];
     /* 0x130 */ u32 modelSegment;
     /* 0x134 */ s8 pad134[0x4];
-    /* 0x138 */ u32 unkSegment;
-    /* 0x13C */ s8 pad13C[0x1C];
-    /* 0x158 */ Vec3f position;
+    /* 0x138 */ ModelSegment segment; // @unverified: func_800339CC copies the model's segment header here
+    /* 0x158 */ Vec3f scale;          // @unverified: axis lengths of the model matrix (func_800339CC), fed to Model_ComputeScaledDistance
     /* 0x164 */ s8 pad164[0xC];
     /* 0x170 */ ModelVertex mvtx;
 } StadiumModel; // size = 0x204

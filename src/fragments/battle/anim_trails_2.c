@@ -6,10 +6,10 @@
  * for Hyper Beam.
  */
 void BattleAnim_SeedHyperBeamUseSixSlotTrail(void) {
-    static unk_D_843C2C00_024 D_84388240 = {
+    static CombinerCycleArgs D_84388240 = {
         0x00000002, 0x00000001, 0x0000000E, 0x00000001, 0x00000002, 0x00000001, 0x00000003, 0x00000001,
     };
-    static unk_D_843C2C00_024 D_84388260 = {
+    static CombinerCycleArgs D_84388260 = {
         0x00000003, 0x00000005, 0x00000000, 0x00000005, 0x00000000, 0x00000007, 0x00000005, 0x00000007,
     };
 

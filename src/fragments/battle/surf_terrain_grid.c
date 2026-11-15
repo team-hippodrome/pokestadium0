@@ -43,7 +43,7 @@ Gfx* SurfTerrainGrid_Draw(Gfx* arg0) {
         gsSPEndDisplayList(),
     };
 
-    unk_D_843951D0_1010* var_v1;
+    SurfWaterGridPoint* var_v1;
     Vtx* vtx;
     s32 i;
     s32 j;
@@ -62,18 +62,18 @@ Gfx* SurfTerrainGrid_Draw(Gfx* arg0) {
     s32 idx1;
     s32 idx2;
 
-    sWaterHeightMap.unk_000C = Gfx_AllocDisplayList(sizeof(Vtx) * 16 * 16);
-    vtx = sWaterHeightMap.unk_000C;
+    sWaterHeightMap.vtx = Gfx_AllocDisplayList(sizeof(Vtx) * 16 * 16);
+    vtx = sWaterHeightMap.vtx;
     var_v1 = &sWaterHeightMap.grid[0][0];
 
     for (i = 0; i < 16; i++) {
         for (j = 0; j < 16; j++) {
-            vtx->v.ob[0] = var_v1->unk_00;
-            vtx->v.ob[1] = var_v1->unk_04;
-            vtx->v.ob[2] = var_v1->unk_08;
+            vtx->v.ob[0] = var_v1->position.x;
+            vtx->v.ob[1] = var_v1->position.y;
+            vtx->v.ob[2] = var_v1->position.z;
             vtx->v.tc[0] = (i * 0x800) / 3;
             vtx->v.tc[1] = (j * 0x800) / 3;
-            vtx->v.cn[3] = var_v1->unk_10;
+            vtx->v.cn[3] = var_v1->alpha;
             vtx++;
             var_v1++;
         }
@@ -82,11 +82,11 @@ Gfx* SurfTerrainGrid_Draw(Gfx* arg0) {
     gSPDisplayList(arg0++, D_84388F80);
     gDPPipeSync(arg0++);
 
-    if (sWaterHeightMap.unk_0000 < 0xA) {
+    if (sWaterHeightMap.frame < 0xA) {
         var_a2 = 0;
-        var_t0 = (sWaterHeightMap.unk_0000 * 0xFF) / 10;
-    } else if (sWaterHeightMap.unk_0000 < 0x14) {
-        var_a2 = ((sWaterHeightMap.unk_0000 * 0xFF) - 0x9F6) / 10;
+        var_t0 = (sWaterHeightMap.frame * 0xFF) / 10;
+    } else if (sWaterHeightMap.frame < 0x14) {
+        var_a2 = ((sWaterHeightMap.frame * 0xFF) - 0x9F6) / 10;
         var_t0 = 0xFF;
     } else {
         var_a2 = 0xFF;
@@ -105,7 +105,7 @@ Gfx* SurfTerrainGrid_Draw(Gfx* arg0) {
                         G_TX_NOMIRROR | G_TX_WRAP, G_TX_NOMIRROR | G_TX_WRAP, 5, 5, 1, 1);
     gDPSetTileSize(arg0++, 1, D_821A1B22, D_821A1B22, D_821A1B22 + 0x1F, D_821A1B22 + 0x1F);
 
-    vtx = sWaterHeightMap.unk_000C;
+    vtx = sWaterHeightMap.vtx;
     for (i = 0; i < 15; i++) {
         for (j = 0; j < 15; j++) {
             idx1 = (i + 0) * 16 + j;
@@ -118,28 +118,28 @@ Gfx* SurfTerrainGrid_Draw(Gfx* arg0) {
         }
     }
 
-    sp12C = (D_821A1B28.unk_00 - D_821A1B28.unk_0C) + D_821A1B28.unk_18;
-    sp130 = (D_821A1B28.unk_04 - D_821A1B28.unk_10) + D_821A1B28.unk_1C;
-    sp134 = (D_821A1B28.unk_08 - D_821A1B28.unk_14) + D_821A1B28.unk_20;
+    sp12C = (D_821A1B28.center.x - D_821A1B28.halfRight.x) + D_821A1B28.halfUp.x;
+    sp130 = (D_821A1B28.center.y - D_821A1B28.halfRight.y) + D_821A1B28.halfUp.y;
+    sp134 = (D_821A1B28.center.z - D_821A1B28.halfRight.z) + D_821A1B28.halfUp.z;
     sp11C = SurfTerrainGrid_SampleHeightAndSlope(sp12C, sp134, &sp110);
 
-    sp120 = D_821A1B28.unk_00 + D_821A1B28.unk_0C + D_821A1B28.unk_18;
-    sp124 = D_821A1B28.unk_04 + D_821A1B28.unk_10 + D_821A1B28.unk_1C;
-    sp128 = D_821A1B28.unk_08 + D_821A1B28.unk_14 + D_821A1B28.unk_20;
+    sp120 = D_821A1B28.center.x + D_821A1B28.halfRight.x + D_821A1B28.halfUp.x;
+    sp124 = D_821A1B28.center.y + D_821A1B28.halfRight.y + D_821A1B28.halfUp.y;
+    sp128 = D_821A1B28.center.z + D_821A1B28.halfRight.z + D_821A1B28.halfUp.z;
     temp_fv0 = SurfTerrainGrid_SampleHeightAndSlope(sp120, sp128, &sp110);
 
     if ((sp130 < sp11C) || (sp124 < temp_fv0)) {
         temp_v0 = Gfx_AllocDisplayList(sizeof(Vtx) * 4);
 
-        temp_v0[0].v.ob[0] = (D_821A1B28.unk_00 - D_821A1B28.unk_0C) - D_821A1B28.unk_18;
+        temp_v0[0].v.ob[0] = (D_821A1B28.center.x - D_821A1B28.halfRight.x) - D_821A1B28.halfUp.x;
         temp_v0[0].v.ob[1] = sp11C;
-        temp_v0[0].v.ob[2] = (D_821A1B28.unk_08 - D_821A1B28.unk_14) - D_821A1B28.unk_20;
+        temp_v0[0].v.ob[2] = (D_821A1B28.center.z - D_821A1B28.halfRight.z) - D_821A1B28.halfUp.z;
         temp_v0[0].v.tc[0] = 0;
         temp_v0[0].v.tc[1] = 0;
 
-        temp_v0[1].v.ob[0] = (D_821A1B28.unk_00 + D_821A1B28.unk_0C) - D_821A1B28.unk_18;
+        temp_v0[1].v.ob[0] = (D_821A1B28.center.x + D_821A1B28.halfRight.x) - D_821A1B28.halfUp.x;
         temp_v0[1].v.ob[1] = sp11C;
-        temp_v0[1].v.ob[2] = (D_821A1B28.unk_08 + D_821A1B28.unk_14) - D_821A1B28.unk_20;
+        temp_v0[1].v.ob[2] = (D_821A1B28.center.z + D_821A1B28.halfRight.z) - D_821A1B28.halfUp.z;
         temp_v0[1].v.tc[0] = 0x3E0;
         temp_v0[1].v.tc[1] = 0;
 

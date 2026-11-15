@@ -35,7 +35,6 @@ f32 func_82121750(ActivePokemon*, f32, f32);
 void func_82122A7C(CameraNode*, ActivePokemon*);
 s32 func_82135734(CameraNode*, ActivePokemon*);
 void func_8212188C(void);
-extern s8 *D_8219A5A0;
 extern u8* D_800603C0;
 void Audio_FadeCategoriesAndStreams(s32 arg0);
 

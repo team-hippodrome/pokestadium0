@@ -8,7 +8,6 @@ extern ParticleMatrixPool* gParticleMatrixPool;
 extern s32 gParticleMatrixPoolIndex;
 extern s32 gParticleMatrixPoolIndex;
 extern ParticleRenderContext gParticleRenderContext;
-extern ParticleCameraState* gParticleCameraState;
 extern u32 gParticleFrameCounter;
 extern s32 gParticleFrameMod64;
 extern s32 gParticleFrameMod32;
@@ -35,7 +34,6 @@ extern s32 gParticleRandomOffset;
 extern s32 pad_D_8140E714[2];
 extern Particle* gParticlePool;
 extern BattleAnimEffectSlot* gBattleAnimEffectSlots;
-extern ParticleEmitter* gMiniFxEmitters;
 extern s32 gParticlePoolIndex;
 extern s32 gBattleAnimEffectSlotIndex;
 extern s32 gMiniFxEmitterIndex;
@@ -1180,9 +1178,9 @@ void ParticleGfx_NoopStub1(void) {
  */
 void ParticleGfx_PushMatrix(MtxF* arg0) {
     if (gParticleMatrixPoolIndex < 0x16C) {
-        MtxF_ToFixed(&gParticleMatrixPool->unk_0000[gParticleMatrixPoolIndex], arg0);
+        MtxF_ToFixed(&gParticleMatrixPool->matrices[gParticleMatrixPoolIndex], arg0);
 
-        gSPMatrix(gDisplayListHead++, (u32)&gParticleMatrixPool->unk_0000[gParticleMatrixPoolIndex] & 0x1FFFFFFF,
+        gSPMatrix(gDisplayListHead++, (u32)&gParticleMatrixPool->matrices[gParticleMatrixPoolIndex] & 0x1FFFFFFF,
                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
 
         gParticleMatrixPoolIndex++;

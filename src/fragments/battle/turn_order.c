@@ -47,7 +47,6 @@ void ComputePokemonStat(s32 arg0, BattleMon* arg1);
 void func_8210F4E0(void) {
 }
 
-extern s32 D_8219A520;
 s32 BattleMessage_Format(s32, s32, s32, ...);
 s32 ActivePokemon_GetNickname(ActivePokemon*);
 extern s32 D_8218C788;
@@ -69,19 +68,19 @@ void ShowDamageMessage(s32 attacker, s32 defender) {
     s32 pct;
 
     if (runtime->hp == 0) {
-        BattleMessage_Format(D_8219A520 + 0x88, 0x21, D_8218C788, ActivePokemon_GetNickname(*atk));
+        BattleMessage_Format((s32)gBattleMessageQueues->messageBuffers[0], 0x21, D_8218C788, ActivePokemon_GetNickname(*atk));
         return;
     }
-    state->unk_28 = runtime->hp;
+    state->foeHpBeforeMove = runtime->hp;
     pct = (runtime->hp * 0x19) / (runtime->maxHp >> 2);
     if (pct >= 0x46) {
-        BattleMessage_Format(D_8219A520 + 0x88, 0x21, D_8218C788, ActivePokemon_GetNickname(*atk));
+        BattleMessage_Format((s32)gBattleMessageQueues->messageBuffers[0], 0x21, D_8218C788, ActivePokemon_GetNickname(*atk));
     } else if (pct >= 0x28) {
-        BattleMessage_Format(D_8219A520 + 0x88, 0x22, D_8218C78C, ActivePokemon_GetNickname(*atk));
+        BattleMessage_Format((s32)gBattleMessageQueues->messageBuffers[0], 0x22, D_8218C78C, ActivePokemon_GetNickname(*atk));
     } else if (pct >= 0xA) {
-        BattleMessage_Format(D_8219A520 + 0x88, 0x23, D_8218C790, ActivePokemon_GetNickname(*atk));
+        BattleMessage_Format((s32)gBattleMessageQueues->messageBuffers[0], 0x23, D_8218C790, ActivePokemon_GetNickname(*atk));
     } else {
-        BattleMessage_Format(D_8219A520 + 0x88, 0x24, D_8218C794, ActivePokemon_GetNickname(*atk));
+        BattleMessage_Format((s32)gBattleMessageQueues->messageBuffers[0], 0x24, D_8218C794, ActivePokemon_GetNickname(*atk));
     }
 }
 
@@ -114,7 +113,6 @@ void Battle_ResetTransientRuntimeState(s32 arg0, s32 arg1) {
 }
 
 s32 BattleMessage_Format(s32, s32, s32, ...);
-extern s32 D_8219A520;
 extern s32 D_8218C798;
 extern s32 D_8218C79C;
 extern s32 D_8218C7A0;
@@ -136,23 +134,23 @@ void Battle_FormatDamageComment(ActivePokemon* active_pokemon) {
     s32 var_v0;
 
     if (active_pokemon == sActivePokemon[0]) {
-        var_v0 = ((sp1C->unk_28 - temp_a2->hp) * 0x19) / (temp_a2->maxHp >> 2);
+        var_v0 = ((sp1C->foeHpBeforeMove - temp_a2->hp) * 0x19) / (temp_a2->maxHp >> 2);
     } else {
-        var_v0 = ((sp18->unk_28 - temp_a1->hp) * 0x19) / (temp_a1->maxHp >> 2);
+        var_v0 = ((sp18->foeHpBeforeMove - temp_a1->hp) * 0x19) / (temp_a1->maxHp >> 2);
     }
 
     if (var_v0 == 0) {
-        BattleMessage_Format(D_8219A520 + 0x1C8, 0x25, D_8218C798);
+        BattleMessage_Format((s32)gBattleMessageQueues->messageBuffers[5], 0x25, D_8218C798);
     } else if (var_v0 < 0x1E) {
-        BattleMessage_Format(D_8219A520 + 0x1C8, 0x26, D_8218C79C);
+        BattleMessage_Format((s32)gBattleMessageQueues->messageBuffers[5], 0x26, D_8218C79C);
     } else if (var_v0 < 0x46) {
-        BattleMessage_Format(D_8219A520 + 0x1C8, 0x27, D_8218C7A0);
+        BattleMessage_Format((s32)gBattleMessageQueues->messageBuffers[5], 0x27, D_8218C7A0);
     } else {
-        BattleMessage_Format(D_8219A520 + 0x1C8, 0x28, D_8218C7A4);
+        BattleMessage_Format((s32)gBattleMessageQueues->messageBuffers[5], 0x28, D_8218C7A4);
     }
 
-    if (active_pokemon->state.unk_2D == 0x10) {
-        BattleMessage_Format(D_8219A520 + 0x1C8, 0, (s32)D_8219544C);
+    if (active_pokemon->state.faintState == 0x10) {
+        BattleMessage_Format((s32)gBattleMessageQueues->messageBuffers[5], 0, (s32)D_8219544C);
     }
 }
 
@@ -276,27 +274,27 @@ void ComputePokemonStat(s32 arg0, BattleMon* arg1) {
     switch (arg0) {
         case 1:
             spA = gSpeciesData[arg1->level].baseHitPoints;
-            spC = arg1->unk_14;
+            spC = arg1->statExp[0];
             break;
 
         case 2:
             spA = gSpeciesData[arg1->level].baseAttack;
-            spC = arg1->unk_16;
+            spC = arg1->statExp[1];
             break;
 
         case 3:
             spA = gSpeciesData[arg1->level].baseDefense;
-            spC = arg1->unk_18;
+            spC = arg1->statExp[2];
             break;
 
         case 4:
             spA = gSpeciesData[arg1->level].baseSpeed;
-            spC = arg1->unk_1A;
+            spC = arg1->statExp[3];
             break;
 
         case 5:
             spA = gSpeciesData[arg1->level].baseSpecial;
-            spC = arg1->unk_1C;
+            spC = arg1->statExp[4];
             break;
     }
 
@@ -306,7 +304,7 @@ void ComputePokemonStat(s32 arg0, BattleMon* arg1) {
         }
     }
 
-    tmp = D_8219A3C8[0].unk_24;
+    tmp = D_8219A3C8[0].dvs;
 
     switch (arg0) {
         case 1:

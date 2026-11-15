@@ -6,6 +6,7 @@
 #include "font.h"
 #include "gb_save.h"
 #include "geo_layout.h"
+#include "game_state.h"
 #include "geo_render.h"
 #include "gfx_buffer.h"
 #include "graphics_textures.h"
@@ -756,7 +757,7 @@ M2C_UNK func_81700588(s32, M2C_UNK);
 M2C_UNK func_8170070C(s32);
 M2C_UNK func_81700630(s32, M2C_UNK);
 extern u8 D_8006B2E5;
-extern s8* D_8170201C;
+extern SessionContext* D_8170201C;
 M2C_UNK func_817015B0(s32 arg0) {
     s32 i;
 
@@ -769,7 +770,7 @@ M2C_UNK func_817015B0(s32 arg0) {
     }
     M2C_FIELD(D_817027A8 + arg0, u8*, 9) = 0x39;
     M2C_FIELD(D_817027A8 + arg0, u8*, 0x20) = D_8006B2E5;
-    func_817014A4(M2C_FIELD(D_8170201C, u8*, 0x1094));
+    func_817014A4(D_8170201C->teamGbPort);
     func_81700630((s32)D_81701B44, 1);
     func_81700E04();
 }
@@ -839,7 +840,7 @@ void PikachuReward_SetupScene(void) {
 extern char** D_83202020;
 extern char** D_8320201C;
 extern unk_D_832027C8 D_832027C8;
-extern s8* D_8170201C;
+extern SessionContext* D_8170201C;
 
 extern u8 D_81000000[];
 extern u8 D_8FC00000[];
@@ -860,10 +861,10 @@ s32 Stadium_BonusPikachuReward(UNUSED s32 arg0, s32 arg1) {
     UNUSED s32 pad; // FAKE: stack padding
     StageContext* sp20;
 
-    D_8170201C = (s8*)arg1;
+    D_8170201C = (SessionContext*)arg1;
     main_pool_push_state('PIKA');
 
-    if ((M2C_FIELD(D_8170201C, u16*, 0x1096) & 0x20) && (func_81700064(M2C_FIELD(D_8170201C, u8*, 0x1094)) != 0)) {
+    if ((D_8170201C->transitionFlags & 0x20) && (func_81700064(D_8170201C->teamGbPort) != 0)) {
         Gfx_InitDisplayListBuffers(0x10000, 0);
         sp20 = StageContext_Allocate(0, 1, 3, 1, 2, 1);
         Font_Init(6, 0);

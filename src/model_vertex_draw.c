@@ -107,7 +107,7 @@ void func_80035694(StadiumModel* model) {
     temp_s3 = Memmap_GetSegmentVaddr(segment->tableSegment);
     sp70 = Memmap_GetSegmentVaddr(sp40->remapSegment);
     temp_fp = Memmap_GetSegmentVaddr(sp40->vertexSegment);
-    sp68 = Memmap_GetSegmentVaddr(sp40->unk_0C);
+    sp68 = Memmap_GetSegmentVaddr(sp40->neighborSegment);
     mvtx = &model->mvtx;
     sp48 = mvtx;
     for (i = 0; i < sp40->vertexCount; i++) {
@@ -189,7 +189,7 @@ void Model_ApplyTransformCommands(ModelSegment* segment, ModelVertex* vertices, 
         }
     
         if ((var_a0 != 0) || (var_a2 != 0)) {
-            temp_fv0 = Model_ComputeScaledDistance(&temp_a3->position.base, &temp_v0_2->position.base, &model->position);
+            temp_fv0 = Model_ComputeScaledDistance(&temp_a3->position.base, &temp_v0_2->position.base, &model->scale);
             Model_ExtrapolateVertexPosition(&temp_a3->position.base, &temp_v0_2->position.base, temp_fs0, temp_fv0, delta_time);
         }
         
@@ -232,7 +232,7 @@ void func_800359C0(ModelSegment* segment, ModelVertex* vertices, StadiumModel* m
             if ((var_a0 != 0) || (var_a2 != 0)) {
                 temp_s0 = &temp_a3->position;
                 temp_s1 = &temp_v0_2->position;
-                func_80035500(temp_s0, temp_s1, temp_fs0, Model_ComputeScaledDistance(&temp_s0->base, &temp_s1->base, &model->position), delta_time);
+                func_80035500(temp_s0, temp_s1, temp_fs0, Model_ComputeScaledDistance(&temp_s0->base, &temp_s1->base, &model->scale), delta_time);
             }
             continue;
         }
@@ -379,9 +379,9 @@ void func_80036064(StadiumModel* model, MtxF* mtx) {
     switch (segment->type) {
     case 3:
         func_800350E8(segment, mtx, mvtx);
-        Model_OffsetVertexHeights(segment, mvtx, model->position.y * -10.0f);
+        Model_OffsetVertexHeights(segment, mvtx, model->scale.y * -10.0f);
         func_800341E8(segment, mvtx);
-        for(var_s0 = 0; var_s0 < model->unk_02; var_s0++) {
+        for(var_s0 = 0; var_s0 < model->transformCount; var_s0++) {
             func_80034A74(segment, &model->transforms[var_s0], var_s0, mvtx);
         }
         func_80035E48(segment, mvtx);
@@ -389,13 +389,13 @@ void func_80036064(StadiumModel* model, MtxF* mtx) {
         break;
     case 4:
         func_800350E8(segment, mtx, mvtx);
-        Model_OffsetVertexHeights(segment, mvtx, model->position.y * -10.0f);
+        Model_OffsetVertexHeights(segment, mvtx, model->scale.y * -10.0f);
         func_800341E8(segment, mvtx);
         func_80035E48(segment, mvtx);
         break;
     case 10:
         func_800350E8(segment, mtx, mvtx);
-        func_80035BA8(segment, mvtx, model->position.y * 160.0f);
+        func_80035BA8(segment, mvtx, model->scale.y * 160.0f);
         func_80035E48(segment, mvtx);
         func_800359C0(segment, mvtx, model, 1.0f);
         break;
@@ -412,7 +412,7 @@ void func_80036064(StadiumModel* model, MtxF* mtx) {
         break;
     case 2:
         func_800350E8(segment, mtx, mvtx);
-        Model_OffsetVertexHeights(segment, mvtx, model->position.y * -10.0f);
+        Model_OffsetVertexHeights(segment, mvtx, model->scale.y * -10.0f);
         func_800341E8(segment, mvtx);
         func_80035E48(segment, mvtx);
         break;

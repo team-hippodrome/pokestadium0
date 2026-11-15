@@ -391,10 +391,10 @@ void BattleAnim_StopOwnerCategoryParticles(u8 category, ActivePokemon* owner);
 void BattleAnim_RegisterAssetTable(arg1_func_80019420* arg0);
 void BattleAnim_ResetAssetTable(void);
 void BattleAnim_BuildResourceListForMove(s16 arg0);
-void BattleAnim_LoadMoveResourceList(BattleSessionTeams* battle_session_teams, s16 move_id);
-void BattleAnim_LoadModeResourceList(BattleSessionTeams* battle_session_teams, s16 mode);
+void BattleAnim_LoadMoveResourceList(BattleSide* battle_session_teams, s16 move_id);
+void BattleAnim_LoadModeResourceList(BattleSide* battle_session_teams, s16 mode);
 void BattleAnim_RegisterAllAssetTables(void);
-void BattleAnim_RegisterAssetTablesForSession(BattleSessionTeams* battle_session_teams);
+void BattleAnim_RegisterAssetTablesForSession(BattleSide* battle_session_teams);
 void BattleAnim_ResetDisplayContexts(void);
 Particle* BattleAnim_GetOwnerContextParticle(DisplayObject* arg0);
 DisplayObject* BattleAnim_AllocOwnerDisplayContext(Particle* arg0);
@@ -678,12 +678,12 @@ void BattleAnim_BuildResourceListForMove(s16 arg0) {
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_LoadMoveResourceList(BattleSessionTeams* battle_session_teams, s16 move_id) {
+void BattleAnim_LoadMoveResourceList(BattleSide* battle_session_teams, s16 move_id) {
     if (move_id != 0xFF) {
         BattleAnim_BuildResourceListForMove(move_id);
-        battle_session_teams->assetIsBusy |= 0x80;
-        battle_session_teams->unk_20 = sBattleAnimResourceList;
-        battle_session_teams->unk_24 = sBattleAnimResourceTablePointers;
+        battle_session_teams->backgroundLoadFlags |= 0x80;
+        battle_session_teams->backgroundFileList = sBattleAnimResourceList;
+        battle_session_teams->background = sBattleAnimResourceTablePointers;
     }
 }
 
@@ -692,7 +692,7 @@ void BattleAnim_LoadMoveResourceList(BattleSessionTeams* battle_session_teams, s
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (2 of the moves).
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_LoadModeResourceList(BattleSessionTeams* battle_session_teams, s16 mode) {
+void BattleAnim_LoadModeResourceList(BattleSide* battle_session_teams, s16 mode) {
     s32 index = 0;
     u8* var_v1 = sD_84386D44[mode][1];
 
@@ -703,9 +703,9 @@ void BattleAnim_LoadModeResourceList(BattleSessionTeams* battle_session_teams, s
     }
 
     sBattleAnimResourceList[index] = -1;
-    battle_session_teams->unk_20 = sBattleAnimResourceList;
-    battle_session_teams->assetIsBusy |= 0x80;
-    battle_session_teams->unk_24 = sBattleAnimResourceTablePointers;
+    battle_session_teams->backgroundFileList = sBattleAnimResourceList;
+    battle_session_teams->backgroundLoadFlags |= 0x80;
+    battle_session_teams->background = sBattleAnimResourceTablePointers;
 }
 
 /**
@@ -732,8 +732,8 @@ void BattleAnim_RegisterAllAssetTables(void) {
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (164 of the moves).
  * @unverified Name from Stadium 1.
  */
-void BattleAnim_RegisterAssetTablesForSession(BattleSessionTeams* battle_session_teams) {
-    battle_session_teams->assetIsBusy &= ~0x10;
+void BattleAnim_RegisterAssetTablesForSession(BattleSide* battle_session_teams) {
+    battle_session_teams->backgroundLoadFlags &= ~0x10;
     BattleAnim_RegisterAllAssetTables();
 }
 

@@ -4,84 +4,38 @@
 #include "m2c_macros.h"
 #include "audio_and_gb_emulator.h"
 
-typedef struct Inst81111C20 {
-    /* 0x00 */ u32 unk00_31 : 2;
-    /* 0x00 */ u32 useScale : 1;
-    /* 0x00 */ u32 unk00_28 : 29;
-    /* 0x04 */ char unk04[0x28 - 0x4];
-    /* 0x28 */ f32 scale;
-    /* 0x2C */ char unk2C[0x30 - 0x2C];
-    /* 0x30 */ f32 volume;
-} Inst81111C20;
-typedef struct Voice81111C20 {
-    /* 0x00 */ u32 active : 1;
-    /* 0x00 */ u32 unk00_30 : 4;
-    /* 0x00 */ u32 fresh : 1;
-    /* 0x00 */ u32 unk00_25 : 26;
-    /* 0x04 */ u8 unk04[2];
-    /* 0x06 */ u8 pan;
-    /* 0x07 */ s8 outPan;
-    /* 0x08 */ char unk08[0x24 - 0x8];
-    /* 0x24 */ f32 pitch;
-    /* 0x28 */ char unk28[0x2C - 0x28];
-    /* 0x2C */ f32 volume;
-    /* 0x30 */ char unk30[0x34 - 0x30];
-    /* 0x34 */ f32 outVolume;
-    /* 0x38 */ f32 outPitch;
-    /* 0x3C */ char unk3C[0x48 - 0x3C];
-    /* 0x48 */ s32 unk48;
-} Voice81111C20;
-typedef struct Chan81111C20 {
-    /* 0x00 */ u32 unk00_31 : 8;
-    /* 0x00 */ u32 pitchDirty : 1;
-    /* 0x00 */ u32 volDirty : 1;
-    /* 0x00 */ u32 panDirty : 1;
-    /* 0x00 */ u32 unk00_20 : 21;
-    /* 0x04 */ char unk04[0xA - 0x4];
-    /* 0x0A */ u8 pan;
-    /* 0x0B */ u8 panScale;
-    /* 0x0C */ char unk0C[0x28 - 0xC];
-    /* 0x28 */ f32 volume;
-    /* 0x2C */ f32 expression;
-    /* 0x30 */ s32 panMix;
-    /* 0x34 */ f32 outVolume;
-    /* 0x38 */ f32 pitch;
-    /* 0x3C */ char unk3C[0x4C - 0x3C];
-    /* 0x4C */ Inst81111C20* inst;
-    /* 0x50 */ Voice81111C20* voices[4];
-} Chan81111C20;
-void func_81111C20(Chan81111C20* arg0, u32 force) {
+void func_81111C20(SequenceChannel* arg0, u32 force) {
     f32 vol;
     s32 i;
-    Voice81111C20* v;
+    SequenceLayer* v;
 
-    if (arg0->volDirty || force) {
-        vol = arg0->expression * arg0->volume * arg0->inst->volume;
-        if (arg0->inst->useScale && (M2C_FIELD(arg0, u8*, 3) & 0x20)) {
-            vol = arg0->inst->scale * vol;
+    if (arg0->changes.s.volume || force) {
+        vol = arg0->volume * arg0->volumeScale * arg0->seqPlayer->appliedFadeVolume;
+        if (arg0->seqPlayer->muted && (M2C_FIELD(arg0, u8*, 3) & 0x20)) {
+            vol = arg0->seqPlayer->muteVolumeScale * vol;
         }
-        arg0->outVolume = vol * vol;
+        arg0->appliedVolume = vol * vol;
     }
-    if (arg0->panDirty) {
-        arg0->panMix = arg0->pan * arg0->panScale;
+    if (arg0->changes.s.pan) {
+        arg0->pan = arg0->newPan * arg0->panChannelWeight;
     }
     for (i = 0; i < 4; i++) {
-        v = arg0->voices[i];
-        if (v != NULL && v->active && v->unk48 != 0) {
-            if (v->fresh) {
-                v->outPitch = v->pitch * arg0->pitch;
-                v->outVolume = v->volume * arg0->outVolume;
-                v->outPan = (arg0->panMix + v->pan * (0x80 - arg0->panScale)) >> 7;
-                v->fresh = 0;
+        v = arg0->layers[i];
+        if (v != NULL && v->enabled && v->note != 0) {
+            if (v->notePropertiesNeedInit) {
+                v->noteFreqScale = v->freqScale * arg0->freqScale;
+                v->noteVelocity = v->velocitySquare2 * arg0->appliedVolume;
+                v->notePan = (arg0->pan + v->pan * (0x80 - arg0->panChannelWeight)) >> 7;
+                v->notePropertiesNeedInit = 0;
             } else {
-                if (arg0->pitchDirty) {
-                    v->outPitch = v->pitch * arg0->pitch;
+                if (arg0->changes.s.freqScale) {
+                    v->noteFreqScale = v->freqScale * arg0->freqScale;
                 }
-                if (arg0->volDirty || force) {
-                    v->outVolume = v->volume * arg0->outVolume;
+                if (arg0->changes.s.volume || force) {
+                    v->noteVelocity = v->velocitySquare2 * arg0->appliedVolume;
                 }
-                if (arg0->panDirty) {
-                    v->outPan = (arg0->panMix + v->pan * (0x80 - arg0->panScale)) >> 7;
+                if (arg0->changes.s.pan) {
+                    v->notePan = (arg0->pan + v->pan * (0x80 - arg0->panChannelWeight)) >> 7;
                 }
             }
         }
@@ -89,52 +43,34 @@ void func_81111C20(Chan81111C20* arg0, u32 force) {
     M2C_FIELD(arg0, u8*, 1) = 0;
 }
 
-typedef struct Voice81111DC8 {
-    /* 0x00 */ u32 active : 1;
-} Voice81111DC8;
-typedef struct Track81111DC8 {
-    /* 0x00 */ u32 unk00_0 : 5;
-    /* 0x00 */ u32 dirty : 1;
-    /* 0x00 */ u32 unk00_6 : 2;
-    /* 0x01 */ u32 state : 8;
-    /* 0x02 */ char unk02[0x12 - 0x2];
-    /* 0x12 */ u16 timer;
-    /* 0x14 */ char unk14[0x1C - 0x14];
-    /* 0x1C */ f32 level;
-    /* 0x20 */ f32 levelStep;
-    /* 0x24 */ char unk24[0x2C - 0x24];
-    /* 0x2C */ f32 scale;
-    /* 0x30 */ f32 out;
-    /* 0x34 */ Voice81111DC8* voices[16];
-} Track81111DC8;
 void func_81111C20();
-void AudioSeq_SequencePlayerDisable(Track81111DC8 *);
-void func_81111DC8(Track81111DC8 *arg0) {
+void AudioSeq_SequencePlayerDisable(SequencePlayer *);
+void func_81111DC8(SequencePlayer *arg0) {
     s32 i;
 
-    if (arg0->timer != 0) {
-        arg0->level += arg0->levelStep;
-        arg0->dirty = 1;
-        if (arg0->level > 1.0f) {
-            arg0->level = 1.0f;
+    if (arg0->fadeTimer != 0) {
+        arg0->fadeVolume += arg0->fadeVelocity;
+        arg0->recalculateVolume = 1;
+        if (arg0->fadeVolume > 1.0f) {
+            arg0->fadeVolume = 1.0f;
         }
-        if (arg0->level < 0.0f) {
-            arg0->level = 0.0f;
+        if (arg0->fadeVolume < 0.0f) {
+            arg0->fadeVolume = 0.0f;
         }
-        if ((--arg0->timer == 0) && (arg0->state == 2)) {
+        if ((--arg0->fadeTimer == 0) && (arg0->state == 2)) {
             AudioSeq_SequencePlayerDisable(arg0);
             return;
         }
     }
-    if (arg0->dirty) {
-        arg0->out = arg0->level * arg0->scale;
+    if (arg0->recalculateVolume) {
+        arg0->appliedFadeVolume = arg0->fadeVolume * arg0->fadeVolumeScale;
     }
     for (i = 0; i < 16; i++) {
-        if (arg0->voices[i]->active == 1) {
-            func_81111C20(arg0->voices[i], arg0->dirty);
+        if (arg0->channels[i]->enabled == 1) {
+            func_81111C20(arg0->channels[i], arg0->recalculateVolume);
         }
     }
-    arg0->dirty = 0;
+    arg0->recalculateVolume = 0;
 }
 
 extern f32 D_FLT_81136178[];
@@ -154,82 +90,22 @@ f32 func_81111F0C(arg0)
     return ret;
 }
 
-typedef struct {
-    /* 0x00 */ char unk00[0x4];
-    /* 0x04 */ u32 phase;
-    /* 0x08 */ s16* table;
-    /* 0x0C */ char unk0C[0x4];
-    /* 0x10 */ f32 step;
-} PhaseTableCursor;
 
 /*
  * func_81111FE0
  *
- * Advances the cursor's phase by its step (truncated to an integer) and
- * returns the table entry selected by phase bits 10-15 (a 64-entry table of
- * s16), shifted right by 8 so only the entry's upper byte remains
- * (sign-extended).
+ * Advances the vibrato time by its rate (truncated to an integer) and
+ * returns the curve entry selected by time bits 10-15 (a 64-entry table of
+ * s16), shifted right by 8 (sign-extended). Same as OoT's
+ * AudioEffects_GetVibratoPitchChange.
  */
-s16 func_81111FE0(PhaseTableCursor* arg0) {
+s16 func_81111FE0(VibratoState* arg0) {
     s32 index;
 
-    arg0->phase += (s32)arg0->step;
-    index = (arg0->phase >> 10) & 0x3F;
-    return (s16)(arg0->table[index] >> 8);
+    arg0->time += (s32)arg0->rate;
+    index = (arg0->time >> 10) & 0x3F;
+    return (s16)(arg0->curve[index] >> 8);
 }
-
-typedef struct Channel81112278 {
-    /* 0x00 */ char pad00[0x10];
-    /* 0x10 */ u16 vibratoRateStart;
-    /* 0x12 */ u16 vibratoExtentStart;
-    /* 0x14 */ u16 vibratoRateTarget;
-    /* 0x16 */ u16 vibratoExtentTarget;
-    /* 0x18 */ u16 vibratoRateChangeDelay;
-    /* 0x1A */ u16 vibratoExtentChangeDelay;
-    /* 0x1C */ u16 vibratoDelay;
-} Channel81112278;
-
-typedef struct Portamento81112278 {
-    /* 0x00 */ s32 words[4];
-} Portamento81112278; // size = 0x10
-
-typedef struct Layer81112278 {
-    /* 0x00 */ char pad00[0x8];
-    /* 0x08 */ Portamento81112278 portamento;
-    /* 0x18 */ char pad18[0x54 - 0x18];
-    /* 0x54 */ Channel81112278* seqChannel;
-} Layer81112278;
-
-typedef struct PlaybackState81112278 {
-    /* 0x00 */ char pad00[0x14];
-    /* 0x14 */ Layer81112278* parentLayer;
-    /* 0x18 */ char pad18[0x50 - 0x18];
-    /* 0x50 */ Portamento81112278 portamento;
-} PlaybackState81112278;
-
-typedef struct Vibrato81112278 {
-    /* 0x00 */ Channel81112278* seqChannel;
-    /* 0x04 */ u32 time;
-    /* 0x08 */ s16* curve;
-    /* 0x0C */ f32 extent;
-    /* 0x10 */ f32 rate;
-    /* 0x14 */ u8 active;
-    /* 0x16 */ u16 rateChangeTimer;
-    /* 0x18 */ u16 extentChangeTimer;
-    /* 0x1A */ u16 delay;
-} Vibrato81112278;
-
-typedef struct Note81112278 {
-    /* 0x00 */ char pad00[0x30];
-    /* 0x30 */ u8 priority;
-    /* 0x31 */ char pad31[0x38 - 0x31];
-    /* 0x38 */ f32 portamentoFreqScale;
-    /* 0x3C */ f32 vibratoFreqScale;
-    /* 0x40 */ char pad40[0x4];
-    /* 0x44 */ Layer81112278* parentLayer;
-    /* 0x48 */ char pad48[0x90 - 0x48];
-    /* 0x90 */ Vibrato81112278 vibratoState;
-} Note81112278;
 
 /**
  * Returns the frequency scale for a note's vibrato and steps it: counts down
@@ -239,12 +115,12 @@ typedef struct Note81112278 {
  * library.
  */
 f32 func_81112024(vib)
-    Vibrato81112278* vib;
+    VibratoState* vib;
 {
     s32 pitch_change;
     f32 extent;
     f32 result;
-    Channel81112278* seqChannel = vib->seqChannel;
+    SequenceChannel* seqChannel = vib->channel;
 
     if (vib->delay != 0) {
         vib->delay--;
@@ -283,7 +159,7 @@ f32 func_81112024(vib)
         return 1.0f;
     }
 
-    pitch_change = func_81111FE0((PhaseTableCursor*)vib);
+    pitch_change = func_81111FE0(vib);
     extent = (f32)vib->extent / 4096.0f;
 
     result = 1.0f + extent * (D_FLT_81136178[pitch_change] - 1.0f);
@@ -310,21 +186,21 @@ extern s16* D_81135F68;
  * their targets) and copies the layer's portamento into the note. Same
  * structure as note_vibrato_init in the Super Mario 64 audio library.
  */
-void func_81112278(Note81112278* note) {
-    Vibrato81112278* vib;
-    Channel81112278* seqChannel;
-    PlaybackState81112278* seq_player_state = (PlaybackState81112278*)&note->priority;
+void func_81112278(Note* note) {
+    VibratoState* vib;
+    SequenceChannel* seqChannel;
+    NotePlaybackState* seq_player_state = &note->playbackState;
 
-    note->vibratoFreqScale = 1.0f;
-    note->portamentoFreqScale = 1.0f;
-    vib = &note->vibratoState;
+    note->playbackState.vibratoFreqScale = 1.0f;
+    note->playbackState.portamentoFreqScale = 1.0f;
+    vib = &note->playbackState.vibratoState;
 
     vib->active = 1;
     vib->time = 0;
 
     vib->curve = D_81135F68;
-    vib->seqChannel = note->parentLayer->seqChannel;
-    seqChannel = vib->seqChannel;
+    vib->channel = note->playbackState.parentLayer->channel;
+    seqChannel = vib->channel;
 
     if ((vib->extentChangeTimer = seqChannel->vibratoExtentChangeDelay) == 0) {
         vib->extent = (s32)seqChannel->vibratoExtentTarget;
@@ -351,25 +227,6 @@ void func_8111235C(s8 *arg0, s32 arg1, M2C_UNK arg2) {
     M2C_FIELD(arg0, f32 *, 0x14) = 0.0f;
 }
 
-typedef struct EnvelopePoint81112380 {
-    /* 0x0 */ s16 delay;
-    /* 0x2 */ s16 arg;
-} EnvelopePoint81112380;
-
-typedef struct Adsr81112380 {
-    /* 0x00 */ u8 action;
-    /* 0x01 */ u8 state;
-    /* 0x02 */ s16 envIndex;
-    /* 0x04 */ s16 delay;
-    /* 0x08 */ f32 sustain;
-    /* 0x0C */ f32 velocity;
-    /* 0x10 */ f32 fadeOutVel;
-    /* 0x14 */ f32 current;
-    /* 0x18 */ f32 target;
-    /* 0x1C */ char pad1C[4];
-    /* 0x20 */ EnvelopePoint81112380* envelope;
-} Adsr81112380;
-
 extern f32 D_811858DC;
 
 /**
@@ -382,7 +239,7 @@ extern f32 D_811858DC;
  * tables or fragment headers.
  * @unverified Name guessed from the code; comment kept.
  */
-f32 AudioEffects_UpdateAdsr(Adsr81112380* adsr) {
+f32 AudioEffects_UpdateAdsr(AdsrState* adsr) {
     u8 action = adsr->action;
     u8 state = adsr->state;
 

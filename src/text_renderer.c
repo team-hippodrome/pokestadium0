@@ -10,12 +10,11 @@
 extern s32 gShowCPUProfiler;
 extern s32 gShowMEMProfiler;
 extern s32 D_80068C98_Pad[2];
-extern unk_D_80068CA0* D_8005F760;
-extern unk_D_80068CA0* D_8005F764;
+extern QueuedString* D_8005F760;
+extern QueuedString* D_8005F764;
 extern s32 D_8005F768;
 extern s32 D_80068CAC_Pad[1];
 extern u32 D_8005F770[];
-extern unk_D_800A7450 D_800AA170;
 extern StageContext* stage;
 extern char pad_D_800A74A8[0x8];
 extern Gfx* D_800AA1D0;
@@ -89,8 +88,8 @@ void TextRenderer_DrawString(s16 arg0, s16 arg1, s8* arg2, s32 arg3) {
 
 /** Draws and clears the queued strings. */
 void TextRenderer_FlushQueuedStrings(Gfx** arg0, s32 arg1) {
-    unk_D_80068CA0* var_s0 = D_8005F760;
-    unk_D_80068CA0* var_s2 = D_8005F764;
+    QueuedString* var_s0 = D_8005F760;
+    QueuedString* var_s2 = D_8005F764;
 
     D_800AA1D0 = *arg0;
 
@@ -98,15 +97,15 @@ void TextRenderer_FlushQueuedStrings(Gfx** arg0, s32 arg1) {
         TextRenderer_SetupGlyphState();
 
         while (var_s0 != NULL) {
-            unk_D_80068CA0* next = var_s0->next;
+            QueuedString* next = var_s0->next;
 
-            TextRenderer_DrawString(var_s0->unk_04, var_s0->unk_06, var_s0->unk_08, arg1);
+            TextRenderer_DrawString(var_s0->x, var_s0->y, var_s0->text, arg1);
             Util_Free(var_s0);
             var_s0 = next;
         }
 
         while (var_s2 != NULL) {
-            TextRenderer_DrawString(var_s2->unk_04, var_s2->unk_06, var_s2->unk_08, arg1);
+            TextRenderer_DrawString(var_s2->x, var_s2->y, var_s2->text, arg1);
             var_s2 = var_s2->next;
         }
 
@@ -127,10 +126,10 @@ void TextRenderer_FlushQueuedStrings(Gfx** arg0, s32 arg1) {
 
 /** Clears the queue of strings. */
 void TextRenderer_ClearQueuedStrings(void) {
-    unk_D_80068CA0* var_s0 = D_8005F764;
+    QueuedString* var_s0 = D_8005F764;
 
     while (var_s0 != NULL) {
-        unk_D_80068CA0* next = var_s0->next;
+        QueuedString* next = var_s0->next;
 
         Util_Free(var_s0);
         var_s0 = next;
@@ -148,7 +147,7 @@ char* TextRenderer_FormatCopy(char* buffer, const char* data, size_t size) {
 s32 HAL_Printf(s16 x, s16 y, const char* fmt, ...) {
     s32 sp124;
     char sp20[0x104];
-    unk_D_80068CA0* sp1C;
+    QueuedString* sp1C;
     va_list args;
 
     va_start(args, fmt);
@@ -156,12 +155,12 @@ s32 HAL_Printf(s16 x, s16 y, const char* fmt, ...) {
     sp124 = _Printf(TextRenderer_FormatCopy, sp20, fmt, args);
 
     if (sp124 > 0) {
-        sp1C = Util_Malloc(sp124 + sizeof(unk_D_80068CA0));
+        sp1C = Util_Malloc(sp124 + sizeof(QueuedString));
         if (sp1C != NULL) {
-            sp1C->unk_04 = x;
-            sp1C->unk_06 = y;
-            memcpy(sp1C->unk_08, &sp20, sp124);
-            sp1C->unk_08[sp124] = 0;
+            sp1C->x = x;
+            sp1C->y = y;
+            memcpy(sp1C->text, &sp20, sp124);
+            sp1C->text[sp124] = 0;
             sp1C->next = D_8005F760;
             D_8005F760 = sp1C;
         }
@@ -176,7 +175,7 @@ s32 HAL_Printf(s16 x, s16 y, const char* fmt, ...) {
 s32 TextRenderer_QueuePersistentString(s16 x, s16 y, const char* fmt, ...) {
     s32 sp124;
     char sp20[0x104];
-    unk_D_80068CA0* sp1C;
+    QueuedString* sp1C;
     va_list args;
 
     va_start(args, fmt);
@@ -184,12 +183,12 @@ s32 TextRenderer_QueuePersistentString(s16 x, s16 y, const char* fmt, ...) {
     D_8005F768 = 0;
     sp124 = _Printf(TextRenderer_FormatCopy, sp20, fmt, args);
     if (sp124 > 0) {
-        sp1C = Util_Malloc(sp124 + sizeof(unk_D_80068CA0));
+        sp1C = Util_Malloc(sp124 + sizeof(QueuedString));
         if (sp1C != NULL) {
-            sp1C->unk_04 = x;
-            sp1C->unk_06 = y;
-            memcpy(sp1C->unk_08, &sp20, sp124);
-            sp1C->unk_08[sp124] = 0;
+            sp1C->x = x;
+            sp1C->y = y;
+            memcpy(sp1C->text, &sp20, sp124);
+            sp1C->text[sp124] = 0;
             sp1C->next = D_8005F764;
             D_8005F764 = sp1C;
         }
