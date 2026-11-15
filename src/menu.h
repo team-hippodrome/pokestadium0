@@ -38,7 +38,7 @@ typedef struct GridMenu {
     /* 0x18 */ Controller* controller;
     /* 0x1C */ s32 unk_1C;
     /* 0x20 */ s32 options;
-    /* 0x24 */ s32 columns; // items per row: 2 for the six ポケモンのせいり buttons, where D-Down moved the cursor by 2
+    /* 0x24 */ s32 columns; // items per row: 2 for the six ポケモンのせいり (Organize Pokémon) buttons, where D-Down moved the cursor by 2
 } GridMenu; // size = 0x28
 
 /* A scrolling one-column list (ScrollList_*). Some screens put other fields right after its 0x44
@@ -53,7 +53,7 @@ typedef struct ScrollList {
     /* 0x18 */ Controller* controller;
     /* 0x1C */ s32 unk_1C;
     /* 0x20 */ s32 options;
-    /* 0x24 */ s32 visibleRows; // 3 in the Free Battle entry list (エントリーポケモンのせんたく)
+    /* 0x24 */ s32 visibleRows; // 3 in the Free Battle entry list (エントリーポケモンのせんたく (Choose entry Pokémon))
     /* 0x28 */ u16 inputDirection; // direction pressed this frame (0x800 up, 0x400 down, 0x200 left = page up, 0x100 right = page down); once repeatTimer runs out, the buttons held
     /* 0x2A */ u16 scrollFlags; // the same direction bits while the cursor or the page is still moving: 0x800 for 2 frames after D-Up
     /* 0x2C */ s32 scrollY; // pixel offset of the first visible row: 100 with the cursor on the 4th of 100-pixel rows
@@ -85,7 +85,7 @@ typedef struct ScrollGrid {
     /* 0x18 */ Controller* controller;
     /* 0x1C */ s32 unk_1C;
     /* 0x20 */ s32 options;
-    /* 0x24 */ s32 visibleRows; // 3 in the Free Battle entry list (エントリーポケモンのせんたく)
+    /* 0x24 */ s32 visibleRows; // 3 in the Free Battle entry list (エントリーポケモンのせんたく (Choose entry Pokémon))
     /* 0x28 */ u16 inputDirection; // direction pressed this frame (0x800 up, 0x400 down, 0x200 left = page up, 0x100 right = page down); once repeatTimer runs out, the buttons held
     /* 0x2A */ u16 scrollFlags; // the same direction bits while the cursor or the page is still moving: 0x800 for 2 frames after D-Up
     /* 0x2C */ s32 scrollY; // pixel offset of the first visible row: 100 with the cursor on the 4th of 100-pixel rows
@@ -113,9 +113,9 @@ typedef struct DigitSelector {
 typedef struct MenuWindow {
     /* 0x00 */ Window window;
     /* 0x2C */ Menu menu;
-    /* 0x50 */ PointerList itemList; // the item strings: フリーバトル, L 1～30 バトル, L50～55 バトル
+    /* 0x50 */ PointerList itemList; // the item strings: フリーバトル (Free Battle), L 1～30 バトル, L50～55 バトル
     /* 0x5C */ u16 itemFlags[16]; // FreeBattle_InitMenuWindow and Registration_InitMainMenu; the Free Battle popup takes its flags from the caller
-    /* 0x7C */ char** descriptions; // printed under the list for the cursor row: 「４０しゅるいの　ポケモンの　なかから」... for フリーバトル
+    /* 0x7C */ char** descriptions; // printed under the list for the cursor row: 「４０しゅるいの　ポケモンの　なかから」... for フリーバトル (Free Battle)
     /* 0x80 */ s32 descriptionLines; // 3 in the rule window; the description box is 0x1C pixels per line
 } MenuWindow; // size = 0x84
 

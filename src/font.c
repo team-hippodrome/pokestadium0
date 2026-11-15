@@ -442,7 +442,7 @@ typedef struct Font8001B32C {
 /**
  * Returns the x position at which `str` starts when centered on x, using the
  * current font's glyph width, spacing and the scale (percent).
- * Seen in play (2026-11-13) ran during the VS intro (トレーナー 1P vs トレーナー COM) (Free Battle, L1-30
+ * Seen in play (2026-11-13) ran during the VS intro (トレーナー (Trainer) 1P vs トレーナー COM) (Free Battle, L1-30
  * rules, six L30 rentals vs COM); also in an ordinary Free Battle.
  * @unverified Name and comment guessed from the code.
  */

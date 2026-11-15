@@ -1715,7 +1715,7 @@ Gfx* Font_PrintfToDisplayList(s16 x, s16 y, s16 arg2, s16 arg3, Color_RGBA8_u32 
 /**
  * Geo callback for a text node: prints the node's formatted string with its
  * font and color and queues the resulting display list on the node's layer.
- * Seen in play (2026-11-13) ran during the VS intro (トレーナー 1P vs トレーナー COM) (Free Battle, L1-30
+ * Seen in play (2026-11-13) ran during the VS intro (トレーナー (Trainer) 1P vs トレーナー COM) (Free Battle, L1-30
  * rules, six L30 rentals vs COM); also in an ordinary Free Battle.
  * @unverified Name guessed from the code; comment kept.
  */

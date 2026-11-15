@@ -27,7 +27,7 @@ typedef struct ModeSettings {
 // Zero's 32 KiB cartridge SRAM, loaded whole into the buffer at gSaveBuffer
 // (docs/n64-save-format.md). Every record is stored twice, primary then backup,
 // and each copy ends with a SaveFooter. Fields without a tag were seen in play in pj64
-// (2026-11-14: a team registered in とうろく, a Pokemon and items moved in せいとん, the
+// (2026-11-14: a team registered in とうろく, a Pokemon and items moved in せいとん (Organize), the
 // sound options toggled, then the buffer read back and the footer sums recomputed).
 
 // "POKE" and a u16 sum of every byte of the copy before it; "XXXX" and sum ^ 0xFF

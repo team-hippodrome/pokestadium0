@@ -223,7 +223,7 @@ loop_1:
  *
  * Same structure as GbSave_InvalidateMainDataChecksum in the Stadium 1
  * decomp (its VERSION_JP branch uses the same 0x1000/0x1014/0x3580 values).
- * Seen in play (2026-11-12): during a せいとん save it ran once, before the box banks were written. The .sav then had a
+ * Seen in play (2026-11-12): during a せいとん (Organize) save it ran once, before the box banks were written. The .sav then had a
  * valid checksum at 0x3594 (0x55, matching the sum of 0x2598..0x3593), so it writes a correct checksum and does not
  * invalidate one. It was named GbSave_InvalidateMainDataChecksum, after Stadium 1.
  */
@@ -263,7 +263,7 @@ s32 GbSave_ReadBoxBank(s32 arg0, s32 arg1) {
  *
  * Same structure as GbSave_WriteBoxBank in the Stadium 1 decomp (its
  * VERSION_JP branch also uses 0x15A0).
- * Seen in play (2026-11-12) in a せいとん save: ran for bank 0 and bank 1 after the main data
+ * Seen in play (2026-11-12) in a せいとん (Organize) save: ran for bank 0 and bank 1 after the main data
  * checksum was written.
  */
 s32 GbSave_WriteBoxBank(s32 arg0, s32 arg1) {
@@ -310,8 +310,8 @@ void GbSave_ReleasePortBuffers(s32 arg0, u32 arg1) {
 /**
  * Sets port flag 0x4000 when the save's current map (byte 0x80 of the main-data copy, save offset
  * 0x2600) is one of the twelve Pokemon Center maps in sPokemonCenterMapIds (0x29 Viridian ...
- * 0xB6 Rock Tunnel). Seen in play (2026-11-12): with map 0 the main menu warns 「ポケモンセンターにいない」;
- * with map 0x29 it adds せいとん and いちらん.
+ * 0xB6 Rock Tunnel). Seen in play (2026-11-12): with map 0 the main menu warns 「ポケモンセンターにいない」 ("not at a Pokémon Center");
+ * with map 0x29 it adds せいとん (Organize) and いちらん (List).
  */
 void GbSave_CheckSavedAtPokemonCenter(s32 arg0) {
     extern u8 sPokemonCenterMapIds[12];
@@ -331,7 +331,7 @@ void GbSave_CheckSavedAtPokemonCenter(s32 arg0) {
 
 /**
  * Seen in play (2026-11-12): ran at boot from GbSave_ScanAllPorts for port 0 (the Green
- * cartridge) and again when せいとん opened; returned 1.
+ * cartridge) and again when せいとん (Organize) opened; returned 1.
  */
 s32 GbSave_OpenMainData(s32 arg0) {
     u8 sp2F;
@@ -380,7 +380,7 @@ s32 GbSave_EnsureMainDataLoaded(s32 arg0) {
 }
 
 /**
- * Seen in play (2026-11-12): ran for port 0 when せいとん opened; returned 1.
+ * Seen in play (2026-11-12): ran for port 0 when せいとん (Organize) opened; returned 1.
  */
 s32 GbSave_OpenBoxData(s32 arg0) {
     u8 sp37;
@@ -644,8 +644,8 @@ s32 GbSave_WriteBoxBanks(s32 arg0) {
 
 /**
  * Writes the main save data back to the cartridge.
- * Seen in play (2026-11-13) ran when leaving せいとん with レポートしてやめる after moving フシギダネ and ヒトカゲ into
- * GBのボックス1.
+ * Seen in play (2026-11-13) ran when leaving せいとん (Organize) with レポートしてやめる (Save and quit) after moving フシギダネ (Bulbasaur) and ヒトカゲ (Charmander) into
+ * GBのボックス1 (GB Box 1).
  */
 s32 GbSave_CommitMainData(s32 arg0) {
     u8 sp2F;
@@ -725,7 +725,7 @@ GbSaveBox* GbSave_GetBoxEntry(s32 arg0, s32 arg1) {
 
 /**
  * The raw 6-byte Game Boy trainer name is kept in the 3-byte tails at 0x3D and 0x4D.
- * Seen in play (2026-11-12): called by Deck_ReadEntry for party slots 0-2 when せいとん listed ハナ,
+ * Seen in play (2026-11-12): called by Deck_ReadEntry for party slots 0-2 when せいとん (Organize) listed ハナ,
  * ヒノコ and カメ.
  */
 void GbSave_LoadMainPokemon(BattleMon* arg0, s32 arg1, s32 arg2) {
@@ -749,7 +749,7 @@ void GbSave_LoadMainPokemon(BattleMon* arg0, s32 arg1, s32 arg2) {
  * and the species byte in the party's species list.
  *
  * Same structure as GbSave_SaveMainPokemon in the Stadium 1 decomp.
- * Seen in play (2026-11-12) in a せいとん save: called by Deck_WriteEntry for party slots 0 and 1.
+ * Seen in play (2026-11-12) in a せいとん (Organize) save: called by Deck_WriteEntry for party slots 0 and 1.
  */
 void GbSave_SaveMainPokemon(BattleMon* arg0, s32 arg1, s32 arg2) {
     GbSaveParty* sp24 = &sGbSavePorts[arg1].mainData->party;
@@ -762,8 +762,8 @@ void GbSave_SaveMainPokemon(BattleMon* arg0, s32 arg1, s32 arg2) {
 }
 
 /**
- * Seen in play (2026-11-13) ran when leaving せいとん with レポートしてやめる after moving フシギダネ and ヒトカゲ into
- * GBのボックス1.
+ * Seen in play (2026-11-13) ran when leaving せいとん (Organize) with レポートしてやめる (Save and quit) after moving フシギダネ (Bulbasaur) and ヒトカゲ (Charmander) into
+ * GBのボックス1 (GB Box 1).
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void GbSave_LoadBoxPokemon(BattleMon* arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -909,7 +909,7 @@ s32 Deck_GetCount(s32 arg0, s32 arg1, s32 arg2) {
  *
  * Same structure as Deck_DeleteEntry in the Stadium 1 decomp, using its
  * VERSION_JP offsets.
- * Seen in play (2026-11-12) in a せいとん save: truncated deck 0x20 (party; it returned 3, the old
+ * Seen in play (2026-11-12) in a せいとん (Organize) save: truncated deck 0x20 (party; it returned 3, the old
  * count) and deck 0x21 (GB box) before they were rewritten.
  */
 void Deck_DeleteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
@@ -950,7 +950,7 @@ void Deck_DeleteEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
  *
  * Same structure as Deck_AppendEntry in the Stadium 1 decomp, using its
  * VERSION_JP offsets.
- * Seen in play (2026-11-12) in a せいとん save: called by Deck_WriteEntry for each written entry (two
+ * Seen in play (2026-11-12) in a せいとん (Organize) save: called by Deck_WriteEntry for each written entry (two
  * party, one box).
  */
 void Deck_AppendEntry(s32 arg0, s32 arg1, s32 arg2) {
@@ -995,7 +995,7 @@ void Deck_AppendEntry(s32 arg0, s32 arg1, s32 arg2) {
  *
  * Same structure as Deck_ReadEntry in the Stadium 1 decomp, using its
  * VERSION_JP offsets.
- * Seen in play (2026-11-12): opening ポケモンのせいり read deck 0x20 (party) entries 0, 1 and 2 through
+ * Seen in play (2026-11-12): opening ポケモンのせいり (Organize Pokémon) read deck 0x20 (party) entries 0, 1 and 2 through
  * GbSave_LoadMainPokemon, one per party Pokémon.
  */
 s32 Deck_ReadEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, BattleMon* arg4) {
@@ -1040,7 +1040,7 @@ s32 Deck_ReadEntry(s32 arg0, s32 arg1, s32 arg2, s32 arg3, BattleMon* arg4) {
  *
  * Same structure as Deck_WriteEntry in the Stadium 1 decomp, using its
  * VERSION_JP offsets.
- * Seen in play (2026-11-12) in a せいとん save: wrote the two remaining party Pokémon to deck 0x20
+ * Seen in play (2026-11-12) in a せいとん (Organize) save: wrote the two remaining party Pokémon to deck 0x20
  * (entries 0 and 1) and the moved one to deck 0x21 entry 0. The .sav then had party count 2 and
  * box count 1.
  */
@@ -1270,7 +1270,7 @@ s32 GbSave_SetRivalName(s32 port, char* name) {
  */
 /**
  * Seen in play (2026-11-12): see GbSave_CheckSavedAtPokemonCenter; this flag decides the
- * 「ポケモンセンターにいない」 warning and the せいとん and いちらん items.
+ * 「ポケモンセンターにいない」 ("not at a Pokémon Center") warning and the せいとん (Organize) and いちらん (List) items.
  */
 s32 GbSave_SavedAtPokemonCenter(s32 arg0) {
     return (sGbSavePorts[arg0].flags & 0x4000) != 0;
@@ -1333,8 +1333,8 @@ s32 GbSave_CopyPortSnapshot(s32 arg0, GbSavePortSnapshot* arg1) {
 /**
  * Sets the bit of each species in the list arg2 (arg1 internal species indices) in the bit array
  * arg0.
- * Seen in play (2026-11-12): on entering ずかん it ran for the party (3 Pokemon) and the current
- * GB box (0) into the held-species bits that GbSave_CountHeldSpecies counts for もっているかず.
+ * Seen in play (2026-11-12): on entering ずかん (Pokédex) it ran for the party (3 Pokemon) and the current
+ * GB box (0) into the held-species bits that GbSave_CountHeldSpecies counts for もっているかず (number owned).
  * Renamed from GbSave_MarkSeenBits: the bits are the Pokemon the player holds, not the seen flags.
  */
 void GbSave_MarkSpeciesHeld(char* arg0, s32 arg1, u8* arg2) {
@@ -1441,7 +1441,7 @@ void GbSave_SetSeenOwnedBits(s32 port, s32 species, s32 level) {
  * Counts the species marked seen in the Game Boy save of port arg0: the first 151 bits of the
  * Pokedex seen array (main data +0x13, at offset 0x31 of the bank copy).
  * Seen in play (2026-11-12): returned 3 for the test save, and 8 after the first byte of that
- * array was set to 0xFF in memory; ずかん then showed みつけたかず 8. Renamed from
+ * array was set to 0xFF in memory; ずかん (Pokédex) then showed みつけたかず (number seen) 8. Renamed from
  * GbSave_CountSpeciesProgressField036 (Stadium 1's name for the same function).
  */
 s32 GbSave_CountSeenSpecies(s32 arg0) {
@@ -1459,7 +1459,7 @@ s32 GbSave_CountSeenSpecies(s32 arg0) {
  * Counts the species marked owned in the Game Boy save of port arg0: the first 151 bits of the
  * Pokedex owned array (main data +0, at offset 0x1E of the bank copy).
  * Seen in play (2026-11-12): returned 3 for the test save, and 7 after four more bits of that
- * array were set in memory; ずかん then showed つかまえたかず 7. Renamed from
+ * array were set in memory; ずかん (Pokédex) then showed つかまえたかず (number caught) 7. Renamed from
  * GbSave_CountSpeciesProgressField023 (Stadium 1's name for the same function).
  */
 s32 GbSave_CountOwnedSpecies(s32 arg0) {
@@ -1476,8 +1476,8 @@ s32 GbSave_CountOwnedSpecies(s32 arg0) {
 /**
  * Counts the species in the held-species bits (unk_05) that GbSave_RebuildHeldSpecies builds from
  * the party, the current GB box and the Stadium boxes.
- * Seen in play (2026-11-12): returned 3 for a save holding フシギダネ, ヒトカゲ and ゼニガメ, shown as
- * もっているかず 3 in ずかん; an extra bit set by hand was cleared again by the rebuild before the
+ * Seen in play (2026-11-12): returned 3 for a save holding フシギダネ (Bulbasaur), ヒトカゲ (Charmander) and ゼニガメ (Squirtle), shown as
+ * もっているかず (number owned) 3 in ずかん (Pokédex); an extra bit set by hand was cleared again by the rebuild before the
  * count. Renamed from GbSave_CountSpeciesProgressField06.
  */
 s32 GbSave_CountHeldSpecies(s32 arg0) {
