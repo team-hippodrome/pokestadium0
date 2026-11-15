@@ -21,7 +21,7 @@ M2C_UNK func_8213C9D0(s8 *);
 M2C_UNK func_8213E1FC(s8 *, s32);
 M2C_UNK func_821401D4(s8 *, M2C_UNK);
 M2C_UNK func_82143478(s8 *, u16);
-s16 Particle_GetUnkCE();
+s16 Particle_GetByteParam2();
 s32 func_82140690(s8 *);
 void BattleAnim_PowderCloudScaleMotion(Particle* arg0);
 
@@ -301,7 +301,7 @@ void BattleAnim_RunSlashingMoveFullScreenFlash(Particle* arg0) {
     s16 sp26;
     s16 temp_v1;
 
-    sp26 = Particle_GetUnkCE();
+    sp26 = Particle_GetByteParam2();
     temp_v1 = arg0->lifecycle;
     switch (temp_v1) {                              /* irregular */
     case 1:
@@ -346,7 +346,7 @@ void BattleAnim_RunSlashMoveWhiteFlashOverlay(Particle* arg0) {
     s16 sp26;
     s16 temp_v1;
 
-    sp26 = Particle_GetUnkCE();
+    sp26 = Particle_GetByteParam2();
     temp_v1 = arg0->lifecycle;
     switch (temp_v1) {                              /* irregular */
     case 1:

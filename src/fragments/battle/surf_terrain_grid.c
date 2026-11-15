@@ -39,8 +39,8 @@ Gfx* SurfTerrainGrid_Draw(Gfx* arg0) {
         gsDPSetCombineLERP(TEXEL1, TEXEL0, PRIM_LOD_FRAC, TEXEL0, TEXEL1, TEXEL0, PRIM_LOD_FRAC, TEXEL0, PRIMITIVE,
                            ENVIRONMENT, COMBINED, ENVIRONMENT, COMBINED, 0, PRIMITIVE, 0),
         gsDPSetColorDither(G_CD_NOISE),
-        gsDPSetPrimColor(0, 0x80, 0, 50, 255, 100),
-        gsDPSetEnvColor(0, 100, 255, 100),
+        gsDPSetPrimColor(0, 0x80, 0, 50, 255, 100), // #0032FF
+        gsDPSetEnvColor(0, 100, 255, 100), // #0064FF
         gsSPEndDisplayList(),
     };
 
@@ -94,8 +94,8 @@ Gfx* SurfTerrainGrid_Draw(Gfx* arg0) {
         var_t0 = 0xFF;
     }
 
-    gDPSetPrimColor(arg0++, 0, 0xB4, 255, 255, 255, var_t0);
-    gDPSetEnvColor(arg0++, 0, 0x64, 0xC8, var_a2);
+    gDPSetPrimColor(arg0++, 0, 0xB4, 255, 255, 255, var_t0); // #FFFFFF
+    gDPSetEnvColor(arg0++, 0, 0x64, 0xC8, var_a2); // #0064C8
     gDPSetBlendColor(arg0++, 255, 255, 255, 255); // #FFFFFFFF
 
     gDPLoadTextureTile_4b(arg0++, sBattleAnimAssetPointers[0xB8], G_IM_FMT_I, 32, 0, 0, 0, 31, 31, 0, G_TX_NOMIRROR | G_TX_WRAP,
