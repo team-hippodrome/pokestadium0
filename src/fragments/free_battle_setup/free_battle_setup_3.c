@@ -262,7 +262,7 @@ void FreeBattle_DrawMenuWindow(MenuWindow* window, s32 flags) {
         gSPDisplayList(gDisplayListHead++, D_80060270);
         func_80029028(window->window.frame.x + 6, window->window.frame.y + 6, window->window.frame.width - 12, temp_s1, *(Color82001CCC*)&D_82009100);
         Ui_FillRectPrimEnvColor(window->window.frame.x + 6, window->window.frame.y + temp_s1 + 12, window->window.frame.width - 12, window->descriptionLines * 28, D_82009104, D_82009108);
-        sp38 = window->window.frame.width - 0xC;
+        sp38 = window->window.frame.width - 12;
         Menu_DrawItems(&window->menu, window->window.frame.x + 6, window->window.frame.y + 10, flags | 0xFFED, (s8*)&sp38);
         func_8001AB6C();
         func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
@@ -344,7 +344,7 @@ void FreeBattle_InitPopupMenu(MenuWindow* window, s32 x, s32 y, List820061F0 *it
         }
     }
     func_80027804(&window->itemList, (s32)items->items, items->count, items->count);
-    h = max * 0x18 + 0x18;
+    h = max * 24 + 24;
     Menu_Init(&window->menu, &window->itemList, item_flags, (void (*)(s32, s32, char *, s32, s32, s32 *))FreeBattle_DrawPopupRow, h, 36);
     window->menu.options |= 0x10000;
     Window_SetRect(&window->window, x, y, h + 12, items->count * 36 + 24);
@@ -1234,8 +1234,8 @@ void FreeBattle_DrawUsableMonGrid(FreeBattleMonGridWindow* window, s32 flags) {
             func_8001AB6C();
             func_8001AA9C(D_800734A8[0], D_800734A8[1], D_800734A8[2], D_800734A8[3]);
             func_8001A384(4, -1);
-            x = (i % 7) * 0x4F + x0;
-            y = (i / 7) * 0x3C + y0;
+            x = (i % 7) * 79 + x0;
+            y = (i / 7) * 60 + y0;
             Font_Printf(x + 2, y + 42, entry + 0x30);
             func_8001ABBC();
             gSPDisplayList(gDisplayListHead++, D_80073408);
@@ -1342,8 +1342,8 @@ void FreeBattle_InitShortageWarning(FreeBattleShortageWarning* window, s32 x, s3
     window->window.frame.style = 0x2801;
     window->window.title = D_8200A104;
     Window_InitLabeled(&window->yesButton, window->window.frame.x + 46, window->window.frame.y + 110, 72, D_82009218, D_8200A114);
-    window->yesButton.labelX = 0xA;
-    window->yesButton.unk_34 = 0xC;
+    window->yesButton.labelX = 10;
+    window->yesButton.unk_34 = 12;
     Window_InitLabeled(&window->noButton, window->window.frame.x + 190, window->window.frame.y + 110, 72, D_82009218, D_8200A11C);
     window->choice.count = 2;
     window->choice.cursor = 0;
@@ -1448,8 +1448,8 @@ void FreeBattle_InitLevelSumWarning(FreeBattleLevelSumWarning* window, s32 x, s3
     window->window.frame.style = 0x2801;
     window->window.title = D_8200A178;
     Window_InitLabeled(&window->yesButton, window->window.frame.x + 46, window->window.frame.y + 110, 72, D_82009228, D_8200A188);
-    window->yesButton.labelX = 0xA;
-    window->yesButton.unk_34 = 0xC;
+    window->yesButton.labelX = 10;
+    window->yesButton.unk_34 = 12;
     Window_InitLabeled(&window->noButton, window->window.frame.x + 190, window->window.frame.y + 110, 72, D_82009228, D_8200A190);
     window->choice.count = 2;
     window->choice.cursor = 0;

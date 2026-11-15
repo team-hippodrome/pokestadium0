@@ -230,7 +230,7 @@ void FreeBattle_InitEntrySelect(s8* entry, s32 x, s32 y, s32 teams, s32 picks, s
     ScrollList_Init(entry + 0x40, teams, entry + 0x84, 3, &FreeBattle_DrawTeamRow, 532, 100);
     M2C_FIELD(entry, s32*, 0x60) = M2C_FIELD(entry, s32*, 0x60) | 0x10000;
     M2C_FIELD(entry, s32*, 0) = 0;
-    FreeBattle_ClearIndices(D_8200AC58, 0, 0x28);
+    FreeBattle_ClearIndices(D_8200AC58, 0, 40);
     M2C_FIELD(entry, s32*, 0x738) = 1;
     M2C_FIELD(entry, s32*, 0x73C) = picks;
     M2C_FIELD(entry, s32*, 0x740) = rule_category;
@@ -238,12 +238,12 @@ void FreeBattle_InitEntrySelect(s8* entry, s32 x, s32 y, s32 teams, s32 picks, s
     if (rule_category != 0) {
         if (rule_category == 1) {
             var_s1 = entry + 0x684;
-            func_80027410(var_s1, D_8200ACFC, 0x50, 0x28, 0x28);
+            func_80027410(var_s1, D_8200ACFC, 0x50, 40, 40);
         } else {
             var_s1 = entry + 0x684;
-            func_80027410(var_s1, D_8200AD00, 0x50, 0x21, 0x21);
+            func_80027410(var_s1, D_8200AD00, 0x50, 33, 33);
         }
-        ScrollGrid_Init(entry + 0x6E4, var_s1, entry + 0x694, 4, 3, &FreeBattle_DrawMonCell, 0x84, 0x32);
+        ScrollGrid_Init(entry + 0x6E4, var_s1, entry + 0x694, 4, 3, &FreeBattle_DrawMonCell, 132, 50);
         M2C_FIELD(entry, s32*, 0x704) = M2C_FIELD(entry, s32*, 0x704) | 0x10000;
     }
     PokeIcon_ResetSlots((s8*)D_8200AC50);
@@ -529,7 +529,7 @@ s32 FreeBattle_CheckEntryRules(SlotMenu* entry) {
 
         sp38 = FreeBattle_CountDuplicateSpecies(entry->slots, &sp34);
         if (sp38 > 0) {
-            FreeBattle_InitDuplicateWarning((s8*)entry + 0x320, 0x9C, 0x105, sp38);
+            FreeBattle_InitDuplicateWarning((s8*)entry + 0x320, 156, 261, sp38);
             entry->cur = sp34;
             FreeBattle_DisableNonDuplicateRows((SlotFlags*)((s8*)entry + 0x2F8));
             ret = 2;
@@ -541,7 +541,7 @@ s32 FreeBattle_CheckEntryRules(SlotMenu* entry) {
                 if (entry->unk_784 & 1) {
                     ret = 8;
                 } else {
-                    FreeBattle_InitShortageWarning((s8*)entry + 0x370, 0xA6, 0x105, entry->unk_744, sp38);
+                    FreeBattle_InitShortageWarning((s8*)entry + 0x370, 166, 261, entry->unk_744, sp38);
                     ret = 4;
                 }
             } else if ((entry->mode == 1) && (FreeBattle_AllTriosOverLevelLimit(entry->slots) != 0)) {

@@ -62,7 +62,7 @@ void FreeBattle_SetScreenState(FreeBattleScreen* screen, s32 state, s32 flags) {
     switch (state) {
         case 1:
             if (!(flags & 2)) {
-                FreeBattle_InitBattleModeWindow((s8*)&screen->modeWindow, 0x78, 0x63, (s32)D_82009014, (s32)D_82009004);
+                FreeBattle_InitBattleModeWindow((s8*)&screen->modeWindow, 120, 99, (s32)D_82009014, (s32)D_82009004);
             }
             view = (s8*)&screen->modeWindow;
             break;
@@ -137,7 +137,7 @@ void FreeBattle_SetScreenState(FreeBattleScreen* screen, s32 state, s32 flags) {
             break;
         case 5:
             if (!(flags & 2)) {
-                FreeBattle_InitOpponentSelect((s8*)&screen->opponentWindow, 0xB0, 0x54, screen->connectedControllerMask, screen->connectedControllerCount, screen->gbSaveReadyMask);
+                FreeBattle_InitOpponentSelect((s8*)&screen->opponentWindow, 176, 84, screen->connectedControllerMask, screen->connectedControllerCount, screen->gbSaveReadyMask);
             }
             view = (s8*)&screen->opponentWindow;
             break;
@@ -149,7 +149,7 @@ void FreeBattle_SetScreenState(FreeBattleScreen* screen, s32 state, s32 flags) {
             break;
         case 12:
             if (!(flags & 2)) {
-                FreeBattle_InitPopupMenu((s8*)&screen->popupMenu, 0x26, 0x5A, &D_82009278[screen->unk_4374], (s8*)&screen->popupMenuText, *(Color_RGBA8*)D_82008F54);
+                FreeBattle_InitPopupMenu((s8*)&screen->popupMenu, 38, 90, &D_82009278[screen->unk_4374], (s8*)&screen->popupMenuText, *(Color_RGBA8*)D_82008F54);
             }
             view = (s8*)&screen->popupMenu;
             break;
@@ -161,7 +161,7 @@ void FreeBattle_SetScreenState(FreeBattleScreen* screen, s32 state, s32 flags) {
             break;
         case 14:
             if (!(flags & 2)) {
-                FreeBattle_InitUsableMonGrid(&screen->monGridWindow, 0x25, 0x50, screen->unk_4374, D_8200ACFC, D_8200AD00, (s8*)D_8200AC50);
+                FreeBattle_InitUsableMonGrid(&screen->monGridWindow, 37, 80, screen->unk_4374, D_8200ACFC, D_8200AD00, (s8*)D_8200AC50);
             }
             view = &screen->monGridWindow;
             break;
