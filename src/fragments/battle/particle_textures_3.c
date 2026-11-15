@@ -30,9 +30,9 @@ extern u8 gParticlePalettePairs[][2];
 #include "m2c_macros.h"
 
 void ParticleGfx_TextureCallbackNop(void);
-void ParticleGfx_LoadTextureCallbackI4FrameMod10_32x64(UNUSED Particle* arg0, u8* texture);
-void ParticleGfx_LoadTextureCallbackI4_64x64(UNUSED Particle* arg0, u8* texture);
-void ParticleGfx_LoadTextureCallbackI4FrameMod8_64x64(UNUSED Particle* arg0, u8* texture);
+void ParticleGfx_LoadTexCallbackI4FrameMod10_32x64(UNUSED Particle* arg0, u8* texture);
+void ParticleGfx_LoadTexCallbackI4_64x64(UNUSED Particle* arg0, u8* texture);
+void ParticleGfx_LoadTexCallbackI4FrameMod8_64x64(UNUSED Particle* arg0, u8* texture);
 
 /**
  * Empty.
@@ -50,7 +50,7 @@ M2C_UNK func_8216C008(s32, M2C_UNK, M2C_UNK);       /* extern */
  * Whip, Water Gun, Waterfall.
  * @unverified Name guessed from the code.
  */
-void ParticleGfx_LoadTextureCallbackTileI4FrameC3_24x24(s8 *particle, s32 texture) {
+void ParticleGfx_LoadTexCallbackTileI4FrameC3_24x24(s8 *particle, s32 texture) {
     func_8216C008((M2C_FIELD(particle, s8 *, 0xC3) * 0x120) + texture, 0x18, 0x18);
 }
 
@@ -59,7 +59,7 @@ void ParticleGfx_LoadTextureCallbackTileI4FrameC3_24x24(s8 *particle, s32 textur
  * Seen in play (2026-11-13) in the 165-move sweep (Fire Spin): from base 0x80342970 it loaded
  * 0x80344170, frame 6 of the 0x400-byte 32x64 I4 frames, with G_LOADBLOCK 071FF400 (2048 texels).
  */
-void ParticleGfx_LoadTextureCallbackI4FrameMod10_32x64(UNUSED Particle* arg0, u8* texture) {
+void ParticleGfx_LoadTexCallbackI4FrameMod10_32x64(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureI4Alias(&texture[(gParticleFrameCounter % 10) * (32 * 64 / 2)], 32, 64);
 }
 
@@ -69,7 +69,7 @@ M2C_UNK func_8216BFE8(s32, M2C_UNK, M2C_UNK);       /* extern */
  * Texture callback: loads 32x64 I4 frame (byte 0xC3) of the texture at arg1.
  * @unverified Name guessed from the code.
  */
-void ParticleGfx_LoadTextureCallbackI4FrameC3_32x64(s8 *particle, s32 texture) {
+void ParticleGfx_LoadTexCallbackI4FrameC3_32x64(s8 *particle, s32 texture) {
     func_8216BFE8((M2C_FIELD(particle, s8 *, 0xC3) << 0xA) + texture, 0x20, 0x40);
 }
 
@@ -78,7 +78,7 @@ void ParticleGfx_LoadTextureCallbackI4FrameC3_32x64(s8 *particle, s32 texture) {
  * Seen in play (2026-11-13) in the 165-move sweep (Thunder Wave): it emitted an I texture load of
  * 0x8033B120 with G_LOADBLOCK 073FF200 (4096 texels, 64x64).
  */
-void ParticleGfx_LoadTextureCallbackI4_64x64(UNUSED Particle* arg0, u8* texture) {
+void ParticleGfx_LoadTexCallbackI4_64x64(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureI4Alias(texture, 64, 64);
 }
 
@@ -87,6 +87,6 @@ void ParticleGfx_LoadTextureCallbackI4_64x64(UNUSED Particle* arg0, u8* texture)
  * Seen in play (2026-11-13) in the 165-move sweep (Thunderpunch, Thunderbolt, Thunder): from base
  * 0x8033B950 it loaded the base and 0x8033F150, frame 7 of the 0x800-byte 64x64 I4 frames.
  */
-void ParticleGfx_LoadTextureCallbackI4FrameMod8_64x64(UNUSED Particle* arg0, u8* texture) {
+void ParticleGfx_LoadTexCallbackI4FrameMod8_64x64(UNUSED Particle* arg0, u8* texture) {
     ParticleGfx_LoadTextureI4Alias(&texture[gParticleFrameMod8 * (64 * 64 / 2)], 64, 64);
 }

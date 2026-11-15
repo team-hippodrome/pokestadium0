@@ -1182,7 +1182,7 @@ void BattleAnim_SetupBoomSmallExplosion(Particle* arg0) {
     sp2C.x = ParticleMath_RandomSigned(0xA);
     sp2C.y = ParticleMath_RandomSignedOffset(0xF, 0xA);
     sp2C.z = ParticleMath_RandomSigned(0xF);
-    Particle_PositionOffset_AddVecScaledFromVec3f_08D78(arg0, sp2C);
+    Particle_PositionOffset_AddVecScaled(arg0, sp2C);
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, (ParticleMath_RandomRange(5) * 0.25f) + 3.0f);
     Particle_SetScaleScaled(arg0, 0.75f);
     ParticleGfx_RecolorPrimEnvFromPalettePair(arg0, sp28);
@@ -1254,7 +1254,7 @@ void BattleAnim_SetupEggBombHitEffect(Particle* arg0) {
     sp24.x = ParticleMath_RandomSigned(0xA);
     sp24.y = ParticleMath_RandomSignedOffset(0xA, 5);
     sp24.z = ParticleMath_RandomSigned(0xA);
-    Particle_PositionOffset_AddVecScaledFromVec3f_08D78(arg0, sp24);
+    Particle_PositionOffset_AddVecScaled(arg0, sp24);
     Particle_SetScaleScaled(arg0, 1.0f);
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.5f);
     sp30.x = ParticleMath_RandomSigned(0x2000);
@@ -1394,7 +1394,7 @@ void BattleAnim_SetupEmberHitFireball(Particle* arg0) {
     sp24.x = ParticleMath_RandomSigned(0x19);
     sp24.y = ParticleMath_RandomSignedOffset(0xF, 5);
     sp24.z = ParticleMath_RandomSigned(0xA);
-    Particle_PositionOffset_AddVecScaledFromVec3f_08D78(arg0, sp24);
+    Particle_PositionOffset_AddVecScaled(arg0, sp24);
     Particle_SetScaleScaled(arg0, 0.15f);
     Particle_StepMagnitude_SetScaled_0AD8C(arg0, 0.5f);
     sp30.x = 0x2000 - ParticleMath_RandomRange(0x4000);
@@ -1596,7 +1596,7 @@ void BattleAnim_SetupAfterImpactSmoke(Particle* arg0) {
     sp24.x = ParticleMath_RandomSigned(0x14);
     sp24.y = ParticleMath_RandomSignedOffset(0xF, 0xA);
     sp24.z = ParticleMath_RandomSigned(0xF);
-    Particle_PositionOffset_AddVecScaledFromVec3f_08D78(arg0, sp24);
+    Particle_PositionOffset_AddVecScaled(arg0, sp24);
     Particle_SetScaleScaled(arg0, 0.1f);
     sp30.x = ParticleMath_RandomRange(0x10000);
     sp30.y = ParticleMath_RandomRange(0x10000);
@@ -2165,12 +2165,12 @@ extern ParticleDescriptor D_8218E7B8;
  * ran for exactly Ember.
  */
 void BattleAnim_InitializeEmberHit(void) {
-    BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(2, 0, 0x40, 0x8, 0xC8);
-    BattleAnim_SpawnOwnerModelTintRampDetach(0, 0xA, 0xFF, 0, 0x30);
+    BattleAnim_SpawnDesc25AlphaHoldFadeOut(2, 0, 0x40, 0x8, 0xC8);
+    BattleAnim_SpawnOwnerTintRampDetach(0, 0xA, 0xFF, 0, 0x30);
     BattleAnim_CreateEffectSlotForCurrentOwner(4, BattleAnim_CallbackEndEffect56Descriptor46RisingScaleAlphaFade, &D_8218E7B0, 0, 6, 0x10, 9, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(8, BattleAnim_CallbackEndEffect56Descriptor46RisingScaleAlphaFade, &D_8218E7B0, 0, 6, 0x10, 9, 0, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 2, BattleAnim_CallbackEndEffects54And56Descriptor3DRisingColorScaleFade, &D_8218E770, 0, 4, 0x10, 9, 0, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 2, BattleAnim_EmberSpreadScaleAlphaRise, &D_8218E7B8, 0, 4, 0x10, 9, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 2, 2, BattleAnim_CallbackEndEffects54And56Descriptor3DRisingColorScaleFade, &D_8218E770, 0, 4, 0x10, 9, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 2, 2, BattleAnim_EmberSpreadScaleAlphaRise, &D_8218E7B8, 0, 4, 0x10, 9, 0, 0);
 }
 
 M2C_UNK func_8213B560(M2C_UNK, M2C_UNK *, M2C_UNK *, M2C_UNK, s32, s32, s32, s32, s32); /* extern */
@@ -2224,12 +2224,12 @@ extern M2C_UNK D_8218E7F0;
  */
 void BattleAnim_InitializeFlamethrowerHit(void) {
     BattleAnim_SpawnDrainFlameHueChange(0xA, 0x9, 0xE, 8, 0xC8, 0x10);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 0x14, BattleAnim_RunFlamethrowerHitRotationWeak, &D_8218E7F0, 0, 1, 0x11, 9, 0, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 2, BattleAnim_RunFlamethrowerHitRotationStrong, &D_8218E7F0, 0, 0xC, 0x11, 9, 0, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(14, 8, 5, BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade, &D_8218E770, 0, 2, 0x11, 9, 0, 0);
-    BattleAnim_SpawnOwnerModelTintRampDetach(0x3C, 0xE, 0xC8, 0, 8);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(58, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x33, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(60, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x33, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 2, 0x14, BattleAnim_RunFlamethrowerHitRotationWeak, &D_8218E7F0, 0, 1, 0x11, 9, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 2, 2, BattleAnim_RunFlamethrowerHitRotationStrong, &D_8218E7F0, 0, 0xC, 0x11, 9, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(14, 8, 5, BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade, &D_8218E770, 0, 2, 0x11, 9, 0, 0);
+    BattleAnim_SpawnOwnerTintRampDetach(0x3C, 0xE, 0xC8, 0, 8);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(58, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x33, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(60, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x33, 0);
 }
 
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32); /* extern */
@@ -2261,12 +2261,12 @@ extern ParticleDescriptor D_8218E588[86];
  */
 void BattleAnim_InitializeDragonRageHit(void) {
     BattleAnim_SpawnDrainFlameHueChange(0xA, 0x33, 0x2C, 8, 0xC8, 0x10);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 0x14, BattleAnim_RunFlamethrowerHitRotationWeak, &D_8218E7F0, 0, 1, 0x11, 9, 1, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 2, 2, BattleAnim_RunFlamethrowerHitRotationStrong, &D_8218E7F0, 0, 0xC, 0x11, 9, 1, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(14, 8, 5, BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade, &D_8218E770, 0, 2, 0x11, 9, 1, 0);
-    BattleAnim_SpawnOwnerModelTintRampDetach(0x3C, 0x2C, 0xC8, 0, 8);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(58, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x18, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(60, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x18, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 2, 0x14, BattleAnim_RunFlamethrowerHitRotationWeak, &D_8218E7F0, 0, 1, 0x11, 9, 1, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 2, 2, BattleAnim_RunFlamethrowerHitRotationStrong, &D_8218E7F0, 0, 0xC, 0x11, 9, 1, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(14, 8, 5, BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade, &D_8218E770, 0, 2, 0x11, 9, 1, 0);
+    BattleAnim_SpawnOwnerTintRampDetach(0x3C, 0x2C, 0xC8, 0, 8);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(58, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x18, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(60, 2, 2, BattleAnim_CallbackSharedAnimatedVerticalFade, &D_8218E770, 0, 1, 9, 0, 0x18, 0);
 }
 
 M2C_UNK func_8213B5D8(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK *, M2C_UNK *, s32, s32, s32, s32, s32, s32); /* extern */
@@ -2332,14 +2332,14 @@ extern M2C_UNK D_8218E7C0;
  */
 void BattleAnim_InitializeEggBombHit(void) {
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunExpandingHitSpark, &D_8218E5A8, 0, 1, 0x10, 9, 0x12, 0);
-    BattleAnim_SpawnDescriptor25AlphaHoldFadeOut(0, 0, 0x40, 0x8, 0xC8);
+    BattleAnim_SpawnDesc25AlphaHoldFadeOut(0, 0, 0x40, 0x8, 0xC8);
     BattleAnim_SpawnBeamBoomWaterfallHueChange(4, 0x8, 0x17, 0x20, 0xFF);
     BattleAnim_CreateEffectSlotForCurrentOwner(0, BattleAnim_RunBackgroundBombExplosion, &D_8218E7B0, 0, 3, 0x10, 9, 0x17, 2);
     BattleAnim_CreateEffectSlotForCurrentOwner(6, BattleAnim_RunBackgroundBombExplosion, &D_8218E7B0, 0, 3, 0x10, 9, 0x2C, 1);
     BattleAnim_CreateEffectSlotForCurrentOwner(12, BattleAnim_RunBackgroundBombExplosion, &D_8218E7B0, 0, 3, 0x10, 9, 0x1A, 1);
     BattleAnim_CreateEffectSlotForCurrentOwner(18, BattleAnim_RunBackgroundBombExplosion, &D_8218E7B0, 0, 2, 0x10, 9, 0x1A, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(20, BattleAnim_CallbackEndEffect40Descriptor48SpreadScaleAlphaFade, &D_8218E7C0, 0, 3, 0x11, 9, 0x1A, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(20, 2, 2, BattleAnim_CallbackEndEffect40Descriptor3DSpreadRisingColorFade, &D_8218E770, 0, 6, 0x11, 9, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(20, 2, 2, BattleAnim_CallbackEndEffect40Descriptor3DSpreadRisingColorFade, &D_8218E770, 0, 6, 0x11, 9, 0, 0);
     BattleAnim_CreateEffectSlotForCurrentOwner(24, BattleAnim_CallbackEndEffects40And54Descriptor46SpreadScaleFade, &D_8218E7B0, 0, 8, 0x11, 9, 0, 0);
 }
 
@@ -2360,11 +2360,11 @@ void BattleAnim_DefaultEndEffect_Init(void) {
 void BattleAnim_InitializeFireBlastHit(void) {
     BattleAnim_SpawnGlobalTintColorFadeDetach(0, 0xFF, 0);
     BattleAnim_SpawnDrainFlameHueChange(0xA, 9, 0xE, 8, 0xC8, 0x10);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(4, 8, 0x14, BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade, &D_8218E580[0x3E], 0, 2, 0xE, 0, 0, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(4, 8, 0x14, BattleAnim_CallbackEndEffect59Descriptor4FColorScaleFade, &D_8218E580[0x4F], 0, 2, 9, 0, 0, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 6, 0x28, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 0, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 0x3C, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 1, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 4, 0x3C, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 2, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 3, 0x50, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 3, 0);
-    BattleAnim_CreateRepeatingEffectSlotForCurrentOwner(0, 3, 0x50, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 4, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(4, 8, 0x14, BattleAnim_CallbackEndEffects15And22And59Descriptor3DRotatingAlphaScaleFade, &D_8218E580[0x3E], 0, 2, 0xE, 0, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(4, 8, 0x14, BattleAnim_CallbackEndEffect59Descriptor4FColorScaleFade, &D_8218E580[0x4F], 0, 2, 9, 0, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 6, 0x28, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 0, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 0x3C, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 1, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 4, 0x3C, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 2, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 3, 0x50, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 3, 0);
+    BattleAnim_CreateRepeatEffectSlotForCurrentOwner(0, 3, 0x50, BattleAnim_RunDaimonji, &D_8218E580[0x4F], 0, 1, 9, 0, 4, 0);
 }
