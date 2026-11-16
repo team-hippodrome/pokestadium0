@@ -23,6 +23,7 @@ Install Python 3, GNU make, and GNU MIPS binutils (`mips-linux-gnu-as`, `ld`,
 make init       # pinned Python packages, IDO, extraction
 make rom        # COMPARE=1 by default; rebuilds objects and links every image
 make test       # assembly regeneration check and repository tests
+make shift-test # moves every piece by SHIFT (16) bytes and checks every address followed
 make coverage   # regenerate coverage from the verified receipt
 ```
 
@@ -143,19 +144,62 @@ building after `make clean` passed. The same control on the whole-file build
 `linked image bytes differ: resident`. This checks that C edits affect the actual
 output and that the build has no fallback to retail owner bytes.
 
-## Current constraints
+## Shiftable build
 
-This is a fixed-layout build. Owner sizes and image addresses are held constant;
-a matching function is promoted by replacing its `GLOBAL_ASM` block in `src/`
-with C and passing the full ROM gate. Data, `.rodata`, microcode and other
-non-code ranges still come from the extracted assets.
+Code and data may grow. The linker lays out each image: pieces follow each
+other in retail order, and every retail address that code or data holds is a
+symbol, so it moves with what it names. `make rom COMPARE=0` is the build to
+edit: a C function may get longer, a placed `.data` may gain entries, and the
+images, the ROM after them, the archive directories, the fragment relocation
+tables and the header checksum all follow.
 
-`COMPARE=0` permits nonidentical fixed-layout output, but an owner size change or
-an edit incompatible with the retained compression topology fails explicitly.
-General relayout and a compressor matching the retail encoder are future work.
+* Relocation tables are regenerated from the linker's relocations
+  (`--emit-relocs`). A fragment lists its own addresses and those in
+  `SHARED_SLOT` (0x82100000, the only slot other fragments reach through the
+  loader), as retail does.
+* Fragment data addresses come from the retail relocation table. Two more kinds
+  of address are not in that table, so the builder finds them by value: resident
+  addresses (the loader leaves them alone) and geo layout set-callback commands
+  (`0x08000000, callback, argument`) that name another fragment's function. The
+  geo code converts those itself, so moving fragment001's particle code without
+  them crashes the title screen.
+* The resident image has no table: an aligned data word that is a resident
+  address counts as a pointer. Words that only look like fragment addresses
+  (`0x81000531` is a slot id and a count) are left alone.
+* A ROM offset written as a number in C cannot move. `-DSHIFTABLE` (set when
+  not comparing) switches such code to a linker symbol; see
+  `src/display_object_textures.c`. It costs instructions, which is why the
+  matching build leaves it out.
+* `config/jp/section_sizes.json` holds each placed section's retail size. A
+  matching build writes it; other builds read it to place data after a grown
+  section.
+* `LISTING_FIXES` in `tools/production.py` names two operands that the
+  generated listings leave as numbers.
+* Compressed fragments that no longer match are recompressed with crunch64
+  (no restoration patches); the header checksum is restamped for CIC 6103.
+
+`make shift-test` (`--shift N`) keeps the retail code, moves every piece of every
+image by N bytes and checks the result word by word: each relocated word must
+hold the moved address, and every other byte must be unchanged. A ROM with every
+image moved by 0x40 boots, reaches the main menu and runs a battle in
+Project64.
+
+Limits:
+
+* Project64 picks settings by header CRC. A rebuilt ROM has a new CRC and,
+  without an RDB entry like retail's (`Save Type=Sram`, `RDRAM Size=8`), hangs
+  on a black screen. That is the emulator, not the ROM.
+* Addresses inside opaque assets (gaps, textures, compressed data outside the
+  images) are not translated. `tools/fonts_en.py` (`make en`) patches fixed
+  retail offsets and so expects the retail layout.
+* A reference into the middle of a C function or object whose size changed
+  raises instead of guessing.
+* `.bss` keeps its retail address and may shrink but not grow. New zeroed
+  variables go in `.data` (initialised to zero), which can grow.
+
 The original compiler settings and original function/translation-unit boundaries
 remain unconfirmed beyond the individual candidates that now pass the full ROM
-gate. No runtime or emulator acceptance is claimed.
+gate.
 
 Private ROMs, extracted assets and assembly, compiler binaries, and build output
 are ignored and must not be committed. CI runs synthetic storage/assembler tests

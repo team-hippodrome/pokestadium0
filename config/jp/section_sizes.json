@@ -1,0 +1,610 @@
+{
+  "src/33FE0_4.c": {
+    ".rodata": 80
+  },
+  "src/3D140.c": {
+    ".rodata": 112
+  },
+  "src/4DF00.c": {
+    ".rodata": 128
+  },
+  "src/4E980.c": {
+    ".data": 32,
+    ".rodata": 80
+  },
+  "src/52D80.c": {
+    ".data": 20
+  },
+  "src/5C980.c": {
+    ".bss": 16
+  },
+  "src/DDC0_2.c": {
+    ".rodata": 12
+  },
+  "src/DDC0_3.c": {
+    ".rodata": 36
+  },
+  "src/audio_commands.c": {
+    ".bss": 64,
+    ".rodata": 2780
+  },
+  "src/audio_commands_2.c": {
+    ".rodata": 528
+  },
+  "src/audio_commands_800407B0.c": {
+    ".rodata": 400
+  },
+  "src/audio_commands_800414B0.c": {
+    ".rodata": 48
+  },
+  "src/crash_screen.c": {
+    ".rodata": 428
+  },
+  "src/fragments/fragment000_80C00/81100020.c": {
+    ".bss": 16,
+    ".rodata": 112
+  },
+  "src/fragments/fragment000_80C00/81110190.c": {
+    ".data": 16
+  },
+  "src/fragments/fragment000_80C00/81110210.c": {
+    ".rodata": 32
+  },
+  "src/fragments/fragment000_80C00/81111C20.c": {
+    ".rodata": 48
+  },
+  "src/fragments/fragment000_80C00/battle_engine_309ED0.c": {
+    ".rodata": 28
+  },
+  "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0_81102C20.c": {
+    ".bss": 656,
+    ".rodata": 80
+  },
+  "src/fragments/fragment000_80C00/gb_tower_emulator_7F9A0_811056CC.c": {
+    ".rodata": 28
+  },
+  "src/fragments/fragment000_80C00/gb_tower_emulator_86920.c": {
+    ".rodata": 32
+  },
+  "src/fragments/fragment000_80C00/gb_tower_emulator_86920_8110B880.c": {
+    ".rodata": 20
+  },
+  "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0.c": {
+    ".rodata": 140
+  },
+  "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81113A44.c": {
+    ".rodata": 720
+  },
+  "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81114B54.c": {
+    ".rodata": 576
+  },
+  "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_81115818.c": {
+    ".data": 16,
+    ".rodata": 320
+  },
+  "src/fragments/fragment000_80C00/gb_tower_emulator_86CB0_811177E8.c": {
+    ".data": 12
+  },
+  "src/fragments/fragment002_15E220.c": {
+    ".rodata": 20
+  },
+  "src/fragments/fragment006_162BE0/battle_engine_2FA4D0.c": {
+    ".data": 8
+  },
+  "src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c": {
+    ".data": 32
+  },
+  "src/fragments/fragment007_166580_3.c": {
+    ".rodata": 52
+  },
+  "src/fragments/fragment007_166580_4.c": {
+    ".rodata": 144
+  },
+  "src/fragments/fragment007_166580_5.c": {
+    ".rodata": 168
+  },
+  "src/fragments/fragment008_1720F0.c": {
+    ".rodata": 72
+  },
+  "src/fragments/fragment010_17BE70/pikachu_reward.c": {
+    ".data": 12
+  },
+  "src/fragments/fragment011_17E340/area_select.c": {
+    ".data": 16,
+    ".rodata": 20
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_2F6930.c": {
+    ".bss": 96,
+    ".rodata": 48
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_3020D0.c": {
+    ".rodata": 48
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_3055E0.c": {
+    ".rodata": 8
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_3055E0_821243DC.c": {
+    ".rodata": 32
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_309ED0.c": {
+    ".rodata": 20
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_309ED0_82124E80.c": {
+    ".rodata": 172
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_309ED0_82128CDC.c": {
+    ".rodata": 76
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_309ED0_8212A328.c": {
+    ".rodata": 100
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_313D60.c": {
+    ".rodata": 60
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_313D60_2.c": {
+    ".rodata": 128
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_315D50_2.c": {
+    ".rodata": 24
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_317E70.c": {
+    ".rodata": 20
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_317E70_2.c": {
+    ".rodata": 272
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_31D9F0.c": {
+    ".rodata": 12
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_31D9F0_2.c": {
+    ".rodata": 208
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_31D9F0_82117610.c": {
+    ".data": 12,
+    ".rodata": 68
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_31D9F0_821199E4.c": {
+    ".data": 304,
+    ".rodata": 16
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_3223B0.c": {
+    ".rodata": 96
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_3274D0.c": {
+    ".rodata": 48
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_328F10.c": {
+    ".rodata": 128
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_32A640.c": {
+    ".rodata": 96
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_32B680.c": {
+    ".rodata": 124
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_32B680_3.c": {
+    ".rodata": 712
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_32B680_3_82154310.c": {
+    ".rodata": 484
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_32B680_3_82154484.c": {
+    ".rodata": 1132
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_32B680_82121260.c": {
+    ".rodata": 92
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_32B680_82121434.c": {
+    ".rodata": 92
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_32B680_82121604.c": {
+    ".rodata": 200
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_339CA0.c": {
+    ".rodata": 528
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_339CA0_821640A0.c": {
+    ".rodata": 280
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_339CA0_821659FC.c": {
+    ".rodata": 20
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_339CA0_82165E30.c": {
+    ".rodata": 32
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_3438B0.c": {
+    ".rodata": 332
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_3438B0_82130628.c": {
+    ".rodata": 240
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_343BA0.c": {
+    ".rodata": 32
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_343BA0_2.c": {
+    ".data": 16,
+    ".rodata": 96
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_343BA0_3.c": {
+    ".rodata": 48
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_343BA0_4.c": {
+    ".rodata": 40
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_343BA0_8.c": {
+    ".data": 640,
+    ".rodata": 8
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_343BA0_8_82170D28.c": {
+    ".data": 64,
+    ".rodata": 16
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_347330.c": {
+    ".rodata": 8
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_347330_82171788.c": {
+    ".data": 240,
+    ".rodata": 48
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_347330_82173418.c": {
+    ".data": 224
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_34A420.c": {
+    ".bss": 6464,
+    ".rodata": 368
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_34E1A0.c": {
+    ".rodata": 32
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_34F1A0.c": {
+    ".rodata": 32
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_3502D0.c": {
+    ".rodata": 32
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_3512D0.c": {
+    ".rodata": 64
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_351F20.c": {
+    ".rodata": 48
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_352570.c": {
+    ".rodata": 64
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_353370.c": {
+    ".rodata": 80
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_3540B0.c": {
+    ".rodata": 48
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_354CD0.c": {
+    ".rodata": 48
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_355A00.c": {
+    ".rodata": 48
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_356730.c": {
+    ".rodata": 16
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_357C30.c": {
+    ".data": 128,
+    ".rodata": 32
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_3591E0.c": {
+    ".rodata": 16
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_359F90.c": {
+    ".rodata": 40
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_move_animation.c": {
+    ".rodata": 128
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_move_model_transforms.c": {
+    ".data": 36,
+    ".rodata": 12
+  },
+  "src/fragments/fragment012_17ED00/battle_engine_move_model_transforms_82109AF4.c": {
+    ".data": 48,
+    ".rodata": 184
+  },
+  "src/fragments/fragment012_17ED00/ekans_game.c": {
+    ".rodata": 116
+  },
+  "src/fragments/fragment012_17ED00/ekans_game_3.c": {
+    ".rodata": 376
+  },
+  "src/fragments/fragment012_17ED00/ekans_game_3_82184DC8.c": {
+    ".rodata": 1764
+  },
+  "src/fragments/fragment012_17ED00/ekans_game_3_82187DB4.c": {
+    ".rodata": 312
+  },
+  "src/fragments/fragment012_17ED00/ekans_game_3_82188050.c": {
+    ".rodata": 652
+  },
+  "src/fragments/fragment012_17ED00/fragment1_89010.c": {
+    ".rodata": 56
+  },
+  "src/fragments/fragment012_17ED00/fragment1_89010_821328DC.c": {
+    ".rodata": 56
+  },
+  "src/fragments/fragment012_17ED00/particle_math_269820_2.c": {
+    ".rodata": 32
+  },
+  "src/fragments/fragment012_17ED00/particle_math_26E6D0_3.c": {
+    ".rodata": 48
+  },
+  "src/fragments/fragment014_235D70/lab_pc_icons.c": {
+    ".bss": 16,
+    ".rodata": 32
+  },
+  "src/fragments/fragment014_235D70/lab_pc_icons_88000020.c": {
+    ".rodata": 36
+  },
+  "src/fragments/fragment015_238BD0/89006FC0.c": {
+    ".rodata": 76
+  },
+  "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00.c": {
+    ".rodata": 76
+  },
+  "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00_8900379C.c": {
+    ".rodata": 24
+  },
+  "src/fragments/fragment015_238BD0/lab_pc_list_1CEA00_89003880.c": {
+    ".rodata": 24
+  },
+  "src/fragments/fragment015_238BD0/lab_pc_list_1D7B40.c": {
+    ".rodata": 132
+  },
+  "src/fragments/fragment016_252E10/89100020_89100914.c": {
+    ".rodata": 64
+  },
+  "src/fragments/fragment016_252E10/89100020_891012A8.c": {
+    ".rodata": 64
+  },
+  "src/fragments/fragment016_252E10/89100020_891019E4.c": {
+    ".rodata": 116
+  },
+  "src/fragments/fragment016_252E10/89100020_89102AB8.c": {
+    ".rodata": 20
+  },
+  "src/fragments/fragment016_252E10/89100020_89102C40.c": {
+    ".rodata": 88
+  },
+  "src/fragments/fragment016_252E10/89100020_89103620.c": {
+    ".rodata": 32
+  },
+  "src/fragments/fragment016_252E10/89100020_89103740.c": {
+    ".rodata": 80
+  },
+  "src/fragments/fragment016_252E10/lab_pc_list_1D7B40.c": {
+    ".rodata": 44
+  },
+  "src/fragments/fragment016_252E10/lab_pc_list_1E46B0_2.c": {
+    ".data": 224,
+    ".rodata": 24
+  },
+  "src/fragments/fragment017_261F00.c": {
+    ".rodata": 24
+  },
+  "src/fragments/fragment018_262620/pokedex_214920.c": {
+    ".rodata": 20
+  },
+  "src/fragments/fragment018_262620/pokedex_2190D0.c": {
+    ".rodata": 16
+  },
+  "src/fragments/fragment019_293410/lab_pc_icons.c": {
+    ".rodata": 28
+  },
+  "src/fragments/fragment019_293410/lab_pc_icons_8A201598.c": {
+    ".rodata": 76
+  },
+  "src/fragments/fragment025_2B16A0/fatal_error_screen.c": {
+    ".data": 16
+  },
+  "src/fragments/fragment031_3553C0/particle_data_library_257DE0.c": {
+    ".bss": 16
+  },
+  "src/fragments/fragment039_3C5200.c": {
+    ".bss": 16
+  },
+  "src/fragments/fragment040_3CE090.c": {
+    ".bss": 16
+  },
+  "src/game_state.c": {
+    ".bss": 4256
+  },
+  "src/gb_audio.c": {
+    ".bss": 400,
+    ".data": 44,
+    ".rodata": 96
+  },
+  "src/gb_audio_render.c": {
+    ".rodata": 16
+  },
+  "src/gb_data.c": {
+    ".rodata": 100
+  },
+  "src/gb_save.c": {
+    ".data": 4,
+    ".rodata": 32
+  },
+  "src/gb_tower.c": {
+    ".data": 16
+  },
+  "src/jpeg_stream.c": {
+    ".rodata": 112
+  },
+  "src/lab_item.c": {
+    ".data": 1056,
+    ".rodata": 8400
+  },
+  "src/leo.c": {
+    ".rodata": 384
+  },
+  "src/libleo/leoc2ecc.c": {
+    ".rodata": 32
+  },
+  "src/libleo/leocmdex.c": {
+    ".rodata": 168
+  },
+  "src/libleo/leomecha.c": {
+    ".rodata": 48
+  },
+  "src/libnaudio/n_drvrNew.c": {
+    ".rodata": 32
+  },
+  "src/libnaudio/n_resample.c": {
+    ".rodata": 16
+  },
+  "src/libnaudio/n_reverb.c": {
+    ".rodata": 48
+  },
+  "src/libnaudio/n_synthesizer.c": {
+    ".rodata": 16
+  },
+  "src/libnumus/player.c": {
+    ".rodata": 128
+  },
+  "src/libultra/audio/drvrnew.c": {
+    ".data": 400,
+    ".rodata": 32
+  },
+  "src/libultra/audio/env.c": {
+    ".data": 320,
+    ".rodata": 96
+  },
+  "src/libultra/audio/resample.c": {
+    ".rodata": 64
+  },
+  "src/libultra/audio/reverb.c": {
+    ".rodata": 48
+  },
+  "src/libultra/audio/sl.c": {
+    ".data": 16
+  },
+  "src/libultra/audio/synthesizer.c": {
+    ".rodata": 16
+  },
+  "src/libultra/gu/cosf.c": {
+    ".rodata": 80
+  },
+  "src/libultra/gu/perspective.c": {
+    ".rodata": 16
+  },
+  "src/libultra/gu/random.c": {
+    ".data": 16
+  },
+  "src/libultra/gu/rotate.c": {
+    ".bss": 16,
+    ".rodata": 16
+  },
+  "src/libultra/gu/rotaterpy.c": {
+    ".bss": 16,
+    ".rodata": 16
+  },
+  "src/libultra/gu/sinf.c": {
+    ".rodata": 80
+  },
+  "src/libultra/io/aisetnextbuf.c": {
+    ".data": 16
+  },
+  "src/libultra/io/cartrominit.c": {
+    ".bss": 128
+  },
+  "src/libultra/io/conteepread.c": {
+    ".bss": 64
+  },
+  "src/libultra/io/contpfs.c": {
+    ".bss": 256,
+    ".data": 16
+  },
+  "src/libultra/io/contramread.c": {
+    ".data": 16
+  },
+  "src/libultra/io/controller.c": {
+    ".bss": 144,
+    ".data": 16
+  },
+  "src/libultra/io/devmgr.c": {
+    ".rodata": 32
+  },
+  "src/libultra/io/driverominit.c": {
+    ".bss": 128
+  },
+  "src/libultra/io/gbpakreadid.c": {
+    ".data": 80
+  },
+  "src/libultra/io/pfsisplug.c": {
+    ".bss": 64
+  },
+  "src/libultra/io/piacs.c": {
+    ".bss": 32,
+    ".data": 16
+  },
+  "src/libultra/io/siacs.c": {
+    ".bss": 32,
+    ".data": 16
+  },
+  "src/libultra/io/sptask.c": {
+    ".bss": 64
+  },
+  "src/libultra/io/vi.c": {
+    ".data": 112
+  },
+  "src/libultra/libc/llcvt.c": {
+    ".rodata": 16
+  },
+  "src/libultra/libc/xldtob.c": {
+    ".rodata": 96
+  },
+  "src/libultra/libc/xlitob.c": {
+    ".data": 48
+  },
+  "src/libultra/libc/xprintf.c": {
+    ".data": 80,
+    ".rodata": 256
+  },
+  "src/libultra/os/seteventmesg.c": {
+    ".bss": 128
+  },
+  "src/libultra/os/thread.c": {
+    ".data": 32
+  },
+  "src/libultra/os/timerintr.c": {
+    ".bss": 64,
+    ".data": 16
+  },
+  "src/matrix.c": {
+    ".rodata": 16
+  },
+  "src/poke_icon_2.c": {
+    ".data": 128
+  },
+  "src/pokemon_stats_2.c": {
+    ".rodata": 48
+  },
+  "src/profiler.c": {
+    ".data": 32,
+    ".rodata": 32
+  },
+  "src/rom_device.c": {
+    ".rodata": 32
+  },
+  "src/rsp.c": {
+    ".bss": 128,
+    ".rodata": 48
+  },
+  "src/save_data.c": {
+    ".rodata": 176
+  },
+  "src/scheduler.c": {
+    ".rodata": 32
+  },
+  "src/util.c": {
+    ".rodata": 48
+  },
+  "src/vector_math.c": {
+    ".rodata": 64
+  }
+}

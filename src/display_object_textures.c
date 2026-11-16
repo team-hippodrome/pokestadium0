@@ -375,14 +375,25 @@ extern s32 D_800AD1A4;
 extern s32 D_800AD1A8;
 extern s32 D_800AD1AC;
 
+#ifdef SHIFTABLE
+/* ROM offsets of two archives; the linker moves them with the ROM. */
+extern u8 D_00500000[];
+extern u8 D_004A8000[];
+#define ARCHIVE_500000 ((s32) D_00500000)
+#define ARCHIVE_4A8000 ((s32) D_004A8000)
+#else
+#define ARCHIVE_500000 0x500000
+#define ARCHIVE_4A8000 0x4A8000
+#endif
+
 /**
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
  * Lab sort, registration, the Lab PC and Free Battle setup.
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void PokeIcon_OpenModelArchives(void) {
-    D_800AD1A4 = func_80004154(0x500000, 0, 1, 1);
-    D_800AD1A8 = func_80004154(0x4A8000, 0, 1, 1);
+    D_800AD1A4 = func_80004154(ARCHIVE_500000, 0, 1, 1);
+    D_800AD1A8 = func_80004154(ARCHIVE_4A8000, 0, 1, 1);
     D_800AD1AC = func_800023C4(0x28000, 1);
 }
 

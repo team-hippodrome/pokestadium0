@@ -9,8 +9,7 @@ import json
 from m2c_easiest import function_bytes
 from production import MACROS, canonical_assembly, encode_image, run, storage_template, trim_text
 from production import ROOT, SECTION_REGISTRY, SOURCE_REGISTRY, source_files, trim_file_text
-from production import ASSETS
-from production import bss_output_section
+from production import ASSETS, fix_checksum
 
 
 def wrapped(override=None):
@@ -69,33 +68,6 @@ class ExtractedAssetsTests(unittest.TestCase):
 
 @unittest.skipUnless(shutil.which('mips-linux-gnu-as'), 'MIPS GNU assembler unavailable')
 class AssemblerTests(unittest.TestCase):
-    def test_runtime_bss_can_overlap_stored_relocation_bytes(self):
-        with tempfile.TemporaryDirectory() as temporary:
-            directory = Path(temporary)
-            source, obj = directory / 'fixture.s', directory / 'fixture.o'
-            source.write_text('.section .stored, "a", @progbits\n'
-                              '.word 0x12345678, 0xAABBCCDD, 0x87654321, 0xFFEEDDCC\n'
-                              '.section .bss, "aw", @nobits\n'
-                              'scratch: .space 4\n'
-                              '.text\n.set noreorder\nlui $v0, %hi(scratch)\n'
-                              'addiu $v0, $v0, %lo(scratch)\njr $ra\nnop\n')
-            run(['mips-linux-gnu-as', '-32', '-EB', source, '-o', obj])
-            script = directory / 'fixture.ld'
-            script.write_text('PHDRS { body PT_LOAD; }\nSECTIONS {\n'
-                              f'.stored 0x80000000 : AT(0) {{ "{obj}"(.stored) }} :body\n'
-                              f'.text 0x80000010 : AT(16) {{ "{obj}"(.text) }} :body\n'
-                              + bss_output_section('.scratch', 0x80000004, obj, '.bss',
-                                                   0x80000000, 32)
-                              + '\n/DISCARD/ : { *(*) }\n}\n')
-            elf, binary = directory / 'fixture.elf', directory / 'fixture.bin'
-            run(['mips-linux-gnu-ld', '-T', script, '-o', elf, obj])
-            run(['mips-linux-gnu-objcopy', '-O', 'binary', elf, binary])
-            # The reference resolves to scratch's address while all overlapping
-            # nonzero storage bytes survive; BSS adds no trailing file content.
-            self.assertEqual(binary.read_bytes(), struct.pack('>8I',
-                             0x12345678, 0xAABBCCDD, 0x87654321, 0xFFEEDDCC,
-                             0x3C028000, 0x24420004, 0x03E00008, 0))
-
     def check_words(self, instructions):
         lines = []
         expected = bytearray()
@@ -143,6 +115,16 @@ class AssemblerTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+@unittest.skipUnless((ROOT / 'baseroms/jp/baserom.z64').exists(), 'private ROM unavailable')
+class ChecksumTests(unittest.TestCase):
+    def test_restamping_the_retail_rom_reproduces_its_header(self):
+        rom = bytearray((ROOT / 'baseroms/jp/baserom.z64').read_bytes())
+        header = rom[0x10:0x18]
+        rom[0x10:0x18] = bytes(8)
+        fix_checksum(rom)
+        self.assertEqual(rom[0x10:0x18], header)
 
 
 class SourceRegistryTests(unittest.TestCase):
