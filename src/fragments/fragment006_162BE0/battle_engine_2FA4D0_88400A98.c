@@ -249,6 +249,14 @@ extern char D_8840327C[];
 extern char D_88403290[];
 extern char D_884032A0[];
 extern u8 D_8F4B2EB0[];
+#ifdef ENGLISH
+// Options byte (func_80025214): bit 0 mono, bit 1 no commentary, and in the English build this
+// spare bit, which hides the subtitles (Subtitles_Draw). Clear in a retail save: subtitles on.
+#define OPTIONS_SUBTITLES_OFF 4
+#define OPTIONS_ROWS 5
+#else
+#define OPTIONS_ROWS 4
+#endif
 void func_884014B4(s32 arg0, u8 arg1) {
     Color_RGB8 sp44 = {0x00, 0x00, 0x32};
     Color_RGB8 sp40 = {0x00, 0x00, 0xC8};
@@ -257,7 +265,11 @@ void func_884014B4(s32 arg0, u8 arg1) {
     s32 row;
 
     row = arg0;
+#ifdef ENGLISH
+    Ui_DrawGradientPanel(0x32, 0x3C, 0xDC, 0x91, &sp44, &sp40); // one more row: Subtitles
+#else
     Ui_DrawGradientPanel(0x32, 0x3C, 0xDC, 0x7D, &sp44, &sp40);
+#endif
     gSPDisplayList(gDisplayListHead++, D_80060290);
     Gfx_DrawTextureRgba16(0x3A, (row * 20) + 0x63, 0x18, 0xE, (u8 *) Util_ConvertAddrToVirtAddr((uintptr_t) D_8F4B2EB0), 0x18, 0x200000);
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -272,10 +284,19 @@ void func_884014B4(s32 arg0, u8 arg1) {
     Font_Printf(0x52, 0x62, D_88403268, D_88402FA4[(arg1 & 1) != 0]);
     Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x77) ? 0 : 255, 255);
     Font_Printf(0x52, 0x76, D_8840327C, D_88402FAC[(arg1 & 2) != 0]);
+#ifdef ENGLISH
+    Gfx_SetEnvColor(255, 255, (row == 2) ? 0 : 255, 255);
+    Font_Printf(0x52, 0x8A, "Subtitles  %s", D_88402FAC[(arg1 & OPTIONS_SUBTITLES_OFF) != 0]);
+    Gfx_SetEnvColor(255, 255, (row == 3) ? 0 : 255, 255);
+    Font_Printf(0x52, 0x9E, D_88403290);
+    Gfx_SetEnvColor(255, 255, (row == 4) ? 0 : 255, 255);
+    Font_Printf(0x52, 0xB2, D_884032A0);
+#else
     Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x8B) ? 0 : 255, 255);
     Font_Printf(0x52, 0x8A, D_88403290);
     Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x9F) ? 0 : 255, 255);
     Font_Printf(0x52, 0x9E, D_884032A0);
+#endif
     Font_EndTexturedTextRendering();
 }
 
@@ -395,12 +416,12 @@ void func_88401B40(void) {
         if (M2C_FIELD(D_800603C0, u16*, 8) & 0x800) {
             sel--;
             if (sel < 0) {
-                sel = 3;
+                sel = OPTIONS_ROWS - 1;
             }
             func_8003F6AC(1);
         } else if (M2C_FIELD(D_800603C0, u16*, 8) & 0x400) {
             sel++;
-            if (sel >= 4) {
+            if (sel >= OPTIONS_ROWS) {
                 sel = 0;
             }
             func_8003F6AC(1);
@@ -414,14 +435,20 @@ void func_88401B40(void) {
                     func_8003F6AC(2);
                     flags ^= 2;
                     break;
+#ifdef ENGLISH
                 case 2:
+                    func_8003F6AC(2);
+                    flags ^= OPTIONS_SUBTITLES_OFF;
+                    break;
+#endif
+                case OPTIONS_ROWS - 2:
                     func_8003F6AC(2);
                     if (func_88401970(0, sel, flags) != 0 && func_88401970(1, sel, flags) != 0) {
                         flags = 0;
                         Save_InitializeBank3();
                     }
                     break;
-                case 3:
+                case OPTIONS_ROWS - 1:
                     done = 1;
                     func_8003F6AC(0x1D);
                     break;

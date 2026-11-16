@@ -190,12 +190,17 @@ Limits:
   without an RDB entry like retail's (`Save Type=Sram`, `RDRAM Size=8`), hangs
   on a black screen. That is the emulator, not the ROM.
 * Addresses inside opaque assets (gaps, textures, compressed data outside the
-  images) are not translated. `tools/fonts_en.py` (`make en`) patches fixed
-  retail offsets and so expects the retail layout.
+  images) are not translated.
 * A reference into the middle of a C function or object whose size changed
   raises instead of guessing.
-* `.bss` keeps its retail address and may shrink but not grow. New zeroed
-  variables go in `.data` (initialised to zero), which can grow.
+* `.bss` moves with its image but keeps its retail size: it may shrink, not
+  grow. New zeroed variables go in `.data` (initialised to zero), which can grow.
+
+`make en` (`--english US_ROM`, with `--compare 0`) is the English build on this
+layout: it compiles with `-DENGLISH`, writes Stadium 1's font and
+`text/strings.json` through the new layout, and moves a resident string that
+outgrew its room to a new piece after the resident data, resolving the retail
+address to it. See `docs/translation.md`.
 
 The original compiler settings and original function/translation-unit boundaries
 remain unconfirmed beyond the individual candidates that now pass the full ROM

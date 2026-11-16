@@ -47,33 +47,25 @@ glyph in a set advances by one value (10, 12, 16, 20, 24, 32 px), which is why Z
 are full-width. Stadium 1's set files instead start with a **0x90-byte advance table** followed by
 0x91 Latin glyphs, so each glyph advances by its own width (space 4, `A` 7, `i` 3 in the 16x10 set).
 
-`tools/fonts_en.py` builds the English ROM from the verified retail build:
-
-1. Copies Stadium 1's font archive into Zero's slot (`0x10FA0` bytes in a `0x2DF60` slot, nothing is
-   relocated) and Stadium 1's ASCII glyph map (its dump's 128-byte table at `0x8DE80`) over
-   `D_8006081F`. Both are retail Yay0 streams for the same loader, so there is no recompression.
-2. Rewrites two functions **in place at their retail size**: `func_8001A118` stores `file + 0x90` as
-   the set's glyph base, and `func_80019F70` maps printable ASCII through the Latin map, maps every
-   other code to glyph 0, and copies the glyph's advance from the table into the set's advance byte,
-   which both glyph drawers already read once per character. No other function changes.
-
-The build pins each source file's span, not its functions, so a recompiled file whose functions
-change size shifts the rest of the file while the calls other files make by address keep pointing at
-the old offsets — a build that still passes `make rom` but is broken. That is why the font path is a
-binary patch and not `#ifdef` code; keep it that way, or add per-function placement to
-`tools/production.py` first.
-
-`make en` runs it (`EN_FONT_ROM=baseroms/us/baserom.z64`, the Stadium 1 dump) and writes
-`build/pokestadium0-en.z64`. The patch asserts the retail instruction words it reuses, and its
-self-test interprets the emitted mapping function: ASCII returns its glyph and advance, other codes
-return glyph 0 with the space advance.
+The English build is `make en` (see "English build on the shiftable layout" below): Stadium 1's set
+payloads go into Zero's archive slots and its Latin glyph numbers into `D_8006081F`
+(`tools/fonts_en.py`), and two functions are C under `#ifdef ENGLISH`: `func_8001A118` registers
+`file + 0x90` as the set's glyphs, and `func_80019F70` maps printable ASCII through the Latin map and
+copies the glyph's advance from the table into the set's advance byte, which both glyph drawers read
+right after the call. Every other code takes the retail path. Until 2026-11-13 these were binary
+patches at the functions' retail size, because the build could not move code yet.
 
 Known limits: kana has no glyph in the Latin sheets, so an untranslated Japanese string draws blank
 cells with the space advance (the intended signal for what is left to translate); the two-cycle
 gradient glyph sits at a cell index the Latin sheets do not have, and nothing in Zero enables
 two-cycle text; `é` is not in the map, so "POKéMON" is written "POKeMON".
 
-## Workstream 2: announcer subtitles
+## Workstream 2: announcer subtitles — done (2026-11-13)
+
+Done together with workstream 3; see `docs/subtitles.md`. Zero's announcer turned out to be sound
+effects from one bank, not a stream, so the plan below changed: the hook is the effect start in
+`func_80043DD0`, the lines were written down from the bank, and the state lives in new
+`.data` of `src/stage_loader.c`. Original plan:
 
 Direct port of `Subtitles_OnClip` / `Subtitles_Draw` / `Subtitles_Clear` from
 `~/pokestadium-complete/src/text_system.c`, which is 90 lines and already debounced for a 320x240
@@ -91,7 +83,14 @@ stage.
 Verification: every clip id in the pak resolves to a non-empty line, and the line count matches the
 pak's; then a stage-by-stage listen-and-read pass.
 
-## Workstream 3: movie and animation subtitles
+## Workstream 3: movie and animation subtitles — done (2026-11-13)
+
+The spoken scene lines (tournament and Free Battle openings, badge calls, the champion) are
+effects of the same announcer bank, queued when the battle music starts, so workstream 2's hook
+and table cover them; see `docs/subtitles.md`. No other voice source was found: the bank's other
+players are `Audio_PlayCommand` case 0x50 (hooked too) and `func_80041834` (never called), and
+Zero has no streamed audio (`src/audio_stream.h` declares Stadium 1's `AudioStream_*`, which
+nothing defines). Original plan:
 
 The intro/demo scenes (`src/fragments/demo_scenes/`, `src/dp_intro.c`) play voice without any text
 layer, and several cues fire outside battles ("GOOD LUCK!" before a battle).
@@ -271,18 +270,16 @@ read as text (70% kana/digits/Japanese punctuation, at least three characters): 
 matching entry into `en` when the English fits in `room`; 581 strings are filled at the moment, the
 rest are Pokédex flavour text and names waiting for review.
 
-`tools/translate_strings.py apply` writes the translations into the built ROM in place (ASCII plus
-NUL padding inside `room`) and re-stamps the IPL3 checksum, since the resident image sits below the
-first megabyte. Only uncompressed, catalogued runs are ever written.
+`tools/translate_strings.py` writes the translations into the built ROM in place (ASCII plus NUL
+padding inside `room`); the build re-stamps the IPL3 checksum afterwards, since the resident image
+sits below the first megabyte. Only uncompressed, catalogued runs are ever written.
 
-Full English build:
+Full English build (since 2026-11-13; see the last section):
 
 ```
-.venv/bin/python tools/fonts_en.py patch --stage full --rom build/pokestadium0-jp.z64 \
-    --us ~/pokestadium-complete/baseroms/us/baserom.z64 --out build/pokestadium0-full.z64
 .venv/bin/python tools/string_catalog.py dump      # merge any new jp strings
 .venv/bin/python tools/string_catalog.py fill      # dictionary -> en, where it fits
-.venv/bin/python tools/translate_strings.py apply # -> build/pokestadium0-en.z64
+make en EN_FONT_ROM=~/pokestadium-complete/baseroms/us/baserom.z64   # -> build/pokestadium0-en.z64
 ```
 
 ## Bulk translation (2026-11-12)
@@ -298,6 +295,20 @@ Result: 2583 of 2722 strings translated, 139 still Japanese (garbage entries and
 kana. Those need relocation (write the English elsewhere and patch the reference), which is the same
 mechanism workstream 4 needs for attack and Pokédex names.
 
+## Room counts the terminator and the padding (2026-11-13)
+
+`room` used to be the Japanese text's byte length without its NUL, and the fit check
+`len(en) + 1 <= room` then also reserved a NUL, so every string lost a byte plus its alignment
+padding. String literals start word-aligned, so `dump` now counts the NUL and, for a word-aligned
+string, the zero bytes up to the next word. All 41 resident strings among the old overflow are
+reached through pointers, and the fragment009 ones are 16-byte record fields, so the padding is
+theirs to use.
+
+Result: 132 of the 138 overflowing translations fit, giving 2715 of 2722 strings translated. Of
+the 7 left, one is a scanner false positive (`いいいいいいぅ` at 0x72ADC3) and six are move and item
+names that need more than their 12 bytes: Rolling Kick, Poison Powder, Sleep Powder, Defense Curl,
+Focus Energy, Paralyze Heal.
+
 ## Kana stays visible (2026-11-12)
 
 Stadium 1's sets hold 145 glyphs, Zero's 257. The English payload keeps Stadium 1's 0x90-byte
@@ -305,3 +316,93 @@ advance table and 145 glyphs, then carries **Zero's own cells 145..256**, so unt
 (species names, nicknames, Game Pak names) still draws. `func_80019F70` handles printable ASCII and
 tail-calls a copy of the retail mapper kept in the free tail of the font archive for everything
 else, so kana and the text macros keep retail behaviour exactly.
+
+Correction (2026-11-13): only hiragana lands in the kept cells (`D_8005E47F[c] + 0xAF`). Katakana
+maps to `D_8005E37F[c] + 0x45`, from glyph 69 up, which is inside Stadium 1's Latin range, so a
+katakana nickname draws as accented Latin letters (`イワイワ` shows as `mïmï` on the rental entry
+screen). Fixed the same day; see "Katakana and team records" below.
+
+## Katakana and team records (2026-11-13)
+
+Zero's retail mapper reaches every one of its cells 0..144 from Japanese text: row-1 symbols
+(0..68), full-width digits (16..25) and capitals (26..51), which Stadium 1's Latin glyphs share,
+and katakana (69..148), which they do not. Three layouts were tried:
+
+* All 257 of Zero's cells kept and the 83 Latin glyphs ASCII uses appended: correct everywhere,
+  but each set grows by a third, and the order-select screen (sets 2..5, about 190 KB more) ran
+  out of memory: `GfxImage_Allocate` returned NULL and `GfxImage_Initialize` stored through it.
+* What ships: Stadium 1's 145 glyphs, Zero's cells 145..256, and in the three small sets (16x10,
+  16x12, 16x16; 12 to 20 KB each) a copy of Zero's cells 69..144 from cell 257.
+  `func_80019F70` sends katakana there in those sets and to the hiragana of the same sound
+  (`c - 0x100`, one JIS row up) in the big ones. Every non-ASCII glyph now takes the set's own
+  advance, which `func_8001A118` keeps in the set entry's spare byte; before, a kana after a Latin
+  letter took that letter's width.
+* The archive is rebuilt with its own header (`fonts_en.english_archive`) and is a ROM segment of
+  its own, so the larger sets move what follows; its ROM range symbols follow it.
+
+The garbled COM nicknames (`パルn k`, `ium umT`) and trainer name (`S k`) were not the font. The
+preset Pokemon record at ROM 0x4006CA holds a nickname and a trainer name (`ポケスタ`) as packed
+Japanese fields, and the catalogue had translated them ("Venusaur", "Stadium"). The code that
+builds the COM team's names from these fields copies them as 2-byte characters, so the ASCII came
+out split and leaked into the nicknames. Those fields, and fragment009's team records, which have
+the same layout, are now `KEEP_JP` ranges in `tools/string_catalog.py`: `dump` marks their entries
+`keep_jp` and `fill`/`merge` leave them alone. Checked in Project64: the entry, order-select and
+battle screens show `イワイワ`, `パルパル`, `スピスピ`, `ガール`, and the battle HUD `ニドニド`.
+
+## English build on the shiftable layout (2026-11-13)
+
+`make en` (`production.py build --compare 0 --english <Stadium 1 US ROM>`) replaces the patch
+pipeline. It compiles with `-DENGLISH`, so the two font functions are C, then writes the font
+payloads, the Latin map and `text/strings.json` into the ROM it just laid out, each retail offset
+translated through the piece it now sits in. Nothing assumes the retail layout any more, so code and
+data may grow. The screens checked (title, main menu, entry, order select) are pixel-identical to
+the old patched ROM.
+
+A resident translation longer than its `room` no longer has to be cut: the build puts it after the
+resident data under a new label and resolves the retail address to that label, so every pointer and
+`%hi/%lo` that named the old string names the new one. The build refuses a string that nothing
+refers to by its start address (an array inside a struct cannot move this way). `merge` therefore
+fills resident entries whatever their length. This moved the last six: Rolling Kick, Poison Powder,
+Sleep Powder, Defense Curl, Focus Energy and Paralyze Heal, each reached through one table pointer.
+Fragment strings still have to fit.
+
+## Second pass (2026-11-14)
+
+**Font layout.** Every set, big ones included, is now Stadium 1's 0x90 advances, its Latin cells
+0..144 and Zero's cells 145..256: 257 cells, the retail count, so no screen needs more memory.
+Zero's katakana cells 69..144 are drawn into cells the English text never uses
+(`fonts_en.katakana_cell`, mirrored by `Font_GetKatakanaGlyph` in `src/model_renderer.c`): the
+accented Latin cells 95..117 and 119..144, and the full-width lower-case cells 149..174, whose
+characters (0x2361..0x237A) `func_80019F70` now draws with the ASCII letters. Katakana therefore
+draws as katakana in every set; the hiragana fallback and the copies past cell 256 are gone.
+Checked on the hi-res entry and order-select screens and in battle.
+
+**é.** Cell 118 keeps Stadium 1's é and `@` maps to it. `translate_strings.encode` writes `é` as
+`@` and everything else non-ASCII as EUC-JP, so `Nidoran♀` keeps its sign. The catalogue spells
+Pokémon, POKéMON, Pokédex and Poké Ball/Doll/Mart with it; the Zero studio accepts é.
+
+**Two-character strings.** `string_catalog.scan` takes two kana when they start word-aligned
+(`はい`, `いいえ`, `あり`, `なし`); unaligned pairs are noise. `NOT_TEXT` drops two ranges that
+read as Japanese and are not (the `いいいいいいぅ` fill at 0x72ADC0, sample data at 0xE30148).
+
+**printf strings.** `likely_text` ignored `%s`/`%d` when counting, so `ゆけっ！%s`, `は%sした！`,
+`なまえ/%s` and `ボックス%d` failed the 70% test and stayed Japanese. Conversions are now stripped
+before counting; "Go! %s" was seen in battle.
+
+**Compressed fragments hold no text.** Every Yay0 block was decompressed and scanned: the only
+Japanese is the block at ROM 0x3FFD78, rental and team records of the `keep_jp` kind. Nothing to
+catalogue there.
+
+**The main-menu box is proportional.** Its drawer (`Font_Printf` -> `func_8001A3E4`) reads the
+set's advance after `func_80019F70`. It looks monospaced because Stadium 1's 20-pixel set has
+wide advances (11..12 for most letters, 7 for i and l). No code change.
+
+**Name pass.** `tools/fonts_en.py names --us <Stadium 1 ROM>` measures every species, move and
+item name of Stadium 1's own tables (not `text/strings.json`) in each set against the widest the retail game could draw there (its longest
+Japanese name times the set's advance). Wider than that, per set: 10px species 54, moves 27; 12px
+species 12 (Kangaskhan and Charmander 70 against 60; Farfetch'd, Hitmonchan, Flycatcher,
+Electabuzz, Charmeleon, Exeggutor, Exeggcute, Wigglytuff, Victreebel, Triple Bird), moves 0; 16px
+species 34, moves 5; 20px species 10, moves 3; 24px species 10; 32px species 2 (Charmander,
+Kangaskhan); items none. Three of those moves are spelled shorter in the catalogue, as on the
+Game Boy (THUNDERPUNCH, THUNDERSHOCK, PoisonPowder). The bound is the retail text, not the box, so each listed name still
+needs a look on its screen.

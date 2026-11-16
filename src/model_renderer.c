@@ -263,9 +263,86 @@ extern u8 D_8006081F[];
 extern u8 D_8005E7D2[];
 extern u8 D_8005E47F[];
 extern u8 D_8005E37F[];
+#ifdef ENGLISH
+/*
+ * An English font set is Stadium 1's 145 Latin glyphs, with one advance each in the 0x90 bytes before
+ * the cells, then Zero's own cells 145..256 (tools/fonts_en.py); D_8006081F[c] holds the Latin glyph
+ * of ASCII c. Zero's katakana cells 69..144 lie under the Latin glyphs, so they move to the cells
+ * English text never draws (Font_GetKatakanaGlyph), full-width lower case among them: that is drawn
+ * with the Latin letters.
+ * The glyph drawers read the set's advance right after this call: a Latin glyph sets its own, and
+ * everything else the set's own, which func_8001A118 keeps in the spare byte.
+ */
+#define FONT_ADVANCES 0x90
+#define FONT_LATIN_GLYPHS 145
+#define FONT_KATAKANA_FIRST 69
+
+typedef struct FontSetEnglish {
+    /* 0x0 */ u8 advance;
+    /* 0x1 */ u8 height;
+    /* 0x2 */ u8 width;
+    /* 0x3 */ u8 set_advance;
+    /* 0x4 */ u8* glyphs;
+} FontSetEnglish; // size = 0x8
+
+extern FontContext* font_context;
+
+// The active set, or NULL. Screens select sets they never loaded, and an unloaded slot holds stale
+// pool bytes, so only a glyph pointer inside RDRAM counts.
+static FontSetEnglish* Font_GetActiveSet(void) {
+    FontSetEnglish* set;
+
+    if ((font_context == NULL) || (font_context->unk_50 >= 6)) {
+        return NULL;
+    }
+    set = &((FontSetEnglish*)font_context)[font_context->unk_50];
+    if (((u32)set->glyphs < 0x80001000) || ((u32)set->glyphs >= 0x803F0000)) {
+        return NULL;
+    }
+    return set;
+}
+
+// Where the katakana at Zero's cell `ret` is in an English set: katakana_cell in tools/fonts_en.py.
+// Cells 95..117 and 119..144 (accented Latin, 118 is the e acute), 149..174 (full-width lower case)
+// and 256 (unused).
+static s32 Font_GetKatakanaGlyph(s32 ret) {
+    s32 i = ret - FONT_KATAKANA_FIRST;
+
+    if (ret >= FONT_LATIN_GLYPHS) {
+        return ret;
+    }
+    if (i < 23) {
+        return 95 + i;
+    }
+    if (i < 49) {
+        return 96 + i;
+    }
+    if (i < 75) {
+        return 100 + i;
+    }
+    return 256;
+}
+#endif
 s32 func_80019F70(u16 arg0) {
     s32 c = arg0;
     s32 ret = 0;
+#ifdef ENGLISH
+    FontSetEnglish* set = Font_GetActiveSet();
+
+    if ((c >= 0x2361) && (c < 0x237B)) {
+        c -= 0x2361 - 'a'; // full-width lower case: its cells hold katakana
+    }
+    if ((c >= 0x20) && (c < 0x7F)) {
+        ret = D_8006081F[c];
+        if (set != NULL) {
+            set->advance = set->glyphs[ret - FONT_ADVANCES];
+        }
+        return ret;
+    }
+    if (set != NULL) {
+        set->advance = set->set_advance;
+    }
+#endif
 
     if (c >= 0x21 && c < 0x7F) {
         ret = D_8006081F[c];
@@ -281,6 +358,9 @@ s32 func_80019F70(u16 arg0) {
         ret = D_8005E47F[c] + 0xAF;
     } else if (c >= 0x2521 && c < 0x2574) {
         ret = D_8005E37F[c] + 0x45;
+#ifdef ENGLISH
+        ret = Font_GetKatakanaGlyph(ret);
+#endif
     } else if (c == 0x2574) {
         ret = 0xFF;
     }

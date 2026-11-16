@@ -1146,6 +1146,10 @@ s32 func_800380D0(void) {
     return 0;
 }
 
+#ifdef ENGLISH
+void Subtitles_OnSound(s32 effects, s32 id, s32 handle); // src/stage_loader.c
+#endif
+
 /**
  * Initialises channel `cp` as a new sound: calls func_8003A2B8(cp) to reset it, then
  * stores arg0 at offsets 0x88 and 0x140, arg1 at 0x13C, arg3 + 0x100 at 0xB2 (the
@@ -1176,6 +1180,11 @@ s32 func_8003815C(s32 arg0, s32 arg1, s8* cp, s32 arg3, s32 arg4, s32 arg5, s32 
     M2C_FIELD(cp, s32*, 0x8C) = val;
     M2C_FIELD(cp, s32*, 0x30) = val;
     func_8004D300(mask);
+#ifdef ENGLISH
+    // Every sound effect starts here: direct plays, the announcer queue and effects that other
+    // effects start. arg1 is the effect table, which says the bank.
+    Subtitles_OnSound(arg1, arg3, M2C_FIELD(cp, s32*, 0x5C));
+#endif
     return M2C_FIELD(cp, s32*, 0x5C);
 }
 

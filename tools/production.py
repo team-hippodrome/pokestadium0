@@ -29,6 +29,10 @@ SOURCE_REGISTRY = ROOT / 'config/jp/sources.json'
 SECTION_REGISTRY = ROOT / 'config/jp/sections.json'
 # src/ file -> {section: retail size}; written by a matching build, read by the others.
 SIZE_REGISTRY = ROOT / 'config/jp/section_sizes.json'
+# src/ file -> sections that only new code has (the ENGLISH subtitles): no retail address, so a
+# non-matching build puts them after the image's data. A matching build has none to place.
+APPENDED = {'src/stage_loader.c': ('.rodata', '.data'),
+            'src/fragments/fragment006_162BE0/battle_engine_2FA4D0_88400A98.c': ('.rodata',)}
 # The one fragment that other fragments reach through relocations (checked against retail).
 SHARED_SLOT = 0x82100000
 # Names that carry their own retail address.
@@ -548,7 +552,7 @@ class Image:
     RESIDENT_BSS = 0x85360   # cleared by the entry code; the size is an immediate there
 
     def __init__(self, group, selected, cc, prefix, compare, files, compilers, symbols, placements,
-                 sizes, names, resident_addresses, shift=0, directory=None):
+                 sizes, names, resident_addresses, shift=0, directory=None, extra=None):
         self.group, self.name, self.base = group, group['name'], group['base']
         self.prefix, self.compare, self.symbols, self.shift = prefix, compare, symbols, shift
         self.directory = directory or BUILD / self.name
@@ -564,6 +568,8 @@ class Image:
             self.content, self.table = group['size'], ()
             self.span = self.content + self.RESIDENT_BSS
         self.pointers = self.find_pointers(resident_addresses)
+        self.extra = extra or {}  # retail address -> bytes that now live after the image's data
+        self.labels = {}           # retail address -> where its extra bytes were linked
         self.offsets = sorted(self.pointers)
         self.used = set()
         self.sizes = {}    # src file -> {section: size}, the retail sizes when this build matches
@@ -620,11 +626,15 @@ class Image:
         current = None
         objects_by_file = {}
         occupied = []
+        appended = []  # (object, section) placed after the image's data
         self.nobits = []
         for path in sorted({path for path, _ in files.values()} & {
                 files[row['name']][0] for row in group['owners'] if row['name'] in files}):
             objects_by_file[path] = compile_source_file(path, directory, compilers, self.prefix)
             found = object_sections(objects_by_file[path])
+            if not self.compare:
+                appended += [(objects_by_file[path].name, section) for section in APPENDED.get(path, ())
+                             if found.get(section, (0, 0))[0]]
             for section, place in placements.get(path, {}).items():
                 if section not in found:
                     raise ValueError(f'{path} has no {section} to place')
@@ -721,6 +731,15 @@ class Image:
                 counts['asm'] += 1
             cursor = end
         gap(cursor, self.content)
+        if self.extra:
+            # Data that has no room at its retail address (the English build's longer strings)
+            # follows everything else, under labels that stand in for those addresses.
+            assembly.append('.section .extra, "a", @progbits')
+            for address, data in sorted(self.extra.items()):
+                assembly.append(f'.balign 4\n.globl X_{address:08X}\nX_{address:08X}:\n'
+                                f'.byte {", ".join(map(str, data))}')
+            pieces.append((self.content, None, 'assembly.o', '.extra'))
+        pieces += [(self.content, None, obj, section) for obj, section in appended]
         if not self.fragment and self.ENTRY.keys() - self.used:
             raise ValueError('resident entry code is no longer asset bytes')
         source = directory / 'assembly.s'
@@ -773,6 +792,8 @@ class Image:
         return index, new + offset - old
 
     def expression(self, address):
+        if address in self.extra:
+            return f'X_{address:08X}'
         index, offset = self.locate(address)
         return f'__bss + 0x{offset:X}' if index is None else f'ADDR(.part_{index}) + 0x{offset:X}'
 
@@ -780,6 +801,8 @@ class Image:
         """Where a retail address ended up in the last link; itself before any link."""
         if self.parts is None:
             return address
+        if address in self.extra:
+            return self.labels[address]
         index, offset = self.locate(address)
         return (self.bss if index is None else self.parts[index]) + offset
 
@@ -835,6 +858,7 @@ class Image:
         self.parts = {int(section[6:]): header[3] for section, header in zip(names, raw)
                       if section.startswith('.part_')}
         self.bss = next(value for symbol, value, _ in symbols if symbol == '__bss')
+        self.labels = {int(symbol[2:], 16): value for symbol, value, _ in symbols if symbol.startswith('X_')}
         # (type, image offset, symbol value) of every relocation the linker applied, in the
         # order the objects list them: a HI16 comes before the LO16s that complete it.
         self.relocations = []
@@ -976,7 +1000,7 @@ def source_files(paths):
     return files
 
 
-def build(cc, prefix, compare, jobs, asm_only, compilers, shift=0):
+def build(cc, prefix, compare, jobs, asm_only, compilers, shift=0, english=None):
     manifest = json.loads((ASSETS / 'manifest.json').read_text())
     BUILD.mkdir(parents=True, exist_ok=True)
     receipt_path = BUILD / 'receipt.json'
@@ -1030,11 +1054,29 @@ def build(cc, prefix, compare, jobs, asm_only, compilers, shift=0):
         # Code that holds a ROM offset as a number takes it from a symbol instead. That costs
         # instructions, so the --shift self-test, which keeps the retail code, leaves it out.
         SOURCE_FLAGS.append('-DSHIFTABLE')
+    if english and '-DENGLISH' not in SOURCE_FLAGS:
+        SOURCE_FLAGS.append('-DENGLISH')
+    strings, extra = {}, {}
+    if english:
+        import fonts_en
+        import translate_strings
+        us = Path(english).read_bytes()
+        strings = json.loads((ROOT / 'text/strings.json').read_text(encoding='utf-8'))
+        # A resident translation longer than its retail room moves to the end of the resident
+        # data; everything that points at the retail string follows it there.
+        for key, entry in strings.items():
+            data = translate_strings.encode(entry['en']) + b'\0'
+            if entry['en'] and len(data) > entry['room'] and entry['region'] == 'resident':
+                extra[int(key, 16) + 0x7FFFF400] = data
     with ThreadPoolExecutor(max_workers=jobs) as pool:
         images = list(pool.map(lambda group: Image(
             group, selected, cc, prefix, compare, files, compilers, symbols, placements, sizes, names,
-            resident_addresses, shift), manifest['groups']))
+            resident_addresses, shift, extra=None if group['image_index'] is not None else extra),
+            manifest['groups']))
         resident = images[0]
+        for address in extra:
+            if address not in resident_addresses and f'.4byte T_{address:08X}' not in resident.pointers.values():
+                raise ValueError(f'nothing refers to 0x{address:08X} by that address, so it cannot move')
         by_slot = {image.base: image for image in images[1:] if image.base in unique}
         # ROM segments in order: (retail start, image or None, opaque bytes or None).
         segments = [(image.group['rom_start'], image, None) for image in images]
@@ -1042,6 +1084,14 @@ def build(cc, prefix, compare, jobs, asm_only, compilers, shift=0):
             data = (ASSETS / gap['asset']).read_bytes()
             if sha(data) != gap['sha256']:
                 raise ValueError('opaque asset changed: ' + gap['asset'])
+            if english and gap['start'] <= fonts_en.ZERO_FONTS < gap['end']:
+                # The English font archive is larger than Zero's: it becomes a segment of its own,
+                # so what follows it in the gap moves with it.
+                cut, end = fonts_en.ZERO_FONTS - gap['start'], fonts_en.ZERO_FONTS_END - gap['start']
+                segments += [(gap['start'], None, data[:cut]),
+                             (fonts_en.ZERO_FONTS, None, fonts_en.english_archive(data[cut:end], us)),
+                             (fonts_en.ZERO_FONTS_END, None, data[end:])]
+                continue
             segments.append((gap['start'], None, data))
         segments.sort(key=lambda segment: segment[0])
         old_starts = [segment[0] for segment in segments]
@@ -1051,6 +1101,16 @@ def build(cc, prefix, compare, jobs, asm_only, compilers, shift=0):
             """Where a retail ROM address is now; everything moves with its segment."""
             index = bisect.bisect_right(old_starts, address) - 1
             return new_starts[index] + address - old_starts[index]
+
+        def at(offset):
+            """Where a retail ROM byte is now, following the pieces of an uncompressed image."""
+            index = bisect.bisect_right(old_starts, offset) - 1
+            start, image, _ = segments[index]
+            if image is None:
+                return new_starts[index] + offset - start
+            if image.group['storage'] != 'raw':
+                raise ValueError(f'ROM 0x{offset:X} is inside compressed {image.name}')
+            return new_starts[index] + image.address(image.base + offset - start) - image.base
 
         def owner(image, address):
             """The image that a retail address seen in the given image belongs to."""
@@ -1102,7 +1162,8 @@ def build(cc, prefix, compare, jobs, asm_only, compilers, shift=0):
             counts.update(image.counts)
             stored[image.group['rom_start']] = len(image.stored)
     # Archive directories hold member offsets and sizes; fragments 43 and up live in the last two.
-    for archive in (0x2B2C80, 0x2F5940, 0x3FEBD0, 0x4A8000, 0x500000):
+    # The English font archive (0x2B2C80) is rebuilt whole, header included.
+    for archive in (0x2F5940, 0x3FEBD0, 0x4A8000, 0x500000) if english else (0x2B2C80, 0x2F5940, 0x3FEBD0, 0x4A8000, 0x500000):
         base = rom(archive)
         total, count = struct.unpack_from('>2I', output, base + 8)
         struct.pack_into('>I', output, base + 8, rom(archive + total) - base)
@@ -1112,6 +1173,12 @@ def build(cc, prefix, compare, jobs, asm_only, compilers, shift=0):
             if member in stored:
                 size = stored[member] + -stored[member] % 16
             struct.pack_into('>2I', output, entry, rom(member) - base, size)
+    if english:
+        # Stadium 1's font and the translated strings; the code that draws them is the ENGLISH C.
+        fonts_en.english(output, us, at)
+        written, overflow, skipped = translate_strings.apply(output, strings, at)
+        print(f'{written} strings translated in place, {len(extra)} moved, '
+              f'{overflow - len(extra)} do not fit, {skipped} untranslated')
     if len(output) > manifest['size'] and not output[manifest['size']:].strip(b'\xFF'):
         del output[manifest['size']:]  # the retail ROM ends in 0xFF filler
     output += b'\xFF' * (-len(output) % 0x100000)
@@ -1126,7 +1193,7 @@ def build(cc, prefix, compare, jobs, asm_only, compilers, shift=0):
                           indent=2, sort_keys=True) + '\n'
         if not SIZE_REGISTRY.exists() or SIZE_REGISTRY.read_text() != text:
             SIZE_REGISTRY.write_text(text)
-    target = ROOT / 'build/pokestadium0-jp.z64'
+    target = ROOT / ('build/pokestadium0-en.z64' if english else 'build/pokestadium0-jp.z64')
     target.write_bytes(output)
     overrides = json.loads((ROOT / 'tools/cflags_overrides.json').read_text())
     native = {path: sdk_assembly_source(path, overrides[path])
@@ -1182,13 +1249,17 @@ def main():
     parser.add_argument('--asm-only', action='store_true')
     parser.add_argument('--shift', type=lambda value: int(value, 0), default=0,
                         help='self-test: pad pieces of every image by this many bytes (a multiple of 16)')
+    parser.add_argument('--english', metavar='US_ROM',
+                        help='English build (with --compare 0): Stadium 1 US ROM for the font')
     args = parser.parse_args()
+    if args.english and (args.compare or args.shift):
+        parser.error('--english needs --compare 0 and no --shift')
     if args.command == 'extract':
         extract()
     else:
         compilers = {'5.3': str(Path(args.cc).resolve()), '7.1': str(Path(args.cc71).resolve())}
         build(compilers['5.3'], args.prefix, bool(args.compare) and not args.shift, args.jobs,
-              args.asm_only, compilers, args.shift)
+              args.asm_only, compilers, args.shift, args.english)
 
 
 if __name__ == '__main__':

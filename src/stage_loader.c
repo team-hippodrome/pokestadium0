@@ -204,6 +204,124 @@ extern Vp D_8005F6D8;
 void func_80005980(void);
 void func_80002EC8(Gfx**);
 
+#ifdef ENGLISH
+#include "subtitles_en.h"
+
+// Frames a subtitle stays up after its clip ends, so short clips can be read.
+#define SUBTITLE_HOLD_FRAMES 45
+
+extern FontContext* font_context;
+void Font_SetActive(s32 mask, s32 arg1);
+void Font_BeginTranslucentTextRendering(void);
+void Font_EndTexturedTextRendering(void);
+void Gfx_SetEnvColor(s32 r, s32 g, s32 b, s32 a);
+void func_8001A944(s32 x, s32 y, const char* fmt, ...);
+void func_8001AC7C(s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b, s32 a);
+s32 func_80037B7C(s32 handle);
+u8 func_80025214(void);
+extern void* D_800AE8E0; // the save data the options byte lives in
+
+typedef struct SubtitleFontSet {
+    /* 0x0 */ u8 advance;
+    /* 0x1 */ u8 height;
+    /* 0x2 */ u8 width;
+    /* 0x4 */ u8* glyphs;
+} SubtitleFontSet; // size = 0x8, one of the six at the start of font_context
+
+extern s32 D_800B41A0; // SYSSFX.WBK's effect table, the system sounds (some play battle samples)
+extern s32 D_800B41A4; // BTLSFX.WBK's effect table, the battle sound effects
+extern s32 D_800B41A8; // JIKKYOU.WBK's effect table, the announcer
+
+static const char* sSubtitleLine = NULL; // what is being said, NULL for nothing
+static s32 sSubtitleHandle = 0;          // its sound handle, for func_80037B7C
+static s32 sSubtitleHold = 0;
+static s32 sSubtitlesOff = 0;
+
+// Called on the audio thread whenever effect `id` of the bank whose effect table is `effects`
+// starts playing as sound `handle` (func_8003815C). A sound without a line, such as a hit, leaves
+// the subtitle on screen alone.
+void Subtitles_OnSound(s32 effects, s32 id, s32 handle) {
+    const char* line = NULL;
+
+    if ((handle == 0) || (handle == -1) || (id < 0)) {
+        return;
+    }
+    if ((effects == D_800B41A8) && (id < ARRAY_COUNT(sSubtitleAnnouncer))) {
+        line = sSubtitleAnnouncer[id];
+    } else if ((effects == D_800B41A4) && (id < ARRAY_COUNT(sSubtitleBattle))) {
+        line = sSubtitleBattle[id];
+    } else if ((effects == D_800B41A0) && (id < ARRAY_COUNT(sSubtitleSystem))) {
+        line = sSubtitleSystem[id];
+    }
+    if (line != NULL) {
+        sSubtitleHandle = handle;
+        sSubtitleHold = SUBTITLE_HOLD_FRAMES;
+        sSubtitleLine = line;
+    }
+}
+
+// Draws the line being said on a translucent box in the lower left of the screen, between the
+// battle HUD panels and above the battle message box (as in pokestadium-complete), while its sound
+// plays and SUBTITLE_HOLD_FRAMES after, with the smallest font set the screen loaded. A screen
+// without a font context gets no subtitle.
+void Subtitles_Draw(void) {
+    const char* line = sSubtitleLine;
+    s32 scale = StageContext_IsHighResolution() ? 2 : 1; // 640x480 or 320x240 stage
+    SubtitleFontSet* set;
+    const char* p;
+    s32 index;
+    s32 lines;
+    s32 line_height;
+    s32 height;
+    s32 y;
+
+    // The Options screen's Subtitles row: mask 4 of the options byte, set for off. The save data is
+    // only in memory on the menus (a battle has none), so the last value seen is kept.
+    if (D_800AE8E0 != NULL) {
+        sSubtitlesOff = func_80025214() & 4;
+    }
+    if (line == NULL) {
+        return;
+    }
+    if (func_80037B7C(sSubtitleHandle) == 0) {
+        if (sSubtitleHold == 0) {
+            sSubtitleLine = NULL;
+            return;
+        }
+        sSubtitleHold--;
+    }
+    if ((font_context == NULL) || sSubtitlesOff) {
+        return;
+    }
+    // Screens select sets they never loaded, and an unloaded slot holds stale pool bytes.
+    for (index = 0; index < 6; index++) {
+        set = &((SubtitleFontSet*)font_context)[index];
+        if (((u32)set->glyphs >= 0x80001000) && ((u32)set->glyphs < 0x803F0000) && (set->height != 0)) {
+            break;
+        }
+    }
+    if (index == 6) {
+        return;
+    }
+    line_height = set->height + 1;
+    for (lines = 1, p = line; *p != '\0'; p++) {
+        if (*p == '\n') {
+            lines++;
+        }
+    }
+    height = (lines * line_height) + (6 * scale);
+    y = (176 * scale) - height; // the battle message box starts at y 179
+
+    func_8001AC7C(8 * scale, y, 216 * scale, height, 0, 0, 0, 0xA0);
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(1 << index, 0);
+    font_context->line_height = line_height;
+    Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, 0xFF);
+    func_8001A944(14 * scale, y + (3 * scale), "%s", line);
+    Font_EndTexturedTextRendering();
+}
+#endif
+
 void StageLoader_SetupFrame(void) {
     GfxImage_SetRenderTarget(&gDisplayListHead, stage->renderTargets[stage->renderTargetIndex]);
     guOrtho(&D_800AA188, 0.0f, 320.0f, 0.0f, 240.0f, -2.0f, 2.0f, 1.0f);
@@ -229,6 +347,9 @@ void StageLoader_SetupFrame(void) {
     }
 
     TextRenderer_FlushQueuedStrings(&gDisplayListHead, StageContext_IsHighResolution());
+#ifdef ENGLISH
+    Subtitles_Draw(); // on top of everything the stage drew this frame
+#endif
 
     if (gShowCPUProfiler != 0) {
         draw_profiler(gShowCPUProfiler - 1);

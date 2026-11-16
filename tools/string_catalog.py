@@ -11,6 +11,7 @@ usage: string_catalog.py dump [--rom baseroms/jp/baserom.z64] [--json text/strin
 
 import argparse
 import json
+import re
 import struct
 import sys
 from pathlib import Path
@@ -51,7 +52,7 @@ def read_string(rom, i):
             japanese += 1
         text.append(rom[j:j + n])
         j += n
-    if rom[j] != 0 or japanese < MIN_JAPANESE:
+    if j >= len(rom) or rom[j] != 0 or japanese < MIN_JAPANESE:
         return None
     try:
         decoded = b''.join(text).decode('euc_jp')
@@ -67,11 +68,21 @@ def scan(rom):
     found = {}
     i = 0
     while i < len(rom):
-        if 0xA1 <= rom[i] <= 0xFE:
+        # A string starts at a Japanese character, or at ASCII (a leading space, mostly) when that
+        # is word-aligned after a NUL and the Japanese follows at once.
+        if 0xA1 <= rom[i] <= 0xFE or (i % 4 == 0 and i and rom[i - 1] == 0 and 0x20 <= rom[i] < 0x7F
+                                      and i + 1 < len(rom) and 0xA1 <= rom[i + 1] <= 0xFE):
             got = read_string(rom, i)
-            if got and likely_text(got[0]):
+            # Two characters (はい, あり, なし) only count word-aligned: unaligned pairs are noise.
+            if got and likely_text(got[0]) and (len(got[0]) >= 3 or i % 4 == 0):
                 text, end = got
-                found[i] = (text, end - i)
+                # Room is the NUL plus, for a string that starts word-aligned, the zero bytes up
+                # to the next word: the alignment padding before whatever follows it.
+                room = end + 1
+                if i % 4 == 0:
+                    while room % 4 and room < len(rom) and rom[room] == 0:
+                        room += 1
+                found[i] = (text, room - i)
                 i = end + 1
                 continue
         i += 1
@@ -82,14 +93,36 @@ def likely_text(text):
     """Whether a run of high bytes reads as game text rather than coincidental data.
 
     Code and binary data contain plenty of bytes in the EUC-JP range; real strings are mostly kana,
-    digits and Japanese punctuation, so require 70% of the characters to be in that set.
+    digits, full-width forms and Japanese punctuation, so require 70% of the characters to be in
+    that set. A two-character string must be all kana. printf conversions (ゆけっ！%s) do not count
+    either way.
     """
+    text = re.sub(r'%[-0-9.]*[a-zA-Z]', '', text)
     interpunct = '\u3000\u30fc\u3001\u3002\u300c\u300d\u300e\u300f\uff01\uff1f\uff0e'
     good = 0
     for c in text:
-        if '\u3041' <= c <= '\u30ff' or c in interpunct or c in ' \n' or c.isdigit():
+        if ('\u3041' <= c <= '\u30ff' or '\uff01' <= c <= '\uff5e' or c in interpunct or c in ' \n'
+                or c.isdigit()):
             good += 1
+    if len(text) == 2:
+        return all('\u3041' <= c <= '\u30ff' for c in text)
     return good >= 0.7 * len(text) and len(text) >= 3
+
+
+# ROM ranges whose strings stay Japanese, with the reason dump writes into their entries.
+KEEP_JP = [(0x175570, 0x17BE70, 'fragment009 team records: the game builds nicknames and trainer '
+                                'names from these fields as 2-byte Japanese, so ASCII draws garbage'),
+           (0x4006C0, 0x4006E0, 'preset Pokemon record (nickname, trainer): the COM team names are '
+                                'built from it as 2-byte Japanese; "Stadium" here drew as "S k" and '
+                                'leaked "ium" into the COM nicknames')]
+
+
+# ROM ranges that read as Japanese and are not text: a fill pattern (いいいいいいぅ) and sample data.
+NOT_TEXT = [(0x72ADC0, 0x72ADD4), (0xE30148, 0xE30150)]
+
+
+def keep_jp(offset):
+    return next((reason for start, end, reason in KEEP_JP if start <= offset < end), None)
 
 
 def region(offset):
@@ -103,7 +136,8 @@ def dump(rom_path, json_path):
     existing = {}
     if Path(json_path).exists():
         existing = json.loads(Path(json_path).read_text(encoding='utf-8'))
-    strings = scan(rom)
+    strings = {offset: found for offset, found in scan(rom).items()
+               if not any(start <= offset < end for start, end in NOT_TEXT)}
     out = {}
     kept = 0
     for offset, (text, room) in sorted(strings.items()):
@@ -115,7 +149,9 @@ def dump(rom_path, json_path):
             'room': room,
             'region': region(offset),
         }
-        if old.get('en'):
+        if keep_jp(offset):
+            entry['en'], entry['keep_jp'] = '', keep_jp(offset)
+        if entry['en']:
             kept += 1
         out[key] = entry
     Path(json_path).parent.mkdir(parents=True, exist_ok=True)
@@ -129,7 +165,7 @@ def fill(json_path, dictionary_path):
     dictionary = json.loads(Path(dictionary_path).read_text(encoding='utf-8'))
     added = 0
     for entry in strings.values():
-        if entry['en'] or entry['jp'] not in dictionary:
+        if entry['en'] or entry.get('keep_jp') or entry['jp'] not in dictionary:
             continue
         text = dictionary[entry['jp']]
         if len(text.encode('ascii', 'replace')) + 1 > entry['room']:
@@ -145,8 +181,9 @@ def merge(json_path, auto_dir):
     """Absorbs the {jp: en} files written by the translation batches into the catalogue.
 
     A translation is applied to every catalogue entry with that Japanese text, but only where it
-    fits: `room` is the byte extent of the original string, and an English line that does not fit
-    would have to be relocated, which is a separate job.
+    fits: `room` is what the original string occupies, terminator and alignment padding included.
+    Resident strings are the exception: the English build moves a longer one to the end of the
+    resident data (tools/production.py).
     """
     strings = json.loads(Path(json_path).read_text(encoding='utf-8'))
     pairs, conflicts = {}, 0
@@ -160,10 +197,10 @@ def merge(json_path, auto_dir):
             pairs[jp] = en
     filled = overflow = 0
     for entry in strings.values():
-        if entry['en'] or entry['jp'] not in pairs:
+        if entry['en'] or entry.get('keep_jp') or entry['jp'] not in pairs:
             continue
         text = pairs[entry['jp']]
-        if len(text.encode('ascii', 'replace')) + 1 > entry['room']:
+        if len(text.encode('ascii', 'replace')) + 1 > entry['room'] and entry['region'] != 'resident':
             overflow += 1
             continue
         entry['en'] = text
@@ -175,21 +212,28 @@ def merge(json_path, auto_dir):
 
 
 def selftest():
-    # "バトル" + NUL: 2-byte EUC-JP kana, must be found as one string of 6 bytes plus terminator.
+    # "バトル" + NUL: 6 bytes of 2-byte EUC-JP kana and a terminator, word-aligned, so its room
+    # runs to the next word: 8 bytes.
     rom = bytearray(0x100)
     text = 'バトル'.encode('euc_jp')
     rom[0x40:0x40 + len(text)] = text
     got = scan(bytes(rom))
-    assert got.get(0x40) == ('バトル', len(text)), got
+    assert got.get(0x40) == ('バトル', 8), got
+    # An unaligned string gets only its terminator, even with zeros after it.
+    rom[0x81:0x81 + len(text)] = text
+    assert scan(bytes(rom)).get(0x81) == ('バトル', 7), scan(bytes(rom))
     assert not likely_text('淳潘衣7'), 'binary noise was accepted'
+    assert likely_text('ゆけっ！%s') and not likely_text('は%s'), 'printf conversions'
+    # Two kana count as a string only when word-aligned.
+    rom[0xA0:0xA4] = rom[0xC1:0xC5] = 'はい'.encode('euc_jp')
+    got = scan(bytes(rom))
+    assert got.get(0xA0) == ('はい', 8) and 0xC1 not in got, got
     # ASCII-only and stray high bytes must not be reported.
     rom2 = bytearray(0x100)
     rom2[0x20:0x25] = b'hello'
     rom2[0x60] = 0xFE
     rom2[0x61] = 0x00
     assert scan(bytes(rom2)) == {}, scan(bytes(rom2))
-    # A translation must be shown its room, so an over-long string is caught before it is applied.
-    assert got[0x40][1] == 6
     print('selftest ok')
 
 

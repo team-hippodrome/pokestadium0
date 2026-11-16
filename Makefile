@@ -40,11 +40,13 @@ rom:
 	@test -f assets/production/manifest.json || { echo 'Run make init first'; exit 1; }
 	$(PYTHON) tools/production.py build --cc $(IDO_CC) --cc71 $(IDO71_CC) --prefix $(MIPS_BINUTILS_PREFIX) --compare $(COMPARE) --jobs $(JOBS) $(if $(filter 1,$(ASM_ONLY)),--asm-only,)
 
-# English font build: the verified retail ROM plus Stadium 1's font archive, ASCII map and the two
-# in-place function patches (tools/fonts_en.py). Needs the Stadium 1 US dump for the Latin glyphs.
+# English build: the shiftable build of the ENGLISH C, with Stadium 1's font (tools/fonts_en.py) and
+# text/strings.json written in. Needs the Stadium 1 US dump for the Latin glyphs.
 EN_FONT_ROM ?= baseroms/us/baserom.z64
-en: rom
-	$(PYTHON) tools/fonts_en.py patch --rom build/pokestadium0-jp.z64 --us $(EN_FONT_ROM)
+en:
+	@test -f assets/production/manifest.json || { echo 'Run make init first'; exit 1; }
+	$(PYTHON) tools/subtitles.py
+	$(PYTHON) tools/production.py build --cc $(IDO_CC) --cc71 $(IDO71_CC) --prefix $(MIPS_BINUTILS_PREFIX) --compare 0 --jobs $(JOBS) --english $(EN_FONT_ROM)
 
 # Moves every piece of every image by SHIFT bytes and checks that each address followed: the
 # proof that the build relocates. A shiftable ROM to edit is just `make rom COMPARE=0`.

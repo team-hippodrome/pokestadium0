@@ -67,6 +67,7 @@ typedef struct FontEntry8001A118 {
     /* 0x0 */ s8 size_a;
     /* 0x1 */ s8 size_b;
     /* 0x2 */ s8 size_c;
+    /* 0x3 */ s8 size_a_set; // unused by retail; the English build keeps size_a here
     /* 0x4 */ void* file;
 } FontEntry8001A118; // size = 0x8
 s32 func_8001A0A4(void);
@@ -77,6 +78,12 @@ void func_8001A118(s32 mask, s32 arg1, s32 arg2, s32 arg3, void* file) {
     if (mask) {}  // karodo
     index = func_8001A0A4();
 
+#ifdef ENGLISH
+    // English font files start with a 0x90-byte table of Latin advances, and the Latin glyphs
+    // change size_a (the advance) as they draw, so the set's own is kept (see func_80019F70).
+    file = (u8*)file + 0x90;
+    ((FontEntry8001A118*)font_context)[index].size_a_set = arg1;
+#endif
     ((FontEntry8001A118*)font_context)[index].file = file;
     ((FontEntry8001A118*)font_context)[index].size_a = arg1;
     ((FontEntry8001A118*)font_context)[index].size_b = arg2;
