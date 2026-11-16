@@ -108,7 +108,7 @@ Regenerating the refinement is checked for byte-identical output hashes. These t
 
 ## Deliverables
 
-- **`fragment-sections.json` and `.csv`:** updated evidence-labelled sections and per-image inventory.
+- **`fragment-sections.json` and `.csv`:** updated evidence-labeled sections and per-image inventory.
 - **`flow-validation.json`:** per-site target sets, runtime contracts, initializer-store evidence, entry hypotheses, and gap checks.
 - **`indirect-transfers.csv`:** all 288 indirect sites, their status, and target/provenance information.
 - **`text-gap-validation.csv`:** the accounting ledger for all original candidate-gap bytes.

@@ -1,5 +1,8 @@
-#ifndef _MEMMAP_H_
-#define _MEMMAP_H_
+/* Declarations for src/memmap.c. */
+#ifndef MEMMAP_H
+#define MEMMAP_H
+
+#include "global.h"
 
 #ifdef M2C
 #define RELOCATIONS_SIZE 1
@@ -9,8 +12,11 @@
 
 /* MIPS Relocation Types */
 #define R_MIPS_32 2
+
 #define R_MIPS_26 4
+
 #define R_MIPS_HI16 5
+
 #define R_MIPS_LO16 6
 
 struct RelocTable {
@@ -28,8 +34,7 @@ typedef struct Fragment {
     /* 0x20 */ char data[RELOCATIONS_SIZE]; // variable size
 } Fragment; // size = 0x20
 
-typedef s32 (*FragmentEntry)(s32, s32);
-
+// memmap.c
 void Memmap_SetSegmentMap(u32 id, uintptr_t vaddr, size_t size);
 uintptr_t Memmap_GetSegmentBaseVaddr(u32 id);
 uintptr_t Memmap_GetSegmentVaddr(u32 mask);
@@ -44,4 +49,4 @@ u32 Memmap_GetFragmentVaddrMask(u32 i, uintptr_t addr);
 void Memmap_ClearFragmentMemmap(u32 id);
 uintptr_t Memmap_GetLoadedFragmentVaddr(uintptr_t addr);
 
-#endif // _MEMMAP_H_
+#endif // MEMMAP_H

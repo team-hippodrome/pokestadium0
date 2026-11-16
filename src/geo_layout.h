@@ -1,15 +1,18 @@
-#ifndef _18480_H_
-#define _18480_H_
+/* Declarations for src/geo_layout.c. */
+#ifndef GEO_LAYOUT_H
+#define GEO_LAYOUT_H
 
 #include "global.h"
-#include "src/memory.h"
-#include "src/geo_node.h"
+#include "geo_node.h"
 
 #define GEO_CMD_FLAGS_RESET 0
+
 #define GEO_CMD_FLAGS_SET   1
+
 #define GEO_CMD_FLAGS_CLEAR 2
 
 #define CMD_SIZE_SHIFT (sizeof(void *) >> 3)
+
 #define CMD_PROCESS_OFFSET(offset) (((offset) & 3) | (((offset) & ~3) << CMD_SIZE_SHIFT))
 
 #define cur_geo_cmd_u8(offset) \
@@ -29,276 +32,270 @@
 
 typedef void (*GeoLayoutCommandProc)(void);
 
-typedef struct unk_D_800ABE00_cmd0 {
+typedef struct GeoLayoutCmdBranchAndLink {
     /* 0x00 */ u8 cmd;
     /* 0x02 */ u16 unk_02;
     /* 0x04 */ u8* unk_04;
-} unk_D_800ABE00_cmd0; // size = 0x8
+} GeoLayoutCmdBranchAndLink; // size = 0x8
 
-typedef struct unk_D_800ABE00_cmd1 {
+typedef struct GeoLayoutCmdEnd {
     /* 0x00 */ u8 cmd;
     /* 0x01 */ char pad[3];
-} unk_D_800ABE00_cmd1; // size = 0x4
+} GeoLayoutCmdEnd; // size = 0x4
 
-typedef struct unk_D_800ABE00_cmd2 {
+typedef struct GeoLayoutCmdJump {
     /* 0x00 */ u8 cmd;
     /* 0x04 */ u8* unk_04;
-} unk_D_800ABE00_cmd2; // size = 0x8
+} GeoLayoutCmdJump; // size = 0x8
 
-typedef struct unk_D_800ABE00_cmd3 {
+typedef struct GeoLayoutCmdBranch {
     /* 0x00 */ u8 cmd;
     /* 0x04 */ u8* unk_04;
-} unk_D_800ABE00_cmd3; // size = 0x8
+} GeoLayoutCmdBranch; // size = 0x8
 
-typedef struct unk_D_800ABE00_cmd4 {
+typedef struct GeoLayoutCmdReturn {
     /* 0x00 */ u8 cmd;
     /* 0x01 */ char pad[3];
-} unk_D_800ABE00_cmd4; // size = 0x4
+} GeoLayoutCmdReturn; // size = 0x4
 
-typedef struct unk_D_800ABE00_cmd5 {
+typedef struct GeoLayoutCmdOpenNode {
     /* 0x00 */ u8 cmd;
     /* 0x01 */ char pad[3];
-} unk_D_800ABE00_cmd5; // size = 0x4
+} GeoLayoutCmdOpenNode; // size = 0x4
 
-typedef struct unk_D_800ABE00_cmd6 {
+typedef struct GeoLayoutCmdCloseNode {
     /* 0x00 */ u8 cmd;
     /* 0x01 */ char pad[3];
-} unk_D_800ABE00_cmd6; // size = 0x4
+} GeoLayoutCmdCloseNode; // size = 0x4
 
-typedef struct unk_D_800ABE00_cmd7 {
+typedef struct GeoLayoutCmdAttachNode {
     /* 0x00 */ u8 cmd;
-    /* 0x04 */ unk_D_8690A610* unk_04;
-} unk_D_800ABE00_cmd7; // size = 0x8
+    /* 0x04 */ GeoFogNode* node; // @unverified: used by the AttachNode command
+} GeoLayoutCmdAttachNode; // size = 0x8
 
-typedef struct unk_D_800ABE00_cmd8 {
+typedef struct GeoLayoutCmdSetCallback {
     /* 0x00 */ u8 cmd;
-    /* 0x04 */ GraphNodeCallback unk_04;
-    /* 0x08 */ unk_D_86002F34_000_014* unk_08;
-} unk_D_800ABE00_cmd8; // size = 0xC
+    /* 0x04 */ GraphNodeCallback callback; // @unverified: used by the SetCallback command
+    /* 0x08 */ unk_D_86002F34_000_014* callbackArg; // @unverified: used by the SetCallback command
+} GeoLayoutCmdSetCallback; // size = 0xC
 
-typedef struct unk_D_800ABE00_cmd9 {
+typedef struct GeoLayoutCmdCreateContainer {
     /* 0x00 */ u8 cmd;
     /* 0x01 */ char pad[3];
-} unk_D_800ABE00_cmd9; // size = 0x4
+} GeoLayoutCmdCreateContainer; // size = 0x4
 
-typedef struct unk_D_800ABE00_cmdA {
+typedef struct GeoLayoutCmdCreateReference {
     /* 0x00 */ u8 cmd;
-    /* 0x04 */ GraphNode* unk_04;
-} unk_D_800ABE00_cmdA; // size = 0x8
+    /* 0x04 */ GraphNode* target; // @unverified: GeoLayout command: GeoNode_CreateReference argument
+} GeoLayoutCmdCreateReference; // size = 0x8
 
-typedef struct unk_D_800ABE00_cmdB {
+typedef struct GeoLayoutCmdCreateCamera {
     /* 0x00 */ u8 cmd;
-    /* 0x02 */ u16 unk_02;
-    /* 0x04 */ u16 unk_04;
-    /* 0x06 */ u16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
-    /* 0x0C */ Vec3s unk_0C;
-    /* 0x12 */ s16 unk_12;
-    /* 0x14 */ s16 unk_14;
-    /* 0x16 */ s16 unk_16;
-} unk_D_800ABE00_cmdB; // size = 0x18
+    /* 0x02 */ u16 fovY; // @unverified: GeoLayout command: GeoNode_CreateCamera argument, stored in perspective.verticalFieldOfView
+    /* 0x04 */ u16 viewportX; // @unverified: GeoLayout command: GeoNode_CreateCamera argument
+    /* 0x06 */ u16 viewportY; // @unverified: GeoLayout command: GeoNode_CreateCamera argument
+    /* 0x08 */ s16 viewportWidth; // @unverified: GeoLayout command: GeoNode_CreateCamera argument
+    /* 0x0A */ s16 viewportHeight; // @unverified: GeoLayout command: GeoNode_CreateCamera argument
+    /* 0x0C */ Vec3s target; // @unverified: GeoLayout command: GeoNode_CreateCamera argument
+    /* 0x12 */ s16 rotationXDegrees; // @unverified: GeoLayout command: GeoNode_CreateCamera argument, degrees, converted to a binary angle
+    /* 0x14 */ s16 rotationYDegrees; // @unverified: GeoLayout command: GeoNode_CreateCamera argument, degrees, converted to a binary angle
+    /* 0x16 */ s16 distance; // @unverified: GeoLayout command: GeoNode_CreateCamera argument, eye distance from target for Camera_ComputeEyeFromAngles
+} GeoLayoutCmdCreateCamera; // size = 0x18
 
-typedef struct unk_D_800ABE00_cmdC {
+typedef struct GeoLayoutCmdCreateType3 {
     /* 0x00 */ u8 cmd;
     /* 0x02 */ s16 unk_02;
-} unk_D_800ABE00_cmdC; // size = 0x4
+} GeoLayoutCmdCreateType3; // size = 0x4
 
-typedef struct unk_D_800ABE00_cmdD {
+typedef struct GeoLayoutCmdCreateType4 {
     /* 0x00 */ u8 cmd;
-    /* 0x02 */ s16 unk_02;
-} unk_D_800ABE00_cmdD; // size = 0x4
+    /* 0x02 */ s16 rootId; // @unverified: GeoLayout command: GeoNode_CreateType4 argument
+} GeoLayoutCmdCreateType4; // size = 0x4
 
-typedef struct unk_D_800ABE00_cmdE {
+typedef struct GeoLayoutCmdCreateOrtho {
     /* 0x00 */ u8 cmd;
-    /* 0x02 */ s16 unk_02;
-} unk_D_800ABE00_cmdE; // size = 0x4
+    /* 0x02 */ s16 renderFlags; // @unverified: GeoLayout command: GeoNode_CreateOrtho argument
+} GeoLayoutCmdCreateOrtho; // size = 0x4
 
-typedef struct unk_D_800ABE00_cmdF {
+typedef struct GeoLayoutCmdCreatePerspective {
     /* 0x00 */ u8 cmd;
-    /* 0x02 */ s16 unk_02;
-} unk_D_800ABE00_cmdF; // size = 0x4
+    /* 0x02 */ s16 renderFlags; // @unverified: GeoLayout command: GeoNode_CreatePerspective argument
+} GeoLayoutCmdCreatePerspective; // size = 0x4
 
-typedef struct unk_D_800ABE00_cmd10 {
+typedef struct GeoLayoutCmdCreateBackground {
     /* 0x00 */ u8 cmd;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-} unk_D_800ABE00_cmd10; // size = 0x4
+    /* 0x01 */ u8 r; // @unverified: GeoLayout command: GeoNode_CreateBackground argument
+    /* 0x02 */ u8 g; // @unverified: GeoLayout command: GeoNode_CreateBackground argument
+    /* 0x03 */ u8 b; // @unverified: GeoLayout command: GeoNode_CreateBackground argument
+} GeoLayoutCmdCreateBackground; // size = 0x4
 
-typedef struct unk_D_800ABE00_cmd11 {
-    /* 0x00 */ u8 cmd;
-    /* 0x01 */ char pad[3];
-} unk_D_800ABE00_cmd11; // size = 0x4
-
-typedef struct unk_D_800ABE00_cmd12 {
+typedef struct GeoLayoutCmdCreateClearDepth {
     /* 0x00 */ u8 cmd;
     /* 0x01 */ char pad[3];
-} unk_D_800ABE00_cmd12; // size = 0x4
+} GeoLayoutCmdCreateClearDepth; // size = 0x4
 
-typedef struct unk_D_800ABE00_cmd13 {
+typedef struct GeoLayoutCmdNoop {
+    /* 0x00 */ u8 cmd;
+    /* 0x01 */ char pad[3];
+} GeoLayoutCmdNoop; // size = 0x4
+
+typedef struct GeoLayoutCmdCreateFog {
     /* 0x00 */ u8 cmd;
     /* 0x01 */ u8 r;
     /* 0x02 */ u8 g;
     /* 0x03 */ u8 b;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-} unk_D_800ABE00_cmd13; // size = 0x8
+    /* 0x04 */ s16 near; // @unverified: GeoLayout command: GeoNode_CreateFog argument
+    /* 0x06 */ s16 far; // @unverified: GeoLayout command: GeoNode_CreateFog argument
+} GeoLayoutCmdCreateFog; // size = 0x8
 
-typedef struct unk_D_800ABE00_cmd14 {
+typedef struct GeoLayoutCmdCreateLight {
     /* 0x00 */ u8 cmd;
     /* 0x01 */ char pad[0x3];
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
+    /* 0x04 */ s16 rotationXDegrees; // @unverified: GeoLayout command: GeoNode_CreateLight argument, degrees, converted to a binary angle
+    /* 0x06 */ s16 rotationYDegrees; // @unverified: GeoLayout command: GeoNode_CreateLight argument, degrees, converted to a binary angle
     /* 0x08 */ u8 r;
     /* 0x09 */ u8 g;
     /* 0x0A */ u8 b;
     /* 0x0B */ u8 a;
-} unk_D_800ABE00_cmd14; // size = 0xC
+} GeoLayoutCmdCreateLight; // size = 0xC
 
-typedef struct unk_D_800ABE00_cmd15 {
+typedef struct GeoLayoutCmdSkip {
     /* 0x00 */ u8 cmd;
     /* 0x01 */ char pad[0xB];
-} unk_D_800ABE00_cmd15; // size = 0xC
+} GeoLayoutCmdSkip; // size = 0xC
 
-typedef struct unk_D_800ABE00_cmd16 {
+typedef struct GeoLayoutCmdCreateAmbientLight {
     /* 0x00 */ u8 cmd;
     /* 0x01 */ u8 r;
     /* 0x02 */ u8 g;
     /* 0x03 */ u8 b;
-} unk_D_800ABE00_cmd16; // size = 0x4
+} GeoLayoutCmdCreateAmbientLight; // size = 0x4
 
-typedef struct unk_D_800ABE00_cmd17 {
+typedef struct GeoLayoutCmdCreateTextureBank {
     /* 0x00 */ u8 cmd;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ unk_D_86002F34_018* unk_08;
-    /* 0x0C */ unk_D_86002F34_01C* unk_0C;
-    /* 0x10 */ Vtx* unk_10;
-} unk_D_800ABE00_cmd17; // size = 0x14
+    /* 0x02 */ s16 textureCount; // @unverified: GeoLayout command: GeoNode_CreateTextureBank argument
+    /* 0x04 */ s16 paletteCount; // @unverified: GeoLayout command: GeoNode_CreateTextureBank argument
+    /* 0x06 */ s16 vertexCount; // @unverified: GeoLayout command: GeoNode_CreateTextureBank argument
+    /* 0x08 */ GeoTexture* textures; // @unverified: GeoLayout command: GeoNode_CreateTextureBank argument
+    /* 0x0C */ GeoPalette* palettes; // @unverified: GeoLayout command: GeoNode_CreateTextureBank argument
+    /* 0x10 */ Vtx* vertices; // @unverified: GeoLayout command: GeoNode_CreateTextureBank argument
+} GeoLayoutCmdCreateTextureBank; // size = 0x14
 
-typedef struct unk_D_800ABE00_cmd18 {
+typedef struct GeoLayoutCmdCreateShadow {
     /* 0x00 */ u8 cmd;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-} unk_D_800ABE00_cmd18; // size = 0x8
+    /* 0x01 */ u8 shape; // @unverified: GeoLayout command: GeoNode_CreateShadow argument
+    /* 0x02 */ s16 heightOffset; // @unverified: GeoLayout command: GeoNode_CreateShadow argument
+    /* 0x04 */ s16 scaleXPercent; // @unverified: GeoLayout command: GeoNode_CreateShadow argument, percent (divided by 100)
+    /* 0x06 */ s16 scaleZPercent; // @unverified: GeoLayout command: GeoNode_CreateShadow argument, percent (divided by 100)
+} GeoLayoutCmdCreateShadow; // size = 0x8
 
-typedef struct unk_D_800ABE00_cmd19 {
-    /* 0x00 */ u8 cmd;
-    /* 0x01 */ char pad[0x3];
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-} unk_D_800ABE00_cmd19; // size = 0x8
-
-typedef struct unk_D_800ABE00_cmd1A {
-    /* 0x00 */ u8 cmd;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ s16 unk_02;
-} unk_D_800ABE00_cmd1A; // size = 0x4
-
-typedef struct unk_D_800ABE00_cmd1B {
+typedef struct GeoLayoutCmdCreateCullDistance {
     /* 0x00 */ u8 cmd;
     /* 0x01 */ char pad[0x3];
     /* 0x04 */ s16 unk_04;
     /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ Vec3s unk_0A;
-} unk_D_800ABE00_cmd1B; // size = 0x10
+} GeoLayoutCmdCreateCullDistance; // size = 0x8
 
-typedef struct unk_D_800ABE00_cmd1C {
+typedef struct GeoLayoutCmdCreateSwitchCase {
+    /* 0x00 */ u8 cmd;
+    /* 0x01 */ u8 unk_01;
+    /* 0x02 */ s16 selectedChild; // @unverified: GeoLayout command: GeoNode_CreateSwitchCase argument
+} GeoLayoutCmdCreateSwitchCase; // size = 0x4
+
+typedef struct GeoLayoutCmdCreateTranslateRotate {
     /* 0x00 */ u8 cmd;
     /* 0x01 */ char pad[0x3];
-    /* 0x04 */ u32 unk_04;
-    /* 0x08 */ u32 unk_08;
-    /* 0x0C */ u32 unk_0C;
-} unk_D_800ABE00_cmd1C; // size = 0x10
+    /* 0x04 */ Vec3s rotationDegrees; // @unverified: GeoLayout command: GeoNode_CreateTranslateRotate argument, degrees, converted to binary angles
+    /* 0x0A */ Vec3s translation; // @unverified: GeoLayout command: GeoNode_CreateTranslateRotate argument
+} GeoLayoutCmdCreateTranslateRotate; // size = 0x10
 
-typedef struct unk_D_800ABE00_cmd1D {
+typedef struct GeoLayoutCmdCreateTranslate {
     /* 0x00 */ u8 cmd;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ Vec3s unk_04;
-    /* 0x0A */ Vec3s unk_0A;
-    /* 0x10 */ u32 unk_10;
-    /* 0x14 */ u32 unk_14;
-    /* 0x18 */ u32 unk_18;
-} unk_D_800ABE00_cmd1D; // size = 0x1C
+    /* 0x01 */ char pad[0x3];
+    /* 0x04 */ u32 translationX; // @unverified: GeoLayout command: GeoNode_CreateTranslate argument, 16.16 fixed point
+    /* 0x08 */ u32 translationY; // @unverified: GeoLayout command: GeoNode_CreateTranslate argument, 16.16 fixed point
+    /* 0x0C */ u32 translationZ; // @unverified: GeoLayout command: GeoNode_CreateTranslate argument, 16.16 fixed point
+} GeoLayoutCmdCreateTranslate; // size = 0x10
 
-typedef struct unk_D_800ABE00_cmd1E {
+typedef struct GeoLayoutCmdCreateAnimatedPart {
     /* 0x00 */ u8 cmd;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ Gfx* unk_04;
-} unk_D_800ABE00_cmd1E; // size = 0x8
+    /* 0x01 */ u8 matrixSlot; // @unverified: GeoLayout command: GeoNode_CreateAnimatedPart argument
+    /* 0x02 */ u8 flags; // @unverified: GeoLayout command: GeoNode_CreateAnimatedPart argument
+    /* 0x03 */ u8 channelGroup; // @unverified: GeoLayout command: GeoNode_CreateAnimatedPart argument
+    /* 0x04 */ Vec3s translation; // @unverified: GeoLayout command: GeoNode_CreateAnimatedPart argument
+    /* 0x0A */ Vec3s rotation; // @unverified: GeoLayout command: GeoNode_CreateAnimatedPart argument
+    /* 0x10 */ u32 scaleX; // @unverified: GeoLayout command: GeoNode_CreateAnimatedPart argument, 16.16 fixed point
+    /* 0x14 */ u32 scaleY; // @unverified: GeoLayout command: GeoNode_CreateAnimatedPart argument, 16.16 fixed point
+    /* 0x18 */ u32 scaleZ; // @unverified: GeoLayout command: GeoNode_CreateAnimatedPart argument, 16.16 fixed point
+} GeoLayoutCmdCreateAnimatedPart; // size = 0x1C
 
-typedef struct unk_D_800ABE00_cmd1F {
+typedef struct GeoLayoutCmdCreateDisplayListPart {
     /* 0x00 */ u8 cmd;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ Vec3s unk_0A;
-    /* 0x10 */ s16 unk_10;
-    /* 0x12 */ s16 unk_12;
-    /* 0x14 */ s16 unk_14;
+    /* 0x01 */ u8 renderLayer; // @unverified: GeoLayout command: GeoNode_CreateDisplayListPart argument
+    /* 0x02 */ s16 matrixSlot; // @unverified: GeoLayout command: GeoNode_CreateDisplayListPart argument
+    /* 0x04 */ Gfx* displayList; // @unverified: GeoLayout command: GeoNode_CreateDisplayListPart argument
+} GeoLayoutCmdCreateDisplayListPart; // size = 0x8
+
+typedef struct GeoLayoutCmdCreateModelPart {
+    /* 0x00 */ u8 cmd;
+    /* 0x02 */ s16 objectType; // @unverified: GeoLayout command: GeoNode_CreateModelPart argument
+    /* 0x04 */ Vec3s rotationDegrees; // @unverified: GeoLayout command: GeoNode_CreateModelPart argument, degrees, converted to binary angles
+    /* 0x0A */ Vec3s position; // @unverified: GeoLayout command: GeoNode_CreateModelPart argument
+    /* 0x10 */ s16 scaleXPercent; // @unverified: GeoLayout command: GeoNode_CreateModelPart argument, percent (divided by 100)
+    /* 0x12 */ s16 scaleYPercent; // @unverified: GeoLayout command: GeoNode_CreateModelPart argument, percent (divided by 100)
+    /* 0x14 */ s16 scaleZPercent; // @unverified: GeoLayout command: GeoNode_CreateModelPart argument, percent (divided by 100)
     /* 0x16 */ char pad[0x2];
-} unk_D_800ABE00_cmd1F; // size = 0x18
+} GeoLayoutCmdCreateModelPart; // size = 0x18
 
-typedef struct unk_D_800ABE00_cmd20 {
+typedef struct GeoLayoutCmdCreateDisplayListMatrix {
     /* 0x00 */ u8 cmd;
-    /* 0x01 */ u8 unk_01;
+    /* 0x01 */ u8 renderLayer; // @unverified: GeoLayout command: GeoNode_CreateDisplayListMatrix argument
     /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s16 unk_04;
-    /* 0x06 */ s16 unk_06;
-    /* 0x08 */ s16 unk_08;
-    /* 0x0A */ Vec3s unk_0A;
-    /* 0x10 */ Gfx* unk_10;
-} unk_D_800ABE00_cmd20; // size = 0x14
+    /* 0x04 */ Vec3s rotationDegrees; // @unverified: GeoLayout command: GeoNode_CreateDisplayListMatrix argument, degrees, converted to binary angles
+    /* 0x0A */ Vec3s translation; // @unverified: GeoLayout command: GeoNode_CreateDisplayListMatrix argument
+    /* 0x10 */ Gfx* displayList; // @unverified: GeoLayout command: GeoNode_CreateDisplayListMatrix argument
+} GeoLayoutCmdCreateDisplayListMatrix; // size = 0x14
 
-typedef struct unk_D_800ABE00_cmd21 {
+typedef struct GeoLayoutCmdCreateBillboard {
     /* 0x00 */ u8 cmd;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ Vec3s unk_02;
+    /* 0x01 */ u8 renderLayer; // @unverified: GeoLayout command: GeoNode_CreateBillboard argument
+    /* 0x02 */ Vec3s position; // @unverified: GeoLayout command: GeoNode_CreateBillboard argument
     /* 0x08 */ u32 unk_08;
-    /* 0x0C */ Gfx* unk_0C;
-} unk_D_800ABE00_cmd21; // size = 0x10
+    /* 0x0C */ Gfx* displayList; // @unverified: GeoLayout command: GeoNode_CreateBillboard argument
+} GeoLayoutCmdCreateBillboard; // size = 0x10
 
-typedef struct unk_D_800ABE00_cmd22 {
+typedef struct GeoLayoutCmdCreateDisplayList {
     /* 0x00 */ u8 cmd;
-    /* 0x01 */ u8 unk_01;
-    /* 0x04 */ Gfx* unk_04;
-} unk_D_800ABE00_cmd22; // size = 0x8
+    /* 0x01 */ u8 renderLayer; // @unverified: GeoLayout command: GeoNode_CreateDisplayList argument
+    /* 0x04 */ Gfx* displayList; // @unverified: GeoLayout command: GeoNode_CreateDisplayList argument
+} GeoLayoutCmdCreateDisplayList; // size = 0x8
 
-typedef struct unk_D_800ABE00_cmd23 {
+typedef struct GeoLayoutCmdCreateMaterial {
     /* 0x00 */ u8 cmd;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ Gfx* unk_04;
-    /* 0x07 */ s16 unk_08;
-    /* 0x0A */ s16 unk_0A;
+    /* 0x01 */ u8 mode; // @unverified: GeoLayout command: GeoNode_CreateMaterial argument
+    /* 0x02 */ s16 eventIndex; // @unverified: GeoLayout command: GeoNode_CreateMaterial argument
+    /* 0x04 */ Gfx* displayList; // @unverified: GeoLayout command: GeoNode_CreateMaterial argument
+    /* 0x08 */ s16 textureIndex; // @unverified: GeoLayout command: GeoNode_CreateMaterial argument
+    /* 0x0A */ s16 paletteIndex; // @unverified: GeoLayout command: GeoNode_CreateMaterial argument
     /* 0x0C */ u8 r;
     /* 0x0D */ u8 g;
     /* 0x0E */ u8 b;
     /* 0x0F */ u8 a;
-} unk_D_800ABE00_cmd23; // size = 0x10
+} GeoLayoutCmdCreateMaterial; // size = 0x10
 
-typedef struct unk_D_800ABE00_cmd24 {
+typedef struct GeoLayoutCmdCreateAnchor {
     /* 0x00 */ u8 cmd;
-    /* 0x02 */ s16 unk_02;
-} unk_D_800ABE00_cmd24; // size = 0x4
+    /* 0x02 */ s16 anchorId; // @unverified: GeoLayout command: GeoNode_CreateAnchor argument
+} GeoLayoutCmdCreateAnchor; // size = 0x4
 
-typedef struct unk_D_800ABE00_cmd25 {
+typedef struct GeoLayoutCmdSetNodeFlag4 {
     /* 0x00 */ u8 cmd;
     /* 0x01 */ char pad[3];
-} unk_D_800ABE00_cmd25; // size = 0x4
+} GeoLayoutCmdSetNodeFlag4; // size = 0x4
 
-typedef struct unk_D_800ABE00_cmd26 {
+typedef struct GeoLayoutCmdCreateGroup {
     /* 0x00 */ u8 cmd;
-    /* 0x01 */ u8 unk_01;
+    /* 0x01 */ u8 renderLayer; // @unverified: GeoLayout command: GeoNode_CreateGroup argument
     /* 0x02 */ u8 unk_02;
     /* 0x03 */ s8 unk_03;
     /* 0x04 */ s16 unk_04;
@@ -310,47 +307,50 @@ typedef struct unk_D_800ABE00_cmd26 {
     /* 0x11 */ u8 g;
     /* 0x12 */ u8 b;
     /* 0x13 */ u8 a;
-} unk_D_800ABE00_cmd26; // size = 0x14
+} GeoLayoutCmdCreateGroup; // size = 0x14
 
-void geo_layout_cmd_branch_and_link(void); // cmd  0
-void geo_layout_cmd_end(void); // cmd  1
-void geo_layout_cmd_jump(void); // cmd  2
-void geo_layout_cmd_branch(void); // cmd  3
-void geo_layout_cmd_return(void); // cmd  4
-void geo_layout_cmd_open_node(void); // cmd  5
-void geo_layout_cmd_close_node(void); // cmd  6
-void geo_layout_cmd_attach_node(void); // cmd  7
-void geo_layout_cmd_set_callback(void); // cmd  8
-void geo_layout_cmd_create_container(void); // cmd  9
-void geo_layout_cmd_create_reference(void); // cmd 10
-void geo_layout_cmd_create_camera(void); // cmd 11
-void geo_layout_cmd_create_type3(void); // cmd 12
-void geo_layout_cmd_create_type4(void); // cmd 13
-void geo_layout_cmd_create_ortho(void); // cmd 14
-void geo_layout_cmd_create_perspective(void); // cmd 15
-void geo_layout_cmd_create_background(void); // cmd 16
-void geo_layout_cmd_create_clear_depth(void); // cmd 17
-void geo_layout_cmd_noop(void); // cmd 18
-void geo_layout_cmd_create_fog(void); // cmd 19
-void geo_layout_cmd_create_light(void); // cmd 20
-void geo_layout_cmd_skip(void); // cmd 21
-void geo_layout_cmd_create_ambient_light(void); // cmd 22
-void geo_layout_cmd_create_shadow_context(void); // cmd 23
-void geo_layout_cmd_create_shadow(void); // cmd 24
-void geo_layout_cmd_create_cull_distance(void); // cmd 25
-void geo_layout_cmd_create_switch_case(void); // cmd 26
-void geo_layout_cmd_create_translate_rotate(void); // cmd 27
-void geo_layout_cmd_create_translate(void); // cmd 28
-void geo_layout_cmd_create_animated_part(void); // cmd 29
-void geo_layout_cmd_create_display_list_part(void); // cmd 30
-void geo_layout_cmd_create_model_part(void); // cmd 31
-void geo_layout_cmd_create_display_list_matrix(void); // cmd 32
-void geo_layout_cmd_create_scale(void); // cmd 33
-void geo_layout_cmd_create_display_list(void); // cmd 34
-void geo_layout_cmd_create_shadow_texture(void); // cmd 35
-void geo_layout_cmd_create_anchor(void); // cmd 36
-void geo_layout_cmd_set_node_flag4(void); // cmd 37
-void geo_layout_cmd_create_group(void); // cmd 38
-GraphNode* process_geo_layout(MemoryBlock*, void*);
+#include "memory.h"
 
-#endif // _18480_H_
+// geo_layout.c
+void GeoLayout_CmdBranchAndLink(void); // cmd  0
+void GeoLayout_CmdEnd(void); // cmd  1
+void GeoLayout_CmdJump(void); // cmd  2
+void GeoLayout_CmdBranch(void); // cmd  3
+void GeoLayout_CmdReturn(void); // cmd  4
+void GeoLayout_CmdOpenNode(void); // cmd  5
+void GeoLayout_CmdCloseNode(void); // cmd  6
+void GeoLayout_CmdAttachNode(void); // cmd  7
+void GeoLayout_CmdSetCallback(void); // cmd  8
+void GeoLayout_CmdCreateContainer(void); // cmd  9
+void GeoLayout_CmdCreateReference(void); // cmd 10
+void GeoLayout_CmdCreateCamera(void); // cmd 11
+void GeoLayout_CmdCreateType3(void); // cmd 12
+void GeoLayout_CmdCreateType4(void); // cmd 13
+void GeoLayout_CmdCreateOrtho(void); // cmd 14
+void GeoLayout_CmdCreatePerspective(void); // cmd 15
+void GeoLayout_CmdCreateBackground(void); // cmd 16
+void GeoLayout_CmdCreateClearDepth(void); // cmd 17
+void GeoLayout_CmdNoop(void); // cmd 18
+void GeoLayout_CmdCreateFog(void); // cmd 19
+void GeoLayout_CmdCreateLight(void); // cmd 20
+void GeoLayout_CmdSkip(void); // cmd 21
+void GeoLayout_CmdCreateAmbientLight(void); // cmd 22
+void GeoLayout_CmdCreateTextureBank(void); // cmd 23
+void GeoLayout_CmdCreateShadow(void); // cmd 24
+void GeoLayout_CmdCreateCullDistance(void); // cmd 25
+void GeoLayout_CmdCreateSwitchCase(void); // cmd 26
+void GeoLayout_CmdCreateTranslateRotate(void); // cmd 27
+void GeoLayout_CmdCreateTranslate(void); // cmd 28
+void GeoLayout_CmdCreateAnimatedPart(void); // cmd 29
+void GeoLayout_CmdCreateDisplayListPart(void); // cmd 30
+void GeoLayout_CmdCreateModelPart(void); // cmd 31
+void GeoLayout_CmdCreateDisplayListMatrix(void); // cmd 32
+void GeoLayout_CmdCreateBillboard(void); // cmd 33
+void GeoLayout_CmdCreateDisplayList(void); // cmd 34
+void GeoLayout_CmdCreateMaterial(void); // cmd 35
+void GeoLayout_CmdCreateAnchor(void); // cmd 36
+void GeoLayout_CmdSetNodeFlag4(void); // cmd 37
+void GeoLayout_CmdCreateGroup(void); // cmd 38
+GraphNode* GeoLayout_Process(MemoryBlock*, void*);
+
+#endif // GEO_LAYOUT_H

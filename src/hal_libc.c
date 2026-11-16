@@ -15,8 +15,8 @@ char* HAL_Memset(char* dest, s32 c, u32 nsize);
  * pointer.
  */
 char* HAL_Strcpy(char* dest, char* src) {
-    char* newDest = dest;
-    while ((*(newDest++) = *(src++)) != '\0') {}
+    char* new_dest = dest;
+    while ((*(new_dest++) = *(src++)) != '\0') {}
     return dest;
 }
 
@@ -60,11 +60,11 @@ size_t HAL_Strcmp(char* dest, char* src) {
  * pointer used.
  */
 char* HAL_Memset(char* dest, s32 c, u32 nsize) {
-    char* newDest = dest;
+    char* new_dest = dest;
 
     // While the size is not 0, keep decrementing.
     while (nsize-- > 0) {
-        *newDest++ = c;
+        *new_dest++ = c;
     }
     return dest;
 }

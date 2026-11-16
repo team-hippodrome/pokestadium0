@@ -3,7 +3,7 @@
 
 #include "matrix.h"
 #include "game_state.h"
-#include "math_util.h"
+#include "gfx_rect.h"
 extern Mtx gIdentityMtx;
 extern Vec3f D_80060450;
 extern Vec3s D_8006045C;
@@ -12,12 +12,9 @@ extern Vec3f D_80060464;
 #define GET_LOW_S16_OF_32(var) (((s16*)&(var))[1])
 
 #include "global.h"
-#include "gfx_rect.h"
-#include "memory.h"
-extern DepthBuffer* D_8005F670;
+extern GfxImage* D_8005F670;
 
 #include "global.h"
-#include "math_util.h"
 // gSineTable, gCosineTable and gArctanTable (include/trig_tables.inc.c) match the
 // ROM at 0x8006DBB0; they stay in the resident data region until it is split.
 
@@ -43,13 +40,13 @@ Vec3s* Vec3s_FromVec3f(Vec3s* dest, Vec3f* float_vector);
 void MtxF_Copy(MtxF* dest, MtxF* src);
 void MtxF_Identity(MtxF* dest);
 void MtxF_SetTranslation(MtxF* identity, Vec3f* translate);
-void MtxF_SetLookAt(MtxF* mtx, Vec3f* from, Vec3f* to, u16 roll);
+void MtxF_SetLookAt(MtxF* mtx, Vec3f* from, Vec3f* to, u16 rotation_z);
 void MtxF_SetRotationTranslation(MtxF* out, Vec3s* translate, Vec3s* rotate);
 void MtxF_SetRotationTranslationF(MtxF* out, Vec3f* translate, Vec3s* rotate);
 void MtxF_SetRotationAndTransformTranslation(MtxF* out, Vec3f* translate, Vec3s* rotate);
 void MtxF_SetRotationScaleTranslation(MtxF* dest, Vec3f* translate, Vec3s* rotate, Vec3f* scale);
 void MtxF_SetRotationAndScaledTranslation(MtxF* dest, Vec3f* translate, Vec3s* rotate, Vec3f* scale);
-void MtxF_SetOrthonormalBasis(MtxF* dest, Vec3f* up_direction, Vec3f* pos, s16 yaw);
+void MtxF_SetOrthonormalBasis(MtxF* dest, Vec3f* up_direction, Vec3f* pos, s16 rotation_y);
 void MtxF_Multiply(MtxF* dest, MtxF* A, MtxF* B);
 void MtxF_ScaleRows(MtxF* dest, MtxF* matrix, Vec3f* scale);
 void MtxF_GetScale(MtxF* matrix, Vec3f* dest);
@@ -75,6 +72,10 @@ Color_RGBA8_u32* Color_HSVToRGBA8(Color_RGBA8_u32* arg0, Vec3f* arg1, s32 arg2);
 u16 Color_AdjustRGB5551(u16 arg0, arg1_func_80010CA8 arg1);
 u32 Color_AdjustRGBA8(u32 arg0, arg1_func_80010CA8 arg1);
 
+/**
+ * Sets the red, green and blue channels of a color; alpha is left unchanged.
+ * Returns dest.
+ */
 Color_RGBA8* Color_SetRGB(Color_RGBA8* dest, u8 r, u8 g, u8 b) {
     dest->r = r;
     dest->g = g;
@@ -83,6 +84,7 @@ Color_RGBA8* Color_SetRGB(Color_RGBA8* dest, u8 r, u8 g, u8 b) {
     return dest;
 }
 
+/** Sets all four channels of a color. Returns dest. */
 Color_RGBA8* Color_SetRGBA(Color_RGBA8* dest, u8 r, u8 g, u8 b, u8 alpha) {
     dest->r = r;
     dest->g = g;
@@ -92,6 +94,7 @@ Color_RGBA8* Color_SetRGBA(Color_RGBA8* dest, u8 r, u8 g, u8 b, u8 alpha) {
     return dest;
 }
 
+/** Sets the x, y and z components of a float vector. Returns dest. */
 Vec3f* Vec3f_SetComponents(Vec3f* dest, f32 x, f32 y, f32 z) {
     dest->x = x;
     dest->y = y;
@@ -100,6 +103,10 @@ Vec3f* Vec3f_SetComponents(Vec3f* dest, f32 x, f32 y, f32 z) {
     return dest;
 }
 
+/**
+ * Stores a rectangle's corners, ordering the coordinates when x2 is less than
+ * x1. Returns the rectangle.
+ */
 unk_D_800A7440* GfxRect_SetBounds(unk_D_800A7440* arg0, s16 x1, s16 y1, s16 x2, s16 y2) {
     if (x2 >= x1) {
         arg0->x1 = x1;
@@ -120,6 +127,10 @@ unk_D_800A7440* GfxRect_SetBounds(unk_D_800A7440* arg0, s16 x1, s16 y1, s16 x2, 
     return arg0;
 }
 
+/**
+ * Duplicate of Vec3f_SetComponents; the two are separate functions in the ROM.
+ * Returns dest.
+ */
 Vec3f* Vec3f_SetComponentsDuplicate(Vec3f* dest, f32 x, f32 y, f32 z) {
     dest->x = x;
     dest->y = y;
@@ -128,6 +139,7 @@ Vec3f* Vec3f_SetComponentsDuplicate(Vec3f* dest, f32 x, f32 y, f32 z) {
     return dest;
 }
 
+/** Adds summand to dest component-wise. Returns dest. */
 Vec3f* Vec3f_AddInPlace(Vec3f* dest, Vec3f* summand) {
     dest->x += summand->x;
     dest->y += summand->y;
@@ -136,6 +148,7 @@ Vec3f* Vec3f_AddInPlace(Vec3f* dest, Vec3f* summand) {
     return dest;
 }
 
+/** Stores a + b in dest. Returns dest. */
 Vec3f* Vec3f_Add(Vec3f* dest, Vec3f* a, Vec3f* b) {
     dest->x = a->x + b->x;
     dest->y = a->y + b->y;
@@ -144,6 +157,7 @@ Vec3f* Vec3f_Add(Vec3f* dest, Vec3f* a, Vec3f* b) {
     return dest;
 }
 
+/** Subtracts subtrahend from dest component-wise. Returns dest. */
 Vec3f* Vec3f_SubtractInPlace(Vec3f* dest, Vec3f* subtrahend) {
     dest->x -= subtrahend->x;
     dest->y -= subtrahend->y;
@@ -152,6 +166,7 @@ Vec3f* Vec3f_SubtractInPlace(Vec3f* dest, Vec3f* subtrahend) {
     return dest;
 }
 
+/** Stores a - subtrahend in out. Returns out. */
 Vec3f* Vec3f_Subtract(Vec3f* out, Vec3f* a, Vec3f* subtrahend) {
     out->x = a->x - subtrahend->x;
     out->y = a->y - subtrahend->y;
@@ -160,6 +175,7 @@ Vec3f* Vec3f_Subtract(Vec3f* out, Vec3f* a, Vec3f* subtrahend) {
     return out;
 }
 
+/** Converts a short vector to a float vector. Returns float_vector. */
 Vec3f* Vec3f_FromVec3s(Vec3f* float_vector, Vec3s* int_vector) {
     float_vector->x = int_vector->x;
     float_vector->y = int_vector->y;
@@ -168,6 +184,7 @@ Vec3f* Vec3f_FromVec3s(Vec3f* float_vector, Vec3s* int_vector) {
     return float_vector;
 }
 
+/** Stores the unnormalized normal of triangle (a, b, c) in dest. Returns dest. */
 Vec3f* Vec3f_TriangleNormal(Vec3f* dest, Vec3f* a, Vec3f* b, Vec3f* c) {
     dest->x = ((b->y - a->y) * (c->z - b->z)) - ((c->y - b->y) * (b->z - a->z));
     dest->y = ((b->z - a->z) * (c->x - b->x)) - ((c->z - b->z) * (b->x - a->x));
@@ -176,6 +193,7 @@ Vec3f* Vec3f_TriangleNormal(Vec3f* dest, Vec3f* a, Vec3f* b, Vec3f* c) {
     return dest;
 }
 
+/** Stores the cross product a x b in dest. Returns dest. */
 Vec3f* Vec3f_CrossProduct(Vec3f* dest, Vec3f* a, Vec3f* b) {
     dest->x = (a->y * b->z) - (b->y * a->z);
     dest->y = (a->z * b->x) - (b->z * a->x);
@@ -184,6 +202,7 @@ Vec3f* Vec3f_CrossProduct(Vec3f* dest, Vec3f* a, Vec3f* b) {
     return dest;
 }
 
+/** Scales a vector to unit length in place. Returns the vector. */
 Vec3f* Vec3f_Normalize(Vec3f* vector) {
     f32 temp_fv1_2 = 1.0f / sqrtf(SQ(vector->x) + SQ(vector->y) + SQ(vector->z));
 
@@ -194,6 +213,7 @@ Vec3f* Vec3f_Normalize(Vec3f* vector) {
     return vector;
 }
 
+/** Sets the x, y and z components of a short vector. Returns dest. */
 Vec3s* Vec3s_SetComponents(Vec3s* dest, s16 a, s16 b, s16 c) {
     dest->x = a;
     dest->y = b;
@@ -202,6 +222,7 @@ Vec3s* Vec3s_SetComponents(Vec3s* dest, s16 a, s16 b, s16 c) {
     return dest;
 }
 
+/** Adds summand to dest component-wise. Returns dest. */
 Vec3s* Vec3s_AddInPlace(Vec3s* dest, Vec3s* summand) {
     dest->x += summand->x;
     dest->y += summand->y;
@@ -210,6 +231,7 @@ Vec3s* Vec3s_AddInPlace(Vec3s* dest, Vec3s* summand) {
     return dest;
 }
 
+/** Stores a + b in dest. Returns dest. */
 Vec3s* Vec3s_Add(Vec3s* dest, Vec3s* a, Vec3s* b) {
     dest->x = a->x + b->x;
     dest->y = a->y + b->y;
@@ -218,6 +240,7 @@ Vec3s* Vec3s_Add(Vec3s* dest, Vec3s* a, Vec3s* b) {
     return dest;
 }
 
+/** Subtracts subtrahend from dest component-wise. Returns dest. */
 Vec3s* Vec3s_SubtractInPlace(Vec3s* dest, Vec3s* subtrahend) {
     dest->x -= subtrahend->x;
     dest->y -= subtrahend->y;
@@ -226,6 +249,7 @@ Vec3s* Vec3s_SubtractInPlace(Vec3s* dest, Vec3s* subtrahend) {
     return dest;
 }
 
+/** Stores a - subtrahend in dest. Returns dest. */
 Vec3s* Vec3s_Subtract(Vec3s* dest, Vec3s* a, Vec3s* subtrahend) {
     dest->x = a->x - subtrahend->x;
     dest->y = a->y - subtrahend->y;
@@ -234,6 +258,7 @@ Vec3s* Vec3s_Subtract(Vec3s* dest, Vec3s* a, Vec3s* subtrahend) {
     return dest;
 }
 
+/** Converts a float vector to a short vector with rounding. Returns dest. */
 Vec3s* Vec3s_FromVec3f(Vec3s* dest, Vec3f* float_vector) {
     dest->x = ROUND_MAX(float_vector->x);
     dest->y = ROUND_MAX(float_vector->y);
@@ -242,6 +267,10 @@ Vec3s* Vec3s_FromVec3f(Vec3s* dest, Vec3f* float_vector) {
     return dest;
 }
 
+/**
+ * Copies a float matrix; does nothing when source and destination are the
+ * same.
+ */
 void MtxF_Copy(MtxF* dest, MtxF* src) {
     if (dest != src) {
         s32 i;
@@ -254,6 +283,7 @@ void MtxF_Copy(MtxF* dest, MtxF* src) {
     }
 }
 
+/** Sets a float matrix to the identity matrix. */
 void MtxF_Identity(MtxF* dest) {
     s32 i;
     f32* j;
@@ -268,6 +298,7 @@ void MtxF_Identity(MtxF* dest) {
     // clang-format on
 }
 
+/** Sets a float matrix to a pure translation. */
 void MtxF_SetTranslation(MtxF* identity, Vec3f* translate) {
     MtxF_Identity(identity);
 
@@ -276,73 +307,77 @@ void MtxF_SetTranslation(MtxF* identity, Vec3f* translate) {
     identity->mf[3][2] = translate->z;
 }
 
-void MtxF_SetLookAt(MtxF* mtx, Vec3f* from, Vec3f* to, u16 roll) {
-    f32 invLength;
+/**
+ * Builds a look-at view matrix from an eye point, a target point and a rotationZ
+ * angle.
+ */
+void MtxF_SetLookAt(MtxF* mtx, Vec3f* from, Vec3f* to, u16 rotation_z) {
+    f32 inv_length;
     f32 dx;
     f32 dz;
-    f32 xColY;
-    f32 yColY;
-    f32 zColY;
-    f32 xColZ;
-    f32 yColZ;
-    f32 zColZ;
-    f32 xColX;
-    f32 yColX;
-    f32 zColX;
+    f32 x_col_y;
+    f32 y_col_y;
+    f32 z_col_y;
+    f32 x_col_z;
+    f32 y_col_z;
+    f32 z_col_z;
+    f32 x_col_x;
+    f32 y_col_x;
+    f32 z_col_x;
 
     dx = to->x - from->x;
     dz = to->z - from->z;
 
-    invLength = -1.0 / sqrtf(dx * dx + dz * dz);
-    dx *= invLength;
-    dz *= invLength;
+    inv_length = -1.0 / sqrtf(dx * dx + dz * dz);
+    dx *= inv_length;
+    dz *= inv_length;
 
-    yColY = COSS(roll);
-    xColY = SINS(roll) * dz;
-    zColY = -SINS(roll) * dx;
+    y_col_y = COSS(rotation_z);
+    x_col_y = SINS(rotation_z) * dz;
+    z_col_y = -SINS(rotation_z) * dx;
 
-    xColZ = to->x - from->x;
-    yColZ = to->y - from->y;
-    zColZ = to->z - from->z;
+    x_col_z = to->x - from->x;
+    y_col_z = to->y - from->y;
+    z_col_z = to->z - from->z;
 
-    invLength = -1.0 / sqrtf(xColZ * xColZ + yColZ * yColZ + zColZ * zColZ);
-    xColZ *= invLength;
-    yColZ *= invLength;
-    zColZ *= invLength;
+    inv_length = -1.0 / sqrtf(x_col_z * x_col_z + y_col_z * y_col_z + z_col_z * z_col_z);
+    x_col_z *= inv_length;
+    y_col_z *= inv_length;
+    z_col_z *= inv_length;
 
-    xColX = yColY * zColZ - zColY * yColZ;
-    yColX = zColY * xColZ - xColY * zColZ;
-    zColX = xColY * yColZ - yColY * xColZ;
+    x_col_x = y_col_y * z_col_z - z_col_y * y_col_z;
+    y_col_x = z_col_y * x_col_z - x_col_y * z_col_z;
+    z_col_x = x_col_y * y_col_z - y_col_y * x_col_z;
 
-    invLength = 1.0 / sqrtf(xColX * xColX + yColX * yColX + zColX * zColX);
+    inv_length = 1.0 / sqrtf(x_col_x * x_col_x + y_col_x * y_col_x + z_col_x * z_col_x);
 
-    xColX *= invLength;
-    yColX *= invLength;
-    zColX *= invLength;
+    x_col_x *= inv_length;
+    y_col_x *= inv_length;
+    z_col_x *= inv_length;
 
-    xColY = yColZ * zColX - zColZ * yColX;
-    yColY = zColZ * xColX - xColZ * zColX;
-    zColY = xColZ * yColX - yColZ * xColX;
+    x_col_y = y_col_z * z_col_x - z_col_z * y_col_x;
+    y_col_y = z_col_z * x_col_x - x_col_z * z_col_x;
+    z_col_y = x_col_z * y_col_x - y_col_z * x_col_x;
 
-    invLength = 1.0 / sqrtf(xColY * xColY + yColY * yColY + zColY * zColY);
-    xColY *= invLength;
-    yColY *= invLength;
-    zColY *= invLength;
+    inv_length = 1.0 / sqrtf(x_col_y * x_col_y + y_col_y * y_col_y + z_col_y * z_col_y);
+    x_col_y *= inv_length;
+    y_col_y *= inv_length;
+    z_col_y *= inv_length;
 
-    mtx->mf[0][0] = xColX;
-    mtx->mf[1][0] = yColX;
-    mtx->mf[2][0] = zColX;
-    mtx->mf[3][0] = -(from->x * xColX + from->y * yColX + from->z * zColX);
+    mtx->mf[0][0] = x_col_x;
+    mtx->mf[1][0] = y_col_x;
+    mtx->mf[2][0] = z_col_x;
+    mtx->mf[3][0] = -(from->x * x_col_x + from->y * y_col_x + from->z * z_col_x);
 
-    mtx->mf[0][1] = xColY;
-    mtx->mf[1][1] = yColY;
-    mtx->mf[2][1] = zColY;
-    mtx->mf[3][1] = -(from->x * xColY + from->y * yColY + from->z * zColY);
+    mtx->mf[0][1] = x_col_y;
+    mtx->mf[1][1] = y_col_y;
+    mtx->mf[2][1] = z_col_y;
+    mtx->mf[3][1] = -(from->x * x_col_y + from->y * y_col_y + from->z * z_col_y);
 
-    mtx->mf[0][2] = xColZ;
-    mtx->mf[1][2] = yColZ;
-    mtx->mf[2][2] = zColZ;
-    mtx->mf[3][2] = -(from->x * xColZ + from->y * yColZ + from->z * zColZ);
+    mtx->mf[0][2] = x_col_z;
+    mtx->mf[1][2] = y_col_z;
+    mtx->mf[2][2] = z_col_z;
+    mtx->mf[3][2] = -(from->x * x_col_z + from->y * y_col_z + from->z * z_col_z);
 
     mtx->mf[0][3] = 0.0f;
     mtx->mf[1][3] = 0.0f;
@@ -350,6 +385,10 @@ void MtxF_SetLookAt(MtxF* mtx, Vec3f* from, Vec3f* to, u16 roll) {
     mtx->mf[3][3] = 1.0f;
 }
 
+/**
+ * Builds a rotation matrix from Euler angles and applies a short-vector
+ * translation.
+ */
 void MtxF_SetRotationTranslation(MtxF* out, Vec3s* translate, Vec3s* rotate) {
     f32 sx = SINS(rotate->x);
     f32 cx = COSS(rotate->x);
@@ -381,6 +420,10 @@ void MtxF_SetRotationTranslation(MtxF* out, Vec3s* translate, Vec3s* rotate) {
     out->mf[3][3] = 1.0f;
 }
 
+/**
+ * Builds a rotation matrix from Euler angles and applies a float-vector
+ * translation.
+ */
 void MtxF_SetRotationTranslationF(MtxF* out, Vec3f* translate, Vec3s* rotate) {
     f32 temp_fa0;
     f32 temp_fa1;
@@ -422,6 +465,10 @@ void MtxF_SetRotationTranslationF(MtxF* out, Vec3f* translate, Vec3s* rotate) {
     out->mf[3][3] = 1.0f;
 }
 
+/**
+ * Builds a rotation matrix from Euler angles, with the translation transformed
+ * by that rotation.
+ */
 void MtxF_SetRotationAndTransformTranslation(MtxF* out, Vec3f* translate, Vec3s* rotate) {
     f32 sx = SINS(rotate->x);
     f32 cx = COSS(rotate->x);
@@ -450,6 +497,10 @@ void MtxF_SetRotationAndTransformTranslation(MtxF* out, Vec3f* translate, Vec3s*
     out->mf[3][3] = 1.0f;
 }
 
+/**
+ * Builds a rotation matrix from Euler angles with per-axis scale and a
+ * translation.
+ */
 void MtxF_SetRotationScaleTranslation(MtxF* dest, Vec3f* translate, Vec3s* rotate, Vec3f* scale) {
     f32 sx = SINS(rotate->x);
     f32 cx = COSS(rotate->x);
@@ -481,6 +532,7 @@ void MtxF_SetRotationScaleTranslation(MtxF* dest, Vec3f* translate, Vec3s* rotat
     dest->mf[3][3] = 1.0f;
 }
 
+/** Builds a rotation and scale matrix whose translation is also scaled. */
 void MtxF_SetRotationAndScaledTranslation(MtxF* dest, Vec3f* translate, Vec3s* rotate, Vec3f* scale) {
     f32 sx = SINS(rotate->x);
     f32 cx = COSS(rotate->x);
@@ -512,7 +564,12 @@ void MtxF_SetRotationAndScaledTranslation(MtxF* dest, Vec3f* translate, Vec3s* r
     dest->mf[3][3] = 1.0f;
 }
 
-void func_8000E41C(MtxF* dest, MtxF* basis, MtxF* transform, Vec3f* local_position) {
+/**
+ * Builds a billboard matrix in dest: the rotation is the transpose of `basis` (the camera rotation),
+ * scaled per axis by the lengths of `transform`'s rows, and the translation is `local_position`
+ * transformed by `transform`.
+ */
+void MtxF_SetBillboard(MtxF* dest, MtxF* basis, MtxF* transform, Vec3f* local_position) {
     f32 x_norm;
     f32 y_norm;
     f32 z_norm;
@@ -545,12 +602,16 @@ void func_8000E41C(MtxF* dest, MtxF* basis, MtxF* transform, Vec3f* local_positi
     dest->mf[3][3] = 1.0f;
 }
 
-void MtxF_SetOrthonormalBasis(MtxF* dest, Vec3f* up_direction, Vec3f* pos, s16 yaw) {
+/**
+ * Builds a matrix from an up direction, a position and a heading angle about
+ * the up direction.
+ */
+void MtxF_SetOrthonormalBasis(MtxF* dest, Vec3f* up_direction, Vec3f* pos, s16 rotation_y) {
     Vec3f lateral_direction;
     Vec3f left_direction;
     Vec3f forward_direction;
 
-    Vec3f_SetComponentsDuplicate(&lateral_direction, SINS(yaw), 0, COSS(yaw));
+    Vec3f_SetComponentsDuplicate(&lateral_direction, SINS(rotation_y), 0, COSS(rotation_y));
     Vec3f_Normalize(up_direction);
 
     Vec3f_CrossProduct(&left_direction, up_direction, &lateral_direction);
@@ -580,47 +641,49 @@ void MtxF_SetOrthonormalBasis(MtxF* dest, Vec3f* up_direction, Vec3f* pos, s16 y
     dest->mf[3][3] = 1.0f;
 }
 
-void MtxF_Multiply(MtxF* dest, MtxF* A, MtxF* B) {
+/** Stores the matrix product a * b in dest. */
+void MtxF_Multiply(MtxF* dest, MtxF* a, MtxF* b) {
     f32 entry0;
     f32 entry1;
     f32 entry2;
 
-    entry0 = A->mf[0][0];
-    entry1 = A->mf[0][1];
-    entry2 = A->mf[0][2];
+    entry0 = a->mf[0][0];
+    entry1 = a->mf[0][1];
+    entry2 = a->mf[0][2];
 
-    dest->mf[0][0] = (entry0 * B->mf[0][0]) + (entry1 * B->mf[1][0]) + (entry2 * B->mf[2][0]);
-    dest->mf[0][1] = (entry0 * B->mf[0][1]) + (entry1 * B->mf[1][1]) + (entry2 * B->mf[2][1]);
-    dest->mf[0][2] = (entry0 * B->mf[0][2]) + (entry1 * B->mf[1][2]) + (entry2 * B->mf[2][2]);
+    dest->mf[0][0] = (entry0 * b->mf[0][0]) + (entry1 * b->mf[1][0]) + (entry2 * b->mf[2][0]);
+    dest->mf[0][1] = (entry0 * b->mf[0][1]) + (entry1 * b->mf[1][1]) + (entry2 * b->mf[2][1]);
+    dest->mf[0][2] = (entry0 * b->mf[0][2]) + (entry1 * b->mf[1][2]) + (entry2 * b->mf[2][2]);
 
-    entry0 = A->mf[1][0];
-    entry1 = A->mf[1][1];
-    entry2 = A->mf[1][2];
+    entry0 = a->mf[1][0];
+    entry1 = a->mf[1][1];
+    entry2 = a->mf[1][2];
 
-    dest->mf[1][0] = (entry0 * B->mf[0][0]) + (entry1 * B->mf[1][0]) + (entry2 * B->mf[2][0]);
-    dest->mf[1][1] = (entry0 * B->mf[0][1]) + (entry1 * B->mf[1][1]) + (entry2 * B->mf[2][1]);
-    dest->mf[1][2] = (entry0 * B->mf[0][2]) + (entry1 * B->mf[1][2]) + (entry2 * B->mf[2][2]);
+    dest->mf[1][0] = (entry0 * b->mf[0][0]) + (entry1 * b->mf[1][0]) + (entry2 * b->mf[2][0]);
+    dest->mf[1][1] = (entry0 * b->mf[0][1]) + (entry1 * b->mf[1][1]) + (entry2 * b->mf[2][1]);
+    dest->mf[1][2] = (entry0 * b->mf[0][2]) + (entry1 * b->mf[1][2]) + (entry2 * b->mf[2][2]);
 
-    entry0 = A->mf[2][0];
-    entry1 = A->mf[2][1];
-    entry2 = A->mf[2][2];
+    entry0 = a->mf[2][0];
+    entry1 = a->mf[2][1];
+    entry2 = a->mf[2][2];
 
-    dest->mf[2][0] = (entry0 * B->mf[0][0]) + (entry1 * B->mf[1][0]) + (entry2 * B->mf[2][0]);
-    dest->mf[2][1] = (entry0 * B->mf[0][1]) + (entry1 * B->mf[1][1]) + (entry2 * B->mf[2][1]);
-    dest->mf[2][2] = (entry0 * B->mf[0][2]) + (entry1 * B->mf[1][2]) + (entry2 * B->mf[2][2]);
+    dest->mf[2][0] = (entry0 * b->mf[0][0]) + (entry1 * b->mf[1][0]) + (entry2 * b->mf[2][0]);
+    dest->mf[2][1] = (entry0 * b->mf[0][1]) + (entry1 * b->mf[1][1]) + (entry2 * b->mf[2][1]);
+    dest->mf[2][2] = (entry0 * b->mf[0][2]) + (entry1 * b->mf[1][2]) + (entry2 * b->mf[2][2]);
 
-    entry0 = A->mf[3][0];
-    entry1 = A->mf[3][1];
-    entry2 = A->mf[3][2];
+    entry0 = a->mf[3][0];
+    entry1 = a->mf[3][1];
+    entry2 = a->mf[3][2];
 
-    dest->mf[3][0] = (entry0 * B->mf[0][0]) + (entry1 * B->mf[1][0]) + (entry2 * B->mf[2][0]) + B->mf[3][0];
-    dest->mf[3][1] = (entry0 * B->mf[0][1]) + (entry1 * B->mf[1][1]) + (entry2 * B->mf[2][1]) + B->mf[3][1];
-    dest->mf[3][2] = (entry0 * B->mf[0][2]) + (entry1 * B->mf[1][2]) + (entry2 * B->mf[2][2]) + B->mf[3][2];
+    dest->mf[3][0] = (entry0 * b->mf[0][0]) + (entry1 * b->mf[1][0]) + (entry2 * b->mf[2][0]) + b->mf[3][0];
+    dest->mf[3][1] = (entry0 * b->mf[0][1]) + (entry1 * b->mf[1][1]) + (entry2 * b->mf[2][1]) + b->mf[3][1];
+    dest->mf[3][2] = (entry0 * b->mf[0][2]) + (entry1 * b->mf[1][2]) + (entry2 * b->mf[2][2]) + b->mf[3][2];
 
     dest->mf[0][3] = dest->mf[1][3] = dest->mf[2][3] = 0.0f;
     dest->mf[3][3] = 1.0f;
 }
 
+/** Scales the rows of a matrix by the x, y and z components of a vector. */
 void MtxF_ScaleRows(MtxF* dest, MtxF* matrix, Vec3f* scale) {
     s32 i;
 
@@ -632,12 +695,14 @@ void MtxF_ScaleRows(MtxF* dest, MtxF* matrix, Vec3f* scale) {
     }
 }
 
+/** Extracts the per-axis scale from the row lengths of a matrix. */
 void MtxF_GetScale(MtxF* matrix, Vec3f* dest) {
     dest->x = sqrtf(SQ(matrix->mf[0][0]) + SQ(matrix->mf[0][1]) + SQ(matrix->mf[0][2]));
     dest->y = sqrtf(SQ(matrix->mf[1][0]) + SQ(matrix->mf[1][1]) + SQ(matrix->mf[1][2]));
     dest->z = sqrtf(SQ(matrix->mf[2][0]) + SQ(matrix->mf[2][1]) + SQ(matrix->mf[2][2]));
 }
 
+/** Transforms a short vector by a matrix in place. */
 void MtxF_TransformVec3s(MtxF* matrix, Vec3s* dest) {
     f32 entry0 = dest->x;
     f32 entry1 = dest->y;
@@ -648,31 +713,44 @@ void MtxF_TransformVec3s(MtxF* matrix, Vec3s* dest) {
     dest->z = ((entry0 * matrix->mf[0][2]) + (entry1 * matrix->mf[1][2]) + (entry2 * matrix->mf[2][2])) + matrix->mf[3][2];
 }
 
+/**
+ * Converts a float matrix to the RSP fixed-point format (integer parts first,
+ * then fractions).
+ */
 void MtxF_ToFixed(MtxF* dest, MtxF* src) {
-    s32 asFixedPoint;
+    s32 as_fixed_point;
     s32 i;
     s16* a3 = (s16*)dest;      // all integer parts stored in first 16 bytes
     s16* t0 = (s16*)dest + 16; // all fraction parts stored in last 16 bytes
     f32* t1 = (f32*)src;
 
     for (i = 0; i < 16; i++) {
-        asFixedPoint = *t1++ * (1 << 16);         //! float-to-integer conversion responsible for PU crashes
-        *a3++ = GET_HIGH_S16_OF_32(asFixedPoint); // integer part
-        *t0++ = GET_LOW_S16_OF_32(asFixedPoint);  // fraction part
+        as_fixed_point = *t1++ * (1 << 16);         //! float-to-integer conversion responsible for PU crashes
+        *a3++ = GET_HIGH_S16_OF_32(as_fixed_point); // integer part
+        *t0++ = GET_LOW_S16_OF_32(as_fixed_point);  // fraction part
     }
 }
 
-void func_8000E41C(MtxF* dest, MtxF* basis, MtxF* transform, Vec3f* local_position);
-void func_8000ED9C(MtxF* dest, Vec3f* local_position, Vec3s* rotate, Vec3f* scale, MtxF* basis, MtxF* transform) {
+void MtxF_SetBillboard(MtxF* dest, MtxF* basis, MtxF* transform, Vec3f* local_position);
+/**
+ * Builds `dest` = scale x rotate x billboard: a billboard matrix that faces the camera of `basis`/
+ * `transform` at `local_position`, rotated by `rotate` and scaled per row by `scale`. Used by
+ * geo_render for camera-facing nodes. @unverified: named from the code.
+ */
+void MtxF_ComposeBillboardTransform(MtxF* dest, Vec3f* local_position, Vec3s* rotate, Vec3f* scale, MtxF* basis, MtxF* transform) {
     MtxF sp58;
     MtxF sp18;
 
-    func_8000E41C(&sp58, basis, transform, local_position);
+    MtxF_SetBillboard(&sp58, basis, transform, local_position);
     MtxF_SetRotationTranslationF(&sp18, &D_80060450, rotate);
     MtxF_Multiply(&sp18, &sp18, &sp58);
     MtxF_ScaleRows(dest, &sp18, scale);
 }
 
+/**
+ * Computes the distance between two points and the two angles that point from
+ * one to the other.
+ */
 void Vec3f_CalculateDistanceAngles(Vec3f* to, Vec3f* from, f32* euclidean, s16* angle_x, s16* angle_y) {
     f32 x_dist = from->x - to->x;
     f32 y_dist = from->y - to->y;
@@ -683,6 +761,7 @@ void Vec3f_CalculateDistanceAngles(Vec3f* to, Vec3f* from, f32* euclidean, s16* 
     *angle_y = MathUtil_Atan2s(z_dist, x_dist);
 }
 
+/** Computes a point at a given distance from a center using two angles. */
 void Camera_ComputeEyeFromAngles(Vec3f* from, Vec3f* to, f32 dist, s16 rotation_x, s16 rotation_y) {
     to->x = from->x + (dist * COSS(rotation_x) * SINS(rotation_y));
     to->y = from->y + (dist * SINS(rotation_x));
@@ -706,7 +785,7 @@ u16 MathUtil_Atan2Lookup(f32 y, f32 x) {
 
 /**
  * Compute the angle from (0, 0) to (x, y) as a s16. Given that terrain is in
- * the xz-plane, this is commonly called with (z, x) to get a yaw angle.
+ * the xz-plane, this is commonly called with (z, x) to get a rotationY angle.
  */
 s16 MathUtil_Atan2s(f32 y, f32 x) {
     u16 ret;
@@ -760,6 +839,7 @@ f32 MathUtil_Random_ZeroOne(void) {
     return MathUtil_Random16() / 65536.0f;
 }
 
+/** Moves a short toward a target by at most delta and stops on the target. */
 s16 Math_StepToS(s16 current, s16 target, s16 delta) {
     s16 temp_v0 = target - current;
 
@@ -778,6 +858,10 @@ s16 Math_StepToS(s16 current, s16 target, s16 delta) {
     return target - temp_v0;
 }
 
+/**
+ * Moves an integer toward a target by separate increase and decrease steps and
+ * stops on the target.
+ */
 s32 Math_StepToS32(s32 current, s32 target, s32 increase, s32 decrease) {
     //! If target is close to the max or min s32, then it's possible to overflow
     // past it without stopping.
@@ -796,6 +880,10 @@ s32 Math_StepToS32(s32 current, s32 target, s32 increase, s32 decrease) {
     return current;
 }
 
+/**
+ * Moves a float toward a target by separate increase and decrease steps and
+ * stops on the target.
+ */
 f32 Math_StepToF(f32 current, f32 target, f32 increase, f32 decrease) {
     if (current < target) {
         current += increase;
@@ -811,6 +899,7 @@ f32 Math_StepToF(f32 current, f32 target, f32 increase, f32 decrease) {
     return current;
 }
 
+/** Reads a signed bit field of the given length from a packed array of shorts. */
 s16 PackedBits_ReadSigned(s16* packed, s32 offset, s32 length) {
     Vec2s_s32 spC;
     s16* temp_a3 = &packed[(offset * length) / 16];
@@ -824,6 +913,7 @@ s16 PackedBits_ReadSigned(s16* packed, s32 offset, s32 length) {
     return spC.y;
 }
 
+/** Converts RGB channels in the range 0 to 1 to hue, saturation and value. */
 void Color_RGBToHSV(f32 r, f32 g, f32 b, Vec3f* dest) {
     f32 temp_ft4;
     f32 var_ft5;
@@ -884,14 +974,20 @@ void Color_RGBToHSV(f32 r, f32 g, f32 b, Vec3f* dest) {
     }
 }
 
+/** Converts an 8-bit RGBA color to HSV. */
 void Color_RGBA8ToHSV(Color_RGBA8_u32 color, Vec3f* dest) {
     Color_RGBToHSV((s32)color.r / 255.0f, (s32)color.g / 255.0f, (s32)color.b / 255.0f, dest);
 }
 
+/** Converts an RGBA5551 color to HSV. */
 void Color_RGB5551ToHSV(u16 color, Vec3f* dest) {
     Color_RGBToHSV(((color & 0xF800) >> 0xB) / 31.0f, ((color & 0x7C0) >> 6) / 31.0f, ((color & 0x3E) >> 1) / 31.0f, dest);
 }
 
+/**
+ * Helper for HSV to RGB conversion: interpolates one channel for a given hue
+ * sector.
+ */
 f32 Color_HSVInterpolate(f32 hue, f32 low, f32 high) {
     f32 channel;
 
@@ -916,6 +1012,7 @@ f32 Color_HSVInterpolate(f32 hue, f32 low, f32 high) {
     return channel;
 }
 
+/** Converts hue, saturation and value to RGB channels in the range 0 to 1. */
 void Color_HSVToRGB(f32* arg0, f32* arg1, f32* arg2, Vec3f* arg3) {
     f32 sp24;
     f32 sp20;
@@ -959,6 +1056,7 @@ void Color_HSVToRGB(f32* arg0, f32* arg1, f32* arg2, Vec3f* arg3) {
     *arg2 = Color_HSVInterpolate(arg3->x - 120.0f, sp24, sp20);
 }
 
+/** Converts an HSV color to RGBA5551. */
 u16 Color_HSVToRGB5551(Vec3f* arg0) {
     f32 sp2C;
     f32 sp28;
@@ -987,6 +1085,7 @@ u16 Color_HSVToRGB5551(Vec3f* arg0) {
     return (var_a1 << 0xB) | (var_v1 << 6) | (var_a0 * 2) | 1;
 }
 
+/** Converts an HSV color to 8-bit RGBA, using the given alpha. */
 Color_RGBA8_u32* Color_HSVToRGBA8(Color_RGBA8_u32* arg0, Vec3f* arg1, s32 arg2) {
     f32 sp34;
     f32 sp30;
@@ -1023,6 +1122,7 @@ Color_RGBA8_u32* Color_HSVToRGBA8(Color_RGBA8_u32* arg0, Vec3f* arg1, s32 arg2) 
     return arg0;
 }
 
+/** Adjusts an RGBA5551 color in HSV space. */
 u16 Color_AdjustRGB5551(u16 arg0, arg1_func_80010CA8 arg1) {
     Vec3f sp24;
     s32 a;
@@ -1031,24 +1131,24 @@ u16 Color_AdjustRGB5551(u16 arg0, arg1_func_80010CA8 arg1) {
     if (arg0 & 1) {
         Color_RGB5551ToHSV(arg0, &sp24);
 
-        if (arg1.unk_00 != 0) {
-            sp24.x += (arg1.unk_00 * 0.015625f);
+        if (arg1.hueShift != 0) {
+            sp24.x += (arg1.hueShift * 0.015625f);
         }
 
-        if (arg1.unk_02 != 0) {
-            if (arg1.unk_02 > 0) {
-                sp24.y += ((1.0f - sp24.y) * arg1.unk_02 * 0.125f);
+        if (arg1.saturationShift != 0) {
+            if (arg1.saturationShift > 0) {
+                sp24.y += ((1.0f - sp24.y) * arg1.saturationShift * 0.125f);
             } else {
-                sp24.y += (sp24.y * arg1.unk_02 * 0.125f);
+                sp24.y += (sp24.y * arg1.saturationShift * 0.125f);
             }
         }
 
-        if (arg1.unk_03 != 0) {
+        if (arg1.valueShift != 0) {
             a = (((sp24.z + 1.0f) * 0.5f * 255.0f));
-            if (arg1.unk_03 > 0) {
-                b = arg1.unk_03 + 7;
+            if (arg1.valueShift > 0) {
+                b = arg1.valueShift + 7;
             } else {
-                b = arg1.unk_03 + 8;
+                b = arg1.valueShift + 8;
             }
 
             sp24.z = (2.0f * (D_8006BBB0[b][a] / 65535.0f)) - 1.0f;
@@ -1059,6 +1159,7 @@ u16 Color_AdjustRGB5551(u16 arg0, arg1_func_80010CA8 arg1) {
     return arg0;
 }
 
+/** Adjusts an 8-bit RGBA color in HSV space. */
 u32 Color_AdjustRGBA8(u32 arg0, arg1_func_80010CA8 arg1) {
     Vec3f sp2C;
     Color_RGBA8_u32 arg;
@@ -1070,25 +1171,25 @@ u32 Color_AdjustRGBA8(u32 arg0, arg1_func_80010CA8 arg1) {
     if (arg.a > 0) {
         Color_RGBA8ToHSV(arg, &sp2C);
 
-        if (arg1.unk_00 != 0) {
-            sp2C.x += (arg1.unk_00 * 0.015625f);
+        if (arg1.hueShift != 0) {
+            sp2C.x += (arg1.hueShift * 0.015625f);
         }
 
-        if (arg1.unk_02 != 0) {
-            if (arg1.unk_02 > 0) {
-                sp2C.y += ((1.0f - sp2C.y) * arg1.unk_02 * 0.125f);
+        if (arg1.saturationShift != 0) {
+            if (arg1.saturationShift > 0) {
+                sp2C.y += ((1.0f - sp2C.y) * arg1.saturationShift * 0.125f);
             } else {
-                sp2C.y += (sp2C.y * arg1.unk_02 * 0.125f);
+                sp2C.y += (sp2C.y * arg1.saturationShift * 0.125f);
             }
         }
 
-        if (arg1.unk_03 != 0) {
+        if (arg1.valueShift != 0) {
             a = (((sp2C.z + 1.0f) * 0.5f * 255.0f));
 
-            if (arg1.unk_03 > 0) {
-                b = arg1.unk_03 + 7;
+            if (arg1.valueShift > 0) {
+                b = arg1.valueShift + 7;
             } else {
-                b = arg1.unk_03 + 8;
+                b = arg1.valueShift + 8;
             }
 
             sp2C.z = (2.0f * (D_8006BBB0[b][a] / 65535.0f)) - 1.0f;

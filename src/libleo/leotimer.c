@@ -162,23 +162,23 @@ u8 __locReadTimer(__LOCTime* time) {
 }
 
 u8 __locSetTimer(__LOCTime* time) {
-    u32 yearMonth;
-    u32 dayHour;
-    u32 minuteSecond;
+    u32 year_month;
+    u32 day_hour;
+    u32 minute_second;
     u8 temp_v0;
     u8 temp_v0_2;
     u8 temp_v0_3;
     u8 result;
 
-    yearMonth = (time->year << 0x18) + (time->month << 0x10);
-    dayHour = (time->day << 0x18) + (time->hour << 0x10);
-    minuteSecond = (time->minute << 0x18) + (time->second << 0x10);
-    temp_v0 = leoSend_asic_cmd_w_nochkDiskChange(ASIC_SET_TIMER_YEAR, yearMonth);
+    year_month = (time->year << 0x18) + (time->month << 0x10);
+    day_hour = (time->day << 0x18) + (time->hour << 0x10);
+    minute_second = (time->minute << 0x18) + (time->second << 0x10);
+    temp_v0 = leoSend_asic_cmd_w_nochkDiskChange(ASIC_SET_TIMER_YEAR, year_month);
     result = temp_v0;
     if ((temp_v0 != 0) ||
-        (temp_v0_2 = leoSend_asic_cmd_w_nochkDiskChange(ASIC_SET_TIMER_DATE, dayHour), result = temp_v0_2,
+        (temp_v0_2 = leoSend_asic_cmd_w_nochkDiskChange(ASIC_SET_TIMER_DATE, day_hour), result = temp_v0_2,
          (temp_v0_2 != 0)) ||
-        (temp_v0_3 = leoSend_asic_cmd_w_nochkDiskChange(ASIC_SET_TIMER_MINUTE, minuteSecond), result = temp_v0_3,
+        (temp_v0_3 = leoSend_asic_cmd_w_nochkDiskChange(ASIC_SET_TIMER_MINUTE, minute_second), result = temp_v0_3,
          (temp_v0_3 != 0))) {
         return result;
     }

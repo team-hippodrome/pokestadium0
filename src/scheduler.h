@@ -1,84 +1,53 @@
-#ifndef _5580_H_
-#define _5580_H_
+/* Declarations for src/scheduler.c. */
+#ifndef SCHEDULER_H
+#define SCHEDULER_H
 
 #include "global.h"
 
-typedef struct UnkStruct80001380 {
-    /* 0x00 */ OSMesg mesg;
-    /* 0x04 */ OSMesgQueue queue;
-    /* 0x1C */ u16 unk_1C;
-    /* 0x1E */ u16 unk_1E;
+// A task (graphics, audio or JPEG) handed to the scheduler thread.
+typedef struct SchedTask {
+    /* 0x00 */ OSMesg mesg; // @unverified: buffer of queue
+    /* 0x04 */ OSMesgQueue queue; // @unverified: gets 'DONE' when the task finished
+    /* 0x1C */ u16 state; // @unverified: from Sched_StartTask/Sched_HandleRspCompletion: 0 queued, 1 running, 2 yield requested, 3 RSP done
+    /* 0x1E */ u16 rdpState; // @unverified: from Sched_StartTask/Sched_HandleRdpCompletion: 1 RDP busy, 2 RDP done (or no RDP work)
     /* 0x20 */ OSTask task;
     /* 0x60 */ char unk60[0x8];
-} UnkStruct80001380; // size = 0x68
+} SchedTask; // size = 0x68
 
-typedef struct unk_D_800A62E0 {
+// A thread that gets a 'VTRE' message on every video retrace (Sched_BroadcastMessage).
+typedef struct SchedClient {
+    /* 0x00 */ OSMesg mesgBuf[4]; // @unverified: buffer of queue, created with 4 entries in DisplayWorker_ThreadMain
+    /* 0x10 */ OSMesgQueue queue; // @unverified: Sched_BroadcastMessage sends 'VTRE' to it, SchedClient_WaitMessage receives from it
+    /* 0x28 */ struct SchedClient* next; // @unverified: list link walked in Sched_AddClient and Sched_RemoveClient
+} SchedClient; // size = 0x2C
+
+typedef struct Scheduler {
     /* 0x000 */ OSThread thread;
-    /* 0x1B0 */ char unk1B0[0x800];
-    /* 0x9B0 */ u8 stack[64];
+    /* 0x1B0 */ u8 threadStack[0x800]; // @unverified: Sched_Init passes its end (mesgBuf) as the thread's stack pointer
+    /* 0x9B0 */ OSMesg mesgBuf[16]; // @unverified: buffer of queue (also the top of threadStack)
     /* 0x9F0 */ OSMesgQueue queue;
     /* 0xA08 */ u64 time;
-    /* 0xA10 */ unk_D_800AA660* unk_A10;
-    /* 0xA14 */ UnkStruct80001380* unk_A14;
-    /* 0xA18 */ UnkStruct80001380* unk_A18;
-    /* 0xA1C */ UnkStruct80001380* unk_A1C;
-    /* 0xA20 */ UnkStruct80001380* unk_A20;
-    /* 0xA24 */ UnkStruct80001380* unk_A24;
+    /* 0xA10 */ SchedClient* clients; // @unverified: head of the retrace client list (Sched_AddClient, Sched_BroadcastMessage)
+    /* 0xA14 */ SchedTask* runningTask; // @unverified: the task on the RSP now (Sched_HandleRspEvent)
+    /* 0xA18 */ SchedTask* audioTask; // @unverified: the audio task to run (Sched_HandleRetrace, Sched_HandleRspEvent)
+    /* 0xA1C */ SchedTask* gfxTask; // @unverified: the graphics or JPEG task to run (Sched_SubmitTask, Sched_HandleRdpEvent)
+    /* 0xA20 */ SchedTask* nextAudioTask; // @unverified: audio task waiting for the next retrace (Sched_SubmitTask, Sched_PromotePendingTasks)
+    /* 0xA24 */ SchedTask* nextGfxTask; // @unverified: graphics task waiting for the next retrace (Sched_SubmitTask, Sched_PromotePendingTasks)
     /* 0xA28 */ s32 unk_A28;
     /* 0xA2C */ s32 unk_A2C;
     /* 0xA30 */ s32 unk_A30;
-    /* 0xA34 */ s32 unk_A34;
-    /* 0xA38 */ s16 unk_A38;
+    /* 0xA34 */ s32 retraceCount; // @unverified: incremented in Sched_HandleRetrace
+    /* 0xA38 */ s16 preNmiFrames; // @unverified: set to 1 by Sched_HandlePreNMI, counts retraces after it; osAfterPreNMI at 26
     /* 0xA3A */ char unkA3A[0x6];
-} unk_D_800A62E0; // size = 0xA40
+} Scheduler; // size = 0xA40
 
-struct unk_D_80068BB0;
+extern Scheduler D_800A9710;
 
-typedef struct UnkArray4 {
-    /* 0x00 */ u8 unk_00;
-    /* 0x01 */ u8 unk_01;
-    /* 0x02 */ u8 unk_02;
-    /* 0x03 */ u8 unk_03;
-    /* 0x04 */ u32 unk_04;
-    /* 0x08 */ u32 unk_08;
-    /* 0x0C */ struct unk_D_80068BB0* unk_0C;
-} UnkArray4; // size = 0x10
-
-typedef struct UnkStruct80083CA0_2 {
-    /* 0x000 */ OSThread thread;
-    /* 0x1B0 */ OSMesg unk_1B0;
-    /* 0x1B4 */ char unk1B4[0xC];
-    /* 0x1C0 */ OSMesgQueue unk_1C0;
-    /* 0x1D8 */ s32 unk_1D8;
-    /* 0x1DC */ s32 unk_1DC;
-    /* 0x1E0 */ u8 unk1E0[0x800];
-    /* 0x9E0 */ struct unk_D_80068BB0* unk_9E0;
-    /* 0x9E4 */ OSMesg unk_9E4;
-    /* 0x9E8 */ OSMesg unk_9E8;
-    /* 0x9EC */ OSMesgQueue unk_9EC;
-    /* 0xA04 */ OSMesgQueue unk_A04;
-    /* 0xA1C */ char unkA1C[0x4];
-    /* 0xA20 */ UnkStruct80001380 unk_A20;
-    /* 0xA88 */ u16 unk_A88;
-    /* 0xA8A */ u8 unk_A8A;
-    /* 0xA8B */ u8 unk_A8B;
-    /* 0xA8C */ UnkArray4 unk_A8C;
-    /* 0xA9C */ UnkArray4 unk_A9C;
-    /* 0xAAC */ UnkArray4 unk_AAC;
-    /* 0xABC */ char unkABC[0x4];
-} UnkStruct80083CA0_2; // size = 0xAC0
-
-extern unk_D_800A62E0 D_800A9710;
-
-void Sched_InitClientQueue(UnkStruct80083CA0_2*, s32, s32);
-s32 Sched_WaitClientQueue(UnkStruct80083CA0_2*);
-s32 Sched_TryReceiveClientQueue(UnkStruct80083CA0_2*);
+// scheduler.c
 void Sched_Init(void);
-void Sched_AddClient(unk_D_800AA660*);
-void Sched_ResetTaskState(UnkStruct80001380* arg0);
-void Sched_WaitForTaskMessage(UnkStruct80001380* arg0);
-void Sched_RemoveClient(unk_D_800AA660* arg0);
-void Sched_SubmitTask(UnkStruct80001380* arg0, s32 arg1);
+void Sched_ResetTaskState(SchedTask* arg0);
+void Sched_WaitForTaskMessage(SchedTask* arg0);
+void Sched_RemoveClient(SchedClient* arg0);
+void Sched_SubmitTask(SchedTask* arg0, s32 arg1);
 
-
-#endif // _5580_H_
+#endif // SCHEDULER_H

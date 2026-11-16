@@ -1,9 +1,12 @@
-#ifndef _435D0_H_
-#define _435D0_H_
+/* Declarations for src/gb_audio.c. */
+#ifndef GB_AUDIO_H
+#define GB_AUDIO_H
 
 #include "global.h"
-#include "src/audio_commands.h"
 
+#include "audio_commands.h"
+
+// gb_audio.c
 void GbMusic_UpdateChannels(void);
 void GbMusic_StartSequenceById(u8 arg0);
 s32 GbMusic_StartTableSequence(u16 arg0);
@@ -47,6 +50,6 @@ void GbMusic_StartSfx(u8 arg0);
 void GbMusic_ResetApu(void);
 void GbMusic_BindSequenceTracks(u8 arg0);
 s32 GbMusic_CountActiveHighChannels(void);
-void func_8003E0B0(unk_D_800FC6D4* arg0);
+void GbMusic_RelocateBank(GbMusicBank* arg0);
 
-#endif // _435D0_H_
+#endif // GB_AUDIO_H

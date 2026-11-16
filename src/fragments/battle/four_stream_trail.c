@@ -1,0 +1,318 @@
+/* Stadium Zero fragment012_17ED00. */
+/* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_352570.c. */
+
+#include "battle.h"
+#include "gfx_buffer.h"
+extern FourStreamTrail D_821B4D70[4];
+extern Gfx D_82193160[];
+extern Gfx D_821931C8[];
+
+void FourStreamTrail_Init(void);
+void FourStreamTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
+                   f32 argA, f32 argB, f32 argC, s16 argD);
+void FourStreamTrail_Update(f32 arg0, Vec3f* arg1, f32 arg2, f32 arg3);
+void FourStreamTrail_UpdateNodeChain(FourStreamTrail* arg0);
+s32 FourStreamTrail_IsComplete(void);
+Gfx* FourStreamTrail_Draw(Gfx* arg0);
+
+/**
+ * Clears the 4 four-stream trails and their 15 nodes each.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Sonicboom.
+ * @unverified Name from Stadium 1.
+ */
+void FourStreamTrail_Init(void) {
+    s32 i;
+    s32 j;
+    f32 temp_fa0;
+    FourStreamTrail* var_a2;
+    FourStreamTrailNode* var_v0;
+
+    temp_fa0 = BattleAnim_GetSecondaryOwnerModelScale() * 0.75f;
+    var_a2 = &D_821B4D70[0];
+
+    for (i = 0; i < 4; i++, var_a2++) {
+        var_a2->active = 0;
+        var_a2->frame = 0;
+        var_a2->duration = 0;
+        var_a2->scale = temp_fa0;
+
+        var_v0 = &var_a2->nodes[0];
+        for (j = 0; j < 15; j++, var_v0++) {
+            var_v0->alpha = 0;
+            var_v0->halfWidth = 1.0f;
+            var_v0->angle = 0.0f;
+            var_v0->position.z = var_v0->position.y = var_v0->position.x = 0.0f;
+            var_v0->velocity.z = var_v0->velocity.y = var_v0->velocity.x = 0.0f;
+        }
+    }
+}
+
+/**
+ * Starts a free four-stream trail from (arg0, arg1, arg2) toward (arg3, arg4, arg5) with
+ * color arg6..arg9, spread, speed and length parameters.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * @unverified Name from Stadium 1.
+ */
+void FourStreamTrail_Start(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, f32 arg5, u8 arg6, u8 arg7, u8 arg8, u8 arg9,
+                   f32 argA, f32 argB, f32 argC, s16 argD) {
+    FourStreamTrail* var_v1;
+    FourStreamTrailNode* var_s0;
+    s32 i;
+    s32 j;
+    Vec3f sp64;
+    Vec3f sp58;
+
+    sp64.x = arg0;
+    sp64.y = arg1;
+    sp64.z = arg2;
+    var_v1 = &D_821B4D70[0];
+
+    for (i = 0; i < 4; i++, var_v1++) {
+        if (var_v1->active == 0) {
+            f32 tmp = var_v1->scale;
+
+            var_v1->active = 1;
+            var_v1->frame = 0;
+
+            var_v1->duration = argD;
+            var_v1->color.r = arg6;
+            var_v1->color.g = arg7;
+            var_v1->color.b = arg8;
+            var_v1->targetPos = sp64;
+            var_v1->maxHalfWidth = argC;
+            var_v1->angleStep = argA;
+
+            sp58.x = arg3;
+            sp58.y = arg4 * tmp;
+            sp58.z = arg5 * tmp;
+
+            if (arg3 < 0.0) {
+                var_v1->direction = -1;
+            } else {
+                var_v1->direction = 1;
+            }
+
+            var_s0 = &var_v1->nodes[0];
+            for (j = 0; j < 15; j++, var_s0++) {
+                var_s0->alpha = (arg9 * (14 - j)) / 15;
+                var_s0->halfWidth = argB;
+                var_s0->angle = (RAND(120) * 6.2831855f) / 120.0;
+                var_s0->position = sp64;
+                var_s0->velocity = sp58;
+            }
+            break;
+        }
+    }
+}
+
+/**
+ * Writes the point arg2 units along Z, scaled by arg3 and rotated arg0 radians about X,
+ * to arg1.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Sonic Boom: ran from sample 290 with the white streaks on screen; only move that ran it.
+ */
+void FourStreamTrail_Update(f32 arg0, Vec3f* arg1, f32 arg2, f32 arg3) {
+    MtxF spB0;
+    MtxF sp70;
+    MtxF sp30;
+    UNUSED s32 pad; // FAKE: stack padding
+
+    guScaleF(sp30.mf, arg3, arg3, arg3);
+    guRotateF(sp70.mf, (arg0 * 360.0) / 6.2831854820251465, 1.0f, 0.0f, 0.0f);
+    guMtxCatF(sp30.mf, sp70.mf, spB0.mf);
+    guMtxXFMF(spB0.mf, 0.0f, 0.0f, arg2, &arg1->x, &arg1->y, &arg1->z);
+}
+
+/**
+ * Advances a trail's 15 nodes, each following the one ahead of it.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Sonicboom.
+ * @unverified Name from Stadium 1.
+ */
+void FourStreamTrail_UpdateNodeChain(FourStreamTrail* arg0) {
+    FourStreamTrailNode* var_v0 = &arg0->nodes[0];
+    s32 i;
+    f32 temp_fa0;
+    f32 temp_fa1;
+
+    for (i = 0; i < 15; i++, var_v0++) {
+        if (i == 0) {
+            var_v0->prevHalfWidth = var_v0->halfWidth;
+            var_v0->prevAngle = var_v0->angle;
+            var_v0->prevPosition = var_v0->position;
+            var_v0->prevVelocity = var_v0->velocity;
+
+            var_v0->position.x += var_v0->velocity.x;
+            var_v0->position.y += var_v0->velocity.y;
+            var_v0->position.z += var_v0->velocity.z;
+
+            var_v0->angle += arg0->angleStep;
+            if (arg0->direction < 0) {
+                var_v0->velocity.x += 1.5;
+                if (var_v0->velocity.x > 20.0) {
+                    var_v0->velocity.x = 20.0f;
+                }
+            } else {
+                var_v0->velocity.x -= 1.5;
+                if (var_v0->velocity.x < -20.0) {
+                    var_v0->velocity.x = -20.0f;
+                }
+            }
+
+            if (arg0->frame < 0xF) {
+                temp_fa0 = ((0xF - arg0->frame) * 0.03) / 15.0;
+                temp_fa1 = (arg0->frame * 0.15) / 15.0;
+                var_v0->velocity.y += (arg0->targetPos.y - var_v0->position.y) * temp_fa0;
+                var_v0->velocity.z += (arg0->targetPos.z - var_v0->position.z) * temp_fa0;
+                var_v0->position.y += (arg0->targetPos.y - var_v0->position.y) * temp_fa1;
+                var_v0->position.z += (arg0->targetPos.z - var_v0->position.z) * temp_fa1;
+            } else {
+                var_v0->velocity.y += (arg0->targetPos.y - var_v0->position.y) * 0.03;
+                var_v0->velocity.z += (arg0->targetPos.z - var_v0->position.z) * 0.03;
+                var_v0->position.y += (arg0->targetPos.y - var_v0->position.y) * 0.15;
+                var_v0->position.z += (arg0->targetPos.z - var_v0->position.z) * 0.15;
+            }
+
+            var_v0->halfWidth += 2.0;
+            if (arg0->maxHalfWidth < var_v0->halfWidth) {
+                var_v0->halfWidth = arg0->maxHalfWidth;
+            }
+        } else {
+            var_v0->prevHalfWidth = var_v0->halfWidth;
+            var_v0->prevAngle = var_v0->angle;
+
+            var_v0->prevPosition = var_v0->position;
+            var_v0->prevVelocity = var_v0->velocity;
+
+            var_v0->position = var_v0[-1].prevPosition;
+            var_v0->angle = var_v0[-1].prevAngle;
+            var_v0->velocity = var_v0[-1].prevVelocity;
+            var_v0->halfWidth = var_v0[-1].prevHalfWidth;
+        }
+    }
+}
+
+/**
+ * Advances every active four-stream trail and counts its frames. Always returns 0.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Sonicboom.
+ * @unverified Name from Stadium 1.
+ */
+s32 FourStreamTrail_IsComplete(void) {
+    s32 i;
+    FourStreamTrail* var_s0 = &D_821B4D70[0];
+
+    for (i = 0; i < 4; i++, var_s0++) {
+        if (var_s0->active == 1) {
+            var_s0->frame += 1;
+            if (var_s0->duration < var_s0->frame) {
+                var_s0->active = 0;
+            } else {
+                FourStreamTrail_UpdateNodeChain(var_s0);
+            }
+        }
+    }
+
+    return 0;
+}
+
+/**
+ * Adds the display lists that draw every active four-stream trail and returns the new end
+ * of the list.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (1 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, 1P Onix vs Pinsir, exec breakpoint + screenshots):
+ * Sonic Boom: drew the white streaks around Onix from sample 290; only move that ran it.
+ */
+Gfx* FourStreamTrail_Draw(Gfx* arg0) {
+    s32 i;
+    s32 j;
+    s32 k;
+    FourStreamTrail* var_s4;
+    FourStreamTrailNode* temp_s0;
+    Mtx* temp_v0;
+    Vec3f sp134;
+    Vtx* var_s0;
+    Mtx spF0;
+    Mtx spB0;
+    s16 var_s3;
+    UNUSED s32 pad; // FAKE: stack padding
+
+    gDPPipeSync(arg0++);
+    gDPLoadTextureBlock_4b(arg0++, sBattleAnimAssetPointers[0x49], G_IM_FMT_I, 32, 32, 0, G_TX_NOMIRROR | G_TX_WRAP,
+                           G_TX_NOMIRROR | G_TX_WRAP, 5, 5, G_TX_NOLOD, G_TX_NOLOD);
+
+    var_s4 = &D_821B4D70[0];
+    for (i = 0; i < 4; i++, var_s4++) {
+        if (var_s4->active == 1) {
+            guScale(&spB0, var_s4->scale, var_s4->scale, var_s4->scale);
+            temp_s0 = &var_s4->nodes[0];
+
+            if (temp_s0->position.y > 0.0f) {
+                temp_v0 = Gfx_AllocDisplayList(sizeof(Mtx) * 1);
+                guTranslate(temp_v0, temp_s0->position.x, temp_s0->position.y, temp_s0->position.z);
+                guRotateRPY(&spF0, (temp_s0->angle * -360.0f * var_s4->direction) / 6.2831854820251465,
+                            (var_s4->direction * 90) + 90, 0.0f);
+                guMtxCatL(&spF0, temp_v0, temp_v0);
+                guMtxCatL(&spB0, temp_v0, temp_v0);
+
+                gSPMatrix(arg0++, temp_v0, G_MTX_PUSH | G_MTX_MUL | G_MTX_MODELVIEW);
+                gSPDisplayList(arg0++, D_82193160);
+                gSPPopMatrix(arg0++, G_MTX_MODELVIEW);
+            }
+
+            var_s4->vtx = Gfx_AllocDisplayList(sizeof(Vtx) * 30);
+            var_s0 = var_s4->vtx;
+
+            for (j = 0; j < 15; j++) {
+                FourStreamTrail_Update(temp_s0->angle, &sp134, temp_s0->halfWidth, var_s4->scale);
+                var_s3 = temp_s0->position.y + sp134.y;
+                if (var_s3 < 0) {
+                    var_s3 = 0;
+                }
+
+                var_s0->v.ob[0] = temp_s0->position.x + sp134.x;
+                var_s0->v.ob[1] = var_s3;
+                var_s0->v.ob[2] = temp_s0->position.z + sp134.z;
+                var_s0->v.cn[0] = var_s4->color.r;
+                var_s0->v.cn[1] = var_s4->color.g;
+                var_s0->v.cn[2] = var_s4->color.b;
+                var_s0->v.cn[3] = temp_s0->alpha;
+                var_s0++;
+
+                FourStreamTrail_Update(temp_s0->angle + M_PI_F, &sp134, temp_s0->halfWidth, var_s4->scale);
+
+                var_s3 = temp_s0->position.y + sp134.y;
+                if (var_s3 < 0) {
+                    var_s3 = 0;
+                }
+                var_s0->v.ob[0] = temp_s0->position.x + sp134.x;
+                var_s0->v.ob[1] = var_s3;
+                var_s0->v.ob[2] = temp_s0->position.z + sp134.z;
+                var_s0->v.cn[0] = var_s4->color.r;
+                var_s0->v.cn[1] = var_s4->color.g;
+                var_s0->v.cn[2] = var_s4->color.b;
+                var_s0->v.cn[3] = temp_s0->alpha;
+                var_s0++;
+
+                temp_s0++;
+            }
+
+            var_s0 = var_s4->vtx;
+
+            gSPDisplayList(arg0++, D_821931C8);
+
+            for (k = 0; k < 14; k++) {
+                gSPVertex(arg0++, var_s0, 4, 0);
+                gSP2Triangles(arg0++, 0, 2, 1, 0, 2, 3, 1, 0);
+                var_s0 += 2;
+            }
+        }
+    }
+
+    return arg0;
+}

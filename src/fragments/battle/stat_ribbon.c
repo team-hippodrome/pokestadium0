@@ -1,0 +1,199 @@
+/* Fixed-layout split; original translation-unit boundaries remain unconfirmed. */
+#include "battle.h"
+
+/**
+ * Part of the stat-change ribbon (see StatRibbon_Spawn).
+ * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 40
+ * turns): ran.
+ * @unverified Named after the ribbon seen in play; this function itself was not traced.
+ */
+void StatRibbon_Init(void) {
+    RibbonMesh* ptr = &D_8219CB20[0];
+    s32 i;
+
+    for (i = 0; i < 4; i++) {
+        ptr->frame = ptr->active = 0;
+        ptr++;
+    }
+}
+
+/**
+ * Sets a ribbon mesh's prim color (arg1, arg2, arg3), env color (arg4, arg5, arg6), prim LOD
+ * fraction arg7, prim alpha arg8 and env alpha arg9.
+ * @unverified Named after the ribbon seen in play; this function itself was not traced.
+ */
+void StatRibbon_Configure(RibbonMesh* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8,
+                   s32 arg9) {
+    arg0->primR = arg1;
+    arg0->primG = arg2;
+    arg0->primB = arg3;
+    arg0->envR = arg4;
+    arg0->envG = arg5;
+    arg0->envB = arg6;
+    arg0->primLodFrac = arg7;
+    arg0->primA = arg8;
+    arg0->envA = arg9;
+}
+
+
+/**
+ * Spawns one stat-change ribbon in a free slot of the 4-entry pool, centered on (arg0, arg1, arg2)
+ * with radius arg3 and scale arg4. arg5 picks the direction: 0 is the rising ribbon used when a
+ * stat goes up, 1 the falling curtain used when a stat goes down (Haze spawns both).
+ * Seen in play (2026-11-13) in the per-move sweep it ran for 23 moves: every stat-raising and stat-
+ * lowering move plus Mist and Haze. On screen (Swords Dance) a translucent pale-yellow wavy band
+ * rose around the user while the attack-rose message showed; for Growl a brownish curtain came down
+ * from the top of the screen in front of the target.
+ */
+void StatRibbon_Spawn(f32 arg0, f32 arg1, f32 arg2, f32 arg3, f32 arg4, s32 arg5) {
+    RibbonMesh* ptr;
+    RibbonMeshVertexState* ptr1;
+    RibbonMeshVertexState* ptr2;
+    RibbonMeshVertexState* ptr3;
+    s32 i;
+    u8 temp_lo;
+    u8 temp_lo_2;
+    s32 temp_v0_2;
+    s32 var_v1;
+    u8 temp_a0;
+    u8 temp_a1;
+    u8 temp_v1;
+
+    var_v1 = -1;
+
+    for (i = 0; i < 4; i++) {
+        if (D_8219CB20[i].active == 0) {
+            var_v1 = i;
+            break;
+        }
+    }
+
+    if (var_v1 == -1) {
+        return;
+    }
+
+    ptr = &D_8219CB20[var_v1];
+
+    ptr->active = 1;
+    ptr->frame = 0;
+    ptr->origin.x = arg0;
+    ptr->origin.z = arg2;
+    ptr->radius = arg3 * arg4;
+    ptr->scale = arg4;
+    ptr->auxEffectId = -1;
+
+    switch (arg5) {
+        case 0:
+            ptr->direction = 1;
+            ptr->origin.y = (arg4 * 0.0) + arg1;
+            ptr->duration = 60;
+            ptr->riseSpeed = 1.5f;
+            StatRibbon_Configure(&D_8219CB20[var_v1], 0xFF, 0xFF, 0xC8, 0x20, 0x20, 0xFF, 0x80, 0x80, 0xFF); // prim #FFFFC8, env #2020FF
+            ptr->auxEffectId = AuxiliaryEffect_Alloc();
+            break;
+
+        case 1:
+            ptr->direction = -1;
+            ptr->duration = 120;
+            ptr->origin.y = (arg4 * 100.0) + arg1;
+            ptr->riseSpeed = 1.5f;
+            StatRibbon_Configure(&D_8219CB20[var_v1], 0xFF, 0xFF, 0xC8, 0xFF, 0x20, 0x20, 0x80, 0x80, 0); // prim #FFFFC8, env #FF2020
+            break;
+
+        default:
+        case 2:
+            ptr->direction = 1;
+            ptr->origin.y = (arg4 * 0.0) + arg1;
+            ptr->duration = 30;
+            ptr->riseSpeed = 1.5f;
+            break;
+    }
+
+    ptr1 = &ptr->points[0];
+    for (i = 0; i < 31; i++) {
+        ptr2 = ptr1++;
+        ptr3 = ptr1++;
+
+        switch (arg5) {
+            case 0:
+                temp_v0_2 = ((i % 3) * 2) + 1;
+                temp_lo = 0x44 / temp_v0_2;
+                temp_lo_2 = 0xFF / temp_v0_2;
+
+                ptr2->color.r = 0x66;
+                ptr2->color.g = ((temp_lo * 6) + 0x3FC) / 10;
+                ptr2->color.b = ((temp_lo_2 * 6) + 0x3FC) / 10;
+                ptr2->color.a = 0xFF;
+
+                ptr3->color.r = 0;
+                ptr3->color.g = temp_lo;
+                ptr3->color.b = temp_lo_2;
+                ptr3->color.a = 0;
+
+                ptr2->texT = 0x20;
+                ptr3->texT = 0x7E0;
+                break;
+
+            case 1:
+                temp_v0_2 = ((i % 3) * 2) + 1;
+                temp_lo = 0xFF / temp_v0_2;
+                temp_lo_2 = 0x44 / temp_v0_2;
+
+                ptr2->color.r = ((temp_lo * 4) + 0x5FA) / 10;
+                ptr2->color.g = ((temp_lo_2 * 4) + 0x5FA) / 10;
+                ptr2->color.b = 0x99;
+                ptr2->color.a = 0x10;
+
+                ptr3->color.r = temp_lo;
+                ptr3->color.g = temp_lo_2;
+                ptr3->color.b = 0;
+                ptr3->color.a = 0;
+
+                ptr2->texT = 0x7E0;
+                ptr3->texT = 0x20;
+                break;
+
+            default:
+            case 2:
+                temp_v1 = (((u32)(i & 0x3F) >> 4) & 3) << 6;
+                temp_a0 = (((u32)(i & 0x3F) >> 2) & 3) << 6;
+                temp_a1 = ((u32)(i & 0x3F) & 3) << 6;
+
+                ptr2->color.r = ((temp_v1 * 6) + 0x3FC) / 10;
+                ptr2->color.g = ((temp_a0 * 6) + 0x3FC) / 10;
+                ptr2->color.b = ((temp_a1 * 6) + 0x3FC) / 10;
+                ptr2->color.a = 0xFF;
+
+                ptr3->color.r = temp_v1;
+                ptr3->color.g = temp_a0;
+                ptr3->color.b = temp_a1;
+                ptr3->color.a = 0;
+
+                ptr2->texT = 0x20;
+                ptr3->texT = 0x7E0;
+                break;
+        }
+
+        ptr2->texS = ((i % 31) * 0x3000) / 30;
+        ptr3->texS = ptr2->texS;
+        ptr2->wavePhase = 0.0f;
+        ptr2->angle = (i * TWO_PI) / 30.0;
+        ptr2->position.x = (__cosf((i * TWO_PI) / 30.0) * (arg3 * arg4)) + arg0;
+        ptr2->position.y = ptr->origin.y;
+
+        if (ptr2->position.y < 0.0) {
+            ptr2->position.y = 0.0f;
+        }
+        ptr2->position.z = (__sinf(ptr2->angle) * (arg3 * arg4)) + arg2;
+
+        ptr3->wavePhase = 0.0f;
+        ptr3->angle = ptr2->angle;
+        ptr3->position.x = ptr2->position.x;
+        ptr3->position.y = ptr->origin.y;
+        if (ptr3->position.y < 0.0) {
+            ptr3->position.y = 0.0f;
+        }
+
+        ptr3->position.z = ptr2->position.z;
+    }
+}

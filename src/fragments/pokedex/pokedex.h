@@ -1,195 +1,82 @@
-#ifndef _FRAGMENT28_H_
-#define _FRAGMENT28_H_
+/* Declarations for the pokedex fragment (src/fragments/pokedex/). */
+#ifndef FRAGMENT_POKEDEX_H
+#define FRAGMENT_POKEDEX_H
 
 #include "global.h"
-#include "src/fragments/widget_tree/widget_tree.h"
+#include "menu.h"
+#include "table_view.h"
 
-typedef struct unk_func_888044BC_038_02C_02C_000 {
-    /* 0x00 */ u8 unk_00;
-} unk_func_888044BC_038_02C_02C_000; // size >= 0x4
+/* Struct types that were defined identically in each of these files; this is
+ * now the one definition they all include:
+ * src/fragments/pokedex/pokedex.c
+ * src/fragments/pokedex/pokedex_2.c
+ */
 
-typedef struct unk_func_888044BC_038_02C_02C {
-    /* 0x00 */ unk_func_888044BC_038_02C_02C_000** unk_00;
-    /* 0x04 */ char unk04[0x4];
-    /* 0x08 */ s32 unk_08;
-} unk_func_888044BC_038_02C_02C; // size >= 0x0C
+typedef struct unk_D_80064C60 {
+    /* 0x00 */ char* unk_00;
+    /* 0x04 */ char unk04[0x18];
+} unk_D_80064C60; // size = 0x1C
 
-typedef struct unk_func_888044BC_038_02C_044 {
-    /* 0x00 */ WidgetNode unk_00;
-} unk_func_888044BC_038_02C_044; // size >= 0x2C
+/* The ずかんもくじ (index) list window: 151 rows of number, name and caught icon, and the アイウエオじゅん /
+ * ばんごうじゅん (kana / number order) bar (Pokedex_InitListWindow, Pokedex_DrawListWindow). */
+typedef struct PokedexListWindow {
+    /* 0x000 */ Window window; // the ずかんもくじ window, 272x366 at (54, 85)
+    /* 0x02C */ ScrollList list; // rows drawn by Pokedex_DrawListRow; D-Down moved list.cursor 0 -> 1, D-Right paged it to 9
+    /* 0x070 */ ByteMatrix entries; // rows = the 0x1C-byte entries of D_80064C5C: capacity and count 151, rowSize 28
+    /* 0x080 */ u16 itemFlags[0x97]; // @unverified: itemFlags of list
+    /* 0x1AE */ char pad1AE[0x2];
+    /* 0x1B0 */ s32 sortByKana; // C-Right (button bit 1, not A) toggles it (Pokedex_UpdateListCursor): 1 showed アイウエオじゅん with 023, 024, 119, 133 first; 0 ばんごうじゅん
+} PokedexListWindow; // size = 0x1B4
 
-typedef struct unk_func_888044BC_038_02C_000 {
-    /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_888044BC_038_02C_02C* unk_2C;
-    /* 0x30 */ char unk30[0x4];
-    /* 0x34 */ u16* unk_34;
-    /* 0x38 */ s32 unk_38;
-    /* 0x3C */ s16 unk_3C;
-    /* 0x3E */ s16 unk_3E;
-    /* 0x40 */ char unk40[0x4];
-    /* 0x44 */ unk_func_888044BC_038_02C_044* unk_44;
-    /* 0x48 */ char unk48[0x2];
-    /* 0x4A */ s16 unk_4A;
-    /* 0x4C */ char unk4C[0x4];
-    /* 0x50 */ WidgetPoint unk_50;
-    /* 0x54 */ s16 unk_54;
-    /* 0x58 */ s32 unk_58;
-    /* 0x5C */ s32 unk_5C;
-    /* 0x60 */ char unk60[0xC];
-    /* 0x6C */ s32 unk_6C;
-} unk_func_888044BC_038_02C_000; // size = 0x70
+/* The データをみる / なきごえ / ぶんぷをみる / やめる (data, cry, area, quit) menu window (Pokedex_InitActionMenuWindow). */
+typedef struct PokedexMenuWindow {
+    /* 0x00 */ Window window; // 180x168 at (390, 262)
+    /* 0x2C */ Menu menu; // rows drawn by Pokedex_DrawActionMenuRow: データをみる, なきごえ, ぶんぷをみる, やめる; D-Down moved menu.cursor to 1
+    /* 0x50 */ u16 itemFlags[4]; // @unverified: itemFlags of menu; bit 0 = disabled (Pokedex_HandleActionMenuResult)
+    /* 0x58 */ PointerList items; // func_80027804 over the 4 strings D_8A1057E8 (count 4)
+} PokedexMenuWindow; // size = 0x64
 
-typedef struct unk_func_888044BC_038_02C {
-    /* 0x00 */ unk_func_888044BC_038_02C_000 unk_00;
-    /* 0x70 */ unk_func_88205880_A030 unk_70;
-    /* 0x7C */ unk_func_88205880_A030 unk_7C;
-    /* 0x88 */ s32 unk_88;
-    /* 0x8C */ s32 unk_8C;
-} unk_func_888044BC_038_02C; // size = 0x90
+/* The ずかんもくじ screen, sIndexScreen (Pokedex_InitIndexWindows). The code also reaches the windows through
+ * their own symbols sCountsWindow, sActionMenuWindow and sEntryWindow. */
+typedef struct PokedexIndexScreen {
+    /* 0x000 */ PokedexListWindow listWindow; // the ずかんもくじ list
+    /* 0x1B4 */ Window countsWindow; // みつけたかず / つかまえたかず / もっているかず (Pokedex_DrawCounts), 248x104 at (342, 114)
+    /* 0x1E0 */ PokedexMenuWindow menuWindow; // the データをみる / なきごえ / ぶんぷをみる / やめる menu
+    /* 0x244 */ Window entryWindow; // the データをみる page (Pokedex_InitEntryWindow), also reached as sEntryWindow: 552x348 at (44, 84) with ヒトカゲ's entry
+} PokedexIndexScreen; // size = 0x270
 
-typedef struct unk_func_888044BC_038 {
-    /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_888044BC_038_02C* unk_2C;
-} unk_func_888044BC_038; // size = 0x30
+#include "controller.h"
 
-typedef struct unk_func_888044BC_03C_02C {
-    /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ s32 unk_2C;
-    /* 0x30 */ char unk_30[8];
-    /* 0x38 */ unk_func_88200FA0_030_038* unk_38;
-    /* 0x3C */ s32 unk_3C;
-    /* 0x40 */ s32 unk_40;
-    /* 0x44 */ s32 unk_44;
-} unk_func_888044BC_03C_02C; // size = 0x48
-
-typedef struct unk_func_888044BC_03C {
-    /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_888044BC_03C_02C* unk_2C;
-} unk_func_888044BC_03C; // size = 0x30
-
-typedef struct unk_func_888044BC_040_030 {
-    /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ s32 unk_2C;
-} unk_func_888044BC_040_030; // size = 0x30
-
-typedef struct unk_func_888044BC_040 {
-    /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ char unk2C[0x4];
-    /* 0x30 */ unk_func_888044BC_040_030* unk_30;
-    /* 0x34 */ unk_func_88200FA0_030_030* unk_34;
-    /* 0x38 */ unk_func_88200FA0_030_038 unk_38;
-} unk_func_888044BC_040; // size = 0x44
-
-typedef struct unk_func_888044BC_044_02C {
-    /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ s32 unk_2C;
-} unk_func_888044BC_044_02C; // size = 0x30
-
-typedef struct unk_func_888044BC_044 {
-    /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_888044BC_044_02C* unk_2C;
-} unk_func_888044BC_044; // size = 0x30
-
-typedef struct unk_func_888044BC_048 {
-    /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_8850878C* unk_2C;
-} unk_func_888044BC_048; // size = 0x30
-
-typedef struct unk_func_888044BC_04C_02C {
-    /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ s32 unk_2C;
-} unk_func_888044BC_04C_02C; // size = 0x30
-
-typedef struct unk_func_888044BC_04C {
-    /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_888044BC_04C_02C* unk_2C;
-} unk_func_888044BC_04C; // size = 0x30
-
-typedef struct unk_func_888044BC_050 {
-    /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_888044BC_038_02C* unk_2C;
-    /* 0x30 */ s32 unk_30;
-} unk_func_888044BC_050; // size = 0x34
-
-typedef struct unk_func_888044BC {
-    /* 0x00 */ WidgetNode unk_00;
-    /* 0x2C */ unk_func_88500994* unk_2C;
-    /* 0x30 */ unk_func_88500994* unk_30;
-    /* 0x34 */ WidgetDelayedNode* unk_34;
-    /* 0x38 */ unk_func_888044BC_038* unk_38;
-    /* 0x3C */ unk_func_888044BC_03C* unk_3C;
-    /* 0x40 */ unk_func_888044BC_040* unk_40;
-    /* 0x44 */ unk_func_888044BC_044* unk_44;
-    /* 0x48 */ unk_func_888044BC_048* unk_48;
-    /* 0x4C */ unk_func_888044BC_04C* unk_4C;
-    /* 0x50 */ unk_func_888044BC_050* unk_50;
-    /* 0x54 */ unk_func_888044BC_050* unk_54;
-} unk_func_888044BC; // size = 0x58
-
-void Pokedex_DrawCheckboxIcon(s32 arg0, s32 arg1, s32 arg2);
-s32 Pokedex_DrawListScrollArrows(unk_func_888044BC_050* arg0, s32 arg1, s32 arg2);
-void Pokedex_DrawSpeciesListRow(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3, s32 arg4, unk_func_888044BC_038_02C* arg5);
-void Pokedex_BuildSpeciesListWidget(unk_func_888044BC_038_02C* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, MemoryPool* arg5);
-s32 Pokedex_GetSelectedSpeciesIndex(unk_func_888044BC_038_02C* arg0);
-void Pokedex_ToggleListSortOrder(unk_func_888044BC_038_02C* arg0);
-void Pokedex_BuildSpeciesListPanel(unk_func_888044BC_038* arg0, s32 arg1, s32 arg2, s32 arg3, MemoryPool* arg4);
-s32 Pokedex_HandleSpeciesListInput(unk_func_888044BC_038* arg0, Controller* arg1);
-void Pokedex_DrawListSelectionFrame(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGBA8 arg4);
-void Pokedex_InitTrainerInfoWidget(unk_func_888044BC_03C_02C* arg0, s32 arg1, s32 arg2);
-void Pokedex_LoadTrainerInfo(unk_func_888044BC_03C_02C* arg0, s32 arg1);
-void Pokedex_DrawTrainerInfoCard(unk_func_888044BC_03C_02C* arg0, s32 arg1, s32 arg2);
-void Pokedex_BuildTrainerInfoPanel(unk_func_888044BC_03C* arg0, s32 arg1, s32 arg2, s32 arg3, MemoryPool* arg4);
-void Pokedex_InitSortOrderLabel(unk_func_888044BC_040_030* arg0, s32 arg1, s32 arg2);
-s32 Pokedex_DrawSortOrderLabel(unk_func_888044BC_040_030* arg0, s32 arg1, s32 arg2);
-void Pokedex_ToggleSortOrderLabel(unk_func_888044BC_040_030* arg0);
-void Pokedex_DrawEntryMenuItem(s32 arg0, s32 arg1, char* arg2, UNUSED s32 arg3, UNUSED s32 arg4, unk_func_88200FA0_030_030* arg5);
-void Pokedex_BuildEntryMenuWidget(unk_func_888044BC_040* arg0, s32 arg1, s32 arg2, MemoryPool* arg3);
-s32 Pokedex_HandleEntryMenuInput(unk_func_888044BC_040* arg0, Controller* arg1);
-void Pokedex_InitDataPanel(unk_func_888044BC_044_02C* arg0, s32 arg1, s32 arg2);
-void Pokedex_SetDataPanelSpecies(unk_func_888044BC_044_02C* arg0, s32 arg1);
-void Pokedex_FormatHeightString(s32 arg0, s32 arg1, s32 arg2);
-void Pokedex_FormatWeightString(s32 arg0, s32 arg1, s32 arg2);
-s32 Pokedex_DrawDataPanel(unk_func_888044BC_044_02C* arg0, s32 arg1, s32 arg2);
-void Pokedex_BuildDataPanel(unk_func_888044BC_044* arg0, s32 arg1, s32 arg2, MemoryPool* arg3);
-void Pokedex_BuildFlavorTextPanel(unk_func_888044BC_048* arg0, s32 arg1, s32 arg2, MemoryPool* arg3);
-void Pokedex_SetFlavorText(unk_func_888044BC_048* arg0, s32 arg1, s32 arg2);
-void Pokedex_InitPreviewWidget(unk_func_888044BC_04C_02C* arg0, s32 arg1, s32 arg2);
-void Pokedex_SetPreviewSpecies(unk_func_888044BC_04C_02C* arg0, s32 arg1);
-s32 Pokedex_DrawPreview(unk_func_888044BC_04C_02C* arg0, s32 arg1, s32 arg2);
-void Pokedex_BuildPreviewPanel(unk_func_888044BC_04C* arg0, s32 arg1, s32 arg2, MemoryPool* arg3);
-void Pokedex_BuildRootWidget(unk_func_888044BC* arg0, s32 arg1, s32 arg2, u8* arg3, MemoryPool* arg4);
-s32 func_8A10122C(void);
-s32 Pokedex_ShowEntryMenu(void);
-void Pokedex_LoadIcon(u8* arg0, s32 arg1);
+// pokedex.c
+s32 Pokedex_RunIndexScreen(void);
+s32 Pokedex_RunActionMenu(void);
+s32 Pokedex_DrawIndexScreen(u8 unused);
+void Pokedex_LoadIcon(u8* dest, s32 species);
 s32 Pokedex_ShowEntry(void);
 s32 Pokedex_PlayCry(void);
-s32 Pokedex_RedrawAreaMapTransition(u8 arg0);
 void Pokedex_EnterAreaMapScreen(void);
 void Pokedex_ExitAreaMapScreen(void);
 s32 Pokedex_ShowAreaMapScreen(void);
-s32 Pokedex_RedrawRootTransition(u8 arg0);
-void Pokedex_RunEntryFlow(void);
+void Pokedex_RunScreenLoop(void);
 s32 Pokedex_GetHighestSeenSpeciesIndex(void);
 void Pokedex_InitFramebuffers(void);
-s32 Pokedex_Main(UNUSED s32 arg0, UNUSED s32 arg1);
 
-
-s32 Pokedex_FindNextMapArea(s32 arg0);
-s32 Pokedex_FindPrevMapArea(s32 arg0);
-void Pokedex_BuildMapMarkerDisplayList(void);
-void Pokedex_BuildMapMarkersDisplayList(void);
-void Pokedex_BuildOverviewMarkersDisplayList(void);
-Gfx* Pokedex_DrawMapPinIcon(Gfx* arg0, s16 arg1, s16 arg2);
-Gfx* func_8A1033CC(Gfx* arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
-void Pokedex_BuildMapLabelsDisplayList(void);
+// pokedex_2.c
+s32 Pokedex_FindNextMapArea(s32 current_area);
+s32 Pokedex_FindPrevMapArea(s32 current_area);
+void Pokedex_BuildGbMapDisplayList(void);
+void Pokedex_BuildAreaPinsDisplayList(void);
+void Pokedex_BuildGbMapMarkersDisplayList(void);
+Gfx* Pokedex_DrawRButtonIcon(Gfx* gfx, s16 x, s16 y);
+Gfx* Pokedex_DrawLabelFrame(Gfx* gfx, s32 left, s32 top, s32 width, s32 height, s32 style, s32 filled);
+void Pokedex_BuildLabelFramesDisplayList(void);
 void Pokedex_ResetCameraEase(void);
 void Pokedex_UpdateCameraEaseSpeed(void);
-void Pokedex_EaseVec3Toward(Vec3f* arg0, Vec3f* arg1);
+void Pokedex_EaseVec3Toward(Vec3f* current, Vec3f* target);
 void Pokedex_UpdateAreaMapFrame(void);
-s32 Pokedex_GetCountTier(s32 arg0);
-s32 Pokedex_DrawAreaMapFrame(UNUSED u8 arg0);
-s32 Pokedex_CheckAreaMapExit(void);
-
+s32 Pokedex_GetEncounterRateTier(s32 rate);
+s32 Pokedex_DrawAreaMapScreen(u8 unused);
+s32 Pokedex_HandleAreaMapInput(void);
 void Pokedex_ExitAreaMapPool(void);
 
-#endif // _FRAGMENT28_H_
+#endif // FRAGMENT_POKEDEX_H

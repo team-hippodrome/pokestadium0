@@ -2,10 +2,12 @@
 #define _FRAGMENTS_H_
 
 // Linker-token aliases for FRAGMENT_ID and the FRAGMENT_LOAD family, not numeric IDs.
-// Names identify the existing source modules, not recovered original identifiers.
+// The names come from the Stadium 1 decomp and describe Stadium 1's fragments, not Zero's: Zero has no
+// minigames, Gallery or Gym Leader Castle. Only FRAGMENT_FATAL_ERROR_SCREEN and FRAGMENT_PARTICLE_DATA_LIBRARY
+// are used. Zero's fragments are listed in docs/layout.md.
 // Segment membership is defined in the version's ROM YAML.
 
-#define FRAGMENT_GB_TOWER_EMULATOR fragment1
+#define FRAGMENT_GB_PLAYER_EMULATOR fragment1
 #define FRAGMENT_WIDGET_TOOLKIT fragment2
 #define FRAGMENT_MINIGAME_ACTOR_FRAMEWORK fragment3
 #define FRAGMENT_MINIGAME_SHARED_GRAPHICS fragment4
@@ -55,9 +57,9 @@
 #define FRAGMENT_GALLERY_DEBUGGER fragment48
 #define FRAGMENT_SNAP_PRINT_CLUB_BACKGROUND_SELECT fragment49
 #define FRAGMENT_HALL_OF_FAME fragment50
-#define FRAGMENT_GB_TOWER_UNUSED fragment51
+#define FRAGMENT_GB_PLAYER_UNUSED fragment51
 #define FRAGMENT_MINIGAME_SAMPLE2_VIEWER fragment52
-#define FRAGMENT_GB_TOWER_TEAM_PREP fragment53
+#define FRAGMENT_GB_PLAYER_PARTY_ICONS fragment53
 #define FRAGMENT_RENTAL_HUB fragment54
 #define FRAGMENT_RENTAL_RULES fragment55
 #define FRAGMENT_OPTIONS fragment56

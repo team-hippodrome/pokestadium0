@@ -3,31 +3,32 @@
 
 #include "global.h"
 #include "macros.h"
-#include "memory.h"
+#include "memory_main.h"
+#include "stage_loader.h"
 extern struct MainPool sMemPool;
 
 #include "m2c_macros.h"
 
-void main_pool_init(void* start, void* end);
-void* main_pool_alloc_from_pool(u32 size, u32 side);
-u32 main_pool_free(void* addr, u32 runBlockFunc);
-void* main_pool_alloc_with_func(u32 size, s32 side, s32 arg, AllocateFunc func);
-void* main_pool_alloc(u32 size, s32 side);
-void* main_pool_realloc(void* addr, size_t size);
-u32 main_pool_push_state(u32 arg);
-void* main_pool_search(uintptr_t addr, s32* argPtr);
-void main_pool_set_func(void* block, s32 arg, AllocateFunc func);
-size_t main_pool_get_block_dist(MainPoolBlock* block);
-MainPool* main_pool_get_pool(void);
+void MainPool_Init(void* start, void* end);
+void* MainPool_AllocFromPool(u32 size, u32 side);
+u32 MainPool_Free(void* addr, u32 runBlockFunc);
+void* MainPool_AllocWithFunc(u32 size, s32 side, s32 arg, AllocateFunc func);
+void* MainPool_Alloc(u32 size, s32 side);
+void* MainPool_Realloc(void* addr, size_t size);
+u32 MainPool_PushState(u32 arg);
+void* MainPool_Search(uintptr_t addr, s32* argPtr);
+void MainPool_SetFunc(void* block, s32 arg, AllocateFunc func);
+size_t MainPool_GetBlockDist(MainPoolBlock* block);
+MainPool* MainPool_GetPool(void);
 
-u32 main_pool_get_available(void);
+s32 MainPool_GetAvailable(void);
 
 /**
  * Initialize the main memory pool. This pool is conceptually a pair of stacks
  * that grow inward from the left and right. It therefore only supports
  * freeing the object that was most recently allocated from a side.
  */
-void main_pool_init(void* start, void* end) {
+void MainPool_Init(void* start, void* end) {
     sMemPool.start = (void*)(ALIGN16((uintptr_t)start) + 16);
     sMemPool.end = (void*)(ALIGN16((uintptr_t)end - 15) - 16);
     sMemPool.available = (uintptr_t)sMemPool.end - (uintptr_t)sMemPool.start;
@@ -54,8 +55,8 @@ void main_pool_init(void* start, void* end) {
  * specified side of the pool (MEMORY_POOL_LEFT or MEMORY_POOL_RIGHT).
  * If there is not enough space, return NULL.
  */
-void* main_pool_alloc_from_pool(u32 size, u32 side) {
-    MainPoolBlock* newListHead;
+void* MainPool_AllocFromPool(u32 size, u32 side) {
+    MainPoolBlock* new_list_head;
     void* addr = NULL;
 
     size = ALIGN16(size) + sizeof(MainPoolBlock);
@@ -65,25 +66,25 @@ void* main_pool_alloc_from_pool(u32 size, u32 side) {
         if (side == MEMORY_POOL_LEFT) {
             // reduce available size.
             sMemPool.available -= size;
-            newListHead = (void*)((uintptr_t)sMemPool.listHeadL + size);
-            sMemPool.listHeadL->next = newListHead;
-            newListHead->prev = sMemPool.listHeadL;
-            newListHead->next = NULL;
-            newListHead->func = NULL;
-            newListHead->arg = '\0';
+            new_list_head = (void*)((uintptr_t)sMemPool.listHeadL + size);
+            sMemPool.listHeadL->next = new_list_head;
+            new_list_head->prev = sMemPool.listHeadL;
+            new_list_head->next = NULL;
+            new_list_head->func = NULL;
+            new_list_head->arg = '\0';
             addr = ((u8*)sMemPool.listHeadL + sizeof(MainPoolBlock));
-            sMemPool.listHeadL = newListHead;
+            sMemPool.listHeadL = new_list_head;
         } else if (side == MEMORY_POOL_RIGHT) {
             // reduce available size.
             sMemPool.available -= size;
-            newListHead = (void*)((uintptr_t)sMemPool.listHeadR - size);
-            sMemPool.listHeadR->prev = newListHead;
-            newListHead->next = sMemPool.listHeadR;
-            newListHead->prev = NULL;
-            newListHead->func = NULL;
-            newListHead->arg = '\0';
-            sMemPool.listHeadR = newListHead;
-            addr = ((u8*)newListHead + sizeof(MainPoolBlock));
+            new_list_head = (void*)((uintptr_t)sMemPool.listHeadR - size);
+            sMemPool.listHeadR->prev = new_list_head;
+            new_list_head->next = sMemPool.listHeadR;
+            new_list_head->prev = NULL;
+            new_list_head->func = NULL;
+            new_list_head->arg = '\0';
+            sMemPool.listHeadR = new_list_head;
+            addr = ((u8*)new_list_head + sizeof(MainPoolBlock));
         }
     }
     return addr;
@@ -95,14 +96,14 @@ void* main_pool_alloc_from_pool(u32 size, u32 side) {
  * newer blocks are freed as well.
  * Return the amount of free space left in the pool.
  */
-u32 main_pool_free(void* addr, u32 runBlockFunc) {
+u32 MainPool_Free(void* addr, u32 run_block_func) {
     MainPoolBlock* block = (MainPoolBlock*)((u8*)addr - sizeof(MainPoolBlock));
-    MainPoolBlock* oldListHead = (MainPoolBlock*)((u8*)addr - sizeof(MainPoolBlock));
+    MainPoolBlock* old_list_head = (MainPoolBlock*)((u8*)addr - sizeof(MainPoolBlock));
 
-    if (oldListHead < sMemPool.listHeadL) {
+    if (old_list_head < sMemPool.listHeadL) {
         do {
             block = (sMemPool.listHeadL = sMemPool.listHeadL->prev);
-            if (runBlockFunc) {
+            if (run_block_func) {
                 // TODO: Fakematch
                 AllocateFunc func = block->func;
                 if (func != 0) {
@@ -113,12 +114,12 @@ u32 main_pool_free(void* addr, u32 runBlockFunc) {
             }
             sMemPool.available += ((uintptr_t)sMemPool.listHeadL->next - (uintptr_t)sMemPool.listHeadL);
             sMemPool.listHeadL->next = NULL;
-        } while (oldListHead != sMemPool.listHeadL);
+        } while (old_list_head != sMemPool.listHeadL);
     } else {
         block = sMemPool.listHeadR;
-        if (oldListHead >= block && oldListHead >= block) {
+        if (old_list_head >= block && old_list_head >= block) {
             do {
-                if (runBlockFunc) {
+                if (run_block_func) {
                     AllocateFunc func = block->func;
                     if (func != NULL) {
                         func((u8*)block + sizeof(MainPoolBlock), block->arg);
@@ -129,24 +130,24 @@ u32 main_pool_free(void* addr, u32 runBlockFunc) {
                 sMemPool.available += ((uintptr_t)block - (uintptr_t)block->prev);
                 block->prev = NULL;
                 block = sMemPool.listHeadR;
-            } while (oldListHead >= sMemPool.listHeadR);
+            } while (old_list_head >= sMemPool.listHeadR);
         }
     }
 
-    return main_pool_get_available();
+    return MainPool_GetAvailable();
 }
 
 /**
  * Manually allocate and initialize a block given a size and side and its
  * function+arguments.
  */
-void* main_pool_alloc_with_func(u32 size, s32 side, s32 arg, AllocateFunc func) {
+void* MainPool_AllocWithFunc(u32 size, s32 side, s32 arg, AllocateFunc func) {
     MainPoolBlock* addr;
 
     osRecvMesg(&sMemPool.queue, NULL, OS_MESG_BLOCK);
-    addr = main_pool_alloc_from_pool(size, side);
+    addr = MainPool_AllocFromPool(size, side);
     if (addr != NULL) {
-        main_pool_set_func(addr, arg, func);
+        MainPool_SetFunc(addr, arg, func);
     }
     osSendMesg(&sMemPool.queue, NULL, OS_MESG_NOBLOCK);
 
@@ -156,27 +157,28 @@ void* main_pool_alloc_with_func(u32 size, s32 side, s32 arg, AllocateFunc func) 
 /**
  * Same as above but no function/argument is set.
  */
-void* main_pool_alloc(u32 size, s32 side) {
+void* MainPool_Alloc(u32 size, s32 side) {
     MainPoolBlock* node;
 
     osRecvMesg(&sMemPool.queue, NULL, OS_MESG_BLOCK);
-    node = main_pool_alloc_from_pool(size, side);
+    node = MainPool_AllocFromPool(size, side);
     osSendMesg(&sMemPool.queue, NULL, OS_MESG_NOBLOCK);
 
     return node;
 }
 
 M2C_UNK func_80002230(s32, M2C_UNK);                /* extern */
-s32 func_8000255C(void);
+s32 MainPool_GetAvailable(void);
 M2C_UNK func_8004CFB0(M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
 M2C_UNK func_8004D1C0(M2C_UNK *, M2C_UNK, M2C_UNK); /* extern */
 extern M2C_UNK D_800A94A4;
 
-void func_80002420(s32 arg0) {
+/** Waits on the pool lock and frees a block if it is valid. */
+void MainPool_TryFree(s32 arg0) {
     func_8004D1C0(&D_800A94A4, 0, 1);
     func_80002230(arg0, 1);
     func_8004CFB0(&D_800A94A4, 0, 0);
-    func_8000255C();
+    MainPool_GetAvailable();
 }
 
 /**
@@ -185,7 +187,7 @@ void func_80002420(s32 arg0) {
  * block from the left side.
  * The block does not move.
  */
-void* main_pool_realloc(void* addr, size_t size) {
+void* MainPool_Realloc(void* addr, size_t size) {
     MainPoolBlock* prior = (MainPoolBlock*)((u8*)addr - sizeof(MainPoolBlock));
     void* newaddr = NULL;
 
@@ -200,9 +202,9 @@ void* main_pool_realloc(void* addr, size_t size) {
         if (diff >= size || sMemPool.available >= (size - diff)) {
             s32 arg = prior->arg;
             AllocateFunc func = prior->func;
-            main_pool_free(addr, FALSE); // do not run the func as we are merely reallocating it.
-            newaddr = main_pool_alloc_from_pool(size, MEMORY_POOL_LEFT);
-            main_pool_set_func(newaddr, arg, func);
+            MainPool_Free(addr, FALSE); // do not run the func as we are merely reallocating it.
+            newaddr = MainPool_AllocFromPool(size, MEMORY_POOL_LEFT);
+            MainPool_SetFunc(newaddr, arg, func);
         }
     }
     osSendMesg(&sMemPool.queue, NULL, OS_MESG_NOBLOCK);
@@ -211,7 +213,8 @@ void* main_pool_realloc(void* addr, size_t size) {
 
 extern s32 D_800A94BC;
 
-s32 func_8000255C(void) {
+/** Returns the free space left in the main pool. */
+s32 MainPool_GetAvailable(void) {
     return D_800A94BC - 0x10;
 }
 
@@ -219,18 +222,18 @@ s32 func_8000255C(void) {
  * Push pool state, to be restored later. Return the amount of free space left
  * in the pool.
  */
-u32 main_pool_push_state(u32 arg) {
+u32 MainPool_PushState(u32 arg) {
     MainPoolState* state;
-    MainPoolBlock* listHeadL;
-    MainPoolBlock* listHeadR;
+    MainPoolBlock* list_head_l;
+    MainPoolBlock* list_head_r;
     uintptr_t available;
 
     osRecvMesg(&sMemPool.queue, NULL, OS_MESG_BLOCK);
 
     // retrieve the space and head pointers.
     available = sMemPool.available;
-    listHeadL = sMemPool.listHeadL;
-    listHeadR = sMemPool.listHeadR;
+    list_head_l = sMemPool.listHeadL;
+    list_head_r = sMemPool.listHeadR;
 
     /**
      * We are essentially allocating a block that looks like this:
@@ -240,7 +243,7 @@ u32 main_pool_push_state(u32 arg) {
      *     struct MainPoolState state; <---- the pointer is pointing here.
      * };
      */
-    state = main_pool_alloc_from_pool(sizeof(struct MainPoolState), MEMORY_POOL_LEFT);
+    state = MainPool_AllocFromPool(sizeof(struct MainPoolState), MEMORY_POOL_LEFT);
     if (state != NULL) {
         /**
          * Why is this line here? What this line is doing is backing the pointer up to the
@@ -254,17 +257,24 @@ u32 main_pool_push_state(u32 arg) {
         // fields.
         state->prev = sMemPool.mainState;
         state->freeSpace = available;
-        state->listHeadL = listHeadL;
-        state->listHeadR = listHeadR;
+        state->listHeadL = list_head_l;
+        state->listHeadR = list_head_r;
 
         // add the newly allocated state.
         sMemPool.mainState = state;
     }
     osSendMesg(&sMemPool.queue, NULL, OS_MESG_NOBLOCK);
-    return main_pool_get_available();
+    return MainPool_GetAvailable();
 }
 
-u32 main_pool_pop_state(u32 arg) {
+/**
+ * Restore pool state from a previous call to MainPool_PushState. Return the
+ * amount of free space left in the pool.
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the Pokédex, the party screen,
+ * the Lab list, Lab sort, registration, the Lab PC and Free Battle setup.
+ * @unverified Name matches Stadium 1. Comment from Stadium 1.
+ */
+u32 MainPool_PopState(u32 arg) {
     MainPoolBlock* argptr;
     MainPoolBlock* block;
 
@@ -303,7 +313,7 @@ u32 main_pool_pop_state(u32 arg) {
     } while (sMemPool.mainState != NULL);
 
     osSendMesg(&sMemPool.queue, NULL, OS_MESG_NOBLOCK);
-    return func_8000255C();
+    return MainPool_GetAvailable();
 }
 
 /*
@@ -312,20 +322,20 @@ u32 main_pool_pop_state(u32 arg) {
  * Without this being called, its hard to tell the correct context of this
  * function.
  */
-void* main_pool_search(uintptr_t addr, s32* argPtr) {
+void* MainPool_Search(uintptr_t addr, s32* arg_ptr) {
     MainPoolBlock* node;
-    MainPoolBlock* otherNode;
+    MainPoolBlock* other_node;
 
     node = sMemPool.listHeadL->prev;
     while (node != NULL) {
-        int isAddrLater = (addr >= ((uintptr_t)((u8*)node + sizeof(MainPoolBlock))));
-        otherNode = node->next;
+        int is_addr_later = (addr >= ((uintptr_t)((u8*)node + sizeof(MainPoolBlock))));
+        other_node = node->next;
         // seems to be checking for an addr within a block region? Since this function
         // is unused, we wont be able to check for the intended context of what could
         // call this function.
-        if (isAddrLater && addr < ((uintptr_t)otherNode & 0xFFFFFFFF)) {
-            if (argPtr != NULL) {
-                *argPtr = node->arg;
+        if (is_addr_later && addr < ((uintptr_t)other_node & 0xFFFFFFFF)) {
+            if (arg_ptr != NULL) {
+                *arg_ptr = node->arg;
             }
             // return the pointer to its block contents.
             return (void*)((u8*)(node) + sizeof(MainPoolBlock));
@@ -335,19 +345,19 @@ void* main_pool_search(uintptr_t addr, s32* argPtr) {
 
     // we've searched thr prev linked list. Now lets go through the next linked list.
     node = sMemPool.listHeadR;
-    otherNode = node->next;
-    while (otherNode != NULL) {
-        int isAddrLater = (addr >= ((uintptr_t)((u8*)node + sizeof(MainPoolBlock))));
-        MainPoolBlock* new_var = otherNode; // bit of a fakematch to force the move reload.
+    other_node = node->next;
+    while (other_node != NULL) {
+        int is_addr_later = (addr >= ((uintptr_t)((u8*)node + sizeof(MainPoolBlock))));
+        MainPoolBlock* new_var = other_node; // FAKE: bit of a fakematch to force the move reload.
         // same as above.
-        if (isAddrLater && (addr < ((uintptr_t)new_var & 0xFFFFFFFF))) {
-            if (argPtr != NULL) {
-                *argPtr = node->arg;
+        if (is_addr_later && (addr < ((uintptr_t)new_var & 0xFFFFFFFF))) { // FAKE: permuter temp and & 0xFFFFFFFF
+            if (arg_ptr != NULL) {
+                *arg_ptr = node->arg;
             }
             // return the pointer to its block contents.
             return (void*)((u8*)(node) + sizeof(MainPoolBlock));
         }
-        otherNode = (node = otherNode)->next;
+        other_node = (node = other_node)->next;
     }
 
     return NULL;
@@ -356,7 +366,7 @@ void* main_pool_search(uintptr_t addr, s32* argPtr) {
 /**
  * Set the block function and its argument(s) for a given block.
  */
-void main_pool_set_func(void* block, s32 arg, AllocateFunc func) {
+void MainPool_SetFunc(void* block, s32 arg, AllocateFunc func) {
     MainPoolBlock* node = (void*)((uintptr_t)block - sizeof(MainPoolBlock));
     node->func = func;
     node->arg = arg;
@@ -365,7 +375,7 @@ void main_pool_set_func(void* block, s32 arg, AllocateFunc func) {
 /**
  * Get the distance offset from the block's state listHeadL pointer to the current block.
  */
-size_t main_pool_get_block_dist(MainPoolBlock* block) {
+size_t MainPool_GetBlockDist(MainPoolBlock* block) {
     MainPoolState* state = ((u8*)block - sizeof(MainPoolBlock));
 
     return (size_t)((uintptr_t)state->listHeadL - (uintptr_t)block);
@@ -374,6 +384,6 @@ size_t main_pool_get_block_dist(MainPoolBlock* block) {
 /**
  * Return the pointer to the static memory pool area.
  */
-MainPool* main_pool_get_pool(void) {
+MainPool* MainPool_GetPool(void) {
     return &sMemPool;
 }

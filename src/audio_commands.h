@@ -1,7 +1,11 @@
-#ifndef _373A0_H_
-#define _373A0_H_
+/* Declarations for src/audio_commands.c, src/audio_commands_2.c, src/audio_commands_3.c, src/audio_commands_4.c. */
+#ifndef AUDIO_COMMANDS_H
+#define AUDIO_COMMANDS_H
 
 #include "global.h"
+#include "m2c_macros.h"
+#include "stdarg.h"
+#include "moves.h"
 
 #ifdef M2C
 #define ENTRY_SIZE 1
@@ -34,71 +38,76 @@ typedef union {
     File2SubHeader2 file2sub2;
 } FileHeaders;
 
-typedef struct unk_D_800FC6CC {
-    /* 0x00 */ u32 unk_00;
-    /* 0x04 */ u32 unk_04;
-} unk_D_800FC6CC; // size = 0x8
+typedef struct GbNoiseSampleEntry {
+    /* 0x00 */ u32 romAddr; // @unverified: from the code: ROM address of the noise sample, relocated by the table's file offset and DMA'd in gb_audio_render.c
+    /* 0x04 */ u32 size; // @unverified: from the code: size in bytes of the noise sample (sample count * 2)
+} GbNoiseSampleEntry; // size = 0x8
 
-typedef struct unk_D_800FC6D4_entry {
-    /* 0x00 */ u16 unk_00;
+typedef struct GbMusicSongEntry {
+    /* 0x00 */ u16 seqId; // @unverified: from the code: index of the song's sequence header (GbMusic_StartTableSequence)
     /* 0x02 */ u8 unk_02;
     /* 0x03 */ u8 unk_03;
-} unk_D_800FC6D4_entry; // size = 0x4
+} GbMusicSongEntry; // size = 0x4
 
-typedef struct unk_D_800FC6D4_008 {
-    /* 0x00 */ u32 unk_00;
-    /* 0x04 */ u8 unk_04;
-} unk_D_800FC6D4_008; // size = 0x5
+typedef struct GbMusicTrackHeader {
+    /* 0x00 */ u32 data; // @unverified: from the code: track data address, copied into the channel's stream pointer
+    /* 0x04 */ u8 channel; // @unverified: from the code: low nybble = sound channel; bits 6-7 of the first track = number of further tracks
+} GbMusicTrackHeader; // size = 0x5
 
-typedef struct unk_D_800FC6D4 {
+typedef struct GbMusicBank {
     /* 0x00 */ u16 flags;
     /* 0x02 */ u16 num_entries;
-    /* 0x04 */ u16 unk_04;
+    /* 0x04 */ u16 numSequences; // @unverified: from the code: GbMusic_RelocateBank relocates numSequences * 3 track pointers
     /* 0x06 */ u16 unk_06;
-    /* 0x08 */ unk_D_800FC6D4_008* offset;
+    /* 0x08 */ GbMusicTrackHeader* offset;
     /* 0x0C */ char unk_0C[0x4];
-    /* 0x10 */ unk_D_800FC6D4_entry entries[ENTRY_SIZE];
-} unk_D_800FC6D4; // size = 0x10
+    /* 0x10 */ GbMusicSongEntry entries[ENTRY_SIZE];
+} GbMusicBank; // size = 0x10
 
 typedef struct MoveSoundEntry { u8 unk0[0x6]; } MoveSoundEntry;
+
 typedef struct MoveSoundTable { u8 header[0x10]; MoveSoundEntry entries[1]; } MoveSoundTable;
 
+/* Struct types that were defined identically in each of these files; this is
+ * now the one definition they all include:
+ * src/audio_commands.c
+ * src/audio_commands_2.c
+ */
 
+typedef struct unk_D_80077970 {
+    /* 0x00 */ u8 unk_00;
+    /* 0x01 */ u8 unk_01;
+    /* 0x02 */ u8 unk_02;
+    /* 0x03 */ u8 unk_03;
+    /* 0x04 */ u8 unk_04;
+} unk_D_80077970;
 
+extern GbNoiseSampleEntry* D_800B41E4;
 
-
-
-
-
-
-
-
-
-
-extern unk_D_800FC6CC* D_800B41E4;
 extern u8* D_800B41E8;
-extern unk_D_800FC6D4* D_800FD688;
+
+extern GbMusicBank* D_800FD688;
+
 extern s16* D_800B41EC;
 
 extern u32* gAudioRegions;
 
-
-
-
-
-
-
-
-
-
-
-
-
-s32 Audio_PlayCommand(u32 command, s32 parameter, UNUSED s32 unused);
-s32 Audio_FadeCommand(s32 arg0, u32 arg1);
-void func_80056950(void);
+// audio_commands.c
 void Audio_CreateFrameTaskWrapper(void* arg0);
 void Audio_RelocateOffsets(u32* arg0, u32 arg1, s32 arg2);
-s32 Audio_InitBanks(void);
+void Audio_FadeAndClearStoredSounds(void);
+M2C_UNK Audio_PlaySystemSound(M2C_UNK);                     /* extern */
 
-#endif // _373A0_H_
+// audio_commands_2.c
+s32 Audio_PlayCommand(u32 arg0, s32 arg1, s32 arg2);
+
+// audio_commands_4.c
+void Audio_UpdateBattleAudioFrame(void);
+s32 Audio_LoadWaveTablesAndMusic(u8*);
+void Audio_ClearWaveDataLoaded(void);
+void Announcer_CommentOnBattleEnd(void);
+
+// libultra/audio/synthesizer.c
+void func_80056950(void);
+
+#endif // AUDIO_COMMANDS_H

@@ -2,7 +2,6 @@
 /* C ported from the Stadium 1 decomp: src/geo_layout.c. */
 
 #include "geo_layout.h"
-#include "geo_node.h"
 #include "matrix.h"
 #include "util.h"
 extern GeoLayoutCommandProc GeoLayoutJumpTable[];
@@ -15,53 +14,53 @@ extern s16 gGeoLayoutStackIndex;
 extern s16 gGeoLayoutReturnIndex;
 extern u8* gGeoLayoutCommand;
 
-void geo_layout_cmd_branch_and_link(void);
-void geo_layout_cmd_end(void);
-void geo_layout_cmd_jump(void);
-void geo_layout_cmd_branch(void);
-void geo_layout_cmd_return(void);
-void geo_layout_cmd_open_node(void);
-void geo_layout_cmd_close_node(void);
-void register_graph_node(GraphNode* arg0);
-void geo_layout_cmd_attach_node(void);
-void geo_layout_cmd_set_callback(void);
-void geo_layout_cmd_create_container(void);
-void geo_layout_cmd_create_reference(void);
-void geo_layout_cmd_create_camera(void);
-void geo_layout_cmd_create_type3(void);
-void geo_layout_cmd_create_type4(void);
-void geo_layout_cmd_create_ortho(void);
-void geo_layout_cmd_create_perspective(void);
-void geo_layout_cmd_create_background(void);
-void geo_layout_cmd_create_clear_depth(void);
-void geo_layout_cmd_noop(void);
-void geo_layout_cmd_create_fog(void);
-void geo_layout_cmd_create_light(void);
-void geo_layout_cmd_skip(void);
-void geo_layout_cmd_create_ambient_light(void);
-void geo_layout_cmd_create_shadow_context(void);
-void geo_layout_cmd_create_shadow(void);
-void geo_layout_cmd_create_cull_distance(void);
-void geo_layout_cmd_create_switch_case(void);
-void geo_layout_cmd_create_translate_rotate(void);
-void geo_layout_cmd_create_translate(void);
-void geo_layout_cmd_create_animated_part(void);
-void geo_layout_cmd_create_display_list_part(void);
-void geo_layout_cmd_create_model_part(void);
-void geo_layout_cmd_create_display_list_matrix(void);
-void geo_layout_cmd_create_scale(void);
-void geo_layout_cmd_create_display_list(void);
-void geo_layout_cmd_create_shadow_texture(void);
-void geo_layout_cmd_create_anchor(void);
-void geo_layout_cmd_set_node_flag4(void);
-void geo_layout_cmd_create_group(void);
-GraphNode* process_geo_layout(MemoryBlock* pool, void* segptr);
+void GeoLayout_CmdBranchAndLink(void);
+void GeoLayout_CmdEnd(void);
+void GeoLayout_CmdJump(void);
+void GeoLayout_CmdBranch(void);
+void GeoLayout_CmdReturn(void);
+void GeoLayout_CmdOpenNode(void);
+void GeoLayout_CmdCloseNode(void);
+void GeoLayout_RegisterGraphNode(GraphNode* arg0);
+void GeoLayout_CmdAttachNode(void);
+void GeoLayout_CmdSetCallback(void);
+void GeoLayout_CmdCreateContainer(void);
+void GeoLayout_CmdCreateReference(void);
+void GeoLayout_CmdCreateCamera(void);
+void GeoLayout_CmdCreateType3(void);
+void GeoLayout_CmdCreateType4(void);
+void GeoLayout_CmdCreateOrtho(void);
+void GeoLayout_CmdCreatePerspective(void);
+void GeoLayout_CmdCreateBackground(void);
+void GeoLayout_CmdCreateClearDepth(void);
+void GeoLayout_CmdNoop(void);
+void GeoLayout_CmdCreateFog(void);
+void GeoLayout_CmdCreateLight(void);
+void GeoLayout_CmdSkip(void);
+void GeoLayout_CmdCreateAmbientLight(void);
+void GeoLayout_CmdCreateTextureBank(void);
+void GeoLayout_CmdCreateShadow(void);
+void GeoLayout_CmdCreateCullDistance(void);
+void GeoLayout_CmdCreateSwitchCase(void);
+void GeoLayout_CmdCreateTranslateRotate(void);
+void GeoLayout_CmdCreateTranslate(void);
+void GeoLayout_CmdCreateAnimatedPart(void);
+void GeoLayout_CmdCreateDisplayListPart(void);
+void GeoLayout_CmdCreateModelPart(void);
+void GeoLayout_CmdCreateDisplayListMatrix(void);
+void GeoLayout_CmdCreateBillboard(void);
+void GeoLayout_CmdCreateDisplayList(void);
+void GeoLayout_CmdCreateMaterial(void);
+void GeoLayout_CmdCreateAnchor(void);
+void GeoLayout_CmdSetNodeFlag4(void);
+void GeoLayout_CmdCreateGroup(void);
+GraphNode* GeoLayout_Process(MemoryBlock* pool, void* segptr);
 
 /*
   0x00: Branch and store return address
    cmd+0x04: void *branchTarget
 */
-void geo_layout_cmd_branch_and_link(void) {
+void GeoLayout_CmdBranchAndLink(void) {
     u8* cmd = (void*)gGeoLayoutCommand;
 
     cmd += 0;
@@ -73,7 +72,11 @@ void geo_layout_cmd_branch_and_link(void) {
 }
 
 // 0x01: Terminate geo layout
-void geo_layout_cmd_end(void) {
+/**
+ * Geo layout command: ends the current layout and returns to the caller's
+ * stack frame.
+ */
+void GeoLayout_CmdEnd(void) {
     gGeoLayoutStackIndex = gGeoLayoutReturnIndex;
     gGeoLayoutReturnIndex = gGeoLayoutStack[--gGeoLayoutStackIndex] & 0xFFFF;
     gCurGraphNodeIndex = gGeoLayoutStack[gGeoLayoutStackIndex] >> 16;
@@ -84,7 +87,7 @@ void geo_layout_cmd_end(void) {
   0x02: Jump to address
     cmd+0x04: void *jumpTarget
 */
-void geo_layout_cmd_jump(void) {
+void GeoLayout_CmdJump(void) {
     u8* cmd = (void*)gGeoLayoutCommand;
 
     cmd += 0;
@@ -96,7 +99,7 @@ void geo_layout_cmd_jump(void) {
   0x03: Branch
     cmd+0x04: void *branchTarget
 */
-void geo_layout_cmd_branch(void) {
+void GeoLayout_CmdBranch(void) {
     u8* cmd = (void*)gGeoLayoutCommand;
 
     cmd += 0;
@@ -107,24 +110,34 @@ void geo_layout_cmd_branch(void) {
 }
 
 // 0x04: Return from branch
-void geo_layout_cmd_return(void) {
+/** Geo layout command: returns to the command address saved on the stack. */
+void GeoLayout_CmdReturn(void) {
     gGeoLayoutCommand = (u8*)gGeoLayoutStack[--gGeoLayoutStackIndex];
 }
 
 // 0x05: Open node
-void geo_layout_cmd_open_node(void) {
+/**
+ * Geo layout command: makes the current node the parent of the nodes that
+ * follow.
+ */
+void GeoLayout_CmdOpenNode(void) {
     gCurGraphNodeList[gCurGraphNodeIndex + 1] = gCurGraphNodeList[gCurGraphNodeIndex];
     gCurGraphNodeIndex++;
     gGeoLayoutCommand += 0x04 << CMD_SIZE_SHIFT;
 }
 
 // 0x06: Close node
-void geo_layout_cmd_close_node(void) {
+/** Geo layout command: ends the current parent node. */
+void GeoLayout_CmdCloseNode(void) {
     gCurGraphNodeIndex--;
     gGeoLayoutCommand += 0x04 << CMD_SIZE_SHIFT;
 }
 
-void register_graph_node(GraphNode* arg0) {
+/**
+ * Adds a node to the layout being built, as a child of the current parent or
+ * as the root.
+ */
+void GeoLayout_RegisterGraphNode(GraphNode* arg0) {
     if (arg0 != NULL) {
         gCurGraphNodeList[gCurGraphNodeIndex] = arg0;
         if (gCurGraphNodeIndex == 0) {
@@ -137,313 +150,349 @@ void register_graph_node(GraphNode* arg0) {
     }
 }
 
-void geo_layout_cmd_attach_node(void) {
-    unk_D_800ABE00_cmd7* cmd = (unk_D_800ABE00_cmd7*)gGeoLayoutCommand;
+/** Geo layout command: registers an existing node. */
+void GeoLayout_CmdAttachNode(void) {
+    GeoLayoutCmdAttachNode* cmd = (GeoLayoutCmdAttachNode*)gGeoLayoutCommand;
 
-    register_graph_node(&cmd->unk_04->node);
+    GeoLayout_RegisterGraphNode(&cmd->node->node);
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd7);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdAttachNode);
 }
 
-void geo_layout_cmd_set_callback(void) {
-    unk_D_800ABE00_cmd8* cmd = (unk_D_800ABE00_cmd8*)gGeoLayoutCommand;
+/** Geo layout command: sets a callback on the current node. */
+void GeoLayout_CmdSetCallback(void) {
+    GeoLayoutCmdSetCallback* cmd = (GeoLayoutCmdSetCallback*)gGeoLayoutCommand;
 
     if (gCurGraphNodeList[gCurGraphNodeIndex] != NULL) {
-        GeoNode_SetCallback(gCurGraphNodeList[gCurGraphNodeIndex], cmd->unk_04, cmd->unk_08);
+        GeoNode_SetCallback(gCurGraphNodeList[gCurGraphNodeIndex], cmd->callback, cmd->callbackArg);
     }
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd8);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdSetCallback);
 }
 
-void geo_layout_cmd_create_container(void) {
-    register_graph_node(GeoNode_CreateContainer(gGraphNodePool, NULL));
+/** Geo layout command: creates a container node. */
+void GeoLayout_CmdCreateContainer(void) {
+    GeoLayout_RegisterGraphNode(GeoNode_CreateContainer(gGraphNodePool, NULL));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd9);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateContainer);
 }
 
-void geo_layout_cmd_create_reference(void) {
-    unk_D_800ABE00_cmdA* cmd = (unk_D_800ABE00_cmdA*)gGeoLayoutCommand;
+/** Geo layout command: creates a reference node. */
+void GeoLayout_CmdCreateReference(void) {
+    GeoLayoutCmdCreateReference* cmd = (GeoLayoutCmdCreateReference*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateWithReference(gGraphNodePool, NULL, cmd->unk_04));
+    GeoLayout_RegisterGraphNode(GeoNode_CreateWithReference(gGraphNodePool, NULL, cmd->target));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmdA);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateReference);
 }
 
-void geo_layout_cmd_create_camera(void) {
-    unk_D_800ABE00_cmdB* cmd = (unk_D_800ABE00_cmdB*)gGeoLayoutCommand;
+/** Geo layout command: creates a camera node. */
+void GeoLayout_CmdCreateCamera(void) {
+    GeoLayoutCmdCreateCamera* cmd = (GeoLayoutCmdCreateCamera*)gGeoLayoutCommand;
     CameraNode* temp_v0 =
-        GeoNode_CreateCamera(gGraphNodePool, NULL, cmd->unk_04, cmd->unk_06, cmd->unk_08, cmd->unk_0A);
+        GeoNode_CreateCamera(gGraphNodePool, NULL, cmd->viewportX, cmd->viewportY, cmd->viewportWidth, cmd->viewportHeight);
 
     if (temp_v0 != NULL) {
-        temp_v0->perspective.verticalFieldOfView = cmd->unk_02;
-        Vec3f_FromVec3s(&temp_v0->view.targetPosition, &cmd->unk_0C);
-        Camera_ComputeEyeFromAngles(&temp_v0->view.targetPosition, &temp_v0->view.eyePosition, cmd->unk_16, (cmd->unk_12 << 0xF) / 180,
-                      (cmd->unk_14 << 0xF) / 180);
+        temp_v0->perspective.verticalFieldOfView = cmd->fovY;
+        Vec3f_FromVec3s(&temp_v0->view.targetPosition, &cmd->target);
+        Camera_ComputeEyeFromAngles(&temp_v0->view.targetPosition, &temp_v0->view.eyePosition, cmd->distance, (cmd->rotationXDegrees << 0xF) / 180,
+                      (cmd->rotationYDegrees << 0xF) / 180);
     }
 
-    register_graph_node(&temp_v0->node);
+    GeoLayout_RegisterGraphNode(&temp_v0->node);
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmdB);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateCamera);
 }
 
-void geo_layout_cmd_create_type3(void) {
-    unk_D_800ABE00_cmdC* cmd = (unk_D_800ABE00_cmdC*)gGeoLayoutCommand;
+/** Geo layout command: creates a type3 node. */
+void GeoLayout_CmdCreateType3(void) {
+    GeoLayoutCmdCreateType3* cmd = (GeoLayoutCmdCreateType3*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateType3(gGraphNodePool, NULL, cmd->unk_02));
+    GeoLayout_RegisterGraphNode(GeoNode_CreateType3(gGraphNodePool, NULL, cmd->unk_02));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmdC);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateType3);
 }
 
-void geo_layout_cmd_create_type4(void) {
-    unk_D_800ABE00_cmdD* cmd = (unk_D_800ABE00_cmdD*)gGeoLayoutCommand;
+/** Geo layout command: creates a type4 node. */
+void GeoLayout_CmdCreateType4(void) {
+    GeoLayoutCmdCreateType4* cmd = (GeoLayoutCmdCreateType4*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateType4(gGraphNodePool, NULL, cmd->unk_02));
+    GeoLayout_RegisterGraphNode(GeoNode_CreateType4(gGraphNodePool, NULL, cmd->rootId));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmdD);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateType4);
 }
 
-void geo_layout_cmd_create_ortho(void) {
-    unk_D_800ABE00_cmdE* cmd = (unk_D_800ABE00_cmdE*)gGeoLayoutCommand;
+/** Geo layout command: creates a ortho node. */
+void GeoLayout_CmdCreateOrtho(void) {
+    GeoLayoutCmdCreateOrtho* cmd = (GeoLayoutCmdCreateOrtho*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateOrtho(gGraphNodePool, NULL, cmd->unk_02));
+    GeoLayout_RegisterGraphNode(GeoNode_CreateOrtho(gGraphNodePool, NULL, cmd->renderFlags));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmdE);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateOrtho);
 }
 
-void geo_layout_cmd_create_perspective(void) {
-    unk_D_800ABE00_cmdF* cmd = (unk_D_800ABE00_cmdF*)gGeoLayoutCommand;
+/** Geo layout command: creates a perspective node. */
+void GeoLayout_CmdCreatePerspective(void) {
+    GeoLayoutCmdCreatePerspective* cmd = (GeoLayoutCmdCreatePerspective*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreatePerspective(gGraphNodePool, NULL, cmd->unk_02));
+    GeoLayout_RegisterGraphNode(GeoNode_CreatePerspective(gGraphNodePool, NULL, cmd->renderFlags));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmdF);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreatePerspective);
 }
 
-void geo_layout_cmd_create_background(void) {
-    unk_D_800ABE00_cmd10* cmd = (unk_D_800ABE00_cmd10*)gGeoLayoutCommand;
+/** Geo layout command: creates a background node. */
+void GeoLayout_CmdCreateBackground(void) {
+    GeoLayoutCmdCreateBackground* cmd = (GeoLayoutCmdCreateBackground*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateBackground(gGraphNodePool, NULL, cmd->unk_01, cmd->unk_02, cmd->unk_03));
+    GeoLayout_RegisterGraphNode(GeoNode_CreateBackground(gGraphNodePool, NULL, cmd->r, cmd->g, cmd->b));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd10);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateBackground);
 }
 
-void geo_layout_cmd_create_clear_depth(void) {
-    register_graph_node(GeoNode_CreateClearDepth(gGraphNodePool, NULL));
+/** Geo layout command: creates a clear depth node. */
+void GeoLayout_CmdCreateClearDepth(void) {
+    GeoLayout_RegisterGraphNode(GeoNode_CreateClearDepth(gGraphNodePool, NULL));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd11);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateClearDepth);
 }
 
-void geo_layout_cmd_noop(void) {
+/** Geo layout command: does nothing. */
+void GeoLayout_CmdNoop(void) {
 }
 
-void geo_layout_cmd_create_fog(void) {
-    unk_D_800ABE00_cmd13* cmd = (unk_D_800ABE00_cmd13*)gGeoLayoutCommand;
+/** Geo layout command: creates a fog node. */
+void GeoLayout_CmdCreateFog(void) {
+    GeoLayoutCmdCreateFog* cmd = (GeoLayoutCmdCreateFog*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateFog(gGraphNodePool, NULL, cmd->unk_04, cmd->unk_06, cmd->r, cmd->g, cmd->b, 0xFF));
+    GeoLayout_RegisterGraphNode(GeoNode_CreateFog(gGraphNodePool, NULL, cmd->near, cmd->far, cmd->r, cmd->g, cmd->b, 0xFF));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd13);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateFog);
 }
 
-void geo_layout_cmd_create_light(void) {
-    unk_D_800ABE00_cmd14* cmd = (unk_D_800ABE00_cmd14*)gGeoLayoutCommand;
+/** Geo layout command: creates a light node. */
+void GeoLayout_CmdCreateLight(void) {
+    GeoLayoutCmdCreateLight* cmd = (GeoLayoutCmdCreateLight*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateLight(gGraphNodePool, NULL, (cmd->unk_04 << 0xF) / 180, (cmd->unk_06 << 0xF) / 180, cmd->r,
+    GeoLayout_RegisterGraphNode(GeoNode_CreateLight(gGraphNodePool, NULL, (cmd->rotationXDegrees << 0xF) / 180, (cmd->rotationYDegrees << 0xF) / 180, cmd->r,
                                 cmd->g, cmd->b, cmd->a));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd14);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateLight);
 }
 
-void geo_layout_cmd_skip(void) {
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd15);
+/** Geo layout command: skips over an unused command. */
+void GeoLayout_CmdSkip(void) {
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdSkip);
 }
 
-void geo_layout_cmd_create_ambient_light(void) {
-    unk_D_800ABE00_cmd16* cmd = (unk_D_800ABE00_cmd16*)gGeoLayoutCommand;
+/** Geo layout command: creates a ambient light node. */
+void GeoLayout_CmdCreateAmbientLight(void) {
+    GeoLayoutCmdCreateAmbientLight* cmd = (GeoLayoutCmdCreateAmbientLight*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateAmbientLight(gGraphNodePool, NULL, cmd->r, cmd->g, cmd->b));
+    GeoLayout_RegisterGraphNode(GeoNode_CreateAmbientLight(gGraphNodePool, NULL, cmd->r, cmd->g, cmd->b));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd16);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateAmbientLight);
 }
 
-void geo_layout_cmd_create_shadow_context(void) {
-    unk_D_800ABE00_cmd17* cmd = (unk_D_800ABE00_cmd17*)gGeoLayoutCommand;
+/** Geo layout command: creates a texture bank node. */
+void GeoLayout_CmdCreateTextureBank(void) {
+    GeoLayoutCmdCreateTextureBank* cmd = (GeoLayoutCmdCreateTextureBank*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateShadowContext(gGraphNodePool, NULL, cmd->unk_02, cmd->unk_08, cmd->unk_04, cmd->unk_0C, cmd->unk_06,
-                                cmd->unk_10));
+    GeoLayout_RegisterGraphNode(GeoNode_CreateTextureBank(gGraphNodePool, NULL, cmd->textureCount, cmd->textures, cmd->paletteCount, cmd->palettes, cmd->vertexCount,
+                                cmd->vertices));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd17);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateTextureBank);
 }
 
-void geo_layout_cmd_create_shadow(void) {
-    unk_D_800ABE00_cmd18* cmd = (unk_D_800ABE00_cmd18*)gGeoLayoutCommand;
+/** Geo layout command: creates a shadow node. */
+void GeoLayout_CmdCreateShadow(void) {
+    GeoLayoutCmdCreateShadow* cmd = (GeoLayoutCmdCreateShadow*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateShadow(gGraphNodePool, NULL, cmd->unk_01, cmd->unk_04, cmd->unk_06, cmd->unk_02));
+    GeoLayout_RegisterGraphNode(GeoNode_CreateShadow(gGraphNodePool, NULL, cmd->shape, cmd->scaleXPercent, cmd->scaleZPercent, cmd->heightOffset));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd18);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateShadow);
 }
 
-void geo_layout_cmd_create_cull_distance(void) {
-    unk_D_800ABE00_cmd19* cmd = (unk_D_800ABE00_cmd19*)gGeoLayoutCommand;
+/** Geo layout command: creates a cull distance node. */
+void GeoLayout_CmdCreateCullDistance(void) {
+    GeoLayoutCmdCreateCullDistance* cmd = (GeoLayoutCmdCreateCullDistance*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateCullDistance(gGraphNodePool, NULL, cmd->unk_04, cmd->unk_06));
+    GeoLayout_RegisterGraphNode(GeoNode_CreateCullDistance(gGraphNodePool, NULL, cmd->unk_04, cmd->unk_06));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd19);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateCullDistance);
 }
 
-void geo_layout_cmd_create_switch_case(void) {
-    unk_D_800ABE00_cmd1A* cmd = (unk_D_800ABE00_cmd1A*)gGeoLayoutCommand;
+/** Geo layout command: creates a switch case node. */
+void GeoLayout_CmdCreateSwitchCase(void) {
+    GeoLayoutCmdCreateSwitchCase* cmd = (GeoLayoutCmdCreateSwitchCase*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateSwitchCase(gGraphNodePool, NULL, cmd->unk_01, cmd->unk_02));
+    GeoLayout_RegisterGraphNode(GeoNode_CreateSwitchCase(gGraphNodePool, NULL, cmd->unk_01, cmd->selectedChild));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd1A);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateSwitchCase);
 }
 
-void geo_layout_cmd_create_translate_rotate(void) {
+/** Geo layout command: creates a translate rotate node. */
+void GeoLayout_CmdCreateTranslateRotate(void) {
     Vec3s sp30;
     Vec3f sp24;
-    UNUSED s32 pad;
-    unk_D_800ABE00_cmd1B* cmd = (unk_D_800ABE00_cmd1B*)gGeoLayoutCommand;
+    UNUSED s32 pad; // FAKE: stack padding
+    GeoLayoutCmdCreateTranslateRotate* cmd = (GeoLayoutCmdCreateTranslateRotate*)gGeoLayoutCommand;
 
-    Vec3f_FromVec3s(&sp24, &cmd->unk_0A);
-    Vec3s_SetComponents(&sp30, (cmd->unk_04 << 0xF) / 180, (cmd->unk_06 << 0xF) / 180, (cmd->unk_08 << 0xF) / 180);
-    register_graph_node(GeoNode_CreateTranslateRotate(gGraphNodePool, NULL, &sp24, &sp30));
+    Vec3f_FromVec3s(&sp24, &cmd->translation);
+    Vec3s_SetComponents(&sp30, (cmd->rotationDegrees.x << 0xF) / 180, (cmd->rotationDegrees.y << 0xF) / 180, (cmd->rotationDegrees.z << 0xF) / 180);
+    GeoLayout_RegisterGraphNode(GeoNode_CreateTranslateRotate(gGraphNodePool, NULL, &sp24, &sp30));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd1B);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateTranslateRotate);
 }
 
-void geo_layout_cmd_create_translate(void) {
+/** Geo layout command: creates a translate node. */
+void GeoLayout_CmdCreateTranslate(void) {
     Vec3f sp24;
-    unk_D_800ABE00_cmd1C* cmd = (unk_D_800ABE00_cmd1C*)gGeoLayoutCommand;
+    GeoLayoutCmdCreateTranslate* cmd = (GeoLayoutCmdCreateTranslate*)gGeoLayoutCommand;
 
-    sp24.x = cmd->unk_04 / 65536.0f;
-    sp24.y = cmd->unk_08 / 65536.0f;
-    sp24.z = cmd->unk_0C / 65536.0f;
-    register_graph_node(GeoNode_CreateTranslate(gGraphNodePool, NULL, &sp24));
+    sp24.x = cmd->translationX / 65536.0f;
+    sp24.y = cmd->translationY / 65536.0f;
+    sp24.z = cmd->translationZ / 65536.0f;
+    GeoLayout_RegisterGraphNode(GeoNode_CreateTranslate(gGraphNodePool, NULL, &sp24));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd1C);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateTranslate);
 }
 
-void geo_layout_cmd_create_animated_part(void) {
+/** Geo layout command: creates a animated part node. */
+void GeoLayout_CmdCreateAnimatedPart(void) {
     Vec3f sp3C;
     s16 var_a3 = 1;
-    unk_D_800ABE00_cmd1D* cmd = (unk_D_800ABE00_cmd1D*)gGeoLayoutCommand;
+    GeoLayoutCmdCreateAnimatedPart* cmd = (GeoLayoutCmdCreateAnimatedPart*)gGeoLayoutCommand;
 
-    sp3C.x = cmd->unk_10 / 65536.0f;
-    sp3C.y = cmd->unk_14 / 65536.0f;
-    sp3C.z = cmd->unk_18 / 65536.0f;
+    sp3C.x = cmd->scaleX / 65536.0f;
+    sp3C.y = cmd->scaleY / 65536.0f;
+    sp3C.z = cmd->scaleZ / 65536.0f;
 
-    if (cmd->unk_02 & 1) {
+    if (cmd->flags & 1) {
         var_a3 = 0;
     }
 
-    if (cmd->unk_02 & 2) {
+    if (cmd->flags & 2) {
         var_a3 |= 2;
     }
 
-    register_graph_node(
-        GeoNode_CreateAnimatedPart(gGraphNodePool, NULL, cmd->unk_01, var_a3, cmd->unk_03, &cmd->unk_04, &cmd->unk_0A, &sp3C));
+    GeoLayout_RegisterGraphNode(
+        GeoNode_CreateAnimatedPart(gGraphNodePool, NULL, cmd->matrixSlot, var_a3, cmd->channelGroup, &cmd->translation, &cmd->rotation, &sp3C));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd1D);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateAnimatedPart);
 }
 
-void geo_layout_cmd_create_display_list_part(void) {
-    unk_D_800ABE00_cmd1E* cmd = (unk_D_800ABE00_cmd1E*)gGeoLayoutCommand;
+/** Geo layout command: creates a display list part node. */
+void GeoLayout_CmdCreateDisplayListPart(void) {
+    GeoLayoutCmdCreateDisplayListPart* cmd = (GeoLayoutCmdCreateDisplayListPart*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateDisplayListPart(gGraphNodePool, NULL, cmd->unk_01, cmd->unk_04, cmd->unk_02));
+    GeoLayout_RegisterGraphNode(GeoNode_CreateDisplayListPart(gGraphNodePool, NULL, cmd->renderLayer, cmd->displayList, cmd->matrixSlot));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd1E);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateDisplayListPart);
 }
 
-void geo_layout_cmd_create_model_part(void) {
+/** Geo layout command: creates a model part node. */
+void GeoLayout_CmdCreateModelPart(void) {
     Vec3s sp40;
     Vec3f sp34;
     Vec3f sp28;
     DisplayObject* tmp;
-    unk_D_800ABE00_cmd1F* cmd = (unk_D_800ABE00_cmd1F*)gGeoLayoutCommand;
+    GeoLayoutCmdCreateModelPart* cmd = (GeoLayoutCmdCreateModelPart*)gGeoLayoutCommand;
 
-    Vec3f_FromVec3s(&sp34, &cmd->unk_0A);
+    Vec3f_FromVec3s(&sp34, &cmd->position);
 
-    sp28.x = cmd->unk_10 / 100.0f;
-    sp28.y = cmd->unk_12 / 100.0f;
-    sp28.z = cmd->unk_14 / 100.0f;
+    sp28.x = cmd->scaleXPercent / 100.0f;
+    sp28.y = cmd->scaleYPercent / 100.0f;
+    sp28.z = cmd->scaleZPercent / 100.0f;
 
-    Vec3s_SetComponents(&sp40, (cmd->unk_04 << 0xF) / 180, (cmd->unk_06 << 0xF) / 180, (cmd->unk_08 << 0xF) / 180);
-    tmp = GeoNode_CreateModelPart(gGraphNodePool, NULL, cmd->unk_02, &sp34, &sp40, &sp28);
-    register_graph_node(tmp);
+    Vec3s_SetComponents(&sp40, (cmd->rotationDegrees.x << 0xF) / 180, (cmd->rotationDegrees.y << 0xF) / 180, (cmd->rotationDegrees.z << 0xF) / 180);
+    tmp = GeoNode_CreateModelPart(gGraphNodePool, NULL, cmd->objectType, &sp34, &sp40, &sp28);
+    GeoLayout_RegisterGraphNode(tmp);
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd1F);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateModelPart);
 }
 
-void geo_layout_cmd_create_display_list_matrix(void) {
+/** Geo layout command: creates a display list matrix node. */
+void GeoLayout_CmdCreateDisplayListMatrix(void) {
     Vec3f sp34;
     Vec3s sp2C;
-    unk_D_86002F34_alt8* tmp;
-    unk_D_800ABE00_cmd20* cmd = (unk_D_800ABE00_cmd20*)gGeoLayoutCommand;
+    GeoDisplayListMatrixNode* tmp;
+    GeoLayoutCmdCreateDisplayListMatrix* cmd = (GeoLayoutCmdCreateDisplayListMatrix*)gGeoLayoutCommand;
 
-    Vec3f_FromVec3s(&sp34, &cmd->unk_0A);
-    Vec3s_SetComponents(&sp2C, (cmd->unk_04 << 0xF) / 180, (cmd->unk_06 << 0xF) / 180, (cmd->unk_08 << 0xF) / 180);
-    tmp = GeoNode_CreateDisplayListMatrixFromTransform(gGraphNodePool, NULL, cmd->unk_01, cmd->unk_10, &sp34, &sp2C);
-    register_graph_node(tmp);
+    Vec3f_FromVec3s(&sp34, &cmd->translation);
+    Vec3s_SetComponents(&sp2C, (cmd->rotationDegrees.x << 0xF) / 180, (cmd->rotationDegrees.y << 0xF) / 180, (cmd->rotationDegrees.z << 0xF) / 180);
+    tmp = GeoNode_CreateDisplayListMatrixFromTransform(gGraphNodePool, NULL, cmd->renderLayer, cmd->displayList, &sp34, &sp2C);
+    GeoLayout_RegisterGraphNode(tmp);
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd20);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateDisplayListMatrix);
 }
 
-void geo_layout_cmd_create_scale(void) {
+/** Geo layout command: creates a scale node. */
+void GeoLayout_CmdCreateBillboard(void) {
     Vec3f sp2C;
-    unk_D_86002F34_alt9* tmp;
-    unk_D_800ABE00_cmd21* cmd = (unk_D_800ABE00_cmd21*)gGeoLayoutCommand;
+    GeoBillboardNode* tmp;
+    GeoLayoutCmdCreateBillboard* cmd = (GeoLayoutCmdCreateBillboard*)gGeoLayoutCommand;
 
-    Vec3f_FromVec3s(&sp2C, &cmd->unk_02);
-    tmp = GeoNode_CreateScale(gGraphNodePool, NULL, cmd->unk_01, cmd->unk_0C, &sp2C, cmd->unk_08 / 65536.0f);
-    register_graph_node(tmp);
+    Vec3f_FromVec3s(&sp2C, &cmd->position);
+    tmp = GeoNode_CreateBillboard(gGraphNodePool, NULL, cmd->renderLayer, cmd->displayList, &sp2C, cmd->unk_08 / 65536.0f);
+    GeoLayout_RegisterGraphNode(tmp);
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd21);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateBillboard);
 }
 
-void geo_layout_cmd_create_display_list(void) {
-    unk_D_800ABE00_cmd22* cmd = (unk_D_800ABE00_cmd22*)gGeoLayoutCommand;
+/** Geo layout command: creates a display list node. */
+void GeoLayout_CmdCreateDisplayList(void) {
+    GeoLayoutCmdCreateDisplayList* cmd = (GeoLayoutCmdCreateDisplayList*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateDisplayList(gGraphNodePool, NULL, cmd->unk_01, cmd->unk_04));
+    GeoLayout_RegisterGraphNode(GeoNode_CreateDisplayList(gGraphNodePool, NULL, cmd->renderLayer, cmd->displayList));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd22);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateDisplayList);
 }
 
-void geo_layout_cmd_create_shadow_texture(void) {
-    unk_D_800ABE00_cmd23* cmd = (unk_D_800ABE00_cmd23*)gGeoLayoutCommand;
+/** Geo layout command: creates a material node. */
+void GeoLayout_CmdCreateMaterial(void) {
+    GeoLayoutCmdCreateMaterial* cmd = (GeoLayoutCmdCreateMaterial*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateShadowTexture(gGraphNodePool, NULL, cmd->unk_01, cmd->unk_02, cmd->unk_04, cmd->unk_08, cmd->unk_0A,
+    GeoLayout_RegisterGraphNode(GeoNode_CreateMaterial(gGraphNodePool, NULL, cmd->mode, cmd->eventIndex, cmd->displayList, cmd->textureIndex, cmd->paletteIndex,
                                 cmd->r, cmd->g, cmd->b, cmd->a));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd23);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateMaterial);
 }
 
-void geo_layout_cmd_create_anchor(void) {
-    unk_D_800ABE00_cmd24* cmd = (unk_D_800ABE00_cmd24*)gGeoLayoutCommand;
+/** Geo layout command: creates a anchor node. */
+void GeoLayout_CmdCreateAnchor(void) {
+    GeoLayoutCmdCreateAnchor* cmd = (GeoLayoutCmdCreateAnchor*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateAnchor(gGraphNodePool, NULL, cmd->unk_02));
+    GeoLayout_RegisterGraphNode(GeoNode_CreateAnchor(gGraphNodePool, NULL, cmd->anchorId));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd24);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateAnchor);
 }
 
-void geo_layout_cmd_set_node_flag4(void) {
-    unk_D_800ABE00_cmd25* cmd = (unk_D_800ABE00_cmd25*)gGeoLayoutCommand;
+/** Geo layout command: sets flag 4 on the current node. */
+void GeoLayout_CmdSetNodeFlag4(void) {
+    GeoLayoutCmdSetNodeFlag4* cmd = (GeoLayoutCmdSetNodeFlag4*)gGeoLayoutCommand;
 
     if (gCurGraphNodeList[gCurGraphNodeIndex] != NULL) {
         gCurGraphNodeList[gCurGraphNodeIndex]->renderFlags |= 4;
     }
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd25);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdSetNodeFlag4);
 }
 
-void geo_layout_cmd_create_group(void) {
-    unk_D_800ABE00_cmd26* cmd = (unk_D_800ABE00_cmd26*)gGeoLayoutCommand;
+/** Geo layout command: creates a group node. */
+void GeoLayout_CmdCreateGroup(void) {
+    GeoLayoutCmdCreateGroup* cmd = (GeoLayoutCmdCreateGroup*)gGeoLayoutCommand;
 
-    register_graph_node(GeoNode_CreateGroup(gGraphNodePool, NULL, cmd->unk_01, cmd->unk_04, cmd->unk_06, cmd->unk_08, cmd->unk_0A,
+    GeoLayout_RegisterGraphNode(GeoNode_CreateGroup(gGraphNodePool, NULL, cmd->renderLayer, cmd->unk_04, cmd->unk_06, cmd->unk_08, cmd->unk_0A,
                                 cmd->unk_02, cmd->unk_03, cmd->unk_0C, cmd->r, cmd->g, cmd->b, cmd->a));
 
-    gGeoLayoutCommand += sizeof(unk_D_800ABE00_cmd26);
+    gGeoLayoutCommand += sizeof(GeoLayoutCmdCreateGroup);
 }
 
-GraphNode* process_geo_layout(MemoryBlock* pool, void* segptr) {
+/**
+ * Builds a graph node tree from a geo layout command stream and returns its
+ * root.
+ */
+GraphNode* GeoLayout_Process(MemoryBlock* pool, void* segptr) {
     // set by register_scene_graph_node when gCurGraphNodeIndex is 0
     // and gCurRootGraphNode is NULL
     gCurRootGraphNode = NULL;

@@ -1,0 +1,493 @@
+/* Stadium Zero fragment012_17ED00. */
+/* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_31C660.c. */
+
+#include "battle.h"
+#include "model_renderer.h"
+
+#include "m2c_macros.h"
+
+void BattleAnim_SetupDrainFlameHueChange(Particle* arg0);
+void BattleAnim_SetupParticleRecolorTransparent(Particle* arg0);
+void BattleAnim_SetupWhiteHueChange(Particle* arg0);
+void BattleAnim_SetupDescriptor25AlphaFadeInHold(Particle* arg0);
+void BattleAnim_SetupDescriptor25PaletteFadeOut(Particle* arg0);
+void BattleAnim_SetupDescriptor25PaletteFadeIn(Particle* arg0);
+
+/**
+ * Sets up the hue change upon being hit by
+ * - A Draining move (absorb, mega drain, leech life)
+ * - A flame-emitting move (Flamethrower, Fire blast, fire spin, dragon rage)
+ * Seen in play (2026-11-13) in the 165-move sweep it ran only for Flamethrower, Absorb, Mega Drain,
+ * Dragon Rage, Fire Spin and Fire Blast: it recolored prim from the particle's palette index (e.g.
+ * prim FF0000) and advanced the lifecycle.
+ */
+void BattleAnim_SetupDrainFlameHueChange(Particle* arg0) {
+    ParticleGfx_RecolorPrim(arg0, Particle_GetByteParam1(arg0));
+    Particle_ScratchA_SetS16_0BF4C(arg0, 0);
+    Particle_AdvanceLifecycle(arg0);
+}
+
+M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
+s32 Particle_IsRunning(Particle* arg0);                          /* extern */
+s32 func_8213C484(); // Particle_GetByteParam1 with the s32 return this call needs
+M2C_UNK func_8213C9D0(s8 *);                      /* extern */
+s32 Particle_ApproachScratchA(s8 *, s16, u8);                 /* extern */
+s32 func_821436A0(s8 *, u8, u8);                  /* extern */
+M2C_UNK func_82144130(s8 *);                      /* extern */
+
+/**
+ * Particle callback for an owner model tint: inits the drain or flame hue change, ramps the tint
+ * strength toward param0, then shifts toward its palette pair and is marked inactive. While
+ * running it writes its color and strength to the owner model's material.
+ */
+void BattleAnim_CallbackOwnerTintPaletteFade(Particle* arg0) {
+    s16 temp_v0;
+
+    temp_v0 = arg0->lifecycle;
+    switch (temp_v0) {                              /* irregular */
+    case 1:
+        func_82144130(arg0);
+        break;
+    case 2:
+        if (Particle_ApproachScratchA(arg0, arg0->param0, arg0->byteParam2) != 0) {
+            func_8213C9D0(arg0);
+        }
+        break;
+    case 3:
+        if (func_821436A0(arg0, arg0->byteParam0, M2C_FIELD(arg0, u8 *, 0xA7)) != 0) {
+            func_8213C9D0(arg0);
+        }
+        break;
+    case 4:
+        Particle_MarkInactive(arg0);
+        break;
+    }
+    if (Particle_IsRunning(arg0) != 0) {
+        func_80019B28(M2C_FIELD(arg0, s32 *, 0x10), arg0->prim_r, arg0->prim_g, arg0->prim_b, (s32) arg0->scratchA);
+    }
+}
+
+/**
+ * Lifecycle init for the random tint cycle: picks random start and target colors from
+ * palette set A and a step timer of 255 / speed.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupOwnerTintRandomPaletteCycle(Particle* arg0) {
+    ParticleGfx_RecolorPrim(arg0, gParticlePaletteSetA[ParticleMath_RandomRange(6)]);
+    Particle_SetByteParam1(arg0, gParticlePaletteSetA[ParticleMath_RandomRange(6)]);
+    Particle_SetPrimAlpha(arg0, arg0->byteParam0);
+
+    if (arg0->param1 == 0) {
+        arg0->param1 = 1;
+    }
+
+    Particle_Param0_SetS16_0BCA8(arg0, 0xFF / arg0->param1);
+    Particle_AdvanceLifecycle(arg0);
+}
+
+/**
+ * Particle callback: moves the tint toward the target color, picks a new random target
+ * when the timer runs out, and applies the tint to the owner model.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_CallbackOwnerTintRandomPaletteCycle(Particle* arg0) {
+    switch (arg0->lifecycle) {
+        case 1:
+            BattleAnim_SetupOwnerTintRandomPaletteCycle(arg0);
+            break;
+
+        case 2:
+            ParticleGfx_ApproachPrimPalette(arg0, arg0->byteParam1, arg0->param1);
+            if (Particle_DecrementParam0ToZero(arg0) != 0) {
+                Particle_Param0_SetS16_0BCA8(arg0, 0xFF / arg0->param1);
+                Particle_SetByteParam1(arg0, gParticlePaletteSetA[ParticleMath_RandomRange(6)]);
+            }
+            Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->prim_a);
+            break;
+    }
+}
+
+/**
+ * Sets up the rainbow hue shift triggered by the user's Recover or by an incoming Psybeam or Aurora
+ * Beam.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Psybeam, Aurora Beam.
+ */
+void BattleAnim_SetupRainbowHueChange(Particle* arg0) {
+    ParticleGfx_RecolorPrim(arg0, gParticlePaletteSetA[0]);
+    Particle_ScratchA_SetS16_0BF4C(arg0, 1);
+    Particle_SetByteParam1(arg0, gParticlePaletteSetA[1]);
+    Particle_SetPrimAlpha(arg0, arg0->byteParam0);
+
+    if (arg0->param1 == 0) {
+        arg0->param1 = 1;
+    }
+
+    Particle_Countdown_SetS16_0BE14(arg0, 0xFF / arg0->param1);
+    Particle_AdvanceLifecycle(arg0);
+}
+
+/**
+ * Runs the rainbow hue shift triggered by the user's Recover or by an incoming Psybeam or Aurora
+ * Beam.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Psybeam, Aurora Beam.
+ */
+void BattleAnim_RunRainbowHueChange(Particle* arg0) {
+    switch (arg0->lifecycle) {
+        case 1:
+            BattleAnim_SetupRainbowHueChange(arg0);
+            break;
+
+        case 2:
+            Particle_DecrementParam0ToZeroThenAdvance(arg0);
+            if (Particle_DecrementCountdownToZero(arg0) != 0) {
+                Particle_Countdown_SetS16_0BE14(arg0, 0xFF / arg0->param1);
+                arg0->scratchA = (arg0->scratchA + 1) % 6;
+                Particle_SetByteParam1(arg0, gParticlePaletteSetA[arg0->scratchA]);
+            }
+            ParticleGfx_ApproachPrimPalette(arg0, arg0->byteParam1, arg0->param1);
+            Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->prim_a);
+            break;
+
+        case 3:
+            if (Particle_PrimAlpha_Approach_0BC2C(arg0, 0, 8) != 0) {
+                Particle_AdvanceLifecycle(arg0);
+            }
+            Model_SetMaterialColor(&arg0->pokemon->displayObject, arg0->prim_r, arg0->prim_g, arg0->prim_b, arg0->prim_a);
+            break;
+
+        case 4:
+            Particle_DisableAndDetach(arg0);
+            break;
+    }
+}
+
+/**
+ * Set up Fading the user's model to invisible for Teleport, defense curl, sky attack, acid armor
+ * and sharpen. These moves do not replace the user's model like transform or substitute and do not
+ * have unique animation varients like withdrawal; which are not covered by this function.
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Acid Armor, Defense Curl, Explosion, Selfdestruct, Sharpen and Teleport. Sky Attack's
+ * charge turn did not use it, and Explosion and Selfdestruct did.
+ */
+void BattleAnim_SetupInvisibility(Particle* arg0) {
+    arg0->prim_a = arg0->param0;
+    Particle_AdvanceLifecycle(arg0);
+}
+
+M2C_UNK func_80019B6C(s32, u8);                     /* extern */
+void Particle_MarkInactive(Particle* arg0);                      /* extern */
+s32 Particle_IsRunning(Particle* arg0);                          /* extern */
+M2C_UNK func_8213C9D0(s8 *);                      /* extern */
+s32 Particle_ApproachPrimAlpha(s8 *, u8, u8);                  /* extern */
+M2C_UNK func_82144644(s8 *);                      /* extern */
+
+/**
+ * Particle callback for an owner model alpha fade (used to turn the Pokémon invisible): inits it,
+ * fades its alpha toward the target, then is marked inactive. While running it writes the alpha to
+ * the owner model's material.
+ */
+void BattleAnim_CallbackOwnerModelAlphaFade(Particle* arg0) {
+    s16 temp_v0;
+
+    temp_v0 = arg0->lifecycle;
+    switch (temp_v0) {                              /* irregular */
+    case 1:
+        func_82144644(arg0);
+        break;
+    case 2:
+        if (Particle_ApproachPrimAlpha(arg0, arg0->byteParam0, M2C_FIELD(arg0, u8 *, 0xA7)) != 0) {
+            func_8213C9D0(arg0);
+        }
+        break;
+    case 3:
+        Particle_MarkInactive(arg0);
+        break;
+    }
+    if (Particle_IsRunning(arg0) != 0) {
+        func_80019B6C(M2C_FIELD(arg0, s32 *, 0x10), arg0->prim_a);
+    }
+}
+
+/**
+ * Lifecycle init: palette color from the CF parameter, fully transparent.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupParticleRecolorTransparent(Particle* arg0) {
+    ParticleGfx_RecolorPrim(arg0, Particle_GetByteParam1(arg0));
+    Particle_SetPrimAlpha(arg0, 0);
+    Particle_AdvanceLifecycle(arg0);
+}
+
+M2C_UNK func_80019B28(s32, u8, u8, u8, s32);        /* extern */
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
+M2C_UNK func_82144710(s8 *);                      /* extern */
+
+/**
+ * Particle callback queued by start effect 123: init, fade in toward alpha 128, then fade out by 8
+ * and detach.
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_CallbackModelBurstAlphaFade(Particle* particle) {
+    s16 temp_v0;
+
+    temp_v0 = particle->lifecycle;
+    switch (temp_v0) {                              /* irregular */
+    case 1:
+        func_82144710(particle);
+        break;
+    case 2:
+        Particle_ApproachPrimAlpha(particle, 0x80, 4);
+        break;
+    case 3:
+        if (Particle_ApproachPrimAlpha(particle, 0, 8) != 0) {
+            Particle_DisableAndDetach(particle);
+        }
+        break;
+    }
+    func_80019B28(M2C_FIELD(particle, s32 *, 0x10), particle->prim_r, particle->prim_g, particle->prim_b, (s32) particle->prim_a);
+}
+
+/**
+ * Sets up coloration changes to pure white for using Blizzard, Confuse Ray, Self-destruct, Flash,
+ * or Explosion. Blizzard's effect is more subtle and doesn't change the user completely white like
+ * the other listed moves. It is used in blizzard to make the user's hue match that of the arena.
+ * Also used for the Poké Ball's hue change.
+ * Seen in play (2026-11-13) in the 165-move sweep (Ice Beam, Psybeam, Aurora Beam, Hyper Beam,
+ * Confusion, Psychic, Light Screen, Reflect): it kept prim white (FFFFFF), set prim alpha to 0 and
+ * advanced the lifecycle.
+ */
+void BattleAnim_SetupWhiteHueChange(Particle* arg0) {
+    ParticleGfx_RecolorPrim(arg0, Particle_GetByteParam1(arg0));
+    Particle_SetPrimAlpha(arg0, 0);
+    Particle_AdvanceLifecycle(arg0);
+}
+
+/**
+ * Runs coloration changes to pure white for using Blizzard, Confuse Ray, Self-destruct, Flash, or
+ * Explosion. Blizzard's effect is more subtle and doesn't change the user completely white like the
+ * other listed moves. It is used in blizzard to make the user's hue match that of the arena. Also
+ * used for the Poké Ball's hue change.
+ * Seen in play (2026-11-13) in the 165-move sweep (Ice Beam, Psybeam, Aurora Beam, Hyper Beam,
+ * Confusion, Psychic, Light Screen, Reflect): after setup the white overlay's prim alpha rose by
+ * 0x20 per frame (0, 0x20, 0x40, ...).
+ */
+void BattleAnim_RunWhiteHueChange(Particle* arg0) {
+    switch (arg0->lifecycle) {
+        case 1:
+            BattleAnim_SetupWhiteHueChange(arg0);
+            break;
+
+        case 2:
+            Particle_ApproachPrimAlphaThenAdvance(arg0, arg0->byteParam0, arg0->param1);
+            break;
+
+        case 3:
+            Particle_DecrementParam0ToZeroThenAdvance(arg0);
+            break;
+
+        case 4:
+            if (Particle_PrimAlpha_Approach_0BC2C(arg0, 0, arg0->param1) != 0) {
+                Particle_MarkInactive(arg0);
+            }
+            break;
+    }
+}
+
+/**
+ * Recolors the particle's primitive with its byteParam1, sets its prim alpha to byteParam0 and
+ * advances its lifecycle.
+ * @unverified Comment read from the code.
+ */
+void BattleAnim_SetupDescriptor25AlphaHoldFadeOut(Particle* arg0) {
+    ParticleGfx_RecolorPrim((u8*)arg0, Particle_GetByteParam1(arg0));
+    Particle_SetPrimAlpha((s8*)arg0, arg0->byteParam0);
+    Particle_AdvanceLifecycle(arg0);
+}
+
+/**
+ * handles full screen hue overlay changes to a single color. Examples:
+ * - Vine whip -> green
+ * - Slash -> red
+ * - Fire punch -> white
+ *
+ * BattleAnim_DrawFadingFullScreenColorOverlay in @battle_engine_particle_renderers.c is the
+ * equivalent for moves that change both the full screen hue and the pokemon hue at the same time
+ * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in the battle opening and a
+ * switch in battle.
+ * @unverified Name and comment from Stadium 1.
+ */
+void BattleAnim_RunFullScreenHueChange(Particle* arg0) {
+    switch (arg0->lifecycle) {
+        case 1:
+            BattleAnim_SetupDescriptor25AlphaHoldFadeOut(arg0);
+            break;
+
+        case 2:
+            Particle_DecrementParam0ToZeroThenAdvance(arg0);
+            break;
+
+        case 3:
+            if (Particle_PrimAlpha_Approach_0BC2C(arg0, 0, arg0->param1) != 0) {
+                Particle_MarkInactive(arg0);
+            }
+            break;
+    }
+}
+
+/**
+ * Lifecycle init for a fade-in overlay: palette color from the CF parameter, fully
+ * transparent.
+ * Seen in play (2026-11-13): ran in the 165-move battle sweep (5 of the moves).
+ * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
+ * breakpoint): ran only for Blizzard, Confuse Ray, Explosion, Flash, Selfdestruct.
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupDescriptor25AlphaFadeInHold(Particle* arg0) {
+    ParticleGfx_RecolorPrim(arg0, Particle_GetByteParam1(arg0));
+    Particle_SetPrimAlpha(arg0, 0);
+    Particle_AdvanceLifecycle(arg0);
+}
+
+/**
+ * Used to change the Pokemon and screen hue at the same time for Blizzard, Boom, Confuse Ray, and
+ * Flash
+ * Seen in play (2026-11-12): in the per-move sweep (each of the 165 moves used once) it ran only
+ * for Blizzard, Confuse Ray, Explosion, Flash and Selfdestruct.
+ */
+void BattleAnim_RunPokemonAndFullScreenHueChange(Particle* arg0) {
+    switch (arg0->lifecycle) {
+        case 1:
+            BattleAnim_SetupDescriptor25AlphaFadeInHold(arg0);
+            break;
+
+        case 2:
+            Particle_ApproachPrimAlphaThenAdvance(arg0, arg0->byteParam0, arg0->param1);
+            break;
+
+        case 3:
+            if (Particle_DecrementParam0ToZero(arg0) != 0) {
+                Particle_MarkInactive(arg0);
+            }
+            break;
+    }
+}
+
+/**
+ * Init step: recolors the prim color from palette CF, sets alpha from field CD and advances.
+ * @unverified Name guessed from the code.
+ */
+void BattleAnim_SetupDescriptor25AlphaHold(Particle* particle) {
+    ParticleGfx_RecolorPrim(particle, Particle_GetByteParam1(particle));
+    Particle_SetPrimAlpha(particle, particle->byteParam0);
+    Particle_AdvanceLifecycle(particle);
+}
+
+void Particle_DisableAndDetach(Particle* arg0);                      /* extern */
+s32 func_82140690();                                /* extern */
+
+/**
+ * Particle callback for a full-screen color hold: inits it with its color and alpha, then detaches
+ * once its timer ends.
+ */
+void BattleAnim_CallbackDescriptor25AlphaHoldDetach(Particle* arg0) {
+    s16 temp_v0;
+
+    temp_v0 = arg0->lifecycle;
+    switch (temp_v0) {                              /* irregular */
+    case 1:
+        BattleAnim_SetupDescriptor25AlphaHold((Particle*)arg0);
+        return;
+    case 2:
+        if (func_82140690() != 0) {
+            Particle_DisableAndDetach(arg0);
+        }
+        return;
+    }
+}
+
+/**
+ * Lifecycle init for a fade-out overlay: palette color from the CF parameter, fully
+ * opaque.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupDescriptor25PaletteFadeOut(Particle* arg0) {
+    ParticleGfx_RecolorPrim(arg0, Particle_GetByteParam1(arg0));
+    Particle_SetPrimAlpha(arg0, 0xFF);
+    Particle_AdvanceLifecycle(arg0);
+}
+
+/**
+ * Particle callback for the fade-out overlay: holds for its timer, then fades out and
+ * detaches.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_CallbackDescriptor25PaletteFadeOut(Particle* arg0) {
+    switch (arg0->lifecycle) {
+        case 1:
+            BattleAnim_SetupDescriptor25PaletteFadeOut(arg0);
+            break;
+
+        case 2:
+            Particle_DecrementParam0ToZeroThenAdvance(arg0);
+            break;
+
+        case 3:
+            ParticleGfx_ApproachPrimPalette(arg0, arg0->byteParam0, arg0->param1);
+            if (Particle_PrimAlpha_Approach_0BC2C(arg0, 0, arg0->param1) != 0) {
+                Particle_MarkInactive(arg0);
+            }
+            break;
+    }
+}
+
+/**
+ * Lifecycle init for a fade-in overlay: palette color from the CF parameter, fully
+ * transparent.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_SetupDescriptor25PaletteFadeIn(Particle* arg0) {
+    ParticleGfx_RecolorPrim(arg0, Particle_GetByteParam1(arg0));
+    Particle_SetPrimAlpha(arg0, 0);
+    Particle_AdvanceLifecycle(arg0);
+}
+
+/**
+ * Particle callback for the fade-in overlay: moves toward the target palette color while
+ * fading in, then holds and detaches.
+ * Not reached in play (2026-11-13): did not run in the 165-move battle sweep (each move used once,
+ * from the command menu to the end of its turn) or in a tour of the menus and a COM battle.
+ * @unverified Name from Stadium 1.
+ */
+void BattleAnim_CallbackDescriptor25PaletteFadeIn(Particle* arg0) {
+    switch (arg0->lifecycle) {
+        case 1:
+            BattleAnim_SetupDescriptor25PaletteFadeIn(arg0);
+            break;
+
+        case 2:
+            ParticleGfx_ApproachPrimPalette(arg0, arg0->byteParam0, arg0->param1);
+            Particle_ApproachPrimAlphaThenAdvance(arg0, 0xFF, arg0->param1);
+            break;
+
+        case 3:
+            if (Particle_DecrementParam0ToZero(arg0) != 0) {
+                Particle_MarkInactive(arg0);
+            }
+            break;
+    }
+}

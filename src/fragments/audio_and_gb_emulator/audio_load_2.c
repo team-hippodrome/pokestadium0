@@ -1,0 +1,1199 @@
+/* Stadium Zero fragment000_80C00. */
+/* Audio driver, matching the rest of OoT load.c (src/audio/internal) in function order. The driver
+ * is Nintendo's "Nas" library (original names Nas_*); this revision sits between SM64 Shindou and
+ * OoT. See docs/annotation/audio-driver.md for the per-function mapping. */
+/* C ported from the Stadium 1 decomp: src/fragments/battle_engine/battle_engine_309ED0.c. */
+
+#include "audio_and_gb_emulator.h"
+
+#include "m2c_macros.h"
+
+void AudioLoad_Unused1A(void);
+void AudioLoad_Unused1B(void);
+void AudioLoad_ProcessLoads(s32 reset_status);
+void AudioLoad_Unused2(void);
+
+/**
+ * Empty.
+ * No OoT counterpart is certain. Zero has two empty stubs between AudioLoad_Dma and
+ * AudioLoad_SyncLoadSimple, as SM64 Shindou does (func_sh_802f3ec4, func_sh_802f3ed4); OoT keeps
+ * one there, AudioLoad_Unused1 (__OfsToLbaOfs).
+ * No caller (2026-11-14): nothing in the built ROM jumps to it or holds its address, so play
+ * cannot reach it.
+ * @unverified Name from the code; it never runs.
+ */
+void AudioLoad_Unused1A(void) {
+}
+
+/**
+ * Empty.
+ * See AudioLoad_Unused1A.
+ * No caller (2026-11-14): nothing in the built ROM jumps to it or holds its address, so play
+ * cannot reach it.
+ * @unverified Name from the code; it never runs.
+ */
+void AudioLoad_Unused1B(void) {
+}
+
+void AudioLoad_SyncLoad(Particle* arg0, s32 arg1, s32* arg2);
+
+/**
+ * Loads entry `arg1` of table `arg0` synchronously and ignores the result.
+ * Corresponds to OoT AudioLoad_SyncLoadSimple (original name EmemLoad).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioLoad_SyncLoadSimple(Particle* arg0, s32 arg1) {
+    s32 sp1C;
+
+    AudioLoad_SyncLoad(arg0, arg1, &sp1C);
+}
+
+extern u8 D_81184654[];
+extern u8 D_81184655[];
+extern u8 D_81184656[];
+s32 AudioLoad_SearchCaches(s32, s32);
+AudioTable* AudioLoad_GetLoadTable(s32);
+s32 AudioHeap_AllocPermanent(s32, s32, s32);
+s32 AudioHeap_AllocCached(s32, s32, s32, s32);
+s32 func_8004CFB0(OSMesgQueue*, OSMesg, s32);
+void AudioLoad_SetFontLoadStatus(s32, s32);
+void AudioLoad_SetSeqLoadStatus(s32, s32);
+void AudioLoad_SetSampleLoadStatus(s32, s32);
+struct Entry8110EABC* AudioLoad_StartAsyncLoad(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
+
+/**
+ * Starts an asynchronous load of entry id of audio table tableType (0 sequences,
+ * 1 sound fonts, 2 sample banks). Returns 0 if a load of it is already in
+ * progress or no memory could be allocated. If the entry is already cached the
+ * cached address is returned and retData is posted to retQueue at once;
+ * otherwise memory is allocated by the entry's cache policy and a chunked DMA
+ * is started. The table's load status is updated either way.
+ * Corresponds to OoT AudioLoad_AsyncLoadInner (original name __Load_Bank_BG). OoT also handles the
+ * unknown-medium queue.
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
+ * @unverified Name guessed from the code; comment kept.
+ */
+s32 AudioLoad_AsyncLoadInner(s32 table_type, s32 id, s32 n_chunks, s32 ret_data, OSMesgQueue* ret_queue) {
+    u32 size;
+    AudioTable* table;
+    s32 ram_addr;
+    s32 medium;
+    s8 cache_policy;
+    u32 dev_addr;
+    s32 load_status;
+
+    switch (table_type) {
+        case 0:
+            if (D_81184656[id] == 1) {
+                return 0;
+            }
+            break;
+        case 1:
+            if (D_81184655[id] == 1) {
+                return 0;
+            }
+            break;
+        case 2:
+            if (D_81184654[id] == 1) {
+                return 0;
+            }
+            break;
+    }
+
+    ram_addr = AudioLoad_SearchCaches(table_type, id);
+    if (ram_addr != 0) {
+        load_status = 2;
+        func_8004CFB0(ret_queue, (OSMesg)(ret_data << 0x18), 0);
+    } else {
+        table = (AudioTable*)AudioLoad_GetLoadTable(table_type);
+        size = table->entries[id].size;
+        size = ALIGN16(size);
+        medium = table->entries[id].medium;
+        cache_policy = table->entries[id].cachePolicy;
+        dev_addr = table->entries[id].romAddr;
+        load_status = 2;
+
+        switch (cache_policy) {
+            case 0:
+                ram_addr = AudioHeap_AllocPermanent(table_type, id, size);
+                if (ram_addr == 0) {
+                    return ram_addr;
+                }
+                load_status = 5;
+                break;
+            case 1:
+                ram_addr = AudioHeap_AllocCached(table_type, size, 1, id);
+                if (ram_addr == 0) {
+                    return ram_addr;
+                }
+                break;
+            case 2:
+                ram_addr = AudioHeap_AllocCached(table_type, size, 0, id);
+                if (ram_addr == 0) {
+                    return ram_addr;
+                }
+                break;
+            case 3:
+            case 4:
+                ram_addr = AudioHeap_AllocCached(table_type, size, 2, id);
+                if (ram_addr == 0) {
+                    return ram_addr;
+                }
+                break;
+        }
+
+        AudioLoad_StartAsyncLoad(dev_addr, ram_addr, size, medium, n_chunks, ret_queue, (ret_data << 0x18) | (table_type << 0x10) | (id << 8) | load_status);
+        load_status = 1;
+    }
+
+    switch (table_type) {
+        case 0:
+            AudioLoad_SetSeqLoadStatus(id, load_status);
+            break;
+        case 1:
+            AudioLoad_SetFontLoadStatus(id, load_status);
+            break;
+        case 2:
+            AudioLoad_SetSampleLoadStatus(id, load_status);
+            break;
+    }
+
+    return ram_addr;
+}
+
+/**
+ * Runs the per-frame load work: slow sample loads, sample preloads, then async loads.
+ * Corresponds to OoT AudioLoad_ProcessLoads (original name Nas_BgDmaFrameWork): the same
+ * three calls in the same order.
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioLoad_ProcessLoads(s32 reset_status) {
+    AudioLoad_ProcessSlowLoads(reset_status);
+    AudioLoad_ProcessSamplePreloads(reset_status);
+    AudioLoad_ProcessAsyncLoads(reset_status);
+}
+
+extern SoundFont* D_811858B0;
+
+extern volatile s32 D_811859D4;
+extern s32 D_811526FC;
+extern u64 D_81186270[];
+extern u64 D_81184100;
+extern u64 D_81186258;
+extern f32 D_811859B0;
+extern s32 D_811859B4;
+extern s16 D_811859C4[3];
+extern s16* D_811859B8[3];
+extern volatile s32 D_811858F0;
+extern s32 D_811858F8;
+extern s32 D_811858FC;
+extern s8 D_811858EE;
+extern s32 D_8118590C;
+extern u8 D_81185910[];
+extern OSMesgQueue D_81185650;
+extern OSMesg D_81185668[];
+extern OSMesgQueue D_81185618;
+extern OSMesg D_81185630[];
+extern OSMesgQueue D_811855D8;
+extern OSMesg D_811855F0[];
+extern OSMesgQueue D_811855F8;
+extern OSMesg D_81185610[];
+extern s32 D_811858F4;
+extern s32 D_8118568C;
+extern s32 D_81152700;
+extern s32 D_81152704;
+extern u8 D_811842B0[];
+extern AudioPermanentCache D_81184440;
+extern volatile s8 D_81184657;
+extern s8 D_81184658;
+extern AudioTable* D_8118589C;
+extern AudioTable* D_811858A0;
+extern u8* D_811858A4;
+extern u8* D_811858A8;
+extern s16 D_811858AC;
+extern AudioTable D_81152760;
+extern AudioTable D_81152720;
+extern AudioTable D_81152740;
+extern u8 D_81152710[];
+extern u8 D_0015AE60[];
+extern u8 D_0015A9B0[];
+extern u8 D_0015AA60[];
+void func_8111016C(void);
+void AudioHeap_InitMainPools(s32);
+void* func_81109868(void*, s32);
+void func_811098C0(void*, void*, s32);
+s32 AudioHeap_ResetStep(void);
+void AudioLoad_InitTable(AudioTable*, u8*, s32);
+
+/**
+ * Initializes the audio system: clears the heap and the audio globals, sets up
+ * the message queues and the three output buffers, points the sequence, font
+ * and sample tables at their ROM copies and fills in each font's sample bank
+ * ids and instrument and drum counts.
+ * Corresponds to OoT AudioLoad_Init (original name Nas_InitAudio). OoT adds the DMA and unused
+ * handlers and moves the per-font loop into AudioLoad_InitSoundFont (__SetVlute).
+ * Seen in play (2026-11-13) ran when the GB Player started (main menu GB, Yes; second entry after
+ * quitting).
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
+ * Transfer Pak; called from GbEmu_Init.
+ */
+void AudioLoad_Init(void) {
+    s32 num_fonts;
+    void* ram_addr;
+    s32 i;
+    s32 j;
+    u64* ptr;
+    s16* buf;
+    s32 count;
+
+    D_811859D4 = 0;
+
+    for (i = 0; i < D_811526FC / 8; i++) {
+        D_81186270[i] = 0;
+    }
+
+    ptr = &D_81184100;
+    for (count = ((u32)&D_81186258 - (u32)&D_81184100) / 8; count >= 0; count--) {
+        *ptr++ = 0;
+    }
+
+    D_811859B0 = 16.713f;
+    D_811859B4 = 60;
+    func_8111016C();
+
+    for (i = 0; i < 3; i++) {
+        D_811859C4[i] = 160;
+    }
+
+    D_811858F0 = 0;
+    D_811858F8 = 0;
+    D_811858FC = 0;
+    D_811858EE = 0;
+    D_8118590C = 0;
+    *(s32*)(D_81185910 + 0x34) = 0;
+    *(s32*)(D_81185910 + 0x84) = 0;
+
+    osCreateMesgQueue(&D_81185650, D_81185668, 1);
+    osCreateMesgQueue(&D_81185618, D_81185630, 1);
+    osCreateMesgQueue(&D_811855D8, D_811855F0, 1);
+    osCreateMesgQueue(&D_811855F8, D_81185610, 1);
+    D_811858F4 = 0;
+    D_8118568C = 0;
+    AudioHeap_InitMainPools(D_81152700);
+
+    for (i = 0; i < 3; i++) {
+        buf = D_811859B8[i] = func_81109868(D_811842B0, 0xFC0);
+        for (j = 0; j < 2016; j++) {
+            *buf++ = 0;
+        }
+    }
+
+    D_81184658 = 0;
+    D_81184657 = 1;
+    AudioHeap_ResetStep();
+
+    D_8118589C = &D_81152760;
+    D_811858A0 = &D_81152720;
+    D_811858A4 = (u8*)&D_81152740;
+    D_811858A8 = D_81152710;
+    D_811858AC = D_8118589C->numEntries;
+
+    AudioLoad_InitTable(D_8118589C, D_0015AE60, 0);
+    AudioLoad_InitTable(D_811858A0, D_0015A9B0, 0);
+    AudioLoad_InitTable((AudioTable*)D_811858A4, D_0015AA60, 0);
+
+    num_fonts = D_811858A0->numEntries;
+    D_811858B0 = func_81109868(D_811842B0, num_fonts * sizeof(SoundFont));
+    for (i = 0; i < num_fonts; i++) {
+        D_811858B0[i].sampleBankId1 = D_811858A0->entries[i].shortData1 >> 8 & 0xFF;
+        D_811858B0[i].sampleBankId2 = D_811858A0->entries[i].shortData1 & 0xFF;
+        D_811858B0[i].numInstruments = D_811858A0->entries[i].shortData2 >> 8 & 0xFF;
+        D_811858B0[i].numDrums = D_811858A0->entries[i].shortData2 & 0xFF;
+    }
+
+    ram_addr = func_81109868(D_811842B0, D_81152704);
+    if (ram_addr == NULL) {
+        D_81152704 = 0;
+    }
+    func_811098C0(&D_81184440, ram_addr, D_81152704);
+}
+
+typedef struct SlowLoads8110E500 {
+    /* 0x00 */ s32 index;
+    /* 0x04 */ AudioSlowLoad slots[2];
+} SlowLoads8110E500;
+
+extern SlowLoads8110E500 D_81180610;
+s32 AudioHeap_AllocTemporarySampleCache(s32, s32, s32, s8);
+s32 AudioLoad_GetFontSample(s32 arg0, s32 arg1);
+
+/**
+ * Queues a slow load of the sample for instrument or drum `arg1` (0x80 and up are drums) of font
+ * `arg0`; `status` reports progress.
+ * Corresponds to OoT AudioLoad_SlowLoadSample (original name VoiceLoad).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+s32 AudioLoad_SlowLoadSample(s32 arg0, u8 arg1, s8* status) {
+    Sample* header = (Sample*)AudioLoad_GetFontSample(arg0, arg1);
+    AudioSlowLoad* load;
+
+    if (header == NULL) {
+        *status = 0;
+        return -1;
+    }
+    if (header->medium == 0) {
+        *status = 2;
+        return 0;
+    }
+    load = &D_81180610.slots[D_81180610.index];
+    if (load->state == 3) {
+        load->state = 0;
+    }
+    load->sample = *header;
+    load->status = status;
+    load->curRamAddr = AudioHeap_AllocTemporarySampleCache(header->size, arg0, (s32)header->sampleAddr, header->medium);
+    if (load->curRamAddr == 0) {
+        if ((header->medium == 1) || (header->codec == 2)) {
+            *status = 0;
+            return -1;
+        }
+        *status = 3;
+        return -1;
+    }
+    load->state = 1;
+    load->bytesRemaining = ALIGN16(header->size);
+    load->ramAddr = load->curRamAddr;
+    load->curDevAddr = (s32)header->sampleAddr;
+    load->medium = header->medium;
+    load->seqOrFontId = arg0;
+    load->instId = arg1;
+    D_81180610.index ^= 1;
+    return 0;
+}
+
+s32* AudioPlayback_GetInstrumentInner(s32, s32);
+s32* AudioPlayback_GetDrum(s32, s32);
+/**
+ * Returns the sample of instrument `arg1` (below 0x80) or drum `arg1` - 0x80 of font `arg0`, or
+ * NULL.
+ * Corresponds to OoT AudioLoad_GetFontSample (original name __GetWaveTable). OoT also returns
+ * sound-effect samples for ids of 0x100 and up.
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+s32 AudioLoad_GetFontSample(s32 arg0, s32 arg1) {
+    s32* p;
+    s32 v;
+
+    if (arg1 < 0x80) {
+        p = AudioPlayback_GetInstrumentInner(arg0, arg1);
+        if (p == NULL) {
+            return 0;
+        }
+        v = p[4];
+    } else {
+        p = AudioPlayback_GetDrum(arg0, arg1 - 0x80);
+        if (p == NULL) {
+            return 0;
+        }
+        v = p[1];
+    }
+    return v;
+}
+
+/**
+ * Empty.
+ * Corresponds to OoT AudioLoad_Unused2.
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioLoad_Unused2(void) {
+}
+
+/** The Sample that AudioLoad_GetFontSample returns for a font instrument or drum. */
+typedef struct Sample8110E71C {
+    /* 0x00 */ u8 flags; // @unverified: Sample byte 0 (codec/medium/flags); AudioLoad_FinishSlowLoad clears medium (bits 2-3) to RAM
+    /* 0x01 */ u8 unk_01[3];
+    /* 0x04 */ s32 sampleAddr; // @unverified: Sample.sampleAddr, pointed at the slow-loaded copy (OoT's AudioLoad_FinishSlowLoad)
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s32 unk_0C;
+} Sample8110E71C;
+
+
+/**
+ * Finishes a slow load: looks up the sample of (arg0->seqOrFontId, arg0->instId) with
+ * AudioLoad_GetFontSample and, if there is one, keeps a copy of its 16-byte header in arg0->sample,
+ * points its sampleAddr at the loaded copy (arg0->ramAddr) and clears bits 2-3 of its first byte
+ * (medium = RAM).
+ * Corresponds to OoT AudioLoad_FinishSlowLoad (original name __SwapLoadLps).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioLoad_FinishSlowLoad(AudioSlowLoad* arg0) {
+    Sample8110E71C* entry;
+
+    entry = (Sample8110E71C*)AudioLoad_GetFontSample(arg0->seqOrFontId, arg0->instId);
+    if (entry != NULL) {
+        arg0->sample = *(Sample*)entry;
+        entry->sampleAddr = arg0->ramAddr;
+        entry->flags &= 0xFFF3;
+    }
+}
+
+s32 func_8004D1C0(OSMesgQueue*, u32*, s32);
+void AudioLoad_DmaSlowCopy(AudioSlowLoad* arg0, s32 arg1);
+void AudioLoad_DmaSlowCopyUnkMedium(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3);
+
+/**
+ * Steps the two slow sample loads, copying at most 0x1000 bytes per call and finishing a load
+ * once nothing is left.
+ * Corresponds to OoT AudioLoad_ProcessSlowLoads (original name LpsDma).
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
+ * @unverified Name guessed from the code; comment kept.
+ */
+void AudioLoad_ProcessSlowLoads(s32 reset_status) {
+    u8* table = D_811858A4;
+    AudioSlowLoad* load;
+    s32 i;
+
+    for (i = 0; i < 2; i++) {
+        load = &D_81180610.slots[i];
+        switch (D_81180610.slots[i].state) {
+            case 2:
+                func_8004D1C0(&load->msgQueue, NULL, 1);
+                if (reset_status != 0) {
+                    load->state = 3;
+                    break;
+                }
+            case 1:
+                load->state = 2;
+                if (load->bytesRemaining == 0) {
+                    AudioLoad_FinishSlowLoad(load);
+                    load->state = 3;
+                    *load->status = 1;
+                } else if (load->bytesRemaining < 0x1000) {
+                    if (load->medium == 1) {
+                        u32 size = load->bytesRemaining;
+
+                        AudioLoad_DmaSlowCopyUnkMedium(load->curDevAddr, load->curRamAddr, size, *(s16*)(table + 2));
+                    } else {
+                        AudioLoad_DmaSlowCopy(load, load->bytesRemaining);
+                    }
+                    load->bytesRemaining = 0;
+                } else {
+                    if (load->medium == 1) {
+                        AudioLoad_DmaSlowCopyUnkMedium(load->curDevAddr, load->curRamAddr, 0x1000, *(s16*)(table + 2));
+                    } else {
+                        AudioLoad_DmaSlowCopy(load, 0x1000);
+                    }
+                    load->bytesRemaining -= 0x1000;
+                    load->curRamAddr += 0x1000;
+                    load->curDevAddr += 0x1000;
+                }
+                break;
+        }
+    }
+}
+
+extern u8 D_81137E3C[];
+void AudioLoad_Dma(s8*, s32, s32, s32, s32, s32, OSMesgQueue*, s32, u8*);
+
+/**
+ * Starts the DMA for the next chunk of a slow load.
+ * Corresponds to OoT AudioLoad_DmaSlowCopy (original name __Nas_SlowCopy).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioLoad_DmaSlowCopy(AudioSlowLoad* arg0, s32 arg1) {
+    osInvalDCache((void*)arg0->curRamAddr, arg1);
+    osCreateMesgQueue(&arg0->msgQueue, &arg0->msg, 1);
+    AudioLoad_Dma((s8*)&arg0->ioMesg, 0, 0, arg0->curDevAddr, arg0->curRamAddr, arg1, &arg0->msgQueue, arg0->medium, D_81137E3C);
+}
+
+/**
+ * Empty: slow loads from the unknown medium are not supported.
+ * Corresponds to OoT AudioLoad_DmaSlowCopyUnkMedium (original name __Nas_SlowDiskCopy).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioLoad_DmaSlowCopyUnkMedium(s32 arg0, M2C_UNK arg1, M2C_UNK arg2, M2C_UNK arg3) {
+
+}
+
+typedef struct Entry8110EABC {
+    /* 0x00 */ s8 active;
+    /* 0x01 */ s8 state;
+    /* 0x02 */ s8 medium;
+    /* 0x04 */ s32 ramAddr;
+    /* 0x08 */ s32 romAddr;
+    /* 0x0C */ s32 curAddr;
+    /* 0x10 */ u32 size;
+    /* 0x14 */ u32 chunkSize;
+    /* 0x18 */ OSMesg info;
+    /* 0x1C */ OSMesgQueue* doneQueue;
+    /* 0x20 */ OSMesgQueue queue;
+    /* 0x38 */ OSMesg msg;
+    /* 0x3C */ char unk3C[0x18];
+} Entry8110EABC; // size = 0x54
+extern Entry8110EABC D_81185580[1];
+
+Entry8110EABC* AudioLoad_StartAsyncLoad(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
+
+void func_800567E0(OSMesgQueue*, OSMesg*, s32);
+/**
+ * Claims the free async load slot and starts a chunked DMA of size bytes from
+ * dev_addr to ram_addr. n_chunks == 0 means 0x1000-byte chunks; otherwise the size
+ * is split into n_chunks pieces rounded up to 0x100 (at least 0x100). ret_msg is
+ * sent to ret_queue when the load finishes. Returns NULL when no slot is free.
+ * Corresponds to OoT AudioLoad_StartAsyncLoad (original name Nas_BgCopyReq).
+ */
+Entry8110EABC* AudioLoad_StartAsyncLoad(s32 dev_addr, s32 ram_addr, u32 size, s32 medium, s32 n_chunks, OSMesgQueue* ret_queue, u32 ret_msg) {
+    Entry8110EABC* load;
+    s32 i;
+
+    for (i = 0; i < ARRAY_COUNT(D_81185580); i++) {
+        if (D_81185580[i].active == 0) {
+            load = &D_81185580[i];
+            break;
+        }
+    }
+
+    if (i == ARRAY_COUNT(D_81185580)) {
+        return NULL;
+    }
+
+    load->active = 1;
+    load->romAddr = dev_addr;
+    load->ramAddr = ram_addr;
+    load->curAddr = ram_addr;
+    load->size = size;
+
+    if (n_chunks == 0) {
+        load->chunkSize = 0x1000;
+    } else {
+        load->chunkSize = ((s32)size / n_chunks + 0xFF) & ~0xFF;
+        if (load->chunkSize < 0x100) {
+            load->chunkSize = 0x100;
+        }
+    }
+
+    load->doneQueue = ret_queue;
+    load->state = 3;
+    load->medium = medium;
+    load->info = (OSMesg)ret_msg;
+    func_800567E0(&load->queue, &load->msg, 1);
+    return load;
+}
+
+extern volatile s32 D_811859D4;
+void AudioLoad_ProcessAsyncLoad(Entry8110EABC*, s32);
+/**
+ * Advances every active async load by one step.
+ * Corresponds to OoT AudioLoad_ProcessAsyncLoads (original name Nas_BgCopyMain). OoT adds the
+ * unknown-medium load queue. Stadium 1's name Battle_ApplyAnimStateEffects did not fit.
+ */
+void AudioLoad_ProcessAsyncLoads(s32 arg0) {
+    s32 i;
+
+    if (D_811859D4 != 1U) {
+        for (i = 0; i < 1; i++) {
+            if (D_81185580[i].active == 1) {
+                AudioLoad_ProcessAsyncLoad(&D_81185580[i], arg0);
+            }
+        }
+    }
+}
+
+typedef struct RelocInfo8110EF7C {
+    /* 0x00 */ s32 sampleBankId1;
+    /* 0x04 */ s32 sampleBankId2;
+    /* 0x08 */ s32 baseAddr1;
+    /* 0x0C */ s32 baseAddr2;
+    /* 0x10 */ u32 medium1;
+    /* 0x14 */ u32 medium2;
+} RelocInfo8110EF7C;
+
+s32 func_8004D1C0(OSMesgQueue*, u32*, s32);
+s32 AudioLoad_TrySyncLoadSampleBank(s32, u32*);
+void AudioLoad_AsyncDma(s8* arg0, u32 arg1);
+void AudioLoad_AsyncDmaUnkMedium(s32 arg0, M2C_UNK arg1, u32 arg2, M2C_UNK arg3);
+void AudioLoad_RelocateFontAndPreloadSamples(s32 size, s32 fontData, RelocInfo8110EF7C* relocInfo, s32 async);
+
+/**
+ * Advances one async load by one chunk; when it is done, sets the load status, relocates a font and
+ * sends the done message.
+ * Corresponds to OoT AudioLoad_ProcessAsyncLoad (original name __BgCopySub). Zero has OoT's
+ * AudioLoad_FinishAsyncLoad (__BgCopyFinishProcess) inlined.
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioLoad_ProcessAsyncLoad(Entry8110EABC* load, s32 reset_status) {
+    u8* table = D_811858A4;
+    u32 info;
+    s32 font_id;
+    UNUSED s32 pad[2]; // FAKE
+    u32 sample_bank_id1;
+    u32 sample_bank_id2;
+    RelocInfo8110EF7C reloc_info;
+
+    if (load->state >= 2) {
+        load->state--;
+        return;
+    }
+    if (load->state == 1) {
+        load->state = 0;
+    } else if (reset_status != 0) {
+        func_8004D1C0(&load->queue, 0, 1);
+        load->active = 0;
+        return;
+    } else if (func_8004D1C0(&load->queue, 0, 0) == -1) {
+        return;
+    }
+    if (load->size == 0) {
+        info = (u32)load->info;
+        switch ((u8)(info >> 16)) {
+            case 0:
+                AudioLoad_SetSeqLoadStatus((u8)(info >> 8), (u8)info);
+                break;
+            case 2:
+                AudioLoad_SetSampleLoadStatus((u8)(info >> 8), (u8)info);
+                break;
+            case 1:
+                font_id = (u8)(info >> 8);
+                AudioLoad_SetFontLoadStatus(font_id, (u8)info);
+                sample_bank_id1 = D_811858B0[font_id].sampleBankId1;
+                sample_bank_id2 = D_811858B0[font_id].sampleBankId2;
+                reloc_info.sampleBankId1 = sample_bank_id1;
+                reloc_info.sampleBankId2 = sample_bank_id2;
+                reloc_info.baseAddr1 = (sample_bank_id1 != 0xFF) ? AudioLoad_TrySyncLoadSampleBank(sample_bank_id1, &reloc_info.medium1) : 0;
+                reloc_info.baseAddr2 = (sample_bank_id2 != 0xFF) ? AudioLoad_TrySyncLoadSampleBank(sample_bank_id2, &reloc_info.medium2) : 0;
+                AudioLoad_RelocateFontAndPreloadSamples(font_id, load->ramAddr, &reloc_info, 1);
+                break;
+        }
+        load->active = 0;
+        func_8004CFB0(load->doneQueue, load->info, 0);
+        return;
+    }
+    if (load->size < load->chunkSize) {
+        if (load->medium == 1) {
+            AudioLoad_AsyncDmaUnkMedium(load->romAddr, load->curAddr, load->size, *((s16*)(table + 2)));
+        } else {
+            AudioLoad_AsyncDma((s8*)load, load->size);
+        }
+        load->size = 0;
+        return;
+    }
+    if (load->medium == 1) {
+        AudioLoad_AsyncDmaUnkMedium(load->romAddr, load->curAddr, load->chunkSize, *((s16*)(table + 2)));
+    } else {
+        AudioLoad_AsyncDma((s8*)load, load->chunkSize);
+    }
+    load->size -= load->chunkSize;
+    load->romAddr += load->chunkSize;
+    load->curAddr += load->chunkSize;
+}
+
+extern u8 D_81137F04[];
+
+/**
+ * Starts the DMA for the next chunk of an async load.
+ * Corresponds to OoT AudioLoad_AsyncDma (original name __Nas_BgCopy).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioLoad_AsyncDma(s8* arg0, u32 arg1) {
+    arg1 = (arg1 + 0xF) & ~0xF;
+    osInvalDCache((void*)M2C_FIELD(arg0, s32*, 0xC), arg1);
+    osCreateMesgQueue((OSMesgQueue*)(arg0 + 0x20), (OSMesg*)(arg0 + 0x38), 1);
+    AudioLoad_Dma(arg0 + 0x3C, 0, 0, M2C_FIELD(arg0, s32*, 8), M2C_FIELD(arg0, s32*, 0xC), arg1, (OSMesgQueue*)(arg0 + 0x20), arg0[2], D_81137F04);
+    if (arg1) {}  // karodo
+}
+
+/**
+ * Empty: async loads from the unknown medium are not supported.
+ * Corresponds to OoT AudioLoad_AsyncDmaUnkMedium (original name __Nas_BgDiskCopy).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioLoad_AsyncDmaUnkMedium(s32 arg0, M2C_UNK arg1, u32 arg2, M2C_UNK arg3) {
+
+}
+
+/* First word of a Sample (OoT layout: codec, medium, unk_bit26, isRelocated, size). */
+typedef struct {
+    u32 bits31_28 : 4;
+    u32 medium : 2; // @unverified: Sample.medium bits (OoT layout)
+    u32 unk_bit26 : 1; // @unverified: Sample bit 26, same position as OoT's Sample.unk_bit26
+    u32 bit24 : 1;
+    u32 size : 24; // @unverified: Sample.size (24 bits)
+} SampleFlags8110F64C;
+
+extern SampleFlags8110F64C *D_81184978[];
+extern s32 D_81185578;
+
+typedef struct Sample8110EE3C {
+    /* 0x00 */ u32 codec : 4;
+    /* 0x00 */ u32 medium : 2;
+    /* 0x00 */ u32 unk_bit26 : 1;
+    /* 0x00 */ u32 isRelocated : 1;
+    /* 0x00 */ u32 size : 24;
+    /* 0x04 */ s32 sampleAddr;
+    /* 0x08 */ s32 loop;
+    /* 0x0C */ s32 book;
+} Sample8110EE3C;
+
+/**
+ * Relocates a sound font sample: the sample pointer and its loop and book
+ * pointers are made absolute against the font's RAM address, and the sample
+ * data address against the sample bank chosen by its medium. Samples flagged
+ * for preloading that are not in RAM are added to D_81184978.
+ * Corresponds to OoT AudioLoad_RelocateSample (original name __WaveTouch).
+ * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
+ * tables or fragment headers.
+ * @unverified Name guessed from the code; comment kept.
+ */
+void AudioLoad_RelocateSample(Sample8110EE3C** sample_p, s32 font_data_addr, RelocInfo8110EF7C* reloc_info) {
+    Sample8110EE3C* sample;
+    s32 reloc;
+
+    if ((u32)*sample_p <= 0x80000000) {
+        reloc = (u32)*sample_p + font_data_addr;
+        *sample_p = (Sample8110EE3C*)reloc;
+        sample = (Sample8110EE3C*)reloc;
+
+        if ((sample->size != 0) && (sample->isRelocated != 1)) {
+            reloc = sample->loop + font_data_addr;
+            sample->loop = reloc;
+            reloc = sample->book + font_data_addr;
+            sample->book = reloc;
+
+            switch (sample->medium) {
+                case 0:
+                    reloc = sample->sampleAddr + reloc_info->baseAddr1;
+                    sample->sampleAddr = reloc;
+                    sample->medium = reloc_info->medium1;
+                    break;
+                case 1:
+                    reloc = sample->sampleAddr + reloc_info->baseAddr2;
+                    sample->sampleAddr = reloc;
+                    sample->medium = reloc_info->medium2;
+                    break;
+                case 2:
+                case 3:
+                    break;
+            }
+
+            sample->isRelocated = 1;
+            if (sample->unk_bit26 && (sample->medium != 0)) {
+                D_81184978[D_81185578++] = (SampleFlags8110F64C*)sample;
+            }
+        }
+    }
+}
+
+typedef struct Sample8110EF7C {
+    /* 0x00 */ u32 codec : 4;
+    /* 0x00 */ u32 medium : 2;
+    /* 0x00 */ u32 unk_bit26 : 1;
+    /* 0x00 */ u32 isRelocated : 1;
+    /* 0x00 */ u32 size : 24;
+    /* 0x04 */ s32 sampleAddr;
+} Sample8110EF7C;
+
+extern s32 D_811806D8;
+extern AudioPreloadReq D_81184B78[];
+extern s32 D_8118557C;
+extern OSMesgQueue D_811855F8;
+extern u8* D_811858A4;
+void AudioLoad_RelocateFont(s32, s32, RelocInfo8110EF7C*);
+void AudioLoad_SyncDmaUnkMedium(s32, s32, u32, s16);
+void AudioLoad_SyncDma(s32, s32, u32, s32);
+
+s32 AudioHeap_AllocPersistentSampleCache(s32, s32, s32, s8);
+
+
+/**
+ * Relocates font `font_id` and loads the samples it marks for preloading, synchronously or (with
+ * `async`) through the preload queue.
+ * Corresponds to OoT AudioLoad_RelocateFontAndPreloadSamples (original name Nas_BankOfsToAddr).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+void AudioLoad_RelocateFontAndPreloadSamples(s32 font_id, s32 font_data, RelocInfo8110EF7C* reloc_info, s32 async) {
+    UNUSED s32 pad[2]; // FAKE: stack padding
+    s32 sample_ram_addr;
+    Sample8110EF7C* sample;
+    s32 size;
+    s32 n_chunks;
+    s32 preload_in_progress;
+    s32 i;
+
+    preload_in_progress = 0;
+    if (D_8118557C != 0) {
+        preload_in_progress = 1;
+    } else {
+        D_811806D8 = 0;
+    }
+
+    D_81185578 = 0;
+    AudioLoad_RelocateFont(font_id, font_data, reloc_info);
+
+    size = 0;
+    for (i = 0; i < D_81185578; i++) {
+        size += ALIGN16(((Sample8110EF7C*)D_81184978[i])->size);
+    }
+
+    for (i = 0; i < D_81185578; i++) {
+        if (D_8118557C == 120) {
+            break;
+        }
+
+        sample = (Sample8110EF7C*)D_81184978[i];
+        switch (async) {
+            case 0:
+                if (sample->medium == reloc_info->medium1) {
+                    // Assigning size here keeps it live, which the ROM's register allocation needs.
+                    sample_ram_addr = AudioHeap_AllocPersistentSampleCache(size = sample->size, reloc_info->sampleBankId1, sample->sampleAddr, sample->medium);
+                } else if (sample->medium == reloc_info->medium2) {
+                    sample_ram_addr = AudioHeap_AllocPersistentSampleCache(sample->size, reloc_info->sampleBankId2, sample->sampleAddr, sample->medium);
+                }
+                break;
+
+            case 1:
+                if (sample->medium == reloc_info->medium1) {
+                    sample_ram_addr = AudioHeap_AllocTemporarySampleCache(sample->size, reloc_info->sampleBankId1, sample->sampleAddr, sample->medium);
+                } else if (sample->medium == reloc_info->medium2) {
+                    sample_ram_addr = AudioHeap_AllocTemporarySampleCache(sample->size, reloc_info->sampleBankId2, sample->sampleAddr, sample->medium);
+                }
+                break;
+        }
+
+        if (sample_ram_addr == 0) {
+            continue;
+        }
+
+        switch (async) {
+            case 0:
+                if (sample->medium == 1) {
+                    AudioLoad_SyncDmaUnkMedium(sample->sampleAddr, sample_ram_addr, sample->size, *(s16*)(D_811858A4 + 2));
+                    sample->sampleAddr = sample_ram_addr;
+                    sample->medium = 0;
+                } else {
+                    AudioLoad_SyncDma(sample->sampleAddr, sample_ram_addr, sample->size, sample->medium);
+                    sample->sampleAddr = sample_ram_addr;
+                    sample->medium = 0;
+                }
+                break;
+
+            case 1:
+                D_81184B78[D_8118557C].sample = (Sample*)sample;
+                D_81184B78[D_8118557C].ramAddr = (u8*)sample_ram_addr;
+                D_81184B78[D_8118557C].encodedInfo = (D_8118557C << 24) | 0xFFFFFF;
+                D_81184B78[D_8118557C].isFree = 0;
+                D_81184B78[D_8118557C].endAndMediumKey = sample->sampleAddr + sample->size + sample->medium;
+                D_8118557C++;
+                break;
+        }
+    }
+    D_81185578 = 0;
+
+    if ((D_8118557C != 0) && !preload_in_progress) {
+        sample = (Sample8110EF7C*)D_81184B78[D_8118557C - 1].sample;
+        n_chunks = (sample->size >> 12) + 1;
+        AudioLoad_StartAsyncLoad(sample->sampleAddr, (s32)D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
+    }
+}
+
+s32 func_8004D1C0(OSMesgQueue*, u32*, s32);
+/**
+ * Finishes queued sample preloads. When the message for a finished DMA arrives,
+ * the sample is pointed at its RAM copy (if it still matches the request), and
+ * the next pending request on the stack is started. Returns 0 while a DMA is
+ * still in flight or on reset (arg0 != 0), otherwise 1.
+ * Corresponds to OoT AudioLoad_ProcessSamplePreloads (original name Nas_CheckBgWave). Stadium 1's
+ * name BattleAnim_EndSleepStatusAnimation did not fit.
+ */
+s32 AudioLoad_ProcessSamplePreloads(s32 arg0) {
+    Sample8110EF7C* sample;
+    u32 preload_index;
+    u32 key;
+    u32 n_chunks;
+    s32 pad; // FAKE: stack padding
+
+    if (D_8118557C > 0) {
+        if (arg0 != 0) {
+            func_8004D1C0(&D_811855F8, &preload_index, 0);
+            D_8118557C = 0;
+            return 0;
+        }
+        if (func_8004D1C0(&D_811855F8, &preload_index, 0) == -1) {
+            return 0;
+        }
+
+        preload_index >>= 24;
+        if (D_81184B78[preload_index].isFree == 0) {
+            sample = (Sample8110EF7C*)D_81184B78[preload_index].sample;
+            key = sample->sampleAddr + sample->size + sample->medium;
+            if (key == D_81184B78[preload_index].endAndMediumKey) {
+                sample->sampleAddr = (s32)D_81184B78[preload_index].ramAddr;
+                sample->medium = 0;
+            }
+            D_81184B78[preload_index].isFree = 1;
+        }
+
+        for (;;) {
+            if (D_8118557C <= 0) {
+                break;
+            }
+            if (D_81184B78[D_8118557C - 1].isFree == 1) {
+                D_8118557C--;
+                continue;
+            }
+
+            sample = (Sample8110EF7C*)D_81184B78[D_8118557C - 1].sample;
+            n_chunks = (sample->size >> 12) + 1;
+            key = sample->sampleAddr + sample->size + sample->medium;
+            if (key != D_81184B78[D_8118557C - 1].endAndMediumKey) {
+                D_81184B78[D_8118557C - 1].isFree = 1;
+                D_8118557C--;
+            } else {
+                AudioLoad_StartAsyncLoad(sample->sampleAddr, (s32)D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
+                break;
+            }
+        }
+    }
+    return 1;
+}
+
+typedef struct Item8110F4D0 {
+    /* 0x0 */ s32 unk0;
+    /* 0x4 */ s32 key;
+} Item8110F4D0;
+
+/**
+ * Appends `arg0` to the list `list` unless an entry with the same `key` (offset 0x4)
+ * is already present among the first `count` entries.
+ *
+ * @param arg0  Item to add.
+ * @param count Number of entries currently in `list`.
+ * @param list  Array of item pointers; must have room for `count + 1` entries.
+ * @return The new entry count (count + 1 if added, otherwise unchanged).
+ * Corresponds to OoT AudioLoad_AddToSampleSet (original name __AddList).
+ */
+s32 AudioLoad_AddToSampleSet(Item8110F4D0* arg0, s32 count, Item8110F4D0** list) {
+    s32 i;
+
+    for (i = 0; i < count; i++) {
+        if (arg0->key == list[i]->key) {
+            break;
+        }
+    }
+    if (i == count) {
+        list[count] = arg0;
+        count++;
+    }
+    return count;
+}
+
+
+/**
+ * Collects the distinct samples of font `arg0`'s drums and instruments into `arg1` and returns how
+ * many there are.
+ * Corresponds to OoT AudioLoad_GetSamplesForFont (original name MakeWaveList).
+ * @unverified Name follows the counterpart; not checked in play.
+ */
+s32 AudioLoad_GetSamplesForFont(s32 arg0, Item8110F4D0** arg1) {
+    s32 count = 0;
+    s32 i;
+    s32 n1 = D_811858B0[arg0].numDrums;
+    s32 n0 = D_811858B0[arg0].numInstruments;
+    s32* p;
+    u8* q;
+
+    for (i = 0; i < n1; i++) {
+        p = AudioPlayback_GetDrum(arg0, i);
+        if (p != 0) {
+            // FAKE: do-while(0) wrapper only changes register allocation; needed to match
+            do {  // FAKE
+                count = AudioLoad_AddToSampleSet((Item8110F4D0*)p[1], count, arg1);
+            } while (0); // FAKE
+        }
+    }
+    for (i = 0; i < n0; i++) {
+        q = (u8*)AudioPlayback_GetInstrumentInner(arg0, i);
+        if (q != 0) {
+            if (q[1] != 0) {
+                count = AudioLoad_AddToSampleSet(*(Item8110F4D0**)(q + 8), count, arg1);
+            }
+            if (q[2] != 0x7F) {
+                count = AudioLoad_AddToSampleSet(*(Item8110F4D0**)(q + 0x18), count, arg1);
+            }
+            count = AudioLoad_AddToSampleSet(*(Item8110F4D0**)(q + 0x10), count, arg1);
+        }
+    }
+    return count;
+}
+
+
+/**
+ * Appends the sample *arg0 to the preload list D_81184978 (count D_81185578, no bounds check) when
+ * it has a size, is flagged for preloading (unk_bit26) and is not in RAM (medium != 0).
+ * AudioLoad_PreloadSamplesForFont collects a font's samples here and then preloads them.
+ * Matching note: the bit-field reads are what produce the ROM's shift
+ * sequence; the equivalent masks and shifts on a plain word differ in
+ * temporary register numbering.
+ * Corresponds to OoT AudioLoad_AddUsedSample (original name __Reload).
+ */
+void AudioLoad_AddUsedSample(SampleFlags8110F64C **arg0) {
+    SampleFlags8110F64C *rec;
+
+    rec = *arg0;
+    if (rec->size && rec->unk_bit26 && rec->medium) {
+        D_81184978[D_81185578] = rec;
+        D_81185578 += 1;
+    }
+}
+
+/**
+ * Gathers the samples used by a font's instruments and drums, then copies them into the sample
+ * cache (async == 0) or queues them on the preload stack (async == 1).
+ * Corresponds to OoT AudioLoad_PreloadSamplesForFont (original name WaveReload).
+ * Not reached in play (2026-11-13): did not run in a GB Player session (boot, Continue, menus) or
+ * in a tour of the menus and a COM battle.
+ * @unverified Name guessed from the code; comment kept.
+ */
+void AudioLoad_PreloadSamplesForFont(s32 font_id, s32 async, RelocInfo8110EF7C* reloc_info) {
+    s32 num_drums;
+    s32 num_instruments;
+    s32 pad[2]; // FAKE
+    u8* instrument;
+    u8* drum;
+    s32 sample_ram_addr;
+    Sample8110EF7C* sample;
+    s32 size;
+    s32 n_chunks;
+    s32 preload_in_progress;
+    s32 i;
+
+    preload_in_progress = 0;
+    if (D_8118557C != 0) {
+        preload_in_progress = 1;
+    }
+    D_81185578 = 0;
+    num_instruments = D_811858B0[font_id].numInstruments;
+    num_drums = D_811858B0[font_id].numDrums;
+
+    for (i = 0; i < num_instruments; i++) {
+        instrument = (u8*)AudioPlayback_GetInstrumentInner(font_id, i);
+        if (instrument != NULL) {
+            if (instrument[1] != 0) {
+                AudioLoad_AddUsedSample((SampleFlags8110F64C**)(instrument + 8));
+                if (!reloc_info->medium2) {} // karodo
+            }
+            if (instrument[2] != 0x7F) {
+                AudioLoad_AddUsedSample((SampleFlags8110F64C**)(instrument + 0x18));
+            }
+            AudioLoad_AddUsedSample((SampleFlags8110F64C**)(instrument + 0x10));
+        }
+    }
+
+    for (i = 0; i < num_drums; i++) {
+        drum = (u8*)AudioPlayback_GetDrum(font_id, i);
+        if (drum != NULL) {
+            AudioLoad_AddUsedSample((SampleFlags8110F64C**)(drum + 4));
+        }
+    }
+
+    if (D_81185578 == 0) {
+        return;
+    }
+
+    size = 0;
+    for (i = 0; i < D_81185578; i++) {
+        size += ALIGN16(((Sample8110EF7C*)D_81184978[i])->size);
+    }
+    if (size) {} // karodo
+
+    for (i = 0; i < D_81185578; i++) {
+        if (D_8118557C == 120) {
+            break;
+        }
+
+        sample = (Sample8110EF7C*)D_81184978[i];
+        switch (async) {
+            case 0:
+                if (sample->medium == reloc_info->medium1) {
+                    sample_ram_addr = AudioHeap_AllocPersistentSampleCache(sample->size, reloc_info->sampleBankId1, sample->sampleAddr, sample->medium);
+                } else if (sample->medium == reloc_info->medium2) {
+                    sample_ram_addr = AudioHeap_AllocPersistentSampleCache(sample->size, reloc_info->sampleBankId2, sample->sampleAddr, sample->medium);
+                }
+                break;
+
+            case 1:
+                if (sample->medium == reloc_info->medium1) {
+                    sample_ram_addr = AudioHeap_AllocTemporarySampleCache(sample->size, reloc_info->sampleBankId1, sample->sampleAddr, sample->medium);
+                } else if (sample->medium == reloc_info->medium2) {
+                    sample_ram_addr = AudioHeap_AllocTemporarySampleCache(sample->size, reloc_info->sampleBankId2, sample->sampleAddr, sample->medium);
+                }
+                break;
+        }
+
+        if (sample_ram_addr == 0) {
+            continue;
+        }
+
+        switch (async) {
+            case 0:
+                if (sample->medium == 1) {
+                    AudioLoad_SyncDmaUnkMedium(sample->sampleAddr, sample_ram_addr, sample->size, *(s16*)(D_811858A4 + 2));
+                    sample->sampleAddr = sample_ram_addr;
+                    sample->medium = 0;
+                } else {
+                    AudioLoad_SyncDma(sample->sampleAddr, sample_ram_addr, sample->size, sample->medium);
+                    sample->sampleAddr = sample_ram_addr;
+                    sample->medium = 0;
+                }
+                break;
+
+            case 1:
+                D_81184B78[D_8118557C].sample = (Sample*)sample;
+                D_81184B78[D_8118557C].ramAddr = (u8*)sample_ram_addr;
+                D_81184B78[D_8118557C].encodedInfo = (D_8118557C << 24) | 0xFFFFFF;
+                D_81184B78[D_8118557C].isFree = 0;
+                D_81184B78[D_8118557C].endAndMediumKey = sample->sampleAddr + sample->size + sample->medium;
+                D_8118557C++;
+                break;
+        }
+    }
+    D_81185578 = 0;
+
+    if ((D_8118557C != 0) && !preload_in_progress) {
+        sample = (Sample8110EF7C*)D_81184B78[D_8118557C - 1].sample;
+        n_chunks = (sample->size >> 12) + 1;
+        AudioLoad_StartAsyncLoad(sample->sampleAddr, (s32)D_81184B78[D_8118557C - 1].ramAddr, sample->size, sample->medium, n_chunks, &D_811855F8, D_81184B78[D_8118557C - 1].encodedInfo);
+    }
+}
+
+extern s32 D_8118444C;
+s32 AudioLoad_GetRealTableIndex(s32, s32);
+void AudioLoad_PreloadSamplesForFont(s32, s32, RelocInfo8110EF7C*);
+/**
+ * Preloads the samples of every permanently cached font.
+ * Corresponds to OoT AudioLoad_LoadPermanentSamples (original name EmemReload).
+ * Seen in play (2026-11-14) ran when the GB Player started (main menu GB, はい "Yes") with JP Green in the
+ * Transfer Pak; called from AudioHeap_Init.
+ */
+void AudioLoad_LoadPermanentSamples(void) {
+    AudioTable* base = AudioLoad_GetLoadTable(2);
+    s32 i;
+    s32 idx;
+    s32 buf[8];
+    s32 id;
+
+    for (i = 0; i < D_8118444C; i++) {
+        if (D_81184440.entries[i].tableType == 1) {
+            id = AudioLoad_GetRealTableIndex(1, D_81184440.entries[i].id);
+            buf[0] = D_811858B0[id].sampleBankId1;
+            buf[0] = AudioLoad_GetRealTableIndex(2, buf[0]);
+            buf[1] = D_811858B0[id].sampleBankId2;
+            buf[1] = AudioLoad_GetRealTableIndex(2, buf[1]);
+            buf[4] = base->entries[buf[0]].medium;
+            idx = buf[1];
+            buf[5] = base->entries[idx].medium;
+            AudioLoad_PreloadSamplesForFont(id, 0, buf);
+        }
+    }
+}

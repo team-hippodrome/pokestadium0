@@ -1,12 +1,12 @@
 /* Stadium Zero resident code. */
 /* C ported from the Stadium 1 decomp: src/fragments/pokemon_lab_support/pokemon_lab_support.c. */
 
-#include "fragments/pokemon_lab_support/pokemon_lab_support.h"
-#include "gb_save.h"
+#include "pokemon_lab_support.h"
 #include "m2c_macros.h"
 
 s32 LabPC_StatusToIconIndex(s32 arg0);
 
+/** Converts a status condition bit mask to a status icon index. */
 s32 LabPC_StatusToIconIndex(s32 arg0) {
     s32 v1;
     if (arg0 & 7) {
@@ -30,12 +30,17 @@ s32 LabPC_StatusToIconIndex(s32 arg0) {
     return v1;
 }
 
-s32 func_8001FA8C(s32 arg0)
+/**
+ * Maps a move type id to its slot in the type-indexed tables: the Gen 1 type ids skip 9..19, so
+ * ids 20 and up (Fire..Dragon) move down by 11. Used for the type icon and the move backdrop in the
+ * party summary. @unverified: table layout inferred from the type ids.
+ */
+s32 Type_ToTableIndex(s32 type)
 {
-  arg0 = arg0;
-  if (arg0 >= 0x14)
+  type = type; // FAKE: self-assignment
+  if (type >= 0x14)
   {
-    arg0 -= 0xB;
+    type -= 0xB;
   }
-  return arg0;
+  return type;
 }

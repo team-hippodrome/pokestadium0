@@ -3,64 +3,67 @@
 
 #include "table_view.h"
 
-void TableView_Initialize(unk_func_88201DA0_038* arg0, unk_func_88201DA0_034* arg1, s32 arg2, s32 arg3, s32 arg4);
-s32 ByteMatrix_AppendRow(unk_func_8820BE14_06C* arg0, s8* a1);
-s32 ByteMatrix_InsertRow(unk_func_8820BE14_06C* arg0, s8* arg1, s32 arg2);
-s32 ByteMatrix_RemoveRow(unk_func_8820BE14_06C* arg0, s32 arg1);
-s32 ByteMatrix_CopyRow(unk_func_8820BE14_06C* arg0, s8* a1, s32 arg2);
-s32 ByteMatrix_CopyRowAt(unk_func_8820BE14_06C* arg0, s8* a1, s32 arg2);
+void TableView_Initialize(ByteMatrix* arg0, void* arg1, s32 arg2, s32 arg3, s32 arg4);
+s32 ByteMatrix_AppendRow(ByteMatrix* arg0, s8* a1);
+s32 ByteMatrix_InsertRow(ByteMatrix* arg0, s8* arg1, s32 arg2);
+s32 ByteMatrix_RemoveRow(ByteMatrix* arg0, s32 arg1);
+s32 ByteMatrix_CopyRow(ByteMatrix* arg0, s8* a1, s32 arg2);
+s32 ByteMatrix_CopyRowAt(ByteMatrix* arg0, s8* a1, s32 arg2);
 s32 WordList_Remove(unk_func_8830867C_04C_030_02C_000_000_00C* arg0, s32 arg1);
-void PointerList_Initialize(unk_func_88205880_A030* arg0, void** arg1, s32 arg2, s32 arg3);
-void PointerList_Insert(unk_func_88200FA0_030_038* arg0, char* arg1, s32 arg2);
-void PointerList_Remove(unk_func_8830867C_02C_0CC* arg0, s32 arg1);
+void PointerList_Initialize(PointerList* arg0, void** arg1, s32 arg2, s32 arg3);
+void PointerList_Insert(PointerList* arg0, char* arg1, s32 arg2);
+void PointerList_Remove(LabMonEntryList* arg0, s32 arg1);
 void PointerList_SwapRange(void** arg0, void** arg1, s32 arg2);
 s32* Sort_SelectMedianPointer(s32* arg0, s32* arg1, s32* arg2, s32 (*arg3)(s32, s32));
 void Sort_QuickSort(void** base, s32 n, s32 (*cmp)(s32, s32));
-void PointerList_Sort(unk_func_8830867C_02C_0CC* arg0, s32 (*arg1)(s32, s32));
-void PointerList_Filter(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_0CC* arg1,
-                   s32 (*arg2)(unk_func_8830867C_02C_0CC_000*, s32*), s32* arg3);
+void PointerList_Sort(LabMonEntryList* arg0, s32 (*arg1)(s32, s32));
+void PointerList_Filter(LabMonEntryList* arg0, LabMonEntryList* arg1,
+                   s32 (*arg2)(LabMonEntry*, s32*), s32* arg3);
 s32 Text_CompareU16Terminated(u16* a0, u16* a1);
 s32 Text_CompareGlyphCodes(u8* a0, u8* a1);
 
-void TableView_Initialize(unk_func_88201DA0_038* arg0, unk_func_88201DA0_034* arg1, s32 arg2, s32 arg3, s32 arg4) {
-    arg0->unk_00 = arg1;
-    arg0->unk_0C = arg2;
-    arg0->unk_04 = arg3;
-    arg0->unk_08 = arg4;
+/** Initializes a table view over a data table with the given dimensions. */
+void TableView_Initialize(ByteMatrix* arg0, void* arg1, s32 arg2, s32 arg3, s32 arg4) {
+    arg0->rows = arg1;
+    arg0->rowSize = arg2;
+    arg0->capacity = arg3;
+    arg0->count = arg4;
 }
 
-s32 ByteMatrix_AppendRow(unk_func_8820BE14_06C* arg0, s8* a1) {
+/** Appends a row to a byte matrix. */
+s32 ByteMatrix_AppendRow(ByteMatrix* arg0, s8* a1) {
     s8* var_v0;
     s32 i;
     s8* arg1;
 
-    if (arg0->unk_08 >= arg0->unk_04) {
+    if (arg0->count >= arg0->capacity) {
         return 1;
     }
 
-    var_v0 = (u8*)arg0->unk_00 + (arg0->unk_0C * arg0->unk_08);
+    var_v0 = (u8*)arg0->rows + (arg0->rowSize * arg0->count);
     arg1 = a1;
 
-    for (i = arg0->unk_0C; i > 0; i--) {
+    for (i = arg0->rowSize; i > 0; i--) {
         *var_v0++ = *arg1++;
     }
 
-    arg0->unk_08++;
+    arg0->count++;
     return 0;
 }
 
-s32 ByteMatrix_InsertRow(unk_func_8820BE14_06C* arg0, s8* arg1, s32 arg2) {
+/** Inserts a row into a byte matrix at an index. */
+s32 ByteMatrix_InsertRow(ByteMatrix* arg0, s8* arg1, s32 arg2) {
     s32 var_t1;
     s8* var_t0;
     s8* var_v1;
 
-    if ((arg0->unk_08 >= arg0->unk_04) || (arg0->unk_08 < arg2)) {
+    if ((arg0->count >= arg0->capacity) || (arg0->count < arg2)) {
         return 1;
     }
 
-    var_v1 = (s8*)arg0->unk_00 + (arg0->unk_0C * arg0->unk_08);
-    var_t0 = var_v1 + arg0->unk_0C;
-    var_t1 = (arg0->unk_08 - arg2) * arg0->unk_0C;
+    var_v1 = (s8*)arg0->rows + (arg0->rowSize * arg0->count);
+    var_t0 = var_v1 + arg0->rowSize;
+    var_t1 = (arg0->count - arg2) * arg0->rowSize;
 
     while (var_t1 > 0) {
         *--var_t0 = *--var_v1;
@@ -68,33 +71,34 @@ s32 ByteMatrix_InsertRow(unk_func_8820BE14_06C* arg0, s8* arg1, s32 arg2) {
     }
 
     var_v1 = arg1;
-    var_t1 = arg0->unk_0C;
-    var_t0 = (u8*)arg0->unk_00 + (arg0->unk_0C * arg2);
+    var_t1 = arg0->rowSize;
+    var_t0 = (u8*)arg0->rows + (arg0->rowSize * arg2);
 
     while (var_t1 > 0) {
         *var_t0++ = *var_v1++;
         var_t1--;
     }
 
-    arg0->unk_08 += 1;
+    arg0->count += 1;
     return 0;
 }
 
-s32 ByteMatrix_RemoveRow(unk_func_8820BE14_06C* arg0, s32 arg1) {
+/** Removes a row from a byte matrix. */
+s32 ByteMatrix_RemoveRow(ByteMatrix* arg0, s32 arg1) {
     s32 var_t0;
     s8* var_a3;
     s8* var_v1;
 
-    if (arg1 >= arg0->unk_08) {
+    if (arg1 >= arg0->count) {
         return 1;
     }
 
-    var_v1 = (s8*)arg0->unk_00 + (arg0->unk_0C * arg1);
+    var_v1 = (s8*)arg0->rows + (arg0->rowSize * arg1);
 
-    arg0->unk_08--;
+    arg0->count--;
 
-    var_a3 = arg0->unk_0C + var_v1;
-    var_t0 = (arg0->unk_08 - arg1) * arg0->unk_0C;
+    var_a3 = arg0->rowSize + var_v1;
+    var_t0 = (arg0->count - arg1) * arg0->rowSize;
 
     while (var_t0 > 0) {
         *var_v1++ = *var_a3++;
@@ -104,59 +108,62 @@ s32 ByteMatrix_RemoveRow(unk_func_8820BE14_06C* arg0, s32 arg1) {
     return 0;
 }
 
-s32 ByteMatrix_CopyRow(unk_func_8820BE14_06C* arg0, s8* a1, s32 arg2) {
+/** Copies a row into a byte matrix. */
+s32 ByteMatrix_CopyRow(ByteMatrix* arg0, s8* a1, s32 arg2) {
     s8* var_v0;
     s32 i;
     s8* arg1;
 
-    if (arg2 >= arg0->unk_08) {
+    if (arg2 >= arg0->count) {
         return 1;
     }
 
-    var_v0 = (s8*)arg0->unk_00 + (arg0->unk_0C * arg2);
+    var_v0 = (s8*)arg0->rows + (arg0->rowSize * arg2);
     arg1 = a1;
 
-    for (i = arg0->unk_0C; i > 0; i--) {
+    for (i = arg0->rowSize; i > 0; i--) {
         *arg1++ = *var_v0++;
     }
 
     return 0;
 }
 
-s32 ByteMatrix_CopyRowAt(unk_func_8820BE14_06C* arg0, s8* a1, s32 arg2) {
+/** Copies a row into a byte matrix at an index. */
+s32 ByteMatrix_CopyRowAt(ByteMatrix* arg0, s8* a1, s32 arg2) {
     s8* var_v0;
     s32 i;
     s8* arg1;
 
-    if (arg2 >= arg0->unk_08) {
+    if (arg2 >= arg0->count) {
         return 1;
     }
 
-    var_v0 = (s8*)arg0->unk_00 + (arg0->unk_0C * arg2);
+    var_v0 = (s8*)arg0->rows + (arg0->rowSize * arg2);
     arg1 = a1;
 
-    for (i = arg0->unk_0C; i > 0; i--) {
+    for (i = arg0->rowSize; i > 0; i--) {
         *var_v0++ = *arg1++;
     }
 
     return 0;
 }
 
+/** Removes an entry from a list of 16-bit values. */
 s32 WordList_Remove(unk_func_8830867C_04C_030_02C_000_000_00C* arg0, s32 arg1) {
     s16* var_a2;
     s32 var_a3;
     s16* var_v1;
 
-    if (arg1 >= arg0->unk_08) {
+    if (arg1 >= arg0->count) {
         return 1;
     }
 
-    var_v1 = (s16*)arg0->unk_00 + arg1;
+    var_v1 = (s16*)arg0->items + arg1;
 
-    arg0->unk_08--;
+    arg0->count--;
 
     var_a2 = var_v1 + 1;
-    var_a3 = arg0->unk_08 - arg1;
+    var_a3 = arg0->count - arg1;
 
     while (var_a3 > 0) {
         *var_v1++ = *var_a2++;
@@ -166,41 +173,44 @@ s32 WordList_Remove(unk_func_8830867C_04C_030_02C_000_000_00C* arg0, s32 arg1) {
     return 0;
 }
 
-void PointerList_Initialize(unk_func_88205880_A030* arg0, void** arg1, s32 arg2, s32 arg3) {
-    arg0->unk_00 = arg1;
-    arg0->unk_04 = arg2;
-    arg0->unk_08 = arg3;
+/** Initializes a pointer list over a given array. */
+void PointerList_Initialize(PointerList* arg0, void** arg1, s32 arg2, s32 arg3) {
+    arg0->items = arg1;
+    arg0->capacity = arg2;
+    arg0->count = arg3;
 }
 
-void PointerList_Insert(unk_func_88200FA0_030_038* arg0, char* arg1, s32 arg2) {
+/** Inserts a pointer into a pointer list at an index. */
+void PointerList_Insert(PointerList* arg0, char* arg1, s32 arg2) {
     s32 var_t1;
-    unk_func_88205880_00D0** var_t0;
-    unk_func_88205880_00D0** var_v0;
+    void** var_t0;
+    void** var_v0;
 
-    var_v0 = &arg0->unk_00[arg0->unk_08];
+    var_v0 = &arg0->items[arg0->count];
     var_t0 = var_v0 + 1;
-    var_t1 = arg0->unk_08 - arg2;
+    var_t1 = arg0->count - arg2;
 
     while (var_t1 > 0) {
         *--var_t0 = *--var_v0;
         var_t1--;
     }
 
-    arg0->unk_00[arg2] = arg1;
-    arg0->unk_08++;
+    arg0->items[arg2] = arg1;
+    arg0->count++;
 }
 
-void PointerList_Remove(unk_func_8830867C_02C_0CC* arg0, s32 arg1) {
+/** Removes a pointer from a pointer list. */
+void PointerList_Remove(LabMonEntryList* arg0, s32 arg1) {
     s32 var_a2;
-    unk_func_8830867C_02C_0CC_000** var_v0;
-    unk_func_8830867C_02C_0CC_000** var_v1;
+    LabMonEntry** var_v0;
+    LabMonEntry** var_v1;
 
-    var_v0 = &arg0->unk_00[arg1];
+    var_v0 = &arg0->items[arg1];
     var_v1 = var_v0 + 1;
 
-    arg0->unk_08--;
+    arg0->count--;
 
-    var_a2 = arg0->unk_08 - arg1;
+    var_a2 = arg0->count - arg1;
 
     while (var_a2 > 0) {
         *var_v0++ = *var_v1++;
@@ -208,6 +218,7 @@ void PointerList_Remove(unk_func_8830867C_02C_0CC* arg0, s32 arg1) {
     }
 }
 
+/** Swaps two ranges of pointers. */
 void PointerList_SwapRange(void** arg0, void** arg1, s32 arg2) {
     s32 i;
 
@@ -218,6 +229,7 @@ void PointerList_SwapRange(void** arg0, void** arg1, s32 arg2) {
     }
 }
 
+/** Returns the median of three pointers according to a comparison function. */
 s32* Sort_SelectMedianPointer(s32* arg0, s32* arg1, s32* arg2, s32 (*arg3)(s32, s32)) {
     return (arg3(*arg0, *arg1) < 0)   ? (arg3(*arg1, *arg2) < 0)   ? arg1
                                         : (arg3(*arg0, *arg2) < 0) ? arg2
@@ -227,6 +239,7 @@ s32* Sort_SelectMedianPointer(s32* arg0, s32* arg1, s32* arg2, s32 (*arg3)(s32, 
                                       : arg0;
 }
 
+/** Sorts an array of pointers with a quicksort using a comparison function. */
 void Sort_QuickSort(void** base, s32 n, s32 (*cmp)(s32, s32)) {
     void** sp8C;
     s32 temp_s2;
@@ -354,19 +367,24 @@ void Sort_QuickSort(void** base, s32 n, s32 (*cmp)(s32, s32)) {
     }
 }
 
-void PointerList_Sort(unk_func_8830867C_02C_0CC* arg0, s32 (*arg1)(s32, s32)) {
-    Sort_QuickSort(arg0->unk_00, arg0->unk_08, arg1);
+/** Sorts a pointer list with a comparison function. */
+void PointerList_Sort(LabMonEntryList* arg0, s32 (*arg1)(s32, s32)) {
+    Sort_QuickSort(arg0->items, arg0->count, arg1);
 }
 
-void PointerList_Filter(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_0CC* arg1,
-                   s32 (*arg2)(unk_func_8830867C_02C_0CC_000*, s32*), s32* arg3) {
+/**
+ * Copies every entry of pointer list arg0 for which arg2(entry, arg3) returns nonzero into
+ * list arg1, and sets arg1's count.
+ */
+void PointerList_Filter(LabMonEntryList* arg0, LabMonEntryList* arg1,
+                   s32 (*arg2)(LabMonEntry*, s32*), s32* arg3) {
     s32 var_s2;
-    unk_func_8830867C_02C_0CC_000** var_s0;
-    unk_func_8830867C_02C_0CC_000** var_s1;
+    LabMonEntry** var_s0;
+    LabMonEntry** var_s1;
 
-    var_s1 = arg1->unk_00;
-    var_s2 = arg0->unk_08;
-    var_s0 = arg0->unk_00;
+    var_s1 = arg1->items;
+    var_s2 = arg0->count;
+    var_s0 = arg0->items;
 
     while (var_s2 > 0) {
         if (arg2(*var_s0, arg3) != 0) {
@@ -376,9 +394,10 @@ void PointerList_Filter(unk_func_8830867C_02C_0CC* arg0, unk_func_8830867C_02C_0
         var_s0++;
     }
 
-    arg1->unk_08 = ((s32)var_s1 - (s32)arg1->unk_00) >> 2;
+    arg1->count = ((s32)var_s1 - (s32)arg1->items) >> 2;
 }
 
+/** Compares two zero-terminated 16-bit strings. */
 s32 Text_CompareU16Terminated(u16* a0, u16* a1) {
     u16* arg0 = a0;
     u16* arg1 = a1;
@@ -407,6 +426,7 @@ s32 Text_CompareU16Terminated(u16* a0, u16* a1) {
 // subtracts 0x100 from every code whose lead byte is 0xA5 (katakana row), which
 // maps it onto the matching 0xA4 hiragana code so both kana scripts sort
 // together; ties are then broken by an exact code comparison.
+/** Compares two strings of 16-bit glyph codes. */
 s32 Text_CompareGlyphCodes(u8* a0, u8* a1) {
     u16* arg0 = (u16*)a0;
     u16* arg1 = (u16*)a1;
