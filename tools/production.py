@@ -29,6 +29,10 @@ SOURCE_REGISTRY = ROOT / 'config/jp/sources.json'
 SECTION_REGISTRY = ROOT / 'config/jp/sections.json'
 # src/ file -> {section: retail size}; written by a matching build, read by the others.
 SIZE_REGISTRY = ROOT / 'config/jp/section_sizes.json'
+# src/ file -> sections that only new code has (the ENGLISH subtitles): no retail address, so a
+# non-matching build puts them after the image's data. A matching build has none to place.
+APPENDED = {'src/stage_loader.c': ('.rodata', '.data'),
+            'src/fragments/cartridge_check/cartridge_check_options.c': ('.rodata',)}
 # The one fragment that other fragments reach through relocations (checked against retail).
 SHARED_SLOT = 0x82100000
 # Names that carry their own retail address.
@@ -620,11 +624,15 @@ class Image:
         current = None
         objects_by_file = {}
         occupied = []
+        appended = []  # (object, section) placed after the image's data
         self.nobits = []
         for path in sorted({path for path, _ in files.values()} & {
                 files[row['name']][0] for row in group['owners'] if row['name'] in files}):
             objects_by_file[path] = compile_source_file(path, directory, compilers, self.prefix)
             found = object_sections(objects_by_file[path])
+            if not self.compare:
+                appended += [(objects_by_file[path].name, section) for section in APPENDED.get(path, ())
+                             if found.get(section, (0, 0))[0]]
             for section, place in placements.get(path, {}).items():
                 if section not in found:
                     raise ValueError(f'{path} has no {section} to place')
@@ -721,6 +729,7 @@ class Image:
                 counts['asm'] += 1
             cursor = end
         gap(cursor, self.content)
+        pieces += [(self.content, None, obj, section) for obj, section in appended]
         if not self.fragment and self.ENTRY.keys() - self.used:
             raise ValueError('resident entry code is no longer asset bytes')
         source = directory / 'assembly.s'

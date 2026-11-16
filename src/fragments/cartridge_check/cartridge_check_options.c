@@ -340,6 +340,14 @@ extern char D_8840327C[];
 extern char D_88403290[];
 extern char D_884032A0[];
 extern u8 D_8F4B2EB0[];
+#ifdef ENGLISH
+// Options byte (Save_GetOptionFlags): bit 0 mono, bit 1 no commentary, and in the English build this
+// spare bit, which hides the subtitles (Subtitles_Draw). Clear in a retail save: subtitles on.
+#define OPTIONS_SUBTITLES_OFF 4
+#define OPTIONS_ROWS 5
+#else
+#define OPTIONS_ROWS 4
+#endif
 /**
  * Draws the options: ステレオ/モノラル (Stereo/Mono), あり/なし (On/Off), バックアップ (Backup), おわり (End).
  * Seen in play: draws 「オプション」 with サウンド/じっきょう/バックアップ/おわり; the cursor moves with D-Down.
@@ -352,7 +360,11 @@ void Options_DrawMenu(s32 sel_row, u8 flags) {
     s32 row;
 
     row = sel_row;
+#ifdef ENGLISH
+    Ui_DrawGradientPanel(50, 60, 220, 145, &sp44, &sp40); // one more row: Subtitles
+#else
     Ui_DrawGradientPanel(50, 60, 220, 125, &sp44, &sp40);
+#endif
     gSPDisplayList(gDisplayListHead++, D_80060290);
     Gfx_DrawTextureRgba16(58, (row * 20) + 99, 24, 14, (u8 *) Util_ConvertAddrToVirtAddr((uintptr_t) D_8F4B2EB0), 24, 0x200000);
     gSPDisplayList(gDisplayListHead++, gUiRestoreTextureDL);
@@ -367,10 +379,19 @@ void Options_DrawMenu(s32 sel_row, u8 flags) {
     Font_Printf(82, 98, D_88403268, D_88402FA4[(flags & 1) != 0]);
     Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x77) ? 0 : 255, 255); // #FFFF00 when selected, else #FFFFFF
     Font_Printf(82, 118, D_8840327C, D_88402FAC[(flags & 2) != 0]);
+#ifdef ENGLISH
+    Gfx_SetEnvColor(255, 255, (row == 2) ? 0 : 255, 255);
+    Font_Printf(82, 138, "Subtitles  %s", D_88402FAC[(flags & OPTIONS_SUBTITLES_OFF) != 0]);
+    Gfx_SetEnvColor(255, 255, (row == 3) ? 0 : 255, 255);
+    Font_Printf(82, 158, D_88403290);
+    Gfx_SetEnvColor(255, 255, (row == 4) ? 0 : 255, 255);
+    Font_Printf(82, 178, D_884032A0);
+#else
     Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x8B) ? 0 : 255, 255); // #FFFF00 when selected, else #FFFFFF
     Font_Printf(82, 138, D_88403290);
     Gfx_SetEnvColor(255, 255, ((row * 20) + 0x63 == 0x9F) ? 0 : 255, 255); // #FFFF00 when selected, else #FFFFFF
     Font_Printf(82, 158, D_884032A0);
+#endif
     Font_EndTexturedTextRendering();
 }
 
@@ -513,12 +534,12 @@ void Options_RunMenu(void) {
         if (gPlayer1Controller->buttonPressed & 0x800) {
             sel--;
             if (sel < 0) {
-                sel = 3;
+                sel = OPTIONS_ROWS - 1;
             }
             Audio_PlaySystemSound(1);
         } else if (gPlayer1Controller->buttonPressed & 0x400) {
             sel++;
-            if (sel >= 4) {
+            if (sel >= OPTIONS_ROWS) {
                 sel = 0;
             }
             Audio_PlaySystemSound(1);
@@ -532,14 +553,20 @@ void Options_RunMenu(void) {
                     Audio_PlaySystemSound(2);
                     flags ^= 2;
                     break;
+#ifdef ENGLISH
                 case 2:
+                    Audio_PlaySystemSound(2);
+                    flags ^= OPTIONS_SUBTITLES_OFF;
+                    break;
+#endif
+                case OPTIONS_ROWS - 2:
                     Audio_PlaySystemSound(2);
                     if (Options_RunClearSavePrompt(0, sel, flags) != 0 && Options_RunClearSavePrompt(1, sel, flags) != 0) {
                         flags = 0;
                         Save_ResetAll();
                     }
                     break;
-                case 3:
+                case OPTIONS_ROWS - 1:
                     done = 1;
                     Audio_PlaySystemSound(0x1D);
                     break;

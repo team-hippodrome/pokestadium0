@@ -1,0 +1,1934 @@
+{
+ "_about": "English subtitles for Zero's spoken sound effects, one entry per effect id of each sound bank: announcer = JIKKYOU.WBK (effects queued by func_80043CE8), battle = BTLSFX.WBK (played by Audio_PlayCommand), system = SYSSFX.WBK's effect table (some of its effects play the battle samples). kind: voice (gets a subtitle when en is set), sfx (never), unknown (not checked yet), none (empty effect). tools/subtitles.py writes src/subtitles_en.h from this file; the Zero studio in stadium-assets edits it with the audio alongside.",
+ "announcer": {
+  "0x00": {
+   "kind": "none",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x01": {
+   "kind": "voice",
+   "jp": "グレーバッジ…",
+   "en": "",
+   "review": true,
+   "note": "the tail phrase all badge calls share is not worked out yet"
+  },
+  "0x02": {
+   "kind": "voice",
+   "jp": "ブルーバッジ…",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x03": {
+   "kind": "voice",
+   "jp": "オレンジバッジ…",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x04": {
+   "kind": "voice",
+   "jp": "レインボーバッジ…",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x05": {
+   "kind": "voice",
+   "jp": "ピンクバッジ…",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x06": {
+   "kind": "voice",
+   "jp": "ゴールドバッジ…",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x07": {
+   "kind": "voice",
+   "jp": "クリムゾンバッジ…",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x08": {
+   "kind": "voice",
+   "jp": "グリーンバッジ…",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x09": {
+   "kind": "voice",
+   "jp": "大観衆の見守る中、ついに開幕しました。第一回ポケモントーナメント。 果たしてどのようなバトルを見せてくれるのでありましょうか。",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x0A": {
+   "kind": "voice",
+   "jp": "さあ、今度のバトルも楽しみなところ。第三回戦です。",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x0B": {
+   "kind": "voice",
+   "jp": "さあ、今度はいかなるファイトを見せてくれるのでありましょうか。第二回戦です。",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x0C": {
+   "kind": "voice",
+   "jp": "バトルも残すところあとわずか。第六回戦です。",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x0D": {
+   "kind": "voice",
+   "jp": "ついに始まりました、ファイナルバトル。果たしてチャンピオンの座は誰のものに。",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x0E": {
+   "kind": "voice",
+   "jp": "トーナメントも後半に入り、ますますヒートアップしています。第五回戦です。",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x0F": {
+   "kind": "voice",
+   "jp": "観客の興奮も大いに増してまいりました。第四回戦です。",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x10": {
+   "kind": "voice",
+   "jp": "スタジアムは夕暮れ時、トレーナーとポケモンたちの闘志が夕焼けに燃える。 セミファイナルバトルです。",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x11": {
+   "kind": "voice",
+   "jp": "さあ、始まりました、フリーバトル。ここコロシアムで明日のチャンピオンを目指す トレーナーたちが熱いバトルを繰り広げます。",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x12": {
+   "kind": "voice",
+   "jp": "今回のバトルは第一回ポケモントーナメントのルールで行われます。",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x13": {
+   "kind": "voice",
+   "jp": "今回のバトルは第二回ポケモントーナメントのルールで行われます。",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x14": {
+   "kind": "voice",
+   "jp": "いよいよ開幕しました。第二回ポケモントーナメント、モンスターボールカップ。 大歓声に囲まれ、今バトル開始です。",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x15": {
+   "kind": "voice",
+   "jp": "…スーパーボールカップ…",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x16": {
+   "kind": "voice",
+   "jp": "…ハイパーボールカップ…",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x17": {
+   "kind": "voice",
+   "jp": "…マスターボールカップ…",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x18": {
+   "kind": "voice",
+   "jp": "おめでとう、チャンピオン決定！",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x19": {
+   "kind": "voice",
+   "jp": "急所に当たった",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x1A": {
+   "kind": "voice",
+   "jp": "一撃必殺",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x1B": {
+   "kind": "voice",
+   "jp": "効果はばつぐんだ",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x1C": {
+   "kind": "voice",
+   "jp": "効果はいまひとつのようだ",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x1D": {
+   "kind": "voice",
+   "jp": "おっと、力尽きたか",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x1E": {
+   "kind": "voice",
+   "jp": "ここで試合終了",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x1F": {
+   "kind": "voice",
+   "jp": "ここでポケモンをチェンジだ",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x20": {
+   "kind": "voice",
+   "jp": "さあ、かなりダメージを受けている中、どう攻めるか",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x21": {
+   "kind": "voice",
+   "jp": "さあ、不利な状況だがどう攻めるか",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x22": {
+   "kind": "voice",
+   "jp": "皮一枚でつながった",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x23": {
+   "kind": "voice",
+   "jp": "おっと、まひした",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x24": {
+   "kind": "voice",
+   "jp": "おっと、眠ってしまった",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x25": {
+   "kind": "voice",
+   "jp": "おっと、氷漬けになってしまった",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x26": {
+   "kind": "voice",
+   "jp": "ここで目を覚ました",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x27": {
+   "kind": "voice",
+   "jp": "おっと、氷が溶けた",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x28": {
+   "kind": "voice",
+   "jp": "おっと、へんしんした",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x29": {
+   "kind": "voice",
+   "jp": "おっと、分身を作り出した",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x2A": {
+   "kind": "voice",
+   "jp": "ここで体力回復だ",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x2B": {
+   "kind": "voice",
+   "jp": "ここでステータス回復だ",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x2C": {
+   "kind": "voice",
+   "jp": "さあ、両者とも体力は互角",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x2D": {
+   "kind": "voice",
+   "jp": "さあ、両者ともバテております",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x2E": {
+   "kind": "voice",
+   "jp": "両者ともにらみ合ったまま動きません",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x2F": {
+   "kind": "voice",
+   "jp": "これで一方的な戦いになってしまったか",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x30": {
+   "kind": "voice",
+   "jp": "体力の差がついております",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x31": {
+   "kind": "voice",
+   "jp": "トレーナーの指示がありません",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x32": {
+   "kind": "voice",
+   "jp": "どうしたトレーナー",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x33": {
+   "kind": "voice",
+   "jp": "互いに出方をうかがっているというところか",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x34": {
+   "kind": "voice",
+   "jp": "激しいバトルです",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x35": {
+   "kind": "voice",
+   "jp": "両者とも健闘です",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x36": {
+   "kind": "voice",
+   "jp": "相手のポケモンはあと一匹だ",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x37": {
+   "kind": "voice",
+   "jp": "最後のポケモンになってしまった",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x38": {
+   "kind": "voice",
+   "jp": "さあ、体力十分の相手だがどう攻めるか",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x39": {
+   "kind": "voice",
+   "jp": "さあ、相手はかなり弱っているがどう攻めるか",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x3A": {
+   "kind": "voice",
+   "jp": "おっと、ここは動けません",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x3B": {
+   "kind": "voice",
+   "jp": "おっと、攻撃が外れた",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x3C": {
+   "kind": "voice",
+   "jp": "わざがうまく決まりません",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x3D": {
+   "kind": "voice",
+   "jp": "ダメージはまずまずといったところ",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x3E": {
+   "kind": "voice",
+   "jp": "ダメージは大きいぞ",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x3F": {
+   "kind": "voice",
+   "jp": "あまりダメージはありません",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x40": {
+   "kind": "voice",
+   "jp": "この一撃で決められるか",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x41": {
+   "kind": "voice",
+   "jp": "まずはどのような攻撃に出るか",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x42": {
+   "kind": "voice",
+   "jp": "ここでどのような攻撃に出るか",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x43": {
+   "kind": "voice",
+   "jp": "さあ、今度の攻撃は",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x44": {
+   "kind": "voice",
+   "jp": "さあ、対する攻撃は",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x45": {
+   "kind": "voice",
+   "jp": "おっと、一撃で倒れてしまった",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x46": {
+   "kind": "voice",
+   "jp": "この一撃で決めたいところ",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x47": {
+   "kind": "voice",
+   "jp": "",
+   "en": "",
+   "review": true,
+   "note": "not worked out yet"
+  },
+  "0x48": {
+   "kind": "voice",
+   "jp": "ここで自分のステータスをアップです",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x49": {
+   "kind": "voice",
+   "jp": "おっと、自分で自分を攻撃した",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x4A": {
+   "kind": "voice",
+   "jp": "おっと、空高く飛び上がった",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x4B": {
+   "kind": "voice",
+   "jp": "おっと、穴を掘って地中に潜った",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x4C": {
+   "kind": "voice",
+   "jp": "しかし、効果がありません",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x4D": {
+   "kind": "voice",
+   "jp": "おっと、暴れています",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x4E": {
+   "kind": "voice",
+   "jp": "ここは我慢のしどころだ",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x4F": {
+   "kind": "voice",
+   "jp": "おっと、勢い余って地面にぶつかった",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x50": {
+   "kind": "voice",
+   "jp": "攻撃はまだ続いているぞ",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x51": {
+   "kind": "voice",
+   "jp": "おっと、頭に血が上っているぞ",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x52": {
+   "kind": "voice",
+   "jp": "次の攻撃に備えて力を蓄えます",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x53": {
+   "kind": "voice",
+   "jp": "おっと、これは私も拾いたいところ",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x54": {
+   "kind": "voice",
+   "jp": "さあ、もう後がないぞ",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x55": {
+   "kind": "voice",
+   "jp": "このまま一方的に試合が終わってしまうのか",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x56": {
+   "kind": "voice",
+   "jp": "しかし、これでは戦えません",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x57": {
+   "kind": "voice",
+   "jp": "さあ、大接戦です",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x58": {
+   "kind": "voice",
+   "jp": "残りのポケモンの数に差がついております",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x59": {
+   "kind": "voice",
+   "jp": "はじめから大変なバトルになっております",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x5A": {
+   "kind": "voice",
+   "jp": "両者とも残るポケモンは一匹ずつ",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x5B": {
+   "kind": "voice",
+   "jp": "おっと、分身が消えてしまいました",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x5C": {
+   "kind": "voice",
+   "jp": "よし、効いているぞ",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x5D": {
+   "kind": "voice",
+   "jp": "白熱したバトルが続いております",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x5E": {
+   "kind": "voice",
+   "jp": "バトルに大きな動きは見られません",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x5F": {
+   "kind": "voice",
+   "jp": "ここで攻撃力をアップです",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x60": {
+   "kind": "voice",
+   "jp": "ここで防御力をアップです",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x61": {
+   "kind": "voice",
+   "jp": "ここで素早さをアップです",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x62": {
+   "kind": "voice",
+   "jp": "ここで特殊能力をアップです",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x63": {
+   "kind": "voice",
+   "jp": "ここで命中率をアップです",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x64": {
+   "kind": "voice",
+   "jp": "ここで回避率をアップです",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x65": {
+   "kind": "voice",
+   "jp": "これで特殊攻撃に強くなりました",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x66": {
+   "kind": "voice",
+   "jp": "これで打撃攻撃に強くなりました",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x67": {
+   "kind": "voice",
+   "jp": "おっと、攻撃はまだ続いています",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x68": {
+   "kind": "voice",
+   "jp": "おっと、金縛りが効いています",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x69": {
+   "kind": "voice",
+   "jp": "おっと、分身が攻撃を受けました",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x6A": {
+   "kind": "voice",
+   "jp": "おっと、これは痛い追加ダメージだ",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x6B": {
+   "kind": "voice",
+   "jp": "よし、わざがきれいに決まった",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x6C": {
+   "kind": "voice",
+   "jp": "これはまさにハラハラドキドキのジェットコースターバトルだ",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x6D": {
+   "kind": "voice",
+   "jp": "ここで挽回になるか",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x6E": {
+   "kind": "voice",
+   "jp": "展開が読めなくなってきた",
+   "en": "",
+   "review": false,
+   "note": ""
+  }
+ },
+ "battle": {
+  "0x00": {
+   "kind": "none",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x01": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x02": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x03": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x04": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x05": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x06": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x07": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x08": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x09": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x0A": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x0B": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x0C": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x0D": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x0E": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x0F": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x10": {
+   "kind": "voice",
+   "jp": "",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x11": {
+   "kind": "voice",
+   "jp": "",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x12": {
+   "kind": "voice",
+   "jp": "",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x13": {
+   "kind": "voice",
+   "jp": "",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x14": {
+   "kind": "voice",
+   "jp": "",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x15": {
+   "kind": "voice",
+   "jp": "",
+   "en": "",
+   "review": true,
+   "note": ""
+  },
+  "0x16": {
+   "kind": "voice",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x17": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x18": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x19": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x1A": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x1B": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x1C": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x1D": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x1E": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x1F": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x20": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x21": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x22": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x23": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x24": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x25": {
+   "kind": "voice",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x26": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x27": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x28": {
+   "kind": "voice",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x29": {
+   "kind": "voice",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x2A": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x2B": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x2C": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x2D": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x2E": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x2F": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x30": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x31": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x32": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x33": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x34": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x35": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x36": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x37": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x38": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x39": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x3A": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x3B": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x3C": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x3D": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x3E": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x3F": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x40": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x41": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x42": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x43": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x44": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x45": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x46": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x47": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x48": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x49": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x4A": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x4B": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x4C": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x4D": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x4E": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x4F": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x50": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x51": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x52": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x53": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x54": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x55": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x56": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x57": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  }
+ },
+ "system": {
+  "0x00": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x01": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x02": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x03": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x04": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x05": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x06": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x07": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x08": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x09": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x0A": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x0B": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x0C": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x0D": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x0E": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x0F": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x10": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x11": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x12": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x13": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x14": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x15": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x16": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x17": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": "func_8003F6AC plays this one with the battle samples (D_800B4188), not the system ones; it also starts 0x3D..0x42"
+  },
+  "0x18": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x19": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x1A": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x1B": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x1C": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x1D": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x1E": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x1F": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x20": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x21": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x22": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x23": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x24": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x25": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x26": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x27": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x28": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x29": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x2A": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x2B": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x2C": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x2D": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x2E": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x2F": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x30": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x31": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x32": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x33": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x34": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x35": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x36": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x37": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x38": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x39": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x3A": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x3B": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x3C": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x3D": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x3E": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x3F": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x40": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x41": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x42": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x43": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x44": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x45": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x46": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x47": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x48": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x49": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x4A": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  },
+  "0x4B": {
+   "kind": "unknown",
+   "jp": "",
+   "en": "",
+   "review": false,
+   "note": ""
+  }
+ }
+}

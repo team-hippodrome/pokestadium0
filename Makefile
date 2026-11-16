@@ -38,6 +38,7 @@ init: setup extract
 
 rom:
 	@test -f assets/production/manifest.json || { echo 'Run make init first'; exit 1; }
+	$(PYTHON) tools/subtitles.py
 	$(PYTHON) tools/production.py build --cc $(IDO_CC) --cc71 $(IDO71_CC) --prefix $(MIPS_BINUTILS_PREFIX) --compare $(COMPARE) --jobs $(JOBS) $(if $(filter 1,$(ASM_ONLY)),--asm-only,)
 
 # Moves every piece of every image by SHIFT bytes and checks that each address followed: the
