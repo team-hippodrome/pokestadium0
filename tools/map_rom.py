@@ -97,7 +97,115 @@ def trace_yay0(data):
     return decoded, max(mask_cursor, links, literals)
 
 
-def mapping_yaml(report):
+BANK_MAGIC = b"N64 PtrTablesV2\x00"
+WAVE_MAGIC = b"N64 WaveTables \x00"
+# Data regions identified from their consumers: (start, end exclusive, label, evidence).
+CURATED_REGIONS = [
+    (0xDA9B0, 0x15A9B0, "gb_waveform_tables",
+     "32 x 0x4000 8-bit waveform tables; fragment 0x81100000 DMAs exactly this interval at 0x81100930"),
+    (0x15A9B0, 0x15B1A0, "gb_audio_bank_seq",
+     "ADPCM book and sequence bytes; 0x8110E1F0..0x8110E220 pass 0x15AE60, 0x15A9B0, 0x15AA60 to 0x8110CB70"),
+    (0x2B1630, 0x2B16A0, "cpu_stub_2B1630",
+     "0x70-byte MIPS routine outside any FRAGMENT; no static ROM reference found"),
+    (0x434C00, 0x480CEC, "battle_species_records",
+     "151 per-species records of 0x7F4 bytes (0x80C for #25); offsets in resident u32 table 0x80073B30, "
+     "read 0x814 bytes at a time by 0x82102188"),
+    (0x480CEC, 0x4857D0, "f32_table_480CEC",
+     "big-endian f32 records after the species records; consumer not yet found"),
+    (0xFB4690, 0xFE647C, "cry_data_FB4690",
+     "u32 0x97 then, at +0x10, 151 x {u16 base cry, u8 pitch, u8 length} in National Dex order "
+     "(values equal the Game Boy Red/Green cry table), +0x270 onward per-cry channel data; consumer not yet traced"),
+]
+
+
+def find_archives(data):
+    """Top-level member archives: u32 ?, 0, total, count, then count x {offset, size, 0, 0}."""
+    found, offset = [], 0
+    while offset + 0x20 <= len(data):
+        total, count = struct.unpack_from(">2I", data, offset + 8)
+        table_end = 0x10 + count * 0x10
+        valid = (data[offset + 4:offset + 8] == bytes(4) and 0 < count < 0x2000
+                 and table_end <= total <= len(data) - offset and total > 0x40)
+        for index in range(count if valid else 0):
+            member, size, zero1, zero2 = struct.unpack_from(">4I", data, offset + 0x10 + index * 0x10)
+            if (zero1 or zero2 or member + size > total or (size and member < table_end)
+                    or (index == 0 and member != table_end)):
+                valid = False
+                break
+        if valid:
+            found.append((offset, total, count, table_end))
+            offset += (total + 15) & ~15
+        else:
+            offset += 16
+    return found
+
+
+def asset_regions(data, report):
+    """Label non-fragment storage. Regions overlapping a fragment image or an
+    earlier (outer) region are dropped, so the result never conflicts with the
+    fragment map. A wave table runs from its "N64 WaveTables" header to the next
+    mapped boundary, minus trailing 0xFF fill."""
+    taken = [(int(f["rom_start"], 0), int(f["rom_consumed_end"], 0)) for f in report["fragments"]]
+    wrappers = {}
+    cursor = data.find(b"PERS-SZP")
+    while cursor >= 0:
+        wrappers[cursor + struct.unpack_from(">I", data, cursor + 8)[0]] = cursor
+        cursor = data.find(b"PERS-SZP", cursor + 8)
+    # bank magic + ".WBK" name appear as literal bytes inside each bank's Yay0 stream
+    banks = []
+    cursor = data.find(BANK_MAGIC)
+    while cursor >= 0:
+        name = data[cursor + 0x10:cursor + 0x30].split(b"\0")[0].split(b".")[0].decode("ascii", "replace")
+        banks.append((cursor, name or f"{cursor:X}"))
+        cursor = data.find(BANK_MAGIC, cursor + 16)
+    candidates = list(CURATED_REGIONS)
+    for offset, total, count, table_end in find_archives(data):
+        if any(offset < end and start < offset + total for start, end in taken):
+            candidates.append((offset, offset + table_end, f"archive_{offset:X}_dir",
+                               f"directory of a {count}-member archive; fragment members mapped separately"))
+        else:
+            candidates.append((offset, offset + total, f"archive_{offset:X}",
+                               f"{count}-member archive without fragment members"))
+    for block in report["yay0_blocks"]:
+        if "rom_end" not in block or "fragment_words" in block:
+            continue
+        start, end = int(block["rom_start"], 0), int(block["rom_end"], 0)
+        if start in wrappers:
+            candidates.append((wrappers[start], end, f"szp_{wrappers[start]:X}",
+                               f"PERS-SZP data, decoded size 0x{block['decoded_size']:X}"))
+        elif crunch64.yay0.decompress(data[start:end])[:16] == BANK_MAGIC:
+            name = next(n for o, n in banks if o > start)
+            candidates.append((start, end, f"audio_{name}_bank_yay0",
+                               f"Yay0 copy of the {name} pointer tables, the copy the game loads"))
+        else:
+            candidates.append((start, end, f"yay0_{start:X}",
+                               f"Yay0 data, decoded size 0x{block['decoded_size']:X}"))
+    cursor = data.find(b"PRESJPEG")
+    while cursor >= 0:
+        jpeg = cursor + struct.unpack_from(">I", data, cursor + 8)[0]
+        eoi = data.find(b"\xFF\xD9", jpeg)
+        if data[jpeg:jpeg + 2] == b"\xFF\xD8" and eoi > 0:
+            candidates.append((cursor, eoi + 2, f"jpeg_{cursor:X}", "PRESJPEG background, baseline JPEG"))
+        cursor = data.find(b"PRESJPEG", cursor + 8)
+    for offset, name in banks:
+        waves = data.find(WAVE_MAGIC, offset, offset + 0x40000)
+        candidates.append((waves, None, f"audio_{name}_wavetables", "N64 WaveTables header and ADPCM sample data"))
+    regions = []
+    for start, end, label, evidence in sorted(candidates, key=lambda c: (c[0], -(c[1] or len(data)))):
+        if not any(start < e and s < (end or start + 1) for s, e in taken):
+            regions.append([start, end, label, evidence])
+            taken.append((start, end or start + 1))
+    regions.sort()
+    for region in regions:
+        if region[1] is None:
+            end = min([s for s, _ in taken if s > region[0]] + [len(data)])
+            while end > region[0] + 1 and data[end - 1] == 0xFF:
+                end -= 1
+            region[1] = end
+    return [tuple(region) for region in regions]
+
+
+def mapping_yaml(report, regions=(), data=None):
     """Generate an opaque-byte split: mapped images are not all declared code."""
     ranges = [
         (0, 0x40, "header"),
@@ -112,10 +220,17 @@ def mapping_yaml(report):
         end = int(fragment["rom_consumed_end"], 0)
         label = f"fragment_image_{index:03d}_{start:X}"
         ranges.append((start, end, label))
+    ranges.extend((start, end, label) for start, end, label, _ in regions)
     ranges.sort()
+
+    def gap(start, end):
+        fill = set(data[start:end]) if data is not None else None
+        return "pad" if fill and fill <= {0, 0xFF} else "opaque"
     lines = [
         "# Generated by tools/map_rom.py. Mapping-only, NOT a build configuration.",
         "# Every range is opaque bin; per-fragment text/data boundaries remain pending.",
+        "# Non-fragment labels come from asset_regions() (docs/mappings/asset-regions.csv);",
+        "# pad_ ranges hold only 0x00 and/or 0xFF bytes.",
         "name: Pokemon Stadium Zero (Japan), storage mapping",
         f"sha1: {report['sha1']}",
         "options:",
@@ -134,11 +249,11 @@ def mapping_yaml(report):
         if start < cursor:
             raise ValueError("overlapping mapping-only intervals")
         if start > cursor:
-            lines.append(f"  - [0x{cursor:X}, bin, opaque_{cursor:X}]")
+            lines.append(f"  - [0x{cursor:X}, bin, {gap(cursor, start)}_{cursor:X}]")
         lines.append(f"  - [0x{start:X}, bin, {label}]")
         cursor = end
     if cursor < report["size"]:
-        lines.append(f"  - [0x{cursor:X}, bin, opaque_{cursor:X}]")
+        lines.append(f"  - [0x{cursor:X}, bin, {gap(cursor, report['size'])}_{cursor:X}]")
     lines.append(f"  - [0x{report['size']:X}]")
     return "\n".join(lines) + "\n"
 
@@ -332,9 +447,10 @@ def main():
             "wrapper_patches_applied": sum(f.get("wrapper_patch_count", 0) for f in fragments),
         },
     }
+    regions = asset_regions(data, report)
     if args.mapping_yaml:
         args.mapping_yaml.parent.mkdir(parents=True, exist_ok=True)
-        args.mapping_yaml.write_text(mapping_yaml(report), encoding="utf-8")
+        args.mapping_yaml.write_text(mapping_yaml(report, regions, data), encoding="utf-8")
     serialized = json.dumps(report, indent=2) + "\n"
     if args.output_dir:
         args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -347,6 +463,10 @@ def main():
             writer = csv.DictWriter(output, fields, extrasaction="ignore")
             writer.writeheader()
             writer.writerows(fragments)
+        with (args.output_dir / "asset-regions.csv").open("w", newline="", encoding="utf-8") as output:
+            writer = csv.writer(output)
+            writer.writerow(["rom_start", "rom_end", "label", "evidence"])
+            writer.writerows((f"0x{s:08X}", f"0x{e:08X}", label, why) for s, e, label, why in regions)
         print(json.dumps(report["summary"], indent=2))
     else:
         print(serialized, end="")
