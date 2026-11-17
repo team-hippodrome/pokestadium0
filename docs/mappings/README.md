@@ -116,7 +116,52 @@ the wrapper restoration patches, matching the inspected load path.
 
 `rom_consumed_end` is the byte after the final byte consumed by a raw image or
 compressed stream. It is not automatically the archive member's padded end.
-Archive directory ownership and member padding are not yet fully mapped.
+Archive member padding is not yet fully mapped.
+
+## Non-fragment asset regions
+
+`asset-regions.csv` labels storage outside the fragment images; `map_rom.py`
+derives it (`asset_regions()`) and names the matching `mapping.yaml` bins.
+A region that would overlap a fragment image or an enclosing region is dropped,
+so the fragment map is never changed by it.
+
+- Archives: `u32 ?, 0, total, count`, then `count` x `{offset, size, 0, 0}`
+  relative to the archive start, first member right after the table. Archives
+  `0x2B2C80`, `0x2F5940`, `0x3DCB60` and `0x3FEBD0` hold no fragments and are one
+  bin each; `0x4A8000` (63 members, move effects) and `0x500000` (153 members:
+  151 species models, then objects) contain fragment members, so only their
+  directories are labelled.
+- `szp_*` / `yay0_*`: non-fragment PERS-SZP and Yay0 streams (textures, tables,
+  arena and scene data, sequences). `jpeg_2E2B90` is a loose 320x240 PRESJPEG.
+  Main-menu art is loaded as segment 1 `szp_2E0BE0`, segment 4 `szp_400F70` and
+  segment 5 `szp_4076E0` (decoded `0x224B0` bytes). The last texture of `szp_4076E0`,
+  decoded offset `0x18868`, is the 200x100 RGBA16 title logo. The menu draws it at
+  (230, 86) in 200x10 strips; without a Game Boy cartridge, the warning popup covers it.
+  The battle screen, including the attract demo, loads `szp_3F53F0` as segment 3. Its
+  decoded offset `0x3EC0` holds a different, smaller logo: 104x28 RGBA32 with a soft
+  shadow, drawn at (30, 23) in a 320x240 frame, one row per texture rectangle.
+- Sound: seven `N64 PtrTablesV2` banks (POKEBANK, SYSSFX, BTLSFX, JIKKYOU,
+  MVOICE, TRCSFX, SPCSFX). The bank magic and `.WBK` name are literal bytes
+  inside each bank's Yay0 stream (`audio_*_bank_yay0`); the `N64 WaveTables`
+  ADPCM data follows it (`audio_*_wavetables`, ending at the next mapped
+  boundary minus `0xFF` fill). Songs and sound-effect sequences are the Yay0
+  streams from `0xC5B680` on.
+- Curated, with the consumer evidence in the CSV:
+  - `gb_waveform_tables` `0xDA9B0..0x15A9B0`: 32 x `0x4000` 8-bit waveform
+    tables, DMAed as one interval by fragment `0x81100000` (`0x81100930`), whose
+    image holds an audio driver ("Audio:Memory:DataHeap") and `POKEMON YELLOW`.
+  - `gb_audio_bank_seq` `0x15A9B0..0x15B1A0`: ADPCM book and sequence bytes for
+    the same fragment.
+  - `battle_species_records` `0x434C00..0x480CEC`: 151 per-species records,
+    `0x7F4` bytes (Pikachu `0x80C`), 11-byte entries; offsets come from the
+    resident u32 table `0x80073B30` and `0x82102188` reads `0x814` bytes each.
+  - `f32_table_480CEC`: big-endian f32 records after them; consumer unknown.
+  - `cry_data_FB4690` `0xFB4690..0xFE647C`: `u32 0x97`, then 151 x
+    `{u16 base cry, u8 pitch, u8 length}` in National Dex order, equal to the
+    Game Boy Red/Green cry table, followed by per-cry channel data.
+  - `cpu_stub_2B1630`: a `0x70`-byte MIPS routine outside any fragment.
+- `pad_*` bins contain only `0x00`/`0xFF`; the 59 remaining `opaque_*` bins are
+  short stream tails and archive member padding.
 
 ## Results and checks
 
@@ -131,7 +176,7 @@ Archive directory ownership and member padding are not yet fully mapped.
 - Fragment storage ranges are non-overlapping.
 - All 259 raw `FRAGMENT` signature hits are accounted for: 27 are raw images,
   and 232 are literal bytes inside identified compressed streams.
-- The mapping-only splat run produced 489 bins covering the entire 16 MiB ROM.
+- The mapping-only splat run produced 1,395 bins covering the entire 16 MiB ROM.
   Every bin was compared with its original input interval and the concatenated
   SHA-256 agrees. This is extraction partition identity, not a ROM build.
 - Six focused tests pass: literal Yay0 decoding, overlapping backreferences,
@@ -168,7 +213,7 @@ The scanner and the independent decoder use `crunch64 0.6.2` as the comparison
 oracle, after separate stream traversal. `n64img 0.3.3` and `pygfxd 1.0.5` are
 pinned because the tested splat import requires them even for an opaque-bin split.
 
-`yamls/jp/mapping.yaml` partitions the whole ROM into opaque bins, preserving
+`yamls/jp/mapping.yaml` partitions the whole ROM into bins, preserving
 the mapped boundaries without declaring mixed fragment payloads to be code.
 It is an extraction/storage oracle, not the production build YAML.
 
