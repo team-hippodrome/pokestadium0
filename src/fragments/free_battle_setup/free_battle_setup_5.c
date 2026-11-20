@@ -80,15 +80,15 @@ void FreeBattle_SetScreenState(FreeBattleScreen* screen, s32 state, s32 flags) {
             break;
         case 7:
             if (!(flags & 2)) {
-                screen->unk_4358 = 1;
-                screen->unk_435C = 0;
-                screen->unk_4360 = 0;
-                screen->unk_4364 = 0;
-                screen->unk_432C = 1;
-                screen->unk_433C = 0;
-                screen->unk_4338 = 0;
-                screen->unk_4334 = 0;
-                screen->unk_4330 = 0;
+                screen->side0Players[0] = 1;
+                screen->side0Players[1] = 0;
+                screen->side1Players[0] = 0;
+                screen->side1Players[1] = 0;
+                screen->playerActive[0] = 1;
+                screen->playerActive[4] = 0;
+                screen->playerActive[3] = 0;
+                screen->playerActive[2] = 0;
+                screen->playerActive[1] = 0;
                 screen->unk_4370 = 1;
                 screen->unk_4374 = 1;
                 FreeBattle_InitMenuWindow((s8*)&screen->ruleMenuWindow, 80, 140, 448, 174, (s32)D_82008FBC, 2, (s32)D_82008FC4, 3, (s32)D_82009D7C);
@@ -97,15 +97,15 @@ void FreeBattle_SetScreenState(FreeBattleScreen* screen, s32 state, s32 flags) {
             break;
         case 8:
             if (!(flags & 2)) {
-                screen->unk_4358 = 1;
-                screen->unk_435C = 0;
-                screen->unk_4360 = 0;
-                screen->unk_4364 = 0;
-                screen->unk_432C = 1;
-                screen->unk_433C = 0;
-                screen->unk_4338 = 0;
-                screen->unk_4334 = 0;
-                screen->unk_4330 = 0;
+                screen->side0Players[0] = 1;
+                screen->side0Players[1] = 0;
+                screen->side1Players[0] = 0;
+                screen->side1Players[1] = 0;
+                screen->playerActive[0] = 1;
+                screen->playerActive[4] = 0;
+                screen->playerActive[3] = 0;
+                screen->playerActive[2] = 0;
+                screen->playerActive[1] = 0;
                 screen->unk_4370 = 2;
                 screen->unk_4374 = 2;
                 FreeBattle_InitMenuWindow((s8*)&screen->ruleMenuWindow, 80, 140, 448, 174, (s32)D_82008FAC, 2, (s32)D_82008FB4, 3, (s32)D_82009D9C);
@@ -225,22 +225,22 @@ void func_80027804(void*, void*, s32, s32);
 void FreeBattle_InitEntryScreen(FreeBattleScreen* screen)
 {
   s32 i;
-  M2C_FIELD(screen, s32*, 0x4368) = (!((screen->unk_4370) == 0)) || (!((screen->unk_4374) == 0));
-  M2C_FIELD(screen, s32*, 0x436C) = ((screen->unk_4370) == 0) && ((screen->unk_4374) == 0);
+  screen->rentalsAllowed = (!((screen->unk_4370) == 0)) || (!((screen->unk_4374) == 0));
+  screen->presetsAllowed = ((screen->unk_4370) == 0) && ((screen->unk_4374) == 0);
   TableView_Initialize((s8*)screen + 0x4310, (s32) ((s8*)screen + 0x10), 0x214, 0x20, 0);
   FreeBattle_LoadGbTeams((s8*)screen + 0x4310);
-  if (M2C_FIELD(screen, s32*, 0x4368))
+  if (screen->rentalsAllowed)
   {
     FreeBattle_AddRentalEntry((void *) ((s8*)screen + 0x4310));
   }
-  if (M2C_FIELD(screen, s32*, 0x436C))
+  if (screen->presetsAllowed)
   {
     FreeBattle_AddPresetTeams((s8*)screen + 0x4310);
   }
   func_80027804((s8*)screen + 0x4320, (s8*)screen + 0x4290, 0x20, 0);
   FreeBattle_BuildTeamPointers((void *) ((s8*)screen + 0x4320), (void *) ((s8*)screen + 0x4310));
   FreeBattle_MarkIneligibleMons((void *) ((s8*)screen + 0x4310), screen->unk_4374);
-  M2C_FIELD(screen, s32*, 0x4354) = 0;
+  screen->currentPlayer = 0;
     for (i = 0; i < 5; i++) { M2C_FIELD(screen, s32*, (0x4340 + (i * 4))) = 0;
   }
 
@@ -453,15 +453,15 @@ s32 FreeBattle_UpdateScreen(FreeBattleScreen* screen) {
             if (res == -1) {
                 FreeBattle_SetScreenState(screen, 4, 3);
             } else if (res == 1) {
-                screen->unk_4358 = 1;
-                screen->unk_435C = 0;
-                screen->unk_4364 = 0;
-                screen->unk_432C = 1;
-                screen->unk_433C = 0;
-                screen->unk_4338 = 0;
-                screen->unk_4334 = 0;
-                screen->unk_4330 = 0;
-                screen->unk_4360 = M2C_FIELD(screen, s32*, 0x45B8);
+                screen->side0Players[0] = 1;
+                screen->side0Players[1] = 0;
+                screen->side1Players[1] = 0;
+                screen->playerActive[0] = 1;
+                screen->playerActive[4] = 0;
+                screen->playerActive[3] = 0;
+                screen->playerActive[2] = 0;
+                screen->playerActive[1] = 0;
+                screen->side1Players[0] = M2C_FIELD(screen, s32*, 0x45B8);
                 M2C_FIELD(screen, s32*, 0x4328 + M2C_FIELD(screen, s32*, 0x45B8) * 4) = 1;
                 M2C_FIELD(screen, s32*, 0x448C) = 7;
                 M2C_FIELD(screen, s32*, 0x4408) = 7;
@@ -516,28 +516,28 @@ s32 FreeBattle_UpdateScreen(FreeBattleScreen* screen) {
                     M2C_FIELD(screen, s32*, 0x4318)++;
                     M2C_FIELD(screen, u8*, 0x4758) |= 1;
                     ((Blob82004E9C*)((s8*)screen + 0x10))[M2C_FIELD(screen, s32*, 0x4318) - 1] = *(Blob82004E9C*)((s8*)screen + 0x4758);
-                    idx = M2C_FIELD(screen, s32*, 0x4328) + ((M2C_FIELD(screen, s32*, 0x4368) != 0) ? -1 : 0);
+                    idx = M2C_FIELD(screen, s32*, 0x4328) + ((screen->rentalsAllowed != 0) ? -1 : 0);
                     func_80027814((s8*)screen + 0x4320, (s8*)&((Blobs82004E9C*)screen)->blobs[M2C_FIELD(screen, s32*, 0x4318) - 1], idx);
                 } else {
                     idx = M2C_FIELD(screen, s32*, 0x46D8);
                 }
-                M2C_FIELD(screen, s32*, 0x4340 + M2C_FIELD(screen, s32*, 0x4354) * 4) = M2C_FIELD(screen, s32*, 0x4290 + idx * 4);
-                M2C_FIELD(screen, s32*, 0x4354)++;
-                if (M2C_FIELD(screen, s32*, 0x4354) < 5) {
+                M2C_FIELD(screen, s32*, 0x4340 + screen->currentPlayer * 4) = M2C_FIELD(screen, s32*, 0x4290 + idx * 4);
+                screen->currentPlayer++;
+                if (screen->currentPlayer < 5) {
                 loop:
-                    if (((s32*)((s8*)screen + 0x432C))[M2C_FIELD(screen, s32*, 0x4354)] == 0) {
-                        M2C_FIELD(screen, s32*, 0x4354)++;
-                        if (M2C_FIELD(screen, s32*, 0x4354) < 5) {
+                    if (((s32*)((s8*)screen + 0x432C))[screen->currentPlayer] == 0) {
+                        screen->currentPlayer++;
+                        if (screen->currentPlayer < 5) {
                             goto loop; // FAKE: goto loop kept from m2c output
                         }
                     }
                 }
-                if (M2C_FIELD(screen, s32*, 0x4354) >= 5) {
+                if (screen->currentPlayer >= 5) {
                     FreeBattle_CommitEntries(screen);
                     Audio_PlayCommand(0x53, 0, 0);
                     FreeBattle_SetScreenState(screen, 0xB, 0);
                 } else {
-                    M2C_FIELD(screen, s32*, 0x4DC8) = M2C_FIELD(screen, s32*, 0x4354) + 1;
+                    M2C_FIELD(screen, s32*, 0x4DC8) = screen->currentPlayer + 1;
                     if (M2C_FIELD(screen, s32*, 0x4DC4) != 0) {
                         FreeBattle_ClearIndices(D_8200AC58, (M2C_FIELD(screen, s32*, 0x46D8) * 6) % 24, 6);
                     }
