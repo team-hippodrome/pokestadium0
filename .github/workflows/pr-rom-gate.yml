@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
       - master
-    types: [opened, synchronize, reopened, ready_for_review]
+    types: [opened, synchronize, reopened, ready_for_review, labeled]
   workflow_dispatch:
     inputs:
       ref:
@@ -17,19 +17,34 @@ permissions:
   packages: read
 
 concurrency:
-  group: rom-gate-${{ github.event.pull_request.number || inputs.ref || github.run_id }}
+  # A label event gets its own group so labelling never cancels a running gate.
+  group: rom-gate-${{ github.event.pull_request.number || inputs.ref || github.run_id }}${{ github.event.action == 'labeled' && '-label' || '' }}
   cancel-in-progress: true
 
 jobs:
   gate:
     name: Validate ROM against master
-    # Same-repository PRs only: the job runs PR code next to the retail ROM.
-    # Drafts are skipped and run once marked ready (ready_for_review).
+    # The job runs PR code next to the retail ROM, so it runs automatically
+    # only for branches in this repository. A fork PR runs once a maintainer
+    # has reviewed it and adds the `gate-approved` label; that approval is
+    # the trust decision. gate-approval-reset.yml removes the label on every
+    # new push, so each new commit needs a fresh review. Drafts are skipped
+    # and run once marked ready (ready_for_review).
     if: >-
       github.event_name == 'workflow_dispatch' ||
       (
         github.event.pull_request.draft == false &&
-        github.event.pull_request.head.repo.full_name == github.repository
+        (
+          (
+            github.event.action != 'labeled' &&
+            github.event.pull_request.head.repo.full_name == github.repository
+          ) ||
+          (
+            github.event.action == 'labeled' &&
+            github.event.label.name == 'gate-approved' &&
+            github.event.pull_request.head.repo.full_name != github.repository
+          )
+        )
       )
     # GitHub-hosted: free and unlimited for public repositories. Pinned to
     # 24.04: Ubuntu 26.04 (ubuntu-latest) no longer ships
@@ -49,7 +64,30 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event_name == 'workflow_dispatch' && inputs.ref || '' }}
+          fetch-depth: 2
           persist-credentials: false
+
+      # A fork PR's own workflow file runs here, so this guard cannot stop a
+      # fork that edits it; the maintainer's review before labelling does.
+      # It catches the common cases: commits pushed after the review, and
+      # changes to anything the build executes rather than compiles.
+      - name: Guard approved fork PRs
+        if: >-
+          github.event_name == 'pull_request' &&
+          github.event.pull_request.head.repo.full_name != github.repository
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "$(git rev-parse HEAD)" != "$GITHUB_SHA" ]; then
+            echo "::error::The PR changed after it was approved (HEAD is not $GITHUB_SHA). Remove and re-add the gate-approved label after reviewing the new commits."
+            exit 1
+          fi
+          blocked="$(git diff --name-only HEAD^1 HEAD | grep -E '^(ci/|tools/|\.github/|Makefile$|\.make_options$|requirements[^/]*\.txt$|\.gitmodules$|\.gitattributes$)' || true)"
+          if [ -n "$blocked" ]; then
+            echo "::error::Fork PRs that change build tooling cannot use the approval label; a maintainer must run them from a branch in this repository. Changed:"
+            echo "$blocked"
+            exit 1
+          fi
 
       - name: Provide the retail ROM
         shell: bash
