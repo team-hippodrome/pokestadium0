@@ -31,8 +31,10 @@ jobs:
         github.event.pull_request.draft == false &&
         github.event.pull_request.head.repo.full_name == github.repository
       )
-    # GitHub-hosted: free and unlimited for public repositories.
-    runs-on: ubuntu-latest
+    # GitHub-hosted: free and unlimited for public repositories. Pinned to
+    # 24.04: Ubuntu 26.04 (ubuntu-latest) no longer ships
+    # binutils-mips-linux-gnu.
+    runs-on: ubuntu-24.04
     timeout-minutes: 60
     env:
       # The retail ROM is never committed or uploaded. It comes from this
