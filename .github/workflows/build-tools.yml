@@ -2,7 +2,8 @@ name: Build tools
 on: [push, pull_request]
 jobs:
   synthetic-tests:
-    runs-on: ubuntu-latest
+    # Pinned: Ubuntu 26.04 (ubuntu-latest) no longer ships binutils-mips-linux-gnu.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
