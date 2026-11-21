@@ -8,9 +8,9 @@
 
 /* One battle mode card of the battle mode window (D_8200752C rows). */
 typedef struct FreeBattleModeEntry {
-    /* 0x0 */ s32 unk0;
+    /* 0x0 */ char* label; // printed under the card's picture (FreeBattle_DrawBattleModeCard)
     /* 0x4 */ char* text; // description printed under the cards for the cursor card; swapping the two entries' texts showed the トーナメント (Tournament) text under フリーバトル (Free Battle)
-    /* 0x8 */ s32 unk8;
+    /* 0x8 */ u8* image; // the card's picture (FreeBattle_DrawBattleModeCard)
 } FreeBattleModeEntry; // size = 0xC
 
 /* The battle mode window: a 2x1 grid of cards and the description of the cursor card
@@ -122,17 +122,13 @@ typedef struct FreeBattleScreen {
     /* 0x0008 */ s8* view; // @unverified: window that is shown; set to state 7 (+0x24) when another opens on top
     /* 0x000C */ s8* nextView; // @unverified: window opened on top of view (arg2 & 1)
     /* 0x0010 */ char unk0010[0x431C];
-    /* 0x432C */ s32 unk_432C;
-    /* 0x4330 */ s32 unk_4330;
-    /* 0x4334 */ s32 unk_4334;
-    /* 0x4338 */ s32 unk_4338;
-    /* 0x433C */ s32 unk_433C;
-    /* 0x4340 */ char unk4340[0x18];
-    /* 0x4358 */ s32 unk_4358;
-    /* 0x435C */ s32 unk_435C;
-    /* 0x4360 */ s32 unk_4360;
-    /* 0x4364 */ s32 unk_4364;
-    /* 0x4368 */ char unk4368[0x8];
+    /* 0x432C */ s32 playerActive[5]; // 1P-4P, COM take part; team entry skips a player whose flag is 0
+    /* 0x4340 */ void* playerTeams[5]; // the team (a 0x214-byte entry at 0x10) each player entered; FreeBattle_BuildBattleRosters' arg2
+    /* 0x4354 */ s32 currentPlayer; // index into playerActive of the player choosing
+    /* 0x4358 */ s32 side0Players[2]; // 1-4 = 1P-4P, 5 = COM, 0 = nobody; FreeBattle_BuildBattleRosters' arg0
+    /* 0x4360 */ s32 side1Players[2]; // FreeBattle_BuildBattleRosters' arg1
+    /* 0x4368 */ s32 rentalsAllowed; // L50-55 or L1-30: the entry list ends with the rental Pokemon row (FreeBattle_AddRentalEntry)
+    /* 0x436C */ s32 presetsAllowed; // Free Battle: the preset trainers' teams are listed (FreeBattle_AddPresetTeams)
     /* 0x4370 */ s32 unk_4370;
     /* 0x4374 */ s32 unk_4374;
     /* 0x4378 */ FreeBattleModeWindow modeWindow; // @unverified: state 1, FreeBattle_InitBattleModeWindow
