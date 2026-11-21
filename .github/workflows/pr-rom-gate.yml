@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
       - master
-    types: [opened, synchronize, reopened, ready_for_review]
+    types: [opened, synchronize, reopened, ready_for_review, labeled]
   workflow_dispatch:
     inputs:
       ref:
@@ -14,52 +14,96 @@ on:
 
 permissions:
   contents: read
+  packages: read
 
 concurrency:
-  group: rom-gate-${{ github.event.pull_request.number || inputs.ref || github.run_id }}
+  # A label event gets its own group so labelling never cancels a running gate.
+  group: rom-gate-${{ github.event.pull_request.number || inputs.ref || github.run_id }}${{ github.event.action == 'labeled' && '-label' || '' }}
   cancel-in-progress: true
 
 jobs:
   gate:
     name: Validate ROM against master
-    # Same-repository PRs only (the repository is private); drafts are skipped
+    # The job runs PR code next to the retail ROM, so it runs automatically
+    # only for branches in this repository. A fork PR runs once a maintainer
+    # has reviewed it and adds the `gate-approved` label; that approval is
+    # the trust decision. gate-approval-reset.yml removes the label on every
+    # new push, so each new commit needs a fresh review. Drafts are skipped
     # and run once marked ready (ready_for_review).
     if: >-
       github.event_name == 'workflow_dispatch' ||
       (
         github.event.pull_request.draft == false &&
-        github.event.pull_request.head.repo.full_name == github.repository
+        (
+          (
+            github.event.action != 'labeled' &&
+            github.event.pull_request.head.repo.full_name == github.repository
+          ) ||
+          (
+            github.event.action == 'labeled' &&
+            github.event.label.name == 'gate-approved' &&
+            github.event.pull_request.head.repo.full_name != github.repository
+          )
+        )
       )
-    runs-on: [self-hosted, macOS, ARM64, pokestadium0-decomp]
+    # GitHub-hosted: free and unlimited for public repositories. Pinned to
+    # 24.04: Ubuntu 26.04 (ubuntu-latest) no longer ships
+    # binutils-mips-linux-gnu.
+    runs-on: ubuntu-24.04
     timeout-minutes: 60
     env:
-      # The retail ROM stays on the runner; it is never committed or uploaded.
-      # Optional repository variable overriding the default ~/pokestadium0-baseroms/jp/baserom.z64.
-      BASEROM_SOURCE: ${{ vars.POKESTADIUM0_BASEROM }}
+      # The retail ROM is never committed or uploaded. It comes from this
+      # FROM scratch image holding /baserom.z64, which must stay private.
+      BASEROM_IMAGE: ghcr.io/team-hippodrome/pokestadium0-baserom:jp
       BASEROM_SHA256: ed9f7cd7da795467c1e2b08ed1f878ff5aed906eae9ffe252074aef7a6703d8b
     steps:
-      - name: Mask self-hosted runner paths
-        shell: bash
-        run: |
-          echo "::add-mask::${HOME}"
-          echo "::add-mask::${GITHUB_WORKSPACE}"
-          echo "::add-mask::${RUNNER_TEMP}"
+      - name: Install the MIPS binutils
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq binutils-mips-linux-gnu
 
       - name: Check out the PR merge ref or selected branch
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event_name == 'workflow_dispatch' && inputs.ref || '' }}
+          fetch-depth: 2
           persist-credentials: false
 
-      - name: Provide the retail ROM
+      # A fork PR's own workflow file runs here, so this guard cannot stop a
+      # fork that edits it; the maintainer's review before labelling does.
+      # It catches the common cases: commits pushed after the review, and
+      # changes to anything the build executes rather than compiles.
+      - name: Guard approved fork PRs
+        if: >-
+          github.event_name == 'pull_request' &&
+          github.event.pull_request.head.repo.full_name != github.repository
         shell: bash
         run: |
           set -euo pipefail
-          src="${BASEROM_SOURCE:-$HOME/pokestadium0-baseroms/jp/baserom.z64}"
-          [ -f "$src" ] || { echo "::error::The retail ROM is missing on the runner."; exit 1; }
+          if [ "$(git rev-parse HEAD)" != "$GITHUB_SHA" ]; then
+            echo "::error::The PR changed after it was approved (HEAD is not $GITHUB_SHA). Remove and re-add the gate-approved label after reviewing the new commits."
+            exit 1
+          fi
+          blocked="$(git diff --name-only HEAD^1 HEAD | grep -E '^(ci/|tools/|\.github/|Makefile$|\.make_options$|requirements[^/]*\.txt$|\.gitmodules$|\.gitattributes$)' || true)"
+          if [ -n "$blocked" ]; then
+            echo "::error::Fork PRs that change build tooling cannot use the approval label; a maintainer must run them from a branch in this repository. Changed:"
+            echo "$blocked"
+            exit 1
+          fi
+
+      - name: Provide the retail ROM
+        shell: bash
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          echo "$TOKEN" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          docker pull --quiet --platform linux/amd64 "$BASEROM_IMAGE"
+          docker logout ghcr.io
+          cid="$(docker create --platform linux/amd64 "$BASEROM_IMAGE" /none)"
           mkdir -p baseroms/jp
-          cp "$src" baseroms/jp/baserom.z64
-          echo "$BASEROM_SHA256  baseroms/jp/baserom.z64" | shasum -a 256 -c -
+          docker cp "$cid:/baserom.z64" baseroms/jp/baserom.z64
+          docker rm -f "$cid" >/dev/null
+          docker image rm "$BASEROM_IMAGE" >/dev/null
+          echo "$BASEROM_SHA256  baseroms/jp/baserom.z64" | sha256sum -c -
 
       - name: Install tools and extract
         run: make init
