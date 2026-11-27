@@ -8,7 +8,7 @@ M2C_UNK (*func_80002C80(M2C_UNK *))(s32);           /* extern */
 M2C_UNK SchedClient_WaitMessage(s32);                         /* extern */
 M2C_UNK Sched_AddClient(s32);                         /* extern */
 M2C_UNK func_800567E0(s32, s32, M2C_UNK);           /* extern */
-M2C_UNK func_800594D0(M2C_UNK);                     /* extern */
+M2C_UNK __osSetFpcCsr(M2C_UNK);                     /* extern */
 extern M2C_UNK D_800A9710;
 extern s32 D_800AAF44;
 extern M2C_UNK D_81106830;
@@ -22,7 +22,7 @@ void GbPlayer_OutputThreadEntry(s32 arg0) {
     M2C_UNK (*temp_s2)(s32);
 
     temp_s2 = func_80002C80(&D_81106830);
-    func_800594D0(0x01000F00);
+    __osSetFpcCsr(0x01000F00);
     func_800567E0(D_800AAF44 + 0x21C0, D_800AAF44 + 0x21B0, 1);
     Sched_AddClient(D_800AAF44 + 0x21B0);
 loop_1:
@@ -38,7 +38,7 @@ M2C_UNK (*func_80002C80(M2C_UNK *))(s32);           /* extern */
 M2C_UNK SchedClient_WaitMessage(s32);                         /* extern */
 M2C_UNK Sched_AddClient(s32);                         /* extern */
 M2C_UNK func_800567E0(s32, s32, M2C_UNK);           /* extern */
-M2C_UNK func_800594D0(M2C_UNK);                     /* extern */
+M2C_UNK __osSetFpcCsr(M2C_UNK);                     /* extern */
 M2C_UNK func_8005C130(s32);                         /* extern */
 extern M2C_UNK D_800A9710;
 extern s32 D_800AAF40;
@@ -55,7 +55,7 @@ void GbPlayer_EmulatorThreadEntry(s32 arg0) {
 
     temp_s1 = func_80002C80(&D_811008DC);
     temp_s2 = func_80002C80(&D_81100C84);
-    func_800594D0(0x01000F00);
+    __osSetFpcCsr(0x01000F00);
     func_800567E0(D_800AAF40 + 0x21E4, D_800AAF40 + 0x21D4, 1);
     Sched_AddClient(D_800AAF40 + 0x21D4);
     temp_s1(D_800AAF40);

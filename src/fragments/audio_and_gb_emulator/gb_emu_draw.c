@@ -218,8 +218,8 @@ restart:
     return 0;
 }
 
-void func_80058260(u32*);
-u32 func_80053A80(void);
+void osDpGetCounters(u32*);
+u32 osGetCount(void);
 M2C_UNK func_8005C0A0();
 
 /**
@@ -245,11 +245,11 @@ void GbPak_PrepareProbeBlock(u32* arg0, s32 arg1) {
             }
             break;
         case 1:
-            func_80058260(arg0);
-            arg0[3] = func_80053A80();
+            osDpGetCounters(arg0);
+            arg0[3] = osGetCount();
             func_8005C0A0();
-            func_80058260(arg0 + 4);
-            arg0[7] = func_80053A80();
+            osDpGetCounters(arg0 + 4);
+            arg0[7] = osGetCount();
             break;
     }
 }
@@ -473,9 +473,9 @@ extern OSPfs D_81156018[4];
 extern OSMesg D_811561B8[4];
 extern OSThread D_81154C68;
 extern u8 D_81155E18[];
-void func_800567E0(OSMesgQueue*, OSMesg*, s32);
+void osCreateMesgQueue(OSMesgQueue*, OSMesg*, s32);
 void func_80051B20(OSThread*, s32, void (*)(), s32, u8*, s32);
-void func_8005C130(OSThread*);
+void osStartThread(OSThread*);
 void func_8004FD20(s32, s32);
 void GbPak_IoThreadMain();
 /**
@@ -502,9 +502,9 @@ void GbPak_StartIoThread(s32 arg0, s32 arg1, s32 arg2) {
         D_811561C8[i].unkA1 = 0x18;
         D_811561C8[i].pfs = &D_81156018[i];
     }
-    func_800567E0(&D_81156458, D_811561B8, 4);
+    osCreateMesgQueue(&D_81156458, D_811561B8, 4);
     func_80051B20(&D_81154C68, arg0, GbPak_IoThreadMain, 0, D_81155E18, arg1);
-    func_8005C130(&D_81154C68);
+    osStartThread(&D_81154C68);
 }
 
 extern volatile u8 D_81156474;
@@ -843,7 +843,7 @@ void GbEmu_DrawTintedBar(u8* arg0, s32 arg1, s32 arg2) {
 }
 
 extern u16 D_81120FD8[];
-void func_80052100(void*, s32);
+void osWritebackDCache(void*, s32);
 /**
  * Draws one 12x11 frame of the animated Transfer Pak access icon; direction selects
  * the mirrored (zero) or normal direction, frame selects the frame (0-10).
@@ -876,7 +876,7 @@ void GbEmu_DrawAccessIcon(u16* arg0, s32 arg1, s32 arg2) {
             src += arg1;
         }
     }
-    func_80052100(arg0, 0x1E00);
+    osWritebackDCache(arg0, 0x1E00);
 }
 
 extern s32 D_81156550;
@@ -1169,7 +1169,7 @@ void GbEmu_AnimateLoadingScreen(void);
 void func_800093E0(void*, void*);
 s32 func_80025BD8(void);
 void func_80052DC0(s32);
-void func_8005C280(f32);
+void osViSetXScale(f32);
 void GbEmu_PauseAndBlankScreen(void);
 void GbPak_QueueNextBankLoad(GbPakChannel*);
 void GbEmu_DrawLoadingScreen(u16*, u8 (*)[0xC80], s32, s32);
@@ -1370,7 +1370,7 @@ s32 GbEmu_LoadCartridge(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u8* arg4) {
     }
     D_81156540.unk_06 = 0;
     GbEmu_PauseAndBlankScreen();
-    func_8005C280(D_FLT_81154254);
+    osViSetXScale(D_FLT_81154254);
     func_80052DC0(0);
     return 0;
 }

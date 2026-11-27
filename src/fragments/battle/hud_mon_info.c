@@ -8,11 +8,11 @@
 // Declared here instead of in a header: the callers of these disagree on their types.
 M2C_UNK Ui_DrawPrimColorRect(s32, s32, s32, s32, s32, s32, s32, s32);
 void Font_Printf(s32 x, s32 y, const char* fmt, ...);
-M2C_UNK func_8001AA9C(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK);
-M2C_UNK func_8001AB6C();
+M2C_UNK Gfx_SetEnvColor(M2C_UNK, M2C_UNK, M2C_UNK, M2C_UNK);
+M2C_UNK Font_BeginTranslucentTextRendering();
 u32 func_800566BC(s8*);
-void func_8001A384(M2C_UNK, M2C_UNK);
-void func_8001ABBC(void);
+void Font_SetActive(M2C_UNK, M2C_UNK);
+void Font_EndTexturedTextRendering(void);
 
 /**
  * Empty.
@@ -99,7 +99,7 @@ void BattleHud_DrawHpFractionText(s32 arg0, s32 arg1, s32 arg2, s32 arg3) {
         }
 
         if (var_v0 != NULL) {
-            func_8001B884(arg0, arg1, 8, 6, var_v0, 8, 0);
+            Gfx_DrawTextureRgba16(arg0, arg1, 8, 6, var_v0, 8, 0);
         }
 
         arg0 += 8;
@@ -118,15 +118,15 @@ void BattleHud_DrawTrainerNameLabel(s16 arg0, s16 arg1, s32 arg2, s32 arg3, s32 
     s32 temp_v0;
 
     temp_v0 = arg2 * 3;
-    func_82116CF4(arg0, arg1, 0x46, 0x11, temp_v0 + &D_8218B008, temp_v0 + &D_8218B014);
-    func_8001AB6C();
+    Battle_DrawGradientRectWrapper(arg0, arg1, 0x46, 0x11, temp_v0 + &D_8218B008, temp_v0 + &D_8218B014);
+    Font_BeginTranslucentTextRendering();
     if (arg4 != 0) {
-        func_8001AA9C(0xFF, 0x64, 0xFF, 0xFF); // #FF64FF
+        Gfx_SetEnvColor(0xFF, 0x64, 0xFF, 0xFF); // #FF64FF
     }
     sp24 = func_800566BC(arg3) >> 1;
-    func_8001A384(2, 0);
+    Font_SetActive(2, 0);
     Font_Printf((arg0 - (sp24 * 5)) + 30, arg1 + 2, arg3);
-    func_8001ABBC();
+    Font_EndTexturedTextRendering();
 }
 
 /**
@@ -147,13 +147,13 @@ void BattleHud_DrawTrainerNameLabelBlink(s16 arg0, s16 arg1, s32 arg2, s32 arg3,
         alpha = -wave;
     }
     temp_v0 = arg2 * 3;
-    func_82116CF4(arg0, arg1, 0x46, 0x11, temp_v0 + &D_8218B008, temp_v0 + &D_8218B014);
-    func_8001AB6C();
-    func_8001A384(2, 0);
+    Battle_DrawGradientRectWrapper(arg0, arg1, 0x46, 0x11, temp_v0 + &D_8218B008, temp_v0 + &D_8218B014);
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(2, 0);
     if (arg5 != 0) {
-        func_8001AA9C(0xFF, 0x64, 0xFF, (s8)alpha); // #FF64FF
+        Gfx_SetEnvColor(0xFF, 0x64, 0xFF, (s8)alpha); // #FF64FF
     } else {
-        func_8001AA9C(0xFF, 0xFF, 0xFF, (s8)alpha); // #FFFFFF
+        Gfx_SetEnvColor(0xFF, 0xFF, 0xFF, (s8)alpha); // #FFFFFF
     }
     half = func_800566BC(arg3) >> 1;
     if (wave > 0) {
@@ -161,7 +161,7 @@ void BattleHud_DrawTrainerNameLabelBlink(s16 arg0, s16 arg1, s32 arg2, s32 arg3,
     } else {
         Font_Printf((arg0 - (half * 5)) + 30, arg1 + 2, arg3);
     }
-    func_8001ABBC();
+    Font_EndTexturedTextRendering();
 }
 
 /**
@@ -211,14 +211,14 @@ void BattleHud_DrawMonInfoBox(ActivePokemon* arg0, BattleMon* arg1, StatusLabel*
     BattleHud_DrawLevelNumber(arg3 + 3, arg4 + 0x10, arg1->level);
     Widget_DrawMeterBar(arg3 + 2, arg4 + 25, arg1->hp, arg1->maxHp);
     BattleHud_DrawHpFractionText(arg3 + 0xC, arg4 + 0x1F, arg1->hp, arg1->maxHp);
-    func_8001AB6C();
-    func_8001A384(2, 0);
+    Font_BeginTranslucentTextRendering();
+    Font_SetActive(2, 0);
     half = func_800566BC((s32)arg1->nickname) >> 1;
     Font_Printf((arg3 - (half * 5)) + 29, arg4 + 2, arg1->nickname);
-    func_8001A384(1, 0);
-    func_8001AA9C(arg2->color.r, arg2->color.g, arg2->color.b, 0xFF);
+    Font_SetActive(1, 0);
+    Gfx_SetEnvColor(arg2->color.r, arg2->color.g, arg2->color.b, 0xFF);
     Font_Printf(arg3 + 31, arg4 + 14, arg2->text);
-    func_8001ABBC();
+    Font_EndTexturedTextRendering();
 }
 
 /**

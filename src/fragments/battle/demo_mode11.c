@@ -96,8 +96,8 @@ void SceneMode11_StepInit(CameraNode* camera) {
 }
 
 s32 Audio_PlaySystemSound(s32);
-void func_800199F8(s8*, s32);
-void func_80010F9C(s8*, s32);
+void ModelAnim_SetAnimation(s8*, s32);
+void ModelAnim_SetFrame(s8*, s32);
 s32 func_82107A5C(s8*);
 void BattleCamera_StartDemoPath(CameraNode*, s8*);
 extern PokemonBattleCues* D_82189180[];
@@ -120,39 +120,39 @@ void SceneMode11_StartCut(CameraNode* camera) {
         case 0:
             Audio_PlaySystemSound(0x12);
             SceneMode11_FrameDemoPokemon((s32)D_8219A590, (s32)camera, 3);
-            func_800199F8(D_8219A590, cue->id);
-            func_80010F9C(D_8219A590, sp38[D_8219A50C]);
+            ModelAnim_SetAnimation(D_8219A590, cue->id);
+            ModelAnim_SetFrame(D_8219A590, sp38[D_8219A50C]);
             break;
         case 1:
             Audio_PlaySystemSound(0x13);
             ((ActivePokemon*)D_8219A590)->displayObject.position.y += 500.0;
             SceneMode11_FrameFromAimPoint((s32)camera, (s32)D_8219A590, 350.0f, 0.0f, -0x1C71, 0x38E3);
-            func_800199F8(D_8219A590, cue->id);
-            func_80010F9C(D_8219A590, sp38[D_8219A50C]);
+            ModelAnim_SetAnimation(D_8219A590, cue->id);
+            ModelAnim_SetFrame(D_8219A590, sp38[D_8219A50C]);
             break;
         case 2:
             Audio_PlaySystemSound(0x14);
             ((ActivePokemon*)D_8219A590)->displayObject.rotation.y = -0x4000;
             SceneMode11_FrameFromAimPoint((s32)camera, (s32)D_8219A590, 300.0f, -75.0f, 0x71C, -0x2AAA);
-            func_800199F8(D_8219A590, cue->id);
-            func_80010F9C(D_8219A590, sp38[D_8219A50C]);
+            ModelAnim_SetAnimation(D_8219A590, cue->id);
+            ModelAnim_SetFrame(D_8219A590, sp38[D_8219A50C]);
             break;
         case 3:
             Audio_PlaySystemSound(0x15);
             SceneMode11_FrameFromAimPoint((s32)camera, (s32)D_8219A590, 200.0f, 0.0f, 0x71C, 0x2AAA);
-            func_800199F8(D_8219A590, cue->id);
-            func_80010F9C(D_8219A590, sp38[D_8219A50C]);
+            ModelAnim_SetAnimation(D_8219A590, cue->id);
+            ModelAnim_SetFrame(D_8219A590, sp38[D_8219A50C]);
             break;
         case 4:
             Audio_PlaySystemSound(0x16);
             ((ActivePokemon*)D_8219A590)->displayObject.rotation.y = -0x4000;
             SceneMode11_FrameFromAimPoint((s32)camera, (s32)D_8219A590, 600.0f, -200.0f, 0, -0x238E);
-            func_800199F8(D_8219A590, cue->id);
-            func_80010F9C(D_8219A590, sp38[D_8219A50C]);
+            ModelAnim_SetAnimation(D_8219A590, cue->id);
+            ModelAnim_SetFrame(D_8219A590, sp38[D_8219A50C]);
             break;
         case 5:
             Audio_PlaySystemSound(0x17);
-            func_80010F9C(D_8219A590, sp38[D_8219A50C]);
+            ModelAnim_SetFrame(D_8219A590, sp38[D_8219A50C]);
             D_8219A4F4 = 0xA;
             BattleCamera_StartDemoPath(camera, D_8219A590);
             break;
@@ -172,11 +172,11 @@ void SceneMode11_StepStartCut(CameraNode* camera) {
 
 M2C_UNK BattleCamera_StepDemoPath(CameraNode*, s8*);
 extern s16 D_8219A50C;
-M2C_UNK func_80019B28(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32);
-s32 func_821217DC(M2C_UNK);
+M2C_UNK Model_SetMaterialColor(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32);
+s32 BattleScene_AdvanceCameraFrameCounter(M2C_UNK);
 extern u8 D_8219A594;
 extern u8 D_8219A4F4;
-s16 func_8000F1FC(s16, M2C_UNK, M2C_UNK, M2C_UNK);
+s16 Math_StepToS32(s16, M2C_UNK, M2C_UNK, M2C_UNK);
 void Announcer_CallMove(s32, s32, s32, s32);
 void func_82104C68(s8*, s32);
 /**
@@ -185,15 +185,15 @@ void func_82104C68(s8*, s32);
  * @unverified Name guessed from the code.
  */
 void SceneMode11_StepFadeInCut(CameraNode* camera) {
-    D_8219A594 = func_8000F1FC(D_8219A594, 0xFF, 0x1E, 0x1E);
-    func_80019B28(D_8219A590, 0, 0, 0, 0xFF - D_8219A594);
+    D_8219A594 = Math_StepToS32(D_8219A594, 0xFF, 0x1E, 0x1E);
+    Model_SetMaterialColor(D_8219A590, 0, 0, 0, 0xFF - D_8219A594);
     switch (*(u16*)&D_8219A50C) {
         case 0:
         case 1:
         case 2:
         case 3:
         case 4:
-            if (func_821217DC(40) != 0) {
+            if (BattleScene_AdvanceCameraFrameCounter(40) != 0) {
                 sBattleScene.scene->phaseStep = (s32) (sBattleScene.scene->phaseStep + 1);
             }
             break;
@@ -218,9 +218,9 @@ void SceneMode11_StepFadeInCut(CameraNode* camera) {
  *   - if D_8219A50C == 5: calls BattleCamera_StepDemoPath(arg0, D_8219A590); if the
  *     upper halfword of the word at offset 0x48 of the object
  *     D_8219A590 points to is 0x26, calls Audio_PlayMoveSound(0x38, 9, 0); and if
- *     func_821217DC(0x37) returns non-zero, sets sBattleScene.scene->winner
+ *     BattleScene_AdvanceCameraFrameCounter(0x37) returns non-zero, sets sBattleScene.scene->winner
  *     to 3, calls func_80006998(0xFFFF),
- *     func_80005C4C(4) and Audio_FadeAndClearStoredSounds(), and sets
+ *     StageFade_StartFromTransparent(4) and Audio_FadeAndClearStoredSounds(), and sets
  *     sBattleScene.scene->phaseStep to 6;
  *   - otherwise adds 1 to sBattleScene.scene->phaseStep.
  *
@@ -228,11 +228,11 @@ void SceneMode11_StepFadeInCut(CameraNode* camera) {
  * `arg0` passed straight through (the retail code loads it into $a1 and
  * leaves $a0 untouched).  What these values mean is not established.
  */
-M2C_UNK func_80005C4C(M2C_UNK);
+M2C_UNK StageFade_StartFromTransparent(M2C_UNK);
 M2C_UNK func_80006998(M2C_UNK);
 M2C_UNK Audio_PlayMoveSound(M2C_UNK, M2C_UNK, M2C_UNK);
 M2C_UNK Audio_FadeAndClearStoredSounds();
-s32 func_821217DC(M2C_UNK);
+s32 BattleScene_AdvanceCameraFrameCounter(M2C_UNK);
 M2C_UNK BattleCamera_StepDemoPath(CameraNode*, s8*);
 extern s16 D_8219A50C;
 extern u8 D_8219A594;
@@ -250,10 +250,10 @@ void SceneMode11_StepHoldCut(CameraNode* camera) {
         if (((s32) M2C_FIELD(D_8219A590, s32 *, 0x48) >> 0x10) == 0x26) {
             Audio_PlayMoveSound(0x38, 9, 0);
         }
-        if (func_821217DC(55) != 0) {
+        if (BattleScene_AdvanceCameraFrameCounter(55) != 0) {
             sBattleScene.scene->winner = 3;
             func_80006998(0xFFFF);
-            func_80005C4C(4);
+            StageFade_StartFromTransparent(4);
             Audio_FadeAndClearStoredSounds();
             sBattleScene.scene->phaseStep = 6;
         }
@@ -264,8 +264,8 @@ void SceneMode11_StepHoldCut(CameraNode* camera) {
 
 typedef struct Arr82133534 { u8 b[7]; } Arr82133534;
 extern Arr82133534 D_8218B350;
-s16 func_8000F1FC(s16, M2C_UNK, M2C_UNK, M2C_UNK);
-M2C_UNK func_80019B28(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32);
+s16 Math_StepToS32(s16, M2C_UNK, M2C_UNK, M2C_UNK);
+M2C_UNK Model_SetMaterialColor(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32);
 /**
  * Scene mode 11 step 4: fades the demo Pokémon out and, after 8 frames, loads the next species from
  * the cut model list (D_8218B350) or ends the sequence at 0xFF.
@@ -276,9 +276,9 @@ void SceneMode11_StepFadeOutAndSwapModel(CameraNode *camera)
   s32 pad[2]; // FAKE: stack padding
   Arr82133534 sp28 = D_8218B350;
   s32 v;
-  D_8219A594 = func_8000F1FC(D_8219A594, 0, 0x28, 0x28);
-  func_80019B28(D_8219A590, 0, 0, 0, 0xFF - D_8219A594);
-  if (func_821217DC(8) != 0)
+  D_8219A594 = Math_StepToS32(D_8219A594, 0, 0x28, 0x28);
+  Model_SetMaterialColor(D_8219A590, 0, 0, 0, 0xFF - D_8219A594);
+  if (BattleScene_AdvanceCameraFrameCounter(8) != 0)
   {
     D_8219A4F0[0xE]++;
     v = sp28.b[D_8219A4F0[0xE]];
@@ -296,7 +296,7 @@ void SceneMode11_StepFadeOutAndSwapModel(CameraNode *camera)
   }
 }
 
-M2C_UNK func_80019B28(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
+M2C_UNK Model_SetMaterialColor(s8 *, M2C_UNK, M2C_UNK, M2C_UNK, s32); /* extern */
 void Battle_LoadOwnerModelForSwitchIn(ActivePokemon* active_pokemon);                      /* extern */
 M2C_UNK func_8213B31C(M2C_UNK);                     /* extern */
 extern s8 *D_8219A590;
@@ -316,7 +316,7 @@ void SceneMode11_StepWaitModelReload(s32 camera) {
         *temp_v0 &= 0xFF6F;
         Battle_LoadOwnerModelForSwitchIn(D_8219A590);
         SceneMode11_StartCut(camera);
-        func_80019B28(D_8219A590, 0, 0, 0, 0xFF);
+        Model_SetMaterialColor(D_8219A590, 0, 0, 0, 0xFF);
         D_8219A594 = 0;
         sBattleScene.scene->phaseStep = 2;
     }

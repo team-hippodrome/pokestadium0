@@ -3,8 +3,8 @@
 #include "global.h"
 #include "battle.h"
 
-void func_821401D4(Particle*, f32);
-void func_8213E11C(Particle*, f32);
+void Particle_SetScaleScaled(Particle*, f32);
+void Particle_SetMotionOffsetYScaled(Particle*, f32);
 u32 ParticleMath_RandomRange(u32 arg0);
 void Particle_SetRotationStepY(Particle*, s16);
 void Particle_SetStepMagnitudeScaled(Particle*, f32);
@@ -12,7 +12,7 @@ void Particle_SetMotionStepYScaled(Particle*, f32);
 void func_82143478(Particle*, s32);
 void Particle_SetPrimAlpha(s8 *arg0, char arg1);
 void Particle_SetParam0(Particle*, s32);
-void func_8213C9D0(Particle*);
+void Particle_AdvanceLifecycle(Particle*);
 
 /**
  * Init step for a small particle that drifts to a bone: scale 0.16, a random Y spin, slow
@@ -20,15 +20,15 @@ void func_8213C9D0(Particle*);
  * @unverified Name guessed from the code.
  */
 void BattleAnim_InitBoneDriftEmber(Particle* particle) {
-    func_821401D4(particle, 0.16f);
-    func_8213E11C(particle, -3.2f);
+    Particle_SetScaleScaled(particle, 0.16f);
+    Particle_SetMotionOffsetYScaled(particle, -3.2f);
     Particle_SetRotationStepY(particle, ParticleMath_RandomRange(0x10000));
     Particle_SetStepMagnitudeScaled(particle, 0.085f);
     Particle_SetMotionStepYScaled(particle, 0.44f);
     func_82143478(particle, 0x1A);
     Particle_SetPrimAlpha(particle, 0xFF);
     Particle_SetParam0(particle, 2);
-    func_8213C9D0(particle);
+    Particle_AdvanceLifecycle(particle);
 }
 
 extern Vec3f D_8219A898;

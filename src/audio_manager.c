@@ -744,7 +744,7 @@ void Cry_PlayFromPokedex(s32 arg0) {
 void Cry_Update(void) {
     switch (D_80075E10[0]) {
         case 1:
-            func_8003C110(D_80075E14);
+            GbMusic_StartTableSequence(D_80075E14);
             D_80075E10[0]++;
             D_80075E18 = 0;
             break;
@@ -756,7 +756,7 @@ void Cry_Update(void) {
             }
             break;
         case 3:
-            if (func_8003E058() == 0) {
+            if (GbMusic_CountActiveHighChannels() == 0) {
                 D_80075E10[0]++;
                 D_80075E18 = 0;
             }

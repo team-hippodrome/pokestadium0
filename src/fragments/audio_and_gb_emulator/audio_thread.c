@@ -340,7 +340,7 @@ s8 AudioThread_GetSeqPlayerIO(s32 arg0, s32 arg1) {
     return *(&D_811847BC + ((arg0 * 0x15C) + arg1));
 }
 
-M2C_UNK func_811098C0(M2C_UNK *, s32, M2C_UNK);     /* extern */
+M2C_UNK AudioHeap_InitPool(M2C_UNK *, s32, M2C_UNK);     /* extern */
 extern M2C_UNK D_811842A0;
 
 /**
@@ -349,7 +349,7 @@ extern M2C_UNK D_811842A0;
  * @unverified Name follows the counterpart; not checked in play.
  */
 void AudioThread_InitExternalPool(s32 arg0, M2C_UNK arg1) {
-    func_811098C0(&D_811842A0, arg0, arg1);
+    AudioHeap_InitPool(&D_811842A0, arg0, arg1);
 }
 
 /**

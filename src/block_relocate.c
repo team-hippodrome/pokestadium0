@@ -4,14 +4,14 @@
 #include "m2c_macros.h"
 #include "block_relocate.h"
 
-void func_80037F48(s32, s32);
+void Audio_RelocateSoundBankWrapper(s32, s32);
 
 /**
  * Relocates a sound bank against its own address (Audio_RelocateSoundBankWrapper(bank, bank)).
  * @unverified: no callers found.
  */
 void Audio_RelocateSoundBankInPlace(s32 bank) {
-    func_80037F48(bank, bank);
+    Audio_RelocateSoundBankWrapper(bank, bank);
 }
 
 /**
@@ -44,7 +44,7 @@ void Block_RelocateSelf(RelocHeader8003A710* arg0) {
 s32 Audio_RelocateSoundBankHeader(Unk8003A7AC* arg0) {
     s32 end = arg0->size + (s32)arg0;
 
-    func_80037F48((s32)arg0->data, end);
+    Audio_RelocateSoundBankWrapper((s32)arg0->data, end);
     arg0->flags |= 1;
     return (s32)arg0->data;
 }

@@ -189,12 +189,12 @@ void Ui_DrawGradientRectangle(s32 x1, s32 y1, s32 width, s32 height, Color_RGB8*
     gSP2Triangles(gDisplayListHead++, 0, 2, 3, 0, 0, 3, 1, 0);
 }
 
-void func_8211694C(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8* arg4, Color_RGB8* arg5);
+void Ui_DrawGradientRectangle(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8* arg4, Color_RGB8* arg5);
 /**
- * Calls func_8211694C with the same arguments (a gradient rectangle draw).
+ * Calls Ui_DrawGradientRectangle with the same arguments (a gradient rectangle draw).
  * Seen in play (2026-11-13): ran in the 165-move battle sweep (165 of the moves).
  * @unverified Name from Stadium 1.
  */
 void Battle_DrawGradientRectWrapper(s32 arg0, s32 arg1, s32 arg2, s32 arg3, Color_RGB8* arg4, Color_RGB8* arg5) {
-    func_8211694C(arg0, arg1, arg2, arg3, arg4, arg5);
+    Ui_DrawGradientRectangle(arg0, arg1, arg2, arg3, arg4, arg5);
 }

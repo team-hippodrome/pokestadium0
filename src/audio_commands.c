@@ -128,7 +128,7 @@ void* func_8005C0D0(s32, s32, void*, s32, s32);
 void Rom_InitDevice(s32);
 void func_8004609C(u32, u8*, s32);
 void func_80047FB0(u8*, s32, s32);
-void func_80037F48(s32, s32);
+void Audio_RelocateSoundBankWrapper(s32, s32);
 void Block_RelocateSelf(u8*);
 s32 func_800371A4(s8*);
 void Audio_SetChannelVolume(s32 arg0, u32 arg1);
@@ -166,7 +166,7 @@ s32 Audio_LoadSoundData(void) {
     func_8004609C(D_800B4164->offset1, D_800B41F0, D_800B4164->wave_tables_offset - D_800B4164->offset1);
     D_800B4180 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 12992);
     func_80047FB0(D_800B41F0, D_800B4180, 12992);
-    func_80037F48(D_800B4180, D_800B4164->wave_tables_offset);
+    Audio_RelocateSoundBankWrapper(D_800B4180, D_800B4164->wave_tables_offset);
 
     D_800B4168 = func_8005C0D0(0, 0, D_800B41F8, 4, 3);
     func_8004609C(D_800B4160->num_files, (u8*)D_800B4168, 12);
@@ -178,7 +178,7 @@ s32 Audio_LoadSoundData(void) {
     func_8004609C(D_800B4168[1], D_800B41F0, D_800B4168[2] - D_800B4168[1]);
     D_800B4184 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 3424);
     func_80047FB0(D_800B41F0, D_800B4184, 3424);
-    func_80037F48(D_800B4184, D_800B4168[2]);
+    Audio_RelocateSoundBankWrapper(D_800B4184, D_800B4168[2]);
 
     D_800B416C = func_8005C0D0(0, 0, D_800B41F8, 4, 3);
     func_8004609C(D_800B4160->files[0], (u8*)D_800B416C, 12);
@@ -190,7 +190,7 @@ s32 Audio_LoadSoundData(void) {
     func_8004609C(D_800B416C[1], D_800B41F0, D_800B416C[2] - D_800B416C[1]);
     D_800B4188 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 8288);
     func_80047FB0(D_800B41F0, D_800B4188, 8288);
-    func_80037F48(D_800B4188, D_800B416C[2]);
+    Audio_RelocateSoundBankWrapper(D_800B4188, D_800B416C[2]);
 
     func_8004609C(D_800B4160->files[2], (u8*)hdr, 12);
     num = hdr[0];
@@ -200,7 +200,7 @@ s32 Audio_LoadSoundData(void) {
     func_8004609C(((u32*)D_800B4174)[1], D_800B41F0, ((u32*)D_800B4174)[2] - ((u32*)D_800B4174)[1]);
     D_800B4190 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 7712);
     func_80047FB0(D_800B41F0, D_800B4190, 7712);
-    func_80037F48(D_800B4190, ((u32*)D_800B4174)[2]);
+    Audio_RelocateSoundBankWrapper(D_800B4190, ((u32*)D_800B4174)[2]);
 
     func_8004609C(D_800B4160->files[3], (u8*)hdr, 12);
     num = hdr[0];
@@ -210,7 +210,7 @@ s32 Audio_LoadSoundData(void) {
     func_8004609C(D_800B4178->offset1, D_800B41F0, D_800B4178->wave_tables_offset - D_800B4178->offset1);
     D_800B4194 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 12000);
     func_80047FB0(D_800B41F0, D_800B4194, 12000);
-    func_80037F48(D_800B4194, D_800B4178->wave_tables_offset);
+    Audio_RelocateSoundBankWrapper(D_800B4194, D_800B4178->wave_tables_offset);
 
     func_8004609C(D_800B4160->files[4], (u8*)hdr, 12);
     num = hdr[0];
@@ -220,7 +220,7 @@ s32 Audio_LoadSoundData(void) {
     func_8004609C(D_800B417C[1], D_800B41F0, D_800B417C[2] - D_800B417C[1]);
     D_800B4198 = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 2000);
     func_80047FB0(D_800B41F0, D_800B4198, 2000);
-    func_80037F48(D_800B4198, D_800B417C[2]);
+    Audio_RelocateSoundBankWrapper(D_800B4198, D_800B417C[2]);
 
     func_8004609C(D_800B4160->files[1], (u8*)D_800B4170, 12);
     Audio_RelocateOffsets(D_800B4170, D_800B4160->files[1], 3);
@@ -231,7 +231,7 @@ s32 Audio_LoadSoundData(void) {
     func_8004609C(D_800B4170[1], D_800B41F0, D_800B4170[2] - D_800B4170[1]);
     D_800B418C = (s32)func_8005C0D0(0, 0, D_800B41F8, 1, 24288);
     func_80047FB0(D_800B41F0, D_800B418C, 24288);
-    func_80037F48(D_800B418C, D_800B4170[2]);
+    Audio_RelocateSoundBankWrapper(D_800B418C, D_800B4170[2]);
 
     D_800B41EC = func_8005C0D0(0, 0, D_800B41F8, 2, 2944);
     D_800FD688 = func_8005C0D0(0, 0, D_800B41F8, 1, 5000);

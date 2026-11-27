@@ -19,8 +19,8 @@ extern s32 D_800B41D0[];
 extern s32 D_800B4198;
 s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 s32 func_80037AC4(s32, s32);
-void func_8004609C(u32, u8*, s32);
-void func_80047FB0(u8*, s32, s32);
+void Rom_DmaRead(u32, u8*, s32);
+void Audio_CopyDataWithCacheSync(u8*, s32, s32);
 void Block_RelocateSelf(s32);
 s32 func_8003834C(s32, s32, s32, s32, s32, s32, s32);
 
@@ -112,8 +112,8 @@ s32 Announcer_CallMove(u8 side, u32 move, u32 species, u32 event, u8 hi) {
         addr = D_800B417C[species + 3];
         size = D_800B4160[8] - addr;
     }
-    func_8004609C(addr, D_800B41F0, size);
-    func_80047FB0(D_800B41F0, D_800B41D0[D_800FD605], 0x200);
+    Rom_DmaRead(addr, D_800B41F0, size);
+    Audio_CopyDataWithCacheSync(D_800B41F0, D_800B41D0[D_800FD605], 0x200);
     Block_RelocateSelf(D_800B41D0[D_800FD605]);
     return (D_800FD670[side] = func_8003834C(D_800B4198, D_800B41D0[D_800FD605], flags, 0x80, 0x80, 0, -1));
 }
@@ -245,7 +245,7 @@ s32 func_8003834C(s32, s32, s32, s32, s32, s32, s32);
 s32 Audio_QueueSetMonoOutputCommand(s32 handle);
 s32 func_80037AC4(s32, s32);
 s32 func_8004D300(s32);
-u32 func_80053A80(void);
+u32 osGetCount(void);
 void func_800386E4(s32, s32);
 extern u8 D_80077548;
 extern u8 D_80077550;
@@ -307,18 +307,18 @@ void Announcer_SetActive(u32 enable) {
             ratio[1] = (u32)(D_800FD698[1] * 100) / (u32)D_800FD6A8[1];
             if (D_80077548 >= 21) {
                 if ((D_800FD698[0] != 0) && (D_800FD698[1] != 0)) {
-                    if ((u8)func_80053A80() & 1) {
+                    if ((u8)osGetCount() & 1) {
                         d = (ratio[1] < ratio[0]) ? ratio[0] - ratio[1] : ratio[1] - ratio[0];
                         if (d >= 51) {
                             Announcer_QueueLine(48, 0.0f, 0x80);
                             return;
                         }
                     }
-                    if (((u8)func_80053A80() & 4) && (ratio[0] < 21) && (ratio[1] < 21)) {
+                    if (((u8)osGetCount() & 4) && (ratio[0] < 21) && (ratio[1] < 21)) {
                         Announcer_QueueLine(45, 0.0f, 0x80);
                         return;
                     }
-                    if (((u8)func_80053A80() & 8) && (ratio[0] >= 61) && (ratio[1] >= 61) && (ratio[0] < 100) && (ratio[1] < 100)) {
+                    if (((u8)osGetCount() & 8) && (ratio[0] >= 61) && (ratio[1] >= 61) && (ratio[0] < 100) && (ratio[1] < 100)) {
                         d = (ratio[1] < ratio[0]) ? ratio[0] - ratio[1] : ratio[1] - ratio[0];
                         if (d < 10) {
                             Announcer_QueueLine(87, 0.0f, 0x80);
@@ -327,7 +327,7 @@ void Announcer_SetActive(u32 enable) {
                         Announcer_QueueLine(44, 0.0f, 0x80);
                         return;
                     }
-                    if ((u8)func_80053A80() & 2) {
+                    if ((u8)osGetCount() & 2) {
                         d = (((u8*)&D_800FD6B4)[1] < ((u8*)&D_800FD6B4)[0]) ? ((u8*)&D_800FD6B4)[0] - ((u8*)&D_800FD6B4)[1] : ((u8*)&D_800FD6B4)[1] - ((u8*)&D_800FD6B4)[0];
                         if ((d >= 4) && (((u8*)&D_800FD6B2)[0] >= 3) && (((u8*)&D_800FD6B2)[1] >= 3)) {
                             Announcer_QueueLine(88, 0.0f, 0x80);
@@ -346,12 +346,12 @@ void Announcer_SetActive(u32 enable) {
                         D_80077578 = 2;
                         return;
                     }
-                    if (((u8)func_80053A80() & 2) && (D_80077578 != 1)) {
+                    if (((u8)osGetCount() & 2) && (D_80077578 != 1)) {
                         Announcer_QueueLine(52, 0.0f, 0x80);
                         D_80077578 = 1;
                         return;
                     }
-                    if (((u8)func_80053A80() & 1) && (D_80077578 != 2)) {
+                    if (((u8)osGetCount() & 1) && (D_80077578 != 2)) {
                         Announcer_QueueLine(93, 0.0f, 0x80);
                         D_80077578 = 2;
                         return;
@@ -377,18 +377,18 @@ void Announcer_SetActive(u32 enable) {
             }
             if (D_80077548 >= 4) {
                 if ((D_800FD698[0] != 0) && (D_800FD698[1] != 0)) {
-                    if ((u8)func_80053A80() & 1) {
+                    if ((u8)osGetCount() & 1) {
                         d = (ratio[1] < ratio[0]) ? ratio[0] - ratio[1] : ratio[1] - ratio[0];
                         if (d >= 51) {
                             Announcer_QueueLine(48, 0.0f, 0x80);
                             return;
                         }
                     }
-                    if (((u8)func_80053A80() & 4) && (ratio[0] < 21) && (ratio[1] < 21)) {
+                    if (((u8)osGetCount() & 4) && (ratio[0] < 21) && (ratio[1] < 21)) {
                         Announcer_QueueLine(45, 0.0f, 0x80);
                         return;
                     }
-                    if (((u8)func_80053A80() & 8) && (ratio[0] >= 81) && (ratio[1] >= 81) && (ratio[0] < 100) && (ratio[1] < 100)) {
+                    if (((u8)osGetCount() & 8) && (ratio[0] >= 81) && (ratio[1] >= 81) && (ratio[0] < 100) && (ratio[1] < 100)) {
                         if ((D_800FD6B6[0] == 0) && (D_800FD6B6[1] == 0)) {
                             Announcer_QueueLine(94, 0.0f, 0x80);
                             return;
@@ -396,7 +396,7 @@ void Announcer_SetActive(u32 enable) {
                         Announcer_QueueLine(44, 0.0f, 0x80);
                         return;
                     }
-                    if ((u8)func_80053A80() & 2) {
+                    if ((u8)osGetCount() & 2) {
                         d = (((u8*)&D_800FD6B4)[1] < ((u8*)&D_800FD6B4)[0]) ? ((u8*)&D_800FD6B4)[0] - ((u8*)&D_800FD6B4)[1] : ((u8*)&D_800FD6B4)[1] - ((u8*)&D_800FD6B4)[0];
                         if ((d >= 4) && (((u8*)&D_800FD6B2)[0] >= 3) && (((u8*)&D_800FD6B2)[1] >= 3)) {
                             Announcer_QueueLine(88, 0.0f, 0x80);
@@ -411,22 +411,22 @@ void Announcer_SetActive(u32 enable) {
                             D_80077578 = 1;
                             return;
                         }
-                        if ((u8)func_80053A80() & 2) {
+                        if ((u8)osGetCount() & 2) {
                             Announcer_QueueLine(93, 0.0f, 0x80);
                             D_80077578 = 2;
                         }
                     } else {
-                        if (((u8)func_80053A80() & 1) && (D_80077578 != 2)) {
+                        if (((u8)osGetCount() & 1) && (D_80077578 != 2)) {
                             Announcer_QueueLine(93, 0.0f, 0x80);
                             D_80077578 = 2;
                             return;
                         }
-                        if (((u8)func_80053A80() & 2) && (D_80077578 != 1)) {
+                        if (((u8)osGetCount() & 2) && (D_80077578 != 1)) {
                             Announcer_QueueLine(52, 0.0f, 0x80);
                             D_80077578 = 1;
                             return;
                         }
-                        if ((u8)func_80053A80() & 0x40) {
+                        if ((u8)osGetCount() & 0x40) {
                             Announcer_QueueLine(53, 0.0f, 0x80);
                             D_80077578 = 0;
                         }
@@ -445,15 +445,15 @@ void Announcer_SetActive(u32 enable) {
                     func_8004D300(mask);
                 }
             } else if ((D_800FD698[0] != 0) && (D_800FD698[1] != 0)) {
-                if ((u8)func_80053A80() & 1) {
+                if ((u8)osGetCount() & 1) {
                     d = (ratio[1] < ratio[0]) ? ratio[0] - ratio[1] : ratio[1] - ratio[0];
                     if (d >= 51) {
                         Announcer_QueueLine(48, 0.0f, 0x80);
                         return;
                     }
                 }
-                if (((u8)func_80053A80() & 4) && (ratio[0] < 21) && (ratio[1] < 21)) {
-                    if ((u8)func_80053A80() & 1) {
+                if (((u8)osGetCount() & 4) && (ratio[0] < 21) && (ratio[1] < 21)) {
+                    if ((u8)osGetCount() & 1) {
                         Announcer_QueueLine(45, 0.0f, 0x80);
                         return;
                     }

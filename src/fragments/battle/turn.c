@@ -607,9 +607,9 @@ void Battle_ProcessTurn(void) {
     D_82199F43 = 0;
 }
 
-s32 func_82107A5C(ActivePokemon*);
+s32 BattleScene_GetParticipantSideIndex(ActivePokemon*);
 s32 ActivePokemon_GetNickname(ActivePokemon*);
-void func_8210F730(ActivePokemon*);
+void Battle_FormatDamageComment(ActivePokemon*);
 extern s32 D_8218C710;
 /**
  * Mark fainting, clear continuation state and remove temporary effects from the opponent.
@@ -618,7 +618,7 @@ extern s32 D_8218C710;
  */
 void Battle_HandleFaint(ActivePokemon* arg0) {
     UNUSED s32 pad; // FAKE: stack padding
-    s32 sp1C = func_82107A5C(arg0);
+    s32 sp1C = BattleScene_GetParticipantSideIndex(arg0);
     ActivePokemonState* temp_a10;
     BattleMonRuntime* temp_a11;
     BattleMonRuntime* temp_a01;
@@ -645,7 +645,7 @@ void Battle_HandleFaint(ActivePokemon* arg0) {
         temp_a10->faintState = 0x11;
     }
 
-    func_8210F730(arg0);
+    Battle_FormatDamageComment(arg0);
     BattleMessage_Format((s32)&((u8(*)[0x40])((s32)gBattleMessageQueues->messageBuffers[15]))[sp1C], 3, D_8218C710, ActivePokemon_GetNickname(sActivePokemon[sp1C]));
 }
 

@@ -1017,7 +1017,7 @@ void LabPCList_DrawLevelInputWindow(LabLevelInputWindow* window) {
     if (func_8002AE6C() == 0) {
         func_8001AB6C();
         func_8001A384(4, 0);
-        func_8001AA9C(0xC8, 0xC8, 0xFF, 0xFF); // #C8C8FFFF
+        Gfx_SetEnvColor(0xC8, 0xC8, 0xFF, 0xFF); // #C8C8FFFF
         Font_Printf(window->window.frame.x + 84, window->window.frame.y + 19, D_8910E094);
         func_8001ABBC();
         LabPCList_DrawLevelInput((s8*)&window->minLevel, window->window.frame.x + 14, window->window.frame.y + 0x10, (window->focus == 0) ? 2 : 0);

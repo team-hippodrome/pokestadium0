@@ -223,9 +223,9 @@ void Ui_DrawBorderedPanel(s32 x1, s32 y1, s32 width, s32 height, u16 color) {
 void Ui_DrawGradientPanel(s32 x1, s32 y1, s32 width, s32 height, Color_RGB8* top_color, Color_RGB8* bottom_color) {
     if ((width >= 0xF) && (height >= 0xF)) {
         if (StageContext_IsHighResolution() != 0) {
-            func_8001DBB0(x1 + 6, y1 + 6, width - 0xC, height - 0xC, top_color, bottom_color);
+            BattleHud_DrawGradientRect(x1 + 6, y1 + 6, width - 0xC, height - 0xC, top_color, bottom_color);
         } else {
-            func_8001DBB0(x1 + 2, y1 + 2, width - 4, height - 4, top_color, bottom_color);
+            BattleHud_DrawGradientRect(x1 + 2, y1 + 2, width - 4, height - 4, top_color, bottom_color);
         }
     }
 

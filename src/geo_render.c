@@ -1611,7 +1611,7 @@ void Geo_NodeDisplayList(GeoDisplayListPartNode* arg0) {
 
     if (dl != NULL) {
         if (arg0) {} // karodo
-        func_800135FC(arg0->node.renderLayer, (s32)dl, 0, arg0->node.renderFlags & 4);
+        GeoRender_SubmitLayerDisplayList(arg0->node.renderLayer, (s32)dl, 0, arg0->node.renderFlags & 4);
     }
     func_8001380C(arg0);
 }

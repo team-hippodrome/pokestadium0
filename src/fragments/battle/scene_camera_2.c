@@ -3,7 +3,7 @@
 #include "matrix.h"
 
 // Declared here instead of in a header: the callers of these disagree on their types.
-void func_8210C1A8(f32*, f32, f32);
+void BattleAnim_ApproachF(f32*, f32, f32);
 void func_8212254C(s32, s32, Vec3f, s32, s32, f32, f32);
 void BattleScene_FrameParticipantFront(CameraNode* arg0, ActivePokemon* arg1);
 
@@ -48,10 +48,10 @@ void BattleScene_StartOrbitFraming(CameraNode* camera, ActivePokemon* active_pok
 void BattleScene_StepOrbitFraming(s32 camera, s32 active_pokemon, s16 rotation_x) {
     f32 temp = 0.35f;
 
-    sBattleScene.scene->easeRates.z = func_8000F23C(sBattleScene.scene->easeRampRates.z, 2.5f, temp, temp);
-    func_8210C1A8(&sBattleScene.scene->orbitDistance, sBattleScene.scene->distance, sBattleScene.scene->easeRates.z);
+    sBattleScene.scene->easeRates.z = Math_StepToF(sBattleScene.scene->easeRampRates.z, 2.5f, temp, temp);
+    BattleAnim_ApproachF(&sBattleScene.scene->orbitDistance, sBattleScene.scene->distance, sBattleScene.scene->easeRates.z);
     func_8212254C(active_pokemon, camera, sBattleScene.scene->anchorPosition, 0, BattleScene_GetParticipantFacingAngle(active_pokemon), 0.0f, 0.0f);
-    func_82122684(camera, rotation_x, BattleScene_GetParticipantFacingAngle(active_pokemon), sBattleScene.scene->orbitDistance, 0.0f);
+    BattleScene_SetCameraEyeFromAt(camera, rotation_x, BattleScene_GetParticipantFacingAngle(active_pokemon), sBattleScene.scene->orbitDistance, 0.0f);
 }
 
 /**
@@ -150,10 +150,10 @@ void BattleScene_FrameParticipantFrontWide(CameraNode* camera, ActivePokemon* ac
     BattleScene_SetCameraEyeFromPosition(camera, sBattleScene.scene->anchorPosition, 0, BattleScene_GetParticipantFacingAngle(active_pokemon), gCameraDistTarget, 0.0f);
 }
 
-void func_82124750();
-void func_82124770();
-void func_82124790();
-void func_821247B0();
+void BattleScene_SetCameraPresetCloseThunk();
+void BattleScene_SetCameraPresetHighCloseThunk();
+void BattleScene_SetCameraPresetLowCloseThunk();
+void BattleScene_CameraShotTargetCloseThunk();
 void BattleScene_FrameParticipantFrontThunk();
 /**
  * Runs camera shot `arg2` (0-4, default 0) for Pokemon `arg0` on camera `arg1`.
@@ -164,22 +164,22 @@ void BattleScene_FrameParticipantFrontThunk();
 void BattleCamera_PlayShot(void* arg0, void* arg1, s32 arg2) {
     switch (arg2) {
         case 0:
-            func_82124750(arg1, arg0);
+            BattleScene_SetCameraPresetCloseThunk(arg1, arg0);
             break;
         case 1:
-            func_82124770(arg1, arg0);
+            BattleScene_SetCameraPresetHighCloseThunk(arg1, arg0);
             break;
         case 2:
-            func_82124790(arg1, arg0);
+            BattleScene_SetCameraPresetLowCloseThunk(arg1, arg0);
             break;
         case 3:
-            func_821247B0(arg1, arg0);
+            BattleScene_CameraShotTargetCloseThunk(arg1, arg0);
             break;
         case 4:
             BattleScene_FrameParticipantFrontThunk(arg1, arg0);
             break;
         default:
-            func_82124750(arg1, arg0);
+            BattleScene_SetCameraPresetCloseThunk(arg1, arg0);
             break;
     }
 }

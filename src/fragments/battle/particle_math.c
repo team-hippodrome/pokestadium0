@@ -988,7 +988,7 @@ s32 BattleAnim_GetCameraContext(void);
 #else
 void func_821381E4(Vec3f*, Vec3f, Vec3f);
 s32 BattleAnim_GetCameraContext(void);
-void func_82137F10();
+void ParticleMath_Vec3ToAngles();
 /**
  * Writes to arg0 the point arg2 units from the camera eye along the view direction turned
  * by arg1.
@@ -1000,7 +1000,7 @@ void ParticleMath_GetPointAlongTurnedView(Vec3f *out, s32 angle, f32 distance) {
 
     camera = (CameraNode *)BattleAnim_GetCameraContext();
     func_821381E4(&dir, camera->view.eyePosition, camera->view.targetPosition);
-    func_82137F10(angle, dir);
+    ParticleMath_Vec3ToAngles(angle, dir);
     out->x = camera->view.eyePosition.x + distance * dir.x;
     out->y = camera->view.eyePosition.y + distance * dir.y;
     out->z = camera->view.eyePosition.z + distance * dir.z;

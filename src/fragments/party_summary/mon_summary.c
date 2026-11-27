@@ -347,10 +347,10 @@ void PartyScreen_ReadParty(ByteMatrix* table) {
     s32 temp_v0;
 
     sp1C = (s32)table->rows;
-    temp_v0 = func_80020AFC(0x20, sPartyGbPort, 0, 0);
+    temp_v0 = Deck_Open(0x20, sPartyGbPort, 0, 0);
     sp18 = temp_v0;
     table->count = func_80020CE4(sp1C, table->capacity, temp_v0);
-    func_80020C60(sp18);
+    Deck_CloseAndFlush(sp18);
 }
 
 /**
@@ -365,13 +365,13 @@ void PartyScreen_WriteParty(s32* mon_list, s32 screen) {
 
     sp2C = (s32*)mon_list[0];
     func_80022118(sPartyGbPort);
-    temp_s3 = func_80020AFC(0x20, sPartyGbPort, 0, 1);
+    temp_s3 = Deck_Open(0x20, sPartyGbPort, 0, 1);
 
     for (i = 0; i < mon_list[2]; i++) {
-        func_80020DF0(sp2C[i], 1, temp_s3);
+        Deck_WriteEntries(sp2C[i], 1, temp_s3);
     }
 
-    func_80020C60(temp_s3);
+    Deck_CloseAndFlush(temp_s3);
     if (func_8002207C(sPartyGbPort) == 0) {
         GbSave_RunReportErrorLoop(sPartyGbPort);
         PartyScreen_Draw((M2C_UNK*)screen);
@@ -659,10 +659,10 @@ M2C_UNK PartyScreen_Update(PartyScreen* ctx) {
  * Seen in play (2026-11-14): ran first after the entry point.
  */
 void PartyScreen_Load(void) {
-    sPartyGbPort = func_80025BD8();
+    sPartyGbPort = GbSave_GetActivePort();
     D_8A21DE08 = sPartyGbPort;
     if (D_8A21DE08 != -1) {
-        func_80027FF8(&D_8A21DE10, D_8A21DE08);
+        GbSave_BuildPortSummary(&D_8A21DE10, D_8A21DE08);
     }
     PartyScreen_SetupList(&sPartyScreen);
 }

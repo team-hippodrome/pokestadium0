@@ -139,13 +139,13 @@ void ParticleGfx_DrawBillboardDefaultQuad(Particle* arg0, CameraNode* arg1) {
     ParticleGfx_DrawModelQuad(arg1, arg0->worldPosition, arg0->scale, D_82190E90);
 }
 
-void func_8216936C(u8 prim_r, u8 prim_g, u8 prim_b, u8 env_r, u8 env_g, u8 env_b, u8 prim_a);
+void ParticleGfx_SetPrimEnvNoiseCombine(u8 prim_r, u8 prim_g, u8 prim_b, u8 env_r, u8 env_g, u8 env_b, u8 prim_a);
 /**
- * Particle draw callback: like ParticleGfx_DrawBillboardQuadE50 but sets the colors with func_8216936C.
+ * Particle draw callback: like ParticleGfx_DrawBillboardQuadE50 but sets the colors with ParticleGfx_SetPrimEnvNoiseCombine.
  * @unverified Name guessed from the code.
  */
 void ParticleGfx_DrawBillboardNoiseQuadE50(Particle* particle, CameraNode* camera) {
-    func_8216936C(particle->prim_r, particle->prim_g, particle->prim_b, particle->env_r, particle->env_g, particle->env_b, particle->prim_a);
+    ParticleGfx_SetPrimEnvNoiseCombine(particle->prim_r, particle->prim_g, particle->prim_b, particle->env_r, particle->env_g, particle->env_b, particle->prim_a);
     ParticleGfx_DrawModelQuad(camera, particle->worldPosition, particle->scale, D_82190E50);
 }
 

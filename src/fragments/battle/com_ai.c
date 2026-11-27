@@ -102,14 +102,14 @@ void BattleAi_StirRandom(void) {
 void ComAi_UnusedNopA(void) {
 }
 
-f32 func_80055340(f32);                             /* extern */
+f32 sqrtf(f32);                             /* extern */
 
 /**
  * Gen 1 stat formula without DVs: ((sqrt(statExp) / 4 + base * 2) * level) / 100 + 5.
  * The callers pass statExp 0xFFFF (maximum stat experience).
  */
 s32 BattleAi_CalcStat(s32 arg0, s32 arg1, s32 arg2) {
-    return ((s32) ((((s32) func_80055340((f32) arg1) / 4) + (arg0 * 2)) * arg2) / 100) + 5;
+    return ((s32) ((((s32) sqrtf((f32) arg1) / 4) + (arg0 * 2)) * arg2) / 100) + 5;
 }
 
 /**

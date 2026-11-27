@@ -949,11 +949,11 @@ s8* AudioPlayback_AllocNoteFromActive(s8* pool, s8* layer) {
     s32 a_priority;
 
     r_priority = a_priority = 0x10;
-    r_note = func_811114E8(pool + 0x20, M2C_FIELD(M2C_FIELD(layer, u8**, 0x54), u8*, 5));
+    r_note = AudioPlayback_FindNodeWithPrioLessThan(pool + 0x20, M2C_FIELD(M2C_FIELD(layer, u8**, 0x54), u8*, 5));
     if (r_note != NULL) {
         r_priority = M2C_FIELD(r_note, u8*, 0x30);
     }
-    a_note = func_811114E8(pool + 0x30, M2C_FIELD(M2C_FIELD(layer, u8**, 0x54), u8*, 5));
+    a_note = AudioPlayback_FindNodeWithPrioLessThan(pool + 0x30, M2C_FIELD(M2C_FIELD(layer, u8**, 0x54), u8*, 5));
     if (a_note != NULL) {
         a_priority = M2C_FIELD(a_note, u8*, 0x30);
     }
@@ -961,9 +961,9 @@ s8* AudioPlayback_AllocNoteFromActive(s8* pool, s8* layer) {
         return NULL;
     }
     if (a_priority < r_priority) {
-        func_811114BC(a_note);
-        func_81111688(a_note, (s32)layer);
-        func_81112EAC(pool + 0x20, (Note*)a_note);
+        AudioPlayback_AudioListRemove(a_note);
+        AudioPlayback_NoteReleaseOwnerAndQueueLayer(a_note, (s32)layer);
+        AudioSeq_AudioListPushBack(pool + 0x20, (Note*)a_note);
         M2C_FIELD(a_note, u8*, 0x30) = M2C_FIELD(M2C_FIELD(layer, u8**, 0x54), u8*, 5);
         return a_note;
     }
@@ -1029,7 +1029,7 @@ s8* AudioPlayback_AllocNote(s8* arg0) {
 
 extern NoteSampleState D_811369A8;
 extern s8 D_811842C0;
-s32 func_81109868(s8 *, s32);
+s32 AudioHeap_Alloc(s8 *, s32);
 /**
  * Resets every note's state and sample buffers.
  * Corresponds to OoT Audio_NoteInitAll (original name Nas_ChannelInit). Zero allocates with
@@ -1059,6 +1059,6 @@ void AudioPlayback_NoteInitAll(void) {
         rec->playbackState.vibratoState.active = 0;
         rec->playbackState.portamento.cur = 0.0f;
         rec->playbackState.portamento.speed = 0.0f;
-        rec->synthesisState.synthesisBuffers = func_81109868(&D_811842C0, 0x80);
+        rec->synthesisState.synthesisBuffers = AudioHeap_Alloc(&D_811842C0, 0x80);
     }
 }

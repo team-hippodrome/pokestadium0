@@ -538,6 +538,6 @@ void BattleSound_UpdateSideHp(ActivePokemon* arg0) {
 
     if (arg0->displayObject.objectType != 152) {
         side = func_82107A5C(arg0);
-        func_80041940(side, arg0->state.runtime.hp, mon->maxHp, arg0);
+        Announcer_SetHp(side, arg0->state.runtime.hp, mon->maxHp, arg0);
     }
 }

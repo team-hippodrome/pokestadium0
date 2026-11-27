@@ -107,7 +107,7 @@ void AudioSeq_SequencePlayerDisable(unk_D_81184668* seqPlayer);
 extern unk_D_81184668 D_81184668[];
 extern s16 D_811858CC;
 /**
- * Stops every sequence player that plays sequence `arg0` (func_81112E00 is
+ * Stops every sequence player that plays sequence `arg0` (AudioSeq_SequencePlayerDisable is
  * AudioSeq_SequencePlayerDisable).
  * Corresponds to OoT AudioHeap_DiscardSequence (original name Nas_ForceStopSeq).
  * No caller in play (2026-11-13): nothing that runs reaches it, not even through callbacks, data
@@ -119,7 +119,7 @@ void AudioHeap_DiscardSequence(s32 arg0) {
 
     for (i = 0; i < D_811858CC; i++) {
         if (D_81184668[i].enabled && D_81184668[i].seqId == arg0) {
-            func_81112E00(&D_81184668[i]);
+            AudioSeq_SequencePlayerDisable(&D_81184668[i]);
         }
     }
 }
@@ -957,7 +957,7 @@ s32 AudioHeap_InitSampleCaches(s32, s32);
 void AudioLoad_InitSampleDmaBuffers(s32);
 void AudioSeq_ResetSequencePlayer(s32);
 s32 func_80058100(s32);
-void func_8005C0A0(void);
+void osWritebackDCacheAll(void);
 void AudioLoad_LoadPermanentSamples(void);
 void AudioPlayback_InitNoteFreeList(void);
 void AudioPlayback_NoteInitAll(void);
@@ -1124,5 +1124,5 @@ void AudioHeap_Init(void) {
     D_8118557C = 0;
     D_8118427C = 0x1000;
     AudioLoad_LoadPermanentSamples();
-    func_8005C0A0();
+    osWritebackDCacheAll();
 }

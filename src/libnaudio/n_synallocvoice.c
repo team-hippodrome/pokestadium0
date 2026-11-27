@@ -14,7 +14,7 @@
  * at +0x88 is set to 0x200 (after clearing word +0x8 of the record that obj+0x8 pointed
  * at before the link) and two blocks are posted with func_8003AE2C(obj, 3, block): the
  * first has halfword +8 = 0xB (word +4 = D_80075E44[+0x1C], word +0xC = 0, word +0x10 = obj[+0x88] - 0x40) and,
- * if func_800448F8 can supply a second block, one with halfword +8 = 0xF (word +0 = 0,
+ * if __n_allocParam can supply a second block, one with halfword +8 = 0xF (word +0 = 0,
  * word +4 = D_80075E44[+0x1C] + obj[+0x88]).  If it returned zero, obj[+0x88] is cleared
  * and only the link is made.  Returns 1 if an object was found, else 0.  (The meaning
  * of these records is not established here; the field offsets are taken from the retail code.)
@@ -23,7 +23,7 @@
 #include "m2c_macros.h"
 M2C_UNK func_8003AE2C(void *, M2C_UNK, void *);
 s32 _allocatePVoice(void **, s16);
-void *func_800448F8();
+void *__n_allocParam();
 extern void *D_80075E44;
 
 s32 n_alSynAllocVoice(void *arg0, void *arg1) {
@@ -46,13 +46,13 @@ s32 n_alSynAllocVoice(void *arg0, void *arg1) {
             M2C_FIELD(M2C_FIELD(obj, void **, 8), s32 *, 8) = 0;
             M2C_FIELD(obj, void **, 8) = arg0;
             M2C_FIELD(arg0, void **, 8) = obj;
-            msg_a = func_800448F8();
+            msg_a = __n_allocParam();
             M2C_FIELD(msg_a, s32 *, 4) = (s32) M2C_FIELD(D_80075E44, s32 *, 0x1C);
             M2C_FIELD(msg_a, s16 *, 8) = 0xB;
             M2C_FIELD(msg_a, s32 *, 0xC) = 0;
             M2C_FIELD(msg_a, s32 *, 0x10) = (s32) (M2C_FIELD(obj, s32 *, 0x88) - 0x40);
             func_8003AE2C(M2C_FIELD(arg0, void **, 8), 3, msg_a);
-            msg_b = func_800448F8();
+            msg_b = __n_allocParam();
             if (msg_b != NULL) {
                 M2C_FIELD(msg_b, s32 *, 4) = (s32) (M2C_FIELD(obj, s32 *, 0x88) + M2C_FIELD(D_80075E44, s32 *, 0x1C));
                 M2C_FIELD(msg_b, s16 *, 8) = 0xF;

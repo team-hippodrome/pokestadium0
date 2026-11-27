@@ -142,7 +142,7 @@ void BattleScene_GetParticipantCameraAnchor(ActivePokemon* arg0, Vec3f* arg1) {
     }
 }
 
-void func_8210BCF0(Vec3f*, Vec3f*, f32*, s16*, s16*);
+void BattleAnim_CalculateDistanceAngles(Vec3f*, Vec3f*, f32*, s16*, s16*);
 f32 BattleAnim_Vec3fDistance(Vec3f a, Vec3f b);
 f32 BattleScene_GetParticipantModelRadiusScaled(ActivePokemon* active_pokemon);
 /**
@@ -172,7 +172,7 @@ u16 BattleScene_IsParticipantInViewWedge(ActivePokemon* owner, CameraNode* camer
     f32 radius;
 
     sp5C = 0;
-    func_8210BCF0(&camera->view.targetPosition, &camera->view.eyePosition, &sp70, &sp6E, &sp6C);
+    BattleAnim_CalculateDistanceAngles(&camera->view.targetPosition, &camera->view.eyePosition, &sp70, &sp6E, &sp6C);
     sp60.z = (COSS((sp6C - 0x8000)) * 30.0f) + camera->view.eyePosition.z;
     sp60.x = (SINS((sp6C - 0x8000)) * 30.0f) + camera->view.eyePosition.x;
     sp7C = (COSS(((sp6C - half_angle) + 0x8000)) * length) + sp60.z;
@@ -268,39 +268,39 @@ void BattleScene_SetCameraSubstate(s32 arg0, u16 arg1) {
     sBattleScene.scene->transitionStyle = arg1;
 }
 
-void func_82121D5C(s32, s32);
+void BattleScene_SetCameraModeAndStep(s32, s32);
 /**
  * Only runs when the scene's unk_18 is 2.  It then checks the scene's unk_44
  * against 1, 2, 5, 6, 9 and 0xA in turn (the field is re-read after every
  * call, so a call may change it and a later check can then also succeed) and
- * calls func_82121D5C(value, argument) for each match: with 0x32 for 1, 5 and
+ * calls BattleScene_SetCameraModeAndStep(value, argument) for each match: with 0x32 for 1, 5 and
  * 9, and with 0 for 2, 6 and 0xA.  Before the calls for 2, 6 and 0xA it also
  * copies the scene's unk_2A into unk_2C.  What unk_44 values 1/2, 5/6 and 9/0xA
- * stand for, and what func_82121D5C does with them, is not established here.
+ * stand for, and what BattleScene_SetCameraModeAndStep does with them, is not established here.
  * @unverified Name guessed from the code.
  */
 void BattleScene_ApplyModeAfterTransition(void) {
     if (sBattleScene.scene->transitionStage == 2) {
         if (sBattleScene.scene->modeAfterTransition == 1) {
-            func_82121D5C(1, 0x32);
+            BattleScene_SetCameraModeAndStep(1, 0x32);
         }
         if (sBattleScene.scene->modeAfterTransition == 2) {
             sBattleScene.scene->actingSide = sBattleScene.scene->sideCurrentlySwitching;
-            func_82121D5C(2, 0);
+            BattleScene_SetCameraModeAndStep(2, 0);
         }
         if (sBattleScene.scene->modeAfterTransition == 5) {
-            func_82121D5C(5, 0x32);
+            BattleScene_SetCameraModeAndStep(5, 0x32);
         }
         if (sBattleScene.scene->modeAfterTransition == 6) {
             sBattleScene.scene->actingSide = sBattleScene.scene->sideCurrentlySwitching;
-            func_82121D5C(6, 0);
+            BattleScene_SetCameraModeAndStep(6, 0);
         }
         if (sBattleScene.scene->modeAfterTransition == 9) {
-            func_82121D5C(9, 0x32);
+            BattleScene_SetCameraModeAndStep(9, 0x32);
         }
         if (sBattleScene.scene->modeAfterTransition == 0xA) {
             sBattleScene.scene->actingSide = sBattleScene.scene->sideCurrentlySwitching;
-            func_82121D5C(0xA, 0);
+            BattleScene_SetCameraModeAndStep(0xA, 0);
         }
     }
 }
@@ -490,7 +490,7 @@ void BattleCamera_CaptureModelOrbit(ActivePokemon* pokemon, CameraNode* camera) 
 }
 
 extern u8 D_8219A4F4;
-void func_82121D78(CameraNode*, f32, f32);
+void BattleScene_SetCameraClipPlanes(CameraNode*, f32, f32);
 /**
  * Sets the camera clip planes for the scene mode: 20-4000 normally, 20-32000 in modes 4 and
  * 8, and 60-32000 in mode 9 when D_8219A4F4 is 5 (except at phase step 29).
@@ -499,14 +499,14 @@ void func_82121D78(CameraNode*, f32, f32);
 void BattleScene_UpdateCameraClipPlanes(CameraNode* camera) {
     s32 var_v0;
 
-    func_82121D78(camera, 20.0f, 4000.0f);
+    BattleScene_SetCameraClipPlanes(camera, 20.0f, 4000.0f);
     var_v0 = sBattleScene.scene->mode;
     if ((var_v0 == 4) || (var_v0 == 8)) {
-        func_82121D78(camera, 20.0f, 32000.0f);
+        BattleScene_SetCameraClipPlanes(camera, 20.0f, 32000.0f);
         var_v0 = sBattleScene.scene->mode;
     }
     if ((var_v0 == 9) && (D_8219A4F4 == 5) && (sBattleScene.scene->phaseStep != 29)) {
-        func_82121D78(camera, 60.0f, 32000.0f);
+        BattleScene_SetCameraClipPlanes(camera, 60.0f, 32000.0f);
     }
 }
 
