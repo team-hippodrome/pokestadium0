@@ -58,7 +58,7 @@ void LabPCList_InitSources(LabPCListScreen* screen) {
     s32 i;
 
     screen->sources[0].unk_04 = 0x20;
-    screen->sources[0].unk_08 = func_80025BD8();
+    screen->sources[0].unk_08 = GbSave_GetActivePort();
     screen->sources[0].unk_0C = 0;
     screen->sources[0].unk_20 = 6;
     func_80027410(&screen->sources[0].boxes, (s8*)screen + 0x90, 0x20, 1, 0);

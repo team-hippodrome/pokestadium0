@@ -698,7 +698,7 @@ extern LabPCList D_8910E3D0;
  * 1 name for the same address.
  */
 void LabPCList_Setup(void) {
-    D_8910E37C = func_80025BD8();
+    D_8910E37C = GbSave_GetActivePort();
     if (D_8910E37C != -1) {
         func_80027FF8(&D_8910E380, D_8910E37C);
     }

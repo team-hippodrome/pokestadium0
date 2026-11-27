@@ -212,7 +212,7 @@ s32 LabPCList_RunLevelFilter(s8 *screen_arg)
 {
   LabPCListScreen *screen = (LabPCListScreen *) screen_arg;
   s32 ret;
-  ret = func_89106C98(&screen->levelInputWindow);
+  ret = LabPCList_UpdateLevelInput(&screen->levelInputWindow);
   if (ret == (-1))
   {
     screen->state = 0;
