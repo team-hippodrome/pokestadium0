@@ -11,8 +11,8 @@ void func_821224F4(CameraNode*);
 void func_82121D78(CameraNode*, f32, f32);
 void func_8212187C(s32);
 void BattleCamera_StartSpeciesPath(CameraNode*, ActivePokemon*);
-s32 func_8211F644(ActivePokemon*, CameraNode*);
-void func_82104C68(ActivePokemon*, s32);
+s32 BattleScene_SkipUnavailableBRollShot(ActivePokemon*, CameraNode*);
+void BattleScene_EnterStateRow(ActivePokemon*, s32);
 f32 BattleScene_GetParticipantHeight(ActivePokemon*);
 void BattleCamera_CaptureModelOrbit(ActivePokemon*, CameraNode*);
 extern f32 D_FLT_82196040;
@@ -23,18 +23,18 @@ extern f32 D_FLT_82189358[][4];
 void BattleScene_SelectNextBRollCameraShot(CameraNode*);
 void BattleScene_SelectNextBRollCameraShot(CameraNode*);
 void BattleScene_EaseCameraTargetFromSavedEye(CameraNode*, ActivePokemon*);
-s32 func_821217DC(M2C_UNK);
+s32 BattleScene_AdvanceCameraFrameCounter(M2C_UNK);
 extern f32 D_FLT_82189358[][4];
 void BattleScene_SelectNextBRollCameraShot(CameraNode*);
 void BattleScene_SelectNextBRollCameraShot(CameraNode*);
 s32 BattleCamera_StepPath(CameraNode*, ActivePokemon*);
-s32 func_821217DC(M2C_UNK);
+s32 BattleScene_AdvanceCameraFrameCounter(M2C_UNK);
 void func_82122628(s32, Vec3f, s32, s32, f32, f32);
 extern f32 D_FLT_821960A8;
-f32 func_82121750(ActivePokemon*, f32, f32);
+f32 BattleScene_ScaleCameraDistance(ActivePokemon*, f32, f32);
 void BattleScene_EaseCameraTargetToParticipant(CameraNode*, ActivePokemon*);
 s32 BattleCamera_StepPath(CameraNode*, ActivePokemon*);
-void func_8212188C(void);
+void BattleScene_ResetCameraFrameCounter(void);
 extern u8* D_800603C0;
 void Audio_FadeCategoriesAndStreams(s32 arg0);
 
@@ -59,10 +59,10 @@ void BattleScene_UpdateBRollCameraSequence(CameraNode* arg0) {
     }
     switch (sBattleScene.scene->phaseStep) {
         case 1:
-            func_82120A34(arg0);
+            BattleScene_BRollCameraUpdateArenaOrbit(arg0);
             break;
         case 3:
-            func_82120A90(arg0);
+            BattleScene_BRollCameraUpdateRotatingArenaOverview(arg0);
             break;
         case 5:
             BattleScene_BRollTiltUpToHead(arg0);

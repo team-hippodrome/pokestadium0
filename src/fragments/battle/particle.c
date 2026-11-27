@@ -814,93 +814,93 @@ void Particle_AddPositionRotatedByRotationY(Particle* arg0, Vec3f arg1) {
     Particle_PositionOffset_AddVecScaled(arg0, sp24);
 }
 
-s32 func_82137DF4(M2C_UNK);                         /* extern */
+s32 ParticleMath_RandomSigned(M2C_UNK);                         /* extern */
 extern f32 D_FLT_8219A824;
 
 /**
- * Sets the particle's positionOffset.x to a random value from func_82137DF4(arg1) times the particle scale D_FLT_8219A824.
+ * Sets the particle's positionOffset.x to a random value from ParticleMath_RandomSigned(arg1) times the particle scale D_FLT_8219A824.
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.x
  * (0x34) of the live particle, e.g. 0 -> 47.52.
  */
 void Particle_SetPosOffsetXRandomScaled(Particle* arg0, M2C_UNK arg1) {
-    arg0->positionOffset.x = (f32) ((f32) func_82137DF4(arg1) * D_FLT_8219A824);
+    arg0->positionOffset.x = (f32) ((f32) ParticleMath_RandomSigned(arg1) * D_FLT_8219A824);
 }
 
-s32 func_82137DF4(M2C_UNK);                         /* extern */
+s32 ParticleMath_RandomSigned(M2C_UNK);                         /* extern */
 extern f32 D_FLT_8219A824;
 
 /**
- * Sets the particle's positionOffset.y to a random value from func_82137DF4(arg1) times the particle scale D_FLT_8219A824.
+ * Sets the particle's positionOffset.y to a random value from ParticleMath_RandomSigned(arg1) times the particle scale D_FLT_8219A824.
  * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetPosOffsetYRandomScaled(Particle* arg0, M2C_UNK arg1) {
-    arg0->positionOffset.y = (f32) ((f32) func_82137DF4(arg1) * D_FLT_8219A824);
+    arg0->positionOffset.y = (f32) ((f32) ParticleMath_RandomSigned(arg1) * D_FLT_8219A824);
 }
 
-s32 func_82137DF4(M2C_UNK);                         /* extern */
+s32 ParticleMath_RandomSigned(M2C_UNK);                         /* extern */
 extern f32 D_FLT_8219A824;
 
 /**
- * Sets the particle's positionOffset.z to a random value from func_82137DF4(arg1) times the particle scale D_FLT_8219A824.
+ * Sets the particle's positionOffset.z to a random value from ParticleMath_RandomSigned(arg1) times the particle scale D_FLT_8219A824.
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.z
  * (0x3C) of the live particle, e.g. 0 -> 44.
  */
 void Particle_SetPosOffsetZRandomScaled(Particle* arg0, M2C_UNK arg1) {
-    arg0->positionOffset.z = (f32) ((f32) func_82137DF4(arg1) * D_FLT_8219A824);
+    arg0->positionOffset.z = (f32) ((f32) ParticleMath_RandomSigned(arg1) * D_FLT_8219A824);
 }
 
-s32 func_82137DF4(M2C_UNK);                         /* extern */
+s32 ParticleMath_RandomSigned(M2C_UNK);                         /* extern */
 extern f32 D_FLT_8219A824;
 
 /**
- * Sets the particle's positionOffset.x to a random value from func_82137DF4(arg1) times the particle scale D_FLT_8219A824, plus arg2.
+ * Sets the particle's positionOffset.x to a random value from ParticleMath_RandomSigned(arg1) times the particle scale D_FLT_8219A824, plus arg2.
  * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetPosOffsetXRandomScaledPlus(Particle* arg0, M2C_UNK arg1, s32 arg2) {
-    arg0->positionOffset.x = (f32) (((f32) func_82137DF4(arg1) * D_FLT_8219A824) + (f32) arg2);
+    arg0->positionOffset.x = (f32) (((f32) ParticleMath_RandomSigned(arg1) * D_FLT_8219A824) + (f32) arg2);
 }
 
-s32 func_82137DF4(M2C_UNK);                         /* extern */
+s32 ParticleMath_RandomSigned(M2C_UNK);                         /* extern */
 extern f32 D_FLT_8219A824;
 
 /**
- * Sets the particle's positionOffset.y to a random value from func_82137DF4(arg1) times the particle scale D_FLT_8219A824, plus arg2.
+ * Sets the particle's positionOffset.y to a random value from ParticleMath_RandomSigned(arg1) times the particle scale D_FLT_8219A824, plus arg2.
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.y
  * (0x38) of the live particle, e.g. 0 -> 1.2.
  */
 void Particle_SetPosOffsetYRandomScaledPlus(Particle* arg0, M2C_UNK arg1, s32 arg2) {
-    arg0->positionOffset.y = (f32) (((f32) func_82137DF4(arg1) * D_FLT_8219A824) + (f32) arg2);
+    arg0->positionOffset.y = (f32) (((f32) ParticleMath_RandomSigned(arg1) * D_FLT_8219A824) + (f32) arg2);
 }
 
-s32 func_82137DF4(M2C_UNK);                         /* extern */
+s32 ParticleMath_RandomSigned(M2C_UNK);                         /* extern */
 extern f32 D_FLT_8219A824;
 
 /**
- * Sets the particle's positionOffset.z to a random value from func_82137DF4(arg1) times the particle scale D_FLT_8219A824, plus arg2.
+ * Sets the particle's positionOffset.z to a random value from ParticleMath_RandomSigned(arg1) times the particle scale D_FLT_8219A824, plus arg2.
  * No caller (2026-11-13): nothing in the built ROM jumps to it or holds its address (no jal,
  * no function-pointer word in any fragment), so play cannot reach it.
  * @unverified Name and comment guessed from the code.
  */
 void Particle_SetPosOffsetZRandomScaledPlus(Particle* arg0, M2C_UNK arg1, s32 arg2) {
-    arg0->positionOffset.z = (f32) (((f32) func_82137DF4(arg1) * D_FLT_8219A824) + (f32) arg2);
+    arg0->positionOffset.z = (f32) (((f32) ParticleMath_RandomSigned(arg1) * D_FLT_8219A824) + (f32) arg2);
 }
 
-s32 func_82137DF4(M2C_UNK);                         /* extern */
+s32 ParticleMath_RandomSigned(M2C_UNK);                         /* extern */
 extern f32 D_FLT_8219A824;
 
 /**
- * Sets positionOffset.x to the random value from func_82137DF4 pushed `arg2` units away from zero, times D_FLT_8219A824.
+ * Sets positionOffset.x to the random value from ParticleMath_RandomSigned pushed `arg2` units away from zero, times D_FLT_8219A824.
  * Seen in play (2026-11-12) in move animations (30-move sweep): it changed positionOffset.x
  * (0x34) of the live particle, e.g. 0 -> 44.
  */
 void Particle_SetRandomPositionOffsetXWithGap(Particle* arg0, M2C_UNK arg1, s32 arg2) {
     f32 temp_f0;
 
-    temp_f0 = (f32) func_82137DF4(arg1);
+    temp_f0 = (f32) ParticleMath_RandomSigned(arg1);
     if (temp_f0 >= 0.0f) {
         arg0->positionOffset.x = (f32) (((f32) arg2 + temp_f0) * D_FLT_8219A824);
         return;
@@ -908,7 +908,7 @@ void Particle_SetRandomPositionOffsetXWithGap(Particle* arg0, M2C_UNK arg1, s32 
     arg0->positionOffset.x = (f32) ((temp_f0 - (f32) arg2) * D_FLT_8219A824);
 }
 
-s32 func_82137DF4(M2C_UNK);                         /* extern */
+s32 ParticleMath_RandomSigned(M2C_UNK);                         /* extern */
 extern f32 D_FLT_8219A824;
 
 /**
@@ -920,7 +920,7 @@ extern f32 D_FLT_8219A824;
 void Particle_SetRandomPositionOffsetYWithGap(Particle* arg0, M2C_UNK arg1, s32 arg2) {
     f32 temp_f0;
 
-    temp_f0 = (f32) func_82137DF4(arg1);
+    temp_f0 = (f32) ParticleMath_RandomSigned(arg1);
     if (temp_f0 >= 0.0f) {
         arg0->positionOffset.y = (f32) (((f32) arg2 + temp_f0) * D_FLT_8219A824);
         return;
@@ -928,7 +928,7 @@ void Particle_SetRandomPositionOffsetYWithGap(Particle* arg0, M2C_UNK arg1, s32 
     arg0->positionOffset.y = (f32) ((temp_f0 - (f32) arg2) * D_FLT_8219A824);
 }
 
-s32 func_82137DF4(M2C_UNK);                         /* extern */
+s32 ParticleMath_RandomSigned(M2C_UNK);                         /* extern */
 extern f32 D_FLT_8219A824;
 
 /**
@@ -939,7 +939,7 @@ extern f32 D_FLT_8219A824;
 void Particle_SetRandomPositionOffsetZWithGap(Particle* arg0, M2C_UNK arg1, s32 arg2) {
     f32 temp_f0;
 
-    temp_f0 = (f32) func_82137DF4(arg1);
+    temp_f0 = (f32) ParticleMath_RandomSigned(arg1);
     if (temp_f0 >= 0.0f) {
         arg0->positionOffset.z = (f32) (((f32) arg2 + temp_f0) * D_FLT_8219A824);
         return;

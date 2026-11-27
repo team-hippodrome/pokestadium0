@@ -38,7 +38,7 @@ void BattleScene_RunOpeningSendOut(CameraNode* arg0) {
             break;
 
         case 6:
-            func_82131EC4(arg0);
+            BattleScene_IntroPanCamera(arg0);
             break;
 
         case 7:

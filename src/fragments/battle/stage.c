@@ -469,9 +469,9 @@ extern SessionContext* D_82198D10;
 extern s32 D_82198D30;
 extern u8 D_82198D24;
 extern u8* D_800603C0;
-s32 func_800010B8(void);
-s32 func_8003BF40(u8*);
-void func_8000D304(void);
+s32 Storage_GetDiskStatus(void);
+s32 Audio_GetDiskReadyStatus(u8*);
+void Leo_ResetBootStateIfReady(void);
 /**
  * triggers every frame: bug boy in GLC (Stadium 1 note; Zero has no Gym Leader Castle)
  * Count the initial two callbacks toward zero; once the gate is zero, the attract
@@ -492,11 +492,11 @@ void Battle_UpdateCompletionGate(void) {
         } else if (D_82198D10->mode == 3) {
             if (*(u16*)(D_800603C0 + 8) != 0) {
                 D_82198D30 = 1;
-            } else if (func_800010B8() != 0) {
-                if (func_8003BF40(&sp1F) != 8) {
+            } else if (Storage_GetDiskStatus() != 0) {
+                if (Audio_GetDiskReadyStatus(&sp1F) != 8) {
                     sp1F &= 1;
                     if ((sp1F ^ D_82198D24) & D_82198D24) {
-                        func_8000D304();
+                        Leo_ResetBootStateIfReady();
                         D_82198D30 = 1;
                     }
                     D_82198D24 = sp1F;
@@ -507,7 +507,7 @@ void Battle_UpdateCompletionGate(void) {
 }
 
 extern SessionContext* D_82198D10;
-void func_8000A7FC(s32);
+void Audio_StopMusic(s32);
 
 /**
  * triggers every frame: bug boy in GLC (Stadium 1 note; Zero has no Gym Leader Castle)
@@ -551,7 +551,7 @@ s32 Battle_FrameCallback(s32 fade_mode) {
         sCompletionGate = 2;
         AudioFrameUpdate(0);
         if (D_82198D10->mode != 4) {
-            func_8000A7FC(0x1E);
+            Audio_StopMusic(0x1E);
         }
         return 1;
     }
@@ -703,9 +703,9 @@ extern u8 D_00317EF0[];
 extern u8 D_0031C300[];
 s32 Font_Init(s32 load_size, s32 side);
 s32 func_800040B4(s32, u8*, u8*);
-void func_82101178(void);
+void Battle_SelectComRoster(void);
 void func_821012D8(Unit82101324*, unk_D_86002F30*);
-void func_82100B84(void);
+void Battle_ResetFaintBatches(void);
 void func_821070E0(s32, Unit82101324*);
 void func_821076FC(s32, CameraNode*, CameraNode*);
 void func_82134CC0(s32, CameraNode*);
@@ -758,10 +758,10 @@ s32 BattleScene_Init(s32* arg0) { // FAKE: s32 return (value unused) fixes calle
             break;
     }
     model = Model_LoadByArchiveIndex(0x99);
-    func_82101178();
+    Battle_SelectComRoster();
     func_821012D8(&D_82198D14[0], model);
     func_821012D8(&D_82198D14[1], model);
-    func_82100B84();
+    Battle_ResetFaintBatches();
     GeoNode_CreateCamera(NULL, &D_82198A20, 0, 0, 0x140, 0xF0);
     GeoNode_CreateCamera(NULL, &D_82198B10, 0x1E, 0x50, 0x4C, 0x4C);
     GeoNode_CreateCamera(NULL, &D_82198C00, 0xE2, 0x50, 0x4C, 0x4C);

@@ -17,19 +17,19 @@ extern f32 D_FLT_82189358[][4];
 void BattleScene_SelectNextBRollCameraShot(CameraNode*);
 void BattleScene_SelectNextBRollCameraShot(CameraNode*);
 void BattleScene_EaseCameraTargetFromSavedEye(CameraNode*, ActivePokemon*);
-s32 func_821217DC(M2C_UNK);
+s32 BattleScene_AdvanceCameraFrameCounter(M2C_UNK);
 extern f32 D_FLT_82189358[][4];
 void BattleScene_SelectNextBRollCameraShot(CameraNode*);
 void BattleScene_SelectNextBRollCameraShot(CameraNode*);
-s32 func_821217DC(M2C_UNK);
+s32 BattleScene_AdvanceCameraFrameCounter(M2C_UNK);
 void func_82122628(s32, Vec3f, s32, s32, f32, f32);
 extern f32 D_FLT_821960A8;
 void BattleScene_EaseCameraTargetToParticipant(CameraNode*, ActivePokemon*);
-void func_8212188C(void);
+void BattleScene_ResetCameraFrameCounter(void);
 extern u8* D_800603C0;
 
-void func_82120A34(CameraNode*);
-void func_82120A90(CameraNode*);
+void BattleScene_BRollCameraUpdateArenaOrbit(CameraNode*);
+void BattleScene_BRollCameraUpdateRotatingArenaOverview(CameraNode*);
 void BattleCamera_StartNextBRollShot(CameraNode*);
 /**
  * Not reached in play (2026-11-13): no move in the 165-move battle sweep called it (each move used
@@ -39,10 +39,10 @@ void BattleCamera_StartNextBRollShot(CameraNode*);
 void Rental_TeamSlotsUpdate(CameraNode* arg0) {
     switch (sBattleScene.scene->phaseStep) {
         case 1:
-            func_82120A34(arg0);
+            BattleScene_BRollCameraUpdateArenaOrbit(arg0);
             break;
         case 3:
-            func_82120A90(arg0);
+            BattleScene_BRollCameraUpdateRotatingArenaOverview(arg0);
             break;
         case 5:
             BattleScene_BRollTiltUpToHead(arg0);

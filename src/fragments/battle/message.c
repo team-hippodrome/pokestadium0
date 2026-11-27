@@ -72,7 +72,7 @@ void BattleMenu_DrawSide0Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
     }
 }
 
-void func_82118738(ActivePokemon*, s16, s16, u16, s32);
+void BattleHud_DrawMonStatusBoxOpponent(ActivePokemon*, s16, s16, u16, s32);
 /**
  * Draws side 1's status box and whichever battle menu its state has open (command, move, confirm, surrender).
  */
@@ -80,9 +80,9 @@ void BattleMenu_DrawSide1Menus(ActivePokemon* arg0, ActivePokemonState* arg1) {
     TeamRoster* sp2C = arg0->side->teamMember[arg0->thumbnail.shownTeamMemberIndex];
 
     if (arg1->selectedCommandOption == 3) {
-        func_82118738(arg0, arg0->thumbnail.camera->viewport.x - 0x20, arg0->thumbnail.camera->viewport.y - 2, arg1->actionDelayTimer, 1);
+        BattleHud_DrawMonStatusBoxOpponent(arg0, arg0->thumbnail.camera->viewport.x - 0x20, arg0->thumbnail.camera->viewport.y - 2, arg1->actionDelayTimer, 1);
     } else {
-        func_82118738(arg0, arg0->thumbnail.camera->viewport.x - 0x20, arg0->thumbnail.camera->viewport.y - 2, arg1->actionDelayTimer, 0);
+        BattleHud_DrawMonStatusBoxOpponent(arg0, arg0->thumbnail.camera->viewport.x - 0x20, arg0->thumbnail.camera->viewport.y - 2, arg1->actionDelayTimer, 0);
     }
 
     if ((arg1->selectedCommandOption != 3) && (arg0->thumbnail.camera->viewport.x == 0x103)) {
@@ -241,7 +241,7 @@ void BattleMessage_Format(s8* arg0, s8 id, s8* arg1, ...) {
     arg0[len] = 0;
 }
 
-void func_8211EE8C(void);
+void Battle_ClearMessageCursor(void);
 void func_8211EEC0(void*, s8*);
 void Announcer_CommentOnSideMessage(s32);
 void Announcer_CommentOnMessage(s32);
@@ -254,7 +254,7 @@ void Announcer_CommentOnMessage(s32);
 void BattleMessage_ShowForSide(s8* arg0, s32 side) {
     ActivePokemon* ap;
 
-    func_8211EE8C();
+    Battle_ClearMessageCursor();
     ap = sActivePokemon[side];
     gBattleMessageQueues->controllerPort = ap->side->teamMember[ap->thumbnail.shownTeamMemberIndex]->controllerPort;
     func_8211EEC0(gBattleMessageQueues->fullText, arg0 + 1);
@@ -431,7 +431,7 @@ void BattleScene_ResetMessageQueue(void) {
 
 void func_8211F1E0(ActivePokemon*, ActivePokemonState*, ActivePokemonState*);
 void BattleText_DrawTextBox(ActivePokemon*, ActivePokemonState*, ActivePokemonState*);
-void func_8211D3A8(void);
+void BattleScene_DrawStripWipeIfActive(void);
 void BattleText_DrawTextBoxFrame(void);
 void BattleHud_DrawActingPokemonNickname(ActivePokemon*, ActivePokemonState*, ActivePokemonState*);
 
@@ -452,21 +452,21 @@ void Battle_RenderHud(void) {
             BattleMenu_DrawSide1Menus(sActivePokemon[1], s1);
             ActivePokemon_TickCaptionTypewriter(sActivePokemon[0]);
             ActivePokemon_TickCaptionTypewriter(sActivePokemon[1]);
-            func_8211D3A8();
+            BattleScene_DrawStripWipeIfActive();
             break;
         case 2:
             func_8211F1E0(sActivePokemon[0], s0, s1);
-            func_8211D3A8();
+            BattleScene_DrawStripWipeIfActive();
             break;
         case 4:
         case 8:
             BattleMessage_TickTypewriter();
-            func_8211D3A8();
+            BattleScene_DrawStripWipeIfActive();
             break;
         case 5:
         case 6:
             Battle_DrawSpectatorModeBackgroundPanel(sActivePokemon[0], s0, s1);
-            func_8211D3A8();
+            BattleScene_DrawStripWipeIfActive();
             break;
         case 9:
         case 10:

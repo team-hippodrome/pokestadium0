@@ -228,7 +228,7 @@ s32 BattleMenu_TryConfirmMove(ActivePokemon* arg0) {
     return 0;
 }
 
-void func_82134D60(void);
+void BattleAnim_PlaySoundEffect2(void);
 s32 BattleMenu_TryConfirmMove(ActivePokemon*);
 /**
  * Maps the C buttons to the four move slots and tries to confirm the pressed one.
@@ -241,19 +241,19 @@ void BattleMenu_HandleMoveButtons(ActivePokemon* arg0) {
     buttons = M2C_FIELD(ctrl, u16*, 8);
 
     if ((buttons & 8) && (arg0->state.runtime.moves[0] != 0) && (arg0->state.runtime.moves[0] < 0xA6)) {
-        func_82134D60();
+        BattleAnim_PlaySoundEffect2();
         arg0->state.moveIndex = 0;
         BattleMenu_TryConfirmMove(arg0);
     } else if ((buttons & 1) && (arg0->state.runtime.moves[1] != 0) && (arg0->state.runtime.moves[1] < 0xA6)) {
-        func_82134D60();
+        BattleAnim_PlaySoundEffect2();
         arg0->state.moveIndex = 1;
         BattleMenu_TryConfirmMove(arg0);
     } else if ((buttons & 4) && (arg0->state.runtime.moves[2] != 0) && (arg0->state.runtime.moves[2] < 0xA6)) {
-        func_82134D60();
+        BattleAnim_PlaySoundEffect2();
         arg0->state.moveIndex = 2;
         BattleMenu_TryConfirmMove(arg0);
     } else if ((buttons & 2) && (arg0->state.runtime.moves[3] != 0) && (arg0->state.runtime.moves[3] < 0xA6)) {
-        func_82134D60();
+        BattleAnim_PlaySoundEffect2();
         arg0->state.moveIndex = 3;
         BattleMenu_TryConfirmMove(arg0);
     }
@@ -488,7 +488,7 @@ void BattleMenu_ShowNicknameCaption(s32 active_pokemon) {
     ActivePokemon_ShowCaption(active_pokemon, D_8218C700, ActivePokemon_GetNickname(active_pokemon));
 }
 
-void func_82134D60(void);
+void BattleAnim_PlaySoundEffect2(void);
 
 /**
  * Pokemon (switch) menu buttons: sets state.actionChosen to the party slot of
@@ -533,12 +533,12 @@ void BattleMenu_HandleSwitchButtons(ActivePokemon* arg0, s8* arg1) {
     }
     if (M2C_FIELD(arg1, u16*, 8) & 0xC00F) {
         if ((state->rosterIndex == state->actionChosen) && (state->teamMemberIndex == state->menuTeamMemberIndex)) {
-            if (func_8210CD7C(arg0) != 0) {
+            if (BattleScene_ValidateSelectedPartyMember(arg0) != 0) {
                 BattleMenu_ShowNicknameCaption((s32)arg0);
             }
         } else if (state->actionChosen <= (u32)(team[2] - 1)) {
-            if (func_8210CD7C(arg0) != 0) {
-                func_82134D60();
+            if (BattleScene_ValidateSelectedPartyMember(arg0) != 0) {
+                BattleAnim_PlaySoundEffect2();
                 state->showingCommandOptions = 0;
                 state->actionDelayTimer = 0;
                 state->selectedCommandOption = 3;
@@ -693,12 +693,12 @@ void BattleMenu_UpdateSurrenderPrompt(ActivePokemon* arg0) {
 
 extern u8 D_800AAF50[];
 void BattleMenu_TakeControlOnBPress(ActivePokemon*, u8*, u8*, s32);
-void func_82134D60(void);
+void BattleAnim_PlaySoundEffect2(void);
 
 /**
  * Reads the buttons of the Pokemon's controller(s) (both trainers in a tag battle) into its
  * command state: A sets 1, B sets 2 and lets the partner take control, Start sets 3. A, B
- * or Start (when the other side isn't in state 4) also calls func_82134D60.
+ * or Start (when the other side isn't in state 4) also calls BattleAnim_PlaySoundEffect2.
  * @unverified Name guessed from the code.
  */
 void BattleMenu_ReadCommandButtons(ActivePokemon* active_pokemon) {
@@ -734,7 +734,7 @@ void BattleMenu_ReadCommandButtons(ActivePokemon* active_pokemon) {
     }
     buttons = M2C_FIELD(c2, u16*, 8) | M2C_FIELD(c1, u16*, 8);
     if ((buttons & 0x8000) || (buttons & 0x4000) || ((buttons & 0x1000) && (M2C_FIELD(other, s32*, 0x10) != 4))) {
-        func_82134D60();
+        BattleAnim_PlaySoundEffect2();
     }
 }
 
@@ -871,7 +871,7 @@ s32 BattleScene_HandleCpuFaintedSwitch(ActivePokemon* arg0, ActivePokemon* arg1)
         state->selectedCommand = 2;
         state->selectedCommandOption = 2;
         if (D_FLT_82199EB0 == 60.0f) {
-            func_82134D60();
+            BattleAnim_PlaySoundEffect2();
             D_82199EB8 = BattleAi_ChooseTurnAction(&arg0->state.runtime, &arg1->state.runtime, state->rosterIndex, other->rosterIndex, arg1->teamRoster);
             state->showingCommandOptions = 0;
             state->actionChosen = D_82199EB8 - 4;
@@ -887,7 +887,7 @@ s32 BattleScene_HandleCpuFaintedSwitch(ActivePokemon* arg0, ActivePokemon* arg1)
         other->selectedCommandOption = 3;
         other->selectedCommand = 1;
         if (D_FLT_82199EB0 == 60.0f) {
-            func_82134D60();
+            BattleAnim_PlaySoundEffect2();
             D_82199EB8 = BattleAi_ChooseTurnAction(&arg0->state.runtime, &arg1->state.runtime, state->rosterIndex, other->rosterIndex, arg1->teamRoster);
             state->showingCommandOptions = 0;
             state->actionChosen = D_82199EB8 - 4;
@@ -1299,11 +1299,11 @@ void Battle_InitParticipantRuntime(ActivePokemon* arg0, s32 arg1, s32 arg2) {
  *   - runs Battle_InitParticipantRuntime on the active-Pokemon pointers stored at D_82199DE0
  *     and D_82199DE4, passing (0, 1) for the first and (1, 0) for the second
  *     (Battle_InitParticipantRuntime ignores those two arguments);
- *   - calls func_8210F688(0, 1) and func_8210F688(1, 0);
+ *   - calls Battle_ResetTransientRuntimeState(0, 1) and Battle_ResetTransientRuntimeState(1, 0);
  *   - clears the first two words of D_82199F10 and of D_82199F18;
  *   - clears bytes +0 and +4 of D_8219A4F0, sets byte +3 to 0xFF, and clears
  *     the halfwords at +0x1A, +0x1C, +0x1E and +0x20.
- * The meaning of func_8210F688's arguments and of the cleared fields is not
+ * The meaning of Battle_ResetTransientRuntimeState's arguments and of the cleared fields is not
  * established from this function alone.
  *
  * D_82199DE0 is declared as s8 elsewhere in this file, so the pointer it holds
@@ -1313,7 +1313,7 @@ extern ActivePokemon* D_82199DE4;
 extern s32 D_82199F10[];
 extern s32 D_82199F18[];
 extern s16 D_8219A4F0[];
-void func_8210F688(s32 arg0, s32 arg1);
+void Battle_ResetTransientRuntimeState(s32 arg0, s32 arg1);
 
 /**
  * Initializes both participants and resets the demo input scripts and turn state.
@@ -1324,8 +1324,8 @@ void func_8210F688(s32 arg0, s32 arg1);
 void Battle_InitBothParticipants(void) {
     Battle_InitParticipantRuntime(*(ActivePokemon**)&D_82199DE0, 0, 1);
     Battle_InitParticipantRuntime(D_82199DE4, 1, 0);
-    func_8210F688(0, 1);
-    func_8210F688(1, 0);
+    Battle_ResetTransientRuntimeState(0, 1);
+    Battle_ResetTransientRuntimeState(1, 0);
     D_82199F10[0] = 0;
     D_82199F18[0] = 0;
     D_82199F10[1] = 0;
@@ -1340,8 +1340,8 @@ void Battle_InitBothParticipants(void) {
 }
 
 void func_8210E118(ActivePokemon*, ActivePokemon*);
-void func_8210D90C(ActivePokemon*, ActivePokemon*);
-void func_82125224(void);
+void BattleScene_CollectPlayerAction(ActivePokemon*, ActivePokemon*);
+void BattleScene_InitializeSwitchActions(void);
 void Battle_StartTurn(void);
 extern u16 D_82199F24;
 extern u16 D_82199F50;
@@ -1359,14 +1359,14 @@ void Battle_ChooseActions(void) {
         func_8210E118(sActivePokemon[0], sActivePokemon[1]);
         D_82199F50 = D_82199F24;
     } else {
-        func_8210D90C(sActivePokemon[0], sActivePokemon[1]);
+        BattleScene_CollectPlayerAction(sActivePokemon[0], sActivePokemon[1]);
     }
     if (*M2C_FIELD(sActivePokemon[1], u8**, 0x860) & 2) {
         D_82199F24 = D_82199F50;
         func_8210E118(sActivePokemon[1], sActivePokemon[0]);
         D_82199F50 = D_82199F24;
     } else {
-        func_8210D90C(sActivePokemon[1], sActivePokemon[0]);
+        BattleScene_CollectPlayerAction(sActivePokemon[1], sActivePokemon[0]);
     }
     if ((state0->selectedCommandOption == 3) && (state1->selectedCommandOption == 3)) {
         if (state0->selectedCommand == 2) {
@@ -1380,7 +1380,7 @@ void Battle_ChooseActions(void) {
             BattleMenu_CommitMoveSelection(sActivePokemon[1]);
         }
         if ((state0->selectedCommand == 2) || (state1->selectedCommand == 2)) {
-            func_82125224();
+            BattleScene_InitializeSwitchActions();
             return;
         }
         Battle_StartTurn();

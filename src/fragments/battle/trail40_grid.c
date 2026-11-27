@@ -257,7 +257,7 @@ s32 Trail40GridAlt_IsComplete(void) {
 
 s32 func_8000515C(s32);
 s32 BattleAnim_GetCameraContext(void);
-void func_80031F14(f32*, f32*, f32*);
+void Vec3f_NormalizeComponents(f32*, f32*, f32*);
 void func_800320A8(s32, f32, f32, f32, f32, f32, f32);
 extern s32 D_821AABA0;
 /**
@@ -299,7 +299,7 @@ void Trail40GridAlt_Reset(void) {
     sp64 = tmp5 - tmp2;
     sp60 = tmp6 - tmp3;
 
-    func_80031F14(&sp68, &sp64, &sp60);
+    Vec3f_NormalizeComponents(&sp68, &sp64, &sp60);
 
     tmp1 = (140.0f * sp68) / (sp5C / 30.0f) + tmp1;
     tmp2 = (140.0f * sp64) / (sp5C / 30.0f) + tmp2;

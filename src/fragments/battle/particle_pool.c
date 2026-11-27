@@ -82,7 +82,7 @@ s32 Particle_HasFlags(Particle* arg0, s32 arg1);
 void Particle_UpdateWorldTransform(Particle* arg0);
 void Particle_UpdateFrameCounters(void);
 
-s32 func_800023C4(M2C_UNK, M2C_UNK);                /* extern */
+s32 MainPool_Alloc(M2C_UNK, M2C_UNK);                /* extern */
 M2C_UNK func_8004FD20(s32, M2C_UNK);                /* extern */
 
 /**
@@ -93,8 +93,8 @@ M2C_UNK func_8004FD20(s32, M2C_UNK);                /* extern */
  * @unverified Name was previously used only by callers of this address; the definition was still func_.
  */
 void BattleAnim_InitParticleSystem(void) {
-    gBattleAnimEffectSlots = (void*)func_800023C4(0x20D0, 0);
-    gParticlePool = (Particle*)func_800023C4(sizeof(Particle) * 300, 0);
+    gBattleAnimEffectSlots = (void*)MainPool_Alloc(0x20D0, 0);
+    gParticlePool = (Particle*)MainPool_Alloc(sizeof(Particle) * 300, 0);
     func_8004FD20((s32)gBattleAnimEffectSlots, 0x20D0);
     func_8004FD20((s32)gParticlePool, sizeof(Particle) * 300);
     gBattleAnimEffectSlotIndex = 0;
@@ -400,7 +400,7 @@ Particle* BattleAnim_CreateProceduralParticle(s16 arg0, s16 arg1, s32 arg2, f32 
     return temp_v0;
 }
 
-void func_80015908(ActivePokemon*, s32, Vec3f*);
+void GeoRender_FindAnchorPosition(ActivePokemon*, s32, Vec3f*);
 void BattleScene_GetParticipantModelSizeScaled(ActivePokemon* arg0, Vec3f* arg1);
 /**
  * Sets the particle's origin once at spawn from its anchor mode (anchorMode): the owner's model
@@ -479,11 +479,11 @@ void BattleAnim_InitializeParticleAnchor(Particle* arg0) {
 
         case 17:
             BattleAnim_GetOwnerBonePosition(arg0->pokemon, arg0->byteParam0, &arg0->origin);
-            func_80015908(arg0->pokemon, arg0->byteParam0, &arg0->origin);
+            GeoRender_FindAnchorPosition(arg0->pokemon, arg0->byteParam0, &arg0->origin);
             break;
 
         case 19:
-            func_80015908(arg0->pokemon, arg0->byteParam0, &arg0->origin);
+            GeoRender_FindAnchorPosition(arg0->pokemon, arg0->byteParam0, &arg0->origin);
             BattleScene_GetParticipantModelRotation(arg0->pokemon, &sp28);
             BattleScene_GetParticipantModelSizeScaled(arg0->pokemon, &sp30);
             ParticleMath_MakeXZVectorFromAngle(&sp3C, sp30.x * 25.0f, sp28.y);

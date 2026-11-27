@@ -43,7 +43,7 @@ s32 BattleScene_ReloadModelForFlag2000(ActivePokemon* active_pokemon) {
             sp1C = 1;
             if (active_pokemon->side->modelFlags & 0x10) {
                 active_pokemon->side->modelFlags &= ~0x90;
-                func_82108A0C(active_pokemon);
+                Battle_ReloadDisplayModel(active_pokemon);
                 sBattleScene.scene->modelReloadStep++;
             }
             break;
@@ -114,7 +114,7 @@ s32 BattleScene_ReloadModelForFlag1000(ActivePokemon* active_pokemon) {
             sp1C = 1;
             if (active_pokemon->side->modelFlags & 0x10) {
                 active_pokemon->side->modelFlags &= ~0x90;
-                func_82108A0C(active_pokemon);
+                Battle_ReloadDisplayModel(active_pokemon);
                 Battle_ClearRuntimeFlags(active_pokemon, 0x3800);
                 sBattleScene.scene->modelReloadStep++;
             }
@@ -162,7 +162,7 @@ s32 BattleScene_AdvanceBothOwnerAnimations(void) {
             if (temp_a1->flags & 0x2000) {
                 if (sActivePokemon[0]->side->modelFlags & 0x10) {
                     sActivePokemon[0]->side->modelFlags &= ~0x90;
-                    func_821089D0(sActivePokemon[0]);
+                    Battle_ReloadSubstituteDoll(sActivePokemon[0]);
                     sBattleScene.scene->modelReloadStep += 1;
                 }
             } else {
@@ -183,7 +183,7 @@ s32 BattleScene_AdvanceBothOwnerAnimations(void) {
             if (temp_a2->flags & 0x2000) {
                 if (sActivePokemon[1]->side->modelFlags & 0x10) {
                     sActivePokemon[1]->side->modelFlags &= ~0x90;
-                    func_821089D0(sActivePokemon[1]);
+                    Battle_ReloadSubstituteDoll(sActivePokemon[1]);
                     sBattleScene.scene->modelReloadStep += 1;
                 }
             } else {

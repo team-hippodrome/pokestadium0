@@ -49,9 +49,9 @@ void BattleScene_AvoidDegenerateCameraLookAt(CameraNode* arg0) {
     }
 }
 
-void func_82105E6C(void);
-void func_82124A40(void);
-void func_82106374(ActivePokemon*);
+void BattleScene_ResetBothParticipantsAnimationState(void);
+void BattleScene_ResetAnimationStep(void);
+void BattleScene_CleanupParticipantEffectMode(ActivePokemon*);
 void BattleAnim_ClearHardenTexture(ActivePokemon*);
 
 /**
@@ -86,9 +86,9 @@ void BattleScene_TickCameraSubstateDefault(CameraNode* arg0) {
 
         case 4:
             if (arg0->overlay.stepIndex == 10) {
-                func_82105E6C();
-                func_82106374(sActivePokemon[0]);
-                func_82106374(sActivePokemon[1]);
+                BattleScene_ResetBothParticipantsAnimationState();
+                BattleScene_CleanupParticipantEffectMode(sActivePokemon[0]);
+                BattleScene_CleanupParticipantEffectMode(sActivePokemon[1]);
                 sBattleScene.scene->transitionStep += 1;
                 sBattleScene.scene->transitionStage = 1;
             }
@@ -111,7 +111,7 @@ void BattleScene_TickCameraSubstateDefault(CameraNode* arg0) {
             break;
 
         case 6:
-            func_82124A40();
+            BattleScene_ResetAnimationStep();
             arg0->perspective.verticalFieldOfView = 30.0f;
             sBattleScene.scene->verticalFieldOfView = 30.0f;
             sBattleScene.scene->transitionStage = 0;
@@ -158,7 +158,7 @@ void BattleScene_TickCameraSubstateStripWipe(CameraNode* arg0) {
         case 4:
             BattleScene_UpdateStripWipe();
             if (BattleScene_GetStripWipeState() == 1) {
-                func_82105E6C();
+                BattleScene_ResetBothParticipantsAnimationState();
                 BattleScene_CleanupParticipantEffectMode(sActivePokemon[0]);
                 BattleScene_CleanupParticipantEffectMode(sActivePokemon[1]);
                 sBattleScene.scene->transitionStep += 1;
@@ -198,7 +198,7 @@ void BattleScene_TickCameraSubstateStripWipe(CameraNode* arg0) {
             break;
 
         case 9:
-            func_82124A40();
+            BattleScene_ResetAnimationStep();
             arg0->perspective.verticalFieldOfView = 30.0f;
             sBattleScene.scene->verticalFieldOfView = 30.0f;
             sBattleScene.scene->transitionStage = 0;

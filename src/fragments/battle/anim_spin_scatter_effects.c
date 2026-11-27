@@ -105,7 +105,7 @@ void BattleAnim_SetupOrphanDescriptor2BSpinFade(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void func_8213E1FC(Particle* arg0, f32 arg1);
+void Particle_AddMotionOffsetYScaled(Particle* arg0, f32 arg1);
 s32 Particle_ApproachStepMagnitude(Particle* arg0, f32 arg1, f32 arg2);
 /**
  * Particle callback: after the delay shows the particle, flies it out spinning, then
@@ -145,7 +145,7 @@ void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0) {
     switch (arg0->phase) {
         case 1:
             Particle_ApproachStepMagnitude(arg0, 50.0f, 0.5f);
-            func_8213E1FC(arg0, 1.0f);
+            Particle_AddMotionOffsetYScaled(arg0, 1.0f);
             Particle_UpdateRotatingVelocityXZ(arg0, arg0->stepMagnitude, 0x1000);
             Particle_Rotation_AddX_0A578(arg0, 0x2000);
             Particle_Rotation_AddZ_0A5B0(arg0, 0x3000);
@@ -153,7 +153,7 @@ void BattleAnim_CallbackOrphanDescriptor2BSpinFade(Particle* arg0) {
 
         case 2:
             Particle_ApproachStepMagnitude(arg0, 0.0f, 1.0f);
-            func_8213E1FC(arg0, -2.0f);
+            Particle_AddMotionOffsetYScaled(arg0, -2.0f);
             Particle_UpdateRotatingVelocityXZ(arg0, arg0->stepMagnitude, 0x1000);
             Particle_Rotation_AddX_0A578(arg0, 0x2000);
             Particle_Rotation_AddZ_0A5B0(arg0, 0x3000);
@@ -247,7 +247,7 @@ void BattleAnim_SetupPetalDanceLingeringHitEffect(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void func_8213E1FC(Particle* arg0, f32 arg1);
+void Particle_AddMotionOffsetYScaled(Particle* arg0, f32 arg1);
 s32 Particle_ApproachStepMagnitude(Particle* arg0, f32 arg1, f32 arg2);
 void Particle_ApplyRotationStepX(Particle* arg0);
 /**
@@ -302,18 +302,18 @@ void BattleAnim_RunPetalDanceLingeringHitEffect(Particle* arg0) {
     switch (arg0->phase) {
         case 1:
             Particle_ApproachStepMagnitude(arg0, 20.0f, 0.5f);
-            func_8213E1FC(arg0, arg0->motionStep.y);
+            Particle_AddMotionOffsetYScaled(arg0, arg0->motionStep.y);
             Particle_UpdateRotatingVelocityXZ(arg0, arg0->stepMagnitude, arg0->scratchA);
             break;
 
         case 2:
             Particle_ScratchA_Approach_0BF60(arg0, 0, 0x200);
-            func_8213E1FC(arg0, arg0->motionStep.y);
+            Particle_AddMotionOffsetYScaled(arg0, arg0->motionStep.y);
             Particle_UpdateRotatingVelocityXZ(arg0, arg0->stepMagnitude, arg0->scratchA);
             break;
 
         case 3:
-            func_8213E1FC(arg0, arg0->motionStep.y);
+            Particle_AddMotionOffsetYScaled(arg0, arg0->motionStep.y);
             Particle_UpdateRotatingVelocityXZ(arg0, 5.0f, 0x400);
             break;
     }
@@ -371,7 +371,7 @@ void BattleAnim_SetupSlowFallingHitEffect(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void func_8213E1FC(Particle* arg0, f32 arg1);
+void Particle_AddMotionOffsetYScaled(Particle* arg0, f32 arg1);
 void Particle_ApplyRotationStepX(Particle* arg0);
 /**
  * Handles the leaves that spawn when being hit by vine whip and the feathers that spawn when being
@@ -413,7 +413,7 @@ void BattleAnim_RunSlowFallingHitEffect(Particle* arg0) {
     }
 
     if (arg0->phase == 1) {
-        func_8213E1FC(arg0, arg0->motionTarget.y);
+        Particle_AddMotionOffsetYScaled(arg0, arg0->motionTarget.y);
         Particle_UpdateRotatingVelocityXZ(arg0, 5.0f, 0x400);
     }
 

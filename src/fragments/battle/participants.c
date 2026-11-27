@@ -342,20 +342,20 @@ void BattleScene_GetParticipantAimPoint(ActivePokemon *arg0, u8 *arg1) {
     }
 }
 
-f32 func_8210791C(ActivePokemon*);
+f32 BattleScene_GetParticipantModelXOffset(ActivePokemon*);
 f32 BattleScene_GetParticipantHeight(ActivePokemon*);
 /**
- * Like BattleScene_GetParticipantAimPoint, but in screen x (func_8210791C) with z 0.
+ * Like BattleScene_GetParticipantAimPoint, but in screen x (BattleScene_GetParticipantModelXOffset) with z 0.
  * Seen in play (2026-11-13) (tour of menus and a COM battle): ran in a Pound turn.
  * @unverified Name and comment guessed from the code.
  */
 void BattleScene_GetParticipantScreenAimPoint(ActivePokemon* active_pokemon, Vec3f* out) {
     if (D_FLT_82189354[active_pokemon->displayObject.objectType][0] != 0.0f) {
-        out->x = func_8210791C(active_pokemon);
+        out->x = BattleScene_GetParticipantModelXOffset(active_pokemon);
         out->y = active_pokemon->displayObject.position.y;
         out->z = 0.0f;
     } else {
-        out->x = func_8210791C(active_pokemon);
+        out->x = BattleScene_GetParticipantModelXOffset(active_pokemon);
         out->y = BattleScene_GetParticipantHeight(active_pokemon) + active_pokemon->displayObject.position.y;
         out->z = 0.0f;
     }

@@ -65,7 +65,7 @@ void DemoBattle_Setup(void) {
     sBattleScene.scene->actingSide = saved;
 }
 
-void func_8211ED90(void);
+void Battle_ClearAllMessageQueues(void);
 extern s8 D_82199F31;
 extern s32 D_82199F78;
 extern s8 D_82199FCC;
@@ -98,7 +98,7 @@ void DemoBattle_SetupDemoMove(void) {
     sBattleScene.scene->moveEffectKind = 0;
     M2C_FIELD(self, u16*, 0x12) = 0xFFFF;
     M2C_FIELD(other, u16*, 0x12) = 0xFFFF;
-    func_8211ED90();
+    Battle_ClearAllMessageQueues();
     move = M2C_FIELD(self, u8*, 0x5A);
     switch (move) {
         case STRING_SHOT:
@@ -120,7 +120,7 @@ void DemoBattle_SetupDemoMove(void) {
     }
 }
 
-void func_82101AD0(void);
+void BattleScene_ClearStateTickCallbacks(void);
 void func_82136708(s32, ActivePokemon*);
 M2C_UNK func_8213B31C(M2C_UNK);
 
@@ -134,7 +134,7 @@ void DemoBattle_ClearStatus(ActivePokemon* active_pokemon) {
     s8* sp20 = (s8*)active_pokemon->teamRoster + 0x1C;
     BattleMonRuntime* rt = &active_pokemon->state.runtime;
 
-    func_82101AD0();
+    BattleScene_ClearStateTickCallbacks();
     if (rt->statusCondition & 7) {
         func_82136708(3, active_pokemon);
     }
@@ -234,13 +234,13 @@ extern Step82133B6C D_8218B5D0[];
 extern s8* D_82199DE4;
 void func_80005B98(s32); // StageFade_Start; declared void here because the s32 prototype changes register allocation
 void func_80006998(s32);
-f32 func_8000F23C(f32, f32, f32, f32);
-void func_80010B3C(void*, s16, s16, s16, s16);
+f32 Math_StepToF(f32, f32, f32, f32);
+void GeoCamera_SetViewport(void*, s16, s16, s16, s16);
 void Battle_LoadOwnerModelForSwitchIn(ActivePokemon* active_pokemon);
 void func_8210BE1C(f32*, f32, s16);
-s16 func_8210BEE0(f32, f32, f32, f32);
-f32 func_8210BFA4(f32, f32, f32, f32);
-void func_82121D5C(s32, s32);
+s16 BattleAnim_Atan2sFromPoints(f32, f32, f32, f32);
+f32 BattleAnim_Distance2D(f32, f32, f32, f32);
+void BattleScene_SetCameraModeAndStep(s32, s32);
 /**
  * Per-frame update for the scripted battle demo: advances the cue timers for
  * both sides (DemoBattle_StepScriptedInputSide0 / DemoBattle_StepScriptedInputSide1) and reacts to the cue flags in
@@ -347,9 +347,9 @@ void DemoBattle_Update(void) {
                     D_8219A4F0.flags = D_82199F18[1] = D_82199F10[1] = 0;
                     D_8219A4F0.index++;
                     D_8219A4F0.timer = 0;
-                    func_80010B3C(sBattleScene.scene->camera, 0, 0, 0x140, 0xF0);
+                    GeoCamera_SetViewport(sBattleScene.scene->camera, 0, 0, 0x140, 0xF0);
                     sBattleScene.scene->bRollShotIndex = 0;
-                    func_82121D5C(9, 0x32);
+                    BattleScene_SetCameraModeAndStep(9, 0x32);
                     sBattleScene.scene->bRollShotIndex = 0;
                     DemoBattle_ClearStatus(((ActivePokemon**)&D_82199DE0)[0]);
                     DemoBattle_ClearStatus((ActivePokemon*)D_82199DE4);
@@ -361,16 +361,16 @@ void DemoBattle_Update(void) {
                 D_8219A4F0.width = 0x140;
                 D_8219A4F0.height = 0xF0;
                 D_8219A4F0.flags |= 1;
-                D_8219A4F0.dist = func_8210BFA4(0.0f, 0.0f, D_8218B5D0[D_8219A4F0.index].x, D_8218B5D0[D_8219A4F0.index].y);
-                D_8219A4F0.angle = func_8210BEE0(0.0f, 0.0f, D_8218B5D0[D_8219A4F0.index].x, D_8218B5D0[D_8219A4F0.index].y);
+                D_8219A4F0.dist = BattleAnim_Distance2D(0.0f, 0.0f, D_8218B5D0[D_8219A4F0.index].x, D_8218B5D0[D_8219A4F0.index].y);
+                D_8219A4F0.angle = BattleAnim_Atan2sFromPoints(0.0f, 0.0f, D_8218B5D0[D_8219A4F0.index].x, D_8218B5D0[D_8219A4F0.index].y);
                 D_8219A4F0.curDist = 0.0f;
             }
             if (D_8219A4F0.flags & 1) {
-                D_8219A4F0.width = func_8000F23C(D_8219A4F0.width, 160.0f, 8.0f, 8.0f);
-                D_8219A4F0.height = func_8000F23C(D_8219A4F0.height, 120.0f, 6.0f, 6.0f);
-                D_8219A4F0.curDist = func_8000F23C(D_8219A4F0.curDist, D_8219A4F0.dist, D_8219A4F0.dist / 20.0f, D_8219A4F0.dist / 20.0f);
+                D_8219A4F0.width = Math_StepToF(D_8219A4F0.width, 160.0f, 8.0f, 8.0f);
+                D_8219A4F0.height = Math_StepToF(D_8219A4F0.height, 120.0f, 6.0f, 6.0f);
+                D_8219A4F0.curDist = Math_StepToF(D_8219A4F0.curDist, D_8219A4F0.dist, D_8219A4F0.dist / 20.0f, D_8219A4F0.dist / 20.0f);
                 func_8210BE1C(vec, D_8219A4F0.curDist, D_8219A4F0.angle);
-                func_80010B3C(sBattleScene.scene->camera, vec[0], vec[2], D_8219A4F0.width, D_8219A4F0.height);
+                GeoCamera_SetViewport(sBattleScene.scene->camera, vec[0], vec[2], D_8219A4F0.width, D_8219A4F0.height);
                 if (D_8219A4F0.width == 0xA0) {
                     D_8219A4F0.flags &= ~1;
                 }

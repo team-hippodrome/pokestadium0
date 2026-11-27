@@ -265,13 +265,13 @@ void BattleCalc_AddBaseDamage(UNUSED u8* arg0, UNUSED u8* arg1) {
 extern u8 D_82199F32;
 extern u8 D_82199F33;
 void func_8210E9C0(u8*, u8*);
-void func_8210EAC4();
+void BattleAi_ClampDamageRatio();
 void func_8210EC0C(u8*, u8*, u8);
 void BattleCalc_AddBaseDamage(u8*, u8*);
 
 /**
  * Runs the sequence func_8210EC0C, BattleCalc_AddBaseDamage, BattleCalc_ApplyTypeEffectAndStab,
- * func_8210EAC4 and func_8210E9C0 for the attacker/defender pair
+ * BattleAi_ClampDamageRatio and func_8210E9C0 for the attacker/defender pair
  * (arg0, arg1). The flag D_82199F32 is saved into D_82199F33 and cleared
  * for the first four steps, and restored before the last one. arg2 is only
  * handed on to func_8210EC0C.
@@ -285,7 +285,7 @@ void BattleCalc_EstimateDamage(u8* arg0, u8* arg1, u8 arg2) {
     func_8210EC0C(arg0, arg1, arg2);
     BattleCalc_AddBaseDamage(arg0, arg1);
     BattleCalc_ApplyTypeEffectAndStab(arg0, arg1);
-    func_8210EAC4();
+    BattleAi_ClampDamageRatio();
     D_82199F32 = D_82199F33;
     func_8210E9C0(arg0, arg1);
 }

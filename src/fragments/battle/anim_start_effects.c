@@ -518,7 +518,7 @@ void BattleAnim_InitExplosionBurst(Particle* arg0) {
     Particle_AdvanceLifecycle(arg0);
 }
 
-void func_8213E1FC(Particle* arg0, f32 arg1);
+void Particle_AddMotionOffsetYScaled(Particle* arg0, f32 arg1);
 /**
  * Particle callback for the Selfdestruct/Explosion burst: swells to scale 4 while fading in,
  * then shrinks and emits rings of six sparkle particles (descriptor 0x42) for several
@@ -547,7 +547,7 @@ void BattleAnim_ExplosionBurstEmitter(Particle* arg0) {
             break;
 
         case 4:
-            func_8213E1FC(arg0, 15.0f);
+            Particle_AddMotionOffsetYScaled(arg0, 15.0f);
             Particle_TickDelayAndAdvanceLifecycle(arg0, 10);
             BattleAnim_EmitParticleBurstWithMetadata(arg0, BattleAnim_RunSparkleHit, &gBattleAnimParticleDescriptors[0x42], 6, 0x18, 7);
             break;

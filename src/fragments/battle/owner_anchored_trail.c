@@ -177,7 +177,7 @@ void OwnerAnchoredFourStream_UpdateNodeChain(OwnerAnchoredFourStream* arg0) {
 }
 
 /**
- * M2C_UNK func_8217E0C0(M2C_UNK *);                   /* extern
+ * M2C_UNK OwnerAnchoredFourStream_UpdateNodeChain(M2C_UNK *);                   /* extern
  * Seen in play (2026-11-13) (unattended Free Battle in which every Pokémon knows only Metronome, 70
  * turns): ran.
  * Seen in play (2026-11-14) (Metronome bench, one movie per move, 1P Onix vs Pinsir on Splash, exec
@@ -203,7 +203,7 @@ s32 OwnerAnchoredFourStream_IsComplete(void)
       }
       else
       {
-        func_8217E0C0(new_var); // FAKE
+        OwnerAnchoredFourStream_UpdateNodeChain(new_var); // FAKE
       }
     }
     var_s1 += 1;

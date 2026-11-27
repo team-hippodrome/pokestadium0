@@ -144,7 +144,7 @@ void BattleAnim_StartTrappingLassoMove_Draw(void) {
     gDisplayListHead = Radial20_Draw(gDisplayListHead);
 }
 
-void func_8216DAC0(Vec3f*);
+void BattleAnim_EffectSecondaryOwnerBonePosition(Vec3f*);
 
 /**
  * Init hook for end effect 9: resets the shared matrix and starts the lasso hit effect at
@@ -158,7 +158,7 @@ void BattleAnim_EndEffect9Radial20_Init(void) {
     f32 sp30;
 
     BattleAnim_ResetSharedEffectMatrix();
-    func_8216DAC0(&sp34);
+    BattleAnim_EffectSecondaryOwnerBonePosition(&sp34);
     sp30 = BattleAnim_EffectTertiaryOwnerModelScale();
     BattleAnim_ResetSharedEffectMatrix();
     LassoHit_Init(sp34.x, sp34.y, sp34.z, sp30, 0x40, 0xFF, 0xFF, 0, 0, 0xFF); // inner #40FFFF, outer #0000FF

@@ -145,9 +145,9 @@ void SceneMode7_StepFadeOutOrFinish(CameraNode* camera) {
     sBattleScene.scene->phaseStep = (s32)(sBattleScene.scene->phaseStep + 1);
 }
 
-s32 func_821217DC(s32);
+s32 BattleScene_AdvanceCameraFrameCounter(s32);
 /**
- * Once func_821217DC(0xA) returns non-zero it advances the roster index of the
+ * Once BattleScene_AdvanceCameraFrameCounter(0xA) returns non-zero it advances the roster index of the
  * Pokemon in D_8219A580 (state.rosterIndex) by one and makes that roster entry
  * the current one in the session teams block: side->displayModel gets
  * the first byte of the new entry, side->unk_04 is pointed at the entry
@@ -164,7 +164,7 @@ void SceneMode7_StepLoadNextRosterPokemon(UNUSED CameraNode* camera) {
     ActivePokemonState* st = &((ActivePokemon*)D_8219A580)->state;
     BattleMon* mon;
 
-    if (func_821217DC(10) != 0) {
+    if (BattleScene_AdvanceCameraFrameCounter(10) != 0) {
         st->rosterIndex++;
         mon = &((ActivePokemon*)D_8219A580)->teamRoster->pokemonPicked[st->rosterIndex];
         ((ActivePokemon*)D_8219A580)->side->displayModel = mon->species.id;
