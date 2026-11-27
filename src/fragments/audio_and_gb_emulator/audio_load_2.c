@@ -55,7 +55,7 @@ s32 AudioLoad_SearchCaches(s32, s32);
 AudioTable* AudioLoad_GetLoadTable(s32);
 s32 AudioHeap_AllocPermanent(s32, s32, s32);
 s32 AudioHeap_AllocCached(s32, s32, s32, s32);
-s32 func_8004CFB0(OSMesgQueue*, OSMesg, s32);
+s32 osSendMesg(OSMesgQueue*, OSMesg, s32);
 void AudioLoad_SetFontLoadStatus(s32, s32);
 void AudioLoad_SetSeqLoadStatus(s32, s32);
 void AudioLoad_SetSampleLoadStatus(s32, s32);
@@ -104,7 +104,7 @@ s32 AudioLoad_AsyncLoadInner(s32 table_type, s32 id, s32 n_chunks, s32 ret_data,
     ram_addr = AudioLoad_SearchCaches(table_type, id);
     if (ram_addr != 0) {
         load_status = 2;
-        func_8004CFB0(ret_queue, (OSMesg)(ret_data << 0x18), 0);
+        osSendMesg(ret_queue, (OSMesg)(ret_data << 0x18), 0);
     } else {
         table = (AudioTable*)AudioLoad_GetLoadTable(table_type);
         size = table->entries[id].size;
@@ -221,8 +221,8 @@ extern u8 D_0015A9B0[];
 extern u8 D_0015AA60[];
 void func_8111016C(void);
 void AudioHeap_InitMainPools(s32);
-void* func_81109868(void*, s32);
-void func_811098C0(void*, void*, s32);
+void* AudioHeap_Alloc(void*, s32);
+void AudioHeap_InitPool(void*, void*, s32);
 s32 AudioHeap_ResetStep(void);
 void AudioLoad_InitTable(AudioTable*, u8*, s32);
 
@@ -283,7 +283,7 @@ void AudioLoad_Init(void) {
     AudioHeap_InitMainPools(D_81152700);
 
     for (i = 0; i < 3; i++) {
-        buf = D_811859B8[i] = func_81109868(D_811842B0, 0xFC0);
+        buf = D_811859B8[i] = AudioHeap_Alloc(D_811842B0, 0xFC0);
         for (j = 0; j < 2016; j++) {
             *buf++ = 0;
         }
@@ -304,7 +304,7 @@ void AudioLoad_Init(void) {
     AudioLoad_InitTable((AudioTable*)D_811858A4, D_0015AA60, 0);
 
     num_fonts = D_811858A0->numEntries;
-    D_811858B0 = func_81109868(D_811842B0, num_fonts * sizeof(SoundFont));
+    D_811858B0 = AudioHeap_Alloc(D_811842B0, num_fonts * sizeof(SoundFont));
     for (i = 0; i < num_fonts; i++) {
         D_811858B0[i].sampleBankId1 = D_811858A0->entries[i].shortData1 >> 8 & 0xFF;
         D_811858B0[i].sampleBankId2 = D_811858A0->entries[i].shortData1 & 0xFF;
@@ -312,11 +312,11 @@ void AudioLoad_Init(void) {
         D_811858B0[i].numDrums = D_811858A0->entries[i].shortData2 & 0xFF;
     }
 
-    ram_addr = func_81109868(D_811842B0, D_81152704);
+    ram_addr = AudioHeap_Alloc(D_811842B0, D_81152704);
     if (ram_addr == NULL) {
         D_81152704 = 0;
     }
-    func_811098C0(&D_81184440, ram_addr, D_81152704);
+    AudioHeap_InitPool(&D_81184440, ram_addr, D_81152704);
 }
 
 typedef struct SlowLoads8110E500 {
@@ -536,7 +536,7 @@ extern Entry8110EABC D_81185580[1];
 
 Entry8110EABC* AudioLoad_StartAsyncLoad(s32, s32, u32, s32, s32, OSMesgQueue*, u32);
 
-void func_800567E0(OSMesgQueue*, OSMesg*, s32);
+void osCreateMesgQueue(OSMesgQueue*, OSMesg*, s32);
 /**
  * Claims the free async load slot and starts a chunked DMA of size bytes from
  * dev_addr to ram_addr. n_chunks == 0 means 0x1000-byte chunks; otherwise the size
@@ -578,7 +578,7 @@ Entry8110EABC* AudioLoad_StartAsyncLoad(s32 dev_addr, s32 ram_addr, u32 size, s3
     load->state = 3;
     load->medium = medium;
     load->info = (OSMesg)ret_msg;
-    func_800567E0(&load->queue, &load->msg, 1);
+    osCreateMesgQueue(&load->queue, &load->msg, 1);
     return load;
 }
 
@@ -667,7 +667,7 @@ void AudioLoad_ProcessAsyncLoad(Entry8110EABC* load, s32 reset_status) {
                 break;
         }
         load->active = 0;
-        func_8004CFB0(load->doneQueue, load->info, 0);
+        osSendMesg(load->doneQueue, load->info, 0);
         return;
     }
     if (load->size < load->chunkSize) {

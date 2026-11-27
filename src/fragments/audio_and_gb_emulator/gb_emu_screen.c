@@ -7,7 +7,7 @@ void func_811177D0(s32);
 void GbEmu_PauseEmulation(void);
 void func_80052DC0(s32);
 void func_81104B88(OSTime);
-void func_8005C280(f32);
+void osViSetXScale(f32);
 void func_80057470(s32);
 void func_80008014(s32, s32, s32);
 void func_8004FD20(s32, s32);
@@ -24,7 +24,7 @@ void GbEmu_PauseAndBlankScreen(void) {
     GbEmu_PauseEmulation();
     func_80052DC0(1);
     func_81104B88(20);
-    func_8005C280(1.0f);
+    osViSetXScale(1.0f);
     func_80057470(*(s32*)(D_81154C30[D_81154C3C] + 8));
     func_80008014(*(s32*)(D_81154C30[D_81154C3C] + 8), 0x140, 0x10);
     func_8004FD20(*(s32*)(D_81154C30[D_81154C3C] + 8), 0x25800);

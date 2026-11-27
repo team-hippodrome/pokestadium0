@@ -316,7 +316,7 @@ void AudioSeq_ResetSequencePlayer(s32 arg0) {
 
 extern u8 D_811842C0[];
 extern SequenceChannel D_81184850;
-void* func_811097E8(void*, s32);
+void* AudioHeap_AllocZeroed(void*, s32);
 /**
  * Allocates sequence player `arg0`'s 16 channels, falling back to the shared dummy channel.
  * Corresponds to OoT AudioSeq_InitSequencePlayerChannels (original name Nas_AssignSubTrack).
@@ -330,7 +330,7 @@ void AudioSeq_InitSequencePlayerChannels(s32 arg0) {
     SequenceChannel* item;
 
     for (i = 0; i < 16; i++) {
-        rec->channels[i] = func_811097E8(D_811842C0, 0xD4);
+        rec->channels[i] = AudioHeap_AllocZeroed(D_811842C0, 0xD4);
         if (rec->channels[i] == NULL) {
             rec->channels[i] = &D_81184850;
         } else {

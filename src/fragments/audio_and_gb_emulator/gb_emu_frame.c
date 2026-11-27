@@ -22,7 +22,7 @@ extern volatile u8 D_81156476;
 extern OSMesgQueue D_81156458;
 s32 func_8004CFB0(OSMesgQueue*, s32, s32);
 s32 GbPak_WriteBackDirtySramBlock(s32 arg0);
-u32 func_80053A80(void);
+u32 osGetCount(void);
 M2C_UNK func_8005C0A0();
 extern s32 D_81156550;
 extern u8 D_8111E308;
@@ -100,7 +100,7 @@ void GbPak_QueueNextBankLoad(GbPakChannel*);
 void Cont_StartReadInputs(void);
 void Cont_ReadInputs(void);
 u8 GbCpu_Run(void*, s32);
-void func_80056730(void*, s32);
+void osInvalDCache(void*, s32);
 void func_811177D0(s32);
 
 /**
@@ -359,7 +359,7 @@ s32 GbEmu_UpdateFrame(void) {
             } else {
                 GB_MEM[0x1018D]--;
                 if (GB_MEM[0x1018D] == 0) {
-                    func_80056730(GB_MEM + 0x12F00, 0x1000);
+                    osInvalDCache(GB_MEM + 0x12F00, 0x1000);
                     GB_MEM[0x10181] = 0;
                     GB_MEM[0x10185] = GB_MEM[0x10181];
                 }
@@ -710,7 +710,7 @@ extern u16 D_81127B88[];
 extern u8 D_8112A938[];
 void GbEmu_DrawTextCommands(u16*, u8*);
 void GbEmu_DrawFramedPanel(u16* arg0);
-u32 func_80053A80(void);
+u32 osGetCount(void);
 M2C_UNK func_8005C0A0();
 /**
  * Draws the cartridge loading screen: the background, the six party icons in framed panels, the
@@ -805,7 +805,7 @@ void GbEmu_DrawLoadingScreen(u16* dst, u8 (*party_icons)[0xC80], s32 port, s32 v
     func_8005C0A0();
     D_811565E0 = 0;
     D_811565D8 = 0x800000;
-    D_811565C8 = func_80053A80();
+    D_811565C8 = osGetCount();
     D_811565CC = 0;
 }
 

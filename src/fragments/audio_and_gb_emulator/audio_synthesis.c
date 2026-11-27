@@ -38,7 +38,7 @@ typedef struct AudioCmd {
 
 extern NoteSampleState* D_81184288;
 
-void func_80056730(void*, s32);
+void osInvalDCache(void*, s32);
 
 /**
  * Sets up the next reverb ring buffer item for update `update_index` of reverb `reverb_index`.
@@ -61,7 +61,7 @@ void AudioSynth_InitNextRingBuf(s32 chunk_len, s32 update_index, s32 reverb_inde
     reverb = (SynthesisReverb*)&D_81184110[reverb_index];
     if (reverb->downsampleRate >= 3 && reverb->framesToIgnore == 0) {
         item = &reverb->items[reverb->curFrame][update_index];
-        func_80056730(item->toDownsampleLeft, 0x340);
+        osInvalDCache(item->toDownsampleLeft, 0x340);
         for (src_pos = 0, dst_pos = 0; dst_pos < item->lengthA / 2; src_pos += reverb->downsampleRate, dst_pos++) {
             reverb->leftRingBuf[item->startPos + dst_pos] = item->toDownsampleLeft[src_pos];
             reverb->rightRingBuf[item->startPos + dst_pos] = item->toDownsampleRight[src_pos];
