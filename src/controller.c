@@ -112,7 +112,7 @@ void Cont_InitControllers(void) {
 
 extern u8 D_800AAFFA;
 extern u8 D_800AAFF8;
-s32 func_80053A90(OSMesgQueue*);
+s32 osEepromProbe(OSMesgQueue*);
 
 /**
  * Setup the controllers for initial use by initializing the EEPROM queue
@@ -129,7 +129,7 @@ u8 Cont_SetupControllers(u8 arg0) {
     osCreateMesgQueue(&gSIEventMesgQueue, gSIEventMesgBuf, 1);
     osSetEventMesg(OS_EVENT_SI, &gSIEventMesgQueue, NULL);
     osContInit(&gSIEventMesgQueue, &D_800AAFF8, &gControllerStatuses[0]);
-    gEepromProbe = func_80053A90(&gSIEventMesgQueue);
+    gEepromProbe = osEepromProbe(&gSIEventMesgQueue);
     Cont_InitControllers();
     return D_800AAFF8;
 }

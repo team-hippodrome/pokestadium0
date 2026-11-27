@@ -90,7 +90,7 @@ extern u8 D_8007756C;
 extern u8 D_80077570;
 extern u8 D_80077574;
 extern u8 D_80077580;
-u32 func_80053A80(void);
+u32 osGetCount(void);
 void Announcer_QueueLine(s32, f32, s32);
 
 /**
@@ -145,7 +145,7 @@ void Announcer_CommentOnMove(u32 arg0) {
                 D_800FD6B0[arg0] = 0;
             }
             if ((pct < 50) && (pct >= 21)) {
-                if ((u8)func_80053A80() & 1) {
+                if ((u8)osGetCount() & 1) {
                     if (D_80077550 == 1) {
                         Announcer_QueueLine(66, 0.0f, 0x80);
                         return;
@@ -157,7 +157,7 @@ void Announcer_CommentOnMove(u32 arg0) {
                 return;
             }
             if ((pct < 21) && (pct >= 6)) {
-                if ((u8)func_80053A80() & 1) {
+                if ((u8)osGetCount() & 1) {
                     if (D_80077550 == 1) {
                         Announcer_QueueLine(66, 0.0f, 0x80);
                         return;
@@ -169,11 +169,11 @@ void Announcer_CommentOnMove(u32 arg0) {
                 return;
             }
             if ((pct < 6) && (D_800FD698[arg0] != 0)) {
-                if ((D_800FD6B4[arg0] < 3) && ((u8)func_80053A80() & 0x11)) {
+                if ((D_800FD6B4[arg0] < 3) && ((u8)osGetCount() & 0x11)) {
                     Announcer_QueueLine(84, 0.0f, 0x80);
                     return;
                 }
-                if ((u8)func_80053A80() & 0x10) {
+                if ((u8)osGetCount() & 0x10) {
                     Announcer_QueueLine(66, 0.0f, 0x80);
                     return;
                 }
@@ -185,9 +185,9 @@ void Announcer_CommentOnMove(u32 arg0) {
                     Announcer_QueueLine(70, 0.0f, 0x80);
                     return;
                 }
-                if ((u8)func_80053A80() & 1) {
+                if ((u8)osGetCount() & 1) {
                     if (D_80077550 == 1) {
-                        if ((u8)func_80053A80() & 1) {
+                        if ((u8)osGetCount() & 1) {
                             Announcer_QueueLine(66, 0.0f, 0x80);
                             return;
                         }
@@ -217,7 +217,7 @@ void Announcer_CommentOnMove(u32 arg0) {
                     Announcer_QueueLine(67, 0.0f, 0x80);
                     return;
                 }
-                if ((u8)func_80053A80() & 1) {
+                if ((u8)osGetCount() & 1) {
                     Announcer_QueueLine(66, 0.0f, 0x80);
                     return;
                 }
@@ -378,7 +378,7 @@ void Announcer_CommentOnSideMessage(s32 kind) {
     }
 }
 
-u32 func_80053A80(void);
+u32 osGetCount(void);
 /**
  * Queues the announcer line for battle text `kind` (low 7 bits of the message id; battle message.c).
  */
@@ -392,7 +392,7 @@ void Announcer_CommentOnMessage(s32 kind) {
         break;
     case 2:
         Announcer_QueueLine(36, 0.0f, 0x80);
-        if ((u8)func_80053A80() & 1) {
+        if ((u8)osGetCount() & 1) {
             Announcer_QueueLine(47, 0.0f, 0x80);
             D_80077568 = 1;
         }
@@ -425,7 +425,7 @@ void Announcer_CommentOnMessage(s32 kind) {
         break;
     case 11:
         Announcer_QueueLine(37, 0.0f, 0x80);
-        if ((u8)func_80053A80() & 1) {
+        if ((u8)osGetCount() & 1) {
             Announcer_QueueLine(47, 0.0f, 0x80);
             D_80077568 = 1;
         }

@@ -784,7 +784,7 @@ void Game_ResetStorageDevice(void) {
     Storage_ResetDisk();
 }
 
-u32 func_800594D0(u32);
+u32 __osSetFpcCsr(u32);
 void func_8000B170(s32);
 void func_8000D20C(void);
 void func_800177DC(void);
@@ -802,7 +802,7 @@ void func_800268A8(void);
 void Game_RunStateLoop(s32 arg0) {
     s32 state;
 
-    func_800594D0(0x01000F00);
+    __osSetFpcCsr(0x01000F00);
     func_8000B170(0);
     func_8000D20C();
     func_800177DC();

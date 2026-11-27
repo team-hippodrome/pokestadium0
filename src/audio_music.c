@@ -85,7 +85,7 @@ void Audio_Enable(void) {
 M2C_UNK SchedClient_WaitMessage(M2C_UNK *);                   /* extern */
 M2C_UNK Sched_AddClient(M2C_UNK *);                   /* extern */
 M2C_UNK func_80004F34(s8 *, M2C_UNK);             /* extern */
-M2C_UNK func_800082D0();                            /* extern */
+M2C_UNK Profiler_LogThread4Time();                            /* extern */
 M2C_UNK __amHandleFrame(s8 *);                      /* extern */
 M2C_UNK Audio_SetOutputMode(M2C_UNK);                     /* extern */
 M2C_UNK Audio_LoadSoundData();                            /* extern */
@@ -121,12 +121,12 @@ void Audio_ThreadEntry(s32 arg0) {
     Audio_SetChannelVolume(3, 4);
 loop_1:
     SchedClient_WaitMessage(&D_800AAE38);
-    func_800082D0();
+    Profiler_LogThread4Time();
     if ((D_800AAE30 != 0) && (D_800A9710.preNmiFrames < 21)) {
         __amHandleFrame(&D_800AAE68 + (D_800AAF38 * 0x68) + 0x20);
         func_80004F34(&D_800AAE68 + (D_800AAF38 * 0x68), 0);
     }
     D_800AAF38 ^= 1;
-    func_800082D0();
+    Profiler_LogThread4Time();
     goto loop_1; // FAKE: goto loop
 }
